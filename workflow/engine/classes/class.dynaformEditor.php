@@ -22,10 +22,10 @@
  * For more information, contact Colosa Inc, 2566 Le Jeune Rd.,
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  */
- 
+
 /**
  * Created on 21/12/2007
- * Dynaform - Dynaform class 
+ * Dynaform - Dynaform class
  * @copyright 2007 COLOSA
  * @author David Callizaya <davidsantos@colosa.com>
  */
@@ -41,7 +41,7 @@ G::LoadClass('xmlDb');
  * @package workflow.engine.classes
  */
 
-class dynaformEditor extends WebResource 
+class dynaformEditor extends WebResource
 {
   private $isOldCopy = false;
   var $file='';
@@ -91,24 +91,24 @@ class dynaformEditor extends WebResource
     'resize'      => false,
     'blinkToFront'=> false
   );
-    
+
   /**
    * Constructor of the class dynaformEditor
    * @param string $get
    * @return void
    */
-  function dynaformEditor($get) 
+  function dynaformEditor($get)
   {
     $this->panelConf = array_merge( $this->panelConf , $this->defaultConfig['Editor'] );
     //'title' => G::LoadTranslation('ID_DYNAFORM_EDITOR').' - ['.$this->title.']',
   }
-  
+
   /**
    * Create the xml form default
    * @param string $filename
    * @return void
    */
-  function _createDefaultXmlForm($fileName) 
+  function _createDefaultXmlForm($fileName)
   {
    //Create the default Dynaform
     $sampleForm='<?xml version="1.0" encoding="UTF-8"?>'."\n";
@@ -138,12 +138,12 @@ class dynaformEditor extends WebResource
     fwrite($fp, $sampleForm);
     fclose($fp);
   }
-  
+
   /**
    * Prints the DynaformEditor
    * @return void
    */
-  function _render() 
+  function _render()
   {
     global $G_PUBLISH;
     $script='';
@@ -165,9 +165,9 @@ class dynaformEditor extends WebResource
     $JSEditor  = array(
       'URL'=> G::encrypt( $this->file , URL_KEY ),
     );
-    
+
     $A = G::encrypt( $this->file , URL_KEY );
-    
+
     try {
       $openDoc = new Xml_Document();
       $fileName= $this->home . $this->file . '.xml';
@@ -240,7 +240,7 @@ class dynaformEditor extends WebResource
       /***@Erik-> this is deprecated,. (unuseful) $G_PUBLISH->AddContent('propeltable', 'paged-table', 'dynaforms/fields_List', $oCriteria, $Parameters, '', SYS_URI.'dynaforms/dynaforms_PagedTableAjax');***/
       $G_PUBLISH->AddContent('blank');
       $G_PUBLISH->AddContent('xmlform', 'xmlform', 'dynaforms/dynaforms_JSEditor', 'display:none', $JSEditor , '', '');
-    } 
+    }
     catch (Exception $e) {
     }
     $G_PUBLISH->AddContent('xmlform', 'xmlform', 'dynaforms/dynaforms_Properties', 'display:none', $Properties , '', '');
@@ -259,7 +259,7 @@ class dynaformEditor extends WebResource
     //$oHeadPublisher->addScriptFile('/js/dveditor/core/dveditor.js');
     //$oHeadPublisher->addScriptFile('/codepress/codepress.js',1);
     $oHeadPublisher->addScriptFile('/js/codemirror/js/codemirror.js',1);
-    
+
     $oHeadPublisher->addScriptFile('/js/grid/core/grid.js');
     $oHeadPublisher->addScriptCode('
     var DYNAFORM_URL="'.$Parameters['URL'].'";
@@ -267,23 +267,23 @@ class dynaformEditor extends WebResource
     ');
     G::RenderPage( "publish", 'blank' );
   }
-  
+
   /**
    * Get the filename
    * @param string $file
    * @return string
    */
-  function _getFilename($file) 
+  function _getFilename($file)
   {
     return (strcasecmp(substr($file,-5),'_tmp0')==0)? substr($file,0,strlen($file)-5) : $file;
   }
-  
+
   /**
    * Set the temporal copy
    * @param string $onOff
    * @return void
    */
-  function _setUseTemporalCopy($onOff) 
+  function _setUseTemporalCopy($onOff)
   {
     $file = self::_getFilename( $this->file );
     if ($onOff) {
@@ -303,26 +303,26 @@ class dynaformEditor extends WebResource
       self::_setTmpData(array());
     }
   }
-  
+
  /**
   * Set temporal data
   * @param $data
   * @return void
-  */ 
-  function _setTmpData($data) 
+  */
+  function _setTmpData($data)
   {
     G::verifyPath(PATH_C . 'dynEditor/',true);
     $fp=fopen(PATH_C . 'dynEditor/'.session_id().'.php','w');
     fwrite($fp,'$tmpData=unserialize(\''.addcslashes(serialize($data),'\\\'').'\');');
     fclose($fp);
   }
-  
+
  /**
   * Get temporal data
   * @param string $filename
-  * @return array 
+  * @return array
   */
-  function _getTmpData() 
+  function _getTmpData()
   {
     $tmpData = array();
     $file    = PATH_C . 'dynEditor/'.session_id().'.php';
@@ -335,7 +335,7 @@ class dynaformEditor extends WebResource
    * @param file $to
    * @return void
    */
-  function _copyFile($from,$to) 
+  function _copyFile($from,$to)
   {
     $copy  = implode('',file($from));
     $fcopy = fopen($to,"w");
@@ -344,46 +344,46 @@ class dynaformEditor extends WebResource
   }
 }
 
-interface iDynaformEditorAjax 
+interface iDynaformEditorAjax
 {
   //public function render_preview($A);
 }
 
 /**
  * DynaformEditorAjax - DynaformEditorAjax class
- * 
+ *
  * @package workflow.engine.classes
  */
 
-class dynaformEditorAjax extends dynaformEditor implements iDynaformEditorAjax 
+class dynaformEditorAjax extends dynaformEditor implements iDynaformEditorAjax
 {
-  
+
   /**
    * Constructor of the class dynaformEditorAjax
    * @param var $post
    * @return void
    */
-  function dynaformEditorAjax($post) 
+  function dynaformEditorAjax($post)
   {
     $this->_run($post);
   }
-  
+
   /**
    * Function Run
    * @param var $post
    * @return void
    */
-  function _run($post) 
+  function _run($post)
   {
     WebResource::WebResource($_SERVER['REQUEST_URI'],$post);
   }
-  
+
   /**
    * Prints the DynaformEditorAjax
    * @param object $A
    * @return ob_get_clean
    */
-  function render_preview($A) 
+  function render_preview($A)
   { ob_start();
     $file = G::decrypt( $A , URL_KEY );
     global $G_PUBLISH;
@@ -391,7 +391,7 @@ class dynaformEditorAjax extends dynaformEditor implements iDynaformEditorAjax
     $G_PUBLISH->publisherId='preview';
     $form = new Form( $file , PATH_DYNAFORM, SYS_LANG, true, $G_PUBLISH->publisherId);
     switch(basename($form->template,'.html')) {
-      case 'grid': 
+      case 'grid':
         $template = 'grid';
         $aAux     = array_keys($form->fields);
         if (count($aAux) > 0) {
@@ -401,15 +401,16 @@ class dynaformEditorAjax extends dynaformEditor implements iDynaformEditorAjax
           $aFields = $aAux;
         }
         if (is_array($aFields)) {
-          foreach($aFields as $key => $val) 
+          foreach($aFields as $key => $val)
             $aFields[$key]=array(1=>"",2=>"",3=>"",4=>"",5=>"");
         }
         break;
       default:
         $template = 'xmlform_' . $G_PUBLISH->publisherId;
         $aFields  = array( '__DYNAFORM_OPTIONS'=> array(
-                                                      'PREVIOUS_STEP'     => '#',
-                                                      'NEXT_STEP'         => '#',
+                                                      'PREVIOUS_STEP'    => '#',
+                                                      'NEXT_STEP'        => '#',
+                                                      'NEXT_STEP_LABEL'  => G::loadTranslation('ID_NEXT_STEP'),
                                                       'PREVIOUS_ACTION'  => 'return false;',
                                                       'NEXT_ACTION'      => 'return false;'
                                                       )
@@ -419,13 +420,13 @@ class dynaformEditorAjax extends dynaformEditor implements iDynaformEditorAjax
     G::RenderPage('publish','raw');
     return ob_get_clean();
   }
-  
+
   /**
    * Prints the Dynaform in format HTML
    * @param object $A
    * @return array
    */
-  function render_htmledit($A) 
+  function render_htmledit($A)
   {
     $script = '';
     $file   = G::decrypt( $A , URL_KEY );
@@ -457,7 +458,7 @@ class dynaformEditorAjax extends dynaformEditor implements iDynaformEditorAjax
    * @param object $A
    * @return code html
    */
-  function get_htmlcode($A) 
+  function get_htmlcode($A)
   {
     try {
       $script = '';
@@ -531,7 +532,7 @@ class dynaformEditorAjax extends dynaformEditor implements iDynaformEditorAjax
    * @param object  $A
    * @return code html
    */
-  function restore_html($A) 
+  function restore_html($A)
   {
     $script  = '';
     $fileTmp = G::decrypt( $A , URL_KEY );
@@ -539,7 +540,7 @@ class dynaformEditorAjax extends dynaformEditor implements iDynaformEditorAjax
     $form    = new Form( $fileTmp , PATH_DYNAFORM, SYS_LANG, true );
     /* Navigation Bar */
     $form->fields=G::array_merges(
-    array('__DYNAFORM_OPTIONS' => new XmlForm_Field_XmlMenu( 
+    array('__DYNAFORM_OPTIONS' => new XmlForm_Field_XmlMenu(
                                   new Xml_Node(
                                               '__DYNAFORM_OPTIONS',
                                               'complete',
@@ -559,13 +560,13 @@ class dynaformEditorAjax extends dynaformEditor implements iDynaformEditorAjax
     fclose($fp);
     return $html;
   }
-  
+
   /**
    * Set the html code
    * @param object $A
    * @return array
    */
-  function set_htmlcode($A,$htmlcode) 
+  function set_htmlcode($A,$htmlcode)
   {
     try {
       $file     = G::decrypt( $A , URL_KEY );
@@ -587,7 +588,7 @@ class dynaformEditorAjax extends dynaformEditor implements iDynaformEditorAjax
    * @param object $A
    * @return array
    */
-  function get_xmlcode($A) 
+  function get_xmlcode($A)
   {
     try {
       $file    = G::decrypt( $A , URL_KEY );
@@ -598,14 +599,14 @@ class dynaformEditorAjax extends dynaformEditor implements iDynaformEditorAjax
       return array("xmlcode"=>"","error"=>(array)$e);
     }
   }
-  
+
   /**
    * Set the xml code
    * @param object $A
    * @param array $xmlcode
    * @return string
    */
-  function set_xmlcode($A,$xmlcode) 
+  function set_xmlcode($A,$xmlcode)
   {
     $xmlcode = urldecode($xmlcode) ;
     $file    = G::decrypt( $A , URL_KEY );
@@ -615,14 +616,14 @@ class dynaformEditorAjax extends dynaformEditor implements iDynaformEditorAjax
     fclose($fp);
     return "";
   }
-  
+
   /**
    * Get the javascript code
    * @param object $A
    * @param string $fieldName
    * @return array
    */
-  function get_javascripts($A,$fieldName) 
+  function get_javascripts($A,$fieldName)
   {
     try {
       $file     = G::decrypt( $A , URL_KEY );
@@ -632,7 +633,7 @@ class dynaformEditorAjax extends dynaformEditor implements iDynaformEditorAjax
       foreach($form->fields as $name => $value ) {
         if (strcasecmp($value->type,"javascript")==0) {
           $aOptions[] = array('key'=>$name,'value'=>$name);
-          if ( $name == $fieldName ) 
+          if ( $name == $fieldName )
             $sCode = $value->code;
           }
         }
@@ -642,7 +643,7 @@ class dynaformEditorAjax extends dynaformEditor implements iDynaformEditorAjax
     return (array) $e;
     }
   }
-  
+
   /**
    * Set the javascript code
    * @param object $A
@@ -660,25 +661,25 @@ class dynaformEditorAjax extends dynaformEditor implements iDynaformEditorAjax
       $ses2  = new DBSession($dbc2);
       $ses2->execute(G::replaceDataField("UPDATE dynaForm SET XMLNODE_VALUE = @@CODE WHERE XMLNODE_NAME = @@FIELDNAME ", array('FIELDNAME'=>$fieldName,'CODE'=>$sCode), "myxml" ));
       */
-      
+
       G::LoadSystem('dynaformhandler');
-			              
+
 		  $dynaform = new dynaFormHandler(PATH_DYNAFORM."{$file}.xml");
       $dynaform->replace($fieldName, $fieldName, Array('type'=>'javascript', '#cdata'=>$sCode));
-          
+
       return 0;
     } catch(Exception $e) {
       return (array) $e;
     }
   }
-  
+
   /**
    * Get properties of the dynaForm
    * @param file $A
    * @param string $DYN_UID
    * @return array
    */
-  function get_properties( $A, $DYN_UID ) 
+  function get_properties( $A, $DYN_UID )
   {
     $file = G::decrypt( $A , URL_KEY );
     $tmp  = self::_getTmpData();
@@ -711,7 +712,7 @@ class dynaformEditorAjax extends dynaformEditor implements iDynaformEditorAjax
       }
     return $Properties;
   }
-  
+
   /**
    * Set properties of the dynaForm
    * @param file $A
@@ -763,26 +764,26 @@ class dynaformEditorAjax extends dynaformEditor implements iDynaformEditorAjax
       return (array) $e;
     }
   }
-  
+
   /**
    * Get enable template
    * @param object $A
    * @return string
    */
-  function get_enabletemplate( $A ) 
+  function get_enabletemplate( $A )
   {
     $file = G::decrypt( $A , URL_KEY );
     $form = new Form( $file , PATH_DYNAFORM, SYS_LANG, true );
     return $form->enableTemplate;
   }
-  
+
   /**
    * Set enable template
    * @param object $A
    * @param string $value
    * @return string
    */
-  function set_enabletemplate( $A,  $value ) 
+  function set_enabletemplate( $A,  $value )
   {
     $file  = G::decrypt( $A , URL_KEY );
     $value = $value=="1"?"1":"0";
@@ -791,14 +792,14 @@ class dynaformEditorAjax extends dynaformEditor implements iDynaformEditorAjax
     $ses2->execute("UPDATE . SET ENABLETEMPLATE = '$value'");
     return $value;
   }
-  
+
   /**
    * Save a dynaForm
    * @param object $A
    * @param string $DYN_UID
    * @return array
    */
-  function save($A,$DYN_UID) 
+  function save($A,$DYN_UID)
   {
     try {
     	$answer = 0;
@@ -814,7 +815,7 @@ class dynaformEditorAjax extends dynaformEditor implements iDynaformEditorAjax
         * in here we are validation if a xmlform has a submit action
         */
         if(!preg_match("/type=\"submit\"/",$copy) && !preg_match("/type=\"grid\"/",$copy) && !isset($_SESSION['submitAction']) ){
-            
+
         	$_SESSION['submitAction']= 1;
         	$answer = 'noSub';
         }
@@ -841,13 +842,13 @@ class dynaformEditorAjax extends dynaformEditor implements iDynaformEditorAjax
       return (array) $e;
     }
   }
-  
+
   /**
    * Close a dynaform
    * @param object $A
    * @return array
    */
-  function close($A) 
+  function close($A)
   {
     try {
     	/*
@@ -877,14 +878,14 @@ class dynaformEditorAjax extends dynaformEditor implements iDynaformEditorAjax
       return (array) $e;
     }
   }
-  
+
   /**
    * Checks if a dynaform was changed
    * @param file $A
    * @param string $DYN_UID
    * @return array
    */
-  function is_modified($A,$DYN_UID) 
+  function is_modified($A,$DYN_UID)
   {
     $file = G::decrypt( $A , URL_KEY );
     try {

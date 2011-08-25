@@ -17,7 +17,7 @@
       <parameter name="Update_time" value="2007-12-09 14:08:22"/>
       <parameter name="Check_time" value=""/>
       <parameter name="Collation" value="utf8_general_ci"/>
-      <parameter name="Checksum" value=""/> 
+      <parameter name="Checksum" value=""/>
       <parameter name="Create_options" value=""/>
       <parameter name="Comment" value="The application"/>
     </vendor>
@@ -787,6 +787,7 @@
     <column name="PRO_TITLE_X" type="INTEGER" required="true" default="0"/>
     <column name="PRO_TITLE_Y" type="INTEGER" required="true" default="6"/>
     <column name="PRO_DEBUG" type="INTEGER" required="true" default="0"/>
+    <column name="PRO_DYNAFORMS" type="LONGVARCHAR" required="false"/>
     <validator column="PRO_TIMEUNIT">
       <rule name="validValues" value="WEEKS|MONTHS|DAYS|HOURS|MINUTES" message="Please select a valid Time Unit."/>
     </validator>
@@ -2724,7 +2725,7 @@
   <table name="APP_NOTES">
     <vendor type="mysql">
       <parameter name="Name" value="APP_NOTES"/>
-      <parameter name="Engine" value="MyISAM"/> 
+      <parameter name="Engine" value="MyISAM"/>
       <parameter name="Version" value="10"/>
       <parameter name="Row_format" value="Dynamic"/>
       <parameter name="Rows" value="129"/>

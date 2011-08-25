@@ -427,6 +427,7 @@ class processMap {
 
         $_SESSION ['_DBArray'] = $_DBArray;
         $aFields = $oProcess->load($sProcessUID);
+        $aFields['PRO_SUMMARY_DYNAFORM'] = (isset($aFields['PRO_DYNAFORMS']['PROCESS']) ? $aFields['PRO_DYNAFORMS']['PROCESS'] : '');
         $aFields ['THETYPE'] = 'UPDATE';
         $calendarInfo = $calendar->getCalendarFor($sProcessUID, $sProcessUID, $sProcessUID);
         //If the function returns a DEFAULT calendar it means that this object doesn't have assigned any calendar
@@ -1394,7 +1395,7 @@ class processMap {
       }else{
       	$G_PUBLISH->AddContent('xmlform', 'xmlform', $sFilename, '', $aFields);
       }
-      
+
       G::RenderPage('publish', 'raw');
       return true;
     } catch (Exception $oError) {
@@ -2313,7 +2314,7 @@ class processMap {
 //      var_dump($aRow);
 //      die();
 
-  
+
       if (is_array($aRow)) {
         $aFields ['ROU_TYPE'] = $aRow ['ROU_TYPE'];
         $aFields ['ROU_TYPE_OLD'] = $aRow ['ROU_TYPE'];
@@ -2399,7 +2400,7 @@ class processMap {
             break;
         }
       }
-      
+
       $aFields ['action'] = 'savePattern';
       $aFields ['LANG'] = SYS_LANG;
       $aFields ['PROCESS'] = $sProcessUID;
@@ -2416,7 +2417,7 @@ class processMap {
       $aMessage['MESSAGE'] = $oError->getMessage();
       $G_PUBLISH->AddContent('xmlform', 'xmlform', 'login/showMessage', '', $aMessage );
       G::RenderPage( 'publish','blank');
-      die;       
+      die;
     }
   }
 
@@ -2878,7 +2879,7 @@ class processMap {
       throw ($oError);
     }
   }
-  
+
 /**
    * webEntryByTask
    *
@@ -4645,12 +4646,12 @@ class processMap {
           $oContent = new Content();
           $dynTitle = $oContent->load('DYN_TITLE', '', $oData['EVN_ACTION'], 'en');
           $task_uid = $oEvent->getEvnTasUidTo();
-          
+
           $dyn = new Dynaform();
           $dyn->load($oData['EVN_ACTION']);
-                   
+
           $dynUid = $dyn->getDynUid();
-          
+
           $task = new Task();
           $task->load($task_uid);
           $task_name = $task->getTasTitle();
@@ -4795,7 +4796,7 @@ class processMap {
          $oCriteria->setOffset($start);
       if($limit != '')
          $oCriteria->setLimit($limit);
-      
+
       $oDataset = TaskUserPeer::doSelectRS ( $oCriteria );
       $oDataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
       $oDataset->next ();
@@ -5206,7 +5207,7 @@ class processMap {
        $oCriteria->setOffset($start);
     if($limit != '')
        $oCriteria->setLimit($limit);
-    
+
     $oDataset = InputDocumentPeer::doSelectRS ( $oCriteria );
     $oDataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
     $oDataset->next ();
@@ -5330,7 +5331,7 @@ class processMap {
     $dynaformArray = array ();
     $gridLabel   = G::LoadTranslation( 'ID_GRID' );
     $normalLabel = G::LoadTranslation( 'ID_NORMAL' );
-    
+
     while ( $aRow = $oDataset->getRow () ) {
     	//this is a trick to copy the description and title from other language when the current language does not exist for this content row.
       if (($aRow ['DYN_TITLE'] == NULL)||($aRow ['DYN_TITLE'] == "")) { // There is no transaltion for this Document name, try to get/regenerate the label
@@ -5339,7 +5340,7 @@ class processMap {
       if (($aRow ['DYN_DESCRIPTION'] == NULL)||($aRow ['DYN_DESCRIPTION'] == "")) { // There is no transaltion for this Document name, try to get/regenerate the label
         $aRow ['DYN_DESCRIPTION'] = Content::Load("DYN_DESCRIPTION","",$aRow ['DYN_UID'],SYS_LANG);
       }
-      
+
       if ( $aRow['DYN_TYPE'] == 'grid' )    $aRow['DYN_TYPE'] = $gridLabel;
       if ( $aRow['DYN_TYPE'] == 'xmlform' ) $aRow['DYN_TYPE'] = $normalLabel;
       $aRow['TAS_EDIT'] = 0;
@@ -5348,7 +5349,7 @@ class processMap {
       $oDataset->next ();
     }
     $result = array();
-    
+
     //Now count how many times the dynaform was used in different tasks in VIEW mode,
     $groupbyCriteria  = new Criteria ( 'workflow' );
     $groupbyCriteria->clearSelectColumns();
@@ -5402,7 +5403,7 @@ class processMap {
     else
       $result['totalCount'] = 0;
     $result['data'] = $dynaformArray;
- 
+
     return $result;
   }
 
@@ -5824,7 +5825,7 @@ class processMap {
       $oCriteria->setOffset($start);
     if($limit != '')
       $oCriteria->setLimit($limit);
-    
+
     $oDataset = StepSupervisorPeer::doSelectRS ( $oCriteria );
     $oDataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
     $oDataset->next ();
@@ -6715,7 +6716,7 @@ function saveExtEvents($oData)
   $aDataEvent['EVN_UID']  = $oData->evn_uid;
   $aDataEvent['EVN_RELATED_TO'] = 'MULTIPLE';
   $aDataEvent['EVN_TYPE']       = $oData->evn_type;
-  
+
   if(preg_match("/Start/", $sEvn_type)){
     if(isset($oData->tas_uid) && $oData->tas_uid != '') {
       $aDataTask['TAS_UID']     = $oData->tas_uid;
@@ -6723,7 +6724,7 @@ function saveExtEvents($oData)
       $aDataTask['EVN_TYPE']    = $oData->evn_type;
       $aDataTask['TAS_EVN_UID'] = $oData->evn_uid;
       $oTask->update($aDataTask);
-    
+
       $aDataEvent['EVN_TAS_UID_TO'] = $oData->tas_uid;
       $output = $oEvent->update($aDataEvent);
     }
@@ -6787,7 +6788,7 @@ function saveExtEvents($oData)
          $oCriteria->setOffset($start);
     if($limit != '')
           $oCriteria->setLimit($limit);
-    
+
     $oDataset = TriggersPeer::doSelectRS($oCriteria);
     $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
     $oDataset->next();
@@ -6807,7 +6808,7 @@ function saveExtEvents($oData)
     return $triggersArray;
 
   }
-  
+
   function getAllInputDocsByTask($sPRO_UID){
     $oCriteria = new Criteria('workflow');
     $oCriteria->addSelectColumn(StepPeer::STEP_UID_OBJ);
@@ -6817,7 +6818,7 @@ function saveExtEvents($oData)
     $oCriteria->add(StepPeer::PRO_UID, $sPRO_UID);
     $oDataset = StepPeer::doSelectRS($oCriteria);
     $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-    
+
     $aIDocs = array();
     while ($oDataset->next()){
       $row = $oDataset->getRow();
@@ -6825,5 +6826,5 @@ function saveExtEvents($oData)
     }
     return $aIDocs;
   }
- 
+
 }

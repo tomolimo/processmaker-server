@@ -197,6 +197,7 @@
         $Fields['APP_DATA']['__DYNAFORM_OPTIONS']['PREVIOUS_STEP_LABEL'] = G::loadTranslation("ID_PREVIOUS_STEP");
       }
       $Fields['APP_DATA']['__DYNAFORM_OPTIONS']['NEXT_STEP'] = $aNextStep['PAGE'];
+      $Fields['APP_DATA']['__DYNAFORM_OPTIONS']['NEXT_STEP_LABEL'] = G::loadTranslation('ID_NEXT_STEP');
 
       $oStep = new Step();
       $oStep = $oStep->loadByProcessTaskPosition($_SESSION['PROCESS'], $_SESSION['TASK'], $_GET['POSITION']);
@@ -432,7 +433,7 @@
                 $aProperties['margins']=array('left' => $aOD['OUT_DOC_LEFT_MARGIN'], 'right' => $aOD['OUT_DOC_RIGHT_MARGIN'], 'top' => $aOD['OUT_DOC_TOP_MARGIN'], 'bottom' => $aOD['OUT_DOC_BOTTOM_MARGIN']);
                 if($aOD['OUT_DOC_PDF_SECURITY_ENABLED']=='1'){
                   $aProperties['pdfSecurity']=array('openPassword'=>$aOD['OUT_DOC_PDF_SECURITY_OPEN_PASSWORD'],'ownerPassword'=>$aOD['OUT_DOC_PDF_SECURITY_OWNER_PASSWORD'],'permissions'=>$aOD['OUT_DOC_PDF_SECURITY_PERMISSIONS']);
-                }                
+                }
                 $oOutputDocument->generate( $_GET['UID'], $Fields['APP_DATA'], $pathOutput,
                    $sFilename, $aOD['OUT_DOC_TEMPLATE'], (boolean)$aOD['OUT_DOC_LANDSCAPE'], $aOD['OUT_DOC_GENERATE'],$aProperties );
                    //$sFilename, $aOD['OUT_DOC_TEMPLATE'], (boolean)$aOD['OUT_DOC_LANDSCAPE'], $aOD['OUT_DOC_GENERATE'] );
@@ -510,7 +511,7 @@
           $oPluginRegistry =& PMPluginRegistry::getSingleton();
           if ( $oPluginRegistry->existsTrigger ( PM_UPLOAD_DOCUMENT ) && class_exists ('uploadDocumentData' ) ) {
           	$triggerDetail=$oPluginRegistry->getTriggerInfo( PM_UPLOAD_DOCUMENT );
-          	
+
 
           	$sPathName = PATH_DOCUMENT . $_SESSION['APPLICATION'] . PATH_SEP;
 
@@ -896,7 +897,7 @@
                     }
                   $sAux .= '</select>';
                   $aFields['TASK'][$sKey]['NEXT_TASK']['TAS_CALENDAR'] = $sAux;
-                
+
               }
 
 
@@ -982,7 +983,7 @@
       parent.showCaseNavigatorPanel('$sStatus');
     }
   ");
-    
+
   G::RenderPage('publish', 'blank');
 
   if( $_SESSION['TRIGGER_DEBUG']['ISSET'] ){

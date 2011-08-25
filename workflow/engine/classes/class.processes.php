@@ -21,7 +21,7 @@
  *
  * For more information, contact Colosa Inc, 2566 Le Jeune Rd.,
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
- */ 
+ */
 
 require_once 'classes/model/Content.php';
 require_once 'classes/model/Process.php';
@@ -73,7 +73,7 @@ class Processes {
 
     $oProcess->Update( $proFields );
   }
-  
+
   /**
   * change debug mode of any Process
   * @param string $sProUid
@@ -531,109 +531,109 @@ class Processes {
         $oData->tasks[$key]['PRO_UID'] = $sNewProUid;
       }
     }
-    
+
     if ( isset($oData->routes ) && is_array($oData->routes) ) {
       foreach ($oData->routes as $key => $val ) {
         $oData->routes[$key]['PRO_UID'] = $sNewProUid;
       }
     }
-    
+
     if ( isset($oData->lanes ) && is_array($oData->lanes) ) {
       foreach ($oData->lanes as $key => $val ) {
         $oData->lanes[$key]['PRO_UID'] = $sNewProUid;
       }
     }
-    
+
     if ( isset($oData->inputs ) && is_array($oData->inputs) ) {
       foreach ($oData->inputs as $key => $val ) {
         $oData->inputs[$key]['PRO_UID'] = $sNewProUid;
       }
     }
-    
+
     if ( isset($oData->outputs ) && is_array($oData->outputs) ) {
       foreach ($oData->outputs as $key => $val ) {
         $oData->outputs[$key]['PRO_UID'] = $sNewProUid;
       }
     }
-    
+
     if ( isset($oData->steps ) && is_array($oData->steps) ) {
       foreach ($oData->steps as $key => $val ) {
         $oData->steps[$key]['PRO_UID'] = $sNewProUid;
       }
     }
-    
+
     if ( isset($oData->dynaforms ) && is_array($oData->dynaforms) ) {
       foreach ($oData->dynaforms as $key => $val ) {
         $oData->dynaforms[$key]['PRO_UID'] = $sNewProUid;
       }
     }
-    
+
     if ( isset($oData->triggers ) && is_array($oData->triggers) ) {
       foreach ($oData->triggers as $key => $val ) {
         $oData->triggers[$key]['PRO_UID'] = $sNewProUid;
       }
     }
-    
+
     if ( isset($oData->reportTables ) && is_array($oData->reportTables) ) {
       foreach ($oData->reportTables as $key => $val ) {
       $oData->reportTables[$key]['PRO_UID'] = $sNewProUid;
       }
     }
-    
+
     if ( isset($oData->reportTablesVars ) && is_array($oData->reportTablesVars) ) {
       foreach ($oData->reportTablesVars as $key => $val ) {
       $oData->reportTablesVars[$key]['PRO_UID'] = $sNewProUid;
       }
     }
-    
+
     if ( isset($oData->dbconnections ) && is_array($oData->dbconnections) ) {
       foreach ($oData->dbconnections as $key => $val ) {
         $oData->dbconnections[$key]['PRO_UID'] = $sNewProUid;
       }
     }
-    
+
     if ( isset($oData->stepSupervisor ) && is_array($oData->stepSupervisor) ) {
       foreach ($oData->stepSupervisor as $key => $val ) {
       $oData->stepSupervisor[$key]['PRO_UID'] = $sNewProUid;
       }
     }
-    
+
     if ( isset($oData->objectPermissions ) && is_array($oData->objectPermissions) ) {
       foreach ($oData->objectPermissions as $key => $val ) {
       $oData->objectPermissions[$key]['PRO_UID'] = $sNewProUid;
-      } 
+      }
     }
-    
+
     if ( isset($oData->caseTracker ) && is_array($oData->caseTracker) ) {
       foreach ($oData->caseTracker as $key => $val ) {
       $oData->caseTracker[$key]['PRO_UID'] = $sNewProUid;
       }
     }
-    
+
     if ( isset($oData->caseTrackerObject ) && is_array($oData->caseTrackerObject) ) {
       foreach ($oData->caseTrackerObject as $key => $val ) {
       $oData->caseTrackerObject[$key]['PRO_UID'] = $sNewProUid;
       }
     }
-    
+
     if ( isset($oData->stage ) && is_array($oData->stage) ) {
       foreach ($oData->stage as $key => $val ) {
       $oData->stage[$key]['PRO_UID'] = $sNewProUid;
       }
     }
-    
+
     if ( isset($oData->subProcess ) && is_array($oData->subProcess) ) {
       foreach ($oData->subProcess as $key => $val ) {
       $oData->subProcess[$key]['PRO_PARENT'] = $sNewProUid;
       }
     }
-    
+
     if ( isset($oData->event ) && is_array($oData->event) ) {
       foreach ($oData->event as $key => $val ) {
       $oData->event[$key]['PRO_UID'] = $sNewProUid;
       }
     }
-    
+
     if ( isset($oData->caseScheduler ) && is_array($oData->caseScheduler) ) {
       foreach ($oData->caseScheduler as $key => $val){
       $oData->caseScheduler[$key]['PRO_UID'] = $sNewProUid;
@@ -683,7 +683,7 @@ class Processes {
         $oData->steps[$key]['TAS_UID'] = $newGuid;
       }
     }
-    
+
     if ( isset($oData->steptriggers ) && is_array($oData->steptriggers) ) {
       foreach ( $oData->steptriggers as $key => $val ) {
         $newGuid = $map[ $val['TAS_UID'] ];
@@ -736,7 +736,7 @@ class Processes {
         }
       }
     }
-    
+
   }
 
  /**
@@ -750,14 +750,27 @@ class Processes {
       $newGuid = $this->getUnusedDynaformGUID();
       $map[ $val['DYN_UID'] ] = $newGuid;
       $oData->dynaforms[$key]['DYN_UID'] = $newGuid;
-
     }
+
+    if (!is_array($oData->process['PRO_DYNAFORMS'])) {
+      $oData->process['PRO_DYNAFORMS'] = @unserialize($oData->process['PRO_DYNAFORMS']);
+    }
+
+    if (!isset($oData->process['PRO_DYNAFORMS']['PROCESS'])) {
+      $oData->process['PRO_DYNAFORMS']['PROCESS'] = '';
+    }
+
+    if ($oData->process['PRO_DYNAFORMS']['PROCESS'] != '') {
+      $oData->process['PRO_DYNAFORMS']['PROCESS'] = $map[$oData->process['PRO_DYNAFORMS']['PROCESS']];
+    }
+
     foreach ( $oData->steps as $key => $val ) {
       if ( $val['STEP_TYPE_OBJ'] == 'DYNAFORM' ) {
         $newGuid = $map[ $val['STEP_UID_OBJ'] ];
         $oData->steps[$key]['STEP_UID_OBJ'] = $newGuid;
       }
     }
+
     if ( isset($oData->caseTrackerObject ) && is_array($oData->caseTrackerObject) ) {
       foreach ( $oData->caseTrackerObject as $key => $val ) {
         if ( $val['CTO_TYPE_OBJ'] == 'DYNAFORM' ) {
@@ -954,7 +967,7 @@ class Processes {
         $oCriteria = new Criteria('workflow');
         $oCriteria->add(DynaformPeer::PRO_UID, $sProUid);
         $oCriteria->addJoin (DynaformPeer::DYN_UID, FieldConditionPeer::FCD_DYN_UID );
-        
+
         $oDataset = FieldConditionPeer::doSelectRS($oCriteria);
         $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
         $oDataset->next();
@@ -978,7 +991,7 @@ class Processes {
     try {
       $aEvent = array();
       $oCriteria = new Criteria('workflow');
-      
+
       $oCriteria->add(EventPeer::PRO_UID, $sProUid);
       $oDataset = EventPeer::doSelectRS($oCriteria);
       $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
@@ -1004,7 +1017,7 @@ class Processes {
     try {
       $aCaseScheduler = array();
       $oCriteria = new Criteria('workflow');
-      
+
       $oCriteria->add(CaseSchedulerPeer::PRO_UID, $sProUid);
       $oDataset = CaseSchedulerPeer::doSelectRS($oCriteria);
       $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
@@ -1020,7 +1033,7 @@ class Processes {
       throw($oError);
     }
   }
-  
+
 
  /**
   * Get all Swimlanes Elements for any Process
@@ -1264,7 +1277,7 @@ class Processes {
       $oEvent = new Event();
       if($oEvent->Exists ($row['EVN_UID']))
           $oEvent->remove($row['EVN_UID']);
-          
+
       $res = $oEvent->create($row);
     }
     return;
@@ -1281,7 +1294,7 @@ class Processes {
       $oCaseScheduler = new CaseScheduler();
       if($oCaseScheduler->Exists($row['SCH_UID']))
           $oCaseScheduler->remove($row['SCH_UID']);
-          
+
       $res = $oCaseScheduler->create($row);
     }
     return;
@@ -1577,7 +1590,7 @@ class Processes {
       }
     }
   }
-  
+
  /**
   * Renew all the GUID's for Swimlanes Elements Objects
   * @param  $oData array.
@@ -1934,7 +1947,7 @@ class Processes {
       throw($oError);
     }
   }
-  
+
  /**
   * Create Step Trigger Rows for a Process form an array
   * @param array $aTrigger
@@ -2169,7 +2182,7 @@ class Processes {
        $oConnection->remove($aRow['DBS_UID'], $aRow['PRO_UID']);
       }
       $oConnection->create($aRow);
-      
+
       // Update information in the table of contents
       $oContent = new Content();
       $ConCategory = 'DBS_DESCRIPTION';
@@ -2273,7 +2286,7 @@ class Processes {
   */
   function serializeProcess ( $sProUid = '') {
     $oProcess = new Process( );
-    $oData->process           = $this->getProcessRow( $sProUid, false); 
+    $oData->process           = $this->getProcessRow( $sProUid, false);
     $oData->tasks             = $this->getTaskRows( $sProUid );
     $oData->routes            = $this->getRouteRows( $sProUid );
     $oData->lanes             = $this->getLaneRows( $sProUid );
@@ -2493,7 +2506,7 @@ class Processes {
   /* under here, I've not modified those lines */
 
     fclose ($fp);
-    
+
     //$bytesSaved = file_put_contents  ( $filename  , $oData  );
     $filenameLink = 'processes_DownloadFile?p=' . $proTitle . '&r=' . rand(100,1000);
     $result['PRO_UID']          = $data->process['PRO_UID'];
@@ -2534,7 +2547,7 @@ class Processes {
            {  $oData->gridFiles[$value['DYN_UID'] ] = $value['DYN_UID'];
            }
         }
-    
+
       $oData->dynaformFiles = array();
       $sIdentifier = 0;
       while ( !feof ( $fp ) && is_numeric ( $sIdentifier ) ) {
@@ -2559,7 +2572,7 @@ class Processes {
     fclose ( $fp);
     return $oData;
   }
-  
+
   // import process related functions
 
   /**
@@ -2803,9 +2816,9 @@ class Processes {
                     foreach($oData->sqlConnections as $key => $value ){
                       $XmlContent = str_replace($key, $value, $XmlContent);
                     }
-                    
+
                   }
-                  
+
                   #here we verify if is adynaform or a html
                   $aAux = explode(' ', $XmlContent);
                   $ext = (strpos($aAux[0], '<?xml') !== false ? '.xml' : '.html');
@@ -3237,7 +3250,7 @@ class Processes {
     $this->createFieldCondition($oData->fieldCondition, $oData->dynaforms);
     $this->createEventRows( $oData->event);
     $this->createCaseSchedulerRows( $oData->caseScheduler );
-    
+
  }
 
 /**

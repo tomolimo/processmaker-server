@@ -133,7 +133,7 @@ class Process extends BaseProcess {
 
       //verify the content for base language
       Content::copyContentOnBaseLanguageIfNotExists('PRO_DESCRIPTION', $this->getProUid(), $this->pro_description);
-      
+
       $res = Content::addContent( 'PRO_DESCRIPTION', '', $this->getProUid(), $lang, $this->pro_description );
     }
 
@@ -180,6 +180,7 @@ class Process extends BaseProcess {
       $this->setProWidth        ( 10000 );
       $this->setProTitleX       ( 0 );
       $this->setProTitleY       ( 0 );
+      $this->setProDynaforms    ( isset($aData['PRO_DYNAFORMS']) ? (is_array($aData['PRO_DYNAFORMS']) ? serialize($aData['PRO_DYNAFORMS']) : $aData['PRO_DYNAFORMS']) : '' );
 
       if ( $this->validate() ) {
         $con->begin();
@@ -315,6 +316,8 @@ class Process extends BaseProcess {
         	}
         }
 
+        $aFields['PRO_DYNAFORMS'] = @unserialize($aFields['PRO_DYNAFORMS']);
+
         return $aFields;
       }
       else {
@@ -393,6 +396,9 @@ class Process extends BaseProcess {
 
   public function update($aData)
   {
+    if (is_array($aData['PRO_DYNAFORMS'])) {
+      $aData['PRO_DYNAFORMS'] = @serialize($aData['PRO_DYNAFORMS']);
+    }
     $con = Propel::getConnection( ProcessPeer::DATABASE_NAME );
     try {
       $con->begin();
@@ -458,6 +464,7 @@ class Process extends BaseProcess {
     $this->setProWidth        ( $aData['PRO_WIDTH'] );
     $this->setProTitleX       ( $aData['PRO_TITLE_X'] );
     $this->setProTitleY       ( $aData['PRO_TITLE_Y'] );
+    $this->setProDynaforms    ( isset($aData['PRO_DYNAFORMS']) ? (is_array($aData['PRO_DYNAFORMS']) ? serialize($aData['PRO_DYNAFORMS']) : $aData['PRO_DYNAFORMS']) : '' );
     if ( $this->validate() ) {
 			$con->begin();
       $res = $this->save();

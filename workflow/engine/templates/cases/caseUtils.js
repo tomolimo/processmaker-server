@@ -1,3 +1,5 @@
+/* Case Notes - Start */
+
 function closeCaseNotesWindow(){
   if(Ext.get("caseNotesWindowPanel")){
     Ext.get("caseNotesWindowPanel").destroy();
@@ -172,7 +174,7 @@ caseNotesWindow = new Ext.Window({
   {
     cls: 'x-toolbar1',
     text: _('ID_SUBMIT_NOTE'),
-    iconCls: 'x-pm-startcase-btn',
+    iconCls: 'x-pm-notes-btn',
     scale: 'large',
     stype:'button',
     iconAlign: 'top',
@@ -256,3 +258,166 @@ function statusBarMessage( msg, isLoading, success ) {
   }
 }
 
+
+/* Case Notes - End */
+/* Case Summary - Start */
+Ext.util.Format.capitalize = (function(){
+  var re = /(^|[^\w])([a-z])/g,
+  fn = function(m, a, b) {
+    return a + b.toUpperCase();
+  };
+  return function(v) {
+    return v.toLowerCase().replace(re, fn);
+  }
+})();
+
+var openSummaryWindow = function(applicationUID, delegation) {
+  var summaryForm = new Ext.FormPanel({
+    title: Ext.util.Format.capitalize(_('ID_GENERATE_INFO')),
+    frame : true,
+    height: 440,
+    labelWidth: 150,
+    items : [{
+      xtype: 'displayfield',
+      name: 'TITLE1',
+      labelStyle: 'font-weight:bold;'
+    },
+    {
+      xtype: 'displayfield',
+      name: 'PRO_TITLE'
+    },
+    {
+      xtype: 'displayfield',
+      name: 'TITLE'
+    },
+    {
+      xtype: 'displayfield',
+      name: 'APP_NUMBER'
+    },
+    {
+      xtype: 'displayfield',
+      name: 'STATUS'
+    },
+    {
+      xtype: 'displayfield',
+      name: 'APP_UID'
+    },
+    {
+      xtype: 'displayfield',
+      name: 'CREATOR'
+    },
+    {
+      xtype: 'displayfield',
+      name: 'CREATE_DATE'
+    },
+    {
+      xtype: 'displayfield',
+      name: 'UPDATE_DATE'
+    },
+    {
+      xtype: 'displayfield',
+      name: 'TITLE2',
+      labelStyle: 'font-weight:bold;'
+    },
+    {
+      xtype: 'displayfield',
+      name: 'TAS_TITLE'
+    },
+    {
+      xtype: 'displayfield',
+      name: 'CURRENT_USER'
+    },
+    {
+      xtype: 'displayfield',
+      name: 'DEL_DELEGATE_DATE'
+    },
+    {
+      xtype: 'displayfield',
+      name: 'DEL_INIT_DATE'
+    },
+    {
+      xtype: 'displayfield',
+      name: 'DEL_TASK_DUE_DATE'
+    },
+    {
+      xtype: 'displayfield',
+      name: 'DEL_FINISH_DATE'
+    }],
+  });
+
+  var summaryWindow = new Ext.Window({
+    title: _('ID_SUMMARY'),
+    id: 'summaryWindow',
+    width: 750,
+    height: 500,
+    minWidth: 750,
+    minHeight: 500,
+    left: 0,
+    top: 0,
+    resizable: false,
+    closable: true,
+    modal: true,
+    autoScroll:true,
+    shadow: true,
+    bodyBorder: false,
+    keys: {
+      key: 27,
+      fn: function() {
+        summaryWindow.close();
+      }
+    },
+    listeners: {
+      show: function() {
+        this.loadMask = new Ext.LoadMask(this.body, {
+          msg: _('ID_LOADING')
+        });
+        this.loadMask.show();
+        Ext.Ajax.request({
+          url : '../cases/summaryAjax',
+          params : {
+            action : 'getDataSummary',
+            APP_UID: applicationUID,
+            DEL_INDEX: delegation
+          },
+          success: function (result, request) {
+            var response = Ext.util.JSON.decode(result.responseText);
+            var tabs = [];
+            if (response.values.DYN_UID != '') {
+              tabs.push({title: Ext.util.Format.capitalize(_('ID_MORE_INFORMATION')), bodyCfg: {
+                tag: 'iframe',
+                id: 'summaryIFrame',
+                src: '../cases/summary?APP_UID=' + applicationUID + '&DEL_INDEX=' + delegation + '&DYN_UID=' + response.values.DYN_UID,
+                style: {border: '0px none', height: '440px'},
+                onload: ''
+              }});
+            }
+            for (var fieldName in response.labels) {
+              var field = summaryForm.getForm().findField(fieldName);
+              if (field) {
+                field.fieldLabel = response.labels[fieldName];
+              }
+            }
+            summaryForm.getForm().setValues(response.values);
+            tabs.push(summaryForm);
+            var summaryTabs = new Ext.TabPanel({
+              activeTab: 0,
+              items: tabs
+            });
+            summaryWindow.add(summaryTabs);
+            summaryWindow.doLayout();
+            summaryWindow.loadMask.hide();
+          },
+          failure: function (result, request) {
+            Ext.MessageBox.alert('Failed', result.responseText);
+          }
+        });
+      },
+      close: function() {
+        var summaryIFrame = document.getElementById('summaryIFrame');
+        delete(summaryIFrame);
+      }
+    }
+  });
+  summaryWindow.show();
+};
+/* Case Summary - End*/

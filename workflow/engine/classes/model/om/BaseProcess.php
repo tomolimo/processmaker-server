@@ -188,6 +188,13 @@ abstract class BaseProcess extends BaseObject  implements Persistent {
 	 */
 	protected $pro_debug = 0;
 
+
+	/**
+	 * The value for the pro_dynaforms field.
+	 * @var        string
+	 */
+	protected $pro_dynaforms;
+
 	/**
 	 * Flag to prevent endless save loop, if this object is referenced
 	 * by another object which falls in this transaction.
@@ -493,6 +500,17 @@ abstract class BaseProcess extends BaseObject  implements Persistent {
 	{
 
 		return $this->pro_debug;
+	}
+
+	/**
+	 * Get the [pro_dynaforms] column value.
+	 * 
+	 * @return     string
+	 */
+	public function getProDynaforms()
+	{
+
+		return $this->pro_dynaforms;
 	}
 
 	/**
@@ -1000,6 +1018,28 @@ abstract class BaseProcess extends BaseObject  implements Persistent {
 	} // setProDebug()
 
 	/**
+	 * Set the value of [pro_dynaforms] column.
+	 * 
+	 * @param      string $v new value
+	 * @return     void
+	 */
+	public function setProDynaforms($v)
+	{
+
+		// Since the native PHP type for this column is string,
+		// we will cast the input to a string (if it is not).
+		if ($v !== null && !is_string($v)) {
+			$v = (string) $v; 
+		}
+
+		if ($this->pro_dynaforms !== $v) {
+			$this->pro_dynaforms = $v;
+			$this->modifiedColumns[] = ProcessPeer::PRO_DYNAFORMS;
+		}
+
+	} // setProDynaforms()
+
+	/**
 	 * Hydrates (populates) the object variables with values from the database resultset.
 	 *
 	 * An offset (1-based "start column") is specified so that objects can be hydrated
@@ -1062,12 +1102,14 @@ abstract class BaseProcess extends BaseObject  implements Persistent {
 
 			$this->pro_debug = $rs->getInt($startcol + 22);
 
+			$this->pro_dynaforms = $rs->getString($startcol + 23);
+
 			$this->resetModified();
 
 			$this->setNew(false);
 
 			// FIXME - using NUM_COLUMNS may be clearer.
-			return $startcol + 23; // 23 = ProcessPeer::NUM_COLUMNS - ProcessPeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + 24; // 24 = ProcessPeer::NUM_COLUMNS - ProcessPeer::NUM_LAZY_LOAD_COLUMNS).
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating Process object", $e);
@@ -1339,6 +1381,9 @@ abstract class BaseProcess extends BaseObject  implements Persistent {
 			case 22:
 				return $this->getProDebug();
 				break;
+			case 23:
+				return $this->getProDynaforms();
+				break;
 			default:
 				return null;
 				break;
@@ -1382,6 +1427,7 @@ abstract class BaseProcess extends BaseObject  implements Persistent {
 			$keys[20] => $this->getProTitleX(),
 			$keys[21] => $this->getProTitleY(),
 			$keys[22] => $this->getProDebug(),
+			$keys[23] => $this->getProDynaforms(),
 		);
 		return $result;
 	}
@@ -1482,6 +1528,9 @@ abstract class BaseProcess extends BaseObject  implements Persistent {
 			case 22:
 				$this->setProDebug($value);
 				break;
+			case 23:
+				$this->setProDynaforms($value);
+				break;
 		} // switch()
 	}
 
@@ -1528,6 +1577,7 @@ abstract class BaseProcess extends BaseObject  implements Persistent {
 		if (array_key_exists($keys[20], $arr)) $this->setProTitleX($arr[$keys[20]]);
 		if (array_key_exists($keys[21], $arr)) $this->setProTitleY($arr[$keys[21]]);
 		if (array_key_exists($keys[22], $arr)) $this->setProDebug($arr[$keys[22]]);
+		if (array_key_exists($keys[23], $arr)) $this->setProDynaforms($arr[$keys[23]]);
 	}
 
 	/**
@@ -1562,6 +1612,7 @@ abstract class BaseProcess extends BaseObject  implements Persistent {
 		if ($this->isColumnModified(ProcessPeer::PRO_TITLE_X)) $criteria->add(ProcessPeer::PRO_TITLE_X, $this->pro_title_x);
 		if ($this->isColumnModified(ProcessPeer::PRO_TITLE_Y)) $criteria->add(ProcessPeer::PRO_TITLE_Y, $this->pro_title_y);
 		if ($this->isColumnModified(ProcessPeer::PRO_DEBUG)) $criteria->add(ProcessPeer::PRO_DEBUG, $this->pro_debug);
+		if ($this->isColumnModified(ProcessPeer::PRO_DYNAFORMS)) $criteria->add(ProcessPeer::PRO_DYNAFORMS, $this->pro_dynaforms);
 
 		return $criteria;
 	}
@@ -1659,6 +1710,8 @@ abstract class BaseProcess extends BaseObject  implements Persistent {
 		$copyObj->setProTitleY($this->pro_title_y);
 
 		$copyObj->setProDebug($this->pro_debug);
+
+		$copyObj->setProDynaforms($this->pro_dynaforms);
 
 
 		$copyObj->setNew(true);

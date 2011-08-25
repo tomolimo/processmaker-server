@@ -22,7 +22,7 @@
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  *
  */
- 
+
  /**
   * @author Erik Amaru Ortiz <erik@colosa.com>
   * @date Jan 3th, 2010
@@ -36,17 +36,17 @@
   G::LoadClass("case");
   $oCase = new Cases();
   $conf  = new Configurations;
-  
-  $oHeadPublisher =& headPublisher::getSingleton(); 
+
+  $oHeadPublisher =& headPublisher::getSingleton();
   $oHeadPublisher->usingExtJs('ux/miframe');
-  $oHeadPublisher->addExtJsScript('cases/caseNotes', true);
+  $oHeadPublisher->addExtJsScript('cases/caseUtils', true);
   $oHeadPublisher->addExtJsScript('cases/open', true);
-  
+
   $uri = '';
   foreach($_GET as $k=>$v) {
     $uri .= ($uri == '')? "$k=$v": "&$k=$v";
   }
-  
+
   $case   = $oCase->loadCase($_GET['APP_UID'], $_GET['DEL_INDEX']);
 
   if (!isset($_GET['to_revise'])){
