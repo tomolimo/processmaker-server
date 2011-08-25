@@ -1097,7 +1097,7 @@ SELECT 'LV', 'JUR', 'J?rmala'  UNION ALL
 SELECT 'LV', 'KR', 'Kr?slavas Apri??is'  UNION ALL
 SELECT 'LV', 'KU', 'Kuld?gas Apri??is'  UNION ALL
 SELECT 'LV', 'LE', 'Liepdj?s Apri??is'  UNION ALL
-SELECT 'LV', 'LM', 'LimbaÃÂ¾u Apri??is'  UNION ALL
+SELECT 'LV', 'LM', 'LimbaÃ…Â¾u Apri??is'  UNION ALL
 SELECT 'LV', 'LPX', 'Liepdja'  UNION ALL
 SELECT 'LV', 'LU', 'Ludzas Apri??is'  UNION ALL
 SELECT 'LV', 'MA', 'Madonas Apri??is'  UNION ALL
@@ -1147,7 +1147,7 @@ SELECT 'MX', 'TLA', 'Tlaxcala'  UNION ALL
 SELECT 'MX', 'VER', 'Veracruz'  UNION ALL
 SELECT 'MX', 'YUC', 'Yucatán'  UNION ALL
 SELECT 'MX', 'ZAC', 'Zacatecas'  UNION ALL
-SELECT 'NO', '01', 'ÃËstfold'  UNION ALL
+SELECT 'NO', '01', 'ÃƒËœstfold'  UNION ALL
 SELECT 'NO', '02', 'Akershus'  UNION ALL
 SELECT 'NO', '03', 'Oslo'  UNION ALL
 SELECT 'NO', '04', 'Hedmark'  UNION ALL
@@ -1208,22 +1208,22 @@ SELECT 'SE', 'AC', 'VÃ¤sterbottens LÃ¤n'  UNION ALL
 SELECT 'SE', 'BD', 'Norrbottens län'  UNION ALL
 SELECT 'SE', 'C', 'Uppsala län'  UNION ALL
 SELECT 'SE', 'D', 'Södermanlands län'  UNION ALL
-SELECT 'SE', 'E', 'ÃâstergÃÂ¶tlands lÃÂ¤n'  UNION ALL
-SELECT 'SE', 'F', 'JÃÂ¶nkÃÂ¶pings lÃÂ¤n'  UNION ALL
-SELECT 'SE', 'G', 'Kronoborgs lÃÂ¤n'  UNION ALL
-SELECT 'SE', 'H', 'Kalmar lÃÂ¤n'  UNION ALL
-SELECT 'SE', 'I', 'Gotlands lÃÂ¤n'  UNION ALL
-SELECT 'SE', 'K', 'Blekinge lÃÂ¤n'  UNION ALL
-SELECT 'SE', 'M', 'SkÃÂ¥ne lÃÂ¤n'  UNION ALL
-SELECT 'SE', 'N', 'Hallands lÃÂ¤n'  UNION ALL
-SELECT 'SE', 'O', 'VÃÂ¤stra GÃÂ¶talands lÃÂ¤n'  UNION ALL
-SELECT 'SE', 'S', 'VÃÂ¤rmlands lÃÂ¤n'  UNION ALL
-SELECT 'SE', 'T', 'Ãârebro lÃÂ¤n'  UNION ALL
-SELECT 'SE', 'U', 'VÃÂ¤stmanlands lÃÂ¤n'  UNION ALL
-SELECT 'SE', 'W', 'Dalarnes lÃÂ¤n'  UNION ALL
-SELECT 'SE', 'X', 'GÃÂ¤vleborgs lÃÂ¤n'  UNION ALL
-SELECT 'SE', 'Y', 'VÃÂ¤sternorrlands lÃÂ¤n'  UNION ALL
-SELECT 'SE', 'Z', 'JÃÂ¤mtlands lÃÂ¤n'  UNION ALL
+SELECT 'SE', 'E', 'Ãƒâ€“stergÃƒÂ¶tlands lÃƒÂ¤n'  UNION ALL
+SELECT 'SE', 'F', 'JÃƒÂ¶nkÃƒÂ¶pings lÃƒÂ¤n'  UNION ALL
+SELECT 'SE', 'G', 'Kronoborgs lÃƒÂ¤n'  UNION ALL
+SELECT 'SE', 'H', 'Kalmar lÃƒÂ¤n'  UNION ALL
+SELECT 'SE', 'I', 'Gotlands lÃƒÂ¤n'  UNION ALL
+SELECT 'SE', 'K', 'Blekinge lÃƒÂ¤n'  UNION ALL
+SELECT 'SE', 'M', 'SkÃƒÂ¥ne lÃƒÂ¤n'  UNION ALL
+SELECT 'SE', 'N', 'Hallands lÃƒÂ¤n'  UNION ALL
+SELECT 'SE', 'O', 'VÃƒÂ¤stra GÃƒÂ¶talands lÃƒÂ¤n'  UNION ALL
+SELECT 'SE', 'S', 'VÃƒÂ¤rmlands lÃƒÂ¤n'  UNION ALL
+SELECT 'SE', 'T', 'Ãƒâ€“rebro lÃƒÂ¤n'  UNION ALL
+SELECT 'SE', 'U', 'VÃƒÂ¤stmanlands lÃƒÂ¤n'  UNION ALL
+SELECT 'SE', 'W', 'Dalarnes lÃƒÂ¤n'  UNION ALL
+SELECT 'SE', 'X', 'GÃƒÂ¤vleborgs lÃƒÂ¤n'  UNION ALL
+SELECT 'SE', 'Y', 'VÃƒÂ¤sternorrlands lÃƒÂ¤n'  UNION ALL
+SELECT 'SE', 'Z', 'JÃƒÂ¤mtlands lÃƒÂ¤n'  UNION ALL
 SELECT 'TR', '01', 'Adana'  UNION ALL
 SELECT 'TR', '02', 'Adiyaman'  UNION ALL
 SELECT 'TR', '03', 'Afyon'  UNION ALL
@@ -1252,7 +1252,7 @@ SELECT 'TR', '25', 'Erzurum'  UNION ALL
 SELECT 'TR', '26', 'Eskisehir'  UNION ALL
 SELECT 'TR', '27', 'Gaziantep'  UNION ALL
 SELECT 'TR', '28', 'Giresun'  UNION ALL
-SELECT 'TR', '29', 'Gümü?hane'  UNION ALL
+SELECT 'TR', '29', 'Gümüşhane'  UNION ALL
 SELECT 'TR', '30', 'Hakkari'  UNION ALL
 SELECT 'TR', '31', 'Hatay'  UNION ALL
 SELECT 'TR', '32', 'Isparta'  UNION ALL
@@ -1375,3569 +1375,3702 @@ SELECT 'US', 'WY', 'Wyoming' ;
 
 INSERT INTO [TRANSLATION] ([TRN_CATEGORY],[TRN_ID],[TRN_LANG],[TRN_VALUE],[TRN_UPDATE_DATE]) 
 
-SELECT 'LABEL','LOGIN','en','Login','2011-07-15' 
+SELECT 'LABEL','LOGIN','en','Login','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','CASES','en','Cases','2011-07-15' 
+SELECT 'LABEL','CASES','en','Cases','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_USER_HAVENT_RIGHTS_PAGE','en','User does not have rights on this page.','2011-07-15' 
+SELECT 'LABEL','ID_USER_HAVENT_RIGHTS_PAGE','en','User does not have rights on this page.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_WRONG_PASS','en','Wrong password','2011-07-15' 
+SELECT 'LABEL','ID_WRONG_PASS','en','Wrong password','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ABOUT','en','About','2011-07-15' 
+SELECT 'LABEL','ABOUT','en','About','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PROCESSMAP_MESSAGES','en','Messages','2011-07-15' 
+SELECT 'LABEL','ID_PROCESSMAP_MESSAGES','en','Messages','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','demo','en','test javaScript','2011-07-15' 
+SELECT 'JAVASCRIPT','demo','en','test javaScript','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_AVAILABLE_TRIGGERS','en','Available Triggers','2011-07-15' 
+SELECT 'LABEL','ID_AVAILABLE_TRIGGERS','en','Available Triggers','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_LOGOUT','en','Logout','2011-07-15' 
+SELECT 'LABEL','ID_LOGOUT','en','Logout','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MY_ACCOUNT','en','My account','2011-07-15' 
+SELECT 'LABEL','ID_MY_ACCOUNT','en','My account','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_USERS','en','Users','2011-07-15' 
+SELECT 'LABEL','ID_USERS','en','Users','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CASES','en','HOME','2011-07-18' 
+SELECT 'LABEL','ID_CASES','en','HOME','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_APPLICATIONS','en','DESIGNER','2011-07-18' 
+SELECT 'LABEL','ID_APPLICATIONS','en','DESIGNER','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_RULES_AND_USER_GROUPS','en','Rules and user groups','2011-07-15' 
+SELECT 'LABEL','ID_RULES_AND_USER_GROUPS','en','Rules and user groups','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ADD_USER_OF_TASK','en','Last executor of the task','2011-07-15' 
+SELECT 'LABEL','ID_ADD_USER_OF_TASK','en','Last executor of the task','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_END_OF_PROCESS','en','End of process','2011-07-15' 
+SELECT 'LABEL','ID_END_OF_PROCESS','en','End of process','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_TAREA_COLGANTE','en','Leaf task','2011-07-15' 
+SELECT 'LABEL','ID_TAREA_COLGANTE','en','Leaf task','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_OUTPUT_DOCUMENTS','en','Output Documents','2011-07-15' 
+SELECT 'LABEL','ID_OUTPUT_DOCUMENTS','en','Output Documents','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MSG_CONFIRM_DELETE_OUTDOC','en','Do you want to delete this output document ?','2011-07-15' 
+SELECT 'LABEL','ID_MSG_CONFIRM_DELETE_OUTDOC','en','Do you want to delete this output document ?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_NO_RECORDS_FOUND','en','No records found','2011-07-15' 
+SELECT 'LABEL','ID_NO_RECORDS_FOUND','en','No records found','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DYNAFORMS','en','DynaForms','2011-07-15' 
+SELECT 'LABEL','ID_DYNAFORMS','en','DynaForms','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DYNAFORM_EDITOR','en','DynaForm Editor','2011-07-15' 
+SELECT 'LABEL','ID_DYNAFORM_EDITOR','en','DynaForm Editor','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MSG_CONFIRM_RESET_TEMPLATE','en','Are you sure you want to restore the default template ?','2011-07-15' 
+SELECT 'LABEL','ID_MSG_CONFIRM_RESET_TEMPLATE','en','Are you sure you want to restore the default template ?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ADD_FIELD','en','Add field','2011-07-15' 
+SELECT 'LABEL','ID_ADD_FIELD','en','Add field','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_EDIT_FIELD','en','Edit Field','2011-07-15' 
+SELECT 'LABEL','ID_EDIT_FIELD','en','Edit Field','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DELETE_FIELD_SURE','en','Are you sure you want to delete this field?','2011-07-15' 
+SELECT 'LABEL','ID_DELETE_FIELD_SURE','en','Are you sure you want to delete this field?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_EDIT','en','Edit','2011-07-15' 
+SELECT 'LABEL','ID_EDIT','en','Edit','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DELETE','en','Delete','2011-07-15' 
+SELECT 'LABEL','ID_DELETE','en','Delete','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_UP','en','Up','2011-07-15' 
+SELECT 'LABEL','ID_UP','en','Up','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DOWN','en','Down','2011-07-15' 
+SELECT 'LABEL','ID_DOWN','en','Down','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PAGE','en','Page','2011-07-15' 
+SELECT 'LABEL','ID_PAGE','en','Page','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_NEW_DYNAFORM','en','New dynaform','2011-07-15' 
+SELECT 'LABEL','ID_NEW_DYNAFORM','en','New dynaform','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_EDIT_DYNAFORM','en','Edit DynaForm','2011-07-15' 
+SELECT 'LABEL','ID_EDIT_DYNAFORM','en','Edit DynaForm','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MSG_CONFIRM_DELETE_DYNAFORM','en','Do you want to delete this DynaForm ?','2011-07-15' 
+SELECT 'LABEL','ID_MSG_CONFIRM_DELETE_DYNAFORM','en','Do you want to delete this DynaForm ?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ADD_MESSAGE','en','Add message','2011-07-15' 
+SELECT 'LABEL','ID_ADD_MESSAGE','en','Add message','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MESSAGES','en','Messages','2011-07-15' 
+SELECT 'LABEL','ID_MESSAGES','en','Messages','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MSG_CONFIRM_DELETE_MESSAGE','en','Do you want to delete this message?','2011-07-15' 
+SELECT 'LABEL','ID_MSG_CONFIRM_DELETE_MESSAGE','en','Do you want to delete this message?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ACTIVE','en','Active','2011-07-15' 
+SELECT 'LABEL','ID_ACTIVE','en','Active','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_INACTIVE','en','Inactive','2011-07-15' 
+SELECT 'LABEL','ID_INACTIVE','en','Inactive','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MSG_CONFIRM_DELETE_PROCESS','en','Do you want to delete this process ?','2011-07-15' 
+SELECT 'LABEL','ID_MSG_CONFIRM_DELETE_PROCESS','en','Do you want to delete this process ?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_VIEW','en','View','2011-07-15' 
+SELECT 'LABEL','ID_VIEW','en','View','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MSG_CONFIRM_DELETE_USER','en','Do you want to delete this user ?','2011-07-15' 
+SELECT 'LABEL','ID_MSG_CONFIRM_DELETE_USER','en','Do you want to delete this user ?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_USERS_LIST','en','Users','2011-07-15' 
+SELECT 'LABEL','ID_USERS_LIST','en','Users','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_USER_REGISTERED','en','User name already exists','2011-07-15' 
+SELECT 'LABEL','ID_USER_REGISTERED','en','User name already exists','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MSG_ERROR_USR_USERNAME','en','User name required!','2011-07-15' 
+SELECT 'LABEL','ID_MSG_ERROR_USR_USERNAME','en','User name required!','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MSG_ERROR_DUE_DATE','en','Due date required!','2011-07-15' 
+SELECT 'LABEL','ID_MSG_ERROR_DUE_DATE','en','Due date required!','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_NEW_PASS_SAME_OLD_PASS','en','The  confirm Password fields must be the same!','2011-07-15' 
+SELECT 'LABEL','ID_NEW_PASS_SAME_OLD_PASS','en','The  confirm Password fields must be the same!','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_NEW_INPUTDOCS','en','New Input Document','2011-07-15' 
+SELECT 'LABEL','ID_NEW_INPUTDOCS','en','New Input Document','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_EDIT_INPUTDOCS','en','Edit Input Document','2011-07-15' 
+SELECT 'LABEL','ID_EDIT_INPUTDOCS','en','Edit Input Document','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MSG_CONFIRM_DELETE_DOCUMENT','en','Do you want to delete this document ?','2011-07-15' 
+SELECT 'LABEL','ID_MSG_CONFIRM_DELETE_DOCUMENT','en','Do you want to delete this document ?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_NEW_TRIGGERS','en','New Trigger','2011-07-15' 
+SELECT 'LABEL','ID_NEW_TRIGGERS','en','New Trigger','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_EDIT_TRIGGERS','en','Edit Trigger','2011-07-15' 
+SELECT 'LABEL','ID_EDIT_TRIGGERS','en','Edit Trigger','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MSG_CONFIRM_DELETE_TRIGGER','en','Do you want to delete this trigger?','2011-07-15' 
+SELECT 'LABEL','ID_MSG_CONFIRM_DELETE_TRIGGER','en','Do you want to delete this trigger?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_GROUP','en','Group','2011-07-15' 
+SELECT 'LABEL','ID_GROUP','en','Group','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DE_ASSIGN','en','Remove','2011-07-15' 
+SELECT 'LABEL','ID_DE_ASSIGN','en','Remove','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MSG_CONFIRM_DEASIGN_USER_MESSAGE','en','Are you sure you want to remove this user?','2011-07-15' 
+SELECT 'LABEL','ID_MSG_CONFIRM_DEASIGN_USER_MESSAGE','en','Are you sure you want to remove this user?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MSG_ERROR_PRO_TITLE','en','Process title required!','2011-07-15' 
+SELECT 'LABEL','ID_MSG_ERROR_PRO_TITLE','en','Process title required!','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_TASK','en','Task','2011-07-15' 
+SELECT 'LABEL','ID_TASK','en','Task','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CONDITION','en','Condition','2011-07-15' 
+SELECT 'LABEL','ID_CONDITION','en','Condition','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MSG_CONFIRM_DELETE_WEBBOT','en','Are you sure you want to delete this webbot?','2011-07-15' 
+SELECT 'LABEL','ID_MSG_CONFIRM_DELETE_WEBBOT','en','Are you sure you want to delete this webbot?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DYNAFORM_EDITOR_SAVE_CHANGES','en','Do you want to save changes?','2011-07-15' 
+SELECT 'LABEL','ID_DYNAFORM_EDITOR_SAVE_CHANGES','en','Do you want to save changes?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_REQUEST_DOCUMENTS','en','Input Documents','2011-07-15' 
+SELECT 'LABEL','ID_REQUEST_DOCUMENTS','en','Input Documents','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_WEBBOT','en','Webbots','2011-07-15' 
+SELECT 'LABEL','ID_WEBBOT','en','Webbots','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ADD','en','Add','2011-07-15' 
+SELECT 'LABEL','ID_ADD','en','Add','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_USER_HAVENT_RIGHTS_SYSTEM','en','User does not have access to the system','2011-07-15' 
+SELECT 'LABEL','ID_USER_HAVENT_RIGHTS_SYSTEM','en','User does not have access to the system','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_START_CASE','en','New','2011-07-15' 
+SELECT 'LABEL','ID_START_CASE','en','New','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_NEW_GROUP','en','New','2011-07-15' 
+SELECT 'LABEL','ID_NEW_GROUP','en','New','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MEMBERS','en','Members','2011-07-15' 
+SELECT 'LABEL','ID_MEMBERS','en','Members','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MSG_CONFIRM_DELETE_GROUP','en','Draft','2011-07-15' 
+SELECT 'LABEL','ID_MSG_CONFIRM_DELETE_GROUP','en','Draft','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_INCORRECT_EMAIL','en','Your E-mail address is not valid.','2011-07-15' 
+SELECT 'LABEL','ID_INCORRECT_EMAIL','en','Your E-mail address is not valid.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_USER_NOT_REGISTERED','en','User not registered!','2011-07-15' 
+SELECT 'LABEL','ID_USER_NOT_REGISTERED','en','User not registered!','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_USER_INACTIVE','en','User inactive!','2011-07-15' 
+SELECT 'LABEL','ID_USER_INACTIVE','en','User inactive!','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CANNOT_CHANGE_STATUS_ADMIN_USER','en','Can''t change the status of administrator!','2011-07-15' 
+SELECT 'LABEL','ID_CANNOT_CHANGE_STATUS_ADMIN_USER','en','Can''t change the status of administrator!','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CANNOT_DELETE_ADMIN_USER','en','Can''t delete the administrator!','2011-07-15' 
+SELECT 'LABEL','ID_CANNOT_DELETE_ADMIN_USER','en','Can''t delete the administrator!','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ASSIGN','en','Assign','2011-07-15' 
+SELECT 'LABEL','ID_ASSIGN','en','Assign','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ASSIGN_SCREEN','en','Assign Screen','2011-07-15' 
+SELECT 'LABEL','ID_ASSIGN_SCREEN','en','Assign Screen','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ASSIGN_TASK','en','Assign Task','2011-07-15' 
+SELECT 'LABEL','ID_ASSIGN_TASK','en','Assign Task','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_UPLOAD','en','Upload','2011-07-15' 
+SELECT 'LABEL','ID_UPLOAD','en','Upload','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_GENERATE','en','Generate','2011-07-15' 
+SELECT 'LABEL','ID_GENERATE','en','Generate','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CONFIRM_DELETE_ELEMENT','en','Approval of consolidated tasks','2011-07-15' 
+SELECT 'LABEL','ID_CONFIRM_DELETE_ELEMENT','en','Approval of consolidated tasks','2011-08-25' 
  ;
 INSERT INTO [TRANSLATION] ([TRN_CATEGORY],[TRN_ID],[TRN_LANG],[TRN_VALUE],[TRN_UPDATE_DATE]) 
 
-SELECT 'JAVASCRIPT','ID_PROCESSMAP_TRIGGERS','en','Triggers','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_PROCESSMAP_TRIGGERS','en','Triggers','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_PROCESSMAP_OUTPUT_DOCUMENTS','en','Output Documents','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_PROCESSMAP_OUTPUT_DOCUMENTS','en','Output Documents','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','DRAFT','en','High','2011-07-15' 
+SELECT 'LABEL','DRAFT','en','High','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PROCESSMAP_DYNAFORMS','en','DynaForms','2011-07-15' 
+SELECT 'LABEL','ID_PROCESSMAP_DYNAFORMS','en','DynaForms','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ATTACH','en','Attach','2011-07-15' 
+SELECT 'LABEL','ID_ATTACH','en','Attach','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MSG_CONFIRM_DELETE_CASES','en','Are you sure  you want to delete all     selected cases?','2011-07-15' 
+SELECT 'LABEL','ID_MSG_CONFIRM_DELETE_CASES','en','Are you sure  you want to delete all     selected cases?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ALL','en','All','2011-07-15' 
+SELECT 'LABEL','ID_ALL','en','All','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CANCELLED','en','Canceled','2011-07-15' 
+SELECT 'LABEL','ID_CANCELLED','en','Canceled','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_FINISHED','en','Finished','2011-07-15' 
+SELECT 'LABEL','ID_FINISHED','en','Finished','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PAUSED','en','Paused','2011-07-15' 
+SELECT 'LABEL','ID_PAUSED','en','Paused','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DERIVED','en','Sent','2011-07-15' 
+SELECT 'LABEL','ID_DERIVED','en','Sent','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_NOT_SENT','en','Not sent','2011-07-15' 
+SELECT 'LABEL','ID_NOT_SENT','en','Not sent','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DRAFT','en','Draft','2011-07-15' 
+SELECT 'LABEL','ID_DRAFT','en','Draft','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_COMPLETED','en','Completed','2011-07-15' 
+SELECT 'LABEL','ID_COMPLETED','en','Completed','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_TO_DO','en','To do','2011-07-15' 
+SELECT 'LABEL','ID_TO_DO','en','To do','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PLEASE_ENTER_COMMENTS','en','Please enter comments!','2011-07-15' 
+SELECT 'LABEL','ID_PLEASE_ENTER_COMMENTS','en','Please enter comments!','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PLEASE_SELECT_FILE','en','Please select the file to attach!','2011-07-15' 
+SELECT 'LABEL','ID_PLEASE_SELECT_FILE','en','Please select the file to attach!','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PROPERTIES','en','Properties','2011-07-15' 
+SELECT 'LABEL','ID_PROPERTIES','en','Properties','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_EMPTY','en','empty','2011-07-15' 
+SELECT 'LABEL','ID_EMPTY','en','empty','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SELECT','en','Select','2011-07-18' 
+SELECT 'LABEL','ID_SELECT','en','Select','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SEARCH','en','Search','2011-07-15' 
+SELECT 'LABEL','ID_SEARCH','en','Search','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_REQUIRED_FIELD','en','Required Field','2011-07-15' 
+SELECT 'LABEL','ID_REQUIRED_FIELD','en','Required Field','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_TRIGGERS','en','Triggers','2011-07-15' 
+SELECT 'LABEL','ID_TRIGGERS','en','Triggers','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_OPEN','en','Open','2011-07-15' 
+SELECT 'LABEL','ID_OPEN','en','Open','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_STEPS','en','Steps','2011-07-15' 
+SELECT 'LABEL','ID_STEPS','en','Steps','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_INFORMATION','en','Information','2011-07-15' 
+SELECT 'LABEL','ID_INFORMATION','en','Information','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ACTIONS','en','Actions','2011-07-15' 
+SELECT 'LABEL','ID_ACTIONS','en','Actions','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PROCESS_INFORMATION','en','Process Information','2011-07-15' 
+SELECT 'LABEL','ID_PROCESS_INFORMATION','en','Process Information','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_TASK_INFORMATION','en','Task Information','2011-07-15' 
+SELECT 'LABEL','ID_TASK_INFORMATION','en','Task Information','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CANCEL_CASE','en','Cancel Case','2011-07-15' 
+SELECT 'LABEL','ID_CANCEL_CASE','en','Cancel Case','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_YOU_ARE_FIRST_STEP','en','You are in the first step!','2011-07-15' 
+SELECT 'LABEL','ID_YOU_ARE_FIRST_STEP','en','You are in the first step!','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','EDIT_PROCESS','en','Edit process','2011-07-15' 
+SELECT 'JAVASCRIPT','EDIT_PROCESS','en','Edit process','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','curriculum','en','Resume','2011-07-15' 
+SELECT 'JAVASCRIPT','curriculum','en','Resume','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_OPEN_SEARCH','en','Advanced Search','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_OPEN_SEARCH','en','Advanced Search','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_CLOSE_SEARCH','en','Close Search','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_CLOSE_SEARCH','en','Close Search','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_URL_OF_LINK','en','Enter the URL for the link','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_URL_OF_LINK','en','Enter the URL for the link','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_FONT_COLOR','en','Change text color','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_FONT_COLOR','en','Change text color','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_HILITE_COLOR','en','Highlight Color','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_HILITE_COLOR','en','Highlight Color','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_INSERT_HTML','en','Insert HTML code','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_INSERT_HTML','en','Insert HTML code','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_IMAGE_URI','en','Image URI','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_IMAGE_URI','en','Image URI','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_FONT_NAME','en','Font Name','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_FONT_NAME','en','Font Name','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_FONT_SIZE','en','Font Size','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_FONT_SIZE','en','Font Size','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_BACKGROUND_COLOR','en','Background color','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_BACKGROUND_COLOR','en','Background color','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_WHICH_BLOCK','en','Block','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_WHICH_BLOCK','en','Block','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_PROCESSMAP_SEQUENTIAL','en','Sequential','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_PROCESSMAP_SEQUENTIAL','en','Sequential','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_PROCESSMAP_SELECTION','en','Selection','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_PROCESSMAP_SELECTION','en','Selection','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_PROCESSMAP_EVALUATION','en','Evaluation','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_PROCESSMAP_EVALUATION','en','Evaluation','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_PROCESSMAP_PARALLEL_FORK','en','Parallel (fork)','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_PROCESSMAP_PARALLEL_FORK','en','Parallel (fork)','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_PROCESSMAP_PARALLEL_EVALUATION_FORK','en','Parallel by Evaluation (fork)','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_PROCESSMAP_PARALLEL_EVALUATION_FORK','en','Parallel by Evaluation (fork)','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_PROCESSMAP_PARALLEL_JOIN','en','Parallel (join)','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_PROCESSMAP_PARALLEL_JOIN','en','Parallel (join)','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_PROCESSMAP_INPUT_DOCUMENTS','en','Input Documents','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_PROCESSMAP_INPUT_DOCUMENTS','en','Input Documents','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_PROCESSMAP_LOADING','en','Loading......','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_PROCESSMAP_LOADING','en','Loading......','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_PROCESSMAP_EDIT_PROCESS','en','Edit process','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_PROCESSMAP_EDIT_PROCESS','en','Edit process','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_PROCESSMAP_ADD_TASK','en','Add task','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_PROCESSMAP_ADD_TASK','en','Add task','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_PROCESSMAP_ADD_TEXT','en','Add text','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_PROCESSMAP_ADD_TEXT','en','Add text','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_PROCESSMAP_HORIZONTAL_LINE','en','Horizontal line','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_PROCESSMAP_HORIZONTAL_LINE','en','Horizontal line','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_PROCESSMAP_VERTICAL_LINE','en','Vertical line','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_PROCESSMAP_VERTICAL_LINE','en','Vertical line','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_PROCESSMAP_DELETE_ALL_LINES','en','Delete all lines','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_PROCESSMAP_DELETE_ALL_LINES','en','Delete all lines','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_PROCESSMAP_CONFIRM_DELETE_ALL_LINES','en','Do you want to delete the guide lines?','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_PROCESSMAP_CONFIRM_DELETE_ALL_LINES','en','Do you want to delete the guide lines?','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_PROCESSMAP_PROMPT_RENAME_TEXT','en','Rename to:','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_PROCESSMAP_PROMPT_RENAME_TEXT','en','Rename to:','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_PROCESSMAP_STEPS','en','Steps','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_PROCESSMAP_STEPS','en','Steps','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_PROCESSMAP_TASK_STEPS','en','Steps of:','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_PROCESSMAP_TASK_STEPS','en','Steps of:','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_PROCESSMAP_CONDITIONS','en','Conditions','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_PROCESSMAP_CONDITIONS','en','Conditions','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_PROCESSMAP_USERS_AND_GROUPS','en','Users & User Groups','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_PROCESSMAP_USERS_AND_GROUPS','en','Users & User Groups','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_PROCESSMAP_WORKFLOW_PATTERNS','en','Routing rule','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_PROCESSMAP_WORKFLOW_PATTERNS','en','Routing rule','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_PROCESSMAP_DELETE_TASK','en','Delete task','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_PROCESSMAP_DELETE_TASK','en','Delete task','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_PROCESSMAP_CONFIRM_DELETE_TASK','en','Do you want to delete the task:','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_PROCESSMAP_CONFIRM_DELETE_TASK','en','Do you want to delete the task:','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_PROCESSMAP_PROPERTIES','en','Properties','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_PROCESSMAP_PROPERTIES','en','Properties','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_PROCESSMAP_TASK','en','Task','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_PROCESSMAP_TASK','en','Task','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_PROCESSMAP_SUBMIT','en','Save','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_PROCESSMAP_SUBMIT','en','Save','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_PROCESSMAP_CANCEL','en','Cancel','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_PROCESSMAP_CANCEL','en','Cancel','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_PROCESSMAP_TASK_PROPERTIES_DEFINITION','en','Definition','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_PROCESSMAP_TASK_PROPERTIES_DEFINITION','en','Definition','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_PROCESSMAP_TASK_PROPERTIES_ASSIGNMENTS','en','Designation rules','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_PROCESSMAP_TASK_PROPERTIES_ASSIGNMENTS','en','Designation rules','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_PROCESSMAP_TASK_PROPERTIES_TIMING','en','Timing control','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_PROCESSMAP_TASK_PROPERTIES_TIMING','en','Timing control','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_PROCESSMAP_TASK_PROPERTIES_PERMISSIONS','en','Permissions','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_PROCESSMAP_TASK_PROPERTIES_PERMISSIONS','en','Permissions','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_PROCESSMAP_TASK_PROPERTIES_LABELS','en','Case Labels','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_PROCESSMAP_TASK_PROPERTIES_LABELS','en','Case Labels','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_PROCESSMAP_DELETE_GUIDE','en','Delete line','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_PROCESSMAP_DELETE_GUIDE','en','Delete line','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_PROCESSMAP_EDIT_TEXT','en','Edit text','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_PROCESSMAP_EDIT_TEXT','en','Edit text','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_PROCESSMAP_DELETE_TEXT','en','Delete text','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_PROCESSMAP_DELETE_TEXT','en','Delete text','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_PROCESSMAP_EDIT_TEXT_CHANGE_TO','en','Change to:','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_PROCESSMAP_EDIT_TEXT_CHANGE_TO','en','Change to:','2011-08-25' 
  ;
 INSERT INTO [TRANSLATION] ([TRN_CATEGORY],[TRN_ID],[TRN_LANG],[TRN_VALUE],[TRN_UPDATE_DATE]) 
 
-SELECT 'JAVASCRIPT','ID_PROCESSMAP_CONFIRM_WORKFLOW_PATTERN_CHANGE','en','Are you sure you want to change the routing rule?','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_PROCESSMAP_CONFIRM_WORKFLOW_PATTERN_CHANGE','en','Are you sure you want to change the routing rule?','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_PROCESSMAP_NEW_TASK','en','New task','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_PROCESSMAP_NEW_TASK','en','New task','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_PROCESSMAP_TEXT','en','Text:','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_PROCESSMAP_TEXT','en','Text:','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_NEW_STEP','en','New Step','2011-07-15' 
+SELECT 'LABEL','ID_NEW_STEP','en','New Step','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_SAVED','en','DynaForm is now saved','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_SAVED','en','DynaForm is now saved','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_EXIT_WITHOUT_SAVING','en','Exit without saving?','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_EXIT_WITHOUT_SAVING','en','Exit without saving?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_GROUP_CHART','en','Group Chart','2011-07-15' 
+SELECT 'LABEL','ID_GROUP_CHART','en','Group Chart','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_WITHOUT_RESUME','en','Without resume!','2011-07-15' 
+SELECT 'LABEL','ID_WITHOUT_RESUME','en','Without resume!','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_NO_RESUME','en','The user doesn''t have a resume.','2011-07-15' 
+SELECT 'LABEL','ID_NO_RESUME','en','The user doesn''t have a resume.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_NO_DERIVATION_RULE','en','Process definition error: All conditions in  parallel evaluation routing rule evaluated  to false, so workflow has stopped. Please  change the definition of the parallel  evaluation routing rule.','2011-07-15' 
+SELECT 'LABEL','ID_NO_DERIVATION_RULE','en','Process definition error: All conditions in  parallel evaluation routing rule evaluated  to false, so workflow has stopped. Please  change the definition of the parallel  evaluation routing rule.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_NO_USERS','en','The task doesn''t have any users.','2011-07-15' 
+SELECT 'LABEL','ID_NO_USERS','en','The task doesn''t have any users.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CANCEL','en','Cancel','2011-07-15' 
+SELECT 'LABEL','ID_CANCEL','en','Cancel','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PROCESS_MAP','en','Process Map','2011-07-15' 
+SELECT 'LABEL','ID_PROCESS_MAP','en','Process Map','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_BEFORE_ASSIGNMENT','en','Before Assignment','2011-07-15' 
+SELECT 'LABEL','ID_BEFORE_ASSIGNMENT','en','Before Assignment','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_BEFORE_DERIVATION','en','Before Derivation','2011-07-15' 
+SELECT 'LABEL','ID_BEFORE_DERIVATION','en','Before Derivation','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_AFTER_DERIVATION','en','After Derivation','2011-07-15' 
+SELECT 'LABEL','ID_AFTER_DERIVATION','en','After Derivation','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_BEFORE','en','Before','2011-07-15' 
+SELECT 'LABEL','ID_BEFORE','en','Before','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_AFTER','en','After','2011-07-15' 
+SELECT 'LABEL','ID_AFTER','en','After','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_TRANSFER_HISTORY','en','Transfer History','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_TRANSFER_HISTORY','en','Transfer History','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_TRANSFER_HISTORY','en','Transfer History','2011-07-15' 
+SELECT 'LABEL','ID_TRANSFER_HISTORY','en','Transfer History','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ENABLED','en','Enabled','2011-07-15' 
+SELECT 'LABEL','ID_ENABLED','en','Enabled','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_NO_DERIVATIONS_DEFINED','en','No derivations were defined.','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_NO_DERIVATIONS_DEFINED','en','No derivations were defined.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ROWS','en','Rows','2011-07-15' 
+SELECT 'LABEL','ID_ROWS','en','Rows','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MEMBER','en','Member','2011-07-15' 
+SELECT 'LABEL','ID_MEMBER','en','Member','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_USER','en','User','2011-07-15' 
+SELECT 'LABEL','ID_USER','en','User','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_FILE_TOO_BIG','en','The file is too big to upload!','2011-07-15' 
+SELECT 'LABEL','ID_FILE_TOO_BIG','en','The file is too big to upload!','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_EDIT_CONDITIONS_OF_STEP','en','Edit step conditions','2011-07-15' 
+SELECT 'LABEL','ID_EDIT_CONDITIONS_OF_STEP','en','Edit step conditions','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SAVE_DERIVATION_RULES_BEFORE_CLOSING','en','Save changes to the routing rules before closing?','2011-07-15' 
+SELECT 'LABEL','ID_SAVE_DERIVATION_RULES_BEFORE_CLOSING','en','Save changes to the routing rules before closing?','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_SAVE_DERIVATION_RULES_BEFORE_CLOSING','en','Save changes to the routing rules before closing?','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_SAVE_DERIVATION_RULES_BEFORE_CLOSING','en','Save changes to the routing rules before closing?','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_PROCESSMAP_WORKFLOW_DELETE_PATTERNS','en','Delete Routing rule','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_PROCESSMAP_WORKFLOW_DELETE_PATTERNS','en','Delete Routing rule','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_PROCESSMAP_WORKFLOW_CONFIRM_DELETE_PATTERNS','en','Are you sure you want to delete the routing rules?','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_PROCESSMAP_WORKFLOW_CONFIRM_DELETE_PATTERNS','en','Are you sure you want to delete the routing rules?','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_END_OF_PROCESS','en','End of process','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_END_OF_PROCESS','en','End of process','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ACCEPT','en','Accept','2011-07-15' 
+SELECT 'JAVASCRIPT','ACCEPT','en','Accept','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','CANCEL','en','Cancel','2011-07-15' 
+SELECT 'JAVASCRIPT','CANCEL','en','Cancel','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_GROUP_INACTIVE','en','Group inactive','2011-07-15' 
+SELECT 'LABEL','ID_GROUP_INACTIVE','en','Group inactive','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_JUMP','en','Jump','2011-07-15' 
+SELECT 'LABEL','ID_JUMP','en','Jump','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CASE_HISTORY','en','Case History','2011-07-15' 
+SELECT 'LABEL','ID_CASE_HISTORY','en','Case History','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_CASE_HISTORY','en','Case History','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_CASE_HISTORY','en','Case History','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_COLOR_LEYENDS','en','Key','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_COLOR_LEYENDS','en','Key','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PREVIEW','en','Preview','2011-07-15' 
+SELECT 'LABEL','ID_PREVIEW','en','Preview','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_XML','en','XML','2011-07-15' 
+SELECT 'LABEL','ID_XML','en','XML','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_HTML','en','HTML','2011-07-15' 
+SELECT 'LABEL','ID_HTML','en','HTML','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_FIELDS_LIST','en','Fields handler','2011-07-15' 
+SELECT 'LABEL','ID_FIELDS_LIST','en','Fields handler','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_JAVASCRIPTS','en','JavaScripts','2011-07-15' 
+SELECT 'LABEL','ID_JAVASCRIPTS','en','JavaScripts','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_TASK_IN_PROGRESS','en','Task in Progress','2011-07-15' 
+SELECT 'LABEL','ID_TASK_IN_PROGRESS','en','Task in Progress','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_COMPLETED_TASK','en','Completed Task','2011-07-15' 
+SELECT 'LABEL','ID_COMPLETED_TASK','en','Completed Task','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PENDING_TASK','en','Pending Task / Not Executed','2011-07-15' 
+SELECT 'LABEL','ID_PENDING_TASK','en','Pending Task / Not Executed','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PARALLEL_TASK','en','Parallel Task','2011-07-15' 
+SELECT 'LABEL','ID_PARALLEL_TASK','en','Parallel Task','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_CLICK_VIEW_MORE_INFO','en','Click here to view more info','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_CLICK_VIEW_MORE_INFO','en','Click here to view more info','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','TO_DO','en','To Do','2011-07-15' 
+SELECT 'LABEL','TO_DO','en','To Do','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','PAUSED','en','Pause','2011-07-15' 
+SELECT 'LABEL','PAUSED','en','Pause','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','COMPLETED','en','Completed','2011-07-15' 
+SELECT 'LABEL','COMPLETED','en','Completed','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','CANCELLED','en','Canceled','2011-07-15' 
+SELECT 'LABEL','CANCELLED','en','Canceled','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_NOT_FINISHED','en','Not finished','2011-07-15' 
+SELECT 'LABEL','ID_NOT_FINISHED','en','Not finished','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_HOUR','en','Hour','2011-07-15' 
+SELECT 'LABEL','ID_HOUR','en','Hour','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_HOURS','en','Hours','2011-07-15' 
+SELECT 'LABEL','ID_HOURS','en','Hours','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MINUTE','en','Minute','2011-07-15' 
+SELECT 'LABEL','ID_MINUTE','en','Minute','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MINUTES','en','Minutes','2011-07-15' 
+SELECT 'LABEL','ID_MINUTES','en','Minutes','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SECOND','en','Second','2011-07-15' 
+SELECT 'LABEL','ID_SECOND','en','Second','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SECONDS','en','Seconds','2011-07-15' 
+SELECT 'LABEL','ID_SECONDS','en','Seconds','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_NONE','en','None','2011-07-15' 
+SELECT 'LABEL','ID_NONE','en','None','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CASE_NOT_YET_STARTED','en','Case not yet started','2011-07-15' 
+SELECT 'LABEL','ID_CASE_NOT_YET_STARTED','en','Case not yet started','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_CONFIRM_CANCEL_CASE','en','Are you sure you want to cancel this case?','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_CONFIRM_CANCEL_CASE','en','Are you sure you want to cancel this case?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SETUP','en','ADMIN','2011-07-18' 
+SELECT 'LABEL','ID_SETUP','en','ADMIN','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PREVIOUS_STEP','en','Previous Step','2011-07-15' 
+SELECT 'LABEL','ID_PREVIOUS_STEP','en','Previous Step','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MSG_CONFIRM_REMOVE_USER','en','Are you sure you want to remove this user?','2011-07-15' 
+SELECT 'LABEL','ID_MSG_CONFIRM_REMOVE_USER','en','Are you sure you want to remove this user?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MSG_CONFIRM_DEASIGN_USER_GROUP_MESSAGE','en','Are you sure you want to remove this user or group?','2011-07-15' 
+SELECT 'LABEL','ID_MSG_CONFIRM_DEASIGN_USER_GROUP_MESSAGE','en','Are you sure you want to remove this user or group?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DASHBOARD','en','DASHBOARD','2011-07-15' 
+SELECT 'LABEL','ID_DASHBOARD','en','DASHBOARD','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MSG_CONFIRM_REMOVE_TRIGGER','en','Are you sure you want to remove this trigger?','2011-07-15' 
+SELECT 'LABEL','ID_MSG_CONFIRM_REMOVE_TRIGGER','en','Are you sure you want to remove this trigger?','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_MSG_CONFIRM_REMOVE_TRIGGER','en','Are you sure you want to remove this trigger?','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_MSG_CONFIRM_REMOVE_TRIGGER','en','Are you sure you want to remove this trigger?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_NEW','en','New','2011-07-15' 
+SELECT 'LABEL','ID_NEW','en','New','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_CONFIRM_REMOVE_TRIGGER','en','Are you sure you want to remove this trigger?','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_CONFIRM_REMOVE_TRIGGER','en','Are you sure you want to remove this trigger?','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_PROCESSMAP_EXPORT_PROCESS','en','Export Process','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_PROCESSMAP_EXPORT_PROCESS','en','Export Process','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_INVALID_EMAIL','en','The E-mail address is not valid.','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_INVALID_EMAIL','en','The E-mail address is not valid.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_NOT_WORKSPACE','en','You have specified an unavailable workspace.','2011-07-15' 
+SELECT 'LABEL','ID_NOT_WORKSPACE','en','You have specified an unavailable workspace.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_REPORT_TABLES','en','Report Tables','2011-07-15' 
+SELECT 'LABEL','ID_REPORT_TABLES','en','Report Tables','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_PROCESSMAP_REPORT_TABLES','en','Report Tables','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_PROCESSMAP_REPORT_TABLES','en','Report Tables','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_NEW_REPORT_TABLE','en','New Report Table','2011-07-15' 
+SELECT 'LABEL','ID_NEW_REPORT_TABLE','en','New Report Table','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_EDIT_REPORT_TABLE','en','Edit Report Table','2011-07-15' 
+SELECT 'LABEL','ID_EDIT_REPORT_TABLE','en','Edit Report Table','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MSG_CONFIRM_DELETE_REPORT_TABLE','en','Do you want to delete this report table?','2011-07-15' 
+SELECT 'LABEL','ID_MSG_CONFIRM_DELETE_REPORT_TABLE','en','Do you want to delete this report table?','2011-08-25' 
  ;
 INSERT INTO [TRANSLATION] ([TRN_CATEGORY],[TRN_ID],[TRN_LANG],[TRN_VALUE],[TRN_UPDATE_DATE]) 
 
-SELECT 'LABEL','ID_PLEASE_ENTER_REQUIRED_FIELDS','en','Please enter the required fields','2011-07-15' 
+SELECT 'LABEL','ID_PLEASE_ENTER_REQUIRED_FIELDS','en','Please enter the required fields','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_TABLE_ALREADY_EXISTS','en','Table already exists','2011-07-15' 
+SELECT 'LABEL','ID_TABLE_ALREADY_EXISTS','en','Table already exists','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_LANGUAGES','en','Language','2011-07-15' 
+SELECT 'LABEL','ID_LANGUAGES','en','Language','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_EXPORT','en','Export','2011-07-15' 
+SELECT 'LABEL','ID_EXPORT','en','Export','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MSG_CONFIRM_REMOVE_LANGUAGE','en','Are you sure you want to remove this language?','2011-07-15' 
+SELECT 'LABEL','ID_MSG_CONFIRM_REMOVE_LANGUAGE','en','Are you sure you want to remove this language?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MSG_CANNOT_REMOVE_LANGUAGE','en','You cannot delete the default language','2011-07-15' 
+SELECT 'LABEL','ID_MSG_CANNOT_REMOVE_LANGUAGE','en','You cannot delete the default language','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PLEASE_SELECT_PO_FILE','en','Please select a .po file','2011-07-15' 
+SELECT 'LABEL','ID_PLEASE_SELECT_PO_FILE','en','Please select a .po file','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_EMAIL','en','Email','2011-07-15' 
+SELECT 'LABEL','ID_EMAIL','en','Email','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_REPORT3','en','Number of cases per month','2011-07-15' 
+SELECT 'LABEL','ID_REPORT3','en','Number of cases per month','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ROLES_SUCCESS_UPDATE','en','Role has been updated correctly.','2011-07-15' 
+SELECT 'LABEL','ID_ROLES_SUCCESS_UPDATE','en','Role has been updated correctly.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PERMISSIONS','en','Permissions','2011-07-15' 
+SELECT 'LABEL','ID_PERMISSIONS','en','Permissions','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MESSAGE_SUBJECT_DERIVATION','en','Notification for task assignment','2011-07-15' 
+SELECT 'LABEL','ID_MESSAGE_SUBJECT_DERIVATION','en','Notification for task assignment','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PERMITIONS','en','Permissions','2011-07-15' 
+SELECT 'LABEL','ID_PERMITIONS','en','Permissions','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ASSIGN_ROLE','en','Assign user','2011-07-15' 
+SELECT 'LABEL','ID_ASSIGN_ROLE','en','Assign user','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_MSG_CONFIRM_DELETE_SUPERVISOR_PROCESSUSER','en','Do you want to delete this supervisor?','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_MSG_CONFIRM_DELETE_SUPERVISOR_PROCESSUSER','en','Do you want to delete this supervisor?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_REMOVE','en','Remove','2011-07-15' 
+SELECT 'LABEL','ID_REMOVE','en','Remove','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_MSG_CONFIRM','en','Are you sure?','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_MSG_CONFIRM','en','Are you sure?','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_ROLES_MSG2','en','Role already exists! Please choose another.','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_ROLES_MSG2','en','Role already exists! Please choose another.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_FOLDERS','en','Documents','2011-07-15' 
+SELECT 'LABEL','ID_FOLDERS','en','Documents','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_ROLES_MSG1','en','You must specify a role code!','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_ROLES_MSG1','en','You must specify a role code!','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ROLES_CAN_NOT_DELETE','en','This role cannot be deleted while it still   has some assigned users.','2011-07-15' 
+SELECT 'LABEL','ID_ROLES_CAN_NOT_DELETE','en','This role cannot be deleted while it still   has some assigned users.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MSG_CONFIRM_DELETE_SUPERVISOR_DYNAFORM','en','Do you want to remove this DynaForm?','2011-07-15' 
+SELECT 'LABEL','ID_MSG_CONFIRM_DELETE_SUPERVISOR_DYNAFORM','en','Do you want to remove this DynaForm?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','VIEW_ROLE_USERS','en','Users','2011-07-15' 
+SELECT 'LABEL','VIEW_ROLE_USERS','en','Users','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ROLES','en','Roles','2011-07-15' 
+SELECT 'LABEL','ID_ROLES','en','Roles','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_PROCESSMAP_TASK_PROPERTIES_NOTIFICATIONS','en','Notifications','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_PROCESSMAP_TASK_PROPERTIES_NOTIFICATIONS','en','Notifications','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_PROCESSMAP_SUPERVISORS_DYNAFORMS','en','DynaForms','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_PROCESSMAP_SUPERVISORS_DYNAFORMS','en','DynaForms','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_ASSIGN_DYNAFORM','en','Assign DynaForm','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_ASSIGN_DYNAFORM','en','Assign DynaForm','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_TO_REVISE','en','Review','2011-07-15' 
+SELECT 'LABEL','ID_TO_REVISE','en','Review','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MESS_ENGINE_TYPE_3','en','SMTP (OpenMail)','2011-07-15' 
+SELECT 'LABEL','ID_MESS_ENGINE_TYPE_3','en','SMTP (OpenMail)','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MESS_TEST_MESSAGE_ERROR_PHP_MAIL','en','Test message send failed, error:','2011-07-15' 
+SELECT 'LABEL','ID_MESS_TEST_MESSAGE_ERROR_PHP_MAIL','en','Test message send failed, error:','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','IMPORT_LANGUAGE_ERR_NO_WRITABLE2','en','Some files within XMLFORM directory are not  writable, to install or update the  translations the system requires that all  files are writable.  Contact your system administrator please.','2011-07-15' 
+SELECT 'LABEL','IMPORT_LANGUAGE_ERR_NO_WRITABLE2','en','Some files within XMLFORM directory are not  writable, to install or update the  translations the system requires that all  files are writable.  Contact your system administrator please.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MESS_ENGINE_TYPE_2','en','SMTP (PHPMailer)','2011-07-15' 
+SELECT 'LABEL','ID_MESS_ENGINE_TYPE_2','en','SMTP (PHPMailer)','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MESS_ENGINE_TYPE_1','en','Mail (PHP)','2011-07-15' 
+SELECT 'LABEL','ID_MESS_ENGINE_TYPE_1','en','Mail (PHP)','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MESS_TEST_BODY','en','ProcessMaker Test Email','2011-07-15' 
+SELECT 'LABEL','ID_MESS_TEST_BODY','en','ProcessMaker Test Email','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MESS_TEST_SUBJECT','en','Test Email','2011-07-15' 
+SELECT 'LABEL','ID_MESS_TEST_SUBJECT','en','Test Email','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_MESS_TEST_FROM_EMAIL','en','The ''From Email'' field is required','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_MESS_TEST_FROM_EMAIL','en','The ''From Email'' field is required','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_MESS_TEST_TO','en','The ''To'' field is required','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_MESS_TEST_TO','en','The ''To'' field is required','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MESS_SEND_MAX_REQUIRED','en','The maximum number of attempts to send mail  is a required field.','2011-07-15' 
+SELECT 'LABEL','ID_MESS_SEND_MAX_REQUIRED','en','The maximum number of attempts to send mail  is a required field.','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_MESS_EXECUTE_EVERY_REQUIRED','en','The ''Execute Every'' field is required','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_MESS_EXECUTE_EVERY_REQUIRED','en','The ''Execute Every'' field is required','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_MESS_ACCOUNT_REQUIRED','en','The email account is required','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_MESS_ACCOUNT_REQUIRED','en','The email account is required','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_DBS_EDIT','en','Edit the current Database Source','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_DBS_EDIT','en','Edit the current Database Source','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_PROCESSMAP_PROCESS_SUPERVISORS','en','Supervisors','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_PROCESSMAP_PROCESS_SUPERVISORS','en','Supervisors','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_MESS_SERVER_REQUIRED','en','The email server is required','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_MESS_SERVER_REQUIRED','en','The email server is required','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DBS_EDIT','en','Edit the current Database Source','2011-07-15' 
+SELECT 'LABEL','ID_DBS_EDIT','en','Edit the current Database Source','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_DBS_NEW','en','Add new Database Source','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_DBS_NEW','en','Add new Database Source','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_DBS_LIST','en','Databases Source List','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_DBS_LIST','en','Databases Source List','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CHANGES_SAVED','en','Changes saved','2011-07-15' 
+SELECT 'LABEL','ID_CHANGES_SAVED','en','Changes saved','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_EMAILS','en','EMAILS','2011-07-15' 
+SELECT 'LABEL','ID_EMAILS','en','EMAILS','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_REPORT2','en','Number of cases per process','2011-07-15' 
+SELECT 'LABEL','ID_REPORT2','en','Number of cases per process','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_REPORT1','en','Case duration by process and task','2011-07-15' 
+SELECT 'LABEL','ID_REPORT1','en','Case duration by process and task','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_IUD','en','#','2011-07-15' 
+SELECT 'LABEL','ID_IUD','en','#','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_REPORTS','en','Reports','2011-07-15' 
+SELECT 'LABEL','ID_REPORTS','en','Reports','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_MSG_CONFIRM_REMOVE_DBS','en','Are you sure you want to remove this DB Connection?','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_MSG_CONFIRM_REMOVE_DBS','en','Are you sure you want to remove this DB Connection?','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','DBCONNECTIONS_MSG6','en','You must specify a user!','2011-07-15' 
+SELECT 'JAVASCRIPT','DBCONNECTIONS_MSG6','en','You must specify a user!','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','DBCONNECTIONS_MSG7','en','Loading test, please wait!...','2011-07-15' 
+SELECT 'JAVASCRIPT','DBCONNECTIONS_MSG7','en','Loading test, please wait!...','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','DBCONNECTIONS_MSG5','en','You must specify a data base name!','2011-07-15' 
+SELECT 'JAVASCRIPT','DBCONNECTIONS_MSG5','en','You must specify a data base name!','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','DBCONNECTIONS_MSG4','en','Please specify a database server!','2011-07-15' 
+SELECT 'JAVASCRIPT','DBCONNECTIONS_MSG4','en','Please specify a database server!','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','DBCONNECTIONS_MSG3','en','Testing','2011-07-15' 
+SELECT 'JAVASCRIPT','DBCONNECTIONS_MSG3','en','Testing','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','DBCONNECTIONS_MSG2','en','Failed','2011-07-15' 
+SELECT 'JAVASCRIPT','DBCONNECTIONS_MSG2','en','Failed','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','DBCONNECTIOS_MSG2','en','FAILED','2011-07-15' 
+SELECT 'LABEL','DBCONNECTIOS_MSG2','en','FAILED','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','DBCONNECTIONS_MSG1','en','DONE','2011-07-15' 
+SELECT 'JAVASCRIPT','DBCONNECTIONS_MSG1','en','DONE','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','DBCONNECTIOS_MSG1','en','DONE','2011-07-15' 
+SELECT 'JAVASCRIPT','DBCONNECTIOS_MSG1','en','DONE','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_NEW_DBC','en','New Database Connection','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_NEW_DBC','en','New Database Connection','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_EDIT_DBC','en','Edit Database Connection','2011-07-15' 
+SELECT 'LABEL','ID_EDIT_DBC','en','Edit Database Connection','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DB_CONNECTIONS','en','Database Connections','2011-07-15' 
+SELECT 'LABEL','ID_DB_CONNECTIONS','en','Database Connections','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PRIORITY_N','en','NORMAL','2011-07-15' 
+SELECT 'LABEL','ID_PRIORITY_N','en','NORMAL','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PRIORITY_L','en','LOW','2011-07-15' 
+SELECT 'LABEL','ID_PRIORITY_L','en','LOW','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PRIORITY_VL','en','VERY LOW','2011-07-15' 
+SELECT 'LABEL','ID_PRIORITY_VL','en','VERY LOW','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PRIORITY_H','en','HIGH','2011-07-15' 
+SELECT 'LABEL','ID_PRIORITY_H','en','HIGH','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_GENERAL','en','General','2011-07-15' 
+SELECT 'LABEL','ID_GENERAL','en','General','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_REASSIGN','en','Reassign','2011-07-15' 
+SELECT 'LABEL','ID_REASSIGN','en','Reassign','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PRIORITY_VH','en','VERY HIGH','2011-07-15' 
+SELECT 'LABEL','ID_PRIORITY_VH','en','VERY HIGH','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_GROUPS','en','Groups','2011-07-15' 
+SELECT 'LABEL','ID_GROUPS','en','Groups','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CONFIRM_DELETE_CASE','en','Are you sure you want to delete this case?','2011-07-15' 
+SELECT 'LABEL','ID_CONFIRM_DELETE_CASE','en','Are you sure you want to delete this case?','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_CONFIRM_DELETE_CASE','en','Are you sure you want to delete this case?','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_CONFIRM_DELETE_CASE','en','Are you sure you want to delete this case?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ACTIVATE','en','Activate','2011-07-15' 
+SELECT 'LABEL','ID_ACTIVATE','en','Activate','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DEACTIVATE','en','Deactivate','2011-07-15' 
+SELECT 'LABEL','ID_DEACTIVATE','en','Deactivate','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CASECANCEL','en','No actions available for this case.','2011-07-15' 
+SELECT 'LABEL','ID_CASECANCEL','en','No actions available for this case.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_UNPAUSE','en','Unpause','2011-07-15' 
+SELECT 'LABEL','ID_UNPAUSE','en','Unpause','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_CONFIRM_PAUSE_CASE','en','Are you sure you want to pause this case?','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_CONFIRM_PAUSE_CASE','en','Are you sure you want to pause this case?','2011-08-25' 
  ;
 INSERT INTO [TRANSLATION] ([TRN_CATEGORY],[TRN_ID],[TRN_LANG],[TRN_VALUE],[TRN_UPDATE_DATE]) 
 
-SELECT 'JAVASCRIPT','ID_MSG_CONFIRM_REMOVE_USERGROUP','en','Are you sure you want to remove this user group?','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_MSG_CONFIRM_REMOVE_USERGROUP','en','Are you sure you want to remove this user group?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MSG_CONFIRM_REMOVE_USERGROUP','en','Are you sure you want to remove this user group?','2011-07-15' 
+SELECT 'LABEL','ID_MSG_CONFIRM_REMOVE_USERGROUP','en','Are you sure you want to remove this user group?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MSG_ASSIGN_DONE','en','User successfully assigned to group','2011-07-15' 
+SELECT 'LABEL','ID_MSG_ASSIGN_DONE','en','User successfully assigned to group','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ASSIGN_GROUP','en','Assign group','2011-07-15' 
+SELECT 'LABEL','ID_ASSIGN_GROUP','en','Assign group','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_BACK_TO_GROUP_LIST','en','Back to user groups','2011-07-15' 
+SELECT 'LABEL','ID_BACK_TO_GROUP_LIST','en','Back to user groups','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ASSIGN_GROUP_TO','en','Assign group to','2011-07-15' 
+SELECT 'LABEL','ID_ASSIGN_GROUP_TO','en','Assign group to','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PAUSED_CASE','en','Pause','2011-07-15' 
+SELECT 'LABEL','ID_PAUSED_CASE','en','Pause','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_VIEW_USER_GROUP','en','Groups','2011-07-15' 
+SELECT 'LABEL','ID_VIEW_USER_GROUP','en','Groups','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_EDIT_VIEW_USER_GROUP','en','View user groups','2011-07-15' 
+SELECT 'LABEL','ID_EDIT_VIEW_USER_GROUP','en','View user groups','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_GROUPS_SUCCESS_NEW','en','Group has been created correctly.','2011-07-15' 
+SELECT 'LABEL','ID_GROUPS_SUCCESS_NEW','en','Group has been created correctly.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_REACTIVATE','en','Reactivate','2011-07-15' 
+SELECT 'LABEL','ID_REACTIVATE','en','Reactivate','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_USER_GROUPS','en','Groups for','2011-07-15' 
+SELECT 'LABEL','ID_USER_GROUPS','en','Groups for','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_FUNCTION','en','@function() It evaluates the value, then  executes a PHP function','2011-07-15' 
+SELECT 'LABEL','ID_FUNCTION','en','@function() It evaluates the value, then  executes a PHP function','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_MSG_CONFIRM_REACTIVATE_CASES','en','Are you sure you want to reactivate this case?','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_MSG_CONFIRM_REACTIVATE_CASES','en','Are you sure you want to reactivate this case?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CONFIRM_REACTIVATE_CASE','en','Are you sure you want to reactivate this case?','2011-07-15' 
+SELECT 'LABEL','ID_CONFIRM_REACTIVATE_CASE','en','Are you sure you want to reactivate this case?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ESCSJS','en','@@ It replaces the value in single  quotation marks to use it in JavaScript  sentences.','2011-07-15' 
+SELECT 'LABEL','ID_ESCSJS','en','@@ It replaces the value in single  quotation marks to use it in JavaScript  sentences.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ESCJS','en','@@ It replaces the value in quotation marks  to use it in JavaScript sentences','2011-07-15' 
+SELECT 'LABEL','ID_ESCJS','en','@@ It replaces the value in quotation marks  to use it in JavaScript sentences','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ESC','en','@@ Replace the value in quotes','2011-07-15' 
+SELECT 'LABEL','ID_ESC','en','@@ Replace the value in quotes','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_NONEC','en','@# Replace the value with no change','2011-07-15' 
+SELECT 'LABEL','ID_NONEC','en','@# Replace the value with no change','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_EURL','en','@% It replaces the value for the assignment with a GET variable in the URL','2011-07-15' 
+SELECT 'LABEL','ID_EURL','en','@% It replaces the value for the assignment with a GET variable in the URL','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_EVAL','en','@! It evaluates the value, then replaces it','2011-07-15' 
+SELECT 'LABEL','ID_EVAL','en','@! It evaluates the value, then replaces it','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_NCAMBIO','en','@#, Replaces the value without any change.','2011-07-15' 
+SELECT 'LABEL','ID_NCAMBIO','en','@#, Replaces the value without any change.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DOCLICK','en','Double click to insert','2011-07-15' 
+SELECT 'LABEL','ID_DOCLICK','en','Double click to insert','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CASE_IS_CURRENTLY_WITH_ANOTHER_USER','en','The case is currently opened by another user','2011-07-15' 
+SELECT 'LABEL','ID_CASE_IS_CURRENTLY_WITH_ANOTHER_USER','en','The case is currently opened by another user','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_IN','en','in','2011-07-15' 
+SELECT 'LABEL','ID_IN','en','in','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CASE_DOES_NOT_EXISTS','en','This case does not exist','2011-07-15' 
+SELECT 'LABEL','ID_CASE_DOES_NOT_EXISTS','en','This case does not exist','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PLEASE_SELECT_UPGRADE_FILE','en','Please select the upgrade file','2011-07-15' 
+SELECT 'LABEL','ID_PLEASE_SELECT_UPGRADE_FILE','en','Please select the upgrade file','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PLEASE_SELECT_MAX_X_FIELDS','en','Please select 80 fields at most','2011-07-15' 
+SELECT 'LABEL','ID_PLEASE_SELECT_MAX_X_FIELDS','en','Please select 80 fields at most','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_UPGRADE_READY','en','System upgraded from revision','2011-07-15' 
+SELECT 'LABEL','ID_UPGRADE_READY','en','System upgraded from revision','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_UPGRADE','en','Upgrade System','2011-07-15' 
+SELECT 'LABEL','ID_UPGRADE','en','Upgrade System','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_UPLOADED_DOCUMENTS','en','Uploaded Documents','2011-07-15' 
+SELECT 'LABEL','ID_UPLOADED_DOCUMENTS','en','Uploaded Documents','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_TASK_INFORMATION','en','Task Information','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_TASK_INFORMATION','en','Task Information','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_UPLOADED_DOCUMENTS','en','Uploaded Documents','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_UPLOADED_DOCUMENTS','en','Uploaded Documents','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_GENERATED_DOCUMENTS','en','Generated Documents','2011-07-15' 
+SELECT 'LABEL','ID_GENERATED_DOCUMENTS','en','Generated Documents','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_GENERATED_DOCUMENTS','en','Generated Documents','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_GENERATED_DOCUMENTS','en','Generated Documents','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_REPORT4','en','Number of cases per starting user','2011-07-15' 
+SELECT 'LABEL','ID_REPORT4','en','Number of cases per starting user','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_REPORT5','en','Number of cases per executing user','2011-07-15' 
+SELECT 'LABEL','ID_REPORT5','en','Number of cases per executing user','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_PROCESSMAP_USERS_AND_GROUPS_ADHOC','en','Users & User Groups (Ad hoc)','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_PROCESSMAP_USERS_AND_GROUPS_ADHOC','en','Users & User Groups (Ad hoc)','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SETUP_WEBSERVICES','en','Setup','2011-07-15' 
+SELECT 'LABEL','ID_SETUP_WEBSERVICES','en','Setup','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_WEB_SERVICES','en','Web Services Test','2011-07-15' 
+SELECT 'LABEL','ID_WEB_SERVICES','en','Web Services Test','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_PROCESS_INFORMATION','en','Process Information','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_PROCESS_INFORMATION','en','Process Information','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_INFORMATION','en','Information','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_INFORMATION','en','Information','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_ACTIONS','en','Actions','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_ACTIONS','en','Actions','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_PROCESS_MAP','en','Process Map','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_PROCESS_MAP','en','Process Map','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_ADHOC_ASSIGNMENT','en','Ad Hoc Assignment','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_ADHOC_ASSIGNMENT','en','Ad Hoc Assignment','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ADHOC_ASSIGNMENT','en','Adhoc Assignment','2011-07-15' 
+SELECT 'LABEL','ID_ADHOC_ASSIGNMENT','en','Adhoc Assignment','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_DYNAFORMS','en','DynaForms','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_DYNAFORMS','en','DynaForms','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_TEST','en','Test','2011-07-15' 
+SELECT 'LABEL','ID_TEST','en','Test','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MONTH_1','en','January','2011-07-15' 
+SELECT 'LABEL','ID_MONTH_1','en','January','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MONTH_2','en','February','2011-07-15' 
+SELECT 'LABEL','ID_MONTH_2','en','February','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MONTH_3','en','March','2011-07-15' 
+SELECT 'LABEL','ID_MONTH_3','en','March','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MONTH_4','en','April','2011-07-15' 
+SELECT 'LABEL','ID_MONTH_4','en','April','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MONTH_5','en','May','2011-07-15' 
+SELECT 'LABEL','ID_MONTH_5','en','May','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MONTH_6','en','June','2011-07-15' 
+SELECT 'LABEL','ID_MONTH_6','en','June','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MONTH_7','en','July','2011-07-15' 
+SELECT 'LABEL','ID_MONTH_7','en','July','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MONTH_8','en','August','2011-07-15' 
+SELECT 'LABEL','ID_MONTH_8','en','August','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MONTH_9','en','September','2011-07-15' 
+SELECT 'LABEL','ID_MONTH_9','en','September','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MONTH_10','en','October','2011-07-15' 
+SELECT 'LABEL','ID_MONTH_10','en','October','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MONTH_11','en','November','2011-07-15' 
+SELECT 'LABEL','ID_MONTH_11','en','November','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MONTH_12','en','December','2011-07-15' 
+SELECT 'LABEL','ID_MONTH_12','en','December','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_TO_STRING','en','Replace the value in quotes','2011-07-15' 
+SELECT 'LABEL','ID_TO_STRING','en','Replace the value in quotes','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_TO_FLOAT','en','Replace the value converted to float','2011-07-15' 
+SELECT 'LABEL','ID_TO_FLOAT','en','Replace the value converted to float','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_TO_INTEGER','en','Replace the value converted to integer','2011-07-15' 
+SELECT 'LABEL','ID_TO_INTEGER','en','Replace the value converted to integer','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_TO_URL','en','Replace the value with URL encoding','2011-07-15' 
+SELECT 'LABEL','ID_TO_URL','en','Replace the value with URL encoding','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SQL_ESCAPE','en','Replace the value for use in SQL sentences','2011-07-15' 
+SELECT 'LABEL','ID_SQL_ESCAPE','en','Replace the value for use in SQL sentences','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_REPLACE_WITHOUT_CHANGES','en','Replace the value without changes','2011-07-15' 
+SELECT 'LABEL','ID_REPLACE_WITHOUT_CHANGES','en','Replace the value without changes','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_REMOVE','en','Remove','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_REMOVE','en','Remove','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_CONFIRM_REMOVE_DASHBOARD','en','Are you sure you want to remove this dashboard?','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_CONFIRM_REMOVE_DASHBOARD','en','Are you sure you want to remove this dashboard?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MSG_NORESULTS_USERGROUP','en','This user is not assigned to a group','2011-07-15' 
+SELECT 'LABEL','ID_MSG_NORESULTS_USERGROUP','en','This user is not assigned to a group','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_WSDL','en','The Server Host or Workspace is blank','2011-07-15' 
+SELECT 'LABEL','ID_WSDL','en','The Server Host or Workspace is blank','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_OBJECT_PERMISSIONS','en','Process Permissions','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_OBJECT_PERMISSIONS','en','Process Permissions','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_YES','en','Yes','2011-07-15' 
+SELECT 'LABEL','ID_YES','en','Yes','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_NO','en','No','2011-07-15' 
+SELECT 'LABEL','ID_NO','en','No','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ANY_TASK','en','All Tasks','2011-07-15' 
+SELECT 'LABEL','ID_ANY_TASK','en','All Tasks','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_REGENERATE','en','Regenerate','2011-07-15' 
+SELECT 'LABEL','ID_REGENERATE','en','Regenerate','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_BLOCK','en','Block','2011-07-15' 
+SELECT 'LABEL','ID_BLOCK','en','Block','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ANY','en','Any','2011-07-15' 
+SELECT 'LABEL','ID_ANY','en','Any','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DISABLED','en','Disabled','2011-07-15' 
+SELECT 'LABEL','ID_DISABLED','en','Disabled','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DYNAFORM','en','DynaForm','2011-07-15' 
+SELECT 'LABEL','ID_DYNAFORM','en','DynaForm','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_INPUT_DOCUMENT','en','Input Document','2011-07-15' 
+SELECT 'LABEL','ID_INPUT_DOCUMENT','en','Input Document','2011-08-25' 
  ;
 INSERT INTO [TRANSLATION] ([TRN_CATEGORY],[TRN_ID],[TRN_LANG],[TRN_VALUE],[TRN_UPDATE_DATE]) 
 
-SELECT 'LABEL','ID_OUTPUT_DOCUMENT','en','Output Document','2011-07-15' 
+SELECT 'LABEL','ID_OUTPUT_DOCUMENT','en','Output Document','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_PLEASE_SELECT_OTHER_OBJECT_TYPE','en','Please select other object type','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_PLEASE_SELECT_OTHER_OBJECT_TYPE','en','Please select other object type','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_REQUIRED_FIELDS','en','The following fields are required','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_REQUIRED_FIELDS','en','The following fields are required','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_MSG_CONFIRM_DELETE_OBJECT_PERMISSION','en','Do you want to delete this permission ?','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_MSG_CONFIRM_DELETE_OBJECT_PERMISSION','en','Do you want to delete this permission ?','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_WEB_ENTRY','en','Web Entry','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_WEB_ENTRY','en','Web Entry','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_CASE_TRACKER','en','Case Tracker','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_CASE_TRACKER','en','Case Tracker','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_CASE_TRACKER_OBJECTS','en','Objects','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_CASE_TRACKER_OBJECTS','en','Objects','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MSG_CONFIRM_DELETE_CASE_TRACKER_OBJECT','en','Do you want to delete this object?','2011-07-15' 
+SELECT 'LABEL','ID_MSG_CONFIRM_DELETE_CASE_TRACKER_OBJECT','en','Do you want to delete this object?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CASE_NOT_EXISTS','en','The case does not exist','2011-07-15' 
+SELECT 'LABEL','ID_CASE_NOT_EXISTS','en','The case does not exist','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PIN_INVALID','en','The PIN is invalid','2011-07-15' 
+SELECT 'LABEL','ID_PIN_INVALID','en','The PIN is invalid','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MAP','en','Where is my Case?','2011-07-15' 
+SELECT 'LABEL','ID_MAP','en','Where is my Case?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DYNADOC','en','My Case Forms and Documents','2011-07-15' 
+SELECT 'LABEL','ID_DYNADOC','en','My Case Forms and Documents','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_HISTORY','en','My Case History','2011-07-15' 
+SELECT 'LABEL','ID_HISTORY','en','My Case History','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_FILEGENERATED','en','Filename generated, is required!','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_FILEGENERATED','en','Filename generated, is required!','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_WEBENTRY','en','In order to use the Web Entry Feature, you must first create a S','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_WEBENTRY','en','In order to use the Web Entry Feature, you must first create a S','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DOWNLOAD','en','Download','2011-07-15' 
+SELECT 'LABEL','ID_DOWNLOAD','en','Download','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_MSG_CONFIRM_DELETE_DIRECTORY','en','Do you want to delete this directory and delete all its contents?','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_MSG_CONFIRM_DELETE_DIRECTORY','en','Do you want to delete this directory and delete all its contents?','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_MSG_CONFIRM_DELETE_FILE','en','Do you want to delete this file?','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_MSG_CONFIRM_DELETE_FILE','en','Do you want to delete this file?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PLEASE_SELECT_FILES_TO_UPLOAD','en','Please select the files to upload','2011-07-15' 
+SELECT 'LABEL','ID_PLEASE_SELECT_FILES_TO_UPLOAD','en','Please select the files to upload','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_PROCESS_FILES_MANAGER','en','Process Files Manager','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_PROCESS_FILES_MANAGER','en','Process Files Manager','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_WORKSPACE','en','Workspace','2011-07-15' 
+SELECT 'LABEL','ID_WORKSPACE','en','Workspace','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SITE','en','Site','2011-07-15' 
+SELECT 'LABEL','ID_SITE','en','Site','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CASE','en','Case','2011-07-15' 
+SELECT 'LABEL','ID_CASE','en','Case','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_TITLE','en','Title','2011-07-15' 
+SELECT 'LABEL','ID_TITLE','en','Title','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_FINISH_WITH_OPTION','en','Finish with option','2011-07-15' 
+SELECT 'LABEL','ID_FINISH_WITH_OPTION','en','Finish with option','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CONTINUE_WITH_OPTION','en','Continue with option','2011-07-15' 
+SELECT 'LABEL','ID_CONTINUE_WITH_OPTION','en','Continue with option','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CONTINUE','en','Continue','2011-07-15' 
+SELECT 'LABEL','ID_CONTINUE','en','Continue','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_OPTION','en','Option','2011-07-15' 
+SELECT 'LABEL','ID_OPTION','en','Option','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_LAST_EMPLOYEE','en','Last Employee','2011-07-15' 
+SELECT 'LABEL','ID_LAST_EMPLOYEE','en','Last Employee','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_EMPLOYEE','en','Employee','2011-07-15' 
+SELECT 'LABEL','ID_EMPLOYEE','en','Employee','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SESSION','en','Session','2011-07-15' 
+SELECT 'LABEL','ID_SESSION','en','Session','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_NEXT_TASK','en','Next Task','2011-07-15' 
+SELECT 'LABEL','ID_NEXT_TASK','en','Next Task','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PERMISSIONS_FOR_THE_ROL','en','Permissions for the role','2011-07-15' 
+SELECT 'LABEL','ID_PERMISSIONS_FOR_THE_ROL','en','Permissions for the role','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_BACK_TO_USERS_LIST','en','Back to Users List','2011-07-15' 
+SELECT 'LABEL','ID_BACK_TO_USERS_LIST','en','Back to Users List','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ASSIGN_THE_ROLE','en','Assign the role','2011-07-15' 
+SELECT 'LABEL','ID_ASSIGN_THE_ROLE','en','Assign the role','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_USER_WITH_ROLE','en','Users with role','2011-07-15' 
+SELECT 'LABEL','ID_USER_WITH_ROLE','en','Users with role','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_EDIT_STAGES_MAP','en','Edit Stages Map','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_EDIT_STAGES_MAP','en','Edit Stages Map','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_PROCESSMAP_ADD_STAGE','en','Add Stage','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_PROCESSMAP_ADD_STAGE','en','Add Stage','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_PROCESSMAP_DELETE_STAGE','en','Delete Stage','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_PROCESSMAP_DELETE_STAGE','en','Delete Stage','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_HISTORY_MESSAGES','en','My History Messages','2011-07-15' 
+SELECT 'LABEL','ID_HISTORY_MESSAGES','en','My History Messages','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_STAGE','en','Stage','2011-07-15' 
+SELECT 'LABEL','ID_STAGE','en','Stage','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_PROCESSMAP_CONFIRM_DELETE_STAGE','en','Do you want to delete the stage:','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_PROCESSMAP_CONFIRM_DELETE_STAGE','en','Do you want to delete the stage:','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_PROCESSMAP_EDIT','en','Edit','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_PROCESSMAP_EDIT','en','Edit','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_HISTORY_MESSAGE_CASE','en','Messages History','2011-07-15' 
+SELECT 'LABEL','ID_HISTORY_MESSAGE_CASE','en','Messages History','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_HISTORY_MESSAGE_CASE','en','Messages History','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_HISTORY_MESSAGE_CASE','en','Messages History','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_PROCESSMAP_TASKS_ASSIGNED','en','Tasks Assigned','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_PROCESSMAP_TASKS_ASSIGNED','en','Tasks Assigned','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_PROCESSMAP_TASKS_ASSIGNED_FOR','en','Tasks Assigned For','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_PROCESSMAP_TASKS_ASSIGNED_FOR','en','Tasks Assigned For','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_MSG_CONFIRM_REMOVE_TASK','en','Do you want to remove this task?','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_MSG_CONFIRM_REMOVE_TASK','en','Do you want to remove this task?','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_PROCESSMAP_ADD_SUBPROCESS','en','Add Sub-Process','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_PROCESSMAP_ADD_SUBPROCESS','en','Add Sub-Process','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_PROCESSMAP_DELETE_SUBPROCESS','en','Delete Sub-Process','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_PROCESSMAP_DELETE_SUBPROCESS','en','Delete Sub-Process','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_PROCESSMAP_CONFIRM_DELETE_SUBPROCESS','en','Do you want to delete the Sub-Process:','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_PROCESSMAP_CONFIRM_DELETE_SUBPROCESS','en','Do you want to delete the Sub-Process:','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_CASE_TRACKER_PROPERTIES','en','Properties','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_CASE_TRACKER_PROPERTIES','en','Properties','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_PROCESSMAP_PSUPERVISORS','en','Process Supervisors','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_PROCESSMAP_PSUPERVISORS','en','Process Supervisors','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','INVALID_FILE','en','Invalid file!','2011-07-15' 
+SELECT 'LABEL','INVALID_FILE','en','Invalid file!','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_GET_EXTERNAL_FILE','en','Get','2011-07-15' 
+SELECT 'LABEL','ID_GET_EXTERNAL_FILE','en','Get','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_FIELD_NAME','en','Field Name','2011-07-15' 
+SELECT 'LABEL','ID_FIELD_NAME','en','Field Name','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PREV_VALUES','en','Previous Values','2011-07-15' 
+SELECT 'LABEL','ID_PREV_VALUES','en','Previous Values','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CURRENT_VALUES','en','Current Values','2011-07-15' 
+SELECT 'LABEL','ID_CURRENT_VALUES','en','Current Values','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_FIELDS_CHANGED_NUMBER','en','Fields changed','2011-07-15' 
+SELECT 'LABEL','ID_FIELDS_CHANGED_NUMBER','en','Fields changed','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DATA','en','Data','2011-07-15' 
+SELECT 'LABEL','ID_DATA','en','Data','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SAVE_CHANGES','en','Save Changes','2011-07-15' 
+SELECT 'LABEL','ID_SAVE_CHANGES','en','Save Changes','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CLASS_ALREADY_EXISTS','en','Class already exists','2011-07-15' 
+SELECT 'LABEL','ID_CLASS_ALREADY_EXISTS','en','Class already exists','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_FIELD_KEY_TABLE','en','Please select one or more fields to be primary keys.','2011-07-15' 
+SELECT 'LABEL','ID_FIELD_KEY_TABLE','en','Please select one or more fields to be primary keys.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_FIELD_FOREIGN_TABLE','en','Field "table" is required','2011-07-15' 
+SELECT 'LABEL','ID_FIELD_FOREIGN_TABLE','en','Field "table" is required','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_FIELD_NAME_REQUIRED','en','Field name is required','2011-07-15' 
+SELECT 'LABEL','ID_FIELD_NAME_REQUIRED','en','Field name is required','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_FIELD_SIZE_REQUIRED','en','Field size is required','2011-07-15' 
+SELECT 'LABEL','ID_FIELD_SIZE_REQUIRED','en','Field size is required','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','DYNAFIELD_ALREADY_EXIST','en','The field name already exists!','2011-07-15' 
+SELECT 'JAVASCRIPT','DYNAFIELD_ALREADY_EXIST','en','The field name already exists!','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DYNAFORM_HISTORY','en','Change Log','2011-07-15' 
+SELECT 'LABEL','ID_DYNAFORM_HISTORY','en','Change Log','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CASEDEMO','en','Case Demo','2011-07-15' 
+SELECT 'LABEL','ID_CASEDEMO','en','Case Demo','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_NEED_REGISTER','en','You need to be registered to download this  process. Register NOW!','2011-07-15' 
+SELECT 'LABEL','ID_NEED_REGISTER','en','You need to be registered to download this  process. Register NOW!','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_INCORRECT_USER_OR_PASS','en','Incorrect username or password','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_INCORRECT_USER_OR_PASS','en','Incorrect username or password','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CASESREASSIGN','en','You still have cases to reassign.','2011-07-15' 
+SELECT 'LABEL','ID_CASESREASSIGN','en','You still have cases to reassign.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_TO_REASSIGN','en','Reassign','2011-07-15' 
+SELECT 'LABEL','ID_TO_REASSIGN','en','Reassign','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SELF_SERVICE','en','Self Service','2011-07-15' 
+SELECT 'LABEL','ID_SELF_SERVICE','en','Self Service','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_TAKE','en','Take','2011-07-15' 
+SELECT 'LABEL','ID_TAKE','en','Take','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_STAGES','en','Stages','2011-07-15' 
+SELECT 'LABEL','ID_STAGES','en','Stages','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_STATUS','en','Status','2011-07-15' 
+SELECT 'LABEL','ID_STATUS','en','Status','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_REASSIGN_TO','en','Reassign','2011-07-15' 
+SELECT 'LABEL','ID_REASSIGN_TO','en','Reassign','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_NO_REASSIGN','en','Do not reassign','2011-07-15' 
+SELECT 'LABEL','ID_NO_REASSIGN','en','Do not reassign','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PROCESS','en','Process','2011-07-15' 
+SELECT 'LABEL','ID_PROCESS','en','Process','2011-08-25' 
  ;
 INSERT INTO [TRANSLATION] ([TRN_CATEGORY],[TRN_ID],[TRN_LANG],[TRN_VALUE],[TRN_UPDATE_DATE]) 
 
-SELECT 'LABEL','ID_REASSIGN_CASES','en','Reassign Cases','2011-07-15' 
+SELECT 'LABEL','ID_REASSIGN_CASES','en','Reassign Cases','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ALERT_MESSAGE','en','Alert Message','2011-07-15' 
+SELECT 'LABEL','ID_ALERT_MESSAGE','en','Alert Message','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MSG_ERROR_USR_LASTNAME','en','Last name is required','2011-07-15' 
+SELECT 'LABEL','ID_MSG_ERROR_USR_LASTNAME','en','Last name is required','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MSG_ERROR_USR_FIRSTNAME','en','First name is required','2011-07-15' 
+SELECT 'LABEL','ID_MSG_ERROR_USR_FIRSTNAME','en','First name is required','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_STARTED_CASES','en','My Started Cases','2011-07-15' 
+SELECT 'LABEL','ID_STARTED_CASES','en','My Started Cases','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_LOGGED','en','Logged on','2011-07-15' 
+SELECT 'LABEL','ID_LOGGED','en','Logged on','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_OPTIONS','en','Options','2011-07-15' 
+SELECT 'LABEL','ID_OPTIONS','en','Options','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SKINS','en','Skins','2011-07-15' 
+SELECT 'LABEL','ID_SKINS','en','Skins','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ERROR_INSERT_LINE','en','Error trying to insert the line','2011-07-15' 
+SELECT 'LABEL','ID_ERROR_INSERT_LINE','en','Error trying to insert the line','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_CONFIRM_PAUSE_CASE_ALERT','en','You should specify an unpause date.','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_CONFIRM_PAUSE_CASE_ALERT','en','You should specify an unpause date.','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','CONDITIONAL_ALERT1','en','Some fields have not been filled.','2011-07-15' 
+SELECT 'JAVASCRIPT','CONDITIONAL_ALERT1','en','Some fields have not been filled.','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','CONDITIONAL_NOFIELDS_IN_CONDITION','en','No records found for conditions setup','2011-07-15' 
+SELECT 'JAVASCRIPT','CONDITIONAL_NOFIELDS_IN_CONDITION','en','No records found for conditions setup','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','IMPORT_LANGUAGE_ERR_NO_WRITABLE','en','The XML forms directory is not writable','2011-07-15' 
+SELECT 'LABEL','IMPORT_LANGUAGE_ERR_NO_WRITABLE','en','The XML forms directory is not writable','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','CONDITIONAL_ALERT2','en','You should select at least one event  (OnChange or OnLoad )','2011-07-15' 
+SELECT 'JAVASCRIPT','CONDITIONAL_ALERT2','en','You should select at least one event  (OnChange or OnLoad )','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','CONDITIONAL_TITLE','en','CONDITIONAL SHOW/HIDE EDITOR','2011-07-15' 
+SELECT 'JAVASCRIPT','CONDITIONAL_TITLE','en','CONDITIONAL SHOW/HIDE EDITOR','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DISB_WORKSPACE','en','This site is disabled','2011-07-15' 
+SELECT 'LABEL','ID_DISB_WORKSPACE','en','This site is disabled','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_WORKSPACES','en','WORKSPACES','2011-07-15' 
+SELECT 'LABEL','ID_WORKSPACES','en','WORKSPACES','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MORE_INFO','en','More Info','2011-07-15' 
+SELECT 'LABEL','ID_MORE_INFO','en','More Info','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CASE_ALREADY_DERIVATED','en','Case already routed','2011-07-15' 
+SELECT 'LABEL','ID_CASE_ALREADY_DERIVATED','en','Case already routed','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','EVENT_EMAILEXISTS','en','The user or group is already in the list!','2011-07-15' 
+SELECT 'JAVASCRIPT','EVENT_EMAILEXISTS','en','The user or group is already in the list!','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PENDING','en','Pending','2011-07-15' 
+SELECT 'LABEL','ID_PENDING','en','Pending','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_FULL_NAME','en','Full Name','2011-07-15' 
+SELECT 'LABEL','ID_FULL_NAME','en','Full Name','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ROLE','en','Role','2011-07-15' 
+SELECT 'LABEL','ID_ROLE','en','Role','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MSG_CANNOT_DELETE_USER','en','User cannot be deleted while has assigned  cases.','2011-07-15' 
+SELECT 'LABEL','ID_MSG_CANNOT_DELETE_USER','en','User cannot be deleted while has assigned  cases.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MSG_REMOVE_PLUGIN','en','Are you sure that you want to remove this  plugin?','2011-07-15' 
+SELECT 'LABEL','ID_MSG_REMOVE_PLUGIN','en','Are you sure that you want to remove this  plugin?','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','USERS_REASSIGN','en','This user cannot be deleted because he/she  still has some pending tasks. <br/><br/>Do  you want to reassign these tasks to another  user now?','2011-07-15' 
+SELECT 'JAVASCRIPT','USERS_REASSIGN','en','This user cannot be deleted because he/she  still has some pending tasks. <br/><br/>Do  you want to reassign these tasks to another  user now?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','LOGIN_VERIFY_MSG','en','Verifying...','2011-07-15' 
+SELECT 'LABEL','LOGIN_VERIFY_MSG','en','Verifying...','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ACTION','en','Action','2011-07-15' 
+SELECT 'LABEL','ID_ACTION','en','Action','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_EDIT_ACTION','en','Edit Action','2011-07-15' 
+SELECT 'LABEL','ID_EDIT_ACTION','en','Edit Action','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PROCESSING','en','Processing ...','2011-07-15' 
+SELECT 'LABEL','ID_PROCESSING','en','Processing ...','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_FIELD_CANNOT_BE_PRIMARY_KEY','en','The type of field ''TEXT'' can''t be a primary key','2011-07-15' 
+SELECT 'LABEL','ID_FIELD_CANNOT_BE_PRIMARY_KEY','en','The type of field ''TEXT'' can''t be a primary key','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DYNAFORM_HASNOSUBMITBTN','en','Warning: This DynaForm does not include a [Submit] or [Button] field to save any entered data.','2011-07-15' 
+SELECT 'LABEL','ID_DYNAFORM_HASNOSUBMITBTN','en','Warning: This DynaForm does not include a [Submit] or [Button] field to save any entered data.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_UPLOAD_VALID_CSV_FILE','en','Please upload a valid CSV file','2011-07-15' 
+SELECT 'LABEL','ID_UPLOAD_VALID_CSV_FILE','en','Please upload a valid CSV file','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_MSG_DELETE_GRID_ITEM','en','Are you sure you want to delete this row?','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_MSG_DELETE_GRID_ITEM','en','Are you sure you want to delete this row?','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_MSG_NODELETE_GRID_ITEM','en','Can''t delete the first row!','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_MSG_NODELETE_GRID_ITEM','en','Can''t delete the first row!','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_MSG_GROUPS_ADDCONFIRM','en','At least one user must be selected.','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_MSG_GROUPS_ADDCONFIRM','en','At least one user must be selected.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DEBUG','en','Debugger','2011-07-15' 
+SELECT 'LABEL','ID_DEBUG','en','Debugger','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MSG_CONFIRM_DELETE_EVENT','en','Do you want to delete this event?','2011-07-15' 
+SELECT 'LABEL','ID_MSG_CONFIRM_DELETE_EVENT','en','Do you want to delete this event?','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_MSG_CONFIRM_RESENDMSG','en','Are you sure that you want to resend this  message?','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_MSG_CONFIRM_RESENDMSG','en','Are you sure that you want to resend this  message?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_RESEND','en','Resend','2011-07-15' 
+SELECT 'LABEL','ID_RESEND','en','Resend','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_EDIT_EVENT','en','Edit Event','2011-07-15' 
+SELECT 'LABEL','ID_EDIT_EVENT','en','Edit Event','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_NEW_EVENT','en','New Event','2011-07-15' 
+SELECT 'LABEL','ID_NEW_EVENT','en','New Event','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_EVENTS','en','Events','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_EVENTS','en','Events','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_TO','en','To','2011-07-15' 
+SELECT 'LABEL','ID_TO','en','To','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_LINE','en','Line','2011-07-15' 
+SELECT 'LABEL','ID_LINE','en','Line','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_REQUIRED','en','The condition is required','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_REQUIRED','en','The condition is required','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DUPLICATE_ENTRY_PRIMARY_KEY','en','Duplicate entry for primary key','2011-07-15' 
+SELECT 'LABEL','ID_DUPLICATE_ENTRY_PRIMARY_KEY','en','Duplicate entry for primary key','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ADDITIONAL_TABLES','en','PM Tables','2011-07-15' 
+SELECT 'LABEL','ID_ADDITIONAL_TABLES','en','PM Tables','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_REQUEST_SENT','en','Request sent.','2011-07-15' 
+SELECT 'LABEL','ID_REQUEST_SENT','en','Request sent.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DYNAFORM_SAVE_CHANGES','en','Do you want to save changes?','2011-07-15' 
+SELECT 'LABEL','ID_DYNAFORM_SAVE_CHANGES','en','Do you want to save changes?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_IMPORT_USERS','en','Import Users','2011-07-15' 
+SELECT 'LABEL','ID_IMPORT_USERS','en','Import Users','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MSG_CONFIRM_DELETE_STEP','en','Are you sure you want to eliminate this step from the task?','2011-07-15' 
+SELECT 'LABEL','ID_MSG_CONFIRM_DELETE_STEP','en','Are you sure you want to eliminate this step from the task?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_AUTHENTICATION','en','Authentication','2011-07-15' 
+SELECT 'LABEL','ID_AUTHENTICATION','en','Authentication','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_AUTHENTICATION_SOURCE_INVALID','en','Authentication Source for this user is invalid','2011-07-15' 
+SELECT 'LABEL','ID_AUTHENTICATION_SOURCE_INVALID','en','Authentication Source for this user is invalid','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_USER_INACTIVE_BY_DATE','en','User not allowed access past due date','2011-07-15' 
+SELECT 'LABEL','ID_USER_INACTIVE_BY_DATE','en','User not allowed access past due date','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MSG_CONFIRM_DELETE_AUTH_SOURCE','en','Do you want to delete this authentication  source?','2011-07-15' 
+SELECT 'LABEL','ID_MSG_CONFIRM_DELETE_AUTH_SOURCE','en','Do you want to delete this authentication  source?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ERROR_OBJECT_NOT_EXISTS','en','Error: Object does not exist.','2011-07-15' 
+SELECT 'LABEL','ID_ERROR_OBJECT_NOT_EXISTS','en','Error: Object does not exist.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_AUTH_SOURCES','en','Authentication Sources','2011-07-15' 
+SELECT 'LABEL','ID_AUTH_SOURCES','en','Authentication Sources','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ROLES_SUCCESS_NEW','en','Role has been created correctly.','2011-07-15' 
+SELECT 'LABEL','ID_ROLES_SUCCESS_NEW','en','Role has been created correctly.','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_PROCESSMAP_SUPERVISORS_INPUTS','en','Input Documents','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_PROCESSMAP_SUPERVISORS_INPUTS','en','Input Documents','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_ASSIGN_INPUT_DOCUMENT','en','Assign Input Document','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_ASSIGN_INPUT_DOCUMENT','en','Assign Input Document','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_NOT_DERIVATED','en','The case couldn''t be routed. Consult the  system administrator','2011-07-15' 
+SELECT 'LABEL','ID_NOT_DERIVATED','en','The case couldn''t be routed. Consult the  system administrator','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MSG_CONFIRM_DELETE_SUPERVISOR_INPUT','en','Do you want to remove this Input Document?','2011-07-15' 
+SELECT 'LABEL','ID_MSG_CONFIRM_DELETE_SUPERVISOR_INPUT','en','Do you want to remove this Input Document?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ADVANCEDSEARCH','en','Advanced Search','2011-07-15' 
+SELECT 'LABEL','ID_ADVANCEDSEARCH','en','Advanced Search','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_POLICY_ALERT','en','Your password does not meet the following password policies','2011-07-15' 
+SELECT 'LABEL','ID_POLICY_ALERT','en','Your password does not meet the following password policies','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PLEASE_CHANGE_PASSWORD_POLICY','en','Please change your password to one that complies with these policies.','2011-07-15' 
+SELECT 'LABEL','ID_PLEASE_CHANGE_PASSWORD_POLICY','en','Please change your password to one that complies with these policies.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PPP_MINIMUN_LENGTH','en','Minimum length','2011-07-15' 
+SELECT 'LABEL','ID_PPP_MINIMUN_LENGTH','en','Minimum length','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PPP_MAXIMUN_LENGTH','en','Maximum length','2011-07-15' 
+SELECT 'LABEL','ID_PPP_MAXIMUN_LENGTH','en','Maximum length','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PPP_NUMERICAL_CHARACTER_REQUIRED','en','Numerical Character is required','2011-07-15' 
+SELECT 'LABEL','ID_PPP_NUMERICAL_CHARACTER_REQUIRED','en','Numerical Character is required','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PPP_UPPERCASE_CHARACTER_REQUIRED','en','Uppercase Character is required','2011-07-15' 
+SELECT 'LABEL','ID_PPP_UPPERCASE_CHARACTER_REQUIRED','en','Uppercase Character is required','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PPP_SPECIAL_CHARACTER_REQUIRED','en','Special Character is required','2011-07-15' 
+SELECT 'LABEL','ID_PPP_SPECIAL_CHARACTER_REQUIRED','en','Special Character is required','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PPP_CHANGE_PASSWORD_AFTER_NEXT_LOGIN','en','User must change his password after next login','2011-07-15' 
+SELECT 'LABEL','ID_PPP_CHANGE_PASSWORD_AFTER_NEXT_LOGIN','en','User must change his password after next login','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PPP_EXPIRATION_IN','en','Password Expiration in','2011-07-15' 
+SELECT 'LABEL','ID_PPP_EXPIRATION_IN','en','Password Expiration in','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DAYS','en','Days','2011-07-15' 
+SELECT 'LABEL','ID_DAYS','en','Days','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ACCOUNT','en','Account','2011-07-15' 
+SELECT 'LABEL','ID_ACCOUNT','en','Account','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ACCOUNT_DISABLED_CONTACT_ADMIN','en','disabled, please contact with the system administrator','2011-07-15' 
+SELECT 'LABEL','ID_ACCOUNT_DISABLED_CONTACT_ADMIN','en','disabled, please contact with the system administrator','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_WORKSPACE_USING','en','Using workspace','2011-07-15' 
+SELECT 'LABEL','ID_WORKSPACE_USING','en','Using workspace','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_REASSIGN_BYUSER_CONFIRM','en','Are you sure that you want to reassign the  cases?','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_REASSIGN_BYUSER_CONFIRM','en','Are you sure that you want to reassign the  cases?','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_REASSIGN_BYUSER','en','At least one item from the list must be  selected.','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_REASSIGN_BYUSER','en','At least one item from the list must be  selected.','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_MSG_RESSIGN_BYUSER_PANEL','en','Users selection interface','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_MSG_RESSIGN_BYUSER_PANEL','en','Users selection interface','2011-08-25' 
  ;
 INSERT INTO [TRANSLATION] ([TRN_CATEGORY],[TRN_ID],[TRN_LANG],[TRN_VALUE],[TRN_UPDATE_DATE]) 
 
-SELECT 'JAVASCRIPT','ID_MSG_RESSIGN_B','en','At least one item from the list must be  selected.','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_MSG_RESSIGN_B','en','At least one item from the list must be  selected.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DETAILS_WEBSERVICES','en','Details','2011-07-15' 
+SELECT 'LABEL','ID_DETAILS_WEBSERVICES','en','Details','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ERROR_STREAMING_FILE','en','doesn''t exist. It should be saved by a  plugin to a different place. Please review  the configuration','2011-07-15' 
+SELECT 'LABEL','ID_ERROR_STREAMING_FILE','en','doesn''t exist. It should be saved by a  plugin to a different place. Please review  the configuration','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_UPLOAD_ERR_UNKNOWN','en','Unknown upload error','2011-07-15' 
+SELECT 'LABEL','ID_UPLOAD_ERR_UNKNOWN','en','Unknown upload error','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_UPLOAD_ERR_EXTENSION','en','File upload stopped by extension','2011-07-15' 
+SELECT 'LABEL','ID_UPLOAD_ERR_EXTENSION','en','File upload stopped by extension','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_UPLOAD_ERR_CANT_WRITE','en','Failed to write file to disk','2011-07-15' 
+SELECT 'LABEL','ID_UPLOAD_ERR_CANT_WRITE','en','Failed to write file to disk','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_UPLOAD_ERR_NO_TMP_DIR','en','Missing a temporary folder','2011-07-15' 
+SELECT 'LABEL','ID_UPLOAD_ERR_NO_TMP_DIR','en','Missing a temporary folder','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_UPLOAD_ERR_NO_FILE','en','No file was uploaded','2011-07-15' 
+SELECT 'LABEL','ID_UPLOAD_ERR_NO_FILE','en','No file was uploaded','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_UPLOAD_ERR_PARTIAL','en','The uploaded file was only partially uploaded','2011-07-15' 
+SELECT 'LABEL','ID_UPLOAD_ERR_PARTIAL','en','The uploaded file was only partially uploaded','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_UPLOAD_ERR_FORM_SIZE','en','The uploaded file exceeds the MAX_FILE_SIZE   directive that was specified in the HTML form','2011-07-15' 
+SELECT 'LABEL','ID_UPLOAD_ERR_FORM_SIZE','en','The uploaded file exceeds the MAX_FILE_SIZE   directive that was specified in the HTML form','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_UPLOAD_ERR_INI_SIZE','en','The uploaded file exceeds the  upload_max_filesize directive in php.ini','2011-07-15' 
+SELECT 'LABEL','ID_UPLOAD_ERR_INI_SIZE','en','The uploaded file exceeds the  upload_max_filesize directive in php.ini','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_NOT_PROCESS_RELATED','en','Not from a Process','2011-07-15' 
+SELECT 'LABEL','ID_NOT_PROCESS_RELATED','en','Not from a Process','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_EXTERNAL_FILE','en','External','2011-07-15' 
+SELECT 'LABEL','ID_EXTERNAL_FILE','en','External','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_INFO','en','Info','2011-07-15' 
+SELECT 'LABEL','ID_INFO','en','Info','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CONFIRM_DELETE_INPUT_AND_HISTORY','en','This action will delete the current  document and all its versions','2011-07-15' 
+SELECT 'LABEL','ID_CONFIRM_DELETE_INPUT_AND_HISTORY','en','This action will delete the current  document and all its versions','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_CONFIRM_DELETE_INPUT_AND_HISTORY','en','This will delete the current document and  its past versions.','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_CONFIRM_DELETE_INPUT_AND_HISTORY','en','This will delete the current document and  its past versions.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SETUP_MAILCONF_TITLE','en','Test SMTP Connection','2011-07-15' 
+SELECT 'LABEL','ID_SETUP_MAILCONF_TITLE','en','Test SMTP Connection','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','DBCONNECTIONS_TITLE','en','Testing database server configuration','2011-07-15' 
+SELECT 'LABEL','DBCONNECTIONS_TITLE','en','Testing database server configuration','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DBCNN_TITLE','en','Checking server configuration','2011-07-15' 
+SELECT 'LABEL','ID_DBCNN_TITLE','en','Checking server configuration','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_NOT_IN_FOLDER','en','Not in folder','2011-07-15' 
+SELECT 'LABEL','ID_NOT_IN_FOLDER','en','Not in folder','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_NEW_FOLDER','en','New Folder','2011-07-15' 
+SELECT 'LABEL','ID_NEW_FOLDER','en','New Folder','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_NEXT_STEP','en','Next Step','2011-07-15' 
+SELECT 'LABEL','ID_NEXT_STEP','en','Next Step','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PM_FOLDER','en','ProcessMaker Folder','2011-07-15' 
+SELECT 'LABEL','ID_PM_FOLDER','en','ProcessMaker Folder','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_INPUT_DOCUMENT_HISTORY','en','Input Document History','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_INPUT_DOCUMENT_HISTORY','en','Input Document History','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_UPLOAD_REPLACE_INPUT','en','Replace Input Document','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_UPLOAD_REPLACE_INPUT','en','Replace Input Document','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_UPLOAD_NEW_INPUT_VERSION','en','Upload New Input Document Version','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_UPLOAD_NEW_INPUT_VERSION','en','Upload New Input Document Version','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_VERSION_HISTORY','en','Version History','2011-07-15' 
+SELECT 'LABEL','ID_VERSION_HISTORY','en','Version History','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_UPLOAD_NEW_INPUT','en','Upload New Input Document','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_UPLOAD_NEW_INPUT','en','Upload New Input Document','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_NEW_VERSION','en','New Version','2011-07-15' 
+SELECT 'LABEL','ID_NEW_VERSION','en','New Version','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_ROLES_MSG3','en','You must specify a role name!','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_ROLES_MSG3','en','You must specify a role name!','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_PROCESSMAP_DELETE_LINE','en','Delete line','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_PROCESSMAP_DELETE_LINE','en','Delete line','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_FIELD_HANDLER_HELP1','en','About the feature','2011-07-15' 
+SELECT 'LABEL','ID_FIELD_HANDLER_HELP1','en','About the feature','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_FIELD_HANDLER_HELP2','en','Drag & Drop to move and reorder the fields.','2011-07-15' 
+SELECT 'LABEL','ID_FIELD_HANDLER_HELP2','en','Drag & Drop to move and reorder the fields.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_FIELD_HANDLER_HELP3','en','Bring the mouse pointer near tool icon and  the corresponding options (Edit, Delete)  will be shown.','2011-07-15' 
+SELECT 'LABEL','ID_FIELD_HANDLER_HELP3','en','Bring the mouse pointer near tool icon and  the corresponding options (Edit, Delete)  will be shown.','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_CONFIRM_WEBENTRY_DELETE','en','Are you sure you want to delete this web entry?','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_CONFIRM_WEBENTRY_DELETE','en','Are you sure you want to delete this web entry?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CHANGE_VIEW','en','Change view','2011-07-15' 
+SELECT 'LABEL','ID_CHANGE_VIEW','en','Change view','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_REMOVE_FIELD','en','Remove field','2011-07-15' 
+SELECT 'LABEL','ID_REMOVE_FIELD','en','Remove field','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_VISIBLE','en','Visible','2011-07-15' 
+SELECT 'LABEL','ID_VISIBLE','en','Visible','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_TYPE','en','Type','2011-07-15' 
+SELECT 'LABEL','ID_TYPE','en','Type','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_LABEL','en','Label','2011-07-15' 
+SELECT 'LABEL','ID_LABEL','en','Label','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_NAME','en','Name','2011-07-15' 
+SELECT 'LABEL','ID_NAME','en','Name','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','WEBEN_ONLY_BALANCED','en','Web Entry only works with tasks which  have  Cyclical Assignment.<br/> Please  change  the Assignment Rules','2011-07-15' 
+SELECT 'LABEL','WEBEN_ONLY_BALANCED','en','Web Entry only works with tasks which  have  Cyclical Assignment.<br/> Please  change  the Assignment Rules','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DETAIL','en','Detail','2011-07-15' 
+SELECT 'LABEL','ID_DETAIL','en','Detail','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','HTML_FILES','en','You can open only files with the .html  extension','2011-07-15' 
+SELECT 'LABEL','HTML_FILES','en','You can open only files with the .html  extension','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','WEBEN_ONLY_BALANCEDJS','en','Web Entry only works with tasks which have   Cyclical Assignment.  Please change  the  Assignment Rules','2011-07-15' 
+SELECT 'JAVASCRIPT','WEBEN_ONLY_BALANCEDJS','en','Web Entry only works with tasks which have   Cyclical Assignment.  Please change  the  Assignment Rules','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','HTML_FILES','en','Make sure your uploaded file has extension  html or txt','2011-07-15' 
+SELECT 'JAVASCRIPT','HTML_FILES','en','Make sure your uploaded file has extension  html or txt','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SEARCH_RESULT','en','Search results','2011-07-15' 
+SELECT 'LABEL','ID_SEARCH_RESULT','en','Search results','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_MSG_REMOVE_PLUGIN','en','Are you sure that you want to remove this  plugin?','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_MSG_REMOVE_PLUGIN','en','Are you sure that you want to remove this  plugin?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MSG_REMOVE_PLUGIN_SUCCESS','en','Plugin successfully removed!','2011-07-15' 
+SELECT 'LABEL','ID_MSG_REMOVE_PLUGIN_SUCCESS','en','Plugin successfully removed!','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','CANT_DEL_LANGUAGE','en','This language cannot be deleted  because it  is currently being  used.','2011-07-15' 
+SELECT 'LABEL','CANT_DEL_LANGUAGE','en','This language cannot be deleted  because it  is currently being  used.','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_ADD','en','Add','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_ADD','en','Add','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','CONDITIONAL_ALERT3','en','You have not tested the condition, do you  want save anyway?','2011-07-15' 
+SELECT 'JAVASCRIPT','CONDITIONAL_ALERT3','en','You have not tested the condition, do you  want save anyway?','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','CONDITIONAL_ALERT4','en','You have an error in the condition, do you  want save anyway?','2011-07-15' 
+SELECT 'JAVASCRIPT','CONDITIONAL_ALERT4','en','You have an error in the condition, do you  want save anyway?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ERROR','en','ERROR','2011-07-15' 
+SELECT 'LABEL','ID_ERROR','en','ERROR','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_REQUIRED_FIELDS_ERROR','en','Some required fields were not filled','2011-07-15' 
+SELECT 'LABEL','ID_REQUIRED_FIELDS_ERROR','en','Some required fields were not filled','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','IMPORT_LANGUAGE_SUCCESS','en','The translation file was successfully imported.','2011-07-15' 
+SELECT 'LABEL','IMPORT_LANGUAGE_SUCCESS','en','The translation file was successfully imported.','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_PROCESSMAP_REPORT_TO','en','Report to','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_PROCESSMAP_REPORT_TO','en','Report to','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','UID_UNDEFINED_USER','en','Undefined user','2011-07-15' 
+SELECT 'LABEL','UID_UNDEFINED_USER','en','Undefined user','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DEPARTAMENT_USERS','en','Departments','2011-07-15' 
+SELECT 'LABEL','ID_DEPARTAMENT_USERS','en','Departments','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DEPARTMENTS_USERS','en','Departments','2011-07-15' 
+SELECT 'LABEL','ID_DEPARTMENTS_USERS','en','Departments','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_NEW_DEPARTMENT','en','New','2011-07-15' 
+SELECT 'LABEL','ID_NEW_DEPARTMENT','en','New','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MSG_CONFIRM_DELETE_DEPARTMENT','en','Do you want to delete this department?','2011-07-15' 
+SELECT 'LABEL','ID_MSG_CONFIRM_DELETE_DEPARTMENT','en','Do you want to delete this department?','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_MSJ_DEPTO','en','Department name already exists!','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_MSJ_DEPTO','en','Department name already exists!','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MSJ_REPORSTO','en','The current user does not have a valid   Reports To user.  Please contact  the  administrator.','2011-07-15' 
+SELECT 'LABEL','ID_MSJ_REPORSTO','en','The current user does not have a valid   Reports To user.  Please contact  the  administrator.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_REMOVE_LOGO','en','Are you sure you want to delete this Logo?','2011-07-15' 
+SELECT 'LABEL','ID_REMOVE_LOGO','en','Are you sure you want to delete this Logo?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_REPLACED_LOGO','en','The logo was replaced','2011-07-15' 
+SELECT 'LABEL','ID_REPLACED_LOGO','en','The logo was replaced','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_REMOVE_LOGO','en','Are you sure you want to delete this Logo?','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_REMOVE_LOGO','en','Are you sure you want to delete this Logo?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_LOGO','en','Logo','2011-07-15' 
+SELECT 'LABEL','ID_LOGO','en','Logo','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_INBOX','en','Inbox','2011-07-15' 
+SELECT 'LABEL','ID_INBOX','en','Inbox','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_OUTBOX','en','Outbox','2011-07-15' 
+SELECT 'LABEL','ID_OUTBOX','en','Outbox','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CASES_MENU_FOLDERS','en','Cases','2011-07-15' 
+SELECT 'LABEL','ID_CASES_MENU_FOLDERS','en','Cases','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CASES_MENU_SEARCH','en','Search','2011-07-15' 
+SELECT 'LABEL','ID_CASES_MENU_SEARCH','en','Search','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CASES_MENU_ADMIN','en','Process Supervisor','2011-07-15' 
+SELECT 'LABEL','ID_CASES_MENU_ADMIN','en','Process Supervisor','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SENT','en','Participated','2011-07-15' 
+SELECT 'LABEL','ID_SENT','en','Participated','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CALENDAR','en','Calendar','2011-07-15' 
+SELECT 'LABEL','ID_CALENDAR','en','Calendar','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MSG_CONFIRM_DELETE_CASE_SCHEDULER','en','Are you sure you want to delete this  scheduled case?','2011-07-15' 
+SELECT 'LABEL','ID_MSG_CONFIRM_DELETE_CASE_SCHEDULER','en','Are you sure you want to delete this  scheduled case?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SCHEDULER_LIST','en','New cases scheduler','2011-07-15' 
+SELECT 'LABEL','ID_SCHEDULER_LIST','en','New cases scheduler','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SCHEDULER_LOG','en','Cases Scheduler Logs','2011-07-15' 
+SELECT 'LABEL','ID_SCHEDULER_LOG','en','Cases Scheduler Logs','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MSG_CONFIRM_DELETE_IDOCUMENT','en','This object is being used in some steps.  Are you sure you want to delete it?','2011-07-15' 
+SELECT 'LABEL','ID_MSG_CONFIRM_DELETE_IDOCUMENT','en','This object is being used in some steps.  Are you sure you want to delete it?','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_FIELD_FOREIGN_TABLE','en','Field "table" is required','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_FIELD_FOREIGN_TABLE','en','Field "table" is required','2011-08-25' 
  ;
 INSERT INTO [TRANSLATION] ([TRN_CATEGORY],[TRN_ID],[TRN_LANG],[TRN_VALUE],[TRN_UPDATE_DATE]) 
 
-SELECT 'JAVASCRIPT','ID_ASSIGN_RULES','en','Error: There is a problem with next tasks   of this process, one of them have manual   assignment.  Manual assignment shouldn''t be   used with subprocesses','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_ASSIGN_RULES','en','Error: There is a problem with next tasks   of this process, one of them have manual   assignment.  Manual assignment shouldn''t be   used with subprocesses','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_FIELD_INVALID','en','Field Invalid','2011-07-15' 
+SELECT 'LABEL','ID_FIELD_INVALID','en','Field Invalid','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_WARNING','en','WARNING','2011-07-15' 
+SELECT 'LABEL','ID_WARNING','en','WARNING','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SAVED','en','Saved','2011-07-15' 
+SELECT 'LABEL','ID_SAVED','en','Saved','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ASSIGN_RULES','en','Error: There is a problem with next tasks  of this process, one of them have manual  assignment.  Manual assignment shouldn''t be  used with subprocesses','2011-07-15' 
+SELECT 'LABEL','ID_ASSIGN_RULES','en','Error: There is a problem with next tasks  of this process, one of them have manual  assignment.  Manual assignment shouldn''t be  used with subprocesses','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SELECT_OPTION_TABLE','en','Select a option to export schema or data  from the selected table(s).','2011-07-15' 
+SELECT 'LABEL','ID_SELECT_OPTION_TABLE','en','Select a option to export schema or data  from the selected table(s).','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SELECT_TABLE','en','Please select a table to export.','2011-07-15' 
+SELECT 'LABEL','ID_SELECT_TABLE','en','Please select a table to export.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_TASK_WAS_ASSIGNED_TO_USER','en','Manual assignment shouldn''t be used with  subprocesses.<br>The task "{0}" from case  {1} was assigned to user <b>{2}</b> ( {3}   {4} )','2011-07-15' 
+SELECT 'LABEL','ID_TASK_WAS_ASSIGNED_TO_USER','en','Manual assignment shouldn''t be used with  subprocesses.<br>The task "{0}" from case  {1} was assigned to user <b>{2}</b> ( {3}   {4} )','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_USER_ONVACATION','en','User on vacation! Contact to your System  Administrator if you want to login. please','2011-07-15' 
+SELECT 'LABEL','ID_USER_ONVACATION','en','User on vacation! Contact to your System  Administrator if you want to login. please','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','PASSWORD_HISTORY','en','Password history','2011-07-15' 
+SELECT 'LABEL','PASSWORD_HISTORY','en','Password history','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_EMAIL_REQUIRED','en','The mail to is required, or uncheck the  send a test mail','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_EMAIL_REQUIRED','en','The mail to is required, or uncheck the  send a test mail','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_PASSWORD_REQUIRED','en','The password is required, or uncheck the  option Require Authentication','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_PASSWORD_REQUIRED','en','The password is required, or uncheck the  option Require Authentication','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_SERVER_REQUIRED','en','You must specify a server!','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_SERVER_REQUIRED','en','You must specify a server!','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_FILL_SERVER','en','You must specify a server!','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_FILL_SERVER','en','You must specify a server!','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CONDITIONS_EDITOR','en','Conditions editor','2011-07-15' 
+SELECT 'LABEL','ID_CONDITIONS_EDITOR','en','Conditions editor','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SELECT_FILE_PMT_IMPORT','en','Please select a .pmt file','2011-07-15' 
+SELECT 'LABEL','ID_SELECT_FILE_PMT_IMPORT','en','Please select a .pmt file','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SELECT_FILE_PM_IMPORT','en','Please select a .pm file','2011-07-15' 
+SELECT 'LABEL','ID_SELECT_FILE_PM_IMPORT','en','Please select a .pm file','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PLEASE_SELECT_PLUGIN','en','Please select the plugin','2011-07-15' 
+SELECT 'LABEL','ID_PLEASE_SELECT_PLUGIN','en','Please select the plugin','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_NO_FIELD_FOUND','en','No fields found!','2011-07-15' 
+SELECT 'LABEL','ID_NO_FIELD_FOUND','en','No fields found!','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_UNASSIGNED','en','Unassigned','2011-07-15' 
+SELECT 'LABEL','ID_UNASSIGNED','en','Unassigned','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CLAIM','en','Claim','2011-07-15' 
+SELECT 'LABEL','ID_CLAIM','en','Claim','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_TABLE_INVALID_SYNTAX','en','Invalid syntax','2011-07-15' 
+SELECT 'LABEL','ID_TABLE_INVALID_SYNTAX','en','Invalid syntax','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_NO_PERMISSION_NO_PARTICIPATED','en','You do not have permission to see this case  or you have not participated in it.','2011-07-15' 
+SELECT 'LABEL','ID_NO_PERMISSION_NO_PARTICIPATED','en','You do not have permission to see this case  or you have not participated in it.','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_EMPTY_NODENAME','en','The field name contains spaces or it''s empty!','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_EMPTY_NODENAME','en','The field name contains spaces or it''s empty!','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_SUGGEST_NEW_ENTRIES_ALERT','en','You should set all options for new entries.','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_SUGGEST_NEW_ENTRIES_ALERT','en','You should set all options for new entries.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ISNT_LICENSE','en','This isn''t the correct license.','2011-07-15' 
+SELECT 'LABEL','ID_ISNT_LICENSE','en','This isn''t the correct license.','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_TABLE_RESERVED_WORDS','en','This table name is reserved. Please set  another for','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_TABLE_RESERVED_WORDS','en','This table name is reserved. Please set  another for','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_START_NEW_CASE','en','Start a new case','2011-07-15' 
+SELECT 'LABEL','ID_START_NEW_CASE','en','Start a new case','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PROCESS_NOCATEGORY','en','No Category','2011-07-15' 
+SELECT 'LABEL','ID_PROCESS_NOCATEGORY','en','No Category','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PLEASE_SELECT_LOGO','en','Please Select Logo','2011-07-15' 
+SELECT 'LABEL','ID_PLEASE_SELECT_LOGO','en','Please Select Logo','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_TASK_NO_STEPS','en','The task doesn''t have any steps','2011-07-15' 
+SELECT 'LABEL','ID_TASK_NO_STEPS','en','The task doesn''t have any steps','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_FIELDS_RESERVED_WORDS','en','The following fields cannot have these  names because they are reserved words','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_FIELDS_RESERVED_WORDS','en','The following fields cannot have these  names because they are reserved words','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PROCESS_CATEGORY','en','Process category','2011-07-15' 
+SELECT 'LABEL','ID_PROCESS_CATEGORY','en','Process category','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_LOCATION','en','Location','2011-07-15' 
+SELECT 'LABEL','ID_LOCATION','en','Location','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_GROUP','en','Group','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_GROUP','en','Group','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_COUNTRY','en','Country','2011-07-15' 
+SELECT 'LABEL','ID_COUNTRY','en','Country','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_BACK_PERMISSIONS_LIST','en','Back to permissions list','2011-07-15' 
+SELECT 'LABEL','ID_BACK_PERMISSIONS_LIST','en','Back to permissions list','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_REASSIGNMENT','en','REASSIGNMENT','2011-07-15' 
+SELECT 'LABEL','ID_REASSIGNMENT','en','REASSIGNMENT','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_FILL_PRIMARY_KEYS','en','Please fill all the primary key fields','2011-07-15' 
+SELECT 'LABEL','ID_FILL_PRIMARY_KEYS','en','Please fill all the primary key fields','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_TRIGGER_SOURCE_LINK','en','Edit Source Code','2011-07-15' 
+SELECT 'LABEL','ID_TRIGGER_SOURCE_LINK','en','Edit Source Code','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_ASSIGN_SUPERVISOR','en','Assign Process Supervisor','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_ASSIGN_SUPERVISOR','en','Assign Process Supervisor','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ADD_USERS_TO_DEPARTMENT','en','Add users to department','2011-07-15' 
+SELECT 'LABEL','ADD_USERS_TO_DEPARTMENT','en','Add users to department','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_RESET','en','Reset','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_RESET','en','Reset','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_CREATE','en','Create','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_CREATE','en','Create','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_DISABLE_WORKSPACE_CONFIRM','en','Do you want to disable the selected workspace?','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_DISABLE_WORKSPACE_CONFIRM','en','Do you want to disable the selected workspace?','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_ENABLE_WORKSPACE_CONFIRM','en','Do you want enable the selected workspace?','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_ENABLE_WORKSPACE_CONFIRM','en','Do you want enable the selected workspace?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ENABLE_WORKSPACE','en','Enable Workspace','2011-07-15' 
+SELECT 'LABEL','ID_ENABLE_WORKSPACE','en','Enable Workspace','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','DBCONNECTIONS_ALERT','en','You forgot to fill a required field!','2011-07-15' 
+SELECT 'JAVASCRIPT','DBCONNECTIONS_ALERT','en','You forgot to fill a required field!','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DISABLE_WORKSPACE','en','Disable Workspace','2011-07-15' 
+SELECT 'LABEL','ID_DISABLE_WORKSPACE','en','Disable Workspace','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','NEW_SITE_SUCCESS_CONFIRMNOTE','en','Note.- If you open the new site your  current session will be closed.','2011-07-15' 
+SELECT 'JAVASCRIPT','NEW_SITE_SUCCESS_CONFIRMNOTE','en','Note.- If you open the new site your  current session will be closed.','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','NEW_SITE_SUCCESS_CONFIRM','en','Do you want open the new site?','2011-07-15' 
+SELECT 'JAVASCRIPT','NEW_SITE_SUCCESS_CONFIRM','en','Do you want open the new site?','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','NEW_SITE_SUCCESS','en','Your new site was successfully created with  name:','2011-07-15' 
+SELECT 'JAVASCRIPT','NEW_SITE_SUCCESS','en','Your new site was successfully created with  name:','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','DBCONNECTIONS_MSGR','en','Server Response','2011-07-15' 
+SELECT 'LABEL','DBCONNECTIONS_MSGR','en','Server Response','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','DBCONNECTIONS_MSGR','en','Server Response','2011-07-15' 
+SELECT 'JAVASCRIPT','DBCONNECTIONS_MSGR','en','Server Response','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CUSTOM_TRIGGER_DESCRIPTION','en','Custom Trigger','2011-07-15' 
+SELECT 'LABEL','ID_CUSTOM_TRIGGER_DESCRIPTION','en','Custom Trigger','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','DBCONNECTIONS_MSGA','en','Database Connections Test was aborted','2011-07-15' 
+SELECT 'JAVASCRIPT','DBCONNECTIONS_MSGA','en','Database Connections Test was aborted','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CUSTOM_TRIGGER','en','Custom Trigger','2011-07-15' 
+SELECT 'LABEL','ID_CUSTOM_TRIGGER','en','Custom Trigger','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_TRIGGERS_VALIDATION_ERR3','en','* The {Object} {Description} depends.','2011-07-15' 
+SELECT 'LABEL','ID_TRIGGERS_VALIDATION_ERR3','en','* The {Object} {Description} depends.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_TRIGGERS_VALIDATION_ERR2','en','({N}) Dependencies were found for this  trigger in {Object} objects','2011-07-15' 
+SELECT 'LABEL','ID_TRIGGERS_VALIDATION_ERR2','en','({N}) Dependencies were found for this  trigger in {Object} objects','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_TRIGGERS_VALIDATION','en','No Dependencies were found for this trigger  in {Object} definitions','2011-07-15' 
+SELECT 'LABEL','ID_TRIGGERS_VALIDATION','en','No Dependencies were found for this trigger  in {Object} definitions','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_TRIGGERS_VALIDATE_EERR1','en','This trigger can''t be deleted due to  dependencies.','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_TRIGGERS_VALIDATE_EERR1','en','This trigger can''t be deleted due to  dependencies.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CONTACT_ADMIN','en','Please contact your system administrator','2011-07-15' 
+SELECT 'LABEL','ID_CONTACT_ADMIN','en','Please contact your system administrator','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_USER_ON_VACATIONS','en','User on vacation was replaced','2011-07-15' 
+SELECT 'LABEL','ID_USER_ON_VACATIONS','en','User on vacation was replaced','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PROCESS_DEF_PROBLEM','en','There is a problem in the process  definition and/or an exception error ocurred.','2011-07-15' 
+SELECT 'LABEL','ID_PROCESS_DEF_PROBLEM','en','There is a problem in the process  definition and/or an exception error ocurred.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_COPY_OF','en','Copy of','2011-07-15' 
+SELECT 'LABEL','ID_COPY_OF','en','Copy of','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_COPY','en','Copy','2011-07-15' 
+SELECT 'LABEL','ID_COPY','en','Copy','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_LOADING','en','Loading, please wait...','2011-07-15' 
+SELECT 'LABEL','ID_LOADING','en','Loading, please wait...','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CLEAR_CACHE','en','Clear Cache','2011-07-15' 
+SELECT 'LABEL','ID_CLEAR_CACHE','en','Clear Cache','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_RESTORE_LOGO','en','Restore the default logo','2011-07-15' 
+SELECT 'LABEL','ID_RESTORE_LOGO','en','Restore the default logo','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_APPLY_LOGO','en','Do you want to apply the selected Logo?','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_APPLY_LOGO','en','Do you want to apply the selected Logo?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CLEAR_CACHE_CONFIRM1','en','Clear all cache files now?','2011-07-15' 
+SELECT 'LABEL','ID_CLEAR_CACHE_CONFIRM1','en','Clear all cache files now?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SELFSERVICE','en','Self Service','2011-07-15' 
+SELECT 'LABEL','ID_SELFSERVICE','en','Self Service','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PROCESSES','en','Processes','2011-07-15' 
+SELECT 'LABEL','ID_PROCESSES','en','Processes','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ENTER_SEARCH_TERM','en','enter search term','2011-07-18' 
+SELECT 'LABEL','ID_ENTER_SEARCH_TERM','en','enter search term','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DETAILS','en','Details','2011-07-15' 
+SELECT 'LABEL','ID_DETAILS','en','Details','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_METHOD','en','Method','2011-07-15' 
+SELECT 'LABEL','ID_METHOD','en','Method','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_FIELD_DUPLICATE','en','Duplicate Field','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_FIELD_DUPLICATE','en','Duplicate Field','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DESCRIPTION','en','Description','2011-07-15' 
+SELECT 'LABEL','ID_DESCRIPTION','en','Description','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PARAMETERS','en','Parameters','2011-07-15' 
+SELECT 'LABEL','ID_PARAMETERS','en','Parameters','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_TRIGGER_RETURN_TITLE','en','Return value','2011-07-15' 
+SELECT 'LABEL','ID_TRIGGER_RETURN_TITLE','en','Return value','2011-08-25' 
  ;
 INSERT INTO [TRANSLATION] ([TRN_CATEGORY],[TRN_ID],[TRN_LANG],[TRN_VALUE],[TRN_UPDATE_DATE]) 
 
-SELECT 'LABEL','ID_TRIGGER_RETURN_LABEL','en','Variable to hold return value','2011-07-15' 
+SELECT 'LABEL','ID_TRIGGER_RETURN_LABEL','en','Variable to hold return value','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SAVE','en','Save','2011-07-15' 
+SELECT 'LABEL','ID_SAVE','en','Save','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_LOG_CASE_SCHEDULER','en','Case Scheduler Log','2011-07-15' 
+SELECT 'LABEL','ID_LOG_CASE_SCHEDULER','en','Case Scheduler Log','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CASE_SCHEDULER','en','Case Scheduler','2011-07-15' 
+SELECT 'LABEL','ID_CASE_SCHEDULER','en','Case Scheduler','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_NEW_CASE','en','New case','2011-07-15' 
+SELECT 'LABEL','ID_NEW_CASE','en','New case','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','OPEN_NEW_WS','en','Open new site','2011-07-15' 
+SELECT 'LABEL','OPEN_NEW_WS','en','Open new site','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ERROR_NEW_WS','en','You have some mistakes, please try again','2011-07-15' 
+SELECT 'JAVASCRIPT','ERROR_NEW_WS','en','You have some mistakes, please try again','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_ASSIGN_CASE_TO_USER','en','You have to select one employee. Select one  from the dropdown list please.','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_ASSIGN_CASE_TO_USER','en','You have to select one employee. Select one  from the dropdown list please.','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','DBCONNECTIONS_MSGT','en','The test has','2011-07-15' 
+SELECT 'JAVASCRIPT','DBCONNECTIONS_MSGT','en','The test has','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','DBCONNECTIONS_MSGS','en','Successful','2011-07-15' 
+SELECT 'JAVASCRIPT','DBCONNECTIONS_MSGS','en','Successful','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','DBCONNECTIONS_TEST','en','TESTING SERVER CONNECTION','2011-07-15' 
+SELECT 'JAVASCRIPT','DBCONNECTIONS_TEST','en','TESTING SERVER CONNECTION','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DBC_CHECK','en','Checking server parameters','2011-07-15' 
+SELECT 'LABEL','ID_DBC_CHECK','en','Checking server parameters','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_HOST_NAME','en','Resolving Host Name','2011-07-15' 
+SELECT 'LABEL','ID_HOST_NAME','en','Resolving Host Name','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CHECK_PORT','en','Checking port','2011-07-15' 
+SELECT 'LABEL','ID_CHECK_PORT','en','Checking port','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CONNECT_HOST','en','Trying to connect to host','2011-07-15' 
+SELECT 'LABEL','ID_CONNECT_HOST','en','Trying to connect to host','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_OPEN_DB','en','Trying to open database','2011-07-15' 
+SELECT 'LABEL','ID_OPEN_DB','en','Trying to open database','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SERVICE','en','Service','2011-07-15' 
+SELECT 'LABEL','ID_SERVICE','en','Service','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_ABORT','en','Abort','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_ABORT','en','Abort','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_UNASSIGNED_USERS','en','Unassigned Users','2011-07-15' 
+SELECT 'LABEL','ID_UNASSIGNED_USERS','en','Unassigned Users','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','CHECK_ALL','en','Check All','2011-07-15' 
+SELECT 'LABEL','CHECK_ALL','en','Check All','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','UNCHECK_ALL','en','Uncheck All','2011-07-15' 
+SELECT 'LABEL','UNCHECK_ALL','en','Uncheck All','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_EVENT_MULTIPLE','en','Multiple Event','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_EVENT_MULTIPLE','en','Multiple Event','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_EVENT_MESSAGE','en','Message Event','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_EVENT_MESSAGE','en','Message Event','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_EVENT_CONDITIONAL','en','Conditional Event','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_EVENT_CONDITIONAL','en','Conditional Event','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CASES_START_PAGE','en','Start Pages','2011-07-15' 
+SELECT 'LABEL','ID_CASES_START_PAGE','en','Start Pages','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PROCESS_NO_CATEGORY','en','No Category','2011-07-15' 
+SELECT 'LABEL','ID_PROCESS_NO_CATEGORY','en','No Category','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_USER_TO_REASSIGN','en','Reassign to:','2011-07-15' 
+SELECT 'LABEL','ID_USER_TO_REASSIGN','en','Reassign to:','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_REASSIGN_USERS','en','User Reassignment','2011-07-15' 
+SELECT 'LABEL','ID_REASSIGN_USERS','en','User Reassignment','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CASES_LIST_SETUP','en','Cases Lists','2011-07-15' 
+SELECT 'LABEL','ID_CASES_LIST_SETUP','en','Cases Lists','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_APPCACHE_SETUP','en','Cases List Cache Builder','2011-07-15' 
+SELECT 'LABEL','ID_APPCACHE_SETUP','en','Cases List Cache Builder','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CLEAR_CACHE_MSG1','en','All cache data was deleted','2011-07-15' 
+SELECT 'LABEL','ID_CLEAR_CACHE_MSG1','en','All cache data was deleted','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CLEAR_CACHE_MSG2','en','The cache directory is empty','2011-07-15' 
+SELECT 'LABEL','ID_CLEAR_CACHE_MSG2','en','The cache directory is empty','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CASESLIST_APP_UID','en','Case Id','2011-07-15' 
+SELECT 'LABEL','ID_CASESLIST_APP_UID','en','Case Id','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CASESLIST_DEL_INDEX','en','Case Index','2011-07-15' 
+SELECT 'LABEL','ID_CASESLIST_DEL_INDEX','en','Case Index','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CASESLIST_APP_NUMBER','en','#','2011-07-15' 
+SELECT 'LABEL','ID_CASESLIST_APP_NUMBER','en','#','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CASESLIST_APP_STATUS','en','Status','2011-07-15' 
+SELECT 'LABEL','ID_CASESLIST_APP_STATUS','en','Status','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CASESLIST_APP_TITLE','en','Case','2011-07-15' 
+SELECT 'LABEL','ID_CASESLIST_APP_TITLE','en','Case','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CASESLIST_APP_PRO_TITLE','en','Process','2011-07-15' 
+SELECT 'LABEL','ID_CASESLIST_APP_PRO_TITLE','en','Process','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CASESLIST_APP_TAS_TITLE','en','Task','2011-07-15' 
+SELECT 'LABEL','ID_CASESLIST_APP_TAS_TITLE','en','Task','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CASESLIST_APP_DEL_PREVIOUS_USER','en','Sent by','2011-07-15' 
+SELECT 'LABEL','ID_CASESLIST_APP_DEL_PREVIOUS_USER','en','Sent by','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CASESLIST_APP_CURRENT_USER','en','Current User','2011-07-15' 
+SELECT 'LABEL','ID_CASESLIST_APP_CURRENT_USER','en','Current User','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CASESLIST_DEL_TASK_DUE_DATE','en','Due Date','2011-07-15' 
+SELECT 'LABEL','ID_CASESLIST_DEL_TASK_DUE_DATE','en','Due Date','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CASESLIST_APP_UPDATE_DATE','en','Last Modify','2011-07-15' 
+SELECT 'LABEL','ID_CASESLIST_APP_UPDATE_DATE','en','Last Modify','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CASESLIST_DEL_PRIORITY','en','Priority','2011-07-15' 
+SELECT 'LABEL','ID_CASESLIST_DEL_PRIORITY','en','Priority','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CASESLIST_APP_FINISH_DATE','en','Finish Date','2011-07-15' 
+SELECT 'LABEL','ID_CASESLIST_APP_FINISH_DATE','en','Finish Date','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MAINTENANCE','en','Maintenance','2011-07-15' 
+SELECT 'LABEL','ID_MAINTENANCE','en','Maintenance','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SETTINGS','en','Settings','2011-07-15' 
+SELECT 'LABEL','ID_SETTINGS','en','Settings','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_TOOLS','en','Tools','2011-07-15' 
+SELECT 'LABEL','ID_TOOLS','en','Tools','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CASES_LIST_GRID_LOADING','en','Loading Cases List, please wait...','2011-07-15' 
+SELECT 'LABEL','ID_CASES_LIST_GRID_LOADING','en','Loading Cases List, please wait...','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CASESLIST_APP_THREAD_INDEX','en','Thread Index','2011-07-15' 
+SELECT 'LABEL','ID_CASESLIST_APP_THREAD_INDEX','en','Thread Index','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CASESLIST_APP_DEL_INDEX','en','Del Index','2011-07-15' 
+SELECT 'LABEL','ID_CASESLIST_APP_DEL_INDEX','en','Del Index','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_TRIGGERS_VALIDATE_EERR1','en','* The {Object} {Description} depends.','2011-07-15' 
+SELECT 'LABEL','ID_TRIGGERS_VALIDATE_EERR1','en','* The {Object} {Description} depends.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CASES_STATUS_TO_DO','en','To Do','2011-07-15' 
+SELECT 'LABEL','ID_CASES_STATUS_TO_DO','en','To Do','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_DONT_SAVE_XMLFORM','en','This form has not a submit action. Do you  want to continue anyway?','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_DONT_SAVE_XMLFORM','en','This form has not a submit action. Do you  want to continue anyway?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CASES_STATUS_COMPLETED','en','Completed','2011-07-15' 
+SELECT 'LABEL','ID_CASES_STATUS_COMPLETED','en','Completed','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CASES_STATUS_DRAFT','en','Draft','2011-07-15' 
+SELECT 'LABEL','ID_CASES_STATUS_DRAFT','en','Draft','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PM_ENV_SETTINGS_TITLE','en','Processmaker Environment Settings','2011-07-15' 
+SELECT 'LABEL','ID_PM_ENV_SETTINGS_TITLE','en','Processmaker Environment Settings','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PM_ENV_SETTINGS_USERFIELDSET_TITLE','en','Display Information Settings','2011-07-15' 
+SELECT 'LABEL','ID_PM_ENV_SETTINGS_USERFIELDSET_TITLE','en','Display Information Settings','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','IS_USER_NAME_DISPLAY_FORMAT','en','User Name Display Format','2011-07-15' 
+SELECT 'LABEL','IS_USER_NAME_DISPLAY_FORMAT','en','User Name Display Format','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SAVE_SETTINGS','en','Save Settings','2011-07-15' 
+SELECT 'LABEL','ID_SAVE_SETTINGS','en','Save Settings','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SAVING_ENVIRONMENT_SETTINGS','en','Saving Environment Settings','2011-07-15' 
+SELECT 'LABEL','ID_SAVING_ENVIRONMENT_SETTINGS','en','Saving Environment Settings','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ENVIRONMENT_SETTINGS_MSG_1','en','You should select a format from the list.','2011-07-15' 
+SELECT 'LABEL','ID_ENVIRONMENT_SETTINGS_MSG_1','en','You should select a format from the list.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ENVIRONMENT_SETTINGS','en','Environment','2011-07-15' 
+SELECT 'LABEL','ID_ENVIRONMENT_SETTINGS','en','Environment','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_LANG_INSTALL_UPDATE','en','Install / Update','2011-07-15' 
+SELECT 'LABEL','ID_LANG_INSTALL_UPDATE','en','Install / Update','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_LAN_LANGUAGE','en','Language','2011-07-15' 
+SELECT 'LABEL','ID_LAN_LANGUAGE','en','Language','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_LAN_COUNTRY','en','Country','2011-07-15' 
+SELECT 'LABEL','ID_LAN_COUNTRY','en','Country','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_LAN_UPDATE_DATE','en','Update Date','2011-07-15' 
+SELECT 'LABEL','ID_LAN_UPDATE_DATE','en','Update Date','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_LAN_REV_DATE','en','Revision Date','2011-07-15' 
+SELECT 'LABEL','ID_LAN_REV_DATE','en','Revision Date','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_LAN_VERSION','en','Version','2011-07-15' 
+SELECT 'LABEL','ID_LAN_VERSION','en','Version','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_LAN_UPLOAD_TITLE','en','Upload translation file','2011-07-15' 
+SELECT 'LABEL','ID_LAN_UPLOAD_TITLE','en','Upload translation file','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_LAN_FILE','en','File','2011-07-15' 
+SELECT 'LABEL','ID_LAN_FILE','en','File','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_LAN_FILE_WATER_LABEL','en','Select a translation file','2011-07-15' 
+SELECT 'LABEL','ID_LAN_FILE_WATER_LABEL','en','Select a translation file','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_REFRESH_LABEL','en','Refresh','2011-07-15' 
+SELECT 'LABEL','ID_REFRESH_LABEL','en','Refresh','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_REFRESH_MESSAGE','en','You clicked Ctrl + F5','2011-07-15' 
+SELECT 'LABEL','ID_REFRESH_MESSAGE','en','You clicked Ctrl + F5','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_OPT_READ','en','Read','2011-07-15' 
+SELECT 'LABEL','ID_OPT_READ','en','Read','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_OPT_UNREAD','en','Unread','2011-07-15' 
+SELECT 'LABEL','ID_OPT_UNREAD','en','Unread','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_OPT_ALL','en','All','2011-07-15' 
+SELECT 'LABEL','ID_OPT_ALL','en','All','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_OPT_STARTED','en','Started by Me','2011-07-15' 
+SELECT 'LABEL','ID_OPT_STARTED','en','Started by Me','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_OPT_COMPLETED','en','Completed by Me','2011-07-15' 
+SELECT 'LABEL','ID_OPT_COMPLETED','en','Completed by Me','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_EMPTY_PROCESSES','en','Select a Process...','2011-07-15' 
+SELECT 'LABEL','ID_EMPTY_PROCESSES','en','Select a Process...','2011-08-25' 
  ;
 INSERT INTO [TRANSLATION] ([TRN_CATEGORY],[TRN_ID],[TRN_LANG],[TRN_VALUE],[TRN_UPDATE_DATE]) 
 
-SELECT 'LABEL','ID_EMPTY_SEARCH','en','Search ...','2011-07-15' 
+SELECT 'LABEL','ID_EMPTY_SEARCH','en','Search ...','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_EMPTY_CASE','en','Search Case...','2011-07-15' 
+SELECT 'LABEL','ID_EMPTY_CASE','en','Search Case...','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_OPT_JUMP','en','Jump To','2011-07-15' 
+SELECT 'LABEL','ID_OPT_JUMP','en','Jump To','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DISPLAY_ITEMS','en','Display Items  {0} - {1}  of {2}','2011-07-15' 
+SELECT 'LABEL','ID_DISPLAY_ITEMS','en','Display Items  {0} - {1}  of {2}','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DISPLAY_EMPTY','en','Displaying Empty','2011-07-15' 
+SELECT 'LABEL','ID_DISPLAY_EMPTY','en','Displaying Empty','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_EMPTY_PMTABLE','en','Select a PM Table...','2011-07-15' 
+SELECT 'LABEL','ID_EMPTY_PMTABLE','en','Select a PM Table...','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_HEADER_NUMBER','en','#','2011-07-15' 
+SELECT 'LABEL','ID_HEADER_NUMBER','en','#','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_HEADER_FIELD_NAME','en','Field Name','2011-07-15' 
+SELECT 'LABEL','ID_HEADER_FIELD_NAME','en','Field Name','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_HEADER_FIELD_TYPE','en','Field Type','2011-07-15' 
+SELECT 'LABEL','ID_HEADER_FIELD_TYPE','en','Field Type','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_HEADER_LABEL','en','Label','2011-07-15' 
+SELECT 'LABEL','ID_HEADER_LABEL','en','Label','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_HEADER_WIDTH','en','Width','2011-07-15' 
+SELECT 'LABEL','ID_HEADER_WIDTH','en','Width','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_HEADER_ALIGN','en','Align','2011-07-15' 
+SELECT 'LABEL','ID_HEADER_ALIGN','en','Align','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SELECTED_FIELD','en','selected field','2011-07-15' 
+SELECT 'LABEL','ID_SELECTED_FIELD','en','selected field','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_AVAILABLE_FIELDS','en','Available Fields','2011-07-15' 
+SELECT 'LABEL','ID_AVAILABLE_FIELDS','en','Available Fields','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CASES_LIST_FIELDS','en','Cases List Fields','2011-07-15' 
+SELECT 'LABEL','ID_CASES_LIST_FIELDS','en','Cases List Fields','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_TITLE_INBOX','en','Inbox','2011-07-15' 
+SELECT 'LABEL','ID_TITLE_INBOX','en','Inbox','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_TITLE_DRAFT','en','Draft','2011-07-15' 
+SELECT 'LABEL','ID_TITLE_DRAFT','en','Draft','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_TITLE_PARTICIPATED','en','Participated','2011-07-15' 
+SELECT 'LABEL','ID_TITLE_PARTICIPATED','en','Participated','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_TITLE_UNASSIGNED','en','Unassigned','2011-07-15' 
+SELECT 'LABEL','ID_TITLE_UNASSIGNED','en','Unassigned','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_TITLE_PAUSED','en','Paused','2011-07-15' 
+SELECT 'LABEL','ID_TITLE_PAUSED','en','Paused','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_TITLE_COMPLETED','en','Completed','2011-07-15' 
+SELECT 'LABEL','ID_TITLE_COMPLETED','en','Completed','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_TITLE_CANCELLED','en','Cancelled','2011-07-15' 
+SELECT 'LABEL','ID_TITLE_CANCELLED','en','Cancelled','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PM_TABLE','en','PM Table','2011-07-15' 
+SELECT 'LABEL','ID_PM_TABLE','en','PM Table','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ROWS_PER_PAGE','en','Rows per Page','2011-07-15' 
+SELECT 'LABEL','ID_ROWS_PER_PAGE','en','Rows per Page','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DATE_FORMAT','en','Date Format','2011-07-15' 
+SELECT 'LABEL','ID_DATE_FORMAT','en','Date Format','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_RESET','en','Reset','2011-07-15' 
+SELECT 'LABEL','ID_RESET','en','Reset','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_APPLY_CHANGES','en','Apply changes','2011-07-15' 
+SELECT 'LABEL','ID_APPLY_CHANGES','en','Apply changes','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_INTERNATIONAL','en','International','2011-07-15' 
+SELECT 'LABEL','ID_INTERNATIONAL','en','International','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_BREAK_DW_PROCESS','en','were lost by a connection problem.','2011-07-15' 
+SELECT 'LABEL','ID_BREAK_DW_PROCESS','en','were lost by a connection problem.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CATEGORY','en','Category','2011-07-15' 
+SELECT 'LABEL','ID_CATEGORY','en','Category','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PHOTO','en','Photo','2011-07-15' 
+SELECT 'LABEL','ID_PHOTO','en','Photo','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_BROWSE_LIBRARY','en','Browse Library','2011-07-15' 
+SELECT 'LABEL','ID_BROWSE_LIBRARY','en','Browse Library','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_IMPORT','en','Import','2011-07-15' 
+SELECT 'LABEL','ID_IMPORT','en','Import','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PRO_TITLE','en','Process Title','2011-07-15' 
+SELECT 'LABEL','ID_PRO_TITLE','en','Process Title','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DISPLAY_OF','en','of','2011-07-15' 
+SELECT 'LABEL','ID_DISPLAY_OF','en','of','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DELETE_LANGUAGE_WARNING','en','To delete a language you should select a  item from the list first.','2011-07-15' 
+SELECT 'LABEL','ID_DELETE_LANGUAGE_WARNING','en','To delete a language you should select a  item from the list first.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DELETE_LANGUAGE_CONFIRM','en','Do you want remove the language "{0}" ?','2011-07-15' 
+SELECT 'LABEL','ID_DELETE_LANGUAGE_CONFIRM','en','Do you want remove the language "{0}" ?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DELETE_LANGUAGE','en','Remove','2011-07-15' 
+SELECT 'LABEL','ID_DELETE_LANGUAGE','en','Remove','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_LANGUAGE_DELETED_SUCCESSFULLY','en','Language deleted successfully!','2011-07-15' 
+SELECT 'LABEL','ID_LANGUAGE_DELETED_SUCCESSFULLY','en','Language deleted successfully!','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_LANGUAGE_CANT_DELETE','en','There is {0} cases started with this  language, delete action canceled!','2011-07-15' 
+SELECT 'LABEL','ID_LANGUAGE_CANT_DELETE','en','There is {0} cases started with this  language, delete action canceled!','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_TOTAL_CASES','en','Total Cases','2011-07-15' 
+SELECT 'LABEL','ID_TOTAL_CASES','en','Total Cases','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_HEARTBEAT_CONFIG','en','Heart Beat','2011-07-15' 
+SELECT 'LABEL','ID_HEARTBEAT_CONFIG','en','Heart Beat','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PM_HEARTBEAT_SETTINGS_TITLE','en','Heart Beat Configuration','2011-07-15' 
+SELECT 'LABEL','ID_PM_HEARTBEAT_SETTINGS_TITLE','en','Heart Beat Configuration','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SETTINGS_HEARTBEAT_TITLE','en','Display Setting','2011-07-15' 
+SELECT 'LABEL','ID_SETTINGS_HEARTBEAT_TITLE','en','Display Setting','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_HEARTBEAT_DISPLAY','en','Heart Beat','2011-07-15' 
+SELECT 'LABEL','ID_HEARTBEAT_DISPLAY','en','Heart Beat','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_MAIL_SUCESSFULLY','en','Test message sent successfully','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_MAIL_SUCESSFULLY','en','Test message sent successfully','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_MAIL_FAILED','en','The test failure, you must configure yourrnserver to send messages','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_MAIL_FAILED','en','The test failure, you must configure yourrnserver to send messages','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CACHE_DIR_ISNOT_WRITABLE','en','The cache directory is not writable, change  permissions please!','2011-07-15' 
+SELECT 'LABEL','ID_CACHE_DIR_ISNOT_WRITABLE','en','The cache directory is not writable, change  permissions please!','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CACHE_DELETED_SUCCESS','en','All cache data was deleted successfully','2011-07-15' 
+SELECT 'LABEL','ID_CACHE_DELETED_SUCCESS','en','All cache data was deleted successfully','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_EMAIL_INVALID','en','The mail is invalid','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_EMAIL_INVALID','en','The mail is invalid','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','MSG_CONDITION_NOT_DEFINED','en','Condition variable not defined','2011-07-15' 
+SELECT 'LABEL','MSG_CONDITION_NOT_DEFINED','en','Condition variable not defined','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_RSTDATAFIELD','en','Reset Data Field','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_RSTDATAFIELD','en','Reset Data Field','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_OPEN_IN_:POPUP','en','Open in a popup','2011-07-15' 
+SELECT 'LABEL','ID_OPEN_IN_:POPUP','en','Open in a popup','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DEATACH','en','Detach','2011-07-15' 
+SELECT 'LABEL','ID_DEATACH','en','Detach','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PRO_USER','en','User Owner','2011-07-15' 
+SELECT 'LABEL','ID_PRO_USER','en','User Owner','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SYSTEM','en','System','2011-07-15' 
+SELECT 'LABEL','ID_SYSTEM','en','System','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_VARIABLES','en','Variables','2011-07-15' 
+SELECT 'LABEL','ID_VARIABLES','en','Variables','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_OPEN_CASE','en','Open Case','2011-07-15' 
+SELECT 'LABEL','ID_OPEN_CASE','en','Open Case','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CASES_STATUS_CANCELLED','en','Cancelled','2011-07-15' 
+SELECT 'LABEL','ID_CASES_STATUS_CANCELLED','en','Cancelled','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CASES_STATUS_PAUSED','en','Paused','2011-07-15' 
+SELECT 'LABEL','ID_CASES_STATUS_PAUSED','en','Paused','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ALL_PROCESS','en','All Processes','2011-07-15' 
+SELECT 'LABEL','ID_ALL_PROCESS','en','All Processes','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ALL_USERS','en','All Users','2011-07-15' 
+SELECT 'LABEL','ID_ALL_USERS','en','All Users','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ALL_STATUS','en','All Status','2011-07-15' 
+SELECT 'LABEL','ID_ALL_STATUS','en','All Status','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CONFIRM','en','Confirm','2011-07-15' 
+SELECT 'LABEL','ID_CONFIRM','en','Confirm','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CONFIRM_UNPAUSE_CASE','en','Are you sure you want to unpause this case?','2011-07-15' 
+SELECT 'LABEL','ID_CONFIRM_UNPAUSE_CASE','en','Are you sure you want to unpause this case?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PRO_DESCRIPTION','en','Process Description','2011-07-15' 
+SELECT 'LABEL','ID_PRO_DESCRIPTION','en','Process Description','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PRO_DEBUG','en','Debug','2011-07-15' 
+SELECT 'LABEL','ID_PRO_DEBUG','en','Debug','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PRO_CREATE_DATE','en','Create Date','2011-07-15' 
+SELECT 'LABEL','ID_PRO_CREATE_DATE','en','Create Date','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ON','en','On','2011-07-15' 
+SELECT 'LABEL','ID_ON','en','On','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_OFF','en','Off','2011-07-15' 
+SELECT 'LABEL','ID_OFF','en','Off','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_NO_SELECTION_WARNING','en','Select a item from the list please.','2011-07-15' 
+SELECT 'LABEL','ID_NO_SELECTION_WARNING','en','Select a item from the list please.','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_REQUIRED_NAME_TRIGGERS','en','You forgot the title of the trigger','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_REQUIRED_NAME_TRIGGERS','en','You forgot the title of the trigger','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_EXIST_PROCESS','en','There is a process with the same name. this  process will not save','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_EXIST_PROCESS','en','There is a process with the same name. this  process will not save','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_EXIST_DYNAFORM','en','There is a Dynaform with the same name in  this process. It is not saving','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_EXIST_DYNAFORM','en','There is a Dynaform with the same name in  this process. It is not saving','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CLASS_TABLE_DOESNT_EXIST','en','This Class Table doesn''t exists!','2011-07-15' 
+SELECT 'LABEL','ID_CLASS_TABLE_DOESNT_EXIST','en','This Class Table doesn''t exists!','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_EXIST_INPUTDOCUMENT','en','There is an Input Document with the same  name in  this process. It is not saving','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_EXIST_INPUTDOCUMENT','en','There is an Input Document with the same  name in  this process. It is not saving','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_EXIST_OUTPUTDOCUMENT','en','There is an Output Document with the same  name in  this process. It is not saving','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_EXIST_OUTPUTDOCUMENT','en','There is an Output Document with the same  name in  this process. It is not saving','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CASE_SCHEDULER_VALIDATE_ALERT','en','User or password are empty.','2011-07-15' 
+SELECT 'LABEL','ID_CASE_SCHEDULER_VALIDATE_ALERT','en','User or password are empty.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DELEGATE_DATE_FROM','en','Delegated date from','2011-07-15' 
+SELECT 'LABEL','ID_DELEGATE_DATE_FROM','en','Delegated date from','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_DUPLICATE_CATEGORY_NAME','en','Duplicate category name.','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_DUPLICATE_CATEGORY_NAME','en','Duplicate category name.','2011-08-25' 
  ;
 INSERT INTO [TRANSLATION] ([TRN_CATEGORY],[TRN_ID],[TRN_LANG],[TRN_VALUE],[TRN_UPDATE_DATE]) 
 
-SELECT 'LABEL','ID_DELEGATE_DATE_TO','en','to','2011-07-15' 
+SELECT 'LABEL','ID_DELEGATE_DATE_TO','en','to','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_FILTER_BY_DELEGATED_DATE','en','Filter','2011-07-15' 
+SELECT 'LABEL','ID_FILTER_BY_DELEGATED_DATE','en','Filter','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PM_ENV_SETTINGS_REGIONFIELDSET_TITLE','en','Regional Settings','2011-07-15' 
+SELECT 'LABEL','ID_PM_ENV_SETTINGS_REGIONFIELDSET_TITLE','en','Regional Settings','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_GLOBAL_DATE_MASK','en','Global date mask','2011-07-15' 
+SELECT 'LABEL','ID_GLOBAL_DATE_MASK','en','Global date mask','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SAVED_SUCCESSFULLY','en','Saved Successfully','2011-07-15' 
+SELECT 'LABEL','ID_SAVED_SUCCESSFULLY','en','Saved Successfully','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','PENTAHO_LABEL_CONFIGURATION','en','Configuration','2011-07-15' 
+SELECT 'LABEL','PENTAHO_LABEL_CONFIGURATION','en','Configuration','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','PENTAHO_LABEL_DATASOURCE','en','Datasource Name','2011-07-15' 
+SELECT 'LABEL','PENTAHO_LABEL_DATASOURCE','en','Datasource Name','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','PENTAHO_LABEL_DB_EXISTS','en','Datasource already exists','2011-07-15' 
+SELECT 'LABEL','PENTAHO_LABEL_DB_EXISTS','en','Datasource already exists','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','PENTAHO_LABEL_DB_SUCCESS','en','Datasource created successfully','2011-07-15' 
+SELECT 'LABEL','PENTAHO_LABEL_DB_SUCCESS','en','Datasource created successfully','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','PENTAHO_LABEL_DRIVER_CLASS','en','Driver Class','2011-07-15' 
+SELECT 'LABEL','PENTAHO_LABEL_DRIVER_CLASS','en','Driver Class','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','PENTAHO_LABEL_JNDI_CONNECTION','en','JNDI Connection','2011-07-15' 
+SELECT 'LABEL','PENTAHO_LABEL_JNDI_CONNECTION','en','JNDI Connection','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','PENTAHO_LABEL_JNDI_INFORMATION','en','JNDI Information','2011-07-15' 
+SELECT 'LABEL','PENTAHO_LABEL_JNDI_INFORMATION','en','JNDI Information','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','PENTAHO_LABEL_PASSWORD','en','Password','2011-07-15' 
+SELECT 'LABEL','PENTAHO_LABEL_PASSWORD','en','Password','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','PENTAHO_LABEL_REBUILD','en','Rebuild','2011-07-15' 
+SELECT 'LABEL','PENTAHO_LABEL_REBUILD','en','Rebuild','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','PENTAHO_LABEL_ROLES_MANAGER','en','Roles Manager','2011-07-15' 
+SELECT 'LABEL','PENTAHO_LABEL_ROLES_MANAGER','en','Roles Manager','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','PENTAHO_LABEL_SERVER','en','Pentaho Server (URL)','2011-07-15' 
+SELECT 'LABEL','PENTAHO_LABEL_SERVER','en','Pentaho Server (URL)','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','PENTAHO_LABEL_SHOW_JNDI_INFORMATION','en','Show JNDI Info','2011-07-15' 
+SELECT 'LABEL','PENTAHO_LABEL_SHOW_JNDI_INFORMATION','en','Show JNDI Info','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','PENTAHO_LABEL_SYNC','en','Sync to Pentaho Solution','2011-07-15' 
+SELECT 'LABEL','PENTAHO_LABEL_SYNC','en','Sync to Pentaho Solution','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','PENTAHO_LABEL_TABLE_ALREADY_SYNCH','en','Workspace already synchronized with Pentaho  Solution','2011-07-15' 
+SELECT 'LABEL','PENTAHO_LABEL_TABLE_ALREADY_SYNCH','en','Workspace already synchronized with Pentaho  Solution','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','PENTAHO_LABEL_TABLE_SUCCESS','en','Table APP_CACHE_VIEW and triggers are  installed successfully','2011-07-15' 
+SELECT 'LABEL','PENTAHO_LABEL_TABLE_SUCCESS','en','Table APP_CACHE_VIEW and triggers are  installed successfully','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','PENTAHO_LABEL_TABLE_SYNCHED','en','Workspace synchronized with Pentaho Solution','2011-07-15' 
+SELECT 'LABEL','PENTAHO_LABEL_TABLE_SYNCHED','en','Workspace synchronized with Pentaho Solution','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','PENTAHO_LABEL_TABLE_TRIGGERS','en','Database tables and triggers','2011-07-15' 
+SELECT 'LABEL','PENTAHO_LABEL_TABLE_TRIGGERS','en','Database tables and triggers','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','PENTAHO_LABEL_URL','en','URL','2011-07-15' 
+SELECT 'LABEL','PENTAHO_LABEL_URL','en','URL','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','PENTAHO_LABEL_USER_CONSOLE','en','Pentaho User Console','2011-07-15' 
+SELECT 'LABEL','PENTAHO_LABEL_USER_CONSOLE','en','Pentaho User Console','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','PENTAHO_LABEL_USER_CREATE','en','Create user in Pentaho','2011-07-15' 
+SELECT 'LABEL','PENTAHO_LABEL_USER_CREATE','en','Create user in Pentaho','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','PENTAHO_LABEL_USER_CREATED','en','User created successfully','2011-07-15' 
+SELECT 'LABEL','PENTAHO_LABEL_USER_CREATED','en','User created successfully','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','PENTAHO_LABEL_USER_EXIST','en','User already exists','2011-07-15' 
+SELECT 'LABEL','PENTAHO_LABEL_USER_EXIST','en','User already exists','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','PENTAHO_LABEL_USER_NAME','en','User Name','2011-07-15' 
+SELECT 'LABEL','PENTAHO_LABEL_USER_NAME','en','User Name','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','PENTAHO_LABEL_WS_SYNCHED','en','Workspace synchronized with Pentaho Solution','2011-07-15' 
+SELECT 'LABEL','PENTAHO_LABEL_WS_SYNCHED','en','Workspace synchronized with Pentaho Solution','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','PENTAHO_LABEL_WS_USER_PASSWORD','en','Pentaho Workspace User and Password','2011-07-15' 
+SELECT 'LABEL','PENTAHO_LABEL_WS_USER_PASSWORD','en','Pentaho Workspace User and Password','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','PENTAHO_TABLES_TRIGGERS','en','Database tables and triggers','2011-07-15' 
+SELECT 'LABEL','PENTAHO_TABLES_TRIGGERS','en','Database tables and triggers','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_EXIST_TRIGGERS','en','There is a triggers with the same name in  this process.','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_EXIST_TRIGGERS','en','There is a triggers with the same name in  this process.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SELECT_ONE_AT_LEAST','en','Select at least one item from the list','2011-07-15' 
+SELECT 'LABEL','ID_SELECT_ONE_AT_LEAST','en','Select at least one item from the list','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MSG_CONFIRM_CANCEL_CASE','en','Are you sure you want to cancel this case?','2011-07-15' 
+SELECT 'LABEL','ID_MSG_CONFIRM_CANCEL_CASE','en','Are you sure you want to cancel this case?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PAUSE_CASE_TO_DATE','en','Do you want to pause the case until','2011-07-15' 
+SELECT 'LABEL','ID_PAUSE_CASE_TO_DATE','en','Do you want to pause the case until','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DELETING_ELEMENTS','en','Deleting elements, please wait...','2011-07-15' 
+SELECT 'LABEL','ID_DELETING_ELEMENTS','en','Deleting elements, please wait...','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MSG_CONFIRM_DELETE_CASE','en','Are you sure you want to delete this case?','2011-07-15' 
+SELECT 'LABEL','ID_MSG_CONFIRM_DELETE_CASE','en','Are you sure you want to delete this case?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MSG_CONFIRM_CANCEL_CASES','en','Are you sure you want to cancel all   selected cases?','2011-07-15' 
+SELECT 'LABEL','ID_MSG_CONFIRM_CANCEL_CASES','en','Are you sure you want to cancel all   selected cases?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PAUSE_CASE','en','Pause Case','2011-07-15' 
+SELECT 'LABEL','ID_PAUSE_CASE','en','Pause Case','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PAUSE','en','Pause','2011-07-15' 
+SELECT 'LABEL','ID_PAUSE','en','Pause','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_UNPAUSE_CASE','en','Unpause','2011-07-15' 
+SELECT 'LABEL','ID_UNPAUSE_CASE','en','Unpause','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_OPEN_IN_POPUP','en','Open in a popup','2011-07-15' 
+SELECT 'LABEL','ID_OPEN_IN_POPUP','en','Open in a popup','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_DYNAFORM_ASSIGN','en','You can not delete this dynaform. This is  assigned in some step.','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_DYNAFORM_ASSIGN','en','You cannot delete this Dynaform while it is assigned to a step.','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_REQ_TITLE','en','You forgot to fill the Title field!','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_REQ_TITLE','en','You forgot to fill the Title field!','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PROCESS_DELETE_LABEL','en','Do you want to delete the selected process?','2011-07-15' 
+SELECT 'LABEL','ID_PROCESS_DELETE_LABEL','en','Do you want to delete the selected process?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PROCESS_DELETE_ALL_LABEL','en','Do you want to delete all selected processes?','2011-07-15' 
+SELECT 'LABEL','ID_PROCESS_DELETE_ALL_LABEL','en','Do you want to delete all selected processes?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PROCESS_CANT_DELETE','en','You can''t delete the process "{0}" because  has {1} cases.','2011-07-15' 
+SELECT 'LABEL','ID_PROCESS_CANT_DELETE','en','You can''t delete the process "{0}" because  has {1} cases.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_FILE','en','File','2011-07-15' 
+SELECT 'LABEL','ID_FILE','en','File','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_OUT_PUT_DOC_UPLOAD_TITLE','en','Upload Output Document Template File','2011-07-15' 
+SELECT 'LABEL','ID_OUT_PUT_DOC_UPLOAD_TITLE','en','Upload Output Document Template File','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_UPLOADING_FILE','en','Uploading file...','2011-07-15' 
+SELECT 'LABEL','ID_UPLOADING_FILE','en','Uploading file...','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_CLASS_TABLE_DOESNT_EXIST','en','This table class does not exist','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_CLASS_TABLE_DOESNT_EXIST','en','This table class does not exist','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_LOAD_FROM_FILE','en','Load from file','2011-07-15' 
+SELECT 'LABEL','ID_LOAD_FROM_FILE','en','Load from file','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SELECT_TEMPLATE_FILE','en','Select a template file','2011-07-15' 
+SELECT 'LABEL','ID_SELECT_TEMPLATE_FILE','en','Select a template file','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CASES_DATE_MASK','en','Date Format','2011-07-15' 
+SELECT 'LABEL','ID_CASES_DATE_MASK','en','Date Format','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CASES_ROW_NUMBER','en','Number of Rows per Page','2011-07-15' 
+SELECT 'LABEL','ID_CASES_ROW_NUMBER','en','Number of Rows per Page','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_GLOBAL_DATE_FORMAT','en','Global Date Format','2011-07-15' 
+SELECT 'LABEL','ID_GLOBAL_DATE_FORMAT','en','Global Date Format','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PM_ENV_SETTINGS_CASESLIST_TITLE','en','Cases Lists Settings','2011-07-15' 
+SELECT 'LABEL','ID_PM_ENV_SETTINGS_CASESLIST_TITLE','en','Cases Lists Settings','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DATE_FORMAT_1','en','Y-m-d H:i:s','2011-07-15' 
+SELECT 'LABEL','ID_DATE_FORMAT_1','en','Y-m-d H:i:s','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DATE_FORMAT_2','en','d/m/Y','2011-07-15' 
+SELECT 'LABEL','ID_DATE_FORMAT_2','en','d/m/Y','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DATE_FORMAT_3','en','m/d/Y','2011-07-15' 
+SELECT 'LABEL','ID_DATE_FORMAT_3','en','m/d/Y','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DATE_FORMAT_4','en','Y/d/m','2011-07-15' 
+SELECT 'LABEL','ID_DATE_FORMAT_4','en','Y/d/m','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DATE_FORMAT_5','en','Y/m/d','2011-07-15' 
+SELECT 'LABEL','ID_DATE_FORMAT_5','en','Y/m/d','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DATE_FORMAT_6','en','F j, Y, g:i a','2011-07-15' 
+SELECT 'LABEL','ID_DATE_FORMAT_6','en','F j, Y, g:i a','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DATE_FORMAT_7','en','m.d.y','2011-07-15' 
+SELECT 'LABEL','ID_DATE_FORMAT_7','en','m.d.y','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DATE_FORMAT_8','en','j, n, Y','2011-07-15' 
+SELECT 'LABEL','ID_DATE_FORMAT_8','en','j, n, Y','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DATE_FORMAT_9','en','D M j G:i:s T Y','2011-07-15' 
+SELECT 'LABEL','ID_DATE_FORMAT_9','en','D M j G:i:s T Y','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DATE_FORMAT_10','en','D d M, Y','2011-07-15' 
+SELECT 'LABEL','ID_DATE_FORMAT_10','en','D d M, Y','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DATE_FORMAT_11','en','D M, Y','2011-07-15' 
+SELECT 'LABEL','ID_DATE_FORMAT_11','en','D M, Y','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DATE_FORMAT_12','en','d M, Y','2011-07-15' 
+SELECT 'LABEL','ID_DATE_FORMAT_12','en','d M, Y','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DATE_FORMAT_13','en','d m, Y','2011-07-15' 
+SELECT 'LABEL','ID_DATE_FORMAT_13','en','d m, Y','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_STEP_LIST','en','Step List','2011-07-15' 
+SELECT 'LABEL','ID_STEP_LIST','en','Step List','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_USERNAME_FORMAT_1','en','@firstName @lastName','2011-07-15' 
+SELECT 'LABEL','ID_USERNAME_FORMAT_1','en','@firstName @lastName','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_USERNAME_FORMAT_2','en','@firstName @lastName (@userName)','2011-07-15' 
+SELECT 'LABEL','ID_USERNAME_FORMAT_2','en','@firstName @lastName (@userName)','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_USERNAME_FORMAT_3','en','@userName','2011-07-15' 
+SELECT 'LABEL','ID_USERNAME_FORMAT_3','en','@userName','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_USERNAME_FORMAT_4','en','@userName (@firstName @lastName)','2011-07-15' 
+SELECT 'LABEL','ID_USERNAME_FORMAT_4','en','@userName (@firstName @lastName)','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_USERNAME_FORMAT_5','en','@lastName @firstName','2011-07-15' 
+SELECT 'LABEL','ID_USERNAME_FORMAT_5','en','@lastName @firstName','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_USERNAME_FORMAT_6','en','@lastName, @firstName','2011-07-15' 
+SELECT 'LABEL','ID_USERNAME_FORMAT_6','en','@lastName, @firstName','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_USERNAME_FORMAT_7','en','@lastName, @firstName (@userName)','2011-07-15' 
+SELECT 'LABEL','ID_USERNAME_FORMAT_7','en','@lastName, @firstName (@userName)','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','USERS_DELETE_WITH_HISTORY','en','The user has some completed or canceled   tasks (which may be useful for  historical  records). Do you want to  delete this user  anyway?','2011-07-15' 
+SELECT 'JAVASCRIPT','USERS_DELETE_WITH_HISTORY','en','The user has some completed or canceled   tasks (which may be useful for  historical  records). Do you want to  delete this user  anyway?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DISCARD_CHANGES','en','Discard Changes','2011-07-15' 
+SELECT 'LABEL','ID_DISCARD_CHANGES','en','Discard Changes','2011-08-25' 
  ;
 INSERT INTO [TRANSLATION] ([TRN_CATEGORY],[TRN_ID],[TRN_LANG],[TRN_VALUE],[TRN_UPDATE_DATE]) 
 
-SELECT 'LABEL','ID_EMPTY_USERS','en','Select a User...','2011-07-15' 
+SELECT 'LABEL','ID_EMPTY_USERS','en','Select a User...','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DUPLICATE_CATEGORY_NAME','en','Duplicate category name.','2011-07-15' 
+SELECT 'LABEL','ID_DUPLICATE_CATEGORY_NAME','en','Duplicate category name.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_INVALID_FILE','en','Invalid FIle','2011-07-15' 
+SELECT 'LABEL','ID_INVALID_FILE','en','Invalid FIle','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CONFIGURE','en','Configure','2011-07-15' 
+SELECT 'LABEL','ID_CONFIGURE','en','Configure','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_VERSION','en','Version','2011-07-15' 
+SELECT 'LABEL','ID_VERSION','en','Version','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MESSAGE_ROOT_CHANGE_SUCESS','en','The root password has been updated  successfully!','2011-07-15' 
+SELECT 'LABEL','ID_MESSAGE_ROOT_CHANGE_SUCESS','en','The root password has been updated  successfully!','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MESSAGE_ROOT_CHANGE_FAILURE','en','The root password has can''t be updated !','2011-07-15' 
+SELECT 'LABEL','ID_MESSAGE_ROOT_CHANGE_FAILURE','en','The root password has can''t be updated !','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_LAN_TRANSLATOR','en','Translator','2011-07-15' 
+SELECT 'LABEL','ID_LAN_TRANSLATOR','en','Translator','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_LOCALE','en','Locale','2011-07-15' 
+SELECT 'LABEL','ID_LOCALE','en','Locale','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','DATE_LABEL','en','Date','2011-07-15' 
+SELECT 'LABEL','DATE_LABEL','en','Date','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_LAN_NUM_RECORDS','en','# Records','2011-07-15' 
+SELECT 'LABEL','ID_LAN_NUM_RECORDS','en','# Records','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_LAN_LOCALE','en','Locale','2011-07-15' 
+SELECT 'LABEL','ID_LAN_LOCALE','en','Locale','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SUBMIT','en','submit','2011-07-15' 
+SELECT 'LABEL','ID_SUBMIT','en','submit','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PLUGIN_CANT_DELETE','en','The plugin is activated, please deactivate  first to remove it.','2011-07-15' 
+SELECT 'LABEL','ID_PLUGIN_CANT_DELETE','en','The plugin is activated, please deactivate  first to remove it.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CACHE_LANGUAGE','en','Language','2011-07-15' 
+SELECT 'LABEL','ID_CACHE_LANGUAGE','en','Language','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CACHE_HOST','en','Host','2011-07-15' 
+SELECT 'LABEL','ID_CACHE_HOST','en','Host','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CACHE_USER','en','User','2011-07-15' 
+SELECT 'LABEL','ID_CACHE_USER','en','User','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CACHE_PASSWORD','en','Password','2011-07-15' 
+SELECT 'LABEL','ID_CACHE_PASSWORD','en','Password','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CACHE_TITLE_INFO','en','Workflow Applications Cache Info','2011-07-15' 
+SELECT 'LABEL','ID_CACHE_TITLE_INFO','en','Workflow Applications Cache Info','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CACHE_SUBTITLE_REBUILD','en','Rebuild Workflow Application Cache','2011-07-15' 
+SELECT 'LABEL','ID_CACHE_SUBTITLE_REBUILD','en','Rebuild Workflow Application Cache','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CACHE_BTN_BUILD','en','Build Cache','2011-07-15' 
+SELECT 'LABEL','ID_CACHE_BTN_BUILD','en','Build Cache','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CACHE_BUILDING','en','Building Workflow Application Cache...','2011-07-15' 
+SELECT 'LABEL','ID_CACHE_BUILDING','en','Building Workflow Application Cache...','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CACHE_SUBTITLE_SETUP_DB','en','Setup MySql Root Password','2011-07-15' 
+SELECT 'LABEL','ID_CACHE_SUBTITLE_SETUP_DB','en','Setup MySql Root Password','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CACHE_BTN_SETUP_PASSWRD','en','Setup Password','2011-07-15' 
+SELECT 'LABEL','ID_CACHE_BTN_SETUP_PASSWRD','en','Setup Password','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CALENDAR_INVALID_NAME','en','The calendar name already exists!','2011-07-15' 
+SELECT 'LABEL','ID_CALENDAR_INVALID_NAME','en','The calendar name already exists!','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DELETE_TABLE_COLLECTION','en','Do you want to delete this collection?','2011-07-15' 
+SELECT 'LABEL','ID_DELETE_TABLE_COLLECTION','en','Do you want to delete this collection?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_TABLE','en','Table','2011-07-15' 
+SELECT 'LABEL','ID_TABLE','en','Table','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_EXTENDED_FEATURES','en','Extended Features','2011-07-15' 
+SELECT 'LABEL','ID_EXTENDED_FEATURES','en','Extended Features','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DESIGNER','en','Designer','2011-07-15' 
+SELECT 'LABEL','ID_DESIGNER','en','Designer','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_HOME','en','Home','2011-07-15' 
+SELECT 'LABEL','ID_HOME','en','Home','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_EDIT_BPMN','en','Edit BPMN','2011-07-15' 
+SELECT 'LABEL','ID_EDIT_BPMN','en','Edit BPMN','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_INVALID_START_HOURS','en','The following start hours rows are invalid:','2011-07-15' 
+SELECT 'LABEL','ID_INVALID_START_HOURS','en','The following start hours rows are invalid:','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_INVALID_END_HOURS','en','The following end hours rows are invalid:','2011-07-15' 
+SELECT 'LABEL','ID_INVALID_END_HOURS','en','The following end hours rows are invalid:','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_INVALID_NAME','en','Invalid name!','2011-07-15' 
+SELECT 'LABEL','ID_INVALID_NAME','en','Invalid name!','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_CASE_SCHEDULER_VALIDATE_ALERT','en','User or password are empty.','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_CASE_SCHEDULER_VALIDATE_ALERT','en','User or password are empty.','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_PROCESSMAP_CASE_SCHEDULER_TITLE','en','Case Scheduler List','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_PROCESSMAP_CASE_SCHEDULER_TITLE','en','Case Scheduler List','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_START_DATE','en','Start Date','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_START_DATE','en','Start Date','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_TITLE_FIELD','en','Title','2011-07-15' 
+SELECT 'LABEL','ID_TITLE_FIELD','en','Title','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_TITLE_FIELD','en','Title','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_TITLE_FIELD','en','Title','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_SCHEDULER_CANT_PUT_TIME','en','The time can not be increased to 23:59','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_SCHEDULER_CANT_PUT_TIME','en','The time can not be increased to 23:59','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_SCHEDULER_CANT_PUT_MINUTES','en','The mininutos can not be greater than about 59','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_SCHEDULER_CANT_PUT_MINUTES','en','The mininutos can not be greater than about 59','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_PROCESSMAP_CALENDAR_CONFIRM_DELETE','en','Are you sure you want to delete this calendar?','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_PROCESSMAP_CALENDAR_CONFIRM_DELETE','en','Are you sure you want to delete this calendar?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PROCESSMAP_CALENDAR_CONFIRM_DELETE','en','Are you sure you want to delete this calendar?','2011-07-15' 
+SELECT 'LABEL','ID_PROCESSMAP_CALENDAR_CONFIRM_DELETE','en','Are you sure you want to delete this calendar?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_NEW_ADD_TABLE','en','New PM Table','2011-07-15' 
+SELECT 'LABEL','ID_NEW_ADD_TABLE','en','New PM Table','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_FIELD_DYNAFORM_TEXT','en','text','2011-07-15' 
+SELECT 'LABEL','ID_FIELD_DYNAFORM_TEXT','en','text','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SELECT_FIRST_PM_TABLE_ROW','en','First select a PM Table from the list please.','2011-07-15' 
+SELECT 'LABEL','ID_SELECT_FIRST_PM_TABLE_ROW','en','First select a PM Table from the list please.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CONFIRM_DELETE_PM_TABLE','en','Do you want to delete selected tables?','2011-07-15' 
+SELECT 'LABEL','ID_CONFIRM_DELETE_PM_TABLE','en','Do you want to delete selected tables?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_TITLE_START_CASE','en','Start Case','2011-07-15' 
+SELECT 'LABEL','ID_TITLE_START_CASE','en','Start Case','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_STARTING_NEW_CASE','en','Starting new case','2011-07-15' 
+SELECT 'LABEL','ID_STARTING_NEW_CASE','en','Starting new case','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ERROR_CREATING_NEW_CASE','en','Error creating a new Case','2011-07-15' 
+SELECT 'LABEL','ID_ERROR_CREATING_NEW_CASE','en','Error creating a new Case','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_TITLE_FIELD_DYNAFORM','en','title','2011-07-15' 
+SELECT 'LABEL','ID_TITLE_FIELD_DYNAFORM','en','title','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_GENERAL_PROCESS_NUMBERS','en','General Process Numbers','2011-07-15' 
+SELECT 'LABEL','ID_GENERAL_PROCESS_NUMBERS','en','General Process Numbers','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CALENDAR_DESCRIPTION','en','Calendar Description','2011-07-15' 
+SELECT 'LABEL','ID_CALENDAR_DESCRIPTION','en','Calendar Description','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_WORKING_DAYS','en','Working days','2011-07-15' 
+SELECT 'LABEL','ID_WORKING_DAYS','en','Working days','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DEBUG_MODE','en','Debug Mode','2011-07-15' 
+SELECT 'LABEL','ID_DEBUG_MODE','en','Debug Mode','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SUN','en','Sun','2011-07-15' 
+SELECT 'LABEL','ID_SUN','en','Sun','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MON','en','Mon','2011-07-15' 
+SELECT 'LABEL','ID_MON','en','Mon','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_TUE','en','Tue','2011-07-15' 
+SELECT 'LABEL','ID_TUE','en','Tue','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_WEN','en','Wen','2011-07-15' 
+SELECT 'LABEL','ID_WEN','en','Wen','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_THU','en','Thu','2011-07-15' 
+SELECT 'LABEL','ID_THU','en','Thu','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_FRI','en','Fri','2011-07-15' 
+SELECT 'LABEL','ID_FRI','en','Fri','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SAT','en','Sat','2011-07-15' 
+SELECT 'LABEL','ID_SAT','en','Sat','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_FIND_A_PROCESS','en','Find a Process','2011-07-15' 
+SELECT 'LABEL','ID_FIND_A_PROCESS','en','Find a Process','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_UNABLE_START_CASE','en','Unable to start a case','2011-07-15' 
+SELECT 'LABEL','ID_UNABLE_START_CASE','en','Unable to start a case','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_FIELD_DYNAFORM_TITLE','en','title','2011-07-15' 
+SELECT 'LABEL','ID_FIELD_DYNAFORM_TITLE','en','title','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_FIELD_DYNAFORM_CURRENCY','en','currency','2011-07-15' 
+SELECT 'LABEL','ID_FIELD_DYNAFORM_CURRENCY','en','currency','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_FIELD_DYNAFORM_PERCENTAGE','en','percentage','2011-07-15' 
+SELECT 'LABEL','ID_FIELD_DYNAFORM_PERCENTAGE','en','percentage','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_FIELD_DYNAFORM_PASSWORD','en','password','2011-07-15' 
+SELECT 'LABEL','ID_FIELD_DYNAFORM_PASSWORD','en','password','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_FIELD_DYNAFORM_SUGGEST','en','suggest','2011-07-15' 
+SELECT 'LABEL','ID_FIELD_DYNAFORM_SUGGEST','en','suggest','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_FIELD_DYNAFORM_TEXTAREA','en','textarea','2011-07-15' 
+SELECT 'LABEL','ID_FIELD_DYNAFORM_TEXTAREA','en','textarea','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_FIELD_DYNAFORM_SUBTITLE','en','subtitle','2011-07-15' 
+SELECT 'LABEL','ID_FIELD_DYNAFORM_SUBTITLE','en','subtitle','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_FIELD_DYNAFORM_BUTTON','en','button','2011-07-15' 
+SELECT 'LABEL','ID_FIELD_DYNAFORM_BUTTON','en','button','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_FIELD_DYNAFORM_SUBMIT','en','submit','2011-07-15' 
+SELECT 'LABEL','ID_FIELD_DYNAFORM_SUBMIT','en','submit','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_FIELD_DYNAFORM_RESET','en','reset','2011-07-15' 
+SELECT 'LABEL','ID_FIELD_DYNAFORM_RESET','en','reset','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_FIELD_DYNAFORM_DROPDOWN','en','dropdown','2011-07-15' 
+SELECT 'LABEL','ID_FIELD_DYNAFORM_DROPDOWN','en','dropdown','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_FIELD_DYNAFORM_YESNO','en','yesno','2011-07-15' 
+SELECT 'LABEL','ID_FIELD_DYNAFORM_YESNO','en','yesno','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_FIELD_DYNAFORM_LISTBOX','en','listbox','2011-07-15' 
+SELECT 'LABEL','ID_FIELD_DYNAFORM_LISTBOX','en','listbox','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_FIELD_DYNAFORM_CHECKBOX','en','checkbox','2011-07-15' 
+SELECT 'LABEL','ID_FIELD_DYNAFORM_CHECKBOX','en','checkbox','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_FIELD_DYNAFORM_CHECKGROUP','en','checkgroup','2011-07-15' 
+SELECT 'LABEL','ID_FIELD_DYNAFORM_CHECKGROUP','en','checkgroup','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_FIELD_DYNAFORM_RADIOGROUP','en','radiogroup','2011-07-15' 
+SELECT 'LABEL','ID_FIELD_DYNAFORM_RADIOGROUP','en','radiogroup','2011-08-25' 
  ;
 INSERT INTO [TRANSLATION] ([TRN_CATEGORY],[TRN_ID],[TRN_LANG],[TRN_VALUE],[TRN_UPDATE_DATE]) 
 
-SELECT 'LABEL','ID_FIELD_DYNAFORM_HIDDEN','en','hidden','2011-07-15' 
+SELECT 'LABEL','ID_FIELD_DYNAFORM_HIDDEN','en','hidden','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_FIELD_DYNAFORM_LINK','en','link','2011-07-15' 
+SELECT 'LABEL','ID_FIELD_DYNAFORM_LINK','en','link','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_FIELD_DYNAFORM_FILE','en','file','2011-07-15' 
+SELECT 'LABEL','ID_FIELD_DYNAFORM_FILE','en','file','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_FIELD_DYNAFORM_JAVASCRIPT','en','javascript','2011-07-15' 
+SELECT 'LABEL','ID_FIELD_DYNAFORM_JAVASCRIPT','en','javascript','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_FIELD_DYNAFORM_GRID','en','grid','2011-07-15' 
+SELECT 'LABEL','ID_FIELD_DYNAFORM_GRID','en','grid','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ADD_ROW','en','Add Row','2011-07-15' 
+SELECT 'LABEL','ID_ADD_ROW','en','Add Row','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_BACK','en','Back','2011-07-15' 
+SELECT 'LABEL','ID_BACK','en','Back','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CHECK_ALL','en','Check All','2011-07-15' 
+SELECT 'LABEL','ID_CHECK_ALL','en','Check All','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_UN_CHECK_ALL','en','Un-Check All','2011-07-15' 
+SELECT 'LABEL','ID_UN_CHECK_ALL','en','Un-Check All','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SELECT_FIRST_ROW','en','First select a ROW from the list','2011-07-15' 
+SELECT 'LABEL','ID_SELECT_FIRST_ROW','en','First select a ROW from the list','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MSG_CONFIRM_DELETE_ROW','en','Do you want to delete selected row?','2011-07-15' 
+SELECT 'LABEL','ID_MSG_CONFIRM_DELETE_ROW','en','Do you want to delete selected row?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SENT_BY','en','Sent By','2011-07-15' 
+SELECT 'LABEL','ID_SENT_BY','en','Sent By','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CURRENT_USER','en','Current User','2011-07-15' 
+SELECT 'LABEL','ID_CURRENT_USER','en','Current User','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_LAST_MODIFY','en','Last Modify','2011-07-15' 
+SELECT 'LABEL','ID_LAST_MODIFY','en','Last Modify','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DELEGATION_DATE','en','Delegation Date','2011-07-15' 
+SELECT 'LABEL','ID_DELEGATION_DATE','en','Delegation Date','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DUE_DATE','en','Due Date','2011-07-15' 
+SELECT 'LABEL','ID_DUE_DATE','en','Due Date','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PRIORITY','en','Priority','2011-07-15' 
+SELECT 'LABEL','ID_PRIORITY','en','Priority','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_COMPLETED_BY_USER','en','Completed By User','2011-07-15' 
+SELECT 'LABEL','ID_COMPLETED_BY_USER','en','Completed By User','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_FINISH_DATE','en','Finish Date','2011-07-15' 
+SELECT 'LABEL','ID_FINISH_DATE','en','Finish Date','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MAIL_TEST_SUCCESS','en','Test message sent successfully','2011-07-15' 
+SELECT 'LABEL','ID_MAIL_TEST_SUCCESS','en','Test message sent successfully','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CLOSE','en','Close','2011-07-15' 
+SELECT 'LABEL','ID_CLOSE','en','Close','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ACTION_EXPORT','en','Export','2011-07-15' 
+SELECT 'LABEL','ID_ACTION_EXPORT','en','Export','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ACTION_IGNORE','en','Ignore','2011-07-15' 
+SELECT 'LABEL','ID_ACTION_IGNORE','en','Ignore','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DEL_INDEX','en','Del Index','2011-07-15' 
+SELECT 'LABEL','ID_DEL_INDEX','en','Del Index','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_THREAD_INDEX','en','Thread Index','2011-07-15' 
+SELECT 'LABEL','ID_THREAD_INDEX','en','Thread Index','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MESS_TEST_MESSAGE_SENDED','en','Test message sent successfully','2011-07-15' 
+SELECT 'LABEL','ID_MESS_TEST_MESSAGE_SENDED','en','Test message sent successfully','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_TITLE_EXPORT_RESULT','en','Export Summary','2011-07-15' 
+SELECT 'LABEL','ID_TITLE_EXPORT_RESULT','en','Export Summary','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_TITLE_EXPORT_TOOL','en','Exporting Tool','2011-07-15' 
+SELECT 'LABEL','ID_TITLE_EXPORT_TOOL','en','Exporting Tool','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_TIME_LABEL','en','Time','2011-07-15' 
+SELECT 'LABEL','ID_TIME_LABEL','en','Time','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DATE_LABEL','en','Date','2011-07-15' 
+SELECT 'LABEL','ID_DATE_LABEL','en','Date','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_RESULT','en','Result','2011-07-15' 
+SELECT 'LABEL','ID_RESULT','en','Result','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CREATED_CASE_STATUS','en','Created Case Status','2011-07-15' 
+SELECT 'LABEL','ID_CREATED_CASE_STATUS','en','Created Case Status','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ROUTED_CASE_STATUS','en','Routed Case Status','2011-07-15' 
+SELECT 'LABEL','ID_ROUTED_CASE_STATUS','en','Routed Case Status','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_TITLE_LOG_DETAIL','en','Log Detail','2011-07-15' 
+SELECT 'LABEL','ID_TITLE_LOG_DETAIL','en','Log Detail','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CODE','en','Code','2011-07-15' 
+SELECT 'LABEL','ID_CODE','en','Code','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_REMOVE_ROLE','en','Are you sure you want to delete this role?','2011-07-15' 
+SELECT 'LABEL','ID_REMOVE_ROLE','en','Are you sure you want to delete this role?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ROLES_MSG','en','You cannot modify this role.','2011-07-15' 
+SELECT 'LABEL','ID_ROLES_MSG','en','You cannot modify this role.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ROLES_SUCCESS_DELETE','en','Your role has been deleted correctly.','2011-07-15' 
+SELECT 'LABEL','ID_ROLES_SUCCESS_DELETE','en','Your role has been deleted correctly.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','MSG_PO_FILE_INVALID_LANGUAJE','en','The .po file has an invalid language!','2011-07-15' 
+SELECT 'LABEL','MSG_PO_FILE_INVALID_LANGUAJE','en','The .po file has an invalid language!','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','MSG_PO_FILE_BAD_FORMAT','en','The .po file has a bad format!','2011-07-15' 
+SELECT 'LABEL','MSG_PO_FILE_BAD_FORMAT','en','The .po file has a bad format!','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SELECT_STATUS','en','Select status...','2011-07-15' 
+SELECT 'LABEL','ID_SELECT_STATUS','en','Select status...','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ASSIGN_ALL_PERMISSIONS','en','Assign All Permissions','2011-07-15' 
+SELECT 'LABEL','ID_ASSIGN_ALL_PERMISSIONS','en','Assign All Permissions','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_REMOVE_ALL_PERMISSIONS','en','Remove All Permissions','2011-07-15' 
+SELECT 'LABEL','ID_REMOVE_ALL_PERMISSIONS','en','Remove All Permissions','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ASSIGN_ALL_USERS','en','Assign All Users','2011-07-15' 
+SELECT 'LABEL','ID_ASSIGN_ALL_USERS','en','Assign All Users','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_REMOVE_ALL_USERS','en','Remove All Users','2011-07-15' 
+SELECT 'LABEL','ID_REMOVE_ALL_USERS','en','Remove All Users','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_USER_NAME','en','User Name','2011-07-15' 
+SELECT 'LABEL','ID_USER_NAME','en','User Name','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PERMISSION_CODE','en','Permission Code','2011-07-15' 
+SELECT 'LABEL','ID_PERMISSION_CODE','en','Permission Code','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_AVAILABLE_PERMISSIONS','en','AVAILABLE PERMISSIONS','2011-07-15' 
+SELECT 'LABEL','ID_AVAILABLE_PERMISSIONS','en','AVAILABLE PERMISSIONS','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ASSIGNED_PERMISSIONS','en','ASSIGNED PERMISSIONS','2011-07-15' 
+SELECT 'LABEL','ID_ASSIGNED_PERMISSIONS','en','ASSIGNED PERMISSIONS','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_FIRST_NAME','en','First Name','2011-07-15' 
+SELECT 'LABEL','ID_FIRST_NAME','en','First Name','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_LAST_NAME','en','Last Name','2011-07-15' 
+SELECT 'LABEL','ID_LAST_NAME','en','Last Name','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_AVAILABLE_USERS','en','AVAILABLE USERS','2011-07-15' 
+SELECT 'LABEL','ID_AVAILABLE_USERS','en','AVAILABLE USERS','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ASSIGNED_USERS','en','ASSIGNED USERS','2011-07-15' 
+SELECT 'LABEL','ID_ASSIGNED_USERS','en','ASSIGNED USERS','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MSG_CONFIRM_ASSIGN_ALL_USERS','en','Do you want to assign all available users  to this role?','2011-07-15' 
+SELECT 'LABEL','ID_MSG_CONFIRM_ASSIGN_ALL_USERS','en','Do you want to assign all available users  to this role?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MSG_AJAX_FAILURE','en','Some error has happened. Please retry later.','2011-07-15' 
+SELECT 'LABEL','ID_MSG_AJAX_FAILURE','en','Some error has happened. Please retry later.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_FINISH','en','Finish','2011-07-15' 
+SELECT 'LABEL','ID_FINISH','en','Finish','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_USERS_SUCCESS_DELETE','en','User has been deleted correctly.','2011-07-15' 
+SELECT 'LABEL','ID_USERS_SUCCESS_DELETE','en','User has been deleted correctly.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ASSIGN_ALL_GROUPS','en','Assign All Groups','2011-07-15' 
+SELECT 'LABEL','ID_ASSIGN_ALL_GROUPS','en','Assign All Groups','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_USERS_DELETE_WITH_HISTORY','en','The user has some completed or canceled     tasks (which may be useful for  historical    records). Do you want to  delete this  user   anyway?','2011-07-15' 
+SELECT 'LABEL','ID_USERS_DELETE_WITH_HISTORY','en','The user has some completed or canceled     tasks (which may be useful for  historical    records). Do you want to  delete this  user   anyway?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_REMOVE_ALL_GROUPS','en','Remove All Groups','2011-07-15' 
+SELECT 'LABEL','ID_REMOVE_ALL_GROUPS','en','Remove All Groups','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ASSIGNED_GROUPS','en','ASSIGNED GROUPS','2011-07-15' 
+SELECT 'LABEL','ID_ASSIGNED_GROUPS','en','ASSIGNED GROUPS','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_AVAILABLE_GROUPS','en','AVAILABLE GROUPS','2011-07-15' 
+SELECT 'LABEL','ID_AVAILABLE_GROUPS','en','AVAILABLE GROUPS','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_GROUP_NAME','en','Group Name','2011-07-15' 
+SELECT 'LABEL','ID_GROUP_NAME','en','Group Name','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_AUTHENTICATION_SOURCE','en','Authentication Source','2011-07-15' 
+SELECT 'LABEL','ID_AUTHENTICATION_SOURCE','en','Authentication Source','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_AUTHENTICATION_DN','en','DN','2011-07-15' 
+SELECT 'LABEL','ID_AUTHENTICATION_DN','en','DN','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_AUTHENTICATION_FORM_TITLE','en','Authentication Source Assignment','2011-07-15' 
+SELECT 'LABEL','ID_AUTHENTICATION_FORM_TITLE','en','Authentication Source Assignment','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SELECT_AUTH_SOURCE','en','Select Authentication Source...','2011-07-15' 
+SELECT 'LABEL','ID_SELECT_AUTH_SOURCE','en','Select Authentication Source...','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SCHEDULER_TASK','en','Scheduled Task ID','2011-07-15' 
+SELECT 'LABEL','ID_SCHEDULER_TASK','en','Scheduled Task ID','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_TASK_ID','en','Task ID','2011-07-15' 
+SELECT 'LABEL','ID_TASK_ID','en','Task ID','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PROCESS_ID','en','Process ID','2011-07-15' 
+SELECT 'LABEL','ID_PROCESS_ID','en','Process ID','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_EXECUTION_DATE','en','Execution Date','2011-07-15' 
+SELECT 'LABEL','ID_EXECUTION_DATE','en','Execution Date','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_EXECUTION_HOUR','en','Execution Hour','2011-07-15' 
+SELECT 'LABEL','ID_EXECUTION_HOUR','en','Execution Hour','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_EXECUTION_STATUS','en','Execution Status','2011-07-15' 
+SELECT 'LABEL','ID_EXECUTION_STATUS','en','Execution Status','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MSG_GROUP_NAME_EXISTS','en','Group name already exists!','2011-07-15' 
+SELECT 'LABEL','ID_MSG_GROUP_NAME_EXISTS','en','Group name already exists!','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_GROUPS_SUCCESS_DELETE','en','Your group has been deleted correctly.','2011-07-15' 
+SELECT 'LABEL','ID_GROUPS_SUCCESS_DELETE','en','Your group has been deleted correctly.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_GROUPS_SUCCESS_UPDATE','en','Group has been updated correctly.','2011-07-15' 
+SELECT 'LABEL','ID_GROUPS_SUCCESS_UPDATE','en','Group has been updated correctly.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CREATE_GROUP_TITLE','en','Create New Group','2011-07-15' 
+SELECT 'LABEL','ID_CREATE_GROUP_TITLE','en','Create New Group','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_EDIT_GROUP_TITLE','en','Edit Group','2011-07-15' 
+SELECT 'LABEL','ID_EDIT_GROUP_TITLE','en','Edit Group','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ASSIGN_ALL_MEMBERS','en','Assign All Members','2011-07-15' 
+SELECT 'LABEL','ID_ASSIGN_ALL_MEMBERS','en','Assign All Members','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_REMOVE_ALL_MEMBERS','en','Remove All Members','2011-07-15' 
+SELECT 'LABEL','ID_REMOVE_ALL_MEMBERS','en','Remove All Members','2011-08-25' 
  ;
 INSERT INTO [TRANSLATION] ([TRN_CATEGORY],[TRN_ID],[TRN_LANG],[TRN_VALUE],[TRN_UPDATE_DATE]) 
 
-SELECT 'LABEL','ID_ASSIGNED_MEMBERS','en','MEMBERS','2011-07-15' 
+SELECT 'LABEL','ID_ASSIGNED_MEMBERS','en','MEMBERS','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_AVAILABLE_MEMBERS','en','AVAILABLE MEMBERS','2011-07-15' 
+SELECT 'LABEL','ID_AVAILABLE_MEMBERS','en','AVAILABLE MEMBERS','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CREATE_ROLE_TITLE','en','Create New  Role','2011-07-15' 
+SELECT 'LABEL','ID_CREATE_ROLE_TITLE','en','Create New  Role','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_EDIT_ROLE_TITLE','en','Edit Role','2011-07-15' 
+SELECT 'LABEL','ID_EDIT_ROLE_TITLE','en','Edit Role','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DEPARTMENTS','en','Departments','2011-07-15' 
+SELECT 'LABEL','ID_DEPARTMENTS','en','Departments','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DEPARTMENT_NAME','en','Department Name','2011-07-15' 
+SELECT 'LABEL','ID_DEPARTMENT_NAME','en','Department Name','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CONFIRM_CANCEL_CASE','en','Are you sure you want to cancel this case?','2011-07-15' 
+SELECT 'LABEL','ID_CONFIRM_CANCEL_CASE','en','Are you sure you want to cancel this case?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_FIRSTNAME','en','First Name','2011-07-15' 
+SELECT 'LABEL','ID_FIRSTNAME','en','First Name','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_LASTNAME','en','Last Name','2011-07-15' 
+SELECT 'LABEL','ID_LASTNAME','en','Last Name','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_REASSIGNMENT_SUCCESS','en','The case #{APP_NUMBER} was reassigned to  user   {USER} successfully!','2011-07-15' 
+SELECT 'LABEL','ID_REASSIGNMENT_SUCCESS','en','The case #{APP_NUMBER} was reassigned to  user   {USER} successfully!','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_REASSIGN_CONFIRM','en','Are you sure to reassign the current case?','2011-07-15' 
+SELECT 'LABEL','ID_REASSIGN_CONFIRM','en','Are you sure to reassign the current case?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CASE_PAUSED_SUCCESSFULLY','en','The Case {APP_NUMBER} was paused successfully and   ir will be unpused on date {UNPAUSE_DATE}','2011-07-15' 
+SELECT 'LABEL','ID_CASE_PAUSED_SUCCESSFULLY','en','The Case {APP_NUMBER} was paused successfully and   ir will be unpused on date {UNPAUSE_DATE}','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_VACATION','en','Vacation','2011-07-15' 
+SELECT 'LABEL','ID_VACATION','en','Vacation','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_DB_CONNECTION_ASSIGN','en','You can not delete this data base  connection. This is assigned in some step.','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_DB_CONNECTION_ASSIGN','en','You can not delete this data base  connection. This is assigned in some step.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_LAST_LOGIN','en','Last Login','2011-07-15' 
+SELECT 'LABEL','ID_LAST_LOGIN','en','Last Login','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PAGE_SIZE','en','Page Size','2011-07-15' 
+SELECT 'LABEL','ID_PAGE_SIZE','en','Page Size','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_GRID_PAGE_DISPLAYING_USERS_MESSAGE','en','Displaying users {0} - {1} of {2}','2011-07-15' 
+SELECT 'LABEL','ID_GRID_PAGE_DISPLAYING_USERS_MESSAGE','en','Displaying users {0} - {1} of {2}','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_GRID_PAGE_NO_USERS_MESSAGE','en','No users to display','2011-07-15' 
+SELECT 'LABEL','ID_GRID_PAGE_NO_USERS_MESSAGE','en','No users to display','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SUMMARY','en','Summary','2011-07-15' 
+SELECT 'LABEL','ID_SUMMARY','en','Summary','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_FINISH_EDITION','en','Finish Edition','2011-07-15' 
+SELECT 'LABEL','ID_FINISH_EDITION','en','Finish Edition','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_EDIT_MEMBEROF','en','Edit Member Of','2011-07-15' 
+SELECT 'LABEL','ID_EDIT_MEMBEROF','en','Edit Member Of','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MEMBER_OF','en','MEMBER OF','2011-07-15' 
+SELECT 'LABEL','ID_MEMBER_OF','en','MEMBER OF','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CONFIRM_DISCARD_CHANGES','en','Do you want discard changes?','2011-07-15' 
+SELECT 'LABEL','ID_CONFIRM_DISCARD_CHANGES','en','Do you want discard changes?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PHONE_NUMBER','en','Phone Number','2011-07-15' 
+SELECT 'LABEL','ID_PHONE_NUMBER','en','Phone Number','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_STATE_REGION','en','State or Region','2011-07-15' 
+SELECT 'LABEL','ID_STATE_REGION','en','State or Region','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_REPLACED_BY','en','Replaced by','2011-07-15' 
+SELECT 'LABEL','ID_REPLACED_BY','en','Replaced by','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_POSITION','en','Position','2011-07-15' 
+SELECT 'LABEL','ID_POSITION','en','Position','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DEPARTMENT','en','Department','2011-07-15' 
+SELECT 'LABEL','ID_DEPARTMENT','en','Department','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ZIP_CODE','en','Zip Code','2011-07-15' 
+SELECT 'LABEL','ID_ZIP_CODE','en','Zip Code','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ADDRESS','en','Address','2011-07-15' 
+SELECT 'LABEL','ID_ADDRESS','en','Address','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_EXPIRATION_DATE','en','Expiration Date','2011-07-15' 
+SELECT 'LABEL','ID_EXPIRATION_DATE','en','Expiration Date','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_USER_INFORMATION','en','User Information','2011-07-15' 
+SELECT 'LABEL','ID_USER_INFORMATION','en','User Information','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CASES_SUMMARY','en','Cases Summary','2011-07-15' 
+SELECT 'LABEL','ID_CASES_SUMMARY','en','Cases Summary','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_GRID_PAGE_DISPLAYING_GROUPS_MESSAGE','en','Displaying groups {0} - {1} of {2}','2011-07-15' 
+SELECT 'LABEL','ID_GRID_PAGE_DISPLAYING_GROUPS_MESSAGE','en','Displaying groups {0} - {1} of {2}','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_GRID_PAGE_NO_GROUPS_MESSAGE','en','No groups to display','2011-07-15' 
+SELECT 'LABEL','ID_GRID_PAGE_NO_GROUPS_MESSAGE','en','No groups to display','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_TASKS','en','Tasks','2011-07-15' 
+SELECT 'LABEL','ID_TASKS','en','Tasks','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_EDIT_MEMBERS','en','Edit Members','2011-07-15' 
+SELECT 'LABEL','ID_EDIT_MEMBERS','en','Edit Members','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MONTH_ABB_1','en','Jan','2011-07-15' 
+SELECT 'LABEL','ID_MONTH_ABB_1','en','Jan','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MONTH_ABB_2','en','Feb','2011-07-15' 
+SELECT 'LABEL','ID_MONTH_ABB_2','en','Feb','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MONTH_ABB_3','en','Mar','2011-07-15' 
+SELECT 'LABEL','ID_MONTH_ABB_3','en','Mar','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MONTH_ABB_4','en','Apr','2011-07-15' 
+SELECT 'LABEL','ID_MONTH_ABB_4','en','Apr','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MONTH_ABB_5','en','May','2011-07-15' 
+SELECT 'LABEL','ID_MONTH_ABB_5','en','May','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MONTH_ABB_6','en','Jun','2011-07-15' 
+SELECT 'LABEL','ID_MONTH_ABB_6','en','Jun','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MONTH_ABB_7','en','Jul','2011-07-15' 
+SELECT 'LABEL','ID_MONTH_ABB_7','en','Jul','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MONTH_ABB_8','en','Aug','2011-07-15' 
+SELECT 'LABEL','ID_MONTH_ABB_8','en','Aug','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MONTH_ABB_9','en','Sep','2011-07-15' 
+SELECT 'LABEL','ID_MONTH_ABB_9','en','Sep','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MONTH_ABB_10','en','Oct','2011-07-15' 
+SELECT 'LABEL','ID_MONTH_ABB_10','en','Oct','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MONTH_ABB_11','en','Nov','2011-07-15' 
+SELECT 'LABEL','ID_MONTH_ABB_11','en','Nov','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MONTH_ABB_12','en','Dec','2011-07-15' 
+SELECT 'LABEL','ID_MONTH_ABB_12','en','Dec','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_WEEKDAY_0','en','Sunday','2011-07-15' 
+SELECT 'LABEL','ID_WEEKDAY_0','en','Sunday','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_WEEKDAY_1','en','Monday','2011-07-15' 
+SELECT 'LABEL','ID_WEEKDAY_1','en','Monday','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_WEEKDAY_2','en','Tuesday','2011-07-15' 
+SELECT 'LABEL','ID_WEEKDAY_2','en','Tuesday','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_WEEKDAY_3','en','Wednesday','2011-07-15' 
+SELECT 'LABEL','ID_WEEKDAY_3','en','Wednesday','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_WEEKDAY_4','en','Thursday','2011-07-15' 
+SELECT 'LABEL','ID_WEEKDAY_4','en','Thursday','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_WEEKDAY_5','en','Friday','2011-07-15' 
+SELECT 'LABEL','ID_WEEKDAY_5','en','Friday','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_WEEKDAY_6','en','Saturday','2011-07-15' 
+SELECT 'LABEL','ID_WEEKDAY_6','en','Saturday','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_WEEKDAY_ABB_0','en','Sun','2011-07-15' 
+SELECT 'LABEL','ID_WEEKDAY_ABB_0','en','Sun','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_WEEKDAY_ABB_1','en','Mon','2011-07-15' 
+SELECT 'LABEL','ID_WEEKDAY_ABB_1','en','Mon','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_WEEKDAY_ABB_2','en','Tue','2011-07-15' 
+SELECT 'LABEL','ID_WEEKDAY_ABB_2','en','Tue','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_WEEKDAY_ABB_3','en','Wed','2011-07-15' 
+SELECT 'LABEL','ID_WEEKDAY_ABB_3','en','Wed','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_WEEKDAY_ABB_4','en','Thu','2011-07-15' 
+SELECT 'LABEL','ID_WEEKDAY_ABB_4','en','Thu','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_WEEKDAY_ABB_5','en','Fri','2011-07-15' 
+SELECT 'LABEL','ID_WEEKDAY_ABB_5','en','Fri','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_WEEKDAY_ABB_6','en','Sat','2011-07-15' 
+SELECT 'LABEL','ID_WEEKDAY_ABB_6','en','Sat','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PROCESS_SAVE','en','Process Save','2011-07-15' 
+SELECT 'LABEL','ID_PROCESS_SAVE','en','Process Save','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PROCESS_SAVE_SUCCESS','en','The process was saved successfully!','2011-07-15' 
+SELECT 'LABEL','ID_PROCESS_SAVE_SUCCESS','en','The process was saved successfully!','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CASE_UNPAUSED_SUCCESSFULLY','en','The Case {APP_NUMBER} was unpaused successfully!','2011-07-15' 
+SELECT 'LABEL','ID_CASE_UNPAUSED_SUCCESSFULLY','en','The Case {APP_NUMBER} was unpaused successfully!','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_GRID_PAGE_DISPLAYING_ROLES_MESSAGE','en','Displaying roles {0} - {1} of {2}','2011-07-15' 
+SELECT 'LABEL','ID_GRID_PAGE_DISPLAYING_ROLES_MESSAGE','en','Displaying roles {0} - {1} of {2}','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_GRID_PAGE_NO_ROLES_MESSAGE','en','No roles to display','2011-07-15' 
+SELECT 'LABEL','ID_GRID_PAGE_NO_ROLES_MESSAGE','en','No roles to display','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CASE_DELETED_SUCCESSFULLY','en','The Case {APP_NUMBER} was deleted successfully!','2011-07-15' 
+SELECT 'LABEL','ID_CASE_DELETED_SUCCESSFULLY','en','The Case {APP_NUMBER} was deleted successfully!','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_EDIT_PERMISSIONS','en','Edit Permissions','2011-07-15' 
+SELECT 'LABEL','ID_EDIT_PERMISSIONS','en','Edit Permissions','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CASE_REACTIVATED_SUCCESSFULLY','en','The case {APP_NUMBER} was reactivated successfully!','2011-07-15' 
+SELECT 'LABEL','ID_CASE_REACTIVATED_SUCCESSFULLY','en','The case {APP_NUMBER} was reactivated successfully!','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_EDIT_USERS','en','Edit Users','2011-07-15' 
+SELECT 'LABEL','ID_EDIT_USERS','en','Edit Users','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_OPEN_WITH','en','Open With','2011-07-15' 
+SELECT 'LABEL','ID_OPEN_WITH','en','Open With','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CASES_STEPS','en','Cases Steps','2011-07-15' 
+SELECT 'LABEL','ID_CASES_STEPS','en','Cases Steps','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SHOW_HIDE_CASES_STEPS','en','Show or hide the Cases Steps','2011-07-15' 
+SELECT 'LABEL','ID_SHOW_HIDE_CASES_STEPS','en','Show or hide the Cases Steps','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PROCESSTITLE_ALREADY_EXISTS','en','The Process Title "{PRO_TITLE}" already exists!','2011-07-15' 
+SELECT 'LABEL','ID_PROCESSTITLE_ALREADY_EXISTS','en','The Process Title "{PRO_TITLE}" already exists!','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CREATE','en','Create','2011-07-15' 
+SELECT 'LABEL','ID_CREATE','en','Create','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_BPMN_EDITOR','en','BPMN Editor (Beta)','2011-07-15' 
+SELECT 'LABEL','ID_BPMN_EDITOR','en','BPMN Editor (Beta)','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CLASSIC_EDITOR','en','Classic Editor','2011-07-15' 
+SELECT 'LABEL','ID_CLASSIC_EDITOR','en','Classic Editor','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DISABLE_DEBUG','en','Disable Debug Mode','2011-07-15' 
+SELECT 'LABEL','ID_DISABLE_DEBUG','en','Disable Debug Mode','2011-08-25' 
  ;
 INSERT INTO [TRANSLATION] ([TRN_CATEGORY],[TRN_ID],[TRN_LANG],[TRN_VALUE],[TRN_UPDATE_DATE]) 
 
-SELECT 'LABEL','ID_ENABLE_DEBUG','en','Enable Debug Mode','2011-07-15' 
+SELECT 'LABEL','ID_ENABLE_DEBUG','en','Enable Debug Mode','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_MSJ','en','Group name already exists!','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_MSJ','en','Group name already exists!','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_DEPARTMENT','en','Department','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_DEPARTMENT','en','Department','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CATEGORY_SUCCESS_NEW','en','Process category has been created correctly.','2011-07-15' 
+SELECT 'LABEL','ID_CATEGORY_SUCCESS_NEW','en','Process category has been created correctly.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_NEW_SUB_DEPARTMENT','en','New Sub-Department','2011-07-15' 
+SELECT 'LABEL','ID_NEW_SUB_DEPARTMENT','en','New Sub-Department','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DEPARTMENT_SUCCESS_NEW','en','Department has been created correctly.','2011-07-15' 
+SELECT 'LABEL','ID_DEPARTMENT_SUCCESS_NEW','en','Department has been created correctly.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DEPARTMENT_EXISTS','en','Department name already exists.','2011-07-15' 
+SELECT 'LABEL','ID_DEPARTMENT_EXISTS','en','Department name already exists.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DEPARTMENT_SUCCESS_UPDATE','en','Department has been updated correctly.','2011-07-15' 
+SELECT 'LABEL','ID_DEPARTMENT_SUCCESS_UPDATE','en','Department has been updated correctly.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_EDIT_DEPARTMENT','en','Edit Department','2011-07-15' 
+SELECT 'LABEL','ID_EDIT_DEPARTMENT','en','Edit Department','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CONFIRM_DELETE_DEPARTMENT','en','Do you want to delete selected department?','2011-07-15' 
+SELECT 'LABEL','ID_CONFIRM_DELETE_DEPARTMENT','en','Do you want to delete selected department?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DEPARTMENT_SUCCESS_DELETE','en','Department has been deleted correctly.','2011-07-15' 
+SELECT 'LABEL','ID_DEPARTMENT_SUCCESS_DELETE','en','Department has been deleted correctly.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MSG_CANNOT_DELETE_DEPARTMENT','en','Department cannot be deleted while has  assigned users.','2011-07-15' 
+SELECT 'LABEL','ID_MSG_CANNOT_DELETE_DEPARTMENT','en','Department cannot be deleted while has  assigned users.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MANAGER','en','Manager','2011-07-15' 
+SELECT 'LABEL','ID_MANAGER','en','Manager','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CATEGORY_NAME','en','Category Name','2011-07-15' 
+SELECT 'LABEL','ID_CATEGORY_NAME','en','Category Name','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_GRID_PAGE_NO_CATEGORY_MESSAGE','en','No categories to display','2011-07-15' 
+SELECT 'LABEL','ID_GRID_PAGE_NO_CATEGORY_MESSAGE','en','No categories to display','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_GRID_PAGE_DISPLAYING_CATEGORY_MESSAGE','en','Displaying categories {0} - {1} of {2}','2011-07-15' 
+SELECT 'LABEL','ID_GRID_PAGE_DISPLAYING_CATEGORY_MESSAGE','en','Displaying categories {0} - {1} of {2}','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','NaN','en','a','2011-07-15' 
+SELECT 'LABEL','NaN','en','a','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_EDIT_CATEGORY','en','Edit Process Category','2011-07-15' 
+SELECT 'LABEL','ID_EDIT_CATEGORY','en','Edit Process Category','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_LOADING_GRID','en','Loading...','2011-07-15' 
+SELECT 'LABEL','ID_LOADING_GRID','en','Loading...','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_NEW_CATEGORY','en','Create New Category','2011-07-15' 
+SELECT 'LABEL','ID_NEW_CATEGORY','en','Create New Category','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CATEGORY_EXISTS','en','Category name already exists.','2011-07-15' 
+SELECT 'LABEL','ID_CATEGORY_EXISTS','en','Category name already exists.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CATEGORY_SUCCESS_UPDATE','en','Process category has been updated correctly.','2011-07-15' 
+SELECT 'LABEL','ID_CATEGORY_SUCCESS_UPDATE','en','Process category has been updated correctly.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CATEGORY_SUCCESS_DELETE','en','Process category has been deleted correctly.','2011-07-15' 
+SELECT 'LABEL','ID_CATEGORY_SUCCESS_DELETE','en','Process category has been deleted correctly.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MSG_CANNOT_DELETE_CATEGORY','en','Category cannot be deleted while has   assigned processes.','2011-07-15' 
+SELECT 'LABEL','ID_MSG_CANNOT_DELETE_CATEGORY','en','Category cannot be deleted while has   assigned processes.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CONFIRM_DELETE_CATEGORY','en','Do you want to delete selected category?','2011-07-15' 
+SELECT 'LABEL','ID_CONFIRM_DELETE_CATEGORY','en','Do you want to delete selected category?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_GROUP_USERS','en','Group or Users','2011-07-15' 
+SELECT 'LABEL','ID_GROUP_USERS','en','Group or Users','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DOWNLOADING_FILE','en','Downloading file','2011-07-15' 
+SELECT 'LABEL','ID_DOWNLOADING_FILE','en','Downloading file','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','IMPORT_PROCESS_OVERWRITING','en','Update the current process, overwriting all tasks and steps','2011-07-15' 
+SELECT 'LABEL','IMPORT_PROCESS_OVERWRITING','en','Update the current process, overwriting all tasks and steps','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_OPEN_IN_A_NEW_WINDOW','en','Open in a new window','2011-07-15' 
+SELECT 'LABEL','ID_OPEN_IN_A_NEW_WINDOW','en','Open in a new window','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CASE_LIST','en','Case List','2011-07-15' 
+SELECT 'LABEL','ID_CASE_LIST','en','Case List','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SAMPLES','en','Samples','2011-07-15' 
+SELECT 'LABEL','ID_SAMPLES','en','Samples','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PROCESSNAME_ALREADY_EXISTS','en','The Process Name already exists!','2011-07-15' 
+SELECT 'LABEL','ID_PROCESSNAME_ALREADY_EXISTS','en','The Process Name already exists!','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_ROLES_CAN_NOT_DELETE','en','This role cannot be deleted while it still  has some assigned users.','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_ROLES_CAN_NOT_DELETE','en','This role cannot be deleted while it still  has some assigned users.','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_REMOVE_ROLE','en','Are you sure you want to delete this role?','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_REMOVE_ROLE','en','Are you sure you want to delete this role?','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_ROLES_MSG','en','You cannot modify this role.','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_ROLES_MSG','en','You cannot modify this role.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_GRID_PAGE_DISPLAYING_AUTHENTICATION_MESSAGE','en','Displaying authentication sources {0} - {1} of {2}','2011-07-15' 
+SELECT 'LABEL','ID_GRID_PAGE_DISPLAYING_AUTHENTICATION_MESSAGE','en','Displaying authentication sources {0} - {1} of {2}','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SELECT_DYNAFORM','en','Please select the Dynaform Type','2011-07-15' 
+SELECT 'LABEL','ID_SELECT_DYNAFORM','en','Please select the Dynaform Type','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PORT','en','Port','2011-07-15' 
+SELECT 'LABEL','ID_PORT','en','Port','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_BLANK_DYNAFORM','en','Blank Dynaform','2011-07-15' 
+SELECT 'LABEL','ID_BLANK_DYNAFORM','en','Blank Dynaform','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PROVIDER','en','Provider','2011-07-15' 
+SELECT 'LABEL','ID_PROVIDER','en','Provider','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PM_DYNAFORM','en','PM Table Dynaform','2011-07-15' 
+SELECT 'LABEL','ID_PM_DYNAFORM','en','PM Table Dynaform','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DYNAFORM_INFORMATION','en','Dynaform Information','2011-07-15' 
+SELECT 'LABEL','ID_DYNAFORM_INFORMATION','en','Dynaform Information','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SERVER_NAME','en','Server Name','2011-07-15' 
+SELECT 'LABEL','ID_SERVER_NAME','en','Server Name','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CREATE_PM_TABLE','en','Create from a PM Table','2011-07-15' 
+SELECT 'LABEL','ID_CREATE_PM_TABLE','en','Create from a PM Table','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DYNAFORM_REMOVED','en','Dynaform has been removed successfully','2011-07-15' 
+SELECT 'LABEL','ID_DYNAFORM_REMOVED','en','Dynaform has been removed successfully','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PRIMARY_KEY','en','Primary Key','2011-07-15' 
+SELECT 'LABEL','ID_PRIMARY_KEY','en','Primary Key','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DYNAFORM_TITLE_REQUIRED','en','Dynaform Title Required','2011-07-15' 
+SELECT 'LABEL','ID_DYNAFORM_TITLE_REQUIRED','en','Dynaform Title Required','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CURRENT_USERS','en','Current Users','2011-07-15' 
+SELECT 'LABEL','ID_CURRENT_USERS','en','Current Users','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ENABLED_TLS','en','Enabled TLS','2011-07-15' 
+SELECT 'LABEL','ID_ENABLED_TLS','en','Enabled TLS','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DYANFORM_CREATED','en','Dynaform has been created successfully','2011-07-15' 
+SELECT 'LABEL','ID_DYANFORM_CREATED','en','Dynaform has been created successfully','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SERVER','en','Server','2011-07-15' 
+SELECT 'LABEL','ID_SERVER','en','Server','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DATABASE_NAME','en','Database Name','2011-07-15' 
+SELECT 'LABEL','ID_DATABASE_NAME','en','Database Name','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ENGINE','en','Engine','2011-07-15' 
+SELECT 'LABEL','ID_ENGINE','en','Engine','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ENCODE','en','Encode','2011-07-15' 
+SELECT 'LABEL','ID_ENCODE','en','Encode','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_USERNAME','en','Username','2011-07-15' 
+SELECT 'LABEL','ID_USERNAME','en','Username','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_TEST_CONNECTION','en','Test Connection','2011-07-15' 
+SELECT 'LABEL','ID_TEST_CONNECTION','en','Test Connection','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DBS_SOURCE','en','Add New Database Source','2011-07-15' 
+SELECT 'LABEL','ID_DBS_SOURCE','en','Add New Database Source','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DBS_LIST','en','Database Source List','2011-07-15' 
+SELECT 'LABEL','ID_DBS_LIST','en','Database Source List','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_LOAD_FAILED','en','Load Failed','2011-07-15' 
+SELECT 'LABEL','ID_LOAD_FAILED','en','Load Failed','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','DBS_REMOVE','en','Database Connection has been removed successfully','2011-07-15' 
+SELECT 'LABEL','DBS_REMOVE','en','Database Connection has been removed successfully','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DBS_CONNECTION_TEST','en','Connection Tested Successfully','2011-07-15' 
+SELECT 'LABEL','ID_DBS_CONNECTION_TEST','en','Connection Tested Successfully','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DBS_CONNECTION_SAVE','en','Connection Saved Successfully','2011-07-15' 
+SELECT 'LABEL','ID_DBS_CONNECTION_SAVE','en','Connection Saved Successfully','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DBS_CONNECTION_EDIT','en','Connection Edited Successfully','2011-07-15' 
+SELECT 'LABEL','ID_DBS_CONNECTION_EDIT','en','Connection Edited Successfully','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_GRID_PAGE_NO_AUTHENTICATION_MESSAGE','en','No authentication sources to display','2011-07-15' 
+SELECT 'LABEL','ID_GRID_PAGE_NO_AUTHENTICATION_MESSAGE','en','No authentication sources to display','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_INPUT_REMOVE','en','Input Document  has been removed successfully from Process','2011-07-15' 
+SELECT 'LABEL','ID_INPUT_REMOVE','en','Input Document  has been removed successfully from Process','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_INPUT_WARNING','en','Input document assigned to a process supervisors cannot be deleted','2011-07-15' 
+SELECT 'LABEL','ID_INPUT_WARNING','en','Input document assigned to a process supervisors cannot be deleted','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_INPUT_INFO','en','Input Document Information','2011-07-15' 
+SELECT 'LABEL','ID_INPUT_INFO','en','Input Document Information','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_FORMAT','en','Format','2011-07-15' 
+SELECT 'LABEL','ID_FORMAT','en','Format','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ENABLE_VERSIONING','en','Enable Versioning','2011-07-15' 
+SELECT 'LABEL','ID_ENABLE_VERSIONING','en','Enable Versioning','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DESTINATION_PATH','en','Destination Path','2011-07-15' 
+SELECT 'LABEL','ID_DESTINATION_PATH','en','Destination Path','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_TAGS','en','Tags','2011-07-15' 
+SELECT 'LABEL','ID_TAGS','en','Tags','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_INPUT_CREATE','en','Input document has been created successfully','2011-07-15' 
+SELECT 'LABEL','ID_INPUT_CREATE','en','Input document has been created successfully','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_INPUT_NOT_SAVE','en','There is an Input Document with the same  name in  this process. It is not saving','2011-07-15' 
+SELECT 'LABEL','ID_INPUT_NOT_SAVE','en','There is an Input Document with the same  name in  this process. It is not saving','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_INPUT_UPDATE','en','Input document has been updated successfully','2011-07-15' 
+SELECT 'LABEL','ID_INPUT_UPDATE','en','Input document has been updated successfully','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_VERSIONING','en','Versioning','2011-07-15' 
+SELECT 'LABEL','ID_VERSIONING','en','Versioning','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_OUTPUT_INFO','en','Output Document Information','2011-07-15' 
+SELECT 'LABEL','ID_OUTPUT_INFO','en','Output Document Information','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ORIENTATION','en','Orientation','2011-07-15' 
+SELECT 'LABEL','ID_ORIENTATION','en','Orientation','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MEDIA','en','Media','2011-07-15' 
+SELECT 'LABEL','ID_MEDIA','en','Media','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_LEFT_MARGIN','en','Left Margin','2011-07-15' 
+SELECT 'LABEL','ID_LEFT_MARGIN','en','Left Margin','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_RIGHT_MARGIN','en','Right Margin','2011-07-15' 
+SELECT 'LABEL','ID_RIGHT_MARGIN','en','Right Margin','2011-08-25' 
  ;
 INSERT INTO [TRANSLATION] ([TRN_CATEGORY],[TRN_ID],[TRN_LANG],[TRN_VALUE],[TRN_UPDATE_DATE]) 
 
-SELECT 'LABEL','ID_TOP_MARGIN','en','Top Margin','2011-07-15' 
+SELECT 'LABEL','ID_TOP_MARGIN','en','Top Margin','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_BOTTOM_MARGIN','en','Bottom Margin','2011-07-15' 
+SELECT 'LABEL','ID_BOTTOM_MARGIN','en','Bottom Margin','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_OUTPUT_GENERATE','en','Output Document to Generate','2011-07-15' 
+SELECT 'LABEL','ID_OUTPUT_GENERATE','en','Output Document to Generate','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','OUTPUT_CREATE','en','Output document has been created successfully','2011-07-15' 
+SELECT 'LABEL','OUTPUT_CREATE','en','Output document has been created successfully','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_OUTPUT_NOT_SAVE','en','There is an Output Document with the same  name in  this process. It is not saving.','2011-07-15' 
+SELECT 'LABEL','ID_OUTPUT_NOT_SAVE','en','There is an Output Document with the same  name in  this process. It is not saving.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_OUTPUT_UPDATE','en','Output document has been updated successfully.','2011-07-15' 
+SELECT 'LABEL','ID_OUTPUT_UPDATE','en','Output document has been updated successfully.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_TABLE_NAME','en','Table Name','2011-07-15' 
+SELECT 'LABEL','ID_TABLE_NAME','en','Table Name','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_FIELDS','en','Fields','2011-07-15' 
+SELECT 'LABEL','ID_FIELDS','en','Fields','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_GRID_FIELDS','en','Grid Fields','2011-07-15' 
+SELECT 'LABEL','ID_GRID_FIELDS','en','Grid Fields','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_REPORT_REMOVED','en','Report Table has been removed successfully','2011-07-15' 
+SELECT 'LABEL','ID_REPORT_REMOVED','en','Report Table has been removed successfully','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_REPORT_SAVE','en','Report Table Saved Successfully','2011-07-15' 
+SELECT 'LABEL','ID_REPORT_SAVE','en','Report Table Saved Successfully','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_REPORT_EDITED','en','Report Table Edited Successfully','2011-07-15' 
+SELECT 'LABEL','ID_REPORT_EDITED','en','Report Table Edited Successfully','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_OUTPUT_REMOVE','en','Output document has been removed successfully','2011-07-15' 
+SELECT 'LABEL','ID_OUTPUT_REMOVE','en','Output document has been removed successfully','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SIZE_IN_BYTES','en','Size in bytes','2011-07-15' 
+SELECT 'LABEL','ID_SIZE_IN_BYTES','en','Size in bytes','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_EXPORT_PROCESS','en','Export Process','2011-07-15' 
+SELECT 'LABEL','ID_EXPORT_PROCESS','en','Export Process','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_HORIZONTAL_LINE','en','Horizontal Line','2011-07-15' 
+SELECT 'LABEL','ID_HORIZONTAL_LINE','en','Horizontal Line','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_VERTICAL_LINE','en','Vertical Line','2011-07-15' 
+SELECT 'LABEL','ID_VERTICAL_LINE','en','Vertical Line','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DELETE_LINES','en','Delete All Lines','2011-07-15' 
+SELECT 'LABEL','ID_DELETE_LINES','en','Delete All Lines','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_TARGET_TASK','en','Target Task','2011-07-15' 
+SELECT 'LABEL','ID_TARGET_TASK','en','Target Task','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ORIGIN_TASK','en','Origin Task','2011-07-15' 
+SELECT 'LABEL','ID_ORIGIN_TASK','en','Origin Task','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PARTICIPATION','en','Participation','2011-07-15' 
+SELECT 'LABEL','ID_PARTICIPATION','en','Participation','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_OBJECT','en','Object','2011-07-15' 
+SELECT 'LABEL','ID_OBJECT','en','Object','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PROCESS_PERMISSIONS','en','Process Permissions','2011-07-15' 
+SELECT 'LABEL','ID_PROCESS_PERMISSIONS','en','Process Permissions','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_STATUS_CASE','en','Status Case','2011-07-15' 
+SELECT 'LABEL','ID_STATUS_CASE','en','Status Case','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SNAP_GEOMETRY','en','Snap Geometry','2011-07-15' 
+SELECT 'LABEL','ID_SNAP_GEOMETRY','en','Snap Geometry','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PARTICIPATION_REQUIRED','en','Participation Required?','2011-07-15' 
+SELECT 'LABEL','ID_PARTICIPATION_REQUIRED','en','Participation Required?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PROCESS_PERMISSIONS_CREATE','en','Process Permission created successfully','2011-07-15' 
+SELECT 'LABEL','ID_PROCESS_PERMISSIONS_CREATE','en','Process Permission created successfully','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PROCESS_PERMISSIONS_EDIT','en','Process Permission edited successfully','2011-07-15' 
+SELECT 'LABEL','ID_PROCESS_PERMISSIONS_EDIT','en','Process Permission edited successfully','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PERMISSION_NEW','en','New specific Permission','2011-07-15' 
+SELECT 'LABEL','ID_PERMISSION_NEW','en','New specific Permission','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SUPERVISOR_UNAVAILABLE','en','No supervisors are available. All supervisors have been already assigned.','2011-07-15' 
+SELECT 'LABEL','ID_SUPERVISOR_UNAVAILABLE','en','No supervisors are available. All supervisors have been already assigned.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SUPERVISOR_REMOVED','en','Supervisor  has been removed successfully from Process','2011-07-15' 
+SELECT 'LABEL','ID_SUPERVISOR_REMOVED','en','Supervisor  has been removed successfully from Process','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SUPERVISOR_ASSIGNED','en','Supervisor has been successfully assigned to a Process','2011-07-15' 
+SELECT 'LABEL','ID_SUPERVISOR_ASSIGNED','en','Supervisor has been successfully assigned to a Process','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SUPERVISOR_FAILED','en','Failed saving Supervisor Assigned to process','2011-07-15' 
+SELECT 'LABEL','ID_SUPERVISOR_FAILED','en','Failed saving Supervisor Assigned to process','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SUPERVISOR','en','Supervisor','2011-07-15' 
+SELECT 'LABEL','ID_SUPERVISOR','en','Supervisor','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DYANFORM_REMOVE','en','Dynaform  has been removed successfully from Process','2011-07-15' 
+SELECT 'LABEL','ID_DYANFORM_REMOVE','en','Dynaform  has been removed successfully from Process','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DYNAFORM_ASSIGN','en','Dynaform has been successfully assigned to a Process','2011-07-15' 
+SELECT 'LABEL','ID_DYNAFORM_ASSIGN','en','Dynaform has been successfully assigned to a Process','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DYNAFORM_ASSIGN_FAILED','en','Failed saving Dynaform Assigned to process','2011-07-15' 
+SELECT 'LABEL','ID_DYNAFORM_ASSIGN_FAILED','en','Failed saving Dynaform Assigned to process','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_INPUT_UNAVAILABLE','en','No Input Document are available. All Input Document have been already assigned.','2011-07-15' 
+SELECT 'LABEL','ID_INPUT_UNAVAILABLE','en','No Input Document are available. All Input Document have been already assigned.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_INPUT_ASSIGN','en','Input Document has been successfully assigned to a Process','2011-07-15' 
+SELECT 'LABEL','ID_INPUT_ASSIGN','en','Input Document has been successfully assigned to a Process','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_INPUT_FAILED','en','Failed saving Input Document Assigned to process','2011-07-15' 
+SELECT 'LABEL','ID_INPUT_FAILED','en','Failed saving Input Document Assigned to process','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PROCESS_FILE_MANAGER','en','Process File Manager','2011-07-15' 
+SELECT 'LABEL','ID_PROCESS_FILE_MANAGER','en','Process File Manager','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_FAILURE','en','Failure','2011-07-15' 
+SELECT 'LABEL','ID_FAILURE','en','Failure','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MAP_TYPE','en','Map Type','2011-07-15' 
+SELECT 'LABEL','ID_MAP_TYPE','en','Map Type','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DERIVATION_HISTORY','en','Derivation History','2011-07-15' 
+SELECT 'LABEL','ID_DERIVATION_HISTORY','en','Derivation History','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MESSAGES_HISTORY','en','Messages History','2011-07-15' 
+SELECT 'LABEL','ID_MESSAGES_HISTORY','en','Messages History','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CASE_PROPERTIES_SAVE','en','Case Tracker Properties Saved Successfully','2011-07-15' 
+SELECT 'LABEL','ID_CASE_PROPERTIES_SAVE','en','Case Tracker Properties Saved Successfully','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CASE_TRACKERS','en','Case trackers','2011-07-15' 
+SELECT 'LABEL','ID_CASE_TRACKERS','en','Case trackers','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_USERS_UNAVAILABLE','en','No users are available. All users have been already assigned','2011-07-15' 
+SELECT 'LABEL','ID_USERS_UNAVAILABLE','en','No users are available. All users have been already assigned','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_OBJECT_REMOVE','en','Object has been removed successfully','2011-07-15' 
+SELECT 'LABEL','ID_OBJECT_REMOVE','en','Object has been removed successfully','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_OBJECT_ASSIGNED','en','Objects has been successfully assigned','2011-07-15' 
+SELECT 'LABEL','ID_OBJECT_ASSIGNED','en','Objects has been successfully assigned','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_OBJECT_FAILED','en','Failed to assign Objects','2011-07-15' 
+SELECT 'LABEL','ID_OBJECT_FAILED','en','Failed to assign Objects','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_OBJECT_UPDATE','en','User has been updated successfully','2011-07-15' 
+SELECT 'LABEL','ID_OBJECT_UPDATE','en','User has been updated successfully','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ALL_VARIABLES','en','All Variables','2011-07-15' 
+SELECT 'LABEL','ID_ALL_VARIABLES','en','All Variables','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_STEPS_UNAVAILABLE','en','No steps are available. All Steps have been already assigned.','2011-07-15' 
+SELECT 'LABEL','ID_STEPS_UNAVAILABLE','en','No steps are available. All Steps have been already assigned.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_STEP_REMOVED','en','Step has been removed successfully','2011-07-15' 
+SELECT 'LABEL','ID_STEP_REMOVED','en','Step has been removed successfully','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','STEP_MODE','en','Mode','2011-07-15' 
+SELECT 'LABEL','STEP_MODE','en','Mode','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_STEP_ASSIGNED','en','Step has been assigned successfully','2011-07-15' 
+SELECT 'LABEL','ID_STEP_ASSIGNED','en','Step has been assigned successfully','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_STEPS_OF','en','Steps Of','2011-07-15' 
+SELECT 'LABEL','ID_STEPS_OF','en','Steps Of','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_OBJECTS_UNAVAILABLE','en','No objects are available. All objects have been already assigned.','2011-07-15' 
+SELECT 'LABEL','ID_OBJECTS_UNAVAILABLE','en','No objects are available. All objects have been already assigned.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_USERS_REMOVED','en','User has been removed successfully','2011-07-15' 
+SELECT 'LABEL','ID_USERS_REMOVED','en','User has been removed successfully','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_USER_ASSIGNED','en','User has been successfully assigned','2011-07-15' 
+SELECT 'LABEL','ID_USER_ASSIGNED','en','User has been successfully assigned','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_USER_SAVE_FAIL','en','Failed saving User Assigned to Task','2011-07-15' 
+SELECT 'LABEL','ID_USER_SAVE_FAIL','en','Failed saving User Assigned to Task','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_USERS_GROUPS','en','Users and User Groups','2011-07-15' 
+SELECT 'LABEL','ID_USERS_GROUPS','en','Users and User Groups','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MSG_CANNOT_DELETE_AUTHENTICATION','en','Authentication source cannot be deleted while has assigned users.','2011-07-15' 
+SELECT 'LABEL','ID_MSG_CANNOT_DELETE_AUTHENTICATION','en','Authentication source cannot be deleted while has assigned users.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DEFINITION','en','Definition','2011-07-15' 
+SELECT 'LABEL','ID_DEFINITION','en','Definition','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_AUTHENTICATION_SUCCESS_DELETE','en','Authentication source has been deleted correctly.','2011-07-15' 
+SELECT 'LABEL','ID_AUTHENTICATION_SUCCESS_DELETE','en','Authentication source has been deleted correctly.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_VARIABLES_CASE_PRIORITY','en','Variable for Case priority','2011-07-15' 
+SELECT 'LABEL','ID_VARIABLES_CASE_PRIORITY','en','Variable for Case priority','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_START_TASK','en','Starting Task','2011-07-15' 
+SELECT 'LABEL','ID_START_TASK','en','Starting Task','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CONFIRM_DELETE_AUTHENTICATION','en','Do you want to delete selected authentication source?','2011-07-15' 
+SELECT 'LABEL','ID_CONFIRM_DELETE_AUTHENTICATION','en','Do you want to delete selected authentication source?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ASSIGNMENT_RULES','en','Assignment Rules','2011-07-15' 
+SELECT 'LABEL','ID_ASSIGNMENT_RULES','en','Assignment Rules','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CASES_ASSIGNED_BY','en','Cases to be Assigned by','2011-07-15' 
+SELECT 'LABEL','ID_CASES_ASSIGNED_BY','en','Cases to be Assigned by','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CYCLIC_ASSIGNMENT','en','Cyclic Assignment','2011-07-15' 
+SELECT 'LABEL','ID_CYCLIC_ASSIGNMENT','en','Cyclic Assignment','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MANUAL_ASSIGNMENT','en','Manual Assignment','2011-07-15' 
+SELECT 'LABEL','ID_MANUAL_ASSIGNMENT','en','Manual Assignment','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_VALUE_BASED','en','Value Based','2011-07-15' 
+SELECT 'LABEL','ID_VALUE_BASED','en','Value Based','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_REPORTS_TO','en','Reports to','2011-07-15' 
+SELECT 'LABEL','ID_REPORTS_TO','en','Reports to','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_STATIC_PARTIAL_JOIN_MULTIPLE_INSTANCES','en','Static Partial Join for Multiple Instance','2011-07-15' 
+SELECT 'LABEL','ID_STATIC_PARTIAL_JOIN_MULTIPLE_INSTANCES','en','Static Partial Join for Multiple Instance','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CANCEL_PARTIAL_JOIN_MULTIPLE_INSTANCE','en','Cancelling Partial Join for Multiple Instance','2011-07-15' 
+SELECT 'LABEL','ID_CANCEL_PARTIAL_JOIN_MULTIPLE_INSTANCE','en','Cancelling Partial Join for Multiple Instance','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_VARIABLES_VALUE_ASSIGNMENT','en','Variable for Value Based Assignment','2011-07-15' 
+SELECT 'LABEL','ID_VARIABLES_VALUE_ASSIGNMENT','en','Variable for Value Based Assignment','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_VARIABLES_NO_INSTANCES','en','Variable for No of Instances','2011-07-15' 
+SELECT 'LABEL','ID_VARIABLES_NO_INSTANCES','en','Variable for No of Instances','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_VARIABLES_INSTANCES_TO _COMPLETE','en','Variable for No of Instances to complete','2011-07-15' 
+SELECT 'LABEL','ID_VARIABLES_INSTANCES_TO _COMPLETE','en','Variable for No of Instances to complete','2011-08-25' 
  ;
 INSERT INTO [TRANSLATION] ([TRN_CATEGORY],[TRN_ID],[TRN_LANG],[TRN_VALUE],[TRN_UPDATE_DATE]) 
 
-SELECT 'LABEL','ID_USER_DEFINED_TIMING_CONTROL','en','Allow user defined timing control','2011-07-15' 
+SELECT 'LABEL','ID_USER_DEFINED_TIMING_CONTROL','en','Allow user defined timing control','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_TASK_DURATION','en','Task Duration','2011-07-15' 
+SELECT 'LABEL','ID_TASK_DURATION','en','Task Duration','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_TIME_UNIT','en','Time Unit','2011-07-15' 
+SELECT 'LABEL','ID_TIME_UNIT','en','Time Unit','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_COUNT_DAYS','en','Count Days by','2011-07-15' 
+SELECT 'LABEL','ID_COUNT_DAYS','en','Count Days by','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ALLOW_ARBITARY_TRANSFER','en','Allow arbitary transfer (Ad hoc)','2011-07-15' 
+SELECT 'LABEL','ID_ALLOW_ARBITARY_TRANSFER','en','Allow arbitary transfer (Ad hoc)','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CASE_LABELS','en','Case Labels','2011-07-15' 
+SELECT 'LABEL','ID_CASE_LABELS','en','Case Labels','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CASE_TITLE','en','Case Title','2011-07-15' 
+SELECT 'LABEL','ID_CASE_TITLE','en','Case Title','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CASE_DESCRIPTION','en','Case Description','2011-07-15' 
+SELECT 'LABEL','ID_CASE_DESCRIPTION','en','Case Description','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_NOTIFICATION','en','Notification','2011-07-15' 
+SELECT 'LABEL','ID_NOTIFICATION','en','Notification','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_NOTIFY_USERS_AFTER_ASSIGN','en','After routing notify the next assigned user(s)','2011-07-15' 
+SELECT 'LABEL','ID_NOTIFY_USERS_AFTER_ASSIGN','en','After routing notify the next assigned user(s)','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_TASK_PROPERTIES_SAVE','en','Task properties has been saved successfully','2011-07-15' 
+SELECT 'LABEL','ID_TASK_PROPERTIES_SAVE','en','Task properties has been saved successfully','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ERROR_TASK_SAVE','en','Error in saving Task Properties','2011-07-15' 
+SELECT 'LABEL','ID_ERROR_TASK_SAVE','en','Error in saving Task Properties','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_TRIGGERS_UNAVAILABLE','en','No triggers are available. All triggers have been already assigned.','2011-07-15' 
+SELECT 'LABEL','ID_TRIGGERS_UNAVAILABLE','en','No triggers are available. All triggers have been already assigned.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_TRIGGER_REMOVE','en','Trigger has been removed successfully.','2011-07-15' 
+SELECT 'LABEL','ID_TRIGGER_REMOVE','en','Trigger has been removed successfully.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_TRIGGER_ASSIGN','en','Triggers has been assigned successfully.','2011-07-15' 
+SELECT 'LABEL','ID_TRIGGER_ASSIGN','en','Triggers has been assigned successfully.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ASSIGN_TRIGGERS','en','Assign Triggers','2011-07-15' 
+SELECT 'LABEL','ID_ASSIGN_TRIGGERS','en','Assign Triggers','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_USER_GROUPS_ADHOC','en','Users and User Groups(Ad Hoc)','2011-07-15' 
+SELECT 'LABEL','ID_USER_GROUPS_ADHOC','en','Users and User Groups(Ad Hoc)','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ASSIGN_VARIABLES_OUT','en','Assign Variables Out','2011-07-15' 
+SELECT 'LABEL','ID_ASSIGN_VARIABLES_OUT','en','Assign Variables Out','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_REMOVE_VARIABLES_OUT','en','Remove Variables Out','2011-07-15' 
+SELECT 'LABEL','ID_REMOVE_VARIABLES_OUT','en','Remove Variables Out','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ASSIGN_VARIABLES_IN','en','Assign Variables In','2011-07-15' 
+SELECT 'LABEL','ID_ASSIGN_VARIABLES_IN','en','Assign Variables In','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_REMOVE_VARIABLES_IN','en','Remove Variables In','2011-07-15' 
+SELECT 'LABEL','ID_REMOVE_VARIABLES_IN','en','Remove Variables In','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ORIGIN','en','Origin','2011-07-15' 
+SELECT 'LABEL','ID_ORIGIN','en','Origin','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_TARGET','en','Target','2011-07-15' 
+SELECT 'LABEL','ID_TARGET','en','Target','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SUBPROCESS','en','Sub-Process','2011-07-15' 
+SELECT 'LABEL','ID_SUBPROCESS','en','Sub-Process','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SUBPROCESS_NAME','en','SubProcess name','2011-07-15' 
+SELECT 'LABEL','ID_SUBPROCESS_NAME','en','SubProcess name','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_VARIABLES_OUT','en','Variables Out','2011-07-15' 
+SELECT 'LABEL','ID_VARIABLES_OUT','en','Variables Out','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_VARIABLES_IN','en','Variables In','2011-07-15' 
+SELECT 'LABEL','ID_VARIABLES_IN','en','Variables In','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SUBPROCESS_SAVE','en','Sub Process Properties has been saved successfully.','2011-07-15' 
+SELECT 'LABEL','ID_SUBPROCESS_SAVE','en','Sub Process Properties has been saved successfully.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_AUTHENTICATION_FAILED','en','Authentication Failed','2011-07-15' 
+SELECT 'LABEL','ID_AUTHENTICATION_FAILED','en','Authentication Failed','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_WEBENTRY_LINK','en','WebEntry Link','2011-07-15' 
+SELECT 'LABEL','ID_WEBENTRY_LINK','en','WebEntry Link','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_INITIAL_TASK','en','Initial Task','2011-07-15' 
+SELECT 'LABEL','ID_INITIAL_TASK','en','Initial Task','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_INITIAL_DYNAFORM','en','Initial Dynaform','2011-07-15' 
+SELECT 'LABEL','ID_INITIAL_DYNAFORM','en','Initial Dynaform','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_METHODS','en','Methods','2011-07-15' 
+SELECT 'LABEL','ID_METHODS','en','Methods','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_INPUT_DOC_ACCESS','en','Input Document Access','2011-07-15' 
+SELECT 'LABEL','ID_INPUT_DOC_ACCESS','en','Input Document Access','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PHP_WEB_SERVICE','en','PHP & Web Service options','2011-07-15' 
+SELECT 'LABEL','ID_PHP_WEB_SERVICE','en','PHP & Web Service options','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_WEB_SERVICE_USER','en','Web Service User','2011-07-15' 
+SELECT 'LABEL','ID_WEB_SERVICE_USER','en','Web Service User','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_WEB_SERVICE_PASSWORD','en','Web Service Password','2011-07-15' 
+SELECT 'LABEL','ID_WEB_SERVICE_PASSWORD','en','Web Service Password','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_START_MESSAGE_EVENT_WEB_ENTRY','en','Start Message Event(Web Entry)','2011-07-15' 
+SELECT 'LABEL','ID_START_MESSAGE_EVENT_WEB_ENTRY','en','Start Message Event(Web Entry)','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_TEST_CONFIGURATION','en','Test Configuration','2011-07-15' 
+SELECT 'LABEL','ID_TEST_CONFIGURATION','en','Test Configuration','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_GENERATE_WEB_ENTRY_PAGE','en','Generate Web Entry Page','2011-07-15' 
+SELECT 'LABEL','ID_GENERATE_WEB_ENTRY_PAGE','en','Generate Web Entry Page','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_GENERATE_INFO','en','General Information','2011-07-15' 
+SELECT 'LABEL','ID_GENERATE_INFO','en','General Information','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_TEST_USER','en','Test User','2011-07-15' 
+SELECT 'LABEL','ID_TEST_USER','en','Test User','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PROCESSMAKER_VALIDATION','en','Please insert a valid processmaker user name and password, in order to assign the case to their respective owner.','2011-07-15' 
+SELECT 'LABEL','ID_PROCESSMAKER_VALIDATION','en','Please insert a valid processmaker user name and password, in order to assign the case to their respective owner.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_VALID_CREDENTIALS','en','Please enter valid credentials','2011-07-15' 
+SELECT 'LABEL','ID_VALID_CREDENTIALS','en','Please enter valid credentials','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PERFORM_TASK','en','Perform this Task','2011-07-15' 
+SELECT 'LABEL','ID_PERFORM_TASK','en','Perform this Task','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SELECT_DATE_TIME','en','Select the time and day you want this task to start','2011-07-15' 
+SELECT 'LABEL','ID_SELECT_DATE_TIME','en','Select the time and day you want this task to start','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_START_DATE','en','Start Date','2011-07-15' 
+SELECT 'LABEL','ID_START_DATE','en','Start Date','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_END_DATE','en','End Date','2011-07-15' 
+SELECT 'LABEL','ID_END_DATE','en','End Date','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_EXECUTION_TIME','en','Execution Time','2011-07-15' 
+SELECT 'LABEL','ID_EXECUTION_TIME','en','Execution Time','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SELECT_DAY_OF_WEEK','en','Select the day(s) of the week below','2011-07-15' 
+SELECT 'LABEL','ID_SELECT_DAY_OF_WEEK','en','Select the day(s) of the week below','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_OF_THE_MONTH','en','of the month(s)','2011-07-15' 
+SELECT 'LABEL','ID_OF_THE_MONTH','en','of the month(s)','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_START_TIME_EVENT','en','Start Timer Event (Case Scheduler)','2011-07-15' 
+SELECT 'LABEL','ID_START_TIME_EVENT','en','Start Timer Event (Case Scheduler)','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CASE_SCHEDULER_SAVED','en','Case Scheduler Saved Sucessfully','2011-07-15' 
+SELECT 'LABEL','ID_CASE_SCHEDULER_SAVED','en','Case Scheduler Saved Sucessfully','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_AFTER_ROUTING_NOTIFY','en','After routing notify the next assigned user(s).','2011-07-15' 
+SELECT 'LABEL','ID_AFTER_ROUTING_NOTIFY','en','After routing notify the next assigned user(s).','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_INTERMEDIATE_MESSAGE_EVENTS','en','Intermediate Message Events (Task Notifications)','2011-07-15' 
+SELECT 'LABEL','ID_INTERMEDIATE_MESSAGE_EVENTS','en','Intermediate Message Events (Task Notifications)','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_EVENT_MESSAGE','en','Event Message','2011-07-15' 
+SELECT 'LABEL','ID_EVENT_MESSAGE','en','Event Message','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_BEHAVIOUR','en','Behaviour','2011-07-15' 
+SELECT 'LABEL','ID_BEHAVIOUR','en','Behaviour','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_TIME_START_WITH_TASK','en','The time starts with task','2011-07-15' 
+SELECT 'LABEL','ID_TIME_START_WITH_TASK','en','The time starts with task','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ESTIMATED_TASK_DURATION','en','Estimated Task duration','2011-07-15' 
+SELECT 'LABEL','ID_ESTIMATED_TASK_DURATION','en','Estimated Task duration','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_EXECUTION_TIME_INTERVAL','en','Execution time Interval','2011-07-15' 
+SELECT 'LABEL','ID_EXECUTION_TIME_INTERVAL','en','Execution time Interval','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_END_MESSAGE_EVENT','en','End Message Event (Message Event)','2011-07-15' 
+SELECT 'LABEL','ID_END_MESSAGE_EVENT','en','End Message Event (Message Event)','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_EVENT_MULTIPLE','en','Event Multiple','2011-07-15' 
+SELECT 'LABEL','ID_EVENT_MULTIPLE','en','Event Multiple','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ESTIMATED_TASK_DURATION_DAYS','en','Estimated Task duration in Days','2011-07-15' 
+SELECT 'LABEL','ID_ESTIMATED_TASK_DURATION_DAYS','en','Estimated Task duration in Days','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_EXECUTION_TIME_DAYS','en','Execution time in days','2011-07-15' 
+SELECT 'LABEL','ID_EXECUTION_TIME_DAYS','en','Execution time in days','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_EXECUTE_TRIGGER','en','Execute Trigger','2011-07-15' 
+SELECT 'LABEL','ID_EXECUTE_TRIGGER','en','Execute Trigger','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_INTERMEDIATE_TIMER_EVENTS','en','Intermediate Timer Event (Multiple Event)','2011-07-15' 
+SELECT 'LABEL','ID_INTERMEDIATE_TIMER_EVENTS','en','Intermediate Timer Event (Multiple Event)','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_GRID_PAGE_DISPLAYING_PMTABLES_MESSAGE','en','Displaying PM Tables {0} - {1} of {2}','2011-07-15' 
+SELECT 'LABEL','ID_GRID_PAGE_DISPLAYING_PMTABLES_MESSAGE','en','Displaying PM Tables {0} - {1} of {2}','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_GRID_PAGE_NO_PMTABLES_MESSAGE','en','No PM Tables to display','2011-07-15' 
+SELECT 'LABEL','ID_GRID_PAGE_NO_PMTABLES_MESSAGE','en','No PM Tables to display','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_GRID_PAGE_DISPLAYING_ROWS_MESSAGE','en','Displaying rows {0} - {1} of {2}','2011-07-15' 
+SELECT 'LABEL','ID_GRID_PAGE_DISPLAYING_ROWS_MESSAGE','en','Displaying rows {0} - {1} of {2}','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_GRID_PAGE_NO_ROWS_MESSAGE','en','No rows to display','2011-07-15' 
+SELECT 'LABEL','ID_GRID_PAGE_NO_ROWS_MESSAGE','en','No rows to display','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SCHEMA','en','Schema','2011-07-22' 
+SELECT 'LABEL','ID_SCHEMA','en','Schema','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_DELETE_TABLE_COLLECTION','en','Do you want to delete this table?','2011-07-15' 
+SELECT 'JAVASCRIPT','ID_DELETE_TABLE_COLLECTION','en','Do you want to delete this table?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CALENDARS','en','Calendars','2011-07-15' 
+SELECT 'LABEL','ID_CALENDARS','en','Calendars','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_GRID_PAGE_DISPLAYING_CALENDAR_MESSAGE','en','Displaying calendars {0} - {1} of {2}','2011-07-15' 
+SELECT 'LABEL','ID_GRID_PAGE_DISPLAYING_CALENDAR_MESSAGE','en','Displaying calendars {0} - {1} of {2}','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_GRID_PAGE_NO_CALENDAR_MESSAGE','en','No calendars to display','2011-07-15' 
+SELECT 'LABEL','ID_GRID_PAGE_NO_CALENDAR_MESSAGE','en','No calendars to display','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','MIME_DES_EXE','en','Executable File','2011-07-15' 
+SELECT 'LABEL','MIME_DES_EXE','en','Executable File','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','MIME_DES_DIR','en','Directory','2011-07-15' 
+SELECT 'LABEL','MIME_DES_DIR','en','Directory','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','MIME_DES_FILE','en','File','2011-07-15' 
+SELECT 'LABEL','MIME_DES_FILE','en','File','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','MIME_DES_SYMLINK','en','Symbolic Link','2011-07-15' 
+SELECT 'LABEL','MIME_DES_SYMLINK','en','Symbolic Link','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','MIME_DES_TEXT','en','Text File','2011-07-15' 
+SELECT 'LABEL','MIME_DES_TEXT','en','Text File','2011-08-25' 
  ;
 INSERT INTO [TRANSLATION] ([TRN_CATEGORY],[TRN_ID],[TRN_LANG],[TRN_VALUE],[TRN_UPDATE_DATE]) 
 
-SELECT 'LABEL','MIME_DES_TXT','en','Text File','2011-07-15' 
+SELECT 'LABEL','MIME_DES_TXT','en','Text File','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','MIME_DES_PHP','en','PHP Script','2011-07-15' 
+SELECT 'LABEL','MIME_DES_PHP','en','PHP Script','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','MIME_DES_SQL','en','SQL File','2011-07-15' 
+SELECT 'LABEL','MIME_DES_SQL','en','SQL File','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','MIME_DES_PERL','en','PERL Script','2011-07-15' 
+SELECT 'LABEL','MIME_DES_PERL','en','PERL Script','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','MIME_DES_HTML','en','HTML Page','2011-07-15' 
+SELECT 'LABEL','MIME_DES_HTML','en','HTML Page','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','MIME_DES_JS','en','Javascript File','2011-07-15' 
+SELECT 'LABEL','MIME_DES_JS','en','Javascript File','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','MIME_DES_CSS','en','CSS File','2011-07-15' 
+SELECT 'LABEL','MIME_DES_CSS','en','CSS File','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','MIME_DES_CGI','en','CGI Script','2011-07-15' 
+SELECT 'LABEL','MIME_DES_CGI','en','CGI Script','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','MIME_DES_CPPS','en','C++ Source File','2011-07-15' 
+SELECT 'LABEL','MIME_DES_CPPS','en','C++ Source File','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','MIME_DES_CPPH','en','C++ Header File','2011-07-15' 
+SELECT 'LABEL','MIME_DES_CPPH','en','C++ Header File','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','MIME_DES_JAVAS','en','Java Source File','2011-07-15' 
+SELECT 'LABEL','MIME_DES_JAVAS','en','Java Source File','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','MIME_DES_JAVAC','en','Java Class File','2011-07-15' 
+SELECT 'LABEL','MIME_DES_JAVAC','en','Java Class File','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','MIME_DES_PAS','en','Pascal File','2011-07-15' 
+SELECT 'LABEL','MIME_DES_PAS','en','Pascal File','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','MIME_DES_GIF','en','GIF Picture','2011-07-15' 
+SELECT 'LABEL','MIME_DES_GIF','en','GIF Picture','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','MIME_DES_JPG','en','JPG Picture','2011-07-15' 
+SELECT 'LABEL','MIME_DES_JPG','en','JPG Picture','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','MIME_DES_BMP','en','BMP Picture','2011-07-15' 
+SELECT 'LABEL','MIME_DES_BMP','en','BMP Picture','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','MIME_DES_PNG','en','PNG Picture','2011-07-15' 
+SELECT 'LABEL','MIME_DES_PNG','en','PNG Picture','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','MIME_DES_ZIP','en','ZIP Archive','2011-07-15' 
+SELECT 'LABEL','MIME_DES_ZIP','en','ZIP Archive','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','MIME_DES_TAR','en','TAR Archive','2011-07-15' 
+SELECT 'LABEL','MIME_DES_TAR','en','TAR Archive','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','MIME_DES_GZIP','en','GZIP Archive','2011-07-15' 
+SELECT 'LABEL','MIME_DES_GZIP','en','GZIP Archive','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','MIME_DES_BZIP2','en','BZIP2 Archive','2011-07-15' 
+SELECT 'LABEL','MIME_DES_BZIP2','en','BZIP2 Archive','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','MIME_DES_RAR','en','RAR Archive','2011-07-15' 
+SELECT 'LABEL','MIME_DES_RAR','en','RAR Archive','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','MIME_DES_MP3','en','MP3 Audio File','2011-07-15' 
+SELECT 'LABEL','MIME_DES_MP3','en','MP3 Audio File','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','MIME_DES_WAV','en','WAV Audio File','2011-07-15' 
+SELECT 'LABEL','MIME_DES_WAV','en','WAV Audio File','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','MIME_DES_MIDI','en','MIDI Audio File','2011-07-15' 
+SELECT 'LABEL','MIME_DES_MIDI','en','MIDI Audio File','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','MIME_DES_REAL','en','RealAudio File','2011-07-15' 
+SELECT 'LABEL','MIME_DES_REAL','en','RealAudio File','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','MIME_DES_MPG','en','MPG Video File','2011-07-15' 
+SELECT 'LABEL','MIME_DES_MPG','en','MPG Video File','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','MIME_DES_MOV','en','Movie File','2011-07-15' 
+SELECT 'LABEL','MIME_DES_MOV','en','Movie File','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','MIME_DES_AVI','en','AVI Video File','2011-07-15' 
+SELECT 'LABEL','MIME_DES_AVI','en','AVI Video File','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','MIME_DES_FLASH','en','Flash Movie File','2011-07-15' 
+SELECT 'LABEL','MIME_DES_FLASH','en','Flash Movie File','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','MIME_DES_WORD','en','Word Document','2011-07-15' 
+SELECT 'LABEL','MIME_DES_WORD','en','Word Document','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','MIME_DES_EXCEL','en','Excel Document','2011-07-15' 
+SELECT 'LABEL','MIME_DES_EXCEL','en','Excel Document','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','MIME_DES_PDF','en','PDF File','2011-07-15' 
+SELECT 'LABEL','MIME_DES_PDF','en','PDF File','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','MIME_DES_DOC','en','Word Document','2011-07-15' 
+SELECT 'LABEL','MIME_DES_DOC','en','Word Document','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','MIME_DES_XLS','en','Excel Document','2011-07-15' 
+SELECT 'LABEL','MIME_DES_XLS','en','Excel Document','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','MIME_DES_RTF','en','Rich Text File','2011-07-15' 
+SELECT 'LABEL','MIME_DES_RTF','en','Rich Text File','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CONFIRM_DELETE_CALENDAR','en','Do you want to delete selected calendar?','2011-07-15' 
+SELECT 'LABEL','ID_CONFIRM_DELETE_CALENDAR','en','Do you want to delete selected calendar?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CALENDAR_SUCCESS_DELETE','en','Calendar has been deleted correctly.','2011-07-15' 
+SELECT 'LABEL','ID_CALENDAR_SUCCESS_DELETE','en','Calendar has been deleted correctly.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MSG_CANNOT_DELETE_CALENDAR','en','Calendar cannot be deleted while has assignations.','2011-07-15' 
+SELECT 'LABEL','ID_MSG_CANNOT_DELETE_CALENDAR','en','Calendar cannot be deleted while has assignations.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_REMOVED_SESSION_FILES','en','Older session files has been removed','2011-07-15' 
+SELECT 'LABEL','ID_REMOVED_SESSION_FILES','en','Older session files has been removed','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_NO_OLDER_SESSION_FILES','en','There are no older session files','2011-07-15' 
+SELECT 'LABEL','ID_NO_OLDER_SESSION_FILES','en','There are no older session files','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CACHE_BTN_SETUP_SESSION','en','Delete older session files','2011-07-15' 
+SELECT 'LABEL','ID_CACHE_BTN_SETUP_SESSION','en','Delete older session files','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CACHE_SUBTITLE_SETUP_SESSION','en','Session Maintenance','2011-07-15' 
+SELECT 'LABEL','ID_CACHE_SUBTITLE_SETUP_SESSION','en','Session Maintenance','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ASSIGN_USERS','en','Assign Users','2011-07-15' 
+SELECT 'LABEL','ID_ASSIGN_USERS','en','Assign Users','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SET_SUPERVISOR','en','Set Supervisor','2011-07-15' 
+SELECT 'LABEL','ID_SET_SUPERVISOR','en','Set Supervisor','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SET_SUPERVISOR_SUCCESS','en','Supervisor assigned correctly','2011-07-15' 
+SELECT 'LABEL','ID_SET_SUPERVISOR_SUCCESS','en','Supervisor assigned correctly','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ROLE_EXISTS','en','Role Code already exists.','2011-07-15' 
+SELECT 'LABEL','ID_ROLE_EXISTS','en','Role Code already exists.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DEBUG_PANEL_TITLE','en','ProcessMaker Debugger','2011-07-15' 
+SELECT 'LABEL','ID_DEBUG_PANEL_TITLE','en','ProcessMaker Debugger','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SWITCH_EDITOR','en','Switch Editor','2011-07-15' 
+SELECT 'LABEL','ID_SWITCH_EDITOR','en','Switch Editor','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_NORMAL','en','Normal','2011-07-15' 
+SELECT 'LABEL','ID_NORMAL','en','Normal','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_GRID','en','Grid','2011-07-15' 
+SELECT 'LABEL','ID_GRID','en','Grid','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_TAS_EDIT','en','Tasks (Edit mode)','2011-07-15' 
+SELECT 'LABEL','ID_TAS_EDIT','en','Tasks (Edit mode)','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_TAS_VIEW','en','Tasks (View mode)','2011-07-15' 
+SELECT 'LABEL','ID_TAS_VIEW','en','Tasks (View mode)','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PM_FILENAME','en','Download PM File:','2011-07-15' 
+SELECT 'LABEL','ID_PM_FILENAME','en','Download PM File:','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_XPDL_FILENAME','en','Download XPDL File:','2011-07-15' 
+SELECT 'LABEL','ID_XPDL_FILENAME','en','Download XPDL File:','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_NO_ITEMS_SELECTED','en','No items Selected','2011-07-15' 
+SELECT 'LABEL','ID_NO_ITEMS_SELECTED','en','No items Selected','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SERVER_COMMUNICATION_ERROR','en','Failed to connect to the server','2011-07-15' 
+SELECT 'LABEL','ID_SERVER_COMMUNICATION_ERROR','en','Failed to connect to the server','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DELETE_SELECTED_ITEMS','en','Do you want to deleted selected({0}) items?','2011-07-15' 
+SELECT 'LABEL','ID_DELETE_SELECTED_ITEMS','en','Do you want to deleted selected({0}) items?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ROOT_FOLDER','en','Root Folder','2011-07-15' 
+SELECT 'LABEL','ID_ROOT_FOLDER','en','Root Folder','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_RELOAD','en','Reload','2011-07-15' 
+SELECT 'LABEL','ID_RELOAD','en','Reload','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MOVE','en','Move','2011-07-15' 
+SELECT 'LABEL','ID_MOVE','en','Move','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_RENAME','en','Rename','2011-07-15' 
+SELECT 'LABEL','ID_RENAME','en','Rename','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SHOW_DIRS','en','Show Dirs','2011-07-15' 
+SELECT 'LABEL','ID_SHOW_DIRS','en','Show Dirs','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_FILTER_CURRENT_VIEW','en','Filter current view','2011-07-15' 
+SELECT 'LABEL','ID_FILTER_CURRENT_VIEW','en','Filter current view','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_FIRST','en','First','2011-07-15' 
+SELECT 'LABEL','ID_FIRST','en','First','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_LAST','en','Last','2011-07-15' 
+SELECT 'LABEL','ID_LAST','en','Last','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_NEXT','en','Next','2011-07-15' 
+SELECT 'LABEL','ID_NEXT','en','Next','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PREVIOUS','en','Previous','2011-07-15' 
+SELECT 'LABEL','ID_PREVIOUS','en','Previous','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DONE','en','Done','2011-07-15' 
+SELECT 'LABEL','ID_DONE','en','Done','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MODIFIED','en','Modified','2011-07-15' 
+SELECT 'LABEL','ID_MODIFIED','en','Modified','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_OWNER','en','Owner','2011-07-15' 
+SELECT 'LABEL','ID_OWNER','en','Owner','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SIZE','en','Size','2011-07-15' 
+SELECT 'LABEL','ID_SIZE','en','Size','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DIRECTORY','en','Directory','2011-07-15' 
+SELECT 'LABEL','ID_DIRECTORY','en','Directory','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_NO_MANAGER_SELECTED','en','No Manager Selected','2011-07-15' 
+SELECT 'LABEL','ID_NO_MANAGER_SELECTED','en','No Manager Selected','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_EXPAND_ALL','en','Expand All','2011-07-15' 
+SELECT 'LABEL','ID_EXPAND_ALL','en','Expand All','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_COLLAPSE_ALL','en','Collapse All','2011-07-15' 
+SELECT 'LABEL','ID_COLLAPSE_ALL','en','Collapse All','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_FILENAME_GENERATED','en','Filename generated','2011-07-15' 
+SELECT 'LABEL','ID_FILENAME_GENERATED','en','Filename generated','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ACTORS_ASSIGNED_SUCESSFULLY','en','{0} Actors assign to task <b>"{1}"</b> successfully!','2011-07-15' 
+SELECT 'LABEL','ID_ACTORS_ASSIGNED_SUCESSFULLY','en','{0} Actors assign to task <b>"{1}"</b> successfully!','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ACTOR_ASSIGNED_SUCESSFULLY','en','The actor was assigned to task <b>"{tas_title}"</b> successfully!','2011-07-15' 
+SELECT 'LABEL','ID_ACTOR_ASSIGNED_SUCESSFULLY','en','The actor was assigned to task <b>"{tas_title}"</b> successfully!','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_RESPONSABILITIES_ASSIGNMENT','en','Assignment of responsibilities','2011-07-15' 
+SELECT 'LABEL','ID_RESPONSABILITIES_ASSIGNMENT','en','Assignment of responsibilities','2011-08-25' 
  ;
 INSERT INTO [TRANSLATION] ([TRN_CATEGORY],[TRN_ID],[TRN_LANG],[TRN_VALUE],[TRN_UPDATE_DATE]) 
 
-SELECT 'LABEL','ID_ACTORS','en','Actors','2011-07-15' 
+SELECT 'LABEL','ID_ACTORS','en','Actors','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PROCESSMAP_TITLE','en','BPMN Designer','2011-07-15' 
+SELECT 'LABEL','ID_PROCESSMAP_TITLE','en','BPMN Designer','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_AD_HOC_ACTORS','en','Ad Hoc Actors','2011-07-15' 
+SELECT 'LABEL','ID_AD_HOC_ACTORS','en','Ad Hoc Actors','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ACTOR_ALREADY_ASSIGNED','en','The actor is already assigned to task <b>{0}</b>','2011-07-15' 
+SELECT 'LABEL','ID_ACTOR_ALREADY_ASSIGNED','en','The actor is already assigned to task <b>{0}</b>','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SOME_ACTORS_ALREADY_ASSIGNED','en','Some actor(s) is/are already assigned to task <b>{0}</b>','2011-07-15' 
+SELECT 'LABEL','ID_SOME_ACTORS_ALREADY_ASSIGNED','en','Some actor(s) is/are already assigned to task <b>{0}</b>','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_TRIGGERS_SAVED','en','Trigger saved','2011-07-15' 
+SELECT 'LABEL','ID_TRIGGERS_SAVED','en','Trigger saved','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PLUGINS','en','Plugins','2011-07-15' 
+SELECT 'LABEL','ID_PLUGINS','en','Plugins','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_UID','en','UID','2011-07-15' 
+SELECT 'LABEL','ID_UID','en','UID','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CREATE_PROCESS','en','Create Process','2011-07-15' 
+SELECT 'LABEL','ID_CREATE_PROCESS','en','Create Process','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_WEB_ENTRY_LINK','en','Web Entry Link','2011-07-15' 
+SELECT 'LABEL','ID_WEB_ENTRY_LINK','en','Web Entry Link','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_WEB_ENTRY_SUMMARY','en','Web Entry Summary','2011-07-15' 
+SELECT 'LABEL','ID_WEB_ENTRY_SUMMARY','en','Web Entry Summary','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CREDENTIAL_ERROR','en','Credentials Error','2011-07-15' 
+SELECT 'LABEL','ID_CREDENTIAL_ERROR','en','Credentials Error','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_WEB_ENTRY','en','Web Entry','2011-07-15' 
+SELECT 'LABEL','ID_WEB_ENTRY','en','Web Entry','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_TEST_WEB_ENTRY','en','Test Web Entry','2011-07-15' 
+SELECT 'LABEL','ID_TEST_WEB_ENTRY','en','Test Web Entry','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_NEW_WEB_ENTRY','en','New Web Entry','2011-07-15' 
+SELECT 'LABEL','ID_NEW_WEB_ENTRY','en','New Web Entry','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_EDIT_WEB_ENTRY','en','Edit Web Entry','2011-07-15' 
+SELECT 'LABEL','ID_EDIT_WEB_ENTRY','en','Edit Web Entry','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CONFIRM_DELETE_WEB_ENTRY','en','Do you want to delete current web entry?','2011-07-15' 
+SELECT 'LABEL','ID_CONFIRM_DELETE_WEB_ENTRY','en','Do you want to delete current web entry?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_WEB_ENTRY_SUCCESS_DELETE','en','Web Entry deleted correctly','2011-07-15' 
+SELECT 'LABEL','ID_WEB_ENTRY_SUCCESS_DELETE','en','Web Entry deleted correctly','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PASSWORD','en','Password','2011-07-15' 
+SELECT 'LABEL','ID_PASSWORD','en','Password','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_NOT_DEFINED','en','Not defined','2011-07-15' 
+SELECT 'LABEL','ID_NOT_DEFINED','en','Not defined','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_WEB_ENTRY_SUCCESS_NEW','en','Web Entry has been created correctly.','2011-07-15' 
+SELECT 'LABEL','ID_WEB_ENTRY_SUCCESS_NEW','en','Web Entry has been created correctly.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_REMOVE_ALL_BUTTON_FACE','en','<<','2011-07-15' 
+SELECT 'LABEL','ID_REMOVE_ALL_BUTTON_FACE','en','<<','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_UPDATE_DATE','en','Update','2011-07-15' 
+SELECT 'LABEL','ID_UPDATE_DATE','en','Update','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_NEW_CASE_SCHEDULER','en','New Case Scheduler','2011-07-15' 
+SELECT 'LABEL','ID_NEW_CASE_SCHEDULER','en','New Case Scheduler','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CHANGE_STATUS','en','Change Status','2011-07-15' 
+SELECT 'LABEL','ID_CHANGE_STATUS','en','Change Status','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CONFIRM_DELETE_CASE_SCHEDULER','en','Do you want to delete current Case Scheduler?','2011-07-15' 
+SELECT 'LABEL','ID_CONFIRM_DELETE_CASE_SCHEDULER','en','Do you want to delete current Case Scheduler?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_USER_CREDENTIALS_REQUIRED','en','User credentials are required.','2011-07-15' 
+SELECT 'LABEL','ID_USER_CREDENTIALS_REQUIRED','en','User credentials are required.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_LAST_RUN_TIME','en','Last Run Time','2011-07-15' 
+SELECT 'LABEL','ID_LAST_RUN_TIME','en','Last Run Time','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_TIME_NEXT_RUN','en','Time Next Run','2011-07-15' 
+SELECT 'LABEL','ID_TIME_NEXT_RUN','en','Time Next Run','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SCHEDULER_SUCCESS_DELETE','en','Case Scheduler has been deleted correctly.','2011-07-15' 
+SELECT 'LABEL','ID_SCHEDULER_SUCCESS_DELETE','en','Case Scheduler has been deleted correctly.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SCHEDULER_SUCCESS_CHANGE_STATUS','en','Case Scheduler status has been changed correctly.','2011-07-15' 
+SELECT 'LABEL','ID_SCHEDULER_SUCCESS_CHANGE_STATUS','en','Case Scheduler status has been changed correctly.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SCHEDULER_SUCCESS_NEW','en','Case Scheduler has been created correctly.','2011-07-15' 
+SELECT 'LABEL','ID_SCHEDULER_SUCCESS_NEW','en','Case Scheduler has been created correctly.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SCHEDULER_SUCCESS_UPDATE','en','Case Scheduler has been updated correctly.','2011-07-15' 
+SELECT 'LABEL','ID_SCHEDULER_SUCCESS_UPDATE','en','Case Scheduler has been updated correctly.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CASE_SCHEDULER_SUMMARY','en','Case Scheduler Summary','2011-07-15' 
+SELECT 'LABEL','ID_CASE_SCHEDULER_SUMMARY','en','Case Scheduler Summary','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_USERS_ACTORS','en','Users Actors','2011-07-15' 
+SELECT 'LABEL','ID_USERS_ACTORS','en','Users Actors','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ADHOC_USERS_ACTORS','en','Ad hoc Users Actors','2011-07-15' 
+SELECT 'LABEL','ID_ADHOC_USERS_ACTORS','en','Ad hoc Users Actors','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_GROUPS_ACTORS','en','Groups Actors','2011-07-15' 
+SELECT 'LABEL','ID_GROUPS_ACTORS','en','Groups Actors','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ADHOC_GROUPS_ACTORS','en','Ad Hoc Groups Actors','2011-07-15' 
+SELECT 'LABEL','ID_ADHOC_GROUPS_ACTORS','en','Ad Hoc Groups Actors','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_EXIST_DYNAFORM','en','There is a Dynaform with the same name in   this process. It is not saving','2011-07-15' 
+SELECT 'LABEL','ID_EXIST_DYNAFORM','en','There is a Dynaform with the same name in   this process. It is not saving','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_INPUT_DOC_SUCCESS_NEW','en','Input Document has been created correctly.','2011-07-15' 
+SELECT 'LABEL','ID_INPUT_DOC_SUCCESS_NEW','en','Input Document has been created correctly.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_INPUT_DOC_SUCCESS_UPDATE','en','Input Document has been updated correctly.','2011-07-15' 
+SELECT 'LABEL','ID_INPUT_DOC_SUCCESS_UPDATE','en','Input Document has been updated correctly.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_INPUT_DOC_SUCCESS_DELETE','en','Input Document has been deleted correctly.','2011-07-15' 
+SELECT 'LABEL','ID_INPUT_DOC_SUCCESS_DELETE','en','Input Document has been deleted correctly.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CONFIRM_DELETE_INPUT_DOC','en','Do you want to delete selected Input Document?','2011-07-15' 
+SELECT 'LABEL','ID_CONFIRM_DELETE_INPUT_DOC','en','Do you want to delete selected Input Document?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MSG_CANNOT_DELETE_INPUT_DOC','en','Input Document cannot be deleted while has assigned tasks.','2011-07-15' 
+SELECT 'LABEL','ID_MSG_CANNOT_DELETE_INPUT_DOC','en','Input Document cannot be deleted while has assigned tasks.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SOME_FIELDS_REQUIRED','en','Some Fields are required.','2011-07-15' 
+SELECT 'LABEL','ID_SOME_FIELDS_REQUIRED','en','Some Fields are required.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_INPUT_DOC_TITLE_REQUIRED','en','Input Document Title is required.','2011-07-15' 
+SELECT 'LABEL','ID_INPUT_DOC_TITLE_REQUIRED','en','Input Document Title is required.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PROCESS_TITLE_REQUIRED','en','Process Title is required.','2011-07-15' 
+SELECT 'LABEL','ID_PROCESS_TITLE_REQUIRED','en','Process Title is required.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SAVING_PROCESS','en','Saving process','2011-07-15' 
+SELECT 'LABEL','ID_SAVING_PROCESS','en','Saving process','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_GRID_PAGE_DISPLAYING_SKIN_MESSAGE','en','Displaying skins {0} - {1} of {2}','2011-07-15' 
+SELECT 'LABEL','ID_GRID_PAGE_DISPLAYING_SKIN_MESSAGE','en','Displaying skins {0} - {1} of {2}','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_GRID_PAGE_NO_SKIN_MESSAGE','en','No skins to display','2011-07-15' 
+SELECT 'LABEL','ID_GRID_PAGE_NO_SKIN_MESSAGE','en','No skins to display','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_REASSIGN_ALL_CASES_BY_TASK','en','Reassign All Cases by Task','2011-07-15' 
+SELECT 'LABEL','ID_REASSIGN_ALL_CASES_BY_TASK','en','Reassign All Cases by Task','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CASES_TO_REASSIGN_TASK_LIST','en','Cases to reassign - Task List','2011-07-15' 
+SELECT 'LABEL','ID_CASES_TO_REASSIGN_TASK_LIST','en','Cases to reassign - Task List','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_USER_LIST','en','User List','2011-07-15' 
+SELECT 'LABEL','ID_USER_LIST','en','User List','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ENABLE','en','Enable','2011-07-15' 
+SELECT 'LABEL','ID_ENABLE','en','Enable','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DISABLE','en','Disable','2011-07-15' 
+SELECT 'LABEL','ID_DISABLE','en','Disable','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_YES_VALUE','en','YES','2011-07-15' 
+SELECT 'LABEL','ID_YES_VALUE','en','YES','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_NO_VALUE','en','NO','2011-07-15' 
+SELECT 'LABEL','ID_NO_VALUE','en','NO','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ACTIVE_USERS','en','Active Users','2011-07-15' 
+SELECT 'LABEL','ID_ACTIVE_USERS','en','Active Users','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','IMPORT_PROCESS_DISABLE','en','Disable the current process and create a new version of the process','2011-07-15' 
+SELECT 'LABEL','IMPORT_PROCESS_DISABLE','en','Disable the current process and create a new version of the process','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','IMPORT_PROCESS_NEW','en','Create a completely new process without changing the current process','2011-07-15' 
+SELECT 'LABEL','IMPORT_PROCESS_NEW','en','Create a completely new process without changing the current process','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SELECT_PROCESS_FILE','en','Select a process file','2011-07-15' 
+SELECT 'LABEL','ID_SELECT_PROCESS_FILE','en','Select a process file','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_IMPORT_PROCESS','en','Import Process','2011-07-15' 
+SELECT 'LABEL','ID_IMPORT_PROCESS','en','Import Process','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_UPLOADING_PROCESS_FILE','en','Uploading the process file...','2011-07-15' 
+SELECT 'LABEL','ID_UPLOADING_PROCESS_FILE','en','Uploading the process file...','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_IMPORT_ALREADY_EXISTS','en','The process you are trying to import already exists. Please select one of the following options to continue:','2011-07-15' 
+SELECT 'LABEL','ID_IMPORT_ALREADY_EXISTS','en','The process you are trying to import already exists. Please select one of the following options to continue:','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DEBUG_MESSAGE','en','Debug Messages','2011-07-15' 
+SELECT 'LABEL','ID_DEBUG_MESSAGE','en','Debug Messages','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_FIELD_HANDLER_ACTION_DELETE','en','Are you sure that you want to remove this','2011-07-15' 
+SELECT 'LABEL','ID_FIELD_HANDLER_ACTION_DELETE','en','Are you sure that you want to remove this','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PROCESS_EXIST_SOME_GROUP','en','Some of the groups that are you trying to import, already exists. Please select one of the following options to continue','2011-07-15' 
+SELECT 'LABEL','ID_PROCESS_EXIST_SOME_GROUP','en','Some of the groups that are you trying to import, already exists. Please select one of the following options to continue','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PROCESS_GROUP_RENAME','en','Rename the imported groups','2011-07-15' 
+SELECT 'LABEL','ID_PROCESS_GROUP_RENAME','en','Rename the imported groups','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PROCESS_GROUP_MERGE_PREEXISTENT','en','Merge the imported groups, with the preexistent local groups (no changes will be made to the local groups)','2011-07-15' 
+SELECT 'LABEL','ID_PROCESS_GROUP_MERGE_PREEXISTENT','en','Merge the imported groups, with the preexistent local groups (no changes will be made to the local groups)','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_FILE_UPLOAD_INCORRECT_EXTENSION','en','The file has an incorrect extension. Please check the file and upload again.','2011-07-07' 
+SELECT 'LABEL','ID_FILE_UPLOAD_INCORRECT_EXTENSION','en','The file has an incorrect extension. Please check the file and upload again.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ERROR_UPLOAD_FILE_CONTACT_ADMINISTRATOR','en','Error message when you upload the file, please contact your administrator.','2011-07-07' 
+SELECT 'LABEL','ID_ERROR_UPLOAD_FILE_CONTACT_ADMINISTRATOR','en','Error message when you upload the file, please contact your administrator.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DELEGATE_USER','en','Delegated User','2011-07-07' 
+SELECT 'LABEL','ID_DELEGATE_USER','en','Delegated User','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_TASK_TRANSFER','en','Task Transfer Date','2011-07-07' 
+SELECT 'LABEL','ID_TASK_TRANSFER','en','Task Transfer Date','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ENABLE_ACTION','en','Enable Action','2011-07-07' 
+SELECT 'LABEL','ID_ENABLE_ACTION','en','Enable Action','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DISABLE_ACTION','en','Disable Action','2011-07-07' 
+SELECT 'LABEL','ID_DISABLE_ACTION','en','Disable Action','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DERIVATED','en','Routed','2011-07-07' 
+SELECT 'LABEL','ID_DERIVATED','en','Routed','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_IN_PROGRESS','en','In Progress','2011-07-07' 
+SELECT 'LABEL','ID_IN_PROGRESS','en','In Progress','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_REASSIGNED','en','Reassigned','2011-07-07' 
+SELECT 'LABEL','ID_REASSIGNED','en','Reassigned','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_CONFIRM_ADHOCUSER_CASE','en','Are you sure you want to do it?','2011-07-07' 
+SELECT 'JAVASCRIPT','ID_CONFIRM_ADHOCUSER_CASE','en','Are you sure you want to do it?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CONFIRM_ADHOCUSER_CASE','en','Are you sure you want to do it?','2011-07-07' 
+SELECT 'LABEL','ID_CONFIRM_ADHOCUSER_CASE','en','Are you sure you want to do it?','2011-08-25' 
  ;
 INSERT INTO [TRANSLATION] ([TRN_CATEGORY],[TRN_ID],[TRN_LANG],[TRN_VALUE],[TRN_UPDATE_DATE]) 
 
-SELECT 'LABEL','ID_PM_ENV_HOME_SETTINGS_TITLE','en','Home Settings','2011-07-07' 
+SELECT 'LABEL','ID_PM_ENV_HOME_SETTINGS_TITLE','en','Home Settings','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_HOME_LISTS_DATE_FORMAT','en','Date format on Lists','2011-07-07' 
+SELECT 'LABEL','ID_HOME_LISTS_DATE_FORMAT','en','Date format on Lists','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_HOME_LISTS_ROWS_PER_PAGE','en','Rows per page on Lists','2011-07-07' 
+SELECT 'LABEL','ID_HOME_LISTS_ROWS_PER_PAGE','en','Rows per page on Lists','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_HOME_COLLAPSE_RIGHT_PANEL','en','Collapse right panel when a Case is open','2011-07-07' 
+SELECT 'LABEL','ID_HOME_COLLAPSE_RIGHT_PANEL','en','Collapse right panel when a Case is open','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_HOME_SETTINGS','en','Home Settings','2011-07-07' 
+SELECT 'LABEL','ID_HOME_SETTINGS','en','Home Settings','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ENVIRONMENT','en','Environment','2011-07-07' 
+SELECT 'LABEL','ID_ENVIRONMENT','en','Environment','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CURLFUN_ISUNDEFINED','en','The process was not downloaded, because the curl     extension for php is not installed','2011-07-07' 
+SELECT 'LABEL','ID_CURLFUN_ISUNDEFINED','en','The process was not downloaded, because the curl     extension for php is not installed','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_RATING','en','Rating','2011-07-07' 
+SELECT 'LABEL','ID_RATING','en','Rating','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SUBSCRIPTIONS','en','Subscriptions','2011-07-07' 
+SELECT 'LABEL','ID_SUBSCRIPTIONS','en','Subscriptions','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_AUTHOR','en','Author','2011-07-07' 
+SELECT 'LABEL','ID_AUTHOR','en','Author','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PRIVACY','en','Privacy','2011-07-07' 
+SELECT 'LABEL','ID_PRIVACY','en','Privacy','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CREATE_DATE','en','Create Date','2011-07-07' 
+SELECT 'LABEL','ID_CREATE_DATE','en','Create Date','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_INSTALL_STEPS','en','Install Steps','2011-07-07' 
+SELECT 'LABEL','ID_INSTALL_STEPS','en','Install Steps','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PROCESS_DETAILS','en','Process Details','2011-07-07' 
+SELECT 'LABEL','ID_PROCESS_DETAILS','en','Process Details','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_LOGIN_LIBRARY','en','Login into ProcessMaker Library','2011-07-07' 
+SELECT 'LABEL','ID_LOGIN_LIBRARY','en','Login into ProcessMaker Library','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CREATE_NEW_ACCOUNT','en','Create a New Account','2011-07-07' 
+SELECT 'LABEL','ID_CREATE_NEW_ACCOUNT','en','Create a New Account','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_INCORRECT_USERNAME_PASSWORD','en','Incorrect username or password','2011-07-07' 
+SELECT 'LABEL','ID_INCORRECT_USERNAME_PASSWORD','en','Incorrect username or password','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_USERNAME_OR_WORKSPACE','en','Username (or Live Workspace)','2011-07-07' 
+SELECT 'LABEL','ID_USERNAME_OR_WORKSPACE','en','Username (or Live Workspace)','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PROCESS_UID','en','Process Uid','2011-07-07' 
+SELECT 'LABEL','ID_PROCESS_UID','en','Process Uid','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_INSTALL_MESSAGE','en','Please follow these instructions to complete installation','2011-07-07' 
+SELECT 'LABEL','ID_INSTALL_MESSAGE','en','Please follow these instructions to complete installation','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PROCESS_SUCESSFULLY_IMPORTED','en','Process sucessfully imported','2011-07-07' 
+SELECT 'LABEL','ID_PROCESS_SUCESSFULLY_IMPORTED','en','Process sucessfully imported','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ENABLE_HEART_BEAT','en','Contribute to the ProcessMaker project enabling heart beat anonymous usage data','2011-07-07' 
+SELECT 'LABEL','ID_ENABLE_HEART_BEAT','en','Contribute to the ProcessMaker project enabling heart beat anonymous usage data','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_READ_ONLINE_DOCUMENTATION','en','Read Online Documentation','2011-07-07' 
+SELECT 'LABEL','ID_READ_ONLINE_DOCUMENTATION','en','Read Online Documentation','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ARE_YOU_SURE_RESEND','en','Are you sure that you want to resend this message','2011-07-07' 
+SELECT 'LABEL','ID_ARE_YOU_SURE_RESEND','en','Are you sure that you want to resend this message','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PROCESSMAKER','en','ProcessMaker','2011-07-07' 
+SELECT 'LABEL','ID_PROCESSMAKER','en','ProcessMaker','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MAIL_SENT_SUCCESSFULLY','en','Your message has been sent successfully','2011-07-07' 
+SELECT 'LABEL','ID_MAIL_SENT_SUCCESSFULLY','en','Your message has been sent successfully','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_HEART_BEAT_DETAILS_1','en','The usage statistics will help the development team to better understand user requirements and prioritize improvements in future releases.','2011-07-07' 
+SELECT 'LABEL','ID_HEART_BEAT_DETAILS_1','en','The usage statistics will help the development team to better understand user requirements and prioritize improvements in future releases.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_HEART_BEAT_DETAILS_2','en','We cannot and will not reverse-engineer that collected data to find specific details concerning your projects.','2011-07-07' 
+SELECT 'LABEL','ID_HEART_BEAT_DETAILS_2','en','We cannot and will not reverse-engineer that collected data to find specific details concerning your projects.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SEE','en','See','2011-07-07' 
+SELECT 'LABEL','ID_SEE','en','See','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MORE_INFORMATION','en','more information','2011-07-07' 
+SELECT 'LABEL','ID_MORE_INFORMATION','en','more information','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CLEAR','en','Clear','2011-07-07' 
+SELECT 'LABEL','ID_CLEAR','en','Clear','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_JAVASCRIPT_CACHE','en','Javascript cache','2011-07-07' 
+SELECT 'LABEL','ID_JAVASCRIPT_CACHE','en','Javascript cache','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_FORMS_METADATA_CACHE','en','Forms metadata cache','2011-07-07' 
+SELECT 'LABEL','ID_FORMS_METADATA_CACHE','en','Forms metadata cache','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_FORMS_HTML_CACHE','en','Forms Html templates cache','2011-07-07' 
+SELECT 'LABEL','ID_FORMS_HTML_CACHE','en','Forms Html templates cache','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SUBJECT','en','Subject','2011-07-07' 
+SELECT 'LABEL','ID_SUBJECT','en','Subject','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_FROM','en','From','2011-07-07' 
+SELECT 'LABEL','ID_FROM','en','From','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_HEART_BEAT_ENABLED','en','Heart beat has been enabled','2011-07-07' 
+SELECT 'LABEL','ID_HEART_BEAT_ENABLED','en','Heart beat has been enabled','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_HEART_BEAT_DISABLED','en','Heart beat has been disabled','2011-07-07' 
+SELECT 'LABEL','ID_HEART_BEAT_DISABLED','en','Heart beat has been disabled','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_HAS_BEEN_DELETED','en','Has been deleted','2011-07-07' 
+SELECT 'LABEL','ID_HAS_BEEN_DELETED','en','Has been deleted','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_XPDL_IMPORT','en','Import XPDL','2011-07-07' 
+SELECT 'LABEL','ID_XPDL_IMPORT','en','Import XPDL','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_FILENAME','en','Filename','2011-07-07' 
+SELECT 'LABEL','ID_FILENAME','en','Filename','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_COMMENTS','en','Comments','2011-07-07' 
+SELECT 'LABEL','ID_COMMENTS','en','Comments','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CREATED_BY','en','Created By','2011-07-07' 
+SELECT 'LABEL','ID_CREATED_BY','en','Created By','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_REPORT_TABLE_TITLE','en','Title','2011-07-07' 
+SELECT 'LABEL','ID_REPORT_TABLE_TITLE','en','Title','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_REPORT_TABLE','en','Report Table','2011-07-07' 
+SELECT 'LABEL','ID_REPORT_TABLE','en','Report Table','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ASSIGNED_FIEDS','en','ASSIGNED FIELDS','2011-07-07' 
+SELECT 'LABEL','ID_ASSIGNED_FIEDS','en','ASSIGNED FIELDS','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SAVE_AND_CONTINUE','en','Save and Continue','2011-07-07' 
+SELECT 'LABEL','ID_SAVE_AND_CONTINUE','en','Save and Continue','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_NO_SELECTED_FIELDS','en','No selected fields','2011-07-07' 
+SELECT 'LABEL','ID_NO_SELECTED_FIELDS','en','No selected fields','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DYNAFORM_FIELD','en','Dynaform Field','2011-07-07' 
+SELECT 'LABEL','ID_DYNAFORM_FIELD','en','Dynaform Field','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_COMPLETE_VARCHAR','en','Complete the Varchar field size','2011-07-07' 
+SELECT 'LABEL','ID_COMPLETE_VARCHAR','en','Complete the Varchar field size','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DELETE_REPORT_TABLE','en','Do you want to delete the selected report tables?','2011-07-07' 
+SELECT 'LABEL','ID_DELETE_REPORT_TABLE','en','Do you want to delete the selected report tables?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DELETE_ALL_REPORT_TABLE','en','Do you want to delete all report tables?','2011-07-07' 
+SELECT 'LABEL','ID_DELETE_ALL_REPORT_TABLE','en','Do you want to delete all report tables?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DELETE_FIELDS','en','Do you want to delete the selected fields?','2011-07-07' 
+SELECT 'LABEL','ID_DELETE_FIELDS','en','Do you want to delete the selected fields?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DELETE_ALL_FIELDS','en','Do you want to delete all fields?','2011-07-07' 
+SELECT 'LABEL','ID_DELETE_ALL_FIELDS','en','Do you want to delete all fields?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_LOGIN_SETTINGS','en','Login Settings','2011-07-07' 
+SELECT 'LABEL','ID_LOGIN_SETTINGS','en','Login Settings','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_YOUR_USERMANE_IS','en','Your username is','2011-07-07' 
+SELECT 'LABEL','ID_YOUR_USERMANE_IS','en','Your username is','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ENABLE_FORGOT_PASSWORD','en','Forgot password was enabled','2011-07-07' 
+SELECT 'LABEL','ID_ENABLE_FORGOT_PASSWORD','en','Forgot password was enabled','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DISABLE_FORGOT_PASSWORD','en','Forgot password was disabled','2011-07-07' 
+SELECT 'LABEL','ID_DISABLE_FORGOT_PASSWORD','en','Forgot password was disabled','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_USER_NOT_REGISTER','en','the user is not register','2011-07-07' 
+SELECT 'LABEL','ID_USER_NOT_REGISTER','en','the user is not register','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_THANKS_USE_SERVICES','en','Thanks for using the ProcessMaker services','2011-07-07' 
+SELECT 'LABEL','ID_THANKS_USE_SERVICES','en','Thanks for using the ProcessMaker services','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_RESET_PASSWORD','en','Reset password','2011-07-07' 
+SELECT 'LABEL','ID_RESET_PASSWORD','en','Reset password','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_YOUR_PASSWORD_IS','en','Your password is','2011-07-07' 
+SELECT 'LABEL','ID_YOUR_PASSWORD_IS','en','Your password is','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ENABLE_FOTGOT_PASSWORD','en','Enable Forgot password','2011-07-07' 
+SELECT 'LABEL','ID_ENABLE_FOTGOT_PASSWORD','en','Enable Forgot password','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_NEW_PASSWORD_SENT','en','Your new password was sent to your email account!','2011-07-07' 
+SELECT 'LABEL','ID_NEW_PASSWORD_SENT','en','Your new password was sent to your email account!','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_IS_NOT_REGISTERED','en','is not registered!','2011-07-07' 
+SELECT 'LABEL','ID_IS_NOT_REGISTERED','en','is not registered!','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_EMAIL_ENGINE_IS_NOT_ENABLED','en','The "Email Notifications" is not enabled, please contact to your System Administrator.','2011-07-07' 
+SELECT 'LABEL','ID_EMAIL_ENGINE_IS_NOT_ENABLED','en','The "Email Notifications" is not enabled, please contact to your System Administrator.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_EMAIL_ENTER_VALID','en','Please enter a valid email address.','2011-07-07' 
+SELECT 'LABEL','ID_EMAIL_ENTER_VALID','en','Please enter a valid email address.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PROFILE','en','Profile','2011-07-07' 
+SELECT 'LABEL','ID_PROFILE','en','Profile','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PLEASE_SELECT_PHOTO','en','Please select a photo','2011-07-07' 
+SELECT 'LABEL','ID_PLEASE_SELECT_PHOTO','en','Please select a photo','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_RESUME','en','RÃ©sumÃ©','2011-07-07' 
+SELECT 'LABEL','ID_RESUME','en','Résumé','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_USER_ID','en','User ID (*)','2011-07-07' 
+SELECT 'LABEL','ID_USER_ID','en','User ID (*)','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PHONE','en','Phone','2011-07-07' 
+SELECT 'LABEL','ID_PHONE','en','Phone','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_NEW_PASSWORD','en','New Password','2011-07-07' 
+SELECT 'LABEL','ID_NEW_PASSWORD','en','New Password','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CONFIRM_PASSWORD','en','Confirm Password','2011-07-07' 
+SELECT 'LABEL','ID_CONFIRM_PASSWORD','en','Confirm Password','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PASSWORDS_DONT_MATCH','en','The password fields don''t match.','2011-07-07' 
+SELECT 'LABEL','ID_PASSWORDS_DONT_MATCH','en','The password fields don''t match.','2011-08-25' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_VALIDATED_FIELDS','en','The following fields have invalid values','2011-07-07' 
+SELECT 'JAVASCRIPT','ID_VALIDATED_FIELDS','en','The following fields have invalid values','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_VALIDATED_FIELDS','en','The following fields have invalid values','2011-07-07' 
+SELECT 'LABEL','ID_VALIDATED_FIELDS','en','The following fields have invalid values','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CHANGE_PASSWORD','en','Change Password','2011-07-07' 
+SELECT 'LABEL','ID_CHANGE_PASSWORD','en','Change Password','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DEFAULT_MAIN_MENU_OPTION','en','Default Main Menu Option','2011-07-07' 
+SELECT 'LABEL','ID_DEFAULT_MAIN_MENU_OPTION','en','Default Main Menu Option','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DEFAULT_CASES_MENU_OPTION','en','Default Cases Menu option','2011-07-07' 
+SELECT 'LABEL','ID_DEFAULT_CASES_MENU_OPTION','en','Default Cases Menu option','2011-08-25' 
  ;
 INSERT INTO [TRANSLATION] ([TRN_CATEGORY],[TRN_ID],[TRN_LANG],[TRN_VALUE],[TRN_UPDATE_DATE]) 
 
-SELECT 'LABEL','ID_INFORMATION_WAS_STORED_SUCCESSFULLY','en','information was stored successfully','2011-07-07' 
+SELECT 'LABEL','ID_INFORMATION_WAS_STORED_SUCCESSFULLY','en','information was stored successfully','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PREFERENCES','en','Preferences','2011-07-07' 
+SELECT 'LABEL','ID_PREFERENCES','en','Preferences','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PERSONAL_INFORMATION','en','Personal information','2011-07-07' 
+SELECT 'LABEL','ID_PERSONAL_INFORMATION','en','Personal information','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','NEW_SITE_SUCCESS','en','Your new site was successfully created with  name:','2011-07-07' 
+SELECT 'LABEL','NEW_SITE_SUCCESS','en','Your new site was successfully created with  name:','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','NEW_SITE_SUCCESS_CONFIRMNOTE','en','Note.- If you open the new site your  current session will be closed.','2011-07-07' 
+SELECT 'LABEL','NEW_SITE_SUCCESS_CONFIRMNOTE','en','Note.- If you open the new site your  current session will be closed.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','NEW_SITE_SUCCESS_CONFIRM','en','Do you want open the new site?','2011-07-07' 
+SELECT 'LABEL','NEW_SITE_SUCCESS_CONFIRM','en','Do you want open the new site?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','NEW_SITE_NOT_AVAILABLE','en','This site is not available','2011-07-07' 
+SELECT 'LABEL','NEW_SITE_NOT_AVAILABLE','en','This site is not available','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','NEW_SITE_CONFIRM_TO_CREATE','en','Are you sure to create this site?','2011-07-07' 
+SELECT 'LABEL','NEW_SITE_CONFIRM_TO_CREATE','en','Are you sure to create this site?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SAVING','en','Saving...','2011-07-07' 
+SELECT 'LABEL','ID_SAVING','en','Saving...','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SET_A_TABLE_NAME','en','Set a Table Name','2011-07-07' 
+SELECT 'LABEL','ID_SET_A_TABLE_NAME','en','Set a Table Name','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SET_TABLE_DESCRIPTION','en','Set a Table Description','2011-07-07' 
+SELECT 'LABEL','ID_SET_TABLE_DESCRIPTION','en','Set a Table Description','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SELECT_GRID','en','Select a grid','2011-07-07' 
+SELECT 'LABEL','ID_SELECT_GRID','en','Select a grid','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_GLOBAL','en','Global','2011-07-07' 
+SELECT 'LABEL','ID_GLOBAL','en','Global','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DB_CONNECTION','en','DB Connection','2011-07-07' 
+SELECT 'LABEL','ID_DB_CONNECTION','en','DB Connection','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DYNAFORM_FIELDS','en','Dynaform Fields','2011-07-07' 
+SELECT 'LABEL','ID_DYNAFORM_FIELDS','en','Dynaform Fields','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_FIELD_LABEL','en','Field Label','2011-07-07' 
+SELECT 'LABEL','ID_FIELD_LABEL','en','Field Label','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ADD_CUSTOM_COLUMN','en','Add Custom Column','2011-07-07' 
+SELECT 'LABEL','ID_ADD_CUSTOM_COLUMN','en','Add Custom Column','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_VARCHAR','en','VARCHAR','2011-07-07' 
+SELECT 'LABEL','ID_VARCHAR','en','VARCHAR','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_TEXT','en','TEXT','2011-07-07' 
+SELECT 'LABEL','ID_TEXT','en','TEXT','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DATE','en','DATE','2011-07-07' 
+SELECT 'LABEL','ID_DATE','en','DATE','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_INT','en','INT','2011-07-07' 
+SELECT 'LABEL','ID_INT','en','INT','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_FLOAT','en','FLOAT','2011-07-07' 
+SELECT 'LABEL','ID_FLOAT','en','FLOAT','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_UPDATE','en','Update','2011-07-07' 
+SELECT 'LABEL','ID_UPDATE','en','Update','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_ALL_RECORDS_DELETED_SUCESSFULLY','en','All records was deleted successfully!','2011-07-07' 
+SELECT 'LABEL','ID_ALL_RECORDS_DELETED_SUCESSFULLY','en','All records was deleted successfully!','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_DELETION_SUCCESSFULLY','en','DELETION SUCCESSFULLY','2011-07-07' 
+SELECT 'LABEL','ID_DELETION_SUCCESSFULLY','en','DELETION SUCCESSFULLY','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CASES_NOTES','en','Case Notes','2011-07-14' 
+SELECT 'LABEL','ID_CASES_NOTES','en','Case Notes','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CASES_NOTES_POST','en','Post a Note','2011-07-14' 
+SELECT 'LABEL','ID_CASES_NOTES_POST','en','Post a Note','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CASES_NOTE_POSTING','en','Posting a Note','2011-07-14' 
+SELECT 'LABEL','ID_CASES_NOTE_POSTING','en','Posting a Note','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CASES_NOTE_POST_ERROR','en','Post Error','2011-07-14' 
+SELECT 'LABEL','ID_CASES_NOTE_POST_ERROR','en','Post Error','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CASES_NOTE_POST_FAILED','en','There is a server error','2011-07-14' 
+SELECT 'LABEL','ID_CASES_NOTE_POST_FAILED','en','There is a server error','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CASES_NOTE_POST_SUCCESS','en','Note successfully posted','2011-07-14' 
+SELECT 'LABEL','ID_CASES_NOTE_POST_SUCCESS','en','Note successfully posted','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CASE_NOTES_EMPTY','en','No notes to Display','2011-07-14' 
+SELECT 'LABEL','ID_CASE_NOTES_EMPTY','en','No notes to Display','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CASE_NOTES_LOADING','en','Loading Notes...','2011-07-14' 
+SELECT 'LABEL','ID_CASE_NOTES_LOADING','en','Loading Notes...','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CASE_NOTES_MORE','en','Show more notes','2011-07-14' 
+SELECT 'LABEL','ID_CASE_NOTES_MORE','en','Show more notes','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_NOTES_READY','en','Ready','2011-07-14' 
+SELECT 'LABEL','ID_NOTES_READY','en','Ready','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SUBMIT_NOTE','en','Post a Note','2011-07-14' 
+SELECT 'LABEL','ID_SUBMIT_NOTE','en','Post Note','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_BUTTON','en','Button','2011-07-18' 
+SELECT 'LABEL','ID_BUTTON','en','Button','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SPLIT_BUTTON','en','Split Button','2011-07-18' 
+SELECT 'LABEL','ID_SPLIT_BUTTON','en','Split Button','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_WESTPANEL','en','westPanel','2011-07-18' 
+SELECT 'LABEL','ID_WESTPANEL','en','westPanel','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SOUTHPANEL','en','southPanel','2011-07-18' 
+SELECT 'LABEL','ID_SOUTHPANEL','en','southPanel','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_EASTPANEL','en','eastPanel','2011-07-18' 
+SELECT 'LABEL','ID_EASTPANEL','en','eastPanel','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_VIEW_EDIT_PROFILE','en','View/Edit Profile','2011-07-18' 
+SELECT 'LABEL','ID_VIEW_EDIT_PROFILE','en','View/Edit Profile','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_FULL_TEXT_SEARCH','en','Full Text Search','2011-07-18' 
+SELECT 'LABEL','ID_FULL_TEXT_SEARCH','en','Full Text Search','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_VALIDATION_ERRORS','en','validation Errors','2011-07-18' 
+SELECT 'LABEL','ID_VALIDATION_ERRORS','en','validation Errors','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SERVER_PROBLEM','en','Server Problem :','2011-07-18' 
+SELECT 'LABEL','ID_SERVER_PROBLEM','en','Server Problem :','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SELECT_WORKSPACE','en','Select a workspace','2011-07-18' 
+SELECT 'LABEL','ID_SELECT_WORKSPACE','en','Select a workspace','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_EXIT_EDITOR','en','Exit Editor','2011-07-18' 
+SELECT 'LABEL','ID_EXIT_EDITOR','en','Exit Editor','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PMTABLES','en','PM Tables','2011-07-22' 
+SELECT 'LABEL','ID_PMTABLES','en','PM Tables','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CLOSE_EDITOR','en','Close Editor','2011-07-28' 
+SELECT 'LABEL','ID_CLOSE_EDITOR','en','Close Editor','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_NEW_REPORT_TABLE_OLD','en','New Report Table (Old Version)','2011-07-22' 
+SELECT 'LABEL','ID_NEW_REPORT_TABLE_OLD','en','New Report Table (Old Version)','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PMTABLE','en','PM Table','2011-07-22' 
+SELECT 'LABEL','ID_PMTABLE','en','PM Table','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_NULL','en','Null','2011-07-22' 
+SELECT 'LABEL','ID_NULL','en','Null','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_TABLES_TO_EXPORT','en','Tables To Export','2011-07-22' 
+SELECT 'LABEL','ID_TABLES_TO_EXPORT','en','Tables To Export','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_PMTABLES_NOTICE_EXPORT','en','From each table you should select Schema/Data to export at least one.','2011-07-22' 
+SELECT 'LABEL','ID_PMTABLES_NOTICE_EXPORT','en','From each table you should select Schema/Data to export at least one.','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CONFIRM_DELETE_SKIN','en','Do you want to delete selected skin?','2011-07-26' 
+SELECT 'LABEL','ID_CONFIRM_DELETE_SKIN','en','Do you want to delete selected skin?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MESSAGE_SUBJECT_NOTE_NOTIFICATION','en','A note has added to a case','2011-07-26' 
+SELECT 'LABEL','ID_MESSAGE_SUBJECT_NOTE_NOTIFICATION','en','A note has added to a case','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MSG_CANNOT_EXPORT_DEFAULT_SKIN','en','Default skin can''t be exported. Instead create new one based on default','2011-07-26' 
+SELECT 'LABEL','ID_MSG_CANNOT_EXPORT_DEFAULT_SKIN','en','Default skin can''t be exported. Instead create new one based on default','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_MSG_CANNOT_EXPORT_SKIN','en','Can''t export skin. Server Error','2011-07-26' 
+SELECT 'LABEL','ID_MSG_CANNOT_EXPORT_SKIN','en','Can''t export skin. Server Error','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_NEW_SKIN','en','New Skin','2011-07-26' 
+SELECT 'LABEL','ID_NEW_SKIN','en','New Skin','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SKIN_ALREADY_EXISTS','en','Skin already exists','2011-07-26' 
+SELECT 'LABEL','ID_SKIN_ALREADY_EXISTS','en','Skin already exists','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SKIN_BASE','en','Base skin','2011-07-26' 
+SELECT 'LABEL','ID_SKIN_BASE','en','Base skin','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SKIN_CONFIGURATION_MISSING','en','Missing skin configuration file','2011-07-26' 
+SELECT 'LABEL','ID_SKIN_CONFIGURATION_MISSING','en','Missing skin configuration file','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SKIN_CREATING','en','Generating Skin','2011-07-26' 
+SELECT 'LABEL','ID_SKIN_CREATING','en','Generating Skin','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SKIN_DOESNT_EXIST','en','Skin doesn''t exists','2011-07-26' 
+SELECT 'LABEL','ID_SKIN_DOESNT_EXIST','en','Skin doesn''t exists','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SKIN_ERROR_EXTRACTING','en','Error extracting skin','2011-07-26' 
+SELECT 'LABEL','ID_SKIN_ERROR_EXTRACTING','en','Error extracting skin','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SKIN_EXPORTING','en','Exporting Skin','2011-07-26' 
+SELECT 'LABEL','ID_SKIN_EXPORTING','en','Exporting Skin','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SKIN_FILE_REQUIRED','en','Skin file required','2011-07-26' 
+SELECT 'LABEL','ID_SKIN_FILE_REQUIRED','en','Skin file required','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SKIN_FOLDER','en','Folder name','2011-07-26' 
+SELECT 'LABEL','ID_SKIN_FOLDER','en','Folder name','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SKIN_FOLDER_NOT_DELETEABLE','en','Can''t delete default skin','2011-07-26' 
+SELECT 'LABEL','ID_SKIN_FOLDER_NOT_DELETEABLE','en','Can''t delete default skin','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SKIN_FOLDER_PERMISSIONS','en','Not enough permissions in Skin Folder','2011-07-26' 
+SELECT 'LABEL','ID_SKIN_FOLDER_PERMISSIONS','en','Not enough permissions in Skin Folder','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SKIN_FOLDER_REQUIRED','en','Skin folder name is required','2011-07-26' 
+SELECT 'LABEL','ID_SKIN_FOLDER_REQUIRED','en','Skin folder name is required','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SKIN_IMPORTING','en','Importing Skin','2011-07-26' 
+SELECT 'LABEL','ID_SKIN_IMPORTING','en','Importing Skin','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SKIN_NAME_REQUIRED','en','Skin Name is required','2011-07-26' 
+SELECT 'LABEL','ID_SKIN_NAME_REQUIRED','en','Skin Name is required','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SKIN_SUCCESS_CREATE','en','Skin successfully created','2011-07-26' 
+SELECT 'LABEL','ID_SKIN_SUCCESS_CREATE','en','Skin successfully created','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SKIN_SUCCESS_DELETE','en','Skin successfully deleted','2011-07-26' 
+SELECT 'LABEL','ID_SKIN_SUCCESS_DELETE','en','Skin successfully deleted','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SKIN_SUCCESS_IMPORTED','en','Skin successfully imported','2011-07-26' 
+SELECT 'LABEL','ID_SKIN_SUCCESS_IMPORTED','en','Skin successfully imported','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_SKIN_SWITCHING','en','Switching Skin','2011-07-26' 
+SELECT 'LABEL','ID_SKIN_SWITCHING','en','Switching Skin','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_CONFIRM_REMOVE_FIELD','en','Do you really want remove this field?','2011-07-27' 
+SELECT 'LABEL','ID_CONFIRM_REMOVE_FIELD','en','Do you really want remove this field?','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_INVALID_EXTENSION','en','Invalid file extension!','2011-07-28' 
+SELECT 'LABEL','ID_INVALID_EXTENSION','en','Invalid file extension!','2011-08-25' 
   UNION ALL
-SELECT 'LABEL','ID_NEW_PMTABLE','en','New PM Table','2011-07-28' 
+SELECT 'LABEL','ID_NEW_PMTABLE','en','New PM Table','2011-08-25' 
  ;
-;
+INSERT INTO [TRANSLATION] ([TRN_CATEGORY],[TRN_ID],[TRN_LANG],[TRN_VALUE],[TRN_UPDATE_DATE]) 
+
+SELECT 'LABEL','ID_APPLY_AS_MAIN_LOGO','en','Apply as main logo','2011-08-25' 
+  UNION ALL
+SELECT 'LABEL','ID_YOU_ARE_NOT_CAN_SELECT_PHOTO','en','You are not can select more one photo','2011-08-25' 
+  UNION ALL
+SELECT 'LABEL','ID_SELECT_AN_IMAGE','en','Please select an image','2011-08-25' 
+  UNION ALL
+SELECT 'LABEL','PHOTO_GALLERY','en','Photo gallery','2011-08-25' 
+  UNION ALL
+SELECT 'LABEL','ID_IMAGES_SELECTED','en','images selected','2011-08-25' 
+  UNION ALL
+SELECT 'LABEL','ID_UPLOAD_IMAGE','en','Upload image','2011-08-25' 
+  UNION ALL
+SELECT 'LABEL','ID_SELECT_FILE','en','Select a file','2011-08-25' 
+  UNION ALL
+SELECT 'LABEL','ID_IMAGE','en','Image','2011-08-25' 
+  UNION ALL
+SELECT 'LABEL','ID_YOUR_IMAGE_HAS_BEEN_SUCCESSFULLY','en','Your image has been successfully uploaded','2011-08-25' 
+  UNION ALL
+SELECT 'LABEL','ID_ERROR_UPLOADING_IMAGE_TYPE','en','Error uploading image, wrong file type','2011-08-25' 
+  UNION ALL
+SELECT 'LABEL','ID_UPLOADING_IMAGE_WRONG_SIZE','en','Error uploading image, wrong file size','2011-08-25' 
+  UNION ALL
+SELECT 'LABEL','ID_SUCCESS','en','Success','2011-08-25' 
+  UNION ALL
+SELECT 'LABEL','IMAGE_DETAIL','en','Image detail','2011-08-25' 
+  UNION ALL
+SELECT 'LABEL','ID_SELECTED','en','selected','2011-08-25' 
+  UNION ALL
+SELECT 'LABEL','ID_REPORT_TABLES_DATA_EXPORT_NOT_ALLOWED','en','Data export for Report Tables is not allowed!','2011-08-25' 
+  UNION ALL
+SELECT 'LABEL','ID_FORGOT_PASSWORD','en','Forgot Password','2011-08-25' 
+  UNION ALL
+SELECT 'LABEL','ID_FORGOT_PASSWORD_Q','en','Forgot Password?','2011-08-25' 
+  UNION ALL
+SELECT 'LABEL','ID_SEND','en','Send','2011-08-25' 
+  UNION ALL
+SELECT 'LABEL','ID_EMAIL_DOES_NOT_MATCH_FOR_USER','en','The email doesn''t match for user:','2011-08-25' 
+  UNION ALL
+SELECT 'LABEL','ID_PASSWORD_CHANGED_SUCCESSFULLY','en','Your password has been successfully changed to','2011-08-25' 
+  UNION ALL
+SELECT 'LABEL','ID_PROCESSMAKER_FORGOT_PASSWORD_SERVICE','en','ProcessMaker Forgot Password Service','2011-08-25' 
+  UNION ALL
+SELECT 'LABEL','ID_PROCESSMAKER_SLOGAN1','en','This Business Process is Powered By ProcessMaker','2011-08-25' 
+  UNION ALL
+SELECT 'LABEL','ID_VISIT','en','Visit','2011-08-25' 
+  UNION ALL
+SELECT 'LABEL','ID_APPLY','en','Apply','2011-08-25' 
+  UNION ALL
+SELECT 'LABEL','ID_RESTORE_DEFAULT','en','Restore default','2011-08-25' 
+  UNION ALL
+SELECT 'LABEL','ID_NO_IMAGES_TO_DISPLAY','en','No images to display','2011-08-25' 
+  UNION ALL
+SELECT 'LABEL','ID_PMTABLES_ALERT1','en','You can''t repeat a column name, please rename:','2011-08-25' 
+  UNION ALL
+SELECT 'LABEL','ID_PMTABLES_ALERT2','en','Field Name for all columns is required.','2011-08-25' 
+  UNION ALL
+SELECT 'LABEL','ID_PMTABLES_ALERT3','en','Field Label for all columns is required.','2011-08-25' 
+  UNION ALL
+SELECT 'LABEL','ID_PMTABLES_ALERT4','en','Please set a field type for','2011-08-25' 
+  UNION ALL
+SELECT 'LABEL','ID_PMTABLES_ALERT5','en','Please set a field size for:','2011-08-25' 
+  UNION ALL
+SELECT 'LABEL','ID_PMTABLES_ALERT6','en','You need set one column at least as Primary Key.','2011-08-25' 
+  UNION ALL
+SELECT 'LABEL','ID_PMTABLES_ALERT7','en','Set columns for this Report Table please.','2011-08-25' 
+  UNION ALL
+SELECT 'LABEL','ID_AUTO_INCREMENT','en','Auto Increment','2011-08-25' 
+  UNION ALL
+SELECT 'LABEL','ID_CAPS_LOCK_IS_ON','en','Caps Lock is On','2011-08-25' 
+  UNION ALL
+SELECT 'LABEL','ID_ENABLE_VIRTUAL_KEYBOARD','en','Enable Virtual Keyboard','2011-08-25' 
+  UNION ALL
+SELECT 'LABEL','ID_DEFAULT_LANGUAGE','en','Default Language','2011-08-25' 
+  UNION ALL
+SELECT 'LABEL','ID_CAPS_LOCK_ALERT2','en','You should press Caps Lock to turn it off before entering your password.','2011-08-25' 
+  UNION ALL
+SELECT 'LABEL','ID_CAPS_LOCK_ALERT1','en','Having Caps Lock on may cause you to enter your password incorrectly.','2011-08-25' 
+  UNION ALL
+SELECT 'LABEL','ID_SYSTEM_INFO','en','System information','2011-08-25' 
+  UNION ALL
+SELECT 'LABEL','ID_SHOW_CASES_NOTES','en','Show Case Notes','2011-08-25' 
+  UNION ALL
+SELECT 'LABEL','ID_CASES_NUM','en','# Cases','2011-08-25' 
+  UNION ALL
+SELECT 'JAVASCRIPT','ID_CASES_NUM','en','# Cases','2011-08-25' 
+  UNION ALL
+SELECT 'LABEL','EMAIL_ENGINE','en','Email Engine','2011-08-25' 
+  UNION ALL
+SELECT 'LABEL','ID_CONFIGURATION','en','Configuration','2011-08-25' 
+  UNION ALL
+SELECT 'LABEL','PORT_DEFAULT','en','Port (default 25)','2011-08-25' 
+  UNION ALL
+SELECT 'LABEL','REQUIRE_AUTHENTICATION','en','Require authentication','2011-08-25' 
+  UNION ALL
+SELECT 'LABEL','ACCOUNT_FROM','en','Account From','2011-08-25' 
+  UNION ALL
+SELECT 'LABEL','SEND_TEST_MAIL','en','Send a test mail','2011-08-25' 
+  UNION ALL
+SELECT 'LABEL','MAIL_TO','en','Mail to','2011-08-25' 
+  UNION ALL
+SELECT 'LABEL','USE_SECURE_CONNECTION','en','Use Secure Connection','2011-08-25' 
+  UNION ALL
+SELECT 'LABEL','TESTING_EMAIL_CONF','en','Testing email configuration','2011-08-25' 
+  UNION ALL
+SELECT 'LABEL','MSG_REQ_AUTH','en','First you have to check the Require Authentication box','2011-08-25' 
+  UNION ALL
+SELECT 'LABEL','RESOLVING_NAME','en','Resolving Host Name','2011-08-25' 
+  UNION ALL
+SELECT 'LABEL','TEST_HAS','en','The test has','2011-08-25' 
+  UNION ALL
+SELECT 'LABEL','SERVER_RESPONSE','en','Server Response','2011-08-25' 
+  UNION ALL
+SELECT 'LABEL','ESTABLISHING_CON_HOST','en','Establishing connection to host','2011-08-25' 
+  UNION ALL
+SELECT 'LABEL','LOGIN_AS','en','Login as','2011-08-25' 
+  UNION ALL
+SELECT 'LABEL','SMTP_SERVER','en','SMTP Server','2011-08-25' 
+  UNION ALL
+SELECT 'LABEL','SENDING_TEST_EMAIL','en','Sending a test mail to','2011-08-25' 
+  UNION ALL
+SELECT 'LABEL','STEP1','en','Step 1','2011-08-25' 
+  UNION ALL
+SELECT 'LABEL','STEP2','en','Step 2','2011-08-25' 
+  UNION ALL
+SELECT 'LABEL','STEP3','en','Step 3','2011-08-25' 
+  UNION ALL
+SELECT 'LABEL','STEP4','en','Step 4','2011-08-25' 
+  UNION ALL
+SELECT 'LABEL','ID_ENABLE_EMAIL_NOTIFICATION','en','Enable Email Notifications','2011-08-25' 
+  UNION ALL
+SELECT 'JAVASCRIPT','ID_LOST_SESSION_XMLFORM','en','You have lost your session and you have to login to continue.','2011-08-25' 
+ ;
 
 INSERT INTO ISO_LOCATION ([IC_UID],[IL_UID],[IL_NAME],[IL_NORMAL_NAME],[IS_UID]) 
 SELECT 'AD','','','',''  UNION ALL
@@ -12523,7 +12656,7 @@ SELECT 'CA','WAR','Fort Ware','','BC'  UNION ALL
 SELECT 'CA','WAS','Waskatenau','','AB'  UNION ALL
 SELECT 'CA','WAT','Watson Lake','','YT'  UNION ALL
 SELECT 'CA','WAW','Wawanesa','','MB'  UNION ALL
-SELECT 'CA','WBG','WarburgÃ‚Â ','','AB'  UNION ALL
+SELECT 'CA','WBG','WarburgÃƒâ€šÃ‚Â ','','AB'  UNION ALL
 SELECT 'CA','WBK','Westbank','','BC'  UNION ALL
 SELECT 'CA','WBN','Winterburn','','AB'  UNION ALL
 SELECT 'CA','WBO','Wimborne','','AB'  UNION ALL
@@ -15546,7 +15679,7 @@ SELECT 'CZ','VCE','Velke Opatovice','',''  UNION ALL
 SELECT 'CZ','VCH','Vysoky Chlumec','',''  UNION ALL
 SELECT 'CZ','VCR','Volduchy','',''  UNION ALL
 SELECT 'CZ','VEA','Ceske Velenice','',''  UNION ALL
-SELECT 'CZ','VEB','Velka BiteÃ…Â¡','',''  UNION ALL
+SELECT 'CZ','VEB','Velka BiteÃƒâ€¦Ã‚Â¡','',''  UNION ALL
 SELECT 'CZ','VEL','Veletov','',''  UNION ALL
 SELECT 'CZ','VFA','Varnsdorf','',''  UNION ALL
 SELECT 'CZ','VIM','Vimperk','','' ;
@@ -18007,7 +18140,7 @@ SELECT 'DE','PEZ','Penzberg','','BY'  UNION ALL
 SELECT 'DE','PFA','Pfaffenhofen an der Ilm','','BY'  UNION ALL
 SELECT 'DE','PFD','Pleinfeld','','BY'  UNION ALL
 SELECT 'DE','PFE','Pfatter','','BY'  UNION ALL
-SELECT 'DE','PFF','PfaffenhausenÃ‚Â ','','BY'  UNION ALL
+SELECT 'DE','PFF','PfaffenhausenÃƒâ€šÃ‚Â ','','BY'  UNION ALL
 SELECT 'DE','PFJ','Pfaffenhofen an der Glonn','','BY'  UNION ALL
 SELECT 'DE','PFK','Pfarrkirchen','','BY'  UNION ALL
 SELECT 'DE','PFN','Pfullingen','','BW'  UNION ALL
@@ -23563,7 +23696,7 @@ SELECT 'FR','FDN','Fleville-devant-Nancy','','54'  UNION ALL
 SELECT 'FR','FDO','Fours','','33'  UNION ALL
 SELECT 'FR','FDS','Fondettes','','37'  UNION ALL
 SELECT 'FR','FDU','Ferdrupt','','88'  UNION ALL
-SELECT 'FR','FEA','Ferrieres-en-GatinaisÃ‚Â ','','45'  UNION ALL
+SELECT 'FR','FEA','Ferrieres-en-GatinaisÃƒâ€šÃ‚Â ','','45'  UNION ALL
 SELECT 'FR','FEC','Fecamp','','76'  UNION ALL
 SELECT 'FR','FEE','Fresse','','70'  UNION ALL
 SELECT 'FR','FEG','Fegersheim','','67'  UNION ALL
@@ -25123,7 +25256,7 @@ SELECT 'FR','MZM','Metz','','57'  UNION ALL
 SELECT 'FR','MZN','Mouzon','','08'  UNION ALL
 SELECT 'FR','MZO','Mazion','','33'  UNION ALL
 SELECT 'FR','MZQ','Montpezat-de-Quercy','','82'  UNION ALL
-SELECT 'FR','MZR','MazeresÃ‚Â ','','33'  UNION ALL
+SELECT 'FR','MZR','MazeresÃƒâ€šÃ‚Â ','','33'  UNION ALL
 SELECT 'FR','MZS','Mezieres-sur-Seine','','78'  UNION ALL
 SELECT 'FR','MZT','Metz-Tessy','','74'  UNION ALL
 SELECT 'FR','MZV','Mazet-St-Voy','','43'  UNION ALL
@@ -25769,7 +25902,7 @@ SELECT 'FR','PYI','Peyrilhac','','87'  UNION ALL
 SELECT 'FR','PYL','Pouilly-sous-Charlieu','','42'  UNION ALL
 SELECT 'FR','PYM','Puligny-Montrachet','','21'  UNION ALL
 SELECT 'FR','PYN','Peynier','','13'  UNION ALL
-SELECT 'FR','PYP','PeypinÃ‚Â ','','13'  UNION ALL
+SELECT 'FR','PYP','PeypinÃƒâ€šÃ‚Â ','','13'  UNION ALL
 SELECT 'FR','PYR','Peyrins','','26'  UNION ALL
 SELECT 'FR','PYS','Peyruis','','04'  UNION ALL
 SELECT 'FR','PYV','Le Perray-en-Yvelines','','78'  UNION ALL
@@ -26632,7 +26765,7 @@ SELECT 'FR','TCY','Saint-Cyr-de-Favieres','','42'  UNION ALL
 SELECT 'FR','TDA','St-Tugdual','','56'  UNION ALL
 SELECT 'FR','TDB','La Teste-de-Buch','','33'  UNION ALL
 SELECT 'FR','TDC','Thedirac','','46'  UNION ALL
-SELECT 'FR','TDD','St  DidierÃ‚Â ','','84'  UNION ALL
+SELECT 'FR','TDD','St  DidierÃƒâ€šÃ‚Â ','','84'  UNION ALL
 SELECT 'FR','TDE','Tallende','','63'  UNION ALL
 SELECT 'FR','TDI','Theding','','57'  UNION ALL
 SELECT 'FR','TDS','Taillades','','84'  UNION ALL
@@ -27033,7 +27166,7 @@ SELECT 'FR','VGU','Valergues','','34'  UNION ALL
 SELECT 'FR','VGX','Vigneux','',''  UNION ALL
 SELECT 'FR','VGY','Vigy','','57'  UNION ALL
 SELECT 'FR','VHA','Vitrolles','','05'  UNION ALL
-SELECT 'FR','VHC','Villefranche-sur-CherÃ‚Â ','','41'  UNION ALL
+SELECT 'FR','VHC','Villefranche-sur-CherÃƒâ€šÃ‚Â ','','41'  UNION ALL
 SELECT 'FR','VHI','Vauchretien','','49'  UNION ALL
 SELECT 'FR','VHN','Le Valdahon','','25'  UNION ALL
 SELECT 'FR','VHO','Venthon','','73'  UNION ALL
@@ -43437,7 +43570,7 @@ SELECT 'PL','TBZ','Trzebiez','',''  UNION ALL
 SELECT 'PL','TDZ','Tubadzin','',''  UNION ALL
 SELECT 'PL','TEN','Tenczynek','',''  UNION ALL
 SELECT 'PL','TER','Terespol','',''  UNION ALL
-SELECT 'PL','TES','TeresinÃ‚Â ','',''  UNION ALL
+SELECT 'PL','TES','TeresinÃƒâ€šÃ‚Â ','',''  UNION ALL
 SELECT 'PL','TGO','Tarnowskie Gory','',''  UNION ALL
 SELECT 'PL','TMO','Tolkmicko','',''  UNION ALL
 SELECT 'PL','TMW','Tomaszow Mazowiecki','',''  UNION ALL
@@ -44243,7 +44376,7 @@ SELECT 'RO','BCA','Borca','',''  UNION ALL
 SELECT 'RO','BCM','Bacau','',''  UNION ALL
 SELECT 'RO','BCN','Beclean','',''  UNION ALL
 SELECT 'RO','BCO','Bacova','',''  UNION ALL
-SELECT 'RO','BCT','BechetÃ‚Â ','',''  UNION ALL
+SELECT 'RO','BCT','BechetÃƒâ€šÃ‚Â ','',''  UNION ALL
 SELECT 'RO','BCU','Baciu, Cluj','',''  UNION ALL
 SELECT 'RO','BDI','Bodesti','',''  UNION ALL
 SELECT 'RO','BDU','Bragadiru, Ilfov','',''  UNION ALL
@@ -51286,7 +51419,7 @@ SELECT 'US','GXV','Gilbertsville','','PA'  UNION ALL
 SELECT 'US','GXX','Greer','','SC'  UNION ALL
 SELECT 'US','GXY','Greeley','','CO'  UNION ALL
 SELECT 'US','GY2','Gascoyne','','ND'  UNION ALL
-SELECT 'US','GY3','GridleyÃ‚Â ','','CA'  UNION ALL
+SELECT 'US','GY3','GridleyÃƒâ€šÃ‚Â ','','CA'  UNION ALL
 SELECT 'US','GY4','Gurley','','AL'  UNION ALL
 SELECT 'US','GY5','Gray','','TN'  UNION ALL
 SELECT 'US','GYA','Gray','','LA'  UNION ALL
@@ -55074,7 +55207,7 @@ SELECT 'US','PGT','Pennington','','AR'  UNION ALL
 SELECT 'US','PGV','Greenville','','NC'  UNION ALL
 SELECT 'US','PGW','Parkwood','','PA'  UNION ALL
 SELECT 'US','PGY','Spring Valley, San Diego','','CA'  UNION ALL
-SELECT 'US','PH2','PocahontasÃ‚Â ','','MS'  UNION ALL
+SELECT 'US','PH2','PocahontasÃƒâ€šÃ‚Â ','','MS'  UNION ALL
 SELECT 'US','PH3','Philmont','','NY'  UNION ALL
 SELECT 'US','PH4','Panhandle, Cass','','TX'  UNION ALL
 SELECT 'US','PHA','Phenix City','','AL' ;

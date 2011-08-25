@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: ProcessMaker (Branch 2.0) 2.0.32.rc4-3-gbb5e90a\n"
+"Project-Id-Version: ProcessMaker (Branch 2.0) 2.0.32.rc4-14-gbf41d92\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2011-08-23 16:28:53\n"
+"PO-Revision-Date: 2011-08-25 16:25:54\n"
 "Last-Translator: \n"
 "Language-Team: Colosa Developers Team <developers@colosa.com>\n"
 "MIME-Version: 1.0\n"
@@ -10820,10 +10820,154 @@ msgid "Show Case Notes"
 msgstr "Show Case Notes"
 
 # TRANSLATION
-# JAVASCRIPT/ID_CASES_NUM
-#: JAVASCRIPT/ID_CASES_NUM
+# LABEL/ID_CASES_NUM
+#: LABEL/ID_CASES_NUM
 msgid "# Cases"
 msgstr "# Cases"
+
+# TRANSLATION
+# JAVASCRIPT/ID_CASES_NUM
+#: JAVASCRIPT/ID_CASES_NUM
+msgid "[JAVASCRIPT/ID_CASES_NUM] # Cases"
+msgstr "# Cases"
+
+# TRANSLATION
+# LABEL/EMAIL_ENGINE
+#: LABEL/EMAIL_ENGINE
+msgid "Email Engine"
+msgstr "Email Engine"
+
+# TRANSLATION
+# LABEL/ID_CONFIGURATION
+#: LABEL/ID_CONFIGURATION
+msgid "[LABEL/ID_CONFIGURATION] Configuration"
+msgstr "Configuration"
+
+# TRANSLATION
+# LABEL/PORT_DEFAULT
+#: LABEL/PORT_DEFAULT
+msgid "Port (default 25)"
+msgstr "Port (default 25)"
+
+# TRANSLATION
+# LABEL/REQUIRE_AUTHENTICATION
+#: LABEL/REQUIRE_AUTHENTICATION
+msgid "Require authentication"
+msgstr "Require authentication"
+
+# TRANSLATION
+# LABEL/ACCOUNT_FROM
+#: LABEL/ACCOUNT_FROM
+msgid "Account From"
+msgstr "Account From"
+
+# TRANSLATION
+# LABEL/SEND_TEST_MAIL
+#: LABEL/SEND_TEST_MAIL
+msgid "Send a test mail"
+msgstr "Send a test mail"
+
+# TRANSLATION
+# LABEL/MAIL_TO
+#: LABEL/MAIL_TO
+msgid "Mail to"
+msgstr "Mail to"
+
+# TRANSLATION
+# LABEL/USE_SECURE_CONNECTION
+#: LABEL/USE_SECURE_CONNECTION
+msgid "Use Secure Connection"
+msgstr "Use Secure Connection"
+
+# TRANSLATION
+# LABEL/TESTING_EMAIL_CONF
+#: LABEL/TESTING_EMAIL_CONF
+msgid "Testing email configuration"
+msgstr "Testing email configuration"
+
+# TRANSLATION
+# LABEL/MSG_REQ_AUTH
+#: LABEL/MSG_REQ_AUTH
+msgid "First you have to check the Require Authentication box"
+msgstr "First you have to check the Require Authentication box"
+
+# TRANSLATION
+# LABEL/RESOLVING_NAME
+#: LABEL/RESOLVING_NAME
+msgid "[LABEL/RESOLVING_NAME] Resolving Host Name"
+msgstr "Resolving Host Name"
+
+# TRANSLATION
+# LABEL/TEST_HAS
+#: LABEL/TEST_HAS
+msgid "[LABEL/TEST_HAS] The test has"
+msgstr "The test has"
+
+# TRANSLATION
+# LABEL/SERVER_RESPONSE
+#: LABEL/SERVER_RESPONSE
+msgid "[LABEL/SERVER_RESPONSE] Server Response"
+msgstr "Server Response"
+
+# TRANSLATION
+# LABEL/ESTABLISHING_CON_HOST
+#: LABEL/ESTABLISHING_CON_HOST
+msgid "Establishing connection to host"
+msgstr "Establishing connection to host"
+
+# TRANSLATION
+# LABEL/LOGIN_AS
+#: LABEL/LOGIN_AS
+msgid "Login as"
+msgstr "Login as"
+
+# TRANSLATION
+# LABEL/SMTP_SERVER
+#: LABEL/SMTP_SERVER
+msgid "SMTP Server"
+msgstr "SMTP Server"
+
+# TRANSLATION
+# LABEL/SENDING_TEST_EMAIL
+#: LABEL/SENDING_TEST_EMAIL
+msgid "Sending a test mail to"
+msgstr "Sending a test mail to"
+
+# TRANSLATION
+# LABEL/STEP1
+#: LABEL/STEP1
+msgid "Step 1"
+msgstr "Step 1"
+
+# TRANSLATION
+# LABEL/STEP2
+#: LABEL/STEP2
+msgid "Step 2"
+msgstr "Step 2"
+
+# TRANSLATION
+# LABEL/STEP3
+#: LABEL/STEP3
+msgid "Step 3"
+msgstr "Step 3"
+
+# TRANSLATION
+# LABEL/STEP4
+#: LABEL/STEP4
+msgid "Step 4"
+msgstr "Step 4"
+
+# TRANSLATION
+# LABEL/ID_ENABLE_EMAIL_NOTIFICATION
+#: LABEL/ID_ENABLE_EMAIL_NOTIFICATION
+msgid "Enable Email Notifications"
+msgstr "Enable Email Notifications"
+
+# TRANSLATION
+# JAVASCRIPT/ID_LOST_SESSION_XMLFORM
+#: JAVASCRIPT/ID_LOST_SESSION_XMLFORM
+msgid "You have lost your session and you have to login to continue."
+msgstr "You have lost your session and you have to login to continue."
 
 # additionalTables/additionalTablesData.xml?ADD_TAB_NAME
 # additionalTables/additionalTablesData.xml
@@ -14167,12 +14311,6 @@ msgstr "Case Properties"
 msgid "[cases/cases_Resume.xml?PRO_TITLE] Process"
 msgstr "Process"
 
-# cases/cases_Resume.xml?STATUS
-# cases/cases_Resume.xml
-#: text - STATUS
-msgid "[cases/cases_Resume.xml?STATUS] Case Status"
-msgstr "Case Status"
-
 # cases/cases_Resume.xml?TITLE
 # cases/cases_Resume.xml
 #: text - TITLE
@@ -14184,6 +14322,12 @@ msgstr "Case Title"
 #: text - APP_NUMBER
 msgid "[cases/cases_Resume.xml?APP_NUMBER] Case Number"
 msgstr "Case Number"
+
+# cases/cases_Resume.xml?STATUS
+# cases/cases_Resume.xml
+#: text - STATUS
+msgid "[cases/cases_Resume.xml?STATUS] Case Status"
+msgstr "Case Status"
 
 # cases/cases_Resume.xml?APP_UID
 # cases/cases_Resume.xml
@@ -21599,6 +21743,18 @@ msgstr "Process Category"
 msgid "[processes/processes_Edit.xml?PRO_CATEGORY-]"
 msgstr "- None -"
 
+# processes/processes_Edit.xml?PRO_SUMMARY_DYNAFORM
+# processes/processes_Edit.xml
+#: dropdown - PRO_SUMMARY_DYNAFORM
+msgid "Dynaform to show a case summary"
+msgstr "Dynaform to show a case summary"
+
+# processes/processes_Edit.xml?PRO_SUMMARY_DYNAFORM-
+# processes/processes_Edit.xml
+#: dropdown - PRO_SUMMARY_DYNAFORM -
+msgid "[processes/processes_Edit.xml?PRO_SUMMARY_DYNAFORM-]"
+msgstr "- Default summary Dynaform -"
+
 # processes/processes_Edit.xml?PRO_DEBUG
 # processes/processes_Edit.xml
 #: checkbox - PRO_DEBUG
@@ -23900,13 +24056,13 @@ msgstr "Configuration"
 # setup/emails.xml?MESS_ENABLED
 # setup/emails.xml
 #: checkbox - MESS_ENABLED
-msgid "Enable Email Notifications"
+msgid "[setup/emails.xml?MESS_ENABLED] Enable Email Notifications"
 msgstr "Enable Email Notifications"
 
 # setup/emails.xml?MESS_ENGINE
 # setup/emails.xml
 #: dropdown - MESS_ENGINE
-msgid "Email Engine"
+msgid "[setup/emails.xml?MESS_ENGINE] Email Engine"
 msgstr "Email Engine"
 
 # setup/emails.xml?MESS_SERVER
@@ -23918,19 +24074,19 @@ msgstr "Server"
 # setup/emails.xml?MESS_PORT
 # setup/emails.xml
 #: text - MESS_PORT
-msgid "Port (default 25)"
+msgid "[setup/emails.xml?MESS_PORT] Port (default 25)"
 msgstr "Port (default 25)"
 
 # setup/emails.xml?MESS_RAUTH
 # setup/emails.xml
 #: checkbox - MESS_RAUTH
-msgid "Require authentication"
+msgid "[setup/emails.xml?MESS_RAUTH] Require authentication"
 msgstr "Require authentication"
 
 # setup/emails.xml?MESS_ACCOUNT
 # setup/emails.xml
 #: text - MESS_ACCOUNT
-msgid "Account From"
+msgid "[setup/emails.xml?MESS_ACCOUNT] Account From"
 msgstr "Account From"
 
 # setup/emails.xml?MESS_PASSWORD
@@ -23942,19 +24098,19 @@ msgstr "Password"
 # setup/emails.xml?MESS_TEST_MAIL
 # setup/emails.xml
 #: checkbox - MESS_TEST_MAIL
-msgid "Send a test mail"
+msgid "[setup/emails.xml?MESS_TEST_MAIL] Send a test mail"
 msgstr "Send a test mail"
 
 # setup/emails.xml?MESS_TEST_MAIL_TO
 # setup/emails.xml
 #: text - MESS_TEST_MAIL_TO
-msgid "Mail to"
+msgid "[setup/emails.xml?MESS_TEST_MAIL_TO] Mail to"
 msgstr "Mail to"
 
 # setup/emails.xml?SMTPSecure
 # setup/emails.xml
 #: radiogroup - SMTPSecure
-msgid "Use Secure Connection"
+msgid "[setup/emails.xml?SMTPSecure] Use Secure Connection"
 msgstr "Use Secure Connection"
 
 # setup/emails.xml?SMTPSecure-none
