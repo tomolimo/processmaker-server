@@ -93,6 +93,7 @@ function openCaseNotesWindow(appUid,modalSw){
     }),{
       xtype:'button',
       id:'CASES_MORE_BUTTON',
+      iconCls: '.x-pm-notes-btn',
       hidden:true,
       text:_('ID_CASE_NOTES_MORE'),
       align:'center',

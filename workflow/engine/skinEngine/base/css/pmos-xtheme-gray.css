@@ -917,6 +917,16 @@ antes funcionaba.
 }
 
 .x-pm-startcase-btn {
+  background-image:url(/images/start.png)  !important;
+  color: #000 !important;
+  padding-left: 25px !important;
+  padding-right: 2px !important;
+  padding-top: 5px !important;
+  padding-bottom: 8px !important;
+  font: 12px "Lucida Grande",Lucida,Verdana,sans-serif !important;
+}
+
+.x-pm-notes-btn {
   background-image:url(/images/notes.png)  !important;
   color: #000 !important;
   padding-left: 2px !important;
