@@ -50,7 +50,10 @@ var dynaformEditor={
 		}
 		else
 		{
-			G.alert(res["*message"]);
+                if(typeof(res.innerHTML) == 'undefined')
+                  G.alert(res["*message"]);
+                else
+                  alert(G_STRINGS.ID_LOST_SESSION_XMLFORM);
 		}
 	},
 	save_as:function(){
