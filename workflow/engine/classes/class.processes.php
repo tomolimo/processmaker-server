@@ -2600,14 +2600,15 @@ class Processes {
         $oDataset->next();
       }
       //check if any group name exists in the dbase
-      foreach ($aGroupwf as $groupBase){
-        foreach ($sGroupList as $group){
-          if($groupBase['CON_VALUE']==$group['GRP_TITLE']&&$groupBase['CON_ID']!=$group['GRP_UID']){
-              $existingGroupList[]=$group;
-          }
-        }
+      if(is_array($sGroupList)){
+       foreach ($aGroupwf as $groupBase){
+         foreach ($sGroupList as $group){
+           if($groupBase['CON_VALUE']==$group['GRP_TITLE']&&$groupBase['CON_ID']!=$group['GRP_UID']){
+               $existingGroupList[]=$group;
+           }
+         }
+       }
       }
-
       //return $sGroupList;
       if (isset($existingGroupList))
         return $existingGroupList;
