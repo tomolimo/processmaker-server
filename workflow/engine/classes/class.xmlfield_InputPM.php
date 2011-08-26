@@ -370,6 +370,8 @@ class XmlForm_Field_hours extends XmlForm_Field_SimpleText
       foreach ($aAux as $sName => $sValue) {
         $aFields[] = array('sName' => $sName, 'sType' => 'system', 'sLabel'=> 'System variable');
       }
+      //we're adding the ping variable to the system list
+       $aFields[] = array('sName' => 'PIN', 'sType' => 'system', 'sLabel' => 'System variable');
     }
     require_once 'classes/model/Dynaform.php';
     $oCriteria = new Criteria('workflow');
