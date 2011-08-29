@@ -75,24 +75,29 @@
       }
     }
   }
+  else {
+    // Execute SSO trigger
+    $pluginRegistry =& PMPluginRegistry::getSingleton();
+    if (defined('PM_SINGLE_SIGN_ON')) {
+      if ($pluginRegistry->existsTrigger(PM_SINGLE_SIGN_ON)) {
+        if ($pluginRegistry->executeTriggers(PM_SINGLE_SIGN_ON, null)) {
+          // Start new session
+          @session_destroy();
+          session_start();
+          session_regenerate_id();
+          // Authenticate
+          require_once 'authentication.php';
+          die();
+        }
+      }
+    }
+  }
   //end log
 
   //start new session
   @session_destroy ();
   session_start ();
   session_regenerate_id ();
-
-  // Execute SSO trigger - Start
-  $pluginRegistry =& PMPluginRegistry::getSingleton();
-  if (defined('PM_SINGLE_SIGN_ON')) {
-    if ($pluginRegistry->existsTrigger(PM_SINGLE_SIGN_ON)) {
-      if ($pluginRegistry->executeTriggers(PM_SINGLE_SIGN_ON, null)) {
-        require_once 'authentication.php';
-        die();
-      }
-    }
-  }
-  // Execute SSO trigger - End
 
   if (strlen ( $msg ) > 0) {
     $_SESSION ['G_MESSAGE'] = $msg;
