@@ -57,40 +57,50 @@ class pmTables extends Controller
   public function edit($httpData)
   {
     require_once PATH_CONTROLLERS . 'pmTablesProxy.php';
-    $addTabUid = isset($httpData->id) ? $httpData->id : false;
-    $table = false;
-    $repTabPluginPermissions = false;
-    $additionalTables = new AdditionalTables();
+    require_once 'classes/model/AdditionalTables.php';
+    G::loadClass('pmTable');
 
-    if ($addTabUid !== false) { // if is a edit request
-      require_once 'classes/model/AdditionalTables.php';      
+    $additionalTables = new AdditionalTables();
+    $table = false;
+    $addTabUid = isset($httpData->id) ? $httpData->id : false;
+    $dataNumRows = 0;
+    $repTabPluginPermissions = false;
+    $columnsTypes = PmTable::getPropelSupportedColumnTypes();
+    $jsFile = isset($httpData->tableType) && $httpData->tableType == 'report' ? 'editReport' : 'edit';
+    $columnsTypesList = array();
+    
+    foreach ($columnsTypes as $columnTypeName => $columnType) {
+      $columnsTypesList[] = array($columnTypeName, $columnType);
+    }
+    
+    if ($addTabUid) {
+      $tableData = $additionalTables->getAllData($httpData->id, 0, 2);
+      $dataNumRows = $tableData['count'];
+    }
+
+    if ($addTabUid !== false) { // if it is a edit request
       $tableFields = array();
       $fieldsList = array();
       
       $table = $additionalTables->load($addTabUid, true);
+      //fix for backware compatibility
+      $table['DBS_UID'] = $table['DBS_UID'] == null || $table['DBS_UID'] == '' ? 'workflow': $table['DBS_UID'];
       $_SESSION['ADD_TAB_UID'] = $addTabUid;
 
       //list dynaform fields
-      switch ($table['ADD_TAB_TYPE']) {
-        case 'NORMAL':
-        case 'GRID':
+      if ($table['ADD_TAB_TYPE'] == 'NORMAL' || $table['ADD_TAB_TYPE'] == 'GRID') {
           $repTabPluginPermissions = $this->_getSimpleReportPluginDef();
-          break;
       }
     }
 
-    $jsFile = isset($httpData->tableType) && $httpData->tableType == 'report' ? 'editReport' : 'edit';
-    
-    $this->includeExtJS('pmTables/' . $jsFile, $this->debug);
-
-    //fix for backware compatibility
-    if ($table) {
-      $table['DBS_UID'] = $table['DBS_UID'] == null || $table['DBS_UID'] == '' ? 'workflow': $table['DBS_UID'];
-    }
+    $this->includeExtJS('pmTables/' . $jsFile);
 
     $this->setJSVar('ADD_TAB_UID', $addTabUid);
     $this->setJSVar('PRO_UID', isset($_GET['PRO_UID'])? $_GET['PRO_UID'] : false);
     $this->setJSVar('TABLE', $table);
+    $this->setJSVar('dbg', isset($httpData->dbg));
+    $this->setJSVar('columnsTypes', $columnsTypesList);
+    $this->setJSVar('dataNumRows', $dataNumRows);
     $this->setJSVar('_plugin_permissions', $repTabPluginPermissions);
 
     G::RenderPage('publish', 'extJs');
@@ -108,6 +118,7 @@ class pmTables extends Controller
     
     $this->includeExtJS('pmTables/data', $this->debug);
     $this->setJSVar('tableDef', $tableDef);
+    
     //g::pr($tableDef['FIELDS']);
     G::RenderPage('publish', 'extJs');
   } 

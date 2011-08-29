@@ -74,7 +74,7 @@ abstract class BaseFields extends BaseObject  implements Persistent {
 	 * The value for the fld_size field.
 	 * @var        int
 	 */
-	protected $fld_size = 1;
+	protected $fld_size = 0;
 
 
 	/**
@@ -458,7 +458,7 @@ abstract class BaseFields extends BaseObject  implements Persistent {
 			$v = (int) $v;
 		}
 
-		if ($this->fld_size !== $v || $v === 1) {
+		if ($this->fld_size !== $v || $v === 0) {
 			$this->fld_size = $v;
 			$this->modifiedColumns[] = FieldsPeer::FLD_SIZE;
 		}

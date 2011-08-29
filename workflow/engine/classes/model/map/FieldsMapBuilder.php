@@ -74,9 +74,9 @@ class FieldsMapBuilder {
 
 		$tMap->addColumn('FLD_DESCRIPTION', 'FldDescription', 'string', CreoleTypes::LONGVARCHAR, true, null);
 
-		$tMap->addColumn('FLD_TYPE', 'FldType', 'string', CreoleTypes::VARCHAR, true, 10);
+		$tMap->addColumn('FLD_TYPE', 'FldType', 'string', CreoleTypes::VARCHAR, true, 20);
 
-		$tMap->addColumn('FLD_SIZE', 'FldSize', 'int', CreoleTypes::INTEGER, true, null);
+		$tMap->addColumn('FLD_SIZE', 'FldSize', 'int', CreoleTypes::INTEGER, false, null);
 
 		$tMap->addColumn('FLD_NULL', 'FldNull', 'int', CreoleTypes::TINYINT, true, null);
 

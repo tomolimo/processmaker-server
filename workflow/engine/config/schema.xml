@@ -2080,8 +2080,8 @@
     <column name="FLD_INDEX" type="INTEGER" required="true" default="1"/>
     <column name="FLD_NAME" type="VARCHAR" size="60" required="true" default=""/>
     <column name="FLD_DESCRIPTION" type="LONGVARCHAR" required="true"/>
-    <column name="FLD_TYPE" type="VARCHAR" size="10" required="true" default=""/>
-    <column name="FLD_SIZE" type="INTEGER" required="true" default="1"/>
+    <column name="FLD_TYPE" type="VARCHAR" size="20" required="true" default=""/>
+    <column name="FLD_SIZE" type="INTEGER" required="false" default="0"/>
     <column name="FLD_NULL" type="TINYINT" required="true" default="1"/>
     <column name="FLD_AUTO_INCREMENT" type="TINYINT" required="true" default="0"/>
     <column name="FLD_KEY" type="TINYINT" required="true" default="0"/>

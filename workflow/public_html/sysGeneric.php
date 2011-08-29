@@ -255,8 +255,8 @@ $startingTime =  array_sum(explode(' ',microtime()));
   G::LoadSystem('form');
   G::LoadSystem('menu');
   G::LoadSystem("xmlMenu");
-  G::LoadSystem('dvEditor');
-  G::LoadSystem('table');
+  //G::LoadSystem('dvEditor');
+  //G::LoadSystem('table');
   G::LoadSystem('controller');
   G::LoadSystem('httpProxyController');
   G::LoadSystem('pmException');
@@ -295,6 +295,11 @@ $startingTime =  array_sum(explode(' ',microtime()));
     if ( file_exists( PATH_DB .  SYS_TEMP . '/db.php' ) ) {
       require_once( PATH_DB .  SYS_TEMP . '/db.php' );
       define ( 'SYS_SYS' , SYS_TEMP );
+      
+      // defining constant for workspace shared directory 
+      define ( 'PATH_WORKSPACE' , PATH_DB . SYS_SYS . PATH_SEP );
+      // including workspace shared classes -> particularlly for pmTables
+      set_include_path(get_include_path() . PATH_SEPARATOR . PATH_WORKSPACE);
     }
     else {
       $aMessage['MESSAGE'] = G::LoadTranslation ('ID_NOT_WORKSPACE');

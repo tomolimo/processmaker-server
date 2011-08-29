@@ -314,7 +314,8 @@ Ext.onReady(function(){
               valueField:'type_id',
               store: new Ext.data.SimpleStore({
                   fields: ['type_id', 'type'],
-                  data : [['VARCHAR',_("ID_VARCHAR")],['TEXT',_("ID_TEXT")],['DATE',_("ID_DATE")],['INT',_("ID_INT")],['FLOAT',_("ID_FLOAT")]],
+                  //data : [['VARCHAR',_("ID_VARCHAR")],['TEXT',_("ID_TEXT")],['DATE',_("ID_DATE")],['INT',_("ID_INT")],['FLOAT',_("ID_FLOAT")]],
+                  data: columnsTypes,
                   sortInfo: {field:'type_id', direction:'ASC'}
               })
           })
@@ -330,7 +331,7 @@ Ext.onReady(function(){
       }, {
         xtype: 'booleancolumn',
         header: _('ID_AUTO_INCREMENT'),
-        dataIndex: 'field_bai',
+        dataIndex: 'field_autoincrement',
         align: 'center',
         width: 50,
         trueText: 'Yes',
@@ -380,7 +381,7 @@ Ext.onReady(function(){
           {name: 'field_type'},
           {name: 'field_size', type: 'float'},
           {name: 'field_null', type: 'float'},
-          {name: 'field_bai', type: 'float'},
+          {name: 'field_autoincrement', type: 'float'},
           {name: 'field_filter', type: 'string'}
       ]
   });
@@ -931,7 +932,7 @@ function createReportTable()
     }
 
     // validate field size for varchar & int column types
-    if ((row.data['field_type'] == 'VARCHAR' || row.data['field_type'] == 'INT') && row.data['field_size'] == '') {
+    if ((row.data['field_type'] == 'VARCHAR' || row.data['field_type'] == 'INTEGER') && row.data['field_size'] == '') {
       PMExt.error(_('ID_ERROR'), _('ID_PMTABLES_ALERT5')+' '+row.data['field_name']+' ('+row.data['field_type']+').');
       return false;
     }
@@ -962,7 +963,11 @@ function createReportTable()
         proParam = PRO_UID !== false ? '?PRO_UID='+PRO_UID : '';
         location.href = '../pmTables' + proParam; //history.back();
       } else {
-        Ext.Msg.alert( _('ID_ERROR'), result.msg+'\n'+result.trace);
+        PMExt.error(_('ID_ERROR'), result.type +': '+result.msg);
+        if (window.console && window.console.firebug) {
+          window.console.log(result.msg);
+          window.console.log(result.trace);
+        }
       }
     },
     failure: function(obj, resp){
@@ -1139,15 +1144,17 @@ function setReportFields(records) {
     var meta = mapPMFieldType(records[i].data['FIELD_UID']);
     var row = new PMRow({
       uid  : '',
-      field_uid  : records[i].data['FIELD_UID'],
-      field_dyn  : records[i].data['FIELD_NAME'],
+      _index      : records[i].data['_index'] !== '' ? records[i].data['_index'] : records[i].data['FIELD_DYN'],
+      field_uid   : records[i].data['FIELD_UID'],
+      field_dyn   : records[i].data['FIELD_NAME'],
       field_name  : records[i].data['FIELD_NAME'].toUpperCase(),
       field_label : records[i].data['FIELD_NAME'].toUpperCase(),
       field_type  : meta.type,
       field_size  : meta.size,
       field_key   : 0,
       field_null  : 1,
-      _index      : records[i].data['_index'] ? records[i].data['_index'] : records[i].data['FIELD_DYN']
+      field_filter: 0,
+      field_autoincrement : 0
     });
 
     store.add(row);
@@ -1231,7 +1238,7 @@ function loadTableRowsFromArray(records)
       field_size : records[i].FLD_SIZE,
       field_key  : records[i].FLD_KEY,
       field_null  : records[i].FLD_NULL,
-      field_bai  : records[i].FLD_AUTO_INCREMENT  == '1' ? true : false,
+      field_autoincrement  : records[i].FLD_AUTO_INCREMENT  == '1' ? true : false,
       field_filter: records[i].FLD_FILTER == '1' ? true : false,
       _index : ''
     });
@@ -1270,7 +1277,7 @@ function mapPMFieldType(id)
         sizeField='32';
         break;
       case 'currency':
-        typeField='INT';
+        typeField='INTEGER';
         sizeField='11';
         break;
       case 'percentage':
@@ -1282,8 +1289,8 @@ function mapPMFieldType(id)
         sizeField='';
         break;
       case 'textarea':
-        typeField='TEXT';
-        sizeField='';
+        typeField='VARCHAR';
+        sizeField='255';
         break;
 
       default:

@@ -193,7 +193,8 @@ Ext.onReady(function(){
               forceSelection: true,
               store: new Ext.data.SimpleStore({
                   fields: ['type_id', 'type'],
-                  data : [['VARCHAR',_("ID_VARCHAR")],['TEXT',_("ID_TEXT")],['DATE',_("ID_DATE")],['INT',_("ID_INT")],['FLOAT',_("ID_FLOAT")]],
+                  //data : [['VARCHAR',_("ID_VARCHAR")],['TEXT',_("ID_TEXT")],['DATE',_("ID_DATE")],['INT',_("ID_INT")],['FLOAT',_("ID_FLOAT")]],
+                  data: columnsTypes,
                   sortInfo: {field:'type_id', direction:'ASC'}
               })
           })
@@ -231,9 +232,9 @@ Ext.onReady(function(){
       }, {
         xtype: 'booleancolumn',
         header: _('ID_AUTO_INCREMENT'),
-        dataIndex: 'field_bai',
+        dataIndex: 'field_autoincrement',
         align: 'center',
-        width: 50,
+        width: 80,
         trueText: 'Yes',
         falseText: 'No',
         editor: {
@@ -277,7 +278,7 @@ Ext.onReady(function(){
           {name: 'field_type'},
           {name: 'field_size', type: 'float'},
           {name: 'field_null', type: 'float'},
-          {name: 'field_bai', type: 'float'},
+          {name: 'field_autoincrement', type: 'float'},
           {name: 'field_filter', type: 'string'}
       ]
   });
@@ -582,12 +583,19 @@ Ext.onReady(function(){
     buttons:[ 
       {
         text: TABLE === false ? _("ID_CREATE") : _("ID_UPDATE"),
-        handler: createReportTable
+        handler: function() {
+          if (TABLE === false || dataNumRows == 0) {
+            createReportTable();
+          } 
+          else {
+            PMExt.confirm(_('ID_CONFIRM'), _('ID_PMTABLE_SAVE_AND_DATA_LOST'), createReportTable);
+          }
+        }
       }, {
         text:_("ID_CANCEL"),
         handler: function() {
           proParam = PRO_UID !== false ? '?PRO_UID='+PRO_UID : '';
-          location.href = '../pmTables' + proParam; //history.back();
+          location.href = '../pmTables' + proParam;
         }
       }
     ]
@@ -607,7 +615,19 @@ Ext.onReady(function(){
 
     loadTableRowsFromArray(TABLE.FIELDS);
   }
-  //DDLoadFields();
+  
+  if (dataNumRows > 0) {
+    var tpl = new Ext.Template(
+        '<div id="fb" style="border: 1px solid #FF0000; background-color:#FFAAAA; display:none; padding:15px; color:#000000; font-size:12px;">'+
+        '<b>Warning: </b> ' + dataNumRows + ' ' + _('ID_PMTABLE_DATA_EXISTS_WARNINIG') + ' <a href="#" id="hideWarning">[ '+_('ID_HIDE')+' ]</a></div>'
+    );
+    var newEl = tpl.insertFirst(document.getElementById('assignedGrid'));
+
+    Ext.fly('hideWarning').on('click', function() {
+      Ext.fly(newEl).slideOut('t',{remove:true});
+    });
+    Ext.fly(newEl).slideIn();
+  }
 
 });
 
@@ -660,7 +680,7 @@ function createReportTable()
     }
 
     // validate field size for varchar & int column types
-    if ((row.data['field_type'] == 'VARCHAR' || row.data['field_type'] == 'INT') && row.data['field_size'] == '') {
+    if ((row.data['field_type'] == 'VARCHAR' || row.data['field_type'] == 'INTEGER') && row.data['field_size'] == '') {
       PMExt.error(_('ID_ERROR'), _('ID_PMTABLES_ALERT5')+' '+row.data['field_name']+' ('+row.data['field_type']+').');
       return false;
     }
@@ -690,13 +710,25 @@ function createReportTable()
       columns       : Ext.util.JSON.encode(columns)
     },
     success: function(resp){
-      result = Ext.util.JSON.decode(resp.responseText);
-
-      if (result.success) {
-        proParam = PRO_UID !== false ? '?PRO_UID='+PRO_UID : '';
-        location.href = '../pmTables' + proParam; //history.back();
-      } else {
-        Ext.Msg.alert( _('ID_ERROR'), result.msg);
+      try {
+        result = Ext.util.JSON.decode(resp.responseText);
+  
+        if (result.success) {
+          proParam = PRO_UID !== false ? '?PRO_UID='+PRO_UID : '';
+          location.href = '../pmTables' + proParam; //history.back();
+        } else {
+          PMExt.error(_('ID_ERROR'), result.type +': '+result.msg);
+          if (window.console && window.console.firebug) {
+            window.console.log(result.msg);
+            window.console.log(result.trace);
+          }
+        }
+      } catch (e) {
+        if (dbg) {
+          _showDebugWin(resp.responseText);
+        } else {
+          PMExt.error('ERROR', 'Something was wrong.');
+        }
       }
     },
     failure: function(obj, resp){
@@ -706,19 +738,41 @@ function createReportTable()
 }
 //end createReportTable
 
+function _showDebugWin(content)
+{
+  dbgWin = new Ext.Window({
+    title: '',
+    id: 'dbgWin',
+    layout: 'fit',
+    width: 570,
+    height: 400,
+    modal: false,
+    autoScroll: true,
+    maximizable: true,
+    //closeAction: 'hide',
+    maximizable : false,
+    items: [],
+    x: 0,
+    y: 0,
+    html: '<pre>' + content + '</pre>'
+  });
+  
+  dbgWin.show();
+}
+
 function addColumn() {
   var PMRow = assignedGrid.getStore().recordType;
   //var meta = mapPMFieldType(records[i].data['FIELD_UID']);
   var row = new PMRow({
-    uid  : '',
+    uid : '',
     field_uid  : '',
     field_dyn  : '',
-    field_name  : '',
-    field_label : '',
-    field_type  : '',
-    field_size  : '',
-    field_key   : 0,
-    field_null  : 1
+    field_name : '',
+    field_label: '',
+    field_type : '',
+    field_size : '',
+    field_key  : 0,
+    field_null : 1
   });
   var len = assignedGrid.getStore().data.length;
   
@@ -927,7 +981,7 @@ function loadTableRowsFromArray(records)
       field_size : records[i].FLD_SIZE,
       field_key  : records[i].FLD_KEY == '1' ? true : false,
       field_null : records[i].FLD_NULL  == '1' ? true : false,
-      field_bai  : records[i].FLD_AUTO_INCREMENT  == '1' ? true : false,
+      field_autoincrement  : records[i].FLD_AUTO_INCREMENT  == '1' ? true : false,
       field_filter: records[i].FLD_FILTER == '1' ? true : false
     });
     store.add(row);

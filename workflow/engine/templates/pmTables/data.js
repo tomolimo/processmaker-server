@@ -256,7 +256,8 @@ Ext.onReady(function(){
     layout: 'fit',
     autoScroll: false,
     items: [infoGrid]
-  }); 
+  });
+
 });
 
 //Funtion Handles Context Menu Opening
