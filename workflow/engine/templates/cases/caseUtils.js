@@ -371,6 +371,14 @@ var openSummaryWindow = function(applicationUID, delegation) {
         summaryWindow.close();
       }
     },
+    buttons : [
+               {
+                 text    : _('ID_CANCEL'),
+                 handler : function(){
+                  summaryWindow.close();
+                 }
+               }
+              ],
     listeners: {
       show: function() {
         this.loadMask = new Ext.LoadMask(this.body, {
