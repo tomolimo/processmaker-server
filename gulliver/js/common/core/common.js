@@ -707,7 +707,7 @@ function showHideSearch(id,aElement,openText,closeText)
  * and execute the javascript node that it contains.
  */
 function loadPage ( url, x, y , visibility , div )  {
-    visibility = typeof(visibility)==='udefined'?'hidden':visibility;
+    visibility = typeof(visibility)==='undefined'?'hidden':visibility;
   	var r = new leimnud.module.rpc.xmlhttp({url:url});
   	r.callback=leimnud.closure({Function:function(rpc,div){
   	    if (typeof(div)==='undefined') div=createDiv('');
