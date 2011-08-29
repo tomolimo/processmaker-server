@@ -249,14 +249,14 @@ function cancelCase(){
 }
 
 function callbackUnpauseCase (btn, text) {
-	if ( btn == 'yes' ) {
+  if ( btn == 'yes' ) {
     Ext.MessageBox.show({ progressText: TRANSLATIONS.ID_PROCESSING, wait:true,waitConfig: {interval:200} });
     Ext.Ajax.request({
       url: 'cases_Ajax',
       success: function(response) {
-      	try {
-      	  parent.updateCasesView();
-      	}
+        try {
+          parent.updateCasesView();
+        }
         catch (e) {
           // Nothing to do
         }
@@ -353,7 +353,7 @@ Ext.onReady ( function() {
     	var myDate = new Date( myArrayDate[0], myArrayDate[1]-1, myArrayDate[2], myArrayHour[0], myArrayHour[1], myArrayHour[2] );
     }
   }
-  catch(e){};
+        catch(e){};
 
     return myDate;
   }
@@ -398,12 +398,26 @@ Ext.onReady ( function() {
     if( c.dataIndex == 'CASE_NOTES_COUNT')   c.renderer = renderNote;
   }
 
-	//adding the hidden field DEL_INIT_DATE
-	readerFields.push ( {name: "DEL_INIT_DATE"});
-	readerFields.push ( {name: "APP_UID"});
-	readerFields.push ( {name: "DEL_INDEX"});
+  //adding the hidden field DEL_INIT_DATE
+  readerFields.push ( {name: "DEL_INIT_DATE"});
+  readerFields.push ( {name: "APP_UID"});
+  readerFields.push ( {name: "DEL_INDEX"});
 
-
+  for (i=0; i<columns.length; i++) {
+    if (columns[i].dataIndex == 'CASE_NOTES_COUNT') {
+      columns[i].header=_('ID_CASES_NOTES');
+    }
+    if (columns[i].dataIndex == 'CASE_SUMMARY') {
+      columns[i].header =_('ID_SUMMARY');
+    }
+    if (columns[i].dataIndex == 'USR_UID') {
+      columns[i].hideable = false;
+    }
+    if(columns[i].dataIndex == 'PREVIOUS_USR_UID') {
+      columns[i].hideable=false; 
+    }
+  }
+    
   var cm = new Ext.grid.ColumnModel({
     defaults: {
       sortable: true // columns are sortable by default
