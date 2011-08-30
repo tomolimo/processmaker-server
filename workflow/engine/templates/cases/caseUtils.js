@@ -151,15 +151,17 @@ caseNotesWindow = new Ext.Window({
     text: _('ID_NOTES_READY'),
     //iconCls: 'ready-icon',
     statusAlign: 'left',
-
     // any standard Toolbar items:
-    items: [{
-             text: _('ID_CANCEL'),
-             handler: function(){
-              caseNotesWindow.close();
-             }
-            }]
-  })
+    items: []
+  }),
+   {xtype: 'tbfill'},
+   {
+      text: _('ID_CANCEL'),
+      handler: function()
+      {
+       caseNotesWindow.close();
+      }
+   }
   ],
   tbar:[{
     //xtype:'textfield',
