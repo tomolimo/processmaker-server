@@ -76,11 +76,10 @@ class PmTable
    */
   function setDataSource($dbsUid)
   {
-    $this->dataSource = $dbsUid;
+    $this->dataSource = self::resolveDbSource($dbsUid);
 
     switch ($dbsUid) {
-      case 'workflow': case 'wf': case '0': case '':
-        $this->dataSource = 'workflow';
+      case 'workflow':
         $this->dbConfig->adapter= DB_ADAPTER;
         $this->dbConfig->host   = DB_HOST;
         $this->dbConfig->name   = DB_NAME;
@@ -89,8 +88,7 @@ class PmTable
         $this->dbConfig->port = 3306; //FIXME update this when port for workflow dsn will be available
         break;
 
-      case 'rp': case 'report':
-        $this->dataSource = 'rp';
+      case 'rp':
         $this->dbConfig->adapter= DB_ADAPTER;
         $this->dbConfig->host   = DB_REPORT_HOST;
         $this->dbConfig->name   = DB_REPORT_NAME;
@@ -101,7 +99,7 @@ class PmTable
 
       default:
         require_once 'classes/model/DbSource.php';
-        $dbSource = DbSource::load($dbsUid);
+        $dbSource = DbSource::load($this->dataSource);
         if (!is_object($dbSource)) {
           throw new Exception("Db source with id $dbsUid does not exist!");
         }
@@ -113,6 +111,26 @@ class PmTable
         $this->dbConfig->passwd = $dbSource->getDbsPassword();
         $this->dbConfig->port   = $dbSource->getDbsPort();
     }
+  }
+
+  /**
+   * Backward compatibility function
+   * Resolve a propel data source
+   * @param string $dbsUid corresponding to DBS_UID key
+   * @return string contains resolved DBS_UID
+   */
+  public function resolveDbSource($dbsUid)
+  {
+    switch ($dbsUid) {
+      case 'workflow': case 'wf': case '0': case '': case null:
+        $dbsUid = 'workflow';
+        break;
+      case 'rp': case 'report':
+        $dbsUid = 'rp';
+        break;
+    }
+
+    return $dbsUid;
   }
 
   public function getDataSource()
@@ -280,14 +298,14 @@ class PmTable
   /**
    * Drop the phisical table of target pmTable or any specified as parameter
    */
-  public function dropTable($table = null)
+  public function dropTable($tableName = null)
   {
-    $table = isset($table) ? $table : $this->dataSource;
-    $con = Propel::getConnection();
+    $tableName = isset($tableName) ? $tableName : $this->tableName;
+    $con = Propel::getConnection($this->dataSource);
     $stmt = $con->createStatement();
     
     if (is_object($con)) {
-      $stmt->executeQuery("DROP TABLE {$this->tableName}");
+      $stmt->executeQuery("DROP TABLE {$tableName}");
     }
   }
   
@@ -506,6 +524,8 @@ class PmTable
    */
   public static function callPhing($target, $buildFile = '', $options = array(), $verbose = true)
   {
+    G::loadClass('pmPhing');
+
     $args = array();
     foreach ($options as $key => $value) {
       $args[] = "-D$key=$value";
@@ -540,19 +560,4 @@ class PmTable
     $m->runBuild();
   }
 
-}
-
-include_once 'phing/Phing.php';
-set_include_path(PATH_THIRDPARTY . 'propel-generator/classes/'  . PATH_SEPARATOR . get_include_path());
-
-if (!class_exists('Phing')) {
-  throw new Exception('Fatal Error: Phing is not loaded!');
-}
-
-class pmPhing extends Phing
-{
-  function getPhingVersion()
-  {
-    return 'pmPhing Ver 1.0';
-  }
 }

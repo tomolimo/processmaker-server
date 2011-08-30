@@ -236,22 +236,26 @@ class AdditionalTables extends BaseAdditionalTables {
   }
   
   function deleteAll($id) 
-  {
-    //deleting pm table
-    $additionalTable = AdditionalTables::load($id);
-    AdditionalTables::remove($id);
-    
-    //deleting fields
-    require_once 'classes/model/Fields.php';
-    $criteria = new Criteria('workflow');
-    $criteria->add(FieldsPeer::ADD_TAB_UID, $id);
-    FieldsPeer::doDelete($criteria);
-    
-    //remove all related to pmTable
-    G::loadClass('pmTable');
-    $pmTable = new pmTable($additionalTable['ADD_TAB_NAME']);
-    $pmTable->setDataSource($additionalTable['DBS_UID']);
-    $pmTable->remove();
+  { 
+    try{
+      //deleting pm table
+      $additionalTable = AdditionalTables::load($id);
+      AdditionalTables::remove($id);
+      
+      //deleting fields
+      require_once 'classes/model/Fields.php';
+      $criteria = new Criteria('workflow');
+      $criteria->add(FieldsPeer::ADD_TAB_UID, $id);
+      FieldsPeer::doDelete($criteria);
+      
+      //remove all related to pmTable
+      G::loadClass('pmTable');
+      $pmTable = new pmTable($additionalTable['ADD_TAB_NAME']);
+      $pmTable->setDataSource($additionalTable['DBS_UID']);
+      $pmTable->remove();
+    } catch (Exception $e) {
+      echo $e->getTraceAsString();
+    }
   }
 
   function getPHPName($sName) {
@@ -556,26 +560,25 @@ class AdditionalTables extends BaseAdditionalTables {
       $deleteSql = "DELETE FROM $tableName WHERE APP_UID = '".$row['APP_UID']."'";
       $rs = $stmt->executeQuery($deleteSql);
       // getting the case data
-      $caseFields = array_change_key_case(unserialize($row['APP_DATA']), CASE_UPPER);
+      $caseData = unserialize($row['APP_DATA']);
       
       if ($type == 'GRID') {
         list($gridName, $gridUid)  = explode('-', $gridKey);
-        $gridName = strtoupper($gridName);
-        foreach ($caseFields[$gridName] as $i => $gridRow) {
-          $gridRow = array_change_key_case($gridRow, CASE_UPPER);
-
+        $gridData = isset($caseData[$gridName]) ? $caseData[$gridName] : array();
+        
+        foreach ($gridData as $i => $gridRow) {
           eval('$obj = new ' .$this->className. '();');
-          $obj->fromArray($caseFields, BasePeer::TYPE_FIELDNAME);
+          $obj->fromArray($caseData, BasePeer::TYPE_FIELDNAME);
           $obj->setAppUid($row['APP_UID']);
           $obj->setAppNumber($row['APP_NUMBER']);
-          $obj->fromArray($gridRow, BasePeer::TYPE_FIELDNAME);
+          $obj->fromArray(array_change_key_case($gridRow, CASE_UPPER), BasePeer::TYPE_FIELDNAME);
           $obj->setRow($i);
           $obj->save();
           eval('$obj = new ' .$this->className. '();');
         }
       } else {
         eval('$obj = new ' .$this->className. '();');
-        $obj->fromArray($caseFields, BasePeer::TYPE_FIELDNAME);
+        $obj->fromArray(array_change_key_case($caseData, CASE_UPPER), BasePeer::TYPE_FIELDNAME);
         $obj->setAppUid($row['APP_UID']);
         $obj->setAppNumber($row['APP_NUMBER']);
         $obj->save();
@@ -585,454 +588,79 @@ class AdditionalTables extends BaseAdditionalTables {
   }
 
   /**
-   * Populate Report Table
+   * Update the report table with a determinated case data
+   * @param string $proUid
+   * @param string $appUid
+   * @param string $appNumber
+   * @param string $caseData  
    */
-  public function populateReportTable2($sTableName, $sConnection = 'rp', $sType = 'NORMAL', $aFields = array(), $sProcessUid = '', $sGrid = '')
+  public function updateReportTables($proUid, $appUid, $appNumber, $caseData)
   {
-
-    require_once "classes/model/Application.php";
-    
-    $con = Propel::getConnection($sConnection);
-    $stmt = $con->createStatement();
-    if ($sType == 'GRID') {
-      $aAux  = explode('-', $sGrid);
-      $sGrid = $aAux[0];
-    }
-
-    try {
-
-      $tableExists  = true;
-      $sDataBase    = 'database_' . strtolower(DB_ADAPTER);
-      if(G::LoadSystemExist($sDataBase)){
-        G::LoadSystem($sDataBase);
-        $oDataBase = new database();
-        $sDataBase = $sConnection;
-        if($sDataBase == 'rp')
-          $sDataBase = DB_REPORT_NAME;
-        if($sDataBase == 'workflow')
-          $sDataBase = DB_NAME;
-        $tableExists = $oDataBase->tableExists($sTableName, $sDataBase);
-      }
-      if($tableExists) {
-
-        switch (DB_ADAPTER) {
-          case 'mysql':
-            //select cases for this Process, ordered by APP_NUMBER
-            $oCriteria = new Criteria('workflow');
-            $oCriteria->add(ApplicationPeer::PRO_UID, $sProcessUid);
-            $oCriteria->addAscendingOrderByColumn(ApplicationPeer::APP_NUMBER);
-            $oDataset = ApplicationPeer::doSelectRS($oCriteria);
-            $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-            $oDataset->next();
-            while ($aRow = $oDataset->getRow()) {
-              $aData = unserialize($aRow['APP_DATA']);
-
-              //delete previous record from this report table ( previous records in case this is a grid )
-              $deleteSql = 'DELETE FROM `' . $sTableName . "` WHERE APP_UID = '" . $aRow['APP_UID'] . "'";
-              $rsDel = $stmt->executeQuery( $deleteSql );
-              if ($sType == 'NORMAL') {
-                $sQuery  = 'INSERT INTO `' . $sTableName . '` (';
-                $sQuery .= '`APP_UID`,`APP_NUMBER`';
-
-                foreach ($aFields as $aField) {
-                  if ($aField['FLD_NAME'] != 'APP_UID' && $aField['FLD_NAME'] != 'APP_NUMBER' && $aField['FLD_NAME'] != 'ROW')
-                    $sQuery .= ',`' . $aField['FLD_NAME'] . '`';
-                }
-
-                $sQuery .= ") VALUES ('" . $aRow['APP_UID'] . "'," . (int)$aRow['APP_NUMBER'];
-                foreach ($aFields as $aField) {
-                  if ($aField['FLD_NAME'] == 'APP_UID' || $aField['FLD_NAME'] == 'APP_NUMBER' || $aField['FLD_NAME'] == 'ROW') continue;
-
-                  switch ($aField['FLD_TYPE']) {
-                    case 'INT':
-                    case 'FLOAT':
-                      $sQuery .= ',' . (isset($aData[$aField['FLD_DYN_NAME']]) ? (float)str_replace(',', '', $aData[$aField['FLD_DYN_NAME']]) : '0');
-                      break;
-                    case 'VARCHAR':
-                    case 'TEXT':
-                      if (!isset($aData[$aField['FLD_NAME']])) {
-                        $aData[$aField['FLD_NAME']] = '';
-                      }
-                      $sQuery .= ",'" . (isset($aData[$aField['FLD_DYN_NAME']]) ? mysql_real_escape_string($aData[$aField['FLD_DYN_NAME']]) : '') . "'";
-                      break;
-                    case 'DATE':
-                      $value = (isset($aData[$aField['FLD_DYN_NAME']]) && trim($aData[$aField['FLD_DYN_NAME']])) != '' ? "'" . $aData[$aField['FLD_DYN_NAME']] . "'" : 'NULL';
-                      $sQuery .= "," . $value;
-                      break;
-                  }
-                }
-                $sQuery .= ')';
-
-                $rs = $stmt->executeQuery( $sQuery );
-              }
-              else {
-                if (isset($aData[$sGrid])) {
-                  foreach ($aData[$sGrid] as $iRow => $aGridRow) {
-                    $sQuery  = 'INSERT INTO `' . $sTableName . '` (';
-                    $sQuery .= '`APP_UID`,`APP_NUMBER`,`ROW`';
-
-                    foreach ($aFields as $aField) {
-                      if ($aField['FLD_NAME'] != 'APP_UID' && $aField['FLD_NAME'] != 'APP_NUMBER' && $aField['FLD_NAME'] != 'ROW')
-                      $sQuery .= ',`' . $aField['FLD_NAME'] . '`';
-                    }
-
-                    $sQuery .= ") VALUES ('" . $aRow['APP_UID'] . "'," . (int)$aRow['APP_NUMBER'] . ',' . $iRow;
-                    foreach ($aFields as $aField) {
-                      if ($aField['FLD_NAME'] != 'APP_UID' || $aField['FLD_NAME'] != 'APP_NUMBER' || $aField['FLD_NAME'] != 'ROW') continue;
-
-                      switch ($aField['FLD_TYPE']) {
-                        case 'INT':
-                        case 'FLOAT':
-                          $sQuery .= ',' . (isset($aGridRow[$aField['FLD_NAME']]) ? (float)str_replace(',', '', $aGridRow[$aField['FLD_NAME']]) : '0');
-                          break;
-                        case 'VARCHAR':
-                        case 'TEXT':
-                          if (!isset($aGridRow[$aField['FLD_NAME']])) {
-                            $aGridRow[$aField['FLD_NAME']] = '';
-                          }
-                          $sQuery .= ",'" . (isset($aGridRow[$aField['FLD_NAME']]) ? mysql_real_escape_string($aGridRow[$aField['FLD_NAME']]) : '') . "'";
-                          break;
-                        case 'DATE':
-                          $value = (isset($aGridRow[$aField['FLD_NAME']]) && trim($aGridRow[$aField['FLD_NAME']])) != '' ? "'" . $aGridRow[$aField['FLD_NAME']] . "'" : 'NULL';
-                          $sQuery .= "," . $value;
-                          break;
-                      }
-                    }
-                    $sQuery .= ')';
-                    $rs = $stmt->executeQuery( $sQuery );
-                  }
-                }
-              }
-              $oDataset->next();
-            }
-            break;
-
-            /**
-              * For SQLServer code
-              */
-            case 'mssql':
-              $oCriteria = new Criteria('workflow');
-              $oCriteria->add(ApplicationPeer::PRO_UID, $sProcessUid);
-              $oCriteria->addAscendingOrderByColumn(ApplicationPeer::APP_NUMBER);
-              $oDataset = ApplicationPeer::doSelectRS($oCriteria);
-              $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-              $oDataset->next();
-              while ($aRow = $oDataset->getRow()) {
-                $aData = unserialize($aRow['APP_DATA']);
-                mysql_query('DELETE FROM [' . $sTableName . "] WHERE APP_UID = '" . $aRow['APP_UID'] . "'");
-                if ($sType == 'NORMAL') {
-                  $sQuery  = 'INSERT INTO [' . $sTableName . '] (';
-                  $sQuery .= '[APP_UID],[APP_NUMBER]';
-                  foreach ($aFields as $aField) {
-                    $sQuery .= ',[' . $aField['sFieldName'] . ']';
-                  }
-                  $sQuery .= ") VALUES ('" . $aRow['APP_UID'] . "'," . (int)$aRow['APP_NUMBER'];
-                  foreach ($aFields as $aField) {
-                    switch ($aField['sType']) {
-                      case 'number':
-                        $sQuery .= ',' . (isset($aData[$aField['sFieldName']]) ? (float)str_replace(',', '', $aData[$aField['sFieldName']]) : '0');
-                      break;
-                      case 'char':
-                      case 'text':
-                        if (!isset($aData[$aField['sFieldName']])) {
-                          $aData[$aField['sFieldName']] = '';
-                        }
-                        $sQuery .= ",'" . (isset($aData[$aField['sFieldName']]) ? mysql_real_escape_string($aData[$aField['sFieldName']]) : '') . "'";
-                      break;
-                      case 'date':
-                        $sQuery .= ",'" . (isset($aData[$aField['sFieldName']]) ? $aData[$aField['sFieldName']] : '') . "'";
-                      break;
-                    }
-                  }
-                  $sQuery .= ')';
-                  $rs = $stmt->executeQuery( $sQuery );
-                }
-                else {
-                  if (isset($aData[$sGrid])) {
-                    foreach ($aData[$sGrid] as $iRow => $aGridRow) {
-                      $sQuery  = 'INSERT INTO [' . $sTableName . '] (';
-                      $sQuery .= '`APP_UID`,`APP_NUMBER`,`ROW`';
-                      foreach ($aFields as $aField) {
-                        $sQuery .= ',[' . $aField['sFieldName'] . ']';
-                      }
-                      $sQuery .= ") VALUES ('" . $aRow['APP_UID'] . "'," . (int)$aRow['APP_NUMBER'] . ',' . $iRow;
-                      foreach ($aFields as $aField) {
-                        switch ($aField['sType']) {
-                          case 'number':
-                            $sQuery .= ',' . (isset($aGridRow[$aField['sFieldName']]) ? (float)str_replace(',', '', $aGridRow[$aField['sFieldName']]) : '0');
-                          break;
-                          case 'char':
-                          case 'text':
-                            if (!isset($aGridRow[$aField['sFieldName']])) {
-                              $aGridRow[$aField['sFieldName']] = '';
-                            }
-                            $sQuery .= ",'" . (isset($aGridRow[$aField['sFieldName']]) ? mysql_real_escape_string($aGridRow[$aField['sFieldName']]) : '') . "'";
-                          break;
-                          case 'date':
-                            $sQuery .= ",'" . (isset($aGridRow[$aField['sFieldName']]) ? $aGridRow[$aField['sFieldName']] : '') . "'";
-                          break;
-                        }
-                      }
-                      $sQuery .= ')';
-                      $rs = $stmt->executeQuery( $sQuery );
-                    }
-                  }
-                }
-                $oDataset->next();
-              }
-            break;
-
-        }
-      }
-    }
-    catch (Exception $oError) {
-      throw($oError);
-    }
-  }
-
-
-
-  public function updateReportTables($sProcessUid, $sApplicationUid, $iApplicationNumber, $aFields)
-  {
-  try {
-
+    G::loadClass('pmTable');
     //get all Active Report Tables
-    $oCriteria = new Criteria('workflow');
-    $oCriteria->add(AdditionalTablesPeer::PRO_UID, $sProcessUid);
-    //$oCriteria->add(AdditionalTablesPeer::REP_TAB_STATUS, 'ACTIVE');
-    $oDataset = AdditionalTablesPeer::doSelectRS($oCriteria);
-    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-    $oDataset->next();
-    $aVars = array();
-
-    while ($aRow = $oDataset->getRow()) {
-      //$aRow['REP_TAB_NAME'] = $this->sPrefix . $aRow['REP_TAB_NAME'];
-
-      $con = Propel::getConnection($aRow['DBS_UID']);
-      $stmt = $con->createStatement();
-      switch (DB_ADAPTER) {
-
-        case 'mysql':
-          $aTableFields = $this->getTableVars($aRow['ADD_TAB_UID'], true);
-
-          if ($aRow['ADD_TAB_TYPE'] == 'NORMAL') {
-            $sqlExists = "SELECT * FROM `" . $aRow['ADD_TAB_NAME'] . "` WHERE APP_UID = '" . $sApplicationUid . "'";
-            $rsExists  = $stmt->executeQuery( $sqlExists, ResultSet::FETCHMODE_ASSOC);
-            $rsExists->next();
-            $aRow2 = $rsExists->getRow();
-
-            if ( is_array( $aRow2) ) {
-              $sQuery  = 'UPDATE `' . $aRow['ADD_TAB_NAME'] . '` SET ';
-              foreach ($aTableFields as $aField) {
-
-                if ($aField['sFieldName'] == 'APP_UID' || $aField['sFieldName'] == 'APP_NUMBER' || $aField['sFieldName'] == 'ROW') continue;
-                $sQuery .= '`' . $aField['sFieldName'] . '` = ';
-
-                switch ($aField['sType']) {
-                  case 'FLOAT':
-                  case 'INT':
-                    $sQuery .= (isset($aFields[$aField['sFieldDynName']]) ? (float)str_replace(',', '', $aFields[$aField['sFieldDynName']]) : '0') . ',';
-                  break;
-                  case 'VARCHAR':
-                  case 'TEXT':
-                    if (!isset($aFields[$aField['sFieldDynName']])) {
-                      $aFields[$aField['sFieldDynName']] = '';
-                    }
-                    $sQuery .= "'" . (isset($aFields[$aField['sFieldDynName']]) ? mysql_real_escape_string($aFields[$aField['sFieldDynName']]) : '') . "',";
-                  break;
-                  case 'DATE':
-                    $mysqlDate = (isset($aFields[$aField['sFieldDynName']]) ? $aFields[$aField['sFieldDynName']] : '') ;
-                    if ($mysqlDate!='') {
-                      $mysqlDate = str_replace('/', '-', $mysqlDate);
-                      $mysqlDate = date( 'Y-m-d',  strtotime($mysqlDate) );
-                    }
-                    $sQuery .= "'" . $mysqlDate . "',";
-                  break;
-                }
-              }
-              $sQuery  = substr($sQuery, 0, -1);
-              $sQuery .= " WHERE APP_UID = '" . $sApplicationUid . "'";
-            }
-            else {
-              $sQuery  = 'INSERT INTO `' . $aRow['ADD_TAB_NAME'] . '` (';
-              $sQuery .= '`APP_UID`,`APP_NUMBER`';
-              foreach ($aTableFields as $aField) {
-                if ($aField['sFieldName'] != 'APP_UID' && $aField['sFieldName'] != 'APP_NUMBER' && $aField['sFieldName'] != 'ROW')
-                  $sQuery .= ',`' . $aField['sFieldName'] . '`';
-              }
-              $sQuery .= ") VALUES ('" . $sApplicationUid . "'," . (int)$iApplicationNumber;
-              foreach ($aTableFields as $aField) {
-                if ($aField['sFieldName'] == 'APP_UID' || $aField['sFieldName'] == 'APP_NUMBER' || $aField['sFieldName'] == 'ROW') continue;
-
-                switch ($aField['sType']) {
-                  case 'FLOAT':
-                  case 'INT':
-                    $sQuery .= ',' . (isset($aFields[$aField['sFieldDynName']]) ? (float)str_replace(',', '', $aFields[$aField['sFieldDynName']]) : '0');
-                    break;
-                  case 'VARCHAR':
-                  case 'TEXT':
-                    if (!isset($aFields[$aField['sFieldDynName']])) {
-                      $aFields[$aField['sFieldDynName']] = '';
-                    }
-                    $sQuery .= ",'" . (isset($aFields[$aField['sFieldDynName']]) ? mysql_real_escape_string($aFields[$aField['sFieldDynName']]) : '') . "'";
-                    break;
-                  case 'DATE':
-                    $mysqlDate = ( isset($aFields[$aField['sFieldDynName']]) ? $aFields[$aField['sFieldDynName']] : '' );
-                    if ($mysqlDate!='') {
-                      $mysqlDate = str_replace( '/', '-', $mysqlDate );
-                      $mysqlDate = date( 'Y-m-d',  strtotime($mysqlDate) );
-                    }
-                    $sQuery .= ",'" . $mysqlDate  . "'";
-                    break;
-                }
-              }
-              $sQuery .= ')';
-            }
-
-            $rs = $stmt->executeQuery( $sQuery );
-          }
-          else {
-            //remove old rows from database
-            $sqlDelete = 'DELETE FROM `' . $aRow['ADD_TAB_NAME'] . "` WHERE APP_UID = '" . $sApplicationUid . "'";
-            $rsDelete  = $stmt->executeQuery( $sqlDelete );
-
-            $aAux = explode('-', $aRow['ADD_TAB_GRID']);
-            if (isset($aFields[$aAux[0]])) {
-              foreach ($aFields[$aAux[0]] as $iRow => $aGridRow) {
-                $sQuery  = 'INSERT INTO `' . $aRow['ADD_TAB_NAME'] . '` (';
-                $sQuery .= '`APP_UID`,`APP_NUMBER`,`ROW`';
-                foreach ($aTableFields as $aField) {
-                  if ($aField['sFieldName'] != 'APP_UID' && $aField['sFieldName'] != 'APP_NUMBER' && $aField['sFieldName'] != 'ROW')
-                    $sQuery .= ',`' . $aField['sFieldName'] . '`';
-                }
-                $sQuery .= ") VALUES ('" . $sApplicationUid . "'," . (int)$iApplicationNumber . ',' . $iRow;
-                foreach ($aTableFields as $aField) {
-                  if ($aField['sFieldName'] == 'APP_UID' || $aField['sFieldName'] == 'APP_NUMBER' || $aField['sFieldName'] == 'ROW') continue;
-
-                  switch ($aField['sType']) {
-                    case 'FLOAT':
-                    case 'INT':
-                      $sQuery .= ',' . (isset($aGridRow[$aField['sFieldDynName']]) ? (float)str_replace(',', '', $aGridRow[$aField['sFieldDynName']]) : '0');
-                      break;
-                    case 'VARCHAR':
-                    case 'TEXT':
-                      if (!isset($aGridRow[$aField['sFieldDynName']])) {
-                        $aGridRow[$aField['sFieldDynName']] = '';
-                      }
-                      $sQuery .= ",'" . (isset($aGridRow[$aField['sFieldDynName']]) ? mysql_real_escape_string($aGridRow[$aField['sFieldDynName']]) : '') . "'";
-                      break;
-                    case 'DATE':
-                      $sQuery .= ",'" . (isset($aGridRow[$aField['sFieldDynName']]) ? $aGridRow[$aField['sFieldDynName']] : '') . "'";
-                      break;
-                  }
-                }
-                $sQuery .= ')';
-                $rs =$stmt->executeQuery( $sQuery );
-              }
-            }
-          }
-          break;
-
-         /**
-          * For SQLServer code
-          */
-          case 'mssql':
-            $aTableFields = $this->getTableVars($aRow['REP_TAB_UID'], true);
-            if ($aRow['REP_TAB_TYPE'] == 'NORMAL') {
-              $oDataset2 = mssql_query("SELECT * FROM [" . $aRow['REP_TAB_NAME'] . "] WHERE APP_UID = '" . $sApplicationUid . "'");
-              if ($aRow2 = mssql_fetch_row($oDataset2)) {
-                $sQuery  = 'UPDATE [' . $aRow['REP_TAB_NAME'] . '] SET ';
-                foreach ($aTableFields as $aField) {
-                  $sQuery .= '[' . $aField['sFieldName'] . '] = ';
-                  switch ($aField['sType']) {
-                    case 'number':
-                      $sQuery .= (isset($aFields[$aField['sFieldName']]) ? (float)str_replace(',', '', $aFields[$aField['sFieldName']]) : '0') . ',';
-                    break;
-                    case 'char':
-                    case 'text':
-                      if (!isset($aFields[$aField['sFieldName']])) {
-                        $aFields[$aField['sFieldName']] = '';
-                      }
-                      $sQuery .= "'" . (isset($aFields[$aField['sFieldName']]) ? mysql_real_escape_string($aFields[$aField['sFieldName']]) : '') . "',";
-                    break;
-                    case 'date':
-                      $sQuery .= "'" . (isset($aFields[$aField['sFieldName']]) ? $aFields[$aField['sFieldName']] : '') . "',";
-                    break;
-                  }
-                }
-                $sQuery  = substr($sQuery, 0, -1);
-                $sQuery .= " WHERE APP_UID = '" . $sApplicationUid . "'";
-              }
-              else {
-                $sQuery  = 'INSERT INTO [' . $aRow['REP_TAB_NAME'] . '] (';
-                $sQuery .= '[APP_UID],[APP_NUMBER]';
-                foreach ($aTableFields as $aField) {
-                  $sQuery .= ',[' . $aField['sFieldName'] . ']';
-                }
-                $sQuery .= ") VALUES ('" . $sApplicationUid . "'," . (int)$iApplicationNumber;
-                foreach ($aTableFields as $aField) {
-                  switch ($aField['sType']) {
-                    case 'number':
-                      $sQuery .= ',' . (isset($aFields[$aField['sFieldName']]) ? (float)str_replace(',', '', $aFields[$aField['sFieldName']]) : '0');
-                    break;
-                    case 'char':
-                    case 'text':
-                      if (!isset($aFields[$aField['sFieldName']])) {
-                        $aFields[$aField['sFieldName']] = '';
-                      }
-                      $sQuery .= ",'" . (isset($aFields[$aField['sFieldName']]) ? mysql_real_escape_string($aFields[$aField['sFieldName']]) : '') . "'";
-                    break;
-                    case 'date':
-                      $sQuery .= ",'" . (isset($aFields[$aField['sFieldName']]) ? $aFields[$aField['sFieldName']] : '') . "'";
-                    break;
-                  }
-                }
-                $sQuery .= ')';
-              }
-              $rs = $stmt->executeQuery( $sQuery );
-            }
-            else {
-              mysql_query('DELETE FROM [' . $aRow['REP_TAB_NAME'] . "] WHERE APP_UID = '" . $sApplicationUid . "'");
-              $aAux = explode('-', $aRow['REP_TAB_GRID']);
-              if (isset($aFields[$aAux[0]])) {
-                foreach ($aFields[$aAux[0]] as $iRow => $aGridRow) {
-                  $sQuery  = 'INSERT INTO [' . $aRow['REP_TAB_NAME'] . '] (';
-                  $sQuery .= '[APP_UID],[APP_NUMBER],[ROW]';
-                  foreach ($aTableFields as $aField) {
-                    $sQuery .= ',[' . $aField['sFieldName'] . ']';
-                  }
-                  $sQuery .= ") VALUES ('" . $sApplicationUid . "'," . (int)$iApplicationNumber . ',' . $iRow;
-                  foreach ($aTableFields as $aField) {
-                    switch ($aField['sType']) {
-                      case 'number':
-                        $sQuery .= ',' . (isset($aGridRow[$aField['sFieldName']]) ? (float)str_replace(',', '', $aGridRow[$aField['sFieldName']]) : '0');
-                      break;
-                      case 'char':
-                      case 'text':
-                        if (!isset($aGridRow[$aField['sFieldName']])) {
-                          $aGridRow[$aField['sFieldName']] = '';
-                        }
-                        $sQuery .= ",'" . (isset($aGridRow[$aField['sFieldName']]) ? mysql_real_escape_string($aGridRow[$aField['sFieldName']]) : '') . "'";
-                      break;
-                      case 'date':
-                        $sQuery .= ",'" . (isset($aGridRow[$aField['sFieldName']]) ? $aGridRow[$aField['sFieldName']] : '') . "'";
-                      break;
-                    }
-                  }
-                  $sQuery .= ')';
-                  $rs =$stmt->executeQuery( $sQuery );
-                }
-              }
-            }
-          break;
-
+    $criteria = new Criteria('workflow');
+    $criteria->add(AdditionalTablesPeer::PRO_UID, $proUid);
+    $dataset = AdditionalTablesPeer::doSelectRS($criteria);
+    $dataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    
+    // accomplish all related  report tables for this process that contain case data for the target ($appUid) application
+    while ($dataset->next()) {
+      $row = $dataset->getRow();
+      $className = $row['ADD_TAB_CLASS_NAME'];
+      // verify if the report table class exists
+      if (!file_exists (PATH_WORKSPACE . 'classes/' . $className . '.php') ) {
+        continue;
       }
-      $oDataset->next();
+      // the class exists then load it.
+      require_once PATH_WORKSPACE . 'classes/' . $className . '.php'; //
+      
+      // create a criteria object of report table class
+      $c = new Criteria(pmTable::resolveDbSource($row['DBS_UID']));
+      // select all related records with this $appUid
+      eval('$c->add(' . $className . 'Peer::APP_UID, \'' . $appUid . '\');');
+      eval('$records = ' . $className . 'Peer::doSelect($c);');
+
+      switch ($row['ADD_TAB_TYPE']) { //switching by report table type
+        case  'NORMAL':
+          if (is_array($records) && count($records) > 0) { // if the record already exists on the report table 
+            foreach ($records as $record) { //update all records
+              $record->fromArray(array_change_key_case($caseData, CASE_UPPER), BasePeer::TYPE_FIELDNAME);
+              if ($record->validate()) {
+                $record->save();
+              }
+            }
+          }
+          else { // there are not any record for this application on the table, then create it
+            eval('$obj = new ' . $className . '();');
+            $obj->fromArray($caseData, BasePeer::TYPE_FIELDNAME);
+            $obj->setAppUid($appUid);
+            $obj->setAppNumber($appNumber);
+            $obj->save();
+          }
+          break;
+        
+        case  'GRID':
+          list($gridName, $gridUid)  = explode('-', $row['ADD_TAB_GRID']);
+          $gridData = isset($caseData[$gridName]) ? $caseData[$gridName] : array();
+          
+          // delete old records
+          if (is_array($records) && count($records) > 0) {
+            foreach ($records as $record) {
+              $record->delete();
+            }
+          }
+          // save all grid rows on grid type report table
+          foreach ($gridData as $i => $gridRow) {
+            eval('$obj = new ' . $className . '();');
+            $obj->fromArray(array_change_key_case($gridRow, CASE_UPPER), BasePeer::TYPE_FIELDNAME);
+            $obj->setAppUid($appUid);
+            $obj->setAppNumber($appNumber);
+            $obj->setRow($i);
+            $obj->save();
+          }
+          break;
+      }
     }
-  }
-  catch (Exception $oError) {
-    throw($oError);
-  }
   }
 
   public function getTableVars($uid, $bWhitType = false)
