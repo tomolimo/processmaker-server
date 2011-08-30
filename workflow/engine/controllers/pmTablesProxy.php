@@ -279,9 +279,9 @@ class pmTablesProxy extends HttpProxyController
         $oFields->create($field);
       }
       
-      // if ($isReportTable) {
-      //   $oAdditionalTables->populateReportTable($data['REP_TAB_NAME'], $data['REP_TAB_CONNECTION'], $data['REP_TAB_TYPE'], $fieldsList, $data['PRO_UID'], $data['REP_TAB_GRID']);
-      // }
+      if ($isReportTable) {
+        $oAdditionalTables->populateReportTable($data['REP_TAB_NAME'], $pmTable->getDataSource(), $data['REP_TAB_TYPE'], $data['PRO_UID'], $data['REP_TAB_GRID']);
+      }
 
       $result->success = true;
       $result->msg = $buildResult;
@@ -351,24 +351,19 @@ class pmTablesProxy extends HttpProxyController
     $start   = isset($httpData->start)  ? $httpData->start : 0;
     $limit   = isset($httpData->limit)  ? $httpData->limit : $limit_size; 
 
-    $oAdditionalTables = new AdditionalTables();
-    $table = $oAdditionalTables->load($httpData->id, true);
-    $result = $oAdditionalTables->getAllData($httpData->id, $start, $limit);
+    $additionalTables = new AdditionalTables();
+    $table = $additionalTables->load($httpData->id, true);
+    $result = $additionalTables->getAllData($httpData->id, $start, $limit);
     
-    $keys = array();
-    foreach ($table['FIELDS'] as $field) {
-      if ($field['FLD_KEY'] == '1') {
-        $keys[] = $field['FLD_NAME'];
-      }
-    }
+    $primaryKeys = $additionalTables->getPrimaryKeys();
 
     foreach ($result['rows'] as $i => $row) {
-      $indexes = array();
-      foreach ($keys as $key) {
-        $indexes[] = $row[$key];
+      $primaryKeysValues = array();
+      foreach ($primaryKeys as $key) {
+        $primaryKeysValues[] = isset($row[$key['FLD_NAME']]) ? $row[$key['FLD_NAME']] : '';
       }
 
-      $result['rows'][$i]['__index__'] = implode('-', $indexes);
+      $result['rows'][$i]['__index__'] = md5(implode('-', $primaryKeysValues));
     }
 
     return $result;
@@ -376,82 +371,74 @@ class pmTablesProxy extends HttpProxyController
 
   /**
    * create pm tables record
-   * @param string $httpData->id
-   * @param string $httpData->start
-   * @param string $httpData->limit
+   * @param string $httpData->rows
    */
   public function dataCreate($httpData)
   {
     $rows = G::json_decode(stripslashes($httpData->rows));
     
     require_once 'classes/model/AdditionalTables.php';
-    $oAdditionalTables = new AdditionalTables();
-    $table = $oAdditionalTables->load($httpData->id, true);
+    $additionalTables = new AdditionalTables();
+    $table = $additionalTables->load($httpData->id, true);
+    $primaryKeys = $additionalTables->getPrimaryKeys();
+
     $this->className = $table['ADD_TAB_CLASS_NAME'];
     $this->classPeerName = $this->className . 'Peer';
-    $sPath = PATH_DB . SYS_SYS . PATH_SEP . 'classes' . PATH_SEP;
+    $row = (array) $rows;
+    $toSave = false;
 
-    if (!file_exists ($sPath . $this->className . '.php') ) {
-      throw new Exception("ERROR: $className class file doesn't exit!");
+    if (!file_exists (PATH_WORKSPACE . 'classes/' . $this->className . '.php') ) {
+      throw new Exception("ERROR: {$this->className} class file doesn't exit!");
     }
 
-    //require_once $sPath . $this->className . '.php';
-    require_once 'classes/' . $this->className . '.php';
-    $toSave = false;
-    
-    if (is_array($rows)) { //multiple
-      $c = $cs = 0;
-      foreach ($rows as $i => $row) {
-        $fieldsCount = 0;
-        eval('$obj = new ' .$this->className. '();');
-        foreach ($row as $key => $value) {
-          $action = 'set' . AdditionalTables::getPHPName($key);
-          $obj->$action($value);
-          $fieldsCount++;
+    require_once PATH_WORKSPACE . 'classes/' . $this->className . '.php';
+    eval('$obj = new ' .$this->className. '();');
+
+    if (count($row) > 0) {
+      try {
+        eval('$con = Propel::getConnection('.$this->classPeerName.'::DATABASE_NAME);');
+        $con->begin();
+        $obj->fromArray($row, BasePeer::TYPE_FIELDNAME);
+
+        if ($obj->validate()) {
+          $obj->save();
           $toSave = true;
-        }
-        if ($fieldsCount != 0) {
-          $c++;
-          if ($obj->save() > 0) {
-            $cs++;
+            
+          $primaryKeysValues = array();
+          foreach ($primaryKeys as $primaryKey) {
+            $method = 'get' . AdditionalTables::getPHPName($primaryKey['FLD_NAME']);
+            $primaryKeysValues[] = $obj->$method();
           }
         }
-      }
-      
-      if ($toSave) {
-        $result->success = $cs == $c ? true: false;
-        $result->message = 'Saved #' . $c . ' records successfully';
-      } 
-      else {
-        $result->success = false;
-        $result->message = 'Nothing to do';
-      }
-    } 
-    else { //single
-      eval('$obj = new ' .$this->className. '();');
-      foreach ($rows as $key => $value) {
-        $action = 'set' . AdditionalTables::getPHPName($key);
-        $obj->$action($value);
-        $toSave = true;
-      }
-      if ($toSave) {
-        if ($obj->save() > 0) {
-          $rows->__index__ = 5;
-          $result->success = true;
-          $result->message = 'Record saved successfully';
-          $result->data = (array) $rows;
-        } 
         else {
-          $result->success = false;
-          $result->message = 'Error Updating records';
+          foreach($obj->getValidationFailures() as $objValidationFailure) {
+             $msg .= $objValidationFailure->getMessage() . "\n";
+          }
+          throw new PropelException($msg);
         }
+      } 
+      catch(Exception $e) {
+         $con->rollback();
+         throw new Exception($e->getMessage());
       }
-      else {
-        $result->success = true;
-        $result->data = array('__index__'=>1132);
-        $result->message = 'Nothing to do';
-      }
+      $index = md5(implode('-', $primaryKeysValues));
+    } 
+    else {
+      $toSave = false;
     }
+    
+    if ($toSave) {
+      $result->success = true;
+      $result->message = 'Record saved successfully';
+      $result->rows = $obj->toArray(BasePeer::TYPE_FIELDNAME);
+      $result->rows['__index__'] = $index;
+    }
+    else {
+      $result->success = false;
+      $result->rows = array();
+      $result->message = 'nothing to do';
+    }
+  
     
     return $result;
   }
@@ -1056,7 +1043,7 @@ class pmTablesProxy extends HttpProxyController
       $gridIndex->field_key   = 1;
       $gridIndex->field_null  = 0;
       $gridIndex->field_filter = false;
-      $application->field_autoincrement  = false;
+      $gridIndex->field_autoincrement  = false;
       array_push($defaultColumns, $gridIndex);
     }
 

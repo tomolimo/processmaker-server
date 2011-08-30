@@ -80,6 +80,7 @@ class PmTable
 
     switch ($dbsUid) {
       case 'workflow': case 'wf': case '0': case '':
+        $this->dataSource = 'workflow';
         $this->dbConfig->adapter= DB_ADAPTER;
         $this->dbConfig->host   = DB_HOST;
         $this->dbConfig->name   = DB_NAME;
@@ -89,6 +90,7 @@ class PmTable
         break;
 
       case 'rp': case 'report':
+        $this->dataSource = 'rp';
         $this->dbConfig->adapter= DB_ADAPTER;
         $this->dbConfig->host   = DB_REPORT_HOST;
         $this->dbConfig->name   = DB_REPORT_NAME;
@@ -111,6 +113,11 @@ class PmTable
         $this->dbConfig->passwd = $dbSource->getDbsPassword();
         $this->dbConfig->port   = $dbSource->getDbsPort();
     }
+  }
+
+  public function getDataSource()
+  {
+    return $this->dataSource;
   }
   
   /**
@@ -396,41 +403,6 @@ class PmTable
     }
     
     
-  }
-  
-  /**
-   * Populate the report table with all case data
-   * @param string $sType
-   * @param string $sProcessUid
-   * @param string $sGrid
-   * @return number
-   */
-  public function populateReportTable($sType = 'NORMAL', $sProcessUid = '', $sGrid = '')
-  {
-    require_once "classes/model/Application.php";
-    
-    $con = Propel::getConnection($sConnection);
-    $stmt = $con->createStatement();
-    if ($sType == 'GRID') {
-      $aAux  = explode('-', $sGrid);
-      $sGrid = $aAux[0];
-    }
-    
-    //select cases for this Process, ordered by APP_NUMBER
-    $criteria = new Criteria('workflow');
-    $criteria->add(ApplicationPeer::PRO_UID, $sProcessUid);
-    $criteria->addAscendingOrderByColumn(ApplicationPeer::APP_NUMBER);
-    $dataset = ApplicationPeer::doSelectRS($criteria);
-    $dataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-    
-    while ($dataset->next()) {
-      $row = $dataset->getRow();
-      $aData = unserialize($aRow['APP_DATA']);
-    }
-    
-    return 0;
-
-  
   }
   
   /**

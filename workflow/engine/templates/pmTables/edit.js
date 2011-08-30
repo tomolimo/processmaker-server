@@ -970,7 +970,7 @@ function loadTableRowsFromArray(records)
   var PMRow = assignedGrid.getStore().recordType;
   if (records.length == 0) return;
 
-  for(i in records) {
+  for (i=0;i<records.length; i++) {
     var row = new PMRow({
       uid        : records[i].FLD_UID,
       field_uid  : records[i].FLD_DYN_UID,

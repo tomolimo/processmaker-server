@@ -255,7 +255,7 @@ $startingTime =  array_sum(explode(' ',microtime()));
   G::LoadSystem('form');
   G::LoadSystem('menu');
   G::LoadSystem("xmlMenu");
-  //G::LoadSystem('dvEditor');
+  G::LoadSystem('dvEditor');
   //G::LoadSystem('table');
   G::LoadSystem('controller');
   G::LoadSystem('httpProxyController');

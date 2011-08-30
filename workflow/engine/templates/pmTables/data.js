@@ -72,26 +72,34 @@ Ext.onReady(function(){
 
   _fields.push({name: _idProperty});
   
-  if (tableDef.FIELDS.length !== 0) {
-    for (i in tableDef.FIELDS) {
-      _columns.push({
-        id: tableDef.FIELDS[i].FLD_NAME,
-        header: tableDef.FIELDS[i].FLD_DESCRIPTION,
-        dataIndex: tableDef.FIELDS[i].FLD_NAME,
-        width: 40,
-        editor:{
-          xtype: 'textfield',
-          allowBlank: true
-        }
-      });
-      
-      _fields.push({name: tableDef.FIELDS[i].FLD_NAME});
-
-      if(_idProperty == '' && tableDef.FIELDS[i].FLD_KEY) {
-        _idProperty = tableDef.FIELDS[i].FLD_NAME;
+  for (i=0;i<tableDef.FIELDS.length; i++) {
+    column = {
+      id: tableDef.FIELDS[i].FLD_NAME,
+      header: tableDef.FIELDS[i].FLD_DESCRIPTION,
+      dataIndex: tableDef.FIELDS[i].FLD_NAME,
+      width: 40
+    };
+    if (tableDef.FIELDS[i].FLD_AUTO_INCREMENT != 1) {
+      column.editor = {
+        xtype: 'textfield',
+        allowBlank: true
       }
     }
+    else {
+      column.editor = {
+        xtype: 'displayfield',
+        style: 'font-size:11px; padding-left:7px'
+      }
+    }
+    _columns.push(column);
+    
+    _fields.push({name: tableDef.FIELDS[i].FLD_NAME});
+
+    if(_idProperty == '' && tableDef.FIELDS[i].FLD_KEY) {
+      _idProperty = tableDef.FIELDS[i].FLD_NAME;
+    }
   }
+  
   
  smodel = new Ext.grid.CheckboxSelectionModel({
      listeners:{
@@ -125,13 +133,31 @@ Ext.onReady(function(){
   	    afteredit: {
   	      fn:function(rowEditor, obj, data, rowIndex ){            	  
     		    if (data.phantom === true) {
-    			  store.reload(); // only if it is an insert 
+    			  //store.reload(); // only if it is an insert 
     	    	}
   	      }
   	    }
       }
     });
   }
+
+  Ext.data.DataProxy.addListener('write', function(proxy, action, result, res, rs) {
+    PMExt.notify(_('ID_UPDATE'), res.raw.message)
+  });
+
+  // all exception events
+  Ext.data.DataProxy.addListener('exception', function(proxy, type, action, options, res) {
+    try{
+      response = Ext.util.JSON.decode(res.responseText);
+      
+      if(response.message != 'nothing to do') {
+        PMExt.notify(_('ID_ERROR'), response.msg);
+      }
+    } 
+    catch(e) {
+      PMExt.notify(_('ID_ERROR'), res.responseText);
+    }
+  });
 
   var proxy = new Ext.data.HttpProxy({
     //url: '../pmTablesProxy/getData?id=' + tableDef.ADD_TAB_UID
@@ -152,7 +178,7 @@ Ext.onReady(function(){
 
   var reader = new Ext.data.JsonReader({
     root       : 'rows',
-    idProperty : 'id',
+    idProperty : '__index__',
     fields     : _fields,
     idProperty : _idProperty,
     totalProperty: 'count'
@@ -284,6 +310,9 @@ DoNothing = function(){};
 var props = function(){};
 
 NewPMTableRow = function(){
+  if (editor.editing) {
+    return false;
+  }
   var PMRow = infoGrid.getStore().recordType;
   //var meta = mapPMFieldType(records[i].data['FIELD_UID']);
   

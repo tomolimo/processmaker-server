@@ -20,6 +20,9 @@ require_once 'classes/model/om/BaseAdditionalTables.php';
  */
 class AdditionalTables extends BaseAdditionalTables {
 
+  public $fields = array();
+  public $primaryKeys = array();
+
   /**
    * Function load
    * access public
@@ -29,37 +32,12 @@ class AdditionalTables extends BaseAdditionalTables {
       $oAdditionalTables = AdditionalTablesPeer::retrieveByPK($sUID);
       if (!is_null($oAdditionalTables)) {
         $aFields = $oAdditionalTables->toArray(BasePeer::TYPE_FIELDNAME);
-        if ($bFields) {
-          require_once 'classes/model/Fields.php';
-          $oCriteria = new Criteria('workflow');
-          $oCriteria->addSelectColumn(FieldsPeer::FLD_UID);
-          $oCriteria->addSelectColumn(FieldsPeer::FLD_INDEX);
-          $oCriteria->addSelectColumn(FieldsPeer::FLD_NAME);
-          $oCriteria->addSelectColumn(FieldsPeer::FLD_DESCRIPTION);
-          $oCriteria->addSelectColumn(FieldsPeer::FLD_TYPE);
-          $oCriteria->addSelectColumn(FieldsPeer::FLD_SIZE);
-          $oCriteria->addSelectColumn(FieldsPeer::FLD_NULL);
-          $oCriteria->addSelectColumn(FieldsPeer::FLD_AUTO_INCREMENT);
-          $oCriteria->addSelectColumn(FieldsPeer::FLD_KEY);
-          $oCriteria->addSelectColumn(FieldsPeer::FLD_FOREIGN_KEY);
-          $oCriteria->addSelectColumn(FieldsPeer::FLD_FOREIGN_KEY_TABLE);
-          $oCriteria->addSelectColumn(FieldsPeer::FLD_DYN_NAME);
-          $oCriteria->addSelectColumn(FieldsPeer::FLD_DYN_UID);
-          $oCriteria->addSelectColumn(FieldsPeer::FLD_FILTER);
-          $oCriteria->add(FieldsPeer::ADD_TAB_UID, $sUID);
-          $oCriteria->addAscendingOrderByColumn(FieldsPeer::FLD_INDEX);
-          $oDataset = FieldsPeer::doSelectRS($oCriteria);
-          $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-          $oDataset->next();
-          $aFields['FIELDS'] = array();
-          $i = 1;
-          while ($aRow = $oDataset->getRow()) {
-            $aFields['FIELDS'][$i] = $aRow;
-            $oDataset->next();
-            $i++;
-          }
-        }
         $this->fromArray($aFields, BasePeer::TYPE_FIELDNAME);
+
+        if ($bFields) {
+          $aFields['FIELDS'] = $this->getFields();
+        }
+        
         return $aFields;
       }
       else {
@@ -69,6 +47,53 @@ class AdditionalTables extends BaseAdditionalTables {
     catch (Exception $oError) {
       throw($oError);
     }
+  }
+
+  public function getFields()
+  {
+    if (count($this->fields) > 0) {
+      return $this->fields;
+    }
+
+    require_once 'classes/model/Fields.php';
+    $oCriteria = new Criteria('workflow');
+
+    $oCriteria->addSelectColumn(FieldsPeer::FLD_UID);
+    $oCriteria->addSelectColumn(FieldsPeer::FLD_INDEX);
+    $oCriteria->addSelectColumn(FieldsPeer::FLD_NAME);
+    $oCriteria->addSelectColumn(FieldsPeer::FLD_DESCRIPTION);
+    $oCriteria->addSelectColumn(FieldsPeer::FLD_TYPE);
+    $oCriteria->addSelectColumn(FieldsPeer::FLD_SIZE);
+    $oCriteria->addSelectColumn(FieldsPeer::FLD_NULL);
+    $oCriteria->addSelectColumn(FieldsPeer::FLD_AUTO_INCREMENT);
+    $oCriteria->addSelectColumn(FieldsPeer::FLD_KEY);
+    $oCriteria->addSelectColumn(FieldsPeer::FLD_FOREIGN_KEY);
+    $oCriteria->addSelectColumn(FieldsPeer::FLD_FOREIGN_KEY_TABLE);
+    $oCriteria->addSelectColumn(FieldsPeer::FLD_DYN_NAME);
+    $oCriteria->addSelectColumn(FieldsPeer::FLD_DYN_UID);
+    $oCriteria->addSelectColumn(FieldsPeer::FLD_FILTER);
+    $oCriteria->add(FieldsPeer::ADD_TAB_UID, $this->getAddTabUid());
+    $oCriteria->addAscendingOrderByColumn(FieldsPeer::FLD_INDEX);
+
+    $oDataset = FieldsPeer::doSelectRS($oCriteria);
+    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+
+    while ($oDataset->next()) {
+      $this->fields[] = $oDataset->getRow();
+    }
+
+    return $this->fields;
+  }
+
+  public function getPrimaryKeys()
+  {
+    $this->primaryKeys = array();
+    foreach ($this->fields as $field) {
+      if ($field['FLD_KEY'] == '1') {
+        $this->primaryKeys[] = $field;
+      }
+    }
+    return $this->primaryKeys;
   }
 
   public function loadByName($name) {
@@ -497,9 +522,72 @@ class AdditionalTables extends BaseAdditionalTables {
 
 
   /**
+   * Populate the report table with all case data
+   * @param string $sType
+   * @param string $sProcessUid
+   * @param string $sGrid
+   * @return number
+   */
+  public function populateReportTable($tableName, $sConnection = 'rp', $type = 'NORMAL', $processUid = '', $gridKey = '')
+  {
+    require_once "classes/model/Application.php";
+
+    $this->className = $this->getPHPName($tableName);
+    $this->classPeerName = $this->className . 'Peer';
+
+    if (!file_exists (PATH_WORKSPACE . 'classes/' . $this->className . '.php') ) {
+      throw new Exception("ERROR: {$this->className} class file doesn't exit!");
+    }
+
+    require_once PATH_WORKSPACE . 'classes/' . $this->className . '.php';
+
+    //select cases for this Process, ordered by APP_NUMBER
+    $con = Propel::getConnection($sConnection);
+    $stmt = $con->createStatement();
+    $criteria = new Criteria('workflow');
+    $criteria->add(ApplicationPeer::PRO_UID, $processUid);
+    $criteria->addAscendingOrderByColumn(ApplicationPeer::APP_NUMBER);
+    $dataset = ApplicationPeer::doSelectRS($criteria);
+    $dataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+
+    while ($dataset->next()) {
+      $row = $dataset->getRow();
+      //remove old applications references
+      $deleteSql = "DELETE FROM $tableName WHERE APP_UID = '".$row['APP_UID']."'";
+      $rs = $stmt->executeQuery($deleteSql);
+      // getting the case data
+      $caseFields = array_change_key_case(unserialize($row['APP_DATA']), CASE_UPPER);
+      
+      if ($type == 'GRID') {
+        list($gridName, $gridUid)  = explode('-', $gridKey);
+        $gridName = strtoupper($gridName);
+        foreach ($caseFields[$gridName] as $i => $gridRow) {
+          $gridRow = array_change_key_case($gridRow, CASE_UPPER);
+
+          eval('$obj = new ' .$this->className. '();');
+          $obj->fromArray($caseFields, BasePeer::TYPE_FIELDNAME);
+          $obj->setAppUid($row['APP_UID']);
+          $obj->setAppNumber($row['APP_NUMBER']);
+          $obj->fromArray($gridRow, BasePeer::TYPE_FIELDNAME);
+          $obj->setRow($i);
+          $obj->save();
+          eval('$obj = new ' .$this->className. '();');
+        }
+      } else {
+        eval('$obj = new ' .$this->className. '();');
+        $obj->fromArray($caseFields, BasePeer::TYPE_FIELDNAME);
+        $obj->setAppUid($row['APP_UID']);
+        $obj->setAppNumber($row['APP_NUMBER']);
+        $obj->save();
+        $obj = null;
+      }
+    }
+  }
+
+  /**
    * Populate Report Table
    */
-  public function populateReportTable($sTableName, $sConnection = 'rp', $sType = 'NORMAL', $aFields = array(), $sProcessUid = '', $sGrid = '')
+  public function populateReportTable2($sTableName, $sConnection = 'rp', $sType = 'NORMAL', $aFields = array(), $sProcessUid = '', $sGrid = '')
   {
 
     require_once "classes/model/Application.php";

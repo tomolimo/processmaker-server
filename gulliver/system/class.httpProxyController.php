@@ -86,7 +86,7 @@ class HttpProxyController {
               
         } catch (Exception $e) {
             $result->success = false;
-            $result->msg     = $e->getMessage();
+            $result->message = $result->msg = $e->getMessage();
             switch(get_class($e)) {
                 case 'Exception':       $error = "SYSTEM ERROR"; break;
                 case 'PMException':     $error = "PROCESSMAKER ERROR"; break;

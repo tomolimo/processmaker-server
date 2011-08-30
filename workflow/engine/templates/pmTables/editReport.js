@@ -267,8 +267,7 @@ Ext.onReady(function(){
           // use shorthand alias defined above
           editor: {
             xtype: 'displayfield',
-            readOnly: true,
-            style: 'font-size:11px; font-weight:bold; padding-left:4px'
+            style: 'font-size:11px; padding-left:7px'
           }
       }, {
           id: 'field_name',
@@ -323,7 +322,7 @@ Ext.onReady(function(){
           id: 'field_size',
           header: _("ID_SIZE"),
           dataIndex: 'field_size',
-          width: 70,
+          width: 50,
           align: 'right',
           editor: new fm.NumberField({
             allowBlank: true
@@ -333,15 +332,13 @@ Ext.onReady(function(){
         header: _('ID_AUTO_INCREMENT'),
         dataIndex: 'field_autoincrement',
         align: 'center',
-        width: 50,
+        width: 100,
         trueText: 'Yes',
         falseText: 'No',
         editor: {
             xtype: 'checkbox'
         }
       }
-      
-      
   ];
 
   //if permissions plugin is enabled
@@ -644,6 +641,18 @@ Ext.onReady(function(){
             comboGridsList.setValue(this.getAt(i).data.FIELD_UID);
             comboGridsList.setRawValue(this.getAt(i).data.FIELD_NAME);
             comboGridsList.setDisabled(true);
+
+            var available = Ext.getCmp('availableGrid');
+            available.store.load({
+              params: {
+                action: "getDynafields",
+                PRO_UID: PRO_UID !== false ? PRO_UID : Ext.getCmp('PROCESS').getValue(),
+                TYPE: 'GRID',
+                GRID_UID: Ext.getCmp('REP_TAB_GRID').getValue(),
+                start: 0,
+                limit: pageSize
+              }
+            });
           } else {
             Ext.Msg.alert( _('ID_ERROR'), 'Grid doesn\'t exist!');
           }
@@ -724,9 +733,10 @@ Ext.onReady(function(){
 
           // loading available fields
           //loadAvFieldsFromArray(avFieldsList);
-          if (TABLE.ADD_TAB_TYPE == 'GRID') 
-            loadFieldsGrids();
-          else 
+          //if (TABLE.ADD_TAB_TYPE == 'GRID') 
+            //loadFieldsGrids();
+          //else 
+          if (TABLE.ADD_TAB_TYPE == 'NORMAL')
             loadFieldNormal();
 
           // loading table fields
@@ -1075,7 +1085,7 @@ loadFieldNormal = function(){
 loadFieldsGrids = function(){
   var available = Ext.getCmp('availableGrid');
   available.store.removeAll();
-
+  
   available.store.load({
     params: {
       action: "getDynafields",
@@ -1227,7 +1237,7 @@ function loadTableRowsFromArray(records)
   var PMRow = assignedGrid.getStore().recordType;
   if (records.length == 0) return;
 
-  for(i in records) {
+  for (i=0;i<records.length; i++) {
     var row = new PMRow({
       uid        : records[i].FLD_UID,
       field_uid  : records[i].FLD_DYN_UID,
