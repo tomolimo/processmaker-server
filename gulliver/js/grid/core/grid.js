@@ -357,7 +357,14 @@ var G_Grid = function(oForm, sGridName){
                   oNewSelect.setAttribute(aAttributes[a].name,aAttributes[a].value);
                 }
                 if (aAttributes[a].name == 'disabled'){
-                  oNewSelect.setAttribute(aAttributes[a].name,aAttributes[a].value);
+                  if (_BROWSER.name == 'msie'){
+                	if (aAttributes[a].value=='true'){
+                	  oNewSelect.setAttribute(aAttributes[a].name,aAttributes[a].value);
+                	}
+                  }
+                  else{
+                    oNewSelect.setAttribute(aAttributes[a].name,aAttributes[a].value);
+                  }
                 }
               }
               
