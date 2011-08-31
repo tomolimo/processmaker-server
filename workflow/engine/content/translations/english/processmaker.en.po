@@ -80,6 +80,12 @@ msgid "Users"
 msgstr "Users"
 
 # TRANSLATION
+# LABEL/ID_DELETE_ACTION
+#: LABEL/ID_DELETE_ACTION
+msgid "DELETE"
+msgstr "DELETE"
+
+# TRANSLATION
 # LABEL/ID_CASES
 #: LABEL/ID_CASES
 msgid "HOME"
