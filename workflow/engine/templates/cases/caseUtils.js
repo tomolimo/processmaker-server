@@ -16,7 +16,7 @@ function openCaseNotesWindow(appUid,modalSw){
     url : '../caseProxy/getNotesList?appUid='+appUid,
     root: 'notes',
     totalProperty: 'totalCount',
-    fields: ['USR_USERNAME','NOTE_DATE','NOTE_CONTENT'],
+    fields: ['USR_USERNAME','USR_FIRSTNAME','USR_LASTNAME','USR_FULL_NAME','NOTE_DATE','NOTE_CONTENT'],
     baseParams:{
       start:startRecord,
       limit:startRecord+loadSize
@@ -33,11 +33,34 @@ function openCaseNotesWindow(appUid,modalSw){
   });
   storeNotes.load();
 
+  // note added by krlos pacha carlos-at-colosa.com
+  // code added to get info about the users' name configuration
+  // to can see the correct user name set into enviroment
+
+  var userName = '';
+  switch(FORMATS.FullNameFormat){
+    case '@lastName, @firstName (@userName)':
+      userName = '{USR_LASTNAME}, {USR_FIRSTNAME} ({USR_USERNAME})';break;
+    case '@firstName @lastName':
+      userName = '{USR_FIRSTNAME} {USR_LASTNAME}';break;
+    case '@firstName @lastName (@userName)':
+      userName = '{USR_FIRSTNAME} {USR_LASTNAME} ({USR_USERNAME})';break;
+    case '@userName':
+      userName = '{USR_USERNAME}';break;
+    case '@userName (@firstName @lastName)':
+      userName = '{USR_USERNAME} ({USR_FIRSTNAME} {USR_LASTNAME})';break;
+    case '@lastName @firstName':
+      userName = '{USR_LASTNAME} {USR_FIRSTNAME}';break;
+    case '@lastName, @firstName':
+      userName = '{USR_LASTNAME}, {USR_FIRSTNAME}';break;
+    case '@lastName, @firstName (@userName)':
+      userName = '{USR_LASTNAME}, {USR_FIRSTNAME} ({USR_USERNAME})';break;
+  }
   var tplNotes = new Ext.XTemplate(
     '<tpl for=".">',
     '<div class="thumb-wrap">',
     '<div class="thumb" >',
-    '<span class="x-editable"><b>{USR_USERNAME}</b></span><br>',
+    '<span class="x-editable"><b>'+userName+'</b></span><br>',
     '<span class="x-editable">{NOTE_CONTENT}</span><br>',
     '<span class="x-editable"><small><i>{NOTE_DATE}</i></small><hr /></span>',
     '</div>',

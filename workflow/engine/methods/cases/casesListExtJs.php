@@ -112,11 +112,14 @@
 
   $oHeadPublisher->assign( '___p34315105',   $menuPerms); // user menu permissions
 
+  G::LoadClass('configuration');
+  $c = new Configurations();
+
   $oHeadPublisher->usingExtJs('ux/GridRowActions');
   $oHeadPublisher->addExtJsScript('cases/caseUtils', true);
   $oHeadPublisher->addExtJsScript('cases/casesList', false );    //adding a javascript file .js
   $oHeadPublisher->addContent( 'cases/casesListExtJs'); //adding a html file  .html.
-
+  $oHeadPublisher->assign('FORMATS',$c->getFormats());
   G::RenderPage('publish', 'extJs');
 
   //functions to fill the comboboxes in the case list page

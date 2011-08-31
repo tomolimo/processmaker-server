@@ -18,6 +18,8 @@ class AppNotes extends BaseAppNotes {
   function getNotesList($appUid, $usrUid, $start, $limit) {
     require_once ( "classes/model/Users.php" );
 
+    G::LoadClass('ArrayPeer');
+
     $Criteria = new Criteria('workflow');
     $Criteria->clearSelectColumns();
 
@@ -32,6 +34,9 @@ class AppNotes extends BaseAppNotes {
     $Criteria->addSelectColumn(AppNotesPeer::NOTE_AFFECTED_OBJ2);
     $Criteria->addSelectColumn(AppNotesPeer::NOTE_RECIPIENTS);
     $Criteria->addSelectColumn(UsersPeer::USR_USERNAME);
+    $Criteria->addSelectColumn(UsersPeer::USR_FIRSTNAME);
+    $Criteria->addSelectColumn(UsersPeer::USR_LASTNAME);  
+     
     $Criteria->addSelectColumn(UsersPeer::USR_EMAIL);
 
     $Criteria->addJoin(AppNotesPeer::USR_UID, UsersPeer::USR_UID, Criteria::LEFT_JOIN);
