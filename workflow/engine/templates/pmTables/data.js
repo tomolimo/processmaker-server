@@ -17,78 +17,86 @@ var _fields;
 var isReport;
 
 Ext.onReady(function(){
-  
+
   pageSize = 20; //parseInt(CONFIG.pageSize);
   
   isReport = tableDef.PRO_UID ? true : false;
   
   newButton = new Ext.Action({
-    text: _('ID_ADD_ROW'),
-    iconCls: 'button_menu_ext ss_sprite ss_add',
-    handler: NewPMTableRow
+    text    : _('ID_ADD_ROW'),
+    iconCls : 'button_menu_ext ss_sprite ss_add',
+    handler : NewPMTableRow
   });
   
   editButton = new Ext.Action({
-    text: _('ID_EDIT'),
-    iconCls: 'button_menu_ext ss_sprite  ss_pencil',
-    handler: EditPMTableRow,
-    disabled: true
+    text     : _('ID_EDIT'),
+    iconCls  : 'button_menu_ext ss_sprite  ss_pencil',
+    handler  : EditPMTableRow,
+    disabled : true
   });
 
   deleteButton = new Ext.Action({
-    text: _('ID_DELETE'),
-    iconCls: 'button_menu_ext ss_sprite  ss_delete',
-    handler: DeletePMTableRow,
-    disabled: true
+    text     : _('ID_DELETE'),
+    iconCls  : 'button_menu_ext ss_sprite  ss_delete',
+    handler  : DeletePMTableRow,
+    disabled : true
   });
 
   importButton = new Ext.Action({
-    text: _('ID_IMPORT'),
-    iconCls: 'silk-add',
-    icon: '/images/import.gif',
-    handler: ImportPMTableCSV
+    text    : _('ID_IMPORT_CSV'),
+    iconCls : 'silk-add',
+    icon    : '/images/import.gif',
+    handler : ImportPMTableCSV
+  });
+
+  exportButton = new Ext.Action({
+    text    : _('ID_EXPORT_CSV'),
+    iconCls : 'silk-add',
+    icon    : '/images/export.png',
+    handler : ExportPMTableCSV
   });
   
   backButton = new Ext.Action({
-    text: _('ID_BACK'),
-    icon: '/images/back-icon.png',
-    handler: BackPMList
+    text    : _('ID_BACK'),
+    icon    : '/images/back-icon.png',
+    handler : BackPMList
   });
   
   contextMenu = new Ext.menu.Menu({
-      items: [editButton, deleteButton]
+      items : [ editButton,
+                deleteButton ]
   });
   
   //This loop loads columns and fields to store and column model
-  _columns = new Array();
-  _fields  = new Array();
+  _columns    = new Array();
+  _fields     = new Array();
   _idProperty = '__index__';
 
  //default generated id
   _columns.push({
-    id: _idProperty,
-    hidden: true
+    id     : _idProperty,
+    hidden : true
   });
 
   _fields.push({name: _idProperty});
   
   for (i=0;i<tableDef.FIELDS.length; i++) {
     column = {
-      id: tableDef.FIELDS[i].FLD_NAME,
-      header: tableDef.FIELDS[i].FLD_DESCRIPTION,
-      dataIndex: tableDef.FIELDS[i].FLD_NAME,
-      width: 40
+      id        : tableDef.FIELDS[i].FLD_NAME,
+      header    : tableDef.FIELDS[i].FLD_DESCRIPTION,
+      dataIndex : tableDef.FIELDS[i].FLD_NAME,
+      width     : 40
     };
     if (tableDef.FIELDS[i].FLD_AUTO_INCREMENT != 1) {
       column.editor = {
-        xtype: 'textfield',
-        allowBlank: true
+        xtype      : 'textfield',
+        allowBlank : true
       }
     }
     else {
       column.editor = {
-        xtype: 'displayfield',
-        style: 'font-size:11px; padding-left:7px'
+        xtype : 'displayfield',
+        style : 'font-size:11px; padding-left:7px'
       }
     }
     _columns.push(column);
@@ -103,7 +111,7 @@ Ext.onReady(function(){
   
  smodel = new Ext.grid.CheckboxSelectionModel({
      listeners:{
-       selectionchange: function(sm){
+       selectionchange : function(sm){
          var count_rows = sm.getCount();
          switch(count_rows){
          case 0:
@@ -128,9 +136,9 @@ Ext.onReady(function(){
   //row editor for table columns grid
   if (!isReport) {
     editor = new Ext.ux.grid.RowEditor({
-      saveText: _("ID_UPDATE"),
-      listeners: {
-  	    afteredit: {
+      saveText  : _("ID_UPDATE"),
+      listeners : {
+  	    afteredit : {
   	      fn:function(rowEditor, obj, data, rowIndex ){            	  
     		    if (data.phantom === true) {
     			  //store.reload(); // only if it is an insert 
@@ -253,8 +261,15 @@ Ext.onReady(function(){
     store: store,
     cm: cmodel,
     sm: smodel,
-    tbar:[newButton,'-',editButton, deleteButton,'-',importButton,{xtype: 'tbfill'}, backButton],
-    // tbar:[newButton,'-',editButton, deleteButton,'-',{xtype: 'tbfill' }, backButton],
+    tbar:[ newButton,
+           '-',
+           editButton,
+           deleteButton,
+           '-',
+           importButton,
+           exportButton,
+           {xtype: 'tbfill'},
+           backButton ],
     bbar: bbarpaging
   }
   
@@ -361,65 +376,65 @@ DeletePMTableRow = function(){
 ImportPMTableCSV = function(){
       
   var comboDelimiter = new Ext.data.SimpleStore({
-                          fields: ['id', 'value'],
-                          data:   [[';', 'SemiColon (;)'], 
-                                   [',', 'Comma (,)']]
+                          fields : ['id', 'value'],
+                          data   : [[';', 'SemiColon (;)'],
+                                    [',', 'Comma (,)']]
                        });      
   var w = new Ext.Window({
-    title: '',
-    width: 440,
-    height: 180,
-    modal: true,
-    autoScroll: false,
-    maximizable: false,
-    resizable: false,
+    title       : '',
+    width       : 440,
+    height      : 180,
+    modal       : true,
+    autoScroll  : false,
+    maximizable : false,
+    resizable   : false,
     items: [
       new Ext.FormPanel({
-        id:'uploader',
-        fileUpload: true,
-        width: 420,
-        frame: true,
-        title: 'Import Data from CSV file',
-        autoHeight: false,
-        bodyStyle: 'padding: 10px 10px 0 10px;',
-        labelWidth: 80,
-        defaults: {
-            anchor: '90%',
-            allowBlank: false,
-            msgTarget: 'side'
+        id         :'uploader',
+        fileUpload : true,
+        width      : 420,
+        frame      : true,
+        title      : _('ID_IMPORT_DATA_CSV'),
+        autoHeight : false,
+        bodyStyle  : 'padding: 10px 10px 0 10px;',
+        labelWidth : 80,
+        defaults   : {
+            anchor     : '90%',
+            allowBlank : false,
+            msgTarget  : 'side'
         },
-        items: [{
-            xtype: 'fileuploadfield',
-            id: 'csv-file',
-            emptyText: 'Select a file',
-            fieldLabel: 'CSV File', 
-            name: 'form[CSV_FILE]',
-            buttonText: '',
-            buttonCfg: {
+        items : [{
+            xtype      : 'fileuploadfield',
+            id         : 'csv-file',
+            emptyText  : 'Select a file',
+            fieldLabel : 'CSV File',
+            name       : 'form[CSV_FILE]',
+            buttonText : '',
+            buttonCfg  : {
                 iconCls: 'upload-icon'
             }
         }, {
-          xtype: 'combo',
-          id: 'csv-delimiter',
-          fieldLabel: 'Delimited by',
-          hiddenName: 'form[CSV_DELIMITER]',
-          mode: 'local',
-          store: comboDelimiter,
-          displayField: 'value', 
-          valueField: 'id',
-          allowBlank: false, 
-          triggerAction: 'all',
-          emptyText: _('ID_SELECT'),
-          selectOnFocus:true
+          xtype         : 'combo',
+          id            : 'csv-delimiter',
+          fieldLabel    : 'Delimited by',
+          hiddenName    : 'form[CSV_DELIMITER]',
+          mode          : 'local',
+          store         : comboDelimiter,
+          displayField  : 'value',
+          valueField    : 'id',
+          allowBlank    : false,
+          triggerAction : 'all',
+          emptyText     : _('ID_SELECT'),
+          selectOnFocus : true
           
         },{
-          xtype: 'hidden',
-          name: 'form[ADD_TAB_UID]',
-          value: tableDef.ADD_TAB_UID
+          xtype : 'hidden',
+          name  : 'form[ADD_TAB_UID]',
+          value : tableDef.ADD_TAB_UID
         }],
-        buttons: [{
-            text: _('ID_UPLOAD'),
-            handler: function(){
+        buttons : [{
+            text     : _('ID_UPLOAD'),
+            handler  : function(){
               var filePath = Ext.getCmp('csv-file').getValue();
               var fileType = filePath.substring(filePath.lastIndexOf('.') + 1).toLowerCase();
               if(fileType =='csv' ){
@@ -427,9 +442,9 @@ ImportPMTableCSV = function(){
 
                 if(uploader.getForm().isValid()){
                   uploader.getForm().submit({
-                    url: '../pmTablesProxy/importCSV',
-                    waitMsg: 'Uploading file...',
-                    success: function(o, resp){
+                    url      : '../pmTablesProxy/importCSV',
+                    waitMsg  : 'Uploading file...',
+                    success  : function(o, resp){
                       w.close();
                       infoGrid.store.reload();
 
@@ -438,30 +453,138 @@ ImportPMTableCSV = function(){
                     failure: function(o, resp){
                       w.close();
                       Ext.MessageBox.show({title: '', 
-                                            msg:     resp.result.message,
-                                            buttons: Ext.MessageBox.OK, 
-                                            animEl:  'mb9', 
-                                            fn:      function(){}, 
-                                            icon:    Ext.MessageBox.ERROR
+                                            msg     : resp.result.message,
+                                            buttons : Ext.MessageBox.OK, 
+                                            animEl  : 'mb9', 
+                                            fn      : function(){}, 
+                                            icon    : Ext.MessageBox.ERROR
                                           });
                     }
                   });
                 }
               } else {
-                Ext.MessageBox.show({ title:   '', 
-                                      msg:     _('ID_INVALID_EXTENSION') + ' ' + fileType,
-                                      buttons: Ext.MessageBox.OK,
-                                      animEl:  'mb9', 
-                                      fn:      function(){},
-                                      icon:    Ext.MessageBox.ERROR
+                Ext.MessageBox.show({ title   : '', 
+                                      msg     : _('ID_INVALID_EXTENSION') + ' ' + fileType,
+                                      buttons : Ext.MessageBox.OK,
+                                      animEl  : 'mb9', 
+                                      fn      : function(){},
+                                      icon    : Ext.MessageBox.ERROR
                                     });
               }
             }
         },{
-            text: TRANSLATIONS.ID_CANCEL,
-            handler: function(){
-              w.close();
+          text    : TRANSLATIONS.ID_CANCEL,
+          handler : function(){
+            w.close();
+          }
+        }]
+      })
+    ]
+
+  });
+  w.show();
+}
+
+ExportPMTableCSV = function(){
+
+  var comboDelimiter = new Ext.data.SimpleStore({
+                          fields : ['id', 'value'],
+                          data   : [[';', 'SemiColon (;)'],
+                                    [',', 'Comma (,)']]
+                       });
+  var w = new Ext.Window({
+    title       : '',
+    width       : 320,
+    height      : 140,
+    modal       : true,
+    autoScroll  : false,
+    maximizable : false,
+    resizable   : false,
+    items: [
+      new Ext.FormPanel({
+        id         :'uploader',
+        fileUpload : true,
+        width      : 300,
+        frame      : true,
+        title      : _('ID_EXPORT_DATA_CSV'),
+        autoHeight : false,
+        bodyStyle  : 'padding: 10px 10px 0 10px;',
+        labelWidth : 80,
+        defaults   : {
+            anchor     : '90%',
+            allowBlank : false,
+            msgTarget  : 'side'
+        },
+        items : [{
+          xtype         : 'combo',
+          id            : 'csv_delimiter',
+          fieldLabel    : 'Delimited by',
+          hiddenName    : 'form[CSV_DELIMITER]',
+          mode          : 'local',
+          store         : comboDelimiter,
+          displayField  : 'value',
+          valueField    : 'id',
+          allowBlank    : false,
+          triggerAction : 'all',
+          emptyText     : _('ID_SELECT'),
+          selectOnFocus : true
+
+        },{
+          xtype : 'hidden',
+          name  : 'form[ADD_TAB_UID]',
+          value : tableDef.ADD_TAB_UID
+        } ],
+        buttons : [{
+            text     : _('ID_EXPORT'),
+            handler  : function(){
+              var csvDelimiter = Ext.getCmp('csv_delimiter').getValue();
+              if(csvDelimiter != '') {
+                Ext.Msg.show({
+                  title      : '',
+                  msg        : _('ID_PROCESSING'),
+                  wait       : true,
+                  waitConfig : {interval:500}
+                });
+
+                Ext.Ajax.request({
+                  url: '../pmTablesProxy/exportCSV',
+                  params: {
+                    ADD_TAB_UID   : tableDef.ADD_TAB_UID,
+                    CSV_DELIMITER : Ext.getCmp('csv_delimiter').getValue()
+                  },
+                  success: function(resp){
+
+                    Ext.Msg.hide();
+                    w.close();
+
+                    result = Ext.util.JSON.decode(resp.responseText);
+
+                    if (result.success) {
+                      location.href = result.link;
+                    } else {
+                      PMExt.error(_('ID_ERROR', result.message));
+                    }
+
+                  },
+                  failure: function(obj, resp){
+                    Ext.Msg.alert( _('ID_ERROR'), resp.result.msg);
+                  }
+                });
+              } else {
+                Ext.MessageBox.show({ title   : '',
+                                      msg     : _('ID_INVALID_DELIMITER'),
+                                      buttons : Ext.MessageBox.OK,
+                                      animEl  : 'mb9',
+                                      fn      : function(){},
+                                      icon    : Ext.MessageBox.ERROR
+                                    });
+              }
             }
+        },{
+          text    : TRANSLATIONS.ID_CANCEL,
+          handler : function(){
+            w.close();
+          }
         }]
       })
     ]
@@ -469,6 +592,7 @@ ImportPMTableCSV = function(){
   });
   w.show();
 }
+
 
 //Load PM Table List
 BackPMList = function(){

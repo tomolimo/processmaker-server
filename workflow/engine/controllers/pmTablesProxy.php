@@ -568,6 +568,71 @@ class pmTablesProxy extends HttpProxyController
   }  
   
   /**
+   * export a pm tables record to CSV
+   * @param string $httpData->id
+   */
+  public function exportCSV($httpData)
+  {
+
+    try{
+
+      $link       = '';
+      $size       = '';
+      $META       = 'Content';
+      $bytesSaved = 0;
+
+      require_once 'classes/model/AdditionalTables.php';
+      $oAdditionalTables = new AdditionalTables();
+      $aAdditionalTables = $oAdditionalTables->load($_POST['ADD_TAB_UID'], true);
+      $sErrorMessages    = '';
+      $sDelimiter        = $_POST['CSV_DELIMITER'];
+
+      $resultData        = $oAdditionalTables->getAllData($_POST['ADD_TAB_UID']);
+      $rows  = $resultData['rows'];
+      $count = $resultData['count'];
+
+      $PUBLIC_ROOT_PATH = PATH_DATA . 'sites' . PATH_SEP . SYS_SYS . PATH_SEP . 'public' . PATH_SEP;
+      $filenameOnly = strtolower( $aAdditionalTables['ADD_TAB_NAME'] ."_".date("Y-m-d").'_'.date("Hi").".csv");
+      $filename = $PUBLIC_ROOT_PATH . $filenameOnly;
+      $fp = fopen( $filename, "wb");
+
+      foreach($rows as $keyCol => $cols ){
+        $SDATA = "";
+        $cnt = count($cols);
+        foreach($cols as $key => $val){
+          $SDATA .= $val;
+          if(--$cnt > 0 ) $SDATA .= $sDelimiter;
+        }
+        $SDATA .= "\n";
+        $bytesSaved  += fwrite($fp, $SDATA);
+      }
+
+
+      fclose ($fp);
+
+
+      // $filenameLink = "pmTables/streamExported?f=$filenameOnly";
+      $filenameLink = "streamExported?f=$filenameOnly";
+      $size         = round(($bytesSaved/1024), 2)." Kb";
+      $filename     = $filenameOnly;
+      $link         = $filenameLink;
+
+
+      $result->success  = true;
+      $result->filename = $filenameOnly;
+      $result->link     = $link;
+      $result->message  = "Generated file: $filenameOnly, size: $size";
+    }
+    catch (Exception $e) {
+      $result->success = false;
+      $result->message = $e->getMessage();
+    }
+
+    return $result;
+
+  }
+
+  /**
    * import a pm table
    * @param string $httpData->id
    */
