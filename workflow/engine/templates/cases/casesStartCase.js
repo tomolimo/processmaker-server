@@ -45,7 +45,7 @@ Ext.onReady(function() {
         xtype : 'textfield',
         name : 'processesFilter',
         id : 'processesFilter',
-        emptyText : TRANSLATIONS.ID_FIND_A_PROCESS,  // 'Find a Process',
+        emptyText : _('ID_FIND_A_PROCESS'),  // 'Find a Process',
         enableKeyEvents : true,
         listeners : {
           render : function(f) {
