@@ -2,14 +2,14 @@
 if (!isset($_REQUEST ['action'])) {
   $res ['success'] = 'failure';
   $res ['message'] = 'You may request an action';
-  print json_encode($res);
+  print G::json_encode($res);
   die ();
 }
 if (!function_exists($_REQUEST ['action'])) {
   $res ['success'] = 'failure';
   $res ['message'] = 'The requested action doesn\'t exists';
   header("Content-Type: application/json");
-  print json_encode($res);
+  print G::json_encode($res);
   die ();
 }
 
@@ -29,7 +29,7 @@ function getExtJSParams() {
 
 function sendJsonResultGeneric($response, $callback) {
   header("Content-Type: application/json");
-  $finalResponse = json_encode($response);
+  $finalResponse = G::json_encode($response);
   if ($callback != '') {
     print $callback . "($finalResponse);";
   } else {
