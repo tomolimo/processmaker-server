@@ -1097,7 +1097,7 @@ SELECT 'LV', 'JUR', 'J?rmala'  UNION ALL
 SELECT 'LV', 'KR', 'Kr?slavas Apri??is'  UNION ALL
 SELECT 'LV', 'KU', 'Kuld?gas Apri??is'  UNION ALL
 SELECT 'LV', 'LE', 'Liepdj?s Apri??is'  UNION ALL
-SELECT 'LV', 'LM', 'LimbaÃÂ¾u Apri??is'  UNION ALL
+SELECT 'LV', 'LM', 'LimbaÃ…Â¾u Apri??is'  UNION ALL
 SELECT 'LV', 'LPX', 'Liepdja'  UNION ALL
 SELECT 'LV', 'LU', 'Ludzas Apri??is'  UNION ALL
 SELECT 'LV', 'MA', 'Madonas Apri??is'  UNION ALL
@@ -1147,7 +1147,7 @@ SELECT 'MX', 'TLA', 'Tlaxcala'  UNION ALL
 SELECT 'MX', 'VER', 'Veracruz'  UNION ALL
 SELECT 'MX', 'YUC', 'Yucatán'  UNION ALL
 SELECT 'MX', 'ZAC', 'Zacatecas'  UNION ALL
-SELECT 'NO', '01', 'ÃËstfold'  UNION ALL
+SELECT 'NO', '01', 'ÃƒËœstfold'  UNION ALL
 SELECT 'NO', '02', 'Akershus'  UNION ALL
 SELECT 'NO', '03', 'Oslo'  UNION ALL
 SELECT 'NO', '04', 'Hedmark'  UNION ALL
@@ -1208,22 +1208,22 @@ SELECT 'SE', 'AC', 'VÃ¤sterbottens LÃ¤n'  UNION ALL
 SELECT 'SE', 'BD', 'Norrbottens län'  UNION ALL
 SELECT 'SE', 'C', 'Uppsala län'  UNION ALL
 SELECT 'SE', 'D', 'Södermanlands län'  UNION ALL
-SELECT 'SE', 'E', 'ÃâstergÃÂ¶tlands lÃÂ¤n'  UNION ALL
-SELECT 'SE', 'F', 'JÃÂ¶nkÃÂ¶pings lÃÂ¤n'  UNION ALL
-SELECT 'SE', 'G', 'Kronoborgs lÃÂ¤n'  UNION ALL
-SELECT 'SE', 'H', 'Kalmar lÃÂ¤n'  UNION ALL
-SELECT 'SE', 'I', 'Gotlands lÃÂ¤n'  UNION ALL
-SELECT 'SE', 'K', 'Blekinge lÃÂ¤n'  UNION ALL
-SELECT 'SE', 'M', 'SkÃÂ¥ne lÃÂ¤n'  UNION ALL
-SELECT 'SE', 'N', 'Hallands lÃÂ¤n'  UNION ALL
-SELECT 'SE', 'O', 'VÃÂ¤stra GÃÂ¶talands lÃÂ¤n'  UNION ALL
-SELECT 'SE', 'S', 'VÃÂ¤rmlands lÃÂ¤n'  UNION ALL
-SELECT 'SE', 'T', 'Ãârebro lÃÂ¤n'  UNION ALL
-SELECT 'SE', 'U', 'VÃÂ¤stmanlands lÃÂ¤n'  UNION ALL
-SELECT 'SE', 'W', 'Dalarnes lÃÂ¤n'  UNION ALL
-SELECT 'SE', 'X', 'GÃÂ¤vleborgs lÃÂ¤n'  UNION ALL
-SELECT 'SE', 'Y', 'VÃÂ¤sternorrlands lÃÂ¤n'  UNION ALL
-SELECT 'SE', 'Z', 'JÃÂ¤mtlands lÃÂ¤n'  UNION ALL
+SELECT 'SE', 'E', 'Ãƒâ€“stergÃƒÂ¶tlands lÃƒÂ¤n'  UNION ALL
+SELECT 'SE', 'F', 'JÃƒÂ¶nkÃƒÂ¶pings lÃƒÂ¤n'  UNION ALL
+SELECT 'SE', 'G', 'Kronoborgs lÃƒÂ¤n'  UNION ALL
+SELECT 'SE', 'H', 'Kalmar lÃƒÂ¤n'  UNION ALL
+SELECT 'SE', 'I', 'Gotlands lÃƒÂ¤n'  UNION ALL
+SELECT 'SE', 'K', 'Blekinge lÃƒÂ¤n'  UNION ALL
+SELECT 'SE', 'M', 'SkÃƒÂ¥ne lÃƒÂ¤n'  UNION ALL
+SELECT 'SE', 'N', 'Hallands lÃƒÂ¤n'  UNION ALL
+SELECT 'SE', 'O', 'VÃƒÂ¤stra GÃƒÂ¶talands lÃƒÂ¤n'  UNION ALL
+SELECT 'SE', 'S', 'VÃƒÂ¤rmlands lÃƒÂ¤n'  UNION ALL
+SELECT 'SE', 'T', 'Ãƒâ€“rebro lÃƒÂ¤n'  UNION ALL
+SELECT 'SE', 'U', 'VÃƒÂ¤stmanlands lÃƒÂ¤n'  UNION ALL
+SELECT 'SE', 'W', 'Dalarnes lÃƒÂ¤n'  UNION ALL
+SELECT 'SE', 'X', 'GÃƒÂ¤vleborgs lÃƒÂ¤n'  UNION ALL
+SELECT 'SE', 'Y', 'VÃƒÂ¤sternorrlands lÃƒÂ¤n'  UNION ALL
+SELECT 'SE', 'Z', 'JÃƒÂ¤mtlands lÃƒÂ¤n'  UNION ALL
 SELECT 'TR', '01', 'Adana'  UNION ALL
 SELECT 'TR', '02', 'Adiyaman'  UNION ALL
 SELECT 'TR', '03', 'Afyon'  UNION ALL
@@ -1252,7 +1252,7 @@ SELECT 'TR', '25', 'Erzurum'  UNION ALL
 SELECT 'TR', '26', 'Eskisehir'  UNION ALL
 SELECT 'TR', '27', 'Gaziantep'  UNION ALL
 SELECT 'TR', '28', 'Giresun'  UNION ALL
-SELECT 'TR', '29', 'Gümü?hane'  UNION ALL
+SELECT 'TR', '29', 'Gümüşhane'  UNION ALL
 SELECT 'TR', '30', 'Hakkari'  UNION ALL
 SELECT 'TR', '31', 'Hatay'  UNION ALL
 SELECT 'TR', '32', 'Isparta'  UNION ALL
@@ -12674,7 +12674,7 @@ SELECT 'CA','WAR','Fort Ware','','BC'  UNION ALL
 SELECT 'CA','WAS','Waskatenau','','AB'  UNION ALL
 SELECT 'CA','WAT','Watson Lake','','YT'  UNION ALL
 SELECT 'CA','WAW','Wawanesa','','MB'  UNION ALL
-SELECT 'CA','WBG','WarburgÃ‚Â ','','AB'  UNION ALL
+SELECT 'CA','WBG','WarburgÃƒâ€šÃ‚Â ','','AB'  UNION ALL
 SELECT 'CA','WBK','Westbank','','BC'  UNION ALL
 SELECT 'CA','WBN','Winterburn','','AB'  UNION ALL
 SELECT 'CA','WBO','Wimborne','','AB'  UNION ALL
@@ -15697,7 +15697,7 @@ SELECT 'CZ','VCE','Velke Opatovice','',''  UNION ALL
 SELECT 'CZ','VCH','Vysoky Chlumec','',''  UNION ALL
 SELECT 'CZ','VCR','Volduchy','',''  UNION ALL
 SELECT 'CZ','VEA','Ceske Velenice','',''  UNION ALL
-SELECT 'CZ','VEB','Velka BiteÃ…Â¡','',''  UNION ALL
+SELECT 'CZ','VEB','Velka BiteÃƒâ€¦Ã‚Â¡','',''  UNION ALL
 SELECT 'CZ','VEL','Veletov','',''  UNION ALL
 SELECT 'CZ','VFA','Varnsdorf','',''  UNION ALL
 SELECT 'CZ','VIM','Vimperk','','' ;
@@ -18158,7 +18158,7 @@ SELECT 'DE','PEZ','Penzberg','','BY'  UNION ALL
 SELECT 'DE','PFA','Pfaffenhofen an der Ilm','','BY'  UNION ALL
 SELECT 'DE','PFD','Pleinfeld','','BY'  UNION ALL
 SELECT 'DE','PFE','Pfatter','','BY'  UNION ALL
-SELECT 'DE','PFF','PfaffenhausenÃ‚Â ','','BY'  UNION ALL
+SELECT 'DE','PFF','PfaffenhausenÃƒâ€šÃ‚Â ','','BY'  UNION ALL
 SELECT 'DE','PFJ','Pfaffenhofen an der Glonn','','BY'  UNION ALL
 SELECT 'DE','PFK','Pfarrkirchen','','BY'  UNION ALL
 SELECT 'DE','PFN','Pfullingen','','BW'  UNION ALL
@@ -23714,7 +23714,7 @@ SELECT 'FR','FDN','Fleville-devant-Nancy','','54'  UNION ALL
 SELECT 'FR','FDO','Fours','','33'  UNION ALL
 SELECT 'FR','FDS','Fondettes','','37'  UNION ALL
 SELECT 'FR','FDU','Ferdrupt','','88'  UNION ALL
-SELECT 'FR','FEA','Ferrieres-en-GatinaisÃ‚Â ','','45'  UNION ALL
+SELECT 'FR','FEA','Ferrieres-en-GatinaisÃƒâ€šÃ‚Â ','','45'  UNION ALL
 SELECT 'FR','FEC','Fecamp','','76'  UNION ALL
 SELECT 'FR','FEE','Fresse','','70'  UNION ALL
 SELECT 'FR','FEG','Fegersheim','','67'  UNION ALL
@@ -25274,7 +25274,7 @@ SELECT 'FR','MZM','Metz','','57'  UNION ALL
 SELECT 'FR','MZN','Mouzon','','08'  UNION ALL
 SELECT 'FR','MZO','Mazion','','33'  UNION ALL
 SELECT 'FR','MZQ','Montpezat-de-Quercy','','82'  UNION ALL
-SELECT 'FR','MZR','MazeresÃ‚Â ','','33'  UNION ALL
+SELECT 'FR','MZR','MazeresÃƒâ€šÃ‚Â ','','33'  UNION ALL
 SELECT 'FR','MZS','Mezieres-sur-Seine','','78'  UNION ALL
 SELECT 'FR','MZT','Metz-Tessy','','74'  UNION ALL
 SELECT 'FR','MZV','Mazet-St-Voy','','43'  UNION ALL
@@ -25920,7 +25920,7 @@ SELECT 'FR','PYI','Peyrilhac','','87'  UNION ALL
 SELECT 'FR','PYL','Pouilly-sous-Charlieu','','42'  UNION ALL
 SELECT 'FR','PYM','Puligny-Montrachet','','21'  UNION ALL
 SELECT 'FR','PYN','Peynier','','13'  UNION ALL
-SELECT 'FR','PYP','PeypinÃ‚Â ','','13'  UNION ALL
+SELECT 'FR','PYP','PeypinÃƒâ€šÃ‚Â ','','13'  UNION ALL
 SELECT 'FR','PYR','Peyrins','','26'  UNION ALL
 SELECT 'FR','PYS','Peyruis','','04'  UNION ALL
 SELECT 'FR','PYV','Le Perray-en-Yvelines','','78'  UNION ALL
@@ -26783,7 +26783,7 @@ SELECT 'FR','TCY','Saint-Cyr-de-Favieres','','42'  UNION ALL
 SELECT 'FR','TDA','St-Tugdual','','56'  UNION ALL
 SELECT 'FR','TDB','La Teste-de-Buch','','33'  UNION ALL
 SELECT 'FR','TDC','Thedirac','','46'  UNION ALL
-SELECT 'FR','TDD','St  DidierÃ‚Â ','','84'  UNION ALL
+SELECT 'FR','TDD','St  DidierÃƒâ€šÃ‚Â ','','84'  UNION ALL
 SELECT 'FR','TDE','Tallende','','63'  UNION ALL
 SELECT 'FR','TDI','Theding','','57'  UNION ALL
 SELECT 'FR','TDS','Taillades','','84'  UNION ALL
@@ -27184,7 +27184,7 @@ SELECT 'FR','VGU','Valergues','','34'  UNION ALL
 SELECT 'FR','VGX','Vigneux','',''  UNION ALL
 SELECT 'FR','VGY','Vigy','','57'  UNION ALL
 SELECT 'FR','VHA','Vitrolles','','05'  UNION ALL
-SELECT 'FR','VHC','Villefranche-sur-CherÃ‚Â ','','41'  UNION ALL
+SELECT 'FR','VHC','Villefranche-sur-CherÃƒâ€šÃ‚Â ','','41'  UNION ALL
 SELECT 'FR','VHI','Vauchretien','','49'  UNION ALL
 SELECT 'FR','VHN','Le Valdahon','','25'  UNION ALL
 SELECT 'FR','VHO','Venthon','','73'  UNION ALL
@@ -43588,7 +43588,7 @@ SELECT 'PL','TBZ','Trzebiez','',''  UNION ALL
 SELECT 'PL','TDZ','Tubadzin','',''  UNION ALL
 SELECT 'PL','TEN','Tenczynek','',''  UNION ALL
 SELECT 'PL','TER','Terespol','',''  UNION ALL
-SELECT 'PL','TES','TeresinÃ‚Â ','',''  UNION ALL
+SELECT 'PL','TES','TeresinÃƒâ€šÃ‚Â ','',''  UNION ALL
 SELECT 'PL','TGO','Tarnowskie Gory','',''  UNION ALL
 SELECT 'PL','TMO','Tolkmicko','',''  UNION ALL
 SELECT 'PL','TMW','Tomaszow Mazowiecki','',''  UNION ALL
@@ -44394,7 +44394,7 @@ SELECT 'RO','BCA','Borca','',''  UNION ALL
 SELECT 'RO','BCM','Bacau','',''  UNION ALL
 SELECT 'RO','BCN','Beclean','',''  UNION ALL
 SELECT 'RO','BCO','Bacova','',''  UNION ALL
-SELECT 'RO','BCT','BechetÃ‚Â ','',''  UNION ALL
+SELECT 'RO','BCT','BechetÃƒâ€šÃ‚Â ','',''  UNION ALL
 SELECT 'RO','BCU','Baciu, Cluj','',''  UNION ALL
 SELECT 'RO','BDI','Bodesti','',''  UNION ALL
 SELECT 'RO','BDU','Bragadiru, Ilfov','',''  UNION ALL
@@ -51437,7 +51437,7 @@ SELECT 'US','GXV','Gilbertsville','','PA'  UNION ALL
 SELECT 'US','GXX','Greer','','SC'  UNION ALL
 SELECT 'US','GXY','Greeley','','CO'  UNION ALL
 SELECT 'US','GY2','Gascoyne','','ND'  UNION ALL
-SELECT 'US','GY3','GridleyÃ‚Â ','','CA'  UNION ALL
+SELECT 'US','GY3','GridleyÃƒâ€šÃ‚Â ','','CA'  UNION ALL
 SELECT 'US','GY4','Gurley','','AL'  UNION ALL
 SELECT 'US','GY5','Gray','','TN'  UNION ALL
 SELECT 'US','GYA','Gray','','LA'  UNION ALL
@@ -55225,7 +55225,7 @@ SELECT 'US','PGT','Pennington','','AR'  UNION ALL
 SELECT 'US','PGV','Greenville','','NC'  UNION ALL
 SELECT 'US','PGW','Parkwood','','PA'  UNION ALL
 SELECT 'US','PGY','Spring Valley, San Diego','','CA'  UNION ALL
-SELECT 'US','PH2','PocahontasÃ‚Â ','','MS'  UNION ALL
+SELECT 'US','PH2','PocahontasÃƒâ€šÃ‚Â ','','MS'  UNION ALL
 SELECT 'US','PH3','Philmont','','NY'  UNION ALL
 SELECT 'US','PH4','Panhandle, Cass','','TX'  UNION ALL
 SELECT 'US','PHA','Phenix City','','AL' ;

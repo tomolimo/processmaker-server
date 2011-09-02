@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: ProcessMaker (Branch 2.0) 2.0.32.rc4-14-gbf41d92\n"
+"Project-Id-Version: ProcessMaker (Branch 2.0) 2.0.32.rc6-1-ga21fff4\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2011-08-25 16:25:54\n"
+"PO-Revision-Date: 2011-09-02 10:04:27\n"
 "Last-Translator: \n"
 "Language-Team: Colosa Developers Team <developers@colosa.com>\n"
 "MIME-Version: 1.0\n"
@@ -78,12 +78,6 @@ msgstr "My account"
 #: LABEL/ID_USERS
 msgid "Users"
 msgstr "Users"
-
-# TRANSLATION
-# LABEL/ID_DELETE_ACTION
-#: LABEL/ID_DELETE_ACTION
-msgid "DELETE"
-msgstr "DELETE"
 
 # TRANSLATION
 # LABEL/ID_CASES
@@ -10975,6 +10969,60 @@ msgstr "Enable Email Notifications"
 msgid "You have lost your session and you have to login to continue."
 msgstr "You have lost your session and you have to login to continue."
 
+# TRANSLATION
+# LABEL/ID_PMTABLE_DATA_EXISTS_WARNINIG
+#: LABEL/ID_PMTABLE_DATA_EXISTS_WARNINIG
+msgid "record(s) was/were found on this table, if you edit its structure all data will lost."
+msgstr "record(s) was/were found on this table, if you edit its structure all data will lost."
+
+# TRANSLATION
+# LABEL/ID_HIDE
+#: LABEL/ID_HIDE
+msgid "Hide"
+msgstr "Hide"
+
+# TRANSLATION
+# LABEL/ID_PMTABLE_SAVE_AND_DATA_LOST
+#: LABEL/ID_PMTABLE_SAVE_AND_DATA_LOST
+msgid "Save the changes accepting the data lost?"
+msgstr "Save the changes accepting the data lost?"
+
+# TRANSLATION
+# LABEL/ID_EXCEPTION
+#: LABEL/ID_EXCEPTION
+msgid "Exception"
+msgstr "Exception"
+
+# TRANSLATION
+# LABEL/ID_DELETE_CONNECTION
+#: LABEL/ID_DELETE_CONNECTION
+msgid "Delete the connection?"
+msgstr "Delete the connection?"
+
+# TRANSLATION
+# LABEL/ID_EXPORT_DATA_CSV
+#: LABEL/ID_EXPORT_DATA_CSV
+msgid "Export Data from CSV file"
+msgstr "Export Data from CSV file"
+
+# TRANSLATION
+# LABEL/ID_IMPORT_DATA_CSV
+#: LABEL/ID_IMPORT_DATA_CSV
+msgid "Import Data from CSV file"
+msgstr "Import Data from CSV file"
+
+# TRANSLATION
+# LABEL/ID_EXPORT_CSV
+#: LABEL/ID_EXPORT_CSV
+msgid "Export to CSV"
+msgstr "Export to CSV"
+
+# TRANSLATION
+# LABEL/ID_IMPORT_CSV
+#: LABEL/ID_IMPORT_CSV
+msgid "Import to CSV"
+msgstr "Import to CSV"
+
 # additionalTables/additionalTablesData.xml?ADD_TAB_NAME
 # additionalTables/additionalTablesData.xml
 #: text - ADD_TAB_NAME
@@ -11002,7 +11050,7 @@ msgstr ""
 # additionalTables/additionalTablesDataImportForm.xml?TITLE
 # additionalTables/additionalTablesDataImportForm.xml
 #: title - TITLE
-msgid "Import Data from CSV file"
+msgid "[additionalTables/additionalTablesDataImportForm.xml?TITLE] Import Data from CSV file"
 msgstr "Import Data from CSV file"
 
 # additionalTables/additionalTablesDataImportForm.xml?CSV_FILE
