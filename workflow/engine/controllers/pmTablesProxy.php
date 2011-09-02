@@ -363,7 +363,7 @@ class pmTablesProxy extends HttpProxyController
         $primaryKeysValues[] = isset($row[$key['FLD_NAME']]) ? $row[$key['FLD_NAME']] : '';
       }
 
-      $result['rows'][$i]['__index__'] = md5(implode('-', $primaryKeysValues));
+      $result['rows'][$i]['__index__'] = G::encrypt(implode('-', $primaryKeysValues), 'pmtable');
     }
 
     return $result;
@@ -421,7 +421,7 @@ class pmTablesProxy extends HttpProxyController
          $con->rollback();
          throw new Exception($e->getMessage());
       }
-      $index = md5(implode('-', $primaryKeysValues));
+      $index = G::encrypt(implode('-', $primaryKeysValues), 'pmtable');
     } 
     else {
       $toSave = false;
@@ -1037,6 +1037,7 @@ class pmTablesProxy extends HttpProxyController
    */
   function _dataDestroy($row)
   {
+    $row = G::decrypt($row, 'pmtable');
     $row = str_replace('"', '', $row);
     $keys = explode('-', $row);
     $params = array();
@@ -1052,8 +1053,6 @@ class pmTablesProxy extends HttpProxyController
       return true;
     } else {
       return false;
-      $this->success = false;
-      $this->message = 'Update Failed';
     }
   }
 

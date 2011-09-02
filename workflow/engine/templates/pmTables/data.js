@@ -346,16 +346,13 @@ NewPMTableRow = function(){
 };
 
 //Load PM Table Edition Row Form
-EditPMTableRow = function(){
-  iGrid = Ext.getCmp('infoGrid');
-  rowsSelected = iGrid.getSelectionModel().getSelections();
-  var aRowsSeleted = (RetrieveRowsID(rowsSelected)).split(",") ;
-  var aTablesPKF   = (TABLES.PKF).split(","); ;
-  var sParam = '';
-  for(var i=0;i<aTablesPKF.length; i++){
-    sParam += '&' + aTablesPKF[i] + '=' + aRowsSeleted[i];
-  }
-  location.href = 'additionalTablesDataEdit?sUID='+TABLES.UID+sParam;
+EditPMTableRow = function(){ 
+  var row = Ext.getCmp('infoGrid').getSelectionModel().getSelected();
+  var selIndex = store.indexOfId(row.id);
+  editor.stopEditing();
+  Ext.getCmp('infoGrid').getView().refresh();
+  Ext.getCmp('infoGrid').getSelectionModel().selectRow(selIndex);
+  editor.startEditing(selIndex);
 };
 
 //Confirm PM Table Row Deletion Tasks
