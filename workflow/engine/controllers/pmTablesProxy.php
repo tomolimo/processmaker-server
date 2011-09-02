@@ -178,6 +178,155 @@ class pmTablesProxy extends HttpProxyController
    * save pm table
    */
   public function save()
+  {
+    require_once 'classes/model/AdditionalTables.php';
+    require_once 'classes/model/Fields.php';
+    try {
+      $data = $_POST;
+      $data['PRO_UID'] = trim($data['PRO_UID']);
+      $data['columns'] = G::json_decode($_POST['columns']); //decofing data columns
+      $isReportTable = $data['PRO_UID'] != '' ? true : false;
+
+      // Reserved Words
+      $aReservedWords = array(
+        'ALTER', 'CLOSE', 'COMMIT', 'CREATE', 'DECLARE',
+        'DELETE', 'DROP', 'FETCH', 'FUNCTION', 'GRANT',
+        'INDEX', 'INSERT', 'OPEN', 'REVOKE', 'ROLLBACK',
+        'SELECT', 'SYNONYM', 'TABLE', 'UPDATE', 'VIEW',
+        'APP_UID', 'ROW'
+      );
+
+      $oAdditionalTables = new AdditionalTables();
+      $oFields = new Fields();
+
+      // verify if exists.
+      $aNameTable = $oAdditionalTables->loadByName($data['REP_TAB_NAME']);
+
+      $repTabClassName = $oAdditionalTables->getPHPName($data['REP_TAB_NAME']);
+
+      $repTabData = array(
+        'ADD_TAB_UID'         => $data['REP_TAB_UID'],
+        'ADD_TAB_NAME'        => $data['REP_TAB_NAME'],
+        'ADD_TAB_CLASS_NAME'  => $repTabClassName,
+        'ADD_TAB_DESCRIPTION' => $data['REP_TAB_DSC'],
+        'ADD_TAB_PLG_UID'     => '',
+        'DBS_UID'             => ($data['REP_TAB_CONNECTION'] ? $data['REP_TAB_CONNECTION'] : 'workflow'),
+        'PRO_UID'             => $data['PRO_UID'],
+        'ADD_TAB_TYPE'        => $data['REP_TAB_TYPE'],
+        'ADD_TAB_GRID'        => $data['REP_TAB_GRID']
+      );
+
+      $columns = $data['columns'];
+       
+      if ($data['REP_TAB_UID'] == '') { //new report table
+
+        if ($isReportTable) { //setting default columns
+          $defaultColumns = $this->_getReportTableDefaultColumns($data['REP_TAB_TYPE']);
+          $columns = array_merge($defaultColumns, $columns);
+        }
+
+        /** validations **/
+        if(is_array($aNameTable)) {
+          throw new Exception('The table "' . $data['REP_TAB_NAME'] . '" already exits.');
+        }
+
+        if (in_array(strtoupper($data['REP_TAB_NAME']), $aReservedWords) ) {
+          throw new Exception('Could not create the table with the name "' . $data['REP_TAB_NAME'] . '" because it is a reserved word.');
+        }
+        //create record
+        $addTabUid = $oAdditionalTables->create($repTabData);
+
+      } else { //editing report table
+        $addTabUid = $data['REP_TAB_UID'];
+        //loading old data before update
+        $addTabBeforeData = $oAdditionalTables->load($addTabUid, true);
+        //updating record
+        $oAdditionalTables->update($repTabData);
+
+        //removing old data fields references
+        $oCriteria = new Criteria('workflow');
+        $oCriteria->add(FieldsPeer::ADD_TAB_UID, $data['REP_TAB_UID']);
+        //$oCriteria->add(FieldsPeer::FLD_NAME, 'APP_UID', Criteria::NOT_EQUAL);
+        //$oCriteria->add(FieldsPeer::FLD_NAME, 'ROW', Criteria::NOT_EQUAL);
+        FieldsPeer::doDelete($oCriteria);
+
+        //getting old fieldnames
+        $oldFields = array();
+        foreach ($addTabBeforeData['FIELDS'] as $field) {
+          $oldFields[$field['FLD_UID']] = $field;
+        }
+      }
+
+      $aFields    = array();
+      $fieldsList = array();
+      $editFieldsList = array();
+
+      foreach ($columns as $i => $column) {
+        //new feature, to reorder the columns
+        // if (isset($oldFields[$column->uid])) { // the the field alreaday exists
+        //   if ($oldFields[$column->uid]['FLD_INDEX'] != $i) { // if its index has changed
+        //     $column->uid = ''; //set as new field,
+        //   }
+        // }
+
+        $field = array(
+          'FLD_UID'               => $column->uid,
+          'FLD_INDEX'             => $i,
+          'ADD_TAB_UID'           => $addTabUid,
+          'FLD_NAME'              => $column->field_name,
+          'FLD_DESCRIPTION'       => $column->field_label,
+          'FLD_TYPE'              => $column->field_type,
+          'FLD_SIZE'              => $column->field_size,
+          'FLD_NULL'              => (isset($column->field_null) && $column->field_null ? 1 : 0),
+          'FLD_AUTO_INCREMENT'    => (isset($column->field_autoincrement) && $column->field_autoincrement ? 1 : 0),
+          'FLD_KEY'               => (isset($column->field_key) && $column->field_key ? 1 : 0),
+          'FLD_FOREIGN_KEY'       => 0,
+          'FLD_FOREIGN_KEY_TABLE' => '',
+          'FLD_DYN_NAME'          => $column->field_dyn,
+          'FLD_DYN_UID'           => $column->field_uid,
+          'FLD_FILTER'            => (isset($column->field_filter) && $column->field_filter ? 1 : 0)
+        );
+
+        $fieldUid = $oFields->create($field);
+        $fieldsList[] = $field;
+
+        if($data['REP_TAB_UID'] == '') { //new
+          $aFields[] = array(
+            'sType'       => $column->field_type,
+            'iSize'       => $column->field_size,
+            'sFieldName'  => $column->field_name,
+            'bNull'       => (isset($column->field_null) ? $column->field_null : 1),
+            'bAI'         => (isset($column->field_autoincrement) ? $column->field_autoincrement : 0),
+            'bPrimaryKey' => (isset($column->field_key) ? $column->field_key : 0)
+          );
+        } else { //editing
+          $field['FLD_UID'] = $fieldUid;
+          $aFields[$fieldUid] = $field;
+        }
+      }
+      if ($data['REP_TAB_UID'] == '') { //create a new report table
+        $oAdditionalTables->createTable($data['REP_TAB_NAME'], $data['REP_TAB_CONNECTION'], $aFields);
+        
+      } else { //editing
+        //print_R($aFields);
+        $oAdditionalTables->updateTable($data['REP_TAB_NAME'], $data['REP_TAB_CONNECTION'], $aFields, $oldFields);
+      }
+      $oAdditionalTables->createPropelClasses($data['REP_TAB_NAME'], '', $fieldsList, $addTabUid, $data['REP_TAB_CONNECTION']);
+      if ($isReportTable) {
+        $oAdditionalTables->populateReportTable($data['REP_TAB_NAME'], $data['REP_TAB_CONNECTION'], $data['REP_TAB_TYPE'], $fieldsList, $data['PRO_UID'], $data['REP_TAB_GRID']);
+      }
+
+      $result->success = true;
+    } catch (Exception $e) {
+      $result->success = false;
+      $result->msg = $e->getMessage();
+      $result->trace = $e->getTraceAsString();
+    }
+
+    return $result;
+  }
+
+  public function save_moved()
   { 
     require_once 'classes/model/AdditionalTables.php';
     require_once 'classes/model/Fields.php';
