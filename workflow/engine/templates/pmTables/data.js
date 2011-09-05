@@ -138,13 +138,13 @@ Ext.onReady(function(){
     editor = new Ext.ux.grid.RowEditor({
       saveText  : _("ID_UPDATE"),
       listeners : {
-  	    afteredit : {
-  	      fn:function(rowEditor, obj, data, rowIndex ){            	  
-    		    if (data.phantom === true) {
-    			  //store.reload(); // only if it is an insert 
-    	    	}
-  	      }
-  	    }
+        afteredit : {
+          fn:function(rowEditor, obj, data, rowIndex ){
+            if (data.phantom === true) {
+              store.reload(); // <-- (just for old pmtables class engine) only if it is an insert 
+            }
+          }
+        }
       }
     });
   }

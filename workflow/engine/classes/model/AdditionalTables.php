@@ -19,6 +19,10 @@ require_once 'classes/model/om/BaseAdditionalTables.php';
  * @package    workflow.engine.classes.model
  */
 class AdditionalTables extends BaseAdditionalTables {
+
+  public $fields = array();
+  public $primaryKeys = array();
+
   private $aDef = array(
     'mysql' => array(
       'TEXT' => 'TEXT',
