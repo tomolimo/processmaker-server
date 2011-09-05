@@ -3385,6 +3385,11 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
     }
     //$this->defaultValue = G::replaceDataField( $this->defaultValue, $owner->values);
     $id = "form[$this->name]";
+    if ($this->renderMode != 'edit' && $value == 'today' ){
+      $mask = str_replace("%", "", $this->mask);
+      $value = date($mask);
+      return $value;
+    }
     return $this->__draw_widget ( $id, $value, $owner );
   }
 
@@ -3409,9 +3414,13 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
         if($this->mode === 'view' || (isset($owner->modeGrid) && $owner->modeGrid === 'view') ) {
           if ($this->required){
             $isRequired = '1';
-        } else {
+          } else {
             $isRequired = '0';
-        }
+          }
+          if($v == 'today') {
+            $mask = str_replace("%", "", $this->mask);
+            $v = date($mask);
+          }
           $html = '<input '.$this->NSRequiredValue().' class="module_app_input___gray" id="form[' . $owner->name . '][' . $r . '][' . $this->name . ']" name="form[' . $owner->name . '][' . $r . '][' . $this->name . ']" type ="text" size="' . $this->size . '" maxlength="' . $this->maxLength . '" value="' . $this->htmlentities ( $v, ENT_COMPAT, 'utf-8' ) . '" required="' . $isRequired . '" style="display:none;' . htmlentities ( $this->style, ENT_COMPAT, 'utf-8' ) . '"/>' . htmlentities ( $v, ENT_COMPAT, 'utf-8' );
         } else {
           $id   = 'form[' . $owner->name . '][' . $r . '][' . $this->name . ']';
