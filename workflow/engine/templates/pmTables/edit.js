@@ -662,6 +662,11 @@ function createReportTable()
       PMExt.error(_('ID_ERROR'),_('ID_PMTABLES_ALERT1') + ' <b>' + row.data['field_name']+'</b>');
       return false;
     }
+    
+    if (row.data['field_name'] == 'DESC') {
+      PMExt.error(_('ID_ERROR'), 'The word "DESC" is reserved by the database engine please set another one.');
+      return false;
+    }
 
     // validate that fieldname is not empty
     if(row.data['field_name'].trim() == '') {

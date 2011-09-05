@@ -15,6 +15,7 @@ var smodel;
 var infoGrid;
 var _fields;
 var isReport;
+var editor;
 
 Ext.onReady(function(){
 
@@ -141,7 +142,9 @@ Ext.onReady(function(){
         afteredit : {
           fn:function(rowEditor, obj, data, rowIndex ){
             if (data.phantom === true) {
-              store.reload(); // <-- (just for old pmtables class engine) only if it is an insert 
+              setTimeout(function(){
+                store.reload();
+              }, 1100); // <-- (just for old pmtables class engine) only if it is an insert 
             }
           }
         }
@@ -325,7 +328,7 @@ DoNothing = function(){};
 var props = function(){};
 
 NewPMTableRow = function(){
-  if (editor.editing) {
+  if (!editor || editor.editing) {
     return false;
   }
   var PMRow = infoGrid.getStore().recordType;
