@@ -369,7 +369,7 @@ Ext.onReady ( function() {
   }
 
   var renderSummary = function (val, p, r) {
-    var summaryIcon = '<img src="/images/ext/default/s.gif" class="x-tree-node-icon ss_folder_page" unselectable="off" id="extdd-17" ';
+    var summaryIcon = '<img src="/images/ext/default/s.gif" class="x-tree-node-icon ss_layout_header" unselectable="off" id="extdd-17" ';
     summaryIcon += 'onclick="openSummaryWindow(' + "'" + r.data['APP_UID'] + "'" + ', ' + r.data['DEL_INDEX'] + ')" title="' + _('ID_SUMMARY') + '" />';
     return summaryIcon;
   };
@@ -414,10 +414,10 @@ Ext.onReady ( function() {
       columns[i].hideable = false;
     }
     if(columns[i].dataIndex == 'PREVIOUS_USR_UID') {
-      columns[i].hideable=false; 
+      columns[i].hideable=false;
     }
   }
-    
+
   var cm = new Ext.grid.ColumnModel({
     defaults: {
       sortable: true // columns are sortable by default
