@@ -41,7 +41,7 @@
   $oHeadPublisher->usingExtJs('ux/miframe');
   $oHeadPublisher->addExtJsScript('cases/caseUtils', true);
   $oHeadPublisher->addExtJsScript('cases/open', true);
-
+  $oHeadPublisher->assign('FORMATS',$conf->getFormats());
   $uri = '';
   foreach($_GET as $k=>$v) {
     $uri .= ($uri == '')? "$k=$v": "&$k=$v";
