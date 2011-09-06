@@ -669,9 +669,10 @@ class pmTablesProxy extends HttpProxyController
             return 0;
           }
           if($i == 1) {
+            // Only the first row. If a field has the same name is discarded.
             $j = 0;
             foreach ($aAdditionalTables['FIELDS'] as $aField) {
-              if($aField['FLD_NAME'] === $aAux[$j]) $swHead = true;
+              if(strtoupper($aField['FLD_NAME']) == strtoupper($aAux[$j])) $swHead = true;
               $j++;
             }
           }
