@@ -538,6 +538,7 @@ class pmTablesProxy extends HttpProxyController
     $this->className = $table['ADD_TAB_CLASS_NAME'];
     $this->classPeerName = $this->className . 'Peer';
     $row = (array) $rows;
+    $row = array_merge(array_change_key_case($row, CASE_UPPER), array_change_key_case($row, CASE_LOWER));
     $toSave = false;
 
     if (!file_exists (PATH_WORKSPACE . 'classes/' . $this->className . '.php') ) {
@@ -1237,7 +1238,7 @@ class pmTablesProxy extends HttpProxyController
     $application->field_uid   = '';
     $application->field_name  = 'APP_NUMBER';
     $application->field_label = 'APP_NUMBER';
-    $application->field_type  = 'INTEGER';
+    $application->field_type  = 'INT';
     $application->field_size  = 11;
     $application->field_dyn   = '';
     $application->field_key   = 0;
@@ -1254,7 +1255,7 @@ class pmTablesProxy extends HttpProxyController
       $gridIndex->field_uid   = '';
       $gridIndex->field_name  = 'ROW';
       $gridIndex->field_label = 'ROW';
-      $gridIndex->field_type  = 'INTEGER';
+      $gridIndex->field_type  = 'INT';
       $gridIndex->field_size  = '11';
       $gridIndex->field_dyn   = '';
       $gridIndex->field_key   = 1;
