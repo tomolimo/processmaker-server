@@ -372,7 +372,7 @@ var openSummaryWindow = function(applicationUID, delegation) {
     {
       xtype: 'displayfield',
       name: 'DEL_FINISH_DATE'
-    }],
+    }]
   });
 
   var summaryWindow = new Ext.Window({
