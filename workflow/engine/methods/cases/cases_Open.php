@@ -173,10 +173,13 @@ try {
       } else {
         //when the case have another user or current user doesnt have rights to this selfservice,
         //just view the case Resume
+
         $_SESSION['APPLICATION']   = $sAppUid;
         $_SESSION['INDEX']         = $iDelIndex;
         $_SESSION['PROCESS']       = $aFields['PRO_UID'];
         $_SESSION['TASK']          = -1;
+        $Fields = $oCase->loadCase( $_SESSION['APPLICATION'], $_SESSION['INDEX'] );  
+        $_SESSION['CURRENT_TASK']  = $Fields['TAS_UID'];
         $_SESSION['STEP_POSITION'] = 0;
         require_once (PATH_METHODS . 'cases' . PATH_SEP . 'cases_Resume.php');
       }
