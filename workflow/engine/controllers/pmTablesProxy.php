@@ -386,6 +386,7 @@ class pmTablesProxy extends HttpProxyController
     $this->className = $table['ADD_TAB_CLASS_NAME'];
     $this->classPeerName = $this->className . 'Peer';
     $row = (array) $rows;
+    $row = array_merge(array_change_key_case($row, CASE_LOWER), array_change_key_case($row, CASE_UPPER));
     $toSave = false;
 
     if (!file_exists (PATH_WORKSPACE . 'classes/' . $this->className . '.php') ) {
@@ -396,32 +397,27 @@ class pmTablesProxy extends HttpProxyController
     eval('$obj = new ' .$this->className. '();');
 
     if (count($row) > 0) {
-      try {
-        eval('$con = Propel::getConnection('.$this->classPeerName.'::DATABASE_NAME);');
-        $con->begin();
-        $obj->fromArray($row, BasePeer::TYPE_FIELDNAME);
+      eval('$con = Propel::getConnection('.$this->classPeerName.'::DATABASE_NAME);');
+      $con->begin();
+      $obj->fromArray($row, BasePeer::TYPE_FIELDNAME);
 
-        if ($obj->validate()) {
-          $obj->save();
-          $toSave = true;
-            
-          $primaryKeysValues = array();
-          foreach ($primaryKeys as $primaryKey) {
-            $method = 'get' . AdditionalTables::getPHPName($primaryKey['FLD_NAME']);
-            $primaryKeysValues[] = $obj->$method();
-          }
+      if ($obj->validate()) {
+        $obj->save();
+        $toSave = true;
+          
+        $primaryKeysValues = array();
+        foreach ($primaryKeys as $primaryKey) {
+          $method = 'get' . AdditionalTables::getPHPName($primaryKey['FLD_NAME']);
+          $primaryKeysValues[] = $obj->$method();
         }
-        else {
-          foreach($obj->getValidationFailures() as $objValidationFailure) {
-             $msg .= $objValidationFailure->getMessage() . "\n";
-          }
-          throw new PropelException($msg);
-        }
-      } 
-      catch(Exception $e) {
-         $con->rollback();
-         throw new Exception($e->getMessage());
       }
+      else {
+        foreach($obj->getValidationFailures() as $objValidationFailure) {
+           $msg .= $objValidationFailure->getMessage() . "\n";
+        }
+        throw new PropelException($msg);
+      }
+      
       $index = G::encrypt(implode('-', $primaryKeysValues), 'pmtable');
     } 
     else {

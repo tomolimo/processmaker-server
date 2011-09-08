@@ -25,7 +25,8 @@ Ext.onReady(function(){
   newButton = new Ext.Action({
     text    : _('ID_ADD_ROW'),
     iconCls : 'button_menu_ext ss_sprite ss_add',
-    handler : NewPMTableRow
+    handler : NewPMTableRow,
+    disabled: (isReport ? true : false)
   });
   
   editButton = new Ext.Action({
@@ -121,12 +122,12 @@ Ext.onReady(function(){
          case 1:
            if (!isReport) {
              editButton.enable();
+             deleteButton.enable();
            }
-           deleteButton.enable();
            break;
          default:
            editButton.disable();
-           //deleteButton.disable();
+           deleteButton.disable();
            break;
          }
        }
