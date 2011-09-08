@@ -1518,7 +1518,7 @@ class XmlForm_Field_Textarea extends XmlForm_Field {
       $html .= '<textarea readOnly ';
       $html .= 'id="form['.$this->name.']" ';
       $html .= 'name="form['.$this->name.']" ';
-      $html .= 'wrap="hard" cols="'.$this->cols.'" rows="'.$this->rows.'" ';
+      $html .= 'wrap="soft" cols="'.$this->cols.'" rows="'.$this->rows.'" ';
       $html .= 'style="border:0px;backgroud-color:inherit;'.$scrollStyle.'" wrap="'.$this->htmlentities($this->wrap, ENT_QUOTES, 'UTF-8').'" ';
       $html .= 'class="FormTextArea" >';
       $html .= $this->htmlentities($value, ENT_COMPAT, 'utf-8');
@@ -1553,7 +1553,7 @@ class XmlForm_Field_Textarea extends XmlForm_Field {
         $html .= '<textarea '.$readOnlyText.' class="module_app_input___gray" ';
         $html .= 'id="form['.$owner->name.']['.$r.']['.$this->name.']" ';
         $html .= 'name="form['.$owner->name.']['.$r.']['.$this->name.']" ';
-        $html .= 'wrap="hard" cols="'.$this->cols.'" rows="'.$this->rows.'" ';
+        $html .= 'wrap="soft" cols="'.$this->cols.'" rows="'.$this->rows.'" ';
         $html .= 'style="'.$scrollStyle.'" ';
         $html .= $this->NSDefaultValue().' ';
         $html .= $this->NSRequiredValue().' ';
@@ -1566,7 +1566,7 @@ class XmlForm_Field_Textarea extends XmlForm_Field {
         $html .= '<textarea readOnly ';
         $html .= 'id="form['.$owner->name.']['.$r.']['.$this->name.']" ';
         $html .= 'name="form['.$owner->name.']['.$r.']['.$this->name.']" ';
-        $html .= 'wrap="hard" cols="'.$this->cols.'" rows="'.$this->rows.'" ';
+        $html .= 'wrap="soft" cols="'.$this->cols.'" rows="'.$this->rows.'" ';
         $html .= 'style="'.$scrollStyle.'" wrap="'.$this->htmlentities($this->wrap, ENT_QUOTES, 'UTF-8').'" ';
         $html .= 'class="FormTextArea" >';
         $html .= $this->htmlentities($v, ENT_COMPAT, 'utf-8');
