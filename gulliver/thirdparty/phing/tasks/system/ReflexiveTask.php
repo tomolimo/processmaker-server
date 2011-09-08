@@ -19,7 +19,7 @@
  * <http://phing.info>.
  */
 
-require_once 'phing/Task.php';
+require_once 'phing/TaskPhing.php';
 
 /**
  * This task is for using filter chains to make changes to files and overwrite the original files.
@@ -46,7 +46,7 @@ require_once 'phing/Task.php';
  * @version   $Revision: 1.11 $
  * @package   phing.tasks.system
  */
-class ReflexiveTask extends Task {
+class ReflexiveTask extends TaskPhing {
     
     /** Single file to process. */
     private $file;

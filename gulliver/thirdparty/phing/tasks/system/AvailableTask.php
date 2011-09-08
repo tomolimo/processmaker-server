@@ -19,7 +19,7 @@
  * <http://phing.info>.
  */
 
-require_once 'phing/Task.php';
+require_once 'phing/TaskPhing.php';
 include_once 'phing/tasks/system/condition/ConditionBase.php';
 
 /**
@@ -32,7 +32,7 @@ include_once 'phing/tasks/system/condition/ConditionBase.php';
  *  @version   $Revision: 1.11 $
  *  @package   phing.tasks.system
  */
-class AvailableTask extends Task {
+class AvailableTask extends TaskPhing {
 
     /** Property to check for. */
     private $property;

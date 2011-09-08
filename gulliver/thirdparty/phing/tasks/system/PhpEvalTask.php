@@ -19,7 +19,7 @@
  * <http://phing.info>.
  */
  
-require_once 'phing/Task.php';
+require_once 'phing/TaskPhing.php';
 
 /**
  * Executes PHP function or evaluates expression and sets return value to a property.
@@ -34,7 +34,7 @@ require_once 'phing/Task.php';
  *
  * @todo Add support for evaluating expressions
  */
-class PhpEvalTask extends Task {
+class PhpEvalTask extends TaskPhing {
         
     protected $expression; // Expression to evaluate
     protected $function; // Function to execute

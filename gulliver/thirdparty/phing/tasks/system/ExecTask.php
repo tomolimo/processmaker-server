@@ -20,7 +20,7 @@
  * <http://phing.info>.
  */
 
-require_once 'phing/Task.php';
+require_once 'phing/TaskPhing.php';
 
 /**
  * Executes a command on the shell.
@@ -30,7 +30,7 @@ require_once 'phing/Task.php';
  * @version  $Revision: 1.17 $
  * @package  phing.tasks.system
  */
-class ExecTask extends Task {
+class ExecTask extends TaskPhing {
 
     /**
      * Command to execute.

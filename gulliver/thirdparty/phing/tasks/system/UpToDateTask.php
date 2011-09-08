@@ -19,7 +19,7 @@
  * <http://phing.info>.
  */
 
-require_once 'phing/Task.php';
+require_once 'phing/TaskPhing.php';
 include_once 'phing/tasks/system/condition/Condition.php';
 include_once 'phing/util/DirectoryScanner.php';
 include_once 'phing/util/SourceFileScanner.php';
@@ -36,7 +36,7 @@ include_once 'phing/mappers/MergeMapper.php';
  * @version   $Revision: 1.6 $
  * @package   phing.tasks.system
  */
-class UpToDateTask extends Task implements Condition {
+class UpToDateTask extends TaskPhing implements Condition {
 
     private $_property;
     private $_value;

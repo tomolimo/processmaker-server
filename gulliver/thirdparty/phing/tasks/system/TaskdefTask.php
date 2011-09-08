@@ -20,7 +20,7 @@
  * <http://phing.info>.
  */
  
-require_once 'phing/Task.php';
+require_once 'phing/TaskPhing.php';
 
 /**
  * Register a task for use within a buildfile.
@@ -45,7 +45,7 @@ require_once 'phing/Task.php';
  * @version   $Revision: 1.11 $
  * @package   phing.tasks.system
  */
-class TaskdefTask extends Task {
+class TaskdefTask extends TaskPhing {
 
     /** Tag name for task that will be used in XML */
     private $name;

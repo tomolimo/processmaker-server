@@ -20,7 +20,7 @@
  * <http://phing.info>.
  */
 
-require_once 'phing/Task.php';
+require_once 'phing/TaskPhing.php';
 require_once 'phing/TaskContainer.php';
 
 /**
@@ -32,7 +32,7 @@ require_once 'phing/TaskContainer.php';
  *
  * @since 2.1.2
  */
-class SequentialTask extends Task implements TaskContainer {
+class SequentialTask extends TaskPhing implements TaskContainer {
 
     /** Optional Vector holding the nested tasks */
     private $nestedTasks = array();
@@ -41,7 +41,7 @@ class SequentialTask extends Task implements TaskContainer {
      * Add a nested task to Sequential.
      * @param Task $nestedTask  Nested task to execute Sequential
      */
-    public function addTask(Task $nestedTask) {
+    public function addTask(TaskPhing $nestedTask) {
         $this->nestedTasks[] = $nestedTask;
     }
 

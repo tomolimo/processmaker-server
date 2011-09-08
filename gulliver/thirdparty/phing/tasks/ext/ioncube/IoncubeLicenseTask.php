@@ -19,7 +19,7 @@
  * <http://phing.info>.
  */
 
-require_once 'phing/Task.php';
+require_once 'phing/TaskPhing.php';
 require_once 'phing/tasks/ext/ioncube/IoncubeComment.php';
 
 /**
@@ -30,7 +30,7 @@ require_once 'phing/tasks/ext/ioncube/IoncubeComment.php';
  * @package phing.tasks.ext.ioncube
  * @since 2.2.0
  */
-class IoncubeLicenseTask extends Task
+class IoncubeLicenseTask extends TaskPhing
 {
 	private $ioncubePath = "/usr/local/ioncube";
 	

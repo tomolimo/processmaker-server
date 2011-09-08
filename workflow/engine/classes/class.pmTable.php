@@ -385,7 +385,7 @@ class PmTable
       $line = substr($line, 0, strrpos($line, ";"));
       
       // just execute the drop and create table for target table nad not for others
-      if (stripos('CREATE TABLE') !== false || stripos('DROP TABLE') !== false) {
+      if (stripos($line, 'CREATE TABLE') !== false || stripos($line, 'DROP TABLE') !== false) {
         $isCreateForCurrentTable = preg_match('/CREATE\sTABLE\s[\'\"\`]{1}' . $this->tableName . '[\'\"\`]{1}/i', $line, $match);
         if ($isCreateForCurrentTable) {
           $queryStack['create'] = $line;

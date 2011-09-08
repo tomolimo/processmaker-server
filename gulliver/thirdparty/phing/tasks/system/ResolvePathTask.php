@@ -19,7 +19,7 @@
  * <http://phing.info>.
  */
 
-require_once 'phing/Task.php';
+require_once 'phing/TaskPhing.php';
 
 /**
  * Task for resolving relative paths and setting absolute path in property value.
@@ -42,7 +42,7 @@ require_once 'phing/Task.php';
  * @version   $Revision: 1.6 $
  * @package   phing.tasks.system
  */
-class ResolvePathTask extends Task {
+class ResolvePathTask extends TaskPhing {
 
     /** Name of property to set. */
     private $propertyName;

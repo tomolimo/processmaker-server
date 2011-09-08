@@ -20,7 +20,7 @@
  * <http://phing.info>. 
  */
 
-require_once 'phing/Task.php';
+require_once 'phing/TaskPhing.php';
 
 /**
  * Convert dot-notation packages to relative paths.
@@ -29,7 +29,7 @@ require_once 'phing/Task.php';
  * @version   $Revision: 1.5 $
  * @package   phing.tasks.ext
  */
-class PackageAsPathTask extends Task {
+class PackageAsPathTask extends TaskPhing {
 
     /** The package to convert. */
     protected $pckg;

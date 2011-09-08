@@ -20,7 +20,7 @@
  * <http://phing.info>. 
  */
  
-include_once 'phing/Task.php';
+include_once 'phing/TaskPhing.php';
 include_once 'phing/BuildException.php';
 include_once 'phing/lib/Capsule.php';
 include_once 'phing/util/StringHelper.php';
@@ -34,7 +34,7 @@ include_once 'phing/util/StringHelper.php';
  * @version   $Revision: 1.17 $
  * @package   phing.tasks.ext
  */
-class CapsuleTask extends Task {
+class CapsuleTask extends TaskPhing {
 
     /**
      * Capsule "template" engine.

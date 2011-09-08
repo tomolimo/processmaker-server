@@ -19,7 +19,7 @@
  * <http://phing.info>.
  */
 
-require_once 'phing/Task.php';
+require_once 'phing/TaskPhing.php';
 require_once 'phing/system/io/PhingFile.php';
 require_once 'phing/system/io/FileWriter.php';
 require_once 'phing/util/ExtendedFileStream.php';
@@ -36,7 +36,7 @@ require_once 'phing/util/ExtendedFileStream.php';
  * @package phing.tasks.ext.phpunit2
  * @since 2.1.0
  */
-class PHPUnit2ReportTask extends Task
+class PHPUnit2ReportTask extends TaskPhing
 {
 	private $format = "noframes";
 	private $styleDir = "";

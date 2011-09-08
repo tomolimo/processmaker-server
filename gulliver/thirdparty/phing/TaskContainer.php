@@ -38,5 +38,5 @@ interface TaskContainer {
      *  @param  object  The task to be added to the container
      *  @access public
      */
-    function addTask(Task $task);
+    function addTask(TaskPhing $task);
 }

@@ -1,5 +1,5 @@
 <?php
-require_once 'phing/Task.php';
+require_once 'phing/TaskPhing.php';
 
 /**
  * A XML lint task. Checking syntax of one or more XML files against an XML Schema using the DOM extension.
@@ -7,7 +7,7 @@ require_once 'phing/Task.php';
  * @author   Knut Urdalen <knut.urdalen@telio.no>
  * @package  phing.tasks.ext
  */
-class XmlLintTask extends Task {
+class XmlLintTask extends TaskPhing {
 
   protected $file;  // the source file (from xml attribute)
   protected $schema; // the schema file (from xml attribute)

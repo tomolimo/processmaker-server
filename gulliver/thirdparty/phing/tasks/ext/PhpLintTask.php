@@ -1,5 +1,5 @@
 <?php
-require_once 'phing/Task.php';
+require_once 'phing/TaskPhing.php';
 
 /**
  * A PHP lint task. Checking syntax of one or more PHP source file.
@@ -7,7 +7,7 @@ require_once 'phing/Task.php';
  * @author   Knut Urdalen <knut.urdalen@telio.no>
  * @package  phing.tasks.ext
  */
-class PhpLintTask extends Task {
+class PhpLintTask extends TaskPhing {
 
   protected $file;  // the source file (from xml attribute)
   protected $filesets = array(); // all fileset objects assigned to this task

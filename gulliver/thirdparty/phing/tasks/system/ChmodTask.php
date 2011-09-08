@@ -19,7 +19,7 @@
  * <http://phing.info>.
  */
 
-require_once 'phing/Task.php';
+require_once 'phing/TaskPhing.php';
 include_once 'phing/types/FileSet.php';
 
 /**
@@ -30,7 +30,7 @@ include_once 'phing/types/FileSet.php';
  * @version   $Revision: 1.12 $
  * @package   phing.tasks.system
  */
-class ChmodTask extends Task {
+class ChmodTask extends TaskPhing {
 
     private $file;
 

@@ -19,7 +19,7 @@
  * <http://phing.info>.
  */
 
-require_once 'phing/Task.php';
+require_once 'phing/TaskPhing.php';
 
 /**
  * Call another target in the same project.
@@ -46,7 +46,7 @@ require_once 'phing/Task.php';
  * @access    public
  * @package   phing.tasks.system
  */
-class PhingCallTask extends Task {
+class PhingCallTask extends TaskPhing {
 
     private $callee;
     private $subTarget;

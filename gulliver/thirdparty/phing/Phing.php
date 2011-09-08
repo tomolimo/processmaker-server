@@ -22,7 +22,7 @@
 require_once 'phing/Project.php';
 require_once 'phing/ProjectComponent.php';
 require_once 'phing/Target.php';
-require_once 'phing/Task.php';
+require_once 'phing/TaskPhing.php';
 
 include_once 'phing/BuildException.php';
 include_once 'phing/BuildEvent.php';

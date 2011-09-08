@@ -19,7 +19,7 @@
  * <http://phing.info>.
  */
  
-require_once 'phing/Task.php';
+require_once 'phing/TaskPhing.php';
 include_once 'phing/system/io/BufferedReader.php';
 include_once 'phing/system/io/BufferedWriter.php';
 include_once 'phing/util/StringHelper.php';
@@ -32,7 +32,7 @@ include_once 'phing/util/StringHelper.php';
  * @version $Revision: 1.7 $
  * @package phing.tasks.system
  */
-class CVSPassTask extends Task {
+class CVSPassTask extends TaskPhing {
 
     /** CVS Root */
     private $cvsRoot; 

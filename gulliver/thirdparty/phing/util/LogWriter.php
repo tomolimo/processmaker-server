@@ -21,7 +21,7 @@
 	 */
 	
 	require_once 'phing/system/io/Writer.php';
-	require_once 'phing/Task.php';
+	require_once 'phing/TaskPhing.php';
 
 	/**
 	 * Extends the Writer class to output messages to Phing's log
@@ -39,7 +39,7 @@
 		/**
 		 * Constructs a new LogWriter object
 		 */
-		function __construct(Task $task, $level = PROJECT_MSG_INFO)
+		function __construct(TaskPhing $task, $level = PROJECT_MSG_INFO)
 		{
 			$this->task = $task;
 			$this->level = $level;

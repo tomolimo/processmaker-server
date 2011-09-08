@@ -19,7 +19,7 @@
  * <http://phing.info>.
  */
 
-require_once 'phing/Task.php';
+require_once 'phing/TaskPhing.php';
 
 /**
  * Deletes a file or directory, or set of files defined by a fileset.
@@ -27,7 +27,7 @@ require_once 'phing/Task.php';
  * @version   $Revision: 1.13 $
  * @package   phing.tasks.system
  */
-class DeleteTask extends Task {
+class DeleteTask extends TaskPhing {
 
     protected $file;
     protected $dir;

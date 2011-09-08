@@ -19,7 +19,7 @@
  * <http://phing.info>.
  */
 
-require_once 'phing/Task.php';
+require_once 'phing/TaskPhing.php';
 include_once 'phing/input/InputRequest.php';
 include_once 'phing/input/YesNoInputRequest.php';
 include_once 'phing/input/MultipleChoiceInputRequest.php';
@@ -34,7 +34,7 @@ include_once 'phing/input/MultipleChoiceInputRequest.php';
  * @version   $Revision: 1.6 $
  * @package   phing.tasks.system
  */
-class InputTask extends Task {
+class InputTask extends TaskPhing {
     
     private $validargs;
     private $message = ""; // required

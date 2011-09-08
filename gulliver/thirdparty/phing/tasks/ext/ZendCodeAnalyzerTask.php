@@ -1,5 +1,5 @@
 <?php
-require_once 'phing/Task.php';
+require_once 'phing/TaskPhing.php';
 
 /**
  * ZendCodeAnalyzerTask analyze PHP source code using the ZendCodeAnalyzer included in Zend Studio 5.1
@@ -41,7 +41,7 @@ require_once 'phing/Task.php';
  * @author   Knut Urdalen <knut.urdalen@telio.no>
  * @package  phing.tasks.ext
  */
-class ZendCodeAnalyzerTask extends Task {
+class ZendCodeAnalyzerTask extends TaskPhing {
   
   protected $analyzerPath = ""; // Path to ZendCodeAnalyzer binary
   protected $file = "";  // the source file (from xml attribute)

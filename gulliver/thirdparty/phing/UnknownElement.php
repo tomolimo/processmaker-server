@@ -19,7 +19,7 @@
  * <http://phing.info>.
  */
 
-require_once 'phing/Task.php';
+require_once 'phing/TaskPhing.php';
 
 /**
  * Wrapper class that holds all information necessary to create a task
@@ -34,7 +34,7 @@ require_once 'phing/Task.php';
  * @version   $Revision: 1.9 $
  * @package   phing
  */
-class UnknownElement extends Task {
+class UnknownElement extends TaskPhing {
 
     private $elementName;
     private $realThing;
@@ -69,7 +69,7 @@ class UnknownElement extends Task {
     
         $this->realThing = $this->makeObject($this, $this->wrapper);
         $this->wrapper->setProxy($this->realThing);
-        if ($this->realThing instanceof Task) {
+        if ($this->realThing instanceof TaskPhing) {
             $this->realThing->setRuntimeConfigurableWrapper($this->wrapper);
         }
     
@@ -91,7 +91,7 @@ class UnknownElement extends Task {
             throw new BuildException("Should not be executing UnknownElement::main() -- task/type: {$this->elementName}");
         }
         
-        if ($this->realThing instanceof Task) {
+        if ($this->realThing instanceof TaskPhing) {
             $this->realThing->main();
         }
         
@@ -134,12 +134,12 @@ class UnknownElement extends Task {
             }
 
             $childWrapper->setProxy($realChild);
-            if ($realChild instanceof Task) {
+            if ($realChild instanceof TaskPhing) {
                 $realChild->setRuntimeConfigurableWrapper($childWrapper);
             }
 
             $child->handleChildren($realChild, $childWrapper);
-            if ($realChild instanceof Task) {
+            if ($realChild instanceof TaskPhing) {
                 $realChild->maybeConfigure();
             }
         }

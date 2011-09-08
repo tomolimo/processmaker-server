@@ -20,7 +20,7 @@
  * <http://phing.info>.
  */
  
-require_once 'phing/Task.php';
+require_once 'phing/TaskPhing.php';
 include_once 'phing/types/Path.php';
 
 /**
@@ -37,7 +37,7 @@ include_once 'phing/types/Path.php';
  * @version   $Revision: 1.1 $
  * @package   phing.tasks.system
  */
-class IncludePathTask extends Task {
+class IncludePathTask extends TaskPhing {
    
     /**
      * Classname of task to register.

@@ -19,7 +19,7 @@
  * <http://phing.info>.
  */
 
-require_once 'phing/Task.php';
+require_once 'phing/TaskPhing.php';
 include_once 'phing/util/DirectoryScanner.php';
 include_once 'phing/types/FileSet.php';
 include_once 'phing/util/FileUtils.php';
@@ -34,7 +34,7 @@ include_once 'phing/system/io/IOException.php';
  * @version $Revision: 1.12 $
  * @package phing.tasks.system
  */
-class TouchTask extends Task {
+class TouchTask extends TaskPhing {
 
     private $file;
     private $millis    = -1;

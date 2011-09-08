@@ -20,7 +20,7 @@
  * <http://phing.info>.
  */
 
-include_once 'phing/Task.php';
+include_once 'phing/TaskPhing.php';
 include_once 'phing/system/util/Properties.php';
 
 /**
@@ -31,7 +31,7 @@ include_once 'phing/system/util/Properties.php';
  * @version   $Revision$
  * @package   phing.tasks.system
  */
-class PropertyTask extends Task {
+class PropertyTask extends TaskPhing {
 
     /** name of the property */
     protected $name; 

@@ -20,7 +20,7 @@
  * <http://phing.info>.
  */
 
-require_once 'phing/Task.php';
+require_once 'phing/TaskPhing.php';
 include_once 'phing/types/Reference.php';
 
 /**
@@ -34,7 +34,7 @@ include_once 'phing/types/Reference.php';
  * @version   $Revision: 1.13 $
  * @package   phing.tasks.system
  */
-abstract class CreoleTask extends Task {
+abstract class CreoleTask extends TaskPhing {
 
     /**
      * Used for caching loaders / driver. This is to avoid

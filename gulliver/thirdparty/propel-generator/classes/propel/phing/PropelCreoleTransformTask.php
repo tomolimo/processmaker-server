@@ -21,7 +21,7 @@
  */
 
 include_once 'creole/Connection.php';
-require_once 'phing/Task.php';
+require_once 'phing/TaskPhing.php';
 
 /**
  * This class generates an XML schema of an existing database from
@@ -33,7 +33,7 @@ require_once 'phing/Task.php';
  * @version    $Revision: 538 $
  * @package    propel.phing
  */
-class PropelCreoleTransformTask extends Task {
+class PropelCreoleTransformTask extends TaskPhing {
 
 	/** Name of XML database schema produced. */
 	protected $xmlSchema;

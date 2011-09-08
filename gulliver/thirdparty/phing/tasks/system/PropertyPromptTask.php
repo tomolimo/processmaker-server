@@ -19,7 +19,7 @@
  * <http://phing.info>.
  */
 
-require_once 'phing/Task.php';
+require_once 'phing/TaskPhing.php';
 include_once 'phing/system/io/ConsoleReader.php';
 
 /**
@@ -35,7 +35,7 @@ include_once 'phing/system/io/ConsoleReader.php';
  * @package   phing.tasks.system
  * @deprecated - in favor of the more capable InputTask
  */ 
-class PropertyPromptTask extends Task {
+class PropertyPromptTask extends TaskPhing {
 
     private $propertyName;        // required
     private $defaultValue;

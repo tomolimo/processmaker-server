@@ -101,7 +101,7 @@ class BuildEvent extends EventObject {
             $this->project = $source->getProject();
             $this->target = $source;
             $this->task = null;
-        } elseif ($source instanceof Task) {
+        } elseif ($source instanceof TaskPhing) {
             $this->project = $source->getProject();
             $this->target = $source->getOwningTarget();
             $this->task = $source;

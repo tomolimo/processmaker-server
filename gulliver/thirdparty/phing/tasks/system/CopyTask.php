@@ -19,7 +19,7 @@
  * <http://phing.info>.
  */
  
-require_once 'phing/Task.php';
+require_once 'phing/TaskPhing.php';
 include_once 'phing/system/io/PhingFile.php';
 include_once 'phing/util/FileUtils.php';
 include_once 'phing/util/SourceFileScanner.php';
@@ -36,7 +36,7 @@ include_once 'phing/mappers/FlattenMapper.php';
  * @version  $Revision: 1.16 $ $Date: 2006-06-12 21:46:05 +0200 (Mon, 12 Jun 2006) $
  * @package  phing.tasks.system
  */
-class CopyTask extends Task {
+class CopyTask extends TaskPhing {
     
     protected $file          = null;   // the source file (from xml attribute)
     protected $destFile      = null;   // the destiantion file (from xml attribute)

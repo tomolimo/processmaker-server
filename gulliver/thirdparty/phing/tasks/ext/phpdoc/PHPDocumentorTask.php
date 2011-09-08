@@ -20,7 +20,7 @@
  * <http://phing.info>.
  */
 
-require_once 'phing/Task.php';
+require_once 'phing/TaskPhing.php';
 
 /**
  * Task to run phpDocumentor.
@@ -29,7 +29,7 @@ require_once 'phing/Task.php';
  * @version $Id: PHPDocumentorTask.php 3076 2006-12-18 08:52:12Z fabien $
  * @package phing.tasks.ext.phpdoc
  */	
-class PHPDocumentorTask extends Task
+class PHPDocumentorTask extends TaskPhing
 {
 	/**
 	 * The path to the executable for phpDocumentor

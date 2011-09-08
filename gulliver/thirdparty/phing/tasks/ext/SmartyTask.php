@@ -20,7 +20,7 @@
  * <http://phing.info>. 
  */
  
-require_once 'phing/Task.php';
+require_once 'phing/TaskPhing.php';
 include_once 'phing/BuildException.php';
 include_once 'phing/util/StringHelper.php';
 
@@ -40,7 +40,7 @@ include_once 'phing/util/StringHelper.php';
  * @version   $Id: SmartyTask.php 3076 2006-12-18 08:52:12Z fabien $
  * @package   phing.tasks.ext
  */
-class SmartyTask extends Task {
+class SmartyTask extends TaskPhing {
 
     /**
      * Smarty template engine.

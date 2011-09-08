@@ -20,7 +20,7 @@
  * <http://propel.phpdb.org>.
  */
 
-require_once 'phing/Task.php';
+require_once 'phing/TaskPhing.php';
 include_once 'creole/Connection.php';
 
 /**
@@ -39,7 +39,7 @@ include_once 'creole/Connection.php';
  * @version    $Revision: 536 $
  * @package    propel.phing
  */
-class PropelSQLExec extends Task {
+class PropelSQLExec extends TaskPhing {
 
 	private $goodSql = 0;
 	private $totalSql = 0;

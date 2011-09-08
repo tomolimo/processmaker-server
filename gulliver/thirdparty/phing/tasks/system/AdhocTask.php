@@ -19,7 +19,7 @@
  * <http://phing.info>.
  */
  
-require_once 'phing/Task.php';
+require_once 'phing/TaskPhing.php';
 
 /**
  * Abstract class for creating adhoc Phing components in buildfile.
@@ -34,7 +34,7 @@ require_once 'phing/Task.php';
  * @version  $Revision: 1.6 $
  * @package  phing.tasks.system
  */
-class AdhocTask extends Task {
+class AdhocTask extends TaskPhing {
             
     /**
      * The PHP script

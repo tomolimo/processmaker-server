@@ -19,7 +19,7 @@
  * <http://phing.info>.
  */
  
-include_once 'phing/Task.php';
+include_once 'phing/TaskPhing.php';
 
 /**
  *  Send a message by mail() 
@@ -30,7 +30,7 @@ include_once 'phing/Task.php';
  *  @version  $Revision: 1.1 $
  *  @package  phing.tasks.ext
  */
-class MailTask extends Task {
+class MailTask extends TaskPhing {
 
     protected $recipient;
       

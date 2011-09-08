@@ -19,7 +19,7 @@
  * <http://phing.info>.
  */
  
-require_once 'phing/Task.php';
+require_once 'phing/TaskPhing.php';
 
 /**
  * Sets properties to the current time, or offsets from the current time.
@@ -32,7 +32,7 @@ require_once 'phing/Task.php';
  * @package  phing.tasks.system
  * @since    2.2.0
  */
-class TstampTask extends Task
+class TstampTask extends TaskPhing
 {
 	private $customFormats = array();
 	

@@ -19,7 +19,7 @@
  * <http://phing.info>.
  */
  
-include_once 'phing/Task.php';
+include_once 'phing/TaskPhing.php';
 
 /**
  *  Echos a message to the logging system or to a file
@@ -30,7 +30,7 @@ include_once 'phing/Task.php';
  *  @package  phing.tasks.system
  */
 
-class EchoTask extends Task {
+class EchoTask extends TaskPhing {
 	
     protected $msg = "";
     

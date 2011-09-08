@@ -598,7 +598,7 @@ class Project {
             
             $o = new $cls();        
     
-            if ($o instanceof Task) {
+            if ($o instanceof TaskPhing) {
                 $task = $o;
             } else {
                 $this->log ("  (Using TaskAdapter for: $taskType)", PROJECT_MSG_DEBUG);

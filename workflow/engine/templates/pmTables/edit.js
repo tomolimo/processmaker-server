@@ -193,8 +193,8 @@ Ext.onReady(function(){
               forceSelection: true,
               store: new Ext.data.SimpleStore({
                   fields: ['type_id', 'type'],
-                  data : [['VARCHAR',_("ID_VARCHAR")],['TEXT',_("ID_TEXT")],['DATE',_("ID_DATE")],['INT',_("ID_INT")],['FLOAT',_("ID_FLOAT")]],
-                  //data: columnsTypes,
+                  //data : [['VARCHAR',_("ID_VARCHAR")],['TEXT',_("ID_TEXT")],['DATE',_("ID_DATE")],['INT',_("ID_INT")],['FLOAT',_("ID_FLOAT")]],
+                  data: columnsTypes,
                   sortInfo: {field:'type_id', direction:'ASC'}
               })
           })
@@ -660,11 +660,6 @@ function createReportTable()
 
     if (in_array(row.data['field_name'], fieldsNames)) {
       PMExt.error(_('ID_ERROR'),_('ID_PMTABLES_ALERT1') + ' <b>' + row.data['field_name']+'</b>');
-      return false;
-    }
-    
-    if (row.data['field_name'] == 'DESC') {
-      PMExt.error(_('ID_ERROR'), 'The word "DESC" is reserved by the database engine please set another one.');
       return false;
     }
 

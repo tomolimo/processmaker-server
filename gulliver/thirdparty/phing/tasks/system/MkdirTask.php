@@ -19,7 +19,7 @@
  * <http://phing.info>.
  */
 
-require_once 'phing/Task.php';
+require_once 'phing/TaskPhing.php';
 include_once 'phing/system/io/PhingFile.php';
 
 /**
@@ -29,7 +29,7 @@ include_once 'phing/system/io/PhingFile.php';
  * @version  $Revision: 1.8 $
  * @package  phing.tasks.system
  */
-class MkdirTask extends Task {
+class MkdirTask extends TaskPhing {
 
     /** directory to create*/
     private $dir;

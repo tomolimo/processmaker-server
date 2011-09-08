@@ -19,7 +19,7 @@
  * <http://phing.info>.
  */
 
-require_once 'phing/Task.php';
+require_once 'phing/TaskPhing.php';
 require_once 'phing/system/io/PhingFile.php';
 require_once 'phing/system/io/Writer.php';
 require_once 'phing/util/LogWriter.php';
@@ -33,7 +33,7 @@ require_once 'phing/util/LogWriter.php';
  * @see BatchTest
  * @since 2.1.0
  */
-class PHPUnit2Task extends Task
+class PHPUnit2Task extends TaskPhing
 {
 	private $batchtests = array();
 	private $formatters = array();
@@ -70,7 +70,7 @@ class PHPUnit2Task extends Task
 		// add some defaults to the PHPUnit2 Filter
 		PHPUnit2_Util_Filter::addFileToFilter('PHPUnit2Task.php');
 		PHPUnit2_Util_Filter::addFileToFilter('PHPUnit2TestRunner.php');
-		PHPUnit2_Util_Filter::addFileToFilter('phing/Task.php');
+		PHPUnit2_Util_Filter::addFileToFilter('phing/TaskPhing.php');
 		PHPUnit2_Util_Filter::addFileToFilter('phing/Target.php');
 		PHPUnit2_Util_Filter::addFileToFilter('phing/Project.php');
 		PHPUnit2_Util_Filter::addFileToFilter('phing/Phing.php');

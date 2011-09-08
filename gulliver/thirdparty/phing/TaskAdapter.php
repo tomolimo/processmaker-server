@@ -19,7 +19,7 @@
  * <http://phing.info>.
  */
 
-require_once 'phing/Task.php';
+require_once 'phing/TaskPhing.php';
 
 /**
  *  Use introspection to "adapt" an arbitrary ( not extending Task, but with
@@ -30,7 +30,7 @@ require_once 'phing/Task.php';
  *  @version   $Revision: 1.7 $
  *  @package   phing
  */
-class TaskAdapter extends Task {
+class TaskAdapter extends TaskPhing {
     
     /** target object */
     private $proxy;

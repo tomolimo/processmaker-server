@@ -19,7 +19,7 @@
  * <http://phing.info>.
  */
 
-require_once 'phing/Task.php';
+require_once 'phing/TaskPhing.php';
 include_once 'phing/tasks/system/ExecTask.php';
 include_once 'phing/types/Commandline.php';
 
@@ -38,7 +38,7 @@ include_once 'phing/types/Commandline.php';
  * @version $Revision: 1.14 $
  * @package phing.tasks.system
  */
-class CvsTask extends Task {
+class CvsTask extends TaskPhing {
 
     /** 
      * Default compression level to use, if compression is enabled via

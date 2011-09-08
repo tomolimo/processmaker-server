@@ -19,7 +19,7 @@
  * <http://phing.info>.
  */
 
-require_once 'phing/Task.php';
+require_once 'phing/TaskPhing.php';
 include_once 'phing/tasks/system/PhingTask.php';
 
 /**
@@ -46,7 +46,7 @@ include_once 'phing/tasks/system/PhingTask.php';
  * @version   $Revision: 1.9 $
  * @package   phing.tasks.system
  */
-class ForeachTask extends Task {
+class ForeachTask extends TaskPhing {
     
     /** Delimter-separated list of values to process. */
     private $list;

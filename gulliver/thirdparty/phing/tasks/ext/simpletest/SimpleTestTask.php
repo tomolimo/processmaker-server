@@ -19,7 +19,7 @@
  * <http://phing.info>.
  */
 
-require_once 'phing/Task.php';
+require_once 'phing/TaskPhing.php';
 require_once 'phing/system/io/PhingFile.php';
 require_once 'phing/system/io/Writer.php';
 require_once 'phing/util/LogWriter.php';
@@ -32,7 +32,7 @@ require_once 'phing/util/LogWriter.php';
  * @package phing.tasks.ext.simpletest
  * @since 2.2.0
  */
-class SimpleTestTask extends Task
+class SimpleTestTask extends TaskPhing
 {
 	private $formatters = array();
 	private $haltonerror = false;

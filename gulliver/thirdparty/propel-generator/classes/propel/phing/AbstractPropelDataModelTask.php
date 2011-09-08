@@ -21,7 +21,7 @@
  */
 
 //include_once 'phing/tasks/ext/CapsuleTask.php';
-require_once 'phing/Task.php';
+require_once 'phing/TaskPhing.php';
 include_once 'propel/engine/database/model/AppData.php';
 include_once 'propel/engine/database/model/Database.php';
 include_once 'propel/engine/database/transform/XmlToAppData.php';
@@ -36,7 +36,7 @@ include_once 'propel/engine/database/transform/XmlToAppData.php';
  * @author     Daniel Rall <dlr@finemaltcoding.com> (Torque)
  * @package    propel.phing
  */
-abstract class AbstractPropelDataModelTask extends Task {
+abstract class AbstractPropelDataModelTask extends TaskPhing {
 
 	/**
 	 * Fileset of XML schemas which represent our data models.

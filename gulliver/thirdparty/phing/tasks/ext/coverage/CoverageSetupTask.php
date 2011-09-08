@@ -19,7 +19,7 @@
  * <http://phing.info>.
  */
 
-require_once 'phing/Task.php';
+require_once 'phing/TaskPhing.php';
 require_once 'phing/system/io/PhingFile.php';
 require_once 'phing/system/io/Writer.php';
 require_once 'phing/system/util/Properties.php';
@@ -33,7 +33,7 @@ require_once 'phing/tasks/ext/coverage/CoverageMerger.php';
  * @package phing.tasks.ext.coverage
  * @since 2.1.0
  */
-class CoverageSetupTask extends Task
+class CoverageSetupTask extends TaskPhing
 {
 	/** the list of filesets containing the .php filename rules */
 	private $filesets = array();

@@ -19,7 +19,7 @@
  * <http://phing.info>.
  */
  
-require_once 'phing/Task.php';
+require_once 'phing/TaskPhing.php';
 
 /**
  * Exits the active build, giving an additional message
@@ -30,7 +30,7 @@ require_once 'phing/Task.php';
  * @version   $Revision: 1.7 $
  * @package   phing.tasks.system
  */
-class ExitTask extends Task { 
+class ExitTask extends TaskPhing { 
 
     private $message;
     private $ifCondition;

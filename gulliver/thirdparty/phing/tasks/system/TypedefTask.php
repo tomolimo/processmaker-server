@@ -19,7 +19,7 @@
  * <http://phing.info>.
  */
 
-require_once 'phing/Task.php';
+require_once 'phing/TaskPhing.php';
 
 /**
  * Register a datatype for use within a buildfile.
@@ -46,7 +46,7 @@ require_once 'phing/Task.php';
  * @version   $Revision: 1.7 $
  * @package   phing.tasks.system
  */
-class TypedefTask extends Task {
+class TypedefTask extends TaskPhing {
     
     /** Tag name for datatype that will be used in XML */
     private $name;

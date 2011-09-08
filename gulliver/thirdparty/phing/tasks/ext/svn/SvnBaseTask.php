@@ -19,7 +19,7 @@
  * <http://phing.info>.
  */
  
-include_once 'phing/Task.php';
+include_once 'phing/TaskPhing.php';
 
 /**
  *  Send a message by mail() 
@@ -30,7 +30,7 @@ include_once 'phing/Task.php';
  *  @version  $Id: SvnBaseTask.php 3076 2006-12-18 08:52:12Z fabien $
  *  @package  phing.tasks.ext
  */
-abstract class SvnBaseTask extends Task
+abstract class SvnBaseTask extends TaskPhing
 {
 	private $workingCopy = "";
 	

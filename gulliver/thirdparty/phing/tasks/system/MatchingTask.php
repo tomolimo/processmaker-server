@@ -19,7 +19,7 @@
  * <http://phing.info>.
  */
 
-require_once 'phing/Task.php';
+require_once 'phing/TaskPhing.php';
 require_once 'phing/types/selectors/SelectorContainer.php';
 include_once 'phing/types/FileSet.php';
 include_once 'phing/types/PatternSet.php';
@@ -41,7 +41,7 @@ include_once 'phing/util/DirectoryScanner.php';
  * @version   $Revision: 1.4 $
  * @package   phing.tasks.system
  */
-abstract class MatchingTask extends Task implements SelectorContainer {
+abstract class MatchingTask extends TaskPhing implements SelectorContainer {
 
     /** @var boolean */
     protected $useDefaultExcludes = true;

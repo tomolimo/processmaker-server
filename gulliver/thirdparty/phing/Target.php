@@ -137,7 +137,7 @@ class Target implements TaskContainer {
      *  @param   object  The task object to add
      *  @access  public
      */
-    function addTask(Task $task) {
+    function addTask(TaskPhing $task) {
         $this->children[] = $task;
     }
 
@@ -164,7 +164,7 @@ class Target implements TaskContainer {
         $tasks = array();
         for ($i=0,$size=count($this->children); $i < $size; $i++) {
             $tsk = $this->children[$i];
-            if ($tsk instanceof Task) {
+            if ($tsk instanceof TaskPhing) {
                 // note: we're copying objects here!
                 $tasks[] = clone $tsk;
             }
@@ -235,7 +235,7 @@ class Target implements TaskContainer {
     public function main() {
         if ($this->testIfCondition() && $this->testUnlessCondition()) {
             foreach($this->children as $o) {
-                if ($o instanceof Task) {
+                if ($o instanceof TaskPhing) {
                     // child is a task
                     $o->perform();
                 } else {

@@ -19,7 +19,7 @@
  * <http://phing.info>.
  */
 
-require_once 'phing/Task.php';
+require_once 'phing/TaskPhing.php';
 include_once 'phing/types/FileList.php';
 include_once 'phing/types/FileSet.php';
 
@@ -50,7 +50,7 @@ include_once 'phing/types/FileSet.php';
  * @package phing.tasks.system
  * @version $Revision: 1.14 $
  */
-class AppendTask extends Task {
+class AppendTask extends TaskPhing {
     
     /** Append stuff to this file. */
     private $to;

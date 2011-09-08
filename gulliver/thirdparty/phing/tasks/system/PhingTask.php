@@ -20,7 +20,7 @@
  * <http://phing.info>.
 */
 
-include_once 'phing/Task.php';
+include_once 'phing/TaskPhing.php';
 include_once 'phing/util/FileUtils.php';
 include_once 'phing/types/Reference.php';
 include_once 'phing/tasks/system/PropertyTask.php';
@@ -44,7 +44,7 @@ include_once 'phing/tasks/system/PropertyTask.php';
  * @version   $Revision: 1.20 $
  * @package   phing.tasks.system
  */
-class PhingTask extends Task {
+class PhingTask extends TaskPhing {
 
     /** the basedir where is executed the build file */
     private $dir;
