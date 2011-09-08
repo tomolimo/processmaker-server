@@ -46,6 +46,11 @@
             G::uploadFile($tempName, $path, $filename );
         }
   }
+  //we check if the file is a pm file
+  $aExtPmfile= explode('.', $filename);
+  if($aExtPmfile[sizeof($aExtPmfile)-1]!='pm') {
+    throw ( new Exception ( G::LoadTranslation( 'ID_NOT_PM_FILE' )) );
+  }
   
   $oData = $oProcess->getProcessData ( $path . $filename  );
 
