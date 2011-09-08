@@ -1507,7 +1507,7 @@ class XmlForm_Field_Textarea extends XmlForm_Field {
       $html .= '<textarea '.$readOnlyText.' ';
       $html .= 'id="form['.$this->name.']" ';
       $html .= 'name="form['.$this->name.']" ';
-      $html .= 'wrap="hard" cols="'.$this->cols.'" rows="'.$this->rows.'" ';
+      $html .= 'wrap="soft" cols="'.$this->cols.'" rows="'.$this->rows.'" ';
       $html .= 'style="'.$scrollStyle.'" wrap="'.$this->htmlentities($this->wrap, ENT_QUOTES, 'UTF-8').'" ';
       $html .= $this->NSDefaultValue().' ';
       $html .= $this->NSRequiredValue().' ';
