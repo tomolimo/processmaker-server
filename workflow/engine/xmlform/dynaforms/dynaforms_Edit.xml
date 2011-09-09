@@ -99,7 +99,7 @@ document.getElementById('form[DYN_TITLE]').value = document.getElementById('form
        	oPanel = new leimnud.module.panel();
       	oPanel.options = {
             limit    : true,
-            size     : {w:400,h:350},
+            size     : {w:450,h:350},
             position : {x:0,y:0,center:true},
             title    : '',
             theme    : 'processmaker',

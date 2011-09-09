@@ -38,7 +38,7 @@
     } else {
         action = document.getElementsByName('form[DYN_SOURCE]')[1].value;
     }
-    panel = popupWindowObject('@G::LoadTranslation(ID_NEW_DYNAFORM)', '@G::encryptlink(@#dynaformsNewPlugin)?PRO_UID=@%PRO_UID&ACTION='+action , 400, 350);
+    panel = popupWindowObject('@G::LoadTranslation(ID_NEW_DYNAFORM)', '@G::encryptlink(@#dynaformsNewPlugin)?PRO_UID=@%PRO_UID&ACTION='+action , 450, 350);
     currentPopupWindow.remove();
   }
   

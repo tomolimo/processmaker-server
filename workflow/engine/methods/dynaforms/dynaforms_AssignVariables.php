@@ -4,11 +4,13 @@ require_once('classes/model/AdditionalTables.php');
       $oAdditionalTables = new AdditionalTables();
       $aData = $oAdditionalTables->load($_POST['ADD_TABLE'], true);
       $addTabName = $aData['ADD_TAB_NAME'];
+      $c = 1;
         foreach ($aData['FIELDS'] as $iRow => $aRow) {
             if ($aRow['FLD_KEY'] == 1) {
-                $aFields['FIELDS'][$iRow] = $aRow;
+                $aFields['FIELDS'][$c++] = $aRow;
             }
         }
+        //g::pr($aFields['FIELDS']); die;
 
         $aFields['DYN_UID']   = $_POST['DYN_UID'];
         $aFields['ADD_TABLE'] = $_POST['ADD_TABLE'];
