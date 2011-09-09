@@ -189,9 +189,9 @@ Ext.onReady(function() {
 
   treePanel = new Ext.ux.tree.TreeGrid({
     title: _('ID_DEPARTMENTS'),
-    autoScroll: true,
-    width: 720,
-    height: 300,
+    autoScroll: false,
+    //width: 720,
+    //height: 300,
     id: 'treePanel',
     columns:[{
       header: _('ID_DEPARTMENT_NAME'),
@@ -231,8 +231,8 @@ Ext.onReady(function() {
   treePanel.on('contextmenu', treeContextHandler);
 
   viewport = new Ext.Viewport({
-    layout: 'fit',
-    autoScroll: false,
+    layout: 'anchor',
+    autoScroll: true,
     items: [treePanel]
   });
 
