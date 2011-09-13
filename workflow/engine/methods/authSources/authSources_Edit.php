@@ -73,7 +73,12 @@ else {
     $G_PUBLISH->AddContent('xmlform', 'xmlform', $fields['AUTH_SOURCE_PROVIDER'] . PATH_SEP . $fields['AUTH_SOURCE_PROVIDER'] . 'Edit.xml', '', $fields, '../authSources/authSources_Save');
   }
   else {
-    $G_PUBLISH->AddContent('xmlform', 'xmlform', 'login/showMessage', '', array('MESSAGE' => 'File: ' . $fields['AUTH_SOURCE_PROVIDER'] . 'Edit.xml' . ' not exists.'));
+    if (file_exists(PATH_XMLFORM . 'authSources/' . $aFields['AUTH_SOURCE_PROVIDER'] . 'Edit.xml')) {
+      $G_PUBLISH->AddContent('xmlform', 'xmlform', 'authSources/' . $aFields['AUTH_SOURCE_PROVIDER'] . 'Edit', '', $aFields, '../authSources/authSources_Save');
+    }
+    else {
+      $G_PUBLISH->AddContent('xmlform', 'xmlform', 'login/showMessage', '', array('MESSAGE' => 'File: ' . $fields['AUTH_SOURCE_PROVIDER'] . 'Edit.xml' . ' not exists.'));
+    }
   }
 }
 G::RenderPage('publish', 'blank');
