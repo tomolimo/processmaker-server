@@ -3,7 +3,7 @@
  * authSources_Edit.php
  *
  * ProcessMaker Open Source Edition
- * Copyright (C) 2004 - 2008 Colosa Inc.23
+ * Copyright (C) 2004 - 2011 Colosa Inc.23
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -23,55 +23,57 @@
  *
  */
 
-  global $RBAC;
-  if ($RBAC->userCanAccess('PM_SETUP_ADVANCE') != 1) {
-    G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');
-  	G::header('location: ../login/login');
-  	die;
+global $RBAC;
+if ($RBAC->userCanAccess('PM_SETUP_ADVANCE') != 1) {
+  G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');
+	G::header('location: ../login/login');
+	die;
+}
+
+if (!isset($_GET['sUID'])) {
+  G::SendTemporalMessage('ID_ERROR_OBJECT_NOT_EXISTS', 'error', 'labels');
+	G::header('location: authSources_List');
+	die;
+}
+
+if ($_GET['sUID'] == '') {
+  G::SendTemporalMessage('ID_ERROR_OBJECT_NOT_EXISTS', 'error', 'labels');
+	G::header('location: authSources_List');
+	die;
+}
+
+$G_MAIN_MENU            = 'processmaker';
+$G_SUB_MENU             = 'users';
+$G_ID_MENU_SELECTED     = 'USERS';
+$G_ID_SUB_MENU_SELECTED = 'AUTH_SOURCES';
+
+$fields = $RBAC->getAuthSource($_GET['sUID']);
+if (is_array($fields['AUTH_SOURCE_DATA'])) {
+  foreach($fields['AUTH_SOURCE_DATA'] as $field => $value) {
+    $fields[$field] = $value;
   }
-  
-  if (!isset($_GET['sUID'])) {
-    G::SendTemporalMessage('ID_ERROR_OBJECT_NOT_EXISTS', 'error', 'labels');
-  	G::header('location: authSources_List');
-  	die;
-  }
-  
-  if ($_GET['sUID'] == '') {
-    G::SendTemporalMessage('ID_ERROR_OBJECT_NOT_EXISTS', 'error', 'labels');
-  	G::header('location: authSources_List');
-  	die;
-  }
-  
-  $G_MAIN_MENU            = 'processmaker';
-  $G_SUB_MENU             = 'users';
-  $G_ID_MENU_SELECTED     = 'USERS';
-  $G_ID_SUB_MENU_SELECTED = 'AUTH_SOURCES';
-  
-  $aFields = $RBAC->getAuthSource($_GET['sUID']);
-  if (is_array($aFields['AUTH_SOURCE_DATA'])) {
-    foreach($aFields['AUTH_SOURCE_DATA'] as $sField => $sValue) {
-      $aFields[$sField] = $sValue;
-    }
-  }
-  unset($aFields['AUTH_SOURCE_DATA']);
-  
- //fixing a problem with dropdown with int values, 
- //the problem : the value was integer, but the dropdown was expecting a string value, and they returns always the first item of dropdown
- if ( isset($aFields['AUTH_SOURCE_ENABLED_TLS']))  
-   $aFields['AUTH_SOURCE_ENABLED_TLS'] = sprintf('%d', $aFields['AUTH_SOURCE_ENABLED_TLS'] );
- if ( isset($aFields['AUTH_ANONYMOUS']))  
-   $aFields['AUTH_ANONYMOUS'] = sprintf('%d', $aFields['AUTH_ANONYMOUS'] );
-   
-  $G_PUBLISH = new Publisher();
-  if ($aFields['AUTH_SOURCE_PROVIDER'] == 'ldap') {
-    $G_PUBLISH->AddContent('xmlform', 'xmlform', 'authSources/ldapEdit', '', $aFields, '../authSources/authSources_Save');
+}
+unset($fields['AUTH_SOURCE_DATA']);
+
+//fixing a problem with dropdown with int values,
+//the problem : the value was integer, but the dropdown was expecting a string value, and they returns always the first item of dropdown
+if (isset($fields['AUTH_SOURCE_ENABLED_TLS'])) {
+  $fields['AUTH_SOURCE_ENABLED_TLS'] = sprintf('%d', $fields['AUTH_SOURCE_ENABLED_TLS']);
+}
+if (isset($fields['AUTH_ANONYMOUS'])) {
+  $fields['AUTH_ANONYMOUS'] = sprintf('%d', $fields['AUTH_ANONYMOUS']);
+}
+
+$G_PUBLISH = new Publisher();
+if ($fields['AUTH_SOURCE_PROVIDER'] == 'ldap') {
+  $G_PUBLISH->AddContent('xmlform', 'xmlform', 'authSources/ldapEdit', '', $fields, '../authSources/authSources_Save');
+}
+else {
+  if (file_exists(PATH_PLUGINS . $fields['AUTH_SOURCE_PROVIDER'] . PATH_SEP . $fields['AUTH_SOURCE_PROVIDER'] . 'Edit.xml')) {
+    $G_PUBLISH->AddContent('xmlform', 'xmlform', $fields['AUTH_SOURCE_PROVIDER'] . PATH_SEP . $fields['AUTH_SOURCE_PROVIDER'] . 'Edit.xml', '', $fields, '../authSources/authSources_Save');
   }
   else {
-    if (file_exists(PATH_XMLFORM . 'authSources/' . $aFields['AUTH_SOURCE_PROVIDER'] . 'Edit.xml')) {
-      $G_PUBLISH->AddContent('xmlform', 'xmlform', 'authSources/' . $aFields['AUTH_SOURCE_PROVIDER'] . 'Edit', '', $aFields, '../authSources/authSources_Save');
-    }
-    else {
-      $G_PUBLISH->AddContent('xmlform', 'xmlform', 'login/showMessage', '', array('MESSAGE' => 'File: ' . $aFields['AUTH_SOURCE_PROVIDER'] . 'Edit.xml' . ' doesn\'t exist.'));
-    }
+    $G_PUBLISH->AddContent('xmlform', 'xmlform', 'login/showMessage', '', array('MESSAGE' => 'File: ' . $fields['AUTH_SOURCE_PROVIDER'] . 'Edit.xml' . ' not exists.'));
   }
-  G::RenderPage('publish','blank');
+}
+G::RenderPage('publish', 'blank');
