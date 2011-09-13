@@ -1752,71 +1752,79 @@ function PMFRedirectToStep($sApplicationUID, $iDelegation, $sStepType, $sStepUid
  *
  * Returns a list of the next assigned users to a case.
  *
- * @name PMFGetNextAssignedUsers
- * @label PMFGet Next Assigned Users
+ * @name PMFGetNextAssignedUser
+ * @label PMFGet Next Assigned User
  *
  * @param string(32) | $application | Case ID | Id of the case
+ * @param string(32) | $task | Task ID | Id of the task
  * @return array | $array | List of users | Return a list of users
  *
  */
-function PMFGetNextAssignedUsers ($application) {
+function PMFGetNextAssignedUser ($application, $task) {
 
   require_once 'classes/model/AppDelegation.php';
   require_once 'classes/model/Task.php';
   require_once 'classes/model/TaskUser.php';
   require_once 'classes/model/Users.php';
 
-  $oCriteria = new Criteria('workflow');
+  $oTask = new Task();
+  $TaskFields = $oTask->load ($task);
+  $typeTask = $TaskFields ['TAS_ASSIGN_TYPE'];
 
-  $oCriteria->addSelectColumn(AppDelegationPeer::PRO_UID);
-  $oCriteria->add(AppDelegationPeer::APP_UID, $application);
-  $oDataset = AppDelegationPeer::doSelectRS($oCriteria);
-  $oDataset->next();
-  $aRow = $oDataset->getRow();
-  $PRO_UID=$aRow[0];
+  if($typeTask == 'BALANCED')
+  {
+    $oCriteria = new Criteria('workflow');
+    $oCriteria->addSelectColumn(AppDelegationPeer::PRO_UID);
+    $oCriteria->add(AppDelegationPeer::APP_UID, $application);
+    $oDataset = AppDelegationPeer::doSelectRS($oCriteria);
+    $oDataset->next();
+    $aRow = $oDataset->getRow();
+    $PRO_UID=$aRow[0];
 
-  $c = new Criteria('workflow');
-  $c->addSelectColumn(TaskPeer::TAS_UID);
-  $c->add(TaskPeer::PRO_UID, $PRO_UID);
-  $c->add(TaskPeer::TAS_LAST_ASSIGNED, 0);
-  $oDataset = TaskPeer::doSelectRS($c);
-  $oDataset->next();
-  $aRow = $oDataset->getRow();
-  $TAS_UID=$aRow[0];
+    $c = new Criteria('workflow');
+    $c->addSelectColumn(TaskPeer::TAS_UID);
+    $c->add(TaskPeer::PRO_UID, $PRO_UID);
+   // $c->add(TaskPeer::TAS_LAST_ASSIGNED, 0);
+    $oDataset = TaskPeer::doSelectRS($c);
+    $oDataset->next();
+    $aRow = $oDataset->getRow();
+    $TAS_UID=$aRow[0];
 
 
-  $k=new Criteria('workflow');
-  $k->addSelectColumn(TaskUserPeer::USR_UID);
-  $k->add(TaskUserPeer::TAS_UID,$TAS_UID);
-  $k->add(TaskUserPeer::TU_TYPE,1);
-  $ods=TaskUserPeer::doSelectRS($k);
-  $ods->next();
-  $row=$ods->getRow();
-  $USR_UID=$row[0];
+    $k=new Criteria('workflow');
+    $k->addSelectColumn(TaskUserPeer::USR_UID);
+    $k->add(TaskUserPeer::TAS_UID,$TAS_UID);
+    $k->add(TaskUserPeer::TU_TYPE,1);
+    $ods=TaskUserPeer::doSelectRS($k);
+    $ods->next();
+    $row=$ods->getRow();
+    $USR_UID=$row[0];
 
-  $kk=new Criteria();
-  $kk->addSelectColumn(UsersPeer::USR_UID);
-  $kk->addSelectColumn(UsersPeer::USR_USERNAME);
-  $kk->addSelectColumn(UsersPeer::USR_FIRSTNAME);
-  $kk->addSelectColumn(UsersPeer::USR_LASTNAME);
-  $kk->addSelectColumn(UsersPeer::USR_EMAIL);
-  $kk->add(UsersPeer::USR_UID,$USR_UID);
-  $oDataset=UsersPeer::doSelectRS($kk);
-  $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-  $oDataset->next();
+    $kk=new Criteria('workflow');
+    $kk->addSelectColumn(UsersPeer::USR_UID);
+    $kk->addSelectColumn(UsersPeer::USR_USERNAME);
+    $kk->addSelectColumn(UsersPeer::USR_FIRSTNAME);
+    $kk->addSelectColumn(UsersPeer::USR_LASTNAME);
+    $kk->addSelectColumn(UsersPeer::USR_EMAIL);
+    $kk->add(UsersPeer::USR_UID,$USR_UID);
+    $oDataset=UsersPeer::doSelectRS($kk);
+    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    $oDataset->next();
 
-  $aRow1 = $oDataset->getRow();
+    $aRow1 = $oDataset->getRow();
 
-  $array=array(
-          'USR_UID'      => $aRow1['USR_UID'],
-          'USR_USERNAME' => $aRow1['USR_USERNAME'],
-          'USR_FIRSTNAME'=> $aRow1['USR_FIRSTNAME'],
-          'USR_LASTNAME' => $aRow1['USR_LASTNAME'],
-          'USR_EMAIL'    => $aRow1['USR_EMAIL']
-  );
-
-  return ($array);
-
+    $array=array(
+            'USR_UID'      => $aRow1['USR_UID'],
+            'USR_USERNAME' => $aRow1['USR_USERNAME'],
+            'USR_FIRSTNAME'=> $aRow1['USR_FIRSTNAME'],
+            'USR_LASTNAME' => $aRow1['USR_LASTNAME'],
+            'USR_EMAIL'    => $aRow1['USR_EMAIL']
+    );
+    return $array;
+  } else
+    {
+      return false;
+    }
 }
 
 
