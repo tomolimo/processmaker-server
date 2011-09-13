@@ -439,11 +439,7 @@ Ext.onReady(function(){
         params : {action : 'cancelCase'},
         success: function ( result, request ) {
           try {
-            try {
-              parent.notify('', 'The case ' + parent._CASE_TITLE + ' was cancelled!');
-            }
-            catch (e) {
-            }
+            parent.notify('', 'The case ' + parent._CASE_TITLE + ' was cancelled!');
           }
           catch (e) {
           }
