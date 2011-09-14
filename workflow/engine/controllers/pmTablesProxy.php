@@ -195,7 +195,8 @@ class pmTablesProxy extends HttpProxyController
       // Reserved Words
       $reservedWords = array(
         'ALTER', 'CLOSE', 'COMMIT', 'CREATE', 'DECLARE', 'DELETE', 'DROP', 'FETCH', 'FUNCTION', 'GRANT',
-        'INDEX', 'INSERT', 'OPEN', 'REVOKE', 'ROLLBACK', 'SELECT', 'SYNONYM', 'TABLE', 'UPDATE', 'VIEW', 'APP_UID', 'ROW'
+        'INDEX', 'INSERT', 'OPEN', 'REVOKE', 'ROLLBACK', 'SELECT', 'SYNONYM', 'TABLE', 'UPDATE', 'VIEW', 
+        'APP_UID', 'ROW', 'PMTABLE'
       );
 
       // verify if exists.

@@ -635,10 +635,21 @@ Ext.onReady(function(){
 
 function createReportTable()
 {
+  var tableName        = Ext.getCmp('REP_TAB_NAME').getValue().trim();
+  var tableDescription = Ext.getCmp('REP_TAB_DSC').getValue().trim();
+  
   //validate table name
-  if(Ext.getCmp('REP_TAB_NAME').getValue().trim() == '') {
+  if (tableName == '') {
     Ext.getCmp('REP_TAB_NAME').focus();
-    PMExt.error(_('ID_ERROR'), 'Table Name is required.', function(){
+    PMExt.error(_('ID_ERROR'), _('ID_TABLE_NAME_IS_REQUIRED'), function(){
+      Ext.getCmp('REP_TAB_NAME').focus();
+    });
+    return false;
+  }
+
+  // validate table name length
+  if(tableName.length < 4) {
+    PMExt.error(_('ID_ERROR'), _('ID_TABLE_NAME_TOO_SHORT'), function(){
       Ext.getCmp('REP_TAB_NAME').focus();
     });
     return false;
@@ -654,6 +665,9 @@ function createReportTable()
     return false;
   }
   var fieldsNames = new Array();
+  // Reserved Words
+  var reservedWords = new Array('DESC');
+
 
   for (var i = 0; i < allRows.getCount(); i++) {
     row = allRows.getAt(i);
@@ -661,6 +675,13 @@ function createReportTable()
     if (in_array(row.data['field_name'], fieldsNames)) {
       PMExt.error(_('ID_ERROR'),_('ID_PMTABLES_ALERT1') + ' <b>' + row.data['field_name']+'</b>');
       return false;
+    }
+
+    for (j=0; j < reservedWords.length; j++) {
+      if (row.data['field_name'] == reservedWords[j]) {
+        PMExt.error(_('ID_ERROR'), _('ID_PMTABLES_RESERVED_FIELDNAME_WARNING', reservedWords[j]));
+        return false;
+      }
     }
 
     // validate that fieldname is not empty
@@ -702,8 +723,8 @@ function createReportTable()
     params: {
       REP_TAB_UID   : TABLE !== false ? TABLE.ADD_TAB_UID : '',
       PRO_UID       : '',
-      REP_TAB_NAME  : Ext.getCmp('REP_TAB_NAME').getValue(),
-      REP_TAB_DSC   : Ext.getCmp('REP_TAB_DSC').getValue(),
+      REP_TAB_NAME  : tableName,
+      REP_TAB_DSC   : tableDescription,
       REP_TAB_CONNECTION : 'workflow',
       REP_TAB_TYPE  : '',
       REP_TAB_GRID  : '',

@@ -901,10 +901,21 @@ Ext.onReady(function(){
 
 function createReportTable()
 {
+  var tableName        = Ext.getCmp('REP_TAB_NAME').getValue().trim();
+  var tableDescription = Ext.getCmp('REP_TAB_DSC').getValue().trim();
+
   //validate table name
   if(Ext.getCmp('REP_TAB_NAME').getValue().trim() == '') {
     Ext.getCmp('REP_TAB_NAME').focus();
     PMExt.error(_('ID_ERROR'), 'Table Name is required.', function(){
+      Ext.getCmp('REP_TAB_NAME').focus();
+    });
+    return false;
+  }
+
+  // validate table name length
+  if(tableName.length < 4) {
+    PMExt.error(_('ID_ERROR'), _('ID_TABLE_NAME_TOO_SHORT'), function(){
       Ext.getCmp('REP_TAB_NAME').focus();
     });
     return false;
@@ -921,6 +932,8 @@ function createReportTable()
     return false;
   }
   var fieldsNames = new Array();
+  // Reserved Words
+  var reservedWords = new Array('DESC');
 
   for (var r=0; r < allRows.getCount(); r++) {
     row = allRows.getAt(r);
@@ -928,6 +941,13 @@ function createReportTable()
     if (in_array(row.data['field_name'], fieldsNames)) {
       PMExt.error(_('ID_ERROR'),_('ID_PMTABLES_ALERT1') + ' <b>' + row.data['field_name']+'</b>');
       return false;
+    }
+
+    for (j=0; j < reservedWords.length; j++) {
+      if (row.data['field_name'] == reservedWords[j]) {
+        PMExt.error(_('ID_ERROR'), _('ID_PMTABLES_RESERVED_FIELDNAME_WARNING', reservedWords[j]));
+        return false;
+      }
     }
 
     // validate that fieldname is not empty
@@ -959,8 +979,8 @@ function createReportTable()
     params: {
       REP_TAB_UID   : TABLE !== false ? TABLE.ADD_TAB_UID : '',
       PRO_UID       : PRO_UID !== false? PRO_UID : Ext.getCmp('PROCESS').getValue(),
-      REP_TAB_NAME  : Ext.getCmp('REP_TAB_NAME').getValue(),
-      REP_TAB_DSC   : Ext.getCmp('REP_TAB_DSC').getValue(),
+      REP_TAB_NAME  : tableName,
+      REP_TAB_DSC   : tableDescription,
       REP_TAB_CONNECTION : Ext.getCmp('REP_TAB_CONNECTION').getValue(),
       REP_TAB_TYPE  : Ext.getCmp('REP_TAB_TYPE').getValue(),
       REP_TAB_GRID  : Ext.getCmp('REP_TAB_TYPE').getValue()=='GRID'? Ext.getCmp('REP_TAB_GRID').getValue(): '',
