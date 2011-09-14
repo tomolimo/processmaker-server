@@ -130,6 +130,11 @@
               showRowById('MESS_TEST_MAIL_TO');
             else
               hideRowById('MESS_TEST_MAIL_TO');
+            //we're checking if the required authentication is checked
+            if ( getField('MESS_RAUTH').checked)
+              showRowById('MESS_PASSWORD');
+            else
+              hideRowById('MESS_PASSWORD');
             
             getField('SAVE_CHANGES').disabled = true;
            break;
@@ -251,7 +256,10 @@
       hideRowById('MESS_SEND_MAX');
       hideRowById('MESS_TRY_SEND_INMEDIATLY');
     }
-
+    if ( getField('MESS_RAUTH').checked)
+      showRowById('MESS_PASSWORD');
+    else
+      hideRowById('MESS_PASSWORD');
     getField('SAVE_CHANGES').disabled = true;
     initSet();
   ]]>
