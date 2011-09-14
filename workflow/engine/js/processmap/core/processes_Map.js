@@ -43,6 +43,7 @@ var saveDataTaskTemporal = function(iForm)
         {
           oTaskData.TAS_ASSIGN_TYPE = 'EVALUATE';
         }
+        /* this feature is temporarily disabled  
         if (getField('TAS_ASSIGN_TYPE][STATIC_MI').checked)
         {
           oTaskData.TAS_ASSIGN_TYPE = 'STATIC_MI';
@@ -50,10 +51,11 @@ var saveDataTaskTemporal = function(iForm)
         if (getField('TAS_ASSIGN_TYPE][CANCEL_MI').checked)
         {
           oTaskData.TAS_ASSIGN_TYPE = 'CANCEL_MI';
-        }
+        }*/
         oTaskData.TAS_ASSIGN_VARIABLE = getField('TAS_ASSIGN_VARIABLE').value;
+        /* this feature is temporarily disabled
         oTaskData.TAS_MI_INSTANCE_VARIABLE = getField('TAS_MI_INSTANCE_VARIABLE').value;
-        oTaskData.TAS_MI_COMPLETE_VARIABLE = getField('TAS_MI_COMPLETE_VARIABLE').value;
+        oTaskData.TAS_MI_COMPLETE_VARIABLE = getField('TAS_MI_COMPLETE_VARIABLE').value;*/
       break;
       case 3:
       case '3':

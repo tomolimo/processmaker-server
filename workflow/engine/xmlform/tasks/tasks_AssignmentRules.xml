@@ -12,43 +12,52 @@
 <LANG type="private"/>
 
 <TAS_ASSIGN_TYPE type="radiogroup" defaultvalue="BALANCED" group="1">
-  <en>Case to be assigned by<option name="BALANCED">Cyclical Assignment</option><option name="MANUAL">Manual Assignment</option><option name="EVALUATE">Value Based Assignment</option><option name="REPORT_TO">Reports to</option><option name="SELF_SERVICE">Self Service</option><option name="STATIC_MI">Static Partial Join for Multiple Instances</option><option name="CANCEL_MI">Cancelling Partial Join for Multiple Instances</option></en>
+  <en>Case to be assigned by<option name="BALANCED">Cyclical Assignment</option><option name="MANUAL">Manual Assignment</option><option name="EVALUATE">Value Based Assignment</option>
+  <option name="REPORT_TO">Reports to</option>
+  <option name="SELF_SERVICE">Self Service</option>
+  <!-- this feature is temporarily disabled -->
+  <!--option name="STATIC_MI">Static Partial Join for Multiple Instances</option>
+  <option name="CANCEL_MI">Cancelling Partial Join for Multiple Instances</option-->
+  </en>
 </TAS_ASSIGN_TYPE>
 
 <TAS_ASSIGN_VARIABLE type="textpm" size="40" maxlength="155" defaultvalue="@@SYS_NEXT_USER_TO_BE_ASSIGNED" showVars="1" process="@#PRO_UID">
   <en>Variable for Value Based Assignment</en>
 </TAS_ASSIGN_VARIABLE>
-
-<TAS_MI_INSTANCE_VARIABLE type="textpm" size="40" maxlength="155" defaultvalue="@@SYS_VAR_TOTAL_INSTANCE" showVars="1" process="@#PRO_UID">
+  <!-- this feature is temporarily disabled -->
+<!--TAS_MI_INSTANCE_VARIABLE type="textpm" size="40" maxlength="155" defaultvalue="@@SYS_VAR_TOTAL_INSTANCE" showVars="1" process="@#PRO_UID">
   <en>Variable for No of Instances</en>
 </TAS_MI_INSTANCE_VARIABLE>
-
 <TAS_MI_COMPLETE_VARIABLE type="textpm" size="40" maxlength="155" defaultvalue="@@SYS_VAR_TOTAL_INSTANCES_COMPLETE" showVars="1" process="@#PRO_UID">
   <en>Variable for No of Instances to complete</en>
-</TAS_MI_COMPLETE_VARIABLE>
+</TAS_MI_COMPLETE_VARIABLE-->
 
 
 <JS type="javascript"><![CDATA[
 
 var showTextpm = function()
 {
+/* this feature is temporarily disabled
 if(getField('TAS_ASSIGN_TYPE][STATIC_MI').checked == true || getField('TAS_ASSIGN_TYPE][CANCEL_MI').checked == true)
 {
   showRowById('TAS_MI_INSTANCE_VARIABLE');
   showRowById('TAS_MI_COMPLETE_VARIABLE');
   hideRowById('TAS_ASSIGN_VARIABLE');
 }
-else if(getField('TAS_ASSIGN_TYPE][EVALUATE').checked == true)
+else */
+if(getField('TAS_ASSIGN_TYPE][EVALUATE').checked == true)
   {
   showRowById('TAS_ASSIGN_VARIABLE');
+/* this feature is temporarily disabled
   hideRowById('TAS_MI_INSTANCE_VARIABLE');
-  hideRowById('TAS_MI_COMPLETE_VARIABLE');
+  hideRowById('TAS_MI_COMPLETE_VARIABLE');*/
   }
  else
  {
     hideRowById('TAS_ASSIGN_VARIABLE');
+/* this feature is temporarily disabled
     hideRowById('TAS_MI_INSTANCE_VARIABLE');
-    hideRowById('TAS_MI_COMPLETE_VARIABLE');
+    hideRowById('TAS_MI_COMPLETE_VARIABLE');*/
  }
 };
 
@@ -81,6 +90,7 @@ if (aTaskFlag[1])
       getField('TAS_ASSIGN_TYPE][SELFSERVICE').checked = true;
       showTextpm();
     break;
+    /* this feature is temporarily disabled
     case 'STATIC_MI':
       getField('TAS_ASSIGN_TYPE][STATIC_MI').checked = true;
       showTextpm();
@@ -88,7 +98,7 @@ if (aTaskFlag[1])
     case 'CANCEL_MI':
       getField('TAS_ASSIGN_TYPE][CANCEL_MI').checked = true;
       showTextpm();
-    break;
+    break;*/
   }
   getField('TAS_ASSIGN_VARIABLE').value         = oTaskData.TAS_ASSIGN_VARIABLE;
   getField('TAS_MI_INSTANCE_VARIABLE').value    = oTaskData.TAS_MI_INSTANCE_VARIABLE;
@@ -126,12 +136,13 @@ leimnud.event.add(getField('TAS_ASSIGN_TYPE][MANUAL'), 'click', function() {
 leimnud.event.add(getField('TAS_ASSIGN_TYPE][EVALUATE'), 'click', function() {
   showTextpm();
 });
+/* this feature is temporarily disabled
 leimnud.event.add(getField('TAS_ASSIGN_TYPE][STATIC_MI'), 'click', function() {
   showTextpm();
 });
 leimnud.event.add(getField('TAS_ASSIGN_TYPE][CANCEL_MI'), 'click', function() {
   showTextpm();
-});
+});*/
 
 if (!getField('TAS_ASSIGN_TYPE][EVALUATE').checked) {
   showTextpm();
