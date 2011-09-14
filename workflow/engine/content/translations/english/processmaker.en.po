@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: ProcessMaker (Branch 2.0) 2.0.32.rc6-1-ga21fff4\n"
+"Project-Id-Version: ProcessMaker (Branch 2.0) 2.0.33.rc1-8-g2549d78\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2011-09-02 10:04:27\n"
+"PO-Revision-Date: 2011-09-14 11:03:26\n"
 "Last-Translator: \n"
 "Language-Team: Colosa Developers Team <developers@colosa.com>\n"
 "MIME-Version: 1.0\n"
@@ -4234,8 +4234,8 @@ msgstr "User on vacation was replaced"
 # TRANSLATION
 # LABEL/ID_PROCESS_DEF_PROBLEM
 #: LABEL/ID_PROCESS_DEF_PROBLEM
-msgid "There is a problem in the process  definition and/or an exception error ocurred."
-msgstr "There is a problem in the process  definition and/or an exception error ocurred."
+msgid "There is a problem in the process definition and/or an exception error occurred."
+msgstr "There is a problem in the process definition and/or an exception error occurred."
 
 # TRANSLATION
 # LABEL/ID_COPY_OF
@@ -11022,6 +11022,30 @@ msgstr "Export to CSV"
 #: LABEL/ID_IMPORT_CSV
 msgid "Import to CSV"
 msgstr "Import to CSV"
+
+# TRANSLATION
+# LABEL/ID_NOT_PM_FILE
+#: LABEL/ID_NOT_PM_FILE
+msgid "This is not a .pm file"
+msgstr "This is not a .pm file"
+
+# TRANSLATION
+# LABEL/ID_PMTABLES_RESERVED_FIELDNAME_WARNING
+#: LABEL/ID_PMTABLES_RESERVED_FIELDNAME_WARNING
+msgid "The word {0} is reserved by the database engine please set another one."
+msgstr "The word {0} is reserved by the database engine please set another one."
+
+# TRANSLATION
+# LABEL/ID_TABLE_NAME_IS_REQUIRED
+#: LABEL/ID_TABLE_NAME_IS_REQUIRED
+msgid "Table Name is required."
+msgstr "Table Name is required."
+
+# TRANSLATION
+# LABEL/ID_TABLE_NAME_TOO_SHORT
+#: LABEL/ID_TABLE_NAME_TOO_SHORT
+msgid "The table name is too short, it should have at least 4 characters."
+msgstr "The table name is too short, it should have at least 4 characters."
 
 # additionalTables/additionalTablesData.xml?ADD_TAB_NAME
 # additionalTables/additionalTablesData.xml
