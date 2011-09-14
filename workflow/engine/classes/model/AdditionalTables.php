@@ -113,15 +113,15 @@ class AdditionalTables extends BaseAdditionalTables {
       $oCriteria->addSelectColumn(AdditionalTablesPeer::DBS_UID);
       $oCriteria->add(AdditionalTablesPeer::ADD_TAB_NAME, $name, Criteria::LIKE);
 
-      $oDataset = FieldsPeer::doSelectRS($oCriteria);
+      $oDataset = AdditionalTablesPeer::doSelectRS($oCriteria);
       $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
 
       $aRows = Array();
-      while( $oDataset->next() ){
+      while ($oDataset->next()) {
         $aRows[] = $oDataset->getRow();
       }
 
-      return (sizeof($aRows) > 0)? $aRows: false;
+      return sizeof($aRows) > 0 ? $aRows : false;
     }
     catch (Exception $oError) {
       throw($oError);
@@ -236,26 +236,22 @@ class AdditionalTables extends BaseAdditionalTables {
   }
   
   function deleteAll($id) 
-  { 
-    try{
-      //deleting pm table
-      $additionalTable = AdditionalTables::load($id);
-      AdditionalTables::remove($id);
-      
-      //deleting fields
-      require_once 'classes/model/Fields.php';
-      $criteria = new Criteria('workflow');
-      $criteria->add(FieldsPeer::ADD_TAB_UID, $id);
-      FieldsPeer::doDelete($criteria);
-      
-      //remove all related to pmTable
-      G::loadClass('pmTable');
-      $pmTable = new pmTable($additionalTable['ADD_TAB_NAME']);
-      $pmTable->setDataSource($additionalTable['DBS_UID']);
-      $pmTable->remove();
-    } catch (Exception $e) {
-      echo $e->getTraceAsString();
-    }
+  {
+    //deleting pm table
+    $additionalTable = AdditionalTables::load($id);
+    AdditionalTables::remove($id);
+    
+    //deleting fields
+    require_once 'classes/model/Fields.php';
+    $criteria = new Criteria('workflow');
+    $criteria->add(FieldsPeer::ADD_TAB_UID, $id);
+    FieldsPeer::doDelete($criteria);
+    
+    //remove all related to pmTable
+    G::loadClass('pmTable');
+    $pmTable = new pmTable($additionalTable['ADD_TAB_NAME']);
+    $pmTable->setDataSource($additionalTable['DBS_UID']);
+    $pmTable->remove();
   }
 
   function getPHPName($sName) {

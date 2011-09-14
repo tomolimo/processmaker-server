@@ -52,10 +52,15 @@ class PmTable
   private $dbConfig;
   private $db;
 
-  function __construct($tableName)
+  private $alterTable = true;
+
+  function __construct($tableName = null)
   {
-    $this->tableName = $tableName;
-    $this->className = $this->toCamelCase($tableName);
+    if (isset($tableName)) {
+      $this->tableName = $tableName;
+      $this->className = $this->toCamelCase($tableName);
+    }
+
     $this->dbConfig = new StdClass();
   }
   
@@ -147,6 +152,11 @@ class PmTable
     return $this->dbConfig;
   }
 
+  public function setAlterTable($value)
+  {
+    $this->alterTable = $value;
+  }
+
   /**
    * Build the pmTable with all dependencies 
    */
@@ -155,15 +165,28 @@ class PmTable
     $this->prepare();
     $this->preparePropelIniFile();
     $this->buildSchema();
+
+    if ($this->alterTable) {
+      $this->phingbuildModel();
+      $this->phingbuildSql();
+      $this->upgradeDatabase();
+    }
+  }
+
+  function buildModelFor($dbsUid)
+  {
+    $this->setDataSource($dbsUid);
+    $loadSchema = false;
+    $this->prepare($loadSchema);
     $this->phingbuildModel();
     $this->phingbuildSql();
-    $this->upgradeDatabase();
+    $this->upgradeDatabaseFor($this->dataSource);
   }
 
   /**
    * Prepare the pmTable env
    */
-  function prepare()
+  function prepare($loadSchema = true)
   {
     //prevent execute prepare() twice or more
     if (is_object($this->dom)) {
@@ -184,7 +207,14 @@ class PmTable
     // G::mk_dir create the requested dir and the parents directories if not exists
     G::mk_dir($this->configDir);
     G::mk_dir($this->dataDir);
-    
+
+    if ($loadSchema) {
+      $this->loadSchema();
+    }
+  }
+
+  function loadSchema()
+  {
     $this->dom = new DOMDocument('1.0', 'utf-8');
     $this->dom->preserveWhiteSpace = false;
     $this->dom->formatOutput = true;
@@ -213,6 +243,20 @@ class PmTable
     if ($this->hasAutoIncrementPKey()) {
       $tableNode->setAttribute('idMethod', 'native');
     }
+
+    // specifying collation
+    switch ($this->dbConfig->adapter) {
+      case 'mysql':
+        $vendorNode = $this->dom->createElement('vendor');
+        $vendorNode->setAttribute('type', $this->dbConfig->adapter);
+        $parameterNode = $this->dom->createElement('parameter');
+        $parameterNode->setAttribute('name', 'Collation'); 
+        $parameterNode->setAttribute('value', 'utf8_general_ci');
+        $vendorNode->appendChild($parameterNode);
+        $tableNode->appendChild($vendorNode);
+        break;
+    }
+    
 
     foreach ($this->columns as $column) {
            
@@ -422,6 +466,54 @@ class PmTable
     
     
   }
+
+  public function upgradeDatabaseFor($dataSource)
+  {
+    $con = Propel::getConnection($dataSource);
+    $stmt = $con->createStatement();
+    $lines = file($this->dataDir . $this->dbConfig->adapter . PATH_SEP . 'schema.sql');
+    $previous = NULL;
+    
+    foreach ($lines as $j => $line) {
+      $line = trim($line); // Remove comments from the script
+      
+      if (strpos($line, "--") === 0) {
+        $line = substr($line, 0, strpos($line, "--"));
+      }
+
+      if (empty($line)) {
+        continue;
+      }
+
+      if (strpos($line, "#") === 0) {
+        $line = substr($line, 0, strpos($line, "#"));
+      }
+
+      if (empty($line)) {
+        continue;
+      }
+
+      // Concatenate the previous line, if any, with the current
+      if ($previous) {
+        $line = $previous . " " . $line;
+      }
+      $previous = NULL;
+      
+      // If the current line doesnt end with ; then put this line together
+      // with the next one, thus supporting multi-line statements.
+      if (strrpos($line, ";") != strlen($line) - 1) {
+        $previous = $line;
+        continue;
+      }
+      
+      $line = substr($line, 0, strrpos($line, ";"));
+      
+      // execute
+      $stmt->executeQuery($line);
+    
+    } 
+    
+  }
   
   /**
    * verify if on the columns list was set a column as primary key
@@ -513,7 +605,7 @@ class PmTable
       'propel.php.dir'    => $this->baseDir
     );
 
-    self::callPhing(array($taskName), PATH_THIRDPARTY . 'propel-generator/build.xml', $options, false);
+    self::callPhing(array($taskName), PATH_THIRDPARTY . 'propel-generator/build.xml', $options, true);
   }
 
   /**
