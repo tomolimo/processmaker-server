@@ -379,9 +379,15 @@ class pmTablesProxy extends HttpProxyController
    * create pm tables record
    * @param string $httpData->rows
    */
-  public function dataCreate($httpData)
+  public function dataCreate($httpData , $codification = 'json')
   {
-    $rows = G::json_decode(stripslashes($httpData->rows));
+    if($codification=='base64') {
+      $rows = unserialize(base64_decode($httpData->rows));
+    }
+    else {
+      $rows = G::json_decode(stripslashes($httpData->rows));
+    }
+
     
     require_once 'classes/model/AdditionalTables.php';
     $additionalTables = new AdditionalTables();
@@ -798,8 +804,8 @@ class pmTablesProxy extends HttpProxyController
             foreach ($rows['records'] as $row) {
               $data = new StdClass();
               $data->id = $rows['id'];
-              $data->rows = G::json_encode($row);
-              $this->dataCreate($data);
+              $data->rows = base64_encode(serialize($row));
+              $this->dataCreate($data , 'base64');
             }
           }
         }
