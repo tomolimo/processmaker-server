@@ -20,7 +20,7 @@
  */
 
 include_once 'propel/engine/EngineException.php';
-include_once 'propel/engine/database/model/Database.php';
+include_once 'propel/engine/database/model/DatabasePropel.php';
 
 /**
  * A class for holding application data structures.
@@ -158,7 +158,7 @@ class AppData {
 	 */
 	public function addDatabase($db)
 	{
-		if ($db instanceof Database) {
+		if ($db instanceof DatabasePropel) {
 			$db->setAppData($this);
 			if ($db->getPlatform() === null) {
 				$db->setPlatform($this->platform);
@@ -167,7 +167,7 @@ class AppData {
 			return $db;
 		} else {
 			// XML attributes array / hash
-			$d = new Database();
+			$d = new DatabasePropel();
 			$d->loadFromXML($db);
 			return $this->addDatabase($d); // calls self w/ different param type
 		}

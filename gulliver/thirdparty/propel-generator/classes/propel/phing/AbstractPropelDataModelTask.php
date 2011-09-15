@@ -23,7 +23,7 @@
 //include_once 'phing/tasks/ext/CapsuleTask.php';
 require_once 'phing/TaskPhing.php';
 include_once 'propel/engine/database/model/AppData.php';
-include_once 'propel/engine/database/model/Database.php';
+include_once 'propel/engine/database/model/DatabasePropel.php';
 include_once 'propel/engine/database/transform/XmlToAppData.php';
 
 /**

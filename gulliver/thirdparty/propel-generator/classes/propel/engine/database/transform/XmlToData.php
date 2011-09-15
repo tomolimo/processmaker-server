@@ -53,7 +53,7 @@ class XmlToData extends AbstractHandler {
 	 *
 	 * @param      Database $database
 	 */
-	public function __construct(Database $database, $encoding = 'iso-8859-1')
+	public function __construct(DatabasePropel $database, $encoding = 'iso-8859-1')
 	{
 		$this->database = $database;
 		$this->encoding = $encoding;

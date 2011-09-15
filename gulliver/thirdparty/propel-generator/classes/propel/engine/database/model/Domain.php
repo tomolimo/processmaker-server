@@ -95,7 +95,7 @@ class Domain extends XMLElement {
 	/**
 	 * Sets the owning database object (if this domain is being setup via XML).
 	 */
-	public function setDatabase(Database $database) {
+	public function setDatabase(DatabasePropel $database) {
 		$this->database = $database;
 	}
 

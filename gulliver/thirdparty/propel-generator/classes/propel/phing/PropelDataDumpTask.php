@@ -349,7 +349,7 @@ class PropelDataDumpTask extends AbstractPropelDataModelTask {
 	 * @param      Database $database
 	 * @return     DOMDocument
 	 */
-	private function createXMLDoc(Database $database) {
+	private function createXMLDoc(DatabasePropel $database) {
 
 		$doc = new DOMDocument('1.0', 'utf-8');
 		$doc->formatOutput = true; // pretty printing

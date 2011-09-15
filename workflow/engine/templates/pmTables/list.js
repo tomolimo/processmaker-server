@@ -114,7 +114,6 @@ Ext.onReady(function(){
     contextMenuItems.push(exportButton);
 
     if (_PLUGIN_SIMPLEREPORTS !== false) {
-      
       externalOption = new Ext.Action({
         text:'',
         handler: function() {
@@ -131,22 +130,22 @@ Ext.onReady(function(){
     });
 
     searchText = new Ext.form.TextField ({
-        id: 'searchTxt',
-        ctCls:'pm_search_text_field',
-        allowBlank: true,
-        width: 150,
-        emptyText: _('ID_ENTER_SEARCH_TERM'),
-        listeners: {
-          specialkey: function(f,e){
-            if (e.getKey() == e.ENTER) {
-              DoSearch();
-            }
-          },
-          focus: function(f,e) {
-            var row = infoGrid.getSelectionModel().getSelected();
-            infoGrid.getSelectionModel().deselectRow(infoGrid.getStore().indexOf(row));
+      id: 'searchTxt',
+      ctCls:'pm_search_text_field',
+      allowBlank: true,
+      width: 150,
+      emptyText: _('ID_ENTER_SEARCH_TERM'),
+      listeners: {
+        specialkey: function(f,e){
+          if (e.getKey() == e.ENTER) {
+            DoSearch();
           }
+        },
+        focus: function(f,e) {
+          var row = infoGrid.getSelectionModel().getSelected();
+          infoGrid.getSelectionModel().deselectRow(infoGrid.getStore().indexOf(row));
         }
+      }
     });
 
     clearTextButton = new Ext.Action({
@@ -182,6 +181,7 @@ Ext.onReady(function(){
     comboPageSize.setValue(pageSize);
 
     store = new Ext.data.GroupingStore( {
+      autoLoad: false,
       proxy : new Ext.data.HttpProxy({
         url: 'pmTablesProxy/getList' + (PRO_UID? '?pro_uid='+PRO_UID: '')
       }),
@@ -293,14 +293,25 @@ Ext.onReady(function(){
         forceFit:true
       },
       store: store,
+      loadMask: true,
       cm: cmodel,
       sm: smodel,
-      tbar:[newButton, editButton, deleteButton,'-', dataButton,'-' , importButton, exportButton,{xtype: 'tbfill'},searchText,clearTextButton,searchButton],
+      tbar: [
+        newButton, 
+        editButton, 
+        deleteButton,'-', 
+        dataButton,'-' , 
+        importButton, 
+        exportButton,
+        '->',
+        searchText,
+        clearTextButton,
+        searchButton],
       bbar: bbarpaging,
       listeners: {
         rowdblclick: EditPMTable,
         render: function(){
-          this.loadMask = new Ext.LoadMask(this.body, {msg:_('ID_LOADING_GRID')});
+          this.loadMask = new Ext.LoadMask(this.body, {msg:'loading'});
         }
       },
       view: new Ext.grid.GroupingView({
@@ -310,38 +321,35 @@ Ext.onReady(function(){
     });
 
     infoGrid.on('rowcontextmenu',
-        function (grid, rowIndex, evt) {
-            var sm = grid.getSelectionModel();
-            sm.selectRow(rowIndex, sm.isSelected(rowIndex));
+      function (grid, rowIndex, evt) {
+          var sm = grid.getSelectionModel();
+          sm.selectRow(rowIndex, sm.isSelected(rowIndex));
 
-            var rowsSelected = Ext.getCmp('infoGrid').getSelectionModel().getSelections();
-            tag = rowsSelected[0].get('ADD_TAB_TAG');
-            text = tag? 'Convert to native Report Table': 'Convert to Simple Report';
-            if (externalOption) {
-              externalOption.setText(text);
-              if (rowsSelected[0].get('PRO_UID')) {
-                externalOption.setDisabled(false);
-              } else {
-                externalOption.setDisabled(true);
-              }
+          var rowsSelected = Ext.getCmp('infoGrid').getSelectionModel().getSelections();
+          tag = rowsSelected[0].get('ADD_TAB_TAG');
+          text = tag? 'Convert to native Report Table': 'Convert to Simple Report';
+          if (externalOption) {
+            externalOption.setText(text);
+            if (rowsSelected[0].get('PRO_UID')) {
+              externalOption.setDisabled(false);
+            } else {
+              externalOption.setDisabled(true);
             }
-        },
-        this
+          }
+      },
+      this
     );
 
     infoGrid.on('contextmenu', function(evt){evt.preventDefault();}, this);
     infoGrid.addListener('rowcontextmenu',onMessageContextMenu, this);
 
-    infoGrid.store.load();
-
     viewport = new Ext.Viewport({
       layout: 'fit',
       autoScroll: false,
-      items: [
-         infoGrid
-      ]
+      items: [infoGrid]
     });
-  
+
+    infoGrid.store.load();
 });
 
 //Funtion Handles Context Menu Opening
@@ -482,6 +490,9 @@ ImportPMTable = function(){
                   url: 'pmTablesProxy/import',
                   waitMsg: 'Uploading file...',
                   success: function(o, resp){
+                    console.log(o);
+                    console.log(resp.response.responseText);
+
                     w.close();
                     infoGrid.store.reload();
 
@@ -511,14 +522,7 @@ ImportPMTable = function(){
             }
         }]
       })
-    ]/*,
-    listeners:{
-      show:function() {
-        this.loadMask = new Ext.LoadMask(this.body, {
-          msg:'Loading. Please wait...'
-        });
-      }
-    }*/
+    ]
   });
   w.show();
 }

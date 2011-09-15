@@ -251,7 +251,7 @@ class PropelSQLTask extends AbstractPropelDataModelTask {
 			//'heavyIndexing' => $db->getHeavyIndexing(),
 		);
 
-		$clone = new Database();
+		$clone = new DatabasePropel();
 		$clone->loadFromXML($attributes);
 		return $clone;
 	}

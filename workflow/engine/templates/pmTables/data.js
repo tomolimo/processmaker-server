@@ -260,6 +260,7 @@ Ext.onReady(function(){
       forceFit:true
     },
     store: store,
+    loadMask: true,
     cm: cmodel,
     sm: smodel,
     tbar:[ newButton,
@@ -292,13 +293,13 @@ Ext.onReady(function(){
   infoGrid.on('contextmenu', function(evt){evt.preventDefault();}, this);
   infoGrid.addListener('rowcontextmenu',onMessageContextMenu, this);
 
-  infoGrid.store.load();
-
   viewport = new Ext.Viewport({
     layout: 'fit',
     autoScroll: false,
     items: [infoGrid]
   });
+
+  infoGrid.store.load();
 
 });
 

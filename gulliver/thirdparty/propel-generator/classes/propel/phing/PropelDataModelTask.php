@@ -22,7 +22,7 @@
 
 require_once 'propel/phing/AbstractPropelDataModelTask.php';
 include_once 'propel/engine/database/model/AppData.php';
-include_once 'propel/engine/database/model/Database.php';
+include_once 'propel/engine/database/model/DatabasePropel.php';
 include_once 'propel/engine/database/transform/XmlToAppData.php';
 
 /**
