@@ -41,7 +41,7 @@
     );
   }
 
-  function ProcessList( $params ) {
+  function ProcessList( $params ) { 
 
     $vsResult = isValidSession($params->sessionId);
     if( $vsResult->status_code !== 0 ){
@@ -49,6 +49,12 @@
       $o->name = '';
       return array("processes" => $o);
     }
+    
+    if (ifPermission( $params->sessionId, 'PM_CASES') != 0 ){
+       $ws = new wsBase();
+       $res = $ws->processList();
+       return array("processes" => $res );
+    } 
 
     if( ifPermission( $params->sessionId, 'PM_FACTORY') == 0 ){
       $o->guid = "2 You have not privileges to execute this function";
@@ -65,11 +71,13 @@
 
       $ws = new wsBase ();
       $res = $ws->processListVerified( $userId );
+      print_r($res);die;
       return array("processes" => $res );
     }
 
     $ws = new wsBase();
     $res = $ws->processList();
+    
     return array("processes" => $res );
   }
 
