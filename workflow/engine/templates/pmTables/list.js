@@ -490,21 +490,46 @@ ImportPMTable = function(){
                   url: 'pmTablesProxy/import',
                   waitMsg: 'Uploading file...',
                   success: function(o, resp){
-                    console.log(o);
-                    console.log(resp.response.responseText);
+                    var result = Ext.util.JSON.decode(resp.response.responseText);
+
+                    if (result.success) {
+                      PMExt.notify('IMPORT RESULT', result.message);
+                    }
+                    else {
+                      win = new Ext.Window({
+                        applyTo:'hello-win',
+                        layout:'fit',
+                        width:500,
+                        height:300,
+                        closeAction:'hide',
+                        plain: true,
+                        html: '<h3>Importing Error</h3>'+ result.message,
+                        items: [],
+
+                        buttons: [{
+                          text: 'Close',
+                          handler: function(){
+                              win.hide();
+                          }
+                        }]
+                      });
+                      win.show(this);
+                    }
 
                     w.close();
                     infoGrid.store.reload();
-
-                    PMExt.notify('IMPORT RESULT', resp.result.message);
                   },
                   failure: function(o, resp){
                     w.close();
-                    //alert('ERROR "'+resp.result.msg+'"');
-                    Ext.MessageBox.show({title: '', msg: resp.result.msg, buttons:
-                    Ext.MessageBox.OK, animEl: 'mb9', fn: function(){}, icon:
-                    Ext.MessageBox.ERROR});
-                    //setTimeout(function(){Ext.MessageBox.hide(); }, 2000);
+                    infoGrid.store.reload();
+
+                    var result = Ext.util.JSON.decode(resp.response.responseText);
+                    if (result.errorType == 'warning') {
+                      PMExt.warning(_('ID_WARNING'), result.message.replace(/\n/g,' <br>'));
+                    }
+                    else {
+                      PMExt.error(_('ID_ERROR'), result.message.replace(/\n/g,' <br>'));
+                    }
                   }
                 });
               }

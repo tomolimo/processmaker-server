@@ -209,7 +209,7 @@ class pmTablesProxy extends HttpProxyController
         }
         
         /** validations **/
-        if(in_array($data['REP_TAB_NAME'], $reservedWords) || (isset($httpData->forceUid) && $httpData->forceUid )) {
+        if (is_array($oAdditionalTables->loadByName($data['REP_TAB_NAME']))) {
           throw new Exception('The table "' . $data['REP_TAB_NAME'] . '" already exits.');
         }
 
@@ -290,7 +290,7 @@ class pmTablesProxy extends HttpProxyController
       }
 
       $result->success = true;
-      $result->msg = $buildResult;
+      $result->message = $result->msg = $buildResult;
     } catch (Exception $e) {
       $buildResult = ob_get_contents();
       ob_end_clean();
@@ -298,11 +298,11 @@ class pmTablesProxy extends HttpProxyController
       
       // if it is a propel exception message
       if (preg_match('/(.*)\s\[(.*):\s(.*)\]\s\[(.*):\s(.*)\]/', $e->getMessage(), $match)) {
-        $result->msg = $match[3];
+        $result->message = $result->msg = $match[3];
         $result->type = ucfirst($pmTable->getDbConfig()->adapter);
       } 
       else {
-        $result->msg = $e->getMessage();
+        $result->message = $result->msg = $e->getMessage();
         $result->type = G::loadTranslation('ID_EXCEPTION');
       }
       
@@ -749,7 +749,7 @@ class pmTablesProxy extends HttpProxyController
             $result = $this->save($tableData, $alterTable);
             
             if (!$result->success) {
-              $errors .= $errors . "\n\n";
+              $errors .=  $result->message . "\n\n";
             }
             
           break;
@@ -806,31 +806,31 @@ class pmTablesProxy extends HttpProxyController
       }
 
       if ($errors == '') {
+        $result->success = true;
         $msg = 'File Imported "'.$filename.'" Successfully';
-        $result->type = 0;
       }
       else {
+        $result->success = false;
+        $result->errorType = 'warning';
         $msg = 'File Imported "'.$filename.'" but with errors' .  "\n\n" . $errors;
-        $result->type = 1;
       }
 
-      $result->success = true;
       $result->message = $msg;
       
     } 
     catch(Exception $e) {
-      $result->type = 2;
+      $result->errorType = 'error';
       $result->buildResult = ob_get_contents();
       ob_end_clean();
       $result->success = false;
       
       // if it is a propel exception message
       if (preg_match('/(.*)\s\[(.*):\s(.*)\]\s\[(.*):\s(.*)\]/', $e->getMessage(), $match)) {
-        $result->msg = $match[3];
+        $result->message = $match[3];
         $result->type = ucfirst($pmTable->getDbConfig()->adapter);
       } 
       else {
-        $result->msg = $e->getMessage();
+        $result->message = $e->getMessage();
         $result->type = G::loadTranslation('ID_EXCEPTION');
       }
       
