@@ -596,7 +596,7 @@ class wsBase
   * @param $appFields = null 
   * @return $result will return an object
   */
-  public function sendMessage($caseId, $sFrom, $sTo, $sCc, $sBcc, $sSubject, $sTemplate, $appFields = null, $sAttachment = null ) {
+  public function sendMessage($caseId, $sFrom, $sTo, $sCc, $sBcc, $sSubject, $sTemplate, $appFields = null, $aAttachment = null ) {
     try {
       $aSetup = getEmailConfiguration();
 
@@ -671,7 +671,7 @@ class wsBase
         'app_msg_body'     => $sBody,
         'app_msg_cc'       => $sCc,
         'app_msg_bcc'      => $sBcc,
-        'app_msg_attach'   => $sAttachment,
+        'app_msg_attach'   => $aAttachment,
         'app_msg_template' => '',
         'app_msg_status'   => 'pending'
       );

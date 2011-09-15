@@ -154,7 +154,7 @@ class spoolRun {
    * @param string $sAppMsgUid, $sSubject, $sFrom, $sTo, $sBody, $sDate, $sCC, $sBCC, $sTemplate
    * @return none
    */
-  public function setData($sAppMsgUid, $sSubject, $sFrom, $sTo, $sBody, $sDate = '', $sCC = '', $sBCC = '', $sTemplate = '', $sAttachment = '') {
+  public function setData($sAppMsgUid, $sSubject, $sFrom, $sTo, $sBody, $sDate = '', $sCC = '', $sBCC = '', $sTemplate = '', $aAttachment = '') {
     $this->spool_id = $sAppMsgUid;
     $this->fileData['subject'] = $sSubject;
     $this->fileData['from'] = $sFrom;
@@ -164,7 +164,7 @@ class spoolRun {
     $this->fileData['cc'] = $sCC;
     $this->fileData['bcc'] = $sBCC;
     $this->fileData['template'] = $sTemplate;
-    $this->fileData['attachments'] = ($sAttachment)? $sAttachment:array();
+    $this->fileData['attachments'] = ($aAttachment)? $aAttachment:array();
     
     if( $this->config['MESS_ENGINE'] == 'OPENMAIL' ) {
       if( $this->config['MESS_SERVER'] != '' ) {
