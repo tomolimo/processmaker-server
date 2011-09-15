@@ -384,7 +384,11 @@
 
   }
 
-  function GetVariables( $params ) {
+  function GetVariables( $params ) {    
+  	if (!is_array($params->variables)) {
+      $params->variables = array($params->variables);
+    }
+    
     $vsResult = isValidSession($params->sessionId);
     if( $vsResult->status_code !== 0 ){
       return $vsResult;
