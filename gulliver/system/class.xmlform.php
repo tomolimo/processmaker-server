@@ -3448,9 +3448,7 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
     $endDate    = G::replaceDataField ( $this->endDate, $owner->values );
     $beforeDate = G::replaceDataField ( $this->beforeDate, $owner->values );
     $afterDate  = G::replaceDataField ( $this->afterDate, $owner->values );
-    $valueaux=$value;
-    $value=$this->defaultValue;
-
+    $defaultValue=$this->defaultValue;
     if ($startDate != '') {
       if (! $this->verifyDateFormat ( $startDate ))
         $startDate = '';
@@ -3464,11 +3462,7 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
     if ($startDate == '' && isset ( $this->size ) && is_numeric ( $this->size ) && $this->size >= 1900 && $this->size <= 2100) {
       $startDate = $this->size . '-01-01';
     }
-
-    if ($startDate == '') {
-      //$startDate = date ( 'Y-m-d' ); // the default is the current date
-    }
-
+    
     if ($endDate != '') {
       if (! $this->verifyDateFormat ( $endDate ))
         $endDate = '';
@@ -3495,140 +3489,88 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
       $mask = '%Y-%m-%d'; //set default
     }
 
-    /**
-     * - init - Backward compatibility
-     *
-     * By Erik A. O. <erik@colosa.com>
-     * @package gulliver.system
-     */
-       
     if( strpos($mask, '%') === false ) {
-      if( strpos($mask, '-') !== false ) { // case '-' saparator
-        $maskparts = explode('-', $mask);
-        $mask = '';
-        foreach($maskparts as $part) {
-          if($mask != '')
-            $mask .= '-';
-          if($part=='yyyy')
-          $part='Y';
-          if($part=='dd')
-          $part='d';
-          if($part=='mm')
-          $part='m';
-          if($part=='yy') 
-          $part='y';
-          $mask .= '%'.$part;
-        }
-      }
-
-      if( strpos($mask, '/') !== false ) { // case '/' saparator
-        $maskparts = explode('/', $mask);
-        $mask = '';
-        foreach($maskparts as $part) {
-          if($mask != '')
-            $mask .= '/';
-          if($part=='yyyy')
-          $part='Y';
-          if($part=='dd')
-          $part='d';
-          if($part=='mm')
-          $part='m';
-          if($part=='yy')
-          $part='y';
-          $mask .= '%'.$part;
-        }
-      }
+      if( strpos($mask, '-') !== false )
+        $separator = '-';
+      if( strpos($mask, '/') !== false )
+        $separator = '/';
+      if( strpos($mask, '.') !== false )
+        $separator = '.';
       
-    if( strpos($mask, '.') !== false ) { // case '.' saparator
-        $maskparts = explode('.', $mask);
-        $mask = '';
-        foreach($maskparts as $part) {
-          if($mask != '')
-            $mask .= '.';
-          if($part=='yyyy')
+      $maskparts = explode($separator, $mask);
+      $mask = '';
+      foreach($maskparts as $part) {
+        if($mask != '')
+          $mask .= $separator;
+        if($part=='yyyy')
           $part='Y';
-          if($part=='dd')
+        if($part=='dd')
           $part='d';
-          if($part=='mm')
+        if($part=='mm')
           $part='m';
-          if($part=='yy')
+        if($part=='yy') 
           $part='y';
-          $mask .= '%'.$part;
-        }
+        $mask .= '%'.$part;
       }
-      
-      
     }
-    /** - end - Backward compatibility **/
+    
     $tmp = str_replace("%", "", $mask);
     if ( trim ($value) == '' or $value == NULL ) {
       $value = ''; //date ($tmp);
-    } else {
-      switch(strtolower($value)){
-        case 'today':
-       //   $value = date($tmp);
-              $value=masktophp ($mask);
-        break;
-        default:
-          if(!$this->verifyDateFormat($value))
-            $value='';
-        break;
+    } else 
+      {      
+        switch(strtolower($value)){
+          case 'today':       
+            $value=masktophp ($mask);//   $value = date($tmp);
+            break;        
+          default:
+            if(!$this->verifyDateFormat($value))
+              //$value='';
+            break;
+        }
       }
-    }
-
+ 
     //onchange
     if( isset($this->onchange) && $this->onchange != '' )
       $onchange = 'onchange="'.$this->onchange.'"';
     else
       $onchange = '';
     
-    #the validations field was moved to javascript routines ;)
-    
     if ($this->renderMode == 'edit') {
-      if( $startDate=='1969-12-31' ) {
-        $startDate='';
-        $endDate='';
-      }
-       $maskleng=strlen($mask);
-       $hour   = '%H';$min   = '%M';$sec   = '%S';
-       $sizehour = strpos($mask, $hour);
-       $sizemin = strpos($mask, $hour);
-       $sizesec = strpos($mask, $hour);
-
-       $Time = 'false';
-        if (($sizehour !== false)&&($sizemin !== false)&&($sizesec !== false)) {
-          $sizeend = $maskleng + 2;
-          $Time = 'true';
-        } else {
+      $maskleng = strlen($mask);
+      $hour   = '%H';$min   = '%M';$sec   = '%S';
+      $sizehour = strpos($mask, $hour);
+      $sizemin = strpos($mask, $hour);
+      $sizesec = strpos($mask, $hour);
+      $Time = 'false';
+      
+      if (($sizehour !== false)&&($sizemin !== false)&&($sizesec !== false)) {
+        $sizeend = $maskleng + 2;
+        $Time = 'true';
+      } else
+        {        
           $sizeend = $maskleng + 2;
         }
- 
-        if($valueaux=='today'){
-          $valueaux=masktophp ($mask);
-        }
-        $value1=$value;
-        $value=$valueaux;
-        if(($value==NULL)||($value=='')){          
-               $value=$value1;
-           }
-        
-       if ($this->required){
-            $isRequired = '1';
-        } else {
-            $isRequired = '0';
-        }
-        
-        if ( $this->editable != "0") {
-          $html = '<input pm:required="'. $isRequired .'" id="'.$pID.'" name="'.$pID.'" pm:mask="'.$mask.'" pm:start="'.$startDate.'" pm:end="'.$endDate.'" pm:time="'.$Time.'" '.$onchange.' class="module_app_input___gray" size="'.$sizeend.'" value="'.$value.'" pm:defaultvalue="'.$value1.'" required="' . $isRequired . '"/>'
-                . '<a onclick="removeValue(\''.$pID.'\'); return false;" style="position:relative;left:-17px;top:5px;" >'
-                . '  <img src="/images/icons_silk/calendar_x_button.png" />'
-                . '</a>'
-                . '<a id="'.$pID.'[btn]" style="position:relative;left:-22px;top:0px;" >'
-                . '  <img src="/images/pmdateicon.png" border="0" width="12" height="14" />'
-                . '</a>'
-                . '<script>datePicker4("", \''.$pID.'\', \''.$mask.'\', \''.$startDate.'\', \''.$endDate.'\','.$Time.')</script>';
-        } else {   
-          $html = '<input pm:required="'. $isRequired .'" id="'.$pID.'" name="'.$pID.'" pm:mask="'.$mask.'" pm:start="'.$startDate.'" pm:end="'.$endDate.'" pm:time="'.$Time.'" '.$onchange.' class="module_app_input___gray" size="'.$sizeend.'" value="'.$value.'"pm:defaultvalue="'.$value1.'" readonly="readonly" required="' . $isRequired . '"/>'
+      if ($this->required) 
+        $isRequired = '1';
+      else      
+        $isRequired = '0';
+      if ( $this->editable != "0") {
+        $html = '<input pm:required="'. $isRequired .'" id="'.$pID.'" name="'.$pID.'" pm:mask="'.$mask.'"'          
+              . 'pm:start="'.$startDate.'" pm:end="'.$endDate.'" pm:time="'.$Time.'" '.$onchange.' class="module_app_input___gray" size="'.$sizeend.'"'
+              .  'value="'.$value.'" pm:defaultvalue="'.$defaultValue.'" required="' . $isRequired . '"/>'
+              . '<a onclick="removeValue(\''.$pID.'\'); return false;" style="position:relative;left:-17px;top:5px;" > '
+              . '  <img src="/images/icons_silk/calendar_x_button.png" />'
+              . '</a>'
+              . '<a id="'.$pID.'[btn]" style="position:relative;left:-22px;top:0px;" >'
+              . '  <img src="/images/pmdateicon.png" border="0" width="12" height="14" />'
+              . '</a>'
+              . '<script>datePicker4("", \''.$pID.'\', \''.$mask.'\', \''.$startDate.'\', \''.$endDate.'\','.$Time.')</script>';
+      } else 
+        { 
+          $html = '<input pm:required="'. $isRequired .'" id="'.$pID.'" name="'.$pID.'" pm:mask="'.$mask.'" pm:start="'.$startDate.'"'
+                . 'pm:end="'.$endDate.'" pm:time="'.$Time.'" '.$onchange.' class="module_app_input___gray" size="'.$sizeend.'"'
+                . 'value="'.$value.'"pm:defaultvalue="'.$defaultValue.'" readonly="readonly" required="' . $isRequired . '"/>'
                 . '<a onclick="removeValue(\''.$pID.'\'); return false;" style="position:relative;left:-17px;top:5px;" >'
                 . '  <img src="/images/icons_silk/calendar_x_button.png" />'
                 . '</a>'
@@ -3637,21 +3579,17 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
                 . '</a>'
                 . '<script>datePicker4("", \''.$pID.'\', \''.$mask.'\', \''.$startDate.'\', \''.$endDate.'\','.$Time.')</script>';
         }
-
-    } else {
-      //$html = "<span style='border:1;border-color:#000;width:100px;' name='" . $pID . "'>$value</span>";
-      ///-- $html =  '<input class="module_app_input___gray" id="form[' . $this->name . ']" name="form[' . $this->name . ']" type ="text" size="' . $this->size . '" ' . (isset ( $this->maxLength ) ? ' maxlength="' . $this->maxLength . '"' : '') . ' value=\'' . htmlentities ( $value, ENT_COMPAT, 'utf-8' ) . '\' style="display:none;' . htmlentities ( $this->style, ENT_COMPAT, 'utf-8' ) . '" />' . htmlentities ( $value, ENT_COMPAT, 'utf-8' );
-
-      $html = "<span style='border:1;border-color:#000;width:100px;' name='" . $pID . "'>$valueaux</span>";
-      $html .= '<input type="hidden" id="'.$pID.'" name="'.$pID.'" pm:mask="'.$mask.'" pm:start="'.$startDate.'" pm:end="'.$endDate.'"  '.$onchange.' class="module_app_input___gray" value="'.$valueaux.'"/>';
-    }
-    
-
+    } else 
+      {           
+        $html = "<span style='border:1;border-color:#000;width:100px;' name='" . $pID . "'>$value</span>"
+              . '<input type="hidden" id="'.$pID.'" name="'.$pID.'" pm:mask="'.$mask.'" pm:start="'.$startDate.'"'
+              . 'pm:end="'.$endDate.'"  '.$onchange.' class="module_app_input___gray" value="'.$value.'"/>';
+          
+      }    
     if ($this->gridFieldType == '') $html .= $this->renderHint();
     return $html;
   }
 }
-
 
 /**
  * Calendar Widget with Javascript Routines
