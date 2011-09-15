@@ -199,7 +199,6 @@ class pmTablesProxy extends HttpProxyController
         'INDEX', 'INSERT', 'OPEN', 'REVOKE', 'ROLLBACK', 'SELECT', 'SYNONYM', 'TABLE', 'UPDATE', 'VIEW', 
         'APP_UID', 'ROW', 'PMTABLE'
       );
-      //$reservedWords = array_merge($reservedWords, array_change_key_case($reservedWords, CASE_LOWER));
 
       // verify if exists.
       if ($data['REP_TAB_UID'] == '' || (isset($httpData->forceUid) && $httpData->forceUid)) { //new report table
@@ -210,11 +209,11 @@ class pmTablesProxy extends HttpProxyController
         
         /** validations **/
         if (is_array($oAdditionalTables->loadByName($data['REP_TAB_NAME']))) {
-          throw new Exception('The table "' . $data['REP_TAB_NAME'] . '" already exits.');
+          throw new Exception(G::loadTranslation('ID_PMTABLE_ALREADY_EXISTS', array($data['REP_TAB_NAME'])));
         }
 
         if (in_array(strtoupper($data['REP_TAB_NAME']), $reservedWords) ) {
-          throw new Exception('Could not create the table with the name "' . $data['REP_TAB_NAME'] . '" because it is a reserved word.');
+          throw new Exception(G::loadTranslation('ID_PMTABLE_INVALID_NAME', array($data['REP_TAB_NAME'])));
         }
       }
       
@@ -402,7 +401,7 @@ class pmTablesProxy extends HttpProxyController
     $toSave = false;
 
     if (!file_exists (PATH_WORKSPACE . 'classes/' . $this->className . '.php') ) {
-      throw new Exception("ERROR: {$this->className} class file doesn't exit!");
+      throw new Exception(G::loadTranslation('ID_PMTABLE_CLASS_DOESNT_EXIST', $this->className));
     }
 
     require_once PATH_WORKSPACE . 'classes/' . $this->className . '.php';
@@ -466,7 +465,7 @@ class pmTablesProxy extends HttpProxyController
     $sPath = PATH_DB . SYS_SYS . PATH_SEP . 'classes' . PATH_SEP;
 
     if (!file_exists ($sPath . $this->className . '.php') ) {
-      throw new Exception("ERROR: $className class file doesn't exit!");
+      throw new Exception(G::loadTranslation('ID_PMTABLE_CLASS_DOESNT_EXIST', $this->className));
     }
 
     require_once $sPath . $this->className . '.php';
@@ -500,7 +499,7 @@ class pmTablesProxy extends HttpProxyController
     $sPath = PATH_DB . SYS_SYS . PATH_SEP . 'classes' . PATH_SEP;
 
     if (!file_exists ($sPath . $this->className . '.php') ) {
-      throw new Exception("ERROR: $className class file doesn't exit!");
+      throw new Exception(G::loadTranslation('ID_PMTABLE_CLASS_DOESNT_EXIST', $this->className));
     }
 
     require_once $sPath . $this->className . '.php';
@@ -655,7 +654,7 @@ class pmTablesProxy extends HttpProxyController
 
       //save the file
       if ($_FILES['form']['error']['FILENAME'] !== 0) {
-        throw new Exception('Problem while uploading file');
+        throw new Exception(G::loadTranslation('ID_PMTABLE_UPLOADING_FILE_PROBLEM'));
       }
 
       $oAdditionalTables = new AdditionalTables();
@@ -670,7 +669,7 @@ class pmTablesProxy extends HttpProxyController
       $fileContent = file_get_contents($PUBLIC_ROOT_PATH.$filename);
       
       if(strpos($fileContent, '-----== ProcessMaker Open Source Private Tables ==-----') === false) {
-        throw new Exception('Invalid File, Import abort');
+        throw new Exception('ID_PMTABLE_INVALID_FILE');
       }
         
       $fp     = fopen($PUBLIC_ROOT_PATH.$filename, "rb");
@@ -813,12 +812,12 @@ class pmTablesProxy extends HttpProxyController
 
       if ($errors == '') {
         $result->success = true;
-        $msg = 'File Imported "'.$filename.'" Successfully';
+        $msg = G::loadTranslation('ID_PMTABLE_IMPORT_SUCCESS', array($filename));
       }
       else {
         $result->success = false;
         $result->errorType = 'warning';
-        $msg = 'File Imported "'.$filename.'" but with errors' .  "\n\n" . $errors;
+        $msg = G::loadTranslation('ID_PMTABLE_IMPORT_WITH_ERRORS', array($filename)) . "\n\n";
       }
 
       $result->message = $msg;

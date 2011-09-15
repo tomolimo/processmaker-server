@@ -2182,9 +2182,15 @@ $output = $outputHeader.$output;
    * @parameter array data // erik: associative array within data input to replace for formatted string i.e "any messsage {replaced_label} that contains a replace label"
    * @return string
    */
-  function LoadTranslation( $msgID , $lang = SYS_LANG, $data = null)
+  function LoadTranslation($msgID, $lang = SYS_LANG, $data = null)
   {
     global $translation;
+
+    // if the second parameter $lang is an array does mean it was especified to use as data
+    if (is_array($lang)) {
+      $data = $lang;
+      $lang = SYS_LANG;
+    }
     
     if ( isset ( $translation[$msgID] ) ){
       $translationString = preg_replace("[\n|\r|\n\r]", ' ', $translation[$msgID]);
