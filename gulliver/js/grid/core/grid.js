@@ -289,8 +289,12 @@ var G_Grid = function(oForm, sGridName){
                       a2.innerHTML = img2;
                       oNewRow.getElementsByTagName('td')[i].appendChild(a2);
                       //Load DatePicker Trigger
-                      datePicker4("", newID, attributes.mask, attributes.start, attributes.end, attributes.time);
-                      aObjects[n].value = defaultValue;
+                      datePicker4("", newID, attributes.mask, attributes.start, attributes.end, attributes.time);                     
+                      if(defaultValue=='today'){ 
+                    	  attributesValue = elementAttributesNS(aObjects[0], '');
+                    	  aObjects[n].value=attributesValue.value;
+                      }else                    
+                         aObjects[n].value = defaultValue;
                     }else{
                       if (_BROWSER.name == 'msie' && aObjects.length==1){ //Clone new input element if browser is IE
                         var oNewOBJ = this.cloneInput(aObjects[n]);
