@@ -32,7 +32,7 @@ try{
     if( isset($_GET['result']) && $_GET['result'] == 'confirm' ){
       if( defined('PATH_C') ){
         G::rm_dir(PATH_C);
-        G::SendTemporalMessage('ID_CLEAR_CACHE_MSG1', 'tmp-info', 'label');
+        G::SendTemporalMessage('ID_CLEAR_CACHE_MSG1', 'tmp-info', 'label','','100%');
         G::header('location: clearCompiled?result=done');
       }
     } else {
