@@ -124,11 +124,11 @@ class UsersProperties extends BaseUsersProperties {
   }
 
   public function validatePassword($sPassword, $sLastUpdate, $iChangePasswordNextTime) {
-    if (!defined('PPP_MINIMUN_LENGTH')) {
-      define('PPP_MINIMUN_LENGTH', 5);
+    if (!defined('PPP_MINIMUM_LENGTH')) {
+      define('PPP_MINIMUM_LENGTH', 5);
     }
-    if (!defined('PPP_MAXIMUN_LENGTH')) {
-      define('PPP_MAXIMUN_LENGTH', 20);
+    if (!defined('PPP_MAXIMUM_LENGTH')) {
+      define('PPP_MAXIMUM_LENGTH', 20);
     }
     if (!defined('PPP_NUMERICAL_CHARACTER_REQUIRED')) {
       define('PPP_NUMERICAL_CHARACTER_REQUIRED', 0);
@@ -152,11 +152,11 @@ class UsersProperties extends BaseUsersProperties {
       $iLength = strlen($sPassword);
     }
     $aErrors = array();
-    if ($iLength < PPP_MINIMUN_LENGTH) {
-      $aErrors[] = 'ID_PPP_MINIMUN_LENGTH';
+    if ($iLength < PPP_MINIMUM_LENGTH) {
+      $aErrors[] = 'ID_PPP_MINIMUM_LENGTH';
     }
-    if ($iLength > PPP_MAXIMUN_LENGTH) {
-      $aErrors[] = 'ID_PPP_MAXIMUN_LENGTH';
+    if ($iLength > PPP_MAXIMUM_LENGTH) {
+      $aErrors[] = 'ID_PPP_MAXIMUM_LENGTH';
     }
     if (PPP_NUMERICAL_CHARACTER_REQUIRED == 1) {
       if (preg_match_all('/[0-9]/', $sPassword, $aMatch, PREG_PATTERN_ORDER | PREG_OFFSET_CAPTURE) == 0) {
