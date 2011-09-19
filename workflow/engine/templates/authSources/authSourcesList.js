@@ -58,49 +58,50 @@ var comboStatusStore;
 var editForm;
 var contextMenu;
 var w;
- 
+var actionButtons;
+
 Ext.onReady(function(){
     Ext.QuickTips.init();
-    
+
     pageSize = parseInt(CONFIG.pageSize);
-    
+
     newButton = new Ext.Action({
       text: _('ID_NEW'),
       iconCls: 'button_menu_ext ss_sprite ss_add',
       handler: NewAuthSource
     });
-    
+
     editButton = new Ext.Action({
       text: _('ID_EDIT'),
       iconCls: 'button_menu_ext ss_sprite  ss_pencil',
       handler: EditAuthSource,
-      disabled: true  
+      disabled: true
     });
-    
+
     deleteButton = new Ext.Action({
       text: _('ID_DELETE'),
       iconCls: 'button_menu_ext ss_sprite  ss_delete',
       handler: DeleteAuthSource,
       disabled: true
     });
-    
+
     usersButton = new Ext.Action({
       text: _('ID_IMPORT_USERS'),
       iconCls: 'button_menu_ext ss_sprite  ss_user_add',
       handler: ImportUsers,
       disabled: true
-      
+
     });
-    
+
     searchButton = new Ext.Action({
       text: _('ID_SEARCH'),
       handler: DoSearch
     });
-    
+
     contextMenu = new Ext.menu.Menu({
       items: [editButton, deleteButton,'-',usersButton]
     });
-    
+
     searchText = new Ext.form.TextField ({
         id: 'searchText',
         ctCls:'pm_search_text_field',
@@ -119,26 +120,45 @@ Ext.onReady(function(){
                }
         }
     });
-    
+
     clearTextButton = new Ext.Action({
       text: 'X',
       ctCls:'pm_search_x_button',
       handler: GridByDefault
     });
-    
-      
+
+    actionButtons = _addPluginActions([newButton, '-', editButton, deleteButton, '-', usersButton, {xtype: 'tbfill'}, searchText, clearTextButton, searchButton]);
+
     smodel = new Ext.grid.RowSelectionModel({
       singleSelect: true,
       listeners:{
-        rowselect: function(sm){
+        rowselect: function(sm, index, record){
           editButton.enable();
           deleteButton.enable();
           usersButton.enable();
+          if (typeof(_rowselect) !== 'undefined') {
+            if (Ext.isArray(_rowselect)) {
+              for (var i = 0; i < _rowselect.length; i++) {
+                if (Ext.isFunction(_rowselect[i])) {
+                  _rowselect[i](sm, index, record);
+                }
+              }
+            }
+          }
         },
-        rowdeselect: function(sm){
+        rowdeselect: function(sm, index, record){
           editButton.disable();
           deleteButton.disable();
           usersButton.disable();
+          if (typeof(_rowdeselect) !== 'undefined') {
+            if (Ext.isArray(_rowdeselect)) {
+              for (var i = 0; i < _rowdeselect.length; i++) {
+                if (Ext.isFunction(_rowdeselect[i])) {
+                  _rowdeselect[i](sm, index, record);
+                }
+              }
+            }
+          }
         }
       }
     });
@@ -167,7 +187,7 @@ Ext.onReady(function(){
             ]
       })
     });
-    
+
     cmodel = new Ext.grid.ColumnModel({
         defaults: {
             width: 50,
@@ -183,13 +203,13 @@ Ext.onReady(function(){
             {header: _('ID_ACTIVE_USERS'), dataIndex: 'CURRENT_USERS', width: 90, hidden: false, align: 'center'}
         ]
     });
-    
+
     storePageSize = new Ext.data.SimpleStore({
         fields: ['size'],
          data: [['20'],['30'],['40'],['50'],['100']],
          autoLoad: true
     });
-        
+
     comboPageSize = new Ext.form.ComboBox({
       typeAhead     : false,
       mode          : 'local',
@@ -207,9 +227,9 @@ Ext.onReady(function(){
         }
       }
     });
-        
+
     comboPageSize.setValue(pageSize);
-      
+
     bbarpaging = new Ext.PagingToolbar({
       pageSize: pageSize,
       store: store,
@@ -218,7 +238,7 @@ Ext.onReady(function(){
       emptyMsg: _('ID_GRID_PAGE_NO_AUTHENTICATION_MESSAGE'),
       items: ['-',_('ID_PAGE_SIZE')+':',comboPageSize]
     });
-    
+
     infoGrid = new Ext.grid.GridPanel({
       region: 'center',
       layout: 'fit',
@@ -239,7 +259,7 @@ Ext.onReady(function(){
       store: store,
       cm: cmodel,
       sm: smodel,
-      tbar: [newButton, '-', editButton, deleteButton,'-',usersButton, {xtype: 'tbfill'}, searchText,clearTextButton,searchButton],
+      tbar: actionButtons,
       bbar: bbarpaging,
       listeners: {
         rowdblclick: EditAuthSource,
@@ -254,22 +274,22 @@ Ext.onReady(function(){
         emptyText: _('ID_NO_RECORDS_FOUND')
       })
     });
-    
-    infoGrid.on('rowcontextmenu', 
+
+    infoGrid.on('rowcontextmenu',
         function (grid, rowIndex, evt) {
             var sm = grid.getSelectionModel();
             sm.selectRow(rowIndex, sm.isSelected(rowIndex));
         },
         this
     );
-    
-    infoGrid.on('contextmenu', 
+
+    infoGrid.on('contextmenu',
         function (evt) {
             evt.preventDefault();
-        }, 
+        },
         this
     );
-    
+
     infoGrid.addListener('rowcontextmenu',onMessageContextMenu,this);
 
     infoGrid.store.load();
@@ -301,7 +321,7 @@ GridByDefault = function(){
 
 //Do Search Function
 DoSearch = function(){
-   infoGrid.store.load({params: {textFilter: searchText.getValue()}});  
+   infoGrid.store.load({params: {textFilter: searchText.getValue()}});
 };
 
 //Update Page Size Configuration
@@ -365,11 +385,11 @@ DeleteAuthSource = function(){
                     viewport.getEl().unmask();
                   }
                 });
-            }  
+            }
             });
-            
+
           }else{
-           PMExt.error(_('ID_AUTH_SOURCES'),_('ID_MSG_CANNOT_DELETE_AUTHENTICATION'));  
+           PMExt.error(_('ID_AUTH_SOURCES'),_('ID_MSG_CANNOT_DELETE_AUTHENTICATION'));
           }
       },
       failure: function(r,o){
@@ -386,3 +406,48 @@ ImportUsers = function(){
       location.href = 'authSources_SearchUsers?sUID=' +rowSelected.data.AUTH_SOURCE_UID;
     }
 };
+
+// Mover a un archivo más genérico - Start
+var _pluginActionButtons = [];
+var _rowselect = [];
+var _rowdeselect = [];
+
+var _addPluginActions = function(defaultActionButtons) {
+  try {
+    if (Ext.isArray(_pluginActionButtons)) {
+      if (_pluginActionButtons.length > 0) {
+        var positionToInsert = _tbfillPosition(defaultActionButtons);
+        var leftActionButtons = defaultActionButtons.slice(0, positionToInsert);
+        var rightActionButtons = defaultActionButtons.slice(positionToInsert, defaultActionButtons.length - 1);
+        return leftActionButtons.concat(_pluginActionButtons.concat(rightActionButtons));
+      }
+      else {
+        return defaultActionButtons;
+      }
+    }
+    else {
+      return defaultActionButtons;
+    }
+  }
+  catch (error) {
+    return defaultActionButtons;
+  }
+};
+
+var _tbfillPosition = function(actionButtons) {
+  try {
+    for (var i = 0; i < actionButtons.length; i++) {
+      if (Ext.isObject(actionButtons[i])) {
+        if (actionButtons[i].xtype == 'tbfill') {
+          return i;
+        }
+      }
+    }
+    return i;
+  }
+  catch (error) {
+    return 0;
+  }
+};
+
+// Mover a un archivo más genérico - End
