@@ -70,8 +70,7 @@
       $userId    = $session['USR_UID'];
 
       $ws = new wsBase ();
-      $res = $ws->processListVerified( $userId );
-      print_r($res);die;
+      $res = $ws->processListVerified( $userId ); 
       return array("processes" => $res );
     }
 
