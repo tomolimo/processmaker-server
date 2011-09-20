@@ -85,12 +85,17 @@ class AdditionalTables extends BaseAdditionalTables {
     return $this->fields;
   }
 
-  public function getPrimaryKeys()
+  public function getPrimaryKeys($type = 'complete')
   {
     $this->primaryKeys = array();
     foreach ($this->fields as $field) {
       if ($field['FLD_KEY'] == '1') {
-        $this->primaryKeys[] = $field;
+        if ($type == 'complete') {
+          $this->primaryKeys[] = $field;
+        }
+        else { // just field names
+          $this->primaryKeys[] = $field['FLD_NAME'];
+        }
       }
     }
     return $this->primaryKeys;
@@ -775,5 +780,398 @@ class AdditionalTables extends BaseAdditionalTables {
     // }
 
     return array('rows'=>$addTables, 'count'=>$count);
+  }
+
+  /**
+   * DEPRECATED createPropelClasses()
+   * 
+   * Don't use this method, it was left only for backward compatibility 
+   * for some external plugins that still is using it
+   */
+
+  function createPropelClasses($sTableName, $sClassName, $aFields, $sAddTabUid, $connection='workflow') 
+  {
+    try {
+      /*$aUID = array('FLD_NAME'           => 'PM_UNIQUE_ID',
+                    'FLD_TYPE'           => 'INT',
+                    'FLD_KEY'            => 'on',
+                    'FLD_SIZE'           => '11',
+                    'FLD_NULL'           => '',
+                    'FLD_AUTO_INCREMENT' => 'on');
+      array_unshift($aFields, $aUID);*/
+      $aTypes = array(
+        'VARCHAR' => 'string',
+        'TEXT'    => 'string',
+        'DATE'    => 'int',
+        'INT'     => 'int',
+        'FLOAT'   => 'double'
+      );
+      $aCreoleTypes = array(
+        'VARCHAR' => 'VARCHAR',
+        'TEXT'    => 'LONGVARCHAR',
+        'DATE'    => 'TIMESTAMP',
+        'INT'     => 'INTEGER',
+        'FLOAT'   => 'DOUBLE'
+      );
+      if ($sClassName == '') {
+        $sClassName = $this->getPHPName($sTableName);
+      }
+
+      $sPath = PATH_DB . SYS_SYS . PATH_SEP . 'classes' . PATH_SEP;
+      if (!file_exists($sPath)) {
+         G::mk_dir($sPath);
+      }
+      if (!file_exists($sPath . 'map')) {
+        G::mk_dir($sPath . 'map');
+      }
+      if (!file_exists($sPath . 'om')) {
+         G::mk_dir($sPath . 'om');
+      }
+      $aData = array();
+      $aData['pathClasses']    = substr(PATH_DB, 0, -1);
+      $aData['tableName']      = $sTableName;
+      $aData['className']      = $sClassName;
+      $aData['connection']     = $connection;
+      $aData['GUID']           = $sAddTabUid;
+      
+      $aData['firstColumn']    = isset($aFields[0])? strtoupper($aFields[0]['FLD_NAME']) : ($aFields[1]['FLD_NAME']);
+      $aData['totalColumns']   = count($aFields);
+      $aData['useIdGenerator'] = 'false';
+      $oTP1  = new TemplatePower(PATH_TPL . 'additionalTables' . PATH_SEP . 'Table.tpl');
+      $oTP1->prepare();
+      $oTP1->assignGlobal($aData);
+      file_put_contents($sPath . $sClassName . '.php', $oTP1->getOutputContent());
+      $oTP2  = new TemplatePower(PATH_TPL . 'additionalTables' . PATH_SEP . 'TablePeer.tpl');
+      $oTP2->prepare();
+      $oTP2->assignGlobal($aData);
+      file_put_contents($sPath . $sClassName . 'Peer.php', $oTP2->getOutputContent());
+      $aColumns = array();
+      $aPKs     = array();
+      $aNotPKs  = array();
+      $i        = 0;
+      foreach($aFields as $iKey => $aField) {
+       $aField['FLD_NAME'] = strtoupper($aField['FLD_NAME']);
+       if ($aField['FLD_TYPE']=='DATE') $aField['FLD_NULL'] = '';
+        $aColumn    = array(
+          'name'        => $aField['FLD_NAME'],
+          'phpName'     => $this->getPHPName($aField['FLD_NAME']),
+          'type'        => $aTypes[$aField['FLD_TYPE']],
+          'creoleType'  => $aCreoleTypes[$aField['FLD_TYPE']],
+          'notNull'     => ($aField['FLD_NULL'] == 'on' ? 'true' : 'false'),
+          'size'        => (($aField['FLD_TYPE'] == 'VARCHAR') || ($aField['FLD_TYPE'] == 'INT') || ($aField['FLD_TYPE'] == 'FLOAT') ? $aField['FLD_SIZE'] : 'null'),
+          'var'         => strtolower($aField['FLD_NAME']),
+          'attribute'   => (($aField['FLD_TYPE'] == 'VARCHAR') || ($aField['FLD_TYPE'] == 'TEXT') || ($aField['FLD_TYPE'] == 'DATE') ? '$' . strtolower($aField['FLD_NAME']) . " = ''" : '$' . strtolower($aField['FLD_NAME']) . ' = 0'),
+          'index'       => $i,
+        );
+        if ($aField['FLD_TYPE'] == 'DATE') {
+          $aColumn['getFunction'] = '/**
+   * Get the [optionally formatted] [' . $aColumn['var'] . '] column value.
+   *
+   * @param      string $format The date/time format string (either date()-style or strftime()-style).
+   *              If format is NULL, then the integer unix timestamp will be returned.
+   * @return     mixed Formatted date/time value as string or integer unix timestamp (if format is NULL).
+   * @throws     PropelException - if unable to convert the date/time to timestamp.
+   */
+  public function get' . $aColumn['phpName'] . '($format = "Y-m-d")
+  {
+
+    if ($this->' . $aColumn['var'] . ' === null || $this->' . $aColumn['var'] . ' === "") {
+      return null;
+    } elseif (!is_int($this->' . $aColumn['var'] . ')) {
+      // a non-timestamp value was set externally, so we convert it
+      if (($this->' . $aColumn['var'] . ' == "0000-00-00 00:00:00") || ($this->' . $aColumn['var'] . ' == "0000-00-00") || !$this->' . $aColumn['var'] . ') {
+        $ts = "0";
+      }
+      else {
+        $ts = strtotime($this->' . $aColumn['var'] . ');
+      }
+      if ($ts === -1 || $ts === false) { // in PHP 5.1 return value changes to FALSE
+        throw new PropelException("Unable to parse value of [' . $aColumn['var'] . '] as date/time value: " . var_export($this->' . $aColumn['var'] . ', true));
+      }
+    } else {
+      $ts = $this->' . $aColumn['var'] . ';
+    }
+    if ($format === null) {
+      return $ts;
+    } elseif (strpos($format, "%") !== false) {
+      return strftime($format, $ts);
+    } else {
+      return date($format, $ts);
+    }
+  }';
+        }
+        else {
+          $aColumn['getFunction'] = '/**
+   * Get the [' . $aColumn['var'] . '] column value.
+   *
+   * @return     string
+   */
+  public function get' . $aColumn['phpName'] . '()
+  {
+
+    return $this->' . $aColumn['var'] . ';
+  }';
+        }
+        switch ($aField['FLD_TYPE']) {
+          case 'VARCHAR':
+          case 'TEXT':
+            $aColumn['setFunction'] = '// Since the native PHP type for this column is string,
+    // we will cast the input to a string (if it is not).
+    if ($v !== null && !is_string($v)) {
+      $v = (string) $v;
+    }
+
+    if ($this->' . $aColumn['var'] . ' !== $v) {
+      $this->' . $aColumn['var'] . ' = $v;
+      $this->modifiedColumns[] = ' . $aData['className'] . 'Peer::' . $aColumn['name'] . ';
+    }';
+          break;
+          case 'DATE':
+            $aColumn['setFunction'] = 'if ($v !== null && !is_int($v)) {
+      // if($v == \'\')
+      //   $ts = null;
+     // else
+       $ts = strtotime($v);
+     if ($ts === -1 || $ts === false) { // in PHP 5.1 return value changes to FALSE
+       //throw new PropelException("Unable to parse date/time value for [' . $aColumn['var'] . '] from input: " . var_export($v, true));
+     }
+   } else {
+     $ts = $v;
+   }
+   if ($this->' . $aColumn['var'] . ' !== $ts) {
+     $this->' . $aColumn['var'] . ' = $ts;
+     $this->modifiedColumns[] = ' . $aData['className'] . 'Peer::' . $aColumn['name'] . ';
+   }';
+         break;
+         case 'INT':
+           $aColumn['setFunction'] = '// Since the native PHP type for this column is integer,
+   // we will cast the input value to an int (if it is not).
+   if ($v !== null && !is_int($v) && is_numeric($v)) {
+     $v = (int) $v;
+   }
+   if ($this->' . $aColumn['var'] . ' !== $v || $v === 1) {
+     $this->' . $aColumn['var'] . ' = $v;
+     $this->modifiedColumns[] = ' . $aData['className'] . 'Peer::' . $aColumn['name'] . ';
+   }';
+         break;
+         case 'FLOAT':
+           $aColumn['setFunction'] = 'if ($this->' . $aColumn['var'] . ' !== $v || $v === 0) {
+     $this->' . $aColumn['var'] . ' = $v;
+     $this->modifiedColumns[] = ' . $aData['className'] . 'Peer::' . $aColumn['name'] . ';
+   }';
+         break;
+       }
+       $aColumns[] = $aColumn;
+       if ($aField['FLD_KEY'] == 1 || $aField['FLD_KEY'] === 'on') {
+         $aPKs[] = $aColumn;
+       }
+       else {
+         $aNotPKs[] = $aColumn;
+       }
+        if ($aField['FLD_AUTO_INCREMENT'] == 1 || $aField['FLD_AUTO_INCREMENT'] === 'on') {
+          $aData['useIdGenerator'] = 'true';
+        }
+        $i++;
+      }
+      $oTP3  = new TemplatePower(PATH_TPL . 'additionalTables' . PATH_SEP . 'map' . PATH_SEP . 'TableMapBuilder.tpl');
+      $oTP3->prepare();
+      $oTP3->assignGlobal($aData);
+      foreach ($aPKs as $iIndex => $aColumn) {
+        $oTP3->newBlock('primaryKeys');
+        $aKeys = array_keys($aColumn);
+        foreach ($aKeys as $sKey) {
+          $oTP3->assign($sKey, $aColumn[$sKey]);
+        }
+      }
+      $oTP3->gotoBlock('_ROOT');
+      foreach ($aNotPKs as $iIndex => $aColumn) {
+        $oTP3->newBlock('columnsWhitoutKeys');
+        $aKeys = array_keys($aColumn);
+        foreach ($aKeys as $sKey) {
+          $oTP3->assign($sKey, $aColumn[$sKey]);
+        }
+      }
+      file_put_contents($sPath . PATH_SEP . 'map' . PATH_SEP . $sClassName . 'MapBuilder.php', $oTP3->getOutputContent());
+      $oTP4  = new TemplatePower(PATH_TPL . 'additionalTables' . PATH_SEP . 'om' . PATH_SEP . 'BaseTable.tpl');
+      $oTP4->prepare();
+      switch (count($aPKs)) {
+        case 0:
+          $aData['getPrimaryKeyFunction'] = 'return null;';
+          $aData['setPrimaryKeyFunction'] = '';
+        break;
+        case 1:
+          $aData['getPrimaryKeyFunction'] = 'return $this->get' . $aPKs[0]['phpName'] . '();';
+          $aData['setPrimaryKeyFunction'] = '$this->set' . $aPKs[0]['phpName'] . '($key);';
+        break;
+        default:
+          $aData['getPrimaryKeyFunction'] = '$pks = array();' . "\n";
+          $aData['setPrimaryKeyFunction'] = '';
+          foreach ($aPKs as $iIndex => $aColumn) {
+            $aData['getPrimaryKeyFunction'] .= '$pks[' . $iIndex . '] = $this->get' . $aColumn['phpName'] . '();' . "\n";
+            $aData['setPrimaryKeyFunction'] .= '$this->set' . $aColumn['phpName'] . '($keys[' . $iIndex . ']);' . "\n";
+          }
+          $aData['getPrimaryKeyFunction'] .= 'return $pks;' . "\n";
+        break;
+      }
+      $oTP4->assignGlobal($aData);
+      foreach ($aColumns as $iIndex => $aColumn) {
+        $oTP4->newBlock('allColumns1');
+        $aKeys = array_keys($aColumn);
+        foreach ($aKeys as $sKey) {
+          $oTP4->assign($sKey, $aColumn[$sKey]);
+        }
+        $oTP4->newBlock('allColumns2');
+        $aKeys = array_keys($aColumn);
+        foreach ($aKeys as $sKey) {
+          $oTP4->assign($sKey, $aColumn[$sKey]);
+        }
+        $oTP4->newBlock('allColumns3');
+        $aKeys = array_keys($aColumn);
+        foreach ($aKeys as $sKey) {
+          $oTP4->assign($sKey, $aColumn[$sKey]);
+        }
+        $oTP4->newBlock('allColumns4');
+        $aKeys = array_keys($aColumn);
+        foreach ($aKeys as $sKey) {
+          $oTP4->assign($sKey, $aColumn[$sKey]);
+        }
+        $oTP4->newBlock('allColumns5');
+        $aKeys = array_keys($aColumn);
+        foreach ($aKeys as $sKey) {
+          $oTP4->assign($sKey, $aColumn[$sKey]);
+        }
+        $oTP4->newBlock('allColumns6');
+        $aKeys = array_keys($aColumn);
+        foreach ($aKeys as $sKey) {
+          $oTP4->assign($sKey, $aColumn[$sKey]);
+        }
+        $oTP4->newBlock('allColumns7');
+        $aKeys = array_keys($aColumn);
+        foreach ($aKeys as $sKey) {
+          $oTP4->assign($sKey, $aColumn[$sKey]);
+        }
+        $oTP4->newBlock('allColumns8');
+        $aKeys = array_keys($aColumn);
+        foreach ($aKeys as $sKey) {
+          $oTP4->assign($sKey, $aColumn[$sKey]);
+        }
+        $oTP4->newBlock('allColumns9');
+        $aKeys = array_keys($aColumn);
+        foreach ($aKeys as $sKey) {
+          $oTP4->assign($sKey, $aColumn[$sKey]);
+        }
+      }
+      $oTP4->gotoBlock('_ROOT');
+      foreach ($aPKs as $iIndex => $aColumn) {
+        $oTP4->newBlock('primaryKeys1');
+        $aKeys = array_keys($aColumn);
+        foreach ($aKeys as $sKey) {
+          $oTP4->assign($sKey, $aColumn[$sKey]);
+        }
+      }
+      $oTP4->gotoBlock('_ROOT');
+      foreach ($aPKs as $iIndex => $aColumn) {
+        $oTP4->newBlock('primaryKeys2');
+        $aKeys = array_keys($aColumn);
+        foreach ($aKeys as $sKey) {
+          $oTP4->assign($sKey, $aColumn[$sKey]);
+        }
+      }
+      $oTP4->gotoBlock('_ROOT');
+      foreach ($aNotPKs as $iIndex => $aColumn) {
+        $oTP4->newBlock('columnsWhitoutKeys');
+        $aKeys = array_keys($aColumn);
+        foreach ($aKeys as $sKey) {
+          $oTP4->assign($sKey, $aColumn[$sKey]);
+        }
+      }
+      file_put_contents($sPath . PATH_SEP . 'om' . PATH_SEP . 'Base' . $sClassName . '.php', $oTP4->getOutputContent());
+      $oTP5  = new TemplatePower(PATH_TPL . 'additionalTables' . PATH_SEP . 'om' . PATH_SEP . 'BaseTablePeer.tpl');
+      $oTP5->prepare();
+      $sKeys = '';
+      foreach ($aPKs as $iIndex => $aColumn) {
+        $sKeys .= '$' . $aColumn['var'] . ', ';
+      }
+      $sKeys = substr($sKeys, 0, -2);
+      //$sKeys = '$pm_unique_id';
+      if ($sKeys != '') {
+        $aData['sKeys'] = $sKeys;
+      }
+      else {
+        $aData['sKeys'] = '$DUMMY';
+      }
+      $oTP5->assignGlobal($aData);
+      foreach ($aColumns as $iIndex => $aColumn) {
+        $oTP5->newBlock('allColumns1');
+        $aKeys = array_keys($aColumn);
+        foreach ($aKeys as $sKey) {
+          $oTP5->assign($sKey, $aColumn[$sKey]);
+        }
+        $oTP5->newBlock('allColumns2');
+        $aKeys = array_keys($aColumn);
+        foreach ($aKeys as $sKey) {
+          $oTP5->assign($sKey, $aColumn[$sKey]);
+        }
+        $oTP5->newBlock('allColumns3');
+        $aKeys = array_keys($aColumn);
+        foreach ($aKeys as $sKey) {
+          $oTP5->assign($sKey, $aColumn[$sKey]);
+        }
+        $oTP5->newBlock('allColumns4');
+        $aKeys = array_keys($aColumn);
+        foreach ($aKeys as $sKey) {
+          $oTP5->assign($sKey, $aColumn[$sKey]);
+        }
+        $oTP5->newBlock('allColumns5');
+        $aKeys = array_keys($aColumn);
+        foreach ($aKeys as $sKey) {
+         $oTP5->assign($sKey, $aColumn[$sKey]);
+       }
+       $oTP5->newBlock('allColumns6');
+       $aKeys = array_keys($aColumn);
+       foreach ($aKeys as $sKey) {
+         $oTP5->assign($sKey, $aColumn[$sKey]);
+       }
+       $oTP5->newBlock('allColumns7');
+       $aKeys = array_keys($aColumn);
+       foreach ($aKeys as $sKey) {
+         $oTP5->assign($sKey, $aColumn[$sKey]);
+       }
+       $oTP5->newBlock('allColumns8');
+       $aKeys = array_keys($aColumn);
+       foreach ($aKeys as $sKey) {
+         $oTP5->assign($sKey, $aColumn[$sKey]);
+       }
+       $oTP5->newBlock('allColumns9');
+       $aKeys = array_keys($aColumn);
+       foreach ($aKeys as $sKey) {
+         $oTP5->assign($sKey, $aColumn[$sKey]);
+       }
+       $oTP5->newBlock('allColumns10');
+       $aKeys = array_keys($aColumn);
+       foreach ($aKeys as $sKey) {
+         $oTP5->assign($sKey, $aColumn[$sKey]);
+       }
+     }
+     $oTP5->gotoBlock('_ROOT');
+     foreach ($aPKs as $iIndex => $aColumn) {
+       $oTP5->newBlock('primaryKeys1');
+       $aKeys = array_keys($aColumn);
+       foreach ($aKeys as $sKey) {
+         $oTP5->assign($sKey, $aColumn[$sKey]);
+       }
+     }
+     foreach ($aPKs as $iIndex => $aColumn) {
+       $oTP5->newBlock('primaryKeys2');
+       $aKeys = array_keys($aColumn);
+       foreach ($aKeys as $sKey) {
+         $oTP5->assign($sKey, $aColumn[$sKey]);
+       }
+     }
+     file_put_contents($sPath . PATH_SEP . 'om' . PATH_SEP . 'Base' . $sClassName . 'Peer.php', $oTP5->getOutputContent());
+    }
+    catch (Exception $oError) {
+      throw($oError);
+    }
   }
 } // AdditionalTables
