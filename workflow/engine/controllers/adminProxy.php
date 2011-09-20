@@ -1,0 +1,75 @@
+<?php
+/**
+ * adminProxy.php
+ *
+ * ProcessMaker Open Source Edition
+ * Copyright (C) 2004 - 2008 Colosa Inc.23
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * For more information, contact Colosa Inc, 2566 Le Jeune Rd.,
+ * Coral Gables, FL, 33134, USA, or email info@colosa.com.
+ *
+ */
+class adminProxy extends HttpProxyController
+{    
+  function calendarSave() {    
+    //{ $_POST['BUSINESS_DAY']
+    $businessDayArray = G::json_decode($_POST['BUSINESS_DAY']);
+    $businessDayFixArray = array();      
+    for($i=0;$i<sizeof($businessDayArray);$i++) {
+      $businessDayFixArray[$i+1]['CALENDAR_BUSINESS_DAY'] = $businessDayArray[$i]->CALENDAR_BUSINESS_DAY;
+      $businessDayFixArray[$i+1]['CALENDAR_BUSINESS_START'] = $businessDayArray[$i]->CALENDAR_BUSINESS_START;
+      $businessDayFixArray[$i+1]['CALENDAR_BUSINESS_END'] = $businessDayArray[$i]->CALENDAR_BUSINESS_END;
+    }
+    $_POST['BUSINESS_DAY'] = $businessDayFixArray;
+    //}
+    
+    //{ $_POST['CALENDAR_WORK_DAYS']
+    $calendarWorkDaysArray = G::json_decode($_POST['CALENDAR_WORK_DAYS']);
+    $calendarWorkDaysFixArray = array();
+    for($i=0;$i<sizeof($calendarWorkDaysArray);$i++) {
+      $calendarWorkDaysFixArray[$i] = $calendarWorkDaysArray[$i]."";        
+    }
+    $_POST['CALENDAR_WORK_DAYS'] = $calendarWorkDaysFixArray;     
+    //} 
+    
+    //{ $_POST['HOLIDAY']
+    $holidayArray = G::json_decode($_POST['HOLIDAY']);
+    $holidayFixArray = array();      
+    for($i=0;$i<sizeof($holidayArray);$i++) {
+      $holidayFixArray[$i+1]['CALENDAR_HOLIDAY_NAME'] = $holidayArray[$i]->CALENDAR_HOLIDAY_NAME;
+      $holidayFixArray[$i+1]['CALENDAR_HOLIDAY_START'] = $holidayArray[$i]->CALENDAR_HOLIDAY_START;
+      $holidayFixArray[$i+1]['CALENDAR_HOLIDAY_END'] = $holidayArray[$i]->CALENDAR_HOLIDAY_END; 
+    }
+    $_POST['HOLIDAY'] = $holidayFixArray;
+    //}
+    
+    //[ CALENDAR_STATUS BUSINESS_DAY_STATUS HOLIDAY_STATUS            
+    if($_POST['BUSINESS_DAY_STATUS']=="INACTIVE") {
+      unset($_POST['BUSINESS_DAY_STATUS']);        
+    }      
+    if($_POST['HOLIDAY_STATUS']=="INACTIVE") {
+      unset($_POST['HOLIDAY_STATUS']);        
+    }      
+    //]
+    
+    $form = $_POST;
+    G::LoadClass('calendar');
+    $calendarObj=new calendar();
+    $calendarObj->saveCalendarInfo($form);
+    
+    echo "{success: true}";      
+  }
+}

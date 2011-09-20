@@ -280,8 +280,9 @@ onMessageContextMenu = function (grid, rowIndex, e) {
 DoNothing = function(){};
 
 //Open New Calendar
-NewCalendarAction = function(){
-	location.href = 'calendarEdit';
+NewCalendarAction = function() {
+	//location.href = 'calendarEdit';
+	location.href = '../admin/calendarEdit';
 };
 
 //Load Grid By Default
@@ -296,10 +297,10 @@ DoSearch = function(){
 };
 
 //Edit Calendar Action
-EditCalendarAction = function(){
+EditCalendarAction = function() {
   rowSelected = infoGrid.getSelectionModel().getSelected();
   if (rowSelected){
-	  location.href = 'calendarEdit?id=' + rowSelected.data.CALENDAR_UID;
+	  location.href = '../admin/calendarEdit?id=' + rowSelected.data.CALENDAR_UID;
   }
 };
 
