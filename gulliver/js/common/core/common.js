@@ -1960,8 +1960,7 @@ function removeValue(id){
 function datePicker4(obj, id, mask, startDate, endDate, showTIme, idIsoDate){  
   if(showTIme=='false')
   showTIme=false;
-  var cal;
-      	cal = Calendar.setup({
+  Calendar.setup({
         inputField: id,
         dateFormat: mask,
         trigger: id+"[btn]",
@@ -1973,14 +1972,13 @@ function datePicker4(obj, id, mask, startDate, endDate, showTIme, idIsoDate){
         opacity: 1,
         onSelect: function() {
             this.hide();
-            setisoDate(id, this, idIsoDate);
+            auxid     = id;
+            idIsoDate = auxid.substring(0,auxid.length-1)+'_isodate]';
+            var field= document.getElementById(idIsoDate);
+            field.value=this.selection.print("%Y-%m-%d", "");            
             fireEvent(document.getElementById(id), 'change');
         }
   });
-}
-function setisoDate(id, cals, idIsoDate){
- var field= document.getElementById(idIsoDate);
- field.value=cals.selection.print("%Y-%m-%d", "");
 }
 
 function fireEvent(element,event){
