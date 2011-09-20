@@ -769,7 +769,7 @@ function getEmailConfiguration () {
  * @param string(32) | $sSubject | Subject of the email | The subject (title) of the email.
  * @param string(32) | $sTemplate | Name of the template | The name of the template file in plain text or HTML format which will produce the body of the email.
  * @param array | $aFields | An optional associative array | Optional parameter. An associative array where the keys are the variable names and the values are the variables' values.
- * @param array | $aAttachment | An optional array | Optional parameter. An array of files (full paths) to be attached to the email.
+ * @param array | $aAttachment | Attachment | An  Optional arrray. An array of files (full paths) to be attached to the email.
  * @return int | $result | result | Result of sending email
  *
  */
