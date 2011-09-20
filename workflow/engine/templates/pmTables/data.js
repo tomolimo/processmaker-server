@@ -82,17 +82,51 @@ Ext.onReady(function(){
   _fields.push({name: _idProperty});
   
   for (i=0;i<tableDef.FIELDS.length; i++) {
+    switch (tableDef.FIELDS[i].FLD_TYPE) {
+      case 'DATE':
+        columnRenderer = function (value) { 
+          if (!value.dateFormat)
+            return value;
+          else
+            return value.dateFormat('Y-m-d');
+        }
+        columnAlign = 'left';  
+        columnEditor = {
+          xtype      : 'datefield',
+          format     : 'Y-m-d',
+          allowBlank : true
+        }; 
+        break;
+
+      case 'INTEGER': case 'INT': case 'FLOAT': case 'DOUBLE' :
+        columnRenderer = {};
+        columnAlign = 'right';
+        columnEditor = {
+          xtype      : 'numberfield',
+          format     : 'Y-m-d',
+          allowBlank : true
+        }; 
+        break;
+      
+      default:
+        columnRenderer = {};
+        columnAlign = 'left';
+        columnEditor = {
+          xtype      : 'textfield',
+          allowBlank : true
+        };
+    }
+
     column = {
       id        : tableDef.FIELDS[i].FLD_NAME,
       header    : tableDef.FIELDS[i].FLD_DESCRIPTION,
       dataIndex : tableDef.FIELDS[i].FLD_NAME,
-      width     : 40
+      width     : 40,
+      align     : columnAlign,
+      renderer  : columnRenderer
     };
     if (tableDef.FIELDS[i].FLD_AUTO_INCREMENT != 1) {
-      column.editor = {
-        xtype      : 'textfield',
-        allowBlank : true
-      }
+      column.editor = columnEditor
     }
     else {
       column.editor = {
@@ -156,15 +190,14 @@ Ext.onReady(function(){
 
   // all exception events
   Ext.data.DataProxy.addListener('exception', function(proxy, type, action, options, res) {
-    try{
-      response = Ext.util.JSON.decode(res.responseText);
-      
-      if(response.message != 'nothing to do') {
-        PMExt.notify(_('ID_ERROR'), response.msg);
+    if (res.raw.success) {
+      if(res.raw.message != 'nothing to do') {
+        PMExt.notify(_('ID_INFO'), response.raw.message);
       }
-    } 
-    catch(e) {
-      PMExt.notify(_('ID_ERROR'), res.responseText);
+    }
+    else {
+      PMExt.error(_('ID_ERROR'), res.raw.message);
+      infoGrid.store.reload();
     }
   });
 

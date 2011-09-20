@@ -409,7 +409,6 @@ class pmTablesProxy extends HttpProxyController
 
     if (count($row) > 0) {
       eval('$con = Propel::getConnection('.$this->classPeerName.'::DATABASE_NAME);');
-      $con->begin();
       $obj->fromArray($row, BasePeer::TYPE_FIELDNAME);
 
       if ($obj->validate()) {
@@ -423,6 +422,7 @@ class pmTablesProxy extends HttpProxyController
         }
       }
       else {
+        $msg = '';
         foreach($obj->getValidationFailures() as $objValidationFailure) {
            $msg .= $objValidationFailure->getMessage() . "\n";
         }
@@ -460,6 +460,7 @@ class pmTablesProxy extends HttpProxyController
     require_once 'classes/model/AdditionalTables.php';
     $oAdditionalTables = new AdditionalTables();
     $table = $oAdditionalTables->load($httpData->id, true);
+    $primaryKeys = $oAdditionalTables->getPrimaryKeys('keys');
     $this->className = $table['ADD_TAB_CLASS_NAME'];
     $this->classPeerName = $this->className . 'Peer';
     $sPath = PATH_DB . SYS_SYS . PATH_SEP . 'classes' . PATH_SEP;
@@ -474,15 +475,17 @@ class pmTablesProxy extends HttpProxyController
     
     if (is_array($rows)) {
       foreach($rows as $row) {
-        $result = $this->_dataUpdate($row);
+        $row = (array) $row;
+        $result = $this->_dataUpdate($row, $primaryKeys);
       }
     }
     else { //then is object 
-      $result = $this->_dataUpdate($rows);
+      $row = (array) $rows;
+      $result = $this->_dataUpdate($row, $primaryKeys);
     }
     
     $this->success = $result;
-    $this->message = $result ? 'Updated Successfully' : 'Error Updating record';
+    $this->message = $result ? G::loadTranslation('ID_UPDATED_SUCCESSFULLY') : G::loadTranslation('ID_UPDATE_FAILED');
   }
 
   /**
@@ -505,7 +508,7 @@ class pmTablesProxy extends HttpProxyController
     require_once $sPath . $this->className . '.php';
     
     $this->success = $this->_dataDestroy($httpData->rows);
-    $this->message = $this->success ? 'Deleted Successfully' : 'Error Deleting record';
+    $this->message = $this->success ? G::loadTranslation('ID_DELETED_SUCCESSFULLY') : G::loadTranslation('ID_DELETE_FAILED');
   }
 
   /**
@@ -564,7 +567,7 @@ class pmTablesProxy extends HttpProxyController
         $this->message = $sErrorMessages;        
       } else {
         $this->success = true;
-        $this->message = 'File Imported "'.$filename.'" Successfully';
+        $this->message = G::loadTranslation('ID_FILE_IMPORTED_SUCCESSFULLY', array($filename));
       }
     }
     else {
@@ -1035,11 +1038,11 @@ class pmTablesProxy extends HttpProxyController
    * Update data from a addTable record
    * @param $row
    */
-  function _dataUpdate($row)
+  function _dataUpdate($row, $primaryKeys)
   {
-    $keys = G::decrypt($row->__index__, 'pmtable');
+    $keys = G::decrypt($row['__index__'], 'pmtable');
     $keys = explode('-', $keys);
-    unset($row->__index__);
+    unset($row['__index__']);
     
     $params = array();
 
@@ -1052,16 +1055,31 @@ class pmTablesProxy extends HttpProxyController
     
     if (is_object($obj)) {
       foreach ($row as $key => $value) {
+        // validation, don't modify primary keys
+        if (in_array($key, $primaryKeys)) {
+          throw new Exception(G::loadTranslation('ID_DONT_MODIFY_PK_VALUE', array($key)));
+        }
         $action = 'set' . AdditionalTables::getPHPName($key);
         $obj->$action($value);
       }
-      $obj->save();
-      return true;
-    } else {
-      return false;
-      $this->success = false;
-      $this->message = 'Update Failed';
+      if ($r = $obj->validate()) {
+        $obj->save();
+        $result = true;
+      } 
+      else {
+        $msg = '';
+        foreach($obj->getValidationFailures() as $objValidationFailure) {
+           $msg .= $objValidationFailure->getMessage() . "\n";
+        }
+        throw new Exception($msg);
+      }
+      
     }
+    else {
+      $result = false;
+    }
+
+    return $result;
   }
 
   /**
