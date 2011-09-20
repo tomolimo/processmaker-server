@@ -436,6 +436,7 @@
     </vendor>
     <column name="GRP_UID" type="VARCHAR" size="32" required="true" primaryKey="true" default=""/>
     <column name="GRP_STATUS" type="CHAR" size="8" required="true" default="ACTIVE"/>
+    <column name="GRP_LDAP_DN" type="VARCHAR" size="255" required="true" default=""/>
     <validator column="GRP_STATUS">
       <rule name="validValues" value="ACTIVE|INACTIVE" message="Please select a valid status."/>
       <rule name="required" message="Application Document UID is required."/>

@@ -210,6 +210,7 @@ CREATE TABLE `GROUPWF`
 (
 	`GRP_UID` VARCHAR(32) default '' NOT NULL,
 	`GRP_STATUS` CHAR(8) default 'ACTIVE' NOT NULL,
+	`GRP_LDAP_DN` VARCHAR(255) default '' NOT NULL,
 	PRIMARY KEY (`GRP_UID`)
 )ENGINE=MyISAM  DEFAULT CHARSET='utf8';
 #-----------------------------------------------------------------------------
