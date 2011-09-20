@@ -1957,25 +1957,30 @@ function removeValue(id){
   fireEvent(document.getElementById(id), 'change');
 }
 
-function datePicker4(obj, id, mask, startDate, endDate, showTIme){  
+function datePicker4(obj, id, mask, startDate, endDate, showTIme, idIsoDate){  
   if(showTIme=='false')
   showTIme=false;
-  	Calendar.setup({
-    inputField: id,
-    dateFormat: mask,
-    trigger: id+"[btn]",
-    bottomBar: true,
-    min:startDate,
-    max:endDate,
-    animation: _BROWSER.name =='msie'? false: true,
-    showTime: showTIme,
-    opacity: 1,
-    onSelect: function() {
-        this.hide();
-        fireEvent(document.getElementById(id), 'change');
-    }
-
+  var cal;
+      	cal = Calendar.setup({
+        inputField: id,
+        dateFormat: mask,
+        trigger: id+"[btn]",
+        bottomBar: true,
+        min:startDate,
+        max:endDate,
+        animation: _BROWSER.name =='msie'? false: true,
+        showTime: showTIme,
+        opacity: 1,
+        onSelect: function() {
+            this.hide();
+            setisoDate(id, this, idIsoDate);
+            fireEvent(document.getElementById(id), 'change');
+        }
   });
+}
+function setisoDate(id, cals, idIsoDate){
+ var field= document.getElementById(idIsoDate);
+ field.value=cals.selection.print("%Y-%m-%d", "");
 }
 
 function fireEvent(element,event){

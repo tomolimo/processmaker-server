@@ -3384,13 +3384,15 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
       $value = G::replaceDataField ( $value, $owner->values );
     }
     //$this->defaultValue = G::replaceDataField( $this->defaultValue, $owner->values);
-    $id = "form[$this->name]";
+    $id        = "form[$this->name]";
+    $idIsoDate = 'form['.$this->name.'_isodate]';
+    
     if ($this->renderMode != 'edit' && $value == 'today' ){
       $mask = str_replace("%", "", $this->mask);
       $value = date($mask);
       return $value;
     }
-    return $this->__draw_widget ( $id, $value, $owner );
+    return $this->__draw_widget ( $id, $value, $owner, $idIsoDate );
   }
 
   /**
@@ -3423,8 +3425,9 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
           }
           $html = '<input '.$this->NSRequiredValue().' class="module_app_input___gray" id="form[' . $owner->name . '][' . $r . '][' . $this->name . ']" name="form[' . $owner->name . '][' . $r . '][' . $this->name . ']" type ="text" size="' . $this->size . '" maxlength="' . $this->maxLength . '" value="' . $this->htmlentities ( $v, ENT_COMPAT, 'utf-8' ) . '" required="' . $isRequired . '" style="display:none;' . htmlentities ( $this->style, ENT_COMPAT, 'utf-8' ) . '"/>' . htmlentities ( $v, ENT_COMPAT, 'utf-8' );
         } else {
-          $id   = 'form[' . $owner->name . '][' . $r . '][' . $this->name . ']';
-          $html = $this->__draw_widget ( $id, $v, $owner );
+          $id        = 'form[' . $owner->name . '][' . $r . '][' . $this->name . ']';
+          $idIsoDate = 'form[' . $owner->name . '][' . $r . '][' . $this->name .'_isodate]';
+          $html      = $this->__draw_widget ( $id, $v, $owner, $idIsoDate );
         }
       } else {
         $html = $v;
@@ -3442,8 +3445,7 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
    * @param  $owner
    * @return <String>
    */
-  function __draw_widget($pID, $value, $owner = '')
-  {
+  function __draw_widget($pID, $value, $owner = '', $idIsoDate){
     $startDate  = G::replaceDataField ( $this->startDate, $owner->values );
     $endDate    = G::replaceDataField ( $this->endDate, $owner->values );
     $beforeDate = G::replaceDataField ( $this->beforeDate, $owner->values );
@@ -3565,7 +3567,7 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
               . '<a id="'.$pID.'[btn]" style="position:relative;left:-22px;top:0px;" >'
               . '  <img src="/images/pmdateicon.png" border="0" width="12" height="14" />'
               . '</a>'
-              . '<script>datePicker4("", \''.$pID.'\', \''.$mask.'\', \''.$startDate.'\', \''.$endDate.'\','.$Time.')</script>';
+              . '<script>datePicker4("", \''.$pID.'\', \''.$mask.'\', \''.$startDate.'\', \''.$endDate.'\','.$Time.', \''.$idIsoDate.'\')</script>';
       } else 
         { 
           $html = '<input pm:required="'. $isRequired .'" id="'.$pID.'" name="'.$pID.'" pm:mask="'.$mask.'" pm:start="'.$startDate.'"'
@@ -3577,15 +3579,25 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
                 . '<a id="'.$pID.'[btn]" style="position:relative;left:-22px;top:0px;" >'
                 . '  <img src="/images/pmdateicon.png" border="0" width="12" height="14" />'
                 . '</a>'
-                . '<script>datePicker4("", \''.$pID.'\', \''.$mask.'\', \''.$startDate.'\', \''.$endDate.'\','.$Time.')</script>';
+                . '<script>datePicker4("", \''.$pID.'\', \''.$mask.'\', \''.$startDate.'\', \''.$endDate.'\','.$Time.', \''.$idIsoDate.'\')</script>';
         }
-    } else 
-      {           
+    } else {           
         $html = "<span style='border:1;border-color:#000;width:100px;' name='" . $pID . "'>$value</span>"
               . '<input type="hidden" id="'.$pID.'" name="'.$pID.'" pm:mask="'.$mask.'" pm:start="'.$startDate.'"'
               . 'pm:end="'.$endDate.'"  '.$onchange.' class="module_app_input___gray" value="'.$value.'"/>';
           
-      }    
+      } 
+    // added isodate format in the data field when it has a mask
+    $amask      = explode('-',str_replace('%','',$mask));
+    $axDate     = explode('-',$value);
+    $valisoDate = '';
+    if(sizeof($amask)==sizeof($axDate)){	
+      $aisoDate = array_combine($amask, $axDate);
+      if(isset($aisoDate['Y']) && isset($aisoDate['m']) && isset($aisoDate['d']))
+        $valisoDate = $aisoDate['Y'].'-'.$aisoDate['m'].'-'.$aisoDate['d'];
+    }
+    $html .= '<input type="hidden" id="'.$idIsoDate.'" name="'.$idIsoDate.'" value="'.$valisoDate.'"/>';   
+    
     if ($this->gridFieldType == '') $html .= $this->renderHint();
     return $html;
   }
@@ -3721,8 +3733,8 @@ class XmlForm_Field_Date5 extends XmlForm_Field_SimpleText
       $value = G::replaceDataField ( $value, $owner->values );
     }
     //$this->defaultValue = G::replaceDataField( $this->defaultValue, $owner->values);
-    $id = "form[$this->name]";
-    return $this->__draw_widget ( $id, $value, $owner );
+    $id        = "form[$this->name]";
+    return $this->__draw_widget ( $id, $value, $owner, $idIsoDate );
   }
 
   /**
@@ -3738,8 +3750,8 @@ class XmlForm_Field_Date5 extends XmlForm_Field_SimpleText
     foreach ( $values as $v ) {
       $v = ($v!='')?G::replaceDataField ( $v, $owner->values ):$this->defaultValue;
       if (! $onlyValue) {
-        $id   = 'form[' . $owner->name . '][' . $r . '][' . $this->name . ']';
-        $html = $this->__draw_widget ( $id, $v, $owner );
+        $id        = 'form[' . $owner->name . '][' . $r . '][' . $this->name . ']';
+        $html      = $this->__draw_widget ( $id, $v, $owner, $idIsoDate );
       } else {
         $html = $v;
       }
