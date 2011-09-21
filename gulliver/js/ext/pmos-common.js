@@ -330,6 +330,16 @@ function _DF(DATE_TIME, D_FORMAT){
 
 /* Override native objects Section */
 
+Ext.util.Format.capitalize = (function(){
+  var re = /(^|[^\w])([a-z])/g,
+  fn = function(m, a, b) {
+    return a + b.toUpperCase();
+  };
+  return function(v) {
+    return v.toLowerCase().replace(re, fn);
+  }
+})();
+
 /**
  * left and right delete the blank characteres (String prototype)
  */
