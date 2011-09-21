@@ -13,7 +13,7 @@ function openCaseNotesWindow(appUid,modalSw){
   var loadSize=10;
 
   var storeNotes = new Ext.data.JsonStore({
-    url : '../caseProxy/getNotesList?appUid='+appUid,
+    url : '../appProxy/getNotesList?appUid='+appUid,
     root: 'notes',
     totalProperty: 'totalCount',
     fields: ['USR_USERNAME','USR_FIRSTNAME','USR_LASTNAME','USR_FULL_NAME','NOTE_DATE','NOTE_CONTENT'],
@@ -219,7 +219,7 @@ caseNotesWindow = new Ext.Window({
       Ext.getCmp('caseNoteText').reset();
       statusBarMessage( _('ID_CASES_NOTE_POSTING'), true);
       Ext.Ajax.request({
-        url : '../caseProxy/postNote' ,
+        url : '../appProxy/postNote' ,
         params : {
           appUid:appUid,
           noteText:noteText
