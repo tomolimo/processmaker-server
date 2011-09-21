@@ -5,7 +5,7 @@
  *
  * ProcessMaker Open Source Edition
  * Copyright (C) 2004 - 2011 Colosa Inc.
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
  * published by the Free Software Foundation, either version 3 of the
@@ -15,13 +15,13 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Affero General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * 
- * For more information, contact Colosa Inc, 2566 Le Jeune Rd., 
+ *
+ * For more information, contact Colosa Inc, 2566 Le Jeune Rd.,
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
- * 
+ *
  */
 
 require_once 'classes/model/om/BaseGroupwf.php';
@@ -30,7 +30,7 @@ require_once 'classes/model/Content.php';
 /**
  * Skeleton subclass for representing a row from the 'GROUPWF' table.
  *
- * 
+ *
  *
  * You should add additional methods to this class to meet the
  * application requirements.  This class will only be generated as
@@ -61,7 +61,7 @@ class Groupwf extends BaseGroupwf {
 
   /**
    * Set the [grp_title] column value.
-   * 
+   *
    * @param      string $v new value
    * @return     void
    */
@@ -73,7 +73,7 @@ class Groupwf extends BaseGroupwf {
     // Since the native PHP type for this column is string,
     // we will cast the input to a string (if it is not).
     if ($v !== null && !is_string($v)) {
-      $v = (string) $v; 
+      $v = (string) $v;
     }
 
     if ($this->grp_title !== $v || $v === '') {
@@ -86,59 +86,64 @@ class Groupwf extends BaseGroupwf {
 
   /**
    * Creates the Group
-   * 
+   *
    * @param      array $aData  $oData is not necessary
    * @return     void
    */
-  
+
   function create ($aData ) {
     //$oData is not necessary
     $con = Propel::getConnection( GroupwfPeer::DATABASE_NAME );
     try {
-      if ( isset ( $aData['GRP_UID'] ) ) 
+      if ( isset ( $aData['GRP_UID'] ) )
         $this->setGrpUid ( $aData['GRP_UID'] );
-      else 
+      else
         $this->setGrpUid ( G::generateUniqueID() );
-        
-      if ( isset ( $aData['GRP_STATUS'] ) ) 
+
+      if ( isset ( $aData['GRP_STATUS'] ) )
         $this->setGrpStatus ( $aData['GRP_STATUS'] );
-      else 
+      else
         $this->setGrpStatus       ( 'ACTIVE' );
-  
+
+      if ( isset ( $aData['GRP_LDAP_DN'] ) )
+        $this->setGrpLdapDn ( $aData['GRP_LDAP_DN'] );
+      else
+        $this->setGrpLdapDn       ( '' );
+
       if ( $this->validate() ) {
-        $con->begin(); 
+        $con->begin();
         $res = $this->save();
-       
+
         if (isset ( $aData['GRP_TITLE'] ) )
           $this->setGrpTitle (  $aData['GRP_TITLE'] );
         else
           $this->setGrpTitle (  'Default Group Title' );
-          
-        $con->commit(); 
+
+        $con->commit();
         return $this->getGrpUid();
       }
       else {
        $msg = '';
-       foreach($this->getValidationFailures() as $objValidationFailure) 
+       foreach($this->getValidationFailures() as $objValidationFailure)
          $msg .= $objValidationFailure->getMessage() . "<br/>";
-         
-       throw ( new PropelException ( 'The row cannot be created!', new PropelException ( $msg ) ) );      
+
+       throw ( new PropelException ( 'The row cannot be created!', new PropelException ( $msg ) ) );
       }
 
     }
     catch (Exception $e) {
-      $con->rollback(); 
+      $con->rollback();
       throw ($e);
     }
   }
 
   /**
    * Load the Process row specified in [grp_id] column value.
-   * 
-   * @param      string $ProUid   the uid of the Prolication 
-   * @return     array  $Fields   the fields 
+   *
+   * @param      string $ProUid   the uid of the Prolication
+   * @return     array  $Fields   the fields
    */
-  
+
   function Load ( $ProUid ) {
     $con = Propel::getConnection(GroupwfPeer::DATABASE_NAME);
     try {
@@ -164,12 +169,12 @@ class Groupwf extends BaseGroupwf {
    * @param     array $aData
    * @return    variant
   **/
-  
+
   public function update($aData)
   {
     $con = Propel::getConnection( GroupwfPeer::DATABASE_NAME );
     try {
-      $con->begin(); 
+      $con->begin();
       $oPro = GroupwfPeer::retrieveByPK( $aData['GRP_UID'] );
       if (is_object($oPro) && get_class ($oPro) == 'Groupwf' ) {
         $oPro->fromArray( $aData, BasePeer::TYPE_FIELDNAME );
@@ -177,19 +182,19 @@ class Groupwf extends BaseGroupwf {
           if ( isset ( $aData['GRP_TITLE'] ) )
             $oPro->setGrpTitle( $aData['GRP_TITLE'] );
           $res = $oPro->save();
-          $con->commit(); 
+          $con->commit();
           return $res;
         }
         else {
          $msg = '';
-         foreach($this->getValidationFailures() as $objValidationFailure) 
+         foreach($this->getValidationFailures() as $objValidationFailure)
            $msg .= $objValidationFailure->getMessage() . "<br/>";
-         
+
          throw ( new PropelException ( 'The row cannot be created!', new PropelException ( $msg ) ) );
         }
       }
       else {
-        $con->rollback(); 
+        $con->rollback();
         throw(new Exception( "The row '" . $aData['GRP_UID'] . "' in table Group doesn't exist!" ));
       }
     }
@@ -200,7 +205,7 @@ class Groupwf extends BaseGroupwf {
 
   /**
    * Remove the Prolication document registry
-   * @param     array $aData or string $ProUid 
+   * @param     array $aData or string $ProUid
    * @return    string
   **/
   public function remove($ProUid)
@@ -224,7 +229,7 @@ class Groupwf extends BaseGroupwf {
       throw($oError);
     }
   }
-  
+
   /**
    * verify if row specified in [GrpUid] exists.
    *
@@ -246,19 +251,19 @@ class Groupwf extends BaseGroupwf {
       throw($oError);
     }
   }
-  
-  function loadByGroupname ( $Groupname ) {       
-    $c = new Criteria('workflow');    
+
+  function loadByGroupname ( $Groupname ) {
+    $c = new Criteria('workflow');
     $del = DBAdapter::getStringDelimiter();
 
     $c->clearSelectColumns();
     $c->addSelectColumn( ContentPeer::CON_CATEGORY );
     $c->addSelectColumn( ContentPeer::CON_VALUE );
-                    
+
     $c->add(ContentPeer::CON_CATEGORY,  'GRP_TITLE');
     $c->add(ContentPeer::CON_VALUE,  $Groupname);
-    $c->add(ContentPeer::CON_LANG,  SYS_LANG );          
-    return $c;   
+    $c->add(ContentPeer::CON_LANG,  SYS_LANG );
+    return $c;
   }
 
   function getAll($start=null, $limit=null, $search=null)
@@ -267,6 +272,7 @@ class Groupwf extends BaseGroupwf {
     $criteria = new Criteria('workflow');
     $criteria->addSelectColumn(GroupwfPeer::GRP_UID);
     $criteria->addSelectColumn(GroupwfPeer::GRP_STATUS);
+    $criteria->addSelectColumn(GroupwfPeer::GRP_LDAP_DN);
     $criteria->addSelectColumn(ContentPeer::CON_VALUE);
     $criteria->addJoin(GroupwfPeer::GRP_UID, ContentPeer::CON_ID, Criteria::LEFT_JOIN);
     $criteria->add(GroupwfPeer::GRP_STATUS, 'ACTIVE');
@@ -305,5 +311,5 @@ class Groupwf extends BaseGroupwf {
 
     return $result;
   }
-  
+
 } // Groupwf
