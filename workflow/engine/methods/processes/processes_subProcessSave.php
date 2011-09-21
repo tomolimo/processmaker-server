@@ -78,7 +78,7 @@ if ( !isset ( $_POST['form']['SP_SYNCHRONOUS']) ) {
 require_once 'classes/model/SubProcess.php';
 $oOP = new SubProcess();
 $aData = array('SP_UID'          		 => $_POST['form']['SP_UID'],//G::generateUniqueID(),
-               'PRO_UID'         		 => '',//$aTask['PRO_UID'],
+               'PRO_UID'         		 => isset($aTask['PRO_UID'])?$aTask['PRO_UID']:'',
                'TAS_UID'         		 => $_POST['form']['TASKS'],
                'PRO_PARENT'      		 => $_POST['form']['PRO_PARENT'],
                'TAS_PARENT'					 => $_POST['form']['TAS_PARENT'],
