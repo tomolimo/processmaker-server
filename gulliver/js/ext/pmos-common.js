@@ -83,6 +83,55 @@ PMExtJSCommon = function() {
       
     return {name:name, version:version, screen: screen}
   }
+
+  this.createInfoPanel = function(url, params, columnsSize)
+  {
+    var labelColumnWidth = 170;
+    var valueColumnWidth = 350;
+
+    if(typeof columnsSize != 'undefined') {
+      labelColumnWidth = columnsSize[0] || labelColumnWidth;
+      valueColumnWidth = columnsSize[1] || valueColumnWidth;
+    }
+
+
+    return new Ext.grid.GridPanel({
+      store : new Ext.data.GroupingStore({
+        autoLoad: true,
+        proxy : new Ext.data.HttpProxy({
+          url: url,
+          method : 'POST'
+        }),
+        baseParams: params,
+        reader : new Ext.data.JsonReader( {
+          fields : [{name : 'label'}, {name : 'value'}, {name : 'section'}]
+        }),
+        groupField: 'section'
+      }),
+      columns : [{
+        width : labelColumnWidth,
+        dataIndex : 'label',
+        renderer: function(v){return '<b><font color="#465070">'+v+'</font></b>'},
+        align: 'right'
+      }, 
+      {
+        width : valueColumnWidth,
+        dataIndex : 'value'
+      },{
+        hidden: true,
+        dataIndex : 'section'
+      }],
+      autoHeight : true,
+      columnLines: true,    
+      trackMouseOver:false,
+      disableSelection:true,
+      view: new Ext.grid.GroupingView({
+        forceFit:true,
+        headersDisabled : true,
+        groupTextTpl: '{group}'
+      })
+    });
+  } 
 } 
 var PMExt = new PMExtJSCommon();
 
