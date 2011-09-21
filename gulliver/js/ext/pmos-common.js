@@ -88,12 +88,12 @@ PMExtJSCommon = function() {
   {
     var labelColumnWidth = 170;
     var valueColumnWidth = 350;
-
+    params = params || {};
+    
     if(typeof columnsSize != 'undefined') {
       labelColumnWidth = columnsSize[0] || labelColumnWidth;
       valueColumnWidth = columnsSize[1] || valueColumnWidth;
     }
-
 
     return new Ext.grid.GridPanel({
       store : new Ext.data.GroupingStore({
@@ -103,7 +103,7 @@ PMExtJSCommon = function() {
           method : 'POST'
         }),
         baseParams: params,
-        reader : new Ext.data.JsonReader( {
+        reader : new Ext.data.JsonReader({
           fields : [{name : 'label'}, {name : 'value'}, {name : 'section'}]
         }),
         groupField: 'section'
@@ -129,7 +129,8 @@ PMExtJSCommon = function() {
         forceFit:true,
         headersDisabled : true,
         groupTextTpl: '{group}'
-      })
+      }),
+      loadMask: true
     });
   } 
 } 
