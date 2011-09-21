@@ -39,7 +39,7 @@
 
   $oHeadPublisher =& headPublisher::getSingleton();
   $oHeadPublisher->usingExtJs('ux/miframe');
-  $oHeadPublisher->addExtJsScript('cases/caseUtils', true);
+  $oHeadPublisher->addExtJsScript('app/main', true);
   $oHeadPublisher->addExtJsScript('cases/open', true);
   $oHeadPublisher->assign('FORMATS',$conf->getFormats());
   $uri = '';
