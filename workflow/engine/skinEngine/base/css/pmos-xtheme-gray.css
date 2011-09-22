@@ -945,3 +945,49 @@ antes funcionaba.
 .x-toolbar1 .x-btn-bl { background-position: 0 -3px; }
 .x-toolbar1 .x-btn-br { background-position: -3px -3px; }
 .x-toolbar1 .x-btn-bc { background-position: 0 -15px; }
+
+
+
+
+/* Case Notes styles */
+
+.x-cnotes-source {
+  border: 1px solid #EDEDED;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+.x-cnotes-view td {
+    font-family: verdana,arial,sans-serif;
+    font-size: 12px;
+}
+
+td.x-cnotes-label {
+    /*background-color: #ddd;*/
+    border: 1px solid #EDEDED;
+    font-weight: bold;
+    text-align: right;
+    width: 40px;
+    padding: 0px 3px 0px 0px;
+}
+
+.x-cnotes-over {
+    background-color:#EBEBEB;
+    cursor: pointer;
+}
+.x-cnotes-selected {
+    background-color: #DFE8F6;
+    cursor: pointer;
+}
+
+.user-from {
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.x-message {
+  /*       top rig top  left */
+  padding: 5px 5px 5px 10px;
+  font: 11px arial,tahoma,helvetica,sans-serif;
+  color: #465070;
+}
