@@ -527,39 +527,41 @@ class pmTablesProxy extends HttpProxyController
         $i = 1;
         $swHead = false;
         while (($aAux = fgetcsv($oFile, 4096, $_POST['form']['CSV_DELIMITER'])) !== false) {
-          if(count($aAdditionalTables['FIELDS']) != count($aAux)){
-            $this->success = false;
-            $this->message = G::LoadTranslation('INVALID_FILE');
-            return 0;
-          }
-          if($i == 1) {
-            $j = 0;
-            foreach ($aAdditionalTables['FIELDS'] as $aField) {
-              if($aField['FLD_NAME'] === $aAux[$j]) $swHead = true;
-              $j++;
+          if(!is_null($aAux[0])) {
+            if(count($aAdditionalTables['FIELDS']) > count($aAux)){
+              $this->success = false;
+              $this->message = G::LoadTranslation('INVALID_FILE');
+              return 0;
             }
-          }
-
-          if ($swHead == false) {
-            $aData = array();
-            $j     = 0;
-            foreach ($aAdditionalTables['FIELDS'] as $aField) {
-              $aData[$aField['FLD_NAME']] = (isset($aAux[$j]) ? $aAux[$j] : '');
-              $j++;
-            }
-            try {
-              if (!$oAdditionalTables->saveDataInTable($_POST['form']['ADD_TAB_UID'], $aData)) {
-                $sErrorMessages .= G::LoadTranslation('ID_DUPLICATE_ENTRY_PRIMARY_KEY') . ', ' . G::LoadTranslation('ID_LINE') . ' ' . $i . '. ';
+            if($i == 1) {
+              $j = 0;
+              foreach ($aAdditionalTables['FIELDS'] as $aField) {
+                if($aField['FLD_NAME'] === $aAux[$j]) $swHead = true;
+                $j++;
               }
             }
-            catch (Exception $oError) {
-              $sErrorMessages .= G::LoadTranslation('ID_ERROR_INSERT_LINE') . ': ' . G::LoadTranslation('ID_LINE') . ' ' . $i . '. ';
+
+            if ($swHead == false) {
+              $aData = array();
+              $j     = 0;
+              foreach ($aAdditionalTables['FIELDS'] as $aField) {
+                $aData[$aField['FLD_NAME']] = (isset($aAux[$j]) ? $aAux[$j] : '');
+                $j++;
+              }
+              try {
+                if (!$oAdditionalTables->saveDataInTable($_POST['form']['ADD_TAB_UID'], $aData)) {
+                  $sErrorMessages .= G::LoadTranslation('ID_DUPLICATE_ENTRY_PRIMARY_KEY') . ', ' . G::LoadTranslation('ID_LINE') . ' ' . $i . '. ';
+                }
+              }
+              catch (Exception $oError) {
+                $sErrorMessages .= G::LoadTranslation('ID_ERROR_INSERT_LINE') . ': ' . G::LoadTranslation('ID_LINE') . ' ' . $i . '. ';
+              }
+            } else  {
+              $swHead = false;
             }
-          } else  {
-            $swHead = false;
-          } 
-          $i++;
-        } 
+            $i++;
+          }
+        }
         fclose($oFile);
       }
       if ($sErrorMessages != '') {
