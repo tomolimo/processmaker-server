@@ -34,18 +34,23 @@ $G_SUB_MENU             = 'users';
 $G_ID_MENU_SELECTED     = 'USERS';
 $G_ID_SUB_MENU_SELECTED = 'AUTH_SOURCES';
 
-$aFields = array('AUTH_SOURCE_PROVIDER' => $_POST['form']['AUTH_SOURCE_PROVIDER']);
+$fields = array('AUTH_SOURCE_PROVIDER' => $_POST['form']['AUTH_SOURCE_PROVIDER']);
 
 $G_PUBLISH = new Publisher();
 if ($_POST['form']['AUTH_SOURCE_PROVIDER'] == 'ldap') {
-  $G_PUBLISH->AddContent('xmlform', 'xmlform', 'authSources/ldapEdit', '', $aFields, '../authSources/authSources_Save');
+  $G_PUBLISH->AddContent('xmlform', 'xmlform', 'authSources/ldapEdit', '', $fields, '../authSources/authSources_Save');
 }
 else {
-  if (file_exists(PATH_XMLFORM . 'authSources/' . $_POST['form']['AUTH_SOURCE_PROVIDER'] . 'Edit.xml')) {
-    $G_PUBLISH->AddContent('xmlform', 'xmlform', 'authSources/' . $_POST['form']['AUTH_SOURCE_PROVIDER'] . 'Edit', '', $aFields, '../authSources/authSources_Save');
+  if (file_exists(PATH_PLUGINS . $fields['AUTH_SOURCE_PROVIDER'] . PATH_SEP . $fields['AUTH_SOURCE_PROVIDER'] . 'Edit.xml')) {
+    $G_PUBLISH->AddContent('xmlform', 'xmlform', $fields['AUTH_SOURCE_PROVIDER'] . PATH_SEP . $fields['AUTH_SOURCE_PROVIDER'] . 'Edit.xml', '', $fields, '../authSources/authSources_Save');
   }
   else {
-    $G_PUBLISH->AddContent('xmlform', 'xmlform', 'login/showMessage', '', array('MESSAGE' => 'File: ' . $_POST['form']['AUTH_SOURCE_PROVIDER'] . 'Edit.xml' . ' doesn\'t exist.'));
+    if (file_exists(PATH_XMLFORM . 'authSources/' . $fields['AUTH_SOURCE_PROVIDER'] . 'Edit.xml')) {
+      $G_PUBLISH->AddContent('xmlform', 'xmlform', 'authSources/' . $fields['AUTH_SOURCE_PROVIDER'] . 'Edit', '', $fields, '../authSources/authSources_Save');
+    }
+    else {
+      $G_PUBLISH->AddContent('xmlform', 'xmlform', 'login/showMessage', '', array('MESSAGE' => 'File: ' . $fields['AUTH_SOURCE_PROVIDER'] . 'Edit.xml' . ' not exists.'));
+    }
   }
 }
 G::RenderPage('publish','blank');
