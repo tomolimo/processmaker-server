@@ -16,36 +16,28 @@
   </PME_VALIDATE_NAME>
   <PME_LABEL type="text" maxlength="255" size="42">
     <en><![CDATA[Label]]></en>
-    <es><![CDATA[Etiqueta]]></es>
   </PME_LABEL>
   <PME_SUBTITLE3 type="title" enableHTML="1">
     <en><![CDATA[Behaviour]]></en>
-    <es><![CDATA[Comportamiento]]></es>
   </PME_SUBTITLE3>
   <PME_LINK type="text" maxlength="255" size="42" defaultvalue="">
     <en><![CDATA[Link]]></en>
-    <es><![CDATA[Enlace]]></es>
   </PME_LINK>
   <PME_TARGET_SEL type="dropdown" defaultValue="_blank">
-    <en><![CDATA[\n]]><option name="_blank"><![CDATA[Blank]]></option><option name="_self"><![CDATA[Self]]></option><option name="_parent"><![CDATA[Parent]]></option><option name="_top"><![CDATA[Top]]></option><option name=""><![CDATA[Framename]]></option></en>
-    <es><![CDATA[Objeto]]><option name="_blank"><![CDATA[Blanco]]></option><option name="_self"><![CDATA[A si mismo]]></option><option name="_parent"><![CDATA[Padres]]></option><option name="_top"><![CDATA[Arriba]]></option><option name=""><![CDATA[Framename]]></option></es>
+    <en><![CDATA[Target]]><option name="_blank"><![CDATA[Blank]]></option><option name="_self"><![CDATA[Self]]></option><option name="_parent"><![CDATA[Parent]]></option><option name="_top"><![CDATA[Top]]></option><option name=""><![CDATA[Framename]]></option></en>
   </PME_TARGET_SEL>
   <PME_TARGET type="text" size="22"/>
   <PME_VALUE type="text" maxlength="50" size="42" defaultvalue="">
-    <en><![CDATA[Value]]></en>
-    <es><![CDATA[Valor]]></es>
+    <en><![CDATA[Label]]></en>
   </PME_VALUE>
   <PME_HINT type="textarea" cols="40" rows="3">
     <en><![CDATA[Hint]]></en>
-    <es><![CDATA[Sugerencia]]></es>
   </PME_HINT>
   <BTN_CANCEL type="button" onclick="cancel();">
     <en><![CDATA[Cancel]]></en>
-    <es><![CDATA[Cancelar]]></es>
   </BTN_CANCEL>
   <PME_ACCEPT type="button" onclick="erase(); fieldsSave( this.form );">
     <en><![CDATA[Save]]></en>
-    <es><![CDATA[Guardar]]></es>
   </PME_ACCEPT>
   <PME_JS type="javascript"><![CDATA[
  function erase (){
