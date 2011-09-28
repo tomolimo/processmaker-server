@@ -3257,7 +3257,38 @@ INSERT INTO TRANSLATION (TRN_CATEGORY,TRN_ID,TRN_LANG,TRN_VALUE,TRN_UPDATE_DATE 
 ( 'LABEL','ID_NOT_PM_FILE','en','This is not a .pm file','2011-09-08') ,
 ( 'LABEL','ID_PMTABLES_RESERVED_FIELDNAME_WARNING','en','The word {0} is reserved by the database engine please set another one.','2011-09-14') ,
 ( 'LABEL','ID_TABLE_NAME_IS_REQUIRED','en','Table Name is required.','2011-09-14') ,
-( 'LABEL','ID_TABLE_NAME_TOO_SHORT','en','The table name is too short, it should have at least 4 characters.','2011-09-14') ;
+( 'LABEL','ID_TABLE_NAME_TOO_SHORT','en','The table name is too short, it should have at least 4 characters.','2011-09-14') ,
+( 'LABEL','ID_PMTABLE_CLASS_DOESNT_EXIST','en','ERROR: The class fie "{0}" doesn''t exist!','2011-09-15') ;
+INSERT INTO TRANSLATION (TRN_CATEGORY,TRN_ID,TRN_LANG,TRN_VALUE,TRN_UPDATE_DATE )  VALUES 
+
+( 'LABEL','ID_PMTABLE_ALREADY_EXISTS','en','The table "{0}" already exits!','2011-09-15') ,
+( 'LABEL','ID_PMTABLE_INVALID_NAME','en','Could not create the table with the name "{0}" because it is a reserved word.','2011-09-15') ,
+( 'LABEL','ID_PMTABLE_UPLOADING_FILE_PROBLEM','en','A problem occurred while uploading file.','2011-09-15') ,
+( 'LABEL','ID_PMTABLE_INVALID_FILE','en','Invalid File, import abort!','2011-09-15') ,
+( 'LABEL','ID_PMTABLE_IMPORT_SUCCESS','en','File "{0}" imported successfully.','2011-09-15') ,
+( 'LABEL','ID_PMTABLE_IMPORT_WITH_ERRORS','en','File "{0}" imported but with errors.','2011-09-15') ,
+( 'LABEL','DBS_NAME','en','Connection Name','2011-09-19') ,
+( 'LABEL','ID_UPDATED_SUCCESSFULLY','en','Updated Successfully','2011-09-20') ,
+( 'LABEL','ID_UPDATE_FAILED','en','Updated Failed','2011-09-20') ,
+( 'LABEL','ID_DONT_MODIFY_PK_VALUE','en','You can not modify the primary key value  for "{0}" field.','2011-09-20') ,
+( 'LABEL','ID_DELETED_SUCCESSFULLY','en','Deleted Successfully','2011-09-20') ,
+( 'LABEL','ID_FILE_IMPORTED_SUCCESSFULLY','en','File "{0}" imported successfully.','2011-09-20') ,
+( 'LABEL','ID_CALENDAR_DEFINITION','en','Calendar Definition','2011-09-20') ,
+( 'LABEL','ID_WORK_DAYS','en','Work days','2011-09-20') ,
+( 'LABEL','ID_WORK_HOURS','en','Work hours','2011-09-20') ,
+( 'LABEL','ID_DAY','en','Day','2011-09-20') ,
+( 'LABEL','ID_START_HH_MM','en','Start(hh:mm)','2011-09-20') ,
+( 'LABEL','ID_END_HH_MM','en','End(hh:mm)','2011-09-20') ,
+( 'LABEL','ID_HOLIDAYS','en','Holidays','2011-09-20') ,
+( 'LABEL','ID_START_DATE_MDY','en','* Start Date ("m/d/Y")','2011-09-20') ,
+( 'LABEL','ID_END_DATE_MDY','en','End Date ("m/d/Y")','2011-09-20') ,
+( 'LABEL','ID_TIME_STARTING_EXCEED_END','en','The starting time must not exceed the end time','2011-09-20') ,
+( 'LABEL','ID_TIME_EXIST_IN_LIST','en','The day and time exist in the list','2011-09-20') ,
+( 'LABEL','ID_CALENDAR_CREATED_SUCCESSFULLY','en','Your calendar has been created successfully','2011-09-20') ,
+( 'LABEL','ID_CALENDAR_UPDATED_SUCCESSFULLY','en','Your calendar has been updated successfully','2011-09-20') ,
+( 'LABEL','ID_POSTED_AT','en','Posted at','2011-09-22') ,
+( 'LABEL','ID_NEW_NOTE','en','New Note','2011-09-22') ,
+( 'LABEL','ID_CANCEL_NEW_NOTE','en','Cancel New Note','2011-09-22') ;
 
 INSERT INTO ISO_LOCATION (IC_UID,IL_UID,IL_NAME,IL_NORMAL_NAME,IS_UID)  VALUES 
 ('AD','','',' ','') ,

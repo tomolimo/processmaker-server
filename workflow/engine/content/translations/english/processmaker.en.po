@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: ProcessMaker (Branch 2.0) 2.0.33.rc1-8-g2549d78\n"
+"Project-Id-Version: ProcessMaker (Branch 2.0) 2.0.33.rc4-3-gba32c01\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2011-09-14 11:03:26\n"
+"PO-Revision-Date: 2011-09-28 14:21:09\n"
 "Last-Translator: \n"
 "Language-Team: Colosa Developers Team <developers@colosa.com>\n"
 "MIME-Version: 1.0\n"
@@ -11046,6 +11046,180 @@ msgstr "Table Name is required."
 #: LABEL/ID_TABLE_NAME_TOO_SHORT
 msgid "The table name is too short, it should have at least 4 characters."
 msgstr "The table name is too short, it should have at least 4 characters."
+
+# TRANSLATION
+# LABEL/ID_PMTABLE_CLASS_DOESNT_EXIST
+#: LABEL/ID_PMTABLE_CLASS_DOESNT_EXIST
+msgid "ERROR: The class fie \"{0}\" doesn't exist!"
+msgstr "ERROR: The class fie \"{0}\" doesn't exist!"
+
+# TRANSLATION
+# LABEL/ID_PMTABLE_ALREADY_EXISTS
+#: LABEL/ID_PMTABLE_ALREADY_EXISTS
+msgid "The table \"{0}\" already exits!"
+msgstr "The table \"{0}\" already exits!"
+
+# TRANSLATION
+# LABEL/ID_PMTABLE_INVALID_NAME
+#: LABEL/ID_PMTABLE_INVALID_NAME
+msgid "Could not create the table with the name \"{0}\" because it is a reserved word."
+msgstr "Could not create the table with the name \"{0}\" because it is a reserved word."
+
+# TRANSLATION
+# LABEL/ID_PMTABLE_UPLOADING_FILE_PROBLEM
+#: LABEL/ID_PMTABLE_UPLOADING_FILE_PROBLEM
+msgid "A problem occurred while uploading file."
+msgstr "A problem occurred while uploading file."
+
+# TRANSLATION
+# LABEL/ID_PMTABLE_INVALID_FILE
+#: LABEL/ID_PMTABLE_INVALID_FILE
+msgid "Invalid File, import abort!"
+msgstr "Invalid File, import abort!"
+
+# TRANSLATION
+# LABEL/ID_PMTABLE_IMPORT_SUCCESS
+#: LABEL/ID_PMTABLE_IMPORT_SUCCESS
+msgid "File \"{0}\" imported successfully."
+msgstr "File \"{0}\" imported successfully."
+
+# TRANSLATION
+# LABEL/ID_PMTABLE_IMPORT_WITH_ERRORS
+#: LABEL/ID_PMTABLE_IMPORT_WITH_ERRORS
+msgid "File \"{0}\" imported but with errors."
+msgstr "File \"{0}\" imported but with errors."
+
+# TRANSLATION
+# LABEL/DBS_NAME
+#: LABEL/DBS_NAME
+msgid "Connection Name"
+msgstr "Connection Name"
+
+# TRANSLATION
+# LABEL/ID_UPDATED_SUCCESSFULLY
+#: LABEL/ID_UPDATED_SUCCESSFULLY
+msgid "Updated Successfully"
+msgstr "Updated Successfully"
+
+# TRANSLATION
+# LABEL/ID_UPDATE_FAILED
+#: LABEL/ID_UPDATE_FAILED
+msgid "Updated Failed"
+msgstr "Updated Failed"
+
+# TRANSLATION
+# LABEL/ID_DONT_MODIFY_PK_VALUE
+#: LABEL/ID_DONT_MODIFY_PK_VALUE
+msgid "You can not modify the primary key value  for \"{0}\" field."
+msgstr "You can not modify the primary key value  for \"{0}\" field."
+
+# TRANSLATION
+# LABEL/ID_DELETED_SUCCESSFULLY
+#: LABEL/ID_DELETED_SUCCESSFULLY
+msgid "Deleted Successfully"
+msgstr "Deleted Successfully"
+
+# TRANSLATION
+# LABEL/ID_FILE_IMPORTED_SUCCESSFULLY
+#: LABEL/ID_FILE_IMPORTED_SUCCESSFULLY
+msgid "[LABEL/ID_FILE_IMPORTED_SUCCESSFULLY] File \"{0}\" imported successfully."
+msgstr "File \"{0}\" imported successfully."
+
+# TRANSLATION
+# LABEL/ID_CALENDAR_DEFINITION
+#: LABEL/ID_CALENDAR_DEFINITION
+msgid "Calendar Definition"
+msgstr "Calendar Definition"
+
+# TRANSLATION
+# LABEL/ID_WORK_DAYS
+#: LABEL/ID_WORK_DAYS
+msgid "Work days"
+msgstr "Work days"
+
+# TRANSLATION
+# LABEL/ID_WORK_HOURS
+#: LABEL/ID_WORK_HOURS
+msgid "Work hours"
+msgstr "Work hours"
+
+# TRANSLATION
+# LABEL/ID_DAY
+#: LABEL/ID_DAY
+msgid "Day"
+msgstr "Day"
+
+# TRANSLATION
+# LABEL/ID_START_HH_MM
+#: LABEL/ID_START_HH_MM
+msgid "Start(hh:mm)"
+msgstr "Start(hh:mm)"
+
+# TRANSLATION
+# LABEL/ID_END_HH_MM
+#: LABEL/ID_END_HH_MM
+msgid "End(hh:mm)"
+msgstr "End(hh:mm)"
+
+# TRANSLATION
+# LABEL/ID_HOLIDAYS
+#: LABEL/ID_HOLIDAYS
+msgid "Holidays"
+msgstr "Holidays"
+
+# TRANSLATION
+# LABEL/ID_START_DATE_MDY
+#: LABEL/ID_START_DATE_MDY
+msgid "* Start Date (\"m/d/Y\")"
+msgstr "* Start Date (\"m/d/Y\")"
+
+# TRANSLATION
+# LABEL/ID_END_DATE_MDY
+#: LABEL/ID_END_DATE_MDY
+msgid "End Date (\"m/d/Y\")"
+msgstr "End Date (\"m/d/Y\")"
+
+# TRANSLATION
+# LABEL/ID_TIME_STARTING_EXCEED_END
+#: LABEL/ID_TIME_STARTING_EXCEED_END
+msgid "The starting time must not exceed the end time"
+msgstr "The starting time must not exceed the end time"
+
+# TRANSLATION
+# LABEL/ID_TIME_EXIST_IN_LIST
+#: LABEL/ID_TIME_EXIST_IN_LIST
+msgid "The day and time exist in the list"
+msgstr "The day and time exist in the list"
+
+# TRANSLATION
+# LABEL/ID_CALENDAR_CREATED_SUCCESSFULLY
+#: LABEL/ID_CALENDAR_CREATED_SUCCESSFULLY
+msgid "Your calendar has been created successfully"
+msgstr "Your calendar has been created successfully"
+
+# TRANSLATION
+# LABEL/ID_CALENDAR_UPDATED_SUCCESSFULLY
+#: LABEL/ID_CALENDAR_UPDATED_SUCCESSFULLY
+msgid "Your calendar has been updated successfully"
+msgstr "Your calendar has been updated successfully"
+
+# TRANSLATION
+# LABEL/ID_POSTED_AT
+#: LABEL/ID_POSTED_AT
+msgid "Posted at"
+msgstr "Posted at"
+
+# TRANSLATION
+# LABEL/ID_NEW_NOTE
+#: LABEL/ID_NEW_NOTE
+msgid "New Note"
+msgstr "New Note"
+
+# TRANSLATION
+# LABEL/ID_CANCEL_NEW_NOTE
+#: LABEL/ID_CANCEL_NEW_NOTE
+msgid "Cancel New Note"
+msgstr "Cancel New Note"
 
 # additionalTables/additionalTablesData.xml?ADD_TAB_NAME
 # additionalTables/additionalTablesData.xml
@@ -23834,7 +24008,7 @@ msgstr "The access for the service is currently unavailable from the processmake
 # setup/calendarEdit.xml?DEFINITION_TITLE
 # setup/calendarEdit.xml
 #: title - DEFINITION_TITLE
-msgid "Calendar Definition"
+msgid "[setup/calendarEdit.xml?DEFINITION_TITLE] Calendar Definition"
 msgstr "Calendar Definition"
 
 # setup/calendarEdit.xml?CALENDAR_NAME
@@ -23918,7 +24092,7 @@ msgstr "Work Hours"
 # setup/calendarEdit.xml?HOLIDAY_LABEL
 # setup/calendarEdit.xml
 #: title - HOLIDAY_LABEL
-msgid "Holidays"
+msgid "[setup/calendarEdit.xml?HOLIDAY_LABEL] Holidays"
 msgstr "Holidays"
 
 # setup/calendarEdit.xml?SUBMIT
@@ -23954,7 +24128,7 @@ msgstr ""
 # setup/calendarEdit_BusinessHours.xml?CALENDAR_BUSINESS_DAY
 # setup/calendarEdit_BusinessHours.xml
 #: dropdown - CALENDAR_BUSINESS_DAY
-msgid "Day"
+msgid "[setup/calendarEdit_BusinessHours.xml?CALENDAR_BUSINESS_DAY] Day"
 msgstr "Day"
 
 # setup/calendarEdit_BusinessHours.xml?CALENDAR_BUSINESS_DAY-7
@@ -27281,35 +27455,11 @@ msgstr "Reports to"
 msgid "[tasks/tasks_AssignmentRules.xml?TAS_ASSIGN_TYPE-SELF_SERVICE]"
 msgstr "Self Service"
 
-# tasks/tasks_AssignmentRules.xml?TAS_ASSIGN_TYPE-STATIC_MI
-# tasks/tasks_AssignmentRules.xml
-#: radiogroup - TAS_ASSIGN_TYPE - STATIC_MI
-msgid "[tasks/tasks_AssignmentRules.xml?TAS_ASSIGN_TYPE-STATIC_MI]"
-msgstr "Static Partial Join for Multiple Instances"
-
-# tasks/tasks_AssignmentRules.xml?TAS_ASSIGN_TYPE-CANCEL_MI
-# tasks/tasks_AssignmentRules.xml
-#: radiogroup - TAS_ASSIGN_TYPE - CANCEL_MI
-msgid "[tasks/tasks_AssignmentRules.xml?TAS_ASSIGN_TYPE-CANCEL_MI]"
-msgstr "Cancelling Partial Join for Multiple Instances"
-
 # tasks/tasks_AssignmentRules.xml?TAS_ASSIGN_VARIABLE
 # tasks/tasks_AssignmentRules.xml
 #: textpm - TAS_ASSIGN_VARIABLE
 msgid "[tasks/tasks_AssignmentRules.xml?TAS_ASSIGN_VARIABLE] Variable for Value Based Assignment"
 msgstr "Variable for Value Based Assignment"
-
-# tasks/tasks_AssignmentRules.xml?TAS_MI_INSTANCE_VARIABLE
-# tasks/tasks_AssignmentRules.xml
-#: textpm - TAS_MI_INSTANCE_VARIABLE
-msgid "[tasks/tasks_AssignmentRules.xml?TAS_MI_INSTANCE_VARIABLE] Variable for No of Instances"
-msgstr "Variable for No of Instances"
-
-# tasks/tasks_AssignmentRules.xml?TAS_MI_COMPLETE_VARIABLE
-# tasks/tasks_AssignmentRules.xml
-#: textpm - TAS_MI_COMPLETE_VARIABLE
-msgid "[tasks/tasks_AssignmentRules.xml?TAS_MI_COMPLETE_VARIABLE] Variable for No of Instances to complete"
-msgstr "Variable for No of Instances to complete"
 
 # tasks/tasks_Definition.xml?TAS_TITLE
 # tasks/tasks_Definition.xml
@@ -31502,8 +31652,8 @@ msgstr "Link"
 # dynaforms/fields/link.xml?PME_TARGET_SEL
 # dynaforms/fields/link.xml
 #: dropdown - PME_TARGET_SEL
-msgid "n"
-msgstr "n"
+msgid "[dynaforms/fields/link.xml?PME_TARGET_SEL] Target"
+msgstr "Target"
 
 # dynaforms/fields/link.xml?PME_TARGET_SEL-_blank
 # dynaforms/fields/link.xml
@@ -31538,8 +31688,8 @@ msgstr "Framename"
 # dynaforms/fields/link.xml?PME_VALUE
 # dynaforms/fields/link.xml
 #: text - PME_VALUE
-msgid "[dynaforms/fields/link.xml?PME_VALUE] Value"
-msgstr "Value"
+msgid "[dynaforms/fields/link.xml?PME_VALUE] Label"
+msgstr "Label"
 
 # dynaforms/fields/link.xml?PME_HINT
 # dynaforms/fields/link.xml
