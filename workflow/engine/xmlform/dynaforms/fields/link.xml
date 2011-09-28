@@ -36,20 +36,11 @@
   <BTN_CANCEL type="button" onclick="cancel();">
     <en><![CDATA[Cancel]]></en>
   </BTN_CANCEL>
-  <PME_ACCEPT type="button" onclick="erase(); fieldsSave( this.form );">
+  <PME_ACCEPT type="button" onclick="fieldsSave( this.form );">
     <en><![CDATA[Save]]></en>
   </PME_ACCEPT>
   <PME_JS type="javascript"><![CDATA[
- function erase (){
-    if(getField('PME_LINK').value==' http://www.processmaker.com'){
-      getField('PME_LINK').value='';
-      getField('PME_LINK').style.color="#000000";
-    }
-  }
-  if (!(getField('PME_XMLNODE_NAME').value)) {
-    getField('PME_LINK').value=' http://www.processmaker.com';
-    getField('PME_LINK').style.color="#A4A4A4";
-  }
+ 
   var fieldForm="link";
   var fieldName=getField("PME_XMLNODE_NAME",fieldForm);
   var savedFieldName=fieldName.value;
@@ -75,36 +66,15 @@
     }
   }
 
-  leimnud.event.add(getField('PME_LINK'), 'focus', function() {
-    if(getField('PME_LINK').value==' http://www.processmaker.com'){
-    getField('PME_LINK').value='';
-    getField('PME_LINK').style.color="#000000";
-    }
-  });
+ 
   leimnud.event.add(getField('PME_LINK'), 'blur', function() {
     var valor_form = new input(getField('PME_LINK'));
-    getField('PME_LINK').value=getField('PME_LINK').value.replace(/ /g, '');
+    getField('PME_LINK').value=getField('PME_LINK').value.replace(/ /g, ''); 
     if(getField('PME_LINK').value==''){
-      getField('PME_LINK').value=' http://www.processmaker.com';
-      getField('PME_LINK').style.color="#A4A4A4";
+      valor_form.failed();
+      alert('Invalid URL');
     } else {
-        var link = getField('PME_LINK').value.split('.');
-        if (link[0]=='www') {
-        getField('PME_LINK').value = ('http://'+getField('PME_LINK').value);
-        valor_form.passed();
-        }else{
-          var link1 = getField('PME_LINK').value.split(':');
-          if (link1[0]=='javascript') {
-            valor_form.passed();
-          }
-        }
-        var link2 = getField('PME_LINK').value.split('.');
-        if ((link2[0]=='http://www')&&(link2[1]!='')&&(link2[2])) {
-          valor_form.passed();
-        } else {
-            valor_form.failed();
-            alert('Invalid URL');
-          }        
+      valor_form.passed();      
       }
   });
 function cancel(){
