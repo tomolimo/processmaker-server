@@ -837,14 +837,13 @@ class pmTablesProxy extends HttpProxyController
       // if it is a propel exception message
       if (preg_match('/(.*)\s\[(.*):\s(.*)\]\s\[(.*):\s(.*)\]/', $e->getMessage(), $match)) {
         $result->message = $match[3];
-        $result->type = ucfirst($pmTable->getDbConfig()->adapter);
+        $result->type = G::loadTranslation('ID_ERROR');
       } 
       else {
         $result->message = $e->getMessage();
         $result->type = G::loadTranslation('ID_EXCEPTION');
       }
-      
-      $result->trace = $e->getTraceAsString();
+      //$result->trace = $e->getTraceAsString();
     }
 
     return $result;
