@@ -25,7 +25,10 @@ var dynaformEditor={
 		mainPanel.elements.headerBar.appendChild(this.toolbar);
 		mainPanel.events.remove = function(){
 		}
-		this.refresh_preview();
+// note added by krlos pacha carlos[at]colosa[dot]com		
+// the following line of code has been commented because it was executing twice the JavaScript code
+// when the DynaForm was first loaded.
+//		this.refresh_preview();
     this.changeToJavascripts();
     this.changeToPreview();
 	},
