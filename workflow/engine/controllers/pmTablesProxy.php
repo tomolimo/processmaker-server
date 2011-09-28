@@ -822,7 +822,7 @@ class pmTablesProxy extends HttpProxyController
       else {
         $result->success = false;
         $result->errorType = 'warning';
-        $msg = G::loadTranslation('ID_PMTABLE_IMPORT_WITH_ERRORS', array($filename)) . "\n\n";
+        $msg = G::loadTranslation('ID_PMTABLE_IMPORT_WITH_ERRORS', array($filename)) . "\n\n" . $errors;
       }
 
       $result->message = $msg;
