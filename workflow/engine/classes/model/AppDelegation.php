@@ -53,7 +53,8 @@ class AppDelegation extends BaseAppDelegation {
    * @param $isSubprocess is a subprocess inside a process?
    * @return delegation index of the application delegation.
    */
-  function createAppDelegation ($sProUid, $sAppUid, $sTasUid, $sUsrUid, $sAppThread, $sNextTasParam=null,$iPriority = 3, $isSubprocess=false ) {
+  function createAppDelegation ($sProUid, $sAppUid, $sTasUid, $sUsrUid, $sAppThread, $iPriority = 3, $isSubprocess = false, $sPrevious = -1, $sNextTasParam = null) {
+  //function createAppDelegation ($sProUid, $sAppUid, $sTasUid, $sUsrUid, $sAppThread, $sNextTasParam=null,$iPriority = 3, $isSubprocess=false ) {
 
     if (!isset($sProUid) || strlen($sProUid) == 0 ) {
       throw ( new Exception ( 'Column "PRO_UID" cannot be null.' ) );
@@ -91,7 +92,7 @@ class AppDelegation extends BaseAppDelegation {
     $this->setProUid          ( $sProUid );
     $this->setTasUid          ( $sTasUid );
     $this->setDelIndex        ( $delIndex );
-    $this->setDelPrevious     ( 0 );
+    $this->setDelPrevious     ( $sPrevious == -1 ? 0 : $sPrevious );
     $this->setUsrUid          ( $sUsrUid );
     $this->setDelType         ( 'NORMAL' );
     $this->setDelPriority     ( ($iPriority != '' ? $iPriority : '3') );

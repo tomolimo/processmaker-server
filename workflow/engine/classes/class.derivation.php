@@ -615,12 +615,17 @@ class Derivation
                           //Incrementing the Del_thread First so that new delegation has new del_thread
                           $iNewAppThreadIndex += 1;
                           //Creating new delegation according to users in group
-                          $iMIDelIndex = $this->case->newAppDelegation( $appFields['PRO_UID'],$currentDelegation['APP_UID'],$nextDel['TAS_UID'],
-                          (isset($aValue['USR_UID']) ? $aValue['USR_UID'] : ''),
-                          $currentDelegation['DEL_INDEX'],
-                          $nextDel,
-                          $delType,
-                          $iNewAppThreadIndex);
+                          $iMIDelIndex = $this->case->newAppDelegation( 
+                            $appFields['PRO_UID'],
+                            $currentDelegation['APP_UID'],
+                            $nextDel['TAS_UID'],
+                            (isset($aValue['USR_UID']) ? $aValue['USR_UID'] : ''),
+                            $currentDelegation['DEL_INDEX'],
+                            3, //$nextDel['DEL_PRIORITY'], <- //TODO check this priority alway is 3
+                            $delType,
+                            $iNewAppThreadIndex,
+                            $nextDel
+                          );
 
                           $iNewThreadIndex = $this->case->newAppThread ( $currentDelegation['APP_UID'], $iMIDelIndex, $iAppThreadIndex );
 
@@ -634,12 +639,17 @@ class Derivation
                        //No Break, need no execute the default ones....
                   default:
                      // Create new delegation
-                      $iNewDelIndex = $this->case->newAppDelegation( $appFields['PRO_UID'],$currentDelegation['APP_UID'],$nextDel['TAS_UID'],
-                      (isset($nextDel['USR_UID']) ? $nextDel['USR_UID'] : ''),
-                      $currentDelegation['DEL_INDEX'],
-                      $nextDel,
-                      $delType,
-                      $iAppThreadIndex);
+                      $iNewDelIndex = $this->case->newAppDelegation( 
+                        $appFields['PRO_UID'],
+                        $currentDelegation['APP_UID'],
+                        $nextDel['TAS_UID'],
+                        (isset($nextDel['USR_UID']) ? $nextDel['USR_UID'] : ''),
+                        $currentDelegation['DEL_INDEX'],
+                        3, //$nextDel['DEL_PRIORITY'], <- //TODO check this priority alway is 3
+                        $delType,
+                        $iAppThreadIndex,
+                        $nextDel
+                      );
                       break;
               }
             $iAppThreadIndex = $appFields['DEL_THREAD'];
