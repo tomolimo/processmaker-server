@@ -461,8 +461,8 @@ function newProcess(){
 
   var win = new Ext.Window({
     title: _('ID_CREATE_PROCESS'),
-    width: 450,
-    height: 220,
+    width: 470,
+    height: 240,
     layout:'fit',
     autoScroll:true,
     modal: true,
