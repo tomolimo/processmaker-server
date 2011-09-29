@@ -3098,8 +3098,8 @@ class XmlForm_Field_Grid extends XmlForm_Field
     }
     if($fieldsSize>100)
       $owner->width = '100%';
-    else
-      $owner->width = $fieldsSize . 'em';
+  //  else
+  //    $owner->width = $fieldsSize . 'em';
     return $this->renderGrid ( $emptyRow, $owner );
     
     
