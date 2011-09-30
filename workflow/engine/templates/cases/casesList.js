@@ -385,7 +385,11 @@ Ext.onReady ( function() {
     else
       return String.format("<span class='row_updated'>{0}</span>", value );
   }
-
+// note added by krlos pacha carlos[at]colosa[dot]com		
+// the following function is setting the correct status label in advanced search list. Related 7722 bug
+  function renderStatus(val,p,r) {
+    return   _('ID_'+val); 
+  }
   for(var i = 0, len = columns.length; i < len; i++){
     var c = columns[i];
     c.renderer = showField;
@@ -395,7 +399,8 @@ Ext.onReady ( function() {
     if( c.id == 'viewLink')                 c.renderer = viewLink;
     if( c.id == 'unpauseLink')              c.renderer = unpauseLink;
     if( c.dataIndex == 'CASE_SUMMARY')      c.renderer = renderSummary;
-    if( c.dataIndex == 'CASE_NOTES_COUNT')   c.renderer = renderNote;
+    if( c.dataIndex == 'CASE_NOTES_COUNT')  c.renderer = renderNote;
+    if( c.dataIndex == 'APP_STATUS')        c.renderer = renderStatus;
   }
 
   //adding the hidden field DEL_INIT_DATE
