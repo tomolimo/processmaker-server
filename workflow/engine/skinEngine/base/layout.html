@@ -1,10 +1,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    
+
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <link rel="shortcut icon" href="/images/favicon.ico"   type="image/x-icon"/>
     {$header}
-    
+
   </head>
   <body>
     <table width="100%" height="100%" cellpadding="0" cellspacing="0" border="0" id="pm_main_table">
@@ -17,11 +17,11 @@
                 <div align="right" class="logout">
                   <small>
           {php}if ((int)$_SESSION['USER_LOGGED'] != 0) {{/php}
-                    <label class="textBlue">{$userfullname} <a href="../users/myInfo">{$user}</a> | </label>
+                    {$msgVer}<label class="textBlue">{$userfullname} <a href="../users/myInfo">{$user}</a> | </label>
                     <a href="{$linklogout}" class="tableOption">{$logout}</a>&nbsp;&nbsp;<br/>
                     <label class="textBlack"><b>{$rolename}</b> {$workspace_label} <b><u>{$workspace}</u></b> &nbsp; &nbsp; <br/>
-          {$udate}</label>&nbsp; &nbsp;{$msgVer}
-          {php}}{/php} 
+          {$udate}</label>&nbsp; &nbsp;
+          {php}}{/php}
                   </small>
                 </div>
               </td>
@@ -42,7 +42,7 @@
                 {include file="$tpl_menu"}
               </td>
             </tr>
-            {if (count($subMenus)>0) }          
+            {if (count($subMenus)>0) }
             <tr>
               <td >
               <table width="100%" cellpadding="0" cellspacing="0" border="0">

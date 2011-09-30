@@ -159,7 +159,7 @@ global $G_ENABLE_BLANK_SKIN;
 if (isset($G_ENABLE_BLANK_SKIN) && $G_ENABLE_BLANK_SKIN) {
     $smarty->display($layoutFileBlank['basename']);
 } else {
-    
+
     $header = '';
     if (isset($oHeadPublisher)) {
         $oHeadPublisher->title = isset($_SESSION['USR_USERNAME']) ? '(' . $_SESSION['USR_USERNAME'] . ' ' . G::LoadTranslation('ID_IN') . ' ' . SYS_SYS . ')' : '';
@@ -171,13 +171,13 @@ if (isset($G_ENABLE_BLANK_SKIN) && $G_ENABLE_BLANK_SKIN) {
         if (DB_SYSTEM_INFORMATION == 1) {
             $footer = "<a href=\"#\" onclick=\"openInfoPanel();return false;\" class=\"FooterLink\">| System Information |</a><br />";
         }
-        
+
         $freeOfChargeText = "";
         if (! defined('SKIP_FREE_OF_CHARGE_TEXT'))
             $freeOfChargeText = "Supplied free of charge with no support, certification, warranty, <br>maintenance nor indemnity by Colosa and its Certified Partners.";
         $footer .= "<br />Copyright &copy; 2003-" . date('Y') . " <a href=\"http://www.colosa.com\" alt=\"Colosa, Inc.\" target=\"_blank\">Colosa, Inc.</a> All rights reserved.<br /> $freeOfChargeText " . "<br><br/><a href=\"http://www.processmaker.com\" alt=\"Powered by ProcessMaker - Open Source Workflow & Business Process Management (BPM) Management Software\" title=\"Powered by ProcessMaker\" target=\"_blank\"><img src=\"/images/PowerdbyProcessMaker.png\" border=\"0\" /></a>";
     }
-    
+
     //menu
     global $G_MAIN_MENU;
     global $G_SUB_MENU;
@@ -185,15 +185,15 @@ if (isset($G_ENABLE_BLANK_SKIN) && $G_ENABLE_BLANK_SKIN) {
     global $G_SUB_MENU_SELECTED;
     global $G_ID_MENU_SELECTED;
     global $G_ID_SUB_MENU_SELECTED;
-    
+
     $oMenu = new Menu();
     $menus = $oMenu->generateArrayForTemplate($G_MAIN_MENU, 'SelectedMenu', 'mainMenu', $G_MENU_SELECTED, $G_ID_MENU_SELECTED);
     $smarty->assign('menus', $menus);
-    
+
     $oSubMenu = new Menu();
     $subMenus = $oSubMenu->generateArrayForTemplate($G_SUB_MENU, 'selectedSubMenu', 'subMenu', $G_SUB_MENU_SELECTED, $G_ID_SUB_MENU_SELECTED);
     $smarty->assign('subMenus', $subMenus);
-    
+
     if (! defined('NO_DISPLAY_USERNAME')) {
         define('NO_DISPLAY_USERNAME', 0);
     }
@@ -207,7 +207,7 @@ if (isset($G_ENABLE_BLANK_SKIN) && $G_ENABLE_BLANK_SKIN) {
         $uws = (isset($_SESSION['USR_ROLENAME']) && $_SESSION['USR_ROLENAME'] != '')? strtolower(G::LoadTranslation('ID_WORKSPACE_USING')): G::LoadTranslation('ID_WORKSPACE_USING');
         $smarty->assign('workspace_label', $uws);
         $smarty->assign('udate', G::getformatedDate(date('Y-m-d'), 'M d, yyyy', SYS_LANG));
-        
+
     }
     if (defined('SYS_SYS'))
         $logout = '/sys' . SYS_SYS . '/' . SYS_LANG . '/' . SYS_SKIN . '/login/login';
@@ -218,13 +218,13 @@ if (isset($G_ENABLE_BLANK_SKIN) && $G_ENABLE_BLANK_SKIN) {
     $smarty->assign('footer', $footer);
     $smarty->assign('tpl_menu', PATH_TEMPLATE . 'menu.html');
     $smarty->assign('tpl_submenu', PATH_TEMPLATE . 'submenu.html');
-    
+
     if (class_exists('PMPluginRegistry')) {
         $oPluginRegistry = &PMPluginRegistry::getSingleton();
         $sCompanyLogo = $oPluginRegistry->getCompanyLogo('/images/processmaker.logo.jpg');
     } else
         $sCompanyLogo = '/images/processmaker.logo.jpg';
-    
+
     $smarty->assign('logo_company', $sCompanyLogo);
     $smarty->display($layoutFileSubmenu['basename']);
 }
@@ -308,7 +308,7 @@ if (isset($G_ENABLE_BLANK_SKIN) && $G_ENABLE_BLANK_SKIN) {
             $smarty->display($layoutFileBlank['basename']);
         }
         else {
-             
+
             $header = '';
             if (isset($oHeadPublisher)) {
                 $oHeadPublisher->title = isset($_SESSION['USR_USERNAME']) ? '(' . $_SESSION['USR_USERNAME'] . ' ' . G::LoadTranslation('ID_IN') . ' ' . SYS_SYS . ')' : '';
@@ -452,7 +452,9 @@ if (isset($G_ENABLE_BLANK_SKIN) && $G_ENABLE_BLANK_SKIN) {
                 $expireIn=$pmLicenseManagerO->getExpireIn();
                 $expireInLabel=$pmLicenseManagerO->getExpireInLabel();
                 //if($expireIn<=30){
-                $smarty->assign('msgVer', '<br><label class="textBlack">'.$expireInLabel.'</label>&nbsp;&nbsp;');
+                if($expireInLabel!=""){
+                  $smarty->assign('msgVer', '<label class="textBlack">'.$expireInLabel.'</label>&nbsp;&nbsp;');
+                }
                 //}
             }
 
