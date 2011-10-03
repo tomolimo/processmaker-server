@@ -90,14 +90,14 @@ form.formDefault .FormButton {
 {
 	left:0px;
 	top:0px;
-	background-image:url(/skins/green/images/ftl.png);
+	background-image:url(../images/ftl.png);
 	background-color:transparent;
 }
 .boxTop div.c, .boxTopBlue div.c
 {
 	top:0px;
 	right:0px;
-	background-image:url(/skins/green/images/ftr.png);
+	background-image:url(../images/ftr.png);
 	background-color:transparent;
 }
 .boxTop div.b, .boxTopBlue div.b
@@ -199,21 +199,21 @@ form.formDefault .FormButton {
 {
 	left:0px;
 	top:0px;
-	background-image:url(/skins/green/images/ftlL.png);
+	background-image:url(../images/ftlL.png);
 	background-color:transparent;
 }
 .boxTopPanel div.c
 {
 	top:0px;
 	right:0px;
-	background-image:url(/skins/green/images/ftrL.png);
+	background-image:url(../images/ftrL.png);
 	background-color:transparent;
 }
 .boxTopPanel div.b
 {
 	width:100%;
 	height:16px;
-	background: transparent url(/skins/green/images/ftc.png) repeat-x;
+	background: transparent url(../images/ftc.png) repeat-x;
 }
 
 /* BoxPanel Bottom Model END */
@@ -254,7 +254,7 @@ form.formDefault .content
 form.formDefault input.FormField
 {
 	border: 1px solid #CCC;
-	background: #FFFFFF url(/skins/green/images/input_back.gif) repeat-x;
+	background: #FFFFFF url(../images/input_back.gif) repeat-x;
 	color:#333333;
 	font:normal 11px Arial,Helvetica,sans-serif;
 }
@@ -282,7 +282,7 @@ form.formDefault .FormFieldContent
 form.formDefault textarea.FormTextArea
 {
 	border: 1px solid #CCC;
-	background: #FFFFFF url(/skins/green/images/input_back.gif) repeat-x;
+	background: #FFFFFF url(../images/input_back.gif) repeat-x;
 	color:#333333;
 	font:normal 11px Arial,Helvetica,sans-serif;
 	overflow:auto;
@@ -290,7 +290,7 @@ form.formDefault textarea.FormTextArea
 form.formDefault textarea.FormTextPM
 {
 	border: 1px solid #CCC;
-	background: #FFFFFF url(/skins/green/images/input_back.gif) repeat-x;
+	background: #FFFFFF url(../images/input_back.gif) repeat-x;
 	color:#333333;
 	font:normal 12 Courier New, monospace ;
 	overflow:auto;

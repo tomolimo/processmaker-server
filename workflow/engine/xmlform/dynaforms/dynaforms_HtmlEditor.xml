@@ -21,7 +21,7 @@
 <en>Refresh View</en>
 </PME_REFRESH_VIEW>
 
-<HTML2 type="textarea" cols="120" rows="16" style="width:100%" className="htmleditor">
+<HTML2 type="textarea" cols="120" rows="16" style="width:100%;" className="htmleditor">
 <en>HTML Code</en>
 </HTML2>
 <PME_SYNCH_JS type="javascript"><![CDATA[
