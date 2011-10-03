@@ -361,23 +361,24 @@ var openSummaryWindow = function(appUid, delIndex)
         var summaryWindow = new Ext.Window({
           title: _('ID_SUMMARY'),
           width: 500,
-          height: 420,
+          height: 400,
           resizable: false,
           closable: true,
           modal: true,
           autoScroll:true,
+          constrain: true,
           keys: {
             key: 27,
             fn: function() {
               summaryWindow.close();
             }
-          },
+          }/*,
           buttons : [{
            text    : _('ID_CANCEL'),
            handler : function(){
             summaryWindow.close();
            }}
-          ],
+          ]*/,
         });
 
         if (response.dynUid != '') {
