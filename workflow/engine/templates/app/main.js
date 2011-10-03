@@ -1,6 +1,8 @@
-/* Case Notes - Start */
-var newNoteAreaActive = false;
+var newNoteAreaActive;
 var caseNotesWindow;
+var storeNotes;
+var appUid;
+var title;
 
 function closeCaseNotesWindow(){
   if(Ext.get("caseNotesWindowPanel")){
@@ -8,14 +10,15 @@ function closeCaseNotesWindow(){
   }
 }
 
-function openCaseNotesWindow(appUid,modalSw)
+function openCaseNotesWindow(appUid1, modalSw, appTitle)
 {
-  if(!appUid) appUid="";
-
+  Ext.QuickTips.init();
+  appUid = !appUid1 ? "": appUid1;
+  title  = appTitle;
   var startRecord=0;
   var loadSize=10;
 
-  var storeNotes = new Ext.data.JsonStore({
+  storeNotes = new Ext.data.JsonStore({
     url : '../appProxy/getNotesList?appUid='+appUid,
     root: 'notes',
     totalProperty: 'totalCount',
@@ -41,16 +44,14 @@ function openCaseNotesWindow(appUid,modalSw)
   
   var panelNotes = new Ext.Panel({
     id:'notesPanel',
-
     frame:true,
     autoWidth:true,
     autoHeight:true,
-    collapsible:false,    
-    items:[ 
+    collapsible:false,
+    items:[
       new Ext.DataView({
         store: storeNotes,
         loadingtext:_('ID_CASE_NOTES_LOADING'),
-        // autoScroll:true,
         emptyText: _('ID_CASE_NOTES_EMPTY'),
         cls: 'x-cnotes-view',
         tpl: '<tpl for=".">' +
@@ -100,7 +101,7 @@ function openCaseNotesWindow(appUid,modalSw)
         hidden:true,
         text:_('ID_CASE_NOTES_MORE'),
         align:'center',
-        handler:function() {        
+        handler:function() {
           startRecord=startRecord+loadSize;
           limitRecord=startRecord+loadSize;
           storeNotes.load({
@@ -114,71 +115,6 @@ function openCaseNotesWindow(appUid,modalSw)
     ]
   });
 
-  var tbar = [
-    {
-      //xtype:'textfield',
-      xtype : 'textarea',
-      id    : 'caseNoteText',
-      name  : 'caseNoteText',
-      hideLabel : true,
-      blankText : '...',
-      //anchor: '100%',
-      width     : 248,
-      grow      : true,
-      maxLenght : 150,
-      allowBlank:true,
-      selectOnFocus:true,
-      height : 40,
-      growMin: 39,
-      growMax: 80
-     },
-    ' ',
-    {
-      cls: 'x-toolbar1',
-      text: _('ID_SEND'),
-      //iconCls: 'x-pm-notes-btn',
-      scale: 'large',
-      stype:'button',
-      iconAlign: 'top',
-      handler: function(){
-        var noteText = Ext.getCmp('caseNoteText').getValue();
-    
-        if (noteText == "") {
-          return false;
-        }
-
-        newNoteHandler();
-
-        Ext.getCmp('caseNoteText').focus();
-        Ext.getCmp('caseNoteText').reset();
-        statusBarMessage( _('ID_CASES_NOTE_POSTING'), true);
-        Ext.Ajax.request({
-          url : '../appProxy/postNote' ,
-          params : {
-            appUid:appUid,
-            noteText:noteText
-          },
-          success: function ( result, request ) {
-            var data = Ext.util.JSON.decode(result.responseText);
-            if(data.success=="success"){
-              statusBarMessage( _('ID_CASES_NOTE_POST_SUCCESS'), false,true);
-              storeNotes.load();
-            }else{
-              statusBarMessage( _('ID_CASES_NOTE_POST_ERROR'), false,false);
-              Ext.MessageBox.alert(_('ID_CASES_NOTE_POST_ERROR'), data.message);
-
-            }
-          },
-          failure: function ( result, request) {
-            statusBarMessage( _('ID_CASES_NOTE_POST_FAILED'), false,false);
-            Ext.MessageBox.alert(_('ID_CASES_NOTE_POST_FAILED'), result.responseText);
-          }
-        });
-      }
-    }
-  ];
-
-  
   caseNotesWindow = new Ext.Window({
     title: _('ID_CASES_NOTES'), //Title of the Window
     id: 'caseNotesWindowPanel', //ID of the Window Panel
@@ -193,6 +129,7 @@ function openCaseNotesWindow(appUid,modalSw)
     minWidth:300,
     minHeight:200,
     proxyDrag: true,
+    constrain: true,
     keys: {
       key: 27,
       fn  : function(){
@@ -209,7 +146,53 @@ function openCaseNotesWindow(appUid,modalSw)
       }
     }
     ],
-    tbar:tbar,
+    tbar:[
+        new Ext.form.TextArea({
+          text   : 'New Note',
+          xtype  : 'textarea',
+          id     : 'caseNoteText',
+          name   : 'caseNoteText',
+          width  : 280,
+          grow   : true,
+          height : 40,
+          growMin: 40,
+          growMax: 80,
+          maxLengthText  : 150,
+          allowBlank     :true,
+          selectOnFocus  :true,
+          enableKeyEvents: true,
+          listeners : {
+            scope  : this,
+            keyup  : updateTextCtr,
+            keydown: updateTextCtr
+          }
+        })
+      ],
+    rowtbar: [
+      [
+        '->',
+        '<span id="countChar">150</span>',
+        ' ',
+        {
+          id: 'sendBtn',
+          text: 'Send',
+          cls: 'x-toolbar1',
+          handler: sendNote
+        }, ' ',
+        {
+          id: 'addCancelBtn',
+          text: 'Cancel',
+          cls: 'x-toolbar1',
+          //iconCls: 'xx',
+          icon: '/images/add_notes.png',
+          handler: newNoteHandler,
+          tooltip: {
+            title: 'Add new note',
+            text: 'Case: ' + title
+          }
+        }
+      ]
+    ],
     bbar:[
       new Ext.ux.StatusBar({
         defaultText : _('ID_NOTES_READY'),
@@ -219,19 +202,7 @@ function openCaseNotesWindow(appUid,modalSw)
         //iconCls: 'ready-icon',
         statusAlign: 'left',
         items: [] // any standard Toolbar items:
-      }), '->',
-      {
-        id: 'newNoteButton',
-        text: _('ID_NEW_NOTE'),
-        handler: newNoteHandler
-      },
-      {
-        text: _('ID_CANCEL'),
-        handler: function()
-        {
-          caseNotesWindow.close();
-        }
-      }
+      })
     ],
     listeners: {
       show:function() {
@@ -248,32 +219,102 @@ function openCaseNotesWindow(appUid,modalSw)
     }
   });
 
-  caseNotesWindow.getTopToolbar().hide();
+  newNoteAreaActive = false;
   caseNotesWindow.show();
+  newNoteHandler();
+}
+
+function updateTextCtr(body, event) {
+  
+  ctr = document.getElementById('countChar').innerHTML;
+  
+  text = Ext.getCmp('caseNoteText').getValue();
+  maxLength = 150;
+
+  if (text.length > maxLength) {
+    Ext.getCmp('caseNoteText').setValue(Ext.getCmp('caseNoteText').getValue().substr(0,150));
+  }
+  else {
+    document.getElementById('countChar').innerHTML = maxLength - text.length;
+  }
 }
 
 function newNoteHandler()
 {
   newNoteAreaActive = newNoteAreaActive ? false : true;
   if (newNoteAreaActive) {
-    Ext.getCmp('newNoteButton').setText(_('ID_CANCEL_NEW_NOTE'));
+    Ext.getCmp('addCancelBtn').setText('');
+    Ext.getCmp('addCancelBtn').setTooltip({
+      title: _('ID_CASES_NOTES_ADD'),
+      text: _('ID_CASE') +': '+ title
+    });
+
+    Ext.getCmp('addCancelBtn').setIcon('/images/comment_add.gif');
+
+    caseNotesWindow.getTopToolbar().hide();
+    Ext.getCmp('sendBtn').hide();
+    document.getElementById('countChar').style.display = 'none';
+    caseNotesWindow.doLayout();
+  }
+  else {
+    Ext.getCmp('addCancelBtn').setText('');
+    Ext.getCmp('addCancelBtn').setTooltip({title: _('ID_CASES_NOTES_CANCEL')});
+    Ext.getCmp('addCancelBtn').setIcon('/images/cancel.png');
+
     caseNotesWindow.getTopToolbar().show();
+    Ext.getCmp('sendBtn').show();
+    document.getElementById('countChar').style.display = 'block';
     Ext.getCmp('caseNoteText').focus();
     Ext.getCmp('caseNoteText').reset();
-  } 
-  else {
-    Ext.getCmp('newNoteButton').setText(_('ID_NEW_NOTE'));
-    caseNotesWindow.getTopToolbar().hide();
+    document.getElementById('countChar').innerHTML = '150';
+    caseNotesWindow.doLayout();
   }
+  
   caseNotesWindow.doLayout();
 }
 
+function sendNote()
+{
+  var noteText = Ext.getCmp('caseNoteText').getValue();
+    
+  if (noteText == "") {
+    return false;
+  }
+
+  newNoteHandler();
+
+  Ext.getCmp('caseNoteText').focus();
+  Ext.getCmp('caseNoteText').reset();
+  statusBarMessage( _('ID_CASES_NOTE_POSTING'), true);
+  Ext.Ajax.request({
+    url : '../appProxy/postNote' ,
+    params : {
+      appUid  : appUid,
+      noteText: noteText
+    },
+    success: function ( result, request ) {
+      var data = Ext.util.JSON.decode(result.responseText);
+      if(data.success=="success"){
+        statusBarMessage( _('ID_CASES_NOTE_POST_SUCCESS'), false,true);
+        storeNotes.load();
+      }
+      else{
+        statusBarMessage( _('ID_CASES_NOTE_POST_ERROR'), false,false);
+        Ext.MessageBox.alert(_('ID_CASES_NOTE_POST_ERROR'), data.message);
+
+      }
+    },
+    failure: function ( result, request) {
+      statusBarMessage( _('ID_CASES_NOTE_POST_FAILED'), false,false);
+      Ext.MessageBox.alert(_('ID_CASES_NOTE_POST_FAILED'), result.responseText);
+    }
+  });
+}
+
 function statusBarMessage( msg, isLoading, success ) {
-  // console.log("Status Bar needed");
-  // console.log(msg);
   var statusBar = Ext.getCmp('notesStatusPanel');
   if( !statusBar ) return;
-  // console.log("Status bar acceced: "+msg);
+  
   if( isLoading ) {
     statusBar.showBusy(msg);
   }
@@ -283,13 +324,13 @@ function statusBarMessage( msg, isLoading, success ) {
     if( success ) {
       statusBar.setStatus({
         text: '' + msg,
-        //iconCls: 'success',
+        iconCls: 'x-status-valid',
         clear: true
       });
     } else {
       statusBar.setStatus({
         text: 'Error: ' + msg,
-        //iconCls: 'error',
+        iconCls: 'x-status-error',
         clear: true
       });
     }
@@ -297,7 +338,11 @@ function statusBarMessage( msg, isLoading, success ) {
 }
 
 
+
+//-------------------------------------------------------------------------------------
+
 /* Case Notes - End */
+
 /* Case Summary - Start */
 var openSummaryWindow = function(appUid, delIndex) 
 {
@@ -367,3 +412,34 @@ var openSummaryWindow = function(appUid, delIndex)
   });
 }
 /* Case Summary - End*/
+
+
+
+Ext.Panel.prototype.originalonRender = Ext.Panel.prototype.onRender;
+
+// override onRender method
+Ext.Panel.prototype.onRender = function(ct, position) {
+    this.originalonRender(ct, position);
+    
+    // use the custom rowtbar argument to add it to this TopToolbar
+    if(this.tbar && this.rowtbar){
+        var rowtbar = this.rowtbar;
+        if(!Ext.isArray(rowtbar))
+            return;
+        
+        for(var i = 0; i < rowtbar.length; i ++) {
+            new Ext.Toolbar(rowtbar[i]).render(this.tbar);
+        }
+    }
+    
+    // use the custom rowbbar argument to add it to this BottomToolbar
+    if(this.bbar && this.rowbbar) {
+        var rowbbar = this.rowbbar;
+        if(!Ext.isArray(rowbbar))
+            return;
+            
+        for(var i = 0; i < rowbbar.length; i ++) {
+            new Ext.Toolbar(rowbbar[i]).render(this.bbar);
+        }
+    }
+}  

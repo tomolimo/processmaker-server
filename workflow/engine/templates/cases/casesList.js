@@ -375,8 +375,9 @@ Ext.onReady ( function() {
   };
 
   function renderNote(val,p,r) {
-    appUid="'"+r.data['APP_UID']+"'";
-    return '<img src="/images/ext/default/s.gif" class="x-tree-node-icon ICON_CASES_NOTES" unselectable="off" id="extdd-17" onClick="openCaseNotesWindow('+appUid+',true)">';
+    appUid = r.data['APP_UID'];
+    title  = r.data['APP_TITLE'];
+    return '<img src="/images/ext/default/s.gif" class="x-tree-node-icon ICON_CASES_NOTES" unselectable="off" id="extdd-17" onClick="openCaseNotesWindow(\''+appUid+'\', true, \''+title+'\')">';
   }
 
   function showField (value,p,r) {
