@@ -134,14 +134,14 @@ try {
             $aDYN = $_SESSION['Current_Dynafom']['Parameters'];
             $_POST['FCD_UID'] = ($_POST['FCD_UID']=='0') ? '' : $_POST['FCD_UID'];
             $aData = Array(
-                'FCD_UID'       =>  Isset($_POST['FCD_UID'])?$_POST['FCD_UID']:'',
-                'FCD_FUNCTION'  =>  $_POST['function'],
-                'FCD_FIELDS'    =>  $_POST['fields_selected'],
-                'FCD_CONDITION' =>  $_POST['condition'],
-                'FCD_EVENTS'    =>  $_POST['events'],
-                'FCD_EVENT_OWNERS'=>$_POST['event_owner_selected'],
-                'FCD_STATUS'    =>  $_POST['enabled'],
-                'FCD_DYN_UID'   =>  $aDYN['DYN_UID']
+                'FCD_UID'          =>  Isset($_POST['FCD_UID'])?$_POST['FCD_UID']:'',
+                'FCD_FUNCTION'     =>  $_POST['function'],
+                'FCD_FIELDS'       =>  $_POST['fields_selected'],
+                'FCD_CONDITION'    =>  $_POST['condition'],
+                'FCD_EVENTS'       =>  $_POST['events'],
+                'FCD_EVENT_OWNERS' => $_POST['event_owner_selected'],
+                'FCD_STATUS'       =>  $_POST['enabled'],
+                'FCD_DYN_UID'      =>  $aDYN['DYN_UID']
             ); 
 
             $oFieldCondition->quickSave($aData);

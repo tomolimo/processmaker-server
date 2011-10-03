@@ -91,36 +91,36 @@ class FieldCondition extends BaseFieldCondition {
      * @author Erik A. Ortiz <erik@colosa.com, aortiz.erik@gmail.com>
      */
     public function quickSave($aData) {
-        $con = Propel::getConnection(FieldConditionPeer::DATABASE_NAME);
-        try {
-            if( isset($aData['FCD_UID']) && trim($aData['FCD_UID']) != '' ) {
-                $obj = FieldConditionPeer::retrieveByPk( $aData['FCD_UID'] );
-                if(is_object($obj) && get_class($obj) != 'FieldCondition') {
-                    $obj = new FieldCondition();
-                }
-            } else {
-                if ( isset ( $aData['FCD_UID'] ) && $aData['FCD_UID']== '' )
-                    unset ( $aData['FCD_UID'] );
-                if ( !isset ( $aData['FCD_UID'] ) )
-                $aData['FCD_UID'] = G::generateUniqueID();
-                $obj = new FieldCondition();
-            }
+      $con = Propel::getConnection(FieldConditionPeer::DATABASE_NAME);
+      try {
+          $obj = null;
+          
+          if( isset($aData['FCD_UID']) && trim($aData['FCD_UID']) != '' ) {
+            $obj = FieldConditionPeer::retrieveByPk($aData['FCD_UID']); 
+          } else {
+            $aData['FCD_UID'] = G::generateUniqueID();
+          }
+           
+          if (!is_object($obj)) {
+            $obj = new FieldCondition();
+          }
+          
+          $obj->fromArray($aData, BasePeer::TYPE_FIELDNAME);
 
-            $obj->fromArray($aData, BasePeer::TYPE_FIELDNAME);
-
-            if ($obj->validate()) {
-                $result = $obj->save();
-                $con->commit();
-                return $result;
-            } else {
-                $e = new Exception("Failed Validation in class " . get_class($this) . ".");
-                $e->aValidationFailures = $obj->getValidationFailures();
-                throw ($e);
-            }
-        } catch (exception $e) {
-            $con->rollback();
+          if ($obj->validate()) {
+            $result = $obj->save();
+            $con->commit();
+            return $result;
+          } else {
+            $e = new Exception("Failed Validation in class " . get_class($this) . ".");
+            $e->aValidationFailures = $obj->getValidationFailures();
             throw ($e);
-        }
+          }
+          
+      } catch (exception $e) {
+          $con->rollback();
+          throw ($e);
+      }
     }
 
     function getConditionScript($DYN_UID) {
