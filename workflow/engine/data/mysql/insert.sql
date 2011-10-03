@@ -3253,7 +3253,7 @@ INSERT INTO TRANSLATION (TRN_CATEGORY,TRN_ID,TRN_LANG,TRN_VALUE,TRN_UPDATE_DATE 
 ( 'LABEL','ID_EXPORT_DATA_CSV','en','Export Data from CSV file','2011-09-05') ,
 ( 'LABEL','ID_IMPORT_DATA_CSV','en','Import Data from CSV file','2011-09-05') ,
 ( 'LABEL','ID_EXPORT_CSV','en','Export to CSV','2011-09-05') ,
-( 'LABEL','ID_IMPORT_CSV','en','Import to CSV','2011-09-05') ,
+( 'LABEL','ID_IMPORT_CSV','en','Import from CSV','2011-09-29') ,
 ( 'LABEL','ID_NOT_PM_FILE','en','This is not a .pm file','2011-09-08') ,
 ( 'LABEL','ID_PMTABLES_RESERVED_FIELDNAME_WARNING','en','The word {0} is reserved by the database engine please set another one.','2011-09-14') ,
 ( 'LABEL','ID_TABLE_NAME_IS_REQUIRED','en','Table Name is required.','2011-09-14') ,
@@ -3288,7 +3288,10 @@ INSERT INTO TRANSLATION (TRN_CATEGORY,TRN_ID,TRN_LANG,TRN_VALUE,TRN_UPDATE_DATE 
 ( 'LABEL','ID_CALENDAR_UPDATED_SUCCESSFULLY','en','Your calendar has been updated successfully','2011-09-20') ,
 ( 'LABEL','ID_POSTED_AT','en','Posted at','2011-09-22') ,
 ( 'LABEL','ID_NEW_NOTE','en','New Note','2011-09-22') ,
-( 'LABEL','ID_CANCEL_NEW_NOTE','en','Cancel New Note','2011-09-22') ;
+( 'LABEL','ID_CANCEL_NEW_NOTE','en','Cancel New Note','2011-09-22') ,
+( 'LABEL','ID_THERE_MUST__LEAST_HOLIDAY','en','There must be at least a holiday','2011-09-29') ,
+( 'LABEL','ID_CASES_NOTES_CANCEL','en','Cancel this note','2011-10-03') ,
+( 'LABEL','ID_CASES_NOTES_ADD','en','Add new note','2011-10-03') ;
 
 INSERT INTO ISO_LOCATION (IC_UID,IL_UID,IL_NAME,IL_NORMAL_NAME,IS_UID)  VALUES 
 ('AD','','',' ','') ,

@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: ProcessMaker (Branch 2.0) 2.0.33.rc4-3-gba32c01\n"
+"Project-Id-Version: ProcessMaker (Branch 2.0) 2.0.33.rc5-5-gb79d80c\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2011-09-28 14:21:09\n"
+"PO-Revision-Date: 2011-10-03 18:51:36\n"
 "Last-Translator: \n"
 "Language-Team: Colosa Developers Team <developers@colosa.com>\n"
 "MIME-Version: 1.0\n"
@@ -11020,8 +11020,8 @@ msgstr "Export to CSV"
 # TRANSLATION
 # LABEL/ID_IMPORT_CSV
 #: LABEL/ID_IMPORT_CSV
-msgid "Import to CSV"
-msgstr "Import to CSV"
+msgid "Import from CSV"
+msgstr "Import from CSV"
 
 # TRANSLATION
 # LABEL/ID_NOT_PM_FILE
@@ -11220,6 +11220,24 @@ msgstr "New Note"
 #: LABEL/ID_CANCEL_NEW_NOTE
 msgid "Cancel New Note"
 msgstr "Cancel New Note"
+
+# TRANSLATION
+# LABEL/ID_THERE_MUST__LEAST_HOLIDAY
+#: LABEL/ID_THERE_MUST__LEAST_HOLIDAY
+msgid "There must be at least a holiday"
+msgstr "There must be at least a holiday"
+
+# TRANSLATION
+# LABEL/ID_CASES_NOTES_CANCEL
+#: LABEL/ID_CASES_NOTES_CANCEL
+msgid "Cancel this note"
+msgstr "Cancel this note"
+
+# TRANSLATION
+# LABEL/ID_CASES_NOTES_ADD
+#: LABEL/ID_CASES_NOTES_ADD
+msgid "Add new note"
+msgstr "Add new note"
 
 # additionalTables/additionalTablesData.xml?ADD_TAB_NAME
 # additionalTables/additionalTablesData.xml
