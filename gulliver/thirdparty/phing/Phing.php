@@ -860,11 +860,9 @@ class Phing {
             }
         }
 
-                
-        die($path);
-        if (!is_file($path)) {
-            
-            $ret = include_once($path);
+        $ret = include_once($path);        
+        
+        if ($ret === false) {
             $e = new BuildException("Error importing $path");
             if (self::getMsgOutputLevel() === PROJECT_MSG_DEBUG) {
                 // We can't log this because listeners belong
