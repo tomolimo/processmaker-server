@@ -173,14 +173,14 @@ class PmTable
     }
   }
 
-  function buildModelFor($dbsUid)
+  function buildModelFor($dbsUid, $tablesList)
   {
     $this->setDataSource($dbsUid);
     $loadSchema = false;
     $this->prepare($loadSchema);
     $this->phingbuildModel();
     $this->phingbuildSql();
-    $this->upgradeDatabaseFor($this->dataSource);
+    $this->upgradeDatabaseFor($this->dataSource, $tablesList);
   }
 
   /**
@@ -467,7 +467,7 @@ class PmTable
     
   }
 
-  public function upgradeDatabaseFor($dataSource)
+  public function upgradeDatabaseFor($dataSource, $tablesList)
   {
     $con = Propel::getConnection($dataSource);
     $stmt = $con->createStatement();
@@ -509,7 +509,14 @@ class PmTable
       $line = substr($line, 0, strrpos($line, ";"));
       
       // execute
-      $stmt->executeQuery($line);
+      if (stripos($line, 'CREATE TABLE') !== false || stripos($line, 'DROP TABLE') !== false) {
+        if (preg_match('/TABLE\s[\'\"\`]+(\w+)[\'\"\`]+/i', $line, $match)) {
+          if (in_array($match[1], $tablesList)) { 
+            //error_log($line);
+            $stmt->executeQuery($line);
+          }
+        }
+      }
     
     } 
     
@@ -605,7 +612,7 @@ class PmTable
       'propel.php.dir'    => $this->baseDir
     );
 
-    self::callPhing(array($taskName), PATH_THIRDPARTY . 'propel-generator/build.xml', $options, true);
+    self::callPhing(array($taskName), PATH_THIRDPARTY . 'propel-generator/build.xml', $options, false);
   }
 
   /**

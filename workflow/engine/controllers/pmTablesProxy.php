@@ -665,6 +665,7 @@ class pmTablesProxy extends HttpProxyController
       $oAdditionalTables = new AdditionalTables();
       $tableNameMap = array();
       $processQueue = array();
+      $processQueueTables = array();
 
       $PUBLIC_ROOT_PATH = PATH_DATA.'sites'.PATH_SEP.SYS_SYS.PATH_SEP.'public'.PATH_SEP;
       $filename = $_FILES['form']['name']['FILENAME'];
@@ -755,6 +756,7 @@ class pmTablesProxy extends HttpProxyController
             if (!isset($processQueue[$contentSchema['DBS_UID']])) {
               $processQueue[$contentSchema['DBS_UID']] = array();
             }
+            $processQueueTables[] = $contentSchema['ADD_TAB_NAME'];
 
             $result = $this->save($tableData, $alterTable);
             
@@ -799,7 +801,7 @@ class pmTablesProxy extends HttpProxyController
       foreach ($processQueue as $dbsUid => $tableData) {
         
         $pmTable = new pmTable();
-        $pmTable->buildModelFor($dbsUid);
+        $pmTable->buildModelFor($dbsUid, $processQueueTables);
         $buildResult = ob_get_contents();
         ob_end_clean();
 
