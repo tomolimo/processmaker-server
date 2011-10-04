@@ -4,7 +4,7 @@
  * fields_Save.php
  *
  * ProcessMaker Open Source Edition
- * Copyright (C) 2004 - 2008 Colosa Inc.23
+ * Copyright (C) 2004 - 2008 Colosa Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -224,7 +224,7 @@ if (($RBAC_Response=$RBAC->userCanAccess("PM_FACTORY"))!=1) return $RBAC_Respons
 
   // Additions to javascript
   if(isset($sType) && $sType === 'javascript'){
-    $sCode     = $pmeCode;
+    $sCode  = urlencode($pmeCode);
     $editor = new dynaformEditorAjax($_POST);
     $editor->set_javascript($A, $fieldName, $sCode);
   }
