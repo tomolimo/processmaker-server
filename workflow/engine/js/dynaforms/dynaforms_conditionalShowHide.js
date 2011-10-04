@@ -129,7 +129,9 @@ var Conditional = function(DYN_UID){
             k = 0;
             for(i=0; i<response.length; i++){
                 this.fields[i] = response[i];
-                if( oFCD_FIELDS.value.indexOf(response[i]) === -1 ){
+                // if( oFCD_FIELDS.value.indexOf(response[i]) === -1 ){
+                aFCD_FIELDS = oFCD_FIELDS.value.split(",");
+                if( indexInArray(aFCD_FIELDS, response[i]) === -1 ){
                     var newOption = new Option(response[i], response[i]);
                     oFields.options[j++] = newOption;
                 } else {
@@ -142,7 +144,9 @@ var Conditional = function(DYN_UID){
             k = 0;
             for(i=0; i<response.length; i++){
                 this.fields[i] = response[i];
-                if( oFCD_EVENT_OWNERS.value.indexOf(response[i]) === -1 ){
+                // if( oFCD_EVENT_OWNERS.value.indexOf(response[i]) === -1 ){
+                aFCD_EVENT_OWNERS = oFCD_EVENT_OWNERS.value.split(",");
+                if( indexInArray(aFCD_EVENT_OWNERS, response[i]) === -1 ){
                     var newOption = new Option(response[i], response[i]);
                     oEventOwner.options[j++] = newOption;
                 } else {
@@ -692,4 +696,10 @@ var Conditional = function(DYN_UID){
 
 function conditionHasChanged(){
     oConditional.testSaveCondition();
+}
+
+function indexInArray(arr,val){
+	for(var i=0;i<arr.length;i++)
+		if(arr[i]==val) return i;
+	return -1;
 }
