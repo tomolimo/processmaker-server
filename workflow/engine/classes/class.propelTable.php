@@ -670,12 +670,12 @@ class propelTable
         $prevpage = $this->currentPage - 1;
         $prevUrl  = $this->ownerPage . '?order=' . $this->orderBy . '&page=' . $prevpage;
         $prevAjax = $this->id . ".doGoToPage(".$prevpage.");return false;";
-        $first = "<a href=\"" . htmlentities( $firstUrl  , ENT_QUOTES , 'utf-8' ) . "\" onclick=\"".$firstAjax."\" class='firstPage'>&nbsp;</a>";
-        $prev  = "<a href=\"" . htmlentities( $prevUrl  , ENT_QUOTES , 'utf-8' ) . "\"  onclick=\"".$prevAjax."\" class='previousPage'>&nbsp;</a>";
+        $first = "<a href=\"" . htmlentities( $firstUrl  , ENT_QUOTES , 'utf-8' ) . "\" onclick=\"".$firstAjax."\" class='firstPage'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>";
+        $prev  = "<a href=\"" . htmlentities( $prevUrl  , ENT_QUOTES , 'utf-8' ) . "\"  onclick=\"".$prevAjax."\" class='previousPage'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>";
       }
       else{
-        $first = "<a class='noFirstPage'>&nbsp;</a>";
-        $prev  = "<a class='noPreviousPage'>&nbsp;</a>";
+        $first = "<a class='noFirstPage'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>";
+        $prev  = "<a class='noPreviousPage'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>";
       }
       if( $this->currentPage < $this->totPages ) {
         $lastUrl = $this->ownerPage . '?order=' . $this->orderBy . '&page=' . $this->totPages;
@@ -683,12 +683,12 @@ class propelTable
         $nextpage = $this->currentPage + 1;
         $nextUrl  = $this->ownerPage . '?order=' . $this->orderBy . '&page=' . $nextpage;
         $nextAjax = $this->id . ".doGoToPage(" .$nextpage.");return false;";
-        $next = "<a href=\"" . htmlentities( $nextUrl   , ENT_QUOTES , 'utf-8' ) . "\" onclick=\"".$nextAjax."\" class='nextPage'>&nbsp;</a>";
-        $last = "<a href=\"" . htmlentities( $lastUrl   , ENT_QUOTES , 'utf-8' ) . "\" onclick=\"".$lastAjax."\" class='lastPage'>&nbsp;</a>";
+        $next = "<a href=\"" . htmlentities( $nextUrl   , ENT_QUOTES , 'utf-8' ) . "\" onclick=\"".$nextAjax."\" class='nextPage'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>";
+        $last = "<a href=\"" . htmlentities( $lastUrl   , ENT_QUOTES , 'utf-8' ) . "\" onclick=\"".$lastAjax."\" class='lastPage'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>";
       }
       else{
-        $next = "<a class='noNextPage'>&nbsp;</a>";
-        $last = "<a class='noLastPage'>&nbsp;</a>";
+        $next = "<a class='noNextPage'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>";
+        $last = "<a class='noLastPage'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>";
       }
       $pagesEnum='';
       for ($r=1;$r<=$this->totPages;$r++)
