@@ -360,9 +360,10 @@ var openSummaryWindow = function(appUid, delIndex)
 
         var summaryWindow = new Ext.Window({
           title: _('ID_SUMMARY'),
+          layout: 'fit',
           width: 500,
           height: 400,
-          resizable: false,
+          resizable: true,
           closable: true,
           modal: true,
           autoScroll:true,
