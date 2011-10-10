@@ -202,7 +202,7 @@ class pmTablesProxy extends HttpProxyController
 
       // verify if exists.
       if ($data['REP_TAB_UID'] == '' || (isset($httpData->forceUid) && $httpData->forceUid)) { //new report table
-        if ($isReportTable) { //setting default columns
+        if ($isReportTable && $alterTable) { //setting default columns
           $defaultColumns = $this->_getReportTableDefaultColumns($data['REP_TAB_TYPE']);
           $columns = array_merge($defaultColumns, $columns);
         }
@@ -284,12 +284,13 @@ class pmTablesProxy extends HttpProxyController
         $oFields->create($field);
       }
       
-      if ($isReportTable) {
+      if ($isReportTable && $alterTable) {
         $oAdditionalTables->populateReportTable($data['REP_TAB_NAME'], $pmTable->getDataSource(), $data['REP_TAB_TYPE'], $data['PRO_UID'], $data['REP_TAB_GRID']);
       }
 
       $result->success = true;
       $result->message = $result->msg = $buildResult;
+
     } catch (Exception $e) {
       $buildResult = ob_get_contents();
       ob_end_clean();
@@ -401,7 +402,7 @@ class pmTablesProxy extends HttpProxyController
     $toSave = false;
 
     if (!file_exists (PATH_WORKSPACE . 'classes/' . $this->className . '.php') ) {
-      throw new Exception(G::loadTranslation('ID_PMTABLE_CLASS_DOESNT_EXIST', $this->className));
+      throw new Exception('Create::' . G::loadTranslation('ID_PMTABLE_CLASS_DOESNT_EXIST', $this->className));
     }
 
     require_once PATH_WORKSPACE . 'classes/' . $this->className . '.php';
@@ -466,7 +467,7 @@ class pmTablesProxy extends HttpProxyController
     $sPath = PATH_DB . SYS_SYS . PATH_SEP . 'classes' . PATH_SEP;
 
     if (!file_exists ($sPath . $this->className . '.php') ) {
-      throw new Exception(G::loadTranslation('ID_PMTABLE_CLASS_DOESNT_EXIST', $this->className));
+      throw new Exception('Update:: '.G::loadTranslation('ID_PMTABLE_CLASS_DOESNT_EXIST', $this->className));
     }
 
     require_once $sPath . $this->className . '.php';
@@ -502,7 +503,7 @@ class pmTablesProxy extends HttpProxyController
     $sPath = PATH_DB . SYS_SYS . PATH_SEP . 'classes' . PATH_SEP;
 
     if (!file_exists ($sPath . $this->className . '.php') ) {
-      throw new Exception(G::loadTranslation('ID_PMTABLE_CLASS_DOESNT_EXIST', $this->className));
+      throw new Exception('Destroy:: ' . G::loadTranslation('ID_PMTABLE_CLASS_DOESNT_EXIST', $this->className));
     }
 
     require_once $sPath . $this->className . '.php';
@@ -702,7 +703,7 @@ class pmTablesProxy extends HttpProxyController
             
             if ($overWrite) {
               if($tableExists !== false) {
-                $additionalTable->deleteAll($tableExists[0]['ADD_TAB_UID']);
+                $additionalTable->deleteAll($tableExists['ADD_TAB_UID']);
               }
             } 
             else {
@@ -815,6 +816,17 @@ class pmTablesProxy extends HttpProxyController
             }
           }
         }
+
+        $additionalTable = new AdditionalTables();
+
+        foreach ($processQueueTables as $tablename) {
+          $table = $additionalTable->loadByName($tablename);
+          $isReport = $table['PRO_UID'] !== '' ? true : false;
+
+          if ($table && $isReport) {  
+            $oAdditionalTables->populateReportTable($tablename, $table['DBS_UID'], $table['ADD_TAB_TYPE'], $table['PRO_UID'], $table['ADD_TAB_GRID']);
+          }
+        }     
       }
 
       if ($errors == '') {

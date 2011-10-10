@@ -108,25 +108,28 @@ class AdditionalTables extends BaseAdditionalTables {
       $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_NAME);
       $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_CLASS_NAME);
       $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_DESCRIPTION);
-      $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_SDW_LOG_INSERT);
-      $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_SDW_LOG_UPDATE);
-      $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_SDW_LOG_DELETE);
-      $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_SDW_LOG_SELECT);
-      $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_SDW_MAX_LENGTH);
-      $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_SDW_AUTO_DELETE);
+      //DEPRECATED! $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_SDW_LOG_INSERT);
+      // $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_SDW_LOG_UPDATE);
+      // $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_SDW_LOG_DELETE);
+      // $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_SDW_LOG_SELECT);
+      // $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_SDW_MAX_LENGTH);
+      // $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_SDW_AUTO_DELETE);
       $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_PLG_UID);
       $oCriteria->addSelectColumn(AdditionalTablesPeer::DBS_UID);
-      $oCriteria->add(AdditionalTablesPeer::ADD_TAB_NAME, $name, Criteria::LIKE);
+      $oCriteria->addSelectColumn(AdditionalTablesPeer::PRO_UID);
+      $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_TYPE);
+      $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_GRID);
+      $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_TAG);
+
+      // AdditionalTablesPeer::ADD_TAB_NAME is unique
+      $oCriteria->add(AdditionalTablesPeer::ADD_TAB_NAME, $name, Criteria::EQUAL);  
 
       $oDataset = AdditionalTablesPeer::doSelectRS($oCriteria);
       $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
 
-      $aRows = Array();
-      while ($oDataset->next()) {
-        $aRows[] = $oDataset->getRow();
-      }
-
-      return sizeof($aRows) > 0 ? $aRows : false;
+      $oDataset->next();
+      
+      return $oDataset->getRow();
     }
     catch (Exception $oError) {
       throw($oError);
@@ -541,7 +544,7 @@ class AdditionalTables extends BaseAdditionalTables {
     $this->classPeerName = $this->className . 'Peer';
 
     if (!file_exists (PATH_WORKSPACE . 'classes/' . $this->className . '.php') ) {
-      throw new Exception("ERROR: {$this->className} class file doesn't exit!");
+      throw new Exception("ERROR: ".PATH_WORKSPACE . 'classes/' . $this->className . '.php'." class file doesn't exit!");
     }
 
     require_once PATH_WORKSPACE . 'classes/' . $this->className . '.php';
