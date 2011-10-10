@@ -309,7 +309,7 @@ class PMPluginRegistry {
       if ( $detail->sNamespace == $sNamespace )
       unset ( $this->_aTaskExtendedProperties[ $key ] );
     }
-    
+
     //unregistering javascripts from this plugin
     $this->unregisterJavascripts($sNamespace);
   }
@@ -339,16 +339,16 @@ class PMPluginRegistry {
   function installPluginArchive($filename, $pluginName = NULL) {
     G::LoadThirdParty( 'pear/Archive','Tar');
     $tar = new Archive_Tar ($filename);
-  
+
     $files = $tar->listContent();
-    
+
     $plugins = array();
     foreach ($files as $f) {
       if (preg_match("/^([\w\.]*).ini$/", $f['filename'], $matches)) {
         $plugins[] = $matches[1];
       }
     }
-    
+
     if (count($plugins) > 1)
       throw new Exception("Multiple plugins in one archive are not supported currently");
 
@@ -358,7 +358,7 @@ class PMPluginRegistry {
     $pluginName = $plugins[0];
     $pluginFile = "$pluginName.php";
     $oldPluginStatus = $this->getStatusPlugin($pluginFile);
-    
+
     if ($pluginStatus != 0) {
       $oldDetails = $this->getPluginDetails($pluginFile);
       $oldVersion = $oldDetails->iVersion;
@@ -369,7 +369,7 @@ class PMPluginRegistry {
 
     $pluginIni = $tar->extractInString("$pluginName.ini");
     $pluginConfig = parse_ini_string($pluginIni);
-    
+
     /*if (!empty($oClass->aDependences)) {
       foreach ($oClass->aDependences as $aDependence) {
         if (file_exists(PATH_PLUGINS . $aDependence['sClassName'] . '.php')) {
@@ -402,7 +402,7 @@ class PMPluginRegistry {
 
     $this->save();
   }
-  
+
   function uninstallPlugin($sNamespace) {
     $this->enablePlugin($sNamespace);
     $this->disablePlugin($sNamespace);
@@ -420,7 +420,7 @@ class PMPluginRegistry {
       }
     }
   }
-  
+
   /**
    * install the plugin
    *
@@ -556,7 +556,7 @@ class PMPluginRegistry {
       if ($sCoreJsFile == $js->sCoreJsFile && $sNamespace == $js->sNamespace) {
         if (is_string($pluginJsFile)) {
           if (!in_array($pluginJsFile, $this->_aJavascripts[$i]->pluginJsFile)) {
-            $this->_aJavascripts[$i]->pluginJsFile[] = $pluginJsFile; 
+            $this->_aJavascripts[$i]->pluginJsFile[] = $pluginJsFile;
           }
         } else if (is_array($pluginJsFile)) {
           $this->_aJavascripts[$i]->pluginJsFile = array_unique(array_merge($pluginJsFile, $this->_aJavascripts[$i]->pluginJsFile));
@@ -566,7 +566,7 @@ class PMPluginRegistry {
         return $this->_aJavascripts[$i];
       }
     }
-  
+
     $js = new StdClass();
     $js->sNamespace   = $sNamespace;
     $js->sCoreJsFile  = $sCoreJsFile;
@@ -613,7 +613,7 @@ class PMPluginRegistry {
         if ($sCoreJsFile == $js->sCoreJsFile && $sNamespace == $js->sNamespace) {
           $scripts = array_merge($scripts, $this->_aJavascripts[$i]->pluginJsFile);
         }
-      }  
+      }
     }
     return $scripts;
   }
@@ -1042,9 +1042,11 @@ class PMPluginRegistry {
       $className    = $details->sClassName;
       $classFile = PATH_PLUGINS . $pluginFolder . PATH_SEP . 'class.' . $pluginFolder .'.php';
       if ( file_exists ( $classFile ) ) {
-        require_once ( $classFile );
         $sClassName=substr_replace($className,"class",-6,6);
         //$sClassName = str_replace ( 'plugin', 'class', $className );
+        if (!class_exists($sClassName)) {
+          require_once $classFile;
+        }
         $obj = new $sClassName( );
         if ( !in_array ( $methodName, get_class_methods ($obj) ) ) {
           throw ( new Exception ( "The method '$methodName' doesn't exist in class '$sClassName' ") );
@@ -1152,14 +1154,14 @@ class PMPluginRegistry {
   function getCaseSchedulerPlugins( ) {
     return $this->_aCaseSchedulerPlugin;
   }
-  
+
    /**
    * Register a Task Extended property page in the singleton
    *
    * @param unknown_type $sNamespace
    * @param unknown_type $sPage
    */
-  
+
   function registerTaskExtendedProperty($sNamespace, $sPage, $sName, $sIcon ) {
     $found = false;
     foreach ( $this->_aTaskExtendedProperties as $row=>$detail ) {

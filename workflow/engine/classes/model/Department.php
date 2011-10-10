@@ -2,10 +2,10 @@
 /**
  * Department.php
  * @package    workflow.engine.classes.model
- *  
+ *
  * ProcessMaker Open Source Edition
  * Copyright (C) 2004 - 2011 Colosa Inc.
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
  * published by the Free Software Foundation, either version 3 of the
@@ -15,13 +15,13 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Affero General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * 
- * For more information, contact Colosa Inc, 2566 Le Jeune Rd., 
+ *
+ * For more information, contact Colosa Inc, 2566 Le Jeune Rd.,
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
- * 
+ *
  */
 
 require_once 'classes/model/om/BaseDepartment.php';
@@ -31,7 +31,7 @@ require_once 'classes/model/Users.php';
 /**
  * Skeleton subclass for representing a row from the 'DEPARTMENT' table.
  *
- * 
+ *
  *
  * You should add additional methods to this class to meet the
  * application requirements.  This class will only be generated as
@@ -45,76 +45,76 @@ class Department extends BaseDepartment {
 protected $depo_title = '';
 /**
    * Create the Department
-   * 
-   * @param      array $aData  
+   *
+   * @param      array $aData
    * @return     void
    */
 
   function create ($aData ) {
     $con = Propel::getConnection( DepartmentPeer::DATABASE_NAME );
     try {
-      if ( isset ( $aData['DEP_UID'] ) ) 
+      if ( isset ( $aData['DEP_UID'] ) )
         $this->setDepUid ( $aData['DEP_UID'] );
-      else 
+      else
         $this->setDepUid ( G::generateUniqueID() );
-        
-      if ( isset ( $aData['DEP_PARENT'] ) ) 
+
+      if ( isset ( $aData['DEP_PARENT'] ) )
         $this->setDepParent ( $aData['DEP_PARENT'] );
-      else 
+      else
         $this->setDepParent ( '' );
-        
-      if ( isset ( $aData['DEP_MANAGER'] ) ) 
+
+      if ( isset ( $aData['DEP_MANAGER'] ) )
         $this->setDepManager ( $aData['DEP_MANAGER'] );
-      else 
+      else
         $this->setDepManager ( '' );
-        
-      if ( isset ( $aData['DEP_LOCATION'] ) ) 
+
+      if ( isset ( $aData['DEP_LOCATION'] ) )
         $this->setDepLocation ( $aData['DEP_LOCATION'] );
-      else 
+      else
         $this->setDepLocation ( '' );
-        
-      if ( isset ( $aData['DEP_STATUS'] ) ) 
+
+      if ( isset ( $aData['DEP_STATUS'] ) )
         $this->setDepStatus ( $aData['DEP_STATUS'] );
-      else 
+      else
         $this->setDepStatus ( 'ACTIVE' );
 
-      if ( isset ( $aData['DEP_REF_CODE'] ) ) 
+      if ( isset ( $aData['DEP_REF_CODE'] ) )
         $this->setDepRefCode ( $aData['DEP_REF_CODE'] );
-      else 
+      else
         $this->setDepRefCode ( '' );
 
-      if ( isset ( $aData['DEP_LDAP_DN'] ) ) 
+      if ( isset ( $aData['DEP_LDAP_DN'] ) )
         $this->setDepLdapDn ( $aData['DEP_LDAP_DN'] );
-      else 
+      else
         $this->setDepLdapDn ( '' );
 
-      if ( isset ( $aData['DEP_TITLE'] ) ) 
+      if ( isset ( $aData['DEP_TITLE'] ) )
         $this->setDepTitle ( $aData['DEP_TITLE'] );
-      else 
+      else
         $this->setDepTitle ( '' );
-        
+
       if ( $this->validate() ) {
-        $con->begin(); 
+        $con->begin();
         $res = $this->save();
-        
-        $con->commit(); 
+
+        $con->commit();
         return $this->getDepUid();
       }
       else {
         $msg = '';
-        foreach($this->getValidationFailures() as $objValidationFailure) 
+        foreach($this->getValidationFailures() as $objValidationFailure)
           $msg .= $objValidationFailure->getMessage() . "<br/>";
-         
+
         throw ( new Exception ( " The Department row cannot be created $msg " ) );
       }
 
     }
     catch (Exception $e) {
-      $con->rollback(); 
+      $con->rollback();
       throw ($e);
     }
   }
-  
+
 /**
    * Get the [depo_title] column value.
    * @return     string
@@ -131,7 +131,7 @@ protected $depo_title = '';
 
   /**
    * Set the [depo_title] column value.
-   * 
+   *
    * @param      string $v new value
    * @return     void
    */
@@ -143,7 +143,7 @@ protected $depo_title = '';
     // Since the native PHP type for this column is string,
     // we will cast the input to a string (if it is not).
     if ($v !== null && !is_string($v)) {
-      $v = (string) $v; 
+      $v = (string) $v;
     }
 
     if ($this->depo_title !== $v || $v === '') {
@@ -157,11 +157,11 @@ protected $depo_title = '';
 
 /**
    * Load the Process row specified in [depo_id] column value.
-   * 
-   * @param      string $ProUid   the uid of the Prolication 
-   * @return     array  $Fields   the fields 
+   *
+   * @param      string $ProUid   the uid of the Prolication
+   * @return     array  $Fields   the fields
    */
-  
+
   function Load ( $DepUid ) {
     $con = Propel::getConnection(DepartmentPeer::DATABASE_NAME);
     try {
@@ -186,12 +186,12 @@ protected $depo_title = '';
    * @param     array $aData
    * @return    variant
   **/
-  
+
   public function update($aData)
   {
     $con = Propel::getConnection( DepartmentPeer::DATABASE_NAME );
     try {
-      $con->begin(); 
+      $con->begin();
       $oPro = DepartmentPeer::retrieveByPK( $aData['DEP_UID'] );
       if (is_object($oPro) && get_class ($oPro) == 'Department' ) {
         $oPro->fromArray( $aData, BasePeer::TYPE_FIELDNAME );
@@ -205,19 +205,19 @@ protected $depo_title = '';
           if ( isset ( $aData['DEP_MANAGER'] ) )
             $oPro->setDepManager( $aData['DEP_MANAGER'] );
           $res = $oPro->save();
-          $con->commit(); 
+          $con->commit();
           return $res;
         }
         else {
           $msg = '';
-          foreach($this->getValidationFailures() as $objValidationFailure) 
+          foreach($this->getValidationFailures() as $objValidationFailure)
             $msg .= $objValidationFailure->getMessage() . "<br/>";
-         
+
           throw ( new PropelException ( 'The Department row cannot be created!', new PropelException ( $msg ) ) );
         }
       }
       else {
-        $con->rollback(); 
+        $con->rollback();
         throw(new Exception( "The row '" . $aData['DEP_UID'] . "' in table Department doesn't exist!" ));
       }
     }
@@ -229,7 +229,7 @@ protected $depo_title = '';
 
  /**
    * Remove the row
-   * @param     array $aData or string $ProUid 
+   * @param     array $aData or string $ProUid
    * @return    string
   **/
   public function remove($ProUid)
@@ -238,17 +238,17 @@ protected $depo_title = '';
       $ProUid = ( isset ( $ProUid['DEP_UID'] ) ? $ProUid['DEP_UID'] : '' );
     }
     try {
-      
+
       $oCriteria = new Criteria('workflow');
       $oCriteria->addSelectColumn(UsersPeer::USR_UID);
       $oCriteria->add(UsersPeer::DEP_UID, $ProUid, Criteria::EQUAL);
       $oDataset = UsersPeer::doSelectRS($oCriteria);
       $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-      
+
       $oDataset->next();
       $aFields = array();
       while ($aRow = $oDataset->getRow()) {
-          
+
           $aFields['USR_UID'] = $aRow['USR_UID'];
           $aFields['DEP_UID'] = '';
           $oDepto = UsersPeer::retrieveByPk($aFields['USR_UID']);
@@ -258,12 +258,12 @@ protected $depo_title = '';
                 $oDepto = new Users();
                 $oDepto->update($aFields);
             }
-          
+
           $oDataset->next();
       }
-      
-      
-      
+
+
+
       $oPro = DepartmentPeer::retrieveByPK( $ProUid );
       if (!is_null($oPro))
       {
@@ -283,11 +283,11 @@ protected $depo_title = '';
 
 /**
    * Load the Department row specified in [depo_id] column value.
-   * 
-   * @param      string $ProUid   the uid of the Prolication 
-   * @return     array  $Fields   the fields 
+   *
+   * @param      string $ProUid   the uid of the Prolication
+   * @return     array  $Fields   the fields
    */
-  
+
   function existsDepartment( $DepUid ) {
     $con = Propel::getConnection(DepartmentPeer::DATABASE_NAME);
     $oPro = DepartmentPeer::retrieveByPk( $DepUid );
@@ -309,7 +309,7 @@ protected $depo_title = '';
 
     return false;
   }
-  
+
   function updateDepartmentManager ($depId) {
     $managerId = '';
     $depParent = '';
@@ -341,15 +341,15 @@ protected $depo_title = '';
           $oUser->setUsrReportsTo( $managerParentId );
         }
       }
-      $oUser->save();      
+      $oUser->save();
     }
-    
+
     // get children departments to update the reportsTo of these children
     $childrenCriteria = new Criteria('workflow');
     $childrenCriteria->add(DepartmentPeer::DEP_PARENT, $depId );
     $oDataset = DepartmentPeer::doSelectRS($childrenCriteria);
     $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-      
+
     $oDataset->next();
     while ( $aRow = $oDataset->getRow() ) {
       $oUser = UsersPeer::retrieveByPk($aRow['DEP_MANAGER']);
@@ -358,7 +358,7 @@ protected $depo_title = '';
         $oUser->save();
       }
       $oDataset->next();
-    }      
+    }
 
   }
 
@@ -371,7 +371,7 @@ protected $depo_title = '';
         $oUser->setDepUid( $depId );
         $oUser->save();
       }
-      
+
       //if the user is a manager update Department Table
       if ( $manager ) {
         $oDept = DepartmentPeer::retrieveByPk( $depId );
@@ -380,11 +380,11 @@ protected $depo_title = '';
           $oDept->save();
         }
       }
-      
-      //now update the reportsto to all 
+
+      //now update the reportsto to all
       if ( $updateManager ) {
         $this->updateDepartmentManager ($depId);
-      }   
+      }
       return true;
     }
     catch ( Exception $oError) {
@@ -402,7 +402,7 @@ function getDepartments( $DepParent )  {
       $con = Propel::getConnection(DepartmentPeer::DATABASE_NAME);
       $objects = DepartmentPeer::doSelect($criteria, $con);
       global $RBAC;
-      
+
       foreach( $objects as $oDepartment ) {
         $node = array();
         $node['DEP_UID']      = $oDepartment->getDepUid();
@@ -410,8 +410,9 @@ function getDepartments( $DepParent )  {
         $node['DEP_TITLE']    = $oDepartment->getDepTitle();
         $node['DEP_STATUS']   = $oDepartment->getDepStatus();
         $node['DEP_MANAGER']  = $oDepartment->getDepManager();
+        $node['DEP_LDAP_DN']  = $oDepartment->getDepLdapDn();
         $node['DEP_LAST']     = 0;
-        
+
         $manager = $oDepartment->getDepManager();
         if ($manager != ''){
           $UserUID = $RBAC->load($manager);
@@ -419,7 +420,7 @@ function getDepartments( $DepParent )  {
           $node['DEP_MANAGER_FIRSTNAME'] = isset($UserUID['USR_FIRSTNAME'])?$UserUID['USR_FIRSTNAME']:'';
           $node['DEP_MANAGER_LASTNAME'] = isset($UserUID['USR_LASTNAME'])?$UserUID['USR_LASTNAME']:'';
         }else{
-          $node['DEP_MANAGER_USERNAME'] = '';	
+          $node['DEP_MANAGER_USERNAME'] = '';
           $node['DEP_MANAGER_FIRSTNAME'] = '';
           $node['DEP_MANAGER_LASTNAME'] = '';
         }
@@ -442,7 +443,7 @@ function getDepartments( $DepParent )  {
       throw $e;
     }
   }
-    
+
   function getUsersFromDepartment( $sDepUid, $sManagerUid )  {
     try {
       $oCriteria = new Criteria('workflow');
@@ -450,12 +451,12 @@ function getDepartments( $DepParent )  {
       $oCriteria->addSelectColumn(UsersPeer::USR_REPORTS_TO);
       $oCriteria->add(UsersPeer::USR_STATUS, 'CLOSED', Criteria::NOT_EQUAL);
       $oCriteria->add(UsersPeer::DEP_UID, $sDepUid);
-          
+
       $rs = UsersPeer::doSelectRS($oCriteria);
       $rs->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-          
+
       $oUser = new Users();
-      $aUsers[] = array('USR_UID' =>'char', 'USR_USERNAME' =>'char','USR_FULLNAME' =>'char', 'USR_REPORTS_TO'=>'char','USR_MANAGER' =>'char');          
+      $aUsers[] = array('USR_UID' =>'char', 'USR_USERNAME' =>'char','USR_FULLNAME' =>'char', 'USR_REPORTS_TO'=>'char','USR_MANAGER' =>'char');
       $rs->next();
       $row = $rs->getRow();
       while( is_array($row) ) {
@@ -479,27 +480,27 @@ function getDepartments( $DepParent )  {
         $rs->next();
         $row = $rs->getRow();
       }
-      
+
       G::LoadClass('ArrayPeer');
       global $_DBArray;
       $_DBArray['DepartmentUserList'] = $aUsers ;
        $_SESSION['_DBArray'] = $_DBArray;
       $oCriteriaT = new Criteria('dbarray');
       $oCriteriaT->setDBArrayTable('DepartmentUserList');
-        
+
       return $oCriteriaT;
     }
     catch (exception $e) {
       throw $e;
     }
   }
-  
+
   /*
   * Remove a user from Departments
   * @param string $DepUid, $UsrUid
   * @return array
   */
-  function removeUserFromDepartment($DepUid, $UsrUid) {   
+  function removeUserFromDepartment($DepUid, $UsrUid) {
     $aFields = array ('USR_UID'=> $UsrUid,'DEP_UID'=> '', 'USR_REPORTS_TO' => '');
     try {
       $oUser = UsersPeer::retrieveByPk( $UsrUid );
@@ -508,7 +509,7 @@ function getDepartments( $DepParent )  {
         $oUser->setDepUid ( '');
         $oUser->setUsrReportsTo ( '');
         $oUser->save();
-      } 
+      }
     }
     catch (exception $oError) {
       throw ($oError);
@@ -535,7 +536,7 @@ function getDepartments( $DepParent )  {
             throw ($oError);
         }
     }
-    
+
     /*
     * Return the cant Users In Department
     * @param string $sDepUID
@@ -558,20 +559,20 @@ function getDepartments( $DepParent )  {
         throw ($oError);
       }
     }
-		function loadByGroupname ( $Groupname ) {       
-		    $c = new Criteria('workflow');    
+		function loadByGroupname ( $Groupname ) {
+		    $c = new Criteria('workflow');
 		    $del = DBAdapter::getStringDelimiter();
-		
+
 		    $c->clearSelectColumns();
 		    $c->addSelectColumn( ContentPeer::CON_CATEGORY );
 		    $c->addSelectColumn( ContentPeer::CON_VALUE );
-		                    
+
 		    $c->add(ContentPeer::CON_CATEGORY,  'DEPO_TITLE');
 		    $c->add(ContentPeer::CON_VALUE,  $Groupname);
-		    $c->add(ContentPeer::CON_LANG,  SYS_LANG );          
-		    return $c;   
+		    $c->add(ContentPeer::CON_LANG,  SYS_LANG );
+		    return $c;
 		  }
-		  
+
 	//Added by Qennix
 	function getAllDepartmentsByUser(){
 		$c = new Criteria('workflow');
