@@ -2,7 +2,7 @@
 $data = $_POST['form'];
 global $RBAC;
 require_once PATH_RBAC."model/RbacUsers.php";
-require_once ( "classes/class.pmFunctions.php" );
+G::LoadClass('pmFunctions');
 require_once 'classes/model/Users.php';
 G::LoadClass("system");
 
