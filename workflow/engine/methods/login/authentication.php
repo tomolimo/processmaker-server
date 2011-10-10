@@ -258,7 +258,13 @@ try {
     }
   }
   else {
-    G::header('Location: ' . $oUserProperty->redirectTo($_SESSION['USER_LOGGED'], $lang));
+    if (isset($_POST['form']['URL']) && $_POST['form']['URL'] != '') {
+      $sLocation = $_POST['form']['URL'];
+    }
+    else {
+      $sLocation = $oUserProperty->redirectTo($_SESSION['USER_LOGGED'], $lang);
+    }
+    G::header('Location: ' . $sLocation);
     die();
   }
 
