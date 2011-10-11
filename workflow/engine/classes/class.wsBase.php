@@ -1884,7 +1884,7 @@ class wsBase
       $tasUid = $aRow['TAS_UID'];
       $derivation = new Derivation ();
       $userList   = $derivation->getAllUsersFromAnyTask( $tasUid );
-      if ( ! in_array ( $userIdTarget, $userList ) ) {
+      if ( in_array ( $userIdTarget, $userList ) ) {
         $result = new wsResponse (34, "The target user does not have rights to execute the task " );
         return $result;
       }
