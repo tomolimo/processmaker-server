@@ -122,7 +122,7 @@ Ext.onReady(function(){
       header    : tableDef.FIELDS[i].FLD_DESCRIPTION,
       dataIndex : tableDef.FIELDS[i].FLD_NAME,
       width     : 40,
-      align     : columnAlign,
+      align     : 'right',
       renderer  : columnRenderer
     };
     if (tableDef.FIELDS[i].FLD_AUTO_INCREMENT != 1) {
@@ -282,7 +282,7 @@ Ext.onReady(function(){
     id: 'infoGrid',
     height:1000,
     autoWidth : true,
-    title : _('ID_PM_TABLE') + " : " + tableDef.ADD_TAB_NAME,
+    //title : _('ID_PM_TABLE') + " : " + tableDef.ADD_TAB_NAME,
     stateful : true,
     stateId : 'grid',
     enableColumnResize: true,
@@ -296,15 +296,15 @@ Ext.onReady(function(){
     loadMask: true,
     cm: cmodel,
     sm: smodel,
-    tbar:[ newButton,
-           '-',
-           editButton,
-           deleteButton,
-           '-',
-           importButton,
-           exportButton,
-           {xtype: 'tbfill'},
-           backButton ],
+    tbar:[ 
+      newButton,
+      '-',
+      editButton,
+      deleteButton,
+      '-',
+      importButton,
+      exportButton
+    ],
     bbar: bbarpaging
   }
   

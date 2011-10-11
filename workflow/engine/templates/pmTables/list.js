@@ -197,6 +197,7 @@ Ext.onReady(function(){
           {name : 'ADD_TAB_TYPE'},
           {name : 'ADD_TAB_TAG'},
           {name : 'PRO_UID'},
+          {name : 'NUM_ROWS'}
         ]
       })
     });
@@ -216,7 +217,10 @@ Ext.onReady(function(){
             editButton.enable();
             deleteButton.enable();
             exportButton.enable();
-            dataButton.enable();
+            row = sm.getSelected();
+            if (row.data.NUM_ROWS > 0) {
+              dataButton.enable();
+            }
             break;
           default:
             editButton.disable();
@@ -252,6 +256,8 @@ Ext.onReady(function(){
       value = r.get('PRO_UID') ? _('ID_REPORT_TABLE') : _('ID_PMTABLE');
       return '<span style="color:'+color+'">'+value+'</span> ';
     }});
+
+    cmodelColumns.push({header: 'Records', dataIndex: 'NUM_ROWS', width: 90, align:'left'});
 
     if (PRO_UID === false) {
       cmodelColumns.push({header: _('ID_PROCESS'), dataIndex: 'PRO_TITLE', width: 180, align:'left'});
@@ -421,15 +427,16 @@ DeletePMTable = function() {
           },
           success: function(resp){
             result = Ext.util.JSON.decode(resp.responseText);
+            Ext.getCmp('infoGrid').getStore().reload();
             if (result.success) {
-              Ext.getCmp('infoGrid').getStore().reload();
               PMExt.notify(_("ID_DELETION_SUCCESSFULLY"), _("ID_ALL_RECORDS_DELETED_SUCESSFULLY"));
             } else {
-              Ext.Msg.alert( _('ID_ERROR'), result.msg);
+              PMExt.error( _('ID_ERROR'), result.message.nl2br());
             }
           },
           failure: function(obj, resp){
-            Ext.Msg.alert( _('ID_ERROR'), resp.result.msg);
+            Ext.getCmp('infoGrid').getStore().reload();
+            Ext.Msg.alert( _('ID_ERROR'), resp.result.message);
           }
         });
       }
@@ -573,9 +580,32 @@ ExportPMTable = function(){
 };
 
 //Load PM TAble Data
-PMTableData = function(){
+PMTableData = function()
+{
   var row = Ext.getCmp('infoGrid').getSelectionModel().getSelected();
-  location.href = 'pmTables/data?id='+row.get('ADD_TAB_UID');
+  //location.href = 'pmTables/data?id='+row.get('ADD_TAB_UID');
+  if (row.get('TYPE') != '') {
+    PMExt.info(_('ID_INFO'), _('ID_DATA_LIST_NOT_AVAILABLE_FOR_OLDVER'));
+    return;
+  }
+
+  win = new Ext.Window({
+    layout:'fit',
+    width:700,
+    title: _('ID_PM_TABLE') +': '+ row.get('ADD_TAB_NAME'),
+    height:500,
+    modal: true,
+    maximizable: true,
+    constrain: true,
+    //closeAction:'hide',
+    plain: true,
+    items: [{
+      xtype:"iframepanel",
+      defaultSrc : 'pmTables/data?id='+row.get('ADD_TAB_UID')+'&type='+row.get('TYPE'),
+      loadMask:{msg: _('ID_LOADING')}
+    }]
+  });
+  win.show();
 };
 
 //Gets UIDs from a array of rows

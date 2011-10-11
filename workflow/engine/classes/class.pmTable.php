@@ -180,7 +180,7 @@ class PmTable
     $this->prepare($loadSchema);
     $this->phingbuildModel();
     $this->phingbuildSql();
-    $this->upgradeDatabaseFor($this->dataSource, $tablesList);
+    //$this->upgradeDatabaseFor($this->dataSource, $tablesList);
   }
 
   /**
@@ -349,7 +349,12 @@ class PmTable
     $stmt = $con->createStatement();
     
     if (is_object($con)) {
-      $stmt->executeQuery("DROP TABLE {$tableName}");
+      try {
+        $stmt->executeQuery("DROP TABLE {$tableName}");   
+      } 
+      catch (Exception $e) {
+        throw new Exception("Phisical table '$tableName' does not exist!");
+      }
     }
   }
   
@@ -467,12 +472,13 @@ class PmTable
     
   }
 
-  public function upgradeDatabaseFor($dataSource, $tablesList)
+  public function upgradeDatabaseFor($dataSource, $tablesList = array())
   {
     $con = Propel::getConnection($dataSource);
     $stmt = $con->createStatement();
     $lines = file($this->dataDir . $this->dbConfig->adapter . PATH_SEP . 'schema.sql');
     $previous = NULL;
+    $errors = '';
     
     foreach ($lines as $j => $line) {
       $line = trim($line); // Remove comments from the script
@@ -509,17 +515,27 @@ class PmTable
       $line = substr($line, 0, strrpos($line, ";"));
       
       // execute
-      if (stripos($line, 'CREATE TABLE') !== false || stripos($line, 'DROP TABLE') !== false) {
+      $isCreate = stripos($line, 'CREATE TABLE') !== false;
+      $isDrop   = stripos($line, 'DROP TABLE') !== false;
+
+      if ($isCreate || $isDrop) {
         if (preg_match('/TABLE\s[\'\"\`]+(\w+)[\'\"\`]+/i', $line, $match)) {
           if (in_array($match[1], $tablesList)) { 
             //error_log($line);
-            $stmt->executeQuery($line);
+            try {
+              $stmt->executeQuery($line);
+            } 
+            catch(Exception $e) {
+              $errors .= $e->getMessage() . "\n";
+              continue;
+            }
+            
           }
         }
       }
-    
     } 
-    
+
+    return $errors;
   }
   
   /**

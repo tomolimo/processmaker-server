@@ -347,3 +347,8 @@ String.prototype.trim = function() {
   return this.replace(/^\s+|\s+get/g,"");
   //return Ext.util.Format.trim(this);
 }
+
+String.prototype.nl2br = function () {
+  return this.replace(/\n/g,'<br />');
+}
+

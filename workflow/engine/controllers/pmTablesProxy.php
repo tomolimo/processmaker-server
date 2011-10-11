@@ -54,6 +54,7 @@ class pmTablesProxy extends HttpProxyController
         $addTables['rows'][] = array(
           'ADD_TAB_UID' => $oldRepTab['REP_TAB_UID'],
           'PRO_UID' => $oldRepTab['PRO_UID'],
+          'DBS_UID' => ($oldRepTab['REP_TAB_CONNECTION']=='wf'? 'workflow' : 'rp'),
           'ADD_TAB_DESCRIPTION' => $oldRepTab['REP_TAB_TITLE'],
           'ADD_TAB_NAME' => $oldRepTab['REP_TAB_NAME'],
           'ADD_TAB_TYPE' => $oldRepTab['REP_TAB_TYPE'],
@@ -63,6 +64,19 @@ class pmTablesProxy extends HttpProxyController
     } 
     else {
       $addTables = AdditionalTables::getAll($start, $limit, $filter);
+    }
+    
+    foreach ($addTables['rows'] as $i => $table) {
+      $con = Propel::getConnection($table['DBS_UID']);
+      $stmt = $con->createStatement();
+      $rs = $stmt->executeQuery('SELECT COUNT(*) AS NUM_ROWS from ' . $table['ADD_TAB_NAME']);
+      if ($rs->next()) {
+        $r = $rs->getRow();
+        $addTables['rows'][$i]['NUM_ROWS'] = $r['NUM_ROWS'];
+      }
+      else {
+        $addTables['rows'][$i]['NUM_ROWS'] = 0;
+      }
     }
 
     return $addTables;
@@ -223,6 +237,13 @@ class pmTablesProxy extends HttpProxyController
           case 'INT': $columns[$i]->field_type = 'INTEGER'; break;
           case 'TEXT': $columns[$i]->field_type = 'LONGVARCHAR'; break;
         }
+
+        // VALIDATIONS
+        if ($columns[$i]->field_autoincrement) {
+          if ($columns[$i]->field_type !== 'INTEGER') {
+            $columns[$i]->field_autoincrement = false;
+          }
+        }
       }
 
       G::loadClass('pmTable');
@@ -291,7 +312,8 @@ class pmTablesProxy extends HttpProxyController
       $result->success = true;
       $result->message = $result->msg = $buildResult;
 
-    } catch (Exception $e) {
+    } 
+    catch (Exception $e) {
       $buildResult = ob_get_contents();
       ob_end_clean();
       $result->success = false;
@@ -319,24 +341,46 @@ class pmTablesProxy extends HttpProxyController
   public function delete($httpData) 
   {
     $rows = G::json_decode(stripslashes($httpData->rows));
-    
-    try {
-      foreach ($rows as $row ) {
+    $errors = '';
+    $count = 0;
+
+    foreach ($rows as $row ) {
+      try {
+        $at = new AdditionalTables();
+        $table = $at->load($row->id);
+
+        if (!isset($table)) {
+          throw new Exception("Table does not exist... skipped!\n");
+        }
+
         if($row->type == 'CLASSIC') {
           G::LoadClass('reportTables');
           $rp = new reportTables();
           $rp->deleteReportTable($row->id);
-        } else {
-          $at = new AdditionalTables();
+          $count++;
+        } 
+        else {
           $at->deleteAll($row->id);
+          $count++;
         }
+      } catch(Exception $e) {
+        $tableName = isset($table['ADD_TAB_NAME']) ? $table['ADD_TAB_NAME'] : $row->id;
+        $errors .= $e->getMessage() . "\n";
+        continue;
       }
-      $result->success = true;
-    } catch(Exception $e) {
-      $result->success = true; // if the table does not exist just skip it and don't  show messages for it
-      $result->msg = $e->getMessage();
     }
     
+    if ($errors == '') {
+      $result->success = true;
+      $result->message = "$count tables removed Successfully.";
+    }
+    else {
+      $result->success = false;
+      $result->message = "$count tables removed but with errors.\n$errors" ;  
+    }
+
+    $result->errors = $errors;
+
     return $result;
   }
 
@@ -655,7 +699,7 @@ class pmTablesProxy extends HttpProxyController
     require_once 'classes/model/AdditionalTables.php';
     try {
       $errors = '';
-      ob_start();
+      
       $overWrite = isset($_POST['form']['OVERWRITE'])? true: false;
 
       //save the file
@@ -678,11 +722,12 @@ class pmTablesProxy extends HttpProxyController
       if(strpos($fileContent, '-----== ProcessMaker Open Source Private Tables ==-----') === false) {
         throw new Exception('ID_PMTABLE_INVALID_FILE');
       }
-        
-      $fp     = fopen($PUBLIC_ROOT_PATH.$filename, "rb");
-      $fsData = intval(fread($fp, 9));    //reading the metadata
-      $sType  = fread($fp, $fsData);    //reading string $oData
       
+      $fp = fopen($PUBLIC_ROOT_PATH.$filename, "rb");
+      $fsData = intval(fread($fp, 9));  //reading the metadata
+      $sType  = fread($fp, $fsData);
+
+      // first create the tables structures
       while (!feof($fp)) {
         switch($sType) {
           case '@META':
@@ -696,13 +741,12 @@ class pmTablesProxy extends HttpProxyController
             $fsData   = intval(fread($fp, 9));
             $schema   = fread($fp, $fsData);
             $contentSchema = unserialize($schema);
-
             $additionalTable = new additionalTables();
             $tableExists = $additionalTable->loadByName($contentSchema['ADD_TAB_NAME']);
             $tableNameMap[$contentSchema['ADD_TAB_NAME']] = $contentSchema['ADD_TAB_NAME'];
             
             if ($overWrite) {
-              if($tableExists !== false) {
+              if ($tableExists !== false) {
                 $additionalTable->deleteAll($tableExists['ADD_TAB_UID']);
               }
             } 
@@ -754,17 +798,65 @@ class pmTablesProxy extends HttpProxyController
 
             //save the table
             $alterTable = false;
-            if (!isset($processQueue[$contentSchema['DBS_UID']])) {
-              $processQueue[$contentSchema['DBS_UID']] = array();
-            }
-            $processQueueTables[] = $contentSchema['ADD_TAB_NAME'];
-
             $result = $this->save($tableData, $alterTable);
             
-            if (!$result->success) {
-              $errors .=  $result->message . "\n\n";
+            if ($result->success) {
+              $processQueueTables[$contentSchema['DBS_UID']][] = $contentSchema['ADD_TAB_NAME'];
+            }
+            else {
+              $errors .=  'Error creating table: '.$tableData->REP_TAB_NAME.'-> '.$result->message . "\n\n";
             }
             
+          break;
+          
+          case '@DATA':
+            $fstName   = intval(fread($fp, 9));
+            $tableName = fread($fp, $fstName);
+            $fsData    = intval(fread($fp, 9));
+            if ($fsData > 0) $data = fread($fp, $fsData);
+          break;
+        }
+
+        $fsData = intval(fread($fp, 9));  //reading the metadata
+        if($fsData > 0){ // reading next block type
+          $sType  = fread($fp, $fsData);
+        } 
+        else {
+          break;
+        }
+
+      }
+
+      fclose($fp);
+      G::loadClass('pmTable');
+
+      foreach ($processQueueTables as $dbsUid => $tables) {  
+        $pmTable = new pmTable();
+        ob_start();
+        $pmTable->buildModelFor($dbsUid, $tables);
+        $buildResult = ob_get_contents();
+        ob_end_clean();
+        $errors .= $pmTable->upgradeDatabaseFor($pmTable->getDataSource(), $tables);
+      }
+
+      $fp = fopen($PUBLIC_ROOT_PATH.$filename, "rb");
+      $fsData = intval(fread($fp, 9));
+      $sType  = fread($fp, $fsData);
+      // data processing
+
+      while (!feof($fp)) {
+
+        switch($sType) {
+          case '@META':
+            $fsData   = intval(fread($fp, 9));
+            $METADATA = fread($fp, $fsData);
+          break;
+          
+          case '@SCHEMA':
+            $fsUid    = intval(fread($fp, 9));
+            $uid      = fread($fp, $fsUid);
+            $fsData   = intval(fread($fp, 9));
+            $schema   = fread($fp, $fsData);
           break;
           
           case '@DATA':
@@ -779,9 +871,24 @@ class pmTablesProxy extends HttpProxyController
               
               $oAdditionalTables = new AdditionalTables();
               $table = $oAdditionalTables->loadByName($tableName);
+              $isReport = $table['PRO_UID'] !== '' ? true : false;
               
               if ($table !== false) {
-                $processQueue[$contentSchema['DBS_UID']][] = array('id'=>$table[0]['ADD_TAB_UID'], 'records'=>$contentData);
+                if (!$isReport) {
+                  //////////data
+                  if (count($contentData) > 0) {
+                    foreach ($contentData as $row) {
+                      $data = new StdClass();
+                      $data->id = $table['ADD_TAB_UID'];
+                      $data->rows = base64_encode(serialize($row));
+                      $res = $this->dataCreate($data , 'base64');
+                    }
+                  }
+                  ////////////
+                }
+                else { // is a report table                  
+                  $oAdditionalTables->populateReportTable($tablename, $table['DBS_UID'], $table['ADD_TAB_TYPE'], $table['PRO_UID'], $table['ADD_TAB_GRID']);
+                }
               }
             }
           break;
@@ -793,41 +900,11 @@ class pmTablesProxy extends HttpProxyController
         } 
         else {
           break;
-        }  
+        }
       }
       
       ////////////
-      G::loadClass('pmTable');
-
-      foreach ($processQueue as $dbsUid => $tableData) {
-        
-        $pmTable = new pmTable();
-        $pmTable->buildModelFor($dbsUid, $processQueueTables);
-        $buildResult = ob_get_contents();
-        ob_end_clean();
-
-        if (count($tableData) > 0) {
-          foreach ($tableData as $rows) {
-            foreach ($rows['records'] as $row) {
-              $data = new StdClass();
-              $data->id = $rows['id'];
-              $data->rows = base64_encode(serialize($row));
-              $this->dataCreate($data , 'base64');
-            }
-          }
-        }
-
-        $additionalTable = new AdditionalTables();
-
-        foreach ($processQueueTables as $tablename) {
-          $table = $additionalTable->loadByName($tablename);
-          $isReport = $table['PRO_UID'] !== '' ? true : false;
-
-          if ($table && $isReport) {  
-            $oAdditionalTables->populateReportTable($tablename, $table['DBS_UID'], $table['ADD_TAB_TYPE'], $table['PRO_UID'], $table['ADD_TAB_GRID']);
-          }
-        }     
-      }
+      
 
       if ($errors == '') {
         $result->success = true;

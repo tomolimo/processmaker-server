@@ -2273,6 +2273,7 @@ class processMap {
     $oCriteria->addSelectColumn(ReportTablePeer::PRO_UID);
     $oCriteria->addSelectColumn(ReportTablePeer::REP_TAB_NAME);
     $oCriteria->addSelectColumn(ReportTablePeer::REP_TAB_TYPE);
+    $oCriteria->addSelectColumn(ReportTablePeer::REP_TAB_CONNECTION);
     // $oCriteria->addAsColumn ( 'REP_TAB_TITLE', 'C.CON_VALUE' );
     $oCriteria->addAsColumn('REP_TAB_TITLE', "CASE WHEN C.CON_VALUE IS NULL THEN (SELECT DISTINCT MAX(A.CON_VALUE) FROM CONTENT A WHERE A.CON_ID = REPORT_TABLE.REP_TAB_UID ) ELSE C.CON_VALUE  END ");
     $oCriteria->addAlias('C', 'CONTENT');

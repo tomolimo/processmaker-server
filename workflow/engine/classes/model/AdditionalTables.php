@@ -27,26 +27,22 @@ class AdditionalTables extends BaseAdditionalTables {
    * Function load
    * access public
    */
-  public function load($sUID, $bFields = false) {
-    try {
-      $oAdditionalTables = AdditionalTablesPeer::retrieveByPK($sUID);
-      if (!is_null($oAdditionalTables)) {
-        $aFields = $oAdditionalTables->toArray(BasePeer::TYPE_FIELDNAME);
-        $this->fromArray($aFields, BasePeer::TYPE_FIELDNAME);
+  public function load($sUID, $bFields = false) 
+  {
+    $oAdditionalTables = AdditionalTablesPeer::retrieveByPK($sUID);
+    
+    if (is_null($oAdditionalTables)) {
+      return null;
+    }
 
-        if ($bFields) {
-          $aFields['FIELDS'] = $this->getFields();
-        }
-        
-        return $aFields;
-      }
-      else {
-        throw(new Exception('This row doesn\'t exist!'));
-      }
+    $aFields = $oAdditionalTables->toArray(BasePeer::TYPE_FIELDNAME);
+    $this->fromArray($aFields, BasePeer::TYPE_FIELDNAME);
+
+    if ($bFields) {
+      $aFields['FIELDS'] = $this->getFields();
     }
-    catch (Exception $oError) {
-      throw($oError);
-    }
+    
+    return $aFields;
   }
 
   public function getFields()
@@ -709,6 +705,7 @@ class AdditionalTables extends BaseAdditionalTables {
     $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_TYPE);
     $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_TAG);
     $oCriteria->addSelectColumn(AdditionalTablesPeer::PRO_UID);
+    $oCriteria->addSelectColumn(AdditionalTablesPeer::DBS_UID);
 
     if (isset($process)) {
       foreach ($process as $key => $pro_uid) {
