@@ -249,20 +249,30 @@ try {
       G::RenderPage('publish');
       die;
     }
-     /* Check password using policy - End */
-    if ( isset($_POST['form']['URL']) && $_POST['form']['URL'] != '') {
-        $sLocation = $_POST['form']['URL'];
+
+    if (isset($_REQUEST['form']['URL']) && $_REQUEST['form']['URL'] != '') {
+        $sLocation = $_REQUEST['form']['URL'];
     }
     else {
-      $sLocation = $oUserProperty->redirectTo($_SESSION['USER_LOGGED'], $lang);
+      if (isset($_REQUEST['u']) && $_REQUEST['u'] != '') {
+        $sLocation = $_REQUEST['u'];
+      }
+      else {
+        $sLocation = $oUserProperty->redirectTo($_SESSION['USER_LOGGED'], $lang);
+      }
     }
   }
   else {
-    if (isset($_POST['form']['URL']) && $_POST['form']['URL'] != '') {
-      $sLocation = $_POST['form']['URL'];
+    if (isset($_REQUEST['form']['URL']) && $_REQUEST['form']['URL'] != '') {
+        $sLocation = $_REQUEST['form']['URL'];
     }
     else {
-      $sLocation = $oUserProperty->redirectTo($_SESSION['USER_LOGGED'], $lang);
+      if (isset($_REQUEST['u']) && $_REQUEST['u'] != '') {
+        $sLocation = $_REQUEST['u'];
+      }
+      else {
+        $sLocation = $oUserProperty->redirectTo($_SESSION['USER_LOGGED'], $lang);
+      }
     }
     G::header('Location: ' . $sLocation);
     die();
