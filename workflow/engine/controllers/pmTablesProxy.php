@@ -725,7 +725,7 @@ class pmTablesProxy extends HttpProxyController
       $fileContent = file_get_contents($PUBLIC_ROOT_PATH.$filename);
       
       if(strpos($fileContent, '-----== ProcessMaker Open Source Private Tables ==-----') === false) {
-        throw new Exception('ID_PMTABLE_INVALID_FILE');
+        throw new Exception(G::loadTranslation('ID_PMTABLE_INVALID_FILE'));
       }
       
       $fp = fopen($PUBLIC_ROOT_PATH.$filename, "rb");
@@ -862,6 +862,12 @@ class pmTablesProxy extends HttpProxyController
             $uid      = fread($fp, $fsUid);
             $fsData   = intval(fread($fp, 9));
             $schema   = fread($fp, $fsData);
+            $contentSchema = unserialize($schema);
+            $additionalTable = new additionalTables();
+            $table = $additionalTable->loadByName($tableNameMap[$contentSchema['ADD_TAB_NAME']]);
+            if ($table['PRO_UID'] != '') { // is a report table, try populate it
+              $additionalTable->populateReportTable($table['ADD_TAB_NAME'], pmTable::resolveDbSource($table['DBS_UID']), $table['ADD_TAB_TYPE'], $table['PRO_UID'], $table['ADD_TAB_GRID']);
+            }
           break;
           
           case '@DATA':
@@ -877,10 +883,9 @@ class pmTablesProxy extends HttpProxyController
               $oAdditionalTables = new AdditionalTables();
               $table = $oAdditionalTables->loadByName($tableName);
               $isReport = $table['PRO_UID'] !== '' ? true : false;
-              
+
               if ($table !== false) {
                 if (!$isReport) {
-                  //////////data
                   if (count($contentData) > 0) {
                     foreach ($contentData as $row) {
                       $data = new StdClass();
@@ -892,10 +897,6 @@ class pmTablesProxy extends HttpProxyController
                       }
                     }
                   }
-                  ////////////
-                }
-                else { // is a report table                  
-                  $oAdditionalTables->populateReportTable($tablename, $table['DBS_UID'], $table['ADD_TAB_TYPE'], $table['PRO_UID'], $table['ADD_TAB_GRID']);
                 }
               }
             }
@@ -1205,6 +1206,29 @@ class pmTablesProxy extends HttpProxyController
     } else {
       return false;
     }
+  }
+
+  public function genDataReport($httpData)
+  {
+    G::loadClass('pmTable');
+    require_once 'classes/model/AdditionalTables.php';
+    $result->message = '';
+    $result->success = true;
+
+    $additionalTables = new AdditionalTables();
+    $table = $additionalTables->load($httpData->id);
+    if ($table['PRO_UID'] != '') {
+      $additionalTables->populateReportTable(
+        $table['ADD_TAB_NAME'], 
+        pmTable::resolveDbSource($table['DBS_UID']), 
+        $table['ADD_TAB_TYPE'], 
+        $table['PRO_UID'], 
+        $table['ADD_TAB_GRID']
+      );
+      $result->message = 'generated for table '.$table['ADD_TAB_NAME'];
+    }
+
+    return $result;
   }
 
   /**

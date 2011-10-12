@@ -83,7 +83,7 @@ class PmTable
   {
     $this->dataSource = self::resolveDbSource($dbsUid);
 
-    switch ($dbsUid) {
+    switch ($this->dataSource) {
       case 'workflow':
         $this->dbConfig->adapter= DB_ADAPTER;
         $this->dbConfig->host   = DB_HOST;
@@ -191,10 +191,6 @@ class PmTable
     //prevent execute prepare() twice or more
     if (is_object($this->dom)) {
       return true;
-    }
-    
-    if ($this->dataSource == '' || $this->dataSource == 'wf' || !$this->dataSource) {
-      $this->dataSource = 'workflow';
     }
 
     $this->schemaFilename = 'schema.xml';

@@ -56,6 +56,14 @@ Ext.onReady(function(){
     icon    : '/images/export.png',
     handler : ExportPMTableCSV
   });
+
+  genDataReportButton = new Ext.Action({
+    text: 'Regenerate Data Report',
+    iconCls: 'silk-add',
+    icon: '/images/database-tool.png',
+    handler: genDataReport,
+    disabled: false
+  });
   
   backButton = new Ext.Action({
     text    : _('ID_BACK'),
@@ -64,8 +72,7 @@ Ext.onReady(function(){
   });
   
   contextMenu = new Ext.menu.Menu({
-      items : [ editButton,
-                deleteButton ]
+      items : [ editButton, deleteButton ]
   });
   
   //This loop loads columns and fields to store and column model
@@ -144,29 +151,30 @@ Ext.onReady(function(){
   }
   
   
- smodel = new Ext.grid.CheckboxSelectionModel({
-     listeners:{
-       selectionchange : function(sm){
-         var count_rows = sm.getCount();
-         switch(count_rows){
-         case 0:
-           editButton.disable();
-           deleteButton.disable();
-           break;
-         case 1:
-           if (!isReport) {
+  smodel = new Ext.grid.CheckboxSelectionModel({
+    listeners:{
+      selectionchange : function(sm){
+        if (isReport) return;
+
+        var count_rows = sm.getCount();
+        switch(count_rows){
+           case 0:
+             editButton.disable();
+             deleteButton.disable();
+             break;
+           case 1:
              editButton.enable();
              deleteButton.enable();
-           }
-           break;
-         default:
-           editButton.disable();
-           //deleteButton.disable();
-           break;
-         }
-       }
-     }
-   });
+             
+             break;
+           default:
+             editButton.disable();
+             //deleteButton.disable();
+             break;
+        }
+      }
+    }
+  });
 
   //row editor for table columns grid
   if (!isReport) {
@@ -274,6 +282,21 @@ Ext.onReady(function(){
     items: ['-',_('ID_PAGE_SIZE')+':',comboPageSize]
   });
   
+  if (!isReport) {
+    tbar = [ 
+      newButton,
+      '-',
+      editButton,
+      deleteButton,
+      '-',
+      importButton,
+      exportButton
+    ];
+  }
+  else 
+    tbar = [genDataReportButton];
+  
+
   infoGridConfig = {
     region: 'center',
     layout: 'fit',
@@ -294,15 +317,7 @@ Ext.onReady(function(){
     loadMask: true,
     cm: cmodel,
     sm: smodel,
-    tbar:[ 
-      newButton,
-      '-',
-      editButton,
-      deleteButton,
-      '-',
-      importButton,
-      exportButton
-    ],
+    tbar: tbar,
     bbar: bbarpaging
   }
   
@@ -313,16 +328,18 @@ Ext.onReady(function(){
   
   infoGrid = new Ext.grid.GridPanel(infoGridConfig);
   
-  infoGrid.on('rowcontextmenu', 
-        function (grid, rowIndex, evt) {
-            var sm = grid.getSelectionModel();
-            sm.selectRow(rowIndex, sm.isSelected(rowIndex));
-        },
-        this
-  );
-    
-  infoGrid.on('contextmenu', function(evt){evt.preventDefault();}, this);
-  infoGrid.addListener('rowcontextmenu',onMessageContextMenu, this);
+  if (!isReport) {
+    infoGrid.on('rowcontextmenu', 
+      function (grid, rowIndex, evt) {
+          var sm = grid.getSelectionModel();
+          sm.selectRow(rowIndex, sm.isSelected(rowIndex));
+      },
+      this
+    );
+      
+    infoGrid.on('contextmenu', function(evt){evt.preventDefault();}, this);
+    infoGrid.addListener('rowcontextmenu',onMessageContextMenu, this);
+  }
 
   viewport = new Ext.Viewport({
     layout: 'fit',
@@ -651,3 +668,19 @@ UpdatePageConfig = function(pageSize){
   params: {action:'updatePageSizeData', size: pageSize}
   });
 };
+
+genDataReport = function()
+{
+  Ext.Ajax.request({
+    url: '../pmTablesProxy/genDataReport',
+    params: {id: tableDef.ADD_TAB_UID},
+    success: function(resp){
+      response = Ext.util.JSON.decode(resp.responseText);
+      PMExt.notify(_('ID_UPDATE'), response.message)
+      Ext.getCmp('infoGrid').store.reload();
+    },
+    failure: function(obj, resp){
+      PMExt.error( _('ID_ERROR'), resp.result.message);
+    }
+  });
+}

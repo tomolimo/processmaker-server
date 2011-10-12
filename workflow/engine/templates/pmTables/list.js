@@ -15,6 +15,7 @@ var smodel;
 var rowsSelected;
 var importOption;
 var externalOption;
+var currentSelectedRow = -1;
 
 Ext.onReady(function(){
     ///Keyboard Events
@@ -199,32 +200,46 @@ Ext.onReady(function(){
           {name : 'PRO_UID'},
           {name : 'NUM_ROWS'}
         ]
-      })
+      }),
+      listeners: {
+        load: function(a,b){
+          if (currentSelectedRow != '') {
+            Ext.getCmp('infoGrid').getSelectionModel().selectRow(currentSelectedRow);
+            Ext.getCmp('infoGrid').fireEvent('rowclick', Ext.getCmp('infoGrid'), currentSelectedRow)
+          }
+        }
+      }
     });
 
     smodel = new Ext.grid.CheckboxSelectionModel({
       listeners:{
         selectionchange: function(sm){
-          var count_rows = sm.getCount();
-          switch(count_rows){
-          case 0:
-            editButton.disable();
-            deleteButton.disable();
-            exportButton.disable();
-            dataButton.disable();
-            break;
-          case 1:
-            editButton.enable();
-            deleteButton.enable();
-            exportButton.enable();
-            dataButton.enable();
-            break;
-          default:
-            editButton.disable();
-            deleteButton.enable();
-            exportButton.enable();
-            dataButton.disable();
-            break;
+          if (sm.last !== false) {
+            var count_rows = sm.getCount();  
+            //var isReport = sm.getSelected().get('PRO_UID') != '';
+
+            currentSelectedRow = sm.last;
+            switch(count_rows){
+              case 0:
+                editButton.disable();
+                deleteButton.disable();
+                exportButton.disable();
+                dataButton.disable();
+                break;
+              case 1:
+                editButton.enable();
+                deleteButton.enable();
+                exportButton.enable();
+                dataButton.enable();
+                break;
+              default:
+                editButton.disable();
+                deleteButton.enable();
+                exportButton.enable();
+                dataButton.disable();
+                break;
+            }
+            
           }
         }
       }
