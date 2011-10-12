@@ -161,7 +161,7 @@ Ext.onReady(function(){
            break;
          default:
            editButton.disable();
-           deleteButton.disable();
+           //deleteButton.disable();
            break;
          }
        }
@@ -185,20 +185,18 @@ Ext.onReady(function(){
   }
 
   Ext.data.DataProxy.addListener('write', function(proxy, action, result, res, rs) {
-    PMExt.notify(_('ID_UPDATE'), res.raw.message)
+    //PMExt.notify(_('ID_UPDATE'), res.raw.message)
   });
 
   // all exception events
   Ext.data.DataProxy.addListener('exception', function(proxy, type, action, options, res) {
-    if (res.raw.success) {
-      if(res.raw.message != 'nothing to do') {
-        PMExt.notify(_('ID_INFO'), response.raw.message);
-      }
+    response = Ext.util.JSON.decode(res.responseText);
+    if(response.message == '$$') {
+      return false;
     }
-    else {
-      PMExt.error(_('ID_ERROR'), res.raw.message);
-      infoGrid.store.reload();
-    }
+
+    PMExt.error(_('ID_ERROR'), response.message);
+    infoGrid.store.reload();
   });
 
   var proxy = new Ext.data.HttpProxy({

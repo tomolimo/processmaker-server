@@ -217,10 +217,7 @@ Ext.onReady(function(){
             editButton.enable();
             deleteButton.enable();
             exportButton.enable();
-            row = sm.getSelected();
-            if (row.data.NUM_ROWS > 0) {
-              dataButton.enable();
-            }
+            dataButton.enable();
             break;
           default:
             editButton.disable();
@@ -420,12 +417,20 @@ DeletePMTable = function() {
   Ext.Msg.confirm(_('ID_CONFIRM'), _('ID_CONFIRM_DELETE_PM_TABLE'),
     function(btn, text) {
       if (btn == "yes") {
+        Ext.Msg.show({
+          title : '',
+          msg : 'Removing selectd table(s), please wait!',
+          wait:true,
+          waitConfig: {interval:500}
+        });
+
         Ext.Ajax.request ({
           url: 'pmTablesProxy/delete',
           params: {
             rows: Ext.util.JSON.encode(selections)
           },
           success: function(resp){
+            Ext.MessageBox.hide();
             result = Ext.util.JSON.decode(resp.responseText);
             Ext.getCmp('infoGrid').getStore().reload();
             if (result.success) {
@@ -435,6 +440,7 @@ DeletePMTable = function() {
             }
           },
           failure: function(obj, resp){
+            Ext.MessageBox.hide();
             Ext.getCmp('infoGrid').getStore().reload();
             Ext.Msg.alert( _('ID_ERROR'), resp.result.message);
           }
@@ -603,7 +609,12 @@ PMTableData = function()
       xtype:"iframepanel",
       defaultSrc : 'pmTables/data?id='+row.get('ADD_TAB_UID')+'&type='+row.get('TYPE'),
       loadMask:{msg: _('ID_LOADING')}
-    }]
+    }],
+    listeners: {
+      close: function() {
+        store.reload();
+      }
+    }
   });
   win.show();
 };

@@ -432,67 +432,72 @@ class pmTablesProxy extends HttpProxyController
       $rows = G::json_decode(stripslashes($httpData->rows));
     }
 
-    
-    require_once 'classes/model/AdditionalTables.php';
-    $additionalTables = new AdditionalTables();
-    $table = $additionalTables->load($httpData->id, true);
-    $primaryKeys = $additionalTables->getPrimaryKeys();
+    try {
+      require_once 'classes/model/AdditionalTables.php';
+      $additionalTables = new AdditionalTables();
+      $table = $additionalTables->load($httpData->id, true);
+      $primaryKeys = $additionalTables->getPrimaryKeys();
 
-    $this->className = $table['ADD_TAB_CLASS_NAME'];
-    $this->classPeerName = $this->className . 'Peer';
-    $row = (array) $rows;
+      $this->className = $table['ADD_TAB_CLASS_NAME'];
+      $this->classPeerName = $this->className . 'Peer';
+      $row = (array) $rows;
 
-    $row = array_merge(array_change_key_case($row, CASE_LOWER), array_change_key_case($row, CASE_UPPER));
-    $toSave = false;
+      $row = array_merge(array_change_key_case($row, CASE_LOWER), array_change_key_case($row, CASE_UPPER));
+      $toSave = false;
 
-    if (!file_exists (PATH_WORKSPACE . 'classes/' . $this->className . '.php') ) {
-      throw new Exception('Create::' . G::loadTranslation('ID_PMTABLE_CLASS_DOESNT_EXIST', $this->className));
-    }
-
-    require_once PATH_WORKSPACE . 'classes/' . $this->className . '.php';
-    eval('$obj = new ' .$this->className. '();');
-
-    if (count($row) > 0) {
-      eval('$con = Propel::getConnection('.$this->classPeerName.'::DATABASE_NAME);');
-      $obj->fromArray($row, BasePeer::TYPE_FIELDNAME);
-
-      if ($obj->validate()) {
-        $obj->save();
-        $toSave = true;
-          
-        $primaryKeysValues = array();
-        foreach ($primaryKeys as $primaryKey) {
-          $method = 'get' . AdditionalTables::getPHPName($primaryKey['FLD_NAME']);
-          $primaryKeysValues[] = $obj->$method();
-        }
+      if (!file_exists (PATH_WORKSPACE . 'classes/' . $this->className . '.php') ) {
+        throw new Exception('Create::' . G::loadTranslation('ID_PMTABLE_CLASS_DOESNT_EXIST', $this->className));
       }
-      else {
-        $msg = '';
-        foreach($obj->getValidationFailures() as $objValidationFailure) {
-           $msg .= $objValidationFailure->getMessage() . "\n";
+
+      require_once PATH_WORKSPACE . 'classes/' . $this->className . '.php';
+      eval('$obj = new ' .$this->className. '();');
+
+      if (count($row) > 0) {
+        eval('$con = Propel::getConnection('.$this->classPeerName.'::DATABASE_NAME);');
+        $obj->fromArray($row, BasePeer::TYPE_FIELDNAME);
+
+        if ($obj->validate()) {
+          $obj->save();
+          $toSave = true;
+            
+          $primaryKeysValues = array();
+          foreach ($primaryKeys as $primaryKey) {
+            $method = 'get' . AdditionalTables::getPHPName($primaryKey['FLD_NAME']);
+            $primaryKeysValues[] = $obj->$method();
+          }
         }
-        throw new PropelException($msg);
+        else {
+          $msg = '';
+          foreach($obj->getValidationFailures() as $objValidationFailure) {
+             $msg .= $objValidationFailure->getMessage() . "\n";
+          }
+          throw new Exception('Error trying insert into "'.$table['ADD_TAB_NAME'] ."\"\n". $msg);
+        }
+        
+        $index = G::encrypt(implode('-', $primaryKeysValues), 'pmtable');
+      } 
+      else {
+        $toSave = false;
       }
       
-      $index = G::encrypt(implode('-', $primaryKeysValues), 'pmtable');
-    } 
-    else {
-      $toSave = false;
+      if ($toSave) {
+        $result->success = true;
+        $result->message = 'Record saved successfully';
+        $result->rows    = $obj->toArray(BasePeer::TYPE_FIELDNAME);
+        $result->rows['__index__'] = $index;
+      }
+      else {
+        $result->success = false;
+        $result->rows    = array();
+        $result->message = '$$';
+      }
     }
-    
-    if ($toSave) {
-      $result->success = true;
-      $result->message = 'Record saved successfully';
-      $result->rows = $obj->toArray(BasePeer::TYPE_FIELDNAME);
-      $result->rows['__index__'] = $index;
-    }
-    else {
+    catch (Exception $e) {
       $result->success = false;
-      $result->rows = array();
-      $result->message = 'nothing to do';
+      $result->rows    = array();
+      $result->message = $e->getMessage();
     }
-  
-    
+      
     return $result;
   }
 
@@ -882,6 +887,9 @@ class pmTablesProxy extends HttpProxyController
                       $data->id = $table['ADD_TAB_UID'];
                       $data->rows = base64_encode(serialize($row));
                       $res = $this->dataCreate($data , 'base64');
+                      if (!$res->success) {
+                        $errors .= $res->message;
+                      }
                     }
                   }
                   ////////////
