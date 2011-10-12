@@ -709,7 +709,11 @@ class Derivation
               $oSubApplication->create($aSubApplication);
               //Update the AppDelegation to execute the update trigger
               $AppDelegation = AppDelegationPeer::retrieveByPK($aNewCase['APPLICATION'], $aNewCase['INDEX']);
-              $AppDelegation->setDelInitDate("+1 second");
+              
+              // note added by krlos pacha carlos[at]colosa[dot]com		
+              // the following line of code was commented because it is related to the 6878 bug              
+              //$AppDelegation->setDelInitDate("+1 second");
+              
               $AppDelegation->save();
               //If not is SYNCHRONOUS derivate one more time
               if ($aSP['SP_SYNCHRONOUS'] == 0) {
