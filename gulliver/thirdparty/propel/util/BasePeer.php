@@ -289,8 +289,17 @@ class BasePeer
 
 			$qualifiedCols = $criteria->keys(); // we need table.column cols when populating values
 			$columns = array(); // but just 'column' cols for the SQL
+
+			/**
+			 * FIXED
+			 * @author Erik Amaru Ortiz
+			 * We have troubles if on sql insert the columns names aren't being qualified quoted with words like RANGE and others
+			 * to fix it we add quote identifier depending of db engine, using its respective Adapter::quoteIdentifier() function
+			 */
+			$adapter = Propel::getDB($criteria->getDbName());
+
 			foreach($qualifiedCols as $qualifiedCol) {
-				$columns[] = substr($qualifiedCol, strpos($qualifiedCol, '.') + 1);
+				$columns[] = $adapter->quoteIdentifier(substr($qualifiedCol, strpos($qualifiedCol, '.') + 1));
 			}
 
 			$sql = "INSERT INTO " . $tableName
@@ -386,9 +395,17 @@ class BasePeer
 					$rs->close();
 				}
 
+				/**
+				 * FIXED
+				 * @author Erik Amaru Ortiz
+				 * We have troubles if on sql insert the columns names aren't being qualified quoted with words like RANGE and others
+				 * to fix it we add quote identifier depending of db engine, using its respective Adapter::quoteIdentifier() function
+				 */
+				$adapter = Propel::getDB($selectCriteria->getDbName());
+
 				$sql = "UPDATE " . $tableName . " SET ";
 				foreach($updateTablesColumns[$tableName] as $col) {
-					$sql .= substr($col, strpos($col, '.') + 1) . " = ?,";
+					$sql .= $adapter->quoteIdentifier(substr($col, strpos($col, '.') + 1)) . " = ?,";
 				}
 
 				$sql = substr($sql, 0, -1) . " WHERE " . $sqlSnippet;
