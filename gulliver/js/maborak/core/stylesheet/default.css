@@ -1160,6 +1160,17 @@ INPUT {
 	color	:#333333;
 	font	:normal 8pt sans-serif;
 }
+.module_ListBoxView
+{ 
+  
+  color: white;
+  background:#CCDDFF;
+  padding:1px;
+  border:1px solid #AAA;
+  padding-left:3px; 
+  background-position:0px 0px; 
+  font  :normal 8pt sans-serif; 
+}
 .module_app_inputHover___gray
 {
 	border:1px solid #AAA;
