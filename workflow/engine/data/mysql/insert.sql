@@ -3252,8 +3252,8 @@ INSERT INTO TRANSLATION (TRN_CATEGORY,TRN_ID,TRN_LANG,TRN_VALUE,TRN_UPDATE_DATE 
 ( 'LABEL','ID_DELETE_CONNECTION','en','Delete the connection?','2011-09-05') ,
 ( 'LABEL','ID_EXPORT_DATA_CSV','en','Export Data from CSV file','2011-09-05') ,
 ( 'LABEL','ID_IMPORT_DATA_CSV','en','Import Data from CSV file','2011-09-05') ,
-( 'LABEL','ID_EXPORT_CSV','en','Export to CSV','2011-09-05') ,
-( 'LABEL','ID_IMPORT_CSV','en','Import from CSV','2011-09-29') ,
+( 'LABEL','ID_EXPORT_CSV','en','CSV Export','2011-10-10') ,
+( 'LABEL','ID_IMPORT_CSV','en','CSV Import','2011-10-10') ,
 ( 'LABEL','ID_NOT_PM_FILE','en','This is not a .pm file','2011-09-08') ,
 ( 'LABEL','ID_PMTABLES_RESERVED_FIELDNAME_WARNING','en','The word {0} is reserved by the database engine please set another one.','2011-09-14') ,
 ( 'LABEL','ID_TABLE_NAME_IS_REQUIRED','en','Table Name is required.','2011-09-14') ,
@@ -3264,7 +3264,7 @@ INSERT INTO TRANSLATION (TRN_CATEGORY,TRN_ID,TRN_LANG,TRN_VALUE,TRN_UPDATE_DATE 
 ( 'LABEL','ID_PMTABLE_ALREADY_EXISTS','en','The table "{0}" already exits!','2011-09-15') ,
 ( 'LABEL','ID_PMTABLE_INVALID_NAME','en','Could not create the table with the name "{0}" because it is a reserved word.','2011-09-15') ,
 ( 'LABEL','ID_PMTABLE_UPLOADING_FILE_PROBLEM','en','A problem occurred while uploading file.','2011-09-15') ,
-( 'LABEL','ID_PMTABLE_INVALID_FILE','en','Invalid File, import abort!','2011-09-15') ,
+( 'LABEL','ID_PMTABLE_INVALID_FILE','en','Invalid PM table(s) file, import aborted!','2011-10-12') ,
 ( 'LABEL','ID_PMTABLE_IMPORT_SUCCESS','en','File "{0}" imported successfully.','2011-09-15') ,
 ( 'LABEL','ID_PMTABLE_IMPORT_WITH_ERRORS','en','File "{0}" imported but with errors.','2011-09-15') ,
 ( 'LABEL','DBS_NAME','en','Connection Name','2011-09-19') ,
@@ -3290,8 +3290,10 @@ INSERT INTO TRANSLATION (TRN_CATEGORY,TRN_ID,TRN_LANG,TRN_VALUE,TRN_UPDATE_DATE 
 ( 'LABEL','ID_NEW_NOTE','en','New Note','2011-09-22') ,
 ( 'LABEL','ID_CANCEL_NEW_NOTE','en','Cancel New Note','2011-09-22') ,
 ( 'LABEL','ID_THERE_MUST__LEAST_HOLIDAY','en','There must be at least a holiday','2011-09-29') ,
+( 'LABEL','ID_DATA_LIST_NOT_AVAILABLE_FOR_OLDVER','en','Data List is not available for old version.','2011-10-11') ,
 ( 'LABEL','ID_CASES_NOTES_CANCEL','en','Cancel this note','2011-10-03') ,
-( 'LABEL','ID_CASES_NOTES_ADD','en','Add new note','2011-10-03') ;
+( 'LABEL','ID_CASES_NOTES_ADD','en','Add new note','2011-10-03') ,
+( 'LABEL','ID_INVALID_PROCESS_NAME','en','Process name Invalid, do not use the following characters ? * / : | \ , ; &','2011-10-12') ;
 
 INSERT INTO ISO_LOCATION (IC_UID,IL_UID,IL_NAME,IL_NORMAL_NAME,IS_UID)  VALUES 
 ('AD','','',' ','') ,

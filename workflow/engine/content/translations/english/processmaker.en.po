@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: ProcessMaker (Branch 2.0) 2.0.33.rc5-5-gb79d80c\n"
+"Project-Id-Version: ProcessMaker (Branch 2.0) 2.0.33\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2011-10-03 18:51:36\n"
+"PO-Revision-Date: 2011-10-13 08:45:57\n"
 "Last-Translator: \n"
 "Language-Team: Colosa Developers Team <developers@colosa.com>\n"
 "MIME-Version: 1.0\n"
@@ -11014,14 +11014,14 @@ msgstr "Import Data from CSV file"
 # TRANSLATION
 # LABEL/ID_EXPORT_CSV
 #: LABEL/ID_EXPORT_CSV
-msgid "Export to CSV"
-msgstr "Export to CSV"
+msgid "CSV Export"
+msgstr "CSV Export"
 
 # TRANSLATION
 # LABEL/ID_IMPORT_CSV
 #: LABEL/ID_IMPORT_CSV
-msgid "Import from CSV"
-msgstr "Import from CSV"
+msgid "CSV Import"
+msgstr "CSV Import"
 
 # TRANSLATION
 # LABEL/ID_NOT_PM_FILE
@@ -11074,8 +11074,8 @@ msgstr "A problem occurred while uploading file."
 # TRANSLATION
 # LABEL/ID_PMTABLE_INVALID_FILE
 #: LABEL/ID_PMTABLE_INVALID_FILE
-msgid "Invalid File, import abort!"
-msgstr "Invalid File, import abort!"
+msgid "Invalid PM table(s) file, import aborted!"
+msgstr "Invalid PM table(s) file, import aborted!"
 
 # TRANSLATION
 # LABEL/ID_PMTABLE_IMPORT_SUCCESS
@@ -11228,6 +11228,12 @@ msgid "There must be at least a holiday"
 msgstr "There must be at least a holiday"
 
 # TRANSLATION
+# LABEL/ID_DATA_LIST_NOT_AVAILABLE_FOR_OLDVER
+#: LABEL/ID_DATA_LIST_NOT_AVAILABLE_FOR_OLDVER
+msgid "Data List is not available for old version."
+msgstr "Data List is not available for old version."
+
+# TRANSLATION
 # LABEL/ID_CASES_NOTES_CANCEL
 #: LABEL/ID_CASES_NOTES_CANCEL
 msgid "Cancel this note"
@@ -11238,6 +11244,12 @@ msgstr "Cancel this note"
 #: LABEL/ID_CASES_NOTES_ADD
 msgid "Add new note"
 msgstr "Add new note"
+
+# TRANSLATION
+# LABEL/ID_INVALID_PROCESS_NAME
+#: LABEL/ID_INVALID_PROCESS_NAME
+msgid "Process name Invalid, do not use the following characters ? * / : |  , ; &"
+msgstr "Process name Invalid, do not use the following characters ? * / : |  , ; &"
 
 # additionalTables/additionalTablesData.xml?ADD_TAB_NAME
 # additionalTables/additionalTablesData.xml
