@@ -65,9 +65,11 @@ foreach ( $aInfoFunction as $k => $v ) {
 		if ($aDataTriggers [$sOptionTrigger] != '') {
 
 			if ((strstr ( $aDataTriggers [$sOptionTrigger], "@@" ))) {
-				$option = $aDataTriggers [$sOptionTrigger];
+			  $option = $aDataTriggers [$sOptionTrigger];
 			} else {
-				$option = "'" . $aDataTriggers [$sOptionTrigger] . "'";
+                        $aDataTriggers [$sOptionTrigger] = str_replace("'", "\'", $aDataTriggers [$sOptionTrigger]);
+                        $option = (is_numeric($aDataTriggers [$sOptionTrigger]))?trim($aDataTriggers [$sOptionTrigger]):
+                      (strstr($aDataTriggers [$sOptionTrigger],"array") )?trim($aDataTriggers [$sOptionTrigger]):"'" . trim($aDataTriggers [$sOptionTrigger]) . "'";
 			}
 		} else {
 			$option = "' '";
@@ -77,6 +79,7 @@ foreach ( $aInfoFunction as $k => $v ) {
 	}
 
 }
+
 $sPMfunction .= (isset ( $aDataTriggers ['TRI_ANSWER'] ) && $aDataTriggers ['TRI_ANSWER'] != '') ? $aDataTriggers ['TRI_ANSWER'] . " = " : "";
 $sPMfunction .= $aDataTriggers ['PMFUNTION_NAME'] . " (" . implode ( ",", $methodParamsFinal ) . ");";
 

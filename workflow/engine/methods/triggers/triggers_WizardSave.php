@@ -62,10 +62,11 @@ foreach ( $aInfoFunction as $k => $v ) {
 		if ($aDataTriggers [$sOptionTrigger] != '') {
 			
 			if ((strstr ( $aDataTriggers [$sOptionTrigger], "@@" ))) {
-				$option = trim($aDataTriggers [$sOptionTrigger]);
+			  $option = trim($aDataTriggers [$sOptionTrigger]);
 			} else {
-        $aDataTriggers [$sOptionTrigger] = str_replace("'", "\'", $aDataTriggers [$sOptionTrigger]);
-        $option = "'" . trim($aDataTriggers [$sOptionTrigger]) . "'";
+                        $aDataTriggers [$sOptionTrigger] = str_replace("'", "\'", $aDataTriggers [$sOptionTrigger]);
+                        $option = (is_numeric($aDataTriggers [$sOptionTrigger]))?trim($aDataTriggers [$sOptionTrigger]):
+                        (strstr($aDataTriggers [$sOptionTrigger],"array") )?trim($aDataTriggers [$sOptionTrigger]):"'" . trim($aDataTriggers [$sOptionTrigger]) . "'";
 			}
 		} else {
 			$option = "''";
