@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: ProcessMaker (Branch 2.0) 2.0.33\n"
+"Project-Id-Version: ProcessMaker (Branch 2.0) 2.0.34.rc3-5-g1db9c66\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2011-10-13 08:45:57\n"
+"PO-Revision-Date: 2011-10-14 12:41:07\n"
 "Last-Translator: \n"
 "Language-Team: Colosa Developers Team <developers@colosa.com>\n"
 "MIME-Version: 1.0\n"
@@ -11248,8 +11248,8 @@ msgstr "Add new note"
 # TRANSLATION
 # LABEL/ID_INVALID_PROCESS_NAME
 #: LABEL/ID_INVALID_PROCESS_NAME
-msgid "Process name Invalid, do not use the following characters ? * / : |  , ; &"
-msgstr "Process name Invalid, do not use the following characters ? * / : |  , ; &"
+msgid "Invalid process name, please just use alphanumeric characters."
+msgstr "Invalid process name, please just use alphanumeric characters."
 
 # additionalTables/additionalTablesData.xml?ADD_TAB_NAME
 # additionalTables/additionalTablesData.xml

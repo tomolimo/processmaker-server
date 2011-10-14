@@ -5165,7 +5165,9 @@ SELECT 'LABEL','ID_CASES_NOTES_CANCEL','en','Cancel this note','2011-10-03'
   UNION ALL
 SELECT 'LABEL','ID_CASES_NOTES_ADD','en','Add new note','2011-10-03' 
   UNION ALL
-SELECT 'LABEL','ID_INVALID_PROCESS_NAME','en','Process name Invalid, do not use the following characters ? * / : | \ , ; &','2011-10-12' 
+SELECT 'LABEL','ID_INVALID_PROCESS_NAME','en','Invalid process name, please just use alphanumeric characters.','2011-10-14' 
+  UNION ALL
+SELECT 'LABEL','ID_INVALID_PROCESS_NAME2','en','Invalid process name, please just use alphanumeric characters.','2011-10-14' 
  ;
 
 INSERT INTO ISO_LOCATION ([IC_UID],[IL_UID],[IL_NAME],[IL_NORMAL_NAME],[IS_UID]) 
