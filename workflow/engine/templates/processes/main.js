@@ -355,11 +355,11 @@ Ext.onReady(function(){
         text: _('ID_EDIT'),
         iconCls: 'button_menu_ext ss_sprite  ss_pencil',
         handler: editProcess
-      },{
+      },/*{
         text: _('ID_EDIT_BPMN'),
         icon: '/images/pencil_beta.png',
         handler: editNewProcess
-      }, {
+      },*/ {
         id: 'activator2',
         text: '',
         icon: '',
