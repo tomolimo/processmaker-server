@@ -332,8 +332,8 @@
   function getToDo() {
     $caseColumns = array ();
     $caseColumns[] = array( 'header' => '#',                                 'dataIndex' => 'APP_NUMBER',       'width' => 45, 'align' => 'center');
-    $caseColumns[] = array( 'header' => '',                                  'dataIndex' => 'CASE_SUMMARY',     'width' => 15, 'align' => 'center',  'sorteable'=>false, 'hideable'=>false);
-    $caseColumns[] = array( 'header' => '',                                  'dataIndex' => 'CASE_NOTES_COUNT', 'width' => 15, 'align' => 'center',  'sorteable'=>false, 'hideable'=>false);
+    $caseColumns[] = array( 'header' => '',                                  'dataIndex' => 'CASE_SUMMARY',     'width' => 25, 'align' => 'center',  'sorteable'=>false, 'hideable'=>false);
+    $caseColumns[] = array( 'header' => '',                                  'dataIndex' => 'CASE_NOTES_COUNT', 'width' => 25, 'align' => 'center',  'sorteable'=>false, 'hideable'=>false);
     $caseColumns[] = array( 'header' => G::LoadTranslation('ID_CASE'),       'dataIndex' => 'APP_TITLE',        'width' => 150 );
     $caseColumns[] = array( 'header' => 'UserUid',                           'dataIndex' => 'USR_UID',          'width' => 50 , 'hidden'=> true, 'hideable'=> false);
     $caseColumns[] = array( 'header' => 'PreUsrUid',                         'dataIndex' => 'PREVIOUS_USR_UID', 'width' => 50 , 'hidden'=> true, 'hideable'=> false);

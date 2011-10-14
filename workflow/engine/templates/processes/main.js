@@ -480,14 +480,10 @@ function saveProcess()
     waitMsg : _('ID_SAVING_PROCESS'),
     timeout : 36000,
     success : function(obj, resp) {
-      var editor  = 'classic'; //Ext.getCmp('editor').getValue().getGroupValue();
-      if( editor == 'classic')
-        location.href = 'processes_Map?PRO_UID='+resp.result.PRO_UID;
-      else
-        location.href = '../bpmnDesigner?id='+resp.result.PRO_UID;
+      location.href = 'processes_Map?PRO_UID='+resp.result.PRO_UID;
     },
     failure: function(obj, resp) {
-      //Ext.Msg.alert( _('ID_ERROR'), resp.result.msg);
+      PMExt.error( _('ID_ERROR'), resp.result.msg);
     }
   });
 }
