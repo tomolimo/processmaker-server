@@ -208,12 +208,12 @@ Ext.onReady(function(){
         iconCls: 'button_menu_ext ss_sprite  ss_pencil',
         //icon: '/images/edit.gif',
         handler: editProcess
-      },{
+      },/*{
         text:TRANSLATIONS.ID_EDIT_BPMN,
         iconCls: 'button_menu_ext',
         icon: '/images/pencil_beta.png',
         handler: editNewProcess
-      },{
+      },*/{
         text:TRANSLATIONS.ID_STATUS,
         id:'activator',
         icon: '',
@@ -438,7 +438,7 @@ function newProcess(){
         xtype:'textarea',
         width: 260 
       },
-      ProcessCategories,
+      ProcessCategories/*,
       {
         id: 'editor',
         xtype: 'radiogroup',
@@ -447,7 +447,7 @@ function newProcess(){
           {boxLabel: _('ID_CLASSIC_EDITOR'), name: 'editor', inputValue: 'classic', checked: true},
           {boxLabel: _('ID_BPMN_EDITOR'), name: 'editor', inputValue: 'bpmn'}
         ]
-      }
+      }*/
     ],
     buttons : [{
       text : _('ID_CREATE'),
@@ -463,7 +463,7 @@ function newProcess(){
   var win = new Ext.Window({
     title: _('ID_CREATE_PROCESS'),
     width: 470,
-    height: 240,
+    height: 220,
     layout:'fit',
     autoScroll:true,
     modal: true,
@@ -480,7 +480,7 @@ function saveProcess()
     waitMsg : _('ID_SAVING_PROCESS'),
     timeout : 36000,
     success : function(obj, resp) {
-      var editor  = Ext.getCmp('editor').getValue().getGroupValue();
+      var editor  = 'classic'; //Ext.getCmp('editor').getValue().getGroupValue();
       if( editor == 'classic')
         location.href = 'processes_Map?PRO_UID='+resp.result.PRO_UID;
       else
