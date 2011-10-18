@@ -379,7 +379,7 @@ var openSummaryWindow = function(appUid, delIndex)
            handler : function(){
             summaryWindow.close();
            }}
-          ]*/,
+          ],*/
         });
 
         if (response.dynUid != '') {
