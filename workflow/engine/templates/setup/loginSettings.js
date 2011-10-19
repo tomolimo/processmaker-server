@@ -47,7 +47,7 @@ Ext.onReady(function(){
           check:function(){ChangeSettings('2');}
         }
        
-      },
+      }
     ],
     buttons : [saveButton]   
   });

@@ -283,8 +283,6 @@ Ext.onReady(function() {
     layout : 'border',
     items : [newCaseTree, details]
   });
-  //PMExt.info('x', 'ddd');
-	//viewport.doLayout();
 
   //routine to hide the debug panel if it is open
   if( typeof parent != 'undefined' ){
@@ -295,6 +293,10 @@ Ext.onReady(function() {
     }
   }
 
+  if (FORMATS.startCaseHideProcessInf) {
+    Ext.getCmp('process-detail-panel').hide();
+    Ext.getCmp('startCaseTreePanel').ownerCt.doLayout();
+  }
 });
 
 function openCaseA(n){
