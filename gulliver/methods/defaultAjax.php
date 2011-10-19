@@ -117,7 +117,7 @@
   		//$_SESSION[$G_FORM->id][$k] = $v;
   	}
   }
-  //$G_FORM->values=isset($_SESSION[$G_FORM->id]) ? $_SESSION[$G_FORM->id] : array();
+  if (isset($_POST['grid'])) $G_FORM->values=isset($_SESSION[$G_FORM->id]) ? $_SESSION[$G_FORM->id] : array();
 
   $dependentFields=array_unique($dependentFields);
 
