@@ -26,6 +26,7 @@
 
 
   <JS type="javascript"><![CDATA[
+  hideRowById('FORGOT_PASWORD_LINK');
 // enable/disable forgot password link
 if(flagForgotPassword != 'on' )
   hideRowById('FORGOT_PASWORD_LINK');
