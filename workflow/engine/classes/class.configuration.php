@@ -289,14 +289,29 @@ class Configurations // extends Configuration
    */
   
   function getFormats(){
-  	if (!isset($this->UserConfig)) $this->UserConfig = $this->getConfiguration('ENVIRONMENT_SETTINGS', '');
-  	$formats = Array();
-  	$formats['FullNameFormat'] = isset($this->UserConfig['format']) ? $this->UserConfig['format'] : '@lastName, @firstName (@userName)';
-  	$formats['DateFormat'] = isset($this->UserConfig['dateFormat']) ? $this->UserConfig['dateFormat'] : 'm/d/Y';
-  	$formats['CasesListDateFormat'] = isset($this->UserConfig['casesListDateFormat']) ? $this->UserConfig['casesListDateFormat'] : 'm/d/Y';
-  	$formats['CasesListRowNumber'] = isset($this->UserConfig['casesListRowNumber']) ? $this->UserConfig['casesListRowNumber'] : '10';
-  	$formats['TimeZone'] = date('T');
-    return $formats;
+  	if (!isset($this->UserConfig)) {
+      $this->UserConfig = $this->getConfiguration('ENVIRONMENT_SETTINGS', '');
+    }
+
+    // setting defaults 
+    if (!isset($this->UserConfig['format'])) {
+      $this->UserConfig['format'] = '@lastName, @firstName (@userName)';
+    }
+    if (!isset($this->UserConfig['dateFormat'])) {
+      $this->UserConfig['dateFormat'] = 'Y-m-d H:i:s';
+    }
+    if (!isset($this->UserConfig['casesListDateFormat'])) {
+      $this->UserConfig['casesListDateFormat'] = 'Y-m-d H:i:s';  
+    }
+    if (!isset($this->UserConfig['casesListRowNumber'])) {
+      $this->UserConfig['CasesListRowNumber'] = '25';
+    }
+    if (!isset($this->UserConfig['startCaseHideProcessInf'])) {
+      $this->UserConfig['startCaseHideProcessInf'] = false;
+    }
+  	$this->UserConfig['TimeZone'] = date('T');
+
+    return $this->UserConfig;
   }
   
     

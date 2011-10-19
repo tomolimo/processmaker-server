@@ -43,6 +43,8 @@
         'casesListDateFormat' =>$_POST['casesListDateFormat'],
         'casesListRowNumber'  =>$_POST['casesListRowNumber']
       );
+      $conf->aConfig['startCaseHideProcessInf'] =  isset($_POST['hideProcessInf']) ? true : false;
+
       $conf->saveConfig('ENVIRONMENT_SETTINGS', '');
 
       $response = new StdClass();
