@@ -3566,7 +3566,7 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
       if ( $this->editable != "0") {
         $html = '<input pm:required="'. $isRequired .'" id="'.$pID.'" name="'.$pID.'" pm:mask="'.$mask.'"'          
               . 'pm:start="'.$startDate.'" pm:end="'.$endDate.'" pm:time="'.$Time.'" '.$onchange.' class="module_app_input___gray" size="'.$sizeend.'"'
-              .  'value="'.$value.'" pm:defaultvalue="'.$defaultValue.'" required="' . $isRequired . '"/>'
+              .  'value="'.$value.'" pm:defaultvalue="'.$defaultValue.'"/>'
               . '<a onclick="removeValue(\''.$pID.'\'); return false;" style="position:relative;left:-17px;top:5px;" > '
               . '  <img src="/images/icons_silk/calendar_x_button.png" />'
               . '</a>'
@@ -3578,7 +3578,7 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
         { 
           $html = '<input pm:required="'. $isRequired .'" id="'.$pID.'" name="'.$pID.'" pm:mask="'.$mask.'" pm:start="'.$startDate.'"'
                 . 'pm:end="'.$endDate.'" pm:time="'.$Time.'" '.$onchange.' class="module_app_input___gray" size="'.$sizeend.'"'
-                . 'value="'.$value.'"pm:defaultvalue="'.$defaultValue.'" readonly="readonly" required="' . $isRequired . '"/>'
+                . 'value="'.$value.'"pm:defaultvalue="'.$defaultValue.'" readonly="readonly" />'
                 . '<a onclick="removeValue(\''.$pID.'\'); return false;" style="position:relative;left:-17px;top:5px;" >'
                 . '  <img src="/images/icons_silk/calendar_x_button.png" />'
                 . '</a>'
