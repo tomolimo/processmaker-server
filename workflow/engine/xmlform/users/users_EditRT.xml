@@ -33,7 +33,7 @@
     <en>Last Name</en>
     <es><![CDATA[Apellido]]></es>
   </USR_LASTNAME>
-  <USR_USERNAME type="text" size="15" maxlength="50" validate="" defaultvalue="" required="1" group="1" dependentfields="" linkfield="" strto="" readonly="0" noshowingrid="0" readonlyingrid="0" totalizeable="0" onchange="">
+  <USR_USERNAME type="text" size="15" maxlength="50" validate="Login" defaultvalue="" required="1" group="1" dependentfields="" linkfield="" strto="" readonly="0" noshowingrid="0" readonlyingrid="0" totalizeable="0" onchange="">
     <en>User ID (*)</en>
     <es><![CDATA[ID de Usuario (*)]]></es>
   </USR_USERNAME>
