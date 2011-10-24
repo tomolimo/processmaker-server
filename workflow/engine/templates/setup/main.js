@@ -23,6 +23,7 @@ var main = function(){
       enableDD:true,
       containerScroll: true,
       border: false,
+        
       width: 250,
       height: 120,
       dropConfig: {appendOnly:true},

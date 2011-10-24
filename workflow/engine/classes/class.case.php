@@ -1198,17 +1198,22 @@ class Cases {
         $oDataset3->next();
         $aRow3 = $oDataset3->getRow();
         if (is_array($aRow3)) {
-          //there are closed delegations, so we need to get back without returning delegation rows
-        } else { //if not we start the recursion searching previous open tasks from this task.
+          //TODO there are closed delegations, so we need to get back without returning delegation rows
+        } 
+        else { //if not we start the recursion searching previous open tasks from this task.
+          if (!in_array($aRow['TAS_UID'],$aPreviousTasks)) {
+            // storing the current task uid of the task currently checked
+            $aPreviousTasks[] = $aRow['TAS_UID'];
+            // passing the array of previous tasks in oprder to avoid an infinite loop that prevents
+            
+            $openPreviousTask = $this->searchOpenPreviousTasks($aRow['TAS_UID'], $sAppUid, $aPreviousTasks);
 
-            if (!in_array($aRow['TAS_UID'],$aPreviousTasks)){
-              // storing the current task uid of the task currently checked
-              $aPreviousTasks[] = $aRow['TAS_UID'];
-              // passing the array of previous tasks in oprder to avoid an infinite loop that prevents
-              $aTaskReviewed[]  = $this->searchOpenPreviousTasks($aRow['TAS_UID'], $sAppUid, $aPreviousTasks);
+            if (count($previousTasks) > 0) {
+              array_push($aTaskReviewed, $openPreviousTask);
+            }
+          }
         }
       }
-        }
 
       //$this->searchOpenPreviousTasks();
       $oDataset->next();
