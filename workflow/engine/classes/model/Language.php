@@ -232,6 +232,13 @@ class Language extends BaseLanguage {
             $errorMsg .= 'file doesn\'t exist: ' . PATH_XMLFORM . $xmlForm . "\n";
             continue;
           }
+
+          if (count($match) < 4) {
+            $near = isset($rowTranslation['msgid']) ? $rowTranslation['msgid'] : 
+                   (isset($rowTranslation['msgstr']) ? $rowTranslation['msgstr'] : '');
+            $errorMsg .= "Invalid Translation reference: \"$reference\",  near -> ".$near."\n";
+            continue;
+          }
           
           G::LoadSystem('dynaformhandler');
           $dynaform = new dynaFormHandler(PATH_XMLFORM . $xmlForm);
