@@ -1116,7 +1116,7 @@ function setFocusById (id) {
 }
 
 function submitForm () {
-  document.webform.submit();
+    document.forms[0].submit();
   return;
 }
 
