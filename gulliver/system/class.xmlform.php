@@ -2103,6 +2103,7 @@ class XmlForm_Field_Link extends XmlForm_Field {
   var $link         = '';
   var $value        = '';
   var $target       = '';
+  var $style       = '';
   var $colClassName = 'RowLink';
   /**
    * Function render
@@ -2118,7 +2119,7 @@ class XmlForm_Field_Link extends XmlForm_Field {
     $value   = G::replaceDataField ( $this->value, $owner->values );
     $label   = G::replaceDataField ( $this->label, $owner->values );
     if ($this->mode == 'edit'){
-      $html  = '<a class="tableOption" href=\'' . $this->htmlentities ( $link, ENT_QUOTES, 'utf-8' ) . '\'' . 'id="form[' . $this->name . ']" name="form[' . $this->name . ']"' . (($this->onclick) ? ' onclick="' . htmlentities ( $onclick, ENT_QUOTES, 'utf-8' ) . '"' : '') . (($this->target) ? ' target="' . htmlentities ( $target, ENT_QUOTES, 'utf-8' ) . '"' : '') . '>' . $this->htmlentities ( $this->value === '' ? $label : $value, ENT_QUOTES, 'utf-8' ) . '</a>';
+      $html  = '<a class="tableOption" href=\'' . $this->htmlentities ( $link, ENT_QUOTES, 'utf-8' ) . '\'' . 'id="form[' . $this->name . ']" name="form[' . $this->name . ']" style="' . htmlentities ( $this->style, ENT_QUOTES, 'utf-8' ) .'" '. (($this->onclick) ? ' onclick="' . htmlentities ( $onclick, ENT_QUOTES, 'utf-8' ) . '"' : '') . (($this->target) ? ' target="' . htmlentities ( $target, ENT_QUOTES, 'utf-8' ) . '"' : '') . '>' . $this->htmlentities ( $this->value === '' ? $label : $value, ENT_QUOTES, 'utf-8' ) . '</a>';
       $html .= $this->renderHint();
     } else {
       $html  = $this->htmlentities ( $this->value === '' ? $label : $value, ENT_QUOTES, 'utf-8' );
