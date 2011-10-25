@@ -329,26 +329,27 @@ class Form extends XmlForm
 
                     if (isset($v->options[$value])){
                       $values["{$k}_label"] .= ($i != 0 ? '|': '') . $v->options[$value];
-                    } else {
+                    } 
+                    else { // if hasn't options try execute a sql sentence
                       $query = G::replaceDataField($this->fields[$k]->sql,$newValues);
-                      if(trim($query) == '') {
-                      	continue;
-                      }
-                      //we do the query to the external connection and we've got the label
-                      $con = Propel::getConnection($this->fields[$k]->sqlConnection!=""?$this->fields[$k]->sqlConnection:"workflow");//use default connection workflow if connection is not defined. Same as Dynaforms
                       
-                      $stmt = $con->prepareStatement($query);
-                      $rs = $stmt->executeQuery(ResultSet::FETCHMODE_NUM);
-
-                      while ($rs->next()) {
-                        list($rowId, $rowContent) = array_values($rs->getRow());//This to be sure that the array is numeric. Some cases when is DBArray result it returns an associative. By JHL
+                      if ($query != '') { // execute just if a query was set, it should be not empty
+                        //we do the query to the external connection and we've got the label
+                        $con = Propel::getConnection($this->fields[$k]->sqlConnection!=""?$this->fields[$k]->sqlConnection:"workflow");//use default connection workflow if connection is not defined. Same as Dynaforms
                         
-                        if ($value == $rowId){
-                          $values["{$k}_label"] .= ($i != 0 ? '|': '') . $rowContent;
-                          break;
+                        $stmt = $con->prepareStatement($query);
+                        $rs = $stmt->executeQuery(ResultSet::FETCHMODE_NUM);
+
+                        while ($rs->next()) {
+                          list($rowId, $rowContent) = array_values($rs->getRow());//This to be sure that the array is numeric. Some cases when is DBArray result it returns an associative. By JHL
+                          
+                          if ($value == $rowId){
+                            $values["{$k}_label"] .= ($i != 0 ? '|': '') . $rowContent;
+                            break;
+                          }
                         }
                       }
-                      //die;
+                      
                     }
                   }
                   $newValues["{$k}_label"] = isset($values["{$k}_label"]) ? $values["{$k}_label"] : '';
@@ -363,11 +364,15 @@ class Form extends XmlForm
 
                 if (isset($v->options[$newValues[$k]])){
                   $values["{$k}_label"] = $newValues["{$k}_label"] = $v->options[$newValues[$k]];
-                } else {
+                } 
+                else {
                   $query = G::replaceDataField($this->fields[$k]->sql,$newValues);
+                  
+                  // execute just if a query was set, it should be not empty
                   if(trim($query) == '') {
-                  	continue;
+                  	continue; //if it is  empty string skip it
                   }
+
                   //we do the query to the external connection and we've got the label
                   $con = Propel::getConnection($this->fields[$k]->sqlConnection!=""?$this->fields[$k]->sqlConnection:"workflow");
                   $stmt = $con->prepareStatement($query);
@@ -394,12 +399,20 @@ class Form extends XmlForm
                         $values[$k][$j] = $newValues[$k][$j];
 
                         if ($this->fields[$k]->validateValue($newValues[$k][$j], $this )){
+                          // if the dropdown has otions
                           if (isset($this->fields[$k]->fields[$kk]->options[$vv])){
                             $values[$k][$j]["{$kk}_label"] = $newValues[$k][$j][$kk . '_label'] = $this->fields[$k]->fields[$kk]->options[$vv];
-                          } else {
+                          } 
+                          else { // if hasn't options try execute a sql sentence
                             $query = G::replaceDataField($this->fields[$k]->fields[$kk]->sql,$values[$k][$j]);
                             $con = Propel::getConnection($this->fields[$k]->fields[$kk]->sqlConnection!=""?$this->fields[$k]->fields[$kk]->sqlConnection:"workflow");
                             $stmt = $con->prepareStatement($query);
+                            
+                            // execute just if a query was set, it should be not empty
+                            if(trim($query) == '') {
+                              continue; //if it is  empty string skip it
+                            }
+
                             $rs = $stmt->executeQuery(ResultSet::FETCHMODE_NUM);
                             while ($rs->next()){
                               // from the query executed we only need certain elements
