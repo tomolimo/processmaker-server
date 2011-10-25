@@ -19,7 +19,7 @@
     <en>Login</en>
   </BSUBMIT>
   
-  <FORGOT_PASWORD_LINK type="link" link="forgotPassword" onclick="" colAlign="right" colWidth="135">
+  <FORGOT_PASWORD_LINK type="link" link="forgotPassword" onclick="" colAlign="right" colWidth="135" style="display:none;">
     <en>Forgot Password</en>    
   </FORGOT_PASWORD_LINK>
   
@@ -27,8 +27,8 @@
 
   <JS type="javascript"><![CDATA[
 // enable/disable forgot password link
-if(flagForgotPassword != 'on' )
-  hideRowById('FORGOT_PASWORD_LINK');
+if(flagForgotPassword == 'on' )
+  document.getElementById("form[FORGOT_PASWORD_LINK]").style.display = 'block';//hideRowById('FORGOT_PASWORD_LINK');
   
 var panel;
 
