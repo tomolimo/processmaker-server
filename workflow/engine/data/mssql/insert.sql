@@ -5168,6 +5168,10 @@ SELECT 'LABEL','ID_CASES_NOTES_ADD','en','Add new note','2011-10-03'
 SELECT 'LABEL','ID_INVALID_PROCESS_NAME','en','Invalid process name, please just use alphanumeric characters.','2011-10-14' 
   UNION ALL
 SELECT 'LABEL','ID_INVALID_PROCESS_NAME2','en','Invalid process name, please just use alphanumeric characters.','2011-10-14' 
+  UNION ALL
+SELECT 'LABEL','ID_HIDE_PROCESS_INF','en','Hide Process Information','2011-10-19' 
+  UNION ALL
+SELECT 'LABEL','ID_NEW_CASE_PANEL','en','New Case Panel','2011-10-19' 
  ;
 
 INSERT INTO ISO_LOCATION ([IC_UID],[IL_UID],[IL_NAME],[IL_NORMAL_NAME],[IS_UID]) 
