@@ -57,17 +57,18 @@ class Admin extends Controller
         
       }
     $fields['BUSINESS_DAY'] = $businessDayArray;   
-    
-    $holidayArray = array();
-      for($i=0;$i<sizeof($fields['HOLIDAY']);$i++) {
-        $holidayArray[$i] =  $fields['HOLIDAY'][$i+1];
-        
-      }
+    //validating if the calendar is new, it means that we don't have the $_GET array
+    $fields['HOLIDAY']=(isset ( $_GET['id'] )&&$_GET['id']!='')?$fields['HOLIDAY']:array();
+    $holidayArray     = array();
+    for($i=0;$i<sizeof($fields['HOLIDAY']);$i++) {
+      $holidayArray[$i] =  $fields['HOLIDAY'][$i+1];
+      
+    }
 
-    $_GET ['id']= is_null($_GET ['id'])?'':$_GET ['id'];
+    $_GET ['id']= (isset ( $_GET['id'] )&&$_GET['id']!='')?$_GET['id']:'';
     $fields['HOLIDAY'] = $holidayArray;
     $fields['NEWCALENDAR'] = 'NO';
-    if(isset ( $_GET ['id'] )&&$_GET ['id']=='') {
+    if(isset ( $_GET['id'] )&&$_GET['id']=='') {
        $fields['CALENDAR_UID'] =  G::GenerateUniqueID();
        $fields['NEWCALENDAR'] = 'YES';
     }
