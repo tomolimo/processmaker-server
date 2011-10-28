@@ -18,7 +18,7 @@ $startingTime =  array_sum(explode(' ',microtime()));
       $vVar = stripslashes($vVar);
     }
   }
-  
+
   if (ini_get('magic_quotes_gpc') == '1') {
     strip_slashes($_POST);
   }
@@ -30,7 +30,7 @@ $startingTime =  array_sum(explode(' ',microtime()));
   	$endTime =  array_sum(explode(' ',microtime()));
   	$time = $endTime - $startingTime;
     $fpt= fopen ( PATH_DATA . 'log/time.log', 'a' );
-    fwrite( $fpt, sprintf ( "%s.%03d %15s %s %5.3f %s\n", date('H:i:s'), $time, getenv('REMOTE_ADDR'), substr($serverAddr,-4), $time, $_SERVER['REQUEST_URI'] ));
+    fwrite( $fpt, sprintf ( "%s.%03d %15s %s %5.3f %s\n", date('Y-m-d H:i:s'), $time, getenv('REMOTE_ADDR'), substr($serverAddr,-4), $time, $_SERVER['REQUEST_URI'] ));
     fclose( $fpt);
   }
 
@@ -128,8 +128,8 @@ $startingTime =  array_sum(explode(' ',microtime()));
 
   $virtualURITable['/[a-zA-Z][a-zA-Z0-9]{0,}()'] = 'sysUnnamed';
   $virtualURITable['/(*)'] = PATH_HTML;
-  
-  
+
+
 
 //****** verify if we need to redirect or stream the file, if G:VirtualURI returns true means we are going to redirect the page *****
   if ( G::virtualURI($_SERVER['REQUEST_URI'], $virtualURITable , $realPath )) {
@@ -164,12 +164,12 @@ $startingTime =  array_sum(explode(' ',microtime()));
       }
       die;
     }
-    
-    
-    
+
+
+
     $requestUriArray=explode("/",$_SERVER['REQUEST_URI']);
-    
-    
+
+
   if((isset($requestUriArray[1]))&&($requestUriArray[1]=='skin')) {
       /*
        * By JHL Feb 28, 11
@@ -187,17 +187,17 @@ $startingTime =  array_sum(explode(' ',microtime()));
 
       //Get that path in array
       $paths = explode ( PATH_SEP, $forQuery[0] );
-      
+
       $fileToBeStreamed=str_replace("/skin/",PATH_CUSTOM_SKINS,$_SERVER['REQUEST_URI']);
-      
+
       if ( file_exists ( $fileToBeStreamed ) ) {
           G::streamFile ( $fileToBeStreamed );
       }
       die;
     }
-    
-    
-    
+
+
+
     switch ( $realPath  ) {
       case 'sysUnnamed' :
         require_once('sysUnnamed.php'); die;
@@ -226,7 +226,7 @@ $startingTime =  array_sum(explode(' ',microtime()));
   }
 
 //************** the request correspond to valid php page, now parse the URI  **************
-  
+
   G::parseURI ( getenv( "REQUEST_URI" ) );
   $oHeadPublisher->addMaborakFile( PATH_GULLIVER_HOME . 'js' . PATH_SEP . "widgets/jscalendar/lang/calendar-" . SYS_LANG . ".js");
   define( 'SYS_URI' , '/sys' .  SYS_TEMP . '/' . SYS_LANG . '/' . SYS_SKIN . '/' );
@@ -295,8 +295,8 @@ $startingTime =  array_sum(explode(' ',microtime()));
     if ( file_exists( PATH_DB .  SYS_TEMP . '/db.php' ) ) {
       require_once( PATH_DB .  SYS_TEMP . '/db.php' );
       define ( 'SYS_SYS' , SYS_TEMP );
-      
-      // defining constant for workspace shared directory 
+
+      // defining constant for workspace shared directory
       define ( 'PATH_WORKSPACE' , PATH_DB . SYS_SYS . PATH_SEP );
       // including workspace shared classes -> particularlly for pmTables
       set_include_path(get_include_path() . PATH_SEPARATOR . PATH_WORKSPACE);
@@ -434,10 +434,10 @@ $startingTime =  array_sum(explode(' ',microtime()));
 //********* Setup plugins *************
   $oPluginRegistry->setupPlugins(); //get and setup enabled plugins
   $avoidChangedWorkspaceValidation = false;
-  
+
   //Load custom Classes and Model from Plugins.
   G::LoadAllPluginModelClasses();
-  
+
 //*********jump to php file in methods directory *************
   $collectionPlugin = '';
   if ( $oPluginRegistry->isRegisteredFolder( SYS_COLLECTION ) ) {
@@ -467,8 +467,8 @@ $startingTime =  array_sum(explode(' ',microtime()));
     $phpFile = str_replace ( '.php', 'index.php', $phpFile );
     $phpFile = include ( $phpFile );
   }*/
-  $bWE = false; 
-  $isControllerCall = false; 
+  $bWE = false;
+  $isControllerCall = false;
   if ( substr(SYS_COLLECTION , 0,8) === 'gulliver' ) {
     $phpFile = PATH_GULLIVER_HOME . 'methods/' . substr( SYS_COLLECTION , 8) . SYS_TARGET.'.php';
   }
@@ -493,7 +493,7 @@ $startingTime =  array_sum(explode(' ',microtime()));
       $bWE = true;
       //$phpFile = PATH_DATA_SITE . 'public' . PATH_SEP .  SYS_COLLECTION . PATH_SEP . $auxPart[ count($auxPart)-1];
     }
-    
+
     //erik: verify if it is a Controller Class or httpProxyController Class
     if( is_file(PATH_CONTROLLERS . SYS_COLLECTION . '.php') ) {
       require_once PATH_CONTROLLERS . SYS_COLLECTION . '.php';
@@ -505,7 +505,7 @@ $startingTime =  array_sum(explode(' ',microtime()));
         $isControllerCall = true;
       }
     }
-    
+
     if ( ! $isControllerCall && ! file_exists( $phpFile ) ) {
         $_SESSION['phpFileNotFound'] = $_SERVER['REQUEST_URI'];
         print $phpFile;
@@ -513,7 +513,7 @@ $startingTime =  array_sum(explode(' ',microtime()));
         die;
     }
   }
-  
+
   //redirect to login, if user changed the workspace in the URL
   if( ! $avoidChangedWorkspaceValidation && isset( $_SESSION['WORKSPACE'] ) && $_SESSION['WORKSPACE'] != SYS_SYS) {
     $_SESSION['WORKSPACE'] = SYS_SYS;
@@ -536,7 +536,7 @@ $startingTime =  array_sum(explode(' ',microtime()));
 
     //get the language direction from ServerConf
     define('SYS_LANG_DIRECTION', $oServerConf->getLanDirection() );
-    
+
     if((isset( $_SESSION['USER_LOGGED'] ))&&(!(isset($_GET['sid'])))) {
       $RBAC->initRBAC();
       $RBAC->loadUserRolePermission( $RBAC->sSystem, $_SESSION['USER_LOGGED'] , PATH_DATA, session_id());
@@ -581,7 +581,7 @@ $startingTime =  array_sum(explode(' ',microtime()));
       }
     }
     $_SESSION['phpLastFileFound'] = $_SERVER['REQUEST_URI'];
-    
+
     /***
      * New feature for Gulliver framework to support Controllers & HttpProxyController classes handling
      *
@@ -593,7 +593,7 @@ $startingTime =  array_sum(explode(' ',microtime()));
       $controller->call($controllerAction);
     } else
       require_once( $phpFile );
-        
+
     if ( defined('SKIP_HEADERS') ) {
       header("Expires: " . gmdate("D, d M Y H:i:s", mktime( 0,0,0,date('m'),date('d'),date('Y') + 1) ) . " GMT");
       header('Cache-Control: public');
