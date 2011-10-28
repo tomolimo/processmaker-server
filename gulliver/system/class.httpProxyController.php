@@ -17,6 +17,8 @@ class HttpProxyController {
      * @var object - private object to store the http request data 
      */
     private $__request__;
+
+    public $jsonResponse = true;
     
     private $sendResponse = true;
     /**
@@ -81,6 +83,11 @@ class HttpProxyController {
     {
         try {
             $result = $this->$name($this->__request__);
+
+            if (!$this->jsonResponse) {
+                return null;
+            }
+            
             if( ! $result ) 
               $result = $this->__data__;
               
@@ -117,6 +124,11 @@ class HttpProxyController {
                 $this->__request__->$var['key'] = $var['value'];   
         } else 
             $this->__request__ = $data;
+    }
+
+    public function setJsonResponse($bool)
+    {
+        $this->jsonResponse = $bool;
     }
 
     /**
