@@ -48,6 +48,7 @@ $G_ID_MENU_SELECTED     = 'USERS';
 $G_ID_SUB_MENU_SELECTED = 'AUTH_SOURCES';
 
 $fields = $RBAC->getAuthSource($_GET['sUID']);
+
 if (is_array($fields['AUTH_SOURCE_DATA'])) {
   foreach($fields['AUTH_SOURCE_DATA'] as $field => $value) {
     $fields[$field] = $value;
@@ -65,8 +66,11 @@ if (isset($fields['AUTH_ANONYMOUS'])) {
 }
 
 $G_PUBLISH = new Publisher();
-if ($fields['AUTH_SOURCE_PROVIDER'] == 'ldap') {
-  $G_PUBLISH->AddContent('xmlform', 'xmlform', 'authSources/ldapEdit', '', $fields, '../authSources/authSources_Save');
+if ($fields['AUTH_SOURCE_PROVIDER'] == 'ldap' ) {
+  $oHeadPublisher =& headPublisher::getSingleton();
+  $oHeadPublisher->addExtJsScript('authSources/authSourcesEdit', false);
+  $oHeadPublisher->assign('sUID',$_GET['sUID']);
+  G::RenderPage('publish', 'extJs');
 }
 else {
   if (file_exists(PATH_PLUGINS . $fields['AUTH_SOURCE_PROVIDER'] . PATH_SEP . $fields['AUTH_SOURCE_PROVIDER'] . 'Edit.xml')) {

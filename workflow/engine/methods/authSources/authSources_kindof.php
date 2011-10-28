@@ -36,20 +36,9 @@ $G_ID_SUB_MENU_SELECTED = 'AUTH_SOURCES';
 
 $aAuthSourceTypes = array(array('sType' => 'char', 'sLabel' => 'char'));
 $oDirectory = dir(PATH_RBAC . 'plugins' . PATH_SEP);
-while($sObject = $oDirectory->read()) {
-  if (($sObject != '.') && ($sObject != '..') && ($sObject != '.svn') && ($sObject != 'ldap')) {
-    if (is_file(PATH_RBAC . 'plugins' . PATH_SEP . $sObject)) {
-      $sType = trim(str_replace('class.', '', str_replace('.php', '', $sObject)));
-      $aAuthSourceTypes[] = array('sType' => $sType, 'sLabel' => $sType);
-    }
-  }
-}
-global $_DBArray;
-$_DBArray['authSourceTypes'] = $aAuthSourceTypes;
-$_SESSION['_DBArray'] = $_DBArray;
-
 $G_PUBLISH = new Publisher();
 $oHeadPublisher =& headPublisher::getSingleton();
-$oHeadPublisher->addExtJsScript('authSources/authSourcesListNew', false);    //adding a javascript file .js
+$oHeadPublisher->addExtJsScript('authSources/authSourceskindof', true);    //adding a javascript file .js
+$oHeadPublisher->assign('sprovider', $_GET['sprovider']);
 G::RenderPage('publish', 'extJs');
 G::RenderPage('publish','blank');

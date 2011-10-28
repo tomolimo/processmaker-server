@@ -72,4 +72,67 @@ class adminProxy extends HttpProxyController
     
     echo "{success: true}";      
   }
+  
+  /**
+   * getting the kind of the authentication source
+   * @param object $params
+   * @return array $data
+   */
+  function testingOption($params){
+    
+    $data['success'] = true; 
+    $data['optionAuthS'] = $params->optionAuthS;
+    return $data;
+    
+  }// end testingOption function
+  
+   /**
+   * saving the authentication source data
+   * @param object $params
+   * @return array $data
+   */
+  function saveAuthSources($params){
+
+    global $RBAC;
+    if ($RBAC->userCanAccess('PM_SETUP_ADVANCE') != 1) {
+      G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');
+	    G::header('location: ../login/login');
+	    die;
+    }
+    $aCommonFields = array('AUTH_SOURCE_UID',
+                           'AUTH_SOURCE_NAME',
+                           'AUTH_SOURCE_PROVIDER',
+                           'AUTH_SOURCE_SERVER_NAME',
+                           'AUTH_SOURCE_PORT',
+                           'AUTH_SOURCE_ENABLED_TLS',
+                           'AUTH_ANONYMOUS',
+                           'AUTH_SOURCE_SEARCH_USER',
+                           'AUTH_SOURCE_PASSWORD',
+                           'AUTH_SOURCE_VERSION',
+                           'AUTH_SOURCE_BASE_DN',
+                           'AUTH_SOURCE_OBJECT_CLASSES',
+                           'AUTH_SOURCE_ATTRIBUTES');
+
+    $aFields = $aData = array();
+
+    unset($params->PHPSESSID);
+    foreach ($params as $sField => $sValue) {
+      if (in_array($sField, $aCommonFields)) {
+        $aFields[$sField] = (($sField=='AUTH_SOURCE_ENABLED_TLS' || $sField=='AUTH_ANONYMOUS'))? ($sValue=='yes')?1:0 :$sValue;
+      }
+      else {
+        $aData[$sField] = ($sValue=='Active Directory')?'ad':$sValue;
+      }
+    }
+    $aFields['AUTH_SOURCE_DATA'] = $aData;
+    if ($aFields['AUTH_SOURCE_UID'] == '') {
+      $RBAC->createAuthSource($aFields);
+    }
+    else {
+      $RBAC->updateAuthSource($aFields);
+    }
+    $data=array();
+    $data['success'] = true; 
+    return $data;
+  }//end saveAuthSoruces function
 }
