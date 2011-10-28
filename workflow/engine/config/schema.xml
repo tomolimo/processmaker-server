@@ -2775,4 +2775,106 @@
       </vendor>
     </index>
   </table>
+  <table name="DASHLET">
+    <vendor type="mysql">
+      <parameter name="Name" value="DASHLET"/>
+      <parameter name="Engine" value="MyISAM"/>
+      <parameter name="Version" value="10"/>
+      <parameter name="Row_format" value="Dynamic"/>
+      <parameter name="Rows" value="129"/>
+      <parameter name="Avg_row_length" value="115"/>
+      <parameter name="Data_length" value="14860"/>
+      <parameter name="Max_data_length" value="281474976710655"/>
+      <parameter name="Index_length" value="5120"/>
+      <parameter name="Data_free" value="0"/>
+      <parameter name="Auto_increment" value=""/>
+      <parameter name="Create_time" value="2011-10-28 09:55:00"/>
+      <parameter name="Update_time" value="2011-10-28 09:55:00"/>
+      <parameter name="Check_time" value=""/>
+      <parameter name="Collation" value="utf8_general_ci"/>
+      <parameter name="Checksum" value=""/>
+      <parameter name="Create_options" value=""/>
+      <parameter name="Comment" value="Dashblets definitions"/>
+    </vendor>
+    <column name="DAS_UID" type="VARCHAR" size="32" required="true" primaryKey="true" default="" />
+    <column name="DAS_CLASS" type="VARCHAR" size="50" required="true" default="" />
+    <column name="DAS_TITLE" type="VARCHAR" size="255" required="true" default="" />
+    <column name="DAS_DESCRIPTION" type="LONGVARCHAR" required="false" />
+    <column name="DAS_VERSION" type="VARCHAR" size="10" required="true" default="1.0" />
+    <column name="DAS_CREATE_DATE" type="TIMESTAMP" required="true" />
+    <column name="DAS_UPDATE_DATE" type="TIMESTAMP" required="false" />
+    <column name="DAS_STATUS" type="TINYINT" required="true" default="1"/>
+    <index name="indexDashlet">
+      <index-column name="DAS_UID"/>
+      <vendor type="mysql">
+        <parameter name="Table" value="DASHLET"/>
+        <parameter name="Non_unique" value="1"/>
+        <parameter name="Key_name" value="indexDashlet"/>
+        <parameter name="Seq_in_index" value="1"/>
+        <parameter name="Column_name" value="DAS_UID"/>
+        <parameter name="Collation" value="A"/>
+        <parameter name="Cardinality" value=""/>
+        <parameter name="Sub_part" value=""/>
+        <parameter name="Packed" value=""/>
+        <parameter name="Null" value=""/>
+        <parameter name="Index_type" value="BTREE"/>
+        <parameter name="Comment" value=""/>
+      </vendor>
+    </index>
+  </table>
+  <table name="DASHLET_INSTANCE">
+    <vendor type="mysql">
+      <parameter name="Name" value="DASHLET_INSTANCE"/>
+      <parameter name="Engine" value="MyISAM"/>
+      <parameter name="Version" value="10"/>
+      <parameter name="Row_format" value="Dynamic"/>
+      <parameter name="Rows" value="129"/>
+      <parameter name="Avg_row_length" value="115"/>
+      <parameter name="Data_length" value="14860"/>
+      <parameter name="Max_data_length" value="281474976710655"/>
+      <parameter name="Index_length" value="5120"/>
+      <parameter name="Data_free" value="0"/>
+      <parameter name="Auto_increment" value=""/>
+      <parameter name="Create_time" value="2011-10-28 09:55:00"/>
+      <parameter name="Update_time" value="2011-10-28 09:55:00"/>
+      <parameter name="Check_time" value=""/>
+      <parameter name="Collation" value="utf8_general_ci"/>
+      <parameter name="Checksum" value=""/>
+      <parameter name="Create_options" value=""/>
+      <parameter name="Comment" value="Dashblets definitions"/>
+    </vendor>
+    <column name="DAS_INS_UID" type="VARCHAR" size="32" required="true" primaryKey="true"  default="" />
+    <column name="DAS_UID" type="VARCHAR" size="32" required="true" default="" />
+    <column name="DAS_INS_TYPE" type="VARCHAR" size="20" required="true" default="" />
+    <column name="DAS_INS_CONTEXT_TIME" type="VARCHAR" size="20" required="true" default="" />
+    <column name="DAS_INS_START_DATE" type="TIMESTAMP" required="false" />
+    <column name="DAS_INS_END_DATE" type="TIMESTAMP" required="false" />
+    <column name="DAS_INS_OWNER_TYPE" type="VARCHAR" size="20" required="true" default="" />
+    <column name="DAS_INS_OWNER_UID" type="VARCHAR" size="32" required="false" default="" />
+    <column name="DAS_INS_PROCESSES" type="LONGVARCHAR" required="false" />
+    <column name="DAS_INS_TASKS" type="LONGVARCHAR" required="false" />
+    <column name="DAS_INS_ADDITIONAL_PROPERTIES" type="LONGVARCHAR" required="false" />
+    <column name="DAS_INS_CREATE_DATE" type="TIMESTAMP" required="true" />
+    <column name="DAS_INS_UPDATE_DATE" type="TIMESTAMP" required="false" />
+    <column name="DAS_INS_STATUS" type="TINYINT" required="true" default="1"/>
+    <index name="indexDashletInstance">
+      <index-column name="DAS_INS_UID"/>
+      <index-column name="DAS_UID"/>
+      <index-column name="DAS_INS_OWNER_UID"/>
+      <vendor type="mysql">
+        <parameter name="Table" value="DASHLET_INSTANCE"/>
+        <parameter name="Non_unique" value="1"/>
+        <parameter name="Key_name" value="indexDashletInstance"/>
+        <parameter name="Seq_in_index" value="1"/>
+        <parameter name="Column_name" value="DAS_INS_UID"/>
+        <parameter name="Collation" value="A"/>
+        <parameter name="Cardinality" value=""/>
+        <parameter name="Sub_part" value=""/>
+        <parameter name="Packed" value=""/>
+        <parameter name="Null" value=""/>
+        <parameter name="Index_type" value="BTREE"/>
+        <parameter name="Comment" value=""/>
+      </vendor>
+    </index>
+  </table>
 </database>
