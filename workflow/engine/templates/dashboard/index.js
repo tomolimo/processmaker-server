@@ -57,7 +57,7 @@ Ext.onReady(function(){
           pd.doLayout();        
           //vp.doLayout();        
           }
-      },
+      } /* ,
       {
         xtype: 'tbbutton',
         text : 'new gauge',
@@ -90,7 +90,7 @@ Ext.onReady(function(){
           pd.doLayout();        
           //vp.doLayout();        
           }
-      }
+      } */
     ]
   });
 
