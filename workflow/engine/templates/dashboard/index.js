@@ -65,7 +65,7 @@ Ext.onReady(function(){
           var np = new Ext.ux.Portlet ( {
             //title: 'Panel nuevo',
             //tools: tools,
-            html: 'hello world',
+            html: 'gauge placeholder',
             listeners: {
               'render': function(p){
                 p.html = 'hello ' + p.getWidth();
@@ -76,8 +76,8 @@ Ext.onReady(function(){
               },
               'resize' : function(p,w,h){
                 var randomnumber=Math.floor(Math.random()*1000000)
-                var img = new Ext.XTemplate("<img src='{page}?w={width}&r={random}'>").apply({
-                page: 'http://javaserver.colosa.net/ext/examples/portal/gauge.php', width:w, random: randomnumber })
+                var img = new Ext.XTemplate("<img src='{page}?w={width}&r={random}&id={id}'>").apply({
+                page: 'dashboard/renderDashletInstance', width:w, random: randomnumber, id:'123456ABCDEF' })
 
                 p.update(img );
               }
@@ -141,29 +141,15 @@ Ext.onReady(function(){
       items:[{
         columnWidth:.33,
         style:'padding:10px 0 10px 10px',
-        items:[{
-          title: 'Grid in a Portlet',
-          layout:'fit',
-          tools: tools,
-          html: 'Learn Use the included files to view samples and our API documentation. For advanced, hands-on support, please see our premium support subscriptions. Larger organizations can use our enterprise training and services.'
-          //items: new SampleGrid([0, 2, 3])
-        }]
+        items:[]
       },{
           columnWidth:.33,
           style:'padding:10px 0 10px 10px',
-          items:[{
-              title: 'Panel 2',
-              tools: tools,
-              html: 'Learn Use the included files to view samples and our API documentation. For advanced, hands-on support, please see our premium support subscriptions. Larger organizations can use our enterprise training and services.'
-          }]
+          items:[]
       },{
           columnWidth:.33,
           style:'padding:10px',
-          items:[{
-              title: 'Panel 3',
-              tools: tools,
-              html: 'Learn Use the included files to view samples and our API documentation. For advanced, hands-on support, please see our premium support subscriptions. Larger organizations can use our enterprise training and services.'
-          }]
+          items:[]
       }]
       
       /*
