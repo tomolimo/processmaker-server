@@ -39,7 +39,14 @@ class Dashboard extends Controller {
         throw new Exception('Parameter "DAS_INS_UID" is empty.');
       }
       $this->pmDashlet->setup($data->DAS_INS_UID);
-      $this->pmDashlet->render();
+
+      if (!isset($_REQUEST['w']) ) {
+        $width = 300;
+      }
+      else {
+        $width = $_REQUEST['w'];
+      }
+      $this->pmDashlet->render( $width);
     }
     catch (Exception $error) {
       //ToDo: Render a image with the error message

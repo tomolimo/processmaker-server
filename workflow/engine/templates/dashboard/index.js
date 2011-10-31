@@ -77,7 +77,7 @@ Ext.onReady(function(){
               'resize' : function(p,w,h){
                 var randomnumber=Math.floor(Math.random()*1000000)
                 var img = new Ext.XTemplate("<img src='{page}?w={width}&r={random}&DAS_INS_UID={id}'>").apply({
-                page: 'dashboard/renderDashletInstance', width:w, random: randomnumber, id:'123456ABCDEF' })
+                page: 'dashboard/renderDashletInstance', width:w, random: randomnumber, id:'00000000000000000000000000000001' })
 
                 p.update(img );
               }

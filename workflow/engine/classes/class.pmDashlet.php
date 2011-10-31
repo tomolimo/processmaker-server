@@ -23,12 +23,12 @@ class PMDashlet extends DashletInstance implements DashletInterface {
     }
   }
 
-  public function render() {
+  public function render($width = 300) {
     try {
       if (is_null($this->dashletObject)) {
         throw new Exception('Please call to the function "setup" before call the function "render".');
       }
-      $this->dashletObject->render();
+      $this->dashletObject->render($width);
     }
     catch (Exception $error) {
       throw $error;
