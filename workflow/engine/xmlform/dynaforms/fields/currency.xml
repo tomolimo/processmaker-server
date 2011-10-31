@@ -27,7 +27,7 @@ SELECT XMLNODE_NAME, TYPE FROM dynaForm WHERE XMLNODE_NAME = @@PME_XMLNODE_NAME
 <PME_MAXLENGTH type="text" maxlength="10" size="10" validate="Int" defaultvalue="15">
   <en>Max. Length</en>
 </PME_MAXLENGTH>
-<PME_CURRENCY type="text" maxlength="50" size="30" defaultvalue="$">
+<PME_CURRENCY type="hidden" maxlength="50" size="30" defaultvalue="$">
   <en>Currency</en>
 </PME_CURRENCY>
 <PME_VALIDATE type="dropdown" defaultvalue="Real">
