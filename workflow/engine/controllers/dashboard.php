@@ -88,17 +88,21 @@ class Dashboard extends Controller {
     return $result;
   }
 
-  public function dashletInstanceForm($dasInsUid = '') {
+  public function dashletInstanceForm($data) {
     try {
       $this->includeExtJS('dashboard/dashletInstanceForm', false);
       $this->setView('dashboard/dashletInstanceForm');
-      if ($dasInsUid != '') {
-        $this->setJSVar('dashletInstance', $this->pmDashlet->getDashletInstance($dasInsUid));
+      if (!isset($data->DAS_INS_UID)) {
+        $data->DAS_INS_UID = '';
+      }
+      if ($data->DAS_INS_UID != '') {
+        $this->setJSVar('dashletInstance', $this->pmDashlet->getDashletInstance($data->DAS_INS_UID));
       }
       else {
-        $this->setJSVar('dashletInstance', '');
+        $this->setJSVar('dashletInstance', new stdclass());
       }
       G::RenderPage('publish', 'extJs');
+      return null;
     }
     catch (Exception $error) {
       //ToDo: Display a error message
