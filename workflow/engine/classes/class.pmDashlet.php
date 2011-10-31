@@ -89,7 +89,7 @@ class PMDashlet extends DashletInstance implements DashletInterface {
 
   public function saveDashletInstance($data) {
     try {
-      $this->dashletObject->createOrUpdate($data);
+      $this->createOrUpdate($data);
     }
     catch (Exception $error) {
       throw $error;
@@ -98,7 +98,7 @@ class PMDashlet extends DashletInstance implements DashletInterface {
 
   public function deleteDashletInstance($dasInsUid) {
     try {
-      $this->dashletObject->remove($dasInsUid);
+      $this->remove($dasInsUid);
     }
     catch (Exception $error) {
       throw $error;

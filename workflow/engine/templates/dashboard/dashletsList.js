@@ -150,7 +150,7 @@ Ext.onReady(function(){
       root: 'dashletsInstances',
       totalProperty: 'totalDashletsInstances',
       fields : [
-        {name : 'AUTH_SOURCE_UID'},
+        {name : 'DAS_INS_UID'},
         {name : 'AUTH_SOURCE_NAME'},
         {name : 'AUTH_SOURCE_PROVIDER'},
         {name : 'AUTH_SOURCE_SERVER_NAME'},
@@ -173,7 +173,7 @@ Ext.onReady(function(){
           sortable: true
       },
       columns: [
-          {id:'AUTH_SOURCE_UID', dataIndex: 'AUTH_SOURCE_UID', hidden:true, hideable:false},
+          {id:'DAS_INS_UID', dataIndex: 'DAS_INS_UID', hidden:true, hideable:false},
           {header: _('ID_NAME'), dataIndex: 'AUTH_SOURCE_NAME', width: 200, hidden:false, align:'left'},
           {header: _('ID_PROVIDER'), dataIndex: 'AUTH_SOURCE_PROVIDER', width: 120, hidden: false, align: 'center'},
           {header: _('ID_SERVER_NAME'), dataIndex: 'AUTH_SOURCE_SERVER_NAME', width: 180, hidden: false, align: 'center'},
@@ -212,8 +212,10 @@ Ext.onReady(function(){
     pageSize: pageSize,
     store: store,
     displayInfo: true,
-    displayMsg: _('ID_GRID_PAGE_DISPLAYING_DASHLET_MESSAGE') + '&nbsp; &nbsp; ',
-    emptyMsg: _('ID_GRID_PAGE_NO_DASHLET_MESSAGE'),
+    //displayMsg: _('ID_GRID_PAGE_DISPLAYING_DASHLET_MESSAGE') + '&nbsp; &nbsp; ',
+    displayMsg: 'Displaying dashlets instances {0} - {1} of {2}' + '&nbsp; &nbsp; ',
+    //emptyMsg: _('ID_GRID_PAGE_NO_DASHLET_MESSAGE'),
+    emptyMsg: 'No dashlets instances to display',
     items: ['-',_('ID_PAGE_SIZE')+':',comboPageSize]
   });
 
@@ -233,7 +235,8 @@ Ext.onReady(function(){
     viewConfig: {
       forceFit:true
     },
-    title : _('ID_DASHLET_INSTANCE'),
+    //title : _('ID_DASHLETS_INSTANCES'),
+    title : 'Dashlets Instances',
     store: store,
     cm: cmodel,
     sm: smodel,
@@ -308,18 +311,18 @@ newDashletInstance = function() {
 editDashletInstance = function(){
   var rowSelected = infoGrid.getSelectionModel().getSelected();
   if (rowSelected){
-    location.href = 'dashletInstanceForm?$dasInsUid=' + rowSelected.data.AUTH_SOURCE_UID;
+    location.href = 'dashletInstanceForm?dasInsUid=' + rowSelected.data.DAS_INS_UID;
   }
 };
 
 //Delete Dashlet Instance Action
 deleteDashletInstance = function(){
   var rowSelected = infoGrid.getSelectionModel().getSelected();
-  if (rowSelected){
+  /*if (rowSelected){
     viewport.getEl().mask(_('ID_PROCESSING'));
     Ext.Ajax.request({
       url: 'deleteDashletInstance',
-      params: {dasInsUid: rowSelected.data.AUTH_SOURCE_UID},
+      params: {dasInsUid: rowSelected.data.DAS_INS_UID},
       success: function(r,o){
           viewport.getEl().unmask();
           response = Ext.util.JSON.decode(r.responseText);
@@ -329,7 +332,7 @@ deleteDashletInstance = function(){
               viewport.getEl().mask(_('ID_PROCESSING'));
                 Ext.Ajax.request({
                   url: 'deleteDashletInstance',
-                  params: {dasInsUid : rowSelected.data.AUTH_SOURCE_UID},
+                  params: {dasInsUid : rowSelected.data.DAS_INS_UID},
                   success: function(r,o){
                     viewport.getEl().unmask();
                     resp = Ext.util.JSON.decode(r.responseText);
@@ -357,5 +360,5 @@ deleteDashletInstance = function(){
         viewport.getEl().unmask();
       }
     });
-  }
+  }*/
 };

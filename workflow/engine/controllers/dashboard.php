@@ -85,6 +85,12 @@ class Dashboard extends Controller {
     $result = new stdclass();
     $result->status = 'OK';
     try {
+      if (!isset($data->start)) {
+        $data->start = null;
+      }
+      if (!isset($data->limit)) {
+        $data->limit = null;
+      }
       $result->dashletsInstances = $this->pmDashlet->getDashletsInstances($data->start, $data->limit);
       $result->totalDashletsInstances = $this->pmDashlet->getDashletsInstancesQuantity();
     }
