@@ -108,13 +108,17 @@ class PMDashlet extends DashletInstance implements DashletInterface {
   public function getDashletsInstancesForUser($userUid) {
     try {
       // Include required classes
-      //
+      require_once 'classes/mode/Department.php'
       // Check for "public" dashlets
       // ToDo: Next release
       // Check for the direct assignments
       // ToDo: Next release
       // Check for department assigments
-      //
+      $departmentInstance = new Department();
+      $departments = $departmentInstance->getDepartmentsForUser($userUid);
+      foreach ($departments as $department)  {
+        //
+      }
       // Check for group assignments
       // ToDo: Next release
       // Check for role assigments
