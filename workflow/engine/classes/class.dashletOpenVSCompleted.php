@@ -50,11 +50,12 @@ class dashletOpenVSCompleted implements DashletInterface {
   }
 
   function render () {
-    /*G::LoadClass('gauge');
+    print "hola"; die;
+    G::LoadClass('gauge');
     $g = new Gauge();
-    $g->w = $w;
+    //$g->w = $w;
     //others
-    $g->render();*/
+    $g->render();
   }
 
 }

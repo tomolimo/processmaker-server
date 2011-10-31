@@ -32,13 +32,13 @@ class Dashboard extends Controller {
 
   public function renderDashletInstance($data) {
     try {
-      if (!isset($data['DAS_INS_UID'])) {
-        $data['DAS_INS_UID'] = '';
+      if (!isset($data->DAS_INS_UID)) {
+        $data->DAS_INS_UID = '';
       }
-      if ($data['DAS_INS_UID'] == '') {
+      if ($data->DAS_INS_UID == '') {
         throw new Exception('Parameter "DAS_INS_UID" is empty.');
       }
-      $this->pmDashlet->setup($data['DAS_INS_UID']);
+      $this->pmDashlet->setup($data->DAS_INS_UID);
       $this->pmDashlet->render();
     }
     catch (Exception $error) {
