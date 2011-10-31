@@ -56,25 +56,57 @@
     $arrowBody    = ImageColorAllocate($im, 228, 114, 86);
     $arrowLine    = ImageColorAllocate($im, 207,  74, 42);
     $redArc       = ImageColorAllocate($im, 220,  57, 18);
-    $yellowArc       = ImageColorAllocate($im, 255, 153,  0);
+    $yellowArc    = ImageColorAllocate($im, 255, 153,  0);
   
     $black   = ImageColorAllocate($im,   0,0,0);
     $white   = ImageColorAllocate($im, 255, 255, 255);
     $gray    = ImageColorAllocate($im, 190, 190, 190);
 
     $fontArial   = PATH_THIRDPARTY . 'html2ps_pdf/fonts/arial.ttf';
-    $fontCourier = PATH_THIRDPARTY . 'html2ps_pdf/fonts/cour.ttf';
-    $fontCourbd  = PATH_THIRDPARTY . 'html2ps_pdf/fonts/courbd.ttf';
   
     ImageFilledRectangle($im, 0, 0, $width-1, $height-1, $white);
     ImageRectangle      ($im, 0, 0, $width-1, $height-1, $gray);
   
     //center coords
-    $cX = intval($this->w /2);  
+    $cX = intval($this->w /4);  
     $cY = intval($this->h /2);  
     
     //diameter for gauge
     $diameter = intval( $this->h * 4/5 );
+
+    $this->renderGauge($im, $cX, $cY, $diameter);
+
+    //center coords
+    $cX = intval($this->w * 3/4);  
+    $cY = intval($this->h /2);  
+    
+    //diameter for gauge
+    $diameter = intval( $this->h * 4/5 );
+
+    $this->renderGauge($im, $cX, $cY, $diameter);
+    
+    Header("Content-type: image/png");
+    ImagePng($im);
+    
+  }
+  
+  function renderGauge($im, $cX, $cY, $diameter) {
+    //gauge color 
+    $bgcolor      = ImageColorAllocate($im, 247, 247, 247);
+    $extRing      = ImageColorAllocate($im, 214, 214, 214);
+    $blueRing     = ImageColorAllocate($im,  70, 132, 238);
+    $blueRingLine = ImageColorAllocate($im, 106, 114, 127);
+    $arrowBody    = ImageColorAllocate($im, 228, 114, 86);
+    $arrowLine    = ImageColorAllocate($im, 207,  74, 42);
+    $redArc       = ImageColorAllocate($im, 220,  57, 18);
+    $yellowArc    = ImageColorAllocate($im, 255, 153,  0);
+  
+    $black   = ImageColorAllocate($im,   0,0,0);
+    $white   = ImageColorAllocate($im, 255, 255, 255);
+    $gray    = ImageColorAllocate($im, 190, 190, 190);
+
+    $fontArial   = PATH_THIRDPARTY . 'html2ps_pdf/fonts/arial.ttf';
+
     $dX = intval($diameter *8/7 );   //for now ratio aspect is 8:7
     $dY = intval($diameter);  
     $dXRing = intval($dX * 0.90);
@@ -194,8 +226,6 @@
     $centerY = $cY+$dYRing/2+3-abs($bbox[5]);
     imagettftext ( $im, 9, 0, $centerX, $centerY, $black, $fontArial, $textToDisplay );
  
-    Header("Content-type: image/png");
-    ImagePng($im);
     
   }
    

@@ -44,7 +44,7 @@ class Dashboard extends Controller {
         $width = 300;
       }
       else {
-        $width = $_REQUEST['w'];
+        $width = $_REQUEST['w']-10;
       }
       $this->pmDashlet->render( $width);
     }
