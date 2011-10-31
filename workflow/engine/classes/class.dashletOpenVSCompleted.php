@@ -2,7 +2,7 @@
 
 require_once 'interfaces/dashletInterface.php';
 
-class DashletOpenVSCompleted implements DashletInterface {
+class dashletOpenVSCompleted implements DashletInterface {
 
   /**
       width

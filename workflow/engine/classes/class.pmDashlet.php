@@ -13,8 +13,8 @@ class PMDashlet extends DashletInstance implements DashletInterface {
 
   public function setup($dasInsUid) {
     try {
-      //$dashletInstance = $this->getDashletInstance($dasInsUid);
-      //$this->dashletObject = new $
+      $dashletInstance = $this->getDashletInstance($dasInsUid);
+      //$this->dashletObject = new $dashletInstance['DAS_CLASS']();
     }
     catch (Exception $error) {
       throw $error;
@@ -58,7 +58,13 @@ class PMDashlet extends DashletInstance implements DashletInterface {
 
   public function getDashletInstance($dasInsUid) {
     try {
-      //
+      $dashletInstance = $this->load($dasInsUid);
+      if (!isset($dashletInstance['DAS_UID'])) {
+        new Exception('Error load the Dashlet Instance "' . $dasInsUid . '".');
+      }
+      $dashlet = new Dashlet();
+      $dashletFields = $dashlet->load($dashletInstance['DAS_UID']);
+      return array_merge($dashletFields, $dashletInstance);
     }
     catch (Exception $error) {
       throw $error;
