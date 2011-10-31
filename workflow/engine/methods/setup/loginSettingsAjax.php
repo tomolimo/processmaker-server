@@ -21,12 +21,12 @@
       $conf = new Configurations;
       $conf->loadConfig($obj, 'ENVIRONMENT_SETTINGS','');
       
-      $conf->aConfig['login_enableForgotPassword'] = $_POST['acceptRP'];
+      $conf->aConfig['login_enableForgotPassword'] = isset($_POST['acceptRP']) ? $_POST['acceptRP'] : 'off';
       $conf->aConfig['login_defaultLanguage'] = $_POST['lang'];      
       $conf->saveConfig('ENVIRONMENT_SETTINGS', '');
       
       $response->success = true;
-      if ($_POST['acceptRP'])
+      if (isset($_POST['acceptRP']) && $_POST['acceptRP'])
         $response->enable = true;
       else
         $response->enable = false;     
