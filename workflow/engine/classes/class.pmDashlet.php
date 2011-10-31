@@ -37,9 +37,26 @@ class PMDashlet extends DashletInstance implements DashletInterface {
 
   // Own functions
 
-  public function getDashletsInstances() {
+  public function getDashletsInstances($start = null, $limit = null) {
     try {
-      //
+      $dashletsInstances = array();
+      $criteria = new Criteria('workflow');
+      $criteria->addSelectColumn('*');
+      $criteria->addJoin(DashletInstancePeer::DAS_UID, DashletPeer::DAS_UID, Criteria::LEFT_JOIN);
+      if (!is_null($start)) {
+        $criteria->setOffset($start);
+      }
+      if (!is_null($limit)) {
+        $criteria->setLimit($limit);
+      }
+      $dataset = DashletInstancePeer::doSelectRS($criteria);
+      $dataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+      $dataset->next();
+      while ($row = $dataset->getRow()) {
+        $dashletsInstances[] = $row;
+        $dataset->next();
+      }
+      return $dashletsInstances;
     }
     catch (Exception $error) {
       throw $error;
@@ -48,7 +65,10 @@ class PMDashlet extends DashletInstance implements DashletInterface {
 
   public function getDashletsInstancesQuantity() {
     try {
-      //
+      $criteria = new Criteria('workflow');
+      $criteria->addSelectColumn('*');
+      $criteria->addJoin(DashletInstancePeer::DAS_UID, DashletPeer::DAS_UID, Criteria::LEFT_JOIN);
+      return DashletInstancePeer::doCount($criteria);
     }
     catch (Exception $error) {
       throw $error;
@@ -58,9 +78,6 @@ class PMDashlet extends DashletInstance implements DashletInterface {
   public function getDashletInstance($dasInsUid) {
     try {
       $dashletInstance = $this->load($dasInsUid);
-      if (!isset($dashletInstance['DAS_UID'])) {
-        new Exception('Error load the Dashlet Instance "' . $dasInsUid . '".');
-      }
       $dashlet = new Dashlet();
       $dashletFields = $dashlet->load($dashletInstance['DAS_UID']);
       return array_merge($dashletFields, $dashletInstance);
@@ -90,7 +107,20 @@ class PMDashlet extends DashletInstance implements DashletInterface {
 
   public function getDashletsInstancesForUser($userUid) {
     try {
+      // Include required classes
       //
+      // Check for "public" dashlets
+      // ToDo: Next release
+      // Check for the direct assignments
+      // ToDo: Next release
+      // Check for department assigments
+      //
+      // Check for group assignments
+      // ToDo: Next release
+      // Check for role assigments
+      // ToDo: Next release
+      // Check for permission assigments
+      // ToDo: Next release
     }
     catch (Exception $error) {
       throw $error;

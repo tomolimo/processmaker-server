@@ -80,12 +80,12 @@ class Dashboard extends Controller {
     }
   }
 
-  public function getDashletsInstances() {
+  public function getDashletsInstances($data) {
     $this->setResponseType('json');
     $result = new stdclass();
     $result->status = 'OK';
     try {
-      $result->dashletsInstances = $this->pmDashlet->getDashletsInstances($start, $limit);
+      $result->dashletsInstances = $this->pmDashlet->getDashletsInstances($data->start, $data->limit);
       $result->totalDashletsInstances = $this->pmDashlet->getDashletsInstancesQuantity();
     }
     catch (Exception $error) {
