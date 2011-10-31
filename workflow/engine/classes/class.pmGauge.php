@@ -91,13 +91,21 @@
     imagefilledellipse($im, $cX, $cY, $dXRing, $dYRing, $bgcolor);
   
     //drawing the red arc
+    if ( $this->redFrom > $maxValue )    $this->redFrom    = $maxValue;
+    if ( $this->redTo > $maxValue )      $this->redTo      = $maxValue;
+    if ( $this->yellowFrom > $maxValue ) $this->yellowFrom = $maxValue;
+    if ( $this->yellowTo   > $maxValue ) $this->yellowTo   = $maxValue;
+    
     $redFrom    = $this->redFrom/$this->maxValue*300 - 240 ;
     $redTo      = $this->redTo/$this->maxValue*300   - 240;
     $yellowFrom = $this->yellowFrom/$this->maxValue*300 - 240;
     $yellowTo   = $this->yellowTo/$this->maxValue*300   - 240;
-    imagefilledarc    ($im, $cX, $cY, $dXRingColor, $dYRingColor, $redFrom,    $redTo,    $redArc,    IMG_ARC_PIE );
-    imagefilledarc    ($im, $cX, $cY, $dXRingColor, $dYRingColor, $yellowFrom, $yellowTo, $yellowArc, IMG_ARC_PIE );
-  
+    if ( $this->redFrom != $this->redTo && $this->redTo != $maxValue ) {
+      imagefilledarc    ($im, $cX, $cY, $dXRingColor, $dYRingColor, $redFrom,    $redTo,    $redArc,    IMG_ARC_PIE );
+    }
+    if ( $this->yellowFrom != $this->yellowTo && $this->yellowTo != $maxValue ) {
+      imagefilledarc    ($im, $cX, $cY, $dXRingColor, $dYRingColor, $yellowFrom, $yellowTo, $yellowArc, IMG_ARC_PIE );
+    }
     imagefilledellipse($im, $cX, $cY, $dXRingCenter, $dYRingCenter, $bgcolor);
   
     //ticks  

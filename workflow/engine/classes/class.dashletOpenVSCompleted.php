@@ -34,13 +34,37 @@ Array
     
     //$this->w = $config['w'];
     //loadData
+    
+    $con = Propel::getConnection("workflow");
+    $stmt = $con->createStatement();
+    $sql = "select count(*) as CANT from APPLICATION where APP_STATUS = 'TO_DO' ";
+    $rs1 = $stmt->executeQuery($sql, ResultSet::FETCHMODE_NUM);
+    $rs1->next();
+    $row = $rs1->getRow();
+    $casesTodo = $row['CANT'];
+
+    $stmt = $con->createStatement();
+    $sql = "select count(*) as CANT from APPLICATION where APP_STATUS = 'COMPLETED' ";
+    $rs1 = $stmt->executeQuery($sql, ResultSet::FETCHMODE_NUM);
+    $rs1->next();
+    $row = $rs1->getRow();
+    $casesCompleted = $row['CANT'];
+
+    if ( $casesCompleted + $casesTodo != 0 ) { 
+      $this->value = $casesTodo / ($casesCompleted + $casesTodo);
+    }
+    else {
+      $this->value = 0;
+    }
+    return $row[0];
   }
 
   function render ($width = 300) {
-    G::LoadClass('gauge');
+    G::LoadClass('pmGauge');
     $g = new pmGauge();
     $g->w = $width;
-    //others
+    $g->value = $this->value;
+    //$g->maxValue = $this->value + 5; //default 100 is ok,
     $g->render();
   }
 
