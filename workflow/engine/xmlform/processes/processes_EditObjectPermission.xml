@@ -2,7 +2,7 @@
 <dynaForm name="processes_EditObjectPermission" width="100%">
 <TITLE type="title">
   <en>Edit Specific Permission</en>
-<es><![CDATA[Nuevo permiso específico]]></es><pt><![CDATA[Permissão Específica Nova]]></pt></TITLE>
+<es><![CDATA[Nuevo permiso específico]]></es></TITLE>
 <LANG type="private"/>
 <PRO_UID type="hidden"/>
 <OP_UID type="hidden"/>
@@ -22,90 +22,100 @@
 <TAS_UID type="dropdown" mode="edit"><![CDATA[
 SELECT TAS_UID, CON_VALUE AS TAS_TITLE FROM TASK LEFT JOIN CONTENT ON (TAS_UID = CON_ID AND CON_CATEGORY = 'TAS_TITLE' AND CON_LANG = @@LANG) WHERE PRO_UID = @@PRO_UID AND TAS_TYPE = 'NORMAL' ORDER BY TAS_TITLE
   ]]><en>Target Task<option name="">All Tasks</option></en>
-<es>Tarea destino<option name="">Todas las tareas</option></es><pt>Tarefa Alvo<option name="">Todas as Tarefas</option></pt></TAS_UID>
+</TAS_UID>
 
 <GROUP_USER type="dropdown" mode="edit" sqlConnection="dbarray">
 SELECT * FROM usersGroups
   <en>Group or User</en>
-<es>Grupo o usuario</es><pt><![CDATA[Grupo ou Usuário]]></pt></GROUP_USER>
+</GROUP_USER>
 
 <OP_TASK_SOURCE type="dropdown" mode="edit"><![CDATA[
 SELECT TAS_UID, CON_VALUE AS TAS_TITLE FROM TASK LEFT JOIN CONTENT ON (TAS_UID = CON_ID AND CON_CATEGORY = 'TAS_TITLE' AND CON_LANG = @@LANG) WHERE PRO_UID = @@PRO_UID AND TAS_TYPE = 'NORMAL' ORDER BY TAS_TITLE
   ]]><en>Origin Task<option name="">All Tasks</option></en>
-<es>Tarea origen<option name="">Todas las tareas</option></es><pt>Tarefa Origem<option name="">Todas as Tarefas</option></pt></OP_TASK_SOURCE>
+</OP_TASK_SOURCE>
 
 <OP_PARTICIPATE type="yesno" defaultvalue="1" mode="edit">
   <en>Participation required?</en>
-<es><![CDATA[¿Participación requerida?]]></es><pt><![CDATA[Participação obrigatória?]]></pt></OP_PARTICIPATE>
+</OP_PARTICIPATE>
 
 <OP_OBJ_TYPE type="dropdown" mode="edit" dependentfields="OP_OBJ_UID">
-  <en>Type<option name="ANY">All</option><option name="DYNAFORM">Dynaform</option><option name="INPUT">Input Document</option><option name="OUTPUT">Output Document</option></en>
-<es>Tipo<option name="ANY">Todo</option><option name="DYNAFORM">Dynaform</option><option name="INPUT">Input Document</option><option name="OUTPUT">Output Document</option></es><pt>Tipo<option name="ANY">Todas</option><option name="DYNAFORM"><![CDATA[Formulário Dinâmico]]></option><option name="INPUT">Documento de Entrada</option><option name="OUTPUT"><![CDATA[Documento de Saída]]></option></pt></OP_OBJ_TYPE>
+  <en>Type
+  <option name="ANY">All</option>
+  <option name="DYNAFORM">Dynaform</option>
+  <option name="INPUT">Input Document</option>
+  <option name="OUTPUT">Output Document</option></en>
+</OP_OBJ_TYPE>
 <ALL type="dropdown" mode="edit" sqlConnection="dbarray">
 SELECT * FROM allObjects
   <en>Object<option name="">All</option></en>
-<es>Objeto<option name="">Todo</option></es><pt>Objeto<option name="">Todas</option></pt></ALL>
+</ALL>
 <DYNAFORMS type="dropdown" mode="edit" sqlConnection="dbarray">
 SELECT * FROM allDynaforms
   <en>DynaForm<option name="">All</option></en>
-<es>DynaForm    <option name="">Todo</option></es><pt><![CDATA[Formulário Dinâmico]]><option name="">Todas</option></pt></DYNAFORMS>
+</DYNAFORMS>
 <INPUTS type="dropdown" mode="edit" sqlConnection="dbarray">
 SELECT * FROM allInputs
   <en>Input Document<option name="">All</option></en>
-<es>Input Document    <option name="">Todo</option></es><pt>Documento de Entrada<option name="">Todas</option></pt></INPUTS>
+</INPUTS>
 <OUTPUTS type="dropdown" mode="edit" sqlConnection="dbarray">
 SELECT * FROM allOutputs
   <en>Output Document<option name="">All</option></en>
-<es>Output Document    <option name="">Todo</option></es><pt><![CDATA[Documento de Saída]]><option name="">Todas</option></pt></OUTPUTS>
+</OUTPUTS>
 <OP_ACTION type="dropdown" mode="edit">
   <en>Permission<option name="VIEW">View</option><option name="BLOCK">Block</option></en>
-<es>Permiso<option name="VIEW">Ver</option><option name="BLOCK">Bloquear</option></es><pt><![CDATA[Permissão]]><option name="VIEW">Visualizar</option><option name="BLOCK">Bloquear</option></pt></OP_ACTION>
+</OP_ACTION>
 <CREATE type="button" onclick="saveObjectPermission(this.form);">
   <en>Save</en>
 </CREATE>
 <ID_DELETE type="private"/>
 <JS type="javascript"><![CDATA[
 if(getField('OP_OBJ_TYPE').value=='ANY')
- { hideRowById(getField('ALL'));
-   hideRowById(getField('DYNAFORMS')); 
-   hideRowById(getField('INPUTS')); 
-	 hideRowById(getField('OUTPUTS')); 
+ { hideRowById('ALL' );
+   hideRowById( 'DYNAFORMS' ); 
+   hideRowById( 'INPUTS' ); 
+	 hideRowById( 'OUTPUTS' ); 
  }
 if(getField('OP_OBJ_TYPE').value=='DYNAFORM')
- { hideRowById(getField('ALL')); 
-   hideRowById(getField('INPUTS')); 
-	 hideRowById(getField('OUTPUTS')); 
+ { hideRowById( 'ALL' ); 
+   hideRowById( 'INPUTS' ); 
+	 hideRowById( 'OUTPUTS' ); 
  }
 if(getField('OP_OBJ_TYPE').value=='INPUT')
- { hideRowById(getField('ALL'));
-   hideRowById(getField('DYNAFORMS')); 
-	 hideRowById(getField('OUTPUTS')); 
+ { hideRowById( 'ALL' );
+   hideRowById( 'DYNAFORMS' ); 
+	 hideRowById( 'OUTPUTS' ); 
  }
 if(getField('OP_OBJ_TYPE').value=='OUTPUT')
- { hideRowById(getField('ALL'));
-   hideRowById(getField('DYNAFORMS')); 
-	 hideRowById(getField('INPUTS')); 
+ { hideRowById( 'ALL' );
+   hideRowById( 'DYNAFORMS' ); 
+	 hideRowById( 'INPUTS' ); 
  }
 
 leimnud.event.add(document.getElementById('form[OP_OBJ_TYPE]'), 'change', function() {
 	if(getField('OP_OBJ_TYPE').value=='DYNAFORM')
-	 { hideRowById(getField('ALL')); 
-	   hideRowById(getField('INPUTS')); 
-		 hideRowById(getField('OUTPUTS')); 
-		 showRowById(getField('DYNAFORMS')); 
+	 { hideRowById( 'ALL' ); 
+	   hideRowById( 'INPUTS' ); 
+		 hideRowById( 'OUTPUTS' ); 
+		 showRowById( 'DYNAFORMS' ); 
 	 }
 	if(getField('OP_OBJ_TYPE').value=='INPUT')
-	 { hideRowById(getField('ALL'));
-	   hideRowById(getField('DYNAFORMS')); 
-		 hideRowById(getField('OUTPUTS')); 
-		 showRowById(getField('INPUTS')); 
+	 { hideRowById( 'ALL' );
+	   hideRowById( 'DYNAFORMS' ); 
+		 hideRowById( 'OUTPUTS' ); 
+		 showRowById( 'INPUTS' ); 
 	 }
 	if(getField('OP_OBJ_TYPE').value=='OUTPUT')
-	 { hideRowById(getField('ALL'));
-	   hideRowById(getField('DYNAFORMS')); 
-		 hideRowById(getField('INPUTS')); 
-		 showRowById(getField('OUTPUTS')); 
+	 { hideRowById( 'ALL' );
+	   hideRowById( 'DYNAFORMS' ); 
+		 hideRowById( 'INPUTS' ); 
+		 showRowById( 'OUTPUTS' ); 
 	 }
+	if(getField('OP_OBJ_TYPE').value=='ANY')
+   { hideRowById('ALL' );
+     hideRowById( 'DYNAFORMS' ); 
+     hideRowById( 'INPUTS' ); 
+	   hideRowById( 'OUTPUTS' ); 
+   }
 });
 
 leimnud.event.add(document.getElementById('form[OP_CASE_STATUS]'), 'change', function() {
