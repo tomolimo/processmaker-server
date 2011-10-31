@@ -20,7 +20,7 @@ SELECT XMLNODE_NAME AS UID, XMLNODE_NAME AS NAME FROM dynaForm WHERE TYPE = "jav
   <en>Code</en>
 </JS>
 
-<PME_RESIZE_JS type="javascript">
+<PME_RESIZE_JS type="javascript"><![CDATA[
 getField('JS_TITLE').style.font ="9pt tahoma";
 function resizeJSEditor(){
   try{
@@ -44,6 +44,6 @@ function startJSCodePress()
     dynaformEditor.changeJavascriptCode();
   };
 }
-</PME_RESIZE_JS>
+]]></PME_RESIZE_JS>
 
 </dynaForm>  
