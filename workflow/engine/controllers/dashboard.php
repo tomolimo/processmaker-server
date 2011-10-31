@@ -114,7 +114,7 @@ class Dashboard extends Controller {
     $result = new stdclass();
     $result->status = 'OK';
     try {
-      $this->pmDashlet->saveDashletInstance($data);
+      $this->pmDashlet->saveDashletInstance(get_object_vars($data));
     }
     catch (Exception $error) {
       $result->status = 'ERROR';
@@ -123,12 +123,18 @@ class Dashboard extends Controller {
     return $result;
   }
 
-  public function deleteDashletInstance($dasInsUid) {
+  public function deleteDashletInstance($data) {
     $this->setResponseType('json');
     $result = new stdclass();
     $result->status = 'OK';
     try {
-      $this->pmDashlet->deleteDashletInstance($dasInsUid);
+      if (!isset($data->DAS_INS_UID)) {
+        $data->DAS_INS_UID = '';
+      }
+      if ($data->DAS_INS_UID == '') {
+        throw new Exception('Parameter "DAS_INS_UID" is empty.');
+      }
+      $this->pmDashlet->deleteDashletInstance($data->DAS_INS_UID);
     }
     catch (Exception $error) {
       $result->status = 'ERROR';

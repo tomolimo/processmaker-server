@@ -14,6 +14,7 @@ class PMDashlet extends DashletInstance implements DashletInterface {
   public function setup($dasInsUid) {
     try {
       $dashletInstance = $this->getDashletInstance($dasInsUid);
+      G::LoadClass($dashletInstance['DAS_CLASS']);
       $this->dashletObject = new $dashletInstance['DAS_CLASS']();
       $this->dashletObject->setup($dashletInstance);
     }
