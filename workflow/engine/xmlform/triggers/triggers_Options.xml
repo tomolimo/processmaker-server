@@ -29,7 +29,8 @@
 <triggerNewGoogleCreateEvent type="private" defaultValue="../triggers/triggers_CreateGoogleEvent"/>
 
 
-<PAGED_TABLE_ID type="private"/>
+<PAGED_TABLE_ID type="private"/> 
+<PAGED_TABLE_FAST_SEARCH type="FastSearch" label="@G::LoadTranslation(ID_SEARCH)"/>
 
 <JS type="javascript" replaceTags="1">
 <![CDATA[
