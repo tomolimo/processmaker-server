@@ -68,7 +68,8 @@
     ImageRectangle      ($im, 0, 0, $width-1, $height-1, $gray);
   
     //center coords
-    $cX = intval($this->w /4);  
+    $cX = intval($this->w /2);  
+    //$cX = intval($this->w /4);  
     $cY = intval($this->h /2);  
     
     //diameter for gauge
@@ -76,6 +77,7 @@
 
     $this->renderGauge($im, $cX, $cY, $diameter);
 
+/*
     //center coords
     $cX = intval($this->w * 3/4);  
     $cY = intval($this->h /2);  
@@ -84,7 +86,7 @@
     $diameter = intval( $this->h * 4/5 );
 
     $this->renderGauge($im, $cX, $cY, $diameter);
-    
+*/    
     Header("Content-type: image/png");
     ImagePng($im);
     
