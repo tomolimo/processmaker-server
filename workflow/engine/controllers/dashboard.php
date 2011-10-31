@@ -8,7 +8,7 @@
 class Dashboard extends Controller {
 
   // Class properties
-  private pmDashlet;
+  private $pmDashlet;
 
   // Class constructor
   public function __construct() {

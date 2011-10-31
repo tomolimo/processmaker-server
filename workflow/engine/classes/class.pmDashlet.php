@@ -7,12 +7,14 @@ require_once 'model/DashletInstance.php';
 class PMDashlet extends DashletInstance implements DashletInterface {
 
   // Own properties
+  private $dashletObject;
 
   // Interface functions
 
   public function setup($dasInsUid) {
     try {
-      //
+      //$dashletInstance = $this->getDashletInstance($dasInsUid);
+      //$this->dashletObject = new $
     }
     catch (Exception $error) {
       throw $error;
@@ -46,6 +48,15 @@ class PMDashlet extends DashletInstance implements DashletInterface {
   }
 
   public function getDashletsInstancesQuantity() {
+    try {
+      //
+    }
+    catch (Exception $error) {
+      throw $error;
+    }
+  }
+
+  public function getDashletInstance($dasInsUid) {
     try {
       //
     }
