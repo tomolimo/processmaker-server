@@ -2804,23 +2804,6 @@
     <column name="DAS_CREATE_DATE" type="TIMESTAMP" required="true" />
     <column name="DAS_UPDATE_DATE" type="TIMESTAMP" required="false" />
     <column name="DAS_STATUS" type="TINYINT" required="true" default="1"/>
-    <index name="indexDashlet">
-      <index-column name="DAS_UID"/>
-      <vendor type="mysql">
-        <parameter name="Table" value="DASHLET"/>
-        <parameter name="Non_unique" value="1"/>
-        <parameter name="Key_name" value="indexDashlet"/>
-        <parameter name="Seq_in_index" value="1"/>
-        <parameter name="Column_name" value="DAS_UID"/>
-        <parameter name="Collation" value="A"/>
-        <parameter name="Cardinality" value=""/>
-        <parameter name="Sub_part" value=""/>
-        <parameter name="Packed" value=""/>
-        <parameter name="Null" value=""/>
-        <parameter name="Index_type" value="BTREE"/>
-        <parameter name="Comment" value=""/>
-      </vendor>
-    </index>
   </table>
   <table name="DASHLET_INSTANCE">
     <vendor type="mysql">
@@ -2857,24 +2840,5 @@
     <column name="DAS_INS_CREATE_DATE" type="TIMESTAMP" required="true" />
     <column name="DAS_INS_UPDATE_DATE" type="TIMESTAMP" required="false" />
     <column name="DAS_INS_STATUS" type="TINYINT" required="true" default="1"/>
-    <index name="indexDashletInstance">
-      <index-column name="DAS_INS_UID"/>
-      <index-column name="DAS_UID"/>
-      <index-column name="DAS_INS_OWNER_UID"/>
-      <vendor type="mysql">
-        <parameter name="Table" value="DASHLET_INSTANCE"/>
-        <parameter name="Non_unique" value="1"/>
-        <parameter name="Key_name" value="indexDashletInstance"/>
-        <parameter name="Seq_in_index" value="1"/>
-        <parameter name="Column_name" value="DAS_INS_UID"/>
-        <parameter name="Collation" value="A"/>
-        <parameter name="Cardinality" value=""/>
-        <parameter name="Sub_part" value=""/>
-        <parameter name="Packed" value=""/>
-        <parameter name="Null" value=""/>
-        <parameter name="Index_type" value="BTREE"/>
-        <parameter name="Comment" value=""/>
-      </vendor>
-    </index>
   </table>
 </database>
