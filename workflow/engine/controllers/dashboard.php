@@ -96,7 +96,7 @@ class Dashboard extends Controller {
         $this->setJSVar('dashletInstance', $this->pmDashlet->getDashletInstance($dasInsUid));
       }
       else {
-        $this->setJSVar('dashletInstance', new stdclass());
+        $this->setJSVar('dashletInstance', '');
       }
       G::RenderPage('publish', 'extJs');
     }

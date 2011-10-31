@@ -14,26 +14,24 @@ class PMDashlet extends DashletInstance implements DashletInterface {
   public function setup($dasInsUid) {
     try {
       $dashletInstance = $this->getDashletInstance($dasInsUid);
-      //$this->dashletObject = new $dashletInstance['DAS_CLASS']();
+      $this->dashletObject = new $dashletInstance['DAS_CLASS']();
+      $this->dashletObject->setup($dashletInstance);
     }
     catch (Exception $error) {
       throw $error;
     }
-    //recupera el registro
-    /*$array = loadDB()
-    //merge
-    $c = new $className();
-    $c->setup($array);*/
   }
 
   public function render() {
     try {
-      //
+      if (is_null($this->dashletObject)) {
+        throw new Exception('Please call to the function "setup" before call the function "render".');
+      }
+      $this->dashletObject->render();
     }
     catch (Exception $error) {
       throw $error;
     }
-    //$this->c->render();
   }
 
   // Own functions
