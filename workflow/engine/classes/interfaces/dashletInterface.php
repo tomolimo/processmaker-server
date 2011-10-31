@@ -2,7 +2,7 @@
 
 interface DashletInterface {
 
-  public function setup();
+  public function setup($dasInsUid);
   public function render();
 
 }
