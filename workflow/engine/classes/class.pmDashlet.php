@@ -107,8 +107,9 @@ class PMDashlet extends DashletInstance implements DashletInterface {
 
   public function getDashletsInstancesForUser($userUid) {
     try {
+      $dashletsInstances = array();
       // Include required classes
-      require_once 'classes/mode/Department.php'
+      require_once 'classes/model/Department.php';
       // Check for "public" dashlets
       // ToDo: Next release
       // Check for the direct assignments
@@ -116,8 +117,21 @@ class PMDashlet extends DashletInstance implements DashletInterface {
       // Check for department assigments
       $departmentInstance = new Department();
       $departments = $departmentInstance->getDepartmentsForUser($userUid);
-      foreach ($departments as $department)  {
-        //
+      foreach ($departments as $depUid => $department)  {
+        $criteria = new Criteria('workflow');
+        $criteria->addSelectColumn(DashletInstancePeer::DAS_INS_UID);
+        $criteria->addSelectColumn(DashletPeer::DAS_TITLE);
+        $criteria->add(DashletInstancePeer::DAS_INS_OWNER_TYPE, 'DEPARTMENT');
+        $criteria->add(DashletInstancePeer::DAS_INS_OWNER_UID, $depUid);
+        $dataset = DashletInstancePeer::doSelectRS($criteria);
+        $dataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+        $dataset->next();
+        while ($row = $dataset->getRow()) {
+          if (!isset($dashletsInstances[$row['DAS_INS_UID']])) {
+            $dashletsInstances[$row['DAS_INS_UID']] = $row;
+          }
+          $dataset->next();
+        }
       }
       // Check for group assignments
       // ToDo: Next release
@@ -125,6 +139,7 @@ class PMDashlet extends DashletInstance implements DashletInterface {
       // ToDo: Next release
       // Check for permission assigments
       // ToDo: Next release
+      return array_values($dashletsInstances);
     }
     catch (Exception $error) {
       throw $error;

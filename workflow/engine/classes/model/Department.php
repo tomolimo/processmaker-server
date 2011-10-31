@@ -593,22 +593,26 @@ function getDepartments( $DepParent )  {
 
 	function getDepartmentsForUser($userUid) {
 	  $criteria = new Criteria('workflow');
-	  $criteria->addSelectColumn(DepartmentPeer::DEP_UID);
+	  $criteria->addSelectColumn(UsersPeer::DEP_UID);
 	  $criteria->addAsColumn('DEP_TITLE', 'C.CON_VALUE');
 	  $criteria->addAlias('C', 'CONTENT');
-	  $criteria->add(DepartmentPeer::USR_UID, $userUid);
+	  $criteria->addJoin(UsersPeer::DEP_UID, DepartmentPeer::DEP_UID, Criteria::LEFT_JOIN);
 	  $delimiter = DBAdapter::getStringDelimiter();
 	  $conditions = array();
     $conditions [] = array(DepartmentPeer::DEP_UID, 'C.CON_ID');
     $conditions [] = array('C.CON_CATEGORY', $delimiter . 'DEPO_TITLE' . $delimiter);
     $conditions [] = array('C.CON_LANG', $delimiter . SYS_LANG . $delimiter);
     $criteria->addJoinMC($conditions, Criteria::LEFT_JOIN);
+    $criteria->add(UsersPeer::USR_UID, $userUid);
+    $criteria->add(UsersPeer::DEP_UID, '', Criteria::NOT_EQUAL);
     $dataset = DepartmentPeer::doSelectRS($criteria);
     $dataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
     $dataset->next();
     $departments = array();
     while ($row = $dataset->getRow()) {
-      $departments[] = $row;
+      if (!isset($departments[$row['DEP_UID']])) {
+        $departments[$row['DEP_UID']] = $row;
+      }
       $dataset->next();
     }
     return $departments;
