@@ -30,7 +30,7 @@ class DashletInstance extends BaseDashletInstance {
     }
   }
 
-  public function save($data) {
+  public function createOrUpdate($data) {
     $connection = Propel::getConnection(DashletInstancePeer::DATABASE_NAME);
     try {
       if (!isset($data['DAS_INS_UID'])) {

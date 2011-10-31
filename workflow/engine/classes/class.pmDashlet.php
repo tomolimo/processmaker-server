@@ -71,7 +71,7 @@ class PMDashlet extends DashletInstance implements DashletInterface {
 
   public function saveDashletInstance($data) {
     try {
-      $this->dashletObject->save($data);
+      $this->dashletObject->createOrUpdate($data);
     }
     catch (Exception $error) {
       throw $error;
