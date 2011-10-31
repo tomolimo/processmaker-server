@@ -45,6 +45,10 @@ if ($RBAC->userCanAccess('PM_FACTORY') == 1 ) {
   $G_TMP_MENU->AddIdRawOption('PROCESSES', 'processes/main', G::LoadTranslation('ID_DESIGNER'));
 }
 
+// DASHBOARD MODULE
+if ($RBAC->userCanAccess('PM_DASHBOARD') == 1) {
+  $G_TMP_MENU->AddIdRawOption('DASHBOARD', 'dashboard/main', G::LoadTranslation('ID_DASHBOARD'));
+}
 
 /*if ($RBAC->userCanAccess('PM_REPORTS') == 1 ) {
   $G_TMP_MENU->AddIdRawOption('REPORTS', 'reports/reportsList');
