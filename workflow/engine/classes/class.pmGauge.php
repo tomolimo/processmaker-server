@@ -91,10 +91,10 @@
     imagefilledellipse($im, $cX, $cY, $dXRing, $dYRing, $bgcolor);
   
     //drawing the red arc
-    if ( $this->redFrom > $maxValue )    $this->redFrom    = $maxValue;
-    if ( $this->redTo > $maxValue )      $this->redTo      = $maxValue;
-    if ( $this->yellowFrom > $maxValue ) $this->yellowFrom = $maxValue;
-    if ( $this->yellowTo   > $maxValue ) $this->yellowTo   = $maxValue;
+    if ( $this->redFrom > $this->maxValue )    $this->redFrom    = $this->maxValue;
+    if ( $this->redTo > $this->maxValue )      $this->redTo      = $this->maxValue;
+    if ( $this->yellowFrom > $this->maxValue ) $this->yellowFrom = $this->maxValue;
+    if ( $this->yellowTo   > $this->maxValue ) $this->yellowTo   = $this->maxValue;
     
     $redFrom    = $this->redFrom/$this->maxValue*300 - 240 ;
     $redTo      = $this->redTo/$this->maxValue*300   - 240;

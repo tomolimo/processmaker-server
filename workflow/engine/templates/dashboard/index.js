@@ -90,39 +90,6 @@ Ext.onReady(function(){
           pd.doLayout();        
           //vp.doLayout();        
           }
-      },
-      {
-        xtype: 'tbbutton',
-        text : 'new trend graph',
-        handler : function(a) {
-          var np = new Ext.ux.Portlet ( {
-            //title: 'Panel nuevo',
-            tools: tools,
-            html: 'hello world',
-            listeners: {
-              'render': function(p){
-                p.html = 'hello ' + p.getWidth();
-              },
-              'move' : function(p){
-                Ext.Msg.alert('Portlet ', 'move ' + p.getWidth() );
-                p.html = 'show ' + p.getWidth();
-              },
-              'resize' : function(p,w,h){
-                var randomnumber=Math.floor(Math.random()*1000000)
-                var img = new Ext.XTemplate("<img src='{page}?w={width}&r={random}'>").apply({
-                page: 'http://javaserver.colosa.net/ext/examples/portal/history.php', width:w, random: randomnumber })
-
-                p.update(img );
-              }
-            }
-          });
-          
-          var vp = Ext.getCmp('viewportDashboard');
-          var pd = Ext.getCmp('portalDashboard');
-          pd.items.items[0].add( np );
-          pd.doLayout();        
-          //vp.doLayout();        
-          }
       }
     ]
   });

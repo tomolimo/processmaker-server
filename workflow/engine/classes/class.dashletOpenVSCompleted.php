@@ -38,20 +38,19 @@ Array
     $con = Propel::getConnection("workflow");
     $stmt = $con->createStatement();
     $sql = "select count(*) as CANT from APPLICATION where APP_STATUS = 'TO_DO' ";
-    $rs1 = $stmt->executeQuery($sql, ResultSet::FETCHMODE_NUM);
-    $rs1->next();
-    $row = $rs1->getRow();
+    $rs = $stmt->executeQuery($sql, ResultSet::FETCHMODE_ASSOC);
+    $rs->next();
+    $row = $rs->getRow();
     $casesTodo = $row['CANT'];
 
     $stmt = $con->createStatement();
     $sql = "select count(*) as CANT from APPLICATION where APP_STATUS = 'COMPLETED' ";
-    $rs1 = $stmt->executeQuery($sql, ResultSet::FETCHMODE_NUM);
-    $rs1->next();
-    $row = $rs1->getRow();
+    $rs = $stmt->executeQuery($sql, ResultSet::FETCHMODE_ASSOC);
+    $rs->next();
+    $row = $rs->getRow();
     $casesCompleted = $row['CANT'];
-
     if ( $casesCompleted + $casesTodo != 0 ) { 
-      $this->value = $casesTodo / ($casesCompleted + $casesTodo);
+      $this->value = $casesTodo / ($casesCompleted + $casesTodo)*100;
     }
     else {
       $this->value = 0;
@@ -64,7 +63,7 @@ Array
     $g = new pmGauge();
     $g->w = $width;
     $g->value = $this->value;
-    //$g->maxValue = $this->value + 5; //default 100 is ok,
+    $g->maxValue = 100;
     $g->render();
   }
 
