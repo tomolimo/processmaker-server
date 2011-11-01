@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: ProcessMaker (Branch 2.0) 2.0.34.rc6-4-gfd7334a\n"
+"Project-Id-Version: ProcessMaker (Branch 2.0-dev) 2.0.34.rc4-58-g8068f7d\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2011-10-26 09:47:45\n"
+"PO-Revision-Date: 2011-10-31 21:41:24\n"
 "Last-Translator: \n"
 "Language-Team: Colosa Developers Team <developers@colosa.com>\n"
 "MIME-Version: 1.0\n"
@@ -1378,8 +1378,8 @@ msgstr "Are you sure you want to remove this user or group?"
 # TRANSLATION
 # LABEL/ID_DASHBOARD
 #: LABEL/ID_DASHBOARD
-msgid "DASHBOARD"
-msgstr "DASHBOARD"
+msgid "Dashboards"
+msgstr "Dashboards"
 
 # TRANSLATION
 # LABEL/ID_MSG_CONFIRM_REMOVE_TRIGGER
@@ -11269,6 +11269,48 @@ msgstr "Hide Process Information"
 msgid "New Case Panel"
 msgstr "New Case Panel"
 
+# TRANSLATION
+# LABEL/ID_BASE_DN
+#: LABEL/ID_BASE_DN
+msgid "Base DN"
+msgstr "Base DN"
+
+# TRANSLATION
+# LABEL/ID_ANONYMOUS
+#: LABEL/ID_ANONYMOUS
+msgid "Anonymous"
+msgstr "Anonymous"
+
+# TRANSLATION
+# LABEL/ID_IDENTIFIER_IMPORT_USER
+#: LABEL/ID_IDENTIFIER_IMPORT_USER
+msgid "Identifier for an imported user"
+msgstr "Identifier for an imported user"
+
+# TRANSLATION
+# LABEL/ID_SEARCH_USER
+#: LABEL/ID_SEARCH_USER
+msgid "Search User"
+msgstr "Search User"
+
+# TRANSLATION
+# LABEL/ID_OBJECT_CLASS
+#: LABEL/ID_OBJECT_CLASS
+msgid "Object Classes"
+msgstr "Object Classes"
+
+# TRANSLATION
+# LABEL/ID_ADDITIONAL_FILTER
+#: LABEL/ID_ADDITIONAL_FILTER
+msgid "Additional Filter"
+msgstr "Additional Filter"
+
+# TRANSLATION
+# LABEL/ID_ATTRIBUTES
+#: LABEL/ID_ATTRIBUTES
+msgid "Attributes"
+msgstr "Attributes"
+
 # additionalTables/additionalTablesData.xml?ADD_TAB_NAME
 # additionalTables/additionalTablesData.xml
 #: text - ADD_TAB_NAME
@@ -12286,13 +12328,13 @@ msgstr "3"
 # authSources/ldapEdit.xml?AUTH_SOURCE_BASE_DN
 # authSources/ldapEdit.xml
 #: text - AUTH_SOURCE_BASE_DN
-msgid "Base DN"
+msgid "[authSources/ldapEdit.xml?AUTH_SOURCE_BASE_DN] Base DN"
 msgstr "Base DN"
 
 # authSources/ldapEdit.xml?AUTH_ANONYMOUS
 # authSources/ldapEdit.xml
 #: dropdown - AUTH_ANONYMOUS
-msgid "Anonymous"
+msgid "[authSources/ldapEdit.xml?AUTH_ANONYMOUS] Anonymous"
 msgstr "Anonymous"
 
 # authSources/ldapEdit.xml?AUTH_ANONYMOUS-
@@ -12310,7 +12352,7 @@ msgstr "Yes"
 # authSources/ldapEdit.xml?AUTH_SOURCE_SEARCH_USER
 # authSources/ldapEdit.xml
 #: text - AUTH_SOURCE_SEARCH_USER
-msgid "Search User"
+msgid "[authSources/ldapEdit.xml?AUTH_SOURCE_SEARCH_USER] Search User"
 msgstr "Search User"
 
 # authSources/ldapEdit.xml?AUTH_SOURCE_PASSWORD
@@ -12322,25 +12364,25 @@ msgstr "Password"
 # authSources/ldapEdit.xml?AUTH_SOURCE_IDENTIFIER_FOR_USER
 # authSources/ldapEdit.xml
 #: text - AUTH_SOURCE_IDENTIFIER_FOR_USER
-msgid "Identifier for an imported user"
+msgid "[authSources/ldapEdit.xml?AUTH_SOURCE_IDENTIFIER_FOR_USER] Identifier for an imported user"
 msgstr "Identifier for an imported user"
 
 # authSources/ldapEdit.xml?AUTH_SOURCE_OBJECT_CLASSES
 # authSources/ldapEdit.xml
 #: textarea - AUTH_SOURCE_OBJECT_CLASSES
-msgid "Object Classes"
+msgid "[authSources/ldapEdit.xml?AUTH_SOURCE_OBJECT_CLASSES] Object Classes"
 msgstr "Object Classes"
 
 # authSources/ldapEdit.xml?AUTH_SOURCE_ADDITIONAL_FILTER
 # authSources/ldapEdit.xml
 #: text - AUTH_SOURCE_ADDITIONAL_FILTER
-msgid "Additional Filter"
+msgid "[authSources/ldapEdit.xml?AUTH_SOURCE_ADDITIONAL_FILTER] Additional Filter"
 msgstr "Additional Filter"
 
 # authSources/ldapEdit.xml?AUTH_SOURCE_ATTRIBUTES
 # authSources/ldapEdit.xml
 #: textarea - AUTH_SOURCE_ATTRIBUTES
-msgid "Attributes"
+msgid "[authSources/ldapEdit.xml?AUTH_SOURCE_ATTRIBUTES] Attributes"
 msgstr "Attributes"
 
 # authSources/ldapEdit.xml?btnSave
@@ -17046,42 +17088,6 @@ msgstr "Completed"
 #: submit - FILTER
 msgid "[cases/cases_advancedSearchFilter.xml?FILTER] Filter"
 msgstr "Filter"
-
-# dashboard/dashboard_AvailableDashboards.xml?TITLE
-# dashboard/dashboard_AvailableDashboards.xml
-#: title - TITLE
-msgid "Add availables reports or charts"
-msgstr "Add availables reports or charts"
-
-# dashboard/dashboard_AvailableDashboards.xml?DASHBOARD
-# dashboard/dashboard_AvailableDashboards.xml
-#: dropdown - DASHBOARD
-msgid "Chart or Report"
-msgstr "Chart or Report"
-
-# dashboard/dashboard_AvailableDashboards.xml?BTN_CANCEL
-# dashboard/dashboard_AvailableDashboards.xml
-#: button - BTN_CANCEL
-msgid "[dashboard/dashboard_AvailableDashboards.xml?BTN_CANCEL] Cancel"
-msgstr "Cancel"
-
-# dashboard/dashboard_AvailableDashboards.xml?ADD
-# dashboard/dashboard_AvailableDashboards.xml
-#: button - ADD
-msgid "[dashboard/dashboard_AvailableDashboards.xml?ADD] Add"
-msgstr "Add"
-
-# dashboard/dashboard_NoAvailableDashboards.xml?TITLE
-# dashboard/dashboard_NoAvailableDashboards.xml
-#: title - TITLE
-msgid "No availables reports or charts"
-msgstr "No availables reports or charts"
-
-# dashboard/dashboard_NoAvailableDashboards.xml?CLOSE
-# dashboard/dashboard_NoAvailableDashboards.xml
-#: button - CLOSE
-msgid "[dashboard/dashboard_NoAvailableDashboards.xml?CLOSE] Close"
-msgstr "Close"
 
 # dbConnections/dbConnections.xml?DBS_TYPE
 # dbConnections/dbConnections.xml
@@ -30982,12 +30988,6 @@ msgstr "Behaviour"
 #: text - PME_MAXLENGTH
 msgid "Max. Length"
 msgstr "Max. Length"
-
-# dynaforms/fields/currency.xml?PME_CURRENCY
-# dynaforms/fields/currency.xml
-#: text - PME_CURRENCY
-msgid "[dynaforms/fields/currency.xml?PME_CURRENCY] Currency"
-msgstr "Currency"
 
 # dynaforms/fields/currency.xml?PME_VALIDATE
 # dynaforms/fields/currency.xml
