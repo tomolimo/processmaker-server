@@ -173,7 +173,7 @@ dashletInstance.form = {
     //------------------------------------------------------------------------------------------------------------------
     var hiddenDasInsUID = new Ext.form.Hidden({
       id: "hiddenDasInsUID",
-      name: "DAS_INS_UID",
+      name: "DAS_INS_UID"
     });
     
     var cboDasUID = new Ext.form.ComboBox({
