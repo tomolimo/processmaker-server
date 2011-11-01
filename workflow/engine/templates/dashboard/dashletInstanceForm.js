@@ -386,7 +386,7 @@ dashletInstance.form = {
     
     //------------------------------------------------------------------------------------------------------------------
     //dashletInstanceLoadProcessAjax();
-    var DASHLET_INSTANCE = Ext.util.JSON.decode(dashletInstance)
+    var DASHLET_INSTANCE = Ext.util.JSON.decode(dashletInstance);
     
     //------------------------------------------------------------------------------------------------------------------
     var pnlMain = new Ext.Panel({
