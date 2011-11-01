@@ -127,6 +127,14 @@ Array
     $g->yellowTo   = 90;
     $g->redFrom    = 100;
     $g->redTo      = 100;
+
+    $g->greenFrom  = 50;
+    $g->greenTo    = 100;
+    $g->yellowFrom = 30;
+    $g->yellowTo   = 50;
+    $g->redFrom    = 0;
+    $g->redTo      = 30;
+
     $g->centerLabel = $this->centerLabel;
     $g->open      = $this->open;
     $g->completed = $this->completed;

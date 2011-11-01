@@ -188,8 +188,8 @@
       if ($min % 5 == 0) {
         $textToDisplay = sprintf("%d", (55-$min)*$this->maxValue/50 );
         $bbox = imagettfbbox(8, 0, $fontArial, $textToDisplay );
-        $x1 = sin($ang) * ($radiusX - 2*$len) + $cX - $bbox[4] / 2;
-        $y1 = cos($ang) * ($radiusY - 2*$len) + $cY +2;// - abs($bbox[5]);
+        $x1 = sin($ang) * ($radiusX - 2.5*$len) + $cX - $bbox[4] / 2;
+        $y1 = cos($ang) * ($radiusY - 2.5*$len) + $cY +2;// - abs($bbox[5]);
         imagettftext ( $im, 8, 0, $x1, $y1, $gray, $fontArial, $textToDisplay );
       }  
       $min++;
