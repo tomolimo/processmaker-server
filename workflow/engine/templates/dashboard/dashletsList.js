@@ -316,47 +316,36 @@ editDashletInstance = function(){
 //Delete Dashlet Instance Action
 deleteDashletInstance = function(){
   var rowSelected = infoGrid.getSelectionModel().getSelected();
-  /*if (rowSelected){
-    viewport.getEl().mask(_('ID_PROCESSING'));
-    Ext.Ajax.request({
-      url: 'deleteDashletInstance',
-      params: {dasInsUid: rowSelected.data.DAS_INS_UID},
-      success: function(r,o){
-          viewport.getEl().unmask();
-          response = Ext.util.JSON.decode(r.responseText);
-          if (response.success){
-            Ext.Msg.confirm(_('ID_CONFIRM'),_('ID_CONFIRM_DELETE_DASHLET_INSTANCE'),function(btn,text){
-            if (btn=='yes'){
-              viewport.getEl().mask(_('ID_PROCESSING'));
-                Ext.Ajax.request({
-                  url: 'deleteDashletInstance',
-                  params: {dasInsUid : rowSelected.data.DAS_INS_UID},
-                  success: function(r,o){
-                    viewport.getEl().unmask();
-                    resp = Ext.util.JSON.decode(r.responseText);
-                    if (resp.success){
-                      PMExt.notify(_('ID_DASHLET_INSTANCE'),_('ID_DASHLET_SUCCESS_DELETE'));
-                    }else{
-                      PMExt.error(_('ID_DASHLET_INSTANCE'),resp.error);
-                    }
-                    //doSearch();
-                    editButton.disable();
-                    deleteButton.disable();
-                  },
-                  failure: function(r,o){
-                    viewport.getEl().unmask();
-                  }
-                });
+  if (rowSelected){
+    //Ext.Msg.confirm(_('ID_CONFIRM'), _('ID_CONFIRM_DELETE_DASHLET_INSTANCE'),function(btn, text)
+    Ext.Msg.confirm(_('ID_CONFIRM'), 'Do you want to delete this Dashlet Instance?', function(btn, text)
+    {
+      if (btn == 'yes') {
+        viewport.getEl().mask(_('ID_PROCESSING'));
+        Ext.Ajax.request({
+          url: 'deleteDashletInstance',
+          params: {DAS_INS_UID: rowSelected.data.DAS_INS_UID},
+          success: function(r, o){
+            viewport.getEl().unmask();
+            response = Ext.util.JSON.decode(r.responseText);
+            if (response.status == 'OK') {
+              //PMExt.notify(_('ID_DASHLET_INSTANCE'),_('ID_DASHLET_SUCCESS_DELETE'));
+              PMExt.notify('Dashlet Instance', 'Dashlet instance deleted sucessfully.');
             }
-            });
-
-          }else{
-           PMExt.error(_('ID_DASHLET_INSTANCE'),_('ID_MSG_CANNOT_DELETE_DASHLET'));
+            else {
+              //PMExt.error(_('ID_DASHLET_INSTANCE'), response.message);
+              PMExt.error('Dashlet Instance', response.message);
+            }
+            //doSearch();
+            editButton.disable();
+            deleteButton.disable();
+            infoGrid.store.load();
+          },
+          failure: function(r, o){
+            viewport.getEl().unmask();
           }
-      },
-      failure: function(r,o){
-        viewport.getEl().unmask();
+        });
       }
     });
-  }*/
+  }
 };
