@@ -8,6 +8,8 @@ dashletInstance.form = {
       var myMask = new Ext.LoadMask(Ext.getBody(), {msg: "Saving. Please wait..."});
       myMask.show();
       
+      Ext.MessageBox.alert("", hiddenDasInsUID.getValue()+"------");
+      
       Ext.Ajax.request({
         url: "saveDashletInstance",
         method: "POST",
@@ -58,15 +60,17 @@ dashletInstance.form = {
         //,
         //"DAS_INS_PROCESSES": cboProcess.getValue(),
         //"DAS_INS_TASKS":    cboTask.getValue()
+        
+        var index = store.find(valueField, value, false);
+        if (index < 0) return;
+        //Get model data id
+        var dataId = store.getAt(index).data.Id;
+        //Set combobox value and fire OnSelect event
+        combobox.setValueAndFireSelect(dataId);
+        
+        
         */
         
-        
-
-
-
-
-
-                
         hiddenDasInsUID.getValue(dashletInstance.DAS_INS_UID)
         cboDasUID.setValue(dashletInstance.DAS_UID);
         cboDasInsType.setValue(dashletInstance.DAS_INS_TYPE);
