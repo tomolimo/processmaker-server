@@ -34,12 +34,17 @@ class DashletInstance extends BaseDashletInstance {
     $connection = Propel::getConnection(DashletInstancePeer::DATABASE_NAME);
     try {
       if (!isset($data['DAS_INS_UID'])) {
+        $data['DAS_INS_UID'] = '';
+      }
+      if ($data['DAS_INS_UID'] == '') {
         $data['DAS_INS_UID'] = G::generateUniqueID();
+        $data['DAS_INS_CREATE_DATE'] = date('Y-m-d H:i:s');
         $dashletInstance = new DashletInstance();
       }
       else {
         $dashletInstance = DashletInstancePeer::retrieveByPK($data['DAS_INS_UID']);
       }
+      $data['DAS_INS_UPDATE_DATE'] = date('Y-m-d H:i:s');
       $dashletInstance->fromArray($data, BasePeer::TYPE_FIELDNAME);
       if ($dashletInstance->validate()) {
         $connection->begin();
