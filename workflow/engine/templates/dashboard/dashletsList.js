@@ -309,7 +309,7 @@ newDashletInstance = function() {
 editDashletInstance = function(){
   var rowSelected = infoGrid.getSelectionModel().getSelected();
   if (rowSelected){
-    location.href = 'dashletInstanceForm?dasInsUid=' + rowSelected.data.DAS_INS_UID;
+    location.href = 'dashletInstanceForm?DAS_INS_UID=' + rowSelected.data.DAS_INS_UID;
   }
 };
 
