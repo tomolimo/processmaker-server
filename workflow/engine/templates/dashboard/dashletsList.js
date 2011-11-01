@@ -151,41 +151,39 @@ Ext.onReady(function(){
       totalProperty: 'totalDashletsInstances',
       fields : [
         {name : 'DAS_INS_UID'},
-        {name : 'AUTH_SOURCE_NAME'},
-        {name : 'AUTH_SOURCE_PROVIDER'},
-        {name : 'AUTH_SOURCE_SERVER_NAME'},
-        {name : 'AUTH_SOURCE_PORT'},
-        {name : 'AUTH_SOURCE_ENABLED_TLS'},
-        {name : 'AUTH_SOURCE_VERSION'},
-        {name : 'AUTH_SOURCE_BASE_DN'},
-        {name : 'AUTH_ANONYMOUS'},
-        {name : 'AUTH_SOURCE_SEARCH_USER'},
-        {name : 'AUTH_SOURCE_ATTRIBUTES'},
-        {name : 'AUTH_SOURCE_OBJECT_CLASSES'},
-        {name : 'CURRENT_USERS', type:'int'}
+        {name : 'DAS_TITLE'},
+        {name : 'DAS_VERSION'},
+        {name : 'DAS_INS_TYPE'},
+        {name : 'DAS_INS_CONTEXT_TIME'},
+        {name : 'DAS_INS_OWNER_TITLE'},
+        {name : 'DAS_INS_UPDATE_DATE'},
+        {name : 'DAS_INS_STATUS_LABEL'}
       ]
     })
   });
 
   cmodel = new Ext.grid.ColumnModel({
-      defaults: {
-          width: 50,
-          sortable: true
-      },
-      columns: [
-          {id:'DAS_INS_UID', dataIndex: 'DAS_INS_UID', hidden:true, hideable:false},
-          {header: _('ID_NAME'), dataIndex: 'AUTH_SOURCE_NAME', width: 200, hidden:false, align:'left'},
-          {header: _('ID_PROVIDER'), dataIndex: 'AUTH_SOURCE_PROVIDER', width: 120, hidden: false, align: 'center'},
-          {header: _('ID_SERVER_NAME'), dataIndex: 'AUTH_SOURCE_SERVER_NAME', width: 180, hidden: false, align: 'center'},
-          {header: _('ID_PORT'), dataIndex: 'AUTH_SOURCE_PORT', width: 60, hidden: false, align: 'center'},
-          {header: _('ID_ACTIVE_USERS'), dataIndex: 'CURRENT_USERS', width: 90, hidden: false, align: 'center'}
-      ]
+    defaults: {
+      width: 50,
+      sortable: true
+    },
+    columns: [
+      {id:'DAS_INS_UID', dataIndex: 'DAS_INS_UID', hidden:true, hideable:false},
+      {header: _('ID_NAME'), dataIndex: 'DAS_TITLE', width: 200, hidden:false, align:'left'},
+      {header: _('ID_VERSION'), dataIndex: 'DAS_VERSION', width: 60, hidden: false, align: 'center'},
+      {header: _('ID_TYPE'), dataIndex: 'DAS_INS_TYPE', width: 100, hidden: false, align: 'center'},
+      //{header: _('ID_PERIOD'), dataIndex: 'DAS_INS_CONTEXT_TIME', width: 100, hidden: false, align: 'center'},
+      {header: 'Period', dataIndex: 'DAS_INS_CONTEXT_TIME', width: 100, hidden: false, align: 'center'},
+      {header: _('ID_OWNER'), dataIndex: 'DAS_INS_OWNER_TITLE', width: 200, hidden: false, align: 'center'},
+      {header: _('ID_UPDATE_DATE'), dataIndex: 'DAS_INS_UPDATE_DATE', width: 80, hidden: false, align: 'center'},
+      {header: _('ID_STATUS'), dataIndex: 'DAS_INS_STATUS_LABEL', width: 60, hidden: false, align: 'center'}
+    ]
   });
 
   storePageSize = new Ext.data.SimpleStore({
-      fields: ['size'],
-       data: [['20'],['30'],['40'],['50'],['100']],
-       autoLoad: true
+    fields: ['size'],
+    data: [['20'],['30'],['40'],['50'],['100']],
+    autoLoad: true
   });
 
   comboPageSize = new Ext.form.ComboBox({

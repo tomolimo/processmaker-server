@@ -44,7 +44,7 @@ class Dashboard extends Controller {
         $width = 300;
       }
       else {
-        $width = $_REQUEST['w']-10;
+        $width = $_REQUEST['w'];
       }
       $this->pmDashlet->render( $width);
     }
@@ -119,6 +119,7 @@ class Dashboard extends Controller {
     }
     catch (Exception $error) {
       //ToDo: Display a error message
+      error_log($error->getMessage());
     }
   }
 
