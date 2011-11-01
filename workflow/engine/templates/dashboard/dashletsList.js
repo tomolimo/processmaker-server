@@ -174,7 +174,8 @@ Ext.onReady(function(){
       {header: _('ID_TYPE'), dataIndex: 'DAS_INS_TYPE', width: 100, hidden: false, align: 'center'},
       //{header: _('ID_PERIOD'), dataIndex: 'DAS_INS_CONTEXT_TIME', width: 100, hidden: false, align: 'center'},
       {header: 'Period', dataIndex: 'DAS_INS_CONTEXT_TIME', width: 100, hidden: false, align: 'center'},
-      {header: _('ID_OWNER'), dataIndex: 'DAS_INS_OWNER_TITLE', width: 200, hidden: false, align: 'center'},
+      //{header: _('ID_OWNER'), dataIndex: 'DAS_INS_OWNER_TITLE', width: 200, hidden: false, align: 'center'},
+      {header: 'Assigned To', dataIndex: 'DAS_INS_OWNER_TITLE', width: 200, hidden: false, align: 'center'},
       {header: _('ID_UPDATE_DATE'), dataIndex: 'DAS_INS_UPDATE_DATE', width: 80, hidden: false, align: 'center'},
       {header: _('ID_STATUS'), dataIndex: 'DAS_INS_STATUS_LABEL', width: 60, hidden: false, align: 'center'}
     ]
