@@ -375,7 +375,7 @@ dashletInstance.form = {
                  id:    "btnCancel",
                  text:  "Cancel",
                  handler: function () {
-                   window.location.href = "dashletList";
+                   window.location.href = "dashletsList";
                  }
                 }
                ]
