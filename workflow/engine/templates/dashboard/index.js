@@ -158,7 +158,7 @@ Ext.onReady(function(){
         }
       });
     
-      pd.items.items[0].add( np );
+      pd.items.items[i % 3].add( np );
   } //for
   pd.doLayout();        
   

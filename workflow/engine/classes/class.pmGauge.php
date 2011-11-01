@@ -39,6 +39,21 @@
       yellowTo
     */
     var $yellowTo = 80; 
+
+    /**
+      greenFrom
+    */
+    var $greenFrom = 0; 
+    
+    /**
+      greenTo
+    */
+    var $greenTo = 60; 
+    
+    /**
+      centerLabel, the label in the middle of the gauge
+    */
+    var $centerLabel = '';
   
   function render () {   
     $this->h  = $this->w / 2;
@@ -57,7 +72,7 @@
     $arrowLine    = ImageColorAllocate($im, 207,  74, 42);
     $redArc       = ImageColorAllocate($im, 220,  57, 18);
     $yellowArc    = ImageColorAllocate($im, 255, 153,  0);
-  
+
     $black   = ImageColorAllocate($im,   0,0,0);
     $white   = ImageColorAllocate($im, 255, 255, 255);
     $gray    = ImageColorAllocate($im, 190, 190, 190);
@@ -102,6 +117,7 @@
     $arrowLine    = ImageColorAllocate($im, 207,  74, 42);
     $redArc       = ImageColorAllocate($im, 220,  57, 18);
     $yellowArc    = ImageColorAllocate($im, 255, 153,  0);
+    $greenArc     = ImageColorAllocate($im, 0, 136,  0);
   
     $black   = ImageColorAllocate($im,   0,0,0);
     $white   = ImageColorAllocate($im, 255, 255, 255);
@@ -129,16 +145,24 @@
     if ( $this->redTo > $this->maxValue )      $this->redTo      = $this->maxValue;
     if ( $this->yellowFrom > $this->maxValue ) $this->yellowFrom = $this->maxValue;
     if ( $this->yellowTo   > $this->maxValue ) $this->yellowTo   = $this->maxValue;
+    if ( $this->greenFrom  > $this->maxValue ) $this->greenFrom  = $this->maxValue;
+    if ( $this->greenTo    > $this->maxValue ) $this->greenTo    = $this->maxValue;
     
     $redFrom    = $this->redFrom/$this->maxValue*300 - 240 ;
     $redTo      = $this->redTo/$this->maxValue*300   - 240;
     $yellowFrom = $this->yellowFrom/$this->maxValue*300 - 240;
     $yellowTo   = $this->yellowTo/$this->maxValue*300   - 240;
+    $greenFrom  = $this->greenFrom/$this->maxValue*300 - 240;
+    $greenTo    = $this->greenTo/$this->maxValue*300   - 240;
+
     if ( $this->redFrom != $this->redTo && $this->redTo != $maxValue ) {
       imagefilledarc    ($im, $cX, $cY, $dXRingColor, $dYRingColor, $redFrom,    $redTo,    $redArc,    IMG_ARC_PIE );
     }
     if ( $this->yellowFrom != $this->yellowTo && $this->yellowTo != $maxValue ) {
       imagefilledarc    ($im, $cX, $cY, $dXRingColor, $dYRingColor, $yellowFrom, $yellowTo, $yellowArc, IMG_ARC_PIE );
+    }
+    if ( $this->greenFrom != $this->greenTo && $this->greenTo != $maxValue ) {
+      imagefilledarc    ($im, $cX, $cY, $dXRingColor, $dYRingColor, $greenFrom, $greenTo, $greenArc, IMG_ARC_PIE );
     }
     imagefilledellipse($im, $cX, $cY, $dXRingCenter, $dYRingCenter, $bgcolor);
   
@@ -170,6 +194,14 @@
       }  
       $min++;
     }
+    
+    if (trim($this->centerLabel) != '' ) {
+      $textToDisplay = trim($this->centerLabel);
+      $bbox = imagettfbbox(8, 0, $fontArial, $textToDisplay );
+      $x1 = $cX - $bbox[4] / 2;
+      $y1 = $cY *3/4 + abs($bbox[5]);
+      imagettftext ( $im, 8, 0, $x1, $y1, $black, $fontArial, $textToDisplay );
+    }  
     
     //drawing the arrow, simple way
     $radiusX = intval($dX * 0.35);

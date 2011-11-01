@@ -55,6 +55,19 @@ Array
     else {
       $this->value = 0;
     }
+    switch ( $config['DAS_INS_CONTEXT_TIME'] ) { 
+      case 'TODAY'            : $this->centerLabel = 'Today';            break;
+      case 'YESTERDAY'        : $this->centerLabel = 'Yesterday';        break;
+      case 'THIS_WEEK'        : $this->centerLabel = 'This week';        break;
+      case 'PREVIOUS_WEEK'    : $this->centerLabel = 'Previous week';    break;
+      case 'THIS_MONTH'       : $this->centerLabel = 'This month';       break;
+      case 'PREVIOUS_MONTH'   : $this->centerLabel = 'Previous month';   break;
+      case 'THIS_QUARTER'     : $this->centerLabel = 'This quarter';     break;
+      case 'PREVIOUS_QUARTER' : $this->centerLabel = 'Previous quarter'; break;
+      case 'THIS_YEAR'        : $this->centerLabel = 'This year';        break;
+      case 'PREVIOUS_YEAR'    : $this->centerLabel = 'Previous year';    break;
+      default : $this->centerLabel = '';break;
+    }
     return $row[0];
   }
 
@@ -63,7 +76,14 @@ Array
     $g = new pmGauge();
     $g->w = $width;
     $g->value = $this->value;
-    $g->maxValue = 100;
+    $g->maxValue   = 100;
+    $g->greenFrom  = 90;
+    $g->greenTo    = 100;
+    $g->yellowFrom = 70;
+    $g->yellowTo   = 90;
+    $g->redFrom    = 100;
+    $g->redTo      = 100;
+    $g->centerLabel = $this->centerLabel;
     $g->render();
   }
 
