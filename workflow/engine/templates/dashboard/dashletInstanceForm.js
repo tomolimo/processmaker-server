@@ -78,6 +78,7 @@ dashletInstance.form = {
         cboDasInsOwnerType.setValue(dashletInstance.DAS_INS_OWNER_TYPE);
         
         //cboDasInsOwnerUID.setValue(dashletInstance.DAS_INS_OWNER_UID);
+        
         /*
         var record = cboDasInsOwnerUID.findRecord(cboDasInsOwnerUID.valueField, dashletInstance.DAS_INS_OWNER_UID);
         var index  = cboDasInsOwnerUID.store.indexOf(record);
@@ -85,12 +86,14 @@ dashletInstance.form = {
         */
         
         //var index = storeDasInsOwnerUID.find(cboDasInsOwnerUID.valueField, dashletInstance.DAS_INS_OWNER_UID, false);
+        /*
         var dataId = storeDasInsOwnerUID.getAt(index).data.TABLE_UID;
         var record = cboDasInsOwnerUID.findRecord(cboDasInsOwnerUID.valueField, dashletInstance.DAS_INS_OWNER_UID);
         var index  = cboDasInsOwnerUID.store.indexOf(record);
         var dataId = storeDasInsOwnerUID.getAt(index).data.TABLE_UID;
         //cboDasInsOwnerUID.setValueAndFireSelect(dataId);
-        cboDasInsOwnerUID.setValue(dataId); 
+        cboDasInsOwnerUID.setValue(dataId);
+        */
         
         //selectByValue(dashletInstance.DAS_INS_OWNER_UID, Boolean scrollIntoView ) : Boolean
       }
@@ -179,7 +182,12 @@ dashletInstance.form = {
         },
         
         load: function (store, record, option) {
-          cboDasInsOwnerUID.setValue(store.getAt(0).get(cboDasInsOwnerUID.valueField));
+          if (dashletInstance.DAS_INS_UID) {
+            cboDasInsOwnerUID.setValue(dashletInstance.DAS_INS_OWNER_UID);
+          }
+          else {
+            cboDasInsOwnerUID.setValue(store.getAt(0).get(cboDasInsOwnerUID.valueField));  
+          }
         }
       }
     });
