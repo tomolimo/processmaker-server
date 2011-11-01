@@ -79,7 +79,7 @@ dashletInstance.form = {
         
         //cboDasInsOwnerUID.setValue(dashletInstance.DAS_INS_OWNER_UID);
         var index = storeDasInsOwnerUID.find(cboDasInsOwnerUID.valueField, dashletInstance.DAS_INS_OWNER_UID, false);
-        var dataId = storeDasInsOwnerUID.getAt(index).data.Id;
+        var dataId = storeDasInsOwnerUID.getAt(index).data.TABLE_UID;
         cboDasInsOwnerUID.setValueAndFireSelect(dataId);
       }
     }
