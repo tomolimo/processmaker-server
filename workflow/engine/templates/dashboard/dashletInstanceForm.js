@@ -46,7 +46,7 @@ dashletInstance.form = {
     
     dashletInstanceFrmLoad = function () {
       /*
-      if (DASHLET_INSTANCE.DAS_INS_UID.length > 0) {
+      if (dashletInstance.DAS_INS_UID.length > 0) {
         "DAS_INS_UID": "",
         "DAS_UID":     cboDasUID.getValue(),
         "DAS_INS_TYPE": cboDasInsType.getValue(),
@@ -108,17 +108,17 @@ dashletInstance.form = {
       idIndex: 0,
       fields: ["id", "value"],
       data:   [//["RANGE", "Date Ranges"],
-               ["MONTH",     "Month"],
-               ["TODAY",     "Today"],
-               ["YESTERDAY", "Yesterday"],
-               ["THIS_WEEK", "Last Month"],
-               ["PREVIOUS_WEEK", "Last Month"],
-               ["THIS_MONTH", "Last Month"],
-               ["PREVIOUS_MONTH", "Last Month"],
-               ["THIS_QUARTER", "Last Month"],
-               ["PREVIOUS_QUARTER", "Last Month"],
-               ["THIS_YEAR", "Last Month"],
-               ["PREVIOUS_YEAR", "Last Month"]
+               ["MONTH",            "Month"],
+               ["TODAY",            "Today"],
+               ["YESTERDAY",        "Yesterday"],
+               ["THIS_WEEK",        "This Week"],
+               ["PREVIOUS_WEEK",    "Previous Week"],
+               ["THIS_MONTH",       "This Month"],
+               ["PREVIOUS_MONTH",   "Previous Month"],
+               ["THIS_QUARTER",     "This Quarter"],
+               ["PREVIOUS_QUARTER", "Previous Quarter"],
+               ["THIS_YEAR",        "This Year"],
+               ["PREVIOUS_YEAR",    "Previous Year"]
               ]
     });
     
@@ -353,7 +353,7 @@ dashletInstance.form = {
               cboDasInsContextTime,
               //txtDasInsStartDate,
               //txtDasInsEndDate,
-              cboDasInsOwnerType,
+              //cboDasInsOwnerType,
               cboDasInsOwnerUID
               //,
               //cboProcess,
@@ -393,7 +393,6 @@ dashletInstance.form = {
     
     //------------------------------------------------------------------------------------------------------------------
     //dashletInstanceLoadProcessAjax();
-    var DASHLET_INSTANCE = dashletInstance;
     
     //------------------------------------------------------------------------------------------------------------------
     var pnlMain = new Ext.Panel({
