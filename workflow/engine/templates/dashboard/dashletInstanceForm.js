@@ -48,29 +48,6 @@ dashletInstance.form = {
     
     dashletInstanceFrmLoad = function () {
       if (dashletInstance.DAS_INS_UID) {
-        /*
-        "DAS_INS_UID": "",
-        "DAS_UID":     cboDasUID.getValue(),
-        "DAS_INS_TYPE": cboDasInsType.getValue(),
-        "DAS_INS_CONTEXT_TIME": cboDasInsContextTime.getValue(),
-        //"DAS_INS_START_DATE":   txtDasInsStartDate.getValue().format(txtDasInsStartDate.format),
-        //"DAS_INS_END_DATE":  txtDasInsEndDate.getValue().format(txtDasInsEndDate.format),
-        "DAS_INS_OWNER_TYPE":   cboDasInsOwnerType.getValue(),
-        "DAS_INS_OWNER_UID":    cboDasInsOwnerUID.getValue()
-        //,
-        //"DAS_INS_PROCESSES": cboProcess.getValue(),
-        //"DAS_INS_TASKS":    cboTask.getValue()
-        
-        var index = store.find(valueField, value, false);
-        if (index < 0) return;
-        //Get model data id
-        var dataId = store.getAt(index).data.Id;
-        //Set combobox value and fire OnSelect event
-        combobox.setValueAndFireSelect(dataId);
-        
-        
-        */
-        
         hiddenDasInsUID.setValue(dashletInstance.DAS_INS_UID)
         cboDasUID.setValue(dashletInstance.DAS_UID);
         cboDasInsType.setValue(dashletInstance.DAS_INS_TYPE);
@@ -78,24 +55,6 @@ dashletInstance.form = {
         cboDasInsOwnerType.setValue(dashletInstance.DAS_INS_OWNER_TYPE);
         
         //cboDasInsOwnerUID.setValue(dashletInstance.DAS_INS_OWNER_UID);
-        
-        /*
-        var record = cboDasInsOwnerUID.findRecord(cboDasInsOwnerUID.valueField, dashletInstance.DAS_INS_OWNER_UID);
-        var index  = cboDasInsOwnerUID.store.indexOf(record);
-        
-        */
-        
-        //var index = storeDasInsOwnerUID.find(cboDasInsOwnerUID.valueField, dashletInstance.DAS_INS_OWNER_UID, false);
-        /*
-        var dataId = storeDasInsOwnerUID.getAt(index).data.TABLE_UID;
-        var record = cboDasInsOwnerUID.findRecord(cboDasInsOwnerUID.valueField, dashletInstance.DAS_INS_OWNER_UID);
-        var index  = cboDasInsOwnerUID.store.indexOf(record);
-        var dataId = storeDasInsOwnerUID.getAt(index).data.TABLE_UID;
-        //cboDasInsOwnerUID.setValueAndFireSelect(dataId);
-        cboDasInsOwnerUID.setValue(dataId);
-        */
-        
-        //selectByValue(dashletInstance.DAS_INS_OWNER_UID, Boolean scrollIntoView ) : Boolean
       }
     }
     
