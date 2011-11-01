@@ -71,16 +71,28 @@ dashletInstance.form = {
         
         */
         
-        hiddenDasInsUID.getValue(dashletInstance.DAS_INS_UID)
+        hiddenDasInsUID.setValue(dashletInstance.DAS_INS_UID)
         cboDasUID.setValue(dashletInstance.DAS_UID);
         cboDasInsType.setValue(dashletInstance.DAS_INS_TYPE);
         cboDasInsContextTime.setValue(dashletInstance.DAS_INS_CONTEXT_TIME);
         cboDasInsOwnerType.setValue(dashletInstance.DAS_INS_OWNER_TYPE);
         
         //cboDasInsOwnerUID.setValue(dashletInstance.DAS_INS_OWNER_UID);
-        var index = storeDasInsOwnerUID.find(cboDasInsOwnerUID.valueField, dashletInstance.DAS_INS_OWNER_UID, false);
+        /*
+        var record = cboDasInsOwnerUID.findRecord(cboDasInsOwnerUID.valueField, dashletInstance.DAS_INS_OWNER_UID);
+        var index  = cboDasInsOwnerUID.store.indexOf(record);
+        
+        */
+        
+        //var index = storeDasInsOwnerUID.find(cboDasInsOwnerUID.valueField, dashletInstance.DAS_INS_OWNER_UID, false);
         var dataId = storeDasInsOwnerUID.getAt(index).data.TABLE_UID;
-        cboDasInsOwnerUID.setValueAndFireSelect(dataId);
+        var record = cboDasInsOwnerUID.findRecord(cboDasInsOwnerUID.valueField, dashletInstance.DAS_INS_OWNER_UID);
+        var index  = cboDasInsOwnerUID.store.indexOf(record);
+        var dataId = storeDasInsOwnerUID.getAt(index).data.TABLE_UID;
+        //cboDasInsOwnerUID.setValueAndFireSelect(dataId);
+        cboDasInsOwnerUID.setValue(dataId); 
+        
+        //selectByValue(dashletInstance.DAS_INS_OWNER_UID, Boolean scrollIntoView ) : Boolean
       }
     }
     
