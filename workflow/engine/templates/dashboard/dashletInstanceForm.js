@@ -45,8 +45,8 @@ dashletInstance.form = {
     }
     
     dashletInstanceFrmLoad = function () {
-      /*
-      if (dashletInstance.DAS_INS_UID.length > 0) {
+      if (dashletInstance.DAS_INS_UID) {
+        /*
         "DAS_INS_UID": "",
         "DAS_UID":     cboDasUID.getValue(),
         "DAS_INS_TYPE": cboDasInsType.getValue(),
@@ -58,17 +58,22 @@ dashletInstance.form = {
         //,
         //"DAS_INS_PROCESSES": cboProcess.getValue(),
         //"DAS_INS_TASKS":    cboTask.getValue()
-                
-        ////////////
+        */
         
-        var index = storeDasUID.find(valueField, value, false);
-        if (index < 0) return;
-        //Get model data id
-        var dataId = store.getAt(index).data.Id;
-        //Set combobox value and fire OnSelect event
-        combobox.setValueAndFireSelect(dataId);
+        
+
+
+
+
+
+                
+        hiddenDasInsUID.getValue(dashletInstance.DAS_INS_UID)
+        cboDasUID.setValue(dashletInstance.DAS_UID);
+        cboDasInsType.setValue(dashletInstance.DAS_INS_TYPE);
+        cboDasInsContextTime.setValue(dashletInstance.DAS_INS_CONTEXT_TIME);
+        cboDasInsOwnerType.setValue(dashletInstance.DAS_INS_OWNER_TYPE);
+        cboDasInsOwnerUID.setValue(dashletInstance.DAS_INS_OWNER_UID);
       }
-      */
     }
     
     //------------------------------------------------------------------------------------------------------------------
@@ -295,7 +300,7 @@ dashletInstance.form = {
       editable: false,
                     
       width: 200,
-      fieldLabel: "Owner"
+      fieldLabel: "Assign To"
     });
     
     var cboProcess = new Ext.form.ComboBox({
@@ -392,7 +397,7 @@ dashletInstance.form = {
     });
     
     //------------------------------------------------------------------------------------------------------------------
-    //dashletInstanceLoadProcessAjax();
+    dashletInstanceFrmLoad();
     
     //------------------------------------------------------------------------------------------------------------------
     var pnlMain = new Ext.Panel({
