@@ -76,7 +76,11 @@ dashletInstance.form = {
         cboDasInsType.setValue(dashletInstance.DAS_INS_TYPE);
         cboDasInsContextTime.setValue(dashletInstance.DAS_INS_CONTEXT_TIME);
         cboDasInsOwnerType.setValue(dashletInstance.DAS_INS_OWNER_TYPE);
-        cboDasInsOwnerUID.setValue(dashletInstance.DAS_INS_OWNER_UID);
+        
+        //cboDasInsOwnerUID.setValue(dashletInstance.DAS_INS_OWNER_UID);
+        var index = storeDasInsOwnerUID.find(cboDasInsOwnerUID.valueField, dashletInstance.DAS_INS_OWNER_UID, false);
+        var dataId = storeDasInsOwnerUID.getAt(index).data.Id;
+        cboDasInsOwnerUID.setValueAndFireSelect(dataId);
       }
     }
     
