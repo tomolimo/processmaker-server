@@ -2,8 +2,6 @@ Ext.namespace("dashletInstance");
 
 dashletInstance.form = {
   init: function () {
-    var URL_DASHLET_INSTANCE = "dashletInstance";
-
     dashletInstanceSaveProcessAjax = function () {
       var myMask = new Ext.LoadMask(Ext.getBody(), {msg: "Saving. Please wait..."});
       myMask.show();
@@ -59,7 +57,7 @@ dashletInstance.form = {
     //------------------------------------------------------------------------------------------------------------------
     var storeDasUID = new Ext.data.Store({
       proxy: new Ext.data.HttpProxy({
-        url: URL_DASHLET_INSTANCE,
+        url: "dashletData",
         method: "POST"
       }),
 
@@ -116,7 +114,7 @@ dashletInstance.form = {
 
     var storeDasInsOwnerUID = new Ext.data.Store({
       proxy: new Ext.data.HttpProxy({
-        url: URL_DASHLET_INSTANCE,
+        url: "ownerData",
         method: "POST"
       }),
 
