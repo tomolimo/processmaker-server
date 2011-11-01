@@ -99,8 +99,8 @@ dashletInstance.form = {
                ["PREVIOUS_WEEK",    "Previous Week"],
                ["THIS_MONTH",       "This Month"],
                ["PREVIOUS_MONTH",   "Previous Month"],
-               ["THIS_QUARTER",     "This Quarter"],
-               ["PREVIOUS_QUARTER", "Previous Quarter"],
+               //["THIS_QUARTER",     "This Quarter"],
+               //["PREVIOUS_QUARTER", "Previous Quarter"],
                ["THIS_YEAR",        "This Year"],
                ["PREVIOUS_YEAR",    "Previous Year"]
               ]
