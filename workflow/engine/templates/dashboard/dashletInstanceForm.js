@@ -60,6 +60,13 @@ dashletInstance.form = {
         //"DAS_INS_TASKS":    cboTask.getValue()
                 
         ////////////
+        
+        var index = storeDasUID.find(valueField, value, false);
+        if (index < 0) return;
+        //Get model data id
+        var dataId = store.getAt(index).data.Id;
+        //Set combobox value and fire OnSelect event
+        combobox.setValueAndFireSelect(dataId);
       }
       */
     }
