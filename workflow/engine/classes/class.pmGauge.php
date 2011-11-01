@@ -203,6 +203,10 @@
       imagettftext ( $im, 8, 0, $x1, $y1, $black, $fontArial, $textToDisplay );
     }  
     
+    imagettftext ( $im, 9, 0, $cX*0.60, $cY*1.8, $gray, $fontArial, $this->open );
+    imagettftext ( $im, 9, 0, $cX*1.40, $cY*1.8, $gray, $fontArial, $this->completed );
+
+    
     //drawing the arrow, simple way
     $radiusX = intval($dX * 0.35);
     $radiusY = intval($dY * 0.35);
