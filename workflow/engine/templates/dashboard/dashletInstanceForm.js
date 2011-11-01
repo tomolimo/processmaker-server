@@ -11,8 +11,7 @@ dashletInstance.form = {
       Ext.Ajax.request({
         url: "saveDashletInstance",
         method: "POST",
-        params:{//"option":     option,
-                //"DAS_INS_UID": "",
+        params:{"DAS_INS_UID": hiddenDasInsUID.getValue(),
                 "DAS_UID":     cboDasUID.getValue(),
                 "DAS_INS_TYPE": cboDasInsType.getValue(),
                 "DAS_INS_CONTEXT_TIME": cboDasInsContextTime.getValue(),
@@ -31,8 +30,11 @@ dashletInstance.form = {
                   var dataResponse = Ext.util.JSON.decode(result.responseText)
                   
                   switch (dataResponse.status) {
-                    case "OK": Ext.MessageBox.alert("Message", "Dashboard Instance registered correctly"); break;
-                    default: Ext.MessageBox.alert("Alert", "Dashboard Instance registered failed"); break;
+                    case "OK": //Ext.MessageBox.alert("Message", "Dashboard Instance registered correctly");
+                               window.location.href = "dashletsList";
+                               break;
+                    default: Ext.MessageBox.alert("Alert", "Dashboard Instance registered failed");
+                             break;
                   }
                 },
         failure:function (result, request) {
@@ -42,21 +44,24 @@ dashletInstance.form = {
       });
     }
     
-    dashletInstanceLoadProcessAjax = function () {
-      var strUID = hiddenDasInsUID.getValue();
-      
-      if (strUID.length > 0) {
-        dashletInstanceFrm.getForm().load({
-          url: "getRoutingInfo.php",
-          method: "POST",
-          params: {"DAS_INS_UID": strUID},
-        
-          //failure: function(form, action) {
-          failure:function (result, request) {
-            Ext.Msg.alert("Load failed", "Failed");
-          }
-        });
+    dashletInstanceFrmLoad = function () {
+      /*
+      if (DASHLET_INSTANCE.DAS_INS_UID.length > 0) {
+        "DAS_INS_UID": "",
+        "DAS_UID":     cboDasUID.getValue(),
+        "DAS_INS_TYPE": cboDasInsType.getValue(),
+        "DAS_INS_CONTEXT_TIME": cboDasInsContextTime.getValue(),
+        //"DAS_INS_START_DATE":   txtDasInsStartDate.getValue().format(txtDasInsStartDate.format),
+        //"DAS_INS_END_DATE":  txtDasInsEndDate.getValue().format(txtDasInsEndDate.format),
+        "DAS_INS_OWNER_TYPE":   cboDasInsOwnerType.getValue(),
+        "DAS_INS_OWNER_UID":    cboDasInsOwnerUID.getValue()
+        //,
+        //"DAS_INS_PROCESSES": cboProcess.getValue(),
+        //"DAS_INS_TASKS":    cboTask.getValue()
+                
+        ////////////
       }
+      */
     }
     
     //------------------------------------------------------------------------------------------------------------------
@@ -169,8 +174,6 @@ dashletInstance.form = {
     var hiddenDasInsUID = new Ext.form.Hidden({
       id: "hiddenDasInsUID",
       name: "DAS_INS_UID",
-      //value: ""
-      value: "1655406564eaf2b3bd3df47008036625"
     });
     
     var cboDasUID = new Ext.form.ComboBox({
@@ -383,6 +386,7 @@ dashletInstance.form = {
     
     //------------------------------------------------------------------------------------------------------------------
     //dashletInstanceLoadProcessAjax();
+    var DASHLET_INSTANCE = Ext.util.JSON.decode(dashletInstance)
     
     //------------------------------------------------------------------------------------------------------------------
     var pnlMain = new Ext.Panel({
