@@ -57,7 +57,7 @@ Ext.onReady(function(){
           pd.doLayout();        
           //vp.doLayout();        
           }
-      },
+      } /* ,
       {
         xtype: 'tbbutton',
         text : 'new gauge',
@@ -90,40 +90,7 @@ Ext.onReady(function(){
           pd.doLayout();        
           //vp.doLayout();        
           }
-      },
-      {
-        xtype: 'tbbutton',
-        text : 'new trend graph',
-        handler : function(a) {
-          var np = new Ext.ux.Portlet ( {
-            //title: 'Panel nuevo',
-            tools: tools,
-            html: 'hello world',
-            listeners: {
-              'render': function(p){
-                p.html = 'hello ' + p.getWidth();
-              },
-              'move' : function(p){
-                Ext.Msg.alert('Portlet ', 'move ' + p.getWidth() );
-                p.html = 'show ' + p.getWidth();
-              },
-              'resize' : function(p,w,h){
-                var randomnumber=Math.floor(Math.random()*1000000)
-                var img = new Ext.XTemplate("<img src='{page}?w={width}&r={random}'>").apply({
-                page: 'http://javaserver.colosa.net/ext/examples/portal/history.php', width:w, random: randomnumber })
-
-                p.update(img );
-              }
-            }
-          });
-          
-          var vp = Ext.getCmp('viewportDashboard');
-          var pd = Ext.getCmp('portalDashboard');
-          pd.items.items[0].add( np );
-          pd.doLayout();        
-          //vp.doLayout();        
-          }
-      }
+      } */
     ]
   });
 
@@ -165,5 +132,35 @@ Ext.onReady(function(){
 //      }
     }]
   });
+  
+//var dashletsInstances = [{"DAS_INS_UID":"00000000000000000000000000000001","DAS_TITLE":"Open Cases VS Complete Cases"}];
+
+  var pd = Ext.getCmp('portalDashboard');
+  for ( var i = 0; i < dashletsInstances.length; i++ ) {
+      var np = new Ext.ux.Portlet ( {
+        title: dashletsInstances[i].DAS_TITLE,
+        dasInsUid : dashletsInstances[i].DAS_INS_UID,
+        html: 'gauge placeholder',
+        listeners: {
+          'render': function(p){
+            p.html = 'hello ' + p.getWidth();
+          },
+          'move' : function(p){
+            Ext.Msg.alert('Portlet ', 'move ' + p.getWidth() );
+            p.html = 'show ' + p.getWidth();
+          },
+          'resize' : function(p,w,h){
+            var randomnumber=Math.floor(Math.random()*1000000)
+            var img = new Ext.XTemplate("<img src='{page}?w={width}&r={random}&DAS_INS_UID={id}'>").apply({
+            page: 'dashboard/renderDashletInstance', width:w, random: randomnumber, id: p.dasInsUid })
+            p.update(img );
+          }
+        }
+      });
+    
+      pd.items.items[i % 3].add( np );
+  } //for
+  pd.doLayout();        
+  
 });
 

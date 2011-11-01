@@ -39,6 +39,21 @@
       yellowTo
     */
     var $yellowTo = 80; 
+
+    /**
+      greenFrom
+    */
+    var $greenFrom = 0; 
+    
+    /**
+      greenTo
+    */
+    var $greenTo = 60; 
+    
+    /**
+      centerLabel, the label in the middle of the gauge
+    */
+    var $centerLabel = '';
   
   function render () {   
     $this->h  = $this->w / 2;
@@ -56,25 +71,60 @@
     $arrowBody    = ImageColorAllocate($im, 228, 114, 86);
     $arrowLine    = ImageColorAllocate($im, 207,  74, 42);
     $redArc       = ImageColorAllocate($im, 220,  57, 18);
-    $yellowArc       = ImageColorAllocate($im, 255, 153,  0);
-  
+    $yellowArc    = ImageColorAllocate($im, 255, 153,  0);
+
     $black   = ImageColorAllocate($im,   0,0,0);
     $white   = ImageColorAllocate($im, 255, 255, 255);
     $gray    = ImageColorAllocate($im, 190, 190, 190);
 
     $fontArial   = PATH_THIRDPARTY . 'html2ps_pdf/fonts/arial.ttf';
-    $fontCourier = PATH_THIRDPARTY . 'html2ps_pdf/fonts/cour.ttf';
-    $fontCourbd  = PATH_THIRDPARTY . 'html2ps_pdf/fonts/courbd.ttf';
   
     ImageFilledRectangle($im, 0, 0, $width-1, $height-1, $white);
     ImageRectangle      ($im, 0, 0, $width-1, $height-1, $gray);
   
     //center coords
     $cX = intval($this->w /2);  
+    //$cX = intval($this->w /4);  
     $cY = intval($this->h /2);  
     
     //diameter for gauge
     $diameter = intval( $this->h * 4/5 );
+
+    $this->renderGauge($im, $cX, $cY, $diameter);
+
+/*
+    //center coords
+    $cX = intval($this->w * 3/4);  
+    $cY = intval($this->h /2);  
+    
+    //diameter for gauge
+    $diameter = intval( $this->h * 4/5 );
+
+    $this->renderGauge($im, $cX, $cY, $diameter);
+*/    
+    Header("Content-type: image/png");
+    ImagePng($im);
+    
+  }
+  
+  function renderGauge($im, $cX, $cY, $diameter) {
+    //gauge color 
+    $bgcolor      = ImageColorAllocate($im, 247, 247, 247);
+    $extRing      = ImageColorAllocate($im, 214, 214, 214);
+    $blueRing     = ImageColorAllocate($im,  70, 132, 238);
+    $blueRingLine = ImageColorAllocate($im, 106, 114, 127);
+    $arrowBody    = ImageColorAllocate($im, 228, 114, 86);
+    $arrowLine    = ImageColorAllocate($im, 207,  74, 42);
+    $redArc       = ImageColorAllocate($im, 220,  57, 18);
+    $yellowArc    = ImageColorAllocate($im, 255, 153,  0);
+    $greenArc     = ImageColorAllocate($im, 0, 136,  0);
+  
+    $black   = ImageColorAllocate($im,   0,0,0);
+    $white   = ImageColorAllocate($im, 255, 255, 255);
+    $gray    = ImageColorAllocate($im, 190, 190, 190);
+
+    $fontArial   = PATH_THIRDPARTY . 'html2ps_pdf/fonts/arial.ttf';
+
     $dX = intval($diameter *8/7 );   //for now ratio aspect is 8:7
     $dY = intval($diameter);  
     $dXRing = intval($dX * 0.90);
@@ -91,20 +141,28 @@
     imagefilledellipse($im, $cX, $cY, $dXRing, $dYRing, $bgcolor);
   
     //drawing the red arc
-    if ( $this->redFrom > $maxValue )    $this->redFrom    = $maxValue;
-    if ( $this->redTo > $maxValue )      $this->redTo      = $maxValue;
-    if ( $this->yellowFrom > $maxValue ) $this->yellowFrom = $maxValue;
-    if ( $this->yellowTo   > $maxValue ) $this->yellowTo   = $maxValue;
+    if ( $this->redFrom    > $this->maxValue ) $this->redFrom    = $this->maxValue;
+    if ( $this->redTo      > $this->maxValue ) $this->redTo      = $this->maxValue;
+    if ( $this->yellowFrom > $this->maxValue ) $this->yellowFrom = $this->maxValue;
+    if ( $this->yellowTo   > $this->maxValue ) $this->yellowTo   = $this->maxValue;
+    if ( $this->greenFrom  > $this->maxValue ) $this->greenFrom  = $this->maxValue;
+    if ( $this->greenTo    > $this->maxValue ) $this->greenTo    = $this->maxValue;
     
     $redFrom    = $this->redFrom/$this->maxValue*300 - 240 ;
     $redTo      = $this->redTo/$this->maxValue*300   - 240;
     $yellowFrom = $this->yellowFrom/$this->maxValue*300 - 240;
     $yellowTo   = $this->yellowTo/$this->maxValue*300   - 240;
-    if ( $this->redFrom != $this->redTo && $this->redTo != $maxValue ) {
+    $greenFrom  = $this->greenFrom/$this->maxValue*300 - 240;
+    $greenTo    = $this->greenTo/$this->maxValue*300   - 240;
+
+    if ( $this->redFrom != $this->redTo || $this->redTo != $this->maxValue ) {
       imagefilledarc    ($im, $cX, $cY, $dXRingColor, $dYRingColor, $redFrom,    $redTo,    $redArc,    IMG_ARC_PIE );
     }
-    if ( $this->yellowFrom != $this->yellowTo && $this->yellowTo != $maxValue ) {
+    if ( $this->yellowFrom != $this->yellowTo || $this->yellowTo != $this->maxValue ) {
       imagefilledarc    ($im, $cX, $cY, $dXRingColor, $dYRingColor, $yellowFrom, $yellowTo, $yellowArc, IMG_ARC_PIE );
+    }
+    if ( $this->greenFrom != $this->greenTo || $this->greenTo != $this->maxValue ) {
+      imagefilledarc    ($im, $cX, $cY, $dXRingColor, $dYRingColor, $greenFrom, $greenTo, $greenArc, IMG_ARC_PIE );
     }
     imagefilledellipse($im, $cX, $cY, $dXRingCenter, $dYRingCenter, $bgcolor);
   
@@ -130,12 +188,24 @@
       if ($min % 5 == 0) {
         $textToDisplay = sprintf("%d", (55-$min)*$this->maxValue/50 );
         $bbox = imagettfbbox(8, 0, $fontArial, $textToDisplay );
-        $x1 = sin($ang) * ($radiusX - 2*$len) + $cX - $bbox[4] / 2;
-        $y1 = cos($ang) * ($radiusY - 2*$len) + $cY +2;// - abs($bbox[5]);
+        $x1 = sin($ang) * ($radiusX - 2.5*$len) + $cX - $bbox[4] / 2;
+        $y1 = cos($ang) * ($radiusY - 2.5*$len) + $cY +2;// - abs($bbox[5]);
         imagettftext ( $im, 8, 0, $x1, $y1, $gray, $fontArial, $textToDisplay );
       }  
       $min++;
     }
+    
+    if (trim($this->centerLabel) != '' ) {
+      $textToDisplay = trim($this->centerLabel);
+      $bbox = imagettfbbox(8, 0, $fontArial, $textToDisplay );
+      $x1 = $cX - $bbox[4] / 2;
+      $y1 = $cY *3/4 + abs($bbox[5]);
+      imagettftext ( $im, 8, 0, $x1, $y1, $black, $fontArial, $textToDisplay );
+    }  
+    
+    imagettftext ( $im, 9, 0, $cX*0.60, $cY*1.8, $gray, $fontArial, $this->open );
+    imagettftext ( $im, 9, 0, $cX*1.40, $cY*1.8, $gray, $fontArial, $this->completed );
+
     
     //drawing the arrow, simple way
     $radiusX = intval($dX * 0.35);
@@ -194,8 +264,6 @@
     $centerY = $cY+$dYRing/2+3-abs($bbox[5]);
     imagettftext ( $im, 9, 0, $centerX, $centerY, $black, $fontArial, $textToDisplay );
  
-    Header("Content-type: image/png");
-    ImagePng($im);
     
   }
    

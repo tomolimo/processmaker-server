@@ -119,6 +119,7 @@ class Dashboard extends Controller {
     }
     catch (Exception $error) {
       //ToDo: Display a error message
+      error_log($error->getMessage());
     }
   }
 

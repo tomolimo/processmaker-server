@@ -53,6 +53,18 @@ class PMDashlet extends DashletInstance implements DashletInterface {
       $dataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
       $dataset->next();
       while ($row = $dataset->getRow()) {
+        $row['DAS_INS_STATUS_LABEL'] = ($row['DAS_INS_STATUS'] == '1' ? G::LoadTranslation('ID_ACTIVE') : G::LoadTranslation('ID_INACTIVE'));
+        switch ($row['DAS_INS_OWNER_TYPE']) {
+          case 'DEPARTMENT':
+            require_once 'classes/model/Department.php';
+            $departmentInstance = new Department();
+            $department = $departmentInstance->load($row['DAS_INS_OWNER_UID']);
+            $row['DAS_INS_OWNER_TITLE'] = $department['DEPO_TITLE'];
+          break;
+          default:
+            $row['DAS_INS_OWNER_TITLE'] = $row['DAS_INS_OWNER_TYPE'];
+          break;
+        }
         $dashletsInstances[] = $row;
         $dataset->next();
       }
@@ -121,6 +133,7 @@ class PMDashlet extends DashletInstance implements DashletInterface {
         $criteria = new Criteria('workflow');
         $criteria->addSelectColumn(DashletInstancePeer::DAS_INS_UID);
         $criteria->addSelectColumn(DashletPeer::DAS_TITLE);
+        $criteria->addSelectColumn(DashletInstancePeer::DAS_INS_CONTEXT_TIME);
         $criteria->add(DashletInstancePeer::DAS_INS_OWNER_TYPE, 'DEPARTMENT');
         $criteria->add(DashletInstancePeer::DAS_INS_OWNER_UID, $depUid);
         $dataset = DashletInstancePeer::doSelectRS($criteria);
@@ -128,6 +141,7 @@ class PMDashlet extends DashletInstance implements DashletInterface {
         $dataset->next();
         while ($row = $dataset->getRow()) {
           if (!isset($dashletsInstances[$row['DAS_INS_UID']])) {
+            $row['DAS_TITLE'] .= ' (' . $row['DAS_INS_CONTEXT_TIME'] . ')';
             $dashletsInstances[$row['DAS_INS_UID']] = $row;
           }
           $dataset->next();
