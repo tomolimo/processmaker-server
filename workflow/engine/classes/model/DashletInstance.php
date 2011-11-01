@@ -34,6 +34,9 @@ class DashletInstance extends BaseDashletInstance {
     $connection = Propel::getConnection(DashletInstancePeer::DATABASE_NAME);
     try {
       if (!isset($data['DAS_INS_UID'])) {
+        $data['DAS_INS_UID'] = '';
+      }
+      if ($data['DAS_INS_UID'] == '') {
         $data['DAS_INS_UID'] = G::generateUniqueID();
         $data['DAS_INS_CREATE_DATE'] = date('Y-m-d H:i:s');
         $dashletInstance = new DashletInstance();

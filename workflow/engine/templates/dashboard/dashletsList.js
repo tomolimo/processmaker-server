@@ -197,7 +197,7 @@ Ext.onReady(function(){
     editable: false,
     listeners:{
       select: function(c,d,i){
-        UpdatePageConfig(d.data['size']);
+        //UpdatePageConfig(d.data['size']);
         bbarpaging.pageSize = parseInt(d.data['size']);
         bbarpaging.moveFirst();
       }
@@ -298,6 +298,14 @@ gridByDefault = function(){
 //Do Search Function
 /*doSearch = function(){
    infoGrid.store.load({params: {textFilter: searchText.getValue()}});
+};*/
+
+//Update Page Size Configuration
+/*updatePageConfig = function(pageSize) {
+  Ext.Ajax.request({
+    url: 'updatePageConfig',
+    params: {size: pageSize}
+  });
 };*/
 
 //New Dashlet Instance Action

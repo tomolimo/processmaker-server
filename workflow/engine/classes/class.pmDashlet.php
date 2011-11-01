@@ -133,6 +133,7 @@ class PMDashlet extends DashletInstance implements DashletInterface {
         $criteria = new Criteria('workflow');
         $criteria->addSelectColumn(DashletInstancePeer::DAS_INS_UID);
         $criteria->addSelectColumn(DashletPeer::DAS_TITLE);
+        $criteria->addSelectColumn(DashletInstancePeer::DAS_INS_CONTEXT_TIME);
         $criteria->add(DashletInstancePeer::DAS_INS_OWNER_TYPE, 'DEPARTMENT');
         $criteria->add(DashletInstancePeer::DAS_INS_OWNER_UID, $depUid);
         $dataset = DashletInstancePeer::doSelectRS($criteria);
@@ -140,6 +141,7 @@ class PMDashlet extends DashletInstance implements DashletInterface {
         $dataset->next();
         while ($row = $dataset->getRow()) {
           if (!isset($dashletsInstances[$row['DAS_INS_UID']])) {
+            $row['DAS_TITLE'] .= ' (' . $row['DAS_INS_CONTEXT_TIME'] . ')';
             $dashletsInstances[$row['DAS_INS_UID']] = $row;
           }
           $dataset->next();
