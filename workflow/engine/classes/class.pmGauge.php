@@ -141,8 +141,8 @@
     imagefilledellipse($im, $cX, $cY, $dXRing, $dYRing, $bgcolor);
   
     //drawing the red arc
-    if ( $this->redFrom > $this->maxValue )    $this->redFrom    = $this->maxValue;
-    if ( $this->redTo > $this->maxValue )      $this->redTo      = $this->maxValue;
+    if ( $this->redFrom    > $this->maxValue ) $this->redFrom    = $this->maxValue;
+    if ( $this->redTo      > $this->maxValue ) $this->redTo      = $this->maxValue;
     if ( $this->yellowFrom > $this->maxValue ) $this->yellowFrom = $this->maxValue;
     if ( $this->yellowTo   > $this->maxValue ) $this->yellowTo   = $this->maxValue;
     if ( $this->greenFrom  > $this->maxValue ) $this->greenFrom  = $this->maxValue;
@@ -155,13 +155,13 @@
     $greenFrom  = $this->greenFrom/$this->maxValue*300 - 240;
     $greenTo    = $this->greenTo/$this->maxValue*300   - 240;
 
-    if ( $this->redFrom != $this->redTo && $this->redTo != $maxValue ) {
+    if ( $this->redFrom != $this->redTo || $this->redTo != $this->maxValue ) {
       imagefilledarc    ($im, $cX, $cY, $dXRingColor, $dYRingColor, $redFrom,    $redTo,    $redArc,    IMG_ARC_PIE );
     }
-    if ( $this->yellowFrom != $this->yellowTo && $this->yellowTo != $maxValue ) {
+    if ( $this->yellowFrom != $this->yellowTo || $this->yellowTo != $this->maxValue ) {
       imagefilledarc    ($im, $cX, $cY, $dXRingColor, $dYRingColor, $yellowFrom, $yellowTo, $yellowArc, IMG_ARC_PIE );
     }
-    if ( $this->greenFrom != $this->greenTo && $this->greenTo != $maxValue ) {
+    if ( $this->greenFrom != $this->greenTo || $this->greenTo != $this->maxValue ) {
       imagefilledarc    ($im, $cX, $cY, $dXRingColor, $dYRingColor, $greenFrom, $greenTo, $greenArc, IMG_ARC_PIE );
     }
     imagefilledellipse($im, $cX, $cY, $dXRingCenter, $dYRingCenter, $bgcolor);

@@ -68,7 +68,7 @@ Array
       case 'PREVIOUS_YEAR'    : $this->centerLabel = 'Previous year';    break;
       default : $this->centerLabel = '';break;
     }
-    return $row[0];
+    return true;
   }
 
   function render ($width = 300) {
