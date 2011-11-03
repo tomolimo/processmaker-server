@@ -259,7 +259,7 @@ var dynaformEditor={
         clientWinSize = getClientWindowSize();
 		  	startJSCodePress(); 
 		    jsEditor = CodeMirror.fromTextArea('form[JS]', {
-	        height: (clientWinSize.height - 120) + "px",
+	        height: (clientWinSize.height - 140) + "px",
 	        width: (_BROWSER.name == 'msie' ? '100%' : '98%'),
 	        parserfile: ["tokenizejavascript.js", "parsejavascript.js"],
 	        stylesheet: ["css/jscolors.css"],
