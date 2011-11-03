@@ -31,7 +31,7 @@
   if (!isset($_GET['APP_UID']) || !isset($_GET['DEL_INDEX'])) {
     throw new Exception("Application ID or Delegation Index is missing!. The System can't open the case.");
   }
-
+  require_once ("classes/model/Step.php");
   G::LoadClass("configuration");
   G::LoadClass("case");
   $oCase = new Cases();
@@ -62,10 +62,15 @@
     echo "<div id='toReviseTree'></div>";
   }
 
+  $oStep = new Step;
+  $oStep = $oStep->loadByProcessTaskPosition($case['PRO_UID'], $case['TAS_UID'], 1);
+
   $oHeadPublisher->assign('uri', $script . $uri);
   $oHeadPublisher->assign('_APP_NUM', '#: ' . $case['APP_NUMBER']);
   $oHeadPublisher->assign('_ENV_CURRENT_DATE', $conf->getSystemDate(date('Y-m-d')));
   $oHeadPublisher->assign('_ENV_CURRENT_DATE_NO_FORMAT', date('Y-m-d'));
+  $oHeadPublisher->assign('idfirstform', $oStep->getStepUidObj());
+
 
   G::RenderPage('publish', 'extJs');
 
