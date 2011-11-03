@@ -186,6 +186,8 @@
   $array['TITLE'] = G::LoadTranslation('ID_TITLE');
   $G_PUBLISH->AddContent('smarty', 'cases/cases_title', '', '', $array);
 
+$uidf=$_GET['UID'];
+
   switch ($_GET['TYPE'])
   {
     case 'DYNAFORM':
@@ -198,7 +200,14 @@
       }
       $Fields['APP_DATA']['__DYNAFORM_OPTIONS']['NEXT_STEP'] = $aNextStep['PAGE'];
       $Fields['APP_DATA']['__DYNAFORM_OPTIONS']['NEXT_STEP_LABEL'] = G::loadTranslation('ID_NEXT_STEP');
-
+     
+      $oHeadPublisher =& headPublisher::getSingleton();
+      $oHeadPublisher->addScriptCode("
+      if (typeof parent != 'undefined') {
+      parent.setNode('$uidf');
+      }
+      ");
+      
       $oStep = new Step();
       $oStep = $oStep->loadByProcessTaskPosition($_SESSION['PROCESS'], $_SESSION['TASK'], $_GET['POSITION']);
 
@@ -689,6 +698,7 @@
                                 'APP_UID'   => $_SESSION['APPLICATION'],
                                 'DEL_INDEX' => $_SESSION['INDEX'])
                          );
+
       if ( empty($aFields['TASK']) )  {
         throw ( new Exception ( G::LoadTranslation( 'ID_NO_DERIVATION_RULE')  ) );
       }
@@ -976,7 +986,6 @@
     die;
   }
 
-  /* Render page */
   $oHeadPublisher =& headPublisher::getSingleton();
   $oHeadPublisher->addScriptCode("
     if (typeof parent != 'undefined') {

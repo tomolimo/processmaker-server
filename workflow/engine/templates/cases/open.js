@@ -9,7 +9,6 @@ var _ENV_CURRENT_DATE;
 
 Ext.onReady(function(){
   Ext.QuickTips.init();
-
   showCaseNavigatorPanel = function(app_status) {
 
     if (typeof(treeToReviseTitle) != 'undefined'){
@@ -155,19 +154,30 @@ Ext.onReady(function(){
     root: {
       nodeType: 'async'
     },
+
     listeners: {
       render: function() {
         this.getRootNode().expand();
       },
       click: function(tp) {
         if( tp.attributes.url ){
-
           document.getElementById('openCaseFrame').src = tp.attributes.url;
-
         }
       }
-    }
+      
+    },
+	"afterrender": {
+           fn: setNodeini,
+           scope: this 
+	}  
   })
+
+  var loader = casesStepTree.getLoader();
+  loader.on("load", setNodeini);    
+  function setNodeini(){
+   var aNode = Ext.getCmp('casesStepTree').getNodeById(idfirstform);
+   aNode.select();
+  }
 
   var navPanelWest = {
     id: 'navPanelWest',
@@ -880,6 +890,12 @@ Ext.onReady(function(){
   CloseWindow = function(){
    Ext.getCmp('w').hide();
   };
+
+  setNode =  function  (uid){
+    var aNode = Ext.getCmp('casesStepTree').getNodeById(uid);
+    aNode.select();
+  }
+
 	/*-----added by krlos end------------*/
 /*Date.prototype.dateFormat = function(format) {
     var result = "";

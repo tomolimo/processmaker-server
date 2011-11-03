@@ -140,7 +140,8 @@ class Ajax
           $node->text    = $oDocument->getDynTitle();
           $node->iconCls = 'ss_sprite ss_application_form';
           $node->leaf    = true;
-          $node->url    = "cases_Step?UID=$stepUidObj&TYPE=$stepTypeObj&POSITION=$stepPosition&ACTION=EDIT";
+          $node->url     = "cases_Step?UID=$stepUidObj&TYPE=$stepTypeObj&POSITION=$stepPosition&ACTION=EDIT";
+          $node->idtodraw= $stepUidObj;
           break;
 
         case 'OUTPUT_DOCUMENT':      
