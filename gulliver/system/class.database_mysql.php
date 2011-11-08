@@ -1,7 +1,7 @@
 <?php
 /**
  * class.database_mysql.php
- * @package gulliver.system 
+ * @package gulliver.system
  *
  * ProcessMaker Open Source Edition
  * Copyright (C) 2004 - 2011 Colosa Inc.
@@ -31,7 +31,7 @@
 G::LoadSystem('database_base');
 
 class database extends database_base {
-  
+
   public $iFetchType = MYSQL_ASSOC;
 
   /**
@@ -61,13 +61,13 @@ class database extends database_base {
   public function generateCreateTableSQL($sTable, $aColumns) {
     $sKeys = '';
     $sSQL = 'CREATE TABLE IF NOT EXISTS ' . $this->sQuoteCharacter . $sTable . $this->sQuoteCharacter . '(';
-    
+
     foreach ($aColumns as $sColumnName => $aParameters) {
       if ($sColumnName != 'INDEXES') {
-        
+
         if ( $sColumnName != '' && isset($aParameters['Type']) && $aParameters['Type'] != '' ){
           $sSQL .= $this->sQuoteCharacter . $sColumnName . $this->sQuoteCharacter . ' ' . $aParameters['Type'];
-          
+
           if ( isset($aParameters['Null']) && $aParameters['Null'] == 'YES') {
           $sSQL .= ' NULL';
         } else {
@@ -76,11 +76,11 @@ class database extends database_base {
         if ( isset($aParameters['Key']) && $aParameters['Key'] == 'PRI') {
           $sKeys .= $this->sQuoteCharacter . $sColumnName . $this->sQuoteCharacter . ',';
         }
-          
+
         if ( isset($aParameters['Default']) && $aParameters['Default'] != '' ) {
           $sSQL .= " DEFAULT '" . $aParameters['Default'] . "'";
         }
-          
+
         $sSQL .= ',';
         }
       }
@@ -90,7 +90,7 @@ class database extends database_base {
       $sSQL .= ',PRIMARY KEY(' . substr($sKeys, 0, -1) . ')';
     }
     $sSQL .= ')' . $this->sEndLine;
-    
+
     return $sSQL;
   }
 
@@ -197,7 +197,7 @@ class database extends database_base {
       if ( trim($aParameters['Default'] == '') && $aParameters['Type'] == 'datetime' ) {
         //do nothing
       }
-      else       
+      else
         $sSQL .= " DEFAULT '" . $aParameters['Default'] . "'";
       //}
     }
@@ -208,7 +208,7 @@ class database extends database_base {
     $sSQL .= $this->sEndLine;
     return $sSQL;
   }
-  
+
   /**
    * Generate and get the primary key in a sentence
    * @param  $sTable table name
@@ -295,7 +295,7 @@ class database extends database_base {
    * @param $aKeys array of keys
    * @return sql sentence
    */
-  
+
   public function generateAddKeysSQL($sTable, $indexName, $aKeys) {
     try {
       $indexType = 'INDEX';
@@ -363,8 +363,8 @@ class database extends database_base {
    * execute a sentence to check if there is connection
    * @return void
    */
-  public function isConnected() { 
-    if ( !$this->oConnection ) 
+  public function isConnected() {
+    if ( !$this->oConnection )
       return false;
     return $this->executeQuery( 'USE ' . $this->sDataBase );
   }
@@ -394,9 +394,9 @@ class database extends database_base {
         }
       }
     }
-    catch (Exception $oException) { 
+    catch (Exception $oException) {
     }
-  }  
+  }
 
   /**
    * execute a sql query
@@ -405,7 +405,7 @@ class database extends database_base {
    */
   public function executeQuery($sQuery) {
     $this->logQuery( $sQuery);
-    
+
     try {
       if ($this->oConnection) {
         @mysql_select_db($this->sDataBase);
@@ -416,7 +416,7 @@ class database extends database_base {
         throw new Exception('invalid connection to database ' . $this->sDataBase );
       }
     }
-    catch (Exception $oException) { 
+    catch (Exception $oException) {
       $this->logQuery( $oException->getMessage() );
       throw $oException;
     }
@@ -447,8 +447,96 @@ class database extends database_base {
   public function close() {
     @mysql_close($this->oConnection);
   }
-  
-  
+
+  public function generateInsertSQL($table, $data) {
+    $fields = array();
+    $values = array();
+    foreach ($data as $field) {
+      $fields[] = $field['field'];
+      switch ($field['type']) {
+        case 'text':
+        case 'date':
+          $values[] = "'" . mysql_real_escape_string($field['value']) . "'";
+        break;
+        case 'int':
+        default:
+          $values[] = mysql_real_escape_string($field['value']);
+        break;
+      }
+    }
+    $fields = array_map(array($this, 'putQuotes'), $fields);
+    $sql = sprintf("INSERT INTO %s (%s) VALUES (%s)", $this->putQuotes($table), implode(', ', $fields), implode(', ', $values));
+    return $sql;
+  }
+
+  public function generateUpdateSQL($table, $keys, $data) {
+    $fields = array();
+    $where  = array();
+    foreach ($data as $field) {
+      switch ($field['type']) {
+        case 'text':
+        case 'date':
+          $fields[] = $this->putQuotes($field['field']) . " = '" . mysql_real_escape_string($field['value']) . "'";
+        break;
+        case 'int':
+        default:
+          $fields[] = $this->putQuotes($field['field']) . " = " . mysql_real_escape_string($field['value']);
+        break;
+      }
+      if (in_array($field['field'], $keys)) {
+        $where[] = $fields[count($fields) - 1];
+      }
+    }
+    $sql = sprintf("UPDATE %s SET %s WHERE %s", $this->putQuotes($table), implode(', ', $fields), implode(', ', $where));
+    return $sql;
+  }
+
+  public function generateDeleteSQL($table, $keys, $data) {
+    $fields = array();
+    $where  = array();
+    foreach ($data as $field) {
+      if (in_array($field['field'], $keys)) {
+        switch ($field['type']) {
+          case 'text':
+          case 'date':
+            $where[] = $this->putQuotes($field['field']) . " = '" . mysql_real_escape_string($field['value']) . "'";
+          break;
+          case 'int':
+          default:
+            $where[] = $this->putQuotes($field['field']) . " = " . mysql_real_escape_string($field['value']);
+          break;
+        }
+      }
+    }
+    $sql = sprintf("DELETE FROM %s WHERE %s", $this->putQuotes($table), implode(', ', $where));
+    return $sql;
+  }
+
+  public function generateSelectSQL($table, $keys, $data) {
+    $fields = array();
+    $where  = array();
+    foreach ($data as $field) {
+      if (in_array($field['field'], $keys)) {
+        switch ($field['type']) {
+          case 'text':
+          case 'date':
+            $where[] = $this->putQuotes($field['field']) . " = '" . mysql_real_escape_string($field['value']) . "'";
+          break;
+          case 'int':
+          default:
+            $where[] = $this->putQuotes($field['field']) . " = " . mysql_real_escape_string($field['value']);
+          break;
+        }
+      }
+    }
+    $sql = sprintf("SELECT * FROM %s WHERE %s", $this->putQuotes($table), implode(', ', $where));
+    return $sql;
+  }
+
+  private function putQuotes($element) {
+    return $this->sQuoteCharacter . $element . $this->sQuoteCharacter;
+  }
+
  /*=================================================================================================*/
   /**
    * concatString
@@ -458,7 +546,7 @@ class database extends database_base {
    * date 2010-08-04
    *
    * @return string $sConcat
-   */ 
+   */
   function concatString()
   {
     $nums    = func_num_args();
@@ -475,10 +563,10 @@ class database extends database_base {
     $sConcat .= ")";
 
     return $sConcat;
-    
+
   }
 
-  /* 
+  /*
    * query functions for class class.case.php
    *
    */
@@ -489,18 +577,18 @@ class database extends database_base {
    * author Hector Cortez <hector@gmail.com>
    * date 2010-08-04
    *
-   * @return string $sCompare 
-   */ 
-  function getCaseWhen($compareValue, $trueResult, $falseResult) 
+   * @return string $sCompare
+   */
+  function getCaseWhen($compareValue, $trueResult, $falseResult)
   {
     $sCompare = "IF(" . $compareValue . ", " . $trueResult . ", " . $falseResult . ") ";
     return $sCompare;
-    
+
   }
 
   /**
    * Generates a string equivalent to create table ObjectPermission
-   * 
+   *
    * class.case.php
    * function verifyTable()
    *
@@ -522,15 +610,15 @@ class database extends database_base {
                    KEY `PRO_UID` (`PRO_UID`,`TAS_UID`,`USR_UID`,`OP_TASK_SOURCE`,`OP_OBJ_UID`)
                    )ENGINE=MyISAM DEFAULT CHARSET=latin1;";
     return $sql;
-  } 
-  
-  /* 
+  }
+
+  /*
    * query functions for class class.report.php
    *
    */
   /**
    * Generates a string query
-   * 
+   *
    * class.report.php
    * function generatedReport4()
    *
@@ -538,10 +626,10 @@ class database extends database_base {
    */
   function getSelectReport4()
   {
-      
+
       $sqlConcat   = " CONCAT(U.USR_LASTNAME,' ',USR_FIRSTNAME) AS USER ";
       $sqlGroupBy  = " USER ";
-      
+
       $sql = "SELECT " . $sqlConcat .  ", " .
              "  COUNT(*) AS CANTCASES,
                 MIN(AD.DEL_DURATION) AS MIN,
@@ -553,20 +641,20 @@ class database extends database_base {
                 LEFT JOIN USERS AS U ON(U.USR_UID = A.APP_INIT_USER)
                 WHERE A.APP_UID<>''
                 GROUP BY " . $sqlGroupBy;
-                
+
     return $sql;
-    
+
   }
 
   /**
    * Generates a string query
-   * 
+   *
    * class.report.php
    * function generatedReport4_filter()
    *
    * @return string $sql
    */
-  function getSelectReport4Filter($var) 
+  function getSelectReport4Filter($var)
   {
     $sqlConcat   = " CONCAT(U.USR_LASTNAME,' ',USR_FIRSTNAME) AS USER ";
     $sqlGroupBy  = " USER ";
@@ -584,12 +672,12 @@ class database extends database_base {
              GROUP BY " . $sqlGroupBy;
 
     return $sql;
-    
+
   }
-  
+
   /**
    * Generates a string query
-   * 
+   *
    * class.report.php
    * function generatedReport5()
    *
@@ -611,20 +699,20 @@ class database extends database_base {
               LEFT JOIN USERS AS U ON(U.USR_UID = AD.USR_UID)
               WHERE AD.APP_UID<>'' AND AD.DEL_FINISH_DATE IS NULL
               GROUP BY " . $sqlGroupBy;
-              
+
     return $sql;
-    
+
   }
-  
+
   /**
    * Generates a string query
-   * 
+   *
    * class.report.php
    * function generatedReport5_filter()
    *
    * @return string $sql
    */
-  function getSelectReport5Filter($var) 
+  function getSelectReport5Filter($var)
   {
 
     $sqlConcat   = " CONCAT(U.USR_LASTNAME,' ',USR_FIRSTNAME) AS USER ";
@@ -644,25 +732,25 @@ class database extends database_base {
 
     return $sql;
   }
-  
-  /* 
+
+  /*
    * query functions for class class.net.php
    *
    */
   function getServerVersion($driver, $dbIP, $dbPort, $dbUser, $dbPasswd, $dbSourcename)
   {
-    
+
     if($link = @mysql_connect($dbIP, $dbUser, $dbPasswd)){
         $v = @mysql_get_server_info();
     } else {
         throw new Exception(@mysql_error($link));
     }
     return (isset($v))?$v:'none';
-    
+
   }
-  
-  
-    /* 
+
+
+    /*
    * query functions for class class.net.php, class.reportTables.php
    *
    */
@@ -670,15 +758,15 @@ class database extends database_base {
   {
     $sql = 'DROP TABLE IF EXISTS `' . $sTableName . '`';
     return $sql;
-  }    
-  
-  
+  }
+
+
   function getTableDescription($sTableName)
   {
     $sql = "DESC ".$sTableName;
     return $sql;
   }
-  
+
   function getFieldNull()
   {
     $fieldName = "Null";
@@ -701,7 +789,7 @@ class database extends database_base {
     $oConnection = mysql_connect(DB_HOST, DB_USER, DB_PASS);
     mysql_select_db(DB_NAME);
     $oDataset = mysql_query('SELECT COUNT(*) FROM REPORT_TABLE') || ($bExists = false);
-    
+
     return $bExists;
   }
 
@@ -713,7 +801,7 @@ class database extends database_base {
     $sql = ' LIMIT '.(($nCurrentPage-1)*$nRowsPerPage).', '.$nRowsPerPage;
     return $sql;
   }
-  
+
   /**
    * Determining the existence of a table
    */

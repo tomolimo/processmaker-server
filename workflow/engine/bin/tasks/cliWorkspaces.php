@@ -129,7 +129,7 @@ CLI::taskDescription(<<<EOT
 
   If no workspace is specified, the command will be run in all workspaces. More
   than one workspace can be specified.
-  
+
   This command is a shortcut to execute all upgrade commands for workspaces.
   Upgrading a workspace will make it correspond to the current version of
   ProcessMaker.
@@ -147,7 +147,7 @@ CLI::taskDescription(<<<EOT
 
   If no workspace is specified, the command will be run in all workspaces. More
   than one workspace can be specified.
-  
+
   This command will go through each language installed in ProcessMaker and
   update this workspace translations to match the current version of
   ProcessMaker.
@@ -257,7 +257,7 @@ function database_upgrade($command, $args) {
           echo "- Indexes (add = " . count($changes['tablesWithNewIndex'])."";
           echo ", alter = " . count($changes['tablesToAlterIndex']).")\n";
         } else {
-          echo "> Schema fixed\n";
+          echo "-> Schema fixed\n";
         }
       } else {
         echo "> OK\n";
@@ -276,11 +276,11 @@ function delete_app_from_table($con, $tableName, $appUid, $col="APP_UID") {
 
 function run_drafts_clean($args, $opts) {
   echo "Cleaning drafts\n";
-    
+
   if (count($args) < 1)
     throw new Exception ("Please specify a workspace name");
   $workspace = $args[0];
-  
+
   if (!file_exists(PATH_DB . $workspace . '/db.php')) {
     throw new Exception('Could not find workspace ' . $workspace);
   }
@@ -388,7 +388,7 @@ function run_workspace_backup($args, $opts) {
     CLI::logging("\n");
     $workspace->printMetadata(false);
   }
-  
+
 }
 
 function run_workspace_restore($args, $opts) {
