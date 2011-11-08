@@ -178,7 +178,12 @@ if($limit != 0){
       $fields ['FOLDER_CREATE_DATE'] = "";
       $fields ['FOLDER_UPDATE_DATE'] = "";
     } else {
-      $fields = array ();
+//      $fields = array ();
+      $fields ['FOLDER_UID'] = "/";
+      $fields ['FOLDER_PARENT_UID'] = "";
+      $fields ['FOLDER_NAME'] = "root";
+      $fields ['FOLDER_CREATE_DATE'] = "";
+      $fields ['FOLDER_UPDATE_DATE'] = "";
     }
     return $fields;
   }
@@ -211,10 +216,15 @@ if($limit != 0){
 
     $oAppDocument = new AppDocument ( );
     $oCriteria = new Criteria ( );
+
     if ((is_array ( $docIdFilter )) && (count ( $docIdFilter ) > 0)) { //Search by App Doc UID no matter what Folder it is
       $oCriteria->add ( AppDocumentPeer::APP_DOC_UID, $docIdFilter, CRITERIA::IN );
     } elseif ($folderID != NULL) {
+    if($folderID=="/"){
+     $oCriteria->add ( AppDocumentPeer::FOLDER_UID, array('root','',NULL), CRITERIA::IN );
+    }else{
       $oCriteria->add ( AppDocumentPeer::FOLDER_UID, $folderID );
+      }
     } elseif ($searchType == "TAG") {
       $oCriteria->add ( AppDocumentPeer::APP_DOC_TAGS, "%" . $keyword . "%", CRITERIA::LIKE );
     }
@@ -234,7 +244,9 @@ if($limit != 0){
   $oCriteria->setLimit($limit);
   $oCriteria->setOffset($start);
 
+
     $rs = AppDocumentPeer::doSelectRS ( $oCriteria );
+   
     $rs->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
     $rs->next ();
     $filesResult = array ();

@@ -90,10 +90,6 @@ function expandNode(){
             $tempTree ['is_readable'] =true;
             $tempTree ['is_deletable'] =true;
 
-
-
-
-
             if((isset($_POST['option']))&&($_POST['option']=="gridDocuments")){
                 $tempTree ['icon'] = "/images/documents/extension/folder.png";
             }
@@ -113,7 +109,7 @@ function expandNode(){
             $tempTree=array();
         }
 
-        if($_POST ['node'] == '/'){
+/*        if($_POST ['node'] == '/'){
             $notInFolderLabel = G::LoadTranslation ( 'ID_NOT_IN_FOLDER' );
             $tempTree ['text'] = $notInFolderLabel;
             $tempTree ['id'] = "NA";
@@ -131,7 +127,7 @@ function expandNode(){
 
             if((isset($_POST['option']))&&($_POST['option']=="gridDocuments")){
                 $tempTree ['icon'] = "/images/documents/extension/bz2.png";
-            }
+            }*/
             //$tempTree ['leaf'] = true;
             //$tempTree ['optionType'] = "category";
             //$tempTree['allowDrop']=false;
@@ -144,10 +140,10 @@ function expandNode(){
              $tempTree ['expanded'] = true;
              }
              */
-            $processListTree [] = $tempTree;
+/*            $processListTree [] = $tempTree;
             $tempTree=array();
 
-        }
+        }*/
     }
      
     if(isset($folderContent)){
