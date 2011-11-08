@@ -265,7 +265,7 @@ function openActionDialog( caller, action ) {
           autoCreate: true,
           modal:true,
           width:600,
-          height:400,
+          autoHeight: true,
           shadow:true,
           minWidth:300,
           minHeight:200,
