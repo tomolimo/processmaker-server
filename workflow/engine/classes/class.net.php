@@ -16,6 +16,7 @@ class NET
   private $db_passwd;
   private $db_sourcename;
   private $db_port;
+  private $db_instance;
 
   /*errors handle*/
   public $error;
@@ -31,6 +32,7 @@ class NET
   {
     $this->errno = 0;
     $this->errstr = "";
+    $this->db_instance = "";
   
     unset($this->db_user);
     unset($this->db_passwd);
@@ -52,16 +54,23 @@ class NET
   */
   function resolv($pHost)
   {
-    if ($this->is_ipaddress($pHost)) {
-      $this->ip = $pHost;
-      if (!$this->hostname = @gethostbyaddr($pHost)) {
+    $aHost = explode("\\", $pHost);
+    if(count($aHost)>1){
+      $ipHost = $aHost[0];
+      $this->db_instance = $aHost[1];
+    } else {
+      $ipHost = $pHost;
+    }
+    if ($this->is_ipaddress($ipHost)) {
+      $this->ip = $ipHost;
+      if (!$this->hostname = @gethostbyaddr($ipHost)) {
         $this->errno = 2000;
         $this->errstr = "NET::Host down";
         $this->error = "Destination Host Unreachable";
       }
     } 
     else {
-      $ip   = @gethostbyname($pHost);
+      $ip   = @gethostbyname($ipHost);
       $long = ip2long($ip);
       if ( $long == -1 || $long === FALSE)  {
         $this->errno = 2000;
@@ -69,7 +78,7 @@ class NET
         $this->error = "Destination Host Unreachable";
       } 
       else {
-        $this->ip = @gethostbyname($pHost);
+        $this->ip = @gethostbyname($ipHost);
         $this->hostname = $pHost;
       }
     }
@@ -219,9 +228,14 @@ class NET
           break;
     
         case 'mssql':
-          $str_port = (($this->db_port == "") || ($this->db_port == 0) || ($this->db_port == 1433)) ? "" : ":".$this->db_port;
-          $link = @mssql_connect($this->ip . $str_port, $this->db_user, $this->db_passwd);
-    
+          if($this->db_instance != ""){
+            $str_port = "";
+            $link = @mssql_connect($this->ip . "\\". $this->db_instance, $this->db_user, $this->db_passwd);
+          } else {
+            $str_port = (($this->db_port == "") || ($this->db_port == 0) || ($this->db_port == 1433)) ? "" : ":".$this->db_port;
+            $link = @mssql_connect($this->ip . $str_port, $this->db_user, $this->db_passwd);
+          }
+
           if ($link) {
             $stat->status = 'SUCCESS';
             $this->errstr = "";
@@ -339,8 +353,15 @@ class NET
           break;
   
         case 'mssql':
-          $str_port = (($this->db_port == "")  || ($this->db_port == 0) || ($this->db_port == 1433)) ? "" : ":".$this->db_port;
-          $link = @mssql_connect($this->ip . $str_port, $this->db_user, $this->db_passwd);
+//          $str_port = (($this->db_port == "")  || ($this->db_port == 0) || ($this->db_port == 1433)) ? "" : ":".$this->db_port;
+//          $link = @mssql_connect($this->ip . $str_port, $this->db_user, $this->db_passwd);
+          if($this->db_instance != ""){
+            $str_port = "";
+            $link = @mssql_connect($this->ip . "\\". $this->db_instance, $this->db_user, $this->db_passwd);
+          } else {
+            $str_port = (($this->db_port == "") || ($this->db_port == 0) || ($this->db_port == 1433)) ? "" : ":".$this->db_port;
+            $link = @mssql_connect($this->ip . $str_port, $this->db_user, $this->db_passwd);
+          }
           if ($link) {
             $db = @mssql_select_db($this->db_sourcename, $link);
             if ($db) {
