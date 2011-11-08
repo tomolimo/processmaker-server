@@ -486,6 +486,27 @@ class database extends database_base {
     return $sql;
   }
 
+  public function generateSelectSQL($table, $keys, $data) {
+    $fields = array();
+    $where  = array();
+    foreach ($data as $field) {
+      if (in_array($field['field'], $keys)) {
+        switch ($field['type']) {
+          case 'text':
+          case 'date':
+            $where[] = $this->putQuotes($field['field']) . " = '" . mysql_real_escape_string($field['value']) . "'";
+          break;
+          case 'int':
+          default:
+            $where[] = $this->putQuotes($field['field']) . " = " . mysql_real_escape_string($field['value']);
+          break;
+        }
+      }
+    }
+    $sql = sprintf("SELECT * FROM %s WHERE %s", $this->putQuotes($table), implode(', ', $where));
+    return $sql;
+  }
+
   private function putQuotes($element) {
     return $this->sQuoteCharacterBegin . $element . $this->sQuoteCharacterEnd;
   }
