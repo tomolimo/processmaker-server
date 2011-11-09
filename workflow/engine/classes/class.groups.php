@@ -169,14 +169,14 @@ class Groups
       throw $e;
     }
   }
-  
+
   /**
   * Get Available Groups for a single user
   * @author Qennix
   * @param string $sUserUid
   * @return object
   */
-  
+
   function getAvailableGroupsCriteria($sUserUid, $filter=''){
   	try{
   		$oCriteria = new Criteria('workflow');
@@ -200,25 +200,25 @@ class Groups
         $oCriteria->add(GroupwfPeer::GRP_STATUS, 'ACTIVE');
         $oCriteria->add(ContentPeer::CON_CATEGORY,'GRP_TITLE');
         $oCriteria->add(ContentPeer::CON_LANG,SYS_LANG);
-        
+
   		if ($filter !=''){
         	$oCriteria->add(ContentPeer::CON_VALUE,'%'.$filter.'%',Criteria::LIKE);
         }
-        
+
       	return $oCriteria;
   	}
   	catch(exception $e){
   	   throw $e;
   	}
   }
-  
+
 /**
   * Get Assigned Groups for a single user
   * @author Qennix
   * @param string $sUserUid
   * @return object
   */
-  
+
   function getAssignedGroupsCriteria($sUserUid, $filter=''){
   	try{
   		$oCriteria = new Criteria('workflow');
@@ -231,19 +231,33 @@ class Groups
         $oCriteria->add(GroupwfPeer::GRP_STATUS, 'ACTIVE');
         $oCriteria->add(ContentPeer::CON_CATEGORY,'GRP_TITLE');
         $oCriteria->add(ContentPeer::CON_LANG,SYS_LANG);
-        
+
         if ($filter !=''){
         	$oCriteria->add(ContentPeer::CON_VALUE,'%'.$filter.'%',Criteria::LIKE);
         }
-        
+
       	return $oCriteria;
   	}
   	catch(exception $e){
   	   throw $e;
   	}
   }
-  
 
+  function getGroupsForUser($usrUid) {
+    $criteria = $this->getAssignedGroupsCriteria($usrUid);
+    $criteria->addAscendingOrderByColumn(ContentPeer::CON_VALUE);
+    $dataset = GroupwfPeer::doSelectRS($criteria);
+    $dataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    $dataset->next();
+    $groups = array();
+    while ($row = $dataset->getRow()) {
+      if (!isset($groups[$row['GRP_UID']])) {
+        $groups[$row['GRP_UID']] = $row;
+      }
+      $dataset->next();
+    }
+    return $groups;
+  }
 
  /**
   * Remove a user from all groups

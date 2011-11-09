@@ -57,15 +57,15 @@ dashletInstance.form = {
     //------------------------------------------------------------------------------------------------------------------
     var storeDasUID = new Ext.data.Store({
       proxy: new Ext.data.HttpProxy({
-        url: "dashletData",
+        url: "getDashlets",
         method: "POST"
       }),
 
       baseParams: {"option": "DASHLST"},
 
       reader: new Ext.data.JsonReader({
-        totalProperty: "resultTotal",
-        root:          "resultRoot",
+        totalProperty: "total",
+        root:          "dashlets",
         fields:[{name: "DAS_UID",   type: "string"},
                 {name: "DAS_TITLE", type: "string"}
                ]
@@ -107,22 +107,23 @@ dashletInstance.form = {
     var storeDasInsOwnerType = new Ext.data.ArrayStore({
       idIndex: 0,
       fields: ["id", "value"],
-      data:   [//["USER",       "User"],
-               ["DEPARTMENT", "Department"]
+      data:   [["USER",       "User"],
+               ["DEPARTMENT", "Department"],
+               ["GROUP", "Group"]
               ]
     });
 
     var storeDasInsOwnerUID = new Ext.data.Store({
       proxy: new Ext.data.HttpProxy({
-        url: "ownerData",
+        url: "getOwnersByType",
         method: "POST"
       }),
 
       reader: new Ext.data.JsonReader({
-        totalProperty: "resultTotal",
-        root:          "resultRoot",
-        fields:[{name: "TABLE_UID",  type: "string"},
-                {name: "TABLE_NAME", type: "string"}
+        totalProperty: "total",
+        root:          "owners",
+        fields:[{name: "OWNER_UID",  type: "string"},
+                {name: "OWNER_NAME", type: "string"}
               ]
       }),
 
@@ -257,13 +258,14 @@ dashletInstance.form = {
       editable: false,
 
       width: 200,
-      fieldLabel: "Owner Type",
+      fieldLabel: "Assign To",
 
       listeners: {
         select: function (combo, record, index) {
           storeDasInsOwnerUID.baseParams = {"option": "OWNERTYPE",
                                             "type": combo.getValue()
                                            };
+          cboDasInsOwnerUID.store.removeAll();
           cboDasInsOwnerUID.store.load();
         }
       }
@@ -273,8 +275,8 @@ dashletInstance.form = {
       id: "cboDasInsOwnerUID",
       name: "DAS_INS_OWNER_UID",
 
-      valueField:   "TABLE_UID",
-      displayField: "TABLE_NAME",
+      valueField:   "OWNER_UID",
+      displayField: "OWNER_NAME",
       store:        storeDasInsOwnerUID,
 
       triggerAction: "all",
@@ -282,7 +284,7 @@ dashletInstance.form = {
       editable: false,
 
       width: 200,
-      fieldLabel: "Assign To"
+      fieldLabel: "Name"
     });
 
     var cboProcess = new Ext.form.ComboBox({
@@ -340,7 +342,7 @@ dashletInstance.form = {
               cboDasInsContextTime,
               //txtDasInsStartDate,
               //txtDasInsEndDate,
-              //cboDasInsOwnerType,
+              cboDasInsOwnerType,
               cboDasInsOwnerUID
               //,
               //cboProcess,
