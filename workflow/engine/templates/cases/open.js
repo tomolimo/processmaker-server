@@ -65,7 +65,7 @@ Ext.onReady(function(){
       url : 'ajaxListener',
       params : {action : 'getCaseMenu', app_status:app_status},
       success: function ( result, request ) {
-        var data = Ext.util.JSON.decode(result.responseText);
+        var data = Ext.util.JSON.decode(result.responseText);        
         for(i=0; i<data.length; i++) {
           switch(data[i].id) {
             case 'STEPS':
@@ -94,11 +94,13 @@ Ext.onReady(function(){
               var actionMenu = Ext.getCmp('actionMenu');
               actionMenu.menu.removeAll();
               for(j=0; j<data[i].options.length; j++) {
-                actionMenu.menu.add({
-                  text: data[i].options[j].text,
-                  handler: data[i].options[j].fn != '' ? Actions[data[i].options[j].fn] : function(){}
-                });
-                menuSelectedTitle[data[i].options[j].fn] = data[i].options[j].text;
+            	if(!data[i].options[j].hide){
+                  actionMenu.menu.add({
+                    text: data[i].options[j].text,
+                    handler: data[i].options[j].fn != '' ? Actions[data[i].options[j].fn] : function(){}
+                  });
+                  menuSelectedTitle[data[i].options[j].fn] = data[i].options[j].text;
+                }
               }
               actionMenu.show();
               break;
