@@ -281,16 +281,17 @@ $caseStep->getStepPosition());
       break;
 
       case 'TO_DO':
-          if( ! AppDelay::isPaused($_SESSION['APPLICATION'], $_SESSION['INDEX']) ) {
-            $options[] = Array('text'=>G::LoadTranslation('ID_PAUSED_CASE'), 'fn'=>'setUnpauseCaseDate');
-
-            if ($cant == 1) {
+        if( ! AppDelay::isPaused($_SESSION['APPLICATION'], $_SESSION['INDEX']) ) {
+          $options[] = Array('text'=>G::LoadTranslation('ID_PAUSED_CASE'), 'fn'=>'setUnpauseCaseDate');
+          if ($cant == 1) {                        
+            if($RBAC->userCanAccess('PM_CANCELCASE')==1) 
               $options[] = Array('text'=>G::LoadTranslation('ID_CANCEL'), 'fn'=>'cancelCase');
+            else  
+              $options[] = Array('text'=>G::LoadTranslation('ID_CANCEL'), 'fn'=>'cancelCase', 'hide'=>'hiden');            	            	            
             }
           } else {
-            $options[] = Array('text'=>G::LoadTranslation('ID_UNPAUSE'), 'fn'=>'unpauseCase');
-          }
-
+              $options[] = Array('text'=>G::LoadTranslation('ID_UNPAUSE'), 'fn'=>'unpauseCase');
+            }
           if($RBAC->userCanAccess('PM_REASSIGNCASE')==1) {
             $options[] = Array('text'=>G::LoadTranslation('ID_REASSIGN'), 'fn'=>'getUsersToReassign');
           }
