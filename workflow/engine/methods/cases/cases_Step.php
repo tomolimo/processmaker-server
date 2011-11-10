@@ -322,7 +322,7 @@ $uidf=$_GET['UID'];
         $aOD['__DYNAFORM_OPTIONS']['PREVIOUS_STEP_LABEL'] = G::loadTranslation("ID_PREVIOUS_STEP");
       }
       $aOD['__DYNAFORM_OPTIONS']['NEXT_STEP'] = $aNextStep['PAGE'];
-
+      $aOD['__DYNAFORM_OPTIONS']['NEXT_STEP_LABEL'] = G::loadTranslation("ID_NEXT_STEP");
       switch ($_GET['ACTION'])
       {
         case 'GENERATE':
