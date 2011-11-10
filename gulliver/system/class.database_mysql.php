@@ -50,6 +50,7 @@ class database extends database_base {
     $this->sDataBase       = $sDataBase;
     $this->oConnection     = @mysql_connect($sServer, $sUser, $sPass) || null;
     $this->sQuoteCharacter = '`';
+    $this->nullString      = 'null';
   }
 
   /**
@@ -453,15 +454,20 @@ class database extends database_base {
     $values = array();
     foreach ($data as $field) {
       $fields[] = $field['field'];
-      switch ($field['type']) {
-        case 'text':
-        case 'date':
-          $values[] = "'" . mysql_real_escape_string($field['value']) . "'";
-        break;
-        case 'int':
-        default:
-          $values[] = mysql_real_escape_string($field['value']);
-        break;
+      if (!is_null($field['value'])) {
+        switch ($field['type']) {
+          case 'text':
+          case 'date':
+            $values[] = "'" . mysql_real_escape_string($field['value']) . "'";
+          break;
+          case 'int':
+          default:
+            $values[] = mysql_real_escape_string($field['value']);
+          break;
+        }
+      }
+      else {
+        $values[] = $this->nullString;
       }
     }
     $fields = array_map(array($this, 'putQuotes'), $fields);
@@ -473,15 +479,20 @@ class database extends database_base {
     $fields = array();
     $where  = array();
     foreach ($data as $field) {
-      switch ($field['type']) {
-        case 'text':
-        case 'date':
-          $fields[] = $this->putQuotes($field['field']) . " = '" . mysql_real_escape_string($field['value']) . "'";
-        break;
-        case 'int':
-        default:
-          $fields[] = $this->putQuotes($field['field']) . " = " . mysql_real_escape_string($field['value']);
-        break;
+      if (!is_null($field['value'])) {
+        switch ($field['type']) {
+          case 'text':
+          case 'date':
+            $fields[] = $this->putQuotes($field['field']) . " = '" . mysql_real_escape_string($field['value']) . "'";
+          break;
+          case 'int':
+          default:
+            $fields[] = $this->putQuotes($field['field']) . " = " . mysql_real_escape_string($field['value']);
+          break;
+        }
+      }
+      else {
+        $values[] = $this->nullString;
       }
       if (in_array($field['field'], $keys)) {
         $where[] = $fields[count($fields) - 1];
@@ -496,15 +507,20 @@ class database extends database_base {
     $where  = array();
     foreach ($data as $field) {
       if (in_array($field['field'], $keys)) {
-        switch ($field['type']) {
-          case 'text':
-          case 'date':
-            $where[] = $this->putQuotes($field['field']) . " = '" . mysql_real_escape_string($field['value']) . "'";
-          break;
-          case 'int':
-          default:
-            $where[] = $this->putQuotes($field['field']) . " = " . mysql_real_escape_string($field['value']);
-          break;
+        if (!is_null($field['value'])) {
+          switch ($field['type']) {
+            case 'text':
+            case 'date':
+              $where[] = $this->putQuotes($field['field']) . " = '" . mysql_real_escape_string($field['value']) . "'";
+            break;
+            case 'int':
+            default:
+              $where[] = $this->putQuotes($field['field']) . " = " . mysql_real_escape_string($field['value']);
+            break;
+          }
+        }
+        else {
+          $values[] = $this->nullString;
         }
       }
     }
@@ -517,15 +533,20 @@ class database extends database_base {
     $where  = array();
     foreach ($data as $field) {
       if (in_array($field['field'], $keys)) {
-        switch ($field['type']) {
-          case 'text':
-          case 'date':
-            $where[] = $this->putQuotes($field['field']) . " = '" . mysql_real_escape_string($field['value']) . "'";
-          break;
-          case 'int':
-          default:
-            $where[] = $this->putQuotes($field['field']) . " = " . mysql_real_escape_string($field['value']);
-          break;
+        if (!is_null($field['value'])) {
+          switch ($field['type']) {
+            case 'text':
+            case 'date':
+              $where[] = $this->putQuotes($field['field']) . " = '" . mysql_real_escape_string($field['value']) . "'";
+            break;
+            case 'int':
+            default:
+              $where[] = $this->putQuotes($field['field']) . " = " . mysql_real_escape_string($field['value']);
+            break;
+          }
+        }
+        else {
+          $values[] = $this->nullString;
         }
       }
     }
