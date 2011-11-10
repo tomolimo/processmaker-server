@@ -29,8 +29,24 @@
   */
 
   if (!isset($_GET['APP_UID']) || !isset($_GET['DEL_INDEX'])) {
-    throw new Exception("Application ID or Delegation Index is missing!. The System can't open the case.");
+  	if (isset($_GET['APP_NUMBER'])) {
+  	  G::LoadClass('case');
+      $oCase = new Cases();
+      $_GET['APP_UID']   = $oCase->getApplicationUIDByNumber($_GET['APP_NUMBER']);
+      $_GET['DEL_INDEX'] = $oCase->getCurrentDelegation($_GET['APP_UID'], $_SESSION['USER_LOGGED']); 
+      if( is_null($_GET['APP_UID']) ) {
+       throw new Exception(G::LoadTranslation('ID_CASE_DOES_NOT_EXISTS'));
+      } 
+      if( is_null($_GET['DEL_INDEX']) ) {
+        throw new Exception(G::LoadTranslation('ID_CASE_IS_CURRENTLY_WITH_ANOTHER_USER'));
+      }      
+    }
+    else {
+  		throw new Exception("Application ID or Delegation Index is missing!. The System can't open the case.");
+  	}
   }
+  
+  
   require_once ("classes/model/Step.php");
   G::LoadClass("configuration");
   G::LoadClass("case");

@@ -288,13 +288,14 @@ $caseStep->getStepPosition());
               $options[] = Array('text'=>G::LoadTranslation('ID_CANCEL'), 'fn'=>'cancelCase');
             else  
               $options[] = Array('text'=>G::LoadTranslation('ID_CANCEL'), 'fn'=>'cancelCase', 'hide'=>'hiden');            	            	            
-            }
-          } else {
-              $options[] = Array('text'=>G::LoadTranslation('ID_UNPAUSE'), 'fn'=>'unpauseCase');
-            }
-          if($RBAC->userCanAccess('PM_REASSIGNCASE')==1) {
-            $options[] = Array('text'=>G::LoadTranslation('ID_REASSIGN'), 'fn'=>'getUsersToReassign');
           }
+        } 
+        else {
+          $options[] = Array('text'=>G::LoadTranslation('ID_UNPAUSE'), 'fn'=>'unpauseCase');
+        }
+        if($RBAC->userCanAccess('PM_REASSIGNCASE')==1) {
+          $options[] = Array('text'=>G::LoadTranslation('ID_REASSIGN'), 'fn'=>'getUsersToReassign');
+        }
       break;
 
       case 'CANCELLED':
