@@ -109,10 +109,13 @@ class Dashboard extends Controller {
         $data->DAS_INS_UID = '';
       }
       if ($data->DAS_INS_UID != '') {
-        $this->setJSVar('dashletInstance', $this->pmDashlet->getDashletInstance($data->DAS_INS_UID));
+        $this->pmDashlet->setup($data->DAS_INS_UID);
+        $this->setJSVar('dashletInstance', $this->pmDashlet->getDashletInstance());
+        $this->setJSVar('additionaFields', $this->pmDashlet->getAdditionalFields());
       }
       else {
         $this->setJSVar('dashletInstance', new stdclass());
+        $this->setJSVar('additionaFields', $this->pmDashlet->getAdditionalFields());
       }
       G::RenderPage('publish', 'extJs');
       return null;

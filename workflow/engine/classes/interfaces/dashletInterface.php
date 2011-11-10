@@ -4,5 +4,6 @@ interface DashletInterface {
 
   public function setup($dasInsUid);
   public function render();
+  public function getAdditionalFields();
 
 }

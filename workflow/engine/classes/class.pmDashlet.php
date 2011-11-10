@@ -7,16 +7,17 @@ require_once 'model/DashletInstance.php';
 class PMDashlet extends DashletInstance implements DashletInterface {
 
   // Own properties
+  private $dashletInstance;
   private $dashletObject;
 
   // Interface functions
 
   public function setup($dasInsUid) {
     try {
-      $dashletInstance = $this->getDashletInstance($dasInsUid);
-      G::LoadClass($dashletInstance['DAS_CLASS']);
-      $this->dashletObject = new $dashletInstance['DAS_CLASS']();
-      $this->dashletObject->setup($dashletInstance);
+      $this->dashletInstance = $this->loadDashletInstance($dasInsUid);
+      G::LoadClass($this->dashletInstance['DAS_CLASS']);
+      $this->dashletObject = new $this->dashletInstance['DAS_CLASS']();
+      $this->dashletObject->setup($this->dashletInstance);
     }
     catch (Exception $error) {
       throw $error;
@@ -33,6 +34,27 @@ class PMDashlet extends DashletInstance implements DashletInterface {
     catch (Exception $error) {
       throw $error;
     }
+  }
+
+  public function getAdditionalFields() {
+    try {
+      //Change this in the next release
+      G::LoadClass('dashletOpenVSCompleted');
+      return dashletOpenVSCompleted::getAdditionalFields();
+    }
+    catch (Exception $error) {
+      throw $error;
+    }
+  }
+
+  // Getter and Setters
+
+  public function getDashletInstance() {
+    return $this->dashletInstance;
+  }
+
+  public function getDashletObject() {
+    return $this->dashletObject;
   }
 
   // Own functions
@@ -99,9 +121,10 @@ class PMDashlet extends DashletInstance implements DashletInterface {
     }
   }
 
-  public function getDashletInstance($dasInsUid) {
+  public function loadDashletInstance($dasInsUid) {
     try {
       $dashletInstance = $this->load($dasInsUid);
+      //Load data from the serialized field
       $dashlet = new Dashlet();
       $dashletFields = $dashlet->load($dashletInstance['DAS_UID']);
       return array_merge($dashletFields, $dashletInstance);

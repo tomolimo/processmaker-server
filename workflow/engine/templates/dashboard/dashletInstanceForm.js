@@ -9,18 +9,7 @@ dashletInstance.form = {
       Ext.Ajax.request({
         url: "saveDashletInstance",
         method: "POST",
-        params:{"DAS_INS_UID": hiddenDasInsUID.getValue(),
-                "DAS_UID":     cboDasUID.getValue(),
-                "DAS_INS_TYPE": cboDasInsType.getValue(),
-                "DAS_INS_CONTEXT_TIME": cboDasInsContextTime.getValue(),
-                //"DAS_INS_START_DATE":   txtDasInsStartDate.getValue().format(txtDasInsStartDate.format),
-                //"DAS_INS_END_DATE":  txtDasInsEndDate.getValue().format(txtDasInsEndDate.format),
-                "DAS_INS_OWNER_TYPE":   cboDasInsOwnerType.getValue(),
-                "DAS_INS_OWNER_UID":    cboDasInsOwnerUID.getValue()
-                //,
-                //"DAS_INS_PROCESSES": cboProcess.getValue(),
-                //"DAS_INS_TASKS":    cboTask.getValue()
-               },
+        params: dashletInstanceFrm.getForm().getFieldValues(),
 
         success:function (result, request) {
                   myMask.hide();
@@ -40,18 +29,6 @@ dashletInstance.form = {
                   Ext.MessageBox.alert("Alert", "Ajax communication failed");
                 }
       });
-    }
-
-    dashletInstanceFrmLoad = function () {
-      if (dashletInstance.DAS_INS_UID) {
-        hiddenDasInsUID.setValue(dashletInstance.DAS_INS_UID)
-        cboDasUID.setValue(dashletInstance.DAS_UID);
-        cboDasInsType.setValue(dashletInstance.DAS_INS_TYPE);
-        cboDasInsContextTime.setValue(dashletInstance.DAS_INS_CONTEXT_TIME);
-        cboDasInsOwnerType.setValue(dashletInstance.DAS_INS_OWNER_TYPE);
-
-        //cboDasInsOwnerUID.setValue(dashletInstance.DAS_INS_OWNER_UID);
-      }
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -321,6 +298,19 @@ dashletInstance.form = {
       fieldLabel: "Task"
     });
 
+    var formFields = [hiddenDasInsUID,
+              cboDasUID,
+              cboDasInsType,
+              cboDasInsContextTime,
+              //txtDasInsStartDate,
+              //txtDasInsEndDate,
+              cboDasInsOwnerType,
+              cboDasInsOwnerUID
+              //cboProcess,
+              //cboTask
+              ];
+    formFields = formFields.concat(additionaFields);
+
     //------------------------------------------------------------------------------------------------------------------
     var dashletInstanceFrm = new Ext.form.FormPanel({
       id:  "dashletInstanceFrm",
@@ -336,18 +326,7 @@ dashletInstance.form = {
 
       title: "New Dashboard Instance",
 
-      items: [hiddenDasInsUID,
-              cboDasUID,
-              cboDasInsType,
-              cboDasInsContextTime,
-              //txtDasInsStartDate,
-              //txtDasInsEndDate,
-              cboDasInsOwnerType,
-              cboDasInsOwnerUID
-              //,
-              //cboProcess,
-              //cboTask
-             ],
+      items: formFields,
 
       buttonAlign: "right",
       buttons: [new Ext.Action({
@@ -381,7 +360,7 @@ dashletInstance.form = {
     });
 
     //------------------------------------------------------------------------------------------------------------------
-    dashletInstanceFrmLoad();
+    dashletInstanceFrm.getForm().setValues(dashletInstance);
 
     //------------------------------------------------------------------------------------------------------------------
     var pnlMain = new Ext.Panel({
