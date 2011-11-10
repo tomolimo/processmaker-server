@@ -101,9 +101,9 @@ function openCase(){
 }
 
 function jumpToCase(appNumber){
-  params  = 'APP_NUMBER=' + appNumber;
+  params = 'APP_NUMBER=' + appNumber;
   params += '&action=jump';
-  requestFile = '../cases/cases_Open';
+  requestFile = '../cases/open';
   redirect(requestFile + '?' + params);
 }
 
