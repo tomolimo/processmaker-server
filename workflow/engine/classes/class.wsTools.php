@@ -2,13 +2,13 @@
 /**
  * Utility functions to manage a workspace.
  *
- * @author Alexandre Rosenfeld 
+ * @author Alexandre Rosenfeld
  */
 
 G::LoadSystem('dbMaintenance');
 G::LoadClass("cli");
 
-/** 
+/**
  * class workspaceTools
  * @package workflow.engine.classes
  */
@@ -129,7 +129,7 @@ class workspaceTools {
    * Reset the database information to that of a newly created workspace.
    *
    * This assumes this workspace already has a db.php file, which will be changed
-   * to contain the new information. 
+   * to contain the new information.
    * This function will reset the database hostname to the system database.
    * If reseting database names, it will also use the the prefixes rp_,
    * rb_ and wf_, with the workspace name as database names.
@@ -445,7 +445,7 @@ class workspaceTools {
     $oCriteria = new Criteria();
     $oCriteria->add(ConfigurationPeer::CFG_UID,'casesList');
     ConfigurationPeer::doDelete($oCriteria);
-    // end of reset 
+    // end of reset
   }
 
   /**
@@ -470,6 +470,7 @@ class workspaceTools {
   public function upgradeDatabase($checkOnly = false) {
     $systemSchema = System::getSystemSchema();
     $this->upgradeSchema($systemSchema);
+    $this->upgradeData();
     return true;
   }
 
@@ -499,7 +500,7 @@ class workspaceTools {
       if ($changed) {
         return $changes;
       } else {
-        CLI::logging("-> Nothing to change\n");
+        CLI::logging("-> Nothing to change in the data base structure\n");
         return $changed;
       }
     }
@@ -560,6 +561,51 @@ class workspaceTools {
     return true;
   }
 
+  public function upgradeData() {
+    if (file_exists(PATH_CORE . 'data' . PATH_SEP . 'check.data')) {
+      $checkData = unserialize(file_get_contents(PATH_CORE . 'data' . PATH_SEP . 'check.data'));
+      if (is_array($checkData)) {
+        foreach ($checkData as $checkThis) {
+          $this->updateThisRegistry($checkThis);
+        }
+      }
+    }
+  }
+
+  public function updateThisRegistry($data) {
+    $dataBase = $this->getDatabase();
+    $sql = '';
+    switch ($data['action']) {
+      case 1:
+        $sql = $dataBase->generateInsertSQL($data['table'], $data['data']);
+        $message = "-> Row added in {$data['table']}\n";
+      break;
+      case 2:
+        $sql = $dataBase->generateUpdateSQL($data['table'], $data['keys'], $data['data']);
+        $message = "-> Row updated in {$data['table']}\n";
+      break;
+      case 3:
+        $sql = $dataBase->generateDeleteSQL($data['table'], $data['keys'], $data['data']);
+        $message = "-> Row deleted in {$data['table']}\n";
+      break;
+      case 4:
+        $sql = $dataBase->generateSelectSQL($data['table'], $data['keys'], $data['data']);
+        $dataset = $dataBase->executeQuery($sql);
+        if (!$dataBase->getRegistry($dataset)) {
+          $sql = $dataBase->generateInsertSQL($data['table'], $data['data']);
+          $message = "-> Row updated in {$data['table']}\n";
+        }
+        else {
+          $sql = '';
+        }
+      break;
+    }
+    if ($sql != '') {
+      $dataBase->executeQuery($sql);
+      CLI::logging($message);
+    }
+  }
+
   /**
    * Get metadata from this workspace
    *
@@ -607,9 +653,9 @@ class workspaceTools {
     return $Fields;
   }
 
- /** 
+ /**
   * Print the system information gathered from getSysInfo
-  */ 
+  */
   public static function printSysInfo() {
     $fields = System::getSysInfo();
 
@@ -776,7 +822,7 @@ class workspaceTools {
     CLI::logging("Copying database to backup...\n");
     $this->addToBackup($backup, $tempDirectory, $tempDirectory);
     CLI::logging("Copying files to backup...\n");
-    
+
     $this->addToBackup($backup, $this->path, $this->path, "{$this->name}.files");
     //Remove leftovers.
     G::rm_dir($tempDirectory);
@@ -821,7 +867,7 @@ class workspaceTools {
   //TODO: Move to class.dbMaintenance.php
   /**
    * executes a mysql script
-   * 
+   *
    * This function supports scripts with -- comments in the beginning of a line
    * and multi-line statements.
    * It does not support other forms of comments (such as /*... or {{...}}).
@@ -879,7 +925,7 @@ class workspaceTools {
         $metafiles[] = "$tempDirectory/$filename";
       }
     }
-    
+
     CLI::logging("Found " . count($metafiles) . " workspace(s) in backup\n");
 
     foreach ($metafiles as $metafile) {
@@ -995,7 +1041,7 @@ class workspaceTools {
         throw new Exception('Could not connect to system database: ' . mysql_error());
 
       $newDBNames = $workspace->resetDBInfo($dbHost, $createWorkspace);
-      
+
       foreach ($metadata->databases as $db) {
         $dbName = $newDBNames[$db->name];
         CLI::logging("+> Restoring database {$db->name} to $dbName\n");
@@ -1003,7 +1049,7 @@ class workspaceTools {
         $workspace->createDBUser($dbName, $db->pass, "localhost", $dbName);
         $workspace->createDBUser($dbName, $db->pass, "%", $dbName);
       }
-      
+
       $workspace->upgradeCacheView(false);
 
       mysql_close($link);

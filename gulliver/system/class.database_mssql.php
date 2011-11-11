@@ -1,7 +1,7 @@
 <?php
 /**
  * class.database_mssql.php
- * @package gulliver.system 
+ * @package gulliver.system
  *
  * ProcessMaker Open Source Edition
  * Copyright (C) 2004 - 2011 Colosa Inc.
@@ -31,9 +31,9 @@
 G::LoadSystem('database_base');
 
 class database extends database_base {
-  
+
   public $iFetchType = MSSQL_ASSOC;
-  
+
   public function __construct($sType = DB_ADAPTER, $sServer = DB_HOST, $sUser = DB_USER, $sPass = DB_PASS, $sDataBase = DB_NAME) {
     $this->sType           = $sType;
     $this->sServer         = $sServer;
@@ -42,22 +42,23 @@ class database extends database_base {
     $this->sDataBase       = $sDataBase;
     $this->oConnection     = @mssql_connect($sServer, $sUser, $sPass) || null;
     $this->sQuoteCharacter = ' ';
+    $this->nullString      = 'NULL';
     $this->sQuoteCharacterBegin = '[';
     $this->sQuoteCharacterEnd   = ']';
   }
-  
 
-  
+
+
   public function generateCreateTableSQL($sTable, $aColumns) {
     $sKeys = '';
     $sSQL = 'CREATE TABLE  ' . $this->sQuoteCharacter . $sTable . $this->sQuoteCharacter . '(';
-    
+
     foreach ($aColumns as $sColumnName => $aParameters) {
       if ($sColumnName != 'INDEXES') {
-        
+
         if ( $sColumnName != '' && isset($aParameters['Type']) && $aParameters['Type'] != '' ){
           $sSQL .= $this->sQuoteCharacter . $sColumnName . $this->sQuoteCharacter . ' ' . $aParameters['Type'];
-          
+
           if ( isset($aParameters['Null']) && $aParameters['Null'] == 'YES') {
           $sSQL .= ' NULL';
         } else {
@@ -66,11 +67,11 @@ class database extends database_base {
         if ( isset($aParameters['Key']) && $aParameters['Key'] == 'PRI') {
           $sKeys .= $this->sQuoteCharacter . $sColumnName . $this->sQuoteCharacter . ',';
         }
-          
+
         if ( isset($aParameters['Default']) && $aParameters['Default'] != '' ) {
           $sSQL .= " DEFAULT '" . $aParameters['Default'] . "'";
         }
-          
+
         $sSQL .= ',';
         }
       }
@@ -80,22 +81,22 @@ class database extends database_base {
       $sSQL .= ',PRIMARY KEY(' . substr($sKeys, 0, -1) . ')';
     }
     $sSQL .= ')' . $this->sEndLine;
-    
+
     return $sSQL;
   }
-  
+
   public function generateDropTableSQL($sTable) {
     return 'DROP TABLE ' . $this->sQuoteCharacter . $sTable . $this->sQuoteCharacter . $this->sEndLine;
   }
 
   public function generateDropColumnSQL($sTable, $sColumn) {
-    // SQL Server first should remove the restriction before the Elimination of the field 
+    // SQL Server first should remove the restriction before the Elimination of the field
     $oConstraint = $this->dropFieldConstraint($sTable, $sColumn);
     $sSQL = 'ALTER TABLE ' . $this->sQuoteCharacter . $sTable . $this->sQuoteCharacter .
             ' DROP COLUMN ' . $this->sQuoteCharacter . $sColumn . $this->sQuoteCharacter . $this->sEndLine;
     return $sSQL;
   }
-  
+
   public function generateAddColumnSQL($sTable, $sColumn, $aParameters) {
     if ( isset($aParameters['Type']) && isset($aParameters['Null']) ) {
       $sDefault = "";
@@ -105,15 +106,15 @@ class database extends database_base {
         $sType = substr($sType, 0, strpos($sType,'('));
       }
       switch($sType) {
-        case 'VARCHAR' : 
-        case 'TEXT'    : $sDefault  = " DEFAULT '' "; 
+        case 'VARCHAR' :
+        case 'TEXT'    : $sDefault  = " DEFAULT '' ";
                          break;
         case 'DATE'    : $sDataType = " CHAR(19) ";
                          $sDefault  = " DEFAULT '0000-00-00' "; // The date data type to use char (19)
                          break;
-        case 'INT'     : 
+        case 'INT'     :
         case 'FLOAT'   : $sDataType = $sType;
-                         $sDefault  = " DEFAULT 0 "; 
+                         $sDefault  = " DEFAULT 0 ";
                          break;
       }
       $sSQL = "ALTER TABLE " . $this->sQuoteCharacter . $sTable . $this->sQuoteCharacter .
@@ -124,7 +125,7 @@ class database extends database_base {
       }
       else {
         $sSQL .= " NOT NULL " . $sDefault;
-        
+
       }
     }
     /*if ($aParameters['Key'] == 'PRI') {
@@ -182,7 +183,7 @@ class database extends database_base {
       if ( trim($aParameters['Default'] == '') && $aParameters['Type'] == 'datetime' ) {
         //do nothing
       }
-      else       
+      else
         $sSQL .= " DEFAULT '" . $aParameters['Default'] . "'";
       //}
     }
@@ -193,7 +194,7 @@ class database extends database_base {
     $sSQL .= $this->sEndLine;
     return $sSQL;
   }
-  
+
   public function generateGetPrimaryKeysSQL($sTable) {
     try {
       if ($sTable == '') {
@@ -206,7 +207,7 @@ class database extends database_base {
     }
   }
 
- /** 
+ /**
   * Get primary key
   * @parameter string $sTable
   * @return string $sPrimaryKey
@@ -221,19 +222,19 @@ class database extends database_base {
 	              " AND	CONSTRAINT_TYPE = 'PRIMARY KEY' " .
 	              " AND	c.TABLE_NAME = pk.TABLE_NAME " .
 	              " AND	c.CONSTRAINT_NAME = pk.CONSTRAINT_NAME ";
-        $oPrimaryKey = $this->executeQuery($sSQL); 
+        $oPrimaryKey = $this->executeQuery($sSQL);
         $aPrimaryKey = mssql_fetch_array($oPrimaryKey);
         mssql_free_result($oPrimaryKey);
         return $aPrimaryKey[0];
     } catch (Exception $oException) {
       throw $oException;
-    }    
+    }
   }
-  
- /** 
+
+ /**
   * Get Field Constraint
   * @parameter string $sTable
-  * @parameter string $sField 
+  * @parameter string $sField
   * @return string $sFieldConstraint
   */
   public function getFieldConstraint($sTable, $sField)
@@ -245,21 +246,21 @@ class database extends database_base {
                 " where a.xtype = 'D' " .
                 " and a.parent_obj = (select id from sysobjects where xtype = 'U' and name = '" . trim($sTable) . "') " .
                 " and b.name = '" . trim($sField) . "' ";
-        
-        $oFieldConstraint = $this->executeQuery($sSQL); 
+
+        $oFieldConstraint = $this->executeQuery($sSQL);
         $aFieldConstraint = mssql_fetch_array($oFieldConstraint);
         mssql_free_result($oFieldConstraint);
         return $aFieldConstraint[0];
     } catch (Exception $oException) {
       throw $oException;
-    }    
+    }
   }
-  
 
- /** 
+
+ /**
   * drop Field Constraint
   * @parameter string $sTable
-  * @parameter string $sField 
+  * @parameter string $sField
   * @return object $oFieldConstraint
   */
   public function dropFieldConstraint($sTable, $sField)
@@ -267,11 +268,11 @@ class database extends database_base {
     try {
         $sConstraint = $this->getFieldConstraint($sTable, $sField);
         $sSQL = "ALTER TABLE " . $sTable . " DROP CONSTRAINT " . $sConstraint . $this->sEndLine ;
-        $oFieldConstraint = $this->executeQuery($sSQL); 
+        $oFieldConstraint = $this->executeQuery($sSQL);
         return $oFieldConstraint;
     } catch (Exception $oException) {
       throw $oException;
-    }    
+    }
   }
 
 
@@ -288,7 +289,7 @@ class database extends database_base {
       throw $oException;
     }
   }
-  
+
   public function generateAddPrimaryKeysSQL($sTable, $aPrimaryKeys) {
     try {
       if ($sTable == '') {
@@ -306,7 +307,7 @@ class database extends database_base {
       throw $oException;
     }
   }
-  
+
   public function generateDropKeySQL($sTable, $sIndexName) {
     try {
       if ($sTable == '') {
@@ -341,15 +342,15 @@ class database extends database_base {
       throw $oException;
     }
   }
-  
+
   public function generateShowTablesSQL() {
     return 'SHOW TABLES' . $this->sEndLine;
   }
-  
+
   public function generateShowTablesLikeSQL($sTable) {
     return "SHOW TABLES LIKE '" . $sTable . "'" . $this->sEndLine;
   }
-  
+
   public function generateDescTableSQL($sTable) {
     try {
       if ($sTable == '') {
@@ -361,14 +362,14 @@ class database extends database_base {
       throw $oException;
     }
   }
-  
+
   public function generateTableIndexSQL($sTable) {
     return 'SHOW INDEX FROM ' . $this->sQuoteCharacter . $sTable . $this->sQuoteCharacter . " " . $this->sEndLine;
     //return 'SHOW INDEX FROM ' . $this->sQuoteCharacter . $sTable . $this->sQuoteCharacter . " WHERE Key_name <> 'PRIMARY'" . $this->sEndLine;
   }
 
-  public function isConnected() { 
-    if ( !$this->oConnection ) 
+  public function isConnected() {
+    if ( !$this->oConnection )
       return false;
     return $this->executeQuery( 'USE ' . $this->sDataBase );
   }
@@ -387,13 +388,13 @@ class database extends database_base {
       fclose ( $fp );
       }
     }
-    catch (Exception $oException) { 
+    catch (Exception $oException) {
     }
-  }  
-  
+  }
+
   public function executeQuery($sQuery) {
     $this->logQuery( $sQuery);
-    
+
     try {
       if ($this->oConnection) {
         @mssql_select_db($this->sDataBase);
@@ -404,25 +405,132 @@ class database extends database_base {
         throw new Exception('invalid connection to database ' . $this->sDataBase );
       }
     }
-    catch (Exception $oException) { 
+    catch (Exception $oException) {
       $this->logQuery( $oException->getMessage() );
       throw $oException;
     }
   }
-  
+
   public function countResults($oDataset) {
     return @mssql_num_rows($oDataset);
   }
-  
+
   public function getRegistry($oDataset) {
     return @mssql_fetch_array($oDataset, $this->iFetchType);
   }
-  
+
   public function close() {
     @mssql_close($this->oConnection);
   }
-  
 
+  public function generateInsertSQL($table, $data) {
+    $fields = array();
+    $values = array();
+    foreach ($data as $field) {
+      $fields[] = $field['field'];
+      if (!is_null($field['value'])) {
+        switch ($field['type']) {
+          case 'text':
+          case 'date':
+            $values[] = "'" . addslashes($field['value']) . "'";
+          break;
+          case 'int':
+          default:
+            $values[] = addslashes($field['value']);
+          break;
+        }
+      }
+      else {
+        $values[] = $this->nullString;
+      }
+    }
+    $fields = array_map(array($this, 'putQuotes'), $fields);
+    $sql = sprintf("INSERT INTO %s (%s) VALUES (%s)", $this->putQuotes($table), implode(', ', $fields), implode(', ', $values));
+    return $sql;
+  }
+
+  public function generateUpdateSQL($table, $keys, $data) {
+    $fields = array();
+    $where  = array();
+    foreach ($data as $field) {
+      if (!is_null($field['value'])) {
+        switch ($field['type']) {
+          case 'text':
+          case 'date':
+            $fields[] = $this->putQuotes($field['field']) . " = '" . addslashes($field['value']) . "'";
+          break;
+          case 'int':
+          default:
+            $fields[] = $this->putQuotes($field['field']) . " = " . addslashes($field['value']);
+          break;
+        }
+      }
+      else {
+        $values[] = $this->nullString;
+      }
+      if (in_array($field['field'], $keys)) {
+        $where[] = $fields[count($fields) - 1];
+      }
+    }
+    $sql = sprintf("UPDATE %s SET %s WHERE %s", $this->putQuotes($table), implode(', ', $fields), implode(', ', $where));
+    return $sql;
+  }
+
+  public function generateDeleteSQL($table, $keys, $data) {
+    $fields = array();
+    $where  = array();
+    foreach ($data as $field) {
+      if (in_array($field['field'], $keys)) {
+        if (!is_null($field['value'])) {
+          switch ($field['type']) {
+            case 'text':
+            case 'date':
+              $where[] = $this->putQuotes($field['field']) . " = '" . addslashes($field['value']) . "'";
+            break;
+            case 'int':
+            default:
+              $where[] = $this->putQuotes($field['field']) . " = " . addslashes($field['value']);
+            break;
+          }
+        }
+        else {
+          $values[] = $this->nullString;
+        }
+      }
+    }
+    $sql = sprintf("DELETE FROM %s WHERE %s", $this->putQuotes($table), implode(', ', $where));
+    return $sql;
+  }
+
+  public function generateSelectSQL($table, $keys, $data) {
+    $fields = array();
+    $where  = array();
+    foreach ($data as $field) {
+      if (in_array($field['field'], $keys)) {
+        if (!is_null($field['value'])) {
+          switch ($field['type']) {
+            case 'text':
+            case 'date':
+              $where[] = $this->putQuotes($field['field']) . " = '" . mysql_real_escape_string($field['value']) . "'";
+            break;
+            case 'int':
+            default:
+              $where[] = $this->putQuotes($field['field']) . " = " . mysql_real_escape_string($field['value']);
+            break;
+          }
+        }
+        else {
+          $values[] = $this->nullString;
+        }
+      }
+    }
+    $sql = sprintf("SELECT * FROM %s WHERE %s", $this->putQuotes($table), implode(', ', $where));
+    return $sql;
+  }
+
+  private function putQuotes($element) {
+    return $this->sQuoteCharacterBegin . $element . $this->sQuoteCharacterEnd;
+  }
 
  /*=================================================================================================*/
    /**
@@ -433,7 +541,7 @@ class database extends database_base {
    * date 2010-08-04
    *
    * @return string $sConcat
-   */ 
+   */
   function concatString()
   {
     $nums    = func_num_args();
@@ -449,7 +557,7 @@ class database extends database_base {
     return $sConcat;
   }
 
-  /* 
+  /*
    * query functions for class class.case.php
    *
    */
@@ -460,9 +568,9 @@ class database extends database_base {
    * @author Hector Cortez <hector@gmail.com>
    * date 2010-08-04
    *
-   * @return string $sCompare 
-   */ 
-  function getCaseWhen($compareValue, $trueResult, $falseResult) 
+   * @return string $sCompare
+   */
+  function getCaseWhen($compareValue, $trueResult, $falseResult)
   {
     $sCompare = " CASE WHEN " . $compareValue . " THEN " . $trueResult . " ELSE " . $falseResult . " END ";
     return $sCompare;
@@ -470,7 +578,7 @@ class database extends database_base {
 
   /**
    * Generates a string equivalent to create table ObjectPermission
-   * 
+   *
    * class.case.php
    * function verifyTable()
    *
@@ -479,28 +587,28 @@ class database extends database_base {
   function createTableObjectPermission()
   {
     $sql = "IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='OBJECT_PERMISSION' AND xtype='U')
-          CREATE TABLE OBJECT_PERMISSION ( 
-          OP_UID varchar(32) NOT NULL, 
-          PRO_UID varchar(32) NOT NULL, 
-          TAS_UID varchar(32) NOT NULL, 
-          USR_UID varchar(32) NOT NULL, 
-          OP_USER_RELATION int NOT NULL default '1', 
-          OP_TASK_SOURCE varchar(32) NOT NULL, 
-          OP_PARTICIPATE int NOT NULL default '1', 
-          OP_OBJ_TYPE varchar(15) NOT NULL default 'ANY', 
-          OP_OBJ_UID varchar(32) NOT NULL, 
-          OP_ACTION varchar(10) NOT NULL default 'VIEW', 
+          CREATE TABLE OBJECT_PERMISSION (
+          OP_UID varchar(32) NOT NULL,
+          PRO_UID varchar(32) NOT NULL,
+          TAS_UID varchar(32) NOT NULL,
+          USR_UID varchar(32) NOT NULL,
+          OP_USER_RELATION int NOT NULL default '1',
+          OP_TASK_SOURCE varchar(32) NOT NULL,
+          OP_PARTICIPATE int NOT NULL default '1',
+          OP_OBJ_TYPE varchar(15) NOT NULL default 'ANY',
+          OP_OBJ_UID varchar(32) NOT NULL,
+          OP_ACTION varchar(10) NOT NULL default 'VIEW',
           CONSTRAINT PK_PRO_UID PRIMARY KEY CLUSTERED (PRO_UID, TAS_UID,USR_UID, OP_TASK_SOURCE, OP_OBJ_UID)  )";
     return $sql;
-  } 
-  
-  /* 
+  }
+
+  /*
    * query functions for class class.report.php
    *
    */
   /**
    * Generates a string query
-   * 
+   *
    * class.report.php
    * function generatedReport4()
    *
@@ -508,10 +616,10 @@ class database extends database_base {
    */
   function getSelectReport4()
   {
-      
+
       $sqlConcat   = " U.USR_LASTNAME + ' ' + USR_FIRSTNAME AS [USER] ";
       $sqlGroupBy  = " U.USR_LASTNAME + ' ' + USR_FIRSTNAME ";
-      
+
       $sql = "SELECT " . $sqlConcat .  ", " .
              "  COUNT(*) AS CANTCASES,
                 MIN(AD.DEL_DURATION) AS MIN,
@@ -523,20 +631,20 @@ class database extends database_base {
                 LEFT JOIN USERS AS U ON(U.USR_UID = A.APP_INIT_USER)
                 WHERE A.APP_UID<>''
                 GROUP BY " . $sqlGroupBy;
-                
+
     return $sql;
-    
+
   }
 
   /**
    * Generates a string query
-   * 
+   *
    * class.report.php
    * function generatedReport4_filter()
    *
    * @return string $sql
    */
-  function getSelectReport4Filter($var) 
+  function getSelectReport4Filter($var)
   {
     $sqlConcat   = " U.USR_LASTNAME + ' ' + USR_FIRSTNAME AS [USER] ";
     $sqlGroupBy  = " U.USR_LASTNAME + ' ' + USR_FIRSTNAME ";
@@ -554,12 +662,12 @@ class database extends database_base {
              GROUP BY " . $sqlGroupBy;
 
     return $sql;
-    
+
   }
-  
+
   /**
    * Generates a string query
-   * 
+   *
    * class.report.php
    * function generatedReport5()
    *
@@ -582,20 +690,20 @@ class database extends database_base {
               LEFT JOIN USERS AS U ON(U.USR_UID = AD.USR_UID)
               WHERE AD.APP_UID<>'' AND AD.DEL_FINISH_DATE IS NULL
               GROUP BY " . $sqlGroupBy;
-              
+
     return $sql;
-    
+
   }
-  
+
   /**
    * Generates a string query
-   * 
+   *
    * class.report.php
    * function generatedReport5_filter()
    *
    * @return string $sql
    */
-  function getSelectReport5Filter($var) 
+  function getSelectReport5Filter($var)
   {
 
     $sqlConcat   = " U.USR_LASTNAME + ' ' + USR_FIRSTNAME AS [USER] ";
@@ -615,19 +723,19 @@ class database extends database_base {
 
     return $sql;
   }
-  
-  /* 
+
+  /*
    * query functions for class class.net.php
    *
    */
   function getServerVersion($driver, $dbIP, $dbPort, $dbUser, $dbPasswd, $dbSourcename)
   {
-    
+
     if(strlen(trim($dbIP))<=0)
       $dbIP = DB_HOST;
     if($link = @mssql_connect($dbIP, $dbUser, $dbPasswd)){
       @mssql_select_db( DB_NAME, $link );
-      $oResult = @mssql_query("select substring(@@version, 21, 6) + ' (' + CAST(SERVERPROPERTY ('productlevel') as varchar(10)) + ') ' + CAST(SERVERPROPERTY('productversion') AS VARCHAR(15)) + ' ' + CAST(SERVERPROPERTY ('edition') AS VARCHAR(25)) as version; ", $link); 
+      $oResult = @mssql_query("select substring(@@version, 21, 6) + ' (' + CAST(SERVERPROPERTY ('productlevel') as varchar(10)) + ') ' + CAST(SERVERPROPERTY('productversion') AS VARCHAR(15)) + ' ' + CAST(SERVERPROPERTY ('edition') AS VARCHAR(25)) as version; ", $link);
       $aResult = @mssql_fetch_array($oResult);
       @mssql_free_result($oResult);
       $v = $aResult[0];
@@ -635,11 +743,11 @@ class database extends database_base {
       throw new Exception(@mssql_error($link));
     }
     return (isset($v))?$v:'none';
-    
+
   }
-  
-  
-    /* 
+
+
+    /*
    * query functions for class class.net.php
    *
    */
@@ -648,9 +756,9 @@ class database extends database_base {
     $sql =  "IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='" . $sTableName . "' AND xtype='U') " .
             "DROP TABLE ['" . $sTableName . "']";
     return $sql;
-  }    
-  
-  
+  }
+
+
   function getTableDescription($sTableName)
   {
     $sql = " select column_name as Field,
@@ -673,7 +781,7 @@ class database extends database_base {
           " Order by Ordinal_Position asc ";
     return $sql;
   }
-  
+
   function getFieldNull()
   {
     $fieldName = "AsNull";
@@ -696,10 +804,10 @@ class database extends database_base {
     $oConnection = mssql_connect(DB_HOST, DB_USER, DB_PASS);
     mssql_select_db(DB_NAME);
     $oDataset = mssql_query('SELECT COUNT(*) FROM REPORT_TABLE') || ($bExists = false);
-    
+
     return $bExists;
   }
- 
+
   /**
    * It is part of class.pagedTable.php
    */
@@ -708,11 +816,11 @@ class database extends database_base {
     $sql = "";
     return $sql;
   }
-  
+
   /**
    * Determining the existence of a table
    */
-  function tableExists ($table, $db) { 
+  function tableExists ($table, $db) {
     $sql = "SELECT * FROM sysobjects WHERE name='" . $table . "' AND type='u'";
     $bExists  = true;
     $oConnection = mssql_connect(DB_HOST, DB_USER, DB_PASS);
@@ -720,5 +828,5 @@ class database extends database_base {
     $oDataset = mssql_query($sql) || ($bExists = false);
     return $bExists;
   }
-  
+
 }
