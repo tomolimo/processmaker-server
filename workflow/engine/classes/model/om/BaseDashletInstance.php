@@ -928,7 +928,7 @@ abstract class BaseDashletInstance extends BaseObject  implements Persistent {
 	 */
 	public function getByName($name, $type = BasePeer::TYPE_PHPNAME)
 	{
-		$pos = DashletInstancePeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);var_dump($name,$pos);die();
+		$pos = DashletInstancePeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
 		return $this->getByPosition($pos);
 	}
 
