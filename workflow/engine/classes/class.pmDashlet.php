@@ -12,6 +12,19 @@ class PMDashlet extends DashletInstance implements DashletInterface {
 
   // Interface functions
 
+  public static function getAdditionalFields() {
+    try {
+      //Change this in the next release
+      $className = 'dashletOpenVSCompleted';
+      G::LoadClass($className);
+      eval("\$additionalFields = $className::getAdditionalFields();");
+      return $additionalFields;
+    }
+    catch (Exception $error) {die('xxx');
+      throw $error;
+    }
+  }
+
   public function setup($dasInsUid) {
     try {
       $this->dashletInstance = $this->loadDashletInstance($dasInsUid);
@@ -30,17 +43,6 @@ class PMDashlet extends DashletInstance implements DashletInterface {
         throw new Exception('Please call to the function "setup" before call the function "render".');
       }
       $this->dashletObject->render($width);
-    }
-    catch (Exception $error) {
-      throw $error;
-    }
-  }
-
-  public function getAdditionalFields() {
-    try {
-      //Change this in the next release
-      G::LoadClass('dashletOpenVSCompleted');
-      return dashletOpenVSCompleted::getAdditionalFields();
     }
     catch (Exception $error) {
       throw $error;

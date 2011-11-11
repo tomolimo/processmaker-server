@@ -118,7 +118,9 @@ dashletInstance.form = {
             cboDasInsOwnerUID.setValue(dashletInstance.DAS_INS_OWNER_UID);
           }
           else {
-            cboDasInsOwnerUID.setValue(store.getAt(0).get(cboDasInsOwnerUID.valueField));
+            if (store.getAt(0)) {
+              cboDasInsOwnerUID.setValue(store.getAt(0).get(cboDasInsOwnerUID.valueField));
+            }
           }
         }
       }
@@ -243,7 +245,8 @@ dashletInstance.form = {
                                             "type": combo.getValue()
                                            };
           cboDasInsOwnerUID.store.removeAll();
-          cboDasInsOwnerUID.store.load();
+          cboDasInsOwnerUID.clearValue();
+          cboDasInsOwnerUID.store.reload();
         }
       }
     });
@@ -261,7 +264,8 @@ dashletInstance.form = {
       editable: false,
 
       width: 200,
-      fieldLabel: "Name"
+      fieldLabel: "Name",
+      allowBlank: false
     });
 
     var cboProcess = new Ext.form.ComboBox({
@@ -333,9 +337,13 @@ dashletInstance.form = {
                   id:   "btnSubmit",
 
                   text: "Save",
-                  //scope: this,
                   handler: function () {
-                    dashletInstanceSaveProcessAjax();
+                    if (dashletInstanceFrm.getForm().isValid()) {
+                      dashletInstanceSaveProcessAjax();
+                    }
+                    else {
+                      Ext.MessageBox.alert('Invalid data', 'Please check the fields mark in red.');
+                    }
                   }
                 }),
 
