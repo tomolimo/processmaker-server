@@ -9,7 +9,7 @@ if(isset($_GET['action'])){
 }
 
 $oHeadPublisher =& headPublisher::getSingleton();
-
+global $RBAC;
 switch($page){
     case "startCase":
 
@@ -30,7 +30,10 @@ switch($page){
         $Config['pageSize'] = isset($configPage['pageSize']) ? $configPage['pageSize'] : 20;
         $oHeadPublisher->assign('CONFIG', $Config);
         $oHeadPublisher->assign('FORMATS',$c->getFormats());
-        
+
+        $oHeadPublisher->assign('permitodelete'   ,$RBAC->userCanAccess('PM_FOLDERS_DELETE')    );
+        $oHeadPublisher->assign('permitoaddfile'  ,$RBAC->userCanAccess('PM_FOLDERS_ADD_FILE')  );
+        $oHeadPublisher->assign('permitoaddfolder',$RBAC->userCanAccess('PM_FOLDERS_ADD_FOLDER'));
 
         $oHeadPublisher->usingExtJs('ux.locationbar/Ext.ux.LocationBar');
         $oHeadPublisher->usingExtJs('ux.statusbar/ext-statusbar');
