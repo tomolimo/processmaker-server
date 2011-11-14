@@ -4,42 +4,102 @@ require_once 'interfaces/dashletInterface.php';
 
 class dashletOpenVSCompleted implements DashletInterface {
 
-  function setup($config) {
-/*
-Array
-(
-    [DAS_UID] => 00000000000000000000000000000001
-    [DAS_CLASS] => dashletOpenVSCompleted
-    [DAS_TITLE] => Open Cases VS Complete Cases
-    [DAS_DESCRIPTION] => Open Cases VS Complete Cases
-    [DAS_VERSION] => 1.0
-    [DAS_CREATE_DATE] => 2011-10-28 00:00:00
-    [DAS_UPDATE_DATE] => 2011-10-28 00:00:00
-    [DAS_STATUS] => 1
-    [DAS_INS_UID] => 00000000000000000000000000000001
-    [DAS_INS_TYPE] => OPEN_CASES
-    [DAS_INS_CONTEXT_TIME] => MONTH
-    [DAS_INS_START_DATE] => 
-    [DAS_INS_END_DATE] => 
-    [DAS_INS_OWNER_TYPE] => DEPARTMENT
-    [DAS_INS_OWNER_UID] => 2502663244e6f5e1e3c2254024148892
-    [DAS_INS_PROCESSES] => 
-    [DAS_INS_TASKS] => 
-    [DAS_INS_ADDITIONAL_PROPERTIES] => 
-    [DAS_INS_CREATE_DATE] => 2011-10-28 00:00:00
-    [DAS_INS_UPDATE_DATE] => 2011-10-28 00:00:00
-    [DAS_INS_STATUS] => 1
-)
-*/
-    
-    //$this->w = $config['w'];
-    //loadData
+  private $value;
+  private $open;
+  private $completed;
+  private $centerLabel;
+  private $redFrom;
+  private $redTo;
+  private $yellowFrom;
+  private $yellowTo;
+  private $greenFrom;
+  private $greenTo;
+
+  public static function getAdditionalFields() {
+    $additionalFields = array();
+
+    $redFrom = new stdclass();
+    $redFrom->xtype = 'numberfield';
+    $redFrom->name = 'DAS_RED_FROM';
+    $redFrom->fieldLabel = 'Red Starts In';
+    $redFrom->width = 50;
+    $redFrom->maxLength = 3;
+    $redFrom->maxValue = 100;
+    $redFrom->minValue = 0;
+    $redFrom->allowBlank = false;
+    $additionalFields[] = $redFrom;
+
+    $redTo = new stdclass();
+    $redTo->xtype = 'numberfield';
+    $redTo->name = 'DAS_RED_TO';
+    $redTo->fieldLabel = 'Red Ends In';
+    $redTo->width = 50;
+    $redTo->maxLength = 3;
+    $redTo->maxValue = 100;
+    $redTo->minValue = 0;
+    $redTo->allowBlank = false;
+    $additionalFields[] = $redTo;
+
+    $yellowFrom = new stdclass();
+    $yellowFrom->xtype = 'numberfield';
+    $yellowFrom->name = 'DAS_YELLOW_FROM';
+    $yellowFrom->fieldLabel = 'Yellow Starts In';
+    $yellowFrom->width = 50;
+    $yellowFrom->maxLength = 3;
+    $yellowFrom->maxValue = 100;
+    $yellowFrom->minValue = 0;
+    $yellowFrom->allowBlank = false;
+    $additionalFields[] = $yellowFrom;
+
+    $yellowTo = new stdclass();
+    $yellowTo->xtype = 'numberfield';
+    $yellowTo->name = 'DAS_YELLOW_TO';
+    $yellowTo->fieldLabel = 'Yellow Ends In';
+    $yellowTo->width = 50;
+    $yellowTo->maxLength = 3;
+    $yellowTo->maxValue = 100;
+    $yellowTo->minValue = 0;
+    $yellowTo->allowBlank = false;
+    $additionalFields[] = $yellowTo;
+
+    $greenFrom = new stdclass();
+    $greenFrom->xtype = 'numberfield';
+    $greenFrom->name = 'DAS_GREEN_FROM';
+    $greenFrom->fieldLabel = 'Green Starts In';
+    $greenFrom->width = 50;
+    $greenFrom->maxLength = 3;
+    $greenFrom->maxValue = 100;
+    $greenFrom->minValue = 0;
+    $greenFrom->allowBlank = false;
+    $additionalFields[] = $greenFrom;
+
+    $greenTo = new stdclass();
+    $greenTo->xtype = 'numberfield';
+    $greenTo->name = 'DAS_GREEN_TO';
+    $greenTo->fieldLabel = 'Green Ends In';
+    $greenTo->width = 50;
+    $greenTo->maxLength = 3;
+    $greenTo->maxValue = 100;
+    $greenTo->minValue = 0;
+    $greenTo->allowBlank = false;
+    $additionalFields[] = $greenTo;
+
+    return $additionalFields;
+  }
+
+  public function setup($config) {
+    $this->redFrom    = isset($config['DAS_RED_FROM']) ? (int) $config['DAS_RED_FROM'] : 0;
+    $this->redTo      = isset($config['DAS_RED_TO']) ? (int) $config['DAS_RED_TO'] : 30;
+    $this->yellowFrom = isset($config['DAS_YELLOW_FROM']) ? (int) $config['DAS_YELLOW_FROM'] : 30;
+    $this->yellowTo   = isset($config['DAS_YELLOW_TO']) ? (int) $config['DAS_YELLOW_TO'] : 50;
+    $this->greenFrom  = isset($config['DAS_GREEN_FROM']) ? (int) $config['DAS_GREEN_FROM'] : 50;
+    $this->greenTo    = isset($config['DAS_GREEN_TO']) ? (int) $config['DAS_GREEN_TO'] : 100;
+
     $thisYear = date('Y');
     $lastYear = $thisYear -1;
     $thisMonth = date('M');
     $lastMonth = date('M', strtotime( "31 days ago") );
-//print "$thisMonth $lastMonth"; die;
-    
+
     $todayIni        = date('Y-m-d H:i:s', strtotime( "today 00:00:00"));
     $todayEnd        = date('Y-m-d H:i:s', strtotime( "today 23:59:59"));
     $yesterdayIni    = date('Y-m-d H:i:s', strtotime( "yesterday 00:00:00"));
@@ -60,17 +120,15 @@ Array
     $previousYearIni = date('Y-m-d H:i:s', strtotime( "jan $lastYear 00:00:00"));
     $previousYearEnd = date('Y-m-d H:i:s', strtotime( "Dec 31 $lastYear 23:59:59"));
 
-    switch ( $config['DAS_INS_CONTEXT_TIME'] ) { 
+    switch ( $config['DAS_INS_CONTEXT_TIME'] ) {
       case 'TODAY'            : $dateIni = $todayIni;        $dateEnd = $todayEnd;        break;
       case 'YESTERDAY'        : $dateIni = $yesterdayIni;    $dateEnd = $yesterdayEnd;    break;
       case 'THIS_WEEK'        : $dateIni = $thisWeekIni;     $dateEnd = $thisWeekEnd;     break;
       case 'PREVIOUS_WEEK'    : $dateIni = $previousWeekIni; $dateEnd = $previousWeekEnd; break;
-
       case 'THIS_MONTH'       : $dateIni = $todayIni; $dateEnd = $todayEnd;     break;
       case 'PREVIOUS_MONTH'   : $dateIni = $todayIni; $dateEnd = $todayEnd;     break;
       case 'THIS_QUARTER'     : $dateIni = $todayIni; $dateEnd = $todayEnd;     break;
       case 'PREVIOUS_QUARTER' : $dateIni = $todayIni;   $dateEnd = $todayEnd;     break;
-
       case 'THIS_YEAR'        : $dateIni = $thisYearIni; $dateEnd = $thisYearEnd;     break;
       case 'PREVIOUS_YEAR'    : $dateIni = $previousYearIni; $dateEnd = $previousYearEnd;     break;
     }
@@ -91,7 +149,7 @@ Array
     $rs->next();
     $row = $rs->getRow();
     $casesCompleted = $row['CANT'];
-    if ( $casesCompleted + $casesTodo != 0 ) { 
+    if ( $casesCompleted + $casesTodo != 0 ) {
       $this->value = $casesCompleted / ($casesCompleted + $casesTodo)*100;
     }
     else {
@@ -99,7 +157,7 @@ Array
     }
     $this->open      = $casesCompleted;
     $this->completed = $casesCompleted + $casesTodo;
-    switch ( $config['DAS_INS_CONTEXT_TIME'] ) { 
+    switch ( $config['DAS_INS_CONTEXT_TIME'] ) {
       case 'TODAY'            : $this->centerLabel = 'Today';            break;
       case 'YESTERDAY'        : $this->centerLabel = 'Yesterday';        break;
       case 'THIS_WEEK'        : $this->centerLabel = 'This week';        break;
@@ -115,29 +173,22 @@ Array
     return true;
   }
 
-  function render ($width = 300) {
+  public function render ($width = 300) {
     G::LoadClass('pmGauge');
     $g = new pmGauge();
     $g->w = $width;
     $g->value = $this->value;
-    $g->maxValue   = 100;
-    $g->greenFrom  = 90;
-    $g->greenTo    = 100;
-    $g->yellowFrom = 70;
-    $g->yellowTo   = 90;
-    $g->redFrom    = 100;
-    $g->redTo      = 100;
 
-    $g->greenFrom  = 50;
-    $g->greenTo    = 100;
-    $g->yellowFrom = 30;
-    $g->yellowTo   = 50;
-    $g->redFrom    = 0;
-    $g->redTo      = 30;
+    $g->redFrom    = $this->redFrom;
+    $g->redTo      = $this->redTo;
+    $g->yellowFrom = $this->yellowFrom;
+    $g->yellowTo   = $this->yellowTo;
+    $g->greenFrom  = $this->greenFrom;
+    $g->greenTo    = $this->greenTo;
 
     $g->centerLabel = $this->centerLabel;
-    $g->open      = $this->open;
-    $g->completed = $this->completed;
+    $g->open        = $this->open;
+    $g->completed   = $this->completed;
     $g->render();
   }
 

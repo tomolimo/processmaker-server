@@ -302,40 +302,49 @@ class Installer
    * @param   string  $file
    * @param   string  $connection
    * @return  array   $report
-   */  
+   */
   public function query_sql_file($file, $connection)
   {
-    $report = array(
-      'SQL_FILE' => $file,
-      'queries'   => 0
-    );
+    $lines = file($file);
+    $previous = NULL;
+    $errors = '';
     
-    if( !is_file($file) ) {
-      $report['errors']="Error reading SQL";
-      return $report;
-    }
-    $content = file_get_contents($file);
-    $ret     = explode(';', $content);
-
-    /* Count successful queries only */
-    $report['queries'] = 0;
-    @mysql_query("SET NAMES 'utf8';");
-
-    foreach($ret as $i => $qr) {
-      /* Make sure we have a query to execute, then execute it */
-      if (trim($qr) != "") {
-          if(!@mysql_query($qr, $connection)) {
-              if (!array_key_exists('errors', $report))
-                $report['errors'] = array();
-              $report['errors'][] = "Error in query ".$i.": ".mysql_error();
-          } else {
-              $report['queries'] += 1;
-          }
+    foreach ($lines as $j => $line) {
+      $line = trim($line); // Remove comments from the script
+      
+      if (strpos($line, "--") === 0) {
+        $line = substr($line, 0, strpos($line, "--"));
       }
-    }
-    return $report;
+
+      if (empty($line)) {
+        continue;
+      }
+
+      if (strpos($line, "#") === 0) {
+        $line = substr($line, 0, strpos($line, "#"));
+      }
+
+      if (empty($line)) {
+        continue;
+      }
+
+      // Concatenate the previous line, if any, with the current
+      if ($previous) {
+        $line = $previous . " " . $line;
+      }
+      $previous = NULL;
+      
+      // If the current line doesnt end with ; then put this line together
+      // with the next one, thus supporting multi-line statements.
+      if (strrpos($line, ";") != strlen($line) - 1) {
+        $previous = $line;
+        continue;
+      }
+      
+      $line = substr($line, 0, strrpos($line, ";"));
+      @mysql_query($line, $connection);
+    } 
   }
-  
 
   /**
    * check_path

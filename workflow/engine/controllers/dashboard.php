@@ -46,7 +46,7 @@ class Dashboard extends Controller {
       else {
         $width = $_REQUEST['w'];
       }
-      $this->pmDashlet->render( $width);
+      $this->pmDashlet->render($width);
     }
     catch (Exception $error) {
       //ToDo: Render a image with the error message
@@ -109,10 +109,13 @@ class Dashboard extends Controller {
         $data->DAS_INS_UID = '';
       }
       if ($data->DAS_INS_UID != '') {
-        $this->setJSVar('dashletInstance', $this->pmDashlet->getDashletInstance($data->DAS_INS_UID));
+        $this->pmDashlet->setup($data->DAS_INS_UID);
+        $this->setJSVar('dashletInstance', $this->pmDashlet->getDashletInstance());
+        $this->setJSVar('additionaFields', $this->pmDashlet->getAdditionalFields());
       }
       else {
         $this->setJSVar('dashletInstance', new stdclass());
+        $this->setJSVar('additionaFields', $this->pmDashlet->getAdditionalFields());
       }
       G::RenderPage('publish', 'extJs');
       return null;
@@ -157,12 +160,91 @@ class Dashboard extends Controller {
     return $result;
   }
 
-  public function getOwnersByType($type) {
+  public function getOwnersByType($data) {
     $this->setResponseType('json');
     $result = new stdclass();
     $result->status = 'OK';
     try {
-      //ToDo: For the next release
+      switch ($data->type) {
+        case 'USER':
+          require_once 'classes/model/Users.php';
+
+          $users = array();
+
+          $usersInstance = new Users();
+          $allUsers = $usersInstance->getAll();
+          foreach ($allUsers->data as $user) {
+            $users[] = array('OWNER_UID' => $user['USR_UID'], 'OWNER_NAME' => $user['USR_FIRSTNAME'] . ' ' . $user['USR_LASTNAME']);
+          }
+
+          $result->total = $allUsers->totalCount;
+          $result->owners = $users;
+        break;
+        case 'DEPARTMENT':
+          require_once 'classes/model/Department.php';
+          require_once 'classes/model/Content.php';
+
+          $departments = array();
+          //SELECT
+          $criteria = new Criteria('workflow');
+          $criteria->setDistinct();
+          $criteria->addSelectColumn(DepartmentPeer::DEP_UID);
+          $criteria->addSelectColumn(ContentPeer::CON_VALUE);
+          //FROM
+          $conditions   = array();
+          $conditions[] = array(DepartmentPeer::DEP_UID, ContentPeer::CON_ID);
+          $conditions[] = array(ContentPeer::CON_CATEGORY, DBAdapter::getStringDelimiter() . 'DEPO_TITLE' . DBAdapter::getStringDelimiter());
+          $conditions[] = array(ContentPeer::CON_LANG, DBAdapter::getStringDelimiter() . 'en' . DBAdapter::getStringDelimiter());
+          $criteria->addJoinMC($conditions, Criteria::LEFT_JOIN);
+          //WHERE
+          $criteria->add(DepartmentPeer::DEP_STATUS, 'ACTIVE');
+          //ORDER BY
+          $criteria->addAscendingOrderByColumn(ContentPeer::CON_VALUE);
+
+          $dataset = DepartmentPeer::doSelectRS($criteria);
+          $dataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+          $dataset->next();
+          while ($row = $dataset->getRow()) {
+            $departments[] = array('OWNER_UID' => $row['DEP_UID'], 'OWNER_NAME' => $row['CON_VALUE']);
+            $dataset->next();
+          }
+
+          $result->total = DepartmentPeer::doCount($criteria);
+          $result->owners = $departments;
+        break;
+        case 'GROUP':
+          require_once 'classes/model/Groupwf.php';
+          require_once 'classes/model/Content.php';
+
+          $groups = array();
+          //SELECT
+          $criteria = new Criteria('workflow');
+          $criteria->setDistinct();
+          $criteria->addSelectColumn(GroupwfPeer::GRP_UID);
+          $criteria->addSelectColumn(ContentPeer::CON_VALUE);
+          //FROM
+          $conditions   = array();
+          $conditions[] = array(GroupwfPeer::GRP_UID, ContentPeer::CON_ID);
+          $conditions[] = array(ContentPeer::CON_CATEGORY, DBAdapter::getStringDelimiter() . 'GRP_TITLE' . DBAdapter::getStringDelimiter());
+          $conditions[] = array(ContentPeer::CON_LANG, DBAdapter::getStringDelimiter() . 'en' . DBAdapter::getStringDelimiter());
+          $criteria->addJoinMC($conditions, Criteria::LEFT_JOIN);
+          //WHERE
+          $criteria->add(GroupwfPeer::GRP_STATUS, 'ACTIVE');
+          //ORDER BY
+          $criteria->addAscendingOrderByColumn(ContentPeer::CON_VALUE);
+
+          $dataset = GroupwfPeer::doSelectRS($criteria);
+          $dataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+          $dataset->next();
+          while ($row = $dataset->getRow()) {
+            $groups[] = array('OWNER_UID' => $row['GRP_UID'], 'OWNER_NAME' => $row['CON_VALUE']);
+            $dataset->next();
+          }
+
+          $result->total = GroupwfPeer::doCount($criteria);
+          $result->owners = $groups;
+        break;
+      }
     }
     catch (Exception $error) {
       $result->status = 'ERROR';
@@ -171,130 +253,38 @@ class Dashboard extends Controller {
     return $result;
   }
 
+  public function getDashlets($data) {
+    $this->setResponseType('json');
+    $result = new stdclass();
+    $result->status = 'OK';
+    try {
+      require_once 'classes/model/Dashlet.php';
+
+      $dashlets = array();
+
+      //SELECT
+      $criteria = new Criteria('workflow');
+      $criteria->addSelectColumn(DashletPeer::DAS_UID);
+      $criteria->addSelectColumn(DashletPeer::DAS_TITLE);
+      //ORDER BY
+      $criteria->addAscendingOrderByColumn(DashletPeer::DAS_TITLE);
+
+      $dataset = DashletPeer::doSelectRS($criteria);
+      $dataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+      $dataset->next();
+      while ($row = $dataset->getRow()) {
+        $dashlets[] = array('DAS_UID' => $row['DAS_UID'], 'DAS_TITLE' => $row['DAS_TITLE']);
+        $dataset->next();
+      }
+      $result->total = DashletPeer::doCount($criteria);
+      $result->dashlets = $dashlets;
+    }
+    catch (Exception $oException) {
+      $result->status = 'ERROR';
+      $result->message = $error->getMessage();
+    }
+    return $result;
+  }
+
   // Functions for the dasboards administration module - End
-
-  public function ownerData($data)
-  {  try {
-       require_once ("classes/model/Content.php");
-
-       require_once ("classes/model/Users.php");
-       require_once ("classes/model/Department.php");
-
-       G::LoadInclude("ajax");
-  
-       //$option = $_POST["option"];
-       //$option = get_ajax_value("option");
-  
-       $type = $data->type;
-                      
-       switch ($type) {
-         case "USER": //
-                      break;
-                        
-         case "DEPARTMENT": $department = array();
-                    
-                            $oCriteria = new Criteria("workflow");
-                            $del = DBAdapter::getStringDelimiter();
-
-                            /*
-                            SELECT
-                              DISTINCT
-                              DEPARTMENT.DEP_UID,
-                              CONTENT.CON_VALUE
-                            FROM
-                              DEPARTMENT AS DEP
-                              LEFT JOIN CONTENT ON (DEPARTMENT.DEP_UID = CONTENT.CON_ID AND CONTENT.CON_CATEGORY = 'DYN_TITLE' AND CONTENT.CON_LANG = 'en')
-                            WHERE
-                              DEPARTMENT.DEP_STATUS = 'ACTIVE'
-                            ORDER BY CONTENT.CON_VALUE ASC
-                            */
-
-                            //SELECT
-                            $oCriteria->setDistinct();
-                            $oCriteria->addSelectColumn(DepartmentPeer::DEP_UID);
-                            $oCriteria->addSelectColumn(ContentPeer::CON_VALUE);
-                            //FROM
-                            $aConditions   = array();
-                            $aConditions[] = array(DepartmentPeer::DEP_UID, ContentPeer::CON_ID);
-                            $aConditions[] = array(ContentPeer::CON_CATEGORY, $del . "DEPO_TITLE" . $del);
-                            $aConditions[] = array(ContentPeer::CON_LANG, $del . "en" . $del);
-                            $oCriteria->addJoinMC($aConditions, Criteria::LEFT_JOIN);
-                            //WHERE
-                            $oCriteria->add(DepartmentPeer::DEP_STATUS, "ACTIVE");
-                            //ORDER BY X ASC
-                            $oCriteria->addAscendingOrderByColumn(ContentPeer::CON_VALUE);
-                            
-                            $departmentNumRows = DepartmentPeer::doCount($oCriteria);
-                    
-                            $oDataset = DepartmentPeer::doSelectRS($oCriteria);
-                            $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-
-                            while ($oDataset->next()) {
-                              $row = $oDataset->getRow();
-
-                              $departmentUID = $row["DEP_UID"];
-                              $depName = $row["CON_VALUE"];
-                      
-                              $department[] = array("TABLE_UID" => $departmentUID, "TABLE_NAME" => $depName);
-                            }
-                    
-                            echo G::json_encode(array("success" => true, "resultTotal" => $departmentNumRows, "resultRoot" => $department));
-                            break;
-       }
-     }
-     catch (Exception $oException) {
-       echo $oException->getMessage();
-       exit(0);
-     }
-  }
-  
-  public function dashletData($data)
-  {  try {
-       require_once ("classes/model/Dashlet.php");
-
-       G::LoadInclude("ajax");
-  
-       //$option = $_POST["option"];
-       //$option = get_ajax_value("option");
-       
-       $dashlet = array();
-                    
-       $oCriteria = new Criteria("workflow");
-
-       //SELECT
-       //$oCriteria->setDistinct();
-       $oCriteria->addSelectColumn(DashletPeer::DAS_UID);
-       $oCriteria->addSelectColumn(DashletPeer::DAS_TITLE);
-       //FROM
-       //WHERE
-       //ORDER BY X ASC
-       $oCriteria->addAscendingOrderByColumn(DashletPeer::DAS_TITLE);
-    
-       //echo "<hr />" . $oCriteria->toString() . "<hr />";
-    
-       //query
-       //doCount(Criteria $criteria, $distinct = false, $con = null)
-       $dashletNumRows = DashletPeer::doCount($oCriteria);
-       
-       $oDataset = DashletPeer::doSelectRS($oCriteria);
-       $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-
-       while ($oDataset->next()) {
-         $row = $oDataset->getRow();
-
-         $dashletUID   = $row["DAS_UID"];
-         $dashTitle = $row["DAS_TITLE"];
-         
-         $dashlet[] = array("DAS_UID" => $dashletUID, "DAS_TITLE" => $dashTitle);
-       }
-       
-       //echo "{users: " . G::json_encode($rows) . ", total_users: " . $totalRows . "}";
-       //echo json_encode(array("success" => true, "resultTotal" => $dashletNumRows, "resultRoot" => $dashlet));
-       echo G::json_encode(array("success" => true, "resultTotal" => $dashletNumRows, "resultRoot" => $dashlet));
-     }
-     catch (Exception $oException) {
-       echo $oException->getMessage();
-       exit(0);
-     }
-  }
 }

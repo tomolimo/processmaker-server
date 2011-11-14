@@ -7,16 +7,30 @@ require_once 'model/DashletInstance.php';
 class PMDashlet extends DashletInstance implements DashletInterface {
 
   // Own properties
+  private $dashletInstance;
   private $dashletObject;
 
   // Interface functions
 
+  public static function getAdditionalFields() {
+    try {
+      //Change this in the next release
+      $className = 'dashletOpenVSCompleted';
+      G::LoadClass($className);
+      eval("\$additionalFields = $className::getAdditionalFields();");
+      return $additionalFields;
+    }
+    catch (Exception $error) {die('xxx');
+      throw $error;
+    }
+  }
+
   public function setup($dasInsUid) {
     try {
-      $dashletInstance = $this->getDashletInstance($dasInsUid);
-      G::LoadClass($dashletInstance['DAS_CLASS']);
-      $this->dashletObject = new $dashletInstance['DAS_CLASS']();
-      $this->dashletObject->setup($dashletInstance);
+      $this->dashletInstance = $this->loadDashletInstance($dasInsUid);
+      G::LoadClass($this->dashletInstance['DAS_CLASS']);
+      $this->dashletObject = new $this->dashletInstance['DAS_CLASS']();
+      $this->dashletObject->setup($this->dashletInstance);
     }
     catch (Exception $error) {
       throw $error;
@@ -33,6 +47,16 @@ class PMDashlet extends DashletInstance implements DashletInterface {
     catch (Exception $error) {
       throw $error;
     }
+  }
+
+  // Getter and Setters
+
+  public function getDashletInstance() {
+    return $this->dashletInstance;
+  }
+
+  public function getDashletObject() {
+    return $this->dashletObject;
   }
 
   // Own functions
@@ -55,11 +79,23 @@ class PMDashlet extends DashletInstance implements DashletInterface {
       while ($row = $dataset->getRow()) {
         $row['DAS_INS_STATUS_LABEL'] = ($row['DAS_INS_STATUS'] == '1' ? G::LoadTranslation('ID_ACTIVE') : G::LoadTranslation('ID_INACTIVE'));
         switch ($row['DAS_INS_OWNER_TYPE']) {
+          case 'USER':
+            require_once 'classes/model/Users.php';
+            $userInstance = new Users();
+            $user = $userInstance->load($row['DAS_INS_OWNER_UID']);
+            $row['DAS_INS_OWNER_TITLE'] = $user['USR_FIRSTNAME'] . ' ' . $user['USR_LASTNAME'];
+          break;
           case 'DEPARTMENT':
             require_once 'classes/model/Department.php';
             $departmentInstance = new Department();
             $department = $departmentInstance->load($row['DAS_INS_OWNER_UID']);
             $row['DAS_INS_OWNER_TITLE'] = $department['DEPO_TITLE'];
+          break;
+          case 'GROUP':
+            require_once 'classes/model/Groupwf.php';
+            $groupInstance = new Groupwf();
+            $group = $groupInstance->load($row['DAS_INS_OWNER_UID']);
+            $row['DAS_INS_OWNER_TITLE'] = $group['GRP_TITLE'];
           break;
           default:
             $row['DAS_INS_OWNER_TITLE'] = $row['DAS_INS_OWNER_TYPE'];
@@ -87,9 +123,10 @@ class PMDashlet extends DashletInstance implements DashletInterface {
     }
   }
 
-  public function getDashletInstance($dasInsUid) {
+  public function loadDashletInstance($dasInsUid) {
     try {
       $dashletInstance = $this->load($dasInsUid);
+      //Load data from the serialized field
       $dashlet = new Dashlet();
       $dashletFields = $dashlet->load($dashletInstance['DAS_UID']);
       return array_merge($dashletFields, $dashletInstance);
@@ -125,11 +162,28 @@ class PMDashlet extends DashletInstance implements DashletInterface {
       // Check for "public" dashlets
       // ToDo: Next release
       // Check for the direct assignments
-      // ToDo: Next release
+      require_once 'classes/model/Users.php';
+      $usersInstance = new Users();
+      $criteria = new Criteria('workflow');
+      $criteria->addSelectColumn(DashletInstancePeer::DAS_INS_UID);
+      $criteria->addSelectColumn(DashletPeer::DAS_TITLE);
+      $criteria->addSelectColumn(DashletInstancePeer::DAS_INS_CONTEXT_TIME);
+      $criteria->add(DashletInstancePeer::DAS_INS_OWNER_TYPE, 'USER');
+      $criteria->add(DashletInstancePeer::DAS_INS_OWNER_UID, $userUid);
+      $dataset = DashletInstancePeer::doSelectRS($criteria);
+      $dataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+      $dataset->next();
+      while ($row = $dataset->getRow()) {
+        if (!isset($dashletsInstances[$row['DAS_INS_UID']])) {
+          $row['DAS_TITLE'] .= ' (' . $row['DAS_INS_CONTEXT_TIME'] . ')';
+          $dashletsInstances[$row['DAS_INS_UID']] = $row;
+        }
+        $dataset->next();
+      }
       // Check for department assigments
       $departmentInstance = new Department();
       $departments = $departmentInstance->getDepartmentsForUser($userUid);
-      foreach ($departments as $depUid => $department)  {
+      foreach ($departments as $depUid => $department) {
         $criteria = new Criteria('workflow');
         $criteria->addSelectColumn(DashletInstancePeer::DAS_INS_UID);
         $criteria->addSelectColumn(DashletPeer::DAS_TITLE);
@@ -148,7 +202,27 @@ class PMDashlet extends DashletInstance implements DashletInterface {
         }
       }
       // Check for group assignments
-      // ToDo: Next release
+      G::LoadClass('groups');
+      $groupsInstance = new Groups();
+      $groups = $groupsInstance->getGroupsForUser($userUid);
+      foreach ($groups as $grpUid => $group) {
+        $criteria = new Criteria('workflow');
+        $criteria->addSelectColumn(DashletInstancePeer::DAS_INS_UID);
+        $criteria->addSelectColumn(DashletPeer::DAS_TITLE);
+        $criteria->addSelectColumn(DashletInstancePeer::DAS_INS_CONTEXT_TIME);
+        $criteria->add(DashletInstancePeer::DAS_INS_OWNER_TYPE, 'GROUP');
+        $criteria->add(DashletInstancePeer::DAS_INS_OWNER_UID, $grpUid);
+        $dataset = DashletInstancePeer::doSelectRS($criteria);
+        $dataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+        $dataset->next();
+        while ($row = $dataset->getRow()) {
+          if (!isset($dashletsInstances[$row['DAS_INS_UID']])) {
+            $row['DAS_TITLE'] .= ' (' . $row['DAS_INS_CONTEXT_TIME'] . ')';
+            $dashletsInstances[$row['DAS_INS_UID']] = $row;
+          }
+          $dataset->next();
+        }
+      }
       // Check for role assigments
       // ToDo: Next release
       // Check for permission assigments

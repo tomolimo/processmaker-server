@@ -12,7 +12,7 @@ include_once 'classes/model/DashletInstancePeer.php';
 /**
  * Base class that represents a row from the 'DASHLET_INSTANCE' table.
  *
- * 
+ *
  *
  * @package    workflow.classes.model.om
  */
@@ -141,7 +141,7 @@ abstract class BaseDashletInstance extends BaseObject  implements Persistent {
 
 	/**
 	 * Get the [das_ins_uid] column value.
-	 * 
+	 *
 	 * @return     string
 	 */
 	public function getDasInsUid()
@@ -152,7 +152,7 @@ abstract class BaseDashletInstance extends BaseObject  implements Persistent {
 
 	/**
 	 * Get the [das_uid] column value.
-	 * 
+	 *
 	 * @return     string
 	 */
 	public function getDasUid()
@@ -163,7 +163,7 @@ abstract class BaseDashletInstance extends BaseObject  implements Persistent {
 
 	/**
 	 * Get the [das_ins_type] column value.
-	 * 
+	 *
 	 * @return     string
 	 */
 	public function getDasInsType()
@@ -174,7 +174,7 @@ abstract class BaseDashletInstance extends BaseObject  implements Persistent {
 
 	/**
 	 * Get the [das_ins_context_time] column value.
-	 * 
+	 *
 	 * @return     string
 	 */
 	public function getDasInsContextTime()
@@ -185,7 +185,7 @@ abstract class BaseDashletInstance extends BaseObject  implements Persistent {
 
 	/**
 	 * Get the [optionally formatted] [das_ins_start_date] column value.
-	 * 
+	 *
 	 * @param      string $format The date/time format string (either date()-style or strftime()-style).
 	 *							If format is NULL, then the integer unix timestamp will be returned.
 	 * @return     mixed Formatted date/time value as string or integer unix timestamp (if format is NULL).
@@ -216,7 +216,7 @@ abstract class BaseDashletInstance extends BaseObject  implements Persistent {
 
 	/**
 	 * Get the [optionally formatted] [das_ins_end_date] column value.
-	 * 
+	 *
 	 * @param      string $format The date/time format string (either date()-style or strftime()-style).
 	 *							If format is NULL, then the integer unix timestamp will be returned.
 	 * @return     mixed Formatted date/time value as string or integer unix timestamp (if format is NULL).
@@ -247,7 +247,7 @@ abstract class BaseDashletInstance extends BaseObject  implements Persistent {
 
 	/**
 	 * Get the [das_ins_owner_type] column value.
-	 * 
+	 *
 	 * @return     string
 	 */
 	public function getDasInsOwnerType()
@@ -258,7 +258,7 @@ abstract class BaseDashletInstance extends BaseObject  implements Persistent {
 
 	/**
 	 * Get the [das_ins_owner_uid] column value.
-	 * 
+	 *
 	 * @return     string
 	 */
 	public function getDasInsOwnerUid()
@@ -269,7 +269,7 @@ abstract class BaseDashletInstance extends BaseObject  implements Persistent {
 
 	/**
 	 * Get the [das_ins_processes] column value.
-	 * 
+	 *
 	 * @return     string
 	 */
 	public function getDasInsProcesses()
@@ -280,7 +280,7 @@ abstract class BaseDashletInstance extends BaseObject  implements Persistent {
 
 	/**
 	 * Get the [das_ins_tasks] column value.
-	 * 
+	 *
 	 * @return     string
 	 */
 	public function getDasInsTasks()
@@ -291,7 +291,7 @@ abstract class BaseDashletInstance extends BaseObject  implements Persistent {
 
 	/**
 	 * Get the [das_ins_additional_properties] column value.
-	 * 
+	 *
 	 * @return     string
 	 */
 	public function getDasInsAdditionalProperties()
@@ -302,7 +302,7 @@ abstract class BaseDashletInstance extends BaseObject  implements Persistent {
 
 	/**
 	 * Get the [optionally formatted] [das_ins_create_date] column value.
-	 * 
+	 *
 	 * @param      string $format The date/time format string (either date()-style or strftime()-style).
 	 *							If format is NULL, then the integer unix timestamp will be returned.
 	 * @return     mixed Formatted date/time value as string or integer unix timestamp (if format is NULL).
@@ -333,7 +333,7 @@ abstract class BaseDashletInstance extends BaseObject  implements Persistent {
 
 	/**
 	 * Get the [optionally formatted] [das_ins_update_date] column value.
-	 * 
+	 *
 	 * @param      string $format The date/time format string (either date()-style or strftime()-style).
 	 *							If format is NULL, then the integer unix timestamp will be returned.
 	 * @return     mixed Formatted date/time value as string or integer unix timestamp (if format is NULL).
@@ -364,7 +364,7 @@ abstract class BaseDashletInstance extends BaseObject  implements Persistent {
 
 	/**
 	 * Get the [das_ins_status] column value.
-	 * 
+	 *
 	 * @return     int
 	 */
 	public function getDasInsStatus()
@@ -375,7 +375,7 @@ abstract class BaseDashletInstance extends BaseObject  implements Persistent {
 
 	/**
 	 * Set the value of [das_ins_uid] column.
-	 * 
+	 *
 	 * @param      string $v new value
 	 * @return     void
 	 */
@@ -385,7 +385,7 @@ abstract class BaseDashletInstance extends BaseObject  implements Persistent {
 		// Since the native PHP type for this column is string,
 		// we will cast the input to a string (if it is not).
 		if ($v !== null && !is_string($v)) {
-			$v = (string) $v; 
+			$v = (string) $v;
 		}
 
 		if ($this->das_ins_uid !== $v || $v === '') {
@@ -397,7 +397,7 @@ abstract class BaseDashletInstance extends BaseObject  implements Persistent {
 
 	/**
 	 * Set the value of [das_uid] column.
-	 * 
+	 *
 	 * @param      string $v new value
 	 * @return     void
 	 */
@@ -407,7 +407,7 @@ abstract class BaseDashletInstance extends BaseObject  implements Persistent {
 		// Since the native PHP type for this column is string,
 		// we will cast the input to a string (if it is not).
 		if ($v !== null && !is_string($v)) {
-			$v = (string) $v; 
+			$v = (string) $v;
 		}
 
 		if ($this->das_uid !== $v || $v === '') {
@@ -419,7 +419,7 @@ abstract class BaseDashletInstance extends BaseObject  implements Persistent {
 
 	/**
 	 * Set the value of [das_ins_type] column.
-	 * 
+	 *
 	 * @param      string $v new value
 	 * @return     void
 	 */
@@ -429,7 +429,7 @@ abstract class BaseDashletInstance extends BaseObject  implements Persistent {
 		// Since the native PHP type for this column is string,
 		// we will cast the input to a string (if it is not).
 		if ($v !== null && !is_string($v)) {
-			$v = (string) $v; 
+			$v = (string) $v;
 		}
 
 		if ($this->das_ins_type !== $v || $v === '') {
@@ -441,7 +441,7 @@ abstract class BaseDashletInstance extends BaseObject  implements Persistent {
 
 	/**
 	 * Set the value of [das_ins_context_time] column.
-	 * 
+	 *
 	 * @param      string $v new value
 	 * @return     void
 	 */
@@ -451,7 +451,7 @@ abstract class BaseDashletInstance extends BaseObject  implements Persistent {
 		// Since the native PHP type for this column is string,
 		// we will cast the input to a string (if it is not).
 		if ($v !== null && !is_string($v)) {
-			$v = (string) $v; 
+			$v = (string) $v;
 		}
 
 		if ($this->das_ins_context_time !== $v || $v === '') {
@@ -463,7 +463,7 @@ abstract class BaseDashletInstance extends BaseObject  implements Persistent {
 
 	/**
 	 * Set the value of [das_ins_start_date] column.
-	 * 
+	 *
 	 * @param      int $v new value
 	 * @return     void
 	 */
@@ -487,7 +487,7 @@ abstract class BaseDashletInstance extends BaseObject  implements Persistent {
 
 	/**
 	 * Set the value of [das_ins_end_date] column.
-	 * 
+	 *
 	 * @param      int $v new value
 	 * @return     void
 	 */
@@ -511,7 +511,7 @@ abstract class BaseDashletInstance extends BaseObject  implements Persistent {
 
 	/**
 	 * Set the value of [das_ins_owner_type] column.
-	 * 
+	 *
 	 * @param      string $v new value
 	 * @return     void
 	 */
@@ -521,7 +521,7 @@ abstract class BaseDashletInstance extends BaseObject  implements Persistent {
 		// Since the native PHP type for this column is string,
 		// we will cast the input to a string (if it is not).
 		if ($v !== null && !is_string($v)) {
-			$v = (string) $v; 
+			$v = (string) $v;
 		}
 
 		if ($this->das_ins_owner_type !== $v || $v === '') {
@@ -533,7 +533,7 @@ abstract class BaseDashletInstance extends BaseObject  implements Persistent {
 
 	/**
 	 * Set the value of [das_ins_owner_uid] column.
-	 * 
+	 *
 	 * @param      string $v new value
 	 * @return     void
 	 */
@@ -543,7 +543,7 @@ abstract class BaseDashletInstance extends BaseObject  implements Persistent {
 		// Since the native PHP type for this column is string,
 		// we will cast the input to a string (if it is not).
 		if ($v !== null && !is_string($v)) {
-			$v = (string) $v; 
+			$v = (string) $v;
 		}
 
 		if ($this->das_ins_owner_uid !== $v || $v === '') {
@@ -555,7 +555,7 @@ abstract class BaseDashletInstance extends BaseObject  implements Persistent {
 
 	/**
 	 * Set the value of [das_ins_processes] column.
-	 * 
+	 *
 	 * @param      string $v new value
 	 * @return     void
 	 */
@@ -565,7 +565,7 @@ abstract class BaseDashletInstance extends BaseObject  implements Persistent {
 		// Since the native PHP type for this column is string,
 		// we will cast the input to a string (if it is not).
 		if ($v !== null && !is_string($v)) {
-			$v = (string) $v; 
+			$v = (string) $v;
 		}
 
 		if ($this->das_ins_processes !== $v) {
@@ -577,7 +577,7 @@ abstract class BaseDashletInstance extends BaseObject  implements Persistent {
 
 	/**
 	 * Set the value of [das_ins_tasks] column.
-	 * 
+	 *
 	 * @param      string $v new value
 	 * @return     void
 	 */
@@ -587,7 +587,7 @@ abstract class BaseDashletInstance extends BaseObject  implements Persistent {
 		// Since the native PHP type for this column is string,
 		// we will cast the input to a string (if it is not).
 		if ($v !== null && !is_string($v)) {
-			$v = (string) $v; 
+			$v = (string) $v;
 		}
 
 		if ($this->das_ins_tasks !== $v) {
@@ -599,7 +599,7 @@ abstract class BaseDashletInstance extends BaseObject  implements Persistent {
 
 	/**
 	 * Set the value of [das_ins_additional_properties] column.
-	 * 
+	 *
 	 * @param      string $v new value
 	 * @return     void
 	 */
@@ -609,7 +609,7 @@ abstract class BaseDashletInstance extends BaseObject  implements Persistent {
 		// Since the native PHP type for this column is string,
 		// we will cast the input to a string (if it is not).
 		if ($v !== null && !is_string($v)) {
-			$v = (string) $v; 
+			$v = (string) $v;
 		}
 
 		if ($this->das_ins_additional_properties !== $v) {
@@ -621,7 +621,7 @@ abstract class BaseDashletInstance extends BaseObject  implements Persistent {
 
 	/**
 	 * Set the value of [das_ins_create_date] column.
-	 * 
+	 *
 	 * @param      int $v new value
 	 * @return     void
 	 */
@@ -645,7 +645,7 @@ abstract class BaseDashletInstance extends BaseObject  implements Persistent {
 
 	/**
 	 * Set the value of [das_ins_update_date] column.
-	 * 
+	 *
 	 * @param      int $v new value
 	 * @return     void
 	 */
@@ -669,7 +669,7 @@ abstract class BaseDashletInstance extends BaseObject  implements Persistent {
 
 	/**
 	 * Set the value of [das_ins_status] column.
-	 * 
+	 *
 	 * @param      int $v new value
 	 * @return     void
 	 */

@@ -9,18 +9,7 @@ dashletInstance.form = {
       Ext.Ajax.request({
         url: "saveDashletInstance",
         method: "POST",
-        params:{"DAS_INS_UID": hiddenDasInsUID.getValue(),
-                "DAS_UID":     cboDasUID.getValue(),
-                "DAS_INS_TYPE": cboDasInsType.getValue(),
-                "DAS_INS_CONTEXT_TIME": cboDasInsContextTime.getValue(),
-                //"DAS_INS_START_DATE":   txtDasInsStartDate.getValue().format(txtDasInsStartDate.format),
-                //"DAS_INS_END_DATE":  txtDasInsEndDate.getValue().format(txtDasInsEndDate.format),
-                "DAS_INS_OWNER_TYPE":   cboDasInsOwnerType.getValue(),
-                "DAS_INS_OWNER_UID":    cboDasInsOwnerUID.getValue()
-                //,
-                //"DAS_INS_PROCESSES": cboProcess.getValue(),
-                //"DAS_INS_TASKS":    cboTask.getValue()
-               },
+        params: dashletInstanceFrm.getForm().getFieldValues(),
 
         success:function (result, request) {
                   myMask.hide();
@@ -42,30 +31,18 @@ dashletInstance.form = {
       });
     }
 
-    dashletInstanceFrmLoad = function () {
-      if (dashletInstance.DAS_INS_UID) {
-        hiddenDasInsUID.setValue(dashletInstance.DAS_INS_UID)
-        cboDasUID.setValue(dashletInstance.DAS_UID);
-        cboDasInsType.setValue(dashletInstance.DAS_INS_TYPE);
-        cboDasInsContextTime.setValue(dashletInstance.DAS_INS_CONTEXT_TIME);
-        cboDasInsOwnerType.setValue(dashletInstance.DAS_INS_OWNER_TYPE);
-
-        //cboDasInsOwnerUID.setValue(dashletInstance.DAS_INS_OWNER_UID);
-      }
-    }
-
     //------------------------------------------------------------------------------------------------------------------
     var storeDasUID = new Ext.data.Store({
       proxy: new Ext.data.HttpProxy({
-        url: "dashletData",
+        url: "getDashlets",
         method: "POST"
       }),
 
       baseParams: {"option": "DASHLST"},
 
       reader: new Ext.data.JsonReader({
-        totalProperty: "resultTotal",
-        root:          "resultRoot",
+        totalProperty: "total",
+        root:          "dashlets",
         fields:[{name: "DAS_UID",   type: "string"},
                 {name: "DAS_TITLE", type: "string"}
                ]
@@ -107,22 +84,23 @@ dashletInstance.form = {
     var storeDasInsOwnerType = new Ext.data.ArrayStore({
       idIndex: 0,
       fields: ["id", "value"],
-      data:   [//["USER",       "User"],
-               ["DEPARTMENT", "Department"]
+      data:   [["USER",       "User"],
+               ["DEPARTMENT", "Department"],
+               ["GROUP", "Group"]
               ]
     });
 
     var storeDasInsOwnerUID = new Ext.data.Store({
       proxy: new Ext.data.HttpProxy({
-        url: "ownerData",
+        url: "getOwnersByType",
         method: "POST"
       }),
 
       reader: new Ext.data.JsonReader({
-        totalProperty: "resultTotal",
-        root:          "resultRoot",
-        fields:[{name: "TABLE_UID",  type: "string"},
-                {name: "TABLE_NAME", type: "string"}
+        totalProperty: "total",
+        root:          "owners",
+        fields:[{name: "OWNER_UID",  type: "string"},
+                {name: "OWNER_NAME", type: "string"}
               ]
       }),
 
@@ -140,7 +118,9 @@ dashletInstance.form = {
             cboDasInsOwnerUID.setValue(dashletInstance.DAS_INS_OWNER_UID);
           }
           else {
-            cboDasInsOwnerUID.setValue(store.getAt(0).get(cboDasInsOwnerUID.valueField));
+            if (store.getAt(0)) {
+              cboDasInsOwnerUID.setValue(store.getAt(0).get(cboDasInsOwnerUID.valueField));
+            }
           }
         }
       }
@@ -257,14 +237,16 @@ dashletInstance.form = {
       editable: false,
 
       width: 200,
-      fieldLabel: "Owner Type",
+      fieldLabel: "Assign To",
 
       listeners: {
         select: function (combo, record, index) {
           storeDasInsOwnerUID.baseParams = {"option": "OWNERTYPE",
                                             "type": combo.getValue()
                                            };
-          cboDasInsOwnerUID.store.load();
+          cboDasInsOwnerUID.store.removeAll();
+          cboDasInsOwnerUID.clearValue();
+          cboDasInsOwnerUID.store.reload();
         }
       }
     });
@@ -273,8 +255,8 @@ dashletInstance.form = {
       id: "cboDasInsOwnerUID",
       name: "DAS_INS_OWNER_UID",
 
-      valueField:   "TABLE_UID",
-      displayField: "TABLE_NAME",
+      valueField:   "OWNER_UID",
+      displayField: "OWNER_NAME",
       store:        storeDasInsOwnerUID,
 
       triggerAction: "all",
@@ -282,7 +264,8 @@ dashletInstance.form = {
       editable: false,
 
       width: 200,
-      fieldLabel: "Assign To"
+      fieldLabel: "Name",
+      allowBlank: false
     });
 
     var cboProcess = new Ext.form.ComboBox({
@@ -319,6 +302,19 @@ dashletInstance.form = {
       fieldLabel: "Task"
     });
 
+    var formFields = [hiddenDasInsUID,
+              cboDasUID,
+              cboDasInsType,
+              cboDasInsContextTime,
+              //txtDasInsStartDate,
+              //txtDasInsEndDate,
+              cboDasInsOwnerType,
+              cboDasInsOwnerUID
+              //cboProcess,
+              //cboTask
+              ];
+    formFields = formFields.concat(additionaFields);
+
     //------------------------------------------------------------------------------------------------------------------
     var dashletInstanceFrm = new Ext.form.FormPanel({
       id:  "dashletInstanceFrm",
@@ -334,27 +330,20 @@ dashletInstance.form = {
 
       title: "New Dashboard Instance",
 
-      items: [hiddenDasInsUID,
-              cboDasUID,
-              cboDasInsType,
-              cboDasInsContextTime,
-              //txtDasInsStartDate,
-              //txtDasInsEndDate,
-              //cboDasInsOwnerType,
-              cboDasInsOwnerUID
-              //,
-              //cboProcess,
-              //cboTask
-             ],
+      items: formFields,
 
       buttonAlign: "right",
       buttons: [new Ext.Action({
                   id:   "btnSubmit",
 
                   text: "Save",
-                  //scope: this,
                   handler: function () {
-                    dashletInstanceSaveProcessAjax();
+                    if (dashletInstanceFrm.getForm().isValid()) {
+                      dashletInstanceSaveProcessAjax();
+                    }
+                    else {
+                      Ext.MessageBox.alert('Invalid data', 'Please check the fields mark in red.');
+                    }
                   }
                 }),
 
@@ -379,7 +368,7 @@ dashletInstance.form = {
     });
 
     //------------------------------------------------------------------------------------------------------------------
-    dashletInstanceFrmLoad();
+    dashletInstanceFrm.getForm().setValues(dashletInstance);
 
     //------------------------------------------------------------------------------------------------------------------
     var pnlMain = new Ext.Panel({

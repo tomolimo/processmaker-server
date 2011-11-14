@@ -563,7 +563,7 @@ class workspaceTools {
 
   public function upgradeData() {
     if (file_exists(PATH_CORE . 'data' . PATH_SEP . 'check.data')) {
-      $checkData = @unserialize(file_get_contents(PATH_CORE . 'data' . PATH_SEP . 'check.data'));
+      $checkData = unserialize(file_get_contents(PATH_CORE . 'data' . PATH_SEP . 'check.data'));
       if (is_array($checkData)) {
         foreach ($checkData as $checkThis) {
           $this->updateThisRegistry($checkThis);
@@ -590,8 +590,8 @@ class workspaceTools {
       break;
       case 4:
         $sql = $dataBase->generateSelectSQL($data['table'], $data['keys'], $data['data']);
-        $result = $dataBase->executeQuery($sql);
-        if (!$result) {
+        $dataset = $dataBase->executeQuery($sql);
+        if (!$dataBase->getRegistry($dataset)) {
           $sql = $dataBase->generateInsertSQL($data['table'], $data['data']);
           $message = "-> Row updated in {$data['table']}\n";
         }
