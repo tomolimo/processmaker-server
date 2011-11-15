@@ -244,6 +244,7 @@ dashletInstance.form = {
           storeDasInsOwnerUID.baseParams = {"option": "OWNERTYPE",
                                             "type": combo.getValue()
                                            };
+          dashletInstance.DAS_INS_OWNER_UID = '';
           cboDasInsOwnerUID.store.removeAll();
           cboDasInsOwnerUID.clearValue();
           cboDasInsOwnerUID.store.reload();
@@ -328,7 +329,7 @@ dashletInstance.form = {
       width: 400,
       //height: 400,
 
-      title: "New Dashboard Instance",
+      title: "Dashboard Instance Configuration",
 
       items: formFields,
 
