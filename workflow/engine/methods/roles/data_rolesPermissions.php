@@ -30,6 +30,11 @@ global $RBAC;
 
 $filter = (isset($_REQUEST['textFilter']))? $_REQUEST['textFilter'] : '';
 
+//BUG 7554: erik/ hook for existents environments that have not PM_CANCELCASE
+if ($RBAC->permissionsObj->loadByCode('PM_CANCELCASE') === false) {
+    $RBAC->permissionsObj->create(array('PER_CODE' => 'PM_CANCELCASE', 'PER_CREATE_DATE' => date('Y-m-d H:i:s')));
+}
+
 if ($TYPE_DATA=='list') $oDataset = $RBAC->getRolePermissions($ROL_UID,$filter);
 if ($TYPE_DATA=='show') $oDataset = $RBAC->getAllPermissions($ROL_UID,$RBAC->sSystem,$filter);
 
