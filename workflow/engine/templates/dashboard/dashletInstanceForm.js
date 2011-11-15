@@ -17,8 +17,7 @@ dashletInstance.form = {
                   var dataResponse = Ext.util.JSON.decode(result.responseText)
 
                   switch (dataResponse.status) {
-                    case "OK": //Ext.MessageBox.alert("Message", "Dashboard Instance registered correctly");
-                               window.location.href = "dashletsList";
+                    case "OK": window.location.href = "dashletsList";
                                break;
                     default: Ext.MessageBox.alert("Alert", "Dashboard Instance registered failed");
                              break;
@@ -58,7 +57,7 @@ dashletInstance.form = {
     });
 
     var storeDasInsType = new Ext.data.ArrayStore({
-      idIndex: 0, //definimos la posicion del ID de cada registro
+      idIndex: 0,
       fields: ["id", "value"],
       data:   [["OPEN_CASES", "Open Cases"]
               ]
@@ -182,7 +181,6 @@ dashletInstance.form = {
       width: 200,
       fieldLabel: "Type"
     });
-
 
     var cboDasInsContextTime = new Ext.form.ComboBox({
       id: "cboDasInsContextTime",
@@ -319,24 +317,15 @@ dashletInstance.form = {
     //------------------------------------------------------------------------------------------------------------------
     var dashletInstanceFrm = new Ext.form.FormPanel({
       id:  "dashletInstanceFrm",
-
-      style: "margin: 0 auto 0 auto;",
-      //labelAlign: "top",
-      labelWidth: 115, //The width of labels in pixels
-      bodyStyle: "padding:0.5em;",
+      labelWidth: 115,
       border: true,
-      //cls: "class1",
       width: 400,
-      //height: 400,
-
+      frame: true,
       title: "Dashboard Instance Configuration",
-
       items: formFields,
-
       buttonAlign: "right",
       buttons: [new Ext.Action({
                   id:   "btnSubmit",
-
                   text: "Save",
                   handler: function () {
                     if (dashletInstanceFrm.getForm().isValid()) {
@@ -347,17 +336,6 @@ dashletInstance.form = {
                     }
                   }
                 }),
-
-                //{xtype: "button",
-                // id:    "btnReset",
-                // text:  "Reset",
-                // handler: function () {
-                //   //Ext.getCmp("dashletInstanceFrm").getForm().reset();
-                //   dashletInstanceFrm.getForm().reset();
-                //   //cboProcess.store.load();
-                // }
-                //},
-
                 {xtype: "button",
                  id:    "btnCancel",
                  text:  "Cancel",
@@ -367,29 +345,8 @@ dashletInstance.form = {
                 }
                ]
     });
-
-    //------------------------------------------------------------------------------------------------------------------
     dashletInstanceFrm.getForm().setValues(dashletInstance);
-
-    //------------------------------------------------------------------------------------------------------------------
-    var pnlMain = new Ext.Panel({
-      id: "pnlMain",
-
-      region: "center",
-      margins: {top:3, right:3, bottom:3, left:0},
-      //bodyStyle: "padding:0.5em;", //propiedades ... //no aceptaba para la derecha
-      bodyStyle: "padding: 25px 25px 25px 25px;", //propiedades ...
-      border: false,
-
-      items: [dashletInstanceFrm]
-    });
-
-    //------------------------------------------------------------------------------------------------------------------
-    //LOAD ALL PANELS
-    var viewport = new Ext.Viewport({
-      layout:"fit",
-      items:[pnlMain]
-    });
+    dashletInstanceFrm.render(document.body);
   }
 }
 
