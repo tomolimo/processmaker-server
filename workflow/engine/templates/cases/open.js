@@ -165,20 +165,16 @@ Ext.onReady(function(){
         if( tp.attributes.url ){
           document.getElementById('openCaseFrame').src = tp.attributes.url;
         }
-      }
-      
-    },
-	"afterrender": {
-           fn: setNodeini,
-           scope: this 
-	}  
+      } 
+    }
   })
 
   var loader = casesStepTree.getLoader();
   loader.on("load", setNodeini);    
-  function setNodeini(){
-   var aNode = Ext.getCmp('casesStepTree').getNodeById(idfirstform);
-   aNode.select();
+  
+  function setNodeini()
+  {
+    setNode(idfirstform);
   }
 
   var navPanelWest = {
@@ -915,5 +911,5 @@ Ext.onReady(function(){
       return false;
     }
     
-    aNode.select();
+    node.select();
   }
