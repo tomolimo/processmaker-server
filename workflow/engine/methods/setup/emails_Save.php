@@ -26,17 +26,17 @@
 require_once 'classes/model/Configuration.php';
 $oConfiguration = new Configuration();
 $aFields['MESS_ENABLED']             = isset($_POST['form']['MESS_ENABLED']) ? $_POST['form']['MESS_ENABLED'] : '';
-$aFields['MESS_ENGINE']              = $_POST['form']['MESS_ENGINE'];
-$aFields['MESS_SERVER']              = trim($_POST['form']['MESS_SERVER']);
-$aFields['MESS_RAUTH']               = isset($_POST['form']['MESS_RAUTH']) ? $_POST['form']['MESS_RAUTH'] : '';
-$aFields['MESS_PORT']                = $_POST['form']['MESS_PORT'];
-$aFields['MESS_ACCOUNT']             = $_POST['form']['MESS_ACCOUNT'];
-$aFields['MESS_PASSWORD']            = $_POST['form']['MESS_PASSWORD'];
-$aFields['MESS_BACKGROUND']          = isset($_POST['form']['MESS_BACKGROUND']) ? $_POST['form']['MESS_BACKGROUND'] : '';
-$aFields['MESS_EXECUTE_EVERY']       = $_POST['form']['MESS_EXECUTE_EVERY'];
-$aFields['MESS_SEND_MAX']            = $_POST['form']['MESS_SEND_MAX'];
-$aFields['SMTPSecure']               = $_POST['form']['SMTPSecure'];
-$aFields['MESS_TRY_SEND_INMEDIATLY'] = isset($_POST['form']['MESS_TRY_SEND_INMEDIATLY']) ? $_POST['form']['MESS_TRY_SEND_INMEDIATLY'] : '';
+$aFields['MESS_ENGINE']              = isset($_POST['form']['MESS_ENABLED']) ?$_POST['form']['MESS_ENGINE']: '';
+$aFields['MESS_SERVER']              = isset($_POST['form']['MESS_ENABLED']) ?trim($_POST['form']['MESS_SERVER']): '';
+$aFields['MESS_RAUTH']               = isset($_POST['form']['MESS_ENABLED']) ?isset($_POST['form']['MESS_RAUTH']) ? $_POST['form']['MESS_RAUTH'] : '': '';
+$aFields['MESS_PORT']                = isset($_POST['form']['MESS_ENABLED']) ?$_POST['form']['MESS_PORT']: '';
+$aFields['MESS_ACCOUNT']             = isset($_POST['form']['MESS_ENABLED']) ?$_POST['form']['MESS_ACCOUNT']: '';
+$aFields['MESS_PASSWORD']            = isset($_POST['form']['MESS_ENABLED']) ?$_POST['form']['MESS_PASSWORD']: '';
+$aFields['MESS_BACKGROUND']          = isset($_POST['form']['MESS_ENABLED']) ?isset($_POST['form']['MESS_BACKGROUND']) ? $_POST['form']['MESS_BACKGROUND'] : '': '';
+$aFields['MESS_EXECUTE_EVERY']       = isset($_POST['form']['MESS_ENABLED']) ?$_POST['form']['MESS_EXECUTE_EVERY']: '';
+$aFields['MESS_SEND_MAX']            = isset($_POST['form']['MESS_ENABLED']) ?$_POST['form']['MESS_SEND_MAX']: '';
+$aFields['SMTPSecure']               = isset($_POST['form']['MESS_ENABLED']) ?$_POST['form']['SMTPSecure']: '';
+$aFields['MESS_TRY_SEND_INMEDIATLY'] = isset($_POST['form']['MESS_ENABLED']) ?isset($_POST['form']['MESS_TRY_SEND_INMEDIATLY']) ? $_POST['form']['MESS_TRY_SEND_INMEDIATLY'] : '': '';
 $oConfiguration->update(array(
   'CFG_UID'   => 'Emails',
   'OBJ_UID'   => '',
