@@ -100,7 +100,7 @@ class HttpProxyController {
                 case 'PropelException': $error = "DATABASE ERROR"; break;
                 case 'UserException':   $error = "USER ERROR"; break;
             }
-            $result->error = $error;
+            $result->error = $e->getMessage();
             
             $result->exception->class = get_class($e);
             $result->exception->code = $e->getCode();
