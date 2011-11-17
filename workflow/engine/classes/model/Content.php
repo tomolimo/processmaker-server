@@ -149,6 +149,13 @@ class Content extends BaseContent {
   */
   function addContent($ConCategory, $ConParent, $ConId, $ConLang, $ConValue) {
     try {
+      if ($ConLang != 'en') {
+        $baseLangContent = ContentPeer::retrieveByPk($ConCategory, $ConParent, $ConId, 'en');
+        if ($baseLangContent === null) {      
+          Content::addContent($ConCategory, $ConParent, $ConId, 'en', $ConValue);
+        }
+      }
+      
       $con = ContentPeer::retrieveByPK ( $ConCategory, $ConParent, $ConId, $ConLang );
       
       if (is_null ( $con )) {
@@ -325,21 +332,5 @@ class Content extends BaseContent {
   	}
   	return $aRoles;
   }
-  
-  /**
-   * Verify the if content on teh current language exists for the base language 'english
-   * if not copy for it.
-   * 
-   * @autor Erik Amaru Ortiz <erik@colosa.com>
-   * @param $category
-   * @param $id
-   * @param $value
-   */
-  function copyContentOnBaseLanguageIfNotExists($category, $id, $value)
-  {
-    $con = ContentPeer::retrieveByPk($category, '', $id, 'en');
-    if ($con === null) {      
-      Content::addContent($category, '', $id, 'en', $value);
-    }
-  }
+
 } // Content

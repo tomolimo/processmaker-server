@@ -43,6 +43,7 @@ class Groupwf extends BaseGroupwf {
    * This value goes in the content table
    * @var        string
    */
+  //protected $grp_title = '';
   protected $grp_title = '';
 
   /**
@@ -312,4 +313,51 @@ class Groupwf extends BaseGroupwf {
     return $result;
   }
 
+ function filterGroup($filter,$start,$limit)
+  { 
+    require_once 'classes/model/Groupwf.php';
+    require_once 'classes/model/TaskUser.php';
+    require_once 'classes/model/GroupUser.php';
+    G::LoadClass('configuration');
+    
+    $co = new Configurations();
+    $config = $co->getConfiguration('groupList', 'pageSize','',$_SESSION['USER_LOGGED']);
+    $env = $co->getConfiguration('ENVIRONMENT_SETTINGS', '');
+    $limit_size = isset($config['pageSize']) ? $config['pageSize'] : 20;
+    $start   = isset($_REQUEST['start'])  ? $_REQUEST['start'] : 0;
+    $limit   = isset($_REQUEST['limit'])  ? $_REQUEST['limit'] : $limit_size; 
+    $filter = isset($_REQUEST['textFilter']) ? $_REQUEST['textFilter'] : '';
+    
+    $oCriteria = new Criteria('workflow');
+    $oCriteria->addSelectColumn(GroupwfPeer::GRP_UID);
+    $oCriteria->addJoin(GroupwfPeer::GRP_UID, ContentPeer::CON_ID, Criteria::LEFT_JOIN);
+    $oCriteria->add(ContentPeer::CON_CATEGORY,'GRP_TITLE');
+    $oCriteria->add(ContentPeer::CON_LANG,SYS_LANG);
+    if ($filter != ''){
+      $oCriteria->add(ContentPeer::CON_VALUE, '%'.$filter.'%', Criteria::LIKE);
+    }
+    $totalRows = GroupwfPeer::doCount($oCriteria);
+    
+    $oCriteria = new Criteria('workflow');   
+    $oCriteria->clearSelectColumns();
+    $oCriteria->addSelectColumn(GroupwfPeer::GRP_UID);
+    $oCriteria->addSelectColumn(GroupwfPeer::GRP_STATUS);
+    $oCriteria->addSelectColumn(ContentPeer::CON_VALUE);
+    $oCriteria->addAsColumn('GRP_TASKS', 0);
+    $oCriteria->addAsColumn('GRP_USERS', 0);
+    $oCriteria->addJoin(GroupwfPeer::GRP_UID, ContentPeer::CON_ID, Criteria::LEFT_JOIN);
+    $oCriteria->add(ContentPeer::CON_CATEGORY,'GRP_TITLE');
+    $oCriteria->add(ContentPeer::CON_LANG,SYS_LANG);
+    if ($filter != ''){
+      $oCriteria->add(ContentPeer::CON_VALUE, '%'.$filter.'%', Criteria::LIKE);
+    }
+    $oCriteria->setOffset($start);
+    $oCriteria->setLimit($limit);
+    
+    $oDataset = GroupwfPeer::doSelectRS($oCriteria);
+    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    
+  }
+  
+  
 } // Groupwf

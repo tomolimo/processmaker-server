@@ -127,7 +127,7 @@ switch ($_POST['action'])
     $oCriteria->addAsColumn('GRP_USERS', 0);
     $oCriteria->addJoin(GroupwfPeer::GRP_UID, ContentPeer::CON_ID, Criteria::LEFT_JOIN);
     $oCriteria->add(ContentPeer::CON_CATEGORY,'GRP_TITLE');
-    $oCriteria->add(ContentPeer::CON_LANG,SYS_LANG);
+    $oCriteria->add(ContentPeer::CON_LANG,SYS_LANG); 
     if ($filter != ''){
       $oCriteria->add(ContentPeer::CON_VALUE, '%'.$filter.'%', Criteria::LIKE);
     }

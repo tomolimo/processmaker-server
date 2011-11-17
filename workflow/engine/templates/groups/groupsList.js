@@ -156,11 +156,18 @@ Ext.onReady(function(){
            {xtype: 'textfield', fieldLabel: _('ID_GROUP_NAME'), name: 'name', width: 200, allowBlank: false},
            {
              xtype: 'combo', 
+             id : 'status',
+             name : 'status',
              fieldLabel: _('ID_STATUS'), 
              hiddenName: 'status',
              typeAhead: true,
              mode: 'local', 
              store: comboStatusStore, 
+             listeners   : {  
+                 beforerender: function(status){  
+                   status.setValue('ACTIVE');                
+                 } 
+             },
              displayField: 'value', 
              valueField:'value',
              allowBlank: false, 
@@ -187,13 +194,13 @@ Ext.onReady(function(){
              hiddenName: 'status',
              typeAhead: true,
              mode: 'local', 
-             store: comboStatusStore, 
+             store: comboStatusStore,  
              displayField: 'value', 
              valueField:'value',
              allowBlank: false, 
              triggerAction: 'all',
              emptyText: _('ID_SELECT_STATUS'),
-             selectOnFocus:true
+             selectOnFocus:true             
            }
            ],
            buttons: [
