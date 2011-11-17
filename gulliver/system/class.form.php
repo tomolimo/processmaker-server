@@ -400,10 +400,10 @@ class Form extends XmlForm
 
                         if ($this->fields[$k]->validateValue($newValues[$k][$j], $this )){
                           // if the dropdown has otions
+
                           if (isset($this->fields[$k]->fields[$kk]->options[$vv])){
                             $values[$k][$j]["{$kk}_label"] = $newValues[$k][$j][$kk . '_label'] = $this->fields[$k]->fields[$kk]->options[$vv];
-                          } 
-                          else { // if hasn't options try execute a sql sentence
+                          } else { // if hasn't options try execute a sql sentence
                             $query = G::replaceDataField($this->fields[$k]->fields[$kk]->sql,$values[$k][$j]);
                             $con = Propel::getConnection($this->fields[$k]->fields[$kk]->sqlConnection!=""?$this->fields[$k]->fields[$kk]->sqlConnection:"workflow");
                             $stmt = $con->prepareStatement($query);
@@ -412,17 +412,17 @@ class Form extends XmlForm
                             if(trim($query) == '') {
                               continue; //if it is  empty string skip it
                             }
-
                             $rs = $stmt->executeQuery(ResultSet::FETCHMODE_NUM);
                             while ($rs->next()){
                               // from the query executed we only need certain elements
-                              list($rowId, $rowContent) = $rs->getRow();
-
+                              // note added by krlos pacha carlos[at]colosa[dot]com
+                              // the following line has the correct values because the query return an associative array. Related 7945 bug
+                              list($rowId, $rowContent) = explode(',',implode(',',$rs->getRow()));
                               if ($vv==$rowId){
                                 $values[$k][$j]["{$kk}_label"] = $newValues[$k][$j][$kk. '_label'] = $rowContent;
                                 break;
                               }
-                            }
+                            }//end $rw->next() while
                           }
                         }
                       } else {
