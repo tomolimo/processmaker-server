@@ -25,6 +25,7 @@ class pmTablesProxy extends HttpProxyController
   {
     G::LoadClass('configuration');
     G::LoadClass('processMap');
+    G::LoadClass('pmTable');
     $configurations = new Configurations();
     $processMap = new processMap();
     
@@ -67,15 +68,20 @@ class pmTablesProxy extends HttpProxyController
     }
     
     foreach ($addTables['rows'] as $i => $table) {
-      $con = Propel::getConnection($table['DBS_UID']);
-      $stmt = $con->createStatement();
-      $rs = $stmt->executeQuery('SELECT COUNT(*) AS NUM_ROWS from ' . $table['ADD_TAB_NAME']);
-      if ($rs->next()) {
-        $r = $rs->getRow();
-        $addTables['rows'][$i]['NUM_ROWS'] = $r['NUM_ROWS'];
+      try {
+        $con = Propel::getConnection(pmTable::resolveDbSource($table['DBS_UID']));
+        $stmt = $con->createStatement();
+        $rs = $stmt->executeQuery('SELECT COUNT(*) AS NUM_ROWS from ' . $table['ADD_TAB_NAME']);
+        if ($rs->next()) {
+          $r = $rs->getRow();
+          $addTables['rows'][$i]['NUM_ROWS'] = $r['NUM_ROWS'];
+        }
+        else {
+          $addTables['rows'][$i]['NUM_ROWS'] = 0;
+        }
       }
-      else {
-        $addTables['rows'][$i]['NUM_ROWS'] = 0;
+      catch (Exception $e) {
+        $addTables['rows'][$i]['NUM_ROWS'] = G::LoadTranslation('ID_TABLE_NOT_FOUND');
       }
     }
 
