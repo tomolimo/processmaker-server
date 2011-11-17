@@ -785,7 +785,7 @@ function G_Text( form, element, name, type )
     if(this.validate=="Email")
     {      
       //var pat=/^[\w\_\-\.ÃƒÂ§ÃƒÂ±]{2,255}@[\w\_\-]{2,255}\.[a-z]{1,3}\.?[a-z]{0,3}$/;
-      var pat=/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+      var pat=/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,6})+$/;
       if(!pat.test(this.element.value))
       {
         //old|if(this.required=="0"&&this.element.value=="") {

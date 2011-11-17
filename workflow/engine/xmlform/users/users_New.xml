@@ -234,7 +234,7 @@ var existsElements = function () {
  */
  
 var validateLocalEmail = function(sEmail){
-   var sFilter = /^[a-zA-Z]+([_\.-]?[a-zA-Z0-9]+)*@[a-zA-Z0-9]+([\.-]?[a-zA-Z0-9]+)*(\.[a-zA-Z]{2,4})+$/;
+   var sFilter = /^[a-zA-Z]+([_\.-]?[a-zA-Z0-9]+)*@[a-zA-Z0-9]+([\.-]?[a-zA-Z0-9]+)*(\.[a-zA-Z]{2,6})+$/;
      if (!sFilter.test(sEmail.value)) {
         return false;
      } else {
