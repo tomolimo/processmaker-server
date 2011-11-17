@@ -1767,6 +1767,8 @@ function PMFGetNextAssignedUser ($application, $task) {
   require_once 'classes/model/Task.php';
   require_once 'classes/model/TaskUser.php';
   require_once 'classes/model/Users.php';
+  require_once 'classes/model/Groupwf.php';
+  require_once 'classes/model/GroupUser.php';
 
   $oTask = new Task();
   $TaskFields = $oTask->load ($task);
@@ -1774,60 +1776,37 @@ function PMFGetNextAssignedUser ($application, $task) {
 
   if($typeTask == 'BALANCED')
   {
-    $oCriteria = new Criteria('workflow');
-    $oCriteria->addSelectColumn(AppDelegationPeer::PRO_UID);
-    $oCriteria->add(AppDelegationPeer::APP_UID, $application);
-    $oDataset = AppDelegationPeer::doSelectRS($oCriteria);
-    $oDataset->next();
-    $aRow = $oDataset->getRow();
-    $PRO_UID=$aRow[0];
 
-    $c = new Criteria('workflow');
-    $c->addSelectColumn(TaskPeer::TAS_UID);
-    $c->add(TaskPeer::PRO_UID, $PRO_UID);
-   // $c->add(TaskPeer::TAS_LAST_ASSIGNED, 0);
-    $oDataset = TaskPeer::doSelectRS($c);
-    $oDataset->next();
-    $aRow = $oDataset->getRow();
-    $TAS_UID=$aRow[0];
+    G::LoadClass('derivation');
+    $oDerivation = new Derivation();
+    $aDeriv = $oDerivation->prepareInformation(
+                       array( 'USER_UID'  => $_SESSION['USER_LOGGED'],
+                              'APP_UID'   => $application,
+                              'DEL_INDEX' => $_SESSION['INDEX'])
+                       );
 
+    foreach($aDeriv as $derivation){
 
-    $k=new Criteria('workflow');
-    $k->addSelectColumn(TaskUserPeer::USR_UID);
-    $k->add(TaskUserPeer::TAS_UID,$TAS_UID);
-    $k->add(TaskUserPeer::TU_TYPE,1);
-    $ods=TaskUserPeer::doSelectRS($k);
-    $ods->next();
-    $row=$ods->getRow();
-    $USR_UID=$row[0];
-
-    $kk=new Criteria('workflow');
-    $kk->addSelectColumn(UsersPeer::USR_UID);
-    $kk->addSelectColumn(UsersPeer::USR_USERNAME);
-    $kk->addSelectColumn(UsersPeer::USR_FIRSTNAME);
-    $kk->addSelectColumn(UsersPeer::USR_LASTNAME);
-    $kk->addSelectColumn(UsersPeer::USR_EMAIL);
-    $kk->add(UsersPeer::USR_UID,$USR_UID);
-    $oDataset=UsersPeer::doSelectRS($kk);
-    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-    $oDataset->next();
-
-    $aRow1 = $oDataset->getRow();
-
-    $array=array(
-            'USR_UID'      => $aRow1['USR_UID'],
-            'USR_USERNAME' => $aRow1['USR_USERNAME'],
-            'USR_FIRSTNAME'=> $aRow1['USR_FIRSTNAME'],
-            'USR_LASTNAME' => $aRow1['USR_LASTNAME'],
-            'USR_EMAIL'    => $aRow1['USR_EMAIL']
-    );
-    return $array;
-  } else
-    {
-      return false;
+      $aUser = array(
+              'USR_UID'      => $derivation['NEXT_TASK']['USER_ASSIGNED']['USR_UID'],
+              'USR_USERNAME' => $derivation['NEXT_TASK']['USER_ASSIGNED']['USR_USERNAME'],
+              'USR_FIRSTNAME'=> $derivation['NEXT_TASK']['USER_ASSIGNED']['USR_FIRSTNAME'],
+              'USR_LASTNAME' => $derivation['NEXT_TASK']['USER_ASSIGNED']['USR_LASTNAME'],
+              'USR_EMAIL'    => $derivation['NEXT_TASK']['USER_ASSIGNED']['USR_EMAIL']
+      );
+      $aUsers[] = $aUser;
     }
-}
 
+    if(count($aUsers) == 1)
+      return $aUser;
+    else
+      return $aUsers;
+
+  } else
+  {
+    return false;
+  }
+}
 
 //new functions by Erik
 
