@@ -2360,7 +2360,7 @@ class XmlForm_Field_Checkbox extends XmlForm_Field
     	$checked = (isset ( $value ) && ($value == $this->value)) ? 'checked' : '';
       if ($this->labelOnRight) {
         $html = '';
-        $html = "<input id='form[" . $this->name . "]' value='{$this->value}' name='form[" . $this->name . "]' type='checkbox' $checked $readOnly $disabled >
+        $html = "<input id='form[" . $this->name . "]' value='{$this->value}' name='form[" . $this->name . "]' type='checkbox' $checked $readOnly disabled >
                  <span class='FormCheck'>" . $this->label . '</span></input>';
       } else {
         $html = "<input id='form[" . $this->name . "]' value='{$this->value}' name='form[" . $this->name . "]' type='checkbox' $checked $readOnly disabled/>";
