@@ -3,7 +3,7 @@
  * authSources_New.php
  *
  * ProcessMaker Open Source Edition
- * Copyright (C) 2004 - 2008 Colosa Inc.23
+ * Copyright (C) 2004 - 2011 Colosa Inc.23
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -22,35 +22,33 @@
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  *
  */
-global $RBAC;
-if ($RBAC->userCanAccess('PM_SETUP_ADVANCE') != 1) {
-  G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');
-	G::header('location: ../login/login');
-	die;
-}
-
-$G_MAIN_MENU            = 'processmaker';
-$G_SUB_MENU             = 'users';
-$G_ID_MENU_SELECTED     = 'USERS';
-$G_ID_SUB_MENU_SELECTED = 'AUTH_SOURCES';
-
-$fields = array('AUTH_SOURCE_PROVIDER' => $_POST['form']['AUTH_SOURCE_PROVIDER']);
-
-$G_PUBLISH = new Publisher();
-if ($_POST['form']['AUTH_SOURCE_PROVIDER'] == 'ldap') {
-  $G_PUBLISH->AddContent('xmlform', 'xmlform', 'authSources/ldapEdit', '', $fields, '../authSources/authSources_Save');
-}
-else {
-  if (file_exists(PATH_PLUGINS . $fields['AUTH_SOURCE_PROVIDER'] . PATH_SEP . $fields['AUTH_SOURCE_PROVIDER'] . 'Edit.xml')) {
-    $G_PUBLISH->AddContent('xmlform', 'xmlform', $fields['AUTH_SOURCE_PROVIDER'] . PATH_SEP . $fields['AUTH_SOURCE_PROVIDER'] . 'Edit.xml', '', $fields, '../authSources/authSources_Save');
+ 
+  global $RBAC;
+  if ($RBAC->userCanAccess('PM_SETUP_ADVANCE') != 1) {
+    G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');
+	  G::header('location: ../login/login');
+	  die;
   }
-  else {
-    if (file_exists(PATH_XMLFORM . 'authSources/' . $fields['AUTH_SOURCE_PROVIDER'] . 'Edit.xml')) {
-      $G_PUBLISH->AddContent('xmlform', 'xmlform', 'authSources/' . $fields['AUTH_SOURCE_PROVIDER'] . 'Edit', '', $fields, '../authSources/authSources_Save');
+
+  $G_MAIN_MENU            = 'processmaker';
+  $G_SUB_MENU             = 'users';
+  $G_ID_MENU_SELECTED     = 'USERS';
+  $G_ID_SUB_MENU_SELECTED = 'AUTH_SOURCES';
+
+  $fields = array('AUTH_SOURCE_PROVIDER' => $_REQUEST['AUTH_SOURCE_PROVIDER']);
+
+
+  $G_PUBLISH = new Publisher();
+
+    if (file_exists(PATH_PLUGINS . $fields['AUTH_SOURCE_PROVIDER'] . PATH_SEP . $fields['AUTH_SOURCE_PROVIDER'] . 'Edit.xml')) {
+      $G_PUBLISH->AddContent('xmlform', 'xmlform', $fields['AUTH_SOURCE_PROVIDER'] . PATH_SEP . $fields['AUTH_SOURCE_PROVIDER'] . 'Edit.xml', '', $fields, '../authSources/authSources_Save');
     }
     else {
-      $G_PUBLISH->AddContent('xmlform', 'xmlform', 'login/showMessage', '', array('MESSAGE' => 'File: ' . $fields['AUTH_SOURCE_PROVIDER'] . 'Edit.xml' . ' not exists.'));
+      if (file_exists(PATH_XMLFORM . 'authSources/' . $fields['AUTH_SOURCE_PROVIDER'] . 'Edit.xml')) {
+        $G_PUBLISH->AddContent('xmlform', 'xmlform', 'authSources/' . $fields['AUTH_SOURCE_PROVIDER'] . 'Edit', '', $fields, '../authSources/authSources_Save');
+      }
+      else {
+        $G_PUBLISH->AddContent('xmlform', 'xmlform', 'login/showMessage', '', array('MESSAGE' => 'File: ' . $fields['AUTH_SOURCE_PROVIDER'] . 'Edit.xml' . ' not exists.'));
+      }
     }
-  }
-}
-G::RenderPage('publish','blank');
+  G::RenderPage('publish','blank');

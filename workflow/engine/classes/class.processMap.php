@@ -859,6 +859,9 @@ class processMap {
       $i = 0;
       while ($aRow = $oDataset->getRow()) {
         $i++;
+				if (($aRow ['DYN_TITLE'] == NULL) || ($aRow ['DYN_TITLE'] == "")) { // There is no transaltion for this Document name, try to get/regenerate the label
+		      $aRow ['DYN_TITLE'] = Content::Load("DYN_TITLE", "", $aRow ['DYN_UID'], SYS_LANG);
+		    }
         $aBB [] = array('STEP_UID' => $aRow ['DYN_UID'], 'STEP_TITLE' => $aRow ['DYN_TITLE'], 'STEP_TYPE_OBJ' => 'DYNAFORM', 'STEP_MODE' => '<select id="STEP_MODE_' . $aRow ['DYN_UID'] . '">
                                             <option value="EDIT">Edit</option>
                                             <option value="VIEW">View</option>
@@ -880,6 +883,10 @@ class processMap {
       $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
       $oDataset->next();
       while ($aRow = $oDataset->getRow()) {
+
+				if (($aRow ['INP_DOC_TITLE'] == NULL) || ($aRow ['INP_DOC_TITLE'] == "")) { // There is no transaltion for this Document name, try to get/regenerate the label
+					$aRow ['INP_DOC_TITLE'] = Content::Load("INP_DOC_TITLE", "", $aRow ['INP_DOC_UID'], SYS_LANG);
+				}
         $aBB [] = array('STEP_UID' => $aRow ['INP_DOC_UID'], 'STEP_TITLE' => $aRow ['INP_DOC_TITLE'], 'STEP_TYPE_OBJ' => 'INPUT_DOCUMENT', 'STEP_MODE' => '<input type="hidden" id="STEP_MODE_' . $aRow ['INP_DOC_UID'] . '">');
         $oDataset->next();
       }
@@ -898,6 +905,10 @@ class processMap {
       $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
       $oDataset->next();
       while ($aRow = $oDataset->getRow()) {
+
+				if (($aRow ['OUT_DOC_TITLE'] == NULL) || ($aRow ['OUT_DOC_TITLE'] == "")) { // There is no transaltion for this Document name, try to get/regenerate the label
+		      $aRow ['OUT_DOC_TITLE'] = Content::Load("OUT_DOC_TITLE", "", $aRow ['OUT_DOC_UID'], SYS_LANG);
+		    }
         $aBB [] = array('STEP_UID' => $aRow ['OUT_DOC_UID'], 'STEP_TITLE' => $aRow ['OUT_DOC_TITLE'], 'STEP_TYPE_OBJ' => 'OUTPUT_DOCUMENT', 'STEP_MODE' => '<input type="hidden" id="STEP_MODE_' . $aRow ['OUT_DOC_UID'] . '">');
         $oDataset->next();
       }
@@ -910,7 +921,6 @@ class processMap {
           $aBB [] = array('STEP_UID' => $stepVar->sStepId, 'STEP_TITLE' => $stepVar->sStepTitle, 'STEP_TYPE_OBJ' => 'EXTERNAL', 'STEP_MODE' => '<input type="hidden" id="STEP_MODE_' . $stepVar->sStepId . '">');
         }
       }
-
       global $_DBArray;
       $_DBArray = (isset($_SESSION ['_DBArray']) ? $_SESSION ['_DBArray'] : '');
       $_DBArray ['availableBB'] = $aBB;

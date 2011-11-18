@@ -3,7 +3,7 @@
  * authSources_Ajax.php
  *
  * ProcessMaker Open Source Edition
- * Copyright (C) 2004 - 2008 Colosa Inc.23
+ * Copyright (C) 2004 - 2011 Colosa Inc.23
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -147,7 +147,36 @@ try {
     		echo '{success: false, error: '.$ex->getMessage().'}';
     	}
     	break;
-    	
+    case 'authSourcesNew':
+      $arr = Array();
+      $oDirectory = dir(PATH_RBAC . 'plugins' . PATH_SEP);
+      $aAuthSourceTypes = array();
+      while($sObject = $oDirectory->read()) {
+        if (($sObject != '.') && ($sObject != '..') && ($sObject != '.svn') && ($sObject != 'ldap')) {
+          if (is_file(PATH_RBAC . 'plugins' . PATH_SEP . $sObject)) {
+            $sType = trim(str_replace('class.', '', str_replace('.php', '', $sObject)));
+            $aAuthSourceTypes['sType'] = $sType;
+            $aAuthSourceTypes['sLabel'] = $sType;
+            $arr[] = $aAuthSourceTypes;
+          }
+        }
+      }
+      echo '{sources: '.G::json_encode($arr).'}';
+      break;
+      case 'loadauthSourceData':
+        global $RBAC;
+        
+        $fields = $RBAC->getAuthSource($_POST['sUID']);
+        if (is_array($fields['AUTH_SOURCE_DATA'])) {
+          foreach($fields['AUTH_SOURCE_DATA'] as $field => $value) {
+            $fields[$field] = $value;
+          }
+        }
+        unset($fields['AUTH_SOURCE_DATA']);
+       $result->success = true;
+       $result->sources = $fields;
+       print(G::json_encode($result));
+      break;
   }
 }
 catch ( Exception  $e ) {

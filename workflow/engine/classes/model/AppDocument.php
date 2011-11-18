@@ -585,4 +585,37 @@ class AppDocument extends BaseAppDocument {
     return $oDataset->getRow();
   }
   
+  
+  ////////////////////////////////////////////////////////////////////////////////
+  /**
+   * get all docuemnts for a folder
+   * created by carlos pacha carlos@colosa.com, pckrlos@gmail.com
+   * @param array $sFolderUid
+   * @return array
+  **/
+  public function getDocumentsinFolders($sFolderUid)
+  {
+    try {
+        $arrayDocumentsToDelete=array();
+
+        $oCriteria = new Criteria('workflow');
+        $oCriteria->add(AppDocumentPeer::FOLDER_UID, $sFolderUid);
+        $oDataset = AppDocumentPeer::doSelectRS($oCriteria);
+        $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+        $oDataset->next();
+        while ($aRow = $oDataset->getRow()) {
+            $arrayDocumentsToDelete[]=array('sAppDocUid'=>$aRow['APP_DOC_UID'],'iVersion'=>$aRow['DOC_VERSION']);
+            $oDataset->next();
+        }
+
+    return ($arrayDocumentsToDelete);
+    }
+    catch (Exception $oError) {
+      throw($oError);
+    }
+  }
+  
+  
+  
+  
 } // AppDocument

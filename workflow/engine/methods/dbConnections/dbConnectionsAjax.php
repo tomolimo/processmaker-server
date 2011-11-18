@@ -147,6 +147,8 @@ switch ( $action ){
 
 		$oDBSource = new DbSource();
 		$oContent = new Content();
+		if(strpos($_POST['server'], "\\"))
+			$_POST['port'] = 'none';
 		$aData = Array(
 			'DBS_UID' => $_POST['dbs_uid'],
 			'PRO_UID' => $_SESSION['PROCESS'],
@@ -168,6 +170,8 @@ switch ( $action ){
 
 		$oDBSource = new DbSource();
 		$oContent = new Content();
+		if(strpos($_POST['server'], "\\"))
+			$_POST['port'] = 'none';
 		$aData = Array(
 			'PRO_UID' => $_SESSION['PROCESS'],
 			'DBS_TYPE' => $_POST['type'],

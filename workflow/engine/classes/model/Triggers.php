@@ -74,9 +74,6 @@ class Triggers extends BaseTriggers {
     if ($this->tri_title !== $v || $v==="") {
       $this->tri_title = $v;
 
-      //verify the content for base language
-      Content::copyContentOnBaseLanguageIfNotExists('TRI_TITLE', $this->getTriUid(), $this->tri_title);
-
       $res = Content::addContent( 'TRI_TITLE', '', $this->getTriUid(), $lang, $this->tri_title );
       return $res;
     }
@@ -115,9 +112,6 @@ class Triggers extends BaseTriggers {
     $lang = defined ( 'SYS_LANG') ? SYS_LANG : 'en';
     if ($this->tri_description !== $v || $v==="") {
       $this->tri_description = $v;
-
-      //verify the content for base language
-      Content::copyContentOnBaseLanguageIfNotExists('TRI_DESCRIPTION', $this->getTriUid(), $this->tri_description);
       
       $res = Content::addContent( 'TRI_DESCRIPTION', '', $this->getTriUid(), $lang, $this->tri_description );
       return $res;

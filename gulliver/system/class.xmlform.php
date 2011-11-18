@@ -2331,36 +2331,41 @@ class XmlForm_Field_Checkbox extends XmlForm_Field
    */
   function render($value = NULL, $owner = NULL)
   {
-    if (($this->pmconnection != '') && ($this->pmfield != '') && $value == NULL) {
+  if (($this->pmconnection != '') && ($this->pmfield != '') && $value == NULL) {
       $value = $this->getPMTableValue($owner);
     }
+ 
+    $disabled = '';
     if($this->readOnly==='readonly' or $this->readOnly==='1' ){
-      $disabled = "disabled";
+     $readOnly = 'readonly="readonly" onclick="javascript: return false;"';//$disabled = "disabled";
     }
     else{
-      $disabled = '';
-   }
+      $readOnly = '';
+   } 
+ 
     $checked = (isset ( $value ) && ($value == $this->value)) ? 'checked' : '';
+ 
     if ($this->mode === 'edit') {
       //$readOnly = isset ( $this->readOnly ) && $this->readOnly ? 'disabled' : '';
       if ($this->labelOnRight) {
-        $res = "<input id='form[" . $this->name . "]' value='{$this->value}' name='form[" . $this->name . "]' type='checkbox' $checked readonly=$this->readOnly $disabled><span class='FormCheck'>" . $this->label . '</span></input>';
+        $res = "<input id='form[" . $this->name . "]' value='{$this->value}' name='form[" . $this->name . "]' type='checkbox' $checked $readOnly $disabled><span class='FormCheck'>" . $this->label . '</span></input>';
       } else {
-        $res = "<input id='form[" . $this->name . "]' value='{$this->value}' name='form[" . $this->name . "]' type='checkbox' $checked readonly=$this->readOnly $disabled/>";
+        $res = "<input id='form[" . $this->name . "]' value='{$this->value}' name='form[" . $this->name . "]' type='checkbox' $checked $readOnly $disabled/>";
       }
       $res .= $this->renderHint();
 
       //      $res = "<input id='form[" . $this->name . "]' value='" . $this->name . "' name='form[" .$this->name . "]' type='checkbox' $checked $readOnly >" . $this->label ;
       return $res;
     } elseif ($this->mode === 'view') {
+    	$checked = (isset ( $value ) && ($value == $this->value)) ? 'checked' : '';
       if ($this->labelOnRight) {
         $html = '';
-        $html = "<input id='form[" . $this->name . "]' value='{$this->value}' name='form[" . $this->name . "]' type='checkbox' $checked readonly='{$this->readOnly}' $disabled >
+        $html = "<input id='form[" . $this->name . "]' value='{$this->value}' name='form[" . $this->name . "]' type='checkbox' $checked $readOnly disabled >
                  <span class='FormCheck'>" . $this->label . '</span></input>';
       } else {
-        $html = "<input id='form[" . $this->name . "]' value='{$this->value}' name='form[" . $this->name . "]' type='checkbox' $checked readonly='{$this->readOnly}' disabled/>";
+        $html = "<input id='form[" . $this->name . "]' value='{$this->value}' name='form[" . $this->name . "]' type='checkbox' $checked $readOnly disabled/>";
       }
-      $html .="<input id='form[" . $this->name . "]' value='{$this->value}' name='form[" . $this->name . "]' type='hidden' />";
+      $html .=  "<input id='form[" . $this->name . "]' value='{$value}' name='form[" . $this->name . "]' type='hidden' />";
 //      if($this->hint){
 //           $html .= '<a href="#" onmouseout="hideTooltip()" onmouseover="showTooltip(event, \''.$this->hint.'\');return false;">
 //                  <image src="/images/help4.gif" width="15" height="15" border="0"/>
@@ -3562,7 +3567,7 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
       if ( $this->editable != "0") {
         $html = '<input pm:required="'. $isRequired .'" id="'.$pID.'" name="'.$pID.'" pm:mask="'.$mask.'"'          
               . 'pm:start="'.$startDate.'" pm:end="'.$endDate.'" pm:time="'.$Time.'" '.$onchange.' class="module_app_input___gray" size="'.$sizeend.'"'
-              .  'value="'.$value.'" pm:defaultvalue="'.$defaultValue.'" required="' . $isRequired . '"/>'
+              .  'value="'.$value.'" pm:defaultvalue="'.$defaultValue.'"/>'
               . '<a onclick="removeValue(\''.$pID.'\'); return false;" style="position:relative;left:-17px;top:5px;" > '
               . '  <img src="/images/icons_silk/calendar_x_button.png" />'
               . '</a>'
@@ -3574,7 +3579,7 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
         { 
           $html = '<input pm:required="'. $isRequired .'" id="'.$pID.'" name="'.$pID.'" pm:mask="'.$mask.'" pm:start="'.$startDate.'"'
                 . 'pm:end="'.$endDate.'" pm:time="'.$Time.'" '.$onchange.' class="module_app_input___gray" size="'.$sizeend.'"'
-                . 'value="'.$value.'"pm:defaultvalue="'.$defaultValue.'" readonly="readonly" required="' . $isRequired . '"/>'
+                . 'value="'.$value.'"pm:defaultvalue="'.$defaultValue.'" readonly="readonly" />'
                 . '<a onclick="removeValue(\''.$pID.'\'); return false;" style="position:relative;left:-17px;top:5px;" >'
                 . '  <img src="/images/icons_silk/calendar_x_button.png" />'
                 . '</a>'

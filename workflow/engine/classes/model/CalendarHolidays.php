@@ -55,7 +55,6 @@ class CalendarHolidays extends BaseCalendarHolidays {
 function deleteAllCalendarHolidays($CalendarUid){
     $toDelete=$this->getCalendarHolidays($CalendarUid);
     foreach($toDelete as $key => $holidayInfo){
-      print_r($holidayInfo);
       $CalendarUid = $holidayInfo['CALENDAR_UID'];
         $CalendarHolidayName = $holidayInfo['CALENDAR_HOLIDAY_NAME'];
         $CalendarHolidayStart = $holidayInfo['CALENDAR_HOLIDAY_START'];

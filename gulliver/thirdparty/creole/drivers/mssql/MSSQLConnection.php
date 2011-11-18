@@ -74,13 +74,14 @@ class MSSQLConnection extends ConnectionCommon implements Connection {
         } else {
             $portDelimiter = ":";
         }
-       
-        if(!empty($dsninfo['port'])) {
-                $dbhost .= $portDelimiter.$dsninfo['port'];
-        } else {
-                $dbhost .= $portDelimiter.'1433';
-        }
-		
+
+          if(!empty($dsninfo['port'])) {
+                  $dbhost .= $portDelimiter.$dsninfo['port'];
+          } else {
+            if(!strpos($dbhost, "\\")){
+                  $dbhost .= $portDelimiter.'1433';
+            }
+          }
         $connect_function = $persistent ? 'mssql_pconnect' : 'mssql_connect';
 
         if ($dbhost && $user && $pw) {

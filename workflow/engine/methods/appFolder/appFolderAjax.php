@@ -17,7 +17,61 @@ $functionName = $_REQUEST ['action'];
 $functionParams = isset ( $_REQUEST ['params'] ) ? $_REQUEST ['params'] : array ();
 
 $functionName ( $functionParams );
+/////////////////////////////////////////////
+  /**
+   * delete folders and documents
+   * created by carlos pacha carlos@colosa.com, pckrlos@gmail.com
+   * @param void
+   * @return true
+  **/
+  function delete() {
+   include_once ("classes/model/AppDocument.php");
+   include_once ("classes/model/AppFolder.php");
+   
+    switch($_REQUEST['option']){
+      case 'documents':
+       deleteDocuments($_REQUEST['selitems'], $_REQUEST['option']);
+      break;
+      case 'directory':
+        $oAppFoder    = new AppFolder ( );
+        $oAppDocument = new AppDocument ( );
+        $aDocuments   = $oAppDocument->getDocumentsinFolders($_REQUEST['item']);
 
+        if(count($aDocuments)>0){
+          deleteDocuments($aDocuments, $_REQUEST['option']);
+        }
+
+        $oAppFoder->remove($_REQUEST['item'],'');
+      break;
+  }
+  $msgLabel= G::LoadTranslation ( 'ID_DELETED_SUCCESSFULLY' );
+  echo "{action: '', error:'error',message: '$msgLabel', success: 'success',folderUID: 'root'}";
+  }
+
+  /**
+   * delete docuements
+   * created by carlos pacha carlos@colosa.com, pckrlos@gmail.com
+   * @param array $aDocuments
+   * @param string $opt
+   * @return true
+  **/
+  function deleteDocuments($aDocuments, $opt){
+   include_once ("classes/model/AppDocument.php");
+   $oAppDocument = new AppDocument ( );
+    foreach($aDocuments as $key => $val){
+    
+      if($opt=='documents'){
+        list($sFileUID,$docVersion) = explode('_',$val);
+      } else {
+        $sFileUID   = $val['sAppDocUid'];
+        $docVersion = $val['iVersion'];
+      }
+
+      $oAppDocument->remove($sFileUID,$docVersion);
+    }
+  return true;
+  }
+/////////////////////////////////////////////
 function getExtJSParams() {
   $validParams = array('callback' => '', 'dir' => 'DESC', 'sort' => '', 'start' => 0, 'limit' => 25, 'filter' => '', 'search' => '', 'action' => '', 'xaction' => '', 'data' => '', 'status' => '', 'query' => '', 'fields' => "");
   $result = array();
@@ -44,9 +98,10 @@ function expandNode(){
     $oPMFolder = new AppFolder ( );
 
     $rootFolder = "/";
-
+    
     if($_POST ['node']=="") $_POST ['node'] ="/";
     if($_POST ['node']=="root") $_POST ['node'] ="/";
+    
     if(!(isset($_POST['sendWhat']))) $_POST['sendWhat']="both";
     $totalItems=0;
     $totalFolders=0;
@@ -58,7 +113,7 @@ function expandNode(){
         $totalFolders=$folderListObj['totalFoldersCount'];
         $totalItems+=count($folderList);
 
-        //G::pr($folderList);
+//        G::pr($folderListObj);
     }
     if(($_POST['sendWhat']=="files")||($_POST['sendWhat']=="both")){
         $folderContentObj = $oPMFolder->getFolderContent ( $_POST ['node'] != 'root' ? $_POST ['node'] == 'NA' ? "" : $_POST ['node'] : $rootFolder, array(), NULL, NULL, $limit, $start );
@@ -69,10 +124,13 @@ function expandNode(){
 
 //G::pr($folderContent);
     }
-    //G::pr($folderContent);
+//    G::pr($folderList);
+//var_dump(isset($folderList));
     $processListTree=array();
-    if(isset($folderList)){
-        $tempTree=array();
+    $tempTree=array();
+    if(isset($folderList) && sizeof($folderList)>0){
+//    print'krlos';
+//        $tempTree=array();
         foreach ( $folderList as $key => $obj ) {
             //$tempTree ['all-obj'] = $obj;
             $tempTree ['text'] = $obj['FOLDER_NAME'];
@@ -115,7 +173,7 @@ function expandNode(){
             $tempTree ['id'] = "NA";
             $tempTree ['folderID'] = "NA";
             $tempTree ['cls'] = 'folder';
-            $tempTree ['draggable'] = true;
+            $tempTree ['draggable'  ] = true;
             $tempTree ['name'] = $notInFolderLabel;
             $tempTree ['type'] = "Directory";
             $tempTree ['is_file'] = false;
@@ -144,6 +202,14 @@ function expandNode(){
             $tempTree=array();
 
         }*/
+        
+        
+    } else {
+    
+      if($_POST ['node'] == '/'){
+//      $tempTree=array();
+//       $processListTree [] = array();
+      }
     }
      
     if(isset($folderContent)){
@@ -271,13 +337,14 @@ function expandNode(){
             $tempTree=array();
         }
     }
+//        G::pr($processListTree);
     if((isset($_POST['option']))&&($_POST['option']=="gridDocuments")){
         $processListTreeTemp['totalCount']=$totalFolders+$totalDocuments;//count($processListTree);
-
+        $processListTreeTemp['msg']='correct reload';
         $processListTreeTemp['items']=$processListTree;
         $processListTree = $processListTreeTemp;
     }
-
+//    G::pr ( $processListTree );die;
     print G::json_encode ( $processListTree );
 }
 
@@ -1122,11 +1189,10 @@ function newFolder(){
     $formNewFolder["buttons"]= array();
 
 
-     
-    $button=array();
-    $button["text"]= "Create";
-    $button["handler"]= 'handlerCreate';
-    $formNewFolder["buttons"][]= $button;
+    $button                     = array();
+    $button["text"]             = "Create";
+    $button["handler"]          = 'handlerCreate';
+    $formNewFolder["buttons"][] = $button;
 
     $button=array();
     $button["text"]= "Cancel";
