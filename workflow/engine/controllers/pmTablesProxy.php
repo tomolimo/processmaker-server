@@ -79,6 +79,11 @@ class pmTablesProxy extends HttpProxyController
         else {
           $addTables['rows'][$i]['NUM_ROWS'] = 0;
         }
+
+        //removing the prefix "PMT" to aalow alphabetical order
+        if (substr($addTables['rows'][$i]['ADD_TAB_NAME'], 0, 4) == 'PMT_') {
+          $addTables['rows'][$i]['ADD_TAB_NAME'] = substr($addTables['rows'][$i]['ADD_TAB_NAME'], 4);
+        }
       }
       catch (Exception $e) {
         $addTables['rows'][$i]['NUM_ROWS'] = G::LoadTranslation('ID_TABLE_NOT_FOUND');
@@ -207,6 +212,12 @@ class pmTablesProxy extends HttpProxyController
       $data = (array) $httpData;
       $data['PRO_UID'] = trim($data['PRO_UID']);
       $data['columns'] = G::json_decode(stripslashes($httpData->columns)); //decofing data columns
+
+      // forcing to use the PMT prefix for all new tables
+      if ($data['REP_TAB_UID'] == '' || (isset($httpData->forceUid) && $httpData->forceUid)) { //new report table
+        $data['REP_TAB_NAME'] = sprintf('%s_%s', 'PMT', $data['REP_TAB_NAME']);
+      }
+
       $isReportTable = $data['PRO_UID'] != '' ? true : false;
       $oAdditionalTables = new AdditionalTables();
       $oFields = new Fields();
