@@ -30,7 +30,7 @@ try {
   //load the variables
   G::LoadClass('plugin');
   if ( ! isset($_FILES['form']['error']['PLUGIN_FILENAME'] ) || $_FILES['form']['error']['PLUGIN_FILENAME'] == 1 ) {
-    throw ( new Exception ("There was an error uploading the file, probably the file size if greater than upload_max_filesize parameter in php.ini, please check this parameter and try again." ) );
+    throw ( new Exception (G::loadTranslation('ID_ERROR_UPLOADING_PLUGIN_FILENAME') ) );
   }
 
   //save the file
@@ -40,8 +40,10 @@ try {
     $tempName = $_FILES['form']['tmp_name']['PLUGIN_FILENAME'];
     G::uploadFile($tempName, $path, $filename );
   }
-  if ( ! $_FILES['form']['type']['PLUGIN_FILENAME'] == 'application/octet-stream')
-    throw ( new Exception ( "the uploaded files are invalid, expected 'application/octect-stream mime type file (".  $_FILES['form']['type']['PLUGIN_FILENAME'] . ")" ));
+  if ( ! $_FILES['form']['type']['PLUGIN_FILENAME'] == 'application/octet-stream') {
+    $pluginFilename = $_FILES['form']['type']['PLUGIN_FILENAME'];
+    throw ( new Exception ( G::loadTranslation('ID_FILES_INVALID_PLUGIN_FILENAME', SYS_LANG, array("pluginFilename"=>$pluginFilename)) ));
+  }
 
 
   G::LoadThirdParty( 'pear/Archive','Tar');
@@ -52,6 +54,9 @@ try {
   $aFiles = $tar->listContent();
   $bMainFile = false;
   $bClassFile = false;
+  if(!is_array($aFiles)){
+    throw ( new Exception (G::loadTranslation('ID_FAILED_IMPORT_PLUGINS', SYS_LANG, array("filename"=>$filename)) ) ) ;
+  }
   foreach ( $aFiles as $key => $val ) {
     if ( $val['filename'] == $sClassName . '.php' ) $bMainFile = true;
     if ( $val['filename'] == $sClassName . PATH_SEP . 'class.' . $sClassName . '.php' ) $bClassFile = true;
@@ -105,24 +110,29 @@ try {
         if (file_exists(PATH_PLUGINS . $aDependence['sClassName'] . '.php')) {
           require_once PATH_PLUGINS . $aDependence['sClassName'] . '.php';
           if (!$oPluginRegistry->getPluginDetails($aDependence['sClassName'] . '.php')) {
-            throw new Exception('This plugin needs "' . $aDependence['sClassName'] . '" plugin');
+            $sDependence = $aDependence['sClassName'];
+            throw new Exception( G::loadTranslation('ID_PLUGIN_DEPENDENCE_PLUGIN', SYS_LANG, array("Dependence"=>$sDependence )) );
           }
         }
         else {
-          throw new Exception('This plugin needs "' . $aDependence['sClassName'] . '" plugin');
+          $sDependence = $aDependence['sClassName'];
+          throw new Exception( G::loadTranslation('ID_PLUGIN_DEPENDENCE_PLUGIN', SYS_LANG, array("Dependence"=>$sDependence )) );
         }
       }
     }
     unset($oClass);
     if ($fVersionOld > $fVersionNew) {
-      throw new Exception('A recent version of this plugin was already installed.');
+      throw new Exception(G::loadTranslation('ID_RECENT_VERSION_PLUGIN'));
     }
     $res = $tar->extract ( PATH_PLUGINS );
   }
-  else
-    throw ( new Exception ( "The file $filename doesn't contain class: $sClassName ") ) ;
+  else {
+    throw ( new Exception ( G::loadTranslation('ID_FILE_CONTAIN_CLASS_PLUGIN', SYS_LANG, array("filename"=>$filename, "className"=>$sClassName )) ) ) ;
+  }
 
-  if ( !file_exists ( PATH_PLUGINS . $sClassName . '.php' ) ) throw ( new Exception( "File '$pluginFile' doesn't exists ") );
+  if ( !file_exists ( PATH_PLUGINS . $sClassName . '.php' ) ) {
+    throw ( new Exception( G::loadTranslation('ID_FILE_PLUGIN_NOT_EXISTS', SYS_LANG, array("pluginFile"=>$pluginFile )) ) );
+  }
 
   require_once ( PATH_PLUGINS . $pluginFile );
   $details = $oPluginRegistry->getPluginDetails( $pluginFile );
