@@ -1,45 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<dynaForm name="dbInfo" basedir="" width="450">
+<dynaForm name="dbInfo" basedir="" width="450" enableTemplate="0" ajaxSubmit="0" >
+
+
+<ENVIRONMENT type="hidden" />
+
 <DYNA_HEADER type="title">
   <en>System Information</en>
-<es><![CDATA[Información del sistema]]></es></DYNA_HEADER>
+</DYNA_HEADER>
 <FLUID type="caption" group="5">
   <en>ProcessMaker</en>
-<es>ProcessMaker</es></FLUID>
+</FLUID>
 <SYSTEM type="caption">
   <en>Operating System</en>
-<es>Sistema operativo</es></SYSTEM>
+</SYSTEM>
 <TIME_ZONE type="caption">
   <en>Time zone</en>
 </TIME_ZONE>
 <SERVER_SOFTWARE type="caption">
   <en>Web Server</en>
-<es>Servidor Web</es></SERVER_SOFTWARE>
+</SERVER_SOFTWARE>
 <SERVER_NAME type="caption" group="4">
   <en>Server Name</en>
-<es>Nombre del servidor</es></SERVER_NAME>
+</SERVER_NAME>
 <SERVER_ADDR type="caption">
   <en>Server IP Address</en>
-<es>IP del servidor</es></SERVER_ADDR>
+</SERVER_ADDR>
 <PHP type="caption">
   <en>PHP version</en>
-<es><![CDATA[Versión PHP]]></es></PHP>
+</PHP>
 <DATABASE type="caption">
   <en>Database</en>
-<es>Base de Datos</es></DATABASE>
+</DATABASE>
 <DATABASE_SERVER type="caption">
   <en>Database Server IP Address</en>
-<es><![CDATA[Dirección IP de la Base de Datos]]></es></DATABASE_SERVER>
+</DATABASE_SERVER>
 <DATABASE_NAME type="caption">
   <en>Database Name</en>
-<es>Nombre de la Base de Datos</es></DATABASE_NAME>
+</DATABASE_NAME>
 <AVAILABLE_DB type="caption">
   <en>Available Databases</en>
-<es>Bases de datos disponibles</es></AVAILABLE_DB>
+</AVAILABLE_DB>
 <HTTP_USER_AGENT type="caption">
   <en><![CDATA[User's Browser]]></en>
-<es>Navegador del usuario</es></HTTP_USER_AGENT>
+</HTTP_USER_AGENT>
 <IP type="caption">
   <en><![CDATA[User's Ip Address]]></en>
-<es>IP del usuario</es></IP>
-</dynaForm>  
+</IP>
+<JS type="javascript"><![CDATA[
+// note added by carlos pacha carlos[at]colosa[dot]com pckrlos[at]gmail[dot]com
+// the following fields are hidden if we've not chosen a workspace. Related 8021 bug
+//var dynaformOnload = function(){
+  if(getField('ENVIRONMENT').value=='Not defined'){
+  hideRowById('DATABASE')
+  hideRowById('DATABASE_SERVER');
+  hideRowById('DATABASE_NAME');
+  hideRowById('AVAILABLE_DB');
+  }
+//};
+]]></JS>
+</dynaForm>
+
+
+

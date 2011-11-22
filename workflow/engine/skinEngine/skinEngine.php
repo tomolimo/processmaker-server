@@ -107,9 +107,7 @@ if(isset($_GET['debug'])){
     print "<b>layout submenu file:</b>"; G::pr($layoutFileSubmenu);
 
 }
-// note added by carlos pacha carlos[at]colosa[dot]com pckrlos[at]gmail[dot]com
-// the following line has true or false value to see the System information text. Related 8021 bug
-$toSeeMsg = (array_key_exists('_DBArray', $_SESSION) && array_key_exists('availableWorkspace', $_SESSION['_DBArray']))?true:false; 
+
 switch(strtolower($G_SKIN)){
     case "blank"://This is a special template but need main skin styles
         G::verifyPath ( PATH_SMARTY_C,     true );
@@ -171,7 +169,7 @@ if (isset($G_ENABLE_BLANK_SKIN) && $G_ENABLE_BLANK_SKIN) {
     $footer = '';
     if (strpos($_SERVER['REQUEST_URI'], '/login/login') !== false) {
         if (DB_SYSTEM_INFORMATION == 1) {
-            $footer =(!$toSeeMsg)?"<a href=\"#\" onclick=\"openInfoPanel();return false;\" class=\"FooterLink\">| System Information |</a><br />":'';
+            $footer = "<a href=\"#\" onclick=\"openInfoPanel();return false;\" class=\"FooterLink\">| System Information |</a><br />";
         }
 
         $freeOfChargeText = "";
@@ -319,7 +317,7 @@ if (isset($G_ENABLE_BLANK_SKIN) && $G_ENABLE_BLANK_SKIN) {
             $footer = '';
             if (strpos($_SERVER['REQUEST_URI'], '/login/login') !== false) {
                 if ( defined('SYS_SYS') ) {
-                    $footer = (!$toSeeMsg)?"<a href=\"#\" onclick=\"openInfoPanel();return false;\" class=\"FooterLink\">| System Information |</a><br />":'';
+                    $footer = "<a href=\"#\" onclick=\"openInfoPanel();return false;\" class=\"FooterLink\">| System Information |</a><br />";
                 }
                 $footer .= "<br />Copyright � 2003-2008 Colosa, Inc. All rights reserved.";
             }
@@ -408,7 +406,7 @@ if (isset($G_ENABLE_BLANK_SKIN) && $G_ENABLE_BLANK_SKIN) {
             $footer = '';
             if (strpos($_SERVER['REQUEST_URI'], '/login/login') !== false) {
                 if (DB_SYSTEM_INFORMATION == 1) {
-                  $footer =(!$toSeeMsg) ? "<a href=\"#\" onclick=\"openInfoPanel();return false;\" class=\"FooterLink\">| System Information |</a><br />":'';
+                  $footer = "<a href=\"#\" onclick=\"openInfoPanel();return false;\" class=\"FooterLink\">| System Information |</a><br />";
                 }
 
                 $freeOfChargeText = "";
