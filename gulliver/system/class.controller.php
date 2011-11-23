@@ -110,7 +110,7 @@ class Controller
 
                 $template = new TemplatePower(PATH_TEMPLATE . 'controller.exception.tpl');
                 $template->prepare();
-                $template->assign('controller', get_called_class());
+                $template->assign('controller', (function_exists('get_called_class') ? get_called_class() : 'Controller'));
                 $template->assign('message', $e->getMessage());
                 $template->assign('file',    $e->getFile());
                 $template->assign('line',    $e->getLine());
