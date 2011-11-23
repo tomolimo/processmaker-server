@@ -336,27 +336,37 @@ class PMPluginRegistry {
    *
    * @return bool true if enabled, false otherwise
    */
-  function installPluginArchive($filename, $pluginName = NULL) {
-    G::LoadThirdParty( 'pear/Archive','Tar');
-    $tar = new Archive_Tar ($filename);
+  function installPluginArchive($filename, $pluginName) {
+    G::LoadThirdParty("pear/Archive", "Tar");
+    $tar = new Archive_Tar($filename);
 
     $files = $tar->listContent();
 
     $plugins = array();
+    $namePlugin = array();
     foreach ($files as $f) {
-      if (preg_match("/^([\w\.]*).ini$/", $f['filename'], $matches)) {
+      //if (preg_match("/^([\w\.]*).ini$/", $f["filename"], $matches)) {
+      if (preg_match("/^(.*pluginConfig)\.ini$/", $f["filename"], $matches)) {
         $plugins[] = $matches[1];
+      }
+      if (preg_match("/^.*($pluginName)\.php$/", $f["filename"], $matches)) {
+        $namePlugin[] = $matches[1];
       }
     }
 
-    if (count($plugins) > 1)
+    if (count($plugins) > 1) {
       throw new Exception("Multiple plugins in one archive are not supported currently");
-
-    if (isset($pluginName) && !in_array($pluginName, $plugins))
+    }
+    
+    //if (isset($pluginName) && !in_array($pluginName, $plugins)) {
+    if (isset($pluginName) && !in_array($pluginName, $namePlugin)) {
       throw new Exception("Plugin '$pluginName' not found in archive");
-
-    $pluginName = $plugins[0];
+    }
+    
+    //$pluginName = $plugins[0];
     $pluginFile = "$pluginName.php";
+
+    /*
     $oldPluginStatus = $this->getStatusPlugin($pluginFile);
 
     if ($pluginStatus != 0) {
@@ -366,11 +376,13 @@ class PMPluginRegistry {
       $oldDetails = NULL;
       $oldVersion = NULL;
     }
+    */
 
-    $pluginIni = $tar->extractInString("$pluginName.ini");
-    $pluginConfig = parse_ini_string($pluginIni);
+    //$pluginIni = $tar->extractInString("$pluginName.ini");
+    //$pluginConfig = parse_ini_string($pluginIni);
 
-    /*if (!empty($oClass->aDependences)) {
+    /*
+    if (!empty($oClass->aDependences)) {
       foreach ($oClass->aDependences as $aDependence) {
         if (file_exists(PATH_PLUGINS . $aDependence['sClassName'] . '.php')) {
           require_once PATH_PLUGINS . $aDependence['sClassName'] . '.php';
@@ -386,20 +398,22 @@ class PMPluginRegistry {
     unset($oClass);
     if ($fVersionOld > $fVersionNew) {
       throw new Exception('A recent version of this plugin was already installed.');
-    }*/
-    $res = $tar->extract ( PATH_PLUGINS );
+    }
+    */
+    
+    $res = $tar->extract(PATH_PLUGINS);
 
-    if (!file_exists(PATH_PLUGINS . $pluginFile))
-      throw ( new Exception( "File '$pluginFile' doesn't exist ") );
-
-    require_once ( PATH_PLUGINS . $pluginFile );
-    $details = $this->getPluginDetails( $pluginFile );
-
+    if (!file_exists(PATH_PLUGINS . $pluginFile)) {
+      throw (new Exception("File \"$pluginFile\" doesn't exist"));
+    }
+    
+    require_once (PATH_PLUGINS . $pluginFile);
+    $details = $this->getPluginDetails($pluginFile);
+    
     $this->installPlugin($details->sNamespace);
     $this->setupPlugins();
-
-    $this->enablePlugin($details->sNamespace);
-
+    
+    //$this->enablePlugin($details->sNamespace);
     $this->save();
   }
 
