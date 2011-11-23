@@ -21,7 +21,7 @@ Ext.onReady(function(){
   xtype:'textfield',
   value:'',
   width: 200,
-  autoCreate: {tag: 'input', type: 'text', size: '20', autocomplete: 'off', maxlength: '13'},
+  autoCreate: {tag: 'input', type: 'text', size: '20', autocomplete: 'off', maxlength: '50'},
   allowBlank: false,
   listeners: {
               'render': function(c) {
@@ -62,7 +62,7 @@ Ext.onReady(function(){
   xtype:'textfield',
   value:'',
   width: 200,
-  autoCreate: {tag: 'input', type: 'text', size: '20', autocomplete: 'off', maxlength: '13'},
+  autoCreate: {tag: 'input', type: 'text', size: '20', autocomplete: 'off', maxlength: '50'},
   allowBlank: false,
   listeners: {
               'render': function(c) {
@@ -78,7 +78,7 @@ Ext.onReady(function(){
     xtype:'textfield',
     value:'389',
     width: 200,
-    autoCreate: {tag: 'input', type: 'text', size: '10', autocomplete: 'off', maxlength: '13'},
+    autoCreate: {tag: 'input', type: 'text', size: '10', autocomplete: 'off', maxlength: '5'},
     allowBlank: false,
     listeners: {
                 'render': function(c) {
@@ -126,7 +126,7 @@ Ext.onReady(function(){
     xtype:'textfield',
     value:sUID,
     width: 200,
-    autoCreate: {tag: 'input', type: 'text', size: '10', autocomplete: 'off', maxlength: '13'},
+    autoCreate: {tag: 'input', type: 'text', size: '10', autocomplete: 'off', maxlength: '128'},
     allowBlank: false,
     listeners: {
                 'render': function(c) {
@@ -178,7 +178,7 @@ Ext.onReady(function(){
     xtype:'textfield',
     value:'',
     width: 200,
-    autoCreate: {tag: 'input', type: 'text', size: '20', autocomplete: 'off', maxlength: '13'},
+    autoCreate: {tag: 'input', type: 'text', size: '20', autocomplete: 'off', maxlength: '128'},
     listeners: {
                 'render': function(c) {
                   c.getEl().on('keyup', function() {
@@ -194,7 +194,7 @@ Ext.onReady(function(){
     inputType:'password',
     value:'',
     width: 200,
-    autoCreate: {tag: 'input', type: 'text', size: '20', autocomplete: 'off', maxlength: '13'},
+    autoCreate: {tag: 'input', type: 'text', size: '20', autocomplete: 'off', maxlength: '32'},
     listeners: {
                 'render': function(c) {
                   c.getEl().on('keyup', function() {
@@ -210,7 +210,7 @@ Ext.onReady(function(){
     xtype:'textfield',
     value:'uid',
     width: 200,
-    autoCreate: {tag: 'input', type: 'text', size: '20', autocomplete: 'off', maxlength: '13'},
+    autoCreate: {tag: 'input', type: 'text', size: '20', autocomplete: 'off', maxlength: '50'},
     allowBlank: false,
     listeners: {
                 'render': function(c) {
@@ -241,7 +241,7 @@ Ext.onReady(function(){
     xtype:'textfield',
     value:'',
     width: 200,
-    autoCreate: {tag: 'input', type: 'text', size: '20', autocomplete: 'off', maxlength: '13'},
+    autoCreate: {tag: 'input', type: 'text', size: '20', autocomplete: 'off', maxlength: '200'},
     allowBlank: false,
     listeners: {
                 'render': function(c) {
