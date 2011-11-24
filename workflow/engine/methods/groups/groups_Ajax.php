@@ -142,7 +142,7 @@ switch ($_POST['action'])
       $arrData[] = $row; 
     }
 
-    echo '{success: true, groups: '.G::json_encode($arrData).', total_groups: '.$totalRows.'}'; die;
+    echo '{success: true, groups: '.G::json_encode($arrData).', total_groups: '.$totalRows.'}';
     break;
   case 'exitsGroupName':
     require_once 'classes/model/Groupwf.php';
