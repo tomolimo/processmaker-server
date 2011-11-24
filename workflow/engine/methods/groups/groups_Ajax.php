@@ -135,8 +135,8 @@ switch ($_POST['action'])
     $arrData = Array();
     while ($oDataset->next()){
       $row = $oDataset->getRow();       
-      $row['GRP_TASKS'] = isset($aTask[$arrData[$index]['GRP_UID']]) ? $aTask[$arrData[$index]['GRP_UID']] : 0;
-      $row['GRP_USERS'] = isset($aMembers[$arrData[$index]['GRP_UID']]) ? $aMembers[$arrData[$index]['GRP_UID']] : 0;      
+      $row['GRP_TASKS'] = isset($aTask[$row['GRP_UID']]) ? $aTask[$row['GRP_UID']] : 0;
+      $row['GRP_USERS'] = isset($aMembers[$row['GRP_UID']]) ? $aMembers[$row['GRP_UID']] : 0;      
       $group = GroupwfPeer::retrieveByPK($row['GRP_UID']);  
       $row['CON_VALUE']= $group->getGrpTitle();
       $arrData[] = $row; 
