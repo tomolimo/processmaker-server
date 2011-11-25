@@ -730,7 +730,7 @@ function createReportTable()
     params: {
       REP_TAB_UID   : TABLE !== false ? TABLE.ADD_TAB_UID : '',
       PRO_UID       : '',
-      REP_TAB_NAME  : tableName,
+      REP_TAB_NAME  : TABLE !== false ? tableName : 'PMT_' + tableName,
       REP_TAB_DSC   : tableDescription,
       REP_TAB_CONNECTION : 'workflow',
       REP_TAB_TYPE  : '',

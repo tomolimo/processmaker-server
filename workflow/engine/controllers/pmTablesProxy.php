@@ -80,7 +80,7 @@ class pmTablesProxy extends HttpProxyController
           $addTables['rows'][$i]['NUM_ROWS'] = 0;
         }
 
-        //removing the prefix "PMT" to aalow alphabetical order
+        //removing the prefix "PMT" to allow alphabetical order (just in view)
         if (substr($addTables['rows'][$i]['ADD_TAB_NAME'], 0, 4) == 'PMT_') {
           $addTables['rows'][$i]['ADD_TAB_NAME'] = substr($addTables['rows'][$i]['ADD_TAB_NAME'], 4);
         }
@@ -212,11 +212,6 @@ class pmTablesProxy extends HttpProxyController
       $data = (array) $httpData;
       $data['PRO_UID'] = trim($data['PRO_UID']);
       $data['columns'] = G::json_decode(stripslashes($httpData->columns)); //decofing data columns
-
-      // forcing to use the PMT prefix for all new tables
-      if ($data['REP_TAB_UID'] == '' || (isset($httpData->forceUid) && $httpData->forceUid)) { //new report table
-        $data['REP_TAB_NAME'] = sprintf('%s_%s', 'PMT', $data['REP_TAB_NAME']);
-      }
 
       $isReportTable = $data['PRO_UID'] != '' ? true : false;
       $oAdditionalTables = new AdditionalTables();
@@ -973,7 +968,7 @@ class pmTablesProxy extends HttpProxyController
   public function export($httpData)
   {
     require_once 'classes/model/AdditionalTables.php';
-
+    $at = new AdditionalTables();
     $tablesToExport = G::json_decode(stripslashes($httpData->rows));
           
     try{
@@ -995,8 +990,9 @@ class pmTablesProxy extends HttpProxyController
       $EXPORT_TRACEBACK = Array();
       $c = 0;
       foreach ($tablesToExport as $table) {
-        $at = new additionalTables();
+        $tableRecord = $at->load($table->ADD_TAB_UID);
         $tableData = $at->getAllData($table->ADD_TAB_UID);
+        $table->ADD_TAB_NAME = $tableRecord['ADD_TAB_NAME'];
         $rows  = $tableData['rows'];
         $count = $tableData['count'];
         
@@ -1082,10 +1078,6 @@ class pmTablesProxy extends HttpProxyController
       $meta         = "<pre>".$META."</pre>";
       $filename     = $filenameOnly;
       $link         = $filenameLink;
-      
-      // $G_PUBLISH = new Publisher();
-      // $G_PUBLISH->AddContent('xmlform', 'xmlform', 'additionalTables/doExport', '', $aFields, '');
-      // G::RenderPage('publish', 'raw');
 
       $result->success  = true;
       $result->filename = $filenameOnly;
