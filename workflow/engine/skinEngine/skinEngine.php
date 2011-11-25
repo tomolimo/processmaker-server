@@ -406,7 +406,7 @@ if (isset($G_ENABLE_BLANK_SKIN) && $G_ENABLE_BLANK_SKIN) {
             $footer = '';
             if (strpos($_SERVER['REQUEST_URI'], '/login/login') !== false) {
                 if (DB_SYSTEM_INFORMATION == 1) {
-                    $footer = "<a href=\"#\" onclick=\"openInfoPanel();return false;\" class=\"FooterLink\">| System Information |</a><br />";
+                  $footer = "<a href=\"#\" onclick=\"openInfoPanel();return false;\" class=\"FooterLink\">| System Information |</a><br />";
                 }
 
                 $freeOfChargeText = "";

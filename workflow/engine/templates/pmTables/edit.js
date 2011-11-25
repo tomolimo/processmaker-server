@@ -534,7 +534,7 @@ Ext.onReady(function(){
 
   items.push({
     id: 'REP_TAB_NAME',
-    fieldLabel: _("ID_TABLE_NAME"),
+    fieldLabel: _("ID_TABLE_NAME") + ' <span style="font-size:9">('+_("ID_AUTO_PREFIX") + ' "PMT")</span>',
     xtype:'textfield',
     emptyText: _("ID_SET_A_TABLE_NAME"),
     width: 250,
@@ -561,7 +561,7 @@ Ext.onReady(function(){
   var frmDetails = new Ext.FormPanel({
     id         :'frmDetails',
     region     : 'north',
-    labelWidth : 120,
+    labelWidth : 180,
     labelAlign :'right',
     title      : ADD_TAB_UID ? _('ID_PMTABLE') : _('ID_NEW_PMTABLE'),
     bodyStyle  :'padding:10px',
@@ -718,12 +718,19 @@ function createReportTable()
     return;
   }
 
+  Ext.Msg.show({
+    title : '',
+    msg : TABLE !== false ? _('ID_UPDATING_TABLE') : _('ID_CREATING_TABLE'),
+    wait:true,
+    waitConfig: {interval:500}
+  });
+
   Ext.Ajax.request({
     url: '../pmTablesProxy/save',
     params: {
       REP_TAB_UID   : TABLE !== false ? TABLE.ADD_TAB_UID : '',
       PRO_UID       : '',
-      REP_TAB_NAME  : tableName,
+      REP_TAB_NAME  : TABLE !== false ? tableName : 'PMT_' + tableName,
       REP_TAB_DSC   : tableDescription,
       REP_TAB_CONNECTION : 'workflow',
       REP_TAB_TYPE  : '',
@@ -733,7 +740,8 @@ function createReportTable()
     success: function(resp){
       try {
         result = Ext.util.JSON.decode(resp.responseText);
-  
+        Ext.MessageBox.hide();
+
         if (result.success) {
           proParam = PRO_UID !== false ? '?PRO_UID='+PRO_UID : '';
           location.href = '../pmTables' + proParam; //history.back();

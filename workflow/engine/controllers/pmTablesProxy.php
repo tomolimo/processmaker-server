@@ -79,6 +79,11 @@ class pmTablesProxy extends HttpProxyController
         else {
           $addTables['rows'][$i]['NUM_ROWS'] = 0;
         }
+
+        //removing the prefix "PMT" to allow alphabetical order (just in view)
+        if (substr($addTables['rows'][$i]['ADD_TAB_NAME'], 0, 4) == 'PMT_') {
+          $addTables['rows'][$i]['ADD_TAB_NAME'] = substr($addTables['rows'][$i]['ADD_TAB_NAME'], 4);
+        }
       }
       catch (Exception $e) {
         $addTables['rows'][$i]['NUM_ROWS'] = G::LoadTranslation('ID_TABLE_NOT_FOUND');
@@ -207,6 +212,7 @@ class pmTablesProxy extends HttpProxyController
       $data = (array) $httpData;
       $data['PRO_UID'] = trim($data['PRO_UID']);
       $data['columns'] = G::json_decode(stripslashes($httpData->columns)); //decofing data columns
+
       $isReportTable = $data['PRO_UID'] != '' ? true : false;
       $oAdditionalTables = new AdditionalTables();
       $oFields = new Fields();
@@ -656,7 +662,7 @@ class pmTablesProxy extends HttpProxyController
       $sErrorMessages    = '';
       $sDelimiter        = $_POST['CSV_DELIMITER'];
 
-      $resultData        = $oAdditionalTables->getAllData($_POST['ADD_TAB_UID']);
+      $resultData        = $oAdditionalTables->getAllData($_POST['ADD_TAB_UID'], NULL, NULL, false);
       $rows  = $resultData['rows'];
       $count = $resultData['count'];
 
@@ -962,7 +968,7 @@ class pmTablesProxy extends HttpProxyController
   public function export($httpData)
   {
     require_once 'classes/model/AdditionalTables.php';
-
+    $at = new AdditionalTables();
     $tablesToExport = G::json_decode(stripslashes($httpData->rows));
           
     try{
@@ -984,8 +990,9 @@ class pmTablesProxy extends HttpProxyController
       $EXPORT_TRACEBACK = Array();
       $c = 0;
       foreach ($tablesToExport as $table) {
-        $at = new additionalTables();
-        $tableData = $at->getAllData($table->ADD_TAB_UID);
+        $tableRecord = $at->load($table->ADD_TAB_UID);
+        $tableData = $at->getAllData($table->ADD_TAB_UID, NULL, NULL, false);
+        $table->ADD_TAB_NAME = $tableRecord['ADD_TAB_NAME'];
         $rows  = $tableData['rows'];
         $count = $tableData['count'];
         
@@ -1046,7 +1053,7 @@ class pmTablesProxy extends HttpProxyController
         if ($table->_DATA) {
           //export data
           $oAdditionalTables = new additionalTables();
-          $tableData = $oAdditionalTables->getAllData($table->ADD_TAB_UID);
+          $tableData = $oAdditionalTables->getAllData($table->ADD_TAB_UID, NULL, NULL, false);
           
           $SDATA      = serialize($tableData['rows']);
           $bufferType   = '@DATA';
@@ -1071,10 +1078,6 @@ class pmTablesProxy extends HttpProxyController
       $meta         = "<pre>".$META."</pre>";
       $filename     = $filenameOnly;
       $link         = $filenameLink;
-      
-      // $G_PUBLISH = new Publisher();
-      // $G_PUBLISH->AddContent('xmlform', 'xmlform', 'additionalTables/doExport', '', $aFields, '');
-      // G::RenderPage('publish', 'raw');
 
       $result->success  = true;
       $result->filename = $filenameOnly;

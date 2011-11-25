@@ -317,9 +317,10 @@ class AdditionalTables extends BaseAdditionalTables {
     }
   }
 
-  function getAllData($sUID, $start=NULL, $limit=NULL)
+  function getAllData($sUID, $start=NULL, $limit=NULL, $keyOrderUppercase = true)
   {
-    $aData = $this->load($sUID, true);
+    $addTab = new AdditionalTables();
+    $aData = $addTab->load($sUID, true);
     $aData['DBS_UID'] = $aData['DBS_UID'] ? $aData['DBS_UID'] : 'workflow';
     $sPath = PATH_DB . SYS_SYS . PATH_SEP . 'classes' . PATH_SEP;
     $sClassName = ($aData['ADD_TAB_CLASS_NAME'] != '' ? $aData['ADD_TAB_CLASS_NAME'] : $this->getPHPName($aData['ADD_TAB_NAME']));
@@ -335,13 +336,14 @@ class AdditionalTables extends BaseAdditionalTables {
     $oCriteria = new Criteria($aData['DBS_UID']);
     
     //eval('$oCriteria->addSelectColumn("\'1\' AS DUMMY");');
-    foreach ($aData['FIELDS'] as $aField) {
-      eval('$oCriteria->addSelectColumn(' . $sClassPeerName . '::' . $aField['FLD_NAME'] . ');');
-      if ($aField['FLD_KEY'] == '1') {
-        eval('$oCriteria->addAscendingOrderByColumn(' . $sClassPeerName . '::' . $aField['FLD_NAME'] . ');');
+    if($keyOrderUppercase==true){
+      foreach ($aData['FIELDS'] as $aField) {
+        eval('$oCriteria->addSelectColumn(' . $sClassPeerName . '::' . $aField['FLD_NAME'] . ');');
+        if ($aField['FLD_KEY'] == '1') {
+          eval('$oCriteria->addAscendingOrderByColumn(' . $sClassPeerName . '::' . $aField['FLD_NAME'] . ');');
+        }
       }
     }
-
     $oCriteriaCount = clone $oCriteria;
     //$count = $sClassPeerName::doCount($oCriteria);
     eval('$count = '.$sClassPeerName.'::doCount($oCriteria);');

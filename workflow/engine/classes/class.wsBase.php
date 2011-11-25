@@ -1607,8 +1607,9 @@ class wsBase
       //here dubug mode in web entry
       if(isset($oProcessFieds['PRO_DEBUG']) && $oProcessFieds['PRO_DEBUG']){
         $result = new wsResponse (0, $varResponse."<br><br><table width='100%' cellpadding='0' cellspacing='0'><tr><td class='FormTitle'>".G::LoadTranslation('ID_DEBUG_MESSAGE')."</td></tr></table>".$varTriggers);
-      }else{
-        $result = new wsResponse (0, $varResponse." --- ".$oProcessFieds['PRO_DUBUG']);
+      }
+      else{
+        $result = new wsResponse (0, $varResponse." --- ".$oProcessFieds['PRO_DEBUG']);
       }
       
       $res = $result->getPayloadArray ();

@@ -589,18 +589,22 @@ Ext.onReady(function(){
     listeners: {
       load: function() {
         if (TABLE !== false) { // is editing
-          // set current editing process combobox
-          var i = this.findExact('DBS_UID', TABLE.DBS_UID, 0);
-          if (i > -1){
-            comboDbConnections.setValue(this.getAt(i).data.DBS_UID);
-            comboDbConnections.setRawValue(this.getAt(i).data.DBS_NAME);
-            comboDbConnections.setDisabled(true);
-          } else {
-            // DB COnnection deleted
-            Ext.Msg.alert( _('ID_ERROR'), 'DB Connection doesn\'t exist!');
-          }
-        } else {
-          comboDbConnections.setValue('rp');
+          defaultValue = TABLE.DBS_UID;
+          comboDbConnections.setDisabled(true);
+        } 
+        else {
+          defaultValue = 'workflow';
+        }
+
+        // set current editing process combobox
+        var i = this.findExact('DBS_UID', defaultValue, 0);
+        if (i > -1){
+          comboDbConnections.setValue(this.getAt(i).data.DBS_UID);
+          comboDbConnections.setRawValue(this.getAt(i).data.DBS_NAME);
+        } 
+        else {
+          // DB COnnection deleted
+          Ext.Msg.alert( _('ID_ERROR'), 'DB Connection doesn\'t exist!');
         }
       }
     }
@@ -781,7 +785,7 @@ Ext.onReady(function(){
 
   items.push({
     id: 'REP_TAB_NAME',
-    fieldLabel: _("ID_TABLE_NAME"),
+    fieldLabel: _("ID_TABLE_NAME") + ' <span style="font-size:9">('+_("ID_AUTO_PREFIX") + ' "PMT")</span>',
     xtype:'textfield',
     emptyText: _("ID_SET_A_TABLE_NAME"),
     width: 250,
@@ -822,7 +826,7 @@ Ext.onReady(function(){
   var frmDetailsConfig = {
     id:'frmDetails',
     region: 'north',
-    labelWidth: 120,
+    labelWidth: 180,
     labelAlign:'right',
     title: ADD_TAB_UID ? _('ID_REPORT_TABLE') : _('ID_NEW_REPORT_TABLE'),
     bodyStyle:'padding:10px',
@@ -974,12 +978,19 @@ function createReportTable()
     columns.push(row.data);
   }
 
+  Ext.Msg.show({
+    title : '',
+    msg : TABLE !== false ? _('ID_UPDATING_TABLE') : _('ID_CREATING_TABLE'),
+    wait:true,
+    waitConfig: {interval:500}
+  });
+
   Ext.Ajax.request({
     url: '../pmTablesProxy/save',
     params: {
       REP_TAB_UID   : TABLE !== false ? TABLE.ADD_TAB_UID : '',
       PRO_UID       : PRO_UID !== false? PRO_UID : Ext.getCmp('PROCESS').getValue(),
-      REP_TAB_NAME  : tableName,
+      REP_TAB_NAME  : TABLE !== false ? tableName : 'PMT_' + tableName,
       REP_TAB_DSC   : tableDescription,
       REP_TAB_CONNECTION : Ext.getCmp('REP_TAB_CONNECTION').getValue(),
       REP_TAB_TYPE  : Ext.getCmp('REP_TAB_TYPE').getValue(),
@@ -988,6 +999,7 @@ function createReportTable()
     },
     success: function(resp){
       result = Ext.util.JSON.decode(resp.responseText);
+      Ext.MessageBox.hide();
 
       if (result.success) {
         proParam = PRO_UID !== false ? '?PRO_UID='+PRO_UID : '';

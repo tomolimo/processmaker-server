@@ -76,7 +76,14 @@ class Route extends BaseRoute {
       $sRouteUID        = G::generateUniqueID();
       $aData['ROU_UID'] = $sRouteUID;
       $oRoute           = new Route();
+
+      // validating default values
+      $aData['ROU_TO_LAST_USER'] = $this->validateValue($aData['ROU_TO_LAST_USER'], array('TRUE', 'FALSE'), 'FALSE');
+      $aData['ROU_OPTIONAL']     = $this->validateValue($aData['ROU_OPTIONAL'], array('TRUE', 'FALSE'), 'FALSE');
+      $aData['ROU_SEND_EMAIL']   = $this->validateValue($aData['ROU_SEND_EMAIL'], array('TRUE', 'FALSE'), 'TRUE');
+
       $oRoute->fromArray($aData, BasePeer::TYPE_FIELDNAME);
+      
       if ($oRoute->validate()) {
         $oConnection->begin();
         $iResult = $oRoute->save();
@@ -110,6 +117,11 @@ class Route extends BaseRoute {
       $oRoute = RoutePeer::retrieveByPK($aData['ROU_UID']);
       if (!is_null($oRoute))
       {
+        // validating default values
+        $aData['ROU_TO_LAST_USER'] = $this->validateValue($aData['ROU_TO_LAST_USER'], array('TRUE', 'FALSE'), 'FALSE');
+        $aData['ROU_OPTIONAL']     = $this->validateValue($aData['ROU_OPTIONAL'], array('TRUE', 'FALSE'), 'FALSE');
+        $aData['ROU_SEND_EMAIL']   = $this->validateValue($aData['ROU_SEND_EMAIL'], array('TRUE', 'FALSE'), 'TRUE');
+
         $oRoute->fromArray($aData, BasePeer::TYPE_FIELDNAME);
         if ($oRoute->validate()) {
           $oConnection->begin();
@@ -179,4 +191,20 @@ class Route extends BaseRoute {
     }
   }
 
+  /**
+   * Validate value for a variable that only accepts some determinated values
+   *
+   * @param $value string - value to test
+   * @param $validValues array - list of valid values
+   * @param $default string default value, if the tested value is not valid the default value is returned
+   * @return the tested and accepted value 
+   */
+  function validateValue($value, $validValues, $default)
+  {
+    if (!in_array($value, $validValues)) {
+      $value = $default;
+    }
+
+    return $value;
+  }
 } // Route

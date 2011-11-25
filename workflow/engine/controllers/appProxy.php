@@ -166,7 +166,8 @@ class AppProxy extends HttpProxyController
     $task = new Task();
     $taskData = $task->load($applicationFields['TAS_UID']);
     $currentUser = $applicationFields['CURRENT_USER'] != '' ? $applicationFields['CURRENT_USER'] : '[' . G::LoadTranslation('ID_UNASSIGNED') . ']';
-    
+
+
     $data[] = array('label'=>$labels['PRO_TITLE'] ,      'value' => $processData['PRO_TITLE'],        'section'=>$labels['TITLE1']);
     $data[] = array('label'=>$labels['TITLE'] ,          'value' => $applicationFields['TITLE'],      'section'=>$labels['TITLE1']);
     $data[] = array('label'=>$labels['APP_NUMBER'] ,     'value' => $applicationFields['APP_NUMBER'], 'section'=>$labels['TITLE1']);
@@ -175,6 +176,10 @@ class AppProxy extends HttpProxyController
     $data[] = array('label'=>$labels['CREATOR'] ,        'value' => $applicationFields['CREATOR'],    'section'=>$labels['TITLE1']);
     $data[] = array('label'=>$labels['CREATE_DATE'] ,    'value' => $applicationFields['CREATE_DATE'],'section'=>$labels['TITLE1']);
     $data[] = array('label'=>$labels['UPDATE_DATE'] ,    'value' => $applicationFields['UPDATE_DATE'],'section'=>$labels['TITLE1']);
+
+    // note added by krlos pacha carlos[at]colosa[dot]com
+    //getting this field if it doesn't exist. Related 7994 bug
+    $taskData['TAS_TITLE'] = (array_key_exists('TAS_TITLE', $taskData))?$taskData['TAS_TITLE']:Content::Load("TAS_TITLE", "", $applicationFields['TAS_UID'], SYS_LANG);
     
     $data[] = array('label'=>$labels['TAS_TITLE'] ,         'value' => $taskData['TAS_TITLE'],                 'section'=>$labels['TITLE2']);
     $data[] = array('label'=>$labels['CURRENT_USER'] ,      'value' => $currentUser,                           'section'=>$labels['TITLE2']);

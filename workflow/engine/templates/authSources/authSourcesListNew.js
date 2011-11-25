@@ -4,7 +4,7 @@
  */
 Ext.onReady(function(){
 
-storeAuthSources = new Ext.data.GroupingStore({
+var storeAuthSources = new Ext.data.GroupingStore({
     autoLoad: true,
     proxy : new Ext.data.HttpProxy({
       url: 'authSources_Ajax?action=authSourcesNew&cmb=yes'
@@ -36,14 +36,13 @@ var cboxAuthSourse = new Ext.form.ComboBox({
     //value: _('ID_ALL'),
     listeners:{
       select: function(c,d,i){
-        store.setBaseParam('auths',d.data['sType']);
-        UpdateAuthSource(d.data['sType']);
+      //nothing to do
       }
     }
   });
 
   componAuthSourse = new Ext.form.FieldSet({
-    title: 'Available Authentication Sourc',  
+    title: 'Available Authentication Sources',  
     items: [
 			   cboxAuthSourse
     ]    

@@ -117,26 +117,15 @@ switch ($_POST['action'])
       $oCriteria->add(ContentPeer::CON_VALUE, '%'.$filter.'%', Criteria::LIKE);
     }
     $totalRows = GroupwfPeer::doCount($oCriteria);
-    
-    $oCriteria = new Criteria('workflow');   
-    $oCriteria->clearSelectColumns();
+     
+    $oCriteria = new Criteria('workflow');
+ 
     $oCriteria->addSelectColumn(GroupwfPeer::GRP_UID);
     $oCriteria->addSelectColumn(GroupwfPeer::GRP_STATUS);
-    $oCriteria->addSelectColumn(ContentPeer::CON_VALUE);
-    $oCriteria->addAsColumn('GRP_TASKS', 0);
-    $oCriteria->addAsColumn('GRP_USERS', 0);
-    $oCriteria->addJoin(GroupwfPeer::GRP_UID, ContentPeer::CON_ID, Criteria::LEFT_JOIN);
-    $oCriteria->add(ContentPeer::CON_CATEGORY,'GRP_TITLE');
-    $oCriteria->add(ContentPeer::CON_LANG,SYS_LANG); 
-    if ($filter != ''){
-      $oCriteria->add(ContentPeer::CON_VALUE, '%'.$filter.'%', Criteria::LIKE);
-    }
-    $oCriteria->setOffset($start);
-    $oCriteria->setLimit($limit);
-    
-    $oDataset = GroupwfPeer::doSelectRS($oCriteria);
+    $oDataset = GroupwfPeer::doSelectRS($oCriteria); 
     $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-    
+    global $RBAC; 
+ 
     $tasks = new TaskUser();
     $aTask = $tasks->getCountAllTaksByGroups();
     
@@ -145,11 +134,14 @@ switch ($_POST['action'])
     
     $arrData = Array();
     while ($oDataset->next()){
-      $arrData[] = $oDataset->getRow();
-      $index = sizeof($arrData)-1;
-      $arrData[$index]['GRP_TASKS'] = isset($aTask[$arrData[$index]['GRP_UID']]) ? $aTask[$arrData[$index]['GRP_UID']] : 0;
-      $arrData[$index]['GRP_USERS'] = isset($aMembers[$arrData[$index]['GRP_UID']]) ? $aMembers[$arrData[$index]['GRP_UID']] : 0;
+      $row = $oDataset->getRow();       
+      $row['GRP_TASKS'] = isset($aTask[$row['GRP_UID']]) ? $aTask[$row['GRP_UID']] : 0;
+      $row['GRP_USERS'] = isset($aMembers[$row['GRP_UID']]) ? $aMembers[$row['GRP_UID']] : 0;      
+      $group = GroupwfPeer::retrieveByPK($row['GRP_UID']);  
+      $row['CON_VALUE']= $group->getGrpTitle();
+      $arrData[] = $row; 
     }
+
     echo '{success: true, groups: '.G::json_encode($arrData).', total_groups: '.$totalRows.'}';
     break;
   case 'exitsGroupName':

@@ -305,6 +305,8 @@ class Cases {
     $rs->next();
     while ($row = $rs->getRow()) {
       if ($typeView == 'category') {
+         $taskTitle = TaskPeer::retrieveByPK($row['TAS_UID']);  
+         $row['TAS_TITLE']= $taskTitle->getTasTitle();
         $row['CATEGORY_NAME'] = ($row['CATEGORY_NAME'] == '') ? G::LoadTranslation('ID_PROCESS_NOCATEGORY') : $row['CATEGORY_NAME'];
         $rows[] = array('uid' => $row['TAS_UID'], 'value' => $row['PRO_TITLE'] . ' (' . $row['TAS_TITLE'] . ')', 'pro_uid' => $row['PRO_UID'], 'cat' => $row['PRO_CATEGORY'], 'catname' => $row['CATEGORY_NAME']);
       } else

@@ -42,7 +42,13 @@
     if ($ini_contents !== false)
       $config = array_merge($default_config, $ini_contents);
   }
-
+  else {
+    // if the env.ini file doesn't exist, and the current is a developemnt env, then force enable debug
+    if (!file_exists ( PATH_TRUNK . 'workflow/engine/methods/login/version-pmos.php' )) {
+      $config['debug'] = 1;
+    }
+  }
+  
   if ($config['debug']) {
     $config['debug_sql'] = 1;
   }

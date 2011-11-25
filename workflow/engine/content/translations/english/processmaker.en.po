@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: ProcessMaker (Branch 2.0-dev) 2.0.34.rc4-58-g8068f7d\n"
+"Project-Id-Version: ProcessMaker (Branch 2.0-dev) 2.0.34.rc4-172-gb201799\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2011-10-31 21:41:24\n"
+"PO-Revision-Date: 2011-11-25 10:22:02\n"
 "Last-Translator: \n"
 "Language-Team: Colosa Developers Team <developers@colosa.com>\n"
 "MIME-Version: 1.0\n"
@@ -11310,6 +11310,96 @@ msgstr "Additional Filter"
 #: LABEL/ID_ATTRIBUTES
 msgid "Attributes"
 msgstr "Attributes"
+
+# TRANSLATION
+# LABEL/ID_TABLE_NOT_FOUND
+#: LABEL/ID_TABLE_NOT_FOUND
+msgid "Table Not found"
+msgstr "Table Not found"
+
+# TRANSLATION
+# LABEL/ID_FAILED_IMPORT_PLUGINS
+#: LABEL/ID_FAILED_IMPORT_PLUGINS
+msgid "Failed to import the file {filename} by doesn't a plugin or invalid file."
+msgstr "Failed to import the file {filename} by doesn't a plugin or invalid file."
+
+# TRANSLATION
+# LABEL/ID_ERROR_UPLOADING_PLUGIN_FILENAME
+#: LABEL/ID_ERROR_UPLOADING_PLUGIN_FILENAME
+msgid "There was an error uploading the file, probably the file size if greater than upload_max_filesize parameter in php.ini, please check this parameter and try again."
+msgstr "There was an error uploading the file, probably the file size if greater than upload_max_filesize parameter in php.ini, please check this parameter and try again."
+
+# TRANSLATION
+# LABEL/ID_FILES_INVALID_PLUGIN_FILENAME
+#: LABEL/ID_FILES_INVALID_PLUGIN_FILENAME
+msgid "the uploaded files are invalid, expected 'application/octect-stream mime type file ({pluginFilename})"
+msgstr "the uploaded files are invalid, expected 'application/octect-stream mime type file ({pluginFilename})"
+
+# TRANSLATION
+# LABEL/ID_PLUGIN_DEPENDENCE_PLUGIN
+#: LABEL/ID_PLUGIN_DEPENDENCE_PLUGIN
+msgid "This plugin needs \"{Dependence}\" plugin"
+msgstr "This plugin needs \"{Dependence}\" plugin"
+
+# TRANSLATION
+# LABEL/ID_FILE_CONTAIN_CLASS_PLUGIN
+#: LABEL/ID_FILE_CONTAIN_CLASS_PLUGIN
+msgid "The file {filename} doesn't contain class: {className}"
+msgstr "The file {filename} doesn't contain class: {className}"
+
+# TRANSLATION
+# LABEL/ID_RECENT_VERSION_PLUGIN
+#: LABEL/ID_RECENT_VERSION_PLUGIN
+msgid "A recent version of this plugin was already installed."
+msgstr "A recent version of this plugin was already installed."
+
+# TRANSLATION
+# LABEL/ID_FILE_PLUGIN_NOT_EXISTS
+#: LABEL/ID_FILE_PLUGIN_NOT_EXISTS
+msgid "File '{pluginFile}' doesn't exists"
+msgstr "File '{pluginFile}' doesn't exists"
+
+# TRANSLATION
+# LABEL/ID_CREATING_TABLE
+#: LABEL/ID_CREATING_TABLE
+msgid "Creating table, please wait..."
+msgstr "Creating table, please wait..."
+
+# TRANSLATION
+# LABEL/ID_UPDATING_TABLE
+#: LABEL/ID_UPDATING_TABLE
+msgid "Updating table, please wait..."
+msgstr "Updating table, please wait..."
+
+# TRANSLATION
+# LABEL/ID_PREFIX
+#: LABEL/ID_PREFIX
+msgid "Prefix"
+msgstr "Prefix"
+
+# TRANSLATION
+# LABEL/ID_AUTO_PREFIX
+#: LABEL/ID_AUTO_PREFIX
+msgid "Auto Prefix"
+msgstr "Auto Prefix"
+
+# TRANSLATION
+# LABEL/ID_NOTIFICATION_ERROR
+#: LABEL/ID_NOTIFICATION_ERROR
+msgid "Some problem happens while trying to send the Task notification."
+msgstr "Some problem happens while trying to send the Task notification."
+
+# TRANSLATION
+# LABEL/ID_INVALID_APPLICATION_ID_MSG
+#: LABEL/ID_INVALID_APPLICATION_ID_MSG
+msgid "Invalid application id stored on session,<br/>This can happens when you have opened another case on a new tab or window.<br/>Please {0} the case."
+msgstr "Invalid application id stored on session,<br/>This can happens when you have opened another case on a new tab or window.<br/>Please {0} the case."
+
+# TRANSLATION
+# LABEL/ID_REOPEN
+#: LABEL/ID_REOPEN
+msgid "re-open"
+msgstr "re-open"
 
 # additionalTables/additionalTablesData.xml?ADD_TAB_NAME
 # additionalTables/additionalTablesData.xml

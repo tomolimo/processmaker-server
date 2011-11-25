@@ -434,6 +434,8 @@ $caseStep->getStepPosition());
   function getTaskInformation()
   {
     $task = new Task();
+    if($_SESSION['TASK']=='-1')
+      $_SESSION['TASK'] = $_SESSION['CURRENT_TASK'];
     $taskData = $task->getDelegatedTaskData($_SESSION['TASK'], $_SESSION['APPLICATION'], $_SESSION['INDEX']);
     
     print(G::json_encode($taskData));
