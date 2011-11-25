@@ -308,7 +308,7 @@ class Installer
     $lines = file($file);
     $previous = NULL;
     $errors = '';
-    
+    @mysql_query("SET NAMES 'utf8';");
     foreach ($lines as $j => $line) {
       $line = trim($line); // Remove comments from the script
       
