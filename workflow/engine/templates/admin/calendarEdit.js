@@ -248,9 +248,7 @@ Ext.onReady( function() {
   }
 
   var editor = new Ext.ux.grid.RowEditor( {
-    saveText: 'Update',
-    handler: function (){                
-    }
+    saveText: 'Update'
   } );
     
   editor.on( {
@@ -315,15 +313,11 @@ Ext.onReady( function() {
                 var gridEachStartSecond   = gridEachStartObject.getTime();
                 var gridEachEndSecond     = gridEachEndObject.getTime();
                 
-                if(editorStartSecond<=gridEachStartSecond||editorStartSecond>=gridEachEndSecond) { 
-                  if(editorEndSecond<=gridEachStartSecond||editorEndSecond>=gridEachEndSecond) {
-                  }
-                  else {
-                    dataExist = 'Off';
-                  }
-                }
-                else {
-                  dataExist = 'Off'; 
+                if((editorStartSecond > gridEachStartSecond)||(gridEachEndSecond>editorStartSecond))
+                	dataExist = 'Off';
+                else{
+                	if(editorEndSecond>gridEachStartSecond||gridEachEndSecond>editorEndSecond)
+                	  dataExist = 'Off';
                 }
               }
             }
@@ -333,8 +327,6 @@ Ext.onReady( function() {
             e.name = gridName;
             e.start = gridStart;
             e.end = gridEnd;                             
-          }
-          else {                  
           }
         }
       }
@@ -470,7 +462,7 @@ Ext.onReady( function() {
         
       var holidayArray  = fields['HOLIDAY'];
       
-      console.info(holidayArray);
+      //console.info(holidayArray);
       
       for (i=0;i<holidayArray.length;i++) {        
         holidayArrayName      = holidayArray[i].CALENDAR_HOLIDAY_NAME;
@@ -551,7 +543,7 @@ Ext.onReady( function() {
             sortable: true,
             editor: {
               xtype: 'textfield',
-              allowBlank: true,
+              allowBlank: true
             }
           },
           {
@@ -566,7 +558,7 @@ Ext.onReady( function() {
               xtype: 'datefield',
               allowBlank: false,
               minValue: '01/01/2006',
-              minText: 'Can\'t have a start date before of the 2006!',
+              minText: 'Can\'t have a start date before of the 2006!'
               //maxValue: (new Date()).format('m/d/Y')
             }
           } ,
