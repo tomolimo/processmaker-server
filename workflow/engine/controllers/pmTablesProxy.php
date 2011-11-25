@@ -662,7 +662,7 @@ class pmTablesProxy extends HttpProxyController
       $sErrorMessages    = '';
       $sDelimiter        = $_POST['CSV_DELIMITER'];
 
-      $resultData        = $oAdditionalTables->getAllData($_POST['ADD_TAB_UID']);
+      $resultData        = $oAdditionalTables->getAllData($_POST['ADD_TAB_UID'], NULL, NULL, false);
       $rows  = $resultData['rows'];
       $count = $resultData['count'];
 
@@ -991,7 +991,7 @@ class pmTablesProxy extends HttpProxyController
       $c = 0;
       foreach ($tablesToExport as $table) {
         $tableRecord = $at->load($table->ADD_TAB_UID);
-        $tableData = $at->getAllData($table->ADD_TAB_UID);
+        $tableData = $at->getAllData($table->ADD_TAB_UID, NULL, NULL, false);
         $table->ADD_TAB_NAME = $tableRecord['ADD_TAB_NAME'];
         $rows  = $tableData['rows'];
         $count = $tableData['count'];
@@ -1053,7 +1053,7 @@ class pmTablesProxy extends HttpProxyController
         if ($table->_DATA) {
           //export data
           $oAdditionalTables = new additionalTables();
-          $tableData = $oAdditionalTables->getAllData($table->ADD_TAB_UID);
+          $tableData = $oAdditionalTables->getAllData($table->ADD_TAB_UID, NULL, NULL, false);
           
           $SDATA      = serialize($tableData['rows']);
           $bufferType   = '@DATA';

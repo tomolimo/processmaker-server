@@ -317,7 +317,7 @@ class AdditionalTables extends BaseAdditionalTables {
     }
   }
 
-  function getAllData($sUID, $start=NULL, $limit=NULL)
+  function getAllData($sUID, $start=NULL, $limit=NULL, $keyOrderUppercase = true)
   {
     $addTab = new AdditionalTables();
     $aData = $addTab->load($sUID, true);
@@ -336,13 +336,14 @@ class AdditionalTables extends BaseAdditionalTables {
     $oCriteria = new Criteria($aData['DBS_UID']);
     
     //eval('$oCriteria->addSelectColumn("\'1\' AS DUMMY");');
-    foreach ($aData['FIELDS'] as $aField) {
-      eval('$oCriteria->addSelectColumn(' . $sClassPeerName . '::' . $aField['FLD_NAME'] . ');');
-      if ($aField['FLD_KEY'] == '1') {
-        eval('$oCriteria->addAscendingOrderByColumn(' . $sClassPeerName . '::' . $aField['FLD_NAME'] . ');');
+    if($keyOrderUppercase==true){
+      foreach ($aData['FIELDS'] as $aField) {
+        eval('$oCriteria->addSelectColumn(' . $sClassPeerName . '::' . $aField['FLD_NAME'] . ');');
+        if ($aField['FLD_KEY'] == '1') {
+          eval('$oCriteria->addAscendingOrderByColumn(' . $sClassPeerName . '::' . $aField['FLD_NAME'] . ');');
+        }
       }
     }
-
     $oCriteriaCount = clone $oCriteria;
     //$count = $sClassPeerName::doCount($oCriteria);
     eval('$count = '.$sClassPeerName.'::doCount($oCriteria);');
