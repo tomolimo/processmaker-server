@@ -400,7 +400,7 @@ class propelTable
       $testValue = preg_match( "/<a ?.*>(.*)<\/a>/i", $htmlField, $value);
       $this->tpl->assign( "value" , $htmlField );    
       if ($testValue>0 && (isset($value[1]) && strlen(trim($value[1])) == 0 ))  {        
-        if ((trim($value[0])) == '' || trim($value[1]) == '')
+        if ((trim($value[0])) == '')
           $this->tpl->assign( "value" , "&nbsp;" );
         // $this->tpl->assign( "value" , (preg_match('^[[:space:]]^', $value) && (substr($fieldName,0,3)!="PRO"))? str_ireplace(" ","&nbsp;",$htmlField):$htmlField );
       } else {
