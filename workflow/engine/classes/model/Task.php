@@ -634,8 +634,8 @@ public function kgetassigType($pro_uid, $tas){
     require_once 'classes/model/AppDelegation.php';
 		require_once 'classes/model/Task.php';
 		$oTask = new Task();
-		$tasUid= ($TAS_UID!=-1)?$TAS_UID:(isset($_SESSION['CURRENT_TASK']))?$_SESSION['CURRENT_TASK']:'';
-		$aFields = ($tasUid!='')?$oTask->load($tasUid):array();
+ 
+		$aFields = $oTask->load($TAS_UID);
 		$oCriteria = new Criteria('workflow');
 		$oCriteria->add(AppDelegationPeer::APP_UID, $APP_UID);
 		$oCriteria->add(AppDelegationPeer::DEL_INDEX, $DEL_INDEX);
