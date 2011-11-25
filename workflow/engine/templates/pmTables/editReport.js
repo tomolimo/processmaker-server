@@ -990,7 +990,7 @@ function createReportTable()
     params: {
       REP_TAB_UID   : TABLE !== false ? TABLE.ADD_TAB_UID : '',
       PRO_UID       : PRO_UID !== false? PRO_UID : Ext.getCmp('PROCESS').getValue(),
-      REP_TAB_NAME  : TABLE !== false ? tableName : 'PMT_' + tableName,,
+      REP_TAB_NAME  : TABLE !== false ? tableName : 'PMT_' + tableName,
       REP_TAB_DSC   : tableDescription,
       REP_TAB_CONNECTION : Ext.getCmp('REP_TAB_CONNECTION').getValue(),
       REP_TAB_TYPE  : Ext.getCmp('REP_TAB_TYPE').getValue(),
