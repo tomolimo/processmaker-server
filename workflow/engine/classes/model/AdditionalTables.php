@@ -624,9 +624,16 @@ class AdditionalTables extends BaseAdditionalTables {
 
       switch ($row['ADD_TAB_TYPE']) { //switching by report table type
         case  'NORMAL':
+          $caseData = array_change_key_case($caseData, CASE_UPPER);
+         
+          // parsing empty values to null
+          foreach ($caseData as $i => $v) {
+            $caseData[$i] = $v === '' ? NULL : $v; 
+          }
+
           if (is_array($records) && count($records) > 0) { // if the record already exists on the report table 
             foreach ($records as $record) { //update all records
-              $record->fromArray(array_change_key_case($caseData, CASE_UPPER), BasePeer::TYPE_FIELDNAME);
+              $record->fromArray($caseData, BasePeer::TYPE_FIELDNAME);
               if ($record->validate()) {
                 $record->save();
               }
