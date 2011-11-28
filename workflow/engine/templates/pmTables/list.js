@@ -198,6 +198,7 @@ Ext.onReady(function(){
           {name : 'ADD_TAB_TYPE'},
           {name : 'ADD_TAB_TAG'},
           {name : 'PRO_UID'},
+          {name : "DBS_UID"},
           {name : 'NUM_ROWS'}
         ]
       }),
@@ -268,6 +269,8 @@ Ext.onReady(function(){
       value = r.get('PRO_UID') ? _('ID_REPORT_TABLE') : _('ID_PMTABLE');
       return '<span style="color:'+color+'">'+value+'</span> ';
     }});
+    
+    cmodelColumns.push({dataIndex: "DBS_UID", hidden: true, hideable: false});
 
     cmodelColumns.push({header: 'Records', dataIndex: 'NUM_ROWS', width: 90, align:'left'});
 
@@ -346,6 +349,7 @@ Ext.onReady(function(){
           var rowsSelected = Ext.getCmp('infoGrid').getSelectionModel().getSelections();
           tag = rowsSelected[0].get('ADD_TAB_TAG');
           text = tag? 'Convert to native Report Table': 'Convert to Simple Report';
+          
           if (externalOption) {
             externalOption.setText(text);
             if (rowsSelected[0].get('PRO_UID')) {
@@ -353,6 +357,8 @@ Ext.onReady(function(){
             } else {
               externalOption.setDisabled(true);
             }
+            
+            externalOption.setHidden((rowsSelected[0].get("TYPE") != "CLASSIC" && rowsSelected[0].get("DBS_UID") == "workflow")? false : true);
           }
       },
       this
