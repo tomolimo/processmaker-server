@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: ProcessMaker (Branch 2.0-dev) 2.0.34.rc4-172-gb201799\n"
+"Project-Id-Version: ProcessMaker (Branch 2.0-dev) 2.0.34.rc4-179-g5fa57e9\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2011-11-25 10:22:02\n"
+"PO-Revision-Date: 2011-11-28 11:40:40\n"
 "Last-Translator: \n"
 "Language-Team: Colosa Developers Team <developers@colosa.com>\n"
 "MIME-Version: 1.0\n"
@@ -11400,6 +11400,36 @@ msgstr "Invalid application id stored on session,<br/>This can happens when you 
 #: LABEL/ID_REOPEN
 msgid "re-open"
 msgstr "re-open"
+
+# TRANSLATION
+# LABEL/ID_HOST
+#: LABEL/ID_HOST
+msgid "[LABEL/ID_HOST] Host"
+msgstr "Host"
+
+# TRANSLATION
+# LABEL/ID_MONITORED_FOLDER
+#: LABEL/ID_MONITORED_FOLDER
+msgid "Monitored Folder"
+msgstr "Monitored Folder"
+
+# TRANSLATION
+# LABEL/ID_SEARCH_PATTERN
+#: LABEL/ID_SEARCH_PATTERN
+msgid "Search Pattern"
+msgstr "Search Pattern"
+
+# TRANSLATION
+# LABEL/ID_SEARCH_XML_METADATA
+#: LABEL/ID_SEARCH_XML_METADATA
+msgid "Search XML metadata"
+msgstr "Search XML metadata"
+
+# TRANSLATION
+# LABEL/ID_FTP_MONITOR_SETTINGS
+#: LABEL/ID_FTP_MONITOR_SETTINGS
+msgid "FTP Monitor Settings"
+msgstr "FTP Monitor Settings"
 
 # additionalTables/additionalTablesData.xml?ADD_TAB_NAME
 # additionalTables/additionalTablesData.xml
