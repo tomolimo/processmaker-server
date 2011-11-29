@@ -53,8 +53,8 @@ class AppDelegation extends BaseAppDelegation {
    * @param $isSubprocess is a subprocess inside a process?
    * @return delegation index of the application delegation.
    */
-  function createAppDelegation ($sProUid, $sAppUid, $sTasUid, $sUsrUid, $sAppThread, $iPriority = 3, $isSubprocess = false, $sPrevious = -1, $sNextTasParam = null) {
-  //function createAppDelegation ($sProUid, $sAppUid, $sTasUid, $sUsrUid, $sAppThread, $sNextTasParam=null,$iPriority = 3, $isSubprocess=false ) {
+  function createAppDelegation ($sProUid, $sAppUid, $sTasUid, $sUsrUid, $sAppThread, $iPriority = 3, $isSubprocess = false, $sPrevious = -1, $sNextTasParam = null) 
+  {
 
     if (!isset($sProUid) || strlen($sProUid) == 0 ) {
       throw ( new Exception ( 'Column "PRO_UID" cannot be null.' ) );
@@ -71,22 +71,21 @@ class AppDelegation extends BaseAppDelegation {
     if (!isset($sUsrUid) /*|| strlen($sUsrUid ) == 0*/ ) {
       throw ( new Exception ( 'Column "USR_UID" cannot be null.' ) );
     }
+
     if (!isset($sAppThread) || strlen($sAppThread ) == 0 ) {
       throw ( new Exception ( 'Column "APP_THREAD" cannot be null.' ) );
     }
+    
     //get max DEL_INDEX SELECT MAX(DEL_INDEX) AS M FROM APP_DELEGATION WHERE APP_UID="'.$Fields['APP_UID'].'"'
     $c = new Criteria ();
     $c->clearSelectColumns();
     $c->addSelectColumn ( 'MAX(' . AppDelegationPeer::DEL_INDEX . ') ' );
-    $c->addSelectColumn ( AppDelegationPeer::DEL_STARTED );
     $c->add ( AppDelegationPeer::APP_UID, $sAppUid );
-    ///-- Group by DEL_STARTED, Adjustment for standardization (SQL)
-    $c->addGroupByColumn(AppDelegationPeer::DEL_STARTED);
+
     $rs = AppDelegationPeer::doSelectRS ( $c );
     $rs->next();
     $row = $rs->getRow();
     $delIndex = $row[0] + 1;
-    //$delStarted = $row[1]; ???? blame -> gustavo,..$row[1] doesn't exist
 
     $this->setAppUid          ( $sAppUid );
     $this->setProUid          ( $sProUid );
@@ -99,22 +98,25 @@ class AppDelegation extends BaseAppDelegation {
     $this->setDelThread       ( $sAppThread );
     $this->setDelThreadStatus ( 'OPEN' );
     $this->setDelDelegateDate ( 'now' );
+
     //The function return an array now.  By JHL
-    $delTaskDueDate=$this->calculateDueDate($sNextTasParam);
+    $delTaskDueDate = $this->calculateDueDate($sNextTasParam);
+    
     $this->setDelTaskDueDate  ( $delTaskDueDate['DUE_DATE'] ); // Due date formatted
     
     if((defined("DEBUG_CALENDAR_LOG"))&&(DEBUG_CALENDAR_LOG)){
       $this->setDelData  ($delTaskDueDate['DUE_DATE_LOG'] ); // Log of actions made by Calendar Engine
-    }else{
-        $this->setDelData  ( '' ); 
+    }
+    else{
+      $this->setDelData  ( '' ); 
     }
 
     // this condition assures that an internal delegation like a subprocess dont have an initial date setted
-    if ( $delIndex == 1 &&  !$isSubprocess )  //the first delegation, init date this should be now for draft applications, in other cases, should be null.
-      $this->setDelInitDate     ('now' );
+    if ( $delIndex == 1 && !$isSubprocess ) { //the first delegation, init date this should be now for draft applications, in other cases, should be null.
+      $this->setDelInitDate('now' );
+    }
 
-
-    if ($this->validate() ) {
+    if ($this->validate()) {
       try {
         $res = $this->save();
       }
@@ -225,43 +227,52 @@ class AppDelegation extends BaseAppDelegation {
     //Added to allow User defined Timing Control at Run time from Derivation screen
     if(isset($sNextTasParam['NEXT_TASK']['TAS_TRANSFER_HIDDEN_FLY']) && $sNextTasParam['NEXT_TASK']['TAS_TRANSFER_HIDDEN_FLY'] == 'true')
     {
-        $aData['TAS_DURATION'] = $sNextTasParam['NEXT_TASK']['TAS_DURATION'];
-        $aData['TAS_TIMEUNIT'] = $sNextTasParam['NEXT_TASK']['TAS_TIMEUNIT'];
-        $aData['TAS_TYPE_DAY'] = $sNextTasParam['NEXT_TASK']['TAS_TYPE_DAY'];
-        if(isset($sNextTasParam['NEXT_TASK']['TAS_CALENDAR']) && $sNextTasParam['NEXT_TASK']['TAS_CALENDAR'] != '')
-            $aCalendarUID      = $sNextTasParam['NEXT_TASK']['TAS_CALENDAR'];
-        else
-            $aCalendarUID = '';
-        //Updating the task Table , so that user will see updated values in the assign screen in consequent cases
-        $oTask = new Task();
-        $oTask->update($aData);
+      $aData['TAS_DURATION'] = $sNextTasParam['NEXT_TASK']['TAS_DURATION'];
+      $aData['TAS_TIMEUNIT'] = $sNextTasParam['NEXT_TASK']['TAS_TIMEUNIT'];
+      $aData['TAS_TYPE_DAY'] = $sNextTasParam['NEXT_TASK']['TAS_TYPE_DAY'];
+      
+      if(isset($sNextTasParam['NEXT_TASK']['TAS_CALENDAR']) && $sNextTasParam['NEXT_TASK']['TAS_CALENDAR'] != '') {
+        $aCalendarUID      = $sNextTasParam['NEXT_TASK']['TAS_CALENDAR'];
+      }
+      else {
+        $aCalendarUID = '';
+      }
+
+      //Updating the task Table , so that user will see updated values in the assign screen in consequent cases
+      $oTask = new Task();
+      $oTask->update($aData);
     }
-    else
-    {
-        $aData['TAS_DURATION'] = $task->getTasDuration();
-        $aData['TAS_TIMEUNIT'] = $task->getTasTimeUnit();
-        $aData['TAS_TYPE_DAY'] = $task->getTasTypeDay();
-        $aCalendarUID          = '';
+    else {
+      $aData['TAS_DURATION'] = $task->getTasDuration();
+      $aData['TAS_TIMEUNIT'] = $task->getTasTimeUnit();
+      $aData['TAS_TYPE_DAY'] = $task->getTasTypeDay();
+      $aCalendarUID          = '';
     }
 
     //use the dates class to calculate dates
     $dates = new dates();
-    $iDueDate = $dates->calculateDate( $this->getDelDelegateDate(),
-                                       $aData['TAS_DURATION'],
-                                       $aData['TAS_TIMEUNIT'],   //hours or days, ( we only accept this two types or maybe weeks
-                                       $aData['TAS_TYPE_DAY'], //working or calendar days
-                                       $this->getUsrUid(),
-                                       $task->getProUid(),
-                                       $aData['TAS_UID'],
-                                       $aCalendarUID);
+    $iDueDate = $dates->calculateDate( 
+      $this->getDelDelegateDate(),
+      $aData['TAS_DURATION'],
+      $aData['TAS_TIMEUNIT'],   //hours or days, ( we only accept this two types or maybe weeks
+      $aData['TAS_TYPE_DAY'], //working or calendar days
+      $this->getUsrUid(),
+      $task->getProUid(),
+      $aData['TAS_UID'],
+      $aCalendarUID
+    );
+
     return $iDueDate;
   }
 
-function getDiffDate ( $date1, $date2 ) {
+  function getDiffDate ( $date1, $date2 ) 
+  {
     return ( $date1 - $date2 )/(24*60*60); //days
     return ( $date1 - $date2 ) / 3600;
   }
-  function calculateDuration() {
+
+  function calculateDuration() 
+  {
     try {
       //patch  rows with initdate = null and finish_date
       $c = new Criteria();
@@ -324,9 +335,10 @@ function getDiffDate ( $date1, $date2 ) {
       $rs->setFetchmode(ResultSet::FETCHMODE_ASSOC);
       $rs->next();
       $row = $rs->getRow();
-$i =0;
-//print "<table colspacing='2' border='1'>";
-//print "<tr><td>iDelegateDate </td><td>iInitDate </td><td>iDueDate </td><td>iFinishDate </td><td>isStarted </td><td>isFinished </td><td>isDelayed </td><td>queueDuration </td><td>delDuration </td><td>delayDuration</td></tr>";
+      $i =0;
+      //print "<table colspacing='2' border='1'>";
+      //print "<tr><td>iDelegateDate </td><td>iInitDate </td><td>iDueDate </td><td>iFinishDate </td><td>isStarted </td><td>isFinished </td><td>isDelayed </td><td>queueDuration </td><td>delDuration </td><td>delayDuration</td></tr>";
+      
       $now = strtotime ( 'now' );
       while ( is_array($row) ) {
         $fTaskDuration = $row['TAS_DURATION'];
@@ -343,6 +355,7 @@ $i =0;
         $overduePercentage = 0.0;
         //get the object,
         $oAppDel = AppDelegationPeer::retrieveByPk($row['APP_UID'], $row['DEL_INDEX'] );
+        
         //if the task is not started
         if ( $isStarted == 0 ) {
           if ( $row['DEL_INIT_DATE'] != NULL && $row['DEL_INIT_DATE']  != '' ) {
@@ -407,22 +420,21 @@ $i =0;
 
         }
 
-
         //and finally save the record
         $RES = $oAppDel->save();
-//print "<tr><td>$iDelegateDate </td><td>$iInitDate </td><td>$iDueDate </td><td>$iFinishDate </td><td>$isStarted </td><td>$isFinished </td><td>$isDelayed</td><td>$queueDuration </td><td>$delDuration </td>" .
-//       "<td>$delayDuration</td><td>$overduePercentage</td><td>" . $row['DEL_INDEX'] . " $RES </td></tr>";
+        //print "<tr><td>$iDelegateDate </td><td>$iInitDate </td><td>$iDueDate </td><td>$iFinishDate </td><td>$isStarted </td><td>$isFinished </td><td>$isDelayed</td><td>$queueDuration </td><td>$delDuration </td>" .
+        //       "<td>$delayDuration</td><td>$overduePercentage</td><td>" . $row['DEL_INDEX'] . " $RES </td></tr>";
 
-//UPDATE APP_DELEGATION SET DEL_DELAYED = 0
-//where
-// APP_OVERDUE_PERCENTAGE < 0
+        //UPDATE APP_DELEGATION SET DEL_DELAYED = 0
+        //where
+        // APP_OVERDUE_PERCENTAGE < 0
         $rs->next();
         $row = $rs->getRow();
 
       }
     }
-    catch ( Exception $oError) {
-      //krumo ( $oError->getMessage() );
+    catch (Exception $oError) {
+      error_log( $oError->getMessage());
     }
   }
 
