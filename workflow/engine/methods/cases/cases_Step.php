@@ -200,14 +200,18 @@ $uidf=$_GET['UID'];
       }
       $Fields['APP_DATA']['__DYNAFORM_OPTIONS']['NEXT_STEP'] = $aNextStep['PAGE'];
       $Fields['APP_DATA']['__DYNAFORM_OPTIONS']['NEXT_STEP_LABEL'] = G::loadTranslation('ID_NEXT_STEP');
-     
+
       $oHeadPublisher =& headPublisher::getSingleton();
       $oHeadPublisher->addScriptCode("
       if (typeof parent != 'undefined') {
-      parent.setNode('$uidf');
+        try {
+          parent.setNode('$uidf');
+        }
+        catch(e) {
+        }
       }
       ");
-      
+
       $oStep = new Step();
       $oStep = $oStep->loadByProcessTaskPosition($_SESSION['PROCESS'], $_SESSION['TASK'], $_GET['POSITION']);
 
@@ -989,7 +993,11 @@ $uidf=$_GET['UID'];
   $oHeadPublisher =& headPublisher::getSingleton();
   $oHeadPublisher->addScriptCode("
     if (typeof parent != 'undefined') {
-      parent.showCaseNavigatorPanel('$sStatus');
+      try {
+        parent.showCaseNavigatorPanel('$sStatus');
+      }
+      catch(e) {
+      }
     }
   ");
 
