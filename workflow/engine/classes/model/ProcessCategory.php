@@ -19,7 +19,9 @@ require_once 'classes/model/om/BaseProcessCategory.php';
  * @package    workflow.engine.classes.model
  */
 class ProcessCategory extends BaseProcessCategory {
-  function getAll($type='criteria'){
+  
+  function getAll($type='criteria')
+  {
     $c = new Criteria('workflow');
     $c->addSelectColumn(ProcessCategoryPeer::CATEGORY_UID);
     $c->addSelectColumn(ProcessCategoryPeer::CATEGORY_NAME);
@@ -32,7 +34,8 @@ class ProcessCategory extends BaseProcessCategory {
         $result[] = $dataset->getRow(); 
       }
       return $result;
-    } else {
+    } 
+    else {
       return $c;
     }
   }

@@ -449,6 +449,18 @@ class Process extends BaseProcess {
     $this->setProShowMessage  ( $aData['PRO_SHOW_MESSAGE'] );
     $this->setProShowDelegate ( $aData['PRO_SHOW_DELEGATE'] );
     $this->setProShowDynaform ( $aData['PRO_SHOW_DYNAFORM'] );
+
+    // validate if the category exists
+    $criteria = new Criteria('workflow');
+    $criteria->add(ProcessCategoryPeer::CATEGORY_UID, $aData['PRO_CATEGORY']);
+    $ds = ProcessCategoryPeer::doSelectRS ($criteria);
+    $ds->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    $ds->next();
+    // if it is not set, set value as empty "No Category"
+    if (!$ds->getRow()) {
+      $aData['PRO_CATEGORY'] = '';
+    }
+
     $this->setProCategory     ( $aData['PRO_CATEGORY'] );
     $this->setProSubCategory  ( $aData['PRO_SUB_CATEGORY'] );
     $this->setProIndustry     ( $aData['PRO_INDUSTRY'] );
