@@ -48,6 +48,7 @@ require_once 'classes/model/TaskUser.php';
 require_once 'classes/model/FieldCondition.php';
 require_once 'classes/model/Event.php';
 require_once 'classes/model/CaseScheduler.php';
+require_once 'classes/model/ProcessCategory.php';
 
 G::LoadClass('tasks');
 G::LoadClass('reportTables');
@@ -1034,6 +1035,27 @@ class Processes {
     }
   }
 
+ /**
+  * Gets processCategory record, if the process had one
+  * @param  $sProUid string for the process Uid
+  * @return $processCategory array
+  */
+  public function getProcessCategoryRow($sProUid)
+  {
+    $process = ProcessPeer::retrieveByPK($sProUid);
+
+    if ($process->getProCategory() == '') {
+      return null;
+    }
+
+    $oCriteria = new Criteria('workflow');
+    $oCriteria->add(ProcessCategoryPeer::CATEGORY_UID, $process->getProCategory());
+    $oDataset = ProcessCategoryPeer::doSelectRS($oCriteria);
+    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    $oDataset->next();
+
+    return $oDataset->getRow();
+  }
 
  /**
   * Get all Swimlanes Elements for any Process
@@ -1298,6 +1320,24 @@ class Processes {
       $res = $oCaseScheduler->create($row);
     }
     return;
+  }
+
+ /**
+  * Create ProcessCategory record
+  * @param  $ProcessCategory array.
+  * @return void
+  */
+  function createProcessCategoryRow ($row)
+  {
+    if ($row && is_array($row) && isset($row['CATEGORY_UID'])) {
+      $record = ProcessCategoryPeer::retrieveByPK($row['CATEGORY_UID']);
+      // create only if the category doesn't exists
+      if (!$record) {
+        $processCategory = new ProcessCategory();
+        $processCategory->fromArray($row, BasePeer::TYPE_FIELDNAME);
+        $processCategory->save();
+      }
+    }
   }
 
  /**
@@ -2311,6 +2351,8 @@ class Processes {
     $oData->fieldCondition    = $this->getFieldCondition($sProUid);
     $oData->event             = $this->getEventRow ($sProUid);
     $oData->caseScheduler     = $this->getCaseSchedulerRow ($sProUid);
+    $oData->processCategory   = $this->getProcessCategoryRow ($sProUid);
+
     //krumo ($oData);die;
     //$oJSON = new Services_JSON();
     //krumo ( $oJSON->encode($oData) );
@@ -3158,7 +3200,14 @@ class Processes {
   */
   function createProcessFromData ($oData, $pmFilename ) {
     $this->removeProcessRows ($oData->process['PRO_UID'] );
+
+    // (*) Creating process dependencies
+    // creating the process category
+    $this->createProcessCategoryRow(isset($oData->processCategory) ? $oData->processCategory : null);
+
+    // create the process
     $this->createProcessRow($oData->process);
+    
     $this->createTaskRows($oData->tasks);
     //it was commented becuase it seems to be working fine
     //$this->createEventRows(isset($oData->event) ? $oData->event : array());
@@ -3211,12 +3260,12 @@ class Processes {
 
     $this->createFieldCondition(isset($oData->fieldCondition) ? $oData->fieldCondition : array(), $oData->dynaforms);
 
-//    Create before to createRouteRows for avoid duplicates
+    // Create before to createRouteRows for avoid duplicates
     $this->createEventRows(isset($oData->event) ? $oData->event : array());
 
     $this->createCaseSchedulerRows(isset($oData->caseScheduler) ? $oData->caseScheduler : array());
 
-    //and finally create the files, dynaforms (xml and html), emailTemplates and Public files
+    // and finally create the files, dynaforms (xml and html), emailTemplates and Public files
     $this->createFiles($oData, $pmFilename);
  }
 
@@ -3251,6 +3300,7 @@ class Processes {
     $this->createFieldCondition($oData->fieldCondition, $oData->dynaforms);
     $this->createEventRows( $oData->event);
     $this->createCaseSchedulerRows( $oData->caseScheduler );
+    $this->createProcessCategoryRow(isset($oData->processCategory) ? $oData->processCategory : null);
 
  }
 
@@ -3260,7 +3310,7 @@ class Processes {
  * @param $sUserUid user uid
  * @return an array of tasks
  */
- function getStartingTaskForUser ($sProUid, $sUsrUid ){
+  function getStartingTaskForUser ($sProUid, $sUsrUid ){
     $oTask = new Tasks( );
 
     return $oTask->getStartingTaskForUser( $sProUid, $sUsrUid );
