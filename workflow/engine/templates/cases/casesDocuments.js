@@ -104,19 +104,19 @@ function chDir( directory, loadGridOnly ) {
     tb.items.get('tb_new').enable();
     tb.items.get('tb_upload').enable();
   }*/
-  if( directory!='root'){
+  /*if( directory!='root'){
     if( permitodelete==1 || permitoaddfolder==1 || permitoaddfile==1) {
       tb.items.get('tb_delete').enable();
-      tb.items.get('tb_new').enable();
+  //    tb.items.get('tb_new').enable();
       tb.items.get('tb_upload').enable();
     } else {
       tb.items.get('tb_delete').disable();
-      tb.items.get('tb_new').disable();
+   //   tb.items.get('tb_new').disable();
       tb.items.get('tb_upload').disable();
     }
   } else {
       tb.items.get('tb_delete').disable();
-  }
+  }*/
   /*
    * tb.items.get('tb_delete')[selections[0].get('is_deletable') ? 'enable' :
    * 'disable']();
@@ -872,7 +872,7 @@ var gridtb = new Ext.Toolbar(
     // '/images/documents/_filenew.png',
     tooltip : TRANSLATIONS.ID_NEW_FOLDER,
     cls : 'x-btn-icon',
-    disabled : false,
+   // disabled : false,
     handler : function() {
       openActionDialog(this, 'newFolder');
     }
@@ -941,7 +941,7 @@ var gridtb = new Ext.Toolbar(
     // '/images/documents/_down.png',
     tooltip : TRANSLATIONS.ID_DOWNLOAD,
     cls : 'x-btn-icon',
-    disabled : true,
+   // disabled : true,
     handler : function() {
       openActionDialog(this, 'download');
     }
@@ -1211,18 +1211,19 @@ function handleRowClick(sm, rowIndex) {//alert(rowIndex);
 //    tb.items.get('tb_delete').enable();
     tb.items.get('tb_delete')[permitodelete==1 ? 'enable': 'disable']();
     tb.items.get('tb_rename').disable();
-    tb.items.get('tb_download').disable();
+   tb.items.get('tb_download').hide();
+    //tb.items.get('tb_download').disable();
   } else if (selections.length == 1) {
 
 //    tb.items.get('tb_delete')[selections[0].get('is_deletable') ? 'enable': 'disable']();
     tb.items.get('tb_delete')[permitodelete==1 ? 'enable': 'disable']();
     tb.items.get('tb_rename')[selections[0].get('is_deletable') ? 'disable': 'disable']();
     tb.items.get('tb_download')[selections[0].get('is_readable')
-    && selections[0].get('is_file') ? 'enable' : 'disable']();
+    && selections[0].get('is_file') ? 'show' : 'hide']();
   } else {
     tb.items.get('tb_delete').disable();
     tb.items.get('tb_rename').disable();
-    tb.items.get('tb_download').disable();
+    tb.items.get('tb_download').hide();
   }
   return true;
 }
@@ -1235,7 +1236,7 @@ function loadDir() {
   datastore.load({
     params : {
       start : 0,
-      limit : 25,
+      limit : 25, 
       dir : datastore.directory,
       node : datastore.directory,
       option : 'gridDocuments',
@@ -1329,6 +1330,45 @@ gridCtxMenu = new Ext.menu.Menu({
     }
   } ]
 });
+//function that used for measure the  permissions and so assign buttons.
+function revisePermission(){ 
+  
+  dirCtxMenu.items.get('dirCtxMenu_reload').hide(); 
+  gridCtxMenu.items.get('cancel').hide(); 
+  dirCtxMenu.items.get('dirCtxMenu_cancel').hide(); 
+  if(permitoaddfolder=='1'){    
+    gridtb.items.get('tb_new').show();
+   // tb.items.get('tb_new').enable();
+    //dirCtxMenu.items.get('dirCtxMenu_new').enable();
+  }    
+  else{
+    gridtb.items.get('tb_new').hide();
+
+   // tb.items.get('tb_new').disable();
+    //dirCtxMenu.items.get('dirCtxMenu_new').disable(); 
+  }
+    
+  
+  if(permitodelete=='1') {
+    gridtb.items.get('tb_delete').show();
+   // tb.items.get('tb_delete').enable();
+   // dirCtxMenu.items.get('dirCtxMenu_remove').enable();
+  }    
+  else {
+    gridtb.items.get('tb_delete').hide();
+
+   // tb.items.get('tb_delete').disable();
+   // dirCtxMenu.items.get('dirCtxMenu_remove').disable();
+  }
+    
+
+  if(permitoaddfile=='1') 
+    gridtb.items.get('tb_upload').show();
+  else
+    gridtb.items.get('tb_upload').hide();
+
+
+};
 
 function dirContext(node, e) {
   // console.log("Dir context menu: "+node);
@@ -1339,10 +1379,10 @@ function dirContext(node, e) {
 
   dirCtxMenu.items.get('dirCtxMenu_rename')[node.attributes.is_deletable ? 'disable': 'disable']();
 //  dirCtxMenu.items.get('dirCtxMenu_remove')[node.attributes.is_deletable ? 'enable':'disable']();
-  dirCtxMenu.items.get('dirCtxMenu_remove')[permitodelete==1 && node.attributes.id!='root' ? 'enable':'disable']();
+  dirCtxMenu.items.get('dirCtxMenu_remove')[permitodelete==1 && node.attributes.id!='root' ? 'show':'hide']();
 
 //  dirCtxMenu.items.get('dirCtxMenu_new')[node.attributes.id!='NA' ? 'enable':'disable']();
-  dirCtxMenu.items.get('dirCtxMenu_new')[permitoaddfolder==1 ? 'enable':'disable']();
+  dirCtxMenu.items.get('dirCtxMenu_new')[permitoaddfolder==1 ? 'show':'hide']();
   dirCtxMenu.items.get('dirCtxMenu_copy')[node.attributes.id!='NA' ? 'enable':'disable']();
   dirCtxMenu.items.get('dirCtxMenu_move')[node.attributes.id!='NA' ? 'enable'
   : 'disable']();
@@ -1379,7 +1419,7 @@ function copymove(action) {
     handleCallback(requestParams);
   }
 }
-// context menus
+// context menus   
 var dirCtxMenu = new Ext.menu.Menu(
 {
   id : 'dirCtxMenu',
@@ -1459,7 +1499,7 @@ var dirCtxMenu = new Ext.menu.Menu(
       dirCtxMenu.hide();
       dirCtxMenu.node.reload();
     }
-  }, '-', {
+  },   {
     id : 'dirCtxMenu_cancel',
     iconCls: 'button_menu_ext ss_sprite ss_cross',// icon
     // :
@@ -1754,6 +1794,7 @@ var documentsTab = {
   listeners : {
     "afterlayout" : {
       fn : function() {
+        revisePermission();      
         // alert(Ext.getCmp("locationbarcmp"));
         // Ext.getCmp("documents").
         /*
