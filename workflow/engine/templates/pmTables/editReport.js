@@ -210,7 +210,7 @@ Ext.onReady(function(){
               var record = Ext.getCmp('assignedGrid').getSelectionModel().getSelected();
               Ext.getCmp('removeButton').enable();
 
-              if (record.data.field_dyn != '' && record.data.field_name != 'APP_UID' && record.data.field_name != 'APP_NUMBER' && record.data.field_name != 'ROW') {
+              if (record.data.field_dyn == '' && record.data.field_name != 'APP_UID' && record.data.field_name != 'APP_NUMBER' && record.data.field_name != 'ROW') {
                 Ext.getCmp('removeColumn').enable();
               }
               break;
@@ -1038,13 +1038,13 @@ function addColumn()
     field_key   : 0,
     field_null  : 1
   });
-  length = assignedGrid.getStore().data.length;
+  var len = assignedGrid.getStore().data.length;
   
   editor.stopEditing();
-  store.insert(length, row);
+  store.insert(len, row);
   assignedGrid.getView().refresh();
-  assignedGrid.getSelectionModel().selectRow(length);
-  editor.startEditing(length);
+  assignedGrid.getSelectionModel().selectRow(len);
+  editor.startEditing(len);
 }
 
 function removeColumn()
@@ -1206,6 +1206,11 @@ function setReportFields(records) {
   //remove from source grid
   Ext.each(records, availableGrid.store.remove, availableGrid.store);
 
+  if (indexes.length == 0) {
+    mainMask.hide();
+    return;
+  }
+
   //update on server
   Ext.Ajax.request({
     url: '../pmTablesProxy/updateAvDynafields',
@@ -1247,6 +1252,11 @@ function unsetReportFields(records) {
   }
 
   Ext.each(records, assignedGrid.store.remove, assignedGrid.store);
+
+  if (indexes.length == 0) {
+    mainMask.hide();
+    return;
+  }
 
   //update on server
   Ext.Ajax.request({
