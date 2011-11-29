@@ -31,7 +31,7 @@ switch($page){
         $oHeadPublisher->assign('CONFIG', $Config);
         $oHeadPublisher->assign('FORMATS',$c->getFormats());
 
-        $oHeadPublisher->assign('permitodelete'   ,$RBAC->userCanAccess('PM_FOLDERS_DELETE')    );
+        $oHeadPublisher->assign('permitodelete'   ,$RBAC->userCanAccess('PM_FOLDER_DELETE')    );
         $oHeadPublisher->assign('permitoaddfile'  ,$RBAC->userCanAccess('PM_FOLDERS_ADD_FILE')  );
         $oHeadPublisher->assign('permitoaddfolder',$RBAC->userCanAccess('PM_FOLDERS_ADD_FOLDER'));
 
