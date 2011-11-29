@@ -320,14 +320,6 @@
   $index = $start;
   while($aRow = $oDataset->getRow()){
     //$aRow = $oAppCache->replaceRowUserData($aRow);
-    // replacing the status data with their respective translation 
-    if( isset($aRow['APP_STATUS']) ){
-      $aRow['APP_STATUS'] = G::LoadTranslation("ID_{$aRow['APP_STATUS']}");
-    }
-    // replacing the priority data with their respective translation
-    if( isset($aRow['DEL_PRIORITY']) ){
-      $aRow['DEL_PRIORITY'] = G::LoadTranslation("ID_PRIORITY_{$aPriorities[$aRow['DEL_PRIORITY']]}");
-    }
     
     /* For participated cases, we want the last step in the case, not only
      * the last step this user participated. To do that we get every case
@@ -356,6 +348,16 @@
     
     if (!isset($aRow['APP_CURRENT_USER']))
       $aRow['APP_CURRENT_USER'] = "[Unassigned]";
+    
+
+    // replacing the status data with their respective translation 
+    if( isset($aRow['APP_STATUS']) ){
+      $aRow['APP_STATUS'] = G::LoadTranslation("ID_{$aRow['APP_STATUS']}");
+    }
+    // replacing the priority data with their respective translation
+    if( isset($aRow['DEL_PRIORITY']) ){
+      $aRow['DEL_PRIORITY'] = G::LoadTranslation("ID_PRIORITY_{$aPriorities[$aRow['DEL_PRIORITY']]}");
+    }
     
     $rows[] = $aRow;
     $oDataset->next();
