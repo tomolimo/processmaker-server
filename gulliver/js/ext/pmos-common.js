@@ -256,11 +256,13 @@ function _DF(DATE_TIME, D_FORMAT)
 {
     function LZ(x){return(x<0||x>9?"":"0")+x;}
     
-    if (typeof FORMATS != 'undefined') {
-      D_FORMAT = FORMATS.dateFormat;
-    }
-    else {
-      D_FORMAT = 'm/d/Y';
+    if(typeof D_FORMAT == 'undefined'){
+      if (typeof FORMATS != 'undefined') {
+        D_FORMAT = FORMATS.dateFormat;
+      }
+      else {
+        D_FORMAT = 'm/d/Y';
+      }
     }
 
     if (!(DATE_TIME != '')) {
