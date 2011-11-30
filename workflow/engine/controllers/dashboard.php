@@ -166,6 +166,10 @@ class Dashboard extends Controller {
     $result->status = 'OK';
     try {
       switch ($data->type) {
+        case 'EVERYBODY':
+          $result->total = 0;
+          $result->owners = array();
+        break;
         case 'USER':
           require_once 'classes/model/Users.php';
 

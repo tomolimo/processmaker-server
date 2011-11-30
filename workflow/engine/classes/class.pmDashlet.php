@@ -79,6 +79,9 @@ class PMDashlet extends DashletInstance implements DashletInterface {
       while ($row = $dataset->getRow()) {
         $row['DAS_INS_STATUS_LABEL'] = ($row['DAS_INS_STATUS'] == '1' ? G::LoadTranslation('ID_ACTIVE') : G::LoadTranslation('ID_INACTIVE'));
         switch ($row['DAS_INS_OWNER_TYPE']) {
+          case 'EVERYBODY':
+            $row['DAS_INS_OWNER_TITLE'] = G::LoadTranslation('ID_ALL_USERS');
+          break;
           case 'USER':
             require_once 'classes/model/Users.php';
             $userInstance = new Users();
@@ -159,10 +162,24 @@ class PMDashlet extends DashletInstance implements DashletInterface {
       $dashletsInstances = array();
       // Include required classes
       require_once 'classes/model/Department.php';
-      // Check for "public" dashlets
-      // ToDo: Next release
-      // Check for the direct assignments
       require_once 'classes/model/Users.php';
+      // Check for "public" dashlets
+      $criteria = new Criteria('workflow');
+      $criteria->addSelectColumn(DashletInstancePeer::DAS_INS_UID);
+      $criteria->addSelectColumn(DashletPeer::DAS_TITLE);
+      $criteria->addSelectColumn(DashletInstancePeer::DAS_INS_CONTEXT_TIME);
+      $criteria->add(DashletInstancePeer::DAS_INS_OWNER_TYPE, 'EVERYBODY');
+      $dataset = DashletInstancePeer::doSelectRS($criteria);
+      $dataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+      $dataset->next();
+      while ($row = $dataset->getRow()) {
+        if (!isset($dashletsInstances[$row['DAS_INS_UID']])) {
+          $row['DAS_TITLE'] .= ' (' . $row['DAS_INS_CONTEXT_TIME'] . ')';
+          $dashletsInstances[$row['DAS_INS_UID']] = $row;
+        }
+        $dataset->next();
+      }
+      // Check for the direct assignments
       $usersInstance = new Users();
       $criteria = new Criteria('workflow');
       $criteria->addSelectColumn(DashletInstancePeer::DAS_INS_UID);
