@@ -32,6 +32,9 @@ SELECT XMLNODE_NAME, TYPE FROM dynaForm WHERE XMLNODE_NAME = @@PME_XMLNODE_NAME
 <PME_VALIDATE type="dropdown" defaultvalue="Real">
   <en>Validate<option name="Int">Integer </option><option name="Real">Real Number</option></en>
 </PME_VALIDATE>
+<PME_COMMA_SEPARATOR type="dropdown" defaultvalue=".">
+  <en>Decimal Separator<option name=".">Period [.]</option><option name=",">Comma [,]</option></en>
+</PME_COMMA_SEPARATOR>
 <PME_MASK type="text" maxlength="50" size="30" defaultvalue="###.## %">
 
   <en>Mask</en>
