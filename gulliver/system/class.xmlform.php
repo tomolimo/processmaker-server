@@ -1598,6 +1598,7 @@ class XmlForm_Field_Currency extends XmlForm_Field_SimpleText {
   var $formula   = '';
   var $function  = '';
   var $gridFieldType = 'currency';
+  var $comma_separator = '.';
 
   /**
    * render the field in a dynaform
@@ -1624,6 +1625,7 @@ class XmlForm_Field_Currency extends XmlForm_Field_SimpleText {
        $html .= $this->NSDefaultValue().' ';
        $html .= $this->NSRequiredValue().' ';
        $html .= $this->NSGridType().' ';
+       $html .= 'pm:decimal_separator="'.$this->comma_separator.'" ';
        $html .= '/>';
     }else{ //VIEW MODE
        $html .= $this->htmlentities($value, ENT_COMPAT, 'utf-8');
@@ -1673,6 +1675,7 @@ class XmlForm_Field_Percentage extends XmlForm_Field_SimpleText {
   var $formula   = '';
   var $function  = '';
   var $gridFieldType = 'percentage';
+  var $comma_separator = '.';
 
   function render( $value = NULL, $owner = NULL) {
     
@@ -1692,6 +1695,7 @@ class XmlForm_Field_Percentage extends XmlForm_Field_SimpleText {
        $html .= 'onkeypress="'.$this->htmlentities($onkeypress, ENT_COMPAT, 'utf-8').'" ';
        $html .= $this->NSDefaultValue().' ';
        $html .= $this->NSRequiredValue().' ';
+       $html .= 'pm:decimal_separator="' + $this->comma_separator + '" ';
        $html .= '/>';
     }else{ //VIEW MODE
        $html .= $this->htmlentities($value, ENT_COMPAT, 'utf-8');
