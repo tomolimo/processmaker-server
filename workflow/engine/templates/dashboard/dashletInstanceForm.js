@@ -161,7 +161,7 @@ dashletInstance.form = {
       mode:     "local",
       editable: false,
 
-      width: 200,
+      width: 325,
       fieldLabel: "Dashboard"
     });
 
@@ -178,7 +178,7 @@ dashletInstance.form = {
       mode:     "local",
       editable: false,
 
-      width: 200,
+      width: 325,
       fieldLabel: "Type"
     });
 
@@ -195,7 +195,7 @@ dashletInstance.form = {
       mode:     "local",
       editable: false,
 
-      width: 200,
+      width: 325,
       fieldLabel: "Period"
     });
 
@@ -234,7 +234,7 @@ dashletInstance.form = {
       mode:     "local",
       editable: false,
 
-      width: 200,
+      width: 325,
       fieldLabel: "Assign To",
 
       listeners: {
@@ -262,7 +262,7 @@ dashletInstance.form = {
       mode:     "local",
       editable: false,
 
-      width: 200,
+      width: 325,
       fieldLabel: "Name",
       allowBlank: false
     });
@@ -280,7 +280,7 @@ dashletInstance.form = {
       mode:     "local",
       editable: false,
 
-      width: 200,
+      width: 325,
       fieldLabel: "Process"
     });
 
@@ -297,7 +297,7 @@ dashletInstance.form = {
       mode:     "local",
       editable: false,
 
-      width: 200,
+      width: 325,
       fieldLabel: "Task"
     });
 
@@ -317,11 +317,11 @@ dashletInstance.form = {
     //------------------------------------------------------------------------------------------------------------------
     var dashletInstanceFrm = new Ext.form.FormPanel({
       id:  "dashletInstanceFrm",
-      labelWidth: 115,
+      labelWidth: 100,
       border: true,
-      width: 400,
+      width: 450,
       frame: true,
-      title: "Dashboard Instance Configuration",
+      title: "Dashlet Instance Configuration",
       items: formFields,
       buttonAlign: "right",
       buttons: [new Ext.Action({
