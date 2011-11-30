@@ -360,7 +360,7 @@ Ext.onReady(function(){
 
 //Function format dates
 showdate = function (value){
-  return _DF(value);
+  return _DF(value, 'Y-m-d');
 };
 
 //Funtion Handles Context Menu Opening
