@@ -3594,7 +3594,7 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
               . 'pm:end="'.$endDate.'"  '.$onchange.' class="module_app_input___gray" value="'.$value.'"/>';
           
       } 
-    // added isodate format in the data field when it has a mask
+    /*** Commented because seems is not working well *
     $idIsoDate  = substr($pID,0,strlen($pID)-1).'_isodate]';
     $amask      = explode('-',str_replace('%','',$mask));
     $axDate     = explode('-',$value);
@@ -3607,7 +3607,8 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
     }
     
     $html .= '<input type="hidden" id="'.$idIsoDate.'" name="'.$idIsoDate.'" value="'.$valisoDate.'"/>';   
-    
+    ***/
+
     if ($this->gridFieldType == '') $html .= $this->renderHint();
     return $html;
   }
