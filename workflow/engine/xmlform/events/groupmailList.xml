@@ -7,6 +7,6 @@
   <en>Group name</en>
 </GROUP_TITLE>
 
-<sel type="link" colWidth="3px" value="&lt;img src=/images/select-icon.png border=0 width=17 height=17/&gt;" link="#" onclick="e.toAdd(@qGRP_UID, @qGROUP_TITLE, &#039;grp&#039;);return false;" enableHTML="1"/>
+<ASSIGN type="link" colWidth="40" value="@G::LoadTranslation(ID_ASSIGN)" link="#" onclick="e.toAdd(@qGRP_UID, @qGROUP_TITLE, &#039;grp&#039;);return false;"/>
 
 </dynaForm>  
