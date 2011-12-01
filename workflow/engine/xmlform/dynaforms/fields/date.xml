@@ -28,11 +28,11 @@ SELECT XMLNODE_NAME, TYPE FROM dynaForm WHERE XMLNODE_NAME = @@PME_XMLNODE_NAME
   <en>Start and End Dates</en>
 </PME_SUBTITLE3>
 
-<PME_STARTDATE type="date" defaultvalue="" beforedate="-900y" afterdate="900y">
+<PME_STARTDATE type="date" defaultvalue="" beforedate="-100y" afterdate="26y">
   <en>Start Date</en>
 </PME_STARTDATE>
 
-<PME_ENDDATE type="date" defaultvalue="" beforedate="-900y" afterdate="900y">
+<PME_ENDDATE type="date" defaultvalue="" beforedate="-100y" afterdate="26y">
   <en>End Date</en>
 </PME_ENDDATE>
 
