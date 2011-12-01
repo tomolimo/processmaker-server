@@ -301,25 +301,87 @@ dashletInstance.form = {
       fieldLabel: "Task"
     });
 
-    var formFields = [hiddenDasInsUID,
-              cboDasUID,
-              cboDasInsType,
-              cboDasInsContextTime,
-              //txtDasInsStartDate,
-              //txtDasInsEndDate,
-              cboDasInsOwnerType,
-              cboDasInsOwnerUID
-              //cboProcess,
-              //cboTask
-              ];
-    formFields = formFields.concat(additionaFields);
+    var sliderMaxValue = 100;
+    var sliderValue = [];
+    
+    var additionalFieldName = [];
+    var additionalFieldN    = additionaFields.length;
+    
+    for (var i = 0; i <= additionalFieldN - 1; i++) {
+      additionalFieldName[i] = additionaFields[i].name;
+    }
+    
+    for (var i = 0; i <= (additionalFieldN / 2) - 1; i++) {
+      sliderValue[i] = 0;
+    }
+    
+    var sliderRangeColor = new Ext.slider.MultiSlider({
+      //renderTo: "id",
+        
+      fieldLabel: "Range Of Colors",
+        
+      width: 325,
+      minValue: 0,
+      maxValue: sliderMaxValue,
+      values: sliderValue,
+      plugins: new Ext.slider.Tip(),
+        
+      listeners:{
+        //changecomplete(Ext.slider.MultiSlider slider, Number newValue, Ext.slider.Thumb thumb)
+        changecomplete: function (slider, newValue, thumb) {
+          var sliderAux = slider.getValues();
+          var index = 0;
+          var sw = 0;
+          
+          for (var i = 0; i <= sliderAux.length - 1 && sw == 0; i++) {
+            if (sliderAux[i] == newValue) {
+              index = i;
+              sw = 1;
+            }
+          }
+          
+          dashletInstanceFrm.getForm().findField(additionalFieldName[(index * 2) + 1]).setValue(newValue);
+          
+          if (index < (additionalFieldN / 2) - 1) {
+            dashletInstanceFrm.getForm().findField(additionalFieldName[(index * 2) + 1 + 1]).setValue(newValue);
+          }
+        }
+      }
+    })
+
+    var formFields = [
+      new Ext.form.FieldSet({
+        title: "Setting",
+        items:[hiddenDasInsUID,
+               cboDasUID,
+               cboDasInsType,
+               cboDasInsContextTime,
+               //txtDasInsStartDate,
+               //txtDasInsEndDate,
+               cboDasInsOwnerType,
+               cboDasInsOwnerUID
+               //,
+               //cboProcess,
+               //cboTask,
+              ]
+      })
+    ];
+    
+    formFields = formFields.concat([
+      new Ext.form.FieldSet({
+        title: "Configuration",
+        items:[sliderRangeColor,
+               additionaFields
+              ]
+      })
+    ]);
 
     //------------------------------------------------------------------------------------------------------------------
     var dashletInstanceFrm = new Ext.form.FormPanel({
       id:  "dashletInstanceFrm",
       labelWidth: 100,
       border: true,
-      width: 450,
+      width: 465,
       frame: true,
       title: "Dashlet Instance Configuration",
       items: formFields,
@@ -345,7 +407,38 @@ dashletInstance.form = {
                 }
                ]
     });
+
     dashletInstanceFrm.getForm().setValues(dashletInstance);
+    
+    ///////
+    var frm = dashletInstanceFrm.getForm();
+    var n = additionalFieldN / 2;
+
+    if (dashletInstance.DAS_INS_UID) {
+      for (var i = 0; i <= n - 1; i++) {
+        //setValue(Number index, Number value, Boolean animate)
+        sliderRangeColor.setValue(i, frm.findField(additionalFieldName[(i * 2) + 1]).getValue(), true);
+      }
+    }
+    else {
+      var range = parseInt(sliderMaxValue / n);
+      var r = range;
+
+      for (var i = 0; i <= n - 1; i++) {
+        sliderRangeColor.setValue(i, r, true);
+        
+        frm.findField(additionalFieldName[(i * 2) + 1 - 1]).setValue(r - range);
+        frm.findField(additionalFieldName[(i * 2) + 1]).setValue(r);
+        
+        r = r + range;
+      }
+      
+      sliderRangeColor.setValue(n - 1, sliderMaxValue, true);
+      
+      frm.findField(additionalFieldName[((n - 1) * 2) + 1]).setValue(sliderMaxValue);
+    }
+    ///////
+    
     dashletInstanceFrm.render(document.body);
   }
 }
