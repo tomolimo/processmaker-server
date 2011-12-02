@@ -166,6 +166,7 @@ class PMDashlet extends DashletInstance implements DashletInterface {
       $criteria = new Criteria('workflow');
       $criteria->addSelectColumn(DashletInstancePeer::DAS_INS_UID);
       $criteria->addSelectColumn(DashletPeer::DAS_TITLE);
+      $criteria->addJoin(DashletInstancePeer::DAS_UID, DashletPeer::DAS_UID, Criteria::INNER_JOIN);
       $criteria->add(DashletInstancePeer::DAS_INS_OWNER_TYPE, 'EVERYBODY');
       $dataset = DashletInstancePeer::doSelectRS($criteria);
       $dataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
@@ -181,6 +182,7 @@ class PMDashlet extends DashletInstance implements DashletInterface {
       $criteria = new Criteria('workflow');
       $criteria->addSelectColumn(DashletInstancePeer::DAS_INS_UID);
       $criteria->addSelectColumn(DashletPeer::DAS_TITLE);
+      $criteria->addJoin(DashletInstancePeer::DAS_UID, DashletPeer::DAS_UID, Criteria::INNER_JOIN);
       $criteria->add(DashletInstancePeer::DAS_INS_OWNER_TYPE, 'USER');
       $criteria->add(DashletInstancePeer::DAS_INS_OWNER_UID, $userUid);
       $dataset = DashletInstancePeer::doSelectRS($criteria);
@@ -199,6 +201,7 @@ class PMDashlet extends DashletInstance implements DashletInterface {
         $criteria = new Criteria('workflow');
         $criteria->addSelectColumn(DashletInstancePeer::DAS_INS_UID);
         $criteria->addSelectColumn(DashletPeer::DAS_TITLE);
+        $criteria->addJoin(DashletInstancePeer::DAS_UID, DashletPeer::DAS_UID, Criteria::INNER_JOIN);
         $criteria->add(DashletInstancePeer::DAS_INS_OWNER_TYPE, 'DEPARTMENT');
         $criteria->add(DashletInstancePeer::DAS_INS_OWNER_UID, $depUid);
         $dataset = DashletInstancePeer::doSelectRS($criteria);
@@ -219,6 +222,7 @@ class PMDashlet extends DashletInstance implements DashletInterface {
         $criteria = new Criteria('workflow');
         $criteria->addSelectColumn(DashletInstancePeer::DAS_INS_UID);
         $criteria->addSelectColumn(DashletPeer::DAS_TITLE);
+        $criteria->addJoin(DashletInstancePeer::DAS_UID, DashletPeer::DAS_UID, Criteria::INNER_JOIN);
         $criteria->add(DashletInstancePeer::DAS_INS_OWNER_TYPE, 'GROUP');
         $criteria->add(DashletInstancePeer::DAS_INS_OWNER_UID, $grpUid);
         $dataset = DashletInstancePeer::doSelectRS($criteria);
