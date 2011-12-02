@@ -166,6 +166,22 @@ class Dashboard extends Controller {
     return $result;
   }
 
+  public function getAdditionalFields($data) {
+    $this->setResponseType('json');
+    $result = new stdclass();
+    $result->status = 'OK';
+    try {
+      $dashlet = new Dashlet();
+      $dashletFields = $dashlet->load($data->DAS_UID);
+      $result->additionaFields = PMDashlet::getAdditionalFields($dashletFields['DAS_CLASS']);
+    }
+    catch(Exception $error) {
+      $result->status = 'ERROR';
+      $result->message = $error->getMessage();
+    }
+    return $result;
+  }
+
   public function getOwnersByType($data) {
     $this->setResponseType('json');
     $result = new stdclass();

@@ -15,7 +15,7 @@ class dashletOpenVSCompleted implements DashletInterface {
   private $greenFrom;
   private $greenTo;
 
-  public static function getAdditionalFields($a) {
+  public static function getAdditionalFields($className) {
     $additionalFields = array();
 
     $contextTimeStore = new stdclass();

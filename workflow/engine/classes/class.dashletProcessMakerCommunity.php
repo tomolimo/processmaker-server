@@ -15,10 +15,10 @@ class dashletProcessMakerCommunity implements DashletInterface {
   private $greenFrom;
   private $greenTo;
 
-  public static function getAdditionalFields($a) {
+  public static function getAdditionalFields($className) {
     $additionalFields = array();
 
-    $contextTimeStore = new stdclass();
+    /*$contextTimeStore = new stdclass();
     $contextTimeStore->xtype = 'arraystore';
     $contextTimeStore->fields = array('id', 'value');
     $contextTimeStore->data = array(array('TODAY',          'Today'),
@@ -108,7 +108,7 @@ class dashletProcessMakerCommunity implements DashletInterface {
     $greenTo->maxValue = 100;
     $greenTo->minValue = 0;
     $greenTo->allowBlank = false;
-    $additionalFields[] = $greenTo;
+    $additionalFields[] = $greenTo;*/
 
     return $additionalFields;
   }
