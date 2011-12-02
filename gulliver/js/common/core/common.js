@@ -1957,46 +1957,51 @@ function removeValue(id){
   fireEvent(document.getElementById(id), 'change');
 }
 
-function datePicker4(obj, id, mask, startDate, endDate, showTIme, idIsoDate){  
-  if(showTIme=='false')
-  showTIme=false;
+function datePicker4(obj, id, mask, startDate, endDate, showTIme, idIsoDate)
+{  
+  if (showTIme=='false') {
+    showTIme = false;
+  }
+
   Calendar.setup({
-        inputField: id,
-        dateFormat: mask,
-        trigger: id+"[btn]",
-        bottomBar: true,
-        min:startDate,
-        max:endDate,
-        animation: _BROWSER.name =='msie'? false: true,
-        showTime: showTIme,
-        opacity: 1,
-        onSelect: function() {
-            this.hide();
-            auxid     = id;
-            idIsoDate = auxid.substring(0,auxid.length-1)+'_isodate]';
-            var field= document.getElementById(idIsoDate);
-            field.value=this.selection.print("%Y-%m-%d", "");            
-            fireEvent(document.getElementById(id), 'change');
-        }
+    inputField: id,
+    dateFormat: mask,
+    trigger: id + "[btn]",
+    bottomBar: true,
+    min:startDate,
+    max:endDate,
+    animation: _BROWSER.name =='msie'? false: true,
+    showTime: showTIme,
+    opacity: 1,
+    onSelect: function() {
+        this.hide();
+        /* disabled temporarily by wrong functionality
+        auxid     = id;
+        idIsoDate = auxid.substring(0,auxid.length-1)+'_isodate]';
+        var field= document.getElementById(idIsoDate);
+        field.value=this.selection.print("%Y-%m-%d", ""); */
+        fireEvent(document.getElementById(id), 'change');
+    }
   });
 }
 
-function fireEvent(element,event){
-    if (document.createEventObject){
+function fireEvent(element, event)
+{
+  if (document.createEventObject){
     // dispatch for IE
     var evt = document.createEventObject();
-    return element.fireEvent('on'+event,evt)
-    }
-    else{
+    return element.fireEvent('on' + event,evt)
+  }
+  else {
     // dispatch for firefox + others
     var evt = document.createEvent("HTMLEvents");
     evt.initEvent(event, true, true ); // event type,bubbling,cancelable
     return !element.dispatchEvent(evt);
-    }
+  }
 }
 
-
-function elementAttributesNS(e, ns) {
+function elementAttributesNS(e, ns) 
+{
   if (!this.__namespaceRegexps)
     this.__namespaceRegexps = {};
   var regexp = this.__namespaceRegexps[ns];
