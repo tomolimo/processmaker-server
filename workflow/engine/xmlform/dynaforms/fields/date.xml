@@ -110,7 +110,7 @@ SELECT XMLNODE_NAME, TYPE FROM dynaForm WHERE XMLNODE_NAME = @@PME_XMLNODE_NAME
   <en>Cancel</en>
 </BTN_CANCEL>
 
-<PME_ACCEPT type="button" onclick="validDate(); fieldsSave( this.form );">
+<PME_ACCEPT type="button" onclick="validDate(this.form);">
   <en>Save</en>
 </PME_ACCEPT>
 
@@ -216,11 +216,29 @@ function cancel(){
     currentPopupWindow.remove();
 }
 
-function validDate() {
+function validDate(form) { 
+var startDate_form = new input(getField('PME_STARTDATE'));
+var endDate_form = new input(getField('PME_ENDDATE'));
+     if(getField('PME_STARTDATE').value==''){
+        startDate_form.failed(); 
+        var flag = 1;
+      }else
+        startDate_form.passed();  
+
+      if(getField('PME_ENDDATE').value==''){
+         endDate_form.failed(); 
+         var flag = 1;
+      }else
+        endDate_form.passed();  
+  if(flag=='1')
+   return false;
+  else
+   var flag = 0;
   reltype = getField('PME_RELATIVEDATE').value;
   switch (reltype) {
     case '':
-      getField('PME_RELATIVEDATE').value = '0';
+      getField('PME_RELATIVEDATE').value = '0';      
+    break;      
     case '0':
       if(getField('PME_STARTDATE').value == ''){
         getField('PME_BEFOREDATE').value = '0m';
@@ -242,6 +260,10 @@ function validDate() {
       }
     break;
   }
+  if(flag==0)
+   fieldsSave(form);
+
+
 }
 
 ]]></PME_JS>
