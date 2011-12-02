@@ -359,13 +359,13 @@ Ext.onReady ( function() {
   }
   function showDate (value,p,r) {
     var myDate = convertDate( value );
-    return String.format("{0}", myDate.dateFormat( PMDateFormat ));
+    return String.format("{0}", myDate.dateFormat( FORMATS.casesListDateFormat ));
   }
 
   function dueDate(value, p, r){
     var myDate = convertDate( value );
     var myColor =  (myDate < new Date()) ? " color:red;" : 'color:green;';
-    return String.format("<span style='{1}'>{0}</span>", myDate.dateFormat(PMDateFormat), myColor );
+    return String.format("<span style='{1}'>{0}</span>", myDate.dateFormat(FORMATS.casesListDateFormat), myColor );
   }
 
   var renderSummary = function (val, p, r) {
