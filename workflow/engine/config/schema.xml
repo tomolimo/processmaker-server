@@ -2828,14 +2828,8 @@
     </vendor>
     <column name="DAS_INS_UID" type="VARCHAR" size="32" required="true" primaryKey="true"  default="" />
     <column name="DAS_UID" type="VARCHAR" size="32" required="true" default="" />
-    <column name="DAS_INS_TYPE" type="VARCHAR" size="20" required="true" default="" />
-    <column name="DAS_INS_CONTEXT_TIME" type="VARCHAR" size="20" required="true" default="" />
-    <column name="DAS_INS_START_DATE" type="TIMESTAMP" required="false" />
-    <column name="DAS_INS_END_DATE" type="TIMESTAMP" required="false" />
     <column name="DAS_INS_OWNER_TYPE" type="VARCHAR" size="20" required="true" default="" />
     <column name="DAS_INS_OWNER_UID" type="VARCHAR" size="32" required="false" default="" />
-    <column name="DAS_INS_PROCESSES" type="LONGVARCHAR" required="false" />
-    <column name="DAS_INS_TASKS" type="LONGVARCHAR" required="false" />
     <column name="DAS_INS_ADDITIONAL_PROPERTIES" type="LONGVARCHAR" required="false" />
     <column name="DAS_INS_CREATE_DATE" type="TIMESTAMP" required="true" />
     <column name="DAS_INS_UPDATE_DATE" type="TIMESTAMP" required="false" />

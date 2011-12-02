@@ -15,8 +15,34 @@ class dashletOpenVSCompleted implements DashletInterface {
   private $greenFrom;
   private $greenTo;
 
-  public static function getAdditionalFields() {
+  public static function getAdditionalFields($a) {
     $additionalFields = array();
+
+    $contextTimeStore = new stdclass();
+    $contextTimeStore->xtype = 'arraystore';
+    $contextTimeStore->fields = array('id', 'value');
+    $contextTimeStore->data = array(array('TODAY',          'Today'),
+                                    array('YESTERDAY',      'Yesterday'),
+                                    array('THIS_WEEK',      'This week'),
+                                    array('PREVIOUS_WEEK',  'Previous Week'),
+                                    array('THIS_MONTH',     'This Month'),
+                                    array('PREVIOUS_MONTH', 'Previous Month'),
+                                    array('THIS_YEAR',      'This Year'),
+                                    array('PREVIOUS_YEAR',  'Previous Year'));
+
+    $contextTime = new stdclass();
+    $contextTime->xtype = 'combo';
+    $contextTime->name = 'DAS_INS_CONTEXT_TIME';
+    $contextTime->fieldLabel = 'Period';
+    $contextTime->editable = false;
+    $contextTime->width = 325;
+    $contextTime->store = $contextTimeStore;
+    $contextTime->mode = 'local';
+    $contextTime->triggerAction = 'all';
+    $contextTime->value = 'TODAY';
+    $contextTime->valueField = 'id';
+    $contextTime->displayField = 'value';
+    $additionalFields[] = $contextTime;
 
     $redFrom = new stdclass();
     $redFrom->xtype = 'numberfield';

@@ -108,14 +108,20 @@ class Dashboard extends Controller {
       if (!isset($data->DAS_INS_UID)) {
         $data->DAS_INS_UID = '';
       }
+      $dashlets = $this->getDashlets();
+      $this->setJSVar('storeDasUID', $dashlets);
       if ($data->DAS_INS_UID != '') {
         $this->pmDashlet->setup($data->DAS_INS_UID);
         $this->setJSVar('dashletInstance', $this->pmDashlet->getDashletInstance());
-        $this->setJSVar('additionaFields', $this->pmDashlet->getAdditionalFields());
+        $this->setJSVar('additionaFields', PMDashlet::getAdditionalFields(get_class($this->pmDashlet->getDashletObject())));
       }
       else {
-        $this->setJSVar('dashletInstance', new stdclass());
-        $this->setJSVar('additionaFields', $this->pmDashlet->getAdditionalFields());
+        $dashletInstance = new stdclass();
+        $dashletInstance->DAS_UID = $dashlets[0][0];
+        $dashlet = new Dashlet();
+        $dashletFields = $dashlet->load($dashletInstance->DAS_UID);
+        $this->setJSVar('dashletInstance', $dashletInstance);
+        $this->setJSVar('additionaFields', PMDashlet::getAdditionalFields($dashletFields['DAS_CLASS']));
       }
       G::RenderPage('publish', 'extJs');
       return null;
@@ -257,10 +263,7 @@ class Dashboard extends Controller {
     return $result;
   }
 
-  public function getDashlets($data) {
-    $this->setResponseType('json');
-    $result = new stdclass();
-    $result->status = 'OK';
+  private function getDashlets() {
     try {
       require_once 'classes/model/Dashlet.php';
 
@@ -277,17 +280,14 @@ class Dashboard extends Controller {
       $dataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
       $dataset->next();
       while ($row = $dataset->getRow()) {
-        $dashlets[] = array('DAS_UID' => $row['DAS_UID'], 'DAS_TITLE' => $row['DAS_TITLE']);
+        $dashlets[] = array($row['DAS_UID'], $row['DAS_TITLE']);
         $dataset->next();
       }
-      $result->total = DashletPeer::doCount($criteria);
-      $result->dashlets = $dashlets;
     }
-    catch (Exception $oException) {
-      $result->status = 'ERROR';
-      $result->message = $error->getMessage();
+    catch (Exception $error) {
+      throw $error;
     }
-    return $result;
+    return $dashlets;
   }
 
   // Functions for the dasboards administration module - End

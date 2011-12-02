@@ -200,6 +200,7 @@ $uidf=$_GET['UID'];
       }
       $Fields['APP_DATA']['__DYNAFORM_OPTIONS']['NEXT_STEP'] = $aNextStep['PAGE'];
       $Fields['APP_DATA']['__DYNAFORM_OPTIONS']['NEXT_STEP_LABEL'] = G::loadTranslation('ID_NEXT_STEP');
+      $Fields['APP_DATA']['__DYNAFORM_OPTIONS']['PHPSESSID'] = @session_id();
 
       $oHeadPublisher =& headPublisher::getSingleton();
       $oHeadPublisher->addScriptCode("
