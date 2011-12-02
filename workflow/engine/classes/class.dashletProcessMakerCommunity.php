@@ -114,7 +114,7 @@ class dashletProcessMakerCommunity implements DashletInterface {
   }
 
   public function setup($config) {
-    $this->redFrom    = isset($config['DAS_RED_FROM']) ? (int) $config['DAS_RED_FROM'] : 0;
+    /*$this->redFrom    = isset($config['DAS_RED_FROM']) ? (int) $config['DAS_RED_FROM'] : 0;
     $this->redTo      = isset($config['DAS_RED_TO']) ? (int) $config['DAS_RED_TO'] : 30;
     $this->yellowFrom = isset($config['DAS_YELLOW_FROM']) ? (int) $config['DAS_YELLOW_FROM'] : 30;
     $this->yellowTo   = isset($config['DAS_YELLOW_TO']) ? (int) $config['DAS_YELLOW_TO'] : 50;
@@ -195,12 +195,12 @@ class dashletProcessMakerCommunity implements DashletInterface {
       case 'THIS_YEAR'        : $this->centerLabel = 'This year';        break;
       case 'PREVIOUS_YEAR'    : $this->centerLabel = 'Previous year';    break;
       default : $this->centerLabel = '';break;
-    }
+    }*/
     return true;
   }
 
   public function render ($width = 300) {
-    G::LoadClass('pmGauge');
+    /*G::LoadClass('pmGauge');
     $g = new pmGauge();
     $g->w = $width;
     $g->value = $this->value;
@@ -215,7 +215,7 @@ class dashletProcessMakerCommunity implements DashletInterface {
     $g->centerLabel = $this->centerLabel;
     $g->open        = $this->open;
     $g->completed   = $this->completed;
-    $g->render();
+    $g->render();*/
   }
 
 }

@@ -169,7 +169,6 @@ Ext.onReady(function(){
       {id:'DAS_INS_UID', dataIndex: 'DAS_INS_UID', hidden:true, hideable:false},
       {header: _('ID_NAME'), dataIndex: 'DAS_TITLE', width: 200, hidden:false, align:'left'},
       {header: _('ID_VERSION'), dataIndex: 'DAS_VERSION', width: 60, hidden: false, align: 'center'},
-      {header: _('ID_TYPE'), dataIndex: 'DAS_INS_TYPE', width: 100, hidden: false, align: 'center'},
       {header: 'Assigned To', dataIndex: 'DAS_INS_OWNER_TITLE', width: 200, hidden: false, align: 'center'},
       {header: _('ID_UPDATE_DATE'), dataIndex: 'DAS_INS_UPDATE_DATE', width: 80, hidden: false, align: 'center'},
       {header: _('ID_STATUS'), dataIndex: 'DAS_INS_STATUS_LABEL', width: 60, hidden: false, align: 'center'}

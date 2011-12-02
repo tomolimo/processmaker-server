@@ -43,6 +43,14 @@ Ext.onReady(function() {
             cboDasInsOwnerUID.setValue(store.getAt(0).get(cboDasInsOwnerUID.valueField));
           }
         }
+        if (cboDasInsOwnerType.getValue() == 'EVERYBODY') {
+          cboDasInsOwnerUID.hide();
+          cboDasInsOwnerUID.container.up('div.x-form-item').setStyle('display', 'none');
+        }
+        else {
+          cboDasInsOwnerUID.show();
+          cboDasInsOwnerUID.container.up('div.x-form-item').setStyle('display', 'block');
+        }
       }
     }
   });
@@ -124,7 +132,7 @@ Ext.onReady(function() {
     store:         storeDasInsOwnerUID,
     triggerAction: 'all',
     mode:          'local',
-    allowBlank:    false,
+    allowBlank:    true,
     valueField:    'OWNER_UID',
     displayField:  'OWNER_NAME'
   });
@@ -134,13 +142,16 @@ Ext.onReady(function() {
       id:    'general',
       title: 'General',
       items: [hiddenDasInsUID, cboDasUID, cboDasInsOwnerType, cboDasInsOwnerUID]
-    }),
-    new Ext.form.FieldSet({
+    })
+  ];
+
+  if (additionaFields.length > 0) {
+    formFields.concat(new Ext.form.FieldSet({
       id:    'additional',
       title: 'Other',
       items: additionaFields
-    })
-  ];
+    }));
+  }
 
   // Form
   dashletInstanceFrm = new Ext.form.FormPanel({
