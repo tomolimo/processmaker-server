@@ -136,7 +136,7 @@ function newSkin($baseSkin='classic') {
     $xmlConfiguration = preg_replace("/(<name>)(.+?)(<\/name>)/i", "<name>" . $skinName . "</name><!-- $2 -->", $xmlConfiguration);
     $xmlConfiguration = preg_replace("/(<description>)(.+?)(<\/description>)/i", "<description>" . $skinDescription . "</description><!-- $2 -->", $xmlConfiguration);
     $xmlConfiguration = preg_replace("/(<author>)(.+?)(<\/author>)/i", "<author>" . $skinAuthor . "</author><!-- $2 -->", $xmlConfiguration);
-    $xmlConfiguration = preg_replace("/(<createDate>)(.+?)(<\/createDate>)/i", "<createDate>" . date("Y-m-d") . "</createDate><!-- $2 -->", $xmlConfiguration);
+    $xmlConfiguration = preg_replace("/(<createDate>)(.+?)(<\/createDate>)/i", "<createDate>" . date("Y-m-d H:i:s") . "</createDate><!-- $2 -->", $xmlConfiguration);
     $xmlConfiguration = preg_replace("/(<modifiedDate>)(.+?)(<\/modifiedDate>)/i", "<modifiedDate>" . date("Y-m-d H:i:s") . "</modifiedDate><!-- $2 -->", $xmlConfiguration);
     file_put_contents($configFileFinal, $xmlConfiguration);
 
