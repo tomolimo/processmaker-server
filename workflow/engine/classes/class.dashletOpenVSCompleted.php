@@ -39,9 +39,9 @@ class dashletOpenVSCompleted implements DashletInterface {
     $contextTime->store = $contextTimeStore;
     $contextTime->mode = 'local';
     $contextTime->triggerAction = 'all';
-    $contextTime->value = 'TODAY';
     $contextTime->valueField = 'id';
     $contextTime->displayField = 'value';
+    $contextTime->value = 'TODAY';
     $additionalFields[] = $contextTime;
 
     $redFrom = new stdclass();
@@ -53,6 +53,7 @@ class dashletOpenVSCompleted implements DashletInterface {
     $redFrom->maxValue = 100;
     $redFrom->minValue = 0;
     $redFrom->allowBlank = false;
+    $redFrom->value = 0;
     $additionalFields[] = $redFrom;
 
     $redTo = new stdclass();
@@ -64,6 +65,7 @@ class dashletOpenVSCompleted implements DashletInterface {
     $redTo->maxValue = 100;
     $redTo->minValue = 0;
     $redTo->allowBlank = false;
+    $redTo->value = 30;
     $additionalFields[] = $redTo;
 
     $yellowFrom = new stdclass();
@@ -75,6 +77,7 @@ class dashletOpenVSCompleted implements DashletInterface {
     $yellowFrom->maxValue = 100;
     $yellowFrom->minValue = 0;
     $yellowFrom->allowBlank = false;
+    $yellowFrom->value = 30;
     $additionalFields[] = $yellowFrom;
 
     $yellowTo = new stdclass();
@@ -86,6 +89,7 @@ class dashletOpenVSCompleted implements DashletInterface {
     $yellowTo->maxValue = 100;
     $yellowTo->minValue = 0;
     $yellowTo->allowBlank = false;
+    $yellowTo->value = 50;
     $additionalFields[] = $yellowTo;
 
     $greenFrom = new stdclass();
@@ -97,6 +101,7 @@ class dashletOpenVSCompleted implements DashletInterface {
     $greenFrom->maxValue = 100;
     $greenFrom->minValue = 0;
     $greenFrom->allowBlank = false;
+    $greenFrom->value = 50;
     $additionalFields[] = $greenFrom;
 
     $greenTo = new stdclass();
@@ -108,6 +113,7 @@ class dashletOpenVSCompleted implements DashletInterface {
     $greenTo->maxValue = 100;
     $greenTo->minValue = 0;
     $greenTo->allowBlank = false;
+    $greenTo->value = 100;
     $additionalFields[] = $greenTo;
 
     return $additionalFields;
