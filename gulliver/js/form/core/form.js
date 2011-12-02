@@ -102,27 +102,27 @@ function G_Field ( form, element, name )
   
   this.updateDepententFields=function(event) {
     
-    var tempValue;
-    if (me.dependentFields.length===0) return true;
-    var fields=[],Fields = [],i,grid='',row=0;
-    for(i in me.dependentFields) {
-      if (me.dependentFields[i].dependentOf) {
-        for (var j = 0; j < me.dependentFields[i].dependentOf.length; j++) {
-          var oAux = me.dependentFields[i].dependentOf[j];
-          if (oAux.name.indexOf('][') > -1) {
-            var aAux  = oAux.name.split('][');
-            grid      = aAux[0];
-            row       = aAux[1];
-            fieldName = aAux[2];
-            if (Fields.length > 0){
-              aux = Fields;
-              aux.push('?');
-              if (aux.join('*').indexOf(fieldName + '*') == -1){
-                Fields.push(fieldName);
-                eval("var oAux2 = {" + fieldName + ":'" + oAux.value() + "'}");  
-                fields = fields.concat(oAux2);
-              }
-            }else{
+  var tempValue;
+  if (me.dependentFields.length===0) return true;
+  var fields=[],Fields = [],i,grid='',row=0;
+  for(i in me.dependentFields) {
+    if (me.dependentFields[i].dependentOf) {
+      for (var j = 0; j < me.dependentFields[i].dependentOf.length; j++) {
+        var oAux = me.dependentFields[i].dependentOf[j];
+        if (oAux.name.indexOf('][') > -1) {
+          var aAux  = oAux.name.split('][');
+          grid      = aAux[0];
+          row       = aAux[1];
+          fieldName = aAux[2];
+          if (Fields.length > 0){
+            aux = Fields;
+            aux.push('?');
+            if (aux.join('*').indexOf(fieldName + '*') == -1){
+              Fields.push(fieldName);
+              eval("var oAux2 = {" + fieldName + ":'" + oAux.value() + "'}");  
+              fields = fields.concat(oAux2);
+            }
+          }else{
               Fields.push(fieldName);
               eval("var oAux2 = {" + fieldName + ":'" + oAux.value() + "'}");  
               fields = fields.concat(oAux2);
@@ -338,6 +338,7 @@ function G_Text( form, element, name)
   this.checkBrowser = function(){
     var nVer = navigator.appVersion;
     var nAgt = navigator.userAgent;
+    //alert(navigator.userAgent);
     var browserName  = navigator.appName;
     var fullVersion  = ''+parseFloat(navigator.appVersion); 
     var majorVersion = parseInt(navigator.appVersion,10);
@@ -436,7 +437,7 @@ function G_Text( form, element, name)
     return true;
   }
   
-  function renderNewValue(element, keyCode){
+  //function renderNewValue(element, keyCode){
     /*var myField = element;
     var myValue = myField.value;
     var cursorPos = 0;
@@ -471,7 +472,7 @@ function G_Text( form, element, name)
         break;
     }
     return {result: newValue, cursor: startPos};*/
-  }
+  //}
   
   //MEMBERS
   this.setContent = function(content) {
@@ -483,7 +484,7 @@ function G_Text( form, element, name)
     }
   };
     
-  this.validateKey = function(event){
+  //this.validateKey = function(event){
     /*
     attributes = elementAttributesNS(element, 'pm');
     if(me.element.readOnly)  return true;
@@ -535,13 +536,13 @@ function G_Text( form, element, name)
             break;
           case "Alpha":
             if (keyCode==8) return true;
-            patron =/[A-Za-z\sÃƒÆ’Ã‚Â¡ÃƒÆ’Ã‚Â©ÃƒÆ’Ã‚Â­ÃƒÆ’Ã‚Â³ÃƒÆ’Ã‚ÂºÃƒÆ’Ã‚Â¤ÃƒÆ’Ã‚Â«ÃƒÆ’Ã‚Â¯ÃƒÆ’Ã‚Â¶ÃƒÆ’Ã‚Â¼ÃƒÆ’Ã‚Â±ÃƒÆ’Ã‚Â§ÃƒÆ’Ã¢â‚¬Â¡ÃƒÆ’Ã¢â‚¬ËœÃƒÆ’Ã¯Â¿Â½ÃƒÆ’Ã¢â‚¬Â°ÃƒÆ’Ã¯Â¿Â½ÃƒÆ’Ã¢â‚¬Å“ÃƒÆ’Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¾ÃƒÆ’Ã¢â‚¬Â¹ÃƒÆ’Ã¯Â¿Â½ÃƒÆ’Ã¢â‚¬â€œÃƒÆ’Ã…â€œ]/;  
+            patron =/[A-Za-z\sÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â©ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â­ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â³ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚ÂºÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¤ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â«ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¯ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¶ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¼ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â±ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â§ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¹Ã…â€œÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¯Ãƒâ€šÃ‚Â¿Ãƒâ€šÃ‚Â½ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â°ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¯Ãƒâ€šÃ‚Â¿Ãƒâ€šÃ‚Â½ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã¢â‚¬Å“ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¾ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¹ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¯Ãƒâ€šÃ‚Â¿Ãƒâ€šÃ‚Â½ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â¦ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œ]/;  
             te = String.fromCharCode(keyCode);
             return patron.test(te);
             break;
           case "AlphaNum":
             if (keyCode==8) return true;
-            patron =/[A-Za-z0-9\sÃƒÆ’Ã‚Â¡ÃƒÆ’Ã‚Â©ÃƒÆ’Ã‚Â­ÃƒÆ’Ã‚Â³ÃƒÆ’Ã‚ÂºÃƒÆ’Ã‚Â¤ÃƒÆ’Ã‚Â«ÃƒÆ’Ã‚Â¯ÃƒÆ’Ã‚Â¶ÃƒÆ’Ã‚Â¼ÃƒÆ’Ã‚Â±ÃƒÆ’Ã‚Â§ÃƒÆ’Ã¢â‚¬Â¡ÃƒÆ’Ã¢â‚¬ËœÃƒÆ’Ã¯Â¿Â½ÃƒÆ’Ã¢â‚¬Â°ÃƒÆ’Ã¯Â¿Â½ÃƒÆ’Ã¢â‚¬Å“ÃƒÆ’Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¾ÃƒÆ’Ã¢â‚¬Â¹ÃƒÆ’Ã¯Â¿Â½ÃƒÆ’Ã¢â‚¬â€œÃƒÆ’Ã…â€œ]/;
+            patron =/[A-Za-z0-9\sÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â©ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â­ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â³ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚ÂºÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¤ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â«ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¯ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¶ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¼ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â±ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â§ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¹Ã…â€œÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¯Ãƒâ€šÃ‚Â¿Ãƒâ€šÃ‚Â½ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â°ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¯Ãƒâ€šÃ‚Â¿Ãƒâ€šÃ‚Â½ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã¢â‚¬Å“ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¾ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¹ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¯Ãƒâ€šÃ‚Â¿Ãƒâ€šÃ‚Â½ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â¦ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œ]/;
             te = String.fromCharCode(keyCode);
             return patron.test(te);
             break;
@@ -594,7 +595,7 @@ function G_Text( form, element, name)
       }
       return true;
     }*/
-  };
+  //};
   
   this.putFormatNumber =function (evt) {
     /*
@@ -664,7 +665,7 @@ function G_Text( form, element, name)
     //}
   };
   
-  this.preValidateChange=function(event) {
+  //this.preValidateChange=function(event) {
     /*var oNewValue;
     var newValueR; 
     me.putFormatNumber(event);
@@ -701,7 +702,7 @@ function G_Text( form, element, name)
     //alert(me.element.value);
     me.prev=me.element.value;
     return true;*/
-  };
+  //};
   
   this.execFormula=function(event) {
     if(  me.formula != ''){
@@ -712,7 +713,7 @@ function G_Text( form, element, name)
     return false;
   };
   
-  this.validateChange=function(event) {
+  /*this.validateChange=function(event) {
     /*if (me.mask ==='') return true;
     var sel=me.getSelectionRange();
     var newValue2=G.cleanMask( me.element.value, me.mask, sel.selectionStart );
@@ -720,7 +721,7 @@ function G_Text( form, element, name)
     me.element.value = newValue2.result;
     me.setSelectionRange(newValue2.cursor, newValue2.cursor);
     return true;*/
-  };
+  //};*/
     
   this.value = function()
   {
@@ -728,8 +729,8 @@ function G_Text( form, element, name)
   };
   
   //Get Cursor Position
-  this.getCursorPos = function () {
-    /*var textElement=me.element;
+  /*this.getCursorPos = function () {
+    var textElement=me.element;
     if (!document.selection) return textElement.selectionStart;
     //save off the current value to restore it later,
     var sOldText = textElement.value;
@@ -753,8 +754,8 @@ function G_Text( form, element, name)
         var cursorPos = (i - sOldRange.length);
         return cursorPos;
       }
-    }*/
-  };
+    }
+  };*/
   
   this.setSelectionRange = function(selectionStart, selectionEnd) {
     var input=me.element;
@@ -774,7 +775,7 @@ function G_Text( form, element, name)
   };
   
   //FUNCTION MAYBE IT'S DEPRECATED
-  this.getSelectionRange = function() {
+  /*this.getSelectionRange = function() {
     if (document.selection) {
       var textElement=me.element;
       var sOldText = textElement.value;
@@ -805,9 +806,9 @@ function G_Text( form, element, name)
       return sel;
     }
   };
-  
+*/  
   //FUNCTION MAYBE IT'S DEPRECATED
-  this.getCursorP =function (field) { 
+  /*this.getCursorP =function (field) { 
     if (document.selection) {                               
       field.focus();                                      
       var oSel = document.selection.createRange();        
@@ -817,7 +818,7 @@ function G_Text( form, element, name)
       field.selectionStart = oSel.text.length; 
     } 
     return {selectionStart: field.selectionStart, selectionEnd: field.selectionEnd}; 
-  };  
+  };*/  
   
   //Gets cursor position
   this.getCursorPosition = function(){
@@ -865,167 +866,207 @@ function G_Text( form, element, name)
     } 
   };
   
-  this.removeMask = function(value, cursor){
-    return {result: value, cursor: cursor};
+  this.removeMask = function(){
+    value     = me.element.value;
+    cursor    = me.getCursorPosition();
+    chars     = value.split('');
+    newValue  = '';
+    newCont   = 0;
+    newCursor = 0;
+    for(c=0; c < chars.length; c++){
+      switch(chars[c]){
+        case '0': case '1': case '2': case '3': case '4':
+        case '5': case '6': case '7': case '8': case '9':
+        case '.': case ',':
+          newValue += chars[c];
+          newCont++;
+          if (c + 1 == cursor.selectionStart){
+            newCursor = newCont;
+          }
+          break;
+        case '-':
+          if (me.validate == 'Real'){
+            newValue += chars[c];
+            newCont++;
+            if (c + 1 == cursor.selectionStart){
+              newCursor = newCont;
+            }
+          }
+          break;
+      }
+    }
+    return {result: newValue, cursor: {selectionStart: newCursor, selectionEnd: newCursor}};
   };
-  
-  this.replaceMask= function(cursor, type, mask, keyCode, direction){
-    var oldValue    = me.element.value;
-    var valueWOMask = me.removeMask(oldValue, cursor);
-    var realValue   = valueWOMask.result;
-    var realCursor  = valueWOMask.cursor;
-    var startPos    = realCursor.selectionStart;
-    var endPos      = realCursor.selectionEnd;
-    switch(keyCode){
-      case 8: case 46:  
-        if (startPos != endPos){
-          newValue  = realValue.substring(0, startPos);
-          newValue += realValue.substring(endPos, realValue.length);
-          newCursor = startPos;
-        }else{
-          if (keyCode == 8){
-            newValue  = realValue.substring(0, startPos - 1);
-            newValue += realValue.substring(endPos, realValue.length);
-            newCursor = startPos - 1;
-          }
-          else{
-            newValue  = realValue.substring(0, startPos);
-            newValue += realValue.substring(endPos + 1, realValue.length);
-            newCursor = startPos;
-          }
-        }
+
+  this.replaceMask = function(value, cursor, mask, type, comma){
+    switch(type){
+      case 'currency': case 'percentage':
+        dir = 'reverse';
         break;
       default:
-        newKey = String.fromCharCode(keyCode);
-        newValue  = realValue.substring(0, startPos);
-        newValue += newKey;
-        newValue += realValue.substring(endPos, realValue.length);
-        newCursor = startPos + 1;
+        dir = 'forward';
         break;
     }
-    alert(newValue);
-    return {result: newValue, cursor: newCursor};
+    return G.ApplyMask(value, mask, cursor, dir, comma);
   };
   
-  this.replaceMasks= function(cursor, type, mask, keyCode, direction){
-    var aMasks = mask.split(';');
-    var aValues = [];
+  this.replaceMasks= function(newValue, newCursor){
+    masks = me.mask;
+    aMasks = masks.split(';');
+    aResults = [];
     for(m=0; m < aMasks.length; m++){
-      aValues.push(me.replaceMask(cursor, type, aMasks[m], keyCode, direction))
+      mask = aMasks[m];
+      type = me.mType;
+      comma_sep = me.comma_separator;
+      aResults.push(me.replaceMask(newValue, newCursor, mask, type, comma_sep));
     }
-    index = 0;
-    minMask = aValues[0].result;
-    if (aValues.length > 1){
-      for(v=1; v < aValues.length; v++){
-        if (aValues[v].result < minMask){
-          minMask = aValues[v].result;
-          index = v;
+    minIndex = 0;
+    minValue = aResults[0].result;
+    if (aResults.length > 1){
+      for(i=1; i < aResults.length; i++){
+        if (aResults[i].result < minValue){
+          minValue = aResults[i].result;
+          minIndex = i;
         }
       }
     }
-    return aValues[index];
+    return aResults[minIndex];
   };
   
-  this.applyMask = function(event){
-    var outData = null;
+  this.applyMask = function(keyCode){
     if (me.mask != ''){
-      var selCursor = me.getCursorPosition();
-      switch(event.keyCode){
-        case 35: case 36: case 37: case 38: case 39: case 40: case 13:
+      dataWOMask = me.removeMask();
+      currentValue = dataWOMask.result;
+      currentSel = dataWOMask.cursor;
+      cursorStart = currentSel.selectionStart;
+      cursorEnd = currentSel.selectionEnd;
+      switch(keyCode){
+        case 0:
           break;
-        case 8: case 46: default:
-          switch(me.mType){
-            case 'text':
-              outData = me.replaceMasks(selCursor, 'text', me.mask, event.keyCode,'forward');
-              break;
-            case 'percentage': 
-            case 'currency':
-              outData = me.replaceMasks(selCursor, 'number', me.mask, event.keyCode,'reverse');
-              break;
-            case 'date':
-              outData = me.replaceMasks(selCursor, 'date', me.mask, event.keyCode,'forward');
-              break;
+        case 8:
+          newValue  = currentValue.substring(0, cursorStart - 1);
+          newValue += currentValue.substring(cursorEnd, currentValue.length);
+          newCursor = cursorStart - 1;
+          break;
+        case 46:
+          newValue  = currentValue.substring(0, cursorStart);
+          newValue += currentValue.substring(cursorEnd + 1, currentValue.length);
+          newCursor = cursorStart;
+          break;
+        case 256:
+          newValue  = currentValue.substring(0, cursorStart);
+          newValue += '.';
+          newValue += currentValue.substring(cursorEnd, currentValue.length);
+          newCursor = cursorStart + 1;
+          break;
+        case 35: case 36: case 37: case 38: case 39: case 40:
+          newValue  = currentValue;
+          switch(keyCode){
+            case 36:newCursor = 0;break;
+            case 35:newCursor = currentValue.length;break;
+            case 37:newCursor = cursorStart - 1;break;
+            case 39:newCursor = cursorStart + 1;break;
           }
           break;
-      }  
-    }
-    return outData;
-  };
-  
-  this.pressKeyDown = function(event){
-    me.checkBrowser();
-    var keyValid = true;
-    //CHECK IF KEY IS VALID AND AFFECT THE FIELD'S VALUE
-    switch(event.keyCode){
-      case 8:   //BACKSPACE
-      case 46:  //DELETE
-        keyValid = (me.mask == '');
-        break;
-      case 35:  //HOME
-      case 36:  //END
-      case 37:  //LEFT KEY
-      case 38:  //TOP KEY
-      case 39:  //RIGHT KEY
-      case 40:  //BOTTOM KEY
-        keyValid = true;//
-        break;
-      case 13:
-        keyValid = true;
-        break;
-      default:
-        switch(me.validate){
-          case 'Any':
-            keyValid = true;
-            break;
-          case 'Int':
-            keyValid = ((event.keyCode > 47) && (event.keyCode < 58) || (event.keyCode > 95) && (event.keyCode < 106));
-            break;
-          case 'Real':
-            keyValid = ((event.keyCode > 47) && (event.keyCode < 58) || (event.keyCode > 95) && (event.keyCode < 106));
-            keyValid = keyValid || (event.keyCode == 109);
-            keyValid = keyValid || (event.keyCode == 110);
-            keyValid = keyValid || (event.keyCode == 190);
-            break;
-          case 'Alpha':
-            patron =/[a-zA-Z]/; // \sÃƒÆ’Ã‚Â¡ÃƒÆ’Ã‚Â©ÃƒÆ’Ã‚Â­ÃƒÆ’Ã‚Â³ÃƒÆ’Ã‚ÂºÃƒÆ’Ã‚Â¤ÃƒÆ’Ã‚Â«ÃƒÆ’Ã‚Â¯ÃƒÆ’Ã‚Â¶ÃƒÆ’Ã‚Â¼ÃƒÆ’Ã‚Â±ÃƒÆ’Ã‚Â§ÃƒÆ’Ã¢â‚¬Â¡ÃƒÆ’Ã¢â‚¬ËœÃƒÆ’Ã¯Â¿Â½ÃƒÆ’Ã¢â‚¬Â°ÃƒÆ’Ã¯Â¿Â½ÃƒÆ’Ã¢â‚¬Å“ÃƒÆ’Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¾ÃƒÆ’Ã¢â‚¬Â¹ÃƒÆ’Ã¯Â¿Â½ÃƒÆ’Ã¢â‚¬â€œÃƒÆ’Ã…â€œ]/;  
-            key = String.fromCharCode(event.keyCode);
-            keyValid = patron.test(key);
-            break;
-          case 'AlphaNum':
-            patron =/[a-zA-Z0-9\sÃƒÆ’Ã‚Â¡ÃƒÆ’Ã‚Â©ÃƒÆ’Ã‚Â­ÃƒÆ’Ã‚Â³ÃƒÆ’Ã‚ÂºÃƒÆ’Ã‚Â¤ÃƒÆ’Ã‚Â«ÃƒÆ’Ã‚Â¯ÃƒÆ’Ã‚Â¶ÃƒÆ’Ã‚Â¼ÃƒÆ’Ã‚Â±ÃƒÆ’Ã‚Â§ÃƒÆ’Ã¢â‚¬Â¡ÃƒÆ’Ã¢â‚¬ËœÃƒÆ’Ã¯Â¿Â½ÃƒÆ’Ã¢â‚¬Â°ÃƒÆ’Ã¯Â¿Â½ÃƒÆ’Ã¢â‚¬Å“ÃƒÆ’Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¾ÃƒÆ’Ã¢â‚¬Â¹ÃƒÆ’Ã¯Â¿Â½ÃƒÆ’Ã¢â‚¬â€œÃƒÆ’Ã…â€œ]/;  
-            key = String.fromCharCode(event.keyCode);
-            keyValid = patron.test(key);
-            break;
-          default:
-            var k = new leimnud.module.validator({
-              valid :[me.validate],
-              key   :event,
-              lang  :(typeof(me.language)!=='undefined')?me.language:"en"
-            });
-            keyValid = k.result();
-            break;
-        }
-        
-    }
-    //APPLIES MASK AND RETURNS VALUES
-    if (keyValid){
-      maskResult = me.applyMask(event); 
-      if (maskResult != null){
-        me.element.value = maskResult.result;
-        me.setSelectionRange(maskResult.cursor, maskResult.cursor);
-        //me.setSelectionRange(0, 0);
+        default:
+          newKey = String.fromCharCode(keyCode);
+          newValue  = currentValue.substring(0, cursorStart);
+          newValue += newKey;
+          newValue += currentValue.substring(cursorEnd, currentValue.length);
+          newCursor = cursorStart + 1;
+          break;
       }
-      //LAUNCH ON_CHANGE EVENT
-      if (me.element.fireEvent){
-        me.element.fireEvent("onchange");
-      }else{
-        var evObj = document.createEvent('HTMLEvents');
-        evObj.initEvent( 'change', true, true );
-        me.element.dispatchEvent(evObj);
-      }
-      return true;
+      if (newCursor < 0)  newCursor = 0;
+      dataNewMask = me.replaceMasks(newValue, newCursor);
+      me.element.value = dataNewMask.result;
+      me.setSelectionRange(dataNewMask.cursor,dataNewMask.cursor);
     }
     else{
+      currentValue = me.element.value;
+      currentSel = me.getCursorPosition();
+      cursorStart = currentSel.selectionStart;
+      cursorEnd = currentSel.selectionEnd;
+      switch(keyCode){
+        case 8:
+          newValue  = currentValue.substring(0, cursorStart - 1);
+          newValue += currentValue.substring(cursorEnd, currentValue.length);
+          newCursor = cursorStart - 1;
+          break;
+        case 46:
+          newValue  = currentValue.substring(0, cursorStart);
+          newValue += currentValue.substring(cursorEnd + 1, currentValue.length);
+          newCursor = cursorStart;
+          break;
+        case 256:
+          newValue  = currentValue.substring(0, cursorStart);
+          newValue += '.';
+          newValue += currentValue.substring(cursorEnd, currentValue.length);
+          newCursor = cursorStart + 1;
+          break;
+        case 35: case 36: case 37: case 38: case 39: case 40:
+          newValue  = currentValue;
+          switch(keyCode){
+            case 36:newCursor = 0;break;
+            case 35:newCursor = currentValue.length;break;
+            case 37:newCursor = cursorStart - 1;break;
+            case 39:newCursor = cursorStart + 1;break;
+          }
+          break;
+        default:
+          newKey = String.fromCharCode(keyCode);
+          newValue  = currentValue.substring(0, cursorStart);
+          newValue += newKey;
+          newValue += currentValue.substring(cursorEnd, currentValue.length);
+          newCursor = cursorStart + 1;
+          break;
+      }
+      if (newCursor < 0)  newCursor = 0;
+      me.element.value = newValue;
+      me.setSelectionRange(newCursor,newCursor);
+    }
+    //Launch OnChange Event
+    if (me.element.fireEvent){
+      me.element.fireEvent("onchange");
+    }else{
+      var evObj = document.createEvent('HTMLEvents');
+      evObj.initEvent( 'change', true, true );
+      me.element.dispatchEvent(evObj);
+    }
+  };
+                          
+  this.handleKeyDown = function(event){
+    //THIS FUNCTION HANDLE BACKSPACE AND DELETE KEYS
+    if (me.validate == 'Any' && me.mask == '') return true;
+    pressKey = event.keyCode;
+    switch(pressKey){
+      case 8: case 46:  //BACKSPACE OR DELETE
+      case 35: case 36: //HOME OR END
+      case 37: case 38: case 39: case 40: // ARROW KEYS
+        me.applyMask(pressKey);
+        me.checkBrowser();
+        if (me.browser.name == 'Chrome'){
+          event.returnValue = false;
+        }
+        else{
+          return false; 
+        }
+        break;
+    }
+    return true;
+  };                          
+  
+  this.handleKeyPress = function(event){
+    if (me.validate == 'Any' && me.mask == '') return true;
+    //THIS FUNCTION HANDLE ALL KEYS EXCEPT BACKSPACE AND DELETE
+    keyCode = event.keyCode;
+    switch(keyCode){
+      case 9: case 13:
+        return true;
+        break;
+    }
+    if (event.altKey) return true;
+    me.checkBrowser();
+    if ((me.browser.name == 'Firefox') && (keyCode == 8 || keyCode == 46)){
       if (me.browser.name == 'Chrome'){
         event.returnValue = false;
       }
@@ -1033,10 +1074,74 @@ function G_Text( form, element, name)
         return false; 
       }
     }
+    else{
+      pressKey = window.event ? event.keyCode : event.which;
+      if (me.mType == 'date') me.validate = 'Int';
+      keyValid = true;
+      switch(me.validate){
+        case 'Any':
+          keyValid = true;
+          break;
+        case 'Int':
+          patron = /[0-9]/;
+          key = String.fromCharCode(pressKey);
+          keyValid = patron.test(key);
+          break;
+        case 'Real':
+          patron = /[0-9]/;
+          key = String.fromCharCode(pressKey);
+          keyValid = patron.test(key);
+          keyValid = keyValid || (pressKey == 44);
+          keyValid = keyValid || (pressKey == 45);
+          keyValid = keyValid || (pressKey == 46);
+          break;
+        case 'Alpha':
+          patron =/[a-zA-Z]/; // \sÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â©ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â­ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â³ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚ÂºÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¤ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â«ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¯ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¶ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¼ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â±ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â§ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¹Ã…â€œÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¯Ãƒâ€šÃ‚Â¿Ãƒâ€šÃ‚Â½ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â°ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¯Ãƒâ€šÃ‚Â¿Ãƒâ€šÃ‚Â½ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã¢â‚¬Å“ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¾ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¹ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¯Ãƒâ€šÃ‚Â¿Ãƒâ€šÃ‚Â½ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â¦ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œ]/;  
+          key = String.fromCharCode(pressKey);
+          keyValid = patron.test(key);
+          break;
+        case 'AlphaNum':
+          patron =/[a-zA-Z0-9\sÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â©ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â­ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â³ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚ÂºÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¤ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â«ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¯ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¶ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¼ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â±ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â§ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¹Ã…â€œÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¯Ãƒâ€šÃ‚Â¿Ãƒâ€šÃ‚Â½ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â°ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¯Ãƒâ€šÃ‚Â¿Ãƒâ€šÃ‚Â½ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã¢â‚¬Å“ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¾ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¹ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¯Ãƒâ€šÃ‚Â¿Ãƒâ€šÃ‚Â½ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â¦ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œ]/;  
+          key = String.fromCharCode(pressKey);
+          keyValid = patron.test(key);
+          break;
+        case 'NodeName':
+          //alert('here');
+          break;
+        default:
+          var k = new leimnud.module.validator({
+            valid :[me.validate],
+            key   :event,
+            lang  :(typeof(me.language)!=='undefined')?me.language:"en"
+          });
+          keyValid = k.result();
+          break;
+      }
+      if (keyValid){
+        //APPLY MASK
+        if (pressKey == 46){
+          me.applyMask(256); //This code send [.] period to the mask
+        }
+        else{
+          me.applyMask(pressKey);
+        }
+        if (me.browser.name == 'Chrome'){
+          event.returnValue = false;
+        }
+        else{
+          return false; 
+        }
+      }else{
+        if (me.browser.name == 'Chrome'){
+          event.returnValue = false;
+        }
+        else{
+          return false; 
+        }
+      }
+    }
   };
-  
-  
-  
+
   if(this.element) {
     this.element.onblur = function(event)
     {
@@ -1046,7 +1151,7 @@ function G_Text( form, element, name)
         
       if(this.validate=="Email")
       {      
-        //var pat=/^[\w\_\-\.ÃƒÆ’Ã‚Â§ÃƒÆ’Ã‚Â±]{2,255}@[\w\_\-]{2,255}\.[a-z]{1,3}\.?[a-z]{0,3}$/;
+        //var pat=/^[\w\_\-\.ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â§ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â±]{2,255}@[\w\_\-]{2,255}\.[a-z]{1,3}\.?[a-z]{0,3}$/;
         var pat=/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,6})+$/;
         if(!pat.test(this.element.value))
         {
@@ -1087,16 +1192,15 @@ function G_Text( form, element, name)
   if (!element) return;
   if (!window.event){
     //THIS ASSIGN FUNCTIONS FOR FIREFOX/MOZILLA
-    this.element.onkeypress = this.pressKeyDown;
-    //alert('window.event');
-    /*this.element.onkeypress = this.validateKey;
-    this.element.onkeydown = this.preValidateChange;*/
-  }else{
+      this.element.onkeydown = this.handleKeyDown;
+      this.element.onkeypress  = this.handleKeyPress;
+      this.element.onchange = this.updateDepententFields;
+      //this.element.onblur = this.handleOnChange;
+    }else{ 
     //THIS ASSIGN FUNCTIONS FOR IE/CHROME
-    leimnud.event.add(this.element,'keypress',this.pressKeyDown);
-    //alert('validateKey');
-    /*leimnud.event.add(this.element,'keypress',this.validateKey);
-    leimnud.event.add(this.element,'keydown',this.preValidateChange); */
+    leimnud.event.add(this.element,'keydown',this.handleKeyDown);
+    leimnud.event.add(this.element,'keypress',this.handleKeyPress);
+    leimnud.event.add(this.element,'change',this.updateDepententFields);
   }
   //leimnud.event.add(this.element,'change',this.updateDepententFields);
 };
@@ -1177,11 +1281,11 @@ function G()
     var newCursorPosition=cursor;
     var betterOut="";
     for(var r0=0;r0< mask.length; r0++){
-      var out=""; var j=0; 
+      var out="";var j=0; 
       var loss=0;  
       var add=0;
-      var cursorPosition=cursor; var i=-1; var dayPosition=0; var mounthPosition=0;
-      var dayAnalized =''; var mounthAnalized =''; 
+      var cursorPosition=cursor;var i=-1;var dayPosition=0;var mounthPosition=0;
+      var dayAnalized ='';var mounthAnalized =''; 
       var blocks={}; //Declares empty object
       for(var r=0;r< r0 ;r++) {
         var e=false;
@@ -1431,8 +1535,164 @@ function G()
   }
   
   //Apply a mask to a number
-  function _ApplyMask(num, mask, cursor, dir){
-    if (dir){
+   this.ApplyMask = function(num, mask, cursor, dir, comma_sep){
+     myOut = '';
+     myCursor = cursor;
+     if (num.length == 0) return {result: '', cursor: 0};
+     switch(dir){
+       case 'forward':
+         iMask = mask.split('');
+         value = _getOnlyNumbers(num,'');
+         iNum = value.split('');
+         for(e=0; e < iMask.length && iNum.length > 0; e++){
+           switch(iMask[e]){
+             case '#': case '0': case 'd': case 'm': case 'y': case 'Y':
+              if (iNum.length > 0){
+                key = iNum.shift();
+                myOut += key;
+              }
+              break;
+            default:
+              myOut += iMask[e];
+              if (e < myCursor) myCursor++;
+              break;
+           }
+         }
+         break;
+       case 'reverse':
+         var __DECIMAL_SEP = comma_sep;
+         var osize = num.length;
+         num =  _getOnlyNumbers(num,__DECIMAL_SEP);
+         if (num.length == 0) return {result: '', cursor: 0};
+         var iNum = invertir(num);
+         var iMask = invertir(mask);
+         //alert('A: ' + iCursor);
+         if (iMask.indexOf('0'+__DECIMAL_SEP)> 0){ //Mask has .0 and will applied complete
+           aMask = iMask;
+           iNum = _getOnlyNumbers(iNum,'*');
+           aNum = iNum;
+           eMask = aMask.split('');
+           eNum = aNum.split('');
+           _cout = '';
+           for (e=0; e < eMask.length; e++){
+             switch(eMask[e]){
+               case '#': case '0':
+                 if (eNum.length > 0){
+                   key = eNum.shift();
+                   _cout += key;
+                 }
+                 break;
+               case '.': case ',':
+                 if (eMask[e] != __DECIMAL_SEP){
+                   if (eNum.length > 0){
+                     _cout += eMask[e];
+                   }
+                 }else{
+                   _cout += eMask[e];
+                 }
+                 break;
+               default:
+                 _cout += eMask[e];
+                 break;
+             }
+           }
+           myOut = _cout;
+        }else{
+          sw_d = false;
+          aMask = iMask.split(__DECIMAL_SEP);
+          aNum = iNum.split(__DECIMAL_SEP);
+          if (aMask.length==1){
+            dMask = '';
+            cMask = aMask[0];
+          }else{
+            dMask = aMask[0];
+            cMask = aMask[1];
+          }
+          if (aNum.length == 1){
+            dNum = '';
+            cNum = aNum[0];
+          }else{
+            sw_d = true;
+            dNum = aNum[0];
+            cNum = aNum[1];
+          }
+          _dout = '';
+        
+          pMask = dMask.split('');
+          pNum = dNum.split('');
+          for (p=0; p < pMask.length; p++){
+            switch(pMask[p]){
+              case '#': case '0':
+                if (pNum.length > 0){
+                  key = pNum.shift();
+                  _dout += key;
+                }
+                break;
+              case ',': case '.':
+                if (pMask[p] != __DECIMAL_SEP){
+                  if (pNum.length > 0){
+                    _dout += pMask[p];
+                  }
+                }else{
+                
+                }
+                break;
+              default:
+                _dout += pMask[p];
+                break;
+            }
+          }
+          _cout = '';
+          sw_c = false;
+          pMask = cMask.split('');
+          pNum = cNum.split('');
+          for (p=0; p < pMask.length; p++){
+            switch(pMask[p]){
+              case '#': case '0': case 'd': case 'm': case 'y':
+                if (pNum.length > 0){
+                  key = pNum.shift();
+                  _cout += key;
+                  sw_c = true;
+                }
+                break;
+              case ',': case '.':
+                if (pMask[p] != __DECIMAL_SEP){
+                  if (pNum.length > 0){
+                    _cout += pMask[p];
+                  }
+                }
+                break;
+              default:
+                 _cout += pMask[p];
+            }
+          }
+          if (sw_c && sw_d){
+            myOut = _dout + __DECIMAL_SEP + _cout;
+            //alert('_dout: ' + _dout);
+            //alert('_cout: ' + _cout);
+          }else{
+            myOut = _dout + _cout;
+            //alert('_dout: ' + _dout);
+            //alert('_cout: ' + _cout);
+          }
+        }
+        //alert(myOut);
+        myOut = invertir(myOut);
+        aOut = myOut.split('');
+        for(l=0; l < aOut.length; l++){
+          switch(aOut[l]){
+            case '0': case '1': case '2': case '3': case '4': 
+            case '5': case '6': case '7': case '8': case '9':
+            case __DECIMAL_SEP:
+              last = l;
+              break;
+          }
+        }
+        myCursor = last + 1;
+        break;
+     }
+     //myCursor += 1;
+    /*if (dir){
       var osize = num.length;
       _out = '';
       num = _checkNumber(num, mask);
@@ -1444,7 +1704,7 @@ function G()
       eNum = iNum.split('');
       for (e=0; e < eMask.length; e++){
         switch(eMask[e]){
-          case '#': case '0': case 'd': case 'm': case 'y': case 'Y': 
+          case '#': case '0': case 'd': case 'm': case 'y': case 'Y':
             if (eNum.length > 0){
               key = eNum.shift();
               _out += key;
@@ -1456,7 +1716,7 @@ function G()
         }
       }
     }else{
-      var __DECIMAL_SEP = '.';
+      var __DECIMAL_SEP = comma_sep;
       var osize = num.length;
       num = _checkNumber(num, mask);
       num =  _getOnlyNumbers(num,__DECIMAL_SEP);
@@ -1572,12 +1832,12 @@ function G()
     }
     if (_out.length > osize){
       cursor = cursor + (_out.length - osize);
-    }
+    }*/
     return {
-      'result': _out,
-      'cursor': cursor
+      'result': myOut,
+      'cursor': myCursor
     };
-  }
+  };
   
   //Manage Multiple Mask and Integer/Real Number restrictions
   this.toMask = function(num, mask, cursor, direction){
@@ -2360,7 +2620,7 @@ var validateForm = function(sRequiredFields) {
                       if(getField(aRequiredFields[i].name).value!='') {
                         var email = getField(aRequiredFields[i].name);              
                         //var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-                        //var filter = /^[\w\_\-\.ÃƒÆ’Ã‚Â§ÃƒÆ’Ã‚Â±]{2,255}@[\w\_\-]{2,255}\.[a-z]{1,3}\.?[a-z]{0,3}$/;
+                        //var filter = /^[\w\_\-\.ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â§ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â±]{2,255}@[\w\_\-]{2,255}\.[a-z]{1,3}\.?[a-z]{0,3}$/;
                         var filter =/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
                           if (!filter.test(email.value)&&email.value!="") {                  
                             fielEmailInvalid.push(aRequiredFields[i].label);                                        
