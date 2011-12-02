@@ -16,7 +16,7 @@ Ext.onReady(function() {
   storeDasInsOwnerType = new Ext.data.ArrayStore({
     idIndex: 0,
     fields: ['id', 'value'],
-    data:   [['USER', 'User'], ['DEPARTMENT', 'Department'], ['GROUP', 'Group']]
+    data:   [['USER', 'User'], ['DEPARTMENT', 'Department'], ['GROUP', 'Group'], ['EVERYBODY', 'Everybody']]
   });
 
   storeDasInsOwnerUID = new Ext.data.Store({
@@ -69,10 +69,19 @@ Ext.onReady(function() {
         Ext.Ajax.request({
              url:      'getAdditionalFields',
              method:   'POST',
-             params:   '',
+             params:   {DAS_UID: this.getValue()},
              success:  function (result, request) {
-                         var dataResponse = Ext.util.JSON.decode(result.responseText)
-                         //
+                         var response = Ext.util.JSON.decode(result.responseText)
+                         additionaFields = response.additionaFields;
+                         dashletInstanceFrm.remove('additional');
+                         if (additionaFields.length > 0) {
+                           dashletInstanceFrm.add(new Ext.form.FieldSet({
+                             id:    'additional',
+                             title: 'Other',
+                             items: additionaFields
+                           }));
+                         }
+                         dashletInstanceFrm.doLayout(false, true);
                       },
              failure: function (result, request) {
                         myMask.hide();
@@ -122,8 +131,14 @@ Ext.onReady(function() {
 
   formFields = [
     new Ext.form.FieldSet({
+      id:    'general',
       title: 'General',
       items: [hiddenDasInsUID, cboDasUID, cboDasInsOwnerType, cboDasInsOwnerUID]
+    }),
+    new Ext.form.FieldSet({
+      id:    'additional',
+      title: 'Other',
+      items: additionaFields
     })
   ];
 
@@ -135,7 +150,7 @@ Ext.onReady(function() {
     width: 465,
     frame: true,
     title: 'Dashlet Instance Configuration',
-    items: formFields.concat(additionaFields),
+    items: formFields,
     buttonAlign: 'right',
     buttons: [
       new Ext.Action({
