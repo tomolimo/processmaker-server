@@ -146,7 +146,7 @@ Ext.onReady(function() {
   ];
 
   if (additionaFields.length > 0) {
-    formFields.concat(new Ext.form.FieldSet({
+    formFields.push(new Ext.form.FieldSet({
       id:    'additional',
       title: 'Other',
       items: additionaFields
