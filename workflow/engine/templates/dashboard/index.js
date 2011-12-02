@@ -136,31 +136,64 @@ Ext.onReady(function(){
 //var dashletsInstances = [{"DAS_INS_UID":"00000000000000000000000000000001","DAS_TITLE":"Open Cases VS Complete Cases"}];
 
   var pd = Ext.getCmp('portalDashboard');
-  for ( var i = 0; i < dashletsInstances.length; i++ ) {
-      var np = new Ext.ux.Portlet ( {
-        title: dashletsInstances[i].DAS_TITLE,
-        dasInsUid : dashletsInstances[i].DAS_INS_UID,
-        html: 'gauge placeholder',
-        listeners: {
-          'render': function(p){
-            p.html = 'hello ' + p.getWidth();
-          },
-          'move' : function(p){
-            Ext.Msg.alert('Portlet ', 'move ' + p.getWidth() );
-            p.html = 'show ' + p.getWidth();
-          },
-          'resize' : function(p,w,h){
-            var randomnumber=Math.floor(Math.random()*1000000)
-            var img = new Ext.XTemplate("<img src='{page}?w={width}&r={random}&DAS_INS_UID={id}'>").apply({
-            page: 'dashboard/renderDashletInstance', width:w, random: randomnumber, id: p.dasInsUid })
-            p.update(img );
-          }
-        }
-      });
-    
-      pd.items.items[i % 3].add( np );
-  } //for
-  pd.doLayout();        
+  var dashletClass = "";
   
+  for ( var i = 0; i < dashletsInstances.length; i++ ) {
+    dashletClass = dashletsInstances[i].DAS_CLASS;
+      
+    switch (dashletClass) {
+      case "dashletOpenVSCompleted":
+        var np = new Ext.ux.Portlet({
+          title: dashletsInstances[i].DAS_TITLE,
+          dasInsUid : dashletsInstances[i].DAS_INS_UID,
+          html: 'gauge placeholder',
+          listeners: {
+            'render': function(p){
+              p.html = 'hello ' + p.getWidth();
+            },
+            'move' : function(p){
+              Ext.Msg.alert('Portlet ', 'move ' + p.getWidth() );
+              p.html = 'show ' + p.getWidth();
+            },
+            'resize' : function(p,w,h){
+              var randomnumber = Math.floor(Math.random() * 1000000)
+              var img = new Ext.XTemplate("<img src='{page}?w={width}&r={random}&DAS_INS_UID={id}'>").apply({
+              page: 'dashboard/renderDashletInstance', width:w, random: randomnumber, id: p.dasInsUid })
+              p.update(img);
+            }
+          }
+        });
+        break;
+
+      case "dashletProcessMakerCommunity":
+        var np = new Ext.ux.Portlet({
+          title: dashletsInstances[i].DAS_TITLE,
+          dasInsUid : dashletsInstances[i].DAS_INS_UID,
+          html: 'gauge placeholder',
+          listeners: {
+            'render': function(p){
+              p.html = 'hello ' + p.getWidth();
+            },
+            'move' : function(p){
+              Ext.Msg.alert('Portlet ', 'move ' + p.getWidth() );
+              p.html = 'show ' + p.getWidth();
+            },
+            'resize' : function(p, w, h){
+              var img = new Ext.XTemplate("<iframe src=\"{page}?DAS_INS_UID={id}\" width=\"422\" height=\"217\" frameborder=\"0\"></iframe>").apply({
+                page: "dashboard/renderDashletInstance",
+                id: p.dasInsUid
+              })
+                
+              p.update(img);
+            }
+          }
+        });
+        break;
+    }
+    
+    pd.items.items[i % 3].add( np );
+  } //for
+  
+  pd.doLayout();
 });
 
