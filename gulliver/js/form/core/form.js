@@ -1106,7 +1106,18 @@ function G_Text( form, element, name)
           keyValid = patron.test(key);
           break;
         case 'NodeName':
-          //alert('here');
+          if (me.getCursorPos() == 0) {
+            if ((pressKey >= 48) && (pressKey <= 57)) {
+              keyValid = false;
+              break;
+            }
+          }
+          var k=new leimnud.module.validator({
+            valid :['Field'],
+            key   :event,
+            lang  :(typeof(me.language)!=='undefined')?me.language:"en"
+          });
+          keyValid = k.result();
           break;
         default:
           var k = new leimnud.module.validator({
