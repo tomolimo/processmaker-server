@@ -247,9 +247,11 @@ function isNumber (sValue)
 }
 
 function roundNumber(iNumber, iDecimals)
-  {
+{
+  if(typeof(iDecimals) === 'undefined')
+    iDecimals = 2;
 	var iNumber   = parseFloat(iNumber || 0);
-	var iDecimals = parseFloat(iDecimals || 2);
+  var iDecimals = parseFloat(iDecimals || 0);
 	return Math.round(iNumber * Math.pow(10, iDecimals)) / Math.pow(10, iDecimals);
 }
 
