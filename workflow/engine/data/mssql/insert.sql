@@ -60588,7 +60588,7 @@ SELECT 'ZW','WKI','Hwange','','' ;
 INSERT INTO [DASHLET] ([DAS_UID],[DAS_CLASS],[DAS_TITLE],[DAS_DESCRIPTION],[DAS_VERSION],[DAS_CREATE_DATE],[DAS_UPDATE_DATE],[DAS_STATUS])
 SELECT '00000000000000000000000000000002','dashletProcessMakerCommunity','ProcessMaker Community','ProcessMaker Community Links and Information','1.0','2011-12-01 00:00:00','2011-12-01 00:00:00','1' UNION ALL
 SELECT '00000000000000000000000000000001','dashletOpenVSCompleted','Open Cases VS Completed Cases','Open Cases VS Completed Cases','1.0','2011-10-28 00:00:00','2011-10-28 00:00:00','1' UNION ALL
-SELECT '00000000000000000000000000000003','dashletProcessMakerEnterprise','ProcessMaker Enterprise Plugins and Addons','The following list of Enterprise plug-ins includes features and functionality that extend and enhance ProcessMaker's performance and functionality.','1.0','2011-12-05 00:00:00','2011-12-05 00:00:00','1';
+SELECT '00000000000000000000000000000003','dashletProcessMakerEnterprise','ProcessMaker Enterprise Plugins and Addons','The following list of Enterprise plug-ins includes features and functionality that extend and enhance ProcessMaker performance and functionality.','1.0','2011-12-05 00:00:00','2011-12-05 00:00:00','1';
 
 INSERT INTO [DASHLET_INSTANCE] ([DAS_INS_UID],[DAS_UID],[DAS_INS_OWNER_TYPE],[DAS_INS_OWNER_UID],[DAS_INS_ADDITIONAL_PROPERTIES],[DAS_INS_CREATE_DATE],[DAS_INS_UPDATE_DATE],[DAS_INS_STATUS])
 SELECT '00000000000000000000000000000002','00000000000000000000000000000002','EVERYBODY','','','2011-12-02 00:00:00','2011-12-02 00:00:00',1 UNION ALL
