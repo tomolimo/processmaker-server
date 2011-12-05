@@ -12,7 +12,7 @@ include_once 'classes/model/DashletInstancePeer.php';
 /**
  * Base class that represents a row from the 'DASHLET_INSTANCE' table.
  *
- *
+ * 
  *
  * @package    workflow.classes.model.om
  */
@@ -43,34 +43,6 @@ abstract class BaseDashletInstance extends BaseObject  implements Persistent {
 
 
 	/**
-	 * The value for the das_ins_type field.
-	 * @var        string
-	 */
-	protected $das_ins_type = '';
-
-
-	/**
-	 * The value for the das_ins_context_time field.
-	 * @var        string
-	 */
-	protected $das_ins_context_time = '';
-
-
-	/**
-	 * The value for the das_ins_start_date field.
-	 * @var        int
-	 */
-	protected $das_ins_start_date;
-
-
-	/**
-	 * The value for the das_ins_end_date field.
-	 * @var        int
-	 */
-	protected $das_ins_end_date;
-
-
-	/**
 	 * The value for the das_ins_owner_type field.
 	 * @var        string
 	 */
@@ -82,20 +54,6 @@ abstract class BaseDashletInstance extends BaseObject  implements Persistent {
 	 * @var        string
 	 */
 	protected $das_ins_owner_uid = '';
-
-
-	/**
-	 * The value for the das_ins_processes field.
-	 * @var        string
-	 */
-	protected $das_ins_processes;
-
-
-	/**
-	 * The value for the das_ins_tasks field.
-	 * @var        string
-	 */
-	protected $das_ins_tasks;
 
 
 	/**
@@ -141,7 +99,7 @@ abstract class BaseDashletInstance extends BaseObject  implements Persistent {
 
 	/**
 	 * Get the [das_ins_uid] column value.
-	 *
+	 * 
 	 * @return     string
 	 */
 	public function getDasInsUid()
@@ -152,7 +110,7 @@ abstract class BaseDashletInstance extends BaseObject  implements Persistent {
 
 	/**
 	 * Get the [das_uid] column value.
-	 *
+	 * 
 	 * @return     string
 	 */
 	public function getDasUid()
@@ -162,92 +120,8 @@ abstract class BaseDashletInstance extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Get the [das_ins_type] column value.
-	 *
-	 * @return     string
-	 */
-	public function getDasInsType()
-	{
-
-		return $this->das_ins_type;
-	}
-
-	/**
-	 * Get the [das_ins_context_time] column value.
-	 *
-	 * @return     string
-	 */
-	public function getDasInsContextTime()
-	{
-
-		return $this->das_ins_context_time;
-	}
-
-	/**
-	 * Get the [optionally formatted] [das_ins_start_date] column value.
-	 *
-	 * @param      string $format The date/time format string (either date()-style or strftime()-style).
-	 *							If format is NULL, then the integer unix timestamp will be returned.
-	 * @return     mixed Formatted date/time value as string or integer unix timestamp (if format is NULL).
-	 * @throws     PropelException - if unable to convert the date/time to timestamp.
-	 */
-	public function getDasInsStartDate($format = 'Y-m-d H:i:s')
-	{
-
-		if ($this->das_ins_start_date === null || $this->das_ins_start_date === '') {
-			return null;
-		} elseif (!is_int($this->das_ins_start_date)) {
-			// a non-timestamp value was set externally, so we convert it
-			$ts = strtotime($this->das_ins_start_date);
-			if ($ts === -1 || $ts === false) { // in PHP 5.1 return value changes to FALSE
-				throw new PropelException("Unable to parse value of [das_ins_start_date] as date/time value: " . var_export($this->das_ins_start_date, true));
-			}
-		} else {
-			$ts = $this->das_ins_start_date;
-		}
-		if ($format === null) {
-			return $ts;
-		} elseif (strpos($format, '%') !== false) {
-			return strftime($format, $ts);
-		} else {
-			return date($format, $ts);
-		}
-	}
-
-	/**
-	 * Get the [optionally formatted] [das_ins_end_date] column value.
-	 *
-	 * @param      string $format The date/time format string (either date()-style or strftime()-style).
-	 *							If format is NULL, then the integer unix timestamp will be returned.
-	 * @return     mixed Formatted date/time value as string or integer unix timestamp (if format is NULL).
-	 * @throws     PropelException - if unable to convert the date/time to timestamp.
-	 */
-	public function getDasInsEndDate($format = 'Y-m-d H:i:s')
-	{
-
-		if ($this->das_ins_end_date === null || $this->das_ins_end_date === '') {
-			return null;
-		} elseif (!is_int($this->das_ins_end_date)) {
-			// a non-timestamp value was set externally, so we convert it
-			$ts = strtotime($this->das_ins_end_date);
-			if ($ts === -1 || $ts === false) { // in PHP 5.1 return value changes to FALSE
-				throw new PropelException("Unable to parse value of [das_ins_end_date] as date/time value: " . var_export($this->das_ins_end_date, true));
-			}
-		} else {
-			$ts = $this->das_ins_end_date;
-		}
-		if ($format === null) {
-			return $ts;
-		} elseif (strpos($format, '%') !== false) {
-			return strftime($format, $ts);
-		} else {
-			return date($format, $ts);
-		}
-	}
-
-	/**
 	 * Get the [das_ins_owner_type] column value.
-	 *
+	 * 
 	 * @return     string
 	 */
 	public function getDasInsOwnerType()
@@ -258,7 +132,7 @@ abstract class BaseDashletInstance extends BaseObject  implements Persistent {
 
 	/**
 	 * Get the [das_ins_owner_uid] column value.
-	 *
+	 * 
 	 * @return     string
 	 */
 	public function getDasInsOwnerUid()
@@ -268,30 +142,8 @@ abstract class BaseDashletInstance extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Get the [das_ins_processes] column value.
-	 *
-	 * @return     string
-	 */
-	public function getDasInsProcesses()
-	{
-
-		return $this->das_ins_processes;
-	}
-
-	/**
-	 * Get the [das_ins_tasks] column value.
-	 *
-	 * @return     string
-	 */
-	public function getDasInsTasks()
-	{
-
-		return $this->das_ins_tasks;
-	}
-
-	/**
 	 * Get the [das_ins_additional_properties] column value.
-	 *
+	 * 
 	 * @return     string
 	 */
 	public function getDasInsAdditionalProperties()
@@ -302,7 +154,7 @@ abstract class BaseDashletInstance extends BaseObject  implements Persistent {
 
 	/**
 	 * Get the [optionally formatted] [das_ins_create_date] column value.
-	 *
+	 * 
 	 * @param      string $format The date/time format string (either date()-style or strftime()-style).
 	 *							If format is NULL, then the integer unix timestamp will be returned.
 	 * @return     mixed Formatted date/time value as string or integer unix timestamp (if format is NULL).
@@ -333,7 +185,7 @@ abstract class BaseDashletInstance extends BaseObject  implements Persistent {
 
 	/**
 	 * Get the [optionally formatted] [das_ins_update_date] column value.
-	 *
+	 * 
 	 * @param      string $format The date/time format string (either date()-style or strftime()-style).
 	 *							If format is NULL, then the integer unix timestamp will be returned.
 	 * @return     mixed Formatted date/time value as string or integer unix timestamp (if format is NULL).
@@ -364,7 +216,7 @@ abstract class BaseDashletInstance extends BaseObject  implements Persistent {
 
 	/**
 	 * Get the [das_ins_status] column value.
-	 *
+	 * 
 	 * @return     int
 	 */
 	public function getDasInsStatus()
@@ -375,7 +227,7 @@ abstract class BaseDashletInstance extends BaseObject  implements Persistent {
 
 	/**
 	 * Set the value of [das_ins_uid] column.
-	 *
+	 * 
 	 * @param      string $v new value
 	 * @return     void
 	 */
@@ -385,7 +237,7 @@ abstract class BaseDashletInstance extends BaseObject  implements Persistent {
 		// Since the native PHP type for this column is string,
 		// we will cast the input to a string (if it is not).
 		if ($v !== null && !is_string($v)) {
-			$v = (string) $v;
+			$v = (string) $v; 
 		}
 
 		if ($this->das_ins_uid !== $v || $v === '') {
@@ -397,7 +249,7 @@ abstract class BaseDashletInstance extends BaseObject  implements Persistent {
 
 	/**
 	 * Set the value of [das_uid] column.
-	 *
+	 * 
 	 * @param      string $v new value
 	 * @return     void
 	 */
@@ -407,7 +259,7 @@ abstract class BaseDashletInstance extends BaseObject  implements Persistent {
 		// Since the native PHP type for this column is string,
 		// we will cast the input to a string (if it is not).
 		if ($v !== null && !is_string($v)) {
-			$v = (string) $v;
+			$v = (string) $v; 
 		}
 
 		if ($this->das_uid !== $v || $v === '') {
@@ -418,100 +270,8 @@ abstract class BaseDashletInstance extends BaseObject  implements Persistent {
 	} // setDasUid()
 
 	/**
-	 * Set the value of [das_ins_type] column.
-	 *
-	 * @param      string $v new value
-	 * @return     void
-	 */
-	public function setDasInsType($v)
-	{
-
-		// Since the native PHP type for this column is string,
-		// we will cast the input to a string (if it is not).
-		if ($v !== null && !is_string($v)) {
-			$v = (string) $v;
-		}
-
-		if ($this->das_ins_type !== $v || $v === '') {
-			$this->das_ins_type = $v;
-			$this->modifiedColumns[] = DashletInstancePeer::DAS_INS_TYPE;
-		}
-
-	} // setDasInsType()
-
-	/**
-	 * Set the value of [das_ins_context_time] column.
-	 *
-	 * @param      string $v new value
-	 * @return     void
-	 */
-	public function setDasInsContextTime($v)
-	{
-
-		// Since the native PHP type for this column is string,
-		// we will cast the input to a string (if it is not).
-		if ($v !== null && !is_string($v)) {
-			$v = (string) $v;
-		}
-
-		if ($this->das_ins_context_time !== $v || $v === '') {
-			$this->das_ins_context_time = $v;
-			$this->modifiedColumns[] = DashletInstancePeer::DAS_INS_CONTEXT_TIME;
-		}
-
-	} // setDasInsContextTime()
-
-	/**
-	 * Set the value of [das_ins_start_date] column.
-	 *
-	 * @param      int $v new value
-	 * @return     void
-	 */
-	public function setDasInsStartDate($v)
-	{
-
-		if ($v !== null && !is_int($v)) {
-			$ts = strtotime($v);
-			if ($ts === -1 || $ts === false) { // in PHP 5.1 return value changes to FALSE
-				throw new PropelException("Unable to parse date/time value for [das_ins_start_date] from input: " . var_export($v, true));
-			}
-		} else {
-			$ts = $v;
-		}
-		if ($this->das_ins_start_date !== $ts) {
-			$this->das_ins_start_date = $ts;
-			$this->modifiedColumns[] = DashletInstancePeer::DAS_INS_START_DATE;
-		}
-
-	} // setDasInsStartDate()
-
-	/**
-	 * Set the value of [das_ins_end_date] column.
-	 *
-	 * @param      int $v new value
-	 * @return     void
-	 */
-	public function setDasInsEndDate($v)
-	{
-
-		if ($v !== null && !is_int($v)) {
-			$ts = strtotime($v);
-			if ($ts === -1 || $ts === false) { // in PHP 5.1 return value changes to FALSE
-				throw new PropelException("Unable to parse date/time value for [das_ins_end_date] from input: " . var_export($v, true));
-			}
-		} else {
-			$ts = $v;
-		}
-		if ($this->das_ins_end_date !== $ts) {
-			$this->das_ins_end_date = $ts;
-			$this->modifiedColumns[] = DashletInstancePeer::DAS_INS_END_DATE;
-		}
-
-	} // setDasInsEndDate()
-
-	/**
 	 * Set the value of [das_ins_owner_type] column.
-	 *
+	 * 
 	 * @param      string $v new value
 	 * @return     void
 	 */
@@ -521,7 +281,7 @@ abstract class BaseDashletInstance extends BaseObject  implements Persistent {
 		// Since the native PHP type for this column is string,
 		// we will cast the input to a string (if it is not).
 		if ($v !== null && !is_string($v)) {
-			$v = (string) $v;
+			$v = (string) $v; 
 		}
 
 		if ($this->das_ins_owner_type !== $v || $v === '') {
@@ -533,7 +293,7 @@ abstract class BaseDashletInstance extends BaseObject  implements Persistent {
 
 	/**
 	 * Set the value of [das_ins_owner_uid] column.
-	 *
+	 * 
 	 * @param      string $v new value
 	 * @return     void
 	 */
@@ -543,7 +303,7 @@ abstract class BaseDashletInstance extends BaseObject  implements Persistent {
 		// Since the native PHP type for this column is string,
 		// we will cast the input to a string (if it is not).
 		if ($v !== null && !is_string($v)) {
-			$v = (string) $v;
+			$v = (string) $v; 
 		}
 
 		if ($this->das_ins_owner_uid !== $v || $v === '') {
@@ -554,52 +314,8 @@ abstract class BaseDashletInstance extends BaseObject  implements Persistent {
 	} // setDasInsOwnerUid()
 
 	/**
-	 * Set the value of [das_ins_processes] column.
-	 *
-	 * @param      string $v new value
-	 * @return     void
-	 */
-	public function setDasInsProcesses($v)
-	{
-
-		// Since the native PHP type for this column is string,
-		// we will cast the input to a string (if it is not).
-		if ($v !== null && !is_string($v)) {
-			$v = (string) $v;
-		}
-
-		if ($this->das_ins_processes !== $v) {
-			$this->das_ins_processes = $v;
-			$this->modifiedColumns[] = DashletInstancePeer::DAS_INS_PROCESSES;
-		}
-
-	} // setDasInsProcesses()
-
-	/**
-	 * Set the value of [das_ins_tasks] column.
-	 *
-	 * @param      string $v new value
-	 * @return     void
-	 */
-	public function setDasInsTasks($v)
-	{
-
-		// Since the native PHP type for this column is string,
-		// we will cast the input to a string (if it is not).
-		if ($v !== null && !is_string($v)) {
-			$v = (string) $v;
-		}
-
-		if ($this->das_ins_tasks !== $v) {
-			$this->das_ins_tasks = $v;
-			$this->modifiedColumns[] = DashletInstancePeer::DAS_INS_TASKS;
-		}
-
-	} // setDasInsTasks()
-
-	/**
 	 * Set the value of [das_ins_additional_properties] column.
-	 *
+	 * 
 	 * @param      string $v new value
 	 * @return     void
 	 */
@@ -609,7 +325,7 @@ abstract class BaseDashletInstance extends BaseObject  implements Persistent {
 		// Since the native PHP type for this column is string,
 		// we will cast the input to a string (if it is not).
 		if ($v !== null && !is_string($v)) {
-			$v = (string) $v;
+			$v = (string) $v; 
 		}
 
 		if ($this->das_ins_additional_properties !== $v) {
@@ -621,7 +337,7 @@ abstract class BaseDashletInstance extends BaseObject  implements Persistent {
 
 	/**
 	 * Set the value of [das_ins_create_date] column.
-	 *
+	 * 
 	 * @param      int $v new value
 	 * @return     void
 	 */
@@ -645,7 +361,7 @@ abstract class BaseDashletInstance extends BaseObject  implements Persistent {
 
 	/**
 	 * Set the value of [das_ins_update_date] column.
-	 *
+	 * 
 	 * @param      int $v new value
 	 * @return     void
 	 */
@@ -669,7 +385,7 @@ abstract class BaseDashletInstance extends BaseObject  implements Persistent {
 
 	/**
 	 * Set the value of [das_ins_status] column.
-	 *
+	 * 
 	 * @param      int $v new value
 	 * @return     void
 	 */
@@ -710,36 +426,24 @@ abstract class BaseDashletInstance extends BaseObject  implements Persistent {
 
 			$this->das_uid = $rs->getString($startcol + 1);
 
-			$this->das_ins_type = $rs->getString($startcol + 2);
+			$this->das_ins_owner_type = $rs->getString($startcol + 2);
 
-			$this->das_ins_context_time = $rs->getString($startcol + 3);
+			$this->das_ins_owner_uid = $rs->getString($startcol + 3);
 
-			$this->das_ins_start_date = $rs->getTimestamp($startcol + 4, null);
+			$this->das_ins_additional_properties = $rs->getString($startcol + 4);
 
-			$this->das_ins_end_date = $rs->getTimestamp($startcol + 5, null);
+			$this->das_ins_create_date = $rs->getTimestamp($startcol + 5, null);
 
-			$this->das_ins_owner_type = $rs->getString($startcol + 6);
+			$this->das_ins_update_date = $rs->getTimestamp($startcol + 6, null);
 
-			$this->das_ins_owner_uid = $rs->getString($startcol + 7);
-
-			$this->das_ins_processes = $rs->getString($startcol + 8);
-
-			$this->das_ins_tasks = $rs->getString($startcol + 9);
-
-			$this->das_ins_additional_properties = $rs->getString($startcol + 10);
-
-			$this->das_ins_create_date = $rs->getTimestamp($startcol + 11, null);
-
-			$this->das_ins_update_date = $rs->getTimestamp($startcol + 12, null);
-
-			$this->das_ins_status = $rs->getInt($startcol + 13);
+			$this->das_ins_status = $rs->getInt($startcol + 7);
 
 			$this->resetModified();
 
 			$this->setNew(false);
 
 			// FIXME - using NUM_COLUMNS may be clearer.
-			return $startcol + 14; // 14 = DashletInstancePeer::NUM_COLUMNS - DashletInstancePeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + 8; // 8 = DashletInstancePeer::NUM_COLUMNS - DashletInstancePeer::NUM_LAZY_LOAD_COLUMNS).
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating DashletInstance object", $e);
@@ -949,39 +653,21 @@ abstract class BaseDashletInstance extends BaseObject  implements Persistent {
 				return $this->getDasUid();
 				break;
 			case 2:
-				return $this->getDasInsType();
-				break;
-			case 3:
-				return $this->getDasInsContextTime();
-				break;
-			case 4:
-				return $this->getDasInsStartDate();
-				break;
-			case 5:
-				return $this->getDasInsEndDate();
-				break;
-			case 6:
 				return $this->getDasInsOwnerType();
 				break;
-			case 7:
+			case 3:
 				return $this->getDasInsOwnerUid();
 				break;
-			case 8:
-				return $this->getDasInsProcesses();
-				break;
-			case 9:
-				return $this->getDasInsTasks();
-				break;
-			case 10:
+			case 4:
 				return $this->getDasInsAdditionalProperties();
 				break;
-			case 11:
+			case 5:
 				return $this->getDasInsCreateDate();
 				break;
-			case 12:
+			case 6:
 				return $this->getDasInsUpdateDate();
 				break;
-			case 13:
+			case 7:
 				return $this->getDasInsStatus();
 				break;
 			default:
@@ -1006,18 +692,12 @@ abstract class BaseDashletInstance extends BaseObject  implements Persistent {
 		$result = array(
 			$keys[0] => $this->getDasInsUid(),
 			$keys[1] => $this->getDasUid(),
-			$keys[2] => $this->getDasInsType(),
-			$keys[3] => $this->getDasInsContextTime(),
-			$keys[4] => $this->getDasInsStartDate(),
-			$keys[5] => $this->getDasInsEndDate(),
-			$keys[6] => $this->getDasInsOwnerType(),
-			$keys[7] => $this->getDasInsOwnerUid(),
-			$keys[8] => $this->getDasInsProcesses(),
-			$keys[9] => $this->getDasInsTasks(),
-			$keys[10] => $this->getDasInsAdditionalProperties(),
-			$keys[11] => $this->getDasInsCreateDate(),
-			$keys[12] => $this->getDasInsUpdateDate(),
-			$keys[13] => $this->getDasInsStatus(),
+			$keys[2] => $this->getDasInsOwnerType(),
+			$keys[3] => $this->getDasInsOwnerUid(),
+			$keys[4] => $this->getDasInsAdditionalProperties(),
+			$keys[5] => $this->getDasInsCreateDate(),
+			$keys[6] => $this->getDasInsUpdateDate(),
+			$keys[7] => $this->getDasInsStatus(),
 		);
 		return $result;
 	}
@@ -1056,39 +736,21 @@ abstract class BaseDashletInstance extends BaseObject  implements Persistent {
 				$this->setDasUid($value);
 				break;
 			case 2:
-				$this->setDasInsType($value);
-				break;
-			case 3:
-				$this->setDasInsContextTime($value);
-				break;
-			case 4:
-				$this->setDasInsStartDate($value);
-				break;
-			case 5:
-				$this->setDasInsEndDate($value);
-				break;
-			case 6:
 				$this->setDasInsOwnerType($value);
 				break;
-			case 7:
+			case 3:
 				$this->setDasInsOwnerUid($value);
 				break;
-			case 8:
-				$this->setDasInsProcesses($value);
-				break;
-			case 9:
-				$this->setDasInsTasks($value);
-				break;
-			case 10:
+			case 4:
 				$this->setDasInsAdditionalProperties($value);
 				break;
-			case 11:
+			case 5:
 				$this->setDasInsCreateDate($value);
 				break;
-			case 12:
+			case 6:
 				$this->setDasInsUpdateDate($value);
 				break;
-			case 13:
+			case 7:
 				$this->setDasInsStatus($value);
 				break;
 		} // switch()
@@ -1116,18 +778,12 @@ abstract class BaseDashletInstance extends BaseObject  implements Persistent {
 
 		if (array_key_exists($keys[0], $arr)) $this->setDasInsUid($arr[$keys[0]]);
 		if (array_key_exists($keys[1], $arr)) $this->setDasUid($arr[$keys[1]]);
-		if (array_key_exists($keys[2], $arr)) $this->setDasInsType($arr[$keys[2]]);
-		if (array_key_exists($keys[3], $arr)) $this->setDasInsContextTime($arr[$keys[3]]);
-		if (array_key_exists($keys[4], $arr)) $this->setDasInsStartDate($arr[$keys[4]]);
-		if (array_key_exists($keys[5], $arr)) $this->setDasInsEndDate($arr[$keys[5]]);
-		if (array_key_exists($keys[6], $arr)) $this->setDasInsOwnerType($arr[$keys[6]]);
-		if (array_key_exists($keys[7], $arr)) $this->setDasInsOwnerUid($arr[$keys[7]]);
-		if (array_key_exists($keys[8], $arr)) $this->setDasInsProcesses($arr[$keys[8]]);
-		if (array_key_exists($keys[9], $arr)) $this->setDasInsTasks($arr[$keys[9]]);
-		if (array_key_exists($keys[10], $arr)) $this->setDasInsAdditionalProperties($arr[$keys[10]]);
-		if (array_key_exists($keys[11], $arr)) $this->setDasInsCreateDate($arr[$keys[11]]);
-		if (array_key_exists($keys[12], $arr)) $this->setDasInsUpdateDate($arr[$keys[12]]);
-		if (array_key_exists($keys[13], $arr)) $this->setDasInsStatus($arr[$keys[13]]);
+		if (array_key_exists($keys[2], $arr)) $this->setDasInsOwnerType($arr[$keys[2]]);
+		if (array_key_exists($keys[3], $arr)) $this->setDasInsOwnerUid($arr[$keys[3]]);
+		if (array_key_exists($keys[4], $arr)) $this->setDasInsAdditionalProperties($arr[$keys[4]]);
+		if (array_key_exists($keys[5], $arr)) $this->setDasInsCreateDate($arr[$keys[5]]);
+		if (array_key_exists($keys[6], $arr)) $this->setDasInsUpdateDate($arr[$keys[6]]);
+		if (array_key_exists($keys[7], $arr)) $this->setDasInsStatus($arr[$keys[7]]);
 	}
 
 	/**
@@ -1141,14 +797,8 @@ abstract class BaseDashletInstance extends BaseObject  implements Persistent {
 
 		if ($this->isColumnModified(DashletInstancePeer::DAS_INS_UID)) $criteria->add(DashletInstancePeer::DAS_INS_UID, $this->das_ins_uid);
 		if ($this->isColumnModified(DashletInstancePeer::DAS_UID)) $criteria->add(DashletInstancePeer::DAS_UID, $this->das_uid);
-		if ($this->isColumnModified(DashletInstancePeer::DAS_INS_TYPE)) $criteria->add(DashletInstancePeer::DAS_INS_TYPE, $this->das_ins_type);
-		if ($this->isColumnModified(DashletInstancePeer::DAS_INS_CONTEXT_TIME)) $criteria->add(DashletInstancePeer::DAS_INS_CONTEXT_TIME, $this->das_ins_context_time);
-		if ($this->isColumnModified(DashletInstancePeer::DAS_INS_START_DATE)) $criteria->add(DashletInstancePeer::DAS_INS_START_DATE, $this->das_ins_start_date);
-		if ($this->isColumnModified(DashletInstancePeer::DAS_INS_END_DATE)) $criteria->add(DashletInstancePeer::DAS_INS_END_DATE, $this->das_ins_end_date);
 		if ($this->isColumnModified(DashletInstancePeer::DAS_INS_OWNER_TYPE)) $criteria->add(DashletInstancePeer::DAS_INS_OWNER_TYPE, $this->das_ins_owner_type);
 		if ($this->isColumnModified(DashletInstancePeer::DAS_INS_OWNER_UID)) $criteria->add(DashletInstancePeer::DAS_INS_OWNER_UID, $this->das_ins_owner_uid);
-		if ($this->isColumnModified(DashletInstancePeer::DAS_INS_PROCESSES)) $criteria->add(DashletInstancePeer::DAS_INS_PROCESSES, $this->das_ins_processes);
-		if ($this->isColumnModified(DashletInstancePeer::DAS_INS_TASKS)) $criteria->add(DashletInstancePeer::DAS_INS_TASKS, $this->das_ins_tasks);
 		if ($this->isColumnModified(DashletInstancePeer::DAS_INS_ADDITIONAL_PROPERTIES)) $criteria->add(DashletInstancePeer::DAS_INS_ADDITIONAL_PROPERTIES, $this->das_ins_additional_properties);
 		if ($this->isColumnModified(DashletInstancePeer::DAS_INS_CREATE_DATE)) $criteria->add(DashletInstancePeer::DAS_INS_CREATE_DATE, $this->das_ins_create_date);
 		if ($this->isColumnModified(DashletInstancePeer::DAS_INS_UPDATE_DATE)) $criteria->add(DashletInstancePeer::DAS_INS_UPDATE_DATE, $this->das_ins_update_date);
@@ -1209,21 +859,9 @@ abstract class BaseDashletInstance extends BaseObject  implements Persistent {
 
 		$copyObj->setDasUid($this->das_uid);
 
-		$copyObj->setDasInsType($this->das_ins_type);
-
-		$copyObj->setDasInsContextTime($this->das_ins_context_time);
-
-		$copyObj->setDasInsStartDate($this->das_ins_start_date);
-
-		$copyObj->setDasInsEndDate($this->das_ins_end_date);
-
 		$copyObj->setDasInsOwnerType($this->das_ins_owner_type);
 
 		$copyObj->setDasInsOwnerUid($this->das_ins_owner_uid);
-
-		$copyObj->setDasInsProcesses($this->das_ins_processes);
-
-		$copyObj->setDasInsTasks($this->das_ins_tasks);
 
 		$copyObj->setDasInsAdditionalProperties($this->das_ins_additional_properties);
 

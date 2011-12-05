@@ -153,8 +153,6 @@ Ext.onReady(function(){
         {name : 'DAS_INS_UID'},
         {name : 'DAS_TITLE'},
         {name : 'DAS_VERSION'},
-        {name : 'DAS_INS_TYPE'},
-        {name : 'DAS_INS_CONTEXT_TIME'},
         {name : 'DAS_INS_OWNER_TITLE'},
         {name : 'DAS_INS_UPDATE_DATE'},
         {name : 'DAS_INS_STATUS_LABEL'}
@@ -171,10 +169,6 @@ Ext.onReady(function(){
       {id:'DAS_INS_UID', dataIndex: 'DAS_INS_UID', hidden:true, hideable:false},
       {header: _('ID_NAME'), dataIndex: 'DAS_TITLE', width: 200, hidden:false, align:'left'},
       {header: _('ID_VERSION'), dataIndex: 'DAS_VERSION', width: 60, hidden: false, align: 'center'},
-      {header: _('ID_TYPE'), dataIndex: 'DAS_INS_TYPE', width: 100, hidden: false, align: 'center'},
-      //{header: _('ID_PERIOD'), dataIndex: 'DAS_INS_CONTEXT_TIME', width: 100, hidden: false, align: 'center'},
-      {header: 'Period', dataIndex: 'DAS_INS_CONTEXT_TIME', width: 100, hidden: false, align: 'center'},
-      //{header: _('ID_OWNER'), dataIndex: 'DAS_INS_OWNER_TITLE', width: 200, hidden: false, align: 'center'},
       {header: 'Assigned To', dataIndex: 'DAS_INS_OWNER_TITLE', width: 200, hidden: false, align: 'center'},
       {header: _('ID_UPDATE_DATE'), dataIndex: 'DAS_INS_UPDATE_DATE', width: 80, hidden: false, align: 'center'},
       {header: _('ID_STATUS'), dataIndex: 'DAS_INS_STATUS_LABEL', width: 60, hidden: false, align: 'center'}

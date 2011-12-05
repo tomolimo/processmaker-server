@@ -24,7 +24,7 @@ abstract class BaseDashletInstancePeer {
 	const CLASS_DEFAULT = 'classes.model.DashletInstance';
 
 	/** The total number of columns. */
-	const NUM_COLUMNS = 14;
+	const NUM_COLUMNS = 8;
 
 	/** The number of lazy-loaded columns. */
 	const NUM_LAZY_LOAD_COLUMNS = 0;
@@ -36,29 +36,11 @@ abstract class BaseDashletInstancePeer {
 	/** the column name for the DAS_UID field */
 	const DAS_UID = 'DASHLET_INSTANCE.DAS_UID';
 
-	/** the column name for the DAS_INS_TYPE field */
-	const DAS_INS_TYPE = 'DASHLET_INSTANCE.DAS_INS_TYPE';
-
-	/** the column name for the DAS_INS_CONTEXT_TIME field */
-	const DAS_INS_CONTEXT_TIME = 'DASHLET_INSTANCE.DAS_INS_CONTEXT_TIME';
-
-	/** the column name for the DAS_INS_START_DATE field */
-	const DAS_INS_START_DATE = 'DASHLET_INSTANCE.DAS_INS_START_DATE';
-
-	/** the column name for the DAS_INS_END_DATE field */
-	const DAS_INS_END_DATE = 'DASHLET_INSTANCE.DAS_INS_END_DATE';
-
 	/** the column name for the DAS_INS_OWNER_TYPE field */
 	const DAS_INS_OWNER_TYPE = 'DASHLET_INSTANCE.DAS_INS_OWNER_TYPE';
 
 	/** the column name for the DAS_INS_OWNER_UID field */
 	const DAS_INS_OWNER_UID = 'DASHLET_INSTANCE.DAS_INS_OWNER_UID';
-
-	/** the column name for the DAS_INS_PROCESSES field */
-	const DAS_INS_PROCESSES = 'DASHLET_INSTANCE.DAS_INS_PROCESSES';
-
-	/** the column name for the DAS_INS_TASKS field */
-	const DAS_INS_TASKS = 'DASHLET_INSTANCE.DAS_INS_TASKS';
 
 	/** the column name for the DAS_INS_ADDITIONAL_PROPERTIES field */
 	const DAS_INS_ADDITIONAL_PROPERTIES = 'DASHLET_INSTANCE.DAS_INS_ADDITIONAL_PROPERTIES';
@@ -83,10 +65,10 @@ abstract class BaseDashletInstancePeer {
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
 	private static $fieldNames = array (
-		BasePeer::TYPE_PHPNAME => array ('DasInsUid', 'DasUid', 'DasInsType', 'DasInsContextTime', 'DasInsStartDate', 'DasInsEndDate', 'DasInsOwnerType', 'DasInsOwnerUid', 'DasInsProcesses', 'DasInsTasks', 'DasInsAdditionalProperties', 'DasInsCreateDate', 'DasInsUpdateDate', 'DasInsStatus', ),
-		BasePeer::TYPE_COLNAME => array (DashletInstancePeer::DAS_INS_UID, DashletInstancePeer::DAS_UID, DashletInstancePeer::DAS_INS_TYPE, DashletInstancePeer::DAS_INS_CONTEXT_TIME, DashletInstancePeer::DAS_INS_START_DATE, DashletInstancePeer::DAS_INS_END_DATE, DashletInstancePeer::DAS_INS_OWNER_TYPE, DashletInstancePeer::DAS_INS_OWNER_UID, DashletInstancePeer::DAS_INS_PROCESSES, DashletInstancePeer::DAS_INS_TASKS, DashletInstancePeer::DAS_INS_ADDITIONAL_PROPERTIES, DashletInstancePeer::DAS_INS_CREATE_DATE, DashletInstancePeer::DAS_INS_UPDATE_DATE, DashletInstancePeer::DAS_INS_STATUS, ),
-		BasePeer::TYPE_FIELDNAME => array ('DAS_INS_UID', 'DAS_UID', 'DAS_INS_TYPE', 'DAS_INS_CONTEXT_TIME', 'DAS_INS_START_DATE', 'DAS_INS_END_DATE', 'DAS_INS_OWNER_TYPE', 'DAS_INS_OWNER_UID', 'DAS_INS_PROCESSES', 'DAS_INS_TASKS', 'DAS_INS_ADDITIONAL_PROPERTIES', 'DAS_INS_CREATE_DATE', 'DAS_INS_UPDATE_DATE', 'DAS_INS_STATUS', ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, )
+		BasePeer::TYPE_PHPNAME => array ('DasInsUid', 'DasUid', 'DasInsOwnerType', 'DasInsOwnerUid', 'DasInsAdditionalProperties', 'DasInsCreateDate', 'DasInsUpdateDate', 'DasInsStatus', ),
+		BasePeer::TYPE_COLNAME => array (DashletInstancePeer::DAS_INS_UID, DashletInstancePeer::DAS_UID, DashletInstancePeer::DAS_INS_OWNER_TYPE, DashletInstancePeer::DAS_INS_OWNER_UID, DashletInstancePeer::DAS_INS_ADDITIONAL_PROPERTIES, DashletInstancePeer::DAS_INS_CREATE_DATE, DashletInstancePeer::DAS_INS_UPDATE_DATE, DashletInstancePeer::DAS_INS_STATUS, ),
+		BasePeer::TYPE_FIELDNAME => array ('DAS_INS_UID', 'DAS_UID', 'DAS_INS_OWNER_TYPE', 'DAS_INS_OWNER_UID', 'DAS_INS_ADDITIONAL_PROPERTIES', 'DAS_INS_CREATE_DATE', 'DAS_INS_UPDATE_DATE', 'DAS_INS_STATUS', ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, )
 	);
 
 	/**
@@ -96,10 +78,10 @@ abstract class BaseDashletInstancePeer {
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
 	private static $fieldKeys = array (
-		BasePeer::TYPE_PHPNAME => array ('DasInsUid' => 0, 'DasUid' => 1, 'DasInsType' => 2, 'DasInsContextTime' => 3, 'DasInsStartDate' => 4, 'DasInsEndDate' => 5, 'DasInsOwnerType' => 6, 'DasInsOwnerUid' => 7, 'DasInsProcesses' => 8, 'DasInsTasks' => 9, 'DasInsAdditionalProperties' => 10, 'DasInsCreateDate' => 11, 'DasInsUpdateDate' => 12, 'DasInsStatus' => 13, ),
-		BasePeer::TYPE_COLNAME => array (DashletInstancePeer::DAS_INS_UID => 0, DashletInstancePeer::DAS_UID => 1, DashletInstancePeer::DAS_INS_TYPE => 2, DashletInstancePeer::DAS_INS_CONTEXT_TIME => 3, DashletInstancePeer::DAS_INS_START_DATE => 4, DashletInstancePeer::DAS_INS_END_DATE => 5, DashletInstancePeer::DAS_INS_OWNER_TYPE => 6, DashletInstancePeer::DAS_INS_OWNER_UID => 7, DashletInstancePeer::DAS_INS_PROCESSES => 8, DashletInstancePeer::DAS_INS_TASKS => 9, DashletInstancePeer::DAS_INS_ADDITIONAL_PROPERTIES => 10, DashletInstancePeer::DAS_INS_CREATE_DATE => 11, DashletInstancePeer::DAS_INS_UPDATE_DATE => 12, DashletInstancePeer::DAS_INS_STATUS => 13, ),
-		BasePeer::TYPE_FIELDNAME => array ('DAS_INS_UID' => 0, 'DAS_UID' => 1, 'DAS_INS_TYPE' => 2, 'DAS_INS_CONTEXT_TIME' => 3, 'DAS_INS_START_DATE' => 4, 'DAS_INS_END_DATE' => 5, 'DAS_INS_OWNER_TYPE' => 6, 'DAS_INS_OWNER_UID' => 7, 'DAS_INS_PROCESSES' => 8, 'DAS_INS_TASKS' => 9, 'DAS_INS_ADDITIONAL_PROPERTIES' => 10, 'DAS_INS_CREATE_DATE' => 11, 'DAS_INS_UPDATE_DATE' => 12, 'DAS_INS_STATUS' => 13, ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, )
+		BasePeer::TYPE_PHPNAME => array ('DasInsUid' => 0, 'DasUid' => 1, 'DasInsOwnerType' => 2, 'DasInsOwnerUid' => 3, 'DasInsAdditionalProperties' => 4, 'DasInsCreateDate' => 5, 'DasInsUpdateDate' => 6, 'DasInsStatus' => 7, ),
+		BasePeer::TYPE_COLNAME => array (DashletInstancePeer::DAS_INS_UID => 0, DashletInstancePeer::DAS_UID => 1, DashletInstancePeer::DAS_INS_OWNER_TYPE => 2, DashletInstancePeer::DAS_INS_OWNER_UID => 3, DashletInstancePeer::DAS_INS_ADDITIONAL_PROPERTIES => 4, DashletInstancePeer::DAS_INS_CREATE_DATE => 5, DashletInstancePeer::DAS_INS_UPDATE_DATE => 6, DashletInstancePeer::DAS_INS_STATUS => 7, ),
+		BasePeer::TYPE_FIELDNAME => array ('DAS_INS_UID' => 0, 'DAS_UID' => 1, 'DAS_INS_OWNER_TYPE' => 2, 'DAS_INS_OWNER_UID' => 3, 'DAS_INS_ADDITIONAL_PROPERTIES' => 4, 'DAS_INS_CREATE_DATE' => 5, 'DAS_INS_UPDATE_DATE' => 6, 'DAS_INS_STATUS' => 7, ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, )
 	);
 
 	/**
@@ -204,21 +186,9 @@ abstract class BaseDashletInstancePeer {
 
 		$criteria->addSelectColumn(DashletInstancePeer::DAS_UID);
 
-		$criteria->addSelectColumn(DashletInstancePeer::DAS_INS_TYPE);
-
-		$criteria->addSelectColumn(DashletInstancePeer::DAS_INS_CONTEXT_TIME);
-
-		$criteria->addSelectColumn(DashletInstancePeer::DAS_INS_START_DATE);
-
-		$criteria->addSelectColumn(DashletInstancePeer::DAS_INS_END_DATE);
-
 		$criteria->addSelectColumn(DashletInstancePeer::DAS_INS_OWNER_TYPE);
 
 		$criteria->addSelectColumn(DashletInstancePeer::DAS_INS_OWNER_UID);
-
-		$criteria->addSelectColumn(DashletInstancePeer::DAS_INS_PROCESSES);
-
-		$criteria->addSelectColumn(DashletInstancePeer::DAS_INS_TASKS);
 
 		$criteria->addSelectColumn(DashletInstancePeer::DAS_INS_ADDITIONAL_PROPERTIES);
 

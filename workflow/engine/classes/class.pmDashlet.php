@@ -12,15 +12,14 @@ class PMDashlet extends DashletInstance implements DashletInterface {
 
   // Interface functions
 
-  public static function getAdditionalFields() {
+  public static function getAdditionalFields($className) {
     try {
       //Change this in the next release
-      $className = 'dashletOpenVSCompleted';
       G::LoadClass($className);
-      eval("\$additionalFields = $className::getAdditionalFields();");
+      eval("\$additionalFields = $className::getAdditionalFields(\$className);");
       return $additionalFields;
     }
-    catch (Exception $error) {die('xxx');
+    catch (Exception $error) {
       throw $error;
     }
   }
@@ -166,15 +165,15 @@ class PMDashlet extends DashletInstance implements DashletInterface {
       // Check for "public" dashlets
       $criteria = new Criteria('workflow');
       $criteria->addSelectColumn(DashletInstancePeer::DAS_INS_UID);
+      $criteria->addSelectColumn(DashletPeer::DAS_CLASS);
       $criteria->addSelectColumn(DashletPeer::DAS_TITLE);
-      $criteria->addSelectColumn(DashletInstancePeer::DAS_INS_CONTEXT_TIME);
+      $criteria->addJoin(DashletInstancePeer::DAS_UID, DashletPeer::DAS_UID, Criteria::INNER_JOIN);
       $criteria->add(DashletInstancePeer::DAS_INS_OWNER_TYPE, 'EVERYBODY');
       $dataset = DashletInstancePeer::doSelectRS($criteria);
       $dataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
       $dataset->next();
       while ($row = $dataset->getRow()) {
         if (!isset($dashletsInstances[$row['DAS_INS_UID']])) {
-          $row['DAS_TITLE'] .= ' (' . $row['DAS_INS_CONTEXT_TIME'] . ')';
           $dashletsInstances[$row['DAS_INS_UID']] = $row;
         }
         $dataset->next();
@@ -183,8 +182,9 @@ class PMDashlet extends DashletInstance implements DashletInterface {
       $usersInstance = new Users();
       $criteria = new Criteria('workflow');
       $criteria->addSelectColumn(DashletInstancePeer::DAS_INS_UID);
+      $criteria->addSelectColumn(DashletPeer::DAS_CLASS);
       $criteria->addSelectColumn(DashletPeer::DAS_TITLE);
-      $criteria->addSelectColumn(DashletInstancePeer::DAS_INS_CONTEXT_TIME);
+      $criteria->addJoin(DashletInstancePeer::DAS_UID, DashletPeer::DAS_UID, Criteria::INNER_JOIN);
       $criteria->add(DashletInstancePeer::DAS_INS_OWNER_TYPE, 'USER');
       $criteria->add(DashletInstancePeer::DAS_INS_OWNER_UID, $userUid);
       $dataset = DashletInstancePeer::doSelectRS($criteria);
@@ -192,7 +192,6 @@ class PMDashlet extends DashletInstance implements DashletInterface {
       $dataset->next();
       while ($row = $dataset->getRow()) {
         if (!isset($dashletsInstances[$row['DAS_INS_UID']])) {
-          $row['DAS_TITLE'] .= ' (' . $row['DAS_INS_CONTEXT_TIME'] . ')';
           $dashletsInstances[$row['DAS_INS_UID']] = $row;
         }
         $dataset->next();
@@ -203,8 +202,9 @@ class PMDashlet extends DashletInstance implements DashletInterface {
       foreach ($departments as $depUid => $department) {
         $criteria = new Criteria('workflow');
         $criteria->addSelectColumn(DashletInstancePeer::DAS_INS_UID);
+        $criteria->addSelectColumn(DashletPeer::DAS_CLASS);
         $criteria->addSelectColumn(DashletPeer::DAS_TITLE);
-        $criteria->addSelectColumn(DashletInstancePeer::DAS_INS_CONTEXT_TIME);
+        $criteria->addJoin(DashletInstancePeer::DAS_UID, DashletPeer::DAS_UID, Criteria::INNER_JOIN);
         $criteria->add(DashletInstancePeer::DAS_INS_OWNER_TYPE, 'DEPARTMENT');
         $criteria->add(DashletInstancePeer::DAS_INS_OWNER_UID, $depUid);
         $dataset = DashletInstancePeer::doSelectRS($criteria);
@@ -212,7 +212,6 @@ class PMDashlet extends DashletInstance implements DashletInterface {
         $dataset->next();
         while ($row = $dataset->getRow()) {
           if (!isset($dashletsInstances[$row['DAS_INS_UID']])) {
-            $row['DAS_TITLE'] .= ' (' . $row['DAS_INS_CONTEXT_TIME'] . ')';
             $dashletsInstances[$row['DAS_INS_UID']] = $row;
           }
           $dataset->next();
@@ -225,8 +224,9 @@ class PMDashlet extends DashletInstance implements DashletInterface {
       foreach ($groups as $grpUid => $group) {
         $criteria = new Criteria('workflow');
         $criteria->addSelectColumn(DashletInstancePeer::DAS_INS_UID);
+        $criteria->addSelectColumn(DashletPeer::DAS_CLASS);
         $criteria->addSelectColumn(DashletPeer::DAS_TITLE);
-        $criteria->addSelectColumn(DashletInstancePeer::DAS_INS_CONTEXT_TIME);
+        $criteria->addJoin(DashletInstancePeer::DAS_UID, DashletPeer::DAS_UID, Criteria::INNER_JOIN);
         $criteria->add(DashletInstancePeer::DAS_INS_OWNER_TYPE, 'GROUP');
         $criteria->add(DashletInstancePeer::DAS_INS_OWNER_UID, $grpUid);
         $dataset = DashletInstancePeer::doSelectRS($criteria);
@@ -234,7 +234,6 @@ class PMDashlet extends DashletInstance implements DashletInterface {
         $dataset->next();
         while ($row = $dataset->getRow()) {
           if (!isset($dashletsInstances[$row['DAS_INS_UID']])) {
-            $row['DAS_TITLE'] .= ' (' . $row['DAS_INS_CONTEXT_TIME'] . ')';
             $dashletsInstances[$row['DAS_INS_UID']] = $row;
           }
           $dataset->next();

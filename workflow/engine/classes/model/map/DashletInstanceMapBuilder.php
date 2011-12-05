@@ -68,21 +68,9 @@ class DashletInstanceMapBuilder {
 
 		$tMap->addColumn('DAS_UID', 'DasUid', 'string', CreoleTypes::VARCHAR, true, 32);
 
-		$tMap->addColumn('DAS_INS_TYPE', 'DasInsType', 'string', CreoleTypes::VARCHAR, true, 20);
-
-		$tMap->addColumn('DAS_INS_CONTEXT_TIME', 'DasInsContextTime', 'string', CreoleTypes::VARCHAR, true, 20);
-
-		$tMap->addColumn('DAS_INS_START_DATE', 'DasInsStartDate', 'int', CreoleTypes::TIMESTAMP, false, null);
-
-		$tMap->addColumn('DAS_INS_END_DATE', 'DasInsEndDate', 'int', CreoleTypes::TIMESTAMP, false, null);
-
 		$tMap->addColumn('DAS_INS_OWNER_TYPE', 'DasInsOwnerType', 'string', CreoleTypes::VARCHAR, true, 20);
 
 		$tMap->addColumn('DAS_INS_OWNER_UID', 'DasInsOwnerUid', 'string', CreoleTypes::VARCHAR, false, 32);
-
-		$tMap->addColumn('DAS_INS_PROCESSES', 'DasInsProcesses', 'string', CreoleTypes::LONGVARCHAR, false, null);
-
-		$tMap->addColumn('DAS_INS_TASKS', 'DasInsTasks', 'string', CreoleTypes::LONGVARCHAR, false, null);
 
 		$tMap->addColumn('DAS_INS_ADDITIONAL_PROPERTIES', 'DasInsAdditionalProperties', 'string', CreoleTypes::LONGVARCHAR, false, null);
 

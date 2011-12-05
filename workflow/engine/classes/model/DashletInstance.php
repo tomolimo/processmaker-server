@@ -16,9 +16,9 @@ require_once 'classes/model/om/BaseDashletInstance.php';
  */
 class DashletInstance extends BaseDashletInstance {
 
-  private $validFields = array('DAS_INS_UID', 'DAS_UID', 'DAS_INS_TYPE', 'DAS_INS_CONTEXT_TIME', 'DAS_INS_START_DATE', 'DAS_INS_END_DATE', 'DAS_INS_OWNER_TYPE',
-                               'DAS_INS_OWNER_UID', 'DAS_INS_PROCESSES', 'DAS_INS_TASKS', '	DAS_INS_CREATE_DATE', 'DAS_INS_UPDATE_DATE', 'DAS_INS_STATUS',
-                               'pmos_generik', 'ys-admin-tabpanel', 'PHPSESSID');
+  private $filterThisFields = array('DAS_INS_UID', 'DAS_UID', 'DAS_INS_OWNER_TYPE', 'DAS_INS_OWNER_UID',
+                                    'DAS_INS_CREATE_DATE', 'DAS_INS_UPDATE_DATE', 'DAS_INS_STATUS',
+                                    'pmos_generik', 'ys-admin-tabpanel', 'PHPSESSID');
 
   public function load($dasInsUid) {
     try {
@@ -37,7 +37,7 @@ class DashletInstance extends BaseDashletInstance {
   public function createOrUpdate($data) {
     $additionalFields = array();
     foreach ($data as $field => $value) {
-      if (!in_array($field, $this->validFields)) {
+      if (!in_array($field, $this->filterThisFields)) {
         $additionalFields[$field] = $value;
         unset($data[$field]);
       }
