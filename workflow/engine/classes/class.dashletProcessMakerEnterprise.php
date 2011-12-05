@@ -82,7 +82,7 @@ class dashletProcessMakerEnterprise implements DashletInterface {
   
     <div id=\"container\">
       <div class=\"icon\">
-        <a href=\"http://processmaker.com/workflow-inbox-and-bpm-inbox\" target=\"_blank\"><img src=\"http://processmaker.com/uploads/icon_list_builder.png\" /></a>
+        <a href=\"http://processmaker.com/workflow-inbox-and-bpm-inbox\" target=\"_blank\"><img src=\"/images/dashlets/enterprise_list_builder.png\" /></a>
       </div>
       <div class=\"description\">
         <a href=\"http://processmaker.com/workflow-inbox-and-bpm-inbox\" target=\"_blank\">Custom Case List Builder</a>
@@ -94,7 +94,7 @@ class dashletProcessMakerEnterprise implements DashletInterface {
       <div class=\"clearf\"></div>
       
       <div class=\"icon\">
-        <a href=\"http://processmaker.com/bpm-ldap-and-bpm-active-directory\" target=\"_blank\"><img src=\"http://processmaker.com/uploads/icon_ldap.png\" /></a>
+        <a href=\"http://processmaker.com/bpm-ldap-and-bpm-active-directory\" target=\"_blank\"><img src=\"/images/dashlets/enterprise_ldap.png\" /></a>
       </div>
       <div class=\"description\">
         <a href=\"http://processmaker.com/bpm-ldap-and-bpm-active-directory\" target=\"_blank\">Advanced LDAP/AD Sync Plug-in</a>
@@ -106,7 +106,7 @@ class dashletProcessMakerEnterprise implements DashletInterface {
       <div class=\"clearf\"></div>
 
       <div class=\"icon\">
-        <a href=\"http://processmaker.com/bpm-reports\" target=\"_blank\"><img src=\"http://processmaker.com/uploads/icon_simple_report.png\" /></a>
+        <a href=\"http://processmaker.com/bpm-reports\" target=\"_blank\"><img src=\"/images/dashlets/enterprise_simple_report.png\" /></a>
       </div>
       <div class=\"description\">
         <a href=\"http://processmaker.com/bpm-reports\" target=\"_blank\">Simple Reports Plug-in</a>
@@ -118,7 +118,7 @@ class dashletProcessMakerEnterprise implements DashletInterface {
       <div class=\"clearf\"></div>
 
       <div class=\"icon\">
-        <a href=\"http://processmaker.com/knowledgetree-workflow-document-management\" target=\"_blank\"><img src=\"http://processmaker.com/uploads/icon_knowledgetree.png\" /></a>
+        <a href=\"http://processmaker.com/knowledgetree-workflow-document-management\" target=\"_blank\"><img src=\"/images/dashlets/enterprise_knowledgetree.png\" /></a>
       </div>
       <div class=\"description\">
         <a href=\"http://processmaker.com/knowledgetree-workflow-document-management\" target=\"_blank\">Knowledgetree DMS Connector Plug-in</a>
@@ -130,7 +130,7 @@ class dashletProcessMakerEnterprise implements DashletInterface {
       <div class=\"clearf\"></div>
       
       <div class=\"icon\">
-        <a href=\"http://processmaker.com/electronic-signatures-with-sigplus-signature-pads\" target=\"_blank\"><img src=\"http://processmaker.com/uploads/icon_digital.png\" /></a>
+        <a href=\"http://processmaker.com/electronic-signatures-with-sigplus-signature-pads\" target=\"_blank\"><img src=\"/images/dashlets/enterprise_digital.png\" /></a>
       </div>
       <div class=\"description\">
         <a href=\"http://processmaker.com/electronic-signatures-with-sigplus-signature-pads\" target=\"_blank\">SigPlus Signature Pads Plug-in for Electronic Signatures</a>
@@ -142,7 +142,7 @@ class dashletProcessMakerEnterprise implements DashletInterface {
       <div class=\"clearf\"></div>
       
       <div class=\"icon\">
-        <a href=\"http://processmaker.com/digitally-sign-web-forms-elock\" target=\"_blank\"><img src=\"http://processmaker.com/uploads/icon_elock.png\" /></a>
+        <a href=\"http://processmaker.com/digitally-sign-web-forms-elock\" target=\"_blank\"><img src=\"/images/dashlets/enterprise_elock.png\" /></a>
       </div>
       <div class=\"description\">
         <a href=\"http://processmaker.com/digitally-sign-web-forms-elock\" target=\"_blank\">Elock PKI Certified Digital Signature mobiSigner Connector Plug-in</a>
@@ -154,7 +154,7 @@ class dashletProcessMakerEnterprise implements DashletInterface {
       <div class=\"clearf\"></div>
       
       <div class=\"icon\">
-        <a href=\"http://processmaker.com/multi-tenant-management\" target=\"_blank\"><img src=\"http://processmaker.com/uploads/icon_multitenant.png\" /></a>
+        <a href=\"http://processmaker.com/multi-tenant-management\" target=\"_blank\"><img src=\"/images/dashlets/enterprise_multitenant.png\" /></a>
       </div>
       <div class=\"description\">
         <a href=\"http://processmaker.com/multi-tenant-management\" target=\"_blank\">Multitenant Management Tools Plug-in</a>
@@ -166,7 +166,7 @@ class dashletProcessMakerEnterprise implements DashletInterface {
       <div class=\"clearf\"></div>
       
       <div class=\"icon\">
-        <a href=\"http://processmaker.com/batch-routing-plugin\" target=\"_blank\"><img src=\"http://processmaker.com/uploads/icon_batch.png\" /></a>
+        <a href=\"http://processmaker.com/batch-routing-plugin\" target=\"_blank\"><img src=\"/images/dashlets/enterprise_batch.png\" /></a>
       </div>
       <div class=\"description\">
         <a href=\"http://processmaker.com/batch-routing-plugin\" target=\"_blank\">Batch Routing Plug-in</a>
@@ -178,7 +178,7 @@ class dashletProcessMakerEnterprise implements DashletInterface {
       <div class=\"clearf\"></div>
       
       <div class=\"icon\">
-        <a href=\"http://www.processmaker.com/bpm-outlook-integration\" target=\"_blank\"><img src=\"http://www.processmaker.com/uploads/icon_outlook.jpg\" /></a>
+        <a href=\"http://www.processmaker.com/bpm-outlook-integration\" target=\"_blank\"><img src=\"/images/dashlets/enterprise_outlook.jpg\" /></a>
       </div>
       <div class=\"description\">
         <a href=\"http://www.processmaker.com/bpm-outlook-integration\" target=\"_blank\">Microsoft Outlook Plug-in</a>
@@ -190,7 +190,6 @@ class dashletProcessMakerEnterprise implements DashletInterface {
       <div class=\"clearf\"></div>
       
       <div class=\"icon\">
-        &nbsp;
       </div>
       <div class=\"description\">
         <a href=\"http://www.processmaker.com/single-sign-on-bpm-plugin\" target=\"_blank\">Single Sign On Plug-in For Active Directory</a>
