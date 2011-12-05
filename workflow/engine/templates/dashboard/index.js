@@ -179,11 +179,11 @@ Ext.onReady(function(){
               p.html = 'show ' + p.getWidth();
             },
             'resize' : function(p, w, h){
-              var img = new Ext.XTemplate("<iframe src=\"{page}?DAS_INS_UID={id}\" width=\"422\" height=\"217\" frameborder=\"0\"></iframe>").apply({
+              var img = new Ext.XTemplate("<iframe src=\"{page}?DAS_INS_UID={id}\" width=\"" + (w - 12) + "\" height=\"216\" frameborder=\"0\"></iframe>").apply({
                 page: "dashboard/renderDashletInstance",
                 id: p.dasInsUid
               })
-                
+              
               p.update(img);
             }
           }
@@ -204,7 +204,7 @@ Ext.onReady(function(){
               p.html = 'show ' + p.getWidth();
             },
             'resize' : function(p, w, h){
-              var img = new Ext.XTemplate("<iframe src=\"{page}?DAS_INS_UID={id}\" width=\"413\" height=\"217\" frameborder=\"0\"></iframe>").apply({
+              var img = new Ext.XTemplate("<iframe src=\"{page}?DAS_INS_UID={id}\" width=\"" + (w - 12) + "\" height=\"216\" frameborder=\"0\"></iframe>").apply({
                 page: "dashboard/renderDashletInstance",
                 id: p.dasInsUid
               })
