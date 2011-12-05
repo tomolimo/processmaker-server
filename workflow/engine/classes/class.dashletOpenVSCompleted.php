@@ -152,6 +152,10 @@ class dashletOpenVSCompleted implements DashletInterface {
     $previousYearIni = date('Y-m-d H:i:s', strtotime( "jan $lastYear 00:00:00"));
     $previousYearEnd = date('Y-m-d H:i:s', strtotime( "Dec 31 $lastYear 23:59:59"));
 
+    if (!isset($config['DAS_INS_CONTEXT_TIME'])) {
+      $config['DAS_INS_CONTEXT_TIME'] = 'TODAY';
+    }
+
     switch ( $config['DAS_INS_CONTEXT_TIME'] ) {
       case 'TODAY'            : $dateIni = $todayIni;        $dateEnd = $todayEnd;        break;
       case 'YESTERDAY'        : $dateIni = $yesterdayIni;    $dateEnd = $yesterdayEnd;    break;
