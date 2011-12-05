@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: ProcessMaker (Branch 2.0-dev) 2.0.34.rc4-179-g5fa57e9\n"
+"Project-Id-Version: ProcessMaker (Branch 2.0-dev) 2.0.34.rc4-203-gb873e5a\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2011-11-28 11:40:40\n"
+"PO-Revision-Date: 2011-12-05 08:57:57\n"
 "Last-Translator: \n"
 "Language-Team: Colosa Developers Team <developers@colosa.com>\n"
 "MIME-Version: 1.0\n"
@@ -31127,6 +31127,24 @@ msgstr "Integer"
 msgid "[dynaforms/fields/currency.xml?PME_VALIDATE-Real]"
 msgstr "Real Number"
 
+# dynaforms/fields/currency.xml?PME_COMMA_SEPARATOR
+# dynaforms/fields/currency.xml
+#: dropdown - PME_COMMA_SEPARATOR
+msgid "Decimal Separator"
+msgstr "Decimal Separator"
+
+# dynaforms/fields/currency.xml?PME_COMMA_SEPARATOR-.
+# dynaforms/fields/currency.xml
+#: dropdown - PME_COMMA_SEPARATOR - .
+msgid "[dynaforms/fields/currency.xml?PME_COMMA_SEPARATOR-.]"
+msgstr "Period [.]"
+
+# dynaforms/fields/currency.xml?PME_COMMA_SEPARATOR-,
+# dynaforms/fields/currency.xml
+#: dropdown - PME_COMMA_SEPARATOR - ,
+msgid "[dynaforms/fields/currency.xml?PME_COMMA_SEPARATOR-,]"
+msgstr "Comma [,]"
+
 # dynaforms/fields/currency.xml?PME_MASK
 # dynaforms/fields/currency.xml
 #: text - PME_MASK
@@ -32128,6 +32146,24 @@ msgstr "Integer"
 #: dropdown - PME_VALIDATE - Real
 msgid "[dynaforms/fields/percentage.xml?PME_VALIDATE-Real]"
 msgstr "Real Number"
+
+# dynaforms/fields/percentage.xml?PME_COMMA_SEPARATOR
+# dynaforms/fields/percentage.xml
+#: dropdown - PME_COMMA_SEPARATOR
+msgid "[dynaforms/fields/percentage.xml?PME_COMMA_SEPARATOR] Decimal Separator"
+msgstr "Decimal Separator"
+
+# dynaforms/fields/percentage.xml?PME_COMMA_SEPARATOR-.
+# dynaforms/fields/percentage.xml
+#: dropdown - PME_COMMA_SEPARATOR - .
+msgid "[dynaforms/fields/percentage.xml?PME_COMMA_SEPARATOR-.]"
+msgstr "Period [.]"
+
+# dynaforms/fields/percentage.xml?PME_COMMA_SEPARATOR-,
+# dynaforms/fields/percentage.xml
+#: dropdown - PME_COMMA_SEPARATOR - ,
+msgid "[dynaforms/fields/percentage.xml?PME_COMMA_SEPARATOR-,]"
+msgstr "Comma [,]"
 
 # dynaforms/fields/percentage.xml?PME_MASK
 # dynaforms/fields/percentage.xml
