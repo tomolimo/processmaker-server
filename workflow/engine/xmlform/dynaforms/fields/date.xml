@@ -41,7 +41,7 @@ SELECT XMLNODE_NAME, TYPE FROM dynaForm WHERE XMLNODE_NAME = @@PME_XMLNODE_NAME
 </PME_SUBTITLE3a>
 
 <PMED_AFTERBEFORE_DESC type="subtitle" defaultvalue="1m" enableHtml="1">
-  <en><![CDATA[<b>Data Codes:</b> A number followed by a letter to indicate the unit of time (d=day m=month y=year).<br/>Use negative numbers for past dates and positive numbers for future dates<br />  	<b>NOTE.</b> When these relative dates are set have the priority, leave empty to use <i>Start and End dates</i>.]]></en>
+  <en><![CDATA[<b>Data Codes:</b> A number followed by a letter to indicate the unit of time (d=day m=month y=year).<br/>Use negative numbers for past dates and positive numbers for future dates<br />    <b>NOTE.</b> When these relative dates are set have the priority, leave empty to use <i>Start and End dates</i>.]]></en>
 </PMED_AFTERBEFORE_DESC>
 
 <PME_BEFOREDATE type="text" defaultvalue="0m">
@@ -110,7 +110,7 @@ SELECT XMLNODE_NAME, TYPE FROM dynaForm WHERE XMLNODE_NAME = @@PME_XMLNODE_NAME
   <en>Cancel</en>
 </BTN_CANCEL>
 
-<PME_ACCEPT type="button" onclick="validDate(); fieldsSave( this.form );">
+<PME_ACCEPT type="button" onclick="if(validDate()) fieldsSave(this.form);">
   <en>Save</en>
 </PME_ACCEPT>
 
@@ -142,18 +142,18 @@ hideRowById('PME_SHOWTIME');
 
 reltype = getField('PME_RELATIVEDATE').value;
 if (reltype == "1"){
-	hideRowById('PME_SUBTITLE3');
-	hideRowById('PME_STARTDATE');
-	hideRowById('PME_ENDDATE');
+  hideRowById('PME_SUBTITLE3');
+  hideRowById('PME_STARTDATE');
+  hideRowById('PME_ENDDATE');
 } else {
-	hideRowById('PME_SUBTITLE3a');
-	hideRowById('PMED_AFTERBEFORE_DESC');
-	hideRowById('PME_BEFOREDATE');
-	hideRowById('PME_AFTERDATE');
+  hideRowById('PME_SUBTITLE3a');
+  hideRowById('PMED_AFTERBEFORE_DESC');
+  hideRowById('PME_BEFOREDATE');
+  hideRowById('PME_AFTERDATE');
 }
 
 if(getField('PME_DEFAULTVALUE_SEL').value != 'val'){
-	hideRowById('PME_DEFAULTVALUE');
+  hideRowById('PME_DEFAULTVALUE');
 }
 var fieldForm="date";
 var fieldName=getField("PME_XMLNODE_NAME",fieldForm);
@@ -166,16 +166,16 @@ leimnud.event.add(fieldName, 'change', {method:dynaformVerifyFieldName, instance
 leimnud.event.add(getField('PME_DEFAULTVALUE_SEL'), 'change', function() {
   switch (this.value) {
     case 'val':
-    	getField('PME_DEFAULTVALUE').value = '';
-		showRowById('PME_DEFAULTVALUE');
+      getField('PME_DEFAULTVALUE').value = '';
+    showRowById('PME_DEFAULTVALUE');
     break;
     case 'empty':
-    	getField('PME_DEFAULTVALUE').value = '';
-    	hideRowById('PME_DEFAULTVALUE');
+      getField('PME_DEFAULTVALUE').value = '';
+      hideRowById('PME_DEFAULTVALUE');
     break;
     case 'today':
-    	getField('PME_DEFAULTVALUE').value = 'today';
-    	hideRowById('PME_DEFAULTVALUE');
+      getField('PME_DEFAULTVALUE').value = 'today';
+      hideRowById('PME_DEFAULTVALUE');
     break;
   }
 }.extend(getField('PME_DEFAULTVALUE_SEL')));
@@ -186,28 +186,28 @@ leimnud.event.add(getField('PME_RELATIVEDATE'), 'change', function() {
     case '':
                 getField('PME_RELATIVEDATE').value = '0';
     case '0':
-		getField('PME_BEFOREDATE').value = '';
-		getField('PME_AFTERDATE').value = '';
-		hideRowById('PME_SUBTITLE3a');
-		hideRowById('PMED_AFTERBEFORE_DESC');
-		hideRowById('PME_BEFOREDATE');
-		hideRowById('PME_AFTERDATE');
-		showRowById('PME_SUBTITLE3');
-		showRowById('PME_STARTDATE');
-		showRowById('PME_ENDDATE');
+    getField('PME_BEFOREDATE').value = '';
+    getField('PME_AFTERDATE').value = '';
+    hideRowById('PME_SUBTITLE3a');
+    hideRowById('PMED_AFTERBEFORE_DESC');
+    hideRowById('PME_BEFOREDATE');
+    hideRowById('PME_AFTERDATE');
+    showRowById('PME_SUBTITLE3');
+    showRowById('PME_STARTDATE');
+    showRowById('PME_ENDDATE');
     break;
     case '1':
-		getField('PME_STARTDATE').value = '';
-		//getField('PME_STARTDATE][div').innerHTML = '';
-		getField('PME_ENDDATE').value = '';
-		//getField('PME_ENDDATE][div').innerHTML = '';
-    	hideRowById('PME_SUBTITLE3');
-		hideRowById('PME_STARTDATE');
-		hideRowById('PME_ENDDATE');
-    	showRowById('PME_SUBTITLE3a');
-    	showRowById('PMED_AFTERBEFORE_DESC');
-		showRowById('PME_BEFOREDATE');
-		showRowById('PME_AFTERDATE');
+    getField('PME_STARTDATE').value = '';
+    //getField('PME_STARTDATE][div').innerHTML = '';
+    getField('PME_ENDDATE').value = '';
+    //getField('PME_ENDDATE][div').innerHTML = '';
+      hideRowById('PME_SUBTITLE3');
+    hideRowById('PME_STARTDATE');
+    hideRowById('PME_ENDDATE');
+      showRowById('PME_SUBTITLE3a');
+      showRowById('PMED_AFTERBEFORE_DESC');
+    showRowById('PME_BEFOREDATE');
+    showRowById('PME_AFTERDATE');
     break;
   }
 }.extend(getField('PME_RELATIVEDATE')));
@@ -218,30 +218,31 @@ function cancel(){
 
 function validDate() {
   reltype = getField('PME_RELATIVEDATE').value;
-  switch (reltype) {
-    case '':
-      getField('PME_RELATIVEDATE').value = '0';
-    case '0':
-      if(getField('PME_STARTDATE').value == ''){
-        getField('PME_BEFOREDATE').value = '0m';
-      } else {
-        getField('PME_BEFOREDATE').value = '';
-      }
-        if(getField('PME_ENDDATE').value == ''){
-          getField('PME_AFTERDATE').value = '1y';
-      } else {
-          getField('PME_AFTERDATE').value = '';
-      }
-    break;
-    case '1':
-      if (getField('PME_BEFOREDATE').value==''){
-        getField('PME_BEFOREDATE').value = '0m';
-      }
-      if (getField('PME_AFTERDATE').value==''){
-        getField('PME_AFTERDATE').value = '1y';
-      }
-    break;
+
+  if (getField('PME_RELATIVEDATE').value == 1) {
+    if(getField('PME_BEFOREDATE').value == ''){
+      msgBox('Please select before date', "alert");
+      return false;
+    } 
+
+    if(getField('PME_AFTERDATE').value == ''){
+      msgBox('Please select after date', "alert");
+      return false;
+    }
   }
+  else {
+    if(getField('PME_STARTDATE').value == ''){
+      msgBox('Please select start date', "alert");
+      return false;
+    } 
+
+    if(getField('PME_ENDDATE').value == ''){
+      msgBox('Please select end date', "alert");
+      return false;
+    }
+  }
+
+  return true;
 }
 
 ]]></PME_JS>
