@@ -278,6 +278,7 @@ Ext.onReady(function(){
             xtype: 'textfield',
             allowBlank: true,
             style:'text-transform: uppercase',
+            stripCharsRe: /(\W+)/g,
             listeners:{
               /*specialkey: function(f,e){
                 if(e.getKey()==e.ENTER){

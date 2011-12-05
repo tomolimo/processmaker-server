@@ -161,6 +161,7 @@ Ext.onReady(function(){
             xtype: 'textfield',
             allowBlank: true,
             style:'text-transform: uppercase',
+            stripCharsRe: /(\W+)/g,
             listeners:{
               change: function(f,e){
                 this.setValue(this.getValue().toUpperCase());
