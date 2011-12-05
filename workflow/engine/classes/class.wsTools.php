@@ -591,14 +591,11 @@ class workspaceTools {
       case 4:
         $sql = $dataBase->generateSelectSQL($data['table'], $data['keys'], $data['data']);
         $dataset = $dataBase->executeQuery($sql);
-        if (!$dataBase->getRegistry($dataset)) {
-          $sql = $dataBase->generateInsertSQL($data['table'], $data['data']);
-        }
-        else {
+        if ($dataBase->getRegistry($dataset)) {
           $sql = $dataBase->generateDeleteSQL($data['table'], $data['keys'], $data['data']);
           $dataBase->executeQuery($sql);
-          $sql = $dataBase->generateUpdateSQL($data['table'], $data['keys'], $data['data']);
         }
+        $sql = $dataBase->generateInsertSQL($data['table'], $data['data']);
         $message = "-> Row updated in {$data['table']}\n";
       break;
     }

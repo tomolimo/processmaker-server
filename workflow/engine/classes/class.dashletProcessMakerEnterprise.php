@@ -63,7 +63,7 @@ class dashletProcessMakerEnterprise implements DashletInterface {
         
         margin-right: 0.5em;
     
-        width: 26.5em;
+        width: 26em;
     
         font-size: 0.8em;
       }
