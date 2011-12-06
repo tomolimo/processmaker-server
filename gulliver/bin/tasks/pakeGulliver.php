@@ -3,7 +3,7 @@
 /**
  * pakeGulliver.php
  * @package gulliver.bin.tasks
- * 
+ *
  * ProcessMaker Open Source Edition
  * Copyright (C) 2004 - 2011 Colosa Inc.
  *
@@ -22,8 +22,8 @@
  *
  * For more information, contact Colosa Inc, 2566 Le Jeune Rd.,
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
- *  
- * 
+ *
+ *
  */
 //dont work mb_internal_encoding('UTF-8');
 
@@ -89,7 +89,7 @@ function strip_quotes($text) {
 }
 // function for the prompt data read in windows
 function prompt_win($text) {
-  
+
   print $text;
   flush();
   ob_flush();
@@ -99,31 +99,31 @@ function prompt_win($text) {
 }
 
 function prompt($text) {
-  
+
   if( ! (PHP_OS == "WINNT") ) {
     printf("$text%s ", pakeColor::colorize(':', 'INFO'));
     # 4092 max on win32 fopen
-    
+
 
     //$fp=fopen("php://stdin", "r");
     $fp = fopen("/dev/tty", "r");
     $in = fgets($fp, 4094);
     fclose($fp);
-    
+
     # strip newline
     (PHP_OS == "WINNT") ? ($read = str_replace("\r\n", "", $in)) : ($read = str_replace("\n", "", $in));
   } else {
     $read = prompt_win($text);
   }
-  
+
   return $read;
 }
 
 function query_sql_file($file, $connection) {
   $report = array (
-    'SQL_FILE' => $file, 
-    'errors' => array (), 
-    'querys' => 0 
+    'SQL_FILE' => $file,
+    'errors' => array (),
+    'querys' => 0
   );
   $content = @fread(@fopen($file, "rt"), @filesize($file));
   if( ! $content ) {
@@ -160,19 +160,19 @@ function createPngLogo($filePng, $text) {
   $red = imagecolorallocatealpha($im, 255, 10, 10, 95);
   $blue = imagecolorallocatealpha($im, 10, 10, 255, 95);
   $transparent = imagecolorallocatealpha($im, 0, 0, 0, 127);
-  
+
   imagefill($im, 0, 0, $white);
   imagestring($im, 4, 50, 14, $text, $orange);
-  
+
   // drawing 3 overlapped circle
   imagefilledellipse($im, 25, 20, 27, 25, $yellow);
   imagefilledellipse($im, 15, 30, 27, 25, $red);
   imagefilledellipse($im, 30, 30, 27, 25, $blue);
-  
+
   imagefill($im, 0, 0, $transparent);
   imagesavealpha($im, true);
   imagepng($im, $filePng);
-  
+
   $aux = explode(PATH_SEP, $filePng);
   $auxName = $aux[count($aux) - 2] . PATH_SEP . $aux[count($aux) - 1];
   $iSize = filesize($filePng);
@@ -183,7 +183,7 @@ function createPngLogo($filePng, $text) {
 function run_generate_unit_test_class($task, $args) {
   //the class filename in the first argument
   $class = $args[0];
-  
+
   //try to find the class in classes directory
   $classFilename = PATH_CORE . 'classes' . PATH_SEP . 'class.' . $args[0] . '.php';
   if( file_exists($classFilename) )
@@ -192,7 +192,7 @@ function run_generate_unit_test_class($task, $args) {
     printf("class %s not found \n", pakeColor::colorize($class, 'ERROR'));
     exit(0);
   }
-  
+
   include ('test' . PATH_SEP . 'bootstrap' . PATH_SEP . 'unit.php');
   G::LoadThirdParty('smarty/libs', 'Smarty.class');
   G::LoadSystem('error');
@@ -201,22 +201,22 @@ function run_generate_unit_test_class($task, $args) {
   G::LoadSystem('form');
   G::LoadClass('application');
   require_once ('propel/Propel.php');
-  
+
   require_once ($classFilename);
-  
+
   $unitFilename = PATH_GULLIVER_HOME . 'bin' . PATH_SEP . 'tasks' . PATH_SEP . 'templates' . PATH_SEP . 'unitTest.tpl';
-  
+
   $smarty = new Smarty();
-  
+
   $smarty->template_dir = PATH_GULLIVER . 'bin' . PATH_SEP . 'tasks';
   $smarty->compile_dir = PATH_SMARTY_C;
   $smarty->cache_dir = PATH_SMARTY_CACHE;
   $smarty->config_dir = PATH_THIRDPARTY . 'smarty/configs';
-  
+
   printf("using unit file in %s \n", pakeColor::colorize($unitFilename, 'INFO'));
   $smarty->assign('className', ucwords($class));
   $smarty->assign('classFile', $class);
-  
+
   //get the method list
   $reflect = new ReflectionClass($class);
   $methods = array ();
@@ -231,16 +231,16 @@ function run_generate_unit_test_class($task, $args) {
     $testItems ++;
     $methods[$reflectmethod->getName()] = $params;
   }
-  
+
   $smarty->assign('methods', $methods);
   $smarty->assign('testItems', (count($methods) * 2) + 3);
   $smarty->assign('cantMethods', count($methods));
   //  $smarty->assign('llave', '{' );
-  
+
 
   // fetch smarty output
   $content = $smarty->fetch($unitFilename);
-  
+
   //saving the content in the output file
   if( defined('MAIN_POFILE') && MAIN_POFILE != '' )
     $unitFilename = PATH_CORE . 'test' . PATH_SEP . 'unit' . PATH_SEP . MAIN_POFILE . PATH_SEP . 'class' . ucwords($class) . 'Test.php';
@@ -250,7 +250,7 @@ function run_generate_unit_test_class($task, $args) {
   $fp = fopen($unitFilename, 'w');
   fprintf($fp, $content);
   fclose($fp);
-  
+
   exit(0);
 }
 
@@ -283,16 +283,16 @@ function copyPluginFile($tplName, $fName, $class) {
 
 function savePluginFile($fName, $tplName, $class, $tableName, $fields = null) {
   $pluginOutDirectory = PATH_OUTTRUNK . 'plugins' . PATH_SEP . $class . PATH_SEP;
-  
+
   $pluginFilename = $pluginOutDirectory . $fName;
-  
+
   $pluginTpl = PATH_GULLIVER_HOME . 'bin' . PATH_SEP . 'tasks' . PATH_SEP . 'templates' . PATH_SEP . $tplName . '.tpl';
   $template = new TemplatePower($pluginTpl);
   $template->prepare();
   $template->assign('className', $class);
   $template->assign('tableName', $tableName);
   $template->assign('menuId', 'ID_' . strtoupper($class));
-  
+
   if( is_array($fields) ) {
     foreach( $fields as $block => $data ) {
       $template->gotoBlock("_ROOT");
@@ -306,7 +306,7 @@ function savePluginFile($fName, $tplName, $class, $tableName, $fields = null) {
         $template->assign($block, $data);
     }
   }
-  
+
   $content = $template->getOutputContent();
   $iSize = file_put_contents($pluginFilename, $content);
   printf("saved %s bytes in file %s [%s]\n", pakeColor::colorize($iSize, 'INFO'), pakeColor::colorize($fName, 'INFO'), pakeColor::colorize($tplName, 'INFO'));
@@ -315,10 +315,10 @@ function savePluginFile($fName, $tplName, $class, $tableName, $fields = null) {
 function run_generate_crud($task, $args) {
   ini_set('display_errors', 'on');
   ini_set('error_reporting', E_ERROR);
-  
+
   // the environment for poedit always is Development
   define('G_ENVIRONMENT', G_DEV_ENV);
-  
+
   //the class filename in the first argument
   if( ! isset($args[0]) ) {
     printf("Error: %s\n", pakeColor::colorize('you must specify a valid classname ', 'ERROR'));
@@ -327,7 +327,7 @@ function run_generate_crud($task, $args) {
   $class = $args[0];
   //second parameter is the table name, by default is the same classname in uppercase.
   $tableName = isset($args[1]) ? $args[1] : strtoupper($class);
-  
+
   //try to find the class in classes directory
   $classFilename = PATH_CORE . 'classes' . PATH_SEP . 'model' . PATH_SEP . $args[0] . '.php';
   if( file_exists($classFilename) )
@@ -339,51 +339,51 @@ function run_generate_crud($task, $args) {
   require_once ("propel/Propel.php");
   require_once ($classFilename);
   G::LoadSystem('templatePower');
-  
+
   Propel::init(PATH_CORE . "config/databases.php");
-  
+
   $configuration = Propel::getConfiguration();
   $connectionDSN = $configuration['datasources']['workflow']['connection'];
   printf("using DSN Connection %s \n", pakeColor::colorize($connectionDSN, 'INFO'));
-  
+
   $dirs = explode(PATH_SEP, PATH_HOME);
   print_r($dirs);
   $projectName = $dirs[count($dirs) - 1];
-  
+
   //  if ( strlen ( trim( $projectName) ) == 0 )  {
   //    printf("Project name not found \n", pakeColor::colorize( $class, 'ERROR'));
   //    exit (0);
-  //  }  
-  
+  //  }
+
 
   //  printf("using Project Name %s \n", pakeColor::colorize( $projectName, 'INFO'));
-  
+
 
   //  $pluginDirectory = PATH_PLUGINS . $class;
   //  $pluginOutDirectory = PATH_OUTTRUNK . 'plugins' . PATH_SEP . $class;
   //
   //  G::verifyPath ( $pluginOutDirectory, true );
   //  G::verifyPath ( $pluginOutDirectory. PATH_SEP . $class, $pluginDirectory );
-  
+
 
   //G::verifyPath ( $pluginDirectory, true );
-  
 
-  //  //main php file 
+
+  //  //main php file
   //  savePluginFile ( $class . '.php', 'pluginMainFile', $class, $tableName );
-  
+
 
   //menu
   savePluginFile($class . PATH_SEP . 'menu' . $class . '.php', 'pluginMenu', $class, $tableName);
-  
+
   //default list
   savePluginFile($class . PATH_SEP . $class . 'List.php', 'pluginList', $class, $tableName);
-  
+
   //parse the schema file in order to get Table definition
   $schemaFile = PATH_CORE . 'config' . PATH_SEP . 'schema.xml';
   $xmlContent = file_get_contents($schemaFile);
   $s = simplexml_load_file($schemaFile);
-  
+
   //default xmlform
   //load the $fields array with fields data for an xmlform.
   $fields = array ();
@@ -396,16 +396,16 @@ function run_generate_crud($task, $args) {
         $size = ($maxlength > 60) ? 60 : $maxlength;
         $type = $column['type'];
         $field = array (
-          'name' => $column['name'], 
-          'type' => $type, 
-          'size' => $size, 
-          'maxlength' => $maxlength 
+          'name' => $column['name'],
+          'type' => $type,
+          'size' => $size,
+          'maxlength' => $maxlength
         );
         $fields['fields'][] = $field;
       }
   }
   savePluginFile($class . PATH_SEP . $class . '.xml', 'pluginXmlform', $class, $tableName, $fields);
-  
+
   die();
   //xmlform for list
   //load the $fields array with fields data for PagedTable xml.
@@ -423,18 +423,18 @@ function run_generate_crud($task, $args) {
             $primaryKey .= '@@' . $column['name'];
           else
             $primaryKey .= '|@@' . $column['name'];
-        
+
         $field = array (
-          'name' => $column['name'], 
-          'type' => $type, 
-          'size' => $size 
+          'name' => $column['name'],
+          'type' => $type,
+          'size' => $size
         );
         $fields['fields'][] = $field;
       }
   }
   $fields['primaryKey'] = $primaryKey;
   savePluginFile($class . PATH_SEP . $class . 'List.xml', 'pluginXmlformList', $class, $tableName, $fields);
-  
+
   //default edit
   $fields = array ();
   $index = 0;
@@ -445,9 +445,9 @@ function run_generate_crud($task, $args) {
         $name = $column['name'];
         $phpName = convertPhpName($name);
         $field = array (
-          'name' => $name, 
-          'phpName' => $phpName, 
-          'index' => $index ++ 
+          'name' => $name,
+          'phpName' => $phpName,
+          'index' => $index ++
         );
         if( $column['primaryKey'] ) {
           if( $keylist == '' )
@@ -464,7 +464,7 @@ function run_generate_crud($task, $args) {
   $fields['keylist'] = $keylist;
   savePluginFile($class . PATH_SEP . $class . 'Edit.php', 'pluginEdit', $class, $tableName, $fields);
   savePluginFile($class . PATH_SEP . $class . 'Save.php', 'pluginSave', $class, $tableName, $fields);
-  
+
   if( ! PHP_OS == "WINNT" ) {
     printf("creting symlinks %s \n", pakeColor::colorize($pluginDirectory, 'INFO'));
     symlink($pluginOutDirectory . PATH_SEP . $class . '.php', PATH_PLUGINS . $class . '.php');
@@ -478,7 +478,7 @@ function addTarFolder($tar, $pathBase, $pluginHome) {
   //print $aux[count($aux) -2 ] . "\n";
   if( $aux[count($aux) - 2] == '.svn' )
     return;
-  
+
   if( $handle = opendir($pathBase) ) {
     while( false !== ($file = readdir($handle)) ) {
       if( is_file($pathBase . $file) ) {
@@ -497,24 +497,24 @@ function addTarFolder($tar, $pathBase, $pluginHome) {
 function run_pack_plugin($task, $args) {
   ini_set('display_errors', 'on');
   ini_set('error_reporting', E_ERROR);
-  
+
   // the environment for poedit always is Development
   define('G_ENVIRONMENT', G_DEV_ENV);
-  
+
   //the plugin name in the first argument
   if( ! isset($args[0]) ) {
     printf("Error: %s\n", pakeColor::colorize('you must specify a valid name for the plugin', 'ERROR'));
     exit(0);
   }
   $pluginName = $args[0];
-  
+
   require_once ("propel/Propel.php");
   G::LoadSystem('templatePower');
-  
+
   $pluginDirectory = PATH_PLUGINS . $pluginName;
   $pluginOutDirectory = PATH_OUTTRUNK . 'plugins' . PATH_SEP . $pluginName;
   $pluginHome = PATH_OUTTRUNK . 'plugins' . PATH_SEP . $pluginName;
-  
+
   //verify if plugin exists,
   $pluginClassFilename = PATH_PLUGINS . $pluginName . PATH_SEP . 'class.' . $pluginName . '.php';
   $pluginFilename = PATH_PLUGINS . $pluginName . '.php';
@@ -524,19 +524,19 @@ function run_pack_plugin($task, $args) {
   }
   G::LoadClass('plugin');
   require_once ($pluginFilename);
-  
+
   $oPluginRegistry = & PMPluginRegistry::getSingleton();
   $pluginDetail = $oPluginRegistry->getPluginDetails($pluginName . '.php');
   $fileTar = $pluginHome . PATH_SEP . $pluginName . '-' . $pluginDetail->iVersion . '.tar';
   G::LoadThirdParty('pear/Archive', 'Tar');
   $tar = new Archive_Tar($fileTar);
   $tar->_compress = false;
-  
+
   $pathBase = $pluginHome . PATH_SEP . $pluginName . PATH_SEP;
   $tar->createModify($pluginHome . PATH_SEP . $pluginName . '.php', '', $pluginHome);
   addTarFolder($tar, $pathBase, $pluginHome);
   $aFiles = $tar->listContent();
-  
+
   foreach( $aFiles as $key => $val ) {
     printf(" %6d %s \n", $val['size'], pakeColor::colorize($val['filename'], 'INFO'));
   }
@@ -544,32 +544,33 @@ function run_pack_plugin($task, $args) {
   $filesize = sprintf("%5.2f", filesize($fileTar) / 1024);
   printf("Filesize  %s Kb \n", pakeColor::colorize($filesize, 'INFO'));
 }
+
 function run_new_plugin($task, $args) {
   ini_set('display_errors', 'on');
   ini_set('error_reporting', E_ERROR);
-  
+
   // the environment for poedit always is Development
   define('G_ENVIRONMENT', G_DEV_ENV);
-  
+
   //the plugin name in the first argument
   if( ! isset($args[0]) ) {
     printf("Error: %s\n", pakeColor::colorize('you must specify a valid name for the plugin', 'ERROR'));
     exit(0);
   }
   $pluginName = $args[0];
-  
+
   require_once ("propel/Propel.php");
   G::LoadSystem('templatePower');
-  
+
   Propel::init(PATH_CORE . "config/databases.php");
   $configuration = Propel::getConfiguration();
   $connectionDSN = $configuration['datasources']['workflow']['connection'];
   printf("using DSN Connection %s \n", pakeColor::colorize($connectionDSN, 'INFO'));
-  
+
   $pluginDirectory = PATH_PLUGINS . $pluginName;
   $pluginOutDirectory = PATH_OUTTRUNK . 'plugins' . PATH_SEP . $pluginName;
   $pluginHome = PATH_OUTTRUNK . 'plugins' . PATH_SEP . $pluginName . PATH_SEP . $pluginName;
-  
+
   //verify if plugin exists, and then ask for overwrite
   $pluginClassFilename = PATH_PLUGINS . $pluginName . PATH_SEP . 'class.' . $pluginName . '.php';
   if( is_file($pluginClassFilename) ) {
@@ -578,147 +579,178 @@ function run_new_plugin($task, $args) {
     if( $overwrite == 'n' )
       die();
   }
-  
+
   printf("creating plugin directory %s \n", pakeColor::colorize($pluginOutDirectory, 'INFO'));
-  
+
   G::verifyPath($pluginOutDirectory, true);
   G::verifyPath($pluginHome . PATH_SEP . 'classes', true);
   G::verifyPath($pluginHome . PATH_SEP . 'public_html', true);
   G::verifyPath($pluginHome . PATH_SEP . 'config', true);
   G::verifyPath($pluginHome . PATH_SEP . 'data', true);
-  
+
   //config
+  savePluginFile($pluginName . PATH_SEP . "setup.xml", "pluginSetup.xml", $pluginName, $pluginName);
+  savePluginFile($pluginName . PATH_SEP . "messageShow.xml", "pluginMessageShow.xml", $pluginName, $pluginName);
   savePluginFile($pluginName . PATH_SEP . 'config' . PATH_SEP . 'schema.xml', 'pluginSchema.xml', $pluginName, $pluginName);
   savePluginFile($pluginName . PATH_SEP . 'config' . PATH_SEP . 'propel.ini', 'pluginPropel.ini', $pluginName, $pluginName);
   savePluginFile($pluginName . PATH_SEP . 'config' . PATH_SEP . 'propel.mysql.ini', 'pluginPropel.mysql.ini', $pluginName, $pluginName);
-  
+
   //create a logo to use instead the Workspace logo
   $changeLogo = strtolower(prompt('Change system logo [y/N]'));
-  
+
   $fields = array ();
   $fields['phpClassName'] = $pluginName;
   if( $changeLogo == 'y' ) {
     $filePng = $pluginHome . PATH_SEP . 'public_html' . PATH_SEP . $pluginName . '.png';
     createPngLogo($filePng, $pluginName);
     $fields['changeLogo'][] = array (
-      'className' => $pluginName 
+      'className' => $pluginName
     );
   }
-  
-  //menu
-  
 
+  //Menu
   $menu = strtolower(prompt('Create an example Page [Y/n]'));
-  
+  $swMenu = 0;
+
   if( $menu == 'y' ) {
-    
     $fields['menu'][] = array (
-      'className' => $pluginName 
+      'className' => $pluginName
     );
+
     savePluginFile($pluginName . PATH_SEP . 'menu' . $pluginName . '.php', 'pluginMenu', $pluginName, $pluginName, $fields);
-    savePluginFile($pluginName . PATH_SEP . $pluginName . 'List.php', 'pluginWelcome.php', $pluginName, $pluginName);
-    savePluginFile($pluginName . PATH_SEP . 'welcome.xml', 'welcome.xml', $pluginName, $pluginName);
+
+    savePluginFile($pluginName . PATH_SEP . $pluginName . "Application.php",     "pluginApplication.php", $pluginName, $pluginName);
+    savePluginFile($pluginName . PATH_SEP . $pluginName . "Application.html",    "pluginApplication.html", $pluginName, $pluginName);
+    savePluginFile($pluginName . PATH_SEP . $pluginName . "Application.js",      "pluginApplication.js", $pluginName, $pluginName);
+    savePluginFile($pluginName . PATH_SEP . $pluginName . "ApplicationAjax.php", "pluginApplicationAjax.php", $pluginName, $pluginName);
+
+    $swMenu = 1;
   }
-  
+
+  //Menu cases
+  $menuCases = strtolower(prompt("Create new option in the menu of cases [Y/n]"));
+
+  if($menuCases == "y") {
+    $fields["menuCases"][] = array (
+      "className" => $pluginName
+    );
+
+    savePluginFile($pluginName . PATH_SEP . "menuCases" . $pluginName . ".php", "pluginMenuCases", $pluginName, $pluginName, $fields);
+
+    if ($swMenu == 0) {
+      savePluginFile($pluginName . PATH_SEP . $pluginName . "Application.php",     "pluginApplication.php", $pluginName, $pluginName);
+      savePluginFile($pluginName . PATH_SEP . $pluginName . "Application.html",    "pluginApplication.html", $pluginName, $pluginName);
+      savePluginFile($pluginName . PATH_SEP . $pluginName . "Application.js",      "pluginApplication.js", $pluginName, $pluginName);
+      savePluginFile($pluginName . PATH_SEP . $pluginName . "ApplicationAjax.php", "pluginApplicationAjax.php", $pluginName, $pluginName);
+    }
+
+    savePluginFile($pluginName . PATH_SEP . $pluginName . "Application2.php",     "pluginApplication2.php", $pluginName, $pluginName);
+    savePluginFile($pluginName . PATH_SEP . $pluginName . "Application2.html",    "pluginApplication2.html", $pluginName, $pluginName);
+    savePluginFile($pluginName . PATH_SEP . $pluginName . "Application2.js",      "pluginApplication2.js", $pluginName, $pluginName);
+
+    savePluginFile($pluginName . PATH_SEP . $pluginName . "Application3.php",     "pluginApplication3.php", $pluginName, $pluginName);
+    savePluginFile($pluginName . PATH_SEP . $pluginName . "Application3.html",    "pluginApplication3.html", $pluginName, $pluginName);
+    savePluginFile($pluginName . PATH_SEP . $pluginName . "Application3.js",      "pluginApplication3.js", $pluginName, $pluginName);
+  }
+
   //RBAC features
   $classNameUpperCase = strtoupper($pluginName);
   //Create a new Permission a new role
   $newPermission = strtolower(prompt("Create the Role 'PROCESSMAKER_$classNameUpperCase' and \n       the Permission 'PM_$classNameUpperCase' [y/N]"));
+  $swRole = 0;
+
   if( $newPermission == 'y' ) {
     $fields['createPermission'][] = array (
-      'className' => $classNameUpperCase 
+      'className' => $classNameUpperCase
     );
+
+    $swRole = 1;
   }
-  
+
   //Redirect
-  $redirect = strtolower(prompt("Create a Redirect Login for the Role 'PROCESSMAKER_$classNameUpperCase' [y/N]"));
-  if( $redirect == 'y' ) {
-    $fields['redirectLogin'][] = array (
-      'className' => $classNameUpperCase 
-    );
+  if ($swRole == 1) {
+    $redirect = strtolower(prompt("Create a Redirect Login for the Role 'PROCESSMAKER_$classNameUpperCase' [y/N]"));
+    if( $redirect == 'y' ) {
+      $fields['redirectLogin'][] = array (
+        'className' => $classNameUpperCase
+      );
+    }
   }
-  
-  $externalStep = strtolower(prompt('Create external step for Processmaker[y/N]'));
+
+  $externalStep = strtolower(prompt('Create external step for Processmaker [y/N]'));
   if( $externalStep == 'y' ) {
     $fields['externalStep'][] = array (
-      'className' => $pluginName, 
-      'GUID' => G::generateUniqueID() 
+      'className' => $pluginName,
+      'GUID' => G::generateUniqueID()
     );
-    savePluginFile($pluginName . PATH_SEP . 'step' . $pluginName . '.php', 'pluginStep', $pluginName, $pluginName);
+
+    savePluginFile($pluginName . PATH_SEP . "step" . $pluginName . "Application.php",     "pluginStepApplication.php",     $pluginName, $pluginName);
+    savePluginFile($pluginName . PATH_SEP . "step" . $pluginName . "Application.html",    "pluginStepApplication.html",    $pluginName, $pluginName);
+    savePluginFile($pluginName . PATH_SEP . "step" . $pluginName . "Application.js",      "pluginStepApplication.js",      $pluginName, $pluginName);
+    savePluginFile($pluginName . PATH_SEP . "step" . $pluginName . "ApplicationAjax.php", "pluginStepApplicationAjax.php", $pluginName, $pluginName);
   }
-  
-  $onTransit = strtolower(prompt('Create an "On transit Page" [y/N]'));
-  if( $onTransit == 'y' ) {
-    $fields['ontransit'][] = array (
-      'className' => $pluginName 
-    );
-    savePluginFile($pluginName . PATH_SEP . 'menu' . $pluginName . 'OnTransit.php', 'pluginMenuOnTransit', $pluginName, $pluginName, $fields);
-    savePluginFile($pluginName . PATH_SEP . $pluginName . 'OnTransitList.php', 'pluginOnTransitList.php', $pluginName, $pluginName);
-    savePluginFile($pluginName . PATH_SEP . $pluginName . 'OnTransitList.xml', 'pluginOnTransitList.xml', $pluginName, $pluginName);
-    copyPluginFile('pluginPaged-table.html', 'paged-table.html', $pluginName);
-  }
-  
-  $dashboard = strtolower(prompt('Create an element for the Processmaker Dashboard [y/N]'));
-  if( $dashboard == 'y' ) {
-    $fields['dashboard'][] = array (
-      'className' => $pluginName 
-    );
-    savePluginFile($pluginName . PATH_SEP . 'drawChart.php', 'pluginDrawChart.php', $pluginName, $pluginName, $fields);
-  }
-  
-  $report = strtolower(prompt('Create a Report for Processmaker [y/N]'));
-  if( $report == 'y' ) {
-    $fields['report'][] = array (
-      'className' => $pluginName 
-    );
-    savePluginFile($pluginName . PATH_SEP . 'report.xml', 'pluginReport.xml', $pluginName, $pluginName, $fields);
-  }
-  
+
+  //$dashboard = strtolower(prompt('Create an element for the Processmaker Dashboard [y/N]'));
+  //if( $dashboard == 'y' ) {
+  //  $fields['dashboard'][] = array (
+  //    'className' => $pluginName
+  //  );
+  //  savePluginFile($pluginName . PATH_SEP . 'drawChart.php', 'pluginDrawChart.php', $pluginName, $pluginName, $fields);
+  //}
+
+  //$report = strtolower(prompt('Create a Report for Processmaker [y/N]'));
+  //if( $report == 'y' ) {
+  //  $fields['report'][] = array (
+  //    'className' => $pluginName
+  //  );
+  //  savePluginFile($pluginName . PATH_SEP . 'report.xml', 'pluginReport.xml', $pluginName, $pluginName, $fields);
+  //}
+
   $report = strtolower(prompt('Create a PmFunction Class for extend Processmaker [y/N]'));
   if( $report == 'y' ) {
     $fields['PmFunction'][] = array (
-      'className' => $pluginName 
+      'className' => $pluginName
     );
     savePluginFile($pluginName . PATH_SEP . 'classes' . PATH_SEP . 'class.pmFunctions.php', 'class.pmFunctions.php', $pluginName, $pluginName, $fields);
   }
-  
+
   //main php file
   savePluginFile($pluginName . '.php', 'pluginMainFile', $pluginName, $pluginName, $fields);
   savePluginFile($pluginName . PATH_SEP . 'class.' . $pluginName . '.php', 'pluginClass', $pluginName, $pluginName, $fields);
-  
+
   if( ! PHP_OS == "WINNT" ) {
     printf("creating symlinks %s \n", pakeColor::colorize($pluginDirectory, 'INFO'));
     symlink($pluginOutDirectory . PATH_SEP . $pluginName . '.php', PATH_PLUGINS . $pluginName . '.php');
     symlink($pluginOutDirectory . PATH_SEP . $pluginName, $pluginDirectory);
   }
-  
+
   exit(0);
 }
 
 function run_create_poedit_file($task, $args) {
   // the environment for poedit always is Development
   define('G_ENVIRONMENT', G_DEV_ENV);
-  
+
   //the output language .po file
   $lgOutId = isset($args[0]) ? $args[0] : 'en';
   $countryOutId = isset($args[1]) ? strtoupper($args[1]) : 'US';
   $verboseFlag = isset($args[2]) ? $args[2] == true : false;
-  
+
   require_once ("propel/Propel.php");
   require_once ("classes/model/Translation.php");
   require_once ("classes/model/Language.php");
   require_once ("classes/model/IsoCountry.php");
-  
+
   Propel::init(PATH_CORE . "config/databases.php");
   $configuration = Propel::getConfiguration();
   $connectionDSN = $configuration['datasources']['propel']['connection'];
   printf("using DSN Connection %s \n", pakeColor::colorize($connectionDSN, 'INFO'));
-  
+
   printf("checking Language table \n");
   $c = new Criteria();
   $c->add(LanguagePeer::LAN_ENABLED, "1");
   $c->addor(LanguagePeer::LAN_ENABLED, "0");
-  
+
   $languages = LanguagePeer::doSelect($c);
   $langs = array ();
   $lgIndex = 0;
@@ -735,11 +767,11 @@ function run_create_poedit_file($task, $args) {
     }
   }
   printf("read %s entries from language table\n", pakeColor::colorize($lgIndex, 'INFO'));
-  
+
   printf("checking iso_country table \n");
   $c = new Criteria();
   $c->add(IsoCountryPeer::IC_UID, NULL, Criteria::ISNOTNULL);
-  
+
   $countries = IsoCountryPeer::doSelect($c);
   $countryIndex = 0;
   $findCountry = false;
@@ -754,28 +786,28 @@ function run_create_poedit_file($task, $args) {
     }
   }
   printf("read %s entries from iso_country table\n", pakeColor::colorize($countryIndex, 'INFO'));
-  
+
   if( $findLang == false && $lgOutId != '' ) {
     printf("%s \n", pakeColor::colorize("'$lgOutId' is not a valid language ", 'ERROR'));
     die();
   } else {
     printf("language: %s\n", pakeColor::colorize($langDir, 'INFO'));
   }
-  
+
   if( $findCountry == false && $countryOutId != '' ) {
     printf("%s \n", pakeColor::colorize("'$countryOutId' is not a valid country ", 'ERROR'));
     die();
   } else {
     printf("country: [%s] %s\n", pakeColor::colorize($countryId, 'INFO'), pakeColor::colorize($countryDir, 'INFO'));
   }
-  
+
   if( $findCountry && $countryId != '' )
     $poeditOutFile = PATH_CORE . 'content' . PATH_SEP . 'translations' . PATH_SEP . $langDir . PATH_SEP . MAIN_POFILE . '.' . $langId . '_' . $countryId . '.po';
   else
     $poeditOutFile = PATH_CORE . 'content' . PATH_SEP . 'translations' . PATH_SEP . $langDir . PATH_SEP . MAIN_POFILE . '.' . $langId . '.po';
-  
+
   printf("poedit file: %s\n", pakeColor::colorize($poeditOutFile, 'INFO'));
-  
+
   $poeditOutPathInfo = pathinfo($poeditOutFile);
   G::verifyPath($poeditOutPathInfo['dirname'], true);
   $lf = "\n";
@@ -793,17 +825,17 @@ function run_create_poedit_file($task, $args) {
   fprintf($fp, "\"X-Poedit-Language: %s\\n\"\n", ucwords($langDir));
   fprintf($fp, "\"X-Poedit-Country: %s\\n\"\n", $countryDir);
   fprintf($fp, "\"X-Poedit-SourceCharset: utf-8\\n\"\n");
-  
+
   printf("checking translation table\n");
-  
+
   $c = new Criteria();
   $c->add(TranslationPeer::TRN_LANG, "en");
-  
+
   $translation = TranslationPeer::doSelect($c);
   $trIndex = 0;
   $trError = 0;
   $langIdOut = $langId; //the output language, later we'll include the country too.
-  
+
 
   $arrayLabels = array ();
   foreach( $translation as $rowid => $row ) {
@@ -818,7 +850,7 @@ function run_create_poedit_file($task, $args) {
       } else {
         $msgStr = $trans->getTrnValue();
       }
-      
+
       $msgid = $row->getTrnValue();
       if( in_array($msgid, $arrayLabels) ) {
         $newMsgid = '[' . $row->getTrnCategory() . '/' . $row->getTrnId() . '] ' . $msgid;
@@ -826,10 +858,10 @@ function run_create_poedit_file($task, $args) {
         $trError ++;
         $msgid = $newMsgid;
       }
-      
+
       $arrayLabels[] = $msgid;
       sort($arrayLabels);
-      
+
       $trIndex ++;
       fprintf($fp, "\n");
       fprintf($fp, "#: %s \n", $keyid);
@@ -839,30 +871,30 @@ function run_create_poedit_file($task, $args) {
       fprintf($fp, "msgstr \"%s\" \n", strip_quotes($msgStr));
     }
   }
-  
+
   printf("checking xmlform\n");
   printf("using directory %s \n", pakeColor::colorize(PATH_XMLFORM, 'INFO'));
-  
+
   G::LoadThirdParty('pear/json', 'class.json');
   G::LoadThirdParty('smarty/libs', 'Smarty.class');
   G::LoadSystem('xmlDocument');
   G::LoadSystem('xmlform');
   G::LoadSystem('xmlformExtension');
   G::LoadSystem('form');
-  
+
   $langIdOut = $langId; //the output language, later we'll include the country too.
   $exceptionFields = array (
-    'javascript', 
-    'hidden', 
-    'phpvariable', 
-    'private', 
-    'toolbar', 
-    'xmlmenu', 
-    'toolbutton', 
-    'cellmark', 
-    'grid' 
+    'javascript',
+    'hidden',
+    'phpvariable',
+    'private',
+    'toolbar',
+    'xmlmenu',
+    'toolbutton',
+    'cellmark',
+    'grid'
   );
-  
+
   $xmlfiles = pakeFinder::type('file')->name('*.xml')->in(PATH_XMLFORM);
   $xmlIndex = 0;
   $xmlError = 0;
@@ -871,7 +903,7 @@ function run_create_poedit_file($task, $args) {
   foreach( $xmlfiles as $xmlfileComplete ) {
     $xmlIndex ++;
     $xmlfile = str_replace(PATH_XMLFORM, '', $xmlfileComplete);
-    
+
     //english version of dynaform
     $form = new Form($xmlfile, '', 'en');
     $englishLabel = array ();
@@ -882,7 +914,7 @@ function run_create_poedit_file($task, $args) {
     unset($form->fields);
     unset($form->tree);
     unset($form);
-    
+
     //in this second pass, we are getting the target language labels
     $form = new Form($xmlfile, '', $langIdOut);
     $fieldsIndex = 0;
@@ -903,10 +935,10 @@ function run_create_poedit_file($task, $args) {
           $xmlError ++;
           $msgid = $newMsgid;
         }
-        
+
         $arrayLabels[] = $msgid;
         sort($arrayLabels);
-        
+
         $comment1 = $xmlfile;
         $comment2 = $node->type . ' - ' . $node->name;
         fprintf($fp, "\n");
@@ -919,7 +951,7 @@ function run_create_poedit_file($task, $args) {
         //fprintf ( $fp, "msgstr \"%s\" \n",  strip_quotes( utf8_encode( trim($node->label) ) ));
         $fieldsIndex ++;
         $fieldsIndexTotal ++;
-      } 
+      }
 
       else {
         if( is_object($node) && ! in_array($node->type, $exceptionFields) ) {
@@ -943,27 +975,27 @@ function run_create_poedit_file($task, $args) {
     printf("xmlform: %s has %s fields and %s exceptions \n", pakeColor::colorize($xmlfile, 'INFO'), pakeColor::colorize($fieldsIndex, 'INFO'), pakeColor::colorize($exceptIndex, 'INFO'));
     $exceptIndexTotal += $exceptIndex;
   }
-  
+
   fclose($fp);
   printf("added %s entries from translation table\n", pakeColor::colorize($trIndex, 'INFO'));
   printf("added %s entries from %s xmlforms  \n", pakeColor::colorize($fieldsIndexTotal, 'INFO'), pakeColor::colorize($xmlIndex, 'INFO'));
-  
+
   if( $trError > 0 ) {
     printf("there are %s errors in tranlation table\n", pakeColor::colorize($trError, 'ERROR'));
   }
   if( $xmlError > 0 ) {
     printf("there are %s errors and %s exceptions in xmlforms\n", pakeColor::colorize($xmlError, 'ERROR'), pakeColor::colorize($exceptIndexTotal, 'ERROR'));
   }
-  
+
   exit(0);
-  
+
 //to do: leer los html templates
 }
 
 function create_file_from_tpl($tplName, $newFilename, $fields = NULL) {
   global $pathHome;
   global $projectName;
-  
+
   $httpdTpl = PATH_GULLIVER_HOME . 'bin' . PATH_SEP . 'tasks' . PATH_SEP . 'templates' . PATH_SEP . $tplName . '.tpl';
   if( substr($newFilename, 0, 1) == PATH_SEP )
     $httpFilename = $newFilename;
@@ -976,7 +1008,7 @@ function create_file_from_tpl($tplName, $newFilename, $fields = NULL) {
   $template->assignGlobal('rbacProjectName', strtoupper($projectName));
   $template->assignGlobal('siglaProjectName', substr(strtoupper($projectName), 0, 3));
   $template->assignGlobal('propel.output.dir', '{propel.output.dir}');
-  
+
   if( is_array($fields) ) {
     foreach( $fields as $block => $data ) {
       $template->gotoBlock("_ROOT");
@@ -1001,7 +1033,7 @@ function create_file_from_tpl($tplName, $newFilename, $fields = NULL) {
         $template->assign($block, $data);
     }
   }
-  
+
   $content = $template->getOutputContent();
   $iSize = file_put_contents($httpFilename, $content);
   printf("saved %s bytes in file %s \n", pakeColor::colorize($iSize, 'INFO'), pakeColor::colorize($tplName, 'INFO'));
@@ -1039,15 +1071,15 @@ function run_new_project($task, $args) {
   $createProject = strtolower(prompt("Do you want to create the project '$projectName' ? [Y/n]"));
   if( $createProject == 'n' )
     die();
-  
+
   G::LoadSystem('templatePower');
   define('PATH_SHARED', PATH_SEP . 'shared' . PATH_SEP . $projectName . '_data' . PATH_SEP);
   $pathHome = PATH_TRUNK . $projectName;
   printf("creating project %s in %s\n", pakeColor::colorize($projectName, 'INFO'), pakeColor::colorize($pathHome, 'INFO'));
-  
+
   define('G_ENVIRONMENT', G_DEV_ENV);
   require_once ("propel/Propel.php");
-  
+
   //create project.conf for httpd conf
   //$dbFile = PATH_TRUNK . $projectName . PATH_SEP . 'shared' . PATH_SEP . 'sites'. PATH_SEP . 'dev'. PATH_SEP . 'db.php';
   $dbFile = PATH_SEP . PATH_SHARED . 'sites' . PATH_SEP . $projectName . PATH_SEP . 'db.php';
@@ -1095,38 +1127,38 @@ function run_new_project($task, $args) {
     printf("executing %s \n", pakeColor::colorize($rbSql, 'INFO'));
     mysql_select_db($dbrn, $connectionDatabase);
     $qrs = query_sql_file($rbSql, $connectionDatabase);
-    
+
     $q = "INSERT INTO `USERS` VALUES ('00000000000000000000000000000001','admin',md5('admin'),'Administrator','','admin@colosa.com','2020-01-01','2007-08-03 12:24:36','2008-02-13 07:24:07',1);";
     $ac = @mysql_query($q, $connectionDatabase);
     $q = "INSERT INTO `USERS` VALUES ('00000000000000000000000000000002','operator',md5('operator'),'Operator','','operator@colosa.com','2020-01-01','2007-08-03 12:24:36','2008-02-13 07:24:07',1);";
     $ac = @mysql_query($q, $connectionDatabase);
-    
+
     //database wf_  db_
     $dbInsertSql = PATH_GULLIVER_HOME . 'bin' . PATH_SEP . 'tasks' . PATH_SEP . 'templates' . PATH_SEP . 'db_insert.sql';
     printf("executing %s \n", pakeColor::colorize($dbInsertSql, 'INFO'));
     mysql_select_db($dbn, $connectionDatabase);
     $qrs = query_sql_file($dbInsertSql, $connectionDatabase);
-    
+
     G::mk_dir(PATH_SHARED . 'sites' . PATH_SEP);
     G::mk_dir(PATH_SHARED . 'sites' . PATH_SEP . $projectName);
-    
+
     $dbFields['rootUser'] = $dbn;
     $dbFields['rootPass'] = $dbnpass;
     create_file_from_tpl('db.php', $dbFile, $dbFields);
   }
-  
+
   global $G_ENVIRONMENTS;
   $G_ENVIRONMENTS['DEVELOPMENT']['dbfile'] = $dbFile;
   //print_r ( $G_ENVIRONMENTS );
-  
+
 
   Propel::init(PATH_CORE . "config/databases.php");
   $configuration = Propel::getConfiguration();
   $connectionDSN = $configuration['datasources']['workflow']['connection'];
   printf("using DSN Connection %s \n", pakeColor::colorize($connectionDSN, 'INFO'));
-  
+
   $rbacProjectName = strtoupper($projectName);
-  
+
   G::LoadSystem('rbac');
   $RBAC = RBAC::getSingleton();
   $RBAC->sSystem = $rbacProjectName;
@@ -1144,7 +1176,7 @@ function run_new_project($task, $args) {
   $roleData['ROL_UPDATE_DATE'] = date('Y-m-d H:i:s');
   $roleData['ROL_STATUS'] = '1';
   $RBAC->createRole($roleData);
-  
+
   $roleData['ROL_UID'] = G::GenerateUniqueId();
   $roleData['ROL_PARENT'] = '';
   $roleData['ROL_SYSTEM'] = $systemData['SYS_UID'];
@@ -1154,7 +1186,7 @@ function run_new_project($task, $args) {
   $roleData['ROL_STATUS'] = '1';
   $RBAC->createRole($roleData);
   $roleData = $RBAC->rolesObj->LoadByCode(substr($rbacProjectName, 0, 3) . '_ADMIN');
-  
+
   //Assign permissions to ADMIN
   $roleData = $RBAC->rolesObj->LoadByCode(substr($rbacProjectName, 0, 3) . '_ADMIN');
   $permData = $RBAC->permissionsObj->LoadByCode(substr($rbacProjectName, 0, 3) . '_LOGIN');
@@ -1164,18 +1196,18 @@ function run_new_project($task, $args) {
   $userRoleData['ROL_UID'] = $roleData['ROL_UID'];
   $userRoleData['USR_UID'] = '00000000000000000000000000000001';
   $RBAC->assignUserToRole($userRoleData);
-  
+
   //Assign permissions to OPERATOR
   $roleData = $RBAC->rolesObj->LoadByCode(substr($rbacProjectName, 0, 3) . '_OPERATOR');
   $permData = $RBAC->permissionsObj->LoadByCode(substr($rbacProjectName, 0, 3) . '_LOGIN');
   $RBAC->assignPermissionToRole($roleData['ROL_UID'], $permData['PER_UID']);
   $permData = $RBAC->permissionsObj->LoadByCode(substr($rbacProjectName, 0, 3) . '_OPERATOR');
   $RBAC->assignPermissionToRole($roleData['ROL_UID'], $permData['PER_UID']);
-  
+
   $userRoleData['ROL_UID'] = $roleData['ROL_UID'];
   $userRoleData['USR_UID'] = '00000000000000000000000000000002';
   $RBAC->assignUserToRole($userRoleData);
-  
+
   //create folder and structure
   G::mk_dir($pathHome);
   G::mk_dir($pathHome . PATH_SEP . 'public_html');
@@ -1210,7 +1242,7 @@ function run_new_project($task, $args) {
   G::mk_dir($pathHome . PATH_SEP . 'engine' . PATH_SEP . 'xmlform' . PATH_SEP . 'login');
   G::mk_dir($pathHome . PATH_SEP . 'engine' . PATH_SEP . 'xmlform' . PATH_SEP . 'gulliver');
   G::mk_dir($pathHome . PATH_SEP . 'engine' . PATH_SEP . 'xmlform' . PATH_SEP . 'users');
-  
+
   //create project.conf for httpd conf
   create_file_from_tpl('httpd.conf', $projectName . '.conf');
   create_file_from_tpl('sysGeneric.php', 'public_html' . PATH_SEP . 'sysGeneric.php');
@@ -1223,7 +1255,7 @@ function run_new_project($task, $args) {
   $fields['dbName'] = 'mysql';
   create_file_from_tpl('propel.ini', 'engine' . PATH_SEP . 'config' . PATH_SEP . 'propel.ini', $fields);
   create_file_from_tpl('propel.ini', 'engine' . PATH_SEP . 'config' . PATH_SEP . 'propel.mysql.ini', $fields);
-  
+
   if( file_exists($pathHome . PATH_SEP . 'engine' . PATH_SEP . 'config' . PATH_SEP . 'schema.xml') ) {
     $createSchema = strtolower(prompt("schema.xml exists!. Do you want to overwrite the schema.xml file? [y/N]"));
     if( $createSchema == 'y' ) {
@@ -1231,7 +1263,7 @@ function run_new_project($task, $args) {
     }
   } else
     create_file_from_tpl('schema.xml', 'engine' . PATH_SEP . 'config' . PATH_SEP . 'schema.xml');
-  
+
   create_file_from_tpl('sysLogin.php', 'engine' . PATH_SEP . 'methods' . PATH_SEP . 'login' . PATH_SEP . 'sysLogin.php');
   create_file_from_tpl('login.php', 'engine' . PATH_SEP . 'methods' . PATH_SEP . 'login' . PATH_SEP . 'login.php');
   create_file_from_tpl('authentication.php', 'engine' . PATH_SEP . 'methods' . PATH_SEP . 'login' . PATH_SEP . 'authentication.php');
@@ -1265,7 +1297,7 @@ function run_new_project($task, $args) {
   copy_file('public_html' . PATH_SEP . 'images' . PATH_SEP . 'bulletSubMenu.jpg');
   copy_file('public_html' . PATH_SEP . 'images' . PATH_SEP . 'users.png');
   copy_file('public_html' . PATH_SEP . 'images' . PATH_SEP . 'trigger.gif');
-  
+
   copy_file('engine' . PATH_SEP . 'skins' . PATH_SEP . 'green.html');
   copy_file('engine' . PATH_SEP . 'skins' . PATH_SEP . 'green.php');
   copy_file('engine' . PATH_SEP . 'skins' . PATH_SEP . 'blank.html');
@@ -1303,7 +1335,7 @@ function run_new_project($task, $args) {
   copy_file('engine' . PATH_SEP . 'templates' . PATH_SEP . 'filterform.html');
   copy_file('engine' . PATH_SEP . 'templates' . PATH_SEP . 'tree.html');
   copy_file('engine' . PATH_SEP . 'templates' . PATH_SEP . 'dummyTemplate.html');
-  
+
   $filePng = $pathHome . PATH_SEP . 'public_html' . PATH_SEP . 'images' . PATH_SEP . 'processmaker.logo.jpg';
   createPngLogo($filePng, $projectName);
   if( ! PHP_OS == "WINNT" ) {
@@ -1311,7 +1343,7 @@ function run_new_project($task, $args) {
     symlink(PATH_GULLIVER_HOME . 'bin' . PATH_SEP . 'gulliver', $pathHome . PATH_SEP . 'engine' . PATH_SEP . 'gulliver');
   }
   //create schema.xml with empty databases
-  
+
 
   exit(0);
 }
@@ -1342,12 +1374,12 @@ function fieldToLabelOption($field) {
 function run_propel_build_crud($task, $args) {
   ini_set('display_errors', 'on');
   ini_set('error_reporting', E_ERROR);
-  
+
   // the environment for poedit always is Development
   define('G_ENVIRONMENT', G_DEV_ENV);
-  
+
   printf("Arguments: %s\n", pakeColor::colorize('./gulliver propel-build-crud <class-name> <table-name> <plugin-name> ', 'INFO'));
-  
+
   //the class filename in the first argument
   if( ! isset($args[0]) ) {
     printf("Error: %s\n", pakeColor::colorize('you must specify a valid classname ', 'ERROR'));
@@ -1356,7 +1388,7 @@ function run_propel_build_crud($task, $args) {
   $class = $args[0];
   $phpClass = $class;
   $phpClass[0] = strtolower($phpClass[0]);
-  
+
   $tableName = $class[0];
   for( $i = 1; $i < strlen($class); $i ++ ) {
     if( $class[$i] >= 'a' )
@@ -1364,25 +1396,25 @@ function run_propel_build_crud($task, $args) {
     else
       $tableName .= "_" . $class[$i];
   }
-  
+
   //second parameter is the table name, by default is the same classname in uppercase.
   if( isset($args[1]) )
     $tableName = $args[1];
-  
+
   $pluginName = '';
   if( isset($args[2]) )
     $pluginName = $args[2];
-    
+
   //try to find the class in classes directory
   $classFilename = PATH_CORE . 'classes' . PATH_SEP . 'model' . PATH_SEP . $args[0] . '.php';
-  
+
   //try to find in the plugis directory, assuming there are a class in the plugin
   if( $pluginName != '' ) {
     $classFilename = PATH_PLUGINS . $pluginName . PATH_SEP . 'classes' . PATH_SEP . 'model' . PATH_SEP . $args[0] . '.php';
     set_include_path(PATH_PLUGINS . $pluginName . PATH_SEPARATOR . get_include_path());
     printf("using plugin : %s\n", pakeColor::colorize($pluginName, 'ERROR'));
   }
-  
+
   if( file_exists($classFilename) )
     printf("class found in %s \n", pakeColor::colorize($classFilename, 'INFO'));
   else {
@@ -1390,29 +1422,29 @@ function run_propel_build_crud($task, $args) {
     exit(0);
   }
   printf("TableName : %s \n", pakeColor::colorize($tableName, 'INFO'));
-  
+
   require_once ("propel/Propel.php");
   require_once ($classFilename);
   G::LoadSystem('templatePower');
-  
+
   global $G_ENVIRONMENTS;
   $aux = explode(PATH_SEP, PATH_HOME);
   $projectName = $aux[count($aux) - 2];
   define('PATH_SHARED', PATH_SEP . 'shared' . PATH_SEP . $projectName . '_data' . PATH_SEP);
-  
+
   $dbFile = PATH_SHARED . 'sites' . PATH_SEP . $projectName . PATH_SEP . 'db.php';
   if( ! file_exists($dbFile) ) {
     $dbFile = PATH_GULLIVER_HOME . 'bin' . PATH_SEP . 'tasks' . PATH_SEP . 'templates' . PATH_SEP . 'db.php.tpl';
   }
   printf("searching db file in : %s \n", pakeColor::colorize($dbFile, 'INFO'));
-  
+
   $G_ENVIRONMENTS['DEVELOPMENT']['dbfile'] = $dbFile;
   Propel::init(PATH_CORE . "config/databases.php");
-  
+
   $configuration = Propel::getConfiguration();
   $connectionDSN = $configuration['datasources']['workflow']['connection'];
   printf("using DSN Connection %s \n", pakeColor::colorize($connectionDSN, 'INFO'));
-  
+
   if( $pluginName != '' ) {
     $xmlformPath = PATH_PLUGINS . $pluginName . PATH_SEP;
     $methodsPath = PATH_PLUGINS . $pluginName . PATH_SEP . $phpClass . PATH_SEP;
@@ -1424,12 +1456,12 @@ function run_propel_build_crud($task, $args) {
   }
   G::mk_dir($xmlformPath);
   G::mk_dir($methodsPath);
-  
+
   $fields['className'] = $class;
   $fields['phpClassName'] = $phpClass;
   $fields['tableName'] = $tableName;
   $fields['projectName'] = $projectName;
-  
+
   //1. MENU
   if( $pluginName == '' ) {
     create_file_from_tpl('pluginMenu', PATH_CORE . 'menus' . PATH_SEP . $phpClass . ".php", $fields);
@@ -1437,7 +1469,7 @@ function run_propel_build_crud($task, $args) {
   //else {
   //  create_file_from_tpl ( 'pluginMenu',  $corePath. $phpClass. ".php", $fields );
   //}
-  
+
 
   //2. si existe menu welcome, aqade la opcion
   if( $pluginName == '' ) {
@@ -1447,24 +1479,24 @@ function run_propel_build_crud($task, $args) {
       fclose($fp);
     }
     $content = file_get_contents(PATH_CORE . 'menus' . PATH_SEP . "welcome.php");
-    
+
     if( strpos($content, $phpClass . ".php") == false ) {
       $fp = fopen(PATH_CORE . 'menus' . PATH_SEP . "welcome.php", "a");
       fwrite($fp, "  require_once ( '" . $phpClass . ".php' );\n");
       fclose($fp);
     }
   }
-  
+
   //parse the schema file in order to get Table definition
   $schemaFile = PATH_CORE . 'config' . PATH_SEP . 'schema.xml';
   if( $pluginName != '' )
     $schemaFile = PATH_PLUGINS . $pluginName . PATH_SEP . 'config' . PATH_SEP . 'schema.xml';
-  
+
   printf("using schemaFile %s \n", pakeColor::colorize($schemaFile, 'INFO'));
-  
+
   $xmlContent = file_get_contents($schemaFile);
   $s = simplexml_load_file($schemaFile);
-  
+
   //default xmlform
   //load the $fields array with fields data for an xmlform.
   $fields = array ();
@@ -1492,8 +1524,8 @@ function run_propel_build_crud($task, $args) {
           $type = 'dropdown';
           foreach( $valuesOpt as $key => $val ) {
             $values[] = array (
-              'value' => $val, 
-              'label' => fieldToLabelOption($val) 
+              'value' => $val,
+              'label' => fieldToLabelOption($val)
             );
           }
         } else {
@@ -1514,13 +1546,13 @@ function run_propel_build_crud($task, $args) {
           $label = fieldToLabel($column['name']);
         }
         $field = array (
-          'name' => $column['name'], 
-          'className' => $class, 
-          'type' => $type, 
-          'size' => $size, 
-          'maxlength' => $maxlength, 
-          'label' => $label, 
-          'values' => $values 
+          'name' => $column['name'],
+          'className' => $class,
+          'type' => $type,
+          'size' => $size,
+          'maxlength' => $maxlength,
+          'label' => $label,
+          'values' => $values
         );
         $fields['fields'][] = $field;
         if( ! $column['primaryKey'] ) {
@@ -1534,11 +1566,11 @@ function run_propel_build_crud($task, $args) {
   $fields['phpClassName'] = $phpClass;
   $fields['projectName'] = $projectName;
   $fields['firstKey'] = $fields['keys'][0]['name'];
-  
+
   $fields['phpFolderName'] = $phpClass;
   if( $pluginName != '' ) {
     $fields['plugin'][] = array (
-      'pluginName' => $pluginName 
+      'pluginName' => $pluginName
     );
     $fields['phpFolderName'] = $pluginName;
   }
@@ -1546,7 +1578,7 @@ function run_propel_build_crud($task, $args) {
   create_file_from_tpl('pluginXmlformEdit', $xmlformPath . $phpClass . "Edit.xml", $fields);
   create_file_from_tpl('pluginXmlformDelete', $xmlformPath . $phpClass . "Delete.xml", $fields);
   create_file_from_tpl('pluginList', $methodsPath . $phpClass . "List.php", $fields);
-  
+
   //xmlform for list
   //load the $fields array with fields data for PagedTable xml.
   $fields = array ();
@@ -1565,19 +1597,19 @@ function run_propel_build_crud($task, $args) {
             $primaryKey .= '@!' . $column['name'];
           else
             $primaryKey .= '|@!' . $column['name'];
-          
+
           if( isset($column['label']) ) {
             $label = $column['label'];
           } else {
             $label = fieldToLabel($column['name']);
           }
         }
-        
+
         $field = array (
-          'name' => $column['name'], 
-          'type' => $type, 
-          'size' => $size, 
-          'label' => $label 
+          'name' => $column['name'],
+          'type' => $type,
+          'size' => $size,
+          'label' => $label
         );
         $fields['fields'][] = $field;
         if( ! $column['primaryKey'] ) {
@@ -1599,7 +1631,7 @@ function run_propel_build_crud($task, $args) {
   $fields['tableName'] = $tableName;
   create_file_from_tpl('pluginXmlformList', $xmlformPath . $phpClass . "List.xml", $fields);
   create_file_from_tpl('pluginXmlformOptions', $xmlformPath . $phpClass . "Options.xml", $fields);
-  
+
   //default edit
   $fields = array ();
   $index = 0;
@@ -1610,9 +1642,9 @@ function run_propel_build_crud($task, $args) {
         $name = $column['name'];
         $phpName = convertPhpName($name);
         $field = array (
-          'name' => $name, 
-          'phpName' => $phpName, 
-          'index' => $index ++ 
+          'name' => $name,
+          'phpName' => $phpName,
+          'index' => $index ++
         );
         if( $column['primaryKey'] ) {
           if( $keylist == '' )
@@ -1636,7 +1668,7 @@ function run_propel_build_crud($task, $args) {
   $fields['projectName'] = $projectName;
   if( $pluginName != '' ) {
     $fields['plugin'][] = array (
-      'pluginName' => $pluginName 
+      'pluginName' => $pluginName
     );
     $fields['phpFolderName'] = $pluginName;
   }
@@ -1647,7 +1679,7 @@ function run_propel_build_crud($task, $args) {
   create_file_from_tpl('pluginNew', $methodsPath . $phpClass . "New.php", $fields);
   create_file_from_tpl('pluginDelete', $methodsPath . $phpClass . "Delete.php", $fields);
   create_file_from_tpl('pluginDeleteExec', $methodsPath . $phpClass . "DeleteExec.php", $fields);
-  
+
   exit(0);
 }
 
@@ -1722,7 +1754,7 @@ function getSysInfo() {
   $distro .= " (" . PHP_OS . ")";
 
   $Fields = array();
-  
+
   $Fields['SYSTEM'] = $distro;
   $Fields['PHP'] = phpversion();
   $Fields['PM_VERSION'] = PM_VERSION;
@@ -1742,13 +1774,13 @@ function get_infoOnPM($workspace) {
   $Fields = getSysInfo();
 
   $Fields['WORKSPACE_NAME'] = $workspace;
-  
+
   if( defined("DB_HOST") ) {
     G::LoadClass('net');
     G::LoadClass('dbConnections');
     $dbNetView = new NET(DB_HOST);
     $dbNetView->loginDbServer(DB_USER, DB_PASS);
-    
+
     $dbConns = new dbConnections('');
     $availdb = '';
     foreach( $dbConns->getDbServicesAvailables() as $key => $val ) {
@@ -1772,9 +1804,9 @@ function get_infoOnPM($workspace) {
     $Fields['DATABASE_NAME'] = "Not defined";
     $Fields['AVAILABLE_DB'] = "Not defined";
   }
-  
+
   $info_db = get_DirDB($workspace);
-  
+
   $Fields['MYSQL_DATA_DIR'] = $info_db['datadir'];
   $Fields['PLUGINS_LIST'] = get_plugins();
   $Fields['DB_ADAPTER'] = $info_db['DB_ADAPTER'];
@@ -1790,9 +1822,9 @@ function get_infoOnPM($workspace) {
   $Fields['DB_REPORT_NAME'] = $info_db['DB_REPORT_NAME'];
   $Fields['DB_REPORT_USER'] = $info_db['DB_REPORT_USER'];
   $Fields['DB_REPORT_PASS'] = $info_db['DB_REPORT_PASS'];
-  
+
   $infoPM = $Fields;
-  
+
   return $infoPM;
 
 }
@@ -1800,22 +1832,22 @@ function get_infoOnPM($workspace) {
 function printMetadata($fields) {
   printf("%20s %s \n", 'Workspace Name', pakeColor::colorize($fields['WORKSPACE_NAME'], 'INFO'));
   printf("%20s %s \n", 'System', pakeColor::colorize($fields['SYSTEM'], 'INFO'));
-  
+
   printf("%20s %s \n", 'ProcessMaker Version', pakeColor::colorize($fields['PM_VERSION'], 'INFO'));
   printf("%20s %s \n", 'PHP Version', pakeColor::colorize($fields['PHP'], 'INFO'));
   printf("%20s %s \n", 'Server Address', pakeColor::colorize($fields['SERVER_ADDR'], 'INFO'));
   printf("%20s %s \n", 'Client IP Address', pakeColor::colorize($fields['IP'], 'INFO'));
-  
+
   printf("%20s %s \n", 'MySql Version', pakeColor::colorize($fields['DATABASE'], 'INFO'));
   printf("%20s %s \n", 'MySql Data Directory', pakeColor::colorize($fields['MYSQL_DATA_DIR'], 'INFO'));
   printf("%20s %s \n", 'Available Databases', pakeColor::colorize($fields['AVAILABLE_DB'], 'INFO'));
-  
+
   printf("%20s %s \n", 'Plugins', pakeColor::colorize('', 'INFO'));
-  
+
   foreach( $fields['PLUGINS_LIST'] as $k => $v ) {
     printf("%20s %s \n", ' -', pakeColor::colorize($v, 'INFO'));
   }
-  
+
   $wfDsn = $fields['DB_ADAPTER'] . '://' . $fields['DB_USER'] . ':' . $fields['DB_PASS'] . '@' . $fields['DB_HOST'] . '/' . $fields['DB_NAME'];
   $rbDsn = $fields['DB_ADAPTER'] . '://' . $fields['DB_RBAC_USER'] . ':' . $fields['DB_RBAC_PASS'] . '@' . $fields['DB_RBAC_HOST'] . '/' . $fields['DB_RBAC_NAME'];
   $rpDsn = $fields['DB_ADAPTER'] . '://' . $fields['DB_REPORT_USER'] . ':' . $fields['DB_REPORT_PASS'] . '@' . $fields['DB_REPORT_HOST'] . '/' . $fields['DB_REPORT_NAME'];
@@ -1827,7 +1859,7 @@ function printMetadata($fields) {
 function get_plugins() {
   $dir = PATH_PLUGINS;
   $filesArray = array ();
-  
+
   if( file_exists($dir) ) {
     if( $handle = opendir($dir) ) {
       while( false !== ($file = readdir($handle)) ) {
@@ -1861,7 +1893,7 @@ function run_workspace_backup($task, $args) {
   try {
     ini_set('display_errors', 'on');
     ini_set('error_reporting', E_ERROR);
-    
+
     // the environment for poedit always is Development
     define('G_ENVIRONMENT', G_DEV_ENV);
 
@@ -1963,12 +1995,12 @@ function run_workspace_backup($task, $args) {
     }
 
     $aSerializeData = get_infoOnPM($workspace);
-    
+
     $dbFile = PATH_DB . $workspace . PATH_SEP . 'db.php';
     if( ! file_exists($dbFile) ) {
       throw (new Exception("Invalid workspace, the db file does not exist, $dbFile"));
     }
-    
+
     $dbOpt = @explode(SYSTEM_HASH, G::decrypt(HASH_INSTALLATION, SYSTEM_HASH));
     G::LoadSystem('dbMaintenance');
     $oDbMaintainer = new DataBaseMaintenance($dbOpt[0], $dbOpt[1], $dbOpt[2]);
@@ -1978,16 +2010,16 @@ function run_workspace_backup($task, $args) {
       echo "Problems contacting the database with the administrator user\n";
       echo "The response was: {$e->getMessage()}\n";
     }
-    
+
     require_once ($dbFile);
     require_once ("propel/Propel.php");
     G::LoadSystem('templatePower');
-    
+
     Propel::init(PATH_CORE . "config/databases.php");
     $configuration = Propel::getConfiguration();
     $connectionDSN = $configuration['datasources']['workflow']['connection'];
     printf("using DSN Connection %s \n", pakeColor::colorize($connectionDSN, 'INFO'));
-    
+
     $con = Propel::getConnection('workflow');
     $sql = "show variables like 'datadir'";
     $stmt = $con->createStatement();
@@ -1999,9 +2031,9 @@ function run_workspace_backup($task, $args) {
     $dataDir = $row['Value'];
     if( $dataDir[count($dataDir) - 1] == '/' )
       $dataDir = substr($dataDir, count($dataDir) - 1);
-    
+
     printf("MySQL data dir %s \n", pakeColor::colorize($dataDir, 'INFO'));
-    
+
     $sql = "SELECT VERSION();";
     $stmt = $con->createStatement();
     $rs = $stmt->executeQuery($sql, ResultSet::FETCHMODE_NUM);
@@ -2021,40 +2053,40 @@ function run_workspace_backup($task, $args) {
     if ($sMetadata === false) {
       throw new Exception("Metadata file could not be written");
     }
-    
+
     G::LoadThirdParty('pear/Archive', 'Tar');
-    
+
     $tar = new Archive_Tar($fileTar);
     if (!isset($gzipPath))
       $tar->_compress = $compress;
-    
+
     /*** WORKFLOW DATABASE BACKUP ***/
     $dbSettings = getDataBaseConfiguration($configuration['datasources']['workflow']['connection']);
     backupDB($dbOpt[0], $dbOpt[1], $dbOpt[2], $dbSettings['dbname'], $tmpDir);
     printf("Copying folder: %s \n", pakeColor::colorize( $tmpDir, 'INFO'));
     backupAddTarFolder( $tar, $tmpDir . $dbSettings['dbname'] . PATH_SEP, $tmpDir );
-   
+
     /*** RBAC DATABASE BACKUP ***/
     $dbSettings = getDataBaseConfiguration($configuration['datasources']['rbac']['connection']);
     backupDB($dbOpt[0], $dbOpt[1], $dbOpt[2], $dbSettings['dbname'], $tmpDir);
     printf("Copying folder: %s \n", pakeColor::colorize( $tmpDir, 'INFO'));
     backupAddTarFolder( $tar, $tmpDir . $dbSettings['dbname'] . PATH_SEP, $tmpDir );
-   
+
     /*** RP DATABASE BACKUP ***/
     $dbSettings = getDataBaseConfiguration($configuration['datasources']['rp']['connection']);
     backupDB($dbOpt[0], $dbOpt[1], $dbOpt[2], $dbSettings['dbname'], $tmpDir);
     printf("Copying folder: %s \n", pakeColor::colorize( $tmpDir, 'INFO'));
     backupAddTarFolder( $tar, $tmpDir . $dbSettings['dbname'] . PATH_SEP, $tmpDir );
-    
-    
+
+
     $pathSharedBase = PATH_DATA . 'sites' . PATH_SEP . $workspace . PATH_SEP;
     printf("copying folder: %s \n", pakeColor::colorize($pathSharedBase, 'INFO'));
     backupAddTarFolder($tar, $pathSharedBase, PATH_DATA . 'sites');
-    
+
     backupAddTarFolder($tar, $fileMetadata, dirname($fileMetadata));
     unlink($fileMetadata);
     $aFiles = $tar->listContent();
-    
+
     $total = 0;
     foreach( $aFiles as $key => $val ) {
       //    printf( " %6d %s \n", $val['size'], pakeColor::colorize( $val['filename'], 'INFO') );
@@ -2080,7 +2112,7 @@ function run_workspace_backup($task, $args) {
     printf("%20s %s \n", 'Files in Backup', pakeColor::colorize(count($aFiles), 'INFO'));
     printf("%20s %s \n", 'Total Filesize', pakeColor::colorize(sprintf("%5.2f MB", $total / 1024 / 1024), 'INFO'));
     printf("%20s %s \n", 'Backup Filesize', pakeColor::colorize(sprintf("%5.2f MB", filesize($fileTar) / 1024 / 1024), 'INFO'));
-  
+
   } catch( Exception $e ) {
     printf("Error: %s\n", pakeColor::colorize($e->getMessage(), 'ERROR'));
     exit(0);
@@ -2101,7 +2133,7 @@ function backupDB($host, $user, $passwd, $dbname, $tmpDir){
 /**
  * Parse and get the database parameters from a dns connection
  * dsn sample  mysql://wf_os:w9j14dkf5v0m@localhost:3306/wf_os?encoding=utf8
- * 
+ *
  * @author Erik A. O. <erik@colosa.com, erik@gmail.com>
  */
 function getDataBaseConfiguration($dsn) {
@@ -2116,7 +2148,7 @@ function getDataBaseConfiguration($dsn) {
   $tmp2 = explode('/', $tmp2[0]);
   $result["port"] = $tmp2[0];
   $result["dbname"] = $tmp2[1];
-  
+
   return $result;
 }
 
@@ -2124,10 +2156,10 @@ function run_workspace_restore($task, $args) {
   try {
     ini_set('display_errors', 'on');
     ini_set('error_reporting', E_ERROR);
-    
+
     // the environment for poedit always is Development
     define('G_ENVIRONMENT', G_DEV_ENV);
-    
+
     $overwrite = array_search('-o', $args);
     if ($overwrite === false)
       $overwrite = array_search('--overwrite', $args);
@@ -2167,7 +2199,7 @@ function run_workspace_restore($task, $args) {
     $targetWorkspaceName = isset($args[1]) ? $args[1] : NULL;
 
     printf("Using file %s \n", pakeColor::colorize($backupFile, 'INFO'));
-    
+
     if( workspaceRestore($backupFile, $targetWorkspaceName, $overwrite) ) {
       printf("Successfully restored from file %s \n", pakeColor::colorize($backupFile, 'INFO'));
     } else {
@@ -2227,7 +2259,7 @@ function updateDBfile($directory, $targetWorkspace, $dbNewHost, $changeWorkspace
     /* Match all defines in the config file. Check updateDBCallback to know what
      * keys are changed and what groups are matched.
      * This regular expression will match any "define ('<key>', '<value>');"
-     * with any combination of whitespace between words. 
+     * with any combination of whitespace between words.
      */
     $sNewDbFile = preg_replace_callback("/( *define *\( *'(?P<key>.*?)' *, *\n* *')(?P<value>.*?)(' *\) *;.*)/",
       updateDBCallback,
@@ -2271,15 +2303,15 @@ function workspaceRestore($backupFilename, $targetWorkspace, $overwrite) {
   if (file_exists($tempDirectory)) {
     unlink($tempDirectory);
   }
-  
+
   if (file_exists($tempDirectory))
     G::rm_dir($tempDirectory);
   G::mk_dir($tempDirectory);
-  
+
   G::LoadThirdParty('pear/Archive', 'Tar');
   $tar = new Archive_Tar($backupFilename);
   $res = $tar->extract($tempDirectory);
-  
+
   $metadataFilename = $tempDirectory . PATH_SEP . 'metadata.txt';
   if (!file_exists($metadataFilename)) {
     /* Look for legacy backups, where metadata was stored as a file with the
@@ -2298,7 +2330,7 @@ function workspaceRestore($backupFilename, $targetWorkspace, $overwrite) {
       throw (new Exception("Metadata file was not found in backup"));
     }
   }
-  
+
   $metadata = unserialize(file_get_contents($metadataFilename));
 
   $backupWorkspace = $metadata['WORKSPACE_NAME'];
@@ -2309,7 +2341,7 @@ function workspaceRestore($backupFilename, $targetWorkspace, $overwrite) {
     echo "Restoring from workspace: " . pakeColor::colorize($backupWorkspace, 'INFO') . "\n";
   }
   echo "Restoring to workspace:   ".pakeColor::colorize($targetWorkspace, 'INFO')."\n";
-  
+
   //moving the site files
   $backupWorkspaceDir = $tempDirectory . PATH_SEP . $backupWorkspace;
   $targetWorkspaceDir = PATH_DATA . 'sites' . PATH_SEP . $targetWorkspace;
@@ -2322,17 +2354,17 @@ function workspaceRestore($backupFilename, $targetWorkspace, $overwrite) {
   }
 
   printf("Moving files to %s \n", pakeColor::colorize($targetWorkspaceDir, 'INFO'));
-  
+
   /* We already know we will be overwriting the new workspace if we reach this
    * point, so remove the workspace directory if it exists.
    */
   if (file_exists($targetWorkspaceDir))
     G::rm_dir($targetWorkspaceDir);
-  
+
   if( ! rename($backupWorkspaceDir, $targetWorkspaceDir) ) {
     throw (new Exception("There was an error moving from $backupWorkspaceDir to $targetWorkspaceDir"));
   }
-  
+
   $dbOpt = @explode(SYSTEM_HASH, G::decrypt(HASH_INSTALLATION, SYSTEM_HASH));
   $dbHostname = $dbOpt[0];
 
@@ -2369,22 +2401,22 @@ function workspaceRestore($backupFilename, $targetWorkspace, $overwrite) {
 }
 
 function get_DirDB($workspace) {
-  
+
   $dbFile = PATH_DB . $workspace . PATH_SEP . 'db.php';
   if( ! file_exists($dbFile) ) {
     throw (new Exception("the db file does not exist, $dbFile"));
   }
-  
+
   require_once ($dbFile);
   require_once ("propel/Propel.php");
   G::LoadSystem('templatePower');
-  
+
   Propel::init(PATH_CORE . "config/databases.php");
   $configuration = Propel::getConfiguration();
   $connectionDSN = $configuration['datasources']['workflow']['connection'];
-  
+
   //  printf("using DSN Connection %s \n", pakeColor::colorize( $connectionDSN, 'INFO'));
-  
+
 
   $con = Propel::getConnection('workflow');
   $sql = "show variables like 'datadir'";
@@ -2392,18 +2424,18 @@ function get_DirDB($workspace) {
   $rs = $stmt->executeQuery($sql, ResultSet::FETCHMODE_ASSOC);
   $rs->next();
   $row = $rs->getRow();
-  
+
   if( ! is_array($row) )
     throw (new Exception("unable to execute query in database"));
   $dataDir = $row['Value'];
   if( $dataDir[count($dataDir) - 1] == '/' )
     $dataDir = substr($dataDir, count($dataDir) - 1);
-  
+
   $info_db = array ();
   $info_db['conx'] = $configuration['datasources']['workflow']['connection'];
   $info_db['adap'] = $configuration['datasources']['workflow']['adapter'];
   $info_db['datadir'] = $dataDir;
-  
+
   $info_db['DB_ADAPTER'] = DB_ADAPTER;
   $info_db['DB_HOST'] = DB_HOST;
   $info_db['DB_NAME'] = DB_NAME;
@@ -2417,43 +2449,43 @@ function get_DirDB($workspace) {
   $info_db['DB_REPORT_NAME'] = DB_REPORT_NAME;
   $info_db['DB_REPORT_USER'] = DB_REPORT_USER;
   $info_db['DB_REPORT_PASS'] = DB_REPORT_PASS;
-  
+
   return $info_db;
 }
 
 function printInfoSites($aSitebck, $aSiterestared) {
   printf("%25s %s \n", 'Workspace Name Backup', pakeColor::colorize($aSitebck['WORKSPACE_NAME'], 'INFO'));
   printf("%25s %s \n", 'Workspace Name Restored', pakeColor::colorize($aSiterestared['WORKSPACE_NAME'], 'INFO'));
-  
+
   printf("%25s %s \n", 'System Backup', pakeColor::colorize($aSitebck['SYSTEM'], 'INFO'));
   printf("%25s %s \n", 'System Restored', pakeColor::colorize($aSiterestared['SYSTEM'], 'INFO'));
-  
+
   printf("%25s %s \n", 'PM Version Backup', pakeColor::colorize($aSitebck['PM_VERSION'], 'INFO'));
   printf("%25s %s \n", 'PM Version Restored', pakeColor::colorize($aSiterestared['PM_VERSION'], 'INFO'));
-  
+
   printf("%25s %s \n", 'PHP Version Backup', pakeColor::colorize($aSitebck['PHP'], 'INFO'));
   printf("%25s %s \n", 'PHP Version Restored', pakeColor::colorize($aSiterestared['PHP'], 'INFO'));
-  
+
   //printf( "%25s %s \n", 'Server Address', pakeColor::colorize( $aSitebck['SERVER_ADDR'], 'INFO') );
   //printf( "%25s %s \n", 'Client IP Address', pakeColor::colorize( $aSitebck['IP'], 'INFO') );
-  
+
 
   //printf( "%25s %s \n", 'MySql Version', pakeColor::colorize( $aSitebck['DATABASE'], 'INFO') );
   //printf( "%25s %s \n", 'MySql Version', pakeColor::colorize( $aSiterestared['DATABASE'], 'INFO') );
-  
+
 
   //printf( "%25s %s \n", 'MySql Data Directory', pakeColor::colorize( $aSitebck['MYSQL_DATA_DIR'], 'INFO') );
   //printf( "%25s %s \n", 'MySql Data Directory', pakeColor::colorize( $aSiterestared['MYSQL_DATA_DIR'], 'INFO') );
-  
+
 
   //printf( "%25s %s \n", 'Available Databases', pakeColor::colorize( $aSitebck['AVAILABLE_DB'], 'INFO') );
-  
+
 
   /*printf( "%20s %s \n", 'Plugins', pakeColor::colorize( '', 'INFO') );
   foreach ($aSitebck['PLUGINS_LIST'] as $k => $v){
   	 printf( "%20s %s \n", ' -', pakeColor::colorize( $v, 'INFO') );
   	}*/
-  
+
   $wfDsn = $aSiterestared['DB_ADAPTER'] . '://' . $aSiterestared['DB_USER'] . ':' . $aSiterestared['DB_PASS'] . '@' . $aSiterestared['DB_HOST'] . '/' . $aSiterestared['DB_NAME'];
   $rbDsn = $aSiterestared['DB_ADAPTER'] . '://' . $aSiterestared['DB_RBAC_USER'] . ':' . $aSiterestared['DB_RBAC_PASS'] . '@' . $aSiterestared['DB_RBAC_HOST'] . '/' . $aSiterestared['DB_RBAC_NAME'];
   $rpDsn = $aSiterestared['DB_ADAPTER'] . '://' . $aSiterestared['DB_REPORT_USER'] . ':' . $aSiterestared['DB_REPORT_PASS'] . '@' . $aSiterestared['DB_REPORT_HOST'] . '/' . $aSiterestared['DB_REPORT_NAME'];
@@ -2461,13 +2493,13 @@ function printInfoSites($aSitebck, $aSiterestared) {
   printf("%25s %s \n", 'RBAC Database', pakeColor::colorize($rbDsn, 'INFO'));
   printf("%25s %s \n", 'Report Database', pakeColor::colorize($rpDsn, 'INFO'));
 
-} 
+}
 
 global $aFiles;
 
 function checkFileStandardCode ( $file ) {
   global $aFiles;
-  
+
 	if (  strpos ($file, 'workflow/engine/classes/model/om/') !== false ) {
 	  return;
 	}
@@ -2477,11 +2509,11 @@ function checkFileStandardCode ( $file ) {
 	if (  substr ($file, -4 ) == '.gif' ) {
 	  return;
 	}
-	  
+
 	$rootFolder = str_replace ( PATH_TRUNK, '', $file );
 
   $data = file_get_contents ( $file );
-  
+
   $bTabs = false;
   if ( strpos( $data, "\t" ) !== false ) {
   	$bTabs = true;
@@ -2494,13 +2526,13 @@ function checkFileStandardCode ( $file ) {
   }
   if ( filesize ( $file ) != strlen($data) ) {
   	$bUtf8 = true;
-  } 
-  
+  }
+
   $bDos = false;
   if ( strpos( $data, "\x0D" ) !== false   ) {
   	$bDos = true;
   }
-  
+
   if ( $bUtf8 || $bTabs || $bDos ) {
   	$aFiles[] = array ( 'file' => $rootFolder, 'tab' => $bTabs, 'utf' => $bUtf8, 'dos' => $bDos );
 
@@ -2513,33 +2545,33 @@ function checkFolderStandardCode ( $folder, $bSubFolders ) {
   //printf("%s \n", pakeColor::colorize($rootFolder, 'INFO'));
   if ($handle = opendir( $folder )) {
     while ( false !== ($file = readdir($handle))) {
-    	
+
       if ( substr( $file, 0, 1 ) !== '.' ) {
       	if ( is_file ( $folder . '/' . $file ) ) {
           checkFileStandardCode ( $folder . '/' . $file);
-        }	
+        }
         if ( is_dir( $folder . '/' . $file ) && $bSubFolders  ) {
         	checkFolderStandardCode ( $folder . '/' . $file, $bSubFolders );
         }
-      } 
+      }
     }
   }
 }
-	
+
 function run_check_standard_code ( $task, $options) {
   global $aFiles;
   $aFiles = array();
   if ( ! isset( $options[0]) ) {
     $folder = PATH_TRUNK . 'classes';
   }
-  else 
+  else
     $folder = PATH_TRUNK . $options[0];
 
 
   if ( ! isset( $options[1]) ) {
     $bSubFolders = false;
   }
-  else 
+  else
     $bSubFolders = strtolower($options[1]) == 'true';
 
   printf("checking folder %s\n", pakeColor::colorize($folder, 'INFO') );
@@ -2548,7 +2580,7 @@ function run_check_standard_code ( $task, $options) {
   foreach ( $aFiles as $key => $val ) {
 
     printf("%s %s %s %s \n", pakeColor::colorize($val['tab'] ? 'tab' : '   ', 'INFO'),
-           pakeColor::colorize($val['utf'] ? 'utf' : '   ', 'INFO'), 
+           pakeColor::colorize($val['utf'] ? 'utf' : '   ', 'INFO'),
            pakeColor::colorize($val['dos'] ? 'dos' : '   ', 'INFO'), $val['file'] );
   }
 }
