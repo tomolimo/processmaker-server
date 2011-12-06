@@ -26,7 +26,7 @@ propel.datadump.mapper.from    = *schema.xml
 propel.datadump.mapper.to      = *data.xml
 
 ; builder settings
-;_propel.builder.peer.class              = addon.propel.builder.SfPeerBuilder
+;_propel.builder.peer.class             = addon.propel.builder.SfPeerBuilder
 ;propel.builder.object.class            = addon.propel.builder.SfObjectBuilder
 
 ;propel.builder.objectstub.class        = addon.propel.builder.SfExtensionObjectBuilder
