@@ -125,6 +125,21 @@ try {
           'USER_FULLNAME' => $infoUser
          );
   }
+
+  //calculating the max upload file size;
+  $POST_MAX_SIZE   = ini_get('post_max_size');
+  $mul = substr($POST_MAX_SIZE, -1);
+  $mul = ($mul == 'M' ? 1048576 : ($mul == 'K' ? 1024 : ($mul == 'G' ? 1073741824 : 1)));
+  $postMaxSize = (int)$POST_MAX_SIZE * $mul;
+
+  $UPLOAD_MAX_SIZE = ini_get('upload_max_filesize');
+  $mul = substr($UPLOAD_MAX_SIZE, -1);
+  $mul = ($mul == 'M' ? 1048576 : ($mul == 'K' ? 1024 : ($mul == 'G' ? 1073741824 : 1)));
+  $uploadMaxSize = (int)$UPLOAD_MAX_SIZE * $mul;
+
+  if ( $postMaxSize < $uploadMaxSize ) $uploadMaxSize = $postMaxSize;
+  $aFields['MAX_FILES_SIZE'] = $uploadMaxSize .  " (" . $UPLOAD_MAX_SIZE . ") ";
+
   //print_r($aUserInfo);
   global $_DBArray;
   $_DBArray['aUserInfo']  = $aUserInfo;

@@ -40,7 +40,10 @@ try {
     break;
   }
   if ( empty($_POST) || !isset($_POST['form'])) {
-    throw ( new Exception ('Posted data is empty!') );
+    if( empty($_FILES) )
+      throw ( new Exception (G::loadTranslation('ID_ERROR_UPLOADING_FILENAME') ) );
+    else
+      throw ( new Exception (G::loadTranslation('ID_POSTED_DATA_EMPTY') ) );
   }
 
   $form =  $_POST['form'];
@@ -290,5 +293,5 @@ catch (Exception $e) {
   $aMessage['MESSAGE'] = $e->getMessage();
   $G_PUBLISH          = new Publisher;
   $G_PUBLISH->AddContent('xmlform', 'xmlform', 'login/showMessage', '', $aMessage );
-  G::RenderPage( 'publish');
+  G::RenderPage( 'publish', 'blank');
 }

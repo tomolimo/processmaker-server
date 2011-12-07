@@ -1,5 +1,5 @@
 <form id="{$form_id}" name="{$form_name}" action="{$form_action}" class="{$form_className}" method="post" encType="multipart/form-data" style="margin:0px;" onsubmit='return validateForm("{$form_objectRequiredFields}".parseJSON());' >  
-  <div class="borderForm" style="padding-left: 0pt; padding-right: 0pt; width:70%" >
+  <div class="borderForm" style="padding-left: 0pt; padding-right: 0pt; width:80%" >
 		<div class="boxTop"><div class="a"></div><div class="b"></div><div class="c"></div></div>
 		<div class="content" style="">
 	  <table width="99%">
@@ -24,9 +24,13 @@
               <!-- <td class='FormFieldContent' width="{$form_width}" >{$form.USR_RESUME} </td>  //-->
               <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.USR_RESUME}</td> 
               </tr>
-                                               <tr>
+              <tr>
+              <td class="FormLabel" width="{$form_labelWidth}">{$MAX_FILES_SIZE}</td>
+              <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.MAX_FILES_SIZE}</td>
+              </tr>
+              <tr>
               <td class="FormTitle" colspan="2" align="">{$form.TITLE1}</td>
-             </tr>
+              </tr>
                                                                                   <tr>
               <td class="FormLabel" width="{$form_labelWidth}"><font color="red">*  </font>{$USR_FIRSTNAME}</td>
               <!-- <td class='FormFieldContent' width="{$form_width}" >{$form.USR_FIRSTNAME} </td>  //-->
