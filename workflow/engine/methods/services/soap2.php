@@ -57,7 +57,7 @@
     } 
 
     if( ifPermission( $params->sessionId, 'PM_FACTORY') == 0 ){
-      $o->guid = "2 You have not privileges to execute this function";
+      $o->guid = "2 Insufficient privileges to execute this function";
       $o->name = '';
       return array("processes" => $o);
     }
@@ -90,7 +90,7 @@
     }
 
     if( ifPermission( $params->sessionId, 'PM_USERS') == 0 ){
-      $o->guid = "2 You have not privileges to execute this function";
+      $o->guid = "2 Insufficient privileges to execute this function";
       $o->name = '';
       return array("roles" => $o);
     }
@@ -109,7 +109,7 @@
     }
 
     if( ifPermission( $params->sessionId, 'PM_USERS') == 0 ){
-      $o->guid = "2 You have not privileges to execute this function";
+      $o->guid = "2 Insufficient privileges to execute this function";
       $o->name = '';
       return array("groups" => $o);
     }
@@ -128,7 +128,7 @@
     }
 
     if( ifPermission( $params->sessionId, 'PM_USERS') == 0 ){
-      $o->guid = "2 You have not privileges to execute this function";
+      $o->guid = "2 Insufficient privileges to execute this function";
       $o->name = '';
       return array("departments" => $o);
     }
@@ -149,7 +149,7 @@
     }
 
     if( ifPermission( $params->sessionId, 'PM_CASES') == 0 ){
-      $o->guid = "2 You have not privileges to execute this function";
+      $o->guid = "2 Insufficient privileges to execute this function";
       $o->name = '';
       $o->status = '';
       $o->delIndex = '';
@@ -175,7 +175,7 @@
     }
 
     if( ifPermission( $params->sessionId, 'PM_USERS') == 0 ){
-      $o->guid = "2 You have not privileges to execute this function";
+      $o->guid = "2 Insufficient privileges to execute this function";
       $o->name = '';
       return array("users" => $o);
     }
@@ -195,7 +195,7 @@
     }
 
     if( ifPermission( $params->sessionId, 'PM_CASES') == 0 ){
-      $o->guid = "2 You have not privileges to execute this function";
+      $o->guid = "2 Insufficient privileges to execute this function";
       $o->name = '';
       $o->processId = '';
       return array("triggers" => $o);
@@ -222,7 +222,7 @@
     }
 
     if( ifPermission( $params->sessionId, 'PM_CASES') == 0 ){
-      $o->guid = "2 You have not privileges to execute this function";
+      $o->guid = "2 Insufficient privileges to execute this function";
       $o->filename = '';
       $o->docId = '';
       $o->version = '';
@@ -261,7 +261,7 @@
     }
 
     if( ifPermission( $params->sessionId, 'PM_CASES') == 0 ){
-      $o->guid = "2 You have not privileges to execute this function";
+      $o->guid = "2 Insufficient privileges to execute this function";
       $o->filename = '';
       $o->docId = '';
       $o->version = '';
@@ -293,7 +293,7 @@
     }
 
     if( ifPermission( $params->sessionId, 'PM_CASES') == 0 ){
-      $o->guid = "2 You have not privileges to execute this function";
+      $o->guid = "2 Insufficient privileges to execute this function";
       $o->name = '';
       $o->description = '';
       return array("documents" => $o);
@@ -311,7 +311,7 @@
     }
 
     if( ifPermission( $params->sessionId, 'PM_CASES') == 0 ){
-      $result = new wsResponse (2, "You have not privileges to execute this function");
+      $result = new wsResponse (2, "Insufficient privileges to execute this function");
       return $result;
     }
 
@@ -691,7 +691,7 @@
     }
 
     if( ifPermission( $params->sessionId, 'PM_CASES') == 0 ){
-      $o->guid = "2 You have not privileges to execute this function";
+      $o->guid = "2 Insufficient privileges to execute this function";
       $o->name = '';
       return array("tasks" => $o);
     }
@@ -714,7 +714,7 @@
     }
 
     if( ifPermission( $params->sessionId, 'PM_CASES') == 0 ){
-      $o->guid = "2 You have not privileges to execute this function";
+      $o->guid = "2 Insufficient privileges to execute this function";
       $o->name = '';
       return array("taskCases" => $o);
     }
