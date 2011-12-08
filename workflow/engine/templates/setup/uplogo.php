@@ -64,7 +64,7 @@ try {
               $logopm="Restore_the_default_logo";
               //$template->assign ('LOG0_NAME'       , str_replace("_"," ",$logopm));
               $template->assign ('LOGO_WIDTH'      , "250");
-              $template->assign ('LOGO_HEIGHT'     , "80" );
+              $template->assign ('LOGO_HEIGHT'     , "60" );
               $template->assign ('LOG0_SIZE'       , "15.36");
               $template->assign ('LOG0_DELETE'     , "onclick ='changeLogo(\"  \");return false;'");
               $template->assign ('LOG0_CHECK'     , "/images/faviconpm.png");
@@ -130,7 +130,7 @@ try {
     G::uploadFile( $tpnfile, $dir . '/', 'tmp'.$fileName );
     $error = false;
     try {
-      G::resizeImage($dir . '/tmp' . $fileName, 250, 80, $dir . '/' .$fileName);
+      G::resizeImage($dir . '/tmp' . $fileName, 250, 60, $dir . '/' .$fileName);
     } catch (Exception $e) {
       $error = $e->getMessage();
     }
