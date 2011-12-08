@@ -413,7 +413,7 @@ class PMPluginRegistry {
     $this->installPlugin($details->sNamespace);
     $this->setupPlugins();
     
-    //$this->enablePlugin($details->sNamespace);
+    $this->enablePlugin($details->sNamespace);
     $this->save();
   }
 
