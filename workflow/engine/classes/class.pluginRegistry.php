@@ -418,21 +418,26 @@ class PMPluginRegistry {
   }
 
   function uninstallPlugin($sNamespace) {
-    $this->enablePlugin($sNamespace);
-    $this->disablePlugin($sNamespace);
-    $this->save();
-
-    foreach ($this->_aPluginDetails as $namespace=>$detail) {
-      if ( $sNamespace == $namespace ) {
-        $pluginDir = PATH_PLUGINS . $detail->sPluginFolder;
-        var_dump($pluginDir);
-        var_dump($detail->sFilename);
-        if (isset($detail->sPluginFolder) && !empty($detail->sPluginFolder) && file_exists($plugin_dir))
-          G::rm_dir($plugin_dir);
-        if (isset($detail->sFilename) && !empty($detail->sFilename) && file_exists($detail->sFilename))
-          unlink(PATH_PLUGINS . $detail->sFilename);
-      }
+    $pluginFile = "$sNamespace.php";
+    
+    if (!file_exists(PATH_PLUGINS . $pluginFile)) {
+      throw (new Exception("File \"$pluginFile\" doesn't exist"));
     }
+    
+    require_once (PATH_PLUGINS . $pluginFile);
+    $details = $this->getPluginDetails($pluginFile);
+    
+    $this->enablePlugin($details->sNamespace);
+    $this->disablePlugin($details->sNamespace);
+    $this->save();
+    
+    $pluginDir = PATH_PLUGINS . $details->sPluginFolder;
+        
+    if (isset($details->sPluginFolder) && !empty($details->sPluginFolder) && file_exists($pluginDir))
+      G::rm_dir($pluginDir);
+          
+    if (isset($details->sFilename) && !empty($details->sFilename) && file_exists($details->sFilename))
+      unlink($details->sFilename);
   }
 
   /**
