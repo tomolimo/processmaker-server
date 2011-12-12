@@ -372,6 +372,7 @@ Ext.onReady( function() {
         handler: function(){
             editor.stopEditing();
             var s = grid.getSelectionModel().getSelections();
+            //  console.log( 's[i]=', s[i].data.name);
             for(var i = 0, r; r = s[i]; i++){               
              if(s[i].data.name!='- ALL -')
               store.remove(r);
