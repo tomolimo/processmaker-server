@@ -23,7 +23,7 @@ class dashletProcessMakerEnterprise implements DashletInterface {
       <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />
 
       <title></title>
- 
+
       <style type=\"text/css\">
       body{
         margin: 0;
@@ -37,7 +37,7 @@ class dashletProcessMakerEnterprise implements DashletInterface {
       #container{
         margin: 0 auto;
       }
-  
+
       .clearf{
         clear: both;
 
@@ -45,61 +45,62 @@ class dashletProcessMakerEnterprise implements DashletInterface {
         line-height: 0;
         font-size: 0;
       }
-      
+
       .dnone{
         display:none;
       }
 
       .icon{
         float:left;
-        
-        margin-left: 0.5em;
-    
-        width: 2.5em;
+
+        margin-left: 4.5%;
+
+        width: 12%;
       }
 
       .description{
         float: right;
-        
-        margin-right: 0.5em;
-    
-        width: 26em;
-    
-        font-size: 0.8em;
+
+        margin-right: 1%;
+
+        width: 80.5%;
+
+        font-size: 64%;
+        text-align : justify;
       }
-  
+
       .icon img{
         width: 35px;
       }
-      
+
       .description a{
         color: #1A4897;
         font-weight: bold;
       }
-      
+
       .icon, .description{
         margin-top: 0.65em;
       }
       </style>
-      
+
       <script type=\"text/javascript\">
       function pageHide(p)
       {  //document.body.scrollTop = 0;
          //document.getElementById(\"container\").scrollIntoView(true);
          window.scroll(0, 0);
-      
+
          document.getElementById(\"page1\").style.display = \"none\";
          document.getElementById(\"page2\").style.display = \"none\";
          document.getElementById(\"page1Label\").innerHTML = \"&nbsp;1&nbsp;\";
          document.getElementById(\"page2Label\").innerHTML = \"&nbsp;2&nbsp;\";
-      
+
          document.getElementById(\"page\" + p).style.display = \"inline\";
          document.getElementById(\"page\" + p + \"Label\").innerHTML = \"[&nbsp;\" + p + \"&nbsp;]\";
       }
       </script>
     </head>
     <body>
-  
+
     <div id=\"container\">
       <div id=\"page1\">
         <div class=\"icon\">
@@ -113,7 +114,7 @@ class dashletProcessMakerEnterprise implements DashletInterface {
           <a href=\"http://processmaker.com/workflow-inbox-and-bpm-inbox\" target=\"_blank\">Read More&gt;&gt;</a>
         </div>
         <div class=\"clearf\"></div>
-      
+
         <div class=\"icon\">
           <a href=\"http://processmaker.com/bpm-ldap-and-bpm-active-directory\" target=\"_blank\"><img src=\"/images/dashlets/enterprise_ldap.png\" /></a>
         </div>
@@ -149,7 +150,7 @@ class dashletProcessMakerEnterprise implements DashletInterface {
           <a href=\"http://processmaker.com/knowledgetree-workflow-document-management\" target=\"_blank\">Read More&gt;&gt;</a>
         </div>
         <div class=\"clearf\"></div>
-      
+
         <div class=\"icon\">
           <a href=\"http://processmaker.com/electronic-signatures-with-sigplus-signature-pads\" target=\"_blank\"><img src=\"/images/dashlets/enterprise_digital.png\" /></a>
         </div>
@@ -162,20 +163,20 @@ class dashletProcessMakerEnterprise implements DashletInterface {
         </div>
         <div class=\"clearf\"></div>
       </div>
-      
+
       <div id=\"page2\" class=\"dnone\">
         <div class=\"icon\">
           <a href=\"http://processmaker.com/digitally-sign-web-forms-elock\" target=\"_blank\"><img src=\"/images/dashlets/enterprise_elock.png\" /></a>
         </div>
         <div class=\"description\">
-          <a href=\"http://processmaker.com/digitally-sign-web-forms-elock\" target=\"_blank\">Elock PKI Certified Digital Signature mobiSigner Connector Plug-in</a>
-          <br />
-          Plug-in which creates an integration with an Elock Digital Signature server and creates a digital signature field which can be added to web forms or can be used to digitally sign PDFs. This creates true PKI certified digital signatures with SHA encryption.
+          <a href=\"http://processmaker.com/digitally-sign-web-forms-elock\" target=\"_blank\"><div align= left>Elock PKI Certified Digital Signature mobiSigner Connector Plug-in</div></a>
+
+          <div align= justify>Plug-in which creates an integration with an Elock Digital Signature server and creates a digital signature field which can be added to web forms or can be used to digitally sign PDFs. This creates true PKI certified digital signatures with SHA encryption.</div>
           <br />
           <a href=\"http://processmaker.com/digitally-sign-web-forms-elock\" target=\"_blank\">Read More&gt;&gt;</a>
         </div>
         <div class=\"clearf\"></div>
-      
+
         <div class=\"icon\">
           <a href=\"http://processmaker.com/multi-tenant-management\" target=\"_blank\"><img src=\"/images/dashlets/enterprise_multitenant.png\" /></a>
         </div>
@@ -187,7 +188,7 @@ class dashletProcessMakerEnterprise implements DashletInterface {
           <a href=\"http://processmaker.com/multi-tenant-management\" target=\"_blank\">Read More&gt;&gt;</a>
         </div>
         <div class=\"clearf\"></div>
-      
+
         <div class=\"icon\">
           <a href=\"http://processmaker.com/batch-routing-plugin\" target=\"_blank\"><img src=\"/images/dashlets/enterprise_batch.png\" /></a>
         </div>
@@ -199,7 +200,7 @@ class dashletProcessMakerEnterprise implements DashletInterface {
           <a href=\"http://processmaker.com/batch-routing-plugin\" target=\"_blank\">Read More&gt;&gt;</a>
         </div>
         <div class=\"clearf\"></div>
-      
+
         <div class=\"icon\">
           <a href=\"http://www.processmaker.com/bpm-outlook-integration\" target=\"_blank\"><img src=\"/images/dashlets/enterprise_outlook.jpg\" /></a>
         </div>
@@ -211,7 +212,7 @@ class dashletProcessMakerEnterprise implements DashletInterface {
           <a href=\"http://www.processmaker.com/bpm-outlook-integration\" target=\"_blank\">Read More&gt;&gt;</a>
         </div>
         <div class=\"clearf\"></div>
-      
+
         <div class=\"icon\">
         </div>
         <div class=\"description\">
@@ -223,7 +224,7 @@ class dashletProcessMakerEnterprise implements DashletInterface {
         </div>
         <div class=\"clearf\"></div>
       </div>
-      
+
       <div class=\"icon\">
       </div>
       <div class=\"description\">

@@ -24,10 +24,13 @@ Ext.onReady(function(){
         handler : function(a) {
           var vp = Ext.getCmp('viewportDashboard');
           var pd = Ext.getCmp('portalDashboard');
+          while (pd.items.items[0].items.items[1]) {
+            pd.items.items[2].add(pd.items.items[0].items.items[1]);
+          }
           pd.items.items[0].columnWidth = 0.33;
           pd.items.items[1].columnWidth = 0.33;
           pd.items.items[2].columnWidth = 0.33;
-          pd.doLayout();        
+          pd.doLayout();
           }
       },
       {
@@ -42,7 +45,7 @@ Ext.onReady(function(){
             pd.items.items[0].add( pd.items.items[2].items.items[0] );
           }
           pd.items.items[2].columnWidth = 0.01;
-          pd.doLayout();        
+          pd.doLayout();
           }
       },
       {
@@ -54,8 +57,8 @@ Ext.onReady(function(){
           pd.items.items[0].columnWidth = 0.40;
           pd.items.items[1].columnWidth = 0.40;
           pd.items.items[2].columnWidth = 0.20;
-          pd.doLayout();        
-          //vp.doLayout();        
+          pd.doLayout();
+          //vp.doLayout();
           }
       } /* ,
       {
@@ -83,12 +86,12 @@ Ext.onReady(function(){
               }
             }
           });
-          
+
           var vp = Ext.getCmp('viewportDashboard');
           var pd = Ext.getCmp('portalDashboard');
           pd.items.items[0].add( np );
-          pd.doLayout();        
-          //vp.doLayout();        
+          pd.doLayout();
+          //vp.doLayout();
           }
       } */
     ]
@@ -118,29 +121,29 @@ Ext.onReady(function(){
           style:'padding:10px',
           items:[]
       }]
-      
+
       /*
        * Uncomment this block to test handling of the drop event. You could use this
-       * to save portlet position state for example. The event arg e is the custom 
+       * to save portlet position state for example. The event arg e is the custom
        * event defined in Ext.ux.Portal.DropZone.
        */
 //      ,listeners: {
 //          'drop': function(e){
-//              Ext.Msg.alert('Portlet Dropped', e.panel.title + '<br />Column: ' + 
+//              Ext.Msg.alert('Portlet Dropped', e.panel.title + '<br />Column: ' +
 //                  e.columnIndex + '<br />Position: ' + e.position);
 //          }
 //      }
     }]
   });
-  
+
 //var dashletsInstances = [{"DAS_INS_UID":"00000000000000000000000000000001","DAS_TITLE":"Open Cases VS Complete Cases"}];
 
   var pd = Ext.getCmp('portalDashboard');
   var dashletClass = "";
-  
+
   for ( var i = 0; i < dashletsInstances.length; i++ ) {
     dashletClass = dashletsInstances[i].DAS_CLASS;
-      
+
     switch (dashletClass) {
       case "dashletOpenVSCompleted":
         var np = new Ext.ux.Portlet({
@@ -183,13 +186,13 @@ Ext.onReady(function(){
                 page: "dashboard/renderDashletInstance",
                 id: p.dasInsUid
               })
-              
+
               p.update(img);
             }
           }
         });
         break;
-      
+
       case "dashletProcessMakerEnterprise":
         var np = new Ext.ux.Portlet({
           title: dashletsInstances[i].DAS_TITLE,
@@ -208,17 +211,17 @@ Ext.onReady(function(){
                 page: "dashboard/renderDashletInstance",
                 id: p.dasInsUid
               })
-                
+
               p.update(img);
             }
           }
         });
         break;
     }
-    
+
     pd.items.items[i % 3].add( np );
   } //for
-  
+
   pd.doLayout();
 });
 
