@@ -118,10 +118,16 @@ class Route extends BaseRoute {
       if (!is_null($oRoute))
       {
         // validating default values
-        $aData['ROU_TO_LAST_USER'] = $this->validateValue($aData['ROU_TO_LAST_USER'], array('TRUE', 'FALSE'), 'FALSE');
-        $aData['ROU_OPTIONAL']     = $this->validateValue($aData['ROU_OPTIONAL'], array('TRUE', 'FALSE'), 'FALSE');
-        $aData['ROU_SEND_EMAIL']   = $this->validateValue($aData['ROU_SEND_EMAIL'], array('TRUE', 'FALSE'), 'TRUE');
-
+        if (isset($aData['ROU_TO_LAST_USER'])) {
+          $aData['ROU_TO_LAST_USER'] = $this->validateValue($aData['ROU_TO_LAST_USER'], array('TRUE', 'FALSE'), 'FALSE');
+        }
+        if (isset($aData['ROU_OPTIONAL'])) {
+          $aData['ROU_OPTIONAL']     = $this->validateValue($aData['ROU_OPTIONAL'], array('TRUE', 'FALSE'), 'FALSE');
+        }
+        if (isset($aData['ROU_SEND_EMAIL'])) {
+          $aData['ROU_SEND_EMAIL']   = $this->validateValue($aData['ROU_SEND_EMAIL'], array('TRUE', 'FALSE'), 'TRUE');
+        }
+        
         $oRoute->fromArray($aData, BasePeer::TYPE_FIELDNAME);
         if ($oRoute->validate()) {
           $oConnection->begin();
