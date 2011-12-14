@@ -36,6 +36,8 @@ class dashletProcessMakerCommunity implements DashletInterface {
 
       #container{
         margin: 0 auto;
+
+
       }
 
       .clearf{
@@ -49,19 +51,20 @@ class dashletProcessMakerCommunity implements DashletInterface {
       .icon{
         float:left;
 
-        margin-left: 0.5em;
+        margin-left: 5%;
 
-        width: 2.5em;
+        width: 13%;
       }
 
       .description{
         float: right;
 
-        margin-right: 0.5em;
+        margin-right: 1%;
 
-        width: 26em;
+        width: 79.5%;
 
-        font-size: 0.8em;
+        font-size: 64%;
+        text-align : justify;
       }
 
       .icon img{
@@ -85,11 +88,11 @@ class dashletProcessMakerCommunity implements DashletInterface {
     <body>
 
     <div id=\"container\">
-      <div class=\"icon\"><img src=\"/images/dashlets/community_forum.png\" /></div>
+      <div class=\"icon\"><img src=\"/images/dashlets/community_forum.png\"/></div>
       <div class=\"description\">
         <strong>FORUM - </strong><a href=\"http://forum.processmaker.com/\" target=\"_blank\" title=\"http://forum.processmaker.com\">http://forum.processmaker.com</a>
         <br />
-        Discuss ProcessMaker issues, interact with the PMOS community, and get support from fellow developers and community members in the ProcessMaker Forum.
+       Discuss Processker issues, interact with the PMOS community, and get support from fellow developers and community members in the ProcessMaker Forum.
       </div>
       <div class=\"clearf\"></div>
 
