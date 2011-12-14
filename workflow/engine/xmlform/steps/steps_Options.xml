@@ -21,6 +21,8 @@
 
 <URL_DYNAFORM_EDITOR type="private" defaultValue="../dynaforms/dynaforms_Editor"/>
 
+<triggersEdit type="private" defaultValue="../triggers/triggers_Edit"/>
+
 <PAGED_TABLE_ID type="private"/>
 
 
@@ -68,6 +70,63 @@
   
   function dynaformEdit( uid, pro_uid ){
     window.location.href = "@G::encryptlink(@#URL_DYNAFORM_EDITOR)?PRO_UID="+pro_uid+"&DYN_UID="+uid;
+  }
+
+  // Additional functions required in triggers
+  function triggerEditWizardSource (sUID){
+    popupWindow('@G::LoadTranslation(ID_EDIT_TRIGGERS)', '@G::encryptlink(@#triggersEdit)?TRI_UID=' + sUID +'&BYPASS=1' , 770, 510);
+  }
+
+  function triggerSave(form)
+  {
+    var triUid = "";
+    if(document.getElementById('TRI_UID')) {
+      var triUid = document.getElementById('TRI_UID').value;
+    }
+    if(triUid==''){
+      var triTitle =document.getElementById('TRI_TITLE').value;
+      if(triTitle==''){
+        alert(G_STRINGS.ID_REQUIRED_NAME_TRIGGERS);
+        return false;
+      }
+      reqName=ajax_function("../triggers/triggers_Save",'lookforNameTrigger','NAMETRIGGER='+encodeURIComponent(triTitle)+'&proUid='+(document.getElementById('PRO_UID').value),'POST');
+      if(!reqName){
+        alert(G_STRINGS.ID_EXIST_TRIGGERS);
+        return false;
+      } else {
+        ajax_post(form.action, form, 'POST');
+        currentPopupWindow.remove();
+      }
+    } else {
+	    ajax_post(form.action, form, 'POST');
+		  currentPopupWindow.remove();
+    }
+  }
+
+  function triggerSave1(form)
+  {
+    var triUid = "";
+    if(getField('TRI_UID')) {
+      var triUid = getField('TRI_UID').value;
+    }
+    if(triUid == ''){
+      var triTitle =getField('TRI_TITLE').value.trim();
+      if(triTitle==''){
+        alert(G_STRINGS.ID_REQUIRED_NAME_TRIGGERS);
+        return false;
+      }
+      reqName=ajax_function("../triggers/triggers_Save",'lookforNameTrigger','NAMETRIGGER='+encodeURIComponent(triTitle)+'&proUid='+(getField('PRO_UID').value),'POST');
+      if(!reqName){
+        alert(G_STRINGS.ID_EXIST_TRIGGERS);
+        return false;
+      } else {
+        ajax_post(form.action, form, 'POST');
+        currentPopupWindow.remove();
+      }
+    } else {
+	    ajax_post(form.action, form, 'POST');
+		  currentPopupWindow.remove();
+    }
   }
 
 ]]></js>
