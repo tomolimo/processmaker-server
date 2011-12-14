@@ -139,7 +139,7 @@
 													<input
 													style="" class='module_app_button___gray ' id="cancel"
 													name="cancel" type='button' value="{ID_CANCEL}"
-													onclick="currentPopupWindow.remove();triggerFromLibrary(); return false;" />
+													onclick="currentPopupWindow.remove(); if(typeof triggerFromLibrary == 'function'){ triggerFromLibrary(); } return false;" />
 													
 													</td>
 											</tr>
