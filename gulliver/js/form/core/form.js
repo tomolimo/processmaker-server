@@ -729,7 +729,7 @@ function G_Text( form, element, name)
   };
   
   //Get Cursor Position
-  /*this.getCursorPos = function () {
+  this.getCursorPos = function () {
     var textElement=me.element;
     if (!document.selection) return textElement.selectionStart;
     //save off the current value to restore it later,
@@ -755,7 +755,7 @@ function G_Text( form, element, name)
         return cursorPos;
       }
     }
-  };*/
+  };
   
   this.setSelectionRange = function(selectionStart, selectionEnd) {
     var input=me.element;
@@ -877,7 +877,7 @@ function G_Text( form, element, name)
       switch(chars[c]){
         case '0': case '1': case '2': case '3': case '4':
         case '5': case '6': case '7': case '8': case '9':
-        case '.': case ',':
+        case me.comma_separator:
           newValue += chars[c];
           newCont++;
           if (c + 1 == cursor.selectionStart){
@@ -895,7 +895,16 @@ function G_Text( form, element, name)
           break;
       }
     }
-    return {result: newValue, cursor: {selectionStart: newCursor, selectionEnd: newCursor}};
+    if (newCursor == -1){
+      
+      newCursor = newValue.length;
+    }
+    if (cursor.selectionStart != cursor.selectionEnd){
+      return {result: newValue, cursor: cursor};
+    }
+    else{
+      return {result: newValue, cursor: {selectionStart: newCursor, selectionEnd: newCursor}}; 
+    }
   };
 
   this.replaceMask = function(value, cursor, mask, type, comma){
@@ -933,6 +942,31 @@ function G_Text( form, element, name)
     return aResults[minIndex];
   };
   
+  this.getCleanMask = function(){
+    aMask = me.mask.split('');
+    maskOut = '';
+    for(i=0; i < aMask.length; i++){
+      if (me.mType == 'currency' || me.mType == 'percentage'){
+        switch(aMask[i]){
+          case '0': case '#':
+            maskOut += aMask[i];
+            break;
+          case me.comma_separator:
+            maskOut += '_';
+            break;
+        }
+      }
+      else{
+        switch(aMask[i]){
+          case '0': case '#': case 'd': case 'm': case 'y': case 'Y':
+            maskOut += aMask[i];
+            break;
+        }
+      }
+    }
+    return maskOut;
+  }
+  
   this.applyMask = function(keyCode){
     if (me.mask != ''){
       dataWOMask = me.removeMask();
@@ -940,23 +974,33 @@ function G_Text( form, element, name)
       currentSel = dataWOMask.cursor;
       cursorStart = currentSel.selectionStart;
       cursorEnd = currentSel.selectionEnd;
+      action = 'mask';
+      swPeriod = false;
       switch(keyCode){
         case 0:
+          action = 'none';
           break;
         case 8:
+          
           newValue  = currentValue.substring(0, cursorStart - 1);
           newValue += currentValue.substring(cursorEnd, currentValue.length);
           newCursor = cursorStart - 1;
+          //alert('aaa' + newValue + ' , ' + newCursor );
           break;
         case 46:
           newValue  = currentValue.substring(0, cursorStart);
           newValue += currentValue.substring(cursorEnd + 1, currentValue.length);
           newCursor = cursorStart;
           break;
-        case 256:
+        case 256: case 44:
+          swPeriod = true;
           newValue  = currentValue.substring(0, cursorStart);
-          newValue += '.';
+          if (keyCode == 256)
+            newValue += '.';
+          else
+            newValue += ',';
           newValue += currentValue.substring(cursorEnd, currentValue.length);
+          //alert(newValue);
           newCursor = cursorStart + 1;
           break;
         case 35: case 36: case 37: case 38: case 39: case 40:
@@ -967,6 +1011,7 @@ function G_Text( form, element, name)
             case 37:newCursor = cursorStart - 1;break;
             case 39:newCursor = cursorStart + 1;break;
           }
+          action = 'move';
           break;
         default:
           newKey = String.fromCharCode(keyCode);
@@ -977,9 +1022,33 @@ function G_Text( form, element, name)
           break;
       }
       if (newCursor < 0)  newCursor = 0;
-      dataNewMask = me.replaceMasks(newValue, newCursor);
-      me.element.value = dataNewMask.result;
-      me.setSelectionRange(dataNewMask.cursor,dataNewMask.cursor);
+      if (keyCode != 8 && keyCode != 35 && keyCode != 36 && keyCode != 37 && keyCode != 39){        testData = dataWOMask.result; 
+        tamData = testData.length;
+        cleanMask = me.getCleanMask();
+        tamMask = cleanMask.length;
+        sw = false;
+        if (testData.indexOf(me.comma_separator) == -1){
+          //alert('entro');
+          aux = cleanMask.split('_');
+          tamMask = aux[0].length;
+          sw = true; 
+        }
+        if (tamData >= tamMask && (!swPeriod && testData.indexOf(me.comma_separator) == -1)){
+          //alert('cancel + ' + String.fromCharCode(keyCode));
+          action = 'none';
+        }
+      }
+      switch(action){
+        case 'mask': case 'move':
+          dataNewMask = me.replaceMasks(newValue, newCursor);
+          me.element.value = dataNewMask.result;
+          me.setSelectionRange(dataNewMask.cursor,dataNewMask.cursor);
+          break;
+        //case 'move':
+          //alert(newCursor);
+          //me.setSelectionRange(newCursor,newCursor);
+          //break;
+      }
     }
     else{
       currentValue = me.element.value;
@@ -1021,17 +1090,18 @@ function G_Text( form, element, name)
           break;
       }
       if (newCursor < 0)  newCursor = 0;
+      
       me.element.value = newValue;
       me.setSelectionRange(newCursor,newCursor);
     }
     //Launch OnChange Event
-    if (me.element.fireEvent){
+    /*if (me.element.fireEvent){
       me.element.fireEvent("onchange");
     }else{
       var evObj = document.createEvent('HTMLEvents');
       evObj.initEvent( 'change', true, true );
       me.element.dispatchEvent(evObj);
-    }
+    }*/
   };
                           
   this.handleKeyDown = function(event){
@@ -1065,6 +1135,8 @@ function G_Text( form, element, name)
         break;
     }
     if (event.altKey) return true;
+    if (event.ctrlKey) return true;
+    if (event.shiftKey) return true;
     me.checkBrowser();
     if ((me.browser.name == 'Firefox') && (keyCode == 8 || keyCode == 46)){
       if (me.browser.name == 'Chrome'){
@@ -1091,9 +1163,17 @@ function G_Text( form, element, name)
           patron = /[0-9]/;
           key = String.fromCharCode(pressKey);
           keyValid = patron.test(key);
-          keyValid = keyValid || (pressKey == 44);
           keyValid = keyValid || (pressKey == 45);
-          keyValid = keyValid || (pressKey == 46);
+          if (me.comma_separator == '.'){
+            if (me.element.value.indexOf('.')==-1){
+              keyValid = keyValid || (pressKey == 46);  
+            } 
+          }
+          else{
+            if (me.element.value.indexOf(',')==-1){
+              keyValid = keyValid || (pressKey == 44);
+            }
+          }
           break;
         case 'Alpha':
           patron =/[a-zA-Z]/; // \sÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â©ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â­ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â³ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚ÂºÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¤ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â«ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¯ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¶ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¼ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â±ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â§ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¹Ã…â€œÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¯Ãƒâ€šÃ‚Â¿Ãƒâ€šÃ‚Â½ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â°ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¯Ãƒâ€šÃ‚Â¿Ãƒâ€šÃ‚Â½ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã¢â‚¬Å“ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¾ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¹ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¯Ãƒâ€šÃ‚Â¿Ãƒâ€šÃ‚Â½ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â¦ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œ]/;  
@@ -1577,7 +1657,6 @@ function G()
          if (num.length == 0) return {result: '', cursor: 0};
          var iNum = invertir(num);
          var iMask = invertir(mask);
-         //alert('A: ' + iCursor);
          if (iMask.indexOf('0'+__DECIMAL_SEP)> 0){ //Mask has .0 and will applied complete
            aMask = iMask;
            iNum = _getOnlyNumbers(iNum,'*');
@@ -1679,12 +1758,8 @@ function G()
           }
           if (sw_c && sw_d){
             myOut = _dout + __DECIMAL_SEP + _cout;
-            //alert('_dout: ' + _dout);
-            //alert('_cout: ' + _cout);
           }else{
             myOut = _dout + _cout;
-            //alert('_dout: ' + _dout);
-            //alert('_cout: ' + _cout);
           }
         }
         //alert(myOut);
