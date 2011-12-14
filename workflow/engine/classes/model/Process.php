@@ -390,9 +390,10 @@ class Process extends BaseProcess {
 
   public function update($aData)
   {
-    if (is_array($aData['PRO_DYNAFORMS'])) {
+    if (isset($aData['PRO_DYNAFORMS']) && is_array($aData['PRO_DYNAFORMS'])) {
       $aData['PRO_DYNAFORMS'] = @serialize($aData['PRO_DYNAFORMS']);
     }
+    
     $con = Propel::getConnection( ProcessPeer::DATABASE_NAME );
     try {
       $con->begin();
