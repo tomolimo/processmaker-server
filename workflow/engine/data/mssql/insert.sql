@@ -2735,7 +2735,7 @@ SELECT 'LABEL','ID_TASK_NO_STEPS','en','The task doesn''t have any steps','2011-
   UNION ALL
 SELECT 'JAVASCRIPT','ID_FIELDS_RESERVED_WORDS','en','The following fields cannot have these  names because they are reserved words','2011-10-26' 
   UNION ALL
-SELECT 'LABEL','ID_PROCESS_CATEGORY','en','Process category','2011-10-26' 
+SELECT 'LABEL','ID_PROCESS_CATEGORY','en','Process Categories','2011-12-14' 
   UNION ALL
 SELECT 'LABEL','ID_LOCATION','en','Location','2011-10-26' 
   UNION ALL
@@ -5226,6 +5226,16 @@ SELECT 'LABEL','ID_SEARCH_PATTERN','en','Search Pattern','2011-11-28'
 SELECT 'LABEL','ID_SEARCH_XML_METADATA','en','Search XML metadata','2011-11-28' 
   UNION ALL
 SELECT 'LABEL','ID_FTP_MONITOR_SETTINGS','en','FTP Monitor Settings','2011-11-28' 
+  UNION ALL
+SELECT 'LABEL','ID_ERROR_UPLOADING_FILENAME','en','There was an error uploading the file, probably the file size if greater than upload_max_filesize parameter in php.ini, please check this parameter and try again.','2011-12-06' 
+  UNION ALL
+SELECT 'LABEL','ID_POSTED_DATA_EMPTY','en','Posted data is empty!','2011-12-06' 
+  UNION ALL
+SELECT 'LABEL','ID_MOST_AT_LEAST_3_DAY','en','You must define at least 3 Working Days!','2011-12-12' 
+  UNION ALL
+SELECT 'LABEL','ID_SELECT_ALL','en','You must define at least one ''ALL'' for other days you have not defined','2011-12-12' 
+  UNION ALL
+SELECT 'LABEL','ID_ASSIGN_USERGROUPS','en','Assign users group or user','2011-12-12' 
  ;
 
 INSERT INTO ISO_LOCATION ([IC_UID],[IL_UID],[IL_NAME],[IL_NORMAL_NAME],[IS_UID]) 

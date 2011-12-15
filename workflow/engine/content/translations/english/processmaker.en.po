@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: ProcessMaker (Branch 2.0-dev) 2.0.34.rc4-203-gb873e5a\n"
+"Project-Id-Version: ProcessMaker (Branch 2.0-dev) 2.0.34.rc4-179-g5fa57e9\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2011-12-05 08:57:57\n"
+"PO-Revision-Date: 2011-11-28 11:40:40\n"
 "Last-Translator: \n"
 "Language-Team: Colosa Developers Team <developers@colosa.com>\n"
 "MIME-Version: 1.0\n"
@@ -4048,8 +4048,8 @@ msgstr "The following fields cannot have these  names because they are reserved 
 # TRANSLATION
 # LABEL/ID_PROCESS_CATEGORY
 #: LABEL/ID_PROCESS_CATEGORY
-msgid "Process category"
-msgstr "Process category"
+msgid "Process Categories"
+msgstr "Process Categories"
 
 # TRANSLATION
 # LABEL/ID_LOCATION
@@ -11430,6 +11430,36 @@ msgstr "Search XML metadata"
 #: LABEL/ID_FTP_MONITOR_SETTINGS
 msgid "FTP Monitor Settings"
 msgstr "FTP Monitor Settings"
+
+# TRANSLATION
+# LABEL/ID_ERROR_UPLOADING_FILENAME
+#: LABEL/ID_ERROR_UPLOADING_FILENAME
+msgid "[LABEL/ID_ERROR_UPLOADING_FILENAME] There was an error uploading the file, probably the file size if greater than upload_max_filesize parameter in php.ini, please check this parameter and try again."
+msgstr "There was an error uploading the file, probably the file size if greater than upload_max_filesize parameter in php.ini, please check this parameter and try again."
+
+# TRANSLATION
+# LABEL/ID_POSTED_DATA_EMPTY
+#: LABEL/ID_POSTED_DATA_EMPTY
+msgid "Posted data is empty!"
+msgstr "Posted data is empty!"
+
+# TRANSLATION
+# LABEL/ID_MOST_AT_LEAST_3_DAY
+#: LABEL/ID_MOST_AT_LEAST_3_DAY
+msgid "You must define at least 3 Working Days!"
+msgstr "You must define at least 3 Working Days!"
+
+# TRANSLATION
+# LABEL/ID_SELECT_ALL
+#: LABEL/ID_SELECT_ALL
+msgid "You must define at least one 'ALL' for other days you have not defined"
+msgstr "You must define at least one 'ALL' for other days you have not defined"
+
+# TRANSLATION
+# LABEL/ID_ASSIGN_USERGROUPS
+#: LABEL/ID_ASSIGN_USERGROUPS
+msgid "Assign users group or user"
+msgstr "Assign users group or user"
 
 # additionalTables/additionalTablesData.xml?ADD_TAB_NAME
 # additionalTables/additionalTablesData.xml
@@ -30011,6 +30041,12 @@ msgstr "Photo"
 msgid "[users/users_EditRT.xml?USR_RESUME] Résumé"
 msgstr "Résumé"
 
+# users/users_EditRT.xml?MAX_FILES_SIZE
+# users/users_EditRT.xml
+#: edit - MAX_FILES_SIZE
+msgid "Max upload files size in bytes"
+msgstr "Max upload files size in bytes"
+
 # users/users_EditRT.xml?TITLE1
 # users/users_EditRT.xml
 #: title - TITLE1
@@ -30274,6 +30310,12 @@ msgstr "Photo"
 #: file - USR_RESUME
 msgid "[users/users_New.xml?USR_RESUME] Résumé"
 msgstr "Résumé"
+
+# users/users_New.xml?MAX_FILES_SIZE
+# users/users_New.xml
+#: edit - MAX_FILES_SIZE
+msgid "[users/users_New.xml?MAX_FILES_SIZE] Max upload files size in bytes"
+msgstr "Max upload files size in bytes"
 
 # users/users_New.xml?TITLE1
 # users/users_New.xml
@@ -31340,8 +31382,8 @@ msgstr "Relative Start and End Dates"
 # dynaforms/fields/date.xml?PMED_AFTERBEFORE_DESC
 # dynaforms/fields/date.xml
 #: subtitle - PMED_AFTERBEFORE_DESC
-msgid "<b>Data Codes:</b> A number followed by a letter to indicate the unit of time (d=day m=month y=year).<br/>Use negative numbers for past dates and positive numbers for future dates<br />  \t<b>NOTE.</b> When these relative dates are set have the priority, leave empty to use <i>Start and End dates</i>."
-msgstr "<b>Data Codes:</b> A number followed by a letter to indicate the unit of time (d=day m=month y=year).<br/>Use negative numbers for past dates and positive numbers for future dates<br />  \t<b>NOTE.</b> When these relative dates are set have the priority, leave empty to use <i>Start and End dates</i>."
+msgid "<b>Data Codes:</b> A number followed by a letter to indicate the unit of time (d=day m=month y=year).<br/>Use negative numbers for past dates and positive numbers for future dates<br />    <b>NOTE.</b> When these relative dates are set have the priority, leave empty to use <i>Start and End dates</i>."
+msgstr "<b>Data Codes:</b> A number followed by a letter to indicate the unit of time (d=day m=month y=year).<br/>Use negative numbers for past dates and positive numbers for future dates<br />    <b>NOTE.</b> When these relative dates are set have the priority, leave empty to use <i>Start and End dates</i>."
 
 # dynaforms/fields/date.xml?PME_BEFOREDATE
 # dynaforms/fields/date.xml
