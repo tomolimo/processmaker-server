@@ -895,10 +895,6 @@ function G_Text( form, element, name)
           break;
       }
     }
-    if (newCursor == -1){
-      
-      newCursor = newValue.length;
-    }
     if (cursor.selectionStart != cursor.selectionEnd){
       return {result: newValue, cursor: cursor};
     }
@@ -970,6 +966,7 @@ function G_Text( form, element, name)
   this.applyMask = function(keyCode){
     if (me.mask != ''){
       dataWOMask = me.removeMask();
+      //alert(dataWOMask.result + ', ' + dataWOMask.cursor.selectionStart);
       currentValue = dataWOMask.result;
       currentSel = dataWOMask.cursor;
       cursorStart = currentSel.selectionStart;
@@ -1022,20 +1019,22 @@ function G_Text( form, element, name)
           break;
       }
       if (newCursor < 0)  newCursor = 0;
-      if (keyCode != 8 && keyCode != 35 && keyCode != 36 && keyCode != 37 && keyCode != 39){        testData = dataWOMask.result; 
+      if (keyCode != 8 && keyCode != 46 && keyCode != 35 && keyCode != 36 && keyCode != 37 && keyCode != 39){        testData = dataWOMask.result; 
         tamData = testData.length;
         cleanMask = me.getCleanMask();
         tamMask = cleanMask.length;
         sw = false;
         if (testData.indexOf(me.comma_separator) == -1){
-          //alert('entro');
           aux = cleanMask.split('_');
           tamMask = aux[0].length;
           sw = true; 
         }
-        if (tamData >= tamMask && (!swPeriod && testData.indexOf(me.comma_separator) == -1)){
-          //alert('cancel + ' + String.fromCharCode(keyCode));
-          action = 'none';
+        if (tamData >= tamMask){
+          if (sw && !swPeriod && testData.indexOf(me.comma_separator) == -1){
+            action = 'none';  
+          }
+          if (!sw) action = 'none';
+          
         }
       }
       switch(action){
@@ -1762,19 +1761,50 @@ function G()
             myOut = _dout + _cout;
           }
         }
-        //alert(myOut);
         myOut = invertir(myOut);
+        tmpCursor = 0;
         aOut = myOut.split('');
-        for(l=0; l < aOut.length; l++){
-          switch(aOut[l]){
-            case '0': case '1': case '2': case '3': case '4': 
-            case '5': case '6': case '7': case '8': case '9':
-            case __DECIMAL_SEP:
-              last = l;
-              break;
+        if (cursor == 0){
+          for(l=0; l < aOut.length; l++){
+            switch(aOut[l]){
+              case '0': case '1': case '2': case '3': case '4': 
+              case '5': case '6': case '7': case '8': case '9':
+              case __DECIMAL_SEP:
+                myCursor = l;
+                l = aOut.length;
+                break;
+            }
           }
         }
-        myCursor = last + 1;
+        else if(cursor == num.length){
+          for(l=0; l < aOut.length; l++){
+            switch(aOut[l]){
+              case '0': case '1': case '2': case '3': case '4': 
+              case '5': case '6': case '7': case '8': case '9':
+              case __DECIMAL_SEP:
+                last = l;
+                break;
+            }
+          }
+          myCursor = last + 1;
+        }
+        else{
+          aNum = num.split('');
+          offset = 0;
+          aNewNum = myOut.split('');
+          for (a = 0; a < cursor; a++){
+             notFinded = false;
+             while (aNum[a] != aNewNum[a + offset] && !notFinded){
+               offset++;
+               if (a + offset > aNewNum.length){
+                 offset = -1;
+                 notFinded = true;
+               }
+             }
+          }
+          myCursor = cursor + offset;
+        }
+        
         break;
      }
      //myCursor += 1;
