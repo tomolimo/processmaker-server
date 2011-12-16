@@ -47,15 +47,17 @@ if( isset($request) ){
           $aFieldSelect = explode(",", $sqlColumns);
           $sFieldSel = (count($aFieldSelect)>1 ) ? $aFieldSelect[1] : $aFieldSelect[0];
           if( strlen(trim($sqlWhere))>0) {
-            $SQL .= " WHERE " . $sqlWhere . " AND " . $sFieldSel . " LIKE '". $_GET['input']."%'";
+            $SQL .= " WHERE " . $sqlWhere . " AND " . $sFieldSel . " LIKE '%". $_GET['input']."%'";
           } else {
-            $SQL .= " WHERE " . $sFieldSel . " LIKE '". $_GET['input']."%'";
+            $SQL .= " WHERE " . $sFieldSel . " LIKE '%". $_GET['input']."%'";
           }
           if( strlen(trim($sqlGroupBy))>0) {
             $SQL .= " GROUP BY " . $sqlGroupBy;
           }
           if( strlen(trim($sqlOrderBy))>0) {
             $SQL .= " ORDER BY " . $sqlOrderBy;
+          } else {
+            $SQL .= " ORDER BY " . $sFieldSel;
           }
         } else {
           //fixed: improving the statement sql by krlos
@@ -95,6 +97,7 @@ if( isset($request) ){
         $aResults = array();
         $count = 0;
 
+        $aRows = sortByChar($aRows, $input);
 
         if ($len){
             for ($i=0;$i<count($aRows);$i++){
@@ -128,10 +131,10 @@ if( isset($request) ){
                 // had to use utf_decode, here
                 // not necessary if the results are coming from mysql
                 //
-                if (strtolower(substr($value,0,$len)) == $input){
+//                if (strtolower(substr($value,0,$len)) == $input){
                     $count++;
                     $aResults[] = array( "id"=>$id ,"value"=>htmlspecialchars($value), "info"=>htmlspecialchars($info) );
-                }
+//                }
 
                 if ($limit && $count==$limit)
                     break;
@@ -198,3 +201,32 @@ if( isset($request) ){
 	}	
 }
 
+function sortByChar($aRows, $charSel)
+{
+  $aIniChar = array();
+  $aRest    = array();
+  for($i=0; $i<count($aRows) ;$i++){
+    $aRow = $aRows[$i];
+    $nCols = sizeof($aRow);
+    $aRowOrder = array_values($aRow);
+    switch( $nCols ){
+        case 1:
+            $value = $aRowOrder[0];
+            break;
+        case 2:
+            $value = $aRowOrder[1];
+            break;
+
+        case $nCols >= 3:
+            $value = $aRowOrder[1];
+            break;
+    }
+
+    if(substr(lowerCase($value), 0, 1) == substr( lowerCase($charSel), 0, 1)){
+      array_push($aIniChar, $aRow);
+    } else {
+      array_push($aRest, $aRow);
+    }
+  }
+  return array_merge($aIniChar, $aRest);
+}
