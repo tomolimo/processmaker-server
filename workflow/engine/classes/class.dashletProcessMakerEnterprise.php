@@ -66,11 +66,12 @@ class dashletProcessMakerEnterprise implements DashletInterface {
         width: 80.5%;
 
         font-size: 64%;
-        text-align : justify;
+        text-align: justify;
       }
 
       .icon img{
         width: 35px;
+        border: 0;
       }
 
       .description a{
@@ -170,8 +171,8 @@ class dashletProcessMakerEnterprise implements DashletInterface {
         </div>
         <div class=\"description\">
           <a href=\"http://processmaker.com/digitally-sign-web-forms-elock\" target=\"_blank\"><div align= left>Elock PKI Certified Digital Signature mobiSigner Connector Plug-in</div></a>
-
-          <div align= justify>Plug-in which creates an integration with an Elock Digital Signature server and creates a digital signature field which can be added to web forms or can be used to digitally sign PDFs. This creates true PKI certified digital signatures with SHA encryption.</div>
+          <br />
+          Plug-in which creates an integration with an Elock Digital Signature server and creates a digital signature field which can be added to web forms or can be used to digitally sign PDFs. This creates true PKI certified digital signatures with SHA encryption.
           <br />
           <a href=\"http://processmaker.com/digitally-sign-web-forms-elock\" target=\"_blank\">Read More&gt;&gt;</a>
         </div>
