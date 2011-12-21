@@ -1122,7 +1122,7 @@ function G_Text( form, element, name)
       case 35: case 36: //HOME OR END
       case 37: case 38: case 39: case 40: // ARROW KEYS
         me.applyMask(pressKey);
-        if (pressKey == 8 || pressKey == 46) me.sendOnChange();
+        if ((pressKey == 8 || pressKey == 46) && (me.validate != 'Login' && me.validate != 'NodeName')) me.sendOnChange();
         me.checkBrowser();
         if (me.browser.name == 'Chrome'){
           event.returnValue = false;
@@ -1196,9 +1196,9 @@ function G_Text( form, element, name)
           key = String.fromCharCode(pressKey);
           keyValid = patron.test(key);
           break;
-        case 'NodeName':
+        case 'NodeName': case 'Login':
+          updateOnChange = false;
           if (me.getCursorPos() == 0) {
-            updateOnChange = false;
             if ((pressKey >= 48) && (pressKey <= 57)) {
               keyValid = false;
               break;
@@ -1218,6 +1218,7 @@ function G_Text( form, element, name)
             lang  :(typeof(me.language)!=='undefined')?me.language:"en"
           });
           keyValid = k.result();
+          
           break;
       }
       if (keyValid){
