@@ -1102,6 +1102,16 @@ function G_Text( form, element, name)
       me.element.dispatchEvent(evObj);
     }*/
   };
+  
+  this.sendOnChange = function(){
+    if (me.element.fireEvent){
+      me.element.fireEvent("onchange");
+    }else{
+      var evObj = document.createEvent('HTMLEvents');
+      evObj.initEvent( 'change', true, true );
+      me.element.dispatchEvent(evObj);
+    }
+  };
                           
   this.handleKeyDown = function(event){
     //THIS FUNCTION HANDLE BACKSPACE AND DELETE KEYS
@@ -1112,6 +1122,7 @@ function G_Text( form, element, name)
       case 35: case 36: //HOME OR END
       case 37: case 38: case 39: case 40: // ARROW KEYS
         me.applyMask(pressKey);
+        if (pressKey == 8 || pressKey == 46) me.sendOnChange();
         me.checkBrowser();
         if (me.browser.name == 'Chrome'){
           event.returnValue = false;
@@ -1149,6 +1160,7 @@ function G_Text( form, element, name)
       pressKey = window.event ? event.keyCode : event.which;
       if (me.mType == 'date') me.validate = 'Int';
       keyValid = true;
+      updateOnChange = true;
       switch(me.validate){
         case 'Any':
           keyValid = true;
@@ -1186,6 +1198,7 @@ function G_Text( form, element, name)
           break;
         case 'NodeName':
           if (me.getCursorPos() == 0) {
+            updateOnChange = false;
             if ((pressKey >= 48) && (pressKey <= 57)) {
               keyValid = false;
               break;
@@ -1215,6 +1228,7 @@ function G_Text( form, element, name)
         else{
           me.applyMask(pressKey);
         }
+        if (updateOnChange) me.sendOnChange();
         if (me.browser.name == 'Chrome'){
           event.returnValue = false;
         }
