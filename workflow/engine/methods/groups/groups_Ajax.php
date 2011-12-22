@@ -190,7 +190,37 @@ switch ($_POST['action'])
   case 'assignedMembers':
     require_once 'classes/model/Users.php';
     require_once 'classes/model/GroupUser.php';
+
+    G::LoadClass('configuration');
+    $co = new Configurations();
+    $config = $co->getConfiguration('groupList', 'pageSize','',$_SESSION['USER_LOGGED']);
+    $env = $co->getConfiguration('ENVIRONMENT_SETTINGS', '');
+    $limit_size = isset($config['pageSize']) ? $config['pageSize'] : 20;
+    $start   = isset($_REQUEST['start'])  ? $_REQUEST['start'] : 0;
+    $limit   = isset($_REQUEST['limit'])  ? $_REQUEST['limit'] : $limit_size;
+    $filter = isset($_REQUEST['textFilter']) ? $_REQUEST['textFilter'] : '';
+
     $sGroupUID = $_REQUEST['gUID'];
+
+    $aUsers = Array();
+    $oCriteria = new Criteria('workflow');
+    $oCriteria->addSelectColumn('COUNT(*) AS CNT');
+    $oCriteria->addJoin(GroupUserPeer::USR_UID, UsersPeer::USR_UID, Criteria::LEFT_JOIN);
+    $oCriteria->add(GroupUserPeer::GRP_UID, $sGroupUID);
+    $oCriteria->add(UsersPeer::USR_STATUS, 'CLOSED', Criteria::NOT_EQUAL);
+    $filter = (isset($_POST['textFilter']))? $_POST['textFilter'] : '';
+    if ($filter != ''){
+      $oCriteria->add(
+      $oCriteria->getNewCriterion(UsersPeer::USR_USERNAME, '%'.$filter.'%', Criteria::LIKE)->addOr(
+      $oCriteria->getNewCriterion(UsersPeer::USR_FIRSTNAME, '%'.$filter.'%', Criteria::LIKE)->addOr(
+      $oCriteria->getNewCriterion(UsersPeer::USR_LASTNAME, '%'.$filter.'%', Criteria::LIKE))));
+    }
+    $oDataset = UsersPeer::DoSelectRs ($oCriteria);
+    $oDataset->setFetchmode (ResultSet::FETCHMODE_ASSOC);
+    $oDataset->next();
+    $row = $oDataset->getRow();
+    $totalRows = $row['CNT'];
+
     $oCriteria = new Criteria('workflow');
     $oCriteria->addSelectColumn(GroupUserPeer::GRP_UID);
     $oCriteria->addSelectColumn(UsersPeer::USR_UID);
@@ -208,18 +238,31 @@ switch ($_POST['action'])
       $oCriteria->getNewCriterion(UsersPeer::USR_USERNAME, '%'.$filter.'%', Criteria::LIKE)->addOr(
       $oCriteria->getNewCriterion(UsersPeer::USR_FIRSTNAME, '%'.$filter.'%', Criteria::LIKE)->addOr(
       $oCriteria->getNewCriterion(UsersPeer::USR_LASTNAME, '%'.$filter.'%', Criteria::LIKE))));
-    }  
+    }
+    $oCriteria->setOffset($start);
+    $oCriteria->setLimit($limit);
+
     $oDataset = UsersPeer::doSelectRS($oCriteria);
     $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
     $arrData = Array();
     while ($oDataset->next()){
       $arrData[] = $oDataset->getRow();
     }
-    echo '{success: true, members: '.G::json_encode($arrData).'}';
+    echo '{success: true, members: '.G::json_encode($arrData).', total_users: '.$totalRows.'}';
     break;
   case 'availableMembers':
     require_once 'classes/model/Users.php';
     require_once 'classes/model/GroupUser.php';
+
+    G::LoadClass('configuration');
+    $co = new Configurations();
+    $config = $co->getConfiguration('groupList', 'pageSize','',$_SESSION['USER_LOGGED']);
+    $env = $co->getConfiguration('ENVIRONMENT_SETTINGS', '');
+    $limit_size = isset($config['pageSize']) ? $config['pageSize'] : 20;
+    $start   = isset($_REQUEST['start'])  ? $_REQUEST['start'] : 0;
+    $limit   = isset($_REQUEST['limit'])  ? $_REQUEST['limit'] : $limit_size;
+    $filter = isset($_REQUEST['textFilter']) ? $_REQUEST['textFilter'] : '';
+
     $sGroupUID = $_REQUEST['gUID'];
     $oCriteria = new Criteria('workflow');
     $oCriteria->addSelectColumn(GroupUserPeer::GRP_UID);
@@ -235,6 +278,25 @@ switch ($_POST['action'])
       $uUIDs[] = $aRow['USR_UID'];
       $oDataset->next();
     }
+
+    $aUsers = Array();
+    $oCriteria = new Criteria('workflow');
+    $oCriteria->addSelectColumn('COUNT(*) AS CNT');
+    $oCriteria->add(UsersPeer::USR_STATUS, 'CLOSED', Criteria::NOT_EQUAL);
+    $oCriteria->add(UsersPeer::USR_UID, $uUIDs, Criteria::NOT_IN);
+    $filter = (isset($_POST['textFilter']))? $_POST['textFilter'] : '';
+    if ($filter != ''){
+      $oCriteria->add(
+      $oCriteria->getNewCriterion(UsersPeer::USR_USERNAME, '%'.$filter.'%', Criteria::LIKE)->addOr(
+      $oCriteria->getNewCriterion(UsersPeer::USR_FIRSTNAME, '%'.$filter.'%', Criteria::LIKE)->addOr(
+      $oCriteria->getNewCriterion(UsersPeer::USR_LASTNAME, '%'.$filter.'%', Criteria::LIKE))));
+    }
+    $oDataset = UsersPeer::DoSelectRs ($oCriteria);
+    $oDataset->setFetchmode (ResultSet::FETCHMODE_ASSOC);
+    $oDataset->next();
+    $row = $oDataset->getRow();
+    $totalRows = $row['CNT'];
+
     $oCriteria = new Criteria('workflow');
     $oCriteria->addSelectColumn(UsersPeer::USR_UID);
     $oCriteria->addSelectColumn(UsersPeer::USR_USERNAME);
@@ -250,14 +312,16 @@ switch ($_POST['action'])
       $oCriteria->getNewCriterion(UsersPeer::USR_USERNAME, '%'.$filter.'%', Criteria::LIKE)->addOr(
       $oCriteria->getNewCriterion(UsersPeer::USR_FIRSTNAME, '%'.$filter.'%', Criteria::LIKE)->addOr(
       $oCriteria->getNewCriterion(UsersPeer::USR_LASTNAME, '%'.$filter.'%', Criteria::LIKE))));
-    }  
+    }
+    $oCriteria->setOffset($start);
+    $oCriteria->setLimit($limit);
     $oDataset = UsersPeer::doSelectRS($oCriteria);
     $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
     $arrData = Array();
     while ($oDataset->next()){
       $arrData[] = $oDataset->getRow();
     }
-    echo '{success: true, members: '.G::json_encode($arrData).'}';
+    echo '{success: true, members: '.G::json_encode($arrData).', total_users: '.$totalRows.'}';
     break;
   case 'assignUsersToGroupsMultiple':
     $GRP_UID = $_POST['GRP_UID'];

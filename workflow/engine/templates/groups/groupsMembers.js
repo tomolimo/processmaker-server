@@ -38,6 +38,8 @@ var assignAllButton;
 var removeButton;
 var removeAllButton;
 var backButton;
+var pageSize = 20;
+var bbarpaging;
 
 
 Ext.onReady(function(){
@@ -66,6 +68,7 @@ Ext.onReady(function(){
           }),
       reader : new Ext.data.JsonReader( {
         root: 'members',
+        totalProperty: 'total_users',
         fields : [
             {name : 'USR_UID'},
             {name : 'USR_USERNAME'},
@@ -125,6 +128,7 @@ Ext.onReady(function(){
           }),
       reader : new Ext.data.JsonReader( {
         root: 'members',
+        totalProperty: 'total_users',
         fields : [
             {name : 'USR_UID'},
             {name : 'USR_USERNAME'},
@@ -168,72 +172,137 @@ Ext.onReady(function(){
     selectSingle: false,
     listeners:{
       selectionchange: function(sm){
-          switch(sm.getCount()){
+        switch(sm.getCount()){
           case 0: Ext.getCmp('removeButton').disable(); break;
           default: Ext.getCmp('removeButton').enable(); break;  
-          }
         }
+      }
     }
   });
   
+  storePageSize = new Ext.data.SimpleStore({
+    fields   : ['size'],
+    data     : [['20'],['30'],['40'],['50'],['100']],
+    autoLoad : true
+  });
+
+  comboPageSizeAvailable = new Ext.form.ComboBox({
+    typeAhead     : false,
+    mode          : 'local',
+    triggerAction : 'all',
+    store         : storePageSize,
+    valueField    : 'size',
+    displayField  : 'size',
+    width         : 50,
+    editable      : false,
+    listeners     : {
+      select : function(c, d, i) {
+        bbarpagingAvailable.pageSize = parseInt(d.data['size']);
+        bbarpagingAvailable.moveFirst();
+      }
+    }
+  });
+  comboPageSizeAvailable.setValue(pageSize);
+  
+  bbarpagingAvailable = new Ext.PagingToolbar({
+    pageSize    : pageSize,
+    store       : storeA,
+    displayInfo : true,
+    displayMsg  : '{0} - {1} of {2}',
+    emptyMsg    : 'No records',
+    items: ['-', _('ID_PAGE_SIZE')+':', comboPageSizeAvailable ]
+  });
+
   availableGrid = new Ext.grid.GridPanel({
-    layout      : 'fit',
-    title           : _('ID_AVAILABLE_USERS'),
-    region          : 'center',
-    ddGroup         : 'assignedGridDDGroup',
-    store           : storeA,
-    cm            : cmodelP,
-    sm        : smodelA,
-    enableDragDrop  : true,
-    stripeRows      : true,
-    autoExpandColumn: 'USR_USERNAME',
-    iconCls      : 'icon-grid',
-    id        : 'availableGrid',
-    height      : 100,
-    autoWidth     : true,
-    stateful     : true,
-    stateId     : 'grid',
+    layout             : 'fit',
+    title              : _('ID_AVAILABLE_USERS'),
+    region             : 'center',
+    ddGroup            : 'assignedGridDDGroup',
+    store              : storeA,
+    cm                 : cmodelP,
+    sm                 : smodelA,
+    enableDragDrop     : true,
+    stripeRows         : true,
+    autoExpandColumn   : 'USR_USERNAME',
+    iconCls            : 'icon-grid',
+    id                 : 'availableGrid',
+    height             : 100,
+    autoWidth          : true,
+    stateful           : true,
+    stateId            : 'grid',
     enableColumnResize : true,
-    enableHdMenu  : true,
-    frame      : false,
-    columnLines    : false,
-    viewConfig: {
-      forceFit:true,
-      cls:"x-grid-empty",
-      emptyText: (TRANSLATIONS.ID_NO_RECORDS_FOUND)
+    enableHdMenu       : true,
+    frame              : false,
+    columnLines        : false,
+    viewConfig : {
+      forceFit  : true,
+      cls       : "x-grid-empty",
+      emptyText : (TRANSLATIONS.ID_NO_RECORDS_FOUND)
     },
-    tbar: [cancelEditMembersButton,{xtype: 'tbfill'},'-',searchTextA,clearTextButtonA],
+    tbar : [cancelEditMembersButton,{xtype: 'tbfill'},'-',searchTextA,clearTextButtonA],
     //bbar: [{xtype: 'tbfill'}, assignAllButton],
-    listeners: {rowdblclick: AssignUsersAction},
-    hidden: true
+    listeners : {rowdblclick: AssignUsersAction},
+    hidden    : true,
+    bbar      : bbarpagingAvailable
+  });
+
+
+  comboPageSizeAssigned = new Ext.form.ComboBox({
+    typeAhead     : false,
+    mode          : 'local',
+    triggerAction : 'all',
+    store         : storePageSize,
+    valueField    : 'size',
+    displayField  : 'size',
+    width         : 50,
+    editable      : false,
+    listeners     : {
+      select : function(c, d, i) {
+        bbarpagingAssigned.pageSize = parseInt(d.data['size']);
+        bbarpagingAssigned.moveFirst();
+      }
+    }
+  });
+  comboPageSizeAssigned.setValue(pageSize);
+
+  bbarpagingAssigned = new Ext.PagingToolbar({
+    pageSize    : pageSize,
+    store       : storeP,
+    displayInfo : true,
+    displayMsg  : '{0} - {1} of {2}',
+    emptyMsg    : 'No records',
+    items: ['-', _('ID_PAGE_SIZE')+':', comboPageSizeAssigned ]
   });
 
   assignedGrid = new Ext.grid.GridPanel({
-    layout      : 'fit',
-    title           : _('ID_ASSIGNED_USERS'),
-    ddGroup         : 'availableGridDDGroup',
-    store           : storeP,
-    cm            : cmodelP,
-    sm        : smodelP,
-    enableDragDrop  : true,
-    stripeRows      : true,
-    autoExpandColumn: 'USR_USERNAME',
-    iconCls      : 'icon-grid',
-    id        : 'assignedGrid',
-    height      : 100,
-    autoWidth     : true,
-    stateful     : true,
-    stateId     : 'grid',
+    layout             : 'fit',
+    title              : _('ID_ASSIGNED_USERS'),
+    ddGroup            : 'availableGridDDGroup',
+    store              : storeP,
+    cm                 : cmodelP,
+    sm                 : smodelP,
+    enableDragDrop     : true,
+    stripeRows         : true,
+    autoExpandColumn   : 'USR_USERNAME',
+    iconCls            : 'icon-grid',
+    id                 : 'assignedGrid',
+    height             : 100,
+    autoWidth          : true,
+    stateful           : true,
+    stateId            : 'grid',
     enableColumnResize : true,
-    enableHdMenu  : true,
-    frame      : false,
-    columnLines    : false,
-    viewConfig    : {forceFit:true},
-    tbar: [editMembersButton,{xtype: 'tbfill'},'-',searchTextP,clearTextButtonP],
+    enableHdMenu       : true,
+    frame              : false,
+    columnLines        : false,
+    viewConfig         : {forceFit:true},
+    tbar : [editMembersButton,{xtype: 'tbfill'},'-',searchTextP,clearTextButtonP],
     //bbar: [{xtype: 'tbfill'},removeAllButton],
-    listeners: {rowdblclick: function(){
-      (availableGrid.hidden)? DoNothing() : RemoveUsersAction();
-    }}
+    listeners : {
+      rowdblclick: function() {
+        (availableGrid.hidden) ? DoNothing() : RemoveUsersAction();
+      }
+    },
+    bbar : bbarpagingAssigned
   });
     
     buttonsPanel = new Ext.Panel({
