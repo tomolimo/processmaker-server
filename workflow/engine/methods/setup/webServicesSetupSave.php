@@ -1,4 +1,4 @@
-<?
+<?php
 unset($_SESSION['WS_SESSION_ID']);
 
 if($_POST['form']['WS_PROTOCOL']!='' && $_POST['form']['WS_WORKSPACE']!='')

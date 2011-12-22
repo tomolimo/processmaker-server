@@ -30,7 +30,7 @@
   if ( !is_object( $G_PUBLISH ) ) die ("Publisher object is required by this template!");
 ?>
 <table width="100%" cellpadding="5" cellspacing="0" border="0">
-<?
+<?php
   if (isset($_SESSION['G_MESSAGE_TYPE']) && isset($_SESSION['G_MESSAGE'])) {
     echo('<b>' . G::capitalize($_SESSION['G_MESSAGE_TYPE']) . '</b> : ' . $_SESSION['G_MESSAGE']);
     unset($_SESSION['G_MESSAGE_TYPE']);

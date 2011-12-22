@@ -1,4 +1,4 @@
-<?
+<?php
   ini_set("soap.wsdl_cache_enabled", "0"); // disabling WSDL cache
 
   $wsdl = PATH_METHODS . "services" . PATH_SEP . "pmos.wsdl";

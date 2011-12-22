@@ -163,7 +163,7 @@
       <td width=20></td>
       <td width=60%></td>
       </tr>
-  <?
+  <?php
     walkLevel (0, "*", 0);
   ?>
 	<tr>

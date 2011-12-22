@@ -22,7 +22,7 @@ demo de buscador<br>
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  * 
  */
-<?
+<?php
   $frm = $HTTP_POST_VARS;
   
   $dbc = new dbconnection();

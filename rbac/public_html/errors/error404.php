@@ -1,4 +1,4 @@
-<?
+<?php
  $ERROR_TEXT = "404 Not Found ";
  $ERROR_DESCRIPTION = "
       Your browser (or proxy) sent a request

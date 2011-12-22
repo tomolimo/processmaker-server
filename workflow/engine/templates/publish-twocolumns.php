@@ -50,7 +50,7 @@ if (isset($_SESSION['G_MESSAGE_TYPE']) && isset($_SESSION['G_MESSAGE'])) {
   }
   ?>
 <table width="100%" cellpadding="0" cellspacing="0" border="0">
-<?
+<?php
  
   if( is_array( $G_PUBLISH->Parts ) )
   {

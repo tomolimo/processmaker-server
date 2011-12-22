@@ -1,4 +1,4 @@
-<?
+<?php
 sleep(1);
 
 if(isset($_SESSION['processes_upload'])){
