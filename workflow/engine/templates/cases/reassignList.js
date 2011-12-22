@@ -67,6 +67,7 @@
     autocomplete  : true,
     hideTrigger   : Boolean,
     alignTo : 'right',
+    selectOnFocus:true,
     mode          : 'remote',
     triggerAction : 'all',
     emptyText     : _('ID_ENTER_SEARCH_TERM'),

@@ -599,7 +599,12 @@ class wsBase
   public function sendMessage($caseId, $sFrom, $sTo, $sCc, $sBcc, $sSubject, $sTemplate, $appFields = null, $aAttachment = null ) {
     try {
       $aSetup = getEmailConfiguration();
-
+      $passwd =$aSetup['MESS_PASSWORD'];
+      if(strpos( $passwd, 'hush:' ) !== false)
+      {
+      	list($hush, $pass) = explode(":", $passwd);
+      	$aSetup['MESS_PASSWORD'] = G::decrypt($pass,'EMAILENCRYPT');      
+      }           
       $oSpool = new spoolRun();
       $oSpool->setConfig(array(
         'MESS_ENGINE'   => $aSetup['MESS_ENGINE'],
@@ -676,12 +681,12 @@ class wsBase
         'app_msg_status'   => 'pending'
       );
       $oSpool->create( $messageArray );
-      $oSpool->sendMail();
-
+      $oSpool->sendMail(); 
       if ( $oSpool->status == 'sent' )
         $result = new wsResponse (0, "message sent : $sTo" );
       else
         $result = new wsResponse (29, $oSpool->status . ' ' . $oSpool->error . print_r ($aSetup ,1 ) );
+
       return $result;
     } 
     catch ( Exception $e ) {

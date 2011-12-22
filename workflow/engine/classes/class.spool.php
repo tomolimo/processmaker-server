@@ -223,7 +223,7 @@ class spoolRun {
       } else { //if the from name was not set
         $this->fileData['from_name'] = 'Processmaker';
       }
-      
+       
       if( ! isset($matches[3]) ) {
         throw new Exception('Invalid email address in FROM parameter (' . $this->fileData['from'] . ')', $this->ExceptionCode['WARNING']);
       }
@@ -327,6 +327,11 @@ class spoolRun {
           $oPHPMailer->Host = $this->config['MESS_SERVER'];
           $oPHPMailer->Port = $this->config['MESS_PORT'];
           $oPHPMailer->Username = $this->config['MESS_ACCOUNT'];
+          $passwd = $this->config['MESS_PASSWORD'];
+          if(strpos( $passwd, 'hush:' ) !== false){
+          	list($hush, $pass) = explode(":", $passwd);
+          	 $this->config['MESS_PASSWORD'] = G::decrypt($pass,'EMAILENCRYPT');
+          }
           $oPHPMailer->Password = $this->config['MESS_PASSWORD'];
           $oPHPMailer->From = $this->fileData['from_email'];
           $oPHPMailer->FromName = utf8_decode($this->fileData['from_name']);
@@ -375,6 +380,11 @@ class spoolRun {
           $oPHPMailer->Host = $this->config['MESS_SERVER'];
           $oPHPMailer->Port = $this->config['MESS_PORT'];
           $oPHPMailer->Username = $this->config['MESS_ACCOUNT'];
+          $passwd = $this->config['MESS_PASSWORD'];
+          if(strpos( $passwd, 'hush:' ) !== false){
+          	list($hush, $pass) = explode(":", $passwd);
+          	$this->config['MESS_PASSWORD'] = G::decrypt($pass,'EMAILENCRYPT');
+          }
           $oPHPMailer->Password = $this->config['MESS_PASSWORD'];
           $oPHPMailer->From = $this->fileData['from_email'];
           $oPHPMailer->FromName = utf8_decode($this->fileData['from_name']);          
@@ -454,6 +464,12 @@ class spoolRun {
           $send->setServer($this->config['MESS_SERVER']);
           $send->setPort($this->config['MESS_PORT']);
           $send->setUsername($this->config['MESS_ACCOUNT']);
+          
+          $passwd = $this->config['MESS_PASSWORD'];
+          if(strpos( $passwd, 'hush:' ) !== false){
+          	list($hush, $pass) = explode(":", $passwd);
+          	$this->config['MESS_PASSWORD'] = G::decrypt($pass,'EMAILENCRYPT');
+          }
           $send->setPassword($this->config['MESS_PASSWORD']);
           $send->setReturnPath($this->fileData['from_email']);
           $send->setHeaders($header);
@@ -482,7 +498,11 @@ class spoolRun {
     $oConfiguration = new Configuration();
     $aConfiguration = $oConfiguration->load('Emails', '', '', '', '');
     $aConfiguration = unserialize($aConfiguration['CFG_VALUE']);
-    
+    $passwd = $aConfiguration['MESS_PASSWORD'];
+    if(strpos( $passwd, 'hush:' ) !== false){
+    	list($hush, $pass) = explode(":", $passwd);
+    	$aConfiguration['MESS_PASSWORD'] = G::decrypt($pass,'EMAILENCRYPT');
+    }
     if( $aConfiguration['MESS_ENABLED'] == '1' ) {
       $this->setConfig(array (
         'MESS_ENGINE' => $aConfiguration['MESS_ENGINE'], 

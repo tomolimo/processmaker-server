@@ -724,6 +724,11 @@ class Xpdl extends processes
         $oConfiguration = new Configuration();
         $emailArray     = $oConfiguration->load('Emails','','','','');
         $arrayFrom      = unserialize($emailArray['CFG_VALUE']);
+        $passwd = $arrayFrom['MESS_PASSWORD'];
+        if(strpos( $passwd, 'hush:' ) !== false){
+        	list($hush, $pass) = explode(":", $passwd);
+        	$arrayFrom['MESS_PASSWORD'] = G::decrypt($pass,'EMAILENCRYPT');
+        }
         $from           = $arrayFrom['MESS_ACCOUNT'];
         if($to == 'ext'){
           $oUser = new Users();
