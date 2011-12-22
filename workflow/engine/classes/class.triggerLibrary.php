@@ -34,22 +34,25 @@ class triggerLibrary {
       $aAvailablePmFunctions = $oPluginRegistry->getPmFunctions ();
       foreach ( $aAvailablePmFunctions as $key => $class ) {
         $filePlugin = PATH_PLUGINS . $class . PATH_SEP . 'classes' . PATH_SEP . 'class.pmFunctions.php';
-        if (file_exists ( $filePlugin ))
+        
+        if ( file_exists($filePlugin) && !is_dir($filePlugin)) {
           $this->registerFunctionsFileToLibrary ( $filePlugin, "ProcessMaker Functions" );
+        }
       }
 
     }
     //Add External Triggers
-    $dir=G::ExpandPath( "classes" ).'triggers';
-    $filesArray=array();
+    $dir = G::ExpandPath( "classes" ).'triggers';
+    $filesArray = array();
+    
     if (file_exists($dir)){
       if ($handle = opendir($dir)) {
-          while (false !== ($file = readdir($handle))) {
-              if(($file!=".")&&($file!="..")){
-                $this->registerFunctionsFileToLibrary ($dir.PATH_SEP. $file, "ProcessMaker External Functions");
-              }
+        while (false !== ($file = readdir($handle))) {
+          if( $file != "." && $file != ".." && !is_dir($dir . PATH_SEP . $file)){
+            $this->registerFunctionsFileToLibrary( $dir . PATH_SEP . $file, "ProcessMaker External Functions");
           }
-          closedir($handle);
+        }
+        closedir($handle);
       }
     }
   }
