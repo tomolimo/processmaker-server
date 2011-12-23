@@ -118,6 +118,12 @@ class LDAP
     $sKeyword     = trim($sKeyword);
     $RBAC         = RBAC::getSingleton();
     $aAuthSource  = $RBAC->authSourcesObj->load($this->sAuthSource);
+    $pass =explode("_",$aAuthSource['AUTH_SOURCE_PASSWORD']);
+    foreach($pass as $index => $value) {
+      if($value == '2NnV3ujj3w'){
+        $aAuthSource['AUTH_SOURCE_PASSWORD'] = G::decrypt($pass[0],$aAuthSource['AUTH_SOURCE_SERVER_NAME']);
+      }
+    }
     $oLink = @ldap_connect($aAuthSource['AUTH_SOURCE_SERVER_NAME'], $aAuthSource['AUTH_SOURCE_PORT']);
     @ldap_set_option($oLink, LDAP_OPT_PROTOCOL_VERSION, $aAuthSource['AUTH_SOURCE_VERSION']);
     @ldap_set_option($oLink, LDAP_OPT_REFERRALS, 0);

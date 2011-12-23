@@ -6,18 +6,18 @@
 Ext.onReady(function(){
 
   var txtSourceId=new Ext.form.TextField({
-  id: 'AUTH_SOURCE_UID',				
-  fieldLabel: 'krlos', 
+  id: 'AUTH_SOURCE_UID',
+  fieldLabel: 'krlos',
   xtype:'textfield',
-  value:sUID,
+  value: sUID,
   width: 200,
   hideLabel: true,
-  hidden : true,
+  hidden: true
   });
 
   var txtName=new Ext.form.TextField({
-  id: 'AUTH_SOURCE_NAME',				
-  fieldLabel: _('ID_NAME'), 
+  id: 'AUTH_SOURCE_NAME',
+  fieldLabel: _('ID_NAME'),
   xtype:'textfield',
   value:'',
   width: 200,
@@ -49,8 +49,10 @@ Ext.onReady(function(){
        select: function(c,d,i){
           if(i){
             formAuthSourceE.getForm().findField('AUTH_SOURCE_ATTRIBUTES').setValue('cn' + "\n" + 'samaccountname' + "\n" + 'givenname' + "\n" + 'sn' + "\n" + 'userprincipalname' + "\n" + 'telephonenumber');
+            formAuthSourceE.getForm().findField('AUTH_SOURCE_IDENTIFIER_FOR_USER').setValue('samaccountname');
           } else {
             formAuthSourceE.getForm().findField('AUTH_SOURCE_ATTRIBUTES').setValue('cn' + "\n" + 'uid' + "\n" + 'givenname' + "\n" + 'sn' + "\n" + 'mail' + "\n" + 'mobile');
+            formAuthSourceE.getForm().findField('AUTH_SOURCE_IDENTIFIER_FOR_USER').setValue('uid');
           }
        }
       }
@@ -188,7 +190,7 @@ Ext.onReady(function(){
     });
 
   var txtPassword=new Ext.form.TextField({
-    id: 'AUTH_SOURCE_PASSWORD',				
+    id: 'AUTH_SOURCE_PASSWORD',
     fieldLabel: _('ID_CACHE_PASSWORD'), 
     xtype:'textfield',
     inputType:'password',
@@ -205,10 +207,10 @@ Ext.onReady(function(){
 
 //Identifier for an imported user
   var txtIdentifier=new Ext.form.TextField({
-    id: 'AS_INDENTIFIER',				
+    id: 'AUTH_SOURCE_IDENTIFIER_FOR_USER',
     fieldLabel: _('ID_IDENTIFIER_IMPORT_USER'), 
     xtype:'textfield',
-    value:'uid',
+    value:'',
     width: 200,
     autoCreate: {tag: 'input', type: 'text', size: '20', autocomplete: 'off', maxlength: '50'},
     allowBlank: false,
@@ -221,7 +223,7 @@ Ext.onReady(function(){
     });
 //Object Classes
   var txtaClass=new Ext.form.TextArea({
-    id: 'AUTH_SOURCE_OBJECT_CLASSES',				
+    id: 'AUTH_SOURCE_OBJECT_CLASSES',
     fieldLabel: _('ID_OBJECT_CLASS'), 
     xtype:'textarea',
     value:'*',
@@ -236,13 +238,13 @@ Ext.onReady(function(){
     });
 //Additional Filter
   var txtoAddFilter=new Ext.form.TextField({
-    id: 'AUTH_SOURCE_ADDITIONAL_FILTER',				
+    id: 'AUTH_SOURCE_ADDITIONAL_FILTER',
     fieldLabel: _('ID_ADDITIONAL_FILTER'), 
     xtype:'textfield',
     value:'',
     width: 200,
     autoCreate: {tag: 'input', type: 'text', size: '20', autocomplete: 'off', maxlength: '200'},
-    allowBlank: false,
+    allowBlank: true,
     listeners: {
                 'render': function(c) {
                   c.getEl().on('keyup', function() {
@@ -252,7 +254,7 @@ Ext.onReady(function(){
     });
 //Attributes
   var txtAttributes=new Ext.form.TextArea({
-    id: 'AUTH_SOURCE_ATTRIBUTES',				
+    id: 'AUTH_SOURCE_ATTRIBUTES',
     fieldLabel: _('ID_ATTRIBUTES'), 
     xtype:'textArea',
     value:'cn' + "\n" + 'uid' + "\n" + 'givenname' + "\n" + 'sn' + "\n" + 'mail' + "\n" + 'mobile',
@@ -375,9 +377,8 @@ function loadAuthSourceData(sUID, txtSearchUser, txtPassword){
       sUID:sUID
     },
     waitMsg: _('ID_UPLOADING_PROCESS_FILE'), 
-    success: function(r,o){			
+    success: function(r,o){
       var data = Ext.util.JSON.decode(r.responseText);
-
 
           if (!data.sources.AUTH_ANONYMOUS){
                 Ext.getCmp("AUTH_SOURCE_SEARCH_USER").enable();
@@ -395,8 +396,6 @@ function loadAuthSourceData(sUID, txtSearchUser, txtPassword){
                 txtPassword.getEl().up('.x-form-item').setDisplayed(false);                
             }
 
-
-
       Ext.getCmp('formAuthSourceE').getForm().setValues({
       
        AUTH_SOURCE_UID:  data.sources.AUTH_SOURCE_UID,
@@ -408,6 +407,7 @@ function loadAuthSourceData(sUID, txtSearchUser, txtPassword){
        AUTH_ANONYMOUS: (data.sources.AUTH_ANONYMOUS)?'yes':'no',
        AUTH_SOURCE_SEARCH_USER: data.sources.AUTH_SOURCE_SEARCH_USER,
        AUTH_SOURCE_PASSWORD: data.sources.AUTH_SOURCE_PASSWORD,
+       AUTH_SOURCE_IDENTIFIER_FOR_USER: data.sources.AUTH_SOURCE_IDENTIFIER_FOR_USER,
        AUTH_SOURCE_VERSION: data.sources.AUTH_SOURCE_VERSION,
        AUTH_SOURCE_BASE_DN: data.sources.AUTH_SOURCE_BASE_DN,
        AUTH_SOURCE_OBJECT_CLASSES: data.sources.AUTH_SOURCE_OBJECT_CLASSES,
@@ -415,11 +415,8 @@ function loadAuthSourceData(sUID, txtSearchUser, txtPassword){
        AUTH_SOURCE_ADDITIONAL_FILTER:data.sources.AUTH_SOURCE_ADDITIONAL_FILTER
       })
     },
-
     failure:function(r,o){
       //viewport.getEl().unmask();
     }
   });
-} 
- 
- 
+}

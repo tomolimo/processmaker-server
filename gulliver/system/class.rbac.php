@@ -178,7 +178,6 @@ class RBAC
       file_put_contents( $filePath, serialize ( $this->aUserInfo ) );
     }
   }
-
   /**
   * verification the register automatic
   *
@@ -889,7 +888,6 @@ class RBAC
   function getAuthenticationSources($start,$limit,$filter='') {
     return $this->authSourcesObj->getAuthenticationSources($start,$limit,$filter);
   }
-
   /**
   * this function gets all authentication source
   * Authentication Sources
@@ -900,9 +898,16 @@ class RBAC
   * @return $this->authSourcesObj->load
   */
   function getAuthSource($sUID) {
-    return $this->authSourcesObj->load($sUID);
+    $data = $this->authSourcesObj->load($sUID);
+    $pass =explode("_",$data['AUTH_SOURCE_PASSWORD']);
+    foreach($pass as $index => $value) {
+      if($value == '2NnV3ujj3w'){
+        $data['AUTH_SOURCE_PASSWORD'] = G::decrypt($pass[0],$data['AUTH_SOURCE_SERVER_NAME']);
+      }
+    }
+    $this->authSourcesObj->Fields = $data;
+    return $this->authSourcesObj->Fields;
   }
-
   /**
   * this function creates an authentication source
   * Authentication Sources
@@ -913,6 +918,7 @@ class RBAC
   * @return $this->authSourcesObj->create
   */
   function createAuthSource($aData) {
+    $aData['AUTH_SOURCE_PASSWORD'] = G::encrypt($aData['AUTH_SOURCE_PASSWORD'],$aData['AUTH_SOURCE_SERVER_NAME'])."_2NnV3ujj3w";
     $this->authSourcesObj->create($aData);
   }
 
@@ -927,6 +933,7 @@ class RBAC
   * @return $this->authSourcesObj->create
   */
   function updateAuthSource($aData) {
+    $aData['AUTH_SOURCE_PASSWORD'] = G::encrypt($aData['AUTH_SOURCE_PASSWORD'],$aData['AUTH_SOURCE_SERVER_NAME'])."_2NnV3ujj3w";
     $this->authSourcesObj->update($aData);
   }
 

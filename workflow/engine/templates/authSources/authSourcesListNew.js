@@ -9,7 +9,7 @@ var storeAuthSources = new Ext.data.GroupingStore({
     proxy : new Ext.data.HttpProxy({
       url: 'authSources_Ajax?action=authSourcesNew&cmb=yes'
     }),
-    reader : new Ext.data.JsonReader( {
+    reader : new Ext.data.JsonReader({
       root: 'sources',
       fields: [
         {name: 'sType'},
@@ -23,12 +23,12 @@ var my_values = [
     ['krlos']
 ];
 var cboxAuthSourse = new Ext.form.ComboBox({
-    fieldLabel: 'Provider', 
-    hiddenName: 'AUTH_SOURCE_PROVIDER',   
+    fieldLabel: 'Provider',
+    hiddenName: 'AUTH_SOURCE_PROVIDER',
     mode: 'local',
     triggerAction: 'all',
     store: storeAuthSources,
-    valueField  : 'sType',
+    valueField: 'sType',
     displayField: 'sLabel',
     emptyText: 'Choose an option...',
     width: 160,
@@ -42,41 +42,40 @@ var cboxAuthSourse = new Ext.form.ComboBox({
   });
 
   componAuthSourse = new Ext.form.FieldSet({
-    title: 'Available Authentication Sources',  
+    title: 'Available Authentication Sources',
     items: [
-			   cboxAuthSourse
+      cboxAuthSourse
     ]    
   });
-  
 
   formAuthSourceOptoins = new Ext.FormPanel({
-    id:'formAuthSourceOptoins',       
+    id:'formAuthSourceOptoins',
     labelWidth: 250,
-    labelAlign:'right',
+    labelAlign: 'right',
     autoScroll: true,
     fileUpload: true,
     width:800,
     bodyStyle:'padding:10px',
-    waitMsgTarget : true,
+    waitMsgTarget: true,
     frame: true,
     defaults: {
       anchor: '100%',
       allowBlank: false,
       resizable: true,
       msgTarget: 'side',
-      align:'center'      
+      align:'center'
     },
     items:[
-    componAuthSourse,
+    componAuthSourse
       ],
     buttons: [
       {
         text: 'Continue',
-        handler: gotypesAuthSources        
+        handler: gotypesAuthSources
       },
-      {     
+      {
         text: 'Cancel',
-        handler: goBackform        
+        handler: goBackform
       }
     ]
     
@@ -125,9 +124,4 @@ var cboxAuthSourse = new Ext.form.ComboBox({
         }
     }
 });
- } 
- 
-
-
-
-
+ }

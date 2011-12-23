@@ -5,32 +5,31 @@
 
 Ext.onReady(function(){
 
-
   var txtSourceId=new Ext.form.TextField({
-  id: 'AUTH_SOURCE_UID',				
-  fieldLabel: 'krlos', 
-  xtype:'textfield',
-  value:'',
+  id: 'AUTH_SOURCE_UID',
+  fieldLabel: 'krlos',
+  xtype: 'textfield',
+  value: '',
   width: 200,
   hideLabel: true,
-  hidden : true,
+  hidden: true
   });
 
   var txtSourceProvider=new Ext.form.TextField({
-  id: 'AUTH_SOURCE_PROVIDER',				
-  fieldLabel: 'krlos', 
-  xtype:'textfield',
-  value:sprovider,
+  id: 'AUTH_SOURCE_PROVIDER',
+  fieldLabel: 'krlos',
+  xtype: 'textfield',
+  value: sprovider,
   width: 200,
   hideLabel: true,
-  hidden : true,
+  hidden: true
   });
 
   var txtName=new Ext.form.TextField({
-  id: 'AUTH_SOURCE_NAME',				
-  fieldLabel: _('ID_NAME'), 
-  xtype:'textfield',
-  value:'',
+  id: 'AUTH_SOURCE_NAME',
+  fieldLabel: _('ID_NAME'),
+  xtype: 'textfield',
+  value: '',
   width: 200,
   autoCreate: {tag: 'input', type: 'text', size: '20', autocomplete: 'off', maxlength: '50'},
   allowBlank: false,
@@ -60,15 +59,17 @@ Ext.onReady(function(){
        select: function(c,d,i){
           if(i){
             formAuthSource.getForm().findField('AUTH_SOURCE_ATTRIBUTES').setValue('cn' + "\n" + 'samaccountname' + "\n" + 'givenname' + "\n" + 'sn' + "\n" + 'userprincipalname' + "\n" + 'telephonenumber');
+            formAuthSource.getForm().findField('AUTH_SOURCE_IDENTIFIER_FOR_USER').setValue('samaccountname');
           } else {
             formAuthSource.getForm().findField('AUTH_SOURCE_ATTRIBUTES').setValue('cn' + "\n" + 'uid' + "\n" + 'givenname' + "\n" + 'sn' + "\n" + 'mail' + "\n" + 'mobile');
+            formAuthSource.getForm().findField('AUTH_SOURCE_IDENTIFIER_FOR_USER').setValue('uid');
           }
        }
       }
   });
 
   var txtServerName=new Ext.form.TextField({
-  id: 'AUTH_SOURCE_SERVER_NAME',				
+  id: 'AUTH_SOURCE_SERVER_NAME',
   fieldLabel: _('ID_SERVER_NAME'), 
   xtype:'textfield',
   value:'',
@@ -84,7 +85,7 @@ Ext.onReady(function(){
   });
 
   var txtPort=new Ext.form.TextField({
-    id: 'AUTH_SOURCE_PORT',				
+    id: 'AUTH_SOURCE_PORT',
     fieldLabel: _('ID_PORT'), 
     xtype:'textfield',
     value:'389',
@@ -107,12 +108,14 @@ Ext.onReady(function(){
           data : my_valuesTLS
       }),
       displayField: 'no',
+      allowBlank: false,
       typeAhead: true,
       mode: 'local',
       triggerAction: 'all',
       emptyText:'Choose an option...',
       selectOnFocus:true
   });
+   //cboxTLS.setValue('no');
 
   var my_values_version= [['2'],['3']];
   var cboxVersion = new Ext.form.ComboBox({
@@ -122,6 +125,7 @@ Ext.onReady(function(){
           fields: ['two','three'],
           data : my_values_version
       }),
+      allowBlank: false,
       displayField: 'two',
       typeAhead: true,
       mode: 'local',
@@ -132,8 +136,8 @@ Ext.onReady(function(){
 
 
   var txtBaseDN=new Ext.form.TextField({
-    id: 'AUTH_SOURCE_BASE_DN',				
-    fieldLabel: _('ID_BASE_DN'), 
+    id: 'AUTH_SOURCE_BASE_DN',
+    fieldLabel: _('ID_BASE_DN'),
     xtype:'textfield',
     value:'',
     width: 200,
@@ -158,6 +162,7 @@ Ext.onReady(function(){
       displayField: '0',
       typeAhead: true,
       mode: 'local',
+      allowBlank: false,
       triggerAction: 'all',
       emptyText:'Choose an option...',
       selectOnFocus:true,
@@ -177,14 +182,14 @@ Ext.onReady(function(){
                 txtSearchUser.getEl().up('.x-form-item').setDisplayed(false);
                 Ext.getCmp("AUTH_SOURCE_PASSWORD").disable(); 
                 Ext.getCmp("AUTH_SOURCE_PASSWORD").hide();
-                txtPassword.getEl().up('.x-form-item').setDisplayed(false);                
+                txtPassword.getEl().up('.x-form-item').setDisplayed(false);
             }     
            }
           }
   });
 
   var txtSearchUser=new Ext.form.TextField({
-    id: 'AUTH_SOURCE_SEARCH_USER',				
+    id: 'AUTH_SOURCE_SEARCH_USER',
     fieldLabel: _('ID_SEARCH_USER'), 
     xtype:'textfield',
     value:'',
@@ -199,7 +204,7 @@ Ext.onReady(function(){
     });
 
   var txtPassword=new Ext.form.TextField({
-    id: 'AUTH_SOURCE_PASSWORD',				
+    id: 'AUTH_SOURCE_PASSWORD',
     fieldLabel: _('ID_CACHE_PASSWORD'), 
     xtype:'textfield',
     inputType:'password',
@@ -216,7 +221,7 @@ Ext.onReady(function(){
 
 //Identifier for an imported user
   var txtIdentifier=new Ext.form.TextField({
-    id: 'AS_INDENTIFIER',				
+    id: 'AUTH_SOURCE_IDENTIFIER_FOR_USER',
     fieldLabel: _('ID_IDENTIFIER_IMPORT_USER'), 
     xtype:'textfield',
     value:'uid',
@@ -232,7 +237,7 @@ Ext.onReady(function(){
     });
 //Object Classes
   var txtaClass=new Ext.form.TextArea({
-    id: 'AUTH_SOURCE_OBJECT_CLASSES',				
+    id: 'AUTH_SOURCE_OBJECT_CLASSES',
     fieldLabel: _('ID_OBJECT_CLASS'), 
     xtype:'textarea',
     value:'*',
@@ -247,13 +252,13 @@ Ext.onReady(function(){
     });
 //Additional Filter
   var txtoAddFilter=new Ext.form.TextField({
-    id: 'AUTH_SOURCE_ADDITIONAL_FILTER',				
-    fieldLabel: _('ID_ADDITIONAL_FILTER'), 
+    id: 'AUTH_SOURCE_ADDITIONAL_FILTER',
+    fieldLabel: _('ID_ADDITIONAL_FILTER'),
     xtype:'textfield',
     value:'',
     width: 200,
     autoCreate: {tag: 'input', type: 'text', size: '20', autocomplete: 'off', maxlength: '200'},
-    allowBlank: false,
+    allowBlank: true,
     listeners: {
                 'render': function(c) {
                   c.getEl().on('keyup', function() {
@@ -263,7 +268,7 @@ Ext.onReady(function(){
     });
 //Attributes
   var txtAttributes=new Ext.form.TextArea({
-    id: 'AUTH_SOURCE_ATTRIBUTES',				
+    id: 'AUTH_SOURCE_ATTRIBUTES',
     fieldLabel: _('ID_ATTRIBUTES'), 
     xtype:'textArea',
     value:'cn' + "\n" + 'uid' + "\n" + 'givenname' + "\n" + 'sn' + "\n" + 'mail' + "\n" + 'mobile',
@@ -278,13 +283,13 @@ Ext.onReady(function(){
     });
 //here we are setting the fields
   fieldsAS = new Ext.form.FieldSet({
-    title: 'Authentication Source Information',  
+    title: 'Authentication Source Information',
     items: [
             txtSourceId,
             txtSourceProvider,
             txtName,
             cboxType,
-            txtServerName,         
+            txtServerName,
             txtPort,
             cboxTLS,
             cboxVersion,
@@ -296,12 +301,12 @@ Ext.onReady(function(){
             txtaClass,
             txtoAddFilter,
             txtAttributes
-            ]    
+            ]
     });
 
 
   formAuthSource = new Ext.FormPanel({
-    id:'formAuthSource',       
+    id:'formAuthSource',
     labelWidth: 250,
     labelAlign:'right',
     autoScroll: true,
@@ -315,7 +320,7 @@ Ext.onReady(function(){
       allowBlank: false,
       resizable: true,
       msgTarget: 'side',
-      align:'center'      
+      align:'center'
     },
     items:[
     fieldsAS
@@ -323,7 +328,7 @@ Ext.onReady(function(){
     buttons: [
       {
         text: 'Save',
-        handler: TestSite       
+        handler: TestSite
       
       },
       {     
@@ -381,6 +386,4 @@ Ext.onReady(function(){
           }
       }
     });
- } 
- 
- 
+ }
