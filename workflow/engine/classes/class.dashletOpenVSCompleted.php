@@ -1,6 +1,6 @@
 <?php
 
-require_once 'interfaces/dashletInterface.php';
+require_once 'classes/interfaces/dashletInterface.php';
 
 class dashletOpenVSCompleted implements DashletInterface {
 
@@ -35,7 +35,7 @@ class dashletOpenVSCompleted implements DashletInterface {
     $contextTime->name = 'DAS_INS_CONTEXT_TIME';
     $contextTime->fieldLabel = 'Period';
     $contextTime->editable = false;
-    $contextTime->width = 325;
+    $contextTime->width = 320;
     $contextTime->store = $contextTimeStore;
     $contextTime->mode = 'local';
     $contextTime->triggerAction = 'all';
@@ -117,6 +117,10 @@ class dashletOpenVSCompleted implements DashletInterface {
     $additionalFields[] = $greenTo;
 
     return $additionalFields;
+  }
+
+  public static function getXTemplate($className) {
+    return "<img src='{page}?w={width}&r={random}&DAS_INS_UID={id}'>";
   }
 
   public function setup($config) {
