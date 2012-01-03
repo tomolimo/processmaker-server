@@ -20,7 +20,7 @@ Ext.onReady(function(){
     items: [
       {
         xtype: 'tbbutton',
-        text : 'three columns',
+        text : 'Three Columns',
         handler : function(a) {
           var vp = Ext.getCmp('viewportDashboard');
           var pd = Ext.getCmp('portalDashboard');
@@ -35,7 +35,7 @@ Ext.onReady(function(){
       },
       {
         xtype: 'tbbutton',
-        text : 'two columns',
+        text : 'Two Columns',
         handler : function(a) {
           var vp = Ext.getCmp('viewportDashboard');
           var pd = Ext.getCmp('portalDashboard');
@@ -47,53 +47,7 @@ Ext.onReady(function(){
           pd.items.items[2].columnWidth = 0.01;
           pd.doLayout();
           }
-      },
-      {
-        xtype: 'tbbutton',
-        text : 'blog',
-        handler : function(a) {
-          var vp = Ext.getCmp('viewportDashboard');
-          var pd = Ext.getCmp('portalDashboard');
-          pd.items.items[0].columnWidth = 0.40;
-          pd.items.items[1].columnWidth = 0.40;
-          pd.items.items[2].columnWidth = 0.20;
-          pd.doLayout();
-          //vp.doLayout();
-          }
-      } /* ,
-      {
-        xtype: 'tbbutton',
-        text : 'new gauge',
-        handler : function(a) {
-          var np = new Ext.ux.Portlet ( {
-            //title: 'Panel nuevo',
-            //tools: tools,
-            html: 'gauge placeholder',
-            listeners: {
-              'render': function(p){
-                p.html = 'hello ' + p.getWidth();
-              },
-              'move' : function(p){
-                Ext.Msg.alert('Portlet ', 'move ' + p.getWidth() );
-                p.html = 'show ' + p.getWidth();
-              },
-              'resize' : function(p,w,h){
-                var randomnumber=Math.floor(Math.random()*1000000)
-                var img = new Ext.XTemplate("<img src='{page}?w={width}&r={random}&DAS_INS_UID={id}'>").apply({
-                page: 'dashboard/renderDashletInstance', width:w, random: randomnumber, id:'00000000000000000000000000000001' })
-
-                p.update(img );
-              }
-            }
-          });
-
-          var vp = Ext.getCmp('viewportDashboard');
-          var pd = Ext.getCmp('portalDashboard');
-          pd.items.items[0].add( np );
-          pd.doLayout();
-          //vp.doLayout();
-          }
-      } */
+      }
     ]
   });
 
@@ -136,92 +90,26 @@ Ext.onReady(function(){
     }]
   });
 
-//var dashletsInstances = [{"DAS_INS_UID":"00000000000000000000000000000001","DAS_TITLE":"Open Cases VS Complete Cases"}];
-
   var pd = Ext.getCmp('portalDashboard');
-  var dashletClass = "";
-
-  for ( var i = 0; i < dashletsInstances.length; i++ ) {
-    dashletClass = dashletsInstances[i].DAS_CLASS;
-
-    switch (dashletClass) {
-      case "dashletOpenVSCompleted":
-        var np = new Ext.ux.Portlet({
-          title: dashletsInstances[i].DAS_TITLE,
-          dasInsUid : dashletsInstances[i].DAS_INS_UID,
-          html: 'gauge placeholder',
-          listeners: {
-            'render': function(p){
-              p.html = 'hello ' + p.getWidth();
-            },
-            'move' : function(p){
-              Ext.Msg.alert('Portlet ', 'move ' + p.getWidth() );
-              p.html = 'show ' + p.getWidth();
-            },
-            'resize' : function(p,w,h){
-              var randomnumber = Math.floor(Math.random() * 1000000)
-              var img = new Ext.XTemplate("<img src='{page}?w={width}&r={random}&DAS_INS_UID={id}'>").apply({
-              page: 'dashboard/renderDashletInstance', width:w, random: randomnumber, id: p.dasInsUid })
-              p.update(img);
-            }
-          }
-        });
-        break;
-
-      case "dashletProcessMakerCommunity":
-        var np = new Ext.ux.Portlet({
-          title: dashletsInstances[i].DAS_TITLE,
-          dasInsUid : dashletsInstances[i].DAS_INS_UID,
-          html: 'gauge placeholder',
-          listeners: {
-            'render': function(p){
-              p.html = 'hello ' + p.getWidth();
-            },
-            'move' : function(p){
-              Ext.Msg.alert('Portlet ', 'move ' + p.getWidth() );
-              p.html = 'show ' + p.getWidth();
-            },
-            'resize' : function(p, w, h){
-              var img = new Ext.XTemplate("<iframe src=\"{page}?DAS_INS_UID={id}\" width=\"" + (w - 12) + "\" height=\"216\" frameborder=\"0\"></iframe>").apply({
-                page: "dashboard/renderDashletInstance",
-                id: p.dasInsUid
-              })
-
-              p.update(img);
-            }
-          }
-        });
-        break;
-
-      case "dashletProcessMakerEnterprise":
-        var np = new Ext.ux.Portlet({
-          title: dashletsInstances[i].DAS_TITLE,
-          dasInsUid : dashletsInstances[i].DAS_INS_UID,
-          html: 'gauge placeholder',
-          listeners: {
-            'render': function(p){
-              p.html = 'hello ' + p.getWidth();
-            },
-            'move' : function(p){
-              Ext.Msg.alert('Portlet ', 'move ' + p.getWidth() );
-              p.html = 'show ' + p.getWidth();
-            },
-            'resize' : function(p, w, h){
-              var img = new Ext.XTemplate("<iframe src=\"{page}?DAS_INS_UID={id}\" width=\"" + (w - 12) + "\" height=\"216\" frameborder=\"0\"></iframe>").apply({
-                page: "dashboard/renderDashletInstance",
-                id: p.dasInsUid
-              })
-
-              p.update(img);
-            }
-          }
-        });
-        break;
-    }
-
-    pd.items.items[i % 3].add( np );
-  } //for
-
+  for (var i = 0; i < dashletsInstances.length; i++) {
+    var np = new Ext.ux.Portlet({
+      title: dashletsInstances[i].DAS_TITLE,
+      index: i,
+      dasInsUid : dashletsInstances[i].DAS_INS_UID,
+      html: 'Gauge Placeholder',
+      listeners: {
+        'resize': function(p, w, h) {
+          var template = new Ext.XTemplate(dashletsInstances[p.index].DAS_XTEMPLATE).apply({
+            id: p.dasInsUid,
+            page: 'dashboard/renderDashletInstance',
+            width: w - 12,
+            random: Math.floor(Math.random() * 1000000)
+          })
+          p.update(template);
+        }
+      }
+    });
+    pd.items.items[i % 3].add(np);
+  }
   pd.doLayout();
 });
-

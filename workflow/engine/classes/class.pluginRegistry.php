@@ -79,12 +79,11 @@ class PMPluginRegistry {
   private $_aMenus = array();
   private $_aFolders = array();
   private $_aTriggers = array();
-  private $_aDashboards = array();
+  private $_aDashlets = array();
   private $_aReports = array();
   private $_aPmFunctions = array();
   private $_aRedirectLogin = array();
   private $_aSteps = array();
-  private $_aDashboardPages = array();
   private $_aCSSStyleSheets = array();
   private $_aToolbarFiles = array();
   private $_aCaseSchedulerPlugin = array();
@@ -145,20 +144,6 @@ class PMPluginRegistry {
    */
   function save() {
     file_put_contents  ( PATH_DATA_SITE . 'plugin.singleton', $this->serializeInstance() );
-  }
-
-  //delete this function, it was here, only for test and debug purposes
-  function showArrays () {
-    krumo ( $this->_aPluginDetails);
-    krumo ( $this->_aPlugins);
-    krumo ( $this->_aMenus);
-    krumo ( $this->_aFolders);
-    krumo ( $this->_aTriggers);
-    krumo ( $this->_aDashboards);
-    krumo ( $this->_aReports);
-    krumo ( $this->_aPmFunctions);
-    krumo ( $this->_aRedirectLogin);
-    krumo ( $this->_aSteps);
   }
 
   /**
@@ -265,9 +250,10 @@ class PMPluginRegistry {
       unset ( $this->_aTriggers[ $key ] );
     }
 
-    foreach ( $this->_aDashboards as $key=>$detail ) {
-      if ( $detail == $sNamespace )
-      unset ( $this->_aDashboards[ $key ] );
+    foreach ($this->_aDashlets as $key => $detail) {
+      if ($detail == $sNamespace) {
+        unset($this->_aDashlets[$key]);
+      }
     }
 
     foreach ( $this->_aReports as $key=>$detail ) {
@@ -292,10 +278,6 @@ class PMPluginRegistry {
     foreach ( $this->_aToolbarFiles as $key=>$detail ) {
       if ( $detail->sNamespace == $sNamespace )
       unset ( $this->_aToolbarFiles[ $key ] );
-    }
-    foreach ( $this->_aDashboardPages as $key=>$detail ) {
-      if ( $detail->sNamespace == $sNamespace )
-      unset ( $this->_aDashboardPages[ $key ] );
     }
     foreach ( $this->_aCSSStyleSheets as $key=>$detail ) {
       if ( $detail->sNamespace == $sNamespace )
@@ -357,12 +339,12 @@ class PMPluginRegistry {
     if (count($plugins) > 1) {
       throw new Exception("Multiple plugins in one archive are not supported currently");
     }
-    
+
     //if (isset($pluginName) && !in_array($pluginName, $plugins)) {
     if (isset($pluginName) && !in_array($pluginName, $namePlugin)) {
       throw new Exception("Plugin '$pluginName' not found in archive");
     }
-    
+
     //$pluginName = $plugins[0];
     $pluginFile = "$pluginName.php";
 
@@ -400,42 +382,42 @@ class PMPluginRegistry {
       throw new Exception('A recent version of this plugin was already installed.');
     }
     */
-    
+
     $res = $tar->extract(PATH_PLUGINS);
 
     if (!file_exists(PATH_PLUGINS . $pluginFile)) {
       throw (new Exception("File \"$pluginFile\" doesn't exist"));
     }
-    
+
     require_once (PATH_PLUGINS . $pluginFile);
     $details = $this->getPluginDetails($pluginFile);
-    
+
     $this->installPlugin($details->sNamespace);
     $this->setupPlugins();
-    
+
     $this->enablePlugin($details->sNamespace);
     $this->save();
   }
 
   function uninstallPlugin($sNamespace) {
     $pluginFile = "$sNamespace.php";
-    
+
     if (!file_exists(PATH_PLUGINS . $pluginFile)) {
       throw (new Exception("File \"$pluginFile\" doesn't exist"));
     }
-    
+
     require_once (PATH_PLUGINS . $pluginFile);
     $details = $this->getPluginDetails($pluginFile);
-    
+
     $this->enablePlugin($details->sNamespace);
     $this->disablePlugin($details->sNamespace);
     $this->save();
-    
+
     $pluginDir = PATH_PLUGINS . $details->sPluginFolder;
-        
+
     if (isset($details->sPluginFolder) && !empty($details->sPluginFolder) && file_exists($pluginDir))
       G::rm_dir($pluginDir);
-          
+
     if (isset($details->sFilename) && !empty($details->sFilename) && file_exists($details->sFilename))
       unlink($details->sFilename);
   }
@@ -486,51 +468,20 @@ class PMPluginRegistry {
   }
 
   /**
-   * Register a dashboard class in the singleton
+   * Register a dashlet class in the singleton
    *
-   * @param unknown_type $sNamespace
-   * @param unknown_type $sMenuId
-   * @param unknown_type $sFilename
+   * @param unknown_type $className
    */
-  function registerDashboard($sNamespace ) {
+  function registerDashlets($namespace) {
     $found = false;
-    foreach ( $this->_aDashboards as $row=>$detail ) {
-      if ( $sNamespace == $detail )
-      $found = true;
-    }
-    if ( !$found ) {
-      $this->_aDashboards[] = $sNamespace;
-    }
-  }
-
-  /**
-   * Register a dashboard page for cases in the singleton
-   *
-   * @param unknown_type $sNamespace
-   * @param unknown_type $sPage
-   */
-  function registerDashboardPage($sNamespace, $sPage, $sName, $sIcon ) {
-    $found = false;
-    foreach ( $this->_aDashboardPages as $row=>$detail ) {
-      if ( $sPage == $detail->sPage && $sNamespace == $detail->sNamespace ){
-        $detail->sName=$sName;
-        $detail->sIcon=$sIcon;
+    foreach ($this->_aDashlets as $row => $detail) {
+      if ($namespace == $detail) {
         $found = true;
       }
     }
-    if ( !$found ) {
-      $dashboardPage = new dashboardPage ($sNamespace, $sPage, $sName, $sIcon);
-      $this->_aDashboardPages[] = $dashboardPage;
+    if (!$found) {
+      $this->_aDashlets[] = $namespace;
     }
-  }
-
-  /**
-   * return all dashboard pages
-   *
-   * @return array
-   */
-  function getDashboardPages() {
-    return  $this->_aDashboardPages;
   }
 
   /**
@@ -554,7 +505,7 @@ class PMPluginRegistry {
   }
 
   /**
-   * return all dashboard pages
+   * return all css
    *
    * @return array
    */
@@ -781,17 +732,11 @@ class PMPluginRegistry {
   }
 
   /**
-   * return all dashboards registered
+   * return all dashlets classes registered
    * @return array
    */
-  function getDashboards( ) {
-    return $this->_aDashboards;
-    $dash = array ();
-    foreach ( $this->_aDashboards as $row=>$detail ) {
-      $sClassName = str_replace ( 'plugin', 'class', $this->_aPluginDetails[ $detail ]->sClassName);
-      $dash[] = $sClassName;
-    }
-    return $dash;
+  function getDashlets() {
+    return $this->_aDashlets;
   }
 
   /**
@@ -809,17 +754,17 @@ class PMPluginRegistry {
   }
 
   /**
-   * This function returns all dashboards registered
+   * This function returns all pmFunctions registered
    * @ array
    */
   function getPmFunctions( ) {
     return $this->_aPmFunctions;
-    $dash = array ();
+    $pmf = array ();
     foreach ( $this->_aPmFunctions as $row=>$detail ) {
       $sClassName = str_replace ( 'plugin', 'class', $this->_aPluginDetails[ $detail ]->sClassName);
-      $dash[] = $sClassName;
+      $pmf[] = $sClassName;
     }
-    return $dash;
+    return $pmf;
   }
 
   /**
@@ -1197,7 +1142,7 @@ class PMPluginRegistry {
   }
 
   /**
-   * return all dashboard pages
+   * return all tasl extended properties
    *
    * @return array
    */

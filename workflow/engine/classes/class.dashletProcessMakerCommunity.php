@@ -1,6 +1,6 @@
 <?php
 
-require_once 'interfaces/dashletInterface.php';
+require_once 'classes/interfaces/dashletInterface.php';
 
 class dashletProcessMakerCommunity implements DashletInterface {
 
@@ -8,6 +8,10 @@ class dashletProcessMakerCommunity implements DashletInterface {
     $additionalFields = array();
 
     return $additionalFields;
+  }
+
+  public static function getXTemplate($className) {
+    return "<iframe src=\"{page}?DAS_INS_UID={id}\" width=\"{width}\" height=\"207\" frameborder=\"0\"></iframe>";
   }
 
   public function setup($config) {

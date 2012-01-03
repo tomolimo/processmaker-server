@@ -1,8 +1,8 @@
 <?php
 
-require_once 'interfaces/dashletInterface.php';
-require_once 'model/Dashlet.php';
-require_once 'model/DashletInstance.php';
+require_once 'classes/interfaces/dashletInterface.php';
+require_once 'classes/model/Dashlet.php';
+require_once 'classes/model/DashletInstance.php';
 
 class PMDashlet extends DashletInstance implements DashletInterface {
 
@@ -14,7 +14,14 @@ class PMDashlet extends DashletInstance implements DashletInterface {
 
   public static function getAdditionalFields($className) {
     try {
-      //Change this in the next release
+      if (!class_exists($className)) {
+        $oPluginRegistry = &PMPluginRegistry::getSingleton();
+        $pluginsDashlets = $oPluginRegistry->getDashlets();
+        foreach ($pluginsDashlets as $pluginDashlet) {
+          set_include_path(get_include_path() . PATH_SEPARATOR . PATH_PLUGINS . $pluginDashlet . PATH_SEP);
+          require_once 'classes/class.' . $className . '.php';
+        }
+      }
       G::LoadClass($className);
       eval("\$additionalFields = $className::getAdditionalFields(\$className);");
       return $additionalFields;
@@ -24,11 +31,22 @@ class PMDashlet extends DashletInstance implements DashletInterface {
     }
   }
 
+
+
   public function setup($dasInsUid) {
     try {
       $this->dashletInstance = $this->loadDashletInstance($dasInsUid);
-      G::LoadClass($this->dashletInstance['DAS_CLASS']);
-      $this->dashletObject = new $this->dashletInstance['DAS_CLASS']();
+      $className = $this->dashletInstance['DAS_CLASS'];
+      G::LoadClass($className);
+      if (!class_exists($className)) {
+        $oPluginRegistry = &PMPluginRegistry::getSingleton();
+        $pluginsDashlets = $oPluginRegistry->getDashlets();
+        foreach ($pluginsDashlets as $pluginDashlet) {
+          set_include_path(get_include_path() . PATH_SEPARATOR . PATH_PLUGINS . $pluginDashlet . PATH_SEP);
+          require_once 'classes/class.' . $className . '.php';
+        }
+      }
+      $this->dashletObject = new $className();
       $this->dashletObject->setup($this->dashletInstance);
     }
     catch (Exception $error) {
@@ -174,6 +192,7 @@ class PMDashlet extends DashletInstance implements DashletInterface {
       $dataset->next();
       while ($row = $dataset->getRow()) {
         if (!isset($dashletsInstances[$row['DAS_INS_UID']])) {
+          $row['DAS_XTEMPLATE'] = $this->getXTemplate($row['DAS_CLASS']);
           $dashletsInstances[$row['DAS_INS_UID']] = $row;
         }
         $dataset->next();
@@ -192,6 +211,7 @@ class PMDashlet extends DashletInstance implements DashletInterface {
       $dataset->next();
       while ($row = $dataset->getRow()) {
         if (!isset($dashletsInstances[$row['DAS_INS_UID']])) {
+          $row['DAS_XTEMPLATE'] = $this->getXTemplate($row['DAS_CLASS']);
           $dashletsInstances[$row['DAS_INS_UID']] = $row;
         }
         $dataset->next();
@@ -212,6 +232,7 @@ class PMDashlet extends DashletInstance implements DashletInterface {
         $dataset->next();
         while ($row = $dataset->getRow()) {
           if (!isset($dashletsInstances[$row['DAS_INS_UID']])) {
+            $row['DAS_XTEMPLATE'] = $this->getXTemplate($row['DAS_CLASS']);
             $dashletsInstances[$row['DAS_INS_UID']] = $row;
           }
           $dataset->next();
@@ -234,6 +255,7 @@ class PMDashlet extends DashletInstance implements DashletInterface {
         $dataset->next();
         while ($row = $dataset->getRow()) {
           if (!isset($dashletsInstances[$row['DAS_INS_UID']])) {
+            $row['DAS_XTEMPLATE'] = $this->getXTemplate($row['DAS_CLASS']);
             $dashletsInstances[$row['DAS_INS_UID']] = $row;
           }
           $dataset->next();
@@ -244,6 +266,25 @@ class PMDashlet extends DashletInstance implements DashletInterface {
       // Check for permission assigments
       // ToDo: Next release
       return array_values($dashletsInstances);
+    }
+    catch (Exception $error) {
+      throw $error;
+    }
+  }
+
+  public static function getXTemplate($className) {
+    try {
+      if (!class_exists($className)) {
+        $oPluginRegistry = &PMPluginRegistry::getSingleton();
+        $pluginsDashlets = $oPluginRegistry->getDashlets();
+        foreach ($pluginsDashlets as $pluginDashlet) {
+          set_include_path(get_include_path() . PATH_SEPARATOR . PATH_PLUGINS . $pluginDashlet . PATH_SEP);
+          require_once 'classes/class.' . $className . '.php';
+        }
+      }
+      G::LoadClass($className);
+      eval("\$additionalFields = $className::getXTemplate(\$className);");
+      return $additionalFields;
     }
     catch (Exception $error) {
       throw $error;

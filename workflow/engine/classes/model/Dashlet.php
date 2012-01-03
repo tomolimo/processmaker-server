@@ -19,7 +19,12 @@ class Dashlet extends BaseDashlet {
   public function load($dasUid) {
     try {
       $dashlet = DashletPeer::retrieveByPK($dasUid);
-      return $dashlet->toArray(BasePeer::TYPE_FIELDNAME);
+      if (!is_null($dashlet)) {
+        return $dashlet->toArray(BasePeer::TYPE_FIELDNAME);
+      }
+      else {
+        return null;
+      }
     }
     catch (Exception $error) {
       throw $error;

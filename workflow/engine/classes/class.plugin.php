@@ -22,24 +22,24 @@
  * For more information, contact Colosa Inc, 2566 Le Jeune Rd.,
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  */
- 
 
-require_once ( 'class.pluginRegistry.php');
 
-define ( 'G_PLUGIN_CLASS',     1 );
+require_once 'class.pluginRegistry.php';
 
-define ( 'PM_CREATE_CASE',       1001 );
-define ( 'PM_UPLOAD_DOCUMENT',   1002 );
-define ( 'PM_CASE_DOCUMENT_LIST',1003 );
-define ( 'PM_BROWSE_CASE',       1004 );
-define ( 'PM_NEW_PROCESS_LIST',  1005 );
-define ( 'PM_NEW_PROCESS_SAVE',  1006 );
-define ( 'PM_NEW_DYNAFORM_LIST', 1007 );
-define ( 'PM_NEW_DYNAFORM_SAVE', 1008 );
-define ( 'PM_EXTERNAL_STEP',     1009 );
-define ( 'PM_CASE_DOCUMENT_LIST_ARR', 1010 );
-define ( 'PM_LOGIN', 1011 );
-define ( 'PM_UPLOAD_DOCUMENT_BEFORE', 1012 );
+define('G_PLUGIN_CLASS', 1);
+
+define('PM_CREATE_CASE',            1001);
+define('PM_UPLOAD_DOCUMENT',        1002);
+define('PM_CASE_DOCUMENT_LIST',     1003);
+define('PM_BROWSE_CASE',            1004);
+define('PM_NEW_PROCESS_LIST',       1005);
+define('PM_NEW_PROCESS_SAVE',       1006);
+define('PM_NEW_DYNAFORM_LIST',      1007);
+define('PM_NEW_DYNAFORM_SAVE',      1008);
+define('PM_EXTERNAL_STEP',          1009);
+define('PM_CASE_DOCUMENT_LIST_ARR', 1010);
+define('PM_LOGIN',                  1011);
+define('PM_UPLOAD_DOCUMENT_BEFORE', 1012);
 
 /**
  * @package workflow.engine.classes
@@ -82,28 +82,7 @@ class toolbarDetail {
     $this->sToolbarId    = $sToolbarId;
     $this->sFilename  = $sFilename;
   }
- }
- /**
- * @package workflow.engine.classes
- */
- class dashboardPage {
-  var $sNamespace;
-  var $sPage;
-  var $sName;  
-  var $sIcon;    
-  /**
-  * This function is the constructor of the dashboardPage class
-  * param string $sNamespace
-  * param string $sPage  
-  * @return void
-  */
-  function __construct( $sNamespace, $sPage, $sName, $sIcon ) {
-    $this->sNamespace = $sNamespace;
-    $this->sPage    = $sPage;    
-    $this->sName    = $sName;
-    $this->sIcon    = $sIcon;
-  }
- }
+}
 
  /**
  * @package workflow.engine.classes
@@ -112,14 +91,14 @@ class cssFile {
   var $sNamespace;
   var $sCssFile;
   /**
-  * This function is the constructor of the dashboardPage class
+  * This function is the constructor of the cssFile class
   * param string $sNamespace
-  * param string $sPage  
+  * param string $sPage
   * @return void
   */
   function __construct( $sNamespace, $sCssFile) {
     $this->sNamespace = $sNamespace;
-    $this->sCssFile    = $sCssFile;        
+    $this->sCssFile    = $sCssFile;
   }
  }
  /**
@@ -334,19 +313,19 @@ class caseSchedulerPlugin {
 class taskExtendedProperty {
   var $sNamespace;
   var $sPage;
-  var $sName;  
-  var $sIcon;    
+  var $sName;
+  var $sIcon;
   /**
   * This function is the constructor of the taskExtendedProperty class
   * param string $sNamespace
-  * param string $sPage  
+  * param string $sPage
   * param string $sName
   * param string $sIcon
   * @return void
   */
   function __construct( $sNamespace, $sPage, $sName, $sIcon ) {
     $this->sNamespace = $sNamespace;
-    $this->sPage    = $sPage;    
+    $this->sPage    = $sPage;
     $this->sName    = $sName;
     $this->sIcon    = $sIcon;
   }
@@ -390,15 +369,15 @@ class PMPlugin {
   }
 
  /**
-  * With this function we can register the dashboard
+  * With this function we can register a dashlet class
   * param
   * @return void
   */
-  function registerDashboard( ) {
+  function registerDashlets() {
     $oPluginRegistry =& PMPluginRegistry::getSingleton();
-    $oPluginRegistry->registerDashboard ( $this->sNamespace);
+    $oPluginRegistry->registerDashlets($this->sNamespace);
   }
-  
+
 
   /**
   * With this function we can register the report
@@ -534,17 +513,8 @@ class PMPlugin {
     $sPageFilename = PATH_PLUGINS . $this->sPluginFolder . PATH_SEP . $templateFilename;
     $oPluginRegistry->registerBreakPageTemplate ( $this->sNamespace, $pageId, $sPageFilename);
   }
-/**
-  * With this function we can register a Dashboard Page for Cases Dashboard
-  * @param string $sPage
-  * @return void
-  */
-  function registerDashboardPage( $sPage, $sName, $sIcon="") {
-    $oPluginRegistry =& PMPluginRegistry::getSingleton();
-    $oPluginRegistry->registerDashboardPage ( $this->sNamespace, $sPage, $sName, $sIcon );
-  }
   /**
-  * With this function we can register a Dashboard Page for Cases Dashboard
+  * With this function we can register a CSS
   * @param string $sPage
   * @return void
   */
@@ -573,7 +543,7 @@ class PMPlugin {
     $oPluginRegistry->registerCaseSchedulerPlugin( $this->sNamespace, $sActionId, $sActionForm, $sActionSave, $sActionExecute, $sActionGetFields );
   }
   /**
-  * With this function we can register a Dashboard Page for Cases Dashboard
+  * With this function we can register a task extended property
   * @param string $sPage
   * @return void
   */

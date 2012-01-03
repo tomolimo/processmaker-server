@@ -49,7 +49,8 @@ class Dashboard extends Controller {
       $this->pmDashlet->render($width);
     }
     catch (Exception $error) {
-      //ToDo: Render a image with the error message
+      //ToDo: Show the error message
+      echo $error->getMessage();
     }
   }
 
@@ -173,9 +174,14 @@ class Dashboard extends Controller {
     try {
       $dashlet = new Dashlet();
       $dashletFields = $dashlet->load($data->DAS_UID);
-      $result->additionaFields = PMDashlet::getAdditionalFields($dashletFields['DAS_CLASS']);
+      if (!is_null($dashletFields)) {
+        $result->additionaFields = PMDashlet::getAdditionalFields($dashletFields['DAS_CLASS']);
+      }
+      else {
+        throw new Exception('Dashlet "' . $data->DAS_UID . '" not exists.');
+      }
     }
-    catch(Exception $error) {
+    catch (Exception $error) {
       $result->status = 'ERROR';
       $result->message = $error->getMessage();
     }
@@ -299,6 +305,7 @@ class Dashboard extends Controller {
         $dashlets[] = array($row['DAS_UID'], $row['DAS_TITLE']);
         $dataset->next();
       }
+
     }
     catch (Exception $error) {
       throw $error;
