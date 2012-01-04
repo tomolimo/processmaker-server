@@ -484,7 +484,7 @@ class Publisher
         'tabStep'=>3,
         'blinkToFront'=>true,
         'tabSpace'=>10), $data );
-
+print($data['tabWidth']);
       $mainPanelScript = 'var '.$panelName.'={},'.$panelName.'Tabs=[];'.
         'leimnud.event.add(window,"load",function(){'.$panelName.' = new leimnud.module.panel();'.
         'var mycontent=document.getElementById("'.$this->publisherId.'['.$intPos.']");'.
@@ -521,7 +521,11 @@ class Publisher
         global $mainPanelScript;
         global $panelName;
         $onChange = $Part['Content'];
-        $beforeChange = $Part['Data'];
+        $beforeChange = $Part['Data'];    
+        if(SYS_LANG=='es')      
+        	$mainPanelScript = str_replace("120","150",$mainPanelScript);
+        else
+        	$mainPanelScript = str_replace("150","120",$mainPanelScript);
         $mainPanelScript .=
           $panelName.'Tabs['.$tabCount.']='.
           'document.getElementById("'.$Part['File'].'");'.

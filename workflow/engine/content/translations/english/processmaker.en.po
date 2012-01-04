@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: ProcessMaker (Branch 2.0-dev) 2.0.34.rc4-179-g5fa57e9\n"
+"Project-Id-Version: ProcessMaker (Branch 2.0-experimental) 2.0.34.rc4-267-gd4b5a98\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2011-11-28 11:40:40\n"
+"PO-Revision-Date: 2012-01-04 15:49:13\n"
 "Last-Translator: \n"
 "Language-Team: Colosa Developers Team <developers@colosa.com>\n"
 "MIME-Version: 1.0\n"
@@ -11460,6 +11460,42 @@ msgstr "You must define at least one 'ALL' for other days you have not defined"
 #: LABEL/ID_ASSIGN_USERGROUPS
 msgid "Assign users group or user"
 msgstr "Assign users group or user"
+
+# TRANSLATION
+# LABEL/ID_SEL_END_DATE
+#: LABEL/ID_SEL_END_DATE
+msgid "Please select end date"
+msgstr "Please select end date"
+
+# TRANSLATION
+# LABEL/ID_SEL_START_DATE
+#: LABEL/ID_SEL_START_DATE
+msgid "Please select start date"
+msgstr "Please select start date"
+
+# TRANSLATION
+# LABEL/ID_SEL_AFTER_DATE
+#: LABEL/ID_SEL_AFTER_DATE
+msgid "Please select after date"
+msgstr "Please select after date"
+
+# TRANSLATION
+# LABEL/ID_SEL_BEFORE_DATE
+#: LABEL/ID_SEL_BEFORE_DATE
+msgid "Please select before date"
+msgstr "Please select before date"
+
+# TRANSLATION
+# LABEL/ID_ASSIGNED_TO
+#: LABEL/ID_ASSIGNED_TO
+msgid "Assigned To"
+msgstr "Assigned To"
+
+# TRANSLATION
+# LABEL/ID_DASHLETS_INSTANCES
+#: LABEL/ID_DASHLETS_INSTANCES
+msgid "Dashlets Instances"
+msgstr "Dashlets Instances"
 
 # additionalTables/additionalTablesData.xml?ADD_TAB_NAME
 # additionalTables/additionalTablesData.xml
