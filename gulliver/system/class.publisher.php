@@ -484,7 +484,6 @@ class Publisher
         'tabStep'=>3,
         'blinkToFront'=>true,
         'tabSpace'=>10), $data );
-print($data['tabWidth']);
       $mainPanelScript = 'var '.$panelName.'={},'.$panelName.'Tabs=[];'.
         'leimnud.event.add(window,"load",function(){'.$panelName.' = new leimnud.module.panel();'.
         'var mycontent=document.getElementById("'.$this->publisherId.'['.$intPos.']");'.
