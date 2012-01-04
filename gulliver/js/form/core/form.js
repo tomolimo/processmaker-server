@@ -2482,15 +2482,21 @@ function getElementsByClassNameCrossBrowser(searchClass,node,tag) {
  *
  **/
 var validateGridForms = function(invalidFields){
-  // alert("doesnt work " + i);
   
-  
-  
-  
-  grids = getElementsByClassNameCrossBrowser("grid",document,"div");
+  grids   = getElementsByClassNameCrossBrowser("grid",document,"div");
   Tlabels = getElementsByClassNameCrossBrowser("tableGrid",document,"table");
   // grids = getElementsByClass("grid",document,"div");
   // grids = document.getElementsByClassName("grid");
+  nameGrid = "";
+  for(cnt=0; cnt<Tlabels.length; cnt++ ){
+    if(Tlabels[cnt].getAttribute("name") ) {
+      nameGrid = Tlabels[cnt].getAttribute("name");
+      if (notValidateThisFields.inArray(nameGrid)) {
+        return invalidFields;
+      }
+    }
+  }
+
   for(j=0; j<grids.length; j++){
     
     // check all the input fields in the grid
@@ -2505,11 +2511,11 @@ var validateGridForms = function(invalidFields){
         }else{
           $fieldName = $labelPM + " " + $label[2].split("]")[0];
         }
+        fieldGridName = $label[1] + "[" + $label[2] + "[" + $label[3].split("]")[0];
         //$fieldName = labels[i].innerHTML.replace('*','') + " " + $label[2].split("]")[0];
         
-        //alert($fieldName+" "+$fieldRow);
-        //alert(fields[i].name);
-        invalidFields.push($fieldName);
+        if (!notValidateThisFields.inArray(fieldGridName))
+          invalidFields.push($fieldName);
       }
     }
     
@@ -2518,9 +2524,9 @@ var validateGridForms = function(invalidFields){
       if (textAreas[i].getAttribute("pm:required")=="1"&&textAreas[i].value==''){
         $label = textAreas[i].name.split("[");
         $fieldName = $label[3].split("]")[0]+ " " + $label[2].split("]")[0];
-        //alert($fieldName+" "+$fieldRow);
-        //alert(fields[i].name);
-        invalidFields.push($fieldName);
+        fieldGridName = $label[1] + "[" + $label[2] + "[" + $label[3].split("]")[0];
+        if (!notValidateThisFields.inArray(fieldGridName))
+          invalidFields.push($fieldName);
       }
     }
     
@@ -2529,9 +2535,9 @@ var validateGridForms = function(invalidFields){
       if (dropdowns[i].getAttribute("pm:required")=="1"&&dropdowns[i].value==''){
         $label = dropdowns[i].name.split("[");
         $fieldName = $label[3].split("]")[0]+ " " + $label[2].split("]")[0];
-        //alert($fieldName+" "+$fieldRow);
-        //alert(fields[i].name);
-        invalidFields.push($fieldName);
+        fieldGridName = $label[1] + "[" + $label[2] + "[" + $label[3].split("]")[0];
+        if (!notValidateThisFields.inArray(fieldGridName))
+          invalidFields.push($fieldName);
       }
     }
   }
