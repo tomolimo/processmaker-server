@@ -329,7 +329,29 @@ class taskExtendedProperty {
     $this->sName    = $sName;
     $this->sIcon    = $sIcon;
   }
- }
+}
+
+/**
+ * @package workflow.engine.classes
+ */
+class dashboardPage {
+  var $sNamespace;
+  var $sPage;
+  var $sName;
+  var $sIcon;
+  /**
+  * This function is the constructor of the dashboardPage class
+  * param string $sNamespace
+  * param string $sPage
+  * @return void
+  */
+  function __construct( $sNamespace, $sPage, $sName, $sIcon ) {
+    $this->sNamespace = $sNamespace;
+    $this->sPage    = $sPage;
+    $this->sName    = $sName;
+    $this->sIcon    = $sIcon;
+  }
+}
 /**
  * @package workflow.engine.classes
  */
