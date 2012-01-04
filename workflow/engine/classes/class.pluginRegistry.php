@@ -88,6 +88,7 @@ class PMPluginRegistry {
   private $_aToolbarFiles = array();
   private $_aCaseSchedulerPlugin = array();
   private $_aTaskExtendedProperties = array();
+  private $_aDashboardPages = array();
 
   /**
    * Registry a plugin javascript to include with js core at same runtime
@@ -244,33 +245,27 @@ class PMPluginRegistry {
       if ( $detail->sNamespace == $sNamespace )
       unset ( $this->_aFolders[ $key ] );
     }
-
     foreach ( $this->_aTriggers as $key=>$detail ) {
       if ( $detail->sNamespace == $sNamespace )
       unset ( $this->_aTriggers[ $key ] );
     }
-
     foreach ($this->_aDashlets as $key => $detail) {
       if ($detail == $sNamespace) {
         unset($this->_aDashlets[$key]);
       }
     }
-
     foreach ( $this->_aReports as $key=>$detail ) {
       if ( $detail == $sNamespace )
       unset ( $this->_aReports[ $key ] );
     }
-
     foreach ( $this->_aPmFunctions as $key=>$detail ) {
       if ( $detail == $sNamespace )
       unset ( $this->_aPmFunctions[ $key ] );
     }
-
     foreach ( $this->_aRedirectLogin as $key=>$detail ) {
       if ( $detail->sNamespace == $sNamespace )
       unset ( $this->_aRedirectLogin[ $key ] );
     }
-
     foreach ( $this->_aSteps as $key=>$detail ) {
       if ( $detail->sNamespace == $sNamespace )
       unset ( $this->_aSteps[ $key ] );
@@ -290,6 +285,10 @@ class PMPluginRegistry {
   	foreach ( $this->_aTaskExtendedProperties as $key=>$detail ) {
       if ( $detail->sNamespace == $sNamespace )
       unset ( $this->_aTaskExtendedProperties[ $key ] );
+    }
+    foreach ( $this->_aDashboardPages as $key=>$detail ) {
+      if ( $detail->sNamespace == $sNamespace )
+      unset ( $this->_aDashboardPages[ $key ] );
     }
 
     //unregistering javascripts from this plugin
@@ -1139,6 +1138,36 @@ class PMPluginRegistry {
       $taskExtendedProperty = new taskExtendedProperty ($sNamespace, $sPage, $sName, $sIcon);
       $this->_aTaskExtendedProperties[] = $taskExtendedProperty;
     }
+  }
+
+  /**
+   * Register a dashboard page for cases in the singleton
+   * @param unknown_type $sNamespace
+   * @param unknown_type $sPage
+   * @param unknown_type $sName
+   * @param unknown_type $sIcon
+   */
+  function registerDashboardPage($sNamespace, $sPage, $sName, $sIcon ) {
+    foreach ( $this->_aDashboardPages as $row=>$detail ) {
+      if ( $sPage == $detail->sPage && $sNamespace == $detail->sNamespace ){
+        $detail->sName=$sName;
+        $detail->sIcon=$sIcon;
+        $found = true;
+       }
+     }
+    if ( !$found ) {
+      $dashboardPage = new dashboardPage ($sNamespace, $sPage, $sName, $sIcon);
+      $this->_aDashboardPages[] = $dashboardPage;
+    }
+  }
+
+  /**
+   * return all dashboard pages
+   *
+   * @return array
+   */
+  function getDashboardPages() {
+    return  $this->_aDashboardPages;
   }
 
   /**
