@@ -322,7 +322,7 @@ class Xpdl extends processes
         G::verifyPath($path, true);
     }
     $proTitle  = (substr(G::inflect($oData->process['PRO_TITLE']), 0, 30));
-    $proTitle  = preg_replace("[^A-Za-z0-9_]", "", $proTitle);
+    $proTitle  = preg_replace("/[^A-Za-z0-9_]/", "", $proTitle);
     $index     = '';
     $lastIndex = '';
     do {
