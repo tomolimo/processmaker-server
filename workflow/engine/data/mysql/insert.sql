@@ -3346,7 +3346,8 @@ INSERT INTO TRANSLATION (TRN_CATEGORY,TRN_ID,TRN_LANG,TRN_VALUE,TRN_UPDATE_DATE 
 ( 'LABEL','ID_SEL_AFTER_DATE','en','Please select after date','2011-12-22') ,
 ( 'LABEL','ID_SEL_BEFORE_DATE','en','Please select before date','2011-12-22') ,
 ( 'LABEL','ID_ASSIGNED_TO','en','Assigned To','2012-01-04') ,
-( 'LABEL','ID_DASHLETS_INSTANCES','en','Dashlets Instances','2012-01-04') ;
+( 'LABEL','ID_DASHLETS_INSTANCES','en','Dashlets Instances','2012-01-04') ,
+( 'LABEL','ID_INPUT_DOC_DOESNT_EXIST','en','Input Document does not exist!','2012-01-06') ;
 
 INSERT INTO ISO_LOCATION (IC_UID,IL_UID,IL_NAME,IL_NORMAL_NAME,IS_UID)  VALUES 
 ('AD','','',' ','') ,

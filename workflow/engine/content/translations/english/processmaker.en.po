@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: ProcessMaker (Branch 2.0-experimental) 2.0.34.rc4-267-gd4b5a98\n"
+"Project-Id-Version: ProcessMaker (Branch 2.0-experimental) 2.0.34.rc4-275-g90770bd\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2012-01-04 15:49:13\n"
+"PO-Revision-Date: 2012-01-06 11:49:11\n"
 "Last-Translator: \n"
 "Language-Team: Colosa Developers Team <developers@colosa.com>\n"
 "MIME-Version: 1.0\n"
@@ -11496,6 +11496,12 @@ msgstr "Assigned To"
 #: LABEL/ID_DASHLETS_INSTANCES
 msgid "Dashlets Instances"
 msgstr "Dashlets Instances"
+
+# TRANSLATION
+# LABEL/ID_INPUT_DOC_DOESNT_EXIST
+#: LABEL/ID_INPUT_DOC_DOESNT_EXIST
+msgid "Input Document does not exist!"
+msgstr "Input Document does not exist!"
 
 # additionalTables/additionalTablesData.xml?ADD_TAB_NAME
 # additionalTables/additionalTablesData.xml
