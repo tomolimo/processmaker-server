@@ -1205,7 +1205,7 @@ function G_Text( form, element, name)
             }
           }
           var k=new leimnud.module.validator({
-            valid :['Field'],
+            valid :['Login'],
             key   :event,
             lang  :(typeof(me.language)!=='undefined')?me.language:"en"
           });

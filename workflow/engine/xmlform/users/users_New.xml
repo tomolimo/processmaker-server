@@ -110,7 +110,7 @@ var sUsername;
 var dynaformOnload = function()
 {
   sUsername = document.forms[0].elements['form[USR_USERNAME]'].value;
-  leimnud.event.add(document.forms[0].elements['form[USR_USERNAME]'], 'change', {method:verifyUsername, instance:document.forms[0].elements['form[USR_USERNAME]'], event:true});
+  leimnud.event.add(document.forms[0].elements['form[USR_USERNAME]'], 'blur', {method:verifyUsername, instance:document.forms[0].elements['form[USR_USERNAME]'], event:true});
   leimnud.event.add(document.forms[0].elements['form[USR_CITY]'], 'change', {method:existsElements, instance:document.forms[0].elements['form[USR_CITY]'], event:true});
   leimnud.event.add(document.forms[0].elements['form[USR_LOCATION]'], 'change', {method:existsElements, instance:document.forms[0].elements['form[USR_LOCATION]'], event:true});
   if (document.forms[0].elements['form[USR_CITY]'].options.length == 0) {
@@ -143,7 +143,6 @@ var verifyUsername = function()
   else
   {
     document.forms[0].elements['form[SUBMIT]'].disabled = false;
-    document.forms[0].elements['form[USR_EMAIL]'].focus();
   }
 };
 
