@@ -2207,15 +2207,24 @@ class XmlForm_Field_File extends XmlForm_Field {
     if($this->mode == 'view'){
       $displayStyle = 'display:none;';
       $html = $value.'<input class="module_app_input___gray_file" ' . $mode .'style='.$displayStyle .' id="form[' . $this->name . ']" name="form[' . $this->name . ']" type=\'file\' value=\'' . $value . '\' />';   
-    }else{ 
+    }
+    else{ 
       $html = '<input class="module_app_input___gray_file" ' . $mode . 'id="form[' . $this->name . ']" name="form[' . $this->name . ']" type=\'file\' value=\'' . $value . '\'/>';
     }
-    if( isset($this->input) && $this->input != ''){
+    
+    if( isset($this->input) && $this->input != '') {
       require_once 'classes/model/InputDocument.php';
       $oiDoc = new InputDocument;
-      $aDoc  = $oiDoc->load($this->input);
-      $aDoc['INP_DOC_TITLE'] = isset($aDoc['INP_DOC_TITLE'])? $aDoc['INP_DOC_TITLE']: '';
-      $html .= '<label><img src="/images/inputdocument.gif" width="22px" width="22px"/><font size="1">('.trim($aDoc['INP_DOC_TITLE']).')</font></label>';
+      
+      try {
+        $aDoc  = $oiDoc->load($this->input);
+        $aDoc['INP_DOC_TITLE'] = isset($aDoc['INP_DOC_TITLE'])? $aDoc['INP_DOC_TITLE']: '';
+        $html .= '<label><img src="/images/inputdocument.gif" width="22px" width="22px"/><font size="1">('.trim($aDoc['INP_DOC_TITLE']).')</font></label>';
+      } 
+      catch (Exception $e) {
+        // then the input document doesn't exits, id referencial broken
+        $html .= '&nbsp;<font color="red"><img src="/images/alert_icon.gif" width="16px" width="16px"/><font size="1">('.G::loadTranslation('ID_INPUT_DOC_DOESNT_EXIST').')</font></font>'; 
+      }
     }	 
     $html .= $this->renderHint();
     return $html;
