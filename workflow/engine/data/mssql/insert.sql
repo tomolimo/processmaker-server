@@ -5226,6 +5226,30 @@ SELECT 'LABEL','ID_SEARCH_PATTERN','en','Search Pattern','2011-11-28'
 SELECT 'LABEL','ID_SEARCH_XML_METADATA','en','Search XML metadata','2011-11-28' 
   UNION ALL
 SELECT 'LABEL','ID_FTP_MONITOR_SETTINGS','en','FTP Monitor Settings','2011-11-28' 
+  UNION ALL
+SELECT 'LABEL','ID_ERROR_UPLOADING_FILENAME','en','There was an error uploading the file, probably the file size if greater than upload_max_filesize parameter in php.ini, please check this parameter and try again.','2011-12-06' 
+  UNION ALL
+SELECT 'LABEL','ID_POSTED_DATA_EMPTY','en','Posted data is empty!','2011-12-06' 
+  UNION ALL
+SELECT 'LABEL','ID_MOST_AT_LEAST_3_DAY','en','You must define at least 3 Working Days!','2011-12-12' 
+  UNION ALL
+SELECT 'LABEL','ID_SELECT_ALL','en','You must define at least one ''ALL'' for other days you have not defined','2011-12-12' 
+  UNION ALL
+SELECT 'LABEL','ID_ASSIGN_USERGROUPS','en','Assign users group or user','2011-12-12' 
+  UNION ALL
+SELECT 'LABEL','ID_SEL_END_DATE','en','Please select end date','2011-12-22' 
+  UNION ALL
+SELECT 'LABEL','ID_SEL_START_DATE','en','Please select start date','2011-12-22' 
+  UNION ALL
+SELECT 'LABEL','ID_SEL_AFTER_DATE','en','Please select after date','2011-12-22' 
+  UNION ALL
+SELECT 'LABEL','ID_SEL_BEFORE_DATE','en','Please select before date','2011-12-22' 
+  UNION ALL
+SELECT 'LABEL','ID_ASSIGNED_TO','en','Assigned To','2012-01-04' 
+  UNION ALL
+SELECT 'LABEL','ID_DASHLETS_INSTANCES','en','Dashlets Instances','2012-01-04' 
+  UNION ALL
+SELECT 'LABEL','ID_INPUT_DOC_DOESNT_EXIST','en','Input Document does not exist!','2012-01-06' 
  ;
 
 INSERT INTO ISO_LOCATION ([IC_UID],[IL_UID],[IL_NAME],[IL_NORMAL_NAME],[IS_UID]) 

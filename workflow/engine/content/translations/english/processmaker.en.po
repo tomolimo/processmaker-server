@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: ProcessMaker (Branch 2.0-dev) 2.0.34.rc4-179-g5fa57e9\n"
+"Project-Id-Version: ProcessMaker (Branch 2.0-experimental) 2.0.34.rc4-275-g90770bd\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2011-11-28 11:40:40\n"
+"PO-Revision-Date: 2012-01-06 11:49:11\n"
 "Last-Translator: \n"
 "Language-Team: Colosa Developers Team <developers@colosa.com>\n"
 "MIME-Version: 1.0\n"
@@ -11430,6 +11430,78 @@ msgstr "Search XML metadata"
 #: LABEL/ID_FTP_MONITOR_SETTINGS
 msgid "FTP Monitor Settings"
 msgstr "FTP Monitor Settings"
+
+# TRANSLATION
+# LABEL/ID_ERROR_UPLOADING_FILENAME
+#: LABEL/ID_ERROR_UPLOADING_FILENAME
+msgid "[LABEL/ID_ERROR_UPLOADING_FILENAME] There was an error uploading the file, probably the file size if greater than upload_max_filesize parameter in php.ini, please check this parameter and try again."
+msgstr "There was an error uploading the file, probably the file size if greater than upload_max_filesize parameter in php.ini, please check this parameter and try again."
+
+# TRANSLATION
+# LABEL/ID_POSTED_DATA_EMPTY
+#: LABEL/ID_POSTED_DATA_EMPTY
+msgid "Posted data is empty!"
+msgstr "Posted data is empty!"
+
+# TRANSLATION
+# LABEL/ID_MOST_AT_LEAST_3_DAY
+#: LABEL/ID_MOST_AT_LEAST_3_DAY
+msgid "You must define at least 3 Working Days!"
+msgstr "You must define at least 3 Working Days!"
+
+# TRANSLATION
+# LABEL/ID_SELECT_ALL
+#: LABEL/ID_SELECT_ALL
+msgid "You must define at least one 'ALL' for other days you have not defined"
+msgstr "You must define at least one 'ALL' for other days you have not defined"
+
+# TRANSLATION
+# LABEL/ID_ASSIGN_USERGROUPS
+#: LABEL/ID_ASSIGN_USERGROUPS
+msgid "Assign users group or user"
+msgstr "Assign users group or user"
+
+# TRANSLATION
+# LABEL/ID_SEL_END_DATE
+#: LABEL/ID_SEL_END_DATE
+msgid "Please select end date"
+msgstr "Please select end date"
+
+# TRANSLATION
+# LABEL/ID_SEL_START_DATE
+#: LABEL/ID_SEL_START_DATE
+msgid "Please select start date"
+msgstr "Please select start date"
+
+# TRANSLATION
+# LABEL/ID_SEL_AFTER_DATE
+#: LABEL/ID_SEL_AFTER_DATE
+msgid "Please select after date"
+msgstr "Please select after date"
+
+# TRANSLATION
+# LABEL/ID_SEL_BEFORE_DATE
+#: LABEL/ID_SEL_BEFORE_DATE
+msgid "Please select before date"
+msgstr "Please select before date"
+
+# TRANSLATION
+# LABEL/ID_ASSIGNED_TO
+#: LABEL/ID_ASSIGNED_TO
+msgid "Assigned To"
+msgstr "Assigned To"
+
+# TRANSLATION
+# LABEL/ID_DASHLETS_INSTANCES
+#: LABEL/ID_DASHLETS_INSTANCES
+msgid "Dashlets Instances"
+msgstr "Dashlets Instances"
+
+# TRANSLATION
+# LABEL/ID_INPUT_DOC_DOESNT_EXIST
+#: LABEL/ID_INPUT_DOC_DOESNT_EXIST
+msgid "Input Document does not exist!"
+msgstr "Input Document does not exist!"
 
 # additionalTables/additionalTablesData.xml?ADD_TAB_NAME
 # additionalTables/additionalTablesData.xml
