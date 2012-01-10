@@ -29,7 +29,7 @@ var verifyFile = function(oForm) {
 };
 
 function cancel(){
-    window.location = 'processes_List';
+  history.back();   
 }
 
 ]]></JS>
