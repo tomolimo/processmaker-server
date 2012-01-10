@@ -40,6 +40,7 @@ define('PM_EXTERNAL_STEP',          1009);
 define('PM_CASE_DOCUMENT_LIST_ARR', 1010);
 define('PM_LOGIN',                  1011);
 define('PM_UPLOAD_DOCUMENT_BEFORE', 1012);
+define('PM_CREATE_NEW_DELEGATION',  1013);
 
 /**
  * @package workflow.engine.classes

@@ -38,7 +38,7 @@ G::LoadClass("dates");
  * You should add additional methods to this class to meet the
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
- * 
+ *
  * @package    workflow.engine.classes.model
  */
 class AppDelegation extends BaseAppDelegation {
@@ -53,7 +53,7 @@ class AppDelegation extends BaseAppDelegation {
    * @param $isSubprocess is a subprocess inside a process?
    * @return delegation index of the application delegation.
    */
-  function createAppDelegation ($sProUid, $sAppUid, $sTasUid, $sUsrUid, $sAppThread, $iPriority = 3, $isSubprocess = false, $sPrevious = -1, $sNextTasParam = null) 
+  function createAppDelegation ($sProUid, $sAppUid, $sTasUid, $sUsrUid, $sAppThread, $iPriority = 3, $isSubprocess = false, $sPrevious = -1, $sNextTasParam = null)
   {
 
     if (!isset($sProUid) || strlen($sProUid) == 0 ) {
@@ -75,7 +75,7 @@ class AppDelegation extends BaseAppDelegation {
     if (!isset($sAppThread) || strlen($sAppThread ) == 0 ) {
       throw ( new Exception ( 'Column "APP_THREAD" cannot be null.' ) );
     }
-    
+
     //get max DEL_INDEX SELECT MAX(DEL_INDEX) AS M FROM APP_DELEGATION WHERE APP_UID="'.$Fields['APP_UID'].'"'
     $c = new Criteria ();
     $c->clearSelectColumns();
@@ -101,14 +101,14 @@ class AppDelegation extends BaseAppDelegation {
 
     //The function return an array now.  By JHL
     $delTaskDueDate = $this->calculateDueDate($sNextTasParam);
-    
+
     $this->setDelTaskDueDate  ( $delTaskDueDate['DUE_DATE'] ); // Due date formatted
-    
+
     if((defined("DEBUG_CALENDAR_LOG"))&&(DEBUG_CALENDAR_LOG)){
       $this->setDelData  ($delTaskDueDate['DUE_DATE_LOG'] ); // Log of actions made by Calendar Engine
     }
     else{
-      $this->setDelData  ( '' ); 
+      $this->setDelData  ( '' );
     }
 
     // this condition assures that an internal delegation like a subprocess dont have an initial date setted
@@ -134,7 +134,19 @@ class AppDelegation extends BaseAppDelegation {
       throw ( new Exception ( 'Failed Data validation. ' . $msg ) );
     }
 
-    return $this->getDelIndex();
+    $delIndex = $this->getDelIndex();
+
+    // Hook for the trigger PM_CREATE_NEW_DELEGATION
+    if (defined('PM_CREATE_NEW_DELEGATION')) {
+      $data = new stdclass();
+      $data->TAS_UID = $sTasUid;
+      $data->APP_UID = $sAppUid;
+      $data->DEL_INDEX = $delIndex;
+      $oPluginRegistry = &PMPluginRegistry::getSingleton();
+      $oPluginRegistry->executeTriggers(PM_CREATE_NEW_DELEGATION, $data);
+    }
+
+    return $delIndex;
   }
 
   /**
@@ -230,7 +242,7 @@ class AppDelegation extends BaseAppDelegation {
       $aData['TAS_DURATION'] = $sNextTasParam['NEXT_TASK']['TAS_DURATION'];
       $aData['TAS_TIMEUNIT'] = $sNextTasParam['NEXT_TASK']['TAS_TIMEUNIT'];
       $aData['TAS_TYPE_DAY'] = $sNextTasParam['NEXT_TASK']['TAS_TYPE_DAY'];
-      
+
       if(isset($sNextTasParam['NEXT_TASK']['TAS_CALENDAR']) && $sNextTasParam['NEXT_TASK']['TAS_CALENDAR'] != '') {
         $aCalendarUID      = $sNextTasParam['NEXT_TASK']['TAS_CALENDAR'];
       }
@@ -251,7 +263,7 @@ class AppDelegation extends BaseAppDelegation {
 
     //use the dates class to calculate dates
     $dates = new dates();
-    $iDueDate = $dates->calculateDate( 
+    $iDueDate = $dates->calculateDate(
       $this->getDelDelegateDate(),
       $aData['TAS_DURATION'],
       $aData['TAS_TIMEUNIT'],   //hours or days, ( we only accept this two types or maybe weeks
@@ -265,13 +277,13 @@ class AppDelegation extends BaseAppDelegation {
     return $iDueDate;
   }
 
-  function getDiffDate ( $date1, $date2 ) 
+  function getDiffDate ( $date1, $date2 )
   {
     return ( $date1 - $date2 )/(24*60*60); //days
     return ( $date1 - $date2 ) / 3600;
   }
 
-  function calculateDuration() 
+  function calculateDuration()
   {
     try {
       //patch  rows with initdate = null and finish_date
@@ -338,7 +350,7 @@ class AppDelegation extends BaseAppDelegation {
       $i =0;
       //print "<table colspacing='2' border='1'>";
       //print "<tr><td>iDelegateDate </td><td>iInitDate </td><td>iDueDate </td><td>iFinishDate </td><td>isStarted </td><td>isFinished </td><td>isDelayed </td><td>queueDuration </td><td>delDuration </td><td>delayDuration</td></tr>";
-      
+
       $now = strtotime ( 'now' );
       while ( is_array($row) ) {
         $fTaskDuration = $row['TAS_DURATION'];
@@ -355,7 +367,7 @@ class AppDelegation extends BaseAppDelegation {
         $overduePercentage = 0.0;
         //get the object,
         $oAppDel = AppDelegationPeer::retrieveByPk($row['APP_UID'], $row['DEL_INDEX'] );
-        
+
         //if the task is not started
         if ( $isStarted == 0 ) {
           if ( $row['DEL_INIT_DATE'] != NULL && $row['DEL_INIT_DATE']  != '' ) {
