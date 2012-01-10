@@ -1405,7 +1405,8 @@ class wsBase
 
       $aData['APP_UID']   = $caseId;
       $aData['DEL_INDEX'] = $delIndex;
-
+      $aData['USER_UID']  = $userId;
+      
       //load data
       $oCase     = new Cases ();
       $appFields = $oCase->loadCase( $caseId );
