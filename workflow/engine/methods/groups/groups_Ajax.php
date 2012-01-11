@@ -122,6 +122,17 @@ switch ($_POST['action'])
  
     $oCriteria->addSelectColumn(GroupwfPeer::GRP_UID);
     $oCriteria->addSelectColumn(GroupwfPeer::GRP_STATUS);
+    $oCriteria->addSelectColumn(ContentPeer::CON_VALUE);
+    $oCriteria->addAsColumn('GRP_TASKS', 0);
+    $oCriteria->addAsColumn('GRP_USERS', 0);
+    $oCriteria->addJoin(GroupwfPeer::GRP_UID, ContentPeer::CON_ID, Criteria::LEFT_JOIN);
+    $oCriteria->add(ContentPeer::CON_CATEGORY,'GRP_TITLE');
+    $oCriteria->add(ContentPeer::CON_LANG,SYS_LANG); 
+    if ($filter != ''){
+      $oCriteria->add(ContentPeer::CON_VALUE, '%'.$filter.'%', Criteria::LIKE);
+    }
+    $oCriteria->setOffset($start);
+    $oCriteria->setLimit($limit);
     $oDataset = GroupwfPeer::doSelectRS($oCriteria); 
     $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
     global $RBAC; 
