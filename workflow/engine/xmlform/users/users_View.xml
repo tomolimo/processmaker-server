@@ -49,7 +49,7 @@
 </USR_ADDRESS>
 
 <USR_ZIP_CODE type="text" size="30" maxlength="30" defaultvalue="" required="0" group="1" dependentfields="" linkfield="" strto="" readonly="0" noshowingrid="0" readonlyingrid="0" totalizeable="0" sqlconnection="">
-  <en>Zip Code</en>
+  <en>Zip/Postal Code</en>
 </USR_ZIP_CODE>
 
 <USR_COUNTRY type="dropdown" style="width:154pt" defaultvalue="" required="0" group="1" dependentfields="USR_CITY" readonly="0" sqlconnection="" noshowingrid="0" readonlyingrid="0">
