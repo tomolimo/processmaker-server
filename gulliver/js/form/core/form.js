@@ -1171,18 +1171,27 @@ function G_Text( form, element, name)
           keyValid = patron.test(key);
           break;
         case 'Real':
-          patron = /[0-9]/;
+          if (typeof me.comma_separator != 'undefined') {
+            patron = /[0-9\-]/;
+          }
+          else {
+            patron = /[0-9,\.]/;
+          }
+          
           key = String.fromCharCode(pressKey);
           keyValid = patron.test(key);
           keyValid = keyValid || (pressKey == 45);
-          if (me.comma_separator == '.'){
-            if (me.element.value.indexOf('.')==-1){
-              keyValid = keyValid || (pressKey == 46);  
-            } 
-          }
-          else{
-            if (me.element.value.indexOf(',')==-1){
-              keyValid = keyValid || (pressKey == 44);
+
+          if (typeof me.comma_separator != 'undefined') { 
+            if (me.comma_separator == '.'){
+              if (me.element.value.indexOf('.')==-1){
+                keyValid = keyValid || (pressKey == 46);  
+              } 
+            }
+            else{
+              if (me.element.value.indexOf(',')==-1){
+                keyValid = keyValid || (pressKey == 44);
+              }
             }
           }
           break;
