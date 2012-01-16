@@ -161,7 +161,7 @@ class pmTablesProxy extends HttpProxyController
       }
 
     }
-    else {
+    else { // normal dynaform
       $httpData->textFilter = isset($httpData->textFilter) ? $httpData->textFilter : null;
       $dynFields = $this->_getDynafields($aFields['PRO_UID'], 'xmlform', $httpData->start, $httpData->limit, $httpData->textFilter);
     }
@@ -1349,7 +1349,11 @@ class pmTablesProxy extends HttpProxyController
   function _getDynafields($proUid, $type = 'xmlform', $start=null, $limit=null, $filter=null)
   {
     $cache = 1;
-    if (!isset($_SESSION['_cache_pmtables']) || (isset($_SESSION['_cache_pmtables']) && $_SESSION['_cache_pmtables']['pro_uid'] != $proUid)) {
+    if (!isset($_SESSION['_cache_pmtables']) || 
+       (isset($_SESSION['_cache_pmtables']) && $_SESSION['_cache_pmtables']['pro_uid'] != $proUid) ||
+       (isset($_SESSION['_cache_pmtables']) && $_SESSION['_cache_pmtables']['dyn_uid'] != $this->dynUid)
+    ) {
+      
       require_once 'classes/model/Dynaform.php';
       $cache = 0;
       $fields = array();
@@ -1436,6 +1440,7 @@ class pmTablesProxy extends HttpProxyController
       }
 
       $_SESSION['_cache_pmtables']['pro_uid'] = $proUid;
+      $_SESSION['_cache_pmtables']['dyn_uid'] = $this->dynUid;
       $_SESSION['_cache_pmtables']['rows']    = $fields;
       $_SESSION['_cache_pmtables']['count']   = count($fields);
       $_SESSION['_cache_pmtables']['indexes'] = $indexes;
