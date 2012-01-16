@@ -624,7 +624,8 @@ class wsBase
       G::mk_dir( $pathEmail, 0777,true);
 
       if ( ! file_exists ( $fileTemplate ) ) {
-        $result = new wsResponse (28, "Template file '$fileTemplate' does not exist."  );
+        $data['FILE_TEMPLATE'] = $fileTemplate;
+        $result = new wsResponse (28, G::LoadTranslation('ID_TEMPLATE_FILE_NOT_EXIST', SYS_LANG, $data) );
         return $result;
       }
 
@@ -683,7 +684,7 @@ class wsBase
       $oSpool->create( $messageArray );
       $oSpool->sendMail(); 
       if ( $oSpool->status == 'sent' )
-        $result = new wsResponse (0, "message sent : $sTo" );
+        $result = new wsResponse (0, G::loadTranslation ('ID_MESSAGE_SENT') . ": ". $sTo );
       else
         $result = new wsResponse (29, $oSpool->status . ' ' . $oSpool->error . print_r ($aSetup ,1 ) );
 
@@ -706,7 +707,8 @@ class wsBase
       $oCase = new Cases();
       $aRows = $oCase->loadCase( $caseId, $iDelIndex );
       if ( count($aRows) == 0 ) {
-        $result = new wsResponse (16, "Case $caseNumber does not exist" );
+        $data['CASE_NUMBER'] = $caseNumber;
+        $result = new wsResponse (16, G::loadTranslation('ID_CASE_DOES_NOT_EXIST', SYS_LANG, $data));
         return $result;
       }
 
@@ -718,7 +720,7 @@ class wsBase
       catch ( Exception $e ) {
         $processName = '';
       }
-      $result = new wsResponse (0, "Command executed successfully" );
+      $result = new wsResponse (0, G::loadTranslation ('ID_COMMAND_EXECUTED_SUCCESSFULLY') );
       $result->caseId              = $aRows['APP_UID'];
       $result->caseNumber          = $aRows['APP_NUMBER'];
       $result->caseName            = $aRows['TITLE'];
@@ -803,23 +805,27 @@ class wsBase
   public function createUser( $userId, $firstname, $lastname, $email, $role, $password) {
     try {
       if($userId=='')
-      {  $result = new wsCreateUserResponse (25, "Username is required");
-         return $result;
+      {
+        $result = new wsCreateUserResponse (25, G::loadTranslation ('ID_USERNAME_REQUIRED'));
+        return $result;
       }
 
       if($password=='')
-      {  $result = new wsCreateUserResponse (26, "Password is required");
-         return $result;
+      {
+        $result = new wsCreateUserResponse (26, G::loadTranslation ('ID_PASSWD_REQUIRED'));
+        return $result;
       }
 
       if($firstname=='')
-      {  $result = new wsCreateUserResponse (27, "First Name is required");
-         return $result;
+      {
+        $result = new wsCreateUserResponse (27, G::loadTranslation ('ID_MSG_ERROR_USR_FIRSTNAME'));
+        return $result;
       }
 
       if(strlen($password)>20)
-      {  $result = new wsCreateUserResponse (28, "Password surprases the maximun length allowed", '');
-         return $result;
+      {
+        $result = new wsCreateUserResponse (28, G::loadTranslation ('ID_PASSWORD_SURPRASES'), '');
+        return $result;
       }
 
       global $RBAC;
@@ -827,7 +833,8 @@ class wsBase
 
       $user = $RBAC->verifyUser($userId);
       if ( $user == 1){
-        $result = new wsCreateUserResponse (7, "Username '$userId' already exists", '' ) ;
+        $data['USER_ID'] = $userId;
+        $result = new wsCreateUserResponse (7, G::loadTranslation ('ID_USERNAME_ALREADY_EXISTS', SYS_LANG, $data), '' ) ;
         return $result;
       }
 
@@ -838,7 +845,8 @@ class wsBase
       else {
         $very_rol = $RBAC->verifyByCode($role);
         if ( $very_rol==0 ){
-          $result = new wsResponse (6, "Invalid role '$role'");
+          $data['ROLE'] = $role;
+          $result = new wsResponse (6, G::loadTranslation ('ID_INVALID_ROLE', SYS_LANG, $data));
           return $result;
         }
         $strRole = $role;
@@ -873,7 +881,10 @@ class wsBase
       $oUser = new Users();
       $oUser->create($aData);
 
-      $res = new wsResponse (0, "User $firstname $lastname [$userId] created successfully");
+      $data['FIRSTNAME'] = $firstname;
+      $data['LASTNAME'] = $lastname;
+      $data['USER_ID'] = $userId;
+      $res = new wsResponse (0, G::loadTranslation ('ID_USER_CREATED_SUCCESSFULLY', SYS_LANG, $data));
       $result = array('status_code' => $res->status_code ,
                       'message'     => $res->message,
                       'userUID'     => $sUserUID,
@@ -896,7 +907,7 @@ class wsBase
   public function createGroup( $groupName) {
     try {
       if( trim($groupName) == '' ) {  
-        $result = new wsCreateGroupResponse (25, "Group name is required", '');
+        $result = new wsCreateGroupResponse (25, G::loadTranslation ('ID_GROUP_NAME_REQUIRED'), '');
         return $result;
       }
 
@@ -904,7 +915,8 @@ class wsBase
       $grpRow['GRP_TITLE'] = $groupName;
       $groupId = $group->create( $grpRow );
 
-      $result = new wsCreateGroupResponse (0, "Group $groupName created successfully", $groupId);
+      $data['GROUP_NAME'] = $groupName;
+      $result = new wsCreateGroupResponse (0, G::loadTranslation ('ID_GROUP_CREATED_SUCCESSFULLY', SYS_LANG, $data), $groupId);
       
       return $result;
     }
@@ -923,7 +935,7 @@ class wsBase
   public function createDepartment( $departmentName, $parentUID ) {
     try {
       if( trim($departmentName) == '' ) {  
-        $result = new wsCreateDepartmentResponse (25, "Department name is required", '');
+        $result = new wsCreateDepartmentResponse (25, G::loadTranslation ('ID_DEPARTMENT_NAME_REQUIRED'), '');
         return $result;
       }
 
@@ -933,7 +945,10 @@ class wsBase
 
       $departmentId = $department->create( $row );
 
-      $result = new wsCreateDepartmentResponse (0, "$departmentName, $parentUID Department $departmentName created successfully", $departmentId);
+      $data['DEPARTMENT_NAME'] = $departmentName;
+      $data['PARENT_UID']      = $parentUID;
+      $data['DEPARTMENT_NAME'] = $departmentName;
+      $result = new wsCreateDepartmentResponse (0, G::loadTranslation ('ID_DEPARTMENT_CREATED_SUCCESSFULLY', SYS_LANG, $data) , $departmentId);
       return $result;
     }
     catch ( Exception $e ) {
@@ -954,14 +969,14 @@ class wsBase
       $RBAC->initRBAC();
       $user=$RBAC->verifyUserId($userId);
       if($user==0){
-        $result = new wsResponse (3, "User not registered in the system");
+        $result = new wsResponse (3, G::loadTranslation ('ID_USER_NOT_REGISTERED_SYSTEM'));
         return $result;
       }
 
       $groups = new Groups;
       $very_group = $groups->verifyGroup( $groupId );
       if ( $very_group==0 ) {
-        $result = new wsResponse (9, "Group not registered in the system");
+        $result = new wsResponse (9, G::loadTranslation ('ID_GROUP_NOT_REGISTERED_SYSTEM'));
         return $result;
       }
 
@@ -969,11 +984,11 @@ class wsBase
       if($very_user==1){
         $oGroup = new Groups();
         $oGroup->removeUserOfGroup($groupId, $userId);
-        $result = new wsResponse (0, "command executed successfuly");
+        $result = new wsResponse (0, G::loadTranslation ('ID_COMMAND_EXECUTED_SUCCESSFULY'));
         return $result;
       }
       //$oGroup->removeUserOfGroup($_POST['GRP_UID'], $_POST['USR_UID']);
-      $result = new wsResponse (8, "User not registered in the group");
+      $result = new wsResponse (8, G::loadTranslation ('ID_USER_NOT_REGISTERED_GROUP'));
       return $result;
     }
     catch ( Exception $e ) {
@@ -997,24 +1012,24 @@ class wsBase
       $RBAC->initRBAC();
       $user=$RBAC->verifyUserId($userId);
       if($user==0){
-        $result = new wsResponse (3, "User not registered in the system");
+        $result = new wsResponse (3, G::loadTranslation ('ID_USER_NOT_REGISTERED_SYSTEM'));
         return $result;
       }
 
       $groups = new Groups;
       $very_group = $groups->verifyGroup( $groupId );
       if ( $very_group==0 ) {
-        $result = new wsResponse (9, "Group not registered in the system");
+        $result = new wsResponse (9, G::loadTranslation ('ID_GROUP_NOT_REGISTERED_SYSTEM'));
         return $result;
       }
 
       $very_user = $groups->verifyUsertoGroup( $groupId, $userId);
       if($very_user==1){
-        $result = new wsResponse (8, "User already exists in the group");
+        $result = new wsResponse (8, G::loadTranslation ('ID_USER_ALREADY_EXISTS_GROUP'));
         return $result;
       }
       $groups->addUserToGroup( $groupId, $userId);
-      $result = new wsResponse (0, "command executed successfuly");
+      $result = new wsResponse (0, G::loadTranslation ('ID_COMMAND_EXECUTED_SUCCESSFULY'));
       return $result;
     }
     catch ( Exception $e ) {
@@ -1037,13 +1052,14 @@ class wsBase
       $RBAC->initRBAC();
       $user=$RBAC->verifyUserId($userId);
       if($user==0){
-        $result = new wsResponse (3, "User not registered in the system");
+        $result = new wsResponse (3, G::loadTranslation ('ID_USER_NOT_REGISTERED_SYSTEM'));
         return $result;
       }
 
       $deps = new Department;
       if ( !$deps->existsDepartment( $depId ) ) {
-        $result = new wsResponse (100, "Department $depId is not registered in the system");
+        $data['DEP_ID'] = $depId;
+        $result = new wsResponse (100, G::loadTranslation ('ID_DEPARTMENT_NOT_REGISTERED_SYSTEM', SYS_LANG, $data));
         return $result;
       }
 
@@ -1051,7 +1067,7 @@ class wsBase
         $deps->addUserToDepartment( $depId, $userId, $manager, true );
       }
   
-      $result = new wsResponse (0, "command executed successfuly");
+      $result = new wsResponse (0, G::loadTranslation ('ID_COMMAND_EXECUTED_SUCCESSFULY'));
       return $result;
     }
     catch ( Exception $e ) {
@@ -1086,7 +1102,7 @@ class wsBase
       }
 
       if ($cnt == 0){
-        $result = new wsResponse (18, 'This case delegation is already closed or does not exist');
+        $result = new wsResponse (18, G::loadTranslation ('ID_CASE_DELEGATION_ALREADY_CLOSED'));
         return $result;
       }
       if ( is_array($variables)) {
@@ -1101,15 +1117,15 @@ class wsBase
           $cdata = ob_get_contents();
           ob_end_clean(); 
           $up_case = $oCase->updateCase($caseId, $oldFields);
-          $result = new wsResponse (0, "$cant variables received: \n".trim(str_replace('Array', '', $cdata)) );
+          $result = new wsResponse (0, $cant . " " . G::loadTranslation ('ID_VARIABLES_RECEIVED') . ": \n" . trim(str_replace('Array', '', $cdata)) );
           return $result;
         } 
         else {
-          $result = new wsResponse (23, "The variables param length is zero");
+          $result = new wsResponse (23, G::loadTranslation ('ID_VARIABLES_PARAM_ZERO'));
           return $result;
         }
       } else {
-        $result = new wsResponse (24, "The variables param is not an array");
+        $result = new wsResponse (24, G::loadTranslation ('ID_VARIABLES_PARAM_NOT_ARRAY'));
         return $result;
       }
     }
@@ -1162,16 +1178,16 @@ class wsBase
               }
             }
           }
-          $result = new wsGetVariableResponse (0, count($resFields) . " variables sent" , $resFields );
+          $result = new wsGetVariableResponse (0, count($resFields) . G::loadTranslation('ID_VARIABLES_SENT') , $resFields );
           return $result;
         }
         else {
-          $result = new wsGetVariableResponse (23, "The variables param length is zero", null);
+          $result = new wsGetVariableResponse (23, G::loadTranslation ('ID_VARIABLES_PARAM_ZERO'), null);
           return $result;
         }
       }
       else {
-        $result = new wsGetVariableResponse (24, "The variables param is not a array", null);
+        $result = new wsGetVariableResponse (24, G::loadTranslation ('ID_VARIABLES_PARAM_NOT_ARRAY'), null);
         return $result;
       }
     }
@@ -1199,7 +1215,7 @@ class wsBase
       $oProcesses = new Processes();
       $pro = $oProcesses->processExists($processId);
       if( !$pro ) {  
-        $result = new wsResponse (11, "Invalid process $processId");
+        $result = new wsResponse (11, G::loadTranslation ('ID_INVALID_PROCESS') . " " . $processId);
         return $result;
       }
 
@@ -1221,13 +1237,13 @@ class wsBase
           $taskId   = $validTaskId;
         }
         if ( $tasksInThisProcess > 1 ) {
-          $result = new wsResponse (13, "Multiple starting tasks in the process");
+          $result = new wsResponse (13, G::loadTranslation ('ID_MULTIPLE_STARTING_TASKS'));
           return $result;
         }
       }
 
       if( $founded == '') {
-        $result = new wsResponse (14, "Task invalid or the user is not assigned to the task");
+        $result = new wsResponse (14, G::loadTranslation ('ID_TASK_INVALID_USER_NOT_ASSIGNED_TASK'));
         return $result;
       }
 
@@ -1241,7 +1257,7 @@ class wsBase
 
       $up_case   = $oCase->updateCase($caseId, $oldFields);
                  
-      $result    = new wsResponse (0, "Command executed successfully");
+      $result    = new wsResponse (0, G::loadTranslation ('ID_STARTED_SUCCESSFULLY'));
       $result->caseId     = $caseId;
       $result->caseNumber = $caseNr;
 
@@ -1268,12 +1284,12 @@ class wsBase
           $c=count($variables);
           $Fields = $variables;
           if($c == 0) { //Si no tenenmos ninguna variables en el array variables.
-            $result = new wsResponse (10, "Array of variables is empty");
+            $result = new wsResponse (10, G::loadTranslation ('ID_ARRAY_VARIABLES_EMPTY'));
             return $result;
           }
         }
       } else {
-        $result = new wsResponse (10, "The variables param is not an array");
+        $result = new wsResponse (10, G::loadTranslation ('ID_VARIABLES_PARAM_NOT_ARRAY'));
         return $result;
       }
 
@@ -1281,7 +1297,7 @@ class wsBase
       $pro        = $oProcesses->processExists($processId);
 
       if(!$pro) {
-        $result = new wsResponse (11, "Invalid process $processId!!");
+        $result = new wsResponse (11, G::loadTranslation ('ID_INVALID_PROCESS') . " " . $processId . "!!");
         return $result;
       }
 
@@ -1300,13 +1316,15 @@ class wsBase
            {
              $group=$groups->getUsersOfGroup( $tasks[0]['TAS_UID'] );
              if(!is_array($group))
-             { $result = new wsResponse (14, "The user is not assigned to the task");
+             {
+               $result = new wsResponse (14, G::loadTranslation ('ID_USER_NOT_ASSIGNED_TASK'));
                return $result;
              }
            }
         }
         else
-        { $result = new wsResponse (14, "The user is not assigned to the task");
+        {
+          $result = new wsResponse (14, G::loadTranslation ('ID_USER_NOT_ASSIGNED_TASK'));
           return $result;
         }
 
@@ -1318,16 +1336,16 @@ class wsBase
         $oldFields['APP_DATA'] = array_merge( $oldFields['APP_DATA'], $Fields);
 
         $up_case   = $oCase->updateCase($caseId, $oldFields);
-        $result    = new wsResponse (0, "Command executed successfully");
+        $result    = new wsResponse (0, G::loadTranslation ('ID_COMMAND_EXECUTED_SUCCESSFULLY'));
         return $result;
       }
       else {
         if($numTasks==0) {
-          $result = new wsResponse (12, "No starting task defined");
+          $result = new wsResponse (12, G::loadTranslation ('ID_NO_STARTING_TASK'));
           return $result;
         }
         if($numTasks > 1){
-          $result = new wsResponse (13, "Multiple starting tasks in the process");
+          $result = new wsResponse (13, G::loadTranslation ('ID_MULTIPLE_STARTING_TASKS'));
           return $result;
         }
       }
@@ -1358,7 +1376,7 @@ class wsBase
         $oCriteria->add(AppDelegationPeer::APP_UID, $caseId);
         $oCriteria->add(AppDelegationPeer::DEL_FINISH_DATE, null, Criteria::ISNULL);
         if (AppDelegationPeer::doCount($oCriteria) > 1) {
-          $result = new wsResponse (20, 'Please specify the delegation index');
+          $result = new wsResponse (20, G::loadTranslation ('ID_SPECIFY_DELEGATION_INDEX'));
           return $result;
         }
         $oDataset = AppDelegationPeer::doSelectRS($oCriteria);
@@ -1373,13 +1391,13 @@ class wsBase
 
       if($userId!=$appdel['USR_UID'])
       {
-        $result = new wsResponse (17, "This case is assigned to another user");
+        $result = new wsResponse (17, G::loadTranslation ('ID_CASE_ASSIGNED_ANOTHER_USER'));
         return $result;
       }
 
       if($appdel['DEL_FINISH_DATE']!=NULL)
       {
-        $result = new wsResponse (18, 'This case delegation is already closed or does not exist');
+        $result = new wsResponse (18, G::loadTranslation ('ID_CASE_DELEGATION_ALREADY_CLOSED'));
         return $result;
       }
 
@@ -1398,7 +1416,7 @@ class wsBase
       {
         if ( isset($aRow['APP_DISABLE_ACTION_USER']) && $aRow['APP_DISABLE_ACTION_USER']!=0 && 
              isset($aRow['APP_DISABLE_ACTION_DATE']) && $aRow['APP_DISABLE_ACTION_DATE']!='' ) {
-            $result = new wsResponse (19, "This case is in status ". $aRow['APP_TYPE']);
+            $result = new wsResponse (19, G::loadTranslation ('ID_CASE_IN_STATUS') . " " . $aRow['APP_TYPE']);
             return $result;
           }
       }
@@ -1498,18 +1516,18 @@ class wsBase
       $derive  = $oDerivation->prepareInformation($aData);
       if (isset($derive[1])) {
         if ($derive[1]['ROU_TYPE'] == 'SELECT') {
-          $result = new wsResponse (21, 'Can not route a case with Manual Assignment using webservices');
+          $result = new wsResponse (21, G::loadTranslation ('ID_CAN_NOT_ROUTE_CASE_USING_WEBSERVICES'));
           return $result;
         }
       }
       else {
-        $result = new wsResponse (22, 'Task does not have a routing rule; check process definition');
+        $result = new wsResponse (22, G::loadTranslation ('ID_TASK_DOES_NOT_HAVE_ROUTING_RULE'));
         return $result;
       }
       foreach ( $derive as $key=>$val ) {
         if($val['NEXT_TASK']['TAS_ASSIGN_TYPE']=='MANUAL')
         {
-          $result = new wsResponse (15, "The task is defined for Manual assignment");
+          $result = new wsResponse (15, G::loadTranslation ('ID_TASK_DEFINED_MANUAL_ASSIGNMENT'));
           return $result;
         }
         $nextDelegations[] = array(
@@ -1691,13 +1709,13 @@ class wsBase
 
       if($userId!=$appdel['USR_UID'])
       {
-        $result = new wsResponse (17, "This case is assigned to another user");
+        $result = new wsResponse (17, G::loadTranslation ('ID_CASE_ASSIGNED_ANOTHER_USER'));
         return $result;
       }
 
       if($appdel['DEL_FINISH_DATE']!=NULL)
       {
-        $result = new wsResponse (18, 'This case delegation is already closed or does not exist');
+        $result = new wsResponse (18, G::loadTranslation ('ID_CASE_DELEGATION_ALREADY_CLOSED'));
         return $result;
       }
 
@@ -1716,7 +1734,7 @@ class wsBase
       {
           if($aRow['APP_DISABLE_ACTION_USER']!=0 && $aRow['APP_DISABLE_ACTION_DATE']!='')
           {
-              $result = new wsResponse (19, "This case is in status ". $aRow['APP_TYPE']);
+              $result = new wsResponse (19, G::loadTranslation ('ID_CASE_IN_STATUS') . " ". $aRow['APP_TYPE']);
               return $result;
           }
       }
@@ -1748,12 +1766,13 @@ class wsBase
         //Save data - End
       }
       else {
-        $result = new wsResponse (100, "Invalid trigger '$triggerIndex'" );
+        $data['TRIGGER_INDEX'] = $triggerIndex;
+        $result = new wsResponse (100, G::loadTranslation ('ID_INVALID_TRIGGER', SYS_LANG, $data) );
         return $result;
       }
 
 
-      $result = new wsResponse (0, 'executed: '. trim( $row['TRI_WEBBOT']) );
+      $result = new wsResponse (0, G::loadTranslation('ID_EXECUTED') . ": " . trim( $row['TRI_WEBBOT']) );
       //$result = new wsResponse (0, 'executed: '. print_r( $oPMScript ,1 ) );
       return $result;
     }
@@ -1841,7 +1860,7 @@ class wsBase
   public function reassignCase( $sessionId, $caseId, $delIndex, $userIdSource, $userIdTarget ){
     try {
       if ( $userIdTarget == $userIdSource ) {
-        $result = new wsResponse (30, "Target and Origin user are the same" );
+        $result = new wsResponse (30, G::loadTranslation ('ID_TARGET_ORIGIN_USER_SAME') );
         return $result;
       }
 
@@ -1855,7 +1874,7 @@ class wsBase
       $aRow      = $oDataset->getRow();
       if(!is_array($aRow))
       {
-          $result = new wsResponse (31, "Invalid origin user" );
+          $result = new wsResponse (31, G::loadTranslation ('ID_INVALID_ORIGIN_USER') );
           return $result;
       }
 
@@ -1864,7 +1883,7 @@ class wsBase
       $rows = $oCase->loadCase($caseId);
       if(!is_array($aRow))
       {
-          $result = new wsResponse (32, "This case is not open" );
+          $result = new wsResponse (32, G::loadTranslation ('ID_CASE_NOT_OPEN') );
           return $result;
       }
 
@@ -1885,14 +1904,14 @@ class wsBase
       $aRow      = $oDataset->getRow();
       if(!is_array($aRow))
       {
-          $result = new wsResponse (33, "Invalid Case Delegation index for this user" );
+          $result = new wsResponse (33, G::loadTranslation ('ID_INVALID_CASE_DELEGATION_INDEX') );
           return $result;
       }
       $tasUid = $aRow['TAS_UID'];
       $derivation = new Derivation ();
       $userList   = $derivation->getAllUsersFromAnyTask( $tasUid );
       if ( in_array ( $userIdTarget, $userList ) ) {
-        $result = new wsResponse (34, "The target user does not have rights to execute the task " );
+        $result = new wsResponse (34, G::loadTranslation ('ID_TARGET_USER_DOES_NOT_HAVE_RIGHTS') );
         return $result;
       }
 
@@ -1907,7 +1926,7 @@ class wsBase
       $aRow       = $oDataset->getRow();
       if(!is_array($aRow))
       {
-          $result = new wsResponse (35, "The target user destination is invalid" );
+          $result = new wsResponse (35, G::loadTranslation ('ID_TARGET_USER_DESTINATION_INVALID') );
           return $result;
       }
 
@@ -1917,11 +1936,11 @@ class wsBase
 
       if(!$var)
       {
-          $result = new wsResponse (36, "The case could not be reassigned." );
+          $result = new wsResponse (36, G::loadTranslation ('ID_CASE_COULD_NOT_REASSIGNED') );
           return $result;
       }
 
-      $result = new wsResponse (0, 'Command executed successfully');
+      $result = new wsResponse (0, G::loadTranslation ('ID_COMMAND_EXECUTED_SUCCESSFULLY'));
 
       return $result;
     }
@@ -1941,7 +1960,7 @@ class wsBase
       define ( 'SKIP_RENDER_SYSTEM_INFORMATION', true );
       require_once ( PATH_METHODS . 'login' . PATH_SEP . 'dbInfo.php' );
       $result->status_code        = 0;
-      $result->message            = 'Sucessful';
+      $result->message            = G::loadTranslation ('ID_SUCESSFUL');
       $result->timestamp          = date ( 'Y-m-d H:i:s');
       G::LoadClass("system");
       $result->version            = System::getVersion();
@@ -2012,7 +2031,10 @@ class wsBase
       //getting the ProUid from the file recently downloaded
       $oData = $oProcess->getProcessData ( $localPath . $newfilename  );
       if ( is_null($oData)) {
-        throw new Exception('Error the url ' . $downloadUrl . ' is invalid or the process in '. $localPath . $newfilename. ' is invalid');
+        $data['DOWNLOAD_URL'] = $downloadUrl;
+        $data['LOCAL_PATH']   = $localPath;
+        $data['NEW_FILENAME'] = $newfilename;
+        throw new Exception(G::loadTranslation ('ID_ERROR_URL_PROCESS_INVALID', SYS_LANG, $data));
       }
 
       $sProUid = $oData->process['PRO_UID'];
@@ -2059,7 +2081,7 @@ class wsBase
         }
 
         if ( $importOption != 1 && $importOption != 2 && $importOption != 3   ) {
-          throw new Exception('The process is already in the System and the value for importOption is not specified.');
+          throw new Exception(G::loadTranslation ('ID_PROCESS_ALREADY_IN_SYSTEM'));
         }
       }
 
@@ -2074,7 +2096,7 @@ class wsBase
       $processData = $oProcess->ws_processGetData ( $processId  );
 
       $result      ->status_code        = 0;
-      $result      ->message            = 'Command executed successfully';
+      $result      ->message            = G::loadTranslation ('ID_COMMAND_EXECUTED_SUCCESSFULLY');
       $result      ->timestamp          = date ( 'Y-m-d H:i:s');
       $result      ->processId          = $processId;
       $result      ->processTitle       = $processData->title;
