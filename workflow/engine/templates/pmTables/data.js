@@ -198,12 +198,21 @@ Ext.onReady(function(){
 
   // all exception events
   Ext.data.DataProxy.addListener('exception', function(proxy, type, action, options, res) {
-    response = Ext.util.JSON.decode(res.responseText);
-    if(response.message == '$$') {
-      return false;
+    
+    if (typeof res.responseText != 'undefined') {
+      response = Ext.util.JSON.decode(res.responseText);
+      msg = response.message;
+    }
+    
+    if (typeof res.raw != 'undefined') {
+      msg = res.raw.msg;
     }
 
-    PMExt.error(_('ID_ERROR'), response.message);
+    if(msg == '$$' || typeof msg == 'undefined') 
+      return false;
+    
+
+    PMExt.error(_('ID_ERROR'), msg);
     infoGrid.store.reload();
   });
 
