@@ -4491,6 +4491,73 @@ function getDirectorySize($path,$maxmtime=0)
     }
     return md5($checkSum);
   }
+  
+  /**
+   * disableEnableINIvariable
+     disable or enable a variable in ini file, this is useful for editing the env.ini file
+     automatically get the value, and change to inverse value,  I mean from true to false and viceversa
+  */
+  function disableEnableINIvariable( $inifile, $variable ) {
+    $enabled = 'false';
+    if ( file_exists($inifile ) ) {
+      $fp = fopen( $inifile, 'r' );
+      $line = fgets($fp);
+      $found = false;
+      $buffer = null;
+      
+      while ( !feof($fp) ) {
+       	$config = G::parse_ini_string($line);
+        if ( isset($config[$variable] )) {
+          $enabled = $config[$variable];
+         	$buffer .= sprintf("%s = %d \n", $variable, 1- $enabled );
+         	$found = true;
+        }
+        else {
+         	$buffer .= trim($line) . "\n";
+        }  
+        $line = fgets($fp);
+      }
+      fclose($fp);
+      if ( !$found ) $buffer .= sprintf("\n%s = 1 \n", $variable );
+          
+      @file_put_contents( $inifile, $buffer);
+    }
+    else {
+      $contents = file_put_contents($inifile, sprintf("\n%s = 1\n", $variable));
+    }
+  }
+		
+  /**
+   * set a variable in ini file
+  */
+  function setINIvariable( $inifile, $variable, $value ) {
+    if ( file_exists($inifile ) ) {
+      $fp = fopen( $inifile, 'r' );
+      $line = fgets($fp);
+      $found = false;
+      $buffer = null;
+      
+      while ( !feof($fp) ) {
+       	$config = G::parse_ini_string($line);
+        if ( isset($config[$variable] )) {
+          $enabled = $config[$variable];
+         	$buffer .= sprintf("%s = %s \n", $variable, $value );
+         	$found = true;
+        }
+        else {
+         	$buffer .= trim($line) . "\n";
+        }  
+        $line = fgets($fp);
+      }
+      fclose($fp);
+      if ( !$found ) $buffer .= sprintf("\n%s = $s \n", $variable, $value );
+          
+      file_put_contents( $inifile, $buffer);
+    }
+    else {
+      $contents = file_put_contents($inifile, sprintf("\n%s = $s\n", $variable, $value));
+    }
+  }
 };
 
 /**
