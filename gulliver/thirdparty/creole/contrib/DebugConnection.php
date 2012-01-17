@@ -80,7 +80,7 @@ class DebugConnection implements Connection {
 		}		
 		$connectionClass = Creole::import($driver);
 		$this->childConnection = new $connectionClass();
-		$this->log("connect(): DSN: ". var_export($dsninfo, true) . ", FLAGS: " . var_export($flags, true));
+    $this->log("connect DSN|0|". var_export($dsninfo, true) . ", FLAGS: " . var_export($flags, true));
 		return $this->childConnection->connect($dsninfo, $flags);
 	}
 	
@@ -154,8 +154,11 @@ class DebugConnection implements Connection {
 	{
 		$this->lastExecutedQuery = $sql;
 		$this->numQueriesExecuted++;
+  	$startTime =  microtime(true);
 		$res = $this->childConnection->executeQuery($sql, $fetchmode);	
-		$this->log("executeQuery(): $sql");
+  	$endTime =  microtime(true);
+  	$time = $endTime - $startTime;
+		$this->log("executeQuery|$time|$sql");
 		return $res;
 	}
 	
@@ -164,10 +167,14 @@ class DebugConnection implements Connection {
 	 */
 	public function executeUpdate($sql)
 	{
-		$this->log("executeUpdate(): $sql");
 		$this->lastExecutedQuery = $sql;
 		$this->numQueriesExecuted++;
-		return $this->childConnection->executeUpdate($sql);	
+  	$startTime =  microtime(true);
+		$res = $this->childConnection->executeUpdate($sql);	
+  	$endTime =  microtime(true);
+  	$time = $endTime - $startTime;
+		$this->log("executeUpdate|$time|$sql");
+		return $res;	
 	}
 	
 	/**

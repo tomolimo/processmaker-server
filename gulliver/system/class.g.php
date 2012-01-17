@@ -4493,6 +4493,38 @@ function getDirectorySize($path,$maxmtime=0)
   }
   
   /**
+   * parse_ini_string
+     Define parse_ini_string if it doesn't exist.
+     Does accept lines starting with ; as comments
+     Does not accept comments after values
+  */
+  function parse_ini_string($string){
+    if( function_exists('parse_ini_string') ) {
+      return parse_ini_string($string);
+    } 
+    else {
+      $array = Array();
+      $lines = explode("\n", $string );
+       
+      foreach( $lines as $line ) {
+        $statement = preg_match( "/^(?!;)(?P<key>[\w+\.\-]+?)\s*=\s*(?P<value>.+?)\s*$/", $line, $match );
+        if( $statement ) {
+          $key    = $match[ 'key' ];
+          $value  = $match[ 'value' ];
+               
+          //Remove quote
+          if( preg_match( "/^\".*\"$/", $value ) || preg_match( "/^'.*'$/", $value ) ) {
+            $value = mb_substr( $value, 1, mb_strlen( $value ) - 2 );
+          }
+               
+          $array[ $key ] = $value;
+        }
+      }
+      return $array;
+    }
+  }
+
+  /**
    * disableEnableINIvariable
      disable or enable a variable in ini file, this is useful for editing the env.ini file
      automatically get the value, and change to inverse value,  I mean from true to false and viceversa
