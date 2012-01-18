@@ -32,7 +32,7 @@
     'wsdl_cache' => 1,
     'memory_limit' => '100M',
     'time_zone' => 'America/La_Paz',
-    'memcached_server' => 0,
+    'memcached' => 0,
     'memcached_server' => ''
   );
 
