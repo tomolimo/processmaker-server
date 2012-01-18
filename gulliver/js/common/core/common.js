@@ -1358,6 +1358,42 @@ function dynaformSetFocus(){
 }
 
 /**
+ * Set id from id_label if it does not exist
+ *
+ * @Author alvaro <alvaro@colosa.com, alvaro.cs@live.com>
+ * @return false
+ */
+function idSet(name){   
+  var inputs = document.getElementsByTagName('input');
+  if(inputs.length > 0){
+    for(i in inputs){
+      id = inputs[i].id;      
+      if(id == "form["+name+"_label]"){
+ 
+         if(inputs[i].value.trim())
+           var valueLabel = inputs[i].value; 
+       else
+           var valueLabel = "Empty"; 
+      } 
+      
+      if(id == "form["+name+"]"){
+        try {     
+          if(valueLabel !="Empty"){
+            if (! inputs[i].value)
+              inputs[i].value =  valueLabel; 
+          }else 
+             inputs[i].value =  ""; 
+            
+        } catch (e) {
+          //nothing
+        }
+      }      
+    }
+  } 
+  return false; 
+}
+
+/**
  * ********************************* Misc Functions by Neyek ****************************************
  */
 

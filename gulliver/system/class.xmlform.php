@@ -1179,7 +1179,8 @@ class XmlForm_Field_Suggest extends XmlForm_Field_SimpleText //by neyek
         if(strlen(trim($formVariableValue))>0) {
           $value = $formVariableValue;
         }
-        $str  = '<input type="text" '.$storeEntry.' class="module_app_input___gray" style="height:16px" size="'.$this->size.'" id="form[' . $this->name . '_label]" name="form[' . $this->name . '_label]" value="'.$this->htmlentities($value, ENT_COMPAT, 'utf-8').'" ';
+        $name = "'".$this->name."'";
+        $str  = '<input type="text" '.$storeEntry.' class="module_app_input___gray" style="height:16px" size="'.$this->size.'" id="form[' . $this->name . '_label]" name="form[' . $this->name . '_label]" value="'.$this->htmlentities($value, ENT_COMPAT, 'utf-8').'" onblur="idSet('. $name . ');"';
         $str .= $this->NSDependentFields(true).' ';
         $str .= '/>';
         $str .= '<input ';
