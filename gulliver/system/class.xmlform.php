@@ -2758,7 +2758,7 @@ class XmlForm_Field_Listbox extends XmlForm_Field
   var $option        = array ();
   var $sqlConnection = 0;
   var $size          = 4;
-  var $width         = '100';
+  var $width         = '';
   var $sql           = '';
   var $sqlOption     = array ();
   function validateValue($value, $owner)
@@ -2783,7 +2783,11 @@ class XmlForm_Field_Listbox extends XmlForm_Field
     if (! is_array ( $value ))
       $value = explode ( '|', $value );
     if ($this->mode === 'edit') {
-      $html = '<select multiple="multiple" id="form[' . $this->name . ']" name="form[' . $this->name . '][]" size="' . $this->size . '" style="width:'.$this->width.'">';
+      $itemWidth = '';
+      if ($this->width != '') {
+        $itemWidth =  'style="width:'.$this->width . '"';
+      }
+      $html = '<select multiple="multiple" id="form[' . $this->name . ']" name="form[' . $this->name . '][]" size="' . $this->size . '" ' . $itemWidth . ' >';
       foreach ( $this->option as $optionName => $option ) {
         $html .= '<option value="' . $optionName . '" ' . ((in_array ( $optionName, $value )) ? 'selected' : '') . '>' . $option . '</option>';
       }
