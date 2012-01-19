@@ -212,7 +212,7 @@ class Language extends BaseLanguage {
               $category,
               $id,
               $LOCALE,
-              trim(str_replace(chr(10), '', stripslashes($rowTranslation['msgstr'])))
+              trim(stripcslashes(str_replace(chr(10), '', $rowTranslation['msgstr'])))
             );
             if( $result['codError'] == 0 ) {
               $countItemsSuccess++;
@@ -247,7 +247,7 @@ class Language extends BaseLanguage {
           $codes = explode('-', $reference);
           
           if( sizeof($codes) == 2 ) { //is a normal node
-            $dynaform->addChilds($fieldName, Array($LOCALE=>stripslashes($rowTranslation['msgstr'])));
+            $dynaform->addChilds($fieldName, Array($LOCALE=>stripcslashes(str_replace(chr(10), '', $rowTranslation['msgstr']))));
           } else if( sizeof($codes) > 2 ) { //is a node child for a language node
             $name = $match[3] == "''" ? '' : $match[3];
             $childNode = Array(
@@ -420,7 +420,7 @@ class Language extends BaseLanguage {
       $poFile->addTranslatorComment($aRow1['TRN_CATEGORY'] . '/' . $aRow1['TRN_ID']);
       $poFile->addReference($aRow1['TRN_CATEGORY'] . '/' . $aRow1['TRN_ID']);
       
-      $poFile->addTranslation(stripslashes($msgid), stripslashes($msgstr));
+      $poFile->addTranslation(stripcslashes($msgid), stripcslashes($msgstr));
       $aMsgids[$msgid] = true;
     }
 
