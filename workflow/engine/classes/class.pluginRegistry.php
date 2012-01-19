@@ -1178,4 +1178,8 @@ class PMPluginRegistry {
   function getTaskExtendedProperties() {
     return  $this->_aTaskExtendedProperties;
   }
+
+  function registerDashboard() {
+    // Dummy function for backwards compatibility
+  }
 }

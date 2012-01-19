@@ -596,4 +596,8 @@ class PMPlugin {
     $oPluginRegistry =& PMPluginRegistry::getSingleton();
     $oPluginRegistry->unregisterJavascript($this->sNamespace, $sCoreJsFile, $pluginJsFile);
   }
+
+  function registerDashboard() {
+    // Dummy function for backwards compatibility
+  }
 }
