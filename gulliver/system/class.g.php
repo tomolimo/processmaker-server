@@ -4582,7 +4582,7 @@ function getDirectorySize($path,$maxmtime=0)
         $line = fgets($fp);
       }
       fclose($fp);
-      if ( !$found ) $buffer .= sprintf("\n%s = $s \n", $variable, $value );
+      if ( !$found ) $buffer .= sprintf("\n%s = %s \n", $variable, $value );
           
       file_put_contents( $inifile, $buffer);
     }

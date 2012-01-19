@@ -39,14 +39,15 @@
   	var $version;
   	var $mem;
   	var $connected = false;
+  	var $enabled   = false;
   	var $supported = false;
   	
     static private $instance = NULL;
 
     private function __construct( $workspace ) {
+      $this->enabled = MEMCACHED_ENABLED;
       $this->connected = false;
       $this->workspace = $workspace;
-  		
       if (class_exists('Memcached')) {
         $this->mem = new Memcached();
         $this->class = 'Memcached';
@@ -57,8 +58,9 @@
           $this->class = 'Memcache';
           $this->supported = true; 
           $this->connected = @$this->mem->connect( MEMCACHED_SERVER , 11211);
-          if ( $this->connected ) 
+          if ( $this->connected ) {
             $this->version = $this->mem->getVersion();
+          }
         }
       }
       
