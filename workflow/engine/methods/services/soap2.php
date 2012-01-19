@@ -836,6 +836,7 @@ $server = new SoapServer( $wsdl );
 $server->addFunction("Login");
 $server->addFunction("ProcessList");
 $server->addFunction("CaseList");
+$server->addFunction("UnassignedCaseList");
 $server->addFunction("RoleList");
 $server->addFunction("GroupList");
 $server->addFunction("DepartmentList");
