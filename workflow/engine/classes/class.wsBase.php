@@ -26,6 +26,7 @@
 
  // * It works with the table CONFIGURATION in a WF dataBase
  require_once ( "classes/model/Application.php" );
+ require_once ( "classes/model/AppCacheView.php" );
  require_once ( "classes/model/AppDelegation.php" );
  require_once ( "classes/model/AppDocument.php" );
  require_once ( "classes/model/AppDelay.php");
@@ -327,6 +328,30 @@ class wsBase
     }
   }
 
+  /*
+   * Get unassigned case list
+   * @param string $userId
+   * @return $result will return an object
+   */
+  public function unassignedCaseList( $userId ) {
+    try { 
+      $result    = array();
+      $oAppCache = new AppCacheView();
+      $Criteria  = $oAppCache->getUnassignedListCriteria($userId); 
+      $oDataset  = AppCacheViewPeer::doSelectRS($Criteria);
+      $oDataset -> setFetchmode(ResultSet::FETCHMODE_ASSOC);
+      $oDataset->next();
+      while($aRow = $oDataset->getRow()){
+        $result[] = array ( 'guid' => $aRow['APP_UID'], 'name' => $aRow['APP_NUMBER'], 'delIndex' => $aRow['DEL_INDEX'] );
+        $oDataset-> next();
+      }
+      return $result;      
+    }
+    catch ( Exception $e ) {
+      $result[] = array ( 'guid' => $e->getMessage(), 'name' => $e->getMessage(), 'status' => $e->getMessage() , 'status' => $e->getMessage() );
+      return $result;
+    }
+  }
 
   /*
   * get all groups

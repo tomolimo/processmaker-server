@@ -166,6 +166,32 @@
     return array("cases" => $res );
   }
 
+  function UnassignedCaseList( $params ) { 
+    $vsResult = isValidSession($params->sessionId);
+    if( $vsResult->status_code !== 0 ){
+      $o->guid = $vsResult->status_code. ' ' . $vsResult->message;
+      $o->name = '';
+      $o->delIndex = '';
+      return array("cases" => $o);
+    }
+
+    if( ifPermission( $params->sessionId, 'PM_CASES') == 0 ){
+      $o->guid = "2 Insufficient privileges to execute this function";
+      $o->name = '';
+      $o->delIndex = '';
+      return array("cases" => $o);
+    }
+
+    G::LoadClass('sessions');
+    $oSessions = new Sessions();
+    $session   = $oSessions->getSessionUser($params->sessionId);
+    $userId    = $session['USR_UID'];
+
+    $ws = new wsBase ();
+    $res = $ws->unassignedCaseList( $userId );
+    return array("cases" => $res );
+  }
+
   function UserList( $params ) {
     $vsResult = isValidSession($params->sessionId);
     if( $vsResult->status_code !== 0 ){
