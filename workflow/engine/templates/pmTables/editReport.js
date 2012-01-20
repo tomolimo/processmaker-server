@@ -202,7 +202,7 @@ Ext.onReady(function(){
     listeners:{
       selectionchange: function(sm){
           switch(sm.getCount()){
-            case 0: 
+            case 0:
               Ext.getCmp('removeButton').disable(); 
               Ext.getCmp('removeColumn').disable();
               break;
@@ -214,7 +214,7 @@ Ext.onReady(function(){
                 Ext.getCmp('removeColumn').enable();
               }
               break;
-            default: 
+            default:
               Ext.getCmp('removeButton').enable();
               Ext.getCmp('removeColumn').disable();
               break;
@@ -1229,8 +1229,10 @@ function setReportFields(records) {
 function unsetReportFields(records) {
   mainMask.show();
 
-  var PMRow = availableGrid.getStore().recordType;
-  var indexes = new Array();
+  var PMRow         = availableGrid.getStore().recordType;
+  var indexes       = new Array();
+  var recordsUsrDef = new Array();
+  var fieldName     = '';
 
   for (i=0; i < records.length; i++) {
     if (records[i].data['field_dyn'] != '') {
@@ -1248,10 +1250,26 @@ function unsetReportFields(records) {
       {
         records[i] = null;
       }
+      else {
+        if (records[i].data['field_dyn'] == '' || records[i].data['field_dyn'] == null) {
+          if (fieldName.length > 0) {
+            fieldName += ', '
+          }
+          fieldName += records[i].data['field_name'];
+          recordsUsrDef.push(records[i]);
+          records[i] = null;
+        }
+      }
     }
   }
 
   Ext.each(records, assignedGrid.store.remove, assignedGrid.store);
+
+  if (recordsUsrDef.length > 0 ) {
+    PMExt.confirm(_('ID_CONFIRM'), _('ID_CONFIRM_REMOVE_FIELDS') + ' ' + fieldName + '?', function(){
+      Ext.each(recordsUsrDef, assignedGrid.store.remove, assignedGrid.store);
+    });
+  }
 
   if (indexes.length == 0) {
     mainMask.hide();
