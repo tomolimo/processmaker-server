@@ -24,7 +24,18 @@
  */
 //  if (($RBAC_Response = $RBAC->userCanAccess("PM_CASES"))!=1) return $RBAC_Response;
 
-  $idDecode64= base64_decode($_GET['id']);
+  $idDecode64 = base64_decode($_GET['id']);
+  $idExploded = explode( '/', $idDecode64 );
+  if ( $idExploded[0] == '' ) array_shift($idExploded);
+  if ( $idExploded[0] == 'plugin' ) {
+    //Get the Plugin Folder, always the first element
+    $pluginFolder   = $idExploded[1];
+    $pluginFilename = PATH_PLUGINS . $pluginFolder . PATH_SEP . 'public_html'. PATH_SEP . $idExploded[2];
+    if ( file_exists ( $pluginFilename ) ) {
+      G::streamFile ( $pluginFilename );
+    }
+    die;
+  }
 
 	$ainfoSite = explode("/",$_SERVER["REQUEST_URI"]);
 //it was added to show the logo into management plugin add by krlos
