@@ -1,0 +1,265 @@
+  /** 
+   * Main simplified skin styles 
+   * @author Erik Amaru Ortiz <erik@colosa.com>
+   */
+
+  body {
+    margin : 0px;
+    color  : #808080;
+    font   : normal 8em sans-serif,Tahoma,MiscFixed;
+    background-color: #ECECEC;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+  }
+
+  a {
+    color: #333;
+    text-decoration: none;
+  }
+  a:hover {
+    color: #1F98C7;
+    font-weight: bold;
+    text-decoration: underline;
+  }
+
+  pre {
+    font: normal 12px Georgia, "Times New Roman", Times, serif;
+  }
+
+
+  .global-nav {
+    position : fixed;
+    left     : 0px;
+    top      : 0px;
+
+    width: 100%;
+    height: 40px;
+    background-color: #252525;
+    background-position: 0 0;
+
+/*    background-image: url("/images/twitter_web_sprite_bgs.png");
+    background-repeat: repeat-x;*/
+
+
+    /*background-color: #00A0D1;
+    background-image: -moz-linear-gradient(#00A0D1, #008DB8); */
+
+    bottom: 0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), 0 -1px 0 rgba(0, 0, 0, 0.1) inset;
+    
+    z-index: 0;
+  }  
+
+
+  .bar-nav {
+    width: 100%;
+    height: 41px;
+  }
+
+
+  .global-nav-table {
+    color: #fff;
+    /*padding: 5px 5px;*/
+  }
+
+  .global-nav-table-right {
+    text-align: right;
+  }
+
+  iframe { 
+    overflow:auto; 
+  }
+  
+  iframe::-webkit-scrollbar {  
+    display: auto;
+  }
+    
+
+
+
+.tooltip {
+  display:none;
+  -webkit-border-bottom-left-radius: 5px;
+  -webkit-border-bottom-right-radius: 5px;
+  -moz-border-radius: 0 0 5px 5px;
+  border-radius: 0 0 5px 5px;
+  -webkit-box-shadow: 0 1px 2px rgba(0,0,0,0.6);
+  -moz-box-shadow: 0 1px 2px rgba(0,0,0,0.6);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.6);
+  font-size:12px;
+  height:70px;
+  width:160px;
+  padding:25px;
+  color:red; 
+}
+
+
+/* index2*/
+/* number style */
+  #commentlist {
+    margin: 10px 0 40px;
+    padding: 5;
+    text-align: left;
+  }
+  #commentlist li {
+    padding: 10px 0 20px;
+    list-style: none;
+    border-top: solid 1px #ccc;
+    position: relative;
+  }
+  #commentlist cite {
+    font: bold 140%/110% Arial, Helvetica, sans-serif;
+    color: #666;
+  }
+  #commentlist .time {
+    color: #ccc;
+    margin: 0 0 10px;
+  }
+  #commentlist .commentnumber {
+    position: absolute;
+    right: 0;
+    top: 8px;
+    font: normal 200%/100% Georgia, "Times New Roman", Times, serif;
+    color: #ccc;
+  }
+
+  #commentlist .notes-link {
+    position: absolute;
+    right: 0;
+    top: 38px;
+    font: normal 200%/100% Georgia, "Times New Roman", Times, serif;
+    color: #ccc;
+  }
+  
+
+  .list-highlight{
+    background-color: #e8edf3;
+  }
+
+
+  .content-header {
+    background-color: #FFFFFF;
+    border-bottom: 1px solid #E8E8E8;
+    border-radius: 5px 5px 0 0;
+    min-height: 20px;
+    padding: 12px;
+  }
+
+
+  .appMessages {
+    display: none;
+    background-color: #EBFFFF;
+    padding: 6px 6px 6px 6px;
+    -webkit-border-bottom-left-radius: 5px;
+    -webkit-border-bottom-right-radius: 5px;
+    -moz-border-radius: 0 0 5px 5px;
+    border-radius: 0 0 5px 5px;
+  }
+
+  .appMessage {
+    border-top: 1px solid #DCDCDC;
+    border-radius: 2px 2px 2px 2px;
+    margin: 2px 2px 2px 2px;
+    padding: 5px 5px 5px 5px;
+  }
+
+  .appMessageDate {
+    font-size: 1p1x; 
+    margin: 10px 0px 0px 0px;
+  }
+
+
+/*
+ * Confirm ui popup window styles
+ */
+
+#confirmOverlay{
+  width:100%;
+  height:100%;
+  position:fixed;
+  top:0;
+  left:0;
+  background:url('/images/simplified/ie.png');
+  background: -moz-linear-gradient(rgba(11,11,11,0.1), rgba(11,11,11,0.6)) repeat-x rgba(11,11,11,0.2);
+  background:-webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(11,11,11,0.1)), to(rgba(11,11,11,0.6))) repeat-x rgba(11,11,11,0.2);
+  z-index:100000;
+}
+
+#confirmBox{
+  background:url('/images/simplified/body_bg.jpg') repeat-x left bottom #e5e5e5;
+  width: 400px;
+  position:fixed;
+  left:50%;
+  top:50%;
+  margin:-130px 0 0 -230px;
+  border: 1px solid rgba(33, 33, 33, 0.6);
+
+  -moz-box-shadow: 0 0 2px rgba(255, 255, 255, 0.6) inset;
+  -webkit-box-shadow: 0 0 2px rgba(255, 255, 255, 0.6) inset;
+  box-shadow: 0 0 2px rgba(255, 255, 255, 0.6) inset;
+}
+
+#confirmBox h1,
+#confirmBox p{
+  font: 20px/1 'Cuprum','Lucida Sans Unicode', 'Lucida Grande', sans-serif;
+  background:url('/images/simplified/header_bg.jpg') repeat-x left bottom #f5f5f5;
+  padding: 12px 15px;
+  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.6);
+  color:#666;
+}
+
+#confirmBox h1{
+  letter-spacing:0.3px;
+  color:#888;
+}
+
+#confirmBox p{
+  background:none;
+  font-size:16px;
+  line-height:1.4;
+  padding-top: 10px;
+}
+
+#confirmButtons{
+  padding:15px 0 25px;
+  text-align:center;
+}
+
+#confirmBox .button{
+  display:inline-block;
+  background:url('/images/simplified/buttons.png') no-repeat;
+  color:white;
+  position:relative;
+  height: 33px;
+
+  font:17px/33px 'Cuprum','Lucida Sans Unicode', 'Lucida Grande', sans-serif;
+
+  margin-right: 15px;
+  padding: 0 35px 0 40px;
+  text-decoration:none;
+  border:none;
+}
+
+#confirmBox .button:last-child{ margin-right:0;}
+
+#confirmBox .button span{
+  position:absolute;
+  top:0;
+  right:-5px;
+  background:url('buttons.png') no-repeat;
+  width:5px;
+  height:33px
+}
+
+#confirmBox .blue{        background-position:left top;text-shadow:1px 1px 0 #5889a2;}
+#confirmBox .blue span{     background-position:-195px 0;}
+#confirmBox .blue:hover{    background-position:left bottom;}
+#confirmBox .blue:hover span{ background-position:-195px bottom;}
+
+#confirmBox .gray{        background-position:-200px top;text-shadow:1px 1px 0 #707070;}
+#confirmBox .gray span{     background-position:-395px 0;}
+#confirmBox .gray:hover{    background-position:-200px bottom;}
+#confirmBox .gray:hover span{ background-position:-395px bottom;}

@@ -3,25 +3,39 @@
 global $G_SKIN;
 global $G_SKIN_MAIN;
 
-if((!isset($G_SKIN))||($G_SKIN=="")){
-    $G_SKIN="classic";
-}
-if($G_SKIN=="green-submenu") $G_SKIN = "submenu";
-$skinVariants=array('blank','extjs','raw','tracker','submenu');
-$forceTemplateCompile=true;
-if(!(in_array(strtolower($G_SKIN), $skinVariants))){
-    //Only save in session the main SKIN
-    $forceTemplateCompile=true;
-    if((isset($_SESSION['currentSkin']))&&($_SESSION['currentSkin']!=$G_SKIN)){
-        $forceTemplateCompile=true;
-    }
-    $_SESSION['currentSkin']=$G_SKIN;
+$forceTemplateCompile = true;
+$skinVariants = array('blank','extjs','raw','tracker','submenu');
 
-}else{
-    $_SESSION['currentSkinVariant']=$G_SKIN;
+// setting default skin
+if (!isset($G_SKIN) || $G_SKIN == "") {
+  $G_SKIN = "classic";
 }
-if(!(isset($_SESSION['currentSkin']))) $_SESSION['currentSkin'] = "classic";
-$G_SKIN_MAIN=$_SESSION['currentSkin'];
+
+// deprecated submenu type ""green-submenu"" now is mapped to "submenu"
+if ($G_SKIN == "green-submenu") {
+  $G_SKIN = "submenu";
+}
+
+if (!(in_array(strtolower($G_SKIN), $skinVariants))) {
+  //Only save in session the main SKIN
+  $forceTemplateCompile = true;
+
+  if (isset($_SESSION['currentSkin']) && $_SESSION['currentSkin'] != $G_SKIN) {
+  $forceTemplateCompile = true; 
+  }
+
+  $_SESSION['currentSkin']=$G_SKIN;
+}
+else {
+  $_SESSION['currentSkinVariant']=$G_SKIN;
+}
+
+// setting default skin
+if (!isset($_SESSION['currentSkin'])){
+  $_SESSION['currentSkin'] = "classic";
+}
+
+$G_SKIN_MAIN = $_SESSION['currentSkin'];
 
 //Set defaults "classic"
 $configurationFile    =    G::ExpandPath( "skinEngine" ).'base'.PATH_SEP.'config.xml';
@@ -35,39 +49,41 @@ $layoutFileSubmenu    =    G::ExpandPath( "skinEngine" ).'base'.PATH_SEP.'layout
 
 //Based on requested Skin look if there is any registered with that name
 if(strtolower($G_SKIN_MAIN)!="classic"){
-    if((file_exists(PATH_CUSTOM_SKINS.$G_SKIN_MAIN))&&(is_dir(PATH_CUSTOM_SKINS.$G_SKIN_MAIN))){
-        //This should have an XML definition and a layout html
-        $skinObject=PATH_CUSTOM_SKINS.$G_SKIN_MAIN;
-        $sw_config=file_exists ($skinObject.PATH_SEP.'config.xml');
-        $sw_layout=file_exists ($skinObject.PATH_SEP.'layout.html');
-        if ($sw_config && $sw_layout ) {
-            $configurationFile    =    $skinObject.PATH_SEP.'config.xml';
-            $layoutFile           =    $skinObject.PATH_SEP.'layout.html';
-            if(file_exists ($skinObject.PATH_SEP.'layout-blank.html')){
-                $layoutFileBlank      =    $skinObject.PATH_SEP.'layout-blank.html';
-            }
-            if(file_exists ($skinObject.PATH_SEP.'layout-extjs.html')){
-                $layoutFileExtjs      =   $skinObject.PATH_SEP.'layout-extjs.html' ;
-            }
-            if(file_exists ($skinObject.PATH_SEP.'layout-raw.html')){
-                $layoutFileRaw        =    $skinObject.PATH_SEP.'layout-raw.html';
-            }
-            if(file_exists ($skinObject.PATH_SEP.'layout-tracker.html')){
-                $layoutFileTracker    =    $skinObject.PATH_SEP.'layout-tracker.html';
-            }
-            if(file_exists ($skinObject.PATH_SEP.'layout-submenu.html')){
-                $layoutFileSubmenu    =    $skinObject.PATH_SEP.'layout-submenu.html';
-            }
+  if((file_exists(PATH_CUSTOM_SKINS.$G_SKIN_MAIN))&&(is_dir(PATH_CUSTOM_SKINS.$G_SKIN_MAIN))){
+    //This should have an XML definition and a layout html
+    $skinObject=PATH_CUSTOM_SKINS.$G_SKIN_MAIN;
+    $sw_config=file_exists ($skinObject.PATH_SEP.'config.xml');
+    $sw_layout=file_exists ($skinObject.PATH_SEP.'layout.html');
+    
+    if ($sw_config && $sw_layout ) {
+      $configurationFile  =  $skinObject.PATH_SEP.'config.xml';
+      $layoutFile       =  $skinObject.PATH_SEP.'layout.html';
+      if(file_exists ($skinObject.PATH_SEP.'layout-blank.html')){
+        $layoutFileBlank    =  $skinObject.PATH_SEP.'layout-blank.html';
+      }
+      if(file_exists ($skinObject.PATH_SEP.'layout-extjs.html')){
+        $layoutFileExtjs    =   $skinObject.PATH_SEP.'layout-extjs.html' ;
+      }
+      if(file_exists ($skinObject.PATH_SEP.'layout-raw.html')){
+        $layoutFileRaw    =  $skinObject.PATH_SEP.'layout-raw.html';
+      }
+      if(file_exists ($skinObject.PATH_SEP.'layout-tracker.html')){
+        $layoutFileTracker  =  $skinObject.PATH_SEP.'layout-tracker.html';
+      }
+      if(file_exists ($skinObject.PATH_SEP.'layout-submenu.html')){
+        $layoutFileSubmenu  =  $skinObject.PATH_SEP.'layout-submenu.html';
+      }
 
-        }else{
-            //define a error message.. but continue and show a smooth message
-            $G_SKIN_MAIN="classic";
-
-        }
-    }else{
-        //Skin doesn't exist
-        $G_SKIN_MAIN="classic";
     }
+    else{
+      //define a error message.. but continue and show a smooth message
+      $G_SKIN_MAIN="classic";
+    }
+  }
+  else{
+    //Skin doesn't exist
+    $G_SKIN_MAIN="classic";
+  }
 
 }
 
@@ -78,33 +94,31 @@ $layoutFileTracker = pathInfo($layoutFileTracker);
 $layoutFileRaw  = pathInfo($layoutFileRaw);
 $layoutFileSubmenu  = pathInfo($layoutFileSubmenu);
 
-$cssFileName=$G_SKIN_MAIN;
-if(($G_SKIN!=$G_SKIN_MAIN)&&(in_array(strtolower($G_SKIN), $skinVariants))){
-    $cssFileName.="-".$G_SKIN;
+$cssFileName = $G_SKIN_MAIN;
+
+if ($G_SKIN != $G_SKIN_MAIN && in_array(strtolower($G_SKIN), $skinVariants)) {
+  $cssFileName .= "-" . $G_SKIN;
 }
 
+if (isset($_GET['debug'])) {
+  //Render
+  print "Requested Skin: $G_SKIN<br />";
+  print "Main Skin: ".$G_SKIN_MAIN;
 
-
-if(isset($_GET['debug'])){
-//if(true){
-    //Render
-    print "Requested Skin: $G_SKIN<br />";
-    print "Main Skin: ".$G_SKIN_MAIN;
-
-    print "Rendering... <br />";
-    print "<b>Configuration file:</b> $configurationFile";
-    print "<br />";
-    print "<b>layout file:</b>"; G::pr($layoutFile);
-    print "<br />";
-    print "<b>layout Blank file:</b>"; G::pr($layoutFileBlank);
-    print "<br />";
-    print "<b>layout ExtJs file:</b>"; G::pr($layoutFileExtjs);
-    print "<br />";
-    print "<b>layout Raw file:</b>"; G::pr($layoutFileRaw);
-    print "<br />";
-    print "<b>layout Tracker file:</b>"; G::pr($layoutFileTracker);
-    print "<br />";
-    print "<b>layout submenu file:</b>"; G::pr($layoutFileSubmenu);
+  print "Rendering... <br />";
+  print "<b>Configuration file:</b> $configurationFile";
+  print "<br />";
+  print "<b>layout file:</b>"; G::pr($layoutFile);
+  print "<br />";
+  print "<b>layout Blank file:</b>"; G::pr($layoutFileBlank);
+  print "<br />";
+  print "<b>layout ExtJs file:</b>"; G::pr($layoutFileExtjs);
+  print "<br />";
+  print "<b>layout Raw file:</b>"; G::pr($layoutFileRaw);
+  print "<br />";
+  print "<b>layout Tracker file:</b>"; G::pr($layoutFileTracker);
+  print "<br />";
+  print "<b>layout submenu file:</b>"; G::pr($layoutFileSubmenu);
 
 }
 
@@ -357,6 +371,37 @@ if (isset($G_ENABLE_BLANK_SKIN) && $G_ENABLE_BLANK_SKIN) {
             $smarty->display($layoutFileTracker['basename']);
         }
         break;
+
+    case "mvc": // mvc
+        G::LoadClass('serverConfiguration');
+        $oServerConf =& serverConf::getSingleton();
+        $oHeadPublisher =& headPublisher::getSingleton();
+
+        require_once(PATH_THIRDPARTY . 'smarty/libs/Smarty.class.php');
+        $smarty = new Smarty();
+
+        $smarty->template_dir = PATH_SKINS;
+        $smarty->compile_dir  = PATH_SMARTY_C;
+        $smarty->cache_dir    = PATH_SMARTY_CACHE;
+        $smarty->config_dir   = PATH_THIRDPARTY . 'smarty/configs';
+
+        $viewFile = $oHeadPublisher->getContent();
+        $viewVars = $oHeadPublisher->getVars();
+
+        if (strpos($viewFile, '.') === false) {
+          $viewFile .= '.html'; 
+        }
+
+        foreach ($viewVars as $key => $value) {
+          $smarty->assign($key, $value);    
+        }
+        
+        if (defined('DEBUG') && DEBUG ) {
+          $smarty->force_compile = true;
+        }
+
+        $smarty->display(PATH_TPL . $viewFile);
+    break;
     default://Render a common page
         if (! defined('DB_SYSTEM_INFORMATION'))
         define('DB_SYSTEM_INFORMATION', 1);

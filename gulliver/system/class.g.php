@@ -992,21 +992,26 @@ class G
       header('Content-Type: text/css');
       
       //First get Skin info
-      $filenameParts=explode("-",$filename);
-      $skinName=$filenameParts[0];
-      $skinVariant="skin";
+      $filenameParts = explode("-",$filename);
+      $skinName      = $filenameParts[0];
+      $skinVariant   = "skin";
+      
       if(isset($filenameParts[1])){
           $skinVariant=strtolower($filenameParts[1]);
       }
+
       if($skinName == "jscolors") $skinName  = "classic";
       if($skinName == "xmlcolors") $skinName = "classic";
       if($skinName=="classic"){
-          $configurationFile    =    G::ExpandPath( "skinEngine" ).'base'.PATH_SEP.'config.xml';
-      }else{
-          $configurationFile=PATH_CUSTOM_SKINS.$skinName.PATH_SEP.'config.xml';
+        $configurationFile = G::ExpandPath( "skinEngine" ).'base'.PATH_SEP.'config.xml';
       }
-
-
+      else {
+        $configurationFile = G::ExpandPath( "skinEngine" ) . $skinName . PATH_SEP . 'config.xml';
+        
+        if (!is_file($configurationFile)) {
+          $configurationFile = PATH_CUSTOM_SKINS . $skinName . PATH_SEP . 'config.xml';
+        }
+      }
 
       //Read Configuration File
       $xmlConfiguration = file_get_contents ( $configurationFile );
