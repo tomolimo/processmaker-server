@@ -610,6 +610,11 @@ ExportPMTable = function(){
 PMTableData = function()
 {
   var row = Ext.getCmp('infoGrid').getSelectionModel().getSelected();
+  if ((Ext.isIE8) ||(Ext.isIE7)){
+    var url = 'pmTables/data?id='+row.get('ADD_TAB_UID')+'&type='+row.get('TYPE');    
+    PopupCenter(url, 's', 800, 410);                                      
+    return false;
+  }
   //location.href = 'pmTables/data?id='+row.get('ADD_TAB_UID');
   if (row.get('TYPE') != '') {
     PMExt.info(_('ID_INFO'), _('ID_DATA_LIST_NOT_AVAILABLE_FOR_OLDVER'));
@@ -687,3 +692,8 @@ function updateTag(value)
   });
 }
 
+ function PopupCenter(pageURL, title,w,h) {
+    var left = (Ext.getBody().getViewSize().width/3);
+    var top = (Ext.getBody().getViewSize().height/3);
+    var targetWin = window.open (pageURL, title, 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width='+w+', height='+h+', top='+top+', left='+left);
+  }  
