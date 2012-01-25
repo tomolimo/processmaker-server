@@ -1555,15 +1555,26 @@ class wsBase
           $result = new wsResponse (15, G::loadTranslation ('ID_TASK_DEFINED_MANUAL_ASSIGNMENT'));
           return $result;
         }
-        $nextDelegations[] = array(
-                                    'TAS_UID' => $val['NEXT_TASK']['TAS_UID'],
-                                    'USR_UID' => $val['NEXT_TASK']['USER_ASSIGNED']['USR_UID'],
-                                    'TAS_ASSIGN_TYPE' =>  $val['NEXT_TASK']['TAS_ASSIGN_TYPE'],
-                                    'TAS_DEF_PROC_CODE' => $val['NEXT_TASK']['TAS_DEF_PROC_CODE'],
-                                    'DEL_PRIORITY'  =>  $appdel['DEL_PRIORITY'],
-                                    'TAS_PARENT' => $val['NEXT_TASK']['TAS_PARENT']
-                                  );
-        $varResponse = $varResponse . ($varResponse!=''?',':'') . $val['NEXT_TASK']['TAS_TITLE'].'('.$val['NEXT_TASK']['USER_ASSIGNED']['USR_USERNAME'].')';
+        
+        //Routed to the next task, if end process then not exist user
+        $nodeNext = array();
+        $usrasgdUid = null;
+        $usrasgdUserName = null;
+        
+        if (isset($val['NEXT_TASK']['USER_ASSIGNED'])) {
+          $usrasgdUid = $val['NEXT_TASK']['USER_ASSIGNED']['USR_UID'];
+          $usrasgdUserName = '(' . $val['NEXT_TASK']['USER_ASSIGNED']['USR_USERNAME'] . ')';
+        }
+        
+        $nodeNext['TAS_UID'] = $val['NEXT_TASK']['TAS_UID'];
+        $nodeNext['USR_UID'] = $usrasgdUid;
+        $nodeNext['TAS_ASSIGN_TYPE']   = $val['NEXT_TASK']['TAS_ASSIGN_TYPE'];
+        $nodeNext['TAS_DEF_PROC_CODE'] = $val['NEXT_TASK']['TAS_DEF_PROC_CODE'];
+        $nodeNext['DEL_PRIORITY'] = $appdel['DEL_PRIORITY'];
+        $nodeNext['TAS_PARENT']   = $val['NEXT_TASK']['TAS_PARENT'];
+        
+        $nextDelegations[] = $nodeNext;
+        $varResponse = $varResponse . (($varResponse != '')? ',' : '') . $val['NEXT_TASK']['TAS_TITLE'] . $usrasgdUserName;
       }
 
       $appFields['DEL_INDEX'] = $delIndex;
