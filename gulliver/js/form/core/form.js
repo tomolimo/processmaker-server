@@ -3006,12 +3006,19 @@ function sumaformu(ee,fma,mask){
   theelemts=nfma.split(" ");
   
   objectsWithFormula[objectsWithFormula.length]= {ee:ee,fma:afma,mask:mask,theElements:theelemts};
-  
-  for (var i=0; i < theelemts.length; i++){
-    leimnud.event.add(getField(theelemts[i]),'keyup',function(){
+
+  for (var i = 0; i < theelemts.length; i++) {
+    leimnud.event.add(getField(theelemts[i]), 'keyup', function(key) {
       //leimnud.event.add(getField(objectsWithFormula[objectsWithFormula.length-1].theElements[i]),'keyup',function(){
-      myId=this.id.replace("form[","").replace("]","");            
       
+      var eventElement = key.srcElement ? key.srcElement : key.target;
+      if ( typeof(this.id) == 'undefined' ) {
+        myId = eventElement.id.replace("form[", "").replace("]", "");
+      }
+      else {
+        myId = this.id.replace("form[", "").replace("]", "");
+      }
+
       for(i_elements=0;i_elements < objectsWithFormula.length; i_elements++){
         
         
