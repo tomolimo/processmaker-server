@@ -732,7 +732,7 @@ var processmap=function(){
              }.extend(this)},
 */
             {
-              image:"/images/event_messageThrow.png",text:"intermediate message event",launch:function(event){
+              image:"/images/event_messageThrow.png",text:"Intermediate message event",launch:function(event){
               this.tmp.eventsPanel = panel =new leimnud.module.panel();
               panel.options={
                 limit :true,
@@ -765,7 +765,7 @@ var processmap=function(){
               }.extend(this)
             },
             {
-              image:"/images/event_conditional.png",text:"conditional message event",launch:function(event){
+              image:"/images/event_conditional.png",text:"Intermediate Conditional Event",launch:function(event){
               this.tmp.eventsPanel = panel =new leimnud.module.panel();
               panel.options={
                 limit :true,
@@ -798,7 +798,7 @@ var processmap=function(){
               }.extend(this)
             },
             {
-              image:"/images/event_timer.png",text:"intermediate timer event ",launch:function(event){
+              image:"/images/event_timer.png",text:"Intermediate timer event ",launch:function(event){
               this.tmp.eventsPanel = panel =new leimnud.module.panel();
               panel.options={
                 limit :true,
