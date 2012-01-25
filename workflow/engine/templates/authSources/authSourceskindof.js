@@ -54,6 +54,7 @@ Ext.onReady(function(){
       mode: 'local',
       triggerAction: 'all',
       emptyText:'Choose an option...',
+        editable: false,
       selectOnFocus:true,
       listeners:{
        select: function(c,d,i){
@@ -113,6 +114,7 @@ Ext.onReady(function(){
       mode: 'local',
       triggerAction: 'all',
       emptyText:'Choose an option...',
+      editable: false,
       selectOnFocus:true
   });
    //cboxTLS.setValue('no');
@@ -131,6 +133,7 @@ Ext.onReady(function(){
       mode: 'local',
       triggerAction: 'all',
       emptyText:'Choose an option...',
+      editable: false,
       selectOnFocus:true
   });
 
@@ -165,6 +168,7 @@ Ext.onReady(function(){
       allowBlank: false,
       triggerAction: 'all',
       emptyText:'Choose an option...',
+      editable: false,
       selectOnFocus:true,
 //      width: 110,
        listeners:{
