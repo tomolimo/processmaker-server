@@ -29,8 +29,7 @@
  * @author MaBoRaK
  * @version 0.1
  */
-if($_POST && $_POST['phpinfo'])
-{
+if($_POST && isset($_POST['phpinfo'])) {
     phpinfo();
     die();
 }
