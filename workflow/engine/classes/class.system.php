@@ -579,9 +579,9 @@ class System {
   //changing the PM_VERSION according the patch file name
   $oFile = fopen(PATH_METHODS . 'login/version-pmos.php', 'w+');
   if( isset($this->sRevision) && $this->sRevision != '' ) {
-    fwrite($oFile, "<?\n  define ( 'PM_VERSION' , str_replace ( ' ','',  '1.6-" . $this->sRevision . "' ));\n?>");
+    fwrite($oFile, "<?php\n  define ( 'PM_VERSION' , str_replace ( ' ','',  '1.6-" . $this->sRevision . "' ));\n?>");
   } else {
-    fwrite($oFile, "<?\n  define ( 'PM_VERSION' , str_replace ( ' ','',  'unknow' ));\n?>");
+    fwrite($oFile, "<?php\n  define ( 'PM_VERSION' , str_replace ( ' ','',  'unknow' ));\n?>");
   }
   fclose($oFile);
   $ver               = explode("-", $this->sRevision);

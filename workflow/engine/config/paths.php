@@ -31,9 +31,11 @@
     'debug_calendar' => 0,
     'wsdl_cache' => 1,
     'memory_limit' => '100M',
-    'time_zone' => 'America/La_Paz'
+    'time_zone' => 'America/La_Paz',
+    'memcached' => 0,
+    'memcached_server' => ''
   );
-  
+
   /* Read the env.ini */
   $env_file = realpath(dirname(__FILE__) . "/env.ini");
   $config = $default_config;
@@ -48,10 +50,7 @@
       $config['debug'] = 1;
     }
   }
-  
-  if ($config['debug']) {
-    $config['debug_sql'] = 1;
-  }
+
 
 //*** Do not change any of these settings directly, use env.ini instead
   ini_set('display_errors','On');
@@ -68,6 +67,8 @@
   define ('DEBUG_SQL_LOG', $config['debug_sql'] );
   define ('DEBUG_TIME_LOG', $config['debug_time'] );
   define ('DEBUG_CALENDAR_LOG', $config['debug_calendar'] );
+  define ('MEMCACHED_ENABLED',  $config['memcached']);
+  define ('MEMCACHED_SERVER',   $config['memcached_server']);
   
   define ('TIME_ZONE', $config['time_zone']);
 

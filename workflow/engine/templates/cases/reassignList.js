@@ -55,23 +55,30 @@
 
   // create the combo instance
   var comboUsersToReassign = new Ext.form.ComboBox({
-    width         : 280,
-    boxMaxWidth   : 180,
-    fieldLabel    : 'Search',
+
+    fieldLabel    : _('ID_SEARCH'),    
     editable      : true,
-    forceSelection: false,
+    forceSelection: false,    
     minChars      : 0,
     valueField    : 'userId',
     displayField  : 'userFullname',
     selectOnFocus : true,
     typeAhead     : true,
     autocomplete  : true,
+    hideTrigger   : Boolean,
+    alignTo : 'right',
+    selectOnFocus:true,
     mode          : 'remote',
     triggerAction : 'all',
+    emptyText     : _('ID_ENTER_SEARCH_TERM'),
+    disabled      : true,
+    width         : 280,
+    boxMaxWidth   : 180,
+
     //lazyRender    : true,
 //    store         : new Ext.data.Store(),
     store         : storeUsersToReassign,
-    listeners:{
+    listeners:{     
       'select': function(comp, record, index) {
         var row = Ext.getCmp('TasksToReassign').getSelectionModel().getSelected();
         row.set('APP_REASSIGN_USER_UID', record.get('userUid'));

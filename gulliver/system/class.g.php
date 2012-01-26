@@ -992,21 +992,26 @@ class G
       header('Content-Type: text/css');
       
       //First get Skin info
-      $filenameParts=explode("-",$filename);
-      $skinName=$filenameParts[0];
-      $skinVariant="skin";
+      $filenameParts = explode("-",$filename);
+      $skinName      = $filenameParts[0];
+      $skinVariant   = "skin";
+      
       if(isset($filenameParts[1])){
           $skinVariant=strtolower($filenameParts[1]);
       }
+
       if($skinName == "jscolors") $skinName  = "classic";
       if($skinName == "xmlcolors") $skinName = "classic";
       if($skinName=="classic"){
-          $configurationFile    =    G::ExpandPath( "skinEngine" ).'base'.PATH_SEP.'config.xml';
-      }else{
-          $configurationFile=PATH_CUSTOM_SKINS.$skinName.PATH_SEP.'config.xml';
+        $configurationFile = G::ExpandPath( "skinEngine" ).'base'.PATH_SEP.'config.xml';
       }
-
-
+      else {
+        $configurationFile = G::ExpandPath( "skinEngine" ) . $skinName . PATH_SEP . 'config.xml';
+        
+        if (!is_file($configurationFile)) {
+          $configurationFile = PATH_CUSTOM_SKINS . $skinName . PATH_SEP . 'config.xml';
+        }
+      }
 
       //Read Configuration File
       $xmlConfiguration = file_get_contents ( $configurationFile );
@@ -4490,6 +4495,105 @@ function getDirectorySize($path,$maxmtime=0)
         $checkSum .= md5_file($file);
     }
     return md5($checkSum);
+  }
+  
+  /**
+   * parse_ini_string
+     Define parse_ini_string if it doesn't exist.
+     Does accept lines starting with ; as comments
+     Does not accept comments after values
+  */
+  function parse_ini_string($string){
+    if( function_exists('parse_ini_string') ) {
+      return parse_ini_string($string);
+    } 
+    else {
+      $array = Array();
+      $lines = explode("\n", $string );
+       
+      foreach( $lines as $line ) {
+        $statement = preg_match( "/^(?!;)(?P<key>[\w+\.\-]+?)\s*=\s*(?P<value>.+?)\s*$/", $line, $match );
+        if( $statement ) {
+          $key    = $match[ 'key' ];
+          $value  = $match[ 'value' ];
+               
+          //Remove quote
+          if( preg_match( "/^\".*\"$/", $value ) || preg_match( "/^'.*'$/", $value ) ) {
+            $value = mb_substr( $value, 1, mb_strlen( $value ) - 2 );
+          }
+               
+          $array[ $key ] = $value;
+        }
+      }
+      return $array;
+    }
+  }
+
+  /**
+   * disableEnableINIvariable
+     disable or enable a variable in ini file, this is useful for editing the env.ini file
+     automatically get the value, and change to inverse value,  I mean from true to false and viceversa
+  */
+  function disableEnableINIvariable( $inifile, $variable ) {
+    $enabled = 'false';
+    if ( file_exists($inifile ) ) {
+      $fp = fopen( $inifile, 'r' );
+      $line = fgets($fp);
+      $found = false;
+      $buffer = null;
+      
+      while ( !feof($fp) ) {
+       	$config = G::parse_ini_string($line);
+        if ( isset($config[$variable] )) {
+          $enabled = $config[$variable];
+         	$buffer .= sprintf("%s = %d \n", $variable, 1- $enabled );
+         	$found = true;
+        }
+        else {
+         	$buffer .= trim($line) . "\n";
+        }  
+        $line = fgets($fp);
+      }
+      fclose($fp);
+      if ( !$found ) $buffer .= sprintf("\n%s = 1 \n", $variable );
+          
+      @file_put_contents( $inifile, $buffer);
+    }
+    else {
+      $contents = file_put_contents($inifile, sprintf("\n%s = 1\n", $variable));
+    }
+  }
+		
+  /**
+   * set a variable in ini file
+  */
+  function setINIvariable( $inifile, $variable, $value ) {
+    if ( file_exists($inifile ) ) {
+      $fp = fopen( $inifile, 'r' );
+      $line = fgets($fp);
+      $found = false;
+      $buffer = null;
+      
+      while ( !feof($fp) ) {
+       	$config = G::parse_ini_string($line);
+        if ( isset($config[$variable] )) {
+          $enabled = $config[$variable];
+         	$buffer .= sprintf("%s = %s \n", $variable, $value );
+         	$found = true;
+        }
+        else {
+         	$buffer .= trim($line) . "\n";
+        }  
+        $line = fgets($fp);
+      }
+      fclose($fp);
+      if ( !$found ) $buffer .= sprintf("\n%s = %s \n", $variable, $value );
+          
+      file_put_contents( $inifile, $buffer);
+    }
+    else {
+      $contents = file_put_contents($inifile, sprintf("\n%s = $s\n", $variable, $value));
+    }
   }
 };
 

@@ -7,7 +7,8 @@ var _NODE_SELECTED;
 var main = function(){
   Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
   
-  var items = Array();
+  var items = [];
+  var nodeLoad = [];
   var i;
  
   for(i=0; i<tabItems.length; i++){
@@ -32,25 +33,59 @@ var main = function(){
       rootVisible: false,
       root: new Ext.tree.AsyncTreeNode(),
       listeners: {
-        'click': function(tp) {
-          if( tp.attributes.url ){
-            _NODE_SELECTED = tp.id;
-            document.getElementById('setup-frame').src = tp.attributes.url;
+        click: function (node, e) {
+          if (node.attributes.url) {
+            document.getElementById("setup-frame").src = node.attributes.url;
+            
+            _NODE_SELECTED = node.attributes.id;
           }
         },
-        'render': function(tp){
-        	
+        render: function (tp) {
           var loader = tp.getLoader();
-	    	loader.on("load", function(){
-	        if( _item_selected != '' ){
-	          node = tp.getNodeById(_item_selected);
-	    	  document.getElementById('setup-frame').src = node.attributes.url;
-	    	  if(node){
-	    	    node.select();
-	    	    _NODE_SELECTED = node.attributes.id;
-	    	  }
-	    	}
-	      });
+          var node;
+          
+          loader.on("load", function () {
+            if (_item_selected != "") {
+              node = tp.getNodeById(_item_selected);
+            }
+            else {
+              node = tp.getRootNode().childNodes[0];
+            }
+            
+            if (node) {
+              if (node.attributes.url) {
+                document.getElementById("setup-frame").src = node.attributes.url;
+              
+                node.select();
+                _NODE_SELECTED = node.attributes.id;
+              }
+            }
+            
+            if (typeof(nodeLoad[tp.id]) == "undefined") {
+              node = tp.getRootNode().childNodes[0];
+              
+              if (node) {
+                nodeLoad[tp.id] = [];
+                nodeLoad[tp.id]["id"] = node.attributes.id;
+              }
+            }
+          });
+        },
+        show: function (tp) {
+          if (!(typeof(nodeLoad[tp.id]) == "undefined")) {
+            //true - load url
+            var node = tp.getNodeById(nodeLoad[tp.id]["id"]);
+
+            if (node.attributes.url) {
+              document.getElementById("setup-frame").src = node.attributes.url;
+              
+              node.select();
+              _NODE_SELECTED = node.attributes.id;
+            }
+          }
+          //else {
+          //  //false - load url
+          //}
         }
       }
     });

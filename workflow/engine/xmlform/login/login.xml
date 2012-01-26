@@ -88,7 +88,7 @@ var openInfoPanel = function() {
   oInfoPanel.options = {
     size    :{w:500,h:424},
     position:{x:0,y:0,center:true},
-    title   :'System Information',
+    title   :'@G::LoadTranslation(ID_SYSTEM_INFO)',
     theme   :'processmaker',
     control :{
       close :true,

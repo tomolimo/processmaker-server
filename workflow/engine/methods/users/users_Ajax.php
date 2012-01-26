@@ -354,6 +354,7 @@ try {
       $oCriteria->addSelectColumn(UsersPeer::USR_ROLE);
       $oCriteria->addSelectColumn(UsersPeer::USR_DUE_DATE);
       $oCriteria->addSelectColumn(UsersPeer::USR_STATUS);
+      $oCriteria->addSelectColumn(UsersPeer::USR_UX);
       $oCriteria->addSelectColumn(UsersPeer::DEP_UID);
       $oCriteria->addAsColumn('LAST_LOGIN', 0);
       $oCriteria->addAsColumn('DEP_TITLE', 0);
@@ -396,15 +397,20 @@ try {
       $aDepart = $Department->getAllDepartmentsByUser();
       $aAuthSources = $RBAC->getAllAuthSourcesByUser();
 
+      require_once PATH_CONTROLLERS . 'adminProxy.php';
+      $uxList = adminProxy::getUxTypesList();
+
       $rows = Array();
       while($oDataset->next()){
-        $rows[] = $oDataset->getRow();
-        $index = sizeof($rows) - 1;
-        $rows[$index]['DUE_DATE_OK'] = (date('Y-m-d')>date('Y-m-d',strtotime($rows[$index]['USR_DUE_DATE'])))? 0 : 1;
-        $rows[$index]['LAST_LOGIN'] = isset($aLogin[$rows[$index]['USR_UID']]) ?  $aLogin[$rows[$index]['USR_UID']] : '';
-        $rows[$index]['TOTAL_CASES'] = isset($aCases[$rows[$index]['USR_UID']]) ? $aCases[$rows[$index]['USR_UID']] : 0;
-        $rows[$index]['DEP_TITLE'] = isset($aDepart[$rows[$index]['USR_UID']]) ? $aDepart[$rows[$index]['USR_UID']] : '';
-        $rows[$index]['USR_AUTH_SOURCE'] = isset($aAuthSources[$rows[$index]['USR_UID']]) ? $aAuthSources[$rows[$index]['USR_UID']] : 'ProcessMaker (MYSQL)';
+        $row = $oDataset->getRow();
+        $row['DUE_DATE_OK'] = (date('Y-m-d')>date('Y-m-d',strtotime($row['USR_DUE_DATE'])))? 0 : 1;
+        $row['LAST_LOGIN']  = isset($aLogin[$row['USR_UID']]) ?  $aLogin[$row['USR_UID']] : '';
+        $row['TOTAL_CASES'] = isset($aCases[$row['USR_UID']]) ? $aCases[$row['USR_UID']] : 0;
+        $row['DEP_TITLE']   = isset($aDepart[$row['USR_UID']]) ? $aDepart[$row['USR_UID']] : '';
+        $row['USR_UX']      = isset($uxList[$row['USR_UX']]) ? $uxList[$row['USR_UX']] : $uxList['NORMAL'];
+        $row['USR_AUTH_SOURCE'] = isset($aAuthSources[$row['USR_UID']]) ? $aAuthSources[$row['USR_UID']] : 'ProcessMaker (MYSQL)';
+
+        $rows[] = $row;
       }
       echo '{users: '.G::json_encode($rows).', total_users: '.$totalRows.'}';
       break;

@@ -359,13 +359,13 @@ Ext.onReady ( function() {
   }
   function showDate (value,p,r) {
     var myDate = convertDate( value );
-    return String.format("{0}", myDate.dateFormat( PMDateFormat ));
+    return String.format("{0}", myDate.dateFormat( FORMATS.casesListDateFormat ));
   }
 
   function dueDate(value, p, r){
     var myDate = convertDate( value );
     var myColor =  (myDate < new Date()) ? " color:red;" : 'color:green;';
-    return String.format("<span style='{1}'>{0}</span>", myDate.dateFormat(PMDateFormat), myColor );
+    return String.format("<span style='{1}'>{0}</span>", myDate.dateFormat(FORMATS.casesListDateFormat), myColor );
   }
 
   var renderSummary = function (val, p, r) {
@@ -1563,13 +1563,13 @@ Ext.onReady ( function() {
     region: 'center',
     store: storeReassignCases,
     cm: reassignCm,
-    autoHeight: true,
+    autoHeight: true,   
     viewConfig: {
       forceFit:true
     }
   });
 
-
+  
 var gridForm = new Ext.FormPanel({
         id: 'reassign-form',
         frame: true,
@@ -1597,38 +1597,44 @@ var gridForm = new Ext.FormPanel({
                 }),
                 //autoExpandColumn: 'company',
                 height: 350,
-                title  : 'Cases to reassign - Task List',
+                title  : _('ID_CASES_TO_REASSIGN_TASK_LIST'),
                 border : true,
-                listeners: {
-                    click: function() {
+
+                listeners: {                   
+                    click: function() {                                 
                         rows = this.getSelectionModel().getSelections();
                         var application = '';
                         if( rows.length > 0 ) {
+                          comboUsersToReassign.enable();
                             var ids = '';
                             for(i=0; i<rows.length; i++) {
-                              // filtering duplicate tasks
-                             application = rows[i].get('APP_UID');
+                               // filtering duplicate tasks
+                               application = rows[i].get('APP_UID');
                             }
+                        } else {
+                          comboUsersToReassign.disable();                              
                         }
                         comboUsersToReassign.clearValue();
                         storeUsersToReassign.removeAll();
                         storeUsersToReassign.setBaseParam('application',application);
+                             
                         //storeUsersToReassign.load();
                         //alert(record.USERS);
                     } // Allow rows to be rendered.
+              
                 }
             }
         },{
             columnWidth: 0.4,
             xtype: 'fieldset',
-            labelWidth: 70,
-            title:'User List',
-            defaults: {width: 120, border:false},    // Default config options for child items
+            labelWidth: 50,
+            title: _('ID_USER_LIST'),
+            defaults: {width: 170, border:false},    // Default config options for child items
             defaultType: 'textfield',
             autoHeight: true,
-            bodyStyle: Ext.isIE ? 'padding:0 0 5px 15px;' : 'padding:10px 15px;',
+            bodyStyle: Ext.isIE ? 'text-align: right;padding:0 0 5px 15px;' : 'text-align: right; padding:10px 15px;',
             border: false,
-            style: {
+            style: {                
                 "margin-left": "10px", // when you add custom margin in IE 6...
                 "margin-right": Ext.isIE6 ? (Ext.isStrict ? "-10px" : "-13px") : "0"  // you have to adjust for it somewhere else
             },
@@ -1772,6 +1778,7 @@ function reassign(){
     storeReassignCases.setBaseParam( 'APP_UIDS', ids);
     storeReassignCases.load();
     newPopUp.show();
+    comboUsersToReassign.disable();
 
     //grid = reassignGrid.store.data;
     //Ext.Msg.alert ( grid );

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<dynaForm name="myInfo" width="70%" labelWidth="300px" mode="edit" enableTemplate="1">
+<dynaForm name="myInfo" width="80%" labelWidth="350px" mode="edit" enableTemplate="1">
   <menuUser type="xmlmenu" xmlfile="users/users_NewOptions">
     <en/>
   </menuUser>
@@ -15,6 +15,9 @@
   <USR_RESUME type="file" group="1">
     <en>Résumé</en>
   </USR_RESUME>
+  <MAX_FILES_SIZE type="edit" mode="view">
+    <en>Max upload files size in bytes</en>
+  </MAX_FILES_SIZE>
   <TITLE1 type="title" group="1">
     <en>Personal Information</en>
   </TITLE1>
@@ -35,7 +38,7 @@
     <en>Address</en>
   </USR_ADDRESS>
   <USR_ZIP_CODE type="text" size="30" maxlength="30" defaultvalue="" required="0" group="1" dependentfields="" linkfield="" strto="" readonly="0" noshowingrid="0" readonlyingrid="0" totalizeable="0" sqlconnection="">
-    <en>Zip Code</en>
+    <en>Zip/Postal Code</en>
   </USR_ZIP_CODE>
   <USR_COUNTRY type="dropdown" style="width:174pt" defaultvalue="" required="0" group="1" dependentfields="USR_CITY" readonly="0" sqlconnection="" noshowingrid="0" readonlyingrid="0">
 SELECT IC_UID, IC_NAME FROM ISO_COUNTRY ORDER BY IC_NAME
@@ -79,7 +82,7 @@ SELECT CALENDAR_UID, CALENDAR_NAME FROM availableCalendars
       <option name="VACATION">ON VACATION</option>
     </en>
   </USR_STATUS>
-  <USR_ROLE type="dropdown" defaultvalue="" required="0" group="1" dependentfields="" readonly="0" sqlconnection="rbac" noshowingrid="0" readonlyingrid="0">
+  <USR_ROLE type="dropdown" defaultvalue="PROCESSMAKER_OPERATOR" required="0" group="1" dependentfields="" readonly="0" sqlconnection="rbac" noshowingrid="0" readonlyingrid="0">
 SELECT ROL_CODE AS USR_ROLE, ROL_CODE AS CODE FROM ROLES WHERE ROL_SYSTEM = '00000000000000000000000000000002' AND ROL_STATUS = 1 ORDER BY ROL_CODE 
   <en>Role</en>
   </USR_ROLE>

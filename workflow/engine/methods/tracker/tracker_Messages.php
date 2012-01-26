@@ -1,4 +1,4 @@
-<?
+<?php
 /**
  * tracker_Messages.php
  *

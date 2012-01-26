@@ -1155,6 +1155,73 @@ function G_Text( form, element, name)
       else{
         return false; 
       }
+      if (newCursor < 0)  newCursor = 0;
+      
+      me.element.value = newValue;
+      me.setSelectionRange(newCursor,newCursor);
+    }
+    //Launch OnChange Event
+    /*if (me.element.fireEvent){
+      me.element.fireEvent("onchange");
+    }else{
+      var evObj = document.createEvent('HTMLEvents');
+      evObj.initEvent( 'change', true, true );
+      me.element.dispatchEvent(evObj);
+    }*/
+  };
+  
+  this.sendOnChange = function(){
+    if (me.element.fireEvent){
+      me.element.fireEvent("onchange");
+    }else{
+      var evObj = document.createEvent('HTMLEvents');
+      evObj.initEvent( 'change', true, true );
+      me.element.dispatchEvent(evObj);
+    }
+  };
+                          
+  this.handleKeyDown = function(event){
+    //THIS FUNCTION HANDLE BACKSPACE AND DELETE KEYS
+    if (me.validate == 'Any' && me.mask == '') return true;
+    pressKey = event.keyCode;
+    switch(pressKey){
+      case 8: case 46:  //BACKSPACE OR DELETE
+      case 35: case 36: //HOME OR END
+      case 37: case 38: case 39: case 40: // ARROW KEYS
+        me.applyMask(pressKey);
+        if ((pressKey == 8 || pressKey == 46) && (me.validate != 'Login' && me.validate != 'NodeName')) me.sendOnChange();
+        me.checkBrowser();
+        if (me.browser.name == 'Chrome'){
+          event.returnValue = false;
+        }
+        else{
+          return false; 
+        }
+        break;
+    }
+    return true;
+  };                          
+  
+  this.handleKeyPress = function(event){
+    if (me.validate == 'Any' && me.mask == '') return true;
+    //THIS FUNCTION HANDLE ALL KEYS EXCEPT BACKSPACE AND DELETE
+    keyCode = event.keyCode;
+    switch(keyCode){
+      case 9: case 13:
+        return true;
+        break;
+    }
+    if (event.altKey) return true;
+    if (event.ctrlKey) return true;
+    if (event.shiftKey) return true;
+    me.checkBrowser();
+    if ((me.browser.name == 'Firefox') && (keyCode == 8 || keyCode == 46)){
+      if (me.browser.name == 'Chrome'){
+        event.returnValue = false;
+      }
+      else{
+        return false; 
+      }
     }
     else{
       pressKey = window.event ? event.keyCode : event.which;
@@ -1171,18 +1238,27 @@ function G_Text( form, element, name)
           keyValid = patron.test(key);
           break;
         case 'Real':
-          patron = /[0-9]/;
+          if (typeof me.comma_separator != 'undefined') {
+            patron = /[0-9\-]/;
+          }
+          else {
+            patron = /[0-9,\.]/;
+          }
+          
           key = String.fromCharCode(pressKey);
           keyValid = patron.test(key);
           keyValid = keyValid || (pressKey == 45);
-          if (me.comma_separator == '.'){
-            if (me.element.value.indexOf('.')==-1){
-              keyValid = keyValid || (pressKey == 46);  
-            } 
-          }
-          else{
-            if (me.element.value.indexOf(',')==-1){
-              keyValid = keyValid || (pressKey == 44);
+
+          if (typeof me.comma_separator != 'undefined') { 
+            if (me.comma_separator == '.'){
+              if (me.element.value.indexOf('.')==-1){
+                keyValid = keyValid || (pressKey == 46);  
+              } 
+            }
+            else{
+              if (me.element.value.indexOf(',')==-1){
+                keyValid = keyValid || (pressKey == 44);
+              }
             }
           }
           break;
@@ -2482,15 +2558,21 @@ function getElementsByClassNameCrossBrowser(searchClass,node,tag) {
  *
  **/
 var validateGridForms = function(invalidFields){
-  // alert("doesnt work " + i);
   
-  
-  
-  
-  grids = getElementsByClassNameCrossBrowser("grid",document,"div");
+  grids   = getElementsByClassNameCrossBrowser("grid",document,"div");
   Tlabels = getElementsByClassNameCrossBrowser("tableGrid",document,"table");
   // grids = getElementsByClass("grid",document,"div");
   // grids = document.getElementsByClassName("grid");
+  nameGrid = "";
+  for(cnt=0; cnt<Tlabels.length; cnt++ ){
+    if(Tlabels[cnt].getAttribute("name") ) {
+      nameGrid = Tlabels[cnt].getAttribute("name");
+      if (notValidateThisFields.inArray(nameGrid)) {
+        return invalidFields;
+      }
+    }
+  }
+
   for(j=0; j<grids.length; j++){
     
     // check all the input fields in the grid
@@ -2505,11 +2587,11 @@ var validateGridForms = function(invalidFields){
         }else{
           $fieldName = $labelPM + " " + $label[2].split("]")[0];
         }
+        fieldGridName = $label[1] + "[" + $label[2] + "[" + $label[3].split("]")[0];
         //$fieldName = labels[i].innerHTML.replace('*','') + " " + $label[2].split("]")[0];
         
-        //alert($fieldName+" "+$fieldRow);
-        //alert(fields[i].name);
-        invalidFields.push($fieldName);
+        if (!notValidateThisFields.inArray(fieldGridName))
+          invalidFields.push($fieldName);
       }
     }
     
@@ -2518,9 +2600,9 @@ var validateGridForms = function(invalidFields){
       if (textAreas[i].getAttribute("pm:required")=="1"&&textAreas[i].value==''){
         $label = textAreas[i].name.split("[");
         $fieldName = $label[3].split("]")[0]+ " " + $label[2].split("]")[0];
-        //alert($fieldName+" "+$fieldRow);
-        //alert(fields[i].name);
-        invalidFields.push($fieldName);
+        fieldGridName = $label[1] + "[" + $label[2] + "[" + $label[3].split("]")[0];
+        if (!notValidateThisFields.inArray(fieldGridName))
+          invalidFields.push($fieldName);
       }
     }
     
@@ -2529,9 +2611,9 @@ var validateGridForms = function(invalidFields){
       if (dropdowns[i].getAttribute("pm:required")=="1"&&dropdowns[i].value==''){
         $label = dropdowns[i].name.split("[");
         $fieldName = $label[3].split("]")[0]+ " " + $label[2].split("]")[0];
-        //alert($fieldName+" "+$fieldRow);
-        //alert(fields[i].name);
-        invalidFields.push($fieldName);
+        fieldGridName = $label[1] + "[" + $label[2] + "[" + $label[3].split("]")[0];
+        if (!notValidateThisFields.inArray(fieldGridName))
+          invalidFields.push($fieldName);
       }
     }
   }
@@ -2991,12 +3073,19 @@ function sumaformu(ee,fma,mask){
   theelemts=nfma.split(" ");
   
   objectsWithFormula[objectsWithFormula.length]= {ee:ee,fma:afma,mask:mask,theElements:theelemts};
-  
-  for (var i=0; i < theelemts.length; i++){
-    leimnud.event.add(getField(theelemts[i]),'keyup',function(){
+
+  for (var i = 0; i < theelemts.length; i++) {
+    leimnud.event.add(getField(theelemts[i]), 'keyup', function(key) {
       //leimnud.event.add(getField(objectsWithFormula[objectsWithFormula.length-1].theElements[i]),'keyup',function(){
-      myId=this.id.replace("form[","").replace("]","");            
       
+      var eventElement = key.srcElement ? key.srcElement : key.target;
+      if ( typeof(this.id) == 'undefined' ) {
+        myId = eventElement.id.replace("form[", "").replace("]", "");
+      }
+      else {
+        myId = this.id.replace("form[", "").replace("]", "");
+      }
+
       for(i_elements=0;i_elements < objectsWithFormula.length; i_elements++){
         
         

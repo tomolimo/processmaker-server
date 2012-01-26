@@ -138,7 +138,21 @@
           <xs:element name="delIndex" type="xs:string"/>
         </xs:sequence>
       </xs:complexType>
+      <xs:complexType name="unassignedCaseListStruct">
+        <xs:sequence>
+          <xs:element name="guid" type="xs:string"/>
+          <xs:element name="name" type="xs:string"/>
+          <xs:element name="delIndex" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
       <xs:element name="caseListRequest">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="sessionId" type="xs:string"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="unassignedCaseListRequest">
         <xs:complexType>
           <xs:sequence>
             <xs:element name="sessionId" type="xs:string"/>
@@ -149,6 +163,13 @@
         <xs:complexType>
           <xs:sequence>
             <xs:element name="cases" maxOccurs="unbounded" type="xs0:caseListStruct"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="unassignedCaseListResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="cases" maxOccurs="unbounded" type="xs0:unassignedCaseListStruct"/>
           </xs:sequence>
         </xs:complexType>
       </xs:element>
@@ -680,6 +701,12 @@
   <message name="caseListResponse">
     <part name="parameters" element="xs0:caseListResponse"/>
   </message>
+  <message name="unassignedCaseListRequest">
+    <part name="parameters" element="xs0:unassignedCaseListRequest"/>
+  </message>
+  <message name="unassignedCaseListResponse">
+    <part name="parameters" element="xs0:unassignedCaseListResponse"/>
+  </message>
   <message name="createUserRequest">
     <part name="parameters" element="xs0:createUserRequest"/>
   </message>
@@ -829,6 +856,10 @@
     <operation name="caseList">
       <input message="xs0:caseListRequest"/>
       <output message="xs0:caseListResponse"/>
+    </operation>
+    <operation name="unassignedCaseList">
+      <input message="xs0:unassignedCaseListRequest"/>
+      <output message="xs0:unassignedCaseListResponse"/>
     </operation>
     <operation name="createUser">
       <input message="xs0:createUserRequest"/>
@@ -985,6 +1016,15 @@
     </operation>
     <operation name="caseList">
       <soap12:operation soapAction="urn:caseList" soapActionRequired="true" style="document"/>
+      <input>
+        <soap12:body use="literal"/>
+      </input>
+      <output>
+        <soap12:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="unassignedCaseList">
+      <soap12:operation soapAction="urn:unassignedCaseList" soapActionRequired="true" style="document"/>
       <input>
         <soap12:body use="literal"/>
       </input>

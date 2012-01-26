@@ -1,4 +1,4 @@
-<?
+<?php
 /**
  * cases_SaveDocument.php
  *

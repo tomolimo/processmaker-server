@@ -4048,8 +4048,8 @@ msgstr "The following fields cannot have these  names because they are reserved 
 # TRANSLATION
 # LABEL/ID_PROCESS_CATEGORY
 #: LABEL/ID_PROCESS_CATEGORY
-msgid "Process category"
-msgstr "Process category"
+msgid "Process Categories"
+msgstr "Process Categories"
 
 # TRANSLATION
 # LABEL/ID_LOCATION
@@ -30083,6 +30083,12 @@ msgstr "Photo"
 msgid "[users/users_EditRT.xml?USR_RESUME] Résumé"
 msgstr "Résumé"
 
+# users/users_EditRT.xml?MAX_FILES_SIZE
+# users/users_EditRT.xml
+#: edit - MAX_FILES_SIZE
+msgid "Max upload files size in bytes"
+msgstr "Max upload files size in bytes"
+
 # users/users_EditRT.xml?TITLE1
 # users/users_EditRT.xml
 #: title - TITLE1
@@ -30346,6 +30352,12 @@ msgstr "Photo"
 #: file - USR_RESUME
 msgid "[users/users_New.xml?USR_RESUME] Résumé"
 msgstr "Résumé"
+
+# users/users_New.xml?MAX_FILES_SIZE
+# users/users_New.xml
+#: edit - MAX_FILES_SIZE
+msgid "[users/users_New.xml?MAX_FILES_SIZE] Max upload files size in bytes"
+msgstr "Max upload files size in bytes"
 
 # users/users_New.xml?TITLE1
 # users/users_New.xml
@@ -31199,6 +31211,24 @@ msgstr "Integer"
 msgid "[dynaforms/fields/currency.xml?PME_VALIDATE-Real]"
 msgstr "Real Number"
 
+# dynaforms/fields/currency.xml?PME_COMMA_SEPARATOR
+# dynaforms/fields/currency.xml
+#: dropdown - PME_COMMA_SEPARATOR
+msgid "Decimal Separator"
+msgstr "Decimal Separator"
+
+# dynaforms/fields/currency.xml?PME_COMMA_SEPARATOR-.
+# dynaforms/fields/currency.xml
+#: dropdown - PME_COMMA_SEPARATOR - .
+msgid "[dynaforms/fields/currency.xml?PME_COMMA_SEPARATOR-.]"
+msgstr "Period [.]"
+
+# dynaforms/fields/currency.xml?PME_COMMA_SEPARATOR-,
+# dynaforms/fields/currency.xml
+#: dropdown - PME_COMMA_SEPARATOR - ,
+msgid "[dynaforms/fields/currency.xml?PME_COMMA_SEPARATOR-,]"
+msgstr "Comma [,]"
+
 # dynaforms/fields/currency.xml?PME_MASK
 # dynaforms/fields/currency.xml
 #: text - PME_MASK
@@ -31394,8 +31424,8 @@ msgstr "Relative Start and End Dates"
 # dynaforms/fields/date.xml?PMED_AFTERBEFORE_DESC
 # dynaforms/fields/date.xml
 #: subtitle - PMED_AFTERBEFORE_DESC
-msgid "<b>Data Codes:</b> A number followed by a letter to indicate the unit of time (d=day m=month y=year).<br/>Use negative numbers for past dates and positive numbers for future dates<br />  \t<b>NOTE.</b> When these relative dates are set have the priority, leave empty to use <i>Start and End dates</i>."
-msgstr "<b>Data Codes:</b> A number followed by a letter to indicate the unit of time (d=day m=month y=year).<br/>Use negative numbers for past dates and positive numbers for future dates<br />  \t<b>NOTE.</b> When these relative dates are set have the priority, leave empty to use <i>Start and End dates</i>."
+msgid "<b>Data Codes:</b> A number followed by a letter to indicate the unit of time (d=day m=month y=year).<br/>Use negative numbers for past dates and positive numbers for future dates<br />    <b>NOTE.</b> When these relative dates are set have the priority, leave empty to use <i>Start and End dates</i>."
+msgstr "<b>Data Codes:</b> A number followed by a letter to indicate the unit of time (d=day m=month y=year).<br/>Use negative numbers for past dates and positive numbers for future dates<br />    <b>NOTE.</b> When these relative dates are set have the priority, leave empty to use <i>Start and End dates</i>."
 
 # dynaforms/fields/date.xml?PME_BEFOREDATE
 # dynaforms/fields/date.xml
@@ -32200,6 +32230,24 @@ msgstr "Integer"
 #: dropdown - PME_VALIDATE - Real
 msgid "[dynaforms/fields/percentage.xml?PME_VALIDATE-Real]"
 msgstr "Real Number"
+
+# dynaforms/fields/percentage.xml?PME_COMMA_SEPARATOR
+# dynaforms/fields/percentage.xml
+#: dropdown - PME_COMMA_SEPARATOR
+msgid "[dynaforms/fields/percentage.xml?PME_COMMA_SEPARATOR] Decimal Separator"
+msgstr "Decimal Separator"
+
+# dynaforms/fields/percentage.xml?PME_COMMA_SEPARATOR-.
+# dynaforms/fields/percentage.xml
+#: dropdown - PME_COMMA_SEPARATOR - .
+msgid "[dynaforms/fields/percentage.xml?PME_COMMA_SEPARATOR-.]"
+msgstr "Period [.]"
+
+# dynaforms/fields/percentage.xml?PME_COMMA_SEPARATOR-,
+# dynaforms/fields/percentage.xml
+#: dropdown - PME_COMMA_SEPARATOR - ,
+msgid "[dynaforms/fields/percentage.xml?PME_COMMA_SEPARATOR-,]"
+msgstr "Comma [,]"
 
 # dynaforms/fields/percentage.xml?PME_MASK
 # dynaforms/fields/percentage.xml

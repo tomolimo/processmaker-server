@@ -23,62 +23,51 @@
  *
  */
 
-  global $G_ENVIRONMENTS;
-  if(defined("G_ENVIRONMENT")){ //If we don't have G_ENVIRONMENT defined the only enable dbArray
-//var_dump($G_ENVIRONMENTS[G_ENVIRONMENT]);die;
-  if ( isset ( $G_ENVIRONMENTS ) ) {
-    $dbfile = $G_ENVIRONMENTS[ G_ENVIRONMENT ][ 'dbfile'];
-    if ( !file_exists ( $dbfile ) ) {
-      printf("%s \n", pakeColor::colorize( "dbfile $dbfile doesn't exist for environment " . G_ENVIRONMENT  , 'ERROR'));
-      die();
-    }
-    require_once ( $dbfile );
-  }
-  else {
-    //when this file is called from sysGeneric, the $G_ENVIRONMENTS DOES NOT EXIST, BUT DB_HOST is defined
-    if ( !defined ( 'DB_HOST' ) ) {
-      printf("%s \n", pakeColor::colorize( "dbfile $dbfile doesn't exist for environment " . G_ENVIRONMENT  , 'ERROR'));
-      die();
-    }
-
-  }
+  if (defined('PATH_DB') && defined('SYS_SYS')) {
+  
+    if (!file_exists(PATH_DB . SYS_SYS . '/db.php'))
+      throw new Exception("Could not find db.php in current workspace " . SYS_SYS);
+  
+    require_once(PATH_DB . SYS_SYS . '/db.php');
+  
     //to do: enable for other databases
-  $dbType = DB_ADAPTER;
+    $dbType = DB_ADAPTER;
 
-  $dsn     = DB_ADAPTER . '://' .  DB_USER . ':' . DB_PASS . '@' . DB_HOST . '/' . DB_NAME;
+    $dsn     = DB_ADAPTER . '://' .  DB_USER . ':' . DB_PASS . '@' . DB_HOST . '/' . DB_NAME;
 
-  //to do: enable a mechanism to select RBAC Database
-  $dsnRbac = DB_ADAPTER . '://' .  DB_RBAC_USER . ':' . DB_RBAC_PASS . '@' . DB_RBAC_HOST . '/' . DB_RBAC_NAME;
+    //to do: enable a mechanism to select RBAC Database
+    $dsnRbac = DB_ADAPTER . '://' .  DB_RBAC_USER . ':' . DB_RBAC_PASS . '@' . DB_RBAC_HOST . '/' . DB_RBAC_NAME;
 
-  //to do: enable a mechanism to select report Database
-  $dsnReport = DB_ADAPTER . '://' .  DB_REPORT_USER . ':' . DB_REPORT_PASS . '@' . DB_REPORT_HOST . '/' . DB_REPORT_NAME;
+    //to do: enable a mechanism to select report Database
+    $dsnReport = DB_ADAPTER . '://' .  DB_REPORT_USER . ':' . DB_REPORT_PASS . '@' . DB_REPORT_HOST . '/' . DB_REPORT_NAME;
 
-  switch (DB_ADAPTER) {
-  	case 'mysql':
-  	  $dsn       .= '?encoding=utf8';
-  	  $dsnRbac   .= '?encoding=utf8';
-  	  $dsnReport .= '?encoding=utf8';
-  	break;
-  	case 'mssql':
-  	  //$dsn       .= '?sendStringAsUnicode=false';
-  	  //$dsnRbac   .= '?sendStringAsUnicode=false';
-  	  //$dsnReport .= '?sendStringAsUnicode=false';
-  	break;
-  	default:
-  	break;
+    switch (DB_ADAPTER) {
+      case 'mysql':
+        $dsn       .= '?encoding=utf8';
+        $dsnRbac   .= '?encoding=utf8';
+        $dsnReport .= '?encoding=utf8';
+      break;
+      case 'mssql':
+        //$dsn       .= '?sendStringAsUnicode=false';
+        //$dsnRbac   .= '?sendStringAsUnicode=false';
+        //$dsnReport .= '?sendStringAsUnicode=false';
+      break;
+      default:
+      break;
+    }
+
+    $pro ['datasources']['workflow']['connection'] = $dsn;
+    $pro ['datasources']['workflow']['adapter'] = DB_ADAPTER;
+
+    $pro ['datasources']['rbac']['connection'] = $dsnRbac;
+    $pro ['datasources']['rbac']['adapter'] = DB_ADAPTER;
+
+    $pro ['datasources']['rp']['connection'] = $dsnReport;
+    $pro ['datasources']['rp']['adapter'] = DB_ADAPTER;
+
   }
-
-  $pro ['datasources']['workflow']['connection'] = $dsn;
-  $pro ['datasources']['workflow']['adapter'] = DB_ADAPTER;
-
-  $pro ['datasources']['rbac']['connection'] = $dsnRbac;
-  $pro ['datasources']['rbac']['adapter'] = DB_ADAPTER;
-
-  $pro ['datasources']['rp']['connection'] = $dsnReport;
-  $pro ['datasources']['rp']['adapter'] = DB_ADAPTER;
-}
+  
   $pro ['datasources']['dbarray']['connection'] = 'dbarray://user:pass@localhost/pm_os';
   $pro ['datasources']['dbarray']['adapter']    = 'dbarray';
 
   return $pro;
-?>

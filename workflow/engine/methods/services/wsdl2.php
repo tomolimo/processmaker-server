@@ -1,4 +1,4 @@
-<?
+<?php
   $filewsdl = PATH_METHODS . 'services'. PATH_SEP . 'pmos2.wsdl';
   $content = file_get_contents( $filewsdl );
   $lang = defined ('SYS_LANG') ? SYS_LANG : 'en';

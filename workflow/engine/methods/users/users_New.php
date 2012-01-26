@@ -38,6 +38,20 @@ try {
   $aFields['END_DATE']   = date('Y-m-d', mktime(0, 0, 0, date('m'), date('d'), date('Y') + 5));
   $aFields['USR_DUE_DATE']= date('Y-m-d', mktime(0, 0, 0, date('m'), date('d'), date('Y') + 1));
   
+  //calculating the max upload file size;
+  $POST_MAX_SIZE   = ini_get('post_max_size');
+  $mul = substr($POST_MAX_SIZE, -1);
+  $mul = ($mul == 'M' ? 1048576 : ($mul == 'K' ? 1024 : ($mul == 'G' ? 1073741824 : 1)));
+  $postMaxSize = (int)$POST_MAX_SIZE * $mul;
+
+  $UPLOAD_MAX_SIZE = ini_get('upload_max_filesize');
+  $mul = substr($UPLOAD_MAX_SIZE, -1);
+  $mul = ($mul == 'M' ? 1048576 : ($mul == 'K' ? 1024 : ($mul == 'G' ? 1073741824 : 1)));
+  $uploadMaxSize = (int)$UPLOAD_MAX_SIZE * $mul;
+
+  if ( $postMaxSize < $uploadMaxSize ) $uploadMaxSize = $postMaxSize;
+  $aFields['MAX_FILES_SIZE'] = $uploadMaxSize .  " (" . $UPLOAD_MAX_SIZE . ") ";
+
   //Load Calendar options and falue for this user
   G::LoadClass ( 'calendar' );
   $calendar = new Calendar ( );

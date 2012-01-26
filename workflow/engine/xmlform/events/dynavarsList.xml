@@ -7,5 +7,5 @@
   <dynaform type="text" colWidth="350" titleAlign="left" align="left">
     <en>Dynaform</en>
   </dynaform>
-  <sel type="link" colWidth="3px" value="&lt;img src=/images/select-icon.png border=0 width=17 height=17/&gt;" link="#" onclick="e.toAdd(@qid, @qname, &#039;dyn&#039;);return false;" enableHTML="1"/>
+  <ASSIGN type="link" colWidth="40" value="@G::LoadTranslation(ID_ASSIGN)" link="#" onclick="e.toAdd(@qid, @qname, &#039;dyn&#039;);return false;"/>
 </dynaForm> 

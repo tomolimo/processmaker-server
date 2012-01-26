@@ -16,7 +16,7 @@ var currentPagedTable = @#PAGED_TABLE_ID;
 var outputdocsEditor;
 
   function outputdocsAdd(){
-		popupWindow('@G::LoadTranslation(ID_OUTPUT_DOCUMENTS)', '@G::encryptlink(@#outputdocs_New)?PRO_UID=@%PRO_UID' , 600, 410);
+      popupWindow('@G::LoadTranslation(ID_OUTPUT_DOCUMENTS)', '@G::encryptlink(@#outputdocs_New)?PRO_UID=@%PRO_UID' , 600, 410);
   }
   
   function PopupCenter(pageURL, title,w,h) {
@@ -28,8 +28,8 @@ var outputdocsEditor;
   } 
 
   function outputdocsEdit( uid, typ ) {
-    
-    if( _BROWSER.name == 'msie' ) {
+     
+    if (( _BROWSER.name == 'msie' ) && ( _BROWSER.version < '9' )) {
       PopupCenter('../outputdocs/outputdocs_Edit?OUT_DOC_UID=' + uid, 's', 800, 410);
       return false;
     }

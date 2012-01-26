@@ -72,7 +72,11 @@ switch ($request) {
 
     $port  = ($_POST['port'] == 'default')? 25: $_POST['port'];
     $user  = $_POST['account'];
-    $passwd = $_POST['passwd'];
+    $passwd = $_POST['passwd']; 
+    if(strpos( $passwd, 'hush:' ) !== false){
+    	list($hush, $pass) = explode(":", $passwd);   
+    	$passwd = G::decrypt($pass,'EMAILENCRYPT');
+    }      
     $step  = $_POST['step'];
     $auth_required  = $_POST['auth_required'];
     $send_test_mail = $_POST['send_test_mail'];
@@ -159,7 +163,7 @@ switch ($request) {
                 $smtp->Hello($hello);
               }
               
-              if( $smtp->Authenticate($user, $passwd) ) {
+              if( $smtp->Authenticate($user, $passwd ) ) {
                 print(SUCCESSFUL.','.$smtp->status);
               } else {
                 print(FAILED.','.$smtp->error['error']);

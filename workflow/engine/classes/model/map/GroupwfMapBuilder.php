@@ -70,6 +70,8 @@ class GroupwfMapBuilder {
 
 		$tMap->addColumn('GRP_LDAP_DN', 'GrpLdapDn', 'string', CreoleTypes::VARCHAR, true, 255);
 
+		$tMap->addColumn('GRP_UX', 'GrpUx', 'string', CreoleTypes::VARCHAR, false, 128);
+
 		$tMap->addValidator('GRP_STATUS', 'validValues', 'propel.validator.ValidValuesValidator', 'ACTIVE|INACTIVE', 'Please select a valid status.');
 
 		$tMap->addValidator('GRP_STATUS', 'required', 'propel.validator.RequiredValidator', '', 'Application Document UID is required.');

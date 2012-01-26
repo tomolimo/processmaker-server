@@ -54,6 +54,9 @@ class headPublisher {
   /* extVariable array, to store the variables generated in PHP, and used in JavaScript */
   var $extVariable = array ();
 
+  /* variable array, to store the variables generated in PHP, and used in JavaScript */
+  var $vars = array ();
+
   var $leimnudInitString = '  var leimnud = new maborak();
   leimnud.make({
     zip:true,
@@ -527,6 +530,14 @@ class headPublisher {
     $this->extJsContent [] = $templateHtml;
   }
 
+  function getContent() {
+    if (!isset($this->extJsContent[0])) {
+      throw new Exception('MVC Error: View template is not set!');
+    }
+
+    return $this->extJsContent[0];
+  }
+
   /**
    * Function assign
    * assign a STRING value to a JS variable
@@ -538,6 +549,14 @@ class headPublisher {
    */
   function Assign($variable, $value) {
     $this->extVariable [] = array ('name' => $variable, 'value' => $value, 'type' => 'string' );
+  }
+
+  function AssignVar($name, $value) {
+    $this->vars [$name] = $value;
+  }
+
+  function getVars() {
+    return $this->vars;
   }
 
   /**

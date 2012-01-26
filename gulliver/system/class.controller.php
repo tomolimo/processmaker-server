@@ -223,7 +223,7 @@ class Controller
      */
     public function setVar($name, $value)
     {
-      $this->getHeadPublisher()->sssignVar($name, $value);
+      $this->getHeadPublisher()->assignVar($name, $value);
     }
 
     /**

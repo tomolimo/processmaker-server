@@ -1,4 +1,4 @@
-<?
+<?php
 if(isset($_POST['form']))
     $sValue = $_POST['form'];   //For old processmap
 else

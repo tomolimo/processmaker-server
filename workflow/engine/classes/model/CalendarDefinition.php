@@ -346,7 +346,7 @@ class CalendarDefinition extends BaseCalendarDefinition {
 
 
   }
-  function getCalendarFor($userUid, $proUid, $tasUid) {
+  function getCalendarFor($userUid, $proUid, $tasUid, $sw_validate=true) {
     $Criteria = new Criteria ( 'workflow' );
 
     //Default Calendar
@@ -386,7 +386,11 @@ class CalendarDefinition extends BaseCalendarDefinition {
     }
 
     //print "<h1>$calendarUid</h1>";
+    if($sw_validate){
     $calendarDefinition = $this->getCalendarInfo ( $calendarUid );
+    }else{
+      $calendarDefinition = $this->getCalendarInfoE ( $calendarUid );
+    }
     $calendarDefinition ['CALENDAR_APPLIED'] = $calendarOwner;
     $this->addCalendarLog ( "--=== Calendar Applied: " . $calendarDefinition ['CALENDAR_NAME'] . " -> $calendarOwner" );
     return $calendarDefinition;

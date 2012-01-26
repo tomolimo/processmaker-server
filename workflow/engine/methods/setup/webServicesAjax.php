@@ -395,8 +395,73 @@ switch ($_POST ['action']) {
 		        }
 			        
 				G::RenderPage ( 'publish', 'raw' );
-				break;
-				
+			break;
+  			
+
+      case "UnassignedCaseList" :                 
+
+      $sessionId = $frm ["SESSION_ID"];
+      $params = array ('sessionId' => $sessionId );                                               
+
+      $wsResponse = $client->__SoapCall ( 'UnassignedCaseList', array ($params ));
+      
+      $G_PUBLISH = new Publisher ( );
+      $rows [] = array ('guid' => 'char', 'name' => 'char', 'delIndex' => 'char' );
+      $result = G::PMWSCompositeResponse($wsResponse, 'cases');
+
+      if ( is_array( $result )) {
+        foreach ( $result as $key => $item ) {
+          if (isset ( $item->item ))
+          foreach ( $item->item as $index => $val ) {
+            if ($val->key == 'guid')
+             $guid = $val->value;
+            if ($val->key == 'name')
+              $name = $val->value;                                                                                           
+            if ($val->key == 'delIndex')
+              $delIndex = $val->value;
+          }
+          else if (is_array ( $item ))
+          foreach ( $item as $index => $val ) {
+            if ($val->key == 'guid')
+             $guid = $val->value;
+            if ($val->key == 'name')
+             $name = $val->value;                                                                                                 
+            if ($val->key == 'delIndex')
+             $delIndex = $val->value;
+          } 
+          else {
+            if (isset ( $item->guid ))
+            $guid = $item->guid;
+            if (isset ( $item->name ))
+            $name = $item->name;                                                                                                
+            if (isset ( $item->delIndex ))
+            $delIndex = $item->delIndex;
+          }	
+          $rows [] = array ('guid' => $guid, 'name' => $name,  'delIndex' => $delIndex );
+        }
+
+        global $_DBArray;
+        $_DBArray = (isset ( $_SESSION ['_DBArray'] ) ? $_SESSION ['_DBArray'] : '');
+        $_DBArray ['case'] = $rows;
+        $_SESSION ['_DBArray'] = $_DBArray;
+
+        G::LoadClass ( 'ArrayPeer' );
+        $c = new Criteria ( 'dbarray' );
+        $c->setDBArrayTable ( 'case' );         
+        $G_PUBLISH->AddContent ( 'propeltable', 'paged-table', 'setup/wsrUnassignedCaseList', $c );
+
+      } 
+        else if( is_object($result) ){
+          $_SESSION ['WS_SESSION_ID'] = '';
+          $fields ['status_code'] = $result->status_code;
+          $fields ['message']     =  $result->message;
+          $fields ['time_stamp']  = date("Y-m-d H:i:s");
+          $G_PUBLISH->AddContent ( 'xmlform', 'xmlform', 'setup/wsShowResult', null, $fields );
+        }
+
+      G::RenderPage ( 'publish', 'raw' );
+      break;
+	
 			case "UserList" :
 				$sessionId = $frm ["SESSION_ID"];
 				$params = array ('sessionId' => $sessionId );

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm rowsPerPage="24">
+
+<guid type="text" colWidth="200" align="left" titleAlign="left">
+  <en>GUID</en>
+</guid>
+
+<name type="text" colWidth="280" align="left" titleAlign="left">
+  <en>Case Title</en>
+</name>
+
+<delIndex type="text" colWidth="70" align="left" titleAlign="left">
+  <en>Del Index</en>
+</delIndex>
+
+</dynaForm> 

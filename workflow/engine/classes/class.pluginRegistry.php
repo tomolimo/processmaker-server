@@ -965,13 +965,13 @@ class PMPluginRegistry {
             }
             $sFilename = PATH_PLUGINS . $aux[ count($aux) -1];
             if (! file_exists($sFilename) ) continue;
-            require_once( $sFilename);
-            $oPlugin = new $detail->sClassName( $detail->sNamespace, $detail->sFilename );
-            $this->_aPlugins[$detail->sNamespace] =& $oPlugin;
-
-            $iPlugins++;
-            //print ( "$iPlugins $namespace <br>");
-            $oPlugin->setup();
+            require_once $sFilename;
+            if (class_exists($detail->sClassName)) {
+              $oPlugin = new $detail->sClassName( $detail->sNamespace, $detail->sFilename );
+              $this->_aPlugins[$detail->sNamespace] =& $oPlugin;
+              $iPlugins++;
+              $oPlugin->setup();
+            }
           }
         }
       }
@@ -1177,5 +1177,9 @@ class PMPluginRegistry {
    */
   function getTaskExtendedProperties() {
     return  $this->_aTaskExtendedProperties;
+  }
+
+  function registerDashboard() {
+    // Dummy function for backwards compatibility
   }
 }

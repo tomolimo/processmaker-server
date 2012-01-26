@@ -1,4 +1,4 @@
-<?
+<?php
     
 $action = isset($POST['action'])? $POST['action']: isset($_GET['action'])? $_GET['action']: '';
 

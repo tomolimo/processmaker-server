@@ -1179,7 +1179,8 @@ class XmlForm_Field_Suggest extends XmlForm_Field_SimpleText //by neyek
         if(strlen(trim($formVariableValue))>0) {
           $value = $formVariableValue;
         }
-        $str  = '<input type="text" '.$storeEntry.' class="module_app_input___gray" style="height:16px" size="'.$this->size.'" id="form[' . $this->name . '_label]" name="form[' . $this->name . '_label]" value="'.$this->htmlentities($value, ENT_COMPAT, 'utf-8').'" ';
+        $name = "'".$this->name."'";
+        $str  = '<input type="text" '.$storeEntry.' class="module_app_input___gray" style="height:16px" size="'.$this->size.'" id="form[' . $this->name . '_label]" name="form[' . $this->name . '_label]" value="'.$this->htmlentities($value, ENT_COMPAT, 'utf-8').'" onblur="idSet('. $name . ');"';
         $str .= $this->NSDependentFields(true).' ';
         $str .= '/>';
         $str .= '<input ';
@@ -2121,17 +2122,8 @@ class XmlForm_Field_Link extends XmlForm_Field {
     $link    = G::replaceDataField ( $this->link, $owner->values );
     $target  = G::replaceDataField ( $this->target, $owner->values );
     $value   = G::replaceDataField ( $this->value, $owner->values );
-    $label   = G::replaceDataField ( $this->label, $owner->values );
-    if ($this->mode == 'edit'){
-      $html  = '<a class="tableOption" href=\'' . $this->htmlentities ( $link, ENT_QUOTES, 'utf-8' ) . '\'' . 'id="form[' . $this->name . ']" name="form[' . $this->name . ']" style="' . htmlentities ( $this->style, ENT_QUOTES, 'utf-8' ) .'" '. (($this->onclick) ? ' onclick="' . htmlentities ( $onclick, ENT_QUOTES, 'utf-8' ) . '"' : '') . (($this->target) ? ' target="' . htmlentities ( $target, ENT_QUOTES, 'utf-8' ) . '"' : '') . '>' . $this->htmlentities ( $this->value === '' ? $label : $value, ENT_QUOTES, 'utf-8' ) . '</a>';
-      $html .= $this->renderHint();
-    } else {
-      $html  = $this->htmlentities ( $this->value === '' ? $label : $value, ENT_QUOTES, 'utf-8' );
-      $html .= '<input ';
-      $html .= 'id="form['.$this->name.']" ';
-      $html .= 'name="form['.$this->name.']" ';
-      $html .= 'type="hidden" value="' . $this->htmlentities ( $link, ENT_QUOTES, 'utf-8' ) . '" />';
-    }
+    $label   = G::replaceDataField ( $this->label, $owner->values );   
+    $html  = '<a class="tableOption" href=\'' . $this->htmlentities ( $link, ENT_QUOTES, 'utf-8' ) . '\'' . 'id="form[' . $this->name . ']" name="form[' . $this->name . ']" style="' . htmlentities ( $this->style, ENT_QUOTES, 'utf-8' ) .'" '. (($this->onclick) ? ' onclick="' . htmlentities ( $onclick, ENT_QUOTES, 'utf-8' ) . '"' : '') . (($this->target) ? ' target="' . htmlentities ( $target, ENT_QUOTES, 'utf-8' ) . '"' : '') . '>' . $this->htmlentities ( $this->value === '' ? $label : $value, ENT_QUOTES, 'utf-8' ) . '</a>';
     return $html;
   }
 
@@ -2767,7 +2759,7 @@ class XmlForm_Field_Listbox extends XmlForm_Field
   var $option        = array ();
   var $sqlConnection = 0;
   var $size          = 4;
-  var $width         = '100';
+  var $width         = '';
   var $sql           = '';
   var $sqlOption     = array ();
   function validateValue($value, $owner)
@@ -2792,7 +2784,11 @@ class XmlForm_Field_Listbox extends XmlForm_Field
     if (! is_array ( $value ))
       $value = explode ( '|', $value );
     if ($this->mode === 'edit') {
-      $html = '<select multiple="multiple" id="form[' . $this->name . ']" name="form[' . $this->name . '][]" size="' . $this->size . '" style="width:'.$this->width.'">';
+      $itemWidth = '';
+      if ($this->width != '') {
+        $itemWidth =  'style="width:'.$this->width . '"';
+      }
+      $html = '<select multiple="multiple" id="form[' . $this->name . ']" name="form[' . $this->name . '][]" size="' . $this->size . '" ' . $itemWidth . ' >';
       foreach ( $this->option as $optionName => $option ) {
         $html .= '<option value="' . $optionName . '" ' . ((in_array ( $optionName, $value )) ? 'selected' : '') . '>' . $option . '</option>';
       }

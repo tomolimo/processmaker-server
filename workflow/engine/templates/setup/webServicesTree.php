@@ -92,6 +92,7 @@ $allWebservices [] = 'SendVariables';
 $allWebservices [] = 'SendMessage';
 $allWebservices [] = 'ProcessList';
 $allWebservices [] = 'CaseList';
+$allWebservices [] = 'UnassignedCaseList'; 
 $allWebservices [] = 'RoleList';
 $allWebservices [] = 'GroupList';
 $allWebservices [] = 'UserList';

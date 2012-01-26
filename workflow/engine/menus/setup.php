@@ -79,3 +79,4 @@ if ($RBAC->userCanAccess('PM_SETUP_ADVANCE') == 1) {
   $G_TMP_MENU->AddIdRawOption('AUTHSOURCES', '../authSources/authSources_List', G::LoadTranslation('ID_AUTH_SOURCES'), '', '', 'users');
 }
 
+$G_TMP_MENU->AddIdRawOption('UX', '../admin/uxList', 'User experience (UX)', '', '', 'users');

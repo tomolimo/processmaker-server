@@ -1,6 +1,6 @@
 <?php
-//sysGeneric, this file is used initialize main variables and redirect to each and all pages
-$startingTime =  array_sum(explode(' ',microtime()));
+  //sysGeneric, this file is used initialize main variables and redirect to each and all pages
+  $startingTime =  microtime(true);
 
 //*** process the $_POST with magic_quotes enabled
   function strip_slashes(&$vVar) {
@@ -27,7 +27,7 @@ $startingTime =  array_sum(explode(' ',microtime()));
   function logTimeByPage() {
   	$serverAddr = $_SERVER['SERVER_ADDR'];
   	global $startingTime;
-  	$endTime =  array_sum(explode(' ',microtime()));
+  	$endTime =  microtime(true);
   	$time = $endTime - $startingTime;
     $fpt= fopen ( PATH_DATA . 'log/time.log', 'a' );
     fwrite( $fpt, sprintf ( "%s.%03d %15s %s %5.3f %s\n", date('Y-m-d H:i:s'), $time, getenv('REMOTE_ADDR'), substr($serverAddr,-4), $time, $_SERVER['REQUEST_URI'] ));
@@ -327,6 +327,10 @@ $startingTime =  array_sum(explode(' ',microtime()));
     }
   }
 
+  //  ***** create memcached singleton *****************
+  G::LoadClass ( 'memcached' );
+  $memcache = & PMmemcached::getSingleton(SYS_SYS);
+
 //***************** PM Paths DATA **************************
   define( 'PATH_DATA_SITE',                 PATH_DATA      . 'sites/' . SYS_SYS . '/');
   define( 'PATH_DOCUMENT',                  PATH_DATA_SITE . 'files/' );
@@ -350,58 +354,33 @@ $startingTime =  array_sum(explode(' ',microtime()));
     $oPluginRegistry->unSerializeInstance( file_get_contents  ( $sSerializedFile ) );
 
 
-//***************** create $G_ENVIRONMENTS dependent of SYS_SYS **************************
-  define ( 'G_ENVIRONMENT', G_DEV_ENV );
-  $G_ENVIRONMENTS = array (
-    G_PRO_ENV => array (
-      'dbfile' => PATH_DB . 'production' . PATH_SEP . 'db.php' ,
-      'cache' => 1,
-      'debug' => 0,
-    ) ,
-    G_DEV_ENV => array (
-      'dbfile' => PATH_DB . SYS_SYS . PATH_SEP . 'db.php',
-      'datasource' => 'workflow',
-      'cache' => 0,
-      'debug' => DEBUG_SQL_LOG,  //<--- change the value of this Constant to to 1, to have a detailed sql log in PATH_DATA . 'log' . PATH_SEP . 'workflow.log'
-    ) ,
-    G_TEST_ENV => array (
-      'dbfile' => PATH_DB . 'test' . PATH_SEP . 'db.php' ,
-      'cache' => 0,
-      'debug' => 0,
-    )
-  );
-
 //******* setup propel definitions and logging ****
   require_once ( "propel/Propel.php" );
   require_once ( "creole/Creole.php" );
 
-  if ( $G_ENVIRONMENTS[ G_ENVIRONMENT ]['debug'] ) {
+  if (defined('DEBUG_SQL_LOG') && DEBUG_SQL_LOG) {
+    define ( 'PM_PID', mt_rand(1,999999) );
     require_once ( "Log.php" );
 
     // register debug connection decorator driver
     Creole::registerDriver('*', 'creole.contrib.DebugConnection');
 
-    // itialize Propel with converted config file
+    // initialize Propel with converted config file
     Propel::init( PATH_CORE . "config/databases.php" );
 
-    //log file for workflow database
-    $logFile = PATH_DATA . 'log' . PATH_SEP . 'workflow.log';
+    //unified log file for all databases
+    $logFile = PATH_DATA . 'log' . PATH_SEP . 'propel.log';
     $logger = Log::singleton('file', $logFile, 'wf ' . SYS_SYS, null, PEAR_LOG_INFO);
     Propel::setLogger($logger);
+    //log file for workflow database
     $con = Propel::getConnection('workflow');
     if ($con instanceof DebugConnection) $con->setLogger($logger);
 
     //log file for rbac database
-    $logFile = PATH_DATA . 'log' . PATH_SEP . 'rbac.log';
-    $logger = Log::singleton('file', $logFile, 'rbac ' . SYS_SYS, null, PEAR_LOG_INFO);
-    Propel::setLogger($logger);
     $con = Propel::getConnection('rbac');
     if ($con instanceof DebugConnection) $con->setLogger($logger);
 
     //log file for report database
-    $logFile = PATH_DATA . 'log' . PATH_SEP . 'report.log';
-    $logger = Log::singleton('file', $logFile, 'rp ' . SYS_SYS, null, PEAR_LOG_INFO);
-    Propel::setLogger($logger);
     $con = Propel::getConnection('rp');
     if ($con instanceof DebugConnection) $con->setLogger($logger);
   }
@@ -426,10 +405,6 @@ $startingTime =  array_sum(explode(' ',microtime()));
     require_once ( "classes/model/Translation.php" );
     $fields = Translation::generateFileTranslation(SYS_LANG);
   }
-
-
-
-
 
 //********* Setup plugins *************
   $oPluginRegistry->setupPlugins(); //get and setup enabled plugins

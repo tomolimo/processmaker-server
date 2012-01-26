@@ -1,4 +1,4 @@
-<?
+<?php
   ini_set("soap.wsdl_cache_enabled", "0"); // disabling WSDL cache
 
   define ('WEB_SERVICE_VERSION' , '2.0' );
@@ -163,6 +163,32 @@
 
     $ws = new wsBase ();
     $res = $ws->caseList( $userId );
+    return array("cases" => $res );
+  }
+
+  function UnassignedCaseList( $params ) { 
+    $vsResult = isValidSession($params->sessionId);
+    if( $vsResult->status_code !== 0 ){
+      $o->guid = $vsResult->status_code. ' ' . $vsResult->message;
+      $o->name = '';
+      $o->delIndex = '';
+      return array("cases" => $o);
+    }
+
+    if( ifPermission( $params->sessionId, 'PM_CASES') == 0 ){
+      $o->guid = "2 Insufficient privileges to execute this function";
+      $o->name = '';
+      $o->delIndex = '';
+      return array("cases" => $o);
+    }
+
+    G::LoadClass('sessions');
+    $oSessions = new Sessions();
+    $session   = $oSessions->getSessionUser($params->sessionId);
+    $userId    = $session['USR_UID'];
+
+    $ws = new wsBase ();
+    $res = $ws->unassignedCaseList( $userId );
     return array("cases" => $res );
   }
 
@@ -810,6 +836,7 @@ $server = new SoapServer( $wsdl );
 $server->addFunction("Login");
 $server->addFunction("ProcessList");
 $server->addFunction("CaseList");
+$server->addFunction("UnassignedCaseList");
 $server->addFunction("RoleList");
 $server->addFunction("GroupList");
 $server->addFunction("DepartmentList");

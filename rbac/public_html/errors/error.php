@@ -1,4 +1,4 @@
-<?
+<?php
  $ERROR_TEXT = "Server Error ";
  $ERROR_DESCRIPTION = "
       <br />

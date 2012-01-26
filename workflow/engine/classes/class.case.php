@@ -4140,6 +4140,11 @@ class Cases {
         $aConfiguration = $oConfiguration->load('Emails', '', '', '', '');
         if ($aConfiguration['CFG_VALUE'] != '') {
           $aConfiguration = unserialize($aConfiguration['CFG_VALUE']);
+          $passwd = $aConfiguration['MESS_PASSWORD'];
+          if(strpos( $passwd, 'hush:' ) !== false){
+          	list($hush, $pass) = explode(":", $passwd);
+          	$aConfiguration['MESS_PASSWORD'] = G::decrypt($pass,'EMAILENCRYPT'); 
+          }
         } else {
           $aConfiguration = array();
         }

@@ -1,29 +1,53 @@
 <?php
 /**
- * pmTables controller
- * @author Douglas Medrano <douglas@colosa.com, douglas.medrano@live.com>
- * @New Calendar
+ * Admin controller
  * @access public
  */
 class Admin extends Controller
 {
   /**
+   * UX - User experience
+   */
+
+  public function uxList()
+  {
+    $this->includeExtJS('admin/uxUsersList');
+    //$this->setView('admin/calendarEdit');
+    
+    //$this->setJSVar('fields',$fields);ç
+    G::LoadClass('configuration');
+    $c = new Configurations();
+    $configPage = $c->getConfiguration('usersList', 'pageSize','',$_SESSION['USER_LOGGED']);
+    $Config['pageSize'] = isset($configPage['pageSize']) ? $configPage['pageSize'] : 20;
+
+    $this->setJSVar('CONFIG', $Config);
+    $this->setJSVar('FORMATS',$c->getFormats());
+
+
+    G::RenderPage('publish', 'extJs');
+  }
+
+
+  /**
+   * CALENDAR
    * getting default list
    * @param string $httpData->PRO_UID (opional)
    */
   public function calendarEdit($httpData)
   {
     global $RBAC;
-    
+    //$RBAC->requirePermissions('PM_SETUP_ADVANCE');    
+    G::LoadClass('configuration');
+    G::LoadClass('calendar');
+
     $CalendarUid = str_replace ( '"', '', isset ( $_GET ['id'] ) ? $_GET ['id'] : G::GenerateUniqueID () );
-    G::LoadClass ( 'calendar' );
     $calendarObj = new calendar ( );
     
     if ((isset ( $_GET ['id'] )) && ($_GET ['id'] != "")) {
       $fields = $calendarObj->getCalendarInfoE ( $CalendarUid );
       $fields ['OLD_NAME'] = $fields['CALENDAR_NAME'];
     }
-    if (! (isset ( $fields ['CALENDAR_UID'] ))) { //For a new Calendar
+    if (!isset($fields['CALENDAR_UID'])) { //For a new Calendar
       $fields ['CALENDAR_UID'] = $CalendarUid;
       $fields ['OLD_NAME'] = '';
       
@@ -37,25 +61,18 @@ class Admin extends Controller
       $fields ['CALENDAR_NAME'] = G::LoadTranslation ( "ID_COPY_OF" ) . " " . $fields ['CALENDAR_NAME'];
     }
     
-    $RBAC->requirePermissions('PM_SETUP_ADVANCE');    
-    G::LoadClass('configuration');
     $c = new Configurations();
     $configPage = $c->getConfiguration('additionalTablesList', 'pageSize','',$_SESSION['USER_LOGGED']);
     $Config['pageSize'] = isset($configPage['pageSize']) ? $configPage['pageSize'] : 20;
     
     $this->includeExtJS('admin/calendarEdit');
     $this->setView('admin/calendarEdit');
-    
-    $variableArray = array();
-    $variableArray[0] = 'uno';
-    $variableArray[1] = 'dos';
-    
-
     $businessDayArray = array();
-      for($i=0;$i<sizeof($fields['BUSINESS_DAY']);$i++) {
-        $businessDayArray[$i] =  $fields['BUSINESS_DAY'][$i+1];
-        
-      }
+    
+    for($i=0;$i<sizeof($fields['BUSINESS_DAY']);$i++) {
+      $businessDayArray[$i] =  $fields['BUSINESS_DAY'][$i+1];
+    }
+
     $fields['BUSINESS_DAY'] = $businessDayArray;   
     //validating if the calendar is new, it means that we don't have the $_GET array
     $fields['HOLIDAY']=(isset ( $_GET['id'] )&&$_GET['id']!='')?$fields['HOLIDAY']:array();

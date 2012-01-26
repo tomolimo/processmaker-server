@@ -1,4 +1,4 @@
-<?
+<?php
 
 switch ($RBAC->userCanAccess('PM_SUPERVISOR')) {
     case - 2:

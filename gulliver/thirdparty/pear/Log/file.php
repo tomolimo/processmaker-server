@@ -290,15 +290,26 @@ class Log_file extends Log
         $message = $this->_extractMessage($message);
         
         /*********************** change here >> depth value *************/
-       $uri = $_SERVER['REQUEST_URI'];
-       $backTrace = $this->_getBacktraceVars( 5 );
-       $trace = " [ $uri -> $backTrace[3] ]";
+        $uri       = $_SERVER['REQUEST_URI'];
+        $backTrace = $this->_getBacktraceVars( 5 );
+        $method    = $_SERVER['REQUEST_METHOD'];
+        $ip        = getenv('REMOTE_ADDR');
+        $myPid     = PM_PID; //getmypid();
+
+        //$request variable will have all the values in POST and GET
+        $request = '';
+        foreach( $_POST as $k => $v ) $request .= ($request!='' ? "\t" : '') . $k . '='.$v; 
+        foreach( $_GET  as $k => $v ) $request .= ($request!='' ? "\t" : '') . $k . '='.$v; 
+
+        //exact time with microseconds        
+        $t = explode(' ',microtime(false));
+        list($usec, $sec) = explode(' ', microtime());
+        $micro = date('H:i:s.') . sprintf("%04d", floor($usec * 10000 ));
+        
+        /* Build the string containing the complete message  */
+        $msg = sprintf ( "%s|%s|%s|%05d|%s|%s|%s|%s|%s\n", $micro,SYS_SYS,$ip, $myPid, $message, $backTrace[3], $method, $uri, $request);
         /* Build the string containing the complete log line. */
-        $t = microtime(true);
-        $micro = date('H:i:s.') . sprintf("%03d",($t - floor($t)) * 1000);
-        $line = $this->_format($this->_lineFormat,
-                               $micro . ' ' . getenv('REMOTE_ADDR'),
-                               $priority, $message . $trace ) . $this->_eol;
+        $line = $this->_format('%4$s', $micro,'',$msg );
 
         /* If locking is enabled, acquire an exclusive lock on the file. */
         if ($this->_locking) {

@@ -202,6 +202,13 @@ abstract class BaseUsers extends BaseObject  implements Persistent {
 	 */
 	protected $usr_replaced_by = '';
 
+
+	/**
+	 * The value for the usr_ux field.
+	 * @var        string
+	 */
+	protected $usr_ux = 'NORMAL';
+
 	/**
 	 * Flag to prevent endless save loop, if this object is referenced
 	 * by another object which falls in this transaction.
@@ -569,6 +576,17 @@ abstract class BaseUsers extends BaseObject  implements Persistent {
 	{
 
 		return $this->usr_replaced_by;
+	}
+
+	/**
+	 * Get the [usr_ux] column value.
+	 * 
+	 * @return     string
+	 */
+	public function getUsrUx()
+	{
+
+		return $this->usr_ux;
 	}
 
 	/**
@@ -1130,6 +1148,28 @@ abstract class BaseUsers extends BaseObject  implements Persistent {
 	} // setUsrReplacedBy()
 
 	/**
+	 * Set the value of [usr_ux] column.
+	 * 
+	 * @param      string $v new value
+	 * @return     void
+	 */
+	public function setUsrUx($v)
+	{
+
+		// Since the native PHP type for this column is string,
+		// we will cast the input to a string (if it is not).
+		if ($v !== null && !is_string($v)) {
+			$v = (string) $v; 
+		}
+
+		if ($this->usr_ux !== $v || $v === 'NORMAL') {
+			$this->usr_ux = $v;
+			$this->modifiedColumns[] = UsersPeer::USR_UX;
+		}
+
+	} // setUsrUx()
+
+	/**
 	 * Hydrates (populates) the object variables with values from the database resultset.
 	 *
 	 * An offset (1-based "start column") is specified so that objects can be hydrated
@@ -1196,12 +1236,14 @@ abstract class BaseUsers extends BaseObject  implements Persistent {
 
 			$this->usr_replaced_by = $rs->getString($startcol + 24);
 
+			$this->usr_ux = $rs->getString($startcol + 25);
+
 			$this->resetModified();
 
 			$this->setNew(false);
 
 			// FIXME - using NUM_COLUMNS may be clearer.
-			return $startcol + 25; // 25 = UsersPeer::NUM_COLUMNS - UsersPeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + 26; // 26 = UsersPeer::NUM_COLUMNS - UsersPeer::NUM_LAZY_LOAD_COLUMNS).
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating Users object", $e);
@@ -1479,6 +1521,9 @@ abstract class BaseUsers extends BaseObject  implements Persistent {
 			case 24:
 				return $this->getUsrReplacedBy();
 				break;
+			case 25:
+				return $this->getUsrUx();
+				break;
 			default:
 				return null;
 				break;
@@ -1524,6 +1569,7 @@ abstract class BaseUsers extends BaseObject  implements Persistent {
 			$keys[22] => $this->getUsrRole(),
 			$keys[23] => $this->getUsrReportsTo(),
 			$keys[24] => $this->getUsrReplacedBy(),
+			$keys[25] => $this->getUsrUx(),
 		);
 		return $result;
 	}
@@ -1630,6 +1676,9 @@ abstract class BaseUsers extends BaseObject  implements Persistent {
 			case 24:
 				$this->setUsrReplacedBy($value);
 				break;
+			case 25:
+				$this->setUsrUx($value);
+				break;
 		} // switch()
 	}
 
@@ -1678,6 +1727,7 @@ abstract class BaseUsers extends BaseObject  implements Persistent {
 		if (array_key_exists($keys[22], $arr)) $this->setUsrRole($arr[$keys[22]]);
 		if (array_key_exists($keys[23], $arr)) $this->setUsrReportsTo($arr[$keys[23]]);
 		if (array_key_exists($keys[24], $arr)) $this->setUsrReplacedBy($arr[$keys[24]]);
+		if (array_key_exists($keys[25], $arr)) $this->setUsrUx($arr[$keys[25]]);
 	}
 
 	/**
@@ -1714,6 +1764,7 @@ abstract class BaseUsers extends BaseObject  implements Persistent {
 		if ($this->isColumnModified(UsersPeer::USR_ROLE)) $criteria->add(UsersPeer::USR_ROLE, $this->usr_role);
 		if ($this->isColumnModified(UsersPeer::USR_REPORTS_TO)) $criteria->add(UsersPeer::USR_REPORTS_TO, $this->usr_reports_to);
 		if ($this->isColumnModified(UsersPeer::USR_REPLACED_BY)) $criteria->add(UsersPeer::USR_REPLACED_BY, $this->usr_replaced_by);
+		if ($this->isColumnModified(UsersPeer::USR_UX)) $criteria->add(UsersPeer::USR_UX, $this->usr_ux);
 
 		return $criteria;
 	}
@@ -1815,6 +1866,8 @@ abstract class BaseUsers extends BaseObject  implements Persistent {
 		$copyObj->setUsrReportsTo($this->usr_reports_to);
 
 		$copyObj->setUsrReplacedBy($this->usr_replaced_by);
+
+		$copyObj->setUsrUx($this->usr_ux);
 
 
 		$copyObj->setNew(true);

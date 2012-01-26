@@ -27,6 +27,7 @@
 require_once 'classes/model/om/BaseGroupUser.php';
 require_once 'classes/model/Content.php';
 require_once 'classes/model/Users.php';
+require_once 'classes/model/Groupwf.php';
 
 /**
  * Skeleton subclass for representing a row from the 'GROUP_USER' table.
@@ -45,7 +46,7 @@ class GroupUser extends BaseGroupUser {
    * Create the application document registry
    * @param array $aData
    * @return string
-  **/
+   */
   public function create($aData)
   {
     $oConnection = Propel::getConnection(GroupUserPeer::DATABASE_NAME);
@@ -78,7 +79,7 @@ class GroupUser extends BaseGroupUser {
    * @param string $sGrpUid
    * @param string $sUserUid
    * @return string
-  **/
+   */
   public function remove($sGrpUid, $sUserUid)
   {
     $oConnection = Propel::getConnection(GroupUserPeer::DATABASE_NAME);
@@ -101,7 +102,8 @@ class GroupUser extends BaseGroupUser {
     }
   }
   
-  function getCountAllUsersByGroup(){
+  function getCountAllUsersByGroup()
+  {
   	$oCriteria = new Criteria('workflow');
   	$oCriteria->addSelectColumn(GroupUserPeer::GRP_UID);
   	$oCriteria->addSelectColumn('COUNT(*) AS CNT');
@@ -116,6 +118,30 @@ class GroupUser extends BaseGroupUser {
 	    $aRows[$row['GRP_UID']] = $row['CNT'];
     }
 	  return $aRows;
+  }
+
+  function getAllUserGroups($usrUid)
+  {
+    $oCriteria = new Criteria('workflow');
+    // $oCriteria->addSelectColumn(GroupUserPeer::GRP_UID);
+    // $oCriteria->addSelectColumn('COUNT(*) AS CNT');
+    // $oCriteria->addJoin(GroupUserPeer::USR_UID, UsersPeer::USR_UID, Criteria::INNER_JOIN);
+    $oCriteria->add(GroupUserPeer::USR_UID, $usrUid);
+    //$oCriteria->add(UsersPeer::USR_STATUS, 'CLOSED', Criteria::NOT_EQUAL);
+    
+    //$oCriteria->addGroupByColumn(GroupUserPeer::GRP_UID);
+    $oDataset = GroupUserPeer::doSelectRS($oCriteria);
+    $oDataset->setFetchmode (ResultSet::FETCHMODE_ASSOC);
+    $g = new Groupwf();
+    $rows = Array();
+    while ($oDataset->next()) {
+      $row = $oDataset->getRow();
+      $grpRow = $g->load($row['GRP_UID']);
+      $row = array_merge($row, $grpRow);
+      $rows[] = $row;
+    }
+
+    return $rows;
   }
 
 } // GroupUser

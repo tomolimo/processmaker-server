@@ -179,7 +179,9 @@ _b.AutoSuggest.prototype.getSuggestions = function (val)
 		var arr = [];
 		for (var i=0;i<l;i++)
 		{
-			if (this.aSug[i].value.substr(0,val.length).toLowerCase() == val.toLowerCase())
+			// if (this.aSug[i].value.substr(0,val.length).toLowerCase() == val.toLowerCase())
+			if (this.aSug[i].value.substr(0,val.length).toLowerCase() == val.toLowerCase() ||
+			    this.aSug[i].value.toLowerCase().indexOf(val.toLowerCase()) > 0)
 				arr.push( this.aSug[i] );
 		}
 		this.aSug = arr;

@@ -1,4 +1,4 @@
-<?
+<?php
  $ERROR_TEXT = "401 Unauthorized   ";
  $ERROR_DESCRIPTION = "
       This server could not verify that

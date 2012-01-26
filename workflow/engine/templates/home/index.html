@@ -1,0 +1,165 @@
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=yes" /> 
+
+  <link rel="shortcut icon" href="/images/favicon.ico"   type="image/x-icon"/>
+  <link rel="stylesheet" href="/js/jquery/css/smoothness/jquery-ui-1.8.17.custom.css" type="text/css">
+  <link rel="stylesheet" href="/css/simplified.css" media="screen" rel="stylesheet" type="text/css" />
+
+  <script type="text/javascript" src="/js/jquery/jquery-1.7.1.min.js"></script>
+  <script type="text/javascript" src="/js/jquery/jquery-ui-1.8.17.min.js"></script>
+  <script type="text/javascript" src="/js/jquery/jquery.confirm.js"></script>
+  
+  {literal}
+  <style>
+  body {
+    padding-top: 40px !important;
+    overflow:hidden; 
+  }
+  </style>
+  <script>
+
+  function resize() 
+  {
+    var h = $(window).height() - 42;
+    $('iframe').height(h)
+  }
+  
+  function redirect(url)
+  {
+    var $iframe = $('#iframex');
+    $iframe.attr('src', url);   
+    return false;
+  }
+
+  function appStart(id, title)
+  {
+    $.confirm({
+      'title'   : 'Start Case Confirmation',
+      'message' : 'Do you wanna start a new case for:<br /> * <b>"'+title+'"</b>?',
+      'buttons' : {
+        'Yes' : {
+          'class' : 'blue',
+          'action': function(){
+            //elem.slideUp();
+            redirect('home/startCase?id='+id);
+          }
+        },
+        'No'  : {
+          'class' : 'gray',
+          'action': function(){}  // Nothing to do in this case. You can as well omit the action property.
+        }
+      }
+    });
+  }
+  </script>
+  {/literal}
+
+</head>
+<body onload="resize()" onresize="resize()" > 
+  <div class="global-nav">
+    <!-- start topbar -->     
+    <div class="topbar" id="corpBar">
+      <div class="topbar-bg"></div>
+      <div class="topbar-inner">
+        <div class="fixed-container clearfix">
+          <!-- <a href="" title="_title / Home" accesskey="1" id="logo">_title</a> -->
+
+          <ul class="nav primary-nav">
+            <li class="account">
+              <a class="menu user-actions" href="#" onclick="redirect('home/appList?t=in')" title="My Inbox">
+                <img alt="A99679add21e8b0704ea5f0fb569572c_mini" src="/images/simplified/in-set-grey.png"  />
+                <!-- <span class="menu-label screen-name">new cases</span> -->
+              </a>
+            </li>
+
+            <li class="account">
+              <a class="menu user-actions" href="#" onclick="redirect('home/appList?t=draft')" title="My Drafts">
+                <img alt="A99679add21e8b0704ea5f0fb569572c_mini" src="/images/simplified/folder-grey.png"  />
+                <!-- <span class="menu-label screen-name">new cases</span> -->
+              </a>
+            </li>
+            {if $canStartCase neq false}
+            <li class="account">
+              <a class="menu user-actions" href="#">
+                <img alt="A99679add21e8b0704ea5f0fb569572c_mini" src="/images/simplified/plus-set-grey.png"  title="Start a new Application"/>
+                <!-- <span class="menu-label screen-name">new cases</span> -->
+              </a>
+
+              <ul class="menu-dropdown" style="width: 360px">
+                {foreach from=$processList key=id item=proc}
+                <li>
+                  <a href="#" onclick="appStart('{$proc.uid}', '{$proc.value}')" accesskey="s" id="settings_link">{$proc.value}</a>
+                </li>
+                {/foreach}
+              </ul>
+            </li>
+            {/if}
+          </ul> 
+
+          <ul class="nav secondary-nav">
+            <li class="account">
+              <a class="menu user-photo" href="#">
+                <img alt="user_avatar_mini" height="24" src="users/users_ViewPhotoGrid?pUID={$usrUid}" width="24" />
+                <span class="menu-label screen-name">{$userName}</span>
+              </a>
+
+              <ul class="menu-dropdown">
+                <!--<li><a href="#" accesskey="s" id="settings_link">Settings</a></li>
+                <li><a href="#" accesskey="?" id="help_link">Help</a></li>-->
+
+                <li><a href="login/login" accesskey="l" id="sign_out_link">Sign out</a></li>
+              </ul>
+            </li>
+          </ul>
+
+        </div> <!-- /fixed-container -->
+      </div> <!-- /topbar-inner -->
+    </div>
+    <!-- end topbar -->     
+  </div>
+
+  <iframe id="iframex" name="iframex" src="home/appList" width="100%" height="200" scrolling="yes" frameborder="0"></iframe>
+  
+  
+  {literal} 
+  <script type="text/javascript">
+    // Javascript to toggle the dropdowns
+    $(document).ready(function(){
+      // Dropdowns
+      $("body").bind("click", function(e) {
+        $("ul.menu-dropdown").hide();
+        $('a.menu').parent("li").removeClass("open").children("ul.menu-dropdown").hide();
+      });
+
+      $("a.menu").click(function() {
+        if ($(this).parent("li").hasClass("open")) {
+          $(this).parent("li").removeClass("open");
+          $(this).siblings("ul.menu-dropdown").hide();
+        } else {
+          $(this).parent("li").addClass("open");
+          $(this).siblings("ul.menu-dropdown").show();
+        }
+        $(this).parent("li").siblings("li").children("ul.menu-dropdown").hide();
+        $(this).parent("li").siblings("li").removeClass("open");
+        return false;
+      });
+
+      
+      // To hide some actived menu clicking on inner iframe content
+      $('iframe').load(function(){
+        var iframeDoc = $('iframe').contents().get(0);
+        // Bind event to iframe document
+        $(iframeDoc).bind('click', function( event ) {
+          $("ul.menu-dropdown").hide();
+          $('a.menu').parent("li").removeClass("open").children("ul.menu-dropdown").hide();
+        });
+
+      })
+    });
+  </script>
+  {/literal}
+
+</body>
+</html>
