@@ -271,6 +271,13 @@ class Log_file extends Log
      */
     function log($message, $priority = null)
     {
+        // define constants, because there are times when the page is rendered outside a workspace
+        if ( !defined('PM_PID') ) {
+          define ('PM_PID', rand(0,1000) );
+        }
+        if ( !defined('SYS_SYS') ) {
+          define ('SYS_SYS', '' );
+        }
         /* If a priority hasn't been specified, use the default value. */
         if ($priority === null) {
             $priority = $this->_priority;
@@ -294,8 +301,7 @@ class Log_file extends Log
         $backTrace = $this->_getBacktraceVars( 5 );
         $method    = $_SERVER['REQUEST_METHOD'];
         $ip        = getenv('REMOTE_ADDR');
-        $myPid     = PM_PID; //getmypid();
-
+        $myPid     = PM_PID; 
         //$request variable will have all the values in POST and GET
         $request = '';
         foreach( $_POST as $k => $v ) $request .= ($request!='' ? "\t" : '') . $k . '='.$v; 
