@@ -286,6 +286,12 @@ button.x-btn-text:focus,.x-combo-selected{
   background-image:url(/images/edit.gif) !important;
 }
 
+.ICON_UX {
+  background-image:url(/images/user-experience-icon.png) !important;
+}
+
+
+
 
 
 /**
