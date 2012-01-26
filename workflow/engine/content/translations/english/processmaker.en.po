@@ -3152,6 +3152,24 @@ msgid "Events"
 msgstr "Events"
 
 # TRANSLATION
+# JAVASCRIPT/ID_INTERMEDIATE_MESSAGE_EVENT
+#: JAVASCRIPT/ID_INTERMEDIATE_MESSAGE_EVENT
+msgid "Intermediate message event"
+msgstr "Intermediate message event"
+
+# TRANSLATION
+# JAVASCRIPT/ID_INTERMEDIATE_CONDITIONAL_EVENT
+#: JAVASCRIPT/ID_INTERMEDIATE_CONDITIONAL_EVENT
+msgid "Intermediate Conditional Event"
+msgstr "Intermediate Conditional Event"
+
+# TRANSLATION
+# JAVASCRIPT/ID_INTERMEDIATE_TIMER_EVENT
+#: JAVASCRIPT/ID_INTERMEDIATE_TIMER_EVENT
+msgid "Intermediate timer event"
+msgstr "Intermediate timer event"
+
+# TRANSLATION
 # LABEL/ID_TO
 #: LABEL/ID_TO
 msgid "To"
