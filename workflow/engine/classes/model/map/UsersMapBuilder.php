@@ -114,6 +114,8 @@ class UsersMapBuilder {
 
 		$tMap->addColumn('USR_REPLACED_BY', 'UsrReplacedBy', 'string', CreoleTypes::VARCHAR, false, 32);
 
+		$tMap->addColumn('USR_UX', 'UsrUx', 'string', CreoleTypes::VARCHAR, false, 128);
+
 		$tMap->addValidator('USR_STATUS', 'validValues', 'propel.validator.ValidValuesValidator', 'ACTIVE|INACTIVE|VACATION|CLOSED', 'Please select a valid type.');
 
 		$tMap->addValidator('USR_STATUS', 'required', 'propel.validator.RequiredValidator', '', 'Type is required.');

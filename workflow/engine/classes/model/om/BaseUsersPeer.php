@@ -24,7 +24,7 @@ abstract class BaseUsersPeer {
 	const CLASS_DEFAULT = 'classes.model.Users';
 
 	/** The total number of columns. */
-	const NUM_COLUMNS = 25;
+	const NUM_COLUMNS = 26;
 
 	/** The number of lazy-loaded columns. */
 	const NUM_LAZY_LOAD_COLUMNS = 0;
@@ -105,6 +105,9 @@ abstract class BaseUsersPeer {
 	/** the column name for the USR_REPLACED_BY field */
 	const USR_REPLACED_BY = 'USERS.USR_REPLACED_BY';
 
+	/** the column name for the USR_UX field */
+	const USR_UX = 'USERS.USR_UX';
+
 	/** The PHP to DB Name Mapping */
 	private static $phpNameMap = null;
 
@@ -116,10 +119,10 @@ abstract class BaseUsersPeer {
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
 	private static $fieldNames = array (
-		BasePeer::TYPE_PHPNAME => array ('UsrUid', 'UsrUsername', 'UsrPassword', 'UsrFirstname', 'UsrLastname', 'UsrEmail', 'UsrDueDate', 'UsrCreateDate', 'UsrUpdateDate', 'UsrStatus', 'UsrCountry', 'UsrCity', 'UsrLocation', 'UsrAddress', 'UsrPhone', 'UsrFax', 'UsrCellular', 'UsrZipCode', 'DepUid', 'UsrPosition', 'UsrResume', 'UsrBirthday', 'UsrRole', 'UsrReportsTo', 'UsrReplacedBy', ),
-		BasePeer::TYPE_COLNAME => array (UsersPeer::USR_UID, UsersPeer::USR_USERNAME, UsersPeer::USR_PASSWORD, UsersPeer::USR_FIRSTNAME, UsersPeer::USR_LASTNAME, UsersPeer::USR_EMAIL, UsersPeer::USR_DUE_DATE, UsersPeer::USR_CREATE_DATE, UsersPeer::USR_UPDATE_DATE, UsersPeer::USR_STATUS, UsersPeer::USR_COUNTRY, UsersPeer::USR_CITY, UsersPeer::USR_LOCATION, UsersPeer::USR_ADDRESS, UsersPeer::USR_PHONE, UsersPeer::USR_FAX, UsersPeer::USR_CELLULAR, UsersPeer::USR_ZIP_CODE, UsersPeer::DEP_UID, UsersPeer::USR_POSITION, UsersPeer::USR_RESUME, UsersPeer::USR_BIRTHDAY, UsersPeer::USR_ROLE, UsersPeer::USR_REPORTS_TO, UsersPeer::USR_REPLACED_BY, ),
-		BasePeer::TYPE_FIELDNAME => array ('USR_UID', 'USR_USERNAME', 'USR_PASSWORD', 'USR_FIRSTNAME', 'USR_LASTNAME', 'USR_EMAIL', 'USR_DUE_DATE', 'USR_CREATE_DATE', 'USR_UPDATE_DATE', 'USR_STATUS', 'USR_COUNTRY', 'USR_CITY', 'USR_LOCATION', 'USR_ADDRESS', 'USR_PHONE', 'USR_FAX', 'USR_CELLULAR', 'USR_ZIP_CODE', 'DEP_UID', 'USR_POSITION', 'USR_RESUME', 'USR_BIRTHDAY', 'USR_ROLE', 'USR_REPORTS_TO', 'USR_REPLACED_BY', ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, )
+		BasePeer::TYPE_PHPNAME => array ('UsrUid', 'UsrUsername', 'UsrPassword', 'UsrFirstname', 'UsrLastname', 'UsrEmail', 'UsrDueDate', 'UsrCreateDate', 'UsrUpdateDate', 'UsrStatus', 'UsrCountry', 'UsrCity', 'UsrLocation', 'UsrAddress', 'UsrPhone', 'UsrFax', 'UsrCellular', 'UsrZipCode', 'DepUid', 'UsrPosition', 'UsrResume', 'UsrBirthday', 'UsrRole', 'UsrReportsTo', 'UsrReplacedBy', 'UsrUx', ),
+		BasePeer::TYPE_COLNAME => array (UsersPeer::USR_UID, UsersPeer::USR_USERNAME, UsersPeer::USR_PASSWORD, UsersPeer::USR_FIRSTNAME, UsersPeer::USR_LASTNAME, UsersPeer::USR_EMAIL, UsersPeer::USR_DUE_DATE, UsersPeer::USR_CREATE_DATE, UsersPeer::USR_UPDATE_DATE, UsersPeer::USR_STATUS, UsersPeer::USR_COUNTRY, UsersPeer::USR_CITY, UsersPeer::USR_LOCATION, UsersPeer::USR_ADDRESS, UsersPeer::USR_PHONE, UsersPeer::USR_FAX, UsersPeer::USR_CELLULAR, UsersPeer::USR_ZIP_CODE, UsersPeer::DEP_UID, UsersPeer::USR_POSITION, UsersPeer::USR_RESUME, UsersPeer::USR_BIRTHDAY, UsersPeer::USR_ROLE, UsersPeer::USR_REPORTS_TO, UsersPeer::USR_REPLACED_BY, UsersPeer::USR_UX, ),
+		BasePeer::TYPE_FIELDNAME => array ('USR_UID', 'USR_USERNAME', 'USR_PASSWORD', 'USR_FIRSTNAME', 'USR_LASTNAME', 'USR_EMAIL', 'USR_DUE_DATE', 'USR_CREATE_DATE', 'USR_UPDATE_DATE', 'USR_STATUS', 'USR_COUNTRY', 'USR_CITY', 'USR_LOCATION', 'USR_ADDRESS', 'USR_PHONE', 'USR_FAX', 'USR_CELLULAR', 'USR_ZIP_CODE', 'DEP_UID', 'USR_POSITION', 'USR_RESUME', 'USR_BIRTHDAY', 'USR_ROLE', 'USR_REPORTS_TO', 'USR_REPLACED_BY', 'USR_UX', ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, )
 	);
 
 	/**
@@ -129,10 +132,10 @@ abstract class BaseUsersPeer {
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
 	private static $fieldKeys = array (
-		BasePeer::TYPE_PHPNAME => array ('UsrUid' => 0, 'UsrUsername' => 1, 'UsrPassword' => 2, 'UsrFirstname' => 3, 'UsrLastname' => 4, 'UsrEmail' => 5, 'UsrDueDate' => 6, 'UsrCreateDate' => 7, 'UsrUpdateDate' => 8, 'UsrStatus' => 9, 'UsrCountry' => 10, 'UsrCity' => 11, 'UsrLocation' => 12, 'UsrAddress' => 13, 'UsrPhone' => 14, 'UsrFax' => 15, 'UsrCellular' => 16, 'UsrZipCode' => 17, 'DepUid' => 18, 'UsrPosition' => 19, 'UsrResume' => 20, 'UsrBirthday' => 21, 'UsrRole' => 22, 'UsrReportsTo' => 23, 'UsrReplacedBy' => 24, ),
-		BasePeer::TYPE_COLNAME => array (UsersPeer::USR_UID => 0, UsersPeer::USR_USERNAME => 1, UsersPeer::USR_PASSWORD => 2, UsersPeer::USR_FIRSTNAME => 3, UsersPeer::USR_LASTNAME => 4, UsersPeer::USR_EMAIL => 5, UsersPeer::USR_DUE_DATE => 6, UsersPeer::USR_CREATE_DATE => 7, UsersPeer::USR_UPDATE_DATE => 8, UsersPeer::USR_STATUS => 9, UsersPeer::USR_COUNTRY => 10, UsersPeer::USR_CITY => 11, UsersPeer::USR_LOCATION => 12, UsersPeer::USR_ADDRESS => 13, UsersPeer::USR_PHONE => 14, UsersPeer::USR_FAX => 15, UsersPeer::USR_CELLULAR => 16, UsersPeer::USR_ZIP_CODE => 17, UsersPeer::DEP_UID => 18, UsersPeer::USR_POSITION => 19, UsersPeer::USR_RESUME => 20, UsersPeer::USR_BIRTHDAY => 21, UsersPeer::USR_ROLE => 22, UsersPeer::USR_REPORTS_TO => 23, UsersPeer::USR_REPLACED_BY => 24, ),
-		BasePeer::TYPE_FIELDNAME => array ('USR_UID' => 0, 'USR_USERNAME' => 1, 'USR_PASSWORD' => 2, 'USR_FIRSTNAME' => 3, 'USR_LASTNAME' => 4, 'USR_EMAIL' => 5, 'USR_DUE_DATE' => 6, 'USR_CREATE_DATE' => 7, 'USR_UPDATE_DATE' => 8, 'USR_STATUS' => 9, 'USR_COUNTRY' => 10, 'USR_CITY' => 11, 'USR_LOCATION' => 12, 'USR_ADDRESS' => 13, 'USR_PHONE' => 14, 'USR_FAX' => 15, 'USR_CELLULAR' => 16, 'USR_ZIP_CODE' => 17, 'DEP_UID' => 18, 'USR_POSITION' => 19, 'USR_RESUME' => 20, 'USR_BIRTHDAY' => 21, 'USR_ROLE' => 22, 'USR_REPORTS_TO' => 23, 'USR_REPLACED_BY' => 24, ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, )
+		BasePeer::TYPE_PHPNAME => array ('UsrUid' => 0, 'UsrUsername' => 1, 'UsrPassword' => 2, 'UsrFirstname' => 3, 'UsrLastname' => 4, 'UsrEmail' => 5, 'UsrDueDate' => 6, 'UsrCreateDate' => 7, 'UsrUpdateDate' => 8, 'UsrStatus' => 9, 'UsrCountry' => 10, 'UsrCity' => 11, 'UsrLocation' => 12, 'UsrAddress' => 13, 'UsrPhone' => 14, 'UsrFax' => 15, 'UsrCellular' => 16, 'UsrZipCode' => 17, 'DepUid' => 18, 'UsrPosition' => 19, 'UsrResume' => 20, 'UsrBirthday' => 21, 'UsrRole' => 22, 'UsrReportsTo' => 23, 'UsrReplacedBy' => 24, 'UsrUx' => 25, ),
+		BasePeer::TYPE_COLNAME => array (UsersPeer::USR_UID => 0, UsersPeer::USR_USERNAME => 1, UsersPeer::USR_PASSWORD => 2, UsersPeer::USR_FIRSTNAME => 3, UsersPeer::USR_LASTNAME => 4, UsersPeer::USR_EMAIL => 5, UsersPeer::USR_DUE_DATE => 6, UsersPeer::USR_CREATE_DATE => 7, UsersPeer::USR_UPDATE_DATE => 8, UsersPeer::USR_STATUS => 9, UsersPeer::USR_COUNTRY => 10, UsersPeer::USR_CITY => 11, UsersPeer::USR_LOCATION => 12, UsersPeer::USR_ADDRESS => 13, UsersPeer::USR_PHONE => 14, UsersPeer::USR_FAX => 15, UsersPeer::USR_CELLULAR => 16, UsersPeer::USR_ZIP_CODE => 17, UsersPeer::DEP_UID => 18, UsersPeer::USR_POSITION => 19, UsersPeer::USR_RESUME => 20, UsersPeer::USR_BIRTHDAY => 21, UsersPeer::USR_ROLE => 22, UsersPeer::USR_REPORTS_TO => 23, UsersPeer::USR_REPLACED_BY => 24, UsersPeer::USR_UX => 25, ),
+		BasePeer::TYPE_FIELDNAME => array ('USR_UID' => 0, 'USR_USERNAME' => 1, 'USR_PASSWORD' => 2, 'USR_FIRSTNAME' => 3, 'USR_LASTNAME' => 4, 'USR_EMAIL' => 5, 'USR_DUE_DATE' => 6, 'USR_CREATE_DATE' => 7, 'USR_UPDATE_DATE' => 8, 'USR_STATUS' => 9, 'USR_COUNTRY' => 10, 'USR_CITY' => 11, 'USR_LOCATION' => 12, 'USR_ADDRESS' => 13, 'USR_PHONE' => 14, 'USR_FAX' => 15, 'USR_CELLULAR' => 16, 'USR_ZIP_CODE' => 17, 'DEP_UID' => 18, 'USR_POSITION' => 19, 'USR_RESUME' => 20, 'USR_BIRTHDAY' => 21, 'USR_ROLE' => 22, 'USR_REPORTS_TO' => 23, 'USR_REPLACED_BY' => 24, 'USR_UX' => 25, ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, )
 	);
 
 	/**
@@ -282,6 +285,8 @@ abstract class BaseUsersPeer {
 		$criteria->addSelectColumn(UsersPeer::USR_REPORTS_TO);
 
 		$criteria->addSelectColumn(UsersPeer::USR_REPLACED_BY);
+
+		$criteria->addSelectColumn(UsersPeer::USR_UX);
 
 	}
 

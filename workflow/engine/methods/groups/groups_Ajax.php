@@ -122,6 +122,7 @@ switch ($_POST['action'])
  
     $oCriteria->addSelectColumn(GroupwfPeer::GRP_UID);
     $oCriteria->addSelectColumn(GroupwfPeer::GRP_STATUS);
+    $oCriteria->addSelectColumn(GroupwfPeer::GRP_UX);
     $oCriteria->addSelectColumn(ContentPeer::CON_VALUE);
     $oCriteria->addAsColumn('GRP_TASKS', 0);
     $oCriteria->addAsColumn('GRP_USERS', 0);
@@ -142,6 +143,9 @@ switch ($_POST['action'])
     
     $members = new GroupUser();
     $aMembers = $members->getCountAllUsersByGroup();
+
+    require_once PATH_CONTROLLERS . 'adminProxy.php';
+    $uxList = adminProxy::getUxTypesList();
     
     $arrData = Array();
     while ($oDataset->next()){
@@ -149,8 +153,10 @@ switch ($_POST['action'])
       $row['GRP_TASKS'] = isset($aTask[$row['GRP_UID']]) ? $aTask[$row['GRP_UID']] : 0;
       $row['GRP_USERS'] = isset($aMembers[$row['GRP_UID']]) ? $aMembers[$row['GRP_UID']] : 0;      
       $group = GroupwfPeer::retrieveByPK($row['GRP_UID']);  
-      $row['CON_VALUE']= $group->getGrpTitle();
-      $arrData[] = $row; 
+      $row['CON_VALUE'] = $group->getGrpTitle();
+      $row['GRP_UX']    = isset($uxList[$row['GRP_UX']]) ? $uxList[$row['GRP_UX']] : $uxList['NORMAL'];
+
+      $arrData[] = $row;
     }
 
     echo '{success: true, groups: '.G::json_encode($arrData).', total_groups: '.$totalRows.'}';

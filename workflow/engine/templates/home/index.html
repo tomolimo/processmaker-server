@@ -4,7 +4,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=yes" /> 
 
   <link rel="shortcut icon" href="/images/favicon.ico"   type="image/x-icon"/>
-  <link rel="stylesheet" href="/js/jquery/css/esmothness/jquery-ui-1.8.17.custom.css" type="text/css">
+  <link rel="stylesheet" href="/js/jquery/css/smoothness/jquery-ui-1.8.17.custom.css" type="text/css">
   <link rel="stylesheet" href="/css/simplified.css" media="screen" rel="stylesheet" type="text/css" />
 
   <script type="text/javascript" src="/js/jquery/jquery-1.7.1.min.js"></script>
@@ -68,19 +68,19 @@
 
           <ul class="nav primary-nav">
             <li class="account">
-              <a class="menu user-actions" href="#" onclick="redirect('home/init?t=in')" title="My Inbox">
+              <a class="menu user-actions" href="#" onclick="redirect('home/appList?t=in')" title="My Inbox">
                 <img alt="A99679add21e8b0704ea5f0fb569572c_mini" src="/images/simplified/in-set-grey.png"  />
                 <!-- <span class="menu-label screen-name">new cases</span> -->
               </a>
             </li>
 
             <li class="account">
-              <a class="menu user-actions" href="#" onclick="redirect('home/init?t=draft')" title="My Drafts">
+              <a class="menu user-actions" href="#" onclick="redirect('home/appList?t=draft')" title="My Drafts">
                 <img alt="A99679add21e8b0704ea5f0fb569572c_mini" src="/images/simplified/folder-grey.png"  />
                 <!-- <span class="menu-label screen-name">new cases</span> -->
               </a>
             </li>
-
+            {if $canStartCase neq false}
             <li class="account">
               <a class="menu user-actions" href="#">
                 <img alt="A99679add21e8b0704ea5f0fb569572c_mini" src="/images/simplified/plus-set-grey.png"  title="Start a new Application"/>
@@ -95,7 +95,7 @@
                 {/foreach}
               </ul>
             </li>
-
+            {/if}
           </ul> 
 
           <ul class="nav secondary-nav">
@@ -120,7 +120,7 @@
     <!-- end topbar -->     
   </div>
 
-  <iframe id="iframex" name="iframex" src="home/init" width="100%" height="200" scrolling="yes" frameborder="0"></iframe>
+  <iframe id="iframex" name="iframex" src="home/appList" width="100%" height="200" scrolling="yes" frameborder="0"></iframe>
   
   
   {literal} 

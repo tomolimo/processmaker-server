@@ -437,6 +437,7 @@
     <column name="GRP_UID" type="VARCHAR" size="32" required="true" primaryKey="true" default=""/>
     <column name="GRP_STATUS" type="CHAR" size="8" required="true" default="ACTIVE"/>
     <column name="GRP_LDAP_DN" type="VARCHAR" size="255" required="true" default=""/>
+    <column name="GRP_UX" type="VARCHAR" size="128" default="NORMAL"/>
     <validator column="GRP_STATUS">
       <rule name="validValues" value="ACTIVE|INACTIVE" message="Please select a valid status."/>
       <rule name="required" message="Application Document UID is required."/>
@@ -1389,6 +1390,7 @@
     <column name="USR_ROLE" type="VARCHAR" size="32" default="PROCESSMAKER_ADMIN"/>
     <column name="USR_REPORTS_TO" type="VARCHAR" size="32" default=""/>
     <column name="USR_REPLACED_BY" type="VARCHAR" size="32" default=""/>
+    <column name="USR_UX" type="VARCHAR" size="128" default="NORMAL"/>
     <validator column="USR_STATUS">
       <rule name="validValues" value="ACTIVE|INACTIVE|VACATION|CLOSED" message="Please select a valid type."/>
       <rule name="required" message="Type is required."/>

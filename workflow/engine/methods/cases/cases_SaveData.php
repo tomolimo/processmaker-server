@@ -234,11 +234,16 @@ try {
     G::header ( 'location: ' . $_SERVER ['HTTP_REFERER'] );
     die ();
   }
+
   $_SESSION ['STEP_POSITION'] = $aNextStep ['POSITION'];
-
   $_SESSION['BREAKSTEP']['NEXT_STEP'] = $aNextStep ['PAGE'];
+  $debuggerAvailable = true;
 
-  if ($trigger_debug_session) {
+  if (isset($_SESSION['user_experience']) && $_SESSION['user_experience'] == 'simplified') {
+    $debuggerAvailable = false;
+  }
+
+  if ($trigger_debug_session && $debuggerAvailable) {
     $_SESSION ['TRIGGER_DEBUG'] ['BREAKPAGE'] = $aNextStep ['PAGE'];
     $aNextStep ['PAGE'] = $aNextStep ['PAGE'] . '&breakpoint=triggerdebug';
   }

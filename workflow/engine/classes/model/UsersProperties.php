@@ -188,8 +188,11 @@ class UsersProperties extends BaseUsersProperties {
     }
     return $aErrors;
   }
-  public function redirectTo($sUserUID, $sLanguage = 'en') {
+  
+  public function redirectTo($sUserUID, $sLanguage = 'en') 
+  {
     global $RBAC;
+    
     //get the plugins, and check if there is redirectLogins
     //if yes, then redirect goes according his Role
     if ( class_exists('redirectDetail')) {
@@ -208,6 +211,36 @@ class UsersProperties extends BaseUsersProperties {
       }
     }
     //end plugin
+
+    /**
+     * New feature - User Experience Redirector
+     * @author Erik Amaru Ortiz <erik@colosa.com>
+     */
+    require_once 'classes/model/Users.php';
+    $u = UsersPeer::retrieveByPK($sUserUID);
+    $uxType = $u->getUsrUx();
+
+    // find a group setting
+    if ($uxType == '' || $uxType == 'NORMAL') {
+      require_once 'classes/model/GroupUser.php';
+      $gu = new GroupUser();
+      $ugList = $gu->getAllUserGroups($sUserUID);
+      
+      foreach ($ugList as $row) {
+        if ($row['GRP_UX'] != 'NORMAL' && $row['GRP_UX'] != '') {
+          $uxType = $row['GRP_UX'];
+          break;
+        }
+      }
+    }
+    
+    switch ($uxType) {
+      case 'SIMPLIFIED':
+        return '/sys' .  SYS_SYS . '/' . $sLanguage . '/' . SYS_SKIN . '/' . 'home';
+        break;
+    }
+
+
 
     #New feature by Erik erik@colosa.com>
     #get user preferences for default redirect

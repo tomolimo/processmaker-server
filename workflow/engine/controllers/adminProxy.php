@@ -22,9 +22,55 @@
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  *
  */
+
 class adminProxy extends HttpProxyController
 {    
-  function calendarSave() {    
+  function uxUserUpdate($httpData)
+  {
+    require_once 'classes/model/Users.php';
+    $data = (array) json_decode($httpData->users);
+
+    $user = UsersPeer::retrieveByPK($data['USR_UID']);
+    $user->setUsrUx($data['USR_UX']);
+    $user->save();
+    $row = $user->toArray(BasePeer::TYPE_FIELDNAME);
+
+    $uxList = self::getUxTypesList();
+    $row['USR_UX'] = $uxList[$user->getUsrUx()];
+
+    return array('success' => true, 'message'=>'done', 'users'=>$row);
+  }
+
+  function uxGroupUpdate($httpData)
+  {
+    require_once 'classes/model/Groupwf.php';
+    $data = (array) json_decode($httpData->groups);
+
+    $group = GroupwfPeer::retrieveByPK($data['GRP_UID']);
+    $group->setGrpUx($data['GRP_UX']);
+    $group->save();
+
+    $g = new Groupwf();
+    //$row = $group->toArray(BasePeer::TYPE_FIELDNAME);
+    $row = $g->Load($group->getGrpUid());
+    $row['CON_VALUE'] = $row['GRP_TITLE'];
+
+    $uxList = self::getUxTypesList();
+    $row['GRP_UX'] = $uxList[$group->getGrpUx()];
+
+    return array('success' => true, 'message'=>'done', 'groups'=>$row);
+  }
+
+  function getUxTypesList()
+  {
+    return Array(
+      'NORMAL' => 'Normal',
+      'SIMPLIFIED' => 'Simplified'
+    );
+  }
+
+  function calendarSave() 
+  {    
     //{ $_POST['BUSINESS_DAY']
     $businessDayArray = G::json_decode($_POST['BUSINESS_DAY']);
     $businessDayFixArray = array();      
@@ -86,7 +132,7 @@ class adminProxy extends HttpProxyController
     
   }// end testingOption function
   
-   /**
+  /**
    * saving the authentication source data
    * @param object $params
    * @return array $data
