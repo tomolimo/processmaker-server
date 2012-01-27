@@ -32,7 +32,7 @@ try {
     G::LoadClass('xmlfield_Image');
   }
   require_once 'classes/model/Users.php';
-  require_once 'classes/model/Department.php';
+  require_once 'classes/model/Department.php';  
   
   $_SESSION['CURRENT_USER'] = $_GET['USR_UID'];
   $oUser                    = new Users();
@@ -144,14 +144,15 @@ try {
   global $_DBArray;
   $_DBArray['aUserInfo']  = $aUserInfo;
   $_SESSION['_DBArray'] = $_DBArray;
-	
-  //always show this form  users_EditRT.xml.
-	$G_PUBLISH->AddContent('xmlform', 'xmlform', 'users/users_EditRT.xml', '', $aFields, 'users_Save?USR_UID=' . $_SESSION['CURRENT_USER']);
-  //if (isset($aFields['DEP_UID'])  && isset($aFields['USR_REPORTS_TO']) &&  $aFields['DEP_UID']!='' && $aFields['USR_REPORTS_TO']!='')
-  //	$G_PUBLISH->AddContent('xmlform', 'xmlform', 'users/users_EditRT.xml', '', $aFields, 'users_Save?USR_UID=' . $_SESSION['CURRENT_USER']);
-  //else
-  //	$G_PUBLISH->AddContent('xmlform', 'xmlform', 'users/users_Edit.xml', '', $aFields, 'users_Save?USR_UID=' . $_SESSION['CURRENT_USER']);
-  
+  if ($_GET['USR_AUTH_SOURCE'] == 'ProcessMaker (MYSQL)') {
+    //always show this form  users_EditRT.xml.
+    $G_PUBLISH->AddContent('xmlform', 'xmlform', 'users/users_EditRT.xml', '', $aFields, 'users_Save?USR_UID=' . $_SESSION['CURRENT_USER']);  
+  }
+  else {
+    //for users ldap always show this form users_EditLDAP.xml.
+    $G_PUBLISH->AddContent('xmlform', 'xmlform', 'users/users_EditLDAP.xml', '', $aFields, 'users_Save?USR_UID=' . $_SESSION['CURRENT_USER']);  
+  }
+ 
   G::RenderPage('publish','blank');
 }
 catch (Exception $oException) {

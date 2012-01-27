@@ -414,8 +414,8 @@ SummaryTabOpen = function(){
 //Edit User Action
 EditUserAction = function(){
   var uid = infoGrid.getSelectionModel().getSelected();
-  if (uid){
-  location.href = 'users_Edit?USR_UID=' + uid.data.USR_UID;
+  if (uid) {
+    location.href = 'users_Edit?USR_UID=' + uid.data.USR_UID+'&USR_AUTH_SOURCE=' + uid.data.USR_AUTH_SOURCE;
   }
 };
 
