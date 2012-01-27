@@ -496,6 +496,7 @@
     $caseColumns[] = array( 'header' => G::LoadTranslation('ID_TASK'),        'dataIndex' => 'APP_TAS_TITLE',   'width' => 120 );
 
     $caseColumns[] = array( 'header' => G::LoadTranslation('ID_SENT_BY'),     'dataIndex' => 'APP_DEL_PREVIOUS_USER', 'width' => 90 );
+    $caseColumns[] = array( 'header' => G::LoadTranslation('ID_DUE_DATE'),    'dataIndex' => 'DEL_TASK_DUE_DATE', 'width' => 110);
     $caseColumns[] = array( 'header' => G::LoadTranslation('ID_LAST_MODIFY'), 'dataIndex' => 'APP_UPDATE_DATE',   'width' => 80 );
 
 //    $caseColumns[] = array( 'header' => G::LoadTranslation('ID_COMPLETED_BY_USER'),'dataIndex' => 'APP_CURRENT_USER','width' => 110 );
