@@ -706,7 +706,7 @@ function run_new_plugin($task, $args) {
   //  savePluginFile($pluginName . PATH_SEP . 'report.xml', 'pluginReport.xml', $pluginName, $pluginName, $fields);
   //}
 
-  $report = strtolower(prompt('Create a PmFunction Class for extend Processmaker [y/N]'));
+  $report = strtolower(prompt('Create a PmFunction Class for extending Processmaker [y/N]'));
   if( $report == 'y' ) {
     $fields['PmFunction'][] = array (
       'className' => $pluginName
