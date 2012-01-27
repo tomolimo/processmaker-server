@@ -964,7 +964,17 @@ class wsBase
         return $result;
       }
 
-      $department = new department();  
+      $department = new Department();
+      if ( ($parentUID != '') && !($department->existsDepartment($parentUID)) ) {
+        $result = new wsCreateDepartmentResponse (26, G::loadTranslation ('ID_PARENT_DEPARTMENT_NOT_EXIST'), $parentUID);
+        return $result;
+      }
+
+      if ( $department->checkDepartmentName($departmentName, $parentUID ) ) {
+        $result = new wsCreateDepartmentResponse (27, G::loadTranslation ('ID_DEPARTMENT_EXISTS'), '');
+        return $result;
+      }
+
       $row['DEP_TITLE'] = $departmentName;
       $row['DEP_PARENT'] = $parentUID;
 

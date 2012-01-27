@@ -444,6 +444,37 @@ function getDepartments( $DepParent )  {
     }
   }
 
+  /**
+   * Check department name exist in the level
+   * @param      string  $departmentName    name of the department
+   * @param      string  $parentUID         parent UID of the department
+   * @param      string  $departmentUID     department UID
+   * @return     boolean $Fields            true or false
+   *
+   */
+  function checkDepartmentName($departmentName, $parentUID, $departmentUID = '' )
+  {
+    $oCriteria = new Criteria('workflow');
+
+    $oCriteria->clearSelectColumns();
+    $oCriteria->addSelectColumn( ContentPeer::CON_CATEGORY );
+    $oCriteria->addSelectColumn( ContentPeer::CON_VALUE );
+    $oCriteria->addSelectColumn( DepartmentPeer::DEP_PARENT );
+    $oCriteria->add(ContentPeer::CON_CATEGORY, 'DEPO_TITLE');
+    $oCriteria->addJoin(ContentPeer::CON_ID, DepartmentPeer::DEP_UID, Criteria::LEFT_JOIN);
+    $oCriteria->add(ContentPeer::CON_VALUE, $departmentName);
+    $oCriteria->add(DepartmentPeer::DEP_UID, $departmentUID, Criteria::NOT_EQUAL);
+    $oCriteria->add(ContentPeer::CON_LANG, SYS_LANG );
+    $oCriteria->add(DepartmentPeer::DEP_PARENT, $parentUID);
+
+    $oDataset = DepartmentPeer::doSelectRS($oCriteria);
+    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    $oDataset->next();
+    $aRow = $oDataset->getRow();
+
+    return ($aRow) ? true : false;
+  }
+
   function getUsersFromDepartment( $sDepUid, $sManagerUid )  {
     try {
       $oCriteria = new Criteria('workflow');

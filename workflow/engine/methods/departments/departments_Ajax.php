@@ -185,24 +185,9 @@ switch ($_POST['action'])
   	$dep_name = $_REQUEST['name'];
   	$dep_uid = $_REQUEST['uid'];
   	
-  	$oCriteria = new Criteria('workflow');
-  	$oCriteria->clearSelectColumns();
-		$oCriteria->addSelectColumn( ContentPeer::CON_CATEGORY );
-		$oCriteria->addSelectColumn( ContentPeer::CON_VALUE );
-		$oCriteria->addSelectColumn(DepartmentPeer::DEP_PARENT);
-		$oCriteria->add(ContentPeer::CON_CATEGORY,  'DEPO_TITLE');
-		$oCriteria->addJoin(ContentPeer::CON_ID, DepartmentPeer::DEP_UID, Criteria::LEFT_JOIN);
-		$oCriteria->add(ContentPeer::CON_VALUE,  $dep_name);
-		$oCriteria->add(DepartmentPeer::DEP_UID,$dep_uid,Criteria::NOT_EQUAL);
-		$oCriteria->add(ContentPeer::CON_LANG,  SYS_LANG ); 
-		$oCriteria->add(DepartmentPeer::DEP_PARENT,$parent);
-	
-		$oDataset = DepartmentPeer::doSelectRS($oCriteria);
-    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-    $oDataset->next();
-    $aRow = $oDataset->getRow();
-    
-    echo (!$aRow) ? 'true' : 'false';
+    $oDepartment = new Department();
+    $checkVal    = $oDepartment->checkDepartmentName($dep_name, $parent, $dep_uid );
+    echo ( !$checkVal ) ? 'true' : 'false';
     break;
   	
   case 'saveDepartment':
