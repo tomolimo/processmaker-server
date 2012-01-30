@@ -80,15 +80,18 @@ try {
       unset($oClass);
     }
     $res = $tar->extract ( $path );
-    $sContent = file_get_contents($path . PATH_SEP . $pluginFile);
+    $sContent = file_get_contents($path . $pluginFile);
     $sContent = str_ireplace($sAux, $sAux . '_', $sContent);
     $sContent = str_ireplace('PATH_PLUGINS', "'".$path."'", $sContent);
-    $sContent = str_ireplace('$oPluginRegistry =& PMPluginRegistry::getSingleton();', '', $sContent);
-    $sContent = str_ireplace('$oPluginRegistry->registerPlugin(\'' . $sClassName . '\', __FILE__);', '', $sContent);
+    $sContent = preg_replace("/\\\$oPluginRegistry\s*=\s*&\s*PMPluginRegistry::getSingleton\(\);/i", null, $sContent);
+    $sContent = preg_replace("/\\\$oPluginRegistry->registerPlugin\([\"\']" . $sClassName . "[\"\'], __FILE__\);/i", null, $sContent);
+    
     //header('Content-Type: text/plain');var_dump($sClassName, $sContent);die;
-    file_put_contents($path . PATH_SEP . $pluginFile, $sContent);
+    file_put_contents($path . $pluginFile, $sContent);
     $sAux = $sAux . '_';
-    include $path . PATH_SEP . $pluginFile;
+
+    include ($path . $pluginFile);
+
     $oClass = new $sAux($sClassName);
     $fVersionNew = $oClass->iVersion;
     if (!isset($oClass->iPMVersion)) {
