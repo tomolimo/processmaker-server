@@ -1,7 +1,7 @@
 <form action="r">
-  Server: <input type="text" name="srv" value="<?echo isset($_GET['srv'])?$_GET['srv']:'';?>">
-  User: <input type="text" name="usr" value="<?echo isset($_GET['usr'])?$_GET['usr']:'';?>"/>
-  Passwd: <input type="text" name="pass" value="<?echo isset($_GET['pass'])?$_GET['pass']:'';?>"/>
+  Server: <input type="text" name="srv" value="<?php echo isset($_GET['srv'])?$_GET['srv']:'';?>">
+  User: <input type="text" name="usr" value="<?php echo isset($_GET['usr'])?$_GET['usr']:'';?>"/>
+  Passwd: <input type="text" name="pass" value="<?php echo isset($_GET['pass'])?$_GET['pass']:'';?>"/>
   <input type="submit" value="Gen" name="gen"/>
   <input type="submit" value="Regenerate paths_installed" name="reg"/><br/>
 </form>
