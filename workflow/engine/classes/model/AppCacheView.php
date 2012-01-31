@@ -10,14 +10,14 @@ require_once 'classes/model/om/BaseAppCacheView.php';
 /**
  * Skeleton subclass for representing a row from the 'APP_CACHE_VIEW' table.
  *
- * 
+ *
  *
  * You should add additional methods to this class to meet the
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  *
  */
- 
+
 require_once 'classes/model/Application.php';
 require_once 'classes/model/AppDelegation.php';
 require_once 'classes/model/AppDelay.php';
@@ -32,7 +32,7 @@ require_once 'classes/model/AdditionalTables.php';
 class AppCacheView extends BaseAppCacheView {
 	var $confCasesList;
 	var $pathToAppCacheFiles;
-	
+
   function getAllCounters ( $aTypes, $userUid, $processSummary = false ) {
     $aResult = Array();
     foreach($aTypes as $type){
@@ -43,29 +43,29 @@ class AppCacheView extends BaseAppCacheView {
 
   function getListCounters ( $type, $userUid, $processSummary ) {
   	switch ( $type ) {
-  		case 'to_do' : 
+  		case 'to_do' :
   	    $Criteria = $this->getToDoCountCriteria( $userUid );
   	    break;
-  		case 'draft' : 
+  		case 'draft' :
   	    $Criteria = $this->getDraftCountCriteria( $userUid );
   	    break;
-  		case 'sent' : 
+  		case 'sent' :
   	    $Criteria = $this->getSentCountCriteria( $userUid );
         return AppCacheViewPeer::doCount($Criteria, true);
   	    break;
-  		case 'selfservice' : 
+  		case 'selfservice' :
   	    $Criteria = $this->getUnassignedCountCriteria( $userUid );
   	    break;
-  		case 'paused' : 
+  		case 'paused' :
   	    $Criteria = $this->getPausedCountCriteria( $userUid );
   	    break;
-  		case 'completed' : 
+  		case 'completed' :
   	    $Criteria = $this->getCompletedCountCriteria( $userUid );
   	    break;
-  		case 'cancelled' : 
+  		case 'cancelled' :
   	    $Criteria = $this->getCancelledCountCriteria( $userUid );
   	    break;
-  		case 'to_revise' : 
+  		case 'to_revise' :
   	    $Criteria = $this->getToReviseCountCriteria( $userUid );
   	    break;
   	  default :
@@ -73,7 +73,7 @@ class AppCacheView extends BaseAppCacheView {
     }
     return AppCacheViewPeer::doCount($Criteria);
   }
-  
+
   /**
    * gets the todo cases list criteria
    * param $userUid the current userUid
@@ -106,7 +106,7 @@ class AppCacheView extends BaseAppCacheView {
   function getToDoCountCriteria ($userUid) {
   	return $this->getToDo($userUid, true);
   }
-  
+
   /**
    * gets the todo cases list criteria for list
    * param $userUid the current userUid
@@ -139,7 +139,7 @@ class AppCacheView extends BaseAppCacheView {
     $Criteria->add (AppCacheViewPeer::DEL_THREAD_STATUS, 'OPEN');
     return $Criteria;
   }
-  
+
     /**
    * gets the DRAFT cases list criteria for count
    * param $userUid the current userUid
@@ -148,7 +148,7 @@ class AppCacheView extends BaseAppCacheView {
   function getDraftCountCriteria ($userUid) {
   	return $this->getDraft($userUid, true);
   }
-  
+
    /**
    * gets the DRAFT cases list criteria for list
    * param $userUid the current userUid
@@ -181,7 +181,7 @@ class AppCacheView extends BaseAppCacheView {
     $Criteria->add (AppCacheViewPeer::DEL_THREAD_STATUS, 'OPEN');
     return $Criteria;
   }
-  
+
     /**
    * gets the SENT cases list criteria for count
    * param $userUid the current userUid
@@ -195,7 +195,7 @@ class AppCacheView extends BaseAppCacheView {
 
     return $Criteria;
   }
-  
+
    /**
    * gets the SENT cases list criteria for list
    * param $userUid the current userUid
@@ -205,18 +205,18 @@ class AppCacheView extends BaseAppCacheView {
     $Criteria = $this->addPMFieldsToCriteria('sent');
     //$Criteria->addAsColumn( 'MAX_DEL_INDEX', 'MAX(' . AppDelegationPeer::DEL_INDEX . ')' );
     //$Criteria->addJoin ( AppCacheViewPeer::APP_UID , AppDelegationPeer::APP_UID, Criteria::LEFT_JOIN);
-    
+
     $Criteria->add (AppCacheViewPeer::USR_UID, $userUid);
 
     $Criteria->addGroupByColumn(AppCacheViewPeer::APP_UID);
     //$Criteria->addGroupByColumn(AppCacheViewPeer::APP_);
-    return $Criteria;  	
+    return $Criteria;
   }
 
   function getSentListProcessCriteria ($userUid) {
     $Criteria = $this->addPMFieldsToCriteria('sent');
     $Criteria->add (AppCacheViewPeer::USR_UID, $userUid);
-    return $Criteria;  	
+    return $Criteria;
   }
 
   /*
@@ -293,7 +293,7 @@ class AppCacheView extends BaseAppCacheView {
     }
 
     $oCase = new Cases();
-    $tasks = $this->getSelfServiceTasks( $userUid ); 
+    $tasks = $this->getSelfServiceTasks( $userUid );
     // adding configuration fields from the configuration options
     // and forming the criteria object
     if ( $doCount && !isset($this->confCasesList['PMTable']) && !empty($this->confCasesList['PMTable'])) {
@@ -307,13 +307,13 @@ class AppCacheView extends BaseAppCacheView {
     $Criteria->add (AppCacheViewPeer::DEL_FINISH_DATE, null, Criteria::ISNULL);
 //    $Criteria->add (AppCacheViewPeer::APP_THREAD_STATUS, 'OPEN');
 //    $Criteria->add (AppCacheViewPeer::DEL_THREAD_STATUS, 'OPEN');
-    
+
     $Criteria->add(AppCacheViewPeer::USR_UID, '');
-    $Criteria->add(AppCacheViewPeer::TAS_UID, $tasks , Criteria::IN );    
+    $Criteria->add(AppCacheViewPeer::TAS_UID, $tasks , Criteria::IN );
 
     return $Criteria;
   }
-  
+
     /**
    * gets the UNASSIGNED cases list criteria for count
    * param $userUid the current userUid
@@ -322,7 +322,7 @@ class AppCacheView extends BaseAppCacheView {
   function getUnassignedCountCriteria ($userUid) {
   	return $this->getUnassigned($userUid, true);
   }
-  
+
    /**
    * gets the UNASSIGNED cases list criteria for list
    * param $userUid the current userUid
@@ -349,18 +349,18 @@ class AppCacheView extends BaseAppCacheView {
     }
     $Criteria->add (AppCacheViewPeer::USR_UID, $userUid);
 
-    //join with APP_DELAY table using APP_UID and DEL_INDEX    
+    //join with APP_DELAY table using APP_UID and DEL_INDEX
     $appDelayConds[] = array(AppCacheViewPeer::APP_UID, AppDelayPeer::APP_UID);
     $appDelayConds[] = array(AppCacheViewPeer::DEL_INDEX, AppDelayPeer::APP_DEL_INDEX);
     $Criteria->addJoinMC($appDelayConds, Criteria::LEFT_JOIN);
-    
+
     $Criteria->add($Criteria->getNewCriterion(AppDelayPeer::APP_DISABLE_ACTION_USER, null, Criteria::ISNULL)->addOr($Criteria->getNewCriterion(AppDelayPeer::APP_DISABLE_ACTION_USER, 0)));
 
     $Criteria->add(AppDelayPeer::APP_DELAY_UID, null, Criteria::ISNOTNULL);
     $Criteria->add(AppDelayPeer::APP_TYPE, 'PAUSE');
     return $Criteria;
   }
-  
+
     /**
    * gets the PAUSED cases list criteria for count
    * param $userUid the current userUid
@@ -369,7 +369,7 @@ class AppCacheView extends BaseAppCacheView {
   function getPausedCountCriteria ($userUid) {
   	return $this->getPaused($userUid, true);
   }
-  
+
   /**
    * gets the PAUSED cases list criteria for list
    * param $userUid the current userUid
@@ -412,10 +412,10 @@ class AppCacheView extends BaseAppCacheView {
     $c->add(AppCacheViewPeer::DEL_FINISH_DATE,   null,  Criteria::ISNULL);
     $c->add(AppCacheViewPeer::APP_THREAD_STATUS, 'OPEN');
     $c->add(AppCacheViewPeer::DEL_THREAD_STATUS, 'OPEN');
-   
+
     return $c;
   }
-  
+
     /**
    * gets the ToRevise cases list criteria for count
    * param $userUid the current userUid
@@ -424,7 +424,7 @@ class AppCacheView extends BaseAppCacheView {
   function getToReviseCountCriteria ($userUid) {
   	return $this->getToRevise($userUid, true);
   }
-  
+
    /**
    * gets the PAUSED cases list criteria for list
    * param $userUid the current userUid
@@ -460,10 +460,10 @@ class AppCacheView extends BaseAppCacheView {
 
     //$c->add(AppDelegationPeer::DEL_PREVIOUS, '0', Criteria::NOT_EQUAL);
     $Criteria->addGroupByColumn(AppCacheViewPeer::APP_UID);
-   
+
     return $Criteria;
   }
-  
+
   /**
    * gets the COMPLETED cases list criteria for count
    * param $userUid the current userUid
@@ -472,7 +472,7 @@ class AppCacheView extends BaseAppCacheView {
   function getCompletedCountCriteria ($userUid) {
   	return $this->getCompleted($userUid, true);
   }
-  
+
   /**
    * gets the COMPLETED cases list criteria for list
    * param $userUid the current userUid
@@ -501,10 +501,10 @@ class AppCacheView extends BaseAppCacheView {
     $Criteria->add (AppCacheViewPeer::APP_STATUS, "CANCELLED" , CRITERIA::EQUAL );
     $Criteria->add (AppCacheViewPeer::USR_UID, $userUid);
     $Criteria->add (AppCacheViewPeer::DEL_THREAD_STATUS, 'CLOSED');
-    
+
     return $Criteria;
   }
-  
+
   /**
    * gets the CANCELLED cases list criteria for count
    * param $userUid the current userUid
@@ -513,7 +513,7 @@ class AppCacheView extends BaseAppCacheView {
   function getCancelledCountCriteria ($userUid) {
   	return $this->getCancelled($userUid, true);
   }
-  
+
   /**
    * gets the CANCELLED cases list criteria for list
    * param $userUid the current userUid
@@ -534,7 +534,7 @@ class AppCacheView extends BaseAppCacheView {
     return $Criteria;
   	//return $this->getSearchCriteria( true);
   }
-  
+
   function getSearchAllCount ( ) {
     $CriteriaCount = new Criteria('workflow');
     $totalCount = ApplicationPeer::doCount( $CriteriaCount);
@@ -549,7 +549,7 @@ class AppCacheView extends BaseAppCacheView {
   function getSearchListCriteria () {
     $Criteria = $this->addPMFieldsToCriteria('sent');
     $Criteria->addAsColumn( 'MAX_DEL_INDEX', 'MAX(' . AppCacheViewPeer::DEL_INDEX . ')' );
-    
+
     //$Criteria->add (AppCacheViewPeer::USR_UID, $userUid);
 
     $Criteria->addGroupByColumn(AppCacheViewPeer::APP_UID);
@@ -595,8 +595,8 @@ class AppCacheView extends BaseAppCacheView {
     $Criteria  = new Criteria('workflow');
     return $Criteria;
   }
-  
-  
+
+
   /**
    * gets the SENT cases list criteria for list
    * param $userUid the current userUid
@@ -625,7 +625,7 @@ class AppCacheView extends BaseAppCacheView {
     //$Criteria->add (AppCacheViewPeer::DEL_THREAD_STATUS, 'OPEN');
     return $Criteria;
   }
-  
+
 
   /**
    * loads the configuration fields from the database based in an action parameter
@@ -649,7 +649,7 @@ class AppCacheView extends BaseAppCacheView {
 
       $oAdditionalTables = AdditionalTablesPeer::retrieveByPK($this->confCasesList['PMTable']);
       $tableName = $oAdditionalTables->getAddTabName();
-  
+
       foreach($this->confCasesList['second']['data'] as $fieldData){
         if ( !in_array($fieldData['name'],$defaultFields) ){
           $fieldName = $tableName.'.'.$fieldData['name'];
@@ -667,28 +667,18 @@ class AppCacheView extends BaseAppCacheView {
               $configTable = 'APP_CACHE_VIEW';
             break;
           }
-          //filterign for some especial cases
-          switch($action) {
-            case 'sent':
-              if ($fieldData['name']!='DEL_INDEX'){
-                $fieldName = $configTable . '.' . $fieldData['name'];
-              }
-            break;
-            default:
-              $fieldName = $configTable . '.' . $fieldData['name'];
-            break;
-          }
-          $oCriteria->addSelectColumn (  $fieldName );
+          $fieldName = $configTable . '.' . $fieldData['name'];
+          $oCriteria->addSelectColumn($fieldName);
         }
       }
-  
+
       //add the default and hidden DEL_INIT_DATE
       $oCriteria->addSelectColumn ( 'APP_CACHE_VIEW.DEL_INIT_DATE' );
 //      $oCriteria->addAlias("PM_TABLE", $tableName);
       //Add the JOIN
       $oCriteria->addJoin(AppCacheViewPeer::APP_UID, $tableName.'.APP_UID', Criteria::LEFT_JOIN);
       return $oCriteria;
-    } 
+    }
     //else this list do not have a PM Table,
     else {
       if (is_array($this->confCasesList) && !empty($this->confCasesList['second']['data'])){
@@ -717,7 +707,7 @@ class AppCacheView extends BaseAppCacheView {
           }
           $oCriteria->addSelectColumn (  $fieldName );
         }
-      } 
+      }
       else {
         //foreach($defaultFields as $field){
         $oCriteria->addSelectColumn('*');
@@ -728,7 +718,7 @@ class AppCacheView extends BaseAppCacheView {
       return $oCriteria;
     }
   }
-  
+
   /**
    * gets the Criteria object for the general cases list.
    * @param Boolean $doCount
@@ -863,12 +853,12 @@ class AppCacheView extends BaseAppCacheView {
                   'APP_AUTOMATIC_DISABLED_DATE'
                 );
   }
-  
-  
+
+
   function setPathToAppCacheFiles ( $path ) {
-  	$this->pathToAppCacheFiles = $path; 
+  	$this->pathToAppCacheFiles = $path;
   }
-  
+
   function getMySQLVersion() {
     $con = Propel::getConnection("workflow");
     $stmt = $con->createStatement();
@@ -878,11 +868,11 @@ class AppCacheView extends BaseAppCacheView {
     $row = $rs1->getRow();
     return $row[0];
 
-  }  
+  }
 
   function checkGrantsForUser( $root = false ) {
-    try {      
-    	if ( $root ) 
+    try {
+    	if ( $root )
         $con = Propel::getConnection("root");
       else
         $con = Propel::getConnection("workflow");
@@ -893,25 +883,25 @@ class AppCacheView extends BaseAppCacheView {
       $rs1->next();
       $row = $rs1->getRow();
       $mysqlUser    = str_replace('@', "'@'", $row[0] );
-      
+
       $super = false;
-      $sql = "SELECT * FROM `information_schema`.`USER_PRIVILEGES` where GRANTEE = \"'$mysqlUser'\" and PRIVILEGE_TYPE = 'SUPER' "; 
+      $sql = "SELECT * FROM `information_schema`.`USER_PRIVILEGES` where GRANTEE = \"'$mysqlUser'\" and PRIVILEGE_TYPE = 'SUPER' ";
       $rs1 = $stmt->executeQuery($sql, ResultSet::FETCHMODE_ASSOC);
       $rs1->next();
       $row = $rs1->getRow();
       if ( is_array($row = $rs1->getRow() ) ) {
       	$super = true;
     	}
-      
+
       return array( 'user' => $mysqlUser, 'super' => $super );
     }
     catch ( Exception $e ) {
       return array( 'error' => true, 'msg' => $e->getMessage() );
     }
   }
-    
+
   function setSuperForUser( $mysqlUser ) {
-    try {      
+    try {
       $con = Propel::getConnection("root");
       $stmt = $con->createStatement();
       $sql = "GRANT SUPER on *.* to '$mysqlUser' ";
@@ -923,33 +913,33 @@ class AppCacheView extends BaseAppCacheView {
     }
 
   }
-  
+
   /**
-   * search for table APP_CACHE_VIEW  
+   * search for table APP_CACHE_VIEW
    * @return void
    *
    */
   function checkAppCacheView () {
     $con = Propel::getConnection("workflow");
     $stmt = $con->createStatement();
-    
+
     //check if table APP_CACHE_VIEW exists
-    $sql="SHOW TABLES"; 
+    $sql="SHOW TABLES";
     $rs1 = $stmt->executeQuery($sql, ResultSet::FETCHMODE_NUM);
     $rs1->next();
-    $found = false;     
+    $found = false;
     while ( is_array($row = $rs1->getRow() ) && !$found ) {
       if ( strtolower($row[0]) == 'app_cache_view' ) {
         $found = true;
       }
       $rs1->next();
     }
-    
+
     //now count how many records there are ..
     $count = '-';
     if ( $found ) {
-      $oCriteria = new Criteria('workflow');  
-      $count = AppCacheViewPeer::doCount($oCriteria);        
+      $oCriteria = new Criteria('workflow');
+      $count = AppCacheViewPeer::doCount($oCriteria);
     }
     return array( 'found' => $found, 'count' => $count );
 
@@ -962,8 +952,8 @@ class AppCacheView extends BaseAppCacheView {
   function fillAppCacheView ( $lang ) {
     $con = Propel::getConnection("workflow");
     $stmt = $con->createStatement();
-    
-    $sql ="truncate table APP_CACHE_VIEW ";  
+
+    $sql ="truncate table APP_CACHE_VIEW ";
     $rs1 = $stmt->executeQuery($sql, ResultSet::FETCHMODE_ASSOC);
 
     $filenameSql = $this->pathToAppCacheFiles .  'app_cache_view_insert.sql';
@@ -972,16 +962,16 @@ class AppCacheView extends BaseAppCacheView {
 
     $sql = explode ( ';', file_get_contents ( $filenameSql ) );
     foreach ( $sql as $key => $val ) {
-      $val = str_replace('{lang}', $lang, $val);      
+      $val = str_replace('{lang}', $lang, $val);
       $stmt->executeQuery($val);
     }
 
-    $sql = "select count(*) as CANT from APP_CACHE_VIEW ";  
+    $sql = "select count(*) as CANT from APP_CACHE_VIEW ";
     $rs1 = $stmt->executeQuery($sql, ResultSet::FETCHMODE_ASSOC);
     $rs1->next();
     $row1 = $rs1->getRow();
     $cant = $row1['CANT'];
-    
+
     return "done $cant rows in table APP_CACHE_VIEW";
   }
 
@@ -1014,13 +1004,13 @@ class AppCacheView extends BaseAppCacheView {
       if ( !file_exists ( $filenameSql ) )
         throw ( new Exception ( "file triggerAppDelegationInsert.sql doesn't exists ") );
       $sql = file_get_contents ( $filenameSql );
-      $sql = str_replace('{lang}', $lang, $sql);      
+      $sql = str_replace('{lang}', $lang, $sql);
       $stmt->executeQuery($sql);
       return 'created';
     }
     return 'exists';
   }
-  
+
 
   /**
    * update the App Delegation triggers
@@ -1052,7 +1042,7 @@ class AppCacheView extends BaseAppCacheView {
       if ( !file_exists ( $filenameSql ) )
         throw ( new Exception ( "file triggerAppDelegationUpdate.sql doesn't exists ") );
       $sql = file_get_contents ( $filenameSql );
-      $sql = str_replace('{lang}', $lang, $sql);      
+      $sql = str_replace('{lang}', $lang, $sql);
       $stmt->executeQuery($sql);
       return 'created';
     }
@@ -1088,13 +1078,13 @@ class AppCacheView extends BaseAppCacheView {
       if ( !file_exists ( $filenameSql ) )
         throw ( new Exception ( "file triggerAppDelegationUpdate.sql doesn't exist ") );
       $sql = file_get_contents ( $filenameSql );
-      $sql = str_replace('{lang}', $lang, $sql);      
+      $sql = str_replace('{lang}', $lang, $sql);
       $stmt->executeQuery($sql);
       return 'created';
     }
     return 'exists';
   }
-  
+
   /**
    * update the Application triggers
    * @return void
@@ -1125,7 +1115,7 @@ class AppCacheView extends BaseAppCacheView {
       if ( !file_exists ( $filenameSql ) )
         throw ( new Exception ( "file triggerAppDelegationDelete.sql doesn't exist") );
       $sql = file_get_contents ( $filenameSql );
-      $sql = str_replace('{lang}', $lang, $sql);      
+      $sql = str_replace('{lang}', $lang, $sql);
       $stmt->executeQuery($sql);
       return 'created';
     }
@@ -1185,7 +1175,7 @@ class AppCacheView extends BaseAppCacheView {
     }
     return ($rowData);
   }
-  
+
   //Added By Qennix
   function getTotalCasesByAllUsers(){
   	$oCriteria  = new Criteria('workflow');
@@ -1201,5 +1191,5 @@ class AppCacheView extends BaseAppCacheView {
 	}
 	return $aRows;
   }
-  
+
 } // AppCacheView
