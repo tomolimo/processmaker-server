@@ -481,6 +481,13 @@ if (isset($G_ENABLE_BLANK_SKIN) && $G_ENABLE_BLANK_SKIN) {
                 define('NO_DISPLAY_USERNAME', 0);
             }
             if (NO_DISPLAY_USERNAME == 0) {
+                    
+                $switch_interface = isset($_SESSION['user_experience']) && $_SESSION['user_experience'] == 'SWITCHABLE';
+
+                $smarty->assign('user_logged', (isset($_SESSION['USER_LOGGED'])? $_SESSION['USER_LOGGED'] : ''));
+                $smarty->assign('switch_interface', $switch_interface);
+                $smarty->assign('switch_interface_label', G::LoadTranslation('ID_SWITCH_INTERFACE'));
+
                 $smarty->assign('userfullname', isset($_SESSION['USR_FULLNAME']) ? $_SESSION['USR_FULLNAME'] : '');
                 $smarty->assign('user', isset($_SESSION['USR_USERNAME']) ? '(' . $_SESSION['USR_USERNAME'] . ')' : '');
                 $smarty->assign('rolename', isset($_SESSION['USR_ROLENAME']) ? $_SESSION['USR_ROLENAME'] . '' : '');

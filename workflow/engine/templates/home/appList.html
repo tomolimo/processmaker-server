@@ -3,8 +3,12 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=yes" /> 
+  
   <link rel="stylesheet" href="/css/simplified.css" media="screen" rel="stylesheet" type="text/css" />
+  <link rel="stylesheet" href="/js/jquery/css/smoothness/jquery-ui-1.8.17.custom.css" type="text/css">
+
   <script type="text/javascript" src="/js/jquery/jquery-1.7.1.min.js"></script>
+  <script type="text/javascript" src="/js/jquery/jquery-ui-1.8.17.min.js"></script>
 
   {literal}
   <style>
@@ -33,9 +37,9 @@
     $('.content-header').width(w-50);
   }
 
-  function showNt(appNum)
+  function showNt(appUid)
   {
-    var d = $('#m_'+appNum);
+    var d = $('#m_'+appUid);
 
     if (d.css('display') == 'block') {
       d.hide('slow');
@@ -43,6 +47,63 @@
     else {
       d.show('slow');
     }
+  }
+
+  function addNt(appUid)
+  {
+    $( "#dialog-add-note" ).dialog({
+      resizable: false,
+      height:178,
+      modal: true,
+      buttons: {
+        "Add Note": function() {
+          $(this).dialog("close");
+          $.post(
+            '../appProxy/postNote',
+            {appUid: appUid, noteText: $('textarea#note_text').val()},
+            function(responseText) {
+              updateNt(appUid);
+            }
+          );
+          //redirect('home/startCase?id='+id);
+        },
+        Cancel: function() {
+          $(this).dialog( "close" );
+        }
+      }
+    });
+  }
+
+  function updateNt(appUid)
+  {
+    $.post(
+      '../appProxy/getNotesList?appUid='+appUid,
+      {start:0, limit:100},
+      function(resp) {
+        data = jQuery.parseJSON(resp);
+        content = $('div#m_'+appUid);
+        content.html('');
+        
+        for (i=0; i<data.notes.length; i++) {
+          r = data.notes[i];
+          console.log(r);
+          s = '<div class="appMessage"><table border="0"><tr>' +
+                '<td width="50" valign="top">'+
+                  '<img border="0" src="../users/users_ViewPhotoGrid?pUID='+r.USR_UID+'" width="40" height="40"/>' +
+                '</td><td>' +
+                  '<h3>'+r.USR_FIRSTNAME+' '+r.USR_LASTNAME+' ('+r.USR_USERNAME+')</h3>' +
+                  '<p><pre>'+r.NOTE_CONTENT+'</pre>' +
+                  '<div class="appMessageDate">Posted at '+r.NOTE_DATE+'</div>' +
+                '</td></tr></table></div>';
+          console.log(s);
+          content.append(s);
+          $('#n_'+appUid).show('slow');
+        }
+        d = $('#m_'+appUid);
+        d.show('slow');
+      }
+    );
+    return true;
   }
   </script>
   {/literal}
@@ -60,11 +121,13 @@
             #{$APP.APP_NUMBER}
           </span>
           
-          {if $APP.NOTES_COUNT neq 0}
-          <span class="notes-link">
-            <a href="#" onclick="showNt('{$APP.APP_NUMBER}'); return false;"><img src="/images/simplified/messages-grey.png" height="20" width="20"></a>
+          <span id="n_{$APP.APP_UID}" class="notes-link" style="display:{if $APP.NOTES_COUNT neq 0}block{else}none{/if}">
+            <a href="#" onclick="showNt('{$APP.APP_UID}'); return false;"><img src="/images/simplified/messages-grey.png" height="20" width="20"></a>
           </span>
-          {/if}
+          
+          <span class="notes-plus-link">
+            <a href="#" onclick="addNt('{$APP.APP_UID}', '{$APP.APP_UID}'); return false;"><img src="/images/simplified/messages-grey-plus.png" height="21" width="21"></a>
+          </span>
           
           <p>
             <cite>
@@ -75,7 +138,7 @@
           <p>{$APP.APP_PRO_TITLE}
           <br/>{$APP.APP_TAS_TITLE}</p>
           
-          <div id="m_{$APP.APP_NUMBER}" class="appMessages">
+          <div id="m_{$APP.APP_UID}" class="appMessages">
           {if $APP.NOTES_COUNT neq 0}
             {foreach from=$APP.NOTES_LIST key=k item=NOTE}
               <div class="appMessage">
@@ -102,5 +165,13 @@
       </ul>
     </div>
   </center>
+
+  <div id="dialog-add-note" title="Case Note" style="display:none">
+    <p><!-- <span class="ui-icon ui-icon-document" style="float:left; margin:0 7px 20px 0;"></span> -->
+    <span id="startAppTitle"/>
+    <textarea id="note_text" rows="2" cols="22"></textarea>
+    </p>
+  </div>
+
  </body>
  </html>

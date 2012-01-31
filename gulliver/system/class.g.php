@@ -1676,6 +1676,11 @@ $output = $outputHeader.$output;
     $format  = str_replace('dd', '{DAY}', $format);
     $format  = str_replace('d', '{day}', $format);
 
+    $format  = str_replace('h', '{h}', $format);
+    $format  = str_replace('i', '{i}', $format);
+    $format  = str_replace('s', '{s}', $format);
+
+
     if ($lang==='') $lang=defined(SYS_LANG)?SYS_LANG:'en';
 
     $aux     = explode (' ', $date);  //para dividir la fecha del dia
@@ -1686,9 +1691,9 @@ $output = $outputHeader.$output;
     $month   = (int)((isset($date[1]))?$date[1]:'0'); //month
     $day     = (int)((isset($date[2]))?$date[2]:'0'); //day
 
-    $time[0] = (int)((isset($time[0]))?$time[0]:'0'); //hour
-    $time[1] = (int)((isset($time[1]))?$time[1]:'0'); //minute
-    $time[2] = (int)((isset($time[2]))?$time[2]:'0'); //second
+    $h = isset($time[0])? $time[0]: '00'; //hour
+    $i = isset($time[1])? $time[1]: '00'; //minute
+    $s = isset($time[2])? $time[2]: '00'; //second
 
     $MONTHS  = Array();
     for($i=1; $i<=12; $i++){
@@ -1707,8 +1712,8 @@ $output = $outputHeader.$output;
     $yy     = substr($year,strlen($year)-2,2);
     $yyyy   = $year;
 
-    $names  = array('{day}', '{DAY}', '{month}', '{YONTH}', '{XONTH}', '{year}', '{YEAR}');
-    $values = array($d, $dd, $m, $mm, $M, $yy, $yyyy);
+    $names  = array('{day}', '{DAY}', '{month}', '{YONTH}', '{XONTH}', '{year}', '{YEAR}', '{h}', '{i}', '{s}');
+    $values = array($d, $dd, $m, $mm, $M, $yy, $yyyy, $h, $i, $s);
 
     $ret    = str_replace( $names, $values, $format );
 

@@ -16,8 +16,10 @@ require_once 'classes/model/om/BaseUsersProperties.php';
 /**
  * @package    workflow.engine.classes.model
  */
-class UsersProperties extends BaseUsersProperties {
-    function UserPropertyExists($sUserUID) {
+class UsersProperties extends BaseUsersProperties 
+{
+  function UserPropertyExists($sUserUID) 
+  {
     try {
       $oUserProperty = UsersPropertiesPeer::retrieveByPk($sUserUID);
       if (is_object($oUserProperty) && get_class($oUserProperty) == 'UsersProperties') {
@@ -32,7 +34,8 @@ class UsersProperties extends BaseUsersProperties {
     }
   }
 
-  public function load($sUserUID) {
+  public function load($sUserUID) 
+  {
     try {
       $oUserProperty = UsersPropertiesPeer::retrieveByPK($sUserUID);
       if (!is_null($oUserProperty)) {
@@ -49,7 +52,8 @@ class UsersProperties extends BaseUsersProperties {
     }
   }
 
-  public function create($aData) {
+  public function create($aData) 
+  {
     $oConnection = Propel::getConnection(UsersPropertiesPeer::DATABASE_NAME);
     try {
       $oUserProperty = new UsersProperties();
@@ -75,7 +79,8 @@ class UsersProperties extends BaseUsersProperties {
     }
   }
 
-  public function update($aData) {
+  public function update($aData) 
+  {
     $oConnection = Propel::getConnection(UsersPropertiesPeer::DATABASE_NAME);
     try {
       $oUserProperty = UsersPropertiesPeer::retrieveByPK($aData['USR_UID']);
@@ -106,7 +111,8 @@ class UsersProperties extends BaseUsersProperties {
     }
   }
 
-  public function loadOrCreateIfNotExists($sUserUID, $aUserProperty = array()) {
+  public function loadOrCreateIfNotExists($sUserUID, $aUserProperty = array()) 
+  {
     if (!$this->UserPropertyExists($sUserUID)) {
       $aUserProperty['USR_UID'] = $sUserUID;
       if (!isset($aUserProperty['USR_LAST_UPDATE_DATE'])) {
@@ -123,7 +129,8 @@ class UsersProperties extends BaseUsersProperties {
     return $aUserProperty;
   }
 
-  public function validatePassword($sPassword, $sLastUpdate, $iChangePasswordNextTime) {
+  public function validatePassword($sPassword, $sLastUpdate, $iChangePasswordNextTime) 
+  {
     if (!defined('PPP_MINIMUM_LENGTH')) {
       define('PPP_MINIMUM_LENGTH', 5);
     }
@@ -219,6 +226,7 @@ class UsersProperties extends BaseUsersProperties {
     require_once 'classes/model/Users.php';
     $u = UsersPeer::retrieveByPK($sUserUID);
     $uxType = $u->getUsrUx();
+    $_SESSION['user_experience'] = 'NORMAL';
 
     // find a group setting
     if ($uxType == '' || $uxType == 'NORMAL') {
@@ -236,21 +244,21 @@ class UsersProperties extends BaseUsersProperties {
     
     switch ($uxType) {
       case 'SIMPLIFIED':
+      case 'SWITCHABLE':
+        $_SESSION['user_experience'] = $uxType;
         return '/sys' .  SYS_SYS . '/' . $sLanguage . '/' . SYS_SKIN . '/' . 'home';
         break;
     }
+    // end user experience redirection
 
-
-
-    #New feature by Erik erik@colosa.com>
-    #get user preferences for default redirect
-    #verifying if it has any preferences on the configurations table
+    // get user preferences for default redirect
+    // verifying if it has any preferences on configurations table
     G::loadClass('configuration');
     $oConf = new Configurations;
     $oConf->loadConfig($x, 'USER_PREFERENCES','','',$_SESSION['USER_LOGGED'],'');
-    if( sizeof($oConf->aConfig) > 0) { #this user has a configuration record
-    	
-    	//these is for backward compatibility, because now, we dont have user and dashboard menu.
+
+    if( sizeof($oConf->aConfig) > 0) { // this user has a configuration record
+    	// backward compatibility, because now, we don't have user and dashboard menu.
     	if ( $oConf->aConfig['DEFAULT_MENU'] == 'PM_USERS')     $oConf->aConfig['DEFAULT_MENU'] = 'PM_SETUP';
     	if ( $oConf->aConfig['DEFAULT_MENU'] == 'PM_DASHBOARD') $oConf->aConfig['DEFAULT_MENU'] = 'PM_SETUP';
     	

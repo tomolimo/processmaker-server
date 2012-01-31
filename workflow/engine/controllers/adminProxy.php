@@ -61,12 +61,26 @@ class adminProxy extends HttpProxyController
     return array('success' => true, 'message'=>'done', 'groups'=>$row);
   }
 
-  function getUxTypesList()
+  function getUxTypesList($type = 'assoc')
   {
-    return Array(
-      'NORMAL' => 'Normal',
-      'SIMPLIFIED' => 'Simplified'
-    );
+    $list = array();
+      
+    if ($type == 'assoc') {
+      $list = array(
+        'NORMAL' => 'Normal',
+        'SIMPLIFIED' => 'Simplified',
+        'SWITCHABLE' => 'Switchable'
+      );
+    }
+    else {
+      $list = array(
+        array('NORMAL', 'Normal'),
+        array('SIMPLIFIED', 'Simplified'),
+        array('SWITCHABLE', 'Switchable')
+      );
+    }
+
+    return $list;
   }
 
   function calendarSave() 

@@ -169,7 +169,7 @@ Ext.onReady(function(){
           editable: false,
           store: new Ext.data.ArrayStore({
             fields: ['id', 'name'],
-            data : [['NORMAL', 'Normal'], ['SIMPLIFIED', 'Simplified']] 
+            data : uxTypes
           }),
           listeners: {
             select: function(a, b) {
@@ -177,11 +177,10 @@ Ext.onReady(function(){
               role = row.get('USR_ROLE');
               //console.log(role)
 
-              if (role == 'PROCESSMAKER_ADMIN') {
-                PMExt.warning(_('ID_ERROR'), 'You can\'t assign this User Experience UI for users that have PROCESSMAKER_ADMIN role.');
-                this.setValue('NORMAL');
-              }
-
+              // if (role == 'PROCESSMAKER_ADMIN') {
+              //   PMExt.warning(_('ID_ERROR'), 'You can\'t assign this User Experience UI for users that have PROCESSMAKER_ADMIN role.');
+              //   this.setValue('NORMAL');
+              // }
             }
           }
         })
@@ -286,7 +285,7 @@ Ext.onReady(function(){
           editable: false,
           store: new Ext.data.ArrayStore({
             fields: ['id', 'name'],
-            data : [['NORMAL', 'Normal'], ['SIMPLIFIED', 'Simplified']] 
+            data : uxTypes 
           })
         })
       }
