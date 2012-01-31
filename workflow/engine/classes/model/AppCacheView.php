@@ -694,17 +694,7 @@ class AppCacheView extends BaseAppCacheView {
               $configTable = 'APP_CACHE_VIEW';
             break;
           }
-          $fieldName = $configTable.'.'.$fieldData['name'];
-          switch($action) {
-            case 'sent':
-              if ($fieldData['name']!='DEL_INDEX'){
-                $fieldName = $configTable . '.' . $fieldData['name'];
-              }
-            break;
-            default:
-              $fieldName = $configTable . '.' . $fieldData['name'];
-            break;
-          }
+          $fieldName = $configTable . '.' . $fieldData['name'];
           $oCriteria->addSelectColumn (  $fieldName );
         }
       }
