@@ -6,7 +6,7 @@
   body {
     margin : 0px;
     color  : #808080;
-    font   : normal 8em sans-serif,Tahoma,MiscFixed;
+    font   : normal 11px sans-serif,Tahoma,MiscFixed;
     background-color: #ECECEC;
   }
 
@@ -21,7 +21,6 @@
   }
   a:hover {
     color: #1F98C7;
-    font-weight: bold;
     text-decoration: underline;
   }
 
@@ -53,6 +52,9 @@
     z-index: 0;
   }  
 
+  .ui-widget .ui-widget {
+    font-size: 12px !important;
+  }
 
   .bar-nav {
     width: 100%;
@@ -129,6 +131,14 @@
   #commentlist .notes-link {
     position: absolute;
     right: 0;
+    top: 64px;
+    font: normal 200%/100% Georgia, "Times New Roman", Times, serif;
+    color: #ccc;
+  }
+  
+  #commentlist .notes-plus-link {
+    position: absolute;
+    right: 0px;
     top: 38px;
     font: normal 200%/100% Georgia, "Times New Roman", Times, serif;
     color: #ccc;

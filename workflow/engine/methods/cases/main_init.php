@@ -53,7 +53,7 @@
   $oHeadPublisher->assign( 'defaultOption', $defaultOption); // user menu permissions
   $oHeadPublisher->assign( '_nodeId', isset($confDefaultOption)?$confDefaultOption:'PM_USERS'); // user menu permissions
 
-  $_SESSION['user_experience'] = 'normal';
+  $_SESSION['current_ux'] = 'NORMAL';
   
   G::RenderPage('publish', 'extJs');
   

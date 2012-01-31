@@ -11,18 +11,17 @@ class Admin extends Controller
 
   public function uxList()
   {
+    require_once PATH_CONTROLLERS . 'adminProxy.php';
     $this->includeExtJS('admin/uxUsersList');
-    //$this->setView('admin/calendarEdit');
-    
-    //$this->setJSVar('fields',$fields);ç
     G::LoadClass('configuration');
+
     $c = new Configurations();
     $configPage = $c->getConfiguration('usersList', 'pageSize','',$_SESSION['USER_LOGGED']);
     $Config['pageSize'] = isset($configPage['pageSize']) ? $configPage['pageSize'] : 20;
 
-    $this->setJSVar('CONFIG', $Config);
-    $this->setJSVar('FORMATS',$c->getFormats());
-
+    $this->setJSVar('CONFIG',  $Config);
+    $this->setJSVar('FORMATS', $c->getFormats());
+    $this->setJSVar('uxTypes', AdminProxy::getUxTypesList('list'));
 
     G::RenderPage('publish', 'extJs');
   }

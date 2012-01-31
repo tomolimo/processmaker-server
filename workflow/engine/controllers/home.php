@@ -13,17 +13,23 @@ class Home extends Controller
   private $userName;
   private $userFullName;
   private $userRolName;
+  private $userUxType;
 
   public function __construct()
   {
-    $_SESSION['user_experience'] = 'simplified';
-    
+    // setting as using simplified.
+    $_SESSION['current_ux'] = 'SIMPLIFIED';
+
+    // getting the ux type from user o group conf.
+    $this->userUxType = isset($_SESSION['user_experience'])? $_SESSION['user_experience']: $_SESSION['current_ux'];
+
     if (isset($_SESSION['USER_LOGGED']) && !empty($_SESSION['USER_LOGGED'])) {
       $this->userID       = isset($_SESSION['USER_LOGGED']) ? $_SESSION['USER_LOGGED'] : null;
       $this->userName     = isset($_SESSION['USR_USERNAME']) ? $_SESSION['USR_USERNAME'] : '';
       $this->userFullName = isset($_SESSION['USR_FULLNAME']) ? $_SESSION['USR_FULLNAME'] : '';
       $this->userRolName  = isset($_SESSION['USR_ROLENAME']) ? $_SESSION['USR_ROLENAME'] : '';
     }
+    //g::pr($_SESSION); die;
   }
 
   /**
@@ -52,6 +58,7 @@ class Home extends Controller
     $this->setVar('userName', $this->userName);
     $this->setVar('processList', $processList);
     $this->setVar('canStartCase', $case->canStartCase($_SESSION ['USER_LOGGED']));
+    $this->setVar('userUxType', $this->userUxType);
 
     G::RenderPage('publish', 'mvc');
   }

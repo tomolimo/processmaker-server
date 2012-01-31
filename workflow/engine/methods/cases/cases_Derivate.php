@@ -146,7 +146,7 @@ try {
   //Events - End
   $debuggerAvailable = true;
 
-  if (isset($_SESSION['user_experience']) && $_SESSION['user_experience'] == 'simplified') {
+  if (isset($_SESSION['current_ux']) && $_SESSION['current_ux'] == 'SIMPLIFIED') {
     $aNextStep['PAGE'] = '../home/appList';
     $debuggerAvailable = false;
   }

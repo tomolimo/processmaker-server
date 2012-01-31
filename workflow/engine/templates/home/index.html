@@ -35,7 +35,7 @@
 
   function appStart(id, title)
   {
-    $.confirm({
+    /*$.confirm({
       'title'   : 'Start Case Confirmation',
       'message' : 'Do you wanna start a new case for:<br /> * <b>"'+title+'"</b>?',
       'buttons' : {
@@ -49,6 +49,22 @@
         'No'  : {
           'class' : 'gray',
           'action': function(){}  // Nothing to do in this case. You can as well omit the action property.
+        }
+      }
+    });*/
+    $('#startAppTitle').html(title)
+
+    $( "#dialog-confirm" ).dialog({
+      resizable: false,
+      height:160,
+      modal: true,
+      buttons: {
+        "Start Case": function() {
+          $( this ).dialog( "close" );
+          redirect('home/startCase?id='+id);
+        },
+        Cancel: function() {
+          $( this ).dialog( "close" );
         }
       }
     });
@@ -83,7 +99,7 @@
             {if $canStartCase neq false}
             <li class="account">
               <a class="menu user-actions" href="#">
-                <img alt="A99679add21e8b0704ea5f0fb569572c_mini" src="/images/simplified/plus-set-grey.png"  title="Start a new Application"/>
+                <img alt="A99679add21e8b0704ea5f0fb569572c_mini" src="/images/simplified/plus-set-grey.png"  title="New Case"/>
                 <!-- <span class="menu-label screen-name">new cases</span> -->
               </a>
 
@@ -108,7 +124,9 @@
               <ul class="menu-dropdown">
                 <!--<li><a href="#" accesskey="s" id="settings_link">Settings</a></li>
                 <li><a href="#" accesskey="?" id="help_link">Help</a></li>-->
-
+                {if $userUxType eq 'SWITCHABLE'}
+                <li><a href="cases/main" accesskey="?" id="help_link">Switch Interface</a></li>
+                {/if}
                 <li><a href="login/login" accesskey="l" id="sign_out_link">Sign out</a></li>
               </ul>
             </li>
@@ -122,7 +140,11 @@
 
   <iframe id="iframex" name="iframex" src="home/appList" width="100%" height="200" scrolling="yes" frameborder="0"></iframe>
   
-  
+  <div id="dialog-confirm" title="Confirm" style="display:none">
+    <p><span class="ui-icon ui-icon-document" style="float:left; margin:0 7px 20px 0;"></span>
+    <span id="startAppTitle"/></p>
+  </div>
+
   {literal} 
   <script type="text/javascript">
     // Javascript to toggle the dropdowns
