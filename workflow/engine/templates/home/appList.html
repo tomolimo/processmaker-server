@@ -120,7 +120,7 @@
     $("#loadmorebutton").click(function (){
       $('#loadmorebutton').html('<img src="/images/ajax-loader.gif" />');
       $.ajax({
-        url: "getApps?start="+appListStart+"&limit="+appListLimit,
+        url: "getApps?t="+listType+"&start="+appListStart+"&limit="+appListLimit,
         success: function(html){
           appListStart += appListLimit;
 
@@ -141,6 +141,7 @@
 
   var appListLimit = {$appListLimit};
   var appListStart = {$appListStart};
+  var listType     = '{$listType}';
   </script>
   
 </head>

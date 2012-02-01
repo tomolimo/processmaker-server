@@ -68,14 +68,29 @@ class Home extends Controller
 
   public function appList($httpData)
   {
+    require_once ( "classes/model/AppNotes.php" );
+    $appNotes = new AppNotes();
+
     $httpData->t = isset($httpData->t)? $httpData->t : 'in';
     $title = $httpData->t != 'draft' ? 'My Inbox' : 'My Drafts';
     $action = $httpData->t != 'draft' ? 'todo' : 'draft';
+
+    $notesStart = 0;
+    $notesLimit = 4;
+
     //$cases = self::getAppList($httpData->t, $this->appListStart, $this->appListLimit);
 
     G::LoadClass('applications');
     $apps = new Applications();
     $cases = $apps->getAll($this->appListStart, $this->appListLimit, $action);
+    
+    foreach ($cases['data'] as $i => $row) {
+      $notes = $appNotes->getNotesList($row['APP_UID'], $this->userID, $notesStart, $notesLimit);
+      $notes = $notes['array'];
+      
+      $cases['data'][$i]['NOTES_COUNT'] = $notes['totalCount'];
+      $cases['data'][$i]['NOTES_LIST']  = $notes['notes'];
+    }
 
     // settings html template
     $this->setView('home/appList');
@@ -85,7 +100,8 @@ class Home extends Controller
     $this->setVar('cases_count', $cases['totalCount']);
     $this->setVar('title', $title);
     $this->setVar('appListStart', $this->appListLimit);
-    $this->setVar('appListLimit', 5);
+    $this->setVar('appListLimit', 10);
+    $this->setVar('listType', $httpData->t);
 
     G::RenderPage('publish', 'mvc');
   }
@@ -94,7 +110,24 @@ class Home extends Controller
   {
     G::LoadClass('applications');
     $apps = new Applications();
-    $cases = $apps->getAll($httpData->start, $httpData->limit);
+
+    require_once ( "classes/model/AppNotes.php" );
+    $appNotes = new AppNotes();
+
+    $notesStart = 0;
+    $notesLimit = 4;
+
+    $action = $httpData->t != 'draft' ? 'todo' : 'draft';
+
+    $cases = $apps->getAll($httpData->start, $httpData->limit, $action);
+
+    foreach ($cases['data'] as $i => $row) {
+      $notes = $appNotes->getNotesList($row['APP_UID'], $this->userID, $notesStart, $notesLimit);
+      $notes = $notes['array'];
+      
+      $cases['data'][$i]['NOTES_COUNT'] = $notes['totalCount'];
+      $cases['data'][$i]['NOTES_LIST']  = $notes['notes'];
+    }
 
     $this->setView('home/applications');
 
