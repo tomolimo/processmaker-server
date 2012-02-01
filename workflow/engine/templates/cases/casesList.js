@@ -503,12 +503,12 @@ Ext.onReady ( function() {
 
           for (count in ajaxServerResponse) {
             if ( ajaxServerResponse[count]['TAS_TITLE'] != undefined ){
-              message = message + "Task: " + ajaxServerResponse[count]['TAS_TITLE'] + " - Reassigned Cases: " + ajaxServerResponse[count]['REASSIGNED_CASES'] + "<br>" ;
+              message = message + "Case: " + ajaxServerResponse[count]['APP_TITLE'] + " - Reassigned to: " + ajaxServerResponse[count]['APP_REASSIGN_USER'] + "<br>" ;              
             };
           }
 
           if (ajaxServerResponse['TOTAL']!=undefined&&ajaxServerResponse['TOTAL']!=-1){
-            message = message + "Total Cases Reassigned: " + ajaxServerResponse['TOTAL'];
+            message = message + "<br> Total Cases Reassigned: " + ajaxServerResponse['TOTAL'];
           } else {
             message = "";
           };
