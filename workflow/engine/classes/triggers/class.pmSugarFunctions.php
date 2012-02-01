@@ -43,6 +43,42 @@ function objectToArray($object) {
   }
   return array_map ( "objectToArray", $object );
 }
+
+/**
+ * @method
+ *
+ * Gets SugarCRM entry using get_entry web service.
+ *
+ * @name GetSugarEntry
+ * @label Get SugarCRM Entry
+ *
+ * @param string | $sugarSoap | Sugar SOAP URL | http://www.example.com/sugar/soap.php?wsdl [^]
+ * @param string | $user | User
+ * @param string | $password | Password
+ * @param string | $module | The name of the module from which to retrieve records.
+ * @param string | $id | The SugarBean’s ID.
+ * @param string | $selectedFields | Optional. The list of fields to be returned in the results.
+ * @param string | $linkNameToFieldsArray | A list of link names and the fields to be returned for each link name.
+ * @param string | $resultType=array | Result type (array or object)
+ *
+ * @return array/object | $sugarEntries | Sugar Entries (array or object)
+ *
+ */
+
+function GetSugarEntry($sugarSoap, $user, $password, $module, $id, $selectFields, $linkNameToFieldsArray, $resultType = 'array') {
+    $sessionId = sugarLogin ( $sugarSoap, $user, $password );
+    $client = new SoapClient ( $sugarSoap, array ('trace' => 1 ) );
+    $request_array = array ('session' => $sessionId, 'module_name' => $module, 'id' => $id,
+            'select_fields' => $select_fields, 'link_name_to_fields_array' => $linkNameToFieldsArray);
+    $sugarEntry = $client->__SoapCall ( 'get_entry', $request_array );
+
+    if($resultType == 'array'){
+        $sugarEntry = objectToArray ( $sugarEntry );
+    }
+
+    return $sugarEntry;
+}
+
 /**
  * @method
  *
@@ -68,7 +104,7 @@ function objectToArray($object) {
 function GetSugarEntries($sugarSoap, $user, $password, $module, $query, $orderBy, $selectedFields, $maxResults, $resultType="array") {
   $sessionId = sugarLogin ( $sugarSoap, $user, $password );
   $client = new SoapClient ( $sugarSoap, array ('trace' => 1 ) );
-  $request_array = array ('session' => $sessionId, 'module_name' => $module, 'query' => $query, 'order_by' => $orderBy );
+  $request_array = array ('session' => $sessionId, 'module_name' => $module, 'query' => $query, 'order_by' => $orderBy, 'offset'=>"", 'select_fields'=>"", 'max_result'=>$maxResults );
   $sugarEntriesO = $client->__SoapCall ( 'get_entry_list', $request_array );
 
   switch($resultType){
@@ -220,20 +256,19 @@ function GetSugarAccount($sugarSoap, $user, $password, $query, $orderBy, $select
  * @param string | $sugarSoap | Sugar SOAP URL | http://www.example.com/sugar/soap.php?wsdl
  * @param string | $user | User
  * @param string | $password | Password
- * @param string | $name | name
- * @param string | $value | value
+ * @param string | $name | Account name
  * @param string | $resultType=array | Result type (array or object)
  *
  * @return array/object | $sugarAccount | Sugar Opportunities (array or object)
  *
  */
-function CreateSugarAccount($sugarSoap, $user, $password, $name , $value, $resultType="array") {
+function CreateSugarAccount($sugarSoap, $user, $password, $name,  $resultType="array") {
 
   $module = "Accounts";
   $sessionId = sugarLogin ( $sugarSoap, $user, $password );
   $client = new SoapClient ( $sugarSoap, array ('trace' => 1 ) );
   $request_array = array ('session' => $sessionId, 'module_name' => $module, 'name_value_list' => array(
-            array("name" => 'name', "value" => $value )
+            array("name" => 'name', "value" => $name )
             ) );
   $sugarEntriesO = $client->__SoapCall ( 'set_entry', $request_array );
   $account_id = $sugarEntriesO ->id;
