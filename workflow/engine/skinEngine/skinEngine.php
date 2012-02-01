@@ -380,7 +380,7 @@ if (isset($G_ENABLE_BLANK_SKIN) && $G_ENABLE_BLANK_SKIN) {
         require_once(PATH_THIRDPARTY . 'smarty/libs/Smarty.class.php');
         $smarty = new Smarty();
 
-        $smarty->template_dir = PATH_SKINS;
+        $smarty->template_dir = PATH_TPL;
         $smarty->compile_dir  = PATH_SMARTY_C;
         $smarty->cache_dir    = PATH_SMARTY_CACHE;
         $smarty->config_dir   = PATH_THIRDPARTY . 'smarty/configs';
@@ -550,4 +550,3 @@ if (isset($G_ENABLE_BLANK_SKIN) && $G_ENABLE_BLANK_SKIN) {
         }
         break;
 }
-?>

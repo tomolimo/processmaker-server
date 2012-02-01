@@ -123,22 +123,23 @@ class GroupUser extends BaseGroupUser {
   function getAllUserGroups($usrUid)
   {
     $oCriteria = new Criteria('workflow');
-    // $oCriteria->addSelectColumn(GroupUserPeer::GRP_UID);
-    // $oCriteria->addSelectColumn('COUNT(*) AS CNT');
-    // $oCriteria->addJoin(GroupUserPeer::USR_UID, UsersPeer::USR_UID, Criteria::INNER_JOIN);
     $oCriteria->add(GroupUserPeer::USR_UID, $usrUid);
-    //$oCriteria->add(UsersPeer::USR_STATUS, 'CLOSED', Criteria::NOT_EQUAL);
-    
     //$oCriteria->addGroupByColumn(GroupUserPeer::GRP_UID);
     $oDataset = GroupUserPeer::doSelectRS($oCriteria);
     $oDataset->setFetchmode (ResultSet::FETCHMODE_ASSOC);
-    $g = new Groupwf();
+    
     $rows = Array();
     while ($oDataset->next()) {
       $row = $oDataset->getRow();
-      $grpRow = $g->load($row['GRP_UID']);
-      $row = array_merge($row, $grpRow);
-      $rows[] = $row;
+      $g = new Groupwf();
+      try {
+        $grpRow = $g->load($row['GRP_UID']);
+        $row = array_merge($row, $grpRow);
+        $rows[] = $row;
+      }
+      catch (Exception $e){
+        continue;
+      }
     }
 
     return $rows;

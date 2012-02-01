@@ -15,6 +15,9 @@ class Home extends Controller
   private $userRolName;
   private $userUxType;
 
+  private $appListStart = 0;
+  private $appListLimit = 15;
+
   public function __construct()
   {
     // setting as using simplified.
@@ -65,6 +68,66 @@ class Home extends Controller
 
   public function appList($httpData)
   {
+    $httpData->t = isset($httpData->t)? $httpData->t : 'in';
+    $title = $httpData->t != 'draft' ? 'My Inbox' : 'My Drafts';
+    $action = $httpData->t != 'draft' ? 'todo' : 'draft';
+    //$cases = self::getAppList($httpData->t, $this->appListStart, $this->appListLimit);
+
+    G::LoadClass('applications');
+    $apps = new Applications();
+    $cases = $apps->getAll($this->appListStart, $this->appListLimit, $action);
+
+    // settings html template
+    $this->setView('home/appList');
+
+    // settings vars and rendering
+    $this->setVar('cases', $cases['data']);
+    $this->setVar('cases_count', $cases['totalCount']);
+    $this->setVar('title', $title);
+    $this->setVar('appListStart', $this->appListLimit);
+    $this->setVar('appListLimit', 5);
+
+    G::RenderPage('publish', 'mvc');
+  }
+
+  public function getApps($httpData)
+  {
+    G::LoadClass('applications');
+    $apps = new Applications();
+    $cases = $apps->getAll($httpData->start, $httpData->limit);
+
+    $this->setView('home/applications');
+
+    // settings vars and rendering
+    $this->setVar('cases', $cases['data']);
+
+    G::RenderPage('publish', 'mvc');
+  }
+
+  public function startCase($httpData)
+  {
+    G::LoadClass('case');
+    $case  = new Cases();
+    $aData = $case->startCase($httpData->id, $_SESSION['USER_LOGGED']);
+    
+    $_SESSION['APPLICATION']   = $aData['APPLICATION'];
+    $_SESSION['INDEX']         = $aData['INDEX'];
+    $_SESSION['PROCESS']       = $aData['PROCESS'];
+    $_SESSION['TASK']          = $httpData->id;
+    $_SESSION['STEP_POSITION'] = 0;
+    $_SESSION['CASES_REFRESH'] = true;
+        
+    $oCase = new Cases();
+    $aNextStep = $oCase->getNextStep($_SESSION['PROCESS'], $_SESSION['APPLICATION'], $_SESSION['INDEX'], $_SESSION['STEP_POSITION']);
+    //../cases/cases_Open?APP_UID={$APP.APP_UID}&DEL_INDEX={$APP.DEL_INDEX}&action=todo
+    $aNextStep['PAGE'] = '../cases/cases_Open?APP_UID='.$aData['APPLICATION'].'&DEL_INDEX='.$aData['INDEX'].'&action=draft';
+    $_SESSION ['BREAKSTEP'] ['NEXT_STEP'] = $aNextStep;
+
+    G::header('Location: ' . $aNextStep['PAGE']);
+  }
+
+  private function getAppList($type, $start=null, $limit=null)
+  {
     require_once ( "classes/model/AppCacheView.php" );
     require_once ( "classes/model/Application.php" );
     require_once ( "classes/model/AppNotes.php" );
@@ -72,36 +135,30 @@ class Home extends Controller
     $appCache = new AppCacheView();
     $appNotes = new AppNotes();
 
-    $start = 0;
-    $limit = 100;
-
     $notesStart = 0;
     $notesLimit = 4;
 
-    $httpData->t = isset($httpData->t)? $httpData->t : 'in';
-
-    /**
-     * Getting the user's applications list
-     */
-
-    //TODO validate user id
-    
     // getting user's cases on inbox
-    switch ($httpData->t) {
-      case 'in':
+    switch ($type) {
+      case 'inbox': case 'in':
         $criteria = $appCache->getToDoListCriteria($this->userID);
-        $title = 'My Inbox';
         break;
+      
       case 'draft':
       default:
         $criteria = $appCache->getDraftListCriteria($this->userID); //fast enough    
-        $title = 'My Drafts';
         break;
     } 
 
-    //$criteriac = $oAppCache->getToDoCountCriteria($this->userID);
-    //$criteria->setLimit($limit);
-    //$criteria->setOffset($start);
+    $distinct = $type == 'draft' ? true : false;
+    $criteriac = $appCache->getToDoCountCriteria($this->userID);
+    $totalCount = AppCacheViewPeer::doCount( $criteriac, $distinct );
+
+    if (isset($start))
+      $criteria->setOffset($start);
+    
+    if (isset($limit))
+      $criteria->setLimit($limit);
 
     $criteria->addDescendingOrderByColumn(AppCacheViewPeer::APP_NUMBER);
     $dataset = AppCacheViewPeer::doSelectRS($criteria);
@@ -137,38 +194,8 @@ class Home extends Controller
       $row['NOTES_LIST']  = $notes['notes'];
 
       $cases[] = $row;
-
     }
 
-    // settings html template
-    $this->setView('home/appList');
-
-    // settings vars and rendering
-    $this->setVar('cases', $cases);
-    $this->setVar('title', $title);
-
-    G::RenderPage('publish', 'mvc');
-  }
-
-  public function startCase($httpData)
-  {
-    G::LoadClass('case');
-    $case  = new Cases();
-    $aData = $case->startCase($httpData->id, $_SESSION['USER_LOGGED']);
-    
-    $_SESSION['APPLICATION']   = $aData['APPLICATION'];
-    $_SESSION['INDEX']         = $aData['INDEX'];
-    $_SESSION['PROCESS']       = $aData['PROCESS'];
-    $_SESSION['TASK']          = $httpData->id;
-    $_SESSION['STEP_POSITION'] = 0;
-    $_SESSION['CASES_REFRESH'] = true;
-        
-    $oCase = new Cases();
-    $aNextStep = $oCase->getNextStep($_SESSION['PROCESS'], $_SESSION['APPLICATION'], $_SESSION['INDEX'], $_SESSION['STEP_POSITION']);
-    //../cases/cases_Open?APP_UID={$APP.APP_UID}&DEL_INDEX={$APP.DEL_INDEX}&action=todo
-    $aNextStep['PAGE'] = '../cases/cases_Open?APP_UID='.$aData['APPLICATION'].'&DEL_INDEX='.$aData['INDEX'].'&action=draft';
-    $_SESSION ['BREAKSTEP'] ['NEXT_STEP'] = $aNextStep;
-
-    G::header('Location: ' . $aNextStep['PAGE']);
+    return array('data' => $cases, 'totalCount' => $totalCount);
   }
 }

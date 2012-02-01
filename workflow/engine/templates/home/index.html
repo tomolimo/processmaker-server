@@ -9,7 +9,6 @@
 
   <script type="text/javascript" src="/js/jquery/jquery-1.7.1.min.js"></script>
   <script type="text/javascript" src="/js/jquery/jquery-ui-1.8.17.min.js"></script>
-  <script type="text/javascript" src="/js/jquery/jquery.confirm.js"></script>
   
   {literal}
   <style>
@@ -35,23 +34,6 @@
 
   function appStart(id, title)
   {
-    /*$.confirm({
-      'title'   : 'Start Case Confirmation',
-      'message' : 'Do you wanna start a new case for:<br /> * <b>"'+title+'"</b>?',
-      'buttons' : {
-        'Yes' : {
-          'class' : 'blue',
-          'action': function(){
-            //elem.slideUp();
-            redirect('home/startCase?id='+id);
-          }
-        },
-        'No'  : {
-          'class' : 'gray',
-          'action': function(){}  // Nothing to do in this case. You can as well omit the action property.
-        }
-      }
-    });*/
     $('#startAppTitle').html(title)
 
     $( "#dialog-confirm" ).dialog({
@@ -141,8 +123,9 @@
   <iframe id="iframex" name="iframex" src="home/appList" width="100%" height="200" scrolling="yes" frameborder="0"></iframe>
   
   <div id="dialog-confirm" title="Confirm" style="display:none">
-    <p><span class="ui-icon ui-icon-document" style="float:left; margin:0 7px 20px 0;"></span>
-    <span id="startAppTitle"/></p>
+    <p>
+    Start a new case for:<br/>
+    <span class="ui-icon ui-icon-document" style="float:left; margin:0 7px 20px 0;"></span><span id="startAppTitle"/></p>
   </div>
 
   {literal} 
