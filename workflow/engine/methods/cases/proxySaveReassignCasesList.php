@@ -52,29 +52,26 @@
 //      $params = array ();
 //      $sql = BasePeer::createSelectSql($oCasesReassignList, $params);
 //      var_dump($sql);
-      if (is_array($aData)){
+      if ( is_array($aData) ) {
+        $currentCasesReassigned=0;
         foreach ($aData as $data){
           $oTmpReassignCriteria = $oCasesReassignList;
           $oTmpReassignCriteria->add(AppCacheViewPeer::TAS_UID,$data->TAS_UID);
           $rs = AppCacheViewPeer::doSelectRS($oTmpReassignCriteria);
           $rs->setFetchmode(ResultSet::FETCHMODE_ASSOC);
           $rs->next();
-          $row = $rs->getRow();
-          $currentCasesReassigned=0;
-          while (is_array($row)) {
-            $APP_UID = $row['APP_UID'];
-            $aCase = $oCases->loadCaseInCurrentDelegation($APP_UID);
-            $oCases->reassignCase($aCase['APP_UID'], $aCase['DEL_INDEX'], $aCase['USR_UID'], $data->APP_REASSIGN_USER_UID);
-//              var_dump($aCase);
-//              echo ("<br>");
-            $currentCasesReassigned++;
-            $casesReassignedCount++;
-            $rs->next();
-            $row = $rs->getRow();
-          }
-          $serverResponse[] = array ('TAS_TITLE'=>$data->APP_TAS_TITLE,'REASSIGNED_CASES'=>$currentCasesReassigned);
+          $row = $rs->getRow();          
+          $aCase = $oCases->loadCaseInCurrentDelegation($data->APP_UID);
+          $oCases->reassignCase($aCase['APP_UID'], $aCase['DEL_INDEX'], $aCase['USR_UID'], $data->APP_REASSIGN_USER_UID);
+          $currentCasesReassigned++;
+          $casesReassignedCount++;
+          $serverResponse[] = array ('APP_REASSIGN_USER' => $data->APP_REASSIGN_USER,
+                                     'APP_TITLE'         => $data->APP_TITLE,
+                                     'TAS_TITLE'         => $data->APP_TAS_TITLE,
+                                     'REASSIGNED_CASES'  => $currentCasesReassigned);
         }
-      } else {
+      } 
+      else {
         $oTmpReassignCriteria = $oCasesReassignList;
         $oTmpReassignCriteria->add(AppCacheViewPeer::TAS_UID,$aData->TAS_UID);
         $rs = AppCacheViewPeer::doSelectRS($oTmpReassignCriteria);

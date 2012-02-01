@@ -1,4 +1,7 @@
 <?php
+
+G::LoadClass('configuration');
+
   $callback = isset($_POST['callback']) ? $_POST['callback'] : 'stcCallback1001';
   $query    = isset($_POST['query'])    ? $_POST['query']    : '';
   $dir      = isset($_POST['dir'])      ? $_POST['dir']    : 'DESC';
@@ -43,11 +46,11 @@ function array_sort($array, $on, $order=SORT_ASC, $query='')
         foreach ($sortable_array as $k => $v) {
             if ($query==''){
                 $new_array[] = $array[$k];
-            } else {
-                $pos1 = stripos($array[$k]['userFullname'], $query);
-                if ($pos1!==false&&$pos1==0){
-                    $new_array[] = $array[$k];
-                }
+            } 
+            else {
+              if ( preg_match("/".$query."/i", $array[$k]['userFullname']) ) {
+                $new_array[] = $array[$k];
+              }
             }
         }
     }
@@ -76,25 +79,15 @@ function array_sort($array, $on, $order=SORT_ASC, $query='')
         	  $aCase  = $oCases->loadCaseInCurrentDelegation($appUid);
             
             $aUsersInvolved = Array();
-            $aCaseGroups = $oTasks->getGroupsOfTask($aCase['TAS_UID'], 1);
-
-            G::loadClass('configuration');
-            $oConfig = new Configuration();
-            try {
-              $aConfig = $oConfig->load('ENVIRONMENT_SETTINGS');
-              $aConfig = unserialize($aConfig['CFG_VALUE']);
-            } catch (Exception $e){
-              // if there is no configuration record then.
-              $aConfig['format'] = '@userName';
-            }
-            
-//            var_dump($aConfig);
+            $aCaseGroups = $oTasks->getGroupsOfTask($aCase['TAS_UID'], 1);            
+            $oConf = new Configurations; 
+            $ConfEnv= $oConf->getFormats();
             foreach ( $aCaseGroups as $aCaseGroup ) {
               $aCaseUsers = $oGroups->getUsersOfGroup($aCaseGroup['GRP_UID']);
               foreach ( $aCaseUsers as $aCaseUser ) {
                 if ( $aCaseUser['USR_UID'] != $sReassignFromUser ) {
                   $aCaseUserRecord = $oUser->load($aCaseUser['USR_UID']);
-                  $sCaseUser = G::getFormatUserList ($aConfig['format'],$aCaseUserRecord);
+                  $sCaseUser = G::getFormatUserList ($ConfEnv['format'],$aCaseUserRecord);    
 //                        $aUsersInvolved[] = array ( 'userUid' => $aCaseUser['USR_UID'] , 'userFullname' => $aCaseUserRecord['USR_FIRSTNAME'] . ' ' . $aCaseUserRecord['USR_LASTNAME']); // . ' (' . $aCaseUserRecord['USR_USERNAME'] . ')';
                   $aUsersInvolved[] = array ( 'userUid' => $aCaseUser['USR_UID'] , 'userFullname' => $sCaseUser); // . ' (' . $aCaseUserRecord['USR_USERNAME'] . ')';
                 }
@@ -105,14 +98,14 @@ function array_sort($array, $on, $order=SORT_ASC, $query='')
             foreach ( $aCaseUsers as $aCaseUser ) {
                 if ( $aCaseUser['USR_UID'] != $sReassignFromUser ) {
                     $aCaseUserRecord = $oUser->load($aCaseUser['USR_UID']);
-                    $sCaseUser = G::getFormatUserList ($aConfig['format'],$aCaseUserRecord);
+                    $sCaseUser = G::getFormatUserList ($ConfEnv['format'],$aCaseUserRecord);
 //                    $aUsersInvolved[] = array ( 'userUid' => $aCaseUser['USR_UID'] , 'userFullname' => $aCaseUserRecord['USR_FIRSTNAME'] . ' ' . $aCaseUserRecord['USR_LASTNAME']); // . ' (' . $aCaseUserRecord['USR_USERNAME'] . ')';
                     $aUsersInvolved[] = array ( 'userUid' => $aCaseUser['USR_UID'] , 'userFullname' => $sCaseUser); // . ' (' . $aCaseUserRecord['USR_USERNAME'] . ')';
                 }
             }
 //            $oTmp = new stdClass();
 //            $oTmp->items = $aUsersInvolved;
-        $result = array();
-        $aUsersInvolved = array_sort($aUsersInvolved,'userFullname',SORT_ASC, $query);
+        $result = array();        
+        $aUsersInvolved = array_sort($aUsersInvolved,'userFullname',SORT_ASC, $query);   
         $result['data'] = $aUsersInvolved;
         print G::json_encode( $result ) ;
