@@ -32,6 +32,7 @@ try {
   $aFields['MESSAGE3']   = str_replace("\r\n","<br>",G::LoadTranslation('ID_NEW_PASS_SAME_OLD_PASS'));
   $aFields['MESSAGE4']   = str_replace("\r\n","<br>",G::LoadTranslation('ID_MSG_ERROR_USR_FIRSTNAME'));
   $aFields['MESSAGE5']   = str_replace("\r\n","<br>",G::LoadTranslation('ID_MSG_ERROR_USR_LASTNAME'));
+  $aFields['MESSAGE6']   = str_replace("\r\n","<br>",G::LoadTranslation('ID_ERROR_UPLOADING_IMAGE_TYPE'));
     // the default role variable sets the value that will be showed as the default for the role field.
   $aFields['DEFAULT_ROLE']   = 'PROCESSMAKER_OPERATOR';
   $aFields['START_DATE'] = date('Y-m-d');
@@ -50,7 +51,7 @@ try {
   $uploadMaxSize = (int)$UPLOAD_MAX_SIZE * $mul;
 
   if ( $postMaxSize < $uploadMaxSize ) $uploadMaxSize = $postMaxSize;
-  $aFields['MAX_FILES_SIZE'] = $uploadMaxSize .  " (" . $UPLOAD_MAX_SIZE . ") ";
+  $aFields['MAX_FILES_SIZE'] = " (" . $UPLOAD_MAX_SIZE . ") ";
 
   //Load Calendar options and falue for this user
   G::LoadClass ( 'calendar' );

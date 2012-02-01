@@ -44,6 +44,7 @@ try {
   $aFields['MESSAGE3']   = str_replace("\r\n","<br>",G::LoadTranslation('ID_NEW_PASS_SAME_OLD_PASS'));
   $aFields['MESSAGE4']   = str_replace("\r\n","<br>",G::LoadTranslation('ID_MSG_ERROR_USR_FIRSTNAME'));
   $aFields['MESSAGE5']   = str_replace("\r\n","<br>",G::LoadTranslation('ID_MSG_ERROR_USR_LASTNAME'));
+  $aFields['MESSAGE6']   = str_replace("\r\n","<br>",G::LoadTranslation('ID_ERROR_UPLOADING_IMAGE_TYPE'));
   $aFields['START_DATE']    = date('Y-m-d');
   $aFields['END_DATE']      = date('Y-m-d', mktime(0, 0, 0, date('m'), date('d'), date('Y') + 5));
   
@@ -138,9 +139,9 @@ try {
   $uploadMaxSize = (int)$UPLOAD_MAX_SIZE * $mul;
 
   if ( $postMaxSize < $uploadMaxSize ) $uploadMaxSize = $postMaxSize;
-  $aFields['MAX_FILES_SIZE'] = $uploadMaxSize .  " (" . $UPLOAD_MAX_SIZE . ") ";
+  $aFields['MAX_FILES_SIZE'] = " (" . $UPLOAD_MAX_SIZE . ") ";
 
-  //print_r($aUserInfo);
+
   global $_DBArray;
   $_DBArray['aUserInfo']  = $aUserInfo;
   $_SESSION['_DBArray'] = $_DBArray;
