@@ -104,7 +104,8 @@ try {
     $aData['USR_PHONE']       = $form['USR_PHONE'];
     $aData['USR_ZIP_CODE']    = $form['USR_ZIP_CODE'];
     $aData['USR_POSITION']    = $form['USR_POSITION'];
-    $aData['USR_RESUME']      = $form['USR_RESUME'];
+//  Commented by removal of resume in the addition and modification of user.
+//  $aData['USR_RESUME']      = $form['USR_RESUME'];
     $aData['USR_ROLE']        = $form['USR_ROLE'];
     $aData['USR_REPLACED_BY'] = $form['USR_REPLACED_BY'];
     
@@ -246,6 +247,19 @@ try {
     require_once 'classes/model/Users.php';
     $oUser = new Users();
     $oUser->update($aData);
+    $aExtensions = array ( "AIS",  "BMP", "BW",   "CDR", "CDT", "CGM",  "CMX",  "CPT",  "DCX", "DIB",
+                           "EMF",  "GBR", "GIF",  "GIH", "ICO", "IFF",  "ILBM", "JFIF", "JIF", "JPE",
+                           "JPEG", "JPG", "KDC",  "LBM", "MAC", "PAT",  "PCD",  "PCT",  "PCX", "PIC",
+                           "PICT", "PNG", "PNTG", "PIX", "PSD", "PSP",  "QTI",  "QTIF", "RGB", "RGBA",
+                           "RIF",  "RLE", "SGI",  "TGA", "TIF", "TIFF", "WMF",  "XCF"
+                          );
+
+    $sPhotoFile = $_FILES['form']['name']['USR_PHOTO'];
+    $aPhotoFile = explode('.', $sPhotoFile);
+    $sExtension = strtoupper ($aPhotoFile[sizeof($aPhotoFile)-1]);
+    if ((strlen($sPhotoFile) > 0) && (! in_array($sExtension, $aExtensions)) ) {
+      throw ( new Exception ( G::LoadTranslation( 'ID_ERROR_UPLOADING_IMAGE_TYPE' )) );
+    }
     if ($_FILES['form']['error']['USR_PHOTO'] != 1) {
       if ($_FILES['form']['tmp_name']['USR_PHOTO'] != '') {
         $aAux = explode('.', $_FILES['form']['name']['USR_PHOTO']);

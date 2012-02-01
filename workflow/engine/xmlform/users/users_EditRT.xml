@@ -3,22 +3,7 @@
   <menuUser type="xmlmenu" xmlfile="users/users_EditOptions"/>
   <START_DATE type="phpVariable"/>
   <END_DATE type="phpVariable"/>
-  <TITLE3 type="title" group="1">
-    <en>Profile</en>    
-  </TITLE3>
-  <RANDOM type="private"/>
-  <USR_PHOTO_SHOW type="image" group="1" file="users/users_ViewPhoto?@#RANDOM" home="methods" style="height:96">
-    <en/>    
-  </USR_PHOTO_SHOW>
-  <USR_PHOTO type="file" group="1">
-    <en>Photo</en>    
-  </USR_PHOTO>
-  <USR_RESUME type="file" group="1">
-    <en>Résumé</en>    
-  </USR_RESUME>
-  <MAX_FILES_SIZE type="edit" mode="view">
-    <en>Max upload files size in bytes</en>
-  </MAX_FILES_SIZE>
+
   <TITLE1 type="title" group="1">
     <en>Personal Information</en>    
   </TITLE1>
@@ -95,6 +80,26 @@
   <USR_CNF_PASS type="password" size="30" maxlength="20" validate="5" mask="" required="1">
     <en>Confirm Password </en>    
   </USR_CNF_PASS>
+
+  <TITLE3 type="title" group="1">
+    <en>Profile</en>
+  </TITLE3>
+  <RANDOM type="private"/>
+  <USR_PHOTO_SHOW type="image" group="1" file="users/users_ViewPhoto?@#RANDOM" home="methods" style="height:96">
+    <en/>
+  </USR_PHOTO_SHOW>
+  <USR_PHOTO type="file" group="1">
+    <en>Photo</en>
+  </USR_PHOTO>
+<!--
+  <USR_RESUME type="file" group="1">
+    <en>Résumé</en>
+  </USR_RESUME>
+-->
+  <MAX_FILES_SIZE type="edit" mode="view">
+    <en>Max upload file size</en>
+  </MAX_FILES_SIZE>
+
   <SUBMIT type="button" onclick="verifyUserInformation(this.form);" group="1">
     <en>Save</en>    
   </SUBMIT>
@@ -107,6 +112,7 @@
   <MESSAGE3 type="phpvariable"/>
   <MESSAGE4 type="phpvariable"/>
   <MESSAGE5 type="phpvariable"/>
+  <MESSAGE6 type="phpvariable"/>
   <JS type="javascript" replacetags="1"><![CDATA[
  
   if((getField('USR_REPORTS_TO').value=='')){
@@ -232,6 +238,37 @@
         return false;
       }
     }
+
+    var permitted = false;
+    aExtensions = new Array ( ".ais",  ".bmp", ".bw",   ".cdr", ".cdt", ".cgm",  ".cmx",  ".cpt",  ".dcx", ".dib",
+                              ".emf",  ".gbr", ".gif",  ".gih", ".ico", ".iff",  ".ilbm", ".jfif", ".jif", ".jpe",
+                              ".jpeg", ".jpg", ".kdc",  ".lbm", ".mac", ".pat",  ".pcd",  ".pct",  ".pcx", ".pic",
+                              ".pict", ".png", ".pntg", ".pix", ".psd", ".psp",  ".qti",  ".qtif", ".rgb", ".rgba",
+                              ".rif",  ".rle", ".sgi",  ".tga", ".tif", ".tiff", ".wmf",  ".xcf"
+                            );
+
+    oUsrPhoto = oForm.elements['form[USR_PHOTO]'];
+    sUsrPhoto = oUsrPhoto.value;
+    if (sUsrPhoto != "" ) {
+      extension = (sUsrPhoto.substring(sUsrPhoto.lastIndexOf("."))).toLowerCase();
+       for (var i = 0; i < aExtensions.length; i++) {
+         if (aExtensions[i] == extension) {
+           permitted = true;
+           break;
+         }
+       }
+    }
+    else {
+      permitted = true;
+    }
+    if (!permitted) {
+      new leimnud.module.app.alert().make({
+        label: "@#MESSAGE6"
+      });
+      bContinue = false;
+      return false;
+    }
+
     if (bContinue)
     {
       oForm.submit();

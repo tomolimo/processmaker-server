@@ -6,18 +6,7 @@
   <START_DATE type="phpVariable"/>
   <DEFAULT_ROLE type="phpVariable"/>
   <END_DATE type="phpVariable"/>
-  <TITLE3 type="title" group="1">
-    <en>Profile</en>
-  </TITLE3>
-  <USR_PHOTO type="file" group="1">
-    <en>Photo</en>
-  </USR_PHOTO>
-  <USR_RESUME type="file" group="1">
-    <en>Résumé</en>
-  </USR_RESUME>
-  <MAX_FILES_SIZE type="edit" mode="view">
-    <en>Max upload files size in bytes</en>
-  </MAX_FILES_SIZE>
+
   <TITLE1 type="title" group="1">
     <en>Personal Information</en>
   </TITLE1>
@@ -98,6 +87,22 @@ SELECT ROL_CODE AS USR_ROLE, ROL_CODE AS CODE FROM ROLES WHERE ROL_SYSTEM = '000
   <SUBMIT type="button" onclick="validateLocalFields(this.form);" group="1">
     <en>Save</en>
   </SUBMIT>
+
+  <TITLE3 type="title" group="1">
+    <en>Profile</en>
+  </TITLE3>
+  <USR_PHOTO type="file" group="1">
+    <en>Photo</en>
+  </USR_PHOTO>
+<!--
+  <USR_RESUME type="file" group="1">
+    <en>Résumé</en>
+  </USR_RESUME>
+  -->
+  <MAX_FILES_SIZE type="edit" mode="view">
+    <en>Max upload file size</en>
+  </MAX_FILES_SIZE>
+
   <BTN_CANCEL type="button" onclick="cancel();">
     <en>Cancel</en>
   </BTN_CANCEL>
@@ -107,6 +112,7 @@ SELECT ROL_CODE AS USR_ROLE, ROL_CODE AS CODE FROM ROLES WHERE ROL_SYSTEM = '000
   <MESSAGE3 type="phpvariable"/>
   <MESSAGE4 type="phpvariable"/>
   <MESSAGE5 type="phpvariable"/>
+  <MESSAGE6 type="phpvariable"/>
   <JS type="javascript" replacetags="1"><![CDATA[
 var sUsername;
 
@@ -276,7 +282,31 @@ var validateLocalFields = function(oForm)
         var sPasswordRep = document.getElementById('form[USR_CNF_PASS]');
         var sAlert = "";
         var bContinue = true;
+        var permitted = false;
         bContinue = validateForm("[{\"name\":\"USR_FIRSTNAME\",\"type\":\"text\",\"label\":\"First Name\"},{\"name\":\"USR_LASTNAME\",\"type\":\"text\",\"label\":\"Last Name\"},{\"name\":\"USR_USERNAME\",\"type\":\"text\",\"label\":\"User ID (*)\"},{\"name\":\"USR_DUE_DATE\",\"type\":\"date\",\"label\":\"Expiration Date\"},{\"name\":\"USR_NEW_PASS\",\"type\":\"password\",\"label\":\"New Password\"},{\"name\":\"USR_CNF_PASS\",\"type\":\"password\",\"label\":\"Confirm Password\"}]".parseJSON());
+
+        aExtensions = new Array ( ".ais",  ".bmp", ".bw",   ".cdr", ".cdt", ".cgm",  ".cmx",  ".cpt",  ".dcx", ".dib",
+                                  ".emf",  ".gbr", ".gif",  ".gih", ".ico", ".iff",  ".ilbm", ".jfif", ".jif", ".jpe",
+                                  ".jpeg", ".jpg", ".kdc",  ".lbm", ".mac", ".pat",  ".pcd",  ".pct",  ".pcx", ".pic",
+                                  ".pict", ".png", ".pntg", ".pix", ".psd", ".psp",  ".qti",  ".qtif", ".rgb", ".rgba",
+                                  ".rif",  ".rle", ".sgi",  ".tga", ".tif", ".tiff", ".wmf",  ".xcf"
+                                );
+
+        oUsrPhoto = oForm.elements['form[USR_PHOTO]'];
+        sUsrPhoto = oUsrPhoto.value;
+        if (sUsrPhoto != "" ) {
+          extension = (sUsrPhoto.substring(sUsrPhoto.lastIndexOf("."))).toLowerCase();
+          for (var i = 0; i < aExtensions.length; i++) {
+            if (aExtensions[i] == extension) {
+              permitted = true;
+              break;
+            }
+          }
+        }
+        else {
+          permitted = true;
+        }
+
         if (bContinue){
             if (!validateLocalEmail(sEmail)){
                 sAlert = sAlert+"Please provide a valid email address. <br>";
@@ -286,9 +316,14 @@ var validateLocalFields = function(oForm)
                 sAlert = sAlert+"The password fields don't match. <br>";
                 bContinue = false;
             }
+            if (!permitted) {
+              sAlert    = sAlert + "@#MESSAGE6" + " <br>";
+              bContinue = false;
+            }
             if (!bContinue){
                 msgBox(sAlert, "alert");
-            } else {
+            }
+            else {
                 oForm.submit();
             }
         }
