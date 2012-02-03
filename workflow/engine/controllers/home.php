@@ -56,7 +56,14 @@ class Home extends Controller
     $processList = $case->getStartCasesPerType ( $_SESSION ['USER_LOGGED'], 'category' );
     unset($processList[0]);
 
-    $this->setView('home/index');
+    if ($this->userUxType == 'SINGLE') {
+      $this->setView('home/index2');
+    }
+    else {
+      $this->setView('home/index');  
+    }
+    
+
     $this->setVar('usrUid', $this->userID);
     $this->setVar('userName', $this->userName);
     $this->setVar('processList', $processList);

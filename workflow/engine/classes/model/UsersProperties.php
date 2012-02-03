@@ -245,6 +245,7 @@ class UsersProperties extends BaseUsersProperties
     switch ($uxType) {
       case 'SIMPLIFIED':
       case 'SWITCHABLE':
+      case 'SINGLE':
         $_SESSION['user_experience'] = $uxType;
         return '/sys' .  SYS_SYS . '/' . $sLanguage . '/' . SYS_SKIN . '/' . 'home';
         break;

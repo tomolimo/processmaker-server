@@ -96,7 +96,7 @@
         
         for (i=0; i<data.notes.length; i++) {
           r = data.notes[i];
-          console.log(r);
+          
           s = '<div class="appMessage"><table border="0"><tr>' +
                 '<td width="50" valign="top">'+
                   '<img border="0" src="../users/users_ViewPhotoGrid?pUID='+r.USR_UID+'" width="40" height="40"/>' +
@@ -105,7 +105,7 @@
                   '<p><pre>'+r.NOTE_CONTENT+'</pre>' +
                   '<div class="appMessageDate">Posted at '+r.NOTE_DATE+'</div>' +
                 '</td></tr></table></div>';
-          console.log(s);
+          
           content.append(s);
           $('#n_'+appUid).show('slow');
         }
@@ -124,12 +124,12 @@
         success: function(html){
           appListStart += appListLimit;
 
-          if(html){
+          if(jQuery.trim(html) != ''){
             $("#commentlist").append(html);
             $('#loadmorebutton').html('Load More');
           }
           else {
-            $('#loadmorebutton').replaceWith('<center>No more posts to show.</center>');
+            $('#loadmorebutton').replaceWith('<center>No more applications to show.</center>');
           }
         }
       });
@@ -154,9 +154,11 @@
         {include file='home/applications.html'}
       </ul>
 
+      {if $cases_count > $appListLimit}
       <center>
         <a href="#" style="color:#1F98C7; font-size:12px; font-weight:bold;" id="loadmorebutton">Load More</a>
       </center>
+      {/if}
     </div>
   </center>
 
