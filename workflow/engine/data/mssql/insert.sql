@@ -4249,7 +4249,7 @@ SELECT 'LABEL','ID_CASE_SCHEDULER_SAVED','en','Case Scheduler Saved Sucessfully'
   UNION ALL
 SELECT 'LABEL','ID_AFTER_ROUTING_NOTIFY','en','After routing notify the next assigned user(s).','2012-02-02' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_INTERMEDIATE_MESSAGE_EVENT','en','Intermediate message event','2012-02-02' 
+SELECT 'JAVASCRIPT','ID_INTERMEDIATE_MESSAGE_EVENT','en','Intermediate message','2012-02-02' 
   UNION ALL
 SELECT 'LABEL','ID_EVENT_MESSAGE','en','Event Message','2012-02-02' 
   UNION ALL
@@ -4271,7 +4271,7 @@ SELECT 'LABEL','ID_EXECUTION_TIME_DAYS','en','Execution time in days','2012-02-0
   UNION ALL
 SELECT 'LABEL','ID_EXECUTE_TRIGGER','en','Execute Trigger','2012-02-02' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_INTERMEDIATE_CONDITIONAL_EVENT','en','Intermediate Conditional Event','2012-02-02' 
+SELECT 'JAVASCRIPT','ID_INTERMEDIATE_CONDITIONAL_EVENT','en','Intermediate Conditional','2012-02-02' 
   UNION ALL
 SELECT 'LABEL','ID_GRID_PAGE_DISPLAYING_PMTABLES_MESSAGE','en','Displaying PM Tables {0} - {1} of {2}','2012-02-02' 
   UNION ALL
@@ -5263,7 +5263,7 @@ SELECT 'LABEL','ID_DASHLETS_INSTANCES','en','Dashlets Instances','2012-02-02'
   UNION ALL
 SELECT 'LABEL','ID_INPUT_DOC_DOESNT_EXIST','en','Input Document does not exist!','2012-02-02' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_INTERMEDIATE_TIMER_EVENT','en','Intermediate timer event','2012-02-02' 
+SELECT 'JAVASCRIPT','ID_INTERMEDIATE_TIMER_EVENT','en','Intermediate timer','2012-02-02' 
   UNION ALL
 SELECT 'LABEL','ID_TEMPLATE_FILE_NOT_EXIST','en','Template file ''{FILE_TEMPLATE}'' does not exist.','2012-02-02' 
   UNION ALL
