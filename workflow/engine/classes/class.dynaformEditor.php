@@ -814,9 +814,9 @@ class dynaformEditorAjax extends dynaformEditor implements iDynaformEditorAjax
 				* added by krlos carlos/a/colosa.com
         * in here we are validation if a xmlform has a submit action
         */
-        if(!preg_match("/type=\"submit\"/",$copy) && !preg_match("/type=\"grid\"/",$copy) && !isset($_SESSION['submitAction']) ){
-
-        	$_SESSION['submitAction']= 1;
+//      if (!preg_match("/type=\"submit\"/",$copy) && !preg_match("/type=\"grid\"/",$copy) && !isset($_SESSION['submitAction']) ){
+        if (!preg_match("/type=\"submit\"/",$copy) && !preg_match("/type=\"grid\"/",$copy) ){
+//        $_SESSION['submitAction'] = 1;
         	$answer = 'noSub';
         }
         $copyHtml = false;
@@ -854,7 +854,7 @@ class dynaformEditorAjax extends dynaformEditor implements iDynaformEditorAjax
     	/*
       * we are unseting this variable. It's our control about to save the xmlfrom
       */
-    	unset($_SESSION['submitAction']);
+//   	unset($_SESSION['submitAction']);
       $file = G::decrypt( $A , URL_KEY );
        //return(array('response'=>PATH_DYNAFORM  . $file . '.xml'));
        /* Delete the temporal copy */
