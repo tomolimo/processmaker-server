@@ -429,12 +429,18 @@ public function kgetassigType($pro_uid, $tas){
         $c->addSelectColumn(ContentPeer::CON_CATEGORY);
         $c->addSelectColumn(ContentPeer::CON_VALUE);
         $c->add(ContentPeer::CON_ID, $TasUid );
-        $c->add(ContentPeer::CON_LANG, $lang );
+        $c->add(ContentPeer::CON_LANG, $lang );  
         $rs = TaskPeer::doSelectRS($c);
         $rs->setFetchmode(ResultSet::FETCHMODE_ASSOC);
         $rs->next();
         $row = $rs->getRow();
-
+        
+        
+        if (!$row){
+          $row['CON_VALUE'] = $this->getTasTitle();
+          $row['CON_CATEGORY'] = 'TAS_TITLE';
+        }
+        
         while (is_array($row)) {
           switch ( $row['CON_CATEGORY'] ) {
             case 'TAS_TITLE' : 
