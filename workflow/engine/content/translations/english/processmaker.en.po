@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: ProcessMaker (Branch 2.0-experimental) 2.0.34.rc4-275-g90770bd\n"
+"Project-Id-Version: ProcessMaker (Branch 2.0-experimental) 2.0.34.rc4-333-g0b3da6c\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2012-01-06 11:49:11\n"
+"PO-Revision-Date: 2012-02-03 12:58:19\n"
 "Last-Translator: \n"
 "Language-Team: Colosa Developers Team <developers@colosa.com>\n"
 "MIME-Version: 1.0\n"
@@ -3152,24 +3152,6 @@ msgid "Events"
 msgstr "Events"
 
 # TRANSLATION
-# JAVASCRIPT/ID_INTERMEDIATE_MESSAGE_EVENT
-#: JAVASCRIPT/ID_INTERMEDIATE_MESSAGE_EVENT
-msgid "Intermediate message event"
-msgstr "Intermediate message event"
-
-# TRANSLATION
-# JAVASCRIPT/ID_INTERMEDIATE_CONDITIONAL_EVENT
-#: JAVASCRIPT/ID_INTERMEDIATE_CONDITIONAL_EVENT
-msgid "Intermediate Conditional Event"
-msgstr "Intermediate Conditional Event"
-
-# TRANSLATION
-# JAVASCRIPT/ID_INTERMEDIATE_TIMER_EVENT
-#: JAVASCRIPT/ID_INTERMEDIATE_TIMER_EVENT
-msgid "Intermediate timer event"
-msgstr "Intermediate timer event"
-
-# TRANSLATION
 # LABEL/ID_TO
 #: LABEL/ID_TO
 msgid "To"
@@ -4672,8 +4654,12 @@ msgstr "To Do"
 # TRANSLATION
 # JAVASCRIPT/ID_DONT_SAVE_XMLFORM
 #: JAVASCRIPT/ID_DONT_SAVE_XMLFORM
-msgid "This form has not a submit action. Do you  want to continue anyway?"
-msgstr "This form has not a submit action. Do you  want to continue anyway?"
+msgid "DynaForm is now saved. \n"
+"Warning: Form doesn't have a submit action. \n"
+"Either add a \"Submit\" button or change the \"Next Step Link\" property."
+msgstr "DynaForm is now saved. \n"
+"Warning: Form doesn't have a submit action. \n"
+"Either add a \"Submit\" button or change the \"Next Step Link\" property."
 
 # TRANSLATION
 # LABEL/ID_CASES_STATUS_COMPLETED
@@ -8516,10 +8502,10 @@ msgid "After routing notify the next assigned user(s)."
 msgstr "After routing notify the next assigned user(s)."
 
 # TRANSLATION
-# LABEL/ID_INTERMEDIATE_MESSAGE_EVENTS
-#: LABEL/ID_INTERMEDIATE_MESSAGE_EVENTS
-msgid "Intermediate Message Events (Task Notifications)"
-msgstr "Intermediate Message Events (Task Notifications)"
+# JAVASCRIPT/ID_INTERMEDIATE_MESSAGE_EVENT
+#: JAVASCRIPT/ID_INTERMEDIATE_MESSAGE_EVENT
+msgid "Intermediate message event"
+msgstr "Intermediate message event"
 
 # TRANSLATION
 # LABEL/ID_EVENT_MESSAGE
@@ -8582,10 +8568,10 @@ msgid "Execute Trigger"
 msgstr "Execute Trigger"
 
 # TRANSLATION
-# LABEL/ID_INTERMEDIATE_TIMER_EVENTS
-#: LABEL/ID_INTERMEDIATE_TIMER_EVENTS
-msgid "Intermediate Timer Event (Multiple Event)"
-msgstr "Intermediate Timer Event (Multiple Event)"
+# JAVASCRIPT/ID_INTERMEDIATE_CONDITIONAL_EVENT
+#: JAVASCRIPT/ID_INTERMEDIATE_CONDITIONAL_EVENT
+msgid "Intermediate Conditional Event"
+msgstr "Intermediate Conditional Event"
 
 # TRANSLATION
 # LABEL/ID_GRID_PAGE_DISPLAYING_PMTABLES_MESSAGE
@@ -10648,8 +10634,8 @@ msgstr "Your image has been successfully uploaded"
 # TRANSLATION
 # LABEL/ID_ERROR_UPLOADING_IMAGE_TYPE
 #: LABEL/ID_ERROR_UPLOADING_IMAGE_TYPE
-msgid "Error uploading image, wrong file type"
-msgstr "Error uploading image, wrong file type"
+msgid "Error when uploading file, type or format is incorrect."
+msgstr "Error when uploading file, type or format is incorrect."
 
 # TRANSLATION
 # LABEL/ID_UPLOADING_IMAGE_WRONG_SIZE
@@ -11520,6 +11506,348 @@ msgstr "Dashlets Instances"
 #: LABEL/ID_INPUT_DOC_DOESNT_EXIST
 msgid "Input Document does not exist!"
 msgstr "Input Document does not exist!"
+
+# TRANSLATION
+# JAVASCRIPT/ID_INTERMEDIATE_TIMER_EVENT
+#: JAVASCRIPT/ID_INTERMEDIATE_TIMER_EVENT
+msgid "Intermediate timer event"
+msgstr "Intermediate timer event"
+
+# TRANSLATION
+# LABEL/ID_TEMPLATE_FILE_NOT_EXIST
+#: LABEL/ID_TEMPLATE_FILE_NOT_EXIST
+msgid "Template file '{FILE_TEMPLATE}' does not exist."
+msgstr "Template file '{FILE_TEMPLATE}' does not exist."
+
+# TRANSLATION
+# LABEL/ID_MESSAGE_SENT
+#: LABEL/ID_MESSAGE_SENT
+msgid "message sent"
+msgstr "message sent"
+
+# TRANSLATION
+# LABEL/ID_CASE_DOES_NOT_EXIST
+#: LABEL/ID_CASE_DOES_NOT_EXIST
+msgid "Case {CASE_NUMBER} does not exist"
+msgstr "Case {CASE_NUMBER} does not exist"
+
+# TRANSLATION
+# LABEL/ID_COMMAND_EXECUTED_SUCCESSFULLY
+#: LABEL/ID_COMMAND_EXECUTED_SUCCESSFULLY
+msgid "Command executed successfully"
+msgstr "Command executed successfully"
+
+# TRANSLATION
+# LABEL/ID_USERNAME_REQUIRED
+#: LABEL/ID_USERNAME_REQUIRED
+msgid "Username is required"
+msgstr "Username is required"
+
+# TRANSLATION
+# LABEL/ID_PASSWD_REQUIRED
+#: LABEL/ID_PASSWD_REQUIRED
+msgid "Password is required"
+msgstr "Password is required"
+
+# TRANSLATION
+# LABEL/ID_PASSWORD_SURPRASES
+#: LABEL/ID_PASSWORD_SURPRASES
+msgid "Password surprases the maximun length allowed"
+msgstr "Password surprases the maximun length allowed"
+
+# TRANSLATION
+# LABEL/ID_USERNAME_ALREADY_EXISTS
+#: LABEL/ID_USERNAME_ALREADY_EXISTS
+msgid "Username '{USER_ID}' already exists"
+msgstr "Username '{USER_ID}' already exists"
+
+# TRANSLATION
+# LABEL/ID_INVALID_ROLE
+#: LABEL/ID_INVALID_ROLE
+msgid "Invalid role '{ROLE}'"
+msgstr "Invalid role '{ROLE}'"
+
+# TRANSLATION
+# LABEL/ID_USER_CREATED_SUCCESSFULLY
+#: LABEL/ID_USER_CREATED_SUCCESSFULLY
+msgid "User {FIRSTNAME} {LASTNAME} [{USER_ID}] created successfully"
+msgstr "User {FIRSTNAME} {LASTNAME} [{USER_ID}] created successfully"
+
+# TRANSLATION
+# LABEL/ID_GROUP_NAME_REQUIRED
+#: LABEL/ID_GROUP_NAME_REQUIRED
+msgid "Group name is required"
+msgstr "Group name is required"
+
+# TRANSLATION
+# LABEL/ID_GROUP_CREATED_SUCCESSFULLY
+#: LABEL/ID_GROUP_CREATED_SUCCESSFULLY
+msgid "Group {GROUP_NAME} created successfully"
+msgstr "Group {GROUP_NAME} created successfully"
+
+# TRANSLATION
+# LABEL/ID_DEPARTMENT_NAME_REQUIRED
+#: LABEL/ID_DEPARTMENT_NAME_REQUIRED
+msgid "Department name is required"
+msgstr "Department name is required"
+
+# TRANSLATION
+# LABEL/ID_DEPARTMENT_CREATED_SUCCESSFULLY
+#: LABEL/ID_DEPARTMENT_CREATED_SUCCESSFULLY
+msgid "{DEPARTMENT_NAME}, {PARENT_UID} Department {DEPARTMENT_NAME} created successfully"
+msgstr "{DEPARTMENT_NAME}, {PARENT_UID} Department {DEPARTMENT_NAME} created successfully"
+
+# TRANSLATION
+# LABEL/ID_USER_NOT_REGISTERED_SYSTEM
+#: LABEL/ID_USER_NOT_REGISTERED_SYSTEM
+msgid "User not registered in the system"
+msgstr "User not registered in the system"
+
+# TRANSLATION
+# LABEL/ID_GROUP_NOT_REGISTERED_SYSTEM
+#: LABEL/ID_GROUP_NOT_REGISTERED_SYSTEM
+msgid "Group not registered in the system"
+msgstr "Group not registered in the system"
+
+# TRANSLATION
+# LABEL/ID_COMMAND_EXECUTED_SUCCESSFULY
+#: LABEL/ID_COMMAND_EXECUTED_SUCCESSFULY
+msgid "command executed successfuly"
+msgstr "command executed successfuly"
+
+# TRANSLATION
+# LABEL/ID_USER_NOT_REGISTERED_GROUP
+#: LABEL/ID_USER_NOT_REGISTERED_GROUP
+msgid "User not registered in the group"
+msgstr "User not registered in the group"
+
+# TRANSLATION
+# LABEL/ID_USER_ALREADY_EXISTS_GROUP
+#: LABEL/ID_USER_ALREADY_EXISTS_GROUP
+msgid "User already exists in the group"
+msgstr "User already exists in the group"
+
+# TRANSLATION
+# LABEL/ID_DEPARTMENT_NOT_REGISTERED_SYSTEM
+#: LABEL/ID_DEPARTMENT_NOT_REGISTERED_SYSTEM
+msgid "Department {DEP_ID} is not registered in the system"
+msgstr "Department {DEP_ID} is not registered in the system"
+
+# TRANSLATION
+# LABEL/ID_CASE_DELEGATION_ALREADY_CLOSED
+#: LABEL/ID_CASE_DELEGATION_ALREADY_CLOSED
+msgid "This case delegation is already closed or does not exist"
+msgstr "This case delegation is already closed or does not exist"
+
+# TRANSLATION
+# LABEL/ID_VARIABLES_RECEIVED
+#: LABEL/ID_VARIABLES_RECEIVED
+msgid "variables received"
+msgstr "variables received"
+
+# TRANSLATION
+# LABEL/ID_VARIABLES_PARAM_ZERO
+#: LABEL/ID_VARIABLES_PARAM_ZERO
+msgid "The variables param length is zero"
+msgstr "The variables param length is zero"
+
+# TRANSLATION
+# LABEL/ID_VARIABLES_PARAM_NOT_ARRAY
+#: LABEL/ID_VARIABLES_PARAM_NOT_ARRAY
+msgid "The variables param is not an array"
+msgstr "The variables param is not an array"
+
+# TRANSLATION
+# LABEL/ID_VARIABLES_SENT
+#: LABEL/ID_VARIABLES_SENT
+msgid "variables sent"
+msgstr "variables sent"
+
+# TRANSLATION
+# LABEL/ID_INVALID_PROCESS
+#: LABEL/ID_INVALID_PROCESS
+msgid "Invalid process"
+msgstr "Invalid process"
+
+# TRANSLATION
+# LABEL/ID_MULTIPLE_STARTING_TASKS
+#: LABEL/ID_MULTIPLE_STARTING_TASKS
+msgid "Multiple starting tasks in the process"
+msgstr "Multiple starting tasks in the process"
+
+# TRANSLATION
+# LABEL/ID_TASK_INVALID_USER_NOT_ASSIGNED_TASK
+#: LABEL/ID_TASK_INVALID_USER_NOT_ASSIGNED_TASK
+msgid "Task invalid or the user is not assigned to the task"
+msgstr "Task invalid or the user is not assigned to the task"
+
+# TRANSLATION
+# LABEL/ID_STARTED_SUCCESSFULLY
+#: LABEL/ID_STARTED_SUCCESSFULLY
+msgid "Started successfully"
+msgstr "Started successfully"
+
+# TRANSLATION
+# LABEL/ID_ARRAY_VARIABLES_EMPTY
+#: LABEL/ID_ARRAY_VARIABLES_EMPTY
+msgid "Array of variables is empty"
+msgstr "Array of variables is empty"
+
+# TRANSLATION
+# LABEL/ID_USER_NOT_ASSIGNED_TASK
+#: LABEL/ID_USER_NOT_ASSIGNED_TASK
+msgid "The user is not assigned to the task"
+msgstr "The user is not assigned to the task"
+
+# TRANSLATION
+# LABEL/ID_NO_STARTING_TASK
+#: LABEL/ID_NO_STARTING_TASK
+msgid "No starting task defined"
+msgstr "No starting task defined"
+
+# TRANSLATION
+# LABEL/ID_SPECIFY_DELEGATION_INDEX
+#: LABEL/ID_SPECIFY_DELEGATION_INDEX
+msgid "Please specify the delegation index"
+msgstr "Please specify the delegation index"
+
+# TRANSLATION
+# LABEL/ID_CASE_ASSIGNED_ANOTHER_USER
+#: LABEL/ID_CASE_ASSIGNED_ANOTHER_USER
+msgid "This case is assigned to another user"
+msgstr "This case is assigned to another user"
+
+# TRANSLATION
+# LABEL/ID_CASE_IN_STATUS
+#: LABEL/ID_CASE_IN_STATUS
+msgid "This case is in status"
+msgstr "This case is in status"
+
+# TRANSLATION
+# LABEL/ID_CAN_NOT_ROUTE_CASE_USING_WEBSERVICES
+#: LABEL/ID_CAN_NOT_ROUTE_CASE_USING_WEBSERVICES
+msgid "Can not route a case with Manual Assignment using webservices"
+msgstr "Can not route a case with Manual Assignment using webservices"
+
+# TRANSLATION
+# LABEL/ID_TASK_DOES_NOT_HAVE_ROUTING_RULE
+#: LABEL/ID_TASK_DOES_NOT_HAVE_ROUTING_RULE
+msgid "Task does not have a routing rule; check process definition"
+msgstr "Task does not have a routing rule; check process definition"
+
+# TRANSLATION
+# LABEL/ID_TASK_DEFINED_MANUAL_ASSIGNMENT
+#: LABEL/ID_TASK_DEFINED_MANUAL_ASSIGNMENT
+msgid "The task is defined for Manual assignment"
+msgstr "The task is defined for Manual assignment"
+
+# TRANSLATION
+# LABEL/ID_INVALID_TRIGGER
+#: LABEL/ID_INVALID_TRIGGER
+msgid "Invalid trigger '{TRIGGER_INDEX}'"
+msgstr "Invalid trigger '{TRIGGER_INDEX}'"
+
+# TRANSLATION
+# LABEL/ID_EXECUTED
+#: LABEL/ID_EXECUTED
+msgid "executed"
+msgstr "executed"
+
+# TRANSLATION
+# LABEL/ID_TARGET_ORIGIN_USER_SAME
+#: LABEL/ID_TARGET_ORIGIN_USER_SAME
+msgid "Target and Origin user are the same"
+msgstr "Target and Origin user are the same"
+
+# TRANSLATION
+# LABEL/ID_INVALID_ORIGIN_USER
+#: LABEL/ID_INVALID_ORIGIN_USER
+msgid "Invalid origin user"
+msgstr "Invalid origin user"
+
+# TRANSLATION
+# LABEL/ID_CASE_NOT_OPEN
+#: LABEL/ID_CASE_NOT_OPEN
+msgid "This case is not open"
+msgstr "This case is not open"
+
+# TRANSLATION
+# LABEL/ID_INVALID_CASE_DELEGATION_INDEX
+#: LABEL/ID_INVALID_CASE_DELEGATION_INDEX
+msgid "Invalid Case Delegation index for this user"
+msgstr "Invalid Case Delegation index for this user"
+
+# TRANSLATION
+# LABEL/ID_TARGET_USER_DOES_NOT_HAVE_RIGHTS
+#: LABEL/ID_TARGET_USER_DOES_NOT_HAVE_RIGHTS
+msgid "The target user does not have rights to execute the task"
+msgstr "The target user does not have rights to execute the task"
+
+# TRANSLATION
+# LABEL/ID_TARGET_USER_DESTINATION_INVALID
+#: LABEL/ID_TARGET_USER_DESTINATION_INVALID
+msgid "The target user destination is invalid"
+msgstr "The target user destination is invalid"
+
+# TRANSLATION
+# LABEL/ID_CASE_COULD_NOT_REASSIGNED
+#: LABEL/ID_CASE_COULD_NOT_REASSIGNED
+msgid "The case could not be reassigned."
+msgstr "The case could not be reassigned."
+
+# TRANSLATION
+# LABEL/ID_SUCESSFUL
+#: LABEL/ID_SUCESSFUL
+msgid "Sucessful"
+msgstr "Sucessful"
+
+# TRANSLATION
+# LABEL/ID_ERROR_URL_PROCESS_INVALID
+#: LABEL/ID_ERROR_URL_PROCESS_INVALID
+msgid "Error the url {DOWNLOAD_URL} is invalid or the process in {LOCAL_PATH}{NEW_FILENAME} is invalid"
+msgstr "Error the url {DOWNLOAD_URL} is invalid or the process in {LOCAL_PATH}{NEW_FILENAME} is invalid"
+
+# TRANSLATION
+# LABEL/ID_PROCESS_ALREADY_IN_SYSTEM
+#: LABEL/ID_PROCESS_ALREADY_IN_SYSTEM
+msgid "The process is already in the System and the value for importOption is not specified."
+msgstr "The process is already in the System and the value for importOption is not specified."
+
+# TRANSLATION
+# LABEL/ID_CONFIRM_REMOVE_FIELDS
+#: LABEL/ID_CONFIRM_REMOVE_FIELDS
+msgid "Do you really want remove this fields"
+msgstr "Do you really want remove this fields"
+
+# TRANSLATION
+# LABEL/ID_INTERMEDIATE_MESSAGE_EVENTS
+#: LABEL/ID_INTERMEDIATE_MESSAGE_EVENTS
+msgid "Intermediate Message Events (Task Notifications)"
+msgstr "Intermediate Message Events (Task Notifications)"
+
+# TRANSLATION
+# LABEL/ID_INTERMEDIATE_TIMER_EVENTS
+#: LABEL/ID_INTERMEDIATE_TIMER_EVENTS
+msgid "Intermediate Timer Event (Multiple Event)"
+msgstr "Intermediate Timer Event (Multiple Event)"
+
+# TRANSLATION
+# LABEL/ID_PARENT_DEPARTMENT_NOT_EXIST
+#: LABEL/ID_PARENT_DEPARTMENT_NOT_EXIST
+msgid "Parent department doesn't exist"
+msgstr "Parent department doesn't exist"
+
+# TRANSLATION
+# LABEL/ID_SWITCH_INTERFACE
+#: LABEL/ID_SWITCH_INTERFACE
+msgid "Switch Interface"
+msgstr "Switch Interface"
+
+# TRANSLATION
+# LABEL/ID_USER_EXPERIENCE
+#: LABEL/ID_USER_EXPERIENCE
+msgid "User Experience"
+msgstr "User Experience"
 
 # additionalTables/additionalTablesData.xml?ADD_TAB_NAME
 # additionalTables/additionalTablesData.xml
@@ -27209,6 +27537,18 @@ msgstr "Session Id"
 msgid "TriggerList"
 msgstr "TriggerList"
 
+# setup/wsUnassignedCaseList.xml?SESSION_ID
+# setup/wsUnassignedCaseList.xml
+#: text - SESSION_ID
+msgid "[setup/wsUnassignedCaseList.xml?SESSION_ID] Session Id"
+msgstr "Session Id"
+
+# setup/wsUnassignedCaseList.xml?ACTIONB
+# setup/wsUnassignedCaseList.xml
+#: button - ACTIONB
+msgid "UnassignedCaseList"
+msgstr "UnassignedCaseList"
+
 # setup/wsUserList.xml?SESSION_ID
 # setup/wsUserList.xml
 #: text - SESSION_ID
@@ -27424,6 +27764,24 @@ msgstr "Task Title"
 #: text - processId
 msgid "Process GUID/Title"
 msgstr "Process GUID/Title"
+
+# setup/wsrUnassignedCaseList.xml?guid
+# setup/wsrUnassignedCaseList.xml
+#: text - guid
+msgid "[setup/wsrUnassignedCaseList.xml?guid] GUID"
+msgstr "GUID"
+
+# setup/wsrUnassignedCaseList.xml?name
+# setup/wsrUnassignedCaseList.xml
+#: text - name
+msgid "[setup/wsrUnassignedCaseList.xml?name] Case Title"
+msgstr "Case Title"
+
+# setup/wsrUnassignedCaseList.xml?delIndex
+# setup/wsrUnassignedCaseList.xml
+#: text - delIndex
+msgid "[setup/wsrUnassignedCaseList.xml?delIndex] Del Index"
+msgstr "Del Index"
 
 # setup/wsrUserList.xml?guid
 # setup/wsrUserList.xml
@@ -28904,8 +29262,8 @@ msgstr "Address"
 # users/myInfo.xml?USR_ZIP_CODE
 # users/myInfo.xml
 #: text - USR_ZIP_CODE
-msgid "[users/myInfo.xml?USR_ZIP_CODE] Zip Code"
-msgstr "Zip Code"
+msgid "Zip/Postal Code"
+msgstr "Zip/Postal Code"
 
 # users/myInfo.xml?USR_COUNTRY
 # users/myInfo.xml
@@ -29090,8 +29448,8 @@ msgstr "Address"
 # users/myInfo2.xml?USR_ZIP_CODE
 # users/myInfo2.xml
 #: text - USR_ZIP_CODE
-msgid "[users/myInfo2.xml?USR_ZIP_CODE] Zip Code"
-msgstr "Zip Code"
+msgid "[users/myInfo2.xml?USR_ZIP_CODE] Zip/Postal Code"
+msgstr "Zip/Postal Code"
 
 # users/myInfo2.xml?USR_COUNTRY
 # users/myInfo2.xml
@@ -29288,8 +29646,8 @@ msgstr "Address"
 # users/myInfoView.xml?USR_ZIP_CODE
 # users/myInfoView.xml
 #: text - USR_ZIP_CODE
-msgid "[users/myInfoView.xml?USR_ZIP_CODE] Zip Code"
-msgstr "Zip Code"
+msgid "[users/myInfoView.xml?USR_ZIP_CODE] Zip/Postal Code"
+msgstr "Zip/Postal Code"
 
 # users/myInfoView.xml?USR_COUNTRY
 # users/myInfoView.xml
@@ -29474,8 +29832,8 @@ msgstr "Address"
 # users/myInfoView2.xml?USR_ZIP_CODE
 # users/myInfoView2.xml
 #: text - USR_ZIP_CODE
-msgid "[users/myInfoView2.xml?USR_ZIP_CODE] Zip Code"
-msgstr "Zip Code"
+msgid "[users/myInfoView2.xml?USR_ZIP_CODE] Zip/Postal Code"
+msgstr "Zip/Postal Code"
 
 # users/myInfoView2.xml?USR_COUNTRY
 # users/myInfoView2.xml
@@ -29744,8 +30102,8 @@ msgstr "Address"
 # users/users_Edit.xml?USR_ZIP_CODE
 # users/users_Edit.xml
 #: text - USR_ZIP_CODE
-msgid "[users/users_Edit.xml?USR_ZIP_CODE] Zip Code"
-msgstr "Zip Code"
+msgid "[users/users_Edit.xml?USR_ZIP_CODE] Zip/Postal Code"
+msgstr "Zip/Postal Code"
 
 # users/users_Edit.xml?USR_COUNTRY
 # users/users_Edit.xml
@@ -29930,8 +30288,8 @@ msgstr "Address"
 # users/users_EditAdmin.xml?USR_ZIP_CODE
 # users/users_EditAdmin.xml
 #: text - USR_ZIP_CODE
-msgid "[users/users_EditAdmin.xml?USR_ZIP_CODE] Zip Code"
-msgstr "Zip Code"
+msgid "[users/users_EditAdmin.xml?USR_ZIP_CODE] Zip/Postal Code"
+msgstr "Zip/Postal Code"
 
 # users/users_EditAdmin.xml?USR_COUNTRY
 # users/users_EditAdmin.xml
@@ -30071,41 +30429,233 @@ msgstr "Resume"
 msgid "[users/users_EditAdmin.xml?SUBMIT] Save"
 msgstr "Save"
 
+# users/users_EditLDAP.xml?TITLE3
+# users/users_EditLDAP.xml
+#: title - TITLE3
+msgid "[users/users_EditLDAP.xml?TITLE3] Profile"
+msgstr "Profile"
+
+# users/users_EditLDAP.xml?USR_PHOTO_SHOW
+# users/users_EditLDAP.xml
+#: image - USR_PHOTO_SHOW
+msgid "[users/users_EditLDAP.xml?USR_PHOTO_SHOW] "
+msgstr ""
+
+# users/users_EditLDAP.xml?USR_PHOTO
+# users/users_EditLDAP.xml
+#: file - USR_PHOTO
+msgid "[users/users_EditLDAP.xml?USR_PHOTO] Photo"
+msgstr "Photo"
+
+# users/users_EditLDAP.xml?USR_RESUME
+# users/users_EditLDAP.xml
+#: file - USR_RESUME
+msgid "[users/users_EditLDAP.xml?USR_RESUME] Résumé"
+msgstr "Résumé"
+
+# users/users_EditLDAP.xml?MAX_FILES_SIZE
+# users/users_EditLDAP.xml
+#: edit - MAX_FILES_SIZE
+msgid "Max upload files size in bytes"
+msgstr "Max upload files size in bytes"
+
+# users/users_EditLDAP.xml?TITLE1
+# users/users_EditLDAP.xml
+#: title - TITLE1
+msgid "[users/users_EditLDAP.xml?TITLE1] Personal Information"
+msgstr "Personal Information"
+
+# users/users_EditLDAP.xml?USR_FIRSTNAME
+# users/users_EditLDAP.xml
+#: text - USR_FIRSTNAME
+msgid "[users/users_EditLDAP.xml?USR_FIRSTNAME] First Name"
+msgstr "First Name"
+
+# users/users_EditLDAP.xml?USR_LASTNAME
+# users/users_EditLDAP.xml
+#: text - USR_LASTNAME
+msgid "[users/users_EditLDAP.xml?USR_LASTNAME] Last Name"
+msgstr "Last Name"
+
+# users/users_EditLDAP.xml?USR_USERNAME
+# users/users_EditLDAP.xml
+#: text - USR_USERNAME
+msgid "[users/users_EditLDAP.xml?USR_USERNAME] User ID (*)"
+msgstr "User ID (*)"
+
+# users/users_EditLDAP.xml?USR_EMAIL
+# users/users_EditLDAP.xml
+#: text - USR_EMAIL
+msgid "[users/users_EditLDAP.xml?USR_EMAIL] Email"
+msgstr "Email"
+
+# users/users_EditLDAP.xml?USR_ADDRESS
+# users/users_EditLDAP.xml
+#: textarea - USR_ADDRESS
+msgid "[users/users_EditLDAP.xml?USR_ADDRESS] Address"
+msgstr "Address"
+
+# users/users_EditLDAP.xml?USR_ZIP_CODE
+# users/users_EditLDAP.xml
+#: text - USR_ZIP_CODE
+msgid "[users/users_EditLDAP.xml?USR_ZIP_CODE] Zip/Postal Code"
+msgstr "Zip/Postal Code"
+
+# users/users_EditLDAP.xml?USR_COUNTRY
+# users/users_EditLDAP.xml
+#: dropdown - USR_COUNTRY
+msgid "[users/users_EditLDAP.xml?USR_COUNTRY] Country"
+msgstr "Country"
+
+# users/users_EditLDAP.xml?USR_COUNTRY-
+# users/users_EditLDAP.xml
+#: dropdown - USR_COUNTRY -
+msgid "[users/users_EditLDAP.xml?USR_COUNTRY-]"
+msgstr ""
+
+# users/users_EditLDAP.xml?USR_CITY
+# users/users_EditLDAP.xml
+#: dropdown - USR_CITY
+msgid "[users/users_EditLDAP.xml?USR_CITY] State or Region"
+msgstr "State or Region"
+
+# users/users_EditLDAP.xml?USR_CITY-
+# users/users_EditLDAP.xml
+#: dropdown - USR_CITY -
+msgid "[users/users_EditLDAP.xml?USR_CITY-]"
+msgstr "N/D"
+
+# users/users_EditLDAP.xml?USR_LOCATION
+# users/users_EditLDAP.xml
+#: dropdown - USR_LOCATION
+msgid "[users/users_EditLDAP.xml?USR_LOCATION] Location"
+msgstr "Location"
+
+# users/users_EditLDAP.xml?USR_LOCATION-
+# users/users_EditLDAP.xml
+#: dropdown - USR_LOCATION -
+msgid "[users/users_EditLDAP.xml?USR_LOCATION-]"
+msgstr "N/D"
+
+# users/users_EditLDAP.xml?USR_PHONE
+# users/users_EditLDAP.xml
+#: text - USR_PHONE
+msgid "[users/users_EditLDAP.xml?USR_PHONE] Phone"
+msgstr "Phone"
+
+# users/users_EditLDAP.xml?USR_POSITION
+# users/users_EditLDAP.xml
+#: text - USR_POSITION
+msgid "[users/users_EditLDAP.xml?USR_POSITION] Position"
+msgstr "Position"
+
+# users/users_EditLDAP.xml?USR_REPORTS_TO
+# users/users_EditLDAP.xml
+#: caption - USR_REPORTS_TO
+msgid "[users/users_EditLDAP.xml?USR_REPORTS_TO] Reports to"
+msgstr "Reports to"
+
+# users/users_EditLDAP.xml?USR_DEPARTMENT
+# users/users_EditLDAP.xml
+#: caption - USR_DEPARTMENT
+msgid "[users/users_EditLDAP.xml?USR_DEPARTMENT] Department"
+msgstr "Department"
+
+# users/users_EditLDAP.xml?USR_REPLACED_BY
+# users/users_EditLDAP.xml
+#: dropdown - USR_REPLACED_BY
+msgid "[users/users_EditLDAP.xml?USR_REPLACED_BY] Replaced by"
+msgstr "Replaced by"
+
+# users/users_EditLDAP.xml?USR_REPLACED_BY-
+# users/users_EditLDAP.xml
+#: dropdown - USR_REPLACED_BY -
+msgid "[users/users_EditLDAP.xml?USR_REPLACED_BY-]"
+msgstr ""
+
+# users/users_EditLDAP.xml?USR_DUE_DATE
+# users/users_EditLDAP.xml
+#: date - USR_DUE_DATE
+msgid "[users/users_EditLDAP.xml?USR_DUE_DATE] Expiration Date"
+msgstr "Expiration Date"
+
+# users/users_EditLDAP.xml?USR_CALENDAR
+# users/users_EditLDAP.xml
+#: dropdown - USR_CALENDAR
+msgid "[users/users_EditLDAP.xml?USR_CALENDAR] Calendar"
+msgstr "Calendar"
+
+# users/users_EditLDAP.xml?USR_CALENDAR-
+# users/users_EditLDAP.xml
+#: dropdown - USR_CALENDAR -
+msgid "[users/users_EditLDAP.xml?USR_CALENDAR-]"
+msgstr "- None -"
+
+# users/users_EditLDAP.xml?USR_STATUS
+# users/users_EditLDAP.xml
+#: dropdown - USR_STATUS
+msgid "[users/users_EditLDAP.xml?USR_STATUS] Status"
+msgstr "Status"
+
+# users/users_EditLDAP.xml?USR_STATUS-ACTIVE
+# users/users_EditLDAP.xml
+#: dropdown - USR_STATUS - ACTIVE
+msgid "[users/users_EditLDAP.xml?USR_STATUS-ACTIVE]"
+msgstr "ACTIVE"
+
+# users/users_EditLDAP.xml?USR_STATUS-INACTIVE
+# users/users_EditLDAP.xml
+#: dropdown - USR_STATUS - INACTIVE
+msgid "[users/users_EditLDAP.xml?USR_STATUS-INACTIVE]"
+msgstr "INACTIVE"
+
+# users/users_EditLDAP.xml?USR_STATUS-VACATION
+# users/users_EditLDAP.xml
+#: dropdown - USR_STATUS - VACATION
+msgid "[users/users_EditLDAP.xml?USR_STATUS-VACATION]"
+msgstr "ON VACATION"
+
+# users/users_EditLDAP.xml?USR_ROLE
+# users/users_EditLDAP.xml
+#: dropdown - USR_ROLE
+msgid "[users/users_EditLDAP.xml?USR_ROLE] Role"
+msgstr "Role"
+
+# users/users_EditLDAP.xml?TITLE2
+# users/users_EditLDAP.xml
+#: title - TITLE2
+msgid "[users/users_EditLDAP.xml?TITLE2] Change Password"
+msgstr "Change Password"
+
+# users/users_EditLDAP.xml?USR_NEW_PASS
+# users/users_EditLDAP.xml
+#: password - USR_NEW_PASS
+msgid "[users/users_EditLDAP.xml?USR_NEW_PASS] New Password"
+msgstr "New Password"
+
+# users/users_EditLDAP.xml?USR_CNF_PASS
+# users/users_EditLDAP.xml
+#: password - USR_CNF_PASS
+msgid "[users/users_EditLDAP.xml?USR_CNF_PASS] Confirm Password"
+msgstr "Confirm Password"
+
+# users/users_EditLDAP.xml?SUBMIT
+# users/users_EditLDAP.xml
+#: button - SUBMIT
+msgid "[users/users_EditLDAP.xml?SUBMIT] Save"
+msgstr "Save"
+
+# users/users_EditLDAP.xml?BTN_CANCEL
+# users/users_EditLDAP.xml
+#: button - BTN_CANCEL
+msgid "[users/users_EditLDAP.xml?BTN_CANCEL] Cancel"
+msgstr "Cancel"
+
 # users/users_EditOptions.xml?MNU1
 # users/users_EditOptions.xml
 #: link - MNU1
 msgid "[users/users_EditOptions.xml?MNU1] Back to list"
 msgstr "Back to list"
-
-# users/users_EditRT.xml?TITLE3
-# users/users_EditRT.xml
-#: title - TITLE3
-msgid "[users/users_EditRT.xml?TITLE3] Profile"
-msgstr "Profile"
-
-# users/users_EditRT.xml?USR_PHOTO_SHOW
-# users/users_EditRT.xml
-#: image - USR_PHOTO_SHOW
-msgid "[users/users_EditRT.xml?USR_PHOTO_SHOW] "
-msgstr ""
-
-# users/users_EditRT.xml?USR_PHOTO
-# users/users_EditRT.xml
-#: file - USR_PHOTO
-msgid "[users/users_EditRT.xml?USR_PHOTO] Photo"
-msgstr "Photo"
-
-# users/users_EditRT.xml?USR_RESUME
-# users/users_EditRT.xml
-#: file - USR_RESUME
-msgid "[users/users_EditRT.xml?USR_RESUME] Résumé"
-msgstr "Résumé"
-
-# users/users_EditRT.xml?MAX_FILES_SIZE
-# users/users_EditRT.xml
-#: edit - MAX_FILES_SIZE
-msgid "Max upload files size in bytes"
-msgstr "Max upload files size in bytes"
 
 # users/users_EditRT.xml?TITLE1
 # users/users_EditRT.xml
@@ -30146,8 +30696,8 @@ msgstr "Address"
 # users/users_EditRT.xml?USR_ZIP_CODE
 # users/users_EditRT.xml
 #: text - USR_ZIP_CODE
-msgid "[users/users_EditRT.xml?USR_ZIP_CODE] Zip Code"
-msgstr "Zip Code"
+msgid "[users/users_EditRT.xml?USR_ZIP_CODE] Zip/Postal Code"
+msgstr "Zip/Postal Code"
 
 # users/users_EditRT.xml?USR_COUNTRY
 # users/users_EditRT.xml
@@ -30287,6 +30837,30 @@ msgstr "New Password"
 msgid "[users/users_EditRT.xml?USR_CNF_PASS] Confirm Password"
 msgstr "Confirm Password"
 
+# users/users_EditRT.xml?TITLE3
+# users/users_EditRT.xml
+#: title - TITLE3
+msgid "[users/users_EditRT.xml?TITLE3] Profile"
+msgstr "Profile"
+
+# users/users_EditRT.xml?USR_PHOTO_SHOW
+# users/users_EditRT.xml
+#: image - USR_PHOTO_SHOW
+msgid "[users/users_EditRT.xml?USR_PHOTO_SHOW] "
+msgstr ""
+
+# users/users_EditRT.xml?USR_PHOTO
+# users/users_EditRT.xml
+#: file - USR_PHOTO
+msgid "[users/users_EditRT.xml?USR_PHOTO] Photo"
+msgstr "Photo"
+
+# users/users_EditRT.xml?MAX_FILES_SIZE
+# users/users_EditRT.xml
+#: edit - MAX_FILES_SIZE
+msgid "Max upload file size"
+msgstr "Max upload file size"
+
 # users/users_EditRT.xml?SUBMIT
 # users/users_EditRT.xml
 #: button - SUBMIT
@@ -30353,30 +30927,6 @@ msgstr ""
 msgid "[users/users_List.xml?USR_DELETE] "
 msgstr ""
 
-# users/users_New.xml?TITLE3
-# users/users_New.xml
-#: title - TITLE3
-msgid "[users/users_New.xml?TITLE3] Profile"
-msgstr "Profile"
-
-# users/users_New.xml?USR_PHOTO
-# users/users_New.xml
-#: file - USR_PHOTO
-msgid "[users/users_New.xml?USR_PHOTO] Photo"
-msgstr "Photo"
-
-# users/users_New.xml?USR_RESUME
-# users/users_New.xml
-#: file - USR_RESUME
-msgid "[users/users_New.xml?USR_RESUME] Résumé"
-msgstr "Résumé"
-
-# users/users_New.xml?MAX_FILES_SIZE
-# users/users_New.xml
-#: edit - MAX_FILES_SIZE
-msgid "[users/users_New.xml?MAX_FILES_SIZE] Max upload files size in bytes"
-msgstr "Max upload files size in bytes"
-
 # users/users_New.xml?TITLE1
 # users/users_New.xml
 #: title - TITLE1
@@ -30416,8 +30966,8 @@ msgstr "Address"
 # users/users_New.xml?USR_ZIP_CODE
 # users/users_New.xml
 #: text - USR_ZIP_CODE
-msgid "[users/users_New.xml?USR_ZIP_CODE] Zip Code"
-msgstr "Zip Code"
+msgid "[users/users_New.xml?USR_ZIP_CODE] Zip/Postal Code"
+msgstr "Zip/Postal Code"
 
 # users/users_New.xml?USR_COUNTRY
 # users/users_New.xml
@@ -30562,6 +31112,24 @@ msgstr "Confirm Password"
 #: button - SUBMIT
 msgid "[users/users_New.xml?SUBMIT] Save"
 msgstr "Save"
+
+# users/users_New.xml?TITLE3
+# users/users_New.xml
+#: title - TITLE3
+msgid "[users/users_New.xml?TITLE3] Profile"
+msgstr "Profile"
+
+# users/users_New.xml?USR_PHOTO
+# users/users_New.xml
+#: file - USR_PHOTO
+msgid "[users/users_New.xml?USR_PHOTO] Photo"
+msgstr "Photo"
+
+# users/users_New.xml?MAX_FILES_SIZE
+# users/users_New.xml
+#: edit - MAX_FILES_SIZE
+msgid "[users/users_New.xml?MAX_FILES_SIZE] Max upload file size"
+msgstr "Max upload file size"
 
 # users/users_New.xml?BTN_CANCEL
 # users/users_New.xml
@@ -30824,8 +31392,8 @@ msgstr "Address"
 # users/users_View.xml?USR_ZIP_CODE
 # users/users_View.xml
 #: text - USR_ZIP_CODE
-msgid "[users/users_View.xml?USR_ZIP_CODE] Zip Code"
-msgstr "Zip Code"
+msgid "[users/users_View.xml?USR_ZIP_CODE] Zip/Postal Code"
+msgstr "Zip/Postal Code"
 
 # users/users_View.xml?USR_COUNTRY
 # users/users_View.xml
@@ -32692,12 +33260,6 @@ msgstr "Dependent Fields"
 #: listbox - PME_DEPENDENTFIELDS -
 msgid "[dynaforms/fields/suggest.xml?PME_DEPENDENTFIELDS-]"
 msgstr "(none)"
-
-# dynaforms/fields/suggest.xml?PME_DEFAULTVALUE
-# dynaforms/fields/suggest.xml
-#: text - PME_DEFAULTVALUE
-msgid "[dynaforms/fields/suggest.xml?PME_DEFAULTVALUE] Default Value"
-msgstr "Default Value"
 
 # dynaforms/fields/suggest.xml?PME_HINT
 # dynaforms/fields/suggest.xml
