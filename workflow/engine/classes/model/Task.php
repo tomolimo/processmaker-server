@@ -363,7 +363,7 @@ class Task extends BaseTask {
       $this->setTasSelfService("FALSE");
       $this->setTasStart("FALSE");
       $this->setTasToLastUser("FALSE");
-      $this->setTasSendLastEmail("TRUE");
+      $this->setTasSendLastEmail("FALSE");
       $this->setTasDerivation("NORMAL");
       $this->setTasPosx("");
       $this->setTasPosy("");
