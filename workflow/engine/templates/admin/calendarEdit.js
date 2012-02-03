@@ -447,12 +447,12 @@ Ext.onReady( function() {
         type: 'string'
       },
       {
-        name: 'email',
+        name: 'startDate',
         type: 'date',
         dateFormat: 'n/j/Y'
       },
       {
-        name: 'start',
+        name: 'endDate',
         type: 'date',
         dateFormat: 'n/j/Y'
       }
@@ -469,20 +469,19 @@ Ext.onReady( function() {
         
         holidayArrayEnd   = holidayArrayEnd.replace(/-/g,'/');
         holidayArrayStart = holidayArrayStart.replace(/-/g,'/');       
-
-        
+ 
         data.push( {
           name : holidayArrayName,
-          email: Ext.util.Format.date(holidayArrayStart,'m/d/Y'),
-          start: Ext.util.Format.date(holidayArrayEnd  ,'m/d/Y')
-        });
+          startDate: Ext.util.Format.date(holidayArrayStart,'m/d/Y'),
+          endDate: Ext.util.Format.date(holidayArrayEnd  ,'m/d/Y')
+        });         
       }       
       return data;
     }
     var storeHoliday = new Ext.data.GroupingStore({
         reader: new Ext.data.JsonReader({fields: EmployeeHoliday}),
         data: genDataHoliday(),
-        sortInfo: {field: 'start', direction: 'ASC'}
+        sortInfo: {field: 'startDate', direction: 'ASC'}
     });
 
     var editorHoliday = new Ext.ux.grid.RowEditor( {
@@ -534,8 +533,8 @@ Ext.onReady( function() {
           handler: function(){
               var e = new EmployeeHoliday({
                   name: '',
-                  email: (new Date()).clearTime(),
-                  start: (new Date()).clearTime()
+                  startdt: (new Date()).clearTime(),
+                  enddt: (new Date()).clearTime()
 
               });
               editorHoliday.stopEditing();
@@ -583,7 +582,7 @@ Ext.onReady( function() {
 
             editor: {
               xtype: 'datefield',
-              allowBlank: false,
+              allowBlank: true,
               id: 'startdt',
               name: 'startdt',
               vtype: 'daterange',
@@ -605,7 +604,7 @@ Ext.onReady( function() {
               xtype: 'datefield',
               id: 'enddt',
               name: 'enddt',
-              allowBlank: false,
+              allowBlank: true,
               vtype: 'daterange',
             startDateField: 'startdt'// id of the 'From' date field
             //  minValue: '01/01/2006',
@@ -700,249 +699,14 @@ Ext.onReady( function() {
       var calendarColumnDayCombo_ = Ext.getCmp('calendarColumnDayCombo');
       calendarColumnDayCombo_.bindStore(comboStatusStore);
     }
-
-  southPanel = new Ext.FormPanel({
-    region: 'south',
-    buttons:[ 
-      {
-        text: fields['NEWCALENDAR']=='YES'?_("ID_CREATE") : _("ID_UPDATE"),
-        handler: function() {
  
-          assignedGrid = grid;
-          var allRows = assignedGrid.getStore();
-          var columns = new Array();
-          var hasSomePrimaryKey = false;
-          
-          //!fordata
-          var canlendarName = Ext.getCmp('dynaformCalendarName').getValue();
-          var calendarDescription = Ext.getCmp('dynaformCalendarDescription').getValue();
-          var calendarStatus = Ext.getCmp('dynaformCalendarStatus').getValue();
-          var calendarStatusString = "INACTIVE";
-          
-          var calendarWorkDays = Ext.getCmp('dynaformCalendarWorkDays').getValue();                              
-          var calendarWorkDaysArray = new Array();
-          
-          var businessDayStatus = Ext.getCmp('idWorkHour');
-          var businessDayStatusCollapsed = businessDayStatus.collapsed;
-          var businessDayStatusString = "INACTIVE";
-          var businessDay = "";
-          
-          var holidayStatus = Ext.getCmp('idHolidays');
-          var holidayStatusCollapsed = holidayStatus.collapsed;
-          var holidayStatusString = "INACTIVE";
-          var holiday = "";                              
-          //!fordata
-          
-          var dynaformCalendarWorkDaysArray = Ext.getCmp('dynaformCalendarWorkDays').items.items;
-          var dynaformCalendarWorkDaysArrayLength = dynaformCalendarWorkDaysArray.length; 
-          var dynaformCalendarWorkDaysArrayChecked; 
-          var dynaformCalendarWorkDaysArrayCheckedArray = new Array();                              
-          var indexAuxiliar = 0;
-          var arrayDayinCheckbox = new Array(); 
-          for(i=0;i<dynaformCalendarWorkDaysArrayLength;i++) {
-            dynaformCalendarWorkDaysArrayChecked = dynaformCalendarWorkDaysArray[i].checked;
-            dynaformCalendarWorkDaysArrayName    = dynaformCalendarWorkDaysArray[i].name;
-
-            
-              if(dynaformCalendarWorkDaysArrayChecked==true) {
-                arrayDayinCheckbox[i]=(dynaformCalendarWorkDaysArray[i].boxLabel);
-                
-                index = parseInt(dynaformCalendarWorkDaysArrayName.substring(1,2),10); 
-                dynaformCalendarWorkDaysArrayCheckedArray[indexAuxiliar] = index; 
-                indexAuxiliar++; 
-              }
-          }
-          
-          dynaformCalendarWorkDaysArrayCheckedArray = Ext.util.JSON.encode(dynaformCalendarWorkDaysArrayCheckedArray);
-          
-          if( calendarStatus == true ) {
-            calendarStatusString = "ACTIVE";
-          } 
-          if( businessDayStatusCollapsed == false ) { 
-            businessDayStatusString = "ACTIVE";
-          } 
-          if( holidayStatusCollapsed == false ) {
-            holidayStatusString = "ACTIVE";
-          }
-          
-          var gridCalendarColumns = new Array();
-          var gridCalendarColumnsRow = new Array();
-          casesGrid_ = Ext.getCmp('gridCalendar');
-          var rowAllJsonArray = casesGrid_.store.reader.jsonData.data;
-          var rowNameData = '';
-          var arrayDayinGrid = new Array();
-          for (var i = 0; i < allRows.getCount(); i++) {  
-            rowData = allRows.data.items[i].data;
-            rowNameData = '';
-            switch(rowData.name) {
-              case '- ALL -':
-                rowNameData = '7';
-              break;
-              case 'SUN':
-                rowNameData = '0';
-              break;
-              case 'MON':
-                rowNameData = '1';
-              break;                                
-              case 'TUE':
-                rowNameData = '2';
-              break;
-              case 'WED':
-                rowNameData = '3';
-              break;
-              case 'THU':
-                rowNameData = '4';
-              break;
-              case 'FRI':
-                rowNameData = '5';
-              break;
-              case 'SAT':
-                rowNameData = '6';
-              break;
-              default:
-              break;                                  
-            }
-            var gridCalendarColumnsRow = new Object();
-            gridCalendarColumnsRow['CALENDAR_BUSINESS_DAY']   = rowNameData;
-            gridCalendarColumnsRow['CALENDAR_BUSINESS_START'] = rowData.start;
-            gridCalendarColumnsRow['CALENDAR_BUSINESS_END']   = rowData.end;
-            
-            gridCalendarColumns[i+1] = gridCalendarColumnsRow; 
-            arrayDayinGrid[i]=rowData.name;
-            if(rowData.name=='- ALL -')
-             var all = 1;  
-          }
-            
-          gridCalendarColumns = Ext.util.JSON.encode(gridCalendarColumns);                              
-          
-          var gridHolidayColumns = new Array();
-          var gridHolidayColumnsRow = new Array();
-          casesGrid_ = Ext.getCmp('gridHoliday');
-          var allRows = casesGrid_.getStore();
-          var rowAllJsonArray = casesGrid_.store.reader.jsonData.data;
-          var rowNameData = '';
-          for (var i = 0; i < allRows.getCount(); i++) {                                
-            rowData = allRows.data.items[i].data;
-            
-            var gridHolidayColumnsRow = new Object();
-            gridHolidayColumnsRow['CALENDAR_HOLIDAY_NAME']   = rowData.name;
-            gridHolidayColumnsRow['CALENDAR_HOLIDAY_START'] = Ext.util.Format.date(rowData.email,'Y-m-d');
-            gridHolidayColumnsRow['CALENDAR_HOLIDAY_END']   = Ext.util.Format.date(rowData.start,'Y-m-d');
-            
-            gridHolidayColumns[i+1] = gridHolidayColumnsRow;
-  
-          }
-            
-          gridHolidayColumns = Ext.util.JSON.encode(gridHolidayColumns);
-          
-          var canlendarName = Ext.getCmp('dynaformCalendarName').getValue();
-          var calendarDescription = Ext.getCmp('dynaformCalendarDescription').getValue();
-          var calendarStatus = calendarStatusString;
-          var calendarWorkDays = dynaformCalendarWorkDaysArrayCheckedArray;
-          var businessDayStatus = businessDayStatusString;
-          var businessDay = gridCalendarColumns;
-          var holidayStatus = holidayStatusString;
-          var holiday = gridHolidayColumns;
-
-          if (indexAuxiliar>=3){
-            if(all==1){
-              Ext.Ajax.request( {
-                url: '../adminProxy/calendarSave',
-                params: {
-                  CALENDAR_UID : CALENDAR_UID,
-                  OLD_NAME : "",
-                  CALENDAR_NAME : canlendarName,
-                  CALENDAR_DESCRIPTION : calendarDescription,
-                  CALENDAR_STATUS : calendarStatus,
-                  CALENDAR_WORK_DAYS : calendarWorkDays,
-                  BUSINESS_DAY_STATUS : businessDayStatus,
-                  BUSINESS_DAY : businessDay,
-                  HOLIDAY_STATUS : holidayStatus,
-                  HOLIDAY : holiday
-                },
-                success: function(resp){ 
-                  if(fields['NEWCALENDAR']=='YES') {
-                    PMExt.notify( _('ID_STATUS') , _('ID_CALENDAR_CREATED_SUCCESSFULLY') );                                
-                  }
-                  else {
-                    PMExt.notify( _('ID_STATUS') , _('ID_CALENDAR_UPDATED_SUCCESSFULLY') );                                
-                  }
-                  window.location.href = '../setup/calendarList';
-                } 
-               });   
-
-
-            }else{
-              var flagDay = 0;
-              var indexArray = 0;
-              var arrayDayinGridSize = arrayDayinGrid.length;
-              var arrayDayinCheckboxSize = arrayDayinCheckbox.length;
-              for(var a = 0 ; a<arrayDayinCheckboxSize; a++) {
-  
-                for(var j = 0 ; j<arrayDayinGridSize; j++) {
-                  if(arrayDayinCheckbox[a].toUpperCase()==arrayDayinGrid[j]){ 
-                    flagDay = flagDay + 1; 
-                  } else {
-                    var flag = 0; 
-                  }                  
-                } 
-              }
-              if (flagDay < arrayDayinCheckboxSize)
-                Ext.Msg.alert( _('ID_ERROR'), _('ID_SELECT_ALL'));
-              else {
-                Ext.Ajax.request( {
-                url: '../adminProxy/calendarSave',
-                params: {
-                  CALENDAR_UID : CALENDAR_UID,
-                  OLD_NAME : "",
-                  CALENDAR_NAME : canlendarName,
-                  CALENDAR_DESCRIPTION : calendarDescription,
-                  CALENDAR_STATUS : calendarStatus,
-                  CALENDAR_WORK_DAYS : calendarWorkDays,
-                  BUSINESS_DAY_STATUS : businessDayStatus,
-                  BUSINESS_DAY : businessDay,
-                  HOLIDAY_STATUS : holidayStatus,
-                  HOLIDAY : holiday
-                },
-                success: function(resp){ 
-                  if(fields['NEWCALENDAR']=='YES') {
-                    PMExt.notify( _('ID_STATUS') , _('ID_CALENDAR_CREATED_SUCCESSFULLY') );                                
-                  }
-                  else {
-                    PMExt.notify( _('ID_STATUS') , _('ID_CALENDAR_UPDATED_SUCCESSFULLY') );                                
-                  }
-                  window.location.href = '../setup/calendarList';
-                } 
-               }); 
-             }
-
-            }
-
-
-            
-
-            
-          }else{
-             Ext.Msg.alert( _('ID_ERROR'), _('ID_MOST_AT_LEAST_3_DAY'));
-          }
-        
-    
-        }
-      }, {
-        text:_("ID_CANCEL"),
-        handler: function() {
-          window.location.href = '../setup/calendarList';
-        }
-      }
-    ]
-  });
     
     new Ext.Viewport({
-      layout: 'border',
+    //  layout: 'border',
       items: [
          {
-          region: 'center',
-          layout: 'ux.center',
+          region: 'right',
+    //      layout: 'ux.right',
           items: [
             new Ext.ux.OrderedFormPanel({
               id: 'dynaformCalendar',
@@ -1142,21 +906,241 @@ Ext.onReady( function() {
                     }
                   ]
                 }
-              ] 
-            })
-          ]
-       
-      },
-      {
-           height : 30,
-           region : 'north',
-           title  : '&nbsp;'
-      },
-      southPanel     
-      
-      ]
-    } );
+              ], //button
+      buttons:[ 
+                {
+                  text: fields['NEWCALENDAR']=='YES'?_("ID_CREATE") : _("ID_UPDATE"),
+                  handler: function() {
+                    var flag = 0;
+                    gridHoliday.store.each(function(record) {
+                      var start = record.data['startDate'];
+                      var end = record.data['endDate'];
+                      if ((! start) || (! end))                 
+                        flag = 1;           
+                    });
+                    assignedGrid = grid;
+                    var allRows = assignedGrid.getStore();
+                    var columns = new Array();
+                    var hasSomePrimaryKey = false;
 
+                    //!fordata
+                    var canlendarName = Ext.getCmp('dynaformCalendarName').getValue();
+                    var calendarDescription = Ext.getCmp('dynaformCalendarDescription').getValue();
+                    var calendarStatus = Ext.getCmp('dynaformCalendarStatus').getValue();
+                    var calendarStatusString = "INACTIVE";
+
+                    var calendarWorkDays = Ext.getCmp('dynaformCalendarWorkDays').getValue();                              
+                    var calendarWorkDaysArray = new Array();
+
+                    var businessDayStatus = Ext.getCmp('idWorkHour');
+                    var businessDayStatusCollapsed = businessDayStatus.collapsed;
+                    var businessDayStatusString = "INACTIVE";
+                    var businessDay = "";
+
+                    var holidayStatus = Ext.getCmp('idHolidays');
+                    var holidayStatusCollapsed = holidayStatus.collapsed;
+                    var holidayStatusString = "INACTIVE";
+                    var holiday = "";                              
+                    //!fordata
+
+                    var dynaformCalendarWorkDaysArray = Ext.getCmp('dynaformCalendarWorkDays').items.items;
+                    var dynaformCalendarWorkDaysArrayLength = dynaformCalendarWorkDaysArray.length; 
+                    var dynaformCalendarWorkDaysArrayChecked; 
+                    var dynaformCalendarWorkDaysArrayCheckedArray = new Array();                              
+                    var indexAuxiliar = 0;
+                    var arrayDayinCheckbox = new Array(); 
+                    for(i=0;i<dynaformCalendarWorkDaysArrayLength;i++) {
+                      dynaformCalendarWorkDaysArrayChecked = dynaformCalendarWorkDaysArray[i].checked;
+                      dynaformCalendarWorkDaysArrayName    = dynaformCalendarWorkDaysArray[i].name;
+                      if(dynaformCalendarWorkDaysArrayChecked==true) {
+                        arrayDayinCheckbox[i]=(dynaformCalendarWorkDaysArray[i].boxLabel);
+
+                        index = parseInt(dynaformCalendarWorkDaysArrayName.substring(1,2),10); 
+                        dynaformCalendarWorkDaysArrayCheckedArray[indexAuxiliar] = index; 
+                        indexAuxiliar++; 
+                      }
+                    }
+                    dynaformCalendarWorkDaysArrayCheckedArray = Ext.util.JSON.encode(dynaformCalendarWorkDaysArrayCheckedArray);
+
+                    if( calendarStatus == true ) {
+                      calendarStatusString = "ACTIVE";
+                    }
+
+                    if( businessDayStatusCollapsed == false ) { 
+                      businessDayStatusString = "ACTIVE";
+                    }
+
+                    if( holidayStatusCollapsed == false ) {
+                      holidayStatusString = "ACTIVE";
+                    }
+
+                    var gridCalendarColumns = new Array();
+                    var gridCalendarColumnsRow = new Array();
+                    casesGrid_ = Ext.getCmp('gridCalendar');
+                    var rowAllJsonArray = casesGrid_.store.reader.jsonData.data;
+                    var rowNameData = '';
+                    var arrayDayinGrid = new Array();
+                    for (var i = 0; i < allRows.getCount(); i++) {  
+                      rowData = allRows.data.items[i].data;
+                      rowNameData = '';
+                      switch(rowData.name) {
+                        case '- ALL -':
+                          rowNameData = '7';
+                        break;
+                        case 'SUN':
+                          rowNameData = '0';
+                        break;
+                        case 'MON':
+                          rowNameData = '1';
+                        break;                                
+                        case 'TUE':
+                          rowNameData = '2';
+                        break;
+                        case 'WED':
+                          rowNameData = '3';
+                        break;
+                        case 'THU':
+                          rowNameData = '4';
+                        break;
+                        case 'FRI':
+                          rowNameData = '5';
+                        break;
+                        case 'SAT':
+                          rowNameData = '6';
+                        break;
+                        default:
+                        break;                                  
+                      }
+                      var gridCalendarColumnsRow = new Object();
+                      gridCalendarColumnsRow['CALENDAR_BUSINESS_DAY']   = rowNameData;
+                      gridCalendarColumnsRow['CALENDAR_BUSINESS_START'] = rowData.start;
+                      gridCalendarColumnsRow['CALENDAR_BUSINESS_END']   = rowData.end;
+
+                      gridCalendarColumns[i+1] = gridCalendarColumnsRow; 
+                      arrayDayinGrid[i]=rowData.name;
+                      if(rowData.name=='- ALL -')
+                        var all = 1;  
+                    }
+
+                    gridCalendarColumns = Ext.util.JSON.encode(gridCalendarColumns);                              
+
+                    var gridHolidayColumns = new Array();
+                    var gridHolidayColumnsRow = new Array();
+                    casesGrid_ = Ext.getCmp('gridHoliday');
+                    var allRows = casesGrid_.getStore();
+                    var rowAllJsonArray = casesGrid_.store.reader.jsonData.data;
+                    var rowNameData = '';
+                    for (var i = 0; i < allRows.getCount(); i++) {                                
+                      rowData = allRows.data.items[i].data;
+                      var gridHolidayColumnsRow = new Object();            
+                      gridHolidayColumnsRow['CALENDAR_HOLIDAY_NAME']   = rowData.name;
+                      gridHolidayColumnsRow['CALENDAR_HOLIDAY_START'] = Ext.util.Format.date(rowData.startDate,'Y-m-d');
+                      gridHolidayColumnsRow['CALENDAR_HOLIDAY_END']   = Ext.util.Format.date(rowData.endDate,'Y-m-d');
+                      gridHolidayColumns[i+1] = gridHolidayColumnsRow;
+                    }
+                    gridHolidayColumns = Ext.util.JSON.encode(gridHolidayColumns);
+                    var canlendarName = Ext.getCmp('dynaformCalendarName').getValue();
+                    var calendarDescription = Ext.getCmp('dynaformCalendarDescription').getValue();
+                    var calendarStatus = calendarStatusString;
+                    var calendarWorkDays = dynaformCalendarWorkDaysArrayCheckedArray;
+                    var businessDayStatus = businessDayStatusString;
+                    var businessDay = gridCalendarColumns;
+                    var holidayStatus = holidayStatusString;
+                    var holiday = gridHolidayColumns;
+                    if(flag==0){
+                      if (indexAuxiliar>=3){
+                        if(all==1){
+                          Ext.Ajax.request( {
+                            url: '../adminProxy/calendarSave',
+                            params: {
+                              CALENDAR_UID : CALENDAR_UID,
+                              OLD_NAME : "",
+                              CALENDAR_NAME : canlendarName,
+                              CALENDAR_DESCRIPTION : calendarDescription,
+                              CALENDAR_STATUS : calendarStatus,
+                              CALENDAR_WORK_DAYS : calendarWorkDays,
+                              BUSINESS_DAY_STATUS : businessDayStatus,
+                              BUSINESS_DAY : businessDay,
+                              HOLIDAY_STATUS : holidayStatus,
+                              HOLIDAY : holiday
+                            },
+                            success: function(resp){ 
+                              if(fields['NEWCALENDAR']=='YES') {
+                                PMExt.notify( _('ID_STATUS') , _('ID_CALENDAR_CREATED_SUCCESSFULLY') );                                
+                              }
+                              else {
+                                PMExt.notify( _('ID_STATUS') , _('ID_CALENDAR_UPDATED_SUCCESSFULLY') );                                
+                              }
+                              window.location.href = '../setup/calendarList';
+                            } 
+                          });   
+                        }
+                        else {
+                          var flagDay = 0;
+                          var indexArray = 0;
+                          var arrayDayinGridSize = arrayDayinGrid.length;
+                          var arrayDayinCheckboxSize = arrayDayinCheckbox.length;
+                          for(var a = 0 ; a<arrayDayinCheckboxSize; a++) {
+                            for(var j = 0 ; j<arrayDayinGridSize; j++) {
+                              if(arrayDayinCheckbox[a].toUpperCase()==arrayDayinGrid[j]){ 
+                                flagDay = flagDay + 1; 
+                              } 
+                              else {
+                                var flag = 0; 
+                              }                  
+                            } 
+                          }
+                          if (flagDay < arrayDayinCheckboxSize)
+                            Ext.Msg.alert( _('ID_ERROR'), _('ID_SELECT_ALL'));
+                          else {
+                            Ext.Ajax.request( {
+                              url: '../adminProxy/calendarSave',
+                              params: {
+                                CALENDAR_UID : CALENDAR_UID,
+                                OLD_NAME : "",
+                                CALENDAR_NAME : canlendarName,
+                                CALENDAR_DESCRIPTION : calendarDescription,
+                                CALENDAR_STATUS : calendarStatus,
+                                CALENDAR_WORK_DAYS : calendarWorkDays,
+                                BUSINESS_DAY_STATUS : businessDayStatus,
+                                BUSINESS_DAY : businessDay,
+                                HOLIDAY_STATUS : holidayStatus,
+                                HOLIDAY : holiday
+                              },
+                              success: function(resp){ 
+                                if(fields['NEWCALENDAR']=='YES') {
+                                  PMExt.notify( _('ID_STATUS') , _('ID_CALENDAR_CREATED_SUCCESSFULLY') );                                
+                                }
+                                else {
+                                  PMExt.notify( _('ID_STATUS') , _('ID_CALENDAR_UPDATED_SUCCESSFULLY') );                                
+                                }
+                                window.location.href = '../setup/calendarList';
+                              } 
+                            }); 
+                          }
+                        }
+                      }
+                      else {
+                        Ext.Msg.alert( _('ID_ERROR'), _('ID_MOST_AT_LEAST_3_DAY'));
+                      }
+                    } 
+                    else {
+                      Ext.Msg.alert( _('ID_ERROR'), 'There is at least one empty date field in the holiday grid, please check and try again');
+                    }
+                  }
+                },
+                {
+                  text:_("ID_CANCEL"),
+                  handler: function() {
+                    window.location.href = '../setup/calendarList';
+                  }
+                }
+              ]
+            })
+          ]       
+        }
+      ]
+    });
 
   
   //[ DATA EDIT
