@@ -9,12 +9,14 @@
 
   <script type="text/javascript" src="/js/jquery/jquery-1.7.1.min.js"></script>
   <script type="text/javascript" src="/js/jquery/jquery-ui-1.8.17.min.js"></script>
+  <script type="text/javascript" src="/js/jquery/xbreadcrumbs.js"></script>
+
   
   {literal}
   <style>
   body {
     padding-top: 40px !important;
-    overflow:hidden; 
+    overflow:hidden;
   }
   </style>
   <script>
@@ -51,73 +53,25 @@
       }
     });
   }
+
   </script>
   {/literal}
 
 </head>
 <body onload="resize()" onresize="resize()" > 
-  <div class="global-nav">
+  <div class="global-nav" style="height:28px">
     <!-- start topbar -->     
-    <div class="topbar" id="corpBar">
-      <div class="topbar-bg"></div>
-      <div class="topbar-inner">
-        <div class="fixed-container clearfix">
-          <!-- <a href="" title="_title / Home" accesskey="1" id="logo">_title</a> -->
-
-          <ul class="nav primary-nav">
-            <li class="account">
-              <a class="menu user-actions" href="#" onclick="redirect('home/appList?t=in')" title="My Inbox">
-                <img alt="A99679add21e8b0704ea5f0fb569572c_mini" src="/images/simplified/in-set-grey.png"  />
-                <!-- <span class="menu-label screen-name">new cases</span> -->
-              </a>
+           <ul class="xbreadcrumbs" id="breadcrumbs-1">
+            <li class="current">
+               <a href="#" class="home">Home</a>
             </li>
-
-            {if $canStartCase neq false}
-            <li class="account">
-              <a class="menu user-actions" href="#" onclick="redirect('home/appList?t=draft')" title="My Drafts">
-                <img alt="A99679add21e8b0704ea5f0fb569572c_mini" src="/images/simplified/folder-grey.png"  />
-                <!-- <span class="menu-label screen-name">new cases</span> -->
-              </a>
+            <li>
+               <a href="setup/main" target="iframex">Scripts</a>
             </li>
-            
-            <li class="account">
-              <a class="menu user-actions" href="#">
-                <img alt="A99679add21e8b0704ea5f0fb569572c_mini" src="/images/simplified/plus-set-grey.png"  title="New Case"/>
-                <!-- <span class="menu-label screen-name">new cases</span> -->
-              </a>
-
-              <ul class="menu-dropdown" style="width: 360px">
-                {foreach from=$processList key=id item=proc}
-                <li>
-                  <a href="#" onclick="appStart('{$proc.uid}', '{$proc.value}')" accesskey="s" id="settings_link">{$proc.value}</a>
-                </li>
-                {/foreach}
-              </ul>
+            <li>
+               <a href="#">jQuery Framework..</a>               
             </li>
-            {/if}
-          </ul> 
-
-          <ul class="nav secondary-nav">
-            <li class="account">
-              <a class="menu user-photo" href="#">
-                <img alt="user_avatar_mini" height="24" src="users/users_ViewPhotoGrid?pUID={$usrUid}" width="24" />
-                <span class="menu-label screen-name">{$userName}</span>
-              </a>
-
-              <ul class="menu-dropdown">
-                <!--<li><a href="#" accesskey="s" id="settings_link">Settings</a></li>
-                <li><a href="#" accesskey="?" id="help_link">Help</a></li>-->
-                {if $userUxType eq 'SWITCHABLE'}
-                <li><a href="cases/main" accesskey="?" id="help_link">Switch Interface</a></li>
-                {/if}
-                <li><a href="login/login" accesskey="l" id="sign_out_link">Sign out</a></li>
-              </ul>
-            </li>
-          </ul>
-
-        </div> <!-- /fixed-container -->
-      </div> <!-- /topbar-inner -->
-    </div>
+        </ul>
     <!-- end topbar -->     
   </div>
 
@@ -163,6 +117,13 @@
         });
 
       })
+    });
+
+    $(document).ready(function(){
+        //  Initialize xBreadcrumbs
+        //$('#breadcrumbs-1').xBreadcrumbs();
+        $('#breadcrumbs-1').xBreadcrumbs({ collapsible: true });
+        
     });
   </script>
   {/literal}
