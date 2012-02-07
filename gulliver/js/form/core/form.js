@@ -1136,6 +1136,12 @@ function G_Text( form, element, name)
   };                          
   
   this.handleKeyPress = function(event){
+    if (me.element.readOnly) {
+      return true;
+    }
+    if (( me.mType != 'currency' && me.mType != 'percentage') && (me.element.value.length > me.element.maxLength - 1)) {
+      return true;
+    }
     if (me.validate == 'Any' && me.mask == '') return true;
     //THIS FUNCTION HANDLE ALL KEYS EXCEPT BACKSPACE AND DELETE
     keyCode = event.keyCode;

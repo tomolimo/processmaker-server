@@ -23,10 +23,11 @@ SELECT XMLNODE_NAME, TYPE FROM dynaForm WHERE XMLNODE_NAME = @@PME_XMLNODE_NAME
 <PME_SUBTITLE3 type="title" enableHTML="1">
   <en>Behaviour</en>
 </PME_SUBTITLE3>
-
+<!--
 <PME_MAXLENGTH type="text" maxlength="10" size="10" validate="Int" defaultvalue="15">
   <en>Max. Length</en>
 </PME_MAXLENGTH>
+-->
 <PME_CURRENCY type="hidden" maxlength="50" size="30" defaultvalue="$">
   <en>Currency</en>
 </PME_CURRENCY>

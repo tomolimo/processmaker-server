@@ -1635,7 +1635,9 @@ class XmlForm_Field_Currency extends XmlForm_Field_SimpleText {
        $html .= 'name="form[' . $this->name . ']" ';
        $html .= 'type="hidden" value="'.$this->htmlentities($value, ENT_COMPAT, 'utf-8').'" />';
     }
-    
+    if (($this->readOnly == 1) && ($this->renderMode == 'edit')) {
+      $html = str_replace("class=\"module_app_input___gray\"", "class=\"module_app_input___gray_readOnly\"", $html);
+    }
     $html .= $this->renderHint();
     
     return $html;
@@ -1706,6 +1708,9 @@ class XmlForm_Field_Percentage extends XmlForm_Field_SimpleText {
        $html .= 'type="hidden" value="'.$this->htmlentities($value, ENT_COMPAT, 'utf-8').'" />';
     }
 
+    if (($this->readOnly == 1) && ($this->renderMode == 'edit')) {
+      $html = str_replace("class=\"module_app_input___gray\"", "class=\"module_app_input___gray_readOnly\"", $html);
+    }
     $html .= $this->renderHint();
     return $html;
     

@@ -24,11 +24,11 @@ SELECT XMLNODE_NAME, TYPE FROM dynaForm WHERE XMLNODE_NAME = @@PME_XMLNODE_NAME
 <PME_SUBTITLE3 type="title" enableHTML="1">
   <en>Behaviour</en>
 </PME_SUBTITLE3>
-
+<!--
 <PME_MAXLENGTH type="text" maxlength="10" size="10" validate="Int" defaultvalue="15">
-
   <en>Max. Length</en>
 </PME_MAXLENGTH>
+-->
 <PME_VALIDATE type="dropdown" defaultvalue="Real">
   <en>Validate<option name="Int">Integer </option><option name="Real">Real Number</option></en>
 </PME_VALIDATE>
