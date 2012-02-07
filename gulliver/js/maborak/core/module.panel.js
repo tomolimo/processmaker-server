@@ -1506,7 +1506,7 @@ leimnud.Package.Public({
 							position:"absolute",
 							left:((this.tab.display==="vertical")?((this.tab.width-this.tab.optWidth)-((this.parent.browser.isIE)?-1:1)):opW),
 							//left:0,
-							top:((this.tab.display==="vertical")?opH:"auto"),
+							top:((this.tab.display==="vertical")?opH:0),//"auto"),
 							bottom:((this.tab.display==="vertical")?"auto":0)
 						});
 						tb.innerHTML=this.tab.options[i].title || "";

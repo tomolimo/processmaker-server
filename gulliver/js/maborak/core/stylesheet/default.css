@@ -351,8 +351,7 @@ INPUT {
 	border: 1px solid #1983BD;
 	border: 1px solid #66667E;
 	border:1px solid #AAA;
-
-	oveflow:hidden;
+	overflow: hidden;
 	/*border: 1px solid #5394BF;
 	border-left:1px solid #8BBDDF;
 	border-top:1px solid #8BBDDF;*/
@@ -464,7 +463,11 @@ INPUT {
 .panel_tab___processmaker{
 	position:absolute;
 	z-index:3;
-	overflow:hidden;
+	padding-bottom: 16px;
+	overflow-x: scroll;
+	/*overflow-y: visible;*/
+  
+	
 }
 
 
