@@ -60,7 +60,7 @@
   }
   
   function triggerEdit(sUID) {
-    popupWindow('@G::LoadTranslation(ID_EDIT_TRIGGERS)', '@G::encryptlink(@#triggersEdit)?TRI_UID=' + sUID , 770, 510);
+    popupWindow('@G::LoadTranslation(ID_EDIT_TRIGGERS)', '@G::encryptlink(@#triggersEdit)?TRI_UID=' + sUID , 900, 600);
   }
 
   function triggerProperties( sUID ) {
