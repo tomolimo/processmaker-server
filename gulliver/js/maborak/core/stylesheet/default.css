@@ -463,7 +463,7 @@ INPUT {
 .panel_tab___processmaker{
 	position:absolute;
 	z-index:3;
-	padding-bottom: 16px;
+	padding-bottom: 14px;
 	overflow-x: scroll;
 	/*overflow-y: visible;*/
   
