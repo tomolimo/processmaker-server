@@ -429,7 +429,16 @@ class Cases {
       $oApp = new Application;
       $aFields = $oApp->Load($sAppUid);
       //$aFields = $oApp->toArray(BasePeer::TYPE_FIELDNAME);
-      $aFields['APP_DATA'] = G::array_merges(G::getSystemConstants(), @unserialize($aFields['APP_DATA']));
+
+      $appData = @unserialize($aFields['APP_DATA']);
+
+      // BUG 8134, FIX!// for single/double quote troubles // Unserialize with utf8 content get trouble
+      if ($appData === false) {
+        $appData = preg_replace('!s:(\d+):"(.*?)";!e', "'s:'.strlen('$2').':\"$2\";'", $aFields['APP_DATA']);
+        $appData = @unserialize($appData);
+      }
+
+      $aFields['APP_DATA'] = G::array_merges(G::getSystemConstants(), $appData);
       switch ($oApp->getAppStatus()) {
         case 'COMPLETED':
           $aFields['STATUS'] = G::LoadTranslation('ID_COMPLETED');
