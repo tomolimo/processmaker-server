@@ -3844,6 +3844,7 @@ class Cases {
       }
     }
     $aDelete = $this->getAllObjectsFrom($sProcessUID, $sApplicationUID, $sTasKUID, $sUserUID, 'DELETE');
+
     $oAppDocument = new AppDocument();
     $oCriteria = new Criteria('workflow');
     $oCriteria->add(AppDocumentPeer::APP_UID, $sApplicationUID);
@@ -3986,7 +3987,8 @@ class Cases {
         $aFields['POSITION'] = $_SESSION['STEP_POSITION'];
         $aFields['CONFIRM'] = G::LoadTranslation('ID_CONFIRM_DELETE_ELEMENT');
         if (in_array($aRow['APP_DOC_UID'], $aObjectPermissions['OUTPUT_DOCUMENTS'])) {
-          $aFields['ID_DELETE'] = G::LoadTranslation('ID_DELETE');
+          if (in_array($aRow['APP_DOC_UID'], $aDelete['OUTPUT_DOCUMENTS'])) 
+            $aFields['ID_DELETE'] = G::LoadTranslation('ID_DELETE');
         }
 
         $aOutputDocuments[] = $aFields;
@@ -4265,7 +4267,7 @@ class Cases {
    * @return Array within all user permitions all objects' types
    */
   function getAllObjects($PRO_UID, $APP_UID, $TAS_UID = '', $USR_UID) {
-    $ACTIONS = Array('VIEW', 'BLOCK'); //TO COMPLETE
+    $ACTIONS = Array('VIEW', 'BLOCK','DELETE'); //TO COMPLETE
     $MAIN_OBJECTS = Array();
     $RESULT_OBJECTS = Array();
 
@@ -4276,11 +4278,10 @@ class Cases {
     /*     * * BETWEN VIEW AND BLOCK** */
     $RESULT_OBJECTS['DYNAFORMS'] = G::arrayDiff($MAIN_OBJECTS['VIEW']['DYNAFORMS'], $MAIN_OBJECTS['BLOCK']['DYNAFORMS']);
     $RESULT_OBJECTS['INPUT_DOCUMENTS'] = G::arrayDiff($MAIN_OBJECTS['VIEW']['INPUT_DOCUMENTS'], $MAIN_OBJECTS['BLOCK']['INPUT_DOCUMENTS']);
-    $RESULT_OBJECTS['OUTPUT_DOCUMENTS'] = G::arrayDiff($MAIN_OBJECTS['VIEW']['OUTPUT_DOCUMENTS'], $MAIN_OBJECTS['BLOCK']['OUTPUT_DOCUMENTS']);
+    $RESULT_OBJECTS['OUTPUT_DOCUMENTS'] = array_merge_recursive(G::arrayDiff($MAIN_OBJECTS['VIEW']['OUTPUT_DOCUMENTS'],$MAIN_OBJECTS['BLOCK']['OUTPUT_DOCUMENTS']) , G::arrayDiff($MAIN_OBJECTS['DELETE']['OUTPUT_DOCUMENTS'],$MAIN_OBJECTS['BLOCK']['OUTPUT_DOCUMENTS']));
     array_push($RESULT_OBJECTS['DYNAFORMS'], -1);
     array_push($RESULT_OBJECTS['INPUT_DOCUMENTS'], -1);
     array_push($RESULT_OBJECTS['OUTPUT_DOCUMENTS'], -1);
-
     return $RESULT_OBJECTS;
   }
 
