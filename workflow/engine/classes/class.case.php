@@ -2447,8 +2447,7 @@ class Cases {
         $c->add($c->getNewCriterion(AppThreadPeer::APP_THREAD_STATUS, 'OPEN')->addOr($c->getNewCriterion(ApplicationPeer::APP_STATUS, 'COMPLETED')->addAnd($c->getNewCriterion(AppDelegationPeer::DEL_PREVIOUS, 0))));
         $c->addDescendingOrderByColumn(ApplicationPeer::APP_NUMBER);
         $params = array();
-        $sSql = BasePeer::createSelectSql($c, $params);
-        var_dump($sSql);
+        $sSql = BasePeer::createSelectSql($c, $params);        
         break;
       case 'to_revise':
         $oCriteria = new Criteria('workflow');
