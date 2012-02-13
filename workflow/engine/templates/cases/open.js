@@ -6,6 +6,7 @@ var caseMenuOpen = false;
 var toReviseTreeOpen = false;
 var menuSelectedTitle = Array();
 var _ENV_CURRENT_DATE;
+var winTree;
 
 Ext.onReady(function(){
   Ext.QuickTips.init();
@@ -33,18 +34,19 @@ Ext.onReady(function(){
         }
       });
 
-      if(typeof(winTree)=='undefined'){
-        var winTree = new Ext.Window({
-          id:'toReviseWindow',
-          width:220,
-          height:300,
-          el:'toReviseTree',
-          collapsible: true,
-          plain: true,
-          x:100,
-          y:100,
-          closeAction:'hide',
-          items: [treeToRevise]
+      if (typeof(winTree) == 'undefined') {
+        winTree = new Ext.Window({
+          id          : 'toReviseWindow',
+          width       : 220,
+          height      : 300,
+          el          : 'toReviseTree',
+          collapsible : true,
+          plain       : true,
+          x           : 100,
+          y           : 100,
+          closable    : false,
+          constrain   : true,
+          items       : [treeToRevise]
         });
       }
 
