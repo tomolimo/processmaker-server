@@ -724,32 +724,10 @@ function WSProcessList() {
  *
  */
 //private function to get current email configuration
-function getEmailConfiguration () {
-  require_once 'classes/model/Configuration.php';
-  $oConfiguration = new Configuration();
-  $sDelimiter     = DBAdapter::getStringDelimiter();
-  $oCriteria      = new Criteria('workflow');
-  $oCriteria->add(ConfigurationPeer::CFG_UID, 'Emails');
-  $oCriteria->add(ConfigurationPeer::OBJ_UID, '');
-  $oCriteria->add(ConfigurationPeer::PRO_UID, '');
-  $oCriteria->add(ConfigurationPeer::USR_UID, '');
-  $oCriteria->add(ConfigurationPeer::APP_UID, '');
-
-  if (ConfigurationPeer::doCount($oCriteria) == 0) {
-    $oConfiguration->create(array('CFG_UID' => 'Emails', 'OBJ_UID' => '', 'CFG_VALUE' => '', 'PRO_UID' => '', 'USR_UID' => '', 'APP_UID' => ''));
-    $aFields = array();
-  }
-  else {
-    $aFields = $oConfiguration->load('Emails', '', '', '', '');
-    if ($aFields['CFG_VALUE'] != '') {
-      $aFields = unserialize($aFields['CFG_VALUE']);
-    }
-    else {
-      $aFields = array();
-    }
-  }
-
-  return $aFields;
+function getEmailConfiguration() 
+{
+  G::loadClass('system');
+  return System::getEmailConfiguration();
 }
 
 /**
@@ -782,7 +760,8 @@ function PMFSendMessage($caseId, $sFrom, $sTo, $sCc, $sBcc, $sSubject, $sTemplat
 
   if ( $result->status_code == 0) {
     return 1;
-  } else {
+  } 
+  else {
     return 0;
   }
 }

@@ -623,7 +623,10 @@ class wsBase
   */
   public function sendMessage($caseId, $sFrom, $sTo, $sCc, $sBcc, $sSubject, $sTemplate, $appFields = null, $aAttachment = null ) {
     try {
-      $aSetup = getEmailConfiguration();
+      G::loadClass('system');
+
+      $aSetup = System::getEmailConfiguration();
+
       $passwd =$aSetup['MESS_PASSWORD'];
       if(strpos( $passwd, 'hush:' ) !== false)
       {
@@ -656,7 +659,8 @@ class wsBase
 
       if ( $appFields == null ) {
           $Fields = $oldFields['APP_DATA'];
-      } else {
+      } 
+      else {
         $Fields = $appFields;
       }
       $templateContents = file_get_contents ( $fileTemplate );
@@ -683,11 +687,9 @@ class wsBase
       }
 
       $sBody = G::replaceDataField( $templateContents, $Fields);
+      $hasEmailFrom = preg_match('/(.+)@(.+)\.(.+)/', $sFrom, $match);
 
-      if ($sFrom != '') {
-        $sFrom = $sFrom . ' <' . $aSetup['MESS_ACCOUNT'] . '>';
-      } 
-      else {
+      if (!$hasEmailFrom) {
         $sFrom = $aSetup['MESS_ACCOUNT'];
       }
 
@@ -706,8 +708,10 @@ class wsBase
         'app_msg_template' => '',
         'app_msg_status'   => 'pending'
       );
+
       $oSpool->create( $messageArray );
       $oSpool->sendMail(); 
+
       if ( $oSpool->status == 'sent' )
         $result = new wsResponse (0, G::loadTranslation ('ID_MESSAGE_SENT') . ": ". $sTo );
       else
@@ -716,8 +720,7 @@ class wsBase
       return $result;
     } 
     catch ( Exception $e ) {
-      $result = new wsResponse (100, $e->getMessage());
-      return $result;
+      return new wsResponse (100, $e->getMessage());
     }
   }
 

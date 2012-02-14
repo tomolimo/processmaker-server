@@ -27,11 +27,11 @@
 </MESS_RAUTH>
 
 <MESS_ACCOUNT type="text" size="35" maxlength="50" validate="Email">
-  <en>Account From</en>
+  <en>SMTP Username</en>
 </MESS_ACCOUNT>
 
 <MESS_PASSWORD type="password" size="35" maxlength="50">
-  <en>Password</en>
+  <en>SMTP Password</en>
 </MESS_PASSWORD>
 
 <MESS_TEST_MAIL type="checkbox" value="1">

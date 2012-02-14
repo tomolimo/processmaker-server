@@ -81,8 +81,8 @@ class spoolRun {
     $this->ExceptionCode['WARNING'] = 2;
     $this->ExceptionCode['NOTICE']  = 3;
 
-    $this->longMailEreg = '/([\"\w\W\s]*\s*)?(<([\w\-\.]+@[\.-\w]+\.\w{2,3})+>)/';
-    $this->mailEreg     = '/^([\w\-_\.]+@[\.-\w]+\.\w{2,3}+)$/';
+    $this->longMailEreg = '/(.*)(<([\w\-\.]+@[\w\-_\.]+\.\w{2,3})+>)/';
+    $this->mailEreg     = '/^([\w\-_\.]+@[\w\-_\.]+\.\w{2,3}+)$/';
   }
   
   /**
@@ -220,8 +220,9 @@ class spoolRun {
       if( isset($matches[1]) && $matches[1] != '' ) {
         //drop the " characters if they exist
         $this->fileData['from_name'] = trim(str_replace('"', '', $matches[1]));
-      } else { //if the from name was not set
-        $this->fileData['from_name'] = 'Processmaker';
+      } 
+      else { //if the from name was not set
+        $this->fileData['from_name'] = '';
       }
        
       if( ! isset($matches[3]) ) {
@@ -229,7 +230,8 @@ class spoolRun {
       }
       
       $this->fileData['from_email'] = trim($matches[3]);
-    } else {
+    } 
+    else {
       //to validate simple email address i.e. erik@colosa.com
       preg_match($this->mailEreg, $this->fileData['from'], $matches);
       
@@ -237,7 +239,7 @@ class spoolRun {
         throw new Exception('Invalid email address in FROM parameter (' . $this->fileData['from'] . ')', $this->ExceptionCode['WARNING']);
       }
       
-      $this->fileData['from_name'] = 'Processmaker Web boot';
+      $this->fileData['from_name'] = '';
       $this->fileData['from_email'] = $matches[0];
     }
   

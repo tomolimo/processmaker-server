@@ -96,18 +96,22 @@ class Configurations // extends Configuration
   {
     if (!(is_object($object) || is_array($object))) 
       return;
+
     if (!isset($from)) 
       $from = &$this->aConfig;
+
     foreach($from as $k => $v ) {
       if (isset($v) && array_key_exists($k,$object)) {
         if (is_object($v)) 
           throw new Exception( 'Object is not permited inside configuration array.' );
+        
         if (is_object($object)) {
           if (is_array($v)) 
             $this->configObject($object->{$k}, $v);
           else 
             $object->{$k} = $v;
-        } else { 
+        } 
+        else { 
           if (is_array($object)) {
             if (is_array($v)) 
               $this->configObject($object[$k], $v);
@@ -130,18 +134,38 @@ class Configurations // extends Configuration
    * @param  string   $app 
    * @return void
    */ 
-  function loadConfig(&$object, $cfg, $obj, $pro = '', $usr = '', $app = '')
+  function loadConfig(&$object, $cfg, $obj='', $pro = '', $usr = '', $app = '')
+  {
+    $this->load($cfg, $obj, $pro, $usr, $app);
+    $this->configObject($object, $this->aConfig);
+  }
+
+  /**
+   * loadConf
+   *
+   * @param  string   $cfg 
+   * @param  object   $obj 
+   * @param  string   $pro 
+   * @param  string   $usr 
+   * @param  string   $app 
+   * @return void
+   */ 
+  function load($cfg, $obj='', $pro = '', $usr = '', $app = '')
   {
     $this->Fields = array();
-    if ($this->Configuration->exists( $cfg, $obj, $pro, $usr, $app ))
-      $this->Fields = $this->Configuration->load( $cfg, $obj, $pro, $usr, $app );
-    $aConfig = $this->aConfig;
+
+    try {
+      $this->Fields = $this->Configuration->load($cfg, $obj, $pro, $usr, $app);
+    }
+    catch(Exception $e) {} // the configuration does not exist
+    
     if (isset($this->Fields['CFG_VALUE']))
-      $aConfig = unserialize($this->Fields['CFG_VALUE']);
-    if (!is_array($aConfig)) 
-      $aConfig = $this->aConfig;
-    $this->aConfig = $aConfig;
-    $this->configObject($object,$this->aConfig);
+      $this->aConfig = unserialize($this->Fields['CFG_VALUE']);
+    
+    if (!is_array($this->aConfig)) 
+      $this->aConfig = Array();
+    
+    return $this->aConfig;
   }
   
   /**

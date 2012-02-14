@@ -913,4 +913,14 @@ class System {
     return $aChanges;
   }
 
+
+  function getEmailConfiguration() 
+  {
+    G::LoadClass('configuration');
+    $conf = new Configurations();
+    $config = $conf->load('Emails');
+
+    return $config;
+  }
+  
 }// end System class
