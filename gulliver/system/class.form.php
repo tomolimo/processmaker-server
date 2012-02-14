@@ -316,6 +316,7 @@ class Form extends XmlForm
                 break;
 
               case 'checkgroup':
+                
               case 'listbox':
                 if ( is_array($newValues[$k]) ) {
                   $values[$k] = $values["{$k}_label"] = '';
@@ -534,12 +535,24 @@ class Form extends XmlForm
   function validateFields($data) {
     $values = array();
     $excludeTypes = array('submit', 'file');
-    
     foreach($this->fields as $k => $v) {
-      if (!in_array($v->type, $excludeTypes)) {
-        switch($v->type) {
-          case 'checkbox':
+      if (!in_array($v->type, $excludeTypes)) {                
+        switch($v->type) {          
+          case 'checkbox':   
             $data[$v->name] = isset($data[$v->name])? $data[$v->name] : $v->falseValue;
+            break;
+          case 'grid':
+             $i = 0 ;
+             foreach ($data[$v->name] as $dataGrid) {              
+             $i++;
+               foreach ($v->fields as $dataGridInt) {                          
+                 switch($dataGridInt->type) {
+                   case 'checkbox':   
+                     $data[$v->name][$i][$dataGridInt->name] = isset($data[$v->name][$i][$dataGridInt->name])? $data[$v->name][$i][$dataGridInt->name] : $dataGridInt->falseValue;
+                     break;
+                 }                
+               }               
+             }
             break;
           default:
         }

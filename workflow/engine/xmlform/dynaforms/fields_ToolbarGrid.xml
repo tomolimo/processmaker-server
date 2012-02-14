@@ -32,12 +32,10 @@
   <yesno type="toolButton" class="ss_sprite button_toolbar ss_yesno" onclick="fieldsAdd('yesno')" buttonType="class">
     <en>Yes/No</en>
   </yesno>
-  <!--.-->
-  <!--<separator5 type="toolButton" file="images/dynamicForm/separatorTable.gif" home="public_html" buttonStyle=""/>
-  <checkbox type="toolButton" onclick="fieldsAdd('checkbox')" file="images/dynamicForm/checkbox.gif" fileAlt="images/dynamicForm/hover.gif" home="public_html" buttonType="html">
-    <en><![CDATA[<div class="ss_sprite button_toolbar ss_check" title="Checkbox"></div>]]></en>
-  </checkbox>-->
-  <!--.-->
+  <separator5 type="toolButton" file="images/dynamicForm/separatorTable.gif" home="public_html" buttonStyle=""/>
+  <checkbox type="toolButton" class="ss_sprite button_toolbar ss_check" onclick="fieldsAdd('checkbox')" buttonType="class">
+    <en>Checkbox</en>
+  </checkbox>
   <separator7 type="toolButton" file="images/dynamicForm/separatorTable.gif" home="public_html" buttonStyle=""/>
   <date type="toolButton" class="ss_sprite button_toolbar ss_date" onclick="fieldsAdd('date')" buttonType="class">
     <en>Date</en>

@@ -307,9 +307,12 @@ var G_Grid = function(oForm, sGridName){
                       }
                     }
                     break;
-                  case 'checkbox': //CHECKBOX
-                    aObjects[n].checked = false;
-                    aObjects[n].value = defaultValue;
+                  case 'checkbox': //CHECKBOX 
+                    attributesFalse = elementAttributesNS(aObjects[0], '');                       
+                    if((defaultValue === attributesFalse.falsevalue) || (defaultValue==='')) 
+                      aObjects[n].checked = false;  
+                    else
+                      aObjects[n].checked = true;                     
                     break;
                   case 'hidden': //HIDDEN
                     if ((attributes.gridtype != 'yesno' && attributes.gridtype != 'dropdown') || typeof attributes.gridtype == 'undefined')

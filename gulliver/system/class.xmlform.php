@@ -2398,16 +2398,23 @@ class XmlForm_Field_Checkbox extends XmlForm_Field
     $r      = 1;
     foreach ( $values as $v ) {
       $checked = (($v == $this->value) ? 'checked="checked"' : '');
-      if($this->readOnly==='readonly' or $this->readOnly==='1' ){
+      if($this->readOnly==='readonly' or $this->readOnly==='1' ) {
         $disabled = "disabled";
       }
-      else{
+      else {
         $disabled = '';
       }
-      //$disabled = (($this->value == 'view') ? 'disabled="disabled"' : '');
-      $html = $res = "<input id='form[" . $owner->name . "][" . $r . "][" . $this->name . "]' value='{$this->value}' name='form[" . $owner->name . "][" . $r . "][" . $this->name . "]' type='checkbox' $checked $disabled readonly = '{$this->readOnly}' ".$this->NSDefaultValue()." ".$this->NSGridType()."/>";
-      $result [] = $html;
-      $r ++;
+      if ($this->mode==='edit') {        
+        $html = $res = "<input id='form[" . $owner->name . "][" . $r . "][" . $this->name . "]' value='{$this->value}' falseValue= ".$this->falseValue."  name='form[" . $owner->name . "][" . $r . "][" . $this->name . "]' type='checkbox' $checked $disabled readonly = '{$this->readOnly}' ".$this->NSDefaultValue()." ".$this->NSGridType()."/>";
+        $result [] = $html;
+        $r ++;      
+      }
+      else {
+        //$disabled = (($this->value == 'view') ? 'disabled="disabled"' : '');
+        $html = $res = "<input id='form[" . $owner->name . "][" . $r . "][" . $this->name . "]' value='{$this->value}' falseValue= ".$this->falseValue." name='form[" . $owner->name . "][" . $r . "][" . $this->name . "]' type='checkbox' $checked disabled readonly = '{$this->readOnly}' ".$this->NSDefaultValue()." ".$this->NSGridType()."/>";
+        $result [] = $html;
+        $r ++;      
+      }      
     }
     return $result;
   }
