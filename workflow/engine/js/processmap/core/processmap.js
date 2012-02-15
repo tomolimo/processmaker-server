@@ -195,7 +195,7 @@ var processmap=function(){
            panel = this.panels.toolbar=new leimnud.module.panel();
            this.panels.toolbar.options={
             limit :true,
-            size :{w:260,h:31},
+            size :{w:220,h:31},
             position:{x:this.options.target.clientWidth-278,y:4},
             title :"",
             theme :"processmaker",
@@ -259,28 +259,28 @@ var processmap=function(){
                fin.title = G_STRINGS.ID_END_OF_PROCESS;
                div.appendChild(fin);
 
-                                                                              var ini = document.createElement("img");
+               var ini = document.createElement("img");
                ini.src = this.options.images_dir+"7.gif";
                ini.title = "Starting task";
                div.appendChild(ini);
 
-                                                                              var dis = document.createElement("img");
+             /*var dis = document.createElement("img");
                dis.src = this.options.images_dir+"8.gif";
                dis.title = "Discriminator";
-               div.appendChild(dis);
+               div.appendChild(dis);*/
 
-               [dr1,dr2,dr3,dr4,dr5,dr6,fin,ini,dis].map(function(el){
+               [dr1,dr2,dr3,dr4,dr5,dr6,fin,ini/*,dis*/].map(function(el){
                 el.className ="processmap_toolbarItem___"+this.options.theme
                }.extend(this));
                this.dragables.derivation = new this.parent.module.drag({ //Add to enable dragging of image from panel
-               elements:[dr1,dr2,dr3,dr4,dr5,dr6,fin,ini,dis],
+               elements:[dr1,dr2,dr3,dr4,dr5,dr6,fin,ini/*,dis*/],
                 fx:{
                  type : "clone",
                  target : this.panels.editor.elements.content,
                  zIndex : 11
                 }
                });
-               this.dragables.derivation.typesDerivation=["simple","double","conditional","conditional1","conditional2","conditional3","final","initial","discriminator"];
+               this.dragables.derivation.typesDerivation=["simple","double","conditional","conditional1","conditional2","conditional3","final","initial"/*,"discriminator"*/];
                this.dragables.derivation.events={
                 init :[function(){
                  this.dragables.derivation.noDrag=true;
@@ -306,7 +306,7 @@ var processmap=function(){
                };
                this.dragables.derivation.make();
                //drg.options.elements=[];
-               this.parent.dom.setStyle([dr1,dr2,dr3,dr4,dr5,dr6,fin,ini,dis],{
+               this.parent.dom.setStyle([dr1,dr2,dr3,dr4,dr5,dr6,fin,ini/*,dis*/],{
                 cursor:"move"
                });
            panel.loader.hide();
