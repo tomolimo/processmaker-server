@@ -2127,8 +2127,12 @@ class XmlForm_Field_Link extends XmlForm_Field {
     $link    = G::replaceDataField ( $this->link, $owner->values );
     $target  = G::replaceDataField ( $this->target, $owner->values );
     $value   = G::replaceDataField ( $this->value, $owner->values );
-    $label   = G::replaceDataField ( $this->label, $owner->values );   
-    $html  = '<a class="tableOption" href=\'' . $this->htmlentities ( $link, ENT_QUOTES, 'utf-8' ) . '\'' . 'id="form[' . $this->name . ']" name="form[' . $this->name . ']" style="' . htmlentities ( $this->style, ENT_QUOTES, 'utf-8' ) .'" '. (($this->onclick) ? ' onclick="' . htmlentities ( $onclick, ENT_QUOTES, 'utf-8' ) . '"' : '') . (($this->target) ? ' target="' . htmlentities ( $target, ENT_QUOTES, 'utf-8' ) . '"' : '') . '>' . $this->htmlentities ( $this->value === '' ? $label : $value, ENT_QUOTES, 'utf-8' ) . '</a>';
+    $label   = G::replaceDataField ( $this->label, $owner->values );
+    $html    =  '<a class="tableOption" href=\'' . $this->htmlentities ( $link, ENT_QUOTES, 'utf-8' ) . '\'';
+    $html   .= 'id="form[' . $this->name . ']" name="form[' . $this->name . ']" style="' . htmlentities ( $this->style, ENT_QUOTES, 'utf-8' ) .'" ';
+    $html   .= (($this->onclick) ? ' onclick="' . htmlentities ( $onclick, ENT_QUOTES, 'utf-8' ) . '"' : '') ;
+    $html   .= (($this->target) ? ' target="' . htmlentities ( $target, ENT_QUOTES, 'utf-8' ) . '"' : '') . '>';
+    $html   .= $this->htmlentities ( $this->value === '' ? $label : $value, ENT_QUOTES, 'utf-8' ) . '</a>';
     return $html;
   }
 
@@ -2148,15 +2152,14 @@ class XmlForm_Field_Link extends XmlForm_Field {
       $target    = G::replaceDataField ( $this->target, $_aData_ );
       $value     = G::replaceDataField ( $this->value, $_aData_ );
       $label     = G::replaceDataField ( $this->label, $_aData_ );
-      if ($this->mode == 'edit'){
-        $html      = '<a class="tableOption" href=\'' . $this->htmlentities ( $link, ENT_QUOTES, 'utf-8' ) . '\'' . 'id="form[' . $owner->name . '][' . $r . '][' . $this->name . ']" name="form[' . $owner->name . '][' . $r . '][' . $this->name . ']"' . (($this->onclick) ? ' onclick="' . htmlentities ( $onclick, ENT_QUOTES, 'utf-8' ) . '"' : '') . (($this->target) ? ' target="' . htmlentities ( $target, ENT_QUOTES, 'utf-8' ) . '"' : '') . '>' . $this->htmlentities ( $this->value === '' ? $label : $value, ENT_QUOTES, 'utf-8' ) . '</a>';
-      } else {
-        $html  = $this->htmlentities ( $this->value === '' ? $label : $value, ENT_QUOTES, 'utf-8' );
-        $html .= '<input ';
-        $html .= 'id="form[' . $owner->name . '][' . $r . '][' . $this->name . ']" ';
-        $html .= 'name="form[' . $owner->name . '][' . $r . '][' . $this->name . ']" ';
-        $html .= 'type="hidden" value="' . $this->htmlentities ( $link, ENT_QUOTES, 'utf-8' ) . '" />';
-      }  
+      $html      = '<a class="tableOption" href=\'' . $this->htmlentities ( $link, ENT_QUOTES, 'utf-8' ) . '\'';
+      $html     .= 'id="form[' . $owner->name . '][' . $r . '][' . $this->name . ']"';
+      $html     .= 'name="form[' . $owner->name . '][' . $r . '][' . $this->name . ']"';
+      $html     .= (($this->onclick) ? ' onclick="' . htmlentities ( $onclick, ENT_QUOTES, 'utf-8' ) . '"' : '');
+      $html     .= (($this->target) ? ' target="' . htmlentities ( $target, ENT_QUOTES, 'utf-8' ) . '"' : '') ;
+      if ($this->mode == 'view')
+        $html     .= 'style="color: #006699; text-decoration: none;font-weight: normal;"';      
+      $html     .=  '>'.$this->htmlentities ( $this->value === '' ? $label : $value, ENT_QUOTES, 'utf-8' ) . '</a>';
       $result [] = $html;
       $r ++;
     }
