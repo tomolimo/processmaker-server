@@ -341,7 +341,7 @@ class spoolRun {
           $oPHPMailer->Body = utf8_decode($this->fileData['body']);
           if(is_array($this->fileData['attachments'])){
             foreach($this->fileData['attachments'] as $key => $fileAttach){
-              $oPHPMailer->AddAttachment($fileAttach);
+              $oPHPMailer->AddAttachment($fileAttach, is_int($key) ? '' : $key);
             }
           }
           foreach( $this->fileData['envelope_to'] as $sEmail ) {
@@ -403,7 +403,7 @@ class spoolRun {
           
           if(is_array($this->fileData['attachments'])){
             foreach($this->fileData['attachments'] as $key => $fileAttach){
-              $oPHPMailer->AddAttachment($fileAttach);
+              $oPHPMailer->AddAttachment($fileAttach, is_int($key) ? '' : $key);
             }
           }
           foreach( $this->fileData['envelope_to'] as $sEmail ) {
