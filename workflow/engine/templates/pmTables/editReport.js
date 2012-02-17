@@ -841,15 +841,6 @@ Ext.onReady(function(){
     items: items
   }
   
-  if (TABLE !== false && TABLE.ADD_TAB_TAG == 'plugin@simplereport') {
-    frmDetailsConfig.tbar = [{
-      text: _plugin_permissions.label,
-      handler: function(){
-        setTimeout(_plugin_permissions.fn, 0);
-      }
-    }]
-  }
-  
   var frmDetails = new Ext.FormPanel(frmDetailsConfig);
 
   southPanel = new Ext.FormPanel({
