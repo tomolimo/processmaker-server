@@ -480,6 +480,7 @@ class AdditionalTables extends BaseAdditionalTables {
         }
         else {
           $sMessage = 'Error, row cannot updated';
+          return false;
         }
         throw(new Exception('The registry cannot be updated!<br />' . $sMessage));
       }
