@@ -1114,6 +1114,9 @@ function G_Text( form, element, name)
   };
                           
   this.handleKeyDown = function(event){
+    if (me.element.readOnly) {
+      return true;
+    }
     //THIS FUNCTION HANDLE BACKSPACE AND DELETE KEYS
     if (me.validate == 'Any' && me.mask == '') return true;
     pressKey = event.keyCode;
