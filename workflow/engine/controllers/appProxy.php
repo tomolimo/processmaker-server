@@ -2,7 +2,7 @@
 /**
  * App controller
  * @author Erik Amaru Ortiz <erik@colosa.com, aortiz.erik@gmail.com>
- * @inherits Controller
+ * @herits Controller
  * @access public
  */
 
@@ -129,8 +129,13 @@ class AppProxy extends HttpProxyController
       $this->dynUid = $processData['PRO_DYNAFORMS']['PROCESS'];
     }
 
-    $_SESSION['_applicationFields'] = $applicationFields;
-    $_SESSION['_processData'] = $processData;
+    $_SESSION['_applicationFields']   = $applicationFields;
+    $_SESSION['_processData']         = $processData;
+    $_SESSION['APPLICATION']          = $httpData->appUid;
+    $_SESSION['INDEX']                = $httpData->delIndex;
+    $_SESSION['PROCESS']              = $applicationFields['PRO_UID'];
+    $_SESSION['TASK']                 = $applicationFields['TAS_UID'];
+    $_SESSION['STEP_POSITION']        = '';
   }
 
   /**
@@ -191,6 +196,5 @@ class AppProxy extends HttpProxyController
 
     return $data;
   }
-
 
 }

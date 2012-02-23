@@ -361,8 +361,8 @@ var openSummaryWindow = function(appUid, delIndex)
         var summaryWindow = new Ext.Window({
           title: _('ID_SUMMARY'),
           layout: 'fit',
-          width: 500,
-          height: 400,
+          width: 600,
+          height: 450,
           resizable: true,
           closable: true,
           modal: true,
@@ -382,25 +382,37 @@ var openSummaryWindow = function(appUid, delIndex)
           ],*/
         });
 
+        var tabs = new Array();
+        tabs.push(sumaryInfPanel);
         if (response.dynUid != '') {
-          var tabs = new Array();
-          tabs.push(sumaryInfPanel);
           tabs.push({title: Ext.util.Format.capitalize(_('ID_MORE_INFORMATION')), bodyCfg: {
             tag: 'iframe',
             id: 'summaryIFrame',
             src: '../cases/summary?APP_UID=' + appUid + '&DEL_INDEX=' + delIndex + '&DYN_UID=' + response.dynUid,
-            style: {border: '0px none', height: '440px'},
+            style: {border: '0px none', height: '300px'},
             onload: ''
           }});
-          var summaryTabs = new Ext.TabPanel({
-            activeTab: 0,
-            items: tabs
-          });
-          summaryWindow.add(summaryTabs);
         }
-        else {
-          summaryWindow.add(sumaryInfPanel);
-        }
+        tabs.push({title: Ext.util.Format.capitalize('Uploaded Documents'), bodyCfg: {
+          tag: 'iframe',
+          id: 'summaryIFrame',
+          src: '../cases/ajaxListener?action=uploadedDocumentsSummary',
+          style: {border: '0px none', height: '300px'},
+          onload: ''
+        }});
+        
+        tabs.push({title: Ext.util.Format.capitalize('Generated Documents'), bodyCfg: {
+          tag: 'iframe',
+          id: 'summaryIFrame',
+          src: '../cases/ajaxListener?action=generatedDocumentsSummary',
+          style: {border: '0px none',height: '450px'},
+          onload: ''
+        }});
+        var summaryTabs = new Ext.TabPanel({
+          activeTab: 0,
+          items: tabs
+        });
+        summaryWindow.add(summaryTabs);
         summaryWindow.doLayout();
         summaryWindow.show();
       }

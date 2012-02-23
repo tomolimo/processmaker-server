@@ -477,12 +477,29 @@ $caseStep->getStepPosition());
     G::RenderPage('publish', 'blank');
   }
   
+  function uploadedDocumentsSummary()
+  {
+    global $G_PUBLISH;    
+    $oCase = new Cases();
+    $G_PUBLISH = new Publisher();
+    $G_PUBLISH->AddContent('propeltable', 'paged-table', 'cases/cases_AllInputdocsList_Summary', $oCase->getAllUploadedDocumentsCriteria($_SESSION['PROCESS'], $_SESSION['APPLICATION'], $_SESSION['TASK'], $_SESSION['USER_LOGGED']));
+    G::RenderPage('publish', 'blank');
+  }
+  
   function generatedDocuments()
   {
     global $G_PUBLISH;
     $oCase = new Cases();
     $G_PUBLISH = new Publisher();
     $G_PUBLISH->AddContent('propeltable', 'paged-table', 'cases/cases_AllOutputdocsList', $oCase->getAllGeneratedDocumentsCriteria($_SESSION['PROCESS'], $_SESSION['APPLICATION'], $_SESSION['TASK'], $_SESSION['USER_LOGGED']));
+    G::RenderPage('publish', 'blank');
+  }
+    function generatedDocumentsSummary()
+  {
+    global $G_PUBLISH;
+    $oCase = new Cases();
+    $G_PUBLISH = new Publisher();
+    $G_PUBLISH->AddContent('propeltable', 'paged-table', 'cases/cases_AllOutputdocsList_Summary', $oCase->getAllGeneratedDocumentsCriteria($_SESSION['PROCESS'], $_SESSION['APPLICATION'], $_SESSION['TASK'], $_SESSION['USER_LOGGED']));
     G::RenderPage('publish', 'blank');
   }
   
