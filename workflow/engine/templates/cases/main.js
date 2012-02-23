@@ -336,7 +336,14 @@ Ext.onReady(function(){
     reader: reader,
     sortInfo:{field: 'name', direction: "ASC"},
     groupField:'execution_time',
-    proxy: new Ext.data.HttpProxy({url: 'debug_triggers?r='+Math.random()})
+    proxy: new Ext.data.HttpProxy({url: 'debug_triggers?r='+Math.random()}),
+    listeners: {
+      load : function() {
+        var detailPanel = Ext.getCmp('debug-details-panel');
+        detailPanel.setTitle('');
+        debugTriggersDetailTpl.overwrite(detailPanel.body, {});
+      }
+    }
   });
 
   var debugTriggers = new xg.GridPanel({

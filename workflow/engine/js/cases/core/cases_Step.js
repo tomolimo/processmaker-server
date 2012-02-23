@@ -913,20 +913,20 @@ var resendMessage = function(APP_UID, APP_MSG_UID)
 };
 
 
-function showdebug(){
-  if( typeof parent != 'undefined' ){
-    if( typeof parent.parent != 'undefined' ){
-      if( ! parent.parent.PANEL_EAST_OPEN ) {
-        parent.parent.PANEL_EAST_OPEN = true;
+function showdebug()
+{
+  if ( typeof(parent) != 'undefined' ) {
+    if ( typeof(parent.parent) != 'undefined' ) {
+      if ( ! parent.parent.PANEL_EAST_OPEN ) {
         var debugPanel = parent.parent.Ext.getCmp('debugPanel');
+        parent.parent.PANEL_EAST_OPEN = true;
 
         debugPanel.show();
         debugPanel.ownerCt.doLayout();
         debugPanel.expand();
-
-        parent.parent.propStore.load();
-        parent.parent.triggerStore.load();
       }
+      parent.parent.propStore.load();
+      parent.parent.triggerStore.load();
     }
   }
 }
