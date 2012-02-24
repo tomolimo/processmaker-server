@@ -3,192 +3,190 @@
    * @author Erik Amaru Ortiz <erik@colosa.com>
    */
 
-  body {
-    margin : 0px;
-    color  : #808080;
-    font   : normal 11px sans-serif,Tahoma,MiscFixed;
-    background-color: #ECECEC;
-  }
+body {
+  margin : 0px;
+  color  : #808080;
+  font   : normal 11px sans-serif,Tahoma,MiscFixed;
+  background-color: #ECECEC;
+}
 
-  * {
-    margin: 0;
-    padding: 0;
-  }
+* {
+  margin: 0;
+  padding: 0;
+}
 
-  a {
-    color: #333;
-    text-decoration: none;
-  }
-  a:hover {
-    color: #1F98C7;
-    text-decoration: underline;
-  }
+a {
+  color: #333;
+  text-decoration: none;
+}
+a:hover {
+  color: #1F98C7;
+  text-decoration: underline;
+}
 
-  pre {
-    font: normal 12px Georgia, "Times New Roman", Times, serif;
-  }
+pre {
+  font: normal 12px Georgia, "Times New Roman", Times, serif;
+}
 
 
-  .global-nav {
-    position : fixed;
-    left     : 0px;
-    top      : 0px;
-
-    width: 100%;
-    height: 40px;
-    background-color: #252525;
-    background-position: 0 0;
+.global-nav {
+  position : fixed;
+  left     : 0px;
+  top      : 0px;
+  width: 100%;
+  height: 40px;
+  background-color: #252525;
+  background-position: 0 0;
 
 /*    background-image: url("/images/twitter_web_sprite_bgs.png");
-    background-repeat: repeat-x;*/
+  background-repeat: repeat-x;*/
+  /*background-color: #00A0D1;
+  background-image: -moz-linear-gradient(#00A0D1, #008DB8); */
 
-
-    /*background-color: #00A0D1;
-    background-image: -moz-linear-gradient(#00A0D1, #008DB8); */
-
-    bottom: 0;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), 0 -1px 0 rgba(0, 0, 0, 0.1) inset;
-    
-    z-index: 0;
-  }  
-
-  .ui-widget .ui-widget {
-    font-size: 12px !important;
-  }
-
-  .bar-nav {
-    width: 100%;
-    height: 41px;
-  }
-
-
-  .global-nav-table {
-    color: #fff;
-    /*padding: 5px 5px;*/
-  }
-
-  .global-nav-table-right {
-    text-align: right;
-  }
-
-  iframe { 
-    overflow:auto; 
-  }
+  bottom: 0;
   
-  iframe::-webkit-scrollbar {  
-    display: auto;
-  }
-    
 
 
+  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), 0 -1px 0 rgba(0, 0, 0, 0.1) inset;
+  -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), 0 -1px 0 rgba(0, 0, 0, 0.1) inset;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), 0 -1px 0 rgba(0, 0, 0, 0.1) inset;
 
-.tooltip {
-  display:none;
+  
+  z-index: 0;
+}  
+
+.global-nav-2 {
+  position : fixed;
+  left     : 0px;
+  top      : 0px;
+  width: 100%;
+  height: 26px;
+  /*background-color: #252525;*/
+  background-position: 0 0;
+  bottom: 0;
+  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), 0 -1px 0 rgba(0, 0, 0, 0.1) inset;
+  -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), 0 -1px 0 rgba(0, 0, 0, 0.1) inset;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), 0 -1px 0 rgba(0, 0, 0, 0.1) inset;
+  z-index: 0;
+}  
+
+.ui-widget .ui-widget {
+  font-size: 12px !important;
+}
+
+.bar-nav {
+  width: 100%;
+  height: 41px;
+}
+
+
+.global-nav-table {
+  color: #fff;
+  /*padding: 5px 5px;*/
+}
+
+.global-nav-table-right {
+  text-align: right;
+}
+
+iframe { 
+  overflow:auto; 
+}
+
+iframe::-webkit-scrollbar {  
+  display: auto;
+}
+
+/* number style */
+#commentlist {
+  margin: 10px 0 40px;
+  padding: 5;
+  text-align: left;
+}
+#commentlist li {
+  padding: 10px 0 20px;
+  list-style: none;
+  border-top: solid 1px #ccc;
+  position: relative;
+}
+#commentlist cite {
+  font: bold 140%/110% Arial, Helvetica, sans-serif;
+  color: #666;
+}
+#commentlist .time {
+  color: #ccc;
+  margin: 0 0 10px;
+}
+#commentlist .commentnumber {
+  position: absolute;
+  right: 0;
+  top: 8px;
+  font: normal 200%/100% Georgia, "Times New Roman", Times, serif;
+  color: #ccc;
+}
+
+#commentlist .notes-link {
+  position: absolute;
+  right: 0;
+  top: 64px;
+  font: normal 200%/100% Georgia, "Times New Roman", Times, serif;
+  color: #ccc;
+}
+
+#commentlist .notes-plus-link {
+  position: absolute;
+  right: 0px;
+  top: 38px;
+  font: normal 200%/100% Georgia, "Times New Roman", Times, serif;
+  color: #ccc;
+}
+
+
+.list-highlight{
+  background-color: #e8edf3;
+}
+
+
+.content-header {
+  background-color: #FFFFFF;
+  border-bottom: 1px solid #E8E8E8;
+  border-radius: 5px 5px 5px 5px;
+  -webkit-border-bottom-left-radius: 5px;
+  -webkit-border-bottom-right-radius: 5px;
+  -moz-border-radius: 5px 5px 5px 5px;
+  border-radius: 5px 5px 5px 5px;
+  /*-webkit-box-shadow: 0 1px 2px rgba(0,0,0,0.6);*/
+  /*-moz-box-shadow: 0 1px 2px rgba(0,0,0,0.6);*/
+  min-height: 20px;
+  padding: 12px;
+}
+
+
+.appMessages {
+  display: none;
+  background-color: #E9F1F4;
+  padding: 6px 6px 6px 6px;
   -webkit-border-bottom-left-radius: 5px;
   -webkit-border-bottom-right-radius: 5px;
   -moz-border-radius: 0 0 5px 5px;
   border-radius: 0 0 5px 5px;
-  -webkit-box-shadow: 0 1px 2px rgba(0,0,0,0.6);
-  -moz-box-shadow: 0 1px 2px rgba(0,0,0,0.6);
-  box-shadow: 0 1px 2px rgba(0,0,0,0.6);
-  font-size:12px;
-  height:70px;
-  width:160px;
-  padding:25px;
-  color:red; 
+}
+
+.appMessage {
+  border-top: 1px solid #DCDCDC;
+  border-radius: 2px 2px 2px 2px;
+  margin: 2px 2px 2px 2px;
+  padding: 5px 5px 5px 5px;
+  font-size: 10px; 
+}
+
+.appMessageDate {
+  font-size: 10px; 
+  margin: 10px 0px 0px 0px;
 }
 
 
-/* index2*/
-/* number style */
-  #commentlist {
-    margin: 10px 0 40px;
-    padding: 5;
-    text-align: left;
-  }
-  #commentlist li {
-    padding: 10px 0 20px;
-    list-style: none;
-    border-top: solid 1px #ccc;
-    position: relative;
-  }
-  #commentlist cite {
-    font: bold 140%/110% Arial, Helvetica, sans-serif;
-    color: #666;
-  }
-  #commentlist .time {
-    color: #ccc;
-    margin: 0 0 10px;
-  }
-  #commentlist .commentnumber {
-    position: absolute;
-    right: 0;
-    top: 8px;
-    font: normal 200%/100% Georgia, "Times New Roman", Times, serif;
-    color: #ccc;
-  }
-
-  #commentlist .notes-link {
-    position: absolute;
-    right: 0;
-    top: 64px;
-    font: normal 200%/100% Georgia, "Times New Roman", Times, serif;
-    color: #ccc;
-  }
-  
-  #commentlist .notes-plus-link {
-    position: absolute;
-    right: 0px;
-    top: 38px;
-    font: normal 200%/100% Georgia, "Times New Roman", Times, serif;
-    color: #ccc;
-  }
-  
-
-  .list-highlight{
-    background-color: #e8edf3;
-  }
-
-
-  .content-header {
-    background-color: #FFFFFF;
-    border-bottom: 1px solid #E8E8E8;
-    border-radius: 5px 5px 5px 5px;
-    -webkit-border-bottom-left-radius: 5px;
-    -webkit-border-bottom-right-radius: 5px;
-    -moz-border-radius: 5px 5px 5px 5px;
-    border-radius: 5px 5px 5px 5px;
-    /*-webkit-box-shadow: 0 1px 2px rgba(0,0,0,0.6);*/
-    /*-moz-box-shadow: 0 1px 2px rgba(0,0,0,0.6);*/
-    min-height: 20px;
-    padding: 12px;
-  }
-
-
-  .appMessages {
-    display: none;
-    background-color: #EBFFFF;
-    padding: 6px 6px 6px 6px;
-    -webkit-border-bottom-left-radius: 5px;
-    -webkit-border-bottom-right-radius: 5px;
-    -moz-border-radius: 0 0 5px 5px;
-    border-radius: 0 0 5px 5px;
-  }
-
-  .appMessage {
-    border-top: 1px solid #DCDCDC;
-    border-radius: 2px 2px 2px 2px;
-    margin: 2px 2px 2px 2px;
-    padding: 5px 5px 5px 5px;
-  }
-
-  .appMessageDate {
-    font-size: 1p1x; 
-    margin: 10px 0px 0px 0px;
-  }
-
-
-  /*
+/*
   xBreadcrumbs (Extended Breadcrumbs) jQuery Plugin
   © 2009 ajaxBlender.com
   For any questions please visit www.ajaxblender.com 
@@ -278,7 +276,7 @@
     padding-right: 15px;
     padding-left: 10px;
 }
-.xbreadcrumbs LI.current { 
+.xbreadcrumbs LI.current {
   /*background: none;*/
   background: url(/images/simplified/separator.gif) no-repeat right center; 
 }
@@ -323,4 +321,217 @@ PRE.code {
     color: #F0F0F0;
     width: 400px;
     overflow: auto;
+}
+
+
+/**
+ * Simplified Login Styles @erik
+ */
+
+/* Mask for background, by default is not display */
+#mask {
+  display: none;
+  /*background: #000; erik */
+  background: #E8E8E8;
+  background: #E1E1E1;
+  
+  position: fixed; left: 0; top: 0; 
+  z-index: 10;
+  width: 100%; 
+  height: 100%;
+  opacity: 0.8;
+  z-index: 999;
+
+  background-color: #142F3C;
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#142F3C), to(#307190)); /* Webkit */
+  background-image: -moz-linear-gradient(#142F3C, #1D4558); /* FF3.6 */
+}
+
+/** Login form styles*/
+
+.login_form {
+  display: none;
+  margin: 0;
+  width: 400;
+  height:265;
+  font: 13px/1.4 helvetica,arial,freesans,clean,sans-serif;
+  text-align:left;
+
+  box-shadow: 0px 0px 20px #999; /* CSS3 */
+  -moz-box-shadow: 0px 0px 20px #999; /* Firefox */
+  -webkit-box-shadow: 0px 0px 20px #999; /* Safari, Chrome */
+  border-radius:5px 5px 5px 5px;
+  -moz-border-radius: 5px; /* Firefox */
+  -webkit-border-radius: 5px; /* Safari, Chrome */
+  z-index: 99999;
+
+  position: fixed;
+  left: 50%;
+  top: 50%;
+
+  /* erik: this was for positioning to center just with css
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 300px;
+  height: 200px;
+  margin-top: -100px;
+  margin-left: -150px;
+
+  overflow: auto;
+  border: 1px solid red;*/
+}
+
+.login_form .formbody {
+  background-color: #E9F1F4;
+  border-color: #E9F1F4 #D8DEE2 #D8DEE2;
+  border-style: solid;
+  border-width: 0px;
+  overflow: hidden;
+  padding: 1.5em;
+  border-radius: 0px 0px 5px 5px;
+  -moz-border-radius: 0px 0px 5px 5px; /* Firefox */
+  -webkit-border-radius: 0px 0px 5px 5px; /* Safari, Chrome */
+  height:170;
+}
+
+.login_form h1
+{
+  
+  background: -moz-linear-gradient(#829AA8, #405A6A) repeat scroll 0 0 transparent;
+  background: -webkit-linear-gradient(#829AA8,#405A6A);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#829aa8',endColorstr='#405a6a');
+  border-color: #677C89 #677C89 #6B808D;
+  border-radius: 5px 5px 0 0;
+  border-style: solid;
+  border-width: 1px;
+  color: #FFFFFF;
+  font-size: 16px;
+  font-weight: bold;
+  margin: 0;
+  padding: 8px;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.698);
+  
+}
+
+
+.login_form label, .login_form form .label, label.standard {
+    color: #2F424E;
+    cursor: text;
+    display: inline-block;
+    font-size: 80%;
+    text-shadow: 0 -1px 0 rgba(100, 100, 100, 0.1);
+}
+
+.login_form .label label {
+    color: black;
+    font-size: 95%;
+    margin: 0;
+}
+
+.login_form input.text, .login_form form textarea {
+    border: 1px solid #D8DEE2;
+    margin: 0.2em 0 1em;
+    padding: 5px;
+}
+.login_form input.text {
+    font-size: 110%;
+}
+.login_form button {
+    margin: 0 8px 0 0;
+}
+.login_form input[type="submit"] {
+  font: 11px sans-serif,Tahoma,MiscFixed;
+  background-color: #DDDDDD;
+  background-image: -moz-linear-gradient(#FFFFFF, #DDDDDD);
+  background: -webkit-gradient(linear, 0 0, 0 100%, from(#FFFFFF), to(#DDDDDD));
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFFFFF', endColorstr='#DDDDDD'); /* IE6,IE7 */
+  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFFFFF', endColorstr='#DDDDDD')"; /* IE8 */
+
+  background-repeat: repeat-x;
+  border: 1px solid #CCCCCC;
+  border-radius: 4px 4px 4px 4px;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+  color: #333333;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 13px;
+  font-weight: bold;
+  line-height: 18px;
+  overflow: visible;
+  padding: 5px 10px;
+  position: relative;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+.login_form input[type="submit"]:hover {
+  background-color: #D8D8D8;
+  background-image: -moz-linear-gradient(#DCDCDC, #D8D8D8);
+  background: -webkit-gradient(linear, 0 0, 0 100%, from(#DCDCDC), to(#D8D8D8));
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#DCDCDC', endColorstr='#D8D8D8'); /* IE6,IE7 */
+  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#DCDCDC', endColorstr='#D8D8D8')"; /* IE8 */
+  border-color: #BBBBBB;
+  text-decoration: none;
+}
+
+.login_form .error_box, .login_form form .notification {
+    margin-bottom: 1em;
+}
+
+.login_message {
+  position:absolute; 
+  top:195px;
+  left:25px;
+  color: red;
+  font-size: 11px;
+}
+
+/** indexSingle.html styles */
+
+#signout-link {
+  position: absolute;
+  right: 5px;
+  top:2px;
+  z-index:10000;
+
+  -moz-border-bottom-colors: none;
+  -moz-border-image: none;
+  -moz-border-left-colors: none;
+  -moz-border-right-colors: none;
+  -moz-border-top-colors: none;
+  
+  background: -moz-linear-gradient(white, #E1E1E1) repeat scroll 0 0 transparent;
+  background: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#E1E1E1));
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#E1E1E1'); /* IE6,IE7 */
+  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#E1E1E1')"; /* IE8 */
+
+  border-color: -moz-use-text-color -moz-use-text-color #EBEBEB;
+  border-radius: 4px 4px 4px 4px;
+  border-style: none none solid;
+  border-width: medium medium 1px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  color: #333333;
+  cursor: pointer;
+  display: inline-block;
+  font-family: helvetica,arial,freesans,clean,sans-serif;
+  font-size: 12px;
+  font-weight: bold;
+  
+  margin-left: 1px;
+  overflow: visible;
+  padding: 2px 5px 0px 2px;
+  
+  text-shadow: 1px 1px 0 #FFFFFF;
+  top: 1px;
+  white-space: nowrap;
+}
+
+a.signout-link:hover {
+  background: -moz-linear-gradient(#0CA6DD, #0770A0) repeat scroll 0 0 transparent;
+  background: -webkit-gradient(linear, 0 0, 0 100%, from(#0CA6DD), to(#0770A0));
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#0CA6DD', endColorstr='#0770A0'); /* IE6,IE7 */
+  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#0CA6DD', endColorstr='#0770A0')"; /* IE8 */
+
+  border-bottom-color: #0770A0;
+  color: #FFFFFF;
+  text-shadow: -1px -1px 0 rgba(0, 0, 0, 0.3);
 }

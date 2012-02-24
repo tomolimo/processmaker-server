@@ -415,33 +415,47 @@ class processMap {
 
   function editProcess($sProcessUID) {
     try {
-      $oProcess = new Process ( );
-      if (!is_null($oProcess)) {
+      $oProcess = new Process ();
 
-        $calendar = new Calendar ( );
+      if (!is_null($oProcess)) {
+        G::loadClass('processes');
+        $calendar = new Calendar();
+        $files = Processes::getProcessFiles($sProcessUID, 'mail');
+
+        $templates   = array();
+        $templates[] = 'dummy';
+
+        foreach ($files as $file) {
+          $templates[] = array('FILE' => $file['filename'], 'NAME' => $file['filename']);
+        }
+        
         $calendarObj = $calendar->getCalendarList(true, true);
 
         global $_DBArray;
-
-        $_DBArray ['availableCalendars'] = $calendarObj ['array'];
-
+        $_DBArray['_TEMPLATES1'] = $templates;
+        $_DBArray['availableCalendars'] = $calendarObj['array'];
         $_SESSION ['_DBArray'] = $_DBArray;
+
         $aFields = $oProcess->load($sProcessUID);
         $aFields['PRO_SUMMARY_DYNAFORM'] = (isset($aFields['PRO_DYNAFORMS']['PROCESS']) ? $aFields['PRO_DYNAFORMS']['PROCESS'] : '');
-        $aFields ['THETYPE'] = 'UPDATE';
+        $aFields['THETYPE'] = 'UPDATE';
         $calendarInfo = $calendar->getCalendarFor($sProcessUID, $sProcessUID, $sProcessUID);
+
         //If the function returns a DEFAULT calendar it means that this object doesn't have assigned any calendar
-        $aFields ['PRO_CALENDAR'] = $calendarInfo ['CALENDAR_APPLIED'] != 'DEFAULT' ? $calendarInfo ['CALENDAR_UID'] : "";
+        $aFields['PRO_CALENDAR'] = $calendarInfo ['CALENDAR_APPLIED'] != 'DEFAULT' ? $calendarInfo ['CALENDAR_UID'] : "";
 
         global $G_PUBLISH;
         $G_PUBLISH = new Publisher ( );
         $G_PUBLISH->AddContent('xmlform', 'xmlform', 'processes/processes_Edit', '', $aFields, 'processes_Save');
         G::RenderPage('publish', 'raw');
+        
         return true;
-      } else {
+      } 
+      else {
         throw (new Exception('This row doesn\'t exist!'));
       }
-    } catch (Exception $oError) {
+    } 
+    catch (Exception $oError) {
       throw ($oError);
     }
   }
@@ -1353,24 +1367,23 @@ class processMap {
       $aFields ['IFORM'] = $iForm;
       $aFields ['LANG'] = SYS_LANG;
 
-      if($iForm == 7) {
-        $aTemplates   = array();
-          $aTemplates[] = 'dummy';
-          $sDirectory = PATH_DATA_MAILTEMPLATES . $aFields['PRO_UID'] . PATH_SEP;
-          G::verifyPath($sDirectory, true);
-          if (!file_exists($sDirectory . 'alert_message.html')) {
-            @copy(PATH_TPL . 'mails' . PATH_SEP . 'alert_message.html', $sDirectory . 'alert_message.html');
-          }
-          $oDirectory   = dir($sDirectory);
-          while ($sObject = $oDirectory->read()) {
-            if (($sObject !== '.') && ($sObject !== '..') && ($sObject !== 'alert_message.html')) {
-              $aTemplates[] = array('FILE' => $sObject, 'NAME' => $sObject);
-            }
-          }
-          global $_DBArray;
-          $_DBArray['_TEMPLATES1'] = $aTemplates;
-          $_SESSION ['_DBArray'] = $_DBArray;
+      /** Task Notifications **/
+      if($iForm == 7 || $iForm == 1 ) {
+        G::loadClass('processes');
+        $files = Processes::getProcessFiles($aFields['PRO_UID'], 'mail');
 
+        $templates   = array();
+        $templates[] = 'dummy';
+
+        foreach ($files as $file) {
+          $templates[] = array('FILE' => $file['filename'], 'NAME' => $file['filename']);
+        }
+        
+        global $_DBArray;
+        $_DBArray['_TEMPLATES1'] = $templates;
+        $_SESSION['_DBArray'] = $_DBArray;
+
+        if ($iForm == 7) {
           // Additional configuration
           G::loadClass('configuration');
           $oConf = new Configurations;
@@ -1380,6 +1393,7 @@ class processMap {
             $aFields['TAS_DEF_MESSAGE_TYPE'] = $conf['TAS_DEF_MESSAGE_TYPE'];
             $aFields['TAS_DEF_MESSAGE_TEMPLATE'] = $conf['TAS_DEF_MESSAGE_TEMPLATE'];
           }
+        }
       }
 
       if ($iForm == 3) { //Load Calendar Information
@@ -4021,19 +4035,24 @@ class processMap {
    * @return void
    */
   function processFilesManager($sProcessUID) {
-    $aDirectories = array();
-    $aDirectories [] = array('DIRECTORY' => 'char');
-    $aDirectories [] = array('DIRECTORY' => '<a href="#" onclick="goToDirectory(\'' . $sProcessUID . '\', \'mailTemplates\', \'\');" class="pagedTableHeader">mailTemplates</a>');
-    $aDirectories [] = array('DIRECTORY' => '<a href="#" onclick="goToDirectory(\'' . $sProcessUID . '\', \'public\', \'\');" class="pagedTableHeader">public</a>');
-    global $_DBArray;
-    $_DBArray = (isset($_SESSION ['_DBArray']) ? $_SESSION ['_DBArray'] : '');
-    $_DBArray ['directories'] = $aDirectories;
-    $_SESSION ['_DBArray'] = $_DBArray;
     G::LoadClass('ArrayPeer');
-    $oCriteria = new Criteria('dbarray');
-    $oCriteria->setDBArrayTable('directories');
+    global $_DBArray;
     global $G_PUBLISH;
-    $G_PUBLISH = new Publisher ( );
+
+    $oCriteria = new Criteria('dbarray');
+    $G_PUBLISH = new Publisher();
+  
+    $aDirectories = array();
+    $aDirectories[] = array('DIRECTORY' => 'char');
+    $aDirectories[] = array('DIRECTORY' => '<a href="#" onclick="goToDirectory(\'' . $sProcessUID . '\', \'mailTemplates\', \'\');" class="pagedTableHeader">'.G::loadTranslation('ID_TEMPLATES').'</a>');
+    $aDirectories[] = array('DIRECTORY' => '<a href="#" onclick="goToDirectory(\'' . $sProcessUID . '\', \'public\', \'\');" class="pagedTableHeader">'.G::loadTranslation('ID_PUBLIC').'</a>');
+    
+    $_DBArray = (isset($_SESSION ['_DBArray']) ? $_SESSION ['_DBArray'] : '');
+    $_DBArray['directories'] = $aDirectories;
+    $_SESSION['_DBArray'] = $_DBArray;
+    
+    $oCriteria->setDBArrayTable('directories');
+    
     $G_PUBLISH->AddContent('propeltable', 'paged-table', 'processes/processes_DirectoriesList', $oCriteria);
     G::RenderPage('publish', 'raw');
   }
@@ -4238,11 +4257,8 @@ class processMap {
    * @param   string    $sTaskUID
    * @param   string    $sIndex
    * @return  void
-<<<<<<< HEAD
    * throw   Exception $oError
-=======
    * @throw   Exception $oError
->>>>>>> 4cdf80a... BUG 6639 When importing a process it is displaying an error
    */
   function subProcess_Properties($sProcessUID = '', $sTaskUID = '', $sIndex = '') {
     try { //echo "$sProcessUID = '', $sTaskUID = '', $sIndex = ''";

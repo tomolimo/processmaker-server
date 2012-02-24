@@ -3150,12 +3150,6 @@ class XmlForm_Field_Grid extends XmlForm_Field
     $this->id = $this->owner->id . $this->name;
     $using_template = "grid";
 
-    ### added by Erik <erik@colosa.com>
-    ### For throw the preview view
-    if( isset($this->owner->visual_frontend) ){
-     $using_template = "grid_{$this->owner->visual_frontend}";
-    }
-
     if( $this->mode == 'view' || $this->modeGrid === 'view' ){
       $using_template = "grid_view";
     }
@@ -4433,6 +4427,7 @@ class xmlformTemplate extends Smarty
       $ft->action = '{$form_action}';
     }
     $hasRequiredFields = false;
+
     foreach ( $form->fields as $k => $v ) {
       $ft->fields [$k] = $v->cloneObject ();
       $ft->fields [$k]->label = '{' . $varPrefix . $k . '}';
@@ -4442,7 +4437,8 @@ class xmlformTemplate extends Smarty
           $ft->fields [$k]->field = '{' . $varPrefix . 'form.' . $k . '[row]}';
         if (strcasecmp ( $target, 'templatePower' ) === 0)
           $ft->fields [$k]->field = '{' . $varPrefix . 'form[' . $k . '][row]}';
-      } else {
+      } 
+      else {
         if (strcasecmp ( $target, 'smarty' ) === 0)
           $ft->fields [$k]->field = '{' . $varPrefix . 'form.' . $k . '}';
         if (strcasecmp ( $target, 'templatePower' ) === 0)
@@ -4450,13 +4446,27 @@ class xmlformTemplate extends Smarty
       }
 
       $hasRequiredFields = $hasRequiredFields | (isset ( $v->required ) && ($v->required == '1') && ($v->mode == 'edit'));
+
+      if ($v->type == 'xmlmenu') {
+        $menu = $v;
+      }
     }
+
+    if (isset($menu)) {
+      if (isset($menu->owner->values['__DYNAFORM_OPTIONS']['PREVIOUS_STEP'])) {
+        $prevStep_url = $menu->owner->values['__DYNAFORM_OPTIONS']['PREVIOUS_STEP'];
+        
+        $this->assign('prevStep_url', $prevStep_url);
+        $this->assign('prevStep_label', G::loadTranslation('ID_BACK'));
+      }
+    }
+
     $this->assign ( 'hasRequiredFields', $hasRequiredFields );
     $this->assign ( 'form', $ft );
     $this->assign ( 'printTemplate', true );
     $this->assign ( 'printJSFile', false );
     $this->assign ( 'printJavaScript', false );
-    $this->assign ( 'dynaformSetFocus', "try {literal}{{/literal} dynaformSetFocus();}catch(e){literal}{{/literal}}" );
+    //$this->assign ( 'dynaformSetFocus', "try {literal}{{/literal} dynaformSetFocus();}catch(e){literal}{{/literal}}" );
     return $this->fetch ( $this->templateFile );
   }
 

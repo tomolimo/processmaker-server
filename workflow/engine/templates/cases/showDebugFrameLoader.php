@@ -1,6 +1,6 @@
 <script>
-if( typeof parent != 'undefined' ){
-  if( typeof parent.parent != 'undefined' ){
+if ( typeof parent != 'undefined' && typeof parent.parent != 'undefined') {
+  if ( typeof parent.parent.Ext != 'undefined') {
     var debugPanel = parent.parent.Ext.getCmp('debugPanel');
 
     debugPanel.show();

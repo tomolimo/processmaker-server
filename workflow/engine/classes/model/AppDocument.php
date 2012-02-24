@@ -585,37 +585,27 @@ class AppDocument extends BaseAppDocument {
     return $oDataset->getRow();
   }
   
-  
-  ////////////////////////////////////////////////////////////////////////////////
   /**
-   * get all docuemnts for a folder
-   * created by carlos pacha carlos@colosa.com, pckrlos@gmail.com
+   * Get all docuemnts for a folder
    * @param array $sFolderUid
    * @return array
-  **/
+   */
   public function getDocumentsinFolders($sFolderUid)
   {
-    try {
-        $arrayDocumentsToDelete=array();
+    $documents = array();
 
-        $oCriteria = new Criteria('workflow');
-        $oCriteria->add(AppDocumentPeer::FOLDER_UID, $sFolderUid);
-        $oDataset = AppDocumentPeer::doSelectRS($oCriteria);
-        $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-        $oDataset->next();
-        while ($aRow = $oDataset->getRow()) {
-            $arrayDocumentsToDelete[]=array('sAppDocUid'=>$aRow['APP_DOC_UID'],'iVersion'=>$aRow['DOC_VERSION']);
-            $oDataset->next();
-        }
+    $oCriteria = new Criteria('workflow');
+    $oCriteria->add(AppDocumentPeer::FOLDER_UID, $sFolderUid);
+    $oDataset = AppDocumentPeer::doSelectRS($oCriteria);
+    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    $oDataset->next();
 
-    return ($arrayDocumentsToDelete);
+    while ($aRow = $oDataset->getRow()) {
+      $documents[] = array('sAppDocUid' => $aRow['APP_DOC_UID'], 'iVersion' => $aRow['DOC_VERSION']);
+      $oDataset->next();
     }
-    catch (Exception $oError) {
-      throw($oError);
-    }
+
+    return $documents;
   }
-  
-  
-  
   
 } // AppDocument

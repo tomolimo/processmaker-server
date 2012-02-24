@@ -21,6 +21,13 @@
   <en>Variable for Case priority</en>
 </TAS_PRIORITY_VARIABLE>
 
+<TAS_DERIVATION_SCREEN_TPL type="dropdown" sqlconnection="dbarray">
+  SELECT FILE,NAME FROM _TEMPLATES1
+  <en>Derivation Screen Template
+  <option name="">- Default -</option>
+  </en>
+</TAS_DERIVATION_SCREEN_TPL>
+
 <TAS_START type="checkbox" value="TRUE" group="1">
   <en>Starting task</en>
 </TAS_START>

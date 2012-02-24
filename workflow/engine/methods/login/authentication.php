@@ -36,22 +36,26 @@ try {
     $frm = $_POST['form'];
     $usr = '';
     $pwd = '';
+
     if (isset($frm['USR_USERNAME'])) {
       $usr = strtolower(trim($frm['USR_USERNAME']));
       $pwd = trim($frm['USR_PASSWORD']);
     }
+    
     $uid = $RBAC->VerifyLogin($usr , $pwd);
-    //cleaning session files older than 72 hours
-    $RBAC->cleanSessionFiles(72);
+  
+    $RBAC->cleanSessionFiles(72); //cleaning session files older than 72 hours
     $sPwd = 'currentPwd';
+
     switch ($uid) {
       //The user does doesn't exist
       case -1:
-        G::SendTemporalMessage ('ID_USER_NOT_REGISTERED', "warning");
+        $errLabel = 'ID_USER_NOT_REGISTERED';
         break;
       //The password is incorrect
       case -2:
-        G::SendTemporalMessage ('ID_WRONG_PASS', "warning");
+        $errLabel = 'ID_WRONG_PASS';
+
         if(isset($_SESSION['__AUTH_ERROR__'])){
         	G::SendMessageText($_SESSION['__AUTH_ERROR__'], "warning");
         	unset($_SESSION['__AUTH_ERROR__']);
@@ -62,29 +66,31 @@ try {
         require_once 'classes/model/Users.php';
         $user = new Users;
         $aUser = $user->loadByUsernameInArray($usr);
+
         switch($aUser['USR_STATUS']){
           case 'VACATION':
-            G::SendTemporalMessage ('ID_USER_ONVACATION', "warning");
+            $errLabel = 'ID_USER_ONVACATION';
             break;
-          CASE 'INACTIVE':
-            G::SendTemporalMessage ('ID_USER_INACTIVE', "warning");
+          case 'INACTIVE':
+            $errLabel = 'ID_USER_INACTIVE';
             break;
         }
         break;
       //The Due date is finished
       case -4:
-        G::SendTemporalMessage ('ID_USER_INACTIVE_BY_DATE', "warning");
+        $errLabel = 'ID_USER_INACTIVE_BY_DATE';
         break;
       case -5:
-        G::SendTemporalMessage ('ID_AUTHENTICATION_SOURCE_INVALID', "warning");
+        $errLabel = 'ID_AUTHENTICATION_SOURCE_INVALID';
         break;
-      }
-    $$sPwd= $pwd;
+    }
+
+    $$sPwd = $pwd;
 
     //to avoid empty string in user field.  This will avoid a weird message "this row doesn't exist"
     if ( !isset($uid) ) {
       $uid = -1;
-      G::SendTemporalMessage ('ID_USER_NOT_REGISTERED', "warning");
+      $errLabel = 'ID_USER_NOT_REGISTERED';
     }
 
     if ( !isset($uid) || $uid < 0 ) {
@@ -109,12 +115,19 @@ try {
             unset($_SESSION['FAILED_LOGINS']);
             G::SendMessageText(G::LoadTranslation('ID_ACCOUNT') . ' "' . $usr . '" ' . G::LoadTranslation('ID_ACCOUNT_DISABLED_CONTACT_ADMIN'), 'warning');
           }
-          else {
-            //Nothing
-          }
         }
       }
-      G::header  ("location: login.html");
+
+      if (strpos($_SERVER['HTTP_REFERER'], 'home/login') !== false) {
+        $d = serialize(array('u'=>$usr, 'p'=>$pwd, 'm'=>G::LoadTranslation($errLabel)));
+        $loginUrl = '../home/login?d='.base64_encode($d);
+      }
+      else {
+        G::SendTemporalMessage($errLabel, "warning");
+        $loginUrl = 'login';
+      }
+
+      G::header("location: $loginUrl");
       die;
     }
     if(!isset( $_SESSION['WORKSPACE'] ) ) $_SESSION['WORKSPACE'] = SYS_SYS;

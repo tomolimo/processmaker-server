@@ -195,6 +195,13 @@ abstract class BaseProcess extends BaseObject  implements Persistent {
 	 */
 	protected $pro_dynaforms;
 
+
+	/**
+	 * The value for the pro_derivation_screen_tpl field.
+	 * @var        string
+	 */
+	protected $pro_derivation_screen_tpl = '';
+
 	/**
 	 * Flag to prevent endless save loop, if this object is referenced
 	 * by another object which falls in this transaction.
@@ -511,6 +518,17 @@ abstract class BaseProcess extends BaseObject  implements Persistent {
 	{
 
 		return $this->pro_dynaforms;
+	}
+
+	/**
+	 * Get the [pro_derivation_screen_tpl] column value.
+	 * 
+	 * @return     string
+	 */
+	public function getProDerivationScreenTpl()
+	{
+
+		return $this->pro_derivation_screen_tpl;
 	}
 
 	/**
@@ -1040,6 +1058,28 @@ abstract class BaseProcess extends BaseObject  implements Persistent {
 	} // setProDynaforms()
 
 	/**
+	 * Set the value of [pro_derivation_screen_tpl] column.
+	 * 
+	 * @param      string $v new value
+	 * @return     void
+	 */
+	public function setProDerivationScreenTpl($v)
+	{
+
+		// Since the native PHP type for this column is string,
+		// we will cast the input to a string (if it is not).
+		if ($v !== null && !is_string($v)) {
+			$v = (string) $v; 
+		}
+
+		if ($this->pro_derivation_screen_tpl !== $v || $v === '') {
+			$this->pro_derivation_screen_tpl = $v;
+			$this->modifiedColumns[] = ProcessPeer::PRO_DERIVATION_SCREEN_TPL;
+		}
+
+	} // setProDerivationScreenTpl()
+
+	/**
 	 * Hydrates (populates) the object variables with values from the database resultset.
 	 *
 	 * An offset (1-based "start column") is specified so that objects can be hydrated
@@ -1104,12 +1144,14 @@ abstract class BaseProcess extends BaseObject  implements Persistent {
 
 			$this->pro_dynaforms = $rs->getString($startcol + 23);
 
+			$this->pro_derivation_screen_tpl = $rs->getString($startcol + 24);
+
 			$this->resetModified();
 
 			$this->setNew(false);
 
 			// FIXME - using NUM_COLUMNS may be clearer.
-			return $startcol + 24; // 24 = ProcessPeer::NUM_COLUMNS - ProcessPeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + 25; // 25 = ProcessPeer::NUM_COLUMNS - ProcessPeer::NUM_LAZY_LOAD_COLUMNS).
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating Process object", $e);
@@ -1384,6 +1426,9 @@ abstract class BaseProcess extends BaseObject  implements Persistent {
 			case 23:
 				return $this->getProDynaforms();
 				break;
+			case 24:
+				return $this->getProDerivationScreenTpl();
+				break;
 			default:
 				return null;
 				break;
@@ -1428,6 +1473,7 @@ abstract class BaseProcess extends BaseObject  implements Persistent {
 			$keys[21] => $this->getProTitleY(),
 			$keys[22] => $this->getProDebug(),
 			$keys[23] => $this->getProDynaforms(),
+			$keys[24] => $this->getProDerivationScreenTpl(),
 		);
 		return $result;
 	}
@@ -1531,6 +1577,9 @@ abstract class BaseProcess extends BaseObject  implements Persistent {
 			case 23:
 				$this->setProDynaforms($value);
 				break;
+			case 24:
+				$this->setProDerivationScreenTpl($value);
+				break;
 		} // switch()
 	}
 
@@ -1578,6 +1627,7 @@ abstract class BaseProcess extends BaseObject  implements Persistent {
 		if (array_key_exists($keys[21], $arr)) $this->setProTitleY($arr[$keys[21]]);
 		if (array_key_exists($keys[22], $arr)) $this->setProDebug($arr[$keys[22]]);
 		if (array_key_exists($keys[23], $arr)) $this->setProDynaforms($arr[$keys[23]]);
+		if (array_key_exists($keys[24], $arr)) $this->setProDerivationScreenTpl($arr[$keys[24]]);
 	}
 
 	/**
@@ -1613,6 +1663,7 @@ abstract class BaseProcess extends BaseObject  implements Persistent {
 		if ($this->isColumnModified(ProcessPeer::PRO_TITLE_Y)) $criteria->add(ProcessPeer::PRO_TITLE_Y, $this->pro_title_y);
 		if ($this->isColumnModified(ProcessPeer::PRO_DEBUG)) $criteria->add(ProcessPeer::PRO_DEBUG, $this->pro_debug);
 		if ($this->isColumnModified(ProcessPeer::PRO_DYNAFORMS)) $criteria->add(ProcessPeer::PRO_DYNAFORMS, $this->pro_dynaforms);
+		if ($this->isColumnModified(ProcessPeer::PRO_DERIVATION_SCREEN_TPL)) $criteria->add(ProcessPeer::PRO_DERIVATION_SCREEN_TPL, $this->pro_derivation_screen_tpl);
 
 		return $criteria;
 	}
@@ -1712,6 +1763,8 @@ abstract class BaseProcess extends BaseObject  implements Persistent {
 		$copyObj->setProDebug($this->pro_debug);
 
 		$copyObj->setProDynaforms($this->pro_dynaforms);
+
+		$copyObj->setProDerivationScreenTpl($this->pro_derivation_screen_tpl);
 
 
 		$copyObj->setNew(true);

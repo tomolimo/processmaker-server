@@ -1253,7 +1253,7 @@ leimnud.Package.Public({
 			{
 				this.parent.dom.setStyle(this.elements.loader,{
 					//display:"none",
-					background:"url('"+this.parent.path_root+"maborak/core/images/loader_B.gif')",
+					background:"url('/images/classic/loader_B.gif')",
 					backgroundRepeat:"no-repeat",
 					width:32,
 					height:32,

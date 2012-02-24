@@ -146,8 +146,8 @@ try {
   //Events - End
   $debuggerAvailable = true;
 
-  if (isset($_SESSION['current_ux']) && $_SESSION['current_ux'] == 'SIMPLIFIED') {
-    $aNextStep['PAGE'] = '../home/appList';
+  if (isset($_SESSION['user_experience'])) {
+    $aNextStep['PAGE'] = 'casesListExtJsRedirector?ux=' . $_SESSION['user_experience'];
     $debuggerAvailable = false;
   }
   else {

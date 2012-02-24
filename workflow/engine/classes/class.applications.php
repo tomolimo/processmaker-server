@@ -3,7 +3,7 @@
 class Applications
 {
 
-  public function getAll($start=null, $limit=null, $action=null, $filter=null, $search=null, $process=null, $user=null, $status=null, $type=null, $dateFrom=null, $dateTo=null, $callback=null, $dir=null, $sort='APP_CACHE_VIEW.APP_NUMBER')
+  public function getAll($userUid, $start=null, $limit=null, $action=null, $filter=null, $search=null, $process=null, $user=null, $status=null, $type=null, $dateFrom=null, $dateTo=null, $callback=null, $dir=null, $sort='APP_CACHE_VIEW.APP_NUMBER')
   {
     $callback = isset($callback) ? $callback : 'stcCallback1001';
     $dir      = isset($dir)    ? $dir    : 'DESC';
@@ -28,7 +28,7 @@ class Applications
     require_once ( "classes/model/AppDelay.php" );
     require_once ( "classes/model/Fields.php" );
 
-    $userUid = ( isset($_SESSION['USER_LOGGED'] ) && $_SESSION['USER_LOGGED'] != '' ) ? $_SESSION['USER_LOGGED'] : null;
+    //$userUid = ( isset($_SESSION['USER_LOGGED'] ) && $_SESSION['USER_LOGGED'] != '' ) ? $_SESSION['USER_LOGGED'] : null; <-- passed by param
     $oAppCache = new AppCacheView();
     
     //get data configuration
@@ -350,11 +350,11 @@ class Applications
       if (!isset($aRow['APP_CURRENT_USER']))
         $aRow['APP_CURRENT_USER'] = "[Unassigned]";
       
-
       // replacing the status data with their respective translation 
       if( isset($aRow['APP_STATUS']) ){
         $aRow['APP_STATUS'] = G::LoadTranslation("ID_{$aRow['APP_STATUS']}");
       }
+
       // replacing the priority data with their respective translation
       if( isset($aRow['DEL_PRIORITY']) ){
         $aRow['DEL_PRIORITY'] = G::LoadTranslation("ID_PRIORITY_{$aPriorities[$aRow['DEL_PRIORITY']]}");
@@ -610,36 +610,114 @@ class Applications
     return $result;
   }
 
-  /**
-   *
-   * @param String $itemKey
-   * @param array $fields
-   * @return Boolean
-   */
-  function removeItem($itemKey,$fields) {
-    $removedField = false;
-    for ($i=0;$i<count($fields);$i++){
-      if ($fields[$i]['name']==$itemKey){
-        unset($fields[$i]);
-        $removedField = true;
+  public function getSteps($appUid, $index, $tasUid, $proUid)
+  {
+    require_once 'classes/model/Step.php';
+    require_once 'classes/model/Content.php';
+    require_once 'classes/model/AppDocument.php';
+    require_once 'classes/model/InputDocumentPeer.php';
+    require_once 'classes/model/OutputDocument.php';
+    require_once 'classes/model/Dynaform.php';
+
+    G::LoadClass('pmScript');
+    G::LoadClass('case');
+    
+    $steps = Array();
+    $case = new Cases;
+    $step = new Step;
+    $appDocument = new AppDocument;
+
+    $caseSteps = $step->getAllCaseSteps($proUid, $tasUid, $appUid);
+
+    //getting externals steps
+    $oPluginRegistry = &PMPluginRegistry::getSingleton();
+    $eSteps          = $oPluginRegistry->getSteps();
+    $externalSteps   = array();
+
+    foreach ($eSteps as $externalStep) {
+      $externalSteps[$externalStep->sStepId] = $externalStep;
+    }
+
+    //getting the case record
+    if ($appUid) {
+      $caseData = $case->loadCase($appUid);
+      $pmScript = new PMScript();
+      $pmScript->setFields($caseData['APP_DATA']);
+    }
+
+    $externalStepCount = 0;
+
+    foreach ($caseSteps as $caseStep) {
+
+      if (trim($caseStep->getStepCondition()) != '') { // if it has a condition
+        $pmScript->setScript($caseStep->getStepCondition());
+        
+        if (!$pmScript->evaluate()) { //evaluate
+          //evaluated false, jump & continue with the others steps
+          continue;
+        }
       }
-    }
-    $fields = array_values($fields);
-    //$fields = $this->calculateGridIndex( $fields );
-    return ( $fields );
-  }
 
- /**
-  *
-  * @param Array $fields
-  * @return Array
-  *
-  */
-  function calculateGridIndex( $fields ) {
-    for ( $i=0;$i<count( $fields );$i++ ) {
-      $fields[$i]['gridIndex']=$i+1;
-    }
-    return ( $fields );
-  }
+      $stepUid      = $caseStep->getStepUidObj();
+      $stepType     = $caseStep->getStepTypeObj();
+      $stepPosition = $caseStep->getStepPosition();
 
+      $stepItem = array();
+      $stepItem['id']   = $stepUid;
+      $stepItem['type'] = $stepType;
+
+      switch ($stepType) {
+        case 'DYNAFORM':
+          $oDocument = DynaformPeer::retrieveByPK($stepUid);
+
+          $stepItem['title'] = $oDocument->getDynTitle();
+          $stepItem['url']   = "cases/cases_Step?UID=$stepUid&TYPE=$stepType&POSITION=$stepPosition&ACTION=EDIT";
+          break;
+
+        case 'OUTPUT_DOCUMENT':
+          $oDocument = OutputDocumentPeer::retrieveByPK($caseStep->getStepUidObj());
+          $outputDoc = $appDocument->getObject($appUid, $index, $caseStep->getStepUidObj(), 'OUTPUT');
+
+          $stepItem['title']    = $oDocument->getOutDocTitle();
+                    
+          if ($outputDoc['APP_DOC_UID']) {
+            $stepItem['url'] = "cases/cases_Step?UID=$stepUid&TYPE=$stepType&POSITION=$stepPosition&ACTION=VIEW&DOC={$outputDoc['APP_DOC_UID']}"; 
+          }
+          else {
+            $stepItem['url'] = "cases/cases_Step?UID=$stepUid&TYPE=$stepType&POSITION=$stepPosition&ACTION=GENERATE";         
+          }
+          break;
+
+        case 'INPUT_DOCUMENT':
+          $oDocument = InputDocumentPeer::retrieveByPK($stepUid);
+          
+          $stepItem['title'] = $oDocument->getInpDocTitle();
+          $stepItem['url']  = "cases/cases_Step?UID=$stepUid&TYPE=$stepType&POSITION=$stepPosition&ACTION=ATTACH";
+          break;
+
+        case 'EXTERNAL':
+          $stepTitle       = 'unknown ' . $caseStep->getStepUidObj();
+          $oPluginRegistry = PMPluginRegistry::getSingleton();
+    
+          $externalStep      = $externalSteps[$caseStep->getStepUidObj()];
+          $stepItem['id']    = $externalStep->sStepId;
+          $stepItem['title'] = $externalStep->sStepTitle;
+          $stepItem['url']   = "cases/cases_Step?UID={$externalStep->sStepId}&TYPE=EXTERNAL&POSITION=$stepPosition&ACTION=EDIT";          
+        break;
+      }
+
+      $steps[] = $stepItem;
+    }
+
+    //last, assign task
+    $stepItem          = array();
+    $stepItem['id']    = '-1';
+    $stepItem['type']  = '';
+    $stepItem['title'] = G::LoadTranslation('ID_ASSIGN_TASK');
+    $stepItem['url']   = "cases/cases_Step?TYPE=ASSIGN_TASK&UID=-1&POSITION=10000&ACTION=ASSIGN";
+    
+    $steps[] = $stepItem;    
+
+    return $steps;
+  }
 }

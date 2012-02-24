@@ -47,6 +47,7 @@ switch($function){
     $aRow = $oDataset->getRow();
     print($aRow['PROCESS'] ? true : false);
   break;
+  
   default:
     if ( isset($_GET['PRO_UID'])) {
       $_POST['form']['PRO_UID'] = $_GET['PRO_UID'];

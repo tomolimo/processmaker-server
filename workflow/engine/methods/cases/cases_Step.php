@@ -55,12 +55,13 @@
 
 
   /* GET , POST & $_SESSION Vars */
-  if(isset($_GET['POSITION'])) {
+  if (isset($_GET['POSITION'])) {
     $_SESSION['STEP_POSITION'] = (int)$_GET['POSITION'];
   }
-  if(isset($_SESSION['CASES_REFRESH'])){
-  	unset($_SESSION['CASES_REFRESH']);
-  	echo "<script language='javascript'>if(parent.refreshCountFolders) parent.refreshCountFolders();</script>";
+
+  if (isset($_SESSION['CASES_REFRESH'])) {
+    unset($_SESSION['CASES_REFRESH']);
+    G::evalJScript("if(typeof parent != 'undefined' && parent.refreshCountFolders) parent.refreshCountFolders();");
   }
 
   /* Menues */
@@ -184,13 +185,13 @@
   $array['APP_TITLE'] = $sTitleCase;
   $array['CASE'] = G::LoadTranslation('ID_CASE');
   $array['TITLE'] = G::LoadTranslation('ID_TITLE');
-  $G_PUBLISH->AddContent('smarty', 'cases/cases_title', '', '', $array);
-
-$uidf=$_GET['UID'];
+  
 
   switch ($_GET['TYPE'])
   {
     case 'DYNAFORM':
+      $G_PUBLISH->AddContent('smarty', 'cases/cases_title', '', '', $array);
+      
       if (!$aPreviousStep) {
         $Fields['APP_DATA']['__DYNAFORM_OPTIONS']['PREVIOUS_STEP_LABEL'] = '';
       }
@@ -205,13 +206,10 @@ $uidf=$_GET['UID'];
       $oHeadPublisher =& headPublisher::getSingleton();
       $oHeadPublisher->addScriptCode("
       if (typeof parent != 'undefined') {
-        try {
-          parent.setNode('$uidf');
+        if (parent.setNode) {
+          parent.setNode('".$_GET['UID']."');
         }
-        catch(e) {
-        }
-      }
-      ");
+      }");
 
       $oStep = new Step();
       $oStep = $oStep->loadByProcessTaskPosition($_SESSION['PROCESS'], $_SESSION['TASK'], $_GET['POSITION']);
@@ -227,6 +225,8 @@ $uidf=$_GET['UID'];
       break;
 
     case 'INPUT_DOCUMENT':
+      $G_PUBLISH->AddContent('smarty', 'cases/cases_title', '', '', $array);
+
       $oInputDocument = new InputDocument();
       $Fields = $oInputDocument->load($_GET['UID']);
       if (!$aPreviousStep) {
@@ -316,6 +316,8 @@ $uidf=$_GET['UID'];
     break;
 
     case 'OUTPUT_DOCUMENT':
+      $G_PUBLISH->AddContent('smarty', 'cases/cases_title', '', '', $array);
+
       require_once 'classes/model/OutputDocument.php';
       $oOutputDocument = new OutputDocument();
       $aOD = $oOutputDocument->load( $_GET['UID'] );
@@ -615,6 +617,8 @@ $uidf=$_GET['UID'];
 					die;
           break;
        case 'VIEW':
+          $G_PUBLISH->AddContent('smarty', 'cases/cases_title', '', '', $array);
+
           require_once 'classes/model/AppDocument.php';
           $oAppDocument = new AppDocument();
           $lastVersion=$oAppDocument->getLastAppDocVersion($_GET['DOC'],$_SESSION['APPLICATION']);
@@ -680,6 +684,7 @@ $uidf=$_GET['UID'];
       $oDerivation = new Derivation();
       $oProcess    = new Process();
       $aData       = $oCase->loadCase($_SESSION['APPLICATION']);
+      
       $aFields['PROCESS']              = $oProcess->load($_SESSION['PROCESS']);
       $aFields['PREVIOUS_PAGE']        = $aPreviousStep['PAGE'];
       $aFields['PREVIOUS_PAGE_LABEL']  = G::LoadTranslation('ID_PREVIOUS_STEP');
@@ -698,15 +703,17 @@ $uidf=$_GET['UID'];
       $aFields['TAS_TIMEUNIT']         = 'Task Unit';
       $aFields['TAS_TYPE_DAY']         = 'Count Days By';
       $aFields['TAS_CALENDAR']         = 'Calendar';
-      $aFields['TASK'] = $oDerivation->prepareInformation(
-                         array( 'USER_UID'  => $_SESSION['USER_LOGGED'],
-                                'APP_UID'   => $_SESSION['APPLICATION'],
-                                'DEL_INDEX' => $_SESSION['INDEX'])
-                         );
+
+      $aFields['TASK'] = $oDerivation->prepareInformation(array(
+        'USER_UID'  => $_SESSION['USER_LOGGED'],
+        'APP_UID'   => $_SESSION['APPLICATION'],
+        'DEL_INDEX' => $_SESSION['INDEX']
+      ));
 
       if ( empty($aFields['TASK']) )  {
         throw ( new Exception ( G::LoadTranslation( 'ID_NO_DERIVATION_RULE')  ) );
       }
+
       //take the first derivation rule as the task derivation rule type.
       $aFields['PROCESS']['ROU_TYPE'] = $aFields['TASK'][1]['ROU_TYPE'];
       $aFields['PROCESS']['ROU_FINISH_FLAG'] = false;
@@ -928,7 +935,27 @@ $uidf=$_GET['UID'];
       }
       $aFields['PROCESSING_MESSAGE'] = G::loadTranslation('ID_PROCESSING');
 
-      $G_PUBLISH->AddContent('smarty', 'cases/cases_ScreenDerivation', '', '', $aFields);
+      /** 
+       * New Feature: Derivation Screen can be personalized
+       * @author Erik Amaru Ortiz <erik@colosa.com>
+       */
+      $tplFile = 'cases/cases_ScreenDerivation';
+      $task    = TaskPeer::retrieveByPk($_SESSION['TASK']);
+      
+      $tasDerivationScreenTpl = $task->getTasDerivationScreenTpl();
+      
+      if (!empty($tasDerivationScreenTpl)) { //erik: first, verify if the task has a personalized template (for derivation screen)
+        $tplFile = $tasDerivationScreenTpl;
+        $tplFile = PATH_DATA_MAILTEMPLATES . $aFields['PROCESS']['PRO_UID'] . PATH_SEP . $tplFile;
+      }
+      else { //erik: verify if the process has a personalized template (for derivation screen)
+        if (!empty($aFields['PROCESS']['PRO_DERIVATION_SCREEN_TPL'])) {
+          $tplFile = $aFields['PROCESS']['PRO_DERIVATION_SCREEN_TPL'];
+          $tplFile = PATH_DATA_MAILTEMPLATES . $aFields['PROCESS']['PRO_UID'] . PATH_SEP . $tplFile;
+        }
+      }
+
+      $G_PUBLISH->AddContent('smarty', $tplFile, '', '', $aFields);
 /*
       if (isset( $aFields['TASK'][1]['NEXT_TASK']['USER_ASSIGNED'])){
        if($aFields['TASK'][1]['NEXT_TASK']['USER_ASSIGNED']!="ERROR" && is_array($aFields['TASK'][1]['NEXT_TASK']['USER_ASSIGNED'])){
@@ -947,7 +974,9 @@ $uidf=$_GET['UID'];
       	}
 */
       break;
-    case 'EXTERNAL':
+    case 'EXTERNAL': 
+      $G_PUBLISH->AddContent('smarty', 'cases/cases_title', '', '', $array);
+
       $oPluginRegistry = &PMPluginRegistry::getSingleton();
       $externalSteps   = $oPluginRegistry->getSteps();
 
@@ -975,6 +1004,11 @@ $uidf=$_GET['UID'];
       $oDbConnections = new dbConnections($_SESSION['PROCESS']);
       $oDbConnections->loadAdditionalConnections();
       $stepFilename = "$sNamespace/$sStepName";
+      G::evalJScript("
+      if (parent.setCurrent) {
+        parent.setCurrent('".$_GET['UID']."');
+      }");
+
       $G_PUBLISH->AddContent('content', $stepFilename);
       break;
 
@@ -993,19 +1027,20 @@ $uidf=$_GET['UID'];
 
   $oHeadPublisher =& headPublisher::getSingleton();
   $oHeadPublisher->addScriptCode("
-    if (typeof parent != 'undefined') {
-      try {
-        parent.showCaseNavigatorPanel('$sStatus');
-      }
-      catch(e) {
-      }
+  if (typeof parent != 'undefined') {
+    if (parent.showCaseNavigatorPanel) {
+      parent.showCaseNavigatorPanel('$sStatus');
     }
-  ");
+
+    if (parent.setCurrent) {
+      parent.setCurrent('".$_GET['UID']."');
+    }
+  }");
 
   G::RenderPage('publish', 'blank');
 
   if( $_SESSION['TRIGGER_DEBUG']['ISSET'] ){
-    G::evalJScript('showdebug();');
+    G::evalJScript('if (typeof showdebug != \'undefined\') showdebug();');
   }
 
 

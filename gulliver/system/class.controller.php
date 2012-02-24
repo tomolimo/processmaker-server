@@ -237,4 +237,19 @@ class Controller
 
       return $this->headPublisher;
     }
+
+    public function render($type='mvc')
+    {
+        G::RenderPage('publish', $type);
+    }
+
+    public function header($header)
+    {
+        G::header($header);
+    }
+
+    public function redirect($url)
+    {
+        G::header("Location: $url");
+    }
 }

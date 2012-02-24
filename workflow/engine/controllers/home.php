@@ -18,13 +18,18 @@ class Home extends Controller
   private $appListStart = 0;
   private $appListLimit = 15;
 
+  private $clientBrowser;
+  private $lastSkin;
+
   public function __construct()
   {
-    // setting as using simplified.
-    $_SESSION['current_ux'] = 'SIMPLIFIED';
+    //die($_SESSION['user_experience']);
+    // setting client browser information
+    $this->clientBrowser = G::getBrowser();
 
     // getting the ux type from user o group conf.
-    $this->userUxType = isset($_SESSION['user_experience'])? $_SESSION['user_experience']: $_SESSION['current_ux'];
+    $this->userUxType = isset($_SESSION['user_experience'])? $_SESSION['user_experience']: 'SIMPLIFIED';
+    $this->lastSkin   = isset($_SESSION['user_last_skin']) ? $_SESSION['user_last_skin'] : 'classic';
 
     if (isset($_SESSION['USER_LOGGED']) && !empty($_SESSION['USER_LOGGED'])) {
       $this->userID       = isset($_SESSION['USER_LOGGED']) ? $_SESSION['USER_LOGGED'] : null;
@@ -32,7 +37,31 @@ class Home extends Controller
       $this->userFullName = isset($_SESSION['USR_FULLNAME']) ? $_SESSION['USR_FULLNAME'] : '';
       $this->userRolName  = isset($_SESSION['USR_ROLENAME']) ? $_SESSION['USR_ROLENAME'] : '';
     }
-    //g::pr($_SESSION); die;
+  }
+
+  public function login($httpData)
+  {
+    //start new session
+    @session_destroy ();
+    session_start ();
+    session_regenerate_id ();
+
+    $data     = isset($httpData->d) ? unserialize(base64_decode($httpData->d)) : '';
+    $template = $this->clientBrowser['name'] == 'msie' ? 'login_ie' : 'login_standard';
+    $skin     = $this->clientBrowser['name'] == 'msie' ? $this->lastSkin : 'simplified';
+    
+    if (!is_array($data)) {
+      $data = array('u'=>'', 'p'=>'', 'm'=>'');
+    }
+
+    $this->setVar('msg', $data['m']);
+    $this->setVar('usr', $data['u']);
+    $this->setVar('pwd', $data['p']);
+    $this->setVar('skin', $skin);
+
+    $this->setView("home/$template");
+    
+    $this->render();
   }
 
   /**
@@ -42,6 +71,11 @@ class Home extends Controller
 
   public function index($httpData)
   {
+    if ($this->userUxType == 'SINGLE') {
+      $this->indexSingle($httpData);
+      return;
+    }
+
     G::LoadClass('process');
     G::LoadClass('case');
 
@@ -52,56 +86,84 @@ class Home extends Controller
     $start = 0;
     $limit = '';
 
-    $proData = $process->getAllProcesses($start, $limit);
-    $processList = $case->getStartCasesPerType ( $_SESSION ['USER_LOGGED'], 'category' );
+    $proData     = $process->getAllProcesses($start, $limit);
+    $processList = $case->getStartCasesPerType ( $_SESSION ['USER_LOGGED'], 'category');
+    $switchLink  = '../classic/cases/main';  //'../' . $this->lastSkin . '/cases/main';
+
     unset($processList[0]);
 
-    if ($this->userUxType == 'SINGLE') {
-      $this->setView('home/index2');
-    }
-    else {
-      $this->setView('home/index');  
-    }
-    
+    $this->setView('home/index');
 
     $this->setVar('usrUid', $this->userID);
     $this->setVar('userName', $this->userName);
     $this->setVar('processList', $processList);
     $this->setVar('canStartCase', $case->canStartCase($_SESSION ['USER_LOGGED']));
     $this->setVar('userUxType', $this->userUxType);
+    $this->setVar('clientBrowser', $this->clientBrowser['name']);
+    $this->setVar('switchLink', $switchLink);
 
-    G::RenderPage('publish', 'mvc');
+    $this->render();
+  }
+
+  public function indexSingle($httpData)
+  {
+    require_once 'classes/model/Step.php';
+    G::LoadClass('applications');
+    
+    $apps = new Applications();
+    $step = new Step;
+
+    $cases = $apps->getAll($this->userID, 0, 1, 'todo');
+
+
+    if (!isset($cases['data'][0])) {
+      //the current user has not any aplication to do
+      $this->setView('home/indexSingle');
+      $this->setVar('default_url', 'home/error?no=2');
+      $this->render();
+      exit();
+    }
+
+    $lastApp = $cases['data'][0];
+    $_SESSION['INDEX'] = $lastApp['DEL_INDEX'];
+    $_SESSION['APPLICATION'] = $lastApp['APP_UID'];
+    $_SESSION['PROCESS'] = $lastApp['PRO_UID'];
+    $_SESSION['TASK'] = $lastApp['TAS_UID'];
+    
+    
+    $steps    = $apps->getSteps($lastApp['APP_UID'], $lastApp['DEL_INDEX'], $lastApp['TAS_UID'], $lastApp['PRO_UID']);
+    $lastStep = array_pop($steps);
+    $lastStep['title'] = 'Finish';
+    $steps[] = $lastStep;
+
+    $this->setView('home/indexSingle');
+
+    $this->setVar('usrUid', $this->userID);
+    $this->setVar('userName', $this->userName);
+    $this->setVar('steps', $steps);
+    $this->setVar('default_url', "cases/cases_Open?APP_UID={$lastApp['APP_UID']}&DEL_INDEX={$lastApp['DEL_INDEX']}&action=todo");
+
+    $this->render();
   }
 
   public function appList($httpData)
   {
-    require_once ( "classes/model/AppNotes.php" );
-    $appNotes = new AppNotes();
+    // setting default list applications types [default: todo]
+    $httpData->t = isset($httpData->t)? $httpData->t : 'todo';
 
-    $httpData->t = isset($httpData->t)? $httpData->t : 'in';
-    $title = $httpData->t != 'draft' ? 'My Inbox' : 'My Drafts';
-    $action = $httpData->t != 'draft' ? 'todo' : 'draft';
-
-    $notesStart = 0;
-    $notesLimit = 4;
-
-    //$cases = self::getAppList($httpData->t, $this->appListStart, $this->appListLimit);
-
-    G::LoadClass('applications');
-    $apps = new Applications();
-    $cases = $apps->getAll($this->appListStart, $this->appListLimit, $action);
-    
-    foreach ($cases['data'] as $i => $row) {
-      $notes = $appNotes->getNotesList($row['APP_UID'], $this->userID, $notesStart, $notesLimit);
-      $notes = $notes['array'];
-      
-      $cases['data'][$i]['NOTES_COUNT'] = $notes['totalCount'];
-      $cases['data'][$i]['NOTES_LIST']  = $notes['notes'];
+    // setting main list title
+    switch ($httpData->t) {
+      case 'todo'  : $title = 'My Inbox'; break;
+      case 'draft' : $title = 'My Drafts'; break;
+      default: $title = ucwords($httpData->t);
     }
+
+    // getting apps data
+    $cases = $this->getAppsData($httpData->t);
 
     // settings html template
     $this->setView('home/appList');
-
+    
     // settings vars and rendering
     $this->setVar('cases', $cases['data']);
     $this->setVar('cases_count', $cases['totalCount']);
@@ -110,25 +172,48 @@ class Home extends Controller
     $this->setVar('appListLimit', 10);
     $this->setVar('listType', $httpData->t);
 
-    G::RenderPage('publish', 'mvc');
+    $this->render();
   }
 
   public function getApps($httpData)
   {
-    G::LoadClass('applications');
-    $apps = new Applications();
+    $cases = $this->getAppsData($httpData->t, $httpData->start, $httpData->limit);
 
+    $this->setView('home/applications');
+    $this->setVar('cases', $cases['data']);
+    $this->render();
+  }
+
+  public function getAppsData($type, $start=null, $limit=null)
+  {
     require_once ( "classes/model/AppNotes.php" );
+    G::LoadClass('applications');
+
+    $apps = new Applications();
     $appNotes = new AppNotes();
+
+    $start = empty($start) ? $this->appListStart : $start;
+    $limit = empty($limit) ? $this->appListLimit : $limit;
 
     $notesStart = 0;
     $notesLimit = 4;
 
-    $action = $httpData->t != 'draft' ? 'todo' : 'draft';
+    $cases = $apps->getAll($this->userID, $start, $limit, $type);
+    //g::pr($cases['data']); die;
 
-    $cases = $apps->getAll($httpData->start, $httpData->limit, $action);
-
+    // formating & complitting apps data with 'Notes'
     foreach ($cases['data'] as $i => $row) {
+      // Formatting
+      $appTitle = str_replace('#', '', $row['APP_TITLE']);
+
+      if (is_numeric($appTitle)) {
+        $cases['data'][$i]['APP_TITLE'] = G::LoadTranslation('ID_CASE'). ' ' . $appTitle;
+      }
+
+      $cases['data'][$i]['DEL_DELEGATE_DATE']     = G::getformatedDate($row['DEL_DELEGATE_DATE'], 'M d, yyyy - h:i:s');
+      $cases['data'][$i]['APP_DEL_PREVIOUS_USER'] = ucwords($row['APP_DEL_PREVIOUS_USER']);
+
+      // Completting with Notes
       $notes = $appNotes->getNotesList($row['APP_UID'], $this->userID, $notesStart, $notesLimit);
       $notes = $notes['array'];
       
@@ -136,12 +221,7 @@ class Home extends Controller
       $cases['data'][$i]['NOTES_LIST']  = $notes['notes'];
     }
 
-    $this->setView('home/applications');
-
-    // settings vars and rendering
-    $this->setVar('cases', $cases['data']);
-
-    G::RenderPage('publish', 'mvc');
+    return $cases;
   }
 
   public function startCase($httpData)
@@ -163,79 +243,19 @@ class Home extends Controller
     $aNextStep['PAGE'] = '../cases/cases_Open?APP_UID='.$aData['APPLICATION'].'&DEL_INDEX='.$aData['INDEX'].'&action=draft';
     $_SESSION ['BREAKSTEP'] ['NEXT_STEP'] = $aNextStep;
 
-    G::header('Location: ' . $aNextStep['PAGE']);
+    $this->redirect($aNextStep['PAGE']);
   }
 
-  private function getAppList($type, $start=null, $limit=null)
+  public function error($httpData)
   {
-    require_once ( "classes/model/AppCacheView.php" );
-    require_once ( "classes/model/Application.php" );
-    require_once ( "classes/model/AppNotes.php" );
+    $httpData->no = isset($httpData->no) ? $httpData->no : 0;
 
-    $appCache = new AppCacheView();
-    $appNotes = new AppNotes();
-
-    $notesStart = 0;
-    $notesLimit = 4;
-
-    // getting user's cases on inbox
-    switch ($type) {
-      case 'inbox': case 'in':
-        $criteria = $appCache->getToDoListCriteria($this->userID);
-        break;
-      
-      case 'draft':
-      default:
-        $criteria = $appCache->getDraftListCriteria($this->userID); //fast enough    
-        break;
-    } 
-
-    $distinct = $type == 'draft' ? true : false;
-    $criteriac = $appCache->getToDoCountCriteria($this->userID);
-    $totalCount = AppCacheViewPeer::doCount( $criteriac, $distinct );
-
-    if (isset($start))
-      $criteria->setOffset($start);
-    
-    if (isset($limit))
-      $criteria->setLimit($limit);
-
-    $criteria->addDescendingOrderByColumn(AppCacheViewPeer::APP_NUMBER);
-    $dataset = AppCacheViewPeer::doSelectRS($criteria);
-    $dataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-      
-    $cases = array();
-    //$data['totalCount'] = $totalCount;
-    $rows = array();
-    $priorities = array('1'=>'VL', '2'=>'L', '3'=>'N', '4'=>'H', '5'=>'VH');
-    $index = $start;
-    
-    while ($dataset->next()) {
-      $row = $dataset->getRow();
-      if (is_numeric(str_replace('#', '', $row['APP_TITLE']))) {
-        $row['APP_TITLE'] = 'Case ' . str_replace('#', '', $row['APP_TITLE']);
-      }
-      // replacing the status data with their respective translation 
-      if (isset($row['APP_STATUS'])) {
-        $row['APP_STATUS'] = G::LoadTranslation("ID_{$row['APP_STATUS']}");
-      }
-      // replacing the priority data with their respective translation
-      if (isset($row['DEL_PRIORITY'])) {
-        $row['DEL_PRIORITY'] = G::LoadTranslation("ID_PRIORITY_{$priorities[$row['DEL_PRIORITY']]}");
-      }
-
-      $row['DEL_DELEGATE_DATE'] = G::getformatedDate($row['DEL_DELEGATE_DATE'], 'M d, yyyy at h:i:s');
-
-      
-      $notes = $appNotes->getNotesList($row['APP_UID'], $this->userID, $notesStart, $notesLimit);
-      $notes = $notes['array'];
-      
-      $row['NOTES_COUNT'] = $notes['totalCount'];
-      $row['NOTES_LIST']  = $notes['notes'];
-
-      $cases[] = $row;
+    switch ($httpData->no) {
+      case 2:  $tpl = 'home/noAppsMsg'; break;
+      default: $tpl = 'home/error';
     }
 
-    return array('data' => $cases, 'totalCount' => $totalCount);
+    $this->setView($tpl);
+    $this->render();
   }
 }

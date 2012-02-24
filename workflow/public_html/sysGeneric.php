@@ -517,19 +517,31 @@
       $RBAC->loadUserRolePermission( $RBAC->sSystem, $_SESSION['USER_LOGGED'] , PATH_DATA, session_id());
     }
     else {
+      // this is the blank list to allow execute scripts with no login (without session started)
+      $noLoginFiles   = array();
+      $noLoginFiles[] = 'login'; 
+      $noLoginFiles[] = 'authentication';
+      $noLoginFiles[] = 'login_Ajax'; 
+      $noLoginFiles[] = 'dbInfo';
+      $noLoginFiles[] = 'sysLoginVerify';
+      $noLoginFiles[] = 'processes_Ajax';
+      $noLoginFiles[] = 'updateTranslation';
+      $noLoginFiles[] = 'autoinstallProcesses';
+      $noLoginFiles[] = 'autoinstallPlugins';
+      $noLoginFiles[] = 'heartbeatStatus';
+      $noLoginFiles[] = 'showLogoFile'; 
+      $noLoginFiles[] = 'forgotPassword';
+      $noLoginFiles[] = 'retrivePassword';
+      $noLoginFiles[] = 'services';
+      $noLoginFiles[] = 'tracker';
+      $noLoginFiles[] = 'defaultAjaxDynaform';
+      $noLoginFiles[] = 'dynaforms_checkDependentFields';
+      $noLoginFiles[] = 'cases_ShowDocument';
+
       //This sentence is used when you lost the Session
-      if ( SYS_TARGET != 'authentication' and  SYS_TARGET != 'login' and  SYS_TARGET != 'login_Ajax'
-      and  SYS_TARGET != 'dbInfo'         and  SYS_TARGET != 'sysLoginVerify' and SYS_TARGET != 'processes_Ajax'
-      and  SYS_TARGET != 'updateTranslation'
-      and  SYS_TARGET != 'autoinstallProcesses'
-      and  SYS_TARGET != 'autoinstallPlugins'
-      and  SYS_TARGET != 'heartbeatStatus'
-      and  SYS_TARGET != 'showLogoFile'
-      and  SYS_TARGET != 'forgotPassword'
-      and  SYS_TARGET != 'retrivePassword'
-      and  SYS_COLLECTION != 'services' and SYS_COLLECTION != 'tracker' and $collectionPlugin != 'services'
-      and  $bWE != true and SYS_TARGET != 'defaultAjaxDynaform' and SYS_TARGET != 'dynaforms_checkDependentFields' and SYS_TARGET != 'cases_ShowDocument') {
+      if ( !in_array(SYS_TARGET, $noLoginFiles) &&  $bWE != true && $collectionPlugin != 'services') {
         $bRedirect = true;
+        
         if (isset($_GET['sid'])) {
           G::LoadClass('sessions');
           $oSessions = new Sessions();
@@ -545,11 +557,19 @@
           }
         }
         if ($bRedirect) {
-          if (empty($_POST)) {
-              header('location: ' . SYS_URI . 'login/login?u=' . urlencode($_SERVER['REQUEST_URI']));
+          //g::pr($_SERVER); die;
+          if (strpos($_SERVER['REQUEST_URI'], '/home') !== false) {
+            $loginUrl = 'home/login';
           }
           else {
-            header('location: ' . SYS_URI . 'login/login');
+            $loginUrl = 'login/login';
+          }
+          
+          if (empty($_POST)) {
+            header('location: ' . SYS_URI . $loginUrl . '?u=' . urlencode($_SERVER['REQUEST_URI']));
+          }
+          else {
+            header('location: ' . SYS_URI . $loginUrl);
           }
           die();
         }

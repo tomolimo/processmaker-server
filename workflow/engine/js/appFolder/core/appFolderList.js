@@ -6,7 +6,7 @@ function openPMFolder( uid, rootfolder ){
       getPMFolderContent(uid);
      return;
     }
-    document.getElementById('child_'+uid).innerHTML = "<img src='/js/maborak/core/images/loader_B.gif' >";//<div style="background: transparent url(http://hugo.opensource.colosa.net/js/maborak/core/images/loader_B.gif) no-repeat scroll 0% 0%; -moz-background-clip: border; -moz-background-origin: padding; -moz-background-inline-policy: continuous; width: 32px; height: 32px; position: absolute; display: none; top: 514.5px; left: 609.5px;" class="panel_loader___processmaker"></div><div style="" class="panel_statusBar___processmaker"><div style="position: relative; text-align: center; display: none;" class="panel_statusButtons___processmaker"></div>';
+    document.getElementById('child_'+uid).innerHTML = "<img src='/images/classic/loader_B.gif' >";
 
 
 	var oRPC = new leimnud.module.rpc.xmlhttp({
@@ -30,7 +30,7 @@ function openPMFolder( uid, rootfolder ){
 }
 
 function getPMFolderContent(uid){
-  document.getElementById('spanFolderContent').innerHTML = "<img src='/js/maborak/core/images/loader_B.gif' >";//"Loading..";
+  document.getElementById('spanFolderContent').innerHTML = "<img src='/images/classic/loader_B.gif' >";//"Loading..";
 	var oRPC = new leimnud.module.rpc.xmlhttp({
       url   : 'appFolderAjax',
       async : true,
@@ -51,7 +51,7 @@ function getPMFolderContent(uid){
 }
 
 function getPMFolderSearchResult(searchKeyword,type){
-	  document.getElementById('spanFolderContent').innerHTML = "<img src='/js/maborak/core/images/loader_B.gif' >";//"Loading..";
+	  document.getElementById('spanFolderContent').innerHTML = "<img src='/images/classic/loader_B.gif' >";//"Loading..";
 		var oRPC = new leimnud.module.rpc.xmlhttp({
 	      url   : 'appFolderAjax',
 	      async : true,
@@ -72,7 +72,7 @@ function getPMFolderSearchResult(searchKeyword,type){
 	}
 
 function getPMFolderTags(rootfolder){
-  document.getElementById('tags_cloud').innerHTML = "<img src='/js/maborak/core/images/loader_B.gif' >";//"Loading..";
+  document.getElementById('tags_cloud').innerHTML = "<img src='/images/classicloader_B.gif' >";//"Loading..";
 	var oRPC = new leimnud.module.rpc.xmlhttp({
       url   : 'appFolderAjax',
       async : false,

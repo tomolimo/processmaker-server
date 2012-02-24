@@ -144,6 +144,8 @@ class TaskMapBuilder {
 
 		$tMap->addColumn('TAS_BOUNDARY', 'TasBoundary', 'string', CreoleTypes::VARCHAR, true, 32);
 
+		$tMap->addColumn('TAS_DERIVATION_SCREEN_TPL', 'TasDerivationScreenTpl', 'string', CreoleTypes::VARCHAR, false, 128);
+
 		$tMap->addValidator('TAS_TYPE', 'validValues', 'propel.validator.ValidValuesValidator', 'NORMAL|ADHOC|SUBPROCESS|HIDDEN', 'Please select a valid value for TAS_TYPE.');
 
 		$tMap->addValidator('TAS_TIMEUNIT', 'validValues', 'propel.validator.ValidValuesValidator', 'MINUTES|HOURS|DAYS|WEEKS|MONTHS', 'Please select a valid value for TAS_TIMEUNIT.');

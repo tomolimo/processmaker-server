@@ -69,16 +69,16 @@ class adminProxy extends HttpProxyController
       $list = array(
         'NORMAL' => 'Normal',
         'SIMPLIFIED' => 'Simplified',
-        'SWITCHABLE' => 'Switchable'/*,
-        'SINGLE' => 'Single Application'*/
+        'SWITCHABLE' => 'Switchable',
+        'SINGLE' => 'Single Application'
       );
     }
     else {
       $list = array(
         array('NORMAL', 'Normal'),
         array('SIMPLIFIED', 'Simplified'),
-        array('SWITCHABLE', 'Switchable')/*,
-        array('SINGLE', 'Single Application')*/
+        array('SWITCHABLE', 'Switchable'),
+        array('SINGLE', 'Single Application')
       );
     }
 

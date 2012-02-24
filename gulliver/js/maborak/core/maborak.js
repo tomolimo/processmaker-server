@@ -68,11 +68,14 @@ var maborak = function(){
 		this.exec(this.fix.memoryLeak);
 
 		/* create Stylesheet BEGIN  */
+		/* erik: DEPRECATED! css should be separated accordind MVC pattern, all those css are moved on style.css to current skin*/
+		/*
 		var st	=$dce('link');
 		st.rel	='stylesheet';
 		st.type	='text/css';
 		st.href	=this.info.base+'stylesheet/default.css';
 		this.dom.capture("tag.head 0").appendChild(st);
+		*/
 		/* create Stylesheet END  */
 		this.expand(this);
 		return this;

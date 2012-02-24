@@ -307,6 +307,13 @@ abstract class BaseTask extends BaseObject  implements Persistent {
 	 */
 	protected $tas_boundary = '';
 
+
+	/**
+	 * The value for the tas_derivation_screen_tpl field.
+	 * @var        string
+	 */
+	protected $tas_derivation_screen_tpl = '';
+
 	/**
 	 * Flag to prevent endless save loop, if this object is referenced
 	 * by another object which falls in this transaction.
@@ -759,6 +766,17 @@ abstract class BaseTask extends BaseObject  implements Persistent {
 	{
 
 		return $this->tas_boundary;
+	}
+
+	/**
+	 * Get the [tas_derivation_screen_tpl] column value.
+	 * 
+	 * @return     string
+	 */
+	public function getTasDerivationScreenTpl()
+	{
+
+		return $this->tas_derivation_screen_tpl;
 	}
 
 	/**
@@ -1630,6 +1648,28 @@ abstract class BaseTask extends BaseObject  implements Persistent {
 	} // setTasBoundary()
 
 	/**
+	 * Set the value of [tas_derivation_screen_tpl] column.
+	 * 
+	 * @param      string $v new value
+	 * @return     void
+	 */
+	public function setTasDerivationScreenTpl($v)
+	{
+
+		// Since the native PHP type for this column is string,
+		// we will cast the input to a string (if it is not).
+		if ($v !== null && !is_string($v)) {
+			$v = (string) $v; 
+		}
+
+		if ($this->tas_derivation_screen_tpl !== $v || $v === '') {
+			$this->tas_derivation_screen_tpl = $v;
+			$this->modifiedColumns[] = TaskPeer::TAS_DERIVATION_SCREEN_TPL;
+		}
+
+	} // setTasDerivationScreenTpl()
+
+	/**
 	 * Hydrates (populates) the object variables with values from the database resultset.
 	 *
 	 * An offset (1-based "start column") is specified so that objects can be hydrated
@@ -1726,12 +1766,14 @@ abstract class BaseTask extends BaseObject  implements Persistent {
 
 			$this->tas_boundary = $rs->getString($startcol + 39);
 
+			$this->tas_derivation_screen_tpl = $rs->getString($startcol + 40);
+
 			$this->resetModified();
 
 			$this->setNew(false);
 
 			// FIXME - using NUM_COLUMNS may be clearer.
-			return $startcol + 40; // 40 = TaskPeer::NUM_COLUMNS - TaskPeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + 41; // 41 = TaskPeer::NUM_COLUMNS - TaskPeer::NUM_LAZY_LOAD_COLUMNS).
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating Task object", $e);
@@ -2054,6 +2096,9 @@ abstract class BaseTask extends BaseObject  implements Persistent {
 			case 39:
 				return $this->getTasBoundary();
 				break;
+			case 40:
+				return $this->getTasDerivationScreenTpl();
+				break;
 			default:
 				return null;
 				break;
@@ -2114,6 +2159,7 @@ abstract class BaseTask extends BaseObject  implements Persistent {
 			$keys[37] => $this->getTasColor(),
 			$keys[38] => $this->getTasEvnUid(),
 			$keys[39] => $this->getTasBoundary(),
+			$keys[40] => $this->getTasDerivationScreenTpl(),
 		);
 		return $result;
 	}
@@ -2265,6 +2311,9 @@ abstract class BaseTask extends BaseObject  implements Persistent {
 			case 39:
 				$this->setTasBoundary($value);
 				break;
+			case 40:
+				$this->setTasDerivationScreenTpl($value);
+				break;
 		} // switch()
 	}
 
@@ -2328,6 +2377,7 @@ abstract class BaseTask extends BaseObject  implements Persistent {
 		if (array_key_exists($keys[37], $arr)) $this->setTasColor($arr[$keys[37]]);
 		if (array_key_exists($keys[38], $arr)) $this->setTasEvnUid($arr[$keys[38]]);
 		if (array_key_exists($keys[39], $arr)) $this->setTasBoundary($arr[$keys[39]]);
+		if (array_key_exists($keys[40], $arr)) $this->setTasDerivationScreenTpl($arr[$keys[40]]);
 	}
 
 	/**
@@ -2379,6 +2429,7 @@ abstract class BaseTask extends BaseObject  implements Persistent {
 		if ($this->isColumnModified(TaskPeer::TAS_COLOR)) $criteria->add(TaskPeer::TAS_COLOR, $this->tas_color);
 		if ($this->isColumnModified(TaskPeer::TAS_EVN_UID)) $criteria->add(TaskPeer::TAS_EVN_UID, $this->tas_evn_uid);
 		if ($this->isColumnModified(TaskPeer::TAS_BOUNDARY)) $criteria->add(TaskPeer::TAS_BOUNDARY, $this->tas_boundary);
+		if ($this->isColumnModified(TaskPeer::TAS_DERIVATION_SCREEN_TPL)) $criteria->add(TaskPeer::TAS_DERIVATION_SCREEN_TPL, $this->tas_derivation_screen_tpl);
 
 		return $criteria;
 	}
@@ -2510,6 +2561,8 @@ abstract class BaseTask extends BaseObject  implements Persistent {
 		$copyObj->setTasEvnUid($this->tas_evn_uid);
 
 		$copyObj->setTasBoundary($this->tas_boundary);
+
+		$copyObj->setTasDerivationScreenTpl($this->tas_derivation_screen_tpl);
 
 
 		$copyObj->setNew(true);

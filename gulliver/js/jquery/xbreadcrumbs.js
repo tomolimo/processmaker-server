@@ -32,11 +32,17 @@
 			}
 			
 			element.children('LI').click(function(){
-				
+				if(settings.collapsible && !$(this).hasClass('current')){
+            		var initWidth = $(this).children('A').attr('init-width');
+            		$(this).children('A').animate({width: initWidth}, 'normal');
+            	}
+            	
             	$('.xbreadcrumbs').children('LI').attr('class', '');
             	$(this).attr('class', 'current');
 
-            	$('.xbreadcrumbs').children('LI[class!=current]').children('A').animate({width: settings.collapsedWidth}, 'fast');
+            	if(settings.collapsible) {
+            	  $('.xbreadcrumbs').children('LI[class!=current]').children('A').animate({width: settings.collapsedWidth}, 'fast');
+            	}  
             });
 
             element.children('LI').mouseenter(function(){
@@ -62,7 +68,7 @@
                 _showHideSubLevel(subLevel, false);
                 
                 if(settings.collapsible && !$(this).hasClass('current')){
-                	$(this).children('A').animate({width: settings.collapsedWidth}, 'fast');
+                  $(this).children('A').animate({width: settings.collapsedWidth}, 800);
                 }
             });
 		};
@@ -96,12 +102,6 @@
 		
 		//    Entry point
 		_build();
-
-
-		//$('.xbreadcrumbs').children('LI[class=current]').click();
-		//var initWidth = $('.xbreadcrumbs').children('LI[class=current]').width();
-		//alert(initWidth);
-		//$('.xbreadcrumbs').children('LI[class=current]').animate({width: initWidth}, 'normal');
 	};
 	
 	/*  Default Settings  */

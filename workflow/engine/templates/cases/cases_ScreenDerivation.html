@@ -1,209 +1,203 @@
 <div id="publisherContent[1]" style="margin: 0px;" align="center">
 <form name="frmDerivation" id="frmDerivation" action="cases_Derivate" method="POST" class="formDefault" style="margin: 0px;">
-	<input type="hidden" name="form[ROU_TYPE]" id="form[ROU_TYPE]" value="{$PROCESS.ROU_TYPE}">
-	<div class="borderForm" style="width: 500px; padding-left: 0; padding-right: 0; border-width: 1;">
-		<div class="boxTop">
-			<div class="a"></div>
-			<div class="b"></div>
-			<div class="c"></div>
-		</div>
-		<div class="content" style="height: 100%;">
-			<table width="99%">
-				<tr>
-					<td valign='top'>
-					<table cellspacing="0" cellpadding="0" border="0" width="100%">
-						<tr>
-							<td colspan="2" class="withoutLabel">
-							<table width='100%' cellspacing="0" cellpadding="0">
-								<tr>
-								    {if $PREVIOUS_PAGE}
-									<td valign='top' class='tableOption' width='33%' align="left">
-									<table cellspacing="0" cellpadding="0" width='100%'>
-										<tr>
-											<td class='tableOption' align="left" width="120"><img src="/images/bulletButtonLeft.gif" width="6" />&nbsp; <a class="tableOption" href='{$PREVIOUS_PAGE}' id="form[DYN_BACKWARD]" name="form[DYN_BACKWARD]" onclick="">{$PREVIOUS_PAGE_LABEL}</a></td>
-											<td class='tableOption'>&nbsp;</td>
-										</tr>
-									</table>
-									</td>
-									{/if}
-									<td valign='top' class='tableOption'>
-									<table cellspacing="0" cellpadding="0" width='100%'>
-										<tr>
-											<td>&nbsp;</td>
-										</tr>
-									</table>
-									</td>
-									<td valign='top'></td>
-								</tr>
-							</table>
-							</td>
-						</tr>
+  <input type="hidden" name="form[ROU_TYPE]" id="form[ROU_TYPE]" value="{$PROCESS.ROU_TYPE}">
+  <div class="borderForm" style="width: 500px; padding-left: 0; padding-right: 0; border-width: 1;">
+    <div class="boxTop">
+      <div class="a"></div>
+      <div class="b"></div>
+      <div class="c"></div>
+    </div>
+    <div class="content" style="height: 100%;">
+      <table width="99%">
+        <tr>
+          <td valign='top'>
+          <table cellspacing="0" cellpadding="0" border="0" width="100%">
+            <tr>
+              <td colspan="2" class="withoutLabel">
+              <table width='100%' cellspacing="0" cellpadding="0">
+                <tr>
+                    {if $PREVIOUS_PAGE}
+                  <td valign='top' class='tableOption' width='33%' align="left">
+                  <table cellspacing="0" cellpadding="0" width='100%'>
+                    <tr>
+                      <td class='tableOption' align="left" width="120"><img src="/images/bulletButtonLeft.gif" width="6" />&nbsp; <a class="tableOption" href='{$PREVIOUS_PAGE}' id="form[DYN_BACKWARD]" name="form[DYN_BACKWARD]" onclick="">{$PREVIOUS_PAGE_LABEL}</a></td>
+                      <td class='tableOption'>&nbsp;</td>
+                    </tr>
+                  </table>
+                  </td>
+                  {/if}
+                  <td valign='top' class='tableOption'>
+                  <table cellspacing="0" cellpadding="0" width='100%'>
+                    <tr>
+                      <td>&nbsp;</td>
+                    </tr>
+                  </table>
+                  </td>
+                  <td valign='top'></td>
+                </tr>
+              </table>
+              </td>
+            </tr>
 
-						<tr>
-							{if $PROCESS.ERROR eq '' && $PROCESS.ROU_TYPE neq 'SELECT' && $PROCESS.ROU_FINISH_FLAG }
-							<td class='FormTitle' colspan="2" align="">{$END_OF_PROCESS}</td>
-							{else}
-							<td class='FormTitle' colspan="2" align="">{$ASSIGN_TASK}</td>
-							{/if}
-						</tr>
+            <tr>
+              {if $PROCESS.ERROR eq '' && $PROCESS.ROU_TYPE neq 'SELECT' && $PROCESS.ROU_FINISH_FLAG }
+              <td class='FormTitle' colspan="2" align="">{$END_OF_PROCESS}</td>
+              {else}
+              <td class='FormTitle' colspan="2" align="">{$ASSIGN_TASK}</td>
+              {/if}
+            </tr>
 
-						{foreach key=id item=data from=$TASK}
-						<tr height="5">
-							<td>&nbsp;</td>
-							<td>&nbsp;</td>
-						</tr>
+            {foreach key=id item=data from=$TASK}
+            <tr height="5">
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+            </tr>
 
-						{if $PROCESS.ROU_TYPE eq 'SELECT'}
-						<form name="frmDerivation{$id}" id="frmDerivation{$id}" action="cases_Derivate" method="POST" class="formDefault" method="post" style="margin: 0px;"><input type="hidden" name="form[ROU_TYPE]" id="form[ROU_TYPE]" value="{$PROCESS.ROU_TYPE}">
-						<tr>
-							<td class="FormLabel" width="100">{$OPTION_LABEL} {$id}:</td>
-							<td class="FormFieldContent">{$data.ROU_CONDITION }</td>
-						</tr>
-						{/if}
-						{if $PROCESS.ERROR eq '' }
-						<tr>
-							<td class="FormLabel" width="100">{$NEXT_TASK_LABEL}:</td>
-							<td class="FormFieldContent">{$data.NEXT_TASK.TAS_TITLE}{$data.NEXT_TASK.TAS_HIDDEN_FIELD}</td>
-						</tr>
-						{/if}
-						{if not $data.NEXT_TASK.ROU_FINISH_FLAG }
+            {if $PROCESS.ROU_TYPE eq 'SELECT'}
+            <form name="frmDerivation{$id}" id="frmDerivation{$id}" action="cases_Derivate" method="POST" class="formDefault" method="post" style="margin: 0px;"><input type="hidden" name="form[ROU_TYPE]" id="form[ROU_TYPE]" value="{$PROCESS.ROU_TYPE}">
+            <tr>
+              <td class="FormLabel" width="100">{$OPTION_LABEL} {$id}:</td>
+              <td class="FormFieldContent">{$data.ROU_CONDITION }</td>
+            </tr>
+            {/if}
+            {if $PROCESS.ERROR eq '' }
+            <tr>
+              <td class="FormLabel" width="100">{$NEXT_TASK_LABEL}:</td>
+              <td class="FormFieldContent">{$data.NEXT_TASK.TAS_TITLE}{$data.NEXT_TASK.TAS_HIDDEN_FIELD}</td>
+            </tr>
+            {/if}
+            {if not $data.NEXT_TASK.ROU_FINISH_FLAG }
+              {if $data.NEXT_TASK.TAS_NEXT eq 'STATIC_MI' || $data.NEXT_TASK.TAS_NEXT eq 'CANCEL_MI'}
+                {foreach key=id item=dataUser from=$data.NEXT_TASK.USER_ASSIGNED}
+                {if $dataUser.USR_HIDDEN_FIELD neq ''}
+                <tr>
+                  <td class="FormLabel" width="100">{$EMPLOYEE}:</td>
+                  <td class="FormFieldContent">{$dataUser.USR_UID}{$dataUser.USR_HIDDEN_FIELD}</td>
+                </tr>
+                {/if}
+                {/foreach}
+              {/if}
+              {if $data.NEXT_TASK.TAS_NEXT eq ''}
+                {if $data.NEXT_TASK.USR_UID neq ''}
+                <tr>
+                  <td class="FormLabel" width="100">{$EMPLOYEE}:</td>
+                  <td class="FormFieldContent">{$data.NEXT_TASK.USR_UID}{$data.NEXT_TASK.USR_HIDDEN_FIELD}</td>
+                </tr>
+                {/if}
+              {/if}
+              {if $data.NEXT_TASK.TAS_TRANSFER_FLY eq 'true'}
+              <tr>
+                <td class='FormSubTitle' colspan="2" align="">{$TAS_TIMING_TITLE} For {$data.NEXT_TASK.TAS_TITLE} Task</td>
+              </tr>
+              <tr>
+                <td class="FormLabel" width="100">{$TAS_DURATION}:</td>
+                <td class="FormFieldContent">{$data.NEXT_TASK.TAS_DURATION}</td>
+              </tr>
+              <tr>
+                <td class="FormLabel" width="100">{$TAS_TIMEUNIT}:</td>
+                <td class="FormFieldContent">{$data.NEXT_TASK.TAS_TIMEUNIT}</td>
+              </tr>
+              <tr>
+                <td class="FormLabel" width="100">{$TAS_TYPE_DAY}:</td>
+                <td class="FormFieldContent">{$data.NEXT_TASK.TAS_TYPE_DAY}</td>
+              </tr>
+              {if $data.NEXT_TASK.TAS_CALENDAR neq ''}
+              <tr>
+                <td class="FormLabel" width="100">{$TAS_CALENDAR}:</td>
+                <td class="FormFieldContent">{$data.NEXT_TASK.TAS_CALENDAR}</td>
+              </tr>
+              {/if}
+              <tr height="0">
+                <td colspan="2">
+                  {$data.NEXT_TASK.TAS_TRANSFER_HIDDEN_FLY}
+                </td>
+              </tr>
+            {/if}
+            {else}
+            <tr>
+              <td class="FormLabel" width="100">{$LAST_EMPLOYEE}:</td>
+              <td class="FormFieldContent">{$data.NEXT_TASK.USR_UID}{$data.NEXT_TASK.USR_HIDDEN_FIELD}</td>
+            </tr>
+            {/if}
 
-                                                    {if $data.NEXT_TASK.TAS_NEXT eq 'STATIC_MI' || $data.NEXT_TASK.TAS_NEXT eq 'CANCEL_MI'}
-                                                        {foreach key=id item=dataUser from=$data.NEXT_TASK.USER_ASSIGNED}
-                                                        {if $dataUser.USR_HIDDEN_FIELD neq ''}
-                                                        <tr>
-                                                                <td class="FormLabel" width="100">{$EMPLOYEE}:</td>
-                                                                <td class="FormFieldContent">{$dataUser.USR_UID}{$dataUser.USR_HIDDEN_FIELD}</td>
-                                                        </tr>
-                                                        {/if}
-                                                        {/foreach}
-                                                    {/if}
-                                                    {if $data.NEXT_TASK.TAS_NEXT eq ''}
-                                                       {if $data.NEXT_TASK.USR_UID neq ''}
-                                                        <tr>
-                                                            <td class="FormLabel" width="100">{$EMPLOYEE}:</td>
-                                                             <td class="FormFieldContent">{$data.NEXT_TASK.USR_UID}{$data.NEXT_TASK.USR_HIDDEN_FIELD}</td>
-                                                        </tr>
-                                                        {/if}
-                                                    {/if}
-                                                    {if $data.NEXT_TASK.TAS_TRANSFER_FLY eq 'true'}
-                                                       <tr>
-							  <td class='FormSubTitle' colspan="2" align="">{$TAS_TIMING_TITLE} For {$data.NEXT_TASK.TAS_TITLE} Task</td>
-                                                       </tr>
-                                                       <tr>
-                                                             <td class="FormLabel" width="100">{$TAS_DURATION}:</td>
-                                                             <td class="FormFieldContent">{$data.NEXT_TASK.TAS_DURATION}</td>
-                                                       </tr>
-                                                        <tr>
-                                                             <td class="FormLabel" width="100">{$TAS_TIMEUNIT}:</td>
-                                                             <td class="FormFieldContent">{$data.NEXT_TASK.TAS_TIMEUNIT}</td>
-                                                        </tr>
-                                                        <tr>
-                                                             <td class="FormLabel" width="100">{$TAS_TYPE_DAY}:</td>
-                                                             <td class="FormFieldContent">{$data.NEXT_TASK.TAS_TYPE_DAY}</td>
-                                                        </tr>
-                                                        {if $data.NEXT_TASK.TAS_CALENDAR neq ''}
-                                                        <tr>
-                                                             <td class="FormLabel" width="100">{$TAS_CALENDAR}:</td>
-                                                             <td class="FormFieldContent">{$data.NEXT_TASK.TAS_CALENDAR}</td>
-                                                        </tr>
-                                                        {/if}
-                                                        <tr height="0">
-							<td colspan="2">
-								{$data.NEXT_TASK.TAS_TRANSFER_HIDDEN_FLY}
-							</td>
-                                                        </tr>
-                                                     {/if}
-						{else}
-						<tr>
-							<td class="FormLabel" width="100">{$LAST_EMPLOYEE}:</td>
-							<td class="FormFieldContent">{$data.NEXT_TASK.USR_UID}{$data.NEXT_TASK.USR_HIDDEN_FIELD}</td>
-						</tr>
-						{/if}
+            <tr height="0">
+              <td colspan="2">
+                {$data.NEXT_TASK.TAS_ASSIGN_TYPE}{$data.NEXT_TASK.TAS_DEF_PROC_CODE}{$data.NEXT_TASK.DEL_PRIORITY}{$data.NEXT_TASK.TAS_PARENT}
+              </td>
+            </tr>
 
-						<tr height="0">
-							<td colspan="2">
-								{$data.NEXT_TASK.TAS_ASSIGN_TYPE}{$data.NEXT_TASK.TAS_DEF_PROC_CODE}{$data.NEXT_TASK.DEL_PRIORITY}{$data.NEXT_TASK.TAS_PARENT}
-							</td>
-						</tr>
+            {if $PROCESS.ROU_TYPE eq 'SELECT'}
+            <tr>
+              <td colspan="2" align="center">
+                {if $data.NEXT_TASK.TAS_ASSIGN_TYPE neq '' && not $data.NEXT_TASK.ROU_FINISH_FLAG }
+                <input type="submit" class='module_app_button___gray' name="btnContinue" id="btnContinue" value="{$CONTINUE_WITH_OPTION} {$id} ">
+                {/if} {if $data.NEXT_TASK.TAS_ASSIGN_TYPE neq '' && $data.NEXT_TASK.ROU_FINISH_FLAG }
+                <input type="submit" class='module_app_button___gray' name="btnContinue" id="btnContinue" value="{$FINISH_WITH_OPTION} {$id} ">
+                  {$data.NEXT_TASK.TAS_ASSIGN_TYPE}
+                {/if}
+              </td>
+            </tr>
 
-						{if $PROCESS.ROU_TYPE eq 'SELECT'}
-						<tr>
-							<td colspan="2" align="center">
-								{if $data.NEXT_TASK.TAS_ASSIGN_TYPE neq '' && not $data.NEXT_TASK.ROU_FINISH_FLAG }
-								<input type="submit" class='module_app_button___gray' name="btnContinue" id="btnContinue" value="{$CONTINUE_WITH_OPTION} {$id} ">
-								{/if} {if $data.NEXT_TASK.TAS_ASSIGN_TYPE neq '' && $data.NEXT_TASK.ROU_FINISH_FLAG }
-								<input type="submit" class='module_app_button___gray' name="btnContinue" id="btnContinue" value="{$FINISH_WITH_OPTION} {$id} ">
-									{$data.NEXT_TASK.TAS_ASSIGN_TYPE}
-								{/if}
-							</td>
-						</tr>
+            </form>
+            {/if}
+            {/foreach}
+            {if $PROCESS.ERROR eq '' && $PROCESS.ROU_TYPE neq 'SELECT' && ! $PROCESS.ROU_FINISH_FLAG }
+            <tr>
+              <td colspan="2" align="center">
+                <input type="button" class='module_app_button___gray' name="btnContinue" id="btnContinue" value="{$CONTINUE}" {$PROCESS.DISABLED} />        
+              </td>
+            </tr>
+            {/if}
+            {if $PROCESS.ERROR eq '' && $PROCESS.ROU_TYPE neq 'SELECT' && $PROCESS.ROU_FINISH_FLAG }
+            <tr>
+              <td colspan="2" align="center">
+                <input type="submit" class='module_app_button___gray' name="btnContinue" id="btnContinue" value="{$FINISH}">
+              </td>
+            </tr>
+            {/if}
+          </table>
+          </td>
+        </tr>
+      </table>
+    </div>
 
-						</form>
-						{/if}
-						{/foreach}
-						{if $PROCESS.ERROR eq '' && $PROCESS.ROU_TYPE neq 'SELECT' && ! $PROCESS.ROU_FINISH_FLAG }
-						<tr>
-						  <td colspan="2" align="center">
-		<input type="button" class='module_app_button___gray' name="btnContinue" id="btnContinue" value="{$CONTINUE}" {$PROCESS.DISABLED} />        </td>
-						</tr>
-						{/if}
-						{if $PROCESS.ERROR eq '' && $PROCESS.ROU_TYPE neq 'SELECT' && $PROCESS.ROU_FINISH_FLAG }
-						<tr>
-						  <td colspan="2" align="center">
-						    <input type="submit" class='module_app_button___gray' name="btnContinue" id="btnContinue" value="{$FINISH}">
-						   <!-- <input type="submit" class='module_app_button___gray' name="btnContinue" id="btnContinue" value="Finish">-->
-						  </td>
-						</tr>
-						{/if}
-					</table>
-
-					</td>
-				</tr>
-			</table>
-		</div>
-
-		<div class="boxBottom">
-			<div class="a"></div>
-			<div class="b"></div>
-			<div class="c"></div>
-		</div>
-	</div>
-	{if $PROCESS.ROU_TYPE neq 'SELECT'}
+    <div class="boxBottom">
+      <div class="a"></div>
+      <div class="b"></div>
+      <div class="c"></div>
+    </div>
+  </div>
+{if $PROCESS.ROU_TYPE neq 'SELECT'}
 </form>
 {/if}
 </div>
 
 <script>
+  {literal}leimnud.event.add(document.getElementById('btnContinue'), 'click', function() {
+  i=0, sw=true;
+  var frmFields =document.getElementById('frmDerivation');
 
-{literal}leimnud.event.add(document.getElementById('btnContinue'), 'click', function() {
+  while (i < frmFields.length && sw) {
+    if(frmFields[i].type=="select-one"){
+      if(frmFields[i].value==""){
+        sw = false; break;
+      }
+    }
+    i++;
+  }
 
-i=0, sw=true;
-var frmFields =document.getElementById('frmDerivation');
-
-while(i < frmFields.length && sw){
-	if(frmFields[i].type=="select-one"){
-	 if(frmFields[i].value==""){
-	 	sw=false;
-	 	}
-	}
-	i++;
-}
-if(!sw){
-	alert(G_STRINGS.ID_ASSIGN_CASE_TO_USER);return false;
-	}
-
- 	{/literal}
- 	setNestedProperty(this, Array('disabled'), 'true');
- 	setNestedProperty(this, Array('value'), '{$PROCESSING_MESSAGE}');
- 	var client = getBrowserClient();
- 	{literal} if (client.browser == "msie" || client.browser == "safari" || client.browser == "firefox"){ {/literal}
- 		document.frmDerivation.submit();
- 	{literal} } {/literal}
- {literal}
-
-
+  if(!sw) {
+    alert(G_STRINGS.ID_ASSIGN_CASE_TO_USER);
+    return false;
+  }
+  {/literal}
+  setNestedProperty(this, Array('disabled'), 'true');
+  setNestedProperty(this, Array('value'), '{$PROCESSING_MESSAGE}');
+  {literal}
+  var client = getBrowserClient();
+  if (client.browser == "msie" || client.browser == "safari" || client.browser == "firefox") {
+    document.frmDerivation.submit();
+  }
 }.extend(document.getElementById('btnContinue'))); {/literal}
-
 </script>
 

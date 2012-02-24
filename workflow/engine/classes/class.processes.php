@@ -3464,8 +3464,46 @@ class Processes {
     return $result;
   }
 
+  function getProcessFiles($proUid, $type)
+  {
+    $filesList = array();
 
- }//end class processes
+    switch ($type) {
+      case 'mail': case 'email':
+        $basePath = PATH_DATA_MAILTEMPLATES;
+        break;
+      
+      case 'public':
+        $basePath = PATH_DATA_PUBLIC;
+        break;
+
+      default:
+        throw new Exception("Unknow Process Files Type '$type'.");
+    }
+
+    $dir = $basePath . $proUid . PATH_SEP;
+
+    G::verifyPath($dir, true); // create if it does not exist.
+
+    // creating the default template (if not exists)
+    if (!file_exists($dir . 'alert_message.html')) {
+      @copy(PATH_TPL . 'mails' . PATH_SEP . 'alert_message.html', $dir . 'alert_message.html');
+    }
+    
+    $files = glob($dir . '*.*');
+
+    foreach ($files as $file) {
+      $fileName = basename($file);
+
+      if ($fileName !== 'alert_message.html') {
+        $filesList[] = array('filepath' => $file, 'filename' => $fileName);
+      }
+    }
+
+    return $filesList;
+  }
+
+}//end class processes
 
 /**
  * Object Document class

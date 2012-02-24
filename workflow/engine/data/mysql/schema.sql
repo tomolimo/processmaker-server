@@ -400,6 +400,7 @@ CREATE TABLE `PROCESS`
 	`PRO_TITLE_Y` INTEGER default 6 NOT NULL,
 	`PRO_DEBUG` INTEGER default 0 NOT NULL,
 	`PRO_DYNAFORMS` MEDIUMTEXT,
+	`PRO_DERIVATION_SCREEN_TPL` VARCHAR(128) default '',
 	PRIMARY KEY (`PRO_UID`)
 )ENGINE=MyISAM  DEFAULT CHARSET='utf8' COMMENT='Store process Information';
 #-----------------------------------------------------------------------------
@@ -582,6 +583,7 @@ CREATE TABLE `TASK`
 	`TAS_COLOR` VARCHAR(32) default '' NOT NULL,
 	`TAS_EVN_UID` VARCHAR(32) default '' NOT NULL,
 	`TAS_BOUNDARY` VARCHAR(32) default '' NOT NULL,
+	`TAS_DERIVATION_SCREEN_TPL` VARCHAR(128) default '',
 	PRIMARY KEY (`TAS_UID`)
 )ENGINE=MyISAM  DEFAULT CHARSET='utf8' COMMENT='Task of workflow';
 #-----------------------------------------------------------------------------

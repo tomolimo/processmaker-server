@@ -4,22 +4,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=yes" /> 
 
   <link rel="shortcut icon" href="/images/favicon.ico"   type="image/x-icon"/>
+  <!--<link rel="stylesheet" href="/js/jquery/css/redmond/jquery-ui-1.7.2.custom.css" type="text/css">-->
   <link rel="stylesheet" href="/js/jquery/css/smoothness/jquery-ui-1.8.17.custom.css" type="text/css">
   <link rel="stylesheet" href="/css/simplified.css" media="screen" rel="stylesheet" type="text/css" />
 
   <script type="text/javascript" src="/js/jquery/jquery-1.7.1.min.js"></script>
   <script type="text/javascript" src="/js/jquery/jquery-ui-1.8.17.min.js"></script>
   
-  {literal}
+  {if $clientBrowser neq 'msie'}
   <style>
+  {literal}
   body {
-    padding-top: 40px !important;
-    overflow:hidden; 
+    padding-top : 40px !important;
+    overflow    : hidden;
   }
   </style>
-  <script>
+  {/literal}
+  {/if}
 
-  function resize() 
+  {literal}
+  <script>
+  var ux_env = {ver: '1.0'};
+
+  function resize()
   {
     var h = $(window).height() - 42;
     $('iframe').height(h)
@@ -66,7 +73,7 @@
 
           <ul class="nav primary-nav">
             <li class="account">
-              <a class="menu user-actions" href="#" onclick="redirect('home/appList?t=in')" title="My Inbox">
+              <a class="menu user-actions" href="#" onclick="redirect('home/appList?t=todo')" title="My Inbox">
                 <img alt="A99679add21e8b0704ea5f0fb569572c_mini" src="/images/simplified/in-set-grey.png"  />
                 <!-- <span class="menu-label screen-name">new cases</span> -->
               </a>
@@ -76,14 +83,12 @@
             <li class="account">
               <a class="menu user-actions" href="#" onclick="redirect('home/appList?t=draft')" title="My Drafts">
                 <img alt="A99679add21e8b0704ea5f0fb569572c_mini" src="/images/simplified/folder-grey.png"  />
-                <!-- <span class="menu-label screen-name">new cases</span> -->
               </a>
             </li>
             
             <li class="account">
               <a class="menu user-actions" href="#">
                 <img alt="A99679add21e8b0704ea5f0fb569572c_mini" src="/images/simplified/plus-set-grey.png"  title="New Case"/>
-                <!-- <span class="menu-label screen-name">new cases</span> -->
               </a>
 
               <ul class="menu-dropdown" style="width: 360px">
@@ -108,9 +113,9 @@
                 <!--<li><a href="#" accesskey="s" id="settings_link">Settings</a></li>
                 <li><a href="#" accesskey="?" id="help_link">Help</a></li>-->
                 {if $userUxType eq 'SWITCHABLE'}
-                <li><a href="cases/main" accesskey="?" id="help_link">Switch Interface</a></li>
+                <li><a href="{$switchLink}" accesskey="?" id="help_link">Switch Interface</a></li>
                 {/if}
-                <li><a href="login/login" accesskey="l" id="sign_out_link">Sign out</a></li>
+                <li><a href="home/login" accesskey="l" id="sign_out_link">Sign out</a></li>
               </ul>
             </li>
           </ul>
@@ -121,7 +126,7 @@
     <!-- end topbar -->     
   </div>
 
-  <iframe id="iframex" name="iframex" src="home/appList" width="100%" height="200" scrolling="yes" frameborder="0"></iframe>
+  <iframe id="iframex" name="iframex" src="home/appList" width="100%" height="800" scrolling="yes" frameborder="0"></iframe>
   
   <div id="dialog-confirm" title="Confirm" style="display:none">
     <p>

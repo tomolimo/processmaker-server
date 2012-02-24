@@ -252,15 +252,32 @@ class Publisher
         }
       }
       if (isset($_SESSION)) $_SESSION[$G_FORM->id]=$G_FORM->values;
+        // by default load the core template
+        if ($Part['Template'] == 'xmlform_preview')
+          $Part['Template'] = 'xmlform';  
+
 
         $template = PATH_CORE . 'templates/'  . $Part['Template'] . '.html';
+
+        //erik: new feature, now templates such as xmlform.html can be personalized via skins
+        if (defined('SYS_SKIN') && strtolower(SYS_SKIN) != 'classic') {
+          // first, verify if the template exists on base skins path
+          if (is_file(G::ExpandPath("skinEngine") . SYS_SKIN . PATH_SEP . $Part['Template'] . '.html')) {
+            $template = G::ExpandPath("skinEngine") . SYS_SKIN . PATH_SEP . $Part['Template'] . '.html';
+          }
+          // second, verify if the template exists on user skins path
+          else if (is_file(PATH_CUSTOM_SKINS . SYS_SKIN . PATH_SEP . $Part['Template'] . '.html')) {
+            $template = PATH_CUSTOM_SKINS . SYS_SKIN . PATH_SEP . $Part['Template'] . '.html';  
+          }
+        }
+        //end new feature
+
         if ($Part['Template'] == 'grid') print ('<form class="formDefault">');
         $scriptCode='';
 
         if($this->localMode != '') { // @# las modification by erik in 09/06/2008
             $G_FORM->mode = $this->localMode;
         }
-
         print $G_FORM->render( $template , $scriptCode );
         if ($Part['Template'] == 'grid') print ('</form>');
         $oHeadPublisher =& headPublisher::getSingleton();
@@ -601,6 +618,11 @@ class Publisher
         $template->templateFile = PATH_PLUGINS . $Part['Template'] . '.html';
       else
         $template->templateFile = PATH_TPL . $Part['Template'] . '.html';
+
+      // last change to load the template, maybe absolute path was given
+      if (!is_file($template->templateFile)) {
+        $template->templateFile = strpos($Part['Template'], '.html') !== false? $Part['Template']: $Part['Template'].'.html';
+      }
 
       //assign the variables and use the template $template
       $template->assign( $dataArray);

@@ -460,6 +460,7 @@ CREATE TABLE [GROUPWF]
 	[GRP_UID] VARCHAR(32) default '' NOT NULL,
 	[GRP_STATUS] CHAR(8) default 'ACTIVE' NOT NULL,
 	[GRP_LDAP_DN] VARCHAR(255) default '' NOT NULL,
+	[GRP_UX] VARCHAR(128) default 'NORMAL' NULL,
 	CONSTRAINT GROUPWF_PK PRIMARY KEY ([GRP_UID])
 );
 
@@ -898,6 +899,7 @@ CREATE TABLE [PROCESS]
 	[PRO_TITLE_Y] INT default 6 NOT NULL,
 	[PRO_DEBUG] INT default 0 NOT NULL,
 	[PRO_DYNAFORMS] NVARCHAR(MAX)  NULL,
+	[PRO_DERIVATION_SCREEN_TPL] VARCHAR(128) default '' NULL,
 	CONSTRAINT PROCESS_PK PRIMARY KEY ([PRO_UID])
 );
 
@@ -1280,6 +1282,7 @@ CREATE TABLE [TASK]
 	[TAS_COLOR] VARCHAR(32) default '' NOT NULL,
 	[TAS_EVN_UID] VARCHAR(32) default '' NOT NULL,
 	[TAS_BOUNDARY] VARCHAR(32) default '' NOT NULL,
+	[TAS_DERIVATION_SCREEN_TPL] VARCHAR(128) default '' NULL,
 	CONSTRAINT TASK_PK PRIMARY KEY ([TAS_UID])
 );
 
@@ -1463,6 +1466,7 @@ CREATE TABLE [USERS]
 	[USR_ROLE] VARCHAR(32) default 'PROCESSMAKER_ADMIN' NULL,
 	[USR_REPORTS_TO] VARCHAR(32) default '' NULL,
 	[USR_REPLACED_BY] VARCHAR(32) default '' NULL,
+	[USR_UX] VARCHAR(128) default 'NORMAL' NULL,
 	CONSTRAINT USERS_PK PRIMARY KEY ([USR_UID])
 );
 
@@ -3024,3 +3028,91 @@ CREATE TABLE [APP_NOTES]
 CREATE INDEX [indexAppNotesDate] ON [APP_NOTES] ([APP_UID],[NOTE_DATE]);
 
 CREATE INDEX [indexAppNotesUser] ON [APP_NOTES] ([APP_UID],[USR_UID]);
+
+/* ---------------------------------------------------------------------- */
+/* DASHLET											*/
+/* ---------------------------------------------------------------------- */
+
+
+IF EXISTS (SELECT 1 FROM sysobjects WHERE type = 'U' AND name = 'DASHLET')
+BEGIN
+	 DECLARE @reftable_67 nvarchar(60), @constraintname_67 nvarchar(60)
+	 DECLARE refcursor CURSOR FOR
+	 select reftables.name tablename, cons.name constraintname
+	  from sysobjects tables,
+		   sysobjects reftables,
+		   sysobjects cons,
+		   sysreferences ref
+	   where tables.id = ref.rkeyid
+		 and cons.id = ref.constid
+		 and reftables.id = ref.fkeyid
+		 and tables.name = 'DASHLET'
+	 OPEN refcursor
+	 FETCH NEXT from refcursor into @reftable_67, @constraintname_67
+	 while @@FETCH_STATUS = 0
+	 BEGIN
+	   exec ('alter table '+@reftable_67+' drop constraint '+@constraintname_67)
+	   FETCH NEXT from refcursor into @reftable_67, @constraintname_67
+	 END
+	 CLOSE refcursor
+	 DEALLOCATE refcursor
+	 DROP TABLE [DASHLET]
+END
+
+
+CREATE TABLE [DASHLET]
+(
+	[DAS_UID] VARCHAR(32) default '' NOT NULL,
+	[DAS_CLASS] VARCHAR(50) default '' NOT NULL,
+	[DAS_TITLE] VARCHAR(255) default '' NOT NULL,
+	[DAS_DESCRIPTION] NVARCHAR(MAX)  NULL,
+	[DAS_VERSION] VARCHAR(10) default '1.0' NOT NULL,
+	[DAS_CREATE_DATE] CHAR(19)  NOT NULL,
+	[DAS_UPDATE_DATE] CHAR(19)  NULL,
+	[DAS_STATUS] TINYINT default 1 NOT NULL,
+	CONSTRAINT DASHLET_PK PRIMARY KEY ([DAS_UID])
+);
+
+/* ---------------------------------------------------------------------- */
+/* DASHLET_INSTANCE											*/
+/* ---------------------------------------------------------------------- */
+
+
+IF EXISTS (SELECT 1 FROM sysobjects WHERE type = 'U' AND name = 'DASHLET_INSTANCE')
+BEGIN
+	 DECLARE @reftable_68 nvarchar(60), @constraintname_68 nvarchar(60)
+	 DECLARE refcursor CURSOR FOR
+	 select reftables.name tablename, cons.name constraintname
+	  from sysobjects tables,
+		   sysobjects reftables,
+		   sysobjects cons,
+		   sysreferences ref
+	   where tables.id = ref.rkeyid
+		 and cons.id = ref.constid
+		 and reftables.id = ref.fkeyid
+		 and tables.name = 'DASHLET_INSTANCE'
+	 OPEN refcursor
+	 FETCH NEXT from refcursor into @reftable_68, @constraintname_68
+	 while @@FETCH_STATUS = 0
+	 BEGIN
+	   exec ('alter table '+@reftable_68+' drop constraint '+@constraintname_68)
+	   FETCH NEXT from refcursor into @reftable_68, @constraintname_68
+	 END
+	 CLOSE refcursor
+	 DEALLOCATE refcursor
+	 DROP TABLE [DASHLET_INSTANCE]
+END
+
+
+CREATE TABLE [DASHLET_INSTANCE]
+(
+	[DAS_INS_UID] VARCHAR(32) default '' NOT NULL,
+	[DAS_UID] VARCHAR(32) default '' NOT NULL,
+	[DAS_INS_OWNER_TYPE] VARCHAR(20) default '' NOT NULL,
+	[DAS_INS_OWNER_UID] VARCHAR(32) default '' NULL,
+	[DAS_INS_ADDITIONAL_PROPERTIES] NVARCHAR(MAX)  NULL,
+	[DAS_INS_CREATE_DATE] CHAR(19)  NOT NULL,
+	[DAS_INS_UPDATE_DATE] CHAR(19)  NULL,
+	[DAS_INS_STATUS] TINYINT default 1 NOT NULL,
+	CONSTRAINT DASHLET_INSTANCE_PK PRIMARY KEY ([DAS_INS_UID])
+);

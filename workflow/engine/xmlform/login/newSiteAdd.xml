@@ -88,7 +88,7 @@
 	*/
 	
 
-	data.loader= data.submit.parentNode.appendChild(new DOM('img',{src:'/js/maborak/core/images/loader_B.gif'},{width:22,height:22,position:'relative',display:'block'}));
+	data.loader= data.submit.parentNode.appendChild(new DOM('img',{src:'/images/classic/loader_B.gif'},{width:22,height:22,position:'relative',display:'block'}));
 	data.loader.setStyle({visibility:'hidden'});
 
 	var ed = function(mod)

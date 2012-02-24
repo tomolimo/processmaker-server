@@ -20,6 +20,7 @@ var saveDataTaskTemporal = function(iForm)
         oTaskData.TAS_DESCRIPTION = getField('TAS_DESCRIPTION').value.replace(re, "@amp@");
         oTaskData.TAS_START       = (getField('TAS_START').checked ? 'TRUE' : 'FALSE');
         oTaskData.TAS_PRIORITY_VARIABLE = getField('TAS_PRIORITY_VARIABLE').value;
+        oTaskData.TAS_DERIVATION_SCREEN_TPL = getField('TAS_DERIVATION_SCREEN_TPL').value;
       break;
       case 2:
       case '2':

@@ -38,6 +38,14 @@
 </en>
 </PRO_SUMMARY_DYNAFORM>
 
+<PRO_DERIVATION_SCREEN_TPL type="dropdown" sqlconnection="dbarray">
+  SELECT FILE,NAME FROM _TEMPLATES1
+  <en>Derivation Screen Template
+	<option name="">- Default -</option>
+  </en>
+</PRO_DERIVATION_SCREEN_TPL>
+
+
 <PRO_DEBUG type="checkbox" value="1" falsevalue="0" defaultvalue="1" labelonright="0">
   <en>Debug</en>
 </PRO_DEBUG>

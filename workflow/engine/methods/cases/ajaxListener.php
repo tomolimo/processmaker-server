@@ -84,151 +84,45 @@ class Ajax
   
   function steps()
   {
-    require_once 'classes/model/Step.php';
-    require_once ( "classes/model/Content.php" );
-    require_once ( "classes/model/AppDocument.php" );
-    require_once ( "classes/model/InputDocumentPeer.php" );
-    require_once ( "classes/model/OutputDocument.php" );
-    require_once ( "classes/model/Dynaform.php" );
+    G::LoadClass('applications');
+    $applications = new Applications();
 
-    G::LoadClass('pmScript');
-    G::LoadClass('case');
+    $proUid = isset($_SESSION['PROCESS'])     ? $_SESSION['PROCESS']     : '';
+    $tasUid = isset($_SESSION['TASK'])        ? $_SESSION['TASK']        : '';
+    $appUid = isset($_SESSION['APPLICATION']) ? $_SESSION['APPLICATION'] : '';
+    $index  = isset($_SESSION['INDEX'])       ? $_SESSION['INDEX']       : '';
+    $steps  = $applications->getSteps($appUid, $index, $tasUid, $proUid);
+    $list   = array();
+    
+    foreach ($steps as $step) {
+      $item['id']         = $item['idtodraw'] = $step['id'];
+      $item['draggable']  = false;
+      $item['leaf']       = true;
+      $item['hrefTarget'] = 'casesSubFrame';
+      $item['text']       = $step['title'];
+      $item['url']        = '../' . $step['url'];
 
-    $PRO_UID = isset($_SESSION['PROCESS'])?$_SESSION['PROCESS']:'';
-    $TAS_UID = isset($_SESSION['TASK'])?$_SESSION['TASK']:'';
-    $APP_UID = isset($_SESSION['APPLICATION'])?$_SESSION['APPLICATION']:'';
-    $tree = Array();
-    $case = new Cases;
-    $step = new Step;
-    $appDocument = new AppDocument;
-
-    $caseSteps = $step->getAllCaseSteps($PRO_UID, $TAS_UID, $APP_UID);
-
-    //g::pr($caseSteps);
-    //getting externals steps
-    $oPluginRegistry = &PMPluginRegistry::getSingleton();
-    $externalSteps   = $oPluginRegistry->getSteps();
-    //getting the case record
-    if($APP_UID){
-     $caseData = $case->loadCase($APP_UID);
-     $pmScript = new PMScript();
-     $pmScript->setFields($caseData['APP_DATA']);
-    }
-
-    $externalStepCount = 0;
-
-    foreach ($caseSteps as $caseStep) {
-
-      if( trim($caseStep->getStepCondition()) != '' ) {
-        $pmScript->setScript($caseStep->getStepCondition());
-        if( ! $pmScript->evaluate() )
-          continue;
-      }
-      $stepUidObj   = $caseStep->getStepUidObj();
-      $stepTypeObj  = $caseStep->getStepTypeObj();
-      $stepPosition = $caseStep->getStepPosition();
-
-      $node = new stdClass;
-      $node->id         = $stepUidObj;
-      $node->draggable  = false;
-      $node->hrefTarget = 'casesSubFrame';
-
-      switch( $caseStep->getStepTypeObj() ) {
+      switch ($step['type']) {
         case 'DYNAFORM':
-          $oDocument = DynaformPeer::retrieveByPK($caseStep->getStepUidObj());
-
-          $node->text    = $oDocument->getDynTitle();
-          $node->iconCls = 'ss_sprite ss_application_form';
-          $node->leaf    = true;
-          $node->url     = "cases_Step?UID=$stepUidObj&TYPE=$stepTypeObj&POSITION=$stepPosition&ACTION=EDIT";
-          $node->idtodraw= $stepUidObj;
+          $item['iconCls'] = 'ss_sprite ss_application_form';
           break;
-
-        case 'OUTPUT_DOCUMENT':      
-          $oDocument = OutputDocumentPeer::retrieveByPK($caseStep->getStepUidObj());
-          $outputDoc = $appDocument->getObject($_SESSION['APPLICATION'], $_SESSION['INDEX'], $caseStep->getStepUidObj(), 'OUTPUT');
-
-          $node->text    = $oDocument->getOutDocTitle();
-          $node->iconCls = 'ss_sprite ss_application_put';
-          $node->leaf    = true;
-          if($outputDoc['APP_DOC_UID'])
-            $node->url    = "cases_Step?UID=$stepUidObj&TYPE=$stepTypeObj&POSITION=$stepPosition&ACTION=VIEW&DOC={$outputDoc['APP_DOC_UID']}"; 
-          else
-            $node->url    = "cases_Step?UID=$stepUidObj&TYPE=$stepTypeObj&POSITION=$stepPosition&ACTION=GENERATE";         
-          
+        case 'OUTPUT_DOCUMENT':
+          $item['iconCls'] = 'ss_sprite ss_application_put';
           break;
-
         case 'INPUT_DOCUMENT':
-          $oDocument = InputDocumentPeer::retrieveByPK($caseStep->getStepUidObj());
-          //$sType     = $oDocument->getInpDocFormNeeded();
-          $node->text    = $oDocument->getInpDocTitle();
-          $node->iconCls = 'ss_sprite ss_application_get';
-          $node->leaf    = true;
-          $node->url    = "cases_Step?UID=$stepUidObj&TYPE=$stepTypeObj&POSITION=$stepPosition&ACTION=ATTACH";
+          $item['iconCls'] = 'ss_sprite ss_application_get';
           break;
-
         case 'EXTERNAL':
-          $stepTitle          = 'unknown ' . $caseStep->getStepUidObj();
-          $oPluginRegistry = PMPluginRegistry::getSingleton();
-
-          foreach ( $externalSteps as $externalStep ) {
-            if ( $externalStep->sStepId == $caseStep->getStepUidObj() ) {
-              $stepTitle = $externalStep->sStepTitle; //default title
-              $sNamespace = $externalStep->sNamespace;
-              $oPlugin =& $oPluginRegistry->getPlugin($sNamespace);
-              $classFile = PATH_PLUGINS . $oPlugin->sNamespace . PATH_SEP . 'class.' . $oPlugin->sNamespace .'.php';
-              if ( file_exists ( $classFile ) ) {
-                require_once ( $classFile );
-                $sClassName = $sNamespace . 'class';
-                $obj = new $sClassName( );
-                if (method_exists($obj, 'getExternalStepTitle')) {
-                  $stepTitle = $obj->getExternalStepTitle( $caseStep->getStepUidObj(), $TAS_UID, $caseStep->getStepPosition());
-                }
-                if (method_exists($obj, 'getExternalStepAction')) {
-                  $externalStepActions = $obj->getExternalStepAction( $caseStep->getStepUidObj(), 
-$caseStep->getStepPosition());
-                }
-              }
-              break;
-            }
-          }
-		  $node->id      = md5($stepTitle.rand());
-          $node->text    = $stepTitle;
-          $node->leaf    = false;
-          $node->url    = "";
-          $node->children = Array();
-
-          if( isset($externalStepActions) ) {
-            foreach ( $externalStepActions as $action => $label ) {
-              $childNode = new stdClass;
-              $childNode->id      = md5($externalStepCount++);
-              $childNode->text    = $label;
-              $childNode->iconCls = 'ICON_EXTERNAL_STEP';
-              $childNode->leaf    = true; 
-              $childNode->url     = "../cases/cases_Step?TYPE=$stepTypeObj&UID=$stepUidObj&POSITION=$stepPosition&ACTION=$action";
-
-              $node->children[] = $childNode;
-            }
-          }
-        break;
+          $item['iconCls'] = 'ss_sprite ss_application_view_detail';
+          break;
+        default:
+          $item['iconCls'] = 'ICON_ASSIGN_TASK';
       }
 
-      $tree[] = $node;
-
+      $list[] = $item;
     }
 
-    //assign task
-    $node = new stdClass;
-    $node->id         = 'ID_ASSIGN_TASK';
-    $node->draggable  = false;
-    $node->hrefTarget = 'casesSubFrame';
-    $node->text    = G::LoadTranslation('ID_ASSIGN_TASK');
-    $node->iconCls = 'ICON_ASSIGN_TASK';
-    $node->leaf    = true;
-    $node->url    = "../cases/cases_Step?TYPE=ASSIGN_TASK&UID=-1&POSITION=10000&ACTION=ASSIGN";
-    $tree[] = $node;
-
-    echo G::json_encode($tree);
+    echo G::json_encode($list);
   }
 
   function getInformationOptions()

@@ -600,4 +600,10 @@ class PMPlugin {
   function registerDashboard() {
     // Dummy function for backwards compatibility
   }
+
+  function getExternalStepAction() {
+    $oPluginRegistry =& PMPluginRegistry::getSingleton();
+    g::pr($oPluginRegistry->getSteps());
+    return $oPluginRegistry->getSteps();
+  }
 }

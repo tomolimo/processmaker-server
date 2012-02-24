@@ -20,8 +20,9 @@
   try {
     //
     G::LoadClass('applications');
-    $apps = new Applications();
-    $data = $apps->getAll($start, $limit, $action, $filter, $search, $process, $user, $status, $type, $dateFrom, $dateTo, $callback, $dir, $sort);
+    $apps    = new Applications();
+    $userUid = ( isset($_SESSION['USER_LOGGED'] ) && $_SESSION['USER_LOGGED'] != '' ) ? $_SESSION['USER_LOGGED'] : null;
+    $data    = $apps->getAll($userUid, $start, $limit, $action, $filter, $search, $process, $user, $status, $type, $dateFrom, $dateTo, $callback, $dir, $sort);
 
     echo G::json_encode($data);
   }
