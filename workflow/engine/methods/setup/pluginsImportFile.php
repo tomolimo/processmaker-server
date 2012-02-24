@@ -80,7 +80,13 @@ try {
       unset($oClass);
     }
     $res = $tar->extract ( $path );
+    
+    
     $sContent = file_get_contents($path . $pluginFile);
+    $chain = preg_quote('extends enterprisePlugin');
+    if(strpos($sContent,$chain)){
+      throw ( new Exception ('The plugin '.$filename.' is a Enterprise Edition Plugin, please install the Enterprise Plugins Manager to use this plugin.'));
+    }
     $sContent = str_ireplace($sAux, $sAux . '_', $sContent);
     $sContent = str_ireplace('PATH_PLUGINS', "'".$path."'", $sContent);
     $sContent = preg_replace("/\\\$oPluginRegistry\s*=\s*&\s*PMPluginRegistry::getSingleton\(\);/i", null, $sContent);
@@ -88,6 +94,7 @@ try {
     
     //header('Content-Type: text/plain');var_dump($sClassName, $sContent);die;
     file_put_contents($path . $pluginFile, $sContent);
+
     $sAux = $sAux . '_';
 
     include ($path . $pluginFile);
