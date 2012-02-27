@@ -1,6 +1,5 @@
 {foreach from=$cases key=id item=APP}
 <li class="postitem">
-  <!-- <span class="messages-link"></span> -->
   <span class="commentnumber">
     #{$APP.APP_NUMBER}
   </span>
@@ -18,7 +17,12 @@
       <a href="../cases/cases_Open?APP_UID={$APP.APP_UID}&DEL_INDEX={$APP.DEL_INDEX}&action=todo">{$APP.APP_TITLE}</a>
     </cite>
   </p>
-  <p class="time">From {$APP.APP_DEL_PREVIOUS_USER}, send at {$APP.DEL_DELEGATE_DATE}<!-- February 8th, 2009 at 5:38 am --></p>
+  <p class="time">
+    {if $APP.APP_DEL_PREVIOUS_USER != ''}
+    From {$APP.APP_DEL_PREVIOUS_USER}, send at
+    {/if}
+    {$APP.DEL_DELEGATE_DATE}
+  </p>
   <p>{$APP.APP_PRO_TITLE}
   <br/>{$APP.APP_TAS_TITLE}</p>
   

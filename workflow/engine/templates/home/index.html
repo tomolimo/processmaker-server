@@ -58,6 +58,20 @@
       }
     });
   }
+
+  /*function setActive(o) 
+  {
+    if (o.id == 'inboxOp') {
+      o.setAttribute('class', 'active');
+    }
+    else {
+      o.setAttribute('class', ''); 
+    }
+  }*/
+
+  //$("div.topbar ul li a").
+
+ 
   </script>
   {/literal}
 
@@ -73,28 +87,28 @@
 
           <ul class="nav primary-nav">
             <li class="account">
-              <a class="menu user-actions" href="#" onclick="redirect('home/appList?t=todo')" title="My Inbox">
-                <img alt="A99679add21e8b0704ea5f0fb569572c_mini" src="/images/simplified/in-set-grey.png"  />
+              <a class="menu user-actions active" href="#" onclick="redirect('home/appList?t=todo');" title="My Inbox">
+                <img alt="" src="/images/simplified/in-set-grey.png" id="inboxOp" />
                 <!-- <span class="menu-label screen-name">new cases</span> -->
               </a>
             </li>
 
             {if $canStartCase neq false}
             <li class="account">
-              <a class="menu user-actions" href="#" onclick="redirect('home/appList?t=draft')" title="My Drafts">
-                <img alt="A99679add21e8b0704ea5f0fb569572c_mini" src="/images/simplified/folder-grey.png"  />
+              <a class="menu user-actions" href="#" onclick="redirect('home/appList?t=draft');" title="My Drafts">
+                <img alt="" src="/images/simplified/folder-grey.png"  />
               </a>
             </li>
             
             <li class="account">
-              <a class="menu user-actions" href="#">
-                <img alt="A99679add21e8b0704ea5f0fb569572c_mini" src="/images/simplified/plus-set-grey.png"  title="New Case"/>
+              <a class="menu user-actions" href="#" title="New Case" id="_new">
+                <img alt="" src="/images/simplified/plus-set-grey.png"/>
               </a>
 
               <ul class="menu-dropdown" style="width: 360px">
                 {foreach from=$processList key=id item=proc}
                 <li>
-                  <a href="#" onclick="appStart('{$proc.uid}', '{$proc.value}')" accesskey="s" id="settings_link">{$proc.value}</a>
+                  <a href="#" onclick="appStart('{$proc.uid}', '{$proc.value}')" accesskey="s" title="" id="settings_link">{$proc.value}</a>
                 </li>
                 {/foreach}
               </ul>
@@ -168,6 +182,13 @@
         });
 
       })
+
+     
+      $('ul.primary-nav').children('li').children('a').click(function(i, el){
+        $('ul.primary-nav').children('li').children('a').attr('class', 'menu user-actions');
+        $(this).attr('class', 'menu user-actions active');
+      });
+
     });
   </script>
   {/literal}

@@ -715,13 +715,15 @@ form.formDefault .FormTitle,form.formDefault .FormSubTitle{
 }
 form.formDefault .FormTitle
 {
-	-moz-border-bottom-colors: none;
+  -moz-border-bottom-colors: none;
   -moz-border-image: none;
   -moz-border-left-colors: none;
   -moz-border-right-colors: none;
   -moz-border-top-colors: none;
+  background: linear-gradient(#829AA8, #405A6A) repeat scroll 0 0 transparent;
   background: -moz-linear-gradient(#829AA8, #405A6A) repeat scroll 0 0 transparent;
-  background: -webkit-linear-gradient(#829AA8,#405A6A);
+  /*background: -webkit-linear-gradient(#829AA8,#405A6A);*/
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#829aa8), to(#405a6a)); /* Webkit */
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#829aa8',endColorstr='#405a6a');
   border-color: #677C89 #677C89 #6B808D;
   border-radius: 5px 5px 0 0;
@@ -737,7 +739,8 @@ form.formDefault .FormTitle
 form.formDefault .FormSubTitle
 {
   background: -moz-linear-gradient(#FAFAFA, #E0E0E0) repeat scroll 0 0 transparent;
-  background: -webkit-linear-gradient(#FAFAFA,#E0E0E0);
+  /*background: -webkit-linear-gradient(#FAFAFA,#E0E0E0);*/
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#FAFAFA), to(#E0E0E0)); /* Webkit */
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FAFAFA',endColorstr='#E0E0E0');
   border-top-left-radius: 1px;
   border-top-right-radius: 1px;

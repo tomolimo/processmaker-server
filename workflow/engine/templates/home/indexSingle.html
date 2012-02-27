@@ -92,8 +92,9 @@
 
   {literal}
   <script type="text/javascript">
+    console.log($(window).width());
     $(document).ready(function() {
-      $('#breadcrumbs-1').xBreadcrumbs({ collapsible: true });
+      $('#breadcrumbs-1').xBreadcrumbs({ collapsible: ($(window).width() < 500 ?  true : false)});
     });
   </script>
   {/literal}
