@@ -114,7 +114,7 @@
   	    }
   	  }
   		$dependentFields=array_merge($dependentFields, $myDependentFields);
-  		//$_SESSION[$G_FORM->id][$k] = $v;
+  		$_SESSION[$G_FORM->id][$k] = $v;
   	}
   }
   if (isset($_POST['grid'])) $G_FORM->values=isset($_SESSION[$G_FORM->id]) ? $_SESSION[$G_FORM->id] : array();
