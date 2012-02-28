@@ -46,7 +46,8 @@ echo '<?xml version="1.0" encoding="UTF-8" ?>';
    <script type='text/javascript' src='/sys/en/green/install/install.js'></script>
    <script type='text/javascript'>
    var ifr;
-   var grid,winGrill, leimnud = new maborak();
+   var forceCssLoad = true;
+   var grid,winGrill, leimnud = new maborak(forceCssLoad);
    var inWIN = false;
    leimnud.make();
    leimnud.Package.Load("dom,validator,app,rpc,fx,drag,drop,panel,grid,abbr",{Instance:leimnud,Type:"module"});

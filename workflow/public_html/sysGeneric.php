@@ -518,7 +518,7 @@
     }
     else {
       // this is the blank list to allow execute scripts with no login (without session started)
-      $noLoginFiles   = array();
+      $noLoginFiles   = $noLoginFolders = array();
       $noLoginFiles[] = 'login'; 
       $noLoginFiles[] = 'authentication';
       $noLoginFiles[] = 'login_Ajax'; 
@@ -532,14 +532,15 @@
       $noLoginFiles[] = 'showLogoFile'; 
       $noLoginFiles[] = 'forgotPassword';
       $noLoginFiles[] = 'retrivePassword';
-      $noLoginFiles[] = 'services';
-      $noLoginFiles[] = 'tracker';
       $noLoginFiles[] = 'defaultAjaxDynaform';
       $noLoginFiles[] = 'dynaforms_checkDependentFields';
       $noLoginFiles[] = 'cases_ShowDocument';
 
+      $noLoginFolders[] = 'services';
+      $noLoginFolders[] = 'tracker';
+
       //This sentence is used when you lost the Session
-      if ( !in_array(SYS_TARGET, $noLoginFiles) &&  $bWE != true && $collectionPlugin != 'services') {
+      if ( !in_array(SYS_TARGET, $noLoginFiles) &&  !in_array(SYS_COLLECTION, $noLoginFolders) && $bWE != true && $collectionPlugin != 'services') {
         $bRedirect = true;
         
         if (isset($_GET['sid'])) {

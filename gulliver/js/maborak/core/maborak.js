@@ -14,12 +14,14 @@
 *   (at your option) any later version.
 *
 ***************************************************************************/
-var maborak = function(){
+var maborak = function(forceCssLoad){
 	this.info={
 		version	:"0.3",
 		name	:"maborak",
 		file	:"maborak.js"
 	},
+
+	this.forceCssLoad = forceCssLoad ? true : false;
 	/**
 	* Make this Class
 	* @param options = Object{Options.for.class} || {};
@@ -68,14 +70,15 @@ var maborak = function(){
 		this.exec(this.fix.memoryLeak);
 
 		/* create Stylesheet BEGIN  */
-		/* erik: DEPRECATED! css should be separated accordind MVC pattern, all those css are moved on style.css to current skin*/
-		/*
-		var st	=$dce('link');
-		st.rel	='stylesheet';
-		st.type	='text/css';
-		st.href	=this.info.base+'stylesheet/default.css';
-		this.dom.capture("tag.head 0").appendChild(st);
-		*/
+		//erik: Now the core css is available just by demand
+		if (this.forceCssLoad === true) {
+			console.log('cargo css');
+			var st	=$dce('link');
+			st.rel	='stylesheet';
+			st.type	='text/css';
+			st.href	=this.info.base+'stylesheet/default.css';
+			this.dom.capture("tag.head 0").appendChild(st);
+		}
 		/* create Stylesheet END  */
 		this.expand(this);
 		return this;
