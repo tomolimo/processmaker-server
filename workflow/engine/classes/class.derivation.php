@@ -613,7 +613,7 @@ class Derivation
 
           if ( $canDerivate ) {
             $aSP = isset($aSP) ? $aSP : null;
-            $this->doDerivation($currentDelegation, $nextDel, $appFields, $aSP);
+            $iNewDelIndex = $this->doDerivation($currentDelegation, $nextDel, $appFields, $aSP);
           }
           else {  //when the task doesnt generate a new AppDelegation
             $iAppThreadIndex = $appFields['DEL_THREAD'];
@@ -817,6 +817,7 @@ class Derivation
           }
         }
     } //end switch
+    return $iNewDelIndex;
   }
 
   /* verifyIsCaseChild
