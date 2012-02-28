@@ -4456,11 +4456,8 @@ function get_mobile_data( $pv_browser_user_agent )
    
     // finally get the correct version number
     $known = array('Version', $ub, 'other');
-    $pattern = '#(?<browser>' . join('|', $known) .
-    ')[/ ]+(?<version>[0-9.|a-zA-Z.]*)#';
-    if (!preg_match_all($pattern, $u_agent, $matches)) {
-        // we have no matching number just continue
-    }
+    $pattern = '#(?P<browser>' . join('|', $known) . ')[/ ]+(?P<version>[0-9.|a-zA-Z.]*)#';
+    @preg_match_all($pattern, $u_agent, $matches);
    
     // see how many we have
     $i = count($matches['browser']);
