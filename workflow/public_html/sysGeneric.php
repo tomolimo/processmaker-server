@@ -18,8 +18,9 @@
       $vVar = stripslashes($vVar);
     }
   }
-
-  if (ini_get('magic_quotes_gpc') == '1') {
+  // The magic_quotes_gpc feature has been DEPRECATED as of PHP 5.3.0.
+  // if (ini_get('magic_quotes_gpc') == '1') {
+  if (get_magic_quotes_gpc() === 1) {
     strip_slashes($_POST);
   }
 
@@ -391,7 +392,8 @@
 
 //***************** Session Initializations **************************/
   ini_set( 'session.auto_start', '1' );
-  ini_set( 'register_globals',   'Off' );
+  // The register_globals feature has been DEPRECATED as of PHP 5.3.0. default value Off.
+  // ini_set( 'register_globals', 'Off' );
   session_start();
   ob_start();
 

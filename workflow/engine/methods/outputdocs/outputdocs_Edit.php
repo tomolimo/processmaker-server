@@ -83,7 +83,9 @@ try {
       if ( $type == 'JRXML') $extension = 'jrxml';
       if ( $type == 'ACROFORM') $extension = 'pdf';
 
-      $downFileName = ereg_replace('[^A-Za-z0-9_]', '_', $aFields['OUT_DOC_TITLE'] ) . '.' . $extension;
+      // The ereg_replace function has been DEPRECATED as of PHP 5.3.0.
+      // $downFileName = ereg_replace('[^A-Za-z0-9_]', '_', $aFields['OUT_DOC_TITLE'] ) . '.' . $extension;
+      $downFileName = preg_replace('/[^A-Za-z0-9_]/i', '_', $aFields['OUT_DOC_TITLE'] ) . '.' . $extension;
       $filename = PATH_DYNAFORM . $aFields['PRO_UID'] . PATH_SEP . $aFields['OUT_DOC_UID'] . '.' . $extension ;
       if ( file_exists ( $filename) )
         $aFields['FILENAME'] = $downFileName;

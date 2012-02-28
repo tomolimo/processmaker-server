@@ -20,11 +20,13 @@ class Service_Comments
 		}
 		return $r;
 	}
-	public function post()
-	{
-		$q="INSERT INTO comments (`UID`, `NOMBRE`, `COMENTARIO`) VALUES (NULL, '".mysql_escape_string($this->options->data->name)."', '".mysql_escape_string($this->options->data->comment)."')";
-		$w = mysql_query($q,$this->db) or die(mysql_error());
-	}
+  public function post()
+  {
+    // The mysql_escape_string function has been DEPRECATED as of PHP 5.3.0.
+    // $q="INSERT INTO comments (`UID`, `NOMBRE`, `COMENTARIO`) VALUES (NULL, '".mysql_escape_string($this->options->data->name)."', '".mysql_escape_string($this->options->data->comment)."')";
+    $q = "INSERT INTO comments (`UID`, `NOMBRE`, `COMENTARIO`) VALUES (NULL, '" . mysql_real_escape_string($this->options->data->name) . "', '". mysql_real_escape_string($this->options->data->comment). "')";    
+    $w = mysql_query($q,$this->db) or die(mysql_error());
+  }
 	function __call($n,$a)
 	{
 		return isset($this->n)?$this->$n($a):"Invalid action";

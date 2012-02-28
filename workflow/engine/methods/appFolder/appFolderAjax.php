@@ -1320,15 +1320,31 @@ function get_max_upload_limit() {
 }
 
 function calc_php_setting_bytes( $value ) {
-    if(@eregi("G$",$value)) {
-        $value = substr($value,0,-1);
-        $value = round($value*1073741824);
-    } elseif(@eregi("M$",$value)) {
-        $value = substr($value,0,-1);
-        $value = round($value*1048576);
-    } elseif(@eregi("K$",$value)) {
-        $value = substr($value,0,-1);
-        $value = round($value*1024);
+//    if(@eregi("G$",$value)) {
+//        $value = substr($value,0,-1);
+//        $value = round($value*1073741824);
+//    } elseif(@eregi("M$",$value)) {
+//        $value = substr($value,0,-1);
+//        $value = round($value*1048576);
+//    } elseif(@eregi("K$",$value)) {
+//        $value = substr($value,0,-1);
+//        $value = round($value*1024);
+//    }
+    if ( @preg_match("/G$/i", $value) ) {
+      $value = substr($value, 0, -1);
+      $value = round($value * 1073741824);
+    }
+    else {
+      if ( @preg_match("/M$/i", $value) ) {
+        $value = substr($value, 0, -1);
+        $value = round($value * 1048576);
+      }
+      else {
+        if ( @preg_match("/K$/i", $value) ) {
+          $value = substr($value, 0, -1);
+          $value = round($value * 1024);
+        }
+      }
     }
 
     return $value;

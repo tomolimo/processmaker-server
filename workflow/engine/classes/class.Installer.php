@@ -274,12 +274,21 @@ class Installer
   public function set_admin()
   {
     mysql_select_db($this->wf_site_name,$this->connection_database);
-    $this->run_query('UPDATE USERS SET USR_USERNAME = \''.mysql_escape_string($this->options['admin']['username']).'\', `USR_PASSWORD` = \''.md5($this->options['admin']['password']).'\' WHERE `USR_UID` = \'00000000000000000000000000000001\' LIMIT 1',
-      "Add 'admin' user in ProcessMaker (wf)");
-
+    //  The mysql_escape_string function has been DEPRECATED as of PHP 5.3.0.
+    //  $this->run_query('UPDATE USERS SET USR_USERNAME = \''.mysql_escape_string($this->options['admin']['username']).'\', `USR_PASSWORD` = \''.md5($this->options['admin']['password']).'\' WHERE `USR_UID` = \'00000000000000000000000000000001\' LIMIT 1',
+    //    "Add 'admin' user in ProcessMaker (wf)");
+    $this->run_query('UPDATE USERS SET USR_USERNAME = \'' . mysql_real_escape_string($this->options['admin']['username']) . '\', ' .
+                     '  `USR_PASSWORD` = \'' . md5($this->options['admin']['password']) . '\' ' .
+                     '  WHERE `USR_UID` = \'00000000000000000000000000000001\' LIMIT 1',
+                     "Add 'admin' user in ProcessMaker (wf)");
     mysql_select_db($this->rbac_site_name,$this->connection_database);
-    $this->run_query('UPDATE USERS SET USR_USERNAME = \''.mysql_escape_string($this->options['admin']['username']).'\', `USR_PASSWORD` = \''.md5($this->options['admin']['password']).'\' WHERE `USR_UID` = \'00000000000000000000000000000001\' LIMIT 1',
-      "Add 'admin' user in ProcessMaker (rb)");
+    // The mysql_escape_string function has been DEPRECATED as of PHP 5.3.0.
+    // $this->run_query('UPDATE USERS SET USR_USERNAME = \''.mysql_escape_string($this->options['admin']['username']).'\', `USR_PASSWORD` = \''.md5($this->options['admin']['password']).'\' WHERE `USR_UID` = \'00000000000000000000000000000001\' LIMIT 1',
+    //   "Add 'admin' user in ProcessMaker (rb)");
+    $this->run_query('UPDATE USERS SET USR_USERNAME = \'' . mysql_real_escape_string($this->options['admin']['username']) . '\', ' .
+                     '  `USR_PASSWORD` = \'' . md5($this->options['admin']['password']) . '\' ' .
+                     '  WHERE `USR_UID` = \'00000000000000000000000000000001\' LIMIT 1',
+                     "Add 'admin' user in ProcessMaker (rb)");
   }
 
   /**

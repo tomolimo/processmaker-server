@@ -257,7 +257,9 @@ class DataBaseMaintenance
     }
     
     $sql = "SELECT * INTO OUTFILE '{$this->outfile}' FIELDS TERMINATED BY '\t|\t' OPTIONALLY ENCLOSED BY '\"' LINES TERMINATED BY '\t\t\r\r\n' FROM $table";
-    mysql_escape_string("';");
+    // The mysql_escape_string function has been DEPRECATED as of PHP 5.3.0.
+    // Commented that is not assigned to a variable.
+    // mysql_escape_string("';");
     if( ! @mysql_query($sql) ) {
       echo mysql_error() . "\n";
       return false;

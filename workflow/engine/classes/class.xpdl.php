@@ -2596,7 +2596,9 @@ class Xpdl extends processes
   function calculateTimeScheduler($time)
   {
     $result = array();
-    $result = split(' ',$time);
+    // The split function has been DEPRECATED as of PHP 5.3.0.
+    // $result = split(' ',$time);
+    $result = explode(' ', $time);
     //print_r($result);
     return $result;
   }
@@ -3919,8 +3921,11 @@ class Xpdl extends processes
     $file             = new DOMDocument();
     foreach($array as $key => $value){
       $link = $value->W_LINK;
-      $link = split('>',$link);
-      $link = split('<',$link[2]);
+      // This split function has been DEPRECATED as of PHP 5.3.0.
+      // $link = split('>',$link);
+      // $link = split('<',$link[2]);
+      $link = explode('>',$link);
+      $link = explode('<',$link[2]);
       $link = $link['0'];
       $uid  = $value->W_PRO_UID;
       $name  = $value->W_FILENAME;

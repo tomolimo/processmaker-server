@@ -57,7 +57,8 @@
 
   ini_set('short_open_tag', 'on');
   ini_set('asp_tags', 'on');
-  ini_set('register_globals', 'off');
+  // The register_globals feature has been DEPRECATED as of PHP 5.3.0. default value Off.
+  // ini_set('register_globals', 'off');
   ini_set('default_charset', "UTF-8");
   $e_all = defined('E_DEPRECATED') ? E_ALL ^ E_DEPRECATED : E_ALL;
   ini_set('error_reporting', ($config['debug'] ? $e_all : $e_all ^ E_NOTICE) );

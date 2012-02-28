@@ -84,7 +84,9 @@
 		$t->isnt( PATH_GULLIVER,      'PATH_GULLIVER',   'Constant PATH_GULLIVER');
 		$phatSitio     = "/home/arturo/processmaker/trunk/workflow/engine/class.x.php/";
 		$phatBuscar = "/processmaker/trunk/workflow/engine/class.x.php/";
-		$t->is(( ereg( $phatBuscar , $phatSitio ) ), 1 ,   'expandPath()');
+    // The ereg function has been DEPRECATED as of PHP 5.3.0.
+    // $t->is(( ereg( $phatBuscar , $phatSitio ) ), 1 ,   'expandPath()');
+    $t->is(( preg_match( '/' . $phatBuscar . '/', $phatSitio ) ), 1 ,   'expandPath()');
 		$t->is( G::LoadSystem("error"),      NULL,   'LoadSystem()');
 		$t->can_ok( $obj,      'RenderPage',   'RenderPage()');
 		$t->can_ok( $obj,      'LoadSkin',   'LoadSkin()');

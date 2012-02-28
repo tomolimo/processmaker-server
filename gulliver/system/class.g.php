@@ -264,7 +264,9 @@ class G
    * @return string $errorBox or $buffer
    */
   /*public static*/ function fatalErrorHandler($buffer) {
-    if (ereg("(error</b>:)(.+)(<br)", $buffer, $regs) ) {
+    // The ereg function has been DEPRECATED as of PHP 5.3.0.
+    // if (ereg("(error</b>:)(.+)(<br)", $buffer, $regs) ) {
+    if (preg_match("/(error</b>:)(.+)(<br)/", $buffer, $regs) ) {
       $err = preg_replace("/<.*?>/","",$regs[2]);
       G::customErrorLog('FATAL', $err,  '', 0, '');
       $ip_addr  = G::getIpAddress();

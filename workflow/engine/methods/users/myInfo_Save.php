@@ -41,9 +41,11 @@ try {ini_set('display_errors','1');
   	$_POST['form']['USR_RESUME'] = $_FILES['form']['name']['USR_RESUME'];
   }
   if ($_POST['form']['USR_EMAIL'] != '') {
-		if (!ereg("^[_a-zA-Z0-9-]+(\.[_a-zA-Z0-9-]+)*@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*$", $_POST['form']['USR_EMAIL'])) {
-			G::SendTemporalMessage ('ID_INCORRECT_EMAIL', 'error');
-		}
+    // The ereg function has been DEPRECATED as of PHP 5.3.0.
+    // if (!ereg("^[_a-zA-Z0-9-]+(\.[_a-zA-Z0-9-]+)*@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*$", $_POST['form']['USR_EMAIL'])) {
+    if ( !preg_match("/^[_a-zA-Z0-9-]+(\.[_a-zA-Z0-9-]+)*@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*$/", $_POST['form']['USR_EMAIL'])) {
+      G::SendTemporalMessage ('ID_INCORRECT_EMAIL', 'error');
+    }
 	}
 	if (!isset($_POST['form']['USR_NEW_PASS'])) {
 		$_POST['form']['USR_NEW_PASS'] = '';

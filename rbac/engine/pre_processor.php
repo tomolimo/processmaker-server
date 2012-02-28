@@ -163,7 +163,8 @@ else{  //cuando no esta definido
 
 //***************** Session Initializations **************************/
     ini_alter( 'session.auto_start', '1' );
-    ini_alter( 'register_globals',   'Off' );
+    // This feature has been DEPRECATED as of PHP 5.3.0. default value Off
+    // ini_alter( 'register_globals', 'Off' );
     session_start();
     ob_start();
 
