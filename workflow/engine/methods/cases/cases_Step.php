@@ -316,7 +316,7 @@
     break;
 
     case 'OUTPUT_DOCUMENT':
-      $G_PUBLISH->AddContent('smarty', 'cases/cases_title', '', '', $array);
+      //$G_PUBLISH->AddContent('smarty', 'cases/cases_title', '', '', $array);
 
       require_once 'classes/model/OutputDocument.php';
       $oOutputDocument = new OutputDocument();
