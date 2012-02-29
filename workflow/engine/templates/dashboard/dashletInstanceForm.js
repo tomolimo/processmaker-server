@@ -83,6 +83,13 @@ Ext.onReady(function() {
                          additionaFields = response.additionaFields;
                          dashletInstanceFrm.remove('additional');
                          if (additionaFields.length > 0) {
+                           for (var i = 0; i < additionaFields.length; i++) {
+                             for (var listener in additionaFields[i].listeners) {
+                               try {
+                                 eval('additionaFields[i].listeners.' + listener + ' = eval(additionaFields[i].listeners.' + listener + ');');
+                               } catch (e) {}
+                             }
+                           }
                            dashletInstanceFrm.add(new Ext.form.FieldSet({
                              id:    'additional',
                              title: 'Other',
