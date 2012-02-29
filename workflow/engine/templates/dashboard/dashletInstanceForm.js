@@ -9,7 +9,6 @@ var formFields;
 var additionalFields;
 var dashletInstanceFrm;
 
-
 // On ready
 Ext.onReady(function() {
   // Stores
@@ -97,6 +96,16 @@ Ext.onReady(function() {
                            }));
                          }
                          dashletInstanceFrm.doLayout(false, true);
+                         // Execute after render scripts
+                         if (additionaFields.length > 0) {
+                           for (var i = 0; i < additionaFields.length; i++) {
+                             if (typeof(additionaFields[i]._afterRender) != 'undefined') {
+                               try {
+                                 eval(additionaFields[i]._afterRender);
+                               } catch (e) {}
+                             }
+                           }
+                         }
                       },
              failure: function (result, request) {
                         myMask.hide();
