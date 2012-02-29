@@ -106,7 +106,6 @@
 {elseif ($node->nodeType==='blank')}
 {* This is the default "html" for node with nodeType="child" *}
 <div class="treeBlank">
-	<br>
 <table id="treeNode[{$node->name}]" cellspacing="0" cellpadding="0" border="0" style="width:{$node->width};border-collapse:collapse;">
   <tr {if $node->value==''}style="display:none"{/if}>
   	<td class="a" name="treeNode[plus][{$node->name}]" width="1px">

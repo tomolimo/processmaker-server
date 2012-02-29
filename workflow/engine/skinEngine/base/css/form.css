@@ -331,7 +331,7 @@ INPUT {
     background-color: #F9F9F9;
     background-color: #FFF;
     overflow: auto;
-    padding:0px;
+    padding-top:15px;
 }
 .panel_statusBar___processmaker{
     position:relative;
@@ -339,6 +339,7 @@ INPUT {
     font:normal 8pt Tahoma,MiscFixed;
     padding:0px;
     margin:0px;
+    top:-32px;
     /*background-color:white;*/
     background-color:transparent;
     min-height:25px;
