@@ -81,7 +81,7 @@ $aFields['FILE2'] = 'cases_ShowOutputDocument?a=' . $aFields['APP_DOC_UID'] . '&
 $G_PUBLISH = new Publisher;
 $G_PUBLISH->AddContent('xmlform', 'xmlform', 'cases/cases_ViewOutputDocumentToRevise', '', G::array_merges($aOD, $aFields), '');
 //
-G::RenderPage('publish');
+G::RenderPage('publish', 'blank');
 
 if(!isset($_GET['ex'])) $_GET['ex']=0;
 
