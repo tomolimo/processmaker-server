@@ -114,7 +114,7 @@ class Dashboard extends Controller {
       if ($data->DAS_INS_UID != '') {
         $this->pmDashlet->setup($data->DAS_INS_UID);
         $this->setJSVar('dashletInstance', $this->pmDashlet->getDashletInstance());
-        $this->setJSVar('additionaFields', PMDashlet::getAdditionalFields(get_class($this->pmDashlet->getDashletObject())));
+        $this->setJSVar('additionalFields', PMDashlet::getAdditionalFields(get_class($this->pmDashlet->getDashletObject())));
       }
       else {
         $dashletInstance = new stdclass();
@@ -122,7 +122,7 @@ class Dashboard extends Controller {
         $dashlet = new Dashlet();
         $dashletFields = $dashlet->load($dashletInstance->DAS_UID);
         $this->setJSVar('dashletInstance', $dashletInstance);
-        $this->setJSVar('additionaFields', PMDashlet::getAdditionalFields($dashletFields['DAS_CLASS']));
+        $this->setJSVar('additionalFields', PMDashlet::getAdditionalFields($dashletFields['DAS_CLASS']));
       }
       G::RenderPage('publish', 'extJs');
       return null;
@@ -175,7 +175,7 @@ class Dashboard extends Controller {
       $dashlet = new Dashlet();
       $dashletFields = $dashlet->load($data->DAS_UID);
       if (!is_null($dashletFields)) {
-        $result->additionaFields = PMDashlet::getAdditionalFields($dashletFields['DAS_CLASS']);
+        $result->additionalFields = PMDashlet::getAdditionalFields($dashletFields['DAS_CLASS']);
       }
       else {
         throw new Exception('Dashlet "' . $data->DAS_UID . '" not exists.');

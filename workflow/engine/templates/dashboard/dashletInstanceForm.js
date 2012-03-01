@@ -79,29 +79,29 @@ Ext.onReady(function() {
              params:   {DAS_UID: this.getValue()},
              success:  function (result, request) {
                          var response = Ext.util.JSON.decode(result.responseText)
-                         additionaFields = response.additionaFields;
+                         additionalFields = response.additionalFields;
                          dashletInstanceFrm.remove('additional');
-                         if (additionaFields.length > 0) {
-                           for (var i = 0; i < additionaFields.length; i++) {
-                             for (var listener in additionaFields[i].listeners) {
+                         if (additionalFields.length > 0) {
+                           for (var i = 0; i < additionalFields.length; i++) {
+                             for (var listener in additionalFields[i].listeners) {
                                try {
-                                 eval('additionaFields[i].listeners.' + listener + ' = eval(additionaFields[i].listeners.' + listener + ');');
+                                 eval('additionalFields[i].listeners.' + listener + ' = eval(additionalFields[i].listeners.' + listener + ');');
                                } catch (e) {}
                              }
                            }
                            dashletInstanceFrm.add(new Ext.form.FieldSet({
                              id:    'additional',
                              title: 'Other',
-                             items: additionaFields
+                             items: additionalFields
                            }));
                          }
                          dashletInstanceFrm.doLayout(false, true);
                          // Execute after render scripts
-                         if (additionaFields.length > 0) {
-                           for (var i = 0; i < additionaFields.length; i++) {
-                             if (typeof(additionaFields[i]._afterRender) != 'undefined') {
+                         if (additionalFields.length > 0) {
+                           for (var i = 0; i < additionalFields.length; i++) {
+                             if (typeof(additionalFields[i]._afterRender) != 'undefined') {
                                try {
-                                 eval(additionaFields[i]._afterRender);
+                                 eval(additionalFields[i]._afterRender);
                                } catch (e) {}
                              }
                            }
@@ -161,11 +161,20 @@ Ext.onReady(function() {
     })
   ];
 
-  if (additionaFields.length > 0) {
+  if (additionalFields.length > 0) {
+    if (additionalFields.length > 0) {
+      for (var i = 0; i < additionalFields.length; i++) {
+        for (var listener in additionalFields[i].listeners) {
+          try {
+            eval('additionalFields[i].listeners.' + listener + ' = eval(additionalFields[i].listeners.' + listener + ');');
+          } catch (e) {}
+        }
+      }
+    }
     formFields.push(new Ext.form.FieldSet({
       id:    'additional',
       title: 'Other',
-      items: additionaFields
+      items: additionalFields
     }));
   }
 
@@ -230,4 +239,15 @@ Ext.onReady(function() {
 
   // Render
   dashletInstanceFrm.render(document.body);
+
+  // Execute after render scripts
+  if (additionalFields.length > 0) {
+    for (var i = 0; i < additionalFields.length; i++) {
+      if (typeof(additionalFields[i]._afterRender) != 'undefined') {
+        try {
+          eval(additionalFields[i]._afterRender);
+        } catch (e) {}
+      }
+    }
+  }
 });
