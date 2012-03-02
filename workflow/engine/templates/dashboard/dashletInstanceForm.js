@@ -85,7 +85,7 @@ Ext.onReady(function() {
                            for (var i = 0; i < additionalFields.length; i++) {
                              for (var listener in additionalFields[i].listeners) {
                                try {
-                                 eval('additionalFields[i].listeners.' + listener + ' = eval(additionalFields[i].listeners.' + listener + ');');
+                                 eval('additionalFields[i].listeners.' + listener + ' = ' + additionalFields[i].listeners.select + ';');
                                } catch (e) {}
                              }
                            }
@@ -166,8 +166,8 @@ Ext.onReady(function() {
       for (var i = 0; i < additionalFields.length; i++) {
         for (var listener in additionalFields[i].listeners) {
           try {
-            eval('additionalFields[i].listeners.' + listener + ' = eval(additionalFields[i].listeners.' + listener + ');');
-          } catch (e) {}
+            eval('additionalFields[i].listeners.' + listener + ' = ' + additionalFields[i].listeners.select + ';');
+          } catch (e) {alert('3->'+e);}
         }
       }
     }
