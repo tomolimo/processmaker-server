@@ -1149,34 +1149,23 @@ class processMap {
       $aUsers = array();
       $aUsers [] = array('LABEL' => 'char', 'TAS_UID' => 'char', 'USR_UID' => 'char', 'TU_TYPE' => 'integer', 'TU_RELATION' => 'integer');
       $sDelimiter = DBAdapter::getStringDelimiter ();
-      $oCriteria = new Criteria('workflow');
-      $oCriteria->addSelectColumn(GroupwfPeer::GRP_UID);
-      $oCriteria->addAsColumn('GRP_TITLE', 'C.CON_VALUE');
-      $oCriteria->addAlias('C', 'CONTENT');
-      $aConditions = array();
-      $aConditions [] = array(GroupwfPeer::GRP_UID, 'C.CON_ID');
-      $aConditions [] = array('C.CON_CATEGORY', $sDelimiter . 'GRP_TITLE' . $sDelimiter);
-      $aConditions [] = array('C.CON_LANG', $sDelimiter . SYS_LANG . $sDelimiter);
-      $oCriteria->addJoinMC($aConditions, Criteria::LEFT_JOIN);
-      $oCriteria->add(GroupwfPeer::GRP_STATUS, 'ACTIVE');
-      $oCriteria->add(GroupwfPeer::GRP_UID, $aUIDS1, Criteria::NOT_IN);
-      //$oCriteria->add(GroupwfPeer::GRP_UID, '', Criteria::NOT_EQUAL);
-      $oDataset = GroupwfPeer::doSelectRS($oCriteria);
-      $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-      $oDataset->next();
+      $groups = new Groupwf();
+      $start = '';
+      $limit = '';
+      $filter = '';
+      $result = $groups->getAllGroup($start,$limit,$filter);
       $c = 0;
-      while ($aRow = $oDataset->getRow()) {
+      foreach ($result as $results) {
         $c++;
         $oCriteria = new Criteria('workflow');
         $oCriteria->addSelectColumn('COUNT(*) AS MEMBERS_NUMBER');
-        $oCriteria->add(GroupUserPeer::GRP_UID, $aRow ['GRP_UID']);
+        $oCriteria->add(GroupUserPeer::GRP_UID, $results ['GRP_UID']);
         $oDataset2 = GroupUserPeer::doSelectRS($oCriteria);
         $oDataset2->setFetchmode(ResultSet::FETCHMODE_ASSOC);
         $oDataset2->next();
         $aRow2 = $oDataset2->getRow();
-        $aUsers [] = array('LABEL' => $aRow ['GRP_TITLE'] . ' <a href="#" onclick="usersGroup(\'' . $aRow ['GRP_UID'] . '\', \'' . $c . '\');return false;"><font color="green"><strong>(' . $aRow2 ['MEMBERS_NUMBER'] . ' ' . ((int) $aRow2 ['MEMBERS_NUMBER'] == 1 ? G::LoadTranslation('ID_USER') : G::LoadTranslation('ID_USERS')) . ')</strong></font></a> <br /><div id="users' . $c . '" style="display: none"></div>', 'TAS_UID' => $sTaskUID, 'USR_UID' => $aRow ['GRP_UID'], 'TU_TYPE' => $iType, 'TU_RELATION' => 2);
-        $oDataset->next();
-      }
+        $aUsers [] = array ('LABEL' => $results ['GRP_TITLE'] .' <a href="#" onclick="usersGroup(\'' . $results ['GRP_UID'] . '\', \'' . $c . '\');return false;"><font color="green"><strong>(' . $aRow2 ['MEMBERS_NUMBER'] . ' ' . ((int) $aRow2 ['MEMBERS_NUMBER'] == 1 ? G::LoadTranslation('ID_USER') : G::LoadTranslation('ID_USERS')) . ')</strong></font></a> <br /><div id="users' . $c . '" style="display: none"></div>', 'TAS_UID' => $sTaskUID, 'USR_UID' => $results ['GRP_UID'], 'TU_TYPE' => $iType, 'TU_RELATION' => 2);            
+      }   
       $sDelimiter = DBAdapter::getStringDelimiter ();
       $oCriteria = new Criteria('workflow');
       $oCriteria->addSelectColumn(UsersPeer::USR_UID);

@@ -313,6 +313,64 @@ class Groupwf extends BaseGroupwf {
     return $result;
   }
 
+  function getAllGroup($start=null, $limit=null, $search=null)
+  {     
+    require_once PATH_RBAC . "model/RbacUsers.php";
+    require_once 'classes/model/TaskUser.php';
+    require_once 'classes/model/GroupUser.php';
+    
+    $totalCount = 0;
+    $criteria = new Criteria('workflow');
+    $criteria->addSelectColumn(GroupwfPeer::GRP_UID);
+    $criteria->addSelectColumn(GroupwfPeer::GRP_STATUS);    
+    $criteria->addSelectColumn(GroupwfPeer::GRP_UX); 
+    $criteria->add(GroupwfPeer::GRP_STATUS, 'ACTIVE');    
+    $oDataset = GroupwfPeer::doSelectRS ( $criteria );
+    $oDataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
+    $processes = Array();
+    $uids=array();
+    
+    while( $oDataset->next() ) {
+      $groups[] = $oDataset->getRow();
+      $uids[]   = $groups[sizeof($groups)-1]['GRP_UID'];
+    }
+
+    // for labels of groups 
+    $groupDetails = Array();
+    $c = new Criteria('workflow');    
+    $c->add ( ContentPeer::CON_LANG, defined('SYS_LANG')?SYS_LANG:'en', Criteria::EQUAL );
+    $c->add ( ContentPeer::CON_ID, $uids, Criteria::IN );
+
+    $dt = ContentPeer::doSelectRS ($c);
+    $dt->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+
+    while( $dt->next() ) {
+      $row = $dt->getRow();
+      $groupDetails[$row['CON_ID']] [$row['CON_CATEGORY']] = $row['CON_VALUE'];
+    }
+    
+  // foreach all groups
+   
+    foreach( $groups as $group ) {
+      $grpTitle = isset($groupDetails[$group['GRP_UID']]) && isset($groupDetails[$group['GRP_UID']]['GRP_TITLE']) ? $groupDetails[$group['GRP_UID']]['GRP_TITLE'] : '';    
+      if ( trim($grpTitle) == '') { // if not, then load the record to generate content for current language
+        $grpData   = $this->load($group['GRP_UID']);
+        $grpTitle  = $grpData['GRP_TITLE'];      
+      }
+
+      //filtering by $processName
+      if( isset($search) && $search != '' && stripos($grpTitle, $search) === false){
+        continue;
+      }
+    
+      $group['GRP_TITLE'] = $grpTitle;
+      
+      $aGroups[] = $group;
+    }
+    
+    return $aGroups;
+  }
+
  function filterGroup($filter,$start,$limit)
   { 
     require_once 'classes/model/Groupwf.php';

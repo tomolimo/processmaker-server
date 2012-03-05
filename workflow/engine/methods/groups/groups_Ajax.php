@@ -99,7 +99,6 @@ switch ($_POST['action'])
     require_once 'classes/model/TaskUser.php';
     require_once 'classes/model/GroupUser.php';
     G::LoadClass('configuration');
-    
     $co = new Configurations();
     $config = $co->getConfiguration('groupList', 'pageSize','',$_SESSION['USER_LOGGED']);
     $env = $co->getConfiguration('ENVIRONMENT_SETTINGS', '');
@@ -107,35 +106,7 @@ switch ($_POST['action'])
     $start   = isset($_REQUEST['start'])  ? $_REQUEST['start'] : 0;
     $limit   = isset($_REQUEST['limit'])  ? $_REQUEST['limit'] : $limit_size; 
     $filter = isset($_REQUEST['textFilter']) ? $_REQUEST['textFilter'] : '';
-    
-    $oCriteria = new Criteria('workflow');
-    $oCriteria->addSelectColumn(GroupwfPeer::GRP_UID);
-    $oCriteria->addJoin(GroupwfPeer::GRP_UID, ContentPeer::CON_ID, Criteria::LEFT_JOIN);
-    $oCriteria->add(ContentPeer::CON_CATEGORY,'GRP_TITLE');
-    $oCriteria->add(ContentPeer::CON_LANG,SYS_LANG);
-    if ($filter != ''){
-      $oCriteria->add(ContentPeer::CON_VALUE, '%'.$filter.'%', Criteria::LIKE);
-    }
-    $totalRows = GroupwfPeer::doCount($oCriteria);
      
-    $oCriteria = new Criteria('workflow');
- 
-    $oCriteria->addSelectColumn(GroupwfPeer::GRP_UID);
-    $oCriteria->addSelectColumn(GroupwfPeer::GRP_STATUS);
-    $oCriteria->addSelectColumn(GroupwfPeer::GRP_UX);
-    $oCriteria->addSelectColumn(ContentPeer::CON_VALUE);
-    $oCriteria->addAsColumn('GRP_TASKS', 0);
-    $oCriteria->addAsColumn('GRP_USERS', 0);
-    $oCriteria->addJoin(GroupwfPeer::GRP_UID, ContentPeer::CON_ID, Criteria::LEFT_JOIN);
-    $oCriteria->add(ContentPeer::CON_CATEGORY,'GRP_TITLE');
-    $oCriteria->add(ContentPeer::CON_LANG,SYS_LANG); 
-    if ($filter != ''){
-      $oCriteria->add(ContentPeer::CON_VALUE, '%'.$filter.'%', Criteria::LIKE);
-    }
-    $oCriteria->setOffset($start);
-    $oCriteria->setLimit($limit);
-    $oDataset = GroupwfPeer::doSelectRS($oCriteria); 
-    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
     global $RBAC; 
  
     $tasks = new TaskUser();
@@ -147,16 +118,15 @@ switch ($_POST['action'])
     require_once PATH_CONTROLLERS . 'adminProxy.php';
     $uxList = adminProxy::getUxTypesList();
     
-    $arrData = Array();
-    while ($oDataset->next()){
-      $row = $oDataset->getRow();       
-      $row['GRP_TASKS'] = isset($aTask[$row['GRP_UID']]) ? $aTask[$row['GRP_UID']] : 0;
-      $row['GRP_USERS'] = isset($aMembers[$row['GRP_UID']]) ? $aMembers[$row['GRP_UID']] : 0;      
-      $group = GroupwfPeer::retrieveByPK($row['GRP_UID']);  
-      $row['CON_VALUE'] = $group->getGrpTitle();
-      $row['GRP_UX']    = isset($uxList[$row['GRP_UX']]) ? $uxList[$row['GRP_UX']] : $uxList['NORMAL'];
-
-      $arrData[] = $row;
+    $groups = new Groupwf();    
+    $result = $groups->getAllGroup($start,$limit,$filter);
+    $totalRows =  0;
+    foreach ($result as $results) {
+      $totalRows ++;
+      $results['CON_VALUE'] = $results['GRP_TITLE'];
+      $results['GRP_TASKS'] = isset($aTask[$results['GRP_UID']]) ? $aTask[$results['GRP_UID']] : 0;
+      $results['GRP_USERS'] = isset($aMembers[$results['GRP_UID']]) ? $aMembers[$results['GRP_UID']] : 0;     
+      $arrData[] = $results;         
     }
 
     echo '{success: true, groups: '.G::json_encode($arrData).', total_groups: '.$totalRows.'}';
