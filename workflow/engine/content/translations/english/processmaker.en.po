@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: ProcessMaker (Branch 2.0-experimental) 2.0.34.rc4-333-g0b3da6c\n"
+"Project-Id-Version: ProcessMaker (Branch 2.0-experimental) 2.0-testing.13-15-g8404fa6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2012-02-03 12:58:19\n"
+"PO-Revision-Date: 2012-03-05 16:31:00\n"
 "Last-Translator: \n"
 "Language-Team: Colosa Developers Team <developers@colosa.com>\n"
 "MIME-Version: 1.0\n"
@@ -4655,9 +4655,11 @@ msgstr "To Do"
 # JAVASCRIPT/ID_DONT_SAVE_XMLFORM
 #: JAVASCRIPT/ID_DONT_SAVE_XMLFORM
 msgid "DynaForm is now saved. \n"
+" \n"
 "Warning: Form doesn't have a submit action. \n"
 "Either add a \"Submit\" button or change the \"Next Step Link\" property."
 msgstr "DynaForm is now saved. \n"
+" \n"
 "Warning: Form doesn't have a submit action. \n"
 "Either add a \"Submit\" button or change the \"Next Step Link\" property."
 
@@ -6806,8 +6808,8 @@ msgstr "Are you sure to reassign the current case?"
 # TRANSLATION
 # LABEL/ID_CASE_PAUSED_SUCCESSFULLY
 #: LABEL/ID_CASE_PAUSED_SUCCESSFULLY
-msgid "The Case {APP_NUMBER} was paused successfully and   ir will be unpused on date {UNPAUSE_DATE}"
-msgstr "The Case {APP_NUMBER} was paused successfully and   ir will be unpused on date {UNPAUSE_DATE}"
+msgid "The case {APP_NUMBER} was successfully paused and it will be unpaused on date {UNPAUSE_DATE}"
+msgstr "The case {APP_NUMBER} was successfully paused and it will be unpaused on date {UNPAUSE_DATE}"
 
 # TRANSLATION
 # LABEL/ID_VACATION
@@ -8504,8 +8506,8 @@ msgstr "After routing notify the next assigned user(s)."
 # TRANSLATION
 # JAVASCRIPT/ID_INTERMEDIATE_MESSAGE_EVENT
 #: JAVASCRIPT/ID_INTERMEDIATE_MESSAGE_EVENT
-msgid "Intermediate message event"
-msgstr "Intermediate message event"
+msgid "Intermediate message"
+msgstr "Intermediate message"
 
 # TRANSLATION
 # LABEL/ID_EVENT_MESSAGE
@@ -8570,8 +8572,8 @@ msgstr "Execute Trigger"
 # TRANSLATION
 # JAVASCRIPT/ID_INTERMEDIATE_CONDITIONAL_EVENT
 #: JAVASCRIPT/ID_INTERMEDIATE_CONDITIONAL_EVENT
-msgid "Intermediate Conditional Event"
-msgstr "Intermediate Conditional Event"
+msgid "Intermediate Conditional"
+msgstr "Intermediate Conditional"
 
 # TRANSLATION
 # LABEL/ID_GRID_PAGE_DISPLAYING_PMTABLES_MESSAGE
@@ -11510,8 +11512,8 @@ msgstr "Input Document does not exist!"
 # TRANSLATION
 # JAVASCRIPT/ID_INTERMEDIATE_TIMER_EVENT
 #: JAVASCRIPT/ID_INTERMEDIATE_TIMER_EVENT
-msgid "Intermediate timer event"
-msgstr "Intermediate timer event"
+msgid "Intermediate timer"
+msgstr "Intermediate timer"
 
 # TRANSLATION
 # LABEL/ID_TEMPLATE_FILE_NOT_EXIST
@@ -11848,6 +11850,18 @@ msgstr "Switch Interface"
 #: LABEL/ID_USER_EXPERIENCE
 msgid "User Experience"
 msgstr "User Experience"
+
+# TRANSLATION
+# LABEL/ID_TEMPLATES
+#: LABEL/ID_TEMPLATES
+msgid "Templates"
+msgstr "Templates"
+
+# TRANSLATION
+# LABEL/ID_PUBLIC
+#: LABEL/ID_PUBLIC
+msgid "Public"
+msgstr "Public"
 
 # additionalTables/additionalTablesData.xml?ADD_TAB_NAME
 # additionalTables/additionalTablesData.xml
@@ -13049,6 +13063,36 @@ msgstr "Create Date"
 msgid "[cases/cases_AllInputdocsList.xml?DELETE] "
 msgstr ""
 
+# cases/cases_AllInputdocsList_Summary.xml?TITLE
+# cases/cases_AllInputdocsList_Summary.xml
+#: text - TITLE
+msgid "[cases/cases_AllInputdocsList_Summary.xml?TITLE] Filename"
+msgstr "Filename"
+
+# cases/cases_AllInputdocsList_Summary.xml?APP_DOC_COMMENT
+# cases/cases_AllInputdocsList_Summary.xml
+#: text - APP_DOC_COMMENT
+msgid "[cases/cases_AllInputdocsList_Summary.xml?APP_DOC_COMMENT] Comments"
+msgstr "Comments"
+
+# cases/cases_AllInputdocsList_Summary.xml?CREATED_BY
+# cases/cases_AllInputdocsList_Summary.xml
+#: text - CREATED_BY
+msgid "[cases/cases_AllInputdocsList_Summary.xml?CREATED_BY] Created By"
+msgstr "Created By"
+
+# cases/cases_AllInputdocsList_Summary.xml?CREATE_DATE
+# cases/cases_AllInputdocsList_Summary.xml
+#: text - CREATE_DATE
+msgid "[cases/cases_AllInputdocsList_Summary.xml?CREATE_DATE] Create Date"
+msgstr "Create Date"
+
+# cases/cases_AllInputdocsList_Summary.xml?DELETE
+# cases/cases_AllInputdocsList_Summary.xml
+#: link - DELETE
+msgid "[cases/cases_AllInputdocsList_Summary.xml?DELETE] "
+msgstr ""
+
 # cases/cases_AllOutputdocsList.xml?TITLE
 # cases/cases_AllOutputdocsList.xml
 #: text - TITLE
@@ -13089,6 +13133,36 @@ msgstr ""
 # cases/cases_AllOutputdocsList.xml
 #: link - DOWNLOAD_DOC
 msgid "[cases/cases_AllOutputdocsList.xml?DOWNLOAD_DOC] Download"
+msgstr "Download"
+
+# cases/cases_AllOutputdocsList_Summary.xml?TITLE
+# cases/cases_AllOutputdocsList_Summary.xml
+#: text - TITLE
+msgid "[cases/cases_AllOutputdocsList_Summary.xml?TITLE] Title"
+msgstr "Title"
+
+# cases/cases_AllOutputdocsList_Summary.xml?OUTDOCTITLE
+# cases/cases_AllOutputdocsList_Summary.xml
+#: text - OUTDOCTITLE
+msgid "[cases/cases_AllOutputdocsList_Summary.xml?OUTDOCTITLE] Output Document"
+msgstr "Output Document"
+
+# cases/cases_AllOutputdocsList_Summary.xml?CREATE_DATE
+# cases/cases_AllOutputdocsList_Summary.xml
+#: text - CREATE_DATE
+msgid "[cases/cases_AllOutputdocsList_Summary.xml?CREATE_DATE] Create Date"
+msgstr "Create Date"
+
+# cases/cases_AllOutputdocsList_Summary.xml?DELETE
+# cases/cases_AllOutputdocsList_Summary.xml
+#: link - DELETE
+msgid "[cases/cases_AllOutputdocsList_Summary.xml?DELETE] "
+msgstr ""
+
+# cases/cases_AllOutputdocsList_Summary.xml?DOWNLOAD_DOC
+# cases/cases_AllOutputdocsList_Summary.xml
+#: link - DOWNLOAD_DOC
+msgid "[cases/cases_AllOutputdocsList_Summary.xml?DOWNLOAD_DOC] Download"
 msgstr "Download"
 
 # cases/cases_AttachInputDocument1.xml?TITLE1
@@ -19617,6 +19691,12 @@ msgstr "Dropdown"
 msgid "[dynaforms/fields_ToolbarGrid.xml?yesno] Yes/No"
 msgstr "Yes/No"
 
+# dynaforms/fields_ToolbarGrid.xml?checkbox
+# dynaforms/fields_ToolbarGrid.xml
+#: toolButton - checkbox
+msgid "[dynaforms/fields_ToolbarGrid.xml?checkbox] Checkbox"
+msgstr "Checkbox"
+
 # dynaforms/fields_ToolbarGrid.xml?date
 # dynaforms/fields_ToolbarGrid.xml
 #: toolButton - date
@@ -22599,6 +22679,18 @@ msgstr "Dynaform to show a case summary"
 msgid "[processes/processes_Edit.xml?PRO_SUMMARY_DYNAFORM-]"
 msgstr "- Default summary Dynaform -"
 
+# processes/processes_Edit.xml?PRO_DERIVATION_SCREEN_TPL
+# processes/processes_Edit.xml
+#: dropdown - PRO_DERIVATION_SCREEN_TPL
+msgid "Derivation Screen Template"
+msgstr "Derivation Screen Template"
+
+# processes/processes_Edit.xml?PRO_DERIVATION_SCREEN_TPL-
+# processes/processes_Edit.xml
+#: dropdown - PRO_DERIVATION_SCREEN_TPL -
+msgid "[processes/processes_Edit.xml?PRO_DERIVATION_SCREEN_TPL-]"
+msgstr "- Default -"
+
 # processes/processes_Edit.xml?PRO_DEBUG
 # processes/processes_Edit.xml
 #: checkbox - PRO_DEBUG
@@ -24930,14 +25022,14 @@ msgstr "Require authentication"
 # setup/emails.xml?MESS_ACCOUNT
 # setup/emails.xml
 #: text - MESS_ACCOUNT
-msgid "[setup/emails.xml?MESS_ACCOUNT] Account From"
-msgstr "Account From"
+msgid "SMTP Username"
+msgstr "SMTP Username"
 
 # setup/emails.xml?MESS_PASSWORD
 # setup/emails.xml
 #: password - MESS_PASSWORD
-msgid "[setup/emails.xml?MESS_PASSWORD] Password"
-msgstr "Password"
+msgid "SMTP Password"
+msgstr "SMTP Password"
 
 # setup/emails.xml?MESS_TEST_MAIL
 # setup/emails.xml
@@ -28100,6 +28192,18 @@ msgstr "Description"
 #: textpm - TAS_PRIORITY_VARIABLE
 msgid "[tasks/tasks_Definition.xml?TAS_PRIORITY_VARIABLE] Variable for Case priority"
 msgstr "Variable for Case priority"
+
+# tasks/tasks_Definition.xml?TAS_DERIVATION_SCREEN_TPL
+# tasks/tasks_Definition.xml
+#: dropdown - TAS_DERIVATION_SCREEN_TPL
+msgid "[tasks/tasks_Definition.xml?TAS_DERIVATION_SCREEN_TPL] Derivation Screen Template"
+msgstr "Derivation Screen Template"
+
+# tasks/tasks_Definition.xml?TAS_DERIVATION_SCREEN_TPL-
+# tasks/tasks_Definition.xml
+#: dropdown - TAS_DERIVATION_SCREEN_TPL -
+msgid "[tasks/tasks_Definition.xml?TAS_DERIVATION_SCREEN_TPL-]"
+msgstr "- Default -"
 
 # tasks/tasks_Definition.xml?TAS_START
 # tasks/tasks_Definition.xml
@@ -31773,12 +31877,6 @@ msgstr "Label"
 msgid "[dynaforms/fields/currency.xml?PME_SUBTITLE3] Behaviour"
 msgstr "Behaviour"
 
-# dynaforms/fields/currency.xml?PME_MAXLENGTH
-# dynaforms/fields/currency.xml
-#: text - PME_MAXLENGTH
-msgid "Max. Length"
-msgstr "Max. Length"
-
 # dynaforms/fields/currency.xml?PME_VALIDATE
 # dynaforms/fields/currency.xml
 #: dropdown - PME_VALIDATE
@@ -32700,7 +32798,7 @@ msgstr "Behaviour"
 # dynaforms/fields/password.xml?PME_MAXLENGTH
 # dynaforms/fields/password.xml
 #: text - PME_MAXLENGTH
-msgid "[dynaforms/fields/password.xml?PME_MAXLENGTH] Max. Length"
+msgid "Max. Length"
 msgstr "Max. Length"
 
 # dynaforms/fields/password.xml?PME_REQUIRED
@@ -32792,12 +32890,6 @@ msgstr "Label"
 #: title - PME_SUBTITLE3
 msgid "[dynaforms/fields/percentage.xml?PME_SUBTITLE3] Behaviour"
 msgstr "Behaviour"
-
-# dynaforms/fields/percentage.xml?PME_MAXLENGTH
-# dynaforms/fields/percentage.xml
-#: text - PME_MAXLENGTH
-msgid "[dynaforms/fields/percentage.xml?PME_MAXLENGTH] Max. Length"
-msgstr "Max. Length"
 
 # dynaforms/fields/percentage.xml?PME_VALIDATE
 # dynaforms/fields/percentage.xml

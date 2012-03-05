@@ -2951,7 +2951,7 @@ SELECT 'LABEL','ID_TRIGGERS_VALIDATE_EERR1','en','* The {Object} {Description} d
   UNION ALL
 SELECT 'LABEL','ID_CASES_STATUS_TO_DO','en','To Do','2012-02-02' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_DONT_SAVE_XMLFORM','en','DynaForm is now saved. \nWarning: Form doesn''t have a submit action. \nEither add a "Submit" button or change the "Next Step Link" property.','2012-02-02' 
+SELECT 'JAVASCRIPT','ID_DONT_SAVE_XMLFORM','en','DynaForm is now saved. \n \nWarning: Form doesn''t have a submit action. \nEither add a "Submit" button or change the "Next Step Link" property.','2012-02-02' 
   UNION ALL
 SELECT 'LABEL','ID_CASES_STATUS_COMPLETED','en','Completed','2012-02-02' 
   UNION ALL
@@ -3677,7 +3677,7 @@ SELECT 'LABEL','ID_REASSIGNMENT_SUCCESS','en','The case #{APP_NUMBER} was reassi
   UNION ALL
 SELECT 'LABEL','ID_REASSIGN_CONFIRM','en','Are you sure to reassign the current case?','2012-02-02' 
   UNION ALL
-SELECT 'LABEL','ID_CASE_PAUSED_SUCCESSFULLY','en','The Case {APP_NUMBER} was paused successfully and   ir will be unpused on date {UNPAUSE_DATE}','2012-02-02' 
+SELECT 'LABEL','ID_CASE_PAUSED_SUCCESSFULLY','en','The case {APP_NUMBER} was successfully paused and it will be unpaused on date {UNPAUSE_DATE}','2012-02-02' 
   UNION ALL
 SELECT 'LABEL','ID_VACATION','en','Vacation','2012-02-02' 
   UNION ALL
@@ -5378,6 +5378,10 @@ SELECT 'LABEL','ID_PARENT_DEPARTMENT_NOT_EXIST','en','Parent department doesn''t
 SELECT 'LABEL','ID_SWITCH_INTERFACE','en','Switch Interface','2012-02-02' 
   UNION ALL
 SELECT 'LABEL','ID_USER_EXPERIENCE','en','User Experience','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_TEMPLATES','en','Templates','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_PUBLIC','en','Public','2012-02-02' 
  ;
 
 INSERT INTO ISO_LOCATION ([IC_UID],[IL_UID],[IL_NAME],[IL_NORMAL_NAME],[IS_UID]) 
