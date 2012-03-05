@@ -71,6 +71,16 @@
               </td>
               {/if}
               {foreach from=$form->fields item=field}
+                {if ($field->type==='reset')}
+                <td align="right">{$field->field}</td>
+                {/if}
+              {/foreach}
+              {foreach from=$form->fields item=field}
+                {if ($field->type==='button')}
+                <td align="right">{$field->field}</td>
+                {/if}
+              {/foreach}
+              {foreach from=$form->fields item=field}
                 {if ($field->type==='submit')}
                 <td align="right">{$field->field}</td>
                 {/if}
