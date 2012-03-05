@@ -112,6 +112,8 @@ iframe::-webkit-scrollbar {
 #commentlist cite {
   font: bold 140%/110% Arial, Helvetica, sans-serif;
   color: #666;
+  /*max-width:20px;*/
+  width:50px;
 }
 #commentlist .time {
   color: #ccc;
@@ -120,15 +122,7 @@ iframe::-webkit-scrollbar {
 #commentlist .commentnumber {
   position: absolute;
   right: 0;
-  top: 8px;
-  font: normal 200%/100% Georgia, "Times New Roman", Times, serif;
-  color: #ccc;
-}
-
-#commentlist .notes-link {
-  position: absolute;
-  right: 0;
-  top: 64px;
+  top: 30px;
   font: normal 200%/100% Georgia, "Times New Roman", Times, serif;
   color: #ccc;
 }
@@ -136,7 +130,15 @@ iframe::-webkit-scrollbar {
 #commentlist .notes-plus-link {
   position: absolute;
   right: 0px;
-  top: 38px;
+  top: 60px;
+  font: normal 200%/100% Georgia, "Times New Roman", Times, serif;
+  color: #ccc;
+}
+
+#commentlist .notes-link {
+  position: absolute;
+  right: 0;
+  top: 86px;
   font: normal 200%/100% Georgia, "Times New Roman", Times, serif;
   color: #ccc;
 }
