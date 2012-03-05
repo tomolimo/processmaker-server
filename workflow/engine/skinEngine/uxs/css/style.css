@@ -771,7 +771,8 @@ form.formDefault td.withoutLabel, form.formDefault td.withoutLabel table td
 	padding:0px;
 	height:8px;
 }
-.FormTitle .FormTitle{
+
+.FormTitle{
 	border:none;
 }
 
@@ -3298,4 +3299,27 @@ button.x-btn-text:focus,.x-combo-selected{
     -webkit-border-radius: 5px 5px 0px 0px; /* Safari, Chrome */
 }
 
+.Title
+{
+  -moz-border-bottom-colors: none;
+  -moz-border-image: none;
+  -moz-border-left-colors: none;
+  -moz-border-right-colors: none;
+  -moz-border-top-colors: none;
+  background: linear-gradient(#829AA8, #405A6A) repeat scroll 0 0 transparent;
+  background: -moz-linear-gradient(#829AA8, #405A6A) repeat scroll 0 0 transparent;
+  /*background: -webkit-linear-gradient(#829AA8,#405A6A);*/
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#829aa8), to(#405a6a)); /* Webkit */
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#829aa8',endColorstr='#405a6a');
+  border-color: #677C89 #677C89 #6B808D;
+  border-radius: 5px 5px 0 0;
+  border-style: solid;
+  border-width: 1px;
+  color: #FFFFFF;
+  font-size: 16px;
+  font-weight: bold;
+  margin: 0;
+  padding: 8px 18px;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.698);
+}
 
