@@ -1153,84 +1153,98 @@ class Cases {
     $aTaskReviewed = array();
 
     //check if this task ( $taskUid ) has open delegations
-    $oCriteria2 = new Criteria('workflow');
-    $oCriteria2->add(AppDelegationPeer::APP_UID, $sAppUid);
-    $oCriteria2->add(AppDelegationPeer::TAS_UID, $taskUid);
-    $oCriteria2->add(AppDelegationPeer::DEL_THREAD_STATUS, 'OPEN');
-    $oDataset2 = AppDelegationPeer::doSelectRs($oCriteria2);
-    $oDataset2->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-    $oDataset2->next();
-    $aRow2 = $oDataset2->getRow();
-    if (is_array($aRow2)) {
-      //there is an open delegation, so we need to return the delegation row
-      $aTaskReviewed[] = $aRow2;
-      return $aTaskReviewed;
-    } else {
-      $oCriteria3 = new Criteria('workflow');
-      $oCriteria3->add(AppDelegationPeer::APP_UID, $sAppUid);
-      $oCriteria3->add(AppDelegationPeer::TAS_UID, $taskUid);
-      $oDataset3 = AppDelegationPeer::doSelectRs($oCriteria3);
-      $oDataset3->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-      $oDataset3->next();
-      $aRow3 = $oDataset3->getRow();
-      if (is_array($aRow3)) {
-        return $aTaskReviewed;  //returning empty array
-      } else { //if not we check previous tasks
+    $delegations = $this->getReviewedTasks($taskUid, $sAppUid);
+
+    if ($delegations !== false) {
+      if ( count($aTaskReviewed['open']) > 0) {
+        //there is an open delegation, so we need to return the delegation row
+        return $aTaskReviewed['open'];
+      }
+      else {
+        return array(); //returning empty array
       }
     }
+    // if not we check previous tasks
+    // until here this task has not appdelegations records.
+    // get all previous task from $taskUid, and return open delegations rows, if there are
 
-
-    //get all previous task from $taskUid, and return open delegations rows, if there are
     $oCriteria = new Criteria('workflow');
     $oCriteria->add(RoutePeer::ROU_NEXT_TASK, $taskUid);
     $oDataset = RoutePeer::doSelectRs($oCriteria);
     $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
     $oDataset->next();
     $aRow = $oDataset->getRow();
+  
     while (is_array($aRow)) {
+      $delegations = $this->getReviewedTasks($aRow['TAS_UID'], $sAppUid);
 
-      $oCriteria2 = new Criteria('workflow');
-      $oCriteria2->add(AppDelegationPeer::APP_UID, $sAppUid);
-      $oCriteria2->add(AppDelegationPeer::TAS_UID, $aRow['TAS_UID']);
-      $oCriteria2->add(AppDelegationPeer::DEL_THREAD_STATUS, 'OPEN');
-      $oDataset2 = AppDelegationPeer::doSelectRs($oCriteria2);
-      $oDataset2->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-      $oDataset2->next();
-      $aRow2 = $oDataset2->getRow();
-      if (is_array($aRow2)) {
-        //there is an open delegation, so we need to return the delegation row
-        $aTaskReviewed[] = $aRow2;
-      } else {
-        $oCriteria3 = new Criteria('workflow');
-        $oCriteria3->add(AppDelegationPeer::APP_UID, $sAppUid);
-        $oCriteria3->add(AppDelegationPeer::TAS_UID, $aRow['TAS_UID']);
-        $oDataset3 = AppDelegationPeer::doSelectRs($oCriteria3);
-        $oDataset3->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-        $oDataset3->next();
-        $aRow3 = $oDataset3->getRow();
-        if (is_array($aRow3)) {
-          //TODO there are closed delegations, so we need to get back without returning delegation rows
-        } 
-        else { //if not we start the recursion searching previous open tasks from this task.
-          if (!in_array($aRow['TAS_UID'],$aPreviousTasks)) {
-            // storing the current task uid of the task currently checked
-            $aPreviousTasks[] = $aRow['TAS_UID'];
-            // passing the array of previous tasks in oprder to avoid an infinite loop that prevents
-            
-            $openPreviousTask = $this->searchOpenPreviousTasks($aRow['TAS_UID'], $sAppUid, $aPreviousTasks);
+      if ($delegations !== false) {
+        if ( count($aTaskReviewed['open']) > 0) {
+          //there is an open delegation, so we need to return the delegation row
+          $aTaskReviewed = array_merge($aTaskReviewed, $aTaskReviewed['open']);
+        }
+        else {
+          $aTaskReviewed = array_merge($aTaskReviewed, $aTaskReviewed['closed']);
+        }
+      }
+      else {
+        if (!in_array($aRow['TAS_UID'], $aPreviousTasks)) {
+          // storing the current task uid of the task currently checked
+          $aPreviousTasks[] = $aRow['TAS_UID'];
+          // passing the array of previous tasks in oprder to avoid an infinite loop that prevents
+          $openPreviousTask = $this->searchOpenPreviousTasks($aRow['TAS_UID'], $sAppUid, $aPreviousTasks);
 
-            if (count($previousTasks) > 0) {
-              array_push($aTaskReviewed, $openPreviousTask);
-            }
+          if (count($aPreviousTasks) > 0) {
+            $aTaskReviewed = array_merge($aTaskReviewed, $openPreviousTask);
           }
         }
       }
 
-      //$this->searchOpenPreviousTasks();
       $oDataset->next();
       $aRow = $oDataset->getRow();
     }
+
     return $aTaskReviewed;
+  }
+
+  /**
+   * Get reviewed tasks (delegations started)
+   * @param string $taskUid
+   * @param string $sAppUid
+   * @author erik amaru ortiz <erik@colosa.com>
+   * @return array within the open & closed tasks
+   *         false -> when has not any delegation started for that task
+   */
+  function getReviewedTasks($taskUid, $sAppUid)
+  {
+    $openTasks = $closedTasks = array();
+
+    // get all delegations fro this task
+    $oCriteria2 = new Criteria('workflow');
+    $oCriteria2->add(AppDelegationPeer::APP_UID, $sAppUid);
+    $oCriteria2->add(AppDelegationPeer::TAS_UID, $taskUid);
+
+    $oDataset2 = AppDelegationPeer::doSelectRs($oCriteria2);
+    $oDataset2->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+
+    // loop and separate open & closed delegations in theirs respective arrays
+    while ($oDataset2->next()) {
+      $row = $oDataset2->getRow();
+
+      if ($row['DEL_THREAD_STATUS'] == 'OPEN') {
+        $tasksReviewed[] = $row;
+      }
+      else {
+        $closedTasks[] = $row;
+      }
+    }
+
+    if (count($openTasks) == 0 && count($closedTasks) == 0) {
+      return false; // return false because there is not any delegation for this task.
+    }
+    else {
+      return array('open' => $openTasks, 'closed' => $closedTasks);
+    }
   }
 
   /*
