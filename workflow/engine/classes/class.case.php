@@ -3024,6 +3024,7 @@ class Cases {
     $aTriggers = $this->loadTriggers($sTasUid, $sStepType, $sStepUidObj, $sTriggerType);
 
     if (count($aTriggers) > 0) {
+      global $oPMScript;
       $oPMScript = new PMScript();
       $oPMScript->setFields($aFields);
       foreach ($aTriggers as $aTrigger) {

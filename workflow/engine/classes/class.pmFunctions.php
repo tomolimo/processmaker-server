@@ -1679,6 +1679,7 @@ function PMFgetLabelOption($PROCESS, $DYNAFORM_UID, $FIELD_NAME, $FIELD_SELECTED
  *
  */
 function PMFRedirectToStep($sApplicationUID, $iDelegation, $sStepType, $sStepUid) {
+  $iDelegation = intval($iDelegation);
   require_once 'classes/model/AppDelegation.php';
   $oCriteria = new Criteria('workflow');
   $oCriteria->addSelectColumn(AppDelegationPeer::TAS_UID);
@@ -1687,21 +1688,22 @@ function PMFRedirectToStep($sApplicationUID, $iDelegation, $sStepType, $sStepUid
   $oDataset = AppDelegationPeer::doSelectRS($oCriteria);
   $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
   $oDataset->next();
+  global $oPMScript;
   $aRow = $oDataset->getRow();
   if ($aRow) {
     require_once 'classes/model/Step.php';
     $oStep = new Step();
     $oTheStep = $oStep->loadByType($aRow['TAS_UID'], $sStepType, $sStepUid);
     $bContinue = true;
+    G::LoadClass('case');
+    $oCase = new Cases();
+    $aFields = $oCase->loadCase($sApplicationUID);
     if ($oTheStep->getStepCondition() != '') {
-      G::LoadClass('case');
-      $oCase   = new Cases();
-      $aFields = $oCase->loadCase($sApplicationUID);
       G::LoadClass('pmScript');
-      $oPMScript = new PMScript();
-      $oPMScript->setFields($aFields['APP_DATA']);
-      $oPMScript->setScript($oTheStep->getStepCondition());
-      $bContinue = $oPMScript->evaluate();
+      $pmScript = new PMScript();
+      $pmScript->setFields($aFields['APP_DATA']);
+      $pmScript->setScript($oTheStep->getStepCondition());
+      $bContinue = $pmScript->evaluate();
     }
     if ($bContinue) {
       switch ($oTheStep->getStepTypeObj()) {
@@ -1720,6 +1722,11 @@ function PMFRedirectToStep($sApplicationUID, $iDelegation, $sStepType, $sStepUid
         case 'MESSAGE':
           $sAction = '';
           break;
+      }
+      // save data
+      if (!is_null($oPMScript)) {
+        $aFields['APP_DATA'] = $oPMScript->aFields;
+        $oCase->updateCase($sApplicationUID,$aFields);
       }
       G::header('Location: ' . 'cases_Step?TYPE=' . $sStepType . '&UID=' . $sStepUid . '&POSITION=' . $oTheStep->getStepPosition() . '&ACTION=' . $sAction);
       die;
