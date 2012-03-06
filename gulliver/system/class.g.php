@@ -2211,6 +2211,9 @@ $output = $outputHeader.$output;
     }
     
     if ( isset ( $translation[$msgID] ) ){
+      $arraySearch  = array("'");
+      $arrayReplace = array("\\'");
+      
       $translationString = preg_replace("[\n|\r|\n\r]", ' ', $translation[$msgID]);
     
       if( isset($data) && is_array($data) ) {
@@ -2218,6 +2221,8 @@ $output = $outputHeader.$output;
           $translationString = str_replace('{'.$label.'}', $value, $translationString);
         }
       }
+      
+      $translationString = str_replace($arraySearch, $arrayReplace, $translationString);
       
       return $translationString;
     } else {
