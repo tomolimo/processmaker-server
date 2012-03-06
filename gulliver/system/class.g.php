@@ -1908,7 +1908,13 @@ $output = $outputHeader.$output;
           }
           //Call function
           if (($match[1][$r][0]==='')&&($match[2][$r][0]==='')&&($match[3][$r][0]!=='')) {
-            eval('$__textoEval.='.$match[3][$r][0].'(\''.addcslashes(G::replaceDataField(stripslashes($match[4][$r][0]),$result),'\\\'').'\');');continue;
+            $arraySearch  = array("'");
+            $arrayReplace = array("\\'");
+            
+            eval('$strAux = '.$match[3][$r][0].'(\''.addcslashes(G::replaceDataField(stripslashes($match[4][$r][0]),$result),'\\\'').'\');');
+            $strAux = str_replace($arraySearch, $arrayReplace, $strAux);
+            
+            $__textoEval .= $strAux; continue;
           }
           //Non-quoted
           if (($match[1][$r][0]=='#')&&(isset($result[$match[2][$r][0]]))) {
