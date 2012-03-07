@@ -4,7 +4,7 @@
   <en>CASE TRACKER</en>
 </TITLE>
 
-<CASE type="text" size="30" maxlength="50" validate="Login">
+<CASE type="Text" size="30" maxlength="50" validate="Any">
   <en>Case Code</en>
 </CASE>
 
