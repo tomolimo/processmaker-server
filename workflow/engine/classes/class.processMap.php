@@ -3508,22 +3508,14 @@ class processMap {
   function newObjectPermission($sProcessUID) {
     $aUsersGroups = array();
     $aUsersGroups [] = array('UID' => 'char', 'LABEL' => 'char');
-    $oCriteria = new Criteria('workflow');
-    $oCriteria->addSelectColumn(GroupwfPeer::GRP_UID);
-    $oCriteria->addAsColumn('GRP_TITLE', ContentPeer::CON_VALUE);
-    $aConditions = array();
-    $aConditions [] = array(GroupwfPeer::GRP_UID, ContentPeer::CON_ID);
-    $aConditions [] = array(ContentPeer::CON_CATEGORY, DBAdapter::getStringDelimiter () . 'GRP_TITLE' . DBAdapter::getStringDelimiter ());
-    $aConditions [] = array(ContentPeer::CON_LANG, DBAdapter::getStringDelimiter () . SYS_LANG . DBAdapter::getStringDelimiter ());
-    $oCriteria->addJoinMC($aConditions, Criteria::LEFT_JOIN);
-    $oCriteria->add(GroupwfPeer::GRP_STATUS, 'ACTIVE');
-    $oDataset = GroupwfPeer::doSelectRS($oCriteria);
-    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-    $oDataset->next();
-    while ($aRow = $oDataset->getRow()) {
-      $aUsersGroups [] = array('UID' => '2|' . $aRow ['GRP_UID'], 'LABEL' => $aRow ['GRP_TITLE'] . ' (' . G::LoadTranslation('ID_GROUP') . ')');
-      $oDataset->next();
-    }
+    $start = '';
+    $limit = '';
+    $filter = '';
+    $groups = new Groupwf();
+    $result = $groups->getAllGroup($start,$limit,$filter);      
+    foreach ($result as $results) {        
+      $aUsersGroups [] = array('UID' => '2|' . $results ['GRP_UID'], 'LABEL' => $results ['GRP_TITLE'] . ' (' . G::LoadTranslation('ID_GROUP') . ')');                           
+    } 
     $oCriteria = new Criteria('workflow');
     $oCriteria->addSelectColumn(UsersPeer::USR_UID);
     $oCriteria->addSelectColumn(UsersPeer::USR_USERNAME);
