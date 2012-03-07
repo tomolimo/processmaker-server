@@ -170,7 +170,7 @@ var processmap=function(){
               }.extend(this),
               dynaforms:function(){
                 var panel = this.panels.buildingBlocks;
-                panel.addContentTitle(G_STRINGS.ID_PROCESSMAP_DYNAFORMS);
+                panel.addContentTitle(G_STRINGS.ID_DYNAFORMS);
                 panel.loader.show();
                 var r = new this.parent.module.rpc.xmlhttp({
                   url:this.options.dataServer,
