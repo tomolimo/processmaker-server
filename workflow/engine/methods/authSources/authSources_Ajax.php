@@ -32,8 +32,22 @@ try {
 
   switch ($_REQUEST['action']) {
     case 'searchUsers':
-      G::LoadThirdParty('pear/json','class.json');
       require_once 'classes/model/Users.php';
+      $criteria = new Criteria('workflow');
+      $criteria->addSelectColumn(UsersPeer::USR_USERNAME);
+      $criteria->add(UsersPeer::USR_STATUS, array('CLOSED'), Criteria::NOT_IN);
+      $dataset = UsersPeer::DoSelectRs($criteria);
+      $dataset->setFetchmode (ResultSet::FETCHMODE_ASSOC);
+      $dataset->next();
+      $pmUsers = array();
+      while ($row = $dataset->getRow()) {
+        $pmUsers[] = $row['USR_USERNAME'];
+        $dataset->next();
+      }
+
+      $aFields = $RBAC->getAuthSource($_POST['sUID']);
+
+      G::LoadThirdParty('pear/json','class.json');
       $oJSON    = new Services_JSON();
       $i        = 0;
       $oUser    = new Users();
@@ -49,7 +63,7 @@ try {
                         'Email' => 'char',
                         'DistinguishedName' => 'char');
       foreach ($aAux as $aUser) {
-        if (UsersPeer::doCount($oUser->loadByUsername($aUser['sUsername'])) == 0) {
+        if (!in_array($aUser['sUsername'], $pmUsers)) {
           // add replace to change D'Souza to D*Souza by krlos
           $sCheckbox = '<input type="checkbox" name="aUsers[' . $i . ']" id="aUsers[' . $i . ']" value=\'' . str_replace( "\'","*", addslashes($oJSON->encode($aUser)) ) . '\' />';
           $i++;
@@ -65,7 +79,7 @@ try {
                           'FirstName' => $aUser['sFirstname'],
                           'LastName' => $aUser['sLastname'],
                           'Email' => $aUser['sEmail'],
-                          'DistinguishedName' => $aUser['sDN']); 
+                          'DistinguishedName' => $aUser['sDN']);
       }
       global $_DBArray;
       $_DBArray['users']    = $aUsers;
@@ -73,8 +87,6 @@ try {
       G::LoadClass('ArrayPeer');
       $oCriteria = new Criteria('dbarray');
       $oCriteria->setDBArrayTable('users');
-
-      $aFields = $RBAC->getAuthSource($_POST['sUID']);
 
       global $G_PUBLISH;
       $G_PUBLISH = new Publisher();
@@ -98,25 +110,25 @@ try {
       $co = new Configurations();
       $config = $co->getConfiguration('authSourcesList', 'pageSize','',$_SESSION['USER_LOGGED']);
       $limit_size = isset($config['pageSize']) ? $config['pageSize'] : 20;
-    	
+
     	$start = isset($_REQUEST['start']) ? $_REQUEST['start'] : 0;
     	$limit = isset($_REQUEST['limit']) ? $_REQUEST['limit'] : $limit_size;
     	$filter = isset($_REQUEST['textFilter']) ? $_REQUEST['textFilter'] : '';
-    	
+
     	$Criterias = $RBAC->getAuthenticationSources($start, $limit, $filter);
-    	
+
     	$Dat = AuthenticationSourcePeer::doSelectRS($Criterias['COUNTER']);
     	$Dat->setFetchmode(ResultSet::FETCHMODE_ASSOC);
     	$Dat->next();
     	$row = $Dat->getRow();
     	$total_sources = $row['CNT'];
-    	
+
     	$oDataset = AuthenticationSourcePeer::doSelectRS($Criterias['LIST']);
     	$oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-    	
+
     	global $RBAC;
     	$auth = $RBAC->getAllUsersByAuthSource();
-    	
+
     	$aSources = Array();
     	while ($oDataset->next()){
     		$aSources[] = $oDataset->getRow();
@@ -165,7 +177,7 @@ try {
       break;
       case 'loadauthSourceData':
         global $RBAC;
-        
+
         $fields = $RBAC->getAuthSource($_POST['sUID']);
         if (is_array($fields['AUTH_SOURCE_DATA'])) {
           foreach($fields['AUTH_SOURCE_DATA'] as $field => $value) {
