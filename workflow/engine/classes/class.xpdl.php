@@ -44,8 +44,8 @@ class Xpdl extends processes
   * @param string $pmFilename
   * @return void
   */
-  function createProcessFromDataXpdl ($oData,$tasks)   { 
-  	if ( !isset($oData->process['PRO_UID']) || trim($oData->process['PRO_UID']) == '' ) 
+  function createProcessFromDataXpdl ($oData,$tasks)   {
+  	if ( !isset($oData->process['PRO_UID']) || trim($oData->process['PRO_UID']) == '' )
   	  $oData->process['PRO_UID'] = G::generateUniqueID() ;
 
   	$this->removeProcessRows ($oData->process['PRO_UID'] );
@@ -321,7 +321,7 @@ class Xpdl extends processes
     if ( !is_dir($path) ) {
         G::verifyPath($path, true);
     }
-    $proTitle  = (substr(G::inflect($oData->process['PRO_TITLE']), 0, 30));
+    $proTitle  = (substr(G::inflect($oData->process['PRO_TITLE']), 0, 245));
     $proTitle  = preg_replace("/[^A-Za-z0-9_]/", "", $proTitle);
     $index     = '';
     $lastIndex = '';
@@ -727,7 +727,7 @@ class Xpdl extends processes
         $passwd = $arrayFrom['MESS_PASSWORD'];
         $passwdDec = G::decrypt($passwd,'EMAILENCRYPT');
         if (strpos( $passwdDec, 'hash:' ) !== false) {
-    	    list($hash, $pass) = explode(":", $passwdDec);   
+    	    list($hash, $pass) = explode(":", $passwdDec);
     	    $passwd = $pass;
         }
         $from = $arrayFrom['MESS_ACCOUNT'];

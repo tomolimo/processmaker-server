@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<dynaForm name="processes_Export" type="xmlform" width="400px" labelWidth="100px">
+<dynaForm name="processes_Export" type="xmlform" width="580px" labelWidth="130px">
 
 <TITLE type="title">
   <en>processes Info</en>
@@ -42,4 +42,4 @@ var nextStep = function(oForm)
 };
 ]]></JS>
 
-</dynaForm>  
+</dynaForm>

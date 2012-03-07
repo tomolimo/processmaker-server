@@ -2376,7 +2376,7 @@ class Processes {
     if ( !is_dir($path) ) {
         G::verifyPath($path, true);
     }
-    $proTitle = (substr(G::inflect($data->process['PRO_TITLE']), 0, 30));
+    $proTitle = (substr(G::inflect($data->process['PRO_TITLE']), 0, 245));
     $proTitle = preg_replace("/[^A-Za-z0-9_]/", "", $proTitle);
 
 
@@ -3207,7 +3207,7 @@ class Processes {
 
     // create the process
     $this->createProcessRow($oData->process);
-    
+
     $this->createTaskRows($oData->tasks);
     //it was commented becuase it seems to be working fine
     //$this->createEventRows(isset($oData->event) ? $oData->event : array());
@@ -3472,7 +3472,7 @@ class Processes {
       case 'mail': case 'email':
         $basePath = PATH_DATA_MAILTEMPLATES;
         break;
-      
+
       case 'public':
         $basePath = PATH_DATA_PUBLIC;
         break;
@@ -3489,7 +3489,7 @@ class Processes {
     if (!file_exists($dir . 'alert_message.html')) {
       @copy(PATH_TPL . 'mails' . PATH_SEP . 'alert_message.html', $dir . 'alert_message.html');
     }
-    
+
     $files = glob($dir . '*.*');
 
     foreach ($files as $file) {
