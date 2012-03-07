@@ -49,6 +49,10 @@
     $defaultOption = 'casesListExtJs';
     $confDefaultOption = 'CASES_INBOX';
   }
+
+  if (isset($_GET['id'])) {
+    $defaultOption = '../cases/open?APP_UID='.$_GET['id'].'&DEL_INDEX='.$_GET['i']; //.'&action=todo';
+  }
   
   $oHeadPublisher->assign( 'defaultOption', $defaultOption); // user menu permissions
   $oHeadPublisher->assign( '_nodeId', isset($confDefaultOption)?$confDefaultOption:'PM_USERS'); // user menu permissions

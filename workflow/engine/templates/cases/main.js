@@ -235,18 +235,24 @@ Ext.onReady(function(){
   var loader = treeMenuItems.getLoader();
   loader.on("load", function(){
     document.getElementById('casesSubFrame').src = defaultOption;
+
+    // check if a case was open directly
+    if (defaultOption.indexOf('open') > -1) {
+      //if it is, then update cases tree
+      updateCasesTree();
+    }
     
-      if( _nodeId != '' ){
-        treePanel1 = Ext.getCmp('tree-panel')
-        if(treePanel1)
-          node = treePanel1.getNodeById(_nodeId);
-        if(node) {
-          node.select();
-          if (_nodeId == 'CASES_START_CASE') {
-            updateCasesTree();
-          }
+    if( _nodeId != '' ){
+      treePanel1 = Ext.getCmp('tree-panel')
+      if(treePanel1)
+        node = treePanel1.getNodeById(_nodeId);
+      if(node) {
+        node.select();
+        if (_nodeId == 'CASES_START_CASE') {
+          updateCasesTree();
         }
       }
+    }
   });
 
 
