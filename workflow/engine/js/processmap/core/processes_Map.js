@@ -90,6 +90,34 @@ var saveDataTaskTemporal = function(iForm)
       break;
       case 7:
       case '7':
+        if ( getField('SEND_EMAIL') != null && (typeof (getField('SEND_EMAIL')) != 'undefined' ) ) {
+          // validate fields TAS_DEF_SUBJECT_MESSAGE, TAS_DEF_MESSAGE
+          if (getField('SEND_EMAIL').checked) {
+            if (getField('TAS_DEF_SUBJECT_MESSAGE').value == '') {
+              new leimnud.module.app.alert().make( {
+                label : G_STRINGS.ID_SUBJECT_FIELD_REQUIRED
+              });
+              return false;
+            }
+            switch ( getField('TAS_DEF_MESSAGE_TYPE').value ) {
+              case 'text' :
+                if (getField('TAS_DEF_MESSAGE').value == '' ) {
+                  new leimnud.module.app.alert().make( {
+                    label : G_STRINGS.ID_MESSAGE_FIELD_REQUIRED
+                  });
+                  return false;
+                }
+                break;
+              case 'template' :
+                if (getField('TAS_DEF_MESSAGE_TEMPLATE').value == '' ){
+                  new leimnud.module.app.alert().make( {
+                    label : G_STRINGS.ID_TEMPLATE_FIELD_REQUIRED
+                  });
+                  return false;
+                }
+                break;
+            }
+        }
         if(typeof getField('SEND_EMAIL') != 'undefined' )
           oTaskData.SEND_EMAIL      = getField('SEND_EMAIL').checked ? 'TRUE' : 'FALSE';
         else
@@ -98,6 +126,7 @@ var saveDataTaskTemporal = function(iForm)
         oTaskData.TAS_DEF_SUBJECT_MESSAGE  = getField('TAS_DEF_SUBJECT_MESSAGE').value.replace(re, "@amp@");
         oTaskData.TAS_DEF_MESSAGE_TYPE     = getField('TAS_DEF_MESSAGE_TYPE').value;
         oTaskData.TAS_DEF_MESSAGE_TEMPLATE = getField('TAS_DEF_MESSAGE_TEMPLATE').value;
+      }
       break;
     }
   }
@@ -106,12 +135,15 @@ var saveDataTaskTemporal = function(iForm)
     oTaskData = {};
   }
   iLastTab = iForm;
+  return true;
 };
 
 var saveTaskData = function(oForm, iForm, iType)
 {
   iLastTab = iForm;
-  saveDataTaskTemporal(iForm);
+  if ( !saveDataTaskTemporal(iForm)) {
+    return false;
+  }
   oTaskData.TAS_UID = getField('TAS_UID').value;
  /* while (oTaskData.TAS_TITLE.charAt(0)==' '){ 
 		oTaskData.TAS_TITLE = oTaskData.TAS_TITLE.substring(1,oTaskData.TAS_TITLE.length) ;

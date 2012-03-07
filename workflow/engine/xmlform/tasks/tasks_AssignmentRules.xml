@@ -101,8 +101,10 @@ if (aTaskFlag[1])
     break;*/
   }
   getField('TAS_ASSIGN_VARIABLE').value         = oTaskData.TAS_ASSIGN_VARIABLE;
+/*
   getField('TAS_MI_INSTANCE_VARIABLE').value    = oTaskData.TAS_MI_INSTANCE_VARIABLE;
   getField('TAS_MI_COMPLETE_VARIABLE').value    = oTaskData.TAS_MI_COMPLETE_VARIABLE;
+*/
   /*getField('TAS_DERIVATION').checked          = (oTaskData.TAS_DERIVATION == 'TRUE' ? true : false);
   getField('TAS_PRIORITY_VARIABLE').checked     = (oTaskData.TAS_PRIORITY_VARIABLE == 'TRUE' ? true : false);
   getField('TAS_ASSIGN_LOCATION').checked       = (oTaskData.TAS_ASSIGN_LOCATION == 'TRUE' ? true : false);
