@@ -31,11 +31,17 @@ $aFields['MESS_SERVER']              = isset($_POST['form']['MESS_ENABLED']) ?tr
 $aFields['MESS_RAUTH']               = isset($_POST['form']['MESS_ENABLED']) ?isset($_POST['form']['MESS_RAUTH']) ? $_POST['form']['MESS_RAUTH'] : '': '';
 $aFields['MESS_PORT']                = isset($_POST['form']['MESS_ENABLED']) ?$_POST['form']['MESS_PORT']: '';
 $aFields['MESS_ACCOUNT']             = isset($_POST['form']['MESS_ENABLED']) ?$_POST['form']['MESS_ACCOUNT']: '';
-$aFields['MESS_PASSWORD']            = isset($_POST['form']['MESS_ENABLED']) ?$_POST['form']['MESS_PASSWORD']: ''; 
-if(strpos( $aFields['MESS_PASSWORD'], 'hush:' ) === false){
-	$aFields['MESS_PASSWORD']            = G::encrypt($aFields['MESS_PASSWORD'],'EMAILENCRYPT');
-	$aFields['MESS_PASSWORD']            = 'hush:'.$aFields['MESS_PASSWORD'];
+$aFields['MESS_PASSWORD']            = isset($_POST['form']['MESS_ENABLED']) ?$_POST['form']['MESS_PASSWORD']: '';
+$aFields['MESS_PASSWORD_HIDDEN']     = isset($_POST['form']['MESS_ENABLED']) ?$_POST['form']['MESS_PASSWORD_HIDDEN']: '';
+if ($aFields['MESS_PASSWORD_HIDDEN'] !='') {
+  $aFields['MESS_PASSWORD'] =	$aFields['MESS_PASSWORD_HIDDEN'];
 }
+$aFields['MESS_PASSWORD_HIDDEN'] = '';
+$aPasswd = G::decrypt($aFields['MESS_PASSWORD'],'EMAILENCRYPT');
+if ((strpos( $aPasswd, 'hash:') !== true) && ($aFields['MESS_PASSWORD'] != '')) {   // for plain text
+  $aFields['MESS_PASSWORD'] = 'hash:'.$aFields['MESS_PASSWORD'];
+  $aFields['MESS_PASSWORD'] = G::encrypt($aFields['MESS_PASSWORD'],'EMAILENCRYPT');    
+} 
 $aFields['MESS_BACKGROUND']          = isset($_POST['form']['MESS_ENABLED']) ?isset($_POST['form']['MESS_BACKGROUND']) ? $_POST['form']['MESS_BACKGROUND'] : '': '';
 $aFields['MESS_EXECUTE_EVERY']       = isset($_POST['form']['MESS_ENABLED']) ?$_POST['form']['MESS_EXECUTE_EVERY']: '';
 $aFields['MESS_SEND_MAX']            = isset($_POST['form']['MESS_ENABLED']) ?$_POST['form']['MESS_SEND_MAX']: '';

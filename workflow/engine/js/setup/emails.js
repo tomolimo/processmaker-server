@@ -5,70 +5,71 @@
 var PROCESS_REQUEST_FILE = '../setup/emails_Ajax';
 var oPanel;
 
-function verifyFields(oForm) {
+function verifyFields(oForm) { 
 	switch (getField('MESS_ENGINE').value) {
-	case 'PHPMAILER':
-		verifyPassword = 0;
-		oAuxS = $('form[MESS_SERVER]').value.trim();
-		if (oAuxS == '') {
-			new leimnud.module.app.alert().make({
-				label : G_STRINGS.ID_SERVER_REQUIRED
-			});
-			return false;
-		} else {
-			oAuxA = $('form[MESS_ACCOUNT]').value;
-			if (oAuxA == '') {
-				new leimnud.module.app.alert().make({
-					label : G_STRINGS.ID_MESS_ACCOUNT_REQUIRED
-				});
-				return false;
-			} else {
-				if ($('form[MESS_RAUTH]').checked) {
-					oAuxP = $('form[MESS_PASSWORD]').value;
-					if (oAuxP == '') {
-						new leimnud.module.app.alert().make({
-							label : G_STRINGS.ID_PASSWORD_REQUIRED
-						});
-						return false;
-					} else {
-						verifyPassword = 1;
-					}
-				} else {
-					verifyPassword = 1;
-				}
-				if (verifyPassword == 1) {
-					if ($('form[MESS_TEST_MAIL]').checked) {
-						oAuxE = $('form[MESS_TEST_MAIL_TO]').value;
-						if (oAuxE == '') {
-							new leimnud.module.app.alert().make({
-								label : G_STRINGS.ID_EMAIL_REQUIRED
-							});
-							return false;
-						} else {
-							testConnection();
-						}
-					} else {
-						testConnection();
-					}
-				}
-			}
-		}
-		break;
-	case 'MAIL':
-		if ($('form[MESS_TEST_MAIL]').checked) {
-			oAuxE = $('form[MESS_TEST_MAIL_TO]').value.trim();
-			if (oAuxE == '') {
-				new leimnud.module.app.alert().make({
-					label : G_STRINGS.ID_EMAIL_REQUIRED
-				});
-				return false;
-			} else {
-				testConnectionMail();
-			}
-		} else {
-			testConnectionMail();
-		}
-		break;
+    case 'PHPMAILER':
+      verifyPassword = 0;
+      oAuxS = $('form[MESS_SERVER]').value.trim();
+      if (oAuxS == '') {
+        new leimnud.module.app.alert().make({
+          label : G_STRINGS.ID_SERVER_REQUIRED
+        });
+        return false;
+      } else {
+        oAuxA = $('form[MESS_ACCOUNT]').value;
+        if (oAuxA == '') {
+          new leimnud.module.app.alert().make({
+            label : G_STRINGS.ID_MESS_ACCOUNT_REQUIRED
+          });
+          return false;
+        } else {
+          if ($('form[MESS_RAUTH]').checked) {
+            oAuxP = $('form[MESS_PASSWORD]').value;
+            oAuxPH = $('form[MESS_PASSWORD_HIDDEN]').value;					
+            if ((oAuxP == '')&&(oAuxPH == '')) {
+              new leimnud.module.app.alert().make({
+                label : G_STRINGS.ID_PASSWORD_REQUIRED
+              });
+              return false;
+            } else {
+              verifyPassword = 1;
+            }
+          } else {
+            verifyPassword = 1;
+          }
+          if (verifyPassword == 1) {
+            if ($('form[MESS_TEST_MAIL]').checked) {
+              oAuxE = $('form[MESS_TEST_MAIL_TO]').value;
+              if (oAuxE == '') {
+                new leimnud.module.app.alert().make({
+                  label : G_STRINGS.ID_EMAIL_REQUIRED
+                });
+                return false;
+              } else {
+                testConnection();
+              }
+            } else {
+              testConnection();
+            }
+          }
+        }
+      }
+      break;
+    case 'MAIL':
+      if ($('form[MESS_TEST_MAIL]').checked) {
+        oAuxE = $('form[MESS_TEST_MAIL_TO]').value.trim();
+        if (oAuxE == '') {
+          new leimnud.module.app.alert().make({
+            label : G_STRINGS.ID_EMAIL_REQUIRED
+          });
+          return false;
+        } else {
+          testConnectionMail();
+        }
+      } else {
+        testConnectionMail();
+      }
+      break;
 	}
 }
 
@@ -77,7 +78,12 @@ function testConnection() {
 	params  = 'srv=' + getField('MESS_SERVER').value.trim();
 	params += '&port='+ ((getField('MESS_PORT').value.trim() != '') ? getField('MESS_PORT').value : 'default');
 	params += '&account=' + getField('MESS_ACCOUNT').value;
-	params += '&passwd=' + getField('MESS_PASSWORD').value;
+	if (getField('MESS_PASSWORD_HIDDEN').value =='') {
+	  params += '&passwd=' + getField('MESS_PASSWORD').value;
+	}
+	else {
+	  params += '&passwd=' + getField('MESS_PASSWORD_HIDDEN').value;  
+	}
 	params += '&auth_required='+ (getField('MESS_RAUTH').checked ? 'yes' : 'no');
 	params += '&send_test_mail='+ (getField('MESS_TEST_MAIL').checked ? 'yes' : 'no');
 	params += '&mail_to=' + $('form[MESS_TEST_MAIL_TO]').value;
@@ -271,7 +277,13 @@ function initSet() {
 }
 
 var verifyData = function(oForm) {
+  
 	if (getField('MESS_ENABLED').checked) {
+    if (getField('MESS_RAUTH').checked) {
+      if (getField('MESS_PASSWORD') == '') {
+    	  getField('MESS_PASSWORD').value = getField('MESS_PASSWORD_HIDDEN').value;
+      }	
+    }
 		switch (getField('MESS_ENGINE').value) {
 		case 'PHPMAILER':
 		case 'OPENMAIL':

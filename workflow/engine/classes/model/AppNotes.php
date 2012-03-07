@@ -142,10 +142,11 @@ class AppNotes extends BaseAppNotes {
         $aConfiguration = $oConfiguration->load('Emails', '', '', '', '');
         if ($aConfiguration['CFG_VALUE'] != '') {
           $aConfiguration = unserialize($aConfiguration['CFG_VALUE']);
-          $passwd = $aConfiguration['MESS_PASSWORD'];
-          if(strpos( $passwd, 'hush:' ) !== false){
-          	list($hush, $pass) = explode(":", $passwd);
-          	$aConfiguration['MESS_PASSWORD'] = G::decrypt($pass,'EMAILENCRYPT');
+          $passwd = $aConfiguration['MESS_PASSWORD'];           
+          $passwdDec = G::decrypt($passwd,'EMAILENCRYPT');
+          if (strpos( $passwdDec, 'hash:' ) !== false) {
+    	      list($hash, $pass) = explode(":", $passwdDec);   
+    	      $passwd = $pass;
           }
         } else {
           $aConfiguration = array();

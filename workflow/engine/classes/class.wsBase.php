@@ -628,11 +628,11 @@ class wsBase
       $aSetup = System::getEmailConfiguration();
 
       $passwd =$aSetup['MESS_PASSWORD'];
-      if(strpos( $passwd, 'hush:' ) !== false)
-      {
-      	list($hush, $pass) = explode(":", $passwd);
-      	$aSetup['MESS_PASSWORD'] = G::decrypt($pass,'EMAILENCRYPT');      
-      }           
+      $passwdDec = G::decrypt($passwd,'EMAILENCRYPT');
+      if (strpos( $passwdDec, 'hash:' ) !== false) {
+    	  list($hash, $pass) = explode(":", $passwdDec);   
+    	  $passwd = $pass;
+      }       
       $oSpool = new spoolRun();
       $oSpool->setConfig(array(
         'MESS_ENGINE'   => $aSetup['MESS_ENGINE'],

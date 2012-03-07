@@ -725,11 +725,12 @@ class Xpdl extends processes
         $emailArray     = $oConfiguration->load('Emails','','','','');
         $arrayFrom      = unserialize($emailArray['CFG_VALUE']);
         $passwd = $arrayFrom['MESS_PASSWORD'];
-        if(strpos( $passwd, 'hush:' ) !== false){
-        	list($hush, $pass) = explode(":", $passwd);
-        	$arrayFrom['MESS_PASSWORD'] = G::decrypt($pass,'EMAILENCRYPT');
+        $passwdDec = G::decrypt($passwd,'EMAILENCRYPT');
+        if (strpos( $passwdDec, 'hash:' ) !== false) {
+    	    list($hash, $pass) = explode(":", $passwdDec);   
+    	    $passwd = $pass;
         }
-        $from           = $arrayFrom['MESS_ACCOUNT'];
+        $from = $arrayFrom['MESS_ACCOUNT'];
         if($to == 'ext'){
           $oUser = new Users();
           $aUser = $oUser->load($_SESSION['USER_LOGGED']);

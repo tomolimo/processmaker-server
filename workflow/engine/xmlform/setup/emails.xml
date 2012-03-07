@@ -34,6 +34,10 @@
   <en>SMTP Password</en>
 </MESS_PASSWORD>
 
+<MESS_PASSWORD_HIDDEN type="hidden" size="35" maxlength="100">
+  <en></en>
+</MESS_PASSWORD_HIDDEN>
+
 <MESS_TEST_MAIL type="checkbox" value="1">
   <en>Send a test mail</en>
 </MESS_TEST_MAIL>
@@ -79,6 +83,19 @@
 
 <JS type="javascript">
   <![CDATA[
+	leimnud.event.add(getField('MESS_SERVER'), 'change', function() {
+	  getField('MESS_PASSWORD_HIDDEN').value = '';
+	  getField('MESS_PASSWORD').value = '';
+	}.extend(getField('MESS_ENABLED')));
+	   
+	leimnud.event.add(getField('MESS_PASSWORD'), 'change', function() {
+	  if (getField('MESS_PASSWORD').value != '') {
+		  getField('MESS_PASSWORD_HIDDEN').value = '';
+		}		
+	}.extend(getField('MESS_ENABLED')));
+	 
+	getField('MESS_PASSWORD_HIDDEN').value  = getField('MESS_PASSWORD').value;		
+	getField('MESS_PASSWORD').value = '';
     //settings events
     leimnud.event.add(getField('MESS_RAUTH'), 'click', function() {
       if (this.checked)

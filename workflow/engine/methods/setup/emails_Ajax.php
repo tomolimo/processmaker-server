@@ -72,11 +72,12 @@ switch ($request) {
 
     $port  = ($_POST['port'] == 'default')? 25: $_POST['port'];
     $user  = $_POST['account'];
-    $passwd = $_POST['passwd']; 
-    if(strpos( $passwd, 'hush:' ) !== false){
-    	list($hush, $pass) = explode(":", $passwd);   
-    	$passwd = G::decrypt($pass,'EMAILENCRYPT');
-    }      
+    $passwd = $_POST['passwd'];
+    $passwdDec = G::decrypt($passwd,'EMAILENCRYPT');
+    if (strpos( $passwdDec, 'hash:' ) !== false) {
+    	list($hash, $pass) = explode(":", $passwdDec);   
+    	$passwd = $pass;
+    }
     $step  = $_POST['step'];
     $auth_required  = $_POST['auth_required'];
     $send_test_mail = $_POST['send_test_mail'];
