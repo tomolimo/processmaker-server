@@ -3,7 +3,7 @@
 <TITLE type="title">
   <en>Error</en>
 </TITLE>
-<MESSAGE type="caption" enableHTML="1">
+<MESSAGE type="text" enableHtml="1" mode="view">
   <en/>
 </MESSAGE>
 </dynaForm> 
