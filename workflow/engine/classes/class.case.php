@@ -4595,36 +4595,26 @@ class Cases {
   }
 
   /*
-   * funcion permisos, by Everth
+   * funcion caseTrackerPermissions, by Everth
    *
-   * @name Permisos
+   * @name caseTrackerPermissions
    * @param string $PRO_UID
    * @return string
    */
 
-  function Permisos($PRO_UID) {
-    $a = 0;
-    $b = 0;
-    $c = 0;
-    $d = 0;
-    $oCaseTracker = new CaseTracker();
-    $aCaseTracker = $oCaseTracker->load($PRO_UID);
-    if (is_array($aCaseTracker)) {
-      if ($aCaseTracker['CT_MAP_TYPE'] != 'NONE')
-        $a = 1;
+  function caseTrackerPermissions($PRO_UID) {
+    $newCaseTracker = new CaseTracker();
+    $caseTracker = $newCaseTracker->load($PRO_UID);
+    if (is_array($caseTracker)) {
+      $caseTracker['CT_MAP_TYPE']            = ($caseTracker['CT_MAP_TYPE'] != 'NONE')? true : false;
+      //$caseTracker['CT_DERIVATION_HISTORY']  = ($caseTracker['CT_DERIVATION_HISTORY'] == 1)? true : false;
+      //$caseTracker['CT_MESSAGE_HISTORY']     = ($caseTracker['CT_MESSAGE_HISTORY'] == 1)? true : false;
 
-      $oCriteria = new Criteria();
-      $oCriteria->add(CaseTrackerObjectPeer::PRO_UID, $PRO_UID);
-      if (CaseTrackerObjectPeer::doCount($oCriteria) > 0)
-        $b = 1;
-
-      if ($aCaseTracker['CT_DERIVATION_HISTORY'] == 1)
-        $c = 1;
-
-      if ($aCaseTracker['CT_MESSAGE_HISTORY'] == 1)
-        $d = 1;
+      $criteria = new Criteria();
+      $criteria->add(CaseTrackerObjectPeer::PRO_UID, $PRO_UID);
+      $caseTracker['DYNADOC'] = (CaseTrackerObjectPeer::doCount($criteria) > 0)? true : false;
     }
-    return $a . '-' . $b . '-' . $c . '-' . $d;
+    return $caseTracker;
   }
 
   /*

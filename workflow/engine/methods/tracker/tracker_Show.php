@@ -43,7 +43,7 @@
   $G_MAIN_MENU            = 'caseTracker';
   $G_ID_MENU_SELECTED     = 'DYNADOC';
   global $G_PUBLISH;
-
+  
   switch ($_GET['CTO_TYPE_OBJ'])
   {
     case 'DYNAFORM':
@@ -57,7 +57,6 @@
       $Fields['APP_DATA']['__DYNAFORM_OPTIONS']['PRINT_PREVIEW']        = '#';
       $Fields['APP_DATA']['__DYNAFORM_OPTIONS']['PRINT_PREVIEW_ACTION'] = 'tracker_PrintView?CTO_UID_OBJ=' . $_GET['CTO_UID_OBJ'] . '&CTO_TYPE_OBJ=PRINT_PREVIEW';
       $_SESSION['CTO_UID_OBJ'] =  $_GET['CTO_UID_OBJ'];
-
       $G_PUBLISH = new Publisher;
       $G_PUBLISH->AddContent('dynaform', 'xmlform', $_SESSION['PROCESS']. '/' . $_GET['CTO_UID_OBJ'], '', $Fields['APP_DATA'],'','','view');
       G::RenderPage('publish');

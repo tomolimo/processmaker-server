@@ -23,7 +23,7 @@
  *
  */
  /*
-   * Case Tracker Menú
+   * Case Tracker MenÃº
    *
    * @author Everth S. Berrios Morales <everth@colosa.com>
    * 
@@ -31,46 +31,25 @@
 global $G_TMP_MENU;
 global $RBAC;
 
-$G_TMP_MENU->AddIdRawOption('MAP',      'tracker/tracker_ViewMap');
-$G_TMP_MENU->AddIdRawOption('DYNADOC',  'tracker/tracker_DynaDocs');
-$G_TMP_MENU->AddIdRawOption('HISTORY',  'tracker/tracker_History');
-$G_TMP_MENU->AddIdRawOption('MESSAGES',  'tracker/tracker_Messages');
-
-$G_TMP_MENU->Labels = array(  
-  G::LoadTranslation('ID_MAP'),
-  G::LoadTranslation('ID_DYNADOC'),
-  G::LoadTranslation('ID_HISTORY'), 
-  G::LoadTranslation('ID_HISTORY_MESSAGES')
-);
-
-if ( file_exists ( PATH_CORE . 'menus/plugin.php' ) ) {
-	require_once ( PATH_CORE . 'menus/plugin.php' );
+if (file_exists ( PATH_CORE . 'menus/plugin.php')) {
+  require_once (PATH_CORE . 'menus/plugin.php');
 }
 
-G::LoadClass('case');
-	$oCase = new Cases();
-	$per = $oCase->Permisos( $_SESSION['PROCESS']);
-	
-	$p = explode('-', $per);	
+  G::LoadClass('case');
+  $case = new Cases();
+  $caseTracker = $case->caseTrackerPermissions( $_SESSION['PROCESS']);
+  if ($caseTracker['CT_MAP_TYPE']) {
+    $G_TMP_MENU->AddIdRawOption('MAP',      'tracker/tracker_ViewMap',    G::LoadTranslation('ID_MAP'));
+  }
+  if ($caseTracker['DYNADOC']) {
+    $G_TMP_MENU->AddIdRawOption('DYNADOC',  'tracker/tracker_DynaDocs',   G::LoadTranslation('ID_DYNADOC'));
+  }
+  if ($caseTracker['CT_DERIVATION_HISTORY']) {
+    $G_TMP_MENU->AddIdRawOption('HISTORY',  'tracker/tracker_History',    G::LoadTranslation('ID_HISTORY'));
+  }
+  if ($caseTracker['CT_MESSAGE_HISTORY']) {
+    $G_TMP_MENU->AddIdRawOption('MESSAGES',  'tracker/tracker_Messages',  G::LoadTranslation('ID_HISTORY_MESSAGES'));
+  }
 
-if ($p[0] != 1)
-{
-  $G_TMP_MENU->DisableOptionId('MAP');
-}
-
-if ($p[1] != 1)
-{
-  $G_TMP_MENU->DisableOptionId('DYNADOC');
-}
-
-if ($p[2] != 1)
-{
-  $G_TMP_MENU->DisableOptionId('HISTORY');
-}
-
-if ($p[3] != 1)
-{
-  $G_TMP_MENU->DisableOptionId('MESSAGES');
-}
 
 

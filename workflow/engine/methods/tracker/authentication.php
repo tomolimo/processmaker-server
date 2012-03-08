@@ -29,98 +29,88 @@
    *
    */
 
-
   if (!isset($_POST['form']) ) {
     G::SendTemporalMessage ('ID_USER_HAVENT_RIGHTS_SYSTEM', "error");
     G::header  ("location: login.php");die;
   }
 
-
 try {
-	$frm = $_POST['form'];
-	$case = '';
-	$pin = '';
+  $frm = $_POST['form'];
+  $case = '';
+  $pin = '';
 
-	if (isset($frm['CASE'])) {
-	  $case = strtolower(trim($frm['CASE']));
-	  $pin = trim($frm['PIN']);
-	}
+  if (isset($frm['CASE'])) {
+    $case = strtolower(trim($frm['CASE']));
+    $pin = trim($frm['PIN']);
+  }
 
-	G::LoadClass('case');
-	$oCase = new Cases();
+  G::LoadClass('case');
+  $cases = new Cases();
 
-  $uid = $oCase->verifyCaseTracker($case, $pin);
-	//print_r($uid); die;
-	switch ($uid) {
-		//The case doesn't exist
-	  case -1:
-	    G::SendTemporalMessage ('ID_CASE_NOT_EXISTS', "error");
-	    break;
-	  //The pin is invalid
-	  case -2:
-	    G::SendTemporalMessage ('ID_PIN_INVALID', "error");
-	    break;
-	}
+  $uid = $cases->verifyCaseTracker($case, $pin);
+  switch ($uid) {
+    //The case doesn't exist
+    case -1:
+      G::SendTemporalMessage ('ID_CASE_NOT_EXISTS', "error");
+      break;
+    //The pin is invalid
+    case -2:
+      G::SendTemporalMessage ('ID_PIN_INVALID', "error");
+      break;
+  }
 
-	if ($uid < 0 ) {
-	  G::header  ("location: login.php");
-	  die;
-	}
+  if ($uid < 0 ) {
+    G::header  ("location: login.php");
+    die;
+  }
 
-	if(is_array($uid))
-	{
-		require_once ("classes/model/CaseTracker.php");
-		require_once ("classes/model/CaseTrackerObject.php");
-		$_SESSION['CASE']=$case;
-		$_SESSION['PIN']=$pin;
-		$_SESSION['PROCESS']=$uid['PRO_UID'];
-		$_SESSION['APPLICATION']=$uid['APP_UID'];
-		$_SESSION['TASK']=-1;
-		$_SESSION['INDEX']=-1;
-		$a=0;
-		$b=0;
-		$c=0;
-		$oCriteria = new Criteria();
-    $oCriteria->add(CaseTrackerPeer::PRO_UID, $_SESSION['PROCESS']);
-		$oCaseTracker = new CaseTracker();
-		if (CaseTrackerPeer::doCount($oCriteria) === 0) {
-      $aCaseTracker = array('PRO_UID'               => $_SESSION['PROCESS'],
+  if(is_array($uid))
+  {
+    require_once ("classes/model/CaseTracker.php");
+    require_once ("classes/model/CaseTrackerObject.php");
+    $_SESSION['CASE']         = $case;
+    $_SESSION['PIN']          = $pin;
+    $_SESSION['PROCESS']      = $uid['PRO_UID'];
+    $_SESSION['APPLICATION']  = $uid['APP_UID'];
+    $_SESSION['TASK']         = -1;
+    $_SESSION['INDEX']        = -1;
+
+    $criteria = new Criteria();
+    $criteria->add(CaseTrackerPeer::PRO_UID, $_SESSION['PROCESS']);
+    $caseTracker = new CaseTracker();
+    if (CaseTrackerPeer::doCount($criteria) === 0) {
+      $permissionsCaseTracker = array('PRO_UID'     => $_SESSION['PROCESS'],
                             'CT_MAP_TYPE'           => 'PROCESSMAP',
                             'CT_DERIVATION_HISTORY' => 1,
                             'CT_MESSAGE_HISTORY'    => 1);
-      $oCaseTracker->create($aCaseTracker);
+      $caseTracker->create($permissionsCaseTracker);
+    }
+    $caseTracker = $cases->caseTrackerPermissions( $_SESSION['PROCESS']);
+
+    if ($caseTracker['CT_MAP_TYPE']) {
+      G::header  ('location: tracker_ViewMap');
     }
     else {
-		  $aCaseTracker = $oCaseTracker->load($_SESSION['PROCESS']);
-		}
-
-		if(is_array($aCaseTracker))
-		{	if($aCaseTracker['CT_MAP_TYPE']!='NONE')
-			 {	 $a=1;
-			 		 G::header  ('location: tracker_ViewMap');
-			 		 die;
-		   }
-
-			$oCriteria = new Criteria();
-      $oCriteria->add(CaseTrackerObjectPeer::PRO_UID, $_SESSION['PROCESS']);
-      if (CaseTrackerObjectPeer::doCount($oCriteria) > 0)
-     	 {	$b=1;
-     	 	  G::header  ("location: tracker_DynaDocs");
-     	 	  die;
-       }
-
-			if($aCaseTracker['CT_DERIVATION_HISTORY']==1)
-				 {	$c=1;
-				 	  G::header  ("location: tracker_History");
-				 	  die;
-				 }
-
-			G::header  ("location: tracker_No");
-	  }
+      if ($caseTracker['DYNADOC']) {
+        G::header  ("location: tracker_DynaDocs");
+      }
+      else {
+        if ($caseTracker['CT_DERIVATION_HISTORY']) {
+          G::header  ("location: tracker_History");
+        }
+        else {
+          if ($caseTracker['CT_MESSAGE_HISTORY']) {
+            G::header  ("location: tracker_No");
+          }
+          else {
+            G::header  ("location: login.php");
+            G::SendTemporalMessage ('ID_ACCOUNT_DISABLED_CONTACT_ADMIN', "error");
+          }
+        }
+      }
+    }
   }
-
 }
-
 catch ( Exception $e ) {
   $aMessage['MESSAGE'] = $e->getMessage();
   $G_PUBLISH = new Publisher;

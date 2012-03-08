@@ -550,7 +550,7 @@
   //checking method 'Permisos'
   $t->is ( $aMethods[60],      'Permisos',   'Permisos() is callable' );
 
-  //$result = $obj->Permisos ( $PRO_UID);
+  //$result = $obj->caseTrackerPermissions ( $PRO_UID);
   //$t->isa_ok( $result,      'NULL',   'call to method Permisos ');
   $t->todo( "call to method Permisos using $PRO_UID ");
 
