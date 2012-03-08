@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: ProcessMaker (Branch 2.0-experimental) 2.0-testing.13-15-g8404fa6\n"
+"Project-Id-Version: ProcessMaker (Branch 2.0-experimental) 2.0-testing.13-45-g77bcf63\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2012-03-05 16:31:00\n"
+"PO-Revision-Date: 2012-03-08 18:34:19\n"
 "Last-Translator: \n"
 "Language-Team: Colosa Developers Team <developers@colosa.com>\n"
 "MIME-Version: 1.0\n"
@@ -11863,6 +11863,36 @@ msgstr "Templates"
 msgid "Public"
 msgstr "Public"
 
+# TRANSLATION
+# LABEL/ID_DELETE_INPUTDOCUMENT_CONFIRM
+#: LABEL/ID_DELETE_INPUTDOCUMENT_CONFIRM
+msgid "To the deselecting the item will be deleted the Day of the Work hours list. Do you want continue?"
+msgstr "To the deselecting the item will be deleted the Day of the Work hours list. Do you want continue?"
+
+# TRANSLATION
+# JAVASCRIPT/ID_SUBJECT_FIELD_REQUIRED
+#: JAVASCRIPT/ID_SUBJECT_FIELD_REQUIRED
+msgid "Subject Field is required."
+msgstr "Subject Field is required."
+
+# TRANSLATION
+# JAVASCRIPT/ID_MESSAGE_FIELD_REQUIRED
+#: JAVASCRIPT/ID_MESSAGE_FIELD_REQUIRED
+msgid "Message Field is required."
+msgstr "Message Field is required."
+
+# TRANSLATION
+# JAVASCRIPT/ID_TEMPLATE_FIELD_REQUIRED
+#: JAVASCRIPT/ID_TEMPLATE_FIELD_REQUIRED
+msgid "Template Field is required."
+msgstr "Template Field is required."
+
+# TRANSLATION
+# LABEL/ID_ADMINS_CANT_USE_UXS
+#: LABEL/ID_ADMINS_CANT_USE_UXS
+msgid "Administrators users cannot use this User Experience."
+msgstr "Administrators users cannot use this User Experience."
+
 # additionalTables/additionalTablesData.xml?ADD_TAB_NAME
 # additionalTables/additionalTablesData.xml
 #: text - ADD_TAB_NAME
@@ -21253,7 +21283,7 @@ msgstr "Error"
 
 # login/showMessage.xml?MESSAGE
 # login/showMessage.xml
-#: caption - MESSAGE
+#: text - MESSAGE
 msgid "[login/showMessage.xml?MESSAGE] "
 msgstr ""
 
@@ -28531,7 +28561,7 @@ msgstr "CASE TRACKER"
 
 # tracker/login.xml?CASE
 # tracker/login.xml
-#: text - CASE
+#: Text - CASE
 msgid "Case Code"
 msgstr "Case Code"
 

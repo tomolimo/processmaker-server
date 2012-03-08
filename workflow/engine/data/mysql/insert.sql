@@ -3408,7 +3408,12 @@ INSERT INTO TRANSLATION (TRN_CATEGORY,TRN_ID,TRN_LANG,TRN_VALUE,TRN_UPDATE_DATE 
 ( 'LABEL','ID_SWITCH_INTERFACE','en','Switch Interface','2012-02-02') ,
 ( 'LABEL','ID_USER_EXPERIENCE','en','User Experience','2012-02-02') ,
 ( 'LABEL','ID_TEMPLATES','en','Templates','2012-02-02') ,
-( 'LABEL','ID_PUBLIC','en','Public','2012-02-02') ;
+( 'LABEL','ID_PUBLIC','en','Public','2012-02-02') ,
+( 'LABEL','ID_DELETE_INPUTDOCUMENT_CONFIRM','en','To the deselecting the item will be deleted the Day of the Work hours list. Do you want continue?','2012-02-02') ,
+( 'JAVASCRIPT','ID_SUBJECT_FIELD_REQUIRED','en','Subject Field is required.','2012-02-02') ,
+( 'JAVASCRIPT','ID_MESSAGE_FIELD_REQUIRED','en','Message Field is required.','2012-02-02') ,
+( 'JAVASCRIPT','ID_TEMPLATE_FIELD_REQUIRED','en','Template Field is required.','2012-02-02') ,
+( 'LABEL','ID_ADMINS_CANT_USE_UXS','en','Administrators users cannot use this User Experience.','2012-02-02') ;
 
 INSERT INTO ISO_LOCATION (IC_UID,IL_UID,IL_NAME,IL_NORMAL_NAME,IS_UID)  VALUES 
 ('AD','','',' ','') ,
