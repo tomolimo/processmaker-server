@@ -93,7 +93,7 @@ var saveDataTaskTemporal = function(iForm)
         if ( getField('SEND_EMAIL') != null && (typeof (getField('SEND_EMAIL')) != 'undefined' ) ) {
           // validate fields TAS_DEF_SUBJECT_MESSAGE, TAS_DEF_MESSAGE
           if (getField('SEND_EMAIL').checked) {
-            if (getField('TAS_DEF_SUBJECT_MESSAGE').value == '') {
+            if (getField('TAS_DEF_SUBJECT_MESSAGE').value.trim() == '') {
               new leimnud.module.app.alert().make( {
                 label : G_STRINGS.ID_SUBJECT_FIELD_REQUIRED
               });
@@ -101,7 +101,7 @@ var saveDataTaskTemporal = function(iForm)
             }
             switch ( getField('TAS_DEF_MESSAGE_TYPE').value ) {
               case 'text' :
-                if (getField('TAS_DEF_MESSAGE').value == '' ) {
+                if (getField('TAS_DEF_MESSAGE').value.trim() == '' ) {
                   new leimnud.module.app.alert().make( {
                     label : G_STRINGS.ID_MESSAGE_FIELD_REQUIRED
                   });
@@ -109,7 +109,7 @@ var saveDataTaskTemporal = function(iForm)
                 }
                 break;
               case 'template' :
-                if (getField('TAS_DEF_MESSAGE_TEMPLATE').value == '' ){
+                if (getField('TAS_DEF_MESSAGE_TEMPLATE').value.trim() == '' ){
                   new leimnud.module.app.alert().make( {
                     label : G_STRINGS.ID_TEMPLATE_FIELD_REQUIRED
                   });
