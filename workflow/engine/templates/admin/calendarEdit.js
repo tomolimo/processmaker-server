@@ -23,7 +23,7 @@
       id          : workHourComposite,
       hideLabel   : true,
       labelWidth  : 100,
-      items       : [        
+      items       : [
         {
           xtype  : 'displayfield',
           width : 10,
@@ -94,8 +94,8 @@
         }
       ]
     });
-    return CompositeField1;  
-  }                           
+    return CompositeField1;
+  }
   
   function fordataWorkDayFieldNew() {
     
@@ -126,30 +126,30 @@
       }
     }
     
-		var e = workHourComposite_.el.up( '.x-form-item' );
-		idWorkHour_.remove( workHourComposite_ );
-		e.remove();    
-		dynaformCalendar_.doLayout();
+    var e = workHourComposite_.el.up( '.x-form-item' );
+    idWorkHour_.remove( workHourComposite_ );
+    e.remove();    
+    dynaformCalendar_.doLayout();
   }
-	Ext.ux.OrderedFormPanel = Ext.extend( Ext.FormPanel, { 
-		addAfter : function( a, c ){
-			for( var i = 0 ; i < this.items.items.length ; i++ ){
-				if( this.items.items[i] == a ){
-					this.insert( i + 1, c );
-					return;
-				}
-			}
-		
-		},
-		addBefore : function( a, c ) {
-			for( var i = 0 ; i < this.items.items.length ; i++ ){
-				if( this.items.items[i] == a ){
-					this.insert( i, c );
-					return;
-				}
-			}		
-		}	
-	});
+  Ext.ux.OrderedFormPanel = Ext.extend( Ext.FormPanel, { 
+    addAfter : function( a, c ){
+      for( var i = 0 ; i < this.items.items.length ; i++ ){
+        if( this.items.items[i] == a ){
+          this.insert( i + 1, c );
+          return;
+        }
+      }
+    
+    },
+    addBefore : function( a, c ) {
+      for( var i = 0 ; i < this.items.items.length ; i++ ){
+        if( this.items.items[i] == a ){
+          this.insert( i, c );
+          return;
+        }
+      }		
+    }	
+  });
   
   //[ Global variables
   calendarWorkDayArray = [];
@@ -257,7 +257,7 @@ Ext.onReady( function() {
     validateedit: function(editor, e, options) {
       var gridCalendar_ = Ext.getCmp('gridCalendar');
       var gridRowIndex = editor.rowIndex;
-      var gridRecordId = editor.record.id;         
+      var gridRecordId = editor.record.id;
        
       var gridEnd = gridCalendar_.store.data.items[gridRowIndex].data.end;
       var gridName = gridCalendar_.store.data.items[gridRowIndex].data.name;
@@ -313,10 +313,10 @@ Ext.onReady( function() {
                 var gridEachEndSecond     = gridEachEndObject.getTime();
                 
                 if((editorStartSecond > gridEachStartSecond)||(gridEachEndSecond>editorStartSecond))
-                	dataExist = 'Off';
+                  dataExist = 'Off';
                 else{
-                	if(editorEndSecond>gridEachStartSecond||gridEachEndSecond>editorEndSecond)
-                	  dataExist = 'Off';
+                  if(editorEndSecond>gridEachStartSecond||gridEachEndSecond>editorEndSecond)
+                    dataExist = 'Off';
                 }
               }
             }
@@ -702,6 +702,7 @@ Ext.onReady( function() {
  
     
     new Ext.Viewport({
+      autoScroll : true,
     //  layout: 'border',
       items: [
          {
@@ -767,7 +768,7 @@ Ext.onReady( function() {
                 },
                 {
                     id   : 'workDays',
-                    xtype: 'fieldset',                              
+                    xtype: 'fieldset',
                     title: _('ID_WORK_DAYS'),
                     items: [
                       {//8
@@ -784,7 +785,7 @@ Ext.onReady( function() {
                             name: 'M0',
                             readOnly:true,
                             disabled:false,
-                            handler : function() {                                        
+                            handler : function() {
                               gridCalendarDayModification( this , 'SUN' ); 
                             }
                           },
@@ -794,7 +795,7 @@ Ext.onReady( function() {
                             checked: true,
                             readOnly:true,
                             disabled:false,
-                            handler : function() {                                        
+                            handler : function() {
                               gridCalendarDayModification( this , 'MON' ); 
                             }
                           },
@@ -804,7 +805,7 @@ Ext.onReady( function() {
                             checked: true,
                             readOnly:true,
                             disabled:false,
-                            handler : function() {                                        
+                            handler : function() {
                               gridCalendarDayModification( this , 'TUE' ); 
                             }
                           },
@@ -814,7 +815,7 @@ Ext.onReady( function() {
                             checked: true,
                             readOnly:true,
                             disabled:false,
-                            handler : function() {                                        
+                            handler : function() {
                               gridCalendarDayModification( this , 'WED' ); 
                             }
                           },
@@ -824,7 +825,7 @@ Ext.onReady( function() {
                             checked: true,
                             readOnly:true,
                             disabled:false,
-                            handler : function() {                                        
+                            handler : function() {
                               gridCalendarDayModification( this , 'THU' ); 
                             }
                           },
@@ -834,7 +835,7 @@ Ext.onReady( function() {
                             checked: true,
                             readOnly:true,
                             disabled:false,
-                            handler : function() {                                        
+                            handler : function() {
                               gridCalendarDayModification( this , 'FRI' ); 
                             }
                           },
@@ -843,16 +844,14 @@ Ext.onReady( function() {
                             name: 'M6',
                             readOnly:true,
                             disabled:false,
-                            handler : function() {                                        
+                            handler : function() {
                               gridCalendarDayModification( this , 'SAT' ); 
                             }
                           }
                         ]
-                      }                                
-
+                      }
                     ]
-                    
-                },                                      
+                },
                 {
                   id              : 'idWorkHour',
                   title           : _('ID_WORK_HOURS'),
@@ -878,11 +877,11 @@ Ext.onReady( function() {
                       ]
                     }
                   ]
-                },                                
+                },
                 {
                   
                   id: 'idHolidays',
-                  title: _('ID_HOLIDAYS'),                            
+                  title: _('ID_HOLIDAYS'),
                   xtype:'fieldset',
                   checkboxToggle:true,
                   autoHeight:true,
@@ -915,8 +914,8 @@ Ext.onReady( function() {
                     gridHoliday.store.each(function(record) {
                       var start = record.data['startDate'];
                       var end = record.data['endDate'];
-                      if ((! start) || (! end))                 
-                        flag = 1;           
+                      if ((! start) || (! end))
+                        flag = 1;
                     });
                     assignedGrid = grid;
                     var allRows = assignedGrid.getStore();
@@ -929,7 +928,7 @@ Ext.onReady( function() {
                     var calendarStatus = Ext.getCmp('dynaformCalendarStatus').getValue();
                     var calendarStatusString = "INACTIVE";
 
-                    var calendarWorkDays = Ext.getCmp('dynaformCalendarWorkDays').getValue();                              
+                    var calendarWorkDays = Ext.getCmp('dynaformCalendarWorkDays').getValue();
                     var calendarWorkDaysArray = new Array();
 
                     var businessDayStatus = Ext.getCmp('idWorkHour');
@@ -940,13 +939,13 @@ Ext.onReady( function() {
                     var holidayStatus = Ext.getCmp('idHolidays');
                     var holidayStatusCollapsed = holidayStatus.collapsed;
                     var holidayStatusString = "INACTIVE";
-                    var holiday = "";                              
+                    var holiday = "";
                     //!fordata
 
                     var dynaformCalendarWorkDaysArray = Ext.getCmp('dynaformCalendarWorkDays').items.items;
                     var dynaformCalendarWorkDaysArrayLength = dynaformCalendarWorkDaysArray.length; 
                     var dynaformCalendarWorkDaysArrayChecked; 
-                    var dynaformCalendarWorkDaysArrayCheckedArray = new Array();                              
+                    var dynaformCalendarWorkDaysArrayCheckedArray = new Array();
                     var indexAuxiliar = 0;
                     var arrayDayinCheckbox = new Array(); 
                     for(i=0;i<dynaformCalendarWorkDaysArrayLength;i++) {
@@ -955,8 +954,8 @@ Ext.onReady( function() {
                       if(dynaformCalendarWorkDaysArrayChecked==true) {
                         arrayDayinCheckbox[i]=(dynaformCalendarWorkDaysArray[i].boxLabel);
 
-                        index = parseInt(dynaformCalendarWorkDaysArrayName.substring(1,2),10); 
-                        dynaformCalendarWorkDaysArrayCheckedArray[indexAuxiliar] = index; 
+                        index = parseInt(dynaformCalendarWorkDaysArrayName.substring(1,2),10);
+                        dynaformCalendarWorkDaysArrayCheckedArray[indexAuxiliar] = index;
                         indexAuxiliar++; 
                       }
                     }
@@ -966,7 +965,7 @@ Ext.onReady( function() {
                       calendarStatusString = "ACTIVE";
                     }
 
-                    if( businessDayStatusCollapsed == false ) { 
+                    if( businessDayStatusCollapsed == false ) {
                       businessDayStatusString = "ACTIVE";
                     }
 
@@ -980,7 +979,7 @@ Ext.onReady( function() {
                     var rowAllJsonArray = casesGrid_.store.reader.jsonData.data;
                     var rowNameData = '';
                     var arrayDayinGrid = new Array();
-                    for (var i = 0; i < allRows.getCount(); i++) {  
+                    for (var i = 0; i < allRows.getCount(); i++) {
                       rowData = allRows.data.items[i].data;
                       rowNameData = '';
                       switch(rowData.name) {
@@ -992,7 +991,7 @@ Ext.onReady( function() {
                         break;
                         case 'MON':
                           rowNameData = '1';
-                        break;                                
+                        break;
                         case 'TUE':
                           rowNameData = '2';
                         break;
@@ -1009,7 +1008,7 @@ Ext.onReady( function() {
                           rowNameData = '6';
                         break;
                         default:
-                        break;                                  
+                        break;
                       }
                       var gridCalendarColumnsRow = new Object();
                       gridCalendarColumnsRow['CALENDAR_BUSINESS_DAY']   = rowNameData;
@@ -1022,7 +1021,7 @@ Ext.onReady( function() {
                         var all = 1;  
                     }
 
-                    gridCalendarColumns = Ext.util.JSON.encode(gridCalendarColumns);                              
+                    gridCalendarColumns = Ext.util.JSON.encode(gridCalendarColumns);
 
                     var gridHolidayColumns = new Array();
                     var gridHolidayColumnsRow = new Array();
@@ -1030,9 +1029,9 @@ Ext.onReady( function() {
                     var allRows = casesGrid_.getStore();
                     var rowAllJsonArray = casesGrid_.store.reader.jsonData.data;
                     var rowNameData = '';
-                    for (var i = 0; i < allRows.getCount(); i++) {                                
+                    for (var i = 0; i < allRows.getCount(); i++) {
                       rowData = allRows.data.items[i].data;
-                      var gridHolidayColumnsRow = new Object();            
+                      var gridHolidayColumnsRow = new Object();
                       gridHolidayColumnsRow['CALENDAR_HOLIDAY_NAME']   = rowData.name;
                       gridHolidayColumnsRow['CALENDAR_HOLIDAY_START'] = Ext.util.Format.date(rowData.startDate,'Y-m-d');
                       gridHolidayColumnsRow['CALENDAR_HOLIDAY_END']   = Ext.util.Format.date(rowData.endDate,'Y-m-d');
@@ -1066,10 +1065,10 @@ Ext.onReady( function() {
                             },
                             success: function(resp){ 
                               if(fields['NEWCALENDAR']=='YES') {
-                                PMExt.notify( _('ID_STATUS') , _('ID_CALENDAR_CREATED_SUCCESSFULLY') );                                
+                                PMExt.notify( _('ID_STATUS') , _('ID_CALENDAR_CREATED_SUCCESSFULLY') );
                               }
                               else {
-                                PMExt.notify( _('ID_STATUS') , _('ID_CALENDAR_UPDATED_SUCCESSFULLY') );                                
+                                PMExt.notify( _('ID_STATUS') , _('ID_CALENDAR_UPDATED_SUCCESSFULLY') );
                               }
                               window.location.href = '../setup/calendarList';
                             } 
@@ -1087,7 +1086,7 @@ Ext.onReady( function() {
                               } 
                               else {
                                 var flag = 0; 
-                              }                  
+                              }
                             } 
                           }
                           if (flagDay < arrayDayinCheckboxSize)
@@ -1109,10 +1108,10 @@ Ext.onReady( function() {
                               },
                               success: function(resp){ 
                                 if(fields['NEWCALENDAR']=='YES') {
-                                  PMExt.notify( _('ID_STATUS') , _('ID_CALENDAR_CREATED_SUCCESSFULLY') );                                
+                                  PMExt.notify( _('ID_STATUS') , _('ID_CALENDAR_CREATED_SUCCESSFULLY') );
                                 }
                                 else {
-                                  PMExt.notify( _('ID_STATUS') , _('ID_CALENDAR_UPDATED_SUCCESSFULLY') );                                
+                                  PMExt.notify( _('ID_STATUS') , _('ID_CALENDAR_UPDATED_SUCCESSFULLY') );
                                 }
                                 window.location.href = '../setup/calendarList';
                               } 
@@ -1137,12 +1136,11 @@ Ext.onReady( function() {
                 }
               ]
             })
-          ]       
+          ]
         }
       ]
     });
 
-  
   //[ DATA EDIT
     calendarWorkDayStatusReset();
     var workDayEquivalenceArray = new Array();
