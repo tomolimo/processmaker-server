@@ -50,8 +50,12 @@
     $confDefaultOption = 'CASES_INBOX';
   }
 
-  if (isset($_GET['id'])) {
-    $defaultOption = '../cases/open?APP_UID='.$_GET['id'].'&DEL_INDEX='.$_GET['i']; //.'&action=todo';
+  if (isset($_GET['id'] && isset($_GET['id']))) {
+    $defaultOption = '../cases/open?APP_UID=' . $_GET['id'] . '&DEL_INDEX=' . $_GET['i'];
+
+    if (isset($_GET['a'])) {
+      $defaultOption .= '&action=' . $_GET['a'];
+    }
   }
   
   $oHeadPublisher->assign( 'defaultOption', $defaultOption); // user menu permissions
