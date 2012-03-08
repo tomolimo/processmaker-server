@@ -175,12 +175,11 @@ Ext.onReady(function(){
             select: function(a, b) {
               var row = usersGrid.getSelectionModel().getSelected();
               role = row.get('USR_ROLE');
-              //console.log(role)
 
-              // if (role == 'PROCESSMAKER_ADMIN') {
-              //   PMExt.warning(_('ID_ERROR'), 'You can\'t assign this User Experience UI for users that have PROCESSMAKER_ADMIN role.');
-              //   this.setValue('NORMAL');
-              // }
+              if (role == 'PROCESSMAKER_ADMIN' && (this.value == 'SIMPLIFIED' || this.value == 'SINGLE')) {
+                PMExt.warning(_('ID_WARNING'), _('ID_ADMINS_CANT_USE_UXS'));
+                this.setValue('NORMAL');
+              }
             }
           }
         })
