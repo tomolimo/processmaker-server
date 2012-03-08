@@ -230,8 +230,8 @@ INPUT {
     padding-bottom: 14px;
     overflow-x: scroll;
     /*overflow-y: visible;*/
-  
-    
+
+
 }
 
 
@@ -339,7 +339,6 @@ INPUT {
     font:normal 8pt Tahoma,MiscFixed;
     padding:0px;
     margin:0px;
-    top:-32px;
     /*background-color:white;*/
     background-color:transparent;
     min-height:25px;
@@ -587,15 +586,15 @@ INPUT {
     font    :normal 8pt sans-serif;
 }
 .module_ListBoxView
-{ 
-  
+{
+
   color: white;
   background:#CCDDFF;
   padding:1px;
   border:1px solid #AAA;
-  padding-left:3px; 
-  background-position:0px 0px; 
-  font  :normal 8pt sans-serif; 
+  padding-left:3px;
+  background-position:0px 0px;
+  font  :normal 8pt sans-serif;
 }
 .module_app_inputHover___gray
 {
@@ -624,7 +623,7 @@ INPUT {
     font    :normal 8pt sans-serif;
 }
 .module_app_inputFailed_ie___gray
-{   
+{
         filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=-1, OffY=-1,color=red) progid:DXImageTransform.Microsoft.dropshadow(OffX=1, OffY=1,color=red);
 }
 .module_app_inputPassed_ie___gray
@@ -769,7 +768,7 @@ div#toolbar
 .toolbar_container
 {
     width:100%;
-    text-align:center;    
+    text-align:center;
     height:25px;
 }
 .toolbar_wrapper{
@@ -821,11 +820,11 @@ div#toolbar
     }
   * html div#toolbar
     {
-    position: absolute;  
+    position: absolute;
     }
   /* All done. */
   }
-  
+
   #toolbar a:link,#toolbar a:visited
   {
     color:#666;

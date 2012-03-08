@@ -12,7 +12,7 @@ leimnud.Package.Public({
 		Version	:"1.0.5"
 	},
 	content	:function(options)
-	{		
+	{
 		this.uid	= this.parent.tools.createUID();
 		this.zIndex	= 0;
 		this.stepZindex	= 5;
@@ -544,7 +544,7 @@ leimnud.Package.Public({
 				this.options.position.y = center.y;
 				this.options.position.x = this.options.position.x || 0;
 				this.options.position.y = this.options.position.y || 0;
-				
+
 			}
 			this.options.position.x = (this.options.position.x<0)?0:this.options.position.x;
 			this.options.position.y = (this.options.position.y<0)?0:this.options.position.y;
@@ -1166,7 +1166,7 @@ leimnud.Package.Public({
 			containerWindow:function()
 			{
 				this.options.size.w 	= this.options.size.w || 200;
-				this.options.size.h 	= this.options.size.h || 200;				
+				this.options.size.h 	= this.options.size.h || 200;
 				if(this.options.intoDOM)
 				{
 					var center		= {
@@ -1198,7 +1198,7 @@ leimnud.Package.Public({
 					this.options.position.x = this.options.position.x || 0;
 					this.options.position.y = this.options.position.y || 0;
 				}
-				
+
 				if(this.options.strict_position)
 				{
 					this.options.position.x = (this.options.position.x<0)?0:this.options.position.x;
@@ -1564,7 +1564,7 @@ leimnud.Package.Public({
 				});
 				//alert(this.spaceOutPanel().y)
 				var tamH = this.elements.titleBar.offsetHeight+this.elements.statusBar.offsetHeight+this.elements.headerBar.offsetHeight;
-				var heightContent = this.options.size.h-tamH;
+				var heightContent = this.options.size.h-tamH-(this.tab.options ? 16 : 0);
 				//var heightContent = this.options.size.h-(this.elements.statusBar.clientHeight+this.elements.headerBar.clientHeight);
 				//alert(this.elements.titleBar.clientHeight+":"+this.elements.statusBar.offsetHeight+":"+this.elements.headerBar.clientHeight)
 				this.parent.dom.setStyle(this.elements.content,this.setStyle.content || {});
