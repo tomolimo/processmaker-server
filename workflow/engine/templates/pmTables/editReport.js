@@ -302,7 +302,7 @@ Ext.onReady(function(){
           id: 'field_type',
           header: _("ID_TYPE"),
           dataIndex: 'field_type',
-          width: 75,
+          width: 105,
           editor: new fm.ComboBox({
               typeAhead: true,
               triggerAction: 'all',
@@ -1289,6 +1289,14 @@ function loadTableRowsFromArray(records)
   if (records.length == 0) return;
 
   for (i=0;i<records.length; i++) {
+
+    // to map virtual field types
+    switch (records[i].FLD_TYPE) {
+      case 'TIMESTAMP':
+        records[i].FLD_TYPE = 'DATETIME';
+        break;
+    }
+
     var row = new PMRow({
       uid        : records[i].FLD_UID,
       field_uid  : records[i].FLD_DYN_UID,
@@ -1346,8 +1354,8 @@ function mapPMFieldType(id)
         sizeField='11';
         break;
       case 'date':
-        typeField='DATE';
-        sizeField='';
+        typeField='VARCHAR';
+        sizeField='10';
         break;
       case 'textarea':
         typeField='VARCHAR';

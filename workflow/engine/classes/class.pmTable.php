@@ -575,6 +575,7 @@ class PmTable
     $types['LONGVARCHAR'] = 'LONGVARCHAR';
     $types['DATE'] = 'DATE';
     $types['TIME'] = 'TIME';
+    $types['DATETIME'] = 'DATETIME';
     //$types['BLOB'] = 'BLOB'; <- disabled
     //$types['CLOB'] = 'CLOB'; <- disabled
 

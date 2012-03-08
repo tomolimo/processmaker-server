@@ -248,6 +248,8 @@ class pmTablesProxy extends HttpProxyController
         switch ($column->field_type) {
           case 'INT': $columns[$i]->field_type = 'INTEGER'; break;
           case 'TEXT': $columns[$i]->field_type = 'LONGVARCHAR'; break;
+          // propel DATETIME equivalent is TIMESTAMP
+          case 'DATETIME': $columns[$i]->field_type = 'TIMESTAMP'; break;
         }
 
         // VALIDATIONS
@@ -318,7 +320,13 @@ class pmTablesProxy extends HttpProxyController
       }
       
       if ($isReportTable && $alterTable) {
-        $oAdditionalTables->populateReportTable($data['REP_TAB_NAME'], $pmTable->getDataSource(), $data['REP_TAB_TYPE'], $data['PRO_UID'], $data['REP_TAB_GRID']);
+        // the table was create successfully but we're catching problems while populating table
+        try {
+          $oAdditionalTables->populateReportTable($data['REP_TAB_NAME'], $pmTable->getDataSource(), $data['REP_TAB_TYPE'], $data['PRO_UID'], $data['REP_TAB_GRID']);
+        }
+        catch (Exception $e) {
+          $result->message = $result->msg = $e->getMessage();
+        }
       }
 
       $result->success = true;
