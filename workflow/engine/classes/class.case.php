@@ -4164,13 +4164,16 @@ class Cases {
       } else {
         $aConfiguration = $oConfiguration->load('Emails', '', '', '', '');
         if ($aConfiguration['CFG_VALUE'] != '') {
-          $aConfiguration = unserialize($aConfiguration['CFG_VALUE']);
-          $passwd = $aConfiguration['MESS_PASSWORD'];
-          $passwdDec = G::decrypt($passwd,'EMAILENCRYPT');
-          if (strpos( $passwdDec, 'hash:' ) !== false) {
-    	      list($hash, $pass) = explode(":", $passwdDec);   
-    	      $passwd = $pass;
+          $aConfiguration = unserialize($aConfiguration["CFG_VALUE"]);
+          
+          $passwd = $aConfiguration["MESS_PASSWORD"];
+          $passwdDec = G::decrypt($passwd, "EMAILENCRYPT");
+          if (strpos($passwdDec, "hash:") !== false) {
+            list($hash, $pass) = explode(":", $passwdDec);
+            $passwd = $pass;
           }
+          
+          $aConfiguration["MESS_PASSWORD"] = $passwd;
         } else {
           $aConfiguration = array();
         }

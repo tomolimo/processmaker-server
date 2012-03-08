@@ -416,90 +416,39 @@ public function kgetassigType($pro_uid, $tas){
   public function load($TasUid)
   {
     try {
-      $oRow = TaskPeer::retrieveByPK( $TasUid );
-      if ( !is_null($oRow) )
+      $oRow = TaskPeer::retrieveByPK($TasUid);
+      
+      if (!is_null($oRow))
       {
-        $aFields = $oRow->toArray( BasePeer::TYPE_FIELDNAME );
-        $this->fromArray($aFields, BasePeer::TYPE_FIELDNAME);
+        $aFields = $oRow->toArray(BasePeer::TYPE_FIELDNAME);
+        
+        $this->fromArray($aFields, BasePeer::TYPE_FIELDNAME); //Populating an object from of the array //Populating attributes
         $this->setNew(false);
-        $lang = defined ( 'SYS_LANG') ? SYS_LANG : 'en';        
-        //SELECT CONTENT.CON_CATEGORY, CONTENT.CON_VALUE FROM CONTENT WHERE CONTENT.CON_ID='63515150649b03231c3b020026243292' AND CONTENT.CON_LANG='es' 
-        $c = new Criteria();
-        $c->clearSelectColumns();
-        $c->addSelectColumn(ContentPeer::CON_CATEGORY);
-        $c->addSelectColumn(ContentPeer::CON_VALUE);
-        $c->add(ContentPeer::CON_ID, $TasUid );
-        $c->add(ContentPeer::CON_LANG, $lang );  
-        $rs = TaskPeer::doSelectRS($c);
-        $rs->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-        $rs->next();
-        $row = $rs->getRow();
         
+        ///////
+        //Create new records for TASK in CONTENT for the current language, this if is necesary //Populating others attributes
+        $this->setTasUid($TasUid);
+          
+        $aFields["TAS_TITLE"] = $this->getTasTitle();
+        $aFields["TAS_DESCRIPTION"] = $this->getTasDescription();
+        $aFields["TAS_DEF_TITLE"] = $this->getTasDefTitle();
+        $aFields["TAS_DEF_DESCRIPTION"] = $this->getTasDefDescription();
+        $aFields["TAS_DEF_PROC_CODE"] = $this->getTasDefProcCode();
+        $aFields["TAS_DEF_MESSAGE"] = $this->getTasDefMessage();
+        $aFields["TAS_DEF_SUBJECT_MESSAGE"] = $this->getTasDefSubjectMessage();
         
-        if (!$row){
-          $row['CON_VALUE'] = $this->getTasTitle();
-          $row['CON_CATEGORY'] = 'TAS_TITLE';
-        }
-        
-        while (is_array($row)) {
-          switch ( $row['CON_CATEGORY'] ) {
-            case 'TAS_TITLE' : 
-              $aFields['TAS_TITLE'] = $row['CON_VALUE'];
-              $this->tas_title = $row['CON_VALUE'];
-              if ( $row['CON_VALUE'] !== '' )
-                $this->setTasTitle($aFields['TAS_TITLE']);
-              break;
-
-            case 'TAS_DESCRIPTION' : 
-              $aFields['TAS_DESCRIPTION'] = $row['CON_VALUE'];
-              $this->tas_description = $row['CON_VALUE'];
-              if ( $row['CON_VALUE'] !== '' )
-                $this->setTasDescription($aFields['TAS_DESCRIPTION']);
-              break;
-            case 'TAS_DEF_TITLE' : 
-              $aFields['TAS_DEF_TITLE'] = $row['CON_VALUE'];
-              $this->tas_def_title = $row['CON_VALUE'];
-              if ( $row['CON_VALUE'] !== '' )
-                $this->setTasDefTitle($aFields['TAS_DEF_TITLE']);
-              break;
-            case 'TAS_DEF_DESCRIPTION' : 
-              $aFields['TAS_DEF_DESCRIPTION'] = $row['CON_VALUE'];
-              $this->tas_def_description = $row['CON_VALUE'];
-              if ( $row['CON_VALUE'] !== '' )
-                $this->setTasDefDescription($aFields['TAS_DEF_DESCRIPTION']);
-              break;
-            case 'TAS_DEF_PROC_CODE' : 
-              $aFields['TAS_DEF_PROC_CODE'] = $row['CON_VALUE'];
-              $this->tas_def_proc_code = $row['CON_VALUE'];
-              if ( $row['CON_VALUE'] !== '' )
-                $this->setTasDefProcCode($aFields['TAS_DEF_PROC_CODE']);
-              break;
-            case 'TAS_DEF_MESSAGE' : 
-              $aFields['TAS_DEF_MESSAGE'] = $row['CON_VALUE'];
-              $this->tas_def_message = $row['CON_VALUE'];
-              if ( $row['CON_VALUE'] !== '' )
-                $this->setTasDefMessage($aFields["TAS_DEF_MESSAGE"]);
-              break;
-            case 'TAS_DEF_SUBJECT_MESSAGE' : 
-              $aFields['TAS_DEF_SUBJECT_MESSAGE'] = $row['CON_VALUE'];
-              $this->tas_def_subject_message = $row['CON_VALUE'];
-              if ( $row['CON_VALUE'] !== '' )
-                $this->setTasDefSubjectMessage($aFields["TAS_DEF_SUBJECT_MESSAGE"]);
-              break;
-          }
-          $rs->next();
-          $row = $rs->getRow();
-        }
+        ///////
         return $aFields;
       }
       else {
-        throw( new Exception( "The row '" . $TasUid . "' in table TASK doesn't exist!" ));
+        throw(new Exception("The row '" . $TasUid . "' in table TASK doesn't exist!"));
       }
     }
     catch (Exception $oError) {
       throw($oError);
     }
   }
+  
   function update($fields)
   {
     $con = Propel::getConnection(TaskPeer::DATABASE_NAME);
