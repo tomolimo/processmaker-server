@@ -494,9 +494,11 @@ var G_Grid = function(oForm, sGridName){
     if (this.aFunctions.length > 0) {
       this.assignFunctions(this.aFunctions, 'change', currentRow);
     }
+/*
     if (this.aFormulas.length > 0) {
       this.assignFormulas(this.aFormulas, 'change', currentRow);
     }
+*/
     //Recalculate functions if are declared
     var oAux;
     if (this.aFunctions.length > 0) {
@@ -722,6 +724,36 @@ var G_Grid = function(oForm, sGridName){
     this.assignFunctions(this.aFunctions, 'change');
   };
   
+  this.determineBrowser = function()
+  {
+    var nAgt = navigator.userAgent;
+    var browserName = "";
+    // In Opera, the true version is after "Opera" or after "Version"
+    if ( nAgt.indexOf("Opera") != -1) {
+      browserName = "Opera";
+    } else {
+      // In MSIE, the true version is after "MSIE" in userAgent - Microsoft Internet Explorer
+      if ( nAgt.indexOf("MSIE") != -1) {
+        browserName = "MSIE";
+      } else {
+        // In Chrome, the true version is after "Chrome"
+        if ( nAgt.indexOf("Chrome") != -1) {
+          browserName = "Chrome";
+        } else {
+          // In Safari, the true version is after "Safari" or after "Version"
+          if ( nAgt.indexOf("Safari") != -1) {
+            browserName = "Safari";
+          } else {
+            // In Firefox, the true version is after "Firefox"
+            if ( nAgt.indexOf("Firefox") != -1) {
+             browserName = "Firefox";
+            }
+          }
+        }
+      }
+    }
+    return browserName;
+  };
   /////////////////////////////////////////////////////////////////////////////////
   
   this.sum = function(oEvent, oDOM) {
@@ -737,7 +769,7 @@ var G_Grid = function(oForm, sGridName){
       nnName= this.aElements[k].name.split('][');
       if (aAux[2] == nnName[2] && j <= (this.oGrid.rows.length-2)){
         oAux=this.getElementByName(j, nnName[2]);
-        if(oAux!=null){
+        if ( (oAux != null) && (oAux.value().trim() != '') ) {
           fTotal += parseFloat(G.getValue(oAux.value()));
         }
         j++;
@@ -754,7 +786,11 @@ var G_Grid = function(oForm, sGridName){
     oAux.value = fTotal;
     oAux = document.getElementById('form[SYS_GRID_AGGREGATE_' + oGrid.sGridName + '__' + aAux[2] + ']');
     // oAux.innerHTML = G.toMask(fTotal, sMask).result;
-    oAux.innerHTML = fTotal;
+    if ( this.determineBrowser() == "MSIE" ) {
+      oAux.innerText = fTotal;
+    } else {
+      oAux.innerHTML = fTotal;
+    }
   };
   
   ////////////////////////////////////////////////////////////////////////////////////
@@ -766,7 +802,9 @@ var G_Grid = function(oForm, sGridName){
     fTotal = 0;
     aAux[2] = aAux[2].replace(']', '');
     while (oAux = this.getElementByName(i, aAux[2])) {
-      fTotal += parseFloat(G.getValue(oAux.value()));
+      if ( oAux.value() != "" ) {
+        fTotal += parseFloat(G.getValue(oAux.value().trim() ));
+      }
       sMask = oAux.mask;
       i++;
     }
@@ -777,13 +815,21 @@ var G_Grid = function(oForm, sGridName){
       oAux.value = fTotal;
       oAux = document.getElementById('form[SYS_GRID_AGGREGATE_' + oGrid.sGridName + '__' + aAux[2] + ']');
       // oAux.innerHTML = G.toMask((fTotal / i), sMask).result;
-      oAux.innerHTML = fTotal;
+    if ( this.determineBrowser() == "MSIE" ) {
+        oAux.innerText = fTotal;
+      } else {
+        oAux.innerHTML = fTotal;
+      }
     } else {
       oAux = document.getElementById('form[SYS_GRID_AGGREGATE_' + oGrid.sGridName + '_' + aAux[2] + ']');
       oAux.value = 0;
       oAux = document.getElementById('form[SYS_GRID_AGGREGATE_' + oGrid.sGridName + '__' + aAux[2] + ']');
       // oAux.innerHTML = G.toMask(0, sMask).result;
-      oAux.innerHTML = 0;
+    if ( this.determineBrowser() == "MSIE" ) {
+        oAux.innerText = 0;
+      } else {
+        oAux.innerHTML = 0;
+      }
     }
   };
   
@@ -809,7 +855,7 @@ var G_Grid = function(oForm, sGridName){
   ////////////////////////////////////////////////////////////////////////////////////////////
   this.setFormulas = function(aFormulas) {
     this.aFormulas = aFormulas;
-    this.assignFormulas(this.aFormulas, 'change');
+//    this.assignFormulas(this.aFormulas, 'change');
   };
   
   /////////////////////////////////////////////////////////////////////////////////////////////
