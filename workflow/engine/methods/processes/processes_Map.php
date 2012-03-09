@@ -22,7 +22,7 @@
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  *
  */
-global $RBAC; 
+global $RBAC;
 $access = $RBAC->userCanAccess('PM_FACTORY');
 if( $access != 1 ){
   switch ($access)
@@ -41,9 +41,9 @@ if( $access != 1 ){
   	  G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');
   	  G::header('location: ../login/login');
   	  die;
-  	break;  	
+  	break;
   }
-}  
+}
 $processUID = $_GET['PRO_UID'];
 
 //if ( isset($_SESSION['PROCESSMAP']) && $_SESSION['PROCESSMAP'] == 'BPMN' ) {
@@ -90,7 +90,8 @@ $oHeadPublisher->addScriptCode( '
 			images_dir	:"/jscore/processmap/core/images/"
 		}
 		Pm.make();
-	});' );
+	});
+	var changesSavedLabel = "' . addslashes(G::LoadTranslation('ID_SAVED_SUCCESSFULLY')) . '";' );
 
 if( ! isset($_GET['raw']) )
     G::RenderPage('publish', 'green-submenu');

@@ -1564,7 +1564,7 @@ leimnud.Package.Public({
 				});
 				//alert(this.spaceOutPanel().y)
 				var tamH = this.elements.titleBar.offsetHeight+this.elements.statusBar.offsetHeight+this.elements.headerBar.offsetHeight;
-				var heightContent = this.options.size.h-tamH-(this.tab.options ? 16 : 0);
+				var heightContent = this.options.size.h-tamH-(this.tab.options ? 20 : 0);
 				//var heightContent = this.options.size.h-(this.elements.statusBar.clientHeight+this.elements.headerBar.clientHeight);
 				//alert(this.elements.titleBar.clientHeight+":"+this.elements.statusBar.offsetHeight+":"+this.elements.headerBar.clientHeight)
 				this.parent.dom.setStyle(this.elements.content,this.setStyle.content || {});

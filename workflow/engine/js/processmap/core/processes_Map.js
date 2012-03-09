@@ -9,7 +9,7 @@ var re2 = /@amp@/g;
 var saveDataTaskTemporal = function(iForm)
 {
   oAux = getField('TAS_UID');
-  
+
   if (oAux)
   {
     switch (iLastTab)
@@ -44,7 +44,7 @@ var saveDataTaskTemporal = function(iForm)
         {
           oTaskData.TAS_ASSIGN_TYPE = 'EVALUATE';
         }
-        /* this feature is temporarily disabled  
+        /* this feature is temporarily disabled
         if (getField('TAS_ASSIGN_TYPE][STATIC_MI').checked)
         {
           oTaskData.TAS_ASSIGN_TYPE = 'STATIC_MI';
@@ -145,7 +145,7 @@ var saveTaskData = function(oForm, iForm, iType)
     return false;
   }
   oTaskData.TAS_UID = getField('TAS_UID').value;
- /* while (oTaskData.TAS_TITLE.charAt(0)==' '){ 
+ /* while (oTaskData.TAS_TITLE.charAt(0)==' '){
 		oTaskData.TAS_TITLE = oTaskData.TAS_TITLE.substring(1,oTaskData.TAS_TITLE.length) ;
 	}    */
 	oTaskData.TAS_TITLE=oTaskData.TAS_TITLE.trim();
@@ -171,7 +171,14 @@ var saveTaskData = function(oForm, iForm, iType)
     oTaskData.TAS_START = (oTaskData.TAS_START == 'TRUE' ? true : false);
     Pm.data.render.setTaskINI({task: oTaskData.TAS_UID, value: oTaskData.TAS_START});
   }
-  
+  try {
+    new leimnud.module.app.info().make( {
+      label: changesSavedLabel
+    });
+  }
+  catch (e) {
+    // No show confirmation
+  }
   Pm.tmp.propertiesPanel.remove();
 };
 
@@ -182,8 +189,8 @@ var showTriggers = function(sStep, sType)
     async : false,
     method: 'POST',
     args  : 'action=showTriggers&sProcess=' + Pm.options.uid + '&sStep=' + sStep + '&sType=' + sType
-  });  
-   
+  });
+
   oRPC.make();
 
   document.getElementById('triggersSpan_' + sStep + '_' + sType).innerHTML = oRPC.xmlhttp.responseText;
