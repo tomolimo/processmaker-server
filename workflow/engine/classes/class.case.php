@@ -3080,6 +3080,9 @@ class Cases {
       if (isset($info[$val['TRI_UID']])) {
         $triggers_info[] = $info[$val['TRI_UID']];
       }
+      else {
+        $triggers_info[] = Content::load ( 'TRI_TITLE', '', $val['TRI_UID'], $lang );
+      }
     }
 
     return $triggers_info;
