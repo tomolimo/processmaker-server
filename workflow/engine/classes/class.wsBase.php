@@ -1477,17 +1477,19 @@ class wsBase
             //$appFields = $oCase->loadCase( $caseId );
             //$appFields['APP_DATA']['APPLICATION'] = $caseId;
             
-            #@Neyek #############################################################################################
-            if( !$this->stored_system_variables ) {
-              $appFields['APP_DATA'] = array_merge ( $appFields['APP_DATA'], G::getSystemConstants() );
-            } else {
-              $oParams = new stdClass();
-              $oParams->option = 'STORED SESSION';
-              $oParams->SID = $this->wsSessionId;
-              
-              $appFields['APP_DATA'] = array_merge ( $appFields['APP_DATA'], G::getSystemConstants($oParams));
+            //@Neyek #############################################################################################
+            if (!$this->stored_system_variables) {
+              $appFields["APP_DATA"] = array_merge($appFields["APP_DATA"], G::getSystemConstants());
             }
-            #####################################################################################################
+            else {
+              $oParams = new stdClass();
+              $oParams->option  = "STORED SESSION";
+              $oParams->SID     = $this->wsSessionId;
+              $oParams->appData = $appFields["APP_DATA"];
+            
+              $appFields["APP_DATA"] = array_merge($appFields["APP_DATA"], G::getSystemConstants($oParams));
+            }
+            //####################################################################################################
         
             $oPMScript->setFields( $appFields['APP_DATA'] );
             $bExecute = true;
@@ -1518,17 +1520,19 @@ class wsBase
           //$appFields = $oCase->loadCase( $caseId );
           //$appFields['APP_DATA']['APPLICATION'] = $caseId;
           
-          #@Neyek #############################################################################################
-          if( !$this->stored_system_variables ) {
-            $appFields['APP_DATA'] = array_merge ( $appFields['APP_DATA'], G::getSystemConstants() );
-          } else {
-            $oParams = new stdClass();
-            $oParams->option = 'STORED SESSION';
-            $oParams->SID = $this->wsSessionId;
-            
-            $appFields['APP_DATA'] = array_merge ( $appFields['APP_DATA'], G::getSystemConstants($oParams));
+          //@Neyek #############################################################################################
+          if (!$this->stored_system_variables) {
+            $appFields["APP_DATA"] = array_merge($appFields["APP_DATA"], G::getSystemConstants());
           }
-          #####################################################################################################
+          else {
+            $oParams = new stdClass();
+            $oParams->option  = "STORED SESSION";
+            $oParams->SID     = $this->wsSessionId;
+            $oParams->appData = $appFields["APP_DATA"];
+            
+            $appFields["APP_DATA"] = array_merge($appFields["APP_DATA"], G::getSystemConstants($oParams));
+          }
+          //####################################################################################################
         
           $oPMScript->setFields( $appFields['APP_DATA'] );
           $bExecute = true;
@@ -1630,17 +1634,19 @@ class wsBase
         $oPMScript = new PMScript();
         //$appFields['APP_DATA']['APPLICATION'] = $caseId;
         
-        #@Neyek #############################################################################################
-        if( !$this->stored_system_variables ) {
-          $appFields['APP_DATA'] = array_merge ( $appFields['APP_DATA'], G::getSystemConstants() );
-        } else {
-          $oParams = new stdClass();
-          $oParams->option = 'STORED SESSION';
-          $oParams->SID = $this->wsSessionId;
-          
-          $appFields['APP_DATA'] = array_merge ( $appFields['APP_DATA'], G::getSystemConstants($oParams));
+        //@Neyek #############################################################################################
+        if (!$this->stored_system_variables) {
+          $appFields["APP_DATA"] = array_merge($appFields["APP_DATA"], G::getSystemConstants());
         }
-        #####################################################################################################
+        else {
+          $oParams = new stdClass();
+          $oParams->option  = "STORED SESSION";
+          $oParams->SID     = $this->wsSessionId;
+          $oParams->appData = $appFields["APP_DATA"];
+          
+          $appFields["APP_DATA"] = array_merge($appFields["APP_DATA"], G::getSystemConstants($oParams));
+        }
+        //####################################################################################################
         
         $oPMScript->setFields( $appFields['APP_DATA'] );
         $varTriggers .= "<b>-= After Derivation =-</b><br/>";

@@ -2797,38 +2797,46 @@ $output = $outputHeader.$output;
    *   Constants: SYS_*
    *   Sessions : USER_* , URS_*
    */
-  function getSystemConstants($params=NULL)
+  function getSystemConstants($params = null)
   {
     $t1 = G::microtime_float();
     $sysCon = array();
-    if ( defined('SYS_LANG' )) $sysCon['SYS_LANG'] = SYS_LANG;
-    if ( defined('SYS_SKIN' )) $sysCon['SYS_SKIN'] = SYS_SKIN;
-    if ( defined('SYS_SYS' ) ) $sysCon['SYS_SYS']  = SYS_SYS;
+    if (defined("SYS_LANG")) $sysCon["SYS_LANG"] = SYS_LANG;
+    if (defined("SYS_SKIN")) $sysCon["SYS_SKIN"] = SYS_SKIN;
+    if (defined("SYS_SYS"))  $sysCon["SYS_SYS"]  = SYS_SYS;
 
-    $sysCon['APPLICATION'] = (isset($_SESSION['APPLICATION'])  )? $_SESSION['APPLICATION'] :'';
-    $sysCon['PROCESS']     = (isset($_SESSION['PROCESS'])      )? $_SESSION['PROCESS']     :'';
-    $sysCon['TASK']        =  (isset($_SESSION['TASK'])        )? $_SESSION['TASK']        :'';
-    $sysCon['INDEX']       = (isset($_SESSION['INDEX'])        )? $_SESSION['INDEX']       :'';
-    $sysCon['USER_LOGGED'] = (isset($_SESSION['USER_LOGGED'])  )? $_SESSION['USER_LOGGED'] :'';
-    $sysCon['USR_USERNAME']=  (isset($_SESSION['USR_USERNAME']))? $_SESSION['USR_USERNAME']:'';
+    $sysCon["APPLICATION"]  = (isset($_SESSION["APPLICATION"]))?  $_SESSION["APPLICATION"]  : "";
+    $sysCon["PROCESS"]      = (isset($_SESSION["PROCESS"]))?      $_SESSION["PROCESS"]      : "";
+    $sysCon["TASK"]         = (isset($_SESSION["TASK"]))?         $_SESSION["TASK"]         : "";
+    $sysCon["INDEX"]        = (isset($_SESSION["INDEX"]))?        $_SESSION["INDEX"]        : "";
+    $sysCon["USER_LOGGED"]  = (isset($_SESSION["USER_LOGGED"]))?  $_SESSION["USER_LOGGED"]  : "";
+    $sysCon["USR_USERNAME"] = (isset($_SESSION["USR_USERNAME"]))? $_SESSION["USR_USERNAME"] : "";
     
-    ################################################################################################
-    # Added for compatibility betweek aplication called from web Entry that uses just WS functions
-    ################################################################################################
+    //###############################################################################################
+    // Added for compatibility betweek aplication called from web Entry that uses just WS functions
+    //###############################################################################################
     
-    if( $params != NULL ){
-        
-      switch($params->option){
-        case 'STORED SESSION':
-          if( isset($params->SID) ){
-            G::LoadClass('sessions');
+    if ($params != null) {
+      switch ($params->option) {
+        case "STORED SESSION":
+          if (isset($params->SID)) {
+            G::LoadClass("sessions");
             $oSessions = new Sessions($params->SID);
             $sysCon = array_merge($sysCon, $oSessions->getGlobals());
           }
           break;
       }
+      
+      if (isset($params->appData) && is_array($params->appData)) {
+        $sysCon["APPLICATION"]  = $params->appData["APPLICATION"];
+        $sysCon["PROCESS"]      = $params->appData["PROCESS"];
+        $sysCon["TASK"]         = $params->appData["TASK"];
+        $sysCon["INDEX"]        = $params->appData["INDEX"];
+        $sysCon["USER_LOGGED"]  = $params->appData["USER_LOGGED"];
+        $sysCon["USR_USERNAME"] = $params->appData["USR_USERNAME"];
+      }
     }
-              
+    
     return $sysCon;
   }
 
