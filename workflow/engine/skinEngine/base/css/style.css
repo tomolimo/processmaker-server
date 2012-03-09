@@ -3140,7 +3140,7 @@ button.x-btn-text:focus,.x-combo-selected{
 .CodeMirror-line-numbers {
   width: 2.2em;
   color: #aaa;
-  background-color: #eee;
+  background-color: #fff;
   text-align: right;
   padding-right: .3em;
   font-size: 10pt;

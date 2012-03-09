@@ -142,6 +142,8 @@ var CodeMirror = (function(){
     div.className = "CodeMirror-wrapping";
     div.style.width = options.width;
     div.style.height = (options.height == "dynamic") ? options.minHeight + "px" : options.height;
+    div.style.border ='1px #848484 solid';
+
     // This is used by Editor.reroutePasteEvent
     var teHack = this.textareaHack = createHTMLElement("textarea");
     div.appendChild(teHack);

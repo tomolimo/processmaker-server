@@ -32,8 +32,6 @@ var fieldForm="javascript";
 var fieldName=getField("PME_XMLNODE_NAME",fieldForm);
 var savedFieldName=fieldName.value;
 var pme_validating;
-fieldName.focus();
-fieldName.select();
 leimnud.event.add(fieldName, 'change', {method:dynaformVerifyFieldName, instance:fieldName, event:true});
 
 function cancel(){
@@ -55,6 +53,14 @@ function saveJavascript()
   jsEditorPrompt.setCode(jsEditorPrompt.getCode());
   jsEditorPrompt.save();
 }
+
+function setFocus1() {
+  var fieldName=getField("PME_XMLNODE_NAME");
+  fieldName.focus();
+  fieldName.select();
+}
+
+setTimeout('setFocus1()', 500);
 
 ]]></PME_JS>
 </dynaForm>  
