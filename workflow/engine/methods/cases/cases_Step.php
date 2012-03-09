@@ -1026,6 +1026,7 @@
   }
 
   $oHeadPublisher =& headPublisher::getSingleton();
+  $oHeadPublisher->addScriptFile("/jscore/cases/core/cases_Step.js");
   $oHeadPublisher->addScriptCode("
   if (typeof parent != 'undefined') {
     if (parent.showCaseNavigatorPanel) {
@@ -1040,7 +1041,10 @@
   G::RenderPage('publish', 'blank');
 
   if( $_SESSION['TRIGGER_DEBUG']['ISSET'] ){
-    G::evalJScript('if (typeof showdebug != \'undefined\') showdebug();');
+    G::evalJScript('
+    if (typeof showdebug != \'undefined\') {
+      showdebug();
+    }');
   }
 
 
