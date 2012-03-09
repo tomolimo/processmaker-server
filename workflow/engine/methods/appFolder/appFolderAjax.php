@@ -859,10 +859,7 @@ function moveExecute(){
 }
 
 function copyMoveExecute($type){
-    
-    print_r($_REQUEST);
-    uploadExternalDocument();
-    die ();
+  uploadExternalDocument();   
 }
 
 function documentVersionHistory(){
@@ -893,7 +890,6 @@ function documentVersionHistory(){
 }
 
 function uploadExternalDocument(){
-
     $response['action']=$_POST['action']. " - ".$_POST['option'];
     $response['error']="error";
     $response['message']="error";
@@ -936,13 +932,22 @@ function uploadExternalDocument(){
             $fileInfo=array("tempName"=>$tmp,"fileName"=>$items[$i]);
             $quequeUpload[]=$fileInfo;
         }}elseif(isset($_POST['selitems'])){
+         $response="";
+         $response['msg']="correct reload";
+         $response['success']=true;
+            require_once ( "classes/model/AppDocument.php" );
+            require_once ('classes/model/AppFolder.php');
             $oAppDocument = new AppDocument();
             foreach($_POST['selitems'] as $docId){
-                print "<b>$docId</b>";
-                $docInfo=$oAppDocument->load($docId);
-                G::pr($docInfo);
+                $arrayDocId = explode ('_',$docId);
+               // print "<b>$docId</b>";
+                $docInfo=$oAppDocument->load($arrayDocId[0]);
+                $docInfo['FOLDER_UID'] =  $_POST['new_dir'];
+                $docInfo['APP_DOC_CREATE_DATE'] = date('Y-m-d H:i:s');
+                $oAppDocument->update($docInfo);
+                        
+            //    G::pr($docInfo);
             }
-            
         }
         //G::pr($quequeUpload);
 
@@ -1074,37 +1079,31 @@ function uploadExternalDocument(){
                     //unlink ( $sPathName . $sFileName );
                 }
                 //end plugin
-            }
-        }
-
-        if($sw_error) {          // there were errors
-            $err_msg="";
-            for($i=0;$i<$uploadedInstances;$i++) {
+                if($sw_error) {         // there were errors         
+              $err_msg="";
+              for($i=0;$i<$uploadedInstances;$i++) {
                 if($errors[$i]==NULL) continue;
-                $err_msg .= $items[$i]." : ".$errors[$i]."\n";
+                  $err_msg .= $items[$i]." : ".$errors[$i]."\n";
+              }            
+              $response['error']=$err_msg;
+              $response['message']=$err_msg;
+              $response['success']=false;
             }
-
-            $response['error']=$err_msg;
-            $response['message']=$err_msg;
-            $response['success']=false;
-        }elseif($emptyInstances==$uploadedInstances){
-            $response['error']="You may upload at least one file";
-            $response['message']="You may upload at least one file";
-            $response['success']=false;
-        }else{
-            $response['error']="Upload complete";
-            $response['message']="Upload complete";
-            $response['success']=true;
-
-
+            elseif ($emptyInstances==$uploadedInstances) {            
+              $response['error']="You may upload at least one file";
+              $response['message']="You may upload at least one file";
+              $response['success']=false;
+            }
+            else {
+              $response['error']="Upload complete";
+              $response['message']="Upload complete";
+              $response['success']=true;
+            }  
+            }
+            
         }
-
-
-
-
 
     }
-
     print_r(G::json_encode($response));
     /*
      G::LoadClass ( 'case' );

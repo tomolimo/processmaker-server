@@ -1284,7 +1284,7 @@ gridCtxMenu = new Ext.menu.Menu({
       ext_itemgrid.onCellDblClick(ext_itemgrid, gsm.clickedRow, 0);
       gsm.clickedRow = null;
     }
-  }, {
+  }, /*{
     id : 'gc_copy',
     iconCls: 'button_menu_ext ss_sprite ss_page_white_copy',// icon :
     // '/images/documents/_editcopy.png',
@@ -1300,7 +1300,7 @@ gridCtxMenu = new Ext.menu.Menu({
     handler : function() {
       openActionDialog(this, 'moveAction');
     }
-  }, {
+  },*/ {
     id : 'gc_delete',
     iconCls: 'button_menu_ext ss_sprite ss_page_white_delete',// icon :
     // '/images/documents/_editdelete.png',
@@ -1542,9 +1542,11 @@ var copymoveCtxMenu = new Ext.menu.Menu({
 });
 
 function copymoveCtx(e) {
-  // ctxMenu.items.get('remove')[node.attributes.allowDelete ? 'enable' :
-  // 'disable']();
+  /*ctxMenu.items.get('remove')[node.attributes.allowDelete ? 'enable' :
+  'disable']();
   copymoveCtxMenu.showAt(e.rawEvent.getXY());
+  copymoveCtxMenu.hide();*/
+  copymove('moveExecute');
 }
 
 var documentsTab = {
@@ -1619,6 +1621,7 @@ var documentsTab = {
         fn : function(e) {
           dropEvent = e;
           copymoveCtx(e);
+          datastore.reload();
         }
       },
       'beforemove' : {
