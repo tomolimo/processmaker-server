@@ -13,8 +13,14 @@ if( isset($request) ){
         $oApp= new Cases();
         $aFields = $oApp->loadCase($_SESSION['APPLICATION']);
         unset($aFields['APP_DATA'][$_POST['gridname']][$_POST['rowpos']]);
+        $initialKey = 1;
+        foreach ($aFields['APP_DATA'][$_POST['gridname']] as $key => $value) {
+          $oFields[$initialKey] = $value;
+          $initialKey++;
+          $aFields['APP_DATA'][$_POST['gridname']] = $oFields;
+        }        
         $oApp->updateCase($_SESSION['APPLICATION'], $aFields);
-      }
+      } 
 
     break;
     /** widgets **/
