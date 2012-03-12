@@ -32,7 +32,7 @@
 
 <DELETE type="link" colWidth="" value="@#ID_DELETE" link="#" onclick="deleteGeneratedDocument(@QAPP_DOC_UID);"><en></en></DELETE>
 
-<DOWNLOAD_DOC type="link" colWidth="10" target="_blank" value="@#FILEDOCLABEL" link="@#FILEDOC"><en>Download</en></DOWNLOAD_DOC>
+<DOWNLOAD_DOC type="link" colWidth="10" target="_blank" value="@#FILEDOCLABEL" link="@#FILEDOC"></DOWNLOAD_DOC>
 <DOWNLOAD_PDF type="link" colWidth="10" target="_blank" value="@#FILEPDFLABEL" link="@#FILEPDF"/>
 
 </dynaForm>

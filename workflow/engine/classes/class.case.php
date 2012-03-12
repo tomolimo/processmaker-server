@@ -3997,14 +3997,19 @@ class Cases {
             'CREATED_BY' => $sUser,
             'FILEDOC' => $fileDoc,
             'FILEPDF' => $filePdf,
-            'FILEDOCLABEL' => $fileDocLabel,
-            'FILEPDFLABEL' => $filePdfLabel,
             'OUTDOCTITLE' => $outDocTitle,
             'DOC_VERSION' => $aAux['DOC_VERSION'],
             'TYPE' => $aAux['APP_DOC_TYPE'] . ' ' . $aGields['OUT_DOC_GENERATE'],
             'DOWNLOAD_LINK' => $firstDocLink,
             'DOWNLOAD_FILE' => $aAux['APP_DOC_FILENAME'] . $firstDocLabel
         );
+        
+        if (trim($fileDocLabel)!='')
+          $aFields['FILEDOCLABEL'] = $fileDocLabel;
+        
+        if (trim($filePdfLabel)!='')
+          $aFields['FILEPDFLABEL'] = $filePdfLabel;
+        
         if ($aFields['APP_DOC_FILENAME'] != '') {
           $aFields['TITLE'] = $aFields['APP_DOC_FILENAME'];
         } else {
@@ -4016,7 +4021,6 @@ class Cases {
           if (in_array($aRow['APP_DOC_UID'], $aDelete['OUTPUT_DOCUMENTS'])) 
             $aFields['ID_DELETE'] = G::LoadTranslation('ID_DELETE');
         }
-
         $aOutputDocuments[] = $aFields;
       }
       $oDataset->next();
