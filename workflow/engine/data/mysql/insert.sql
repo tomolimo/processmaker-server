@@ -2338,7 +2338,7 @@ INSERT INTO TRANSLATION (TRN_CATEGORY,TRN_ID,TRN_LANG,TRN_VALUE,TRN_UPDATE_DATE 
 ( 'LABEL','ID_PROCESS_CANT_DELETE','en','You can''t delete the process "{0}" because  has {1} cases.','2012-02-02') ,
 ( 'LABEL','ID_FILE','en','File','2012-02-02') ,
 ( 'LABEL','ID_OUT_PUT_DOC_UPLOAD_TITLE','en','Upload Output Document Template File','2012-02-02') ,
-( 'LABEL','ID_UPLOADING_FILE','en','Uploading file...','2012-02-02') ,
+( 'LABEL','ID_UPLOADING_FILE','en','Uploading file...','2012-03-12') ,
 ( 'JAVASCRIPT','ID_CLASS_TABLE_DOESNT_EXIST','en','This table class does not exist','2012-02-02') ,
 ( 'LABEL','ID_LOAD_FROM_FILE','en','Load from file','2012-02-02') ,
 ( 'LABEL','ID_SELECT_TEMPLATE_FILE','en','Select a template file','2012-02-02') ,
@@ -3164,7 +3164,7 @@ INSERT INTO TRANSLATION (TRN_CATEGORY,TRN_ID,TRN_LANG,TRN_VALUE,TRN_UPDATE_DATE 
 ( 'LABEL','ID_TABLES_TO_EXPORT','en','Tables To Export','2012-02-02') ,
 ( 'LABEL','ID_PMTABLES_NOTICE_EXPORT','en','From each table you should select Schema/Data to export at least one.','2012-02-02') ,
 ( 'LABEL','ID_CONFIRM_DELETE_SKIN','en','Do you want to delete selected skin?','2012-02-02') ,
-( 'LABEL','ID_MESSAGE_SUBJECT_NOTE_NOTIFICATION','en','A note has added to a case','2012-02-02') ,
+( 'LABEL','ID_MESSAGE_SUBJECT_NOTE_NOTIFICATION','en','A note has been added to the case:','2012-03-12') ,
 ( 'LABEL','ID_MSG_CANNOT_EXPORT_DEFAULT_SKIN','en','Default skin can''t be exported. Instead create new one based on default','2012-02-02') ,
 ( 'LABEL','ID_MSG_CANNOT_EXPORT_SKIN','en','Can''t export skin. Server Error','2012-02-02') ,
 ( 'LABEL','ID_NEW_SKIN','en','New Skin','2012-02-02') ,
@@ -3413,7 +3413,17 @@ INSERT INTO TRANSLATION (TRN_CATEGORY,TRN_ID,TRN_LANG,TRN_VALUE,TRN_UPDATE_DATE 
 ( 'JAVASCRIPT','ID_SUBJECT_FIELD_REQUIRED','en','Subject Field is required.','2012-02-02') ,
 ( 'JAVASCRIPT','ID_MESSAGE_FIELD_REQUIRED','en','Message Field is required.','2012-02-02') ,
 ( 'JAVASCRIPT','ID_TEMPLATE_FIELD_REQUIRED','en','Template Field is required.','2012-02-02') ,
-( 'LABEL','ID_ADMINS_CANT_USE_UXS','en','Administrators users cannot use this User Experience.','2012-02-02') ;
+( 'LABEL','ID_ADMINS_CANT_USE_UXS','en','Administrators users cannot use this User Experience.','2012-02-02') ,
+( 'LABEL','ID_IMPORT_PMT','en','Import PM Table','2012-03-12') ,
+( 'LABEL','ID_OVERWRITE_EXIST','en','Overwrite if exists?','2012-03-12') ,
+( 'LABEL','ID_SELECT_PM_FILE','en','Select a .pmt file','2012-03-12') ,
+( 'LABEL','ID_SIMPLE_REPORT','en','Simple Report','2012-03-12') ,
+( 'LABEL','ID_TABLE_TYPE','en','Table Type','2012-03-12') ,
+( 'LABEL','ID_CONVERT_NATIVE_REP_TABLE','en','Convert to native Report Table','2012-03-12') ,
+( 'LABEL','ID_CONVERT_SIMPLE_REPORT','en','Convert to Simple Report','2012-03-12') ,
+( 'LABEL','ID_REMOVING_SELECTED_TABLES','en','Removing selected table(s), please wait!','2012-03-12') ,
+( 'LABEL','ID_IMPORT_RESULT','en','IMPORT RESULT','2012-03-12') ,
+( 'LABEL','ID_IMPORTING_ERROR','en','Importing Error','2012-03-12') ;
 
 INSERT INTO ISO_LOCATION (IC_UID,IL_UID,IL_NAME,IL_NORMAL_NAME,IS_UID)  VALUES 
 ('AD','','',' ','') ,
