@@ -451,6 +451,30 @@ leimnud.event.add(getField('SCH_START_DAY_OPT_1'), 'change', function() {
 		}
 });
 
+leimnud.event.add(getField('SCH_START_TIME'), 'keyup', function() {
+  if (getField('SCH_START_TIME').value.charAt(0)) {
+    if (isNaN(getField('SCH_START_TIME').value.charAt(0)) == true) {
+      getField('SCH_START_TIME').value = getField('SCH_START_TIME').value.slice(0, -1);
+    }    
+  }
+  if (getField('SCH_START_TIME').value.charAt(1)) {
+    if (isNaN(getField('SCH_START_TIME').value.charAt(1)) == true) {
+      getField('SCH_START_TIME').value = getField('SCH_START_TIME').value.slice(0, -1);
+    }    
+  }
+  var oVar = getField('SCH_START_TIME').value.charAt(2);
+  if (isNaN(oVar) == true) {
+    if (! getField('SCH_START_TIME').value.charAt(3)) {
+      getField('SCH_START_TIME').value = getField('SCH_START_TIME').value.slice(0, -1);
+    }
+    if (getField('SCH_START_TIME').value.charAt(4)) {
+      if (isNaN(getField('SCH_START_TIME').value.charAt(4)) == true) {
+        getField('SCH_START_TIME').value = getField('SCH_START_TIME').value.slice(0, -1);
+      }
+    }  
+  }
+});
+
 leimnud.event.add(getField('SCH_START_TIME'), 'change', function() {
     hours = getField('SCH_START_TIME').value;
     answer = hours;
