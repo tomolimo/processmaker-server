@@ -1473,7 +1473,7 @@ leimnud.Package.Public({
 				if(this.tab.options)
 				{
 					this.parent.dom.setStyle(this.elements.tab,{
-						height	:((this.tab.display==="vertical")?heightContent:this.tab.optHeight+4),
+						height	:((this.tab.display==="vertical")?heightContent:this.tab.optHeight+4+(this.parent.browser.isIE ? 14 : 0)),
 						//border	:"1px solid red",
 						width	:((this.tab.display==="vertical")?this.tab.width:this.options.size.w-8),
 						top	:beginTop,
