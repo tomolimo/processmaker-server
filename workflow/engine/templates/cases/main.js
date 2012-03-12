@@ -99,7 +99,12 @@ Ext.onReady(function(){
   //set debug variable details
   debugVariables.getSelectionModel().on('rowselect', function(sm, rowIdx, r) {
     var detailPanel = Ext.getCmp('debug-details-panel');
-    debugVarTpl.overwrite(detailPanel.body, r.data);
+    var d = {}
+    
+    d.name  = r.data.name;
+    d.value = parent.parent.htmlentities ? parent.parent.htmlentities(r.data.value) : r.data.value;
+
+    debugVarTpl.overwrite(detailPanel.body, d);
     detailPanel.setTitle(r.data.name);
     
     if(r.data.value == '<object>' || r.data.value == '<array>' ){
