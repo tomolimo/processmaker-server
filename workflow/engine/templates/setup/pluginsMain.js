@@ -56,7 +56,7 @@ Ext.onReady(function(){
   
   var expander = new Ext.ux.grid.RowExpander({
     tpl : new Ext.Template(
-        '<p><b>'+TRANSLATIONS.ID_DESCRIPTION+': </b> {description}</p><br>'
+        '<p><b>' + _('ID_DESCRIPTION') + ': </b> {description}</p><br>'
     )
   });
 
@@ -91,12 +91,12 @@ Ext.onReady(function(){
       columns: [
         expander,
         {id:'id', dataIndex: 'id', hidden:true, hideable:false},
-        {header: TRANSLATIONS.ID_DESCRIPTION, dataIndex: 'description', width: 100, hidden:true, hideable:false},
+        {header: _('ID_DESCRIPTION'), dataIndex: 'description', width: 100, hidden:true, hideable:false},
         {header: '', dataIndex: 'namespace', width: 100, hidden:true, hideable:false},
         {header: 'classname', dataIndex: 'className', width: 300, hidden:true, hideable:false},
-        {header: TRANSLATIONS.ID_TITLE, dataIndex: 'title'},
-        {header: TRANSLATIONS.ID_VERSION, dataIndex: 'version', width: 50},
-        {header: TRANSLATIONS.ID_STATUS, dataIndex: 'status_label', width: 40, renderer:function(v,p,r){
+        {header: _('ID_TITLE'), dataIndex: 'title'},
+        {header: _('ID_VERSION'), dataIndex: 'version', width: 50},
+        {header: _('ID_STATUS'), dataIndex: 'status_label', width: 40, renderer:function(v,p,r){
           color = r.get('status') == '1'? 'green': 'red';
           return String.format("<font color='{0}'>{1}</font>", color, v);
         }},
@@ -111,32 +111,32 @@ Ext.onReady(function(){
     store: store,
 
     tbar:[{
-        text:TRANSLATIONS.ID_IMPORT,
+        text   : _('ID_IMPORT'),
         iconCls: 'silk-add',
-        icon: '/images/import.gif',
-        handler:importProcess
+        icon   : '/images/import.gif',
+        handler: importProcess
       },{
         xtype: 'tbseparator'
       },
       {
-        id:'setup',
-        text:TRANSLATIONS.ID_CONFIGURE,
+        id     : 'setup',
+        text   : _('ID_CONFIGURE'),
         iconCls: 'silk-add',
-        icon: '/images/options.png',
-        handler:configure
+        icon   : '/images/options.png',
+        handler: configure
       },
       {
-        text:TRANSLATIONS.ID_STATUS,
-        id:'activator',
-        icon: '',
-        iconCls: 'silk-add',
-        handler: activeDeactive,
-        disabled:true
+        text    : _('ID_STATUS'),
+        id      : 'activator',
+        icon    : '',
+        iconCls : 'silk-add',
+        handler : activeDeactive,
+        disabled: true
       },{
-        text:TRANSLATIONS.ID_DELETE,
+        text   : _('ID_DELETE'),
         iconCls: 'silk-add',
-        icon: '/images/delete-16x16.gif',
-        handler:deletePlugin
+        icon   : '/images/delete-16x16.gif',
+        handler: deletePlugin
       }
     ],
     listeners: {
@@ -153,10 +153,10 @@ Ext.onReady(function(){
         
         if( rowSelected.data.status == 1 ){  
           activator.setIcon('/images/deactivate.png');
-          activator.setText('Disable');//activator.setText(TRANSLATIONS.ID_DISABLE);//activator.setText('Deactivate');
+          activator.setText(_('ID_DISABLE'));//activator.setText(TRANSLATIONS.ID_DISABLE);//activator.setText('Deactivate');
         } else {
           activator.setIcon('/images/activate.png');
-         activator.setText('Enable');//activator.setText(TRANSLATIONS.ID_ENABLE); //activator.setText('Activate');
+         activator.setText(_('ID_ENABLE'));//activator.setText(TRANSLATIONS.ID_ENABLE); //activator.setText('Activate');
         }
         //alert(rowSelected.data.setup);
         if( rowSelected.data.setup == 1 ){
@@ -188,10 +188,10 @@ deletePlugin = function(){
     status    = rowSelected.get('status');
     if(status == 0) {
       Ext.Msg.confirm(
-        TRANSLATIONS.ID_CONFIRM, TRANSLATIONS.ID_MSG_REMOVE_PLUGIN,
+        _('ID_CONFIRM'), _('ID_MSG_REMOVE_PLUGIN'),
         function(btn, text){
           if ( btn == 'yes' ){
-            Ext.MessageBox.show({ msg: TRANSLATIONS.ID_DELETING_ELEMENTS, wait:true,waitConfig: {interval:200} });
+            Ext.MessageBox.show({ msg: _('ID_DELETING_ELEMENTS'), wait:true,waitConfig: {interval:200} });
             Ext.Ajax.request({
               url: 'pluginsRemove',
               success: function(response) {
@@ -205,23 +205,23 @@ deletePlugin = function(){
       );
     } else {
       Ext.Msg.show({
-        title:'',
-        msg: TRANSLATIONS.ID_PLUGIN_CANT_DELETE,
+        title  : '',
+        msg    : _('ID_PLUGIN_CANT_DELETE'),
         buttons: Ext.Msg.INFO,
-        fn: function(){},
-        animEl: 'elId',
-        icon: Ext.MessageBox.INFO,
+        fn     : function(){},
+        animEl : 'elId',
+        icon   : Ext.MessageBox.INFO,
         buttons: Ext.MessageBox.OK
       });
     }
   } else {
     Ext.Msg.show({
-      title:'',
-      msg: TRANSLATIONS.ID_NO_SELECTION_WARNING,
+      title  : '',
+      msg    : _('ID_NO_SELECTION_WARNING'),
       buttons: Ext.Msg.INFO,
-      fn: function(){},
-      animEl: 'elId',
-      icon: Ext.MessageBox.INFO,
+      fn     : function(){},
+      animEl : 'elId',
+      icon   : Ext.MessageBox.INFO,
       buttons: Ext.MessageBox.OK
     });
   }
@@ -274,12 +274,12 @@ function activeDeactive(){
     //window.location = 'processes_ChangeStatus?PRO_UID='+rowSelected.data.PRO_UID;
   } else {
      Ext.Msg.show({
-      title:'',
-      msg: TRANSLATIONS.ID_NO_SELECTION_WARNING,
+      title  : '',
+      msg    : _('ID_NO_SELECTION_WARNING'),
       buttons: Ext.Msg.INFO,
-      fn: function(){},
-      animEl: 'elId',
-      icon: Ext.MessageBox.INFO,
+      fn     : function(){},
+      animEl : 'elId',
+      icon   : Ext.MessageBox.INFO,
       buttons: Ext.MessageBox.OK
     });
   }
@@ -295,12 +295,12 @@ var configure = function(){
     
   } else {
      Ext.Msg.show({
-      title:'',
-      msg: TRANSLATIONS.ID_NO_SELECTION_WARNING,
+      title  : '',
+      msg    : _('ID_NO_SELECTION_WARNING'),
       buttons: Ext.Msg.INFO,
-      fn: function(){},
-      animEl: 'elId',
-      icon: Ext.MessageBox.INFO,
+      fn     : function(){},
+      animEl : 'elId',
+      icon   : Ext.MessageBox.INFO,
       buttons: Ext.MessageBox.OK
     });
   }

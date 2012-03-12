@@ -258,13 +258,15 @@ Ext.onReady(function(){
         tag = r.get('ADD_TAB_TAG').replace('plugin@', '');
         tag = tag.charAt(0).toUpperCase() + tag.slice(1);
         switch(tag.toLowerCase()){
-          case 'simplereport': tag = 'Simple Report'; break;
+          case 'simplereport':
+            tag = _('ID_SIMPLE_REPORT');
+            break;
         }
       } 
       return r.get('ADD_TAB_TAG') ? '<span style="font-size:9px; color:green">'+tag+':</span> '+ v : v;
     }});
     
-    cmodelColumns.push({header: 'Table Type', dataIndex: 'PRO_UID', width: 120, align:'left', renderer: function(v,p,r){
+    cmodelColumns.push({header: _('ID_TABLE_TYPE'), dataIndex: 'PRO_UID', width: 120, align:'left', renderer: function(v,p,r){
       color = r.get('PRO_UID') ? 'blue' : 'green';
       value = r.get('PRO_UID') ? _('ID_REPORT_TABLE') : _('ID_PMTABLE');
       return '<span style="color:'+color+'">'+value+'</span> ';
@@ -348,7 +350,7 @@ Ext.onReady(function(){
 
           var rowsSelected = Ext.getCmp('infoGrid').getSelectionModel().getSelections();
           tag = rowsSelected[0].get('ADD_TAB_TAG');
-          text = tag? 'Convert to native Report Table': 'Convert to Simple Report';
+          text = (tag) ? _('ID_CONVERT_TO NATIVE_REPORT_TABLE') : _('ID_CONVERT_TO_SIMPLE_REPORT');
           
           if (externalOption) {
             externalOption.setText(text);
@@ -435,12 +437,12 @@ DeletePMTable = function() {
     selections[i] = {id: rows[i].get('ADD_TAB_UID'), type: rows[i].get('TYPE')};
   }
   
-  Ext.Msg.confirm(_('ID_CONFIRM'), _('ID_CONFIRM_DELETE_PM_TABLE'),
+  Ext.Msg.confirm( _('ID_CONFIRM'), _('ID_CONFIRM_DELETE_PM_TABLE'),
     function(btn, text) {
       if (btn == "yes") {
         Ext.Msg.show({
           title : '',
-          msg : 'Removing selectd table(s), please wait!',
+          msg : _('ID_REMOVING_SELECTD_TABLES'),
           wait:true,
           waitConfig: {interval:500}
         });
@@ -489,7 +491,7 @@ ImportPMTable = function(){
         fileUpload: true,
         width: 400,
         frame: true,
-        title: 'Import PM Table',
+        title: _('ID_IMPORT_PMT'), // 'Import PM Table',
         autoHeight: false,
         bodyStyle: 'padding: 10px 10px 0 10px;',
         labelWidth: 50,
@@ -501,7 +503,7 @@ ImportPMTable = function(){
         items: [{
             xtype: 'fileuploadfield',
             id: 'form-file',
-            emptyText: 'Select a .pmt file',
+            emptyText: _('ID_SELECT_PM_FILE'),
             fieldLabel: _('ID_FILE'),
             name: 'form[FILENAME]',
             buttonText: '',
@@ -511,7 +513,7 @@ ImportPMTable = function(){
         }, {
           xtype: 'checkbox',
           fieldLabel: '',
-          boxLabel: 'Overwrite if exists?',
+          boxLabel: _('ID_OVERWRITE_EXIST'), // 'Overwrite if exists?',
           name: 'form[OVERWRITE]'
         }],
         buttons: [{
@@ -522,12 +524,12 @@ ImportPMTable = function(){
               if(uploader.getForm().isValid()){
                 uploader.getForm().submit({
                   url: 'pmTablesProxy/import',
-                  waitMsg: 'Uploading file...',
+                  waitMsg: _('ID_UPLOADING_FILE'),
                   success: function(o, resp){
                     var result = Ext.util.JSON.decode(resp.response.responseText);
 
                     if (result.success) {
-                      PMExt.notify('IMPORT RESULT', result.message);
+                      PMExt.notify(_('ID_IMPORT_RESULT'), result.message);
                     }
                     else {
                       win = new Ext.Window({
@@ -537,7 +539,7 @@ ImportPMTable = function(){
                         height:300,
                         closeAction:'hide',
                         plain: true,
-                        html: '<h3>Importing Error</h3>'+ result.message,
+                        html: '<h3>' + _('ID_IMPORTING_ERROR') + '</h3>' + result.message,
                         items: [],
 
                         buttons: [{
