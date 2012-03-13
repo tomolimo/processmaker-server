@@ -24,14 +24,19 @@ Ext.onReady(function(){
         handler : function(a) {
           var vp = Ext.getCmp('viewportDashboard');
           var pd = Ext.getCmp('portalDashboard');
-          while (pd.items.items[0].items.items[1]) {
-            pd.items.items[2].add(pd.items.items[0].items.items[1]);
+          
+          for (var i = 0; i <= dashletsInstances.length - 1; i++) {
+            pd.items.items[i % 3].add(pd.items.items[i % 2].items.items[0]);
           }
+          
           pd.items.items[0].columnWidth = 0.33;
           pd.items.items[1].columnWidth = 0.33;
           pd.items.items[2].columnWidth = 0.33;
           pd.doLayout();
-          }
+          
+          tbDashboard.items.items[0].setDisabled(true);
+          tbDashboard.items.items[1].setDisabled(false);
+        }
       },
       {
         xtype: 'tbbutton',
@@ -39,14 +44,19 @@ Ext.onReady(function(){
         handler : function(a) {
           var vp = Ext.getCmp('viewportDashboard');
           var pd = Ext.getCmp('portalDashboard');
+          
+          for (var i = 0; i <= dashletsInstances.length - 1; i++) {
+            pd.items.items[i % 2].add(pd.items.items[i % 3].items.items[0]);
+          }
+          
           pd.items.items[0].columnWidth = 0.49;
           pd.items.items[1].columnWidth = 0.49;
-          while ( pd.items.items[2].items.items[0] ) {
-            pd.items.items[0].add( pd.items.items[2].items.items[0] );
-          }
           pd.items.items[2].columnWidth = 0.01;
           pd.doLayout();
-          }
+          
+          tbDashboard.items.items[0].setDisabled(false);
+          tbDashboard.items.items[1].setDisabled(true);
+        }
       }
     ]
   });
@@ -91,6 +101,7 @@ Ext.onReady(function(){
   });
 
   var pd = Ext.getCmp('portalDashboard');
+  
   for (var i = 0; i < dashletsInstances.length; i++) {
     var np = new Ext.ux.Portlet({
       title: dashletsInstances[i].DAS_TITLE,
@@ -109,7 +120,12 @@ Ext.onReady(function(){
         }
       }
     });
+    
     pd.items.items[i % 3].add(np);
   }
+  
   pd.doLayout();
+  
+  tbDashboard.items.items[0].setDisabled(true);
+  tbDashboard.items.items[1].setDisabled(false);
 });
