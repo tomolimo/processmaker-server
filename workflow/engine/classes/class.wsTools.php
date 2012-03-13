@@ -443,7 +443,8 @@ class workspaceTools {
 
     // removing casesList configuration records. TODO: removing these lines that resets all the configurations records
     $oCriteria = new Criteria();
-    $oCriteria->add(ConfigurationPeer::CFG_UID,'casesList');
+    $oCriteria->add(ConfigurationPeer::CFG_UID, "casesList");
+    $oCriteria->add(ConfigurationPeer::OBJ_UID, array("todo", "draft", "sent", "unassigned", "paused", "cancelled"), Criteria::NOT_IN);
     ConfigurationPeer::doDelete($oCriteria);
     // end of reset
   }
