@@ -554,7 +554,7 @@ var processmap=function(){
               position:{x:50,y:50,center:true},
               title :G_STRINGS.ID_WEB_ENTRY,
               theme :this.options.theme,
-              control :{close:true,resize:false},fx:{modal:true},
+              control :{close:true,resize:true},fx:{modal:true},
               statusBar:false,
               fx  :{shadow:true,modal:true}
             };
