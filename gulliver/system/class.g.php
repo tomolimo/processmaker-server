@@ -1908,11 +1908,14 @@ $output = $outputHeader.$output;
           }
           //Call function
           if (($match[1][$r][0]==='')&&($match[2][$r][0]==='')&&($match[3][$r][0]!=='')) {
-            $arraySearch  = array("'");
-            $arrayReplace = array("\\'");
+            eval('$strAux = ' . $match[3][$r][0] . '(\'' . addcslashes(G::replaceDataField(stripslashes($match[4][$r][0]),$result),'\\\'') . '\');');
             
-            eval('$strAux = '.$match[3][$r][0].'(\''.addcslashes(G::replaceDataField(stripslashes($match[4][$r][0]),$result),'\\\'').'\');');
-            $strAux = str_replace($arraySearch, $arrayReplace, $strAux);
+            if ($match[3][$r][0] == "G::LoadTranslation") {
+              $arraySearch  = array("'");
+              $arrayReplace = array("\\'");
+            
+              $strAux = str_replace($arraySearch, $arrayReplace, $strAux);
+            }
             
             $__textoEval .= $strAux; continue;
           }
