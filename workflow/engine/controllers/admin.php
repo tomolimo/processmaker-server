@@ -8,6 +8,8 @@ class Admin extends Controller
   /**
    * UX - User experience
    */
+  
+  public $debug = true;
 
   public function uxList()
   {
@@ -93,4 +95,19 @@ class Admin extends Controller
     
     G::RenderPage('publish', 'extJs');
   }
+  
+  /**
+   * getting email configuration
+   * @autor Alvaro  <alvaro@colosa.com>
+   */
+   
+  public function emails()
+  {
+    global $RBAC;
+    
+    $RBAC->requirePermissions('PM_SETUP_ADVANCE');
+    $this->includeExtJS('admin/emails');
+    //render content
+    G::RenderPage('publish', 'extJs');
+  } 
 }
