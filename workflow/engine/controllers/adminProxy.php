@@ -197,4 +197,358 @@ class adminProxy extends HttpProxyController
     $data['success'] = true; 
     return $data;
   }//end saveAuthSoruces function
+  
+ /**
+  * for Test email configuration
+  * @autor Alvaro  <alvaro@colosa.com>
+  */
+  public function testConnection($params) {
+    
+    G::LoadClass('net');
+    G::LoadThirdParty('phpmailer', 'class.smtp');
+    
+    $step = $_POST['step'];  
+    $server = $_POST['server'];
+    $user = $_POST['user'];    
+    $passwd = $_POST['passwd'];
+    $passwdHide = $_POST['passwdHide'];
+    
+    if (trim($passwdHide) != '') {
+      $passwd = $passwdHide;
+      $passwdHide = '';
+    }
+    
+    $passwdDec = G::decrypt($passwd,'EMAILENCRYPT');
+    
+    if (strpos( $passwdDec, 'hash:' ) !== false) {
+      list($hash, $pass) = explode(":", $passwdDec);   
+      $passwd = $pass;
+    }
+    
+    $port = $_POST['port'];
+    $auth_required = $_POST['req_auth'];
+    $UseSecureCon = $_POST['UseSecureCon'];
+    $SendaTestMail = $_POST['SendaTestMail'];
+    $Mailto = $_POST['eMailto'];
+    $SMTPSecure  = $_POST['UseSecureCon'];
+
+    $Server = new NET($server);     
+    $smtp = new SMTP;
+    
+    $timeout = 10;
+    $hostinfo = array();
+    $srv=$_POST['server'];
+    
+    switch ($step) {
+      case 1:
+        $this->success = $Server->getErrno() == 0;
+        $this->msg = $this->result ? 'success' : $Server->error;
+        break;
+      
+      case 2:
+        $Server->scannPort($port);
+        
+        $this->success = $Server->getErrno() == 0; //'Successfull'.$smtp->status;
+        $this->msg = $this->result ? '' : $Server->error;
+        break;
+      
+      case 3:   //try to connect to host    
+        if (preg_match('/^(.+):([0-9]+)$/', $srv, $hostinfo)) {
+          $server = $hostinfo[1];
+          $port = $hostinfo[2];
+        }
+        else { 
+          $host = $srv;
+        }
+        
+        $tls = (strtoupper($SMTPSecure) == 'tls');
+        $ssl = (strtoupper($SMTPSecure) == 'ssl');    
+        
+        $this->success = $smtp->Connect(($ssl ? 'ssl://':'').$server, $port, $timeout);
+        $this->msg = $this->result ? '' : $Server->error;
+        
+        break;
+      
+      case 4:  //try login to host        
+        if($auth_required == 'true') {
+          try {	          
+            if (preg_match('/^(.+):([0-9]+)$/', $srv, $hostinfo)) {
+              $server = $hostinfo[1];
+              $port = $hostinfo[2];
+            }
+            else {
+              $server = $srv;	          
+            }           
+            if (strtoupper($UseSecureCon)=='TLS') {
+              $tls = 'tls';
+            }
+            
+            if (strtoupper($UseSecureCon)=='SSL') {
+              $tls = 'ssl';
+            }
+            
+            $tls = (strtoupper($UseSecureCon) == 'tls');
+            $ssl = (strtoupper($UseSecureCon) == 'ssl');
+            $server = $_POST['server'];
+            
+            if(strtoupper($UseSecureCon) == 'SSL') {
+              $resp = $smtp->Connect(('ssl://').$server, $port, $timeout);
+            }
+            else {
+              $resp = $smtp->Connect($server, $port, $timeout);
+            }
+             
+            if ($resp) {
+              $hello = $_SERVER['SERVER_NAME'];
+              $smtp->Hello($hello);
+              
+              if (strtoupper($UseSecureCon) == 'TLS') {                
+                $smtp->Hello($hello);
+              }
+           
+              if( $smtp->Authenticate($user, $passwd) ) { 
+                $this->success = true;                 
+              }
+              else {
+                $this->success = false;
+                $this->msg = $smtp->error['error'];
+              }
+            }
+            else {
+              $this->success = false;
+              $this->msg = $smtp->error['error'];
+            }
+          }
+          catch (Exception $e) {
+            $this->success = false;
+            $this->msg = $e->getMessage(); 
+          }
+        }
+        else {
+          $this->success = true;
+          $this->msg = 'No authentication required!';
+        }
+        break;
+      
+      case 5:   //send a test mail    
+        if($SendaTestMail == 'true') {
+          try {             
+            $_POST['FROM_NAME'] = 'Process Maker O.S. [Test mail]';
+            $_POST['FROM_EMAIL'] = $user;
+            $_POST['MESS_ENGINE'] = 'PHPMAILER';
+            $_POST['MESS_SERVER'] = $server;
+            $_POST['MESS_PORT']   = $port;
+            $_POST['MESS_ACCOUNT'] = $user;
+            $_POST['MESS_PASSWORD'] = $passwd;
+            $_POST['TO'] = $Mailto;
+            
+            if($auth_required == 'true') { 
+              $_POST['SMTPAuth'] = true;
+            }
+            else {
+              $_POST['SMTPAuth'] = false;                      
+            }
+            
+            if ($_POST['UseSecureCon'] == 'ssl') {
+              $_POST['MESS_SERVER'] = 'ssl://'.$_POST['MESS_SERVER'];
+            }
+            
+            $resp = $this->sendTestMail();            
+            if ($resp->status == '1') {
+              $this->success=true;           
+            }
+            else {
+              $this->success=false;
+              $this->msg=$smtp->error['error'];         
+            }
+          }
+          catch (Exception $e) {
+            $this->success = false;
+            $this->msg = $e->getMessage();           
+          }          
+        }
+        else {
+          $this->success=true;
+          $this->msg='jump this step';         
+        }
+        break;
+    }   
+  }
+  
+ /**
+  * for send email configuration
+  * @autor Alvaro  <alvaro@colosa.com>
+  */
+  public function sendTestMail() {
+    
+    global $G_PUBLISH;
+    G::LoadClass("system");
+    G::LoadClass('spool');
+        
+    $sFrom    = ($_POST['FROM_NAME'] != '' ? $_POST['FROM_NAME'] . ' ' : '') . '<' . $_POST['FROM_EMAIL'] . '>';
+    $sSubject = G::LoadTranslation('ID_MESS_TEST_SUBJECT');
+    $msg      = G::LoadTranslation('ID_MESS_TEST_BODY');
+    
+    switch ($_POST['MESS_ENGINE']) {
+      case 'MAIL':
+        $engine = G::LoadTranslation('ID_MESS_ENGINE_TYPE_1');
+        break;
+      
+      case 'PHPMAILER':
+        $engine = G::LoadTranslation('ID_MESS_ENGINE_TYPE_2');
+        break;
+      
+      case 'OPENMAIL':
+        $engine = G::LoadTranslation('ID_MESS_ENGINE_TYPE_3');
+        break;
+    }
+    
+    $sBodyPre  = new TemplatePower(PATH_TPL . 'admin' . PATH_SEP . 'email.tpl');    
+    $sBodyPre->prepare();
+    $sBodyPre->assign('server', $_SERVER['SERVER_NAME']);
+    $sBodyPre->assign('date', date('H:i:s'));
+    $sBodyPre->assign('ver', System::getVersion());
+    $sBodyPre->assign('engine', $engine);
+    $sBodyPre->assign('msg', $msg);
+    $sBody = $sBodyPre->getOutputContent();
+    
+    $oSpool = new spoolRun();
+    $oSpool->setConfig(
+      array(
+        'MESS_ENGINE'   => $_POST['MESS_ENGINE'],
+        'MESS_SERVER'   => $_POST['MESS_SERVER'],
+        'MESS_PORT'     => $_POST['MESS_PORT'],
+        'MESS_ACCOUNT'  => $_POST['MESS_ACCOUNT'],
+        'MESS_PASSWORD' => $_POST['MESS_PASSWORD'],
+        'SMTPAuth'      => $_POST['SMTPAuth'],
+        'SMTPSecure'    => isset($_POST['SMTPSecure'])?$_POST['SMTPSecure']:'none'
+      )
+    );
+    
+    $oSpool->create(
+      array(
+        'msg_uid'          => '',
+        'app_uid'          => '',
+        'del_index'        => 0,
+        'app_msg_type'     => 'TEST',
+        'app_msg_subject'  => $sSubject,
+        'app_msg_from'     => $sFrom,
+        'app_msg_to'       => $_POST['TO'],
+        'app_msg_body'     => $sBody,
+        'app_msg_cc'       => '',
+        'app_msg_bcc'      => '',
+        'app_msg_attach'   => '',
+        'app_msg_template' => '',
+        'app_msg_status'   => 'pending',
+        'app_msg_attach'=>'' // Added By Ankit
+      )
+    );
+    
+    $oSpool->sendMail();	
+    $G_PUBLISH = new Publisher();
+    
+    if ($oSpool->status == 'sent') {
+      $o->status = true;
+      $o->success = true;
+      $o->msg = G::LoadTranslation('ID_MAIL_TEST_SUCCESS');
+    }
+    else {
+      $o->status = false;
+      $o->success = false;
+      $o->msg = $oSpool->error;
+    }
+    return $o; 
+  }
+  
+ /**
+  * getting Save email configuration
+  * @autor Alvaro  <alvaro@colosa.com>
+  */
+  public function saveConfiguration() {
+    
+    require_once 'classes/model/Configuration.php';
+    
+    try {            
+      $oConfiguration = new Configuration();
+      $aFields['MESS_PASSWORD']  = $_POST['passwd'];
+      
+      if ($_POST['passwdHide'] != '') {
+        $aFields['MESS_PASSWORD'] = $_POST['passwdHide'];
+      }
+      
+      $aFields['MESS_PASSWORD_HIDDEN'] = '';
+      $aPasswd = G::decrypt($aFields['MESS_PASSWORD'],'EMAILENCRYPT');
+      
+      if ((strpos( $aPasswd, 'hash:') !== true) && ($aFields['MESS_PASSWORD'] != '')) {   // for plain text
+        $aFields['MESS_PASSWORD'] = 'hash:'.$aFields['MESS_PASSWORD'];
+        $aFields['MESS_PASSWORD'] = G::encrypt($aFields['MESS_PASSWORD'],'EMAILENCRYPT');    
+      }
+      
+      $aFields['MESS_ENABLED']             = isset($_POST['EnableEmailNotifications']) ? $_POST['EnableEmailNotifications'] : '';
+      $aFields['MESS_ENGINE']              = $_POST['EmailEngine'];
+      $aFields['MESS_SERVER']              = trim($_POST['server']);
+      $aFields['MESS_RAUTH']               = isset($_POST['req_auth']) ? $_POST['req_auth'] : '';
+      $aFields['MESS_PORT']                = $_POST['port'];
+      $aFields['MESS_ACCOUNT']             = $_POST['from'];
+      $aFields['MESS_BACKGROUND']          = '';//isset($_POST['background']) ? $_POST['background'] : '';
+      $aFields['MESS_EXECUTE_EVERY']       = '';//$_POST['form']['MESS_EXECUTE_EVERY'];
+      $aFields['MESS_SEND_MAX']            = '';//$_POST['form']['MESS_SEND_MAX'];
+      $aFields['SMTPSecure']               = $_POST['UseSecureCon'];
+      $aFields['MAIL_TO']                  = $_POST['eMailto'];
+      $aFields['MESS_TRY_SEND_INMEDIATLY'] = $_POST['SendaTestMail'];//isset($_POST['form']['MESS_TRY_SEND_INMEDIATLY']) ? $_POST['form']['MESS_TRY_SEND_INMEDIATLY'] : '';
+      $CfgUid='Emails';
+      $ObjUid='';
+      $ProUid='';
+      $UsrUid='';
+      $AppUid='';
+      
+      if($oConfiguration->exists($CfgUid, $ObjUid, $ProUid, $UsrUid, $AppUid)) {
+        $oConfiguration->update(
+          array(
+            'CFG_UID'   => 'Emails',
+            'OBJ_UID'   => '',
+            'CFG_VALUE' => serialize($aFields),
+            'PRO_UID'   => '',
+            'USR_UID'   => '',
+            'APP_UID'   => ''
+          )
+        );
+        $this->success='true';
+        $this->msg='Saved';  
+      }
+      else {
+        $oConfiguration->create(
+          array(
+            'CFG_UID'   => 'Emails',
+            'OBJ_UID'   => '',
+            'CFG_VALUE' => serialize($aFields),
+            'PRO_UID'   => '',
+            'USR_UID'   => '',
+            'APP_UID'   => ''
+          )
+        );
+        $this->success='true'; 
+        $this->msg='Saved'; 
+      }
+    }
+    catch (Exception $e) {      
+      $this->success= false;
+      $this->msg = $e->getMessage();     
+    }
+  }
+
+ /**
+  * loadFields for email configuration
+  * @autor Alvaro  <alvaro@colosa.com>
+  */  
+  public function loadFields() {
+    
+    G::loadClass('configuration');
+    
+    $oConfiguration = new Configurations();      
+    $oConfiguration->loadConfig($x, 'Emails','','','','');
+    $fields = $oConfiguration->aConfig;
+    $this->success = (count($fields) > 0);
+    $this->data = $fields;    
+  }
 }
