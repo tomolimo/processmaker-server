@@ -1,0 +1,109 @@
+  <head>
+    <title>DataView</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  </head>
+  <body >        
+      <div id="container">
+          <div id="left"></div>
+          <div id="right">
+              <div id="right-top"></div>
+              <div id="right-bottom"></div>
+          </div>
+          <div class="clear"></div>
+      </div>
+  </body>
+  <style type="text/css">
+  #container {
+      padding : 10px;
+      width   : 820px;
+  }
+  #left {
+      float : left;
+  }
+  #right {
+      float : right;
+  }
+  #right-bottom {
+      margin-top : 10px;
+  }
+  .clear {
+      clear : both;
+  }
+  .details {
+      padding     : 10px;
+      font-family : "Arial";
+      font-size   : 11px;
+  }
+  .details-info {
+      margin-top : 10px;
+  }
+  .details-info span {
+      display : block;
+  }
+  .details-info span a {
+      color : #0066cc;
+  }
+  .details-info span a:hover {
+      text-decoration : none;
+  }
+ 
+  *html body {
+    overflow-x : hidden !important;
+  }
+  body {
+     overflow-x       : hidden !important;
+     background-color : white !important;
+  }
+  /**/
+  #images-view .x-panel-body {
+    background : white;
+    font       : 11px Arial, Helvetica, sans-serif;
+  }
+  #images-view .thumb {
+    background : #FFFFFF;
+    padding    : 3px;
+  }
+  #images-view .thumb img {
+    height : 50px !important;
+    width  : 255px !important;
+  }
+  #images-view .thumb-wrap {
+    float        : left;
+    display      : inline;
+    margin       : 4px;
+    margin-right : 0;
+    padding      : 5px;
+    border       : 1px solid white;
+  }
+  #images-view .thumb-wrap span {
+    display    : block;
+    overflow   : hidden;
+    text-align : center;
+  }
+  #images-view .x-view-over {
+    border     : 1px solid #99bbe8;
+    opacity    : 0.5;
+    background : #efefef url(/images/ext/row-over.gif) repeat-x left top;
+    padding      : 5px;
+  }
+
+
+  #images-view .x-view-selected {
+    border     : 1px solid #99bbe8;
+    background : #eff5fb url(/images/selected.gif) no-repeat right bottom;
+    opacity    : 0.5;
+    padding    : 5px;
+  }
+  #images-view .x-view-selected .thumb {
+    background : transparent;
+  }
+  #images-view .loading-indicator  {
+    font-size           : 11px;
+    background-image    : url('../../resources/images/default/grid/loading.gif');
+    background-repeat   : no-repeat;
+    background-position : left;
+    padding-left        : 20px;
+    margin              : 10px;
+  }
+
+</style>

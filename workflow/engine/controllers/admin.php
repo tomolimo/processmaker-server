@@ -100,7 +100,6 @@ class Admin extends Controller
    * getting email configuration
    * @autor Alvaro  <alvaro@colosa.com>
    */
-   
   public function emails()
   {
     global $RBAC;
@@ -110,4 +109,38 @@ class Admin extends Controller
     //render content
     G::RenderPage('publish', 'extJs');
   } 
+
+  /**
+   * getting default list
+   * @param string $httpData->PRO_UID (opional)
+   */
+  public function pmLogo($httpData)
+  {
+    global $RBAC;
+    $RBAC->requirePermissions('PM_SETUP_ADVANCE');
+
+    G::LoadClass('configuration');
+    $c = new Configurations();
+    $configPage = $c->getConfiguration('additionalTablesList', 'pageSize', '', $_SESSION['USER_LOGGED']);
+    $Config['pageSize'] = isset($configPage['pageSize']) ? $configPage['pageSize'] : 20;
+
+    $this->includeExtJS('admin/pmLogo');
+    $this->setView('admin/pmLogo');
+
+    //assigning js variables
+    $this->setJSVar('FORMATS', $c->getFormats());
+    $this->setJSVar('CONFIG',  $Config);
+    $this->setJSVar('PRO_UID', isset($_GET['PRO_UID'])? $_GET['PRO_UID'] : false);
+
+    if (isset($_SESSION['_cache_pmtables'])) {
+      unset($_SESSION['_cache_pmtables']);
+    }
+
+    if (isset($_SESSION['ADD_TAB_UID'])) {
+      unset($_SESSION['ADD_TAB_UID']);
+    }
+    //render content
+    G::RenderPage('publish', 'extJs');
+  }
+
 }

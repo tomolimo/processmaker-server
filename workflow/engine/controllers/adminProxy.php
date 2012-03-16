@@ -551,4 +551,516 @@ class adminProxy extends HttpProxyController
     $this->success = (count($fields) > 0);
     $this->data = $fields;    
   }
+
+  /**
+  * get List Image
+  * @param type $httpData
+  */
+  public function getListImage($httpData)
+  {
+    G::LoadClass('replacementLogo');
+    $uplogo       = PATH_TPL . 'setup' . PATH_SEP . 'uplogo.html';
+    $width        = "100%";
+    $upload       = new replacementLogo();
+    $aPhotoSelect = $upload->getNameLogo($_SESSION['USER_LOGGED']);
+    $sPhotoSelect = trim($aPhotoSelect['DEFAULT_LOGO_NAME']);
+    $check        = '';
+    $ainfoSite    = explode("/",$_SERVER["REQUEST_URI"]);
+    $dir          = PATH_DATA . "sites" . PATH_SEP . str_replace("sys", "", $ainfoSite[1]) . PATH_SEP . "files/logos";
+    G::mk_dir ( $dir );
+    $i      = 0;
+    $images = array();
+    /** if we have at least one image it's load  */
+    if (file_exists($dir)) {
+      if ($handle = opendir($dir)) {
+        while (false !== ($file = readdir($handle))) {
+          if (($file != ".") && ($file != "..")) {
+            $extention      = explode(".", $file);
+            $aImageProp     = getimagesize($dir . '/' . $file, $info);
+            $sfileExtention = strtoupper($extention[count($extention)-1]);
+
+            if( in_array($sfileExtention, array('JPG', 'JPEG', 'PNG', 'GIF') ) ) {
+
+              $check   = (!strcmp($file, $sPhotoSelect)) ? '/images/toadd.png' : '/images/delete.png';
+              $onclick = (strcmp($file, $sPhotoSelect)) ? "onclick ='deleteLogo(\" $file \");return false;'" : '';
+
+              if ($i == 0) {
+                $i++;
+              }
+              $i++;
+              $images[] = array(
+                'name'      => $file,
+                'size'      => '0',
+                'lastmod'   => '32',
+                'url'       => "../adminProxy/showLogoFile?id=".base64_encode($file),
+                'thumb_url' => "../adminProxy/showLogoFile?id=".base64_encode($file)
+              );
+            }
+          }
+        }
+        closedir($handle);
+      }
+    }
+    $o = array('images' => $images);
+    echo json_encode($o);
+    exit();
+  }
+  /**
+   * Change Name logo
+   * @param type $snameLogo
+   * @return type $snameLogo
+   */
+  function changeNamelogo($snameLogo)
+  {
+    $snameLogo = preg_replace("/[áàâãª]/", "a", $snameLogo);
+    $snameLogo = preg_replace("/[ÁÀÂÃ]/",  "A", $snameLogo);
+    $snameLogo = preg_replace("/[ÍÌÎ]/",   "I", $snameLogo);
+    $snameLogo = preg_replace("/[íìî]/",   "i", $snameLogo);
+    $snameLogo = preg_replace("/[éèê]/",   "e", $snameLogo);
+    $snameLogo = preg_replace("/[ÉÈÊ]/",   "E", $snameLogo);
+    $snameLogo = preg_replace("/[óòôõº]/", "o", $snameLogo);
+    $snameLogo = preg_replace("/[ÓÒÔÕ]/",  "O", $snameLogo);
+    $snameLogo = preg_replace("/[úùû]/",   "u", $snameLogo);
+    $snameLogo = preg_replace("/[ÚÙÛ]/",   "U", $snameLogo);
+    $snameLogo = str_replace( "ç",         "c", $snameLogo);
+    $snameLogo = str_replace( "Ç",         "C", $snameLogo);
+    $snameLogo = str_replace( "[ñ]",       "n", $snameLogo);
+    $snameLogo = str_replace( "[Ñ]",       "N", $snameLogo);
+    return ($snameLogo);
+  }
+  /**
+   * Create Thumb
+   * @param type $img_file
+   * @param type $ori_path
+   * @param type $thumb_path
+   * @param type $img_type
+   */
+  function createThumb($img_file, $ori_path, $thumb_path, $img_type)
+  {
+    $path = $ori_path;
+    $img  = $path.$img_file;
+    switch ($img_type) {
+      case "image/jpeg":
+        $img_src = @imagecreatefromjpeg($img);
+        break;
+      case "image/pjpeg":
+        $img_src = @imagecreatefromjpeg($img);
+        break;
+      case "image/png":
+        $img_src = @imagecreatefrompng($img);
+        break;
+      case "image/x-png":
+        $img_src = @imagecreatefrompng($img);
+        break;
+      case "image/gif":
+        $img_src = @imagecreatefromgif($img);
+        break;
+    }
+    $img_width   = imagesx($img_src);
+    $img_height  = imagesy($img_src);
+    $square_size = 100;
+    // check width, height, or square
+    if ($img_width == $img_height) {
+      // square
+      $tmp_width  = $square_size;
+      $tmp_height = $square_size;
+    } else if ($img_height < $img_width) {
+      // wide
+      $tmp_height = $square_size;
+      $tmp_width  = intval(($img_width / $img_height) * $square_size);
+      if ($tmp_width % 2 != 0) {
+        $tmp_width++;
+      }
+    } else if ($img_height > $img_width) {
+      $tmp_width  = $square_size;
+      $tmp_height = intval(($img_height / $img_width) * $square_size);
+      if (($tmp_height % 2) != 0) {
+        $tmp_height++;
+      }
+    }
+    $img_new = imagecreatetruecolor($tmp_width, $tmp_height);
+    imagecopyresampled($img_new, $img_src, 0, 0, 0, 0,
+                       $tmp_width, $tmp_height, $img_width, $img_height);
+
+    // create temporary thumbnail and locate on the server
+    $thumb = $thumb_path."thumb_".$img_file;
+    switch ($img_type) {
+      case "image/jpeg":
+        imagejpeg($img_new, $thumb);
+        break;
+      case "image/pjpeg":
+        imagejpeg($img_new, $thumb);
+        break;
+      case "image/png":
+        imagepng($img_new, $thumb);
+        break;
+      case "image/x-png":
+        imagepng($img_new, $thumb);
+        break;
+      case "image/gif":
+        imagegif($img_new, $thumb);
+        break;
+    }
+
+    // get tmp_image
+    switch ($img_type) {
+      case "image/jpeg":
+        $img_thumb_square = imagecreatefromjpeg($thumb);
+        break;
+      case "image/pjpeg":
+        $img_thumb_square = imagecreatefromjpeg($thumb);
+        break;
+      case "image/png":
+        $img_thumb_square = imagecreatefrompng($thumb);
+        break;
+      case "image/x-png":
+        $img_thumb_square = imagecreatefrompng($thumb);
+        break;
+      case "image/gif":
+        $img_thumb_square = imagecreatefromgif($thumb);
+        break;
+    }
+
+    $thumb_width  = imagesx($img_thumb_square);
+    $thumb_height = imagesy($img_thumb_square);
+
+    if ($thumb_height < $thumb_width) {
+      // wide
+      $x_src     = ($thumb_width - $square_size) / 2;
+      $y_src     = 0;
+      $img_final = imagecreatetruecolor($square_size, $square_size);
+      imagecopy($img_final, $img_thumb_square, 0, 0,
+                $x_src, $y_src, $square_size, $square_size);
+    }
+    else if ($thumb_height > $thumb_width) {
+      // landscape
+      $x_src = 0;
+      $y_src = ($thumb_height - $square_size) / 2;
+      $img_final = imagecreatetruecolor($square_size, $square_size);
+      imagecopy($img_final, $img_thumb_square, 0, 0,
+                $x_src, $y_src, $square_size, $square_size);
+    }
+    else {
+      $img_final = imagecreatetruecolor($square_size, $square_size);
+      imagecopy($img_final, $img_thumb_square, 0, 0,
+                0, 0, $square_size, $square_size);
+    }
+
+    switch ($img_type) {
+      case "image/jpeg":
+        @imagejpeg($img_final, $thumb);
+        break;
+      case "image/pjpeg":
+        @imagejpeg($img_final, $thumb);
+        break;
+      case "image/png":
+        @imagepng($img_final, $thumb);
+        break;
+      case "image/x-png":
+        @imagepng($img_final, $thumb);
+        break;
+      case "image/gif":
+        @imagegif($img_final, $thumb);
+        break;
+    }
+  }
+
+  /**
+   * Upload Image
+   * @global type $_FILES
+   */
+  function uploadImage()
+  {
+    //!dataSystem
+    $ainfoSite = explode("/", $_SERVER["REQUEST_URI"]);
+    $dir       = PATH_DATA."sites".PATH_SEP.str_replace("sys","",$ainfoSite[1]).PATH_SEP."files/logos";
+    global $_FILES;
+
+    //| 0-> non fail
+    //| 1-> fail in de type of the image
+    //| 2-> fail in de size of the image
+    //| 3-> fail in de myme of the image
+    $failed = 0;
+    //!dataSystem
+
+    $ori_dir   = $dir . '/img/ori/';
+    $thumb_dir = $dir . '/img/thumbs/';
+
+    $allowedType = array(
+      'image/jpg', 'image/jpeg', 'image/pjpeg', 'image/gif', 'image/png', 'image/x-png'
+    );
+    $allowedTypeArray['index' . base64_encode('image/jpg')]   = IMAGETYPE_JPEG;
+    $allowedTypeArray['index' . base64_encode('image/jpeg')]  = IMAGETYPE_JPEG;
+    $allowedTypeArray['index' . base64_encode('image/pjpeg')] = IMAGETYPE_JPEG;
+    $allowedTypeArray['index' . base64_encode('image/gif')]   = IMAGETYPE_GIF;
+    $allowedTypeArray['index' . base64_encode('image/png')]   = IMAGETYPE_PNG;
+    $allowedTypeArray['index' . base64_encode('image/x-png')] = IMAGETYPE_PNG;
+
+    $uploaded = 0;
+    $failed   = 0;
+
+    if (in_array($_FILES['img']['type'], $allowedType)) {
+       // max upload file is 500 KB
+      if ($_FILES['img']['size'] <= 500000) {
+
+        $formf     = $_FILES['img'];
+        $namefile  = $formf['name'];
+        $typefile  = $formf['type'];
+        $errorfile = $formf['error'];
+        $tpnfile   = $formf['tmp_name'];
+        $aMessage1 = array();
+        $fileName  = trim(str_replace(' ', '_', $namefile));
+        $fileName  = self::changeNamelogo($fileName);
+        G::uploadFile( $tpnfile, $dir . '/', 'tmp' . $fileName );
+
+        try {
+          $typeMime = exif_imagetype($dir . '/'. 'tmp'.$fileName);
+          if ($typeMime == $allowedTypeArray['index' . base64_encode($_FILES['img']['type'])]) {
+            $error = false;
+            try {
+              list($imageWidth, $imageHeight, $imageType) = @getimagesize($dir . '/' . 'tmp' . $fileName);
+              G::resizeImage($dir . '/tmp' . $fileName, $imageWidth, 49, $dir . '/' . $fileName);
+            }
+            catch (Exception $e) {
+              $error = $e->getMessage();
+            }
+            $uploaded++;
+          }
+          else {
+            $failed = "3";
+          }
+          unlink ($dir . '/tmp' . $fileName);
+        }
+        catch (Exception $e) {
+          $failed = "3";
+        }
+
+      }
+      else {
+        $failed = "2";
+      }
+    }
+    else if ($_FILES['img']['type'] != '') {
+      $failed = "1";
+    }
+
+    echo '{success: true, failed: ' . $failed . ', uploaded: ' . $uploaded . ', type: "' . $_FILES['img']['type'] . '"}';
+    exit();
+  }
+
+  /**
+   * Get Name Current Logo
+   * @return type
+   */
+  function getNameCurrentLogo()
+  {
+    G::LoadClass('replacementLogo');
+    $upload       = new replacementLogo();
+    $aPhotoSelect = $upload->getNameLogo($_SESSION['USER_LOGGED']);
+    $sPhotoSelect = trim($aPhotoSelect['DEFAULT_LOGO_NAME']);
+    return $sPhotoSelect;
+  }
+
+  /**
+   * compare Name Current Logo
+   * @param type $selectLogo
+   * @return type int value
+   */
+  function isCurrentLogo()
+  {
+    $arrayImg   = explode(";", $_POST['selectLogo']);
+    foreach ($arrayImg as $imgname) {
+      if ($imgname != "") {
+        if( strcmp($imgname, self::getNameCurrentLogo()) == 0 ) {
+          echo '{success: true}';
+          exit();
+        }
+      }
+    }
+    echo '{success: false}';
+    exit();
+  }
+
+  /**
+   *
+   * Delete Image from the list
+   * @param
+   * @return string '{success: true | false}'
+   */
+  function deleteImage()
+  {
+    //!dataSystem
+    $ainfoSite = explode("/", $_SERVER["REQUEST_URI"]);
+    $dir       = PATH_DATA . "sites" . PATH_SEP . str_replace("sys", "", $ainfoSite[1]) . PATH_SEP . "files/logos";
+    global $_FILES;
+    //!dataSystem
+
+    $dir        = $dir;
+    $dir_thumbs = $dir;
+
+    $arrayImg   = explode(";", $_POST['images']);
+    foreach ($arrayImg as $imgname) {
+      if ($imgname != "") {
+        if( strcmp($imgname, self::getNameCurrentLogo()) != 0 ) {
+          if(file_exists($dir . '/' . $imgname)) {
+            unlink ($dir . '/' . $imgname);
+          }
+          if(file_exists($dir . '/tmp' . $imgname)) {
+            unlink ($dir . '/tmp' . $imgname);
+          }
+        }
+        else {
+          echo '{success: false}';
+          exit();
+        }
+      }
+    }
+    echo '{success: true}';
+    exit();
+  }
+
+  /**
+   * Replacement Logo
+   * @global type $_REQUEST
+   * @global type $RBAC
+   */
+  function replacementLogo()
+  {
+    global $_REQUEST;
+    $sfunction        = $_REQUEST['nameFunction'];
+    $_GET['NAMELOGO'] = $_REQUEST['NAMELOGO'];
+
+    try {//ini_set('display_errors','1');
+      global $RBAC;
+      switch ($RBAC->userCanAccess('PM_LOGIN')) {
+        case -2:
+          G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_SYSTEM', 'error', 'labels');
+          G::header('location: ../login/login');
+          die;
+          break;
+        case -1:
+          G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');
+          G::header('location: ../login/login');
+          die;
+          break;
+      }
+
+      switch ($sfunction) {
+        case 'replacementLogo':
+          $snameLogo = urldecode($_GET['NAMELOGO']);
+          $snameLogo = trim($snameLogo);
+          $snameLogo = self::changeNamelogo($snameLogo);
+          G::loadClass('configuration');
+          $oConf = new Configurations;
+          $aConf = Array(
+            'WORKSPACE_LOGO_NAME' => SYS_SYS,
+            'DEFAULT_LOGO_NAME'   => $snameLogo
+          );
+
+          $oConf->aConfig = $aConf;
+          $oConf->saveConfig('USER_LOGO_REPLACEMENT', '', '', '');
+
+          G::SendTemporalMessage('ID_REPLACED_LOGO', 'tmp-info', 'labels');
+          break;
+        case 'restoreLogo':
+          $snameLogo = $_GET['NAMELOGO'];
+          G::loadClass('configuration');
+          $oConf = new Configurations;
+          $aConf = Array(
+            'WORKSPACE_LOGO_NAME' => '',
+            'DEFAULT_LOGO_NAME'   => ''
+          );
+
+          $oConf->aConfig = $aConf;
+          $oConf->saveConfig('USER_LOGO_REPLACEMENT', '', '', '');
+
+          G::SendTemporalMessage('ID_REPLACED_LOGO', 'tmp-info', 'labels');
+          break;
+      }
+    }
+    catch (Exception $oException) {
+      die($oException->getMessage());
+    }
+    exit();
+  }
+
+  /**
+   * Show Logo
+   * @param type $imagen
+   */
+  function showLogo($imagen)
+  {
+    $info = @getimagesize($imagen);
+    $fp   = fopen($imagen, "rb");
+    if ($info && $fp) {
+      header("Content-type: {$info['mime']}");
+      fpassthru($fp);
+      exit;
+    }
+    else {
+      throw new Exception("Image format not valid");
+    }
+  }
+
+  /**
+   * Copy More Logos
+   * @param type $dir
+   * @param type $newDir
+   */
+  function cpyMoreLogos($dir,$newDir)
+  {
+    if (file_exists($dir)) {
+      if (($handle = opendir($dir))) {
+        while (false !== ($file = readdir($handle))) {
+          if (($file != ".") && ($file != "..")) {
+            $extention      = explode(".", $file);
+            $aImageProp     = getimagesize($dir . '/' . $file, $info);
+            $sfileExtention = strtoupper($extention[count($extention)-1]);
+            if ( in_array($sfileExtention, array('JPG', 'JPEG', 'PNG', 'GIF') ) ) {
+
+                $dir1 = $dir . PATH_SEP . $file;
+                $dir2 = $newDir . PATH_SEP . $file;
+                copy($dir1, $dir2);
+            }
+          }
+        }
+        closedir($handle);
+      }
+    }
+  }
+
+  /**
+   * Show Logo File
+   */
+  function showLogoFile()
+  {
+      $_GET['id'] = $_REQUEST['id'];
+
+      $base64Id  = base64_decode($_GET['id']);
+      $ainfoSite = explode("/", $_SERVER["REQUEST_URI"]);
+      $dir       = PATH_DATA . "sites" . PATH_SEP.str_replace("sys", "", $ainfoSite[1]).PATH_SEP."files/logos";
+      $imagen    = $dir . PATH_SEP . $base64Id;
+
+      if (is_file($imagen)) {
+        self::showLogo($imagen);
+      }
+      else {
+        $newDir = PATH_DATA . "sites" . PATH_SEP.str_replace("sys", "", $ainfoSite[1]).PATH_SEP."files/logos";
+        $dir    = PATH_HOME . "public_html/files/logos";
+
+        if (!is_dir($newDir)) {
+          G::mk_dir($newDir);
+        }
+        //this function does copy all logos from public_html/files/logos to /shared/site/yourSite/files/logos
+        //cpyMoreLogos($dir,$newDir);
+        $newDir .= PATH_SEP.$base64Id;
+        $dir    .= PATH_SEP.$base64Id;
+        copy($dir,$newDir);
+        self::showLogo($newDir);
+        die;
+      }
+    die;
+    exit();
+  }
+
 }
