@@ -83,7 +83,7 @@ class PMDashlet extends DashletInstance implements DashletInterface {
       $dashletsInstances = array();
       $criteria = new Criteria('workflow');
       $criteria->addSelectColumn('*');
-      $criteria->addJoin(DashletInstancePeer::DAS_UID, DashletPeer::DAS_UID, Criteria::LEFT_JOIN);
+      $criteria->addJoin(DashletInstancePeer::DAS_UID, DashletPeer::DAS_UID, Criteria::INNER_JOIN);
       if (!is_null($start)) {
         $criteria->setOffset($start);
       }
@@ -135,7 +135,7 @@ class PMDashlet extends DashletInstance implements DashletInterface {
     try {
       $criteria = new Criteria('workflow');
       $criteria->addSelectColumn('*');
-      $criteria->addJoin(DashletInstancePeer::DAS_UID, DashletPeer::DAS_UID, Criteria::LEFT_JOIN);
+      $criteria->addJoin(DashletInstancePeer::DAS_UID, DashletPeer::DAS_UID, Criteria::INNER_JOIN);
       return DashletInstancePeer::doCount($criteria);
     }
     catch (Exception $error) {
