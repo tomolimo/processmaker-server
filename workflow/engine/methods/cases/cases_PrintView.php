@@ -24,26 +24,27 @@
  */
 try {
 
-  	require_once 'classes/model/Dynaform.php';
-  	require_once 'classes/model/Process.php';
-  	// g::pr($_SESSION); die;
-  	
+  require_once 'classes/model/Dynaform.php';
+  require_once 'classes/model/Process.php';
 
-	$oDynaform                = new Dynaform();
-	$aDyn                  	  = $oDynaform->load($_SESSION['CURRENT_DYN_UID']);
-	G::LoadClass('case');
-	$oCase = new Cases();
 
-    if( isset($_SESSION['APPLICATION']) ){
-        $Fields = $oCase->loadCase( $_SESSION['APPLICATION'] );
-        $Fields['APP_DATA'] = array_merge($Fields['APP_DATA'], G::getSystemConstants());
-    } else {
-        $Fields['APP_DATA'] = Array();
-    }
 
-	$G_MAIN_MENU              = 'processmaker';
-	$G_ID_MENU_SELECTED       = 'USERS';
-	$G_PUBLISH                = new Publisher;
+  $oDynaform = new Dynaform();
+  $aDyn      = $oDynaform->load($_SESSION['CURRENT_DYN_UID']);
+  G::LoadClass('case');
+  $oCase = new Cases();
+
+  if ( isset($_SESSION['APPLICATION']) ) {
+    $Fields             = $oCase->loadCase( $_SESSION['APPLICATION'] );
+    $Fields['APP_DATA'] = array_merge($Fields['APP_DATA'], G::getSystemConstants());
+  }
+  else {
+    $Fields['APP_DATA'] = Array();
+  }
+
+  $G_MAIN_MENU        = 'processmaker';
+  $G_ID_MENU_SELECTED = 'USERS';
+  $G_PUBLISH          = new Publisher;
 
   $idProcess = (isset($Fields['APP_DATA']['PROCESS']))?$Fields['APP_DATA']['PROCESS']:$_SESSION['PROCESS'];
   $oProcess = new Process();
@@ -51,34 +52,35 @@ try {
   $sProcess = $oProcess->getProTitle();
 
   //Add content content step - Start
-  if(isset($_SESSION['APPLICATION'])){
-  $array['CASE']            = G::LoadTranslation('ID_CASE');
-  $array['USER']            = G::LoadTranslation('ID_USER');
-  $array['WORKSPACE']       = G::LoadTranslation('ID_WORKSPACE');
-  $array['APP_NUMBER']      = $Fields['APP_NUMBER'];
-  $array['APP_TITLE']       = $Fields['TITLE'];
-  $array['USR_USERNAME']    = $Fields['APP_DATA']['USR_USERNAME'];
-  $array['USER_ENV']        = $Fields['APP_DATA']['SYS_SYS'];
-  $array['DATEPRINT']        = date('Y-m-d H:m:s');
+  if (isset($_SESSION['APPLICATION'])) {
+    $array['CASE']         = G::LoadTranslation('ID_CASE');
+    $array['USER']         = G::LoadTranslation('ID_USER');
+    $array['WORKSPACE']    = G::LoadTranslation('ID_WORKSPACE');
+    $array['APP_NUMBER']   = $Fields['APP_NUMBER'];
+    $array['APP_TITLE']    = $Fields['TITLE'];
+    $array['USR_USERNAME'] = $Fields['APP_DATA']['USR_USERNAME'];
+    $array['USER_ENV']     = $Fields['APP_DATA']['SYS_SYS'];
+    $array['DATEPRINT']    = date('Y-m-d H:m:s');
   }
   $array['APP_PROCESS']     = $sProcess;
   
-  if(isset($Fields['TITLE'])&& strlen($Fields['TITLE'])>0)
+  if (isset($Fields['TITLE']) && strlen($Fields['TITLE']) > 0) {
     $array['TITLE'] = G::LoadTranslation('ID_TITLE');
-  else 
-    $array['TITLE']         = '';
-  $array['PROCESS']         = G::LoadTranslation('ID_PROCESS');
-   $array['DATELABEL']        = G::LoadTranslation('DATE_LABEL'); 
-  
-  $aDyn['DYN_UID']=(isset($_SESSION['DYN_UID_PRINT']) && $_SESSION['DYN_UID_PRINT']!='')?$_SESSION['DYN_UID_PRINT']:$aDyn['DYN_UID'];
+  }
+  else {
+    $array['TITLE'] = '';
+  }
+  $array['PROCESS']   = G::LoadTranslation('ID_PROCESS');
+  $array['DATELABEL'] = G::LoadTranslation('DATE_LABEL');
+
+  $aDyn['DYN_UID'] = (isset($_SESSION['DYN_UID_PRINT']) && $_SESSION['DYN_UID_PRINT']!='')?$_SESSION['DYN_UID_PRINT']:$aDyn['DYN_UID'];
   $G_PUBLISH->AddContent('smarty', 'cases/cases_PrintViewTitle', '', '', $array);
-	 
-	$G_PUBLISH->AddContent('dynaform', 'xmlform', $aDyn['PRO_UID']. '/' . $aDyn['DYN_UID'], '', $Fields['APP_DATA'], '', '',  'view');
-	G::RenderPage('publish', 'blank');
-	
-	
+
+  $G_PUBLISH->AddContent('dynaform', 'xmlform', $aDyn['PRO_UID']. '/' . $aDyn['DYN_UID'], '', $Fields['APP_DATA'], '', '',  'view');
+  G::RenderPage('publish', 'blank');
+
 } catch (Exception $oException) {
-	die($oException->getMessage());
+  die($oException->getMessage());
 }
 ?>
 
