@@ -6,7 +6,7 @@ SELECT TAS_UID, CON_VALUE FROM TASK LEFT JOIN CONTENT ON (TAS_UID = CON_ID AND C
   ]]><en>Next Task<option name="-1">End of process</option></en>
 </ROU_NEXT_TASK>
 
-<ROU_CONDITION type="textpm" size="60" maxlength="255" showVars="1" process="@#PROCESS">
+<ROU_CONDITION type="textpm" size="60" maxlength="512" showVars="1" process="@#PROCESS">
   <en>Condition</en>
 </ROU_CONDITION>
 

@@ -7,7 +7,7 @@
     </en>
   </ROU_NEXT_TASK>
 
-  <ROU_CONDITION type="textpm" size="35" maxlength="255" showVars="1" process="@#PROCESS">
+  <ROU_CONDITION type="textpm" size="35" maxlength="512" showVars="1" process="@#PROCESS">
     <en>Condition</en>
   </ROU_CONDITION>
   <ROU_OPTIONAL type="hidden"/>

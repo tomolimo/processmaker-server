@@ -956,7 +956,7 @@
     <column name="ROU_NEXT_TASK" type="VARCHAR" size="32" required="true" default="0"/>
     <column name="ROU_CASE" type="INTEGER" required="true" default="0"/>
     <column name="ROU_TYPE" type="VARCHAR" size="25" required="true" default="SEQUENTIAL"/>
-    <column name="ROU_CONDITION" type="VARCHAR" size="255" required="true" default=""/>
+    <column name="ROU_CONDITION" type="VARCHAR" size="512" required="true" default=""/>
     <column name="ROU_TO_LAST_USER" type="VARCHAR" size="20" required="true" default="FALSE"/>
     <column name="ROU_OPTIONAL" type="VARCHAR" size="20" required="true" default="FALSE"/>
     <column name="ROU_SEND_EMAIL" type="VARCHAR" size="20" required="true" default="TRUE"/>

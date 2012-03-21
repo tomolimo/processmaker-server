@@ -78,7 +78,7 @@ class RouteMapBuilder {
 
 		$tMap->addColumn('ROU_TYPE', 'RouType', 'string', CreoleTypes::VARCHAR, true, 25);
 
-		$tMap->addColumn('ROU_CONDITION', 'RouCondition', 'string', CreoleTypes::VARCHAR, true, 255);
+		$tMap->addColumn('ROU_CONDITION', 'RouCondition', 'string', CreoleTypes::VARCHAR, true, 512);
 
 		$tMap->addColumn('ROU_TO_LAST_USER', 'RouToLastUser', 'string', CreoleTypes::VARCHAR, true, 20);
 
