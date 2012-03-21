@@ -1,8 +1,9 @@
 <?php
-$request = isset($_REQUEST['action'])?$_REQUEST['action']:"";
-G::LoadClass ( 'serverConfiguration' );
-$oServerConf = & serverConf::getSingleton ();
-$oServerConf->setHeartbeatProperty('HB_BEAT_URL','http://heartbeat.processmaker.com/syspmLicenseSrv/en/green/services/beat','HEART_BEAT_CONF');
+$request = isset($_REQUEST['action'])? $_REQUEST['action'] : "";
+G::LoadClass('serverConfiguration');
+$oServerConf = &serverConf::getSingleton();
+$oServerConf->setHeartbeatProperty('HB_BEAT_URL', 'http://heartbeat.processmaker.com/syspmLicenseSrv/en/green/services/beat', 'HEART_BEAT_CONF');
+
 switch ($request) {
     case 'processInformation':
         try{
@@ -21,7 +22,6 @@ switch ($request) {
           G::pr($e->getMessage());
         }
     break;
-    
 }
 
 function validateConnectivity($url){
@@ -73,9 +73,12 @@ function file_get_conditional_contents($szURL){
     return false;
 }
 function buildData(){
-G::LoadClass ( 'serverConfiguration' );
-$oServerConf = & serverConf::getSingleton ();  
-    G::LoadClass("system");
+  require_once ("classes/model/Users.php");
+  
+  G::LoadClass("serverConfiguration");
+  G::LoadClass("system");
+  
+  $oServerConf = &serverConf::getSingleton();
 
     $os = '';
     if (file_exists ( '/etc/redhat-release' )) {
@@ -86,9 +89,6 @@ $oServerConf = & serverConf::getSingleton ();
     }
     $os .= " (" . PHP_OS . ")";
     
-    
-  
-  
   $params = array ();
     $params ['ip'] = getenv ( 'SERVER_ADDR' );
     $oServerConf->setHeartbeatProperty('HB_BEAT_INDEX',intval($oServerConf->getHeartbeatProperty('HB_BEAT_INDEX','HEART_BEAT_CONF'))+1,'HEART_BEAT_CONF');
@@ -115,6 +115,107 @@ $oServerConf = & serverConf::getSingleton ();
     if($licInfo=$oServerConf->getProperty('LICENSE_INFO')){
       $params ['license'] = serialize ( $licInfo );
     }
+    
+    ///////
+    $criteria = new Criteria("workflow");
+    
+    $criteria->addSelectColumn("COUNT(USERS.USR_UID) AS USERS_NUMBER");
+    $criteria->add(UsersPeer::USR_UID, null, Criteria::ISNOTNULL);
+    
+    $rs = UsersPeer::doSelectRS($criteria);
+    $rs->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    $rs->next();
+    $row = $rs->getRow();
+    
+    $params["users"] = $row["USERS_NUMBER"];
+    
+    ///////
+    $ee = null;
+    
+    if (file_exists(PATH_PLUGINS . "enterprise" . PATH_SEP . "VERSION")) {
+      $ee = trim(file_get_contents(PATH_PLUGINS . "enterprise" . PATH_SEP . "VERSION"));
+    }
+    else {
+      $pluginRegistry = &PMPluginRegistry::getSingleton();
+      $details = $pluginRegistry->getPluginDetails("enterprise.php");
+
+      $ee = (!($details == null))? $details->iVersion : null;
+    }
+    
+    $params["ee"] = $ee;
+    
+    ///////
+    $addonNumber = 0;
+    $addonEnabledNumber = 0;
+    
+    $pluginRegistry = &PMPluginRegistry::getSingleton();
+    
+    $arrayAddon = array();
+
+    if (file_exists(PATH_DATA_SITE . "ee")) {
+      $arrayAddon = unserialize(trim(file_get_contents(PATH_DATA_SITE . "ee")));
+      
+      $arrayAddon["enterprise"] = array("sFilename" => "enterprise-1.tar");
+    }
+    
+    foreach ($arrayAddon as $addon) {
+      $sFileName = substr($addon["sFilename"], 0, strpos($addon["sFilename"], "-"));
+      
+      if (file_exists(PATH_PLUGINS . $sFileName . ".php")) {
+        $addonDetails = $pluginRegistry->getPluginDetails($sFileName . ".php");
+        $enabled = 0;
+        
+        if ($addonDetails) {
+          $enabled = ($addonDetails->enabled)? 1 : 0;
+        }
+        
+        if ($enabled == 1) {
+          $addonEnabledNumber = $addonEnabledNumber + 1;
+        }
+        
+        $addonNumber = $addonNumber + 1;
+      }
+    }
+    
+    $params["addonNumber"] = $addonNumber;
+    $params["addonEnabledNumber"] = $addonEnabledNumber;
+    
+    ///////
+    $licenseID   = null;
+    $licenseType = null;
+    $licenseDomainWorkspace = null;
+    $licenseNumber = 0;
+      
+    if (file_exists(PATH_PLUGINS . "enterprise" . PATH_SEP . "class.pmLicenseManager.php")) {
+      $licenseManager = &pmLicenseManager::getSingleton();
+      
+      preg_match("/^license_(.*).dat$/", $licenseManager->file, $matches);
+      
+      $licenseID = $matches[1];
+      $licenseType = $licenseManager->type;
+      $licenseDomainWorkspace = $licenseManager->info["DOMAIN_WORKSPACE"];
+      
+      ///////
+      $criteria = new Criteria("workflow");
+    
+      $criteria->addSelectColumn("COUNT(LICENSE_MANAGER.LICENSE_UID) AS LICENSE_NUMBER");
+      $criteria->add(LicenseManagerPeer::LICENSE_UID, null, Criteria::ISNOTNULL);
+    
+      $rs = LicenseManagerPeer::doSelectRS($criteria);
+      $rs->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+      $rs->next();
+      $row = $rs->getRow();
+    
+      ///////
+      $licenseNumber = ($row["LICENSE_NUMBER"] > 0)? $row["LICENSE_NUMBER"] : count(glob(PATH_DATA_SITE . "licenses" . PATH_SEP . "*.dat"));
+    }
+    
+    $params["licenseID"]   = $licenseID;
+    $params["licenseType"] = $licenseType;
+    $params["licenseDomainWorkspace"] = $licenseDomainWorkspace;
+    $params["licenseNumber"] = $licenseNumber;
+    
+    ///////
     return $params;
 }
   function postHeartBeat($params) {
