@@ -1965,7 +1965,7 @@ class wsBase
       $tasUid = $aRow['TAS_UID'];
       $derivation = new Derivation ();
       $userList   = $derivation->getAllUsersFromAnyTask( $tasUid );
-      if ( in_array ( $userIdTarget, $userList ) ) {
+      if ( !in_array ( $userIdTarget, $userList ) ) {
         $result = new wsResponse (34, G::loadTranslation ('ID_TARGET_USER_DOES_NOT_HAVE_RIGHTS') );
         return $result;
       }
