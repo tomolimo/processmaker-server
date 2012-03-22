@@ -703,7 +703,7 @@ Ext.onReady( function() {
     
     new Ext.Viewport({
       autoScroll : true,
-    //  layout: 'border',
+      layout: 'fit',
       items: [
          {
           region: 'right',
