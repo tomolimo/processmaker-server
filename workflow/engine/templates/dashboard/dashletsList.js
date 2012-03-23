@@ -151,6 +151,7 @@ Ext.onReady(function(){
       totalProperty: 'totalDashletsInstances',
       fields : [
         {name : 'DAS_INS_UID'},
+        {name : "DAS_INS_TITLE"},
         {name : 'DAS_TITLE'},
         {name : 'DAS_VERSION'},
         {name : 'DAS_INS_OWNER_TITLE'},
@@ -167,7 +168,8 @@ Ext.onReady(function(){
     },
     columns: [
       {id:'DAS_INS_UID', dataIndex: 'DAS_INS_UID', hidden:true, hideable:false},
-      {header: _('ID_NAME'), dataIndex: 'DAS_TITLE', width: 200, hidden:false, align:'left'},
+      {header: _("ID_TITLE"), dataIndex: "DAS_INS_TITLE", width: 150, hidden: false, align: "left"},
+      {header: "Dashlet", dataIndex: "DAS_TITLE", width: 200, hidden: false, align: "left"},
       {header: _('ID_VERSION'), dataIndex: 'DAS_VERSION', width: 60, hidden: false, align: 'center'},
       {header: _('ID_ASSIGNED_TO'), dataIndex: 'DAS_INS_OWNER_TITLE', width: 200, hidden: false, align: 'center'},
       {header: _('ID_UPDATE_DATE'), dataIndex: 'DAS_INS_UPDATE_DATE', width: 80, hidden: false, align: 'center'},

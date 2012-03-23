@@ -94,7 +94,11 @@ class PMDashlet extends DashletInstance implements DashletInterface {
       $dataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
       $dataset->next();
       while ($row = $dataset->getRow()) {
+        $arrayField = unserialize($row["DAS_INS_ADDITIONAL_PROPERTIES"]);
+        
         $row['DAS_INS_STATUS_LABEL'] = ($row['DAS_INS_STATUS'] == '1' ? G::LoadTranslation('ID_ACTIVE') : G::LoadTranslation('ID_INACTIVE'));
+        $row["DAS_INS_TITLE"] = (isset($arrayField["DAS_INS_TITLE"]) && !empty($arrayField["DAS_INS_TITLE"]))? $arrayField["DAS_INS_TITLE"] : "";
+        
         switch ($row['DAS_INS_OWNER_TYPE']) {
           case 'EVERYBODY':
             $row['DAS_INS_OWNER_TITLE'] = G::LoadTranslation('ID_ALL_USERS');
@@ -183,6 +187,7 @@ class PMDashlet extends DashletInstance implements DashletInterface {
       // Check for "public" dashlets
       $criteria = new Criteria('workflow');
       $criteria->addSelectColumn(DashletInstancePeer::DAS_INS_UID);
+      $criteria->addSelectColumn(DashletInstancePeer::DAS_INS_ADDITIONAL_PROPERTIES);
       $criteria->addSelectColumn(DashletPeer::DAS_CLASS);
       $criteria->addSelectColumn(DashletPeer::DAS_TITLE);
       $criteria->addJoin(DashletInstancePeer::DAS_UID, DashletPeer::DAS_UID, Criteria::INNER_JOIN);
@@ -192,7 +197,11 @@ class PMDashlet extends DashletInstance implements DashletInterface {
       $dataset->next();
       while ($row = $dataset->getRow()) {
         if (!isset($dashletsInstances[$row['DAS_INS_UID']])) {
+          $arrayField = unserialize($row["DAS_INS_ADDITIONAL_PROPERTIES"]);
+          
           $row['DAS_XTEMPLATE'] = $this->getXTemplate($row['DAS_CLASS']);
+          $row["DAS_TITLE"] = (isset($arrayField["DAS_INS_TITLE"]) && !empty($arrayField["DAS_INS_TITLE"]))? $arrayField["DAS_INS_TITLE"] : $row["DAS_TITLE"];
+          
           $dashletsInstances[$row['DAS_INS_UID']] = $row;
         }
         $dataset->next();
@@ -201,6 +210,7 @@ class PMDashlet extends DashletInstance implements DashletInterface {
       $usersInstance = new Users();
       $criteria = new Criteria('workflow');
       $criteria->addSelectColumn(DashletInstancePeer::DAS_INS_UID);
+      $criteria->addSelectColumn(DashletInstancePeer::DAS_INS_ADDITIONAL_PROPERTIES);
       $criteria->addSelectColumn(DashletPeer::DAS_CLASS);
       $criteria->addSelectColumn(DashletPeer::DAS_TITLE);
       $criteria->addJoin(DashletInstancePeer::DAS_UID, DashletPeer::DAS_UID, Criteria::INNER_JOIN);
@@ -211,7 +221,11 @@ class PMDashlet extends DashletInstance implements DashletInterface {
       $dataset->next();
       while ($row = $dataset->getRow()) {
         if (!isset($dashletsInstances[$row['DAS_INS_UID']])) {
+          $arrayField = unserialize($row["DAS_INS_ADDITIONAL_PROPERTIES"]);
+          
           $row['DAS_XTEMPLATE'] = $this->getXTemplate($row['DAS_CLASS']);
+          $row["DAS_TITLE"] = (isset($arrayField["DAS_INS_TITLE"]) && !empty($arrayField["DAS_INS_TITLE"]))? $arrayField["DAS_INS_TITLE"] : $row["DAS_TITLE"];
+          
           $dashletsInstances[$row['DAS_INS_UID']] = $row;
         }
         $dataset->next();
@@ -222,6 +236,7 @@ class PMDashlet extends DashletInstance implements DashletInterface {
       foreach ($departments as $depUid => $department) {
         $criteria = new Criteria('workflow');
         $criteria->addSelectColumn(DashletInstancePeer::DAS_INS_UID);
+        $criteria->addSelectColumn(DashletInstancePeer::DAS_INS_ADDITIONAL_PROPERTIES);
         $criteria->addSelectColumn(DashletPeer::DAS_CLASS);
         $criteria->addSelectColumn(DashletPeer::DAS_TITLE);
         $criteria->addJoin(DashletInstancePeer::DAS_UID, DashletPeer::DAS_UID, Criteria::INNER_JOIN);
@@ -232,7 +247,11 @@ class PMDashlet extends DashletInstance implements DashletInterface {
         $dataset->next();
         while ($row = $dataset->getRow()) {
           if (!isset($dashletsInstances[$row['DAS_INS_UID']])) {
+            $arrayField = unserialize($row["DAS_INS_ADDITIONAL_PROPERTIES"]);
+            
             $row['DAS_XTEMPLATE'] = $this->getXTemplate($row['DAS_CLASS']);
+            $row["DAS_TITLE"] = (isset($arrayField["DAS_INS_TITLE"]) && !empty($arrayField["DAS_INS_TITLE"]))? $arrayField["DAS_INS_TITLE"] : $row["DAS_TITLE"];
+            
             $dashletsInstances[$row['DAS_INS_UID']] = $row;
           }
           $dataset->next();
@@ -245,6 +264,7 @@ class PMDashlet extends DashletInstance implements DashletInterface {
       foreach ($groups as $grpUid => $group) {
         $criteria = new Criteria('workflow');
         $criteria->addSelectColumn(DashletInstancePeer::DAS_INS_UID);
+        $criteria->addSelectColumn(DashletInstancePeer::DAS_INS_ADDITIONAL_PROPERTIES);
         $criteria->addSelectColumn(DashletPeer::DAS_CLASS);
         $criteria->addSelectColumn(DashletPeer::DAS_TITLE);
         $criteria->addJoin(DashletInstancePeer::DAS_UID, DashletPeer::DAS_UID, Criteria::INNER_JOIN);
@@ -255,7 +275,11 @@ class PMDashlet extends DashletInstance implements DashletInterface {
         $dataset->next();
         while ($row = $dataset->getRow()) {
           if (!isset($dashletsInstances[$row['DAS_INS_UID']])) {
+            $arrayField = unserialize($row["DAS_INS_ADDITIONAL_PROPERTIES"]);
+            
             $row['DAS_XTEMPLATE'] = $this->getXTemplate($row['DAS_CLASS']);
+            $row["DAS_TITLE"] = (isset($arrayField["DAS_INS_TITLE"]) && !empty($arrayField["DAS_INS_TITLE"]))? $arrayField["DAS_INS_TITLE"] : $row["DAS_TITLE"];
+            
             $dashletsInstances[$row['DAS_INS_UID']] = $row;
           }
           $dataset->next();
