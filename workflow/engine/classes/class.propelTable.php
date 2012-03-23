@@ -318,8 +318,12 @@ class propelTable
           $this->tpl->assign( "href" ,    $this->style[$r]['href']);
         if (isset($this->style[$r]['onsort']))     
           $this->tpl->assign( "onsort" , htmlentities( $this->style[$r]['onsort'] , ENT_QUOTES, 'UTF-8' ) );
+        
+        /* BUG 8080 - erik: don't setup onclick on page table header, doesn't have sense and causing problems 
         if (isset($this->style[$r]['onclick']))    
           $this->tpl->assign( "onclick" , htmlentities( $this->style[$r]['onclick'] , ENT_QUOTES, 'UTF-8' ) );
+        */
+          
         if (isset($this->style[$r]['colWidth']))   
           $this->tpl->assign( "width" ,   $this->style[$r]['colWidth'] );
         if (isset($this->style[$r]['colWidth']))   
