@@ -146,7 +146,7 @@ class AppNotes extends BaseAppNotes {
           $passwdDec = G::decrypt($passwd,'EMAILENCRYPT');
           if (strpos( $passwdDec, 'hash:' ) !== false) {
     	      list($hash, $pass) = explode(":", $passwdDec);   
-    	      $passwd = $pass;
+    	      $aConfiguration['MESS_PASSWORD'] = $pass;
           }
         } else {
           $aConfiguration = array();

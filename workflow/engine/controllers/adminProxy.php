@@ -222,7 +222,7 @@ class adminProxy extends HttpProxyController
     
     if (strpos( $passwdDec, 'hash:' ) !== false) {
       list($hash, $pass) = explode(":", $passwdDec);   
-      $passwd = $pass;
+      $_POST['passwd'] = $pass;
     }
     
     $port = $_POST['port'];
@@ -548,7 +548,13 @@ class adminProxy extends HttpProxyController
     $oConfiguration = new Configurations();      
     $oConfiguration->loadConfig($x, 'Emails','','','','');
     $fields = $oConfiguration->aConfig;
-    $this->success = (count($fields) > 0);
-    $this->data = $fields;    
+    $this->success = (count($fields) > 0);    
+    $passwd = $fields['MESS_PASSWORD'];
+    $passwdDec = G::decrypt($passwd,'EMAILENCRYPT');
+    if (strpos( $passwdDec, 'hash:' ) !== false) {
+      list($hash, $pass) = explode(":", $passwdDec);   
+      $fields['MESS_PASSWORD'] = $pass;
+    }   
+    $this->data = $fields;
   }
 }

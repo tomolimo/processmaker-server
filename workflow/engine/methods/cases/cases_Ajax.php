@@ -670,6 +670,12 @@ switch(($_POST['action'])?$_POST['action']:$_REQUEST['action']) {
 			'MESS_PASSWORD'	=>	$aConfiguration['MESS_PASSWORD'],
 			'SMTPAuth'		=>	$aConfiguration['MESS_RAUTH']
 		));
+		$passwd = $oSpool['MESS_PASSWORD'];
+    $passwdDec = G::decrypt($passwd,'EMAILENCRYPT');
+    if (strpos( $passwdDec, 'hash:' ) !== false) {
+    	list($hash, $pass) = explode(":", $passwdDec);   
+    	$oSpool['MESS_PASSWORD'] = $pass;
+    }
 
 		$oSpool->create(array(
 			'msg_uid'		=>	$data['MSG_UID'],

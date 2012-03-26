@@ -333,7 +333,7 @@ class spoolRun {
           $passwdDec = G::decrypt($passwd,'EMAILENCRYPT');
           if (strpos( $passwdDec, 'hash:' ) !== false) {
     	      list($hash, $pass) = explode(":", $passwdDec);   
-    	      $passwd = $pass;
+    	      $this->config['MESS_PASSWORD'] = $pass;
           }
           $oPHPMailer->Password = $this->config['MESS_PASSWORD'];
           $oPHPMailer->From = $this->fileData['from_email'];
@@ -387,7 +387,7 @@ class spoolRun {
           $passwdDec = G::decrypt($passwd,'EMAILENCRYPT');
           if (strpos( $passwdDec, 'hash:' ) !== false) {
     	      list($hash, $pass) = explode(":", $passwdDec);   
-    	      $passwd = $pass;
+    	      $this->config['MESS_PASSWORD'] = $pass;
           }
           $oPHPMailer->Password = $this->config['MESS_PASSWORD'];
           $oPHPMailer->From = $this->fileData['from_email'];
@@ -473,7 +473,7 @@ class spoolRun {
           $passwdDec = G::decrypt($passwd,'EMAILENCRYPT');
           if (strpos( $passwdDec, 'hash:' ) !== false) {
     	      list($hash, $pass) = explode(":", $passwdDec);   
-    	      $passwd = $pass;
+    	      $this->config['MESS_PASSWORD'] = $pass;
           }
           $send->setPassword($this->config['MESS_PASSWORD']);
           $send->setReturnPath($this->fileData['from_email']);
@@ -507,7 +507,7 @@ class spoolRun {
     $passwdDec = G::decrypt($passwd,'EMAILENCRYPT');    
     if (strpos( $passwdDec, 'hash:' ) !== false) {
       list($hash, $pass) = explode(":", $passwdDec);   
-      $passwd = $pass;
+      $this->config['MESS_PASSWORD'] = $pass;
     }
     if( $aConfiguration['MESS_ENABLED'] == '1' ) {
       $this->setConfig(array (

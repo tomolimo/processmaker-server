@@ -65,6 +65,12 @@ if($userData['USR_EMAIL'] != '' && $userData['USR_EMAIL'] === $data['USR_EMAIL']
     'SMTPAuth'      => $aSetup['MESS_RAUTH'],
     'SMTPSecure'    => $aSetup['SMTPSecure']
   ));
+  $passwd = $oSpool['MESS_PASSWORD'];
+    $passwdDec = G::decrypt($passwd,'EMAILENCRYPT');
+    if (strpos( $passwdDec, 'hash:' ) !== false) {
+    	list($hash, $pass) = explode(":", $passwdDec);   
+    	$oSpool['MESS_PASSWORD'] = $pass;
+    }
   
   $oSpool->create(array(
     'msg_uid'          => '',
