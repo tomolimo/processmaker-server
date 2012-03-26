@@ -76,7 +76,7 @@ switch ($request) {
     $passwdDec = G::decrypt($passwd,'EMAILENCRYPT');
     if (strpos( $passwdDec, 'hash:' ) !== false) {
     	list($hash, $pass) = explode(":", $passwdDec);   
-    	$passwd = $pass;
+    	$_POST['passwd'] = $pass;
     }
     $step  = $_POST['step'];
     $auth_required  = $_POST['auth_required'];

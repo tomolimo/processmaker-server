@@ -631,7 +631,7 @@ class wsBase
       $passwdDec = G::decrypt($passwd,'EMAILENCRYPT');
       if (strpos( $passwdDec, 'hash:' ) !== false) {
     	  list($hash, $pass) = explode(":", $passwdDec);   
-    	  $passwd = $pass;
+    	  $arrayFrom['MESS_PASSWORD'] = $pass;
       }       
       $oSpool = new spoolRun();
       $oSpool->setConfig(array(

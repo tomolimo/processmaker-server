@@ -276,8 +276,7 @@ Ext.onReady(function(){
           Ext.getCmp('RequireAuthentication').setValue(res.data.MESS_RAUTH);
           Ext.getCmp('AccountFrom').setValue(res.data.MESS_ACCOUNT);
           Ext.getCmp('Password').setValue(res.data.MESS_PASSWORD);
-	  Ext.getCmp('PasswordHide').setValue(Ext.getCmp('Password').getValue());
-	  Ext.getCmp('Password').setValue('');
+					Ext.getCmp('PasswordHide').setValue(Ext.getCmp('Password').getValue());				 
           Ext.getCmp('SendaTestMail').setValue(res.data.MESS_TRY_SEND_INMEDIATLY);          
           
 	  if(!res.data.MAIL_TO) {
@@ -587,8 +586,7 @@ saveMethod=function() {
     },
     success: function(r){
       var i = Ext.decode(r.responseText); 
-      PMExt.notify(_('ID_CHANGES_SAVED'),i.msg);
-      Ext.getCmp('Password').setValue('');
+      PMExt.notify(_('ID_CHANGES_SAVED'),i.msg); 
     }
   });
 }

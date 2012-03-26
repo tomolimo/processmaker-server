@@ -728,7 +728,7 @@ class Xpdl extends processes
         $passwdDec = G::decrypt($passwd,'EMAILENCRYPT');
         if (strpos( $passwdDec, 'hash:' ) !== false) {
     	    list($hash, $pass) = explode(":", $passwdDec);
-    	    $passwd = $pass;
+    	    $arrayFrom['MESS_PASSWORD'] = $pass;
         }
         $from = $arrayFrom['MESS_ACCOUNT'];
         if($to == 'ext'){
