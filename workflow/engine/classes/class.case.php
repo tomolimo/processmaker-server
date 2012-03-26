@@ -4899,6 +4899,57 @@ class Cases {
   }
 
   /*
+   * funcion History messages for case tracker ExtJS 
+   * @name getHistoryMessagesTrackerExt
+   * @param string sApplicationUID
+   * @param string Msg_UID
+   * @return array
+   */
+    
+  function getHistoryMessagesTrackerExt($sApplicationUID) {
+    
+    G::LoadClass('ArrayPeer');
+    global $_DBArray;
+    
+    $oAppDocument = new AppDocument();
+    $oCriteria = new Criteria('workflow');
+    $oCriteria->add(AppMessagePeer::APP_UID, $sApplicationUID);
+    $oCriteria->addAscendingOrderByColumn(AppMessagePeer::APP_MSG_DATE);
+    $oDataset = AppMessagePeer::doSelectRS($oCriteria);
+    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    $oDataset->next();
+
+    $aMessages = array();
+ 
+    while ($aRow = $oDataset->getRow()) {
+      $aMessages[] = array('APP_MSG_UID' => $aRow['APP_MSG_UID'],
+        'APP_UID' => $aRow['APP_UID'],
+        'DEL_INDEX' => $aRow['DEL_INDEX'],
+        'APP_MSG_TYPE' => $aRow['APP_MSG_TYPE'],
+        'APP_MSG_SUBJECT' => $aRow['APP_MSG_SUBJECT'],
+        'APP_MSG_FROM' => $aRow['APP_MSG_FROM'],
+        'APP_MSG_TO' => $aRow['APP_MSG_TO'],
+        'APP_MSG_BODY' => $aRow['APP_MSG_BODY'],
+        'APP_MSG_DATE' => $aRow['APP_MSG_DATE'],
+        'APP_MSG_CC' => $aRow['APP_MSG_CC'],
+        'APP_MSG_BCC' => $aRow['APP_MSG_BCC'],
+        'APP_MSG_TEMPLATE' => $aRow['APP_MSG_TEMPLATE'],
+        'APP_MSG_STATUS' => $aRow['APP_MSG_STATUS'],
+        'APP_MSG_ATTACH' => $aRow['APP_MSG_ATTACH']
+      );
+      $oDataset->next();
+    }
+    
+    $_DBArray['messages'] = $aMessages;
+    $_SESSION['_DBArray'] = $_DBArray;
+    
+    $oCriteria = new Criteria('dbarray');
+    $oCriteria->setDBArrayTable('messages');
+
+    return $aMessages;
+  }
+  
+  /*
    * funcion History messages for case tracker
    * by Everth The Answer
    *

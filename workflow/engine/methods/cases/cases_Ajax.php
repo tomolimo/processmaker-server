@@ -493,15 +493,117 @@ switch(($_POST['action'])?$_POST['action']:$_REQUEST['action']) {
 		$G_PUBLISH->AddContent('xmlform', 'xmlform', $sXmlForm, '', G::array_merges($Fields, $oAppDocument->Fields), '');
 		G::RenderPage('publish', 'raw');
 		break;
+	
 	case 'showGeneratedDocuments':
-		$oCase = new Cases();
 		global $G_PUBLISH;
+		$oCase = new Cases();
 		$G_PUBLISH = new Publisher();
 		$G_PUBLISH->AddContent('propeltable', 'paged-table', 'cases/cases_AllOutputdocsList', $oCase->getAllGeneratedDocumentsCriteria($_SESSION['PROCESS'], $_SESSION['APPLICATION'], $_SESSION['TASK'], $_SESSION['USER_LOGGED']));
+		
 		G::RenderPage('publish', 'raw');
 		break;
-	case 'showGeneratedDocument':
-		require_once 'classes/model/AppDocument.php';
+	
+  case 'uploadDocumentGrid_Ajax':
+    G::LoadClass('case');
+    G::LoadClass("BasePeer" );
+    global $G_PUBLISH;
+		
+    $oCase = new Cases();
+    $aProcesses = Array();
+		
+    $G_PUBLISH = new Publisher();
+    $c = $oCase->getAllUploadedDocumentsCriteria($_SESSION['PROCESS'], $_SESSION['APPLICATION'], $_SESSION['TASK'], $_SESSION['USER_LOGGED']);
+		
+    if ( $c->getDbName() == 'dbarray' ) {
+      $rs = ArrayBasePeer::doSelectRs ($c);
+    }
+    else {
+      $rs = GulliverBasePeer::doSelectRs ($c);
+    }
+    
+    $rs->setFetchmode (ResultSet::FETCHMODE_ASSOC);
+    $rs->next();
+		
+    $totalCount = 0;
+		
+    for ($j=0;$j< $rs->getRecordCount() ;$j++) {
+      $result = $rs->getRow();      
+      $aProcesses[] = $result;              
+      $rs->next();
+      $totalCount++;
+    }
+		
+    $newDir = '/tmp/test/directory';
+    $r = G::verifyPath ( $newDir );
+    $r->data = $aProcesses;
+    $r->totalCount = $totalCount;
+		
+    echo G::json_encode($r);
+    break;
+	
+  case 'generateDocumentGrid_Ajax':
+
+    G::LoadClass('case');
+    G::LoadClass("BasePeer" );
+		G::LoadClass ( 'configuration' );
+    global $G_PUBLISH;  
+    
+    $oCase = new Cases();		
+    $aProcesses = Array();
+		
+    $G_PUBLISH = new Publisher();
+    $c = $oCase->getAllGeneratedDocumentsCriteria($_SESSION['PROCESS'], $_SESSION['APPLICATION'], $_SESSION['TASK'], $_SESSION['USER_LOGGED']);
+		
+    if ( $c->getDbName() == 'dbarray' ){
+      $rs = ArrayBasePeer::doSelectRs ($c);
+    }
+    else {
+      $rs = GulliverBasePeer::doSelectRs ($c);
+    }
+		
+    $rs->setFetchmode (ResultSet::FETCHMODE_ASSOC);
+    $rs->next();
+		
+    $totalCount = 0;
+		
+    for ($j=0;$j< $rs->getRecordCount() ;$j++) {
+      $result = $rs->getRow();
+      $result["FILEDOCEXIST"] = ($result["FILEDOC"]);
+      $result["FILEPDFEXIST"] = ($result["FILEPDF"]);			
+      $aProcesses[] = $result;
+			
+      $rs->next();
+      $totalCount++;
+    }
+
+    //!dateFormat
+    $conf = new Configurations();
+		
+    try {
+      $generalConfCasesList = $conf->getConfiguration('ENVIRONMENT_SETTINGS', '' );
+    }
+    catch (Exception $e) {
+      $generalConfCasesList = array();
+    }
+
+    $dateFormat = "";
+
+    if (isset($generalConfCasesList['casesListDateFormat'])&&!empty($generalConfCasesList['casesListDateFormat'])) {
+      $dateFormat = $generalConfCasesList['casesListDateFormat'];
+    }
+
+    $newDir = '/tmp/test/directory';
+    $r = G::verifyPath ( $newDir );
+    $r->data = $aProcesses;
+    $r->totalCount = $totalCount;
+    $r->dataFormat = $dateFormat;			 
+
+    echo G::json_encode($r);
+
+    break;
+ 
+  case 'showGeneratedDocument' :
+    require_once 'classes/model/AppDocument.php';
 		require_once 'classes/model/AppDelegation.php';
 		$oAppDocument = new AppDocument();
 		$aFields = $oAppDocument->load($_POST['APP_DOC_UID']);

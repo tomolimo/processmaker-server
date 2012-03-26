@@ -335,66 +335,88 @@ class Ajax
     print(G::json_encode($taskData));
   }
   
-  function caseHistory()
-  {
+  function caseHistory() {
     global $G_PUBLISH;
-		$c = Cases::getTransferHistoryCriteria($_SESSION['APPLICATION']);
-		$G_PUBLISH = new Publisher();
-		$G_PUBLISH->AddContent('propeltable', 'paged-table', 'cases/cases_TransferHistory', $c, array());
-		G::RenderPage('publish', 'blank');
+    G::loadClass('configuration');  
+      
+    $oHeadPublisher =& headPublisher::getSingleton();       
+    $conf = new Configurations;
+    $oHeadPublisher->addExtJsScript('cases/caseHistory', true );    //adding a javascript file .js
+    $oHeadPublisher->addContent('cases/caseHistory'); //adding a html file  .html.      
+    $oHeadPublisher->assign('pageSize', $conf->getEnvSetting('casesListRowNumber'));    
+    G::RenderPage('publish', 'extJs');
   }
   
-  function messageHistory()
-  {
+  function messageHistory() {
     global $G_PUBLISH;
-    $oCase = new Cases();
-    $G_PUBLISH = new Publisher();
-    $G_PUBLISH->AddContent('propeltable', 'paged-table', 'cases/cases_Messages', $oCase->getHistoryMessagesTracker($_SESSION['APPLICATION']));
-    G::RenderPage('publish', 'blank'); 
+    G::loadClass('configuration');
+    
+    $oHeadPublisher =& headPublisher::getSingleton();       
+    $conf = new Configurations;
+    $oHeadPublisher->addExtJsScript('cases/caseMessageHistory', true );    //adding a javascript file .js
+    $oHeadPublisher->addContent    ('cases/caseMessageHistory'); //adding a html file  .html.      
+    $oHeadPublisher->assign('pageSize', $conf->getEnvSetting('casesListRowNumber'));    
+    G::RenderPage('publish', 'extJs');
   }
   
-  function dynaformHistory()
-  {
+  function dynaformHistory() {
     global $G_PUBLISH;
-    $oCase = new Cases();
-    $G_PUBLISH = new Publisher();
-    $G_PUBLISH->AddContent('propeltable', 'paged-table', 'cases/cases_AllDynaformsList', $oCase->getallDynaformsCriteria($_SESSION['PROCESS'], $_SESSION['APPLICATION'], $_SESSION['TASK'], $_SESSION['USER_LOGGED']));
-    G::RenderPage('publish', 'blank');
+    G::loadClass('configuration');
+    
+    $oHeadPublisher =& headPublisher::getSingleton();     
+    $conf = new Configurations;
+    $oHeadPublisher->addExtJsScript('cases/caseHistoryDynaformPage', true );    //adding a javascript file .js
+    $oHeadPublisher->addContent    ('cases/caseHistoryDynaformPage'); //adding a html file  .html.      
+    $oHeadPublisher->assign('pageSize', $conf->getEnvSetting('casesListRowNumber'));    
+    G::RenderPage('publish', 'extJs');  
   }
   
-  function uploadedDocuments()
-  {
-    global $G_PUBLISH;    
-    $oCase = new Cases();
-    $G_PUBLISH = new Publisher();
-    $G_PUBLISH->AddContent('propeltable', 'paged-table', 'cases/cases_AllInputdocsList', $oCase->getAllUploadedDocumentsCriteria($_SESSION['PROCESS'], $_SESSION['APPLICATION'], $_SESSION['TASK'], $_SESSION['USER_LOGGED']));
-    G::RenderPage('publish', 'blank');
+  function uploadedDocuments() {
+    global $G_PUBLISH;
+    G::loadClass('configuration');
+    
+    $oHeadPublisher =& headPublisher::getSingleton(); 
+    $conf = new Configurations;
+    $oHeadPublisher->addExtJsScript('cases/casesUploadedDocumentsPage', true );    //adding a javascript file .js
+    $oHeadPublisher->addContent    ('cases/casesUploadedDocumentsPage'); //adding a html file  .html.      
+    $oHeadPublisher->assign('pageSize', $conf->getEnvSetting('casesListRowNumber'));    
+    G::RenderPage('publish', 'extJs');   
   }
   
-  function uploadedDocumentsSummary()
-  {
-    global $G_PUBLISH;    
-    $oCase = new Cases();
-    $G_PUBLISH = new Publisher();
-    $G_PUBLISH->AddContent('propeltable', 'paged-table', 'cases/cases_AllInputdocsList_Summary', $oCase->getAllUploadedDocumentsCriteria($_SESSION['PROCESS'], $_SESSION['APPLICATION'], $_SESSION['TASK'], $_SESSION['USER_LOGGED']));
-    G::RenderPage('publish', 'blank');
+  function uploadedDocumentsSummary() {
+    global $G_PUBLISH;
+    G::loadClass('configuration');
+    
+    $oHeadPublisher =& headPublisher::getSingleton(); 
+    $conf = new Configurations;
+    $oHeadPublisher->addExtJsScript('cases/casesUploadedDocumentsPage', true );    //adding a javascript file .js
+    $oHeadPublisher->addContent    ('cases/casesUploadedDocumentsPage'); //adding a html file  .html.      
+    $oHeadPublisher->assign('pageSize', $conf->getEnvSetting('casesListRowNumber'));    
+    G::RenderPage('publish', 'extJs'); 
   }
   
-  function generatedDocuments()
-  {
+  function generatedDocuments() {
     global $G_PUBLISH;
-    $oCase = new Cases();
-    $G_PUBLISH = new Publisher();
-    $G_PUBLISH->AddContent('propeltable', 'paged-table', 'cases/cases_AllOutputdocsList', $oCase->getAllGeneratedDocumentsCriteria($_SESSION['PROCESS'], $_SESSION['APPLICATION'], $_SESSION['TASK'], $_SESSION['USER_LOGGED']));
-    G::RenderPage('publish', 'blank');
+    G::loadClass('configuration');
+    
+    $oHeadPublisher =& headPublisher::getSingleton(); 
+    $conf = new Configurations;
+    $oHeadPublisher->addExtJsScript('cases/casesGenerateDocumentPage', true );    //adding a javascript file .js
+    $oHeadPublisher->addContent    ('cases/casesGenerateDocumentPage'); //adding a html file  .html.      
+    $oHeadPublisher->assign('pageSize', $conf->getEnvSetting('casesListRowNumber'));    
+    G::RenderPage('publish', 'extJs');
   }
-    function generatedDocumentsSummary()
-  {
+  
+  function generatedDocumentsSummary() {
     global $G_PUBLISH;
-    $oCase = new Cases();
-    $G_PUBLISH = new Publisher();
-    $G_PUBLISH->AddContent('propeltable', 'paged-table', 'cases/cases_AllOutputdocsList_Summary', $oCase->getAllGeneratedDocumentsCriteria($_SESSION['PROCESS'], $_SESSION['APPLICATION'], $_SESSION['TASK'], $_SESSION['USER_LOGGED']));
-    G::RenderPage('publish', 'blank');
+    G::loadClass('configuration');
+    
+    $oHeadPublisher =& headPublisher::getSingleton(); 
+    $conf = new Configurations;
+    $oHeadPublisher->addExtJsScript('cases/casesGenerateDocumentPage', true );    //adding a javascript file .js
+    $oHeadPublisher->addContent    ('cases/casesGenerateDocumentPage'); //adding a html file  .html.      
+    $oHeadPublisher->assign('pageSize', $conf->getEnvSetting('casesListRowNumber'));    
+    G::RenderPage('publish', 'extJs');
   }
   
   function cancelCase()
@@ -512,8 +534,7 @@ class Ajax
     print G::json_encode($result);
   }
 
-  function deleteCase()
-  {
+  function deleteCase() {
     try{
       $applicationUID = (isset($_POST['APP_UID'])) ? $_POST['APP_UID'] : $_SESSION['APPLICATION'];
       $app = new Application();
@@ -525,11 +546,11 @@ class Ajax
       
       $result->success = true;
       $result->msg = G::LoadTranslation('ID_CASE_DELETED_SUCCESSFULLY', SYS_LANG, $data);
-    } catch(Exception $e) {
+    }
+    catch (Exception $e) {
       $result->success = false;
       $result->msg = $e->getMessage();
     }
-    
     print G::json_encode($result);
   }
   
@@ -555,4 +576,154 @@ class Ajax
     print G::json_encode($result);
   }
   
+  function changeLogTab(){
+    try{    
+      global $G_PUBLISH;
+      require_once 'classes/model/AppHistory.php';
+      
+      //!dataInput
+      $idHistory = $_REQUEST["idHistory"];
+      //!dataInput
+      
+      //!dataSytem
+      $idHistoryArray = explode("_",$idHistory );
+      $_REQUEST["PRO_UID"]= $idHistoryArray[0];
+      $_REQUEST["APP_UID"]= $idHistoryArray[1];
+      $_REQUEST["TAS_UID"]= $idHistoryArray[2];
+      $_REQUEST["DYN_UID"]= "";
+      
+      
+      $G_PUBLISH = new Publisher();
+      $G_PUBLISH->AddContent('view', 'cases/cases_DynaformHistory');        
+      ?>
+        <link rel="stylesheet" type="text/css" href="/css/classic.css" />
+        <style type="text/css">
+          html {
+            color:black !important; 
+          }
+          body {
+            color:black !important; 
+          }              
+        </style>  
+        <script language="javascript">
+          function ajaxPostRequest(url, callback_function, id){
+            var d = new Date();
+            var time = d.getTime();
+            url= url + '&nocachetime='+time;
+            var return_xml=false;    
+            var http_request = false;
+            
+            if (window.XMLHttpRequest) { // Mozilla, Safari,...
+              http_request = new XMLHttpRequest();
+              if (http_request.overrideMimeType){
+                http_request.overrideMimeType('text/xml'); 
+              }
+            }
+            else if (window.ActiveXObject) {// IE
+              try {
+                http_request = new ActiveXObject("Msxml2.XMLHTTP");
+              } 
+              catch (e) {
+                try {
+                  http_request = new ActiveXObject("Microsoft.XMLHTTP");
+                }
+                catch (e) {                 
+                }
+              }
+            }
+  
+            if (!http_request){
+              alert('This browser is not supported.');
+              return false;
+            }
+              
+            http_request.onreadystatechange = function(){
+              if (http_request.readyState == 4){
+                if (http_request.status == 200){
+                  if (return_xml){
+                    eval(callback_function + '(http_request.responseXML)');
+                  }
+                  else{		               	
+                    eval(callback_function + '(http_request.responseText, \''+id+'\')');			
+                  }
+                } 
+                else {
+                  alert('Error found on request:(Code: ' + http_request.status + ')');
+                }
+              }
+            }
+            http_request.open('GET', url, true);
+            http_request.send(null);
+          }
+          
+          function toggleTable(tablename) { 
+            table= document.getElementById(tablename);
+            
+            if(table.style.display == ''){
+              table.style.display = 'none';
+            }else{
+              table.style.display = '';
+            }
+          }
+          
+          function noesFuncion(idIframe) {
+            window.parent.tabIframeWidthFix2(idIframe);
+          }
+        
+          function onResizeIframe(idIframe){
+            window.onresize = noesFuncion(idIframe);         
+          }
+          
+          function showDynaformHistoryGetNomDynaform_RSP(response,id) {
+            //!showDynaformHistoryGlobal
+            showDynaformHistoryGlobal.idDin = showDynaformHistoryGlobal.idDin;
+            showDynaformHistoryGlobal.idHistory = showDynaformHistoryGlobal.idHistory;
+            showDynaformHistoryGlobal.dynDate = showDynaformHistoryGlobal.dynDate;
+            
+            //!dataSystem
+            var idDin = showDynaformHistoryGlobal.idDin;
+            var idHistory = showDynaformHistoryGlobal.idHistory;
+            var dynDate = showDynaformHistoryGlobal.dynDate;
+            
+            //!windowParent
+            window.parent.historyGridListChangeLogGlobal.viewIdDin = idDin;
+            window.parent.historyGridListChangeLogGlobal.viewIdHistory = idHistory;
+            window.parent.historyGridListChangeLogGlobal.viewDynaformName = response;
+            window.parent.historyGridListChangeLogGlobal.dynDate = dynDate;            
+            
+            window.parent.Actions.tabFrame('dynaformViewFromHistory');          
+          }
+          
+          showDynaformHistoryGlobal = {};
+          showDynaformHistoryGlobal.idDin = "";
+          showDynaformHistoryGlobal.idHistory = "";
+          showDynaformHistoryGlobal.dynDate = "";
+          
+          function showDynaformHistory(idDin, idHistory,dynDate) {          
+            //!showDynaformHistoryGlobal
+            showDynaformHistoryGlobal.idDin = showDynaformHistoryGlobal.idDin;
+            showDynaformHistoryGlobal.idHistory = showDynaformHistoryGlobal.idHistory;
+            showDynaformHistoryGlobal.dynDate = showDynaformHistoryGlobal.dynDate;
+            
+            //!dataSystem
+            showDynaformHistoryGlobal.idDin = idDin;
+            showDynaformHistoryGlobal.idHistory = idHistory;
+            showDynaformHistoryGlobal.dynDate = dynDate;
+            
+            var url = "caseHistory_Ajax.php?actionAjax=showDynaformHistoryGetNomDynaform_JXP&idDin="+idDin+"&dynDate="+dynDate;
+            ajaxPostRequest(url, 'showDynaformHistoryGetNomDynaform_RSP');              
+          }
+        </script>
+      <?php
+      
+      G::RenderPage('publish', 'raw');
+      
+      $result->success = true;
+      $result->msg = G::LoadTranslation('ID_CASE_REACTIVATED_SUCCESSFULLY', SYS_LANG, "success");
+    }
+    catch(Exception $e){
+      $result->success = false;
+      $result->msg = $e->getMessage();
+    }
+  }
 }
