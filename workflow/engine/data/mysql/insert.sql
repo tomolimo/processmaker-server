@@ -3164,7 +3164,7 @@ INSERT INTO TRANSLATION (TRN_CATEGORY,TRN_ID,TRN_LANG,TRN_VALUE,TRN_UPDATE_DATE 
 ( 'LABEL','ID_TABLES_TO_EXPORT','en','Tables To Export','2012-02-02') ,
 ( 'LABEL','ID_PMTABLES_NOTICE_EXPORT','en','From each table you should select Schema/Data to export at least one.','2012-02-02') ,
 ( 'LABEL','ID_CONFIRM_DELETE_SKIN','en','Do you want to delete selected skin?','2012-02-02') ,
-( 'LABEL','ID_MESSAGE_SUBJECT_NOTE_NOTIFICATION','en','A note has been added to the case:','2012-03-12') ,
+( 'LABEL','ID_MESSAGE_SUBJECT_NOTE_NOTIFICATION','en','A note has been added to case:','2012-03-27') ,
 ( 'LABEL','ID_MSG_CANNOT_EXPORT_DEFAULT_SKIN','en','Default skin can''t be exported. Instead create new one based on default','2012-02-02') ,
 ( 'LABEL','ID_MSG_CANNOT_EXPORT_SKIN','en','Can''t export skin. Server Error','2012-02-02') ,
 ( 'LABEL','ID_NEW_SKIN','en','New Skin','2012-02-02') ,
@@ -3423,7 +3423,11 @@ INSERT INTO TRANSLATION (TRN_CATEGORY,TRN_ID,TRN_LANG,TRN_VALUE,TRN_UPDATE_DATE 
 ( 'LABEL','ID_CONVERT_SIMPLE_REPORT','en','Convert to Simple Report','2012-03-12') ,
 ( 'LABEL','ID_REMOVING_SELECTED_TABLES','en','Removing selected table(s), please wait!','2012-03-12') ,
 ( 'LABEL','ID_IMPORT_RESULT','en','IMPORT RESULT','2012-03-12') ,
-( 'LABEL','ID_IMPORTING_ERROR','en','Importing Error','2012-03-12') ;
+( 'LABEL','ID_IMPORTING_ERROR','en','Importing Error','2012-03-12') ,
+( 'LABEL','ID_SELECTED_IMAGE_DELETED','en','The selected image has been deleted.','2012-03-15') ,
+( 'LABEL','ID_SELECTED_IMAGE_IS_LOGO','en','The selected image is established as logo.','2012-03-15') ,
+( 'LABEL','ID_DELETE_SELECTED_LOGO','en','Do you want to apply the selected Logo?','2012-03-16') ,
+( 'LABEL','MISSING_OR_NOT_CONFIGURED_SMTP','en','Missing or it''s not configured SMTP mail. Check the configuration.','2012-03-26') ;
 
 INSERT INTO ISO_LOCATION (IC_UID,IL_UID,IL_NAME,IL_NORMAL_NAME,IS_UID)  VALUES 
 ('AD','','',' ','') ,

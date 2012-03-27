@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: ProcessMaker (Branch 2.0-stable) 2.0.37\n"
+"Project-Id-Version: ProcessMaker (Branch 2.0-experimental) 2.0-testing.16-22-g126b344\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2012-03-12 18:01:48\n"
+"PO-Revision-Date: 2012-03-27 18:17:53\n"
 "Last-Translator: \n"
 "Language-Team: Colosa Developers Team <developers@colosa.com>\n"
 "MIME-Version: 1.0\n"
@@ -10432,8 +10432,8 @@ msgstr "Do you want to delete selected skin?"
 # TRANSLATION
 # LABEL/ID_MESSAGE_SUBJECT_NOTE_NOTIFICATION
 #: LABEL/ID_MESSAGE_SUBJECT_NOTE_NOTIFICATION
-msgid "A note has been added to the case:"
-msgstr "A note has been added to the case:"
+msgid "A note has been added to case:"
+msgstr "A note has been added to case:"
 
 # TRANSLATION
 # LABEL/ID_MSG_CANNOT_EXPORT_DEFAULT_SKIN
@@ -11953,6 +11953,30 @@ msgstr "IMPORT RESULT"
 msgid "Importing Error"
 msgstr "Importing Error"
 
+# TRANSLATION
+# LABEL/ID_SELECTED_IMAGE_DELETED
+#: LABEL/ID_SELECTED_IMAGE_DELETED
+msgid "The selected image has been deleted."
+msgstr "The selected image has been deleted."
+
+# TRANSLATION
+# LABEL/ID_SELECTED_IMAGE_IS_LOGO
+#: LABEL/ID_SELECTED_IMAGE_IS_LOGO
+msgid "The selected image is established as logo."
+msgstr "The selected image is established as logo."
+
+# TRANSLATION
+# LABEL/ID_DELETE_SELECTED_LOGO
+#: LABEL/ID_DELETE_SELECTED_LOGO
+msgid "[LABEL/ID_DELETE_SELECTED_LOGO] Do you want to apply the selected Logo?"
+msgstr "Do you want to apply the selected Logo?"
+
+# TRANSLATION
+# LABEL/MISSING_OR_NOT_CONFIGURED_SMTP
+#: LABEL/MISSING_OR_NOT_CONFIGURED_SMTP
+msgid "Missing or it's not configured SMTP mail. Check the configuration."
+msgstr "Missing or it's not configured SMTP mail. Check the configuration."
+
 # additionalTables/additionalTablesData.xml?ADD_TAB_NAME
 # additionalTables/additionalTablesData.xml
 #: text - ADD_TAB_NAME
@@ -13153,6 +13177,36 @@ msgstr "Create Date"
 msgid "[cases/cases_AllInputdocsList.xml?DELETE] "
 msgstr ""
 
+# cases/cases_AllInputdocsList_Summary.xml?TITLE
+# cases/cases_AllInputdocsList_Summary.xml
+#: text - TITLE
+msgid "[cases/cases_AllInputdocsList_Summary.xml?TITLE] Filename"
+msgstr "Filename"
+
+# cases/cases_AllInputdocsList_Summary.xml?APP_DOC_COMMENT
+# cases/cases_AllInputdocsList_Summary.xml
+#: text - APP_DOC_COMMENT
+msgid "[cases/cases_AllInputdocsList_Summary.xml?APP_DOC_COMMENT] Comments"
+msgstr "Comments"
+
+# cases/cases_AllInputdocsList_Summary.xml?CREATED_BY
+# cases/cases_AllInputdocsList_Summary.xml
+#: text - CREATED_BY
+msgid "[cases/cases_AllInputdocsList_Summary.xml?CREATED_BY] Created By"
+msgstr "Created By"
+
+# cases/cases_AllInputdocsList_Summary.xml?CREATE_DATE
+# cases/cases_AllInputdocsList_Summary.xml
+#: text - CREATE_DATE
+msgid "[cases/cases_AllInputdocsList_Summary.xml?CREATE_DATE] Create Date"
+msgstr "Create Date"
+
+# cases/cases_AllInputdocsList_Summary.xml?DELETE
+# cases/cases_AllInputdocsList_Summary.xml
+#: link - DELETE
+msgid "[cases/cases_AllInputdocsList_Summary.xml?DELETE] "
+msgstr ""
+
 # cases/cases_AllOutputdocsList.xml?TITLE
 # cases/cases_AllOutputdocsList.xml
 #: text - TITLE
@@ -13189,11 +13243,29 @@ msgstr "Create Date"
 msgid "[cases/cases_AllOutputdocsList.xml?DELETE] "
 msgstr ""
 
-# cases/cases_AllOutputdocsList.xml?DOWNLOAD_DOC
-# cases/cases_AllOutputdocsList.xml
-#: link - DOWNLOAD_DOC
-msgid "[cases/cases_AllOutputdocsList.xml?DOWNLOAD_DOC] Download"
-msgstr "Download"
+# cases/cases_AllOutputdocsList_Summary.xml?TITLE
+# cases/cases_AllOutputdocsList_Summary.xml
+#: text - TITLE
+msgid "[cases/cases_AllOutputdocsList_Summary.xml?TITLE] Title"
+msgstr "Title"
+
+# cases/cases_AllOutputdocsList_Summary.xml?OUTDOCTITLE
+# cases/cases_AllOutputdocsList_Summary.xml
+#: text - OUTDOCTITLE
+msgid "[cases/cases_AllOutputdocsList_Summary.xml?OUTDOCTITLE] Output Document"
+msgstr "Output Document"
+
+# cases/cases_AllOutputdocsList_Summary.xml?CREATE_DATE
+# cases/cases_AllOutputdocsList_Summary.xml
+#: text - CREATE_DATE
+msgid "[cases/cases_AllOutputdocsList_Summary.xml?CREATE_DATE] Create Date"
+msgstr "Create Date"
+
+# cases/cases_AllOutputdocsList_Summary.xml?DELETE
+# cases/cases_AllOutputdocsList_Summary.xml
+#: link - DELETE
+msgid "[cases/cases_AllOutputdocsList_Summary.xml?DELETE] "
+msgstr ""
 
 # cases/cases_AttachInputDocument1.xml?TITLE1
 # cases/cases_AttachInputDocument1.xml
@@ -19721,6 +19793,12 @@ msgstr "Dropdown"
 msgid "[dynaforms/fields_ToolbarGrid.xml?yesno] Yes/No"
 msgstr "Yes/No"
 
+# dynaforms/fields_ToolbarGrid.xml?checkbox
+# dynaforms/fields_ToolbarGrid.xml
+#: toolButton - checkbox
+msgid "[dynaforms/fields_ToolbarGrid.xml?checkbox] Checkbox"
+msgstr "Checkbox"
+
 # dynaforms/fields_ToolbarGrid.xml?date
 # dynaforms/fields_ToolbarGrid.xml
 #: toolButton - date
@@ -21277,7 +21355,7 @@ msgstr "Error"
 
 # login/showMessage.xml?MESSAGE
 # login/showMessage.xml
-#: caption - MESSAGE
+#: text - MESSAGE
 msgid "[login/showMessage.xml?MESSAGE] "
 msgstr ""
 
@@ -22702,6 +22780,18 @@ msgstr "Dynaform to show a case summary"
 #: dropdown - PRO_SUMMARY_DYNAFORM -
 msgid "[processes/processes_Edit.xml?PRO_SUMMARY_DYNAFORM-]"
 msgstr "- Default summary Dynaform -"
+
+# processes/processes_Edit.xml?PRO_DERIVATION_SCREEN_TPL
+# processes/processes_Edit.xml
+#: dropdown - PRO_DERIVATION_SCREEN_TPL
+msgid "Derivation Screen Template"
+msgstr "Derivation Screen Template"
+
+# processes/processes_Edit.xml?PRO_DERIVATION_SCREEN_TPL-
+# processes/processes_Edit.xml
+#: dropdown - PRO_DERIVATION_SCREEN_TPL -
+msgid "[processes/processes_Edit.xml?PRO_DERIVATION_SCREEN_TPL-]"
+msgstr "- Default -"
 
 # processes/processes_Edit.xml?PRO_DEBUG
 # processes/processes_Edit.xml
@@ -25034,14 +25124,14 @@ msgstr "Require authentication"
 # setup/emails.xml?MESS_ACCOUNT
 # setup/emails.xml
 #: text - MESS_ACCOUNT
-msgid "[setup/emails.xml?MESS_ACCOUNT] Account From"
-msgstr "Account From"
+msgid "SMTP Username"
+msgstr "SMTP Username"
 
 # setup/emails.xml?MESS_PASSWORD
 # setup/emails.xml
 #: password - MESS_PASSWORD
-msgid "[setup/emails.xml?MESS_PASSWORD] Password"
-msgstr "Password"
+msgid "SMTP Password"
+msgstr "SMTP Password"
 
 # setup/emails.xml?MESS_TEST_MAIL
 # setup/emails.xml
@@ -28205,6 +28295,18 @@ msgstr "Description"
 msgid "[tasks/tasks_Definition.xml?TAS_PRIORITY_VARIABLE] Variable for Case priority"
 msgstr "Variable for Case priority"
 
+# tasks/tasks_Definition.xml?TAS_DERIVATION_SCREEN_TPL
+# tasks/tasks_Definition.xml
+#: dropdown - TAS_DERIVATION_SCREEN_TPL
+msgid "[tasks/tasks_Definition.xml?TAS_DERIVATION_SCREEN_TPL] Derivation Screen Template"
+msgstr "Derivation Screen Template"
+
+# tasks/tasks_Definition.xml?TAS_DERIVATION_SCREEN_TPL-
+# tasks/tasks_Definition.xml
+#: dropdown - TAS_DERIVATION_SCREEN_TPL -
+msgid "[tasks/tasks_Definition.xml?TAS_DERIVATION_SCREEN_TPL-]"
+msgstr "- Default -"
+
 # tasks/tasks_Definition.xml?TAS_START
 # tasks/tasks_Definition.xml
 #: checkbox - TAS_START
@@ -28531,7 +28633,7 @@ msgstr "CASE TRACKER"
 
 # tracker/login.xml?CASE
 # tracker/login.xml
-#: text - CASE
+#: Text - CASE
 msgid "Case Code"
 msgstr "Case Code"
 
@@ -30533,6 +30635,228 @@ msgstr "Resume"
 msgid "[users/users_EditAdmin.xml?SUBMIT] Save"
 msgstr "Save"
 
+# users/users_EditLDAP.xml?TITLE3
+# users/users_EditLDAP.xml
+#: title - TITLE3
+msgid "[users/users_EditLDAP.xml?TITLE3] Profile"
+msgstr "Profile"
+
+# users/users_EditLDAP.xml?USR_PHOTO_SHOW
+# users/users_EditLDAP.xml
+#: image - USR_PHOTO_SHOW
+msgid "[users/users_EditLDAP.xml?USR_PHOTO_SHOW] "
+msgstr ""
+
+# users/users_EditLDAP.xml?USR_PHOTO
+# users/users_EditLDAP.xml
+#: file - USR_PHOTO
+msgid "[users/users_EditLDAP.xml?USR_PHOTO] Photo"
+msgstr "Photo"
+
+# users/users_EditLDAP.xml?USR_RESUME
+# users/users_EditLDAP.xml
+#: file - USR_RESUME
+msgid "[users/users_EditLDAP.xml?USR_RESUME] Résumé"
+msgstr "Résumé"
+
+# users/users_EditLDAP.xml?MAX_FILES_SIZE
+# users/users_EditLDAP.xml
+#: edit - MAX_FILES_SIZE
+msgid "Max upload files size in bytes"
+msgstr "Max upload files size in bytes"
+
+# users/users_EditLDAP.xml?TITLE1
+# users/users_EditLDAP.xml
+#: title - TITLE1
+msgid "[users/users_EditLDAP.xml?TITLE1] Personal Information"
+msgstr "Personal Information"
+
+# users/users_EditLDAP.xml?USR_FIRSTNAME
+# users/users_EditLDAP.xml
+#: text - USR_FIRSTNAME
+msgid "[users/users_EditLDAP.xml?USR_FIRSTNAME] First Name"
+msgstr "First Name"
+
+# users/users_EditLDAP.xml?USR_LASTNAME
+# users/users_EditLDAP.xml
+#: text - USR_LASTNAME
+msgid "[users/users_EditLDAP.xml?USR_LASTNAME] Last Name"
+msgstr "Last Name"
+
+# users/users_EditLDAP.xml?USR_USERNAME
+# users/users_EditLDAP.xml
+#: text - USR_USERNAME
+msgid "[users/users_EditLDAP.xml?USR_USERNAME] User ID (*)"
+msgstr "User ID (*)"
+
+# users/users_EditLDAP.xml?USR_EMAIL
+# users/users_EditLDAP.xml
+#: text - USR_EMAIL
+msgid "[users/users_EditLDAP.xml?USR_EMAIL] Email"
+msgstr "Email"
+
+# users/users_EditLDAP.xml?USR_ADDRESS
+# users/users_EditLDAP.xml
+#: textarea - USR_ADDRESS
+msgid "[users/users_EditLDAP.xml?USR_ADDRESS] Address"
+msgstr "Address"
+
+# users/users_EditLDAP.xml?USR_ZIP_CODE
+# users/users_EditLDAP.xml
+#: text - USR_ZIP_CODE
+msgid "[users/users_EditLDAP.xml?USR_ZIP_CODE] Zip/Postal Code"
+msgstr "Zip/Postal Code"
+
+# users/users_EditLDAP.xml?USR_COUNTRY
+# users/users_EditLDAP.xml
+#: dropdown - USR_COUNTRY
+msgid "[users/users_EditLDAP.xml?USR_COUNTRY] Country"
+msgstr "Country"
+
+# users/users_EditLDAP.xml?USR_COUNTRY-
+# users/users_EditLDAP.xml
+#: dropdown - USR_COUNTRY -
+msgid "[users/users_EditLDAP.xml?USR_COUNTRY-]"
+msgstr ""
+
+# users/users_EditLDAP.xml?USR_CITY
+# users/users_EditLDAP.xml
+#: dropdown - USR_CITY
+msgid "[users/users_EditLDAP.xml?USR_CITY] State or Region"
+msgstr "State or Region"
+
+# users/users_EditLDAP.xml?USR_CITY-
+# users/users_EditLDAP.xml
+#: dropdown - USR_CITY -
+msgid "[users/users_EditLDAP.xml?USR_CITY-]"
+msgstr "N/D"
+
+# users/users_EditLDAP.xml?USR_LOCATION
+# users/users_EditLDAP.xml
+#: dropdown - USR_LOCATION
+msgid "[users/users_EditLDAP.xml?USR_LOCATION] Location"
+msgstr "Location"
+
+# users/users_EditLDAP.xml?USR_LOCATION-
+# users/users_EditLDAP.xml
+#: dropdown - USR_LOCATION -
+msgid "[users/users_EditLDAP.xml?USR_LOCATION-]"
+msgstr "N/D"
+
+# users/users_EditLDAP.xml?USR_PHONE
+# users/users_EditLDAP.xml
+#: text - USR_PHONE
+msgid "[users/users_EditLDAP.xml?USR_PHONE] Phone"
+msgstr "Phone"
+
+# users/users_EditLDAP.xml?USR_POSITION
+# users/users_EditLDAP.xml
+#: text - USR_POSITION
+msgid "[users/users_EditLDAP.xml?USR_POSITION] Position"
+msgstr "Position"
+
+# users/users_EditLDAP.xml?USR_REPORTS_TO
+# users/users_EditLDAP.xml
+#: caption - USR_REPORTS_TO
+msgid "[users/users_EditLDAP.xml?USR_REPORTS_TO] Reports to"
+msgstr "Reports to"
+
+# users/users_EditLDAP.xml?USR_DEPARTMENT
+# users/users_EditLDAP.xml
+#: caption - USR_DEPARTMENT
+msgid "[users/users_EditLDAP.xml?USR_DEPARTMENT] Department"
+msgstr "Department"
+
+# users/users_EditLDAP.xml?USR_REPLACED_BY
+# users/users_EditLDAP.xml
+#: dropdown - USR_REPLACED_BY
+msgid "[users/users_EditLDAP.xml?USR_REPLACED_BY] Replaced by"
+msgstr "Replaced by"
+
+# users/users_EditLDAP.xml?USR_REPLACED_BY-
+# users/users_EditLDAP.xml
+#: dropdown - USR_REPLACED_BY -
+msgid "[users/users_EditLDAP.xml?USR_REPLACED_BY-]"
+msgstr ""
+
+# users/users_EditLDAP.xml?USR_DUE_DATE
+# users/users_EditLDAP.xml
+#: date - USR_DUE_DATE
+msgid "[users/users_EditLDAP.xml?USR_DUE_DATE] Expiration Date"
+msgstr "Expiration Date"
+
+# users/users_EditLDAP.xml?USR_CALENDAR
+# users/users_EditLDAP.xml
+#: dropdown - USR_CALENDAR
+msgid "[users/users_EditLDAP.xml?USR_CALENDAR] Calendar"
+msgstr "Calendar"
+
+# users/users_EditLDAP.xml?USR_CALENDAR-
+# users/users_EditLDAP.xml
+#: dropdown - USR_CALENDAR -
+msgid "[users/users_EditLDAP.xml?USR_CALENDAR-]"
+msgstr "- None -"
+
+# users/users_EditLDAP.xml?USR_STATUS
+# users/users_EditLDAP.xml
+#: dropdown - USR_STATUS
+msgid "[users/users_EditLDAP.xml?USR_STATUS] Status"
+msgstr "Status"
+
+# users/users_EditLDAP.xml?USR_STATUS-ACTIVE
+# users/users_EditLDAP.xml
+#: dropdown - USR_STATUS - ACTIVE
+msgid "[users/users_EditLDAP.xml?USR_STATUS-ACTIVE]"
+msgstr "ACTIVE"
+
+# users/users_EditLDAP.xml?USR_STATUS-INACTIVE
+# users/users_EditLDAP.xml
+#: dropdown - USR_STATUS - INACTIVE
+msgid "[users/users_EditLDAP.xml?USR_STATUS-INACTIVE]"
+msgstr "INACTIVE"
+
+# users/users_EditLDAP.xml?USR_STATUS-VACATION
+# users/users_EditLDAP.xml
+#: dropdown - USR_STATUS - VACATION
+msgid "[users/users_EditLDAP.xml?USR_STATUS-VACATION]"
+msgstr "ON VACATION"
+
+# users/users_EditLDAP.xml?USR_ROLE
+# users/users_EditLDAP.xml
+#: dropdown - USR_ROLE
+msgid "[users/users_EditLDAP.xml?USR_ROLE] Role"
+msgstr "Role"
+
+# users/users_EditLDAP.xml?TITLE2
+# users/users_EditLDAP.xml
+#: title - TITLE2
+msgid "[users/users_EditLDAP.xml?TITLE2] Change Password"
+msgstr "Change Password"
+
+# users/users_EditLDAP.xml?USR_NEW_PASS
+# users/users_EditLDAP.xml
+#: password - USR_NEW_PASS
+msgid "[users/users_EditLDAP.xml?USR_NEW_PASS] New Password"
+msgstr "New Password"
+
+# users/users_EditLDAP.xml?USR_CNF_PASS
+# users/users_EditLDAP.xml
+#: password - USR_CNF_PASS
+msgid "[users/users_EditLDAP.xml?USR_CNF_PASS] Confirm Password"
+msgstr "Confirm Password"
+
+# users/users_EditLDAP.xml?SUBMIT
+# users/users_EditLDAP.xml
+#: button - SUBMIT
+msgid "[users/users_EditLDAP.xml?SUBMIT] Save"
+msgstr "Save"
+
+# users/users_EditLDAP.xml?BTN_CANCEL
+# users/users_EditLDAP.xml
+#: button - BTN_CANCEL
+msgid "[users/users_EditLDAP.xml?BTN_CANCEL] Cancel"
+msgstr "Cancel"
+
 # users/users_EditOptions.xml?MNU1
 # users/users_EditOptions.xml
 #: link - MNU1
@@ -31655,12 +31979,6 @@ msgstr "Label"
 msgid "[dynaforms/fields/currency.xml?PME_SUBTITLE3] Behaviour"
 msgstr "Behaviour"
 
-# dynaforms/fields/currency.xml?PME_MAXLENGTH
-# dynaforms/fields/currency.xml
-#: text - PME_MAXLENGTH
-msgid "Max. Length"
-msgstr "Max. Length"
-
 # dynaforms/fields/currency.xml?PME_VALIDATE
 # dynaforms/fields/currency.xml
 #: dropdown - PME_VALIDATE
@@ -32582,7 +32900,7 @@ msgstr "Behaviour"
 # dynaforms/fields/password.xml?PME_MAXLENGTH
 # dynaforms/fields/password.xml
 #: text - PME_MAXLENGTH
-msgid "[dynaforms/fields/password.xml?PME_MAXLENGTH] Max. Length"
+msgid "Max. Length"
 msgstr "Max. Length"
 
 # dynaforms/fields/password.xml?PME_REQUIRED
@@ -32674,12 +32992,6 @@ msgstr "Label"
 #: title - PME_SUBTITLE3
 msgid "[dynaforms/fields/percentage.xml?PME_SUBTITLE3] Behaviour"
 msgstr "Behaviour"
-
-# dynaforms/fields/percentage.xml?PME_MAXLENGTH
-# dynaforms/fields/percentage.xml
-#: text - PME_MAXLENGTH
-msgid "[dynaforms/fields/percentage.xml?PME_MAXLENGTH] Max. Length"
-msgstr "Max. Length"
 
 # dynaforms/fields/percentage.xml?PME_VALIDATE
 # dynaforms/fields/percentage.xml

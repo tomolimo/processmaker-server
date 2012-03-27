@@ -4899,7 +4899,7 @@ SELECT 'LABEL','ID_PMTABLES_NOTICE_EXPORT','en','From each table you should sele
   UNION ALL
 SELECT 'LABEL','ID_CONFIRM_DELETE_SKIN','en','Do you want to delete selected skin?','2012-02-02' 
   UNION ALL
-SELECT 'LABEL','ID_MESSAGE_SUBJECT_NOTE_NOTIFICATION','en','A note has been added to the case:','2012-03-12' 
+SELECT 'LABEL','ID_MESSAGE_SUBJECT_NOTE_NOTIFICATION','en','A note has been added to case:','2012-03-27' 
   UNION ALL
 SELECT 'LABEL','ID_MSG_CANNOT_EXPORT_DEFAULT_SKIN','en','Default skin can''t be exported. Instead create new one based on default','2012-02-02' 
   UNION ALL
@@ -5412,6 +5412,14 @@ SELECT 'LABEL','ID_REMOVING_SELECTED_TABLES','en','Removing selected table(s), p
 SELECT 'LABEL','ID_IMPORT_RESULT','en','IMPORT RESULT','2012-03-12' 
   UNION ALL
 SELECT 'LABEL','ID_IMPORTING_ERROR','en','Importing Error','2012-03-12' 
+  UNION ALL
+SELECT 'LABEL','ID_SELECTED_IMAGE_DELETED','en','The selected image has been deleted.','2012-03-15' 
+  UNION ALL
+SELECT 'LABEL','ID_SELECTED_IMAGE_IS_LOGO','en','The selected image is established as logo.','2012-03-15' 
+  UNION ALL
+SELECT 'LABEL','ID_DELETE_SELECTED_LOGO','en','Do you want to apply the selected Logo?','2012-03-16' 
+  UNION ALL
+SELECT 'LABEL','MISSING_OR_NOT_CONFIGURED_SMTP','en','Missing or it''s not configured SMTP mail. Check the configuration.','2012-03-26' 
  ;
 
 INSERT INTO ISO_LOCATION ([IC_UID],[IL_UID],[IL_NAME],[IL_NORMAL_NAME],[IS_UID]) 
