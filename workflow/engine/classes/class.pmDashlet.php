@@ -15,8 +15,13 @@ class PMDashlet extends DashletInstance implements DashletInterface {
   public static function getAdditionalFields($className) {
     try {
       if (!class_exists($className)) {
-        self::setIncludePath();
-        require_once 'classes' . PATH_SEP . 'class.' . $className . '.php';
+        $oPluginRegistry = &PMPluginRegistry::getSingleton();
+        $pluginsDashlets = $oPluginRegistry->getDashlets();
+        foreach ($pluginsDashlets as $pluginDashlet) {
+          set_include_path(get_include_path() . PATH_SEPARATOR . PATH_PLUGINS . $pluginDashlet . PATH_SEP);
+        }
+        
+        require_once ("classes" . PATH_SEP . "class." . $className . ".php");
       }
       G::LoadClass($className);
       eval("\$additionalFields = $className::getAdditionalFields(\$className);");
@@ -38,8 +43,13 @@ class PMDashlet extends DashletInstance implements DashletInterface {
       $className = $this->dashletInstance['DAS_CLASS'];
       G::LoadClass($className);
       if (!class_exists($className)) {
-        self::setIncludePath();
-        require_once 'classes' . PATH_SEP . 'class.' . $className . '.php';
+        $oPluginRegistry = &PMPluginRegistry::getSingleton();
+        $pluginsDashlets = $oPluginRegistry->getDashlets();
+        foreach ($pluginsDashlets as $pluginDashlet) {
+          set_include_path(get_include_path() . PATH_SEPARATOR . PATH_PLUGINS . $pluginDashlet . PATH_SEP);
+        }
+        
+        require_once ("classes" . PATH_SEP . "class." . $className . ".php");
       }
       $this->dashletObject = new $className();
       $this->dashletObject->setup($this->dashletInstance);
@@ -317,8 +327,13 @@ class PMDashlet extends DashletInstance implements DashletInterface {
   public static function getXTemplate($className) {
     try {
       if (!class_exists($className)) {
-        self::setIncludePath();
-        require_once 'classes' . PATH_SEP . 'class.' . $className . '.php';
+        $oPluginRegistry = &PMPluginRegistry::getSingleton();
+        $pluginsDashlets = $oPluginRegistry->getDashlets();
+        foreach ($pluginsDashlets as $pluginDashlet) {
+          set_include_path(get_include_path() . PATH_SEPARATOR . PATH_PLUGINS . $pluginDashlet . PATH_SEP);
+        }
+        
+        require_once ("classes" . PATH_SEP . "class." . $className . ".php");
       }
       G::LoadClass($className);
       eval("\$additionalFields = $className::getXTemplate(\$className);");
