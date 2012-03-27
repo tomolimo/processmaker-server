@@ -646,12 +646,15 @@ class Derivation
       $appFields['APP_FINISH_DATE'] = 'now';
       $this->verifyIsCaseChild($currentDelegation['APP_UID']);
     }
-    $appFields['DEL_INDEX'] = (isset($iNewDelIndex) ? $iNewDelIndex : 0);
-    $appFields['TAS_UID']   = $nextDel['TAS_UID'];
 
-    /* Start Block : UPDATES APPLICATION */
-    $this->case->updateCase ( $currentDelegation['APP_UID'], $appFields );
-    /* End Block : UPDATES APPLICATION */
+    if (isset($iNewDelIndex)) {
+      $appFields['DEL_INDEX'] = $iNewDelIndex;
+      $appFields['TAS_UID']   = $nextDel['TAS_UID'];
+
+      /* Start Block : UPDATES APPLICATION */
+      $this->case->updateCase ( $currentDelegation['APP_UID'], $appFields );
+      /* End Block : UPDATES APPLICATION */
+    }
   }
 
 
