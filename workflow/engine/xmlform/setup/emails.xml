@@ -83,7 +83,7 @@
 
 <JS type="javascript">
   <![CDATA[
-	leimnud.event.add(getField('MESS_SERVER'), 'change', function() {
+	/*leimnud.event.add(getField('MESS_SERVER'), 'change', function() {
 	  getField('MESS_PASSWORD_HIDDEN').value = '';
 	  getField('MESS_PASSWORD').value = '';
 	}.extend(getField('MESS_ENABLED')));
@@ -95,7 +95,7 @@
 	}.extend(getField('MESS_ENABLED')));
 	 
 	getField('MESS_PASSWORD_HIDDEN').value  = getField('MESS_PASSWORD').value;		
-	getField('MESS_PASSWORD').value = '';
+	getField('MESS_PASSWORD').value = '';*/
     //settings events
     leimnud.event.add(getField('MESS_RAUTH'), 'click', function() {
       if (this.checked)

@@ -28,7 +28,7 @@ global $RBAC;
 if ($RBAC->userCanAccess('PM_SETUP') == 1 ) {
   //settings options
   $G_TMP_MENU->AddIdRawOption('LOGO', 'uplogo', G::LoadTranslation('ID_LOGO'), 'icon-pmlogo.png', '', 'settings');
-  $G_TMP_MENU->AddIdRawOption('EMAILS','../admin/emails', G::LoadTranslation('ID_EMAIL'), 'icon-email-settings1.png', '', 'settings');
+  $G_TMP_MENU->AddIdRawOption('EMAILS','emails', G::LoadTranslation('ID_EMAIL'), 'icon-email-settings1.png', '', 'settings');
   $G_TMP_MENU->AddIdRawOption('CALENDAR', 'calendarList', G::LoadTranslation('ID_CALENDAR'), 'icon-calendar.png', '', 'settings' );
   //if ($RBAC->userCanAccess('PM_SETUP_ADVANCE') == 1)
   //  $G_TMP_MENU->AddIdRawOption('CASES_LIST_SETUP', '../cases/casesListSetup', G::LoadTranslation('ID_CASES_LIST_SETUP'), "",'', 'settings');

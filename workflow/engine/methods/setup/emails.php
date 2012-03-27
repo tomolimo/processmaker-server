@@ -77,5 +77,12 @@ $oHeadPublisher = headPublisher::getSingleton();
 $oHeadPublisher->addScriptCode('var TRANSLATIONS='.G::json_encode($trn).';');
 $oHeadPublisher->addScriptFile('/jscore/setup/emails.js');
 
+$passwd = $aFields['MESS_PASSWORD'];
+$passwdDec = G::decrypt($passwd,'EMAILENCRYPT');
+if (strpos( $passwdDec, 'hash:' ) !== false) {
+  list($hash, $pass) = explode(":", $passwdDec);   
+  $aFields['MESS_PASSWORD'] = $pass;
+} 
+
 $G_PUBLISH->AddContent('xmlform', 'xmlform', 'setup/emails', '', $aFields, 'emails_Save');
 G::RenderPage('publishBlank', 'blank');
