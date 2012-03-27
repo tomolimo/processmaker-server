@@ -273,8 +273,9 @@ function convertPhpName($f) {
 }
 
 function copyPluginFile($tplName, $fName, $class) {
-  $pluginOutDirectory = PATH_OUTTRUNK . 'plugins' . PATH_SEP . $class . PATH_SEP . $class . PATH_SEP;
-  $pluginFilename = $pluginOutDirectory . $fName;
+  $pluginOutDirectory = PATH_OUTTRUNK . "plugins" . PATH_SEP . $class . PATH_SEP;
+  $pluginFilename     = $pluginOutDirectory . $fName;
+  
   $fileTpl = PATH_GULLIVER_HOME . 'bin' . PATH_SEP . 'tasks' . PATH_SEP . 'templates' . PATH_SEP . $tplName . '.tpl';
   $content = file_get_contents($fileTpl);
   $iSize = file_put_contents($pluginFilename, $content);
@@ -282,9 +283,8 @@ function copyPluginFile($tplName, $fName, $class) {
 }
 
 function savePluginFile($fName, $tplName, $class, $tableName, $fields = null) {
-  $pluginOutDirectory = PATH_OUTTRUNK . 'plugins' . PATH_SEP . $class . PATH_SEP;
-
-  $pluginFilename = $pluginOutDirectory . $fName;
+  $pluginOutDirectory = PATH_OUTTRUNK . "plugins" . PATH_SEP . $class . PATH_SEP;
+  $pluginFilename     = $pluginOutDirectory . $fName;
 
   $pluginTpl = PATH_GULLIVER_HOME . 'bin' . PATH_SEP . 'tasks' . PATH_SEP . 'templates' . PATH_SEP . $tplName . '.tpl';
   $template = new TemplatePower($pluginTpl);
@@ -292,7 +292,7 @@ function savePluginFile($fName, $tplName, $class, $tableName, $fields = null) {
   $template->assign('className', $class);
   $template->assign('tableName', $tableName);
   $template->assign('menuId', 'ID_' . strtoupper($class));
-
+  
   if( is_array($fields) ) {
     foreach( $fields as $block => $data ) {
       $template->gotoBlock("_ROOT");
@@ -677,6 +677,7 @@ function run_new_plugin($task, $args) {
     }
   }
 
+  //External step
   $externalStep = strtolower(prompt('Create external step for Processmaker [y/N]'));
   if( $externalStep == 'y' ) {
     $fields['externalStep'][] = array (
@@ -690,13 +691,34 @@ function run_new_plugin($task, $args) {
     savePluginFile($pluginName . PATH_SEP . "step" . $pluginName . "ApplicationAjax.php", "pluginStepApplicationAjax.php", $pluginName, $pluginName);
   }
 
-  //$dashboard = strtolower(prompt('Create an element for the Processmaker Dashboard [y/N]'));
-  //if( $dashboard == 'y' ) {
-  //  $fields['dashboard'][] = array (
-  //    'className' => $pluginName
-  //  );
-  //  savePluginFile($pluginName . PATH_SEP . 'drawChart.php', 'pluginDrawChart.php', $pluginName, $pluginName, $fields);
-  //}
+  //Dashboards
+  $dashboard = strtolower(prompt("Create an element for the Processmaker Dashboards [y/N]"));
+  if ($dashboard == "y") {
+    $fields["dashboard"][] = array(
+      "className" => $pluginName
+    );
+    
+    $fields["dashboardAttribute"] = "private \$dashletsUids;";
+    $fields["dashboardAttributeValue"] = "
+    \$this->dashletsUids = array(
+      array(\"DAS_UID\" => \"". G::GenerateUniqueId() ."\",
+            \"DAS_CLASS\" => \"dashlet" . $pluginName . "\",
+            \"DAS_TITLE\" => \"Dashlet $pluginName\",
+            \"DAS_DESCRIPTION\" => \"Dashlet $pluginName\",
+            \"DAS_VERSION\" => \"1.0\",
+            \"DAS_CREATE_DATE\" => date(\"Y-m-d\"),
+            \"DAS_UPDATE_DATE\" => date(\"Y-m-d\"))
+    );
+    ";
+    $fields["dashboardSetup"]   = "\$this->registerDashlets();";
+    $fields["dashboardEnable"]  = "\$this->dashletInsert();";
+    $fields["dashboardDisable"] = "\$this->dashletDelete();";
+    
+    G::verifyPath($pluginHome . PATH_SEP . "views", true);
+  
+    savePluginFile($pluginName . PATH_SEP . "classes" . PATH_SEP . "class.dashlet". $pluginName . ".php", "pluginDashletClass.php", $pluginName, $pluginName);
+    copyPluginFile("pluginDashlet.html", $pluginName . PATH_SEP . "views" . PATH_SEP . "dashlet". $pluginName . ".html", $pluginName);
+  }
 
   //$report = strtolower(prompt('Create a Report for Processmaker [y/N]'));
   //if( $report == 'y' ) {
