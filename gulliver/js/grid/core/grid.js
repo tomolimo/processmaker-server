@@ -494,11 +494,11 @@ var G_Grid = function(oForm, sGridName){
     if (this.aFunctions.length > 0) {
       this.assignFunctions(this.aFunctions, 'change', currentRow);
     }
-/*
+
     if (this.aFormulas.length > 0) {
       this.assignFormulas(this.aFormulas, 'change', currentRow);
     }
-*/
+
     //Recalculate functions if are declared
     var oAux;
     if (this.aFunctions.length > 0) {
@@ -855,7 +855,7 @@ var G_Grid = function(oForm, sGridName){
   ////////////////////////////////////////////////////////////////////////////////////////////
   this.setFormulas = function(aFormulas) {
     this.aFormulas = aFormulas;
-//    this.assignFormulas(this.aFormulas, 'change');
+    this.assignFormulas(this.aFormulas, 'change');
   };
   
   /////////////////////////////////////////////////////////////////////////////////////////////
