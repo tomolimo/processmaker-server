@@ -1126,11 +1126,14 @@ class Cases {
       $oDataset->next();
       while ($aRow = $oDataset->getRow()) {
         $aPrevious = $this->searchOpenPreviousTasks($aRow['TAS_UID'], $sAppUid);
-        if (!(is_array($aPrevious) && count($aPrevious) == 0 ))
+        
+        if (is_array($aPrevious) && count($aPrevious) > 0 ) {
           $aThreads[] = array_merge($aPrevious, $aThreads);
+        }
+        
         $oDataset->next();
       }
-
+      
       return $aThreads;
     } catch (exception $e) {
       throw ($e);
@@ -1154,11 +1157,11 @@ class Cases {
 
     //check if this task ( $taskUid ) has open delegations
     $delegations = $this->getReviewedTasks($taskUid, $sAppUid);
-
+    
     if ($delegations !== false) {
-      if ( count($aTaskReviewed['open']) > 0) {
+      if ( count($delegations['open']) > 0) {
         //there is an open delegation, so we need to return the delegation row
-        return $aTaskReviewed['open'];
+        return $delegations['open'];
       }
       else {
         return array(); //returning empty array
@@ -1179,12 +1182,17 @@ class Cases {
       $delegations = $this->getReviewedTasks($aRow['TAS_UID'], $sAppUid);
 
       if ($delegations !== false) {
-        if ( count($aTaskReviewed['open']) > 0) {
+        if ( count($delegations['open']) > 0) {
           //there is an open delegation, so we need to return the delegation row
-          $aTaskReviewed = array_merge($aTaskReviewed, $aTaskReviewed['open']);
+          $aTaskReviewed = array_merge($aTaskReviewed, $delegations['open']);
         }
         else {
-          $aTaskReviewed = array_merge($aTaskReviewed, $aTaskReviewed['closed']);
+          if ($aRow['ROU_TYPE'] == 'PARALLEL-BY-EVALUATION') {
+            $aTaskReviewed = array();
+          }
+          else {
+            $aTaskReviewed = array_merge($aTaskReviewed, $delegations['closed']);
+          }
         }
       }
       else {
@@ -1193,7 +1201,7 @@ class Cases {
           $aPreviousTasks[] = $aRow['TAS_UID'];
           // passing the array of previous tasks in oprder to avoid an infinite loop that prevents
           $openPreviousTask = $this->searchOpenPreviousTasks($aRow['TAS_UID'], $sAppUid, $aPreviousTasks);
-
+          
           if (count($aPreviousTasks) > 0) {
             $aTaskReviewed = array_merge($aTaskReviewed, $openPreviousTask);
           }
@@ -1232,7 +1240,7 @@ class Cases {
       $row = $oDataset2->getRow();
 
       if ($row['DEL_THREAD_STATUS'] == 'OPEN') {
-        $tasksReviewed[] = $row;
+        $openTasks[] = $row;
       }
       else {
         $closedTasks[] = $row;
