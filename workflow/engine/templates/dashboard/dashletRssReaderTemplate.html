@@ -1,0 +1,92 @@
+<!--<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">-->
+<!--<html xmlns="http://www.w3.org/1999/xhtml">-->
+<head>
+  <title></title>
+  <meta http-equiv="refresh" content="30;url="$url> 
+  <style type="text/css">
+  {literal}
+      body{
+        margin: 0;
+        padding: 0;
+
+        background: #FFFFFF;
+        font: 100% arial, verdana, helvetica, sans-serif;
+        color: #000000;
+      }
+    #container{
+      margin: 0 auto;
+    }
+    .clearf{
+      clear: both;
+      height: 0;
+      line-height: 0;
+      font-size: 0;
+    }
+    .icon{
+      float:left;
+      margin-left: 5%;
+      width: 13%;
+    }
+    .description{
+      float: right;
+      margin-right: 1%;
+      width: 90%;
+      font-size: 64%;
+      text-align : justify;
+    }
+
+    .icon img{
+      width: 35px;
+    }
+
+    .description strong{
+      color: #2C2C2C;
+    }
+
+    .description a{
+      color: #1A4897;
+      font-weight: bold;
+    }
+
+    .icon, .description{
+      margin-top: 0.20em;
+    }
+    error{
+    font-family:verdana;
+    font-size:14px;
+    color:red;
+    /*background-color:maroon;*/
+    }
+    /*TD{font-family: arial,verdana,helvetica,sans-serif; font-size: 8pt;*/
+    /*}*/
+    {/literal}
+  </style>
+</head>
+<body>
+<table cellspacing="0" cellpadding="0" border="0" width="99%">
+
+{if $status eq "Error"}
+  <br/><br/><br/>
+  <tr>
+    <td style=" font-family:verdana; font-size:22px; color:Red;" align="center">{$render[0].link}</td>
+  </tr>
+  <tr >
+    <td style=" font-family:verdana; font-size:19px; color:Red;" align="center">{$render[0].description}</td>
+  </tr>
+{else}
+  {section name=index loop=$render}
+  <tr >
+    <td class="description a">{$render[index].link}</td>
+  </tr>
+  <tr >
+    <td class="description">{$render[index].description}</td>
+  </tr>
+  {/section}
+{/if}
+
+
+</table>
+
+</body> 
+
+<!--</html>-->
