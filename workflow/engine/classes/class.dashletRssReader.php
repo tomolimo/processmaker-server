@@ -4,8 +4,6 @@ require_once 'classes/interfaces/dashletInterface.php';
 
 class dashletRssReader implements DashletInterface {
 
-  const version = '1.0';
-
   public static function getAdditionalFields($className) {
     $additionalFields = array();
 
@@ -13,16 +11,17 @@ class dashletRssReader implements DashletInterface {
     $urlFrom->xtype = 'textfield';
     $urlFrom->name = 'DAS_URL';
     $urlFrom->fieldLabel = 'Url';
-    $urlFrom->width = 320;
-    $urlFrom->maxLength = 200;
+    $urlFrom->width = 250;
+    $urlFrom->maxLength = 150;
     $urlFrom->allowBlank = false;
-    $urlFrom->value = "http://license.processmaker.com/syspmLicenseSrv/en/green/services/rssAP";
+    $urlFrom->value = "http://";
     $additionalFields[] = $urlFrom;
 
     return $additionalFields;
   }
 
   public static function getXTemplate($className) {
+    //Metodo q funcion bien
     return "<iframe src=\"{page}?DAS_INS_UID={id}\" width=\"{width}\" height=\"207\" frameborder=\"0\"></iframe>";
   }
 
@@ -45,7 +44,7 @@ class dashletRssReader implements DashletInterface {
         {
           $self->title = $self->item->title;
           $self->link = $self->item->link;
-
+          
           $self->des = $self->item->description;
           $render[] = array('link' => '<a href="'.$self->link.'" target="_blank">'.$self->title.'</a><br/>','description' => $self->des.'<br/><hr>');
           $index++;
@@ -74,7 +73,7 @@ class dashletRssReader implements DashletInterface {
       print $item->key;
     }
     $smarty->display('dashletRssReaderTemplate.html',null,null);
-
+    
   }
 
 }
