@@ -23,10 +23,10 @@ if($userData['USR_EMAIL'] != '' && $userData['USR_EMAIL'] === $data['USR_EMAIL']
   
   $aData['USR_UID']      = $userData['USR_UID'];
   $aData['USR_PASSWORD'] = md5($newPass);
-  
+/* **Save after sending the mail
   $rbacUser->update($aData);
   $user->update($aData);
-  
+*/
   $sFrom    = ($aSetup['MESS_ACCOUNT'] != '' ? $aSetup['MESS_ACCOUNT'] . ' ' : '') . '<' . $aSetup['MESS_ACCOUNT'] . '>';
   $sSubject = G::LoadTranslation('ID_RESET_PASSWORD').' - ProcessMaker' ;
   $msg = '<h3>ProcessMaker Forgot password Service</h3>';
@@ -65,13 +65,7 @@ if($userData['USR_EMAIL'] != '' && $userData['USR_EMAIL'] === $data['USR_EMAIL']
     'SMTPAuth'      => $aSetup['MESS_RAUTH'],
     'SMTPSecure'    => $aSetup['SMTPSecure']
   ));
-  $passwd = $oSpool['MESS_PASSWORD'];
-    $passwdDec = G::decrypt($passwd,'EMAILENCRYPT');
-    if (strpos( $passwdDec, 'hash:' ) !== false) {
-    	list($hash, $pass) = explode(":", $passwdDec);   
-    	$oSpool['MESS_PASSWORD'] = $pass;
-    }
-  
+
   $oSpool->create(array(
     'msg_uid'          => '',
     'app_uid'          => '',
@@ -89,9 +83,25 @@ if($userData['USR_EMAIL'] != '' && $userData['USR_EMAIL'] === $data['USR_EMAIL']
     'app_msg_attach'=>'' 
   ));
 
-  $oSpool->sendMail();
-  G::header  ("location: login.html");  
-  G::SendTemporalMessage ('ID_NEW_PASSWORD_SENT', "info");
+  try {
+
+    $oSpool->sendMail();
+
+    $rbacUser->update($aData);
+    $user->update($aData);
+
+    G::header  ("location: login.html");
+    G::SendTemporalMessage ('ID_NEW_PASSWORD_SENT', "info");
+  }
+  catch (phpmailerException $e) {
+    G::header  ("location: login.html");
+    G::SendTemporalMessage (G::LoadTranslation('MISSING_OR_NOT_CONFIGURED_SMTP'), "warning", 'string');
+  }
+  catch (Exception $e) {
+    G::header  ("location: login.html");
+    G::SendTemporalMessage ($e->getMessage(), "warning", 'string');
+  }
+
 } else {
   $msg = G::LoadTranslation('ID_USER') . ' ' . $data['USR_USERNAME'] . ' '. G::LoadTranslation('ID_IS_NOT_REGISTERED');
   G::SendTemporalMessage ($msg, "warning", 'string');
