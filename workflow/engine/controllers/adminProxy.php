@@ -485,17 +485,21 @@ class adminProxy extends HttpProxyController
       }
       
       $aFields['MESS_ENABLED']             = isset($_POST['EnableEmailNotifications']) ? $_POST['EnableEmailNotifications'] : '';
-      $aFields['MESS_ENGINE']              = $_POST['EmailEngine'];
+      $aFields['MESS_ENABLED']             = ($aFields['MESS_ENABLED'] == 'true') ? '1' : $aFields['MESS_ENABLED'];
+      $aFields['MESS_ENGINE']              = $_POST['EmailEngine'];     
       $aFields['MESS_SERVER']              = trim($_POST['server']);
       $aFields['MESS_RAUTH']               = isset($_POST['req_auth']) ? $_POST['req_auth'] : '';
+      $aFields['MESS_RAUTH']               = ($aFields['MESS_RAUTH'] == 'true') ? '1' : $aFields['MESS_RAUTH'];
       $aFields['MESS_PORT']                = $_POST['port'];
       $aFields['MESS_ACCOUNT']             = $_POST['from'];
       $aFields['MESS_BACKGROUND']          = '';//isset($_POST['background']) ? $_POST['background'] : '';
       $aFields['MESS_EXECUTE_EVERY']       = '';//$_POST['form']['MESS_EXECUTE_EVERY'];
       $aFields['MESS_SEND_MAX']            = '';//$_POST['form']['MESS_SEND_MAX'];
       $aFields['SMTPSecure']               = $_POST['UseSecureCon'];
+      $aFields['SMTPSecure']               = ($aFields['SMTPSecure'] == 'No') ? 'none' : $aFields['SMTPSecure'];
       $aFields['MAIL_TO']                  = $_POST['eMailto'];
       $aFields['MESS_TRY_SEND_INMEDIATLY'] = $_POST['SendaTestMail'];//isset($_POST['form']['MESS_TRY_SEND_INMEDIATLY']) ? $_POST['form']['MESS_TRY_SEND_INMEDIATLY'] : '';
+      $aFields['MESS_TRY_SEND_INMEDIATLY'] = ($aFields['MESS_TRY_SEND_INMEDIATLY'] == 'true') ? '1' : $aFields['MESS_TRY_SEND_INMEDIATLY'];
       $CfgUid='Emails';
       $ObjUid='';
       $ProUid='';
@@ -554,7 +558,7 @@ class adminProxy extends HttpProxyController
     if (strpos( $passwdDec, 'hash:' ) !== false) {
       list($hash, $pass) = explode(":", $passwdDec);   
       $fields['MESS_PASSWORD'] = $pass;
-    }   
+    }    
     $this->data = $fields;
   }
 

@@ -4,6 +4,7 @@ Ext.onReady(function(){
     name: 'EnableEmailNotifications',
     id: 'EnableEmailNotifications',
     checked:false,
+    disabled : true,
     listeners: {
       check: function(EnableEmailNotifications, checked) {
         if(checked) {
@@ -38,8 +39,7 @@ Ext.onReady(function(){
           }
 	  
           Ext.getCmp('UseSecureConnection').setVisible(true); 
-          Ext.getCmp('UseSecureConnection').getEl().up('.x-form-item').setDisplayed(true);
-          Ext.getCmp('Test').setDisabled(false);
+          Ext.getCmp('UseSecureConnection').getEl().up('.x-form-item').setDisplayed(true);         
         } 
         else {
           combo.setVisible(false);
@@ -57,8 +57,8 @@ Ext.onReady(function(){
           Ext.getCmp('SendaTestMail').setVisible(false);  
           Ext.getCmp('SendaTestMail').getEl().up('.x-form-item').setDisplayed(false);
           
-	  if(Ext.getCmp('SendaTestMail').getValue().checked) { 
-            Ext.getCmp('eMailto').setVisible(true); 
+	   if (Ext.getCmp('SendaTestMail').getValue().checked) {
+            Ext.getCmp('eMailto').setVisible(true);
             Ext.getCmp('eMailto').setVisible(true);               
             Ext.getCmp('eMailto').setValue('');
           } 
@@ -67,10 +67,9 @@ Ext.onReady(function(){
             Ext.getCmp('eMailto').getEl().up('.x-form-item').setDisplayed(false);
             Ext.getCmp('eMailto').setValue(' '); 
           }
-          
-	  Ext.getCmp('UseSecureConnection').setVisible(false);  
+
+          Ext.getCmp('UseSecureConnection').setVisible(false);
           Ext.getCmp('UseSecureConnection').getEl().up('.x-form-item').setDisplayed(false);
-          Ext.getCmp('Test').setDisabled(true)
         }
       }
     }
@@ -90,6 +89,7 @@ Ext.onReady(function(){
     xtype: 'combo',         
     fieldLabel: _('EMAIL_ENGINE'),//'Email Engine',
     blankText: '',
+    valueField: 'id',
     lazyRender: true,
     allowBlank: false,
     selectOnFocus: true,  
@@ -98,6 +98,7 @@ Ext.onReady(function(){
     displayField:'EmailEngine', 
     mode: 'local',      
     triggerAction: 'all',
+    disabled : true,    
     listeners: {
       select: function(combo, value) {
         if (Ext.getCmp('EmailEngine').getValue()== 'Mail (PHP)') {
@@ -127,7 +128,48 @@ Ext.onReady(function(){
       }
     } 
   });
-
+  var tb = new Ext.Toolbar({
+      style : 'background: #EEEEEE;',
+      items: [{
+        xtype:'button',
+        id:'UnEdit',
+        iconCls: 'button_menu_ext',
+        icon: '/images/unlocked.png',
+        handler: UnEditMethod
+      },
+      {
+        xtype:'button',
+        id:'Edit',
+        iconCls: 'button_menu_ext',
+        icon: '/images/locked.png',
+        handler: EditMethod
+      },'&nbsp;',
+      {
+      xtype:'label',
+      text:_('ID_CLICK_LOCK'),
+      id:'label'
+      },
+      {
+      xtype:'label',
+      text:_('ID_CLICK_UNLOCK'),
+      id:'labelUn'
+      },
+      '->',
+      {
+        text : _('ID_TEST'),
+        width: 55,
+        id:'Test',
+        handler: testMethod
+      },'&nbsp; &nbsp;',
+      {
+        text : _('ID_SAVE_CHANGES'),
+        id:'SaveChanges',
+        width: 85,
+        disabled : true,
+        handler: saveMethod
+      }
+    ]
+  });
   var EMailFields = new Ext.form.FieldSet({
     title: _('ID_CONFIGURATION'),
     items : [
@@ -141,6 +183,7 @@ Ext.onReady(function(){
         //blankText: 'Server',
         width: 200,
         allowBlank: false,
+        disabled : true,        
 	listeners : {
 	  'change': {
             fn:function() {
@@ -157,7 +200,8 @@ Ext.onReady(function(){
         name:'Port',
         emptyText : null,
         width: 40,
-        maxLength: 3,  
+        maxLength: 3,
+        disabled : true,        
         allowBlank: false
       },    
       {
@@ -167,6 +211,7 @@ Ext.onReady(function(){
         name:'RequireAuthentication',
         validateMessage: 'You really should do it.',
         validateField: true,
+        disabled : true,        
         handler: function() {
           if (this.checked) {
 	    Ext.getCmp('Password').setVisible(true);    
@@ -186,6 +231,7 @@ Ext.onReady(function(){
         name:'AccountFrom',
         vtype:'email',
         width: 200,
+        disabled : true,        
         allowBlank: false
       },
       {
@@ -197,6 +243,7 @@ Ext.onReady(function(){
         width: 200,
 	hidden: true,
 	hideLabel: true,
+        disabled : true,        
         allowBlank: true
       },
       {
@@ -207,6 +254,7 @@ Ext.onReady(function(){
         inputType: 'password',      
         width: 200,
         allowBlank: true,
+        disabled : true,        
 	listeners : {          
 	  'change' : function() {
 	   if (Ext.getCmp('Password').getValue() != '') {
@@ -220,6 +268,7 @@ Ext.onReady(function(){
         boxLabel: _('SEND_TEST_MAIL'),//'Send a test mail' ,
         id:'SendaTestMail',
         name:'SendaTestMail',
+        disabled : true,        
         listeners: {
           check: function(EnableEmailNotifications, checked) {
             if(checked) {           
@@ -240,7 +289,8 @@ Ext.onReady(function(){
         fieldLabel: _('MAIL_TO'),//'Mail to',
         id:'eMailto', 
         name:'eMailto',      
-        width: 200,          
+        width: 200,
+        disabled : true,        
         allowBlank: false
       },
       {
@@ -250,16 +300,16 @@ Ext.onReady(function(){
         fieldLabel: _('USE_SECURE_CONNECTION'),//'Use Secure Connection',
         columns: 3,       
         width: 200,
+        disabled : true,        
         vertical: true,     
         items: [
           {boxLabel: 'No',inputValue: 'No',name: 'UseSecureConnection',checked:true},
           {boxLabel: 'TLS', inputValue: 'tls',name: 'UseSecureConnection'},
           {boxLabel: 'SSL', inputValue: 'ssl',name: 'UseSecureConnection'}
         ]
-      }   
-    ]  
+      },tb
+    ]
   });
-
 
   loadfields = function(){
     Ext.Ajax.request({
@@ -306,7 +356,7 @@ Ext.onReady(function(){
     width:600,
     labelAlign:'right',
     autoScroll: true,
-    bodyStyle:'padding:2px',
+   // bodyStyle:'padding:2px',
     waitMsgTarget : true,
     frame: true,    
     defaults: {
@@ -314,18 +364,7 @@ Ext.onReady(function(){
       msgTarget: 'side',
       align:'center'
     },
-    items: [ EMailFields ],
-    buttons : [{
-      text : _('ID_TEST'),
-      id:'Test',
-      handler: testMethod         
-    },
-    {
-      text : _('ID_SAVE_CHANGES'),
-      id:'SaveChanges',
-      disabled : true,
-      handler: saveMethod             
-    }]
+    items: [EMailFields ]    
   });
   //render to process-panel
   frm.render(document.body);
@@ -347,7 +386,10 @@ Ext.onReady(function(){
   Ext.getCmp('eMailto').getEl().up('.x-form-item').setDisplayed(false);
   Ext.getCmp('UseSecureConnection').setVisible(false);  
   Ext.getCmp('UseSecureConnection').getEl().up('.x-form-item').setDisplayed(false);
-  Ext.getCmp('Test').setDisabled(true);  
+  Ext.getCmp('Test').setVisible(false);
+  Ext.getCmp('SaveChanges').setVisible(false);
+  Ext.getCmp('UnEdit').setVisible(false);
+  Ext.getCmp('labelUn').setVisible(false);
 });
 
 var testConnForm = new Ext.FormPanel({
@@ -462,6 +504,45 @@ var testEmailWindow = new Ext.Window({
 
 var params;
 var count = 0;
+var EditMethod = function()
+{
+  Ext.getCmp('EnableEmailNotifications').setDisabled(false);
+  Ext.getCmp('EmailEngine').setDisabled(false);
+  Ext.getCmp('Server').setDisabled(false); 
+  Ext.getCmp('Port').setDisabled(false);  
+  Ext.getCmp('RequireAuthentication').setDisabled(false);  
+  Ext.getCmp('AccountFrom').setDisabled(false); 
+  Ext.getCmp('Password').setDisabled(false); 
+  Ext.getCmp('SendaTestMail').setDisabled(false); 
+  Ext.getCmp('eMailto').setDisabled(false); 
+  Ext.getCmp('UseSecureConnection').setDisabled(false);
+  Ext.getCmp('Test').setVisible(true);
+  Ext.getCmp('SaveChanges').setVisible(true);
+  Ext.getCmp('UnEdit').setVisible(true);
+  Ext.getCmp('Edit').setVisible(false);
+  Ext.getCmp('label').setVisible(false);
+  Ext.getCmp('labelUn').setVisible(true);   
+}
+
+var UnEditMethod = function()
+{
+  Ext.getCmp('EnableEmailNotifications').setDisabled(true);
+  Ext.getCmp('EmailEngine').setDisabled(true);
+  Ext.getCmp('Server').setDisabled(true);
+  Ext.getCmp('Port').setDisabled(true);
+  Ext.getCmp('RequireAuthentication').setDisabled(true);
+  Ext.getCmp('AccountFrom').setDisabled(true);
+  Ext.getCmp('Password').setDisabled(true);
+  Ext.getCmp('SendaTestMail').setDisabled(true);
+  Ext.getCmp('eMailto').setDisabled(true);
+  Ext.getCmp('UseSecureConnection').setDisabled(true);
+  Ext.getCmp('Test').setVisible(false);
+  Ext.getCmp('SaveChanges').setVisible(false);
+  Ext.getCmp('UnEdit').setVisible(false);
+  Ext.getCmp('Edit').setVisible(true);
+  Ext.getCmp('label').setVisible(true);
+  Ext.getCmp('labelUn').setVisible(false);   
+}
 var testMethod = function()
 {
   if((Ext.getCmp('Port').getValue()==null)||(Ext.getCmp('Port').getValue()=='')) {
@@ -589,4 +670,5 @@ saveMethod=function() {
       PMExt.notify(_('ID_CHANGES_SAVED'),i.msg); 
     }
   });
+  UnEditMethod();
 }
