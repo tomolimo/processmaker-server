@@ -2178,7 +2178,10 @@ INSERT INTO TRANSLATION (TRN_CATEGORY,TRN_ID,TRN_LANG,TRN_VALUE,TRN_UPDATE_DATE 
 ( 'LABEL','ID_CASESLIST_APP_DEL_INDEX','en','Del Index','2012-02-02') ,
 ( 'LABEL','ID_TRIGGERS_VALIDATE_EERR1','en','* The {Object} {Description} depends.','2012-02-02') ,
 ( 'LABEL','ID_CASES_STATUS_TO_DO','en','To Do','2012-02-02') ,
-( 'JAVASCRIPT','ID_DONT_SAVE_XMLFORM','en','DynaForm is now saved. \n \nWarning: Form doesn''t have a submit action. \nEither add a "Submit" button or change the "Next Step Link" property.','2012-02-02') ,
+( 'JAVASCRIPT','ID_DONT_SAVE_XMLFORM','en','DynaForm is now saved. 
+ 
+Warning: Form doesn''t have a submit action. 
+Either add a "Submit" button or change the "Next Step Link" property.','2012-02-02') ,
 ( 'LABEL','ID_CASES_STATUS_COMPLETED','en','Completed','2012-02-02') ,
 ( 'LABEL','ID_CASES_STATUS_DRAFT','en','Draft','2012-02-02') ,
 ( 'LABEL','ID_PM_ENV_SETTINGS_TITLE','en','Processmaker Environment Settings','2012-02-02') ,
@@ -3427,7 +3430,10 @@ INSERT INTO TRANSLATION (TRN_CATEGORY,TRN_ID,TRN_LANG,TRN_VALUE,TRN_UPDATE_DATE 
 ( 'LABEL','ID_SELECTED_IMAGE_DELETED','en','The selected image has been deleted.','2012-03-15') ,
 ( 'LABEL','ID_SELECTED_IMAGE_IS_LOGO','en','The selected image is established as logo.','2012-03-15') ,
 ( 'LABEL','ID_DELETE_SELECTED_LOGO','en','Do you want to apply the selected Logo?','2012-03-16') ,
-( 'LABEL','MISSING_OR_NOT_CONFIGURED_SMTP','en','Missing or it''s not configured SMTP mail. Check the configuration.','2012-03-26') ;
+( 'LABEL','MISSING_OR_NOT_CONFIGURED_SMTP','en','Missing or it''s not configured SMTP mail. Check the configuration.','2012-03-26') ,
+( 'LABEL','ID_SELECT_ONE_OPTION','en','select one option','2012-03-27') ,
+( 'LABEL','ID_CLICK_LOCK','en','Click the lock to make changes.','2012-03-28') ,
+( 'LABEL','ID_CLICK_UNLOCK','en','Click the lock to prevent further changes.','2012-03-28') ;
 
 INSERT INTO ISO_LOCATION (IC_UID,IL_UID,IL_NAME,IL_NORMAL_NAME,IS_UID)  VALUES 
 ('AD','','',' ','') ,

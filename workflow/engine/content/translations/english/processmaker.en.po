@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: ProcessMaker (Branch 2.0-experimental) 2.0-testing.16-22-g126b344\n"
+"Project-Id-Version: ProcessMaker (Branch 2.0-experimental) 2.0-testing.16-29-g7e9f417\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2012-03-27 18:17:53\n"
+"PO-Revision-Date: 2012-03-28 19:02:42\n"
 "Last-Translator: \n"
 "Language-Team: Colosa Developers Team <developers@colosa.com>\n"
 "MIME-Version: 1.0\n"
@@ -11976,6 +11976,24 @@ msgstr "Do you want to apply the selected Logo?"
 #: LABEL/MISSING_OR_NOT_CONFIGURED_SMTP
 msgid "Missing or it's not configured SMTP mail. Check the configuration."
 msgstr "Missing or it's not configured SMTP mail. Check the configuration."
+
+# TRANSLATION
+# LABEL/ID_SELECT_ONE_OPTION
+#: LABEL/ID_SELECT_ONE_OPTION
+msgid "select one option"
+msgstr "select one option"
+
+# TRANSLATION
+# LABEL/ID_CLICK_LOCK
+#: LABEL/ID_CLICK_LOCK
+msgid "Click the lock to make changes."
+msgstr "Click the lock to make changes."
+
+# TRANSLATION
+# LABEL/ID_CLICK_UNLOCK
+#: LABEL/ID_CLICK_UNLOCK
+msgid "Click the lock to prevent further changes."
+msgstr "Click the lock to prevent further changes."
 
 # additionalTables/additionalTablesData.xml?ADD_TAB_NAME
 # additionalTables/additionalTablesData.xml
@@ -34101,5 +34119,4 @@ msgstr "Cancel"
 # dynaforms/fields/yesno.xml
 #: button - PME_ACCEPT
 msgid "[dynaforms/fields/yesno.xml?PME_ACCEPT] Save"
-msgstr "Save"
-
+msgstr "Save" 

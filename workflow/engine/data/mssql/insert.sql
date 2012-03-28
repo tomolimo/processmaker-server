@@ -2951,7 +2951,10 @@ SELECT 'LABEL','ID_TRIGGERS_VALIDATE_EERR1','en','* The {Object} {Description} d
   UNION ALL
 SELECT 'LABEL','ID_CASES_STATUS_TO_DO','en','To Do','2012-02-02' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_DONT_SAVE_XMLFORM','en','DynaForm is now saved. \n \nWarning: Form doesn''t have a submit action. \nEither add a "Submit" button or change the "Next Step Link" property.','2012-02-02' 
+SELECT 'JAVASCRIPT','ID_DONT_SAVE_XMLFORM','en','DynaForm is now saved. 
+ 
+Warning: Form doesn''t have a submit action. 
+Either add a "Submit" button or change the "Next Step Link" property.','2012-02-02' 
   UNION ALL
 SELECT 'LABEL','ID_CASES_STATUS_COMPLETED','en','Completed','2012-02-02' 
   UNION ALL
@@ -5420,6 +5423,12 @@ SELECT 'LABEL','ID_SELECTED_IMAGE_IS_LOGO','en','The selected image is establish
 SELECT 'LABEL','ID_DELETE_SELECTED_LOGO','en','Do you want to apply the selected Logo?','2012-03-16' 
   UNION ALL
 SELECT 'LABEL','MISSING_OR_NOT_CONFIGURED_SMTP','en','Missing or it''s not configured SMTP mail. Check the configuration.','2012-03-26' 
+  UNION ALL
+SELECT 'LABEL','ID_SELECT_ONE_OPTION','en','select one option','2012-03-27' 
+  UNION ALL
+SELECT 'LABEL','ID_CLICK_LOCK','en','Click the lock to make changes.','2012-03-28' 
+  UNION ALL
+SELECT 'LABEL','ID_CLICK_UNLOCK','en','Click the lock to prevent further changes.','2012-03-28' 
  ;
 
 INSERT INTO ISO_LOCATION ([IC_UID],[IL_UID],[IL_NAME],[IL_NORMAL_NAME],[IS_UID]) 
