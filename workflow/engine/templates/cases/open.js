@@ -238,6 +238,9 @@ Ext.onReady(function(){
           }
         ],
         listeners: {
+          tabchange: function(panel){
+            panel.ownerCt.doLayout();
+          },
           render : function(panel){
             Ext.each([this.el, this[this.collapseEl]] ,
             function( elm ) {
