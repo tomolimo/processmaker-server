@@ -610,7 +610,8 @@ Ext.onReady(function(){
           fieldLabel: 'Unpause Date',
           name: 'unpauseDate',
           allowBlank: false,
-          minValue: new Date(filterDate)
+          value: filterDate,
+          minValue: filterDate
         })
       ],
       buttons : [
