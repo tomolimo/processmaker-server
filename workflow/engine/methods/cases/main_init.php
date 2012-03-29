@@ -27,12 +27,19 @@
   $oHeadPublisher->addExtJsScript('cases/main', false );    //adding a javascript file .js
   $oHeadPublisher->addContent( 'cases/main'); //adding a html file  .html.
   
-  G::loadClass('configuration');
-  $oConf = new Configurations; 
-  $oConf->loadConfig($x, 'USER_PREFERENCES','','',$_SESSION['USER_LOGGED'],'');
+  $keyMem = 'USER_PREFERENCES'.$_SESSION['USER_LOGGED'];
+  $memcache = & PMmemcached::getSingleton(SYS_SYS);  
+  if ( ($arrayConfig = $memcache->get($keyMem)) === false ) {
+    G::loadClass('configuration');
+    $oConf = new Configurations; 
+    $oConf->loadConfig($x, 'USER_PREFERENCES','','',$_SESSION['USER_LOGGED'],'');
+    $arrayConfig = $oConf->aConfig;
+    $memcache->set( $keyMem, $arrayConfig, PMmemcached::ONE_HOUR);
+  }
+
   $confDefaultOption='';
-  if( sizeof($oConf->Fields) > 0 && isset($oConf->aConfig['DEFAULT_CASES_MENU']) ){ #this user has a configuration record  
-    $confDefaultOption = $oConf->aConfig['DEFAULT_CASES_MENU'];
+  if( isset($arrayConfig['DEFAULT_CASES_MENU']) ){ #this user has a configuration record  
+    $confDefaultOption = $arrayConfig['DEFAULT_CASES_MENU'];
     global $G_TMP_MENU;
     $oMenu = new Menu();
     $oMenu->load('cases');
@@ -45,7 +52,8 @@
     }
     $defaultOption = $defaultOption != '' ? $defaultOption : 'casesListExtJs';
   
-  } else {
+  } 
+  else {
     $defaultOption = 'casesListExtJs';
     $confDefaultOption = 'CASES_INBOX';
   }

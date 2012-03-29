@@ -1,5 +1,5 @@
 <?php
- $request = isset($_POST['request'])? $_POST['request']: (isset($_GET['request'])? $_GET['request']: null);
+ $request = isset($_REQUEST['request'])? $_REQUEST['request'] : null ;
   
   switch($request){
     case 'getLangList': 
@@ -15,23 +15,24 @@
       
       print(G::json_encode($result));
       break;
+
     case 'saveSettings':
-      
+      $memcache = & PMmemcached::getSingleton(defined('SYS_SYS') ? SYS_SYS : '');
       G::LoadClass('configuration');
       $conf = new Configurations;
       $conf->loadConfig($obj, 'ENVIRONMENT_SETTINGS','');
-      
-      $conf->aConfig['login_enableForgotPassword'] = isset($_POST['acceptRP']) ? $_POST['acceptRP'] : 'off';
-      $conf->aConfig['login_defaultLanguage'] = $_POST['lang'];      
+
+      $conf->aConfig['login_enableForgotPassword']  = isset($_REQUEST['forgotPasswd']);
+      $conf->aConfig['login_enableVirtualKeyboard'] = isset($_REQUEST['virtualKeyboad']);
+      $conf->aConfig['login_defaultLanguage']       = isset($_REQUEST['lang'])? $_REQUEST['lang'] : 'en';
+
       $conf->saveConfig('ENVIRONMENT_SETTINGS', '');
       
-      $response->success = true;
-      if (isset($_POST['acceptRP']) && $_POST['acceptRP'])
-        $response->enable = true;
-      else
-        $response->enable = false;     
-
-      echo G::json_encode($response);
+      //remove from memcache when this value is updated/created
+      $memcache->delete('flagForgotPassword') ;
       
+      $response->success = true;
+      echo G::json_encode($response);
+
       break;
   }

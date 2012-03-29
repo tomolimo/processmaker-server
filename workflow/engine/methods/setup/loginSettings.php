@@ -33,12 +33,14 @@
   
   $oConf->loadConfig($obj, 'ENVIRONMENT_SETTINGS','');
   
-  $defaultOption = isset($oConf->aConfig['login_enableForgotPassword'])? $oConf->aConfig['login_enableForgotPassword']: false;
+  $forgotPasswd    = isset($oConf->aConfig['login_enableForgotPassword'])? $oConf->aConfig['login_enableForgotPassword']: false;
+  $virtualKeyboad  = isset($oConf->aConfig['login_enableVirtualKeyboard'])? $oConf->aConfig['login_enableVirtualKeyboard']: false;
   $defaultLanguaje = isset($oConf->aConfig['login_defaultLanguage'])? $oConf->aConfig['login_defaultLanguage']: 'en';
   
   
-  $oHeadPublisher->assign( 'currentLang',    $defaultLanguaje);  //current language
-  $oHeadPublisher->assign( 'currentOption',    $defaultOption);  //current option
+  $oHeadPublisher->assign('currentLang',   $defaultLanguaje);
+  $oHeadPublisher->assign('forgotPasswd',  $forgotPasswd);
+  $oHeadPublisher->assign('virtualKeyboad',$virtualKeyboad);
   
   G::RenderPage('publish', 'extJs');
 

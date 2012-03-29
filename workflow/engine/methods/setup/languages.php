@@ -24,7 +24,6 @@
  */
 $RBAC->requirePermissions('PM_SETUP_ADVANCE');
 
-//$oHeadPublisher->usingExtJs('ux/Ext.ux.fileUploadField');
 $oHeadPublisher->addExtJsScript('setup/languages', false);    //adding a javascript file .js
 $oHeadPublisher->addContent('setup/languages'); //adding a html file  .html.
 

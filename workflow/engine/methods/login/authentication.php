@@ -124,7 +124,13 @@ try {
       }
       else {
         G::SendTemporalMessage($errLabel, "warning");
-        $loginUrl = 'login';
+        
+        if (substr(SYS_SKIN, 0, 2) !== 'ux') {
+          $loginUrl = 'login';
+        }
+        else {
+          $loginUrl = '../main/login'; 
+        }
       }
 
       G::header("location: $loginUrl");

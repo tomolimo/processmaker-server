@@ -18,11 +18,14 @@ require_once 'classes/model/om/BaseUsersProperties.php';
  */
 class UsersProperties extends BaseUsersProperties 
 {
-  function UserPropertyExists($sUserUID) 
-  {
+  var $fields = null;
+	
+  function UserPropertyExists($sUserUID) {
     try {
       $oUserProperty = UsersPropertiesPeer::retrieveByPk($sUserUID);
-      if (is_object($oUserProperty) && get_class($oUserProperty) == 'UsersProperties') {
+      if (!is_null($oUserProperty) && is_object($oUserProperty) && get_class($oUserProperty) == 'UsersProperties') {
+        $this->fields = $oUserProperty->toArray(BasePeer::TYPE_FIELDNAME);
+        $this->fromArray($this->fields, BasePeer::TYPE_FIELDNAME);
         return true;
       }
       else {
@@ -124,7 +127,7 @@ class UsersProperties extends BaseUsersProperties
       $this->create($aUserProperty);
     }
     else {
-      $aUserProperty = $this->load($sUserUID);
+      $aUserProperty = $this->fields;
     }
     return $aUserProperty;
   }
@@ -218,6 +221,11 @@ class UsersProperties extends BaseUsersProperties
       }
     }
     //end plugin
+
+    if (substr(SYS_SKIN, 0, 2) === 'ux' && SYS_SKIN != 'uxs') {
+      return '../main';
+    }
+
 
     /**
      * New feature - User Experience Redirector

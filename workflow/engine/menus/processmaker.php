@@ -24,40 +24,35 @@
  */
 
 
-#
-#  ---= Processmaker main menu=---
-#
+/*************************************
+ *  ---= Processmaker main menu=---
+ *************************************/
 
 global $G_TMP_MENU;
 global $RBAC;
 
-if ($RBAC->userCanAccess('PM_DASHBOARD') == 1 ) {
-  //$G_TMP_MENU->AddIdRawOption('DASHBOARD', 'dashboard/dashboard', G::LoadTranslation('ID_DASHBOARD'));
-}
-
-#CASES MODULE
+// HOME MODULE
 if ($RBAC->userCanAccess('PM_CASES') == 1) {
-  $G_TMP_MENU->AddIdRawOption('CASES', 'cases/main', G::LoadTranslation('ID_HOME'));
+  $G_TMP_MENU->AddIdRawOption('CASES', 'cases/main', G::LoadTranslation('ID_HOME'), '', '', '', 'x-pm-home');
 }
 
-#PROCESSES MODULE
+// DESIGNER MODULE
 if ($RBAC->userCanAccess('PM_FACTORY') == 1 ) {
-  $G_TMP_MENU->AddIdRawOption('PROCESSES', 'processes/main', G::LoadTranslation('ID_DESIGNER'));
+  //$G_TMP_MENU->AddIdRawOption('BPMN', 'bpmn/main', 'BPMN DESIGNER','', '', '', 'x-pm-bpmn');
+  $G_TMP_MENU->AddIdRawOption('PROCESSES', 'processes/main', G::LoadTranslation('ID_DESIGNER'), '', '', '', 'x-pm-designer');
 }
 
 // DASHBOARD MODULE
 if ($RBAC->userCanAccess('PM_DASHBOARD') == 1) {
-  $G_TMP_MENU->AddIdRawOption('DASHBOARD', 'dashboard/main', G::LoadTranslation('ID_DASHBOARD'));
+  $G_TMP_MENU->AddIdRawOption('DASHBOARD', 'dashboard/main', G::LoadTranslation('ID_DASHBOARD'), '', '', '', 'x-pm-dashboard');
 }
 
-/*if ($RBAC->userCanAccess('PM_REPORTS') == 1 ) {
-  $G_TMP_MENU->AddIdRawOption('REPORTS', 'reports/reportsList');
-}*/
-
+// ADMIN MODULE
 if ($RBAC->userCanAccess('PM_SETUP') == 1 || $RBAC->userCanAccess('PM_USERS') == 1) {
-  $G_TMP_MENU->AddIdRawOption('SETUP', 'setup/main', G::LoadTranslation('ID_SETUP'));
+  $G_TMP_MENU->AddIdRawOption('SETUP', 'setup/main', G::LoadTranslation('ID_SETUP'), '', '', '', 'x-pm-setup');
 }
 
+// PLUGINS MENUS
 if( file_exists(PATH_CORE . 'menus/plugin.php') ) {
   require_once(PATH_CORE . 'menus/plugin.php');
 }

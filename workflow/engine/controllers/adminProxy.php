@@ -25,6 +25,80 @@
 
 class adminProxy extends HttpProxyController
 {    
+  public function saveSystemConf($httpData)
+  {
+    G::loadClass('system');
+    $envFile = PATH_CONFIG . 'env.ini';
+    $updateRedirector = false;
+    $restart = false;
+
+    if (!file_exists($envFile) ) { // if ini file doesn't exists
+      if (!is_writable(PATH_CONFIG)) {
+        throw new Exception('The enviroment config directory is not writable. <br/>Please give write permission to directory: /workflow/engine/config');    
+      }
+      $content  = ";\r\n";
+      $content .= "; ProcessMaker System Bootstrap Configuration\r\n";
+      $content .= ";\r\n";
+      file_put_contents($envFile, $content);
+      //@chmod($envFile, 0777);
+    }
+    else {
+      if (!is_writable($envFile)) {
+        throw new Exception('The enviroment ini file file is not writable. <br/>Please give write permission to file: /workflow/engine/config/env.ini');    
+      }
+    }
+
+    $sysConf = System::getSystemConfiguration($envFile);
+
+    $updatedConf = array();
+
+    if ($sysConf['default_lang'] != $httpData->default_lang) {
+      $updatedConf['default_lang'] = $sysConf['default_lang'] = $httpData->default_lang;
+      $updateRedirector = true;
+    }
+
+    if ($sysConf['default_skin'] != $httpData->default_skin) {
+      $updatedConf['default_skin'] = $sysConf['default_skin'] = $httpData->default_skin;
+      $updateRedirector = true;
+    }
+
+    if ($sysConf['time_zone'] != $httpData->time_zone) {
+      $updatedConf['time_zone'] = $httpData->time_zone;
+    }
+
+    $httpData->memory_limit .= 'M';
+    if ($sysConf['memory_limit'] != $httpData->memory_limit) {
+      $updatedConf['memory_limit'] = $httpData->memory_limit;
+    }
+
+  
+    if ($updateRedirector) {
+      if (!file_exists(PATH_HTML . 'index.html')) {
+        if (!is_writable(PATH_HTML)) {
+          throw new Exception('The public directory is not writable. <br/>Please give write permission to file: /workflow/public_html');
+        }
+      }
+      else {
+        if (!is_writable(PATH_HTML . 'index.html')) {
+          throw new Exception('The public index file is not writable. <br/>Please give write permission to file: /workflow/public_html/index.html');
+        }
+      }
+
+      System::updateIndexFile(array(
+        'lang' => $sysConf['default_lang'],
+        'skin' => $sysConf['default_skin']
+      ));
+
+      $restart = true;
+    }
+
+    G::update_php_ini($envFile, $updatedConf);
+
+    $this->success = true;
+    $this->restart = $restart;
+    $this->message = 'Saved Successfully';
+  }
+
   function uxUserUpdate($httpData)
   {
     require_once 'classes/model/Users.php';

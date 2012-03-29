@@ -118,8 +118,13 @@ var main = function(){
         items: items
       }),
       {
-        region: 'center', // a center region is ALWAYS required for border
-        contentEl: 'setup-frame'
+        region: 'center',
+        xtype  : 'iframepanel',
+        frameConfig:{
+          name : 'setup-frame',
+          id   : 'setup-frame'
+        },
+        deferredRender: false
       }
     ]
   });

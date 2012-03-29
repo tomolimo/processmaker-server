@@ -53,7 +53,7 @@ if (strtolower($G_SKIN_MAIN) != "classic") {
   if (is_dir($skinsBasePath . $G_SKIN_MAIN)) { // check this skin on core skins path
     $skinObject = $skinsBasePath . $G_SKIN_MAIN;
   }
-  else if (is_dir(PATH_CUSTOM_SKINS . $G_SKIN_MAIN)) { // check this skin on user skins path
+  else if (defined('PATH_CUSTOM_SKINS') && is_dir(PATH_CUSTOM_SKINS . $G_SKIN_MAIN)) { // check this skin on user skins path
     $skinObject = PATH_CUSTOM_SKINS . $G_SKIN_MAIN;
   }
   else { //Skin doesn't exist
@@ -203,6 +203,11 @@ switch (strtolower($G_SKIN)) {
       $menus = $oMenu->generateArrayForTemplate($G_MAIN_MENU, 'SelectedMenu', 'mainMenu', $G_MENU_SELECTED, $G_ID_MENU_SELECTED);
       $smarty->assign('menus', $menus);
 
+      if (substr(SYS_SKIN, 0, 2) == 'ux') {
+        $smarty->assign('exit_editor', 1);
+        $smarty->assign('exit_editor_label', G::loadTranslation('ID_CLOSE_EDITOR'));
+      }
+
       $oSubMenu = new Menu();
       $subMenus = $oSubMenu->generateArrayForTemplate($G_SUB_MENU, 'selectedSubMenu', 'subMenu', $G_SUB_MENU_SELECTED, $G_ID_SUB_MENU_SELECTED);
       $smarty->assign('subMenus', $subMenus);
@@ -273,6 +278,12 @@ switch (strtolower($G_SKIN)) {
     $smarty->display($layoutFileRaw['basename']);
     break;
   //end  case 'raw'
+
+  case "plain":
+    $oHeadPublisher = & headPublisher::getSingleton();
+    echo $oHeadPublisher->renderExtJs();
+    break;
+
     
   case 'extjs'://This is a special template but need main skin styles
     G::LoadClass('serverConfiguration');

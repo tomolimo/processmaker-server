@@ -57,7 +57,6 @@ if (($RBAC_Response=$RBAC->userCanAccess("PM_USERS"))!=1) return $RBAC_Response;
 
 $oHeadPublisher =& headPublisher::getSingleton();
 
-//$oHeadPublisher->usingExtJs('ux/Ext.ux.fileUploadField');
 $oHeadPublisher->addExtJsScript('departments/departmentList', false);    //adding a javascript file .js
 $oHeadPublisher->addContent('departments/departmentList'); //adding a html file  .html.
 

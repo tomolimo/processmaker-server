@@ -922,5 +922,134 @@ class System {
 
     return $config;
   }
+
+  function getSkingList()
+  {
+      //Create Skins custom folder if it doesn't exists
+    if(!is_dir(PATH_CUSTOM_SKINS)){
+      G::verifyPath(PATH_CUSTOM_SKINS, true);
+    }
+
+    //Get Skin Config files
+    $skinListArray = array();
+    $customSkins = glob(PATH_CUSTOM_SKINS . "*/config.xml");
+    $configurationFile = G::ExpandPath("skinEngine") . 'base' . PATH_SEP . 'config.xml';
+    array_unshift($customSkins, $configurationFile);
+
+    //Read and parse each Configuration File
+    foreach ($customSkins as $key => $configInformation) {
+      $folderId = str_replace(G::ExpandPath("skinEngine") . 'base', "", str_replace(PATH_CUSTOM_SKINS, "", str_replace("/config.xml", "", $configInformation)));
+      
+      if ($folderId == "") {
+        $folderId = "classic";
+      }
+
+      $xmlConfiguration = file_get_contents($configInformation);
+      $xmlConfigurationObj = G::xmlParser($xmlConfiguration);
+      
+      if (isset($xmlConfigurationObj->result['skinConfiguration'])) {
+        $skinInformationArray = $skinFilesArray = $xmlConfigurationObj->result['skinConfiguration']['__CONTENT__']['information']['__CONTENT__'];
+        $res = array();
+        $res['SKIN_FOLDER_ID'] = strtolower($folderId);
+        
+        foreach ($skinInformationArray as $keyInfo => $infoValue) {
+          $res['SKIN_' . strtoupper($keyInfo)] = $infoValue['__VALUE__'];
+        }
+        
+        $skinListArray['skins'][] = $res;
+      }
+    }
+
+    $skinListArray['currentSkin'] = SYS_SKIN;
+
+    return $skinListArray;
+  }
+
+  function getAllTimeZones()
+  {
+    $timezones = DateTimeZone::listAbbreviations();
+
+    $cities = array();
+    foreach( $timezones as $key => $zones )
+    {
+        foreach( $zones as $id => $zone )
+        {
+            /**
+             * Only get timezones explicitely not part of "Others".
+             * @see http://www.php.net/manual/en/timezones.others.php
+             */
+            if ( preg_match( '/^(America|Antartica|Arctic|Asia|Atlantic|Africa|Europe|Indian|Pacific)\//', $zone['timezone_id'] ) 
+                    && $zone['timezone_id']) {
+                $cities[$zone['timezone_id']][] = $key;
+            }
+        }
+    }
+
+    // For each city, have a comma separated list of all possible timezones for that city.
+    foreach( $cities as $key => $value )
+        $cities[$key] = join( ', ', $value);
+
+    // Only keep one city (the first and also most important) for each set of possibilities. 
+    $cities = array_unique( $cities );
+
+    // Sort by area/city name.
+    ksort( $cities );
+
+    return $cities;
+  }
+
+  public function getSystemConfiguration($iniFile='')
+  {
+    $config = array(
+      'debug' => 0,
+      'debug_sql' => 0,
+      'debug_time' => 0,
+      'debug_calendar' => 0,
+      'wsdl_cache' => 1,
+      'memory_limit' => '100M',
+      'time_zone' => 'America/La_Paz',
+      'memcached' => 0,
+      'memcached_server' =>'',
+      'default_skin' => 'classic',
+      'default_lang' => 'en'
+    );
+
+    if (empty($iniFile) || !file_exists($iniFile)) {
+      return $config;
+    }
+
+    /* Read the env.ini */
+    $ini_contents = parse_ini_file($iniFile, false);
+    
+    if ($ini_contents !== false) {
+      $config = array_merge($config, $ini_contents);
+    }
+    //echo '<pre>'; print_r($config); die;
+    return $config;
+  }
+
+  function updateIndexFile($conf)
+  {
+    if (!defined('PATH_TPL')) {
+      throw new Exception('PATH_TPL constant is not defined.');
+    }
+
+    if (!file_exists(PATH_HTML . 'index.html')) {
+      if (!is_writable(PATH_HTML)) {
+        throw new Exception('The public directory is not writable.');
+      }
+    }
+    else {
+      if (!is_writable(PATH_HTML . 'index.html')) {
+        throw new Exception('The public index file is not writable.');
+      }
+    }
+
+    $content = file_get_contents(PATH_TPL . 'index.html.tpl');
+    $content = str_replace('{lang}', $conf['lang'], $content);
+    $content = str_replace('{skin}', $conf['skin'], $content);
+
+    return (@file_put_contents(PATH_HTML . 'index.html', $content) !== false);
+  }
   
 }// end System class

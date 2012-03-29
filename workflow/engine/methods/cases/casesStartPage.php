@@ -12,8 +12,6 @@ $oHeadPublisher =& headPublisher::getSingleton();
 global $RBAC;
 switch($page){
     case "startCase":
-
-        $oHeadPublisher->usingExtJs('ux.treefilterx/Ext.ux.tree.TreeFilterX');
         $oHeadPublisher->addExtJsScript('cases/casesStartCase', true);    //adding a javascript file .js
 
         $oHeadPublisher->addContent( 'cases/casesStartCase'); //adding a html file  .html.
@@ -34,9 +32,6 @@ switch($page){
         $oHeadPublisher->assign('permitodelete'   ,$RBAC->userCanAccess('PM_FOLDER_DELETE')    );
         $oHeadPublisher->assign('permitoaddfile'  ,$RBAC->userCanAccess('PM_FOLDERS_ADD_FILE')  );
         $oHeadPublisher->assign('permitoaddfolder',$RBAC->userCanAccess('PM_FOLDERS_ADD_FOLDER'));
-
-        $oHeadPublisher->usingExtJs('ux.locationbar/Ext.ux.LocationBar');
-        $oHeadPublisher->usingExtJs('ux.statusbar/ext-statusbar');
 
         $oHeadPublisher->addExtJsScript('cases/casesDocuments', false);    //adding a javascript file .js
         $oHeadPublisher->addContent( 'cases/casesDocuments'); //adding a html file  .html.

@@ -54,7 +54,7 @@
   $conf  = new Configurations;
 
   $oHeadPublisher =& headPublisher::getSingleton();
-  $oHeadPublisher->usingExtJs('ux/miframe');
+
   $oHeadPublisher->addExtJsScript('app/main', true);
   $oHeadPublisher->addExtJsScript('cases/open', true);
   $oHeadPublisher->assign('FORMATS',$conf->getFormats());

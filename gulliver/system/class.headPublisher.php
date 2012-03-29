@@ -57,6 +57,9 @@ class headPublisher {
   /* variable array, to store the variables generated in PHP, and used in JavaScript */
   var $vars = array ();
 
+  /* tplVariable array, to store the variables for template power */
+  var $tplVariable = array ();
+
   var $leimnudInitString = '  var leimnud = new maborak();
   leimnud.make({
     zip:true,
@@ -280,23 +283,11 @@ class headPublisher {
     $head = '';
     $head .= "  <script type='text/javascript' src='/js/ext/ext-base.js'></script>\n";
     $head .= "  <script type='text/javascript' src='/js/ext/ext-all.js'></script>\n";
-//    $head .= "  <script type='text/javascript' src='/js/ext/ux/ux-all.js'></script>\n";
-/*
-    if (isset ( $this->extJsLibrary ) && is_array ( $this->extJsLibrary )) {
-      foreach ( $this->extJsLibrary as $file ) {
-        $head .= "  <script type='text/javascript' src='/js/ext/" . $file . ".js'></script>\n";
-      }
-    }
- */
+
+    // enabled for particular use
+    $head .= $this->getExtJsLibraries();
+
     $head .= "  <script type='text/javascript' src='/js/ext/draw2d.js'></script>\n";
-
-    //$head .= "  <script type='text/javascript' src='/js/ext/wz_jsgraphics.js'></script>\n";
-    //$head .= "  <script type='text/javascript' src='/js/ext/mootools.js'></script>\n";
-    //$head .= "  <script type='text/javascript' src='/js/ext/moocanvas.js'></script>\n";
-    //$head .= "  <script type='text/javascript' src='/js/ext/draw2d.js'></script>\n";
-    //$head .= "  <script type='text/javascript' src='/js/ext/pmos-common.js'></script>\n";
-    //$head .= "  <script type='text/javascript' src='/gulliver/loader?t=js-translations&locale=".SYS_LANG."'></script>\n";
-
     $head .= "  <script type='text/javascript' src='/js/ext/translation.".SYS_LANG.".js'></script>\n";
 
     if (! isset ( $this->extJsSkin ) || $this->extJsSkin == '') {
@@ -373,6 +364,17 @@ class headPublisher {
       $script .= "</script>\n";
     }
 
+    return $script;
+  }
+
+  function getExtJsLibraries()
+  {
+    $script = '';
+    if (isset ( $this->extJsLibrary ) && is_array ( $this->extJsLibrary )) {
+      foreach ( $this->extJsLibrary as $file ) {
+        $script .= "  <script type='text/javascript' src='/js/ext/" . $file . ".js'></script>\n";
+      }
+    }
     return $script;
   }
 
@@ -468,8 +470,13 @@ class headPublisher {
     $this->extJsScript [] = '/extjs/' . $cacheName;
 
     //hook for registered javascripts from plugins
-    $oPluginRegistry = & PMPluginRegistry::getSingleton();
-    $pluginJavascripts = $oPluginRegistry->getRegisteredJavascriptBy($filename);
+    if ( class_exists( 'PMPluginRegistry' ) ) {
+      $oPluginRegistry = & PMPluginRegistry::getSingleton();
+      $pluginJavascripts = $oPluginRegistry->getRegisteredJavascriptBy($filename);
+    }
+    else
+      $pluginJavascripts = array();
+
     if (count($pluginJavascripts) > 0) {
       if ($debug) {
         foreach ($pluginJavascripts as $pluginJsFile) {
@@ -599,6 +606,11 @@ class headPublisher {
 
         $template = new TemplatePower ( $sPath . $file . '.html' );
         $template->prepare ();
+
+        foreach ($this->getVars() as $k => $v) {
+          $template->assign($k, $v);
+        }
+
         $body .= $template->getOutputContent ();
       }
     }

@@ -169,7 +169,7 @@ class G
    * @access public
    * @return string
    */
-  /*public static*/ function &getVersion(  )
+  function &getVersion(  )
   {
     //majorVersion.minorVersion-SvnRevision
     return '3.0-1';
@@ -179,7 +179,7 @@ class G
    * getIpAddress
    * @return string $ip
    */
-  /*public static*/ function getIpAddress ()
+  function getIpAddress ()
   {
     if (getenv('HTTP_CLIENT_IP')) {
       $ip = getenv('HTTP_CLIENT_IP');
@@ -532,7 +532,7 @@ class G
 
   /***************  path functions *****************/
   
-  /*public static*/ function mk_dir( $strPath, $rights = 0777)
+  function mk_dir( $strPath, $rights = 0777)
   {
     $folder_path = array($strPath);
     $oldumask    = umask(0);
@@ -588,7 +588,7 @@ class G
    * @param  boolean $createPath   if true this function will create the path
    * @return boolean
    */
-  /*public static*/ function verifyPath( $strPath , $createPath = false )
+  function verifyPath( $strPath , $createPath = false )
   {
     $folder_path = strstr($strPath, '.') ? dirname($strPath) : $strPath;
 
@@ -910,15 +910,15 @@ class G
    * @param  string $urlLink
    * @return string
    */
-  function parseURI( $uri )
+  function parseURI($uri, $config = array())
   {
     $aRequestUri = explode('/', $uri );
+
     if ( substr ( $aRequestUri[1], 0, 3 ) == 'sys' ) {
       define( 'SYS_TEMP', substr ( $aRequestUri[1], 3 ) );
     }
     else {
       define("ENABLE_ENCRYPT", 'yes' );
-
       define( 'SYS_TEMP', $aRequestUri[1] );
 
       $plain = '/sys' . SYS_TEMP;
@@ -962,8 +962,9 @@ class G
     unset($toparse);
 
     array_shift($URI_VARS);
-    define("SYS_LANG", array_shift($URI_VARS));
-    define("SYS_SKIN", array_shift($URI_VARS));
+
+    $SYS_LANG = array_shift($URI_VARS);
+    $SYS_SKIN = array_shift($URI_VARS);
 
     $SYS_COLLECTION = array_shift($URI_VARS);
     $SYS_TARGET     = array_shift($URI_VARS);
@@ -973,8 +974,26 @@ class G
     while ( count ( $URI_VARS ) > 0 && $exit == 0) {
       $SYS_TARGET .= '/' . array_shift($URI_VARS);
     }
-    define('SYS_COLLECTION',   $SYS_COLLECTION    );
-    define('SYS_TARGET',       $SYS_TARGET    );
+
+    // if ($SYS_TARGET == 'login') {
+    //   if (isset($config['default_lang']) && !empty($config['default_lang'])) {
+    //     $SYS_LANG = $config['default_lang'];
+    //   }
+
+    //   if (isset($config['default_skin']) && !empty($config['default_skin'])) {
+    //     $SYS_SKIN = $config['default_skin'];
+    //   }
+    // }
+
+    /* Fix to prevent use uxs skin outside siplified interface, because that skin is not compatible with others interfaces*/
+    if ($SYS_SKIN == 'uxs' && $SYS_COLLECTION !== 'home') {
+      $SYS_SKIN = 'classic';
+    }
+
+    define("SYS_LANG", $SYS_LANG);
+    define("SYS_SKIN", $SYS_SKIN);
+    define('SYS_COLLECTION', $SYS_COLLECTION);
+    define('SYS_TARGET', $SYS_TARGET);
 
     if ( $SYS_COLLECTION == 'js2' ) {
       print "ERROR"; die;
@@ -1148,6 +1167,14 @@ $output = $outputHeader.$output;
   {
     header('Content-Type: text/javascript');
 
+  	if (!G::LoadTranslationObject($locale)) {
+      header('Cache-Control: no-cache');
+      header('Pragma: no-cache');
+      return;
+    }
+
+    global $translation;
+
     //if userAgent (BROWSER) is MSIE we need special headers to avoid MSIE behaivor.
     $userAgent = strtolower($_SERVER['HTTP_USER_AGENT']);
     if ( file_exists($filename) )
@@ -1174,11 +1201,7 @@ $output = $outputHeader.$output;
       }
     }
     
-    $output = '';
-    G::LoadTranslationObject($locale);
-    global $translation;
-    $output .= JSMin::minify ( 'var TRANSLATIONS = ' . G::json_encode($translation) . ';' );
-    return $output;
+    return JSMin::minify ( 'var TRANSLATIONS = ' . G::json_encode($translation) . ';' );
   }
 
   /**
@@ -1283,8 +1306,7 @@ $output = $outputHeader.$output;
             $checksum = G::getCheckSum(array(
               $pathJs . 'ext/wz_jsgraphics.js',
               $pathJs . 'ext/mootools.js',
-              $pathJs . 'ext/moocanvas.js',
-              $pathJs . 'ext/pmos-common.js'
+              $pathJs . 'ext/moocanvas.js'
             ));
             
             $cf = $cachePath . "ext-draw2d-cache.$checksum.js"; 
@@ -1300,7 +1322,6 @@ $output = $outputHeader.$output;
               $output .= JSMin::minify ( file_get_contents ( $pathJs . 'ext/mootools.js' ) );
               $output .= JSMin::minify ( file_get_contents ( $pathJs . 'ext/moocanvas.js' ) );
               $output .= file_get_contents ($pathJs . 'ext/draw2d.js'); //already minified
-              $output .= JSMin::minify ( file_get_contents ( $pathJs . 'ext/pmos-common.js' ) );
               file_put_contents($cf, $output);
               //error_log("draw2d.js writting ".$cf);
             }
@@ -1308,6 +1329,7 @@ $output = $outputHeader.$output;
           case 'ext-all.js' :
             $cachePath = PATH_C . 'ExtJs' . PATH_SEP;
             $checksum = G::getCheckSum(array(
+              $pathJs . 'ext/pmos-common.js',
               $pathJs . 'ext/ux/miframe.js',
               $pathJs . 'ext/ux.locationbar/Ext.ux.LocationBar.js',
               $pathJs . 'ext/ux.statusbar/ext-statusbar.js',
@@ -1324,6 +1346,7 @@ $output = $outputHeader.$output;
               
               $output .= file_get_contents ( $pathJs . 'ext/ext-all.js' ); //already minified
               $output .= file_get_contents ( $pathJs . 'ext/ux/ux-all.js' ); //already minified
+              $output .= JSMin::minify ( file_get_contents ( $pathJs . 'ext/pmos-common.js' ) );
               $output .= JSMin::minify ( file_get_contents ( $pathJs . 'ext/ux/miframe.js' ) );
               $output .= JSMin::minify ( file_get_contents ( $pathJs . 'ext/ux.locationbar/Ext.ux.LocationBar.js' ) );
               $output .= JSMin::minify ( file_get_contents ( $pathJs . 'ext/ux.statusbar/ext-statusbar.js' ) );
@@ -2192,6 +2215,8 @@ $output = $outputHeader.$output;
       $translation = $foreignTranslations;
     else
       $translation = array_merge($defaultTranslations, $foreignTranslations);
+    
+    return true;
   }
   
   /**
@@ -3273,6 +3298,138 @@ $output = $outputHeader.$output;
       return true;
     }
     return false;
+  }
+  
+  /**
+   * Send a mail using phpmailer
+   * this method use the global smtp server connection stored on Configuration table
+   * this information is retrieved by the PMFunction getEmailConfiguration()
+   *  
+   * @author Erik Amaru Ortiz <erik@colosa.com>
+   * @param string $from address that is sending the email
+   * @param string $fromName name of sender 
+   * @param mixed $address the possibles values are:
+   *        string
+   *        array('email1', 'some name <email2>')
+   *        array('to'=>array('email1', 'some name <email2>'), 'cc'=>array(...), 'bcc'=>array(...))
+   * @param string $subject contains the email subject
+   * @param string $body contains the email body (text plain or html) 
+   * @return mixed boolean or string : if the email was sent successfully returns true, otherwise returns a string within error message
+   */
+  function sendMail($from, $fromName, $address, $subject, $body)
+  {
+   // require_once "classes/class.pmFunctions.php";
+    G::LoadClass("pmFunctions");
+    G::LoadThirdParty('phpmailer', 'class.phpmailer');
+    $setup = getEmailConfiguration();
+    
+    if (count($setup) == 0 || !isset($setup['MESS_ENGINE']) || !isset($setup['MESS_SERVER']) 
+        || !isset($setup['MESS_ENABLED']) || !isset($setup['MESS_RAUTH']) || $setup['MESS_SERVER'] == '') {
+      return G::LoadTranslation('ID_EMAIL_ENGINE_IS_NOT_CONFIGURED');
+    }
+    
+    if (!$setup['MESS_ENABLED']) {
+      return G::LoadTranslation('ID_EMAIL_ENGINE_IS_NOT_ENABLED');
+    }
+    
+    $mail = new PHPMailer(true);
+    $mail->From = $from != '' && $from ? $from : $setup['MESS_ACCOUNT'];
+    $mail->FromName = $fromName;
+    $mail->Subject = $subject;
+    $mail->Body = $body;
+    $mail->IsHTML (true);
+    $mail->IsSMTP();
+    $mail->Host = $setup['MESS_SERVER'];    
+    $mail->Port = $setup['MESS_PORT'];
+    $mail->SMTPAuth = isset($setup['MESS_RAUTH']) && $setup['MESS_RAUTH'] ? true : false;
+    $mail->Username = $setup['MESS_ACCOUNT'];
+    $mail->Password = $setup['MESS_PASSWORD'];
+    $mail->SMTPSecure = $setup['SMTPSecure'];
+
+    $emailAddressList = G::envelopEmailAddresses($address);
+    
+    foreach ($emailAddressList['to'] as $emails) {
+      $mail->AddAddress($emails[0], $emails[1]);
+    }
+    foreach ($emailAddressList['cc'] as $emails) {
+      $mail->AddCC($emails[0], $emails[1]);
+    }
+    foreach ($emailAddressList['bcc'] as $emails) {
+       $mail->AddBCC($emails[0], $emails[1]);
+    }
+    
+    return $mail->Send() ? true : $mail->ErrorInfo;
+  }
+  
+  /**
+   * Envelope a emails collection from a string or array
+   * @author Erik Amaru Ortiz <erik@colosa.com> 
+   * @param mixed $address the possibles values are:
+   *        string
+   *        array('email1', 'some name <email2>')
+   *        array('to'=>array('email1', 'some name <email2>'), 'cc'=>array(...), 'bcc'=>array(...))
+   * @return array contains: 
+   *                 array(
+   *                    'to' => array('email@host.com', 'some name or empty string', array('email@host.com', '..'), ...),
+   *                    'cc' => array('email@host.com', 'some name or empty string', ...),
+   *                    'bcc' => array('email@host.com', 'some name or empty string', ...)
+   *                 )
+   */
+  function envelopEmailAddresses($address)
+  {
+    $emailAddressList = array();
+    $emailAddressList['to'] = array();
+    $emailAddressList['cc'] = array();
+    $emailAddressList['bcc'] = array();
+    $ereg = '/([\"\w\W\s]*\s*)?(<([\w\-\.]+@[\.-\w]+\.\w{2,3})+>)/';
+    
+    if (!is_array($address)) {
+      if (preg_match($ereg, $address, $match)) 
+        $emailAddressList['to'][] = array($match[3], $match[1]);
+      else
+        $emailAddressList['to'][] = array($address, '');
+    } 
+    else {
+      foreach ($address as $type => $emails) {
+        if (!is_array($emails)) {
+          if (preg_match($ereg, $emails, $match))
+            $emailAddressList['to'][] = array($match[3], $match[1]);
+          else
+            $emailAddressList['to'][] = array($emails, '');
+        }
+        else {
+          switch ($type) {
+            case 'cc':
+              foreach ($emails as $email) {
+                if (preg_match($ereg, $email, $match))
+                  $emailAddressList['cc'][] = array($match[3], $match[1]);
+                else
+                  $emailAddressList['cc'][] = array($email, '');
+              }
+              break;
+            case 'bcc':
+              foreach ($emails as $email) {
+                if (preg_match($ereg, $email, $match))
+                  $emailAddressList['bcc'][] = array($match[3], $match[1]);
+                else
+                  $emailAddressList['bcc'][] = array($email, '');
+              }
+              break;
+            case 'to':
+            default:
+              foreach ($emails as $email) {
+                if (preg_match($ereg, $email, $match))
+                  $emailAddressList['to'][] = array($match[3], $match[1]);
+                else
+                  $emailAddressList['to'][] = array($email, '');
+              }
+              break;
+          }
+        }
+      }
+    }
+    
+    return $emailAddressList;
   }
     
   /**
@@ -4705,6 +4862,74 @@ function getDirectorySize($path,$maxmtime=0)
       $contents = file_put_contents($inifile, sprintf("\n%s = $s\n", $variable, $value));
     }
   }
+
+  function write_php_ini($file, $array)
+  {
+    $res = array();
+    foreach($array as $key => $val)
+    {
+        if(is_array($val))
+        {
+            $res[] = "[$key]";
+            foreach($val as $skey => $sval) $res[] = "$skey = ".(is_numeric($sval) ? $sval : '"'.$sval.'"');
+        }
+        else $res[] = "$key = ".(is_numeric($val) ? $val : '"'.$val.'"');
+    }
+    file_put_contents($file, implode("\r\n", $res));
+  }
+
+
+  /**
+   * Update a ini file passing a array values, this finction don not remove the original commets
+   * @author Erik Amaru Ortiz <erik@colosa.com>
+   */
+  function update_php_ini($file, $array)
+  {
+    $iniLines = array();
+    $iniContent = array();
+    
+    if (file_exists($file)) {
+      $iniContent = file($file);
+    }
+
+    foreach ($iniContent as $line) {
+      $line = trim($line);
+      $lineParts = explode(';', $line);
+      $setting = parse_ini_string($lineParts[0]);
+
+      if (is_array($setting) && count($setting) > 0) {
+        list($key, ) = array_keys($setting);
+
+        if (isset($array[$key])) {          
+          $value = $array[$key];
+          $line = "$key = ".(is_numeric($value) ? $value : '"'.$value.'"');
+          $line .= isset($lineParts[1]) ? ' ;' . $lineParts[1] : '';
+          unset($array[$key]);
+          
+          $lastComment = array_pop($iniLines);
+          if (strpos($lastComment, "Setting $key") === false) {
+            $iniLines[] = $lastComment; 
+          }
+
+          $iniLines[] = ";Setting $key - Updated by System on " . date('D d M, Y H:i:s');
+        }
+      }
+      $iniLines[] = $line; 
+    }
+
+    // inserting new values
+    foreach ($array as $key => $value) {
+      $line = "$key = ".(is_numeric($value) ? $value : '"'.$value.'"');
+      $iniLines[] = '';
+      $iniLines[] = ";Setting $key - Created by System on " . date('D d M, Y H:i:s');
+      $iniLines[] = $line;
+    }
+
+    $content = implode("\r\n", $iniLines);
+
+    file_put_contents($file, $content);
+  }
+
 };
 
 /**

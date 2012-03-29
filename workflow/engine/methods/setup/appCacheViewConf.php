@@ -4,7 +4,6 @@
   
   $oHeadPublisher =& headPublisher::getSingleton();
   //$oHeadPublisher->setExtSkin( 'xtheme-blue');   
-  //$oHeadPublisher->usingExtJs('ux/Ext.ux.codepress');
   
   $oHeadPublisher->addExtJsScript('setup/appCacheViewConf', false);    //adding a javascript file .js
   $oHeadPublisher->addContent('setup/appCacheViewConf'); //adding a html file  .html.

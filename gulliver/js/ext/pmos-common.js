@@ -28,7 +28,10 @@ PMExtJSCommon = function() {
       msg: msg,
       buttons: Ext.MessageBox.YESNO,
       animEl: 'mb9',
-      fn: fn != undefined ? fn: function(){},
+      fn: function(btn, text){
+        if ( btn == 'yes' )
+          setTimeout(fn, 0);
+      },
       icon: Ext.MessageBox.QUESTION
     });
   }
@@ -132,7 +135,34 @@ PMExtJSCommon = function() {
       }),
       loadMask: true
     });
-  } 
+  }
+
+  this.cookie = {
+    create: function(name, value, days) {
+      if (days) {
+        var date = new Date();
+        date.setTime(date.getTime()+(days*24*60*60*1000));
+        var expires = "; expires="+date.toGMTString();
+      }else var expires = "";
+        document.cookie = name+"="+value+expires+"; path=/";
+    },
+
+    read: function(name) {
+      var nameEQ = name + "=";
+      var ca = document.cookie.split(';');
+      for(var i=0;i < ca.length;i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1,c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+      }
+      return null;
+    },
+
+    erase: function(name) {
+      Tools.createCookie(name,"",-1);
+    }
+  }
+
 } 
 var PMExt = new PMExtJSCommon();
 
@@ -159,7 +189,7 @@ Ext.msgBoxSlider = function(){
           msgCt = Ext.DomHelper.insertFirst(document.body, {id:'msg-div', style:'position:absolute'}, true);
       }
       //msgCt.alignTo(document, 'br-br');
-      msgCt.alignTo(document, "br-br", [ -20, -20]);
+      //msgCt.alignTo(document, "br-br", [-20, -20]);
       
       var s = String.format.apply(String, Array.prototype.slice.call(arguments, 1));
       var m = Ext.DomHelper.append(msgCt, {html:createBox(title, s)}, true);
@@ -171,7 +201,57 @@ Ext.msgBoxSlider = function(){
       Ext.get('x-box-mc-inner' ).setStyle('background-repeat', 'no-repeat');
       Ext.get('x-box-mc-inner' ).setStyle('padding-left', '35px');
       m.slideIn('t').pause(3).ghost("t", {remove:true});
+    },
+
+    msgTopCenter : function(type, title, format, time) {
+      if (typeof remove == 'undefined') 
+        remove : true;
+
+      if (typeof time == 'undefined') 
+        time =  3;
+
+      if( ! msgCt ) {
+          msgCt = Ext.DomHelper.insertFirst(document.body, {id:'msg-div', style:'position:absolute'}, true);
+      }
+      
+      var s = String.format.apply(String, Array.prototype.slice.call(arguments, 2));
+      var m = Ext.DomHelper.append(msgCt, {html:createBox(title, s)}, true);
+      m.setWidth(400 );
+      m.position(null, 5000 );
+      m.alignTo(document, 't-t');
+
+      switch(type) {
+        case 'alert':
+        case 'warning':
+        case 'tmp-warning':
+          image = '/images/alert.gif';
+          break;
+        case 'error':
+        case 'tmp-error':
+          image = '/images/error.png';
+          break;
+        case 'tmp-info':
+        case 'info':
+          image = '/images/info.png';
+          break;
+        case 'success':  
+        case 'ok':
+          image = '/images/select-icon.png';
+          break;
+        default:
+          image = '';
+      }
+
+      if (image != '') {
+        Ext.get('x-box-mc-inner' ).setStyle('background-image', 'url("'+image+'")');
+      }
+      Ext.get('x-box-mc-inner' ).setStyle('background-position', '5px 10px');
+      Ext.get('x-box-mc-inner' ).setStyle('background-repeat', 'no-repeat');
+      Ext.get('x-box-mc-inner' ).setStyle('padding-left', '45px');
+
+      m.slideIn('t').pause(time).ghost("t", {remove:true});
     }
+
   };
 }();
 

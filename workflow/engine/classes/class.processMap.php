@@ -3133,6 +3133,7 @@ class processMap {
    */
   function listNoProcessesUser($sProcessUID) {
     G::LoadSystem('rbac');
+    $memcache = & PMmemcached::getSingleton(SYS_SYS);
 
     $oCriteria = new Criteria('workflow');
     $oCriteria->addSelectColumn(ProcessUserPeer::USR_UID);
@@ -3156,7 +3157,11 @@ class processMap {
     $aUIDS = array();
     $oRBAC = RBAC::getSingleton ();
     while ($aRow = $oDataset->getRow()) {
-      $oRBAC->loadUserRolePermission($oRBAC->sSystem, $aRow ['USR_UID']);
+      $memKey = 'rbacSession' . session_id();
+      if ( ($oRBAC->aUserInfo = $memcache->get($memKey)) === false ) {
+        $oRBAC->loadUserRolePermission($oRBAC->sSystem, $aRow ['USR_UID']);
+        $memcache->set( $memKey, $oRBAC->aUserInfo, PMmemcached::EIGHT_HOURS );
+      }
       $aPermissions = $oRBAC->aUserInfo [$oRBAC->sSystem] ['PERMISSIONS'];
       $bInclude = false;
       foreach ($aPermissions as $aPermission) {
@@ -5730,6 +5735,7 @@ class processMap {
    */
   function listExtNoProcessesUser($sProcessUID) {
     G::LoadSystem('rbac');
+    $memcache = & PMmemcached::getSingleton(SYS_SYS);
 
     $oCriteria = new Criteria('workflow');
     $oCriteria->addSelectColumn(ProcessUserPeer::USR_UID);
@@ -5753,7 +5759,11 @@ class processMap {
     $aUIDS = array();
     $oRBAC = RBAC::getSingleton ();
     while ($aRow = $oDataset->getRow()) {
-      $oRBAC->loadUserRolePermission($oRBAC->sSystem, $aRow ['USR_UID']);
+      $memKey = 'rbacSession' . session_id();
+      if ( ($oRBAC->aUserInfo = $memcache->get($memKey)) === false ) {
+        $oRBAC->loadUserRolePermission($oRBAC->sSystem, $aRow ['USR_UID']);
+        $memcache->set( $memKey, $oRBAC->aUserInfo, PMmemcached::EIGHT_HOURS );
+      }
       $aPermissions = $oRBAC->aUserInfo [$oRBAC->sSystem] ['PERMISSIONS'];
       $bInclude = false;
       foreach ($aPermissions as $aPermission) {

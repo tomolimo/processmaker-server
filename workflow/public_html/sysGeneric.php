@@ -58,6 +58,56 @@
   define('PATH_TRUNK',    $pathTrunk  );
   define('PATH_OUTTRUNK', $pathOutTrunk );
 
+//////////////////////////// start, from paths.php
+  
+  /* Default configuration values (do not change these, use env.ini) */
+  // $default_config = array(
+  //   'debug' => 0,
+  //   'debug_sql' => 0,
+  //   'debug_time' => 0,
+  //   'debug_calendar' => 0,
+  //   'wsdl_cache' => 1,
+  //   'memory_limit' => '100M',
+  //   'time_zone' => 'America/La_Paz',
+  //   'memcached' => 0,
+  //   'memcached_server' => ''
+  // );
+
+  // /* Read the env.ini */
+  // $env_file = realpath($pathhome . PATH_SEP . 'engine' . PATH_SEP . 'config' . PATH_SEP . 'env.ini');
+  // $config = $default_config;
+
+  // if ($env_file !== false && file_exists($env_file)) {
+  //   $ini_contents = parse_ini_file($env_file, false);
+  //   if ($ini_contents !== false)
+  //     $config = array_merge($default_config, $ini_contents);
+  // }
+  //var_dump($pathhome . 'engine' . PATH_SEP . 'classes' . PATH_SEP . 'class.system.php'); die;
+  require_once $pathhome  . 'engine' . PATH_SEP . 'classes' . PATH_SEP . 'class.system.php';
+  $config = System::getSystemConfiguration($pathhome . 'engine' . PATH_SEP . 'config' . PATH_SEP . 'env.ini');
+
+//*** Do not change any of these settings directly, use env.ini instead
+  ini_set('display_errors','On');
+
+  ini_set('short_open_tag', 'on');
+  ini_set('asp_tags', 'on');
+  // The register_globals feature has been DEPRECATED as of PHP 5.3.0. default value Off.
+  // ini_set('register_globals', 'off');
+  ini_set('default_charset', "UTF-8");
+  $e_all = defined('E_DEPRECATED') ? E_ALL ^ E_DEPRECATED : E_ALL;
+  ini_set('error_reporting', ($config['debug'] ? $e_all : $e_all ^ E_NOTICE) );
+  ini_set('memory_limit', $config['memory_limit']);
+  ini_set('soap.wsdl_cache_enabled', $config['wsdl_cache']);
+  
+  define ('DEBUG_SQL_LOG', $config['debug_sql'] );
+  define ('DEBUG_TIME_LOG', $config['debug_time'] );
+  define ('DEBUG_CALENDAR_LOG', $config['debug_calendar'] );
+  define ('MEMCACHED_ENABLED',  $config['memcached']);
+  define ('MEMCACHED_SERVER',   $config['memcached_server']);
+  
+  define ('TIME_ZONE', $config['time_zone']);
+//////////////////////////// end, from paths.php
+
 
 //************* Including these files we get the PM paths and definitions (that should be just one file ***********
   require_once ( $pathhome . PATH_SEP . 'engine' . PATH_SEP . 'config' . PATH_SEP . 'paths.php' );
@@ -103,6 +153,13 @@
   $oHeadPublisher->addMaborakFile( PATH_CORE          . 'js' . PATH_SEP . 'processmap/core/processmap.js', true );
   $oHeadPublisher->addMaborakFile( PATH_CORE          . 'js' . PATH_SEP . 'appFolder/core/appFolderList.js', true );
   $oHeadPublisher->addMaborakFile( PATH_THIRDPARTY    . 'htmlarea/editor.js', true );
+
+  //erik: if it is a installation instance
+  if(!defined('PATH_C')) {
+    $tmpDir = G::getSysTemDir();
+    define('PATH_C', $tmpDir . ((substr($tmpDir, -1) == PATH_SEP)? '': PATH_SEP));
+    define('PATH_LANGUAGECONT', PATH_HOME . 'engine/content/languages/' );
+  }
 
 //************ defining Virtual URLs ****************/
   $virtualURITable = array();
@@ -214,7 +271,7 @@
         die;
         break;
       case 'errorFile':
-        header ("location: /errors/error404.php");
+        header ("location: /errors/error404.php?url=" . urlencode($_SERVER['REQUEST_URI']));
         if ( DEBUG_TIME_LOG ) logTimeByPage(); //log this page
         die;
         break;
@@ -228,7 +285,8 @@
 
 //************** the request correspond to valid php page, now parse the URI  **************
 
-  G::parseURI ( getenv( "REQUEST_URI" ) );
+  G::parseURI(getenv("REQUEST_URI" ), $config);
+
   $oHeadPublisher->addMaborakFile( PATH_GULLIVER_HOME . 'js' . PATH_SEP . "widgets/jscalendar/lang/calendar-" . SYS_LANG . ".js");
   define( 'SYS_URI' , '/sys' .  SYS_TEMP . '/' . SYS_LANG . '/' . SYS_SKIN . '/' );
 
@@ -265,16 +323,32 @@
 
 //************** Installer, redirect to install if we don't have a valid shared data folder ***************/
   if ( !defined('PATH_DATA') || !file_exists(PATH_DATA)) {
-    if ( (SYS_TARGET==='installServer')) {
-      $phpFile = G::ExpandPath('methods') ."install/installServer.php";
-      require_once($phpFile);
-      die();
+
+    /*new installer, extjs based*/
+
+    define('PATH_DATA', PATH_C);
+    require_once ( PATH_CONTROLLERS . 'installer.php' );
+    $controller = 'Installer';
+
+    //if the method name is empty set default to index method
+    if (strpos(SYS_TARGET, '/') !== false)
+      list($controller, $controllerAction) = explode('/', SYS_TARGET);
+    else
+      $controllerAction = SYS_TARGET;
+
+    $controllerAction = ($controllerAction != '' && $controllerAction != 'login')? $controllerAction: 'index';
+
+    //create the installer controller and call its method
+    if( is_callable(Array('Installer', $controllerAction)) ) {
+      $installer = new $controller();
+      $installer->setHttpRequestData($_REQUEST);
+      $installer->call($controllerAction);
     }
     else {
-      $phpFile = G::ExpandPath('methods') ."install/install.php";
-      require_once($phpFile);
-      die();
+      $_SESSION['phpFileNotFound'] = $_SERVER['REQUEST_URI'];
+      header ("location: /errors/error404.php?url=" . urlencode($_SERVER['REQUEST_URI']));
     }
+    die;
   }
 
 //  ************* Load Language Translation *****************
@@ -303,15 +377,13 @@
       set_include_path(get_include_path() . PATH_SEPARATOR . PATH_WORKSPACE);
     }
     else {
-      $aMessage['MESSAGE'] = G::LoadTranslation ('ID_NOT_WORKSPACE');
-      $G_PUBLISH          = new Publisher;
-      $G_PUBLISH->AddContent('xmlform', 'xmlform', 'login/showMessage', '', $aMessage );
-      G::RenderPage( 'publish' );
+      G::SendTemporalMessage ('ID_NOT_WORKSPACE', "error");
+      G::header('location: /sys/' . SYS_LANG . '/' . SYS_SKIN . '/main/sysLogin?errno=2');
       die;
     }
   }
   else {  //when we are in global pages, outside any valid workspace
-    if ((SYS_TARGET==='sysLoginVerify') || (SYS_TARGET==='sysLogin') || (SYS_TARGET==='newSite')) {
+    if (SYS_TARGET==='newSite') {
       $phpFile = G::ExpandPath('methods') . SYS_COLLECTION . "/" . SYS_TARGET.'.php';
       require_once($phpFile);
       die();
@@ -321,7 +393,22 @@
           require_once( PATH_METHODS . "login/dbInfo.php" ) ;
       }
       else{
-        require_once( PATH_METHODS . "login/sysLogin.php" ) ;
+
+        if (substr(SYS_SKIN, 0, 2) === 'ux' && SYS_TARGET != 'sysLoginVerify') { // new ux sysLogin - extjs based form
+          require_once PATH_CONTROLLERS . 'main.php';
+          $controllerClass  = 'Main';
+          $controllerAction = SYS_TARGET == 'sysLoginVerify' ? SYS_TARGET : 'sysLogin';
+          //if the method exists
+          if( is_callable(Array($controllerClass, $controllerAction)) ) {
+            $controller = new $controllerClass();
+            $controller->setHttpRequestData($_REQUEST);
+            $controller->call($controllerAction);
+          }
+        }
+        else { // classic sysLogin interface
+          require_once( PATH_METHODS . "login/sysLogin.php" ) ;
+          die();
+        }
       }
       if ( DEBUG_TIME_LOG ) logTimeByPage(); //log this page
       die();
@@ -486,7 +573,7 @@
     if ( ! $isControllerCall && ! file_exists( $phpFile ) ) {
         $_SESSION['phpFileNotFound'] = $_SERVER['REQUEST_URI'];
         print $phpFile;
-        header ("location: /errors/error404.php");
+        header ("location: /errors/error404.php?url=" . urlencode($_SERVER['REQUEST_URI']));
         die;
     }
   }
@@ -494,8 +581,9 @@
   //redirect to login, if user changed the workspace in the URL
   if( ! $avoidChangedWorkspaceValidation && isset( $_SESSION['WORKSPACE'] ) && $_SESSION['WORKSPACE'] != SYS_SYS) {
     $_SESSION['WORKSPACE'] = SYS_SYS;
+    
     G::SendTemporalMessage ('ID_USER_HAVENT_RIGHTS_SYSTEM', "error");
-    header ( 'Location: /sys' . SYS_SYS . '/' . SYS_LANG . '/' . SYS_SKIN . '/login/login' );
+    header ( 'Location: /sys' . SYS_SYS . '/' . SYS_LANG . '/' . SYS_SKIN . '/main/login' );
     die;
   }
 
@@ -516,7 +604,12 @@
 
     if((isset( $_SESSION['USER_LOGGED'] ))&&(!(isset($_GET['sid'])))) {
       $RBAC->initRBAC();
-      $RBAC->loadUserRolePermission( $RBAC->sSystem, $_SESSION['USER_LOGGED'] , PATH_DATA, session_id());
+      //using optimization with memcache, the user data will be in memcache 8 hours, or until session id goes invalid
+      $memKey = 'rbacSession' . session_id();
+      if ( ($RBAC->aUserInfo = $memcache->get($memKey)) === false ) {
+        $RBAC->loadUserRolePermission( $RBAC->sSystem, $_SESSION['USER_LOGGED'] );
+        $memcache->set( $memKey, $RBAC->aUserInfo, PMmemcached::EIGHT_HOURS );
+      }
     }
     else {
       // this is the blank list to allow execute scripts with no login (without session started)
@@ -539,6 +632,7 @@
 
       $noLoginFolders[] = 'services';
       $noLoginFolders[] = 'tracker';
+      $noLoginFolders[] = 'installer';
 
       //This sentence is used when you lost the Session
       if ( !in_array(SYS_TARGET, $noLoginFiles) &&  !in_array(SYS_COLLECTION, $noLoginFolders) && $bWE != true && $collectionPlugin != 'services') {
@@ -556,6 +650,8 @@
             $bRedirect = false;
             $RBAC->initRBAC();
             $RBAC->loadUserRolePermission( $RBAC->sSystem, $_SESSION['USER_LOGGED'] );
+            $memKey = 'rbacSession' . session_id();
+            $memcache->set( $memKey, $RBAC->aUserInfo, PMmemcached::EIGHT_HOURS );
           }
         }
         if ($bRedirect) {
@@ -564,14 +660,19 @@
             $loginUrl = 'home/login';
           }
           else {
-            $loginUrl = 'login/login';
+            $loginUrl = 'main/login';
           }
           
           if (empty($_POST)) {
             header('location: ' . SYS_URI . $loginUrl . '?u=' . urlencode($_SERVER['REQUEST_URI']));
           }
           else {
-            header('location: ' . SYS_URI . $loginUrl);
+            if ( $isControllerCall ) {
+      		  header("HTTP/1.0 302 session lost in controller");
+            }
+            else {
+              header('location: ' . SYS_URI . $loginUrl);
+            }
           }
           die();
         }

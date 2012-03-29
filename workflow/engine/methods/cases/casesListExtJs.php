@@ -115,7 +115,6 @@
   G::LoadClass('configuration');
   $c = new Configurations();
 
-  $oHeadPublisher->usingExtJs('ux/GridRowActions');
   //$oHeadPublisher->addExtJsScript('cases/caseUtils', true);
   $oHeadPublisher->addExtJsScript('app/main', true);
   $oHeadPublisher->addExtJsScript('cases/casesList', false );    //adding a javascript file .js

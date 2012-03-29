@@ -11,6 +11,44 @@ class Admin extends Controller
   
   public $debug = true;
 
+  public function system()
+  {
+    require_once PATH_CONTROLLERS . 'main.php';
+    G::loadClass('system');
+    $skinsList = System::getSkingList();
+    $skins = array();
+    $timeZonesList = System::getAllTimeZones();
+    $timeZonesList = array_keys($timeZonesList);
+    $mainController = new Main();
+    $languagesList = $mainController->getLanguagesList();
+    $sysConf = System::getSystemConfiguration(PATH_CONFIG . 'env.ini');
+
+    foreach ($skinsList['skins'] as $skin) {
+      $skins[] = array($skin['SKIN_FOLDER_ID'], $skin['SKIN_NAME']);
+    }
+    $skins[] = array('uxmodern', 'uxmodern');
+
+    foreach ($timeZonesList as $tz) {
+      $timeZones[] = array($tz, $tz);
+    }
+    
+    
+
+    $this->includeExtJS('admin/system');
+    //G::LoadClass('configuration');
+
+    // $c = new Configurations();
+    // $configPage = $c->getConfiguration('usersList', 'pageSize','',$_SESSION['USER_LOGGED']);
+    // $Config['pageSize'] = isset($configPage['pageSize']) ? $configPage['pageSize'] : 20;
+
+    $this->setJSVar('skinsList', $skins);
+    $this->setJSVar('languagesList', $languagesList);
+    $this->setJSVar('timeZonesList', $timeZones);
+    $this->setJSVar('sysConf', $sysConf);
+    
+    G::RenderPage('publish', 'extJs');
+  }
+
   public function uxList()
   {
     require_once PATH_CONTROLLERS . 'adminProxy.php';

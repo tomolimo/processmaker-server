@@ -33,7 +33,6 @@ $Config['pageSize'] = isset($configPage['pageSize']) ? $configPage['pageSize'] :
 
 $oHeadPublisher =& headPublisher::getSingleton();
 
-//$oHeadPublisher->usingExtJs('ux/Ext.ux.fileUploadField');
 $oHeadPublisher->addExtJsScript('cases/casesSchedulerLog', false);    //adding a javascript file .js
 $oHeadPublisher->addContent('cases/casesSchedulerLog'); //adding a html file  .html.
 

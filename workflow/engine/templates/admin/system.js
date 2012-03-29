@@ -1,0 +1,185 @@
+Ext.onReady(function(){
+  
+  var cmbSkins = new Ext.form.ComboBox({
+    fieldLabel : _('ID_DEFAULT_SKIN'),
+    hiddenName : 'default_skin',
+    store         : new Ext.data.ArrayStore({
+      fields: ['ID', 'NAME'],
+      data : skinsList
+    }),
+    mode        : 'local',
+    emptyText   : _('ID_SELECT'),
+    valueField     : 'ID',
+    displayField   : 'NAME', 
+    selectOnFocus  : true,
+    editable       : true,
+    triggerAction: 'all',
+    allowBlank     : false,
+    forceSelection: true,
+    listeners:{
+      select: function(){
+        changeSettings();
+      },
+      afterrender: function(){
+        i = cmbSkins.store.findExact('ID', sysConf.default_skin, 0);
+        if (i == -1) return;
+        cmbSkins.setValue(cmbSkins.store.getAt(i).data.ID);
+        cmbSkins.setRawValue(cmbSkins.store.getAt(i).data.NAME);
+      }
+    }
+  });
+
+  var cmbLang = new Ext.form.ComboBox({
+    fieldLabel : _('ID_DEFAULT_LANG'),
+    hiddenName : 'default_lang',
+    store         : new Ext.data.ArrayStore({
+      fields: ['ID', 'NAME'],
+      data : languagesList
+    }),
+    mode        : 'local',
+    emptyText   : _('ID_SELECT'),
+    valueField     : 'ID',
+    displayField   : 'NAME', 
+    selectOnFocus  : true,
+    editable       : true,
+    triggerAction: 'all',
+    forceSelection: true,
+    allowBlank     : false,
+    listeners:{
+      select: function(){
+        changeSettings();
+      },
+      afterrender: function(){
+        i = cmbLang.store.findExact('ID', sysConf.default_lang, 0);
+        if (i == -1) return;
+        cmbLang.setValue(cmbLang.store.getAt(i).data.ID);
+        cmbLang.setRawValue(cmbLang.store.getAt(i).data.NAME);
+      }
+    }
+  });
+
+  var cmbTimeZone = new Ext.form.ComboBox({
+    fieldLabel : _('ID_TIME_ZONE'),
+    hiddenName : 'time_zone',
+    store         : new Ext.data.ArrayStore({
+      fields: ['ID', 'NAME'],
+      data : timeZonesList
+    }),
+    mode        : 'local',
+    emptyText   : _('ID_SELECT'),
+    valueField     : 'ID',
+    displayField   : 'NAME', 
+    selectOnFocus  : true,
+    editable       : true,
+    triggerAction: 'all',
+    forceSelection : true,
+    allowBlank     : false,
+    listeners:{
+      select: function(){
+        changeSettings();
+      }
+    }
+  });
+  
+  cmbTimeZone.setValue(sysConf.time_zone);
+
+  saveButton = new Ext.Action({
+    text : _('ID_SAVE_SETTINGS'),
+    disabled : true,
+    handler : saveSettings
+  });
+  
+  xfields = new Ext.form.FieldSet({
+    title: _('ID_SYSTEM_SETTINGS'),
+    items : [
+      cmbSkins,
+      cmbLang,
+      cmbTimeZone,
+      {
+        xtype: 'numberfield',
+        id        : 'memory_limit',
+        name      : 'memory_limit',
+        fieldLabel: _('ID_MEMORY_LIMIT') + '(MB) ',
+        allowBlank: false,
+        value: sysConf.memory_limit,
+        listeners:{
+          change: function(){
+            changeSettings();
+          }
+        }
+      }/*,
+      {
+        name: 'forgotPasswd',
+        xtype: 'checkbox',
+        checked: false, //forgotPasswd,
+        fieldLabel: _('ID_ENABLE_FOTGOT_PASSWORD'),
+        listeners:{
+          check:function(){
+            changeSettings();
+          }
+        }
+      }*/
+    ],
+    buttons : [saveButton]
+  });
+
+  
+  var frm = new Ext.FormPanel({
+    title: '&nbsp',
+    id:'frm',
+    labelWidth: 170,
+    width:460,
+    labelAlign:'right',
+    autoScroll: true,
+    bodyStyle:'padding:2px',
+    waitMsgTarget : true,
+    frame: true,
+    
+    defaults: {
+      allowBlank: false,
+      msgTarget: 'side',
+      align:'center'
+    },
+    items:[ xfields ]
+   
+  });
+  //render to process-panel
+  frm.render(document.body);
+
+}); //end onready()
+
+function saveSettings() 
+{
+  Ext.getCmp('frm').getForm().submit( {  
+    url : '../adminProxy/saveSystemConf',
+    waitMsg : _('ID_SAVING_PROCESS'),
+    timeout : 36000,
+    success : function(obj, resp) {
+      //nothing to do
+      response = Ext.decode(resp.response.responseText);
+      parent.PMExt.notify(_('ID_INFO'),_('ID_SAVED_SUCCESSFULLY'));
+
+      if(response.restart) {
+        PMExt.confirm(_('ID_CONFIRM'), 'To take effect the changes you need re login.<br>Redirect now?', function(){
+          
+          if (typeof window.parent.parent != 'undefined')
+            window.parent.parent.location.href = '/';
+          if (typeof window.parent != 'undefined')
+            window.parent.location.href = '/';
+          else
+            window.location.href = '/';
+        });
+      }
+      else
+        saveButton.disable();
+    },
+    failure: function(obj, resp) {
+      PMExt.error( _('ID_ERROR'), resp.result.message);
+    }    
+  });
+}
+
+changeSettings = function()
+{
+  saveButton.enable();
+}

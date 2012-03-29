@@ -55,7 +55,6 @@ $Config['pageSize'] = isset($configPage['pageSize']) ? $configPage['pageSize'] :
 
 $oHeadPublisher =& headPublisher::getSingleton();
 
-//$oHeadPublisher->usingExtJs('ux/Ext.ux.fileUploadField');
 $oHeadPublisher->addExtJsScript('roles/rolesList', false);    //adding a javascript file .js
 $oHeadPublisher->addContent('roles/rolesList'); //adding a html file  .html.
 $oHeadPublisher->assign('FORMATS',$c->getFormats());

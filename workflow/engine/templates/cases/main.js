@@ -21,24 +21,24 @@ var NOTIFIER_FLAG = false;
 var result;
 var _action = '';
 var _CASE_TITLE;
-
-new Ext.KeyMap(document, {
-  key: Ext.EventObject.F5,
-  fn: function(keycode, e) {
-    if (! e.ctrlKey) {
-      if (Ext.isIE) {
-        e.browserEvent.keyCode = 8;
-      }
-      e.stopEvent();
-      updateCasesTree();
-    } 
-    else 
-      Ext.Msg.alert('Refresh', 'You clicked: CTRL-F5');
-  }
-});
  
 Ext.onReady(function(){
+  new Ext.KeyMap(document, {
+    key: Ext.EventObject.F5,
+    fn: function(keycode, e) {
+      if (! e.ctrlKey) {
+        if (Ext.isIE) {
+          e.browserEvent.keyCode = 8;
+        }
+        e.stopEvent();
+        updateCasesTree();
+      } 
+      else 
+        Ext.Msg.alert('Refresh', 'You clicked: CTRL-F5');
+    }
+  });
 
+  Ext.QuickTips.init();
   Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
 
   var resetGrid = function() {  
@@ -158,13 +158,16 @@ Ext.onReady(function(){
 
   });
   
+  //center iframe panel
   centerPanel = {
-    region: 'center', // a center region is ALWAYS required for border layout
-    xtype:'panel',
-    deferredRender: false,
-    contentEl:'casesSubFrame'
+    region : 'center',
+    xtype  : 'iframepanel',
+    frameConfig:{
+      name : 'casesSubFrame',
+      id   : 'casesSubFrame'
+    },
+    deferredRender: false
   }
-
 
   /**
    * Menu Panel
@@ -326,8 +329,6 @@ Ext.onReady(function(){
   /**
    * Triggers Panel
    */
-  Ext.QuickTips.init();
-
   var xg = Ext.grid;
   
   var reader = new Ext.data.JsonReader(

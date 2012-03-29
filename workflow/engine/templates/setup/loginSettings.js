@@ -1,7 +1,7 @@
 Ext.onReady(function(){
   
   var cmbLanguages = new Ext.form.ComboBox({
-      fieldLabel : TRANSLATIONS.ID_CACHE_LANGUAGE, // 'Language'
+      fieldLabel : _('ID_DEFAULT_LANGUAGE'),
       hiddenName : 'lang',
       store : new Ext.data.Store( {
         proxy : new Ext.data.HttpProxy( {
@@ -21,7 +21,9 @@ Ext.onReady(function(){
       editable       : false,
       allowBlank     : false,
       listeners:{
-        select: function(){ChangeSettings('1');}
+        select: function(){
+          changeSettings();
+        }
       }
     });
   
@@ -33,31 +35,42 @@ Ext.onReady(function(){
     handler : saveSettings
   });
   
-  loginFields = new Ext.form.FieldSet({   
+  loginFields = new Ext.form.FieldSet({
     title: _('ID_LOGIN_SETTINGS'),
     items : [
-      cmbLanguages,    
-      {        
+      cmbLanguages,
+      {
+        name: 'forgotPasswd',
         xtype: 'checkbox',
-        checked: currentOption,
-        name: 'acceptRP',
+        checked: forgotPasswd,
         fieldLabel: _('ID_ENABLE_FOTGOT_PASSWORD'),
-        id: 'ch_ii',
         listeners:{
-          check:function(){ChangeSettings('2');}
+          check:function(){
+            changeSettings();
+          }
         }
-       
+      },
+      {
+        name: 'virtualKeyboad',
+        xtype: 'checkbox',
+        checked: virtualKeyboad,
+        fieldLabel: _('ID_ENABLE_VIRTUAL_KEYBOARD'),
+        listeners:{
+          check:function(){
+            changeSettings();
+          }
+        }
       }
     ],
-    buttons : [saveButton]   
+    buttons : [saveButton]
   });
 
   
-  var frm = new Ext.FormPanel( {
+  var frm = new Ext.FormPanel({
     title: '&nbsp',
     id:'frm',
     labelWidth: 150,
-    width:400,
+    width:460,
     labelAlign:'right',
     autoScroll: true,
     bodyStyle:'padding:2px',
@@ -74,9 +87,11 @@ Ext.onReady(function(){
   });
   //render to process-panel
   frm.render(document.body);
-});
 
-function saveSettings() {  
+}); //end onready()
+
+function saveSettings() 
+{
   Ext.getCmp('frm').getForm().submit( {  
     url : 'loginSettingsAjax?request=saveSettings',
     waitMsg : _('ID_SAVING_PROCESS'),
@@ -84,10 +99,7 @@ function saveSettings() {
     success : function(obj, resp) {
       //nothing to do
       response = Ext.decode(resp.response.responseText);
-      if (response.enable)     
-        parent.PMExt.notify(_('ID_LOGIN_SETTINGS'),_('ID_ENABLE_FORGOT_PASSWORD'));
-      else
-        parent.PMExt.notify(_('ID_LOGIN_SETTINGS'),_('ID_DISABLE_FORGOT_PASSWORD'));
+      parent.PMExt.notify(_('ID_INFO'),_('ID_SAVED_SUCCESSFULLY'));
       saveButton.disable();
     },
     failure: function(obj, resp) {
@@ -96,6 +108,7 @@ function saveSettings() {
   });
 }
 
-ChangeSettings = function(iType){ 
+changeSettings = function()
+{
   saveButton.enable();
 }

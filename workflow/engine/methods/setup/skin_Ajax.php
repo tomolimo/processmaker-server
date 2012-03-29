@@ -41,46 +41,10 @@ function updatePageSize() {
 }
 
 function skinList() {
-  //Create Skins custom folder if it doesn't exists
-  if(!is_dir(PATH_CUSTOM_SKINS)){
-    G::verifyPath(PATH_CUSTOM_SKINS, true);
-  }
+  G::loadClass('system');
 
-  //Get Skin Config files
-  $skinListArray = array();
-  $customSkins = glob(PATH_CUSTOM_SKINS . "*/config.xml");
-  $configurationFile = G::ExpandPath("skinEngine") . 'base' . PATH_SEP . 'config.xml';
-  array_unshift($customSkins, $configurationFile);
-
-  //Read and parse each Configuration File
-  foreach ($customSkins as $key => $configInformation) {
-
-    $folderId = str_replace(G::ExpandPath("skinEngine") . 'base', "", str_replace(PATH_CUSTOM_SKINS, "", str_replace("/config.xml", "", $configInformation)));
-    if ($folderId == "")
-      $folderId = "classic";
-    $xmlConfiguration = file_get_contents($configInformation);
-    $xmlConfigurationObj = G::xmlParser($xmlConfiguration);
-    if (isset($xmlConfigurationObj->result['skinConfiguration'])) {
-      $skinInformationArray = $skinFilesArray = $xmlConfigurationObj->result['skinConfiguration']['__CONTENT__']['information']['__CONTENT__'];
-
-
-      $menuOption = array();
-
-      $res = array();
-      $res['SKIN_FOLDER_ID'] = strtolower($folderId);
-      foreach ($skinInformationArray as $keyInfo => $infoValue) {
-        $res['SKIN_' . strtoupper($keyInfo)] = $infoValue['__VALUE__'];
-      }
-      $skinListArray['skins'][] = $res;
-      $skinMenuArray[] = $menuOption;
-    }
-  }
-  $skinListArray['currentSkin'] = SYS_SKIN;
-  if ((isset($_REQUEST['type'])) && ($_REQUEST['type'] == "menu")) {
-    print_r(G::json_encode($skinMenuArray));
-  } else {
-    print_r(G::json_encode($skinListArray));
-  }
+  $skinListArray = System::getSkingList();
+  echo G::json_encode($skinListArray);
 }
 
 function newSkin($baseSkin='classic') {
