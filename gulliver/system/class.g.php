@@ -4895,7 +4895,7 @@ function getDirectorySize($path,$maxmtime=0)
     foreach ($iniContent as $line) {
       $line = trim($line);
       $lineParts = explode(';', $line);
-      $setting = parse_ini_string($lineParts[0]);
+      $setting = G::parse_ini_string($lineParts[0]);
 
       if (is_array($setting) && count($setting) > 0) {
         list($key, ) = array_keys($setting);
