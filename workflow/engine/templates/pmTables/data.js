@@ -92,6 +92,8 @@ Ext.onReady(function(){
     switch (tableDef.FIELDS[i].FLD_TYPE) {
       case 'DATE':
         columnRenderer = function (value) { 
+          if (!value) return;
+
           if (!value.dateFormat)
             return value;
           else
