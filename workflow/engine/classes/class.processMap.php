@@ -3940,7 +3940,7 @@ class processMap {
     $oCriteria->add(CaseTrackerObjectPeer::PRO_UID, $sProcessUID);
     $iPosition = CaseTrackerObjectPeer::doCount($oCriteria) + 1;
     $oCaseTrackerObject = new CaseTrackerObject ( );
-    $ctoUID = $oCaseTrackerObject->create(array('PRO_UID' => $sProcessUID, 'CTO_TYPE_OBJ' => $sObjType, 'CTO_UID_OBJ' => $sObjUID, 'CTO_POSITION' => $iPosition));
+    $ctoUID = $oCaseTrackerObject->create(array('PRO_UID' => $sProcessUID, 'CTO_TYPE_OBJ' => $sObjType, 'CTO_UID_OBJ' => $sObjUID, 'CTO_POSITION' => $iPosition, 'CTO_CONDITION' => ''));
     return $ctoUID;
   }
 
