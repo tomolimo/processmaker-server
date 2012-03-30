@@ -229,6 +229,7 @@ class PMDashlet extends DashletInstance implements DashletInterface {
           
           $row['DAS_XTEMPLATE'] = $this->getXTemplate($row['DAS_CLASS']);
           $row["DAS_TITLE"] = (isset($arrayField["DAS_INS_TITLE"]) && !empty($arrayField["DAS_INS_TITLE"]))? $arrayField["DAS_INS_TITLE"] : $row["DAS_TITLE"];
+          $row["DAS_TITLE"] = $row["DAS_TITLE"] . ((isset($arrayField["DAS_INS_SUBTITLE"]) && !empty($arrayField["DAS_INS_SUBTITLE"]))? str_replace("@@USR_USERNAME", $_SESSION["USR_USERNAME"], $arrayField["DAS_INS_SUBTITLE"]) : null);
           
           $dashletsInstances[$row['DAS_INS_UID']] = $row;
         }
@@ -253,6 +254,7 @@ class PMDashlet extends DashletInstance implements DashletInterface {
           
           $row['DAS_XTEMPLATE'] = $this->getXTemplate($row['DAS_CLASS']);
           $row["DAS_TITLE"] = (isset($arrayField["DAS_INS_TITLE"]) && !empty($arrayField["DAS_INS_TITLE"]))? $arrayField["DAS_INS_TITLE"] : $row["DAS_TITLE"];
+          $row["DAS_TITLE"] = $row["DAS_TITLE"] . ((isset($arrayField["DAS_INS_SUBTITLE"]) && !empty($arrayField["DAS_INS_SUBTITLE"]))? str_replace("@@USR_USERNAME", $_SESSION["USR_USERNAME"], $arrayField["DAS_INS_SUBTITLE"]) : null);
           
           $dashletsInstances[$row['DAS_INS_UID']] = $row;
         }
@@ -279,6 +281,7 @@ class PMDashlet extends DashletInstance implements DashletInterface {
             
             $row['DAS_XTEMPLATE'] = $this->getXTemplate($row['DAS_CLASS']);
             $row["DAS_TITLE"] = (isset($arrayField["DAS_INS_TITLE"]) && !empty($arrayField["DAS_INS_TITLE"]))? $arrayField["DAS_INS_TITLE"] : $row["DAS_TITLE"];
+            $row["DAS_TITLE"] = $row["DAS_TITLE"] . ((isset($arrayField["DAS_INS_SUBTITLE"]) && !empty($arrayField["DAS_INS_SUBTITLE"]))? str_replace("@@USR_USERNAME", $_SESSION["USR_USERNAME"], $arrayField["DAS_INS_SUBTITLE"]) : null);
             
             $dashletsInstances[$row['DAS_INS_UID']] = $row;
           }
@@ -307,6 +310,7 @@ class PMDashlet extends DashletInstance implements DashletInterface {
             
             $row['DAS_XTEMPLATE'] = $this->getXTemplate($row['DAS_CLASS']);
             $row["DAS_TITLE"] = (isset($arrayField["DAS_INS_TITLE"]) && !empty($arrayField["DAS_INS_TITLE"]))? $arrayField["DAS_INS_TITLE"] : $row["DAS_TITLE"];
+            $row["DAS_TITLE"] = $row["DAS_TITLE"] . ((isset($arrayField["DAS_INS_SUBTITLE"]) && !empty($arrayField["DAS_INS_SUBTITLE"]))? str_replace("@@USR_USERNAME", $_SESSION["USR_USERNAME"], $arrayField["DAS_INS_SUBTITLE"]) : null);
             
             $dashletsInstances[$row['DAS_INS_UID']] = $row;
           }
