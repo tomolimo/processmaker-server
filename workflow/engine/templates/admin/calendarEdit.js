@@ -487,33 +487,7 @@ Ext.onReady( function() {
     var editorHoliday = new Ext.ux.grid.RowEditor( {
         saveText: 'Update'
     } );
-    //for range of dates  
-    Ext.apply(Ext.form.VTypes, {
-    daterange : function(val, field) {
-        var date = field.parseDate(val);
  
-        if(!date){
-            return;
-        }
-        if (field.startDateField && (!this.dateRangeMax || (date.getTime() != this.dateRangeMax.getTime()))) {
-            var start = Ext.getCmp(field.startDateField);
-            start.setMaxValue(date);
-            start.validate();
-            this.dateRangeMax = date;
-        }
-        else if (field.endDateField && (!this.dateRangeMin || (date.getTime() != this.dateRangeMin.getTime()))) {
-            var end = Ext.getCmp(field.endDateField);
-            end.setMinValue(date);
-            end.validate();
-            this.dateRangeMin = date;
-        }
-        /*
-         * Always return true since we're only using this vtype to set the
-         * min/max allowed values (these are tested for after the vtype test)
-         */
-        return true;
-    }
-});
 
     gridHoliday = new Ext.grid.GridPanel( { //grid holidays 
       store: storeHoliday ,
@@ -585,11 +559,11 @@ Ext.onReady( function() {
               allowBlank: true,
               id: 'startdt',
               name: 'startdt',
-              vtype: 'daterange',
-              endDateField: 'enddt'// id of the 'To' date field
-              //minValue: '01/01/2006',
-             // minText: 'Can\'t have a start date before of the 2006!'
-              //maxValue: (new Date()).format('m/d/Y')
+              listeners: {
+                change: function () {
+                  Ext.getCmp('enddt').setMinValue(Ext.getCmp('startdt').value);
+                }
+              }
             }
           } ,
           {
@@ -605,11 +579,11 @@ Ext.onReady( function() {
               id: 'enddt',
               name: 'enddt',
               allowBlank: true,
-              vtype: 'daterange',
-            startDateField: 'startdt'// id of the 'From' date field
-            //  minValue: '01/01/2006',
-            //  minText: 'Can\'t have a start date before  of the 2006!'
-              //maxValue: (new Date()).format('m/d/Y')
+              listeners: {
+                change: function () {
+                  Ext.getCmp('startdt').setMaxValue(Ext.getCmp('enddt').value);
+                }
+              }     
             }
           }
           
