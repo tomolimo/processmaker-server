@@ -17,3 +17,4 @@ workflow/engine/plugins/*
 workflow/engine/methods/login/version-pmos.php
 upgrade.log
 workflow/engine/gulliver
+workflow/public_html/index.html
