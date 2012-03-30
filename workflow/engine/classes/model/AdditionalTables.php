@@ -564,6 +564,25 @@ class AdditionalTables extends BaseAdditionalTables {
       $rs = $stmt->executeQuery($deleteSql);
       // getting the case data
       $caseData = unserialize($row['APP_DATA']);
+
+      // quick fix
+      // map all empty values as NULL for Database
+      foreach ($caseData as $dKey => $dValue) {
+        if (!is_array($dValue)) { // normal fields
+          if (trim($dValue) === '') {
+            $caseData[$dKey] = NULL;
+          }
+        }
+        else { // grids
+          foreach ($caseData[$dKey] as $dIndex => $dRow) {
+            foreach ($dRow as $k => $v) {
+              if (trim($v) === '') {
+                $caseData[$dKey][$dIndex][$k] = NULL;
+              }
+            }
+          }
+        }
+      }
       
       if ($type == 'GRID') {
         list($gridName, $gridUid)  = explode('-', $gridKey);
