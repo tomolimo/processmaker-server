@@ -342,7 +342,7 @@ var processmap=function(){
               limit :true,
               size  :{w:700,h:420},
               position:{x:50,y:50,center:true},
-              title :G_STRINGS.ID_PROCESSMAP_EDIT_PROCESS+": "+this.data.db.title.label,
+              title :G_STRINGS.ID_PROCESSMAP_EDIT_PROCESS+": "+ moldTitle(this.data.db.title.label,700),//this.data.db.title.label,s
               theme :this.options.theme,
               control :{close:true,resize:false},fx:{modal:true},
               statusBar:false,
@@ -372,7 +372,7 @@ var processmap=function(){
               limit :true,
               size  :{w:600,h:230},
               position:{x:50,y:50,center:true},
-              title :G_STRINGS.ID_PROCESSMAP_EXPORT_PROCESS+": "+this.data.db.title.label,
+              title :G_STRINGS.ID_PROCESSMAP_EXPORT_PROCESS+": "+moldTitle(this.data.db.title.label,600),//this.data.db.title.label,
               theme :this.options.theme,
               control :{close:true,resize:false},fx:{modal:true},
               statusBar:false,
@@ -2705,4 +2705,16 @@ function showLogCaseSchedulerList(PRO_UID)
 function exitEditor()
 {
   location.href = '../processes/mainInit';
+}
+function moldTitle(title, size)
+{
+  size = parseInt(size);
+  chain = parseInt(title.length *6);
+  if ((size - chain) < 0)
+  {
+    chain = parseInt((size/6)-33);
+    newTitle = title.substring(0,chain);
+    title = newTitle+"...";
+  }
+  return title;
 }

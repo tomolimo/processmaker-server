@@ -21,7 +21,6 @@ class dashletRssReader implements DashletInterface {
   }
 
   public static function getXTemplate($className) {
-    //Metodo q funcion bien
     return "<iframe src=\"{page}?DAS_INS_UID={id}\" width=\"{width}\" height=\"207\" frameborder=\"0\"></iframe>";
   }
 

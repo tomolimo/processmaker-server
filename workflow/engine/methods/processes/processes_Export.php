@@ -23,9 +23,29 @@
  *
  */
 
+
 G::LoadThirdParty('pear/json','class.json');
 
 try {
+function myTruncate($cadena,$limit, $break='.', $pad='...') {
+  if (strlen($cadena) <= $limit) {
+    return $cadena;
+  }
+  $breakpoint = strpos($cadena, $break, $limit);
+  if (false !== $breakpoint) {
+    $len =strlen($cadena) - 1;
+    if ($breakpoint < $len) {
+      $cadena = substr($cadena, 0, $breakpoint) . $pad;
+    }
+  }
+  return $cadena;
+}
+function addTitlle($Category, $Id, $Lang) {
+  require_once 'classes/model/Content.php';
+  $content = new Content();
+  $value = $content->load($Category,'', $Id, $Lang);
+  return $value;
+}
 
   $oJSON = new Services_JSON();
   $stdObj = $oJSON->decode( $_POST['data'] );
@@ -44,6 +64,18 @@ $Fields = $oProcess->saveSerializedProcess ( $proFields );
 $xpdlFields = $oXpdl->xmdlProcess($sProUid);
 $Fields['FILENAMEXPDL'] = $xpdlFields['FILENAMEXPDL'];
 $Fields['FILENAME_LINKXPDL'] = $xpdlFields['FILENAME_LINKXPDL'];
+foreach($Fields as $key => $value)
+{
+    if ($key == 'PRO_TITLE') {
+      $Fields[$key] = myTruncate($value, 65, ' ', '...');
+    }
+    if ($key == 'FILENAME') {
+      $Fields[$key] = myTruncate($value, 60, '_', '...');
+    }
+    if ($key == 'FILENAMEXPDL') {
+      $Fields[$key] = myTruncate($value, 60, '_', '...');
+    }
+}
 
   /* Render page */
   $G_PUBLISH = new Publisher;
