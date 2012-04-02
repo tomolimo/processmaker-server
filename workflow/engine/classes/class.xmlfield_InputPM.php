@@ -21,10 +21,10 @@
  *
  * For more information, contact Colosa Inc, 2566 Le Jeune Rd.,
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
- * 
+ *
  * @package workflow.engine.classes
  */
- 
+
 class XmlForm_Field_TextPM extends XmlForm_Field_SimpleText
 {
   var $size=15;
@@ -48,7 +48,7 @@ class XmlForm_Field_TextPM extends XmlForm_Field_SimpleText
   var $showVars    = 0;
   var $process     = '';
   var $symbol      = '@@';
-  
+
   /**
    * Function render
    * @author Julio Cesar Laura Avendano <juliocesar@colosa.com>
@@ -66,9 +66,9 @@ class XmlForm_Field_TextPM extends XmlForm_Field_SimpleText
     //  if (isset($firstElement)) $value = $firstElement;
     //}
     //NOTE: string functions must be in G class
-    if ($this->strTo==='UPPER') 
+    if ($this->strTo==='UPPER')
       $value = strtoupper($value);
-    if ($this->strTo==='LOWER') 
+    if ($this->strTo==='LOWER')
       $value = strtolower($value);
     //if ($this->strTo==='CAPITALIZE') $value = strtocapitalize($value);
     $onkeypress = G::replaceDataField( $this->onkeypress, $owner->values );
@@ -95,7 +95,7 @@ class XmlForm_Field_TextPM extends XmlForm_Field_SimpleText
       return $this->htmlentities( $value , ENT_COMPAT, 'utf-8');
     }
   }
-  
+
   /**
    * Function renderGrid
    * @author Julio Cesar Laura Avendano <juliocesar@colosa.com>
@@ -141,7 +141,7 @@ class XmlForm_Field_TextPM extends XmlForm_Field_SimpleText
    * @parameter string $element
    * @return string
    */
-  function attachEvents($element) 
+  function attachEvents($element)
   {
     return "myForm.aElements[i] = new G_Text(myForm, $element,'{$this->name}');
     myForm.aElements[i].setAttributes(" . $this->getAttributes() . ");";
@@ -161,7 +161,7 @@ class XmlForm_Field_TextareaPM extends XmlForm_Field
   var $showVars = 0;
   var $process  = '';
   var $symbol   = '@@';
-  
+
   /**
    * Function render
    * @author Julio Cesar Laura Avendao <juliocesar@colosa.com>
@@ -190,7 +190,7 @@ class XmlForm_Field_TextareaPM extends XmlForm_Field
         return '<textarea id="form['.$this->name.']" name="form['.$this->name.']" cols="'.$this->cols.'" rows="'.$this->rows.'" style="'.$this->style.'" wrap="'.htmlentities($this->wrap,ENT_QUOTES,'UTF-8').'"  class="FormTextArea" >'.$this->htmlentities( $value ,ENT_COMPAT,'utf-8').'</textarea>';
     }
   }
-  
+
   /**
    * Function renderGrid
    * @author Julio Cesar Laura Avendano <juliocesar@colosa.com>
@@ -272,9 +272,9 @@ class XmlForm_Field_hours extends XmlForm_Field_SimpleText
    */
   function render( $value = NULL , $owner = NULL )
   {
-    if ($this->strTo==='UPPER') 
+    if ($this->strTo==='UPPER')
       $value = strtoupper($value);
-    if ($this->strTo==='LOWER') 
+    if ($this->strTo==='LOWER')
       $value = strtolower($value);
     //if ($this->strTo==='CAPITALIZE') $value = strtocapitalize($value);
     $onkeypress = G::replaceDataField( $this->onkeypress, $owner->values );
@@ -301,7 +301,7 @@ class XmlForm_Field_hours extends XmlForm_Field_SimpleText
         return $this->htmlentities( $value , ENT_COMPAT, 'utf-8');
     }
   }
-  
+
   /**
    * Function renderGrid
    * @author Julio Cesar Laura Avendano <juliocesar@colosa.com>
@@ -347,7 +347,7 @@ class XmlForm_Field_hours extends XmlForm_Field_SimpleText
   * @parameter string $element
   * @return string
   */
-  function attachEvents($element) 
+  function attachEvents($element)
   {
     return "myForm.aElements[i] = new G_Text(myForm, $element,'{$this->name}');
     myForm.aElements[i].setAttributes(" . $this->getAttributes() . ");";
@@ -361,7 +361,7 @@ class XmlForm_Field_hours extends XmlForm_Field_SimpleText
   * @parameter boolean $bSystemVars
   * @return array
   */
-  function getDynaformsVars($sProcessUID, $bSystemVars = true) 
+  function getDynaformsVars($sProcessUID, $bSystemVars = true, $bIncMulSelFields = false)
   {
     $aFields = array();
     $aFieldsNames = array();
@@ -372,6 +372,11 @@ class XmlForm_Field_hours extends XmlForm_Field_SimpleText
       }
       //we're adding the ping variable to the system list
        $aFields[] = array('sName' => 'PIN', 'sType' => 'system', 'sLabel' => 'System variable');
+    }
+    $aInvalidTypes = array('title', 'subtitle', 'link', 'file', 'button', 'reset', 'submit', 'javascript');
+    $aMultipleSelectionFields = array('listbox', 'checkgroup', 'grid');
+    if (!$bIncMulSelFields) {
+      $aInvalidTypes = array_merge($aInvalidTypes, $aMultipleSelectionFields);
     }
     require_once 'classes/model/Dynaform.php';
     $oCriteria = new Criteria('workflow');
@@ -386,10 +391,7 @@ class XmlForm_Field_hours extends XmlForm_Field_SimpleText
         $G_FORM  = new Form($aRow['DYN_FILENAME'], PATH_DYNAFORM, SYS_LANG);
         if (($G_FORM->type == 'xmlform') || ($G_FORM->type == '')) {
           foreach($G_FORM->fields as $k => $v) {
-            if (($v->type != 'title')  && ($v->type != 'subtitle') && ($v->type != 'link')       &&
-               ($v->type != 'file')   && ($v->type != 'button')   && ($v->type != 'reset')      &&
-               ($v->type != 'submit') && ($v->type != 'listbox')  && ($v->type != 'checkgroup') &&
-               ($v->type != 'grid')   && ($v->type != 'javascript')) {
+            if (!in_array($v->type, $aInvalidTypes)) {
               if (!in_array($k, $aFieldsNames)) {
                 $aFields[] = array('sName' => $k,
                                    'sType' => $v->type,
@@ -412,7 +414,7 @@ class XmlForm_Field_hours extends XmlForm_Field_SimpleText
    * @parameter string $sProcessUID
    * @return array
    */
-  function getGridsVars($sProcessUID) 
+  function getGridsVars($sProcessUID)
   {
     $aFields = array();
     $aFieldsNames = array();

@@ -89,7 +89,7 @@ var processes_subProcessSave = function(oForm) {
   var grid2 = getField('grid2');
   var SUBTITLE1 = getField('SUBTITLE1');
   var SUBTITLE2 = getField('SUBTITLE2');
-                                         
+
   if(getField('SP_SYNCHRONOUS').value==1)
   	{ showRowById('grid1');
   	  showRowById('grid2');
@@ -97,11 +97,11 @@ var processes_subProcessSave = function(oForm) {
   	  showRowById('SUBTITLE2');
   	}
   else
-  	{ 
+  	{
   	  hideRowById('SUBTITLE2');
   	  hideRowById(grid2);
-  	  
-  	  
+
+
   	}*/
 //};
 
@@ -135,7 +135,7 @@ var showDynaformsFormVars = function(sFieldName, sAjaxServer, sProcess, sSymbol)
   oRPC = new leimnud.module.rpc.xmlhttp({
     url   : sAjaxServer,
     method: 'POST',
-    args  : 'sFieldName=' + sFieldName + '&sProcess=' + sProcess + '&sSymbol=' + sSymbol + '&sNoShowLeyend=1'
+    args  : 'sFieldName=' + sFieldName + '&sProcess=' + sProcess + '&sSymbol=' + sSymbol + '&sNoShowLeyend=1&bIncMulSelFields=1'
   });
   oRPC.callback = function(oRPC) {
     _oVarsPanel_.loader.hide();
@@ -170,4 +170,4 @@ function cancel(){
 }
 
 ]]></JS>
-</dynaForm> 
+</dynaForm>
