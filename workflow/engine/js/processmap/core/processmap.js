@@ -1347,14 +1347,15 @@ var processmap=function(){
         /* Change label End */
         var menu = new this.parent.module.app.menuRight();
         var textMenu = G_STRINGS.ID_PROCESSMAP_USERS_AND_GROUPS_ADHOC;
-        var lengthText = textMenu.length*5.5;
+        var lengthText = textMenu.length * 0.60;
+        
         menu.make({
-          target:a,
-          width:26+lengthText,
-          theme:this.options.theme,
-          menu:((options_task.tp=='task')?
+          target: a,
+          width: (3 + lengthText) + "em",
+          theme: this.options.theme,
+          menu: ((options_task.tp == "task")?
           [
-          {image:"/images/steps.png",text:G_STRINGS.ID_PROCESSMAP_STEPS,launch:function(event,index){
+          {image: "/images/steps.png", text: G_STRINGS.ID_PROCESSMAP_STEPS, launch: function (event, index) {
             this.tmp.stepsPanel = panel =new leimnud.module.panel();
             var data = this.data.db.task[index];
             var iForm=function(panel,index,ifo){
