@@ -258,6 +258,8 @@ var Conditional = function(DYN_UID){
                 }
                 break;
 
+            case 'opera':
+            case 'safari':
             case 'firefox':
 
                 var _ini = f.selectionStart;
