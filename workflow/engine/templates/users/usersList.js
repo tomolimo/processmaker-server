@@ -116,10 +116,15 @@ Ext.onReady(function(){
     text: _('ID_SEARCH'),
     handler: DoSearch
   });
-    
-  contextMenu = new Ext.menu.Menu({
-    items: [editButton, deleteButton,'-',groupsButton,'-',authenticationButton,'-',summaryButton]
-  });
+  
+  contextMenuConfig = new Array();
+  contextMenuConfig.push(editButton);
+  contextMenuConfig.push(deleteButton);
+  contextMenuConfig.push('-');
+  contextMenuConfig.push(groupsButton);
+  contextMenuConfig.push('-');
+  contextMenuConfig.push(summaryButton);
+  contextMenu = new Ext.menu.Menu(contextMenuConfig);
     
   searchText = new Ext.form.TextField ({
     id: 'searchTxt',
@@ -154,7 +159,7 @@ Ext.onReady(function(){
       deleteButton.enable();
         groupsButton.enable();
         //reassignButton.enable();
-        authenticationButton.enable();
+        // authenticationButton.enable();
         summaryButton.enable();
       },
       rowdeselect: function(sm){
@@ -162,7 +167,7 @@ Ext.onReady(function(){
       deleteButton.disable();
       groupsButton.disable();
       //reassignButton.disable();
-      authenticationButton.disable();
+      //authenticationButton.disable();
       summaryButton.disable();
       }
     }
@@ -300,10 +305,10 @@ Ext.onReady(function(){
     store: store,
     cm: cmodel,
     sm: smodel,
-    tbar: [newButton, '-',summaryButton,'-', editButton, deleteButton,/*'-',groupsButton,'-',authenticationButton,*/  {xtype: 'tbfill'},_('ID_AUTH_SOURCES')+': ',comboAuthSources,'-', searchText,clearTextButton,searchButton],
+    tbar: [newButton, '-',summaryButton,'-', editButton, deleteButton, '-', groupsButton, /* '-',authenticationButton, */ {xtype: 'tbfill'}, /* _('ID_AUTH_SOURCES')+': ',comboAuthSources,'-', */ searchText,clearTextButton,searchButton],
     bbar: bbarpaging,
     listeners: {
-      rowdblclick: SummaryTabOpen
+      rowdblclick : EditUserAction
     },
     view: new Ext.grid.GroupingView({
       forceFit:true,
@@ -349,7 +354,7 @@ DoNothing = function(){};
 
 //Open New User Form
 NewUserAction = function(){
-  location.href = 'users_New';
+  location.href = 'usersNew';
 };
 
 //Delete User Action
@@ -415,7 +420,7 @@ SummaryTabOpen = function(){
 EditUserAction = function(){
   var uid = infoGrid.getSelectionModel().getSelected();
   if (uid) {
-    location.href = 'users_Edit?USR_UID=' + uid.data.USR_UID+'&USR_AUTH_SOURCE=' + uid.data.USR_AUTH_SOURCE;
+    location.href = 'usersEdit?USR_UID=' + uid.data.USR_UID+'&USR_AUTH_SOURCE=' + uid.data.USR_AUTH_SOURCE;
   }
 };
 

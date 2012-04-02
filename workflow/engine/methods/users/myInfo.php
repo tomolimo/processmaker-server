@@ -22,157 +22,16 @@
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  *
  */
-try {
-  global $RBAC;
-  switch ($RBAC->userCanAccess('PM_LOGIN')){
-    case -1:
-      G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');
-      G::header('location: ../login/login');
-      die;
-      break;
-    case -2:
-      G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_SYSTEM', 'error', 'labels');
-      G::header('location: ../login/login');
-      die;
-      break;
-  }
 
-  // deprecated the class XmlForm_Field_Image is currently part of the class.xmlform.php package
-  // the use of the external xmlfield_Image is highly discouraged
-  if (!class_exists('XmlForm_Field_Image')){
-    G::LoadClass('xmlfield_Image');
-  }
-//  G::LoadClass('xmlfield_Department');
-  require_once 'classes/model/Users.php';
-  require_once 'classes/model/Department.php';
-  unset($_SESSION['CURRENT_USER']);
-  $oUser                    = new Users();
-  $aFields                  = $oUser->load($_SESSION['USER_LOGGED']);
-  $aFields['USR_PASSWORD']  = '********';
-  $aFields['MESSAGE0']      = G::LoadTranslation('ID_USER_REGISTERED') . '!';
-  $aFields['MESSAGE1']      = G::LoadTranslation('ID_MSG_ERROR_USR_USERNAME');
-  $aFields['MESSAGE2']      = G::LoadTranslation('ID_MSG_ERROR_DUE_DATE');
-  $aFields['MESSAGE3']      = G::LoadTranslation('ID_NEW_PASS_SAME_OLD_PASS');
-  $aFields['MESSAGE4']      = G::LoadTranslation('ID_MSG_ERROR_USR_FIRSTNAME');
-  $aFields['MESSAGE5']      = G::LoadTranslation('ID_MSG_ERROR_USR_LASTNAME');
-  $aFields['NO_RESUME']     = G::LoadTranslation('ID_NO_RESUME');
-  $aFields['START_DATE']    = date('Y-m-d');
-  $aFields['END_DATE']      = date('Y-m-d', mktime(0, 0, 0, date('m'), date('d'), date('Y') + 5));
-  $aFields['RANDOM']        = rand();
-
-  //getting the user and department
-  $oDepInfo = new Department();
-  $oUser = UsersPeer::retrieveByPk( $aFields['USR_REPORTS_TO'] );
-  if ( is_object($oUser) && get_class ($oUser) == 'Users' ) {
-    $userFields = $oUser->toArray(BasePeer::TYPE_FIELDNAME);
-    $aFields['USR_REPORTS_TO'] = $userFields['USR_FIRSTNAME'] . ' ' . $userFields['USR_LASTNAME'];
-    try {
-      $depFields =  $oDepInfo->load($userFields['DEP_UID'] );
-      $aFields['USR_REPORTS_TO'] .=  " (" . $depFields['DEPO_TITLE'] . ")";
-    }
-    catch( Exception $e ) {
-    }
-  }
-  else{
-    $aFields['USR_REPORTS_TO'] = ' ';
-  }
-
-  try {
-    $depFields =  $oDepInfo->load($aFields['DEP_UID']);
-    $aFields['USR_DEPARTMENT'] = $depFields['DEPO_TITLE'];
-  }
-  catch( Exception $e ) {
-    $oUser = UsersPeer::retrieveByPk( $_SESSION['USER_LOGGED'] );
-    $oUser->setDepUid( '' );
-    $aFields['USR_DEPARTMENT'] = ' ';
-  }
-
-  $G_MAIN_MENU              = 'processmaker';
+  $G_MAIN_MENU        = 'processmaker';
+  $G_ID_MENU_SELECTED = 'MY_ACCOUNT';
+  $G_PUBLISH          = new Publisher ();
   
-  $G_ID_MENU_SELECTED       = 'MY_ACCOUNT';
-  $G_PUBLISH                = new Publisher;
-
-
-  #verifying if it has any preferences on the configurations table
-  G::loadClass('configuration');
-  $oConf = new Configurations; 
-  $oConf->loadConfig($x, 'USER_PREFERENCES','','',$_SESSION['USER_LOGGED'],'');
-  
-  if( sizeof($oConf->Fields) > 0){ #this user has a configuration record
-    $aFields['PREF_DEFAULT_LANG'] = $oConf->aConfig['DEFAULT_LANG'];
-    $aFields['PREF_DEFAULT_MENUSELECTED'] = isset($oConf->aConfig['DEFAULT_MENU']) ? $oConf->aConfig['DEFAULT_MENU']: '';
-    $aFields['PREF_DEFAULT_CASES_MENUSELECTED'] = isset($oConf->aConfig['DEFAULT_CASES_MENU']) ? $oConf->aConfig['DEFAULT_CASES_MENU']: '';
-  } else {
-    switch($RBAC->aUserInfo['PROCESSMAKER']['ROLE']['ROL_CODE']){
-      case 'PROCESSMAKER_ADMIN':
-        $aFields['PREF_DEFAULT_MENUSELECTED'] = 'PM_USERS';
-        break;
-
-      case 'PROCESSMAKER_OPERATOR':
-        $aFields['PREF_DEFAULT_MENUSELECTED'] = 'PM_CASES';
-        break;
-      
-    }
-    $aFields['PREF_DEFAULT_LANG'] = SYS_LANG;
+  if ( isset($_GET['type']) ){
+    $G_PUBLISH->AddContent('view', 'users/usersReload');
+    G::RenderPage( "publishBlank", "blank");
   }
-  $rows[] = Array('id'=>'char', 'name'=>'char');
-
-
-  foreach($RBAC->aUserInfo['PROCESSMAKER']['PERMISSIONS'] as $permission){
-    
-    switch($permission['PER_CODE']){
-      case 'PM_USERS':  
-         $rows[] = Array('id'=>'PM_USERS', 'name'=>strtoupper(G::LoadTranslation('ID_USERS'))); 
-      break;
-      case 'PM_CASES':  
-         $rows[] = Array('id'=>'PM_CASES', 'name'=>strtoupper(G::LoadTranslation('ID_CASES'))); 
-      break;
-      case 'PM_FACTORY':  
-         $rows[] = Array('id'=>'PM_FACTORY', 'name'=>strtoupper(G::LoadTranslation('ID_APPLICATIONS'))); 
-      break;
-      case 'PM_DASHBOARD':  
-         $rows[] = Array('id'=>'PM_DASHBOARD', 'name'=>strtoupper(G::LoadTranslation('ID_DASHBOARD'))); 
-      break;
-      case 'PM_SETUP':  
-         $rows[] = Array('id'=>'PM_SETUP', 'name'=>strtoupper(G::LoadTranslation('ID_SETUP'))); 
-      break;
-    }
+  else {
+    $G_PUBLISH->AddContent('view', 'users/usersLoad');
+    G::RenderPage( "publish" );
   }
-  
-  global $G_TMP_MENU;
-  $oMenu = new Menu();
-  $oMenu->load('cases');
-  
-  $rowsCasesMenu[] = Array('id'=>'char', 'name'=>'char');
-  
-  foreach($oMenu->Id as $i=>$item){
-    if( $oMenu->Types[$i] != 'blockHeader' ){
-      $rowsCasesMenu[] = Array('id'=>$item, 'name'=>$oMenu->Labels[$i]);
-    }
-  }
-  
-  //G::pr($rows); die;
-  global $_DBArray;
-  $_DBArray['menutab']   = $rows;
-  $_SESSION['_DBArray'] = $_DBArray;
-  $_DBArray['CASES_MENU']   = $rowsCasesMenu;
-  $_SESSION['_DBArray'] = $_DBArray;
-  
-  G::LoadClass('ArrayPeer');
-  $oCriteria = new Criteria('dbarray');
-  $oCriteria->setDBArrayTable('menutab');
-  $oCriteria2 = new Criteria('dbarray');
-  $oCriteria2->setDBArrayTable('CASES_MENU');
-
-  if ($RBAC->userCanAccess('PM_EDITPERSONALINFO') == 1) { //he has permitions for edit his profile
-    $G_PUBLISH->AddContent('xmlform', 'xmlform', 'users/myInfoView.xml', '', $aFields);
-  } else { //he has not permitions for edit his profile, so just view mode will be displayed
-    $G_PUBLISH->AddContent('xmlform', 'xmlform', 'users/myInfoView2.xml', '', $aFields);
-  }
-
-  G::RenderPage('publish');
-}
-catch (Exception $oException) {
-  die($oException->getMessage());
-}
-?>

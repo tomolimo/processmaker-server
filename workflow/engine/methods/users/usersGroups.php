@@ -85,9 +85,11 @@ $users['CURRENT_TAB'] = $ctab;
 
 $oHeadPublisher =& headPublisher::getSingleton();
 $oHeadPublisher->addExtJsScript('users/usersGroups', false);    //adding a javascript file .js
-$oHeadPublisher->addContent('users/usersGroups'); //adding a html file  .html.
+// $oHeadPublisher->addContent('users/usersGroups'); //adding a html file  .html.
 $oHeadPublisher->assign('USERS', $users);
 
-$oHeadPublisher->assign('hasAuthPerm', ($RBAC->userCanAccess('PM_SETUP_ADVANCE') == 1));
+if ($ctab == 2) {
+  $oHeadPublisher->assign('hasAuthPerm', ($RBAC->userCanAccess('PM_SETUP_ADVANCE') == 1));  
+}
 
 G::RenderPage('publish', 'extJs');
