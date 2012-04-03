@@ -307,7 +307,7 @@ function G_DropDown( form, element, name )
   this.setContent=function(content) {
     var dd=me.element;
     var browser = getBrowserClient();
-    if (browser.name=='msie'){
+    if ((browser.name=='msie') || ((browser.name == 'firefox') && (browser.version < 12))){
       while(dd.options.length>1) dd.remove(0);
     } else {
       for (var key in dd.options){
