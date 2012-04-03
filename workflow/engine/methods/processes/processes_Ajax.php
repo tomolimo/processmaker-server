@@ -501,6 +501,40 @@ try {
 	  	$G_PUBLISH->AddContent('xmlform', 'xmlform', 'processes/processes_FileEditCreateEmpty', '');
 	    G::RenderPage('publish', 'raw');
     break;
+  
+    case "taskCases":
+      require_once ("classes/model/Application.php");
+      require_once ("classes/model/AppDelegation.php");
+      require_once ("classes/model/AppDelay.php");
+      
+      $criteria = new Criteria("workflow");
+      $criteria->addSelectColumn("COUNT(DISTINCT APPLICATION.APP_UID)");
+      
+      $criteria->addJoin(ApplicationPeer::APP_UID, AppDelegationPeer::APP_UID, Criteria::LEFT_JOIN);
+      $criteria->addJoin(ApplicationPeer::APP_UID, AppDelayPeer::APP_UID, Criteria::LEFT_JOIN);
+      
+      $criteria->add(AppDelegationPeer::TAS_UID, $oData->task_uid);
+      
+      $criteria->add(
+        $criteria->getNewCriterion(AppDelegationPeer::DEL_FINISH_DATE, null, Criteria::ISNULL)->addOr(
+          $criteria->getNewCriterion(AppDelayPeer::APP_DELAY_UID, null, Criteria::ISNOTNULL)->addAnd(
+          $criteria->getNewCriterion(AppDelayPeer::APP_TYPE, array("REASSIGN", "ADHOC", "CANCEL"), Criteria::NOT_IN))->addAnd(
+            $criteria->getNewCriterion(AppDelayPeer::APP_DISABLE_ACTION_USER, null, Criteria::ISNULL)->addOr(
+            $criteria->getNewCriterion(AppDelayPeer::APP_DISABLE_ACTION_USER, 0))
+          )
+        )
+      );
+      
+      $rs = ApplicationPeer::doSelectRS($criteria);
+      
+      $rs->next();
+      $row = $rs->getRow();
+        
+      $response->casesNumRec = intval($row[0]);
+      
+      $json = new Services_JSON();
+      $sOutput = $json->encode($response);
+      break;
   }
   if( isset($sOutput) )
   	die($sOutput);

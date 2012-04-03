@@ -1511,22 +1511,48 @@ var processmap=function(){
           },args:index})},
           {image:"/images/delete.png",text:G_STRINGS.ID_PROCESSMAP_DELETE_TASK,launch:this.parent.closure({instance:this,method:function(index){
             var data = this.data.db.task[index];
-            new this.parent.module.app.confirm().make({
-              label:G_STRINGS.ID_PROCESSMAP_CONFIRM_DELETE_TASK+" "+ data.label,
-              action:function()
-              {
-                data.object.drag.flush();
-                this.dropables.derivation.unregister(data.object.dropIndex);
-                this.data.render.deleteDerivation(data.uid,true);
-                this.parent.dom.remove(data.object.elements);
-                var r = new leimnud.module.rpc.xmlhttp({
-                  url:this.options.dataServer,
-                  args:"action=deleteTask&data="+{pro_uid:this.options.uid,tas_uid:data.uid}.toJSONString()
-                });
-                r.make();
-              }.extend(this)
+            
+            var r = new leimnud.module.rpc.xmlhttp({
+              url: this.options.dataServer,
+              args: "action=taskCases&data=" + {
+                task_uid: data.uid
+              }.toJSONString()
             });
+            r.callback = function (rpc) {
+              var rs = rpc.xmlhttp.responseText.parseJSON();
+              var casesNumRec = rs.casesNumRec;
+              
+              if (casesNumRec == 0) {
+                new this.parent.module.app.confirm().make({
+                  label: G_STRINGS.ID_PROCESSMAP_CONFIRM_DELETE_TASK + " " + data.label,
+                  action: function () {
+                    data.object.drag.flush();
+                    this.dropables.derivation.unregister(data.object.dropIndex);
+                    this.data.render.deleteDerivation(data.uid, true);
+                    this.parent.dom.remove(data.object.elements);
+                    var r2 = new leimnud.module.rpc.xmlhttp({
+                      url: this.options.dataServer,
+                      args: "action=deleteTask&data=" + {
+                        pro_uid: this.options.uid,
+                        tas_uid: data.uid
+                      }.toJSONString()
+                    });
+                    r2.make();
+                  }.extend(this)
+                });
+              }
+              else {
+                var msg = _("ID_TASK_CANT_DELETE");
+                msg = msg.replace("{0}", data.label);
+                msg = msg.replace("{1}", casesNumRec);
+              
+                new this.parent.module.app.info().make({label: msg});
+              }
+            }.extend(this);
+            r.make();
+            
             return;
+            
             if(confirm(G_STRINGS.ID_PROCESSMAP_CONFIRM_DELETE_TASK+" "+ data.label))
             {
               data.object.drag.flush();
