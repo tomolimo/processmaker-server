@@ -420,6 +420,19 @@ try {
   		$oCriteria2->add(TaskPeer::STG_UID, '');
   		BasePeer::doUpdate($oCriteria1, $oCriteria2, Propel::getConnection('workflow'));
     break;
+  
+    case "processMapLegend":
+      $arrayField = array();
+      $arrayField["sLabel1"] = G::LoadTranslation("ID_TASK_IN_PROGRESS");
+      $arrayField["sLabel2"] = G::LoadTranslation("ID_COMPLETED_TASK");
+      $arrayField["sLabel3"] = G::LoadTranslation("ID_PENDING_TASK");
+      $arrayField["sLabel4"] = G::LoadTranslation("ID_PARALLEL_TASK");
+      $arrayField["tracker"] = 1;
+  
+      $G_PUBLISH = new Publisher();
+      $G_PUBLISH->AddContent("smarty", "cases/cases_Leyends", "", "", $arrayField);
+      G::RenderPage("publish", "raw");
+      break;
   }
 }
 catch (Exception $oException) {
