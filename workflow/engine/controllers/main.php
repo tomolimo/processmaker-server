@@ -26,12 +26,8 @@ class Main extends Controller
   {
     global $RBAC;
     $RBAC->requirePermissions('PM_LOGIN');
-
     $meta = new stdClass;
-    $this->includeExtJS('main/index');
-    $this->includeExtJSLib('ux/ux.menu');
-    $this->setView('main/index');
-
+    
     // setting variables for template
     $this->setVar('logo_company', $this->getCompanyLogo());
     $this->setVar('userfullname', $this->getUserFullName());
@@ -56,7 +52,14 @@ class Main extends Controller
       $this->setJSVar('flyNotify', $flyNotify);
     }
 
-    G::RenderPage('publish', 'extJs');
+    $this->includeExtJSLib('ux/ux.menu');
+    $this->includeExtJS('main/index');
+    //$this->setView('main/index');
+
+    $this->setLayout('pm-modern');
+
+    $this->afterLoad($httpData);
+    $this->render();
   }
 
   function getSystemInfo()
@@ -265,7 +268,9 @@ class Main extends Controller
     $this->setVar('login_script', $loginScript);
     $this->setVar('login_vars', $this->getHeadPublisher()->getExtJsVariablesScript());
 
-    G::RenderPage('publish', 'plain');
+    $this->setLayout('pm-modern-login');
+
+    $this->render();
   }
 
   /**
@@ -300,7 +305,6 @@ class Main extends Controller
 
     $this->includeExtJSLib('ux/virtualkeyboard');
     $this->includeExtJS('main/sysLogin');
-    $this->setView('main/sysLogin');
 
     $this->setVar('logo_company', $this->getCompanyLogo());
     $this->setVar('pmos_version', System::getVersion());
@@ -328,8 +332,9 @@ class Main extends Controller
     $this->setVar('login_script', $loginScript);
     $this->setVar('login_vars', $this->getHeadPublisher()->getExtJsVariablesScript());
 
-    G::RenderPage('publish', 'plain');
+    $this->setLayout('pm-modern-login');
 
+    $this->render();
   }
 
   public function sysLoginVerify()
@@ -1046,5 +1051,15 @@ class Main extends Controller
       $ntarget = gethostbyaddr ( $target );
     $msg .= $ntarget;
     return ($msg);
+  }
+
+  /**
+   * Execute common reoutes after index() action load
+   */
+  private function afterLoad($httpData)
+  {
+    if (isset($httpData->i18) || isset($httpData->i18n)) {
+      $_SESSION['DEV_FLAG'] = true;
+    }
   }
 }

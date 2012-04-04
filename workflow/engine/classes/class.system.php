@@ -1030,26 +1030,32 @@ class System {
 
   function updateIndexFile($conf)
   {
-    if (!defined('PATH_TPL')) {
-      throw new Exception('PATH_TPL constant is not defined.');
-    }
-
     if (!file_exists(PATH_HTML . 'index.html')) {
-      if (!is_writable(PATH_HTML)) {
-        throw new Exception('The public directory is not writable.');
-      }
+      throw new Exception('The public index file "'.PATH_HTML . 'index.html" does not exist!');
     }
     else {
       if (!is_writable(PATH_HTML . 'index.html')) {
-        throw new Exception('The public index file is not writable.');
+        throw new Exception('The index.html file is not writable on workflow/public_html directory.');
       }
     }
 
-    $content = file_get_contents(PATH_TPL . 'index.html.tpl');
-    $content = str_replace('{lang}', $conf['lang'], $content);
-    $content = str_replace('{skin}', $conf['skin'], $content);
+    $content = file_get_contents(PATH_HTML . 'index.html');
+    $result = false;
 
-    return (@file_put_contents(PATH_HTML . 'index.html', $content) !== false);
+    $patt = '/<meta\s+http\-equiv="REFRESH"\s+content=\"0;URL=(.+)\"\s*\/>/';
+
+    @preg_match($patt, $content, $match);
+
+    if (is_array($match) && count($match) > 0 && isset($match[1])) {
+      $newUrl = 'sys/'.$conf['lang'].'/'.$conf['skin'].'/login/login';
+
+      $newMetaStr = str_replace($match[1], $newUrl, $match[0]);
+      $newContent = str_replace($match[0], $newMetaStr, $content);   
+    
+      $result = (@file_put_contents(PATH_HTML . 'index.html', $newContent) !== false);
+    }
+
+    return $result;
   }
   
 }// end System class

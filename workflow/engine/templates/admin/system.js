@@ -30,7 +30,7 @@ Ext.onReady(function(){
   });
 
   var cmbLang = new Ext.form.ComboBox({
-    fieldLabel : _('ID_DEFAULT_LANG'),
+    fieldLabel : _('ID_DEFAULT_LANGUAGE'),
     hiddenName : 'default_lang',
     store         : new Ext.data.ArrayStore({
       fields: ['ID', 'NAME'],
@@ -99,7 +99,7 @@ Ext.onReady(function(){
         xtype: 'numberfield',
         id        : 'memory_limit',
         name      : 'memory_limit',
-        fieldLabel: _('ID_MEMORY_LIMIT') + '(MB) ',
+        fieldLabel: _('ID_MEMORY_LIMIT'),
         allowBlank: false,
         value: sysConf.memory_limit,
         listeners:{
@@ -160,7 +160,7 @@ function saveSettings()
       parent.PMExt.notify(_('ID_INFO'),_('ID_SAVED_SUCCESSFULLY'));
 
       if(response.restart) {
-        PMExt.confirm(_('ID_CONFIRM'), 'To take effect the changes you need re login.<br>Redirect now?', function(){
+        PMExt.confirm(_('ID_CONFIRM'), _('ID_SYSTEM_REDIRECT_CONFIRM'), function(){
           
           if (typeof window.parent.parent != 'undefined')
             window.parent.parent.location.href = '/';

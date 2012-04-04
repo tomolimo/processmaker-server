@@ -1,8 +1,15 @@
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon"/>
+  {$_header}
+</head>
+<body>
 <div id="panel-header" >
   <table class="x-pm-headerbar1" width="100%"  height="" cellpadding="0" cellspacing="0" border="0">
     <tr>
       <td width="33%" valign="middle" style="padding-left:10px">
-        <img src="{logo_company}" width="180" height="24"/>
+        <img src="{$logo_company}" width="180" height="24"/>
       </td>
       
       <td align="center"></td>
@@ -14,11 +21,11 @@
             <td height="12" valign="middle" align="right" valign="top">
               <a href="#" id="options-tool">
                 <div class="headerRightSideBar">
-                  {userfullname}&nbsp;<br />
-                  <span style="font-size:9px">{rolename}</span>&nbsp;
+                  {$userfullname}&nbsp;<br />
+                  <span style="font-size:9px">{$rolename}</span>&nbsp;
                 </div>
               <div id="user-avatar">  
-                <img src="{user_avatar}" width="25" height="25"/>
+                <img src="{$user_avatar}" width="25" height="25"/>
               </div>
             </a>
             </td>
@@ -28,3 +35,5 @@
     </tr>
   </table>
 </div>
+</body>
+</html>

@@ -238,9 +238,14 @@ class Controller
       return $this->headPublisher;
     }
 
+    public function setLayout($layout)
+    {
+        $this->layout = $layout;
+    }
+
     public function render($type='mvc')
     {
-        G::RenderPage('publish', $type);
+        G::RenderPage('publish', $type, null, $this->layout);
     }
 
     public function header($header)

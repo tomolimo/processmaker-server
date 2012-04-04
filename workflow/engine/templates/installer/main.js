@@ -90,6 +90,10 @@ Ext.onReady(function(){
         Ext.get('pathLogFileSpan').dom.innerHTML    = (response.pathLogFile.result ? okImage : badImage);
         wizard.onClientValidation(1, response.pathConfig.result && response.pathLanguages.result && response.pathPlugins.result && response.pathXmlforms.result && response.pathShared.result && response.pathLogFile.result);
         wizard.showLoadMask(false);
+
+        if (response.notify != '') {
+          Ext.msgBoxSlider.msgTopCenter('alert', '', response.notify, 30);
+        }
       },
       failure: function(){},
       params: {
@@ -431,7 +435,7 @@ Ext.onReady(function(){
     items : [
       {
         border    : false,
-        html:'Directory File Permission',
+        html:'Directory/File Permission',
         bodyStyle : 'background:none;padding-top:0px;padding-bottom:5px;font-weight:bold;font-size:1.3em;'
       },
       {
@@ -486,7 +490,7 @@ Ext.onReady(function(){
               },
               {
                 xtype: 'textfield',
-                fieldLabel: '<span id="pathPublicSpan"></span> Public Directory',
+                fieldLabel: '<span id="pathPublicSpan"></span> Public Index file',
                 id: 'pathPublic',
                 width: 430,
                 value: path_public,

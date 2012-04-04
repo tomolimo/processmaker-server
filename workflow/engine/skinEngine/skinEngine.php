@@ -1,125 +1,228 @@
 <?php
-global $G_SKIN;
-global $G_SKIN_MAIN;
+/**
+ * Class SkinEngine
+ * 
+ * This class load and dispatch the main systems layouts
+ * @author Erik Amaru Ortiz <erik@colosa.com>
+ * @author Hugo Loza
+ */
 
-$forceTemplateCompile = true;
-$skinVariants = array('blank','extjs','raw','tracker','submenu');
+class SkinEngine
+{
 
-// setting default skin
-if (!isset($G_SKIN) || $G_SKIN == "") {
-  $G_SKIN = "classic";
-}
+  private $layout   = '';
+  private $template = '';
+  private $skin     = '';
+  private $content  = '';
+  private $mainSkin = '';
 
-// deprecated submenu type ""green-submenu"" now is mapped to "submenu"
-if ($G_SKIN == "green-submenu") {
-  $G_SKIN = "submenu";
-}
+  private $skinFiles = array();
 
-if (!in_array(strtolower($G_SKIN), $skinVariants)) {
-  $forceTemplateCompile = true; //Only save in session the main SKIN
+  private $forceTemplateCompile = true;
+  private $skinVariants = array();
 
-  if (isset($_SESSION['currentSkin']) && $_SESSION['currentSkin'] != $G_SKIN) {
-    $forceTemplateCompile = true; 
+  private $skinsBasePath     = array();
+  private $configurationFile = array();
+  private $layoutFile        = array();
+  private $layoutFileBlank   = array();
+  private $layoutFileExtjs   = array();
+  private $layoutFileRaw     = array();
+  private $layoutFileTracker = array();
+  private $layoutFileSubmenu = array();
+
+  private $cssFileName = '';
+
+  public function __construct($template, $skin, $content)
+  {
+    $this->template = $template;
+    $this->skin = $skin;
+    $this->content = $content;
+    $this->skinVariants = array('blank','extjs','raw','tracker','submenu');
+    $this->skinsBasePath = G::ExpandPath("skinEngine");
+
+    $this->_init();
   }
 
-  $_SESSION['currentSkin'] = $G_SKIN;
-}
-else {
-  $_SESSION['currentSkin'] = SYS_SKIN;
-  $_SESSION['currentSkinVariant'] = $G_SKIN;
-}
+  private function _init()
+  {
 
-// setting default skin
-if (!isset($_SESSION['currentSkin'])) {
-  $_SESSION['currentSkin'] = "classic";
-}
+    // setting default skin
+    if (!isset($this->skin) || $this->skin == "") {
+      $this->skin = "classic";
+    }
 
-$G_SKIN_MAIN   = $_SESSION['currentSkin'];
-$skinsBasePath = G::ExpandPath("skinEngine");
+    // deprecated submenu type ""green-submenu"" now is mapped to "submenu"
+    if ($this->skin == "green-submenu") {
+      $this->skin = "submenu";
+    }
 
-//Set defaults "classic"
-$configurationFile = $skinsBasePath . 'base' . PATH_SEP . 'config.xml';
-$layoutFile        = $skinsBasePath . 'base' . PATH_SEP . 'layout.html';
-$layoutFileBlank   = $skinsBasePath . 'base' . PATH_SEP . 'layout-blank.html';
-$layoutFileExtjs   = $skinsBasePath . 'base' . PATH_SEP . 'layout-extjs.html';
-$layoutFileRaw     = $skinsBasePath . 'base' . PATH_SEP . 'layout-raw.html';
-$layoutFileTracker = $skinsBasePath . 'base' . PATH_SEP . 'layout-tracker.html';
-$layoutFileSubmenu = $skinsBasePath . 'base' . PATH_SEP . 'layout-submenu.html';
+    if (!in_array(strtolower($this->skin), $this->skinVariants)) {
+      $this->forceTemplateCompile = true; //Only save in session the main SKIN
 
-$skinObject = null;
+      if (isset($_SESSION['currentSkin']) && $_SESSION['currentSkin'] != $this->skin) {
+        $this->forceTemplateCompile = true; 
+      }
+      $_SESSION['currentSkin'] = SYS_SKIN;
+    }
+    else {
+      $_SESSION['currentSkin'] = SYS_SKIN;
+      $_SESSION['currentSkinVariant'] = $this->skin;
+    }
 
-//Based on requested Skin look if there is any registered with that name
-if (strtolower($G_SKIN_MAIN) != "classic") {
-  if (is_dir($skinsBasePath . $G_SKIN_MAIN)) { // check this skin on core skins path
-    $skinObject = $skinsBasePath . $G_SKIN_MAIN;
+    // setting default skin
+    if (!isset($_SESSION['currentSkin'])) {
+      $_SESSION['currentSkin'] = "classic";
+    }
+
+    $this->mainSkin = $_SESSION['currentSkin'];
+    
+
+    $skinObject = null;
+
+    //Set defaults "classic"
+    $configurationFile = $this->skinsBasePath . 'base' . PATH_SEP . 'config.xml';
+    $layoutFile        = $this->skinsBasePath . 'base' . PATH_SEP . 'layout.html';
+    $layoutFileBlank   = $this->skinsBasePath . 'base' . PATH_SEP . 'layout-blank.html';
+    $layoutFileExtjs   = $this->skinsBasePath . 'base' . PATH_SEP . 'layout-extjs.html';
+    $layoutFileRaw     = $this->skinsBasePath . 'base' . PATH_SEP . 'layout-raw.html';
+    $layoutFileTracker = $this->skinsBasePath . 'base' . PATH_SEP . 'layout-tracker.html';
+    $layoutFileSubmenu = $this->skinsBasePath . 'base' . PATH_SEP . 'layout-submenu.html';
+
+
+    //Based on requested Skin look if there is any registered with that name
+    if (strtolower($this->mainSkin) != "classic") {
+      if (is_dir($this->skinsBasePath . $this->mainSkin)) { // check this skin on core skins path
+        $skinObject = $this->skinsBasePath . $this->mainSkin;
+      }
+      else if (defined('PATH_CUSTOM_SKINS') && is_dir(PATH_CUSTOM_SKINS . $this->mainSkin)) { // check this skin on user skins path
+        $skinObject = PATH_CUSTOM_SKINS . $this->mainSkin;
+      }
+      else { //Skin doesn't exist
+        $this->mainSkin = "classic";
+      }
+    }
+
+    //This should have an XML definition and a layout html
+    if ($skinObject && file_exists($skinObject . PATH_SEP . 'config.xml') 
+      && file_exists($skinObject . PATH_SEP . 'layout.html')) {
+
+      $configurationFile = $skinObject . PATH_SEP . 'config.xml';
+      $layoutFile        = $skinObject . PATH_SEP . 'layout.html';
+      
+      if (file_exists($skinObject . PATH_SEP . 'layout-blank.html')){
+        $layoutFileBlank = $skinObject . PATH_SEP . 'layout-blank.html';
+      }
+      if (file_exists($skinObject . PATH_SEP . 'layout-extjs.html')){
+        $layoutFileExtjs = $skinObject . PATH_SEP . 'layout-extjs.html' ;
+      }
+      if (file_exists($skinObject . PATH_SEP . 'layout-raw.html')){
+        $layoutFileRaw   = $skinObject . PATH_SEP . 'layout-raw.html';
+      }
+      if (file_exists($skinObject . PATH_SEP . 'layout-tracker.html')){
+        $layoutFileTracker = $skinObject . PATH_SEP . 'layout-tracker.html';
+      }
+      if (file_exists($skinObject . PATH_SEP . 'layout-submenu.html')){
+        $layoutFileSubmenu = $skinObject . PATH_SEP . 'layout-submenu.html';
+      }
+    }
+
+    $this->layoutFile        = pathInfo($layoutFile);
+    $this->layoutFileBlank   = pathInfo($layoutFileBlank);
+    $this->layoutFileExtjs   = pathInfo($layoutFileExtjs);
+    $this->layoutFileTracker = pathInfo($layoutFileTracker);
+    $this->layoutFileRaw     = pathInfo($layoutFileRaw);
+    $this->layoutFileSubmenu = pathInfo($layoutFileSubmenu);
+
+    $this->cssFileName = $this->mainSkin;
+
+    if ($this->skin != $this->mainSkin && in_array(strtolower($this->skin), $this->skinVariants)) {
+      $this->cssFileName .= "-" . $this->skin;
+    }
   }
-  else if (defined('PATH_CUSTOM_SKINS') && is_dir(PATH_CUSTOM_SKINS . $G_SKIN_MAIN)) { // check this skin on user skins path
-    $skinObject = PATH_CUSTOM_SKINS . $G_SKIN_MAIN;
+
+  public function setLayout($layout)
+  {
+    $this->layout = $layout;
   }
-  else { //Skin doesn't exist
-    $G_SKIN_MAIN = "classic";
+
+  public function dispatch()
+  {
+    $skinMethod = '_' . strtolower($this->skin);
+    
+    if (!method_exists($this, $skinMethod)) {
+      $skinMethod = '_default';
+    }
+    
+    $this->$skinMethod();
   }
-}
 
-//This should have an XML definition and a layout html
-if ($skinObject && file_exists($skinObject . PATH_SEP . 'config.xml') && file_exists($skinObject . PATH_SEP . 'layout.html')) {
-  $configurationFile = $skinObject . PATH_SEP . 'config.xml';
-  $layoutFile    = $skinObject . PATH_SEP . 'layout.html';
-  
-  if (file_exists($skinObject . PATH_SEP . 'layout-blank.html')){
-  $layoutFileBlank = $skinObject . PATH_SEP . 'layout-blank.html';
+  /**
+   * Skins Alternatives
+   */
+
+  private function _raw()
+  {
+    require_once PATH_THIRDPARTY . 'smarty/libs/Smarty.class.php'; // put full path to Smarty.class.php
+
+    G::verifyPath ( PATH_SMARTY_C,   true );
+    G::verifyPath ( PATH_SMARTY_CACHE, true );
+
+    $smarty = new Smarty();
+    $oHeadPublisher =& headPublisher::getSingleton();
+
+    $smarty->template_dir = $this->layoutFileRaw['dirname'];
+    $smarty->compile_dir  = PATH_SMARTY_C;
+    $smarty->cache_dir    = PATH_SMARTY_CACHE;
+    $smarty->config_dir   = PATH_THIRDPARTY . 'smarty/configs';
+
+    if (isset($oHeadPublisher)) {
+      $header = $oHeadPublisher->printRawHeader();
+    }
+
+    $smarty->assign('header', $header );
+    $smarty->force_compile = $this->forceTemplateCompile;
+    $smarty->display($this->layoutFileRaw['basename']);
   }
-  if (file_exists($skinObject . PATH_SEP . 'layout-extjs.html')){
-  $layoutFileExtjs = $skinObject . PATH_SEP . 'layout-extjs.html' ;
+
+  private function _plain()
+  {
+    $oHeadPublisher = & headPublisher::getSingleton();
+    echo $oHeadPublisher->renderExtJs();
   }
-  if (file_exists($skinObject . PATH_SEP . 'layout-raw.html')){
-  $layoutFileRaw   = $skinObject . PATH_SEP . 'layout-raw.html';
+
+  private function _extjs()
+  {
+    G::LoadClass('serverConfiguration');
+    $oServerConf    =& serverConf::getSingleton();
+    $oHeadPublisher =& headPublisher::getSingleton();
+
+    if( $oHeadPublisher->extJsInit === true){
+      $header = $oHeadPublisher->getExtJsVariablesScript();
+      $styles = $oHeadPublisher->getExtJsStylesheets($this->cssFileName);
+      $body   = $oHeadPublisher->getExtJsScripts();
+
+      $templateFile = G::ExpandPath( "skinEngine" ).'base'.PATH_SEP .'extJsInitLoad.html';
+    }
+    else {
+      $styles  = "";
+      $header  = $oHeadPublisher->getExtJsStylesheets($this->cssFileName);
+      $header .= $oHeadPublisher->includeExtJs();
+      $body    = $oHeadPublisher->renderExtJs();
+
+      $templateFile = $this->layoutFile['dirname'] . PATH_SEP . $this->layoutFileExtjs['basename'];
+    }
+
+    $template = new TemplatePower($templateFile);
+    $template->prepare();
+    $template->assign('header', $header);
+    $template->assign('styles', $styles);
+    $template->assign('bodyTemplate', $body);
+
+    echo $template->getOutputContent();
   }
-  if (file_exists($skinObject . PATH_SEP . 'layout-tracker.html')){
-  $layoutFileTracker = $skinObject . PATH_SEP . 'layout-tracker.html';
-  }
-  if (file_exists($skinObject . PATH_SEP . 'layout-submenu.html')){
-  $layoutFileSubmenu = $skinObject . PATH_SEP . 'layout-submenu.html';
-  }
-}
 
-$layoutFile        = pathInfo($layoutFile);
-$layoutFileBlank   = pathInfo($layoutFileBlank);
-$layoutFileExtjs   = pathInfo($layoutFileExtjs);
-$layoutFileTracker = pathInfo($layoutFileTracker);
-$layoutFileRaw     = pathInfo($layoutFileRaw);
-$layoutFileSubmenu = pathInfo($layoutFileSubmenu);
-
-$cssFileName = $G_SKIN_MAIN;
-
-if ($G_SKIN != $G_SKIN_MAIN && in_array(strtolower($G_SKIN), $skinVariants)) {
-  $cssFileName .= "-" . $G_SKIN;
-}
-
-if (isset($_GET['debug'])) {
-  //Render
-  print "Requested Skin: $G_SKIN<br />";
-  print "Main Skin: ".$G_SKIN_MAIN;
-
-  print "Rendering... <br />";
-  print "<b>Configuration file:</b> $configurationFile";
-  print "<br />";
-  print "<b>layout file:</b>"; G::pr($layoutFile);
-  print "<br />";
-  print "<b>layout Blank file:</b>"; G::pr($layoutFileBlank);
-  print "<br />";
-  print "<b>layout ExtJs file:</b>"; G::pr($layoutFileExtjs);
-  print "<br />";
-  print "<b>layout Raw file:</b>"; G::pr($layoutFileRaw);
-  print "<br />";
-  print "<b>layout Tracker file:</b>"; G::pr($layoutFileTracker);
-  print "<br />";
-  print "<b>layout submenu file:</b>"; G::pr($layoutFileSubmenu);
-
-}
-
-switch (strtolower($G_SKIN)) {
-  case 'blank': //This is a special template but need main skin styles
+  private function _blank()
+  {
     require_once PATH_THIRDPARTY . 'smarty/libs/Smarty.class.php'; // put full path to Smarty.class.php
 
     G::verifyPath(PATH_SMARTY_C,   true);
@@ -128,27 +231,26 @@ switch (strtolower($G_SKIN)) {
     $smarty = new Smarty();
     $oHeadPublisher =& headPublisher::getSingleton();
 
-    $smarty->template_dir = $layoutFileBlank['dirname'];
+    $smarty->template_dir = $this->layoutFileBlank['dirname'];
     $smarty->compile_dir  = PATH_SMARTY_C;
-    $smarty->cache_dir  = PATH_SMARTY_CACHE;
+    $smarty->cache_dir    = PATH_SMARTY_CACHE;
     $smarty->config_dir   = PATH_THIRDPARTY . 'smarty/configs';
 
-    if (isset($oHeadPublisher)){
+    if (isset($oHeadPublisher)) {
       $header = $oHeadPublisher->printHeader();
-      $header .= $oHeadPublisher->getExtJsStylesheets($cssFileName);
+      $header .= $oHeadPublisher->getExtJsStylesheets($this->cssFileName);
     }
 
     $smarty->assign('username', (isset($_SESSION['USR_USERNAME']) ? '(' . $_SESSION['USR_USERNAME'] . ' ' . G::LoadTranslation('ID_IN') . ' ' . SYS_SYS . ')' : '') );
     $smarty->assign('header', $header );
-    //$smarty->assign('tpl_menu', PATH_TEMPLATE . 'menu.html' );
-    //$smarty->assign('tpl_submenu', PATH_TEMPLATE . 'submenu.html' );
-    $smarty->force_compile = $forceTemplateCompile;
+    $smarty->force_compile = $this->forceTemplateCompile;
 
-    $smarty->display($layoutFileBlank['basename']);
-    break;
-  //end case blank'
+    // display
+    $smarty->display($this->layoutFileBlank['basename']);
+  }
 
-  case 'submenu'://This is a special template but need main skin styles
+  private function _submenu()
+  {
     require_once PATH_THIRDPARTY . 'smarty/libs/Smarty.class.php'; // put full path to Smarty.class.php
     global $G_ENABLE_BLANK_SKIN;
     //menu
@@ -168,10 +270,10 @@ switch (strtolower($G_SKIN)) {
     $smarty = new Smarty();
     $oHeadPublisher = & headPublisher::getSingleton();
 
-    $smarty->template_dir = $layoutFileSubmenu['dirname'];
-    $smarty->compile_dir = PATH_SMARTY_C;
-    $smarty->cache_dir = PATH_SMARTY_CACHE;
-    $smarty->config_dir = PATH_THIRDPARTY . 'smarty/configs';
+    $smarty->template_dir = $this->layoutFileSubmenu['dirname'];
+    $smarty->compile_dir  = PATH_SMARTY_C;
+    $smarty->cache_dir    = PATH_SMARTY_CACHE;
+    $smarty->config_dir   = PATH_THIRDPARTY . 'smarty/configs';
 
     if (isset($G_ENABLE_BLANK_SKIN) && $G_ENABLE_BLANK_SKIN) {
       $smarty->display($layoutFileBlank['basename']);
@@ -182,7 +284,7 @@ switch (strtolower($G_SKIN)) {
       if (isset($oHeadPublisher)) {
         $oHeadPublisher->title = isset($_SESSION['USR_USERNAME']) ? '(' . $_SESSION['USR_USERNAME'] . ' ' . G::LoadTranslation('ID_IN') . ' ' . SYS_SYS . ')' : '';
         $header = $oHeadPublisher->printHeader();
-        $header .= $oHeadPublisher->getExtJsStylesheets($cssFileName);
+        $header .= $oHeadPublisher->getExtJsStylesheets($this->cssFileName);
       }
 
       $footer = '';
@@ -250,79 +352,12 @@ switch (strtolower($G_SKIN)) {
       }
 
       $smarty->assign('logo_company', $sCompanyLogo);
-      $smarty->display($layoutFileSubmenu['basename']);
+      $smarty->display($this->layoutFileSubmenu['basename']);
     }
-    break;
-  //end case 'submenu'
+  }
 
-  case 'raw': //This is a special template but need main skin styles
-    require_once PATH_THIRDPARTY . 'smarty/libs/Smarty.class.php'; // put full path to Smarty.class.php
-
-    G::verifyPath ( PATH_SMARTY_C,   true );
-    G::verifyPath ( PATH_SMARTY_CACHE, true );
-
-    $smarty = new Smarty();
-    $oHeadPublisher =& headPublisher::getSingleton();
-
-    $smarty->template_dir = $layoutFileRaw['dirname'];
-    $smarty->compile_dir  = PATH_SMARTY_C;
-    $smarty->cache_dir  = PATH_SMARTY_CACHE;
-    $smarty->config_dir   = PATH_THIRDPARTY . 'smarty/configs';
-
-    if (isset($oHeadPublisher)) {
-      $header = $oHeadPublisher->printRawHeader();
-    }
-
-    $smarty->assign('header', $header );
-    $smarty->force_compile=$forceTemplateCompile;
-    $smarty->display($layoutFileRaw['basename']);
-    break;
-  //end  case 'raw'
-
-  case "plain":
-    $oHeadPublisher = & headPublisher::getSingleton();
-    echo $oHeadPublisher->renderExtJs();
-    break;
-
-    
-  case 'extjs'://This is a special template but need main skin styles
-    G::LoadClass('serverConfiguration');
-    $oServerConf    =& serverConf::getSingleton();
-    $oHeadPublisher =& headPublisher::getSingleton();
-
-    /*$extSkin=$oServerConf->getProperty("extSkin");
-     if(isset($extSkin[SYS_SKIN])){
-     $oHeadPublisher->setExtSkin( $extSkin[SYS_SKIN]);
-     }*/
-
-    if( $oHeadPublisher->extJsInit === true){
-      $header = $oHeadPublisher->getExtJsVariablesScript();
-      $styles = $oHeadPublisher->getExtJsStylesheets($cssFileName);
-      $body   = $oHeadPublisher->getExtJsScripts();
-
-      $templateFile = G::ExpandPath( "skinEngine" ).'base'.PATH_SEP .'extJsInitLoad.html';
-    }
-    else {
-      $header = $oHeadPublisher->getExtJsStylesheets($cssFileName);
-      $header .= $oHeadPublisher->includeExtJs();
-      $styles = "";
-      $body   = $oHeadPublisher->renderExtJs();
-
-      $templateFile = $layoutFile['dirname'] . PATH_SEP . $layoutFileExtjs['basename'];
-    }
-
-    $template = new TemplatePower(  $templateFile );
-    $template->prepare();
-    $template->assign( 'header', $header );
-    $template->assign( 'styles', $styles );
-    $template->assign( 'bodyTemplate', $body);
-    $content = $template->getOutputContent();
-
-    echo $content;
-    break;
-  // end case 'extjs'
-
-  case 'tracker': //This is a special template but need main skin styles
+  private function _tracker()
+  {
     require_once PATH_THIRDPARTY . 'smarty/libs/Smarty.class.php'; // put full path to Smarty.class.php
     global $G_ENABLE_BLANK_SKIN;
 
@@ -338,8 +373,8 @@ switch (strtolower($G_SKIN)) {
     $smarty->config_dir   = PATH_THIRDPARTY . 'smarty/configs';
 
     if ( isset($G_ENABLE_BLANK_SKIN) && $G_ENABLE_BLANK_SKIN ) {
-      $smarty->force_compile=$forceTemplateCompile;
-      $smarty->display($layoutFileBlank['basename']);
+      $smarty->force_compile = $this->forceTemplateCompile;
+      $smarty->display($this->layoutFileBlank['basename']);
     }
     else {
       $header = '';
@@ -389,27 +424,46 @@ switch (strtolower($G_SKIN)) {
       $sCompanyLogo = '/images/processmaker.logo.jpg';
 
       $smarty->assign('logo_company', $sCompanyLogo );
-      $smarty->force_compile=$forceTemplateCompile;
-      $smarty->display($layoutFileTracker['basename']);
+      $smarty->force_compile = $this->forceTemplateCompile;
+      $smarty->display($this->layoutFileTracker['basename']);
     }
-    break;
-  //end case 'tracker'
+  }
 
-  case 'mvc': //erik: new mvc templating handler
+  private function _mvc()
+  {
     require_once PATH_THIRDPARTY . 'smarty/libs/Smarty.class.php'; // put full path to Smarty.class.php
     G::LoadClass('serverConfiguration');
     $oServerConf =& serverConf::getSingleton();
     $oHeadPublisher =& headPublisher::getSingleton();
 
     $smarty = new Smarty();
-
-    $smarty->template_dir = PATH_TPL;
+    
     $smarty->compile_dir  = PATH_SMARTY_C;
     $smarty->cache_dir    = PATH_SMARTY_CACHE;
     $smarty->config_dir   = PATH_THIRDPARTY . 'smarty/configs';
 
-    $viewFile = $oHeadPublisher->getContent();
     $viewVars = $oHeadPublisher->getVars();
+
+    // verify if is using extJs engine
+    if (count($oHeadPublisher->extJsScript) > 0) {
+      $header  = $oHeadPublisher->getExtJsStylesheets($this->cssFileName.'-extJs');
+      $header .= $oHeadPublisher->includeExtJs();
+
+      $smarty->assign('_header', $header);
+    }
+
+    $contentFiles = $oHeadPublisher->getContent();
+    $viewFile = isset($contentFiles[0]) ? $contentFiles[0] : '';
+
+    if (empty($this->layout)) {
+      $smarty->template_dir  = PATH_TPL;
+      $tpl = $viewFile;
+    }
+    else {
+      $smarty->template_dir = $this->layoutFile['dirname'];
+      $tpl = 'layout-'.$this->layout.'.html'; 
+      $smarty->assign('_content_file', $viewFile);
+    }
 
     if (strpos($viewFile, '.') === false) {
       $viewFile .= '.html'; 
@@ -423,21 +477,24 @@ switch (strtolower($G_SKIN)) {
       $smarty->force_compile = true;
     }
 
-    $smarty->display(PATH_TPL . $viewFile);
-    break;
-  //end case 'mvc'
-  
-  default://Render a common page
+    $smarty->assign('_skin', $this->mainSkin);
+
+    $smarty->display($tpl);
+  }
+
+  private function _default()
+  {
     require_once PATH_THIRDPARTY . 'smarty/libs/Smarty.class.php'; // put full path to Smarty.class.php
     global $G_ENABLE_BLANK_SKIN;
     //menu
+    global $G_PUBLISH;
     global $G_MAIN_MENU;
     global $G_SUB_MENU;
     global $G_MENU_SELECTED;
     global $G_SUB_MENU_SELECTED;
     global $G_ID_MENU_SELECTED;
     global $G_ID_SUB_MENU_SELECTED;
-
+    
     if (! defined('DB_SYSTEM_INFORMATION')) {
       define('DB_SYSTEM_INFORMATION', 1);
     }
@@ -465,22 +522,20 @@ switch (strtolower($G_SKIN)) {
     $oServerConf->setProperty("extSkin",$extSkin);
     //End of extJS Theme setup
 
-    //G::pr($oHeadPublisher);
     if (isset($G_ENABLE_BLANK_SKIN) && $G_ENABLE_BLANK_SKIN) {
-      $smarty->template_dir = $layoutFileBlank['dirname'];
-      $smarty->force_compile=$forceTemplateCompile;
+      $smarty->template_dir  = $this->layoutFileBlank['dirname'];
+      $smarty->force_compile = $this->forceTemplateCompile;
+
       $smarty->display($layoutFileBlank['basename']);
     }
     else {
-      $smarty->template_dir = $layoutFile['dirname'];
-
+      $smarty->template_dir = $this->layoutFile['dirname'];
       $header = '';
 
       if (isset($oHeadPublisher)) {
         $oHeadPublisher->title = isset($_SESSION['USR_USERNAME']) ? '(' . $_SESSION['USR_USERNAME'] . ' ' . G::LoadTranslation('ID_IN') . ' ' . SYS_SYS . ')' : '';
         $header = $oHeadPublisher->printHeader();
-        $header .= $oHeadPublisher->getExtJsStylesheets($cssFileName);
-
+        $header .= $oHeadPublisher->getExtJsStylesheets($this->cssFileName);
       }
       
       $footer = '';
@@ -527,11 +582,11 @@ switch (strtolower($G_SKIN)) {
 
       }
       if(class_exists('pmLicenseManager')){
-        $pmLicenseManagerO =& pmLicenseManager::getSingleton();
-        $expireIn=$pmLicenseManagerO->getExpireIn();
-        $expireInLabel=$pmLicenseManagerO->getExpireInLabel();
+        $pmLicenseManagerO = &pmLicenseManager::getSingleton();
+        $expireIn          = $pmLicenseManagerO->getExpireIn();
+        $expireInLabel     = $pmLicenseManagerO->getExpireInLabel();
         //if($expireIn<=30){
-        if($expireInLabel!=""){
+        if($expireInLabel != ""){
           $smarty->assign('msgVer', '<label class="textBlack">'.$expireInLabel.'</label>&nbsp;&nbsp;');
         }
         //}
@@ -554,17 +609,18 @@ switch (strtolower($G_SKIN)) {
       $oLogoR = new replacementLogo();
       
       if(defined("SYS_SYS")){
-        $aFotoSelect   = $oLogoR->getNameLogo((isset($_SESSION['USER_LOGGED']))?$_SESSION['USER_LOGGED']:'');
-        if ( is_array ( $aFotoSelect ) ) {
+        $aFotoSelect = $oLogoR->getNameLogo((isset($_SESSION['USER_LOGGED']))?$_SESSION['USER_LOGGED']:'');
+
+        if (is_array($aFotoSelect)) {
           $sFotoSelect   = trim($aFotoSelect['DEFAULT_LOGO_NAME']);
           $sWspaceSelect = trim($aFotoSelect['WORKSPACE_LOGO_NAME']);
         }
       }
       if (class_exists('PMPluginRegistry')) {
         $oPluginRegistry = &PMPluginRegistry::getSingleton();
-        if ( isset($sFotoSelect) && $sFotoSelect!='' && !(strcmp($sWspaceSelect,SYS_SYS)) ){
+        if ( isset($sFotoSelect) && $sFotoSelect!='' && !(strcmp($sWspaceSelect, SYS_SYS)) ){
           $sCompanyLogo = $oPluginRegistry->getCompanyLogo($sFotoSelect);
-          $sCompanyLogo= "/sys".SYS_SYS."/".SYS_LANG."/".SYS_SKIN."/setup/showLogoFile.php?id=".base64_encode($sCompanyLogo);
+          $sCompanyLogo = "/sys".SYS_SYS."/".SYS_LANG."/".SYS_SKIN."/setup/showLogoFile.php?id=".base64_encode($sCompanyLogo);
         }
         else {
           $sCompanyLogo = $oPluginRegistry->getCompanyLogo('/images/processmaker.logo.jpg');
@@ -575,10 +631,12 @@ switch (strtolower($G_SKIN)) {
       }
 
       $smarty->assign('logo_company', $sCompanyLogo);
+      $smarty->force_compile = $this->forceTemplateCompile;
 
-      $smarty->force_compile=$forceTemplateCompile;
-      $smarty->display($layoutFile['basename']);
+      $smarty->display($this->layoutFile['basename']);
     }
-    break;
-  // end 'default' switch sentence
+  }
+
 }
+
+

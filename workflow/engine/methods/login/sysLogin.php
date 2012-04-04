@@ -122,6 +122,8 @@ else {
   $G_PUBLISH->AddContent ( 'xmlform', 'xmlform', 'login/sysLogin', '', $aField, 'sysLogin' );
 }
 
+//g::dump($G_PUBLISH);
+
 G::RenderPage ( "publish" );
 
 

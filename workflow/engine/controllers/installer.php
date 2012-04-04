@@ -20,7 +20,7 @@ class Installer extends Controller {
     $this->path_languages = PATH_CORE.'content/languages/';
     $this->path_plugins   = PATH_CORE.'plugins/';
     $this->path_xmlforms  = PATH_CORE.'xmlform/';
-    $this->path_public    = PATH_HOME.'public_html/';
+    $this->path_public    = PATH_HOME.'public_html/index.html';
     $this->path_shared    = PATH_TRUNK.'shared/';
     $this->path_sep       = PATH_SEP;
   }
@@ -34,8 +34,8 @@ class Installer extends Controller {
 
     $step2_txt = 'These settings are recommended for PHP in order to ensure full compatibility with ProcessMaker. <> ' .
                  'However, ProcessMaker still operate if your settings do not quite match the recommended';
-    $step3_txt = 'In order for ProcessMaker to function correctly it needs to be able to access or write to certain files or directories.<br>' .
-                 'If you see <font color="red">"unwriteable"</font> you need to change the permissions on the file or directory to allow ProcessMaker to write to it.';
+    $step3_txt = 'In order for ProcessMaker works correctly it needs to be able to access or write to certain files or directories.<br>' .
+                 'Please make sure to change the permissions on the files or directories listed below.';
     $step4_txt = 'ProcessMaker stores all of its data in a database. This screen gives the installation program the information needed to create this database.<br><br>' .
                  'If you are installing ProcessMaker on a remote web server, you will need to get this information from your Database Server.<br>';
     $step5_txt = 'ProcessMaker uses a workspaces to store data. Please select a valid workspace name and credentials to log in it. ';
@@ -210,6 +210,7 @@ class Installer extends Controller {
   public function getPermissionInfo() {
 
     $this->setResponseType('json');
+    $info->notify = '';
 
     // pathConfig
     $info->pathConfig->message = 'unwriteable';
@@ -229,8 +230,7 @@ class Installer extends Controller {
     if ( $info->pathXmlforms->result ) $info->pathXmlforms->message = 'writeable';
 
     $info->pathPublic->message = 'unwriteable';
-    $info->pathPublic->result  = $this->is_dir_writable($_REQUEST['pathPublic']);
-    if ( $info->pathPublic->result ) $info->pathPublic->message = 'writeable';
+    $info->pathPublic->result  = is_writable($_REQUEST['pathPublic']);
 
     $info->pathShared->message = 'unwriteable';
     $info->pathShared->result  = $this->is_dir_writable($_REQUEST['pathShared']);

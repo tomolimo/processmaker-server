@@ -74,13 +74,11 @@ class adminProxy extends HttpProxyController
   
     if ($updateRedirector) {
       if (!file_exists(PATH_HTML . 'index.html')) {
-        if (!is_writable(PATH_HTML)) {
-          throw new Exception('The public directory is not writable. <br/>Please give write permission to file: /workflow/public_html');
-        }
+        throw new Exception('The index.html file is not writable on workflow/public_html directory.');
       }
       else {
         if (!is_writable(PATH_HTML . 'index.html')) {
-          throw new Exception('The public index file is not writable. <br/>Please give write permission to file: /workflow/public_html/index.html');
+          throw new Exception(G::LoadTranslation('ID_INDEX_NOT_WRITEABLE') . ' /workflow/public_html/index.html');
         }
       }
 

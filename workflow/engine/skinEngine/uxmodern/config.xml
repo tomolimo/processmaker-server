@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skinConfiguration>
+	<information>
+		<id>00000000000000000000000000000001</id>
+		<name>Classic</name>
+		<description>Classic/default skin</description>
+		<author>ProcessMaker Team</author>
+		<version>1.0</version>
+		<createDate>2011-02-27</createDate>		
+		<modifiedDate>2011-02-28</modifiedDate>
+	</information>
+	<cssFiles>
+		<skin>
+			<cssFile file="style.css" enabledBrowsers="ALL" disabledBrowsers=""></cssFile>
+			<cssFile file="form.css" enabledBrowsers="ALL" disabledBrowsers=""></cssFile>
+			<cssFile file="sprite_ie7.css" enabledBrowsers="ie7" disabledBrowsers="ALL"></cssFile>
+			<cssFile file="sprite.css" enabledBrowsers="ALL" disabledBrowsers="ie7"></cssFile>
+			<cssFile file="xmlcolors.css" enabledBrowsers="ALL" disabledBrowsers=""></cssFile>
+			<cssFile file="jscolors.css" enabledBrowsers="ALL" disabledBrowsers=""></cssFile>
+		</skin>
+		<blank>
+			<cssFile file="style.css" enabledBrowsers="ALL" disabledBrowsers=""></cssFile>
+			<cssFile file="form.css" enabledBrowsers="ALL" disabledBrowsers=""></cssFile>
+			<cssFile file="sprite_ie7.css" enabledBrowsers="ie7" disabledBrowsers="ALL"></cssFile>
+			<cssFile file="sprite.css" enabledBrowsers="ALL" disabledBrowsers="ie7"></cssFile>
+		</blank>
+		<raw>
+		</raw>
+		<submenu>
+			<cssFile file="style.css" enabledBrowsers="ALL" disabledBrowsers=""></cssFile>
+			<cssFile file="form.css" enabledBrowsers="ALL" disabledBrowsers=""></cssFile>
+			<cssFile file="sprite_ie7.css" enabledBrowsers="ie7" disabledBrowsers="ALL"></cssFile>
+			<cssFile file="sprite.css" enabledBrowsers="ALL" disabledBrowsers="ie7"></cssFile>
+		</submenu>
+		<tracker>
+			<cssFile file="style.css" enabledBrowsers="ALL" disabledBrowsers=""></cssFile>
+			<cssFile file="form.css" enabledBrowsers="ALL" disabledBrowsers=""></cssFile>
+			<cssFile file="sprite_ie7.css" enabledBrowsers="ie7" disabledBrowsers="ALL"></cssFile>
+			<cssFile file="sprite.css" enabledBrowsers="ALL" disabledBrowsers="ie7"></cssFile>
+		</tracker>
+		<extjs>
+			<cssFile file="xtheme-gray.css" enabledBrowsers="ALL" disabledBrowsers=""></cssFile>
+			<cssFile file="pmos-xtheme-gray.css" enabledBrowsers="ALL" disabledBrowsers=""></cssFile>				
+			<cssFile file="sprite_ie7.css" enabledBrowsers="ie7" disabledBrowsers="ALL"></cssFile>
+			<cssFile file="sprite.css" enabledBrowsers="ALL" disabledBrowsers="ie7"></cssFile>
+			<cssFile file="xmlcolors.css" enabledBrowsers="ALL" disabledBrowsers=""></cssFile>
+			<cssFile file="jscolors.css" enabledBrowsers="ALL" disabledBrowsers=""></cssFile>
+		</extjs>
+	</cssFiles>
+</skinConfiguration>

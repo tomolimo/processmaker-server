@@ -656,20 +656,33 @@ class G
    * @param  string $strSkin
    * @return void
    */
-  function RenderPage( $strTemplate = "default", $strSkin = SYS_SKIN , $objContent = NULL )
+  function RenderPage( $strTemplate = "default", $strSkin = SYS_SKIN , $objContent = NULL, $layout='')
   {
     global $G_CONTENT;
     global $G_TEMPLATE;
     global $G_SKIN;
+    global $G_PUBLISH;
+
     $G_CONTENT  = $objContent;
     $G_TEMPLATE = $strTemplate;
     $G_SKIN = $strSkin;
+    //echo 'x'; g::dump($G_PUBLISH); die;
+
     try {
-      //G::LoadSkin( $strSkin );
-      G::skinEngine($strSkin);
+      ///////G::LoadSkin( $strSkin );
+      //G::skinEngine($strSkin);
+
+      $file = G::ExpandPath( "skinEngine" ) . "skinEngine.php";
+      include $file;
+
+      $skinEngine = new SkinEngine($G_TEMPLATE, $G_SKIN, $G_CONTENT);
+      $skinEngine->setLayout($layout);
+      $skinEngine->dispatch();
+
     }
     catch ( Exception $e ) {
-      $aMessage['MESSAGE'] = $e->getMessage();
+      echo $aMessage['MESSAGE'] = $e->getMessage();
+      die;
       global $G_PUBLISH;
       global $G_MAIN_MENU;
       global $G_SUB_MENU;
@@ -695,8 +708,15 @@ class G
   }
   
   function skinEngine($strSkin){
-      $file = G::ExpandPath( "skinEngine" ) . "skinEngine.php";
-      require_once( $file );
+    // $file = G::ExpandPath( "skinEngine" ) . "skinEngine.php";
+    // require_once( $file );
+
+    $file = G::ExpandPath( "skinEngine" ) . "class.skinEngine.php";
+    //die($file);
+    include $file;
+    $skinEngine = new SkinEngine();
+    $skinEngine->dispatch();  
+
   }
 
   /**

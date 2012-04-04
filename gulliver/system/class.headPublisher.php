@@ -539,11 +539,7 @@ class headPublisher {
   }
 
   function getContent() {
-    if (!isset($this->extJsContent[0])) {
-      throw new Exception('MVC Error: View template is not set!');
-    }
-
-    return $this->extJsContent[0];
+    return $this->extJsContent;
   }
 
   /**
