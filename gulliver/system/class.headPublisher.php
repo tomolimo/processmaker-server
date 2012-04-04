@@ -304,6 +304,7 @@ class headPublisher {
 
   function getExtJsStylesheets($skinName){
     $script = "  <link rel='stylesheet' type='text/css' href='/css/$skinName.css' />\n";
+    $script .= "  <script type='text/javascript' src='/js/ext/translation.en.js'></script>\n";
 /*
     $script .= "  <link rel='stylesheet' type='text/css' href='/skins/ext/ext-all-notheme.css' />\n";
     $script .= "  <link rel='stylesheet' type='text/css' href='/skins/ext/" . $this->extJsSkin.".css' />\n";
@@ -321,11 +322,11 @@ class headPublisher {
     // Load external/plugin css
     // NOTE is necesary to move this to decorator server
     if(class_exists('PMPluginRegistry')){
-    $oPluginRegistry = & PMPluginRegistry::getSingleton ();
-    $registeredCss=$oPluginRegistry->getRegisteredCss();
-    foreach($registeredCss as $cssFile){
-      $script .= "  <link rel='stylesheet' type='text/css' href='" . $cssFile->sCssFile . ".css' />\n";
-    }
+      $oPluginRegistry = & PMPluginRegistry::getSingleton ();
+      $registeredCss=$oPluginRegistry->getRegisteredCss();
+      foreach($registeredCss as $cssFile){
+        $script .= "  <link rel='stylesheet' type='text/css' href='" . $cssFile->sCssFile . ".css' />\n";
+      }
     }
 
     return $script;
