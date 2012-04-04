@@ -329,7 +329,8 @@ class Groupwf extends BaseGroupwf {
     $oDataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
     $processes = Array();
     $uids=array();
-    
+    $groups = array();
+    $aGroups = array();
     while( $oDataset->next() ) {
       $groups[] = $oDataset->getRow();
       $uids[]   = $groups[sizeof($groups)-1]['GRP_UID'];
