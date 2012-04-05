@@ -107,17 +107,39 @@ class adminProxy extends HttpProxyController
   function uxUserUpdate($httpData)
   {
     require_once 'classes/model/Users.php';
-    $data = (array) json_decode($httpData->users);
+    $data = json_decode($httpData->users);
+    $list = array();
 
-    $user = UsersPeer::retrieveByPK($data['USR_UID']);
-    $user->setUsrUx($data['USR_UX']);
-    $user->save();
-    $row = $user->toArray(BasePeer::TYPE_FIELDNAME);
+    if  (!is_array($data)) {
+      $list[0] = (array) $data ;
+    }
+    else {
+      $list =  $data;
+    }
 
-    $uxList = self::getUxTypesList();
-    $row['USR_UX'] = $uxList[$user->getUsrUx()];
+    $rows = array();
 
-    return array('success' => true, 'message'=>'done', 'users'=>$row);
+    foreach ($list as $value) {
+      $value = (array) $value;
+      $user = UsersPeer::retrieveByPK($value['USR_UID']);
+      $user->setUsrUx($value['USR_UX']);
+      $user->save();
+
+      $row = $user->toArray(BasePeer::TYPE_FIELDNAME);
+
+      $uxList = self::getUxTypesList();
+      $row['USR_UX'] = $uxList[$user->getUsrUx()];
+      $rows[] = $row;
+    }
+
+    if  (count($rows) == 1) {
+      $retRow = $rows[0];
+    }
+    else {
+      $retRow = $rows;
+    }
+
+    return array('success' => true, 'message'=>'done', 'users'=>$retRow);
   }
 
   function uxGroupUpdate($httpData)
