@@ -2951,10 +2951,7 @@ SELECT 'LABEL','ID_TRIGGERS_VALIDATE_EERR1','en','* The {Object} {Description} d
   UNION ALL
 SELECT 'LABEL','ID_CASES_STATUS_TO_DO','en','To Do','2012-02-02' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_DONT_SAVE_XMLFORM','en','DynaForm is now saved. 
- 
-Warning: Form doesn''t have a submit action. 
-Either add a "Submit" button or change the "Next Step Link" property.','2012-02-02' 
+SELECT 'JAVASCRIPT','ID_DONT_SAVE_XMLFORM','en','This form has not a submit action. Do you  want to continue anyway?','2012-02-02' 
   UNION ALL
 SELECT 'LABEL','ID_CASES_STATUS_COMPLETED','en','Completed','2012-02-02' 
   UNION ALL
@@ -3270,7 +3267,7 @@ SELECT 'LABEL','ID_FILE','en','File','2012-02-02'
   UNION ALL
 SELECT 'LABEL','ID_OUT_PUT_DOC_UPLOAD_TITLE','en','Upload Output Document Template File','2012-02-02' 
   UNION ALL
-SELECT 'LABEL','ID_UPLOADING_FILE','en','Uploading file...','2012-03-12' 
+SELECT 'LABEL','ID_UPLOADING_FILE','en','Uploading file...','2012-02-02' 
   UNION ALL
 SELECT 'JAVASCRIPT','ID_CLASS_TABLE_DOESNT_EXIST','en','This table class does not exist','2012-02-02' 
   UNION ALL
@@ -3680,7 +3677,7 @@ SELECT 'LABEL','ID_REASSIGNMENT_SUCCESS','en','The case #{APP_NUMBER} was reassi
   UNION ALL
 SELECT 'LABEL','ID_REASSIGN_CONFIRM','en','Are you sure to reassign the current case?','2012-02-02' 
   UNION ALL
-SELECT 'LABEL','ID_CASE_PAUSED_SUCCESSFULLY','en','The case {APP_NUMBER} was successfully paused and it will be unpaused on date {UNPAUSE_DATE}','2012-02-02' 
+SELECT 'LABEL','ID_CASE_PAUSED_SUCCESSFULLY','en','The Case {APP_NUMBER} was paused successfully and   ir will be unpused on date {UNPAUSE_DATE}','2012-02-02' 
   UNION ALL
 SELECT 'LABEL','ID_VACATION','en','Vacation','2012-02-02' 
   UNION ALL
@@ -4902,7 +4899,7 @@ SELECT 'LABEL','ID_PMTABLES_NOTICE_EXPORT','en','From each table you should sele
   UNION ALL
 SELECT 'LABEL','ID_CONFIRM_DELETE_SKIN','en','Do you want to delete selected skin?','2012-02-02' 
   UNION ALL
-SELECT 'LABEL','ID_MESSAGE_SUBJECT_NOTE_NOTIFICATION','en','A note has been added to case:','2012-03-27' 
+SELECT 'LABEL','ID_MESSAGE_SUBJECT_NOTE_NOTIFICATION','en','A note has added to a case','2012-02-02' 
   UNION ALL
 SELECT 'LABEL','ID_MSG_CANNOT_EXPORT_DEFAULT_SKIN','en','Default skin can''t be exported. Instead create new one based on default','2012-02-02' 
   UNION ALL
@@ -4972,7 +4969,7 @@ SELECT 'LABEL','ID_IMAGE','en','Image','2012-02-02'
   UNION ALL
 SELECT 'LABEL','ID_YOUR_IMAGE_HAS_BEEN_SUCCESSFULLY','en','Your image has been successfully uploaded','2012-02-02' 
   UNION ALL
-SELECT 'LABEL','ID_ERROR_UPLOADING_IMAGE_TYPE','en','Error when uploading file, type or format is incorrect.','2012-02-02' 
+SELECT 'LABEL','ID_ERROR_UPLOADING_IMAGE_TYPE','en','Error uploading image, wrong file type','2012-02-02' 
   UNION ALL
 SELECT 'LABEL','ID_UPLOADING_IMAGE_WRONG_SIZE','en','Error uploading image, wrong file size','2012-02-02' 
   UNION ALL
@@ -5382,6 +5379,8 @@ SELECT 'LABEL','ID_SWITCH_INTERFACE','en','Switch Interface','2012-02-02'
   UNION ALL
 SELECT 'LABEL','ID_USER_EXPERIENCE','en','User Experience','2012-02-02' 
   UNION ALL
+SELECT 'LABEL','ID_INTERMEDIATE_MESSAGE_EVENT','en','Intermediate Message Events (Task Notifications)','2012-02-02' 
+  UNION ALL
 SELECT 'LABEL','ID_TEMPLATES','en','Templates','2012-02-02' 
   UNION ALL
 SELECT 'LABEL','ID_PUBLIC','en','Public','2012-02-02' 
@@ -5396,39 +5395,59 @@ SELECT 'JAVASCRIPT','ID_TEMPLATE_FIELD_REQUIRED','en','Template Field is require
   UNION ALL
 SELECT 'LABEL','ID_ADMINS_CANT_USE_UXS','en','Administrators users cannot use this User Experience.','2012-02-02' 
   UNION ALL
-SELECT 'LABEL','ID_IMPORT_PMT','en','Import PM Table','2012-03-12' 
+SELECT 'LABEL','ID_IMPORT_PMT','en','Import PM Table','2012-02-02' 
   UNION ALL
-SELECT 'LABEL','ID_OVERWRITE_EXIST','en','Overwrite if exists?','2012-03-12' 
+SELECT 'LABEL','ID_OVERWRITE_EXIST','en','Overwrite if exists?','2012-02-02' 
   UNION ALL
-SELECT 'LABEL','ID_SELECT_PM_FILE','en','Select a .pmt file','2012-03-12' 
+SELECT 'LABEL','ID_SELECT_PM_FILE','en','Select a .pmt file','2012-02-02' 
   UNION ALL
-SELECT 'LABEL','ID_SIMPLE_REPORT','en','Simple Report','2012-03-12' 
+SELECT 'LABEL','ID_SIMPLE_REPORT','en','Simple Report','2012-02-02' 
   UNION ALL
-SELECT 'LABEL','ID_TABLE_TYPE','en','Table Type','2012-03-12' 
+SELECT 'LABEL','ID_TABLE_TYPE','en','Table Type','2012-02-02' 
   UNION ALL
-SELECT 'LABEL','ID_CONVERT_NATIVE_REP_TABLE','en','Convert to native Report Table','2012-03-12' 
+SELECT 'LABEL','ID_CONVERT_NATIVE_REP_TABLE','en','Convert to native Report Table','2012-02-02' 
   UNION ALL
-SELECT 'LABEL','ID_CONVERT_SIMPLE_REPORT','en','Convert to Simple Report','2012-03-12' 
+SELECT 'LABEL','ID_CONVERT_SIMPLE_REPORT','en','Convert to Simple Report','2012-02-02' 
   UNION ALL
-SELECT 'LABEL','ID_REMOVING_SELECTED_TABLES','en','Removing selected table(s), please wait!','2012-03-12' 
+SELECT 'LABEL','ID_REMOVING_SELECTED_TABLES','en','Removing selected table(s), please wait!','2012-02-02' 
   UNION ALL
-SELECT 'LABEL','ID_IMPORT_RESULT','en','IMPORT RESULT','2012-03-12' 
+SELECT 'LABEL','ID_IMPORT_RESULT','en','IMPORT RESULT','2012-02-02' 
   UNION ALL
-SELECT 'LABEL','ID_IMPORTING_ERROR','en','Importing Error','2012-03-12' 
+SELECT 'LABEL','ID_IMPORTING_ERROR','en','Importing Error','2012-02-02' 
   UNION ALL
-SELECT 'LABEL','ID_SELECTED_IMAGE_DELETED','en','The selected image has been deleted.','2012-03-15' 
+SELECT 'LABEL','ID_SELECTED_IMAGE_DELETED','en','The selected image has been deleted.','2012-02-02' 
   UNION ALL
-SELECT 'LABEL','ID_SELECTED_IMAGE_IS_LOGO','en','The selected image is established as logo.','2012-03-15' 
+SELECT 'LABEL','ID_SELECTED_IMAGE_IS_LOGO','en','The selected image is established as logo.','2012-02-02' 
   UNION ALL
-SELECT 'LABEL','ID_DELETE_SELECTED_LOGO','en','Do you want to apply the selected Logo?','2012-03-16' 
+SELECT 'LABEL','ID_DELETE_SELECTED_LOGO','en','Do you want to apply the selected Logo?','2012-02-02' 
   UNION ALL
-SELECT 'LABEL','MISSING_OR_NOT_CONFIGURED_SMTP','en','Missing or it''s not configured SMTP mail. Check the configuration.','2012-03-26' 
+SELECT 'LABEL','MISSING_OR_NOT_CONFIGURED_SMTP','en','Missing or it''s not configured SMTP mail. Check the configuration.','2012-02-02' 
   UNION ALL
-SELECT 'LABEL','ID_SELECT_ONE_OPTION','en','select one option','2012-03-27' 
+SELECT 'LABEL','ID_SELECT_ONE_OPTION','en','select one option','2012-02-02' 
   UNION ALL
-SELECT 'LABEL','ID_CLICK_LOCK','en','Click the lock to make changes.','2012-03-28' 
+SELECT 'LABEL','ID_CLICK_LOCK','en','Click the lock to make changes.','2012-02-02' 
   UNION ALL
-SELECT 'LABEL','ID_CLICK_UNLOCK','en','Click the lock to prevent further changes.','2012-03-28' 
+SELECT 'LABEL','ID_CLICK_UNLOCK','en','Click the lock to prevent further changes.','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_MAX_FILE_SIZE','en','Max upload file size','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_DEFAULT_SKIN','en','Default Skin','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_INTERMEDIATE_TIMER_EVENT','en','Intermediate Timer Event (Multiple Event)','2012-02-02' 
+ ;
+INSERT INTO [TRANSLATION] ([TRN_CATEGORY],[TRN_ID],[TRN_LANG],[TRN_VALUE],[TRN_UPDATE_DATE]) 
+
+SELECT 'LABEL','ID_TIME_ZONE','en','Time Zone','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_MEMORY_LIMIT','en','Memory Limit  (Mb)','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_SYSTEM_SETTINGS','en','System Settings','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_SYSTEM_REDIRECT_CONFIRM','en','You must login again to view the changes, do you want do it now?','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_TASK_CANT_DELETE','en','You can''t delete the task "{0}" because it has {1} cases.','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_INDEX_NOT_WRITEABLE','en','The index file is not writable. <br/>Please give write permission to file:','2012-02-02' 
  ;
 
 INSERT INTO ISO_LOCATION ([IC_UID],[IL_UID],[IL_NAME],[IL_NORMAL_NAME],[IS_UID]) 

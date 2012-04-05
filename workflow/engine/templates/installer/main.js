@@ -88,7 +88,17 @@ Ext.onReady(function(){
         Ext.get('pathPublicSpan').dom.innerHTML    = (response.pathPublic.result ? okImage : badImage);
         Ext.get('pathSharedSpan').dom.innerHTML    = (response.pathShared.result ? okImage : badImage);
         Ext.get('pathLogFileSpan').dom.innerHTML    = (response.pathLogFile.result ? okImage : badImage);
-        wizard.onClientValidation(1, response.pathConfig.result && response.pathLanguages.result && response.pathPlugins.result && response.pathXmlforms.result && response.pathShared.result && response.pathLogFile.result);
+        
+        wizard.onClientValidation(1, 
+          response.pathConfig.result && 
+          response.pathLanguages.result && 
+          response.pathPlugins.result && 
+          response.pathXmlforms.result && 
+          response.pathPublic.result && 
+          response.pathShared.result && 
+          response.pathLogFile.result
+        );
+        
         wizard.showLoadMask(false);
 
         if (response.notify != '') {
