@@ -456,8 +456,8 @@ class SkinEngine
     $viewFile = isset($contentFiles[0]) ? $contentFiles[0] : '';
 
     if (empty($this->layout)) {
-      $smarty->template_dir  = PATH_TPL;
-      $tpl = $viewFile;
+      $smarty->template_dir  = PATH_TPL; 
+      $tpl = $viewFile . '.html';
     }
     else {
       $smarty->template_dir = $this->layoutFile['dirname'];

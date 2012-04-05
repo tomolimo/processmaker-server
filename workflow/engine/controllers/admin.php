@@ -26,7 +26,6 @@ class Admin extends Controller
     foreach ($skinsList['skins'] as $skin) {
       $skins[] = array($skin['SKIN_FOLDER_ID'], $skin['SKIN_NAME']);
     }
-    $skins[] = array('uxmodern', 'uxmodern');
 
     foreach ($timeZonesList as $tz) {
       $timeZones[] = array($tz, $tz);

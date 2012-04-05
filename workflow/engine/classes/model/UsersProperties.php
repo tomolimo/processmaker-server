@@ -18,40 +18,38 @@ require_once 'classes/model/om/BaseUsersProperties.php';
  */
 class UsersProperties extends BaseUsersProperties 
 {
-  var $fields = null;
+  public $fields = null;
+  public $usrID  = '';
+  public $lang   = 'en';
+
+  function __construct() 
+  {
+    $this->lang = defined('SYS_LANG') ? SYS_LANG : 'en';
+  }
 	
-  function UserPropertyExists($sUserUID) {
-    try {
-      $oUserProperty = UsersPropertiesPeer::retrieveByPk($sUserUID);
-      if (!is_null($oUserProperty) && is_object($oUserProperty) && get_class($oUserProperty) == 'UsersProperties') {
-        $this->fields = $oUserProperty->toArray(BasePeer::TYPE_FIELDNAME);
-        $this->fromArray($this->fields, BasePeer::TYPE_FIELDNAME);
-        return true;
-      }
-      else {
-        return false;
-      }
+  function UserPropertyExists($sUserUID) 
+  {
+    $oUserProperty = UsersPropertiesPeer::retrieveByPk($sUserUID);
+    if (!is_null($oUserProperty) && is_object($oUserProperty) && get_class($oUserProperty) == 'UsersProperties') {
+      $this->fields = $oUserProperty->toArray(BasePeer::TYPE_FIELDNAME);
+      $this->fromArray($this->fields, BasePeer::TYPE_FIELDNAME);
+      return true;
     }
-    catch (Exception $oError) {
-      throw($oError);
+    else {
+      return false;
     }
   }
 
   public function load($sUserUID) 
-  {
-    try {
-      $oUserProperty = UsersPropertiesPeer::retrieveByPK($sUserUID);
-      if (!is_null($oUserProperty)) {
-        $aFields = $oUserProperty->toArray(BasePeer::TYPE_FIELDNAME);
-        $this->fromArray($aFields, BasePeer::TYPE_FIELDNAME);
-        return $aFields;
-      }
-      else {
-        throw(new Exception('This row doesn\'t exist!'));
-      }
+  {  
+    $oUserProperty = UsersPropertiesPeer::retrieveByPK($sUserUID);
+    if (!is_null($oUserProperty)) {
+      $aFields = $oUserProperty->toArray(BasePeer::TYPE_FIELDNAME);
+      $this->fromArray($aFields, BasePeer::TYPE_FIELDNAME);
+      return $aFields;
     }
-    catch (Exception $oError) {
-      throw($oError);
+    else {
+      throw new Exception("User with $sUserUID does not exist!");
     }
   }
 
@@ -129,6 +127,7 @@ class UsersProperties extends BaseUsersProperties
     else {
       $aUserProperty = $this->fields;
     }
+
     return $aUserProperty;
   }
 
@@ -199,12 +198,84 @@ class UsersProperties extends BaseUsersProperties
     return $aErrors;
   }
   
-  public function redirectTo($sUserUID, $sLanguage = 'en') 
+
+  /**
+   * get user location
+   * defined by precedence plugin->ux->default
+   */
+  public function redirectTo($usrID, $lang='')
+  {
+    $this->usrID = $usrID;
+    $this->lang  = empty($lang) ? $this->lang : $lang;
+
+    $url = $this->_getPluginLocation();
+
+    if (empty($url)) {
+      $url = $this->_getUXLocation();
+    }
+
+    $urlUx = $this->_getUXSkinVariant();
+    if (empty($url) && !empty($urlUx)) {
+      $_SESSION['_defaultUserLocation'] = $url;
+      $url = $urlUx;  
+    }
+
+    if (empty($url)) {
+      $url = $this->_getDefaultLocation();
+    }
+    
+    return $url;
+  }
+
+  /**
+   * get user location
+   * defined by precedence plugin->default
+   * note that is getting location without User Inbox Simplified varification
+   */
+  public function getUserLocation($usrID, $lang = 'en')
+  {
+    $this->usrID = $usrID;
+    $this->lang  = empty($lang) ? $this->lang : $lang;
+
+    $url = $this->_getPluginLocation();
+
+    if (empty($url)) {
+      $url = $this->_getDefaultLocation();
+    }
+
+    $urlUx = $this->_getUXSkinVariant();
+    if (!empty($urlUx)) {
+      $_SESSION['_defaultUserLocation'] = $url;
+      $url = $urlUx;  
+    }
+
+    return $url;
+  }
+
+  /**
+   * to verify if the user is using some "ux..." skin variant
+   * if that is the case, the redirection will change to 'main' controller
+   */
+  public function _getUXSkinVariant()
+  {
+    $url = '';
+
+    if (substr(SYS_SKIN, 0, 2) == 'ux' && SYS_SKIN != 'uxs') {
+      $url = '/sys' .  SYS_SYS . '/' . $this->lang . '/' . SYS_SKIN . '/main';
+    }
+
+    return $url;
+  }
+
+  /**
+   * get the plugins, and check if there is redirectLogins
+   * if yes, then redirect goes according his Role
+   */
+  public function _getPluginLocation()
   {
     global $RBAC;
-    
-    //get the plugins, and check if there is redirectLogins
-    //if yes, then redirect goes according his Role
+    $url = '';
+
     if ( class_exists('redirectDetail')) {
       //to do: complete the validation
       if(isset($RBAC->aUserInfo['PROCESSMAKER']['ROLE']['ROL_CODE']))
@@ -215,24 +286,25 @@ class UsersProperties extends BaseUsersProperties
       if (isset($aRedirectLogin) && is_array($aRedirectLogin) ) {
         foreach ($aRedirectLogin as $key=>$detail) {
           if (isset($detail->sPathMethod) && $detail->sRoleCode == $userRole ) {
-              return '/sys' .  SYS_SYS . '/' . $sLanguage . '/' . SYS_SKIN . '/' . $detail->sPathMethod;
+            $url = '/sys' .  SYS_SYS . '/' . $this->lang . '/' . SYS_SKIN . '/' . $detail->sPathMethod;
           }
         }
       }
     }
-    //end plugin
 
-    if (substr(SYS_SKIN, 0, 2) === 'ux' && SYS_SKIN != 'uxs') {
-      return '../main';
-    }
+    return $url;
+  }
 
-
-    /**
-     * New feature - User Experience Redirector
-     * @author Erik Amaru Ortiz <erik@colosa.com>
-     */
+  /**
+   * New feature - User Experience Redirector
+   * @author Erik Amaru Ortiz <erik@colosa.com>
+   */
+  public function _getUXLocation()
+  {
     require_once 'classes/model/Users.php';
-    $u = UsersPeer::retrieveByPK($sUserUID);
+    $u = UsersPeer::retrieveByPK($this->usrID);
+    $url = '';
+
     $uxType = $u->getUsrUx();
     $_SESSION['user_experience'] = 'NORMAL';
 
@@ -240,7 +312,7 @@ class UsersProperties extends BaseUsersProperties
     if ($uxType == '' || $uxType == 'NORMAL') {
       require_once 'classes/model/GroupUser.php';
       $gu = new GroupUser();
-      $ugList = $gu->getAllUserGroups($sUserUID);
+      $ugList = $gu->getAllUserGroups($this->usrID);
       
       foreach ($ugList as $row) {
         if ($row['GRP_UX'] != 'NORMAL' && $row['GRP_UX'] != '') {
@@ -256,69 +328,85 @@ class UsersProperties extends BaseUsersProperties
       case 'SINGLE':
         $_SESSION['user_experience'] = $uxType;
         $_SESSION['user_last_skin']  = SYS_SKIN;
-        return '/sys' .  SYS_SYS . '/' . $sLanguage . '/uxs/' . 'home';
+        $url = '/sys' .  SYS_SYS . '/' . $this->lang . '/uxs/' . 'home';
         break;
     }
-    // end user experience redirection
 
-    // get user preferences for default redirect
-    // verifying if it has any preferences on configurations table
+    return $url;
+  }
+
+  /**
+   * get user preferences for default redirect
+   * verifying if it has any preferences on configurations table
+   */
+  public function _getDefaultLocation()
+  {
+    global $RBAC;
     G::loadClass('configuration');
     $oConf = new Configurations;
     $oConf->loadConfig($x, 'USER_PREFERENCES','','',$_SESSION['USER_LOGGED'],'');
 
+    $baseUrl = '/sys' .  SYS_SYS . '/' . $this->lang . '/' . SYS_SKIN . '/';
+    $url = '';
+    
     if( sizeof($oConf->aConfig) > 0) { // this user has a configuration record
-    	// backward compatibility, because now, we don't have user and dashboard menu.
-    	if ( $oConf->aConfig['DEFAULT_MENU'] == 'PM_USERS')     $oConf->aConfig['DEFAULT_MENU'] = 'PM_SETUP';
-    	if ( $oConf->aConfig['DEFAULT_MENU'] == 'PM_DASHBOARD') $oConf->aConfig['DEFAULT_MENU'] = 'PM_SETUP';
-    	
+      // backward compatibility, because now, we don't have user and dashboard menu.
+      if ($oConf->aConfig['DEFAULT_MENU'] == 'PM_USERS')     
+        $oConf->aConfig['DEFAULT_MENU'] = 'PM_SETUP';
+      
+      if ($oConf->aConfig['DEFAULT_MENU'] == 'PM_DASHBOARD') 
+        $oConf->aConfig['DEFAULT_MENU'] = 'PM_SETUP';
+      
       switch($oConf->aConfig['DEFAULT_MENU']) {
         case 'PM_SETUP':
           if ($RBAC->userCanAccess('PM_SETUP') == 1) {
-            return '/sys' .  SYS_SYS . '/' . $sLanguage . '/' . SYS_SKIN . '/' . 'setup/main';
+            $url = 'setup/main';
           }
           break;
         case 'PM_FACTORY':
           if ($RBAC->userCanAccess('PM_FACTORY') == 1) {
-            return '/sys' .  SYS_SYS . '/' . $sLanguage . '/' . SYS_SKIN . '/' . 'processes/main';
+            $url = 'processes/main';
           }
           break;
         case 'PM_CASES':
           if ($RBAC->userCanAccess('PM_CASES') == 1) {
-            return '/sys' .  SYS_SYS . '/' . $sLanguage . '/' . SYS_SKIN . '/' . 'cases/main';
+            $url = 'cases/main';
           }
           break;
         case 'PM_USERS':
           if ($RBAC->userCanAccess('PM_USERS') == 1) {
-            return '/sys' .  SYS_SYS . '/' . $sLanguage . '/' . SYS_SKIN . '/' . 'setup/main';
+            $url = 'setup/main';
           }
           break;
         case 'PM_DASHBOARD':
           if ($RBAC->userCanAccess('PM_DASHBOARD') == 1) {
-            return '/sys' .  SYS_SYS . '/' . $sLanguage . '/' . SYS_SKIN . '/' . 'dashboard/dashboard';
+            $url = 'dashboard/dashboard';
           }
           break;
       }
     }
 
-    if ($RBAC->userCanAccess('PM_FACTORY') == 1) {
-      return '/sys' .  SYS_SYS . '/' . $sLanguage . '/' . SYS_SKIN . '/' . 'processes/main';
+    if (empty($url)) {
+      if ($RBAC->userCanAccess('PM_FACTORY') == 1) {
+        $url = 'processes/main';
+      }
+      else if ($RBAC->userCanAccess('PM_SETUP') == 1) {
+        $url = 'setup/main';
+      }
+      else if ($RBAC->userCanAccess('PM_CASES') == 1) {
+        $url = 'cases/main';
+      }
+      else if ($RBAC->userCanAccess('PM_USERS') == 1) {
+        $url = 'setup/main';
+      }
+      else if ($RBAC->userCanAccess('PM_DASHBOARD') == 1) {
+        $url = 'dashboard/dashboard';
+      }
+      else {
+        $url = 'users/myInfo';
+      }
     }
-    if ($RBAC->userCanAccess('PM_SETUP') == 1) {
-      return '/sys' .  SYS_SYS . '/' . $sLanguage . '/' . SYS_SKIN . '/' . 'setup/main';
-    }
-    if ($RBAC->userCanAccess('PM_CASES') == 1) {
-      return '/sys' .  SYS_SYS . '/' . $sLanguage . '/' . SYS_SKIN . '/' . 'cases/main';
-    }
-    if ($RBAC->userCanAccess('PM_USERS') == 1) {
-      return '/sys' .  SYS_SYS . '/' . $sLanguage . '/' . SYS_SKIN . '/' . 'setup/main';
-    }
-    if ($RBAC->userCanAccess('PM_DASHBOARD') == 1) {
-      return '/sys' .  SYS_SYS . '/' . $sLanguage . '/' . SYS_SKIN . '/' . 'dashboard/dashboard';
-    }
-    if ($RBAC->userCanAccess('PM_REPORTS') == 1) {
-      return '/sys' .  SYS_SYS . '/' . $sLanguage . '/' . SYS_SKIN . '/' . 'reports/reportsList';
-    }
-    return '/sys' .  SYS_SYS . '/' . $sLanguage . '/' . SYS_SKIN . '/' . 'users/myInfo';
+
+    return $baseUrl . $url;
   }
 } // UsersProperties

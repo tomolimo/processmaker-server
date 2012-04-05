@@ -91,9 +91,16 @@ class adminProxy extends HttpProxyController
     }
 
     G::update_php_ini($envFile, $updatedConf);
+    if (substr($sysConf['default_skin'], 0, 2) == 'ux') {
+      $urlPart = '/main/login';
+    }
+    else {
+      $urlPart = '/login/login';
+    }
 
     $this->success = true;
     $this->restart = $restart;
+    $this->url     = '/sys' .  SYS_SYS . '/' . $sysConf['default_lang'] . '/' . $sysConf['default_skin'] . $urlPart;
     $this->message = 'Saved Successfully';
   }
 

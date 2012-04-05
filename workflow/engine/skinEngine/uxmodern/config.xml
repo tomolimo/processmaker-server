@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <skinConfiguration>
 	<information>
-		<id>00000000000000000000000000000001</id>
-		<name>Classic</name>
-		<description>Classic/default skin</description>
+		<id>00000000000000000000000000000002</id>
+		<name>UxModern</name>
+		<description>UxModern skin</description>
 		<author>ProcessMaker Team</author>
 		<version>1.0</version>
-		<createDate>2011-02-27</createDate>		
-		<modifiedDate>2011-02-28</modifiedDate>
+		<createDate>2012-04-05</createDate>		
+		<modifiedDate>2012-04-05</modifiedDate>
 	</information>
 	<cssFiles>
 		<skin>

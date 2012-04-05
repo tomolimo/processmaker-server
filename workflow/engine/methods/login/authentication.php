@@ -26,7 +26,6 @@
 try {
 
   if (!$RBAC->singleSignOn) {
-
     if (!isset($_POST['form']) ) {
       G::SendTemporalMessage ('ID_USER_HAVENT_RIGHTS_SYSTEM', 'error');
       G::header('Location: login');
@@ -43,9 +42,7 @@ try {
     }
     
     $uid = $RBAC->VerifyLogin($usr , $pwd);
-  
     $RBAC->cleanSessionFiles(72); //cleaning session files older than 72 hours
-    $sPwd = 'currentPwd';
 
     switch ($uid) {
       //The user does doesn't exist
@@ -84,8 +81,6 @@ try {
         $errLabel = 'ID_AUTHENTICATION_SOURCE_INVALID';
         break;
     }
-
-    $$sPwd = $pwd;
 
     //to avoid empty string in user field.  This will avoid a weird message "this row doesn't exist"
     if ( !isset($uid) ) {
@@ -141,9 +136,9 @@ try {
     //Execute the SSO Script from plugin
     $oPluginRegistry =& PMPluginRegistry::getSingleton();
     if ( $oPluginRegistry->existsTrigger ( PM_LOGIN ) ) {
-            $lSession="";
-            $loginInfo = new loginInfo ($usr, $pwd, $lSession  );
-            $oPluginRegistry->executeTriggers ( PM_LOGIN , $loginInfo );
+      $lSession="";
+      $loginInfo = new loginInfo ($usr, $pwd, $lSession  );
+      $oPluginRegistry->executeTriggers ( PM_LOGIN , $loginInfo );
     }
     $_SESSION['USER_LOGGED']  = $uid;
     $_SESSION['USR_USERNAME'] = $usr;
@@ -225,88 +220,76 @@ try {
     $c = file_get_contents(PATH_DATA_SITE . PATH_SEP . '.server_info');
     if(md5($c) != md5($cput)){
       file_put_contents(PATH_DATA_SITE . PATH_SEP . '.server_info', $cput);
-       }
+    }
   }
 
   /* Check password using policy - Start */
   require_once 'classes/model/UsersProperties.php';
   $oUserProperty = new UsersProperties();
-  if (!$RBAC->singleSignOn) {
-    $aUserProperty = $oUserProperty->loadOrCreateIfNotExists($_SESSION['USER_LOGGED'], array('USR_PASSWORD_HISTORY' => serialize(array(md5($currentPwd)))));
-    $aErrors       = $oUserProperty->validatePassword($_POST['form']['USR_PASSWORD'], $aUserProperty['USR_LAST_UPDATE_DATE'], $aUserProperty['USR_LOGGED_NEXT_TIME']);
 
-     if (!empty($aErrors)) {
-       if (!defined('NO_DISPLAY_USERNAME')) {
-        define('NO_DISPLAY_USERNAME', 1);
-      }
-      $aFields = array();
-      $aFields['DESCRIPTION']  = '<span style="font-weight:normal;">';
-      $aFields['DESCRIPTION'] .= G::LoadTranslation('ID_POLICY_ALERT').':<br /><br />';
-      foreach ($aErrors as $sError)  {
-        switch ($sError) {
-          case 'ID_PPP_MINIMUM_LENGTH':
-            $aFields['DESCRIPTION'] .= ' - ' . G::LoadTranslation($sError).': ' . PPP_MINIMUM_LENGTH . '<br />';
-            $aFields[substr($sError, 3)] = PPP_MINIMUM_LENGTH;
-          break;
-          case 'ID_PPP_MAXIMUM_LENGTH':
-            $aFields['DESCRIPTION'] .= ' - ' . G::LoadTranslation($sError).': ' . PPP_MAXIMUM_LENGTH . '<br />';
-            $aFields[substr($sError, 3)] = PPP_MAXIMUM_LENGTH;
-          break;
-          case 'ID_PPP_EXPIRATION_IN':
-            $aFields['DESCRIPTION'] .= ' - ' . G::LoadTranslation($sError).' ' . PPP_EXPIRATION_IN . ' ' . G::LoadTranslation('ID_DAYS') . '<br />';
-            $aFields[substr($sError, 3)] = PPP_EXPIRATION_IN;
-          break;
-          default:
-            $aFields['DESCRIPTION'] .= ' - ' . G::LoadTranslation($sError).'<br />';
-            $aFields[substr($sError, 3)] = 1;
-          break;
-        }
-      }
-      $aFields['DESCRIPTION'] .= '<br />' . G::LoadTranslation('ID_PLEASE_CHANGE_PASSWORD_POLICY') . '<br /><br /></span>';
-      $G_PUBLISH = new Publisher;
-      $G_PUBLISH->AddContent('xmlform', 'xmlform', 'login/changePassword', '', $aFields, 'changePassword');
-      G::RenderPage('publish');
-      die;
-    }
-
-    if (isset($_REQUEST['form']['URL']) && $_REQUEST['form']['URL'] != '') {
-        $sLocation = $_REQUEST['form']['URL'];
-    }
-    else {
-      if (isset($_REQUEST['u']) && $_REQUEST['u'] != '') {
-        $sLocation = $_REQUEST['u'];
-      }
-      else {
-        $sLocation = $oUserProperty->redirectTo($_SESSION['USER_LOGGED'], $lang);
-      }
-    }
+  // getting default user location
+  if (isset($_REQUEST['form']['URL']) && $_REQUEST['form']['URL'] != '') {
+    $sLocation = $_REQUEST['form']['URL'];
   }
   else {
-    if (isset($_REQUEST['form']['URL']) && $_REQUEST['form']['URL'] != '') {
-        $sLocation = $_REQUEST['form']['URL'];
+    if (isset($_REQUEST['u']) && $_REQUEST['u'] != '') {
+      $sLocation = $_REQUEST['u'];
     }
     else {
-      if (isset($_REQUEST['u']) && $_REQUEST['u'] != '') {
-        $sLocation = $_REQUEST['u'];
-      }
-      else {
-        $sLocation = $oUserProperty->redirectTo($_SESSION['USER_LOGGED'], $lang);
-      }
+      $sLocation = $oUserProperty->redirectTo($_SESSION['USER_LOGGED'], $lang);
     }
+  }
+
+  if ($RBAC->singleSignOn) {
     G::header('Location: ' . $sLocation);
     die();
   }
+  
+  $aUserProperty = $oUserProperty->loadOrCreateIfNotExists($_SESSION['USER_LOGGED'], array('USR_PASSWORD_HISTORY' => serialize(array(md5($pwd)))));
+  $aErrors       = $oUserProperty->validatePassword($_POST['form']['USR_PASSWORD'], $aUserProperty['USR_LAST_UPDATE_DATE'], $aUserProperty['USR_LOGGED_NEXT_TIME']);
 
-  $oHeadPublisher =& headPublisher::getSingleton();
+  if (!empty($aErrors)) {
+    if (!defined('NO_DISPLAY_USERNAME')) {
+      define('NO_DISPLAY_USERNAME', 1);
+    }
+    $aFields = array();
+    $aFields['DESCRIPTION']  = '<span style="font-weight:normal;">';
+    $aFields['DESCRIPTION'] .= G::LoadTranslation('ID_POLICY_ALERT').':<br /><br />';
+    foreach ($aErrors as $sError)  {
+      switch ($sError) {
+        case 'ID_PPP_MINIMUM_LENGTH':
+          $aFields['DESCRIPTION'] .= ' - ' . G::LoadTranslation($sError).': ' . PPP_MINIMUM_LENGTH . '<br />';
+          $aFields[substr($sError, 3)] = PPP_MINIMUM_LENGTH;
+        break;
+        case 'ID_PPP_MAXIMUM_LENGTH':
+          $aFields['DESCRIPTION'] .= ' - ' . G::LoadTranslation($sError).': ' . PPP_MAXIMUM_LENGTH . '<br />';
+          $aFields[substr($sError, 3)] = PPP_MAXIMUM_LENGTH;
+        break;
+        case 'ID_PPP_EXPIRATION_IN':
+          $aFields['DESCRIPTION'] .= ' - ' . G::LoadTranslation($sError).' ' . PPP_EXPIRATION_IN . ' ' . G::LoadTranslation('ID_DAYS') . '<br />';
+          $aFields[substr($sError, 3)] = PPP_EXPIRATION_IN;
+        break;
+        default:
+          $aFields['DESCRIPTION'] .= ' - ' . G::LoadTranslation($sError).'<br />';
+          $aFields[substr($sError, 3)] = 1;
+        break;
+      }
+    }
+    $aFields['DESCRIPTION'] .= '<br />' . G::LoadTranslation('ID_PLEASE_CHANGE_PASSWORD_POLICY') . '<br /><br /></span>';
+    $G_PUBLISH = new Publisher;
+    $G_PUBLISH->AddContent('xmlform', 'xmlform', 'login/changePassword', '', $aFields, 'changePassword');
+    G::RenderPage('publish');
+    die;
+  }
+
+  $oHeadPublisher = &headPublisher::getSingleton();
   $oHeadPublisher->extJsInit = true;
 
   $oHeadPublisher->addExtJsScript('login/init', false);    //adding a javascript file .js
   $oHeadPublisher->assign('uriReq', $sLocation);
   G::RenderPage('publish', 'extJs');
   //G::header('Location: ' . $sLocation);
-
   die;
-
 }
 catch ( Exception $e ) {
   $aMessage['MESSAGE'] = $e->getMessage();

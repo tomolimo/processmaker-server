@@ -76,19 +76,29 @@ class Home extends Controller
       return;
     }
 
+    require_once 'classes/model/UsersProperties.php';
     G::LoadClass('process');
     G::LoadClass('case');
 
+    $userProperty = new UsersProperties();
     $process = new Process();
     $case    = new Cases();
+    G::loadClass('system');
+    $sysConf = System::getSystemConfiguration(PATH_CONFIG . 'env.ini');
+
 
     //Get ProcessStatistics Info
     $start = 0;
     $limit = '';
 
     $proData     = $process->getAllProcesses($start, $limit);
-    $processList = $case->getStartCasesPerType ( $_SESSION ['USER_LOGGED'], 'category');
-    $switchLink  = '../classic/cases/main';  //'../' . $this->lastSkin . '/cases/main';
+    $processList = $case->getStartCasesPerType($_SESSION['USER_LOGGED'], 'category');
+    $switchLink  = $userProperty->getUserLocation($_SESSION['USER_LOGGED']);
+
+    if (substr($sysConf['default_skin'], 0, 2) == 'ux') {
+      $_SESSION['_defaultUserLocation'] = $switchLink;
+      $switchLink  = '/sys' .  SYS_SYS . '/' . SYS_LANG . '/' . $sysConf['default_skin'] . '/main';
+    }
 
     unset($processList[0]);
 

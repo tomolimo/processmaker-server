@@ -419,6 +419,7 @@ Login.submit = function()
 
   Login.submiting = true;
 
+  document.getElementById('language').value = Ext.getCmp('language').getValue();
   document.forms[0].action = '../login/authentication';
   document.forms[0].submit();
   return;

@@ -98,6 +98,24 @@ Main.configureComponents = function()
   
   this.configuration.userMenu = {}
   this.configuration.userMenu.items = new Array();
+
+  if (switchInterface) {
+    this.configuration.userMenu.items.push({
+      text : _("ID_SWITCH_INTERFACE"),
+      iconCls: 'ss_sprite ss_arrow_switch',
+      handler: function() {
+        var url = '../uxs/home';
+
+        if (typeof parent != 'undefined') {
+          parent.location.href = url;
+        }
+        else {
+          location.href = url; 
+        }
+      }
+    });    
+  }
+
   this.configuration.userMenu.items.push({
     text : _("ID_VIEW_EDIT_PROFILE"),
     icon: '/images/profile-picture.png',

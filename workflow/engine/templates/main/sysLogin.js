@@ -196,10 +196,10 @@ Login.initComponents = function()
       data : languages
     }),
     listeners     : {
-      afterrender : function(){
+      afterrender : function() {
         var store = languagesCmb.getStore();
         var i = store.findExact('id', defaultLang, 0);
-        if (i > -1){
+        if (i > -1) {
           Ext.getCmp('language').setValue(store.getAt(i).data.id);
           Ext.getCmp('language').setRawValue(store.getAt(i).data.name);
         }
@@ -275,11 +275,11 @@ Login.submit = function()
   }
 
   Login.submiting = true;
-  
+
+  document.getElementById('language').value = Ext.getCmp('language').getValue();
   document.forms[0].action = '../login/sysLoginVerify';
   document.forms[0].submit();
   return;
-
 
   Login.form.getForm().submit({
     method: 'POST',

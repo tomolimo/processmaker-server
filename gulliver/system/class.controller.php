@@ -31,6 +31,11 @@ class Controller
      * @var string - response type var. possibles values: json|plain
      */
     private $responseType = '';
+
+     /**
+     * @var string - layout to pass skinEngine
+     */
+    private $layout = '';
     
     /**
      * Magic setter method

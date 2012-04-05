@@ -933,15 +933,25 @@ class System {
     //Get Skin Config files
     $skinListArray = array();
     $customSkins = glob(PATH_CUSTOM_SKINS . "*/config.xml");
-    $configurationFile = G::ExpandPath("skinEngine") . 'base' . PATH_SEP . 'config.xml';
-    array_unshift($customSkins, $configurationFile);
+
+    // getting al base skins
+    $baseSkins = glob(G::ExpandPath("skinEngine") . '*/config.xml');
+
+    // filtering no public skins (uxs, simplified)
+    foreach ($baseSkins as $i => $skinName) {
+      if (strpos($skinName, 'simplified') !== false || strpos($skinName, 'uxs') !== false) {
+        unset($baseSkins[$i]);
+      }
+    }
+
+    $customSkins = array_merge($baseSkins, $customSkins);
 
     //Read and parse each Configuration File
     foreach ($customSkins as $key => $configInformation) {
-      $folderId = str_replace(G::ExpandPath("skinEngine") . 'base', "", str_replace(PATH_CUSTOM_SKINS, "", str_replace("/config.xml", "", $configInformation)));
+      $folderId = basename(dirname($configInformation));
       
-      if ($folderId == "") {
-        $folderId = "classic";
+      if ($folderId == 'base') {
+        $folderId = 'classic';
       }
 
       $xmlConfiguration = file_get_contents($configInformation);

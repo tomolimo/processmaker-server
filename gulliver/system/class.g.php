@@ -666,23 +666,17 @@ class G
     $G_CONTENT  = $objContent;
     $G_TEMPLATE = $strTemplate;
     $G_SKIN = $strSkin;
-    //echo 'x'; g::dump($G_PUBLISH); die;
 
     try {
-      ///////G::LoadSkin( $strSkin );
-      //G::skinEngine($strSkin);
-
       $file = G::ExpandPath( "skinEngine" ) . "skinEngine.php";
       include $file;
 
       $skinEngine = new SkinEngine($G_TEMPLATE, $G_SKIN, $G_CONTENT);
       $skinEngine->setLayout($layout);
       $skinEngine->dispatch();
-
     }
     catch ( Exception $e ) {
-      echo $aMessage['MESSAGE'] = $e->getMessage();
-      die;
+      $aMessage['MESSAGE'] = $e->getMessage();
       global $G_PUBLISH;
       global $G_MAIN_MENU;
       global $G_SUB_MENU;
@@ -705,18 +699,6 @@ class G
       G::LoadSkin( 'green' );
       die;
     }
-  }
-  
-  function skinEngine($strSkin){
-    // $file = G::ExpandPath( "skinEngine" ) . "skinEngine.php";
-    // require_once( $file );
-
-    $file = G::ExpandPath( "skinEngine" ) . "class.skinEngine.php";
-    //die($file);
-    include $file;
-    $skinEngine = new SkinEngine();
-    $skinEngine->dispatch();  
-
   }
 
   /**
@@ -994,18 +976,8 @@ class G
     while ( count ( $URI_VARS ) > 0 && $exit == 0) {
       $SYS_TARGET .= '/' . array_shift($URI_VARS);
     }
-
-    // if ($SYS_TARGET == 'login') {
-    //   if (isset($config['default_lang']) && !empty($config['default_lang'])) {
-    //     $SYS_LANG = $config['default_lang'];
-    //   }
-
-    //   if (isset($config['default_skin']) && !empty($config['default_skin'])) {
-    //     $SYS_SKIN = $config['default_skin'];
-    //   }
-    // }
-
-    /* Fix to prevent use uxs skin outside siplified interface, because that skin is not compatible with others interfaces*/
+    /* Fix to prevent use uxs skin outside siplified interface, 
+     because that skin is not compatible with others interfaces*/
     if ($SYS_SKIN == 'uxs' && $SYS_COLLECTION !== 'home') {
       $SYS_SKIN = 'classic';
     }

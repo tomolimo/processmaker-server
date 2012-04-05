@@ -2,6 +2,7 @@ Ext.onReady(function(){
   
   var cmbSkins = new Ext.form.ComboBox({
     fieldLabel : _('ID_DEFAULT_SKIN'),
+    id         : 'default_skin',
     hiddenName : 'default_skin',
     store         : new Ext.data.ArrayStore({
       fields: ['ID', 'NAME'],
@@ -31,6 +32,7 @@ Ext.onReady(function(){
 
   var cmbLang = new Ext.form.ComboBox({
     fieldLabel : _('ID_DEFAULT_LANGUAGE'),
+    id         : 'default_lang',
     hiddenName : 'default_lang',
     store         : new Ext.data.ArrayStore({
       fields: ['ID', 'NAME'],
@@ -161,13 +163,12 @@ function saveSettings()
 
       if(response.restart) {
         PMExt.confirm(_('ID_CONFIRM'), _('ID_SYSTEM_REDIRECT_CONFIRM'), function(){
-          
           if (typeof window.parent.parent != 'undefined')
-            window.parent.parent.location.href = '/';
+            window.parent.parent.location.href = response.url;
           if (typeof window.parent != 'undefined')
-            window.parent.location.href = '/';
+            window.parent.location.href = response.url;
           else
-            window.location.href = '/';
+            window.location.href = response.url;
         });
       }
       else
