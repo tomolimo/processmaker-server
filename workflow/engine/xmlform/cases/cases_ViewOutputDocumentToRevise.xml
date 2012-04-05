@@ -19,6 +19,7 @@
 
 <FILE2 type="phpVariable"/>
 
+
 <APP_DOC_FILENAME1 type="link" value="@#VIEW" link="@#FILE1" target="_blank">
   <en>File (.doc)</en>
 </APP_DOC_FILENAME1>
@@ -30,5 +31,15 @@
 <BACK type="button" onclick="history.go(-1);return false;">
   <en>Back</en>
 </BACK>
+<JS type="javascript"><![CDATA[
+  if (@@FILE1 == '')
+  {
+     hideRowById('APP_DOC_FILENAME1');
+  }
+  if (@@FILE2 == '')
+  {
+     hideRowById('APP_DOC_FILENAME2');
+  }
 
-</dynaForm>  
+]]></JS>
+</dynaForm>
