@@ -336,7 +336,7 @@ if($limit != 0){
 
           break;
         case "INPUT" :
-          $oInputDocument = new InputDocument ( );
+          $oInputDocument = new InputDocument();
           if ($docUid != - 1) {
             if ($oInputDocument->InputExists ( $docUid )) {
               $row4 = $oInputDocument->load ( $docUid );
@@ -357,7 +357,42 @@ if($limit != 0){
             $downloadLabel = G::LoadTranslation ( 'ID_DOWNLOAD' );
             $downloadLabel1 = "";
           }
+          
+          ///////
+          if (!empty($row1["APP_DOC_PLUGIN"])) {
+            $pluginRegistry = &PMPluginRegistry::getSingleton();
+            $addonName = $row1["APP_DOC_PLUGIN"];
+            $fieldValue = "";
+            
+            if (file_exists(PATH_PLUGINS . $addonName . ".php")) {
+              $addonDetails = $pluginRegistry->getPluginDetails($addonName . ".php");
+              
+              if ($addonDetails) {
+                if ($addonDetails->enabled) {
+                  require_once (PATH_PLUGINS . $addonName . PATH_SEP . "class." . $addonName . ".php");
+                  
+                  $addonNameClass = $addonName . "Class";
+                  
+                  $objClass = new $addonNameClass();
+                  
+                  if (method_exists($objClass, "getNameMethodGetUrlDownload")) {
+                    $addonDetails->sMethodGetUrlDownload = $objClass->getNameMethodGetUrlDownload();
+                  
+                    if (!empty($addonDetails->sMethodGetUrlDownload)) {
+                      eval("\$url = \$objClass->" . $addonDetails->sMethodGetUrlDownload . "(\"" . $row1["APP_DOC_UID"] . "\");");
+                      $downloadLink = $url;
+                  
+                      $fieldValue = $row1["APP_DOC_PLUGIN"];
+                    }
+                  }
+                }
+              }
+            }
+            
+            $row1["APP_DOC_PLUGIN"] = $fieldValue;
+          }
           break;
+        
         default :
           $row4 = array ();
           $versioningEnabled = false;

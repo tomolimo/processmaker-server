@@ -420,7 +420,33 @@ function openActionDialog( caller, action ) {
       fileName=ext_itemgrid.getSelectionModel().getSelected().get('name');
       // alert(ext_itemgrid.getSelectionModel().getSelected().get('downloadLink'));
       // alert(ext_itemgrid.getSelectionModel().getSelected().get('downloadLabel'));
-      streamFilefromPM(ext_itemgrid.getSelectionModel().getSelected().get('downloadLink'));
+      
+      var urlDownload = ext_itemgrid.getSelectionModel().getSelected().get("downloadLink");
+      
+      if (ext_itemgrid.getSelectionModel().getSelected().get("appDocPlugin") != "") {
+        messageText = TRANSLATIONS.ID_DOWNLOADING_FILE + " " + ext_itemgrid.getSelectionModel().getSelected().get("name");
+        statusBarMessage(messageText, true, true);
+        
+        try {
+          Ext.destroy(Ext.get("downloadIframe"));
+        }
+        catch (e) {
+        }
+        
+        Ext.DomHelper.append(document.body, {
+          tag: "iframe",
+          id: "downloadIframe",
+          frameBorder: 0,
+          width: 0,
+          height: 0,
+          css: "display: none; visibility: hidden; height: 0px;",
+          src: urlDownload
+        });
+      }
+      else {
+         streamFilefromPM(urlDownload);
+      }
+      
       /*
 			 * if(document.location =
 			 * ext_itemgrid.getSelectionModel().getSelected().get('downloadLink')){
@@ -730,6 +756,8 @@ datastore = new Ext.data.Store({
     name : "appDocType"
   }, {
     name : "appDocCreateDate"
+  }, {
+    name : "appDocPlugin"
   }, {
     name : "appLabel"
   }, {
@@ -1128,6 +1156,9 @@ var cm = new Ext.grid.ColumnModel([{
   hidden:true
 // align : 'right'
 // renderer : renderType
+}, {
+  dataIndex: "appDocPlugin",
+  hidden: true
 }, {
   header : TRANSLATIONS.ID_TYPE,
   dataIndex : 'type',
