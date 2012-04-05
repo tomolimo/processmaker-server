@@ -1155,7 +1155,7 @@ class processMap {
       $filter = '';
       $result = $groups->getAllGroup($start,$limit,$filter);
       $c = 0;
-      foreach ($result as $results) {
+      foreach ($result['rows'] as $results) {
         $c++;
         $oCriteria = new Criteria('workflow');
         $oCriteria->addSelectColumn('COUNT(*) AS MEMBERS_NUMBER');
