@@ -108,7 +108,7 @@ switch ($_POST['action'])
     $filter = isset($_REQUEST['textFilter']) ? $_REQUEST['textFilter'] : '';
      
     global $RBAC; 
- 
+    if ($limit == $start) $limit = $limit +$limit ;
     $tasks = new TaskUser();
     $aTask = $tasks->getCountAllTaksByGroups();
     
@@ -119,7 +119,9 @@ switch ($_POST['action'])
     $uxList = adminProxy::getUxTypesList();
     
     $groups = new Groupwf();    
-    $result = $groups->getAllGroup($start,$limit,$filter);
+    $data = $groups->getAllGroup($start,$limit,$filter);
+    $result  = $data['rows'];
+
     $totalRows =  0;
     foreach ($result as $results) {
       $totalRows ++;
@@ -128,8 +130,13 @@ switch ($_POST['action'])
       $results['GRP_USERS'] = isset($aMembers[$results['GRP_UID']]) ? $aMembers[$results['GRP_UID']] : 0;     
       $arrData[] = $results;         
     }
+    
+    $result = new StdClass();
+    $result->success = true;
+    $result->groups = $arrData;
+    $result->total_groups = $data['totalCount'];
 
-    echo '{success: true, groups: '.G::json_encode($arrData).', total_groups: '.$totalRows.'}';
+    echo G::json_encode($result);
     break;
   case 'exitsGroupName':
     require_once 'classes/model/Groupwf.php';
