@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: ProcessMaker (Branch 2.0-experimental) 2.0-testing.16-29-g7e9f417\n"
+"Project-Id-Version: ProcessMaker (Branch 2.0-experimental) 2.0-testing.16-61-g21e6113\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2012-03-28 19:02:42\n"
+"PO-Revision-Date: 2012-04-05 17:59:20\n"
 "Last-Translator: \n"
 "Language-Team: Colosa Developers Team <developers@colosa.com>\n"
 "MIME-Version: 1.0\n"
@@ -4654,14 +4654,8 @@ msgstr "To Do"
 # TRANSLATION
 # JAVASCRIPT/ID_DONT_SAVE_XMLFORM
 #: JAVASCRIPT/ID_DONT_SAVE_XMLFORM
-msgid "DynaForm is now saved. \n"
-" \n"
-"Warning: Form doesn't have a submit action. \n"
-"Either add a \"Submit\" button or change the \"Next Step Link\" property."
-msgstr "DynaForm is now saved. \n"
-" \n"
-"Warning: Form doesn't have a submit action. \n"
-"Either add a \"Submit\" button or change the \"Next Step Link\" property."
+msgid "This form has not a submit action. Do you  want to continue anyway?"
+msgstr "This form has not a submit action. Do you  want to continue anyway?"
 
 # TRANSLATION
 # LABEL/ID_CASES_STATUS_COMPLETED
@@ -6808,8 +6802,8 @@ msgstr "Are you sure to reassign the current case?"
 # TRANSLATION
 # LABEL/ID_CASE_PAUSED_SUCCESSFULLY
 #: LABEL/ID_CASE_PAUSED_SUCCESSFULLY
-msgid "The case {APP_NUMBER} was successfully paused and it will be unpaused on date {UNPAUSE_DATE}"
-msgstr "The case {APP_NUMBER} was successfully paused and it will be unpaused on date {UNPAUSE_DATE}"
+msgid "The Case {APP_NUMBER} was paused successfully and   ir will be unpused on date {UNPAUSE_DATE}"
+msgstr "The Case {APP_NUMBER} was paused successfully and   ir will be unpused on date {UNPAUSE_DATE}"
 
 # TRANSLATION
 # LABEL/ID_VACATION
@@ -10432,8 +10426,8 @@ msgstr "Do you want to delete selected skin?"
 # TRANSLATION
 # LABEL/ID_MESSAGE_SUBJECT_NOTE_NOTIFICATION
 #: LABEL/ID_MESSAGE_SUBJECT_NOTE_NOTIFICATION
-msgid "A note has been added to case:"
-msgstr "A note has been added to case:"
+msgid "A note has added to a case"
+msgstr "A note has added to a case"
 
 # TRANSLATION
 # LABEL/ID_MSG_CANNOT_EXPORT_DEFAULT_SKIN
@@ -10636,8 +10630,8 @@ msgstr "Your image has been successfully uploaded"
 # TRANSLATION
 # LABEL/ID_ERROR_UPLOADING_IMAGE_TYPE
 #: LABEL/ID_ERROR_UPLOADING_IMAGE_TYPE
-msgid "Error when uploading file, type or format is incorrect."
-msgstr "Error when uploading file, type or format is incorrect."
+msgid "Error uploading image, wrong file type"
+msgstr "Error uploading image, wrong file type"
 
 # TRANSLATION
 # LABEL/ID_UPLOADING_IMAGE_WRONG_SIZE
@@ -11852,6 +11846,12 @@ msgid "User Experience"
 msgstr "User Experience"
 
 # TRANSLATION
+# LABEL/ID_INTERMEDIATE_MESSAGE_EVENT
+#: LABEL/ID_INTERMEDIATE_MESSAGE_EVENT
+msgid "[LABEL/ID_INTERMEDIATE_MESSAGE_EVENT] Intermediate Message Events (Task Notifications)"
+msgstr "Intermediate Message Events (Task Notifications)"
+
+# TRANSLATION
 # LABEL/ID_TEMPLATES
 #: LABEL/ID_TEMPLATES
 msgid "Templates"
@@ -11994,6 +11994,60 @@ msgstr "Click the lock to make changes."
 #: LABEL/ID_CLICK_UNLOCK
 msgid "Click the lock to prevent further changes."
 msgstr "Click the lock to prevent further changes."
+
+# TRANSLATION
+# LABEL/ID_MAX_FILE_SIZE
+#: LABEL/ID_MAX_FILE_SIZE
+msgid "Max upload file size"
+msgstr "Max upload file size"
+
+# TRANSLATION
+# LABEL/ID_DEFAULT_SKIN
+#: LABEL/ID_DEFAULT_SKIN
+msgid "Default Skin"
+msgstr "Default Skin"
+
+# TRANSLATION
+# LABEL/ID_INTERMEDIATE_TIMER_EVENT
+#: LABEL/ID_INTERMEDIATE_TIMER_EVENT
+msgid "[LABEL/ID_INTERMEDIATE_TIMER_EVENT] Intermediate Timer Event (Multiple Event)"
+msgstr "Intermediate Timer Event (Multiple Event)"
+
+# TRANSLATION
+# LABEL/ID_TIME_ZONE
+#: LABEL/ID_TIME_ZONE
+msgid "Time Zone"
+msgstr "Time Zone"
+
+# TRANSLATION
+# LABEL/ID_MEMORY_LIMIT
+#: LABEL/ID_MEMORY_LIMIT
+msgid "Memory Limit  (Mb)"
+msgstr "Memory Limit  (Mb)"
+
+# TRANSLATION
+# LABEL/ID_SYSTEM_SETTINGS
+#: LABEL/ID_SYSTEM_SETTINGS
+msgid "System Settings"
+msgstr "System Settings"
+
+# TRANSLATION
+# LABEL/ID_SYSTEM_REDIRECT_CONFIRM
+#: LABEL/ID_SYSTEM_REDIRECT_CONFIRM
+msgid "You must login again to view the changes, do you want do it now?"
+msgstr "You must login again to view the changes, do you want do it now?"
+
+# TRANSLATION
+# LABEL/ID_TASK_CANT_DELETE
+#: LABEL/ID_TASK_CANT_DELETE
+msgid "You can't delete the task \"{0}\" because it has {1} cases."
+msgstr "You can't delete the task \"{0}\" because it has {1} cases."
+
+# TRANSLATION
+# LABEL/ID_INDEX_NOT_WRITEABLE
+#: LABEL/ID_INDEX_NOT_WRITEABLE
+msgid "The index file is not writable. <br/>Please give write permission to file:"
+msgstr "The index file is not writable. <br/>Please give write permission to file:"
 
 # additionalTables/additionalTablesData.xml?ADD_TAB_NAME
 # additionalTables/additionalTablesData.xml
@@ -31082,7 +31136,7 @@ msgstr "Photo"
 # users/users_EditRT.xml?MAX_FILES_SIZE
 # users/users_EditRT.xml
 #: edit - MAX_FILES_SIZE
-msgid "Max upload file size"
+msgid "[users/users_EditRT.xml?MAX_FILES_SIZE] Max upload file size"
 msgstr "Max upload file size"
 
 # users/users_EditRT.xml?SUBMIT
@@ -34119,4 +34173,5 @@ msgstr "Cancel"
 # dynaforms/fields/yesno.xml
 #: button - PME_ACCEPT
 msgid "[dynaforms/fields/yesno.xml?PME_ACCEPT] Save"
-msgstr "Save" 
+msgstr "Save"
+
