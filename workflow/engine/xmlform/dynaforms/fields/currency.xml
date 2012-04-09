@@ -148,6 +148,9 @@ function checkVal(){
     aux = aux.replace('.','');
     fieldMask.value = aux;
   }
+  if (fieldVal.value === 'Real'){
+    fieldMask.value = fieldMask.value+'.##';
+  }
 }
              
 ]]></PME_JS>
