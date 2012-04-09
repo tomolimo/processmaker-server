@@ -268,7 +268,7 @@
 		$t->is( $methods[89]  , 'pr' 								,$i++. ' pr');
 		$t->is( $methods[90] , 'dump'								,$i++. ' dump');
 		$t->is( $methods[91] , 'stripCDATA'					,$i++. ' stripCDATA');
-		$t->is( $methods[92] , 'getSysTemDir'     	,$i++. ' getSysTemDir');
+		$t->is( $methods[92] , 'sys_get_temp_dir'     	,$i++. ' sys_get_temp_dir');
 		$t->is( $methods[93] , 'PMWSCompositeResponse'     	,$i++. ' PMWSCompositeResponse');          
 		$t->is( $methods[94] , 'emailAddress'     					,$i++. ' emailAddress');
 		$t->is( count( $methods )  , --$i		, count( $methods ).' = '.$i.' ok');

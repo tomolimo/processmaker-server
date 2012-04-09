@@ -36,8 +36,8 @@
       if ( isset($_FILES['form']) ) {
         foreach ($_FILES['form']['name'] as $sFieldName => $vValue) {
           if ( $_FILES['form']['error'][$sFieldName] == 0 ){
-            file_put_contents(G::getSysTemDir().PATH_SEP.$_FILES['form']['name'][$sFieldName], file_get_contents($_FILES['form']['tmp_name'][$sFieldName]));
-            $fpath = G::getSysTemDir().PATH_SEP.$_FILES['form']['name'][$sFieldName];
+            file_put_contents(G::sys_get_temp_dir().PATH_SEP.$_FILES['form']['name'][$sFieldName], file_get_contents($_FILES['form']['tmp_name'][$sFieldName]));
+            $fpath = G::sys_get_temp_dir().PATH_SEP.$_FILES['form']['name'][$sFieldName];
             
             if( isset($_POST['INPUTS'][$sFieldName]) && $_POST['INPUTS'][$sFieldName] != '' ){ #input file type
               ws_sendFile($fpath, $USR_UID, $caseId, 1, $_POST['INPUTS'][$sFieldName]);

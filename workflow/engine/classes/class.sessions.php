@@ -142,7 +142,7 @@ class Sessions {
   */ 
   public function registerGlobal($name, $value)
   {
-   $this->tmpfile = G::getSysTemDir() . PATH_SEP . "pm-rg-{$this->sessionId}";  
+   $this->tmpfile = G::sys_get_temp_dir() . PATH_SEP . "pm-rg-{$this->sessionId}";  
    
    if($this->sessionId == NULL){
        throw new Exception('session id was not set.'); 
@@ -180,7 +180,7 @@ class Sessions {
   */
   public function getGlobal($name)
   {
-   $this->tmpfile = G::getSysTemDir() . PATH_SEP . "pm-rg-{$this->sessionId}";  
+   $this->tmpfile = G::sys_get_temp_dir() . PATH_SEP . "pm-rg-{$this->sessionId}";  
    
    if($this->sessionId == NULL){
        throw new Exception('session id was not set.'); 
@@ -217,7 +217,7 @@ class Sessions {
   */
   public function getGlobals()
   {
-   $this->tmpfile = G::getSysTemDir() . PATH_SEP . "pm-rg-{$this->sessionId}";  
+   $this->tmpfile = G::sys_get_temp_dir() . PATH_SEP . "pm-rg-{$this->sessionId}";  
    
    if($this->sessionId == NULL){
        throw new Exception('session id was not set.'); 
@@ -250,7 +250,7 @@ class Sessions {
     if($this->sessionId == NULL){
       throw new Exception('session id was not set.'); 
     }
-    $this->tmpfile = G::getSysTemDir() . PATH_SEP . "pm-rg-{$this->sessionId}";
+    $this->tmpfile = G::sys_get_temp_dir() . PATH_SEP . "pm-rg-{$this->sessionId}";
     @unlink($this->tmpfile);
   }
   
