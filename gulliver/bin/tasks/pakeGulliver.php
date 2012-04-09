@@ -2066,7 +2066,7 @@ function run_workspace_backup($task, $args) {
 
     //new db restore rotines, by Erik <erik@colosa.com> on May 17th, 2010
     //set the temporal directory for all tables into wf, rb, and rp databases
-    $tmpDir = G::getSysTemDir() . PATH_SEP . 'pmDbBackup' . PATH_SEP;
+    $tmpDir = G::sys_get_temp_dir() . PATH_SEP . 'pmDbBackup' . PATH_SEP;
     //create the db maintenance temporal dir
     G::mk_dir($tmpDir);
 

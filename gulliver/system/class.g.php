@@ -914,6 +914,12 @@ class G
    */
   function parseURI($uri, $config = array())
   {
+    //*** process the $_POST with magic_quotes enabled
+    // The magic_quotes_gpc feature has been DEPRECATED as of PHP 5.3.0.
+    if (get_magic_quotes_gpc() === 1) {
+      $_POST = G::strip_slashes($_POST);
+    }
+
     $aRequestUri = explode('/', $uri );
 
     if ( substr ( $aRequestUri[1], 0, 3 ) == 'sys' ) {
@@ -990,6 +996,42 @@ class G
     if ( $SYS_COLLECTION == 'js2' ) {
       print "ERROR"; die;
     }
+  }
+
+  function strip_slashes($vVar) {
+    if (is_array($vVar)) {
+      foreach($vVar as $sKey => $vValue) {
+        if (is_array($vValue)) {
+          G::strip_slashes($vVar[$sKey]);
+        }
+        else {
+          $vVar[$sKey] = stripslashes($vVar[$sKey]);
+        }
+      }
+    }
+    else {
+      $vVar = stripslashes($vVar);
+    }
+
+    return $vVar;
+  }
+
+  /** 
+   * function to calculate the time used to render a page  
+   */
+  function logTimeByPage() 
+  {
+    if (!defined(PATH_DATA)) {
+      return false;
+    }
+    
+    $serverAddr = $_SERVER['SERVER_ADDR'];
+    global $startingTime;
+    $endTime =  microtime(true);
+    $time = $endTime - $startingTime;
+    $fpt= fopen ( PATH_DATA . 'log/time.log', 'a' );
+    fwrite( $fpt, sprintf ( "%s.%03d %15s %s %5.3f %s\n", date('Y-m-d H:i:s'), $time, getenv('REMOTE_ADDR'), substr($serverAddr,-4), $time, $_SERVER['REQUEST_URI'] ));
+    fclose( $fpt);
   }
 
   /**
@@ -3138,7 +3180,7 @@ $output = $outputHeader.$output;
    * Get the temporal directory path on differents O.S.  i.e. /temp -> linux, C:/Temp -> win
    * @author <erik@colosa.com>
    */
-  function getSysTemDir() {
+  function sys_get_temp_dir() {
     if ( !function_exists('sys_get_temp_dir') ){
       // Based on http://www.phpit.net/
       // article/creating-zip-tar-archives-dynamically-php/2/
@@ -4922,6 +4964,56 @@ function getDirectorySize($path,$maxmtime=0)
     file_put_contents($file, $content);
   }
 
+  function verifyWriteAccess($resources)
+  {
+    $noWritable = array();
+    foreach ($resources as $i => $resource) {
+      if (!is_writable($resource)) {
+        $noWritable[] = $resource;
+      }
+    }
+
+    if (count($noWritable) > 0) {
+      $e = new Exception("Write access not allowed for ProcessMaker resources");
+      $e->files = $noWritable;
+      throw $e;
+    }
+  }
+
+  function renderTemplate($template, $data=array())
+  {
+    if (!defined('PATH_THIRDPARTY')) {
+      throw new Exception('System constant (PATH_THIRDPARTY) is not defined!');
+    }
+
+    require_once PATH_THIRDPARTY . 'smarty/libs/Smarty.class.php'; 
+    
+    $smarty = new Smarty();
+    $smarty->compile_dir = G::sys_get_temp_dir();
+    $smarty->cache_dir   = G::sys_get_temp_dir();
+    $smarty->config_dir  = PATH_THIRDPARTY . 'smarty/configs';
+
+    $smarty->template_dir  = PATH_TEMPLATE;
+    $smarty->force_compile = true;
+
+    foreach ($data as $key => $value) {
+      $smarty->assign($key, $value);
+    }
+
+    $smarty->display("$template.tpl");
+  }
+
+  function parseTemplate($template, $data=array())
+  {
+    $content = '';
+    
+    ob_start();
+    G::renderTemplate($template, $data);
+    $content = ob_get_contents();
+    ob_get_clean();
+
+    return $content;
+  }
 };
 
 /**
