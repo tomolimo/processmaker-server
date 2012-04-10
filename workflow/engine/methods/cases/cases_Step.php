@@ -113,7 +113,7 @@
 
   //cleaning debug variables
   if( !isset($_GET['breakpoint']) ) {
-  	if( isset($_SESSION['TRIGGER_DEBUG']['info']) ) unset($_SESSION['TRIGGER_DEBUG']['info']);
+    if( isset($_SESSION['TRIGGER_DEBUG']['info']) ) unset($_SESSION['TRIGGER_DEBUG']['info']);
 
     if (!isset($_SESSION['_NO_EXECUTE_TRIGGERS_'])) {
       $_SESSION['TRIGGER_DEBUG']['ERRORS'] = Array();
@@ -154,7 +154,7 @@
    */
   if ( isset($_GET['breakpoint']) ) {
 
-  	$G_PUBLISH->AddContent('view', 'cases/showDebugFrameLoader');
+    $G_PUBLISH->AddContent('view', 'cases/showDebugFrameLoader');
     $G_PUBLISH->AddContent('view', 'cases/showDebugFrameBreaker');
     G::RenderPage('publish', 'blank');
     exit();
@@ -264,9 +264,9 @@
         //START: If there is a Break Step registered from Plugin Similar as a Trigger debug
         $oPluginRegistry =& PMPluginRegistry::getSingleton();
         if ( $oPluginRegistry->existsTrigger ( PM_UPLOAD_DOCUMENT_BEFORE ) ) {//If a Plugin has registered a Break Page Evaluator
-        	$oPluginRegistry->executeTriggers ( PM_UPLOAD_DOCUMENT_BEFORE , array('USR_UID'=>$_SESSION['USER_LOGGED']) );
+          $oPluginRegistry->executeTriggers ( PM_UPLOAD_DOCUMENT_BEFORE , array('USR_UID'=>$_SESSION['USER_LOGGED']) );
         }
-				//END: If there is a Break Step registered from Plugin
+        //END: If there is a Break Step registered from Plugin
 
           $G_PUBLISH->AddContent('propeltable', 'cases/paged-table-inputDocuments', 'cases/cases_InputdocsList', $oCase->getInputDocumentsCriteria($_SESSION['APPLICATION'], $_SESSION['INDEX'], $_GET['UID']), array_merge(array('DOC_UID'=>$_GET['UID']),$Fields));//$aFields
 
@@ -333,12 +333,12 @@
       switch ($_GET['ACTION'])
       {
         case 'GENERATE':
-	        //START: If there is a Break Step registered from Plugin Similar as a Trigger debug
-	        $oPluginRegistry =& PMPluginRegistry::getSingleton();
-	        if ( $oPluginRegistry->existsTrigger ( PM_UPLOAD_DOCUMENT_BEFORE ) ) {//If a Plugin has registered a Break Page Evaluator
-	        	$oPluginRegistry->executeTriggers ( PM_UPLOAD_DOCUMENT_BEFORE , array('USR_UID'=>$_SESSION['USER_LOGGED']) );
-	        }
-					//END: If there is a Break Step registered from Plugin
+          //START: If there is a Break Step registered from Plugin Similar as a Trigger debug
+          $oPluginRegistry =& PMPluginRegistry::getSingleton();
+          if ( $oPluginRegistry->existsTrigger ( PM_UPLOAD_DOCUMENT_BEFORE ) ) {//If a Plugin has registered a Break Page Evaluator
+            $oPluginRegistry->executeTriggers ( PM_UPLOAD_DOCUMENT_BEFORE , array('USR_UID'=>$_SESSION['USER_LOGGED']) );
+          }
+          //END: If there is a Break Step registered from Plugin
 
 
           $sFilenameOriginal=$sFilename = preg_replace('[^A-Za-z0-9_]', '_', G::replaceDataField($aOD['OUT_DOC_FILENAME'], $Fields['APP_DATA']));
@@ -435,15 +435,15 @@
                 $aProperties = array();                //maui
 
                 if(!isset($aOD['OUT_DOC_MEDIA']))
-                	$aOD['OUT_DOC_MEDIA'] = 'Letter';
+                  $aOD['OUT_DOC_MEDIA'] = 'Letter';
                 if(!isset($aOD['OUT_DOC_LEFT_MARGIN']))
-                	$aOD['OUT_DOC_LEFT_MARGIN'] = '15';
+                  $aOD['OUT_DOC_LEFT_MARGIN'] = '15';
                 if(!isset($aOD['OUT_DOC_RIGHT_MARGIN']))
-                	$aOD['OUT_DOC_RIGHT_MARGIN'] = '15';
+                  $aOD['OUT_DOC_RIGHT_MARGIN'] = '15';
                 if(!isset($aOD['OUT_DOC_TOP_MARGIN']))
-                	$aOD['OUT_DOC_TOP_MARGIN'] = '15';
+                  $aOD['OUT_DOC_TOP_MARGIN'] = '15';
                 if(!isset($aOD['OUT_DOC_BOTTOM_MARGIN']))
-                	$aOD['OUT_DOC_BOTTOM_MARGIN'] = '15';
+                  $aOD['OUT_DOC_BOTTOM_MARGIN'] = '15';
 
                 $aProperties['media']=$aOD['OUT_DOC_MEDIA'];
                 $aProperties['margins']=array('left' => $aOD['OUT_DOC_LEFT_MARGIN'], 'right' => $aOD['OUT_DOC_RIGHT_MARGIN'], 'top' => $aOD['OUT_DOC_TOP_MARGIN'], 'bottom' => $aOD['OUT_DOC_BOTTOM_MARGIN']);
@@ -526,10 +526,10 @@
           //Plugin Hook PM_UPLOAD_DOCUMENT for upload document
           $oPluginRegistry =& PMPluginRegistry::getSingleton();
           if ( $oPluginRegistry->existsTrigger ( PM_UPLOAD_DOCUMENT ) && class_exists ('uploadDocumentData' ) ) {
-          	$triggerDetail=$oPluginRegistry->getTriggerInfo( PM_UPLOAD_DOCUMENT );
+            $triggerDetail=$oPluginRegistry->getTriggerInfo( PM_UPLOAD_DOCUMENT );
 
 
-          	$sPathName = PATH_DOCUMENT . $_SESSION['APPLICATION'] . PATH_SEP;
+            $sPathName = PATH_DOCUMENT . $_SESSION['APPLICATION'] . PATH_SEP;
 
             $oData['APP_UID']   = $_SESSION['APPLICATION'];
             $oData['ATTACHMENT_FOLDER'] = true;
@@ -549,10 +549,10 @@
                     $uploadReturn=$oPluginRegistry->executeTriggers ( PM_UPLOAD_DOCUMENT , $documentData );
                     if($uploadReturn){//Only delete if the file was saved correctly
                         $aFields['APP_DOC_PLUGIN']=$triggerDetail->sNamespace;
-                      	//$oAppDocument = new AppDocument();
+                        //$oAppDocument = new AppDocument();
                         //$oAppDocument->update($aFields);
-                    	unlink ( $pathOutput . $sFilename. '.pdf' );
-                  	}
+                      unlink ( $pathOutput . $sFilename. '.pdf' );
+                    }
 
 
 
@@ -569,7 +569,7 @@
                     $documentData->bUseOutputFolder = true;
                     $uploadReturn=$oPluginRegistry->executeTriggers ( PM_UPLOAD_DOCUMENT , $documentData );
                     if($uploadReturn){//Only delete if the file was saved correctly
-                    	unlink ( $pathOutput . $sFilename. '.doc' );
+                      unlink ( $pathOutput . $sFilename. '.doc' );
                     }
 
                 break;
@@ -588,7 +588,7 @@
                     $documentData->bUseOutputFolder = true;
                     $uploadReturn=$oPluginRegistry->executeTriggers ( PM_UPLOAD_DOCUMENT , $documentData );
                     if($uploadReturn){//Only delete if the file was saved correctly
-                    	unlink ( $pathOutput . $sFilename. '.pdf' );
+                      unlink ( $pathOutput . $sFilename. '.pdf' );
                     }
                 break;
                 case "DOC":
@@ -605,7 +605,7 @@
                     $documentData->bUseOutputFolder = true;
                     $uploadReturn=$oPluginRegistry->executeTriggers ( PM_UPLOAD_DOCUMENT , $documentData );
                     if($uploadReturn){//Only delete if the file was saved correctly
-                    	unlink ( $pathOutput . $sFilename. '.doc' );
+                      unlink ( $pathOutput . $sFilename. '.doc' );
                     }
                 break;
             }
@@ -614,7 +614,7 @@
 
           $outputNextStep = 'cases_Step?TYPE=OUTPUT_DOCUMENT&UID=' . $_GET['UID'] . '&POSITION=' . $_SESSION['STEP_POSITION'] . '&ACTION=VIEW&DOC=' . $sDocUID;
           G::header('location: '.$outputNextStep);
-					die;
+          die;
           break;
        case 'VIEW':
           $G_PUBLISH->AddContent('smarty', 'cases/cases_title', '', '', $array);
@@ -624,23 +624,23 @@
           $lastVersion=$oAppDocument->getLastAppDocVersion($_GET['DOC'],$_SESSION['APPLICATION']);
           $aFields = $oAppDocument->load($_GET['DOC'],$lastVersion);
           $listing=false;
-			    $oPluginRegistry = & PMPluginRegistry::getSingleton();
-			    if($oPluginRegistry->existsTrigger(PM_CASE_DOCUMENT_LIST)) {
-			      $folderData = new folderData(null, null, $_SESSION['APPLICATION'], null, $_SESSION['USER_LOGGED']);
-			      $folderData->PMType = "OUTPUT";
-			      $folderData->returnList = true;
-			      $listing=$oPluginRegistry->executeTriggers(PM_CASE_DOCUMENT_LIST, $folderData);
-			    }
+          $oPluginRegistry = & PMPluginRegistry::getSingleton();
+          if($oPluginRegistry->existsTrigger(PM_CASE_DOCUMENT_LIST)) {
+            $folderData = new folderData(null, null, $_SESSION['APPLICATION'], null, $_SESSION['USER_LOGGED']);
+            $folderData->PMType = "OUTPUT";
+            $folderData->returnList = true;
+            $listing=$oPluginRegistry->executeTriggers(PM_CASE_DOCUMENT_LIST, $folderData);
+          }
 
           require_once 'classes/model/OutputDocument.php';
           $oOutputDocument = new OutputDocument();
           $aGields = $oOutputDocument->load($aFields['DOC_UID']);
 
           if(isset($aGields['OUT_DOC_VERSIONING']) && $aGields['OUT_DOC_VERSIONING']!=0){
-         	  $oAppDocument= new AppDocument();
+            $oAppDocument= new AppDocument();
             $lastDocVersion=$oAppDocument->getLastDocVersion($_GET['UID'],$_SESSION['APPLICATION']);
           }else {
-           	$lastDocVersion='';
+            $lastDocVersion='';
           }
           $aFields['VIEW1'] = G::LoadTranslation('ID_OPEN');
 
@@ -652,19 +652,19 @@
 
 
           if ( is_array ($listing) ){//If exist in Plugin Document List
-		        foreach($listing as $folderitem) {
-		            if(($folderitem->filename==$aFields['APP_DOC_UID'])&&($folderitem->type=='DOC')){
-		                $aFields['VIEW1'] = G::LoadTranslation('ID_GET_EXTERNAL_FILE');
-		                $aFields['FILE1'] = $folderitem->downloadScript;
-		                continue;
-		            }
-		            if(($folderitem->filename==$aFields['APP_DOC_UID'])&&($folderitem->type=='PDF')){
-		                $aFields['VIEW2'] = G::LoadTranslation('ID_GET_EXTERNAL_FILE');
-		                $aFields['FILE2'] = $folderitem->downloadScript;
-		                continue;
-		            }
-		        }
-        	}
+            foreach($listing as $folderitem) {
+                if(($folderitem->filename==$aFields['APP_DOC_UID'])&&($folderitem->type=='DOC')){
+                    $aFields['VIEW1'] = G::LoadTranslation('ID_GET_EXTERNAL_FILE');
+                    $aFields['FILE1'] = $folderitem->downloadScript;
+                    continue;
+                }
+                if(($folderitem->filename==$aFields['APP_DOC_UID'])&&($folderitem->type=='PDF')){
+                    $aFields['VIEW2'] = G::LoadTranslation('ID_GET_EXTERNAL_FILE');
+                    $aFields['FILE2'] = $folderitem->downloadScript;
+                    continue;
+                }
+            }
+          }
 
           if(($aGields['OUT_DOC_GENERATE']=='BOTH')||($aGields['OUT_DOC_GENERATE']==''))
               $G_PUBLISH->AddContent('xmlform', 'xmlform', 'cases/cases_ViewOutputDocument1', '', G::array_merges($aOD, $aFields), '');
@@ -962,16 +962,16 @@
          $G_PUBLISH->AddContent('smarty', 'cases/cases_ScreenDerivation', '', '', $aFields);
          }
        else {
-       	$sMessageError = "The current user does not have a valid Reports To user.  Please contact administrator.";
-       	//$aFields['TASK'][$sKey]['NEXT_TASK']['USR_HIDDEN_FIELD'] = '<input type="hidden" name="' . $hiddenName . '" id="' . $hiddenName . '" value="' . $sMessageError . '">';
-       	G::SendTemporalMessage ('UID_UNDEFINED_USER', "Error");
-       	$aFields['ERROR_REPORTSTO']= "Error";
-       	$aFields['MESSAGE_ERROR_REPORTSTO']=G::loadTranslation("ID_MSJ_REPORSTO");;
+        $sMessageError = "The current user does not have a valid Reports To user.  Please contact administrator.";
+        //$aFields['TASK'][$sKey]['NEXT_TASK']['USR_HIDDEN_FIELD'] = '<input type="hidden" name="' . $hiddenName . '" id="' . $hiddenName . '" value="' . $sMessageError . '">';
+        G::SendTemporalMessage ('UID_UNDEFINED_USER', "Error");
+        $aFields['ERROR_REPORTSTO']= "Error";
+        $aFields['MESSAGE_ERROR_REPORTSTO']=G::loadTranslation("ID_MSJ_REPORSTO");;
         $G_PUBLISH->AddContent('smarty', 'cases/cases_ShowE_Reportsto', '', '', $aFields);
        }
       }else{
-      	$G_PUBLISH->AddContent('smarty', 'cases/cases_ScreenDerivation', '', '', $aFields);
-      	}
+        $G_PUBLISH->AddContent('smarty', 'cases/cases_ScreenDerivation', '', '', $aFields);
+        }
 */
       break;
     case 'EXTERNAL': 
@@ -986,32 +986,38 @@
         if ( $val->sStepId == $_GET['UID'] ) {
           $sNamespace = $val->sNamespace;
           $sStepName  = $val->sStepName;
+          
         }
       }
-      if (!$aPreviousStep) {
-        $Fields['APP_DATA']['__DYNAFORM_OPTIONS']['PREVIOUS_STEP_LABEL'] = '';
+      if ( class_exists($sNamespace."plugin")) {
+        if (!$aPreviousStep) {
+          $Fields['APP_DATA']['__DYNAFORM_OPTIONS']['PREVIOUS_STEP_LABEL'] = '';
+        }
+        else {
+          $Fields['APP_DATA']['__DYNAFORM_OPTIONS']['PREVIOUS_STEP'] = $aPreviousStep['PAGE'];
+          $Fields['APP_DATA']['__DYNAFORM_OPTIONS']['PREVIOUS_STEP_LABEL'] = G::loadTranslation("ID_PREVIOUS_STEP");
+        }
+        $Fields['APP_DATA']['__DYNAFORM_OPTIONS']['NEXT_STEP'] = $aNextStep['PAGE'];
+        $Fields['APP_DATA']['__DYNAFORM_OPTIONS']['NEXT_STEP_LABEL'] = G::loadTranslation("ID_NEXT_STEP");
+  
+        /** Added By erik date: 16-05-08
+        * Description: this was added for the additional database connections */
+        G::LoadClass ('dbConnections');
+        $oDbConnections = new dbConnections($_SESSION['PROCESS']);
+        $oDbConnections->loadAdditionalConnections();
+        $stepFilename = "$sNamespace/$sStepName";
+        G::evalJScript("
+        if (parent.setCurrent) {
+          parent.setCurrent('".$_GET['UID']."');
+        }");
+  
+        $G_PUBLISH->AddContent('content', $stepFilename);
       }
       else {
-        $Fields['APP_DATA']['__DYNAFORM_OPTIONS']['PREVIOUS_STEP'] = $aPreviousStep['PAGE'];
-        $Fields['APP_DATA']['__DYNAFORM_OPTIONS']['PREVIOUS_STEP_LABEL'] = G::loadTranslation("ID_PREVIOUS_STEP");
+        $aMessage['MESSAGE'] = G::loadTranslation('ID_EXTERNAL_STEP_MISSING', SYS_LANG, array("plugin"=>$sNamespace) );
+        $G_PUBLISH->AddContent('xmlform', 'xmlform', 'login/showMessage', '', $aMessage );
       }
-      $Fields['APP_DATA']['__DYNAFORM_OPTIONS']['NEXT_STEP'] = $aNextStep['PAGE'];
-      $Fields['APP_DATA']['__DYNAFORM_OPTIONS']['NEXT_STEP_LABEL'] = G::loadTranslation("ID_NEXT_STEP");
-
-      /** Added By erik date: 16-05-08
-      * Description: this was added for the additional database connections */
-      G::LoadClass ('dbConnections');
-      $oDbConnections = new dbConnections($_SESSION['PROCESS']);
-      $oDbConnections->loadAdditionalConnections();
-      $stepFilename = "$sNamespace/$sStepName";
-      G::evalJScript("
-      if (parent.setCurrent) {
-        parent.setCurrent('".$_GET['UID']."');
-      }");
-
-      $G_PUBLISH->AddContent('content', $stepFilename);
       break;
-
     }
     //Add content content step - End
   }
