@@ -223,35 +223,32 @@ function run_propel_build_model($task, $args)
 
 function run_propel_build_sql($task, $args)
 {
-//  if ( isset ( $args[1] ) )  {
-//    $propelIniFile = $args[1] . '.ini';
-//    $alternateDir = '';
-//    if ( ! file_exists ( 'config' . PATH_SEP . $propelIniFile ) ) {
-//      $path = explode ( '/', $args[1] );
-//      if ( count($path) > 2 )
-//        throw new Exception('the propel.ini must be in your config directory.');
-//      if ( count($path) == 1 )
-//        $path[1] = 'propel';
-//
-//      $propelIniFile = 'plugins' .PATH_SEP . $path[0] . PATH_SEP . 'config' . PATH_SEP . $path[1] . '.ini';
-//      if ( ! file_exists($propelIniFile) )
-//        throw new Exception("the propel.ini must be in your config directory. ($propelIniFile)");
-//
-//      pake_echo_action('propel.ini', "using the file : $propelIniFile ");
-//      $alternateDir = PATH_PLUGINS . $path[0] . PATH_SEP;
-//      //_call_phing($task, 'om', false, $path[1] . '.ini' , PATH_PLUGINS . $path[0] . PATH_SEP );
-//      //return;
-//    }
-//
-//  }
+   if ( isset ( $args[1] ) )  {
+     $propelIniFile = $args[1] . '.ini';
+     $alternateDir = '';
+     if ( ! file_exists ( 'config' . PATH_SEP . $propelIniFile ) ) {
+       $path = explode ( '/', $args[1] );
+       if ( count($path) > 2 )
+         throw new Exception('the propel.ini must be in your config directory.');
+       if ( count($path) == 1 )
+         $path[1] = 'propel';
+
+       $propelIniFile = 'plugins' .PATH_SEP . $path[0] . PATH_SEP . 'config' . PATH_SEP . $path[1] . '.ini';
+       if ( ! file_exists($propelIniFile) )
+         throw new Exception("the propel.ini must be in your config directory. ($propelIniFile)");
+
+       pake_echo_action('propel.ini', "using the file : $propelIniFile ");
+       $alternateDir = PATH_PLUGINS . $path[0] . PATH_SEP;
+       //_call_phing($task, 'om', false, $path[1] . '.ini' , PATH_PLUGINS . $path[0] . PATH_SEP );
+       //return;
+     }
+
+   }
 
   $aDB = array('mysql', 'mssql', 'oracle', 'pgsql');
 
-  if ( count($args) > 1 ) {
-    throw new Exception("specify only one parameter, valid values are: mysql, mssql, oracle, pgsql.\nexample: ./gulliver propel-build-sql mysql");
-  }
   if ( !in_array($args[0], $aDB)) {
-    throw new Exception('specify database Adapter, valid values are: mysql, mssql, oracle, pgsql.');
+    throw new Exception('invalid database Adapter, available:[mysql|mssql|oracle|pgsql].');
   }
   else {
     switch ( $args [0]) {

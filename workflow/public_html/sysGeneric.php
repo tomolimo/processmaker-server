@@ -81,9 +81,6 @@
   if (defined('PATH_DATA')) {
     $writableDirs[] = PATH_DATA;
   }
-  if (defined('PATH_LANGUAGECONT')) {
-    $writableDirs[] = PATH_LANGUAGECONT;
-  }
   
   try {
     G::verifyWriteAccess($writableDirs);
