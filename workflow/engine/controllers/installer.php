@@ -314,8 +314,7 @@ class Installer extends Controller {
     else {
       $info = $this->createMSSQLWorkspace();
     }
-    $info->url = '/sys' . $_REQUEST['workspace'] . '/en/classic/main/login';
-    $this->forceTogenerateTranslationsFiles($info->url);
+
     return $info;
   }
 
@@ -713,7 +712,6 @@ class Installer extends Controller {
       $this->installLog("Index File updated $indexFileUpdated with lang: {$sysConf['default_lang']}, skin: {$sysConf['default_skin']} " );
       $this->installLog("Install completed Succesfully" );
 
-      $info->url = '/sys' . $_REQUEST['workspace'] . '/en/uxmodern/main/login';
       $info->uri = '/sys' . $_REQUEST['workspace'] . '/en/uxmodern/main/login';
       $info->result  = true;
       $info->message = 'Succesfully OK---';

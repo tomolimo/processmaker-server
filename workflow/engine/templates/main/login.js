@@ -68,6 +68,10 @@ var Login = function() {
       if (typeof flyNotify != 'undefined') {
         Ext.msgBoxSlider.msgTopCenter(flyNotify.type, flyNotify.title, flyNotify.text, flyNotify.time);
       }
+
+      if (flagGettingStarted) {
+        this.gettingStartedWindow.show();
+      }
     }
   }
 }();
@@ -344,6 +348,29 @@ Login.initComponents = function()
     })
   });
 
+  this.gettingStartedWindow = new Ext.Window({
+    id: 'gettingStartedWindow',
+    layout: 'fit',
+    title: '',
+    width: 640,
+    height: 500, //180,
+    //iconCls: 'ux-auth-header-icon',
+    closable: true,
+    resizable: false,
+    plain: true,
+    draggable: false,
+    modal:true,
+    //autoLoad: '../services/login_getStarted.php'
+    items: [
+      {
+        xtype: 'iframepanel',
+        defaultSrc : '../services/login_getStarted.php',
+        loadMask:{msg:_('ID_LOADING')+'...'},
+        bodyStyle:{height: (PMExt.getBrowser().screen.height-60) + 'px', overflow:'auto'},
+        width:588
+      }
+    ]
+  });
   //Ext.getCmp('login-form').hide();
 }
 

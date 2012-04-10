@@ -226,11 +226,7 @@ class Main extends Controller
       $this->memcache->set( 'flagGettingStarted', $flagGettingStarted, 8*3600 ) ;
     }
 
-    // if( $flagGettingStarted == 0 ) {
-    //   $oHeadPublisher->addScriptCode( 'var flagGettingStarted = 1; ');
-    // }
-    // else
-    //   $oHeadPublisher->addScriptCode( 'var flagGettingStarted = 0; ');
+    $this->setJSVar('flagGettingStarted', ($flagGettingStarted == 0));
 
     G::loadClass('configuration');
     $oConf = new Configurations;
@@ -474,8 +470,7 @@ class Main extends Controller
 
   private function getCompanyLogo()
   {
-    $sCompanyLogo = '/images/processmaker2.logo.png';
-    //$sCompanyLogo = '/images/logo_processmaker2.gif';
+    $sCompanyLogo = '/images/processmaker2.logo2.png';
 
     if(defined("SYS_SYS")){
       if ( ($aFotoSelect = $this->memcache->get('aFotoSelect')) === false ) {
