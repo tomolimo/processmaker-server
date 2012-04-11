@@ -3,7 +3,7 @@ var wizard;
 // Extend timeout for all Ext.Ajax.requests to 90 seconds.  
 // Ext.Ajax is a singleton, this statement will extend the timeout  
 // for all subsequent Ext.Ajax calls.  
-Ext.Ajax.timeout = 90000;
+Ext.Ajax.timeout = 4 * 60 * 1000;
 
 Ext.onReady(function(){
     
