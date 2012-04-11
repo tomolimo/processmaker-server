@@ -81,6 +81,32 @@
   -webkit-box-shadow:0 1px 2px rgba(0,0,0,0.2);
 }
 
+
+a.options-tool{
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+a.options-tool:hover {
+  color: #fff;
+  text-decoration: underline;
+  font-weight: bold;
+}
+
+a.options-tool:focus {
+  outline: thin dotted #333333;
+  outline-offset: -2px;
+}
+a.options-tool:hover, a:active {
+    outline: 0 none;
+}
+
+#x-panel-header{
+  height: 500px;
+  padding: 5px 5px 5px 5px;
+}
+
 .x-panel-header-text{
   text-shadow:#fff 0px 1px 1px;
   color:#444;
@@ -988,21 +1014,18 @@ antes funcionaba.
   background-image:url(/images/logout.gif);
 }
 
-.x-pm-headerbar1 {
+.x-pm-headerbar {
   background-color: #32405a;
   background-image: url("/images/header_bg.jpg");
   color: #fff;
   padding: 0px;
   font: 8pt Tahoma,sans-serif,MiscFixed;
   font-size: 12px;
+  width: 100%;
 }
-.x-pm-headerbar2 {
-  background-color: #000;
-  background-image: url("/images/canvastile_bg1.jpg");
-  color: #fff;
-  padding: 5px;
-  font: 8pt Tahoma,sans-serif,MiscFixed;
-  font-size: 12px;
+
+table.x-pm-headerbar td, table th {
+  padding-left: 10px;  
 }
 
 .headerRightSection
@@ -1533,3 +1556,4 @@ td.x-cnotes-label {
   padding-left: 3px;
   padding-right: 3px;
 }
+

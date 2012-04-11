@@ -287,7 +287,7 @@ class headPublisher {
     // enabled for particular use
     $head .= $this->getExtJsLibraries();
 
-    $head .= "  <script type='text/javascript' src='/js/ext/draw2d.js'></script>\n";
+    // $head .= "  <script type='text/javascript' src='/js/ext/draw2d.js'></script>\n";
     $head .= "  <script type='text/javascript' src='/js/ext/translation.".SYS_LANG.".js'></script>\n";
 
     if (! isset ( $this->extJsSkin ) || $this->extJsSkin == '') {

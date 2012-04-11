@@ -4784,6 +4784,9 @@ function getDirectorySize($path,$maxmtime=0)
    */
   function getCheckSum($files) 
   { 
+    G::LoadClass('system');
+    $key = System::getVersion();
+    
     if (!is_array($files)) {
       $tmp = $files;
       $files = array();
@@ -4795,7 +4798,7 @@ function getDirectorySize($path,$maxmtime=0)
       if (is_file($file))
         $checkSum .= md5_file($file);
     }
-    return md5($checkSum);
+    return md5($checkSum.$key);
   }
   
   /**

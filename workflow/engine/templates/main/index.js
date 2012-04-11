@@ -30,7 +30,17 @@ var Main = function() {
       Ext.getCmp('westPanel').hide();
       Ext.getCmp('southPanel').hide();
       
+      Ext.getCmp('northPanel').update(Ext.fly('header-content').dom.innerHTML);
       Ext.getCmp('centerPanel').ownerCt.doLayout();
+
+      Ext.get('options-tool').on('click', function(eventObj, elRef) {
+        var conn = new Ext.data.Connection();
+        eventObj.stopEvent();
+        if (!this.ctxMenu) {
+          Main.buildUserMenu(this);
+        }
+        this.ctxMenu.show(elRef);
+      });
 
       if (typeof flyNotify != 'undefined') {
         Ext.msgBoxSlider.msgTopCenter(flyNotify.type, flyNotify.title, flyNotify.text, flyNotify.time);
@@ -82,8 +92,8 @@ Main.configureComponents = function()
   this.configuration.northPanel = {
     id:'northPanel',
     region: 'north',
-    height: 40,
-    applyTo: 'panel-header',
+    height: 50,
+    //applyTo: 'panel-header',
     margins: '0 0 0 0', // top right botom left
     items: []
   };
@@ -183,15 +193,6 @@ Main.buildComponents = function()
   this.panels.push(new Ext.Panel(this.configuration.westPanel));
   this.panels.push(new Ext.Panel(this.configuration.southPanel));
   this.panels.push(new Ext.Panel(this.configuration.northPanel));
-  
-  Ext.get('options-tool').on('click', function(eventObj, elRef) {
-    var conn = new Ext.data.Connection();
-    eventObj.stopEvent();
-    if (!this.ctxMenu) {
-      Main.buildUserMenu(this);
-    }
-    this.ctxMenu.show(elRef);
-  });
 };
 
 Main.buildUserMenu = function(obj)
