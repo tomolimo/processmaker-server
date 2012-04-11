@@ -54,14 +54,16 @@
 
   require_once $pathhome  . 'engine' . PATH_SEP . 'classes' . PATH_SEP . 'class.system.php';
   $config = System::getSystemConfiguration($pathhome . 'engine' . PATH_SEP . 'config' . PATH_SEP . 'env.ini');
-  $e_all  = defined('E_DEPRECATED') ? E_ALL ^ E_DEPRECATED : E_ALL;
+  
+  $e_all  = defined('E_DEPRECATED') ? E_ALL & ~E_DEPRECATED : E_ALL;
+  $e_all  = defined('E_STRICT')     ? E_ALL & ~E_STRICT     : $e_all;
+  $e_all  = $config['debug']        ? $e_all                : $e_all & ~E_NOTICE;
 
   // Do not change any of these settings directly, use env.ini instead
-  ini_set('display_errors','On');
-  ini_set('short_open_tag', 'on');
-  ini_set('asp_tags', 'on');
+  ini_set('display_errors', $config['debug']);
+  ini_set('error_reporting', $e_all);
+  ini_set('short_open_tag', 'On');
   ini_set('default_charset', "UTF-8");  
-  ini_set('error_reporting', ($config['debug'] ? $e_all : $e_all ^ E_NOTICE));
   ini_set('memory_limit', $config['memory_limit']);
   ini_set('soap.wsdl_cache_enabled', $config['wsdl_cache']);
   

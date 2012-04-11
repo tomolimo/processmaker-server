@@ -1008,7 +1008,7 @@ class System {
     return $cities;
   }
 
-  public function getSystemConfiguration($iniFile='')
+  public static function getSystemConfiguration($iniFile='')
   {
     $config = array(
       'debug' => 0,
@@ -1030,11 +1030,14 @@ class System {
 
     /* Read the env.ini */
     $ini_contents = parse_ini_file($iniFile, false);
+
+    // validation debug config, ony accept bynary values, 1 to enable
+    $ini_contents['debug'] = $ini_contents['debug'] == 1 ? 1 : 0;
     
     if ($ini_contents !== false) {
       $config = array_merge($config, $ini_contents);
     }
-    //echo '<pre>'; print_r($config); die;
+    
     return $config;
   }
 
