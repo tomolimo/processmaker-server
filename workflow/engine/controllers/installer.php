@@ -15,6 +15,8 @@ class Installer extends Controller {
 
   var $link;  #resource for database connection
 
+  public $debug = 1;
+
   public function __construct() {
     $this->path_config    = PATH_CORE.'config/';
     $this->path_languages = PATH_CORE.'content/languages/';
@@ -47,6 +49,8 @@ class Installer extends Controller {
     $this->includeExtJS('installer/Wizard', false);
     $this->includeExtJS('installer/Header', false);
     $this->includeExtJS('installer/Card', false);
+
+    $this->includeExtJS('installer/installer_cards');
     $this->includeExtJS('installer/main', false);
 
     $this->setJSVar('licenseTxt', $licenseContent);

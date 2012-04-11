@@ -3,12 +3,26 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon"/>
   {$_header}
+  {literal}
+<!--[if IE]>
+  <style>  
+  table.x-pm-headerbar td, table th {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-right: 0px;
+  }
+  </style>
+<![endif]-->
+  {/literal}
 </head>
 <body>
-<div id="panel-header" >
-  <table class="x-pm-headerbar1" width="100%"  height="" cellpadding="0" cellspacing="0" border="0">
+
+<div id="panel-header" />
+
+<div id="header-content" style="display:none">
+    <table class="x-pm-headerbar">
     <tr>
-      <td width="33%" valign="middle" style="padding-left:10px">
+      <td width="33%" valign="middle">
         <img src="{$logo_company}" width="180" height="24"/>
       </td>
       
@@ -17,17 +31,16 @@
       <td width="33%" align="right" valign="top">
         <table width="100%" height="25" border="0" cellspacing="0" cellpadding="0" class="headerRightSection">
           <tr  valign="middle">
-            <td width="50%" rowspan="2" valign="top"></td>
             <td height="12" valign="middle" align="right" valign="top">
-              <a href="#" id="options-tool">
-                <div class="headerRightSideBar">
-                  {$userfullname}&nbsp;<br />
-                  <span style="font-size:9px">{$rolename}</span>&nbsp;
-                </div>
-              <div id="user-avatar">  
+              <a href="#" id="options-tool" class="options-tool">
+                {$userfullname}<br />
+                <span style="font-size:9px">{$rolename}</span>
+              </a>
+            </td>
+            <td width="40" align="right">
+              <span id="user-avatar">  
                 <img src="{$user_avatar}" width="25" height="25"/>
-              </div>
-            </a>
+              </span>
             </td>
           </tr>
         </table>
