@@ -47,9 +47,28 @@
 
   G::LoadClass("cli");
 
-  /* Hide notice, otherwise we get a lot of messages */
-  error_reporting(E_ALL ^ E_NOTICE);
-  ini_set('display_errors', 1);
+  require_once PATH_HOME  . 'engine' . PATH_SEP . 'classes' . PATH_SEP . 'class.system.php';
+  $config = System::getSystemConfiguration(PATH_HOME . 'engine' . PATH_SEP . 'config' . PATH_SEP . 'env.ini');
+  
+  $e_all  = defined('E_DEPRECATED') ? E_ALL & ~E_DEPRECATED : E_ALL;
+  $e_all  = defined('E_STRICT')     ? E_ALL & ~E_STRICT     : $e_all;
+  $e_all  = $e_all & ~E_NOTICE; // don't notices
+
+  // Do not change any of these settings directly, use env.ini instead
+  ini_set('display_errors', $config['debug']);
+  ini_set('error_reporting', $e_all);
+  ini_set('short_open_tag', 'On');
+  ini_set('default_charset', "UTF-8");  
+  ini_set('memory_limit', $config['memory_limit']);
+  ini_set('soap.wsdl_cache_enabled', $config['wsdl_cache']);
+  ini_set('date.timezone', $config['time_zone']);
+  
+  define ('DEBUG_SQL_LOG', $config['debug_sql']);
+  define ('DEBUG_TIME_LOG', $config['debug_time']);
+  define ('DEBUG_CALENDAR_LOG', $config['debug_calendar']);
+  define ('MEMCACHED_ENABLED',  $config['memcached']);
+  define ('MEMCACHED_SERVER',   $config['memcached_server']);
+  define ('TIME_ZONE', $config['time_zone']);
 
   // trap -V before pake
   if (in_array('-v', $argv) || in_array('-V', $argv) || in_array('--version', $argv))
@@ -78,5 +97,3 @@
   CLI::run();
 
   exit(0);
-
-?>
