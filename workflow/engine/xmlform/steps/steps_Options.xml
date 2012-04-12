@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="xmlmenu">
 
-<MNU_ADD type="link" value="" link="#" onclick="stepAdd(); return false;" colAlign="left" colWidth="35">
+<MNU_ADD type="link" value="" link="#" onclick="stepAdd(); return false;" colAlign="left" colWidth="80">
   <en>New</en>
 </MNU_ADD>
 
@@ -65,7 +65,7 @@
   }
   
   function externalStepEdit(stpUid, urlExternalStepEdit ){
-		popupWindow('@G::LoadTranslation(ID_EDIT)', '@G::encryptlink(' + urlExternalStepEdit + ')?STP_UID=' + stpUid , 550, 350);
+    popupWindow('@G::LoadTranslation(ID_EDIT)', '@G::encryptlink(' + urlExternalStepEdit + ')?STP_UID=' + stpUid , 550, 350);
   }
   
   function dynaformEdit( uid, pro_uid ){
@@ -98,8 +98,8 @@
         currentPopupWindow.remove();
       }
     } else {
-	    ajax_post(form.action, form, 'POST');
-		  currentPopupWindow.remove();
+      ajax_post(form.action, form, 'POST');
+      currentPopupWindow.remove();
     }
   }
 
@@ -124,11 +124,11 @@
         currentPopupWindow.remove();
       }
     } else {
-	    ajax_post(form.action, form, 'POST');
-		  currentPopupWindow.remove();
+      ajax_post(form.action, form, 'POST');
+      currentPopupWindow.remove();
     }
   }
 
 ]]></js>
 
-</dynaForm>  
+</dynaForm>
