@@ -1182,4 +1182,16 @@ class PMPluginRegistry {
   function registerDashboard() {
     // Dummy function for backwards compatibility
   }
+  
+  function getAttributes()
+  {
+    return get_object_vars($this);
+  }
+  
+  function setAttributes($attributes = array())
+  {
+    foreach ($attributes as $index => $value) {
+      eval("\$this->" . $index . " = \$value;");
+    }
+  }
 }
