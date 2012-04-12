@@ -93,6 +93,9 @@
   }
   // end permissions verification
 
+  // IIS Compatibility, SERVER_ADDR doesn't exist on that env, so we need to define it.
+  $_SERVER['SERVER_ADDR'] = isset($_SERVER['SERVER_ADDR']) ? $_SERVER['SERVER_ADDR'] : $_SERVER['SERVER_NAME'];
+
   //to do: make different environments.  sys
 
   define ('ERROR_SHOW_SOURCE_CODE', true);  // enable ERROR_SHOW_SOURCE_CODE to display the source code for any WARNING OR NOTICE

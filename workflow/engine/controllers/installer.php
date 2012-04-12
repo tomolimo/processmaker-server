@@ -5,19 +5,19 @@
  * @author Erik A. O. <erik@colosa.com>
  */
 
-class Installer extends Controller {
-  var $path_config;
-  var $path_languages;
-  var $path_plugins;
-  var $path_xmlforms;
-  var $path_shared;
-  var $path_sep;
+class Installer extends Controller 
+{
+  public $path_config;
+  public $path_languages;
+  public $path_plugins;
+  public $path_xmlforms;
+  public $path_shared;
+  public $path_sep;
 
-  var $link;  #resource for database connection
+  public $link;  #resource for database connection
 
-  public $debug = 1;
-
-  public function __construct() {
+  public function __construct() 
+  {
     $this->path_config    = PATH_CORE.'config/';
     $this->path_languages = PATH_CORE.'content/languages/';
     $this->path_plugins   = PATH_CORE.'plugins/';
@@ -27,12 +27,13 @@ class Installer extends Controller {
     $this->path_sep       = PATH_SEP;
   }
 
-  public function index($httpData) {
+  public function index($httpData) 
+  {
     $step1_txt = 'If any of these items is not supported (marked as No) then please take actions to correct them.<br><br>' .
                  'Failure to do so could lead to your ProcessMaker! installation not functioning correctly.<br><br>' .
-                 '(*) MSSQL Support is optional.<br><br>' .
-                 '(**) OpenSSL is optional.<br><br>' .
-                 '(***) LDAP is optional.';
+                 //'(*) MSSQL Support is optional.<br><br>' .
+                 '(*) OpenSSL is optional.<br><br>' .
+                 '(*) LDAP is optional.';
 
     $step2_txt = 'These settings are recommended for PHP in order to ensure full compatibility with ProcessMaker. <> ' .
                  'However, ProcessMaker still operate if your settings do not quite match the recommended';
@@ -74,7 +75,8 @@ class Installer extends Controller {
     G::RenderPage('publish', 'extJs');
   }
 
-  public function newSite() {
+  public function newSite() 
+  {
     $textStep1 = 'ProcessMaker stores all of its data in a database. This screen gives the installation program the information needed to create this database.<br><br>' .
                  'If you are installing ProcessMaker on a remote web server, you will need to get this information from your Database Server.';
     $textStep2 = 'ProcessMaker uses a workspaces to store data. Please select a valid workspace name and credentials to log in it.';
@@ -106,7 +108,8 @@ class Installer extends Controller {
     G::RenderPage('publish', 'extJs');
   }
 
-  public function getSystemInfo() {
+  public function getSystemInfo() 
+  {
     $this->setResponseType('json');
 
     // PHP info and verification
@@ -207,11 +210,13 @@ class Installer extends Controller {
     return $info;
   }
 
-  public function is_dir_writable( $path ) {
+  public function is_dir_writable( $path ) 
+  {
     return ( is_dir($path) && is_writable($path) );
   }
 
-  public function getPermissionInfo() {
+  public function getPermissionInfo() 
+  {
 
     $this->setResponseType('json');
     $info->notify = '';
@@ -261,7 +266,8 @@ class Installer extends Controller {
     return $info;
   }
 
-  public function testConnection () {
+  public function testConnection () 
+  {
     $this->setResponseType('json');
     if ($_REQUEST['db_engine'] == 'mysql') {
       return $this->testMySQLconnection();
@@ -272,11 +278,12 @@ class Installer extends Controller {
   }
 
   /**
-    log the queries and other information to install.log,
-    the install.log files should be placed in shared/logs
-    for that reason we are using the $_REQUEST of pathShared
-  */
-  public function installLog( $text ) {
+   * log the queries and other information to install.log,
+   * the install.log files should be placed in shared/logs
+   * for that reason we are using the $_REQUEST of pathShared
+   */
+  public function installLog( $text ) 
+  {
     $serverAddr = $_SERVER['SERVER_ADDR'];
     //if this function is called outside the createWorkspace, just returns and do nothing
     if ( !isset( $_REQUEST['pathShared']) )
@@ -307,10 +314,11 @@ class Installer extends Controller {
   }
 
   /**
-    function to create a workspace
-    in fact this function is calling appropiate functions for mysql and mssql
-  */
-  public function createWorkspace() {
+   * function to create a workspace
+   * in fact this function is calling appropiate functions for mysql and mssql
+   */
+  public function createWorkspace() 
+  {
     $this->setResponseType('json');
     if ($_REQUEST['db_engine'] == 'mysql') {
       $info = $this->createMySQLWorkspace();
@@ -322,7 +330,8 @@ class Installer extends Controller {
     return $info;
   }
 
-  public function forceTogenerateTranslationsFiles($url) {
+  public function forceTogenerateTranslationsFiles($url) 
+  {
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, (isset($_SERVER['HTTPS']) ? ($_SERVER['HTTPS'] != '' ? 'https://' : 'http://') : 'http://') . $_SERVER['HTTP_HOST'] . '/js/ext/translation.en.js?r=' . rand(1, 10000));
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -334,9 +343,10 @@ class Installer extends Controller {
   }
 
   /**
-    send a query to MySQL and log the query
-  */
-  public function mysqlQuery($sql) {
+   * send a query to MySQL and log the query
+   */
+  public function mysqlQuery($sql) 
+  {
     $this->installLog($sql);
     $query = @mysql_query($sql, $this->link);
     if (!$query) {
@@ -350,9 +360,10 @@ class Installer extends Controller {
   }
 
   /**
-    send a query to MSSQL and log the query
-  */
-  public function mssqlQuery( $sql ) {
+   * send a query to MSSQL and log the query
+   */
+  public function mssqlQuery($sql) 
+  {
     $this->installLog( $sql );
     $query = @mssql_query($sql, $this->link);
     if (!$query) {
@@ -372,7 +383,8 @@ class Installer extends Controller {
    * @param   string  $connection
    * @return  array   $report
    */
-  public function mysqlFileQuery( $file ) {
+  public function mysqlFileQuery($file) 
+  {
     if ( !is_file($file) ) {
       throw ( new Exception ( sprintf ( "File $file is not a valid sql file", $file ) ) );
       return $false;
@@ -449,7 +461,8 @@ class Installer extends Controller {
    * @param   string  $connection
    * @return  array   $report
    */
-  public function mssqlFileQuery( $file ) {
+  public function mssqlFileQuery($file) 
+  {
     if ( !is_file($file) ) {
       throw ( new Exception ( sprintf ( "File $file is not a valid sql file", $file ) ) );
       return $false;
@@ -482,7 +495,8 @@ class Installer extends Controller {
    * @param  string    $psDatabase
    * @return void
    */
-  public function setGrantPrivilegesMySQL($psUser, $psPassword, $psDatabase, $host) {
+  public function setGrantPrivilegesMySQL($psUser, $psPassword, $psDatabase, $host) 
+  {
     $host = ($host == 'localhost' || $host == '127.0.0.1' ? 'localhost' : '%');
     $query = sprintf("GRANT ALL PRIVILEGES ON `%s`.* TO %s@'%s' IDENTIFIED BY '%s' WITH GRANT OPTION", $psDatabase, $psUser, $host, $psPassword);
     $this->mysqlQuery($query);
@@ -496,7 +510,8 @@ class Installer extends Controller {
    * @param  string    $psDatabase
    * @return void
    */
-  public function setGrantPrivilegesMSSQL( $psUser, $psPassword, $psDatabase ) {
+  public function setGrantPrivilegesMSSQL($psUser, $psPassword, $psDatabase) 
+  {
 
     $query = sprintf ( "IF  EXISTS (SELECT * FROM sys.server_principals WHERE name = N'%s') DROP LOGIN [%s]", $psUser, $psUser );
     $this->mssqlQuery( $query );
@@ -528,7 +543,8 @@ class Installer extends Controller {
     return true;
   }
 
-  public function createMySQLWorkspace() {
+  public function createMySQLWorkspace() 
+  {
     ini_set('max_execution_time', '0');
     $info->result   = false;
     $info->message = '';
@@ -727,7 +743,8 @@ class Installer extends Controller {
     return $info;
   }
 
-  public function createMSSQLWorkspace() {
+  public function createMSSQLWorkspace() 
+  {
     ini_set('max_execution_time', '0');
     $info->result   = false;
     $info->message = '';
@@ -908,7 +925,8 @@ class Installer extends Controller {
     return $info;
   }
 
-  public function getEngines() {
+  public function getEngines() 
+  {
     $this->setResponseType('json');
     $engines = array();
     if (function_exists('mysql_query')) {
@@ -927,7 +945,8 @@ class Installer extends Controller {
     return $engines;
   }
 
-  public function checkDatabases() {
+  public function checkDatabases() 
+  {
     $this->setResponseType('json');
     $databasesExists = new stdclass();
     if ($_REQUEST['db_engine'] == 'mysql') {
@@ -955,7 +974,8 @@ class Installer extends Controller {
    * Privates functions section, non callable by http request
    */
 
-  private function testMySQLconnection() {
+  private function testMySQLconnection() 
+  {
     $info->result   = false;
     $info->message = '';
     if ( !function_exists("mysql_connect") ) {
@@ -992,7 +1012,8 @@ class Installer extends Controller {
     return $info;
   }
 
-  private function testMSSQLconnection() {
+  private function testMSSQLconnection() 
+  {
     $info->result   = false;
     $info->message = '';
     if ( !function_exists("mssql_connect") ) {

@@ -286,7 +286,7 @@ Ext.onReady(function(){
               },
               {
                 xtype     : 'displayfield',
-                fieldLabel: 'OpenSSL Version (**)',
+                fieldLabel: 'OpenSSL Version (*)',
                 id  : 'openssl'
               },
               {
@@ -311,7 +311,7 @@ Ext.onReady(function(){
               },
               {
                 xtype     : 'displayfield',
-                fieldLabel: 'LDAP Support (***)',
+                fieldLabel: 'LDAP Support (*)',
                 id  : 'ldap'
               },
               {
