@@ -427,8 +427,7 @@ var openSummaryWindow = function(appUid, delIndex)
       summaryWindowOpened = false;
     },
     failure: function (result, request) {
-      summaryWindowOpened = false;
-      PMExt.error(_('ID_ERROR'), result.responseText);
+      summaryWindowOpened = false;      
     }
   });
 }
