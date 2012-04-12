@@ -334,11 +334,11 @@ Ext.onReady(function(){
             style: 'font-weight: bold'
           },
           items       : [
-            {fieldLabel: 'Title', text: data.PRO_TITLE},
-            {fieldLabel: 'Description', text: data.PRO_DESCRIPTION},
-            {fieldLabel: 'Category', text: data.PRO_CATEGORY_LABEL},
-            {fieldLabel: 'Author', text: data.PRO_AUTHOR},
-            {fieldLabel: 'Create date', text: data.PRO_CREATE_DATE}
+            {fieldLabel: _('ID_TITLE'), text: data.PRO_TITLE},
+            {fieldLabel: _('ID_DESCRIPTION'), text: data.PRO_DESCRIPTION},
+            {fieldLabel: _('ID_CATEGORY'), text: data.PRO_CATEGORY_LABEL},
+            {fieldLabel: _('ID_AUTHOR'), text: data.PRO_AUTHOR},
+            {fieldLabel: _('ID_CREATE_DATE'), text: data.PRO_CREATE_DATE}
           ]
         }
 
@@ -392,12 +392,12 @@ Ext.onReady(function(){
             style: 'font-weight: bold'
           },
           items       : [
-            {fieldLabel: 'Title', text: data.TAS_TITLE},
-            {fieldLabel: 'Description', text: data.TAS_DESCRIPTION},
-            {fieldLabel: 'Init Date', text: data.INIT_DATE},
-            {fieldLabel: 'Due Date', text: data.DUE_DATE},
-            {fieldLabel: 'Finish Date', text: data.FINISH},
-            {fieldLabel: 'Duration', text: data.DURATION}
+            {fieldLabel: _('ID_TITLE'), text: data.TAS_TITLE},
+            {fieldLabel: _('ID_DESCRIPTION'), text: data.TAS_DESCRIPTION},
+            {fieldLabel: _('ID_INIT_DATE'), text: data.INIT_DATE},
+            {fieldLabel: _('ID_DUE_DATE'), text: data.DUE_DATE},
+            {fieldLabel: _('ID_FINISH_DATE'), text: data.FINISH},
+            {fieldLabel: _('ID_TASK_DURATION'), text: data.DURATION}
           ]
         }
 
@@ -608,7 +608,7 @@ Ext.onReady(function(){
         {fieldLabel: 'Case', text: parent._CASE_TITLE},
         {fieldLabel: 'Pause Date', text: _ENV_CURRENT_DATE},
         new Ext.form.DateField({
-          id: 	'unpauseDate',
+          id:   'unpauseDate',
           format: 'Y-m-d',
           fieldLabel: 'Unpause Date',
           name: 'unpauseDate',
@@ -870,30 +870,30 @@ Ext.onReady(function(){
       var uri = 'casesHistoryDynaformPage_Ajax?actionAjax=dynaformChangeLogViewHistory';
       uri += '&DYN_UID='+dynUID+'&HISTORY_ID='+tablename;
       menuSelectedTitle[name] = tabTitle;
-    }		
+    }
 
-    if (name.indexOf("historyDynaformGridPreview") != -1) {		
+    if (name.indexOf("historyDynaformGridPreview") != -1) {
       var historyDynaformGridPreviewGlobal = Ext.util.JSON.decode(ActionTabFrameGlobal.tabData);
-      var tabTitle = ActionTabFrameGlobal.tabTitle;			
-      var DYN_UID = historyDynaformGridPreviewGlobal.DYN_UID;			
+      var tabTitle = ActionTabFrameGlobal.tabTitle;
+      var DYN_UID = historyDynaformGridPreviewGlobal.DYN_UID;
       var uri = 'casesHistoryDynaformPage_Ajax?actionAjax=historyDynaformGridPreview';
-      uri += '&DYN_UID='+DYN_UID;			
-      menuSelectedTitle[name] = tabTitle;		
+      uri += '&DYN_UID='+DYN_UID;
+      menuSelectedTitle[name] = tabTitle
     }
 
     if (name == "uploadDocumentGridDownload") {
-      var uploadDocumentGridDownloadGlobal = Ext.util.JSON.decode(ActionTabFrameGlobal.tabData);		
+      var uploadDocumentGridDownloadGlobal = Ext.util.JSON.decode(ActionTabFrameGlobal.tabData);
       var APP_DOC_UID = uploadDocumentGridDownloadGlobal.APP_DOC_UID;
       var DOWNLOAD_LINK = uploadDocumentGridDownloadGlobal.DOWNLOAD_LINK;
-      var TITLE = uploadDocumentGridDownloadGlobal.TITLE;		
+      var TITLE = uploadDocumentGridDownloadGlobal.TITLE;
       var uri = DOWNLOAD_LINK;
-      menuSelectedTitle[name] = ActionTabFrameGlobal.tabTitle;		
+      menuSelectedTitle[name] = ActionTabFrameGlobal.tabTitle;
     }
 
     if (name == "generatedDocuments") {
       var uri = 'casesGenerateDocumentPage_Ajax.php?actionAjax=casesGenerateDocumentPage';
     }
-	
+
     if( tab ) {
       TabPanel.setActiveTab(tabId);
     } 
@@ -941,8 +941,8 @@ Ext.onReady(function(){
       },
      columns: [
       { id:'USR_UID', dataIndex: 'USR_UID', hidden:true, hideable:false},
-      { header : "First Name", dataIndex : 'USR_FIRSTNAME', sortable : true, width: 130, align:'center'},
-      { header : "Last Name", dataIndex : 'USR_LASTNAME', sortable : true,width: 130, align:'center' }
+      { header : _('ID_FIRST_NAME'), dataIndex : 'USR_FIRSTNAME', sortable : true, width: 130, align:'center'},
+      { header : _('ID_LAST_NAME'), dataIndex : 'USR_LASTNAME', sortable : true,width: 130, align:'center' }
      ]
     });
 
@@ -955,7 +955,7 @@ Ext.onReady(function(){
      items:[]
     });
 
-		var adHocUserGrid = new Ext.grid.GridPanel( {
+    var adHocUserGrid = new Ext.grid.GridPanel( {
       region: 'center',
       layout: 'fit',
       id: 'adHocUserGrid',
@@ -978,9 +978,9 @@ Ext.onReady(function(){
         {
           text:_('ID_ASSIGN'), 
           iconCls: 'silk-add', 
-          icon: '/images/cases-selfservice.png', 
+          icon: '/images/cases-selfservice.png',
           handler: assignAdHocUser
-        }	
+        }
       ],
       bbar: '',
       listeners:{
@@ -997,7 +997,7 @@ Ext.onReady(function(){
       id: 'w'
     });
     adHocUserGrid.store.load();
-		w.show();
+    w.show();
 
   function assignAdHocUser()
   {

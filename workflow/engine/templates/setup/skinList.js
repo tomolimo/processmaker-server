@@ -558,17 +558,18 @@ importSkin = function(){
       //},
       {
         xtype:"fileuploadfield",
-        fieldLabel:"File ",
-        id:"uploadedFile",
-        name:"uploadedFile",
-        width:190,
-        buttonOnly:false
+        fieldLabel: _('ID_FILE'),
+        id:         "uploadedFile",
+        name:       "uploadedFile",
+        width:      190,
+        buttonText: _('ID_BROWSE'),
+        buttonOnly: false
       },
       {
-        xtype:"checkbox",
-        fieldLabel:"Overwrite",
-        name:"overwrite_files",
-        checked:true
+        xtype:      "checkbox",
+        fieldLabel: _('ID_OVERWRITE'),
+        name:       "overwrite_files",
+        checked:    true
       }
       ],
       buttons:[

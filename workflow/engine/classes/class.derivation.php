@@ -427,7 +427,7 @@ class Derivation
            
            // if there is no report_to user info, throw an exception indicating this
            if (!isset($userFields) || $userFields['USR_UID'] == '') {
-             throw ( new Exception("The current user does not have a valid Reports To user.  Please contact administrator.") ) ;
+             throw ( new Exception(G::LoadTranslation('ID_MSJ_REPORSTO')));// "The current user does not have a valid Reports To user.  Please contact administrator.") ) ;
            }
            break;
 

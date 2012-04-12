@@ -389,7 +389,7 @@ var Conditional = function(DYN_UID){
                 oResultDiv.style.display = 'block';
                 oResultDiv.style.backgroundColor = '#BFCCC5';
                 oResultDiv.style.color = '#000000';
-                oResultDiv.innerHTML = '[Success] Evaluation result: '+bResult;
+                oResultDiv.innerHTML = _('ID_EVALUATION_RESULT')+": "+bResult;
                 fade('ResultMessageTD', 'inOut');
                 var o = new input(oResultDiv);
                 var oF = new input(getField('FCD_CONDITION'));

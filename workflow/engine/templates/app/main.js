@@ -175,7 +175,7 @@ function openCaseNotesWindow(appUid1, modalSw, appTitle)
         ' ',
         {
           id: 'sendBtn',
-          text: 'Send',
+          text: _('ID_SEND'),
           cls: 'x-toolbar1',
           handler: sendNote
         }, ' ',
@@ -393,7 +393,7 @@ var openSummaryWindow = function(appUid, delIndex)
             onload: ''
           }});
         }
-        tabs.push({title: Ext.util.Format.capitalize('Uploaded Documents'), bodyCfg: {
+        tabs.push({title: Ext.util.Format.capitalize(_('ID_UPLOADED_DOCUMENTS')), bodyCfg: {
           tag: 'iframe',
           id: 'summaryIFrame',
           src: '../cases/ajaxListener?action=uploadedDocumentsSummary',
@@ -401,7 +401,7 @@ var openSummaryWindow = function(appUid, delIndex)
           onload: ''
         }});
         
-        tabs.push({title: Ext.util.Format.capitalize('Generated Documents'), bodyCfg: {
+        tabs.push({title: Ext.util.Format.capitalize(_('ID_GENERATED_DOCUMENTS')), bodyCfg: {
           tag: 'iframe',
           id: 'summaryIFrame',
           src: '../cases/ajaxListener?action=generatedDocumentsSummary',
