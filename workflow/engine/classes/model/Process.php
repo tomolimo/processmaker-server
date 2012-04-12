@@ -713,21 +713,26 @@ class Process extends BaseProcess {
       GROUP BY PRO_UID, APP_STATUS*/
     require_once 'classes/model/Application.php';
 
-    $oCriteria = new Criteria('workflow');
-    $oCriteria->addSelectColumn(ApplicationPeer::PRO_UID);
-    $oCriteria->addSelectColumn(ApplicationPeer::APP_STATUS);
-    $oCriteria->addSelectColumn('COUNT(*) AS CNT');
-    $oCriteria->addGroupByColumn(ApplicationPeer::PRO_UID);
-    $oCriteria->addGroupByColumn(ApplicationPeer::APP_STATUS);
+    $memcache = & PMmemcached::getSingleton(SYS_SYS);
+    $memkey = 'getCasesCountInAllProcesses';
+    if ( ($aProcesses = $memcache->get( $memkey )) === false ) {
+      $oCriteria = new Criteria('workflow');
+      $oCriteria->addSelectColumn(ApplicationPeer::PRO_UID);
+      $oCriteria->addSelectColumn(ApplicationPeer::APP_STATUS);
+      $oCriteria->addSelectColumn('COUNT(*) AS CNT');
+      $oCriteria->addGroupByColumn(ApplicationPeer::PRO_UID);
+      $oCriteria->addGroupByColumn(ApplicationPeer::APP_STATUS);
 
-    $oDataset = ProcessPeer::doSelectRS ( $oCriteria );
-    $oDataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
+      $oDataset = ProcessPeer::doSelectRS ( $oCriteria );
+      $oDataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
 
-    $aProcesses = Array();
-    while($oDataset->next()) {
-      $row = $oDataset->getRow();
-      $aProcesses[$row['PRO_UID']][$row['APP_STATUS']] = $row['CNT'];
-    }
+      $aProcesses = Array();
+      while($oDataset->next()) {
+        $row = $oDataset->getRow();
+        $aProcesses[$row['PRO_UID']][$row['APP_STATUS']] = $row['CNT'];
+      }
+      $memcache->set( $memkey , $aProcesses, PMmemcached::ONE_HOUR );
+    }  
     return $aProcesses;
   }
 

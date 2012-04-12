@@ -1341,7 +1341,7 @@ class Criterion  {
 		} catch (Exception $e) {
 			// we are only doing this to allow easier debugging, so
 			// no need to throw up the exception, just make note of it.
-			Propel::log("Could not get a DBAdapter, generated sql may be wrong", Propel::LOG_ERR);
+			//Propel::log("Could not get a DBAdapter, generated sql may be wrong", Propel::LOG_ERR);
 		}
 
 		//init $this->realtable
