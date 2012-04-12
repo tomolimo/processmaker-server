@@ -28,7 +28,7 @@ Ext.onReady(function(){
             }
             e.stopEvent();
             document.location = document.location;
-          } 
+          }
           else{
             Ext.Msg.alert('Refresh', 'You clicked: CTRL-F5');
           }
@@ -46,7 +46,7 @@ Ext.onReady(function(){
         handler: newPMTable
       });
     }
-    
+
     newMenuOptions.push({
       text: _('ID_NEW_REPORT_TABLE'),
       handler: NewReportTable
@@ -108,7 +108,7 @@ Ext.onReady(function(){
     });
 
     var contextMenuItems = new Array();
-    contextMenuItems.push(editButton);  
+    contextMenuItems.push(editButton);
     contextMenuItems.push(deleteButton);
     contextMenuItems.push('-');
     contextMenuItems.push(dataButton);
@@ -216,7 +216,7 @@ Ext.onReady(function(){
       listeners:{
         selectionchange: function(sm){
           if (sm.last !== false) {
-            var count_rows = sm.getCount();  
+            var count_rows = sm.getCount();
             //var isReport = sm.getSelected().get('PRO_UID') != '';
 
             currentSelectedRow = sm.last;
@@ -240,7 +240,7 @@ Ext.onReady(function(){
                 dataButton.disable();
                 break;
             }
-            
+
           }
         }
       }
@@ -262,16 +262,16 @@ Ext.onReady(function(){
             tag = _('ID_SIMPLE_REPORT');
             break;
         }
-      } 
+      }
       return r.get('ADD_TAB_TAG') ? '<span style="font-size:9px; color:green">'+tag+':</span> '+ v : v;
     }});
-    
+
     cmodelColumns.push({header: _('ID_TABLE_TYPE'), dataIndex: 'PRO_UID', width: 120, align:'left', renderer: function(v,p,r){
       color = r.get('PRO_UID') ? 'blue' : 'green';
       value = r.get('PRO_UID') ? _('ID_REPORT_TABLE') : _('ID_PMTABLE');
       return '<span style="color:'+color+'">'+value+'</span> ';
     }});
-    
+
     cmodelColumns.push({dataIndex: "DBS_UID", hidden: true, hideable: false});
 
     cmodelColumns.push({header: 'Records', dataIndex: 'NUM_ROWS', width: 90, align:'left'});
@@ -279,9 +279,9 @@ Ext.onReady(function(){
     if (PRO_UID === false) {
       cmodelColumns.push({header: _('ID_PROCESS'), dataIndex: 'PRO_TITLE', width: 180, align:'left'});
     }
-    
+
     cmodelColumns.push({header: _('ID_TYPE'), dataIndex: 'ADD_TAB_TYPE', width: 400, hidden:true, align:'left'});
-    
+
     cmodel = new Ext.grid.ColumnModel({
       defaults: {
         width: 50,
@@ -320,11 +320,11 @@ Ext.onReady(function(){
       cm: cmodel,
       sm: smodel,
       tbar: [
-        newButton, 
-        editButton, 
-        deleteButton,'-', 
-        dataButton,'-' , 
-        importButton, 
+        newButton,
+        editButton,
+        deleteButton,'-',
+        dataButton,'-' ,
+        importButton,
         exportButton,
         '->',
         searchText,
@@ -350,8 +350,8 @@ Ext.onReady(function(){
 
           var rowsSelected = Ext.getCmp('infoGrid').getSelectionModel().getSelections();
           tag = rowsSelected[0].get('ADD_TAB_TAG');
-          text = (tag) ? _('ID_CONVERT_TO NATIVE_REPORT_TABLE') : _('ID_CONVERT_TO_SIMPLE_REPORT');
-          
+          text = (tag) ? _('ID_CONVERT_NATIVE_REP_TABLE') : _('ID_CONVERT_SIMPLE_REPORT');
+
           if (externalOption) {
             externalOption.setText(text);
             if (rowsSelected[0].get('PRO_UID')) {
@@ -359,7 +359,7 @@ Ext.onReady(function(){
             } else {
               externalOption.setDisabled(true);
             }
-            
+
             externalOption.setHidden((rowsSelected[0].get("TYPE") != "CLASSIC" && rowsSelected[0].get("DBS_UID") == "workflow")? false : true);
           }
       },
@@ -417,7 +417,7 @@ newPMTable = function(){
 
 EditPMTable = function(){
     var row   = Ext.getCmp('infoGrid').getSelectionModel().getSelected();
-    
+
     if (row.data.TYPE != 'CLASSIC') {
       tableType = row.data.PRO_UID ? 'report' : 'table';
       proParam = PRO_UID !== false ? '&PRO_UID='+PRO_UID : '';
@@ -432,11 +432,11 @@ EditPMTable = function(){
 DeletePMTable = function() {
   var rows = Ext.getCmp('infoGrid').getSelectionModel().getSelections();
   var selections = new Array();
-  
+
   for(var i=0; i<rows.length; i++) {
     selections[i] = {id: rows[i].get('ADD_TAB_UID'), type: rows[i].get('TYPE')};
   }
-  
+
   Ext.Msg.confirm( _('ID_CONFIRM'), _('ID_CONFIRM_DELETE_PM_TABLE'),
     function(btn, text) {
       if (btn == "yes") {
@@ -475,7 +475,7 @@ DeletePMTable = function() {
 
 //Load Import PM Table Form
 ImportPMTable = function(){
-      
+
   var w = new Ext.Window({
     title: '',
     width: 420,
@@ -592,7 +592,7 @@ ImportPMTable = function(){
 ExportPMTable = function(){
   var rows = Ext.getCmp('infoGrid').getSelectionModel().getSelections();
   var toExportRows = new Array();
-  
+
   for(var i=0; i<rows.length; i++){
     toExportRows.push([
       rows[i].get('ADD_TAB_UID'),
@@ -600,7 +600,7 @@ ExportPMTable = function(){
       rows[i].get('ADD_TAB_NAME'),
       (rows[i].get('PRO_UID') ? _('ID_REPORT_TABLE'): _('ID_PMTABLE')),
       true,
-      (rows[i].get('PRO_UID') ? false : true) 
+      (rows[i].get('PRO_UID') ? false : true)
     ]);
   }
 
@@ -613,8 +613,8 @@ PMTableData = function()
 {
   var row = Ext.getCmp('infoGrid').getSelectionModel().getSelected();
   if ((Ext.isIE8) ||(Ext.isIE7)){
-    var url = 'pmTables/data?id='+row.get('ADD_TAB_UID')+'&type='+row.get('TYPE');    
-    PopupCenter(url, 's', 800, 410);                                      
+    var url = 'pmTables/data?id='+row.get('ADD_TAB_UID')+'&type='+row.get('TYPE');
+    PopupCenter(url, 's', 800, 410);
     return false;
   }
   //location.href = 'pmTables/data?id='+row.get('ADD_TAB_UID');
@@ -698,4 +698,4 @@ function updateTag(value)
     var left = (Ext.getBody().getViewSize().width/3);
     var top = (Ext.getBody().getViewSize().height/3);
     var targetWin = window.open (pageURL, title, 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width='+w+', height='+h+', top='+top+', left='+left);
-  }  
+  }
