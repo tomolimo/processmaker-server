@@ -1030,13 +1030,13 @@ class System {
 
     /* Read the env.ini */
     $ini_contents = parse_ini_file($iniFile, false);
-
-    // validation debug config, ony accept bynary values, 1 to enable
-    $ini_contents['debug'] = $ini_contents['debug'] == 1 ? 1 : 0;
     
     if ($ini_contents !== false) {
       $config = array_merge($config, $ini_contents);
     }
+
+    // validation debug config, ony accept bynary values, 1 to enable
+    $config['debug'] = $config['debug'] == 1 ? 1 : 0;
     
     return $config;
   }

@@ -7,6 +7,5 @@
   define("WORKFLOW_PATH", $scriptDir . 'workflow/');
   define("WORKFLOW_BIN_PATH", $scriptDir . 'workflow/engine/bin/');
 
-  include ( WORKFLOW_BIN_PATH . '/cli.php');
+  include WORKFLOW_BIN_PATH . '/cli.php';
 
-?>

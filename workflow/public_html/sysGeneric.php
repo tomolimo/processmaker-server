@@ -66,6 +66,7 @@
   ini_set('default_charset', "UTF-8");  
   ini_set('memory_limit', $config['memory_limit']);
   ini_set('soap.wsdl_cache_enabled', $config['wsdl_cache']);
+  ini_set('date.timezone', $config['time_zone']);
   
   define ('DEBUG_SQL_LOG', $config['debug_sql']);
   define ('DEBUG_TIME_LOG', $config['debug_time']);
