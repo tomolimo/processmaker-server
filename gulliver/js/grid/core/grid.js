@@ -303,7 +303,12 @@ var G_Grid = function(oForm, sGridName){
                         parentGG.removeChild(aObjects[n]);
                         parentGG.appendChild(oNewOBJ);
                       }else{
-                        aObjects[n].value = defaultValue;
+                        if ((attributes.gridtype) && (attributes.gridtype=='currency')) {
+                          var attributesCurrency = elementAttributesNS(aObjects[0], '');
+                          aObjects[n].value = attributesCurrency.value.replace(/[.,0-9\s]/g,'');;
+                        }
+                        else
+                          aObjects[n].value = defaultValue;
                       }
                     }
                     break;
@@ -769,7 +774,8 @@ var G_Grid = function(oForm, sGridName){
       nnName= this.aElements[k].name.split('][');
       if (aAux[2] == nnName[2] && j <= (this.oGrid.rows.length-2)){
         oAux=this.getElementByName(j, nnName[2]);
-        if ( (oAux != null) && (oAux.value().trim() != '') ) {
+        var oAux2 = oAux.value().replace(/[$|a-zA-Z\s]/g,'');
+        if ( (oAux != null) && (oAux.value().trim() != '') && (oAux2)) {
           fTotal += parseFloat(G.getValue(oAux.value()));
         }
         j++;
@@ -877,7 +883,7 @@ var G_Grid = function(oForm, sGridName){
     for (i = 0; i < aFields.length; i++) {
       if (!isNumber(aFields[i])) {
         oAux = this.getElementByName(aAux[1], aFields[i]);
-        sAux = sAux.replace(new RegExp(aFields[i], "g"), "parseFloat(G.cleanMask(this.getElementByName(" + aAux[1] + ", '" + aFields[i] + "').value() || 0, '" + (oAux.sMask ? oAux.sMask : '')
+        sAux = sAux.replace(new RegExp(aFields[i], "g"), "parseFloat(G.cleanMask(this.getElementByName(" + aAux[1] + ", '" + aFields[i] + "').value().replace(/[$|a-zA-Z\s]/g,'') || 0, '" + (oAux.sMask ? oAux.sMask : '')
             + "').result.replace(/,/g, ''))");
         eval("if (!document.getElementById('" + aAux[0] + '][' + aAux[1] + '][' + aFields[i] + "]')) { oContinue = false; }");
       }
@@ -901,8 +907,15 @@ var G_Grid = function(oForm, sGridName){
       }else{
         maskToPut=0;        
       }
+      var symbol = document.getElementById(aAux[0]+']['+ aAux[1] + '][' + oField.sFieldName + ']').value.replace(/[0-9.\s]/g,'');
+      var bkp = document.getElementById(aAux[0] + '][' + aAux[1] + '][' + oField.sFieldName + ']').value;
       eval("document.getElementById('" + aAux[0] + '][' + aAux[1] + '][' + oField.sFieldName + "]').value = (" + sAux + ').toFixed('+maskToPut+');');
-      //eval("document.getElementById('" + aAux[0] + '][' + aAux[1] + '][' + oField.sFieldName + "]').value = (" + sAux + ').toFixed(2);');
+      
+      if (document.getElementById(aAux[0] + '][' + aAux[1] + '][' + oField.sFieldName + ']').value =='NaN')
+        document.getElementById(aAux[0] + '][' + aAux[1] + '][' + oField.sFieldName + ']').value = '';      
+      
+      document.getElementById(aAux[0]+']['+ aAux[1] + '][' + oField.sFieldName + ']').value = symbol+' '+document.getElementById(aAux[0]+']['+ aAux[1] + '][' + oField.sFieldName + ']').value;      
+      
       if (this.aFunctions.length > 0) {
         for (i = 0; i < this.aFunctions.length; i++) {
           oAux = document.getElementById('form[' + this.sGridName + '][' + aAux[1] + '][' + this.aFunctions[i].sFieldName + ']');
