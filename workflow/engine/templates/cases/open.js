@@ -878,7 +878,7 @@ Ext.onReady(function(){
       var DYN_UID = historyDynaformGridPreviewGlobal.DYN_UID;
       var uri = 'casesHistoryDynaformPage_Ajax?actionAjax=historyDynaformGridPreview';
       uri += '&DYN_UID='+DYN_UID;
-      menuSelectedTitle[name] = tabTitle
+      menuSelectedTitle[name] = tabTitle;
     }
 
     if (name == "uploadDocumentGridDownload") {
