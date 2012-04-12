@@ -3,6 +3,7 @@ var caseNotesWindow;
 var storeNotes;
 var appUid;
 var title;
+var summaryWindowOpened = false;
 
 function closeCaseNotesWindow(){
   if(Ext.get("caseNotesWindowPanel")){
@@ -29,7 +30,7 @@ function openCaseNotesWindow(appUid1, modalSw, appTitle)
     },
     listeners:{
       load:function(){
-  
+
         caseNotesWindow.setTitle(_('ID_CASES_NOTES') + ' (' + storeNotes.data.items.length + ')');
 
         if(storeNotes.getCount()<storeNotes.getTotalCount()){
@@ -41,7 +42,7 @@ function openCaseNotesWindow(appUid1, modalSw, appTitle)
     }
   });
   storeNotes.load();
-  
+
   var panelNotes = new Ext.Panel({
     id:'notesPanel',
     frame:true,
@@ -225,9 +226,9 @@ function openCaseNotesWindow(appUid1, modalSw, appTitle)
 }
 
 function updateTextCtr(body, event) {
-  
+
   ctr = document.getElementById('countChar').innerHTML;
-  
+
   text = Ext.getCmp('caseNoteText').getValue();
   maxLength = 150;
 
@@ -269,14 +270,14 @@ function newNoteHandler()
     document.getElementById('countChar').innerHTML = '150';
     caseNotesWindow.doLayout();
   }
-  
+
   caseNotesWindow.doLayout();
 }
 
 function sendNote()
 {
   var noteText = Ext.getCmp('caseNoteText').getValue();
-    
+
   if (noteText == "") {
     return false;
   }
@@ -314,7 +315,7 @@ function sendNote()
 function statusBarMessage( msg, isLoading, success ) {
   var statusBar = Ext.getCmp('notesStatusPanel');
   if( !statusBar ) return;
-  
+
   if( isLoading ) {
     statusBar.showBusy(msg);
   }
@@ -344,8 +345,12 @@ function statusBarMessage( msg, isLoading, success ) {
 /* Case Notes - End */
 
 /* Case Summary - Start */
-var openSummaryWindow = function(appUid, delIndex) 
+var openSummaryWindow = function(appUid, delIndex)
 {
+  if (summaryWindowOpened) {
+    return;
+  }
+  summaryWindowOpened = true;
   Ext.Ajax.request({
     url : '../appProxy/requestOpenSummary',
     params : {
@@ -400,7 +405,7 @@ var openSummaryWindow = function(appUid, delIndex)
           style: {border: '0px none', height: '300px'},
           onload: ''
         }});
-        
+
         tabs.push({title: Ext.util.Format.capitalize(_('ID_GENERATED_DOCUMENTS')), bodyCfg: {
           tag: 'iframe',
           id: 'summaryIFrame',
@@ -419,8 +424,10 @@ var openSummaryWindow = function(appUid, delIndex)
       else {
         PMExt.warning(_('ID_WARNING'), response.message);
       }
+      summaryWindowOpened = false;
     },
     failure: function (result, request) {
+      summaryWindowOpened = false;
       PMExt.error(_('ID_ERROR'), result.responseText);
     }
   });
@@ -434,26 +441,26 @@ Ext.Panel.prototype.originalonRender = Ext.Panel.prototype.onRender;
 // override onRender method
 Ext.Panel.prototype.onRender = function(ct, position) {
     this.originalonRender(ct, position);
-    
+
     // use the custom rowtbar argument to add it to this TopToolbar
     if(this.tbar && this.rowtbar){
         var rowtbar = this.rowtbar;
         if(!Ext.isArray(rowtbar))
             return;
-        
+
         for(var i = 0; i < rowtbar.length; i ++) {
             new Ext.Toolbar(rowtbar[i]).render(this.tbar);
         }
     }
-    
+
     // use the custom rowbbar argument to add it to this BottomToolbar
     if(this.bbar && this.rowbbar) {
         var rowbbar = this.rowbbar;
         if(!Ext.isArray(rowbbar))
             return;
-            
+
         for(var i = 0; i < rowbbar.length; i ++) {
             new Ext.Toolbar(rowbbar[i]).render(this.bbar);
         }
     }
-}  
+}
