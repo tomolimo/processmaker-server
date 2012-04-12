@@ -3056,14 +3056,17 @@ function sumaformu(ee,fma,mask){
             theelemts=objectsWithFormula[i_elements].theElements;
             
             nfk = '';
-            //to replace the field for the value and to evaluate the formula
+             //to replace the field for the value and to evaluate the formula
+            var symbol = mask.replace(/[0-9.#,-_\s]/g,'');
             for (var i=0; i < theelemts.length; i++){
               if(!isnumberk(theelemts[i])){//alert(getField(theelemts[i]).name);
-                val = (getField(theelemts[i]).value == '')? 0 : getField(theelemts[i]).value;
-                formula=formula.replace(theelemts[i],val);
+                val = (getField(theelemts[i]).value == '')? 0 : getField(theelemts[i]).value.replace(/[$a-zA-Z\s]/g,'');
+                formula=formula.replace(theelemts[i],val);                
               }
             }
-            
+            if (isnumberk(getField(theelemts['0']).value))
+              getField(theelemts['0']).value =  symbol+ ' '+getField(theelemts['0']).value;
+
             var rstop=eval(formula);
             if(mask!=''){
               putmask(rstop,mask,ans);
@@ -3131,6 +3134,8 @@ function putmask(numb,mask,ans){
   numDecimal=maskDecimal[1].length;
   
   ans.value=numb.toFixed(numDecimal);
+  var symbol = mask.replace(/[0-9.#,-_\s]/g,'');
+  if (isnumberk(ans.value)) ans.value = symbol+' '+ans.value;
   return;
   var nnum='',i=0,j=0;
   //we get the number of digits

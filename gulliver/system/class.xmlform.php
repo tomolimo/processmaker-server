@@ -1613,6 +1613,8 @@ class XmlForm_Field_Currency extends XmlForm_Field_SimpleText {
     $onkeypress = G::replaceDataField ( $this->onkeypress, $owner->values );
     
     $html = '';
+    $currency = preg_replace( '/([#,.])/', '',$this->mask);
+    if (! $value) $value= $currency;
     
     if ($this->renderMode == 'edit'){ //EDIT MODE
        $readOnlyText = ($this->readOnly == 1 || $this->readOnly == '1') ? 'readOnly="readOnly"' : '';
@@ -1642,6 +1644,50 @@ class XmlForm_Field_Currency extends XmlForm_Field_SimpleText {
     
     return $html;
 
+  }
+  
+  /**
+   * Function renderGrid
+   * @author alvaro campos sanchez  <alvaro@colosa.com>
+   * @access public
+   * @param string values
+   * @param string owner
+   * @return string
+   */
+  function renderGrid($values = array(), $owner)
+  {
+    $result = array ();
+    $r = 1;
+    if ($owner->mode != 'view') $this->renderMode = $this->modeForGrid;
+
+    foreach ( $values as $v ) {
+      $html = '';
+      $currency = preg_replace( '/([#,.])/', '',$this->mask);
+      if (! $v) $v= $currency;
+      if ($this->renderMode === 'edit'){ //EDIT MODE
+        $readOnlyText = ($this->readOnly == 1 || $this->readOnly == '1') ? 'readOnly="readOnly"' : '';
+        $html .= '<input '.$readOnlyText.' class="module_app_input___gray" ';
+        $html .= 'id="form['.$owner->name.']['.$r.']['.$this->name.']" ';
+        $html .= 'name="form['.$owner->name.']['.$r.']['.$this->name.']" ';
+        $html .= 'type="text" size="'.$this->size.'" maxlength="'.$this->maxLength.'" ';
+        $html .= 'value="'.$this->htmlentities($v, ENT_QUOTES, 'utf-8').'" ';
+        $html .= 'style="'.$this->htmlentities($this->style, ENT_COMPAT, 'utf-8').'" ';
+        $html .= $this->NSDefaultValue().' ';
+        $html .= $this->NSRequiredValue().' ';
+        $html .= $this->NSGridType().' ';
+        $html .= $this->NSGridLabel().' ';
+        $html .= '/>';
+      }else{ //VIEW MODE
+        $html .= $this->htmlentities($v, ENT_QUOTES, 'utf-8');
+        $html .= '<input ';
+        $html .= 'id="form['.$owner->name.']['.$r.']['.$this->name.']" ';
+        $html .= 'name="form['.$owner->name.']['.$r.']['.$this->name.']" ';
+        $html .= 'type="hidden" value="'.$this->htmlentities($v, ENT_QUOTES, 'utf-8').'" />';
+      }
+      $result [] = $html;
+      $r ++;
+    }
+    return $result;
   }
 }
 
