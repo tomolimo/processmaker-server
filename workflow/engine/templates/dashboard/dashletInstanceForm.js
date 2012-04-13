@@ -2,10 +2,10 @@
 var storeDasInsOwnerType;
 var storeDasInsOwnerUID;
 var hiddenDasInsUID;
+var txtDasInsTitle;
 var cboDasUID;
 var cboDasInsOwnerType;
 var cboDasInsOwnerUID;
-var txtDasInsTitle;
 var formFields;
 var additionalFields;
 var dashletInstanceFrm;
@@ -61,10 +61,23 @@ Ext.onReady(function() {
     name: 'DAS_INS_UID'
   });
 
+  txtDasInsTitle = new Ext.form.TextField({
+    id:         'txtDasInsTitle',
+    name:       'DAS_INS_TITLE',
+    fieldLabel: 'Title',
+    allowBlank: false,
+    width:      320,
+    listeners:  {
+      blur: function() {
+        this.setValue(this.getValue().trim());
+      }
+    }
+  });
+
   cboDasUID = new Ext.form.ComboBox({
     id:             'cboDasUID',
     name:           'DAS_UID',
-    fieldLabel:     "Dashlet",
+    fieldLabel:     'Dashlet',
     editable:       false,
     width:          320,
     store:          storeDasUID,
@@ -86,7 +99,7 @@ Ext.onReady(function() {
                            for (var i = 0; i < additionalFields.length; i++) {
                              for (var listener in additionalFields[i].listeners) {
                                try {
-                                 eval('additionalFields[i].listeners.' + listener + ' = ' + additionalFields[i].listeners.select + ';');
+                                 eval('additionalFields[i].listeners.' + listener + ' = ' + additionalFields[i].listeners[listener] + ';');
                                } catch (e) {}
                              }
                            }
@@ -153,21 +166,12 @@ Ext.onReady(function() {
     valueField:    'OWNER_UID',
     displayField:  'OWNER_NAME'
   });
-  
-  txtDasInsTitle = new Ext.form.TextField({
-    id: "txtDasInsTitle",
-    
-    name: "DAS_INS_TITLE",
-    fieldLabel: "Title",
-    allowBlank: false,
-    width: 320
-  });
 
   formFields = [
     new Ext.form.FieldSet({
       id:    'general',
       title: 'General',
-      items: [txtDasInsTitle, hiddenDasInsUID, cboDasUID, cboDasInsOwnerType, cboDasInsOwnerUID]
+      items: [hiddenDasInsUID, txtDasInsTitle, cboDasUID, cboDasInsOwnerType, cboDasInsOwnerUID]
     })
   ];
 
@@ -176,7 +180,7 @@ Ext.onReady(function() {
       for (var i = 0; i < additionalFields.length; i++) {
         for (var listener in additionalFields[i].listeners) {
           try {
-            eval('additionalFields[i].listeners.' + listener + ' = ' + additionalFields[i].listeners.select + ';');
+            eval('additionalFields[i].listeners.' + listener + ' = ' + additionalFields[i].listeners[listener] + ';');
           } catch (e) {alert('3->'+e);}
         }
       }
