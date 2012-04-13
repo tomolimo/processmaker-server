@@ -6,7 +6,6 @@ var txtDasInsTitle;
 var cboDasUID;
 var cboDasInsOwnerType;
 var cboDasInsOwnerUID;
-var txtDasInsTitle;
 var formFields;
 var additionalFields;
 var dashletInstanceFrm;
@@ -78,7 +77,7 @@ Ext.onReady(function() {
   cboDasUID = new Ext.form.ComboBox({
     id:             'cboDasUID',
     name:           'DAS_UID',
-    fieldLabel:     "Dashlet",
+    fieldLabel:     'Dashlet',
     editable:       false,
     width:          320,
     store:          storeDasUID,
@@ -167,21 +166,12 @@ Ext.onReady(function() {
     valueField:    'OWNER_UID',
     displayField:  'OWNER_NAME'
   });
-  
-  txtDasInsTitle = new Ext.form.TextField({
-    id: "txtDasInsTitle",
-    
-    name: "DAS_INS_TITLE",
-    fieldLabel: "Title",
-    allowBlank: false,
-    width: 320
-  });
 
   formFields = [
     new Ext.form.FieldSet({
       id:    'general',
       title: 'General',
-      items: [txtDasInsTitle, hiddenDasInsUID, cboDasUID, cboDasInsOwnerType, cboDasInsOwnerUID]
+      items: [hiddenDasInsUID, txtDasInsTitle, cboDasUID, cboDasInsOwnerType, cboDasInsOwnerUID]
     })
   ];
 
