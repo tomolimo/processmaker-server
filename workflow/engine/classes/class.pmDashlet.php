@@ -20,7 +20,7 @@ class PMDashlet extends DashletInstance implements DashletInterface {
         foreach ($pluginsDashlets as $pluginDashlet) {
           set_include_path(get_include_path() . PATH_SEPARATOR . PATH_PLUGINS . $pluginDashlet . PATH_SEP);
         }
-        
+
         require_once ("classes" . PATH_SEP . "class." . $className . ".php");
       }
       G::LoadClass($className);
@@ -48,8 +48,7 @@ class PMDashlet extends DashletInstance implements DashletInterface {
         foreach ($pluginsDashlets as $pluginDashlet) {
           set_include_path(get_include_path() . PATH_SEPARATOR . PATH_PLUGINS . $pluginDashlet . PATH_SEP);
         }
-        
-        require_once ("classes" . PATH_SEP . "class." . $className . ".php");
+        require_once 'classes' . PATH_SEP . 'class.' . $className . '.php';
       }
       $this->dashletObject = new $className();
       $this->dashletObject->setup($this->dashletInstance);
@@ -100,10 +99,10 @@ class PMDashlet extends DashletInstance implements DashletInterface {
       $dataset->next();
       while ($row = $dataset->getRow()) {
         $arrayField = unserialize($row["DAS_INS_ADDITIONAL_PROPERTIES"]);
-        
+
         $row['DAS_INS_STATUS_LABEL'] = ($row['DAS_INS_STATUS'] == '1' ? G::LoadTranslation('ID_ACTIVE') : G::LoadTranslation('ID_INACTIVE'));
         $row["DAS_INS_TITLE"] = (isset($arrayField["DAS_INS_TITLE"]) && !empty($arrayField["DAS_INS_TITLE"]))? $arrayField["DAS_INS_TITLE"] : "";
-        
+
         switch ($row['DAS_INS_OWNER_TYPE']) {
           case 'EVERYBODY':
             $row['DAS_INS_OWNER_TITLE'] = G::LoadTranslation('ID_ALL_USERS');
@@ -226,11 +225,11 @@ class PMDashlet extends DashletInstance implements DashletInterface {
       while ($row = $dataset->getRow()) {
         if (!isset($dashletsInstances[$row['DAS_INS_UID']])) {
           $arrayField = unserialize($row["DAS_INS_ADDITIONAL_PROPERTIES"]);
-          
+
           $row['DAS_XTEMPLATE'] = $this->getXTemplate($row['DAS_CLASS']);
           $row["DAS_TITLE"] = (isset($arrayField["DAS_INS_TITLE"]) && !empty($arrayField["DAS_INS_TITLE"]))? $arrayField["DAS_INS_TITLE"] : $row["DAS_TITLE"];
           $row["DAS_TITLE"] = $row["DAS_TITLE"] . ((isset($arrayField["DAS_INS_SUBTITLE"]) && !empty($arrayField["DAS_INS_SUBTITLE"]))? str_replace("@@USR_USERNAME", $_SESSION["USR_USERNAME"], $arrayField["DAS_INS_SUBTITLE"]) : null);
-          
+
           $dashletsInstances[$row['DAS_INS_UID']] = $row;
         }
         $dataset->next();
@@ -251,11 +250,11 @@ class PMDashlet extends DashletInstance implements DashletInterface {
       while ($row = $dataset->getRow()) {
         if (!isset($dashletsInstances[$row['DAS_INS_UID']])) {
           $arrayField = unserialize($row["DAS_INS_ADDITIONAL_PROPERTIES"]);
-          
+
           $row['DAS_XTEMPLATE'] = $this->getXTemplate($row['DAS_CLASS']);
           $row["DAS_TITLE"] = (isset($arrayField["DAS_INS_TITLE"]) && !empty($arrayField["DAS_INS_TITLE"]))? $arrayField["DAS_INS_TITLE"] : $row["DAS_TITLE"];
           $row["DAS_TITLE"] = $row["DAS_TITLE"] . ((isset($arrayField["DAS_INS_SUBTITLE"]) && !empty($arrayField["DAS_INS_SUBTITLE"]))? str_replace("@@USR_USERNAME", $_SESSION["USR_USERNAME"], $arrayField["DAS_INS_SUBTITLE"]) : null);
-          
+
           $dashletsInstances[$row['DAS_INS_UID']] = $row;
         }
         $dataset->next();
@@ -278,11 +277,11 @@ class PMDashlet extends DashletInstance implements DashletInterface {
         while ($row = $dataset->getRow()) {
           if (!isset($dashletsInstances[$row['DAS_INS_UID']])) {
             $arrayField = unserialize($row["DAS_INS_ADDITIONAL_PROPERTIES"]);
-            
+
             $row['DAS_XTEMPLATE'] = $this->getXTemplate($row['DAS_CLASS']);
             $row["DAS_TITLE"] = (isset($arrayField["DAS_INS_TITLE"]) && !empty($arrayField["DAS_INS_TITLE"]))? $arrayField["DAS_INS_TITLE"] : $row["DAS_TITLE"];
             $row["DAS_TITLE"] = $row["DAS_TITLE"] . ((isset($arrayField["DAS_INS_SUBTITLE"]) && !empty($arrayField["DAS_INS_SUBTITLE"]))? str_replace("@@USR_USERNAME", $_SESSION["USR_USERNAME"], $arrayField["DAS_INS_SUBTITLE"]) : null);
-            
+
             $dashletsInstances[$row['DAS_INS_UID']] = $row;
           }
           $dataset->next();
@@ -307,11 +306,11 @@ class PMDashlet extends DashletInstance implements DashletInterface {
         while ($row = $dataset->getRow()) {
           if (!isset($dashletsInstances[$row['DAS_INS_UID']])) {
             $arrayField = unserialize($row["DAS_INS_ADDITIONAL_PROPERTIES"]);
-            
+
             $row['DAS_XTEMPLATE'] = $this->getXTemplate($row['DAS_CLASS']);
             $row["DAS_TITLE"] = (isset($arrayField["DAS_INS_TITLE"]) && !empty($arrayField["DAS_INS_TITLE"]))? $arrayField["DAS_INS_TITLE"] : $row["DAS_TITLE"];
             $row["DAS_TITLE"] = $row["DAS_TITLE"] . ((isset($arrayField["DAS_INS_SUBTITLE"]) && !empty($arrayField["DAS_INS_SUBTITLE"]))? str_replace("@@USR_USERNAME", $_SESSION["USR_USERNAME"], $arrayField["DAS_INS_SUBTITLE"]) : null);
-            
+
             $dashletsInstances[$row['DAS_INS_UID']] = $row;
           }
           $dataset->next();
@@ -336,7 +335,7 @@ class PMDashlet extends DashletInstance implements DashletInterface {
         foreach ($pluginsDashlets as $pluginDashlet) {
           set_include_path(get_include_path() . PATH_SEPARATOR . PATH_PLUGINS . $pluginDashlet . PATH_SEP);
         }
-        
+
         require_once ("classes" . PATH_SEP . "class." . $className . ".php");
       }
       G::LoadClass($className);
