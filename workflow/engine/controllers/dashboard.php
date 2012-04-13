@@ -73,6 +73,10 @@ class Dashboard extends Controller {
   public function dashletsList() {
     try {
       $this->includeExtJS('dashboard/dashletsList');
+      if (isset($_SESSION['__DASHBOARD_ERROR__'])) {
+        $this->setJSVar('__DASHBOARD_ERROR__', $_SESSION['__DASHBOARD_ERROR__']);
+        unset($_SESSION['__DASHBOARD_ERROR__']);
+      }
       $this->setView('dashboard/dashletsList');
       G::RenderPage('publish', 'extJs');
     }
@@ -128,8 +132,9 @@ class Dashboard extends Controller {
       return null;
     }
     catch (Exception $error) {
-      //ToDo: Display a error message
-      error_log($error->getMessage());
+      $_SESSION['__DASHBOARD_ERROR__'] = $error->getMessage();
+      G::header('Location: dashletsList');
+      die();
     }
   }
 
