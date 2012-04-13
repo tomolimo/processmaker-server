@@ -277,6 +277,10 @@ Ext.onReady(function(){
        infoGrid
     ]
   });
+
+  if (typeof(__DASHBOARD_ERROR__) !== 'undefined') {
+    PMExt.notify(_('ID_DASHBOARD'), __DASHBOARD_ERROR__);
+  }
 });
 
 //Funtion Handles Context Menu Opening
