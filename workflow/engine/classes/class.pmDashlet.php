@@ -20,8 +20,7 @@ class PMDashlet extends DashletInstance implements DashletInterface {
         foreach ($pluginsDashlets as $pluginDashlet) {
           set_include_path(get_include_path() . PATH_SEPARATOR . PATH_PLUGINS . $pluginDashlet . PATH_SEP);
         }
-
-        require_once ("classes" . PATH_SEP . "class." . $className . ".php");
+        require_once 'classes' . PATH_SEP . 'class.' . $className . '.php';
       }
       G::LoadClass($className);
       eval("\$additionalFields = $className::getAdditionalFields(\$className);");
@@ -110,26 +109,46 @@ class PMDashlet extends DashletInstance implements DashletInterface {
           case 'USER':
             require_once 'classes/model/Users.php';
             $userInstance = new Users();
-            $user = $userInstance->load($row['DAS_INS_OWNER_UID']);
-            $row['DAS_INS_OWNER_TITLE'] = $user['USR_FIRSTNAME'] . ' ' . $user['USR_LASTNAME'];
+            try {
+              $user = $userInstance->load($row['DAS_INS_OWNER_UID']);
+              $row['DAS_INS_OWNER_TITLE'] = $user['USR_FIRSTNAME'] . ' ' . $user['USR_LASTNAME'];
+            }
+            catch (Exception $error) {
+              $this->remove($row['DAS_INS_UID']);
+              $row['DAS_INS_UID'] = '';
+            }
           break;
           case 'DEPARTMENT':
             require_once 'classes/model/Department.php';
             $departmentInstance = new Department();
-            $department = $departmentInstance->load($row['DAS_INS_OWNER_UID']);
-            $row['DAS_INS_OWNER_TITLE'] = $department['DEPO_TITLE'];
+            try {
+              $department = $departmentInstance->load($row['DAS_INS_OWNER_UID']);
+              $row['DAS_INS_OWNER_TITLE'] = $department['DEPO_TITLE'];
+            }
+            catch (Exception $error) {
+              $this->remove($row['DAS_INS_UID']);
+              $row['DAS_INS_UID'] = '';
+            }
           break;
           case 'GROUP':
             require_once 'classes/model/Groupwf.php';
             $groupInstance = new Groupwf();
-            $group = $groupInstance->load($row['DAS_INS_OWNER_UID']);
-            $row['DAS_INS_OWNER_TITLE'] = $group['GRP_TITLE'];
+            try {
+              $group = $groupInstance->load($row['DAS_INS_OWNER_UID']);
+              $row['DAS_INS_OWNER_TITLE'] = $group['GRP_TITLE'];
+            }
+            catch (Exception $error) {
+              $this->remove($row['DAS_INS_UID']);
+              $row['DAS_INS_UID'] = '';
+            }
           break;
           default:
             $row['DAS_INS_OWNER_TITLE'] = $row['DAS_INS_OWNER_TYPE'];
           break;
         }
-        $dashletsInstances[] = $row;
+        if ($row['DAS_INS_UID'] != '') {
+          $dashletsInstances[] = $row;
+        }
         $dataset->next();
       }
       return $dashletsInstances;
