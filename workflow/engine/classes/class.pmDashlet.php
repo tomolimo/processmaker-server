@@ -20,8 +20,7 @@ class PMDashlet extends DashletInstance implements DashletInterface {
         foreach ($pluginsDashlets as $pluginDashlet) {
           set_include_path(get_include_path() . PATH_SEPARATOR . PATH_PLUGINS . $pluginDashlet . PATH_SEP);
         }
-
-        require_once ("classes" . PATH_SEP . "class." . $className . ".php");
+        require_once 'classes' . PATH_SEP . 'class.' . $className . '.php';
       }
       G::LoadClass($className);
       eval("\$additionalFields = $className::getAdditionalFields(\$className);");
