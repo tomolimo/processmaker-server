@@ -653,13 +653,15 @@ class adminProxy extends HttpProxyController
     $oConfiguration = new Configurations();      
     $oConfiguration->loadConfig($x, 'Emails','','','','');
     $fields = $oConfiguration->aConfig;
-    $this->success = (count($fields) > 0);    
-    $passwd = $fields['MESS_PASSWORD'];
-    $passwdDec = G::decrypt($passwd,'EMAILENCRYPT');
-    if (strpos( $passwdDec, 'hash:' ) !== false) {
-      list($hash, $pass) = explode(":", $passwdDec);   
-      $fields['MESS_PASSWORD'] = $pass;
-    }    
+    if (count($fields) > 0) {
+      $this->success = (count($fields) > 0);    
+      $passwd = $fields['MESS_PASSWORD'];
+      $passwdDec = G::decrypt($passwd,'EMAILENCRYPT');
+      if (strpos( $passwdDec, 'hash:' ) !== false) {
+        list($hash, $pass) = explode(":", $passwdDec);   
+        $fields['MESS_PASSWORD'] = $pass;
+      }    
+    }
     $this->data = $fields;
   }
 
