@@ -101,7 +101,7 @@ Ext.onReady(function(){
     disabled : true,    
     listeners: {
       select: function(combo, value) {
-        if (Ext.getCmp('EmailEngine').getValue()== 'Mail (PHP)') {
+        if (Ext.getCmp('EmailEngine').getValue()== 'MAIL') { alert
 	  Ext.getCmp('Server').setVisible(false);
 	  Ext.getCmp('Server').getEl().up('.x-form-item').setDisplayed(false); // hide label   
 	  Ext.getCmp('Port').setVisible(false);
@@ -317,7 +317,7 @@ Ext.onReady(function(){
       params: { CFG_UID: 'Emails' },
       success: function(r,o) {          
         var res = Ext.decode(r.responseText);
-        
+        if (! res.data) return;
 	if (res.success) { 
           Ext.getCmp('EnableEmailNotifications').setValue(res.data.MESS_ENABLED);
           Ext.getCmp('EmailEngine').setValue(res.data.MESS_ENGINE);
