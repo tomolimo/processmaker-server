@@ -1119,7 +1119,8 @@ function G_Text( form, element, name)
     }
     //THIS FUNCTION HANDLE BACKSPACE AND DELETE KEYS
     if (me.validate == 'Any' && me.mask == '') return true;
-    pressKey = event.keyCode;
+    //pressKey = event.keyCode;
+    pressKey = window.event ? window.event.keyCode : event.which;
     switch(pressKey){
       case 8: case 46:  //BACKSPACE OR DELETE
       case 35: case 36: //HOME OR END
@@ -1136,7 +1137,7 @@ function G_Text( form, element, name)
         break;
     }
     return true;
-  };                          
+  };
   
   this.handleKeyPress = function(event){
     if (me.element.readOnly) {
@@ -1147,15 +1148,24 @@ function G_Text( form, element, name)
     }
     if (me.validate == 'Any' && me.mask == '') return true;
     //THIS FUNCTION HANDLE ALL KEYS EXCEPT BACKSPACE AND DELETE
-    keyCode = event.keyCode;
+    //keyCode = event.keyCode;
+    keyCode = window.event ? window.event.keyCode : event.which;
     switch(keyCode){
       case 9: case 13:
         return true;
         break;
     }
-    if (event.altKey) return true;
-    if (event.ctrlKey) return true;
-    if (event.shiftKey) return true;
+    if (window.event) {
+      if (window.event.altKey) return true;
+      if (window.event.ctrlKey) return true;
+      if (window.event.shiftKey) return true;
+    }
+    else {
+      if (event.altKey) return true;
+      if (event.ctrlKey) return true;
+      if (event.shiftKey) return true;
+    }
+    
     me.checkBrowser();
     if ((me.browser.name == 'Firefox') && (keyCode == 8 || keyCode == 46)){
       if (me.browser.name == 'Chrome' || me.browser.name == 'Safari'){
@@ -1166,7 +1176,8 @@ function G_Text( form, element, name)
       }
     }
     else{
-      pressKey = window.event ? event.keyCode : event.which;
+      //pressKey = window.event ? event.keyCode : event.which;
+      pressKey = window.event ? window.event.keyCode : event.which;
       if (me.mType == 'date') me.validate = 'Int';
       keyValid = true;
       updateOnChange = true;
@@ -1224,16 +1235,16 @@ function G_Text( form, element, name)
           }
           var k=new leimnud.module.validator({
             valid :['Login'],
-            key   :event,
-            lang  :(typeof(me.language)!=='undefined')?me.language:"en"
+            key   : (window.event)? window.event : event,
+            lang  :(typeof(me.language)!=='undefined')? me.language:"en"
           });
           keyValid = k.result();
           break;
         default:
           var k = new leimnud.module.validator({
             valid :[me.validate],
-            key   :event,
-            lang  :(typeof(me.language)!=='undefined')?me.language:"en"
+            key   :(window.event) ? window.event : event,
+            lang  :(typeof(me.language)!=='undefined')? me.language:"en"
           });
           keyValid = k.result();
           
