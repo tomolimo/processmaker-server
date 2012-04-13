@@ -285,7 +285,32 @@ Ext.onReady(function(){
           store: new Ext.data.ArrayStore({
             fields: ['id', 'name'],
             data : uxTypes 
-          })
+          }),
+          listeners: {
+            select: function(a, b) {               
+              var nameGroup = groupsGrid.getSelectionModel().selection['record'].data['CON_VALUE'];
+              var uidGroup = groupsGrid.getSelectionModel().selection['record'].data['GRP_UID'];             
+              
+              Ext.Ajax.request({
+                url: '../users/users_Ajax?function=usersGroupAllFieldsExtJS',
+                params: { GRP_UID: uidGroup }, 
+                success: function(result, request) {          
+                  var res = Ext.decode(result.responseText);               
+              
+                      console.log(res.data);
+                 
+                }
+              });
+              /*var row = usersGrid.getSelectionModel().getSelected();
+              role = row.get('USR_ROLE');
+
+              if (role == 'PROCESSMAKER_ADMIN' && (this.value == 'SIMPLIFIED' || this.value == 'SINGLE')) {
+                PMExt.warning(_('ID_WARNING'), _('ID_ADMINS_CANT_USE_UXS'));
+                this.setValue('NORMAL');
+              }*/
+            }
+          }
+
         })
       }
     ]
