@@ -2571,7 +2571,7 @@ class Processes {
       throw ( new Exception ( 'Unable to read uploaded file, please check permissions. '));
 
     if (! filesize($pmFilename) >= 9 )
-      throw ( new Exception ( 'Uploaded file is corrupted, please check the file before continue. '));
+      throw ( new Exception ( 'Uploaded file is corrupted, please check the file before continuing. '));
     clearstatcache();
     $fp = fopen( $pmFilename, "rb");
     $fsData = intval( fread ( $fp, 9)); //reading the size of $oData

@@ -2683,7 +2683,7 @@ SELECT 'JAVASCRIPT','ID_FIELD_FOREIGN_TABLE','en','Field "table" is required','2
  ;
 INSERT INTO [TRANSLATION] ([TRN_CATEGORY],[TRN_ID],[TRN_LANG],[TRN_VALUE],[TRN_UPDATE_DATE])
 
-SELECT 'JAVASCRIPT','ID_ASSIGN_RULES','en','Error: There is a problem with next tasks   of this process, one of them have manual   assignment.  Manual assignment shouldn''t be   used with subprocesses','2012-02-02'
+SELECT 'JAVASCRIPT','ID_ASSIGN_RULES','en','Error: There is a problem with next tasks of this process, one of them have manual assignment.  Manual assignment shouldn''t be   used with subprocesses','2012-02-02'
   UNION ALL
 SELECT 'LABEL','ID_FIELD_INVALID','en','Field Invalid','2012-02-02'
   UNION ALL
@@ -2691,7 +2691,7 @@ SELECT 'LABEL','ID_WARNING','en','WARNING','2012-02-02'
   UNION ALL
 SELECT 'LABEL','ID_SAVED','en','Saved','2012-02-02'
   UNION ALL
-SELECT 'LABEL','ID_ASSIGN_RULES','en','Error: There is a problem with next tasks  of this process, one of them have manual  assignment.  Manual assignment shouldn''t be  used with subprocesses','2012-02-02'
+SELECT 'LABEL','ID_ASSIGN_RULES','en','Error: There is a problem with next tasks of this process, one of them have manual assignment.  Manual assignment shouldn''t be  used with subprocesses','2012-02-02'
   UNION ALL
 SELECT 'LABEL','ID_SELECT_OPTION_TABLE','en','Select a option to export schema or data  from the selected table(s).','2012-02-02'
   UNION ALL
@@ -3261,7 +3261,7 @@ SELECT 'LABEL','ID_PROCESS_DELETE_LABEL','en','Do you want to delete the selecte
   UNION ALL
 SELECT 'LABEL','ID_PROCESS_DELETE_ALL_LABEL','en','Do you want to delete all selected processes?','2012-02-02'
   UNION ALL
-SELECT 'LABEL','ID_PROCESS_CANT_DELETE','en','You can''t delete the process "{0}" because  has {1} cases.','2012-02-02'
+SELECT 'LABEL','ID_PROCESS_CANT_DELETE','en','You can''t delete the process \"{0}\" because it has {1} cases.','2012-02-02'
   UNION ALL
 SELECT 'LABEL','ID_FILE','en','File','2012-02-02'
   UNION ALL
@@ -3343,7 +3343,7 @@ SELECT 'LABEL','ID_VERSION','en','Version','2012-02-02'
   UNION ALL
 SELECT 'LABEL','ID_MESSAGE_ROOT_CHANGE_SUCESS','en','The root password has been updated  successfully!','2012-02-02'
   UNION ALL
-SELECT 'LABEL','ID_MESSAGE_ROOT_CHANGE_FAILURE','en','The root password has can''t be updated !','2012-02-02'
+SELECT 'LABEL','ID_MESSAGE_ROOT_CHANGE_FAILURE','en','The root password can''t be updated!','2012-02-02'
   UNION ALL
 SELECT 'LABEL','ID_LAN_TRANSLATOR','en','Translator','2012-02-02'
   UNION ALL

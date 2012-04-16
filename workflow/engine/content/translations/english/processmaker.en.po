@@ -3856,8 +3856,8 @@ msgstr "Field \"table\" is required"
 # TRANSLATION
 # JAVASCRIPT/ID_ASSIGN_RULES
 #: JAVASCRIPT/ID_ASSIGN_RULES
-msgid "Error: There is a problem with next tasks   of this process, one of them have manual   assignment.  Manual assignment shouldn't be   used with subprocesses"
-msgstr "Error: There is a problem with next tasks   of this process, one of them have manual   assignment.  Manual assignment shouldn't be   used with subprocesses"
+msgid "Error: There is a problem with the next tasks of this process. One of them has manual assignment.  Manual assignment shouldn't be   used with subprocesses"
+msgstr "Error: There is a problem with the next tasks of this process. One of them has manual assignment.  Manual assignment shouldn't be   used with subprocesses"
 
 # TRANSLATION
 # LABEL/ID_FIELD_INVALID
@@ -3880,8 +3880,8 @@ msgstr "Saved"
 # TRANSLATION
 # LABEL/ID_ASSIGN_RULES
 #: LABEL/ID_ASSIGN_RULES
-msgid "Error: There is a problem with next tasks  of this process, one of them have manual  assignment.  Manual assignment shouldn't be  used with subprocesses"
-msgstr "Error: There is a problem with next tasks  of this process, one of them have manual  assignment.  Manual assignment shouldn't be  used with subprocesses"
+msgid "Error: There is a problem with the next tasks of this process. One of them has manual assignment.  Manual assignment shouldn't be  used with subprocesses"
+msgstr "Error: There is a problem with the next tasks of this process. One of them has manual assignment.  Manual assignment shouldn't be  used with subprocesses"
 
 # TRANSLATION
 # LABEL/ID_SELECT_OPTION_TABLE
@@ -5572,8 +5572,8 @@ msgstr "Do you want to delete all selected processes?"
 # TRANSLATION
 # LABEL/ID_PROCESS_CANT_DELETE
 #: LABEL/ID_PROCESS_CANT_DELETE
-msgid "You can't delete the process \"{0}\" because  has {1} cases."
-msgstr "You can't delete the process \"{0}\" because  has {1} cases."
+msgid "You can't delete the process \"{0}\" because it has {1} cases."
+msgstr "You can't delete the process \"{0}\" because it has {1} cases."
 
 # TRANSLATION
 # LABEL/ID_FILE
@@ -5812,8 +5812,8 @@ msgstr "The root password has been updated  successfully!"
 # TRANSLATION
 # LABEL/ID_MESSAGE_ROOT_CHANGE_FAILURE
 #: LABEL/ID_MESSAGE_ROOT_CHANGE_FAILURE
-msgid "The root password has can't be updated !"
-msgstr "The root password has can't be updated !"
+msgid "The root password can't be updated!"
+msgstr "The root password can't be updated!"
 
 # TRANSLATION
 # LABEL/ID_LAN_TRANSLATOR

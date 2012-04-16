@@ -349,7 +349,7 @@ class PmTable
         $stmt->executeQuery("DROP TABLE {$tableName}");   
       } 
       catch (Exception $e) {
-        throw new Exception("Phisical table '$tableName' does not exist!");
+        throw new Exception("Physical table '$tableName' does not exist!");
       }
     }
   }
