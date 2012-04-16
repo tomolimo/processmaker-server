@@ -15,11 +15,7 @@ class PMDashlet extends DashletInstance implements DashletInterface {
   public static function getAdditionalFields($className) {
     try {
       if (!class_exists($className)) {
-        $oPluginRegistry = &PMPluginRegistry::getSingleton();
-        $pluginsDashlets = $oPluginRegistry->getDashlets();
-        foreach ($pluginsDashlets as $pluginDashlet) {
-          set_include_path(get_include_path() . PATH_SEPARATOR . PATH_PLUGINS . $pluginDashlet . PATH_SEP);
-        }
+        self::setIncludePath();
         require_once 'classes' . PATH_SEP . 'class.' . $className . '.php';
       }
       G::LoadClass($className);
@@ -42,11 +38,7 @@ class PMDashlet extends DashletInstance implements DashletInterface {
       $className = $this->dashletInstance['DAS_CLASS'];
       G::LoadClass($className);
       if (!class_exists($className)) {
-        $oPluginRegistry = &PMPluginRegistry::getSingleton();
-        $pluginsDashlets = $oPluginRegistry->getDashlets();
-        foreach ($pluginsDashlets as $pluginDashlet) {
-          set_include_path(get_include_path() . PATH_SEPARATOR . PATH_PLUGINS . $pluginDashlet . PATH_SEP);
-        }
+        self::setIncludePath();
         require_once 'classes' . PATH_SEP . 'class.' . $className . '.php';
       }
       $this->dashletObject = new $className();
@@ -100,7 +92,12 @@ class PMDashlet extends DashletInstance implements DashletInterface {
         $arrayField = unserialize($row["DAS_INS_ADDITIONAL_PROPERTIES"]);
 
         $row['DAS_INS_STATUS_LABEL'] = ($row['DAS_INS_STATUS'] == '1' ? G::LoadTranslation('ID_ACTIVE') : G::LoadTranslation('ID_INACTIVE'));
-        $row["DAS_INS_TITLE"] = (isset($arrayField["DAS_INS_TITLE"]) && !empty($arrayField["DAS_INS_TITLE"]))? $arrayField["DAS_INS_TITLE"] : "";
+        $row['DAS_INS_TITLE'] = (isset($arrayField['DAS_INS_TITLE']) && !empty($arrayField['DAS_INS_TITLE']))? $arrayField['DAS_INS_TITLE'] : '';
+        if (!class_exists($row['DAS_CLASS'])) {
+          self::setIncludePath();
+          require_once 'classes' . PATH_SEP . 'class.' . $row['DAS_CLASS'] . '.php';
+        }
+        eval("\$row['DAS_VERSION'] = defined('" . $row['DAS_CLASS'] . "::version') ? " . $row['DAS_CLASS'] . "::version : \$row['DAS_VERSION'];");
 
         switch ($row['DAS_INS_OWNER_TYPE']) {
           case 'EVERYBODY':
@@ -329,13 +326,8 @@ class PMDashlet extends DashletInstance implements DashletInterface {
   public static function getXTemplate($className) {
     try {
       if (!class_exists($className)) {
-        $oPluginRegistry = &PMPluginRegistry::getSingleton();
-        $pluginsDashlets = $oPluginRegistry->getDashlets();
-        foreach ($pluginsDashlets as $pluginDashlet) {
-          set_include_path(get_include_path() . PATH_SEPARATOR . PATH_PLUGINS . $pluginDashlet . PATH_SEP);
-        }
-
-        require_once ("classes" . PATH_SEP . "class." . $className . ".php");
+        self::setIncludePath();
+        require_once 'classes' . PATH_SEP . 'class.' . $className . '.php';
       }
       G::LoadClass($className);
       eval("\$additionalFields = $className::getXTemplate(\$className);");
