@@ -45,8 +45,6 @@
   require_once( PATH_THIRDPARTY . 'pake/pakeGetopt.class.php');
   require_once( PATH_CORE . 'config/environments.php');
 
-  G::LoadClass("cli");
-
   require_once PATH_HOME  . 'engine' . PATH_SEP . 'classes' . PATH_SEP . 'class.system.php';
   $config = System::getSystemConfiguration(PATH_HOME . 'engine' . PATH_SEP . 'config' . PATH_SEP . 'env.ini');
   
@@ -69,6 +67,8 @@
   define ('MEMCACHED_ENABLED',  $config['memcached']);
   define ('MEMCACHED_SERVER',   $config['memcached_server']);
   define ('TIME_ZONE', $config['time_zone']);
+
+  G::LoadClass("cli");
 
   // trap -V before pake
   if (in_array('-v', $argv) || in_array('-V', $argv) || in_array('--version', $argv))
