@@ -277,6 +277,7 @@ Ext.onReady(function(){
         editor: new Ext.form.ComboBox({
           listClass: 'x-combo-list-small',
           mode: 'local',
+          id:'GRP_UXCombo',
           displayField:'name',
           lazyRender: true,
           triggerAction: 'all',
@@ -287,30 +288,21 @@ Ext.onReady(function(){
             data : uxTypes 
           }),
           listeners: {
-            select: function(a, b) {               
-              var nameGroup = groupsGrid.getSelectionModel().selection['record'].data['CON_VALUE'];
-              var uidGroup = groupsGrid.getSelectionModel().selection['record'].data['GRP_UID'];             
-              
+            select: function(a, b) {                            
+              var uidGroup = groupsGrid.getSelectionModel().selection['record'].data['GRP_UID'];                           
               Ext.Ajax.request({
-                url: '../users/users_Ajax?function=usersGroupAllFieldsExtJS',
+                url: '../users/users_Ajax?function=usersAdminGroupExtJS',                
                 params: { GRP_UID: uidGroup }, 
                 success: function(result, request) {          
-                  var res = Ext.decode(result.responseText);               
-              
-                      console.log(res.data);
-                 
+                  var res = Ext.decode(result.responseText);
+                  if ((res.reponse == 'true') && (Ext.getCmp('GRP_UXCombo').getValue()!='SWITCHABLE') && (Ext.getCmp('GRP_UXCombo').getValue()!='NORMAL')) {
+                    PMExt.warning(_('ID_WARNING'), _('ID_ADMINS_CANT_USE_UXS')+'<br/> <b>'+_('ID_USERS_LIST')+':</b> '+res.users);
+                    Ext.getCmp('GRP_UXCombo').setValue('NORMAL');
+                  }
                 }
-              });
-              /*var row = usersGrid.getSelectionModel().getSelected();
-              role = row.get('USR_ROLE');
-
-              if (role == 'PROCESSMAKER_ADMIN' && (this.value == 'SIMPLIFIED' || this.value == 'SINGLE')) {
-                PMExt.warning(_('ID_WARNING'), _('ID_ADMINS_CANT_USE_UXS'));
-                this.setValue('NORMAL');
-              }*/
+              });              
             }
           }
-
         })
       }
     ]

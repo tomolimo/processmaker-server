@@ -150,6 +150,28 @@ try {
         echo $aValues['USR_FIRSTNAME'] . ' ' . $aValues['USR_LASTNAME'] . '<br>';
       }
       break;
+
+    //This case is used to check if any of the user group has as role 'PROCESSMAKER_ADMIN',  
+    case 'usersAdminGroupExtJS':
+      G::LoadClass('groups');
+      $oGroup = new Groups();
+      $aGroup = $oGroup->getUsersOfGroup($_POST['GRP_UID']);       
+      $responseUser = 'false';
+      $usersAdmin = '';
+      foreach ($aGroup as $iIndex => $aValues) {         
+        if ($aValues['USR_ROLE'] == 'PROCESSMAKER_ADMIN') {
+          $responseUser = 'true';
+          $usersAdmin .= $aValues['USR_FIRSTNAME'] . ' ' . $aValues['USR_LASTNAME'].', ';  
+        }
+      }
+      $usersAdmin = substr($usersAdmin, 0, -2);
+      
+      $result = new stdClass();
+      $result->reponse = $responseUser;
+      $result->users = $usersAdmin;
+
+      echo G::json_encode($result);
+      break;
     case 'canDeleteUser':
       G::LoadClass('case');
       $oProcessMap = new Cases();
