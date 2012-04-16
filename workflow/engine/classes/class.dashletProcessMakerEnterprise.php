@@ -4,6 +4,8 @@ require_once 'classes/interfaces/dashletInterface.php';
 
 class dashletProcessMakerEnterprise implements DashletInterface {
 
+  const version = '1.0';
+
   public static function getAdditionalFields($className) {
     $additionalFields = array();
 

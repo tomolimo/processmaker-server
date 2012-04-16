@@ -4,6 +4,8 @@ require_once 'classes/interfaces/dashletInterface.php';
 
 class dashletOpenVSCompleted implements DashletInterface {
 
+  const version = '1.0';
+
   private $value;
   private $open;
   private $completed;
