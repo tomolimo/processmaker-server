@@ -7,19 +7,21 @@ require_once ("classes/interfaces/dashletInterface.php");
 
 class dashlet{className} implements DashletInterface
 {
+  const version = '1.0';
+
   private $role;
   private $note;
 
   public static function getAdditionalFields($className)
   {
     $additionalFields = array();
-    
+
     ///////
     $cnn = Propel::getConnection("rbac");
     $stmt = $cnn->createStatement();
-    
+
     $arrayRole = array();
-    
+
     $sql = "SELECT ROL_CODE
             FROM   ROLES
             WHERE  ROL_SYSTEM = '00000000000000000000000000000002' AND ROL_STATUS = 1
@@ -27,10 +29,10 @@ class dashlet{className} implements DashletInterface
     $rsSQL = $stmt->executeQuery($sql, ResultSet::FETCHMODE_ASSOC);
     while ($rsSQL->next()) {
       $row = $rsSQL->getRow();
-      
+
       $arrayRole[] = array($row["ROL_CODE"], $row["ROL_CODE"]);
     }
-    
+
     ///////
     $storeRole = new stdclass();
     $storeRole->xtype = "arraystore";
@@ -55,7 +57,7 @@ class dashlet{className} implements DashletInterface
     $cboRole->width = 320;
     $cboRole->fieldLabel = "Role";
     $additionalFields[] = $cboRole;
-    
+
     ///////
     $txtNote = new stdclass();
     $txtNote->xtype = "textfield";
@@ -84,9 +86,9 @@ class dashlet{className} implements DashletInterface
   {
     $cnn = Propel::getConnection("workflow");
     $stmt = $cnn->createStatement();
-    
+
     $arrayUser = array();
-    
+
     $sql = "SELECT USR.USR_USERNAME, USR.USR_FIRSTNAME, USR.USR_LASTNAME, USR.USR_STATUS
             FROM   USERS AS USR
             WHERE  USR.USR_ROLE = '" . $this->role . "'
@@ -94,10 +96,10 @@ class dashlet{className} implements DashletInterface
     $rsSQL = $stmt->executeQuery($sql, ResultSet::FETCHMODE_ASSOC);
     while ($rsSQL->next()) {
       $row = $rsSQL->getRow();
-      
+
       $arrayUser[] = array("userName" => $row["USR_USERNAME"], "fullName" => $row["USR_FIRSTNAME"] . " " . $row["USR_LASTNAME"], "status" => $row["USR_STATUS"]);
     }
-    
+
     ///////
     $dashletView = new dashlet{className}View($arrayUser, $this->note);
     $dashletView->templatePrint();
@@ -111,7 +113,7 @@ class dashlet{className} implements DashletInterface
 class dashlet{className}View extends Smarty
 {
   private $smarty;
-  
+
   private $user;
   private $note;
 
@@ -119,7 +121,7 @@ class dashlet{className}View extends Smarty
   {
     $this->user = $u;
     $this->note = $n;
-    
+
     $this->smarty = new Smarty();
     $this->smarty->compile_dir  = PATH_SMARTY_C;
     $this->smarty->cache_dir    = PATH_SMARTY_CACHE;
@@ -132,7 +134,7 @@ class dashlet{className}View extends Smarty
   {
     $this->smarty->assign("user", $this->user);
     $this->smarty->assign("note", $this->note);
-    
+
     return ($this->smarty->fetch($this->smarty->templateFile));
   }
 
