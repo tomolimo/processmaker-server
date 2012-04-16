@@ -1019,7 +1019,8 @@ function G_Text( form, element, name)
           break;
       }
       if (newCursor < 0)  newCursor = 0;
-      if (keyCode != 8 && keyCode != 46 && keyCode != 35 && keyCode != 36 && keyCode != 37 && keyCode != 39){        testData = dataWOMask.result; 
+      if (keyCode != 8 && keyCode != 46 && keyCode != 35 && keyCode != 36 && keyCode != 37 && keyCode != 39){
+        testData = dataWOMask.result;
         tamData = testData.length;
         cleanMask = me.getCleanMask();
         tamMask = cleanMask.length;
@@ -1135,6 +1136,19 @@ function G_Text( form, element, name)
           return false; 
         }
         break;
+      case 9:
+        return true;
+        break;
+      default:
+        if ( (me.mType == 'currency') || (me.mType == 'percentage') || (me.validate == 'Real') || (me.validate == 'Int') ) {
+          if ( (pressKey >= 48 && pressKey <= 57) || (pressKey == 109 || pressKey == 190 || pressKey == 188) ) {
+            return true;
+          }
+          else {
+            return false;
+          }
+        }
+        break;
     }
     return true;
   };
@@ -1150,24 +1164,32 @@ function G_Text( form, element, name)
     //THIS FUNCTION HANDLE ALL KEYS EXCEPT BACKSPACE AND DELETE
     //keyCode = event.keyCode;
     keyCode = window.event ? window.event.keyCode : event.which;
+    if (navigator.userAgent.indexOf('MSIE') != -1) { // Microsoft Internet Explorer
+      if (keyCode == 0) return true;
+    }
     switch(keyCode){
       case 9: case 13:
         return true;
         break;
     }
+    validShiftKey = ( (me.mType == 'currency') || (me.mType == 'percentage')
+                    || (me.validate == 'Real') || (me.validate == 'Int') )
+                    ? false
+                    : true;
     if (window.event) {
       if (window.event.altKey) return true;
       if (window.event.ctrlKey) return true;
-      if (window.event.shiftKey) return true;
+      if (window.event.shiftKey) return validShiftKey;
     }
     else {
       if (event.altKey) return true;
       if (event.ctrlKey) return true;
-      if (event.shiftKey) return true;
+      if (event.shiftKey) return validShiftKey;
     }
     
     me.checkBrowser();
-    if ((me.browser.name == 'Firefox') && (keyCode == 8 || keyCode == 46)){
+//    if ((me.browser.name == 'Firefox') && (keyCode == 8 || keyCode == 46)){
+    if ((me.browser.name == 'Firefox') && (keyCode == 8 )){
       if (me.browser.name == 'Chrome' || me.browser.name == 'Safari'){
         event.returnValue = false;
       }
