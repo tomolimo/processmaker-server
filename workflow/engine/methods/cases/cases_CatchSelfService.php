@@ -86,7 +86,7 @@ $oHeadPublisher =& headPublisher::getSingleton();
 $oHeadPublisher->addScriptCode("
 if (typeof parent != 'undefined') {
   if (parent.showCaseNavigatorPanel) {
-    parent.showCaseNavigatorPanel('{$Fields['APP_STATUS']}}');
+    parent.showCaseNavigatorPanel('{$Fields['APP_STATUS']}');
   }
 }");
 $oHeadPublisher->addScriptCode('
