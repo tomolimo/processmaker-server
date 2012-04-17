@@ -64,7 +64,12 @@
   $Fields = $oCase->loadCase($_SESSION['APPLICATION']);
 
   $oHeadPublisher =& headPublisher::getSingleton();
-  $oHeadPublisher->addScriptCode("parent.showCaseNavigatorPanel('{$Fields['APP_STATUS']}');");
+  $oHeadPublisher->addScriptCode("
+  if (typeof parent != 'undefined') {
+    if (parent.showCaseNavigatorPanel) {
+      parent.showCaseNavigatorPanel('{$Fields['APP_STATUS']}}');
+    }
+  }");
   // DEPRECATED this script call is marked for removal since almost all the interface is extJS based
   $oHeadPublisher->addScriptCode('
     var Cse = {};
@@ -90,11 +95,11 @@
   $_SESSION['STEP_POSITION'] = (int)$_GET['position'];
 
   //Obtain previous and next step - Start
-  if(isset($_GET['type'])) 
+  if(isset($_GET['type']))
     $sType = $_GET['type'];
-  else 
+  else
     $sType = '';
-    
+
   try {
       $aNextStep = $oCase->getNextSupervisorStep($_SESSION['PROCESS'], $_SESSION['STEP_POSITION'], $sType);
       $aPreviousStep = $oCase->getPreviousSupervisorStep($_SESSION['PROCESS'], $_SESSION['STEP_POSITION'], $sType);

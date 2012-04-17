@@ -83,7 +83,12 @@ $G_SUB_MENU               = 'caseOptions';
 $G_ID_MENU_SELECTED       = 'CASES';
 $G_ID_SUB_MENU_SELECTED   = '_';
 $oHeadPublisher =& headPublisher::getSingleton();
-$oHeadPublisher->addScriptCode("parent.showCaseNavigatorPanel('{$Fields['APP_STATUS']}}')");
+$oHeadPublisher->addScriptCode("
+if (typeof parent != 'undefined') {
+  if (parent.showCaseNavigatorPanel) {
+    parent.showCaseNavigatorPanel('{$Fields['APP_STATUS']}}');
+  }
+}");
 $oHeadPublisher->addScriptCode('
       var Cse = {};
       Cse.panels = {};

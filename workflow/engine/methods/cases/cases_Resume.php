@@ -51,7 +51,7 @@
 
  /* Prepare page before to show */
   $oCase = new Cases();
-  $Fields = $oCase->loadCase( $_SESSION['APPLICATION'], $_SESSION['INDEX'] );  
+  $Fields = $oCase->loadCase( $_SESSION['APPLICATION'], $_SESSION['INDEX'] );
   $participated = $oCase->userParticipatedInCase($_GET['APP_UID'], $_SESSION['USER_LOGGED']);
 
   if ($RBAC->userCanAccess('PM_ALLCASES') < 0 && $participated == 0) {
@@ -73,19 +73,24 @@
         $Fields['STATUS'] = ucfirst(strtolower(G::LoadTranslation('ID_CANCELLED')));
       break;
     }
-    
+
     //$Fields['STATUS'] = $aRow['APP_TYPE'];
   }
-  
+
   $actions = 'false';
   if( $_GET['action'] == 'paused')
     $actions = 'true';
-  
+
   /* Render page */
   $oHeadPublisher =& headPublisher::getSingleton();
 
-  $oHeadPublisher->addScriptCode("parent.showCaseNavigatorPanel('{$Fields['APP_STATUS']}')");
-    
+  $oHeadPublisher->addScriptCode("
+  if (typeof parent != 'undefined') {
+    if (parent.showCaseNavigatorPanel) {
+      parent.showCaseNavigatorPanel('{$Fields['APP_STATUS']}}');
+    }
+  }");
+
   $oHeadPublisher->addScriptCode('
   var Cse = {};
   Cse.panels = {};
@@ -98,9 +103,9 @@
   leimnud.Package.Load("processmap",{Type:"file",Absolute:true,Path:"/jscore/processmap/core/processmap.js"});
   leimnud.exec(leimnud.fix.memoryLeak);
   ');
-  
+
   require_once 'classes/model/Process.php';
-  
+
   $objProc = new Process();
   $aProc = $objProc->load($Fields['PRO_UID' ] );
   $Fields['PRO_TITLE'] = $aProc['PRO_TITLE'];
@@ -108,7 +113,7 @@
   $objTask = new Task();
   $aTask = $objTask->load($Fields['TAS_UID' ] );
   $Fields['TAS_TITLE'] = $aTask['TAS_TITLE'];
-  
+
   $oHeadPublisher =& headPublisher::getSingleton();
   $oHeadPublisher->addScriptFile('/jscore/cases/core/cases_Step.js');
   $G_PUBLISH = new Publisher;
