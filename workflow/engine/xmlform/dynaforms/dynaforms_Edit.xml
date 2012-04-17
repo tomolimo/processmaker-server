@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <dynaForm
   name="dynaforms_Edit"
   type="xmlform"
@@ -17,7 +17,7 @@
   <en>Create from a PM Table</en>
 </ADD_TABLE>
 
-<DYN_TITLE type="text" maxlength="256" size ="48">
+<DYN_TITLE type="text" maxlength="256" size ="48" required="1">
   <en>Title</en>
 </DYN_TITLE>
 
