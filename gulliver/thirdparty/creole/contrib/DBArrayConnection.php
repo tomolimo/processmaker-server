@@ -229,6 +229,90 @@ class DBArrayConnection implements Connection {
     return $this->childConnection->close();
   }
 
+
+  /**
+   * Evaluate Clause
+   * @param type $clause
+   * @return type
+   */
+  public function evaluateClause($clause)
+  {
+    $sqlStr = $clause;
+    $sqlStr = str_replace(array('\\\'','\\"',"\r\n","\n","()"), array("''",'""'," "," "," "), $sqlStr);
+    $regex  = "/((?:)[@A-Za-z0-9_.-]+(?:\(\s*\)){0,1})"
+            . "|(\+|-|\*|\/|!=|>=|<=|<>|>|<|&&|\|\||=|\^)"
+            . "|(\(.*?\))"
+            . "|('(?:[^']|'')*'+)"
+            . "|(\"(?:[^\"]|\"\")*\"+)"
+            . "|([^ ,]+)"
+            . "/ix";
+
+    $tokens = preg_split($regex, $sqlStr, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
+    return $tokens;
+  }
+
+  /**
+   * Evaluate Clause Where
+   * @param type $clauseWhere
+   * @return type
+   */
+  public function evaluateClauseWhere($clauseWhere)
+  {
+    $aOperator = array("=", "!=", "<>", ">", "<", ">=", "<=", "LIKE", "AND", "OR", "NOT", "IN");
+    $evalClause = $this->evaluateClause($clauseWhere);
+    $pos = 0;
+    foreach ($evalClause as $key => $value) {
+      $value = strtoupper(trim($value));
+      $sSelect = strtoupper($this->dataSql['selectClause'][0]);
+      if( stripos($sSelect, $value)  !== false ) {
+        $evalClause[$key] = "\$row['" . $evalClause[$key] . "']";
+      }
+      if ( in_array($value, $aOperator) ) {
+        switch ( $value ) {
+          case "=" :
+            $evalClause[$key] = "==";
+            break;
+          case "<>" :
+            $evalClause[$key] = "!=";
+            break;
+          case "AND" :
+            $evalClause[$key] = "&&";
+            break;
+          case "OR" :
+            $evalClause[$key] = "||";
+            break;
+          case "NOT" :
+            $evalClause[$key] = "!";
+            break;
+          case "LIKE" :
+            $evalClause[$key] = ", ";
+            if (trim($evalClause[$key-1]) !== "" ) {
+              $evalClause[$key-1] = " stripos(" . $evalClause[$key-1];
+            }
+            else {
+              if (trim($evalClause[$key-2]) !== "" ) {
+                $evalClause[$key-2] = " stripos(" . $evalClause[$key-2];
+              }
+            }
+
+            if (trim($evalClause[$key+1]) !== "" ) {
+              $evalClause[$key+1] = str_replace("%", "", $evalClause[$key+1]);
+              $evalClause[$key+1] = $evalClause[$key+1] . ") !== false";
+            }
+            else {
+              if (trim($evalClause[$key+2]) !== "" ) {
+                $evalClause[$key+2] = str_replace("%", "", $evalClause[$key+2]);
+                $evalClause[$key+2] = $evalClause[$key+2] . ") !== false";
+              }
+            }
+            break;
+        }
+      }
+    }
+    $$sEvalClause = implode("", $evalClause);
+    return $$sEvalClause;
+  }
+
   private function parseSqlString($query) {
     //we need a SQL parse, for now we only search for text 'select * from'
     /* $aux = str_ireplace ( 'select * from', '', trim($query) );
@@ -236,7 +320,8 @@ class DBArrayConnection implements Connection {
       $sql['fromClause'][0] = trim( $aux );
       $sql['limit'] = 0;
       $sql['offset'] = 0; */
-    if (1 === preg_match('/^\s*SELECT\s+(.+?)(?:\s+FROM\s+(.+?))(?:\s+WHERE\s+(.+?))?(?:\s+GROUP\s+BY\s+(.+?))?(?:\s+ORDER\s+BY\s+(.+?))?(?:\s+BETWEEN\s+(.+?)\s+AND\s+(.+?))?\s*$/im', $query, $matches)) {
+    // if (1 === preg_match('/^\s*SELECT\s+(.+?)(?:\s+FROM\s+(.+?))(?:\s+WHERE\s+(.+?))?(?:\s+GROUP\s+BY\s+(.+?))?(?:\s+ORDER\s+BY\s+(.+?))?(?:\s+BETWEEN\s+(.+?)\s+AND\s+(.+?))?\s*$/im', $query, $matches)) {
+    if (1 === preg_match('/^\s*SELECT\s+([\w\W]+?)(?:\s+FROM\s+`?([^`]+?)`?)(?:\s+WHERE\s+([\w\W]+?))?(?:\s+GROUP\s+BY\s+([\w\W]+?))?(?:\s+ORDER\s+BY\s+([\w\W]+?))?(?:\s+BETWEEN\s+([\w\W]+?)\s+AND\s+([\w\W]+?))?(?:\s+LIMIT\s+(\d+)\s*,\s*(\d+))?\s*$/im', $query, $matches)) {
       //$sqlSelect='SELECT '.$matches[1].(($matches[2]!='')?' FROM '.$matches[2]:'');
     } else {
       return;
@@ -294,20 +379,25 @@ class DBArrayConnection implements Connection {
               $valClause = str_replace(")'", "", $valClause);
             }
 
-            if (stripos($valClause, "LIKE") !== false) {
-              $valClause = str_replace("%", "", $valClause);
-              $operands = explode('LIKE', $valClause);
-              if ($operands[1] == ' ""') {
-                $toEval = "\$flag = 1;";
-              } else {
-                $toEval = "\$flag = ( stripos ( " . $operands[0] . ", " . $operands[1] . "  )  !== false ? 1 : 0 ) ;";
-                eval($toEval);
-                eval('$val = ' . $operands[0] . ';');
+            if (stripos($valClause, "\$row[") !== false ){
+              if (stripos($valClause, "LIKE") !== false) {
+                $valClause = str_replace("%", "", $valClause);
+                $operands = explode('LIKE', $valClause);
+                if ($operands[1] == ' ""') {
+                  $toEval = "\$flag = 1;";
+                } else {
+                  $toEval = "\$flag = ( stripos ( " . $operands[0] . ", " . $operands[1] . "  )  !== false ? 1 : 0 ) ;";
+                  eval($toEval);
+                  eval('$val = ' . $operands[0] . ';');
+                }
+              } else {//this is for EQUAL, LESS_THAN_EQUAL, ETC,
+                $toEval = "\$flag = ( " . ($valClause != '' ? $valClause : '1') . ') ?1 :0;';
               }
-            } else {//this is for EQUAL, LESS_THAN_EQUAL, ETC,
-              $toEval = "\$flag = ( " . ($valClause != '' ? $valClause : '1') . ') ?1 :0;';
             }
-
+            else {
+                $valClause = $this->evaluateClauseWhere($valClause);
+                $toEval = "\$flag = ( " . ($valClause != '' ? $valClause : '1') . ') ?1 :0;';
+            }
             eval($toEval);
           }
         }}else{
