@@ -6,8 +6,8 @@
 Ext.onReady(function(){
 
   var fieldNameWS=new Ext.form.TextField({
-  id: 'NW_TITLE',				
-  fieldLabel: _('ID_NAME'), 
+  id: 'NW_TITLE',
+  fieldLabel: _('ID_NAME'),
   xtype:'textfield',
   value:'sample',
   width: 200,
@@ -25,23 +25,23 @@ Ext.onReady(function(){
             }
   });
   nameWS = new Ext.form.FieldSet({
-    title: 'New Workspace',  
+    title: 'New Workspace',
     items: [
 			   fieldNameWS
-    ]    
+    ]
   });
   dbOptionsWS = new Ext.form.FieldSet({
-    title: 'Database Options',  
-    items: [			
+    title: 'Database Options',
+    items: [
       {
-        id: 'AO_DB_WF',				
-        fieldLabel: 'Workflow Database', 
+        id: 'AO_DB_WF',
+        fieldLabel: 'Workflow Database',
         xtype:'textfield',
         value:'wf_sample',
         width: 200,
         autoCreate: {tag: 'input', type: 'text', size: '20', autocomplete: 'off', maxlength: '13'},
         allowBlank: false
-      },      
+      },
       {
         id: 'AO_DB_RB',
         fieldLabel: 'Rbac Database',
@@ -53,33 +53,33 @@ Ext.onReady(function(){
       },
       {
         id: 'AO_DB_RP',
-        fieldLabel: 'Report Database',			
+        fieldLabel: 'Report Database',
         xtype:'textfield',
         value:'rp_sample',
         width: 200,
         autoCreate: {tag: 'input', type: 'text', size: '20', autocomplete: 'off', maxlength: '13'},
         allowBlank: false
       },
-      {  
-            xtype: 'checkbox', 
+      {
+            xtype: 'checkbox',
             fieldLabel: 'Drop database if exists',
-            name: 'AO_DB_DROP', 
+            name: 'AO_DB_DROP',
             id: 'id-active'
-       }  
+       }
      ]
   });
-  
+
   wspaceAdmWS = new Ext.form.FieldSet({
-    title: 'Workspace Administrator',  
-    items: [			
+    title: 'Workspace Administrator',
+    items: [
       {
-        id: 'NW_USERNAME',				
-        fieldLabel: 'Username', 
+        id: 'NW_USERNAME',
+        fieldLabel: 'Username',
         xtype:'textfield',
         value:'admin',
         width: 200,
         allowBlank: false
-      },      
+      },
       {
         id: 'NW_PASSWORD',
         fieldLabel: 'Password (admin)(Max. length 20):',
@@ -91,7 +91,7 @@ Ext.onReady(function(){
       },
       {
         id: 'NW_PASSWORD2',
-        fieldLabel: 'Re-type Password',			
+        fieldLabel: 'Re-type Password',
         xtype:'textfield',
         inputType:'password',
         value:'admin',
@@ -100,10 +100,10 @@ Ext.onReady(function(){
       }
       ]
   });
-  
-  
+
+
   formNewSite = new Ext.FormPanel({
-    id:'formNewSite',       
+    id:'formNewSite',
     labelWidth: 250,
     labelAlign:'right',
     autoScroll: true,
@@ -117,7 +117,7 @@ Ext.onReady(function(){
       allowBlank: false,
       resizable: true,
       msgTarget: 'side',
-      align:'center'      
+      align:'center'
     },
     items:[
     nameWS,
@@ -128,18 +128,18 @@ Ext.onReady(function(){
       {
         text: 'reset',
         handler: resetfields
-      
+
       },
-      {     
+      {
         text: 'Test',
         handler: TestSite
       }
     ]
-    
+
   });
 
     formNewSite.render(document.body);
-    
+
  });
  function resetfields(){
     formNewSite.getForm().reset();
@@ -174,8 +174,8 @@ Ext.onReady(function(){
                                 }
                             }
                         });
- } 
- 
+ }
+
   function createNW(nwTitle, aoDbWf, aoDbRb, aoDbRp, nwUsername, nwPassword, nwPassword2){
     PMExt.confirm(_('ID_CONFIRM'), _('NEW_SITE_CONFIRM_TO_CREATE'), function(){
     var loadMask = new Ext.LoadMask(document.body, {msg:'site creating..'});
@@ -217,10 +217,10 @@ Ext.onReady(function(){
      });
     });
    }
-  
- 
- 
- 
+
+
+
+
 
 
 
