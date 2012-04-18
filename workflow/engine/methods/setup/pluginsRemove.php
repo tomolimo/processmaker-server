@@ -22,6 +22,7 @@
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  *
  */
+
 /*
 global $RBAC;
 switch ($RBAC->userCanAccess('PM_SETUP_ADVANCE'))
@@ -38,65 +39,20 @@ switch ($RBAC->userCanAccess('PM_SETUP_ADVANCE'))
 	break;
 }*/
 
-/**
- * function rmdir_recursive
- * @author gustavo cruz gustavo-at-colosa-dot-com
- * @param $dir directory to be erased
- * @desc Fork of the rmdir native command this one also erase
- *       the content of the directory recursively.
- */
-function rmdir_recursive($dir) {
-     $files = scandir($dir);
-     array_shift($files);    // remove '.' from array
-     array_shift($files);    // remove '..' from array
+G::LoadClass("plugin");
 
-     foreach ($files as $file) {
-          $file = $dir . '/' . $file;
-          if (is_dir($file)) {
-             rmdir_recursive($file);
-//             rmdir($file);
-          } else {
-             unlink($file);
-          }
-     }
-     //rmdir($dir);
+
+
+
+
+$pluginName = $_REQUEST["pluginUid"];
+
+if (file_exists(PATH_PLUGINS . $pluginName . ".php")) {
+  $pluginRegistry = &PMPluginRegistry::getSingleton();
+  
+  $pluginRegistry->uninstallPlugin($pluginName);
+  
+  $pluginRegistry->unSerializeInstance(file_get_contents(PATH_DATA_SITE . "plugin.singleton"));
 }
 
-G::LoadClass('plugin');
-$oPluginRegistry =& PMPluginRegistry::getSingleton();
-
-$oDir = PATH_PLUGINS.trim($_POST['pluginUid']);
-$oFile = PATH_PLUGINS.$_POST['pluginUid'].".php";
-$pluginFile = $_POST['pluginUid'].".php";
-//G::pr($pluginFile);
-//G::pr($oFile);
-if ($handle = opendir( PATH_PLUGINS )) {
-   while ( false !== ($file = readdir($handle))) {
-       if ( strpos($file, '.php',1) ) {
-         if ( $file == $pluginFile ) {
-           require_once ( PATH_PLUGINS . $pluginFile );
-           $details = $oPluginRegistry->getPluginDetails( $pluginFile );
-           $oPluginRegistry->enablePlugin( $details->sNamespace);
-           $oPluginRegistry->disablePlugin( $details->sNamespace );
-           $size = file_put_contents  ( PATH_DATA_SITE . 'plugin.singleton', $oPluginRegistry->serializeInstance() );
-         }
-       }
-     }
-   closedir($handle);
-}
-
-//$details = $oPluginRegistry->getPluginDetails( $oFile );
-//G::pr($details);
-//$oPluginRegistry->disablePlugin( $details->sNamespace );
-//$size = file_put_contents ( PATH_DATA_SITE . 'plugin.singleton', $oPluginRegistry->serializeInstance() );
-if ($oDir!=""&&$oFile!=""){
-    if (is_dir($oDir)) {
-        rmdir_recursive($oDir);
-    }
-    if (file_exists($oFile)){
-        unlink($oFile);
-    }
-}
-
-echo $_POST['pluginUid']." ".str_replace("\r\n","<br>",G::LoadTranslation('ID_MSG_REMOVE_PLUGIN_SUCCESS'));
-
+echo $pluginName . " " . nl2br(G::LoadTranslation("ID_MSG_REMOVE_PLUGIN_SUCCESS"));
