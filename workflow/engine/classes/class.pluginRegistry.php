@@ -219,24 +219,30 @@ class PMPluginRegistry {
    *
    * @param unknown_type $sNamespace
    */
-  function disablePlugin($sNamespace)
+  function disablePlugin($sNamespace, $eventPlugin = 1)
   {
-    $found = false;
-    foreach ( $this->_aPluginDetails as $namespace=>$detail ) {
-      if ( $sNamespace == $namespace ) {
-        unset ($this->_aPluginDetails[$sNamespace]);
-        $oPlugin = new $detail->sClassName( $detail->sNamespace, $detail->sFilename );
-        $this->_aPlugins[$detail->sNamespace] = $oPlugin;
-        if (method_exists($oPlugin, 'disable')) {
-          $oPlugin->disable();
+    $sw = false;
+    
+    foreach ($this->_aPluginDetails as $namespace => $detail) {
+      if ($namespace == $sNamespace) {
+        unset($this->_aPluginDetails[$sNamespace]);
+        
+        if ($eventPlugin == 1) {
+          $plugin = new $detail->sClassName($detail->sNamespace, $detail->sFilename);
+          $this->_aPlugins[$detail->sNamespace] = $plugin;
+          if (method_exists($plugin, "disable")) {
+            $plugin->disable();
+          }
         }
-        $found = true;
+        
+        $sw = true;
       }
     }
 
-    if (!$found)
+    if (!$sw) {
       throw new Exception("Unable to disable plugin '$sNamespace' (plugin not found)");
-
+    }
+    
     foreach ( $this->_aMenus as $key=>$detail ) {
       if ( $detail->sNamespace == $sNamespace )
       unset ( $this->_aMenus[ $key ] );
@@ -282,7 +288,7 @@ class PMPluginRegistry {
       if ( $detail->sNamespace == $sNamespace )
       unset ( $this->_aCaseSchedulerPlugin[ $key ] );
     }
-  	foreach ( $this->_aTaskExtendedProperties as $key=>$detail ) {
+    foreach ( $this->_aTaskExtendedProperties as $key=>$detail ) {
       if ( $detail->sNamespace == $sNamespace )
       unset ( $this->_aTaskExtendedProperties[ $key ] );
     }
@@ -398,27 +404,84 @@ class PMPluginRegistry {
     $this->save();
   }
 
-  function uninstallPlugin($sNamespace) {
-    $pluginFile = "$sNamespace.php";
+  function uninstallPlugin($sNamespace)
+  {
+    $pluginFile = $sNamespace . ".php";
 
     if (!file_exists(PATH_PLUGINS . $pluginFile)) {
       throw (new Exception("File \"$pluginFile\" doesn't exist"));
     }
-
+    
+    ///////
     require_once (PATH_PLUGINS . $pluginFile);
-    $details = $this->getPluginDetails($pluginFile);
-
-    $this->enablePlugin($details->sNamespace);
-    $this->disablePlugin($details->sNamespace);
-    $this->save();
-
-    $pluginDir = PATH_PLUGINS . $details->sPluginFolder;
-
-    if (isset($details->sPluginFolder) && !empty($details->sPluginFolder) && file_exists($pluginDir))
-      G::rm_dir($pluginDir);
-
-    if (isset($details->sFilename) && !empty($details->sFilename) && file_exists($details->sFilename))
-      unlink($details->sFilename);
+    
+    foreach ($this->_aPluginDetails as $namespace => $detail) {
+      if ($namespace == $sNamespace) {
+        $this->enablePlugin($detail->sNamespace);
+        $this->disablePlugin($detail->sNamespace);
+        
+        ///////
+        $plugin = new $detail->sClassName($detail->sNamespace, $detail->sFilename);
+        $this->_aPlugins[$detail->sNamespace] = $plugin;
+        
+        if (method_exists($plugin, "uninstall")) {
+          $plugin->uninstall();
+        }
+        
+        ///////
+        $this->save();
+        
+        ///////
+        $pluginDir = PATH_PLUGINS . $detail->sPluginFolder;
+        
+        if (isset($detail->sFilename) && !empty($detail->sFilename) && file_exists($detail->sFilename)) {
+          unlink($detail->sFilename);
+        }
+    
+        if (isset($detail->sPluginFolder) && !empty($detail->sPluginFolder) && file_exists($pluginDir)) {
+          G::rm_dir($pluginDir);
+        }
+        
+        ///////
+        $this->uninstallPluginWorkspaces(array($sNamespace));
+        
+        ///////
+        break;
+      }
+    }
+  }
+  
+  function uninstallPluginWorkspaces($arrayPlugin)
+  {
+    G::LoadClass("system");
+    G::LoadClass("wsTools");
+    
+    $workspace = System::listWorkspaces();
+    
+    foreach ($workspace as $indexWS => $ws) {
+      $wsPathDataSite = PATH_DATA . "sites" . PATH_SEP . $ws->name . PATH_SEP;
+      
+      if (file_exists($wsPathDataSite . "plugin.singleton")) {
+        //G::LoadClass("plugin");
+        //Here we are loading all plug-ins registered
+        //The singleton has a list of enabled plug-ins
+        
+        $pluginRegistry = &PMPluginRegistry::getSingleton();
+        $pluginRegistry->unSerializeInstance(file_get_contents($wsPathDataSite . "plugin.singleton"));
+        
+        ///////
+        $attributes = $pluginRegistry->getAttributes();
+         
+        foreach ($arrayPlugin as $index => $value) {
+          if (isset($attributes["_aPluginDetails"][$value])) {
+            $pluginRegistry->disablePlugin($value, 0);
+          }
+        }
+        
+        ///////
+        file_put_contents($wsPathDataSite . "plugin.singleton", $pluginRegistry->serializeInstance());
+      }
+    }
   }
 
   /**
@@ -1186,12 +1249,5 @@ class PMPluginRegistry {
   function getAttributes()
   {
     return get_object_vars($this);
-  }
-  
-  function setAttributes($attributes = array())
-  {
-    foreach ($attributes as $index => $value) {
-      eval("\$this->" . $index . " = \$value;");
-    }
   }
 }

@@ -89,8 +89,8 @@ try {
     }
     $sContent = str_ireplace($sAux, $sAux . '_', $sContent);
     $sContent = str_ireplace('PATH_PLUGINS', "'".$path."'", $sContent);
-    $sContent = preg_replace("/\\\$oPluginRegistry\s*=\s*&\s*PMPluginRegistry::getSingleton\(\);/i", null, $sContent);
-    $sContent = preg_replace("/\\\$oPluginRegistry->registerPlugin\([\"\']" . $sClassName . "[\"\'], __FILE__\);/i", null, $sContent);
+    $sContent = preg_replace("/\\\$oPluginRegistry\s*=\s*&\s*PMPluginRegistry::getSingleton\s*\(\s*\)\s*;/i", null, $sContent);
+    $sContent = preg_replace("/\\\$oPluginRegistry->registerPlugin\s*\(\s*[\"\']" . $sClassName . "[\"\']\s*,\s*__FILE__\s*\)\s*;/i", null, $sContent);
     
     //header('Content-Type: text/plain');var_dump($sClassName, $sContent);die;
     file_put_contents($path . $pluginFile, $sContent);
@@ -144,19 +144,22 @@ try {
     throw ( new Exception( G::loadTranslation('ID_FILE_PLUGIN_NOT_EXISTS', SYS_LANG, array("pluginFile"=>$pluginFile )) ) );
   }
 
-  require_once ( PATH_PLUGINS . $pluginFile );
-  $details = $oPluginRegistry->getPluginDetails( $pluginFile );
+  require_once (PATH_PLUGINS . $pluginFile);
+  
+  $oPluginRegistry->registerPlugin($sClassName, PATH_PLUGINS . $sClassName . ".php");
+  
+  $details = $oPluginRegistry->getPluginDetails($pluginFile);
 
-  $oPluginRegistry->installPlugin( $details->sNamespace);
+  $oPluginRegistry->installPlugin($details->sNamespace);
   $oPluginRegistry->setupPlugins(); //get and setup enabled plugins
-  $size = file_put_contents  ( PATH_DATA_SITE . 'plugin.singleton', $oPluginRegistry->serializeInstance() );
+  $size = file_put_contents(PATH_DATA_SITE . "plugin.singleton", $oPluginRegistry->serializeInstance());
 
-  G::header ( 'Location: pluginsMain');
+  G::header("Location: pluginsMain");
   die;
 }
 catch ( Exception $e ){
   $G_PUBLISH = new Publisher;
-	$aMessage['MESSAGE'] = $e->getMessage();
+  $aMessage['MESSAGE'] = $e->getMessage();
   $G_PUBLISH->AddContent('xmlform', 'xmlform', 'login/showMessage', '', $aMessage );
   G::RenderPage('publishBlank', 'blank');
 }

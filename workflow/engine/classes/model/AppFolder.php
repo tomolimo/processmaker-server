@@ -361,28 +361,35 @@ if($limit != 0){
           ///////
           if (!empty($row1["APP_DOC_PLUGIN"])) {
             $pluginRegistry = &PMPluginRegistry::getSingleton();
-            $addonName = $row1["APP_DOC_PLUGIN"];
+            
+            $pluginName = $row1["APP_DOC_PLUGIN"];
             $fieldValue = "";
             
-            if (file_exists(PATH_PLUGINS . $addonName . ".php")) {
-              $addonDetails = $pluginRegistry->getPluginDetails($addonName . ".php");
+            if (file_exists(PATH_PLUGINS . $pluginName . ".php")) {
+              $pluginDetail = $pluginRegistry->getPluginDetails($pluginName . ".php");
               
-              if ($addonDetails) {
-                if ($addonDetails->enabled) {
-                  require_once (PATH_PLUGINS . $addonName . PATH_SEP . "class." . $addonName . ".php");
+              if ($pluginDetail) {
+                if ($pluginDetail->enabled) {
+                  require_once (PATH_PLUGINS . $pluginName . ".php");
                   
-                  $addonNameClass = $addonName . "Class";
+                  $pluginNameClass = $pluginName . "Plugin";
                   
-                  $objClass = new $addonNameClass();
+                  $objPluginClass = new $pluginNameClass($pluginName);
                   
-                  if (method_exists($objClass, "getNameMethodGetUrlDownload")) {
-                    $addonDetails->sMethodGetUrlDownload = $objClass->getNameMethodGetUrlDownload();
+                  if (isset($objPluginClass->sMethodGetUrlDownload) && !empty($objPluginClass->sMethodGetUrlDownload)) {
+                    if (file_exists(PATH_PLUGINS . $pluginName . PATH_SEP . "class." . $pluginName . ".php")) {
+                      require_once (PATH_PLUGINS . $pluginName . PATH_SEP . "class." . $pluginName . ".php");
                   
-                    if (!empty($addonDetails->sMethodGetUrlDownload)) {
-                      eval("\$url = \$objClass->" . $addonDetails->sMethodGetUrlDownload . "(\"" . $row1["APP_DOC_UID"] . "\");");
-                      $downloadLink = $url;
+                      $pluginNameClass = $pluginName . "Class";
                   
-                      $fieldValue = $row1["APP_DOC_PLUGIN"];
+                      $objClass = new $pluginNameClass();
+                  
+                      if (method_exists($objClass, $objPluginClass->sMethodGetUrlDownload)) {
+                        eval("\$url = \$objClass->" . $objPluginClass->sMethodGetUrlDownload . "(\"" . $row1["APP_DOC_UID"] . "\");");
+                        $downloadLink = $url;
+                        
+                        $fieldValue = $row1["APP_DOC_PLUGIN"];
+                      }
                     }
                   }
                 }
