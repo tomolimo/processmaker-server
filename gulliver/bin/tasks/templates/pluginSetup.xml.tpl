@@ -10,7 +10,7 @@
 </TITLE1>
 
 <SUBTITLE1 type="subtitle" group="1">
-  <en>Edit this page for customize the plugin</en>
+  <en>Edit this page to customize the plugin</en>
 </SUBTITLE1>
 
 <BTN_SUBMIT type="submit">
