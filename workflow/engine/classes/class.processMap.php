@@ -1255,50 +1255,85 @@ class processMap {
    * @return string
    */
 
-  function addTask($sProcessUID = '', $iX = 0, $iY = 0,$iWidth = 165, $iHeight = 40) {
+  function addTask($sProcessUID = '', $iX = 0, $iY = 0, $iWidth = 165, $iHeight = 40) {
     try {
       $oCriteria = new Criteria('workflow');
       $oCriteria->addSelectColumn('TAS_UID');
       $oCriteria->add(TaskPeer::PRO_UID, $sProcessUID);
       $oDataset = TaskPeer::doSelectRS($oCriteria);
       $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-      $oDataset->next();
+      
       $aTasks = array();
       $iTaskNumber = 0;
-      while ($aRow = $oDataset->getRow()) {
-        $aTasks [] = $aRow ['TAS_UID'];
-        $iTaskNumber++;
-        $oDataset->next();
-      }
-      if ($iTaskNumber == 0) {
-        $iTaskNumber = 1;
-      }
-      $bContinue = false;
-      while (!$bContinue) {
-        $oCriteria = new Criteria('workflow');
-        $oCriteria->addSelectColumn('COUNT(*) AS TIMES');
-        $oCriteria->add(ContentPeer::CON_ID, $aTasks, Criteria::IN);
-        $oCriteria->add(ContentPeer::CON_CATEGORY, 'TAS_TITLE');
-        $oCriteria->add(ContentPeer::CON_LANG, SYS_LANG);
-        $oCriteria->add(ContentPeer::CON_VALUE, G::LoadTranslation('ID_TASK') . ' ' . $iTaskNumber);
-        $oDataset = ContentPeer::doSelectRS($oCriteria);
-        $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-        $oDataset->next();
+      
+      while ($oDataset->next()) {
         $aRow = $oDataset->getRow();
-        if ((int) $aRow ['TIMES'] > 0) {
-          $iTaskNumber += 1;
-        } else {
-          $bContinue = true;
+        
+        $aTasks[] = $aRow ["TAS_UID"];
+        $iTaskNumber = $iTaskNumber + 1;
+      }
+      
+      if ($iTaskNumber > 0) {
+        $criteria = new Criteria("workflow");
+        
+        $criteria->addSelectColumn(ContentPeer::CON_LANG);
+        $criteria->addSelectColumn(ContentPeer::CON_VALUE);
+        $criteria->add(ContentPeer::CON_ID, $aTasks, Criteria::IN);
+        $criteria->add(ContentPeer::CON_CATEGORY, "TAS_TITLE");
+        
+        $rsSQLCON = ContentPeer::doSelectRS($criteria);
+        $rsSQLCON->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+        
+        $numMaxLang = 0;
+        $numMax = 0;
+        
+        while ($rsSQLCON->next()) {
+          $row = $rsSQLCON->getRow();
+
+          $conLang  = $row["CON_LANG"];
+          $conValue = $row["CON_VALUE"];
+          
+          if (preg_match("/^\S+\s(\d+)$/", $conValue, $matches)) {
+            $n = intval($matches[1]);
+    
+            if ($conLang == SYS_LANG) {
+              if ($n > $numMaxLang) {
+                $numMaxLang = $n;
+              }
+            }
+            else {
+              if ($n > $numMax) {
+                $numMax = $n;
+              }
+            }
+          }
+        }
+        
+        if ($numMaxLang > 0) {
+          $numMax = $numMaxLang;
+        }
+        
+        if ($numMax > 0 && $numMax > $iTaskNumber) {
+          $iTaskNumber = $numMax + 1;
+        }
+        else {
+          $iTaskNumber = $iTaskNumber + 1;
         }
       }
-      $oTask = new Task ( );
+      else {
+        $iTaskNumber = 1;
+      }
+      
+      $oTask = new Task();
       $oNewTask->label = G::LoadTranslation('ID_TASK') . ' ' . $iTaskNumber;
       $oNewTask->uid = $oTask->create(array('PRO_UID' => $sProcessUID, 'TAS_TITLE' => $oNewTask->label, 'TAS_POSX' => $iX, 'TAS_POSY' => $iY, 'TAS_WIDTH' => $iWidth, 'TAS_HEIGHT' => $iHeight));
       $oNewTask->statusIcons = array();
       $oNewTask->statusIcons[] = array('label' => '', 'icon' => '/images/alert.gif', 'message' => '', 'url' => '');
-      $oJSON = new Services_JSON ( );
+      $oJSON = new Services_JSON();
+      
       return $oJSON->encode($oNewTask);
-    } catch (Exception $oError) {
+    }
+    catch (Exception $oError) {
       throw ($oError);
     }
   }
