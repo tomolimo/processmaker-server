@@ -50,6 +50,5 @@ $_SESSION['_DBArray'] = $_DBArray;
 
 $G_PUBLISH = new Publisher();
 $oHeadPublisher =& headPublisher::getSingleton();
-$oHeadPublisher->addExtJsScript('authSources/authSourcesListNew', false);    //adding a javascript file .js
+$oHeadPublisher->addExtJsScript('authSources/authSourcesListNew', true);    //adding a javascript file .js
 G::RenderPage('publish', 'extJs');
-G::RenderPage('publish','blank');
