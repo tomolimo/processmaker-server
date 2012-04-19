@@ -345,6 +345,8 @@ try {
       $limit   = isset($_REQUEST['limit'])  ? $_REQUEST['limit'] : $limit_size; 
       $filter = isset($_REQUEST['textFilter']) ? $_REQUEST['textFilter'] : '';
       $auths = isset($_REQUEST['auths']) ? $_REQUEST['auths'] : '';
+      $sort = isset($_REQUEST['sort']) ? $_REQUEST['sort'] : '';
+      $dir = isset($_REQUEST['dir']) ? $_REQUEST['dir'] : 'ASC';
       $aUsers = Array();
       if ($auths != ''){
         $aUsers = $RBAC->getListUsersByAuthSource($auths);
@@ -405,6 +407,14 @@ try {
         $oCriteria->add(UsersPeer::USR_UID, $aUsers, Criteria::IN);
       }else if ($totalRows==0 && $auths != ''){
         $oCriteria->add(UsersPeer::USR_UID,'',Criteria::IN);
+      }
+      if ($sort != '') {
+        if ($dir == 'ASC') {
+          $oCriteria->addAscendingOrderByColumn($sort);
+        }
+        else {
+          $oCriteria->addDescendingOrderByColumn($sort);
+        }
       }
       $oCriteria->setOffset($start);
       $oCriteria->setLimit($limit);

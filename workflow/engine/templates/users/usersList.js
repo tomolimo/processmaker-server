@@ -172,28 +172,77 @@ Ext.onReady(function(){
       }
     }
   });
+    var stepsFields = Ext.data.Record.create([
+    {
+      name : 'USR_USERNAME',
+      type: 'string'
+    },
+    {
+      name : 'USR_FIRSTNAME',
+      type: 'string'
+    },
+    {
+      name : 'USR_LASTNAME',
+      type: 'string'
+    },
+    {
+      name : 'USR_EMAIL',
+      type: 'string'
+    },
+    {
+      name : 'USR_ROLE',
+      type: 'string'
+    },
+    {
+      name : 'USR_DUE_DATE',
+      type: 'string'
+    },
+    {
+      name : 'DEP_TITLE',
+      type: 'string'
+    },
+    {
+      name : 'LAST_LOGIN',
+      type: 'string'
+    },
+    {
+      name : 'USR_STATUS',
+      type: 'string'
+    },
+    {
+      name : 'TOTAL_CASES',
+      type: 'string'
+    },
+    {
+      name : 'DUE_DATE_OK',
+      type: 'string'
+    },
+  ]);
 
   store = new Ext.data.GroupingStore( {
-    proxy : new Ext.data.HttpProxy({
-      url: 'users_Ajax?function=usersList'
+    remoteSort  : true,
+    sortInfo    : stepsFields,
+    groupField  :'',
+    proxy       : new Ext.data.HttpProxy({
+      url       : 'users_Ajax?function=usersList'
     }),
     reader : new Ext.data.JsonReader( {
       root: 'users',
       totalProperty: 'total_users',
       fields : [
         {name : 'USR_UID'},
-      {name : 'USR_USERNAME'},
-      {name : 'USR_FIRSTNAME'},
-      {name : 'USR_LASTNAME'},
-      {name : 'USR_EMAIL'},
-      {name : 'USR_ROLE'},
-      {name : 'USR_DUE_DATE'},
-      {name : 'DEP_TITLE'},
-      {name : 'LAST_LOGIN'},
-      {name : 'USR_STATUS'},
-      {name : 'TOTAL_CASES',type:'int'},
-      {name : 'DUE_DATE_OK'},
-      {name : 'USR_AUTH_SOURCE'}
+        {name : 'USR_USERNAME'},
+        {name : 'USR_FIRSTNAME'},
+        {name : 'USR_LASTNAME'},
+        {name : 'USR_EMAIL'},
+        {name : 'USR_ROLE'},
+        {name : 'USR_DUE_DATE'},
+        {name : 'DEP_TITLE'},
+        {name : 'LAST_LOGIN'},
+        {name : 'USR_STATUS'},
+        {name : 'TOTAL_CASES',type:'int'},
+        {name : 'DUE_DATE_OK'},
+        {name : 'USR_AUTH_SOURCE'}
       ]
     })
   });
@@ -411,8 +460,8 @@ UsersGroupPage = function(value){
 SummaryTabOpen = function(){
   rowSelected = infoGrid.getSelectionModel().getSelected();
   if (rowSelected){
-  value = rowSelected.data.USR_UID;
-  location.href = 'usersGroups?uUID=' + value + '&type=summary';
+    value = rowSelected.data.USR_UID;
+    location.href = 'usersGroups?uUID=' + value + '&type=summary';
   }
 };
 
@@ -446,10 +495,11 @@ full_name = function(v,x,s){
 //Render Status
 render_status = function(v){
   switch(v){
-  case 'ACTIVE': return '<font color="green">' + _('ID_ACTIVE') + '</font>'; break;
-  case 'INACTIVE': return '<font color="red">' + _('ID_INACTIVE') + '</font>';; break;
-  case 'VACATION': return '<font color="blue">' + _('ID_VACATION') + '</font>';; break;
+    case 'ACTIVE': return '<font color="green">' + _('ID_ACTIVE') + '</font>'; break;
+    case 'INACTIVE': return '<font color="red">' + _('ID_INACTIVE') + '</font>';; break;
+    case 'VACATION': return '<font color="blue">' + _('ID_VACATION') + '</font>';; break;
   }
+  return true;
 };
 
 //Render Due Date
