@@ -1,6 +1,6 @@
 /*
  * @author: Erik A. Ortiz
- * Aug 20th, 2010 
+ * Aug 20th, 2010
  */
 var processesGrid;
 var store;
@@ -31,7 +31,7 @@ Ext.onReady(function(){
       url: 'pluginsList'
     }),
 
-    reader : new Ext.data.JsonReader( {      
+    reader : new Ext.data.JsonReader( {
       fields : [
         {name : 'id'},
         {name : 'namespace'},
@@ -52,18 +52,18 @@ Ext.onReady(function(){
     //groupField:'PRO_CATEGORY_LABEL'
 
   });
-  
-  
+
+
   var expander = new Ext.ux.grid.RowExpander({
     tpl : new Ext.Template(
         '<p><b>' + _('ID_DESCRIPTION') + ': </b> {description}</p><br>'
     )
   });
 
-  var selModel = new Ext.grid.RowSelectionModel({            
+  var selModel = new Ext.grid.RowSelectionModel({
     singleSelect : true
   })
-    
+
   Grid = new Ext.grid.GridPanel( {
     region: 'center',
     layout: 'fit',
@@ -87,7 +87,7 @@ Ext.onReady(function(){
       defaults: {
           width: 200,
           sortable: true
-      },    
+      },
       columns: [
         expander,
         {id:'id', dataIndex: 'id', hidden:true, hideable:false},
@@ -106,7 +106,7 @@ Ext.onReady(function(){
         {header: '', dataIndex: 'sStatusFile', hidden:true, hideable:false}
       ]
     }),
-    
+
     selModel:selModel,
     store: store,
 
@@ -150,8 +150,8 @@ Ext.onReady(function(){
         var activator = Ext.getCmp('activator');
         var setup = Ext.getCmp('setup');
         activator.setDisabled(false);
-        
-        if( rowSelected.data.status == 1 ){  
+
+        if( rowSelected.data.status == 1 ){
           activator.setIcon('/images/deactivate.png');
           activator.setText(_('ID_DISABLE'));//activator.setText(TRANSLATIONS.ID_DISABLE);//activator.setText('Deactivate');
         } else {
@@ -164,7 +164,7 @@ Ext.onReady(function(){
         } else {
           setup.setDisabled(true);
         }
-         
+
         });
       }
   }
@@ -178,6 +178,10 @@ Ext.onReady(function(){
     autoScroll: true,
     items: [Grid]
   });
+
+  if (typeof(__PLUGIN_ERROR__) !== 'undefined') {
+    PMExt.notify(_('ID_PLUGINS'), __PLUGIN_ERROR__);
+  }
 });
 
 
@@ -238,29 +242,29 @@ browseLibrary = function(){
 function activeDeactive(){
   var rowSelected = Grid.getSelectionModel().getSelected();
   //var rows = Grid.getSelectionModel().getSelections();
-  
+
   if( rowSelected ) {
     var ids = '';
 
     var status = rowSelected.get('status');
     var file = rowSelected.get('sFile');
-    
+
     Ext.Ajax.request({
       url : 'pluginsChange?id='+file+'&status='+status ,
       params : { UIDS : ids },
       method: 'GET',
       success: function ( result, request ) {
         //Ext.MessageBox.alert('Success', 'Data return from the server: '+ result.responseText);
-    	  
+
     	parent.parent.location.href = 'main?s='+parent._NODE_SELECTED;
     	return;
-    	  
+
         store.reload();
 
         plugins = parent.Ext.getCmp('plugins');
-        
+
         plugins.root.reload();
-        
+
         var activator = Ext.getCmp('activator');
         activator.setDisabled(true);
         activator.setText('Status');
@@ -270,7 +274,7 @@ function activeDeactive(){
         Ext.MessageBox.alert('Failed', result.responseText);
       }
     });
-    
+
     //window.location = 'processes_ChangeStatus?PRO_UID='+rowSelected.data.PRO_UID;
   } else {
      Ext.Msg.show({
@@ -292,7 +296,7 @@ var configure = function(){
   if( rowSelected ) {
     file = rowSelected.get('sFile');
     window.location = 'pluginsSetup?id='+file;
-    
+
   } else {
      Ext.Msg.show({
       title  : '',

@@ -23,20 +23,18 @@
  *
  */
 
-$oHeadPublisher =& headPublisher::getSingleton(); 
-  
-  $oHeadPublisher->addExtJsScript('setup/pluginsMain', false );    //adding a javascript file .js
-  //$oHeadPublisher->addContent('setup/main'); //adding a html file  .html.
-  
-  $translations = G::getTranslations(Array(
-    'ID_CONFIGURE', 'ID_STATUS', 'ID_DELETE', 'ID_IMPORT', 'ID_SELECT',
-    'ID_STATUS', 'ID_ACTIVATE', 'ID_DEACTIVATE',
-    'ID_SELECT', 'ID_NO_SELECTION_WARNING', 'ID_MSG_REMOVE_PLUGIN',
-    'ID_TITLE', 'ID_VERSION', 'ID_STATUS', 'ID_TITLE', 'ID_VERSION', 'ID_DESCRIPTION', 
-    'ID_STATUS', 'ID_PLUGIN_CANT_DELETE', 'ID_XPDL_IMPORT', 'ID_DISABLE', 'ID_ENABLE', 'ID_CONFIRM'
-  ));
-  $oHeadPublisher->assign('TRANSLATIONS', $translations);
-  G::RenderPage('publish', 'extJs');
-
-
-  
+$headPublisher =& headPublisher::getSingleton();
+$headPublisher->addExtJsScript('setup/pluginsMain', false);
+$translations = G::getTranslations(array(
+  'ID_CONFIGURE', 'ID_STATUS', 'ID_DELETE', 'ID_IMPORT', 'ID_SELECT',
+  'ID_STATUS', 'ID_ACTIVATE', 'ID_DEACTIVATE', 'ID_PLUGINS',
+  'ID_SELECT', 'ID_NO_SELECTION_WARNING', 'ID_MSG_REMOVE_PLUGIN',
+  'ID_TITLE', 'ID_VERSION', 'ID_STATUS', 'ID_TITLE', 'ID_VERSION', 'ID_DESCRIPTION',
+  'ID_STATUS', 'ID_PLUGIN_CANT_DELETE', 'ID_XPDL_IMPORT', 'ID_DISABLE', 'ID_ENABLE', 'ID_CONFIRM'
+));
+$headPublisher->assign('TRANSLATIONS', $translations);
+if (isset($_SESSION['__PLUGIN_ERROR__'])) {
+  $headPublisher->assign('__PLUGIN_ERROR__', $_SESSION['__PLUGIN_ERROR__']);
+  unset($_SESSION['__PLUGIN_ERROR__']);
+}
+G::RenderPage('publish', 'extJs');

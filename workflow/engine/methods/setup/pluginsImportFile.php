@@ -80,8 +80,8 @@ try {
       unset($oClass);
     }
     $res = $tar->extract ( $path );
-    
-    
+
+
     $sContent = file_get_contents($path . $pluginFile);
     $chain = preg_quote('extends enterprisePlugin');
     if(strpos($sContent,$chain)){
@@ -91,7 +91,7 @@ try {
     $sContent = str_ireplace('PATH_PLUGINS', "'".$path."'", $sContent);
     $sContent = preg_replace("/\\\$oPluginRegistry\s*=\s*&\s*PMPluginRegistry::getSingleton\s*\(\s*\)\s*;/i", null, $sContent);
     $sContent = preg_replace("/\\\$oPluginRegistry->registerPlugin\s*\(\s*[\"\']" . $sClassName . "[\"\']\s*,\s*__FILE__\s*\)\s*;/i", null, $sContent);
-    
+
     //header('Content-Type: text/plain');var_dump($sClassName, $sContent);die;
     file_put_contents($path . $pluginFile, $sContent);
 
@@ -145,9 +145,9 @@ try {
   }
 
   require_once (PATH_PLUGINS . $pluginFile);
-  
+
   $oPluginRegistry->registerPlugin($sClassName, PATH_PLUGINS . $sClassName . ".php");
-  
+
   $details = $oPluginRegistry->getPluginDetails($pluginFile);
 
   $oPluginRegistry->installPlugin($details->sNamespace);
@@ -157,9 +157,8 @@ try {
   G::header("Location: pluginsMain");
   die;
 }
-catch ( Exception $e ){
-  $G_PUBLISH = new Publisher;
-  $aMessage['MESSAGE'] = $e->getMessage();
-  $G_PUBLISH->AddContent('xmlform', 'xmlform', 'login/showMessage', '', $aMessage );
-  G::RenderPage('publishBlank', 'blank');
+catch (Exception $e) {
+  $_SESSION['__PLUGIN_ERROR__'] = $e->getMessage();
+  G::header('Location: pluginsMain');
+  die();
 }
