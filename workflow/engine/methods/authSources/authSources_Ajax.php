@@ -65,7 +65,7 @@ try {
       foreach ($aAux as $aUser) {
         if (!in_array($aUser['sUsername'], $pmUsers)) {
           // add replace to change D'Souza to D*Souza by krlos
-          $sCheckbox = '<input type="checkbox" name="aUsers[' . $i . ']" id="aUsers[' . $i . ']" value=\'' . str_replace( "\'","*", addslashes($oJSON->encode($aUser)) ) . '\' />';
+          $sCheckbox = '<div align="center"><input type="checkbox" name="aUsers[' . $i . ']" id="aUsers[' . $i . ']" value=\'' . str_replace( "\'","*", addslashes($oJSON->encode($aUser)) ) . '\' /></div>';
           $i++;
         }
         else {
@@ -87,15 +87,19 @@ try {
       G::LoadClass('ArrayPeer');
       $oCriteria = new Criteria('dbarray');
       $oCriteria->setDBArrayTable('users');
+      $aData = Array(
+        'Checkbox'=>'0',
+        'FullName'=>'0'
+      );
 
       global $G_PUBLISH;
       $G_PUBLISH = new Publisher();
       if ($aFields['AUTH_SOURCE_PROVIDER'] != 'ldap') {
-        $G_PUBLISH->AddContent('propeltable', 'paged-table', 'authSources/ldapSearchResults', $oCriteria);
+        $G_PUBLISH->AddContent('propeltable', 'pagedTableLdap', 'authSources/ldapSearchResults', $oCriteria,' ',array('Checkbox' => G::LoadTranslation('ID_MSG_CONFIRM_DELETE_CASE_SCHEDULER')));
       }
       else {
         if (file_exists(PATH_XMLFORM . 'authSources/' . $aFields['AUTH_SOURCE_PROVIDER'] . 'Edit.xml')) {
-          $G_PUBLISH->AddContent('propeltable', 'paged-table', 'authSources/' . $aFields['AUTH_SOURCE_PROVIDER'] . 'SearchResults', $oCriteria);
+          $G_PUBLISH->AddContent('propeltable', 'pagedTableLdap', 'authSources/' . $aFields['AUTH_SOURCE_PROVIDER'] . 'SearchResults', $oCriteria,' ',array('Checkbox' => G::LoadTranslation('ID_MSG_CONFIRM_DELETE_CASE_SCHEDULER')));
         }
         else {
           $G_PUBLISH->AddContent('xmlform', 'xmlform', 'login/showMessage', '', array('MESSAGE' => 'File: ' . $aFields['AUTH_SOURCE_PROVIDER'] . 'SearchResults.xml' . ' doesn\'t exist.'));
@@ -104,61 +108,61 @@ try {
       G::RenderPage('publish', 'raw');
     break;
     case 'authSourcesList':
-    	require_once PATH_RBAC.'model/AuthenticationSource.php';
-    	global $RBAC;
-    	G::LoadClass('configuration');
+      require_once PATH_RBAC.'model/AuthenticationSource.php';
+      global $RBAC;
+      G::LoadClass('configuration');
       $co = new Configurations();
       $config = $co->getConfiguration('authSourcesList', 'pageSize','',$_SESSION['USER_LOGGED']);
       $limit_size = isset($config['pageSize']) ? $config['pageSize'] : 20;
 
-    	$start = isset($_REQUEST['start']) ? $_REQUEST['start'] : 0;
-    	$limit = isset($_REQUEST['limit']) ? $_REQUEST['limit'] : $limit_size;
-    	$filter = isset($_REQUEST['textFilter']) ? $_REQUEST['textFilter'] : '';
+      $start = isset($_REQUEST['start']) ? $_REQUEST['start'] : 0;
+      $limit = isset($_REQUEST['limit']) ? $_REQUEST['limit'] : $limit_size;
+      $filter = isset($_REQUEST['textFilter']) ? $_REQUEST['textFilter'] : '';
 
-    	$Criterias = $RBAC->getAuthenticationSources($start, $limit, $filter);
+      $Criterias = $RBAC->getAuthenticationSources($start, $limit, $filter);
 
-    	$Dat = AuthenticationSourcePeer::doSelectRS($Criterias['COUNTER']);
-    	$Dat->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-    	$Dat->next();
-    	$row = $Dat->getRow();
-    	$total_sources = $row['CNT'];
+      $Dat = AuthenticationSourcePeer::doSelectRS($Criterias['COUNTER']);
+      $Dat->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+      $Dat->next();
+      $row = $Dat->getRow();
+      $total_sources = $row['CNT'];
 
-    	$oDataset = AuthenticationSourcePeer::doSelectRS($Criterias['LIST']);
-    	$oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+      $oDataset = AuthenticationSourcePeer::doSelectRS($Criterias['LIST']);
+      $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
 
-    	global $RBAC;
-    	$auth = $RBAC->getAllUsersByAuthSource();
+      global $RBAC;
+      $auth = $RBAC->getAllUsersByAuthSource();
 
-    	$aSources = Array();
-    	while ($oDataset->next()){
-    		$aSources[] = $oDataset->getRow();
-    		$index = sizeof($aSources)-1;
-    		$aSources[$index]['CURRENT_USERS'] = isset($auth[$aSources[$index]['AUTH_SOURCE_UID']]) ? $auth[$aSources[$index]['AUTH_SOURCE_UID']] : 0;
-    	}
-    	echo '{sources: '.G::json_encode($aSources).', total_sources: '.$total_sources.'}';
-    	break;
+      $aSources = Array();
+      while ($oDataset->next()){
+        $aSources[] = $oDataset->getRow();
+        $index = sizeof($aSources)-1;
+        $aSources[$index]['CURRENT_USERS'] = isset($auth[$aSources[$index]['AUTH_SOURCE_UID']]) ? $auth[$aSources[$index]['AUTH_SOURCE_UID']] : 0;
+      }
+      echo '{sources: '.G::json_encode($aSources).', total_sources: '.$total_sources.'}';
+      break;
     case 'canDeleteAuthSource':
-    	//echo 'llego';
-    	//require_once PATH_RBAC.'model/RbacUsers.php';
-    	try{
-    	  $authUID = $_POST['auth_uid'];
-    	  global $RBAC;
-    	  $aAuth = $RBAC->getAllUsersByAuthSource();
-    	  $response = isset($aAuth[$authUID]) ? 'false' : 'true';
-    	  echo '{success: '.$response.'}';
-    	}catch(Exception $ex){
-    		echo '{success: false, error: '.$ex->getMessage().'}';
-    	}
-    	break;
+      //echo 'llego';
+      //require_once PATH_RBAC.'model/RbacUsers.php';
+      try{
+        $authUID = $_POST['auth_uid'];
+        global $RBAC;
+        $aAuth = $RBAC->getAllUsersByAuthSource();
+        $response = isset($aAuth[$authUID]) ? 'false' : 'true';
+        echo '{success: '.$response.'}';
+      }catch(Exception $ex){
+        echo '{success: false, error: '.$ex->getMessage().'}';
+      }
+      break;
     case 'deleteAuthSource':
-    	try{
-    		global $RBAC;
-    		$RBAC->removeAuthSource($_POST['auth_uid']);
-    		echo '{success: true}';
-    	}catch(Exception $ex){
-    		echo '{success: false, error: '.$ex->getMessage().'}';
-    	}
-    	break;
+      try{
+        global $RBAC;
+        $RBAC->removeAuthSource($_POST['auth_uid']);
+        echo '{success: true}';
+      }catch(Exception $ex){
+        echo '{success: false, error: '.$ex->getMessage().'}';
+      }
+      break;
     case 'authSourcesNew':
       $arr = Array();
       $oDirectory = dir(PATH_RBAC . 'plugins' . PATH_SEP);
@@ -192,7 +196,7 @@ try {
   }
 }
 catch ( Exception  $e ) {
-	$fields = array('MESSAGE' => $e->getMessage() );
+  $fields = array('MESSAGE' => $e->getMessage() );
   global $G_PUBLISH;
   $G_PUBLISH = new Publisher();
   $G_PUBLISH->AddContent('xmlform', 'xmlform', 'login/showMessage', '', $fields );

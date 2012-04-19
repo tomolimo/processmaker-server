@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<dynaForm width="100%" rowsPerPage="1000">
+<dynaForm width="90%" rowsPerPage="1000">
 
-<Checkbox type="text" colWidth="120" titleAlign="left" align="left" enableHtml="1" onclick="return false;">
-  <en><![CDATA[<span onclick="selectAll();">[SELECT-ALL]</span>]]></en>
+<Checkbox type="text" titleAlign="center" align="left" enableHtml="1" onclick="return false;">
+  <en><![CDATA[<span id="spanSelectAll"></span>]]></en>
 </Checkbox>
 
-<FullName type="text" colWidth="170" titleAlign="left" align="left">
+<FullName type="text" colWidth="20%" titleAlign="center" align="left">
   <en>Name</en>
 </FullName>
 
-<Email type="text" colWidth="50" titleAlign="left" align="left">
-  <en>E-Mail</en>
+<Email type="text" colWidth="20%" titleAlign="center" align="left">
+  <en><![CDATA[<span style="width:40px; display:block;">E-Mail</span>]]></en>
 </Email>
 
-<DistinguishedName type="text" colWidth="330" titleAlign="left" align="left">
+<DistinguishedName type="text" colWidth="50%" titleAlign="center" align="left">
   <en>Distinguished Name</en>
 </DistinguishedName>
 
-</dynaForm>  
+</dynaForm>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<dynaForm name="authSources/authSources_SearchUsers" type="xmlform" enableTemplate="1" width="800" labelWidth="250">
+<dynaForm name="authSources/authSources_SearchUsers" type="xmlform" enableTemplate="1" width="95%">
 
 <TITLE type="title">
   <en>Search for user</en>
@@ -23,7 +23,12 @@
   <en>Cancel</en>
 </BTN_CANCEL>
 
+<CheckboxSelectAll type="Checkbox">
+  <en></en>
+</CheckboxSelectAll>
+
 <JS type="javascript"><![CDATA[
+getField('CheckboxSelectAll').style.visibility = 'hidden';
 
 function disableEnterKey(e)
 {
@@ -50,21 +55,25 @@ function disableEnterKey(e)
 getField('btnImport').style.visibility = 'hidden';
 var searchUsers = function() {
   var oRPC = new leimnud.module.rpc.xmlhttp({
-  	url : 'authSources_Ajax',
-  	args: 'action=searchUsers&sUID=' + getField('AUTH_SOURCE_UID').value + '&sKeyword=' + getField('KEYWORD').value
+    url : 'authSources_Ajax',
+    args: 'action=searchUsers&sUID=' + getField('AUTH_SOURCE_UID').value + '&sKeyword=' + getField('KEYWORD').value
   });
   oRPC.callback = function(rpc){
     document.getElementById('spanUsers').innerHTML = rpc.xmlhttp.responseText;
     if (document.getElementById('aUsers[0]')) {
       getField('btnImport').style.visibility = 'visible';
+      getField('CheckboxSelectAll').style.visibility = 'visible';
+      document.getElementById("AgeLabel").innerHTML = '[SELECT-ALL]';
     }
     else {
       getField('btnImport').style.visibility = 'hidden';
     }
-  	var scs = rpc.xmlhttp.responseText.extractScript();
-  	scs.evalScript();
+    var scs = rpc.xmlhttp.responseText.extractScript();
+    scs.evalScript();
+
   }.extend(this);
   oRPC.make();
+
 };
 
 var importUsers = function(oForm) {
@@ -100,6 +109,26 @@ function cancel(){
 
 leimnud.event.add(getField('KEYWORD'), 'keypress', function(event) {
   return disableEnterKey(event);
+});
+leimnud.event.add(getField('CheckboxSelectAll'), 'click', function() {
+  var oAux;
+  var i = 0;
+  if (document.getElementById('form[CheckboxSelectAll]').checked)
+  {
+    document.getElementById("AgeLabel").innerHTML = '[DESELECT-ALL]';
+    while (oAux = document.getElementById('aUsers[' + i + ']')) {
+      oAux.checked = true;
+      i++;
+    }
+  }
+  else
+  {
+    document.getElementById("AgeLabel").innerHTML = '[SELECT-ALL]';
+    while (oAux = document.getElementById('aUsers[' + i + ']')) {
+      oAux.checked = false;
+      i++;
+    }
+  }
 });
 
 ]]></JS>

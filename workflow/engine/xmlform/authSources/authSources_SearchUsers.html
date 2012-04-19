@@ -1,10 +1,10 @@
-<form id="{$form_id}" name="{$form_name}" action="{$form_action}" class="{$form_className}" method="post" encType="multipart/form-data" style="margin:0px;" onsubmit='return validateForm("{$form_objectRequiredFields}".parseJSON());'>  <div class="borderForm" style="width:{$form_width}; padding-left:0; padding-right:0; border-width:{$form_border};">
+<form id="{$form_id}" name="{$form_name}" action="{$form_action}" class="{$form_className}" method="post" encType="multipart/form-data" style="margin:0px;" onsubmit='return validateForm("{$form_objectRequiredFields}".parseJSON());'><div class="borderForm" style="width:auto; padding-left:0; padding-right:50px;border-width:{$form_border};">
 <div class="boxTop"><div class="a"></div><div class="b"></div><div class="c"></div></div>
-<div class="content" style="height:{$form_height};" >
-<table width="99%">
+<div class="content" style="width:auto;" >
+<table width="90%" cellspacing="0" cellpadding="0">
   <tr>
-    <td valign='top'>
-      <table cellspacing="0" cellpadding="0" border="0" width="100%">
+    <td valign='top' align="center">
+      <table cellspacing="0" cellpadding="0" border="0" width="90%">
       <tr>
         <td class='FormTitle' colspan="2" align="">{$form.TITLE}</td>
       </tr>
@@ -22,8 +22,17 @@
     </td>
   </tr>
   <tr>
-    <td align="center">
-      <span id="spanUsers" />
+    <td valign='top'>
+      <table cellspacing="0" cellpadding="0" border="0" width="95%">
+      <tr>
+        <td align="left" valign="baseline">&nbsp; &nbsp; {$form.CheckboxSelectAll} <span id="AgeLabel"><span> </td>
+      </tr>
+      <tr>
+        <td align="center">
+          <span id="spanUsers" />
+        </td>
+      </tr>
+      </table>
     </td>
   </tr>
   <tr>
@@ -36,4 +45,4 @@
 <script type="text/javascript">
 {$form.JS}
 </script>
-</form>  
+</form>
