@@ -1429,6 +1429,7 @@ function PMFSendVariables($caseId, $variables) {
  * @param string(32) | $caseId | Case ID | The unique ID for the case to be derivated (routed)
  * @param int | $delIndex | delegation index for the case  | The delegation index for the case to derivated (routed).
  * @param boolean | $bExecuteTriggersBeforeAssignment = false | Trigger | Optional parameter. If set to true, any triggers which are assigned to pending steps in the current task will be executed before the case is assigned to the next user.
+ * @param boolean | $sUserLogged = null | User ID | Optional parameter. The unique ID of the user who will route the case. This should be set to the user who is currently designated to work on the case. If omitted or set to NULL, then the currently logged-in user will route the case.
  * @return int | $result | Result of Derivate case | Returns 1 if new case was derivated (routed) successfully; otherwise, returns 0 if an error occurred.
  *
  */
