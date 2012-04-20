@@ -323,6 +323,21 @@ Ext.onReady ( function() {
   catch (e) {
     // Nothing to do
   }
+  var columnRenderer = function(data, metadata, record, rowIndex,columnIndex, store) {
+    var new_text = metadata.style.split(';');
+    var style = '';
+    if ( !record.data['DEL_INIT_DATE'] ){
+      style = style + "font-weight: bold; ";
+    }
+    for (var i = 0; i < new_text.length -1 ; i++) {
+      var chain = new_text[i] +";";
+      if (chain.indexOf('width') == -1) {
+        style = style + chain;
+      }
+    }
+    metadata.attr = 'ext:qtip="' + data + '" style="'+ style +' white-space: normal; "';
+    return data;
+  };
 
   function openLink(value, p, r){
     return String.format("<a class='button_pm' href='../cases/cases_Open?APP_UID={0}&DEL_INDEX={1}&content=inner'>" + TRANSLATIONS.ID_VIEW + "</a>", r.data['APP_UID'], r.data['DEL_INDEX'], r.data['APP_TITLE']);
@@ -380,16 +395,9 @@ Ext.onReady ( function() {
     return '<img src="/images/ext/default/s.gif" class="x-tree-node-icon ICON_CASES_NOTES" unselectable="off" id="extdd-17" onClick="openCaseNotesWindow(\''+appUid+'\', true, \''+title+'\')">';
   }
 
-  function showField (value,p,r) {
-    if ( r.data['DEL_INIT_DATE'] )
-      return String.format("{0}", value );
-    else
-      return String.format("<span class='row_updated'>{0}</span>", value );
-  }
-
   for(var i = 0, len = columns.length; i < len; i++){
     var c = columns[i];
-    c.renderer = showField;
+    c.renderer = columnRenderer;
     if( c.dataIndex == 'DEL_TASK_DUE_DATE') c.renderer = dueDate;
     if( c.dataIndex == 'APP_UPDATE_DATE')   c.renderer = showDate;
     if( c.id == 'deleteLink')               c.renderer = deleteLink;
