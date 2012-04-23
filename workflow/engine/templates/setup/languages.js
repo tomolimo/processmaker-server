@@ -31,7 +31,7 @@ Ext.onReady(function(){
   Ext.QuickTips.init();
 
   installOption = new Ext.Action({
-    text: TRANSLATIONS.ID_LANG_INSTALL_UPDATE,
+    text: _('ID_LANG_INSTALL_UPDATE'),
     iconCls: 'silk-add',
     icon: '/images/import.gif',
     handler: function(){
@@ -50,7 +50,7 @@ Ext.onReady(function(){
             fileUpload: true,
             width: 400,
             frame: true,
-            title: TRANSLATIONS.ID_LAN_UPLOAD_TITLE,
+            title: _('ID_LAN_UPLOAD_TITLE'),
             autoHeight: false,
             bodyStyle: 'padding: 10px 10px 0 10px;',
             labelWidth: 50,
@@ -62,8 +62,8 @@ Ext.onReady(function(){
             items: [{
                 xtype: 'fileuploadfield',
                 id: 'form-file',
-                emptyText: TRANSLATIONS.ID_LAN_FILE_WATER_LABEL,
-                fieldLabel: TRANSLATIONS.ID_LAN_FILE,
+                emptyText: _('ID_LAN_FILE_WATER_LABEL'),
+                fieldLabel: _('ID_LAN_FILE'),
                 name: 'form[LANGUAGE_FILENAME]',
                 buttonText: '',
                 buttonCfg: {
@@ -71,7 +71,7 @@ Ext.onReady(function(){
                 }
             }],
             buttons: [{
-                text: TRANSLATIONS.ID_UPLOAD,
+                text: _('ID_UPLOAD'),
                 handler: function(){
                   var uploader = Ext.getCmp('uploader');
 
@@ -112,7 +112,7 @@ Ext.onReady(function(){
                   uploader.getForm().reset();
                 }
             }*/,{
-                text: TRANSLATIONS.ID_CANCEL,
+                text: _('ID_CANCEL'),
                 handler: function(){
                   w.close();
                 }
@@ -132,7 +132,7 @@ Ext.onReady(function(){
   });
 
   exportOption = new Ext.Action({
-  text: TRANSLATIONS.ID_EXPORT,
+  text: _('ID_EXPORT'),
   iconCls: 'silk-add',
   icon: '/images/export.png',
   handler: function(){
@@ -143,7 +143,7 @@ Ext.onReady(function(){
     } else {
        Ext.Msg.show({
         title:'',
-        msg: 'first select a language from the list please.',
+        msg: _('ID_SELECT_LANGUAGE_FROM_LIST'),
         buttons: Ext.Msg.INFO,
         fn: function(){},
         animEl: 'elId',
@@ -156,7 +156,7 @@ Ext.onReady(function(){
 
 
   removeOption = new Ext.Action({
-    text: TRANSLATIONS.ID_DELETE_LANGUAGE,
+    text: _('ID_DELETE_LANGUAGE'),
     iconCls: 'silk-add',
     icon: '/images/delete-16x16.gif',
     handler: function(){
@@ -168,7 +168,7 @@ Ext.onReady(function(){
         countryName = rowSelected.data.COUNTRY_NAME;
         locale      = rowSelected.data.LOCALE;
 
-        confirmMsg = TRANSLATIONS.ID_DELETE_LANGUAGE_CONFIRM;
+        confirmMsg = _('ID_DELETE_LANGUAGE_CONFIRM');
         confirmMsg = confirmMsg.replace('{0}', locale);
         Ext.Msg.show({
           title:'',
@@ -206,7 +206,7 @@ Ext.onReady(function(){
       } else {
         Ext.Msg.show({
           title:'',
-          msg: TRANSLATIONS.ID_DELETE_LANGUAGE_WARNING,
+          msg: _('ID_DELETE_LANGUAGE_WARNING'),
           buttons: Ext.Msg.INFO,
           fn: function(){},
           animEl: 'elId',
@@ -264,12 +264,12 @@ Ext.onReady(function(){
       }, {
         dataIndex : 'LOCALE',
         id : 'LOCALE',
-        header : TRANSLATIONS.ID_LAN_LOCALE,
+        header : _('ID_LAN_LOCALE'),
         width : 60,
         sortable : false
       }, {
         dataIndex : 'LAN_NAME',
-        header : TRANSLATIONS.ID_LAN_LANGUAGE,
+        header : _('ID_LAN_LANGUAGE'),
         width : 120,
         sortable : false,
         hidden: true,
@@ -278,14 +278,14 @@ Ext.onReady(function(){
             return String.format(
               "{0} <font color=green style='font-size:9px'>({1})</font>",
               value,
-              TRANSLATIONS.ID_LANG_PREDETERMINED
+              _('ID_LANG_PREDETERMINED')
             );
           else
             return value;
         }
       }, {
         dataIndex : 'COUNTRY_NAME',
-        header : TRANSLATIONS.ID_LAN_COUNTRY,
+        header : _('ID_LAN_COUNTRY'),
         width : 120,
         sortable : false,
         renderer: function (value, p, r){
@@ -296,28 +296,28 @@ Ext.onReady(function(){
         }
       }, {
         dataIndex : 'DATE',
-        header : TRANSLATIONS.ID_LAN_UPDATE_DATE,
+        header : _('ID_LAN_UPDATE_DATE'),
         width : 120,
         sortable : false
       }, {
         dataIndex : 'REV_DATE',
-        header : TRANSLATIONS.ID_LAN_REV_DATE,
+        header : _('ID_LAN_REV_DATE'),
         width : 110,
         sortable : false
       }, {
         dataIndex : 'VERSION',
-        header : TRANSLATIONS.ID_LAN_VERSION,
+        header : _('ID_LAN_VERSION'),
         width : 40,
         sortable : false
       }, {
         dataIndex : 'TRANSLATOR',
-        header : TRANSLATIONS.ID_LAN_TRANSLATOR,
+        header : _('ID_LAN_TRANSLATOR'),
         width : 150,
         sortable : false,
         hidden: false
       }, {
         dataIndex : 'NUM_RECORDS',
-        header : TRANSLATIONS.ID_LAN_NUM_RECORDS,
+        header : _('ID_LAN_NUM_RECORDS'),
         width : 60,
         sortable : false
       }
@@ -349,7 +349,7 @@ Ext.onReady(function(){
 
     tbar:[{
       xtype: 'tbsplit',
-      text: TRANSLATIONS.ID_ACTIONS,
+      text: _('ID_ACTIONS'),
       menu: [removeOption]
     }, '-', installOption, exportOption]
 

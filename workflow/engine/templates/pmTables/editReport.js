@@ -401,7 +401,7 @@ Ext.onReady(function(){
 
   //table columns grid
   assignedGrid = new Ext.grid.GridPanel({
-    title: 'New Report Table',
+    title          : _('ID_NEW_REPORT_TABLE'),
     region         : 'center',
     id             : 'assignedGrid',
     ddGroup        : 'availableGridDDGroup',
@@ -461,7 +461,7 @@ Ext.onReady(function(){
       }
     },
     _setTitle: function() {
-      this.setTitle('Report Table: ' + Ext.getCmp('REP_TAB_NAME').getValue() + ' ('+store.getCount()+' columns)');
+      this.setTitle(_('ID_REPORT_TABLE') + ': ' + Ext.getCmp('REP_TAB_NAME').getValue() + ' ('+store.getCount()+' ' + _('ID_COLUMNS') + ')');
     }
   });
 
@@ -604,7 +604,7 @@ Ext.onReady(function(){
         } 
         else {
           // DB COnnection deleted
-          Ext.Msg.alert( _('ID_ERROR'), 'DB Connection doesn\'t exist!');
+          Ext.Msg.alert( _('ID_ERROR'), _('ID_DB_CONNECTION_NOT_EXIST') );
         }
       }
     }
@@ -658,7 +658,7 @@ Ext.onReady(function(){
               }
             });
           } else {
-            Ext.Msg.alert( _('ID_ERROR'), 'Grid doesn\'t exist!');
+            Ext.Msg.alert( _('ID_ERROR'), _('ID_GRID_NO_EXIST') );
           }
         }
       }
@@ -719,7 +719,7 @@ Ext.onReady(function(){
             processComboBox.setDisabled(true);
           } else {
             // Process deleted
-            Ext.Msg.alert( _('ID_ERROR'), 'Process doesn\'t exist!');
+            Ext.Msg.alert( _('ID_ERROR'), _('ID_PROCESS_NO_EXIST') );
           }
           // setting table attributes for current editing process
           Ext.getCmp('REP_TAB_NAME').setValue(TABLE.ADD_TAB_NAME);
@@ -902,7 +902,7 @@ function createReportTable()
   //validate table name
   if(Ext.getCmp('REP_TAB_NAME').getValue().trim() == '') {
     Ext.getCmp('REP_TAB_NAME').focus();
-    PMExt.error(_('ID_ERROR'), 'Table Name is required.', function(){
+    PMExt.error(_('ID_ERROR'), _('ID_TABLE_NAME_IS_REQUIRED'), function(){
       Ext.getCmp('REP_TAB_NAME').focus();
     });
     return false;
@@ -1076,7 +1076,7 @@ AssignAllFieldsAction = function(){
 RemoveAllFieldsAction = function(){
   
   if (store.getCount() > 100) {
-    PMExt.info('Notice', 'This action was disabled to prevent low performance on your browser. This is because there is more than 100 records on the columns definition grid. <br/><br/>Please perform this action with manual selection only.');
+    PMExt.info(_('ID_NOTICE'), _('ID_ACTION_DISABLED_TO_LOW_PERFORMANCE_1') + _('ID_ACTION_DISABLED_TO_LOW_PERFORMANCE_2') );
     return ;
   }
   
@@ -1397,7 +1397,7 @@ function verifyTableLimit()
 {
   if( store.getCount() >= 255 ) {
     mainMask.hide();
-    PMExt.info('Notice', 'The maximun limit of columns for a database table is 255, you already have them defined!');
+    PMExt.info(_('ID_NOTICE'), _('ID_MAX_LIMIT_COLUMNS_FOR_DATABASE') );
     assignedGrid._setTitle();
     return false;
   }

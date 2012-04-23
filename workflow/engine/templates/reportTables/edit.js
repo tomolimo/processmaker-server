@@ -451,7 +451,7 @@ Ext.onReady(function(){
             comboDbConnections.setDisabled(true);
           } else {
             // DB COnnection deleted
-            Ext.Msg.alert( _('ID_ERROR'), 'DB Connection doesn\'t exist!');
+            Ext.Msg.alert( _('ID_ERROR'), _('ID_DB_CONNECTION_NO_EXIST'));
           }
         } else {
           comboDbConnections.setValue('rp');
@@ -497,7 +497,7 @@ Ext.onReady(function(){
             comboGridsList.setRawValue(this.getAt(i).data.FIELD_NAME);
             comboGridsList.setDisabled(true);
           } else {
-            Ext.Msg.alert( _('ID_ERROR'), 'Grid doesn\'t exist!');
+            Ext.Msg.alert( _('ID_ERROR'), _('ID_GRID_NO_EXIST'));
           }
         }
       }
@@ -558,7 +558,7 @@ Ext.onReady(function(){
             processComboBox.setDisabled(true);
           } else {
             // Process deleted
-            Ext.Msg.alert( _('ID_ERROR'), 'Process doesn\'t exist!');
+            Ext.Msg.alert( _('ID_ERROR'), _('ID_PROCESS_NO_EXIST'));
           }
           // setting table attributes for current editing process
           Ext.getCmp('REP_TAB_NAME').setValue(TABLE.ADD_TAB_NAME);
@@ -676,7 +676,7 @@ Ext.onReady(function(){
     region: 'north',
     labelWidth: 120,
     labelAlign:'right',
-    title: 'New Report Table',
+    title: _('ID_NEW_REPORT_TABLE'),
     bodyStyle:'padding:10px',
     waitMsgTarget : true,
     frame: true,
@@ -749,7 +749,7 @@ function createReportTable()
   //validate table name
   if(Ext.getCmp('REP_TAB_NAME').getValue().trim() == '') {
     Ext.getCmp('REP_TAB_NAME').focus();
-    PMExt.error(_('ID_ERROR'), 'Table Name is required.', function(){
+    PMExt.error(_('ID_ERROR'), _('ID_TABLE_NAME_IS_REQUIRED'), function(){
       Ext.getCmp('REP_TAB_NAME').focus();
     });
     return false;
@@ -760,7 +760,7 @@ function createReportTable()
 
   //validate columns count
   if(allRows.getCount() == 0) {
-    PMExt.error(_('ID_ERROR'), 'Set columns for this Report Table please.');
+    PMExt.error(_('ID_ERROR'), _('ID_PMTABLES_ALERT7'));
     return false;
   }
 
@@ -1071,7 +1071,7 @@ SaveFieldsReportTable = function(arr_avail, function_success, function_failure){
 //REMOVE GROUPS FROM A USER
 DeleteFieldsReportTable = function(arr_asign, function_success, function_failure){
   var sw_response;
-  Ext.MessageBox.show({ msg: TRANSLATIONS.ID_DELETING_ELEMENTS, wait:true,waitConfig: {interval:200} });
+  Ext.MessageBox.show({ msg: _('ID_DELETING_ELEMENTS'), wait:true,waitConfig: {interval:200} });
 
   Ext.Ajax.request({
     url: 'reportTables_Ajax',

@@ -269,7 +269,7 @@ Ext.onReady(function(){
     });
 //here we are setting the fields
   fieldsAS = new Ext.form.FieldSet({
-    title: 'Authentication Source Information',  
+    title: _('ID_AUTHENTICATION_SOURCE_INF_TITLE'),
     items: [
             txtSourceId,
             txtName,
@@ -311,11 +311,11 @@ Ext.onReady(function(){
     ],
     buttons: [
       {
-        text: 'Save',
+        text: _('ID_SAVE'),
         handler: saveAuthSources       
       },
       {     
-        text: 'Cancel',
+        text: _('ID_CANCEL'),
         handler: goback
       }
     ]

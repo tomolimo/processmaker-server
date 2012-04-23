@@ -112,7 +112,7 @@ Ext.onReady(function(){
         {
             xtype:'htmleditor',
             id:'OUT_DOC_TEMPLATE',
-            fieldLabel:'Output Document Template',
+            fieldLabel: _('ID_OUTPUT_DOCUMENT_TEMPLATE'),
             height:300,
             anchor:'98%',
             listeners: {
@@ -157,7 +157,7 @@ Ext.onReady(function(){
               success: function(response){
                 Ext.Msg.show({
                   title: '',
-                  msg: 'Saved Successfully',
+                  msg: _('ID_SAVED_SUCCESSFULLY'),
                   fn: function(){},
                   animEl: 'elId',
                   icon: Ext.MessageBox.INFO,
@@ -172,7 +172,7 @@ Ext.onReady(function(){
             });
           }  
         },{
-          text: 'Cancel',
+          text: _('ID_CANCEL'),
           handler: function(){
             var sInfo = navigator.userAgent.toLowerCase();
             if ( sInfo.indexOf('msie') != -1 )
@@ -196,6 +196,6 @@ Ext.onReady(function(){
 
 });
 
-function _(ID){
-  return TRANSLATIONS[ID];
-}
+//function _(ID){
+//  return TRANSLATIONS[ID];
+//}

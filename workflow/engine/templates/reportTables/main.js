@@ -361,7 +361,7 @@ Ext.onReady(function(){
 
             var rowsSelected = Ext.getCmp('infoGrid').getSelectionModel().getSelections();
             tag = rowsSelected[0].get('ADD_TAB_TAG');
-            text = tag? 'Convert to native Report Table': 'Convert to Simple Report';
+            text = tag? _('ID_CONVERT_NATIVE_REP_TABLE'): _('ID_CONVERT_SIMPLE_REPORT');
             if (externalOption) {
               externalOption.setText(text);
             }

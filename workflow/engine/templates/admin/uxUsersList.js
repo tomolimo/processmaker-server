@@ -263,7 +263,7 @@ Ext.onReady(function(){
   cmodelGroups = new Ext.grid.ColumnModel({
     viewConfig: {
       cls:"x-grid-empty",
-      emptyText: (TRANSLATIONS.ID_NO_RECORDS_FOUND)
+      emptyText: _('ID_NO_RECORDS_FOUND')
     }
     ,
     columns: [
@@ -435,8 +435,8 @@ full_name = function(v,x,s){
 render_status = function(v){
   switch(v){
   case 'ACTIVE': return '<font color="green">' + _('ID_ACTIVE') + '</font>'; break;
-  case 'INACTIVE': return '<font color="red">' + _('ID_INACTIVE') + '</font>';; break;
-  case 'VACATION': return '<font color="blue">' + _('ID_VACATION') + '</font>';; break;
+  case 'INACTIVE': return '<font color="red">' + _('ID_INACTIVE') + '</font>'; break;
+  case 'VACATION': return '<font color="blue">' + _('ID_VACATION') + '</font>'; break;
   }
 };
 

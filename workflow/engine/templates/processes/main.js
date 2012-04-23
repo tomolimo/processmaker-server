@@ -58,7 +58,7 @@ Ext.onReady(function(){
   
   var expander = new Ext.ux.grid.RowExpander({
     tpl : new Ext.Template(
-        '<p><b>'+TRANSLATIONS.ID_PRO_DESCRIPTION+':</b> {PRO_DESCRIPTION}</p><br>'
+        '<p><b>' + _('ID_PRO_DESCRIPTION') + ':</b> {PRO_DESCRIPTION}</p><br>'
     )
   });
 
@@ -81,14 +81,14 @@ Ext.onReady(function(){
       valueField : 'CATEGORY_UID',
       displayField : 'CATEGORY_NAME',
       triggerAction : 'all',
-      emptyText : TRANSLATIONS.ID_SELECT,
+      emptyText : _('ID_SELECT'),
       selectOnFocus : true,
       editable : true,
       width: 180,
       allowBlank : true,
       autocomplete: true,
       typeAhead: true,
-      allowBlankText : 'You should to select a language from the list.',
+      allowBlankText : _('ID_SHOULD_SELECT_LANGUAGE_FROM_LIST'),
       listeners:{
       scope: this,
       'select': function() {
@@ -166,7 +166,7 @@ Ext.onReady(function(){
     viewConfig: {
       forceFit:true,
       cls:"x-grid-empty",
-      emptyText: (TRANSLATIONS.ID_NO_RECORDS_FOUND)
+      emptyText: _('ID_NO_RECORDS_FOUND')
     },
     cm: new Ext.grid.ColumnModel({
       defaults: {
@@ -177,34 +177,34 @@ Ext.onReady(function(){
         expander,
         {id:'PRO_UID', dataIndex: 'PRO_UID', hidden:true, hideable:false},
         {header: "", dataIndex: 'PRO_STATUS', width: 50, hidden:true, hideable:false},
-        {header: TRANSLATIONS.ID_PRO_DESCRIPTION, dataIndex: 'PRO_DESCRIPTION',hidden:true, hideable:false},
-        {header: TRANSLATIONS.ID_PRO_TITLE, dataIndex: 'PRO_TITLE', width: 300},
-        {header: TRANSLATIONS.ID_CATEGORY, dataIndex: 'PRO_CATEGORY_LABEL', width: 100, hidden:false},
-        {header: TRANSLATIONS.ID_STATUS, dataIndex: 'PRO_STATUS_LABEL', width: 50, renderer:function(v,p,r){
+        {header: _('ID_PRO_DESCRIPTION'), dataIndex: 'PRO_DESCRIPTION',hidden:true, hideable:false},
+        {header: _('ID_PRO_TITLE'), dataIndex: 'PRO_TITLE', width: 300},
+        {header: _('ID_CATEGORY'), dataIndex: 'PRO_CATEGORY_LABEL', width: 100, hidden:false},
+        {header: _('ID_STATUS'), dataIndex: 'PRO_STATUS_LABEL', width: 50, renderer:function(v,p,r){
           color = r.get('PRO_STATUS') == 'ACTIVE'? 'green': 'red';
           return String.format("<font color='{0}'>{1}</font>", color, v);
         }},
-        {header: TRANSLATIONS.ID_PRO_USER, dataIndex: 'PRO_CREATE_USER_LABEL', width: 150},
-        {header: TRANSLATIONS.ID_PRO_CREATE_DATE, dataIndex: 'PRO_CREATE_DATE', width: 90}, 
-        {header: TRANSLATIONS.ID_INBOX, dataIndex: 'CASES_COUNT_TO_DO', width: 50, align:'right'},
-        {header: TRANSLATIONS.ID_DRAFT, dataIndex: 'CASES_COUNT_DRAFT', width: 50, align:'right'},
-        {header: TRANSLATIONS.ID_COMPLETED, dataIndex: 'CASES_COUNT_COMPLETED', width: 70, align:'right'},
-        {header: TRANSLATIONS.ID_CANCELLED, dataIndex: 'CASES_COUNT_CANCELLED', width: 70, align:'right'},
-        {header: TRANSLATIONS.ID_TOTAL_CASES, dataIndex: 'CASES_COUNT', width: 80,renderer:function(v){return "<b>"+v+"</b>";}, align:'right'},
-        {header: TRANSLATIONS.ID_PRO_DEBUG, dataIndex: 'PRO_DEBUG_LABEL', width: 50, align:'center'}
+        {header: _('ID_PRO_USER'), dataIndex: 'PRO_CREATE_USER_LABEL', width: 150},
+        {header: _('ID_PRO_CREATE_DATE'), dataIndex: 'PRO_CREATE_DATE', width: 90}, 
+        {header: _('ID_INBOX'), dataIndex: 'CASES_COUNT_TO_DO', width: 50, align:'right'},
+        {header: _('ID_DRAFT'), dataIndex: 'CASES_COUNT_DRAFT', width: 50, align:'right'},
+        {header: _('ID_COMPLETED'), dataIndex: 'CASES_COUNT_COMPLETED', width: 70, align:'right'},
+        {header: _('ID_CANCELLED'), dataIndex: 'CASES_COUNT_CANCELLED', width: 70, align:'right'},
+        {header: _('ID_TOTAL_CASES'), dataIndex: 'CASES_COUNT', width: 80,renderer:function(v){return "<b>"+v+"</b>";}, align:'right'},
+        {header: _('ID_PRO_DEBUG'), dataIndex: 'PRO_DEBUG_LABEL', width: 50, align:'center'}
       ]
     }),                  
     store: store,
     tbar:[
       {
-        text:TRANSLATIONS.ID_NEW,
+        text: _('ID_NEW'),
         iconCls: 'button_menu_ext ss_sprite ss_add',
         //icon: '/images/addc.png',
         handler: newProcess
       },
     	'-'  
       ,{
-        text:TRANSLATIONS.ID_EDIT,
+        text: _('ID_EDIT'),
         iconCls: 'button_menu_ext ss_sprite  ss_pencil',
         //icon: '/images/edit.gif',
         handler: editProcess
@@ -214,26 +214,26 @@ Ext.onReady(function(){
         icon: '/images/pencil_beta.png',
         handler: editNewProcess
       },*/{
-        text:TRANSLATIONS.ID_STATUS,
+        text: _('ID_STATUS'),
         id:'activator',
         icon: '',
         iconCls: 'silk-add',
         handler: activeDeactive,
         disabled:true
       },{
-        text:TRANSLATIONS.ID_DELETE,
+        text: _('ID_DELETE'),
         iconCls: 'button_menu_ext ss_sprite  ss_delete',
         //icon: '/images/delete-16x16.gif',
         handler:deleteProcess
       },{
         xtype: 'tbseparator'
       },{
-        text:TRANSLATIONS.ID_IMPORT,
+        text: _('ID_IMPORT'),
         iconCls: 'silk-add',
         icon: '/images/import.gif',
         handler:importProcess
       },{
-        text:TRANSLATIONS.ID_XPDL_IMPORT,
+        text: _('ID_XPDL_IMPORT'),
         iconCls: 'silk-add',
         icon: '/images/import.gif',
         handler:importXPDLProcess
@@ -242,7 +242,7 @@ Ext.onReady(function(){
         iconCls: 'silk-add',
         icon: '/images/export.png',
       },*/{
-        text:TRANSLATIONS.ID_BROWSE_LIBRARY,
+        text: _('ID_BROWSE_LIBRARY'),
         iconCls: 'button_menu_ext ss_sprite  ss_world',
         //icon: '/images/icon-pmwebservices.png',
         handler: browseLibrary
@@ -252,7 +252,7 @@ Ext.onReady(function(){
       },{
         xtype: 'tbseparator'
       },
-      TRANSLATIONS.ID_CATEGORY,
+      _('ID_CATEGORY'),
       comboCategory,{
         xtype: 'tbseparator'
       },new Ext.form.TextField ({
@@ -260,7 +260,7 @@ Ext.onReady(function(){
         ctCls:'pm_search_text_field',
         allowBlank: true,
         width: 150,
-        emptyText: TRANSLATIONS.ID_ENTER_SEARCH_TERM,//'enter search term',
+        emptyText: _('ID_ENTER_SEARCH_TERM'),//'enter search term',
         listeners: {
           specialkey: function(f,e){
             if (e.getKey() == e.ENTER) {
@@ -280,7 +280,7 @@ Ext.onReady(function(){
           //store.reload();
         }
       },{
-        text:TRANSLATIONS.ID_SEARCH,
+        text: _('ID_SEARCH'),
         handler: doSearch
       }
     ],
@@ -303,10 +303,10 @@ Ext.onReady(function(){
           activator.setDisabled(false);
           if( rowSelected.data.PRO_STATUS == 'ACTIVE' ){
             activator.setIcon('/images/deactivate.png');
-            activator.setText(TRANSLATIONS.ID_DEACTIVATE);
+            activator.setText( _('ID_DEACTIVATE') );
           } else {
             activator.setIcon('/images/activate.png');
-            activator.setText(TRANSLATIONS.ID_ACTIVATE);
+            activator.setText( _('ID_ACTIVATE') );
           }
         });
       }
@@ -325,10 +325,10 @@ Ext.onReady(function(){
     
     if( rowSelected.data.PRO_STATUS == 'ACTIVE' ){
       activator.setIconClass('icon-deactivate');
-      activator.setText(TRANSLATIONS.ID_DEACTIVATE);
+      activator.setText( _('ID_DEACTIVATE') );
     } else {
       activator.setIconClass('icon-activate');
-      activator.setText(TRANSLATIONS.ID_ACTIVATE);
+      activator.setText( _('ID_ACTIVATE') );
     }
 
     if( rowSelected.data.PRO_DEBUG == 1){
@@ -504,7 +504,7 @@ editProcess = function(){
   } else {
      Ext.Msg.show({
       title:'',
-      msg: TRANSLATIONS.ID_NO_SELECTION_WARNING,
+      msg: _('ID_NO_SELECTION_WARNING'),
       buttons: Ext.Msg.INFO,
       fn: function(){},
       animEl: 'elId',
@@ -521,7 +521,7 @@ editNewProcess = function(){
   } else {
      Ext.Msg.show({
       title:'',
-      msg: TRANSLATIONS.ID_NO_SELECTION_WARNING,
+      msg: _('ID_NO_SELECTION_WARNING'),
       buttons: Ext.Msg.INFO,
       fn: function(){},
       animEl: 'elId',
@@ -553,11 +553,11 @@ deleteProcess = function(){
       PRO_UIDS = ids.join(',');
 
       Ext.Msg.confirm(
-        TRANSLATIONS.ID_CONFIRM,
-        rows.length == 1? TRANSLATIONS.ID_PROCESS_DELETE_LABEL: TRANSLATIONS.ID_PROCESS_DELETE_ALL_LABEL,
+        _('ID_CONFIRM'),
+        (rows.length == 1) ? _('ID_PROCESS_DELETE_LABEL') : _('ID_PROCESS_DELETE_ALL_LABEL'),
         function(btn, text){
           if ( btn == 'yes' ){
-            Ext.MessageBox.show({ msg: TRANSLATIONS.ID_DELETING_ELEMENTS, wait:true,waitConfig: {interval:200} });
+            Ext.MessageBox.show({ msg: _('ID_DELETING_ELEMENTS'), wait:true,waitConfig: {interval:200} });
             Ext.Ajax.request({
               url: 'processes_Delete',
               success: function(response) {
@@ -568,7 +568,7 @@ deleteProcess = function(){
                 if(result){
                   if(result.status != 0){
                     Ext.MessageBox.show({
-                      title: 'Error',
+                      title: _('ID_ERROR'),
                       msg: result.msg,
                       buttons: Ext.MessageBox.OK,
                       icon: Ext.MessageBox.ERROR
@@ -576,7 +576,7 @@ deleteProcess = function(){
                   }
                 } else
                   Ext.MessageBox.show({
-                    title: 'Error',
+                    title: _('ID_ERROR'),
                     msg: response.responseText,
                     buttons: Ext.MessageBox.OK,
                     icon: Ext.MessageBox.ERROR
@@ -590,7 +590,7 @@ deleteProcess = function(){
     } else {
       errMsg = '';
       for(i=0; i<errLog.length; i++){
-        e = TRANSLATIONS.ID_PROCESS_CANT_DELETE;
+        e = _('ID_PROCESS_CANT_DELETE');
         e = e.replace('{0}', rows[errLog[i]].get('PRO_TITLE'));
         e = e.replace('{1}', rows[errLog[i]].get('CASES_COUNT'));
         errMsg += e + '<br/>';
@@ -605,7 +605,7 @@ deleteProcess = function(){
   } else {
     Ext.Msg.show({
       title:'',
-      msg: TRANSLATIONS.ID_NO_SELECTION_WARNING,
+      msg: _('ID_NO_SELECTION_WARNING'),
       buttons: Ext.Msg.INFO,
       fn: function(){},
       animEl: 'elId',
@@ -648,13 +648,13 @@ function activeDeactive(){
         activator.setIcon('');
       },
       failure: function ( result, request) {
-        Ext.MessageBox.alert('Failed', result.responseText);
+        Ext.MessageBox.alert(_('ID_FAILED'), result.responseText);
       }
     });
   } else {
      Ext.Msg.show({
       title:'',
-      msg: TRANSLATIONS.ID_NO_SELECTION_WARNING,
+      msg: _('ID_NO_SELECTION_WARNING'),
       buttons: Ext.Msg.INFO,
       fn: function(){},
       animEl: 'elId',
@@ -684,13 +684,13 @@ function enableDisableDebug()
         activator.setIcon('');
       },
       failure: function ( result, request) {
-        Ext.MessageBox.alert('Failed', result.responseText);
+        Ext.MessageBox.alert(_('ID_FAILED'), result.responseText);
       }
     });
   } else {
     Ext.Msg.show({
       title:'',
-      msg: TRANSLATIONS.ID_NO_SELECTION_WARNING,
+      msg: _('ID_NO_SELECTION_WARNING'),
       buttons: Ext.Msg.INFO,
       fn: function(){},
       animEl: 'elId',

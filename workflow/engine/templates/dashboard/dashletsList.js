@@ -207,10 +207,10 @@ Ext.onReady(function(){
     pageSize: pageSize,
     store: store,
     displayInfo: true,
-    //displayMsg: _('ID_GRID_PAGE_DISPLAYING_DASHLET_MESSAGE') + '&nbsp; &nbsp; ',
-    displayMsg: 'Displaying dashlets instances {0} - {1} of {2}' + '&nbsp; &nbsp; ',
-    //emptyMsg: _('ID_GRID_PAGE_NO_DASHLET_MESSAGE'),
-    emptyMsg: 'No dashlets instances to display',
+    displayMsg: _('ID_GRID_PAGE_DISPLAYING_DASHLET_MESSAGE') + '&nbsp; &nbsp; ',
+    //displayMsg: 'Displaying dashlets instances {0} - {1} of {2}' + '&nbsp; &nbsp; ',
+    emptyMsg: _('ID_GRID_PAGE_NO_DASHLET_MESSAGE'),
+    //emptyMsg: 'No dashlets instances to display',
     items: ['-',_('ID_PAGE_SIZE')+':',comboPageSize]
   });
 
@@ -326,8 +326,8 @@ editDashletInstance = function(){
 deleteDashletInstance = function(){
   var rowSelected = infoGrid.getSelectionModel().getSelected();
   if (rowSelected){
-    //Ext.Msg.confirm(_('ID_CONFIRM'), _('ID_CONFIRM_DELETE_DASHLET_INSTANCE'),function(btn, text)
-    Ext.Msg.confirm(_('ID_CONFIRM'), 'Do you want to delete this Dashlet Instance?', function(btn, text)
+    Ext.Msg.confirm(_('ID_CONFIRM'), _('ID_CONFIRM_DELETE_DASHLET_INSTANCE'),function(btn, text)
+    //Ext.Msg.confirm(_('ID_CONFIRM'), 'Do you want to delete this Dashlet Instance?', function(btn, text)
     {
       if (btn == 'yes') {
         viewport.getEl().mask(_('ID_PROCESSING'));
@@ -338,12 +338,12 @@ deleteDashletInstance = function(){
             viewport.getEl().unmask();
             response = Ext.util.JSON.decode(r.responseText);
             if (response.status == 'OK') {
-              //PMExt.notify(_('ID_DASHLET_INSTANCE'),_('ID_DASHLET_SUCCESS_DELETE'));
-              PMExt.notify('Dashlet Instance', 'Dashlet instance deleted sucessfully.');
+              PMExt.notify(_('ID_DASHLET_INSTANCE'),_('ID_DASHLET_SUCCESS_DELETE'));
+              //PMExt.notify('Dashlet Instance', 'Dashlet instance deleted sucessfully.');
             }
             else {
-              //PMExt.error(_('ID_DASHLET_INSTANCE'), response.message);
-              PMExt.error('Dashlet Instance', response.message);
+              PMExt.error(_('ID_DASHLET_INSTANCE'), response.message);
+              //PMExt.error('Dashlet Instance', response.message);
             }
             //doSearch();
             editButton.disable();

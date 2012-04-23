@@ -29,7 +29,7 @@
   'ID_CACHE_TITLE_INFO', 'ID_CACHE_SUBTITLE_REBUILD', 'ID_CACHE_BTN_BUILD',
   'ID_CACHE_BUILDING', 'ID_CACHE_SUBTITLE_SETUP_DB', 'ID_CACHE_BTN_SETUP_PASSWRD', 'ID_CACHE_SUBTITLE_SETUP_SESSION', 'ID_CACHE_BTN_SETUP_SESSION'
   ));
-  $oHeadPublisher->assign('TRANSLATIONS', $labels);
+  // $oHeadPublisher->assign('TRANSLATIONS', $labels);
   // $TRANSLATIONS->ID_PROCESSING               = G::LoadTranslation('ID_PROCESSING');
   // $oHeadPublisher->assign( 'TRANSLATIONS',   $TRANSLATIONS); //translations
   $oHeadPublisher->assign( 'currentLang',    $lang);  //current language  
