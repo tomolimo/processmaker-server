@@ -107,7 +107,7 @@ class adminProxy extends HttpProxyController
   function uxUserUpdate($httpData)
   {
     require_once 'classes/model/Users.php';
-    $data = json_decode($httpData->users);
+    $data = G::json_decode($httpData->users);
     $list = array();
 
     if  (!is_array($data)) {
@@ -145,7 +145,7 @@ class adminProxy extends HttpProxyController
   function uxGroupUpdate($httpData)
   {
     require_once 'classes/model/Groupwf.php';
-    $data = (array) json_decode($httpData->groups);
+    $data = (array) G::json_decode($httpData->groups);
 
     $group = GroupwfPeer::retrieveByPK($data['GRP_UID']);
     $group->setGrpUx($data['GRP_UX']);
@@ -715,7 +715,7 @@ class adminProxy extends HttpProxyController
       }
     }
     $o = array('images' => $images);
-    echo json_encode($o);
+    echo G::json_encode($o);
     exit();
   }
   /**

@@ -27,7 +27,7 @@ try {
                 list($userNum, $user) = userGet($limit, $start);
 
                 //echo "{success: " . true . ", resultTotal: " . count($user) . ", resultRoot: " . G::json_encode($user) . "}";
-                echo json_encode(array("success" => true, "resultTotal" => $userNum, "resultRoot" => $user));
+                echo G::json_encode(array("success" => true, "resultTotal" => $userNum, "resultRoot" => $user));
                 break;
   }
 } catch (Exception $e) {

@@ -83,7 +83,7 @@ function getExtJSParams() {
 
 function sendJsonResultGeneric($response, $callback) {
   header("Content-Type: application/json");
-  $finalResponse = json_encode($response);
+  $finalResponse = G::json_encode($response);
   if ($callback != '') {
     print $callback . "($finalResponse);";
   } else {

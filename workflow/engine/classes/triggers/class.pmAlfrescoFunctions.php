@@ -47,7 +47,7 @@ function cancelCheckout($alfrescoServerUrl, $docUid, $user="", $pwd="") {
 $alfresco_url = "$alfrescoServerUrl/s/cmis/pwc/s/workspace:SpacesStore/i/$docUid";
 $domapi_exec = RestClient::delete($alfresco_url,$user,$pwd,"application/atom+xml;type=entry");
 //$alfrescoMessage = $domapi_exec['header'];
-$domapi_res = json_decode($domapi_exec->getResponse());
+$domapi_res = G::json_decode($domapi_exec->getResponse());
 return $domapi_res;
 }
 
@@ -169,7 +169,7 @@ function deleteObject($alfrescoServerUrl, $objetcId, $user, $pwd) {
     $alfresco_url = "$alfrescoServerUrl/s/cmis/s/workspace:SpacesStore/i/$objetcId";
     $alfresco_exec = RestClient::delete($alfresco_url,$user,$pwd,"application/atom+xml");
 
-    $alfresco_res = json_decode($alfresco_exec->getResponse());
+    $alfresco_res = G::json_decode($alfresco_exec->getResponse());
     echo($alfresco_res);
     return $alfresco_res;
 }
@@ -195,7 +195,7 @@ function deleteObject($alfrescoServerUrl, $objetcId, $user, $pwd) {
 function downloadDoc($alfrescoServerUrl, $parentFolder, $folderName, $user, $pwd) {
     $alfresco_url = "$alfrescoServerUrl/s/cmis/s/workspace:SpacesStore/i/$objetcId";
     $alfresco_exec = RestClient::delete($alfresco,$user,$pwd,"application/atom+xml");
-    $alfresco_res = json_decode($alfresco_exec->getResponse());
+    $alfresco_res = G::json_decode($alfresco_exec->getResponse());
     echo($alfresco_res);
     return $alfresco_res;
 }
@@ -219,10 +219,10 @@ function getCheckedoutFiles($alfrescoServerUrl, $user, $pwd) {
    $getChildrenUrl = "$alfrescoServerUrl/s/cmis/checkedout";
 
    $domapi_exec = RestClient::get($getChildrenUrl,$user,$pwd,'application/atom+xml');
-   $sXmlArray = json_decode($domapi_exec->getResponse());
+   $sXmlArray = G::json_decode($domapi_exec->getResponse());
    $sXmlArray = trim($sXmlArray);
    $xXmlArray = simplexml_load_string($sXmlArray);
-   $aXmlArray = @json_decode(@json_encode($xXmlArray),1);
+   $aXmlArray = @G::json_decode(@G::json_encode($xXmlArray),1);
    var_dump($aXmlArray);
 
    return $alfresco_res;
@@ -250,7 +250,7 @@ function getFolderChildren($alfrescoServerUrl, $folderId,  $user, $pwd) {
     $sXmlArray = $alfresco_exec->getResponse();
     $sXmlArray = trim($sXmlArray);
     $xXmlArray = simplexml_load_string($sXmlArray);
-    $aXmlArray = @json_decode(@json_encode($xXmlArray),1);
+    $aXmlArray = @G::json_decode(@G::json_encode($xXmlArray),1);
     //var_dump($aXmlArray);
     var_dump($aXmlArray);
 
@@ -290,7 +290,7 @@ function uploadDoc($alfrescoServerUrl, $fileSource, $title, $description, $docTy
     $sXmlArray = $alfresco_exec->getResponse();
     $sXmlArray = trim($sXmlArray);
     $xXmlArray = simplexml_load_string($sXmlArray);
-    $aXmlArray = @json_decode(@json_encode($xXmlArray),1);
+    $aXmlArray = @G::json_decode(@G::json_encode($xXmlArray),1);
     var_dump($aXmlArray);
     return $aXmlArray;
 }

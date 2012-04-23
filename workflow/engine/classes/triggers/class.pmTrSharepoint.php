@@ -109,7 +109,7 @@ class pmTrSharepointClass{
     $result = $this->dwsObj->callWsMethod($methodName, $paramArray);
     $xml = $result->CreateDwsResult; // in Result we get string in Xml format
     $xmlNew = simplexml_load_string($xml); // used to parse string to xml
-    $xmlArray = @json_decode(@json_encode($xmlNew), 1); // used to convert Objects to array
+    $xmlArray = @G::json_decode(@G::json_encode($xmlNew), 1); // used to convert Objects to array
     $dwsUrl = $xmlArray['Url'];
     return "Dws with following Url is created:$dwsUrl";
 
@@ -200,7 +200,7 @@ class pmTrSharepointClass{
       var_dump($result);
       $sResult = $result->GetDwsDataResult;
       /*            $xmlNew = simplexml_load_string($sResult);// used to parse string to xml
-        $xmlArray = @json_decode(@json_encode($xmlNew),1);// used to convert Objects to array */
+        $xmlArray = @G::json_decode(@G::json_encode($xmlNew),1);// used to convert Objects to array */
       $serializeResult = serialize($sResult); // serializing the Array for Returning.
       var_dump($serializeResult);
       return $serializeResult;
@@ -301,7 +301,7 @@ class pmTrSharepointClass{
     if ($result) {
       $sResult = $result->DeleteVersionResult->any;
       $xmlNew = simplexml_load_string($sResult); // used to parse string to xml
-      $xmlArray = @json_decode(@json_encode($xmlNew), 1); // used to convert Objects to array
+      $xmlArray = @G::json_decode(@G::json_encode($xmlNew), 1); // used to convert Objects to array
       $versionCount = count($xmlArray['result']);
 
       if($versionCount>1)
@@ -338,7 +338,7 @@ class pmTrSharepointClass{
     if ($result) {
       $xml = $result->DeleteAllVersionsResult->any; // in Result we get string in Xml format
       $xmlNew = simplexml_load_string($xml); // used to parse string to xml
-      $xmlArray = @json_decode(@json_encode($xmlNew), 1); // used to convert Objects to array
+      $xmlArray = @G::json_decode(@G::json_encode($xmlNew), 1); // used to convert Objects to array
       $latestVersion = $xmlArray['result']['@attributes']['version'];
       return "All Versions are Deleted, except the latest i.e $latestVersion";
     } else {

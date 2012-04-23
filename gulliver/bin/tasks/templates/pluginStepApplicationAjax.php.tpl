@@ -19,7 +19,7 @@ try {
   }
   
   //echo "{success: " . true . ", resultTotal: " . count($aResult) . ", resultRoot: " . G::json_encode($aResult) . "}";
-  echo json_encode(array("success" => true, "resultTotal" => count($aResult), "resultRoot" => $aResult));
+  echo G::json_encode(array("success" => true, "resultTotal" => count($aResult), "resultRoot" => $aResult));
 } catch (Exception $e) {
   echo null;
 }

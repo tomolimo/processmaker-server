@@ -311,7 +311,7 @@ function getDWSDocumentVersions($sharepointServer, $auth, $newFileName, $dwsname
                          */
                         $xml = $result->GetVersionsResult->any;// in Result we get string in Xml format
                         $xmlNew = simplexml_load_string($xml);// used to parse string to xml
-                        $xmlArray = @json_decode(@json_encode($xmlNew),1);// used to convert Objects to array
+                        $xmlArray = @G::json_decode(@G::json_encode($xmlNew),1);// used to convert Objects to array
                         $resultCount = count($xmlArray['result']);
                         for($i=0;$i<$resultCount;$i++)
                         {

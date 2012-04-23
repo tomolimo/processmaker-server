@@ -52,7 +52,7 @@ function getZimbraFolder($ServerUrl, $username, $preAuthKey, $folderName) {
 
     $aXmlArray = array();
     $aXmlArray = $zimbra->getFolder($folderName);
-    $sXmlArray = @json_decode(@json_encode($aXmlArray), 1);
+    $sXmlArray = @G::json_decode(@G::json_encode($aXmlArray), 1);
 
     $serializeResult = serialize($sXmlArray); // serializing the Array for Returning.
     return $serializeResult;
@@ -84,7 +84,7 @@ function getZimbraContactList($ServerUrl, $username, $preAuthKey) {
 
     $sXmlArray = array();
     $sXmlArray = $zimbra->getContacts();
-    $aXmlArray = @json_decode(@json_encode($sXmlArray), 1);
+    $aXmlArray = @G::json_decode(@G::json_encode($sXmlArray), 1);
 
     $serializeResult = serialize($aXmlArray); // serializing the Array for Returning.
     return $serializeResult;
@@ -119,7 +119,7 @@ function getZimbraTaskList($ServerUrl, $username, $preAuthKey) {
 
     $sXmlArray = array();
     $sXmlArray = $zimbra->getTasks();
-    $aXmlArray = @json_decode(@json_encode($sXmlArray), 1);
+    $aXmlArray = @G::json_decode(@G::json_encode($sXmlArray), 1);
 
     $serializeResult = serialize($aXmlArray); // serializing the Array for Returning.
     return $serializeResult;
@@ -154,7 +154,7 @@ function getZimbraAppointmentList($ServerUrl, $username, $preAuthKey) {
 
     $sXmlArray = array();
     $sXmlArray = $zimbra->getAppointments();
-    $aXmlArray = @json_decode(@json_encode($sXmlArray), 1);
+    $aXmlArray = @G::json_decode(@G::json_encode($sXmlArray), 1);
 
     $serializeResult = serialize($aXmlArray); // serializing the Array for Returning.
     return $serializeResult;
