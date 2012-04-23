@@ -699,7 +699,7 @@ class Ajax
           showDynaformHistoryGlobal.idHistory = "";
           showDynaformHistoryGlobal.dynDate = "";
           
-          function showDynaformHistory(idDin, idHistory,dynDate) {          
+          function showDynaformHistory(idDin, idHistory, dynDate) {
             //!showDynaformHistoryGlobal
             showDynaformHistoryGlobal.idDin = showDynaformHistoryGlobal.idDin;
             showDynaformHistoryGlobal.idHistory = showDynaformHistoryGlobal.idHistory;
@@ -725,5 +725,82 @@ class Ajax
       $result->success = false;
       $result->msg = $e->getMessage();
     }
+  }
+  
+  function dynaformViewFromHistory()
+  {
+?>
+    
+    <link rel="stylesheet" type="text/css" href="/css/classic.css" />
+    
+    <script type="text/javascript">
+    //!Code that simulated reload library javascript maborak
+    var leimnud = {};
+    leimnud.exec = "";
+    leimnud.fix = {};
+    leimnud.fix.memoryLeak = "";
+    leimnud.browser = {};
+    leimnud.browser.isIphone = "";
+    leimnud.iphone = {};
+    leimnud.iphone.make = function () {};
+    function ajax_function(ajax_server, funcion, parameters, method)
+    {
+    }
+    //!
+    </script>
+    
+<?php
+    global $G_PUBLISH;
+
+    $_POST["HISTORY_ID"] = $_REQUEST["HISTORY_ID"];
+    $_POST["DYN_UID"] = $_REQUEST["DYN_UID"];
+    
+    $G_PUBLISH = new Publisher();
+    $FieldsHistory = unserialize($_SESSION["HISTORY_DATA"]);
+    $Fields["APP_DATA"] = $FieldsHistory[$_POST["HISTORY_ID"]]; //isset($FieldsHistory[$_POST["HISTORY_ID"]])? $FieldsHistory[$_POST["HISTORY_ID"]] : "";
+    $Fields["APP_DATA"]["__DYNAFORM_OPTIONS"]["PREVIOUS_STEP_LABEL"] = "";
+    $Fields["APP_DATA"]["__DYNAFORM_OPTIONS"]["NEXT_STEP_LABEL"] = "";
+    $Fields["APP_DATA"]["__DYNAFORM_OPTIONS"]["NEXT_STEP"] = "#";
+    $Fields["APP_DATA"]["__DYNAFORM_OPTIONS"]["NEXT_ACTION"] = "return false;";
+    $G_PUBLISH->AddContent("dynaform", "xmlform", $_SESSION["PROCESS"] . "/" . $_POST["DYN_UID"], "", $Fields["APP_DATA"], "", "", "view");
+?>
+
+    <script type="text/javascript">
+
+<?php
+    global $G_FORM;
+?>
+
+    function loadForm_<?php echo $G_FORM->id; ?>(parametro1)
+    {
+    }
+    </script>
+
+<?php
+    G::RenderPage("publish", "raw");
+?>
+
+    <style type="text/css">
+    html {
+      color: black !important;
+    }
+    
+    body {
+      color: black !important;
+    }
+    </style>
+    
+    <script type="text/javascript">
+    
+<?php
+    global $G_FORM;
+?>
+
+    function loadForm_<?php echo $G_FORM->id; ?>(parametro1)
+    {
+    }
+    </script>
+
+<?php
   }
 }
