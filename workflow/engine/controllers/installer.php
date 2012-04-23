@@ -749,15 +749,53 @@ class Installer extends Controller
       // Write the paths_installed.php file (contains all the information configured so far)
       if ( !file_exists(FILE_PATHS_INSTALLED) ) {
         $sh = md5( filemtime( PATH_GULLIVER . '/class.g.php' ) );
-        $h  = G::encrypt($db_hostname.$sh.$db_username.$sh.$db_password.'1' , $sh);
+        $h  = G::encrypt($db_hostname.$sh.$db_username.$sh.$db_password, $sh);
         $dbText = "<?php\n";
-        $dbText .= sprintf ( "  define ('PATH_DATA',        '%s' );\n", $pathShared );
-        $dbText .= sprintf ( "  define ('PATH_C',           '%s' );\n", $pathShared.'compiled/');
-        $dbText .= sprintf ( "  define ('HASH_INSTALLATION', '%s' );\n", $h );
-        $dbText .= sprintf ( "  define ('SYSTEM_HASH',       '%s' );\n", $sh );
+        $dbText .= sprintf ( "  define('PATH_DATA',         '%s');\n", $pathShared );
+        $dbText .= sprintf ( "  define('PATH_C',            '%s');\n", $pathShared.'compiled/');
+        $dbText .= sprintf ( "  define('HASH_INSTALLATION', '%s');\n", $h );
+        $dbText .= sprintf ( "  define('SYSTEM_HASH',       '%s');\n", $sh );
         $this->installLog("Creating: " . FILE_PATHS_INSTALLED );
         file_put_contents ( FILE_PATHS_INSTALLED, $dbText);
       }
+
+      /**
+       * AppCacheView Build
+       */
+      define('HASH_INSTALLATION', $h );
+      define('SYSTEM_HASH',       $sh );
+      define('PATH_DB', $pathShared . 'sites' . PATH_SEP );
+      define('SYS_SYS', 'workflow');
+
+      require_once("propel/Propel.php");
+ 
+      Propel::init( PATH_CORE . "config/databases.php" );
+      $con = Propel::getConnection('workflow');
+
+      require_once('classes/model/AppCacheView.php');
+      $lang='en';
+
+      //setup the appcacheview object, and the path for the sql files
+      $appCache = new AppCacheView();
+ 
+      $appCache->setPathToAppCacheFiles ( PATH_METHODS . 'setup' . PATH_SEP .'setupSchemas'. PATH_SEP );
+
+      //APP_DELEGATION INSERT 
+      $res = $appCache->triggerAppDelegationInsert($lang, true);
+      
+      //APP_DELEGATION Update 
+      $res = $appCache->triggerAppDelegationUpdate($lang, true);
+      
+      //APPLICATION UPDATE 
+      $res = $appCache->triggerApplicationUpdate($lang, true);
+      
+      //APPLICATION DELETE
+      $res = $appCache->triggerApplicationDelete($lang, true);
+      
+      //build using the method in AppCacheView Class
+      $res = $appCache->fillAppCacheView($lang);
+      
+      //end AppCacheView Build
 
       //erik: for new env conf handling
       G::loadClass('system');
@@ -800,7 +838,7 @@ class Installer extends Controller
       $this->installLog("Install completed Succesfully" );
 
       $info->result  = true;
-      $info->message = 'Succesfully OK---';
+      $info->message = 'Succesfully OK';
     }
     catch (Exception $e) {
       $info->canRedirect = false;
