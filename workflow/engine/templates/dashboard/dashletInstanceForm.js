@@ -64,7 +64,7 @@ Ext.onReady(function() {
   txtDasInsTitle = new Ext.form.TextField({
     id:         'txtDasInsTitle',
     name:       'DAS_INS_TITLE',
-    fieldLabel: 'Title',
+    fieldLabel: _('ID_TITLE'),
     allowBlank: false,
     width:      320,
     listeners:  {
@@ -77,7 +77,7 @@ Ext.onReady(function() {
   cboDasUID = new Ext.form.ComboBox({
     id:             'cboDasUID',
     name:           'DAS_UID',
-    fieldLabel:     'Dashlet',
+    fieldLabel:     _('ID_DASHLET'),
     editable:       false,
     width:          320,
     store:          storeDasUID,
@@ -105,7 +105,7 @@ Ext.onReady(function() {
                            }
                            dashletInstanceFrm.add(new Ext.form.FieldSet({
                              id:    'additional',
-                             title: 'Other',
+                             title: _('ID_OTHER'),
                              items: additionalFields
                            }));
                          }
@@ -133,7 +133,7 @@ Ext.onReady(function() {
   cboDasInsOwnerType = new Ext.form.ComboBox({
     id:            'cboDasInsOwnerType',
     name:          'DAS_INS_OWNER_TYPE',
-    fieldLabel:    'Assign To',
+    fieldLabel:    _('ID_ASSIGN_TO'),
     editable:      false,
     width:         320,
     store:         storeDasInsOwnerType,
@@ -156,7 +156,7 @@ Ext.onReady(function() {
   cboDasInsOwnerUID = new Ext.form.ComboBox({
     id:            'cboDasInsOwnerUID',
     name:          'DAS_INS_OWNER_UID',
-    fieldLabel:    'Name',
+    fieldLabel:    _('ID_NAME'),
     editable:      false,
     width:         320,
     store:         storeDasInsOwnerUID,
@@ -170,7 +170,7 @@ Ext.onReady(function() {
   formFields = [
     new Ext.form.FieldSet({
       id:    'general',
-      title: 'General',
+      title: _('ID_GENERAL'),
       items: [hiddenDasInsUID, txtDasInsTitle, cboDasUID, cboDasInsOwnerType, cboDasInsOwnerUID]
     })
   ];
@@ -187,7 +187,7 @@ Ext.onReady(function() {
     }
     formFields.push(new Ext.form.FieldSet({
       id:    'additional',
-      title: 'Other',
+      title: _('ID_OTHER'),
       items: additionalFields
     }));
   }
@@ -199,13 +199,13 @@ Ext.onReady(function() {
     border: true,
     width: 465,
     frame: true,
-    title: 'Dashlet Instance Configuration',
+    title: _('ID_DASHLET_INSTANCE_CONFIGURATION'),
     items: formFields,
     buttonAlign: 'right',
     buttons: [
       new Ext.Action({
        id:      'btnSubmit',
-       text:    'Save',
+       text:    _('ID_SAVE'),
        handler: function () {
          if (dashletInstanceFrm.getForm().isValid()) {
            var myMask = new Ext.LoadMask(Ext.getBody(), {msg: 'Saving. Please wait...'});
@@ -222,25 +222,25 @@ Ext.onReady(function() {
                              window.location.href = 'dashletsList';
                            break;
                            default:
-                             Ext.MessageBox.alert('Alert', 'Dashboard Instance registered failed');
+                             Ext.MessageBox.alert( _('ID_ALERT'), _('ID_FAILED_DASHBOARD INSTANCE') );
                            break;
                         }
                       },
              failure: function (result, request) {
                         myMask.hide();
-                        Ext.MessageBox.alert('Alert', 'Ajax communication failed');
+                        Ext.MessageBox.alert( _('ID_ALERT'), _('ID_AJAX_COMMUNICATION_FAILED') );
                       }
            });
          }
          else {
-           Ext.MessageBox.alert('Invalid data', 'Please check the fields mark in red.');
+           Ext.MessageBox.alert(_('ID_INVALID_DATA'), _('ID_CHECK_FIELDS_MARK_RED'));
          }
        }
       }),
       {
         xtype:   'button',
         id:      'btnCancel',
-        text:    'Cancel',
+        text:    _('ID_CANCEL'),
         handler: function () {
           window.location.href = 'dashletsList';
         }

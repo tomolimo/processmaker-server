@@ -35,7 +35,7 @@ class dashletOpenVSCompleted implements DashletInterface {
     $contextTime = new stdclass();
     $contextTime->xtype = 'combo';
     $contextTime->name = 'DAS_INS_CONTEXT_TIME';
-    $contextTime->fieldLabel = 'Period';
+    $contextTime->fieldLabel = G::LoadTranslation('ID_PERIOD');
     $contextTime->editable = false;
     $contextTime->width = 320;
     $contextTime->store = $contextTimeStore;
@@ -49,7 +49,7 @@ class dashletOpenVSCompleted implements DashletInterface {
     $redFrom = new stdclass();
     $redFrom->xtype = 'numberfield';
     $redFrom->name = 'DAS_RED_FROM';
-    $redFrom->fieldLabel = 'Red Starts In';
+    $redFrom->fieldLabel = G::LoadTranslation('ID_RED_STARTS_IN');
     $redFrom->width = 50;
     $redFrom->maxLength = 3;
     $redFrom->maxValue = 100;
@@ -61,7 +61,7 @@ class dashletOpenVSCompleted implements DashletInterface {
     $redTo = new stdclass();
     $redTo->xtype = 'numberfield';
     $redTo->name = 'DAS_RED_TO';
-    $redTo->fieldLabel = 'Red Ends In';
+    $redTo->fieldLabel = G::LoadTranslation('ID_RED_ENDS_IN');
     $redTo->width = 50;
     $redTo->maxLength = 3;
     $redTo->maxValue = 100;
@@ -73,7 +73,7 @@ class dashletOpenVSCompleted implements DashletInterface {
     $yellowFrom = new stdclass();
     $yellowFrom->xtype = 'numberfield';
     $yellowFrom->name = 'DAS_YELLOW_FROM';
-    $yellowFrom->fieldLabel = 'Yellow Starts In';
+    $yellowFrom->fieldLabel = G::LoadTranslation('ID_YELLOW_STARTS_IN');
     $yellowFrom->width = 50;
     $yellowFrom->maxLength = 3;
     $yellowFrom->maxValue = 100;
@@ -85,7 +85,7 @@ class dashletOpenVSCompleted implements DashletInterface {
     $yellowTo = new stdclass();
     $yellowTo->xtype = 'numberfield';
     $yellowTo->name = 'DAS_YELLOW_TO';
-    $yellowTo->fieldLabel = 'Yellow Ends In';
+    $yellowTo->fieldLabel = G::LoadTranslation('ID_YELLOW_ENDS_IN');
     $yellowTo->width = 50;
     $yellowTo->maxLength = 3;
     $yellowTo->maxValue = 100;
@@ -97,7 +97,7 @@ class dashletOpenVSCompleted implements DashletInterface {
     $greenFrom = new stdclass();
     $greenFrom->xtype = 'numberfield';
     $greenFrom->name = 'DAS_GREEN_FROM';
-    $greenFrom->fieldLabel = 'Green Starts In';
+    $greenFrom->fieldLabel = G::LoadTranslation('ID_GREEN_STARTS_IN');
     $greenFrom->width = 50;
     $greenFrom->maxLength = 3;
     $greenFrom->maxValue = 100;
@@ -109,7 +109,7 @@ class dashletOpenVSCompleted implements DashletInterface {
     $greenTo = new stdclass();
     $greenTo->xtype = 'numberfield';
     $greenTo->name = 'DAS_GREEN_TO';
-    $greenTo->fieldLabel = 'Green Ends In';
+    $greenTo->fieldLabel = G::LoadTranslation('ID_GREEN_ENDS_IN');
     $greenTo->width = 50;
     $greenTo->maxLength = 3;
     $greenTo->maxValue = 100;

@@ -38,7 +38,7 @@ Ext.onReady(function() {
       stripeRows : true,
       autoHeight : true,
       width : 400,
-      title : TRANSLATIONS.ID_CACHE_TITLE_INFO, // 'Workflow Applications Cache Info',
+      title : _('ID_CACHE_TITLE_INFO'), // 'Workflow Applications Cache Info',
       // config options for stateful behavior
       stateful : true,
       stateId : 'grid',
@@ -59,9 +59,9 @@ Ext.onReady(function() {
       width : 400,
       items : [ ],
       buttons : [{
-        text : TRANSLATIONS.ID_CACHE_BTN_BUILD, // 'Build Cache',
+        text : _('ID_CACHE_BTN_BUILD'), // 'Build Cache',
         handler : function() {
-          Ext.Msg.show ({ msg : TRANSLATIONS.ID_PROCESSING, wait:true,waitConfig: {interval:400} });
+          Ext.Msg.show ({ msg : _('ID_PROCESSING'), wait:true,waitConfig: {interval:400} });
           Ext.Ajax.request({
             url: 'appCacheViewAjax',
             success: function(response) {
@@ -73,10 +73,10 @@ Ext.onReady(function() {
             },
             failure : function(response) {
               Ext.Msg.hide();              
-              Ext.Msg.alert ( 'Error', response.responseText );
+              Ext.Msg.alert ( _('ID_ERROR'), response.responseText );
             },
             params: {request: 'build', lang: 'en' },
-            waitMsg : TRANSLATIONS.ID_CACHE_BUILDING, // 'Building Workflow Application Cache...',
+            waitMsg : _('ID_CACHE_BUILDING'), // 'Building Workflow Application Cache...',
             timeout : 1000*60*30 //30 mins
           });
         }
@@ -86,7 +86,7 @@ Ext.onReady(function() {
     var txtUser = {
       id   : 'txtUser',
       xtype: 'textfield',
-      fieldLabel: TRANSLATIONS.ID_CACHE_USER, // 'User',
+      fieldLabel: _('ID_CACHE_USER'), // 'User',
       disabled: false,
       name: 'user',
       allowBlank: false
@@ -95,7 +95,7 @@ Ext.onReady(function() {
     var txtHost = {
       id   : 'txtHost',
       xtype: 'textfield',
-      fieldLabel: TRANSLATIONS.ID_CACHE_HOST, // 'Host',
+      fieldLabel: _('ID_CACHE_HOST'), // 'Host',
       disabled: false,
       name: 'host',
       allowBlank: false
@@ -105,7 +105,7 @@ Ext.onReady(function() {
       id   : 'txtPasswd',
       inputType: 'password',
       xtype:'textfield',
-      fieldLabel: TRANSLATIONS.ID_CACHE_PASSWORD, // 'Password',
+      fieldLabel: _('ID_CACHE_PASSWORD'), // 'Password',
       disabled: false,
       hidden: false,
       value: ''
@@ -113,7 +113,7 @@ Ext.onReady(function() {
     
     fieldsetRoot = {
       xtype : 'fieldset',
-      title : TRANSLATIONS.ID_CACHE_SUBTITLE_SETUP_DB, // 'Setup MySql Root Password',
+      title : _('ID_CACHE_SUBTITLE_SETUP_DB'), // 'Setup MySql Root Password',
       collapsible : true,
       collapsed: true,
       autoHeight  : true,
@@ -121,13 +121,13 @@ Ext.onReady(function() {
       defaultType : 'textfield',
       items   : [txtHost, txtUser, txtPasswd ],
       buttons : [{
-        text : TRANSLATIONS.ID_CACHE_BTN_SETUP_PASSWRD, // 'Setup Password',
+        text : _('ID_CACHE_BTN_SETUP_PASSWRD'), // 'Setup Password',
         handler : function() {
           if (!fsf.getForm().isValid()) {
             return;
           }
   
-          Ext.Msg.show ({ msg : TRANSLATIONS.ID_PROCESSING, wait:true,waitConfig: {interval:400} });
+          Ext.Msg.show ({ msg : _('ID_PROCESSING'), wait:true,waitConfig: {interval:400} });
           Ext.Ajax.request({
             url: 'appCacheViewAjax',
             success: function(response) {
@@ -137,7 +137,7 @@ Ext.onReady(function() {
             },
             failure : function(response) {
               Ext.Msg.hide();              
-              Ext.Msg.alert ( 'Error', response.responseText );
+              Ext.Msg.alert ( _('ID_ERROR'), response.responseText );
             },
             params: { request: 'recreate-root', lang: 'en', host: Ext.getCmp('txtHost').getValue(), user: Ext.getCmp('txtUser').getValue(), password: Ext.getCmp('txtPasswd').getValue() },
             // timeout : 1000
@@ -158,11 +158,11 @@ Ext.onReady(function() {
         myData = Ext.decode ( response.responseText );
         store.loadData(myData);  
         if ( myData.error ) {
-          Warning( 'error', myData.errorMsg );
+          Warning( _('ID_ERROR'), myData.errorMsg );
       	}
       },
       failure : function(response) {
-        Ext.Msg.alert ( 'Error', response.responseText );
+        Ext.Msg.alert ( _('ID_ERROR'), response.responseText );
       },
       params: {request: 'info' }
     });

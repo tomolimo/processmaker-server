@@ -1098,7 +1098,7 @@ Ext.onReady( function() {
                       }
                     } 
                     else {
-                      Ext.Msg.alert( _('ID_ERROR'), 'There is at least one empty date field in the holiday grid, please check and try again');
+                      Ext.Msg.alert( _('ID_ERROR'), _('ID_MESSAGE_EMPTY_DATE_FIELD'));
                     }
                   }
                 },

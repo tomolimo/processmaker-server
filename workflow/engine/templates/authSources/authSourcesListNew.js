@@ -23,7 +23,7 @@ var my_values = [
     ['krlos']
 ];
 var cboxAuthSourse = new Ext.form.ComboBox({
-    fieldLabel: 'Provider',
+    fieldLabel: _('ID_PROVIDER'),
     hiddenName: 'AUTH_SOURCE_PROVIDER',
     mode: 'local',
     triggerAction: 'all',
@@ -42,7 +42,7 @@ var cboxAuthSourse = new Ext.form.ComboBox({
   });
 
   componAuthSourse = new Ext.form.FieldSet({
-    title: 'Available Authentication Sources',
+    title: _('ID_AVAILABLE_AUTHENTICATION_SOURCES'),
     items: [
       cboxAuthSourse
     ]    
@@ -70,11 +70,11 @@ var cboxAuthSourse = new Ext.form.ComboBox({
       ],
     buttons: [
       {
-        text: 'Continue',
+        text: _('ID_CONTINUE'),
         handler: gotypesAuthSources
       },
       {
-        text: 'Cancel',
+        text: _('ID_CANCEL'),
         handler: goBackform
       }
     ]

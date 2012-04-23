@@ -12,7 +12,7 @@ new Ext.KeyMap(document, {
         storeCases.reload();
       }
       else
-        Ext.Msg.alert(TRANSLATIONS.ID_REFRESH_LABEL, TRANSLATIONS.ID_REFRESH_MESSAGE);
+        Ext.Msg.alert(_('ID_REFRESH_LABEL'), _('ID_REFRESH_MESSAGE'));
   }
 });
 
@@ -28,7 +28,7 @@ var caseSummary = function() {
     openSummaryWindow(rowModel.data.APP_UID, rowModel.data.DEL_INDEX);
   }
   else {
-    msgBox('Information', TRANSLATIONS.ID_SELECT_ONE_AT_LEAST);
+    msgBox(_('ID_INFORMATION'), _('ID_SELECT_ONE_AT_LEAST'));
   }
 };
 
@@ -40,7 +40,7 @@ function caseNotes(){
     var caseTitle = (rowModel.data.APP_TITLE) ? rowModel.data.APP_TITLE : rowModel.data.APP_UID;
     openCaseNotesWindow(appUid,true);
   }else{
-    msgBox('Information', TRANSLATIONS.ID_SELECT_ONE_AT_LEAST);
+    msgBox(_('ID_INFORMATION'), _('ID_SELECT_ONE_AT_LEAST') );
   }
 }
 function openCase(){
@@ -52,7 +52,7 @@ function openCase(){
       var caseTitle = (rowModel.data.APP_TITLE) ? rowModel.data.APP_TITLE : rowModel.data.APP_UID;
 
       Ext.Msg.show({
-        msg: TRANSLATIONS.ID_OPEN_CASE + ' ' + caseTitle,
+        msg: _('ID_OPEN_CASE') + ' ' + caseTitle,
         width:300,
         wait:true,
         waitConfig: {interval:200}
@@ -97,7 +97,7 @@ function openCase(){
       redirect(requestFile + '?' + params);
 
     } else
-      msgBox('Information', TRANSLATIONS.ID_SELECT_ONE_AT_LEAST);
+      msgBox(_('ID_INFORMATION'), _('ID_SELECT_ONE_AT_LEAST'));
 }
 
 function jumpToCase(appNumber){
@@ -117,11 +117,11 @@ function deleteCase() {
     APP_UIDS = ids.join(',');
 
     Ext.Msg.confirm(
-      TRANSLATIONS.ID_CONFIRM,
-      rows.length == 1? TRANSLATIONS.ID_MSG_CONFIRM_DELETE_CASE: TRANSLATIONS.ID_MSG_CONFIRM_DELETE_CASES,
+      _('ID_CONFIRM'),
+      (rows.length == 1) ? _('ID_MSG_CONFIRM_DELETE_CASE') : _('ID_MSG_CONFIRM_DELETE_CASES'),
       function(btn, text){
         if ( btn == 'yes' ) {
-          Ext.MessageBox.show({ msg: TRANSLATIONS.ID_DELETING_ELEMENTS, wait:true,waitConfig: {interval:200} });
+          Ext.MessageBox.show({ msg: _('ID_DELETING_ELEMENTS'), wait:true,waitConfig: {interval:200} });
           Ext.Ajax.request({
             url: 'cases_Delete',
             success: function(response) {
@@ -147,7 +147,7 @@ function deleteCase() {
   } else {
     Ext.Msg.show({
       title:'',
-      msg: TRANSLATIONS.ID_NO_SELECTION_WARNING,
+      msg: _('ID_NO_SELECTION_WARNING'),
       buttons: Ext.Msg.INFO,
       fn: function(){},
       animEl: 'elId',
@@ -162,11 +162,11 @@ function pauseCase(date){
   unpauseDate = date.format('Y-m-d');
 
   Ext.Msg.confirm(
-    TRANSLATIONS.ID_CONFIRM,
-    TRANSLATIONS.ID_PAUSE_CASE_TO_DATE +' '+date.format('M j, Y')+'?',
+    _('ID_CONFIRM'),
+    _('ID_PAUSE_CASE_TO_DATE') +' '+date.format('M j, Y')+'?',
     function(btn, text){
       if ( btn == 'yes' ) {
-        Ext.MessageBox.show({ msg: TRANSLATIONS.ID_PROCESSING, wait:true,waitConfig: {interval:200} });
+        Ext.MessageBox.show({ msg: _('ID_PROCESSING'), wait:true,waitConfig: {interval:200} });
         Ext.Ajax.request({
           url: 'cases_Ajax',
           success: function(response) {
@@ -208,11 +208,11 @@ function cancelCase(){
     DEL_INDEXES = del_index.join(',');
 
     Ext.Msg.confirm(
-      TRANSLATIONS.ID_CONFIRM,
-      rows.length == 1? TRANSLATIONS.ID_MSG_CONFIRM_CANCEL_CASE: TRANSLATIONS.ID_MSG_CONFIRM_CANCEL_CASES,
+      _('ID_CONFIRM'),
+      (rows.length == 1) ? _('ID_MSG_CONFIRM_CANCEL_CASE') : _('ID_MSG_CONFIRM_CANCEL_CASES'),
       function(btn, text){
         if ( btn == 'yes' ) {
-          Ext.MessageBox.show({ msg: TRANSLATIONS.ID_PROCESSING, wait:true,waitConfig: {interval:200} });
+          Ext.MessageBox.show({ msg: _('ID_PROCESSING'), wait:true,waitConfig: {interval:200} });
           Ext.Ajax.request({
             url: 'cases_Ajax',
             success: function(response) {
@@ -238,7 +238,7 @@ function cancelCase(){
   } else {
     Ext.Msg.show({
       title:'',
-      msg: TRANSLATIONS.ID_NO_SELECTION_WARNING,
+      msg: _('ID_NO_SELECTION_WARNING'),
       buttons: Ext.Msg.INFO,
       fn: function(){},
       animEl: 'elId',
@@ -250,7 +250,7 @@ function cancelCase(){
 
 function callbackUnpauseCase (btn, text) {
   if ( btn == 'yes' ) {
-    Ext.MessageBox.show({ progressText: TRANSLATIONS.ID_PROCESSING, wait:true,waitConfig: {interval:200} });
+    Ext.MessageBox.show({ progressText: _('ID_PROCESSING'), wait:true,waitConfig: {interval:200} });
     Ext.Ajax.request({
       url: 'cases_Ajax',
       success: function(response) {
@@ -278,9 +278,9 @@ function unpauseCase() {
 	caseIdToUnpause    = rowModel.data.APP_UID;
 	caseIndexToUnpause = rowModel.data.DEL_INDEX;
 
-  Ext.Msg.confirm( TRANSLATIONS.ID_CONFIRM, TRANSLATIONS.ID_CONFIRM_UNPAUSE_CASE , function (btn, text) {
+  Ext.Msg.confirm( _('ID_CONFIRM'), _('ID_CONFIRM_UNPAUSE_CASE') , function (btn, text) {
     if ( btn == 'yes' ) {
-      Ext.MessageBox.show({ progressText: TRANSLATIONS.ID_PROCESSING, wait:true,waitConfig: {interval:200} });
+      Ext.MessageBox.show({ progressText: _('ID_PROCESSING'), wait:true,waitConfig: {interval:200} });
       Ext.Ajax.request({
         url: 'cases_Ajax',
         success: function(response) {
@@ -340,19 +340,19 @@ Ext.onReady ( function() {
   };
 
   function openLink(value, p, r){
-    return String.format("<a class='button_pm' href='../cases/cases_Open?APP_UID={0}&DEL_INDEX={1}&content=inner'>" + TRANSLATIONS.ID_VIEW + "</a>", r.data['APP_UID'], r.data['DEL_INDEX'], r.data['APP_TITLE']);
+    return String.format("<a class='button_pm' href='../cases/cases_Open?APP_UID={0}&DEL_INDEX={1}&content=inner'>" + _('ID_VIEW') + "</a>", r.data['APP_UID'], r.data['DEL_INDEX'], r.data['APP_TITLE']);
   }
 
   function deleteLink(value, p, r){
-    return String.format("<a class='button_pm ss_sprite ss_bullet_red' href='#' onclick='deleteCase(\"{0}\")'>" + TRANSLATIONS.ID_DELETE + "</a>", r.data['APP_UID'] );
+    return String.format("<a class='button_pm ss_sprite ss_bullet_red' href='#' onclick='deleteCase(\"{0}\")'>" + _('ID_DELETE') + "</a>", r.data['APP_UID'] );
   }
 
   function viewLink(value, p, r){
-    return String.format("<a href='../cases/cases_Open?APP_UID={0}&DEL_INDEX={1}&content=inner'>" + TRANSLATIONS.ID_VIEW + "</a>", r.data['APP_UID'], r.data['DEL_INDEX'], r.data['APP_TITLE']);
+    return String.format("<a href='../cases/cases_Open?APP_UID={0}&DEL_INDEX={1}&content=inner'>" + _('ID_VIEW') + "</a>", r.data['APP_UID'], r.data['DEL_INDEX'], r.data['APP_TITLE']);
   }
 
   function unpauseLink(value, p, r){
-    return String.format("<a href='#' onclick='unpauseCaseFunction(\"{0}\",\"{1}\")'>" + TRANSLATIONS.ID_UNPAUSE + "</a>", r.data['APP_UID'], r.data['DEL_INDEX'] );
+    return String.format("<a href='#' onclick='unpauseCaseFunction(\"{0}\",\"{1}\")'>" + _('ID_UNPAUSE') + "</a>", r.data['APP_UID'], r.data['DEL_INDEX'] );
   }
 
   function convertDate ( value ) {
@@ -438,7 +438,7 @@ Ext.onReady ( function() {
   var newPopUp = new Ext.Window({
               id       : Ext.id(),
               el       : 'reassign-panel',
-              title    : 'Reassign All Cases by Task',
+              title    : _('ID_REASSIGN_ALL_CASES_BY_TASK'),
               width    : 750,
               height   : 350,
               frame    : true,
@@ -446,7 +446,7 @@ Ext.onReady ( function() {
             });
 
   var btnCloseReassign = new Ext.Button ({
-    text: TRANSLATIONS.ID_CLOSE,
+    text: _('ID_CLOSE'),
     //    text: TRANSLATIONS.LABEL_SELECT_ALL,
     handler: function(){
       newPopUp.hide();
@@ -454,7 +454,7 @@ Ext.onReady ( function() {
   });
 
   var btnExecReassign = new Ext.Button ({
-    text: TRANSLATIONS.ID_REASSIGN_ALL,
+    text: _('ID_REASSIGN_ALL'),
     // text: 'Reassign All',
     //    text: TRANSLATIONS.LABEL_SELECT_ALL,
     handler: function(){
@@ -487,7 +487,7 @@ Ext.onReady ( function() {
   });
 
   var btnExecReassignSelected = new Ext.Button ({
-    text: TRANSLATIONS.ID_REASSIGN,
+    text: _('ID_REASSIGN'),
     // text: 'Reassign',
     //    text: TRANSLATIONS.LABEL_SELECT_ALL,
     handler: function(){
@@ -499,7 +499,7 @@ Ext.onReady ( function() {
         sv[i]= rs[i].data;
       }
       var gridData = storeReassignCases.getModifiedRecords();
-      Ext.MessageBox.show({ msg: TRANSLATIONS.ID_PROCESSING, wait:true,waitConfig: {interval:200} });
+      Ext.MessageBox.show({ msg: _('ID_PROCESSING'), wait:true,waitConfig: {interval:200} });
       Ext.Ajax.request({
         url: 'proxySaveReassignCasesList',
         success: function(response) {
@@ -511,18 +511,18 @@ Ext.onReady ( function() {
 
           for (count in ajaxServerResponse) {
             if ( ajaxServerResponse[count]['TAS_TITLE'] != undefined ){
-              message = message + "Case: " + ajaxServerResponse[count]['APP_TITLE'] + " - Reassigned to: " + ajaxServerResponse[count]['APP_REASSIGN_USER'] + "<br>" ;              
+              message = message + _('ID_CASE') + ": " + ajaxServerResponse[count]['APP_TITLE'] + " - " + _('ID_REASSIGNED_TO') + ": " + ajaxServerResponse[count]['APP_REASSIGN_USER'] + "<br>" ;
             };
           }
 
           if (ajaxServerResponse['TOTAL']!=undefined&&ajaxServerResponse['TOTAL']!=-1){
-            message = message + "<br> Total Cases Reassigned: " + ajaxServerResponse['TOTAL'];
+            message = message + "<br> " + _('ID_TOTAL_CASES_REASSIGNED') + ": " + ajaxServerResponse['TOTAL'];
           } else {
             message = "";
           };
 
           if (message!=""){
-            Ext.MessageBox.alert( 'Status Reassignment', message, '' );
+            Ext.MessageBox.alert( _('ID_STATUS_REASSIGNMENT'), message, '' );
           }
         },
         params: { APP_UIDS:ids, data:Ext.util.JSON.encode(sv), selected:true }
@@ -632,7 +632,7 @@ Ext.onReady ( function() {
   // creating the button for filters
   var btnRead = new Ext.Button ({
     id: 'read',
-    text: TRANSLATIONS.ID_OPT_READ,
+    text: _('ID_OPT_READ'),
     enableToggle: true,
     toggleHandler: onItemToggle,
     allowDepress: false,
@@ -641,7 +641,7 @@ Ext.onReady ( function() {
 
   var btnUnread = new Ext.Button ({
     id: 'unread',
-    text: TRANSLATIONS.ID_OPT_UNREAD,
+    text: _('ID_OPT_UNREAD'),
     enableToggle: true,
     toggleHandler: onItemToggle,
     allowDepress: false,
@@ -650,7 +650,7 @@ Ext.onReady ( function() {
 
   var btnAll = new Ext.Button ({
     id: 'all',
-    text: TRANSLATIONS.ID_OPT_ALL,
+    text: _('ID_OPT_ALL'),
     enableToggle: true,
     toggleHandler: onItemToggle,
     allowDepress: false,
@@ -660,7 +660,7 @@ Ext.onReady ( function() {
   var btnStarted = new Ext.Button ({
     id: 'started',
 //    text: 'started by me',
-    text: TRANSLATIONS.ID_OPT_STARTED,
+    text: _('ID_OPT_STARTED'),
     enableToggle: true,
     toggleHandler: onItemToggle,
     allowDepress: true,
@@ -670,7 +670,7 @@ Ext.onReady ( function() {
   var btnCompleted = new Ext.Button ({
     id: 'completed',
 //    text: 'Completed by me',
-    text: TRANSLATIONS.ID_OPT_COMPLETED,
+    text: _('ID_OPT_COMPLETED'),
     enableToggle: true,
     toggleHandler: onItemToggle,
     allowDepress: true,
@@ -691,7 +691,7 @@ Ext.onReady ( function() {
     displayField  : 'APP_PRO_TITLE',
     valueField    : 'PRO_UID',
     forceSelection: false,
-    emptyText: TRANSLATIONS.ID_EMPTY_PROCESSES,
+    emptyText: _('ID_EMPTY_PROCESSES'),
     selectOnFocus: true,
     tpl: resultTpl,
 
@@ -729,7 +729,7 @@ Ext.onReady ( function() {
     forceSelection: true,
     triggerAction: 'all',
 
-    emptyText: TRANSLATIONS.ID_EMPTY_USERS,
+    emptyText: _('ID_EMPTY_USERS'),
     selectOnFocus: true,
     //getListParent: function() {
     //  return this.el.up('.x-menu');
@@ -760,7 +760,7 @@ Ext.onReady ( function() {
   });
 
   var btnSelectAll = new Ext.Button ({
-    text: TRANSLATIONS.CHECK_ALL,
+    text: _('CHECK_ALL'),
     // text: 'Check All',
     // text: TRANSLATIONS.LABEL_SELECT_ALL,
     handler: function(){
@@ -769,7 +769,7 @@ Ext.onReady ( function() {
   });
 
   var btnUnSelectAll = new Ext.Button ({
-    text: TRANSLATIONS.UNCHECK_ALL,
+    text: _('UNCHECK_ALL'),
     // text: 'Un-Check All',
     // text: TRANSLATIONS.LABEL_UNSELECT_ALL,
     handler: function(){
@@ -778,7 +778,7 @@ Ext.onReady ( function() {
   });
 
   var btnReassign = new Ext.Button ({
-    text: TRANSLATIONS.ID_REASSIGN,
+    text: _('ID_REASSIGN'),
     // text: 'Reassign',
     // text: TRANSLATIONS.LABEL_UNSELECT_ALL,
     handler: function(){
@@ -794,7 +794,7 @@ Ext.onReady ( function() {
 					collapsible:true,
 					defaultType:'textfield',
 					items:[{
-						fieldLabel:'Reassign To',
+						fieldLabel: _('ID_REASSIGN_TO'),
 						name:'txt_stock_in',
 						allowBlank:true
 					}]
@@ -811,7 +811,7 @@ Ext.onReady ( function() {
     plain:true,
     items:[nav],
     buttons:[{
-      text: TRANSLATIONS.ID_SUBMIT,
+      text: _('ID_SUBMIT'),
       handler:function(){
         Ext.Msg.alert('OK','save ?');
         Ext.Msg.prompt('Name','please enter your name: ',function(btn,text){
@@ -821,7 +821,7 @@ Ext.onReady ( function() {
         });
       }
     }, {
-      text: TRANSLATIONS.ID_CLOSE,
+      text: _('ID_CLOSE'),
       handler:function() {
         reassignPopup.hide();
       }
@@ -869,7 +869,7 @@ Ext.onReady ( function() {
     valueField    : 'USR_UID',
     mode          : 'local',
     forceSelection: false,
-    emptyText: TRANSLATIONS.ID_SELECT,
+    emptyText: _('ID_SELECT'),
     selectOnFocus: true,
 
     typeAhead: true,
@@ -898,7 +898,7 @@ Ext.onReady ( function() {
     allowBlank: true,
     ctCls:'pm_search_text_field',
     width: 150,
-    emptyText: TRANSLATIONS.ID_EMPTY_SEARCH,
+    emptyText: _('ID_EMPTY_SEARCH'),
     listeners: {
       specialkey: function(f,e){
         if (e.getKey() == e.ENTER) {
@@ -909,7 +909,7 @@ Ext.onReady ( function() {
   });
 
   var btnSearch = new Ext.Button ({
-    text: TRANSLATIONS.ID_SEARCH,
+    text: _('ID_SEARCH'),
     handler: doSearch
   });
 
@@ -933,7 +933,7 @@ Ext.onReady ( function() {
     id   : 'textJump',
     allowBlank: true,
     width: 50,
-    emptyText: TRANSLATIONS.ID_CASESLIST_APP_UID,
+    emptyText: _('ID_CASESLIST_APP_UID'),
     listeners: {
       specialkey: function(f,e){
         if (e.getKey() == e.ENTER) {
@@ -942,20 +942,20 @@ Ext.onReady ( function() {
           if( caseNumber )
             jumpToCase(caseNumber);
           else
-            msgBox('Input Error', 'You have set a invalid Application Number', 'error');
+            msgBox(_('ID_INPUT_ERROR'), _('ID_INVALID_APPLICATION_NUMBER'), 'error');
         }
       }
     }
   };
 
   var btnJump = new Ext.Button ({
-    text: TRANSLATIONS.ID_OPT_JUMP,
+    text: _('ID_OPT_JUMP'),
     handler: function(){
       var caseNumber = parseFloat(Ext.util.Format.trim(Ext.getCmp('textJump').getValue()));
       if (caseNumber){
         jumpToCase(caseNumber);
       } else {
-            msgBox('Input Error', 'You have set a invalid Application Number', 'error');
+            msgBox(_('ID_INPUT_ERROR'), _('ID_INVALID_APPLICATION_NUMBER'), 'error');
     }
     }
   });
@@ -1027,13 +1027,13 @@ Ext.onReady ( function() {
   });
 
   optionMenuUnpause = new Ext.Action({
-    text: TRANSLATIONS.ID_UNPAUSE_CASE,
+    text: _('ID_UNPAUSE_CASE'),
     iconCls: 'ICON_CASES_UNPAUSE',
     handler: unpauseCase
   });
 
   optionMenuPause = new Ext.Action({
-    text: TRANSLATIONS.ID_PAUSE_CASE,
+    text: _('ID_PAUSE_CASE'),
     iconCls: 'ICON_CASES_PAUSED',
     menu: new Ext.menu.DateMenu({
       //vtype: 'daterange',
@@ -1082,7 +1082,7 @@ Ext.onReady ( function() {
             }
           },
           failure: function ( result, request) {
-            Ext.MessageBox.alert('Failed', result.responseText);
+            Ext.MessageBox.alert( _('ID_FAILED'), result.responseText);
           }
         });
       });
@@ -1122,7 +1122,7 @@ Ext.onReady ( function() {
   optionMenuReassignGlobal.DEL_INDEX = "";
 
   optionMenuReassign = new Ext.Action({
-    text: TRANSLATIONS.ID_REASSIGN,
+    text: _('ID_REASSIGN'),
     iconCls: 'ICON_CASES_TO_REASSIGN',
     handler: function() {
 
@@ -1222,12 +1222,12 @@ Ext.onReady ( function() {
     }
   });
   optionMenuDelete = new Ext.Action({
-    text: TRANSLATIONS.ID_DELETE,
+    text: _('ID_DELETE'),
     iconCls: 'ICON_CASES_DELETE',
     handler: deleteCase
   });
   optionMenuCancel = new Ext.Action({
-    text: TRANSLATIONS.ID_CANCEL,
+    text: _('ID_CANCEL'),
     iconCls: 'ICON_CASES_CANCEL',
     handler: cancelCase
   });
@@ -1288,7 +1288,7 @@ Ext.onReady ( function() {
     optionMenuOpen,
     {
       xtype: 'tbsplit',
-      text: TRANSLATIONS.ID_ACTIONS,
+      text: _('ID_ACTIONS'),
       menu: menuItems
     },
 
@@ -1299,7 +1299,7 @@ Ext.onReady ( function() {
     '-',
     btnAll,
     '->', // begin using the right-justified button container
-    TRANSLATIONS.ID_PROCESS,
+    _('ID_PROCESS'),
     comboProcess,
     '-',
     textSearch,
@@ -1320,7 +1320,7 @@ Ext.onReady ( function() {
     '-',
     btnAll,
     '->', // begin using the right-justified button container
-    TRANSLATIONS.ID_PROCESS,
+    _('ID_PROCESS'),
     comboProcess,
     '-',
     textSearch,
@@ -1341,7 +1341,7 @@ Ext.onReady ( function() {
     '-',
     btnAll,
     '->', // begin using the right-justified button container
-    TRANSLATIONS.ID_PROCESS,
+    _('ID_PROCESS'),
     comboProcess,
     '-',
     textSearch,
@@ -1360,11 +1360,11 @@ Ext.onReady ( function() {
     optionMenuOpen,
     {
       xtype: 'tbsplit',
-      text: TRANSLATIONS.ID_ACTIONS,
+      text: _('ID_ACTIONS'),
       menu: menuItems
     },
     '->',
-    TRANSLATIONS.ID_PROCESS,
+    _('ID_PROCESS'),
     comboProcess,
     '-',
     textSearch,
@@ -1380,7 +1380,7 @@ Ext.onReady ( function() {
   var toolbarToRevise = [
     optionMenuOpen,
     '->', // begin using the right-justified button container
-    TRANSLATIONS.ID_PROCESS,
+    _('ID_PROCESS'),
     comboProcess,
     '-',
     textSearch,
@@ -1404,7 +1404,7 @@ Ext.onReady ( function() {
     'user',
     comboAllUsers,
     '-',
-    TRANSLATIONS.ID_PROCESS,
+    _('ID_PROCESS'),
     comboProcess,
     textSearch,
     resetSearchButton,
@@ -1421,10 +1421,10 @@ Ext.onReady ( function() {
     '-',
     btnAll,
     '->', // begin using the right-justified button container
-     TRANSLATIONS.ID_PROCESS,
+    _('ID_PROCESS'),
     comboProcess,
     '-',
-    TRANSLATIONS.ID_STATUS,
+    _('ID_STATUS'),
     comboStatus,
     '-',
     textSearch,
@@ -1439,13 +1439,13 @@ Ext.onReady ( function() {
 
   var toolbarSearch = [
       ' ',
-      TRANSLATIONS.ID_DELEGATE_DATE_FROM,
+      _('ID_DELEGATE_DATE_FROM'),
       dateFrom,
       ' ',
-      TRANSLATIONS.ID_TO,
+      _('ID_TO'),
       dateTo,
       new Ext.Button ({
-        text: TRANSLATIONS.ID_FILTER_BY_DELEGATED_DATE,
+        text: _('ID_FILTER_BY_DELEGATED_DATE'),
         handler: function(){
           storeCases.setBaseParam('dateFrom', dateFrom.getValue());
           storeCases.setBaseParam('dateTo', dateTo.getValue());
@@ -1462,13 +1462,13 @@ Ext.onReady ( function() {
     items: [
       optionMenuOpen,
       '->',
-      TRANSLATIONS.ID_PROCESS,
+      _('ID_PROCESS'),
       comboProcess,
       '-',
-      TRANSLATIONS.ID_STATUS,
+      _('ID_STATUS'),
       comboStatus,
       '-',
-      TRANSLATIONS.ID_USER,
+      _('ID_USER'),
       comboUser,
       '-',
       textSearch,
@@ -1518,7 +1518,7 @@ Ext.onReady ( function() {
     viewConfig: {
      forceFit:true,
       cls:"x-grid-empty",
-      emptyText: (TRANSLATIONS.ID_NO_RECORDS_FOUND)
+      emptyText: ( _('ID_NO_RECORDS_FOUND') )
     },
     listeners: {
       rowdblclick: openCase,
@@ -1535,8 +1535,8 @@ Ext.onReady ( function() {
       store: storeCases,
       displayInfo: true,
       //displayMsg: 'Displaying items {0} - {1} of {2} ' + ' &nbsp; ' ,
-      displayMsg: TRANSLATIONS.ID_DISPLAY_ITEMS + ' &nbsp; ',
-      emptyMsg: TRANSLATIONS.ID_DISPLAY_EMPTY
+      displayMsg: _('ID_DISPLAY_ITEMS') + ' &nbsp; ',
+      emptyMsg: _('ID_DISPLAY_EMPTY')
     })
   });
 
@@ -1799,7 +1799,7 @@ function reassign(){
   else {
      Ext.Msg.show({
        title:'',
-       msg: TRANSLATIONS.ID_NO_SELECTION_WARNING,
+       msg: _('ID_NO_SELECTION_WARNING'),
        buttons: Ext.Msg.INFO,
        fn: function(){},
        animEl: 'elId',

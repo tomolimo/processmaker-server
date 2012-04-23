@@ -287,7 +287,7 @@ Ext.onReady(function(){
     });
 //here we are setting the fields
   fieldsAS = new Ext.form.FieldSet({
-    title: 'Authentication Source Information',
+    title: _('ID_AUTHENTICATION_SOURCE_INFORMATION'),
     items: [
             txtSourceId,
             txtSourceProvider,
@@ -331,12 +331,12 @@ Ext.onReady(function(){
     ],
     buttons: [
       {
-        text: 'Save',
+        text: _('ID_SAVE'),
         handler: TestSite
       
       },
       {     
-        text: 'Cancel',
+        text: _('ID_CANCEL'),
         handler: goback
       }
     ]
@@ -383,10 +383,10 @@ Ext.onReady(function(){
       },
       failure: function(f,a){
           if (a.failureType === Ext.form.Action.CONNECT_FAILURE){
-              Ext.Msg.alert('Failure', 'Server reported:'+a.response.status+' '+a.response.statusText);
+              Ext.Msg.alert(_('ID_FAILURE'),  _('ID_SERVER_REPORTED') + ':'+a.response.status+' '+a.response.statusText);
           }
           if (a.failureType === Ext.form.Action.SERVER_INVALID){
-              Ext.Msg.alert('Warning', 'you have an error');
+              Ext.Msg.alert( _('ID_WARNING'), _('ID_YOU_HAVE_ERROR') );
           }
       }
     });

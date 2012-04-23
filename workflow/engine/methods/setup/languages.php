@@ -34,5 +34,5 @@ $labels = G::getTranslations(Array(
   'ID_DELETE_LANGUAGE_WARNING', 'ID_ACTIONS', 'ID_LAN_LOCALE', 'ID_LAN_TRANSLATOR', 'ID_LAN_NUM_RECORDS', 'ID_UPLOADING_TRANSLATION_FILE'
 ));
 
-$oHeadPublisher->assign('TRANSLATIONS', $labels);
+//$oHeadPublisher->assign('TRANSLATIONS', $labels);
 G::RenderPage('publish', 'extJs');

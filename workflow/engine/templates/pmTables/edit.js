@@ -507,7 +507,7 @@ Ext.onReady(function(){
             comboDbConnections.setDisabled(true);
           } else {
             // DB COnnection deleted
-            Ext.Msg.alert( _('ID_ERROR'), 'DB Connection doesn\'t exist!');
+            Ext.Msg.alert( _('ID_ERROR'), _('ID_DB_CONNECTION_NOT_EXIST') );
           }
         } else {
           comboDbConnections.setValue('rp');

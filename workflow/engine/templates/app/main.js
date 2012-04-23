@@ -149,7 +149,7 @@ function openCaseNotesWindow(appUid1, modalSw, appTitle)
     ],
     tbar:[
         new Ext.form.TextArea({
-          text   : 'New Note',
+          text   : _('ID_NEW_NOTE'),
           xtype  : 'textarea',
           id     : 'caseNoteText',
           name   : 'caseNoteText',
@@ -182,14 +182,14 @@ function openCaseNotesWindow(appUid1, modalSw, appTitle)
         }, ' ',
         {
           id: 'addCancelBtn',
-          text: 'Cancel',
+          text: _('ID_CANCEL'),
           cls: 'x-toolbar1',
           //iconCls: 'xx',
           icon: '/images/add_notes.png',
           handler: newNoteHandler,
           tooltip: {
-            title: 'Add new note',
-            text: 'Case: ' + title
+            title: _('ID_CASES_NOTES_ADD'),
+            text: _('ID_CASE') + ': ' + title
           }
         }
       ]

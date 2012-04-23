@@ -117,10 +117,10 @@ Export.configure = function()
   }
 
   this.windowConfig.buttons = [{
-    text: 'Export',
+    text: _('ID_EXPORT'),
     handler: Export.submit
   },{
-    text: 'Cancel',
+    text: _('ID_CANCEL'),
     handler: function(){
       Export.window.hide();
     }

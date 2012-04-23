@@ -25,17 +25,17 @@ Ext.onReady(function(){
             }
   });
   nameWS = new Ext.form.FieldSet({
-    title: 'New Workspace',
+    title: _('ID_NEW_WORKSPACE'),
     items: [
-			   fieldNameWS
+      fieldNameWS
     ]
   });
   dbOptionsWS = new Ext.form.FieldSet({
-    title: 'Database Options',
+    title: _('ID_DATABASE_OPTIONS'),
     items: [
       {
         id: 'AO_DB_WF',
-        fieldLabel: 'Workflow Database',
+        fieldLabel: _('ID_WORKFLOW_DATABASE'),
         xtype:'textfield',
         value:'wf_sample',
         width: 200,
@@ -44,7 +44,7 @@ Ext.onReady(function(){
       },
       {
         id: 'AO_DB_RB',
-        fieldLabel: 'Rbac Database',
+        fieldLabel: _('ID_RBAC_DATABASE'),
         xtype:'textfield',
         value:'rb_sample',
         width: 200,
@@ -53,7 +53,7 @@ Ext.onReady(function(){
       },
       {
         id: 'AO_DB_RP',
-        fieldLabel: 'Report Database',
+        fieldLabel: _('ID_REPORT_DATABASE'),
         xtype:'textfield',
         value:'rp_sample',
         width: 200,
@@ -62,7 +62,7 @@ Ext.onReady(function(){
       },
       {
             xtype: 'checkbox',
-            fieldLabel: 'Drop database if exists',
+            fieldLabel: _('ID_DROP_DATABASE_EXISTS'),
             name: 'AO_DB_DROP',
             id: 'id-active'
        }
@@ -70,11 +70,11 @@ Ext.onReady(function(){
   });
 
   wspaceAdmWS = new Ext.form.FieldSet({
-    title: 'Workspace Administrator',
+    title: _('ID_WORKSPACE_ADMINISTRATOR'),
     items: [
       {
         id: 'NW_USERNAME',
-        fieldLabel: 'Username',
+        fieldLabel: _('ID_USERNAME'),
         xtype:'textfield',
         value:'admin',
         width: 200,
@@ -82,7 +82,7 @@ Ext.onReady(function(){
       },
       {
         id: 'NW_PASSWORD',
-        fieldLabel: 'Password (admin)(Max. length 20):',
+        fieldLabel: _('ID_PASSWORD_ADMIN'),
         xtype:'textfield',
         inputType:'password',
         value:'admin',
@@ -91,7 +91,7 @@ Ext.onReady(function(){
       },
       {
         id: 'NW_PASSWORD2',
-        fieldLabel: 'Re-type Password',
+        fieldLabel: _('ID_PASSWORD_ADMIN_RETYPE'),
         xtype:'textfield',
         inputType:'password',
         value:'admin',
@@ -126,12 +126,12 @@ Ext.onReady(function(){
       ],
     buttons: [
       {
-        text: 'reset',
+        text: _('ID_RESET'),
         handler: resetfields
 
       },
       {
-        text: 'Test',
+        text: _('ID_TEST'),
         handler: TestSite
       }
     ]
@@ -150,7 +150,7 @@ Ext.onReady(function(){
                             params: {
                             action : 'test'
                             },
-                            waitMsg : 'new site testing...',
+                            waitMsg : _('ID_NEW_SITE_TESTING'),
                             timeout : 3600,
                             success: function(f,a){
                              nwTitle    =formNewSite.getForm().findField('NW_TITLE').getValue();
@@ -167,10 +167,10 @@ Ext.onReady(function(){
                             },
                             failure: function(f,a){
                                 if (a.failureType === Ext.form.Action.CONNECT_FAILURE){
-                                    Ext.Msg.alert('Failure', 'Server reported:'+a.response.status+' '+a.response.statusText);
+                                    Ext.Msg.alert(_('ID_FAILURE'), _('ID_SERVER_REPORTED') + ':' + a.response.status+' '+a.response.statusText);
                                 }
                                 if (a.failureType === Ext.form.Action.SERVER_INVALID){
-                                    Ext.Msg.alert('Warning', _('NEW_SITE_NOT_AVAILABLE'));
+                                    Ext.Msg.alert(_('ID_WARNING'), _('NEW_SITE_NOT_AVAILABLE'));
                                 }
                             }
                         });
@@ -178,7 +178,7 @@ Ext.onReady(function(){
 
   function createNW(nwTitle, aoDbWf, aoDbRb, aoDbRp, nwUsername, nwPassword, nwPassword2){
     PMExt.confirm(_('ID_CONFIRM'), _('NEW_SITE_CONFIRM_TO_CREATE'), function(){
-    var loadMask = new Ext.LoadMask(document.body, {msg:'site creating..'});
+    var loadMask = new Ext.LoadMask(document.body, {msg : _('ID_SITE_CREATING')});
     loadMask.show();
      Ext.Ajax.request({
       url: '../newSiteProxy/testingNW',
@@ -212,16 +212,8 @@ Ext.onReady(function(){
       }
       },
       failure: function ( result, request) {
-       Ext.MessageBox.alert('Failed', result.responseText);
+       Ext.MessageBox.alert(_('ID_FAILED'), result.responseText);
       }
      });
     });
    }
-
-
-
-
-
-
-
-
