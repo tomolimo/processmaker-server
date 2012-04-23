@@ -166,7 +166,7 @@ try {
   if (isset ( $_FILES ['form'] )) {
     foreach ( $_FILES ['form'] ['name'] as $sFieldName => $vValue ) {
       if ($_FILES ['form'] ['error'] [$sFieldName] == 0) {
-        $oAppDocument = new AppDocument ( );
+        $oAppDocument = new AppDocument();
         
         if ( isset ( $_POST ['INPUTS'] [$sFieldName] ) && $_POST ['INPUTS'] [$sFieldName] != '' ) {
           require_once ('classes/model/AppFolder.php');
@@ -201,7 +201,7 @@ try {
             'APP_UID' => $_SESSION ['APPLICATION'],
             'DEL_INDEX' => $_SESSION ['INDEX'],
             'USR_UID' => $_SESSION ['USER_LOGGED'],
-            'DOC_UID' => - 1,
+            'DOC_UID' => -1,
             'APP_DOC_TYPE' => 'ATTACHED',
             'APP_DOC_CREATE_DATE' => date ( 'Y-m-d H:i:s' ),
             'APP_DOC_COMMENT' => '',
@@ -210,24 +210,36 @@ try {
           );
         }
         
-        $oAppDocument->create ( $aFields );
+        $oAppDocument->create($aFields);
+        
         $iDocVersion = $oAppDocument->getDocVersion();
-        $sAppDocUid = $oAppDocument->getAppDocUid ();
-        $aInfo = pathinfo ( $oAppDocument->getAppDocFilename () );
+        $sAppDocUid = $oAppDocument->getAppDocUid();
+        $aInfo = pathinfo($oAppDocument->getAppDocFilename());
         $sExtension = (isset ( $aInfo ['extension'] ) ? $aInfo ['extension'] : '');
         $sPathName = PATH_DOCUMENT . $_SESSION ['APPLICATION'] . PATH_SEP;
         $sFileName = $sAppDocUid . '_'.$iDocVersion.'.' . $sExtension;
         G::uploadFile ( $_FILES ['form'] ['tmp_name'] [$sFieldName], $sPathName, $sFileName );
+        
         //Plugin Hook PM_UPLOAD_DOCUMENT for upload document
-        $oPluginRegistry = & PMPluginRegistry::getSingleton ();
-        if ($oPluginRegistry->existsTrigger ( PM_UPLOAD_DOCUMENT ) && class_exists ( 'uploadDocumentData' )) {
-          $documentData = new uploadDocumentData ( $_SESSION ['APPLICATION'], $_SESSION ['USER_LOGGED'], $sPathName . $sFileName, $aFields ['APP_DOC_FILENAME'], $sAppDocUid );
-          $uploadReturn=$oPluginRegistry->executeTriggers ( PM_UPLOAD_DOCUMENT, $documentData );
-          if($uploadReturn){
-              $aFields['APP_DOC_PLUGIN']=$triggerDetail->sNamespace;
-                      $oAppDocument1 = new AppDocument();
-                      $oAppDocument1->update($aFields);
-              unlink ( $sPathName . $sFileName );
+        $oPluginRegistry = &PMPluginRegistry::getSingleton();
+        if ($oPluginRegistry->existsTrigger(PM_UPLOAD_DOCUMENT) && class_exists("uploadDocumentData")) {
+          $triggerDetail = $oPluginRegistry->getTriggerInfo(PM_UPLOAD_DOCUMENT);
+          $documentData = new uploadDocumentData($_SESSION["APPLICATION"], $_SESSION["USER_LOGGED"], $sPathName . $sFileName, $aFields["APP_DOC_FILENAME"], $sAppDocUid, $iDocVersion);
+          $uploadReturn = $oPluginRegistry->executeTriggers(PM_UPLOAD_DOCUMENT, $documentData);
+          
+          if ($uploadReturn) {
+              $aFields["APP_DOC_PLUGIN"] = $triggerDetail->sNamespace;
+              
+              if (!isset($aFields["APP_DOC_UID"])) {
+                $aFields["APP_DOC_UID"] = $sAppDocUid;
+              }
+  	           if (!isset($aFields["DOC_VERSION"])) {
+                $aFields["DOC_VERSION"] = $iDocVersion;
+              }
+              
+              $oAppDocument->update($aFields);
+              
+              unlink($sPathName . $sFileName);
           }
         }
       }
@@ -269,8 +281,7 @@ try {
   G::header ( 'location: ' . $aNextStep ['PAGE'] );
 
 }
-catch(Exception $e) {
-
+catch (Exception $e) {
   $G_PUBLISH = new Publisher;
   $aMessage  = array();
   $aMessage['MESSAGE'] = $e->getMessage();
