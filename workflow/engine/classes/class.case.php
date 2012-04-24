@@ -887,7 +887,7 @@ class Cases {
 
       //now update the priority in appdelegation table, using the defined variable in task
       if (trim($DEL_INDEX) != '' && trim($TAS_UID) != '') {
-      	//optimized code to avoid load task content row.
+        //optimized code to avoid load task content row.
         $c = new Criteria();
         $c->clearSelectColumns();
         $c->addSelectColumn(TaskPeer::TAS_PRIORITY_VARIABLE);
@@ -906,12 +906,16 @@ class Cases {
         $x = unserialize($Fields['APP_DATA']);
         if (isset($x[$VAR_PRI])) {
           if (trim($x[$VAR_PRI]) != '') {
+            $priority = 3;
+            if (is_numeric($x[$VAR_PRI])) {
+              $priority = ($x[$VAR_PRI] >= 1 && $x[$VAR_PRI] <= 5) ? $x[$VAR_PRI] : '3';
+            }
             $oDel = new AppDelegation;
             $array = array();
             $array['APP_UID'] = $sAppUid;
             $array['DEL_INDEX'] = $DEL_INDEX;
             $array['TAS_UID'] = $TAS_UID;
-            $array['DEL_PRIORITY'] = (isset($x[$VAR_PRI]) ? ($x[$VAR_PRI] >= 1 && $x[$VAR_PRI] <= 5 ? $x[$VAR_PRI] : '3') : '3');
+            $array['DEL_PRIORITY'] = $priority;
             $oDel->update($array);
           }
         }

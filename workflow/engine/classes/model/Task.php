@@ -343,7 +343,7 @@ class Task extends BaseTask {
       $this->setTasTypeDay("");
       $this->setTasTimeunit("DAYS");
       $this->setTasAlert("FALSE");
-      $this->setTasPriorityVariable("@@SYS_CASE_PRIORITY");
+      $this->setTasPriorityVariable("");
       $this->setTasAssignType("BALANCED");
       $this->setTasAssignVariable("@@SYS_NEXT_USER_TO_BE_ASSIGNED");
       $this->setTasAssignLocation("FALSE");

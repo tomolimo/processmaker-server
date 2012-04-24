@@ -17,7 +17,7 @@
   <en>Description</en>
 </TAS_DESCRIPTION>
 
-<TAS_PRIORITY_VARIABLE type="textpm" size="48" maxlength="155" defaultvalue="@@SYS_CASE_PRIORITY" showVars="1" process="@#PRO_UID" group="1">
+<TAS_PRIORITY_VARIABLE type="textpm" size="48" maxlength="155" defaultvalue="" showVars="1" process="@#PRO_UID" group="1">
   <en>Variable for Case priority</en>
 </TAS_PRIORITY_VARIABLE>
 
@@ -119,4 +119,4 @@ var insertFormVar = function(sFieldName, sValue) {
 
 ]]></JS>
 
-</dynaForm>  
+</dynaForm>

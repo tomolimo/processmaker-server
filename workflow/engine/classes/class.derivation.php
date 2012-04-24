@@ -663,6 +663,12 @@ class Derivation
     $iAppThreadIndex = $appFields['DEL_THREAD'];
     $delType = 'NORMAL';
     
+    if (is_numeric($nextDel['DEL_PRIORITY'])) {
+      $nextDel['DEL_PRIORITY'] = (isset($nextDel['DEL_PRIORITY']) ? ($nextDel['DEL_PRIORITY'] >= 1 && $nextDel['DEL_PRIORITY'] <= 5 ? $nextDel['DEL_PRIORITY'] : '3') : '3');
+    }
+    else  {
+      $nextDel['DEL_PRIORITY'] = 3;
+    }
     switch ( $nextDel['TAS_ASSIGN_TYPE'] ) {
       case 'CANCEL_MI':
       case 'STATIC_MI':
@@ -680,7 +686,7 @@ class Derivation
             $nextDel['TAS_UID'],
             (isset($aValue['USR_UID']) ? $aValue['USR_UID'] : ''),
             $currentDelegation['DEL_INDEX'],
-            3, //$nextDel['DEL_PRIORITY'], <- //TODO check this priority alway is 3
+            $nextDel['DEL_PRIORITY'],
             $delType,
             $iNewAppThreadIndex,
             $nextDel
@@ -700,13 +706,13 @@ class Derivation
         //No Break, need no execute the default ones....
         default:
           // Create new delegation
-          $iNewDelIndex = $this->case->newAppDelegation( 
+          $iNewDelIndex = $this->case->newAppDelegation(
             $appFields['PRO_UID'],
             $currentDelegation['APP_UID'],
             $nextDel['TAS_UID'],
             (isset($nextDel['USR_UID']) ? $nextDel['USR_UID'] : ''),
             $currentDelegation['DEL_INDEX'],
-            3, //$nextDel['DEL_PRIORITY'], <- //TODO check this priority alway is 3
+            $nextDel['DEL_PRIORITY'],
             $delType,
             $iAppThreadIndex,
             $nextDel
