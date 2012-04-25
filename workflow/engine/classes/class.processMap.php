@@ -220,7 +220,9 @@ class processMap {
               } else {
                 $oTask->color = '#006633';
               }
-            } else { //$oTask->color = '#939598';
+            }
+            else {
+              $oTask->color = "#939598";
             }
           }
         } else {
