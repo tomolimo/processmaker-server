@@ -349,6 +349,17 @@
           </xs:sequence>
         </xs:complexType>
       </xs:element>
+      <xs:element name="newCaseImpersonateResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="status_code" type="xs:integer"/>
+            <xs:element name="message" type="xs:string"/>
+            <xs:element name="timestamp" type="xs:string"/>
+            <xs:element name="caseId" minOccurs="0" type="xs:string"/>
+            <xs:element name="caseNumber" minOccurs="0" type="xs:string"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
       <xs:complexType name="routeListStruct">
         <xs:sequence>
           <xs:element name="userId" type="xs:string"/>
@@ -743,6 +754,9 @@
   <message name="newCaseImpersonateRequest">
     <part name="parameters" element="xs0:newCaseImpersonateRequest"/>
   </message>
+  <message name="newCaseImpersonateResponse">
+    <part name="parameters" element="xs0:newCaseImpersonateResponse"/>
+  </message>
   <message name="routeCaseRequest">
     <part name="parameters" element="xs0:routeCaseRequest"/>
   </message>
@@ -891,7 +905,7 @@
     </operation>
     <operation name="newCaseImpersonate">
       <input message="xs0:newCaseImpersonateRequest"/>
-      <output message="xs0:pmResponse"/>
+      <output message="xs0:newCaseImpersonateResponse"/>
     </operation>
     <operation name="routeCase">
       <input message="xs0:routeCaseRequest"/>
@@ -1096,7 +1110,7 @@
       </output>
     </operation>
     <operation name="newCaseImpersonate">
-      <soap12:operation soapAction="urn:newCase" soapActionRequired="true" style="document"/>
+      <soap12:operation soapAction="urn:newCaseImpersonate" soapActionRequired="true" style="document"/>
       <input>
         <soap12:body use="literal"/>
       </input>

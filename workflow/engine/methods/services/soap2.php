@@ -505,56 +505,72 @@
     return  $res->getPayloadArray ( );
   }
 
-  function NewCaseImpersonate( $params ) {
+  function NewCaseImpersonate($params) {
     $vsResult = isValidSession($params->sessionId);
-    if( $vsResult->status_code !== 0 ){
+    
+    if ($vsResult->status_code !== 0) {
       return $vsResult;
     }
 
-    if( ifPermission( $params->sessionId, 'PM_CASES') == 0 ){
-      $result = new wsResponse (2, "You do not have privileges");
+    if (ifPermission($params->sessionId, "PM_CASES") == 0) {
+      $result = new wsResponse(2, "You do not have privileges");
       return $result;
     }
 
-    $ws = new wsBase ();
+    ///////
     $variables = $params->variables;
-    foreach ( $variables as $key=>$val ){
-      $name  = $val->name;
-      $value = $val->value;
-      eval('$Fields[ ' . $val->name . ' ]= $val->value ;');
+    
+    $field = array();
+    
+    if (is_object($variables)) {
+      $field[$variables->name] = $variables->value;
     }
-    $params->variables = $Fields;
+    else {
+      if (is_array($variables)) {
+        foreach ($variables as $index => $obj) {
+          if (is_object($obj) && isset($obj->name) && isset($obj->value)) {
+            $field[$obj->name] = $obj->value;
+          }
+        }
+      }
+    }
+
+    $params->variables = $field;
+    
+    ///////
+    $ws = new wsBase();
     $res = $ws->newCaseImpersonate($params->processId, $params->userId, $params->variables);
-    return  $res->getPayloadArray ( ) ;
+    
+    return $res;
   }
 
-  function NewCase( $params ) {
-
-    G::LoadClass('sessions');
+  function NewCase($params) {
+    G::LoadClass("sessions");
 
     $vsResult = isValidSession($params->sessionId);
-    if( $vsResult->status_code !== 0 ){
+    
+    if ($vsResult->status_code !== 0) {
       return $vsResult;
     }
 
-    if ( ifPermission( $params->sessionId, 'PM_CASES') == 0 ){
-      $result = new wsResponse (2, "You do not have privileges");
+    if (ifPermission($params->sessionId, "PM_CASES") == 0) {
+      $result = new wsResponse(2, "You do not have privileges");
       return $result;
     }
 
-    $oSessions = new Sessions();
-    $session   = $oSessions->getSessionUser($params->sessionId);
-    $userId    = $session['USR_UID'];
-	$variables = $params->variables;
+    $oSession = new Sessions();
+    $session   = $oSession->getSessionUser($params->sessionId);
+    $userId    = $session["USR_UID"];
+    $variables = $params->variables;
 
 /* this code is for previous version of ws, and apparently this will work for grids inside the variables..
     if (!isset($params->variables) ) {
       $variables = array();
-      $Fields = array();
+      $field = array();
     }
     else {
       if ( is_object ($variables) ) {
-        $Fields[ $variables->name ]= $variables->value ;
+        $field[ $variables->name ]= $variables->value ;
       }
 
       if ( is_array ( $variables) ) {
@@ -563,7 +579,7 @@
           $value = $val->value;
           if (!is_object($val->value))
           {
-            eval('$Fields[ ' . $val->name . ' ]= $val->value ;');
+            eval('$field[ ' . $val->name . ' ]= $val->value ;');
           }
           else
           {
@@ -573,7 +589,7 @@
                 if (isset($val1->value)) {
                   if (is_array($val1->value->item)) {
                     foreach ($val1->value->item as $key2 => $val2) {
-                      $Fields[$val->name][$i][$val2->key] = $val2->value;
+                      $field[$val->name][$i][$val2->key] = $val2->value;
                     }
                   }
                 }
@@ -586,26 +602,28 @@
     }
 */
     $variables = $params->variables;
+    
+    $field = array();
 
-
-    if ( is_object ($variables) ) {
-      $Fields[ $variables->name ]= $variables->value ;
+    if (is_object($variables)) {
+      $field[$variables->name]= $variables->value;
     }
-    if ( is_array ( $variables) ) {
-      foreach ( $variables as $key=>$val ) {
-      	if (!is_object($val->value)){
-            eval('$Fields[ ' . $val->name . ' ]= $val->value ;');
+    if (is_array($variables)) {
+      foreach ($variables as $key => $val) {
+        if (!is_object($val->value)) {
+            eval("\$field[" . $val->name . "]= \$val->value;");
         }
       }
     }
-    $params->variables = $Fields;
-    $ws = new wsBase ();
+    
+    $params->variables = $field;
+    $ws = new wsBase();
     $res = $ws->newCase($params->processId, $userId, $params->taskId, $params->variables);
 
     ######################################################################
     # we need to register the case id for a stored session variable. like a normal Session.
     ######################################################################
-    $oSessions->registerGlobal('APPLICATION', $res->caseId);
+    $oSession->registerGlobal("APPLICATION", $res->caseId);
     ######################################################################
 
     return  $res;

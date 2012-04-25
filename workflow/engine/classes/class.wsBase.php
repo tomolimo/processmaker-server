@@ -1366,15 +1366,21 @@ class wsBase
           return $result;
         }
 
-        $case      = $oCase->startCase($tasks[0]['TAS_UID'], $userId);
-        $caseId    = $case['APPLICATION'];
+        $case       = $oCase->startCase($tasks[0]['TAS_UID'], $userId);
+        $caseId     = $case['APPLICATION'];
+        $caseNumber = $case['CASE_NUMBER'];
 
         $oldFields = $oCase->loadCase( $caseId );
 
         $oldFields['APP_DATA'] = array_merge( $oldFields['APP_DATA'], $Fields);
 
         $up_case   = $oCase->updateCase($caseId, $oldFields);
+
         $result    = new wsResponse (0, G::loadTranslation ('ID_COMMAND_EXECUTED_SUCCESSFULLY'));
+        
+        $result->caseId     = $caseId;
+        $result->caseNumber = $caseNumber;
+        
         return $result;
       }
       else {

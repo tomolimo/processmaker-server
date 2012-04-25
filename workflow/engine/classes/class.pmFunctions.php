@@ -386,24 +386,37 @@ function evaluateFunction($aGrid, $sExpresion) {
  * @return string | $unique ID | Unique Id |The unique ID for the initiated session.
  *
  */
-function WSLogin($user, $pass, $endpoint='') {
-  $client = wSOpen(true);
-  $params = array('userid'=>$user, 'password'=>$pass);
-  $result = $client->__SoapCall('login', array($params));
+function WSLogin($user, $pass, $endpoint = "") {
+  $client = WSOpen(true);
+  
+  $params = array("userid" => $user, "password" => $pass);
+  
+  $result = $client->__soapCall("login", array($params));
 
-  if($result->status_code == 0) {
-    if($endpoint != '') {
-      if(isset($_SESSION['WS_SESSION_ID']))      
-        $_SESSION['WS_END_POINT'] = $endpoint;
+  if ($result->status_code == 0) {
+    if ($endpoint != "") {
+      if (isset($_SESSION["WS_SESSION_ID"])) {
+        $_SESSION["WS_END_POINT"] = $endpoint;
+      }
     }
-    if(isset($_SESSION['WS_SESSION_ID']))
-      return $_SESSION['WS_SESSION_ID'] = $result->message;
+    /*
+    if (isset($_SESSION["WS_SESSION_ID"]))
+      return $_SESSION["WS_SESSION_ID"] = $result->message;
     else 
       return $result->message;
-  } else {
-    if(isset($_SESSION['WS_SESSION_ID']))
-      unset($_SESSION['WS_SESSION_ID']);
-    $wp = (trim($pass) != "")?'YES':'NO';
+    */
+    
+    $_SESSION["WS_SESSION_ID"] = $result->message;
+      
+    return $result->message;
+  }
+  else {
+    if (isset($_SESSION["WS_SESSION_ID"])) {
+      unset($_SESSION["WS_SESSION_ID"]);
+    }
+    
+    $wp = (trim($pass) != "")? "YES" : "NO";
+    
     throw new Exception("WSAccess denied! for user $user with password $wp");
   }
 }
@@ -421,16 +434,20 @@ function WSLogin($user, $pass, $endpoint='') {
  * @return Object Client | $client | SoapClient object | A SoapClient object. If unable to establish a connection, returns NULL.
  *
  */
-function WSOpen($force=false) {
-  if(isset($_SESSION['WS_SESSION_ID']) || $force) {
-    if( !isset ($_SESSION['WS_END_POINT']) ) {
-      $defaultEndpoint = 'http://'.$_SERVER['SERVER_NAME'].':'.$_SERVER['SERVER_PORT'].'/sys'.SYS_SYS.'/en/green/services/wsdl';
+function WSOpen($force = false) {
+  if (isset($_SESSION["WS_SESSION_ID"]) || $force) {
+    if (!isset($_SESSION["WS_END_POINT"])) {
+      $defaultEndpoint = "http://" . $_SERVER["SERVER_NAME"] . ":" . $_SERVER["SERVER_PORT"] . "/sys" . SYS_SYS . "/en/classic/services/wsdl2";
     }
-    $endpoint = isset( $_SESSION['WS_END_POINT'] ) ? $_SESSION['WS_END_POINT'] : $defaultEndpoint;
-    $client = new SoapClient( $endpoint );
+    
+    $endpoint = isset($_SESSION["WS_END_POINT"])? $_SESSION["WS_END_POINT"] : $defaultEndpoint;
+    
+    $client = new SoapClient($endpoint);
+    
     return $client;
-  } else {
-    throw new Exception('WS session is not open');
+  }
+  else {
+    throw new Exception("WS session is not open");
   }
 }
 /**
@@ -449,29 +466,31 @@ function WSOpen($force=false) {
 function WSTaskCase($caseId) {
   $client = WSOpen();
 
-  $sessionId = $_SESSION['WS_SESSION_ID'];
-
-  $params = array('sessionId'=>$sessionId, 'caseId'=>$caseId);
-  $result = $client->__soapCall('taskCase', array($params));
-
-  $i = 1;
-  if(isset ($result->taskCases)) {
-    foreach ( $result->taskCases as $key=> $item) {
-      if ( isset ($item->item) ) {
-        foreach ( $item->item as $index=> $val ) {
-          if ( $val->key == 'guid' ) $guid = $val->value;
-          if ( $val->key == 'name' ) $name = $val->value;
-        }
-      } else {
-        foreach ( $item as $index=> $val ) {
-          if ( $val->key == 'guid' ) $guid = $val->value;
-          if ( $val->key == 'name' ) $name = $val->value;
-        }
+  $sessionId = $_SESSION["WS_SESSION_ID"];
+  $params = array("sessionId" => $sessionId, "caseId" => $caseId);
+  
+  $result = $client->__soapCall("taskCase", array($params));
+  
+  $rows = array();
+  $i = 0;
+  
+  if (isset($result->taskCases)) {
+    //Processing when it is an array
+    if (is_array($result->taskCases)) {
+      foreach ($result->taskCases as $key => $obj) {
+        $rows[$i] = array("guid" => $obj->guid, "name" => $obj->name);
+        $i = $i + 1;
       }
-
-      $rows[$i++] = array ( 'guid' => $guid, 'name' => $name );
+    }
+    else {
+      //Processing when it is an object //1 row
+      if (is_object($result->taskCases)) {
+        $rows[$i] = array("guid" => $result->taskCases->guid, "name" => $result->taskCases->name);
+        $i = $i + 1;
+      }
     }
   }
+  
   return $rows;
 }
 /**
@@ -490,28 +509,31 @@ function WSTaskCase($caseId) {
 function WSTaskList() {
   $client = WSOpen();
 
-  $sessionId = $_SESSION['WS_SESSION_ID'];
-  $params = array('sessionId'=>$sessionId );
-  $result = $client->__SoapCall('TaskList', array($params));
-
-  $i = 1;
-  if(isset ($result->tasks)) {
-    foreach ( $result->tasks as $key=> $item) {
-      if ( isset ($item->item) ) {
-        foreach ( $item->item as $index=> $val ) {
-          if ( $val->key == 'guid' ) $guid = $val->value;
-          if ( $val->key == 'name' ) $name = $val->value;
-        }
-      } else {
-        foreach ( $item as $index=> $val ) {
-          if ( $val->key == 'guid' ) $guid = $val->value;
-          if ( $val->key == 'name' ) $name = $val->value;
-        }
+  $sessionId = $_SESSION["WS_SESSION_ID"];
+  $params = array("sessionId" => $sessionId);
+  
+  $result = $client->__soapCall("TaskList", array($params));
+  
+  $rows = array();
+  $i = 0;
+  
+  if (isset($result->tasks)) {
+    //Processing when it is an array
+    if (is_array($result->tasks)) {
+      foreach ($result->tasks as $key => $obj) {
+        $rows[$i] = array("guid" => $obj->guid, "name" => $obj->name);
+        $i = $i + 1;
       }
-
-      $rows[$i++] = array ( 'guid' => $guid, 'name' => $name );
+    }
+    else {
+      //Processing when it is an object //1 row
+      if (is_object($result->tasks)) {
+        $rows[$i] = array("guid" => $result->tasks->guid, "name" => $result->tasks->name);
+        $i = $i + 1;
+      }
     }
   }
+  
   return $rows;
 }
 /**
@@ -529,28 +551,31 @@ function WSTaskList() {
 function WSUserList() {
   $client = WSOpen();
 
-  $sessionId = $_SESSION['WS_SESSION_ID'];
-  $params = array('sessionId'=>$sessionId );
-  $result = $client->__SoapCall('UserList', array($params));
-
-  $i = 1;
-  if(isset ($result->users)) {
-    foreach ( $result->users as $key=> $item) {
-      if ( isset ($item->item) ) {
-        foreach ( $item->item as $index=> $val ) {
-          if ( $val->key == 'guid' ) $guid = $val->value;
-          if ( $val->key == 'name' ) $name = $val->value;
-        }
-      } else {
-        foreach ( $item as $index=> $val ) {
-          if ( $val->key == 'guid' ) $guid = $val->value;
-          if ( $val->key == 'name' ) $name = $val->value;
-        }
+  $sessionId = $_SESSION["WS_SESSION_ID"];
+  $params = array("sessionId" => $sessionId);
+  
+  $result = $client->__soapCall("UserList", array($params));
+  
+  $rows = array();
+  $i = 0;
+  
+  if (isset($result->users)) {
+    //Processing when it is an array
+    if (is_array($result->users)) {
+      foreach ($result->users as $key => $obj) {
+        $rows[$i] = array("guid" => $obj->guid, "name" => $obj->name);
+        $i = $i + 1;
       }
-
-      $rows[$i++] = array ( 'guid' => $guid, 'name' => $name );
+    }
+    else {
+      //Processing when it is an object //1 row
+      if (is_object($result->users)) {
+        $rows[$i] = array("guid" => $result->users->guid, "name" => $result->users->name);
+        $i = $i + 1;
+      }
     }
   }
+  
   return $rows;
 }
 /**
@@ -568,28 +593,31 @@ function WSUserList() {
 function WSGroupList() {
   $client = WSOpen();
 
-  $sessionId = $_SESSION['WS_SESSION_ID'];
-  $params = array('sessionId'=>$sessionId );
-  $result = $client->__SoapCall('GroupList', array($params));
+  $sessionId = $_SESSION["WS_SESSION_ID"];
+  $params = array("sessionId" => $sessionId);
+  
+  $result = $client->__soapCall("GroupList", array($params));
 
-  $i = 1;
-  if(isset ($result->groups)) {
-    foreach ( $result->groups as $key=> $item) {
-      if ( isset ($item->item) ) {
-        foreach ( $item->item as $index=> $val ) {
-          if ( $val->key == 'guid' ) $guid = $val->value;
-          if ( $val->key == 'name' ) $name = $val->value;
-        }
-      } else {
-        foreach ( $item as $index=> $val ) {
-          if ( $val->key == 'guid' ) $guid = $val->value;
-          if ( $val->key == 'name' ) $name = $val->value;
-        }
+  $rows = array();
+  $i = 0;
+  
+  if (isset($result->groups)) {
+    //Processing when it is an array
+    if (is_array($result->groups)) {
+      foreach ($result->groups as $key => $obj) {
+        $rows[$i] = array("guid" => $obj->guid, "name" => $obj->name);
+        $i = $i + 1;
       }
-
-      $rows[$i++] = array ( 'guid' => $guid, 'name' => $name );
+    }
+    else {
+      //Processing when it is an object //1 row
+      if (is_object($result->groups)) {
+        $rows[$i] = array("guid" => $result->groups->guid, "name" => $result->groups->name);
+        $i = $i + 1;
+      }
     }
   }
+  
   return $rows;
 }
 
@@ -608,27 +636,31 @@ function WSGroupList() {
 function WSRoleList() {
   $client = WSOpen();
 
-  $sessionId = $_SESSION['WS_SESSION_ID'];
-  $params = array('sessionId'=>$sessionId );
-  $result = $client->__SoapCall('RoleList', array($params));
-  $i = 1;
-  if(isset ($result->roles)) {
-    foreach ( $result->roles as $key=> $item) {
-      if ( isset ($item->item) ) {
-        foreach ( $item->item as $index=> $val ) {
-          if ( $val->key == 'guid' ) $guid = $val->value;
-          if ( $val->key == 'name' ) $name = $val->value;
-        }
-      } else {
-        foreach ( $item as $index=> $val ) {
-          if ( $val->key == 'guid' ) $guid = $val->value;
-          if ( $val->key == 'name' ) $name = $val->value;
-        }
+  $sessionId = $_SESSION["WS_SESSION_ID"];
+  $params = array("sessionId" => $sessionId);
+  
+  $result = $client->__soapCall("RoleList", array($params));
+  
+  $rows = array();
+  $i = 0;
+  
+  if (isset($result->roles)) {
+    //Processing when it is an array
+    if (is_array($result->roles)) {
+      foreach ($result->roles as $key => $obj) {
+        $rows[$i] = array("guid" => $obj->guid, "name" => $obj->name);
+        $i = $i + 1;
       }
-
-      $rows[$i++] = array ( 'guid' => $guid, 'name' => $name );
+    }
+    else {
+      //Processing when it is an object //1 row
+      if (is_object($result->roles)) {
+        $rows[$i] = array("guid" => $result->roles->guid, "name" => $result->roles->name);
+        $i = $i + 1;
+      }
     }
   }
+  
   return $rows;
 }
 /**
@@ -647,29 +679,31 @@ function WSRoleList() {
 function WSCaseList() {
   $client = WSOpen();
 
-  $sessionId = $_SESSION['WS_SESSION_ID'];
-  $params = array('sessionId'=>$sessionId );
-  $result = $client->__SoapCall('CaseList', array($params));
+  $sessionId = $_SESSION["WS_SESSION_ID"];
+  $params = array("sessionId" => $sessionId);
+  
+  $result = $client->__soapCall("CaseList", array($params));
 
-  $i = 1;
-  if(isset ($result->cases)) {
-    foreach ( $result->cases as $key=> $item) {
-      if ( isset ($item->item) ) {
-        foreach ( $item->item as $index=> $val ) {
-          if ( $val->key == 'guid' ) $guid = $val->value;
-          if ( $val->key == 'name' ) $name = $val->value;
-        }
-      } else {
-        foreach ( $item as $index=> $val ) {
-          if ( $val->key == 'guid' ) $guid = $val->value;
-          if ( $val->key == 'name' ) $name = $val->value;
-        }
+  $rows = array();
+  $i = 0;
+  
+  if (isset($result->cases)) {
+    //Processing when it is an array
+    if (is_array($result->cases)) {
+      foreach ($result->cases as $key => $obj) {
+        $rows[$i] = array("guid" => $obj->guid, "name" => $obj->name);
+        $i = $i + 1;
       }
-
-      $rows[$i++] = array ( 'guid' => $guid, 'name' => $name );
+    }
+    else {
+      //Processing when it is an object //1 row
+      if (is_object($result->cases)) {
+        $rows[$i] = array("guid" => $result->cases->guid, "name" => $result->cases->name);
+        $i = $i + 1;
+      }
     }
   }
-
+  
   return $rows;
 }
 /**
@@ -687,28 +721,31 @@ function WSCaseList() {
 function WSProcessList() {
   $client = WSOpen();
 
-  $sessionId = $_SESSION['WS_SESSION_ID'];
-  $params = array('sessionId'=>$sessionId );
-  $result = $client->__SoapCall('ProcessList', array($params));
+  $sessionId = $_SESSION["WS_SESSION_ID"];
+  $params = array("sessionId" => $sessionId);
+  
+  $result = $client->__soapCall("ProcessList", array($params));
 
-  $i = 1;
-  if(isset ($result->processes)) {
-    foreach ( $result->processes as $key=> $item) {
-      if ( isset ($item->item) ) {
-        foreach ( $item->item as $index=> $val ) {
-          if ( $val->key == 'guid' ) $guid = $val->value;
-          if ( $val->key == 'name' ) $name = $val->value;
-        }
-      } else {
-        foreach ( $item as $index=> $val ) {
-          if ( $val->key == 'guid' ) $guid = $val->value;
-          if ( $val->key == 'name' ) $name = $val->value;
-        }
+  $rows = array();
+  $i = 0;
+  
+  if (isset($result->processes)) {
+    //Processing when it is an array
+    if (is_array($result->processes)) {
+      foreach ($result->processes as $key => $obj) {
+        $rows[$i] = array("guid" => $obj->guid, "name" => $obj->name);
+        $i = $i + 1;
       }
-
-      $rows[$i++] = array ( 'guid' => $guid, 'name' => $name );
+    }
+    else {
+      //Processing when it is an object //1 row
+      if (is_object($result->processes)) {
+        $rows[$i] = array("guid" => $result->processes->guid, "name" => $result->processes->name);
+        $i = $i + 1;
+      }
     }
   }
+  
   return $rows;
 }
 /**
@@ -785,18 +822,27 @@ function PMFSendMessage($caseId, $sFrom, $sTo, $sCc, $sBcc, $sSubject, $sTemplat
  */
 function WSSendVariables($caseId, $name1, $value1, $name2, $value2) {
   $client = WSOpen();
-  $sessionId = $_SESSION['WS_SESSION_ID'];
+  
+  $sessionId = $_SESSION["WS_SESSION_ID"];
 
-  $variables[1]->name  = $name1;
-  $variables[1]->value = $value1;
-  $variables[2]->name  = $name2;
-  $variables[2]->value = $value2;
-  $params = array('sessionId'=>$sessionId, 'caseId'=>$caseId, 'variables'=>$variables);
-  $result = $client->__SoapCall('SendVariables', array($params));
+  $v1 = new stdClass();
+  $v1->name = $name1;
+  $v1->value = $value1;
+ 
+  $v2 = new stdClass();
+  $v2->name = $name2;
+  $v2->value = $value2;
+  
+  $variables = array($v1, $v2);
+  
+  $params = array("sessionId" => $sessionId, "caseId" => $caseId, "variables" => $variables);
+  
+  $result = $client->__soapCall("SendVariables", array($params));
 
-  $fields['status_code'] = $result->status_code;
-  $fields['message']     = $result->message;
-  $fields['time_stamp']  = $result->timestamp;
+  $fields["status_code"] = $result->status_code;
+  $fields["message"]     = $result->message;
+  $fields["time_stamp"]  = $result->timestamp;
+  
   return $fields;
 }
 /**
@@ -816,14 +862,17 @@ function WSSendVariables($caseId, $name1, $value1, $name2, $value2) {
  */
 function WSDerivateCase($caseId, $delIndex) {
   $client = WSOpen();
-  $sessionId = $_SESSION['WS_SESSION_ID'];
+  
+  $sessionId = $_SESSION["WS_SESSION_ID"];
 
-  $params = array('sessionId'=>$sessionId, 'caseId'=>$caseId, 'delIndex'=>$delIndex );
-  $result = $client->__SoapCall('DerivateCase', array($params));
+  $params = array("sessionId" => $sessionId, "caseId" => $caseId, "delIndex" => $delIndex);
+  
+  $result = $client->__soapCall("DerivateCase", array($params));
 
-  $fields['status_code'] = $result->status_code;
-  $fields['message']     = $result->message;
-  $fields['time_stamp']  = $result->timestamp;
+  $fields["status_code"] = $result->status_code;
+  $fields["message"]     = $result->message;
+  $fields["time_stamp"]  = $result->timestamp;
+  
   return $fields;
 }
 /**
@@ -846,19 +895,29 @@ function WSDerivateCase($caseId, $delIndex) {
  */
 function WSNewCaseImpersonate($processId, $userId, $name1, $value1, $name2, $value2) {
   $client = WSOpen();
-  $sessionId = $_SESSION['WS_SESSION_ID'];
+  
+  $sessionId = $_SESSION["WS_SESSION_ID"];
 
-  $variables[1]->name  = $name1;
-  $variables[1]->value = $value1;
-  $variables[2]->name  = $name2;
-  $variables[2]->value = $value2;
+  $v1 = new stdClass();
+  $v1->name = $name1;
+  $v1->value = $value1;
+ 
+  $v2 = new stdClass();
+  $v2->name = $name2;
+  $v2->value = $value2;
+  
+  $variables = array($v1, $v2);
 
-  $params = array('sessionId'=>$sessionId, 'processId'=>$processId, 'userId'=>$userId, 'variables'=>$variables );
-  $result = $client->__SoapCall('NewCaseImpersonate', array($params));
+  $params = array("sessionId" => $sessionId, "processId" => $processId, "userId" => $userId, "variables" => $variables);
+  
+  $result = $client->__soapCall("NewCaseImpersonate", array($params));
 
-  $fields['status_code'] = $result->status_code;
-  $fields['message']     = $result->message;
-  $fields['time_stamp']  = $result->timestamp;
+  $fields["status_code"] = $result->status_code;
+  $fields["message"]     = $result->message;
+  $fields["time_stamp"]  = $result->timestamp;
+  $fields["case_id"]     = $result->caseId;
+  $fields["case_number"] = $result->caseNumber;
+
   return $fields;
 }
 /**
@@ -882,19 +941,28 @@ function WSNewCaseImpersonate($processId, $userId, $name1, $value1, $name2, $val
  */
 function WSNewCase($processId, $taskId, $name1, $value1, $name2, $value2) {
   $client = WSOpen();
-  $sessionId = $_SESSION['WS_SESSION_ID'];
+  $sessionId = $_SESSION["WS_SESSION_ID"];
 
-  $variables[1]->name  = $name1;
-  $variables[1]->value = $value1;
-  $variables[2]->name  = $name2;
-  $variables[2]->value = $value2;
+  $v1 = new stdClass();
+  $v1->name = $name1;
+  $v1->value = $value1;
+ 
+  $v2 = new stdClass();
+  $v2->name = $name2;
+  $v2->value = $value2;
+  
+  $variables = array($v1, $v2);
 
-  $params = array('sessionId'=>$sessionId, 'processId'=>$processId, 'taskId'=>$taskId, 'variables'=>$variables );
-  $result = $client->__SoapCall('NewCase', array($params));
+  $params = array("sessionId" => $sessionId, "processId" => $processId, "taskId" => $taskId, "variables" => $variables);
+  
+  $result = $client->__soapCall("NewCase", array($params));
 
-  $fields['status_code'] = $result->status_code;
-  $fields['message']     = $result->message;
-  $fields['time_stamp']  = $result->timestamp;
+  $fields["status_code"] = $result->status_code;
+  $fields["message"]     = $result->message;
+  $fields["time_stamp"]  = $result->timestamp;
+  $fields["case_id"]     = $result->caseId;
+  $fields["case_number"] = $result->caseNumber;
+  
   return $fields;
 }
 /**
@@ -914,14 +982,17 @@ function WSNewCase($processId, $taskId, $name1, $value1, $name2, $value2) {
  */
 function WSAssignUserToGroup($userId, $groupId) {
   $client = WSOpen();
-  $sessionId = $_SESSION['WS_SESSION_ID'];
+  
+  $sessionId = $_SESSION["WS_SESSION_ID"];
 
-  $params = array('sessionId'=>$sessionId, 'userId'=>$userId, 'groupId'=>$groupId);
-  $result = $client->__SoapCall('AssignUserToGroup', array($params));
+  $params = array("sessionId" => $sessionId, "userId" => $userId, "groupId" => $groupId);
+  
+  $result = $client->__soapCall("AssignUserToGroup", array($params));
 
-  $fields['status_code'] = $result->status_code;
-  $fields['message']     = $result->message;
-  $fields['time_stamp']  = $result->timestamp;
+  $fields["status_code"] = $result->status_code;
+  $fields["message"]     = $result->message;
+  $fields["time_stamp"]  = $result->timestamp;
+  
   return $fields;
 }
 /**
@@ -944,13 +1015,16 @@ function WSAssignUserToGroup($userId, $groupId) {
  */
 function WSCreateUser($userId, $password, $firstname, $lastname, $email, $role) {
   $client = WSOpen();
-  $sessionId = $_SESSION['WS_SESSION_ID'];
-  $params = array('sessionId'=>$sessionId, 'userId'=>$userId, 'firstname'=>$firstname, 'lastname'=>$lastname, 'email'=>$email, 'role'=>$role, 'password'=>$password);
-  $result = $client->__SoapCall('CreateUser', array($params));
+  
+  $sessionId = $_SESSION["WS_SESSION_ID"];
+  $params = array("sessionId" => $sessionId, "userId" => $userId, "firstname" => $firstname, "lastname" => $lastname, "email" => $email, "role" => $role, "password" => $password);
+  
+  $result = $client->__soapCall("CreateUser", array($params));
 
-  $fields['status_code'] = $result->status_code;
-  $fields['message']     = $result->message;
-  $fields['time_stamp']  = $result->timestamp;
+  $fields["status_code"] = $result->status_code;
+  $fields["message"]     = $result->message;
+  $fields["time_stamp"]  = $result->timestamp;
+  
   return $fields;
 }
 /**
@@ -966,9 +1040,10 @@ function WSCreateUser($userId, $password, $firstname, $lastname, $email, $role) 
  *
  */
 function WSGetSession() {
-  if(isset($_SESSION['WS_SESSION_ID'])) {
-    return $_SESSION['WS_SESSION_ID'];
-  } else {
+  if (isset($_SESSION["WS_SESSION_ID"])) {
+    return $_SESSION["WS_SESSION_ID"];
+  }
+  else {
     throw new Exception("SW session is not open!");
   }
 }
@@ -1469,13 +1544,15 @@ function PMFDerivateCase($caseId, $delIndex, $bExecuteTriggersBeforeAssignment =
  *
  */
 function PMFNewCaseImpersonate($processId, $userId, $variables) {
-  G::LoadClass('wsBase');
-  $ws = new wsBase ();
+  G::LoadClass("wsBase");
+  
+  $ws = new wsBase();
   $result = $ws->newCaseImpersonate($processId, $userId, $variables);
 
-  if($result->status_code == 0) {
-    return 1;
-  } else {
+  if ($result->status_code == 0) {
+    return $result->caseId;
+  }
+  else {
     return 0;
   }
 }
