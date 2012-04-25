@@ -323,6 +323,12 @@ class Xpdl extends processes
     }
     $proTitle  = (substr(G::inflect($oData->process['PRO_TITLE']), 0, 245));
     $proTitle  = preg_replace("/[^A-Za-z0-9_]/", "", $proTitle);
+    //Calculating the maximum length of file name
+    $pathLength = strlen(PATH_DATA ."sites".PATH_SEP.SYS_SYS.PATH_SEP."files".PATH_SEP."output".PATH_SEP);
+    $length = strlen($proTitle) + $pathLength;
+    if ($length  >= 250) {
+      $proTitle = myTruncate($proTitle, 250 - $pathLength, '_', '');
+    }
     $index     = '';
     $lastIndex = '';
     do {
