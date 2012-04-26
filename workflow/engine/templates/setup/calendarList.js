@@ -300,7 +300,7 @@ DoSearch = function(){
 EditCalendarAction = function() {
   rowSelected = infoGrid.getSelectionModel().getSelected();
   if (rowSelected){
-	  location.href = '../admin/calendarEdit?id=' + rowSelected.data.CALENDAR_UID;
+	  location.href = '../admin/calendarEdit?edit=1&id=' + rowSelected.data.CALENDAR_UID;
   }
 };
 
@@ -359,8 +359,8 @@ render_status = function(v){
 //Members Button Action
 CopyButtonAction = function(){
   rowSelected = infoGrid.getSelectionModel().getSelected();
-  if (rowSelected){
-    location.href = 'calendarEdit?cp=1&id=' + rowSelected.data.CALENDAR_UID;
+  if (rowSelected){    
+    location.href = '../admin/calendarEdit?cp=1&id=' + rowSelected.data.CALENDAR_UID;
   }
 };
 

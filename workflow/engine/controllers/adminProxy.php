@@ -142,6 +142,41 @@ class adminProxy extends HttpProxyController
     return array('success' => true, 'message'=>'done', 'users'=>$retRow);
   }
 
+  function calendarValidate($httpData) {
+    $httpData=array_unique($httpData);
+    $message = '';
+    $oldName = isset($httpData['oldName'])? $httpData['oldName']:'';    
+    switch ($httpData['action']){
+      case 'calendarName':
+        require_once ('classes/model/CalendarDefinition.php');
+        $oCalendar  = new CalendarDefinition();
+        $aCalendars = $oCalendar->getCalendarList(false,true); 
+        $aCalendarDefinitions = end($aCalendars);
+        foreach($aCalendarDefinitions as $aDefinitions) {
+          if (trim($_POST['name'])==''){
+            $validated = false;
+            $message  = G::loadTranslation('ID_CALENDAR_INVALID_NAME');
+            break;
+          }
+          if ($aDefinitions['CALENDAR_NAME']!=$httpData['name']){
+            $validated = true;
+          } else {
+            if ($aDefinitions['CALENDAR_NAME']!=$oldName) {
+            $validated = false;
+            $message  = G::loadTranslation('ID_CALENDAR_INVALID_NAME');
+            break;
+          }
+        }
+        }
+        break;
+      case 'calendarDates':
+        $validated = false;
+        $message = G::loadTranslation('ID_CALENDAR_INVALID_WORK_DATES');
+        break;
+    }
+    return $message;
+  }
+
   function uxGroupUpdate($httpData)
   {
     require_once 'classes/model/Groupwf.php';
