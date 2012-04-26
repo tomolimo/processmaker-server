@@ -14,6 +14,9 @@ Ext.onReady(function(){
       width : 780,
       id    : 'wizard',
       closable: false,
+      modal : false,
+      draggable: false,
+
       headerConfig : {
         title : '&nbsp'
       },
@@ -64,6 +67,13 @@ function finishInstallation()
         //   'Workspace "' + Ext.getCmp('workspace').getValue() + '" was installed correctly now you will be redirected to your new workspace.', 
         //   function() {_redirectwindow.location = response.url;}
         // );
+      }
+      else {
+        PMExt.error('ERROR', response.message, function(){
+          if (response.canRedirect) {
+            _redirect(response.uri); 
+          }
+        })
       }
     },
     failure: function(){wizard.showLoadMask(false);},

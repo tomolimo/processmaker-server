@@ -37,7 +37,7 @@ var Login = function() {
     /** Properties */
     form   : null,
     window : null,
-    enableVirtualKeyboard : true,
+    enableVirtualKeyboard : false,
     fieldsWidth : 200,
     
     /** Init method */
@@ -51,10 +51,14 @@ var Login = function() {
       
       Ext.QuickTips.init();
       Ext.form.Field.prototype.msgTarget = 'side';
+
+      if ((PMExt.cookie.read('x-pm-ws')))
+        defaultWS = PMExt.cookie.read('x-pm-ws');
+
+      if ((PMExt.cookie.read('x-pm-ws')))
+        defaultLang = PMExt.cookie.read('x-pm-lang');
       
       this.initComponents();
-      
-      Ext.getCmp('workspace').setValue(PMExt.cookie.read('x-pm-ws'));
 
       this.window.show();
       Ext.getCmp('userTxt').focus(true, 1000);
@@ -166,6 +170,8 @@ Login.initComponents = function()
       editable     : true,
       listeners: {
         afterrender: function(){
+          if (defaultWS == '') return;
+
           var store = workspaceField.getStore();
           var i = store.findExact('id', defaultWS, 0);
           if (i > -1){
@@ -197,6 +203,8 @@ Login.initComponents = function()
     }),
     listeners     : {
       afterrender : function() {
+        if (defaultLang == '') return;
+
         var store = languagesCmb.getStore();
         var i = store.findExact('id', defaultLang, 0);
         if (i > -1) {
@@ -277,6 +285,11 @@ Login.submit = function()
   Login.submiting = true;
 
   document.getElementById('language').value = Ext.getCmp('language').getValue();
+
+  // persistene on cookie
+  PMExt.cookie.create('x-pm-ws', Ext.getCmp('workspace').getValue(), 30);
+  PMExt.cookie.create('x-pm-lang', document.getElementById('language').value, 30);
+
   document.forms[0].action = '../login/sysLoginVerify';
   document.forms[0].submit();
   return;

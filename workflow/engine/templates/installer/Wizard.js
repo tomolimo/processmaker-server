@@ -539,6 +539,7 @@ this.showLoadMask(true, 'validating');
      */
     onNextClick : function()
     {
+        this.nextButton.setDisabled(true);
         if (this.currentCard == this.cardCount-1) {
             this.onFinish();
         } else {

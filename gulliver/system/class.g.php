@@ -4931,11 +4931,88 @@ function getDirectorySize($path,$maxmtime=0)
 
 
   /**
-   * Update a ini file passing a array values, this finction don not remove the original commets
+   * verify if all files & directories passed by param. are writable
    * @author Erik Amaru Ortiz <erik@colosa.com>
+   * @param $resources array a list of files to verify write access
+   */
+  function verifyWriteAccess($resources)
+  {
+    $noWritable = array();
+    foreach ($resources as $i => $resource) {
+      if (!is_writable($resource)) {
+        $noWritable[] = $resource;
+      }
+    }
+
+    if (count($noWritable) > 0) {
+      $e = new Exception("Write access not allowed for ProcessMaker resources");
+      $e->files = $noWritable;
+      throw $e;
+    }
+  }
+
+  /**
+   * render a smarty template
+   * @author Erik Amaru Ortiz <erik@colosa.com>
+   * @param $template string containing the template filename on /gulliver/templates/ directory
+   * @param $data associative array containig the template data
+   */
+  function renderTemplate($template, $data=array())
+  {
+    if (!defined('PATH_THIRDPARTY')) {
+      throw new Exception('System constant (PATH_THIRDPARTY) is not defined!');
+    }
+
+    require_once PATH_THIRDPARTY . 'smarty/libs/Smarty.class.php'; 
+    
+    $smarty = new Smarty();
+    $smarty->compile_dir = G::sys_get_temp_dir();
+    $smarty->cache_dir   = G::sys_get_temp_dir();
+    $smarty->config_dir  = PATH_THIRDPARTY . 'smarty/configs';
+
+    $smarty->template_dir  = PATH_TEMPLATE;
+    $smarty->force_compile = true;
+
+    foreach ($data as $key => $value) {
+      $smarty->assign($key, $value);
+    }
+
+    $smarty->display("$template.tpl");
+  }
+
+  /**
+   * parse a smarty template and return teh result as string
+   * @author Erik Amaru Ortiz <erik@colosa.com>
+   * @param $template string containing the template filename on /gulliver/templates/ directory
+   * @param $data associative array containig the template data
+   * @return $content string containing the parsed template content
+   */
+  function parseTemplate($template, $data=array())
+  {
+    $content = '';
+    
+    ob_start();
+    G::renderTemplate($template, $data);
+    $content = ob_get_contents();
+    ob_get_clean();
+
+    return $content;
+  }
+
+  /**
+   * Update a ini file passing a array values, this function don't remove the original comments
+   * @author Erik Amaru Ortiz <erik@colosa.com>
+   * @licence GPL v2 (http://www.gnu.org/licenses/gpl-2.0.html)
+   *
+   * @param $file string containing the ini file to update
+   * @param $array associative array containing the config data
    */
   function update_php_ini($file, $array)
   {
+    if (!is_writable($file)) {
+      throw new Exception("File $file, is not writable.");
+    }
+
     $iniLines = array();
     $iniContent = array();
     
@@ -4978,58 +5055,42 @@ function getDirectorySize($path,$maxmtime=0)
 
     $content = implode("\r\n", $iniLines);
 
-    file_put_contents($file, $content);
+    if (@file_put_contents($file, $content) === false) {
+      throw new Exception("G::update_php_ini() -> can't update file: $file");
+    }
   }
 
-  function verifyWriteAccess($resources)
-  {
-    $noWritable = array();
-    foreach ($resources as $i => $resource) {
-      if (!is_writable($resource)) {
-        $noWritable[] = $resource;
+  /**
+   * recursive file & directories write permission detect
+   * @author Erik Amaru Ortiz <erik@colosa.com>
+   * @licence GPL v2 (http://www.gnu.org/licenses/gpl-2.0.html)
+   *
+   * @param $path string of directory or file to verify recursively
+   * @param $noWritableFiles (alternative) array passed by reference to store all no-writable files
+   * @return bool true if all files inside a directory path are writable, false in another case
+   */
+  function is_writable_r($path, &$noWritableFiles = array()) 
+  { 
+    if (is_writable($path)){
+      if (!is_dir($path))
+        return true;
+
+      $list = glob(rtrim($path, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR .'*');
+      
+      $sw = true;
+      foreach ($list as $f) {
+        if (!G::is_writable_r($f, $noWritableFiles)) {
+          $sw = false;
+        }
       }
+
+      return $sw;
     }
-
-    if (count($noWritable) > 0) {
-      $e = new Exception("Write access not allowed for ProcessMaker resources");
-      $e->files = $noWritable;
-      throw $e;
+    else {
+      $noWritableFiles[] = $path; 
+      
+      return false;
     }
-  }
-
-  function renderTemplate($template, $data=array())
-  {
-    if (!defined('PATH_THIRDPARTY')) {
-      throw new Exception('System constant (PATH_THIRDPARTY) is not defined!');
-    }
-
-    require_once PATH_THIRDPARTY . 'smarty/libs/Smarty.class.php'; 
-    
-    $smarty = new Smarty();
-    $smarty->compile_dir = G::sys_get_temp_dir();
-    $smarty->cache_dir   = G::sys_get_temp_dir();
-    $smarty->config_dir  = PATH_THIRDPARTY . 'smarty/configs';
-
-    $smarty->template_dir  = PATH_TEMPLATE;
-    $smarty->force_compile = true;
-
-    foreach ($data as $key => $value) {
-      $smarty->assign($key, $value);
-    }
-
-    $smarty->display("$template.tpl");
-  }
-
-  function parseTemplate($template, $data=array())
-  {
-    $content = '';
-    
-    ob_start();
-    G::renderTemplate($template, $data);
-    $content = ob_get_contents();
-    ob_get_clean();
-
-    return $content;
   }
 };
 

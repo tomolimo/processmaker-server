@@ -1,7 +1,8 @@
 var steps = [];
 
 Ext.onReady(function(){
-  
+  PMExt.notify_time_out = 2;
+
   var storeDatabase = new Ext.data.Store({
     proxy: new Ext.data.HttpProxy({url: 'getEngines', method:'POST'}),
     reader: new Ext.data.JsonReader({
@@ -71,6 +72,7 @@ Ext.onReady(function(){
   // getting the system info
   function getPermissionInfo() {
     wizard.showLoadMask(true);
+
     Ext.Ajax.request({
       url: 'getPermissionInfo',
       success: function(response) {
@@ -97,9 +99,12 @@ Ext.onReady(function(){
         
         wizard.showLoadMask(false);
 
-        if (response.notify != '') {
-          Ext.msgBoxSlider.msgTopCenter('alert', '', response.notify, 30);
-        }
+        permissionInfo.error1 = response.noWritableFiles
+
+        //type = response.success ? 'success' : 'warning';
+        if (!response.success)
+          PMExt.error('WARNING', response.notify + ' <a href="#" onclick="showPermissionInfo(1); return false;">Show non-writable files.</a>');
+
       },
       failure: function(){},
       params: {
@@ -115,9 +120,9 @@ Ext.onReady(function(){
   }
 
   function checkLicenseAgree() {
-    wizard.onClientValidation(2, Ext.getCmp('agreeCheckbox').getValue());
+    //wizard.onClientValidation(2, Ext.getCmp('agreeCheckbox').checked);
+    wizard.onClientValidation(2, false);
   }
-
 
   function ckeckDBEnginesValuesLoaded() {
     wizard.showLoadMask(true);
@@ -142,6 +147,10 @@ Ext.onReady(function(){
       success: function(response){
         var response = Ext.util.JSON.decode(response.responseText);
         Ext.getCmp('db_message').setValue(getFieldOutput(response.message, response.result));
+        
+        if (!response.result)
+          PMExt.notify('WARNING', response.message, 'warning');
+        
         wizard.onClientValidation(3, response.result);
         wizard.showLoadMask(false);
       },
@@ -207,13 +216,16 @@ Ext.onReady(function(){
         Ext.get('wfDatabaseSpan').dom.innerHTML = (response.wfDatabaseExists ? existMsg : noExistsMsg);
         Ext.get('rbDatabaseSpan').dom.innerHTML = (response.rbDatabaseExists ? existMsg : noExistsMsg);
         Ext.get('rpDatabaseSpan').dom.innerHTML = (response.rpDatabaseExists ? existMsg : noExistsMsg);
+        
         var dbFlag = ((!response.wfDatabaseExists && !response.rbDatabaseExists && !response.rpDatabaseExists) || Ext.getCmp('deleteDB').getValue());
         wizard.onClientValidation(4, dbFlag);
+
         if (dbFlag) {
           Ext.getCmp('finish_message').setValue(getFieldOutput('The data is correct.', true));
         }
         else {
-          Ext.getCmp('finish_message').setValue(getFieldOutput('Rename the databases names or workspace name or check the "Delete Databases if exists" to overwrite the exiting databases.', false));
+          Ext.getCmp('finish_message').setValue(getFieldOutput('Not Passed.', false));
+          PMExt.notify('WARNING', response.errMessage, 'warning', 4)
         }
         wizard.showLoadMask(false);
       },
@@ -415,6 +427,10 @@ Ext.onReady(function(){
                 width: 430,
                 value: path_shared,
                 enableKeyEvents: true,
+                allowBlank: false,
+                blankText: '"Workflow Data Directory" is required',
+                selectOnFocus: true,
+                msgTarget: 'side',
                 listeners: {keyup: function() {
                   wizard.onClientValidation(2, false);
                   if (Ext.getCmp('pathShared').getValue().substr(-1, 1) != path_sep) {
@@ -493,7 +509,11 @@ Ext.onReady(function(){
       }
     ],
     listeners: {
-      show: checkLicenseAgree
+      show: function() {
+        setTimeout(function(){
+          wizard.onClientValidation(2, false);
+        }, 100);
+      }
     }
 
   });
@@ -707,6 +727,7 @@ Ext.onReady(function(){
                     inputType : 'password',
                     id: 'adminPassword',
                     enableKeyEvents: true,
+                    allowBlank: false,
                     listeners: {keyup: function() {
                       wizard.onClientValidation(4, false);
                     }}
@@ -717,6 +738,7 @@ Ext.onReady(function(){
                     inputType : 'password',
                     id : 'confirmPassword',
                     enableKeyEvents: true,
+                    allowBlank: false,
                     listeners: {keyup: function() {
                       wizard.onClientValidation(4, false);
                     }}
@@ -837,3 +859,38 @@ Ext.onReady(function(){
 
 });
 
+permissionInfo = {};
+function showPermissionInfo()
+{
+  var text = '';
+
+  for (i=0; i < permissionInfo.error1.length; i++) {
+    text += (i+1)+'. '+permissionInfo.error1[i] + "\n";
+  }
+
+  w = new Ext.Window({
+    layout: 'fit',
+    title: 'Non-writable Files',
+    width: 550,
+    height: 180,
+    closable: true,
+    resizable: true,
+    //html: text,
+    plain: true,
+    items: [{
+      xtype: 'textarea',
+      id        : 'permissionInfoText',
+      fieldLabel: '',
+      anchor: "100%",
+      value: text,
+      readOnly: true
+    }],
+    bbar: new Ext.ux.StatusBar({
+      defaultText: '',
+      id: 'login-statusbar2',
+      statusAlign: 'right'
+    })
+  });
+
+  w.show();
+}
