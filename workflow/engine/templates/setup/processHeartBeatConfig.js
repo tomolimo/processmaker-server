@@ -11,8 +11,13 @@ Ext.onReady(function() {
         hideLabel  : true,
         id         : 'ch_ii',
         style      : 'margin-top:15px',
-        boxLabel   : '<b>' + _('ID_ENABLE_HEART_BEAT') + '</b>'
-        
+        boxLabel   : '<b>' + _('ID_ENABLE_HEART_BEAT') + '</b>',
+        listeners : {
+          check : function(){
+            Ext.getCmp('btn_save').enable();
+          }
+        }
+
       },
       {
         xtype  : 'box',
@@ -22,10 +27,12 @@ Ext.onReady(function() {
                           + '" target="_blank" align="center">' + _('ID_MORE_INFORMATION') + '</a>.'
                  },
         style : 'margin-left:20px'        
-      },
+      }
     ],    
     buttons : [{
+      id      : 'btn_save',
       text    : _('ID_SAVE'),
+      disabled: true,
       handler : saveOption    
     }]
   });
@@ -54,7 +61,9 @@ Ext.onReady(function() {
   frm.render(document.body);
 });
 
-function saveOption() {  
+function saveOption()
+{
+  Ext.getCmp('btn_save').disable();
   Ext.getCmp('frmHeart').getForm().submit( {  
     url     : 'processHeartBeatAjax?action=saveOption',
     waitMsg : _('ID_SAVING_PROCESS'),
