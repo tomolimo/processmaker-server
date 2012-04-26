@@ -38,7 +38,7 @@ class Installer extends Controller
     $step2_txt = 'These settings are recommended for PHP in order to ensure full compatibility with ProcessMaker. <> ' .
                  'However, ProcessMaker still operate if your settings do not quite match the recommended';
     $step3_txt = 'In order for ProcessMaker works correctly it needs to be able to access or write to certain files or directories.<br>' .
-                 'Please make sure to change the permissions on the files or directories listed below.';
+                 'Please make sure to give write access on directories and all its subdirectories and files within that are listed below.';
     $step4_txt = 'ProcessMaker stores all of its data in a database. This screen gives the installation program the information needed to create this database.<br><br>' .
                  'If you are installing ProcessMaker on a remote web server, you will need to get this information from your Database Server.<br>';
     $step5_txt = 'ProcessMaker uses a workspaces to store data. Please select a valid workspace name and credentials to log in it. ';
@@ -210,44 +210,77 @@ class Installer extends Controller
     return $info;
   }
 
-  public function is_dir_writable( $path ) 
+  public function is_dir_writable($path) 
   {
-    return ( is_dir($path) && is_writable($path) );
+    return G::is_writable_r($path);
   }
 
   public function getPermissionInfo() 
   {
-
     $this->setResponseType('json');
-    $info->notify = '';
-
+    
+    $info = new StdClass();
+    $info->success = true;
+    $noWritableFiles = array();
+    
     // pathConfig
     $info->pathConfig->message = 'unwriteable';
-    $info->pathConfig->result  = $this->is_dir_writable($_REQUEST['pathConfig']);
-    if ( $info->pathConfig->result ) $info->pathConfig->message = 'writeable';
+    $info->pathConfig->result  = G::is_writable_r($_REQUEST['pathConfig'], $noWritableFiles);
+    if ( $info->pathConfig->result ) {
+      $info->pathConfig->message = 'writeable';
+    }
+    else {
+      $info->success = false;
+    }
 
     $info->pathLanguages->message = 'unwriteable';
-    $info->pathLanguages->result  = $this->is_dir_writable($_REQUEST['pathLanguages']);
-    if ( $info->pathLanguages->result ) $info->pathLanguages->message = 'writeable';
+    $info->pathLanguages->result  = G::is_writable_r($_REQUEST['pathLanguages'], $noWritableFiles);
+    if ( $info->pathLanguages->result ) {
+      $info->pathLanguages->message = 'writeable';
+    }
+    else {
+      $info->success = false;
+    }
 
     $info->pathPlugins->message = 'unwriteable';
-    $info->pathPlugins->result  = $this->is_dir_writable($_REQUEST['pathPlugins']);
-    if ( $info->pathPlugins->result ) $info->pathPlugins->message = 'writeable';
+    $info->pathPlugins->result  = G::is_writable_r($_REQUEST['pathPlugins'], $noWritableFiles);
+    if ( $info->pathPlugins->result ) {
+      $info->pathPlugins->message = 'writeable';
+    }
+    else {
+      $info->success = false;
+    }
 
     $info->pathXmlforms->message = 'unwriteable';
-    $info->pathXmlforms->result  = $this->is_dir_writable($_REQUEST['pathXmlforms']);
-    if ( $info->pathXmlforms->result ) $info->pathXmlforms->message = 'writeable';
+    $info->pathXmlforms->result  = G::is_writable_r($_REQUEST['pathXmlforms'], $noWritableFiles);
+    if ( $info->pathXmlforms->result ) {
+      $info->pathXmlforms->message = 'writeable';
+    }
+    else {
+      $info->success = false;
+    }
 
     $info->pathPublic->message = 'unwriteable';
-    $info->pathPublic->result  = is_writable($_REQUEST['pathPublic']);
+    $info->pathPublic->result  = G::is_writable_r($_REQUEST['pathPublic'], $noWritableFiles);
+    if ( $info->pathPublic->result ) {
+      $info->pathShared->message = 'writeable';
+    }
+    else {
+      $info->success = false;
+    }
 
     $info->pathShared->message = 'unwriteable';
-    $info->pathShared->result  = $this->is_dir_writable($_REQUEST['pathShared']);
-    if ( $info->pathShared->result ) $info->pathShared->message = 'writeable';
-
-    if (!$info->pathShared->result) {
+    $info->pathShared->result  = G::is_writable_r($_REQUEST['pathShared'], $noWritableFiles);
+    if ( $info->pathShared->result ) {
+      $info->pathShared->message = 'writeable';
+    }
+    else {
       G::verifyPath($_REQUEST['pathShared'], true);
-      $info->pathShared->result  = $this->is_dir_writable($_REQUEST['pathShared']);
+      $info->pathShared->result = G::is_writable_r($_REQUEST['pathShared'], $noWritableFiles);
+      if ( $info->pathShared->result )
+        $info->pathShared->message = 'writeable';
+      else
+        $info->success = false;
     }
 
     if ($info->pathShared->result) {
@@ -259,9 +292,22 @@ class Installer extends Controller
         }
       }
     }
+
     $info->pathLogFile->message = 'Could not create the installation log';
     $info->pathLogFile->result  = file_exists($_REQUEST['pathLogFile']);
-    if ( $info->pathLogFile->result ) $info->pathLogFile->message = 'Installation log created';
+    
+    if ($info->pathLogFile->result) {
+      $info->pathLogFile->message = 'Installation log created';
+    }
+
+    if ($info->success) {
+      $info->notify = 'Success, all required directories are writable.';
+    }
+    else {
+      $info->notify = 'Some directories and/or files inside it are not writable.';
+    }
+
+    $info->noWritableFiles = $noWritableFiles;
 
     return $info;
   }
@@ -548,6 +594,7 @@ class Installer extends Controller
     ini_set('max_execution_time', '0');
     $info->result   = false;
     $info->message = '';
+    $info->canRedirect = true;
 
     $db_hostname   = trim($_REQUEST['db_hostname']);
     $db_port       = trim($_REQUEST['db_port']);
@@ -756,25 +803,45 @@ class Installer extends Controller
 
       //writting for new installtions to use the new skin 'uxmind' with new Front End ExtJs Based
       $updatedConf['default_skin'] = 'uxmodern';
-      G::update_php_ini($envFile, $updatedConf);
+      $info->uri = '/sys' . $_REQUEST['workspace'] . '/en/uxmodern/main/login';
+
+      try {
+        G::update_php_ini($envFile, $updatedConf);
+      }
+      catch (Exception $e) {
+        $info->result  = false;
+        $info->message = "ProcessMaker couldn't write on configuration file: $envFile.<br/>";
+        $info->message .= "The new ProcessMaker UI couldn't be applied on installation, you can enable it after from Admin->System settings.";
+        $this->installLog("Installed but with error, couldn't update env.ini" );
+        return $info;
+      }
 
       // getting configuration from env.ini
       $sysConf = System::getSystemConfiguration($envFile);
 
-      // update the main index file
-      $indexFileUpdated = System::updateIndexFile(array(
-        'lang' => 'en',
-        'skin' => $updatedConf['default_skin']
-      ));
+      try {
+        // update the main index file
+        $indexFileUpdated = System::updateIndexFile(array(
+          'lang' => 'en',
+          'skin' => $updatedConf['default_skin']
+        ));
+      }
+      catch (Exception $e) {
+        $info->result  = false;
+        $info->message = "ProcessMaker couldn't write on configuration file: ".PATH_HTML."index.html.<br/>";
+        $info->message .= "The new ProcessMaker UI couldn't be applied on installation, you can enable it after from Admin->System settings.";
+        $this->installLog("Installed but with error, couldn't update index.html" );
+        return $info;
+      }
 
       $this->installLog("Index File updated $indexFileUpdated with lang: {$sysConf['default_lang']}, skin: {$sysConf['default_skin']} " );
       $this->installLog("Install completed Succesfully" );
 
-      $info->uri = '/sys' . $_REQUEST['workspace'] . '/en/uxmodern/main/login';
       $info->result  = true;
       $info->message = 'Succesfully OK';
     }
     catch (Exception $e) {
+      $info->canRedirect = false;
       $info->result  = false;
       $info->message = $e->getMessage();
     }
@@ -986,26 +1053,30 @@ class Installer extends Controller
   public function checkDatabases() 
   {
     $this->setResponseType('json');
-    $databasesExists = new stdclass();
+    $info = new stdclass();
+
     if ($_REQUEST['db_engine'] == 'mysql') {
       $link = @mysql_connect($_REQUEST['db_hostname'], $_REQUEST['db_username'], $_REQUEST['db_password']);
       $dataset = @mysql_query("show databases like '" . $_REQUEST['wfDatabase'] . "'", $link);
-      $databasesExists->wfDatabaseExists = (@mysql_num_rows($dataset) > 0);
+      $info->wfDatabaseExists = (@mysql_num_rows($dataset) > 0);
       $dataset = @mysql_query("show databases like '" . $_REQUEST['rbDatabase'] . "'", $link);
-      $databasesExists->rbDatabaseExists = (@mysql_num_rows($dataset) > 0);
+      $info->rbDatabaseExists = (@mysql_num_rows($dataset) > 0);
       $dataset = @mysql_query("show databases like '" . $_REQUEST['rpDatabase'] . "'", $link);
-      $databasesExists->rpDatabaseExists = (@mysql_num_rows($dataset) > 0);
+      $info->rpDatabaseExists = (@mysql_num_rows($dataset) > 0);
     }
     else {
       $link = @mssql_connect($_REQUEST['db_hostname'], $_REQUEST['db_username'], $_REQUEST['db_password']);
       $dataset = @mssql_query("select * from sys.databases where name = '" . $_REQUEST['wfDatabase'] . "'", $link);
-      $databasesExists->wfDatabaseExists = (@mssql_num_rows($dataset) > 0);
+      $info->wfDatabaseExists = (@mssql_num_rows($dataset) > 0);
       $dataset = @mssql_query("select * from sys.databases where name = '" . $_REQUEST['rbDatabase'] . "'", $link);
-      $databasesExists->rbDatabaseExists = (@mssql_num_rows($dataset) > 0);
+      $info->rbDatabaseExists = (@mssql_num_rows($dataset) > 0);
       $dataset = @mssql_query("select * from sys.databases where name = '" . $_REQUEST['rpDatabase'] . "'", $link);
-      $databasesExists->rpDatabaseExists = (@mssql_num_rows($dataset) > 0);
+      $info->rpDatabaseExists = (@mssql_num_rows($dataset) > 0);
     }
-    return $databasesExists;
+
+    $info->errMessage = 'Database already exists, check "Delete Databases if exists" to overwrite the exiting databases.';
+
+    return $info;
   }
 
   /**

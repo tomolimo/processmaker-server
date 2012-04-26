@@ -1,6 +1,8 @@
 PMExtJSCommon = function() {
   this.version = '1.8';
-   
+  
+  this.notify_time_out = 3;
+
   this.confirm = function(title, msg, fnYes, fnNo)
   {
     if (typeof(_) != 'undefined') {
@@ -64,9 +66,9 @@ PMExtJSCommon = function() {
     });
   }
   
-  this.notify = function(title, msg)
+  this.notify = function(title, msg, type, time)
   {
-    Ext.msgBoxSlider.msg(title, msg);
+    Ext.msgBoxSlider.msg(title, msg, type, time);
   }
   
   this.getBrowser = function()
@@ -190,7 +192,7 @@ Ext.msgBoxSlider = function(){
     ].join('');
   }
   return {
-    msg : function(title, format) {
+    msg : function(title, format, type, time) {
       if( ! msgCt ) {
           msgCt = Ext.DomHelper.insertFirst(document.body, {id:'msg-div', style:'position:absolute'}, true);
       }
@@ -202,19 +204,50 @@ Ext.msgBoxSlider = function(){
       m.setWidth(400 );
       m.position(null, 5000 );
       m.alignTo(document, 'br-br');
-      //Ext.get('x-box-mc-inner' ).setStyle('background-image', 'url("<?php echo _EXT_URL ?>/images/_accept.png")');
+
+      type = typeof type != 'undefined' ? type : '';
+      time = typeof time != 'undefined' ? time : PMExt.notify_time_out;
+      
+      switch(type) {
+        case 'alert':
+        case 'warning':
+        case 'tmp-warning':
+          image = '/images/alert.gif';
+          break;
+        case 'error':
+        case 'tmp-error':
+          image = '/images/error.png';
+          break;
+        case 'tmp-info':
+        case 'info':
+          image = '/images/info.png';
+          break;
+        case 'success':  
+        case 'ok':
+          image = '/images/select-icon.png';
+          break;
+        default:
+          image = '';
+      }
+
+      leftPadding = 35;
+
+      if (image != '') {
+        Ext.get('x-box-mc-inner' ).setStyle('background-image', 'url("'+image+'")');
+        leftPadding = 45;
+      }
+
       Ext.get('x-box-mc-inner' ).setStyle('background-position', '5px 10px');
       Ext.get('x-box-mc-inner' ).setStyle('background-repeat', 'no-repeat');
-      Ext.get('x-box-mc-inner' ).setStyle('padding-left', '35px');
-      m.slideIn('t').pause(3).ghost("t", {remove:true});
+      Ext.get('x-box-mc-inner' ).setStyle('padding-left', leftPadding+'px');
+      m.slideIn('t').pause(time).ghost("t", {remove:true});
     },
 
     msgTopCenter : function(type, title, format, time) {
       if (typeof remove == 'undefined') 
         remove : true;
 
-      if (typeof time == 'undefined') 
-        time =  3;
+      time =  typeof time != 'undefined' ? time : PMExt.notify_time_out;
 
       if( ! msgCt ) {
           msgCt = Ext.DomHelper.insertFirst(document.body, {id:'msg-div', style:'position:absolute'}, true);

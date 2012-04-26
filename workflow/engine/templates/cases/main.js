@@ -178,6 +178,7 @@ Ext.onReady(function(){
     id: 'tree-panel',
     region: 'center',
     margins: '0 0 0 0',
+    useArrows : true,
     tbar: [
       {
         xtype: 'tbfill'
@@ -199,6 +200,7 @@ Ext.onReady(function(){
     rootVisible: false,
     clearOnReLoad: false,
     root: new Ext.tree.AsyncTreeNode(),
+    useArrows: true,
 
     // Our custom TreeLoader:
     loader: new Ext.app.menuLoader({
@@ -207,13 +209,13 @@ Ext.onReady(function(){
     }),
 
     listeners: {
-    	'click': function(tp) {
+      'click': function(tp) {
         if( tp.attributes.url ){
           document.getElementById('casesSubFrame').src = tp.attributes.url;
         }
       } ,
       'render': function(tp){
-    	  /*tp.getSelectionModel().on('selectionchange', function(tree, node){
+        /*tp.getSelectionModel().on('selectionchange', function(tree, node){
 
           if( node.attributes.url ){
             document.getElementById('casesSubFrame').src = node.attributes.url;
@@ -545,7 +547,7 @@ Ext.onReady(function(){
 
 function updateCasesView() {
   try{
-  	if (document.getElementById('casesSubFrame').contentWindow.storeCases) {
+    if (document.getElementById('casesSubFrame').contentWindow.storeCases) {
       document.getElementById('casesSubFrame').contentWindow.storeCases.reload();
     }
   } 
@@ -554,7 +556,7 @@ function updateCasesView() {
 
 function updateCasesTree() {
   //treeMenuItems.root.reload();
-  Ext.getCmp('refreshNotifiers').setIcon('/skins/ext/images/default/grid/loading.gif');
+  Ext.getCmp('refreshNotifiers').setIcon('/images/ext/default/grid/loading.gif');
 
   itemsTypes = Array('CASES_INBOX', 'CASES_DRAFT', 'CASES_CANCELLED', 'CASES_SENT', 'CASES_PAUSED', 'CASES_COMPLETED','CASES_SELFSERVICE');
   if(currentSelectedTreeMenuItem){
@@ -664,27 +666,27 @@ Ext.app.menuLoader = Ext.extend(Ext.ux.tree.XmlTreeLoader, {
       attr.loaded = false;
       attr.expanded = false;
       attr.xtype = 'treepanel';
-      attr.rootVisible = true,
-      attr.singleClickExpand=true,
-      attr.animate = true,
-      attr.nodeType = 'async',
-      attr.clearOnReLoad= false,
+      attr.rootVisible = true;
+      attr.singleClickExpand=true;
+      attr.animate = true;
+      attr.nodeType = 'async';
+      attr.clearOnReLoad= false;
 
-      attr.loader = new Ext.tree.TreeLoader( {
-						dataUrl : attr.blockNestedTree,
-						baseParams : {
-							action : 'expandNode',
-							folderID: attr.folderId
-						}});
-		 attr.style= {
-            // width: '50%',
-            height: '50px',
-            // marginBottom: '10px',
-            overflow:'auto'
-        };
-                 
-				      
-    }else if(attr.blockHeaderNoChild){
+      attr.loader = new Ext.tree.TreeLoader({
+        dataUrl : attr.blockNestedTree,
+        baseParams : {
+          action : 'expandNode',
+          folderID: attr.folderId
+        }
+      });
+      attr.style= {
+        // width: '50%',
+        height: '50px',
+        // marginBottom: '10px',
+        overflow:'auto'
+      };
+    }
+    else if(attr.blockHeaderNoChild){
         //console.info(attr);
         attr.text = attr.blockTitle;
         attr.iconCls = 'ICON_' + attr.id;
@@ -694,15 +696,15 @@ Ext.app.menuLoader = Ext.extend(Ext.ux.tree.XmlTreeLoader, {
         attr.expandable=true;
         attr.qtip=attr.blockTitle;
          
-        				      
+                      
       }else if(attr.blockTitle){
       attr.text = attr.blockTitle;
       attr.iconCls = 'ICON_' + attr.id;
       attr.loaded = true;
       //if((attr.url)&&(attr.url!="")){
-      //	attr.expanded = false;
+      //  attr.expanded = false;
       //}else{
-    	  attr.expanded = true;
+        attr.expanded = true;
       //}
     }else if(attr.title){ 
       attr.text = attr.title;
