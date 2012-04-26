@@ -8,8 +8,17 @@
   comboStatusStore = new Ext.data.SimpleStore({
     fields: ['id','value'],
     data: [['- ALL -','- ALL -'],['SUN','SUN'],['MON','MON'],['TUE','TUE'],['WED','WED'],['THU','THU'],['FRI','FRI'],['SAT','SAT']]
-  }); 
-  
+  });
+  var get = '';
+  var vars = [], hash;
+  var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+  for (var i = 0; i < hashes.length; i++) {
+    hash = hashes[i].split('=');
+    vars.push(hash[0]);
+    vars[hash[0]] = hash[1];
+  }    
+  get = vars[0];  
+  var message = '';  
   function workHourCompositeFieldInterfaz(i){     
     //!dataSystem
     var d = new Date();
@@ -374,8 +383,10 @@ Ext.onReady( function() {
             var s = grid.getSelectionModel().getSelections();
             //  console.log( 's[i]=', s[i].data.name);
             for(var i = 0, r; r = s[i]; i++){               
-             if(s[i].data.name!='- ALL -')
-              store.remove(r);
+              if(s[i].data.name!='- ALL -')
+                store.remove(r);
+              else
+                PMExt.error( _('ID_ERROR'), _('ID_NODELETEOPTIONALL'));
             }
         }
       }],
@@ -698,14 +709,51 @@ Ext.onReady( function() {
                 {
                   xtype:'fieldset',
                   title: _('ID_CALENDAR_DEFINITION'),
-                  items: [
+                  items: [{
+                    xtype:'label',
+                    text: _('ID_CALENDAR_INVALID_NAME'),
+                    name: 'idInvalidCalendarName',
+                    id:'idInvalidCalendarName',
+                    style:'color:red; padding:125px; ',
+                    hidden: true,
+                    bodyStyle:'text-align:right;',//'padding:25px',
+                    anchor:'90%'                    
+                 },
                     {
                       id         : 'dynaformCalendarName' ,
                       xtype      : 'textfield' ,
                       width      : 200 ,
                       fieldLabel : _('ID_NAME') ,
                       name       : 'name' ,
-                      allowBlank : false
+                      allowBlank : false,                     
+                      listeners: {
+                        change: function(){                          
+                          Ext.getCmp('idInvalidCalendarName').hide();
+     		           var validateMessage = '';                          
+                          var canlendarName = Ext.getCmp('dynaformCalendarName').getValue();
+                          var oldName = '';
+                          if (name!='') {
+                            oldName = '&oldName='+name;
+                          }
+                          Ext.Ajax.request( {
+                            url: '../adminProxy/calendarValidate',
+                            params: {
+                              action : 'calendarName',
+                              oldName : "",
+                              name : canlendarName                             
+                            },
+                            success: function(resp){                              
+                              if (resp.responseText != '[]')
+                                message = resp.responseText;
+                              else
+                                message = '';
+                            } 
+                          });                                                  
+                        },
+                        focus: function(){
+                          $message = '';
+                        }
+                      } 
                     },
                     {
                       id         : 'dynaformCalendarDescription' ,
@@ -743,7 +791,7 @@ Ext.onReady( function() {
                 {
                     id   : 'workDays',
                     xtype: 'fieldset',
-                    title: _('ID_WORK_DAYS'),
+                    title: _('ID_WORK_DAYS')+'  <i>('+_('ID_3DAYSMINIMUM')+')</i>',
                     items: [
                       {//8
                         id          : 'dynaformCalendarWorkDays',
@@ -883,7 +931,12 @@ Ext.onReady( function() {
       buttons:[ 
                 {
                   text: fields['NEWCALENDAR']=='YES'?_("ID_CREATE") : _("ID_UPDATE"),
-                  handler: function() {
+                  handler: function() {                    
+                    if(message!=''){                      
+                      Ext.getCmp('idInvalidCalendarName').show();                      
+                      Ext.getCmp('dynaformCalendarName').focus();                      
+                      return false;
+                    }
                     var flag = 0;
                     gridHoliday.store.each(function(record) {
                       var start = record.data['startDate'];
@@ -926,7 +979,7 @@ Ext.onReady( function() {
                       dynaformCalendarWorkDaysArrayChecked = dynaformCalendarWorkDaysArray[i].checked;
                       dynaformCalendarWorkDaysArrayName    = dynaformCalendarWorkDaysArray[i].name;
                       if(dynaformCalendarWorkDaysArrayChecked==true) {
-                        arrayDayinCheckbox[i]=(dynaformCalendarWorkDaysArray[i].boxLabel);
+                        arrayDayinCheckbox[indexAuxiliar]=(dynaformCalendarWorkDaysArray[i].boxLabel);
 
                         index = parseInt(dynaformCalendarWorkDaysArrayName.substring(1,2),10);
                         dynaformCalendarWorkDaysArrayCheckedArray[indexAuxiliar] = index;
@@ -1064,7 +1117,7 @@ Ext.onReady( function() {
                             } 
                           }
                           if (flagDay < arrayDayinCheckboxSize)
-                            Ext.Msg.alert( _('ID_ERROR'), _('ID_SELECT_ALL'));
+                            PMExt.error( _('ID_ERROR'), _('ID_SELECT_ALL'));
                           else {
                             Ext.Ajax.request( {
                               url: '../adminProxy/calendarSave',
@@ -1100,7 +1153,33 @@ Ext.onReady( function() {
                     else {
                       Ext.Msg.alert( _('ID_ERROR'), 'There is at least one empty date field in the holiday grid, please check and try again');
                     }
-                  }
+                    return true;
+                  },
+                  listeners: {
+                    mouseover: function () {
+                      Ext.getCmp('idInvalidCalendarName').hide();
+                      var validateMessage = '';                          
+                      var canlendarName = Ext.getCmp('dynaformCalendarName').getValue();
+                      var oldName = '';
+                      if (name!='') {
+                        oldName = '&oldName='+name;
+                      }
+                      Ext.Ajax.request( {
+                        url: '../adminProxy/calendarValidate',
+                        params: {
+                          action : 'calendarName',
+                          oldName : "",
+                          name : canlendarName                             
+                        },
+                        success: function(resp){
+                          if (resp.responseText != '[]')
+                            message = resp.responseText;
+                          else
+                            message = '';
+                        } 
+                      }); 
+                    }
+                  }                  
                 },
                 {
                   text:_("ID_CANCEL"),
@@ -1114,7 +1193,8 @@ Ext.onReady( function() {
         }
       ]
     });
-
+    
+//Ext.getCmp('idInvalidCalendarName').setVisible(false);
   //[ DATA EDIT
     calendarWorkDayStatusReset();
     var workDayEquivalenceArray = new Array();
@@ -1142,9 +1222,8 @@ Ext.onReady( function() {
       existDayKey++;
     }
     eval('var existDayObject = {'+existDayArray.join(',')+'};');
-    var dayName;
-    
-    dynaformCalendarWorkDays_.items.items.each(function(dayObject){
+    var dayName;  
+    dynaformCalendarWorkDays_.items.each(function(dayObject){
       dayName = dayObject.name;
       if(dayName in existDayObject) {
         dayObject.setValue(true);        
@@ -1204,4 +1283,30 @@ Ext.onReady( function() {
       dynaformCalendarName_.setValue(true);
     }
   //]
+  Ext.getCmp('idInvalidCalendarName').hide();
+  if (get != "edit") {
+    var validateMessage = '';                          
+    var canlendarName = Ext.getCmp('dynaformCalendarName').getValue();
+    var oldName = '';
+    
+    if (name!='') {
+      oldName = '&oldName='+name;
+    }
+    
+    Ext.Ajax.request( {
+      url: '../adminProxy/calendarValidate',
+      params: {
+        action : 'calendarName',
+        oldName : "",
+        name : canlendarName                             
+      },
+      success: function(resp){        
+        if (resp.responseText != '[]')
+          message = resp.responseText;
+        else
+          message = '';
+      } 
+    });  
+  }
+  
 });
