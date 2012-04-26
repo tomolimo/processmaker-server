@@ -3365,7 +3365,13 @@ $output = $outputHeader.$output;
     if (!$setup['MESS_ENABLED']) {
       return G::LoadTranslation('ID_EMAIL_ENGINE_IS_NOT_ENABLED');
     }
-    
+
+    $passwd    = $setup['MESS_PASSWORD'];
+    $passwdDec = G::decrypt($passwd,'EMAILENCRYPT');
+    if (strpos( $passwdDec, 'hash:' ) !== false) {
+      list($hash, $pass) = explode(":", $passwdDec);
+      $setup['MESS_PASSWORD'] = $pass;
+    }
     $mail = new PHPMailer(true);
     $mail->From = $from != '' && $from ? $from : $setup['MESS_ACCOUNT'];
     $mail->FromName = $fromName;
