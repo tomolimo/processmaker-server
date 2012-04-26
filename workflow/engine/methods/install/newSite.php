@@ -94,6 +94,9 @@ else
 //  $oHeadPublisher->assign('CONFIG', $Config);
 //  $oHeadPublisher->assign('FORMATS',$c->getFormats());
 
+  $oHeadPublisher->assign("SYS_LANG", SYS_LANG);
+  $oHeadPublisher->assign("SYS_SKIN", SYS_SKIN);
+
   G::RenderPage('publish', 'extJs');
 	
 }

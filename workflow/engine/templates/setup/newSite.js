@@ -199,8 +199,13 @@ Ext.onReady(function(){
       var data = Ext.util.JSON.decode(result.responseText);
       if( data.success ) {
         PMExt.confirm(_('ID_CONFIRM'), _('NEW_SITE_SUCCESS') +" "+nwTitle+"<br/>"+ _('NEW_SITE_SUCCESS_CONFIRM')+"<br/>"+ _('NEW_SITE_SUCCESS_CONFIRMNOTE'), function(){
-         nwTitle    =formNewSite.getForm().findField('NW_TITLE').getValue();
-         parent.parent.window.location="/sys"+nwTitle+"/en/green/login/login";
+         nwTitle = formNewSite.getForm().findField('NW_TITLE').getValue();
+         if (typeof window.parent.parent.parent != 'undefined') {
+           parent.parent.parent.window.location = "/sys" + nwTitle + "/" + SYS_LANG + "/" + SYS_SKIN + "/login/login";
+         }
+         else {
+           parent.parent.window.location = "/sys" + nwTitle + "/" + SYS_LANG + "/" + SYS_SKIN + "/login/login";
+         }
        });
       } else {
        PMExt.error(_('ID_ERROR'), data.msg);
