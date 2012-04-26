@@ -153,7 +153,8 @@ class Installer
   private function make_site()
   {
     $test = $this->create_site_test();
-    if($test['created']===true)
+    
+    if($test["created"] == true || $this->options["advanced"]["ao_db_drop"] == true)
     {
       /* Check if the hostname is local (localhost or 127.0.0.1) */
       $islocal = (strcmp(substr($this->options['database']['hostname'], 0, strlen('localhost')),'localhost')===0) ||
@@ -166,9 +167,11 @@ class Installer
 
       $schema = "schema.sql";
       $values = "insert.sql";
-
+      
       if($this->options['advanced']['ao_db_drop']===true) {
-        /* Drop databases  */
+        //Delete workspace directory if exists
+        
+        //Drop databases
         $this->run_query("DROP DATABASE IF EXISTS ".$wf, "Drop database $wf");
         $this->run_query("DROP DATABASE IF EXISTS ".$rb, "Drop database $rb");
         $this->run_query("DROP DATABASE IF EXISTS ".$rp, "Drop database $rp");
