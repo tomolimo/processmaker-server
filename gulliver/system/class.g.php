@@ -4956,7 +4956,41 @@ function getDirectorySize($path,$maxmtime=0)
     }
 
     require_once PATH_THIRDPARTY . 'smarty/libs/Smarty.class.php'; 
-    
+    $fInfo = pathinfo($template);
+
+    $tplExists = true;
+
+    // file has absolute path
+    if (substr($template, 0, 1) != PATH_SEP) {
+      $template = PATH_TEMPLATE . $template;
+    }
+
+    // fix for template that have dot in its name but is not a valid extension
+    if (isset($fInfo['extension']) && ($fInfo['extension'] != 'tpl' || $fInfo['extension'] != 'html')) {
+      unset($fInfo['extension']);
+    }
+
+    if (!isset($fInfo['extension'])) {
+      if (file_exists($template . '.tpl')) {
+        $template .= '.tpl';
+      }
+      else if (file_exists($template . '.html')) {
+        $template .= '.html';
+      }
+      else {
+        $tplExists = false;
+      }
+    }
+    else {
+      if (!file_exists($template)) {
+        $tplExists = false;
+      }
+    }
+
+    if (!$tplExists) {
+      throw new Exception("Template: $template, doesn't exist!");
+    }
+
     $smarty = new Smarty();
     $smarty->compile_dir = G::sys_get_temp_dir();
     $smarty->cache_dir   = G::sys_get_temp_dir();
@@ -4969,7 +5003,7 @@ function getDirectorySize($path,$maxmtime=0)
       $smarty->assign($key, $value);
     }
 
-    $smarty->display("$template.tpl");
+    $smarty->display($template);
   }
 
   /**
