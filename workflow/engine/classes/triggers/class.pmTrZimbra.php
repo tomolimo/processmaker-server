@@ -31,7 +31,7 @@
  * @name getZimbraFolder
  * @label Get Attributes for specified FolderName
  *
- * @param string | $ServerUrl | Server name and port where Zimbra exists | http://localhost:7070/service/soap
+ * @param string | $ServerUrl | Server name and port where Zimbra exists | zimbra.server:port
  * @param string | $username | Valid username to connect to Zimbra server
  * @param string | $preAuthKey | Server Key for SSO authentication
  * @param string | $folderName | Folder Name
@@ -66,7 +66,7 @@ function getZimbraFolder($ServerUrl, $username, $preAuthKey, $folderName) {
  * @name getZimbraContactList
  * @label Get Contact Lists from Zimbra Server
  *
- * @param string | $ServerUrl | Server name and port where Zimbra exists | http://localhost:7070/service/soap
+ * @param string | $ServerUrl | Server name and port where Zimbra exists | zimbra.server:port
  * @param string | $username| Valid username to connect to Zimbra server
  * @param string | $preAuthKey | Server Key for SSO authentication
  *
@@ -98,7 +98,7 @@ function getZimbraContactList($ServerUrl, $username, $preAuthKey) {
  * @name getZimbraTaskList
  * @label Get Task Lists from Zimbra Server
  *
- * @param string | $ServerUrl | Server name and port where Zimbra exists | http://localhost:7070/service/soap
+ * @param string | $ServerUrl | Server name and port where Zimbra exists | zimbra.server:port
  * @param string | $username| Valid username to connect to Zimbra server
  * @param string | $preAuthKey | Server Key for SSO authentication
  *
@@ -128,12 +128,12 @@ function getZimbraTaskList($ServerUrl, $username, $preAuthKey) {
 /**
  * @method
  *
- * Get Appointment List 
+ * Get Appointment List
  *
  * @name getZimbraAppointmentList
  * @label Get Appointment Lists from Zimbra Server
  *
- * @param string | $ServerUrl | Server name and port where Zimbra exists | http://localhost:7070/service/soap
+ * @param string | $ServerUrl | Server name and port where Zimbra exists | zimbra.server:port
  * @param string | $username| Valid username to connect to Zimbra server
  * @param string | $preAuthKey | Server Key for SSO authentication
  *
@@ -168,11 +168,11 @@ function getZimbraAppointmentList($ServerUrl, $username, $preAuthKey) {
  * @name createZimbraFolder
  * @label Create Specified Folder with Attributes in Briefcase Tab
  *
- * @param string | $ServerUrl | Server name and port where Zimbra exists | http://localhost:7070/service/soap
+ * @param string | $ServerUrl | Server name and port where Zimbra exists | zimbra.server:port
  * @param string | $username | Valid username to connect to Zimbra server
  * @param string | $preAuthKey | Server Key for SSO authentication
  * @param string | $folderName | Folder Name
- * @param string | $color | Color of Folder 
+ * @param string | $color | Color of Folder
  *
  * @return string | $result | Response
  *
@@ -199,12 +199,12 @@ function createZimbraFolder($ServerUrl, $username, $preAuthKey, $folderName, $co
 /**
  * @method
  *
- * Create Contacts 
+ * Create Contacts
  *
  * @name createZimbraContacts
  * @label Create Contacts in Address Book
  *
- * @param string | $ServerUrl | Server name and port where Zimbra exists | http://localhost:7070/service/soap
+ * @param string | $ServerUrl | Server name and port where Zimbra exists | zimbra.server:port
  * @param string | $username | Valid username to connect to Zimbra server
  * @param string | $preAuthKey | Server Key for SSO authentication
  * @param string | $firstName | First Name
@@ -245,10 +245,10 @@ function createZimbraContacts($ServerUrl, $username, $preAuthKey, $firstName, $l
  * @name createZimbraTask
  * @label Create Task
  *
- * @param string | $ServerUrl | Server name and port where Zimbra exists | http://localhost:7070/service/soap
+ * @param string | $ServerUrl | Server name and port where Zimbra exists | zimbra.server:port
  * @param string | $username | Valid username to connect to Zimbra server
  * @param string | $preAuthKey | Server Key for SSO authentication
- * @param string | $subject | Mail Subject 
+ * @param string | $subject | Mail Subject
  * @param string | $taskName | Task Name
  * @param string | $friendlyName | Friendly Name of the User
  * @param string | $userEmail | Email Address of the User
@@ -264,14 +264,13 @@ function createZimbraContacts($ServerUrl, $username, $preAuthKey, $firstName, $l
  *
  */
 function createZimbraTask($ServerUrl, $username, $preAuthKey, $subject, $taskName, $friendlyName, $userEmail, $priority, $allDay, $class, $location, $dueDate, $status, $percent) {
-
     $serializeOp = array();
     $serializeOp = array('subject' => $subject, 'taskName' => $taskName, 'friendlyName' => $friendlyName, 'userEmail' => $userEmail, 'priority' => $priority, 'allDay' => $allDay, 'class' => $class, 'location' => $location, 'dueDate' => $dueDate, 'status' => $status, 'percent' => $percent);
     $serializeOp1 = serialize($serializeOp);
 
     $zimbra = new Zimbra($username, $ServerUrl, $preAuthKey);
-    $connectionResult = $zimbra->connect();
 
+    $connectionResult = $zimbra->connect();
     if (!$connectionResult) {
         return "Check userName or Server URL";
     }
@@ -292,10 +291,10 @@ function createZimbraTask($ServerUrl, $username, $preAuthKey, $subject, $taskNam
  * @name createZimbraAppointment
  * @label Create Appointment
  *
- * @param string | $ServerUrl | Server name and port where Zimbra exists | http://localhost:7070/service/soap
+ * @param string | $ServerUrl | Server name and port where Zimbra exists | zimbra.server:port
  * @param string | $username | Valid username to connect to Zimbra server
  * @param string | $preAuthKey | Server Key for SSO authentication
- * @param string | $subject | Mail Subject 
+ * @param string | $subject | Mail Subject
  * @param string | $appointmentName | Appointment Name
  * @param string | $friendlyName | Organizer's Friendly Name
  * @param string | $userEmail | Email Address of the Attendee(s) seperated by ';'
@@ -345,7 +344,7 @@ function createZimbraAppointment($ServerUrl, $username, $preAuthKey, $subject, $
  * @name uploadZimbraFile
  * @label Upload File/Document to Zimbra Server
  *
- * @param string | $ServerUrl | Server name and port where Zimbra exists | http://localhost:7070/service/soap
+ * @param string | $ServerUrl | Server name and port where Zimbra exists | zimbra.server:port
  * @param string | $username | Valid username to connect to Zimbra server
  * @param string | $preAuthKey | Server Key for SSO authentication
  * @param string | $folderName | Folder Name
@@ -357,42 +356,53 @@ function createZimbraAppointment($ServerUrl, $username, $preAuthKey, $subject, $
 function uploadZimbraFile($ServerUrl, $username, $preAuthKey, $folderName, $fileLocation) {
 
     $header_array = array("ENCTYPE" => "multipart/form-data");
-    $credentials = "root:solutions";
-    $options = array(headers => $header_array,
-        httpauth => $credentials,
-        httpauthtype => HTTP_AUTH_BASIC); //1. test without the credentials
-
     $file = $fileLocation;
 
     $oZimbraObj = new Zimbra($username, $ServerUrl, $preAuthKey);
     $connectResult = $oZimbraObj->connect();
     $sAuthToken = $oZimbraObj->auth_token;
     $cookie = array('ZM_AUTH_TOKEN' => $sAuthToken, 'ZM_TEST' => true);
-
+    $cookie = 'ZM_AUTH_TOKEN=' . $sAuthToken. '; ZM_TEST='. true;
     $url = "http://$ServerUrl/service/upload?fmt=raw";
-    $request = new HttpRequest($url, HTTP_METH_POST);
-    $request->setCookies($cookie);
-    $request->addPostFile("uploadFile", $file);  // 2. test without 1st parameter
-    $request->addPostFields(array($options));
-
-    $sendResult = $request->send();
-
-    // gettin Upload ID
-
-    $aResponce = (array) $sendResult;
-    $counter = 0;
-    foreach ($aResponce as $values) {
-        $counter++;
-        if ($counter == 2) {
-            $sResponce = $values;
-        }
+    $params = array (
+            'uploadFile' => "@$file"
+    );
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    //curl_setopt($ch, CURLOPT_VERBOSE, 1);
+    curl_setopt($ch, CURLOPT_COOKIE, $cookie);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch, CURLOPT_POST, 1);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+    curl_setopt ($ch, CURLOPT_SSL_VERIFYHOST, 0);
+    curl_setopt ($ch, CURLOPT_SSL_VERIFYPEER, 0);
+    curl_setopt ($ch, CURLOPT_BINARYTRANSFER, true);
+    curl_setopt ($ch, CURLOPT_COOKIESESSION, true);
+    curl_setopt ($ch, CURLOPT_FRESH_CONNECT, true);
+    curl_setopt ($ch, CURLOPT_HEADER, true);
+    curl_setopt ($ch, CURLOPT_NOPROGRESS, false);
+    curl_setopt ($ch, CURLOPT_VERBOSE, true);
+    curl_setopt ($ch, CURLOPT_HTTPHEADER,$header_array);
+    if( ! $response = curl_exec($ch))
+    {
+       return "Upload error. Connection Error";
     }
-
+    
+    //G::pr($response);
+    
+    $header_size = curl_getinfo($ch,CURLINFO_HEADER_SIZE);
+    $result['header'] = substr($response, 0, $header_size);
+    $result['body'] = substr( $response, $header_size );
+    $result['http_code'] = curl_getinfo($ch,CURLINFO_HTTP_CODE);
+    $result['last_url'] = curl_getinfo($ch,CURLINFO_EFFECTIVE_URL);
+    
     $aString = array();
-    $aExplode = explode(",", $sResponce);
+    $aExplode = explode(",", $result['body']);
     $uploadID = substr($aExplode[2], 1, -2);
-
-    // gettin FOlder ID
+    
+    curl_close($ch);
+    
+       // gettin FOlder ID
 
     $FolderResult = $oZimbraObj->getFolder($folderName);
     if (isset($FolderResult['id'])) {
