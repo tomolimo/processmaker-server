@@ -21,7 +21,7 @@ class Zimbra {
     protected $_preauth_expiration = 0; // 0 indicates using the default preauth expiration as defined on the server
     protected $_dev; // boolean indicating whether this is development or not
     protected $_protocol; // which protocol to use when building the URL
-    protected $_server1 = 'ip-10-73-18-235.ec2.internal'; // hostname of zimbra server
+    protected $_server1;// = 'ip-10-73-18-235.ec2.internal'; // hostname of zimbra server
     protected $_server; // displayname of zimbra server
     protected $_path = '/service/soap';
     protected $_timestamp;
@@ -55,11 +55,12 @@ class Zimbra {
         $this->_preAuthKey = $preAuthKey;
         $this->_protocol = "http://"; // could also be http://
         $this->_server = $serverUrl; //'zimbra.hostname.edu';
+        $this->_server1 = $serverUrl; //'zimbra.hostname.edu';
         $this->_username = $username;
         $this->_timestamp = time() . '000';
     }
 
-// end __construct
+    // end __construct
 
     /**
      * sso
@@ -84,7 +85,7 @@ class Zimbra {
         }
     }
 
-// end sso
+    // end sso
 
     /**
      * createAccount
@@ -99,10 +100,10 @@ class Zimbra {
 
 
             $soap = '<CreateAccountRequest xmlns="urn:zimbraAccount">
-                                        <name>' . $name . '@' . $this->_server1 . '</name>
-                                        <password>' . $password . '</password>' . $option_string . '
-                                        <session/>
-                            </CreateAccountRequest>';
+            <name>' . $name . '@' . $this->_server1 . '</name>
+            <password>' . $password . '</password>' . $option_string . '
+            <session/>
+            </CreateAccountRequest>';
 
 
             $response = $this->soapRequest($soap);
@@ -134,7 +135,7 @@ class Zimbra {
         return $this->hmacsha1($this->_preAuthKey, $string);
     }
 
-// end getPreAuth
+    // end getPreAuth
 
     /**
      * hmacsha1
@@ -167,7 +168,7 @@ class Zimbra {
         return bin2hex($hmac);
     }
 
-// end hmacsha1
+    // end hmacsha1
 
     /**
      * connect
@@ -195,14 +196,14 @@ class Zimbra {
 
         if ($this->_admin) {
             $body = '<AuthRequest xmlns="urn:zimbraAdmin">
-                        <name>' . $this->_admin_username . '</name>
-                        <password>' . $this->_admin_password . '</password>
-                    </AuthRequest>';
+            <name>' . $this->_admin_username . '</name>
+            <password>' . $this->_admin_password . '</password>
+            </AuthRequest>';
         } else {
             $body = '<AuthRequest xmlns="urn:zimbraAccount">
-                        <account by="name">' . $this->_username . '@' . $this->_server1 . '</account>
-                        <preauth timestamp="' . $this->_timestamp . '" expires="' . $this->_preauth_expiration . '">' . $preauth . '</preauth>
-                    </AuthRequest>';
+            <account by="name">' . $this->_username . '@' . $this->_server1 . '</account>
+            <preauth timestamp="' . $this->_timestamp . '" expires="' . $this->_preauth_expiration . '">' . $preauth . '</preauth>
+            </AuthRequest>';
         }
 
         $response = $this->soapRequest($body, $header, true);
@@ -223,7 +224,7 @@ class Zimbra {
         }
     }
 
-// end connect
+    // end connect
 
     /**
      * administerUser
@@ -243,8 +244,8 @@ class Zimbra {
         $this->_username = $username;
 
         $body = '<DelegateAuthRequest xmlns="urn:zimbraAdmin">
-					<account by="name">' . $this->_username . '@' . $this->_server . '</account>
-				  </DelegateAuthRequest>';
+        <account by="name">' . $this->_username . '@' . $this->_server . '</account>
+        </DelegateAuthRequest>';
         $response = $this->soapRequest($body, $header);
         if ($response) {
             $tmp = $this->makeXMLTree($response);
@@ -259,7 +260,7 @@ class Zimbra {
         }
     }
 
-// end administerUser
+    // end administerUser
 
     /**
      * getInfo
@@ -285,7 +286,7 @@ class Zimbra {
         }
     }
 
-// end getInfo
+    // end getInfo
 
     /**
      * getMessages
@@ -302,8 +303,8 @@ class Zimbra {
         $option_string = $this->buildOptionString($options);
 
         $soap = '<SearchRequest xmlns="urn:zimbraMail" types="message"' . $option_string . '>
-                   <query>' . $search . '</query>
-                </SearchRequest>';
+        <query>' . $search . '</query>
+        </SearchRequest>';
         $response = $this->soapRequest($soap);
         if ($response) {
             $array = $this->makeXMLTree($response);
@@ -313,7 +314,7 @@ class Zimbra {
         }
     }
 
-// end getMessages
+    // end getMessages
 
     /**
      * getContacts
@@ -330,8 +331,8 @@ class Zimbra {
         $option_string = $this->buildOptionString($options);
 
         $soap = '<SearchRequest xmlns="urn:zimbraMail" types="contact"' . $option_string . '>
-                    <query>' . $search . '</query>
-                </SearchRequest>';
+        <query>' . $search . '</query>
+        </SearchRequest>';
         $response = $this->soapRequest($soap);
         if ($response) {
             $array = $this->makeXMLTree($response);
@@ -341,26 +342,26 @@ class Zimbra {
         }
     }
 
-// end getContacts
+    // end getContacts
 
 
     /* getAppointments
      *
-     * get the Appointments in folder
-     *
-     * @since     version 1.0
-     * @access    public
-     * @param     string $search folder to retrieve from
-     * @param     array $options options to apply to retrieval
-     * @return    array array of messages
-     */
+    * get the Appointments in folder
+    *
+    * @since     version 1.0
+    * @access    public
+    * @param     string $search folder to retrieve from
+    * @param     array $options options to apply to retrieval
+    * @return    array array of messages
+    */
 
     public function getAppointments($search='in:calendar', $options=array('limit' => 50, 'fetch' => 'none')) {
         $option_string = $this->buildOptionString($options);
 
         $soap = '<SearchRequest xmlns="urn:zimbraMail" types="appointment"' . $option_string . '>
-                    <query>' . $search . '</query>
-                </SearchRequest>';
+        <query>' . $search . '</query>
+        </SearchRequest>';
         $response = $this->soapRequest($soap);
         if ($response) {
             $array = $this->makeXMLTree($response);
@@ -370,25 +371,25 @@ class Zimbra {
         }
     }
 
-// end getAppointments
+    // end getAppointments
 
     /* getTasks
      *
-     * get the Tasks in folder
-     *
-     * @since     version 1.0
-     * @access    public
-     * @param     string $search folder to retrieve from
-     * @param     array $options options to apply to retrieval
-     * @return    array array of messages
-     */
+    * get the Tasks in folder
+    *
+    * @since     version 1.0
+    * @access    public
+    * @param     string $search folder to retrieve from
+    * @param     array $options options to apply to retrieval
+    * @return    array array of messages
+    */
 
     public function getTasks($search='in:tasks', $options=array('limit' => 50, 'fetch' => 'none')) {
         $option_string = $this->buildOptionString($options);
 
         $soap = '<SearchRequest xmlns="urn:zimbraMail" types="task"' . $option_string . '>
-                    <query>' . $search . '</query>
-                </SearchRequest>';
+        <query>' . $search . '</query>
+        </SearchRequest>';
         $response = $this->soapRequest($soap);
         if ($response) {
             $array = $this->makeXMLTree($response);
@@ -398,7 +399,7 @@ class Zimbra {
         }
     }
 
-// end getTasks
+    // end getTasks
 
     /**
      * getMessageContent
@@ -412,8 +413,8 @@ class Zimbra {
      */
     public function getMessageContent($id) {
         $soap = '<GetMsgRequest xmlns="urn:zimbraMail">
-                    <m id="' . $id . '" html="1">*</m>
-                </GetMsgRequest>';
+        <m id="' . $id . '" html="1">*</m>
+        </GetMsgRequest>';
         $response = $this->soapRequest($soap);
 
         if ($response) {
@@ -454,7 +455,7 @@ class Zimbra {
         return $subscribed;
     }
 
-// end getSubscribedCalendars
+    // end getSubscribedCalendars
 
     /**
      * getSubscribedTaskLists
@@ -476,7 +477,7 @@ class Zimbra {
         return $subscribed;
     }
 
-// end getSubscribedCalendars
+    // end getSubscribedCalendars
 
     /**
      * getFolder
@@ -493,8 +494,8 @@ class Zimbra {
         //$folder_option_string = $this->buildOptionString($folder_options);
 
         $soap = '<GetFolderRequest xmlns="urn:zimbraMail" visible="1">
-                    <folder path="' . $folderName . '"/>
-                </GetFolderRequest>';
+        <folder path="' . $folderName . '"/>
+        </GetFolderRequest>';
         $response = $this->soapRequest($soap);
         if ($response) {
             $array = $this->makeXMLTree($response);
@@ -510,7 +511,7 @@ class Zimbra {
         }
     }
 
-// end getFolder
+    // end getFolder
 
     /**
      * getPrefrences
@@ -537,7 +538,7 @@ class Zimbra {
         }
     }
 
-// end getPreferences
+    // end getPreferences
 
     /**
      * setPrefrences
@@ -557,8 +558,8 @@ class Zimbra {
         }
 
         $soap = '<ModifyPrefsRequest xmlns="urn:zimbraAccount">
-                    ' . $option_string . '
-                </ModifyPrefsRequest>';
+        ' . $option_string . '
+        </ModifyPrefsRequest>';
         $response = $this->soapRequest($soap);
         if ($response) {
             return true;
@@ -567,7 +568,7 @@ class Zimbra {
         }
     }
 
-// end setPreferences
+    // end setPreferences
 
     /**
      * emailChannel
@@ -635,18 +636,18 @@ class Zimbra {
         }
 
         /* include_once 'portal_functions.php';
-          $roles = getRoles($this->_username);
+         $roles = getRoles($this->_username);
 
-          if(in_array('faculty', $roles) || in_array('employee', $roles))
-          {
-          $tpl->parse('main.away_message');
-          } */
+        if(in_array('faculty', $roles) || in_array('employee', $roles))
+        {
+        $tpl->parse('main.away_message');
+        } */
 
         $tpl->parse('main');
         $tpl->out('main');
     }
 
-// end emailChannel
+    // end emailChannel
 
     /**
      * builOptionString
@@ -666,7 +667,7 @@ class Zimbra {
         return $options_string;
     }
 
-// end buildOptionString
+    // end buildOptionString
 
     /**
      *    extractAuthToken
@@ -705,7 +706,7 @@ class Zimbra {
         return $session_id;
     }
 
-// end extractSessionID
+    // end extractSessionID
 
     /**
      * extractErrorCode
@@ -724,7 +725,7 @@ class Zimbra {
         return $session_id;
     }
 
-// end extractErrorCode
+    // end extractErrorCode
 
     /**
      * makeBytesPretty
@@ -741,7 +742,7 @@ class Zimbra {
         if ($bytes < 1024)
             $size = $bytes . ' B';
         elseif ($bytes < 1024 * 1024)
-            $size = round($bytes / 1024, 1) . ' KB';
+        $size = round($bytes / 1024, 1) . ' KB';
         else
             $size = round(($bytes / 1024) / 1024, 1) . ' MB';
 
@@ -752,7 +753,7 @@ class Zimbra {
         return $size;
     }
 
-// end makeBytesPretty
+    // end makeBytesPretty
 
     /**
      * message
@@ -769,7 +770,7 @@ class Zimbra {
         }
     }
 
-// end message
+    // end message
 
     /**
      * soapRequest
@@ -790,15 +791,15 @@ class Zimbra {
 
         if ($header == false) {
             $header = '<context xmlns="urn:zimbra">
-                            <authToken>' . $this->auth_token . '</authToken>
-                            <sessionId id="' . $this->session_id . '">' . $this->session_id . '</sessionId>
-                       </context>';
+            <authToken>' . $this->auth_token . '</authToken>
+            <sessionId id="' . $this->session_id . '">' . $this->session_id . '</sessionId>
+            </context>';
         }
 
         $soap_message = '<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope">
-                            <soap:Header>' . $header . '</soap:Header>
-                            <soap:Body>' . $body . '</soap:Body>
-                        </soap:Envelope>';
+        <soap:Header>' . $header . '</soap:Header>
+        <soap:Body>' . $body . '</soap:Body>
+        </soap:Envelope>';
         $this->message('SOAP message:<textarea>' . $soap_message . '</textarea>');
 
         curl_setopt($this->_curl, CURLOPT_POSTFIELDS, $soap_message);
@@ -820,7 +821,7 @@ class Zimbra {
         return $response;
     }
 
-// end soapRequest
+    // end soapRequest
 
     /**
      * getNumSOAPCalls
@@ -835,7 +836,7 @@ class Zimbra {
         return $this->_num_soap_calls;
     }
 
-// end getNumSOAPCalls
+    // end getNumSOAPCalls
 
     /**
      * makeXMLTree
@@ -896,7 +897,7 @@ class Zimbra {
         return $ret;
     }
 
-// end makeXMLTree
+    // end makeXMLTree
 
     /**
      * &composeArray
@@ -926,7 +927,7 @@ class Zimbra {
         return $array;
     }
 
-// end composeArray
+        // end composeArray
 
     /**
      * noop
@@ -969,39 +970,41 @@ class Zimbra {
         $role = $unserializeOp1['role'];
         $location = $unserializeOp1['location'];
         $ptst = $unserializeOp1['ptst'];
-        $startDate = $unserializeOp1['startDate'];
-        $endDate = $unserializeOp1['endDate'];
-        $timeZone = $unserializeOp1['tz'];
+        
+        $dateFormat=$allDay=="1"?"Ymd":"Ymd\THis";
+        $startDate = date($dateFormat,strtotime($unserializeOp1['startDate']));
+        $endDate = date($dateFormat,strtotime($unserializeOp1['endDate']));
+        $timeZone = $allDay=="1"?"":$unserializeOp1['tz'];
 
         $explodeEmail = explode(';', $userEmail);
         $explodeFriendlyName = explode(';', $atFriendlyName);
         $countExplodeEmail = count($explodeEmail);
 
         $soap = '<CreateAppointmentRequest xmlns="urn:zimbraMail"><m>
-						<su>' . $subject . '</su>';
+        <su>' . $subject . '</su>';
         for ($i = 0; $i < $countExplodeEmail; $i++) {
             $soap.= '<e p="' . $friendlyName . '" a="' . $explodeEmail[$i] . '" t="t"></e>';
         }
         $soap.='<inv>
-								<comp fb="' . $schedule . '" fba="' . $schedule . '" name="' . $appointmentName . '" allDay ="' . $allDay . '" isOrg="' . $isOrg . '" loc="' . $location . '">
-								<s tz="' . $timeZone . '" d="' . $startDate . '"/>
-								<e tz="' . $timeZone . '" d="' . $endDate . '"/>
-								<or a="' . $username . '@' . $domainName . '" d="' . $friendlyName . '"></or>';
+        <comp fb="' . $schedule . '" fba="' . $schedule . '" name="' . $appointmentName . '" allDay ="' . $allDay . '" isOrg="' . $isOrg . '" loc="' . $location . '">
+        <s tz="' . $timeZone . '" d="' . $startDate . '"/>
+        <e tz="' . $timeZone . '" d="' . $endDate . '"/>
+        <or a="' . $username . '@' . $domainName . '" d="' . $friendlyName . '"></or>';
         for ($i = 0; $i < $countExplodeEmail; $i++) {
             $soap.='<at role="' . $role . '" ptst="' . $ptst . '" d="' . $explodeFriendlyName[$i] . '" rsvp="' . $rsvp . '" cutype="' . $cutype . '" a="' . $explodeEmail[$i] . '"></at>';
         }
         $soap.= '</comp>
-										</inv>
-										<mp ct="multipart/alternative">
-											<mp ct="text/plain">
-												<content>
-												this is a sample Contents
-												</content>
-											</mp>
-										</mp>
-										</m>
-										</CreateAppointmentRequest>';
-
+        </inv>
+        <mp ct="multipart/alternative">
+        <mp ct="text/plain">
+        <content>
+        this is a sample Contents
+        </content>
+        </mp>
+        </mp>
+        </m>
+        </CreateAppointmentRequest>';
+//G::pr($soap);die;
         $response = $this->soapRequest($soap);
         if ($response) {
             $array = $this->makeXMLTree($response);
@@ -1012,7 +1015,7 @@ class Zimbra {
         }
     }
 
-// end addAppointments
+    // end addAppointments
 
     /**
      * addTask
@@ -1035,35 +1038,35 @@ class Zimbra {
         $allDay = $unserializeOp1['allDay'];
         $class = $unserializeOp1['class'];
         $location = $unserializeOp1['location'];
-        $dueDate = $unserializeOp1['dueDate'];
+        $dueDate = date("Ymd",strtotime($unserializeOp1['dueDate']));
         $status = $unserializeOp1['status'];
         $percent = $unserializeOp1['percent'];
 
 
         $soap = '<CreateTaskRequest xmlns="urn:zimbraMail">
-						<m l="15">
-							<su>' . $subject . '</su>
-							<e p="' . $friendlyName . '" a="' . $userEmail . '" t="t"></e>
-							<inv>
-								<comp allDay="' . $allDay . '"
-									  name="' . $taskName . '"
-                                      class="' . $class . '"
-                                      priority="' . $priority . '"
-                                      percentComplete="' . $percent . '"
-                                      status="' . $status . '"
-                                      loc="' . $location . '">
-                                     <dueDate d="' . $dueDate . '"/>
-                                </comp>
-                            </inv>
-                            <mp ct="multipart/alternative"> 
-                            <mp ct="text/plain">
-                              <content/>
-                            </mp>
-                            </mp>
-                        </m>
-				        </CreateTaskRequest>';
-
+        <m l="15">
+        <su>' . $subject . '</su>
+        <e p="' . $friendlyName . '" a="' . $userEmail . '" t="t"></e>
+        <inv>
+        <comp allDay="' . $allDay . '"
+        name="' . $taskName . '"
+        class="' . $class . '"
+        priority="' . $priority . '"
+        percentComplete="' . $percent . '"
+        status="' . $status . '"
+        loc="' . $location . '">
+        <dueDate d="' . $dueDate . '"/>
+        </comp>
+        </inv>
+        <mp ct="multipart/alternative">
+        <mp ct="text/plain">
+        <content/>
+        </mp>
+        </mp>
+        </m>
+        </CreateTaskRequest>';
         $response = $this->soapRequest($soap);
+
         if ($response) {
             $array = $this->makeXMLTree($response);
 
@@ -1074,7 +1077,7 @@ class Zimbra {
         }
     }
 
-// end addTask
+    // end addTask
 
     /**
      *  addContacts
@@ -1096,13 +1099,13 @@ class Zimbra {
         $otherDataValue = $unserializeOp1['otherDataValue'];
 
         $soap = '<CreateContactRequest xmlns="urn:zimbraMail">
-                            <cn>
-                                <a n="firstName">' . $firstName . '</a>
-                                <a n="lastName">' . $lastName . '</a>
-                                <a n="email">' . $email . '</a>
-                                <a n="' . $otherData . '">' . $otherDataValue . '</a>
-                            </cn>
-                        </CreateContactRequest>';
+        <cn>
+        <a n="firstName">' . $firstName . '</a>
+        <a n="lastName">' . $lastName . '</a>
+        <a n="email">' . $email . '</a>
+        <a n="' . $otherData . '">' . $otherDataValue . '</a>
+        </cn>
+        </CreateContactRequest>';
 
         $response = $this->soapRequest($soap);
         if ($response) {
@@ -1114,17 +1117,17 @@ class Zimbra {
         }
     }
 
-// end addContacts
+    // end addContacts
     /**
-     *  addFolder
-     *
-     * add Folder in a BriefCase
-     *
-     * @since     version 1.0
-     * @access    public
-     * @param
-     * @return
-     */
+    *  addFolder
+    *
+    * add Folder in a BriefCase
+    *
+    * @since     version 1.0
+    * @access    public
+    * @param
+    * @return
+    */
 
     public function addFolder($serializeOp1) {
         $unserializeOp1 = unserialize($serializeOp1);
@@ -1133,9 +1136,9 @@ class Zimbra {
         $folderColor = $unserializeOp1['color'];
 
         $soap = '<CreateFolderRequest xmlns="urn:zimbraMail">
-                            <folder name="' . $folderName . '" color="' . $folderColor . '" view="document">
-                            </folder>
-                        </CreateFolderRequest>';
+        <folder name="' . $folderName . '" color="' . $folderColor . '" view="document">
+        </folder>
+        </CreateFolderRequest>';
 
         $response = $this->soapRequest($soap);
         if ($response) {
@@ -1147,31 +1150,31 @@ class Zimbra {
         }
     }
 
-// end addFolder
+    // end addFolder
     /**
-     *  uploadDocument
-     *
-     * add Folder in a BriefCase
-     *
-     * @since     version 1.0
-     * @access    public
-     * @param
-     * @return
-     */
+    *  uploadDocument
+    *
+    * add Folder in a BriefCase
+    *
+    * @since     version 1.0
+    * @access    public
+    * @param
+    * @return
+    */
 
     public function upload($folderId, $UploadId, $fileVersion='', $docId='') {
         if ($fileVersion == '' && $docId == '') {
             $soap = '<SaveDocumentRequest xmlns="urn:zimbraMail">
-                            <doc l="' . $folderId . '">
-                            <upload id="' . $UploadId . '"/>
-                            </doc>
-                        </SaveDocumentRequest>';
+            <doc l="' . $folderId . '">
+            <upload id="' . $UploadId . '"/>
+            </doc>
+            </SaveDocumentRequest>';
         } else {
             $soap = '<SaveDocumentRequest xmlns="urn:zimbraMail">
-                            <doc l="' . $folderId . '" ver="' . $fileVersion . '" id="' . $docId . '" >
-                            <upload id="' . $UploadId . '"/>
-                            </doc>
-                        </SaveDocumentRequest>';
+            <doc l="' . $folderId . '" ver="' . $fileVersion . '" id="' . $docId . '" >
+            <upload id="' . $UploadId . '"/>
+            </doc>
+            </SaveDocumentRequest>';
         }
 
         $response = $this->soapRequest($soap);
@@ -1186,7 +1189,7 @@ class Zimbra {
         }
     }
 
-// end uploadDocument
+    // end uploadDocument
 
     /**
      *  getDocId
@@ -1200,8 +1203,8 @@ class Zimbra {
      */
     public function getDocId($folderId, $fileName) {
         $soap = '<GetItemRequest xmlns="urn:zimbraMail">
-                          <item l="' . $folderId . '" name="' . $fileName . '" />
-                        </GetItemRequest>';
+        <item l="' . $folderId . '" name="' . $fileName . '" />
+        </GetItemRequest>';
 
         $response = $this->soapRequest($soap);
         if (is_array($response)) {
@@ -1215,7 +1218,7 @@ class Zimbra {
         }
     }
 
-// end getDocId
+    // end getDocId
 }
 
 // end Zimbra class
