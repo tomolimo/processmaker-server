@@ -7,6 +7,8 @@
  * @author Hugo Loza
  */
 
+define('SE_LAYOUT_NOT_FOUND', 6);
+
 class SkinEngine
 {
 
@@ -149,11 +151,38 @@ class SkinEngine
   {
     $skinMethod = '_' . strtolower($this->skin);
     
-    if (!method_exists($this, $skinMethod)) {
-      $skinMethod = '_default';
+    try {
+      if (!method_exists($this, $skinMethod)) {
+        $skinMethod = '_default';
+      }
+      
+      $this->$skinMethod();
     }
-    
-    $this->$skinMethod();
+    catch (Exception $e) {
+      switch ($e->getCode()) {
+        case SE_LAYOUT_NOT_FOUND:
+
+          $data['exception_type']    = 'Skin Engine Exception';
+          $data['exception_title']   = 'Layout not Found';
+          $data['exception_message'] = 'You\'re trying to get a resource from a incorrent skin, please verify you url.';
+          $data['exception_list'] = array();
+          if (substr($this->mainSkin, 0, 2) != 'ux') {
+            $url = '../login/login';
+          }
+          else {
+            $url = '../main/login'; 
+          }
+          
+          $link = '<a href="'.$url.'">Try Now</a>';
+
+          $data['exception_notes'][] = ' The System can try redirect to correct url. ' . $link;
+
+          G::renderTemplate(PATH_TPL . 'exception', $data);
+          break;
+      }
+
+      exit(0);
+    }
   }
 
   /**
@@ -462,6 +491,14 @@ class SkinEngine
     else {
       $smarty->template_dir = $this->layoutFile['dirname'];
       $tpl = 'layout-'.$this->layout.'.html'; 
+      //die($smarty->template_dir.PATH_SEP.$tpl);
+
+      if (!file_exists($smarty->template_dir . PATH_SEP . $tpl)) {
+        $e = new Exception("Layout $tpl does not exist!", SE_LAYOUT_NOT_FOUND);
+        $e->layoutFile = $smarty->template_dir . PATH_SEP . $tpl;
+        
+        throw $e;
+      }
       $smarty->assign('_content_file', $viewFile);
     }
 
