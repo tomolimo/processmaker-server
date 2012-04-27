@@ -25,7 +25,7 @@
 
 <FILE2 type="phpVariable"/>
 
-<APP_DOC_FILENAME1 type="link" value="@#VIEW1" link="@#FILE1">
+<APP_DOC_FILENAME1 type="link" value="@#VIEW1" link="@#FILE1" onclick="window.open(this.href);return false;">
   <en>File (.doc)</en>
 </APP_DOC_FILENAME1>
 
@@ -41,4 +41,4 @@ var nextStep = function(oForm)
 };
 ]]></JS>
 
-</dynaForm>  
+</dynaForm>

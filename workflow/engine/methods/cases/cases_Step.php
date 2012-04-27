@@ -185,13 +185,13 @@
   $array['APP_TITLE'] = $sTitleCase;
   $array['CASE'] = G::LoadTranslation('ID_CASE');
   $array['TITLE'] = G::LoadTranslation('ID_TITLE');
-  
+
 
   switch ($_GET['TYPE'])
   {
     case 'DYNAFORM':
       $G_PUBLISH->AddContent('smarty', 'cases/cases_title', '', '', $array);
-      
+
       if (!$aPreviousStep) {
         $Fields['APP_DATA']['__DYNAFORM_OPTIONS']['PREVIOUS_STEP_LABEL'] = '';
       }
@@ -646,9 +646,9 @@
 
           $aFields['VIEW2'] = G::LoadTranslation('ID_OPEN');
 
-          $aFields['FILE1'] = 'cases_ShowOutputDocument?a=' . $aFields['APP_DOC_UID'] . '&v='.$lastDocVersion . '&ext=doc&random=' . rand();
+          $aFields['FILE1'] = 'cases_ShowOutputDocument?a=' . $aFields['APP_DOC_UID'] . '&v='.$lastDocVersion . '&ext=doc&random=' . rand() . '&PHPSESSID=' . @session_id();
 
-          $aFields['FILE2'] = 'cases_ShowOutputDocument?a=' . $aFields['APP_DOC_UID'] . '&v='.$lastDocVersion . '&ext=pdf&random=' . rand();
+          $aFields['FILE2'] = 'cases_ShowOutputDocument?a=' . $aFields['APP_DOC_UID'] . '&v='.$lastDocVersion . '&ext=pdf&random=' . rand() . '&PHPSESSID=' . @session_id();
 
 
           if ( is_array ($listing) ){//If exist in Plugin Document List
@@ -684,7 +684,7 @@
       $oDerivation = new Derivation();
       $oProcess    = new Process();
       $aData       = $oCase->loadCase($_SESSION['APPLICATION']);
-      
+
       $aFields['PROCESS']              = $oProcess->load($_SESSION['PROCESS']);
       $aFields['PREVIOUS_PAGE']        = $aPreviousStep['PAGE'];
       $aFields['PREVIOUS_PAGE_LABEL']  = G::LoadTranslation('ID_PREVIOUS_STEP');
@@ -935,15 +935,15 @@
       }
       $aFields['PROCESSING_MESSAGE'] = G::loadTranslation('ID_PROCESSING');
 
-      /** 
+      /**
        * New Feature: Derivation Screen can be personalized
        * @author Erik Amaru Ortiz <erik@colosa.com>
        */
       $tplFile = 'cases/cases_ScreenDerivation';
       $task    = TaskPeer::retrieveByPk($_SESSION['TASK']);
-      
+
       $tasDerivationScreenTpl = $task->getTasDerivationScreenTpl();
-      
+
       if (!empty($tasDerivationScreenTpl)) { //erik: first, verify if the task has a personalized template (for derivation screen)
         $tplFile = $tasDerivationScreenTpl;
         $tplFile = PATH_DATA_MAILTEMPLATES . $aFields['PROCESS']['PRO_UID'] . PATH_SEP . $tplFile;
@@ -974,7 +974,7 @@
         }
 */
       break;
-    case 'EXTERNAL': 
+    case 'EXTERNAL':
       $G_PUBLISH->AddContent('smarty', 'cases/cases_title', '', '', $array);
 
       $oPluginRegistry = &PMPluginRegistry::getSingleton();
@@ -986,7 +986,7 @@
         if ( $val->sStepId == $_GET['UID'] ) {
           $sNamespace = $val->sNamespace;
           $sStepName  = $val->sStepName;
-          
+
         }
       }
       if ( class_exists($sNamespace."plugin")) {
@@ -999,7 +999,7 @@
         }
         $Fields['APP_DATA']['__DYNAFORM_OPTIONS']['NEXT_STEP'] = $aNextStep['PAGE'];
         $Fields['APP_DATA']['__DYNAFORM_OPTIONS']['NEXT_STEP_LABEL'] = G::loadTranslation("ID_NEXT_STEP");
-  
+
         /** Added By erik date: 16-05-08
         * Description: this was added for the additional database connections */
         G::LoadClass ('dbConnections');
@@ -1010,7 +1010,7 @@
         if (parent.setCurrent) {
           parent.setCurrent('".$_GET['UID']."');
         }");
-  
+
         $G_PUBLISH->AddContent('content', $stepFilename);
       }
       else {
