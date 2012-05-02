@@ -19,15 +19,12 @@ var processNumbers = new Ext.data.ArrayStore({
 });
 
 var processNumbersData = [[0,0,0,0,0]];
-//processNumbers.loadData(processNumbersData);
 Docs = {};
-
 
 Ext.onReady(function() {
   var newCaseTree = new Ext.ux.MaskTree({
     id: 'startCaseTreePanel',
     region: 'center',
-    //autoWidth: true,
     useArrows: true,
     animate: true,
     split : true,
@@ -45,7 +42,7 @@ Ext.onReady(function() {
         xtype : 'textfield',
         name : 'processesFilter',
         id : 'processesFilter',
-        emptyText : _('ID_FIND_A_PROCESS'),  // 'Find a Process',
+        emptyText : _('ID_FIND_A_PROCESS'), 
         enableKeyEvents : true,
         listeners : {
           render : function(f) {
@@ -70,14 +67,14 @@ Ext.onReady(function() {
         }
       }, ' ', ' ', {
         iconCls : 'icon-expand-all',
-        tooltip :  _('ID_EXPAND_ALL'), //'Expand All',
+        tooltip :  _('ID_EXPAND_ALL'), 
         handler : function() {
           Ext.getCmp("startCaseTreePanel").root.expand(true);
         },
         scope : this
       }, '-', {
         iconCls : 'icon-collapse-all',
-        tooltip : _('ID_COLLAPSE_ALL'), //'Collapse All',
+        tooltip : _('ID_COLLAPSE_ALL'), 
         handler : function() {
           Ext.getCmp("startCaseTreePanel").root.collapse(true);
         },
@@ -95,188 +92,140 @@ Ext.onReady(function() {
     ],
     listeners : {
       dblclick : function(n) {
-        //mainPanel.openCase(n);
         openCaseA(n);
-
       },
       click : function(n) {
-        //mainPanel.showDetails(n);
         showDetailsA(n);
       }
     }
   });
 
   var details = {
-      xtype:'form',
-      id : 'process-detail-panel',
-      region : 'east',
-      // autoHeight : true,
-      split : true,
-      style : {
-        width : '450'
+    xtype:'form',
+    id : 'process-detail-panel',
+    region : 'east',      
+    split : true,
+    width : 450,
+    style : {
+      width : '450'
+    },
+    minWidth : 250,
+    labelAlign: 'right',
+    labelWidth: 85,
+    waitMsgTarget: true,
+    title: TRANSLATIONS.ID_PROCESS_INFORMATION,
+    layout:'form',
+    defaults: {width: 350},
+    defaultType: 'displayfield',
+    items: [{
+        fieldLabel: TRANSLATIONS.ID_PROCESS,
+        name: 'processName',
+        allowBlank:false,
+        value: '',
+        labelStyle: 'font-weight:bold;',
+        id:"processName"
       },
-      // minWidth : 150,
-      // frame: true,
-        labelAlign: 'right',
-        labelWidth: 85,
-        // width:340,
-        waitMsgTarget: true,
-        title: TRANSLATIONS.ID_PROCESS_INFORMATION, // 'Process Information', //
-        layout:'form',
-        defaults: {width: 350},
-        defaultType: 'displayfield',
-        items: [{
-          fieldLabel: TRANSLATIONS.ID_PROCESS, // 'Process',
-          name: 'processName',
-          allowBlank:false,
+      {
+        xtype: 'compositefield',
+        fieldLabel: TRANSLATIONS.ID_TASK, 
+        labelStyle: 'font-weight:bold;',
+        items: [
+          {
+            xtype : 'button',
+            id : 'starCaseButton',
+            disabled : true,
+            iconCls : "ICON_CASES_START_CASE",
+            text : TRANSLATIONS.ID_TITLE_START_CASE,
+            autoWidth : true,
+            handler : function() {
+              tree = Ext.getCmp('startCaseTreePanel');
+              var selectedNode = tree.getSelectionModel().getSelectedNode();
+              if (selectedNode) {
+                openCaseA(selectedNode);
+              }
+            }
+          },
+          {
+            xtype     : 'displayfield',
+            name: 'taskName',
+            allowBlank:false,
+            value: '',
+            width:200,
+            id:"taskName"
+          }
+        ]},
+        {
+          xtype:'textarea',
+          fieldLabel: TRANSLATIONS.ID_DESCRIPTION,
+          name: 'processDescription',
           value: '',
+          readOnly: true,
           labelStyle: 'font-weight:bold;',
-          // disabled: true,
-          // readonly:true,
-          id:"processName"
+          id:"processDescription"
+        },{
+          fieldLabel: TRANSLATIONS.ID_CATEGORY,
+          name: 'processCategory',
+          value: '',
+          readOnly: true,
+          labelStyle: 'font-weight:bold;',
+          id:"processCategory"
         },
         {
-          xtype: 'compositefield',
-          fieldLabel: TRANSLATIONS.ID_TASK, // 'Task',
+          xtype: 'grid',
+          fieldLabel: ' ',
+          labelSeparator : '',
+          labelStyle: 'font-color:white;',
+          ds: processNumbers,
+          cm: new Ext.grid.ColumnModel([
+            {id:'inbox',header: TRANSLATIONS.ID_INBOX, width:70, sortable: false, locked:true, dataIndex: 'CASES_COUNT_TO_DO'},
+            {id:'draft',header: TRANSLATIONS.ID_DRAFT, width:70,  sortable: false, locked:true,  dataIndex: 'CASES_COUNT_DRAFT'},
+            {id:'completed',header: TRANSLATIONS.ID_COMPLETED, width:70,  sortable: false, locked:true, dataIndex: 'CASES_COUNT_COMPLETED'},
+            {id:'canceled',header: TRANSLATIONS.ID_CANCELLED, width:70,  sortable: false, locked:true,  dataIndex: 'CASES_COUNT_CANCELLED'},
+            {id:'totalCases',header: TRANSLATIONS.ID_TOTAL_CASES, width:70,  sortable: false, locked:true , dataIndex: 'CASES_COUNT'}
+          ]),
+          height: 49,
+          width: 355,
+          border: true
+        },
+        {
+          fieldLabel: TRANSLATIONS.ID_CALENDAR, 
+          name: 'calendarName',
           labelStyle: 'font-weight:bold;',
-
-          items: [
-            {
-              xtype : 'button',
-              id : 'starCaseButton',
-              disabled : true,
-              // cls :
-              // 'x-btn-icon',
-              // icon :
-              // '/images/refresh.gif',
-              iconCls : "ICON_CASES_START_CASE",
-              text : TRANSLATIONS.ID_TITLE_START_CASE, // "Start
-                                    // Case",
-              // margins:"5 5
-              // 5 5",
-              autoWidth : true,
-              handler : function() {
-                tree = Ext
-                    .getCmp('startCaseTreePanel');
-                var selectedNode = tree
-                    .getSelectionModel()
-                    .getSelectedNode();
-                if (selectedNode) {
-                  //mainPanel.openCase(selectedNode);
-                  openCaseA(selectedNode);
-                }
-              }
-            },
-            {
-              xtype     : 'displayfield',
-
-              //fieldLabel: 'Task',
-              //labelStyle: 'font-weight:bold;',
-              name: 'taskName',
-              allowBlank:false,
-              value: '',
-              //autoWitdh:true,
-              width:200,
-              // disabled: true,
-              id:"taskName"
-            }
-
-          ]},
-          {
-            xtype:'textarea',
-            fieldLabel: TRANSLATIONS.ID_DESCRIPTION, // 'Description',
-            name: 'processDescription',
-            value: '',
-            readOnly: true,
-            labelStyle: 'font-weight:bold;',
-            // disabled: true,
-            id:"processDescription"
-          },{
-            fieldLabel: TRANSLATIONS.ID_CATEGORY, // 'Category',
-            name: 'processCategory',
-            value: '',
-            readOnly: true,
-            labelStyle: 'font-weight:bold;',
-            // disabled: true,
-            id:"processCategory"
-          },
-          {
-              xtype: 'grid',
-              fieldLabel: ' ',
-              labelSeparator : '',
-              labelStyle: 'font-color:white;',
-          //    height: 15,
-              ds: processNumbers,
-              cm: new Ext.grid.ColumnModel([
-                  {id:'inbox',header: TRANSLATIONS.ID_INBOX, width:70, sortable: false, locked:true, dataIndex: 'CASES_COUNT_TO_DO'},
-                  {id:'draft',header: TRANSLATIONS.ID_DRAFT, width:70,  sortable: false, locked:true,  dataIndex: 'CASES_COUNT_DRAFT'},
-                  {id:'completed',header: TRANSLATIONS.ID_COMPLETED, width:70,  sortable: false, locked:true, dataIndex: 'CASES_COUNT_COMPLETED'},
-                  {id:'canceled',header: TRANSLATIONS.ID_CANCELLED, width:70,  sortable: false, locked:true,  dataIndex: 'CASES_COUNT_CANCELLED'},
-                  {id:'totalCases',header: TRANSLATIONS.ID_TOTAL_CASES, width:70,  sortable: false, locked:true , dataIndex: 'CASES_COUNT'}
-
-              ])
-  ,
-
-              //autoExpandColumn: 'company',
-              height: 49,
-              width: 355,
-              //title: TRANSLATIONS.ID_GENERAL_PROCESS_NUMBERS,  // 'General Process Numbers',
-              border: true,
-              listeners: {
-                  viewready: function(g) {
-                      //g.getSelectionModel().selectRow(0);
-                  } // Allow rows to be rendered.
-              }
-          },
-
-          {
-              fieldLabel: TRANSLATIONS.ID_CALENDAR, // 'Calendar',
-              name: 'calendarName',
-              labelStyle: 'font-weight:bold;',
-              // disabled: true,
-              id:"calendarName"
-        },/*{
-          xtype:'textarea',
-          fieldLabel: TRANSLATIONS.ID_CALENDAR_DESCRIPTION,  // 'Calendar Description',
-          name: 'calendarDescription',
-          value: '',
-          labelStyle: 'font-weight:bold;',
-          // disabled: true,
-          readOnly: true,
-          id:"calendarDescription"
-      },*/{
+          id:"calendarName"
+      },
+      {
         xtype:'checkboxgroup',
-            fieldLabel: TRANSLATIONS.ID_WORKING_DAYS, // 'Working days',
-            name: 'calendarWorkDays',
-            disabled: true,
-            readOnly: true,
-            disabledClass:"",
-            labelStyle: 'font-weight:bold',
-            id:"calendarWorkDays",
-              columns: 7,
-                items: [
-                    {boxLabel: TRANSLATIONS.ID_SUN, name: '0',disabledClass:""},
-                    {boxLabel: TRANSLATIONS.ID_MON, name: '1',disabledClass:""},
-                    {boxLabel: TRANSLATIONS.ID_TUE, name: '2',disabledClass:""},
-                    {boxLabel: TRANSLATIONS.ID_WEN, name: '3',disabledClass:""},
-                    {boxLabel: TRANSLATIONS.ID_THU, name: '4',disabledClass:""},
-                    {boxLabel: TRANSLATIONS.ID_FRI, name: '5',disabledClass:""},
-                    {boxLabel: TRANSLATIONS.ID_SAT, name: '6',disabledClass:""}
-                ]
-       }, {
+        fieldLabel: TRANSLATIONS.ID_WORKING_DAYS, 
+        name: 'calendarWorkDays',
+        disabled: true,
+        readOnly: true,
+        disabledClass:"",
+        labelStyle: 'font-weight:bold',
+        id:"calendarWorkDays",
+        columns: 7,
+        items: [
+          {boxLabel: TRANSLATIONS.ID_SUN, name: '0',disabledClass:""},
+          {boxLabel: TRANSLATIONS.ID_MON, name: '1',disabledClass:""},
+          {boxLabel: TRANSLATIONS.ID_TUE, name: '2',disabledClass:""},
+          {boxLabel: TRANSLATIONS.ID_WEN, name: '3',disabledClass:""},
+          {boxLabel: TRANSLATIONS.ID_THU, name: '4',disabledClass:""},
+          {boxLabel: TRANSLATIONS.ID_FRI, name: '5',disabledClass:""},
+          {boxLabel: TRANSLATIONS.ID_SAT, name: '6',disabledClass:""}
+        ]
+      }, 
+      {
         xtype:'checkbox',
-          fieldLabel: TRANSLATIONS.ID_DEBUG_MODE, // 'Debug Mode',
-          name: 'processDebug',
-          labelStyle: 'font-weight:bold;',
-          disabled: true,
-          readOnly: true,
-          id:"processDebug",
-          disabledClass:""
-
-    }]
+        fieldLabel: TRANSLATIONS.ID_DEBUG_MODE, 
+        name: 'processDebug',
+        labelStyle: 'font-weight:bold;',
+        disabled: true,
+        readOnly: true,
+        id:"processDebug",
+        disabledClass:""
+      }
+    ]
   }
   
-
   Ext.QuickTips.init();
   
   var viewport = new Ext.Viewport({
@@ -300,58 +249,52 @@ Ext.onReady(function() {
 });
 
 function openCaseA(n){
-	if (n.attributes.optionType == "startProcess") {
-		Ext.Msg.show({
-			title : '', //TRANSLATIONS.ID_TITLE_START_CASE, //'Start Case',
-			msg : TRANSLATIONS.ID_STARTING_NEW_CASE  // 'Starting new case'
-				  + '<br><br><b>' + n.attributes.text + '</b>',
-			//icon : Ext.MessageBox.INFO,
-			// width:300,
-			wait:true,
-	    waitConfig: {interval:500}
-		});
-		Ext.Ajax.request({
-			url : 'casesStartPage_Ajax.php',
-			params : {
-				action : 'startCase',
-				processId : n.attributes.pro_uid,
-				taskId : n.attributes.tas_uid
-			},
-			success : function(response) {
-				
-				try{ 
-					var res = Ext.util.JSON.decode(response.responseText);
-					
-					if (res.openCase) {
-						  window.location = res.openCase.PAGE;
-					} else {
-						Ext.Msg.show({
-							title : TRANSLATIONS.ID_ERROR_CREATING_NEW_CASE, // 'Error creating a new Case',
-							msg : '<textarea cols="50" rows="10">'
-									+ res.message + '</textarea>',
-							icon : Ext.MessageBox.ERROR,
-							buttons : Ext.Msg.OK
-						});
-					}						
-			} catch(e) {						
-				Ext.Msg.show({
-					title : TRANSLATIONS.ID_ERROR_CREATING_NEW_CASE, // 'Error creating a new Case',
-					msg : 'JSON Decode Error:<br /><textarea cols="50" rows="2">'
-							+ e.message + '</textarea><br />Server Response<br /><textarea cols="50" rows="5">'+response.responseText+'</textarea>',
-					icon : Ext.MessageBox.ERROR,
-					buttons : Ext.Msg.OK
-				});
-				 
-			}
-				
-			},
-			failure : function() {
-				// grid.getGridEl().unmask(true); UNABLE_START_CASE
-				// Ext.Msg.alert('Error', 'Unable to start a case');
+  if (n.attributes.optionType == "startProcess") {
+    Ext.Msg.show({
+      title : '', 
+      msg : TRANSLATIONS.ID_STARTING_NEW_CASE  + '<br><br><b>' + n.attributes.text + '</b>',
+      wait:true,
+      waitConfig: {interval:500}
+    });
+    Ext.Ajax.request({
+      url : 'casesStartPage_Ajax.php',
+      params : {
+        action : 'startCase',
+        processId : n.attributes.pro_uid,
+        taskId : n.attributes.tas_uid
+      },
+      success : function(response) {
+        
+        try { 
+          var res = Ext.util.JSON.decode(response.responseText);
+          if (res.openCase) {
+              window.location = res.openCase.PAGE;
+          } 
+          else {
+            Ext.Msg.show({
+              title : TRANSLATIONS.ID_ERROR_CREATING_NEW_CASE, // 'Error creating a new Case',
+              msg : '<textarea cols="50" rows="10">'
+                  + res.message + '</textarea>',
+              icon : Ext.MessageBox.ERROR,
+              buttons : Ext.Msg.OK
+            });
+          }            
+        } 
+        catch(e) {            
+          Ext.Msg.show({
+            title : TRANSLATIONS.ID_ERROR_CREATING_NEW_CASE, // 'Error creating a new Case',
+            msg : 'JSON Decode Error:<br /><textarea cols="50" rows="2">'
+                + e.message + '</textarea><br />Server Response<br /><textarea cols="50" rows="5">'+response.responseText+'</textarea>',
+            icon : Ext.MessageBox.ERROR,
+            buttons : Ext.Msg.OK
+          });
+        }
+      },
+      failure : function() {
         Ext.Msg.alert(TRANSLATIONS.ID_ERROR, TRANSLATIONS.ID_UNABLE_START_CASE); 
-			}
-		});
-	}
+      }
+    });
+  }
 };
 
 function showDetailsA(selectedNode) {
@@ -393,11 +336,11 @@ function showDetailsA(selectedNode) {
     ]];
     processNumbers.loadData(processNumbersData);
 
-	} else {
-		//detailEl.update('');
-	}
+  } else {
+    //detailEl.update('');
+  }
 
-	return;
+  return;
 };
 
 
