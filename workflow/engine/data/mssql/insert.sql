@@ -3901,7 +3901,7 @@ SELECT 'LABEL','ID_PM_DYNAFORM','en','PM Table Dynaform','2012-02-02'
   UNION ALL
 SELECT 'LABEL','ID_DYNAFORM_INFORMATION','en','Dynaform Information','2012-02-02' 
   UNION ALL
-SELECT 'LABEL','ID_SERVER_NAME','en','Server Name','2012-02-02' 
+SELECT 'LABEL','ID_SERVER_NAME','en','Server Address','2012-02-02' 
   UNION ALL
 SELECT 'LABEL','ID_CREATE_PM_TABLE','en','Create from a PM Table','2012-02-02' 
   UNION ALL
@@ -5191,7 +5191,7 @@ SELECT 'LABEL','ID_ANONYMOUS','en','Anonymous','2012-02-02'
   UNION ALL
 SELECT 'LABEL','ID_IDENTIFIER_IMPORT_USER','en','Identifier for an imported user','2012-02-02' 
   UNION ALL
-SELECT 'LABEL','ID_SEARCH_USER','en','Search User','2012-02-02' 
+SELECT 'LABEL','ID_SEARCH_USER','en','Username','2012-02-02' 
   UNION ALL
 SELECT 'LABEL','ID_OBJECT_CLASS','en','Object Classes','2012-02-02' 
   UNION ALL
@@ -5448,6 +5448,136 @@ SELECT 'LABEL','ID_SYSTEM_REDIRECT_CONFIRM','en','You must login again to view t
 SELECT 'LABEL','ID_TASK_CANT_DELETE','en','You can''t delete the task "{0}" because it has {1} cases.','2012-02-02' 
   UNION ALL
 SELECT 'LABEL','ID_INDEX_NOT_WRITEABLE','en','The index file is not writable. <br/>Please give write permission to file:','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_TITLE_AUTHENTICATION_SOURCE_INF','en','Authentication Source Information','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_AUTHENTICATION_SOURCE_INF_TITLE','en','Authentication Source Information','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_AVAILABLE_AUTHENTICATION_SOURCES','en','Available Authentication Sources','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_EXTERNAL_STEP_MISSING','en','The plugin that is related to the step <b> {plugin} </b> was removed or disabled, please consult to your system administrator','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_INIT_DATE','en','Init Date','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_OVERWRITE','en','Overwrite','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_BROWSE','en','Browse','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_UPLOADING_TRANSLATION_FILE','en','Uploading the translation file...','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_EVALUATION_RESULT','en','[Success] Evaluation result','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_REQUIRED_NAME_DYNAFORM','en','Dynaform name required.','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_SELECT_LANGUAGE_FROM_LIST','en','First select a language from the list please.','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_NEW_WORKSPACE','en','New Workspace','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_DATABASE_OPTIONS','en','Database Options','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_WORKFLOW_DATABASE','en','Workflow Database','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_RBAC_DATABASE','en','Rbac Database','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_REPORT_DATABASE','en','Report Database','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_DROP_DATABASE_EXISTS','en','Drop database if exists','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_WORKSPACE_ADMINISTRATOR','en','Workspace Administrator','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_PASSWORD_ADMIN','en','Password (admin)(Max. length 20)','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_PASSWORD_ADMIN_RETYPE','en','Re-type Password','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_NEW_SITE_TESTING','en','New site testing...','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_SERVER_REPORTED','en','Server reported','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_SITE_CREATING','en','site creating...','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_FAILED','en','Failed','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_DB_CONNECTION_NO_EXIST','en','DB Connection doesn''t exist!','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_GRID_NO_EXIST','en','Grid doesn''t exist!','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_PROCESS_NO_EXIST','en','Process doesn''t exist!','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_SHOULD_SELECT_LANGUAGE_FROM_LIST','en','You should to select a language from the list.','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_COLUMNS','en','columns','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_NOTICE','en','Notice','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_ACTION_DISABLED_TO_LOW_PERFORMANCE_1','en','This action was disabled to prevent low performance on your browser. This is because there is more than 100 records on the columns definition grid.','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_ACTION_DISABLED_TO_LOW_PERFORMANCE_2','en','<br/><br/>Please perform this action with manual selection only.','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_MAX_LIMIT_COLUMNS_FOR_DATABASE','en','The maximun limit of columns for a database table is 255, you already have them defined!','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_OUTPUT_DOCUMENT_TEMPLATE','en','Output Document Template','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_REASSIGNED_TO','en','Reassigned to','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_TOTAL_CASES_REASSIGNED','en','Total Cases Reassigned','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_STATUS_REASSIGNMENT','en','Status Reassignment','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_AUTHENTICATION_SOURCE_INFORMATION','en','Authentication Source Information','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_YOU_HAVE_ERROR','en','you have an error','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_MESSAGE_EMPTY_DATE_FIELD','en','There is at least one empty date field in the holiday grid, please check and try again.','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_GRID_PAGE_NO_DASHLET_MESSAGE','en','No dashlets instances to display.','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_CONFIRM_DELETE_DASHLET_INSTANCE','en','Do you want to delete this Dashlet Instance?','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_DASHLET_INSTANCE','en','Dashlet Instance','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_DASHLET_SUCCESS_DELETE','en','Dashlet instance deleted sucessfully.','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_GRID_PAGE_DISPLAYING_DASHLET_MESSAGE','en','Displaying dashlets instances {0} - {1} of {2}','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_DASHLET_INSTANCE_CONFIGURATION','en','Dashlet Instance Configuration','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_OTHER','en','Other','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_ASSIGN_TO','en','Assign To','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_DASHLET','en','Dashlet','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_PERIOD','en','Period','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_RED_STARTS_IN','en','Red Starts In','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_RED_ENDS_IN','en','Red Ends In','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_YELLOW_STARTS_IN','en','Yellow Starts In','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_YELLOW_ENDS_IN','en','Yellow Ends In','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_GREEN_STARTS_IN','en','Green Starts In','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_GREEN_ENDS_IN','en','Green Ends In','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_ALERT','en','Alert','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_INVALID_DATA','en','Invalid data','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_FAILED_DASHBOARD INSTANCE','en','Dashboard Instance registered failed','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_AJAX_COMMUNICATION_FAILED','en','Ajax communication failed','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_CHECK_FIELDS_MARK_RED','en','Please check the fields mark in red.','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_INPUT_ERROR','en','Input Error','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_INVALID_APPLICATION_NUMBER','en','You have set a invalid Application Number','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_3DAYSMINIMUM','en','3 days at least','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_NODELETEOPTIONALL','en','You must add all the days that you have selected in work days, otherwise you should leave at least an "-- ALL --" option.','2012-02-02' 
  ;
 
 INSERT INTO ISO_LOCATION ([IC_UID],[IL_UID],[IL_NAME],[IL_NORMAL_NAME],[IS_UID]) 
@@ -61079,7 +61209,8 @@ SELECT 'NL','ZWO','Zwolle','','GE' ;
 INSERT INTO [DASHLET] ([DAS_UID],[DAS_CLASS],[DAS_TITLE],[DAS_DESCRIPTION],[DAS_VERSION],[DAS_CREATE_DATE],[DAS_UPDATE_DATE],[DAS_STATUS])
 SELECT '00000000000000000000000000000002','dashletProcessMakerCommunity','ProcessMaker Community','ProcessMaker Community Links and Information','1.0','2011-12-01 00:00:00','2011-12-01 00:00:00','1' UNION ALL
 SELECT '00000000000000000000000000000001','dashletOpenVSCompleted','Open Cases VS Completed Cases','Open Cases VS Completed Cases','1.0','2011-10-28 00:00:00','2011-10-28 00:00:00','1' UNION ALL
-SELECT '00000000000000000000000000000003','dashletProcessMakerEnterprise','ProcessMaker Enterprise Plugins and Addons','The following list of Enterprise plug-ins includes features and functionality that extend and enhance ProcessMaker performance and functionality.','1.0','2011-12-05 00:00:00','2011-12-05 00:00:00','1';
+SELECT '00000000000000000000000000000003','dashletProcessMakerEnterprise','ProcessMaker Enterprise Plugins and Addons','The following list of Enterprise plug-ins includes features and functionality that extend and enhance ProcessMaker performance and functionality.','1.0','2011-12-05 00:00:00','2011-12-05 00:00:00','1' UNION ALL
+SELECT '00000000000000000000000000000004','dashletRssReader','Simple RSS reader','Simple RSS reader for ProcessMaker','1.0','2012-04-16 00:00:00','2012-04-16 00:00:00','1';
 
 INSERT INTO [DASHLET_INSTANCE] ([DAS_INS_UID],[DAS_UID],[DAS_INS_OWNER_TYPE],[DAS_INS_OWNER_UID],[DAS_INS_ADDITIONAL_PROPERTIES],[DAS_INS_CREATE_DATE],[DAS_INS_UPDATE_DATE],[DAS_INS_STATUS])
 SELECT '00000000000000000000000000000002','00000000000000000000000000000002','EVERYBODY','','a:1:{s:13:"DAS_INS_TITLE";s:22:"ProcessMaker Community";}','2011-12-02 00:00:00','2011-12-02 00:00:00',1 UNION ALL
