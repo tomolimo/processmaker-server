@@ -155,7 +155,12 @@ Ext.onReady(function() {
          method  : 'post',
          params  : {nameFunction: 'restoreLogo', NAMELOGO:imageName},
          success : function() {
-           window.parent.window.parent.location.href = window.parent.window.parent.window.location.href;
+          if (typeof parent.parent.Ext != 'undefined') {
+            parent.parent.location.href = '../main?st=admin';
+          }
+          else {
+            window.parent.window.parent.location.href = window.parent.window.parent.window.location.href
+          }
          }
       });
     }
