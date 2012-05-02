@@ -25,7 +25,7 @@
 
 /**
  * sysGeneric - ProcessMaker Bootstrap 
- * this file is used initialize main variables and redirect to each and all pages
+ * this file is used initialize main variables, redirect and dispatch all requests
  */
 
   $startingTime = microtime(true);
@@ -55,9 +55,9 @@
   require_once $pathhome  . 'engine' . PATH_SEP . 'classes' . PATH_SEP . 'class.system.php';
   $config = System::getSystemConfiguration($pathhome . 'engine' . PATH_SEP . 'config' . PATH_SEP . 'env.ini');
   
-  $e_all  = defined('E_DEPRECATED') ? E_ALL & ~E_DEPRECATED : E_ALL;
-  $e_all  = defined('E_STRICT')     ? E_ALL & ~E_STRICT     : $e_all;
-  $e_all  = $config['debug']        ? $e_all                : $e_all & ~E_NOTICE;
+  $e_all  = defined('E_DEPRECATED') ? E_ALL  & ~E_DEPRECATED : E_ALL;
+  $e_all  = defined('E_STRICT')     ? $e_all & ~E_STRICT     : $e_all;
+  $e_all  = $config['debug']        ? $e_all                 : $e_all & ~E_NOTICE;
 
   // Do not change any of these settings directly, use env.ini instead
   ini_set('display_errors', $config['debug']);
