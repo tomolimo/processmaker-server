@@ -48,7 +48,8 @@ class Main extends Controller
     if (isset($_SESSION['_defaultUserLocation'])) {
       $activeTab = $this->resolveUrlToTabIndex($_SESSION['_defaultUserLocation']);
     }
-    else if (isset($_GET['st'])) {
+    
+    if (isset($_GET['st'])) {
       $activeTab = $this->getActiveTab($_GET['st']);
       unset($_GET['st']);
     }
