@@ -35,7 +35,7 @@ class AppProxy extends HttpProxyController
 
     $usrUid   = isset($_SESSION['USER_LOGGED']) ? $_SESSION['USER_LOGGED'] : "";
     $appNotes = new AppNotes();
-    $response = $appNotes->getNotesList($appUid, $usrUid, $httpData->start, $httpData->limit);
+    $response = $appNotes->getNotesList($appUid, '', $httpData->start, $httpData->limit);
     
     return $response['array'];
   }

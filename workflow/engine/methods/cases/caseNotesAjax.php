@@ -47,7 +47,7 @@ function getNotesList() {
   }
   $usrUid = (isset($_SESSION['USER_LOGGED'])) ? $_SESSION['USER_LOGGED'] : "";
   $appNotes = new AppNotes();
-  $response = $appNotes->getNotesList($appUid, $usrUid, $start, $limit);
+  $response = $appNotes->getNotesList($appUid, '', $start, $limit);
   sendJsonResultGeneric($response['array'], $callback);
 }
 

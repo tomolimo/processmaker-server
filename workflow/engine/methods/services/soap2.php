@@ -801,6 +801,17 @@
     return $res;
   }
 
+  function getCaseNotes( $params ) {
+    $vsResult = isValidSession($params->sessionId);
+    if( $vsResult->status_code !== 0 ){
+      return $vsResult;
+    }
+
+    $ws = new wsBase ();
+    $res = $ws->getCaseNotes( $params->applicationID ,$params->userUid);
+    return $res;
+  }
+
   /*************/
 
   #added By Erik AO <erik@colosa.com> in datetime 26.06.2008 10:00:00
@@ -884,5 +895,6 @@ $server->addFunction("ReassignCase");
 $server->addFunction("systemInformation");
 $server->addFunction("importProcessFromLibrary");
 $server->addFunction("removeUserFromGroup");
+$server->addFunction("getCaseNotes");
 $server->handle();
 

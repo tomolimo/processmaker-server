@@ -662,6 +662,41 @@
           </xs:sequence>
         </xs:complexType>
       </xs:element>
+      <xs:complexType name="getCaseNotesStruct">
+        <xs:sequence>
+          <xs:element name="full_name"          type="xs:string"/>
+          <xs:element name="app_uid"            type="xs:string"/>
+          <xs:element name="usr_uid"            type="xs:string"/>
+          <xs:element name="note_date"          type="xs:string"/>
+          <xs:element name="note_content"       type="xs:string"/>
+          <xs:element name="note_type"          type="xs:string"/>
+          <xs:element name="note_availability"  type="xs:string"/>
+          <xs:element name="note_origin_obj"    type="xs:string"/>
+          <xs:element name="note_affected_obj1" type="xs:string"/>
+          <xs:element name="note_affected_obj2" type="xs:string"/>
+          <xs:element name="note_recipients"    type="xs:string"/>
+          <xs:element name="usr_username"       type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="getCaseNotesRequest">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="sessionId"        type="xs:string"/>
+            <xs:element name="applicationID"    type="xs:string"/>
+            <xs:element name="userUid"          type="xs:string"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getCaseNotesResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="status_code"  type="xs:integer"/>
+            <xs:element name="message"      type="xs:string"/>
+            <xs:element name="notes"        maxOccurs="unbounded" type="xs0:getCaseNotesStruct"/>
+            <xs:element name="timestamp"    type="xs:string"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
     </xs:schema>
   </types>
   <message name="loginRequest">
@@ -838,6 +873,12 @@
   <message name="importProcessFromLibraryResponse">
     <part name="parameters" element="xs0:importProcessFromLibraryResponse"/>
   </message>
+  <message name="getCaseNotesRequest">
+    <part name="parameters" element="xs0:getCaseNotesRequest"/>
+  </message>
+  <message name="getCaseNotesResponse">
+    <part name="parameters" element="xs0:getCaseNotesResponse"/>
+  </message>
 
   <message name="removeUserFromGroupRequest">
     <part name="parameters" element="xs0:removeUserFromGroupRequest"/>
@@ -892,7 +933,7 @@
       <output message="xs0:pmResponse"/>
     </operation>
     <operation name="assignUserToDepartment">
-      <input message="xs0:assignUserToDepartmentRequest"/>                          
+      <input message="xs0:assignUserToDepartmentRequest"/>
       <output message="xs0:pmResponse"/>
     </operation>
     <operation name="newCase">
@@ -967,6 +1008,11 @@
       <input message="xs0:importProcessFromLibraryRequest"/>
       <output message="xs0:importProcessFromLibraryResponse"/>
     </operation>
+    <operation name="getCaseNotes">
+      <input message="xs0:getCaseNotesRequest"/>
+      <output message="xs0:getCaseNotesResponse"/>
+    </operation>
+    
     <operation name="removeUserFromGroup">
       <input message="xs0:removeUserFromGroupRequest"/>
       <output message="xs0:pmResponse"/>
@@ -1253,6 +1299,16 @@
         <soap12:body use="literal"/>
       </output>
     </operation>
+    <operation name="getCaseNotes">
+      <soap12:operation soapAction="urn:getCaseNotes" soapActionRequired="true" style="document"/>
+      <input>
+        <soap12:body use="literal"/>
+      </input>
+      <output>
+        <soap12:body use="literal"/>
+      </output>
+    </operation>
+    
     <operation name="removeUserFromGroup">
       <soap12:operation soapAction="urn:removeUserFromGroup" soapActionRequired="true" style="document"/>
       <input>

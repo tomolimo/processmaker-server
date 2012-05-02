@@ -15,7 +15,7 @@ require_once 'classes/model/om/BaseAppNotes.php';
  */
 class AppNotes extends BaseAppNotes {
 
-  function getNotesList($appUid, $usrUid, $start, $limit) {
+  function getNotesList($appUid, $usrUid = '', $start = '', $limit = '') {
     require_once ( "classes/model/Users.php" );
 
     G::LoadClass('ArrayPeer');
@@ -35,24 +35,28 @@ class AppNotes extends BaseAppNotes {
     $Criteria->addSelectColumn(AppNotesPeer::NOTE_RECIPIENTS);
     $Criteria->addSelectColumn(UsersPeer::USR_USERNAME);
     $Criteria->addSelectColumn(UsersPeer::USR_FIRSTNAME);
-    $Criteria->addSelectColumn(UsersPeer::USR_LASTNAME);  
-     
+    $Criteria->addSelectColumn(UsersPeer::USR_LASTNAME);
     $Criteria->addSelectColumn(UsersPeer::USR_EMAIL);
 
     $Criteria->addJoin(AppNotesPeer::USR_UID, UsersPeer::USR_UID, Criteria::LEFT_JOIN);
 
     $Criteria->add(appNotesPeer::APP_UID, $appUid, CRITERIA::EQUAL);
+    
+    if ($usrUid != '') {
+      $Criteria->add(appNotesPeer::USR_UID, $usrUid, CRITERIA::EQUAL);
+    }
 
     $Criteria->addDescendingOrderByColumn(AppNotesPeer::NOTE_DATE);
 
-    
     $response = array();
     $totalCount = AppNotesPeer::doCount($Criteria);
     $response['totalCount'] = $totalCount;
     $response['notes'] = array();
 
-    $Criteria->setLimit($limit);
-    $Criteria->setOffset($start);
+    if ($start != '') {
+      $Criteria->setLimit($limit);
+      $Criteria->setOffset($start);
+    }
 
     $oDataset = appNotesPeer::doSelectRS($Criteria);
     $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);

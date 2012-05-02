@@ -1999,3 +1999,9 @@ function PMFGetUserEmailAddress($id, $APP_UID=null, $prefix='usr') {
       return $aRecipient;
   }
 }
+
+function PMFGetCaseNotes ($applicationID, $type = 'array',$userUid = '') {
+  G::LoadClass('case');
+  $response = Cases::getCaseNotes($applicationID, $type, $userUid);
+  return $response;
+}

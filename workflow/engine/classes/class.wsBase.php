@@ -2171,5 +2171,27 @@ class wsBase
       return $result;
     }
   }
+  
+  public function getCaseNotes ($applicationID, $userUid = '') {
+    try {
+      G::LoadClass('case');
+      $result = new wsGetCaseNotesResponse (0, G::loadTranslation('ID_SUCCESS'), Cases::getCaseNotes($applicationID, 'array', $userUid));
+      $var = array();
+      foreach ($result->notes as $key => $value) {
+        $var2 = array();
+        foreach ($value as $keys => $values) {
+          $field = strtolower($keys);
+          $var2[$field] = $values;
+        }
+        $var[] = $var2;
+      }
+      $result->notes = $var;
+      return $result;
+    }
+    catch ( Exception $e ) {
+      $result = new wsResponse (100, $e->getMessage());
+      return $result;
+    }
+  }
 
 }
