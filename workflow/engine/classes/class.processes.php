@@ -722,7 +722,7 @@ class Processes {
     // New process bpmn
     if ( isset($oData->event ) && is_array($oData->event) ) {
       foreach ( $oData->event as $key => $val ) {
-        if (isset($map[ $val['EVN_TAS_UID_FROM'] ])) {
+        if (isset($val['EVN_TAS_UID_FROM']) && isset($map[ $val['EVN_TAS_UID_FROM'] ])) {
           $newGuid = $map[ $val['EVN_TAS_UID_FROM'] ];
           $oData->event[$key]['EVN_TAS_UID_FROM'] = $newGuid;
         }
@@ -753,7 +753,7 @@ class Processes {
       $oData->dynaforms[$key]['DYN_UID'] = $newGuid;
     }
 
-    if (!is_array($oData->process['PRO_DYNAFORMS'])) {
+    if ( isset($oData->process['PRO_DYNAFORMS'])  && !is_array($oData->process['PRO_DYNAFORMS'])) {
       $oData->process['PRO_DYNAFORMS'] = @unserialize($oData->process['PRO_DYNAFORMS']);
     }
 

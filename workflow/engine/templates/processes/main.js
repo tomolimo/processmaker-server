@@ -6,6 +6,16 @@ var processesGrid;
 var store;
 var comboCategory;
 
+/**
+ * Global variables and variable initialization for import process.
+ */
+var importProcessGlobal = {};
+importProcessGlobal.proFileName = "";
+importProcessGlobal.groupBeforeAccion="";
+importProcessGlobal.sNewProUid = "";
+importProcessGlobal.importOption = "";
+importProcessGlobal.processFileType = "";
+
 new Ext.KeyMap(document, {
   key: Ext.EventObject.F5,
   fn: function(keycode, e) {
@@ -231,12 +241,20 @@ Ext.onReady(function(){
         text: _('ID_IMPORT'),
         iconCls: 'silk-add',
         icon: '/images/import.gif',
-        handler:importProcess
+        // handler:importProcess
+        handler : function(){
+          importProcessGlobal.processFileType = "pm";
+          importProcess();
+        }
       },{
         text: _('ID_XPDL_IMPORT'),
         iconCls: 'silk-add',
         icon: '/images/import.gif',
-        handler:importXPDLProcess
+        // handler:importXPDLProcess
+        handler:function(){
+          importProcessGlobal.processFileType="xpdl";
+          importProcess();
+        }
       },/*{
         text:'Export',
         iconCls: 'silk-add',
@@ -615,8 +633,401 @@ deleteProcess = function(){
   }
 }
 
-importProcess = function(){
-  window.location = 'processes_Import';
+importProcessExistGroup = function()
+{
+
+  var processFileTypeTitle = (processFileType == "pm") ? "" : " " + processFileType;
+
+  proFileName         = importProcessGlobal.proFileName;
+  groupBeforeAccion   = importProcessGlobal.groupBeforeAccion;
+  sNewProUid          = importProcessGlobal.sNewProUid;
+  importOption        = importProcessGlobal.importOption;
+  var processFileType = importProcessGlobal.processFileType;
+
+  var w = new Ext.Window({
+    title       : _('ID_IMPORT_PROCESS') + processFileTypeTitle,
+    header      : false,
+    width       : 460,
+    height      : 210,
+    modal       : true,
+    autoScroll  : false,
+    maximizable : false,
+    resizable   : false,
+    items : [
+      new Ext.form.FormPanel({
+        title      : _('ID_LAN_UPLOAD_TITLE'),
+        header     : false,
+        id         : 'formUploadExistGroup',
+        fileUpload : false,
+        width      : 440,
+        frame      : true,
+        autoHeight : false,
+        bodyStyle  : 'padding: 10px 10px 0 10px;',
+        labelWidth : 50,
+        defaults : {
+          anchor     : '90%',
+          allowBlank : false,
+          msgTarget  : 'side'
+        },
+        items : [
+          {
+            xtype  : 'box',
+            autoEl : {
+              tag  : 'div',
+              html : '<div ><img src="/images/ext/default/window/icon-warning.gif" style="display:inline;float:left;" /><div style="float:left;display:inline;width:300px;margin-left:5px;">' + _('ID_PROCESS_EXIST_SOME_GROUP') + '</div><div style="width:300px;" >&nbsp</div></div>'
+            }
+          }, {
+            xtype  : 'spacer',
+            height : 10
+          }, {
+            items: [
+              {
+                xtype      : "radio",
+                boxLabel   : _('ID_PROCESS_GROUP_RENAME'),
+                name       : "optionGroupExistInDatabase",
+                inputValue : '1',
+                tabIndex   : 1
+              }
+            ]
+          }, {
+            items:[
+              {
+                xtype      : "radio",
+                boxLabel   : _('ID_PROCESS_GROUP_MERGE_PREEXISTENT'),
+                tabIndex   : 2,
+                name       : "optionGroupExistInDatabase",
+                inputValue : '2',
+                checked    : "checked"
+              }
+            ]
+          }, {
+            xtype : 'hidden',
+            name  : 'ajaxAction',
+            value : groupBeforeAccion
+          }, {
+            xtype : 'hidden',
+            name  : 'PRO_FILENAME',
+            value : proFileName
+          }, {
+            xtype : 'hidden',
+            name  : 'sNewProUid',
+            value : sNewProUid
+          }, {
+            xtype : 'hidden',
+            name  : 'IMPORT_OPTION',
+            value : importOption
+          }, {
+            name  : 'processFileType',
+            xtype : 'hidden',
+            value : processFileType
+          }, {
+            xtype  : 'spacer',
+            height : 10
+          }
+        ],
+        buttons : [
+          {
+            text    : _('ID_SAVE'),
+            handler : function() {
+              var uploader = Ext.getCmp('formUploadExistGroup');
+
+              if (uploader.getForm().isValid()) {
+                uploader.getForm().submit({
+                  url     : 'processes_Import_Ajax',
+                  waitMsg : _('ID_UPLOADING_PROCESS_FILE'),
+
+                  success : function(o, resp) {
+                    var resp_            = Ext.util.JSON.decode(resp.response.responseText);
+                    var sNewProUid       = resp_.sNewProUid;
+                    window.location.href = "processes_Map?PRO_UID=" + sNewProUid;
+                  },
+                  failure: function(o, resp) {
+                    w.close();
+                    Ext.MessageBox.show({
+                      title   : _('ID_ERROR'),
+                      msg     : resp.result.msg,
+                      buttons : Ext.MessageBox.OK,
+                      animEl  : 'mb9',
+                      fn      : function(){},
+                      icon    : Ext.MessageBox.ERROR
+                    });
+                  }
+                });
+              }
+            }
+          }, {
+            text    : _('ID_CANCEL'),
+            handler : function(){
+              w.close();
+            }
+          }
+        ]
+      })
+    ]
+  });
+  w.show();
+};
+
+importProcessExistProcess = function()
+{
+
+  var processFileTypeTitle = (processFileType == "pm") ? "" : " " + processFileType;
+  var processFileType      = importProcessGlobal.processFileType;
+  var proFileName          = importProcessGlobal.proFileName;
+
+  var w = new Ext.Window({
+    title       : _('ID_IMPORT_PROCESS') + processFileTypeTitle,
+    header      : false,
+    width       : 460,
+    height      : 210,
+    modal       : true,
+    autoScroll  : false,
+    maximizable : false,
+    resizable   : false,
+    items : [
+      new Ext.form.FormPanel({
+        title      : _('ID_LAN_UPLOAD_TITLE'),
+        header     : false,
+        id         : 'formUploader',
+        fileUpload : false,
+        width      : 440,
+        frame      : true,
+        autoHeight : false,
+        bodyStyle  : 'padding: 10px 10px 0 10px;',
+        labelWidth : 50,
+        defaults : {
+          anchor     : '90%',
+          allowBlank : false,
+          msgTarget  : 'side'
+        },
+        items : [
+          {
+            xtype   : 'box',
+            autoEl : {
+              tag  : 'div',
+              html : '<div ><img src="/images/ext/default/window/icon-warning.gif" style="display:inline;float:left;" /><div style="float:left;display:inline;width:300px;margin-left:5px;">' + _('ID_IMPORT_ALREADY_EXISTS') + '</div><div style="width:300px;" >&nbsp</div></div>'
+            }
+          }, {
+            xtype  : 'spacer',
+            height : 10
+          }, {
+            items : [
+              {
+                xtype      : "radio",
+                boxLabel   : _('IMPORT_PROCESS_OVERWRITING'),
+                name       : "IMPORT_OPTION",
+                inputValue : '1',
+                tabIndex   : 1
+              }
+            ]
+          }, {
+            items : [{
+              xtype      : "radio",
+              boxLabel   : _('IMPORT_PROCESS_DISABLE'),
+              tabIndex   : 2,
+              name       : "IMPORT_OPTION",
+              inputValue : '2',
+              checked    : "checked"
+            }]
+          }, {
+            items: [{
+              xtype      : "radio",
+              boxLabel   : _('IMPORT_PROCESS_NEW'),
+              name       : "IMPORT_OPTION",
+              inputValue : '3',
+              tabIndex   : 3
+            }]
+          }, {
+            xtype : 'hidden',
+            name  : 'ajaxAction',
+            value : 'uploadFileNewProcessExist'
+          }, {
+            xtype : 'hidden',
+            name  : 'PRO_FILENAME',
+            value : proFileName
+          }, {
+          name  : 'processFileType',
+          xtype : 'hidden',
+          value : processFileType
+          }, {
+            xtype  : 'spacer',
+            height : 10
+          }
+        ],
+        buttons:[
+          {
+            text    : _('ID_SAVE'),
+            handler : function() {
+              var uploader = Ext.getCmp('formUploader');
+              if (uploader.getForm().isValid()) {
+                uploader.getForm().submit({
+                  url     : 'processes_Import_Ajax',
+                  waitMsg : _('ID_UPLOADING_PROCESS_FILE'),
+
+                  success: function(o, resp) {
+                    var resp_      = Ext.util.JSON.decode(resp.response.responseText);
+                    var sNewProUid = resp_.sNewProUid;
+                    if (resp_.ExistGroupsInDatabase == 0) {
+                      window.location.href = "processes_Map?PRO_UID=" + sNewProUid;
+                    }
+                    else {
+                      importProcessGlobal.proFileName       = resp_.fileName;
+                      importProcessGlobal.groupBeforeAccion = resp_.groupBeforeAccion;
+                      importProcessGlobal.sNewProUid        = resp_.sNewProUid;
+                      importProcessGlobal.importOption      = resp_.importOption;
+                      importProcessExistGroup();
+                    }
+                  },
+                  failure : function(o, resp) {
+                    w.close();
+                    Ext.MessageBox.show({
+                      title   : _('ID_ERROR'),
+                      msg     : resp.result.msg,
+                      buttons : Ext.MessageBox.OK,
+                      animEl  : 'mb9',
+                      fn      : function(){},
+                      icon    : Ext.MessageBox.ERROR
+                    });
+                  }
+                });
+              }
+            }
+          }, {
+            text : _('ID_CANCEL'),
+            handler : function(){
+              w.close();
+            }
+          }
+        ]
+      })
+    ]
+  });
+  w.show();
+};
+
+//importProcess = function(){
+//  window.location = 'processes_Import';
+//}
+
+importProcess = function()
+{
+    var processFileType      = importProcessGlobal.processFileType;
+    var processFileTypeTitle = (processFileType == "pm") ? "" : " " + processFileType;
+
+    var w = new Ext.Window({
+      title       : _('ID_IMPORT_PROCESS')+processFileTypeTitle,
+      width       : 420,
+      height      : 130,
+      modal       : true,
+      autoScroll  : false,
+      maximizable : false,
+      resizable   : false,
+      items: [
+        new Ext.FormPanel({
+          id         : 'uploader',
+          fileUpload : true,
+          width      : 400,
+          height     : 90,
+          frame      : true,
+          title      : _('ID_IMPORT_PROCESS'),
+          header     : false,
+          autoHeight : false,
+          bodyStyle  : 'padding: 10px 10px 0 10px;',
+          labelWidth : 50,
+          defaults : {
+            anchor     : '90%',
+            allowBlank : false,
+            msgTarget  : 'side'
+          },
+          items : [
+            {
+              name  : 'ajaxAction',
+              xtype : 'hidden',
+              value : 'uploadFileNewProcess'
+            }, {
+            name  : 'processFileType',
+            xtype : 'hidden',
+            value : processFileType
+            }, {
+              xtype      : 'fileuploadfield',
+              id         : 'form-file',
+              emptyText  : _('ID_SELECT_PROCESS_FILE'),
+              fieldLabel : _('ID_LAN_FILE'),
+              name       : 'form[PROCESS_FILENAME]',
+              buttonText : '',
+              buttonCfg : {
+                iconCls : 'upload-icon'
+              }
+            }
+          ],
+          buttons : [{
+              text    : _('ID_UPLOAD'),
+              handler : function(){
+                var uploader = Ext.getCmp('uploader');
+                if (uploader.getForm().isValid()) {
+                  uploader.getForm().submit({
+                    url     : 'processes_Import_Ajax',
+                    waitMsg : _('ID_UPLOADING_PROCESS_FILE'),
+                    success : function(o, resp) {
+
+                      var resp_ = Ext.util.JSON.decode(resp.response.responseText);
+
+                      if (resp_.catchMessage == "") {
+                        if (resp_.ExistProcessInDatabase == "0") {
+                          if (resp_.ExistGroupsInDatabase == "0") {
+                            var sNewProUid       = resp_.sNewProUid;
+                            window.location.href = "processes_Map?PRO_UID=" + sNewProUid;
+                          }
+                          else {
+                            importProcessGlobal.sNewProUid        = resp_.sNewProUid;
+                            importProcessGlobal.proFileName       = resp_.proFileName;
+                            importProcessGlobal.groupBeforeAccion = resp_.groupBeforeAccion;
+                            importProcessExistGroup();
+                          }
+                        }
+                        else if (resp_.ExistProcessInDatabase == "1") {
+
+                          importProcessGlobal.proFileName = resp_.proFileName;
+                          importProcessExistProcess();
+                        }
+                      }
+                      else {
+                        w.close();
+                        Ext.MessageBox.show({
+                          title   : '',
+                          msg     : resp_.catchMessage,
+                          buttons : Ext.MessageBox.OK,
+                          animEl  : 'mb9',
+                          fn      : function(){},
+                          icon    : Ext.MessageBox.ERROR
+                        });
+                      }
+                    },
+                    failure : function(o, resp) {
+                      w.close();
+
+                      Ext.MessageBox.show({
+                        title   : '',
+                        msg     : resp_.catchMessage,
+                        buttons : Ext.MessageBox.OK,
+                        animEl  : 'mb9',
+                        fn      : function(){},
+                        icon    : Ext.MessageBox.ERROR
+                      });
+                    }
+                  });
+                }
+              }
+          },{
+            text: _('ID_CANCEL'),
+            handler: function(){
+              w.close();
+            }
+          }]
+        })
+      ]
+    });
+  w.show();
 }
 
 importXPDLProcess = function(){
