@@ -7,12 +7,12 @@ var _firstName, _lastName, _userName, _dateSample;
 
 Ext.onReady(function() {
   Ext.QuickTips.init();
-  
+
   _firstName = 'John';
   _lastName = 'Deere';
   _userName = 'johndeere';
   _dateSample = '2011-02-17 19:15:38';
-  
+
   fsSample = new Ext.form.FieldSet({
     title: _('ID_SAMPLES'),
     labelWidth: 250,
@@ -25,7 +25,7 @@ Ext.onReady(function() {
       {xtype: 'label', fieldLabel: _('ID_CASE_LIST') +': '+_('ID_CASES_ROW_NUMBER'), id: 'lblCasesRowsList', width: 400}
     ]
   });
-  
+
   storeUsernameFormat = new Ext.data.GroupingStore({
     proxy : new Ext.data.HttpProxy({
       url: 'environmentSettingsAjax?request=getUserMaskList'
@@ -43,7 +43,7 @@ Ext.onReady(function() {
       }
     }
   });
-  
+
   cmbUsernameFormats = new Ext.form.ComboBox({
     fieldLabel : _('IS_USER_NAME_DISPLAY_FORMAT'),
     hiddenName : 'userFormat',
@@ -64,7 +64,7 @@ Ext.onReady(function() {
       select: function(){ChangeSettings('1');}
     }
   });
-  
+
   storeDateFormat = new Ext.data.Store( {
     proxy : new Ext.data.HttpProxy( {
           url : 'environmentSettingsAjax?request=getDateFormats',
@@ -72,7 +72,7 @@ Ext.onReady(function() {
     }),
     reader: new Ext.data.JsonReader( {
       root: 'rows',
-      fields: [ 
+      fields: [
         {name : 'id'},
         {name : 'name'}
       ]
@@ -86,7 +86,7 @@ Ext.onReady(function() {
       }
     }
   });
-  
+
   cmbDateFormats = new Ext.form.ComboBox({
     fieldLabel : _('ID_GLOBAL_DATE_FORMAT'),
     hiddenName : 'dateFormat',
@@ -104,10 +104,10 @@ Ext.onReady(function() {
       afterrender:function(){
         cmbDateFormats.store.load();
       },
-      select: function(){ChangeSettings('2');}  
+      select: function(){ChangeSettings('2');}
     }
   });
-  
+
   storeCaseUserNameFormat = new Ext.data.Store({
     proxy : new Ext.data.HttpProxy({
       url : 'environmentSettingsAjax?request=getCasesListDateFormat',
@@ -115,9 +115,9 @@ Ext.onReady(function() {
     }),
     reader: new Ext.data.JsonReader({
       root: 'rows',
-      fields: [ 
+      fields: [
         {name: 'id'},
-        {name : 'name'} 
+        {name : 'name'}
       ]
     }),
     listeners:{
@@ -129,7 +129,7 @@ Ext.onReady(function() {
       }
     }
   });
-  
+
   cmbCasesDateFormats = new Ext.form.ComboBox({
     fieldLabel : _('ID_CASES_DATE_MASK'),
     hiddenName : 'casesListDateFormat',
@@ -149,7 +149,7 @@ Ext.onReady(function() {
       select: function(){ChangeSettings('3');}
     }
   });
-  
+
   storeCaseListNumber = new Ext.data.Store({
   proxy : new Ext.data.HttpProxy( {
     url : 'environmentSettingsAjax?request=getCasesListRowNumber',
@@ -192,20 +192,20 @@ Ext.onReady(function() {
       },
       select: function(){ChangeSettings('4');}
     }
-  });  
-  
+  });
+
   fsNames = new Ext.form.FieldSet({
     title: _('ID_PM_ENV_SETTINGS_USERFIELDSET_TITLE'),
     labelAlign: 'right',
     items: [cmbUsernameFormats]
   });
-  
+
   fsDates = new Ext.form.FieldSet({
     title: _('ID_PM_ENV_SETTINGS_REGIONFIELDSET_TITLE'),
     labelAlign: 'right',
     items: [cmbDateFormats]
   });
-  
+
   fsCases = new Ext.form.FieldSet({
     title: _('ID_HOME_SETTINGS'),//_('ID_PM_ENV_SETTINGS_CASESLIST_TITLE'),
     labelAlign: 'right',
@@ -214,7 +214,7 @@ Ext.onReady(function() {
         title: _('ID_NEW_CASE_PANEL'),
         labelAlign: 'right',
         items: [
-          {        
+          {
             xtype: 'checkbox',
             checked: FORMATS.startCaseHideProcessInf,
             name: 'hideProcessInf',
@@ -223,7 +223,7 @@ Ext.onReady(function() {
               check:function(){
                 saveButton.enable();
               }
-            }  
+            }
           }
         ]
       }),
@@ -234,7 +234,7 @@ Ext.onReady(function() {
       })
     ]
   });
-  
+
   saveButton = new Ext.Action({
     text : _('ID_SAVE_SETTINGS'),
     disabled : true,
@@ -250,7 +250,7 @@ Ext.onReady(function() {
       });
     }
   });
-  
+
   formSettings = new Ext.FormPanel( {
   region: 'center',
     labelWidth : 170, // label settings here cascade unless overridden
@@ -266,7 +266,7 @@ Ext.onReady(function() {
   });
 
   LoadSamples();
-  
+
   /*viewport = new Ext.Viewport({
     layout: 'fit',
     autoScroll: false,
@@ -281,7 +281,7 @@ Ext.onReady(function() {
 //Load Samples Label
 LoadSamples = function(){
   Ext.getCmp('lblFullName').setText(_FNF(_userName, _firstName, _lastName, FORMATS.format));
-  Ext.getCmp('lblDateFormat').setText(_DF(_dateSample, FORMATS.format));
+  Ext.getCmp('lblDateFormat').setText(_DF(_dateSample, FORMATS.dateFormat));
   Ext.getCmp('lblCasesDateFormat').setText(_DF(_dateSample, FORMATS.casesListDateFormat, FORMATS.casesListDateFormat));
   Ext.getCmp('lblCasesRowsList').setText(FORMATS.casesListRowNumber);
 };
@@ -290,7 +290,7 @@ LoadSamples = function(){
 ChangeSettings = function(iType){
   saveButton.enable();
   switch (iType){
-    case '1': 
+    case '1':
       _format = cmbUsernameFormats.getValue();
       Ext.getCmp('lblFullName').setText(_FNF(_userName,_firstName,_lastName, _format));
       break;
