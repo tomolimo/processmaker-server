@@ -5043,12 +5043,12 @@ function getDirectorySize($path,$maxmtime=0)
    */
   function update_php_ini($file, $array)
   {
-    if (!is_writable($file)) {
-      throw new Exception("File $file, is not writable.");
-    }
-
     $iniLines = array();
     $iniContent = array();
+    
+    if (file_exists($file) && !is_writable($file)) {
+      throw new Exception("File $file, is not writable.");
+    }
     
     if (file_exists($file)) {
       $iniContent = file($file);
@@ -5121,7 +5121,8 @@ function getDirectorySize($path,$maxmtime=0)
       return $sw;
     }
     else {
-      $noWritableFiles[] = $path; 
+      if (!in_array($path, $noWritableFiles))
+        $noWritableFiles[] = $path; 
       
       return false;
     }
