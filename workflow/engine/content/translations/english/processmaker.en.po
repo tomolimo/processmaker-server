@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: ProcessMaker (Branch 2.0-experimental) 2.0-testing.16-61-g21e6113\n"
+"Project-Id-Version: ProcessMaker (Branch 2.0-experimental) dummy-73-ge20d9db\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2012-04-05 17:59:20\n"
+"PO-Revision-Date: 2012-05-02 13:15:24\n"
 "Last-Translator: \n"
 "Language-Team: Colosa Developers Team <developers@colosa.com>\n"
 "MIME-Version: 1.0\n"
@@ -1060,14 +1060,14 @@ msgstr "Before Assignment"
 # TRANSLATION
 # LABEL/ID_BEFORE_DERIVATION
 #: LABEL/ID_BEFORE_DERIVATION
-msgid "Before Routing"
-msgstr "Before Routing"
+msgid "Before Derivation"
+msgstr "Before Derivation"
 
 # TRANSLATION
 # LABEL/ID_AFTER_DERIVATION
 #: LABEL/ID_AFTER_DERIVATION
-msgid "After Routing"
-msgstr "After Routing"
+msgid "After Derivation"
+msgstr "After Derivation"
 
 # TRANSLATION
 # LABEL/ID_BEFORE
@@ -1102,8 +1102,8 @@ msgstr "Enabled"
 # TRANSLATION
 # JAVASCRIPT/ID_NO_DERIVATIONS_DEFINED
 #: JAVASCRIPT/ID_NO_DERIVATIONS_DEFINED
-msgid "No routings were defined."
-msgstr "No routings were defined."
+msgid "No derivations were defined."
+msgstr "No derivations were defined."
 
 # TRANSLATION
 # LABEL/ID_ROWS
@@ -3856,8 +3856,8 @@ msgstr "Field \"table\" is required"
 # TRANSLATION
 # JAVASCRIPT/ID_ASSIGN_RULES
 #: JAVASCRIPT/ID_ASSIGN_RULES
-msgid "Error: There is a problem with the next tasks of this process. One of them has manual assignment.  Manual assignment shouldn't be   used with subprocesses"
-msgstr "Error: There is a problem with the next tasks of this process. One of them has manual assignment.  Manual assignment shouldn't be   used with subprocesses"
+msgid "Error: There is a problem with next tasks   of this process, one of them have manual   assignment.  Manual assignment shouldn't be   used with subprocesses"
+msgstr "Error: There is a problem with next tasks   of this process, one of them have manual   assignment.  Manual assignment shouldn't be   used with subprocesses"
 
 # TRANSLATION
 # LABEL/ID_FIELD_INVALID
@@ -3880,8 +3880,8 @@ msgstr "Saved"
 # TRANSLATION
 # LABEL/ID_ASSIGN_RULES
 #: LABEL/ID_ASSIGN_RULES
-msgid "Error: There is a problem with the next tasks of this process. One of them has manual assignment.  Manual assignment shouldn't be  used with subprocesses"
-msgstr "Error: There is a problem with the next tasks of this process. One of them has manual assignment.  Manual assignment shouldn't be  used with subprocesses"
+msgid "Error: There is a problem with next tasks  of this process, one of them have manual  assignment.  Manual assignment shouldn't be  used with subprocesses"
+msgstr "Error: There is a problem with next tasks  of this process, one of them have manual  assignment.  Manual assignment shouldn't be  used with subprocesses"
 
 # TRANSLATION
 # LABEL/ID_SELECT_OPTION_TABLE
@@ -5572,8 +5572,8 @@ msgstr "Do you want to delete all selected processes?"
 # TRANSLATION
 # LABEL/ID_PROCESS_CANT_DELETE
 #: LABEL/ID_PROCESS_CANT_DELETE
-msgid "You can't delete the process \"{0}\" because it has {1} cases."
-msgstr "You can't delete the process \"{0}\" because it has {1} cases."
+msgid "You can't delete the process \"{0}\" because  has {1} cases."
+msgstr "You can't delete the process \"{0}\" because  has {1} cases."
 
 # TRANSLATION
 # LABEL/ID_FILE
@@ -5812,8 +5812,8 @@ msgstr "The root password has been updated  successfully!"
 # TRANSLATION
 # LABEL/ID_MESSAGE_ROOT_CHANGE_FAILURE
 #: LABEL/ID_MESSAGE_ROOT_CHANGE_FAILURE
-msgid "The root password can't be updated!"
-msgstr "The root password can't be updated!"
+msgid "The root password has can't be updated !"
+msgstr "The root password has can't be updated !"
 
 # TRANSLATION
 # LABEL/ID_LAN_TRANSLATOR
@@ -7468,8 +7468,8 @@ msgstr "Dynaform Information"
 # TRANSLATION
 # LABEL/ID_SERVER_NAME
 #: LABEL/ID_SERVER_NAME
-msgid "Server Name"
-msgstr "Server Name"
+msgid "Server Address"
+msgstr "Server Address"
 
 # TRANSLATION
 # LABEL/ID_CREATE_PM_TABLE
@@ -7954,8 +7954,8 @@ msgstr "Map Type"
 # TRANSLATION
 # LABEL/ID_DERIVATION_HISTORY
 #: LABEL/ID_DERIVATION_HISTORY
-msgid "Routing History"
-msgstr "Routing History"
+msgid "Derivation History"
+msgstr "Derivation History"
 
 # TRANSLATION
 # LABEL/ID_MESSAGES_HISTORY
@@ -11290,8 +11290,8 @@ msgstr "Identifier for an imported user"
 # TRANSLATION
 # LABEL/ID_SEARCH_USER
 #: LABEL/ID_SEARCH_USER
-msgid "Search User"
-msgstr "Search User"
+msgid "[LABEL/ID_SEARCH_USER] Username"
+msgstr "Username"
 
 # TRANSLATION
 # LABEL/ID_OBJECT_CLASS
@@ -12048,6 +12048,396 @@ msgstr "You can't delete the task \"{0}\" because it has {1} cases."
 #: LABEL/ID_INDEX_NOT_WRITEABLE
 msgid "The index file is not writable. <br/>Please give write permission to file:"
 msgstr "The index file is not writable. <br/>Please give write permission to file:"
+
+# TRANSLATION
+# LABEL/ID_TITLE_AUTHENTICATION_SOURCE_INF
+#: LABEL/ID_TITLE_AUTHENTICATION_SOURCE_INF
+msgid "Authentication Source Information"
+msgstr "Authentication Source Information"
+
+# TRANSLATION
+# LABEL/ID_AUTHENTICATION_SOURCE_INF_TITLE
+#: LABEL/ID_AUTHENTICATION_SOURCE_INF_TITLE
+msgid "[LABEL/ID_AUTHENTICATION_SOURCE_INF_TITLE] Authentication Source Information"
+msgstr "Authentication Source Information"
+
+# TRANSLATION
+# LABEL/ID_AVAILABLE_AUTHENTICATION_SOURCES
+#: LABEL/ID_AVAILABLE_AUTHENTICATION_SOURCES
+msgid "Available Authentication Sources"
+msgstr "Available Authentication Sources"
+
+# TRANSLATION
+# LABEL/ID_EXTERNAL_STEP_MISSING
+#: LABEL/ID_EXTERNAL_STEP_MISSING
+msgid "The plugin that is related to the step <b> {plugin} </b> was removed or disabled, please consult to your system administrator"
+msgstr "The plugin that is related to the step <b> {plugin} </b> was removed or disabled, please consult to your system administrator"
+
+# TRANSLATION
+# LABEL/ID_INIT_DATE
+#: LABEL/ID_INIT_DATE
+msgid "Init Date"
+msgstr "Init Date"
+
+# TRANSLATION
+# LABEL/ID_OVERWRITE
+#: LABEL/ID_OVERWRITE
+msgid "Overwrite"
+msgstr "Overwrite"
+
+# TRANSLATION
+# LABEL/ID_BROWSE
+#: LABEL/ID_BROWSE
+msgid "Browse"
+msgstr "Browse"
+
+# TRANSLATION
+# LABEL/ID_UPLOADING_TRANSLATION_FILE
+#: LABEL/ID_UPLOADING_TRANSLATION_FILE
+msgid "Uploading the translation file..."
+msgstr "Uploading the translation file..."
+
+# TRANSLATION
+# LABEL/ID_EVALUATION_RESULT
+#: LABEL/ID_EVALUATION_RESULT
+msgid "[Success] Evaluation result"
+msgstr "[Success] Evaluation result"
+
+# TRANSLATION
+# LABEL/ID_REQUIRED_NAME_DYNAFORM
+#: LABEL/ID_REQUIRED_NAME_DYNAFORM
+msgid "Dynaform name required."
+msgstr "Dynaform name required."
+
+# TRANSLATION
+# LABEL/ID_SELECT_LANGUAGE_FROM_LIST
+#: LABEL/ID_SELECT_LANGUAGE_FROM_LIST
+msgid "First select a language from the list please."
+msgstr "First select a language from the list please."
+
+# TRANSLATION
+# LABEL/ID_NEW_WORKSPACE
+#: LABEL/ID_NEW_WORKSPACE
+msgid "New Workspace"
+msgstr "New Workspace"
+
+# TRANSLATION
+# LABEL/ID_DATABASE_OPTIONS
+#: LABEL/ID_DATABASE_OPTIONS
+msgid "Database Options"
+msgstr "Database Options"
+
+# TRANSLATION
+# LABEL/ID_WORKFLOW_DATABASE
+#: LABEL/ID_WORKFLOW_DATABASE
+msgid "Workflow Database"
+msgstr "Workflow Database"
+
+# TRANSLATION
+# LABEL/ID_RBAC_DATABASE
+#: LABEL/ID_RBAC_DATABASE
+msgid "Rbac Database"
+msgstr "Rbac Database"
+
+# TRANSLATION
+# LABEL/ID_REPORT_DATABASE
+#: LABEL/ID_REPORT_DATABASE
+msgid "Report Database"
+msgstr "Report Database"
+
+# TRANSLATION
+# LABEL/ID_DROP_DATABASE_EXISTS
+#: LABEL/ID_DROP_DATABASE_EXISTS
+msgid "Drop database if exists"
+msgstr "Drop database if exists"
+
+# TRANSLATION
+# LABEL/ID_WORKSPACE_ADMINISTRATOR
+#: LABEL/ID_WORKSPACE_ADMINISTRATOR
+msgid "Workspace Administrator"
+msgstr "Workspace Administrator"
+
+# TRANSLATION
+# LABEL/ID_PASSWORD_ADMIN
+#: LABEL/ID_PASSWORD_ADMIN
+msgid "Password (admin)(Max. length 20)"
+msgstr "Password (admin)(Max. length 20)"
+
+# TRANSLATION
+# LABEL/ID_PASSWORD_ADMIN_RETYPE
+#: LABEL/ID_PASSWORD_ADMIN_RETYPE
+msgid "Re-type Password"
+msgstr "Re-type Password"
+
+# TRANSLATION
+# LABEL/ID_NEW_SITE_TESTING
+#: LABEL/ID_NEW_SITE_TESTING
+msgid "New site testing..."
+msgstr "New site testing..."
+
+# TRANSLATION
+# LABEL/ID_SERVER_REPORTED
+#: LABEL/ID_SERVER_REPORTED
+msgid "Server reported"
+msgstr "Server reported"
+
+# TRANSLATION
+# LABEL/ID_SITE_CREATING
+#: LABEL/ID_SITE_CREATING
+msgid "site creating..."
+msgstr "site creating..."
+
+# TRANSLATION
+# LABEL/ID_FAILED
+#: LABEL/ID_FAILED
+msgid "[LABEL/ID_FAILED] Failed"
+msgstr "Failed"
+
+# TRANSLATION
+# LABEL/ID_DB_CONNECTION_NO_EXIST
+#: LABEL/ID_DB_CONNECTION_NO_EXIST
+msgid "DB Connection doesn't exist!"
+msgstr "DB Connection doesn't exist!"
+
+# TRANSLATION
+# LABEL/ID_GRID_NO_EXIST
+#: LABEL/ID_GRID_NO_EXIST
+msgid "Grid doesn't exist!"
+msgstr "Grid doesn't exist!"
+
+# TRANSLATION
+# LABEL/ID_PROCESS_NO_EXIST
+#: LABEL/ID_PROCESS_NO_EXIST
+msgid "Process doesn't exist!"
+msgstr "Process doesn't exist!"
+
+# TRANSLATION
+# LABEL/ID_SHOULD_SELECT_LANGUAGE_FROM_LIST
+#: LABEL/ID_SHOULD_SELECT_LANGUAGE_FROM_LIST
+msgid "You should to select a language from the list."
+msgstr "You should to select a language from the list."
+
+# TRANSLATION
+# LABEL/ID_COLUMNS
+#: LABEL/ID_COLUMNS
+msgid "columns"
+msgstr "columns"
+
+# TRANSLATION
+# LABEL/ID_NOTICE
+#: LABEL/ID_NOTICE
+msgid "Notice"
+msgstr "Notice"
+
+# TRANSLATION
+# LABEL/ID_ACTION_DISABLED_TO_LOW_PERFORMANCE_1
+#: LABEL/ID_ACTION_DISABLED_TO_LOW_PERFORMANCE_1
+msgid "This action was disabled to prevent low performance on your browser. This is because there is more than 100 records on the columns definition grid."
+msgstr "This action was disabled to prevent low performance on your browser. This is because there is more than 100 records on the columns definition grid."
+
+# TRANSLATION
+# LABEL/ID_ACTION_DISABLED_TO_LOW_PERFORMANCE_2
+#: LABEL/ID_ACTION_DISABLED_TO_LOW_PERFORMANCE_2
+msgid "<br/><br/>Please perform this action with manual selection only."
+msgstr "<br/><br/>Please perform this action with manual selection only."
+
+# TRANSLATION
+# LABEL/ID_MAX_LIMIT_COLUMNS_FOR_DATABASE
+#: LABEL/ID_MAX_LIMIT_COLUMNS_FOR_DATABASE
+msgid "The maximun limit of columns for a database table is 255, you already have them defined!"
+msgstr "The maximun limit of columns for a database table is 255, you already have them defined!"
+
+# TRANSLATION
+# LABEL/ID_OUTPUT_DOCUMENT_TEMPLATE
+#: LABEL/ID_OUTPUT_DOCUMENT_TEMPLATE
+msgid "Output Document Template"
+msgstr "Output Document Template"
+
+# TRANSLATION
+# LABEL/ID_REASSIGNED_TO
+#: LABEL/ID_REASSIGNED_TO
+msgid "Reassigned to"
+msgstr "Reassigned to"
+
+# TRANSLATION
+# LABEL/ID_TOTAL_CASES_REASSIGNED
+#: LABEL/ID_TOTAL_CASES_REASSIGNED
+msgid "Total Cases Reassigned"
+msgstr "Total Cases Reassigned"
+
+# TRANSLATION
+# LABEL/ID_STATUS_REASSIGNMENT
+#: LABEL/ID_STATUS_REASSIGNMENT
+msgid "Status Reassignment"
+msgstr "Status Reassignment"
+
+# TRANSLATION
+# LABEL/ID_AUTHENTICATION_SOURCE_INFORMATION
+#: LABEL/ID_AUTHENTICATION_SOURCE_INFORMATION
+msgid "[LABEL/ID_AUTHENTICATION_SOURCE_INFORMATION] Authentication Source Information"
+msgstr "Authentication Source Information"
+
+# TRANSLATION
+# LABEL/ID_YOU_HAVE_ERROR
+#: LABEL/ID_YOU_HAVE_ERROR
+msgid "you have an error"
+msgstr "you have an error"
+
+# TRANSLATION
+# LABEL/ID_MESSAGE_EMPTY_DATE_FIELD
+#: LABEL/ID_MESSAGE_EMPTY_DATE_FIELD
+msgid "There is at least one empty date field in the holiday grid, please check and try again."
+msgstr "There is at least one empty date field in the holiday grid, please check and try again."
+
+# TRANSLATION
+# LABEL/ID_GRID_PAGE_NO_DASHLET_MESSAGE
+#: LABEL/ID_GRID_PAGE_NO_DASHLET_MESSAGE
+msgid "No dashlets instances to display."
+msgstr "No dashlets instances to display."
+
+# TRANSLATION
+# LABEL/ID_CONFIRM_DELETE_DASHLET_INSTANCE
+#: LABEL/ID_CONFIRM_DELETE_DASHLET_INSTANCE
+msgid "Do you want to delete this Dashlet Instance?"
+msgstr "Do you want to delete this Dashlet Instance?"
+
+# TRANSLATION
+# LABEL/ID_DASHLET_INSTANCE
+#: LABEL/ID_DASHLET_INSTANCE
+msgid "Dashlet Instance"
+msgstr "Dashlet Instance"
+
+# TRANSLATION
+# LABEL/ID_DASHLET_SUCCESS_DELETE
+#: LABEL/ID_DASHLET_SUCCESS_DELETE
+msgid "Dashlet instance deleted sucessfully."
+msgstr "Dashlet instance deleted sucessfully."
+
+# TRANSLATION
+# LABEL/ID_GRID_PAGE_DISPLAYING_DASHLET_MESSAGE
+#: LABEL/ID_GRID_PAGE_DISPLAYING_DASHLET_MESSAGE
+msgid "Displaying dashlets instances {0} - {1} of {2}"
+msgstr "Displaying dashlets instances {0} - {1} of {2}"
+
+# TRANSLATION
+# LABEL/ID_DASHLET_INSTANCE_CONFIGURATION
+#: LABEL/ID_DASHLET_INSTANCE_CONFIGURATION
+msgid "Dashlet Instance Configuration"
+msgstr "Dashlet Instance Configuration"
+
+# TRANSLATION
+# LABEL/ID_OTHER
+#: LABEL/ID_OTHER
+msgid "Other"
+msgstr "Other"
+
+# TRANSLATION
+# LABEL/ID_ASSIGN_TO
+#: LABEL/ID_ASSIGN_TO
+msgid "Assign To"
+msgstr "Assign To"
+
+# TRANSLATION
+# LABEL/ID_DASHLET
+#: LABEL/ID_DASHLET
+msgid "Dashlet"
+msgstr "Dashlet"
+
+# TRANSLATION
+# LABEL/ID_PERIOD
+#: LABEL/ID_PERIOD
+msgid "Period"
+msgstr "Period"
+
+# TRANSLATION
+# LABEL/ID_RED_STARTS_IN
+#: LABEL/ID_RED_STARTS_IN
+msgid "Red Starts In"
+msgstr "Red Starts In"
+
+# TRANSLATION
+# LABEL/ID_RED_ENDS_IN
+#: LABEL/ID_RED_ENDS_IN
+msgid "Red Ends In"
+msgstr "Red Ends In"
+
+# TRANSLATION
+# LABEL/ID_YELLOW_STARTS_IN
+#: LABEL/ID_YELLOW_STARTS_IN
+msgid "Yellow Starts In"
+msgstr "Yellow Starts In"
+
+# TRANSLATION
+# LABEL/ID_YELLOW_ENDS_IN
+#: LABEL/ID_YELLOW_ENDS_IN
+msgid "Yellow Ends In"
+msgstr "Yellow Ends In"
+
+# TRANSLATION
+# LABEL/ID_GREEN_STARTS_IN
+#: LABEL/ID_GREEN_STARTS_IN
+msgid "Green Starts In"
+msgstr "Green Starts In"
+
+# TRANSLATION
+# LABEL/ID_GREEN_ENDS_IN
+#: LABEL/ID_GREEN_ENDS_IN
+msgid "Green Ends In"
+msgstr "Green Ends In"
+
+# TRANSLATION
+# LABEL/ID_ALERT
+#: LABEL/ID_ALERT
+msgid "Alert"
+msgstr "Alert"
+
+# TRANSLATION
+# LABEL/ID_INVALID_DATA
+#: LABEL/ID_INVALID_DATA
+msgid "Invalid data"
+msgstr "Invalid data"
+
+# TRANSLATION
+# LABEL/ID_FAILED_DASHBOARD INSTANCE
+#: LABEL/ID_FAILED_DASHBOARD INSTANCE
+msgid "Dashboard Instance registered failed"
+msgstr "Dashboard Instance registered failed"
+
+# TRANSLATION
+# LABEL/ID_AJAX_COMMUNICATION_FAILED
+#: LABEL/ID_AJAX_COMMUNICATION_FAILED
+msgid "Ajax communication failed"
+msgstr "Ajax communication failed"
+
+# TRANSLATION
+# LABEL/ID_CHECK_FIELDS_MARK_RED
+#: LABEL/ID_CHECK_FIELDS_MARK_RED
+msgid "Please check the fields mark in red."
+msgstr "Please check the fields mark in red."
+
+# TRANSLATION
+# LABEL/ID_INPUT_ERROR
+#: LABEL/ID_INPUT_ERROR
+msgid "Input Error"
+msgstr "Input Error"
+
+# TRANSLATION
+# LABEL/ID_INVALID_APPLICATION_NUMBER
+#: LABEL/ID_INVALID_APPLICATION_NUMBER
+msgid "You have set a invalid Application Number"
+msgstr "You have set a invalid Application Number"
+
+# TRANSLATION
+# LABEL/ID_3DAYSMINIMUM
+#: LABEL/ID_3DAYSMINIMUM
+msgid "3 days at least"
+msgstr "3 days at least"
+
+# TRANSLATION
+# LABEL/ID_NODELETEOPTIONALL
+#: LABEL/ID_NODELETEOPTIONALL
+msgid "You must add all the days that you have selected in work days, otherwise you should leave at least an \"-- ALL --\" option."
+msgstr "You must add all the days that you have selected in work days, otherwise you should leave at least an \"-- ALL --\" option."
 
 # additionalTables/additionalTablesData.xml?ADD_TAB_NAME
 # additionalTables/additionalTablesData.xml
@@ -12904,7 +13294,7 @@ msgstr "Provider"
 # authSources/authSources_List.xml?AUTH_SOURCE_SERVER_NAME
 # authSources/authSources_List.xml
 #: text - AUTH_SOURCE_SERVER_NAME
-msgid "[authSources/authSources_List.xml?AUTH_SOURCE_SERVER_NAME] Server Name"
+msgid "Server Name"
 msgstr "Server Name"
 
 # authSources/authSources_List.xml?AUTH_SOURCE_PORT
@@ -12961,6 +13351,12 @@ msgstr "Import"
 msgid "[authSources/authSources_SearchUsers.xml?BTN_CANCEL] Cancel"
 msgstr "Cancel"
 
+# authSources/authSources_SearchUsers.xml?CheckboxSelectAll
+# authSources/authSources_SearchUsers.xml
+#: Checkbox - CheckboxSelectAll
+msgid "[authSources/authSources_SearchUsers.xml?CheckboxSelectAll] "
+msgstr ""
+
 # authSources/authSources_SelectType.xml?TITLE
 # authSources/authSources_SelectType.xml
 #: title - TITLE
@@ -12988,7 +13384,7 @@ msgstr "Cancel"
 # authSources/ldapEdit.xml?TITLE
 # authSources/ldapEdit.xml
 #: title - TITLE
-msgid "Authentication Source Information"
+msgid "[authSources/ldapEdit.xml?TITLE] Authentication Source Information"
 msgstr "Authentication Source Information"
 
 # authSources/ldapEdit.xml?AUTH_SOURCE_NAME
@@ -13090,7 +13486,7 @@ msgstr "Yes"
 # authSources/ldapEdit.xml?AUTH_SOURCE_SEARCH_USER
 # authSources/ldapEdit.xml
 #: text - AUTH_SOURCE_SEARCH_USER
-msgid "[authSources/ldapEdit.xml?AUTH_SOURCE_SEARCH_USER] Search User"
+msgid "Search User"
 msgstr "Search User"
 
 # authSources/ldapEdit.xml?AUTH_SOURCE_PASSWORD
@@ -13138,8 +13534,8 @@ msgstr "Cancel"
 # authSources/ldapSearchResults.xml?Checkbox
 # authSources/ldapSearchResults.xml
 #: text - Checkbox
-msgid "<span onclick=\"selectAll();\">[SELECT-ALL]</span>"
-msgstr "<span onclick=\"selectAll();\">[SELECT-ALL]</span>"
+msgid "<span id=\"spanSelectAll\"></span>"
+msgstr "<span id=\"spanSelectAll\"></span>"
 
 # authSources/ldapSearchResults.xml?FullName
 # authSources/ldapSearchResults.xml
@@ -13150,8 +13546,8 @@ msgstr "Name"
 # authSources/ldapSearchResults.xml?Email
 # authSources/ldapSearchResults.xml
 #: text - Email
-msgid "E-Mail"
-msgstr "E-Mail"
+msgid "<span style=\"width:40px; display:block;\">E-Mail</span>"
+msgstr "<span style=\"width:40px; display:block;\">E-Mail</span>"
 
 # authSources/ldapSearchResults.xml?DistinguishedName
 # authSources/ldapSearchResults.xml
@@ -15352,7 +15748,7 @@ msgstr "Case #"
 # cases/cases_Reassign.xml?USERS
 # cases/cases_Reassign.xml
 #: text - USERS
-msgid "Reassigned to"
+msgid "[cases/cases_Reassign.xml?USERS] Reassigned to"
 msgstr "Reassigned to"
 
 # cases/cases_Reassign.xml?BACK
@@ -16564,7 +16960,7 @@ msgstr "User"
 # cases/cases_TaskDetails.xml?INIT_DATE
 # cases/cases_TaskDetails.xml
 #: date - INIT_DATE
-msgid "Init Date"
+msgid "[cases/cases_TaskDetails.xml?INIT_DATE] Init Date"
 msgstr "Init Date"
 
 # cases/cases_TaskDetails.xml?DUE_DATE
@@ -16847,7 +17243,7 @@ msgstr "In Progress"
 # cases/cases_TransferHistory.xml
 #: dropdown - APP_TYPE -
 msgid "[cases/cases_TransferHistory.xml?APP_TYPE-]"
-msgstr "Routed"
+msgstr "Derivated"
 
 # cases/cases_TransferHistory.xml?APP_TYPE-REASSIGN
 # cases/cases_TransferHistory.xml
@@ -21170,7 +21566,7 @@ msgstr "Forgot Password"
 # login/newSite.xml?NEW_WORKSPACE
 # login/newSite.xml
 #: title - NEW_WORKSPACE
-msgid "New Workspace"
+msgid "[login/newSite.xml?NEW_WORKSPACE] New Workspace"
 msgstr "New Workspace"
 
 # login/newSite.xml?NW_TITLE
@@ -21182,7 +21578,7 @@ msgstr "Name"
 # login/newSite.xml?DB
 # login/newSite.xml
 #: subtitle - DB
-msgid "Database Options"
+msgid "[login/newSite.xml?DB] Database Options"
 msgstr "Database Options"
 
 # login/newSite.xml?AO_DB_WF
@@ -21206,13 +21602,13 @@ msgstr "Report Database:"
 # login/newSite.xml?AO_DB_DROP
 # login/newSite.xml
 #: checkbox - AO_DB_DROP
-msgid "Drop database if exists"
+msgid "[login/newSite.xml?AO_DB_DROP] Drop database if exists"
 msgstr "Drop database if exists"
 
 # login/newSite.xml?WS
 # login/newSite.xml
 #: subtitle - WS
-msgid "Workspace Administrator"
+msgid "[login/newSite.xml?WS] Workspace Administrator"
 msgstr "Workspace Administrator"
 
 # login/newSite.xml?NW_USERNAME
@@ -22856,8 +23252,8 @@ msgstr "- Default summary Dynaform -"
 # processes/processes_Edit.xml?PRO_DERIVATION_SCREEN_TPL
 # processes/processes_Edit.xml
 #: dropdown - PRO_DERIVATION_SCREEN_TPL
-msgid "Routing Screen Template"
-msgstr "Routing Screen Template"
+msgid "Derivation Screen Template"
+msgstr "Derivation Screen Template"
 
 # processes/processes_Edit.xml?PRO_DERIVATION_SCREEN_TPL-
 # processes/processes_Edit.xml
@@ -28370,8 +28766,8 @@ msgstr "Variable for Case priority"
 # tasks/tasks_Definition.xml?TAS_DERIVATION_SCREEN_TPL
 # tasks/tasks_Definition.xml
 #: dropdown - TAS_DERIVATION_SCREEN_TPL
-msgid "[tasks/tasks_Definition.xml?TAS_DERIVATION_SCREEN_TPL] Routing Screen Template"
-msgstr "Routing Screen Template"
+msgid "[tasks/tasks_Definition.xml?TAS_DERIVATION_SCREEN_TPL] Derivation Screen Template"
+msgstr "Derivation Screen Template"
 
 # tasks/tasks_Definition.xml?TAS_DERIVATION_SCREEN_TPL-
 # tasks/tasks_Definition.xml
@@ -28814,8 +29210,8 @@ msgstr "Edit"
 # tracker/tracker_Configuration.xml?CT_DERIVATION_HISTORY
 # tracker/tracker_Configuration.xml
 #: checkbox - CT_DERIVATION_HISTORY
-msgid "[tracker/tracker_Configuration.xml?CT_DERIVATION_HISTORY] Routing History"
-msgstr "Routing History"
+msgid "[tracker/tracker_Configuration.xml?CT_DERIVATION_HISTORY] Derivation History"
+msgstr "Derivation History"
 
 # tracker/tracker_Configuration.xml?CT_MESSAGE_HISTORY
 # tracker/tracker_Configuration.xml
@@ -29049,7 +29445,7 @@ msgstr "Cancelled"
 # tracker/tracker_TransferHistory.xml
 #: dropdown - APP_TYPE -
 msgid "[tracker/tracker_TransferHistory.xml?APP_TYPE-]"
-msgstr "Routed"
+msgstr "Derivated"
 
 # tracker/tracker_ViewAnyInputDocument.xml?FILENAME
 # tracker/tracker_ViewAnyInputDocument.xml
@@ -31166,7 +31562,7 @@ msgstr "Username"
 # users/users_List.xml?USR_EMAIL
 # users/users_List.xml
 #: text - USR_EMAIL
-msgid "[users/users_List.xml?USR_EMAIL] E-Mail"
+msgid "E-Mail"
 msgstr "E-Mail"
 
 # users/users_List.xml?USR_ROLE
