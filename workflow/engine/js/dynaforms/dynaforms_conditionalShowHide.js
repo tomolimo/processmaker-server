@@ -321,9 +321,9 @@ var Conditional = function(DYN_UID){
             sel.id='vars';
             sel.size='11';
             sel.multiple='true';
-            sel.style.className = ' module_app_input___gray';
+            sel.style.className = 'module_app_input___gray';
             sel.style.fontSize = '11px';
-            sel.style.width = '140px';
+            sel.style.height = '150px';
 
 
             sel.ondblclick = function(){
@@ -334,16 +334,30 @@ var Conditional = function(DYN_UID){
             }
 
             max = 0;
+            maymax = 0;
             for (i=0, j=response.length; i<j; i++) {
                 x = response[i];
                 sel.appendChild(document.createElement('option'));
-                sel.options[i].text = sel.options[i].value = x;
-
+                sel.options[i].text = sel.options[i].value = text =x;
+                
                 if(x.length > max){
                     max = x.length;
                 }
+                uppercase_letters="ABCDEFGHYJKLMNÑOPQRSTUVWXYZ_";
+
+                may = 0;
+                for(k=0; k<text.length; k++){
+                  if (uppercase_letters.indexOf(text.charAt(k),0)!=-1){
+                    may++;
+                  }
+                }
+                if(may > maymax){
+                    maymax = may;
+                }
             }
-            oPanel.resize({w:((max*10) ),h:200});
+            max = (max < 15)? 140 : ((max > maymax)? (((max - maymax)*6) + (maymax*9) + 15) : ((maymax*9) + 15));
+            sel.style.width = ((max-13)+'px');
+            oPanel.resize({w:(max),h:215});
             oPanel.addContent(sel);
 
         }.extend(this);
@@ -705,3 +719,5 @@ function indexInArray(arr,val){
 		if(arr[i]==val) return i;
 	return -1;
 }
+
+ 
