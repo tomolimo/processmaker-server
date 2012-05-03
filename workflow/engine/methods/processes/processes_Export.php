@@ -95,9 +95,27 @@ try {
   }
 
   /* Render page */
-  $G_PUBLISH = new Publisher;
-  $G_PUBLISH->AddContent('xmlform', 'xmlform', 'processes/processes_Export', '', $Fields );
-  G::RenderPage( 'publish', 'raw' );
+  if (isset($_REQUEST["processMap"]) && $_REQUEST["processMap"] == 1) {
+    $G_PUBLISH = new Publisher();
+    $G_PUBLISH->AddContent("xmlform", "xmlform", "processes/processes_Export", "", $Fields);
+    
+    G::RenderPage("publish", "raw");
+  }
+  else {
+    $xmlFrm = new xmlform();
+    $xmlFrm->parseFile(PATH_XMLFORM . "processes" . PATH_SEP . "processes_Export.xml" , SYS_LANG, true);
+  
+    $Fields["xmlFrmFieldLabel"] = array(
+      "title"    => $xmlFrm->fields["TITLE"]->label,
+      "proTitle" => $xmlFrm->fields["PRO_TITLE"]->label,
+      "proDescription" => $xmlFrm->fields["PRO_DESCRIPTION"]->label,
+      "size"           => $xmlFrm->fields["SIZE"]->label,
+      "fileName"       => $xmlFrm->fields["FILENAME_LABEL"]->label,
+      "fileNameXPDL"   => $xmlFrm->fields["FILENAME_LABEL1"]->label,
+    );
+    
+    echo G::json_encode($Fields);
+  }
 
 }
 catch ( Exception $e ){

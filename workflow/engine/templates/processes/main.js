@@ -61,9 +61,16 @@ Ext.onReady(function(){
         {name : 'CASES_COUNT_COMPLETED', type:'float'},
         {name : 'CASES_COUNT_CANCELLED', type:'float'}
       ]
-    })//,
+    }),
+    
     //sortInfo:{field: 'PRO_TITLE', direction: "ASC"}
     //groupField:'PRO_CATEGORY_LABEL'
+    
+    listeners: {
+      load: function (store) {
+        Ext.ComponentMgr.get("export").setDisabled(true);
+      }
+    }
   });
   
   var expander = new Ext.ux.grid.RowExpander({
@@ -238,6 +245,15 @@ Ext.onReady(function(){
       },{
         xtype: 'tbseparator'
       },{
+        id: "export",
+        disabled: true,
+        text: _("ID_EXPORT"),
+        iconCls: "silk-add",
+        icon: "/images/export.png",
+        handler: function () {
+          exportProcess();
+        }
+      },{
         text: _('ID_IMPORT'),
         iconCls: 'silk-add',
         icon: '/images/import.gif',
@@ -318,7 +334,10 @@ Ext.onReady(function(){
         processesGrid.getSelectionModel().on('rowselect', function(){
           var rowSelected = processesGrid.getSelectionModel().getSelected();
           var activator = Ext.getCmp('activator');
+          
           activator.setDisabled(false);
+          Ext.ComponentMgr.get("export").setDisabled(false);
+          
           if( rowSelected.data.PRO_STATUS == 'ACTIVE' ){
             activator.setIcon('/images/deactivate.png');
             activator.setText( _('ID_DEACTIVATE') );
@@ -390,6 +409,12 @@ Ext.onReady(function(){
         text: _('ID_DELETE'),
         icon: '/images/delete.png',
         handler: deleteProcess
+      }, {
+        text: _("ID_EXPORT"),
+        icon: "/images/export.png",
+        handler: function () {
+          exportProcess();
+        }
       }
     ]
   });
@@ -627,6 +652,104 @@ deleteProcess = function(){
       buttons: Ext.Msg.INFO,
       fn: function(){},
       animEl: 'elId',
+      icon: Ext.MessageBox.INFO,
+      buttons: Ext.MessageBox.OK
+    });
+  }
+}
+
+var winExportProcess = new Ext.Window({
+  //layout: "fit",
+  width: 625,
+  height: 240,
+  modal: true,
+  closeAction: "hide",
+  resizable: false,
+  autoScroll: true,
+  bodyStyle: "padding: 15px 15px 15px 15px;",
+  
+  title: "",
+
+  items: [
+    new Ext.FormPanel({
+      id: "frmExportProcess",
+      
+      width: 560,
+      autoHeight: true,
+      labelWidth: 1,
+      
+      //title: "_",
+      
+      items: [
+        {
+          xtype: "displayfield",
+          fieldLabel: ""
+        }
+      ]
+    })
+  ]
+});
+
+function exportProcess() {
+  var record = processesGrid.getSelectionModel().getSelections();
+  
+  if(record.length == 1) {
+    var myMask = new Ext.LoadMask(Ext.getBody(), {msg: _("ID_LOADING")});
+    myMask.show();
+  
+    ///////
+    var proUid   = record[0].get("PRO_UID");
+    var proTitle = record[0].get("PRO_TITLE");
+    var titleLength = 60;
+  
+    title = (titleLength - proTitle.length >= 0)? proTitle : proTitle.substring(0, (titleLength - 1) + 1) + "...";
+  
+    ///////
+    Ext.Ajax.request({
+      url: "../processes/processes_Ajax",
+      method: "POST",
+      params: {
+        "action": "process_Export",
+        "data": "{\"pro_uid\": \"" + proUid + "\"}",
+        "processMap": 0
+      },
+
+      success: function (response, opts) {
+        myMask.hide();
+      
+        ///////
+        var dataResponse = eval("(" + response.responseText + ")"); //json
+      
+        var frm = Ext.ComponentMgr.get("frmExportProcess");
+        var frmItems = frm.form.items;
+        var tdAttribute = " align=\"right\" valign=\"top\" nowrap=\"nowrap\" style=\"color: #515151; font-weight: bold;\"";
+        var aStyle = "color: #2078A8; text-decoration: none;";
+      
+        var str = "<table cellspacing=\"5px\" cellpadding=\"0px\" style=\"width: 45em; font-size: 0.95em;\">";
+        str = str + "<tr><td" + tdAttribute + ">" + dataResponse.xmlFrmFieldLabel.proTitle + "</td><td>" + dataResponse.PRO_TITLE + "</td><tr>";
+        str = str + "<tr><td" + tdAttribute + ">" + dataResponse.xmlFrmFieldLabel.proDescription + "</td><td>" + dataResponse.PRO_DESCRIPTION + "</td><tr>";
+        str = str + "<tr><td" + tdAttribute + ">" + dataResponse.xmlFrmFieldLabel.size + "</td><td>" + dataResponse.SIZE + "</td><tr>";
+        str = str + "<tr><td" + tdAttribute + ">" + dataResponse.xmlFrmFieldLabel.fileName + "</td><td><a href=\"" + dataResponse.FILENAME_LINK + "\" onclick=\"window.open(this.href, '_blank'); return (false);\" style=\"" + aStyle + "\" onmouseout=\"this.style.color='#2078A8';\" onmouseover=\"this.style.color='orange';\">" + dataResponse.FILENAME + "</a></td><tr>";
+        str = str + "<tr><td" + tdAttribute + ">" + dataResponse.xmlFrmFieldLabel.fileNameXPDL + "</td><td><a href=\"" + dataResponse.FILENAME_LINKXPDL + "\" onclick=\"window.open(this.href, '_blank'); return (false);\" style=\"" + aStyle + "\" onmouseout=\"this.style.color='#2078A8';\" onmouseover=\"this.style.color='orange';\">" + dataResponse.FILENAMEXPDL + "</a></td><tr>";
+        str = str + "</table>";
+      
+        //frm.setTitle(dataResponse.xmlFrmFieldLabel.title);
+        frmItems.items[0].setValue(str);
+      
+        ///////
+        winExportProcess.setTitle(_("ID_EXPORT_PROCESS") + ": " + title);
+        winExportProcess.show();
+      },
+
+      failure: function (response, opts) {
+        myMask.hide();
+      }
+    });
+  }
+  else {
+    Ext.Msg.show({
+      title: "",
+      msg: _("ID_NO_SELECTION_WARNING"),
       icon: Ext.MessageBox.INFO,
       buttons: Ext.MessageBox.OK
     });

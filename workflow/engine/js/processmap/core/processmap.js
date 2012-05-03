@@ -382,7 +382,7 @@ var processmap=function(){
             panel.loader.show();
             var r = new leimnud.module.rpc.xmlhttp({
               url:this.options.dataServer,
-              args:"action=process_Export&data="+{
+              args:"action=process_Export&processMap=1&data="+{
                 pro_uid :this.options.uid
               }.toJSONString()
             });
