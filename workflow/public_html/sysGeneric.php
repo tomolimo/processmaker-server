@@ -571,9 +571,11 @@
   //redirect to login, if user changed the workspace in the URL
   if (! $avoidChangedWorkspaceValidation && isset($_SESSION['WORKSPACE']) && $_SESSION['WORKSPACE'] != SYS_SYS) {
     $_SESSION['WORKSPACE'] = SYS_SYS;
-    
     G::SendTemporalMessage ('ID_USER_HAVENT_RIGHTS_SYSTEM', "error");
-    header ( 'Location: /sys' . SYS_SYS . '/' . SYS_LANG . '/' . SYS_SKIN . '/main/login' );
+    // verify if the current skin is a 'ux' variant
+    $urlPart = substr(SYS_SKIN, 0, 2) == 'ux' && SYS_SKIN != 'uxs' ? '/main/login' : '/login/login';
+
+    header('Location: /sys' . SYS_SYS . '/' . SYS_LANG . '/' . SYS_SKIN . $urlPart);
     die;
   }
 
