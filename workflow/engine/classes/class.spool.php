@@ -498,26 +498,35 @@ class spoolRun {
    * @return none or exception
    */
   function resendEmails() {
+    require_once ("classes/model/Configuration.php");
     
-    require_once 'classes/model/Configuration.php';
     $oConfiguration = new Configuration();
-    $aConfiguration = $oConfiguration->load('Emails', '', '', '', '');
-    $aConfiguration = unserialize($aConfiguration['CFG_VALUE']);
-    $passwd = $aConfiguration['MESS_PASSWORD'];
-    $passwdDec = G::decrypt($passwd,'EMAILENCRYPT');    
-    if (strpos( $passwdDec, 'hash:' ) !== false) {
-      list($hash, $pass) = explode(":", $passwdDec);   
-      $this->config['MESS_PASSWORD'] = $pass;
+    
+    $aConfiguration = $oConfiguration->load("Emails", "", "", "", "");
+    
+    $aConfiguration = unserialize($aConfiguration["CFG_VALUE"]);
+    $passwd = $aConfiguration["MESS_PASSWORD"];
+    $passwdDec = G::decrypt($passwd,"EMAILENCRYPT");
+    
+    if (strpos($passwdDec, "hash:") !== false) {
+      list($hash, $pass) = explode(":", $passwdDec);
+      $aConfiguration["MESS_PASSWORD"] = $pass;
     }
-    if( $aConfiguration['MESS_ENABLED'] == '1' ) {
-      $this->setConfig(array (
-        'MESS_ENGINE' => $aConfiguration['MESS_ENGINE'], 
-        'MESS_SERVER' => $aConfiguration['MESS_SERVER'], 
-        'MESS_PORT' => $aConfiguration['MESS_PORT'], 
-        'MESS_ACCOUNT' => $aConfiguration['MESS_ACCOUNT'], 
-        'MESS_PASSWORD' => $aConfiguration['MESS_PASSWORD'] 
+    
+    if ($aConfiguration["MESS_ENABLED"] == "1") {
+      $this->setConfig(array(
+        "MESS_ENGINE" => $aConfiguration["MESS_ENGINE"], 
+        "MESS_SERVER" => $aConfiguration["MESS_SERVER"], 
+        "MESS_PORT"   => $aConfiguration["MESS_PORT"], 
+        "MESS_ACCOUNT"  => $aConfiguration["MESS_ACCOUNT"], 
+        "MESS_PASSWORD" => $aConfiguration["MESS_PASSWORD"],
+        "SMTPAuth"   => $aConfiguration["MESS_RAUTH"],
+        "SMTPSecure" => $aConfiguration["SMTPSecure"]
       ));
-      require_once 'classes/model/AppMessage.php';
+      
+      ///////
+      require_once ("classes/model/AppMessage.php");
+      
       $oCriteria = new Criteria('workflow');
       $oCriteria->add(AppMessagePeer::APP_MSG_STATUS, 'sent', Criteria::NOT_EQUAL);
       $oDataset = AppMessagePeer::doSelectRS($oCriteria);
