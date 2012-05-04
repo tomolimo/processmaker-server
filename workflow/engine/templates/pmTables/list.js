@@ -294,7 +294,7 @@ Ext.onReady(function(){
         pageSize: pageSize,
         store: store,
         displayInfo: true,
-        displayMsg: _('ID_GRID_PAGE_DISPLAYING_PMTABLES_MESSAGE') + '&nbsp; &nbsp; ',
+        displayMsg: (PRO_UID? _('ID_GRID_PAGE_DISPLAYING_REPORTABLES_MESSAGE') : _('ID_GRID_PAGE_DISPLAYING_PMTABLES_MESSAGE')) + '&nbsp; &nbsp; ',
         emptyMsg: _('ID_GRID_PAGE_NO_PMTABLES_MESSAGE'),
         items: ['-',_('ID_PAGE_SIZE')+':',comboPageSize]
     });
@@ -305,7 +305,7 @@ Ext.onReady(function(){
       id: 'infoGrid',
       height:100,
       autoWidth : true,
-      title : _('ID_ADDITIONAL_TABLES'),
+      title : (PRO_UID? _('ID_REPORT_TABLES') : _('ID_PMTABLE')),//'Cambiemos esto',//_('ID_ADDITIONAL_TABLES'),
       stateful : true,
       stateId : 'grid',
       enableColumnResize: true,
@@ -491,7 +491,7 @@ ImportPMTable = function(){
         fileUpload: true,
         width: 400,
         frame: true,
-        title: _('ID_IMPORT_PMT'), // 'Import PM Table',
+        title: (PRO_UID? _('ID_IMPORT_RT') : _('ID_IMPORT_PMT')),//_('ID_IMPORT_PMT'), // 'Import PM Table',
         autoHeight: false,
         bodyStyle: 'padding: 10px 10px 0 10px;',
         labelWidth: 50,
@@ -612,6 +612,7 @@ ExportPMTable = function(){
 PMTableData = function()
 {
   var row = Ext.getCmp('infoGrid').getSelectionModel().getSelected();
+  var type = row.get('PRO_UID');
   if ((Ext.isIE8) ||(Ext.isIE7)){
     var url = 'pmTables/data?id='+row.get('ADD_TAB_UID')+'&type='+row.get('TYPE');
     PopupCenter(url, 's', 800, 410);
@@ -626,7 +627,7 @@ PMTableData = function()
   win = new Ext.Window({
     layout:'fit',
     width:700,
-    title: _('ID_PM_TABLE') +': '+ row.get('ADD_TAB_NAME'),
+    title: ((type != '')? _('ID_REPORT_TABLE') : _('ID_PMTABLE')) +': '+ row.get('ADD_TAB_NAME'),
     height:500,
     modal: true,
     maximizable: true,
