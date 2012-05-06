@@ -346,6 +346,19 @@ Ext.onReady( function() {
       
     grid = new Ext.grid.GridPanel( { //grid work days
       store: store,
+      sm: new Ext.grid.RowSelectionModel({
+        selectSingle: true,
+        listeners:{
+          selectionchange: function(sm) {
+            if (sm.getCount() == 0) {
+              Ext.getCmp('btnRemove').setDisabled(true);
+            }
+            else {
+              Ext.getCmp('btnRemove').setDisabled(false);
+            }
+          }
+        }
+      }),
       id: "gridCalendar",
       width: 470,
       height  : 150,
@@ -377,17 +390,17 @@ Ext.onReady( function() {
         ref: '../removeBtn',
         iconCls: 'icon-user-delete',
         text: _('ID_REMOVE'),
-        disabled: false, 
+        id: 'btnRemove',
+        disabled: true,
         handler: function(){
-            editor.stopEditing();
-            var s = grid.getSelectionModel().getSelections();
-            //  console.log( 's[i]=', s[i].data.name);
-            for(var i = 0, r; r = s[i]; i++){               
-              if(s[i].data.name!='- ALL -')
-                store.remove(r);
-              else
-                PMExt.error( _('ID_ERROR'), _('ID_NODELETEOPTIONALL'));
-            }
+          editor.stopEditing();
+          var record = grid.getSelectionModel().getSelected();
+          records = grid.getStore();
+
+          if (record.data.name == '- ALL -' && records.getCount() === 1)
+            PMExt.error( _('ID_ERROR'), _('ID_NODELETEOPTIONALL'));
+          else
+            store.remove(record);
         }
       }],
 
