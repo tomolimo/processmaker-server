@@ -556,34 +556,34 @@ class G
    *
    * @return void
    */
-  function rm_dir($dirName) {
-    if(empty($dirName)) {
-      return;
+  function rm_dir($dirName) 
+  {
+    if (!is_writable($dirName)) {
+      return false;
     }
-    if(file_exists($dirName)) {
-      $dir = dir($dirName);
-      while($file = $dir->read()) {
-        if($file != '.' && $file != '..') {
-          if(is_dir($dirName.'/'.$file)) {
-            G::rm_dir($dirName.'/'.$file);
-          } else {
-            @unlink($dirName.'/'.$file) or die('File '.$dirName.'/'.$file.' couldn\'t be deleted!');
-          }
+
+    if (is_dir($dirName)) {
+      foreach(glob($dirName . '/*') as $file) {
+        if(is_dir($file)) {
+          G::rm_dir($file);
+
+          if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN')
+            exec('DEL /F /S /Q %' . $dirName . '%', $res);
+          else 
+            rmdir($file);
+        }
+        else {
+          unlink($file);
         }
       }
-      $folder = opendir($dirName. PATH_SEP .$file);
-      closedir($folder);
-      if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-        $exit = array();  
-        exec('DEL /F /S /Q %'.$dirName.'/'.$file.'%', $exit);      
-        if (!empty($exit)) die('Folder '.$dirName.'/'.$file.' couldn\'t be deleted!');
-      }
-      else {
-        @rmdir($dirName.'/'.$file) or die('Folder '.$dirName.'/'.$file.' couldn\'t be deleted!');  
-      }  
-      @rmdir($dirName.'/'.$file) or die('Folder '.$dirName.'/'.$file.' couldn\'t be deleted!');
-    } else {
-      echo 'Folder "<b>'.$dirName.'</b>" doesn\'t exist.';
+
+      if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN')
+        exec('DEL /F /S /Q %' . $dirName . '%', $res);
+      else 
+        rmdir($file);
+    }
+    else {
+      unlink($dirName);
     }
   }
 

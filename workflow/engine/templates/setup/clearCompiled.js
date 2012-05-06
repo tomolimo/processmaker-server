@@ -9,9 +9,10 @@ Ext.onReady(function() {
         fieldLabel : 'Terms of Use',
         hideLabel  : true,
         id         : 'javascriptCache',
-        style      : 'margin-top:15px',
-        boxLabel   : _('ID_JAVASCRIPT_CACHE')
-
+        boxLabel   : _('ID_JAVASCRIPT_CACHE'),
+        listeners  : {
+          check : enableBtn
+        }
       },
       {
         xtype      : 'checkbox',
@@ -19,9 +20,10 @@ Ext.onReady(function() {
         fieldLabel : 'Terms of Use',
         hideLabel  : true,
         id         : 'metadataCache',
-        style      : 'margin-top:15px',
-        boxLabel   : _('ID_FORMS_METADATA_CACHE')
-
+        boxLabel   : _('ID_FORMS_METADATA_CACHE'),
+        listeners  : {
+          check : enableBtn
+        }
       },
       {
         xtype      : 'checkbox',
@@ -29,15 +31,17 @@ Ext.onReady(function() {
         fieldLabel : 'Terms of Use',
         hideLabel  : true,
         id         : 'htmlCache',
-        style      : 'margin-top:15px',
-        boxLabel   : _('ID_FORMS_HTML_CACHE')
-        
+        boxLabel   : _('ID_FORMS_HTML_CACHE'),
+        listeners  : {
+          check : enableBtn
+        }
       }
-
     ],
     buttons   : [{
+      id      : 'btn_save',
       text    : _('ID_CLEAR'),
-      handler : clearCache   
+      disabled: true,
+      handler : clearCache
     }]
   });
 
@@ -60,44 +64,45 @@ Ext.onReady(function() {
     items : [ cacheFields ]
 
   });
-  //render to process-panel
-  // frm.render('processes-panel');
+  
   frm.render(document.body);
 });
 
-function clearCache () {
+function enableBtn() {
+  Ext.getCmp('btn_save').enable();
+}
 
-  Ext.getCmp('frmCache').getForm().submit( { 
+function clearCache () {
+  Ext.getCmp('frmCache').getForm().submit({
     url     : 'clearCompiledAjax',
     waitMsg : _('ID_SAVING_PROCESS'),
     timeout : 36000,
     success : function(obj, resp) {
+      message = '';
       response = Ext.decode(resp.response.responseText);
-      if (response.javascript) {
-        var message1 = _('ID_JAVASCRIPT_CACHE') + '<br />';
-      }
-      else {
-        var message1 = '';
-      }
-      if (response.xmlform) {
-        var message2 = _('ID_FORMS_METADATA_CACHE') + '<br />';
-      }
-      else {
-        var message2 = '';
-      }
-      if (response.smarty) {
-        var message3 = _('ID_FORMS_HTML_CACHE') + '<br />';
-      }
-      else {
-        var message3 = '';
-      }
 
-      parent.PMExt.notify(_('ID_CLEAR_CACHE'), message1 + message2 + message3 + _('ID_HAS_BEEN_DELETED'));
+      if (response.javascript) {
+        message += _('ID_JAVASCRIPT_CACHE') + '<br />';
+      }
       
+      if (response.xmlform) {
+        message += _('ID_FORMS_METADATA_CACHE') + '<br />';
+      }
+      
+      if (response.smarty) {
+        message += _('ID_FORMS_HTML_CACHE') + '<br />';
+      }
+      
+      PMExt.notify(_('ID_CLEAR_CACHE'), message + _('ID_HAS_BEEN_DELETED'));
+
+      setTimeout(function() {
+        window.location.href = window.location.href;
+      }, 1500);
     },
     failure : function(obj, resp) {
-      Ext.Msg.alert( _('ID_ERROR'), _('ID_SELECT_ONE_OPTION'));
+      if (typeof resp.response.responseText != 'undefined')
+        PMExt.error(_('ID_ERROR'), resp.response.responseText);
     }
   });
-} 
+}
 
