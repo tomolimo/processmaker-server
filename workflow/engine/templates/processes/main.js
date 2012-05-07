@@ -263,19 +263,6 @@ Ext.onReady(function(){
           importProcess();
         }
       },{
-        text: _('ID_XPDL_IMPORT'),
-        iconCls: 'silk-add',
-        icon: '/images/import.gif',
-        // handler:importXPDLProcess
-        handler:function(){
-          importProcessGlobal.processFileType="xpdl";
-          importProcess();
-        }
-      },/*{
-        text:'Export',
-        iconCls: 'silk-add',
-        icon: '/images/export.png',
-      },*/{
         text: _('ID_BROWSE_LIBRARY'),
         iconCls: 'button_menu_ext ss_sprite  ss_world',
         //icon: '/images/icon-pmwebservices.png',
@@ -658,38 +645,6 @@ deleteProcess = function(){
   }
 }
 
-var winExportProcess = new Ext.Window({
-  //layout: "fit",
-  width: 625,
-  height: 240,
-  modal: true,
-  closeAction: "hide",
-  resizable: false,
-  autoScroll: true,
-  bodyStyle: "padding: 15px 15px 15px 15px;",
-  
-  title: "",
-
-  items: [
-    new Ext.FormPanel({
-      id: "frmExportProcess",
-      
-      width: 560,
-      autoHeight: true,
-      labelWidth: 1,
-      
-      //title: "_",
-      
-      items: [
-        {
-          xtype: "displayfield",
-          fieldLabel: ""
-        }
-      ]
-    })
-  ]
-});
-
 function exportProcess() {
   var record = processesGrid.getSelectionModel().getSelections();
   
@@ -719,26 +674,9 @@ function exportProcess() {
       
         ///////
         var dataResponse = eval("(" + response.responseText + ")"); //json
-      
-        var frm = Ext.ComponentMgr.get("frmExportProcess");
-        var frmItems = frm.form.items;
-        var tdAttribute = " align=\"right\" valign=\"top\" nowrap=\"nowrap\" style=\"color: #515151; font-weight: bold;\"";
-        var aStyle = "color: #2078A8; text-decoration: none;";
-      
-        var str = "<table cellspacing=\"5px\" cellpadding=\"0px\" style=\"width: 45em; font-size: 0.95em;\">";
-        str = str + "<tr><td" + tdAttribute + ">" + dataResponse.xmlFrmFieldLabel.proTitle + "</td><td>" + dataResponse.PRO_TITLE + "</td><tr>";
-        str = str + "<tr><td" + tdAttribute + ">" + dataResponse.xmlFrmFieldLabel.proDescription + "</td><td>" + dataResponse.PRO_DESCRIPTION + "</td><tr>";
-        str = str + "<tr><td" + tdAttribute + ">" + dataResponse.xmlFrmFieldLabel.size + "</td><td>" + dataResponse.SIZE + "</td><tr>";
-        str = str + "<tr><td" + tdAttribute + ">" + dataResponse.xmlFrmFieldLabel.fileName + "</td><td><a href=\"" + dataResponse.FILENAME_LINK + "\" onclick=\"window.open(this.href, '_blank'); return (false);\" style=\"" + aStyle + "\" onmouseout=\"this.style.color='#2078A8';\" onmouseover=\"this.style.color='orange';\">" + dataResponse.FILENAME + "</a></td><tr>";
-        str = str + "<tr><td" + tdAttribute + ">" + dataResponse.xmlFrmFieldLabel.fileNameXPDL + "</td><td><a href=\"" + dataResponse.FILENAME_LINKXPDL + "\" onclick=\"window.open(this.href, '_blank'); return (false);\" style=\"" + aStyle + "\" onmouseout=\"this.style.color='#2078A8';\" onmouseover=\"this.style.color='orange';\">" + dataResponse.FILENAMEXPDL + "</a></td><tr>";
-        str = str + "</table>";
-      
-        //frm.setTitle(dataResponse.xmlFrmFieldLabel.title);
-        frmItems.items[0].setValue(str);
-      
-        ///////
-        winExportProcess.setTitle(_("ID_EXPORT_PROCESS") + ": " + title);
-        winExportProcess.show();
+        var url = window.location.href;
+        
+        window.open(url.substring(0, url.lastIndexOf("/") + 1) + dataResponse.FILENAME_LINK, "_blank");
       },
 
       failure: function (response, opts) {
@@ -1151,10 +1089,6 @@ importProcess = function()
       ]
     });
   w.show();
-}
-
-importXPDLProcess = function(){
-  window.location = 'processes_ImportXpdl';
 }
 
 browseLibrary = function(){

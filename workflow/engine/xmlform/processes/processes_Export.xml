@@ -22,17 +22,11 @@
 </SIZE>
 
 <FILENAME type="phpVariable"/>
-<FILENAMEXPDL type="phpVariable"/>
 <FILENAME_LINK type="phpVariable"/>
-<FILENAME_LINKXPDL type="phpVariable"/>
 
 <FILENAME_LABEL type="link" value="@#FILENAME" link="@#FILENAME_LINK" target="_blank">
   <en>File</en>
 </FILENAME_LABEL>
-
-<FILENAME_LABEL1 type="link" value="@#FILENAMEXPDL" link="@#FILENAME_LINKXPDL" target="_blank">
-  <en>File xpdl</en>
-</FILENAME_LABEL1>
 
 <JS type="javascript"><![CDATA[
 var nextStep = function(oForm)

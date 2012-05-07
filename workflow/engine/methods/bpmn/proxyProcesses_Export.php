@@ -34,14 +34,9 @@ try {
 
 /* Includes */
 G::LoadClass('processes');
-G::LoadClass('xpdl');
 $oProcess  = new Processes();
-$oXpdl     = new Xpdl();
 $proFields = $oProcess->serializeProcess( $sProUid );
 $Fields = $oProcess->saveSerializedProcess ( $proFields );
-$xpdlFields = $oXpdl->xmdlProcess($sProUid);
-$Fields['FILENAMEXPDL'] = $xpdlFields['FILENAMEXPDL'];
-$Fields['FILENAME_LINKXPDL'] = $xpdlFields['FILENAME_LINKXPDL'];
 
  if (G::is_https ())
     $http = 'https://';
@@ -49,7 +44,6 @@ $Fields['FILENAME_LINKXPDL'] = $xpdlFields['FILENAME_LINKXPDL'];
     $http = 'http://';
 
 $Fields['FILENAME_LINK']     = $http . $_SERVER['HTTP_HOST'] . '/sys' . SYS_SYS . '/' . SYS_LANG . '/' . SYS_SKIN . '/processes/' . $Fields['FILENAME_LINK'];
-$Fields['FILENAME_LINKXPDL'] = $http . $_SERVER['HTTP_HOST'] . '/sys' . SYS_SYS . '/' . SYS_LANG . '/' . SYS_SKIN . '/processes/' . $Fields['FILENAME_LINKXPDL'];
 
 $result = G::json_encode( $Fields );
 $result = str_replace("\\/","/",'{success:true,data:'.$result.'}'); // unescape the slashes

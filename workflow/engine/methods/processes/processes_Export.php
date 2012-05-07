@@ -56,14 +56,9 @@ try {
   
   /* Includes */
   G::LoadClass('processes');
-  G::LoadClass('xpdl');
   $oProcess  = new Processes();
-  $oXpdl     = new Xpdl();
   $proFields = $oProcess->serializeProcess( $sProUid );
   $Fields = $oProcess->saveSerializedProcess ( $proFields );
-  $xpdlFields = $oXpdl->xmdlProcess($sProUid);
-  $Fields['FILENAMEXPDL'] = $xpdlFields['FILENAMEXPDL'];
-  $Fields['FILENAME_LINKXPDL'] = $xpdlFields['FILENAME_LINKXPDL'];
   $pathLength = strlen(PATH_DATA ."sites".PATH_SEP.SYS_SYS.PATH_SEP."files".PATH_SEP."output".PATH_SEP);
   $length = strlen($Fields['PRO_TITLE']) + $pathLength;
 
@@ -75,20 +70,11 @@ try {
     if ($key == 'FILENAME') {
       $Fields[$key] = myTruncate($value, 60, '_', '...pm');
     }
-    if ($key == 'FILENAMEXPDL') {
-      $Fields[$key] = myTruncate($value, 60, '_', '...xpdl');
-    }
     if (($length) >= 250) {
       if ($key == 'FILENAME_LINK') {
         list($file,$rest) = explode ('p=',$value);
         list($filenameLink,$rest) = explode ('&',$rest);
         $Fields[$key] = myTruncate($filenameLink, 250 - $pathLength, '_', '');
-        $Fields[$key] = $file."p=".$Fields[$key].'&'.$rest;
-      }
-      if ($key == 'FILENAME_LINKXPDL') {
-        list($file,$rest) = explode ('p=',$value);
-        list($filenameLinkXpdl,$rest) = explode ('&',$rest);
-        $Fields[$key] = myTruncate($filenameLinkXpdl, 250 - $pathLength , '_', '');
         $Fields[$key] = $file."p=".$Fields[$key].'&'.$rest;
       }
     }
@@ -110,13 +96,11 @@ try {
       "proTitle" => $xmlFrm->fields["PRO_TITLE"]->label,
       "proDescription" => $xmlFrm->fields["PRO_DESCRIPTION"]->label,
       "size"           => $xmlFrm->fields["SIZE"]->label,
-      "fileName"       => $xmlFrm->fields["FILENAME_LABEL"]->label,
-      "fileNameXPDL"   => $xmlFrm->fields["FILENAME_LABEL1"]->label,
+      "fileName"       => $xmlFrm->fields["FILENAME_LABEL"]->label
     );
     
     echo G::json_encode($Fields);
   }
-
 }
 catch ( Exception $e ){
   $G_PUBLISH = new Publisher;
