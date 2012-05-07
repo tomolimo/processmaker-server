@@ -143,7 +143,7 @@ class adminProxy extends HttpProxyController
   }
 
   function calendarValidate($httpData) {
-    $httpData=array_unique($httpData);
+    $httpData=array_unique((array)$httpData);
     $message = '';
     $oldName = isset($httpData['oldName'])? $httpData['oldName']:'';    
     switch ($httpData['action']){
