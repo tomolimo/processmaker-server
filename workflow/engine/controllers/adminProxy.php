@@ -143,30 +143,33 @@ class adminProxy extends HttpProxyController
   }
 
   function calendarValidate($httpData) {
-    $httpData=array_unique((array)$httpData);
+    
     $message = '';
-    $oldName = isset($httpData['oldName'])? $httpData['oldName']:'';    
-    switch ($httpData['action']){
+    $oldName = isset($_POST['oldName'])? $_POST['oldName']:'';    
+    
+    switch ($_POST['action']){
       case 'calendarName':
         require_once ('classes/model/CalendarDefinition.php');
         $oCalendar  = new CalendarDefinition();
         $aCalendars = $oCalendar->getCalendarList(false,true); 
         $aCalendarDefinitions = end($aCalendars);
+
         foreach($aCalendarDefinitions as $aDefinitions) {
           if (trim($_POST['name'])==''){
             $validated = false;
             $message  = G::loadTranslation('ID_CALENDAR_INVALID_NAME');
             break;
           }
-          if ($aDefinitions['CALENDAR_NAME']!=$httpData['name']){
+          if ($aDefinitions['CALENDAR_NAME'] != $_POST['name']){
             $validated = true;
-          } else {
-            if ($aDefinitions['CALENDAR_NAME']!=$oldName) {
-            $validated = false;
-            $message  = G::loadTranslation('ID_CALENDAR_INVALID_NAME');
-            break;
+          } 
+          else {
+            if ($aDefinitions['CALENDAR_NAME'] != $oldName) {
+              $validated = false;
+              $message  = G::loadTranslation('ID_CALENDAR_INVALID_NAME');
+              break;
+            }
           }
-        }
         }
         break;
       case 'calendarDates':

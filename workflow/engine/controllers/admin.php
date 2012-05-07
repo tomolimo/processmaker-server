@@ -97,6 +97,7 @@ class Admin extends Controller
     if ((isset ( $_GET ['cp'] )) && ($_GET ['cp'] == 1)) { // Copy Calendar
       $fields ['CALENDAR_UID'] = G::GenerateUniqueID ();
       $fields ['CALENDAR_NAME'] = G::LoadTranslation ( "ID_COPY_OF" ) . " " . $fields ['CALENDAR_NAME'];
+      $fields ['OLD_NAME'] = $fields['CALENDAR_NAME'];;
     }
     
     $c = new Configurations();

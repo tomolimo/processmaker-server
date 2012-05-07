@@ -742,18 +742,15 @@ Ext.onReady( function() {
                       listeners: {
                         change: function(){                          
                           Ext.getCmp('idInvalidCalendarName').hide();
-     		           var validateMessage = '';                          
+     		                  var validateMessage = '';                          
                           var canlendarName = Ext.getCmp('dynaformCalendarName').getValue();
-                          var oldName = '';
-                          if (name!='') {
-                            oldName = '&oldName='+name;
-                          }
+                          
                           Ext.Ajax.request( {
                             url: '../adminProxy/calendarValidate',
                             params: {
                               action : 'calendarName',
-                              oldName : "",
-                              name : canlendarName                             
+                              oldName : fields.OLD_NAME,
+                              name : canlendarName
                             },
                             success: function(resp){                              
                               if (resp.responseText != '[]')
@@ -1181,7 +1178,7 @@ Ext.onReady( function() {
                         url: '../adminProxy/calendarValidate',
                         params: {
                           action : 'calendarName',
-                          oldName : "",
+                          oldName : fields.OLD_NAME,
                           name : canlendarName                             
                         },
                         success: function(resp){
@@ -1310,7 +1307,7 @@ Ext.onReady( function() {
       url: '../adminProxy/calendarValidate',
       params: {
         action : 'calendarName',
-        oldName : "",
+        oldName : fields.OLD_NAME,
         name : canlendarName                             
       },
       success: function(resp){        
