@@ -570,20 +570,15 @@ class G
           if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN')
             exec('DEL /F /S /Q %' . $dirName . '%', $res);
           else 
-            rmdir($file);
+            @rmdir($file);
         }
         else {
-          unlink($file);
+          @unlink($file);
         }
       }
-
-      if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN')
-        exec('DEL /F /S /Q %' . $dirName . '%', $res);
-      else 
-        rmdir($file);
     }
     else {
-      unlink($dirName);
+      @unlink($dirName);
     }
   }
 
