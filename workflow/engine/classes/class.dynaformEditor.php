@@ -461,33 +461,38 @@ class dynaformEditorAjax extends dynaformEditor implements iDynaformEditorAjax
   function get_htmlcode($A)
   {
     try {
-      $script = '';
-      $file   = G::decrypt( $A , URL_KEY );
-      $form   = new Form( $file , PATH_DYNAFORM, SYS_LANG, true );
-    /* Navigation Bar */
-    /*$form->fields=G::array_merges(
-    array('__DYNAFORM_OPTIONS' => new XmlForm_Field_XmlMenu(
-    new Xml_Node(
-    '__DYNAFORM_OPTIONS',
-    'complete',
-    '',
-    array('type'=>'xmlmenu','xmlfile'=>'gulliver/dynaforms_Options')
-    ),SYS_LANG,PATH_XMLFORM,$form)
-    ),
-    $form->fields);*/
-    /**/
-    /*
-    * Loads the stored HTML or the default Template if
-    * it doesn't exist.
-    */
-      $filename = substr($form->fileName , 0, -3) .
-      ( $form->type==='xmlform' ? '' : '.' . $form->type  ) . 'html';
-      if (!file_exists( $filename )) {
-        $html = $form->printTemplate( $form->template , $script );
+      $script = null;
+      $fileTmp = G::decrypt($A , URL_KEY);
+      $form = new Form($fileTmp, PATH_DYNAFORM, SYS_LANG, true);
+      
+      //Navigation Bar
+      $form->fields = G::array_merges(
+        array("__DYNAFORM_OPTIONS" => new XmlForm_Field_XmlMenu(
+                                        new Xml_Node(
+                                          "__DYNAFORM_OPTIONS",
+                                          "complete",
+                                          "",
+                                          array("type" => "xmlmenu", "xmlfile" => "gulliver/dynaforms_Options")
+                                        ),
+                                        SYS_LANG,
+                                        PATH_XMLFORM,
+                                        $form
+                                      )
+        ),
+        $form->fields
+      );
+
+      //Loads the stored HTML or the default Template if
+      //it doesn't exist.
+      $filename = substr($form->fileName, 0, -3) . ($form->type === "xmlform" ? "" : "." . $form->type) . "html";
+      
+      if (!file_exists($filename)) {
+        $html = $form->printTemplate($form->template, $script);
       }
       else {
-        $html = implode( '', file( $filename ) );
+        $html = implode("", file($filename));
       }
+      
       /*
        * It adds the new fields automatically at the bottom of the form.
        * TODO: �TOP OR BOTTOM?
@@ -521,6 +526,7 @@ class dynaformEditorAjax extends dynaformEditor implements iDynaformEditorAjax
         self::_setTmpData($tmp);
       //$html=str_replace('{$form_className}','formDefault', $html );
         $html=str_replace('{$form_className}','formDefault', $aAux[0] . '</form>' );
+        
         return $html;
     }
     catch (Exception $e) {
@@ -534,21 +540,27 @@ class dynaformEditorAjax extends dynaformEditor implements iDynaformEditorAjax
    */
   function restore_html($A)
   {
-    $script  = '';
-    $fileTmp = G::decrypt( $A , URL_KEY );
-    $file    = dynaformEditor::_getFilename($fileTmp);
-    $form    = new Form( $fileTmp , PATH_DYNAFORM, SYS_LANG, true );
-    /* Navigation Bar */
-    $form->fields=G::array_merges(
-    array('__DYNAFORM_OPTIONS' => new XmlForm_Field_XmlMenu(
-                                  new Xml_Node(
-                                              '__DYNAFORM_OPTIONS',
-                                              'complete',
-                                              '',
-                                              array('type'=>'xmlmenu','xmlfile'=>'gulliver/dynaforms_Options')
-                                              ),SYS_LANG,PATH_XMLFORM,$form)
-          ),
-    $form->fields);
+    $script  = null;
+    $fileTmp = G::decrypt($A, URL_KEY);
+    $form    = new Form($fileTmp, PATH_DYNAFORM, SYS_LANG, true);
+    
+    //Navigation Bar
+    $form->fields = G::array_merges(
+      array("__DYNAFORM_OPTIONS" => new XmlForm_Field_XmlMenu(
+                                      new Xml_Node(
+                                        "__DYNAFORM_OPTIONS",
+                                        "complete",
+                                        "",
+                                        array("type" => "xmlmenu", "xmlfile" => "gulliver/dynaforms_Options")
+                                      ),
+                                      SYS_LANG,
+                                      PATH_XMLFORM,
+                                      $form
+                                    )
+      ),
+      $form->fields
+    );
+    
     $form->enableTemplate = false;
     $html = $form->printTemplate( $form->template , $script );
     $html = str_replace('{$form_className}','formDefault', $html );
@@ -558,6 +570,7 @@ class dynaformEditorAjax extends dynaformEditor implements iDynaformEditorAjax
     $fp=fopen(PATH_DYNAFORM  . $fileTmp . '.html','w');
     fwrite($fp, $html);
     fclose($fp);
+    
     return $html;
   }
 
