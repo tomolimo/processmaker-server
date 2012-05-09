@@ -194,10 +194,11 @@
     }
 
     //get the processes for this user in this action
-    $cProcess->clearSelectColumns ( );
-  //  $cProcess->setDistinct();
-    $cProcess->addSelectColumn ( AppCacheViewPeer::PRO_UID );
-    $cProcess->addSelectColumn ( AppCacheViewPeer::APP_PRO_TITLE );
+    $cProcess->clearSelectColumns();
+    $cProcess->addSelectColumn(AppCacheViewPeer::PRO_UID);
+    $cProcess->addSelectColumn(AppCacheViewPeer::APP_PRO_TITLE);
+    $cProcess->setDistinct(AppCacheViewPeer::PRO_UID);
+    
     $oDataset = AppCacheViewPeer::doSelectRS($cProcess);
     $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
     $oDataset->next();
