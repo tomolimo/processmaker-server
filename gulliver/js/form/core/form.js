@@ -1281,22 +1281,17 @@ function G_Text( form, element, name)
           me.applyMask(pressKey);
         }
         if (updateOnChange) me.sendOnChange();
-        if (me.browser.name == 'Chrome' || me.browser.name == 'Safari'){
-          event.returnValue = false;
-        }
-        else{
-          return false; 
-        }
-      }else{
-        if (me.browser.name == 'Firefox') {
-           if (keyCode == 0) return true;
-        }
-        if (me.browser.name == 'Chrome' || me.browser.name == 'Safari'){
-          event.returnValue = false;
-        }
-        else{
-          return false; 
-        }
+      }
+      
+      if (me.browser.name == 'Firefox') {
+        if (keyCode == 0) return true;
+      }
+      
+      if (me.browser.name == 'Chrome' || me.browser.name == 'Safari'){
+        event.returnValue = false;
+      }
+      else{
+        return false; 
       }
     }
   };
