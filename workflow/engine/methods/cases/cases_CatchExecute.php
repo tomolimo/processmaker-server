@@ -27,23 +27,23 @@
 /* Permissions */
 switch ($RBAC->userCanAccess('PM_CASES'))
 {
-	case -2:
-		G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_SYSTEM', 'error', 'labels');
-		G::header('location: ../login/login');
-		die;
-		break;
-	case -1:
-		G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');
-		G::header('location: ../login/login');
-		die;
-		break;
+  case -2:
+    G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_SYSTEM', 'error', 'labels');
+    G::header('location: ../login/login');
+    die;
+    break;
+  case -1:
+    G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');
+    G::header('location: ../login/login');
+    die;
+    break;
 }
 
 
   if ( isset ( $_POST['form']['BTN_CANCEL'] ) ) {
-	  header ( "Location: ../cases/main");
-	  die;
-	}
+    header ( "Location: ../cases/main");
+    die;
+  }
 
   /* Includes */
   G::LoadClass('case');
@@ -63,6 +63,11 @@ switch ($RBAC->userCanAccess('PM_CASES'))
     G::SendMessageText(G::LoadTranslation('ID_CASE_ALREADY_DERIVATED'), 'error');
   }
 
-  //if the case is already derivated this link still works, and the case_Open will show only the cases Resume
-  $url = "../cases/cases_Open?APP_UID=". $_SESSION['APPLICATION'] . "&DEL_INDEX=". $_SESSION['INDEX'];
-  header ( "Location: $url");
+  die('<script type="text/javascript">
+      if (window.parent.frames.length != 0) {
+        parent.location = "open?APP_UID=' . $_SESSION['APPLICATION'] . '&DEL_INDEX=' . $_SESSION['INDEX'] . '&action=unassigned";
+      }
+      else {
+        window.location = "../cases/cases_Open?APP_UID=' . $_SESSION['APPLICATION'] . '&DEL_INDEX=' . $_SESSION['INDEX'] . '&action=unassigned";
+      }
+      </script>');
