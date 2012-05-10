@@ -22,15 +22,20 @@
 <div id="header-content" style="display:none">
     <table class="x-pm-headerbar">
     <tr>
-      <td width="33%" valign="middle">
+      <td width="50%" valign="middle">
         <img src="{$logo_company}" width="180" height="24"/>
       </td>
-      
-      <td align="center"></td>
 
-      <td width="33%" align="right" valign="top">
+      <td align="right" valign="top">
         <table width="100%" height="25" border="0" cellspacing="0" cellpadding="0" class="headerRightSection">
-          <tr  valign="middle">
+          <tr valign="middle">
+            <td align="right">
+              {if $licenseNotification != ''}
+              <span class="x-pm-license-notification"> 
+                <img src="/images/alert_icon.gif" width="10px" headerRightSection="10px"/> {$licenseNotification}
+              </span>
+              {/if}
+            </td>
             <td height="12" valign="middle" align="right" valign="top">
               <a href="#" id="options-tool" class="options-tool">
                 {$userfullname}<br />

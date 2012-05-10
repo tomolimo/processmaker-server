@@ -41,6 +41,15 @@ class Main extends Controller
     $this->setVar('user_avatar', 'users/users_ViewPhotoGrid?pUID=' . $_SESSION['USER_LOGGED'].'&h=' . rand());
     $this->setVar('udate', G::getformatedDate(date('Y-m-d'), 'M d, yyyy', SYS_LANG));
 
+    // license notification
+    $expireInLabel = '';
+    if (class_exists('pmLicenseManager')) {
+      $pmLicenseManager = &pmLicenseManager::getSingleton();
+      $expireIn         = $pmLicenseManager->getExpireIn();
+      $expireInLabel    = $pmLicenseManager->getExpireInLabel();
+    }
+    $this->setVar('licenseNotification', $expireInLabel);
+
     // setting variables on javascript env.
     $this->setJSVar('meta', array('menu'=>$this->getMenu()));
 
