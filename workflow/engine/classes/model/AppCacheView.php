@@ -1066,7 +1066,7 @@ class AppCacheView extends BaseAppCacheView {
     if ( ! $found ) {
       $filenameSql = $this->pathToAppCacheFiles . '/triggerApplicationUpdate.sql';
       if ( !file_exists ( $filenameSql ) )
-        throw ( new Exception ( "file triggerAppDelegationUpdate.sql doesn't exist ") );
+        throw ( new Exception ( "file triggerApplicationUpdate.sql doesn't exist ") );
       $sql = file_get_contents ( $filenameSql );
       $sql = str_replace('{lang}', $lang, $sql);
       $stmt->executeQuery($sql);
@@ -1103,13 +1103,52 @@ class AppCacheView extends BaseAppCacheView {
     if ( ! $found ) {
       $filenameSql = $this->pathToAppCacheFiles . '/triggerApplicationDelete.sql';
       if ( !file_exists ( $filenameSql ) )
-        throw ( new Exception ( "file triggerAppDelegationDelete.sql doesn't exist") );
+        throw ( new Exception ( "file triggerApplicationDelete.sql doesn't exist") );
       $sql = file_get_contents ( $filenameSql );
       $sql = str_replace('{lang}', $lang, $sql);
       $stmt->executeQuery($sql);
       return 'created';
     }
     return 'exists';
+  }
+  
+  function triggerContentUpdate($lang, $recreate = false)
+  {
+    $cnn = Propel::getConnection("workflow");
+    $stmt = $cnn->createStatement();
+
+    $rs = $stmt->executeQuery("Show TRIGGERS", ResultSet::FETCHMODE_ASSOC);
+    $found = false;
+    
+    while ($rs->next()) {
+      $row = $rs->getRow();
+      
+      if (strtolower($row["Trigger"] == "CONTENT_UPDATE") && strtoupper($row["Table"]) == "CONTENT") {
+        $found = true;
+      }
+    }
+    
+    if ($recreate) {
+      $rs = $stmt->executeQuery("DROP TRIGGER IF EXISTS CONTENT_UPDATE");
+      $found = false;
+    }
+
+    if (!$found) {
+      $filenameSql = $this->pathToAppCacheFiles . PATH_SEP . "triggerContentUpdate.sql";
+      
+      if (!file_exists($filenameSql)) {
+        throw (new Exception("file triggerContentUpdate.sql doesn't exist"));
+      }
+      
+      $sql = file_get_contents($filenameSql);
+      $sql = str_replace("{lang}", $lang, $sql);
+      
+      $stmt->executeQuery($sql);
+
+      return "created";
+    }
+    
+    return "exists";
   }
 
   /**
@@ -1122,7 +1161,8 @@ class AppCacheView extends BaseAppCacheView {
       'triggerApplicationDelete.sql',
       'triggerApplicationUpdate.sql',
       'triggerAppDelegationUpdate.sql',
-      'triggerAppDelegationInsert.sql');
+      'triggerAppDelegationInsert.sql',
+      'triggerContentUpdate.sql');
     $triggers = array();
     foreach ($triggerFiles as $triggerFile) {
       $trigger = file_get_contents("{$this->pathToAppCacheFiles}/$triggerFile");

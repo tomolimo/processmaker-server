@@ -718,11 +718,13 @@ class Installer extends Controller
       if (file_exists(PATH_HOME . 'engine/methods/setup/setupSchemas/triggerAppDelegationInsert.sql') &&
           file_exists(PATH_HOME . 'engine/methods/setup/setupSchemas/triggerAppDelegationUpdate.sql') &&
           file_exists(PATH_HOME . 'engine/methods/setup/setupSchemas/triggerApplicationUpdate.sql') &&
-          file_exists(PATH_HOME . 'engine/methods/setup/setupSchemas/triggerApplicationDelete.sql')) {
+          file_exists(PATH_HOME . 'engine/methods/setup/setupSchemas/triggerApplicationDelete.sql') &&
+          file_exists(PATH_HOME . 'engine/methods/setup/setupSchemas/triggerContentUpdate.sql')) {
         $this->mysqlQuery(@file_get_contents(PATH_HOME . 'engine/methods/setup/setupSchemas/triggerAppDelegationInsert.sql'));
         $this->mysqlQuery(@file_get_contents(PATH_HOME . 'engine/methods/setup/setupSchemas/triggerAppDelegationUpdate.sql'));
         $this->mysqlQuery(@file_get_contents(PATH_HOME . 'engine/methods/setup/setupSchemas/triggerApplicationUpdate.sql'));
         $this->mysqlQuery(@file_get_contents(PATH_HOME . 'engine/methods/setup/setupSchemas/triggerApplicationDelete.sql'));
+        $this->mysqlQuery(@file_get_contents(PATH_HOME . 'engine/methods/setup/setupSchemas/triggerContentUpdate.sql'));
         $this->mysqlQuery("INSERT INTO `CONFIGURATION` (
                             `CFG_UID`,
                             `CFG_VALUE`
@@ -791,6 +793,9 @@ class Installer extends Controller
       
       //APPLICATION DELETE
       $res = $appCache->triggerApplicationDelete($lang, true);
+      
+      //CONTENT UPDATE
+      $res = $appCache->triggerContentUpdate($lang, true);
       
       //build using the method in AppCacheView Class
       $res = $appCache->fillAppCacheView($lang);
@@ -978,11 +983,13 @@ class Installer extends Controller
       if (file_exists(PATH_HOME . 'engine/plugins/enterprise/data/triggerAppDelegationInsert.sql') &&
           file_exists(PATH_HOME . 'engine/plugins/enterprise/data/triggerAppDelegationUpdate.sql') &&
           file_exists(PATH_HOME . 'engine/plugins/enterprise/data/triggerApplicationUpdate.sql') &&
-          file_exists(PATH_HOME . 'engine/plugins/enterprise/data/triggerApplicationDelete.sql')) {
+          file_exists(PATH_HOME . 'engine/plugins/enterprise/data/triggerApplicationDelete.sql') &&
+          file_exists(PATH_HOME . 'engine/plugins/enterprise/data/triggerContentUpdate.sql')) {
         $this->mssqlQuery(@file_get_contents(PATH_HOME . 'engine/plugins/enterprise/data/triggerAppDelegationInsert.sql'));
         $this->mssqlQuery(@file_get_contents(PATH_HOME . 'engine/plugins/enterprise/data/triggerAppDelegationUpdate.sql'));
         $this->mssqlQuery(@file_get_contents(PATH_HOME . 'engine/plugins/enterprise/data/triggerApplicationUpdate.sql'));
         $this->mssqlQuery(@file_get_contents(PATH_HOME . 'engine/plugins/enterprise/data/triggerApplicationDelete.sql'));
+        $this->mssqlQuery(@file_get_contents(PATH_HOME . 'engine/plugins/enterprise/data/triggerContentUpdate.sql'));
         $this->mssqlQuery("INSERT INTO CONFIGURATION (
                             CFG_UID,
                             CFG_VALUE

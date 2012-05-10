@@ -102,6 +102,10 @@
       //APPLICATION DELETE
       $res = $appCache->triggerApplicationDelete($lang, false);
       $result->info[] = array ('name' => 'Trigger APPLICATION DELETE',              'value'=> $res);
+      
+      //CONTENT UPDATE 
+      $res = $appCache->triggerContentUpdate($lang, false);
+      $result->info[] = array("name" => "Trigger CONTENT UPDATE", "value" => $res);
 
       //show language
       $result->info[] = array ('name' => 'Language',         'value'=> $lang );
@@ -152,7 +156,10 @@
         //APPLICATION DELETE
         $res = $appCache->triggerApplicationDelete($lang, true);
         //$result->info[] = array ('name' => 'Trigger APPLICATION DELETE',              'value'=> $res);
-
+        
+        //CONTENT UPDATE
+        $res = $appCache->triggerContentUpdate($lang, true);
+        //$result->info[] = array("name" => "Trigger CONTENT UPDATE", "value" => $res);
 
         //build using the method in AppCacheView Class
         $res = $appCache->fillAppCacheView($lang);
