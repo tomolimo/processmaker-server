@@ -430,7 +430,7 @@ class processMap {
         foreach ($files as $file) {
           $templates[] = array('FILE' => $file['filename'], 'NAME' => $file['filename']);
         }
-        
+
         $calendarObj = $calendar->getCalendarList(true, true);
 
         global $_DBArray;
@@ -450,13 +450,13 @@ class processMap {
         $G_PUBLISH = new Publisher ( );
         $G_PUBLISH->AddContent('xmlform', 'xmlform', 'processes/processes_Edit', '', $aFields, 'processes_Save');
         G::RenderPage('publish', 'raw');
-        
+
         return true;
-      } 
+      }
       else {
         throw (new Exception('This row doesn\'t exist!'));
       }
-    } 
+    }
     catch (Exception $oError) {
       throw ($oError);
     }
@@ -1166,8 +1166,8 @@ class processMap {
         $oDataset2->setFetchmode(ResultSet::FETCHMODE_ASSOC);
         $oDataset2->next();
         $aRow2 = $oDataset2->getRow();
-        $aUsers [] = array ('LABEL' => $results ['GRP_TITLE'] .' <a href="#" onclick="usersGroup(\'' . $results ['GRP_UID'] . '\', \'' . $c . '\');return false;"><font color="green"><strong>(' . $aRow2 ['MEMBERS_NUMBER'] . ' ' . ((int) $aRow2 ['MEMBERS_NUMBER'] == 1 ? G::LoadTranslation('ID_USER') : G::LoadTranslation('ID_USERS')) . ')</strong></font></a> <br /><div id="users' . $c . '" style="display: none"></div>', 'TAS_UID' => $sTaskUID, 'USR_UID' => $results ['GRP_UID'], 'TU_TYPE' => $iType, 'TU_RELATION' => 2);            
-      }   
+        $aUsers [] = array ('LABEL' => $results ['GRP_TITLE'] .' <a href="#" onclick="usersGroup(\'' . $results ['GRP_UID'] . '\', \'' . $c . '\');return false;"><font color="green"><strong>(' . $aRow2 ['MEMBERS_NUMBER'] . ' ' . ((int) $aRow2 ['MEMBERS_NUMBER'] == 1 ? G::LoadTranslation('ID_USER') : G::LoadTranslation('ID_USERS')) . ')</strong></font></a> <br /><div id="users' . $c . '" style="display: none"></div>', 'TAS_UID' => $sTaskUID, 'USR_UID' => $results ['GRP_UID'], 'TU_TYPE' => $iType, 'TU_RELATION' => 2);
+      }
       $sDelimiter = DBAdapter::getStringDelimiter ();
       $oCriteria = new Criteria('workflow');
       $oCriteria->addSelectColumn(UsersPeer::USR_UID);
@@ -1264,40 +1264,40 @@ class processMap {
       $oCriteria->add(TaskPeer::PRO_UID, $sProcessUID);
       $oDataset = TaskPeer::doSelectRS($oCriteria);
       $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-      
+
       $aTasks = array();
       $iTaskNumber = 0;
-      
+
       while ($oDataset->next()) {
         $aRow = $oDataset->getRow();
-        
+
         $aTasks[] = $aRow ["TAS_UID"];
         $iTaskNumber = $iTaskNumber + 1;
       }
-      
+
       if ($iTaskNumber > 0) {
         $criteria = new Criteria("workflow");
-        
+
         $criteria->addSelectColumn(ContentPeer::CON_LANG);
         $criteria->addSelectColumn(ContentPeer::CON_VALUE);
         $criteria->add(ContentPeer::CON_ID, $aTasks, Criteria::IN);
         $criteria->add(ContentPeer::CON_CATEGORY, "TAS_TITLE");
-        
+
         $rsSQLCON = ContentPeer::doSelectRS($criteria);
         $rsSQLCON->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-        
+
         $numMaxLang = 0;
         $numMax = 0;
-        
+
         while ($rsSQLCON->next()) {
           $row = $rsSQLCON->getRow();
 
           $conLang  = $row["CON_LANG"];
           $conValue = $row["CON_VALUE"];
-          
+
           if (preg_match("/^\S+\s(\d+)$/", $conValue, $matches)) {
             $n = intval($matches[1]);
-    
+
             if ($conLang == SYS_LANG) {
               if ($n > $numMaxLang) {
                 $numMaxLang = $n;
@@ -1310,11 +1310,11 @@ class processMap {
             }
           }
         }
-        
+
         if ($numMaxLang > 0) {
           $numMax = $numMaxLang;
         }
-        
+
         if ($numMax > 0 && $numMax > $iTaskNumber) {
           $iTaskNumber = $numMax + 1;
         }
@@ -1325,14 +1325,14 @@ class processMap {
       else {
         $iTaskNumber = 1;
       }
-      
+
       $oTask = new Task();
       $oNewTask->label = G::LoadTranslation('ID_TASK') . ' ' . $iTaskNumber;
       $oNewTask->uid = $oTask->create(array('PRO_UID' => $sProcessUID, 'TAS_TITLE' => $oNewTask->label, 'TAS_POSX' => $iX, 'TAS_POSY' => $iY, 'TAS_WIDTH' => $iWidth, 'TAS_HEIGHT' => $iHeight));
       $oNewTask->statusIcons = array();
       $oNewTask->statusIcons[] = array('label' => '', 'icon' => '/images/alert.gif', 'message' => '', 'url' => '');
       $oJSON = new Services_JSON();
-      
+
       return $oJSON->encode($oNewTask);
     }
     catch (Exception $oError) {
@@ -1404,7 +1404,7 @@ class processMap {
         foreach ($files as $file) {
           $templates[] = array('FILE' => $file['filename'], 'NAME' => $file['filename']);
         }
-        
+
         global $_DBArray;
         $_DBArray['_TEMPLATES1'] = $templates;
         $_SESSION['_DBArray'] = $_DBArray;
@@ -3554,10 +3554,10 @@ class processMap {
     $limit = '';
     $filter = '';
     $groups = new Groupwf();
-    $result = $groups->getAllGroup($start,$limit,$filter);      
-    foreach ($result as $results) {        
-      $aUsersGroups [] = array('UID' => '2|' . $results ['GRP_UID'], 'LABEL' => $results ['GRP_TITLE'] . ' (' . G::LoadTranslation('ID_GROUP') . ')');                           
-    } 
+    $result = $groups->getAllGroup($start,$limit,$filter);
+    foreach ($result['rows'] as $results) {
+      $aUsersGroups [] = array('UID' => '2|' . $results ['GRP_UID'], 'LABEL' => $results ['GRP_TITLE'] . ' (' . G::LoadTranslation('ID_GROUP') . ')');
+    }
     $oCriteria = new Criteria('workflow');
     $oCriteria->addSelectColumn(UsersPeer::USR_UID);
     $oCriteria->addSelectColumn(UsersPeer::USR_USERNAME);
@@ -4064,18 +4064,18 @@ class processMap {
 
     $oCriteria = new Criteria('dbarray');
     $G_PUBLISH = new Publisher();
-  
+
     $aDirectories = array();
     $aDirectories[] = array('DIRECTORY' => 'char');
     $aDirectories[] = array('DIRECTORY' => '<a href="#" onclick="goToDirectory(\'' . $sProcessUID . '\', \'mailTemplates\', \'\');" class="pagedTableHeader">'.G::loadTranslation('ID_TEMPLATES').'</a>');
     $aDirectories[] = array('DIRECTORY' => '<a href="#" onclick="goToDirectory(\'' . $sProcessUID . '\', \'public\', \'\');" class="pagedTableHeader">'.G::loadTranslation('ID_PUBLIC').'</a>');
-    
+
     $_DBArray = (isset($_SESSION ['_DBArray']) ? $_SESSION ['_DBArray'] : '');
     $_DBArray['directories'] = $aDirectories;
     $_SESSION['_DBArray'] = $_DBArray;
-    
+
     $oCriteria->setDBArrayTable('directories');
-    
+
     $G_PUBLISH->AddContent('propeltable', 'paged-table', 'processes/processes_DirectoriesList', $oCriteria);
     G::RenderPage('publish', 'raw');
   }
