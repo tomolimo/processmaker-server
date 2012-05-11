@@ -4140,9 +4140,10 @@ class processMap {
     $oCriteria = new Criteria('dbarray');
     $oCriteria->setDBArrayTable('objects');
     $oCriteria->addAscendingOrderByColumn('DOWNLOAD_TEXT');
+
     global $G_PUBLISH;
     $G_PUBLISH = new Publisher ( );
-    $G_PUBLISH->AddContent('propeltable', 'paged-table', 'processes/processes_FilesList', $oCriteria, array('PRO_UID' => $sProcessUID, 'MAIN_DIRECTORY' => $sMainDirectory, 'CURRENT_DIRECTORY' => $sCurrentDirectory));
+    $G_PUBLISH->AddContent('propeltable', 'processes/files-paged-table', 'processes/processes_FilesList',$oCriteria, array('PRO_UID' => $sProcessUID, 'MAIN_DIRECTORY' => $sMainDirectory, 'CURRENT_DIRECTORY' => $sCurrentDirectory));
     G::RenderPage('publish', 'raw');
   }
 
