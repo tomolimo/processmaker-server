@@ -592,7 +592,16 @@ Ext.onReady ( function() {
     reader: readerCasesList,
     writer: writerCasesList,  // <-- plug a DataWriter into the store just as you would a Reader
     autoSave: true, // <-- false would delay executing create, update, destroy requests until specifically told to do so with some [save] buton.
-    sortInfo:{field: 'APP_CACHE_VIEW.APP_NUMBER', direction: "DESC"}
+    sortInfo:{field: 'APP_CACHE_VIEW.APP_NUMBER', direction: "DESC"},
+    listeners: {
+    	load: function(response){
+    		//console.log(response.reader.jsonData);
+    		if (response.reader.jsonData.result === false) {
+    			PMExt.notify('ERROR', response.reader.jsonData.message);
+    			//PMExt.error
+    		}
+    	}
+    }
   });
 
   storeReassignCases = new Ext.data.Store({

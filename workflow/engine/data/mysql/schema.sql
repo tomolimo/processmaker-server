@@ -1403,5 +1403,18 @@ CREATE TABLE `DASHLET_INSTANCE`
 	`DAS_INS_STATUS` TINYINT default 1 NOT NULL,
 	PRIMARY KEY (`DAS_INS_UID`)
 )ENGINE=MyISAM  DEFAULT CHARSET='utf8' COMMENT='Dashblets definitions';
+#-----------------------------------------------------------------------------
+#-- APP_SOLR_QUEUE
+#-----------------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `APP_SOLR_QUEUE`;
+
+
+CREATE TABLE `APP_SOLR_QUEUE`
+(
+	`APP_UID` VARCHAR(32) default '' NOT NULL,
+	`APP_UPDATED` TINYINT default 1 NOT NULL,
+	PRIMARY KEY (`APP_UID`)
+)ENGINE=MyISAM  DEFAULT CHARSET='utf8' COMMENT='APP_SOLR_QUEUE';
 # This restores the fkey checks, after having unset them earlier
 SET FOREIGN_KEY_CHECKS = 1;

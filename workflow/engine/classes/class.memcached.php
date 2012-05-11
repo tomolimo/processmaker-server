@@ -24,131 +24,164 @@
  *
  */
 
-
 /**
  * The ProcessMaker memcached class
+ * 
  * @package workflow.engine.ProcessMaker
  */
 
-  class PMmemcached {
-  	const ONE_MINUTE  = 60;
-  	const ONE_HOUR    = 3600;
-  	const TWO_HOURS   = 7200;
-  	const EIGHT_HOURS = 28800;
-  	
-  	var $version;
-  	var $mem;
-  	var $connected = false;
-  	var $enabled   = false;
-  	var $supported = false;
-  	
-    static private $instance = NULL;
-
-    private function __construct( $workspace ) {
-      $this->enabled = MEMCACHED_ENABLED;
-      $this->connected = false;
-      $this->workspace = $workspace;
-      if (class_exists('Memcached')) {
-        $this->mem = new Memcached();
-        $this->class = 'Memcached';
-      }
-      else {
-        if (class_exists('Memcache')) {
-          $this->mem = new Memcache();
-          $this->class = 'Memcache';
-          $this->supported = true; 
-          $this->connected = @$this->mem->connect( MEMCACHED_SERVER , 11211);
-          if ( $this->connected ) {
-            $this->version = $this->mem->getVersion();
-          }
+class PMmemcached {
+  const ONE_MINUTE = 60;
+  const ONE_HOUR = 3600;
+  const TWO_HOURS = 7200;
+  const EIGHT_HOURS = 28800;
+  
+  var $version;
+  var $mem;
+  var $connected = false;
+  var $enabled = false;
+  var $supported = false;
+  
+  private static $instance = NULL;
+  
+  private function __construct($workspace) {
+    $this->enabled = MEMCACHED_ENABLED;
+    $this->connected = false;
+    $this->workspace = $workspace;
+    if (class_exists ( 'Memcached' )) {
+      $this->mem = new Memcached ();
+      $this->class = 'Memcached';
+      $this->connected = true;
+    }
+    else {
+      if (class_exists ( 'Memcache' )) {
+        $this->mem = new Memcache ();
+        $this->class = 'Memcache';
+        $this->supported = true;
+        $this->connected = @$this->mem->connect ( MEMCACHED_SERVER, 11211 );
+        if ($this->connected) {
+          $this->version = $this->mem->getVersion ();
         }
       }
-      
-  		if ( ! MEMCACHED_ENABLED ) {
-        $this->connected = false;
-  			return false;
-  		}
-      
-    }
-
-    /**
-    * to get singleton instance
-    *
-    * @access public
-    * @return object
-    */  
-    function &getSingleton( $workspace ) {
-      if (self::$instance == NULL) {
-        self::$instance = new PMmemcached( $workspace );
+      else {
+        G::Loadclass ( 'fileCache' );
+        // create cache folder
+        $cacheFolder = PATH_DATA . "sites/" . $workspace . "/cachefiles/";
+        if (! file_exists ( $cacheFolder )) {
+          if (! mkdir ( $cacheFolder )) {
+            return false;
+          }
+        }
+        $this->class = 'fileCache';
+        $this->connected = true;
+        $this->mem = new FileCache ( $cacheFolder );
       }
-      return self::$instance;
     }
-  	
-  	function set($key, $object, $timeout=0) {
-  		if (! $this->connected ) return false;
-  		$this->mem->set( $this->workspace . '_' . $key, $object, false, $timeout) ;
-  	}
-
-  	function get($key) {
-  		if (! $this->connected ) return false;
-  		return $this->mem->get( $this->workspace . '_' . $key) ;
-  	}
-
-  	function add($key, $value ) {
-  		if (! $this->connected ) return false;
-  		return $this->mem->add( $this->workspace . '_' . $key, $value ) ;
-  	}
-
-  	function increment($key, $value ) {
-  		if (! $this->connected ) return false;
-  		return $this->mem->increment( $this->workspace . '_' . $key, $value ) ;
-  	}
-
-  	function delete($key) {
-  		if (! $this->connected ) return false;
-  		return $this->mem->delete( $this->workspace . '_' . $key) ;
-  	}
-  	
-  	function flush() {
-  		if (! $this->connected ) return false;
-  		return $this->mem->flush();
-  	}
-  	
-    function getStats() {
-  		if (! $this->connected ) return false;
-      return $status = $this->mem->getStats();
+    
+    if (! MEMCACHED_ENABLED) {
+      $this->connected = false;
+      return false;
     }
-
-    function printDetails() {
-  		if (! $this->connected ) return false;
-    	$status = $this->mem->getStats();
-      echo "<table border='1'>"; 
-      echo "<tr><td>Memcache Server version:</td><td> ".$status ["version"]."</td></tr>"; 
-      echo "<tr><td>Number of hours this server has been running </td><td>" . ($status ["uptime"] /3660) ."</td></tr>"; 
-      echo "<tr><td>Total number of items stored by this server ever since it started </td><td>".$status ["total_items"]."</td></tr>"; 
-      echo "<tr><td>Number of open connections </td><td>".$status ["curr_connections"]."</td></tr>"; 
-      echo "<tr><td>Total number of connections opened since the server started running </td><td>".$status ["total_connections"]."</td></tr>"; 
-      echo "<tr><td>Number of connection structures allocated by the server </td><td>".$status ["connection_structures"]."</td></tr>"; 
-      echo "<tr><td>Cumulative number of retrieval requests </td><td>".$status ["cmd_get"]."</td></tr>"; 
-      echo "<tr><td> Cumulative number of storage requests </td><td>".$status ["cmd_set"]."</td></tr>"; 
-
-      $percCacheHit=((real)$status ["get_hits"]/ (real)$status ["cmd_get"] *100); 
-      $percCacheHit=round($percCacheHit,3); 
-      $percCacheMiss=100-$percCacheHit; 
-
-      echo "<tr><td>Number of keys that have been requested and found present </td><td>".$status ["get_hits"]." ($percCacheHit%)</td></tr>"; 
-      echo "<tr><td>Number of items that have been requested and not found </td><td>".$status ["get_misses"]."($percCacheMiss%)</td></tr>"; 
-
-      $MBRead= (real)$status["bytes_read"]/(1024*1024); 
-
-      echo "<tr><td>Total number of bytes read by this server from network </td><td>".$MBRead." Mega Bytes</td></tr>"; 
-      $MBWrite=(real) $status["bytes_written"]/(1024*1024) ; 
-      echo "<tr><td>Total number of bytes sent by this server to network </td><td>".$MBWrite." Mega Bytes</td></tr>"; 
-      $MBSize=(real) $status["limit_maxbytes"]/(1024*1024) ; 
-      echo "<tr><td>Number of bytes this server is allowed to use for storage.</td><td>".$MBSize." Mega Bytes</td></tr>"; 
-      echo "<tr><td>Number of valid items removed from cache to free memory for new items.</td><td>".$status ["evictions"]."</td></tr>"; 
-      echo "</table>"; 
-    }
-  	
+  
   }
+  
+  /**
+   * to get singleton instance
+   *
+   * @access public
+   * @return object
+   */
+  public static function getSingleton($workspace) {
+    if (! self::$instance instanceof self) {
+      self::$instance = new PMmemcached ( $workspace );
+    }
+    return self::$instance;
+  }
+  
+  public function __clone() {
+    throw new Exception ( "Clone is not allowed." );
+  }
+  
+  public function __wakeup() {
+    throw new Exception ( "Deserializing is not allowed." );
+  }
+  
+  function set($key, $object, $timeout = 0) {
+    if (! $this->connected)
+      return false;
+    if ($this->class != 'filecache')
+      $this->mem->set ( $this->workspace . '_' . $key, $object, false, $timeout );
+    else
+      $this->mem->set ( $this->workspace . '_' . $key, $object );
+  }
+  
+  function get($key) {
+    if (! $this->connected)
+      return false;
+    return $this->mem->get ( $this->workspace . '_' . $key );
+  }
+  
+  function add($key, $value) {
+    if ((! $this->connected) || ($this->class == 'filecache'))
+      return false;
+    return $this->mem->add ( $this->workspace . '_' . $key, $value );
+  }
+  
+  function increment($key, $value) {
+    if ((! $this->connected) || ($this->class == 'filecache'))
+      return false;
+    return $this->mem->increment ( $this->workspace . '_' . $key, $value );
+  }
+  
+  function delete($key) {
+    if ((! $this->connected) || ($this->class == 'filecache'))
+      return false;
+    return $this->mem->delete ( $this->workspace . '_' . $key );
+  }
+  
+  function flush() {
+    if ((! $this->connected) || ($this->class == 'filecache'))
+      return false;
+    return $this->mem->flush ();
+  }
+  
+  function getStats() {
+    if ((! $this->connected) || ($this->class == 'filecache'))
+      return false;
+    return $status = $this->mem->getStats ();
+  }
+  
+  function printDetails() {
+    if ((! $this->connected) || ($this->class == 'filecache'))
+      return false;
+    $status = $this->mem->getStats ();
+    echo "<table border='1'>";
+    echo "<tr><td>Memcache Server version:</td><td> " . $status ["version"] . "</td></tr>";
+    echo "<tr><td>Number of hours this server has been running </td><td>" . ($status ["uptime"] / 3660) . "</td></tr>";
+    echo "<tr><td>Total number of items stored by this server ever since it started </td><td>" . $status ["total_items"] . "</td></tr>";
+    echo "<tr><td>Number of open connections </td><td>" . $status ["curr_connections"] . "</td></tr>";
+    echo "<tr><td>Total number of connections opened since the server started running </td><td>" . $status ["total_connections"] . "</td></tr>";
+    echo "<tr><td>Number of connection structures allocated by the server </td><td>" . $status ["connection_structures"] . "</td></tr>";
+    echo "<tr><td>Cumulative number of retrieval requests </td><td>" . $status ["cmd_get"] . "</td></tr>";
+    echo "<tr><td> Cumulative number of storage requests </td><td>" . $status ["cmd_set"] . "</td></tr>";
+    
+    $percCacheHit = (( real ) $status ["get_hits"] / ( real ) $status ["cmd_get"] * 100);
+    $percCacheHit = round ( $percCacheHit, 3 );
+    $percCacheMiss = 100 - $percCacheHit;
+    
+    echo "<tr><td>Number of keys that have been requested and found present </td><td>" . $status ["get_hits"] . " ($percCacheHit%)</td></tr>";
+    echo "<tr><td>Number of items that have been requested and not found </td><td>" . $status ["get_misses"] . "($percCacheMiss%)</td></tr>";
+    
+    $MBRead = ( real ) $status ["bytes_read"] / (1024 * 1024);
+    
+    echo "<tr><td>Total number of bytes read by this server from network </td><td>" . $MBRead . " Mega Bytes</td></tr>";
+    $MBWrite = ( real ) $status ["bytes_written"] / (1024 * 1024);
+    echo "<tr><td>Total number of bytes sent by this server to network </td><td>" . $MBWrite . " Mega Bytes</td></tr>";
+    $MBSize = ( real ) $status ["limit_maxbytes"] / (1024 * 1024);
+    echo "<tr><td>Number of bytes this server is allowed to use for storage.</td><td>" . $MBSize . " Mega Bytes</td></tr>";
+    echo "<tr><td>Number of valid items removed from cache to free memory for new items.</td><td>" . $status ["evictions"] . "</td></tr>";
+    echo "</table>";
+  }
+
+}
 

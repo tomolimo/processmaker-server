@@ -833,6 +833,9 @@ class Cases {
    */
 
   function updateCase($sAppUid, $Fields = array()) {
+      //initialize solrindex object
+      G::LoadClass('AppSolr');
+      $appSolr = new AppSolr();
     try {
       $aApplicationFields = $Fields['APP_DATA'];
       $Fields['APP_UID']         = $sAppUid;
@@ -916,7 +919,9 @@ class Cases {
           }
         }
       }
-
+      //Update Solr Index
+      $appSolr->updateApplicationSearchIndex($sAppUid);
+      
       return $Fields;
     } 
     catch (exception $e) {
@@ -933,6 +938,9 @@ class Cases {
    */
 
   function removeCase($sAppUid) {
+      //initialize solrindex object
+      G::LoadClass('AppSolr');
+      $appSolr = new AppSolr();
     try {
       $oApplication = new Application();
       $oAppDelegation = new AppDelegation();
@@ -986,7 +994,12 @@ class Cases {
       $oCriteria2->add(SubApplicationPeer::APP_PARENT, $sAppUid);
       SubApplicationPeer::doDelete($oCriteria2);
       $oApp = new Application;
-      return $oApp->remove($sAppUid);
+      $result = $oApp->remove($sAppUid);
+      
+      //delete application from index
+      $appSolr->deleteApplicationSearchIndex($sAppUid);
+      
+      return $result;
     } catch (exception $e) {
       throw ($e);
     }
@@ -1002,10 +1015,15 @@ class Cases {
    */
 
   function setDelInitDate($sAppUid, $iDelIndex) {
+      //initialize solrindex object
+      G::LoadClass('AppSolr');
+      $appSolr = new AppSolr();      
     try {
       $oAppDel = AppDelegationPeer::retrieveByPk($sAppUid, $iDelIndex);
       $oAppDel->setDelInitDate("now");
       $oAppDel->save();
+      //update searchindex
+      $appSolr->updateApplicationSearchIndex($sAppUid);
     } catch (exception $e) {
       throw ($e);
     }
@@ -1022,11 +1040,17 @@ class Cases {
    */
 
   function setCatchUser($sAppUid, $iDelIndex, $usrId) {
+      //initialize solrindex object
+      G::LoadClass('AppSolr');
+      $appSolr = new AppSolr();
     try {
       $oAppDel = AppDelegationPeer::retrieveByPk($sAppUid, $iDelIndex);
       $oAppDel->setDelInitDate("now");
       $oAppDel->setUsrUid($usrId);
       $oAppDel->save();
+      
+      //update searchindex
+      $appSolr->updateApplicationSearchIndex($sAppUid);
     } catch (exception $e) {
       throw ($e);
     }
@@ -1432,9 +1456,15 @@ class Cases {
    */
 
   function newAppDelegation($sProUid, $sAppUid, $sTasUid, $sUsrUid, $sPrevious, $iPriority, $sDelType, $iAppThreadIndex = 1, $nextDel=null) {
+      //initialize solrindex object
+      G::LoadClass('AppSolr');
+      $appSolr = new AppSolr();
     try {
       $appDel = new AppDelegation();
-      return $appDel->createAppDelegation($sProUid, $sAppUid, $sTasUid, $sUsrUid, $iAppThreadIndex, $iPriority, false, $sPrevious, $nextDel);
+      $result = $appDel->createAppDelegation($sProUid, $sAppUid, $sTasUid, $sUsrUid, $iAppThreadIndex, $iPriority, false, $sPrevious, $nextDel);
+      //update searchindex
+      $appSolr->updateApplicationSearchIndex($sAppUid);
+      return $result;
     } 
     catch (exception $e) {
       throw ($e);
@@ -1453,6 +1483,9 @@ class Cases {
    */
 
   function updateAppDelegation($sAppUid, $iDelIndex, $iAppThreadIndex) {
+      //initialize solrindex object
+      G::LoadClass('AppSolr');
+      $appSolr = new AppSolr();      
     try {
       $appDelegation = new AppDelegation();
       $aData = array();
@@ -1461,6 +1494,9 @@ class Cases {
       $aData['DEL_THREAD'] = $iAppThreadIndex;
 
       $appDelegation->update($aData);
+      //update searchindex
+      $appSolr->updateApplicationSearchIndex($sAppUid);
+            
       return true;
     } catch (exception $e) {
       throw ($e);
@@ -1536,6 +1572,9 @@ class Cases {
    */
 
   function updateAppThread($sAppUid, $iAppThreadIndex, $iNewDelIndex) {
+      //initialize solrindex object
+      G::LoadClass('AppSolr');
+      $appSolr = new AppSolr();      
     try {
       /// updating the DEL_INDEX value in the APP_THREAD
       $con = Propel::getConnection('workflow');
@@ -1555,6 +1594,9 @@ class Cases {
       $aData['DEL_INDEX'] = $iNewDelIndex;      
       $appThread->update($aData);
       */
+      //update searchindex
+      $appSolr->updateApplicationSearchIndex($sAppUid);
+      
       return $iNewDelIndex;
     } 
     catch (exception $e) {
@@ -1572,6 +1614,9 @@ class Cases {
    */
 
   function closeAppThread($sAppUid, $iAppThreadIndex) {
+//       //initialize solrindex object called from other functions
+//       G::LoadClass('AppSolr');
+//       $appSolr = new AppSolr();
     try {
       $appThread = new AppThread();
       $aData = array();
@@ -1580,6 +1625,8 @@ class Cases {
       $aData['APP_THREAD_STATUS'] = 'CLOSED';
 
       $appThread->update($aData);
+//       //update searchindex
+//       $appSolr->updateApplicationSearchIndex($sAppUid);
       return true;
     } catch (exception $e) {
       throw ($e);
@@ -1595,6 +1642,9 @@ class Cases {
    */
 
   function closeAllThreads($sAppUid) {
+      //initialize solrindex object
+      G::LoadClass('AppSolr');
+      $appSolr = new AppSolr();
     try {
       //Execute('UPDATE APP_DELEGATION SET DEL_THREAD_STATUS="CLOSED" WHERE APP_UID="$sAppUid" AND DEL_THREAD_STATUS="OPEN"');
       $c = new Criteria();
@@ -1612,6 +1662,8 @@ class Cases {
           throw (new PropelException('The row cannot be created!', new PropelException($msg)));
         }
       }
+      //update searchindex
+      $appSolr->updateApplicationSearchIndex($sAppUid);
     } catch (exception $e) {
       throw ($e);
     }
@@ -1629,9 +1681,15 @@ class Cases {
    */
 
   function newAppThread($sAppUid, $iNewDelIndex, $iAppParent) {
+      //initialize solrindex object
+      G::LoadClass('AppSolr');
+      $appSolr = new AppSolr();
     try {
       $appThread = new AppThread();
-      return $appThread->createAppThread($sAppUid, $iNewDelIndex, $iAppParent);
+      $result = $appThread->createAppThread($sAppUid, $iNewDelIndex, $iAppParent);
+      //update searchindex
+      $appSolr->updateApplicationSearchIndex($sAppUid);
+      return $result;
     } catch (exception $e) {
       throw ($e);
     }
@@ -1646,6 +1704,9 @@ class Cases {
    */
 
   function closeAllDelegations($sAppUid) {
+      //initialize solrindex object
+      G::LoadClass('AppSolr');
+      $appSolr = new AppSolr();
     try {
       //Execute('UPDATE APP_DELEGATION SET DEL_THREAD_STATUS="CLOSED" WHERE APP_UID="$sAppUid" AND DEL_THREAD_STATUS="OPEN"');
       $c = new Criteria();
@@ -1663,6 +1724,8 @@ class Cases {
           throw (new PropelException('The row cannot be created!', new PropelException($msg)));
         }
       }
+      //update searchindex
+      $appSolr->updateApplicationSearchIndex($sAppUid);
     } catch (exception $e) {
       throw ($e);
     }
@@ -1678,6 +1741,10 @@ class Cases {
    */
 
   function CloseCurrentDelegation($sAppUid, $iDelIndex) {
+      //called from other functions
+//       //initialize solrindex object
+//       G::LoadClass('AppSolr');
+//       $appSolr = new AppSolr();
     try {
       //Execute('UPDATE APP_DELEGATION SET DEL_THREAD_STATUS="CLOSED" WHERE APP_UID="$sAppUid" AND DEL_THREAD_STATUS="OPEN"');
       $c = new Criteria();
@@ -1699,6 +1766,9 @@ class Cases {
           throw (new PropelException('The row cannot be created!', new PropelException($msg)));
         }
       }
+//       //update searchindex
+//       $appSolr->updateApplicationSearchIndex($sAppUid);
+      
     } catch (exception $e) {
       throw ($e);
     }
@@ -1715,6 +1785,9 @@ class Cases {
    */
 
   function ReactivateCurrentDelegation($sAppUid, $iDelegation) {
+//       //initialize solrindex object called from other function
+//       G::LoadClass('AppSolr');
+//       $appSolr = new AppSolr();
     try {
       $c = new Criteria();
       $c->add(AppDelegationPeer::APP_UID, $sAppUid);
@@ -1733,6 +1806,8 @@ class Cases {
           throw (new PropelException('The row cannot be created!', new PropelException($msg)));
         }
       }
+//       //update searchindex
+//       $appSolr->updateApplicationSearchIndex($sAppUid);
     } catch (exception $e) {
       throw ($e);
     }
@@ -1750,7 +1825,11 @@ class Cases {
 
   function startCase($sTasUid, $sUsrUid, $isSubprocess=false) {
     if ($sTasUid != '') {
-      try {
+        //initialize solrindex object
+        G::LoadClass('AppSolr');
+        $appSolr = new AppSolr();
+        
+        try {
         $this->Task = new Task;
         $Fields = $this->Task->Load($sTasUid);
 
@@ -1791,6 +1870,8 @@ class Cases {
         G::LoadClass('derivation');
         $oDerivation = new Derivation();
         $oDerivation->setTasLastAssigned($sTasUid, $sUsrUid);
+        //update searchindex
+        $appSolr->updateApplicationSearchIndex($sAppUid);
       } catch (exception $e) {
         throw ($e);
       }
@@ -3337,6 +3418,10 @@ class Cases {
    */
 
   function pauseCase($sApplicationUID, $iDelegation, $sUserUID, $sUnpauseDate = null) {
+      //initialize solrindex object
+      G::LoadClass('AppSolr');
+      $appSolr = new AppSolr();
+      
     $this->CloseCurrentDelegation($sApplicationUID, $iDelegation);
     $oApplication = new Application();
     $aFields = $oApplication->Load($sApplicationUID);
@@ -3364,6 +3449,9 @@ class Cases {
     $aData['APP_DISABLE_ACTION_DATE'] = $sUnpauseDate;
     $oAppDelay = new AppDelay();
     $oAppDelay->create($aData);
+    
+    //update searchindex
+    $appSolr->updateApplicationSearchIndex($sApplicationUID);
   }
 
   /*
@@ -3377,6 +3465,9 @@ class Cases {
    */
 
   function unpauseCase($sApplicationUID, $iDelegation, $sUserUID) {
+      //initialize solrindex object
+      G::LoadClass('AppSolr');
+      $appSolr = new AppSolr();
     //get information about current $iDelegation row
     $oAppDelegation = new AppDelegation();
     $aFieldsDel = $oAppDelegation->Load($sApplicationUID, $iDelegation);
@@ -3423,6 +3514,9 @@ class Cases {
     $aData['APP_DISABLE_ACTION_DATE'] = date('Y-m-d H:i:s');
     $oAppDelay = new AppDelay();
     $aFieldsDelay = $oAppDelay->update($aData);
+    
+    //update searchindex
+    $appSolr->updateApplicationSearchIndex($sApplicationUID);
   }
 
   /*
@@ -3436,6 +3530,10 @@ class Cases {
    */
 
   function cancelCase($sApplicationUID, $iIndex, $user_logged) {
+      //initialize solrindex object
+      G::LoadClass('AppSolr');
+      $appSolr = new AppSolr();
+      
     $oApplication = new Application();
     $aFields = $oApplication->load($sApplicationUID);
     $oCriteria = new Criteria('workflow');
@@ -3492,6 +3590,9 @@ class Cases {
       $oDerivation = new Derivation();
       $oDerivation->verifyIsCaseChild($sApplicationUID);
     }
+    
+    //update searchindex
+    $appSolr->updateApplicationSearchIndex($sApplicationUID);
   }
 
   /*
@@ -3505,6 +3606,10 @@ class Cases {
    */
 
   function reactivateCase($sApplicationUID, $iIndex, $user_logged) {
+      //initialize solrindex object
+      G::LoadClass('AppSolr');
+      $appSolr = new AppSolr();
+      
     $oApplication = new Application();
     $aFields = $oApplication->load((isset($_POST['sApplicationUID']) ? $_POST['sApplicationUID'] : $_SESSION['APPLICATION']));
     $aFields['APP_STATUS'] = 'TO_DO';
@@ -3538,6 +3643,9 @@ class Cases {
     $sql = "UPDATE APP_THREAD SET APP_THREAD_STATUS = 'OPEN' WHERE APP_UID =  '$sApplicationUID'  AND DEL_INDEX  ='$iIndex' ";
     $stmt = $con->createStatement();
     $rs = $stmt->executeQuery($sql, ResultSet::FETCHMODE_ASSOC);
+    
+    //update searchindex
+    $appSolr->updateApplicationSearchIndex($sApplicationUID);
   }
 
   /*
@@ -3553,6 +3661,10 @@ class Cases {
    */
 
   function reassignCase($sApplicationUID, $iDelegation, $sUserUID, $newUserUID, $sType = 'REASSIGN') {
+      //initialize solrindex object
+      G::LoadClass('AppSolr');
+      $appSolr = new AppSolr();
+      
     $this->CloseCurrentDelegation($sApplicationUID, $iDelegation);
     $oAppDelegation = new AppDelegation();
     $aFieldsDel = $oAppDelegation->Load($sApplicationUID, $iDelegation);
@@ -3585,6 +3697,10 @@ class Cases {
     $aData['APP_ENABLE_ACTION_DATE'] = date('Y-m-d H:i:s');
     $oAppDelay = new AppDelay();
     $oAppDelay->create($aData);
+    
+    //update searchindex
+    $appSolr->updateApplicationSearchIndex($sApplicationUID);
+    
     return true;
   }
 
@@ -5036,6 +5152,10 @@ class Cases {
    */
 
   function executeTriggersAfterExternal($sProcess, $sTask, $sApplication, $iIndex, $iStepPosition, $aNewData = array()) {
+//       //initialize solrindex object UpdateCase añready calls the update
+//       G::LoadClass('AppSolr');
+//       $appSolr = new AppSolr();
+      
     //load the variables
     $Fields = $this->loadCase($sApplication);
     $Fields['APP_DATA'] = array_merge($Fields['APP_DATA'], G::getSystemConstants());
@@ -5052,6 +5172,9 @@ class Cases {
     $aData['DEL_INDEX'] = $iIndex;
     $aData['TAS_UID'] = $sTask;
     $this->updateCase($sApplication, $aData);
+    
+//     //update searchindex
+//     $appSolr->updateApplicationSearchIndex($sApplication);
   }
 
   /*
@@ -5404,11 +5527,18 @@ class Cases {
   }
 
   function discriminateCases($aData){
+      //initialize solrindex object
+      G::LoadClass('AppSolr');
+      $appSolr = new AppSolr();
+      
     $siblingThreadData = $this->GetAllOpenDelegation($aData);
     foreach($siblingThreadData as $thread => $threadData)
     {
         $this->closeAppThread ( $aData['APP_UID'], $threadData['DEL_INDEX']); //Close Sibling AppThreads
         $this->CloseCurrentDelegation ($aData['APP_UID'], $threadData['DEL_INDEX']); //Close Sibling AppDelegations
+        
+        //update searchindex
+        $appSolr->updateApplicationSearchIndex($aData['APP_UID']);
     }
   }
 

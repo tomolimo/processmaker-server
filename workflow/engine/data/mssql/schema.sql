@@ -3116,3 +3116,41 @@ CREATE TABLE [DASHLET_INSTANCE]
 	[DAS_INS_STATUS] TINYINT default 1 NOT NULL,
 	CONSTRAINT DASHLET_INSTANCE_PK PRIMARY KEY ([DAS_INS_UID])
 );
+
+/* ---------------------------------------------------------------------- */
+/* APP_SOLR_QUEUE											*/
+/* ---------------------------------------------------------------------- */
+
+
+IF EXISTS (SELECT 1 FROM sysobjects WHERE type = 'U' AND name = 'APP_SOLR_QUEUE')
+BEGIN
+	 DECLARE @reftable_69 nvarchar(60), @constraintname_69 nvarchar(60)
+	 DECLARE refcursor CURSOR FOR
+	 select reftables.name tablename, cons.name constraintname
+	  from sysobjects tables,
+		   sysobjects reftables,
+		   sysobjects cons,
+		   sysreferences ref
+	   where tables.id = ref.rkeyid
+		 and cons.id = ref.constid
+		 and reftables.id = ref.fkeyid
+		 and tables.name = 'APP_SOLR_QUEUE'
+	 OPEN refcursor
+	 FETCH NEXT from refcursor into @reftable_69, @constraintname_69
+	 while @@FETCH_STATUS = 0
+	 BEGIN
+	   exec ('alter table '+@reftable_69+' drop constraint '+@constraintname_69)
+	   FETCH NEXT from refcursor into @reftable_69, @constraintname_69
+	 END
+	 CLOSE refcursor
+	 DEALLOCATE refcursor
+	 DROP TABLE [APP_SOLR_QUEUE]
+END
+
+
+CREATE TABLE [APP_SOLR_QUEUE]
+(
+	[APP_UID] VARCHAR(32) default '' NOT NULL,
+	[APP_UPDATED] TINYINT default 1 NOT NULL,
+	CONSTRAINT APP_SOLR_QUEUE_PK PRIMARY KEY ([APP_UID])
+);
