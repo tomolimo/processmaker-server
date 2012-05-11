@@ -778,7 +778,7 @@ function getEmailConfiguration()
  *
  * @param string(32) | $caseId | UID for case | The UID (unique identification) for a case, which is a string of 32 hexadecimal characters to identify the case.
  * @param string(32) | $sFrom | Email addres | The email address of the person who sends out the email.
- * @param string(32) | $sTo | Email receptor | The email address(es) to whom the email is sent. If multiple recipients, separate each email address with a semicolon.
+ * @param string(32) | $sTo | Email receptor | The email address(es) to whom the email is sent. If multiple recipients, separate each email address with a comma.
  * @param string(32) | $sCc | Email addres for copies | The email address(es) of people who will receive carbon copies of the email.
  * @param string(32) | $sBcc | Email addres for copies hidden | The email address(es) of people who will receive blind carbon copies of the email.
  * @param string(32) | $sSubject | Subject of the email | The subject (title) of the email.
