@@ -92,7 +92,8 @@ class Helper{
     $this->flush();
   }
 } 
-
+/*
 function minify($buffer) {
   return G::removeComments($buffer);
 }
+*/

@@ -101,10 +101,11 @@ class G_Error extends PEAR_Error
               G_ERROR_WARNING_MESSAGE          => 'Warning message',
           );
       }
-
+/*
       if (DB::isError($code)) {
         $code = $code->getCode();
       }
+      */
       return isset($gErrorMessages[$code]) ? $gErrorMessages[$code] : (isset($errorMessages) ? $errorMessages['G_ERROR'] : '');
     }
   }
