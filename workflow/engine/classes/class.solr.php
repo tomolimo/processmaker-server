@@ -52,11 +52,10 @@ class BpmnEngine_SearchIndexAccess_Solr {
     curl_close ( $handlerTotal );
     
     // verify the result of solr
-    $swOk = strpos ( $responseTotal, '<int name="status">0</int>' );
-    if (! $swOk) {
+    $responseSolrTotal = json_decode ( $responseTotal, true );
+    if ($responseSolrTotal['responseHeader']['status'] != 0) {
       throw new Exception ( "Error returning the total number of documents in Solr." );
     }
-    $responseSolrTotal = json_decode ( $responseTotal, true );
     $numTotalDocs = $responseSolrTotal ['response'] ['numFound'];
     return $numTotalDocs;
   }
@@ -120,14 +119,12 @@ class BpmnEngine_SearchIndexAccess_Solr {
     curl_setopt ( $handler, CURLOPT_RETURNTRANSFER, true );
     $response = curl_exec ( $handler );
     curl_close ( $handler );
-    
-    $swOk = strpos ( $response, '<int name="status">0</int>' );
-    if (! $swOk) {
-      throw new Exception ( "Error executing query to Solr." );
-    }
-    
+
     // decode
     $responseSolr = json_decode ( $response, true );
+    if ($responseSolr['responseHeader']['status'] != 0) {
+      throw new Exception ( "Error executing query to Solr." );
+    }
     
     return $responseSolr;
   }
@@ -159,7 +156,7 @@ class BpmnEngine_SearchIndexAccess_Solr {
     $response = curl_exec ( $handler );
     
     curl_close ( $handler );
-    
+
     $swOk = strpos ( $response, '<int name="status">0</int>' );
     if (! $swOk) {
       throw new Exception ( "Error updating document in Solr." );
@@ -281,13 +278,11 @@ class BpmnEngine_SearchIndexAccess_Solr {
     curl_setopt ( $handler, CURLOPT_RETURNTRANSFER, true );
     $response = curl_exec ( $handler );
     curl_close ( $handler );
-    $swOk = strpos ( $response, '<int name="status">0</int>' );
-    if (! $swOk) {
-      throw new Exception ( "Error getting index fields in Solr." );
-    }
     // decode
     $responseSolr = json_decode ( $response, true );
-    
+    if ($responseSolr['responseHeader']['status'] != 0) {
+      throw new Exception ( "Error getting index fields in Solr." );
+    }
     return $responseSolr;
   }
   
@@ -426,13 +421,11 @@ class BpmnEngine_SearchIndexAccess_Solr {
     $response = curl_exec ( $handler );
     curl_close ( $handler );
     
-    $swOk = strpos ( $response, '<int name="status">0</int>' );
-    if (! $swOk) {
-      throw new Exception ( "Error getting faceted list from Solr." );
-    }
-    
     // decode
     $responseSolr = json_decode ( $response, true );
+    if ($responseSolr['responseHeader']['status'] != 0) {
+      throw new Exception ( "Error getting faceted list from Solr." );
+    }
     
     return $responseSolr;
   }
