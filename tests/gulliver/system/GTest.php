@@ -27,10 +27,63 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testArray_fill_value()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $arrayTest = '1';
+        $arrayRes = G::array_fill_value($arrayTest);
+        $this->assertTrue( (is_array($arrayRes) && (count($arrayRes) == 0)) );
+
+        // $recursive = false and new Value = ''
+        $arrayTest = array('value1','value2','value3','value4');
+        $arrayRes = G::array_fill_value($arrayTest);
+        $this->assertEquals($arrayRes['0'],'');
+        $this->assertEquals($arrayRes['1'],'');
+        $this->assertEquals($arrayRes['2'],'');
+        $this->assertEquals($arrayRes['3'],'');
+
+        // $recursive = false and new Value = 'valueTest'
+        $arrayTest = array('value1','value2','value3','value4');
+        $arrayRes = G::array_fill_value($arrayTest,'valueTest');
+        $this->assertEquals($arrayRes['0'],'valueTest');
+        $this->assertEquals($arrayRes['1'],'valueTest');
+        $this->assertEquals($arrayRes['2'],'valueTest');
+        $this->assertEquals($arrayRes['3'],'valueTest');
+
+        // $recursive = true and new Value = 'valueTest'
+        $arrayTestSub1 = array('value11', 'value12', 'value13');
+        $arrayTestSub2 = array('value21', 'value22', 'value23');
+        $arrayTestSub3 = array('value31', 'value32', 'value33');
+        $arrayTest = array('value1', $arrayTestSub1, $arrayTestSub1, $arrayTestSub1);
+        $arrayRes = G::array_fill_value($arrayTest,'valueTest',true);
+        $this->assertEquals($arrayRes['0'],'valueTest');
+        $this->assertEquals($arrayRes['1']['0'],'valueTest');
+        $this->assertEquals($arrayRes['1']['1'],'valueTest');
+        $this->assertEquals($arrayRes['1']['2'],'valueTest');
+
+        $this->assertEquals($arrayRes['2']['0'],'valueTest');
+        $this->assertEquals($arrayRes['2']['1'],'valueTest');
+        $this->assertEquals($arrayRes['2']['2'],'valueTest');
+
+        $this->assertEquals($arrayRes['3']['0'],'valueTest');
+        $this->assertEquals($arrayRes['3']['1'],'valueTest');
+        $this->assertEquals($arrayRes['3']['2'],'valueTest');
+
+        // $recursive = true and new Value = ''
+        $arrayTestSub1 = array('value11', 'value12', 'value13');
+        $arrayTestSub2 = array('value21', 'value22', 'value23');
+        $arrayTestSub3 = array('value31', 'value32', 'value33');
+        $arrayTest = array('value1', $arrayTestSub1, $arrayTestSub1, $arrayTestSub1);
+        $arrayRes = G::array_fill_value($arrayTest,'',true);
+        $this->assertEquals($arrayRes['0'],'');
+        $this->assertEquals($arrayRes['1']['0'],'');
+        $this->assertEquals($arrayRes['1']['1'],'');
+        $this->assertEquals($arrayRes['1']['2'],'');
+
+        $this->assertEquals($arrayRes['2']['0'],'');
+        $this->assertEquals($arrayRes['2']['1'],'');
+        $this->assertEquals($arrayRes['2']['2'],'');
+
+        $this->assertEquals($arrayRes['3']['0'],'');
+        $this->assertEquals($arrayRes['3']['1'],'');
+        $this->assertEquals($arrayRes['3']['2'],'');
     }
 
     /**
@@ -39,10 +92,13 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testGenerate_password()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        // $length = ''
+        $responsePass = G::generate_password();
+        $this->assertEquals(strlen($responsePass),8);
+
+        // $length = '32'
+        $responsePass = G::generate_password(10);
+        $this->assertEquals(strlen($responsePass),10);
     }
 
     /**
@@ -51,10 +107,19 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testArray_concat()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $arrayTest1 = array('value11','value12');
+        $arrayTest2 = array('value21','value22');
+        $arrayTest3 = array('value31','value32');
+        $arrayTest = array($arrayTest1, $arrayTest2, $arrayTest3);
+
+        $arrayResponse = G::array_concat($arrayTest);
+
+        $this->assertEquals($arrayResponse['0']['0'],'value11');
+        $this->assertEquals($arrayResponse['0']['1'],'value12');
+        $this->assertEquals($arrayResponse['1']['0'],'value21');
+        $this->assertEquals($arrayResponse['1']['1'],'value22');
+        $this->assertEquals($arrayResponse['2']['0'],'value31');
+        $this->assertEquals($arrayResponse['2']['1'],'value32');        
     }
 
     /**
@@ -63,10 +128,19 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testVar_compare()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        /**
+         * @error : Function may receive only one variable, but fires a warning.
+                    @example : <php G::var_compare(true); ?>         
+        */
+        //
+        
+        $this->assertTrue(G::var_compare(true,true));
+        
+        $this->assertFalse(G::var_compare(true,false));
+
+        $this->assertTrue(G::var_compare(true,true,true));
+        
+        $this->assertFalse(G::var_compare(true,true,false));
     }
 
     /**
@@ -75,10 +149,8 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testVar_probe()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->assertEquals(G::var_probe('string'),'string');
+        $this->assertEquals(G::var_probe(false,false),1);
     }
 
     /**
@@ -87,10 +159,8 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testGetVersion()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        // @verify
+        //$this->assertEquals($valueResponse,'3.0-1');
     }
 
     /**
@@ -99,10 +169,7 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testGetIpAddress()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        // cochalo
     }
 
     /**
@@ -111,10 +178,7 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testGetMacAddress()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        // cochalo
     }
 
     /**
@@ -123,10 +187,7 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testMicrotime_float()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        // cochalo
     }
 
     /**
@@ -135,10 +196,7 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testSetFatalErrorHandler()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        // cochalo
     }
 
     /**
@@ -147,10 +205,7 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testSetErrorHandler()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        // cochalo
     }
 
     /**
@@ -159,10 +214,7 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testFatalErrorHandler()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        // cochalo
     }
 
     /**
@@ -171,10 +223,7 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testCustomErrorHandler()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        // cochalo
     }
 
     /**
@@ -183,10 +232,7 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testShowErrorSource()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        // cochalo
     }
 
     /**
@@ -195,10 +241,7 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testCustomErrorLog()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        // cochalo
     }
 
     /**
@@ -207,10 +250,7 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testVerboseError()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        // cochalo
     }
 
     /**
@@ -219,10 +259,9 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testEncrypt()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $encryptPassword = '6czY7OLU688';
+        $encryptResponse = G::encrypt('password','key');
+        $this->assertEquals($encryptResponse, $encryptPassword);
     }
 
     /**
@@ -231,10 +270,8 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testDecrypt()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $encryptPassword = 'password';
+        $encryptResponse = G::decrypt('6czY7OLU688','key');
     }
 
     /**
@@ -243,10 +280,7 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testLookup()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        // @verify function
     }
 
     /**
@@ -255,10 +289,13 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testMk_dir()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $newDir = PATH_HOME.'test';
+        G::mk_dir($newDir);
+        $this->assertTrue(is_dir($newDir));
+        if ( is_dir($newDir) )
+        {
+            rmdir($newDir);
+        }
     }
 
     /**
@@ -267,10 +304,18 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testRm_dir()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        /*
+        *
+        *@verify function does not work
+
+       $newDir = PATH_HOME.'test';
+       G::mk_dir($newDir);
+       if ( is_dir($newDir) )
+       {
+           G::rm_dir($newDir);
+           $this->assertFalse(is_dir($newDir));
+       }
+       */
     }
 
     /**
@@ -279,10 +324,21 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testVerifyPath()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $dirExist = PATH_HOME;
+        $this->assertTrue(G::verifyPath($dirExist));
+        
+        $dirNoExist = PATH_HOME.'test';
+        if ( is_dir($dirNoExist) ) {
+            rmdir($dirNoExist);
+        }
+        $this->assertFalse(G::verifyPath($dirNoExist));
+
+        $dirNoExist = PATH_HOME.'test';
+        $this->assertFalse(G::verifyPath($dirNoExist,true));
+        $this->assertTrue(G::verifyPath($dirNoExist));
+        if ( is_dir($dirNoExist) ) {
+            rmdir($dirNoExist);
+        }
     }
 
     /**
@@ -291,10 +347,11 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testExpandPath()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $valueResponse = G::expandPath('');
+        $this->assertEquals($valueResponse, PATH_CORE);
+        
+        $valueResponse = G::expandPath('test');
+        $this->assertEquals($valueResponse, PATH_CORE . "test/");
     }
 
     /**
@@ -303,10 +360,8 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testLoadSystem()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        G::LoadSystem("controller");
+        $this->assertTrue(class_exists('Controller'));
     }
 
     /**
@@ -315,10 +370,9 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testLoadSystemExist()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->assertTrue(G::LoadSystemExist("controller"));
+
+        $this->assertFalse(G::LoadSystemExist("noExist"));
     }
 
     /**
@@ -327,10 +381,7 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testRenderPage()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        // cochalo
     }
 
     /**
@@ -339,10 +390,7 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testLoadSkin()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        // @verify useless function
     }
 
     /**
@@ -351,10 +399,11 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testLoadInclude()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->assertTrue( G::LoadInclude('application') && class_exists('App') );
+
+        $this->assertTrue( G::LoadInclude('ajax') && function_exists('ajax_show_menu'));
+
+        $this->assertFalse( G::LoadInclude('test') );
     }
 
     /**
@@ -363,10 +412,7 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testLoadAllModelClasses()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        // cochalo
     }
 
     /**
@@ -375,10 +421,7 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testLoadAllPluginModelClasses()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        // cochalo
     }
 
     /**
@@ -387,10 +430,7 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testLoadTemplate()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        // cochalo
     }
 
     /**
@@ -399,10 +439,9 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testLoadClassRBAC()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        /*
+        * @verify useless function
+        */
     }
 
     /**
@@ -411,10 +450,13 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testLoadClass()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        G::LoadClass('cli');
+        $this->assertTrue(class_exists('CLI'));
+
+        G::LoadClass('rbac');
+        $this->assertTrue(class_exists('RBAC'));
+
+        $this->assertFalse(G::LoadClass('noExist'));
     }
 
     /**
@@ -423,10 +465,8 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testLoadThirdParty()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        G::LoadThirdParty('lime','lime');
+        $this->assertTrue(class_exists('lime_test'));
     }
 
     /**
@@ -435,10 +475,11 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testEncryptlink()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->assertEquals(G::encryptlink('url'),'url');
+
+        define('ENABLE_ENCRYPT', 'yes');    
+        $urlEncrypt = 'qNWc';
+        $this->assertEquals(G::encryptlink('url'),$urlEncrypt);
     }
 
     /**
@@ -447,10 +488,7 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testParseURI()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        // cochalo
     }
 
     /**
@@ -459,10 +497,14 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testStrip_slashes()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $stringTest = 'h\e\l\l\o'; 
+        $this->assertEquals(G::strip_slashes($stringTest),'hello');
+
+        $arrayTest = array('h\e\l\l\o', 'h\i' , 't\e\s\t');
+        $arrayResponse = G::strip_slashes($arrayTest);
+        $this->assertEquals($arrayResponse['0'],'hello');
+        $this->assertEquals($arrayResponse['1'],'hi');
+        $this->assertEquals($arrayResponse['2'],'test');
     }
 
     /**
@@ -471,10 +513,7 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testLogTimeByPage()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        // cochalo
     }
 
     /**
@@ -483,10 +522,7 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testStreamCSSBigFile()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        // cochalo   
     }
 
     /**
@@ -495,10 +531,7 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testStreamJSTranslationFile()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        // cochalo
     }
 
     /**
@@ -507,10 +540,7 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testStreamFile()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        // cochalo        
     }
 
     /**
@@ -519,10 +549,7 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testTrimSourceCodeFile()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        // cochalo
     }
 
     /**
@@ -531,10 +558,7 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testSendHeaders()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        // cochalo
     }
 
     /**
@@ -543,10 +567,7 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testVirtualURI()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        // cochalo
     }
 
     /**
@@ -555,10 +576,9 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testCreateUID()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $uidTest001 = 'cDhpajRHQ2paUQ______';
+        $responseUID = G::createUID('test','001');
+        $this->assertEquals($responseUID, $uidTest001);
     }
 
     /**
@@ -567,10 +587,9 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testGetUIDName()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $uidTest001 = 'cDhpajRHQ2paUQ______';        
+        $responseUID = G::getUIDName($uidTest001);
+        $this->assertEquals($responseUID, 'test'.'001');
     }
 
     /**
@@ -579,10 +598,9 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testFormatNumber()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $valueNum = 100;
+        $responseNum = G::formatNumber($valueNum);
+        $this->assertEquals($valueNum, $responseNum);
     }
 
     /**
@@ -591,10 +609,15 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testFormatDate()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        /*
+        * @verify function does not return the correct value in the variable F
+        *
+        *
+        */
+
+        $valueFormatDate = Date('d j F m n y Y g G h H i s');
+        $stringDate = G::formatDate(Date("Y-m-d H:i:s"), 'd j F m n y Y g G h H i s', 'es');
+        //$this->assertEquals($valueFormatDate, $responseNum);
     }
 
     /**
@@ -603,10 +626,15 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testGetformatedDate()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        /*
+        * @verify function does not return the correct value in the variable F
+        *
+        *
+        */
+
+        $valueFormatDate = Date('d j F m n y Y g G h H i s');
+        $stringDate = G::formatDate(Date("Y-m-d H:i:s"), 'd j F m n y Y g G h H i s', 'es');
+        //$this->assertEquals($valueFormatDate, $responseNum);
     }
 
     /**
@@ -615,10 +643,18 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testArrayDiff()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $arrayValues1 = array('value1', 'value2', 'value3', 'value4', 'value5', 'value6', 'value7', 'value8');
+        $arrayValues2 = array('value1', 'value2', 'value3', 'value4');
+        $arrayRes = G::arrayDiff($arrayValues1, $arrayValues2);
+
+        $this->assertEquals($arrayRes['0'], 'value5');
+        $this->assertEquals($arrayRes['1'], 'value6');
+        $this->assertEquals($arrayRes['2'], 'value7');
+        $this->assertEquals($arrayRes['3'], 'value8');
+
+        $arrayRes = G::arrayDiff($arrayValues2, $arrayValues1);
+
+        $this->assertEquals(count($arrayRes), 0);
     }
 
     /**
@@ -627,10 +663,37 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testComplete_field()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $intTest1 = 145;
+        $valueResponse = G::complete_field($intTest1, 3, 1);
+        $this->assertEquals($valueResponse, '145');
+        
+        $intTest1 = 145;
+        $valueResponse = G::complete_field($intTest1, 5, 1);
+        $this->assertEquals($valueResponse, '00145');
+
+        $intTest1 = 'test';
+        $valueResponse = G::complete_field($intTest1, 3, 2);
+        $this->assertEquals($valueResponse, 'test');
+
+        $intTest1 = 'test';
+        $valueResponse = G::complete_field($intTest1, 8, 2);
+        $this->assertEquals($valueResponse, '    test');
+
+        $intTest1 = 541;
+        $valueResponse = G::complete_field($intTest1, 3, 2);
+        $this->assertEquals($valueResponse, '541.');
+
+        $intTest1 = 541;
+        $valueResponse = G::complete_field($intTest1, 5, 2);
+        $this->assertEquals($valueResponse, '00541.');
+
+        $intTest1 = 541.45;
+        $valueResponse = G::complete_field($intTest1, 3, 2);
+        $this->assertEquals($valueResponse, '541.45');
+
+        $intTest1 = 541.45;
+        $valueResponse = G::complete_field($intTest1, 5, 2);
+        $this->assertEquals($valueResponse, '00541.45');
     }
 
     /**
@@ -639,10 +702,7 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testSqlEscape()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        // cochalo : need conexion DB
     }
 
     /**
@@ -651,10 +711,8 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testMySQLSintaxis()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        define('DB_ADAPTER', 'mysql');
+        $this->assertTrue(G::MySQLSintaxis());
     }
 
     /**
@@ -663,10 +721,7 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testReplaceDataField()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        // cochalo : need conexion DB
     }
 
     /**
@@ -675,10 +730,7 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testLoadLanguageFile()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        // cochalo : need xml file
     }
 
     /**
@@ -687,10 +739,7 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testRegisterLabel()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        // cochalo : need conexion DB
     }
 
     /**
@@ -699,10 +748,7 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testLoadMenuXml()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        // cochalo : need conexion DB
     }
 
     /**
@@ -711,10 +757,7 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testSendMessageXml()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        // cochalo : no return
     }
 
     /**
@@ -723,10 +766,7 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testSendTemporalMessage()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        // cochalo : no return
     }
 
     /**
@@ -735,10 +775,7 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testSendMessage()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        // cochalo : no return
     }
 
     /**
@@ -747,10 +784,7 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testSendMessageText()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        // cochalo : no return
     }
 
     /**
@@ -759,10 +793,7 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testLoadMessage()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        // cochalo : need global $arrayXmlMessages
     }
 
     /**
@@ -771,10 +802,8 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testLoadXmlLabel()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $response = 'xxxxxx';
+        $this->assertEquals(G::LoadXmlLabel('test'),'xxxxxx');        
     }
 
     /**
@@ -783,10 +812,7 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testLoadMessageXml()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        // cochalo : need global $arrayXmlMessages
     }
 
     /**
@@ -795,10 +821,7 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testLoadTranslationObject()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        // cochalo
     }
 
     /**
@@ -807,10 +830,7 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testLoadTranslation()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        // cochalo : need global $translation;
     }
 
     /**
@@ -819,10 +839,7 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testGetTranslations()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        // cochalo : need global $translation;
     }
 
     /**
@@ -831,10 +848,7 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testLoadArrayFile()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->assertEquals(G::LoadArrayFile(),null);
     }
 
     /**
@@ -843,10 +857,7 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testExpandUri()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        // cochalo : need getenv ( 'REQUEST_URI' )
     }
 
     /**
@@ -855,10 +866,7 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testGenericForceLogin()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        // cochalo : need redirect
     }
 
     /**
@@ -867,10 +875,8 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testCapitalize()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $name = 'brayan';
+        $this->assertEquals('Brayan',G::capitalize($name));
     }
 
     /**
@@ -879,10 +885,8 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testToUpper()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $name = 'brayan';
+        $this->assertEquals('BRAYAN',G::toUpper($name));
     }
 
     /**
@@ -891,10 +895,8 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testToLower()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $name = 'BRAYAN';
+        $this->assertEquals('brayan',G::toLower($name));
     }
 
     /**
@@ -903,10 +905,8 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testHttp_build_query()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $response = G::http_build_query(array('valor1','valor2'),'num','val');
+        $this->assertEquals('val[num0]=valor1&val[num1]=valor2', $response);
     }
 
     /**
@@ -915,10 +915,7 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testHeader()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        // cochalo : need redirect
     }
 
     /**
@@ -927,10 +924,7 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testForceLogin()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        // cochalo : need redirect and no return
     }
 
     /**
@@ -939,10 +933,9 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testAdd_slashes()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        // @verify : function not work
+        //$response = G::add_slashes('path\\dirc');
+        //$this->assertEquals($response,'\\test\\ ');        
     }
 
     /**
@@ -951,10 +944,7 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testUploadFile()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        // cochalo no file upload
     }
 
     /**
@@ -963,10 +953,7 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testResizeImage()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        // cochalo no file image
     }
 
     /**
@@ -975,10 +962,23 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testArray_merges()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $arrayTest1 = array(  'camp1' => 'val1',
+                              'camp2' => 'val2',
+                              'camp3' => 'val3',
+                              'camp4' => 'val4'
+                            );
+
+        $arrayTest2 = array(  'camp1' => '1',
+                              'camp2' => '2'
+                            );
+
+        $arrayResponse = G::array_merges($arrayTest1, $arrayTest2);
+        $this->assertEquals($arrayResponse['camp1'],'1');
+        $this->assertEquals($arrayResponse['camp2'],'2');
+
+        $arrayResponse = G::array_merges($arrayTest2, $arrayTest1);
+        $this->assertEquals($arrayResponse['camp3'],'val3');
+        $this->assertEquals($arrayResponse['camp4'],'val4');
     }
 
     /**
@@ -987,10 +987,23 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testArray_merge_2()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $arrayTest1 = array(  'camp1' => 'val1',
+                              'camp2' => 'val2',
+                              'camp3' => 'val3',
+                              'camp4' => 'val4'
+                            );
+
+        $arrayTest2 = array(  'camp1' => '1',
+                              'camp2' => '2'
+                            );
+
+        $arrayResponse = G::array_merge_2($arrayTest1, $arrayTest2);
+        $this->assertEquals($arrayTest1['camp1'],'1');
+        $this->assertEquals($arrayTest1['camp2'],'2');
+
+        $arrayResponse = G::array_merge_2($arrayTest2, $arrayTest1);
+        $this->assertEquals($arrayTest2['camp3'],'val3');
+        $this->assertEquals($arrayTest2['camp4'],'val4');
     }
 
     /**
@@ -999,10 +1012,8 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testGenerateUniqueID()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $uid = G::generateUniqueID();
+        $this->assertTrue(is_string($uid) && (strlen($uid) == 32));
     }
 
     /**
@@ -1011,10 +1022,14 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testGenerateCode()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $uid = G::generateCode();
+        $this->assertTrue(is_numeric($uid) && (strlen($uid) == 4));
+
+        $uid = G::generateCode(10);
+        $this->assertTrue(is_numeric($uid) && (strlen($uid) == 10));
+
+        $uid = G::generateCode('ALPHA');
+        $this->assertTrue(is_string($uid) && (strlen($uid) == 4));
     }
 
     /**
@@ -1023,10 +1038,9 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testVerifyUniqueID()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $uid = G::generateUniqueID();
+        $response = G::verifyUniqueID($uid);
+        $this->assertTrue($response);        
     }
 
     /**
@@ -1035,10 +1049,8 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testIs_utf8()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->assertTrue(G::is_utf8('árbol'));
+        $this->assertTrue(G::is_utf8('&aacute;rbol'));
     }
 
     /**
@@ -1047,10 +1059,11 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testCurDate()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $dateNow = Date('Y-m-d H:i:s');
+        $this->assertEquals($dateNow,G::CurDate());
+
+        $dateNow = Date('H:i:s');
+        $this->assertEquals($dateNow,G::CurDate('H:i:s'));
     }
 
     /**
@@ -1059,10 +1072,8 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testGetSystemConstants()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $response = G::getSystemConstants();
+        $this->assertTrue(is_array($response));
     }
 
     /**
@@ -1071,10 +1082,8 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testCapitalizeWords()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $response = G::capitalizeWords('brian real');
+        $this->assertEquals('Brian Real', $response);
     }
 
     /**
@@ -1083,10 +1092,8 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testUnhtmlentities()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $response = G::unhtmlentities('&aacute;rbol');
+        $this->assertEquals($response, 'árbol');
     }
 
     /**
@@ -1095,10 +1102,7 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testXmlParser()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        // conchalo : no file xml
     }
 
     /**
@@ -1107,10 +1111,7 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function test_del_p()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        // cochalo no file
     }
 
     /**
@@ -1119,10 +1120,7 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testAry2xml()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        // cochalo no file xml
     }
 
     /**
@@ -1131,10 +1129,10 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testIns2ary()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $test = array('value1', 'value2');
+        G::ins2ary($test,'newValue',0);
+        $this->assertEquals($test['0'],'newValue');
+        $this->assertEquals($test['1'],'value1');
     }
 
     /**
@@ -1143,10 +1141,7 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testEvalJScript()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        // cochalo no script
     }
 
     /**
@@ -1155,10 +1150,7 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testInflect()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->assertEquals( G::inflect('àchélo'), 'achelo');
     }
 
     /**
@@ -1167,10 +1159,7 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testPr()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        // cochalo is print
     }
 
     /**
@@ -1179,10 +1168,7 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testDump()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        // cochalo is print
     }
 
     /**
@@ -1191,10 +1177,7 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testStripCDATA()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->assertEquals('value',G::stripCDATA('<![CDATA[value]]>'));
     }
 
     /**
@@ -1203,10 +1186,7 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testSys_get_temp_dir()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->assertEquals('/tmp',G::sys_get_temp_dir());
     }
 
     /**
@@ -1215,10 +1195,7 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testPMWSCompositeResponse()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        // cochalo need webservices
     }
 
     /**
@@ -1227,10 +1204,18 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testEmailAddress()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->assertFalse(G::emailAddress('email'));
+
+        $response = G::emailAddress('test@email.com');
+        $this->assertEquals('test@email.com',$response->email);
+        $this->assertEquals('',$response->name);
+        
+        $response = G::emailAddress('Person <test@email.com>');
+        //$this->assertEquals('test@email.com',$response->email);
+        //$this->assertEquals('',$response->name);
+
+        //cochalo 
+
     }
 
     /**
@@ -1239,10 +1224,12 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testJson_encode()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $arrayTest = array( 'pos1' => 'value1',
+                            'pos2' => 'value2',
+                            'pos3' => 'value3',
+                        );
+        $response = G::json_encode($arrayTest);
+        $this->assertEquals('{"pos1":"value1","pos2":"value2","pos3":"value3"}',$response);
     }
 
     /**
@@ -1251,10 +1238,11 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testJson_decode()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $jsonTest = '{"pos1":"value1","pos2":"value2","pos3":"value3"}';
+        $response = G::json_decode($jsonTest);
+        $this->assertEquals($response->pos1, 'value1');
+        $this->assertEquals($response->pos2, 'value2');
+        $this->assertEquals($response->pos3, 'value3');
     }
 
     /**
@@ -1263,10 +1251,12 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testIsHttpRequest()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $response = G::isHttpRequest();
+        $this->assertFalse($response);
+
+        $_SERVER['SERVER_SOFTWARE'] = 'Apache/2.2.8 (CentOS)';
+        $response = G::isHttpRequest();
+        $this->assertTrue($response);
     }
 
     /**
@@ -1275,10 +1265,7 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testSendMail()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        //cochalo need email
     }
 
     /**
@@ -1287,10 +1274,23 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testEnvelopEmailAddresses()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $dataAddresses = array( 'to' => 'test1@colosa.com',
+                                'cc' => array(  'test2@colosa.com <Email Test2>',
+                                                'test3@colosa.com',
+                                                'test4@colosa.com'
+                                              ),
+                                'bcc'=> array(  'test5@colosa.com')
+                               );
+        $response = G::envelopEmailAddresses($dataAddresses);
+
+
+        $this->assertEquals($response['to']['0']['0'], 'test1@colosa.com');
+        /*
+        $this->assertEquals($response['cc']['0']['0'], 'test2@colosa.com');
+        $this->assertEquals($response['cc']['0']['1'], 'test3@colosa.com');
+        $this->assertEquals($response['cc']['0']['2'], 'test4@colosa.com');
+        */
+        $this->assertEquals($response['bcc']['0']['0'], 'test5@colosa.com');        
     }
 
     /**
@@ -1299,10 +1299,30 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testGettype()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $value = NULL; 
+        //$this->assertEquals(G::gettype($value),'NULL');
+        // cochalo function no work with null
+
+        $value = true;
+        $this->assertEquals(G::gettype($value),'boolean');
+
+        $value = 15.25;
+        $this->assertEquals(G::gettype($value),'double');
+
+        $value = 142;
+        $this->assertEquals(G::gettype($value),'integer');
+
+        $value = 'string';
+        $this->assertEquals(G::gettype($value),'string');
+
+        $value = array('val1', 'val2');
+        $this->assertEquals(G::gettype($value),'array');
+
+        $value = new stdClass();
+        $this->assertEquals(G::gettype($value),'object');
+
+        // cochalo need conexion BD is_resource
+
     }
 
     /**
@@ -1311,10 +1331,9 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testRemoveComments()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $value = 'code1 /* comment 1 */  code2 code3';
+        $response = G::removeComments($value);
+        $this->assertEquals('code1 code2 code3',$response);
     }
 
     /**
@@ -1323,10 +1342,9 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testGetMemoryUsage()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $response = G::getMemoryUsage();
+        $mb = "Mb";
+        $this->assertTrue($response != '' && strpos($response, $mb));
     }
 
     /**
@@ -1335,10 +1353,33 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testGetFormatUserList()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $aUserInfo['USR_USERNAME'] = 'fontiveros';
+        $aUserInfo['USR_FIRSTNAME'] = 'Fernando';
+        $aUserInfo['USR_LASTNAME'] = 'Ontiveros';
+
+        $response = G::getFormatUserList('@firstName @lastName', $aUserInfo);
+        $this->assertEquals('Fernando Ontiveros',$response);
+
+        $response = G::getFormatUserList('@firstName @lastName (@userName)', $aUserInfo);
+        $this->assertEquals('Fernando Ontiveros (fontiveros)',$response);
+
+        $response = G::getFormatUserList('@userName', $aUserInfo);
+        $this->assertEquals('fontiveros',$response);
+
+        $response = G::getFormatUserList('@userName (@firstName @lastName)', $aUserInfo);
+        $this->assertEquals('fontiveros (Fernando Ontiveros)',$response);
+
+        $response = G::getFormatUserList('@lastName @firstName', $aUserInfo);
+        $this->assertEquals('Ontiveros Fernando',$response);
+
+        $response = G::getFormatUserList('@lastName, @firstName', $aUserInfo);
+        $this->assertEquals('Ontiveros, Fernando',$response);
+
+        $response = G::getFormatUserList('@lastName, @firstName (@userName)', $aUserInfo);
+        $this->assertEquals('Ontiveros, Fernando (fontiveros)',$response);
+
+        $response = G::getFormatUserList('test', $aUserInfo);
+        $this->assertEquals('fontiveros',$response);      
     }
 
     /**
@@ -1347,10 +1388,13 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testGetModel()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        /*
+        require_once PATH_TRUNK . 'gulliver' . PATH_SEP . 'thirparty' . PATH_SEP . 'propel' . PATH_SEP . 'Propel.php';
+        $model = 'AdditionalTables';
+        $additionalTables = G::getModel($model);
+        $this->assertTrue(is_object($additionalTables) && class_exists($model));
+        */
+        // cochalo need conexion propel
     }
 
     /**
@@ -1359,10 +1403,7 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testIs_rwritable()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        // cochalo
     }
 
     /**
@@ -1371,10 +1412,7 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testRglob()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        // cochalo
     }
 
     /**
@@ -1383,10 +1421,9 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testBrowser_detection()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        // $res = G::browser_detection('full_assoc');
+        // cochalo need browser
+        // $this->assertEquals(is_array($res));
     }
 
     /**
@@ -1395,10 +1432,7 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testGet_os_data()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        // cochalo need browser
     }
 
     /**
@@ -1407,10 +1441,7 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testGet_item_version()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        // cochalo need browser
     }
 
     /**
@@ -1419,10 +1450,8 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testGet_set_count()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->assertEquals(G::get_set_count('get'),1);
+        $this->assertEquals(G::get_set_count('set',0),'');
     }
 
     /**
@@ -1431,10 +1460,7 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testCheck_is_mobile()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        // cochalo need browser
     }
 
     /**
@@ -1443,10 +1469,7 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testGet_mobile_data()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        // cochalo need browser
     }
 
     /**
@@ -1455,10 +1478,8 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testGetBrowser()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        //$this->assertTrue(is_array(G::getBrowser()));
+        // cochalo need browser
     }
 
     /**
@@ -1479,10 +1500,9 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testGetDirectorySize()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $path = PATH_TRUNK . 'gulliver' . PATH_SEP . "system";
+        $response = G::getDirectorySize($path);
+        $this->assertTrue(is_array($response) && count($response));
     }
 
     /**
@@ -1491,10 +1511,8 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testGetCacheFileNameByPattern()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $response = G::getCacheFileNameByPattern(PATH_TRUNK . 'gulliver' . PATH_SEP . "system" . PATH_SEP . "class.g.php" ,'');
+        $this->assertTrue(is_array($response) && count($response));
     }
 
     /**
@@ -1503,10 +1521,8 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testGetCheckSum()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $response = G::getCheckSum(PATH_TRUNK . 'gulliver' . PATH_SEP . "system" . PATH_SEP . "class.g.php");
+        $this->assertTrue(is_string($response));
     }
 
     /**
@@ -1515,6 +1531,7 @@ class GTest extends PHPUnit_Framework_TestCase
      */
     public function testParse_ini_string()
     {
+        
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
           'This test has not been implemented yet.'
