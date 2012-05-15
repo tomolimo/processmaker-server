@@ -52,9 +52,16 @@
   define('PATH_TRUNK',    $pathTrunk);
   define('PATH_OUTTRUNK', $pathOutTrunk);
 
-  require_once $pathhome  . 'engine' . PATH_SEP . 'classes' . PATH_SEP . 'class.system.php';
-  $config = System::getSystemConfiguration($pathhome . 'engine' . PATH_SEP . 'config' . PATH_SEP . 'env.ini');
+  // Including these files we get the PM paths and definitions (that should be just one file.
+  require_once $pathhome . PATH_SEP . 'engine' . PATH_SEP . 'config' . PATH_SEP . 'paths.php';
+  require_once PATH_CORE . 'classes' . PATH_SEP . 'class.system.php';
   
+  // starting session
+  session_start();
+echo '<pre>';
+  $config = System::getSystemConfiguration();
+  print_r($config);
+  print_r($_SESSION); die;
   $e_all  = defined('E_DEPRECATED') ? E_ALL  & ~E_DEPRECATED : E_ALL;
   $e_all  = defined('E_STRICT')     ? $e_all & ~E_STRICT     : $e_all;
   $e_all  = $config['debug']        ? $e_all                 : $e_all & ~E_NOTICE;
@@ -75,9 +82,6 @@
   define ('MEMCACHED_SERVER',   $config['memcached_server']);
   define ('TIME_ZONE', $config['time_zone']);
 
-  // Including these files we get the PM paths and definitions (that should be just one file.
-  require_once $pathhome . PATH_SEP . 'engine' . PATH_SEP . 'config' . PATH_SEP . 'paths.php';
-  
   // Verifiying permissions processmaker writable directories
   $writableDirs = array(PATH_CONFIG, PATH_XMLFORM, PATH_HTML, PATH_PLUGINS);
 
@@ -178,7 +182,7 @@
     if ( substr ( $realPath, 0,6) == 'plugin' ) {
       // Another way to get the path of Plugin public_html and stream the correspondent file, By JHL Jul 14, 08
       // TODO: $pathsQuery will be used?
-      $pathsQuery="";
+      $pathsQuery = '';
       // Get the query side
       // Did we use this variable $pathsQuery for something??
       $forQuery = explode("?",$realPath);
@@ -187,13 +191,13 @@
       }
 
       //Get that path in array
-      $paths = explode ( PATH_SEP, $forQuery[0] );
+      $paths          = explode ( PATH_SEP, $forQuery[0] );
       //remove the "plugin" word from
-      $paths[0] = substr ( $paths[0],6);
+      $paths[0]       = substr ( $paths[0],6);
       //Get the Plugin Folder, always the first element
-      $pluginFolder=array_shift($paths);
+      $pluginFolder   = array_shift($paths);
       //The other parts are the realpath into public_html (no matter how many elements)
-      $filePath=implode(PATH_SEP,$paths);
+      $filePath       = implode(PATH_SEP,$paths);
       $pluginFilename = PATH_PLUGINS . $pluginFolder . PATH_SEP . 'public_html'. PATH_SEP . $filePath;
       
       if ( file_exists ( $pluginFilename ) ) {
@@ -253,7 +257,7 @@
   }
 
   // the request correspond to valid php page, now parse the URI
-  G::parseURI(getenv("REQUEST_URI"), $config);
+  G::parseURI(getenv("REQUEST_URI"));
 
   // verify if index.html exists
   if (!file_exists(PATH_HTML . 'index.html')) { // if not, create it from template
@@ -467,7 +471,7 @@
   
   // The register_globals feature has been DEPRECATED as of PHP 5.3.0. default value Off.
   // ini_set( 'register_globals', 'Off' );
-  session_start();
+  //session_start();
   ob_start();
   
   // Rebuild the base Workflow translations if not exists

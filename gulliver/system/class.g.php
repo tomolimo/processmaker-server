@@ -915,7 +915,7 @@ class G
    * @param  string $urlLink
    * @return string
    */
-  function parseURI($uri, $config = array())
+  static function parseURI($uri, $config = array())
   {
     //*** process the $_POST with magic_quotes enabled
     // The magic_quotes_gpc feature has been DEPRECATED as of PHP 5.3.0.
