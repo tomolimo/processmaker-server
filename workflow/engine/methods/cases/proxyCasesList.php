@@ -18,13 +18,25 @@
   $dateTo   = isset($_POST['dateTo']) ? substr($_POST['dateTo'],0,10) : '';
 
   try {
-    //
-    G::LoadClass('applications');
-    $apps    = new Applications();
+    $result ="";
+    
+    G::LoadClass('AppSolr');
+    $ApplicationSolrIndex = new AppSolr();
+    
     $userUid = ( isset($_SESSION['USER_LOGGED'] ) && $_SESSION['USER_LOGGED'] != '' ) ? $_SESSION['USER_LOGGED'] : null;
-    $data    = $apps->getAll($userUid, $start, $limit, $action, $filter, $search, $process, $user, $status, $type, $dateFrom, $dateTo, $callback, $dir, $sort);
 
-    echo G::json_encode($data);
+    if ($action != 'paused' && $ApplicationSolrIndex->isSolrEnabled()) {
+      $data = $ApplicationSolrIndex->getAppGridData($userUid, $start, $limit, $action, $filter, $search, $process, $user, $status, $type, $dateFrom, $dateTo, $callback, $dir, $sort);
+      $result = G::json_encode($data);
+    }
+    else{
+      G::LoadClass('applications');
+      $apps = new Applications();
+      $data = $apps->getAll($userUid, $start, $limit, $action, $filter, $search, $process, $user, $status, $type, $dateFrom, $dateTo, $callback, $dir, $sort);
+
+      $result = G::json_encode($data);
+    }
+    echo $result;
   }
   catch ( Exception $e ) {
     $msg = array ( 'error' => $e->getMessage() );

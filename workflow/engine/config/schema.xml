@@ -2840,4 +2840,28 @@
     <column name="DAS_INS_UPDATE_DATE" type="TIMESTAMP" required="false" />
     <column name="DAS_INS_STATUS" type="TINYINT" required="true" default="1"/>
   </table>
+  <table name="APP_SOLR_QUEUE">
+    <vendor type="mysql">
+      <parameter name="Name" value="APP_SOLR_QUEUE"/>
+      <parameter name="Engine" value="MyISAM"/>
+      <parameter name="Version" value="10"/>
+      <parameter name="Row_format" value="Dynamic"/>
+      <parameter name="Rows" value="129"/>
+      <parameter name="Avg_row_length" value="115"/>
+      <parameter name="Data_length" value="14860"/>
+      <parameter name="Max_data_length" value="281474976710655"/>
+      <parameter name="Index_length" value="5120"/>
+      <parameter name="Data_free" value="0"/>
+      <parameter name="Auto_increment" value=""/>
+      <parameter name="Create_time" value="2012-04-26 07:22:27"/>
+      <parameter name="Update_time" value="2012-04-26 14:08:22"/>
+      <parameter name="Check_time" value=""/>
+      <parameter name="Collation" value="utf8_general_ci"/>
+      <parameter name="Checksum" value=""/>
+      <parameter name="Create_options" value=""/>
+      <parameter name="Comment" value="APP_SOLR_QUEUE"/>
+    </vendor>
+    <column name="APP_UID" type="VARCHAR" size="32" required="true" primaryKey="true" default=""/>
+    <column name="APP_UPDATED" type="TINYINT" required="true" default="1"/>
+  </table>
 </database>
