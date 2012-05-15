@@ -5615,4 +5615,48 @@ class Cases {
     $response['array']=$rows;
     return $response;
   }
+  
+  function getCaseNotes($applicationID, $type = 'array',$userUid = '') {
+    require_once ( "classes/model/AppNotes.php" );
+    $appNotes = new AppNotes();
+    $appNotes = $appNotes->getNotesList($applicationID,$userUid);
+    $response = '';
+    if (is_array($appNotes)) {
+      switch ($type) {
+        case 'array':
+          $response = array();
+          foreach ($appNotes['array']['notes'] as $key => $value) {
+            $list = array();
+            $list['FULL_NAME'] = $value['USR_FIRSTNAME']." ".$value['USR_LASTNAME'];
+            foreach ($value as $keys => $value) {
+              if ($keys != 'USR_FIRSTNAME' && $keys != 'USR_LASTNAME' && $keys != 'USR_EMAIL') {
+                $list[$keys] = $value;
+              }
+            }
+            $response[$key+1] = $list;
+          }
+          break;
+        case 'object':
+          $response = new stdclass();
+          foreach ($appNotes['array']['notes'] as $key => $value) {
+            $response->$key->FULL_NAME = $value['USR_FIRSTNAME']." ".$value['USR_LASTNAME'];
+            foreach ($value as $keys => $value) {
+              if ($keys != 'USR_FIRSTNAME' && $keys != 'USR_LASTNAME' && $keys != 'USR_EMAIL') {
+                $response->$key->$keys = $value;
+              }
+            }
+          }
+          break;
+        case 'string':
+          $response = '';
+          foreach ($appNotes['array']['notes'] as $key => $value) {
+            $response .=  $value['USR_FIRSTNAME']." ".$value['USR_LASTNAME']." "."(".$value['USR_USERNAME'].")".
+                          " ".$value['NOTE_CONTENT']." "." (".$value['NOTE_DATE']." ) ".
+                          " \n";
+          }
+          break;
+      }
+    }
+    return $response;
+  }
 }
