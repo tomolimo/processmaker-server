@@ -3423,7 +3423,10 @@ class Cases {
     $aData['APP_DISABLE_ACTION_DATE'] = $sUnpauseDate;
     $oAppDelay = new AppDelay();
     $oAppDelay->create($aData);
-    
+
+    $aFields['APP_STATUS'] = 'PAUSED';
+    $oApplication->update($aFields);
+
     //update searchindex
     if($this->appSolr != null)
       $this->appSolr->updateApplicationSearchIndex($sApplicationUID);
@@ -3468,6 +3471,7 @@ class Cases {
     $oCriteria->clearSelectColumns();
     $oCriteria->addSelectColumn(AppDelayPeer::APP_DELAY_UID);
     $oCriteria->addSelectColumn(AppDelayPeer::APP_THREAD_INDEX);
+    $oCriteria->addSelectColumn(AppDelayPeer::APP_STATUS);
     $oCriteria->add(AppDelayPeer::APP_UID, $sApplicationUID);
     $oCriteria->add(AppDelayPeer::APP_DEL_INDEX, $iDelegation);
     $oCriteria->add(AppDelayPeer::APP_TYPE, 'PAUSE');
@@ -3476,6 +3480,12 @@ class Cases {
     $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
     $oDataset->next();
     $aRow = $oDataset->getRow();
+
+    $oApplication = new Application();
+    $aFields = $oApplication->Load($sApplicationUID);
+    $aFields['APP_STATUS'] = $aRow['APP_STATUS'];
+    $oApplication->update($aFields);
+
     //update the DEL_INDEX ? in APP_THREAD table?
     $aUpdate = array('APP_UID' => $sApplicationUID, 'APP_THREAD_INDEX' => $aRow['APP_THREAD_INDEX'], 'DEL_INDEX' => $iIndex);
     $oAppThread = new AppThread();
