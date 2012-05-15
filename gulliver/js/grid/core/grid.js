@@ -1146,7 +1146,7 @@ var G_Grid = function(oForm, sGridName){
 function deleteRowOnDynaform(grid, sRow) {
   var oRPC = new leimnud.module.rpc.xmlhttp( {
     url : '../gulliver/genericAjax',
-    args : 'request=deleteGridRowOnDynaform&gridname=' + grid.sGridName + '&rowpos=' + sRow
+    args : 'request=deleteGridRowOnDynaform&gridname=' + grid.sGridName + '&rowpos=' + sRow + '&formID=' + grid.form.id
   });
   oRPC.callback = function(rpc) {
     if(oPanel)

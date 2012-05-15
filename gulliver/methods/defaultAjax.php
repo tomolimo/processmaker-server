@@ -51,12 +51,11 @@
           $sPath = PATH_PLUGINS;
         }
       }
-    }
+    }   
   $G_FORM=new form( $xmlFile , $sPath );
   $G_FORM->id=urlDecode($_POST['form']);
-  $G_FORM->values=isset($_SESSION[$G_FORM->id]) ? $_SESSION[$G_FORM->id] : array();
-  $newValues=($json->decode(urlDecode(stripslashes($_POST['fields']))));
-  
+  $G_FORM->values=isset($_SESSION[c]) ? $_SESSION[$G_FORM->id] : array();    
+  $newValues=($json->decode(urlDecode(stripslashes($_POST['fields']))));  
   if (isset($_POST['grid'])) {
     $_POST['row'] = (int)$_POST['row'];
     $aAux = array();
@@ -72,7 +71,7 @@
       unset($newValues[$sKey]->$aKeys[0]);
     }
   }
-  
+
   //Next Lines re-build newValues array to send multiple dependent fields merged by row into a grid.
   if (sizeof($newValues)>1 && isset($_POST['grid'])){
     $fieldBase = array();
@@ -102,7 +101,7 @@
   	$newValues[$r]=(array)$newValues[$r];
   	$G_FORM->setValues($newValues[$r]);
   	//Search dependent fields
-  	foreach($newValues[$r] as $k => $v) {
+  	foreach($newValues[$r] as $k => $v) {          
   	  if (!is_array($v)) {
   		  $myDependentFields = subDependencies( $k , $G_FORM , $aux );
   		  $_SESSION[$G_FORM->id][$k] = $v;
@@ -113,8 +112,7 @@
   	      $_SESSION[$G_FORM->id][$_POST['grid']][$_POST['row']][$k1] = $v1;
   	    }
   	  }
-  		$dependentFields=array_merge($dependentFields, $myDependentFields);
-  		$_SESSION[$G_FORM->id][$k] = $v;
+  		$dependentFields=array_merge($dependentFields, $myDependentFields);         
   	}
   }
   if (isset($_POST['grid'])) $G_FORM->values=isset($_SESSION[$G_FORM->id]) ? $_SESSION[$G_FORM->id] : array();
@@ -122,12 +120,12 @@
   $dependentFields=array_unique($dependentFields);
 
   //Parse and update the new content
-  $template = PATH_CORE . 'templates/xmlform.html';
+  $template = PATH_CORE . 'templates/xmlform.html'; 
   $newContent=$G_FORM->getFields($template, (isset($_POST['row']) ? $_POST['row'] : -1));
   //Returns the dependentFields's content
   $sendContent=array();
   $r=0;
-
+  
   foreach($dependentFields as $d) {
     $sendContent[$r]->name=$d;
   	$sendContent[$r]->content=NULL;

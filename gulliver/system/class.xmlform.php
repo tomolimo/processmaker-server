@@ -4570,8 +4570,8 @@ class xmlformTemplate extends Smarty
       if (! is_array ( $value )) {
         if ($form->type == 'grid') {
           $aAux = array ();
-          $index = ($therow >count ( $form->owner->values [$form->name] ))? $therow : count($form->owner->values [$form->name] );
-          for($i = 0; $i < $index; $i ++) {
+         // $index = ($therow >count ( $form->owner->values [$form->name] ))? $therow : count($form->owner->values [$form->name] );
+          for($i = 0; $i < $therow; $i ++) {
             $aAux [] = '';
           }
           $result ['form'] [$k] = $form->fields [$k]->renderGrid ( $aAux, $form );
