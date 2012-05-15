@@ -641,19 +641,30 @@ class Derivation
     $appFields['APP_STATUS'] = $currentDelegation['APP_STATUS'];
     /* Start Block : Count the open threads of $currentDelegation['APP_UID'] */
     $openThreads = $this->case->GetOpenThreads( $currentDelegation['APP_UID'] );
-    if ($openThreads == 0) {//Close case
-      $appFields['APP_STATUS']      = 'COMPLETED';
-      $appFields['APP_FINISH_DATE'] = 'now';
-      $this->verifyIsCaseChild($currentDelegation['APP_UID']);
+    
+    ///////
+    $sw = 0;
+    
+    if ($openThreads == 0) {
+      //Close case
+      $appFields["APP_STATUS"]      = "COMPLETED";
+      $appFields["APP_FINISH_DATE"] = "now";
+      $this->verifyIsCaseChild($currentDelegation["APP_UID"]);
+      
+      $sw = 1;
     }
-
+    
     if (isset($iNewDelIndex)) {
-      $appFields['DEL_INDEX'] = $iNewDelIndex;
-      $appFields['TAS_UID']   = $nextDel['TAS_UID'];
-
-      /* Start Block : UPDATES APPLICATION */
-      $this->case->updateCase ( $currentDelegation['APP_UID'], $appFields );
-      /* End Block : UPDATES APPLICATION */
+      $appFields["DEL_INDEX"] = $iNewDelIndex;
+      $appFields["TAS_UID"]   = $nextDel["TAS_UID"];
+      
+      $sw = 1;
+    }
+    
+    if ($sw == 1) {
+      //Start Block : UPDATES APPLICATION
+      $this->case->updateCase($currentDelegation["APP_UID"], $appFields);
+      //End Block : UPDATES APPLICATION
     }
   }
 
