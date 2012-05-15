@@ -5,11 +5,21 @@
 
 var _NODE_SELECTED;
 var main = function(){
-  Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
+  var cookiep =  new Ext.state.CookieProvider();
   
   var items = [];
   var nodeLoad = [];
   var i;
+  
+  if (tabActive != "") {
+    for(i = 0; i<= tabItems.length - 1; i++) {
+      if (tabItems[i].id == tabActive) {
+        cookiep.set("admin-tabpanel", {"activeTab": i});
+      }
+    }
+  }
+  
+  Ext.state.Manager.setProvider(cookiep);
  
   for(i=0; i<tabItems.length; i++){
     
@@ -47,6 +57,10 @@ var main = function(){
           loader.on("load", function () {
             if (_item_selected != "") {
               node = tp.getNodeById(_item_selected);
+              
+              if (typeof node == "undefined") {
+                node = tp.getRootNode().childNodes[0];
+              }
             }
             else {
               node = tp.getRootNode().childNodes[0];

@@ -23,50 +23,83 @@
  *
  */
 
-  $RBAC->requirePermissions('PM_SETUP', 'PM_USERS');
+$RBAC->requirePermissions("PM_SETUP", "PM_USERS");
 
-  $oHeadPublisher =& headPublisher::getSingleton();
+///////
+$adminSelected = null;
 
-  global $G_TMP_MENU;
-  $oMenu = new Menu();
-  $oMenu->load('setup');
-  $items = Array();
+if (isset($_REQUEST["s"])) {
+  $adminSelected = $_REQUEST["s"];
+}
+else {
+  if (isset($_SESSION["ADMIN_SELECTED"])) {
+    $adminSelected = $_SESSION["ADMIN_SELECTED"];
+  }
+}
 
-  $menuTypes = array_unique($oMenu->Types);
-  foreach($menuTypes as $i=>$v){
-    if( $v == 'admToolsContent'){
-      unset($menuTypes[$i]);
+///////
+$oHeadPublisher = &headPublisher::getSingleton();
+
+global $G_TMP_MENU;
+
+$oMenu = new Menu();
+$oMenu->load("setup");
+$items = array();
+
+$menuTypes = array_unique($oMenu->Types);
+foreach ($menuTypes as $i => $v) {
+  if ($v == "admToolsContent") {
+    unset($menuTypes[$i]);
+    break;
+  }
+}
+
+//sort($menuTypes);
+
+$tabItems = array();
+$i = 0;
+
+foreach ($menuTypes as $menuType) {
+  $tabItems[$i]->id = $menuType;
+  $LABEL_TRANSLATION = G::LoadTranslation("ID_" . strtoupper($menuType));
+  
+  if (substr($LABEL_TRANSLATION, 0, 2) !== "**") {
+    $title = $LABEL_TRANSLATION;
+  }
+  else {
+    $title = str_replace("_", " ", ucwords($menuType));
+  }
+  
+  $tabItems[$i]->title = $title;
+  $i++;
+}
+
+///////
+$tabActive = "";
+
+if ($adminSelected != null) {
+  foreach ($oMenu->Options as $i => $option) {
+    if ($oMenu->Id[$i] == $adminSelected) {
+      $tabActive = (in_array($oMenu->Types[$i], array("", "admToolsContent")))? "plugins" : $oMenu->Types[$i];
       break;
     }
   }
-  //sort($menuTypes);
+}
 
-  $tabItems = Array();
-  $i=0;
-  foreach( $menuTypes as $menuType ){
-    $tabItems[$i]->id    = $menuType;
-    $LABEL_TRANSLATION = G::LoadTranslation("ID_".strtoupper($menuType));
-    
-    if( substr($LABEL_TRANSLATION,0,2) !== '**' ){
-      $title = $LABEL_TRANSLATION;
-    } else {
-      $title = str_replace('_', ' ', ucwords($menuType));
-    }
-    $tabItems[$i]->title = $title;
-    $i++;
-  }
+///////
+$oHeadPublisher->addExtJsScript("setup/main", true); //adding a javascript file .js
+$oHeadPublisher->addContent("setup/main"); //adding a html file .html.
+$oHeadPublisher->assign("tabActive", $tabActive);
+$oHeadPublisher->assign("tabItems", $tabItems);
+$oHeadPublisher->assign("_item_selected", (($adminSelected != null)? $adminSelected : ""));
 
-  $oHeadPublisher->addExtJsScript('setup/main', true);    //adding a javascript file .js
-  $oHeadPublisher->addContent('setup/main'); //adding a html file  .html.
-  $oHeadPublisher->assign('tabItems', $tabItems);
-  $oHeadPublisher->assign('_item_selected', (isset($_SESSION['ADMIN_SELECTED'])?$_SESSION['ADMIN_SELECTED']:''));
+G::RenderPage("publish", "extJs");
 
-  G::RenderPage('publish', 'extJs');
-  // this patch enables the load of the plugin list panel inside de main admin panel iframe
-  if (isset($_GET['action'])&&$_GET['action']=='pluginsList'){
-    print "
-    <script>
-    document.getElementById('setup-frame').src = 'pluginsList';
-    </script>
-    ";
-  }
+//this patch enables the load of the plugin list panel inside de main admin panel iframe
+if (isset($_GET["action"]) && $_GET["action"] == "pluginsList") {
+  echo "
+  <script type=\"text/javascript\">
+  document.getElementById(\"setup-frame\").src = \"pluginsList\";
+  </script>
+  ";
+}
