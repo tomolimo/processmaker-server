@@ -58,10 +58,9 @@
   
   // starting session
   session_start();
-echo '<pre>';
+
   $config = System::getSystemConfiguration();
-  print_r($config);
-  print_r($_SESSION); die;
+  
   $e_all  = defined('E_DEPRECATED') ? E_ALL  & ~E_DEPRECATED : E_ALL;
   $e_all  = defined('E_STRICT')     ? $e_all & ~E_STRICT     : $e_all;
   $e_all  = $config['debug']        ? $e_all                 : $e_all & ~E_NOTICE;
