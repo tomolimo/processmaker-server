@@ -12,7 +12,6 @@ require_once "entities/SolrRequestData.php";
 require_once "entities/SolrUpdateDocument.php";
 require_once "entities/AppSolrQueue.php";
 require_once "classes/model/AppSolrQueue.php";
-require_once PATH_DATA_SITE . "/solr.php";
 
 class InvalidIndexSearchTextException extends Exception {
   // Redefine the exception so message isn't optional
@@ -33,11 +32,11 @@ class AppSolr {
   private $solrHost = "";
   private $solrInstance = "";
   
-  function __construct() {
+  function __construct($SolrEnabled, $SolrHost, $SolrInstance) {
     // define solr availability
-    $this->solrIsEnabled = SOLR_ENABLED;
-    $this->solrHost = SOLR_HOST;
-    $this->solrInstance = SOLR_INSTANCE;
+    $this->solrIsEnabled = $SolrEnabled;
+    $this->solrHost = $SolrHost;
+    $this->solrInstance = $SolrInstance;
   }
   
   public function isSolrEnabled() {

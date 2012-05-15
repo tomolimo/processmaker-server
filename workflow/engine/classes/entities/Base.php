@@ -40,7 +40,7 @@ class Entity_Base {
   protected function validateRequiredFields($requiredFields = array()) {
     foreach ( $requiredFields as $k => $field ) {
       if ($this->{$field} === NULL) {
-        throw (new Zend_Exception ( "Field $field is required in " . get_class ( $this ) ));
+        throw (new Exception ( "Field $field is required in " . get_class ( $this ) ));
         die ();
       }
     }

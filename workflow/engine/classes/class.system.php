@@ -1008,85 +1008,35 @@ class System {
     return $cities;
   }
 
-  public static function getSystemConfiguration($globalIniFile = '', $wsIniFile = '')
+  public static function getSystemConfiguration($iniFile='')
   {
-    $readGlobalIniFile = false;
-    $readWsIniFile     = false;
-
-    if (empty($globalIniFile)) {
-      $globalIniFile = PATH_CORE . 'config' . PATH_SEP . 'env.ini';
-    }
-
-    if (empty($wsIniFile)) {
-      if (defined('PATH_DB')) { // if we're on a valid workspace env.
-        $uriParts = explode('/', getenv("REQUEST_URI"));
-
-        if (substr($uriParts[1], 0, 3 ) == 'sys') {
-          $wsName    = substr($uriParts[1], 3);
-          $wsIniFile = PATH_DB . $wsName . PATH_SEP . 'env.ini';
-        }
-      }
-    }
-
-    $readGlobalIniFile = file_exists($globalIniFile) ? true : false;
-    $readWsIniFile     = file_exists($wsIniFile) ? true : false;
-
-    if (isset($_SESSION['PROCESSMAKER_ENV'])) {
-      $md5 = array();
-      
-      if ($readGlobalIniFile) 
-        $md5[] = md5_file($globalIniFile);
-      
-      if ($readWsIniFile)
-        $md5[] = md5_file($wsIniFile);
-      
-      $hash = implode('-', $md5);
-
-      if ($_SESSION['PROCESSMAKER_ENV_HASH'] === $hash) {
-        $_SESSION['PROCESSMAKER_ENV']['from_cache'] = 1;
-        return $_SESSION['PROCESSMAKER_ENV'];
-      }
-    }
-
-    // default configuration
     $config = array(
-      'debug'            => 0,
-      'debug_sql'        => 0,
-      'debug_time'       => 0,
-      'debug_calendar'   => 0,
-      'wsdl_cache'       => 1,
-      'memory_limit'     => '100M',
-      'time_zone'        => 'America/La_Paz',
-      'memcached'        => 0,
-      'memcached_server' => '',
-      'default_skin'     => 'classic',
-      'default_lang'     => 'en'
+      'debug' => 0,
+      'debug_sql' => 0,
+      'debug_time' => 0,
+      'debug_calendar' => 0,
+      'wsdl_cache' => 1,
+      'memory_limit' => '100M',
+      'time_zone' => 'America/La_Paz',
+      'memcached' => 0,
+      'memcached_server' =>'',
+      'default_skin' => 'classic',
+      'default_lang' => 'en'
     );
 
-    // read the global env.ini configuration file
-    if ($readGlobalIniFile && ($globalConf = @parse_ini_file($globalIniFile)) !== false) {
-      $config = array_merge($config, $globalConf);
+    if (empty($iniFile) || !file_exists($iniFile)) {
+      return $config;
     }
+
+    /* Read the env.ini */
+    $ini_contents = parse_ini_file($iniFile, false);
     
-    // Workspace environment configuration
-    if ($readWsIniFile && ($wsConf = @parse_ini_file($wsIniFile)) !== false) {
-      $config = array_merge($config, $wsConf);
+    if ($ini_contents !== false) {
+      $config = array_merge($config, $ini_contents);
     }
-  
-    // validation debug config, only binary value is valid; debug = 1, to enable
+
+    // validation debug config, ony accept bynary values, 1 to enable
     $config['debug'] = $config['debug'] == 1 ? 1 : 0;
-
-    $md5 = array();
-    if ($readGlobalIniFile) 
-      $md5[] = md5_file($globalIniFile);
-    
-    if ($readWsIniFile)
-      $md5[] = md5_file($wsIniFile);
-    
-    $hash = implode('-', $md5);
-
-    $_SESSION['PROCESSMAKER_ENV']      = $config;
-    $_SESSION['PROCESSMAKER_ENV_HASH'] = $hash;
     
     return $config;
   }
@@ -1119,6 +1069,25 @@ class System {
     }
 
     return $result;
+  }
+  
+  function solrEnv()
+  {
+    $conf = System::getSystemConfiguration();
+    
+    if (!isset($conf['solr_enabled']) || !isset($conf['solr_host']) || !isset($conf['solr_instance'])) {
+      return false;
+    }
+    
+    if ($conf['solr_enabled']) {
+      return array(
+        'solr_enabled' => $conf['solr_enabled'],
+        'solr_host' =>  $conf['solr_host'],
+        'solr_instance' =>  $conf['solr_instance']
+      );
+    }
+    
+    return false;
   }
   
 }// end System class
