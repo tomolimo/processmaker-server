@@ -1116,12 +1116,14 @@ class AppSolr {
                   }
                   else {
                     $typeSufix = '_tdt';
+                    /*
                     if ($withHour)
                       //$value = gmdate ( "Y-m-d\TH:i:s\Z", $newdate->getTimestamp () );
                       $value = gmdate ( "Y-m-d\TH:i:s\Z", $newdate );
                     else {
                       $value = gmdate ( "Y-m-d\T00:00:00\Z", $newdate );
-                    }
+                    }*/
+                    $value = gmdate ( "Y-m-d\T00:00:00\Z", $newdate );
                   }
                   break;
                 case 'dropdown' :
