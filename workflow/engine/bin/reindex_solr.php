@@ -53,7 +53,7 @@ if (! defined ( 'PATH_HOME' )) {
   G::LoadSystem ( 'dvEditor' );
   G::LoadSystem ( 'table' );
   G::LoadSystem ( 'pagedTable' );
-  G::LoadSystem ( 'system' );
+  G::LoadClass ( 'system' );
   require_once ("propel/Propel.php");
   require_once ("creole/Creole.php");
 }
@@ -103,7 +103,7 @@ if (! defined ( 'SYS_SYS' )) {
       // ****************************************
       // read initialize file
       require_once PATH_HOME . 'engine' . PATH_SEP . 'classes' . PATH_SEP . 'class.system.php';
-      $config = System::getSystemConfiguration ( PATH_HOME . 'engine' . PATH_SEP . 'config' . PATH_SEP . 'env.ini' );
+      $config = System::getSystemConfiguration ('', '', SYS_SYS);
       define ( 'MEMCACHED_ENABLED', $config ['memcached'] );
       define ( 'MEMCACHED_SERVER', $config ['memcached_server'] );
       define ( 'TIME_ZONE', $config ['time_zone'] );
@@ -208,7 +208,8 @@ function processWorkspace() {
   global $sLastExecution;
   
   try {
-    if ($solrConf = System::solrEnv () !== false) {
+    
+    if (($solrConf = System::solrEnv (SYS_SYS)) !== false) {
       G::LoadClass ( 'AppSolr' );
       $oAppSolr = new AppSolr ( $solrConf ['solr_enabled'], $solrConf ['solr_host'], $solrConf ['solr_instance'] );
       $oAppSolr->reindexAllApplications ();
