@@ -21,7 +21,7 @@
   <en>DATE</en>
 </APP_MSG_DATE>
 
-<APP_MSG_BODY type="html" cols="70" rows="10" mode="view">
+<APP_MSG_BODY type="text" cols="70" rows="10" mode="view" enableHTML="1"> 
   <en/>
 </APP_MSG_BODY>
 </dynaForm>
