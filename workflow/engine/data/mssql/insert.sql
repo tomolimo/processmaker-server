@@ -1693,7 +1693,7 @@ SELECT 'JAVASCRIPT','ID_PROCESSMAP_CANCEL','en','Cancel','2012-02-02'
   UNION ALL
 SELECT 'JAVASCRIPT','ID_PROCESSMAP_TASK_PROPERTIES_DEFINITION','en','Definition','2012-02-02' 
   UNION ALL
-SELECT 'JAVASCRIPT','ID_PROCESSMAP_TASK_PROPERTIES_ASSIGNMENTS','en','Designation rules','2012-02-02' 
+SELECT 'JAVASCRIPT','ID_PROCESSMAP_TASK_PROPERTIES_ASSIGNMENTS','en','Assignment rules','2012-02-02' 
   UNION ALL
 SELECT 'JAVASCRIPT','ID_PROCESSMAP_TASK_PROPERTIES_TIMING','en','Timing control','2012-02-02' 
   UNION ALL
@@ -4953,7 +4953,7 @@ INSERT INTO [TRANSLATION] ([TRN_CATEGORY],[TRN_ID],[TRN_LANG],[TRN_VALUE],[TRN_U
 
 SELECT 'LABEL','ID_APPLY_AS_MAIN_LOGO','en','Apply as main logo','2012-02-02' 
   UNION ALL
-SELECT 'LABEL','ID_YOU_ARE_NOT_CAN_SELECT_PHOTO','en','You are not can select more one photo','2012-02-02' 
+SELECT 'LABEL','ID_YOU_ARE_NOT_CAN_SELECT_PHOTO','en','You are not can select more than one photo','2012-05-03' 
   UNION ALL
 SELECT 'LABEL','ID_SELECT_AN_IMAGE','en','Please select an image','2012-02-02' 
   UNION ALL
@@ -5419,7 +5419,7 @@ SELECT 'LABEL','ID_SELECTED_IMAGE_DELETED','en','The selected image has been del
   UNION ALL
 SELECT 'LABEL','ID_SELECTED_IMAGE_IS_LOGO','en','The selected image is established as logo.','2012-02-02' 
   UNION ALL
-SELECT 'LABEL','ID_DELETE_SELECTED_LOGO','en','Do you want to apply the selected Logo?','2012-02-02' 
+SELECT 'LABEL','ID_DELETE_SELECTED_LOGO','en','Do you want to delete the selected logo?','2012-05-03' 
   UNION ALL
 SELECT 'LABEL','MISSING_OR_NOT_CONFIGURED_SMTP','en','Missing or it''s not configured SMTP mail. Check the configuration.','2012-02-02' 
   UNION ALL
@@ -5578,6 +5578,10 @@ SELECT 'LABEL','ID_INVALID_APPLICATION_NUMBER','en','You have set a invalid Appl
 SELECT 'LABEL','ID_3DAYSMINIMUM','en','3 days at least','2012-02-02' 
   UNION ALL
 SELECT 'LABEL','ID_NODELETEOPTIONALL','en','You must add all the days that you have selected in work days, otherwise you should leave at least an "-- ALL --" option.','2012-02-02' 
+  UNION ALL
+SELECT 'LABEL','ID_IMPORT_RT','en','Import Report Table','2012-05-04' 
+  UNION ALL
+SELECT 'LABEL','ID_GRID_PAGE_DISPLAYING_REPORTABLES_MESSAGE','en','Displaying Report Tables {0} - {1} of {2}','2012-05-04' 
  ;
 
 INSERT INTO ISO_LOCATION ([IC_UID],[IL_UID],[IL_NAME],[IL_NORMAL_NAME],[IS_UID]) 

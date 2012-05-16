@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: ProcessMaker (Branch 2.0-experimental) dummy-73-ge20d9db\n"
+"Project-Id-Version: ProcessMaker (Branch 2.0-testing) dummy-119-g6a8c61e\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2012-05-02 13:15:24\n"
+"PO-Revision-Date: 2012-05-16 15:56:38\n"
 "Last-Translator: \n"
 "Language-Team: Colosa Developers Team <developers@colosa.com>\n"
 "MIME-Version: 1.0\n"
@@ -928,8 +928,8 @@ msgstr "Definition"
 # TRANSLATION
 # JAVASCRIPT/ID_PROCESSMAP_TASK_PROPERTIES_ASSIGNMENTS
 #: JAVASCRIPT/ID_PROCESSMAP_TASK_PROPERTIES_ASSIGNMENTS
-msgid "Designation rules"
-msgstr "Designation rules"
+msgid "Assignment rules"
+msgstr "Assignment rules"
 
 # TRANSLATION
 # JAVASCRIPT/ID_PROCESSMAP_TASK_PROPERTIES_TIMING
@@ -10582,8 +10582,8 @@ msgstr "Apply as main logo"
 # TRANSLATION
 # LABEL/ID_YOU_ARE_NOT_CAN_SELECT_PHOTO
 #: LABEL/ID_YOU_ARE_NOT_CAN_SELECT_PHOTO
-msgid "You are not can select more one photo"
-msgstr "You are not can select more one photo"
+msgid "You are not can select more than one photo"
+msgstr "You are not can select more than one photo"
 
 # TRANSLATION
 # LABEL/ID_SELECT_AN_IMAGE
@@ -11968,8 +11968,8 @@ msgstr "The selected image is established as logo."
 # TRANSLATION
 # LABEL/ID_DELETE_SELECTED_LOGO
 #: LABEL/ID_DELETE_SELECTED_LOGO
-msgid "[LABEL/ID_DELETE_SELECTED_LOGO] Do you want to apply the selected Logo?"
-msgstr "Do you want to apply the selected Logo?"
+msgid "Do you want to delete the selected logo?"
+msgstr "Do you want to delete the selected logo?"
 
 # TRANSLATION
 # LABEL/MISSING_OR_NOT_CONFIGURED_SMTP
@@ -12438,6 +12438,18 @@ msgstr "3 days at least"
 #: LABEL/ID_NODELETEOPTIONALL
 msgid "You must add all the days that you have selected in work days, otherwise you should leave at least an \"-- ALL --\" option."
 msgstr "You must add all the days that you have selected in work days, otherwise you should leave at least an \"-- ALL --\" option."
+
+# TRANSLATION
+# LABEL/ID_IMPORT_RT
+#: LABEL/ID_IMPORT_RT
+msgid "Import Report Table"
+msgstr "Import Report Table"
+
+# TRANSLATION
+# LABEL/ID_GRID_PAGE_DISPLAYING_REPORTABLES_MESSAGE
+#: LABEL/ID_GRID_PAGE_DISPLAYING_REPORTABLES_MESSAGE
+msgid "Displaying Report Tables {0} - {1} of {2}"
+msgstr "Displaying Report Tables {0} - {1} of {2}"
 
 # additionalTables/additionalTablesData.xml?ADD_TAB_NAME
 # additionalTables/additionalTablesData.xml
@@ -23488,12 +23500,6 @@ msgstr "Size in bytes"
 #: link - FILENAME_LABEL
 msgid "[processes/processes_Export.xml?FILENAME_LABEL] File"
 msgstr "File"
-
-# processes/processes_Export.xml?FILENAME_LABEL1
-# processes/processes_Export.xml
-#: link - FILENAME_LABEL1
-msgid "File xpdl"
-msgstr "File xpdl"
 
 # processes/processes_FileEdit.xml?TITLE
 # processes/processes_FileEdit.xml
