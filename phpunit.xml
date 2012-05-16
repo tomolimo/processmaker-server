@@ -13,7 +13,7 @@
 >
     <testsuites>
         <testsuite name="ProcessMaker Components Test Suite">
-            <directory>./tests/</directory>
+            <directory>./tests/unit/</directory>
         </testsuite>
     </testsuites>
 
