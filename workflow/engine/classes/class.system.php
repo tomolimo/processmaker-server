@@ -1008,7 +1008,7 @@ class System {
     return $cities;
   }
 
-  public static function getSystemConfiguration($globalIniFile = '', $wsIniFile = '')
+  public static function getSystemConfiguration($globalIniFile = '', $wsIniFile = '', $wsName = '')
   {
     $readGlobalIniFile = false;
     $readWsIniFile     = false;
@@ -1019,12 +1019,15 @@ class System {
 
     if (empty($wsIniFile)) {
       if (defined('PATH_DB')) { // if we're on a valid workspace env.
-        $uriParts = explode('/', getenv("REQUEST_URI"));
-
-        if (substr($uriParts[1], 0, 3 ) == 'sys') {
-          $wsName    = substr($uriParts[1], 3);
-          $wsIniFile = PATH_DB . $wsName . PATH_SEP . 'env.ini';
+        if (empty($wsName)) {
+          $uriParts = explode('/', getenv("REQUEST_URI"));
+          
+          if (substr($uriParts[1], 0, 3 ) == 'sys') {
+            $wsName = substr($uriParts[1], 3);
+          }
         }
+        
+        $wsIniFile = PATH_DB . $wsName . PATH_SEP . 'env.ini';
       }
     }
 
@@ -1121,9 +1124,14 @@ class System {
     return $result;
   }
   
-  function solrEnv()
+  function solrEnv($sysName = '')
   {
-    $conf = System::getSystemConfiguration();
+    if (empty($sysName)) {
+      $conf = System::getSystemConfiguration();
+    }
+    else {
+      $conf = System::getSystemConfiguration('', '', $sysName);
+    }
     
     if (!isset($conf['solr_enabled']) || !isset($conf['solr_host']) || !isset($conf['solr_instance'])) {
       return false;

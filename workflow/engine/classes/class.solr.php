@@ -40,7 +40,7 @@ class BpmnEngine_SearchIndexAccess_Solr {
       // get configuration information in base to workspace parameter
       
     // get total number of documents in registry
-    $solrIntruct = $this->solrHost;
+    $solrIntruct = (substr($this->solrHost, -1) == "/")?$this->solrHost:$this->solrHost . "/";
     $solrIntruct .= $workspace;
     $solrIntruct .= "/select/?q=*:*";
     $solrIntruct .= self::SOLR_VERSION;
@@ -54,7 +54,7 @@ class BpmnEngine_SearchIndexAccess_Solr {
     // verify the result of solr
     $responseSolrTotal = json_decode ( $responseTotal, true );
     if ($responseSolrTotal['responseHeader']['status'] != 0) {
-      throw new Exception ( "Error returning the total number of documents in Solr." );
+      throw new Exception ( "Error returning the total number of documents in Solr." . $solrIntruct);
     }
     $numTotalDocs = $responseSolrTotal ['response'] ['numFound'];
     return $numTotalDocs;
@@ -101,7 +101,7 @@ class BpmnEngine_SearchIndexAccess_Solr {
       $filters .= '&fq=' . urlencode ( $value );
     }
     
-    $solrIntruct = $this->solrHost;
+    $solrIntruct = (substr($this->solrHost, -1) == "/")?$this->solrHost:$this->solrHost . "/";
     $solrIntruct .= $workspace;
     $solrIntruct .= "/select/?q=$query";
     $solrIntruct .= "&echoParams=none";
@@ -123,7 +123,7 @@ class BpmnEngine_SearchIndexAccess_Solr {
     // decode
     $responseSolr = json_decode ( $response, true );
     if ($responseSolr['responseHeader']['status'] != 0) {
-      throw new Exception ( "Error executing query to Solr." );
+      throw new Exception ( "Error executing query to Solr." . $solrIntruct);
     }
     
     return $responseSolr;
@@ -142,10 +142,10 @@ class BpmnEngine_SearchIndexAccess_Solr {
       return;
     $solrIntruct = '';
     // get configuration information in base to workspace parameter
-    $solrIntruct = $this->solrHost;
+    $solrIntruct = (substr($this->solrHost, -1) == "/")?$this->solrHost:$this->solrHost . "/";
     $solrIntruct .= $solrUpdateDocument->workspace;
     $solrIntruct .= "/update";
-    
+
     $handler = curl_init ( $solrIntruct );
     curl_setopt ( $handler, CURLOPT_RETURNTRANSFER, true );
     curl_setopt ( $handler, CURLOPT_HTTPHEADER, array (
@@ -154,12 +154,11 @@ class BpmnEngine_SearchIndexAccess_Solr {
     curl_setopt ( $handler, CURLOPT_BINARYTRANSFER, TRUE ); // --data-binary
     curl_setopt ( $handler, CURLOPT_POSTFIELDS, $solrUpdateDocument->document ); // data
     $response = curl_exec ( $handler );
-    
     curl_close ( $handler );
-
+    
     $swOk = strpos ( $response, '<int name="status">0</int>' );
     if (! $swOk) {
-      throw new Exception ( "Error updating document in Solr." );
+      throw new Exception ( "Error updating document in Solr." . $solrIntruct);
     }
   }
   
@@ -176,7 +175,7 @@ class BpmnEngine_SearchIndexAccess_Solr {
       return;
     $solrIntruct = '';
     // get configuration information in base to workspace parameter
-    $solrIntruct = $this->solrHost;
+    $solrIntruct = (substr($this->solrHost, -1) == "/")?$this->solrHost:$this->solrHost . "/";
     $solrIntruct .= $workspace;
     $solrIntruct .= "/update";
     
@@ -192,7 +191,7 @@ class BpmnEngine_SearchIndexAccess_Solr {
     
     $swOk = strpos ( $response, '<int name="status">0</int>' );
     if (! $swOk) {
-      throw new Exception ( "Error commiting changes in Solr." );
+      throw new Exception ( "Error commiting changes in Solr." . $solrIntruct);
     }
   }
   
@@ -210,7 +209,7 @@ class BpmnEngine_SearchIndexAccess_Solr {
     
     $solrIntruct = '';
     // get configuration information in base to workspace parameter
-    $solrIntruct = $this->solrHost;
+    $solrIntruct = (substr($this->solrHost, -1) == "/")?$this->solrHost:$this->solrHost . "/";
     $solrIntruct .= $workspace;
     $solrIntruct .= "/update";
     
@@ -226,7 +225,7 @@ class BpmnEngine_SearchIndexAccess_Solr {
     
     $swOk = strpos ( $response, '<int name="status">0</int>' );
     if (! $swOk) {
-      throw new Exception ( "Error rolling back changes in Solr." );
+      throw new Exception ( "Error rolling back changes in Solr." . $solrIntruct);
     }
   }
   
@@ -244,7 +243,7 @@ class BpmnEngine_SearchIndexAccess_Solr {
     
     $solrIntruct = '';
     // get configuration information in base to workspace parameter
-    $solrIntruct = $this->solrHost;
+    $solrIntruct = (substr($this->solrHost, -1) == "/")?$this->solrHost:$this->solrHost . "/";
     $solrIntruct .= $workspace;
     $solrIntruct .= "/update";
     
@@ -260,7 +259,7 @@ class BpmnEngine_SearchIndexAccess_Solr {
     
     $swOk = strpos ( $response, '<int name="status">0</int>' );
     if (! $swOk) {
-      throw new Exception ( "Error optimizing changes in Solr." );
+      throw new Exception ( "Error optimizing changes in Solr." . $solrIntruct);
     }
   }
   
@@ -270,7 +269,7 @@ class BpmnEngine_SearchIndexAccess_Solr {
     
     $solrIntruct = '';
     // get configuration information in base to workspace parameter
-    $solrIntruct = $this->solrHost;
+    $solrIntruct = (substr($this->solrHost, -1) == "/")?$this->solrHost:$this->solrHost . "/";
     $solrIntruct .= $workspace;
     $solrIntruct .= "/admin/luke?numTerms=0&wt=json";
     
@@ -281,7 +280,7 @@ class BpmnEngine_SearchIndexAccess_Solr {
     // decode
     $responseSolr = json_decode ( $response, true );
     if ($responseSolr['responseHeader']['status'] != 0) {
-      throw new Exception ( "Error getting index fields in Solr." );
+      throw new Exception ( "Error getting index fields in Solr." . $solrIntruct);
     }
     return $responseSolr;
   }
@@ -301,7 +300,7 @@ class BpmnEngine_SearchIndexAccess_Solr {
     
     $solrIntruct = '';
     // get configuration information in base to workspace parameter
-    $solrIntruct = $this->solrHost;
+    $solrIntruct = (substr($this->solrHost, -1) == "/")?$this->solrHost:$this->solrHost . "/";
     $solrIntruct .= $workspace;
     $solrIntruct .= "/update";
     
@@ -318,7 +317,7 @@ class BpmnEngine_SearchIndexAccess_Solr {
     
     $swOk = strpos ( $response, '<int name="status">0</int>' );
     if (! $swOk) {
-      throw new Exception ( "Error deleting all documents in Solr." );
+      throw new Exception ( "Error deleting all documents in Solr." . $solrIntruct);
     }
   }
   
@@ -337,7 +336,7 @@ class BpmnEngine_SearchIndexAccess_Solr {
     
     $solrIntruct = '';
     // get configuration information in base to workspace parameter
-    $solrIntruct = $this->solrHost;
+    $solrIntruct = (substr($this->solrHost, -1) == "/")?$this->solrHost:$this->solrHost . "/";
     $solrIntruct .= $workspace;
     $solrIntruct .= "/update";
     
@@ -354,7 +353,7 @@ class BpmnEngine_SearchIndexAccess_Solr {
     
     $swOk = strpos ( $response, '<int name="status">0</int>' );
     if (! $swOk) {
-      throw new Exception ( "Error deleting document in Solr." );
+      throw new Exception ( "Error deleting document in Solr." . $solrIntruct);
     }
   }
   
@@ -403,7 +402,7 @@ class BpmnEngine_SearchIndexAccess_Solr {
     
     $resultFormat = '&wt=json';
     
-    $solrIntruct = $this->solrHost;
+    $solrIntruct = (substr($this->solrHost, -1) == "/")?$this->solrHost:$this->solrHost . "/";
     $solrIntruct .= $workspace;
     $solrIntruct .= "/select/?q=$query";
     $solrIntruct .= "&echoParams=none";
@@ -424,7 +423,7 @@ class BpmnEngine_SearchIndexAccess_Solr {
     // decode
     $responseSolr = json_decode ( $response, true );
     if ($responseSolr['responseHeader']['status'] != 0) {
-      throw new Exception ( "Error getting faceted list from Solr." );
+      throw new Exception ( "Error getting faceted list from Solr." . $solrIntruct);
     }
     
     return $responseSolr;

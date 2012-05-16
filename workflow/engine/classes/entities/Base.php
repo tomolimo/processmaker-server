@@ -59,7 +59,8 @@ class Entity_Base {
     // get aliases from class
     $className = get_class ( $this );
     if (method_exists ( $className, 'GetAliases' )) {
-      $aliases = $className::GetAliases ();
+      $aliases = call_user_func(array($className, 'GetAliases'));
+      //$aliases = $className::GetAliases ();
       foreach ( $this as $field => $value )
         if (isset ( $aliases [$field] )) {
           // echo "Field exists in Aliases: " . $field . "\n";
@@ -84,8 +85,8 @@ class Entity_Base {
     // get aliases from class
     $className = get_class ( $this );
     if (method_exists ( $className, 'GetAliases' )) {
-      $aliases = $className::GetAliases ();
-      
+      $aliases = call_user_func(array($className, 'GetAliases'));
+      //$aliases = $className::GetAliases ();
       foreach ( $this as $field => $value )
         if (isset ( $aliases [$field] ))
           $this->{$field} = $aAliasData [$aliases [$field]];
@@ -107,7 +108,8 @@ class Entity_Base {
     $aliases = array ();
     $swAliases = false;
     if (method_exists ( $className, 'GetAliases' )) {
-      $aliases = $className::GetAliases ();
+      $aliases = call_user_func(array($className, 'GetAliases'));
+      //$aliases = $className::GetAliases ();
       $swAliases = true;
     }
     // use object properties or aliases to initialize

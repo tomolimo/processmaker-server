@@ -15,12 +15,26 @@ require_once "classes/model/AppSolrQueue.php";
 
 class InvalidIndexSearchTextException extends Exception {
   // Redefine the exception so message isn't optional
-  public function __construct($message, $code = 0, Exception $previous = null) {
+  public function __construct($message, $code = 0) {
     // some code
     // make sure everything is assigned properly
-    parent::__construct ( $message, $code, $previous );
+    parent::__construct ( $message, $code);
   }
   
+  // custom string representation of object
+  public function __toString() {
+    return __CLASS__ . ": [{$this->code}]: {$this->message}\n";
+  }
+}
+
+class ApplicationWithoutDelegationRecordsException extends Exception {
+  // Redefine the exception so message isn't optional
+  public function __construct($message, $code = 0) {
+    // some code
+    // make sure everything is assigned properly
+    parent::__construct ( $message, $code);
+  }
+
   // custom string representation of object
   public function __toString() {
     return __CLASS__ . ": [{$this->code}]: {$this->message}\n";
@@ -714,12 +728,13 @@ class AppSolr {
     }
     // create XML document
     $xmlDoc = $this->createSolrXMLDocument ( $aaAPPUIDs );
-    
+
     // update document
     $data = array (
         'workspace' => $this->solrInstance,
         'document' => $xmlDoc 
     );
+    
     $oSolrUpdateDocument = Entity_SolrUpdateDocument::CreateForRequest ( $data );
     
     G::LoadClass ( 'searchIndex' );
@@ -760,11 +775,14 @@ class AppSolr {
     $xmlDoc .= "<add>\n";
     // echo "APP Uids to index \n";
     foreach ( $aaAPPUIDs as $aAPPUID ) {
-      $result = $this->getApplicationIndexData ( $aAPPUID ['APP_UID'] );
-      
-      if ($result == null)
+      try {
+        $result = $this->getApplicationIndexData ( $aAPPUID ['APP_UID'] );
+      }
+      catch(ApplicationWithoutDelegationRecordsException $e){
+        //exception trying to get application information
+        //skip and continue with the next application
         continue;
-      
+      }
       $documentInformation = $result [0];
       $dynaformFieldTypes = $result [1];
       $lastUpdateDate = $result [2];
@@ -1049,7 +1067,7 @@ class AppSolr {
       }
       else {
         foreach ( $UnSerializedCaseData as $k => $value ) {
-          if (! is_array ( $value ) && $value != '' && $k != 'SYS_LANG' && $k != 'SYS_SKIN' && $k != 'SYS_SYS') {
+          if (!is_array ( $value ) && !is_object($value) && $value != '' && $k != 'SYS_LANG' && $k != 'SYS_SKIN' && $k != 'SYS_SYS') {
             // search the field type in array of dynaform fields
             if (! empty ( $dynaformFieldTypes ) && array_key_exists ( trim ( $k ), $dynaformFieldTypes )) {
               $type = $dynaformFieldTypes [trim ( $k )];
@@ -1157,7 +1175,6 @@ class AppSolr {
   }
   
   function getApplicationIndexData($AppUID) {
-    
     G::LoadClass ( 'memcached' );
     
     // get all the application data
@@ -1166,7 +1183,7 @@ class AppSolr {
     // this case occurs when the application doesn't have related delegation
     // records.
     if (empty ( $allAppDbData ) || ! isset ( $allAppDbData [0] )) {
-      throw new Exception ( "Application without delegation records. APP_UID: " . $AppUID );
+      throw new ApplicationWithoutDelegationRecordsException ( "Application without delegation records. APP_UID: " . $AppUID );
     }
     
     // copy the application information

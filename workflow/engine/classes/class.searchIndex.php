@@ -235,7 +235,7 @@ Class BpmnEngine_Services_SearchIndex
         G::LoadClass('solr');
         
         $solr = new BpmnEngine_SearchIndexAccess_Solr($this->solrIsEnabled, $this->solrHost);
-    
+        
         //create list of facets
         $solr->updateDocument($solrUpdateDocumentEntity);
     }
