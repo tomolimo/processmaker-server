@@ -550,7 +550,7 @@ class AppSolr {
     $tok = strtok ( $plainSearchText, " " );
     
     while ( $tok !== false ) {
-      $fieldName = strstr ( $tok, ":", true );
+      $fieldName = substr($tok, 0, strpos($tok, ":"));  //strstr ( $tok, ":", true ); php 5.3
       $searchText = strstr ( $tok, ":" );
       
       // verify if there's a field definition
@@ -654,12 +654,18 @@ class AppSolr {
             $toDate = $matches [2];
             
             if ($fromDateOriginal != '*') {
-              $fromDateDatetime = date_create_from_format ( 'Y-m-d', $fromDateOriginal );
-              $fromDate = gmdate ( "Y-m-d\T00:00:00\Z", $fromDateDatetime->getTimestamp () );
+              //TODO complete date creation
+              //list($year, $month, $day) = sscanf($fromDateOriginal, '%04d/%02d/%02d');
+              //$fromDateDatetime = new DateTime($fromDateOriginal);
+              //$fromDateDatetime = date_create_from_format ( 'Y-m-d', $fromDateOriginal );
+              //$fromDateDatetime->getTimestamp ()
+              $fromDate = gmdate ( "Y-m-d\T00:00:00\Z", strtotime($fromDateOriginal));
             }
             if ($toDateOriginal != '*') {
-              $toDateDatetime = date_create_from_format ( 'Y-m-d', $toDateOriginal );
-              $toDate = gmdate ( "Y-m-d\T00:00:00\Z", $toDateDatetime->getTimestamp () );
+              //list($year, $month, $day) = sscanf($fromDateOriginal, '%04d/%02d/%02d');
+              //$toDateDatetime = new DateTime($toDateOriginal);
+              //$toDateDatetime = date_create_from_format ( 'Y-m-d', $toDateOriginal );
+              $toDate = gmdate ( "Y-m-d\T00:00:00\Z", strtotime($fromDateOriginal) );
             }
             $searchText = ":[" . $fromDate . " TO " . $toDate . "]";
           }
@@ -1088,6 +1094,8 @@ class AppSolr {
                   $newdate = false;
                   $withHour = true;
                   // try to convert string to date
+                  //TODO convert to php 5.2 format
+                  /*
                   $newdate = date_create_from_format ( 'Y-m-d H:i:s', $value );
                   if (! $newdate) {
                     $newdate = date_create_from_format ( 'Y-m-d', $value );
@@ -1101,16 +1109,18 @@ class AppSolr {
                     $newdate = date_create_from_format ( 'j/m/Y', $value );
                     $withHour = false;
                   }
-                  
+                  */
+                  $newdate = strtotime($value);
                   if (! $newdate) {
                     $typeSufix = '*'; // not store field
                   }
                   else {
                     $typeSufix = '_tdt';
                     if ($withHour)
-                      $value = gmdate ( "Y-m-d\TH:i:s\Z", $newdate->getTimestamp () );
+                      //$value = gmdate ( "Y-m-d\TH:i:s\Z", $newdate->getTimestamp () );
+                      $value = gmdate ( "Y-m-d\TH:i:s\Z", $newdate );
                     else {
-                      $value = gmdate ( "Y-m-d\T00:00:00\Z", $newdate->getTimestamp () );
+                      $value = gmdate ( "Y-m-d\T00:00:00\Z", $newdate );
                     }
                   }
                   break;
