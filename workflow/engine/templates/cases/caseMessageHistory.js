@@ -6,7 +6,109 @@
     function onResizeIframe(idIframe){  
       window.parent.tabIframeWidthFix2(idIframe);  
     }
-  
+   
+    previewMessage = function() {
+      var rowSelected =  Ext.getCmp('processesGrid').getSelectionModel().getSelected();  
+      if (rowSelected) {
+        windowMessage = new Ext.Window({
+          title: '',  
+          width: 600,  
+          height: 420,      
+          border: false,		
+          layout : 'fit',
+          items:
+          [
+            {  
+              xtype: 'form',
+              frame: true,     
+              border: false,  
+              defaults: {
+                width: 150
+              },
+              items: [  
+                {
+                  xtype: 'textfield',
+                  fieldLabel: _("ID_FROM"),
+                  id:'From',
+                  anchor: '100%',
+                  arrowAlign:'center',
+                  readOnly: true,
+                  name: 'From'
+                },
+                {
+                  xtype: 'textfield',
+                  fieldLabel: _("ID_TO"),
+                  id: 'To',
+                  anchor: '100%',
+                  arrowAlign:'center',
+                  readOnly: true,
+                  name: 'To'
+                },
+                {
+                  xtype: 'textfield',
+                  fieldLabel: _('ID_SUBJECT'),
+                  id: 'Subjet',
+                  anchor: '100%',
+                  arrowAlign:'center',
+                  readOnly: true,
+                  name: 'Subjet'
+                },
+                {
+                  xtype: 'textfield',
+                  fieldLabel: _("DATE_LABEL"),
+                  id: 'date',
+                  arrowAlign:'center',
+                  readOnly: true,
+                  name: 'Status'
+                },
+                {                
+                  name : 'body', 
+                  id:'body',               
+                  hideLabel:true,
+                  xtype: 'htmleditor',  
+                  autoScroll: true, 
+                  readOnly: true,
+                  x: 1,
+                  y: 1,
+                  enableAlignments:false,
+                  enableColors:false,
+                  enableFont:false,
+                  enableFontSize:false,
+                  enableFormat:false,
+                  enableLinks:false,
+                  enableLists:false,
+                  enableSourceEdit:false,
+                  anchor: '100%',
+                  height: 260		
+                }
+              ]  
+            }  
+          ]      
+        });
+        
+        //load fields from rowSelect
+        Ext.getCmp('From').setValue(rowSelected.data.APP_MSG_FROM);
+        Ext.getCmp('To').setValue(rowSelected.data.APP_MSG_TO);   
+        Ext.getCmp('Subjet').setValue(rowSelected.data.APP_MSG_SUBJECT); 
+        Ext.getCmp('date').setValue(rowSelected.data.APP_MSG_DATE);
+        Ext.getCmp('body').setValue(rowSelected.data.APP_MSG_BODY);   
+        
+        //show windows message
+        windowMessage.show(windowMessage);
+      }
+      else {
+        Ext.Msg.show({
+          title:'',
+          msg: _("ID_NO_SELECTION_WARNING"),
+          buttons: Ext.Msg.INFO,
+          fn: function(){},
+          animEl: 'elId',
+          icon: Ext.MessageBox.INFO,
+          buttons: Ext.MessageBox.OK
+        });                            
+      }
+    }
+    
     function ajaxPostRequest(url, callback_function, id){
       var d = new Date();
       var time = d.getTime();
@@ -224,7 +326,8 @@ var ActionTabFrameGlobal = '';
               {name : 'APP_MSG_SUBJECT'},
               {name : 'APP_MSG_FROM'},
               {name : 'APP_MSG_TO'},
-              {name : 'APP_MSG_STATUS'}
+              {name : 'APP_MSG_STATUS'},
+	      {name : 'APP_MSG_BODY'} 
               
             ]
           }
@@ -288,7 +391,7 @@ var ActionTabFrameGlobal = '';
         frame:false,
         //plugins: expander,
         cls : 'grid_with_checkbox',
-        columnLines: true,    
+        columnLines: true,        
         viewConfig: {
           forceFit:true
         },    
@@ -305,7 +408,8 @@ var ActionTabFrameGlobal = '';
             {header: _("ID_SUBJECT"), dataIndex: 'APP_MSG_SUBJECT', width: 60},
             {header: _("ID_FROM"), dataIndex: 'APP_MSG_FROM', width: 60, renderer: escapeHtml},
             {header: _("ID_TO"), dataIndex: 'APP_MSG_TO', width: 60, renderer: escapeHtml},
-            {header: _("ID_STATUS"), dataIndex: 'APP_MSG_STATUS', width: 50}          ]
+            {header: _("ID_STATUS"), dataIndex: 'APP_MSG_STATUS', width: 50},
+            {header: _("ID_APP_MSG_BODY"), dataIndex: 'APP_MSG_BODY', width: 50,hidden:true}          ]
         }),
         store: store,
         tbar:[
@@ -381,7 +485,34 @@ var ActionTabFrameGlobal = '';
             },
             disabled:false
           },           
-         
+          {
+            xtype: 'tbseparator'
+          },
+          {
+            text:_("ID_PREVIEW"),
+            id:'viewMailMessageFormRadioId',
+            iconCls: 'button_menu_ext',
+            icon: '/images/documents/_filefind.png',
+            handler: function(){
+	      var rowSelected = processesGrid.getSelectionModel().getSelected();
+	      
+	      if (rowSelected) {
+                previewMessage();		
+	      }
+	      else {
+		Ext.Msg.show({
+		  title:'',
+		  msg: _("ID_NO_SELECTION_WARNING"),
+		  buttons: Ext.Msg.INFO,
+		  fn: function(){},
+		  animEl: 'elId',
+		  icon: Ext.MessageBox.INFO,
+		  buttons: Ext.MessageBox.OK
+		});                            
+	      }            
+            },
+            disabled:false
+          },
           {
             xtype: 'tbfill'
           }
@@ -395,7 +526,7 @@ var ActionTabFrameGlobal = '';
           items:[]
         }),
         listeners: {
-          rowdblclick: emptyReturn,
+          rowdblclick: previewMessage,
           render: function(){
             this.loadMask = new Ext.LoadMask(this.body, {msg:'Loading...'});
             processesGrid.getSelectionModel().on('rowselect', function(){        
