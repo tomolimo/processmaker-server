@@ -18,7 +18,7 @@ var G_Grid = function(oForm, sGridName){
       evt.initEvent(event, true, true ); // event type,bubbling,cancelable
       return !element.dispatchEvent(evt);
     }
-  }
+  };
 
   this.aFields = [];
   this.aElements = [];
@@ -918,8 +918,8 @@ var G_Grid = function(oForm, sGridName){
         } else {
           maskDecimal=maskformula.split(".");          
         }
-
-        if(maskDecimal[1] != undefined) {
+          
+        if(typeof maskDecimal[1] != 'undefined') {
           maskToPut=maskDecimal[1].length;  
         } else {
           maskToPut=0;
@@ -954,7 +954,7 @@ var G_Grid = function(oForm, sGridName){
       document.getElementById(aAux[0]+']['+ aAux[1] + '][' + oField.sFieldName + ']').value = symbol+''+document.getElementById(aAux[0]+']['+ aAux[1] + '][' + oField.sFieldName + ']').value;  
 
       // return focus the field typed
-      if (document.getElementById(domId) != undefined) {
+      if (typeof document.getElementById(domId) != 'undefined') {
         document.getElementById(domId).focus();
       }
 
