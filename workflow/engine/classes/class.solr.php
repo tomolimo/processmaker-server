@@ -85,11 +85,11 @@ class BpmnEngine_SearchIndexAccess_Solr
     curl_close ($handlerTotal);
     
     // verify the result of solr
-    $responseSolrTotal = G::json_decode ($responseTotal, true);
-    if ($responseSolrTotal ['responseHeader'] ['status'] != 0) {
+    $responseSolrTotal = G::json_decode ($responseTotal);
+    if ($responseSolrTotal->responseHeader->status != 0) {
       throw new Exception ("Error returning the total number of documents in Solr." . $solrIntruct);
     }
-    $numTotalDocs = $responseSolrTotal ['response'] ['numFound'];
+    $numTotalDocs = $responseSolrTotal->response->numFound;
     return $numTotalDocs;
   }
   
@@ -154,8 +154,8 @@ class BpmnEngine_SearchIndexAccess_Solr
     curl_close ($handler);
     
     // decode
-    $responseSolr = G::json_decode ($response, true);
-    if ($responseSolr ['responseHeader'] ['status'] != 0) {
+    $responseSolr = G::json_decode ($response);
+    if ($responseSolr->responseHeader->status != 0) {
       throw new Exception ("Error executing query to Solr." . $solrIntruct);
     }
     
@@ -324,8 +324,8 @@ class BpmnEngine_SearchIndexAccess_Solr
     $response = curl_exec ($handler);
     curl_close ($handler);
     // decode
-    $responseSolr = G::json_decode ($response, true);
-    if ($responseSolr ['responseHeader'] ['status'] != 0) {
+    $responseSolr = G::json_decode ($response);
+    if ($responseSolr->responseHeader->status != 0) {
       throw new Exception ("Error getting index fields in Solr." . $solrIntruct);
     }
     return $responseSolr;
@@ -470,8 +470,8 @@ class BpmnEngine_SearchIndexAccess_Solr
     curl_close ($handler);
     
     // decode
-    $responseSolr = G::json_decode ($response, true);
-    if ($responseSolr ['responseHeader'] ['status'] != 0) {
+    $responseSolr = G::json_decode ($response);
+    if ($responseSolr->responseHeader->status != 0) {
       throw new Exception ("Error getting faceted list from Solr." . $solrIntruct);
     }
     

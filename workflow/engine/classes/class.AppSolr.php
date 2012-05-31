@@ -37,7 +37,6 @@ require_once "entities/AppSolrQueue.php";
 require_once "classes/model/AppSolrQueue.php";
 
 
-
 /**
  * Invalid search text for Solr exception
  *

@@ -116,11 +116,11 @@ class BpmnEngine_Services_SearchIndex
         $removeCondition = str_replace ($value, '', $facetRequestEntity->selectedFacetsString, $count);
       }
       $selectedFacetGroupData = array (
-          'selectedFacetGroupName' => $gr [0],
-          'selectedFacetGroupPrintName' => $gr [1],
-          'selectedFacetItemName' => $it [0],
-          'selectedFacetItemPrintName' => $it [1],
-          'selectedFacetRemoveCondition' => $removeCondition 
+          'selectedFacetGroupName'        => $gr [0],
+          'selectedFacetGroupPrintName'   => $gr [1],
+          'selectedFacetItemName'         => $it [0],
+          'selectedFacetItemPrintName'    => $it [1],
+          'selectedFacetRemoveCondition'  => $removeCondition 
       );
       
       $aSelectedFacetGroups [] = Entity_SelectedFacetGroupItem::createForRequest ($selectedFacetGroupData);
@@ -159,9 +159,9 @@ class BpmnEngine_Services_SearchIndex
     // create list of facets
     $facetsList = $solr->getFacetsList ($facetRequestEntity);
     
-    $numFound = $facetsList ['response'] ['numFound'];
+    $numFound = $facetsList->response->numFound;
     
-    $facetCounts = $facetsList ['facet_counts'];
+    $facetCounts = $facetsList->facet_counts;
     
     $facetGroups = array ();
     // convert facet fields result to objects
@@ -169,7 +169,7 @@ class BpmnEngine_Services_SearchIndex
      * *********************************************************************
      */
     // include facet field results
-    $facetFieldsResult = $facetsList ['facet_counts'] ['facet_fields'];
+    $facetFieldsResult = $facetsList->facet_counts->facet_fields;
     if (! empty ($facetFieldsResult)) {
       foreach ($facetFieldsResult as $facetGroup => $facetvalues) {
         if (count ($facetvalues) > 0)         // if the group have facets included
@@ -200,10 +200,10 @@ class BpmnEngine_Services_SearchIndex
      * *********************************************************************
      */
     // include facet date ranges results
-    $facetDatesResult = $facetsList ['facet_counts'] ['facet_dates'];
+    $facetDatesResult = $facetsList->facet_counts->facet_dates;
     if (! empty ($facetDatesResult)) {
       foreach ($facetDatesResult as $facetGroup => $facetvalues) {
-        if (count ($facetvalues) > 3)         // if the group have any facets included
+        if (count ((array)$facetvalues) > 3)         // if the group have any facets included
                                     // besides start, end and gap
         {
           $data = array (
@@ -212,7 +212,7 @@ class BpmnEngine_Services_SearchIndex
           $data ['facetGroupPrintName'] = $facetGroup;
           $data ['facetGroupType'] = 'daterange';
           $facetItems = array ();
-          $facetvalueskeys = array_keys ($facetvalues);
+          $facetvalueskeys = array_keys ((array)$facetvalues);
           foreach ($facetvalueskeys as $i => $k) {
             if ($k != 'gap' && $k != 'start' && $k != 'end') {
               $dataItem = array ();
@@ -223,11 +223,11 @@ class BpmnEngine_Services_SearchIndex
               }
               else {
                 // the last group
-                $dataItem ['facetName']      = '[' . $k . '%20TO%20' . $facetvalues ['end'] . ']';
-                $dataItem ['facetPrintName'] = '[' . $k . '%20TO%20' . $facetvalues ['end'] . ']';
+                $dataItem ['facetName']      = '[' . $k . '%20TO%20' . $facetvalues->end . ']';
+                $dataItem ['facetPrintName'] = '[' . $k . '%20TO%20' . $facetvalues->end . ']';
               }
               
-              $dataItem ['facetCount']           = $facetvalues [$k];
+              $dataItem ['facetCount']           = $facetvalues->$k;
               $dataItem ['facetSelectCondition'] = $facetRequestEntity->selectedFacetsString . (empty ($facetRequestEntity->selectedFacetsString) ? '' : ',') . $data ['facetGroupName'] . '::' . $data ['facetGroupPrintName'] . ':::' . $dataItem ['facetName'] . '::' . $dataItem ['facetPrintName'];
               $newFacetItem = Entity_FacetItem::createForInsert ($dataItem);
               $facetItems [] = $newFacetItem;
@@ -339,12 +339,9 @@ class BpmnEngine_Services_SearchIndex
   public function getDataTablePaginatedList($solrRequestData)
   {
     require_once ('class.solr.php');
-    // require_once (ROOT_PATH .
-    // '/businessLogic/modules/SearchIndexAccess/Solr.php');
     require_once ('entities/SolrRequestData.php');
     require_once ('entities/SolrQueryResult.php');
     
-    // print_r($solrRequestData);
     // prepare the list of sorted columns
     // verify if the data of sorting is available
     if (isset ($solrRequestData->sortCols [0])) {
@@ -363,7 +360,6 @@ class BpmnEngine_Services_SearchIndex
     // $solrRequestData->includeCols = array_diff($solrRequestData->includeCols,
     // array(''));
     
-    // print_r($solrRequestData);
     // execute query
     $solr = new BpmnEngine_SearchIndexAccess_Solr ($this->_solrIsEnabled, $this->_solrHost);
     $solrPaginatedResult = $solr->executeQuery ($solrRequestData);
@@ -372,9 +368,9 @@ class BpmnEngine_Services_SearchIndex
     $numTotalDocs = $solr->getNumberDocuments ($solrRequestData->workspace);
     
     // create the Datatable response of the query
-    $numFound = $solrPaginatedResult ['response'] ['numFound'];
+    $numFound = $solrPaginatedResult->response->numFound;
     
-    $docs = $solrPaginatedResult ['response'] ['docs'];
+    $docs = $solrPaginatedResult->response->docs;
     // print_r($docs);
     // insert list of names in docs result
     $data = array (
@@ -393,8 +389,8 @@ class BpmnEngine_Services_SearchIndex
           $data ['aaData'] [$i] [] = ''; // placeholder
         }
         else {
-          if (isset ($doc [$columnName])) {
-            $data ['aaData'] [$i] [] = $doc [$columnName];
+          if (isset ($doc->$columnName)) {
+            $data ['aaData'] [$i] [] = $doc->$columnName;
           }
           else {
             $data ['aaData'] [$i] [] = '';
@@ -416,27 +412,19 @@ class BpmnEngine_Services_SearchIndex
    */
   public function getIndexFields($workspace)
   {
-    // global $indexFields;
-    // cache
-    // if(!empty($indexFields))
-    // return $indexFields;
-    
     require_once ('class.solr.php');
-    // require_once (ROOT_PATH .
-    // '/businessLogic/modules/SearchIndexAccess/Solr.php');
+
     $solr = new BpmnEngine_SearchIndexAccess_Solr ($this->_solrIsEnabled, $this->_solrHost);
     
     // print "SearchIndex!!!!";
     // create list of facets
     $solrFieldsData = $solr->getListIndexedStoredFields ($workspace);
-    
     // copy list of arrays
     $listFields = array ();
-    foreach ($solrFieldsData ['fields'] as $key => $fieldData) {
+    foreach ($solrFieldsData->fields as $key => $fieldData) {
       if (array_key_exists ('dynamicBase', $fieldData)) {
-        // remove *
-        $originalFieldName = substr ($key, 0, - strlen ($fieldData ['dynamicBase']) + 1);
-        // $listFields[strtolower($originalFieldName)] = $key;
+        $originalFieldName = substr ($key, 0, - strlen ($fieldData->dynamicBase) + 1);
+        // $listFields[strtolower($originalFieldName)] = $key; //in case of case insentive strings
         // Maintain case sensitive variable names
         $listFields [$originalFieldName] = $key;
       }
@@ -446,9 +434,6 @@ class BpmnEngine_Services_SearchIndex
         $listFields [$key] = $key;
       }
     }
-    
-    // print_r($listFields);
-    // $indexFields = $listFields;
     
     return $listFields;
   }
