@@ -56,7 +56,7 @@ var searchUsers = function() {
   });
   oRPC.callback = function(rpc){
     document.getElementById('spanUsers').innerHTML = rpc.xmlhttp.responseText;
-    if (document.getElementById('aUsers[0]')) {
+    if (checkInfo()) {
       getField('btnImport').style.visibility = 'visible';
     }
     else {
@@ -69,6 +69,17 @@ var searchUsers = function() {
   oRPC.make();
 
 };
+
+function checkInfo() {
+  var input_obj = document.getElementsByTagName("input");
+  for (i = 0; i < input_obj.length; i++) {
+    if (input_obj.item(i).type == 'checkbox')
+    {
+      return true;
+    }
+  }
+  return false;
+}
 
 var importUsers = function(oForm) {
   var bContinue = false;
