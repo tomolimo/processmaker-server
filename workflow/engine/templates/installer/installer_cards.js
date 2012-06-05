@@ -511,9 +511,9 @@ Ext.onReady(function(){
     listeners: {
       show: function() {
         setTimeout(function(){
-          var IAgree = Ext.getCmp('agreeCheckbox')getValue();
+          var iAgree = Ext.getCmp('agreeCheckbox').getValue();
           
-          wizard.onClientValidation(2, IAgree);          
+          wizard.onClientValidation(2, iAgree);          
         }, 100);
       }
     }
