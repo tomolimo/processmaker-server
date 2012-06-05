@@ -162,9 +162,9 @@ class SkinEngine
       switch ($e->getCode()) {
         case SE_LAYOUT_NOT_FOUND:
 
-          $data['exception_type']     = G::loadTranslation('ID_SKIN_EXCEPTION');
-          $data['exception_title']    = G::loadTranslation('ID_SKIN_LAYOUT_NOT_FOUND');
-          $data['exception_message']  = G::loadTranslation('ID_SKIN_INCORRECT_VERIFY_URL');
+          $data['exception_type']     = G::LoadTranslation('ID_SKIN_EXCEPTION');
+          $data['exception_title']    = G::LoadTranslation('ID_SKIN_LAYOUT_NOT_FOUND');
+          $data['exception_message']  = G::LoadTranslation('ID_SKIN_INCORRECT_VERIFY_URL');
           $data['exception_list']     = array();
           if (substr($this->mainSkin, 0, 2) != 'ux') {
             $url = '../login/login';
@@ -175,7 +175,7 @@ class SkinEngine
           
           $link = '<a href="'.$url.'">Try Now</a>';
 
-          $data['exception_notes'][] = G::loadTranslation('ID_REDIRECT_URL'). $link;
+          $data['exception_notes'][] = G::LoadTranslation('ID_REDIRECT_URL'). $link;
 
           G::renderTemplate(PATH_TPL . 'exception', $data);
           break;
