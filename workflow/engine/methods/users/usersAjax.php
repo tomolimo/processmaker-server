@@ -518,8 +518,8 @@ switch($_POST['action'])
     $aFields = array();
     $color = '';
     $img = '';
-    $DateNow = date('Y-m-d H:i:s');
-    $aErrors = $oUserProperty->validatePassword($_POST['PASSWORD_TEXT'], $DateNow, $DateNow);
+    $dateNow = date('Y-m-d H:i:s');
+    $aErrors = $oUserProperty->validatePassword($_POST['PASSWORD_TEXT'], $dateNow, $dateNow);
 
     if (!empty($aErrors)) {
       $img = '/images/delete.png';
@@ -556,8 +556,7 @@ switch($_POST['action'])
     } else {
       $color = 'green';
       $img = '/images/dialog-ok-apply.png';
-      $aFields['DESCRIPTION'] .= 'The password complies with policies. </span>';
-      //$aFields['DESCRIPTION'] .= G::LoadTranslation('ID_PLEASE_CHANGE_PASSWORD_POLICY') . '</span>';
+      $aFields['DESCRIPTION'] .= G::LoadTranslation('ID_PASSWORD_COMPLIES_POLICIES') . '</span>';
       $aFields['STATUS'] = true;  
     }
     $span = '<span style="color: ' . $color . '; font: 9px tahoma,arial,helvetica,sans-serif;">';
