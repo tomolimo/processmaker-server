@@ -24,6 +24,7 @@
 </BTN_CANCEL>
 
 <JS type="javascript"><![CDATA[
+
 function disableEnterKey(e)
 {
   var key;
