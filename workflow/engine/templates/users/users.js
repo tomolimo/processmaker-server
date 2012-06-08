@@ -461,14 +461,14 @@ Ext.onReady(function() {
             Ext.getCmp('passwordReview').setText(spanAjax + imageAjax + labelAjax + '</span>', false);
             Ext.getCmp('passwordReview').setVisible(true);
 
-            var PasswordText = this.getValue();
+            var passwordText = this.getValue();
 
             Ext.Ajax.request({
               url    : 'usersAjax',
               method:'POST',
               params : {
-                'action'      : 'testPassword',
-                PASSWORD_TEXT : PasswordText
+                'action'        : 'testPassword',
+                'PASSWORD_TEXT' : passwordText
               },
               success: function(r,o){      
                 var resp = Ext.util.JSON.decode(r.responseText);
@@ -518,10 +518,10 @@ Ext.onReady(function() {
         listeners: {
           blur : function(ob)
           {
-            var PasswordText    = Ext.getCmp('USR_NEW_PASS').getValue();
-            var PasswordConfirm = this.getValue();
+            var passwordText    = Ext.getCmp('USR_NEW_PASS').getValue();
+            var passwordConfirm = this.getValue();
 
-            if (PasswordText != PasswordConfirm) {
+            if (passwordText != passwordConfirm) {
               var spanErrorConfirm  = '<span style="color: red; font: 9px tahoma,arial,helvetica,sans-serif;">';
               var imageErrorConfirm = '<img width="13" height="13" border="0" src="/images/delete.png">';
               var labelErrorConfirm = _('ID_NEW_PASS_SAME_OLD_PASS');
