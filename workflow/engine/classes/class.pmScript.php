@@ -659,7 +659,6 @@ function executeQueryOci($sql, $connection, $aParameter = array())
   $sHostspec = $aDNS["hostspec"];
   $sDatabse  = $aDNS["database"];
   $sPort     = $aDNS["port"];
-  // $sEncoding = $aDNS["encoding"];
 
   if ($sPort != "1521") { // if not default port
     $conn = oci_connect($sUsername, $sPassword, $sHostspec . ":" . $sPort . "/" . $sDatabse);
@@ -677,7 +676,7 @@ function executeQueryOci($sql, $connection, $aParameter = array())
   switch(true) {
     case preg_match("/^(SELECT|SHOW|DESCRIBE|DESC)\s/i", $sql):
       $stid = oci_parse($conn, $sql);
-      if (count($aParameter) > 0){
+      if (count($aParameter) > 0) {
         foreach ($aParameter as $key => $val) {
           oci_bind_by_name($stid, $key, $val);
         }
@@ -693,7 +692,6 @@ function executeQueryOci($sql, $connection, $aParameter = array())
       oci_close($conn);
       return $result;
       break;
-
     case preg_match("/^(INSERT|UPDATE|DELETE)\s/i", $sql):
       $stid       = oci_parse($conn, $sql);
       $isValid    = true;
@@ -710,14 +708,14 @@ function executeQueryOci($sql, $connection, $aParameter = array())
         oci_rollback($conn);
         $isValid = false;
       }
+      oci_free_statement($stid);
+      oci_close($conn);
       if ($isValid) {
         return true;
       }
       else {
         return oci_error();
       }
-      oci_free_statement($stid);
-      oci_close($conn);
       break;
     default:
       // Stored procedures
@@ -725,7 +723,8 @@ function executeQueryOci($sql, $connection, $aParameter = array())
       $aParameterRet = array();
       if (count($aParameter) > 0){
         foreach ($aParameter as $key => $val) {
-          $aParameterRet[$key] = $aParameter[$key];
+          $aParameterRet[$key] = $val;
+          // The third parameter ($aParameterRet[$key]) returned a value by reference.
           oci_bind_by_name($stid, $key, $aParameterRet[$key]);
         }
       }
