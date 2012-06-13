@@ -970,8 +970,13 @@ class adminProxy extends HttpProxyController
         G::uploadFile($tmpFile, $dir, 'tmp' . $fileName);
 
         try {
-          $arrayInfo = getimagesize($dir . '/' . 'tmp' . $fileName);
-          $typeMime  = $arrayInfo[2];
+          if (extension_loaded('exif')) {
+            $typeMime = exif_imagetype($dir . '/'. 'tmp'.$fileName);
+          }
+          else {
+            $arrayInfo = getimagesize($dir . '/' . 'tmp' . $fileName);
+            $typeMime  = $arrayInfo[2];
+          }
           
           if ($typeMime == $allowedTypeArray['index' . base64_encode($_FILES['img']['type'])]) {
             $error = false;
