@@ -346,6 +346,38 @@ class adminProxy extends HttpProxyController
     G::LoadClass('net');
     G::LoadThirdParty('phpmailer', 'class.smtp');
     
+    if ($_POST['typeTest'] == 'MAIL')
+    {
+      define("SUCCESSFUL", 'SUCCESSFUL');
+      define("FAILED", 'FAILED');
+      $mail_to                = $_POST['mail_to'];
+      $send_test_mail         = $_POST['send_test_mail'];
+      $_POST['FROM_NAME']     = $mail_to;
+      $_POST['FROM_EMAIL']    = $mail_to;
+      $_POST['MESS_ENGINE']   = 'MAIL';
+      $_POST['MESS_SERVER']   = 'localhost';
+      $_POST['MESS_PORT']     = 25;
+      $_POST['MESS_ACCOUNT']  = $mail_to;
+      $_POST['MESS_PASSWORD'] = '';
+      $_POST['TO']            = $mail_to;
+      $_POST['SMTPAuth']      = true;
+      
+      try {
+        $resp = $this->sendTestMail();  
+      } catch (Exception $error) {
+        $resp = new stdclass();
+        $reps->status = false;
+        $resp->msg = $error->getMessage();
+      }
+      
+      if($resp->status){
+        echo '{"sendMail":true, "msg":"' . $resp->msg . '"}';
+      } else {
+        echo '{"sendMail":false, "msg":"' . $resp->msg . '"}';
+      }
+      die;      
+    }
+    
     $step = $_POST['step'];  
     $server = $_POST['server'];
     $user = $_POST['user'];    
@@ -962,14 +994,22 @@ class adminProxy extends HttpProxyController
         $namefile  = $formf['name'];
         $typefile  = $formf['type'];
         $errorfile = $formf['error'];
-        $tpnfile   = $formf['tmp_name'];
+        $tmpFile   = $formf['tmp_name'];
         $aMessage1 = array();
         $fileName  = trim(str_replace(' ', '_', $namefile));
         $fileName  = self::changeNamelogo($fileName);
-        G::uploadFile( $tpnfile, $dir . '/', 'tmp' . $fileName );
+        
+        G::uploadFile($tmpFile, $dir, 'tmp' . $fileName);
 
         try {
-          $typeMime = exif_imagetype($dir . '/'. 'tmp'.$fileName);
+          if (extension_loaded('exif')) {
+            $typeMime = exif_imagetype($dir . '/'. 'tmp'.$fileName);
+          }
+          else {
+            $arrayInfo = getimagesize($dir . '/' . 'tmp' . $fileName);
+            $typeMime  = $arrayInfo[2];
+          }
+          
           if ($typeMime == $allowedTypeArray['index' . base64_encode($_FILES['img']['type'])]) {
             $error = false;
             try {
@@ -989,7 +1029,6 @@ class adminProxy extends HttpProxyController
         catch (Exception $e) {
           $failed = "3";
         }
-
       }
       else {
         $failed = "2";
