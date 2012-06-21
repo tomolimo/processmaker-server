@@ -2550,9 +2550,7 @@ var validateGridForms = function(invalidFields){
 
   for(j=0; j<grids.length; j++){
     
-    // check all the input fields in the grid
     fields = grids[j].getElementsByTagName('input');
-    // labels = ;
     for(i=0; i<fields.length; i++){
       var vtext = new input(fields[i]);
       if (fields[i].getAttribute("pm:required")=="1"&&fields[i].value==''){
@@ -2564,10 +2562,10 @@ var validateGridForms = function(invalidFields){
           $fieldName = $labelPM + " " + $label[2].split("]")[0];
         }
         fieldGridName = $label[1] + "[" + $label[2] + "[" + $label[3].split("]")[0];
-        //$fieldName = labels[i].innerHTML.replace('*','') + " " + $label[2].split("]")[0];
         
-        if (!notValidateThisFields.inArray(fieldGridName))
+        if (!notValidateThisFields.inArray(fieldGridName)) {
           invalidFields.push($fieldName);
+        }          
 
         vtext.failed();
       } else {
@@ -2582,8 +2580,10 @@ var validateGridForms = function(invalidFields){
         $label = textAreas[i].name.split("[");
         $fieldName = $label[3].split("]")[0]+ " " + $label[2].split("]")[0];
         fieldGridName = $label[1] + "[" + $label[2] + "[" + $label[3].split("]")[0];
-        if (!notValidateThisFields.inArray(fieldGridName))
+        
+        if (!notValidateThisFields.inArray(fieldGridName)) {
           invalidFields.push($fieldName);
+        }          
 
         vtext.failed();
       } else {
@@ -2594,12 +2594,15 @@ var validateGridForms = function(invalidFields){
     dropdowns = grids[j].getElementsByTagName('select');
     for(i=0; i<dropdowns.length; i++){
       var vtext = new input(dropdowns[i]);
+
       if (dropdowns[i].getAttribute("pm:required")=="1"&&dropdowns[i].value==''){
         $label = dropdowns[i].name.split("[");
         $fieldName = $label[3].split("]")[0]+ " " + $label[2].split("]")[0];
         fieldGridName = $label[1] + "[" + $label[2] + "[" + $label[3].split("]")[0];
-        if (!notValidateThisFields.inArray(fieldGridName))
+        
+        if (!notValidateThisFields.inArray(fieldGridName)) {
           invalidFields.push($fieldName);
+        }
 
         vtext.failed();
       } else {
@@ -2621,7 +2624,9 @@ var validateGridForms = function(invalidFields){
  **/
 
 var validateForm = function(sRequiredFields) {
-  if(leimnud == undefined) {
+  // The code add Brayan Pereyra - Cochalo : 
+  // This part add to firefox 13 and ie 9, in event submit the object leminud and input disappeared
+  if (typeof(leimnud) == 'undefined') {
     var leimnud = new maborak();
     leimnud.make({
       zip:true,
@@ -2631,7 +2636,9 @@ var validateForm = function(sRequiredFields) {
     });    
   }
   
-  if (input == undefined) {
+  // The code add Brayan Pereyra - Cochalo : 
+  // This part add to firefox 13 and ie 9, in event submit the object leminud and input disappeared
+  if (typeof(input) == 'undefined') {
     var input = function(options)
     {
       this.make=function(options)
@@ -2656,10 +2663,12 @@ var validateForm = function(sRequiredFields) {
           return this.input;
         }.extend(this);
         this.input.passed=function()
-        {       if ('\v'=='v')  //verify if is internet explorer
-                                          this.input.className="module_app_inputPassed_ie___gray "+((this.input.className.split(' ')[1]) || '');
-                                        else
+        {
+          if ('\v'=='v') {  //verify if is internet explorer
+            this.input.className="module_app_inputPassed_ie___gray "+((this.input.className.split(' ')[1]) || '');
+          } else {
             this.input.className="module_app_inputPassed___gray "+((this.input.className.split(' ')[1]) || '');
+          }            
           return this.input;
         }.extend(this);
         this.input.normal=function()
@@ -2668,15 +2677,16 @@ var validateForm = function(sRequiredFields) {
           return this.input;
         }.extend(this);
         this.input.failed=function()
-        {       if ('\v'=='v')  //verify if is internet explorer
-                                          this.input.className="module_app_inputFailed_ie___gray "+((this.input.className.split(' ')[1]) || '');
-          else
-                                          this.input.className="module_app_inputFailed___gray "+((this.input.className.split(' ')[1]) || '');
+        {
+          if ('\v'=='v') {  //verify if is internet explorer
+            this.input.className="module_app_inputFailed_ie___gray "+((this.input.className.split(' ')[1]) || '');
+          } else {
+            this.input.className="module_app_inputFailed___gray "+((this.input.className.split(' ')[1]) || '');
+          }
+
           return this.input;
         }.extend(this);
-//        this.parent.event.add(this.input,"mouseover",this.mouseover);
-//        this.parent.event.add(this.input,"mouseout",this.mouseout);
-        //this.parent.dom.setStyle(this.input,style || {});
+
         return this.input;
       };
       this.mouseover=function()
@@ -2708,9 +2718,9 @@ var validateForm = function(sRequiredFields) {
   aRequiredFields = eval(sRequiredFields);
   
   var sMessage = '';
-  var invalid_fields = Array();
-  
+  var invalid_fields   = Array();  
   var fielEmailInvalid = Array();  
+
       for (var i = 0; i < aRequiredFields.length; i++) {
         aRequiredFields[i].label=(aRequiredFields[i].label=='')?aRequiredFields[i].name:aRequiredFields[i].label;
         
@@ -2732,7 +2742,6 @@ var validateForm = function(sRequiredFields) {
     
           if(required == 1)
           {
-
             switch(aRequiredFields[i].type) {
               case 'suggest':
                 var vtext1 = new input(getField(aRequiredFields[i].name+'_suggest'));
