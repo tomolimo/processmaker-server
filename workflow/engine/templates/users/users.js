@@ -457,6 +457,8 @@ Ext.onReady(function() {
         listeners: {
           blur : function(ob)
           {
+            Ext.getCmp('saveB').disable();
+            Ext.getCmp('cancelB').disable();
             var spanAjax = '<span style="font: 9px tahoma,arial,helvetica,sans-serif;">';
             var imageAjax = '<img width="13" height="13" border="0" src="/images/ajax-loader.gif">';
             var labelAjax = _('ID_PASSWORD_TESTING');
@@ -482,7 +484,9 @@ Ext.onReady(function() {
                   flagPoliciesPassword = false;  
                 }
                 
-                Ext.getCmp('passwordReview').setText(resp.DESCRIPTION, false);                
+                Ext.getCmp('passwordReview').setText(resp.DESCRIPTION, false);
+                Ext.getCmp('saveB').enable();
+                Ext.getCmp('cancelB').enable();
               },
               failure: function () {
                 Ext.MessageBox.show({
@@ -492,6 +496,8 @@ Ext.onReady(function() {
                   animEl: 'mb9',
                   icon: Ext.MessageBox.ERROR
                 });
+                Ext.getCmp('saveB').enable();
+                Ext.getCmp('cancelB').enable();
               }
             });
 
@@ -651,12 +657,14 @@ Ext.onReady(function() {
     buttons : [
       {
         text   : _('ID_SAVE'),
+        id     : 'saveB',
         handler: saveUser
 
       
       },
       {     
         text    : _('ID_CANCEL'),
+        id      : 'cancelB',
         handler : function(){
           if (!infoMode) {  
             location.href = 'users_List';
