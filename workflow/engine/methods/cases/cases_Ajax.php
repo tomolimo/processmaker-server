@@ -971,6 +971,9 @@ switch(($_POST['action'])?$_POST['action']:$_REQUEST['action']) {
     require_once 'classes/model/Application.php';
         
     $oCriteria = new Criteria('workflow');
+    $response  = array( "success" => true );
+
+
     $oCriteria->add(ApplicationPeer::APP_NUMBER, $_POST['appNumber']);
     $oDataset = ApplicationPeer::doSelectRS($oCriteria);
     $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
@@ -978,10 +981,12 @@ switch(($_POST['action'])?$_POST['action']:$_REQUEST['action']) {
     $aApplication = $oDataset->getRow();
 
     if (is_array($aApplication)) {
-      echo '{"success": true, "exists": true}';
+      $response['exists'] = true;
     } else {
-      echo '{"success": true, "exists": false}';
+      $response['exists'] = false;
     }
+    
+    echo G::json_encode($response);
   break;
 
   
