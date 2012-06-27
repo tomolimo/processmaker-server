@@ -49,8 +49,7 @@ function cancel(){
 }
 
 function checkGrid (form) {
-  oAux = getField('PME_XMLGRID').value;
-  if ( getField('PME_XMLGRID').value != 0) {
+  if (getField('PME_XMLGRID').value != 0) {
     fieldsSave(form);
   }
   else {
@@ -59,4 +58,4 @@ function checkGrid (form) {
 }
 
 ]]></PME_JS>
-</dynaForm>  
+</dynaForm>
