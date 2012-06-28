@@ -594,21 +594,21 @@ function getElementByPMClass(__class){
     var dField = new input(getField('PME_XMLNODE_NAME'));
 
     if(str.split(" ").length>=2){
-      msgBox(G_STRINGS.ID_EMPTY_NODENAME, "alert");
+      msgBox(_("ID_EMPTY_NODENAME"), "alert");
       dField.failed();
       dField.focus();
       return;
     }
 
     if (str.length == 0) {
-      msgBox(G_STRINGS.DYNAFIELD_EMPTY, "alert");
+      msgBox(_("DYNAFIELD_EMPTY"), "alert");
       dField.failed();
       dField.focus();
       return;
     }
     
     if (!(isNaN(parseInt(str.substr(0,1))))) {
-      msgBox(G_STRINGS.DYNAFIELD_NODENAME_NUMBER, "alert");
+      msgBox(_("DYNAFIELD_NODENAME_NUMBER"), "alert");
       dField.failed();
       dField.focus();
       return;

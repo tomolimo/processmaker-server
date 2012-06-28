@@ -3123,19 +3123,19 @@ function dynaformVerifyFieldName(){
 
 function verifyFieldName1(){
   var newFieldName=fieldName.value;
-  var msj = G_STRINGS.DYNAFIELD_ALREADY_EXIST;
+  var msj = _('DYNAFIELD_ALREADY_EXIST');
   var validatedFieldName=getField("PME_VALIDATE_NAME",fieldForm).value;
   var dField = new input(getField('PME_XMLNODE_NAME'));
 
   var valid=(newFieldName!=='')&&(((newFieldName!==savedFieldName)&&(validatedFieldName===''))||((newFieldName===savedFieldName)));
   if (newFieldName.length == 0) {
     valid = false;
-    msj   = G_STRINGS.DYNAFIELD_EMPTY;
+    msj   = _('DYNAFIELD_EMPTY');
   }
 
   if (!(isNaN(parseInt(newFieldName.substr(0,1))))) {
     valid = false;
-    msj   = ', '+G_STRINGS.DYNAFIELD_NODENAME_NUMBER;
+    msj   = _('DYNAFIELD_NODENAME_NUMBER');
   }
 
   if (valid){
