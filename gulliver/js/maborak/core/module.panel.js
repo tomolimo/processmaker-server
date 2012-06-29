@@ -693,6 +693,7 @@ leimnud.Package.Public({
 		this.makeTab=function(dynamic)
 		{
 			if(this.loading===true){return false;}
+			
 			var thm = this.tab.display==="vertical"?"":"H";
 			var tb =this.elements.tabOptions[this.tabSelected];
 			tb.className="panel_tabOptionSelected"+thm+"___"+this.getTheme("tabOptionSelected");

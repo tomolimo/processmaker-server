@@ -1573,7 +1573,7 @@ var processmap=function(){
             var iForm=function(panel,index,ifo){
               //saveDataTaskTemporal(ifo);
               if(typeof(panel.flag) == 'undefined') {
-                if ( !saveDataTaskTemporal(ifo)) {
+                if (!saveDataTaskTemporal(ifo)) {
                   var tabPass = panel.tabSelected;
                   panel.tabSelected = panel.tabLastSelected;
                   panel.tabLastSelected = tabPass;
