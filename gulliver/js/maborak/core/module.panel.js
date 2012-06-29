@@ -690,7 +690,7 @@ leimnud.Package.Public({
 				this.parent.dom.setStyle(this.elements.resize,{background:"transparent"});
 			}
 		};
-		this.makeTab=function(dynamic, styleTabs)
+		this.makeTab=function(dynamic)
 		{
 			if(this.loading===true){return false;}
 			var thm = this.tab.display==="vertical"?"":"H";

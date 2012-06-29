@@ -116,7 +116,7 @@ var saveDataTaskTemporal = function(iForm)
                   vmesn.failed();
                   new leimnud.module.app.alert().make( {
                     label : G_STRINGS.ID_MESSAGE_FIELD_REQUIRED
-                  });                  
+                  });
                   return false;
                 } else {
                   vmesn.passed();
