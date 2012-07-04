@@ -33,6 +33,9 @@
 // License: LGPL, see LICENSE
 ////////////////////////////////////////////////////
 
+if (!class_exists('PMScript')) {
+    G::LoadClass('pmScript');
+}
 
 /**
  * ProcessMaker has made a number of its PHP functions available be used in triggers and conditions.
