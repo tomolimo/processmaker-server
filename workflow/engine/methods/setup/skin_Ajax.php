@@ -24,6 +24,7 @@ if (in_array($_REQUEST ['action'],$restrictedFunctions)) {
 
 
 $functionName = $_REQUEST ['action'];
+//echo $_REQUEST ['action'];
 $functionParams = isset($_REQUEST ['params']) ? $_REQUEST ['params'] : array();
 
 $functionName();
@@ -48,7 +49,8 @@ function skinList() {
 }
 
 function newSkin($baseSkin='classic') {
-//G::pr($_REQUEST);
+  //G::pr($_REQUEST);
+  
   $skinBase = $baseSkin != "" ? strtolower($baseSkin) : 'classic';
   if ((isset($_REQUEST['skinBase'])) && ($_REQUEST['skinBase'] != "")) {
     $skinBase = strtolower($_REQUEST['skinBase']);
@@ -81,15 +83,20 @@ function newSkin($baseSkin='classic') {
 
     //All validations OK then create skin
     switch ($skinBase) {
-      case 'classic': //Special Copy of this dir + xmlreplace
-        //$configurationFile = G::ExpandPath("skinEngine") . 'base' . PATH_SEP . 'config.xml';
-        copy_skin_folder(G::ExpandPath("skinEngine") . 'base' . PATH_SEP, PATH_CUSTOM_SKINS . $skinFolder,array("config.xml","baseCss"));
-        $pathBase=G::ExpandPath("skinEngine") . 'base' . PATH_SEP;
-        break;
-      default: //Commmon copy/paste of a folder + xmlrepalce
-        copy_skin_folder(PATH_CUSTOM_SKINS . $skinBase, PATH_CUSTOM_SKINS . $skinFolder,array("config.xml"));
-        $pathBase=PATH_CUSTOM_SKINS.$skinBase;
-        break;
+        case 'uxmodern':
+            copy_skin_folder(G::ExpandPath("skinEngine") . 'uxmodern' . PATH_SEP, PATH_CUSTOM_SKINS . $skinFolder,array("config.xml"));
+            $pathBase=G::ExpandPath("skinEngine") . 'base' . PATH_SEP;
+            break;
+        case 'classic':
+            //Special Copy of this dir + xmlreplace
+            copy_skin_folder(G::ExpandPath("skinEngine") . 'base' . PATH_SEP, PATH_CUSTOM_SKINS . $skinFolder,array("config.xml","baseCss"));
+            $pathBase=G::ExpandPath("skinEngine") . 'base' . PATH_SEP;
+            break;
+        default:
+            //Commmon copy/paste of a folder + xmlrepalce
+            copy_skin_folder(PATH_CUSTOM_SKINS . $skinBase, PATH_CUSTOM_SKINS . $skinFolder,array("config.xml"));
+            $pathBase=PATH_CUSTOM_SKINS.$skinBase;
+            break;
     }
     //ReBuild config file
     //TODO: Improve this pre_replace lines
