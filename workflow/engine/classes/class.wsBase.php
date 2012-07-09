@@ -73,13 +73,13 @@
 
 class wsBase
 {
-  
+
   public $stored_system_variables; //boolean
   public $wsSessionId; // web service session id, if the wsbase function is used from a WS request
-  
+
   function __construct($params=NULL) {
     $this->stored_system_variables = FALSE;
-    
+
     if( $params != NULL ){
       $this->stored_system_variables = isset($params->stored_system_variables)? $params->stored_system_variables: FALSE;
       $this->wsSessionId = isset($params->wsSessionId)? $params->wsSessionId: '';
@@ -151,7 +151,7 @@ class wsBase
   }
 
  /*
-  * get all groups 
+  * get all groups
   * @param none
   * @return $result will return an object
   */
@@ -179,11 +179,11 @@ class wsBase
       return $result;
     }
   }
- 
+
     /*
     * get all roles, to see all roles
     * @param none
-    * @return $result will return an object 
+    * @return $result will return an object
     */
     public function roleList( ) {
     try {
@@ -263,7 +263,7 @@ class wsBase
         //get the users from this department
         $c = new Criteria();
         $c->clearSelectColumns();
-        $c->addSelectColumn('COUNT(*)'); 
+        $c->addSelectColumn('COUNT(*)');
         $c->add(UsersPeer::DEP_UID, $aRow['DEP_UID'] );
         $rs = UsersPeer::doSelectRS($c);
         $rs->next();
@@ -334,10 +334,10 @@ class wsBase
    * @return $result will return an object
    */
   public function unassignedCaseList( $userId ) {
-    try { 
+    try {
       $result    = array();
       $oAppCache = new AppCacheView();
-      $Criteria  = $oAppCache->getUnassignedListCriteria($userId); 
+      $Criteria  = $oAppCache->getUnassignedListCriteria($userId);
       $oDataset  = AppCacheViewPeer::doSelectRS($Criteria);
       $oDataset -> setFetchmode(ResultSet::FETCHMODE_ASSOC);
       $oDataset->next();
@@ -345,7 +345,7 @@ class wsBase
         $result[] = array ( 'guid' => $aRow['APP_UID'], 'name' => $aRow['APP_NUMBER'], 'delIndex' => $aRow['DEL_INDEX'] );
         $oDataset-> next();
       }
-      return $result;      
+      return $result;
     }
     catch ( Exception $e ) {
       $result[] = array ( 'guid' => $e->getMessage(), 'name' => $e->getMessage(), 'status' => $e->getMessage() , 'status' => $e->getMessage() );
@@ -356,7 +356,7 @@ class wsBase
   /*
   * get all groups
   * @param none
-  * @return $result will return an object 
+  * @return $result will return an object
   */
   public function userList( ) {
     try {
@@ -382,11 +382,11 @@ class wsBase
   }
 
 
-  
+
   /*
    * get list of all the available triggers in a workspace
    * @param none
-   * @return $result will return an object 
+   * @return $result will return an object
    */
   public function triggerList( ) {
     try {
@@ -441,15 +441,15 @@ class wsBase
       foreach ( $_DBArray['inputDocuments'] as $key => $row ) {
         if ( isset($row['DOC_VERSION']) ) {
           $docrow = array();
-          $docrow['guid']       = $row['APP_DOC_UID']; 
-          $docrow['filename']   = $row['APP_DOC_FILENAME']; 
-          $docrow['docId']      = $row['DOC_UID']; 
-          $docrow['version']    = $row['DOC_VERSION']; 
-          $docrow['createDate'] = $row['CREATE_DATE']; 
-          $docrow['createBy']   = $row['CREATED_BY']; 
-          $docrow['type']       = $row['TYPE']; 
-          $docrow['index']      = $row['APP_DOC_INDEX']; 
-          $docrow['link']       = 'cases/' . $row['DOWNLOAD_LINK']; 
+          $docrow['guid']       = $row['APP_DOC_UID'];
+          $docrow['filename']   = $row['APP_DOC_FILENAME'];
+          $docrow['docId']      = $row['DOC_UID'];
+          $docrow['version']    = $row['DOC_VERSION'];
+          $docrow['createDate'] = $row['CREATE_DATE'];
+          $docrow['createBy']   = $row['CREATED_BY'];
+          $docrow['type']       = $row['TYPE'];
+          $docrow['index']      = $row['APP_DOC_INDEX'];
+          $docrow['link']       = 'cases/' . $row['DOWNLOAD_LINK'];
           $result[] = $docrow;
         }
       }
@@ -463,38 +463,38 @@ class wsBase
 
  /*
   * input document process list
-  * @param string $sProcessUID 
+  * @param string $sProcessUID
   * @return $result will return an object
   */
   public function inputDocumentProcessList( $sProcessUID ) {
     try {
       global $_DBArray;
-      $_DBArray = (isset ( $_SESSION ['_DBArray'] ) ? $_SESSION ['_DBArray'] : '');   
+      $_DBArray = (isset ( $_SESSION ['_DBArray'] ) ? $_SESSION ['_DBArray'] : '');
 
       $oMap = new processMap();
       $oCriteria = $oMap->getInputDocumentsCriteria($sProcessUID);
       $oDataset = InputDocumentPeer::doSelectRS ( $oCriteria );
       $oDataset->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
       $oDataset->next ();
-      
+
       $result   = array();
       //$result[] = array('guid'=>'char','name'=>'name','description'=>'description'); //not necesary for SOAP message
-      while ( $aRow = $oDataset->getRow() ) {        
-        if ( $aRow['INP_DOC_TITLE'] == NULL){// There is no transaltion for this Document name, try to get/regenerate the label                                    
+      while ( $aRow = $oDataset->getRow() ) {
+        if ( $aRow['INP_DOC_TITLE'] == NULL){// There is no transaltion for this Document name, try to get/regenerate the label
           $inputDocument               = new InputDocument();
           $inputDocumentObj            = $inputDocument->load($aRow['INP_DOC_UID']);
           $aRow['INP_DOC_TITLE']       = $inputDocumentObj['INP_DOC_TITLE'];
           $aRow['INP_DOC_DESCRIPTION'] = $inputDocumentObj['INP_DOC_DESCRIPTION'];
-        }        
+        }
         $docrow                        = array();
-        $docrow['guid']                = $aRow['INP_DOC_UID']; 
-        $docrow['name']                = $aRow['INP_DOC_TITLE']; 
-        $docrow['description']         = $aRow['INP_DOC_DESCRIPTION']; 
-        $result[] = $docrow;             
+        $docrow['guid']                = $aRow['INP_DOC_UID'];
+        $docrow['name']                = $aRow['INP_DOC_TITLE'];
+        $docrow['description']         = $aRow['INP_DOC_DESCRIPTION'];
+        $result[] = $docrow;
         $oDataset->next ();
-      }   
+      }
 
-      //$_DBArray['inputDocArray'] = $inputDocArray;    
+      //$_DBArray['inputDocArray'] = $inputDocArray;
 
       return $result;
     }
@@ -507,7 +507,7 @@ class wsBase
 
  /*
   * output document list
-  * @param string $sApplicationUID 
+  * @param string $sApplicationUID
   * @param string $sUserUID
   * @return $result will return an object
   */
@@ -524,16 +524,16 @@ class wsBase
       foreach ( $_DBArray['outputDocuments'] as $key => $row ) {
         if ( isset($row['DOC_VERSION']) ) {
           $docrow = array();
-          $docrow['guid']       = $row['APP_DOC_UID']; 
-          $docrow['filename']   = $row['DOWNLOAD_FILE']; 
-           
-          $docrow['docId']      = $row['DOC_UID']; 
-          $docrow['version']    = $row['DOC_VERSION']; 
-          $docrow['createDate'] = $row['CREATE_DATE']; 
-          $docrow['createBy']   = $row['CREATED_BY']; 
-          $docrow['type']       = $row['TYPE']; 
-          $docrow['index']      = $row['APP_DOC_INDEX']; 
-          $docrow['link']       = 'cases/' . $row['DOWNLOAD_LINK']; 
+          $docrow['guid']       = $row['APP_DOC_UID'];
+          $docrow['filename']   = $row['DOWNLOAD_FILE'];
+
+          $docrow['docId']      = $row['DOC_UID'];
+          $docrow['version']    = $row['DOC_VERSION'];
+          $docrow['createDate'] = $row['CREATE_DATE'];
+          $docrow['createBy']   = $row['CREATED_BY'];
+          $docrow['type']       = $row['TYPE'];
+          $docrow['index']      = $row['APP_DOC_INDEX'];
+          $docrow['link']       = 'cases/' . $row['DOWNLOAD_LINK'];
           $result[] = $docrow;
         }
       }
@@ -611,14 +611,14 @@ class wsBase
 
  /*
   * send message
-  * @param string $caseId 
-  * @param string $sFrom  
+  * @param string $caseId
+  * @param string $sFrom
   * @param string $sTo
-  * @param string $sCc 
-  * @param string $sBcc 
-  * @param string $sSubject 
-  * @param string $sTemplate 
-  * @param $appFields = null 
+  * @param string $sCc
+  * @param string $sBcc
+  * @param string $sSubject
+  * @param string $sTemplate
+  * @param $appFields = null
   * @return $result will return an object
   */
   public function sendMessage($caseId, $sFrom, $sTo, $sCc, $sBcc, $sSubject, $sTemplate, $appFields = null, $aAttachment = null ) {
@@ -630,9 +630,9 @@ class wsBase
       $passwd =$aSetup['MESS_PASSWORD'];
       $passwdDec = G::decrypt($passwd,'EMAILENCRYPT');
       if (strpos( $passwdDec, 'hash:' ) !== false) {
-    	  list($hash, $pass) = explode(":", $passwdDec);   
+    	  list($hash, $pass) = explode(":", $passwdDec);
     	  $arrayFrom['MESS_PASSWORD'] = $pass;
-      }       
+      }
       $oSpool = new spoolRun();
       $oSpool->setConfig(array(
         'MESS_ENGINE'   => $aSetup['MESS_ENGINE'],
@@ -654,17 +654,17 @@ class wsBase
       if (!file_exists($fileTemplate)) {
         $data['FILE_TEMPLATE'] = $fileTemplate;
         $result = new wsResponse(28, G::LoadTranslation('ID_TEMPLATE_FILE_NOT_EXIST', SYS_LANG, $data));
-        
+
         return $result;
       }
 
       if ($appFields == null) {
         $Fields = $oldFields['APP_DATA'];
-      } 
+      }
       else {
         $Fields = array_merge($oldFields['APP_DATA'], $appFields);
       }
-      
+
       $templateContents = file_get_contents($fileTemplate);
 
       //$sContent    = G::unhtmlentities($sContent);
@@ -712,7 +712,7 @@ class wsBase
       );
 
       $oSpool->create( $messageArray );
-      $oSpool->sendMail(); 
+      $oSpool->sendMail();
 
       if ( $oSpool->status == 'sent' )
         $result = new wsResponse (0, G::loadTranslation ('ID_MESSAGE_SENT') . ": ". $sTo );
@@ -720,14 +720,14 @@ class wsBase
         $result = new wsResponse (29, $oSpool->status . ' ' . $oSpool->error . print_r ($aSetup ,1 ) );
 
       return $result;
-    } 
+    }
     catch ( Exception $e ) {
       return new wsResponse (100, $e->getMessage());
     }
   }
 
  /*
-  * get case information 
+  * get case information
   * @param string $caseId
   * @param string $iDelIndex
   * @return $result will return an object
@@ -810,7 +810,7 @@ class wsBase
         $currentUser->delThreadStatus = $aAppDel['DEL_THREAD_STATUS'];
         $aCurrentUsers[] = $currentUser;
       }
-            
+
       $result->currentUsers     = $aCurrentUsers;
 
       return $result;
@@ -822,14 +822,14 @@ class wsBase
   }
 
  /*
-  * creates a new user 
-  * @param  string sessionId : The session ID 
-  * @param  string userId    : The username for the new user. 
+  * creates a new user
+  * @param  string sessionId : The session ID
+  * @param  string userId    : The username for the new user.
   * @param  string firstname : The user's first name.
   * @param  string lastname  : The user's last name.
   * @param  string email     : The user's email address.
   * @param  string role      : The user's role, such as 'PROCESSMAKER_ADMIN' or 'PROCESSMAKER_OPERATOR'.
-  * @param  string password  : The user's password  such as 'Be@gle2'(It will be automatically encrypted with an MD5 hash). 
+  * @param  string password  : The user's password  such as 'Be@gle2'(It will be automatically encrypted with an MD5 hash).
   * @return $result will return an object
   */
   public function createUser( $userId, $firstname, $lastname, $email, $role, $password) {
@@ -899,7 +899,7 @@ class wsBase
       $aData['USR_STATUS']      = 'ACTIVE';
       $aData['USR_COUNTRY']     = '';
       $aData['USR_CITY']        = '';
-      $aData['USR_LOCATION']    = ''; 
+      $aData['USR_LOCATION']    = '';
       $aData['USR_ADDRESS']     = '';
       $aData['USR_PHONE']       = '';
       $aData['USR_ZIP_CODE']    = '';
@@ -919,7 +919,7 @@ class wsBase
                       'message'     => $res->message,
                       'userUID'     => $sUserUID,
                       'timestamp'   => $res->timestamp );
-      
+
       return $result;
     }
     catch ( Exception $e ) {
@@ -927,27 +927,27 @@ class wsBase
       return $result;
     }
   }
- 
- 
+
+
  /*
-  * create Group 
+  * create Group
   * @param string $groupName
   * @return $result will return an object
   */
   public function createGroup( $groupName) {
     try {
-      if( trim($groupName) == '' ) {  
+      if( trim($groupName) == '' ) {
         $result = new wsCreateGroupResponse (25, G::loadTranslation ('ID_GROUP_NAME_REQUIRED'), '');
         return $result;
       }
 
-      $group = new Groupwf();  
+      $group = new Groupwf();
       $grpRow['GRP_TITLE'] = $groupName;
       $groupId = $group->create( $grpRow );
 
       $data['GROUP_NAME'] = $groupName;
       $result = new wsCreateGroupResponse (0, G::loadTranslation ('ID_GROUP_CREATED_SUCCESSFULLY', SYS_LANG, $data), $groupId);
-      
+
       return $result;
     }
     catch ( Exception $e ) {
@@ -957,14 +957,14 @@ class wsBase
   }
 
   /*
-   * Create New Department link on the top section of the left pane allows you to create a root-level department. 
-   * @param string $departmentName 
+   * Create New Department link on the top section of the left pane allows you to create a root-level department.
+   * @param string $departmentName
    * @param string $parentUID
    * @return $result will return an object
    */
   public function createDepartment( $departmentName, $parentUID ) {
     try {
-      if( trim($departmentName) == '' ) {  
+      if( trim($departmentName) == '' ) {
         $result = new wsCreateDepartmentResponse (25, G::loadTranslation ('ID_DEPARTMENT_NAME_REQUIRED'), '');
         return $result;
       }
@@ -1041,11 +1041,11 @@ class wsBase
   }
 
    /*
-    * assigns a user to a group 
+    * assigns a user to a group
     * @param string $userId
     * @param string $groupId
     * @return $result will return an object
-    */ 
+    */
   public function assignUserToGroup( $userId, $groupId) {
     try {
       global $RBAC;
@@ -1080,9 +1080,9 @@ class wsBase
 
 
    /*
-    * assigns user to department 
-    * @param string $userId  
-    * @param string $depId 
+    * assigns user to department
+    * @param string $userId
+    * @param string $depId
     * @param string $manager
     * @return $result will return an object
     */
@@ -1106,7 +1106,7 @@ class wsBase
       if ( ! $deps->existsUserInDepartment( $depId, $userId ) ) {
         $deps->addUserToDepartment( $depId, $userId, $manager, true );
       }
-  
+
       $result = new wsResponse (0, G::loadTranslation ('ID_COMMAND_EXECUTED_SUCCESSFULY'));
       return $result;
     }
@@ -1117,8 +1117,8 @@ class wsBase
   }
 
    /*
-    * sends variables to a case 
-    * @param string $caseId  
+    * sends variables to a case
+    * @param string $caseId
     * @param string $variables
     * @return $result will return an object
     */
@@ -1155,11 +1155,11 @@ class wsBase
           ob_start();
           print_r($variables);
           $cdata = ob_get_contents();
-          ob_end_clean(); 
+          ob_end_clean();
           $up_case = $oCase->updateCase($caseId, $oldFields);
           $result = new wsResponse (0, $cant . " " . G::loadTranslation ('ID_VARIABLES_RECEIVED') . ": \n" . trim(str_replace('Array', '', $cdata)) );
           return $result;
-        } 
+        }
         else {
           $result = new wsResponse (23, G::loadTranslation ('ID_VARIABLES_PARAM_ZERO'));
           return $result;
@@ -1177,7 +1177,7 @@ class wsBase
 
   /*
     * get variables  The variables can be system variables and/or case variables
-    * @param string $caseId  
+    * @param string $caseId
     * @param string $variables
     * @return $result will return an object
     */
@@ -1207,13 +1207,13 @@ class wsBase
                           $node->name  = $val->name."][".$gridKey."][".$col;
                           $node->value =$colValue;
                           $resFields[] = $node;
-                      }               
+                      }
                   }else{//Checkgroups, Radiogroups
                       $node        = new stdClass();
                       $node->name  = $key;
                       $node->value =implode("|",$val);
                       $resFields[] = $node;
-                  }            
+                  }
               }
               }
             }
@@ -1240,9 +1240,9 @@ class wsBase
 
  /*
   * new Case begins a new case under the name of the logged-in user.
-  * @param string $processId 
-  * @param string $userId 
-  * @param string $taskId 
+  * @param string $processId
+  * @param string $userId
+  * @param string $taskId
   * @param string $variables
   * @return $result will return an object
   */
@@ -1257,14 +1257,14 @@ class wsBase
       if (isset($_SESSION['USER_LOGGED']))   unset($_SESSION['USER_LOGGED']);
       //if (isset($_SESSION['USR_USERNAME']))  unset($_SESSION['USR_USERNAME']);
       //if (isset($_SESSION['STEP_POSITION'])) unset($_SESSION['STEP_POSITION']);
-      
+
       $Fields = array();
       if ( is_array($variables) && count($variables)>0 ) {
         $Fields = $variables;
       }
       $oProcesses = new Processes();
       $pro = $oProcesses->processExists($processId);
-      if( !$pro ) {  
+      if( !$pro ) {
         $result = new wsResponse (11, G::loadTranslation ('ID_INVALID_PROCESS') . " " . $processId);
         return $result;
       }
@@ -1296,9 +1296,9 @@ class wsBase
         $result = new wsResponse (14, G::loadTranslation ('ID_TASK_INVALID_USER_NOT_ASSIGNED_TASK'));
         return $result;
       }
-      
+
       $case = $oCase->startCase($taskId, $userId);
-      
+
       $_SESSION['APPLICATION']   = $case['APPLICATION'];
       $_SESSION['PROCESS']       = $case['PROCESS'];
       $_SESSION['TASK']          = $taskId;
@@ -1306,7 +1306,7 @@ class wsBase
       $_SESSION['USER_LOGGED']   = $userId;
       //$_SESSION['USR_USERNAME']  = $case['USR_USERNAME'];
       //$_SESSION['STEP_POSITION'] = 0;
-      
+
       $caseId = $case['APPLICATION'];
       $caseNr = $case['CASE_NUMBER'];
 
@@ -1315,12 +1315,12 @@ class wsBase
       $oldFields['APP_DATA'] = array_merge( $oldFields['APP_DATA'], $Fields);
 
       $up_case   = $oCase->updateCase($caseId, $oldFields);
-                 
+
       $result    = new wsResponse (0, G::loadTranslation ('ID_STARTED_SUCCESSFULLY'));
       $result->caseId     = $caseId;
       $result->caseNumber = $caseNr;
 
-      
+
       return $result;
     }
     catch ( Exception $e ) {
@@ -1398,10 +1398,10 @@ class wsBase
         $up_case   = $oCase->updateCase($caseId, $oldFields);
 
         $result    = new wsResponse (0, G::loadTranslation ('ID_COMMAND_EXECUTED_SUCCESSFULLY'));
-        
+
         $result->caseId     = $caseId;
         $result->caseNumber = $caseNumber;
-        
+
         return $result;
       }
       else {
@@ -1423,13 +1423,13 @@ class wsBase
 
    /*
     * derivate Case moves the case to the next task in the process according to the routing rules
-    * @param string $userId 
-      @param string $caseId 
-      @param string $delIndex  
+    * @param string $userId
+      @param string $caseId
+      @param string $delIndex
     * @return $result will return an object
     */
   public function derivateCase($userId, $caseId, $delIndex, $bExecuteTriggersBeforeAssignment = false) {
-    try { 
+    try {
       $sStatus = 'TO_DO';
 
       $varResponse = '';
@@ -1479,7 +1479,7 @@ class wsBase
 
       if(is_array($aRow))
       {
-        if ( isset($aRow['APP_DISABLE_ACTION_USER']) && $aRow['APP_DISABLE_ACTION_USER']!=0 && 
+        if ( isset($aRow['APP_DISABLE_ACTION_USER']) && $aRow['APP_DISABLE_ACTION_USER']!=0 &&
              isset($aRow['APP_DISABLE_ACTION_DATE']) && $aRow['APP_DISABLE_ACTION_DATE']!='' ) {
             $result = new wsResponse (19, G::loadTranslation ('ID_CASE_IN_STATUS') . " " . $aRow['APP_TYPE']);
             return $result;
@@ -1489,10 +1489,16 @@ class wsBase
       $aData['APP_UID']   = $caseId;
       $aData['DEL_INDEX'] = $delIndex;
       $aData['USER_UID']  = $userId;
-      
-      //load data
-      $oCase     = new Cases ();
-      $appFields = $oCase->loadCase( $caseId );
+
+      //Load data
+      $oCase     = new Cases();
+      $appFields = $oCase->loadCase($caseId, $delIndex);
+
+      if (is_null($appFields["DEL_INIT_DATE"])) {
+          $oCase->setDelInitDate($caseId, $delIndex);
+          $appFields = $oCase->loadCase($caseId, $delIndex);
+      }
+
       $appFields['APP_DATA']['APPLICATION'] = $caseId;
 
       if ($bExecuteTriggersBeforeAssignment) {
@@ -1503,7 +1509,7 @@ class wsBase
           foreach ($aTriggers as $aTrigger) {
             //$appFields = $oCase->loadCase( $caseId );
             //$appFields['APP_DATA']['APPLICATION'] = $caseId;
-            
+
             //@Neyek #############################################################################################
             if (!$this->stored_system_variables) {
               $appFields["APP_DATA"] = array_merge($appFields["APP_DATA"], G::getSystemConstants());
@@ -1513,23 +1519,23 @@ class wsBase
               $oParams->option  = "STORED SESSION";
               $oParams->SID     = $this->wsSessionId;
               $oParams->appData = $appFields["APP_DATA"];
-            
+
               $appFields["APP_DATA"] = array_merge($appFields["APP_DATA"], G::getSystemConstants($oParams));
             }
             //####################################################################################################
-        
+
             $oPMScript->setFields( $appFields['APP_DATA'] );
             $bExecute = true;
             if ($aTrigger['ST_CONDITION'] !== '') {
               $oPMScript->setScript($aTrigger['ST_CONDITION']);
-              $bExecute = $oPMScript->evaluate();              
+              $bExecute = $oPMScript->evaluate();
             }
             if ($bExecute) {
               $oPMScript->setScript($aTrigger['TRI_WEBBOT']);
               $oPMScript->execute();
               $varTriggers .= "<br/><b>-= Before Assignment =-</b><br/>" . nl2br(htmlentities($aTrigger['TRI_WEBBOT'], ENT_QUOTES)) . "<br/>";
-              
-              
+
+
               //$appFields = $oCase->loadCase( $caseId );
               $appFields['APP_DATA'] = $oPMScript->aFields;
               $oCase->updateCase ( $caseId, $appFields );
@@ -1546,7 +1552,7 @@ class wsBase
         foreach ($aTriggers as $aTrigger) {
           //$appFields = $oCase->loadCase( $caseId );
           //$appFields['APP_DATA']['APPLICATION'] = $caseId;
-          
+
           //@Neyek #############################################################################################
           if (!$this->stored_system_variables) {
             $appFields["APP_DATA"] = array_merge($appFields["APP_DATA"], G::getSystemConstants());
@@ -1556,18 +1562,18 @@ class wsBase
             $oParams->option  = "STORED SESSION";
             $oParams->SID     = $this->wsSessionId;
             $oParams->appData = $appFields["APP_DATA"];
-            
+
             $appFields["APP_DATA"] = array_merge($appFields["APP_DATA"], G::getSystemConstants($oParams));
           }
           //####################################################################################################
-        
+
           $oPMScript->setFields( $appFields['APP_DATA'] );
           $bExecute = true;
           if ($aTrigger['ST_CONDITION'] !== '') {
             $oPMScript->setScript($aTrigger['ST_CONDITION']);
             $bExecute = $oPMScript->evaluate();
-            
-          } 
+
+          }
           if ($bExecute) {
             $oPMScript->setScript($aTrigger['TRI_WEBBOT']);
             $oPMScript->execute();
@@ -1599,24 +1605,24 @@ class wsBase
           $result = new wsResponse (15, G::loadTranslation ('ID_TASK_DEFINED_MANUAL_ASSIGNMENT'));
           return $result;
         }
-        
+
         //Routed to the next task, if end process then not exist user
         $nodeNext = array();
         $usrasgdUid = null;
         $usrasgdUserName = null;
-        
+
         if (isset($val['NEXT_TASK']['USER_ASSIGNED'])) {
           $usrasgdUid = $val['NEXT_TASK']['USER_ASSIGNED']['USR_UID'];
           $usrasgdUserName = '(' . $val['NEXT_TASK']['USER_ASSIGNED']['USR_USERNAME'] . ')';
         }
-        
+
         $nodeNext['TAS_UID'] = $val['NEXT_TASK']['TAS_UID'];
         $nodeNext['USR_UID'] = $usrasgdUid;
         $nodeNext['TAS_ASSIGN_TYPE']   = $val['NEXT_TASK']['TAS_ASSIGN_TYPE'];
         $nodeNext['TAS_DEF_PROC_CODE'] = $val['NEXT_TASK']['TAS_DEF_PROC_CODE'];
         $nodeNext['DEL_PRIORITY'] = $appdel['DEL_PRIORITY'];
         $nodeNext['TAS_PARENT']   = $val['NEXT_TASK']['TAS_PARENT'];
-        
+
         $nextDelegations[] = $nodeNext;
         $varResponse = $varResponse . (($varResponse != '')? ',' : '') . $val['NEXT_TASK']['TAS_TITLE'] . $usrasgdUserName;
       }
@@ -1660,7 +1666,7 @@ class wsBase
       if (count($aTriggers) > 0) {
         $oPMScript = new PMScript();
         //$appFields['APP_DATA']['APPLICATION'] = $caseId;
-        
+
         //@Neyek #############################################################################################
         if (!$this->stored_system_variables) {
           $appFields["APP_DATA"] = array_merge($appFields["APP_DATA"], G::getSystemConstants());
@@ -1670,11 +1676,11 @@ class wsBase
           $oParams->option  = "STORED SESSION";
           $oParams->SID     = $this->wsSessionId;
           $oParams->appData = $appFields["APP_DATA"];
-          
+
           $appFields["APP_DATA"] = array_merge($appFields["APP_DATA"], G::getSystemConstants($oParams));
         }
         //####################################################################################################
-        
+
         $oPMScript->setFields( $appFields['APP_DATA'] );
         $varTriggers .= "<b>-= After Derivation =-</b><br/>";
         foreach ($aTriggers as $aTrigger) {
@@ -1699,11 +1705,11 @@ class wsBase
 
       $oUser     = new Users();
       $aUser     = $oUser->load($userId);
-      
-      if (trim($aUser['USR_EMAIL'])=='') {  
+
+      if (trim($aUser['USR_EMAIL'])=='') {
           $aUser['USR_EMAIL'] = 'info@'.$_SERVER['HTTP_HOST'];
       }
-      
+
       $sFromName = '"' . $aUser['USR_FIRSTNAME'] . ' ' . $aUser['USR_LASTNAME'] . '" <'.$aUser['USR_EMAIL'].'>';
       $oCase->sendNotifications($appdel['TAS_UID'], $nextDelegations, $appFields['APP_DATA'], $caseId, $delIndex, $sFromName);
 
@@ -1711,8 +1717,8 @@ class wsBase
       //$appFields = $oCase->loadCase( $caseId );
       //$oCase->updateCase ( $caseId, $appFields );
       //Save data - End
-      
-      
+
+
       $oProcess = new Process();
       $oProcessFieds = $oProcess->Load($appFields['PRO_UID']);
       //here dubug mode in web entry
@@ -1722,7 +1728,7 @@ class wsBase
       else{
         $result = new wsResponse (0, $varResponse." --- ".$oProcessFieds['PRO_DEBUG']);
       }
-      
+
       $res = $result->getPayloadArray ();
 
       //now fill the array of AppDelegationPeer
@@ -1772,7 +1778,7 @@ class wsBase
         $currentUser->delThreadStatus = $aAppDel['DEL_THREAD_STATUS'];
         $aCurrentUsers[] = $currentUser;
       }
-            
+
       $res['routing'] = $aCurrentUsers;
       return $res;
     }
@@ -1781,12 +1787,12 @@ class wsBase
       return $result;
     }
   }
-    
+
    /*
     * execute Trigger, executes a ProcessMaker trigger. Note that triggers which are tied to case derivation will executing automatically.
-    * @param string $userId 
-    * @param string $caseId 
-    * @param string $delIndex  
+    * @param string $userId
+    * @param string $caseId
+    * @param string $delIndex
     * @return $result will return an object
     */
   public function executeTrigger($userId, $caseId, $triggerIndex, $delIndex) {
@@ -1872,7 +1878,7 @@ class wsBase
    /*
     * task Case
     * @param  string sessionId : The session ID which is obtained when logging in
-    * @param  string caseId    : The case ID. The caseList() function can be used to find the ID number for cases 
+    * @param  string caseId    : The case ID. The caseList() function can be used to find the ID number for cases
     * @return $result returns the current task for a given case. Note that the logged-in user must have privileges to access the task
     */
   public function taskCase( $caseId ) {
@@ -1941,9 +1947,9 @@ class wsBase
     * @param  string caseId       :   The case ID (which can be obtained with the caseList() function)
     * @param  string delIndex     : The delegation index number of the case (which can be obtained with the caseList() function).
     * @param  string userIdSource : The user who is currently assigned the case.
-    * @param  string userIdTarget : The target user who will be newly assigned to the case.    
+    * @param  string userIdTarget : The target user who will be newly assigned to the case.
     * @return $result  will return an object
-    */ 
+    */
   public function reassignCase( $sessionId, $caseId, $delIndex, $userIdSource, $userIdTarget ){
     try {
       if ( $userIdTarget == $userIdSource ) {
@@ -2039,9 +2045,9 @@ class wsBase
 
  /*
  * get system information
- * @param  string sessionId : The session ID (which was obtained at login)     
+ * @param  string sessionId : The session ID (which was obtained at login)
  * @return $eturns information about the WAMP/LAMP stack, the workspace database, the IP number and version of ProcessMaker, and the IP number and version of web browser of the user
- */ 
+ */
   public function systemInformation() {
     try {
       define ( 'SKIP_RENDER_SYSTEM_INFORMATION', true );
@@ -2062,7 +2068,7 @@ class wsBase
       $result->availableDatabases = $Fields['AVAILABLE_DB'];
       $result->userBrowser        = $Fields['HTTP_USER_AGENT'];
       $result->userIp             = $Fields['IP'];
-            
+
       return $result;
     }
     catch ( Exception $e ) {
@@ -2078,9 +2084,9 @@ class wsBase
   * @param string version :
   * @param string importOption :
   * @param string usernameLibrary : The username to obtain access to the ProcessMaker library.
-  * @param string passwordLibrary : The password to obtain access to the ProcessMaker library. 
+  * @param string passwordLibrary : The password to obtain access to the ProcessMaker library.
   * @return $eturns  will return an object
-  */ 
+  */
  public function importProcessFromLibrary ( $processId, $version = '', $importOption = '', $usernameLibrary = '', $passwordLibrary = '' ) {
     try {
       G::LoadClass('processes');
@@ -2097,13 +2103,13 @@ class wsBase
       $privacy = $oProcess->privacy;
 
       $strSession = '';
-      if ( $privacy != 'FREE' ) {           
+      if ( $privacy != 'FREE' ) {
         global $sessionId;
         $antSession = $sessionId;
         $oProcesses->ws_open ($usernameLibrary, $passwordLibrary );
         $strSession = "&s=" . $sessionId;
         $sessionId = $antSession;
-      }        
+      }
 
       //downloading the file
       $localPath     = PATH_DOCUMENT . 'input' . PATH_SEP ;
@@ -2129,7 +2135,7 @@ class wsBase
 
       //if the process exists, we need to check the $importOption to and re-import if the user wants,
       if ( $oProcess->processExists ( $sProUid ) ) {
-        
+
         //Update the current Process, overwriting all tasks and steps
         if ( $importOption == 1 ) {
           $oProcess->updateProcessFromData ($oData, $localPath . $newfilename );
@@ -2145,7 +2151,7 @@ class wsBase
           }
           $sNewProUid = $sProUid;
         }
-      
+
         //Disable current Process and create a new version of the Process
         if ( $importOption == 2 ) {
           $oProcess   ->disablePreviousProcesses( $sProUid );
@@ -2156,7 +2162,7 @@ class wsBase
           $oProcess   ->renewAll ( $oData );
           $oProcess   ->createProcessFromData ($oData, $localPath . $newfilename );
         }
-      
+
         //Create a completely new Process without change the current Process
         if ( $importOption == 3 ) {
           //krumo ($oData); die;
@@ -2176,7 +2182,7 @@ class wsBase
       if ( ! $oProcess->processExists ( $processId ) ) {
         $oProcess->createProcessFromData ($oData, $localPath . $newfilename );
       }
-      
+
       //show the info after the imported process
       $oProcess    = new Processes();
       $oProcess    ->ws_open_public ();
@@ -2189,7 +2195,7 @@ class wsBase
       $result      ->processTitle       = $processData->title;
       $result      ->category           = (isset($processData->category) ? $processData->category : '');
       $result      ->version            = $processData->version;
-            
+
       return $result;
     }
     catch ( Exception $e ) {
@@ -2197,7 +2203,7 @@ class wsBase
       return $result;
     }
   }
-  
+
   public function getCaseNotes ($applicationID, $userUid = '') {
     try {
       G::LoadClass('case');

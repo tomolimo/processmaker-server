@@ -104,20 +104,20 @@ class Application extends BaseApplication {
 
   public function isEmptyInContent ( $content, $field, $lang )  {
     if ( isset ( $content[$field][ $lang ] ) ) {
-    	if ( trim( $content[$field][ $lang ] ) != '' ) 
+    	if ( trim( $content[$field][ $lang ] ) != '' )
     	  return false;
     };
     return true;
-  } 
+  }
 
   public function updateInsertContent ( $content, $field, $value )  {
     if ( isset ( $content[$field][ 'en' ] ) ) {
-    	//update 
+    	//update
       $con = ContentPeer::retrieveByPK ( $field, '', $this->getAppUid(), 'en' );
       $con->setConValue ( $value );
       if ($con->validate ()) {
-        $res = $con->save ();      
-      }	
+        $res = $con->save ();
+      }
     }
     else {//insert
       $con = new Content ( );
@@ -127,10 +127,10 @@ class Application extends BaseApplication {
       $con->setConLang ( 'en' );
       $con->setConValue ( $value );
       if ($con->validate ()) {
-        $res = $con->save ();      
-      }	
+        $res = $con->save ();
+      }
     }
-  } 
+  }
 
   public function normalizeContent( $content, $field , $lang ) {
     $value = '';
@@ -140,7 +140,7 @@ class Application extends BaseApplication {
     	$value = $content [ $field  ][ $lang ];
       if ( $lang != 'en' ) {
       	$this->updateInsertContent ( $content, $field , $value );
-      }    
+      }
     }
     else {
       //if the lang row is empty, and 'en' row is not empty return 'en' value
@@ -152,13 +152,13 @@ class Application extends BaseApplication {
       if ( $this->isEmptyInContent ( $content, $field , 'en' ) ) {
       	if ( isset($content[$field]) && is_array ($content[$field] ) ) {
       	  foreach ( $content [ $field  ] as $lan => $val ) {
-      	  	if ( trim ( $val ) != '' ) { 
+      	  	if ( trim ( $val ) != '' ) {
       	  		$value = $val;
       	  		if ( $lan != 'en' ) {
-                $this->updateInsertContent ( $content, $field , $value );      			
+                $this->updateInsertContent ( $content, $field , $value );
                 continue;
               }
-      	    }	
+      	    }
           }
         }
         else {
@@ -167,7 +167,7 @@ class Application extends BaseApplication {
       }
     }
     return $value;
-  }      
+  }
 
   /**
    * Get the [app_description] , [app_title] column values.
@@ -181,8 +181,8 @@ class Application extends BaseApplication {
     $lang = defined ( 'SYS_LANG') ? SYS_LANG : 'en';
     $c = new Criteria();
     $c->clearSelectColumns();
-    $c->addSelectColumn( ContentPeer::CON_CATEGORY );    
-    $c->addSelectColumn( ContentPeer::CON_LANG );    
+    $c->addSelectColumn( ContentPeer::CON_CATEGORY );
+    $c->addSelectColumn( ContentPeer::CON_LANG );
     $c->addSelectColumn( ContentPeer::CON_VALUE );
     $c->add( ContentPeer::CON_ID,  $this->getAppUid() );
     //$c->add( ContentPeer::CON_LANG, $lang );
@@ -201,7 +201,7 @@ class Application extends BaseApplication {
       $rs->next();
       $row = $rs->getRow();
     }
-    
+
     $appTitle       = $this->normalizeContent( $content, 'APP_TITLE', $lang );
     $appDescription = $this->normalizeContent( $content, 'APP_DESCRIPTION', $lang );
 
@@ -288,7 +288,7 @@ class Application extends BaseApplication {
       if (is_object($oApplication) && get_class ($oApplication) == 'Application' ) {
         $aFields = $oApplication->toArray(BasePeer::TYPE_FIELDNAME);
         $this->fromArray ($aFields, BasePeer::TYPE_FIELDNAME );
-        
+
         //this is the new function to optimize content queries
         $aContentFields   = $oApplication->getContentFields();
 
@@ -335,13 +335,12 @@ class Application extends BaseApplication {
       $this->setAppCurUser   ( $sUsrUid );
       $this->setAppCreateDate( 'now' );
       $this->setAppInitDate  ( 'now' );
-      $this->setAppFinishDate( '19020101' );  //to do: what is the empty date for propel???/
       $this->setAppUpdateDate( 'now' );
 
       $pin = G::generateCode( 4, 'ALPHANUMERIC');
       $this->setAppData      ( serialize ( array('PIN'=>$pin) ) );
       $this->setAppPin       ( md5($pin) );
-      
+
       $c = new Criteria();
       $c->clearSelectColumns();
       $c->addSelectColumn( 'MAX(' . ApplicationPeer::APP_NUMBER . ')' );  //the appnumber is based in all processes active, not only in the specified process guid
@@ -367,7 +366,7 @@ class Application extends BaseApplication {
         $con->commit();
         return $this->getAppUid();
       }
-      else { 
+      else {
        $msg = '';
        foreach($this->getValidationFailures() as $objValidationFailure)
          $msg .= $objValidationFailure->getMessage() . "<br/>";
@@ -479,7 +478,6 @@ class Application extends BaseApplication {
     $this->setAppCurUser   ( $aData['USR_UID'] );
     $this->setAppCreateDate(isset($aData['APP_CREATE_DATE'])? $aData['APP_CREATE_DATE'] : 'now' );
     $this->setAppInitDate  (isset($aData['APP_INIT_DATE'])  ? $aData['APP_INIT_DATE']   : 'now' );
-    //$this->setAppFinishDate(isset($aData['APP_FINISH_DATE'])? $aData['APP_FINISH_DATE'] : '' );
     $this->setAppUpdateDate(isset($aData['APP_UPDATE_DATE'])? $aData['APP_UPDATE_DATE'] : 'now' );
     //$this->setAppData      ( serialize ( array() ) );
 
