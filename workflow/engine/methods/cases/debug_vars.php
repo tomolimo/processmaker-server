@@ -82,11 +82,8 @@ switch($request){
     $return_object->totalCount=1;
     
     foreach ($aVariables as $i=>$var) {
-      if( is_object($var) ){
-        $aVariables[$i] = '<object>';
-      }
-      if( is_array($var) ){
-        $aVariables[$i] = '<array>';
+      if( is_array($var) || is_object($var) ) {
+        $aVariables[$i] = print_r($var, true);
       }
     }
 
