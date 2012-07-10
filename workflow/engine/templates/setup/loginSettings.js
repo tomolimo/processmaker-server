@@ -67,8 +67,7 @@ Ext.onReady(function(){
         bodyStyle:'padding:5px',
         frame: true,
         height: 'auto',
-        html:'The default language that is configured in this place is for the "dropdown" of the '+
-            'languages that are displaying on the login screen, this configuration is set for each workspace.'
+        html: _('ID_MESSAGE_LOGIN')
       }
     ],
     buttons : [saveButton]

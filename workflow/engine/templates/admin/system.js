@@ -122,10 +122,7 @@ Ext.onReady(function(){
         bodyStyle:'padding:5px',
         frame: true,
         height: 'auto',
-        html:'The language that is set by default applies directly when the domain is entered '+
-            ' (eg.- http://127.0.0.1:8081), the system reads the configuration and redirects '+
-            '  the link to the selected language (eg.- http://127.0.0.1:8081/sys/en/classic/login/login),'+
-            ' it should be emphasized that this configuration is for all environments.'
+        html: _('ID_MESSAGE_SYSTEM')+" "+_('ID_MESSAGE_SYSTEM2')
       }
     ]
   });
