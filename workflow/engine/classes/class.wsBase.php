@@ -1567,18 +1567,25 @@ class wsBase
                 return $result;
             }
 
-            $oProcesses = new Processes();
-            $pro        = $oProcesses->processExists($processId);
+            $processes = new Processes();
 
-            if (!$pro) {
+            if (!$processes->processExists($processId)) {
                 $result = new wsResponse(11, G::loadTranslation('ID_INVALID_PROCESS') . " " . $processId . "!!");
+
+                return $result;
+            }
+
+            $user = new Users();
+
+            if (!$user->userExists($userId)) {
+                $result = new wsResponse(11, G::loadTranslation('ID_USER_NOT_REGISTERED') . " " . $userId . "!!");
 
                 return $result;
             }
 
             $oCase = new Cases();
 
-            $arrayTask = $oProcesses->getStartingTaskForUser($processId, $userId);
+            $arrayTask = $processes->getStartingTaskForUser($processId, null);
             $numTasks  = count($arrayTask);
 
             if ($numTasks == 1) {
