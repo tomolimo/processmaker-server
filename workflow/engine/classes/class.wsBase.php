@@ -1582,33 +1582,6 @@ class wsBase
             $numTasks  = count($arrayTask);
 
             if ($numTasks == 1) {
-                $task  = new Tasks();
-                $group = new Groups();
-
-                $arrayTaskUser = array();
-
-                $arrayAux = $task->getGroupsOfTask($arrayTask[0]['TAS_UID'], 1);
-
-                foreach ($arrayAux as $arrayGroup) {
-                    $arrayGroupUser = $group->getUsersOfGroup($arrayGroup['GRP_UID']);
-
-                    foreach ($arrayGroupUser as $arrayUser) {
-                        $arrayTaskUser[] = $arrayUser['USR_UID'];
-                    }
-                }
-
-                $arrayAux = $task->getUsersOfTask($arrayTask[0]['TAS_UID'], 1);
-
-                foreach ($arrayAux as $arrayUser) {
-                    $arrayTaskUser[] = $arrayUser['USR_UID'];
-                }
-
-                if (!in_array($userId, $arrayTaskUser)) {
-                    $result = new wsResponse(14, G::loadTranslation('ID_USER_NOT_ASSIGNED_TASK'));
-
-                    return $result;
-                }
-
                 $case       = $oCase->startCase($arrayTask[0]['TAS_UID'], $userId);
                 $caseId     = $case['APPLICATION'];
                 $caseNumber = $case['CASE_NUMBER'];
