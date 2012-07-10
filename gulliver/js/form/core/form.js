@@ -1126,7 +1126,10 @@ function G_Text( form, element, name)
     switch(pressKey){
       case 8: case 46:  //BACKSPACE OR DELETE
       case 35: case 36: //HOME OR END
-      case 37: case 38: case 39: case 40: // ARROW KEYS
+      case 37: case 38: case 39: case 40: // ARROW KEYS        
+        if (me.validate == 'NodeName' && ((pressKey == 8) || (pressKey == 46))) {
+          return true;
+        }
         me.applyMask(pressKey);
         if ((pressKey == 8 || pressKey == 46) && (me.validate != 'Login' && me.validate != 'NodeName')) me.sendOnChange();
         me.checkBrowser();
@@ -1192,7 +1195,7 @@ function G_Text( form, element, name)
 
     me.checkBrowser();
 //    if ((me.browser.name == 'Firefox') && (keyCode == 8 || keyCode == 46)){
-    if ((me.browser.name == 'Firefox') && (keyCode == 8 )){
+    if ((me.browser.name == 'Firefox') && (keyCode == 8 ) && (me.validate != 'NodeName')){
       if (me.browser.name == 'Chrome' || me.browser.name == 'Safari'){
         event.returnValue = false;
       }
@@ -1258,12 +1261,16 @@ function G_Text( form, element, name)
               break;
             }
           }
-          var k=new leimnud.module.validator({
-            valid :['Login'],
-            key   : (window.event)? window.event : event,
-            lang  :(typeof(me.language)!=='undefined')? me.language:"en"
-          });
-          keyValid = k.result();
+          if ((keyCode == 8) && (me.validate == 'NodeName')) {
+            keyValid = true;
+          } else {
+            var k=new leimnud.module.validator({
+              valid :['Login'],
+              key   : (window.event)? window.event : event,
+              lang  :(typeof(me.language)!=='undefined')? me.language:"en"
+            });
+            keyValid = k.result();
+          }          
           break;
         default:
           var k = new leimnud.module.validator({
@@ -2435,12 +2442,14 @@ function contractSubtitle( subTitle ){
   }
 }
 function expandSubtitle( subTitle ){
-  subTitle=getRow(subTitle);
-  var c=subTitle.cells[0].className;
-  var a=subTitle.rowIndex;
-  var t=subTitle.parentNode;
-  for(var i=a+1,m=t.rows.length;i<m;i++){
-    if (t.rows[i].cells.length==1) break;
+  subTitle = getRow(subTitle);
+  var c = subTitle.cells[0].className;
+  var a = subTitle.rowIndex;
+  var t = subTitle.parentNode;
+  for (var i=a+1,m=t.rows.length; i<m; i++) {
+    if (t.rows[i].cells.length==1) {
+      break;
+    }
     t.rows[i].style.display='';
     var aAux = getControlsInTheRow(t.rows[i]);
     for (var j = 0; j < aAux.length; j++) {
@@ -2448,8 +2457,8 @@ function expandSubtitle( subTitle ){
     }
   }
 }
-function contractExpandSubtitle(subTitle){
-  subTitle=getRow(subTitle);
+function contractExpandSubtitle(subTitleName){
+  subTitle=getRow(subTitleName);
   var c=subTitle.cells[0].className;
   var a=subTitle.rowIndex;
   var t=subTitle.parentNode;
@@ -2460,8 +2469,8 @@ function contractExpandSubtitle(subTitle){
       contracted=true;
     }
   }
-  if (contracted) expandSubtitle(subTitle);
-  else contractSubtitle(subTitle);
+  if (contracted) expandSubtitle(subTitleName);
+  else contractSubtitle(subTitleName);
 }
 
 var getControlsInTheRow = function(oRow) {
