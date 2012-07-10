@@ -41,6 +41,15 @@
 
   G::LoadClass('case');
 	$oCase = new Cases();
+
+  $idProcess = $_SESSION['PROCESS'];
+  $oProcess = new Process();
+  $aProcessFieds = $oProcess->load($idProcess);
+  $noShowTitle = 0;
+  if(isset($aProcessFieds['PRO_SHOW_MESSAGE'])) {
+      $noShowTitle = $aProcessFieds['PRO_SHOW_MESSAGE'];
+  }
+
 	$aFields = $oCase->loadCase($_SESSION['APPLICATION']);
 	if (isset($aFields['TITLE'])) {
 	  $aFields['APP_TITLE'] = $aFields['TITLE'];
@@ -52,7 +61,9 @@
   $aFields['TITLE'] = G::LoadTranslation('ID_TITLE');
 
   $G_PUBLISH = new Publisher();
-  $G_PUBLISH->AddContent('smarty', 'cases/cases_title', '', '', $aFields);
+  if($noShowTitle == 0) {
+    $G_PUBLISH->AddContent('smarty', 'cases/cases_title', '', '', $aFields);
+  }
   $G_PUBLISH->AddContent('propeltable', 'paged-table', 'tracker/tracker_DynaDocs', $oProcessMap->getCaseTrackerObjectsCriteria($_SESSION['PROCESS']), array('VIEW'=>G::LoadTranslation('ID_VIEW')));
 	
 	

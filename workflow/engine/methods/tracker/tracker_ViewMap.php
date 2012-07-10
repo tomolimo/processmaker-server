@@ -29,6 +29,7 @@
    * @author Everth S. Berrios Morales <everth@colosa.com>
    *
    */
+  require_once 'classes/model/Process.php';
   if (!isset($_SESSION['PROCESS'])) {
     G::header('location: login');
   }
@@ -38,6 +39,14 @@
   require_once 'classes/model/CaseTracker.php';
   $oCaseTracker = new CaseTracker();
   $aCaseTracker = $oCaseTracker->load($_SESSION['PROCESS']);
+
+    $idProcess = $_SESSION['PROCESS'];
+  $oProcess = new Process();
+  $aProcessFieds = $oProcess->load($idProcess);
+  $noShowTitle = 0;
+  if(isset($aProcessFieds['PRO_SHOW_MESSAGE'])) {
+      $noShowTitle = $aProcessFieds['PRO_SHOW_MESSAGE'];
+  }
   switch (($aCaseTracker['CT_MAP_TYPE'])) {
     case 'NONE':
       //Nothing
@@ -57,7 +66,9 @@
       $oTemplatePower = new TemplatePower(PATH_TPL . 'processes/processes_Map.html');
       $oTemplatePower->prepare();
       $G_PUBLISH = new Publisher;
-      $G_PUBLISH->AddContent('smarty', 'cases/cases_title', '', '', $aFields);
+      if ($noShowTitle == 0) {
+        $G_PUBLISH->AddContent('smarty', 'cases/cases_title', '', '', $aFields);
+      }
       $G_PUBLISH->AddContent('template', '', '', '', $oTemplatePower);
       $oHeadPublisher =& headPublisher::getSingleton();
       $oHeadPublisher->addScriptCode('
@@ -138,7 +149,9 @@
       $oTemplatePower   = new TemplatePower(PATH_TPL . 'tracker/stages_Map.html');
       $oTemplatePower->prepare();
       $G_PUBLISH = new Publisher;
-      $G_PUBLISH->AddContent('smarty', 'cases/cases_title', '', '', $aFields);
+      if ($noShowTitle == 0) {
+        $G_PUBLISH->AddContent('smarty', 'cases/cases_title', '', '', $aFields);
+      }
       $G_PUBLISH->AddContent('template', '', '', '', $oTemplatePower);
       $oHeadPublisher =& headPublisher::getSingleton();
       $oHeadPublisher->addScriptCode('

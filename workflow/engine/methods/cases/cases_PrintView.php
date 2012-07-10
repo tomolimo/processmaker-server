@@ -48,9 +48,13 @@ try {
 
   $idProcess = (isset($Fields['APP_DATA']['PROCESS']))?$Fields['APP_DATA']['PROCESS']:$_SESSION['PROCESS'];
   $oProcess = new Process();
-  $oProcess->load($idProcess);
+  $aProcessFieds = $oProcess->load($idProcess);
   $sProcess = $oProcess->getProTitle();
 
+  $noShowTitle = 0;
+  if(isset($aProcessFieds['PRO_SHOW_MESSAGE'])) {
+      $noShowTitle = $aProcessFieds['PRO_SHOW_MESSAGE'];
+  }
   //Add content content step - Start
   if (isset($_SESSION['APPLICATION'])) {
     $array['CASE']         = G::LoadTranslation('ID_CASE');
@@ -74,8 +78,9 @@ try {
   $array['DATELABEL'] = G::LoadTranslation('DATE_LABEL');
 
   $aDyn['DYN_UID'] = (isset($_SESSION['DYN_UID_PRINT']) && $_SESSION['DYN_UID_PRINT']!='')?$_SESSION['DYN_UID_PRINT']:$aDyn['DYN_UID'];
-  $G_PUBLISH->AddContent('smarty', 'cases/cases_PrintViewTitle', '', '', $array);
-
+  if($noShowTitle == 0) {
+    $G_PUBLISH->AddContent('smarty', 'cases/cases_PrintViewTitle', '', '', $array);
+  }
   $G_PUBLISH->AddContent('dynaform', 'xmlform', $aDyn['PRO_UID']. '/' . $aDyn['DYN_UID'], '', $Fields['APP_DATA'], '', '',  'view');
   G::RenderPage('publish', 'blank');
 
