@@ -740,7 +740,7 @@
    */
 
 function getAdditionalFields($action, $confCasesList=array()) {
-  if (!empty($confCasesList) && !empty($confCasesList['second']['data'])) {
+  if (!empty($confCasesList) && !empty($confCasesList['second']['data'])) {// For the case list builder in the enterprise plugin
     $caseColumns = array();
     $caseReaderFields = array();
 
