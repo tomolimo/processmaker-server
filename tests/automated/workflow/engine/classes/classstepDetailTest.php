@@ -26,7 +26,7 @@ class classstepDetailTest extends PHPUnit_Framework_TestCase
     */
     protected function setUp()
     {
-        $this->object = new stepDetail();
+        $this->object = new stepDetail('nameSpace', 'stepId', 'stepName', 'stepTitle', 'setupStepPage');
     }
 
     /**
@@ -43,7 +43,8 @@ class classstepDetailTest extends PHPUnit_Framework_TestCase
     */
     public function testNumberOfMethodsInThisClass()
     {
-        $methods = get_class_methods('stepDetail');        $this->assertTrue( count($methods) == 1);
+        $methods = get_class_methods('stepDetail');
+        $this->assertTrue( count($methods) == 1);
     }
 
     /**
@@ -71,6 +72,6 @@ class classstepDetailTest extends PHPUnit_Framework_TestCase
         $this->assertTrue( $params[4]->getName() == 'sSetupStepPage');
         $this->assertTrue( $params[4]->isArray() == false);
         $this->assertTrue( $params[4]->isOptional () == false);
-    } 
+    }
+}
 
-  } 
