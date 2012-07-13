@@ -26,7 +26,10 @@ class classxmlMenuTest extends PHPUnit_Framework_TestCase
     */
     protected function setUp()
     {
-        $this->object = new xmlMenu();
+        require_once(PATH_TRUNK . 'gulliver/thirdparty/pear/json/class.json.php');
+        $file = 'login/login.xml';
+        $home = PATH_TRUNK . 'workflow/engine/xmlform/';
+        $this->object = new xmlMenu($file, $home);
     }
 
     /**
@@ -38,7 +41,7 @@ class classxmlMenuTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * This is the default method to test, if the class still having 
+     * This is the default method to test, if the class still having
      * the same number of methods.
     */
     public function testNumberOfMethodsInThisClass()
@@ -46,4 +49,4 @@ class classxmlMenuTest extends PHPUnit_Framework_TestCase
         $methods = get_class_methods('xmlMenu');        $this->assertTrue( count($methods) == 13);
     }
 
-  } 
+  }
