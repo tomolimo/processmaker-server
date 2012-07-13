@@ -26,7 +26,6 @@ class classxmlMenuTest extends PHPUnit_Framework_TestCase
     */
     protected function setUp()
     {
-        require_once(PATH_TRUNK . 'gulliver/thirdparty/pear/json/class.json.php');
         $file = 'login/login.xml';
         $home = PATH_TRUNK . 'workflow/engine/xmlform/';
         $this->object = new xmlMenu($file, $home);
