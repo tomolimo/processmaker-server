@@ -1,4 +1,5 @@
 <?php
+
 require_once PATH_TRUNK . 'gulliver/thirdparty/smarty/libs/Smarty.class.php';
 require_once PATH_TRUNK . 'gulliver/system/class.xmlform.php';
 require_once PATH_TRUNK . 'gulliver/system/class.xmlDocument.php';
@@ -43,7 +44,8 @@ class classInstallerTest extends PHPUnit_Framework_TestCase
     */
     public function testNumberOfMethodsInThisClass()
     {
-        $methods = get_class_methods('Installer');        $this->assertTrue( count($methods) == 11);
+        $methods = get_class_methods('Installer');
+        $this->assertTrue( count($methods) == 11);
     }
 
     /**
@@ -56,7 +58,7 @@ class classInstallerTest extends PHPUnit_Framework_TestCase
         $this->assertTrue( in_array('__construct', $methods ), 'exists method __construct' );
         $r = new ReflectionMethod('Installer', '__construct');
         $params = $r->getParameters();
-    } 
+    }
 
     /**
     * @covers Installer::create_site
@@ -71,12 +73,12 @@ class classInstallerTest extends PHPUnit_Framework_TestCase
         $this->assertTrue( $params[0]->getName() == 'config');
         $this->assertTrue( $params[0]->isArray() == false);
         $this->assertTrue( $params[0]->isOptional () == true);
-        $this->assertTrue( $params[0]->getDefaultValue() == 'Array');
+        $this->assertTrue( $params[0]->getDefaultValue() == array());
         $this->assertTrue( $params[1]->getName() == 'confirmed');
         $this->assertTrue( $params[1]->isArray() == false);
         $this->assertTrue( $params[1]->isOptional () == true);
         $this->assertTrue( $params[1]->getDefaultValue() == '');
-    } 
+    }
 
     /**
     * @covers Installer::isset_site
@@ -92,7 +94,7 @@ class classInstallerTest extends PHPUnit_Framework_TestCase
         $this->assertTrue( $params[0]->isArray() == false);
         $this->assertTrue( $params[0]->isOptional () == true);
         $this->assertTrue( $params[0]->getDefaultValue() == 'workflow');
-    } 
+    }
 
     /**
     * @covers Installer::set_admin
@@ -104,7 +106,7 @@ class classInstallerTest extends PHPUnit_Framework_TestCase
         $this->assertTrue( in_array('set_admin', $methods ), 'exists method set_admin' );
         $r = new ReflectionMethod('Installer', 'set_admin');
         $params = $r->getParameters();
-    } 
+    }
 
     /**
     * @covers Installer::query_sql_file
@@ -122,7 +124,7 @@ class classInstallerTest extends PHPUnit_Framework_TestCase
         $this->assertTrue( $params[1]->getName() == 'connection');
         $this->assertTrue( $params[1]->isArray() == false);
         $this->assertTrue( $params[1]->isOptional () == false);
-    } 
+    }
 
     /**
     * @covers Installer::file_permisions
@@ -141,7 +143,7 @@ class classInstallerTest extends PHPUnit_Framework_TestCase
         $this->assertTrue( $params[1]->isArray() == false);
         $this->assertTrue( $params[1]->isOptional () == true);
         $this->assertTrue( $params[1]->getDefaultValue() == '777');
-    } 
+    }
 
     /**
     * @covers Installer::is_dir_writable
@@ -157,7 +159,7 @@ class classInstallerTest extends PHPUnit_Framework_TestCase
         $this->assertTrue( $params[0]->isArray() == false);
         $this->assertTrue( $params[0]->isOptional () == true);
         $this->assertTrue( $params[0]->getDefaultValue() == '');
-    } 
+    }
 
     /**
     * @covers Installer::getDirectoryFiles
@@ -175,7 +177,7 @@ class classInstallerTest extends PHPUnit_Framework_TestCase
         $this->assertTrue( $params[1]->getName() == 'extension');
         $this->assertTrue( $params[1]->isArray() == false);
         $this->assertTrue( $params[1]->isOptional () == false);
-    } 
+    }
 
     /**
     * @covers Installer::check_db_empty
@@ -190,7 +192,7 @@ class classInstallerTest extends PHPUnit_Framework_TestCase
         $this->assertTrue( $params[0]->getName() == 'dbName');
         $this->assertTrue( $params[0]->isArray() == false);
         $this->assertTrue( $params[0]->isOptional () == false);
-    } 
+    }
 
     /**
     * @covers Installer::check_db
@@ -205,7 +207,7 @@ class classInstallerTest extends PHPUnit_Framework_TestCase
         $this->assertTrue( $params[0]->getName() == 'dbName');
         $this->assertTrue( $params[0]->isArray() == false);
         $this->assertTrue( $params[0]->isOptional () == false);
-    } 
+    }
 
     /**
     * @covers Installer::log
@@ -224,6 +226,6 @@ class classInstallerTest extends PHPUnit_Framework_TestCase
         $this->assertTrue( $params[1]->isArray() == false);
         $this->assertTrue( $params[1]->isOptional () == true);
         $this->assertTrue( $params[1]->getDefaultValue() == '');
-    } 
+    }
+}
 
-  } 
