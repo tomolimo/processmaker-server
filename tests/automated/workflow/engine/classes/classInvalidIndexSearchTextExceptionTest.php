@@ -44,8 +44,8 @@ class classInvalidIndexSearchTextExceptionTest extends PHPUnit_Framework_TestCas
     public function testNumberOfMethodsInThisClass()
     {
         $class = new ReflectionClass('ApplicationWithoutDelegationRecordsException');
-        $methods = $class->getMethods();
-        $this->assertTrue( count($methods) == 10);
+        $methods = $class->getMethods(ReflectionMethod::IS_PUBLIC);
+        $this->assertTrue( count($methods) == 9);
     }
 
     /**

@@ -43,9 +43,9 @@ class classXMLResultTest extends PHPUnit_Framework_TestCase
     */
     public function testNumberOfMethodsInThisClass()
     {
-        $class = new ReflectionClass('ApplicationWithoutDelegationRecordsException');
-        $methods = $class->getMethods();
-        $this->assertTrue( count($methods) == 10);
+        $class = new ReflectionClass('XMLResult');
+        $methods = $class->getMethods(ReflectionMethod::IS_PUBLIC);
+        $this->assertTrue( count($methods) == 3);
     }
 
     /**
