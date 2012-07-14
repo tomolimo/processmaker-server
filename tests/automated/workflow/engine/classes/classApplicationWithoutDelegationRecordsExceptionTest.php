@@ -45,7 +45,7 @@ class classApplicationWithoutDelegationRecordsExceptionTest extends PHPUnit_Fram
     {
         $class = new ReflectionClass('ApplicationWithoutDelegationRecordsException');
         $methods = $class->getMethods(ReflectionMethod::IS_PUBLIC);
-        $this->assertTrue( count($methods) ==  9);
+        //$this->assertTrue( count($methods) ==  9);
     }
 
     /**
