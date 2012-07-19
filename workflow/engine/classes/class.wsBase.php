@@ -1777,7 +1777,7 @@ class wsBase
             $appFields["APP_DATA"]["APPLICATION"] = $caseId;
 
             if (!isset($_SESSION["PROCESS"])) {
-                $_SESSION["PROCESS"] = $appFields["APP_DATA"]["PROCESS"];
+                $_SESSION["PROCESS"] = $appFields["PRO_UID"];
             }
 
             if ($bExecuteTriggersBeforeAssignment) {
@@ -2159,7 +2159,7 @@ class wsBase
             $appFields["APP_DATA"]["APPLICATION"] = $caseId;
 
             if (!isset($_SESSION["PROCESS"])) {
-                $_SESSION["PROCESS"] = $appFields["APP_DATA"]["PROCESS"];
+                $_SESSION["PROCESS"] = $appFields["PRO_UID"];
             }
 
             //executeTrigger
