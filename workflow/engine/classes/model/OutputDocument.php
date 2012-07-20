@@ -65,11 +65,11 @@ class OutputDocument extends BaseOutputDocument {
   protected $out_doc_template = '';
 
 
-  function __construct() { 
+  function __construct() {
       $javaInput  = PATH_C . 'javaBridgePM' . PATH_SEP . 'input'  . PATH_SEP;
       $javaOutput = PATH_C . 'javaBridgePM' . PATH_SEP . 'output' . PATH_SEP;
       G::mk_dir ( $javaInput );
-      G::mk_dir ( $javaOutput );  
+      G::mk_dir ( $javaOutput );
   }
 
   public function getByUid($sOutDocUid)
@@ -103,7 +103,7 @@ class OutputDocument extends BaseOutputDocument {
       $oOutputDocument = OutputDocumentPeer::retrieveByPK( $sOutDocUid );
       if (!is_null($oOutputDocument))
       {
-        $aFields = $oOutputDocument->toArray(BasePeer::TYPE_FIELDNAME);       
+        $aFields = $oOutputDocument->toArray(BasePeer::TYPE_FIELDNAME);
         $aFields['OUT_DOC_TITLE']       = $oOutputDocument->getOutDocTitle();
         $aFields['OUT_DOC_DESCRIPTION'] = $oOutputDocument->getOutDocDescription();
         $aFields['OUT_DOC_FILENAME']    = $oOutputDocument->getOutDocFilename();
@@ -290,7 +290,7 @@ class OutputDocument extends BaseOutputDocument {
     if ($this->out_doc_title !== $sValue || $sValue === '') {
       try {
         $this->out_doc_title = $sValue;
-     
+
         $iResult = Content::addContent('OUT_DOC_TITLE', '', $this->getOutDocUid(), (defined('SYS_LANG') ? SYS_LANG : 'en'), $this->out_doc_title);
       }
       catch (Exception $oError) {
@@ -331,7 +331,7 @@ class OutputDocument extends BaseOutputDocument {
     if ($this->out_doc_description !== $sValue || $sValue === '') {
       try {
         $this->out_doc_description = $sValue;
-   
+
         $iResult = Content::addContent('OUT_DOC_DESCRIPTION', '', $this->getOutDocUid(), (defined('SYS_LANG') ? SYS_LANG : 'en'), $this->out_doc_description);
       }
       catch (Exception $oError) {
@@ -430,106 +430,130 @@ class OutputDocument extends BaseOutputDocument {
   */
   public function generate($sUID, $aFields, $sPath, $sFilename, $sContent, $sLandscape = false, $sTypeDocToGener = 'BOTH', $aProperties = array()) {
     if (($sUID != '') && is_array($aFields) && ($sPath != '')) {
-      $sContent    = G::unhtmlentities($sContent);
-      $iAux        = 0;
-      $iOcurrences = preg_match_all('/\@(?:([\>])([a-zA-Z\_]\w*)|([a-zA-Z\_][\w\-\>\:]*)\(((?:[^\\\\\)]*(?:[\\\\][\w\W])?)*)\))((?:\s*\[[\'"]?\w+[\'"]?\])+)?/', $sContent, $aMatch, PREG_PATTERN_ORDER | PREG_OFFSET_CAPTURE);
+      $sContent      = G::unhtmlentities($sContent);
+      $strContentAux = str_replace(array("\n", "\r", "\t"), array(null, null, null), $sContent);
+
+      $iOcurrences = preg_match_all('/\@(?:([\>])([a-zA-Z\_]\w*)|([a-zA-Z\_][\w\-\>\:]*)\(((?:[^\\\\\)]*(?:[\\\\][\w\W])?)*)\))((?:\s*\[[\'"]?\w+[\'"]?\])+)?/', $strContentAux, $arrayMatch1, PREG_PATTERN_ORDER | PREG_OFFSET_CAPTURE);
+
       if ($iOcurrences) {
-        for($i = 0; $i < $iOcurrences; $i++) {
-          preg_match_all('/@>' . $aMatch[2][$i][0] . '([\w\W]*)' . '@<' . $aMatch[2][$i][0] . '/', $sContent, $aMatch2, PREG_PATTERN_ORDER | PREG_OFFSET_CAPTURE);
-          $sGridName       = $aMatch[2][$i][0];
-          $sStringToRepeat = $aMatch2[1][0][0];
-          if (isset($aFields[$sGridName])) {
-            if (is_array($aFields[$sGridName])) {
-              $sAux = '';
-              foreach ($aFields[$sGridName] as $aRow) {
-                foreach ($aRow as $sKey => $vValue) {
-                  if (!is_array($vValue)) {
-                    $aRow[$sKey] = nl2br($aRow[$sKey]);
-                  }
+        $arrayGrid = array();
+
+        for ($i = 0; $i <= $iOcurrences - 1; $i++) {
+            $arrayGrid[] = $arrayMatch1[2][$i][0];
+        }
+
+        $arrayGrid = array_unique($arrayGrid);
+
+        foreach ($arrayGrid as $index => $value) {
+            $grdName = $value;
+
+            $strContentAux1 = $strContentAux;
+            $strContentAux  = null;
+
+            while (preg_match("/^(.*)@>" . $grdName . "(.*)@<" . $grdName . "(.*)$/", $strContentAux1, $arrayMatch2)) {
+                $strData = null;
+
+                if (isset($aFields[$grdName]) && is_array($aFields[$grdName])) {
+                    foreach ($aFields[$grdName] as $aRow) {
+                        foreach ($aRow as $sKey => $vValue) {
+                            if (!is_array($vValue)) {
+                                $aRow[$sKey] = nl2br($aRow[$sKey]);
+                            }
+                        }
+
+                        $strData = $strData . G::replaceDataField($arrayMatch2[2], $aRow);
+                    }
                 }
-                $sAux .= G::replaceDataField($sStringToRepeat, $aRow);
-              }
+
+                $strContentAux1 = $arrayMatch2[1];
+                $strContentAux  = $strData . $arrayMatch2[3] . $strContentAux;
             }
-          }
-          $sContent = str_replace('@>' . $sGridName . $sStringToRepeat . '@<' . $sGridName, $sAux, $sContent);
+
+            $strContentAux = $strContentAux1 . $strContentAux;
         }
       }
+
+      $sContent = $strContentAux;
+
       foreach ($aFields as $sKey => $vValue) {
         if (!is_array($vValue)) {
           $aFields[$sKey] = nl2br($aFields[$sKey]);
         }
       }
+
       $sContent = G::replaceDataField($sContent, $aFields);
+
       G::verifyPath($sPath, true);
-      /* Start - Create .doc */
-      $oFile = fopen($sPath .  $sFilename . '.doc', 'wb');
+
+      //Start - Create .doc
+      $oFile = fopen($sPath . $sFilename . '.doc', 'wb');
       $size = array();
-      $size["Letter"]         = "216mm  279mm"; 
-      $size["Legal"]          = "216mm  357mm"; 
-      $size["Executive"]      = "184mm  267mm"; 
-      $size["B5"]             = "182mm  257mm"; 
-      $size["Folio"]          = "216mm  330mm"; 
+      $size["Letter"]         = "216mm  279mm";
+      $size["Legal"]          = "216mm  357mm";
+      $size["Executive"]      = "184mm  267mm";
+      $size["B5"]             = "182mm  257mm";
+      $size["Folio"]          = "216mm  330mm";
       $size["A0Oversize"]     = "882mm  1247mm";
       $size["A0"]             = "841mm  1189mm";
-      $size["A1"]             = "594mm  841mm"; 
-      $size["A2"]             = "420mm  594mm"; 
-      $size["A3"]             = "297mm  420mm"; 
-      $size["A4"]             = "210mm  297mm"; 
-      $size["A5"]             = "148mm  210mm"; 
-      $size["A6"]             = "105mm  148mm"; 
-      $size["A7"]             = "74mm   105mm"; 
-      $size["A8"]             = "52mm   74mm";  
-      $size["A9"]             = "37mm   52mm";  
-      $size["A10"]            = "26mm   37mm";  
-      $size["Screenshot640"]  = "640mm  480mm"; 
-      $size["Screenshot800"]  = "800mm  600mm"; 
-      $size["Screenshot1024"] = "1024mm 768mm"; 
-      
-      $sizeLandscape["Letter"]         = "279mm  216mm";      
-      $sizeLandscape["Legal"]          = "357mm  216mm";      
-      $sizeLandscape["Executive"]      = "267mm  184mm";      
-      $sizeLandscape["B5"]             = "257mm  182mm";      
-      $sizeLandscape["Folio"]          = "330mm  216mm";      
-      $sizeLandscape["A0Oversize"]     = "1247mm 882mm";      
-      $sizeLandscape["A0"]             = "1189mm 841mm";      
-      $sizeLandscape["A1"]             = "841mm  594mm";      
-      $sizeLandscape["A2"]             = "594mm  420mm";      
-      $sizeLandscape["A3"]             = "420mm  297mm";      
-      $sizeLandscape["A4"]             = "297mm  210mm";      
-      $sizeLandscape["A5"]             = "210mm  148mm";      
-      $sizeLandscape["A6"]             = "148mm  105mm";      
-      $sizeLandscape["A7"]             = "105mm  74mm";       
-      $sizeLandscape["A8"]             = "74mm   52mm";       
-      $sizeLandscape["A9"]             = "52mm   37mm";       
-      $sizeLandscape["A10"]            = "37mm   26mm";       
-      $sizeLandscape["Screenshot640"]  = "480mm  640mm";      
-      $sizeLandscape["Screenshot800"]  = "600mm  800mm";      
-      $sizeLandscape["Screenshot1024"] = "768mm  1024mm";  	
-      
+      $size["A1"]             = "594mm  841mm";
+      $size["A2"]             = "420mm  594mm";
+      $size["A3"]             = "297mm  420mm";
+      $size["A4"]             = "210mm  297mm";
+      $size["A5"]             = "148mm  210mm";
+      $size["A6"]             = "105mm  148mm";
+      $size["A7"]             = "74mm   105mm";
+      $size["A8"]             = "52mm   74mm";
+      $size["A9"]             = "37mm   52mm";
+      $size["A10"]            = "26mm   37mm";
+      $size["Screenshot640"]  = "640mm  480mm";
+      $size["Screenshot800"]  = "800mm  600mm";
+      $size["Screenshot1024"] = "1024mm 768mm";
+
+      $sizeLandscape["Letter"]         = "279mm  216mm";
+      $sizeLandscape["Legal"]          = "357mm  216mm";
+      $sizeLandscape["Executive"]      = "267mm  184mm";
+      $sizeLandscape["B5"]             = "257mm  182mm";
+      $sizeLandscape["Folio"]          = "330mm  216mm";
+      $sizeLandscape["A0Oversize"]     = "1247mm 882mm";
+      $sizeLandscape["A0"]             = "1189mm 841mm";
+      $sizeLandscape["A1"]             = "841mm  594mm";
+      $sizeLandscape["A2"]             = "594mm  420mm";
+      $sizeLandscape["A3"]             = "420mm  297mm";
+      $sizeLandscape["A4"]             = "297mm  210mm";
+      $sizeLandscape["A5"]             = "210mm  148mm";
+      $sizeLandscape["A6"]             = "148mm  105mm";
+      $sizeLandscape["A7"]             = "105mm  74mm";
+      $sizeLandscape["A8"]             = "74mm   52mm";
+      $sizeLandscape["A9"]             = "52mm   37mm";
+      $sizeLandscape["A10"]            = "37mm   26mm";
+      $sizeLandscape["Screenshot640"]  = "480mm  640mm";
+      $sizeLandscape["Screenshot800"]  = "600mm  800mm";
+      $sizeLandscape["Screenshot1024"] = "768mm  1024mm";
+
       if(!isset($aProperties['media']))
       	$aProperties['media'] = 'Letter';
-      	
-      if($sLandscape) 
+
+      if($sLandscape)
         $media = $sizeLandscape[$aProperties['media']];
-      else 
+      else
         $media = $size[$aProperties['media']];
-        
-      $marginLeft = '15'; 
+
+      $marginLeft = '15';
       if(isset($aProperties['margins']['left']))
-        $marginLeft = $aProperties['margins']['left']; 
-      	
-      $marginRight = '15'; 	
-      if(isset($aProperties['margins']['right']))	
+        $marginLeft = $aProperties['margins']['left'];
+
+      $marginRight = '15';
+      if(isset($aProperties['margins']['right']))
         $marginRight = $aProperties['margins']['right'];
-      	 
-      $marginTop = '15'; 
-      if(isset($aProperties['margins']['top']))	
-        $marginTop = $aProperties['margins']['top']; 
-      
-      $marginBottom = '15'; 
-      if(isset($aProperties['margins']['bottom']))		
-        $marginBottom = $aProperties['margins']['bottom']; 
-      
+
+      $marginTop = '15';
+      if(isset($aProperties['margins']['top']))
+        $marginTop = $aProperties['margins']['top'];
+
+      $marginBottom = '15';
+      if(isset($aProperties['margins']['bottom']))
+        $marginBottom = $aProperties['margins']['bottom'];
+
       fwrite($oFile, '<html xmlns:v="urn:schemas-microsoft-com:vml"
       xmlns:o="urn:schemas-microsoft-com:office:office"
       xmlns:w="urn:schemas-microsoft-com:office:word"
@@ -556,14 +580,14 @@ class OutputDocument extends BaseOutputDocument {
         <w:DrawingGridVerticalSpacing>9.35 pt</w:DrawingGridVerticalSpacing>
        </w:WordDocument>
       </xml><![endif]-->
-      
+
       <style>
       <!--
       @page WordSection1
       	{size:'.$media.';
-      	margin-left:'.$marginLeft.'mm; 
+      	margin-left:'.$marginLeft.'mm;
       	margin-right:'.$marginRight.'mm;
-      	margin-bottom:'.$marginBottom.'mm; 
+      	margin-bottom:'.$marginBottom.'mm;
       	margin-top:'.$marginTop.'mm;
       	mso-header-margin:35.4pt;
       	mso-footer-margin:35.4pt;
@@ -573,19 +597,19 @@ class OutputDocument extends BaseOutputDocument {
       -->
       </style>
       </head>
-      <body> 
+      <body>
       <div class=WordSection1>');
       fwrite($oFile, $sContent);
       fwrite($oFile, "\n</div></body></html>\n\n");
       fclose($oFile);
       /* End - Create .doc */
-      
+
       if($sTypeDocToGener == 'BOTH' || $sTypeDocToGener == 'PDF'){
        /* Start - Create .pdf */
        $oFile = fopen($sPath .  $sFilename . '.html', 'wb');
        fwrite($oFile, $sContent);
        fclose($oFile);
-       
+
        define('PATH_OUTPUT_FILE_DIRECTORY', PATH_HTML . 'files/' . $_SESSION['APPLICATION'] . '/outdocs/');
        G::verifyPath(PATH_OUTPUT_FILE_DIRECTORY, true);
        require_once(PATH_THIRDPARTY . 'html2ps_pdf/config.inc.php');
@@ -615,13 +639,13 @@ class OutputDocument extends BaseOutputDocument {
                                     'html2xhtml'              => true,
                                     'mode'                    => 'html',
                                     'smartpagebreak'          => true);
-       $GLOBALS['g_config']= array_merge($GLOBALS['g_config'],$aProperties);                               
+       $GLOBALS['g_config']= array_merge($GLOBALS['g_config'],$aProperties);
        $g_media = Media::predefined($GLOBALS['g_config']['media']);
        $g_media->set_landscape($GLOBALS['g_config']['landscape']);
        $g_media->set_margins($GLOBALS['g_config']['margins']);
        $g_media->set_pixels($GLOBALS['g_config']['pagewidth']);
-       
-       
+
+
        if(isset($GLOBALS['g_config']['pdfSecurity'])){
          if (isset($GLOBALS['g_config']['pdfSecurity']['openPassword']) && $GLOBALS['g_config']['pdfSecurity']['openPassword'] != "") {
     $GLOBALS['g_config']['pdfSecurity']['openPassword'] = G::decrypt($GLOBALS['g_config']['pdfSecurity']['openPassword'], $sUID);
@@ -630,10 +654,10 @@ class OutputDocument extends BaseOutputDocument {
     $GLOBALS['g_config']['pdfSecurity']['ownerPassword'] = G::decrypt($GLOBALS['g_config']['pdfSecurity']['ownerPassword'], $sUID);
   }
   $g_media->set_security($GLOBALS['g_config']['pdfSecurity']);
-  
+
         require_once(HTML2PS_DIR . 'pdf.fpdf.encryption.php');
        }
-       
+
        $pipeline = new Pipeline();
        if (extension_loaded('curl'))
        {
@@ -767,11 +791,11 @@ class OutputDocument extends BaseOutputDocument {
        }
        copy($sPath . $sFilename . '.html', PATH_OUTPUT_FILE_DIRECTORY . $sFilename . '.html');
        $status = $pipeline->process((  (isset($_SERVER['HTTPS']))&&($_SERVER['HTTPS']=='on') ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . '/files/' . $_SESSION['APPLICATION'] . '/outdocs/' . $sFilename . '.html', $g_media);
-       
+
        copy(PATH_OUTPUT_FILE_DIRECTORY . $sFilename . '.pdf', $sPath . $sFilename . '.pdf');
        unlink(PATH_OUTPUT_FILE_DIRECTORY . $sFilename . '.pdf');
        unlink(PATH_OUTPUT_FILE_DIRECTORY . $sFilename . '.html');
-      
+
       }//end if $sTypeDocToGener
       /* End - Create .pdf */
     }
