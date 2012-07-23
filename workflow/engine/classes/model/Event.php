@@ -34,13 +34,7 @@ class Event extends BaseEvent {
    * @var        string
    */
   protected $evn_description = '';
-
-  /**
-   * This value the Event id select
-   * @var        string
-   */
-  protected $eventsSelect = array();
-
+  
   /**
    * Get the evn_description column value.
    * @return     string
@@ -635,7 +629,8 @@ class Event extends BaseEvent {
     }
     foreach($aRows as $aData){
       // if the events has a condition
-      if( trim($aData['EVN_CONDITIONS']) != '' ) { 
+      if( trim($aData['EVN_CONDITIONS']) != '' ) {
+          G::LoadClass('case');
           $oCase = new Cases();
           $aFields = $oCase->loadCase($APP_UID);
 
