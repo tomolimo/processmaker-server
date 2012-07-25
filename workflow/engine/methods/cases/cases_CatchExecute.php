@@ -69,8 +69,7 @@ die('<script type="text/javascript">
       if (window.parent.frames.length != 0) {
           parent.location = "open?APP_UID=' . $_SESSION['APPLICATION'] . '&DEL_INDEX=' . $_SESSION['INDEX'] .
           '&action=unassigned";
-      }
-      else {
+      } else {
           window.location = "../cases/cases_Open?APP_UID=' . $_SESSION['APPLICATION'] . '&DEL_INDEX=' .
           $_SESSION['INDEX'] . '&action=unassigned";
       }
