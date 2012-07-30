@@ -2305,59 +2305,36 @@ class XmlForm_Field_File extends XmlForm_Field {
   function render($value = NULL) {
     $permission = false;
     $url = '';
-    if (isset($_SESSION['APPLICATION']) && isset($_SESSION['USER_LOGGED']) && $this->mode == 'view') {
+    if (isset($_SESSION['APPLICATION']) && isset($_SESSION['USER_LOGGED']) && isset($_SESSION['TASK']) && $this->mode == 'view') {
+        require_once ("classes/model/AppDocument.php");
         G::LoadClass('case');
         $oCase = new Cases();
         $fields = $oCase->loadCase($_SESSION['APPLICATION']);
         $sProcessUID = $fields['PRO_UID'];
-        $sTaskUID = '';
-        $oCriteria = $oCase->getAllUploadedDocumentsCriteria($sProcessUID, $_SESSION['APPLICATION'], $sTaskUID, $_SESSION['USER_LOGGED']);
-        $result = array();
-        global $_DBArray;
+        $fields = $oCase->getAllObjects($sProcessUID, $_SESSION['APPLICATION'], $_SESSION['TASK'], $_SESSION['USER_LOGGED']);
 
-        foreach ($_DBArray['inputDocuments'] as $key => $row) {
-            if (isset($row['DOC_VERSION'])) {
-                $docrow = array();
-                $docrow['guid']       = $row['APP_DOC_UID'];
-                $docrow['filename']   = $row['APP_DOC_FILENAME'];
-                $docrow['docId']      = $row['DOC_UID'];
-                $docrow['version']    = $row['DOC_VERSION'];
-                $docrow['createDate'] = $row['CREATE_DATE'];
-                $docrow['createBy']   = $row['CREATED_BY'];
-                $docrow['type']       = $row['TYPE'];
-                $docrow['index']      = $row['APP_DOC_INDEX'];
-                $docrow['link']       = 'cases/' . $row['DOWNLOAD_LINK'];
-
-                $result[] = $docrow;
-
-                require_once ("classes/model/ObjectPermission.php");
-                G::LoadClass('groups');
-                $oCriteria = new Criteria();
-                $oCriteria->add(ObjectPermissionPeer::PRO_UID, $sProcessUID);
-                $oDataset = ObjectPermissionPeer::doSelectRS($oCriteria);
-                $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-                $oDataset->next();
-                $fields = array();
-                while ($aRow = $oDataset->getRow()) {
-                    if (($row['DOC_UID'] == $aRow['OP_OBJ_UID']) && ($aRow['OP_ACTION'] == 'VIEW')) {
-                        if ($_SESSION['USER_LOGGED'] == $aRow['USR_UID']) {
-                            $permission = true;
-                            $url = (G::is_https() ? 'https://' : 'http://') .$_SERVER['HTTP_HOST'].dirname($_SERVER['REQUEST_URI']).'/'.$row['DOWNLOAD_LINK'];
-                        } else {
-                            $group = new Groups();
-                            $aGroups = $group->verifyUsertoGroup($aRow['USR_UID'], $_SESSION['USER_LOGGED']);
-                            if ($aGroups) {
-                                $permission = true;
-                                $url = (G::is_https() ? 'https://' : 'http://') .$_SERVER['HTTP_HOST'].dirname($_SERVER['REQUEST_URI']).'/'.$row['DOWNLOAD_LINK'];
-                            }
-                        }
-                    }
-                  $fields[] = $aRow ;
-                  $oDataset->next();
+        $criteria = new Criteria();
+        $criteria->add(AppDocumentPeer::APP_UID, $_SESSION['APPLICATION']);
+        $dataset = AppDocumentPeer::doSelectRS($criteria);
+        $dataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+        $dataset->next();
+        $sw = 0;
+        $document = array();
+        while (($aRow = $dataset->getRow()) && $sw == 0) {
+            $document[] = $aRow ;
+            foreach ($fields['INPUT_DOCUMENTS'] as $key => $appDoc) {
+                if ($aRow['APP_DOC_UID'] == $appDoc && $aRow['DOC_UID'] == $this->input) {
+                    $sw = 1;
+                    $permission = true;
+                    $url = (G::is_https() ? 'https://' : 'http://') .
+                    $_SERVER['HTTP_HOST'].dirname($_SERVER['REQUEST_URI']).'/cases_ShowDocument?a='.
+                    $aRow['APP_DOC_UID'].'&v='.$aRow['DOC_VERSION'];
                 }
             }
+            $dataset->next();
         }
     }
+
     $mode = ($this->mode == 'view') ? ' disabled="disabled"' : '';
     if($this->mode == 'view'){
       $displayStyle = 'display:none;';
