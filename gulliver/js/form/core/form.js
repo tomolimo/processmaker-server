@@ -1963,7 +1963,6 @@ function G()
           sw_c = false;
           pMask = cMask.split('');
           pNum = cNum.split('');
-          console.log('=>' + pNum);
           for (p=0; p < pMask.length; p++){
             switch(pMask[p]){
               case '#': case '0': case 'd': case 'm': case 'y':
