@@ -3,7 +3,7 @@
  * App controller
  * @author Erik Amaru Ortiz <erik@colosa.com, aortiz.erik@gmail.com>
  * @herits Controller
- * @access public
+ * @access public 
  */
 
 class AppProxy extends HttpProxyController
