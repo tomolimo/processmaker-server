@@ -2314,7 +2314,8 @@ class XmlForm_Field_File extends XmlForm_Field {
         $fields = $oCase->getAllObjects($sProcessUID, $_SESSION['APPLICATION'], $_SESSION['TASK'], $_SESSION['USER_LOGGED']);
 
         $criteria = new Criteria();
-        $criteria->add(AppDocumentPeer::APP_UID, $_SESSION['APPLICATION']);
+        $criteria->add(AppDocumentPeer::APP_DOC_UID, $fields['INPUT_DOCUMENTS'], Criteria::IN);
+        $criteria->addDescendingOrderByColumn(AppDocumentPeer::APP_DOC_CREATE_DATE);
         $dataset = AppDocumentPeer::doSelectRS($criteria);
         $dataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
         $dataset->next();
@@ -2322,14 +2323,12 @@ class XmlForm_Field_File extends XmlForm_Field {
         $document = array();
         while (($aRow = $dataset->getRow()) && $sw == 0) {
             $document[] = $aRow ;
-            foreach ($fields['INPUT_DOCUMENTS'] as $key => $appDoc) {
-                if ($aRow['APP_DOC_UID'] == $appDoc && $aRow['DOC_UID'] == $this->input) {
-                    $sw = 1;
-                    $permission = true;
-                    $url = (G::is_https() ? 'https://' : 'http://') .
-                    $_SERVER['HTTP_HOST'].dirname($_SERVER['REQUEST_URI']).'/cases_ShowDocument?a='.
-                    $aRow['APP_DOC_UID'].'&v='.$aRow['DOC_VERSION'];
-                }
+            if ($aRow['DOC_UID'] == $this->input) {
+                $sw = 1;
+                $permission = true;
+                $url = (G::is_https() ? 'https://' : 'http://') .
+                $_SERVER['HTTP_HOST'].dirname($_SERVER['REQUEST_URI']).'/cases_ShowDocument?a='.
+                $aRow['APP_DOC_UID'].'&v='.$aRow['DOC_VERSION'];
             }
             $dataset->next();
         }
