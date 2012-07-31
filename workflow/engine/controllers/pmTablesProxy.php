@@ -4,7 +4,7 @@
  * pmTablesProxy
  * @author Erik Amaru Ortiz <erik@colosa.com, aortiz.erik@gmail.com>
  * @inherits HttpProxyController
- * @access public
+ * @access public 
  */
 require_once 'classes/model/AdditionalTables.php';
 
