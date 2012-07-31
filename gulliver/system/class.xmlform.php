@@ -2308,21 +2308,19 @@ class XmlForm_Field_File extends XmlForm_Field {
     if (isset($_SESSION['APPLICATION']) && isset($_SESSION['USER_LOGGED']) && isset($_SESSION['TASK']) && $this->mode == 'view') {
         require_once ("classes/model/AppDocument.php");
         G::LoadClass('case');
-        $oCase = new Cases();
-        $fields = $oCase->loadCase($_SESSION['APPLICATION']);
+        $case = new Cases();
+        $fields = $case->loadCase($_SESSION['APPLICATION']);
         $sProcessUID = $fields['PRO_UID'];
-        $fields = $oCase->getAllObjects($sProcessUID, $_SESSION['APPLICATION'], $_SESSION['TASK'], $_SESSION['USER_LOGGED']);
+        $permissions = $case->getAllObjects($sProcessUID, $_SESSION['APPLICATION'], $_SESSION['TASK'], $_SESSION['USER_LOGGED']);
 
         $criteria = new Criteria();
-        $criteria->add(AppDocumentPeer::APP_DOC_UID, $fields['INPUT_DOCUMENTS'], Criteria::IN);
+        $criteria->add(AppDocumentPeer::APP_DOC_UID, $permissions['INPUT_DOCUMENTS'], Criteria::IN);
         $criteria->addDescendingOrderByColumn(AppDocumentPeer::APP_DOC_CREATE_DATE);
         $dataset = AppDocumentPeer::doSelectRS($criteria);
         $dataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
         $dataset->next();
         $sw = 0;
-        $document = array();
         while (($aRow = $dataset->getRow()) && $sw == 0) {
-            $document[] = $aRow ;
             if ($aRow['DOC_UID'] == $this->input) {
                 $sw = 1;
                 $permission = true;
