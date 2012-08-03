@@ -328,10 +328,10 @@ function G_DropDown( form, element, name )
 }
 G_DropDown.prototype=new G_Field();
 
-function G_Text( form, element, name)
+function G_Text(form, element, name)
 {
-  var me      = this;
-  this.mType   = 'text';
+  var me = this;
+  this.mType = "text";
   this.parent = G_Field;
   this.browser = {};
   this.comma_separator = ".";
@@ -932,6 +932,7 @@ function G_Text( form, element, name)
       comma_sep = me.comma_separator;
       comma_sep = (comma_sep == '') ? '.' : comma_sep;
       aResults.push(me.replaceMask(newValue, newCursor, mask, type, comma_sep));
+      break;
     }
     minIndex = 0;
     minValue = aResults[0].result;
@@ -1018,6 +1019,27 @@ function G_Text( form, element, name)
           }
           action = 'move';
           break;
+        case 45:
+          if (me.mType == 'currency') {
+            newValue  = currentValue.substring(0, currentValue.length);
+            for (var numI = 0; newValue.length > numI; numI++) {
+              var campVal = newValue[numI];
+              if ((typeof(campVal) === 'number' || typeof(campVal) === 'string') && (campVal !== '') && (!isNaN(campVal))) {
+                newValue = currentValue.substring(0, numI-1);
+                newValue += '-' + currentValue.substring(numI);
+                numI = newValue.length + 1;
+                newCursor = cursorStart+1;
+              } else {
+                if (campVal == '-') {
+                  newValue = currentValue.substring(0, numI-1);
+                  newValue += currentValue.substring(numI+1);
+                  newCursor = cursorStart-1;
+                  numI = newValue.length + 1;
+                }
+              }
+            }
+          }
+          break;
         default:
           newKey = String.fromCharCode(keyCode);
           newValue  = currentValue.substring(0, cursorStart);
@@ -1038,15 +1060,28 @@ function G_Text( form, element, name)
           tamMask = aux[0].length;
           sw = true;
         }
-        if (tamData >= tamMask){
-          if (sw && !swPeriod && testData.indexOf(me.comma_separator) == -1){
-            action = 'none';
+        if (tamData >= tamMask){          
+          var minusExi;
+          for (var numI = 0; newValue.length > numI; numI++) {
+            var campVal = newValue[numI];
+            if ((typeof(campVal) === 'number' || typeof(campVal) === 'string') && (campVal !== '') && (!isNaN(campVal))) {
+              minusExi = false;
+            } else {
+              if (campVal == '-') {
+                minusExi = true;
+                numI = newValue.length + 1;
+              }
+            }
           }
-          if (!sw) action = 'none';
-
+          
+          if (!(keyCode == 45 || (minusExi && tamMask >= tamData))) {
+            if (sw && !swPeriod && testData.indexOf(me.comma_separator) == -1){
+              action = 'none';
+            }
+            if (!sw) action = 'none';
+          }
         }
-      }
-
+      }      
       switch(action){
         case 'mask': case 'move':
           dataNewMask = me.replaceMasks(newValue, newCursor);
@@ -1129,8 +1164,8 @@ function G_Text( form, element, name)
     }
     //THIS FUNCTION HANDLE BACKSPACE AND DELETE KEYS
     if (me.validate == 'Any' && me.mask == '') return true;
-    //pressKey = event.keyCode;
-    pressKey = window.event ? window.event.keyCode : event.which;
+
+    var pressKey = (window.event)? window.event.keyCode : event.which;
 
     switch(pressKey){
       case 8: case 46:  //BACKSPACE OR DELETE
@@ -1176,35 +1211,58 @@ function G_Text( form, element, name)
     }
 
     if (me.validate == 'Any' && me.mask == '') return true;
+
     //THIS FUNCTION HANDLE ALL KEYS EXCEPT BACKSPACE AND DELETE
     //keyCode = event.keyCode;
-    keyCode = window.event ? window.event.keyCode : event.which;
+    var keyCode = (window.event)? window.event.keyCode : event.which;
+
     if (navigator.userAgent.indexOf('MSIE') != -1) { // Microsoft Internet Explorer
       if (keyCode == 0) return true;
     }
-    switch(keyCode){
-      case 9: case 13:
-        return true;
-        break;
+
+    switch (keyCode) {
+        case 9:
+        case 13:
+            return true;
+            break;
     }
-    validShiftKey = ( (me.mType == 'currency') || (me.mType == 'percentage')
-                    || (me.validate == 'Real') || (me.validate == 'Int') )
-                    ? false
-                    : true;
+
+    var swShiftKey = (
+        (me.mType == 'currency') || (me.mType == 'percentage') || (me.validate == 'Real') || (me.validate == 'Int')
+    )? false : true;
+
     if (window.event) {
-      if (window.event.altKey) return true;
-      if (window.event.ctrlKey) return true;
-      if (window.event.shiftKey) return validShiftKey;
-    }
-    else {
-      if (event.altKey) return true;
-      if (event.ctrlKey) return true;
-      if (event.shiftKey) return validShiftKey;
+        if (window.event.altKey) {
+            return true;
+        }
+
+        if (window.event.ctrlKey) {
+            return true;
+        }
+
+        //Commented for accept characters with AZERTY keyboard
+        //if (window.event.shiftKey) {
+        //    return swShiftKey;
+        //}
+    } else {
+        if (event.altKey) {
+            return true;
+        }
+
+        if (event.ctrlKey) {
+            return true;
+        }
+
+        //Commented for accept characters with AZERTY keyboard
+        //if (event.shiftKey) {
+        //    return swShiftKey;
+        //}
     }
 
     me.checkBrowser();
-//    if ((me.browser.name == 'Firefox') && (keyCode == 8 || keyCode == 46)){
-    if ((me.browser.name == 'Firefox') && (keyCode == 8 ) && (me.validate != 'NodeName')){
+
+    //if ((me.browser.name == 'Firefox') && (keyCode == 8 || keyCode == 46)) {
+    if ((me.browser.name == 'Firefox') && (keyCode == 8) && (me.validate != 'NodeName')) {
       if (me.browser.name == 'Chrome' || me.browser.name == 'Safari'){
         event.returnValue = false;
       }
@@ -1214,11 +1272,14 @@ function G_Text( form, element, name)
     }
     else{
       //pressKey = window.event ? event.keyCode : event.which;
-      pressKey = window.event ? window.event.keyCode : event.which;
+      var pressKey = (window.event)? window.event.keyCode : event.which;
+
       if (me.mType == 'date') me.validate = 'Int';
+
       keyValid = true;
       updateOnChange = true;
-      switch(me.validate){
+
+      switch (me.validate) {
         case 'Any':
           keyValid = true;
           break;
@@ -1291,6 +1352,7 @@ function G_Text( form, element, name)
 
           break;
       }
+
       if (keyValid){
         //APPLY MASK
         if ((me.validate == "Login" || me.validate == "NodeName") && me.mask == "") return true;
@@ -1328,79 +1390,84 @@ function G_Text( form, element, name)
                                   ((me.validate == "Real") && (me.mType == 'text')) ) &&
           (me.mask.indexOf('-')==-1) && (me.element.value != '') ) {
 
-        var separatorField = ",";
-        if (typeof(me.comma_separator) != 'undefined') {
-          separatorField = me.comma_separator;
-        } else {
-          txtRealMask = me.mask.split('');
-          p = txtRealMask.length - 1;
-          for ( ; p >= 0; p--) {
-            if (txtRealMask[p] != '#' && txtRealMask[p] != '%' && txtRealMask[p] != ' ') {
-              separatorField = txtRealMask[p];
-              break;
-            }
-          }
-        }
-
-        var partsMaskSep = me.mask.split(separatorField);
-        if (partsMaskSep.length == 2) {
-          var countDecimal = 0;
-          txtRealMask = me.mask.split('');
-          p = txtRealMask.length - 1;
-          for ( ; p >= 0; p--) {
-            if (txtRealMask[p] == '#') {
-              countDecimal++;
-            }
-            if (txtRealMask[p] == separatorField) {
-              break;
-            }
-          }
-
-          var decimalString = '';
-          var pluginAfter = '';
-          var pluginDecimal = '';
-          var numberSet = me.element.value.split(separatorField);
-
-          if (typeof(numberSet[1]) == 'undefined') {
-            var decimalSet = '';
-            var newInt = '';
-            var flagAfter = true;
-            var newPluginDecimal = '';
-            var decimalCade = numberSet[0].split('');
-            for (p = 0; p < decimalCade.length; p++) {
-              if ((!isNaN(parseFloat(decimalCade[p])) && isFinite(decimalCade[p])) || (decimalCade[p] == ',') || (decimalCade[p] == '.') ) {
-                newInt += decimalCade[p];
-                flagAfter = false;
-              } else {
-                if (flagAfter) {
-                  pluginAfter += decimalCade[p];
-                } else {
-                  newPluginDecimal += decimalCade[p];
-                }
+        masks = me.mask;
+        aMasks = masks.split(';');
+        for(m=0; m < aMasks.length; m++) {
+          var separatorField = ",";
+          if (typeof(me.comma_separator) != 'undefined') {
+            separatorField = me.comma_separator;
+          } else {
+            txtRealMask = aMasks[m].split('');
+            p = txtRealMask.length - 1;
+            for ( ; p >= 0; p--) {
+              if (txtRealMask[p] != '#' && txtRealMask[p] != '%' && txtRealMask[p] != ' ') {
+                separatorField = txtRealMask[p];
+                break;
               }
             }
-            numberSet[0] = newInt;
-            numberSet[1] = newPluginDecimal;
           }
 
-          var decimalSet = numberSet[1];
-          var decimalCade = decimalSet.split('');
-          var countDecimalNow = 0;
-          for (p = 0; p < decimalCade.length; p++) {
-            if (!isNaN(parseFloat(decimalCade[p])) && isFinite(decimalCade[p])) {
-              countDecimalNow++;
-              decimalString += decimalCade[p];
-            } else {
-              pluginDecimal += decimalCade[p];
+          var partsMaskSep = aMasks[m].split(separatorField);
+          if (partsMaskSep.length == 2) {
+            var countDecimal = 0;
+            txtRealMask = aMasks[m].split('');
+            p = txtRealMask.length - 1;
+            for ( ; p >= 0; p--) {
+              if (txtRealMask[p] == '#') {
+                countDecimal++;
+              }
+              if (txtRealMask[p] == separatorField) {
+                break;
+              }
             }
-          }
 
-          if(countDecimalNow < countDecimal) {
-            for(; countDecimalNow < countDecimal; countDecimalNow++) {
-              decimalString += '0';
+            var decimalString = '';
+            var pluginAfter = '';
+            var pluginDecimal = '';
+            var numberSet = me.element.value.split(separatorField);
+
+            if (typeof(numberSet[1]) == 'undefined') {
+              var decimalSet = '';
+              var newInt = '';
+              var flagAfter = true;
+              var newPluginDecimal = '';
+              var decimalCade = numberSet[0].split('');
+              for (p = 0; p < decimalCade.length; p++) {
+                if ((!isNaN(parseFloat(decimalCade[p])) && isFinite(decimalCade[p])) || (decimalCade[p] == ',') || (decimalCade[p] == '.') ) {
+                  newInt += decimalCade[p];
+                  flagAfter = false;
+                } else {
+                  if (flagAfter) {
+                    pluginAfter += decimalCade[p];
+                  } else {
+                    newPluginDecimal += decimalCade[p];
+                  }
+                }
+              }
+              numberSet[0] = newInt;
+              numberSet[1] = newPluginDecimal;
             }
-            me.element.value = pluginAfter + numberSet[0] + separatorField + decimalString + pluginDecimal;
+
+            var decimalSet = numberSet[1];
+            var decimalCade = decimalSet.split('');
+            var countDecimalNow = 0;
+            for (p = 0; p < decimalCade.length; p++) {
+              if (!isNaN(parseFloat(decimalCade[p])) && isFinite(decimalCade[p])) {
+                countDecimalNow++;
+                decimalString += decimalCade[p];
+              } else {
+                pluginDecimal += decimalCade[p];
+              }
+            }
+
+            if(countDecimalNow < countDecimal) {
+              for(; countDecimalNow < countDecimal; countDecimalNow++) {
+                decimalString += '0';
+              }
+              me.element.value = pluginAfter + numberSet[0] + separatorField + decimalString + pluginDecimal;
+            }
           }
+          break;
         }
       }
 
@@ -1439,18 +1506,20 @@ function G_Text( form, element, name)
   }
 
   if (!element) return;
+
   if (!window.event){
-    //THIS ASSIGN FUNCTIONS FOR FIREFOX/MOZILLA
-      this.element.onkeydown = this.handleKeyDown;
-      this.element.onkeypress  = this.handleKeyPress;
-      this.element.onchange = this.updateDepententFields;
+      //THIS ASSIGN FUNCTIONS FOR FIREFOX/MOZILLA
+      this.element.onkeydown  = this.handleKeyDown;
+      this.element.onkeypress = this.handleKeyPress;
+      this.element.onchange   = this.updateDepententFields;
       //this.element.onblur = this.handleOnChange;
-    }else{
-    //THIS ASSIGN FUNCTIONS FOR IE/CHROME
-    leimnud.event.add(this.element,'keydown',this.handleKeyDown);
-    leimnud.event.add(this.element,'keypress',this.handleKeyPress);
-    leimnud.event.add(this.element,'change',this.updateDepententFields);
+  } else {
+      //THIS ASSIGN FUNCTIONS FOR IE/CHROME
+      leimnud.event.add(this.element, 'keydown', this.handleKeyDown);
+      leimnud.event.add(this.element, 'keypress', this.handleKeyPress);
+      leimnud.event.add(this.element, 'change', this.updateDepententFields);
   }
+
   //leimnud.event.add(this.element,'change',this.updateDepententFields);
 };
 G_Text.prototype=new G_Field();
@@ -1714,7 +1783,7 @@ function G()
     _aNum = num.split('');
     for (var d=0; d < _aNum.length; d++){
       switch(_aNum[d]){
-        case '0': case '1': case '2': case '3': case '4':
+        case '-': case '0': case '1': case '2': case '3': case '4':
         case '5': case '6': case '7': case '8': case '9': case _DEC:
           _num = _num + _aNum[d];
           break;
@@ -1905,14 +1974,22 @@ function G()
                 break;
               case ',': case '.':
                 if (pMask[p] != __DECIMAL_SEP){
-                  if (pNum.length > 0){
+                  if (pNum.length > 0 && pNum[0] != '-'){
                     _cout += pMask[p];
                   }
                 }
                 break;
               default:
-                 _cout += pMask[p];
+                if (pNum.length > 0 && pNum[0] == '-') {
+                  key = pNum.shift();
+                  _cout += key;
+                }
+                _cout += pMask[p];
             }
+          }
+          if (pNum.length > 0 && pNum[0] == '-') {
+            key = pNum.shift();
+            _cout += key;
           }
           if (sw_c && sw_d){
             myOut = _dout + __DECIMAL_SEP + _cout;

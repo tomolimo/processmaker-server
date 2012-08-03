@@ -177,38 +177,100 @@ function deleteCase() {
 
 function pauseCase(date){
   rowModel = grid.getSelectionModel().getSelected();
-  unpauseDate = date.format('Y-m-d');
 
-  Ext.Msg.confirm(
-    _('ID_CONFIRM'),
-    _('ID_PAUSE_CASE_TO_DATE') +' '+date.format('M j, Y')+'?',
-    function(btn, text){
-      if ( btn == 'yes' ) {
-        Ext.MessageBox.show({ msg: _('ID_PROCESSING'), wait:true,waitConfig: {interval:200} });
-        Ext.Ajax.request({
-          url: 'cases_Ajax',
-          success: function(response) {
-            try {
-              parent.updateCasesView();
-            }
-            catch (e) {
-              // Nothing to do
-            }
-            Ext.MessageBox.hide();
-            try {
-              parent.updateCasesTree();
-            }
-            catch (e) {
-              // Nothing to do
-            }
-            Ext.MessageBox.hide();
-          },
-          params: {action:'pauseCase', unpausedate:unpauseDate, APP_UID:rowModel.data.APP_UID, DEL_INDEX: rowModel.data.DEL_INDEX}
-        });
+  if(rowModel) {
+    unpauseDate = date.format('Y-m-d');
+    var msgPause =  new Ext.Window({
+      //layout:'fit',
+      width:500,
+      plain: true,
+      modal: true,
+      title: _('ID_CONFIRM'),
 
-      }
-    }
-  );
+      items: [
+        new Ext.FormPanel({
+          labelAlign: 'top',
+          labelWidth: 75,
+          border: false,
+          frame: true,
+          items: [
+              {
+                html: '<div align="center" style="font: 14px tahoma,arial,helvetica,sans-serif">' + _('ID_PAUSE_CASE_TO_DATE') +' '+date.format('M j, Y')+'? </div> <br/>'
+              },
+              {
+                xtype: 'textarea',
+                id: 'noteReason',
+                fieldLabel: _('ID_CASE_PAUSE_REASON'),
+                name: 'noteReason',
+                width: 450,
+                height: 50
+              },
+              {
+                id: 'notifyReason',
+                xtype:'checkbox',
+                name: 'notifyReason',
+                hideLabel: true,
+                boxLabel: _('ID_NOTIFY_USERS_CASE'),
+              }
+          ],
+
+          buttonAlign: 'center',
+
+          buttons: [{
+              text: 'Ok',
+              handler: function(){
+                  if (Ext.getCmp('noteReason').getValue() != '') {
+                    var noteReasonTxt = _('ID_CASE_PAUSE_LABEL_NOTE') + ' ' + Ext.getCmp('noteReason').getValue();
+                  } else {
+                    var noteReasonTxt = '';
+                  }
+                  var notifyReasonVal = Ext.getCmp('notifyReason').getValue() == true ? 1 : 0;
+                  
+                  Ext.MessageBox.show({ msg: _('ID_PROCESSING'), wait:true,waitConfig: {interval:200} });
+                  Ext.Ajax.request({
+                    url: 'cases_Ajax',
+                    success: function(response) {
+                      try {
+                        parent.updateCasesView();
+                      }
+                      catch (e) {
+                        // Nothing to do
+                      }
+                      Ext.MessageBox.hide();
+                      try {
+                        parent.updateCasesTree();
+                      }
+                      catch (e) {
+                        // Nothing to do
+                      }
+                      Ext.MessageBox.hide();
+                      msgPause.close();
+                    },
+                    params: {action:'pauseCase', unpausedate:unpauseDate, APP_UID:rowModel.data.APP_UID, DEL_INDEX: rowModel.data.DEL_INDEX, NOTE_REASON: noteReasonTxt, NOTIFY_PAUSE: notifyReasonVal}
+                  });
+              }
+          },{
+              text: 'Cancel', //COCHATRA
+              handler: function(){
+                  msgPause.close();
+              }
+          }]
+        })
+      ]
+    });
+    msgPause.show(this);
+    
+  } else {
+    Ext.Msg.show({
+      title:'',
+      msg: _('ID_NO_SELECTION_WARNING'),
+      buttons: Ext.Msg.INFO,
+      fn: function(){},
+      animEl: 'elId',
+      icon: Ext.MessageBox.INFO,
+      buttons: Ext.MessageBox.OK
+    });
+  }
 }
 
 
@@ -413,22 +475,32 @@ Ext.onReady ( function() {
     return '<img src="/images/ext/default/s.gif" class="x-tree-node-icon ICON_CASES_NOTES" unselectable="off" id="extdd-17" onClick="openCaseNotesWindow(\''+appUid+'\', true, \''+title+'\')">';
   }
 
+  //Render Full Name
+  full_name = function(v,x,s){
+      return _FNF(v, s.data.USR_FIRSTNAME, s.data.USR_LASTNAME);
+  };
+
   for(var i = 0, len = columns.length; i < len; i++){
     var c = columns[i];
     c.renderer = columnRenderer;
-    if( c.dataIndex == 'DEL_TASK_DUE_DATE') c.renderer = dueDate;
-    if( c.dataIndex == 'APP_UPDATE_DATE')   c.renderer = showDate;
-    if( c.id == 'deleteLink')               c.renderer = deleteLink;
-    if( c.id == 'viewLink')                 c.renderer = viewLink;
-    if( c.id == 'unpauseLink')              c.renderer = unpauseLink;
-    if( c.dataIndex == 'CASE_SUMMARY')      c.renderer = renderSummary;
-    if( c.dataIndex == 'CASE_NOTES_COUNT')  c.renderer = renderNote;
+    if( c.dataIndex == 'DEL_TASK_DUE_DATE')     c.renderer = dueDate;
+    if( c.dataIndex == 'APP_UPDATE_DATE')       c.renderer = showDate;
+    if( c.id == 'deleteLink')                   c.renderer = deleteLink;
+    if( c.id == 'viewLink')                     c.renderer = viewLink;
+    if( c.id == 'unpauseLink')                  c.renderer = unpauseLink;
+    if( c.dataIndex == 'CASE_SUMMARY')          c.renderer = renderSummary;
+    if( c.dataIndex == 'CASE_NOTES_COUNT')      c.renderer = renderNote;
+    if( c.dataIndex == 'APP_DEL_PREVIOUS_USER') c.renderer = full_name;
+    if( c.dataIndex == 'APP_CURRENT_USER')      c.renderer = full_name;
   }
 
   //adding the hidden field DEL_INIT_DATE
   readerFields.push ( {name: "DEL_INIT_DATE"});
   readerFields.push ( {name: "APP_UID"});
   readerFields.push ( {name: "DEL_INDEX"});
+
+  readerFields.push ( {name: "USR_FIRSTNAME"});
+  readerFields.push ( {name: "USR_LASTNAME"});
 
   for (i=0; i<columns.length; i++) {
     if (columns[i].dataIndex == 'USR_UID') {

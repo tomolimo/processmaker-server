@@ -1120,7 +1120,7 @@ class XmlForm_Field_Suggest extends XmlForm_Field_SimpleText //by neyek
   var $replaceTags           = 0;
 
   var $ajaxServer            = '../gulliver/genericAjax';
-  var $maxresults;
+  var $maxresults            = '6';
   var $savelabel             = 1;
   var $shownoresults;
   var $callback              = '';
@@ -1242,17 +1242,58 @@ class XmlForm_Field_Suggest extends XmlForm_Field_SimpleText //by neyek
           $depValues = '+';
         }
 
-        $sOptions  = 'script: function (input) {var inputValue = base64_encode(getField(\''. $this->name .'_label\').value); return "'.$this->ajaxServer.'?request=suggest&json=true&limit='.$this->maxresults.'&hash='.$hash.'&dependentFieldsKeys=' . $sResultKeys . '&dependentFieldsValue="'.$depValues.'"&input="+inputValue+"&inputEnconde64=enable"; },';
+        $sOptions  = 'script: function (input) { ';
+        $sOptions .= '  var inputValue = base64_encode(getField(\''. $this->name .'_label\').value); ';
+
+        $sOptions .= '  return "' . $this->ajaxServer . '?request=suggest&json=true&limit=' . $this->maxresults ;
+        $sOptions .= '&hash=' . $hash . '&dependentFieldsKeys=' . $sResultKeys . '&dependentFieldsValue="';
+        $sOptions .= $depValues . '"&input="+inputValue+"&inputEnconde64=enable"; ';
+        $sOptions .= '},';
         $sOptions .= 'json: true,';
         $sOptions .= 'limit: '.$this->maxresults.',';
         // $sOptions .= 'varname: "input",';
-        $sOptions .= 'shownoresults: '.($this->shownoresults?'true':'false').',';
+        $sOptions .= 'shownoresults: ' . ($this->shownoresults ? 'true' : 'false') . ',';
         $sOptions .= 'maxresults: '.$this->maxresults.',';
         $sOptions .= 'chache: true,';
 
-        $setValue = ($this->savelabel == '1')? 'obj.value': 'obj.id';
+        $setValue = ($this->savelabel == '1') ? 'obj.value' : 'obj.id';
 
-        $sOptions .= 'callback: function(obj){'.$sCallBack.'; getField("'. $this->name. '").value = obj.id; return false;}';
+        $sOptions .= 'callback: function(obj){';
+
+        $sOptions .= ' var jField = { ' . $this->name . ' : obj.id };';
+        $sOptions .= ' var sField = "["+ encodeURIComponent(jField.toJSONString()) + "]"; ';
+        $sOptions .= $sCallBack . '; getField("' . $this->name . '").value = obj.id;';
+
+        $sOptions .= 'var response = ajax_function("../gulliver/defaultAjaxDynaform", "reloadField", ';
+        $sOptions .= '               "form=' . $owner->id . '&fields=" + sField, "POST"); ';
+
+        $sOptions .= 'if (response.substr(0,1) === \'[\') { ';
+        $sOptions .= '  var newcont; ';
+        $sOptions .= '  eval(\'newcont=\' + response + \';\'); ';
+        $sOptions .= '  for(var i = 0; i<newcont.length; i++) { ';
+        $sOptions .= '    var j = getField(newcont[i].name); ';
+        $sOptions .= '    getField(newcont[i].name).value = newcont[i].value; ';
+        $sOptions .= '    if (newcont[i].content.type == \'dropdown\') { ';
+
+        $sOptions .= '      fieldLength = getField(newcont[i].name).options.length; ';
+        $sOptions .= '      for (ni = 0; ni < fieldLength; ni++ ){ ';
+        $sOptions .= '        getField(newcont[i].name).options.remove(ni); ';
+        $sOptions .= '      } ';
+
+        $sOptions .= '      for (ni = 0; ni < newcont[i].content.options.length; ni++ ){ ';
+        $sOptions .= '        var opt = document.createElement("OPTION"); ';
+        $sOptions .= '        opt.value = newcont[i].content.options[ni].key; ';
+        $sOptions .= '        opt.text  = newcont[i].content.options[ni].value; ';
+        $sOptions .= '        getField(newcont[i].name).options.add(opt); ';
+        $sOptions .= '      } ';
+        $sOptions .= '    } ';
+
+        $sOptions .= '  } ';
+        $sOptions .= '} else { ';
+        $sOptions .= '  alert(\'Invalid response: \' + response); ' ;
+        $sOptions .= '} ';
+
+        $sOptions .= 'return false; }';
 
         $str .= '<script type="text/javascript">';
         $str .= 'var as_json = new bsn.AutoSuggest(\'form[' . $this->name . '_label]\', {'.$sOptions.'});';
@@ -2262,10 +2303,43 @@ class XmlForm_Field_File extends XmlForm_Field {
    * @return string
    */
   function render($value = NULL) {
+    $permission = false;
+    $url = '';
+    if (isset($_SESSION['APPLICATION']) && isset($_SESSION['USER_LOGGED']) && isset($_SESSION['TASK']) && $this->mode == 'view') {
+        require_once ("classes/model/AppDocument.php");
+        G::LoadClass('case');
+        $case = new Cases();
+        $fields = $case->loadCase($_SESSION['APPLICATION']);
+        $sProcessUID = $fields['PRO_UID'];
+        $permissions = $case->getAllObjects($sProcessUID, $_SESSION['APPLICATION'], $_SESSION['TASK'], $_SESSION['USER_LOGGED']);
+
+        $criteria = new Criteria();
+        $criteria->add(AppDocumentPeer::APP_DOC_UID, $permissions['INPUT_DOCUMENTS'], Criteria::IN);
+        $criteria->addDescendingOrderByColumn(AppDocumentPeer::APP_DOC_CREATE_DATE);
+        $dataset = AppDocumentPeer::doSelectRS($criteria);
+        $dataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+        $dataset->next();
+        $sw = 0;
+        while (($aRow = $dataset->getRow()) && $sw == 0) {
+            if ($aRow['DOC_UID'] == $this->input) {
+                $sw = 1;
+                $permission = true;
+                $url = (G::is_https() ? 'https://' : 'http://') .
+                $_SERVER['HTTP_HOST'].dirname($_SERVER['REQUEST_URI']).'/cases_ShowDocument?a='.
+                $aRow['APP_DOC_UID'].'&v='.$aRow['DOC_VERSION'];
+            }
+            $dataset->next();
+        }
+    }
+
     $mode = ($this->mode == 'view') ? ' disabled="disabled"' : '';
     if($this->mode == 'view'){
       $displayStyle = 'display:none;';
-      $html = $value.'<input class="module_app_input___gray_file" ' . $mode .'style='.$displayStyle .' id="form[' . $this->name . ']" name="form[' . $this->name . ']" type=\'file\' value=\'' . $value . '\' />';
+      if ($permission) {
+        $html = '<a href='.$url.'>'.$value.'<input class="module_app_input___gray_file" ' . $mode .'style='.$displayStyle .' id="form[' . $this->name . ']" name="form[' . $this->name . ']" type=\'file\' value=\'' . $value . '\' /></a>';
+      } else {
+        $html = $value.'<input class="module_app_input___gray_file" ' . $mode .'style='.$displayStyle .' id="form[' . $this->name . ']" name="form[' . $this->name . ']" type=\'file\' value=\'' . $value . '\' />';
+      }
     }
     else{
       $html = '<input class="module_app_input___gray_file" ' . $mode . 'id="form[' . $this->name . ']" name="form[' . $this->name . ']" type=\'file\' value=\'' . $value . '\'/>';

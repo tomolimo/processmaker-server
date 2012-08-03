@@ -968,10 +968,16 @@ class workspaceTools {
     $backup = new Archive_Tar($filename);
     //Get a temporary directory in the upgrade directory
     $tempDirectory = PATH_DATA . "upgrade/" . basename(tempnam(__FILE__, ''));
-    mkdir($tempDirectory);
+    $parentDirectory = PATH_DATA . "upgrade";
+    if (is_writable($parentDirectory)) {
+        mkdir($tempDirectory);
+    } else {
+        throw new Exception("Could not create directory:" . $parentDirectory);
+    }
     //Extract all backup files, including database scripts and workspace files
-    if (!$backup->extract($tempDirectory))
-       throw new Exception("Could not extract backup");
+    if (!$backup->extract($tempDirectory)) {
+        throw new Exception("Could not extract backup");
+    }
     //Search for metafiles in the new standard (the old standard would contain
     //txt files).
     $metaFiles = glob($tempDirectory . "/*.meta");
@@ -1011,13 +1017,13 @@ class workspaceTools {
       $workspace = new workspaceTools($workspaceName);
       if ($workspace->workspaceExists())
         if ($overwrite)
-          CLI::logging(CLI::warning("> Workspace $workspaceName already exists, overwriting!") . "\n");
+          CLI::logging(CLI::warning("> Workspace $workspaceName already exist, overwriting!") . "\n");
         else
-          throw new Exception("Destination workspace already exists (use -o to overwrite)");
+          throw new Exception("Destination workspace already exist (use -o to overwrite)");
 
-      if (file_exists($workspace->path))
+      if (file_exists($workspace->path)) {
         G::rm_dir($workspace->path);
-
+      }
       foreach ($metadata->directories as $dir) {
         CLI::logging("+> Restoring directory '$dir'\n");
 
@@ -1038,6 +1044,7 @@ class workspaceTools {
 
       CLI::logging("> Connecting to system database in '$dbHost'\n");
       $link = mysql_connect($dbHost, $dbUser, $dbPass);
+      @mysql_query("SET NAMES 'utf8';");
       if (!$link)
         throw new Exception('Could not connect to system database: ' . mysql_error());
 
