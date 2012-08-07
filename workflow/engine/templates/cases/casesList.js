@@ -210,7 +210,7 @@ function pauseCase(date){
                 xtype:'checkbox',
                 name: 'notifyReason',
                 hideLabel: true,
-                boxLabel: _('ID_NOTIFY_USERS_CASE'),
+                boxLabel: _('ID_NOTIFY_USERS_CASE')
               }
           ],
 
