@@ -493,7 +493,7 @@ Ext.onReady(function(){
               xtype:'checkbox',
               name: 'notifyReason',
               hideLabel: true,
-              boxLabel: _('ID_NOTIFY_USERS_CASE'),
+              boxLabel: _('ID_NOTIFY_USERS_CASE')
             }
           ],
 
@@ -688,7 +688,7 @@ Ext.onReady(function(){
           id: 'notifyReason',
           xtype:'checkbox',
           name: 'notifyReason',
-          fieldLabel: _('ID_NOTIFY_USERS_CASE'),
+          fieldLabel: _('ID_NOTIFY_USERS_CASE')
         }
       ],
       buttons : [
