@@ -28,7 +28,7 @@
 
   <TAS_DEF_MESSAGE_TEMPLATE type="dropdown" sqlconnection="dbarray">
   SELECT FILE,NAME FROM _TEMPLATES1
-  <en>Template<option name="alert_message.html">- None -</option></en>
+  <en>Template<option name="alert_message.html">-- Default --</option></en>
   </TAS_DEF_MESSAGE_TEMPLATE>
 
   <JS type="javascript"><![CDATA[
