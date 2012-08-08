@@ -303,7 +303,8 @@ class headPublisher {
     $head .= $this->getExtJsScripts();
     $head .= $this->getExtJsVariablesScript();
     
-    if (SYS_LANG == 'ar' || SYS_LANG == 'he' || SYS_LANG == 'en') {
+    $oServerConf =& serverConf::getSingleton();
+    if ($oServerConf->isRtl(SYS_LANG)) {
     	$head .= "  <script type='text/javascript' src='/js/ext/extjs_rtl.js'></script>\n";
     }
     

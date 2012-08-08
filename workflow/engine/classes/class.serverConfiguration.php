@@ -54,7 +54,7 @@ class serverConf {
   private $lanDirection;
   private $lanLanguage;
   public $workspaces = array();
-  public $rtlLang = array('ar','he','es');
+  public $rtlLang = array('ar','iw','fa');
 
 
   public function __construct() {
@@ -403,13 +403,9 @@ class serverConf {
     }
   }
   
-  function isRtl ($lang = SYS_LANG) {  	
-  	$lang = substr($lang, 0, 2);
-  	if (in_array($lang, $this->rtlLang)) {
-  		return true;
-  	} else {
-  		return false;
-  	}
+  function isRtl ($lang = SYS_LANG) {
+    $lang = substr($lang, 0, 2);
+    return in_array($lang, $this->rtlLang);
   }
 
 
