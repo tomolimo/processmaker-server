@@ -917,7 +917,7 @@ class G
    * @param  string $urlLink
    * @return string
    */
-  static function parseURI($uri, $config = array())
+  static function parseURI($uri, $isRestRequest = false)
   {
     //*** process the $_POST with magic_quotes enabled
     // The magic_quotes_gpc feature has been DEPRECATED as of PHP 5.3.0.
@@ -926,82 +926,111 @@ class G
     }
 
     $aRequestUri = explode('/', $uri );
-
-    if ( substr ( $aRequestUri[1], 0, 3 ) == 'sys' ) {
-      define( 'SYS_TEMP', substr ( $aRequestUri[1], 3 ) );
+    if ($isRestRequest) {
+      $args = self::parseRestUri($aRequestUri);
+    } else {
+      $args = self::parseNormalUri($aRequestUri);
     }
-    else {
-      define("ENABLE_ENCRYPT", 'yes' );
-      define( 'SYS_TEMP', $aRequestUri[1] );
 
+    define("SYS_LANG", $args['SYS_LANG']);
+    define("SYS_SKIN", $args['SYS_SKIN']);
+    define('SYS_COLLECTION', $args['SYS_COLLECTION']);
+    define('SYS_TARGET', $args['SYS_TARGET']);
+
+    if ( $args['SYS_COLLECTION'] == 'js2' ) {
+      print "ERROR"; die;
+    }
+  }
+
+  public function parseNormalUri($aRequestUri)
+  {
+    if (substr($aRequestUri[1], 0, 3) == 'sys') {
+      define('SYS_TEMP', substr($aRequestUri[1], 3));
+    } else {
+      define("ENABLE_ENCRYPT", 'yes');
+      define('SYS_TEMP', $aRequestUri[1]);
       $plain = '/sys' . SYS_TEMP;
 
-      for ($i = 2 ; $i < count($aRequestUri); $i++ ) {
-        $decoded = G::decrypt ( urldecode($aRequestUri[$i]) , URL_KEY );
-        if ( $decoded == 'sWì›' ) $decoded = $VARS[$i]; //this is for the string  "../"
+      for ($i = 2; $i < count($aRequestUri); $i++) {
+        $decoded = G::decrypt(urldecode($aRequestUri[$i]), URL_KEY);
+        if ( $decoded == 'sWì›' ) {
+          $decoded = $VARS[$i]; //this is for the string  "../"
+        }
         $plain .= '/' . $decoded;
       }
       $_SERVER["REQUEST_URI"] = $plain;
     }
 
-    $CURRENT_PAGE = $_SERVER["REQUEST_URI"];
+    $work = explode('?', $_SERVER["REQUEST_URI"]);
 
-    $work = explode('?', $CURRENT_PAGE);
-    if ( count($work) > 1 )
-      define( 'SYS_CURRENT_PARMS', $work[1]);
-    else
-      define( 'SYS_CURRENT_PARMS', '');
-    define( 'SYS_CURRENT_URI'  , $work[0]);
-
-    if (!defined('SYS_CURRENT_PARMS'))
+    if (count($work) > 1) {
       define('SYS_CURRENT_PARMS', $work[1]);
+    } else {
+      define('SYS_CURRENT_PARMS', '');
+    }
+
+    define('SYS_CURRENT_URI', $work[0]);
+
+    if (!defined('SYS_CURRENT_PARMS')) {
+      define('SYS_CURRENT_PARMS', $work[1]);
+    }
+
     $preArray = explode('&', SYS_CURRENT_PARMS);
-    $buffer = explode( '.', $work[0] );
-    if ( count($buffer) == 1 ) $buffer[1]='';
+    $buffer   = explode('.', $work[0]);
+
+    if (count($buffer) == 1) {
+      $buffer[1]='';
+    }
 
     //request type
     define('REQUEST_TYPE', ($buffer[1] != "" ?$buffer[1] : 'html'));
 
     $toparse  = substr($buffer[0], 1, strlen($buffer[0]) - 1);
-    $URL = "";
-    $URI_VARS = explode('/', $toparse);
-    for ( $i=3; $i < count( $URI_VARS) ; $i++)
-      $URL .= $URI_VARS[$i].'/';
-
-    $URI_VARS = explode('/', $toparse);
+    $uriVars = explode('/', $toparse);
 
     unset($work);
     unset($buffer);
     unset($toparse);
+    array_shift($uriVars);
 
-    array_shift($URI_VARS);
-
-    $SYS_LANG = array_shift($URI_VARS);
-    $SYS_SKIN = array_shift($URI_VARS);
-
-    $SYS_COLLECTION = array_shift($URI_VARS);
-    $SYS_TARGET     = array_shift($URI_VARS);
+    $args = array();
+    $args['SYS_LANG'] = array_shift($uriVars);
+    $args['SYS_SKIN'] = array_shift($uriVars);
+    $args['SYS_COLLECTION'] = array_shift($uriVars);
+    $args['SYS_TARGET']     = array_shift($uriVars);
 
     //to enable more than 2 directories...in the methods structure
-    $exit = 0;
-    while ( count ( $URI_VARS ) > 0 && $exit == 0) {
-      $SYS_TARGET .= '/' . array_shift($URI_VARS);
+    while (count($uriVars) > 0) {
+      $args['SYS_TARGET'] .= '/' . array_shift($uriVars);
     }
+
     /* Fix to prevent use uxs skin outside siplified interface,
      because that skin is not compatible with others interfaces*/
-    if ($SYS_SKIN == 'uxs' && $SYS_COLLECTION != 'home' && $SYS_COLLECTION != 'cases') {
+    if ($args['SYS_SKIN'] == 'uxs' && $args['SYS_COLLECTION'] != 'home' && $args['SYS_COLLECTION'] != 'cases') {
       $config = System::getSystemConfiguration();
-      $SYS_SKIN = $config['default_skin'];
+      $args['SYS_SKIN'] = $config['default_skin'];
     }
 
-    define("SYS_LANG", $SYS_LANG);
-    define("SYS_SKIN", $SYS_SKIN);
-    define('SYS_COLLECTION', $SYS_COLLECTION);
-    define('SYS_TARGET', $SYS_TARGET);
+    return $args;
+  }
 
-    if ( $SYS_COLLECTION == 'js2' ) {
-      print "ERROR"; die;
+  public function parseRestUri($requestUri)
+  {
+    $args = array();
+    //$args['SYS_TEMP'] = $requestUri[1];
+    define('SYS_TEMP', $requestUri[2]);
+    $restUri = '';
+
+    for ($i=3; $i < count($requestUri); $i++) {
+      $restUri .= '/' . $requestUri[$i];
     }
+
+    $args['SYS_LANG'] = 'en'; // TODO, this can be set from http header
+    $args['SYS_SKIN'] = '';
+    $args['SYS_COLLECTION'] = '';
+    $args['SYS_TARGET'] = $restUri;
+
+    return $args;
   }
 
   function strip_slashes($vVar) {
@@ -5134,7 +5163,43 @@ function getDirectorySize($path,$maxmtime=0)
       return false;
     }
   }
-};
+
+    /**
+     * This method allow dispatch rest services using 'Restler' thirdparty library
+     *
+     * @author  Erik Amaru Ortiz <aortiz.erik@gmail.com>
+     */
+    public function dispatchRestService($uri)
+    {
+        require_once 'restler/restler.php';
+
+        $rest = new Restler();
+        $rest->setSupportedFormats('JsonFormat', 'XmlFormat');
+
+        // override global REQUEST_URI to pass to Restler library
+        $_SERVER['REQUEST_URI'] = $uri;
+
+        // getting all services class
+        $srvClasses = glob(PATH_SERVICES_REST . '*.php');
+
+        foreach ($srvClasses as $classFile) {
+            require_once $classFile;
+            $className = str_replace('.php', '', basename($classFile));
+            $reflClass = new ReflectionClass($className);
+
+            // verify if there is an auth class implementing 'iAuthenticate'
+            if ($reflClass->implementsInterface('iAuthenticate')) {
+                // auth class found, set as restler authentication class handler
+                $rest->addAuthenticationClass($className);
+            } else {
+                // add api class
+                $rest->addAPIClass($className);
+            }
+        }
+
+        $rest->handle();
+    }
+}
 
 /**
  * eprint

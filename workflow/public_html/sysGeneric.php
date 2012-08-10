@@ -24,7 +24,7 @@
  */
 
 /**
- * sysGeneric - ProcessMaker Bootstrap 
+ * sysGeneric - ProcessMaker Bootstrap
  * this file is used initialize main variables, redirect and dispatch all requests
  */
 
@@ -36,7 +36,7 @@
   // Defining the Home Directory
   $realdocuroot = str_replace('\\', '/', $_SERVER['DOCUMENT_ROOT']);
   $docuroot = explode(PATH_SEP , $realdocuroot);
-  
+
   array_pop($docuroot);
   $pathhome = implode(PATH_SEP, $docuroot) . PATH_SEP;
 
@@ -55,12 +55,12 @@
   // Including these files we get the PM paths and definitions (that should be just one file.
   require_once $pathhome . PATH_SEP . 'engine' . PATH_SEP . 'config' . PATH_SEP . 'paths.php';
   require_once PATH_CORE . 'classes' . PATH_SEP . 'class.system.php';
-  
+
   // starting session
   session_start();
 
   $config = System::getSystemConfiguration();
-  
+
   $e_all  = defined('E_DEPRECATED') ? E_ALL  & ~E_DEPRECATED : E_ALL;
   $e_all  = defined('E_STRICT')     ? $e_all & ~E_STRICT     : $e_all;
   $e_all  = $config['debug']        ? $e_all                 : $e_all & ~E_NOTICE;
@@ -69,11 +69,11 @@
   ini_set('display_errors', $config['debug']);
   ini_set('error_reporting', $e_all);
   ini_set('short_open_tag', 'On');
-  ini_set('default_charset', "UTF-8");  
+  ini_set('default_charset', "UTF-8");
   ini_set('memory_limit', $config['memory_limit']);
   ini_set('soap.wsdl_cache_enabled', $config['wsdl_cache']);
   ini_set('date.timezone', $config['time_zone']);
-  
+
   define ('DEBUG_SQL_LOG', $config['debug_sql']);
   define ('DEBUG_TIME_LOG', $config['debug_time']);
   define ('DEBUG_CALENDAR_LOG', $config['debug_calendar']);
@@ -87,7 +87,7 @@
   if (defined('PATH_DATA')) {
     $writableDirs[] = PATH_DATA;
   }
-  
+
   try {
     G::verifyWriteAccess($writableDirs);
   }
@@ -154,12 +154,12 @@
   $virtualURITable['/(sys*)/(*.js)'] = 'jsMethod';
   $virtualURITable['/js/(*)']        = PATH_GULLIVER_HOME . 'js/';
   $virtualURITable['/jscore/(*)']    = PATH_CORE . 'js/';
-  
+
   if ( defined('PATH_C') ) {
     $virtualURITable['/jsform/(*.js)'] = PATH_C . 'xmlform/';
     $virtualURITable['/extjs/(*)']     = PATH_C . 'ExtJs/';
   }
-  
+
   $virtualURITable['/htmlarea/(*)']                  = PATH_THIRDPARTY . 'htmlarea/';
   $virtualURITable['/sys[a-zA-Z][a-zA-Z0-9]{0,}()/'] = 'sysNamed';
   $virtualURITable['/(sys*)']                        = FALSE;
@@ -173,7 +173,10 @@
   $virtualURITable['/skins/']                        = 'errorFile';
   $virtualURITable['/files/']                        = 'errorFile';
   $virtualURITable['/[a-zA-Z][a-zA-Z0-9]{0,}()']     = 'sysUnnamed';
+  $virtualURITable['/rest/(*)']                      = 'rest-service';
   $virtualURITable['/(*)']                           = PATH_HTML;
+
+  $isRestRequest = false;
 
   // Verify if we need to redirect or stream the file, if G:VirtualURI returns true means we are going to redirect the page
   if ( G::virtualURI($_SERVER['REQUEST_URI'], $virtualURITable , $realPath )) {
@@ -198,12 +201,17 @@
       //The other parts are the realpath into public_html (no matter how many elements)
       $filePath       = implode(PATH_SEP,$paths);
       $pluginFilename = PATH_PLUGINS . $pluginFolder . PATH_SEP . 'public_html'. PATH_SEP . $filePath;
-      
+
       if ( file_exists ( $pluginFilename ) ) {
         G::streamFile ( $pluginFilename );
       }
       die;
     }
+
+    // if (substr($realPath, 0, 12) === 'rest-service') {
+    //   G::dispatchRestService();
+    //   die;
+    // }
 
     $requestUriArray = explode("/",$_SERVER['REQUEST_URI']);
 
@@ -229,11 +237,11 @@
 
     switch ($realPath) {
       case 'sysUnnamed' :
-        require_once('sysUnnamed.php'); 
+        require_once('sysUnnamed.php');
         die;
         break;
       case 'sysNamed' :
-        header('location : ' . $_SERVER['REQUEST_URI'] . '/' .SYS_LANG. '/classic/login/login' ); 
+        header('location : ' . $_SERVER['REQUEST_URI'] . '/' .SYS_LANG. '/classic/login/login' );
         die;
         break;
       case 'jsMethod' :
@@ -248,15 +256,19 @@
         die;
         break;
       default :
-        $realPath = explode('?', $realPath);
-        $realPath[0] .= strpos(basename($realPath[0]), '.') === false ? '.php' : '';
-        G::streamFile ( $realPath[0] );
-        die;
+        if (substr($realPath, 0, 12) == 'rest-service') {
+          $isRestRequest = true;
+        } else {
+          $realPath = explode('?', $realPath);
+          $realPath[0] .= strpos(basename($realPath[0]), '.') === false ? '.php' : '';
+          G::streamFile ( $realPath[0] );
+          die;
+        }
     }
   }
 
   // the request correspond to valid php page, now parse the URI
-  G::parseURI(getenv("REQUEST_URI"));
+  G::parseURI(getenv("REQUEST_URI"), $isRestRequest);
 
   // verify if index.html exists
   if (!file_exists(PATH_HTML . 'index.html')) { // if not, create it from template
@@ -448,7 +460,7 @@
     }
     // log file for rbac database
     $con = Propel::getConnection('rbac');
-    
+
     if ($con instanceof DebugConnection) {
       $con->setLogger($logger);
     }
@@ -467,12 +479,12 @@
 
   // Session Initializations
   ini_set('session.auto_start', '1');
-  
+
   // The register_globals feature has been DEPRECATED as of PHP 5.3.0. default value Off.
   // ini_set( 'register_globals', 'Off' );
   //session_start();
   ob_start();
-  
+
   // Rebuild the base Workflow translations if not exists
   if( ! is_file(PATH_LANGUAGECONT . 'translation.en') ){
     require_once ( "classes/model/Translation.php" );
@@ -563,8 +575,12 @@
         $isControllerCall = true;
       }
     }
+    // var_dump(SYS_SYS);
+    // var_dump(SYS_TARGET);
+    // var_dump($isRestRequest);
+    // die;
 
-    if (!$isControllerCall && ! file_exists($phpFile)) {
+    if (!$isControllerCall && ! file_exists($phpFile) && ! $isRestRequest) {
       $_SESSION['phpFileNotFound'] = $_SERVER['REQUEST_URI'];
       header("location: /errors/error404.php?url=" . urlencode($_SERVER['REQUEST_URI']));
       die;
@@ -609,9 +625,9 @@
     else {
       // this is the blank list to allow execute scripts with no login (without session started)
       $noLoginFiles   = $noLoginFolders = array();
-      $noLoginFiles[] = 'login'; 
+      $noLoginFiles[] = 'login';
       $noLoginFiles[] = 'authentication';
-      $noLoginFiles[] = 'login_Ajax'; 
+      $noLoginFiles[] = 'login_Ajax';
       $noLoginFiles[] = 'dbInfo';
       $noLoginFiles[] = 'sysLoginVerify';
       $noLoginFiles[] = 'processes_Ajax';
@@ -619,7 +635,7 @@
       $noLoginFiles[] = 'autoinstallProcesses';
       $noLoginFiles[] = 'autoinstallPlugins';
       $noLoginFiles[] = 'heartbeatStatus';
-      $noLoginFiles[] = 'showLogoFile'; 
+      $noLoginFiles[] = 'showLogoFile';
       $noLoginFiles[] = 'forgotPassword';
       $noLoginFiles[] = 'retrivePassword';
       $noLoginFiles[] = 'defaultAjaxDynaform';
@@ -630,9 +646,13 @@
       $noLoginFolders[] = 'installer';
 
       // This sentence is used when you lost the Session
-      if ( !in_array(SYS_TARGET, $noLoginFiles) &&  !in_array(SYS_COLLECTION, $noLoginFolders) && $bWE != true && $collectionPlugin != 'services') {
+      if (! in_array(SYS_TARGET, $noLoginFiles)
+        && ! in_array(SYS_COLLECTION, $noLoginFolders)
+        && $bWE != true && $collectionPlugin != 'services'
+        && ! $isRestRequest
+      ) {
         $bRedirect = true;
-        
+
         if (isset($_GET['sid'])) {
           G::LoadClass('sessions');
           $oSessions = new Sessions();
@@ -660,7 +680,7 @@
           else {
             $loginUrl = 'login/login'; // just set up the classic login
           }
-          
+
           if (empty($_POST)) {
             header('location: ' . SYS_URI . $loginUrl . '?u=' . urlencode($_SERVER['REQUEST_URI']));
           }
@@ -686,8 +706,9 @@
       $controller = new $controllerClass();
       $controller->setHttpRequestData($_REQUEST);
       $controller->call($controllerAction);
-    }
-    else {
+    } elseif ($isRestRequest) {
+      G::dispatchRestService(SYS_TARGET);
+    } else {
       require_once $phpFile;
     }
 
@@ -700,5 +721,5 @@
     ob_end_flush();
     if (DEBUG_TIME_LOG) {
       G::logTimeByPage(); //log this page
-    } 
+    }
   }

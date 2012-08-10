@@ -64,10 +64,11 @@
   define( 'PATH_WORKFLOW_MSSQL_DATA', PATH_CORE . 'data' . PATH_SEP.'mssql'.PATH_SEP);
   define( 'PATH_RBAC_MSSQL_DATA',     PATH_RBAC_CORE . 'data' . PATH_SEP.'mssql'.PATH_SEP);
   define( 'PATH_CONTROLLERS',         PATH_CORE . 'controllers' . PATH_SEP );
+  define( 'PATH_SERVICES_REST',       PATH_CORE . 'services' . PATH_SEP . 'rest' . PATH_SEP);
 
   // include Gulliver Class
   require_once( PATH_GULLIVER . PATH_SEP . 'class.g.php');
- 
+
   if(file_exists(FILE_PATHS_INSTALLED)) {
     // backward compatibility; parsing old definitions in the compiled path constant
     $tmp = file_get_contents(FILE_PATHS_INSTALLED);
@@ -76,28 +77,28 @@
       @file_put_contents(FILE_PATHS_INSTALLED, str_replace('PATH_OUTTRUNK', 'PATH_DATA', $tmp));
     }
     // end backward compatibility
-    
+
     // include the workspace installed configuration
     require_once FILE_PATHS_INSTALLED;
-    
+
     // defining system constant when a valid workspace environment exists
     define('PATH_LANGUAGECONT', PATH_DATA . "META-INF" . PATH_SEP);
     define('PATH_CUSTOM_SKINS', PATH_DATA . 'skins'   . PATH_SEP);
     define('PATH_TEMPORAL',     PATH_C . 'dynEditor/');
     define('PATH_DB',           PATH_DATA . 'sites' . PATH_SEP);
-    // smarty constants 
+    // smarty constants
     define('PATH_SMARTY_C',     PATH_C . 'smarty' . PATH_SEP . 'c');
     define('PATH_SMARTY_CACHE', PATH_C . 'smarty' . PATH_SEP . 'cache');
-    
+
     if (!is_dir(PATH_SMARTY_C)) {
       G::mk_dir(PATH_SMARTY_C);
     }
 
-    if (!is_dir(PATH_SMARTY_CACHE)) { 
+    if (!is_dir(PATH_SMARTY_CACHE)) {
       G::mk_dir(PATH_SMARTY_CACHE);
     }
   }
-  
+
   // set include path
   set_include_path(
     PATH_CORE . PATH_SEPARATOR .
@@ -110,7 +111,7 @@
   /**
    * Global definitions, before it was the defines.php file
    */
-  
+
   // URL Key
   define("URL_KEY", 'c0l0s40pt1mu59r1m3' );
 
@@ -134,7 +135,7 @@
   // Number of files per folder at PATH_UPLOAD (cases documents)
   define('APPLICATION_DOCUMENTS_PER_FOLDER', 1000);
 
-  // Server of ProcessMaker Library 
+  // Server of ProcessMaker Library
   define('PML_SERVER' ,      'http://library.processmaker.com');
   define('PML_WSDL_URL' ,    PML_SERVER . '/syspmLibrary/en/green/services/wsdl');
   define('PML_UPLOAD_URL',   PML_SERVER . '/syspmLibrary/en/green/services/uploadProcess');
