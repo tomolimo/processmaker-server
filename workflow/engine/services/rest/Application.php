@@ -1,18 +1,21 @@
 <?php
 
-class Application
+class Services_Rest_Application
 {
-    protected function get($id = null)
+    protected function get($id = '', $type = null, $start = null, $limit = null)
     {
-        if (is_null($id)) {
+        if (empty($id)) {
             // getting all records.
             G::loadClass('applications');
-            $app->getAll($userUid, $start=null, $limit=null, $action=null);
+            $app = new Applications();
+            $userUid = Services_Rest_Auth::$userId;
+
+            return $app->getAll($userUid, $start, $limit, $type);
         } else {
             // get a specific record.
             G::loadClass('wsBase');
-            $case = new wsBase();
-            $case->getCaseInfo($id);
+            $wsBase = new wsBase();
+            return $wsBase->getCaseInfo($id);
         }
     }
 }

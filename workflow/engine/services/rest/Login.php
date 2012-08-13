@@ -2,7 +2,7 @@
 G::loadClass('wsBase');
 G::LoadClass('sessions');
 
-class Login
+class Services_Rest_Login
 {
     public function post($user, $passwd)
     {
@@ -12,7 +12,6 @@ class Login
         if ($result->status_code == 0) {
             return array(
                 'auth_key' => $result->message,
-                //'timestamp' => $result->timestamp,
             );
         } else {
             throw new RestException(401, $result->message);
