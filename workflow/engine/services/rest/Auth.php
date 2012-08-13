@@ -2,9 +2,12 @@
 G::LoadClass('sessions');
 G::LoadClass('wsBase');
 
-class Auth implements iAuthenticate
+class Services_Rest_Auth implements iAuthenticate
 {
     public $realm = 'Restricted API';
+
+    public static $userId = '';
+    public static $authKey = '';
 
     function __isAuthenticated()
     {
@@ -20,18 +23,13 @@ class Auth implements iAuthenticate
         $session  = $sessions->verifySession($authKey);
 
         if (is_array($session)) {
+            $sesInfo = $sessions->getSessionUser($authKey);
+            self::$userId = $sesInfo['USR_UID'];
+            self::$authKey = $authKey;
+
             return true;
         }
 
         throw new RestException(401, 'Wrong Credentials!');
-    }
-
-    /**
-     * @url POST
-     */
-    public function login($user, $passwd)
-    {
-        $wsBase = new wsBase();
-        return $wsBase->login($user, $passwd);
     }
 }

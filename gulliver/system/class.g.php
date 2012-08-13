@@ -5175,16 +5175,18 @@ function getDirectorySize($path,$maxmtime=0)
 
         $rest = new Restler();
         $rest->setSupportedFormats('JsonFormat', 'XmlFormat');
+        $namespace = 'Services_Rest_';
 
         // override global REQUEST_URI to pass to Restler library
-        $_SERVER['REQUEST_URI'] = $uri;
+        $_SERVER['REQUEST_URI'] = '/' . strtolower($namespace) . ltrim($uri, '/');
 
         // getting all services class
         $srvClasses = glob(PATH_SERVICES_REST . '*.php');
 
         foreach ($srvClasses as $classFile) {
             require_once $classFile;
-            $className = str_replace('.php', '', basename($classFile));
+
+            $className = $namespace . str_replace('.php', '', basename($classFile));
             $reflClass = new ReflectionClass($className);
 
             // verify if there is an auth class implementing 'iAuthenticate'
