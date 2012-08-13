@@ -4,10 +4,10 @@ G::LoadClass('sessions');
 
 class Services_Rest_Login
 {
-    public function post($user, $passwd)
+    public function post($user, $password)
     {
         $wsBase = new wsBase();
-        $result = $wsBase->login($user, $passwd);
+        $result = $wsBase->login($user, $password);
 
         if ($result->status_code == 0) {
             return array(
