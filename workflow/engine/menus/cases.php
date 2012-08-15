@@ -26,13 +26,8 @@ global $RBAC;
 global $G_TMP_MENU;
 
 $G_TMP_MENU->AddIdRawOption('FOLDERS', '', G::LoadTranslation('ID_CASES_MENU_FOLDERS'), '', '', 'blockHeader');
-G::LoadClass('case');
-$case = new Cases();
-$caseStarCases = $case->getStartCases( $_SESSION['USER_LOGGED']);
-if (count($caseStarCases) > 1) {
-    $G_TMP_MENU->AddIdRawOption('CASES_START_CASE', 'casesStartPage?action=startCase',
-    G::LoadTranslation('ID_NEW_CASE'), '');
-}
+$G_TMP_MENU->AddIdRawOption('CASES_START_CASE', 'casesStartPage?action=startCase',
+G::LoadTranslation('ID_NEW_CASE'), '');
 
 $G_TMP_MENU->AddIdRawOption('CASES_INBOX', 'casesListExtJs?action=todo', G::LoadTranslation('ID_INBOX'),
     'icon-cases-inbox.png');
