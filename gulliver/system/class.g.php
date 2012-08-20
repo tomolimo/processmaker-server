@@ -2814,7 +2814,7 @@ $output = $outputHeader.$output;
   /**
    * Generate a numeric or alphanumeric code
    *
-   * @author Julio Cesar Laura Avenda𭞼juliocesar@colosa.com>
+   * @author Julio Cesar Laura Avendaힼjuliocesar@colosa.com>
    * @access public
    * @return string
    */
@@ -5182,7 +5182,10 @@ function getDirectorySize($path,$maxmtime=0)
 
         // getting all services class
         $srvClasses = glob(PATH_SERVICES_REST . '*.php');
+        $crudClasses = glob(PATH_SERVICES_REST . 'crud/*.php');
 
+        $srvClasses = array_merge($srvClasses, $crudClasses);
+        
         foreach ($srvClasses as $classFile) {
             require_once $classFile;
 
