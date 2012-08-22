@@ -23,11 +23,9 @@
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  */
 
-
 require_once 'class.pluginRegistry.php';
 
-define('G_PLUGIN_CLASS', 1);
-
+define('G_PLUGIN_CLASS',            1);
 define('PM_CREATE_CASE',            1001);
 define('PM_UPLOAD_DOCUMENT',        1002);
 define('PM_CASE_DOCUMENT_LIST',     1003);
@@ -45,565 +43,609 @@ define('PM_CREATE_NEW_DELEGATION',  1013);
 /**
  * @package workflow.engine.classes
  */
+class PMPlugin
+{
+    public $sNamespace;
+    public $sClassName;
+    public $sFilename = null;
+    public $iVersion = 0;
+    public $sFriendlyName = null;
+    public $sPluginFolder = '';
+    public $aWorkspaces = null;
+    public $bPrivate = false;
 
-class menuDetail {
-  var $sNamespace;
-  var $sMenuId;
-  var $sFilename;
-  /**
-  * This function is the constructor of the menuDetail class
-  * param string $sNamespace
-  * param string $sMenuId
-  * param string $sFilename
-  * @return void
-  */
-  function __construct( $sNamespace, $sMenuId, $sFilename ) {
-    $this->sNamespace = $sNamespace;
-    $this->sMenuId    = $sMenuId;
-    $this->sFilename  = $sFilename;
-  }
- }
-/**
- * @package workflow.engine.classes
- */
-
-class toolbarDetail {
-  var $sNamespace;
-  var $sToolbarId;
-  var $sFilename;
-  /**
-  * This function is the constructor of the menuDetail class
-  * param string $sNamespace
-  * param string $sMenuId
-  * param string $sFilename
-  * @return void
-  */
-  function __construct( $sNamespace, $sToolbarId, $sFilename ) {
-    $this->sNamespace = $sNamespace;
-    $this->sToolbarId    = $sToolbarId;
-    $this->sFilename  = $sFilename;
-  }
-}
-
- /**
- * @package workflow.engine.classes
- */
-class cssFile {
-  var $sNamespace;
-  var $sCssFile;
-  /**
-  * This function is the constructor of the cssFile class
-  * param string $sNamespace
-  * param string $sPage
-  * @return void
-  */
-  function __construct( $sNamespace, $sCssFile) {
-    $this->sNamespace = $sNamespace;
-    $this->sCssFile    = $sCssFile;
-  }
- }
- /**
- * @package workflow.engine.classes
- */
-class triggerDetail {
-  var $sNamespace;
-  var $sTriggerId;
-  var $sTriggerName;
-
-  /**
-  * This function is the constructor of the triggerDetail class
-  * param string $sNamespace
-  * param string $sTriggerId
-  * param string $sTriggerName
-  * @return void
-  */
-  function __construct( $sNamespace, $sTriggerId, $sTriggerName ) {
-    $this->sNamespace   = $sNamespace;
-    $this->sTriggerId   = $sTriggerId;
-    $this->sTriggerName = $sTriggerName;
-  }
-}
-/**
- * @package workflow.engine.classes
- */
-class folderDetail {
-  var $sNamespace;
-  var $sFolderId;
-  var $sFolderName;
-
-  /**
-  * This function is the constructor of the folderDetail class
-  * param string $sNamespace
-  * param string $sFolderId
-  * param string $sFolderName
-  * @return void
-  */
-  function __construct( $sNamespace, $sFolderId, $sFolderName ) {
-    $this->sNamespace  = $sNamespace;
-    $this->sFolderId   = $sFolderId;
-    $this->sFolderName = $sFolderName;
-   }
-}
-/**
- * @package workflow.engine.classes
- */
-class stepDetail {
-  var $sNamespace;
-  var $sStepId;
-  var $sStepName;
-  var $sStepTitle;
-  var $sSetupStepPage;
-
-  /**
-  * This function is the constructor of the stepDetail class
-  * param string $sNamespace
-  * param string $sStepId
-  * param string $sStepName
-  * param string $sStepTitle
-  * param string $sSetupStepPage
-  * @return void
-  */
-  function __construct( $sNamespace, $sStepId, $sStepName, $sStepTitle, $sSetupStepPage ) {
-    $this->sNamespace     = $sNamespace;
-    $this->sStepId        = $sStepId;
-    $this->sStepName      = $sStepName;
-    $this->sStepTitle     = $sStepTitle;
-    $this->sSetupStepPage = $sSetupStepPage;
-   }
-}
-/**
- * @package workflow.engine.classes
- */
-class redirectDetail {
-  var $sNamespace;
-  var $sRoleCode;
-  var $sPathMethod;
-
-  /**
-  * This function is the constructor of the redirectDetail class
-  * param string $sNamespace
-  * param string $sRoleCode
-  * param string $sPathMethod
-  * @return void
-  */
-  function __construct( $sNamespace, $sRoleCode, $sPathMethod ) {
-    $this->sNamespace  = $sNamespace;
-    $this->sRoleCode   = $sRoleCode;
-    $this->sPathMethod = $sPathMethod;
-   }
-}
-/**
- * @package workflow.engine.classes
- */
-class folderData {
-  var $sProcessUid;
-  var $sProcessTitle;
-  var $sApplicationUid;
-  var $sApplicationTitle;
-  var $sUserUid;
-  var $sUserLogin;
-  var $sUserFullName;
-
-  /**
-  * This function is the constructor of the folderData class
-  * param string $sProcessUid
-  * param string $sProcessTitle
-  * param string $sApplicationUid
-  * param string $sApplicationTitle
-  * param string $sUserUid
-  * param string $sUserLogin
-  * param string $sUserFullName
-  * @return void
-  */
-  function __construct( $sProcessUid, $sProcessTitle, $sApplicationUid, $sApplicationTitle, $sUserUid, $sUserLogin = '', $sUserFullName ='') {
-    $this->sProcessUid       = $sProcessUid;
-    $this->sProcessTitle     = $sProcessTitle;
-    $this->sApplicationUid   = $sApplicationUid;
-    $this->sApplicationTitle = $sApplicationTitle;
-    $this->sUserUid          = $sUserUid;
-    $this->sUserLogin        = $sUserLogin;
-    $this->sUserFullName     = $sUserFullName;
-   }
-}
-/**
- * @package workflow.engine.classes
- */
-class uploadDocumentData {
-  var $sApplicationUid;
-  var $sUserUid;
-  var $sFilename;
-  var $sFileTitle;
-  var $sDocumentUid;
-  var $bUseOutputFolder;
-  var $iVersion;
-
-  /**
-  * This function is the constructor of the uploadDocumentData class
-  * param string $sApplicationUid
-  * param string $sUserUid
-  * param string $sFilename
-  * param string $sFileTitle
-  * param string $sDocumentUid
-  * param integer $iVersion
-  * @return void
-  */
-  function __construct( $sApplicationUid, $sUserUid, $sFilename, $sFileTitle, $sDocumentUid, $iVersion = 1 ) {
-    $this->sApplicationUid = $sApplicationUid;
-    $this->sUserUid        = $sUserUid;
-    $this->sFilename       = $sFilename;
-    $this->sFileTitle      = $sFileTitle;
-    $this->sDocumentUid    = $sDocumentUid;
-    $this->bUseOutputFolder = false;
-    $this->iVersion    = $iVersion;
-   }
-}
-/**
- * @package workflow.engine.classes
- */
-class loginInfo {
-  var $lName;
-  var $lPassword;
-  var $lSession;
-
-  /**
-  * This function is the constructor of the loginInfo class
-  * param string $lName
-  * param string $lPassword
-  * param string $lSession
-  * @return void
-  */
-  function __construct( $lName, $lPassword, $lSession ) {
-    $this->lName = $lName;
-    $this->lPassword    = $lPassword;
-    $this->lSession  = $lSession;
-  }
-}
-/**
- * @package workflow.engine.classes
- */
-class caseSchedulerPlugin {
-  var $sNamespace;
-  var $sActionId;
-  var $sActionForm;
-  var $sActionSave;
-  var $sActionExecute;
-  var $sActionGetFields;
-
-  /**
-  * This function is the constructor of the caseSchedulerPlugin class
-  * param string $sNamespace
-  * param string $sActionId
-  * param string $sActionForm
-  * param string $sActionSave
-  * param string $sActionExecute
-  * param string $sActionGetFields
-  * @return void
-  */
-  function __construct( $sNamespace, $sActionId, $sActionForm, $sActionSave, $sActionExecute, $sActionGetFields ) {
-    $this->sNamespace     = $sNamespace;
-    $this->sActionId        = $sActionId;
-    $this->sActionForm      = $sActionForm;
-    $this->sActionSave     = $sActionSave;
-    $this->sActionExecute = $sActionExecute;
-    $this->sActionGetFields = $sActionGetFields;
-   }
-}
-/**
- * @package workflow.engine.classes
- */
-class taskExtendedProperty {
-  var $sNamespace;
-  var $sPage;
-  var $sName;
-  var $sIcon;
-  /**
-  * This function is the constructor of the taskExtendedProperty class
-  * param string $sNamespace
-  * param string $sPage
-  * param string $sName
-  * param string $sIcon
-  * @return void
-  */
-  function __construct( $sNamespace, $sPage, $sName, $sIcon ) {
-    $this->sNamespace = $sNamespace;
-    $this->sPage    = $sPage;
-    $this->sName    = $sName;
-    $this->sIcon    = $sIcon;
-  }
-}
-
-/**
- * @package workflow.engine.classes
- */
-class dashboardPage {
-  var $sNamespace;
-  var $sPage;
-  var $sName;
-  var $sIcon;
-  /**
-  * This function is the constructor of the dashboardPage class
-  * param string $sNamespace
-  * param string $sPage
-  * @return void
-  */
-  function __construct( $sNamespace, $sPage, $sName, $sIcon ) {
-    $this->sNamespace = $sNamespace;
-    $this->sPage    = $sPage;
-    $this->sName    = $sName;
-    $this->sIcon    = $sIcon;
-  }
-}
-/**
- * @package workflow.engine.classes
- */
-class PMPlugin {
-  var $sNamespace;
-  var $sClassName;
-  var $sFilename = null;
-  var $iVersion = 0;
-  var $sFriendlyName = null;
-  var $sPluginFolder = '';
-  var $aWorkspaces = null;
-  var $bPrivate = false;
-
-  /**
-  * This function sets values to the plugin
-  * @param string $sNamespace
-  * @param string $sFilename
-  * @return void
-  */
-  function PMPlugin($sNamespace, $sFilename = null) {
-    $this->sNamespace    = $sNamespace;
-    $this->sClassName    = $sNamespace . 'Plugin';
-    $this->sPluginFolder = $sNamespace;
-    $this->sFilename     = $sFilename;
-  }
-
-  /**
-  * With this function we can register the MENU
-  * @param string $menuId
-  * @param string $menuFilename
-  * @return void
-  */
-  function registerMenu( $menuId, $menuFilename ) {
-    $oPluginRegistry =& PMPluginRegistry::getSingleton();
-    $sMenuFilename   = PATH_PLUGINS . $this->sPluginFolder . PATH_SEP . $menuFilename;
-    $oPluginRegistry->registerMenu ( $this->sNamespace, $menuId, $sMenuFilename);
-  }
-
- /**
-  * With this function we can register a dashlet class
-  * param
-  * @return void
-  */
-  function registerDashlets() {
-    $oPluginRegistry =& PMPluginRegistry::getSingleton();
-    $oPluginRegistry->registerDashlets($this->sNamespace);
-  }
-
-
-  /**
-  * With this function we can register the report
-  * param
-  * @return void
-  */
-  function registerReport( ) {
-    $oPluginRegistry =& PMPluginRegistry::getSingleton();
-    $oPluginRegistry->registerReport ( $this->sNamespace);
-  }
-
-  /**
-  * With this function we can register the pm's function
-  * param
-  * @return void
-  */
-  function registerPmFunction( ) {
-    $oPluginRegistry =& PMPluginRegistry::getSingleton();
-    $oPluginRegistry->registerPmFunction ( $this->sNamespace);
-  }
-
-  /**
-  * With this function we can set the company's logo
-  * param
-  * @return void
-  */
-  function setCompanyLogo( $filename ) {
-    $oPluginRegistry =& PMPluginRegistry::getSingleton();
-    $oPluginRegistry->setCompanyLogo( $this->sNamespace, $filename);
-  }
-
-  /**
-  * With this function we can register the pm's function
-  * param
-  * @return void
-  */
-  function redirectLogin( $role, $pathMethod ) {
-    $oPluginRegistry =& PMPluginRegistry::getSingleton();
-    $oPluginRegistry->registerRedirectLogin( $this->sNamespace, $role, $pathMethod );
-  }
-
-  /**
-   * Register a folder for methods
-   *
-   * @param unknown_type $sFolderName
-   */
-  function registerFolder($sFolderId, $sFolderName ) {
-    $oPluginRegistry =& PMPluginRegistry::getSingleton();
-    $oPluginRegistry->registerFolder( $this->sNamespace, $sFolderId, $sFolderName );
-  }
-
-  /**
-  * With this function we can register the steps
-  * param
-  * @return void
-  */
-  function registerStep($sStepId, $sStepName, $sStepTitle, $sSetupStepPage  = '') {
-    $oPluginRegistry =& PMPluginRegistry::getSingleton();
-    $oPluginRegistry->registerStep( $this->sNamespace, $sStepId, $sStepName, $sStepTitle, $sSetupStepPage );
-  }
-
-  /**
-  * With this function we can register the triggers
-  * @param string $sTriggerId
-  * @param string $sTriggerName
-  * @return void
-  */
-  function registerTrigger( $sTriggerId, $sTriggerName ) {
-    $oPluginRegistry =& PMPluginRegistry::getSingleton();
-    $oPluginRegistry->registerTrigger ( $this->sNamespace, $sTriggerId, $sTriggerName );
-  }
-
-  /**
-  * With this function we can delete a file
-  * @param string $sFilename
-  * @param string $bAbsolutePath
-  * @return void
-  */
-  function delete($sFilename, $bAbsolutePath = false) {
-    if (!$bAbsolutePath) {
-      $sFilename = PATH_PLUGINS . $this->sPluginFolder . PATH_SEP . $sFilename;
+    /**
+     * This function sets values to the plugin
+     * @param string $sNamespace
+     * @param string $sFilename
+     * @return void
+     */
+    public function PMPlugin($sNamespace, $sFilename = null)
+    {
+        $this->sNamespace    = $sNamespace;
+        $this->sClassName    = $sNamespace . 'Plugin';
+        $this->sPluginFolder = $sNamespace;
+        $this->sFilename     = $sFilename;
     }
-    @unlink($sFilename);
-  }
 
-  /**
-  * With this function we can copy a files
-  * @param string $sSouce
-  * @param string $sTarget
-  * @param string $bSourceAbsolutePath
-  * @param string $bTargetAbsolutePath
-  * @return void
-  */
-  function copy($sSouce, $sTarget, $bSourceAbsolutePath = false, $bTargetAbsolutePath = false) {
-    if (!$bSourceAbsolutePath) {
-      $sSouce = PATH_PLUGINS . $this->sPluginFolder . PATH_SEP . $sSouce;
+    /**
+     * With this function we can register the MENU
+     * @param string $menuId
+     * @param string $menuFilename
+     * @return void
+     */
+    public function registerMenu($menuId, $menuFilename)
+    {
+        $oPluginRegistry =& PMPluginRegistry::getSingleton();
+        $sMenuFilename   = PATH_PLUGINS . $this->sPluginFolder . PATH_SEP . $menuFilename;
+        $oPluginRegistry->registerMenu($this->sNamespace, $menuId, $sMenuFilename);
     }
-    if (!$bTargetAbsolutePath) {
-      $sTarget = PATH_PLUGINS . $this->sPluginFolder . PATH_SEP . $sTarget;
+
+    /**
+     * With this function we can register a dashlet class
+     * param
+     * @return void
+     */
+    public function registerDashlets()
+    {
+        $oPluginRegistry =& PMPluginRegistry::getSingleton();
+        $oPluginRegistry->registerDashlets($this->sNamespace);
     }
-    G::verifyPath(dirname($sTarget), true);
-    @copy($sSouce, $sTarget);
-  }
 
-  /**
-  * With this function we can rename a files
-  * @param string $sSouce
-  * @param string $sTarget
-  * @param string $bSourceAbsolutePath
-  * @param string $bTargetAbsolutePath
-  * @return void
-  */
-  function rename($sSouce, $sTarget, $bSourceAbsolutePath = false, $bTargetAbsolutePath = false) {
-    if (!$bSourceAbsolutePath) {
-      $sSouce = PATH_PLUGINS . $this->sPluginFolder . PATH_SEP . $sSouce;
+
+    /**
+     * With this function we can register the report
+     * param
+     * @return void
+     */
+    public function registerReport()
+    {
+        $oPluginRegistry =& PMPluginRegistry::getSingleton();
+        $oPluginRegistry->registerReport($this->sNamespace);
     }
-    if (!$bTargetAbsolutePath) {
-      $sTarget = PATH_PLUGINS . $this->sPluginFolder . PATH_SEP . $sTarget;
+
+    /**
+     * With this function we can register the pm's function
+     * param
+     * @return void
+     */
+    public function registerPmFunction()
+    {
+        $oPluginRegistry =& PMPluginRegistry::getSingleton();
+        $oPluginRegistry->registerPmFunction($this->sNamespace);
     }
-    G::verifyPath(dirname($sTarget), true);
-    @chmod(dirname($sTarget), 0777);
-    @rename($sSouce, $sTarget);
-  }
 
-  /**
-  * This function registers a page who is break
-  * @param string $pageId
-  * @param string $templateFilename
-  * @return void
-  */
-  function registerBreakPageTemplate( $pageId, $templateFilename ) {
-    $oPluginRegistry =& PMPluginRegistry::getSingleton();
-    $sPageFilename = PATH_PLUGINS . $this->sPluginFolder . PATH_SEP . $templateFilename;
-    $oPluginRegistry->registerBreakPageTemplate ( $this->sNamespace, $pageId, $sPageFilename);
-  }
-  /**
-  * With this function we can register a CSS
-  * @param string $sPage
-  * @return void
-  */
-  function registerCss( $sCssFile) {
-    $oPluginRegistry =& PMPluginRegistry::getSingleton();
-    $oPluginRegistry->registerCss ( $this->sNamespace, $sCssFile );
-  }
-  /**
-  * With this function we can register the toolbar file for dynaform editor
-  * @param string $menuId
-  * @param string $menuFilename
-  * @return void
-  */
-  function registerToolbarFile( $sToolbarId, $filename ) {
-    $oPluginRegistry =& PMPluginRegistry::getSingleton();
-    $sFilename   = PATH_PLUGINS . $this->sPluginFolder . PATH_SEP . $filename;
-    $oPluginRegistry->registerToolbarFile ( $this->sNamespace, $sToolbarId, $sFilename);
-  }
-  /**
-  * With this function we can register a Case Scheduler Plugin/Addon
-  * param
-  * @return void
-  */
-  function registerCaseSchedulerPlugin($sActionId, $sActionForm, $sActionSave, $sActionExecute, $sActionGetFields) {
-    $oPluginRegistry =& PMPluginRegistry::getSingleton();
-    $oPluginRegistry->registerCaseSchedulerPlugin( $this->sNamespace, $sActionId, $sActionForm, $sActionSave, $sActionExecute, $sActionGetFields );
-  }
-  /**
-  * With this function we can register a task extended property
-  * @param string $sPage
-  * @return void
-  */
-  function registerTaskExtendedProperty( $sPage, $sName, $sIcon="") {
-    $oPluginRegistry =& PMPluginRegistry::getSingleton();
-    $oPluginRegistry->registerTaskExtendedProperty ( $this->sNamespace, $sPage, $sName, $sIcon );
-  }
+    /**
+     * With this function we can set the company's logo
+     * param
+     * @return void
+     */
+    public function setCompanyLogo($filename)
+    {
+        $oPluginRegistry =& PMPluginRegistry::getSingleton();
+        $oPluginRegistry->setCompanyLogo($this->sNamespace, $filename);
+    }
 
-  /**
-   * Register a plugin javascript to run with core js script at same runtime
-   * @param string $coreJsFile
-   * @param array/string $pluginJsFile
-   * @return void
-   */
-  function registerJavascript($sCoreJsFile, $pluginJsFile) {
-    $oPluginRegistry =& PMPluginRegistry::getSingleton();
-    $oPluginRegistry->registerJavascript($this->sNamespace, $sCoreJsFile, $pluginJsFile);
-  }
+    /**
+     * With this function we can register the pm's function
+     * param
+     * @return void
+     */
+    public function redirectLogin($role, $pathMethod)
+    {
+        $oPluginRegistry =& PMPluginRegistry::getSingleton();
+        $oPluginRegistry->registerRedirectLogin($this->sNamespace, $role, $pathMethod);
+    }
 
-  /**
-   * Unregister a plugin javascript
-   * @param string $coreJsFile
-   * @param array/string $pluginJsFile
-   * @return void
-   */
-  function unregisterJavascript($sCoreJsFile, $pluginJsFile) {
-    $oPluginRegistry =& PMPluginRegistry::getSingleton();
-    $oPluginRegistry->unregisterJavascript($this->sNamespace, $sCoreJsFile, $pluginJsFile);
-  }
+    /**
+     * Register a folder for methods
+     *
+     * @param unknown_type $sFolderName
+     */
+    public function registerFolder($sFolderId, $sFolderName)
+    {
+        $oPluginRegistry =& PMPluginRegistry::getSingleton();
+        $oPluginRegistry->registerFolder($this->sNamespace, $sFolderId, $sFolderName);
+    }
 
-  function registerDashboard() {
-    // Dummy function for backwards compatibility
-  }
+    /**
+     * With this function we can register the steps
+     * param
+     * @return void
+     */
+    public function registerStep($sStepId, $sStepName, $sStepTitle, $sSetupStepPage  = '')
+    {
+        $oPluginRegistry =& PMPluginRegistry::getSingleton();
+        $oPluginRegistry->registerStep( $this->sNamespace, $sStepId, $sStepName, $sStepTitle, $sSetupStepPage );
+    }
 
-  function getExternalStepAction() {
-    $oPluginRegistry =& PMPluginRegistry::getSingleton();
-    g::pr($oPluginRegistry->getSteps());
-    return $oPluginRegistry->getSteps();
-  }
+    /**
+     * With this function we can register the triggers
+     * @param string $sTriggerId
+     * @param string $sTriggerName
+     * @return void
+     */
+    public function registerTrigger($sTriggerId, $sTriggerName)
+    {
+        $oPluginRegistry =& PMPluginRegistry::getSingleton();
+        $oPluginRegistry->registerTrigger($this->sNamespace, $sTriggerId, $sTriggerName);
+    }
+
+    /**
+     * With this function we can delete a file
+     * @param string $sFilename
+     * @param string $bAbsolutePath
+     * @return void
+     */
+    public function delete($sFilename, $bAbsolutePath = false)
+    {
+        if (!$bAbsolutePath) {
+            $sFilename = PATH_PLUGINS . $this->sPluginFolder . PATH_SEP . $sFilename;
+        }
+        @unlink($sFilename);
+    }
+
+    /**
+     * With this function we can copy a files
+     * @param string $sSouce
+     * @param string $sTarget
+     * @param string $bSourceAbsolutePath
+     * @param string $bTargetAbsolutePath
+     * @return void
+     */
+    public function copy($sSouce, $sTarget, $bSourceAbsolutePath = false, $bTargetAbsolutePath = false)
+    {
+        if (!$bSourceAbsolutePath) {
+            $sSouce = PATH_PLUGINS . $this->sPluginFolder . PATH_SEP . $sSouce;
+        }
+        if (!$bTargetAbsolutePath) {
+            $sTarget = PATH_PLUGINS . $this->sPluginFolder . PATH_SEP . $sTarget;
+        }
+
+        G::verifyPath(dirname($sTarget), true);
+        @copy($sSouce, $sTarget);
+    }
+
+    /**
+     * With this function we can rename a files
+     * @param string $sSouce
+     * @param string $sTarget
+     * @param string $bSourceAbsolutePath
+     * @param string $bTargetAbsolutePath
+     * @return void
+     */
+    public function rename($sSouce, $sTarget, $bSourceAbsolutePath = false, $bTargetAbsolutePath = false)
+    {
+        if (!$bSourceAbsolutePath) {
+            $sSouce = PATH_PLUGINS . $this->sPluginFolder . PATH_SEP . $sSouce;
+        }
+        if (!$bTargetAbsolutePath) {
+            $sTarget = PATH_PLUGINS . $this->sPluginFolder . PATH_SEP . $sTarget;
+        }
+
+        G::verifyPath(dirname($sTarget), true);
+        @chmod(dirname($sTarget), 0777);
+        @rename($sSouce, $sTarget);
+    }
+
+    /**
+     * This function registers a page who is break
+     * @param string $pageId
+     * @param string $templateFilename
+     * @return void
+     */
+    public function registerBreakPageTemplate($pageId, $templateFilename)
+    {
+        $oPluginRegistry =& PMPluginRegistry::getSingleton();
+        $sPageFilename = PATH_PLUGINS . $this->sPluginFolder . PATH_SEP . $templateFilename;
+        $oPluginRegistry->registerBreakPageTemplate ($this->sNamespace, $pageId, $sPageFilename);
+    }
+
+    /**
+     * With this function we can register a CSS
+     * @param string $sPage
+     * @return void
+     */
+    public function registerCss($sCssFile)
+    {
+        $oPluginRegistry =& PMPluginRegistry::getSingleton();
+        $oPluginRegistry->registerCss($this->sNamespace, $sCssFile);
+    }
+
+    /**
+     * With this function we can register the toolbar file for dynaform editor
+     * @param string $menuId
+     * @param string $menuFilename
+     * @return void
+     */
+    public function registerToolbarFile($sToolbarId, $filename)
+    {
+        $oPluginRegistry =& PMPluginRegistry::getSingleton();
+        $sFilename   = PATH_PLUGINS . $this->sPluginFolder . PATH_SEP . $filename;
+        $oPluginRegistry->registerToolbarFile($this->sNamespace, $sToolbarId, $sFilename);
+    }
+
+    /**
+     * With this function we can register a Case Scheduler Plugin/Addon
+     * param
+     * @return void
+     */
+    public function registerCaseSchedulerPlugin(
+        $sActionId,
+        $sActionForm,
+        $sActionSave,
+        $sActionExecute,
+        $sActionGetFields
+    ) {
+        $oPluginRegistry =& PMPluginRegistry::getSingleton();
+        $oPluginRegistry->registerCaseSchedulerPlugin(
+            $this->sNamespace, $sActionId, $sActionForm, $sActionSave, $sActionExecute, $sActionGetFields
+        );
+    }
+
+    /**
+     * With this function we can register a task extended property
+     * @param string $sPage
+     * @return void
+     */
+    public function registerTaskExtendedProperty($sPage, $sName, $sIcon="")
+    {
+        $oPluginRegistry =& PMPluginRegistry::getSingleton();
+        $oPluginRegistry->registerTaskExtendedProperty ( $this->sNamespace, $sPage, $sName, $sIcon );
+    }
+
+    /**
+     * Register a plugin javascript to run with core js script at same runtime
+     * @param string $coreJsFile
+     * @param array/string $pluginJsFile
+     * @return void
+     */
+    function registerJavascript($sCoreJsFile, $pluginJsFile)
+    {
+        $oPluginRegistry =& PMPluginRegistry::getSingleton();
+        $oPluginRegistry->registerJavascript($this->sNamespace, $sCoreJsFile, $pluginJsFile);
+    }
+
+    /**
+     * Unregister a plugin javascript
+     * @param string $coreJsFile
+     * @param array/string $pluginJsFile
+     * @return void
+     */
+    public function unregisterJavascript($sCoreJsFile, $pluginJsFile)
+    {
+        $oPluginRegistry =& PMPluginRegistry::getSingleton();
+        $oPluginRegistry->unregisterJavascript($this->sNamespace, $sCoreJsFile, $pluginJsFile);
+    }
+
+    public function registerDashboard()
+    { // Dummy function for backwards compatibility
+    }
+
+    public function getExternalStepAction()
+    {
+        $oPluginRegistry =& PMPluginRegistry::getSingleton();
+        return $oPluginRegistry->getSteps();
+    }
 }
+
+class menuDetail
+{
+    public $sNamespace;
+    public $sMenuId;
+    public $sFilename;
+
+    /**
+     * This function is the constructor of the menuDetail class
+     * param string $sNamespace
+     * param string $sMenuId
+     * param string $sFilename
+     * @return void
+     */
+    public function __construct($sNamespace, $sMenuId, $sFilename)
+    {
+        $this->sNamespace = $sNamespace;
+        $this->sMenuId    = $sMenuId;
+        $this->sFilename  = $sFilename;
+    }
+}
+
+
+class toolbarDetail
+{
+    public $sNamespace;
+    public $sToolbarId;
+    public $sFilename;
+
+    /**
+     * This function is the constructor of the menuDetail class
+     * param string $sNamespace
+     * param string $sMenuId
+     * param string $sFilename
+     * @return void
+     */
+    public function __construct($sNamespace, $sToolbarId, $sFilename)
+    {
+        $this->sNamespace = $sNamespace;
+        $this->sToolbarId    = $sToolbarId;
+        $this->sFilename  = $sFilename;
+    }
+}
+
+class cssFile
+{
+    public $sNamespace;
+    public $sCssFile;
+
+    /**
+     * This function is the constructor of the cssFile class
+     * param string $sNamespace
+     * param string $sPage
+     * @return void
+     */
+    public function __construct($sNamespace, $sCssFile)
+    {
+        $this->sNamespace = $sNamespace;
+        $this->sCssFile    = $sCssFile;
+    }
+}
+
+class triggerDetail
+{
+    public $sNamespace;
+    public $sTriggerId;
+    public $sTriggerName;
+
+    /**
+     * This function is the constructor of the triggerDetail class
+     * param string $sNamespace
+     * param string $sTriggerId
+     * param string $sTriggerName
+     * @return void
+     */
+    public function __construct($sNamespace, $sTriggerId, $sTriggerName)
+    {
+        $this->sNamespace   = $sNamespace;
+        $this->sTriggerId   = $sTriggerId;
+        $this->sTriggerName = $sTriggerName;
+    }
+}
+
+class folderDetail
+{
+    public $sNamespace;
+    public $sFolderId;
+    public $sFolderName;
+
+    /**
+     * This function is the constructor of the folderDetail class
+     * param string $sNamespace
+     * param string $sFolderId
+     * param string $sFolderName
+     * @return void
+     */
+    public function __construct($sNamespace, $sFolderId, $sFolderName)
+    {
+        $this->sNamespace  = $sNamespace;
+        $this->sFolderId   = $sFolderId;
+        $this->sFolderName = $sFolderName;
+    }
+}
+
+class stepDetail
+{
+    public $sNamespace;
+    public $sStepId;
+    public $sStepName;
+    public $sStepTitle;
+    public $sSetupStepPage;
+
+    /**
+     * This function is the constructor of the stepDetail class
+     * param string $sNamespace
+     * param string $sStepId
+     * param string $sStepName
+     * param string $sStepTitle
+     * param string $sSetupStepPage
+     * @return void
+     */
+    public function __construct($sNamespace, $sStepId, $sStepName, $sStepTitle, $sSetupStepPage)
+    {
+        $this->sNamespace     = $sNamespace;
+        $this->sStepId        = $sStepId;
+        $this->sStepName      = $sStepName;
+        $this->sStepTitle     = $sStepTitle;
+        $this->sSetupStepPage = $sSetupStepPage;
+    }
+}
+
+class redirectDetail
+{
+    public $sNamespace;
+    public $sRoleCode;
+    public $sPathMethod;
+
+    /**
+     * This function is the constructor of the redirectDetail class
+     * param string $sNamespace
+     * param string $sRoleCode
+     * param string $sPathMethod
+     * @return void
+     */
+    public function __construct($sNamespace, $sRoleCode, $sPathMethod)
+    {
+        $this->sNamespace  = $sNamespace;
+        $this->sRoleCode   = $sRoleCode;
+        $this->sPathMethod = $sPathMethod;
+    }
+}
+
+class folderData
+{
+    public $sProcessUid;
+    public $sProcessTitle;
+    public $sApplicationUid;
+    public $sApplicationTitle;
+    public $sUserUid;
+    public $sUserLogin;
+    public $sUserFullName;
+
+    /**
+     * This function is the constructor of the folderData class
+     * param string $sProcessUid
+     * param string $sProcessTitle
+     * param string $sApplicationUid
+     * param string $sApplicationTitle
+     * param string $sUserUid
+     * param string $sUserLogin
+     * param string $sUserFullName
+     * @return void
+     */
+    public function __construct(
+        $sProcessUid,
+        $sProcessTitle,
+        $sApplicationUid,
+        $sApplicationTitle,
+        $sUserUid,
+        $sUserLogin = '',
+        $sUserFullName =''
+    ) {
+        $this->sProcessUid       = $sProcessUid;
+        $this->sProcessTitle     = $sProcessTitle;
+        $this->sApplicationUid   = $sApplicationUid;
+        $this->sApplicationTitle = $sApplicationTitle;
+        $this->sUserUid          = $sUserUid;
+        $this->sUserLogin        = $sUserLogin;
+        $this->sUserFullName     = $sUserFullName;
+    }
+}
+
+class uploadDocumentData
+{
+    public $sApplicationUid;
+    public $sUserUid;
+    public $sFilename;
+    public $sFileTitle;
+    public $sDocumentUid;
+    public $bUseOutputFolder;
+    public $iVersion;
+
+    /**
+     * This function is the constructor of the uploadDocumentData class
+     * param string $sApplicationUid
+     * param string $sUserUid
+     * param string $sFilename
+     * param string $sFileTitle
+     * param string $sDocumentUid
+     * param integer $iVersion
+     * @return void
+     */
+    public function __construct($sApplicationUid, $sUserUid, $sFilename, $sFileTitle, $sDocumentUid, $iVersion = 1)
+    {
+        $this->sApplicationUid = $sApplicationUid;
+        $this->sUserUid        = $sUserUid;
+        $this->sFilename       = $sFilename;
+        $this->sFileTitle      = $sFileTitle;
+        $this->sDocumentUid    = $sDocumentUid;
+        $this->bUseOutputFolder = false;
+        $this->iVersion    = $iVersion;
+    }
+}
+
+class loginInfo
+{
+    public $lName;
+    public $lPassword;
+    public $lSession;
+
+    /**
+     * This function is the constructor of the loginInfo class
+     * param string $lName
+     * param string $lPassword
+     * param string $lSession
+     * @return void
+     */
+    public function __construct($lName, $lPassword, $lSession)
+    {
+        $this->lName = $lName;
+        $this->lPassword    = $lPassword;
+        $this->lSession  = $lSession;
+    }
+}
+
+class caseSchedulerPlugin
+{
+    public $sNamespace;
+    public $sActionId;
+    public $sActionForm;
+    public $sActionSave;
+    public $sActionExecute;
+    public $sActionGetFields;
+
+    /**
+     * This function is the constructor of the caseSchedulerPlugin class
+     * param string $sNamespace
+     * param string $sActionId
+     * param string $sActionForm
+     * param string $sActionSave
+     * param string $sActionExecute
+     * param string $sActionGetFields
+     * @return void
+     */
+    public function __construct($sNamespace, $sActionId, $sActionForm, $sActionSave, $sActionExecute, $sActionGetFields)
+    {
+        $this->sNamespace       = $sNamespace;
+        $this->sActionId        = $sActionId;
+        $this->sActionForm      = $sActionForm;
+        $this->sActionSave      = $sActionSave;
+        $this->sActionExecute   = $sActionExecute;
+        $this->sActionGetFields = $sActionGetFields;
+    }
+}
+
+class taskExtendedProperty
+{
+    public $sNamespace;
+    public $sPage;
+    public $sName;
+    public $sIcon;
+
+    /**
+     * This function is the constructor of the taskExtendedProperty class
+     * param string $sNamespace
+     * param string $sPage
+     * param string $sName
+     * param string $sIcon
+     * @return void
+     */
+    public function __construct($sNamespace, $sPage, $sName, $sIcon)
+    {
+        $this->sNamespace = $sNamespace;
+        $this->sPage    = $sPage;
+        $this->sName    = $sName;
+        $this->sIcon    = $sIcon;
+    }
+}
+
+class dashboardPage
+{
+    public $sNamespace;
+    public $sPage;
+    public $sName;
+    public $sIcon;
+
+    /**
+     * This function is the constructor of the dashboardPage class
+     * param string $sNamespace
+     * param string $sPage
+     * @return void
+     */
+    public function __construct($sNamespace, $sPage, $sName, $sIcon)
+    {
+        $this->sNamespace = $sNamespace;
+        $this->sPage    = $sPage;
+        $this->sName    = $sName;
+        $this->sIcon    = $sIcon;
+    }
+}
+
