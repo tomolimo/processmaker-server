@@ -199,8 +199,8 @@
               {name : 'CASES_COUNT', type:'float'},
               {name : 'APP_TYPE'},
               {name : 'DEL_FINISH_DATE'},
-              {name : 'APP_ENABLE_ACTION_DATE', type:'float'},
-              {name : 'APP_DISABLE_ACTION_DATE', type:'float'}
+              {name : 'APP_ENABLE_ACTION_DATE'},
+              {name : 'APP_DISABLE_ACTION_DATE'}
             ]
           }
         )
@@ -358,45 +358,14 @@
       );
 
     processesGrid.addListener('rowcontextmenu', emptyReturn,this);
-    processesGrid.on('rowcontextmenu', function (grid, rowIndex, evt) {
-      var sm = grid.getSelectionModel();
-      sm.selectRow(rowIndex, sm.isSelected(rowIndex));
-
-      var rowSelected = Ext.getCmp('processesGrid').getSelectionModel().getSelected();
-      var activator = Ext.getCmp('activator2');
-      var debug = Ext.getCmp('debug');
-
-      if( rowSelected.data.PRO_STATUS == 'ACTIVE' ){
-        activator.setIconClass('icon-deactivate');
-        activator.setText(TRANSLATIONS.ID_DEACTIVATE);
-      } else {
-        activator.setIconClass('icon-activate');
-        activator.setText(TRANSLATIONS.ID_ACTIVATE);
-      }
-
-      if( rowSelected.data.PRO_DEBUG == 1){
-        debug.setIconClass('icon-debug-disabled');
-        debug.setText(_('ID_DISABLE_DEBUG'));
-      } else {
-        debug.setIconClass('icon-debug');
-        debug.setText(_('ID_ENABLE_DEBUG'));
-      }
-    }, this);
 
     processesGrid.on('contextmenu', function (evt) {
       evt.preventDefault();
     }, this);
 
-
-
-
-
     function emptyReturn(){
       return;
     }
-
-
-
 
     var viewport = new Ext.Viewport({
       layout: 'border',
