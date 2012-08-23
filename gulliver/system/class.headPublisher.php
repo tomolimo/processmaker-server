@@ -491,7 +491,7 @@ class headPublisher {
       if ($debug) {
         foreach ($pluginJavascripts as $pluginJsFile) {
           $jsPluginCacheName = '';
-          if (substr($pgetRegisteredJavascriptByluginJsFile, -3) != '.js') {
+          if (substr($pluginJsFile, -3) != '.js') {
             $pluginJsFile .= '.js';
           }
 
