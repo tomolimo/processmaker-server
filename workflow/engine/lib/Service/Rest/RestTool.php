@@ -38,7 +38,7 @@ class Service_Rest_RestTool
             $this->dbInfo[$table['@name']]['pKeys'] = array();
             $this->dbInfo[$table['@name']]['columns'] = array();
             $this->dbInfo[$table['@name']]['required_columns'] = array();
-            
+
             foreach ($table['column'] as $column) {
                 $this->dbInfo[$table['@name']]['columns'][] = $column['@name'];
 
@@ -58,14 +58,23 @@ class Service_Rest_RestTool
         $this->loadDbXmlSchema();
 
         $this->configFile = empty($filename) ? PATH_CONFIG . $this->configFile : $filename;
-        $configIniStr = '';
+        $configIniStr  = "; -= ProcessMaker RestFul services configuration =-\n";
+        $configIniStr .= "\n";
+        $configIniStr .= "; On this configuration you file can customize all crud rest api.\n";
+        $configIniStr .= "; With what methods (GET,POST,PUT,DELETE) you need that PM serve.\n";
+        $configIniStr .= "; And for each table/method what columns you can expose.\n";
+        $configIniStr .= "\n";
 
         foreach ($this->dbInfo as $table => $columns) {
+            $strColumns    = implode(' ', $columns['columns']);
+            $configIniStr .= ";Rest Api for table $table with (".count($columns['columns']).") columns.\n";
             $configIniStr .= "[$table]\n";
-            $configIniStr .= "  ALLOW_METHODS = GET POST PUT DELETE\n";
+            $configIniStr .= "  ; Param to set the allowed methods (separeted by a single space), complete sample: ALLOW_METHODS = GET POST PUT DELETE\n";
+            $configIniStr .= "  ALLOW_METHODS = GET\n";
+            $configIniStr .= "  ; Params to set what columns should be exposed, you can use wildcard '*' to speccify all columns \n";
             $configIniStr .= "  EXPOSE_COLUMNS_GET  = *\n";
-            $configIniStr .= "  EXPOSE_COLUMNS_POST = ".implode(' ', $columns) . "\n";
-            $configIniStr .= "  EXPOSE_COLUMNS_PUT  = ".implode(' ', $columns) . "\n";
+            $configIniStr .= "  EXPOSE_COLUMNS_POST = ".$strColumns."\n";
+            $configIniStr .= "  EXPOSE_COLUMNS_PUT  = ".$strColumns."\n";
             $configIniStr .= "\n";
         }
 
@@ -97,7 +106,7 @@ class Service_Rest_RestTool
 
             )
         ));
-        
+
         foreach ($this->config as $table => $conf) {
             $classname = self::camelize($table, 'class');
             $allowedMethods = explode(' ', $conf['ALLOW_METHODS']);
@@ -105,6 +114,11 @@ class Service_Rest_RestTool
             //$allowedMethods = array('DELETE');
 
             foreach ($allowedMethods as $method) {
+                // validation for a valid method
+                if (! in_array($method, array('GET', 'POST', 'PUT', 'DELETE'))) {
+                    throw new Exception("Invalid method '$method'.");
+                }
+
                 $method = strtoupper($method);
                 $exposedColumns = array();
                 $params = array();
@@ -117,6 +131,15 @@ class Service_Rest_RestTool
                         $exposedColumns = $this->dbInfo[$table]['columns'];
                     } else {
                         $exposedColumns = explode(' ', $conf['EXPOSE_COLUMNS_'.$method]);
+
+                        // validation for valid columns
+                        $tableColumns = $this->dbInfo[$table]['columns'];
+
+                        foreach ($exposedColumns as $column) {
+                            if (! in_array($column, $tableColumns)) {
+                                throw new Exception("Invalid column '$column' for table $table, it does not exist!.");
+                            }
+                        }
 
                         // validate that all required columns are in exposed columns array
                         if ($method == 'POST') {
@@ -152,7 +175,7 @@ class Service_Rest_RestTool
                     case 'PUT':
                         foreach ($exposedColumns as $i => $column) {
                             $paramsStr[$i] = "\$".self::camelize($column);
-                            
+
                             if (! in_array($column, $this->dbInfo[$table]['pKeys'])) {
                                 $params[$i] = self::camelize($column);
                             }
@@ -168,14 +191,14 @@ class Service_Rest_RestTool
                 }
                 $paramsStr = implode(', ', $paramsStr);
 
-                // formatting primary keys for template                    
+                // formatting primary keys for template
                 foreach ($this->dbInfo[$table]['pKeys'] as $i => $pk) {
                     $primaryKeys[$i] = "\$".self::camelize($pk);
                 }
                 $primaryKeys = implode(', ', $primaryKeys);
 
                 $methods .= Haanga::Load(
-                    'method'.self::camelize($method, 'class').'.tpl', 
+                    'method'.self::camelize($method, 'class').'.tpl',
                     array(
                         'params'      => $params,
                         'paramsStr'   => $paramsStr,

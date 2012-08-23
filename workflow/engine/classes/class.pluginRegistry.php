@@ -95,6 +95,11 @@ class PMPluginRegistry {
    */
   private $_aJavascripts = array();
 
+  /**
+   * Contains all rest services classes from plugins
+   */
+  private $_restServices = array();
+
   static private $instance = NULL;
 
   /**
@@ -1222,6 +1227,67 @@ class PMPluginRegistry {
       $dashboardPage = new dashboardPage ($sNamespace, $sPage, $sName, $sIcon);
       $this->_aDashboardPages[] = $dashboardPage;
     }
+  }
+
+  /**
+   * Register a rest service class from a plugin to be served by processmaker
+   *
+   * @param string $sNamespace The namespace for the plugin
+   * @param string $classname  The service (api) class name
+   * @param string $path       (optional) the class file path, if it is not set the system will try resolve the
+   *                           file path from its classname.
+   */
+  public function registerRestService($sNamespace, $classname, $path = '')
+  {
+      $restService = new StdClass();
+      $restService->sNamespace = $sNamespace;
+      $restService->classname  = $classname;
+
+      if (empty($path)) {
+          $path = PATH_PLUGINS . $restService->sNamespace . "/classes/rest/$classname.php";
+      }
+
+      if (! file_exists($path)) {
+          return false;
+      }
+
+      $restService->path = $path;
+      $this->_restServices[] = $restService;
+
+      return true;
+  }
+
+  /**
+   * Unregister a rest service class of a plugin
+   *
+   * @param string $sNamespace The namespace for the plugin
+   * @param string $classname  The service (api) class name
+   */
+  public function unregisterRestService($sNamespace, $classname)
+  {
+      foreach ($this->_restServices as $i => $service) {
+          if ($sNamespace == $service->sNamespace) {
+              unset($this->_restServices[$i]);
+          }
+      }
+      // Re-index when all js were unregistered
+      $this->_restServices = array_values($this->_restServices);
+  }
+
+  public function getRegisteredRestServices()
+  {
+      return  $this->_restServices;
+  }
+
+  public function getRegisteredRestClassFiles()
+  {
+      $restClassFiles = array();
+
+      foreach ($this->_restServices as $restService) {
+          $restClassFiles[] = $restService->path;
+      }
+
+      return $restClassFiles;
   }
 
   /**

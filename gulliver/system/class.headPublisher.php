@@ -302,12 +302,12 @@ class headPublisher {
     //$head .= $this->getExtJsStylesheets();
     $head .= $this->getExtJsScripts();
     $head .= $this->getExtJsVariablesScript();
-    
+
     $oServerConf =& serverConf::getSingleton();
     if ($oServerConf->isRtl(SYS_LANG)) {
     	$head .= "  <script type='text/javascript' src='/js/ext/extjs_rtl.js'></script>\n";
     }
-    
+
     return $head;
   }
 
@@ -491,7 +491,7 @@ class headPublisher {
       if ($debug) {
         foreach ($pluginJavascripts as $pluginJsFile) {
           $jsPluginCacheName = '';
-          if (substr($pluginJsFile, -3) != '.js') {
+          if (substr($pgetRegisteredJavascriptByluginJsFile, -3) != '.js') {
             $pluginJsFile .= '.js';
           }
 

@@ -1,3 +1,4 @@
+#!/usr/bin/env php
 <?php
 include '../../../gulliver/Core/Bootstrap.php';
 include '../../../workflow/engine/PmBootstrap.php';

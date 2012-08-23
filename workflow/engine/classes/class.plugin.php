@@ -327,6 +327,34 @@ class PMPlugin
         $oPluginRegistry =& PMPluginRegistry::getSingleton();
         return $oPluginRegistry->getSteps();
     }
+
+    /**
+     * Register a rest service and expose it
+     *
+     * @author  Erik Amaru Ortiz <erik@colosa.com>
+     * @param string $coreJsFile
+     * @param array/string $pluginJsFile
+     * @return void
+     */
+    function registerRestService($classname, $path = '')
+    {
+        $oPluginRegistry =& PMPluginRegistry::getSingleton();
+        $oPluginRegistry->registerRestService($this->sNamespace, $classname, $path);
+    }
+
+    /**
+     * Unregister a rest service
+     *
+     * @author  Erik Amaru Ortiz <erik@colosa.com>
+     * @param string $coreJsFile
+     * @param array/string $pluginJsFile
+     * @return void
+     */
+    function unregisterRestService($classname, $path)
+    {
+        $oPluginRegistry =& PMPluginRegistry::getSingleton();
+        $oPluginRegistry->unregisterRestService($this->sNamespace, $classname, $path);
+    }
 }
 
 class menuDetail

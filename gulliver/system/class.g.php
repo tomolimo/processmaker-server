@@ -5175,25 +5175,39 @@ function getDirectorySize($path,$maxmtime=0)
 
         $rest = new Restler();
         $rest->setSupportedFormats('JsonFormat', 'XmlFormat');
-        $namespace = 'Services_Rest_';
-
-        // override global REQUEST_URI to pass to Restler library
-        $_SERVER['REQUEST_URI'] = '/' . strtolower($namespace) . ltrim($uri, '/');
 
         // getting all services class
         $srvClasses = glob(PATH_SERVICES_REST . '*.php');
         $crudClasses = glob(PATH_SERVICES_REST . 'crud/*.php');
-
         $srvClasses = array_merge($srvClasses, $crudClasses);
-        
+
+        // hook to get rest api classes from plugins
+        if ( class_exists( 'PMPluginRegistry' ) ) {
+            $pluginRegistry = & PMPluginRegistry::getSingleton();
+            $pluginClasses = $pluginRegistry->getRegisteredRestClassFiles();
+            $srvClasses = array_merge($srvClasses, $pluginClasses);
+        }
+
         foreach ($srvClasses as $classFile) {
             require_once $classFile;
+            $namespace = 'Services_Rest_';
+            $className = str_replace('.php', '', basename($classFile));
 
-            $className = $namespace . str_replace('.php', '', basename($classFile));
+            // if the core class does not exists try resolve the for a plugin
+            if (! class_exists($namespace . $className)) {
+                $namespace = 'Plugin_Services_Rest_';
+
+                // Couldn't resolve the class name, just skipp it
+                if (! class_exists($namespace . $className)) {
+                    continue;
+                }
+            }
+
+            $className = $namespace . $className;
             $reflClass = new ReflectionClass($className);
 
-            // verify if there is an auth class implementing 'iAuthenticate'
-            if ($reflClass->implementsInterface('iAuthenticate')) {
+            // verify if there is an auth class implementing 'iAuthenticate' that wasn't from plugin
+            if ($reflClass->implementsInterface('iAuthenticate') && $namespace != 'Plugin_Services_Rest_') {
                 // auth class found, set as restler authentication class handler
                 $rest->addAuthenticationClass($className);
             } else {
@@ -5201,6 +5215,9 @@ function getDirectorySize($path,$maxmtime=0)
                 $rest->addAPIClass($className);
             }
         }
+
+        // override global REQUEST_URI to pass to Restler library
+        $_SERVER['REQUEST_URI'] = '/' . strtolower($namespace) . ltrim($uri, '/');
 
         $rest->handle();
     }
