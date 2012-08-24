@@ -257,11 +257,9 @@ function activeDeactive(){
         var site = '';
         if (SYS_SKIN.substring(0,2) == 'ux') {
             site = PROCESSMAKER_URL + '/main?st=admin&s='+parent._NODE_SELECTED;
-
         } else {
             site = PROCESSMAKER_URL + "/setup/main?s="+parent._NODE_SELECTED;
         }
-
         parent.parent.location.href = site
 
         return;
