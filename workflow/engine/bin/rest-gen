@@ -9,11 +9,11 @@
  * @author    Erik Amaru Ortiz <aortiz.erik@gmail.com>
  */
 
-include '../../../gulliver/Core/Bootstrap.php';
-include '../../../workflow/engine/PmBootstrap.php';
+include dirname(__FILE__) . '/../../../gulliver/Core/Bootstrap.php';
+include dirname(__FILE__) . '/../../../workflow/engine/PmBootstrap.php';
 
 $config = array(
-    'path_trunk' => realpath('../../../')
+    'path_trunk' => realpath(dirname(__FILE__) . '/../../../')
 );
 
 $bootstrap = new PmBootstrap($config);
@@ -21,10 +21,11 @@ $bootstrap->registerClasses();
 $bootstrap->configure();
 
 if (! isset($argv[1])) {
-    $help = '$>' . $argv[0] . " [option]\n";
+    $help = '$>' . $argv[0] . " [option] [plugin-name]\n";
     $help .= "Avalaibles options:\n";
-    $help .= "    build-api  : Build the PM Rest API.\n";
-    $help .= "    gen-ini    : Generates the rest config ini file.\n\n";
+    $help .= "    build-api  : Build Crud Rest API from ProcessMaker or a plugin.\n";
+    $help .= "    gen-ini    : Generates the rest config ini file.\n";
+    $help .= "* [plugin-name] : (Optional) to specify create crud api for a determiated plugin.\n\n";
 
     echo $help;
     exit(0);
