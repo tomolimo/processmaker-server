@@ -1244,7 +1244,11 @@ class PMPluginRegistry {
       $restService->classname  = $classname;
 
       if (empty($path)) {
-          $path = PATH_PLUGINS . $restService->sNamespace . "/classes/rest/$classname.php";
+          $path = PATH_PLUGINS . $restService->sNamespace . "/services/rest/$classname.php";
+
+          if (! file_exists($path)) {
+              $path = PATH_PLUGINS . $restService->sNamespace . "/services/rest/crud/$classname.php";
+          }
       }
 
       if (! file_exists($path)) {

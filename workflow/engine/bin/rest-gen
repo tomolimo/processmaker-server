@@ -1,5 +1,14 @@
 #!/usr/bin/env php
 <?php
+/**
+ * rest-gen bin command
+ *
+ * This file uses Service_Rest_RestTool class to generate a rest-config.ini file
+ * and build rest crud api for 'Restler' lib.
+ *
+ * @author    Erik Amaru Ortiz <aortiz.erik@gmail.com>
+ */
+
 include '../../../gulliver/Core/Bootstrap.php';
 include '../../../workflow/engine/PmBootstrap.php';
 
@@ -26,6 +35,15 @@ $restTool = new Service_Rest_RestTool();
 try {
     switch ($argv[1]) {
         case 'build-api':
+            if (isset($argv[2])) {
+                // attemp create rest api from a plugin
+                if (! is_dir(PATH_PLUGINS . $argv[2]))  {
+                    throw new Exception(sprintf("Plugin '%s' doesn't exist.", $argv[2]));
+                }
+
+                $restTool->setBasePath(PATH_PLUGINS . $argv[2] . PATH_SEP);
+            }
+
             $restTool->buildApi();
             break;
 

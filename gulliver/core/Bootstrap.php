@@ -1,5 +1,11 @@
 <?php
-
+/**
+ * Class Bootstrap
+ *
+ * This class tries encapsulate some common tasks on SysGeneric bootstrap file
+ *
+ * @author Erik Amaru Ortiz <aortiz.erik@gmail.com>
+ */
 class Bootstrap
 {
     public $startingTime;

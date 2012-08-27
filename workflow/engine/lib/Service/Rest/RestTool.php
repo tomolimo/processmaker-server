@@ -1,36 +1,52 @@
 <?php
-
+/**
+ * Class Service_Rest_RestTool
+ *
+ * This tool generate a rest-config.ini file and build rest crud api for 'Restler' lib.
+ *
+ * @author Erik Amaru Ortiz <aortiz.erik@gmail.com>
+ */
 class Service_Rest_RestTool
 {
-    protected $configFile = 'rest-config.ini';
+    protected $configFile = '';
     protected $config = array();
     protected $dbXmlSchemaFile = '';
     protected $dbInfo = array();
+    protected $basePath = '';
 
     public function __construct()
     {
-        $this->dbXmlSchemaFile = PATH_CONFIG . 'schema.xml';
+        $this->basePath        = PATH_CORE;
+        $this->dbXmlSchemaFile = 'config/schema.xml';
+        $this->configFile      = 'config/rest-config.ini';
+    }
+
+    public function setBasePath($path)
+    {
+        $this->basePath = $path;
     }
 
     protected function loadConfig()
     {
-        if (file_exists(PATH_CONFIG . $this->configFile)) {
-            $this->config = @parse_ini_file(PATH_CONFIG . $this->configFile, true);
+        $configFile = $this->basePath . $this->configFile;
+
+        if (! file_exists($configFile)) {
+            throw new Exception(sprintf("Runtime Error: Configuration file '%s' doesn't exist!", $configFile));
         }
+
+        $this->config = @parse_ini_file($configFile, true);
     }
 
-    protected function loadDbXmlSchema($dbXmlSchemaFile = '')
+    protected function loadDbXmlSchema()
     {
-        if (! empty($dbXmlSchemaFile)) {
-            $this->dbXmlSchemaFile = $dbXmlSchemaFile;
-        }
+        $dbXmlSchemaFile = $this->basePath . $this->dbXmlSchemaFile;
 
-        if (! file_exists($this->dbXmlSchemaFile)) {
-            throw new Exception("Xml Schema file: '{$this->dbXmlSchemaFile}' does not exist!");
+        if (! file_exists($dbXmlSchemaFile)) {
+            throw new Exception(sprintf("Runtime Error: Configuration file '%s' doesn't exist!", $dbXmlSchemaFile));
         }
 
         $doc = new Xml_DOMDocumentExtended();
-        $doc->load($this->dbXmlSchemaFile);
+        $doc->load($dbXmlSchemaFile);
         $data = $doc->toArray();
         $tables = $data['database']['table'];
 
@@ -57,30 +73,30 @@ class Service_Rest_RestTool
     {
         $this->loadDbXmlSchema();
 
-        $this->configFile = empty($filename) ? PATH_CONFIG . $this->configFile : $filename;
+        $configFile    = empty($filename) ? $this->basePath . $this->configFile : $filename;
         $configIniStr  = "; -= ProcessMaker RestFul services configuration =-\n";
         $configIniStr .= "\n";
-        $configIniStr .= "; On this configuration you file can customize all crud rest api.\n";
-        $configIniStr .= "; With what methods (GET,POST,PUT,DELETE) you need that PM serve.\n";
-        $configIniStr .= "; And for each table/method what columns you can expose.\n";
+        $configIniStr .= "; On this configuration file you can customize some aspects to expose on rest service.\n";
+        $configIniStr .= "; Configure what methods (GET,POST,PUT,DELETE) should be exposed by ProcessMaker Rest server.\n";
+        $configIniStr .= "; Configure for each table/method what columns sould be exposed.\n";
         $configIniStr .= "\n";
 
         foreach ($this->dbInfo as $table => $columns) {
             $strColumns    = implode(' ', $columns['columns']);
             $configIniStr .= ";Rest Api for table $table with (".count($columns['columns']).") columns.\n";
             $configIniStr .= "[$table]\n";
-            $configIniStr .= "  ; Param to set the allowed methods (separeted by a single space), complete sample: ALLOW_METHODS = GET POST PUT DELETE\n";
+            $configIniStr .= "  ; Param to set allowed methods (separeted by a single space). Complete example: ALLOW_METHODS = GET POST PUT DELETE\n";
             $configIniStr .= "  ALLOW_METHODS = GET\n";
-            $configIniStr .= "  ; Params to set what columns should be exposed, you can use wildcard '*' to speccify all columns \n";
+            $configIniStr .= "  ; Params to set columns that should be exposed, you can use wildcard '*' to speccify all columns.\n";
             $configIniStr .= "  EXPOSE_COLUMNS_GET  = *\n";
             $configIniStr .= "  EXPOSE_COLUMNS_POST = ".$strColumns."\n";
             $configIniStr .= "  EXPOSE_COLUMNS_PUT  = ".$strColumns."\n";
             $configIniStr .= "\n";
         }
 
-        file_put_contents($this->configFile, $configIniStr);
+        file_put_contents($configFile, $configIniStr);
 
-        return $this->configFile;
+        return $configFile;
     }
 
     public function buildApi()
@@ -97,13 +113,11 @@ class Service_Rest_RestTool
             'cache_dir' => sys_get_temp_dir() . '/haanga_cache/',
             'compiler' => array(
                 'compiler' => array( /* opts for the tpl compiler */
-                    'if_empty' => FALSE,
-                    'autoescape' => FALSE,
-                    'strip_whitespace' => TRUE,
-                    'allow_exec'  => TRUE,
-                    'global' => array('globals', 'current_user'),
+                    'if_empty' => false,
+                    'autoescape' => true,
+                    'strip_whitespace' => true,
+                    'allow_exec'  => true
                 ),
-
             )
         ));
 
@@ -218,7 +232,7 @@ class Service_Rest_RestTool
             ), true);
 
             echo "saving $classname.php\n";
-            file_put_contents(PATH_CORE."services/rest/crud/$classname.php", $classContent);
+            file_put_contents($this->basePath . "services/rest/crud/$classname.php", $classContent);
         }
     }
 
