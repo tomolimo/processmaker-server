@@ -42,8 +42,8 @@ var G_Grid = function(oForm, sGridName){
   this.setFields = function (aFields, iRow)
   {
     var tableGrid = document.getElementById(this.sGridName);
-    var element;
-    var elementName = "";
+    var elem;
+    var elemName = "";
     var i = 0;
     var j = 0;
 
@@ -51,12 +51,12 @@ var G_Grid = function(oForm, sGridName){
 
     for (i = iRow || 1; i <= tableGrid.rows.length - 2; i++) {
         for (j = 0; j <= this.aFields.length - 1; j++) {
-            elementName = this.sGridName + "][" + i + "][" + this.aFields[j].sFieldName;
+            elemName = this.sGridName + "][" + i + "][" + this.aFields[j].sFieldName;
 
-            if ((element = document.getElementById("form[" + elementName + "]"))) {
+            if ((elem = document.getElementById("form[" + elemName + "]"))) {
                 switch (this.aFields[j].sType) {
                     case "text":
-                        this.aElements.push(new G_Text(oForm, element, elementName));
+                        this.aElements.push(new G_Text(oForm, elem, elemName));
                         this.aElements[this.aElements.length - 1].validate = this.aFields[j].oProperties.validate;
 
                         if (this.aFields[j].oProperties.strTo) {
@@ -68,7 +68,7 @@ var G_Grid = function(oForm, sGridName){
                         }
                         break;
                     case "currency":
-                        this.aElements.push(new G_Currency(oForm, element, elementName));
+                        this.aElements.push(new G_Currency(oForm, elem, elemName));
 
                         if (this.aFields[j].oProperties) {
                             if (this.aFields[j].oProperties.comma_separator) {
@@ -80,7 +80,7 @@ var G_Grid = function(oForm, sGridName){
                         }
                         break;
                     case "percentage":
-                        this.aElements.push(new G_Percentage(oForm, element, elementName));
+                        this.aElements.push(new G_Percentage(oForm, elem, elemName));
 
                         if (this.aFields[j].oProperties) {
                             if (this.aFields[j].oProperties.comma_separator) {
@@ -92,14 +92,14 @@ var G_Grid = function(oForm, sGridName){
                         }
                         break;
                     case "dropdown":
-                        this.aElements.push(new G_DropDown(oForm, element, elementName));
+                        this.aElements.push(new G_DropDown(oForm, elem, elemName));
 
                         if (this.aFields[j].oProperties) {
                             this.aElements[this.aElements.length - 1].mask = this.aFields[j].oProperties.sMask;
                         }
                         break;
                     default:
-                        this.aElements.push(new G_Field(oForm, element, elementName));
+                        this.aElements.push(new G_Field(oForm, elem, elemName));
 
                         if (this.aFields[j].oProperties) {
                             this.aElements[this.aElements.length - 1].mask = this.aFields[j].oProperties.sMask;
@@ -120,7 +120,7 @@ var G_Grid = function(oForm, sGridName){
     for (j = 0; j <= this.aFields.length - 1; j++) {
         i = iRow || 1;
 
-        while ((element = document.getElementById("form[" + this.sGridName + "][" + i + "][" + this.aFields[j].sFieldName + "]"))) {
+        while ((elem = document.getElementById("form[" + this.sGridName + "][" + i + "][" + this.aFields[j].sFieldName + "]"))) {
             if (this.aFields[j].oProperties.dependentFields != "") {
                 this.setDependents(i, this.getElementByName(i, this.aFields[j].sFieldName), aFields[j].oProperties.dependentFields, sw);
             }
@@ -197,12 +197,12 @@ var G_Grid = function(oForm, sGridName){
     }
   };
 
-  this.cloneElement = function (element)
+  this.cloneElement = function (elem)
   {
     //input, textarea, select
 
-    var strHtml = element.parentNode.innerHTML;
-    var tag = new String(element.nodeName);
+    var strHtml = elem.parentNode.innerHTML;
+    var tag = new String(elem.nodeName);
     var arrayMatch = [];
     var arrayAux1  = [];
     var arrayAux2  = [];
@@ -214,7 +214,7 @@ var G_Grid = function(oForm, sGridName){
     strHtml = stringReplace("\\x0D", "", strHtml); //\r 13
     strHtml = stringReplace("\\x09", "", strHtml); //\t  9
 
-    if ((arrayMatch = eval("/^.*(<" + tag + ".*id=\"" + element.id + "\".*>).*$/i").exec(strHtml))) {
+    if ((arrayMatch = eval("/^.*(<" + tag + ".*id=\"" + elem.id + "\".*>).*$/i").exec(strHtml))) {
         strHtml = arrayMatch[1];
     }
 
@@ -277,7 +277,7 @@ var G_Grid = function(oForm, sGridName){
     }
 
     ///////
-    var newElement = document.createElement(tag.toLowerCase());
+    var newElem = document.createElement(tag.toLowerCase());
 
     for (i = 0; i <= arrayAttribute.length - 1; i++) {
         a = arrayAttribute[i][0];
@@ -286,32 +286,32 @@ var G_Grid = function(oForm, sGridName){
         switch (a.toLowerCase()) {
             case "id":
             case "name":
-                newElement.setAttribute("id", element.id);
-                newElement.setAttribute("name", element.id);
+                newElem.setAttribute("id", elem.id);
+                newElem.setAttribute("name", elem.id);
                 break;
             case "class":
-                newElement.className = v;
+                newElem.className = v;
                 break;
             case "style":
-                newElement.style.cssText = ((/^.*display\s*:\s*none.*$/i.test(strHtml))? "display: none;" : "") + v;
+                newElem.style.cssText = ((/^.*display\s*:\s*none.*$/i.test(strHtml))? "display: none;" : "") + v;
                 break;
             case "disabled":
-                if (element.disabled) {
-                    newElement.disabled = true;
+                if (elem.disabled) {
+                    newElem.disabled = true;
                 }
                 break;
             case "readonly":
-                if (element.readOnly) {
-                    newElement.readOnly = true;
+                if (elem.readOnly) {
+                    newElem.readOnly = true;
                 }
                 break;
             case "checked":
-                if (element.checked) {
-                    newElement.checked = true;
+                if (elem.checked) {
+                    newElem.checked = true;
                 }
                 break;
             default:
-                newElement.setAttribute(a, v);
+                newElem.setAttribute(a, v);
                 break;
         }
     }
@@ -319,26 +319,26 @@ var G_Grid = function(oForm, sGridName){
     switch (tag.toLowerCase()) {
         case "input":
         case "textarea":
-            newElement.value = element.value;
+            newElem.value = elem.value;
             break;
         case "select":
-            if (element.options.length > 0) {
+            if (elem.options.length > 0) {
                 var pos = 0;
 
-                for (i = 0; i <= element.options.length - 1; i++) {
-                    if (element.options[i].selected) {
+                for (i = 0; i <= elem.options.length - 1; i++) {
+                    if (elem.options[i].selected) {
                         pos = i;
                     }
 
-                    newElement.options[i] = new Option(element.options[i].text, element.options[i].value, element.options[i].defaultSelected);
+                    newElem.options[i] = new Option(elem.options[i].text, elem.options[i].value, elem.options[i].defaultSelected);
                 }
 
-                newElement.options[pos].selected = true;
+                newElem.options[pos].selected = true;
             }
             break;
     }
 
-    return newElement;
+    return newElem;
   };
 
   this.addGridRow = function() {
@@ -423,7 +423,7 @@ var G_Grid = function(oForm, sGridName){
                       a2.id = datePickerTriggerId;
                       a2.innerHTML = img2;
                       oNewRow.getElementsByTagName('td')[i].appendChild(a2);
-                      
+
                       //Load DatePicker Trigger
                       datePicker4("", newID, attributes.mask, attributes.start, attributes.end, attributes.time);
 
@@ -813,19 +813,19 @@ var G_Grid = function(oForm, sGridName){
     }
 
     //Recalculate functions if are declared
-    var element;
+    var elem;
 
     if (oObj.aFunctions.length > 0) {
         for (i = 0; i <= oObj.aFunctions.length - 1; i++) {
-            element = document.getElementById("form[" + oObj.sGridName + "][1][" + oObj.aFunctions[i].sFieldName + "]");
+            elem = document.getElementById("form[" + oObj.sGridName + "][1][" + oObj.aFunctions[i].sFieldName + "]");
 
-            if (element) {
+            if (elem) {
                 switch (oObj.aFunctions[i].sFunction) {
                     case "sum":
-                        oObj.sum(false, element);
+                        oObj.sum(false, elem);
                         break;
                     case "avg":
-                        oObj.avg(false, element);
+                        oObj.avg(false, elem);
                         break;
                 }
             }
@@ -842,31 +842,31 @@ var G_Grid = function(oForm, sGridName){
 
   this.assignFunctions = function (aFields, sEvent, iRow)
   {
-      var element;
+      var elem;
       var i = 0;
       var j = 0;
 
       for (j = 0; j <= aFields.length - 1; j++) {
           i = iRow || 1;
 
-          while ((element = document.getElementById("form[" + this.sGridName + "][" + i + "][" + aFields[j].sFieldName + "]"))) {
+          while ((elem = document.getElementById("form[" + this.sGridName + "][" + i + "][" + aFields[j].sFieldName + "]"))) {
               switch (aFields[j].sFunction) {
                   case "sum":
-                      leimnud.event.add(element, sEvent, {
+                      leimnud.event.add(elem, sEvent, {
                           method: this.sum,
                           instance: this,
                           event: true
                       });
                       break;
                   case "avg":
-                      leimnud.event.add(element, sEvent, {
+                      leimnud.event.add(elem, sEvent, {
                           method: this.avg,
                           instance: this,
                           event: true
                       });
                       break;
                   default:
-                      leimnud.event.add(element, sEvent, {
+                      leimnud.event.add(elem, sEvent, {
                           method: aFields[j].sFunction,
                           instance: this,
                           event: true
@@ -1000,18 +1000,18 @@ var G_Grid = function(oForm, sGridName){
 
   this.assignFormulas = function (aFields, sEvent, iRow)
   {
-      var element;
+      var elem;
       var i = 0
       var j = 0;
 
       for (j = 0; j <= aFields.length - 1; j++) {
           i = iRow || 1;
 
-          while ((element = document.getElementById("form[" + this.sGridName + "][" + i + "][" + aFields[j].sDependentOf + "]"))) {
-              leimnud.event.add(element, sEvent, {
+          while ((elem = document.getElementById("form[" + this.sGridName + "][" + i + "][" + aFields[j].sDependentOf + "]"))) {
+              leimnud.event.add(elem, sEvent, {
                   method: this.evaluateFormula,
                   instance: this,
-                  args: [element, aFields[j]],
+                  args: [elem, aFields[j]],
                   event: true
               });
 
@@ -1366,3 +1366,4 @@ function deleteRowOnDynaform(grid, sRow) {
   }.extend(this);
   oRPC.make();
 }
+
