@@ -5216,6 +5216,22 @@ function getDirectorySize($path,$maxmtime=0)
             }
         }
 
+        // resolving the class for current request
+        $uriPart = explode('/', $uri);
+        $requestedClass = '';
+        if (isset($uriPart[1])) {
+            $requestedClass = ucfirst($uriPart[1]);
+        }
+
+        if (class_exists('Services_Rest_' . $requestedClass)) {
+            $namespace = 'Services_Rest_';
+        } elseif (class_exists('Plugin_Services_Rest_' . $requestedClass)) {
+            $namespace = 'Plugin_Services_Rest_';
+        } else {
+          $namespace = '';
+        }
+        // end resolv.
+
         // override global REQUEST_URI to pass to Restler library
         $_SERVER['REQUEST_URI'] = '/' . strtolower($namespace) . ltrim($uri, '/');
 
