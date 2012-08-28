@@ -304,6 +304,8 @@ class PMPluginRegistry {
 
     //unregistering javascripts from this plugin
     $this->unregisterJavascripts($sNamespace);
+    //unregistering rest services from this plugin
+    $this->unregisterRestService($sNamespace);
   }
 
   /**
@@ -1265,15 +1267,15 @@ class PMPluginRegistry {
    * Unregister a rest service class of a plugin
    *
    * @param string $sNamespace The namespace for the plugin
-   * @param string $classname  The service (api) class name
    */
-  public function unregisterRestService($sNamespace, $classname)
+  public function unregisterRestService($sNamespace)
   {
       foreach ($this->_restServices as $i => $service) {
           if ($sNamespace == $service->sNamespace) {
               unset($this->_restServices[$i]);
           }
       }
+
       // Re-index when all js were unregistered
       $this->_restServices = array_values($this->_restServices);
   }
