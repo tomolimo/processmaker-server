@@ -273,7 +273,7 @@ Ext.onReady(function(){
         name:'AccountFrom',
         vtype:'email',
         width: 200,
-        disabled : true,
+        disabled: true,
         allowBlank: false,
         enableKeyEvents: true,
         listeners: {
