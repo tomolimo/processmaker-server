@@ -323,13 +323,6 @@ _b.AutoSuggest.prototype.createList = function(arr)
 	//
 	var div = _b.DOM.cE("div", {id:this.idAs, className:this.oP.className});
 
-//var hcorner = _b.DOM.cE("div", {className:"as_corner"});
-//var hbar = _b.DOM.cE("div", {className:"as_bar"});
-//var header = _b.DOM.cE("div", {className:"as_header"});
-//header.appendChild(hcorner);
-//header.appendChild(hbar);
-//div.appendChild(header);
-
 	// create and populate ul
 	//
 	var ul = _b.DOM.cE("ul", {id:"as_ul"});
@@ -394,13 +387,6 @@ _b.AutoSuggest.prototype.createList = function(arr)
 ul.style.cssText = "zoom: 1; padding-top: 4px;";
 
 div.appendChild(ul);
-
-//var fcorner = _b.DOM.cE("div", {className:"as_corner"});
-//var fbar = _b.DOM.cE("div", {className:"as_bar"});
-//var footer = _b.DOM.cE("div", {className:"as_footer"});
-//footer.appendChild(fcorner);
-//footer.appendChild(fbar);
-//div.appendChild(footer);
 
 	// get position of target textfield
 	// position holding div below it
