@@ -3,6 +3,7 @@
  * cron.php
  * @package workflow-engine-bin
  */
+
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 ini_set('memory_limit', '300M'); // nore: this may need to be higher for many projects
@@ -55,17 +56,28 @@ define ('TIME_ZONE', $config['time_zone']);
 //Default values
 $bCronIsRunning = false;
 $sLastExecution = null;
+$processcTimeProcess = 0;
+$processcTimeStart   = 0;
 
 if (file_exists(PATH_DATA . "cron")) {
-    $arrayAux = unserialize(trim(@file_get_contents(PATH_DATA . "cron")));
-    $bCronIsRunning = (boolean)($arrayAux["bCronIsRunning"]);
-    $sLastExecution = $arrayAux["sLastExecution"];
+    $arrayCron = unserialize(trim(@file_get_contents(PATH_DATA . "cron")));
+    $bCronIsRunning = (boolean)($arrayCron["bCronIsRunning"]);
+    $sLastExecution = $arrayCron["sLastExecution"];
+    $processcTimeProcess = (isset($arrayCron["processcTimeProcess"]))? intval($arrayCron["processcTimeProcess"]) : 10;
+    $processcTimeStart   = (isset($arrayCron["processcTimeStart"]))? $arrayCron["processcTimeStart"] : 0;
+}
+
+if ($bCronIsRunning && $processcTimeStart != 0) {
+    if ((time() - $processcTimeStart) > ($processcTimeProcess * 60)) {
+        //Cron finished his execution for some reason
+        $bCronIsRunning = false;
+    }
 }
 
 if (!$bCronIsRunning) {
     //Start cron
-    $arrayAux = array("bCronIsRunning" => "1", "sLastExecution" => date("Y-m-d H:i:s"));
-    @file_put_contents(PATH_DATA . "cron", serialize($arrayAux));
+    $arrayCron = array("bCronIsRunning" => "1", "sLastExecution" => date("Y-m-d H:i:s"));
+    @file_put_contents(PATH_DATA . "cron", serialize($arrayCron));
 
     //Data
     $ws    = null;
@@ -102,7 +114,7 @@ if (!$bCronIsRunning) {
                     if (file_exists(PATH_DB . $sObject . PATH_SEP . "db.php")) {
                         $cws = $cws + 1;
 
-                        system("php -f \"".dirname(__FILE__).PATH_SEP."cron_single.php\" $sObject \"$sDate\" \"$dateSystem\" $argsx", $retval);
+                        system("php -f \"" . dirname(__FILE__) . PATH_SEP . "cron_single.php\" $sObject \"$sDate\" \"$dateSystem\" $argsx", $retval);
                     }
                 }
             }
@@ -110,15 +122,14 @@ if (!$bCronIsRunning) {
     } else {
         $cws = 1;
 
-        system("php -f \"".dirname(__FILE__).PATH_SEP."cron_single.php\" $ws \"$sDate\" \"$dateSystem\" $argsx", $retval);
+        system("php -f \"" . dirname(__FILE__) . PATH_SEP . "cron_single.php\" $ws \"$sDate\" \"$dateSystem\" $argsx", $retval);
     }
 
     //End cron
-    $arrayAux = array("bCronIsRunning" => "0", "sLastExecution" => date("Y-m-d H:i:s"));
-    @file_put_contents(PATH_DATA . "cron", serialize($arrayAux));
+    $arrayCron = array("bCronIsRunning" => "0", "sLastExecution" => date("Y-m-d H:i:s"));
+    @file_put_contents(PATH_DATA . "cron", serialize($arrayCron));
 
     eprintln("Finished $cws workspaces processed.");
 } else {
-    eprintln("The cron is running, please wait for it to finish.\n- Started in $sLastExecution");
+    eprintln("The cron is running, please wait for it to finish.\nStarted in $sLastExecution");
 }
-
