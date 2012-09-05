@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: ProcessMaker (Branch master) 2.0.41-testing.4-720-g843d0ac\n"
+"Project-Id-Version: ProcessMaker (Branch master) 2.0.41-testing.4-860-geaa13e0\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2012-08-10 16:39:34\n"
+"PO-Revision-Date: 2012-09-05 10:24:41\n"
 "Last-Translator: \n"
 "Language-Team: Colosa Developers Team <developers@colosa.com>\n"
 "MIME-Version: 1.0\n"
@@ -4348,13 +4348,13 @@ msgstr "Save"
 # TRANSLATION
 # LABEL/ID_LOG_CASE_SCHEDULER
 #: LABEL/ID_LOG_CASE_SCHEDULER
-msgid "Case Scheduler Log"
-msgstr "Case Scheduler Log"
+msgid "Case Scheduler"
+msgstr "Case Scheduler"
 
 # TRANSLATION
 # LABEL/ID_CASE_SCHEDULER
 #: LABEL/ID_CASE_SCHEDULER
-msgid "Case Scheduler"
+msgid "[LABEL/ID_CASE_SCHEDULER] Case Scheduler"
 msgstr "Case Scheduler"
 
 # TRANSLATION
@@ -10678,8 +10678,8 @@ msgstr "Forgot Password?"
 # TRANSLATION
 # LABEL/ID_SEND
 #: LABEL/ID_SEND
-msgid "Send"
-msgstr "Send"
+msgid "Post"
+msgstr "Post"
 
 # TRANSLATION
 # LABEL/ID_EMAIL_DOES_NOT_MATCH_FOR_USER
@@ -12739,6 +12739,108 @@ msgstr "Excel Document"
 msgid "Processed"
 msgstr "Processed"
 
+# TRANSLATION
+# LABEL/ID_CASES_NOT_START
+#: LABEL/ID_CASES_NOT_START
+msgid "You can't start a case because you doesn't have a starting task assigned"
+msgstr "You can't start a case because you doesn't have a starting task assigned"
+
+# TRANSLATION
+# LABEL/ID_FIELD_DYNAFORM_SUGGEST_MESSAGE_TEMPORAL
+#: LABEL/ID_FIELD_DYNAFORM_SUGGEST_MESSAGE_TEMPORAL
+msgid "New value inserted in the table"
+msgstr "New value inserted in the table"
+
+# TRANSLATION
+# LABEL/ID_FIELD_DYNAFORM_SUGGEST_INPUT_TITLE
+#: LABEL/ID_FIELD_DYNAFORM_SUGGEST_INPUT_TITLE
+msgid "If the value entered doesn't exist, a new registry will be inserted when press Enter Key"
+msgstr "If the value entered doesn't exist, a new registry will be inserted when press Enter Key"
+
+# TRANSLATION
+# LABEL/ID_CASE_NOTES_LABEL_SEND
+#: LABEL/ID_CASE_NOTES_LABEL_SEND
+msgid "Send email (Case Participants)"
+msgstr "Send email (Case Participants)"
+
+# TRANSLATION
+# LABEL/ID_CASE_NOTES_HINT_SEND
+#: LABEL/ID_CASE_NOTES_HINT_SEND
+msgid "A copy of this note will be sent to all Case Participants"
+msgstr "A copy of this note will be sent to all Case Participants"
+
+# TRANSLATION
+# LABEL/ID_EVENT_ACTION_DATE
+#: LABEL/ID_EVENT_ACTION_DATE
+msgid "Action Date"
+msgstr "Action Date"
+
+# TRANSLATION
+# LABEL/ID_EVENT_LAST_EXECUTION_DATE
+#: LABEL/ID_EVENT_LAST_EXECUTION_DATE
+msgid "Last Execution"
+msgstr "Last Execution"
+
+# TRANSLATION
+# LABEL/ID_EVENT_DESCRIPTION
+#: LABEL/ID_EVENT_DESCRIPTION
+msgid "Event Description"
+msgstr "Event Description"
+
+# TRANSLATION
+# LABEL/ID_EVENT_ACTION
+#: LABEL/ID_EVENT_ACTION
+msgid "Event Type"
+msgstr "Event Type"
+
+# TRANSLATION
+# LABEL/ID_EVENTS
+#: LABEL/ID_EVENTS
+msgid "[LABEL/ID_EVENTS] Events"
+msgstr "Events"
+
+# TRANSLATION
+# LABEL/ID_EVENT_LIST
+#: LABEL/ID_EVENT_LIST
+msgid "Log of events"
+msgstr "Log of events"
+
+# TRANSLATION
+# LABEL/ID_EMPTY_TYPE
+#: LABEL/ID_EMPTY_TYPE
+msgid "Select a Type"
+msgstr "Select a Type"
+
+# TRANSLATION
+# LABEL/ID_GRID_PAGE_NO_EVENT_MESSAGE
+#: LABEL/ID_GRID_PAGE_NO_EVENT_MESSAGE
+msgid "No Events to display"
+msgstr "No Events to display"
+
+# TRANSLATION
+# LABEL/ID_GRID_PAGE_DISPLAYING_EVENT_MESSAGE
+#: LABEL/ID_GRID_PAGE_DISPLAYING_EVENT_MESSAGE
+msgid "Displaying events {0} - {1} of {2}"
+msgstr "Displaying events {0} - {1} of {2}"
+
+# TRANSLATION
+# LABEL/ID_EVENT_TIMER
+#: LABEL/ID_EVENT_TIMER
+msgid "Event Timer"
+msgstr "Event Timer"
+
+# TRANSLATION
+# LABEL/ID_EVENT_CONDITIONAL
+#: LABEL/ID_EVENT_CONDITIONAL
+msgid "Event Conditional"
+msgstr "Event Conditional"
+
+# TRANSLATION
+# LABEL/ID_PMTABLE_INVALID_FIELD_NAME
+#: LABEL/ID_PMTABLE_INVALID_FIELD_NAME
+msgid "The following fields cannot have these names because the are reserved words \"{0}\""
+msgstr "The following fields cannot have these names because the are reserved words \"{0}\""
+
 # additionalTables/additionalTablesData.xml?ADD_TAB_NAME
 # additionalTables/additionalTablesData.xml
 #: text - ADD_TAB_NAME
@@ -12754,7 +12856,7 @@ msgstr "Description"
 # additionalTables/additionalTablesData.xml?EDIT
 # additionalTables/additionalTablesData.xml
 #: link - EDIT
-msgid ""
+msgid "[additionalTables/additionalTablesData.xml?EDIT] "
 msgstr ""
 
 # additionalTables/additionalTablesData.xml?DELETE
@@ -12870,12 +12972,6 @@ msgstr "Save"
 #: button - BTN_CANCEL
 msgid "[additionalTables/additionalTablesEdit.xml?BTN_CANCEL] Cancel"
 msgstr "Cancel"
-
-# additionalTables/additionalTablesExportList.xml?ADD_TAB_UID
-# additionalTables/additionalTablesExportList.xml
-#: CheckboxTable - ADD_TAB_UID
-msgid "[additionalTables/additionalTablesExportList.xml?ADD_TAB_UID] "
-msgstr ""
 
 # additionalTables/additionalTablesExportList.xml?ADD_TAB_NAME
 # additionalTables/additionalTablesExportList.xml
@@ -13375,12 +13471,6 @@ msgstr ""
 msgid "[appFolder/appFolderDocumentList.xml?versionHistory] "
 msgstr ""
 
-# appFolder/appFolderDocumentList.xml?APP_DOC_UID_VERSION
-# appFolder/appFolderDocumentList.xml
-#: CheckboxTable - APP_DOC_UID_VERSION
-msgid "[appFolder/appFolderDocumentList.xml?APP_DOC_UID_VERSION] "
-msgstr ""
-
 # appFolder/appFolderDocumentListHeader.xml?FOLDER_UID
 # appFolder/appFolderDocumentListHeader.xml
 #: dropdown - FOLDER_UID
@@ -13505,12 +13595,6 @@ msgstr ""
 # appFolder/appFolderDocumentListSearch.xml
 #: link - versionHistory
 msgid "[appFolder/appFolderDocumentListSearch.xml?versionHistory] "
-msgstr ""
-
-# appFolder/appFolderDocumentListSearch.xml?APP_DOC_UID_VERSION
-# appFolder/appFolderDocumentListSearch.xml
-#: CheckboxTable - APP_DOC_UID_VERSION
-msgid "[appFolder/appFolderDocumentListSearch.xml?APP_DOC_UID_VERSION] "
 msgstr ""
 
 # appFolder/appFolderEdit.xml?title1
@@ -16234,8 +16318,8 @@ msgstr "General Information"
 # cases/cases_Scheduler_Edit.xml?PROPERTIES_INF
 # cases/cases_Scheduler_Edit.xml
 #: subtitle - PROPERTIES_INF
-msgid "Enter the username and password for the user who will be assigned to the initial task in the case(s)."
-msgstr "Enter the username and password for the user who will be assigned to the initial task in the case(s)."
+msgid "Enter the username and password of the user who will be assigned to the initial task in the case."
+msgstr "Enter the username and password of the user who will be assigned to the initial task in the case."
 
 # cases/cases_Scheduler_Edit.xml?SCH_USER_NAME
 # cases/cases_Scheduler_Edit.xml
@@ -16609,11 +16693,17 @@ msgstr "End Date"
 msgid "Repeat Task"
 msgstr "Repeat Task"
 
+# cases/cases_Scheduler_Edit.xml?SELECT_EVERY
+# cases/cases_Scheduler_Edit.xml
+#: subtitle - SELECT_EVERY
+msgid "Record the time."
+msgstr "Record the time."
+
 # cases/cases_Scheduler_Edit.xml?SCH_REPEAT_EVERY
 # cases/cases_Scheduler_Edit.xml
 #: text - SCH_REPEAT_EVERY
-msgid "[cases/cases_Scheduler_Edit.xml?SCH_REPEAT_EVERY] Every"
-msgstr "Every"
+msgid "Execute every"
+msgstr "Execute every"
 
 # cases/cases_Scheduler_Edit.xml?SCH_REPEAT_EVERY_OPT
 # cases/cases_Scheduler_Edit.xml
@@ -16798,8 +16888,8 @@ msgstr "General Information"
 # cases/cases_Scheduler_New.xml?PROPERTIES_INF
 # cases/cases_Scheduler_New.xml
 #: subtitle - PROPERTIES_INF
-msgid "[cases/cases_Scheduler_New.xml?PROPERTIES_INF] Enter the username and password for the user who will be assigned to the initial task in the case(s)."
-msgstr "Enter the username and password for the user who will be assigned to the initial task in the case(s)."
+msgid "[cases/cases_Scheduler_New.xml?PROPERTIES_INF] Enter the username and password of the user who will be assigned to the initial task in the case."
+msgstr "Enter the username and password of the user who will be assigned to the initial task in the case."
 
 # cases/cases_Scheduler_New.xml?SCH_USER_NAME
 # cases/cases_Scheduler_New.xml
@@ -16878,6 +16968,12 @@ msgstr "Monthly"
 #: dropdown - SCH_OPTION - 4
 msgid "[cases/cases_Scheduler_New.xml?SCH_OPTION-4]"
 msgstr "One time only"
+
+# cases/cases_Scheduler_New.xml?SCH_OPTION-5
+# cases/cases_Scheduler_New.xml
+#: dropdown - SCH_OPTION - 5
+msgid "[cases/cases_Scheduler_New.xml?SCH_OPTION-5]"
+msgstr "Every"
 
 # cases/cases_Scheduler_New.xml?SELECT_TIME_DAY
 # cases/cases_Scheduler_New.xml
@@ -17194,8 +17290,8 @@ msgstr "Repeat Task"
 # cases/cases_Scheduler_New.xml?SCH_REPEAT_EVERY
 # cases/cases_Scheduler_New.xml
 #: text - SCH_REPEAT_EVERY
-msgid "[cases/cases_Scheduler_New.xml?SCH_REPEAT_EVERY] Every"
-msgstr "Every"
+msgid "[cases/cases_Scheduler_New.xml?SCH_REPEAT_EVERY] Execute every"
+msgstr "Execute every"
 
 # cases/cases_Scheduler_New.xml?SCH_REPEAT_EVERY_OPT
 # cases/cases_Scheduler_New.xml
@@ -17316,12 +17412,6 @@ msgstr "Finish date"
 #: text - DURATION
 msgid "[cases/cases_TaskInformation.xml?DURATION] Duration"
 msgstr "Duration"
-
-# cases/cases_ToReassignByUserList.xml?APP_UID
-# cases/cases_ToReassignByUserList.xml
-#: CheckboxTable - APP_UID
-msgid "[cases/cases_ToReassignByUserList.xml?APP_UID] "
-msgstr ""
 
 # cases/cases_ToReassignByUserList.xml?APP_NUMBER
 # cases/cases_ToReassignByUserList.xml
@@ -18786,12 +18876,6 @@ msgstr "Firstname"
 #: text - USR_LASTNAME
 msgid "Lastname"
 msgstr "Lastname"
-
-# departments/departments_AvailableUsers.xml?USR_UID
-# departments/departments_AvailableUsers.xml
-#: CheckboxTable - USR_UID
-msgid "[departments/departments_AvailableUsers.xml?USR_UID] "
-msgstr ""
 
 # departments/departments_AvailableUsers.xml?USR_FIRSTNAME
 # departments/departments_AvailableUsers.xml
@@ -20606,7 +20690,7 @@ msgstr "Action date"
 # events/appEventsList.xml?EVN_DESCRIPTION
 # events/appEventsList.xml
 #: text - EVN_DESCRIPTION
-msgid "Event Description"
+msgid "[events/appEventsList.xml?EVN_DESCRIPTION] Event Description"
 msgstr "Event Description"
 
 # events/appEventsList.xml?EVN_ACTION
@@ -20648,7 +20732,7 @@ msgstr "Action date"
 # events/appEventsListCompleted.xml?APP_EVN_LAST_EXECUTION_DATE
 # events/appEventsListCompleted.xml
 #: text - APP_EVN_LAST_EXECUTION_DATE
-msgid "Last Execution"
+msgid "[events/appEventsListCompleted.xml?APP_EVN_LAST_EXECUTION_DATE] Last Execution"
 msgstr "Last Execution"
 
 # events/appEventsListCompleted.xml?EVN_DESCRIPTION
@@ -20684,14 +20768,14 @@ msgstr "Multiple"
 # events/dynavarsList.xml?name
 # events/dynavarsList.xml
 #: text - name
-msgid "Var. name"
-msgstr "Var. name"
+msgid "Variable"
+msgstr "Variable"
 
-# events/dynavarsList.xml?dynaform
+# events/dynavarsList.xml?label
 # events/dynavarsList.xml
-#: text - dynaform
-msgid "[events/dynavarsList.xml?dynaform] Dynaform"
-msgstr "Dynaform"
+#: text - label
+msgid "[events/dynavarsList.xml?label] Label"
+msgstr "Label"
 
 # events/eventsEdit.xml?TITLE
 # events/eventsEdit.xml
@@ -20794,6 +20878,24 @@ msgstr "To"
 #: text - EVN_TAS_ESTIMATED_DURATION
 msgid "[events/eventsEdit.xml?EVN_TAS_ESTIMATED_DURATION] Estimated Task duration"
 msgstr "Estimated Task duration"
+
+# events/eventsEdit.xml?EVN_TIME_UNIT
+# events/eventsEdit.xml
+#: dropdown - EVN_TIME_UNIT
+msgid "[events/eventsEdit.xml?EVN_TIME_UNIT] "
+msgstr ""
+
+# events/eventsEdit.xml?EVN_TIME_UNIT-DAYS
+# events/eventsEdit.xml
+#: dropdown - EVN_TIME_UNIT - DAYS
+msgid "[events/eventsEdit.xml?EVN_TIME_UNIT-DAYS]"
+msgstr "Days"
+
+# events/eventsEdit.xml?EVN_TIME_UNIT-HOURS
+# events/eventsEdit.xml
+#: dropdown - EVN_TIME_UNIT - HOURS
+msgid "[events/eventsEdit.xml?EVN_TIME_UNIT-HOURS]"
+msgstr "Hours"
 
 # events/eventsEdit.xml?EVN_WHEN
 # events/eventsEdit.xml
@@ -21041,6 +21143,24 @@ msgstr "To"
 msgid "[events/eventsNew.xml?EVN_TAS_ESTIMATED_DURATION] Estimated Task duration"
 msgstr "Estimated Task duration"
 
+# events/eventsNew.xml?EVN_TIME_UNIT
+# events/eventsNew.xml
+#: dropdown - EVN_TIME_UNIT
+msgid "[events/eventsNew.xml?EVN_TIME_UNIT] "
+msgstr ""
+
+# events/eventsNew.xml?EVN_TIME_UNIT-DAYS
+# events/eventsNew.xml
+#: dropdown - EVN_TIME_UNIT - DAYS
+msgid "[events/eventsNew.xml?EVN_TIME_UNIT-DAYS]"
+msgstr "Days"
+
+# events/eventsNew.xml?EVN_TIME_UNIT-HOURS
+# events/eventsNew.xml
+#: dropdown - EVN_TIME_UNIT - HOURS
+msgid "[events/eventsNew.xml?EVN_TIME_UNIT-HOURS]"
+msgstr "Hours"
+
 # events/eventsNew.xml?EVN_WHEN
 # events/eventsNew.xml
 #: text - EVN_WHEN
@@ -21118,18 +21238,6 @@ msgstr "Continue"
 #: link - MNU_ADD
 msgid "[events/eventsOptions.xml?MNU_ADD] New"
 msgstr "New"
-
-# events/eventsOptions.xml?MNU_PENDING
-# events/eventsOptions.xml
-#: link - MNU_PENDING
-msgid "[events/eventsOptions.xml?MNU_PENDING] Pending"
-msgstr "Pending"
-
-# events/eventsOptions.xml?MNU_COMPLETED
-# events/eventsOptions.xml
-#: link - MNU_COMPLETED
-msgid "[events/eventsOptions.xml?MNU_COMPLETED] Completed"
-msgstr "Completed"
 
 # events/eventsShortList.xml?EVN_DESCRIPTION
 # events/eventsShortList.xml
@@ -21232,12 +21340,6 @@ msgstr "User"
 #: button - button
 msgid "[groups/groups_AddUser.xml?button] Accept"
 msgstr "Accept"
-
-# groups/groups_AvailableUsers.xml?USR_UID
-# groups/groups_AvailableUsers.xml
-#: CheckboxTable - USR_UID
-msgid "[groups/groups_AvailableUsers.xml?USR_UID] "
-msgstr ""
 
 # groups/groups_AvailableUsers.xml?USR_FIRSTNAME
 # groups/groups_AvailableUsers.xml
@@ -23647,7 +23749,7 @@ msgstr "All Tasks"
 
 # processes/processes_EditObjectPermission.xml?GROUP_USER
 # processes/processes_EditObjectPermission.xml
-#: dropdown - GROUP_USER
+#: text - GROUP_USER
 msgid "Group or User"
 msgstr "Group or User"
 
@@ -23764,6 +23866,12 @@ msgstr "View"
 #: dropdown - OP_ACTION - BLOCK
 msgid "[processes/processes_EditObjectPermission.xml?OP_ACTION-BLOCK]"
 msgstr "Block"
+
+# processes/processes_EditObjectPermission.xml?OP_ACTION-DELETE
+# processes/processes_EditObjectPermission.xml
+#: dropdown - OP_ACTION - DELETE
+msgid "[processes/processes_EditObjectPermission.xml?OP_ACTION-DELETE]"
+msgstr "Delete"
 
 # processes/processes_EditObjectPermission.xml?CREATE
 # processes/processes_EditObjectPermission.xml
@@ -24223,7 +24331,7 @@ msgstr "All Tasks"
 
 # processes/processes_NewObjectPermission.xml?GROUP_USER
 # processes/processes_NewObjectPermission.xml
-#: dropdown - GROUP_USER
+#: text - GROUP_USER
 msgid "[processes/processes_NewObjectPermission.xml?GROUP_USER] Group or User"
 msgstr "Group or User"
 
@@ -25485,12 +25593,6 @@ msgstr ""
 # roles/roles_List.xml
 #: link - ROL_DELETE
 msgid "[roles/roles_List.xml?ROL_DELETE] "
-msgstr ""
-
-# roles/roles_ListUsers.xml?USR_UID
-# roles/roles_ListUsers.xml
-#: CheckboxTable - USR_UID
-msgid "[roles/roles_ListUsers.xml?USR_UID] "
 msgstr ""
 
 # roles/roles_ListUsers.xml?USR_FIRSTNAME
@@ -30050,7 +30152,7 @@ msgstr "Assign"
 # triggers/dynavars.xml?variable_label
 # triggers/dynavars.xml
 #: text - variable_label
-msgid "Variable"
+msgid "[triggers/dynavars.xml?variable_label] Variable"
 msgstr "Variable"
 
 # triggers/dynavars.xml?label
