@@ -706,11 +706,10 @@ function updateTag(value)
 }
 
 function updateTagPermissions(){
-  var rowsSelected = Ext.getCmp('infoGrid').getSelectionModel().getSelections();
-  if (rowsSelected){
-    console.info(rowsSelected);
-    location.href = 'pmTables/rptPermissionList?ADD_TAB_NAME='+ rowsSelected[0].get('ADD_TAB_NAME') +'&ADD_TAB_UID='+ rowsSelected[0].get('ADD_TAB_UID')+'&PRO_UID='+PRO_UID;
-  }
+    var rowsSelected = Ext.getCmp('infoGrid').getSelectionModel().getSelections();
+    if (rowsSelected){
+        location.href = 'pmReports/reportsAjax?action=permissionList&ADD_TAB_NAME='+ rowsSelected[0].get('ADD_TAB_NAME') +'&ADD_TAB_UID='+ rowsSelected[0].get('ADD_TAB_UID')+'&pro_uid='+PRO_UID;
+    }
 };
 
  function PopupCenter(pageURL, title,w,h) {
