@@ -135,7 +135,6 @@ return $alfrescoMessage;
  *
  */
 function createFolder($alfrescoServerUrl, $parentFolder, $folderName, $user, $pwd) {
-    //$domapi_url = "http://localhost:8086/alfresco/service/api/path/workspace/SpacesStore/9ee86211-cc3c-4348-beb0-5320635c2dcb/children";
     $name = explode("/", $folderName);
     $init = substr($parentFolder,0,1);
     $parentFolder = ($init == "/")? substr($parentFolder, 1)."/": $parentFolder."/";
@@ -148,7 +147,7 @@ function createFolder($alfrescoServerUrl, $parentFolder, $folderName, $user, $pw
     $parentFolder = $parentFolder."".$name[0];
 
     if ($folderName != null) {
-        $value = createFolder($alfrescoServerUrl, $parentFolder, $folderName, $user, $pwd);
+        createFolder($alfrescoServerUrl, $parentFolder, $folderName, $user, $pwd);
     }
     if($alfrescoMessage === 'Created') {
         return "The Folder has been Created";
@@ -289,7 +288,7 @@ function uploadDoc($alfrescoServerUrl, $fileSource, $title, $description, $docTy
     $fileContent    =  base64_encode($fileContent);
     
     if ($path != '') {
-        $value = createFolder($alfrescoServerUrl, 'Sites', $path, $user, $pwd);
+        createFolder($alfrescoServerUrl, 'Sites', $path, $user, $pwd);
         $path = $path . PATH_SEP;
     }
 
