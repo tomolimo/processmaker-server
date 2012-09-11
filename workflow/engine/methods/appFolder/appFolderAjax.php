@@ -913,9 +913,9 @@ function overwriteFile ($node, $fileName) {
     global $RBAC;
     require_once ("classes/model/AppFolder.php");
     include_once ("classes/model/AppDocument.php");
-    $appDocument = new AppDocument ();
-    $pMFolder = new AppFolder ();
-    $user = ($RBAC->userCanAccess('PM_ALLCASES') == 1)? '' : $_SESSION['USER_LOGGED'];
+    $appDocument = new AppDocument();
+    $pMFolder = new AppFolder();
+    $user = ($RBAC->userCanAccess('PM_ALLCASES') == 1) ? '' : $_SESSION['USER_LOGGED'];
     $folderContentObj = $pMFolder->getFolderContent ($node, array(), null, null, '', '', $user);
     foreach ($folderContentObj['documents'] as $key => $value) {
         if ($folderContentObj['documents'][$key]['APP_DOC_FILENAME'] == $fileName) {
@@ -930,8 +930,8 @@ function uploadExternalDocument()
     $response['error']="error";
     $response['message']="error";
     $response['success']=false;
-    $overwrite = (isset($_REQUEST['overwrite_files']))? $_REQUEST['overwrite_files'] : false;
-    if (isset($_POST["confirm"]) && $_POST["confirm"]=="true") {
+    $overwrite = (isset($_REQUEST['overwrite_files'])) ? $_REQUEST['overwrite_files'] : false;
+    if (isset($_POST["confirm"]) && $_POST["confirm"] == "true") {
         //G::pr($_FILES);
         if (isset($_FILES['uploadedFile'])) {
             $uploadedInstances=count($_FILES['uploadedFile']['name']);
