@@ -103,6 +103,7 @@ class wsBase
             $uid = $RBAC->VerifyLogin($userid , $password);
 
             switch ($uid) {
+                case '':
                 case -1: //The user doesn't exist
                     $wsResponse = new wsResponse(3, G::loadTranslation('ID_USER_NOT_REGISTERED'));
                     break;
@@ -116,7 +117,7 @@ class wsBase
                     break;
             }
 
-            if ($uid < 0 ) {
+            if ($uid < 0 || $uid == '') {
                 throw (new Exception(serialize($wsResponse)));
             }
 
@@ -864,6 +865,7 @@ class wsBase
             $result->processId           = $aRows['PRO_UID'];
             $result->processName         = $processName;
             $result->createDate          = $aRows['CREATE_DATE'];
+            $result->updateDate          = $aRows['UPDATE_DATE'];
 
             //now fill the array of AppDelegationPeer
             $oCriteria = new Criteria('workflow');
@@ -2809,6 +2811,88 @@ class wsBase
             return $result;
         } catch (Exception $e) {
             $result = new wsResponse(100, $e->getMessage());
+
+            return $result;
+        }
+    }
+
+    /**
+     * Delete case
+     * @param string caseUid : ID of the case.
+     * @return $result will return an object
+     */
+    public function deleteCase($caseUid)
+    {
+        try {
+            if (empty($caseUid)) {
+                $result = new wsResponse(100, G::LoadTranslation("ID_REQUIRED_FIELD") . " caseUid");
+
+                return $result;
+            }
+
+            $case = new Cases();
+            $case->removeCase($caseUid);
+
+            //Response
+            $res = new wsResponse(0, G::LoadTranslation("ID_COMMAND_EXECUTED_SUCCESSFULLY"));
+
+            $result = array(
+                "status_code" => $res->status_code,
+                "message"     => $res->message,
+                "timestamp"   => $res->timestamp
+            );
+
+            return $result;
+        } catch (Exception $e) {
+            $result = wsResponse(100, $e->getMessage());
+
+            return $result;
+        }
+    }
+
+    /**
+     * Cancel case
+     * @param string caseUid  : ID of the case.
+     * @param int    delIndex : Delegation index of the case.
+     * @param string userUid  : The unique ID of the user who will cancel the case.
+     * @return $result will return an object
+     */
+    public function cancelCase($caseUid, $delIndex, $userUid)
+    {
+        try {
+            if (empty($caseUid)) {
+                $result = new wsResponse(100, G::LoadTranslation("ID_REQUIRED_FIELD") . " caseUid");
+
+                return $result;
+            }
+
+            if (empty($delIndex)) {
+                $result = new wsResponse(100, G::LoadTranslation("ID_REQUIRED_FIELD") . " delIndex");
+
+                return $result;
+            }
+
+            if (empty($userUid)) {
+                $result = new wsResponse(100, G::LoadTranslation("ID_REQUIRED_FIELD") . " userUid");
+
+                return $result;
+            }
+
+            $case = new Cases();
+            $case->cancelCase($caseUid, $delIndex, $userUid);
+
+            //Response
+            $res = new wsResponse(0, G::LoadTranslation("ID_COMMAND_EXECUTED_SUCCESSFULLY"));
+
+            $result = array(
+                "status_code" => $res->status_code,
+                "message"     => $res->message,
+                "timestamp"   => $res->timestamp
+            );
+
+            return $result;
+        } catch (Exception $e) {
+            $result = wsResponse(100, $e->getMessage());
 
             return $result;
         }

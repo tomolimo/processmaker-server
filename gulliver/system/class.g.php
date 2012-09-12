@@ -5169,7 +5169,7 @@ function getDirectorySize($path,$maxmtime=0)
      *
      * @author  Erik Amaru Ortiz <aortiz.erik@gmail.com>
      */
-    public function dispatchRestService($uri)
+    public function dispatchRestService($uri, $config, $apiClassesPath = '')
     {
         require_once 'restler/restler.php';
 
@@ -5177,18 +5177,38 @@ function getDirectorySize($path,$maxmtime=0)
         $rest->setSupportedFormats('JsonFormat', 'XmlFormat');
 
         // getting all services class
-        $srvClasses = glob(PATH_SERVICES_REST . '*.php');
-        $crudClasses = glob(PATH_SERVICES_REST . 'crud/*.php');
-        $srvClasses = array_merge($srvClasses, $crudClasses);
-
-        // hook to get rest api classes from plugins
-        if ( class_exists( 'PMPluginRegistry' ) ) {
-            $pluginRegistry = & PMPluginRegistry::getSingleton();
-            $pluginClasses = $pluginRegistry->getRegisteredRestClassFiles();
-            $srvClasses = array_merge($srvClasses, $pluginClasses);
+        $restClasses = array();
+        $restClassesList = G::rglob('*', 0, PATH_CORE . 'services/');
+        foreach ($restClassesList as $classFile) {
+            if (substr($classFile, -4) === '.php') {
+                $restClasses[str_replace('.php', '', basename($classFile))] = $classFile;
+            }
         }
 
-        foreach ($srvClasses as $classFile) {
+        if (! empty($apiClassesPath)) {
+            $pluginRestClasses = array();
+            $restClassesList = G::rglob('*', 0, $apiClassesPath . 'services/');
+            foreach ($restClassesList as $classFile) {
+                if (substr($classFile, -4) === '.php') {
+                    $pluginRestClasses[str_replace('.php', '', basename($classFile))] = $classFile;
+                }
+            }
+            $restClasses = array_merge($restClasses, $pluginRestClasses);
+        }
+
+
+        // hook to get rest api classes from plugins
+        if (class_exists('PMPluginRegistry')) {
+            $pluginRegistry = & PMPluginRegistry::getSingleton();
+            $pluginClasses = $pluginRegistry->getRegisteredRestClassFiles();
+            $restClasses = array_merge($restClasses, $pluginClasses);
+        }
+
+        foreach ($restClasses as $classFile) {
+            if (! file_exists($classFile)) {
+                continue;
+            }
+
             require_once $classFile;
             $namespace = 'Services_Rest_';
             $className = str_replace('.php', '', basename($classFile));
@@ -5219,23 +5239,119 @@ function getDirectorySize($path,$maxmtime=0)
         // resolving the class for current request
         $uriPart = explode('/', $uri);
         $requestedClass = '';
+
         if (isset($uriPart[1])) {
             $requestedClass = ucfirst($uriPart[1]);
         }
-
         if (class_exists('Services_Rest_' . $requestedClass)) {
             $namespace = 'Services_Rest_';
         } elseif (class_exists('Plugin_Services_Rest_' . $requestedClass)) {
             $namespace = 'Plugin_Services_Rest_';
         } else {
-          $namespace = '';
+            $namespace = '';
         }
         // end resolv.
+
+        // Send additional headers (if exists) configured on rest-config.ini
+        if (array_key_exists('HEADERS', $config)) {
+            foreach ($config['HEADERS'] as $name => $value) {
+                header("$name: $value");
+            }
+        }
+
+        // to handle a request with "OPTIONS" method
+        if (! empty($namespace) && $_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+            $reflClass = new ReflectionClass($namespace . $requestedClass);
+
+            // if the rest class has not a "options" method
+            if (! $reflClass->hasMethod('options')) {
+                header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS, HEADERS');
+                header('Access-Control-Allow-Headers: authorization, content-type');
+                header("Access-Control-Allow-Credentials", "false");
+                header('Access-Control-Max-Age: 60');
+                exit();
+            }
+        }
 
         // override global REQUEST_URI to pass to Restler library
         $_SERVER['REQUEST_URI'] = '/' . strtolower($namespace) . ltrim($uri, '/');
 
+        // handle the rest request
         $rest->handle();
+    }
+
+    public function reservedWordsSql()
+    {
+        //Reserved words SQL
+        $reservedWordsSql = array(
+            "ACCESSIBLE", "ACTION",        "ADD",        "ALL",           "ALTER",
+            "ANALYZE",    "AND",           "ANY",        "AS",            "ASC",
+            "ASENSITIVE", "AUTHORIZATION", "BACKUP",     "BEFORE",        "BEGIN",
+            "BETWEEN",    "BIGINT",        "BINARY",     "BIT",           "BLOB",
+            "BOTH",       "BREAK",         "BROWSE",     "BULK",          "BY",
+            "CALL",       "CASCADE",       "CASE",       "CHANGE",        "CHAR",
+            "CHARACTER",  "CHECK",         "CHECKPOINT", "CLOSE",         "CLUSTERED",
+            "COALESCE",   "COLLATE",       "COLUMN",     "COMMIT",        "COMPUTE",
+            "CONDITION",  "CONSTRAINT",    "CONTAINS",   "CONTAINSTABLE", "CONTINUE",
+            "CONVERT",    "CREATE",        "CROSS",      "CURRENT",       "CURRENT_DATE",
+            "CURRENT_TIME", "CURRENT_TIMESTAMP", "CURRENT_USER",  "CURSOR",          "DATABASE",
+            "DATABASES",    "DATE",              "DAY_HOUR",      "DAY_MICROSECOND", "DAY_MINUTE",
+            "DAY_SECOND",   "DBCC",              "DEALLOCATE",    "DEC",             "DECIMAL",
+            "DECLARE",      "DEFAULT",           "DELAYED",       "DELETE",          "DENY",
+            "DESC",         "DESCRIBE",          "DETERMINISTIC", "DISK",            "DISTINCT",
+            "DISTINCTROW",  "DISTRIBUTED",       "DIV",           "DOUBLE",          "DROP",
+            "DUAL",         "DUMMY",             "DUMP",          "EACH",            "ELSE",
+            "ELSEIF",       "ENCLOSED",          "END",           "ENUM",            "ERRLVL",
+            "ESCAPE",       "ESCAPED",           "EXCEPT",        "EXEC",            "EXECUTE",
+            "EXISTS",       "EXIT",              "EXPLAIN",       "FALSE",           "FETCH",
+            "FILE",         "FILLFACTOR",        "FLOAT",         "FLOAT4",          "FLOAT8",
+            "FOR",          "FORCE",             "FOREIGN",       "FREETEXT",        "FREETEXTTABLE",
+            "FROM",         "FULL",              "FULLTEXT",      "FUNCTION",        "GENERAL",
+            "GOTO",         "GRANT",             "GROUP",         "HAVING",          "HIGH_PRIORITY",
+            "HOLDLOCK",     "HOUR_MICROSECOND",  "HOUR_MINUTE",   "HOUR_SECOND",     "IDENTITY",
+            "IDENTITYCOL",  "IDENTITY_INSERT",   "IF",            "IGNORE",          "IGNORE_SERVER_IDS",
+            "IN",           "INDEX",             "INFILE",        "INNER",           "INOUT",
+            "INSENSITIVE",  "INSERT",            "INT",           "INT1",            "INT2",
+            "INT3",         "INT4",              "INT8",          "INTEGER",         "INTERSECT",
+            "INTERVAL",     "INTO",              "IS",            "ITERATE",         "JOIN",
+            "KEY",          "KEYS",              "KILL",          "LEADING",         "LEAVE",
+            "LEFT",         "LIKE",              "LIMIT",         "LINEAR",          "LINENO",
+            "LINES",        "LOAD",              "LOCALTIME",     "LOCALTIMESTAMP",  "LOCK",
+            "LONG",         "LONGBLOB",          "LONGTEXT",      "LOOP",            "LOW_PRIORITY",
+            "MASTER_HEARTBEAT_PERIOD", "MASTER_SSL_VERIFY_SERVER_CERT", "MATCH", "MAXVALUE", "MEDIUMBLOB",
+            "MEDIUMINT", "MEDIUMTEXT",   "MIDDLEINT",      "MINUTE_MICROSECOND", "MINUTE_SECOND",
+            "MOD",       "MODIFIES",     "NATIONAL",       "NATURAL",            "NO",
+            "NOCHECK",   "NONCLUSTERED", "NOT",            "NO_WRITE_TO_BINLOG", "NULL",
+            "NULLIF",    "NUMERIC",      "OF",             "OFF",                "OFFSETS",
+            "ON",        "OPEN",         "OPENDATASOURCE", "OPENQUERY",          "OPENROWSET",
+            "OPENXML",   "OPTIMIZE",     "OPTION",         "OPTIONALLY",         "OR",
+            "ORDER",     "OUT",          "OUTER",          "OUTFILE",            "OVER",
+            "PERCENT",   "PLAN",         "PRECISION",      "PRIMARY",            "PRINT",
+            "PROC",      "PROCEDURE",    "PUBLIC",         "PURGE",              "RAISERROR",
+            "RANGE",     "READ",         "READS",          "READTEXT",           "READ_WRITE",
+            "REAL",      "RECONFIGURE",  "REFERENCES",     "REGEXP",             "RELEASE",
+            "RENAME",    "REPEAT",       "REPLACE",        "REPLICATION",        "REQUIRE",
+            "RESIGNAL",  "RESTORE",      "RESTRICT",       "RETURN",             "REVOKE",
+            "RIGHT",     "RLIKE",        "ROLLBACK",       "ROWCOUNT",           "ROWGUIDCOL",
+            "RULE",      "SAVE",         "SCHEMA",         "SCHEMAS",            "SECOND_MICROSECOND",
+            "SELECT",    "SENSITIVE",    "SEPARATOR",      "SESSION_USER",       "SET",
+            "SETUSER",   "SHOW",         "SHUTDOWN",       "SIGNAL",             "SLOW",
+            "SMALLINT",  "SOME",         "SPATIAL",        "SPECIFIC",           "SQL",
+            "SQLEXCEPTION",     "SQLSTATE",   "SQLWARNING",   "SQL_BIG_RESULT",  "SQL_CALC_FOUND_ROWS",
+            "SQL_SMALL_RESULT", "SSL",        "STARTING",     "STATISTICS",      "STRAIGHT_JOIN",
+            "SYSTEM_USER",      "TABLE",      "TERMINATED",   "TEXT",            "TEXTSIZE",
+            "THEN",             "TIME",       "TIMESTAMP",    "TINYBLOB",        "TINYINT",
+            "TINYTEXT",         "TO",         "TOP",          "TRAILING",        "TRAN",
+            "TRANSACTION",      "TRIGGER",    "TRUE",         "TRUNCATE",        "TSEQUAL",
+            "UNDO",             "UNION",      "UNIQUE",       "UNLOCK",          "UNSIGNED",
+            "UPDATE",           "UPDATETEXT", "USAGE",        "USE",             "USER",
+            "USING",            "UTC_DATE",   "UTC_TIME",     "UTC_TIMESTAMP",   "VALUES",
+            "VARBINARY",        "VARCHAR",    "VARCHARACTER", "VARYING",         "VIEW",
+            "WAITFOR",          "WHEN",       "WHERE",        "WHILE",           "WITH",
+            "WRITE",            "WRITETEXT",  "XOR",          "YEAR_MONTH",      "ZEROFILL"
+        );
+
+        return $reservedWordsSql;
     }
 }
 

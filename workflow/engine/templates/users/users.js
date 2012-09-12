@@ -287,10 +287,11 @@ Ext.onReady(function () {
     fieldLabel    : _("ID_REPLACED_BY"),
     hiddenName    : "USR_REPLACED_BY",
     id            : "USR_REPLACED_BY",
+    readOnly      : readMode,
     store         : storeReplacedBy,
     valueField    : "USR_UID",
     displayField  : "USER_FULLNAME",
-    emptyText     : TRANSLATIONS.ID_SELECT,
+    emptyText     : (readMode)? ' ': TRANSLATIONS.ID_SELECT,
     width         : 180,
     selectOnFocus : true,
     editable      : false,
@@ -343,7 +344,7 @@ Ext.onReady(function () {
 
   var status = new Ext.data.SimpleStore({
       fields: ["USR_STATUS", "status"],
-      data: [["ACTIVE", "ACTIVE"], ["INACTIVE", "INACTIVE"], ["VACATION", "ON VACATION"]]
+      data: [["ACTIVE", _("ID_ACTIVE")], ["INACTIVE", _("ID_INACTIVE")], ["VACATION", _("ID_VACATION")]]
   });
 
   var comboStatus = new Ext.form.ComboBox({
