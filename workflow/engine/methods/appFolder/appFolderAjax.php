@@ -912,7 +912,7 @@ function documentVersionHistory()
 function overwriteFile ($node, $fileName) {
     global $RBAC;
     require_once ("classes/model/AppFolder.php");
-    include_once ("classes/model/AppDocument.php");
+    require_once ("classes/model/AppDocument.php");
     $appDocument = new AppDocument();
     $pMFolder = new AppFolder();
     $user = ($RBAC->userCanAccess('PM_ALLCASES') == 1) ? '' : $_SESSION['USER_LOGGED'];
