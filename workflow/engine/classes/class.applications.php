@@ -3,7 +3,7 @@
 class Applications
 {
 
-  public function getAll($userUid, $start=null, $limit=null, $action=null, $filter=null, $search=null, $process=null, $category=null, $user=null, $status=null, $type=null, $dateFrom=null, $dateTo=null, $callback=null, $dir=null, $sort='APP_CACHE_VIEW.APP_NUMBER')
+  public function getAll($userUid, $start=null, $limit=null, $action=null, $filter=null, $search=null, $process=null, $user=null, $status=null, $type=null, $dateFrom=null, $dateTo=null, $callback=null, $dir=null, $sort='APP_CACHE_VIEW.APP_NUMBER', $category=null)
   {
     $callback = isset($callback) ? $callback : 'stcCallback1001';
     $dir      = isset($dir)    ? $dir    : 'DESC';
@@ -130,19 +130,19 @@ class Applications
     // add the category filter
     if ($category != '') {
         $Criteria->addAlias('CP', 'PROCESS');
-        $Criteria->add      ('CP.PRO_CATEGORY', $category, Criteria::EQUAL );
+        $Criteria->add('CP.PRO_CATEGORY', $category, Criteria::EQUAL );
         $Criteria->addJoin(AppCacheViewPeer::PRO_UID, 'CP.PRO_UID', Criteria::LEFT_JOIN);
         $Criteria->addAsColumn('CATEGORY_UID', 'CP.PRO_CATEGORY');
     }
 
     // add the user filter
     if ( $user != '' ) {
-      $Criteria->add      (AppCacheViewPeer::USR_UID, $user, Criteria::EQUAL );
+      $Criteria->add(AppCacheViewPeer::USR_UID, $user, Criteria::EQUAL );
       $CriteriaCount->add (AppCacheViewPeer::USR_UID, $user, Criteria::EQUAL );
     }
 
     if ( $status != '' ) {
-      $Criteria->add      (AppCacheViewPeer::APP_STATUS, $status, Criteria::EQUAL );
+      $Criteria->add(AppCacheViewPeer::APP_STATUS, $status, Criteria::EQUAL );
       $CriteriaCount->add (AppCacheViewPeer::APP_STATUS, $status, Criteria::EQUAL );
     }
 
@@ -268,7 +268,7 @@ class Applications
     //case 1. when the SEARCH action is selected and none filter, search criteria is defined,
     //we need to count using the table APPLICATION, because APP_CACHE_VIEW takes 3 seconds
 
-    if ( $action == 'search' && $filter == '' && $search == '' && $process == '' && $category == '' && $status == '' && $dateFrom == '' && $dateTo == '') {
+    if ( $action == 'search' && $filter == '' && $search == '' && $process == '' && $status == '' && $dateFrom == '' && $dateTo == '' && $category == '') {
       $totalCount = $oAppCache->getSearchAllCount();
       $doCountAlreadyExecuted = true;
     }

@@ -118,7 +118,7 @@
         $cProcess->setDistinct(AppCacheViewPeer::PRO_UID);
         if ($categoryUid) {
             $cProcess->addAlias('CP', 'PROCESS');
-            $cProcess->add      ('CP.PRO_CATEGORY', $categoryUid, Criteria::EQUAL );
+            $cProcess->add('CP.PRO_CATEGORY', $categoryUid, Criteria::EQUAL );
             $cProcess->addJoin(AppCacheViewPeer::PRO_UID, 'CP.PRO_UID', Criteria::LEFT_JOIN);
             $cProcess->addAsColumn('CATEGORY_UID', 'CP.PRO_CATEGORY');
         }

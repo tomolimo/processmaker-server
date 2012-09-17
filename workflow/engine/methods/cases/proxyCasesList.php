@@ -68,7 +68,6 @@ try {
             $filter,
             $search,
             $process,
-            $category,
             $user,
             $status,
             $type,
@@ -76,7 +75,8 @@ try {
             $dateTo,
             $callback,
             $dir,
-            $sort
+            $sort,
+            $category
         );
 
         $result = G::json_encode($data);
