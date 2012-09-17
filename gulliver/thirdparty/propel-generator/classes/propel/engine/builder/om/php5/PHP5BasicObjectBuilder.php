@@ -626,10 +626,10 @@ abstract class ".$this->getClassname()." extends ".ClassTools::classname($this->
         }
 
         $this->addMutatorOpen($script, $col);
-        
+
         // Perform some smart checking here to handle possible type discrepancies
-        // between the passed-in value and the value from the DB 
-        
+        // between the passed-in value and the value from the DB
+
         if ($col->getPhpNative() === "int") {
             $script .= "
         // Since the native PHP type for this column is integer,
@@ -647,7 +647,7 @@ abstract class ".$this->getClassname()." extends ".ClassTools::classname($this->
         }
 ";
         }
-        
+
         $script .= "
         if (\$this->$clo !== \$v";
         if ($defaultValue !== null) {
@@ -808,7 +808,7 @@ abstract class ".$this->getClassname()." extends ".ClassTools::classname($this->
      *                        TYPE_COLNAME, TYPE_FIELDNAME, TYPE_NUM
      * @return     an associative array containing the field names (as keys) and field values
      */
-    public function toArray(\$keyType = BasePeer::TYPE_PHPNAME)
+    public function toArray(\$keyType=BasePeer::TYPE_PHPNAME)
     {
         \$keys = ".$this->getPeerClassname()."::getFieldNames(\$keyType);
         \$result = array(";
@@ -835,7 +835,7 @@ abstract class ".$this->getClassname()." extends ".ClassTools::classname($this->
      *                     TYPE_COLNAME, TYPE_FIELDNAME, TYPE_NUM
      * @return     mixed Value of field.
      */
-    public function getByName(\$name, \$type = BasePeer::TYPE_PHPNAME)
+    public function getByName(\$name, \$type=BasePeer::TYPE_PHPNAME)
     {
         \$pos = ".$this->getPeerClassname()."::translateFieldName(\$name, \$type, BasePeer::TYPE_NUM);
         return \$this->getByPosition(\$pos);
@@ -890,7 +890,7 @@ $script .= "
      *                     TYPE_COLNAME, TYPE_FIELDNAME, TYPE_NUM
      * @return     void
      */
-    public function setByName(\$name, \$value, \$type = BasePeer::TYPE_PHPNAME)
+    public function setByName(\$name, \$value, \$type=BasePeer::TYPE_PHPNAME)
     {
         \$pos = ".$this->getPeerClassname()."::translateFieldName(\$name, \$type, BasePeer::TYPE_NUM);
         return \$this->setByPosition(\$pos, \$value);
@@ -949,7 +949,7 @@ $script .= "
      * @param      string \$keyType The type of keys the array uses.
      * @return     void
      */
-    public function fromArray(\$arr, \$keyType = BasePeer::TYPE_PHPNAME)
+    public function fromArray(\$arr, \$keyType=BasePeer::TYPE_PHPNAME)
     {
         \$keys = ".$this->getPeerClassname()."::getFieldNames(\$keyType);
 ";
@@ -981,7 +981,7 @@ $script .= "
      * @see        BaseObject::setDeleted()
      * @see        BaseObject::isDeleted()
      */
-    public function delete(\$con = null)
+    public function delete(\$con=null)
     {
         if (\$this->isDeleted()) {
             throw new PropelException(\"This object has already been deleted.\");
@@ -1042,7 +1042,7 @@ $script .= "
      * @return     int The number of rows affected by this insert/update operation
      * @throws     PropelException
      */
-    public function save(\$con = null)
+    public function save(\$con=null)
     {
         \$affectedRows = 0; // initialize var to track total num of affected rows
 

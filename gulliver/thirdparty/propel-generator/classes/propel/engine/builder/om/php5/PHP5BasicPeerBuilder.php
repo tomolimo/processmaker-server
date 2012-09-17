@@ -297,7 +297,7 @@ if (Propel::isInit()) {
      * @return     array A list of field names
      */
 
-    static public function getFieldNames(\$type = BasePeer::TYPE_PHPNAME)
+    static public function getFieldNames(\$type=BasePeer::TYPE_PHPNAME)
     {
         if (!array_key_exists(\$type, self::\$fieldNames)) {
             throw new PropelException('Method getFieldNames() expects the parameter \$type to be one of the class constants TYPE_PHPNAME, TYPE_COLNAME, TYPE_FIELDNAME, TYPE_NUM. ' . \$type . ' was given.');
@@ -407,14 +407,14 @@ if (Propel::isInit()) {
     /** A key representing a particular subclass */
     const CLASSKEY_".strtoupper($child->getKey())." = '" . $child->getKey() . "';
 ";
-                    
+
     if (strtoupper($child->getClassname()) != strtoupper($child->getKey())) {
         $script .= "
     /** A key representing a particular subclass */
     const CLASSKEY_".strtoupper($child->getClassname())." = '" . $child->getKey() . "';
 ";
     }
-    
+
     $script .= "
     /** A class that can be returned by this peer. */
     const CLASSNAME_".strtoupper($child->getKey())." = '". $childBuilder->getClasspath() . "';
@@ -528,7 +528,7 @@ if (Propel::isInit()) {
      * @param      Connection \$con
      * @return     int Number of matching rows.
      */
-    public static function doCount(Criteria \$criteria, \$distinct = false, \$con = null)
+    public static function doCount(Criteria \$criteria, \$distinct=false, \$con=null)
     {
         // we're going to modify criteria, so copy it first
         \$criteria = clone \$criteria;
@@ -572,7 +572,7 @@ if (Propel::isInit()) {
      * @throws     PropelException Any exceptions caught during processing will be
      *       rethrown wrapped into a PropelException.
      */
-    public static function doSelectOne(Criteria \$criteria, \$con = null)
+    public static function doSelectOne(Criteria \$criteria, \$con=null)
     {
         \$critcopy = clone \$criteria;
         \$critcopy->setLimit(1);
@@ -600,7 +600,7 @@ if (Propel::isInit()) {
      * @throws     PropelException Any exceptions caught during processing will be
      *       rethrown wrapped into a PropelException.
      */
-    public static function doSelect(Criteria \$criteria, \$con = null)
+    public static function doSelect(Criteria \$criteria, \$con=null)
     {
         return ".$this->getPeerClassname()."::populateObjects(".$this->getPeerClassname()."::doSelectRS(\$criteria, \$con));
     }";
@@ -628,7 +628,7 @@ if (Propel::isInit()) {
      * @return     ResultSet The resultset object with numerically-indexed fields.
      * @see        ".$this->basePeerClassname."::doSelect()
      */
-    public static function doSelectRS(Criteria \$criteria, \$con = null)
+    public static function doSelectRS(Criteria \$criteria, \$con=null)
     {
         if (\$con === null) {
             \$con = Propel::getConnection(self::DATABASE_NAME);
@@ -835,7 +835,7 @@ if (Propel::isInit()) {
      * @throws     PropelException Any exceptions caught during processing will be
      *       rethrown wrapped into a PropelException.
      */
-    public static function doInsert(\$values, \$con = null)
+    public static function doInsert(\$values, \$con=null)
     {
         if (\$con === null) {
             \$con = Propel::getConnection(self::DATABASE_NAME);
@@ -894,7 +894,7 @@ if (Propel::isInit()) {
      * @throws     PropelException Any exceptions caught during processing will be
      *       rethrown wrapped into a PropelException.
      */
-    public static function doUpdate(\$values, \$con = null)
+    public static function doUpdate(\$values, \$con=null)
     {
         if (\$con === null) {
             \$con = Propel::getConnection(self::DATABASE_NAME);
@@ -941,7 +941,7 @@ if (Propel::isInit()) {
      *
      * @return     int The number of affected rows (if supported by underlying database driver).
      */
-    public static function doDeleteAll(\$con = null)
+    public static function doDeleteAll(\$con=null)
     {
         if (\$con === null) {
             \$con = Propel::getConnection(self::DATABASE_NAME);
@@ -985,13 +985,13 @@ if (Propel::isInit()) {
      * @param      mixed \$values Criteria or ".$table->getPhpName()." object or primary key or array of primary keys
      *              which is used to create the DELETE statement
      * @param      Connection \$con the connection to use
-     * @return     int  The number of affected rows (if supported by underlying database driver).  
+     * @return     int  The number of affected rows (if supported by underlying database driver).
      *             This includes CASCADE-related rows
      *              if supported by native driver or if emulated using Propel.
      * @throws     PropelException Any exceptions caught during processing will be
      *       rethrown wrapped into a PropelException.
     */
-    public static function doDelete(\$values, \$con = null)
+    public static function doDelete(\$values, \$con=null)
     {
         if (\$con === null) {
             \$con = Propel::getConnection(".$this->getPeerClassname()."::DATABASE_NAME);
@@ -1265,7 +1265,7 @@ if (Propel::isInit()) {
      *
      * @return     mixed TRUE if all columns are valid or the error message of the first invalid column.
      */
-    public static function doValidate(".$table->getPhpName()." \$obj, \$cols = null)
+    public static function doValidate(".$table->getPhpName()." \$obj, \$cols=null)
     {
         \$columns = array();
 
@@ -1318,7 +1318,7 @@ if (Propel::isInit()) {
      * @param      Connection \$con the connection to use
      * @return     " . $table->getPhpName() . "
      */
-    public static function ".$this->getRetrieveMethodName()."(\$pk, \$con = null)
+    public static function ".$this->getRetrieveMethodName()."(\$pk, \$con=null)
     {
         if (\$con === null) {
             \$con = Propel::getConnection(self::DATABASE_NAME);
@@ -1368,7 +1368,7 @@ if (Propel::isInit()) {
      * @throws     PropelException Any exceptions caught during processing will be
      *       rethrown wrapped into a PropelException.
      */
-    public static function ".$this->getRetrieveMethodName()."s(\$pks, \$con = null)
+    public static function ".$this->getRetrieveMethodName()."s(\$pks, \$con=null)
     {
         if (\$con === null) {
             \$con = Propel::getConnection(self::DATABASE_NAME);
@@ -1437,7 +1437,7 @@ if (Propel::isInit()) {
             $clo = strtolower($col->getName());
             $script .= ($co++ ? ", " : "") . "$".$clo;
         } /* foreach */
-        $script .= ", \$con = null)
+        $script .= ", \$con=null)
     {
         if (\$con === null) {
             \$con = Propel::getConnection(self::DATABASE_NAME);
