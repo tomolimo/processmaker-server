@@ -793,6 +793,21 @@ Ext.onReady ( function() {
           '<span> {APP_PRO_TITLE}</span>',
       '</div></tpl>'
   );
+  
+    Ext.Ajax.request({
+        url : 'casesList_Ajax' ,
+        params : {actionAjax : 'processListExtJs',
+        action: action,
+        CATEGORY_UID: filterCategory},
+        success: function ( result, request ) {
+            processValues = Ext.util.JSON.decode(result.responseText);
+            comboProcess.getStore().removeAll();
+            comboProcess.getStore().loadData(processValues);
+        },
+        failure: function ( result, request) {
+            Ext.MessageBox.alert('Failed', result.responseText);
+        }
+    });
 
   var comboProcess = new Ext.form.ComboBox({
     width         : 200,
@@ -893,6 +908,7 @@ Ext.onReady ( function() {
             
             filterCategory = comboCategory.value;
             storeCases.setBaseParam('category', filterCategory);
+            storeCases.setBaseParam('process', '');
             storeCases.load({params:{category: filterCategory, start : 0 , limit : pageSize}});
             
             Ext.Ajax.request({
@@ -905,6 +921,7 @@ Ext.onReady ( function() {
                     comboProcess.getStore().removeAll();
                     comboProcess.getStore().loadData( data );
                     comboProcess.setValue('');
+                    
                 },
                 failure: function ( result, request) {
                     Ext.MessageBox.alert('Failed', result.responseText);
@@ -1858,25 +1875,25 @@ var gridForm = new Ext.FormPanel({
     //Manually trigger the data store load
     switch (action) {
         case "draft":
-            storeCases.setBaseParam("process", comboProcess.store.getAt(0).get(comboProcess.valueField));
+            storeCases.setBaseParam("process", '');
             storeCases.setBaseParam("search", textSearch.getValue());
             break;
         case "sent":
-            storeCases.setBaseParam("process", comboProcess.store.getAt(0).get(comboProcess.valueField));
+            storeCases.setBaseParam("process", '');
             storeCases.setBaseParam("status", comboStatus.store.getAt(0).get(comboStatus.valueField));
             storeCases.setBaseParam("search", textSearch.getValue());
             break;
         case "to_revise":
-            storeCases.setBaseParam("process", comboProcess.store.getAt(0).get(comboProcess.valueField));
+            storeCases.setBaseParam("process", '');
             storeCases.setBaseParam("search", textSearch.getValue());
             break;
         case "to_reassign":
             storeCases.setBaseParam("user", comboAllUsers.store.getAt(0).get(comboAllUsers.valueField));
-            storeCases.setBaseParam("process", comboProcess.store.getAt(0).get(comboProcess.valueField));
+            storeCases.setBaseParam("process", '');
             storeCases.setBaseParam("search", textSearch.getValue());
             break;
         case "search":
-            storeCases.setBaseParam("process", comboProcess.store.getAt(0).get(comboProcess.valueField));
+            storeCases.setBaseParam("process", '');
             storeCases.setBaseParam("status", comboStatus.store.getAt(0).get(comboStatus.valueField));
             storeCases.setBaseParam("user", comboUser.store.getAt(0).get(comboUser.valueField));
             storeCases.setBaseParam("search", textSearch.getValue());
@@ -1884,16 +1901,16 @@ var gridForm = new Ext.FormPanel({
             storeCases.setBaseParam("dateTo", dateTo.getValue());
             break;
         case "unassigned":
-            storeCases.setBaseParam("process", comboProcess.store.getAt(0).get(comboProcess.valueField));
+            storeCases.setBaseParam("process", '');
             storeCases.setBaseParam("search", textSearch.getValue());
             break;
         case "gral":
-            storeCases.setBaseParam("process", comboProcess.store.getAt(0).get(comboProcess.valueField));
+            storeCases.setBaseParam("process", '');
             storeCases.setBaseParam("search", textSearch.getValue());
             break;
         default:
             //todo
-            storeCases.setBaseParam("process", comboProcess.store.getAt(0).get(comboProcess.valueField));
+            storeCases.setBaseParam("process", '');
             storeCases.setBaseParam("search", textSearch.getValue());
             break;
     }
