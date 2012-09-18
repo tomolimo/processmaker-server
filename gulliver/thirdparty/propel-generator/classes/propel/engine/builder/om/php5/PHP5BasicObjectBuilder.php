@@ -1115,7 +1115,7 @@ $script .= "
     public function validate(\$columns = null)
     {
         if (\$columns) {
-            return ".$this->getPeerClassname()."::doValidatefromArray(\$this, \$columns);
+            return ".$this->getPeerClassname()."::doValidate(\$this, \$columns);
         }
         return ".$this->getPeerClassname()."::doValidate(\$this);
     }
