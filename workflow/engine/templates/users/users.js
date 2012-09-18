@@ -343,7 +343,7 @@ Ext.onReady(function () {
   });
 
   var status = new Ext.data.SimpleStore({
-      fields: ["USR_STATUS", "status"],
+      fields: ["USR_STATUS_VALUE", "status"],
       data: [["ACTIVE", _("ID_ACTIVE")], ["INACTIVE", _("ID_INACTIVE")], ["VACATION", _("ID_VACATION")]]
   });
 
@@ -356,7 +356,7 @@ Ext.onReady(function () {
     mode          : 'local',
     store         : status,
     displayField  : 'status',
-    valueField    : 'USR_STATUS',
+    valueField    : 'USR_STATUS_VALUE',
     width         : 120,
     typeAhead     : true,
     triggerAction : 'all',
@@ -671,6 +671,14 @@ Ext.onReady(function () {
     triggerAction : "all",
     mode          : "local"
   });
+
+    comboDefaultCasesMenuOption.disable();
+    comboDefaultMainMenuOption.on('select',function(cmb,record,index) {
+        comboDefaultCasesMenuOption.disable();
+        if (record.get('id') == 'PM_CASES') {
+            comboDefaultCasesMenuOption.enable();
+        }
+    },this);
 
   var preferencesFields = new Ext.form.FieldSet({
     title : _('ID_PREFERENCES'),
@@ -1053,6 +1061,7 @@ function saveUser()
   var confPass = frmDetails.getForm().findField('USR_CNF_PASS').getValue();
 
   if (confPass === newPass) {
+    Ext.getCmp('USR_STATUS').setDisabled(readMode);
     Ext.getCmp('frmDetails').getForm().submit({
       url    : 'usersAjax',
       params : {
@@ -1160,7 +1169,7 @@ function loadUserData()
                 USR_POSITION  : data.user.USR_POSITION,
                 USR_DUE_DATE  : data.user.USR_DUE_DATE,
                 USR_STATUS    : data.user.USR_STATUS
-            })
+            });
 
             if (infoMode) {
                 Ext.getCmp("USR_FIRSTNAME2").setText(data.user.USR_FIRSTNAME);
@@ -1178,7 +1187,7 @@ function loadUserData()
                 Ext.getCmp("USR_POSITION2").setText(data.user.USR_POSITION);
                 Ext.getCmp("USR_REPLACED_BY2").setText(data.user.REPLACED_NAME);
                 Ext.getCmp("USR_DUE_DATE2").setText(data.user.USR_DUE_DATE);
-                Ext.getCmp("USR_STATUS2").setText(data.user.USR_STATUS);
+                Ext.getCmp("USR_STATUS2").setText(_('ID_' + data.user.USR_STATUS));
                 Ext.getCmp("USR_ROLE2").setText(data.user.USR_ROLE);
 
                 Ext.getCmp("PREF_DEFAULT_MAIN_MENU_OPTION2").setText(data.user.MENUSELECTED_NAME);
