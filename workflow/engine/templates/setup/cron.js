@@ -46,7 +46,7 @@ cron.application = {
             var strData = "<b>" + _("ID_CRON_INFO") + "</b><br />";
             strData = strData + "<b>" + _("ID_STATUS") + ":</b> " + CRON.status + "<br />";
             strData = strData + "<b>" + _("ID_EVENT_LAST_EXECUTION_DATE") + ":</b> " + CRON.lastExecution + "<br /><br />";
-            strData = strData + "<b>" + _("ID_LOG_INFO") + "</b><br />";
+            strData = strData + "<b>" + _("ID_LOG_INFO") + " (" + CRON.fileLogName + ")</b><br />";
             strData = strData + "<b>" + _("ID_FILENAME") + ":</b> " + CRON.fileLogName + "<br />";
             strData = strData + "<b>" + _("ID_SIZE") + ":</b> " + CRON.fileLogSize + " MB<br />";
             strData = strData + "<b>" + _("ID_PATH") + ":</b> " + CRON.fileLogPath + "<br />";
@@ -421,7 +421,7 @@ cron.application = {
                 " ",
                 {
                     xtype: "button",
-                    text: _("ID_RESET"),
+                    text: _("ID_RESET_DATES"),
 
                     handler: function ()
                     {
