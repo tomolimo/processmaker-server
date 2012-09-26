@@ -36,7 +36,7 @@ CLI::taskDescription(<<<EOT
     workspaces are upgraded to the current version.
 EOT
 );
-CLI::taskOpt("buildAPV", "If the option is enabled, performs the Build Cache View.", "APV", "buildAPV");
+CLI::taskOpt("buildACV", "If the option is enabled, performs the Build Cache View.", "ACV", "buildACV");
 CLI::taskRun(run_upgrade);
 
 
@@ -99,7 +99,7 @@ function run_upgrade($command, $args)
     $count = count($workspaces);
     $first = true;
     $errors = false;
-    $buildCacheView = array_key_exists("buildAPV", $command);
+    $buildCacheView = array_key_exists("buildACV", $command);
     foreach ($workspaces as $index => $workspace) {
         try {
             CLI::logging("Upgrading workspaces ($index/$count): " . CLI::info($workspace->name) . "\n");
