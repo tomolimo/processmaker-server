@@ -59,7 +59,6 @@ class workspaceTools {
         $start = microtime(true);
         CLI::logging("> Updating database...\n");
         $this->upgradeDatabase();
-        $this->upgradeDatabase();
         $stop = microtime(true);
         $final = $stop - $start;
         CLI::logging("<*>   Process Updating database carried out in $final seconds.\n");
