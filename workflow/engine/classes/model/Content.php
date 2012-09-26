@@ -369,13 +369,13 @@ class Content extends BaseContent {
             foreach ($content as $key => $value) {
                 unset($langsAsoc[$value['CON_LANG']]);
             }
-            foreach ($langsAsoc as $key) {
+            foreach ($langsAsoc as $key => $value) {
                 $this->rowsInserted++;
                 $this->fastInsertContent(
                     $default['CON_CATEGORY'],
                     $default['CON_PARENT'],
                     $default['CON_ID'],
-                    $lang,
+                    $value,
                     $default['CON_VALUE']
                     );
             }
