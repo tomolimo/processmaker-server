@@ -7,7 +7,7 @@
     * @category   Zend
     * @package    ProcessMaker
     * @subpackage workflow
-    * @copyright  Copyright (c) ProcessMaker  Colosa S.A.
+    * @copyright  Copyright (c) ProcessMaker  Colosa Inc.
     * @version    Release: @2.0.44@
     * @since      Class available since Release 2.0.44
     */
@@ -22,7 +22,7 @@ define('PROTOCOL_HTTP',	'http');
 */
 abstract class CURLMessage
 {
-    protected $restServer; // e.g. "http://ralph.pmos.colosa.net/rest/ralph/";  host + technich dir + user dir
+    protected $restServer; // e.g. "http://ralph.pmos.colosa.net/rest/ralph/";  host + technich dir + workspace 
     protected $content = "Content-Type: application/"; //set the string used to attach next the kind of message to be handle. 
     protected $serviceTechnic = "rest";// name of the current durectory where the rest methods are.
     protected $server_method; // used to set the name of the remote host and the Rest method to be called.
@@ -37,11 +37,11 @@ abstract class CURLMessage
     {
         $serverDNS = explode(DOT,$_SERVER['SERVER_NAME']);
         $serverDNS = array_reverse($serverDNS);
-        $user = array_pop($serverDNS); //***aware this must contains user logged or enviroment name***
+        $workspace = array_pop($serverDNS); //***aware this must contains the workspace name***
 
         $this->restServer = PROTOCOL_HTTP . COLON.PATH_SEP . PATH_SEP;
         $this->restServer .= $_SERVER['SERVER_NAME'] . PATH_SEP;
-        $this->restServer .= $this->serviceTechnic . PATH_SEP . $user . PATH_SEP;
+        $this->restServer .= $this->serviceTechnic . PATH_SEP . $workspace . PATH_SEP;
 
         $this->ch = curl_init();
         curl_setopt($this->ch,CURLOPT_TIMEOUT,			2); 

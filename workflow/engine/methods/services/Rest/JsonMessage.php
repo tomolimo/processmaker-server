@@ -6,7 +6,7 @@
     * @category   Zend
     * @package    ProcessMaker
     * @subpackage workflow
-    * @copyright  Copyright (c) ProcessMaker  Colosa S.A.
+    * @copyright  Copyright (c) ProcessMaker  Colosa Inc.
     * @version    Release: @2.0.44@
     * @since      Class available since Release 2.0.44
     */

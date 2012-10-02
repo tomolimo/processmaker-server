@@ -20,7 +20,7 @@ import org.apache.http.util.EntityUtils;
 */
 public class CRUD
 {
-    private static String m_user = "ralph"; // This member variable must be changed to its own dev username
+    private static String m_user = "workflow"; // This member variable must be changed to its own dev workspace
 
     private static void PostSample()
     {
