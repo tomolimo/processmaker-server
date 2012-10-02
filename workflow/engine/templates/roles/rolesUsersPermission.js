@@ -157,7 +157,7 @@ Ext.onReady(function(){
                     if (ROLES.ROL_UID == pm_admin) {
                         var permissionUid = assignedGrid.getSelectionModel().getSelections();
                         permissionUid = permissionUid[0].get('PER_UID');
-                        for (i=0; i<permissionsAdmin.length; i++)
+                        for (var i=0; i<permissionsAdmin.length; i++)
                         {
                             if (permissionUid == permissionsAdmin[i]['PER_UID']) {
                                 Ext.getCmp('removeButton').disable();
@@ -674,10 +674,11 @@ AssignPermissionAction = function(){
 RemovePermissionAction = function(){
     rowsSelected = assignedGrid.getSelectionModel().getSelections();
     var arrAux = new Array();
+    var sw;
     for(var a=0; a < rowsSelected.length; a++){
-        var sw = true;
+        sw = true;
         if (ROLES.ROL_UID == pm_admin) {
-            for (i=0; i<permissionsAdmin.length; i++)
+            for (var i=0; i<permissionsAdmin.length; i++)
             {
                 if (permissionsAdmin[i]['PER_UID'] == rowsSelected[a].get('PER_UID')) {
                     sw = false;
@@ -710,11 +711,12 @@ RemoveAllPermissionsAction = function(){
     var allRows = assignedGrid.getStore();
     var arrAux = new Array();
     if (allRows.getCount()>0){
+        var sw;
         for (var r=0; r < allRows.getCount(); r++){
             row = allRows.getAt(r);
-            var sw = true;
+            sw = true;
             if (ROLES.ROL_UID == pm_admin) {
-                for (i=0; i<permissionsAdmin.length; i++)
+                for (var i=0; i<permissionsAdmin.length; i++)
                 {
                     if (permissionsAdmin[i]['PER_UID'] == row.data['PER_UID']) {
                         sw = false;

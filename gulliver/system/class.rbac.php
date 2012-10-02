@@ -59,7 +59,6 @@ class RBAC
   var $currentSystemobj;
   var $rolesPermissionsObj;
   var $authSourcesObj;
-  var $permissionsAdmin;
 
   var $aUserInfo = array();
   var $aRbacPlugins = array();
