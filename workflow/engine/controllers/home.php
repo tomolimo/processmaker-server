@@ -31,7 +31,7 @@ class Home extends Controller
     // getting the ux type from user o group conf.
     $this->userUxType = isset($_SESSION['user_experience'])? $_SESSION['user_experience']: 'SIMPLIFIED';
     $this->lastSkin   = isset($_SESSION['user_last_skin']) ? $_SESSION['user_last_skin'] : 'classic';
-    $this->userUxBaseTemplate = (is_dir(PATH_CUSTOM_SKINS . 'uxs')) ? PATH_CUSTOM_SKINS . 'simplified' . PATH_SEP . 'templates' . PATH_SEP : 'home' . PATH_SEP;
+    $this->userUxBaseTemplate = (is_dir(PATH_CUSTOM_SKINS . 'uxs')) ? PATH_CUSTOM_SKINS . 'simplified' . PATH_SEP . 'templates' : 'home';
 
     if (isset($_SESSION['USER_LOGGED']) && !empty($_SESSION['USER_LOGGED'])) {
       $this->userID       = isset($_SESSION['USER_LOGGED']) ? $_SESSION['USER_LOGGED'] : null;
@@ -61,7 +61,7 @@ class Home extends Controller
     $this->setVar('pwd', $data['p']);
     $this->setVar('skin', $skin);
 
-    $this->setView($this->userUxBaseTemplate."$template");
+    $this->setView($this->userUxBaseTemplate . PATH_SEP . $template);
     $this->render();
   }
 
@@ -129,7 +129,7 @@ class Home extends Controller
       }
     }
 
-    $this->setView($this->userUxBaseTemplate.'index');
+    $this->setView($this->userUxBaseTemplate . PATH_SEP . 'index');
 
     $this->setVar('usrUid', $this->userID);
     $this->setVar('userName', $this->userName);
@@ -154,11 +154,10 @@ class Home extends Controller
 
     $cases = $apps->getAll($this->userID, 0, 1, 'todo');
 
-
     if (!isset($cases['data'][0])) {
       //the current user has not any aplication to do
-      $this->setView($this->userUxBaseTemplate.'indexSingle');
-      $this->setVar('default_url', $this->userUxBaseTemplate.'error?no=2');
+      $this->setView($this->userUxBaseTemplate . PATH_SEP .'indexSingle');
+      $this->setVar('default_url', $this->userUxBaseTemplate . "/" . 'error?no=2');
       $this->render();
       exit();
     }
@@ -174,7 +173,7 @@ class Home extends Controller
     $lastStep['title'] = G::LoadTranslation('ID_FINISH');
     $steps[] = $lastStep;
 
-    $this->setView($this->userUxBaseTemplate.'indexSingle');
+    $this->setView($this->userUxBaseTemplate . PATH_SEP . 'indexSingle');
 
     $this->setVar('usrUid', $this->userID);
     $this->setVar('userName', $this->userName);
@@ -209,7 +208,7 @@ class Home extends Controller
         $cases = $this->getAppsData($httpData->t);
 
         // settings html template
-        $this->setView($this->userUxBaseTemplate.'appList');
+        $this->setView($this->userUxBaseTemplate . PATH_SEP . 'appList');
 
         // settings vars and rendering
         $this->setVar('cases', $cases['data']);
@@ -226,7 +225,7 @@ class Home extends Controller
   {
     $cases = $this->getAppsData($httpData->t, $httpData->start, $httpData->limit);
 
-    $this->setView($this->userUxBaseTemplate.'applications');
+    $this->setView($this->userUxBaseTemplate . PATH_SEP . 'applications');
     $this->setVar('cases', $cases['data']);
     $this->render();
   }
@@ -306,8 +305,8 @@ class Home extends Controller
     $httpData->no = isset($httpData->no) ? $httpData->no : 0;
 
     switch ($httpData->no) {
-      case 2:  $tpl = $this->userUxBaseTemplate.'noAppsMsg'; break;
-      default: $tpl = $this->userUxBaseTemplate.'error';
+      case 2:  $tpl = $this->userUxBaseTemplate . PATH_SEP . 'noAppsMsg'; break;
+      default: $tpl = $this->userUxBaseTemplate . PATH_SEP . 'error';
     }
 
     $this->setView($tpl);
