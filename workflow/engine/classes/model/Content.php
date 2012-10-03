@@ -276,7 +276,7 @@ class Content extends BaseContent {
     *
     * @param  array  $langs
     */
-    function regenerateContent($langId)
+    function regenerateContent($langs)
     {
         //Search the language
         $key = array_search('en',$langs);
@@ -380,6 +380,17 @@ class Content extends BaseContent {
                     );
             }
         }
+    }
+
+    function fastInsertContent ($ConCategory, $ConParent, $ConId, $ConLang, $ConValue) {
+        $con = new Content ( );
+        $con->setConCategory ( $ConCategory );
+        $con->setConParent ( $ConParent );
+        $con->setConId ( $ConId );
+        $con->setConLang ( $ConLang );
+        $con->setConValue ( $ConValue );
+        $res = $con->save ();
+        return $res;
     }
 
   function removeLanguageContent($lanId) {
