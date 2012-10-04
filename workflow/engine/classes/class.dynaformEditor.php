@@ -716,7 +716,7 @@ class dynaformEditorAjax extends dynaformEditor implements iDynaformEditorAjax
                           //'ENABLETEMPLATE'=> $form->enableTemplate,
                           'MODE'           => $form->mode,
                           'PRINTDYNAFORM'  => $form->printdynaform,
-                          'ADJUSTGRIDSWIDTH' => $form->adjustgridswith,
+                          'ADJUSTGRIDSWIDTH' => $form->adjustgridswidth,
                           'NEXTSTEPSAVE'   => $form->nextstepsave
                          );
       $tmp['Properties']=$Properties;
