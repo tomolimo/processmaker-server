@@ -368,20 +368,30 @@ Ext.onReady(function(){
   });
 });
 
+gotWildCard = function (value){
+    var currentSkinWildcard = '@';
+    if(value.length <= 0){
+        return false;
+    }
+    return (value[0] == currentSkinWildcard);
+}
+
+setBoldItalic = function(value)
+{
+    return '<b><i>' + value + '</i></b>';
+}
 
 //Function format dates
 showdate = function (value){
-    if(value[0]=='@'){
-        str = _DF(value.substring(1));
-        return '<b><i>' + str + '</i></b>';
+    if(gotWildCard(value)){
+        return setBoldItalic(_DF(value.substring(1)));
     }
     return _DF(value);
 };
 
 selectedSkin = function (value){
-    if(value[0]=='@'){
-        str = value.substring(1);
-        return '<b><i>' + str + '</i></b>';
+    if(gotWildCard(value)){
+        return setBoldItalic(value.substring(1));
     }
     return value;
 };
