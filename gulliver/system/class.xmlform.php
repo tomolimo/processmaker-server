@@ -3297,7 +3297,7 @@ class XmlForm_Field_Grid extends XmlForm_Field
       $emptyRow [$key] = array ($emptyValue);
     }
     
-    if (isset($owner->adjustgridswith) && $owner->adjustgridswith == '1') {
+    if (isset($owner->adjustgridswidth) && $owner->adjustgridswidth == '1') {
       // 400w -> 34s to Firefox
       // 400w -> 43s to Chrome
       
