@@ -36,7 +36,6 @@ var caseSummary = function() {
 function caseNotes(){
   var rowModel = grid.getSelectionModel().getSelected();
   if(rowModel){
-    console.log(rowModel.data);
     var appUid   = rowModel.data.APP_UID;
     var delIndex = rowModel.data.DEL_INDEX;
     var caseTitle = (rowModel.data.APP_TITLE) ? rowModel.data.APP_TITLE : rowModel.data.APP_UID;
