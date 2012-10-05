@@ -35,12 +35,12 @@ abstract class CURLMessage
     */
     function __construct()
     {
-        $serverDNS = explode(DOT,$_SERVER['SERVER_NAME']);
+        $serverDNS = explode(DOT,"jennylee.pmos.colosa.net");//$_SERVER['SERVER_NAME']);
         $serverDNS = array_reverse($serverDNS);
         $workspace = array_pop($serverDNS); //***aware this must contains the workspace name***
 
         $this->restServer = PROTOCOL_HTTP . COLON.PATH_SEP . PATH_SEP;
-        $this->restServer .= $_SERVER['SERVER_NAME'] . PATH_SEP;
+        $this->restServer .= "jennylee.pmos.colosa.net"/*$_SERVER['SERVER_NAME'] */. PATH_SEP;
         $this->restServer .= $this->serviceTechnic . PATH_SEP . $workspace . PATH_SEP;
 
         $this->ch = curl_init();

@@ -4,12 +4,12 @@ if (!defined('PATH_SEP')) {
     define('PATH_SEP',		'/');
 }
 
-require_once PATH_HOME . 'engine/services/rest/crud/Application.php';
+require_once PATH_HOME . 'engine/services/rest/crud/AppOwner.php';
 require_once("Rest/JsonMessage.php");
 require_once("Rest/XmlMessage.php");
 require_once("Rest/RestMessage.php");
 
-class ApplicationTest extends PHPUnit_Extensions_Database_TestCase
+class AppOwnerTest extends PHPUnit_Extensions_Database_TestCase
 {
     public function setup()
     {
@@ -66,22 +66,18 @@ class ApplicationTest extends PHPUnit_Extensions_Database_TestCase
         $xmlm->send($method, $msg);
         //$xmlm->displayResponse();
 
-        $APP_UID = array("741388075505cd6bba2e993094312973");
-        $table = "APPLICATION";
+        $key = array("741388075505cd6bba2e993094312973", "000000000000000000000000000002", "00000000000000000000000000000001");
+        $table = "APP_OWNER";
 
         $rest = new RestMessage();
-        $resp = $rest->sendGET($table,$APP_UID);
+        $resp = $rest->sendGET($table,$key);
         //$rest->displayResponse();
 
-        //Obtengo solo el campo q necesito del array
-        //$ultimo = end( $resp );
-        //$solo = object mysql_fetch_field ( resource $resp ['data'] );
-
         $queryTable = $this->getConnection()->createQueryTable(
-            'APPLICATION', 'SELECT * FROM APPLICATION WHERE APP_UID = "741388075505cd6bba2e993094312973"'
+            'APP_OWNER', 'SELECT * FROM APP_OWNER WHERE APP_UID = "741388075505cd6bba2e993094312973"'
         );
 
-        //$this->assertEquals($queryTable, $resp, "ERROR getting data");
+        //$this->assertEquals($resp, $queryTable, "ERROR getting data");
     }
 
     public function testPost()
@@ -97,18 +93,18 @@ class ApplicationTest extends PHPUnit_Extensions_Database_TestCase
         $xmlm->send($method, $msg);
         //$xmlm->displayResponse();
 
-        $APP_UID = array("4670755835065b7eb6a4187052654566", "2008", "", "DRAFT", "6548800755065a63d67f727063273525", "", "", "N", "00000000000000000000000000000001", "00000000000000000000000000000001", "2012-09-28 10:44:59", "2012-09-28 12:11:58", "2012-09-28 12:11:58", "2012-09-28 12:11:58", "", "00a9357205f5ea2d9325e166092b0e3f");
-        $table = "APPLICATION";
+        $key = array("741388075505cd6bba2e993094312900", "000000000000000000000000000003", "00000000000000000000000000000001");
+        $table = "APP_OWNER";
 
         $rest = new RestMessage();
-        $rest->sendPOST($table,$APP_UID);
-        $rest->displayResponse();
+        $rest->sendPOST($table,$key);
+        //$rest->displayResponse();
 
-        $ID = array("4670755835065b7eb6a4187052654566");
-        $resp = $rest->sendGET($table,$ID);
+        $key1 = array("741388075505cd6bba2e993094312900", "000000000000000000000000000003", "00000000000000000000000000000001");
+        $resp = $rest->sendGET($table,$key1);
 
         $queryTable = $this->getConnection()->createQueryTable(
-            'APPLICATION', 'SELECT * FROM APPLICATION WHERE APP_UID = "4670755835065b7eb6a4187052654566"'
+            'APP_OWNER', 'SELECT * FROM APP_OWNER WHERE APP_UID = "741388075505cd6bba2e993094312900"'
         );
 
         //$this->assertEquals($queryTable, $resp, "ERROR getting data");
@@ -127,12 +123,21 @@ class ApplicationTest extends PHPUnit_Extensions_Database_TestCase
         $xmlm->send($method, $msg);
         //$xmlm->displayResponse();
 
-        $APP_UID = array("4670755835065b7eb6a4187052654566", "2008", "", "DRAFT", "6548800755065a63d67f727063273525", "", "", "N", "00000000000000000000000000000001", "00000000000000000000000000000001", "2012-09-28 10:44:59", "2012-09-28 12:11:58", "2012-09-28 12:11:58", "2012-09-28 12:11:58", "", "00a9357205f5ea2d9325e166092b0e3f");
-        $table = "APPLICATION";
+        $key = array("741388075505cd6bba2e993094312900", "000000000000000000000000000004", "00000000000000000000000000000001");
+        $table = "APP_OWNER";
 
         $rest = new RestMessage();
-        $rest->sendPUT($table,$APP_UID);
+        $rest->sendPUT($table,$key);
         //$rest->displayResponse();
+
+        $key1 = array("741388075505cd6bba2e993094312900", "000000000000000000000000000004", "00000000000000000000000000000001");
+        $resp = $rest->sendGET($table,$key1);
+
+        $queryTable = $this->getConnection()->createQueryTable(
+            'APP_OWNER', 'SELECT * FROM APP_OWNER WHERE APP_UID = "741388075505cd6bba2e993094312900"'
+        );
+
+        //$this->assertEquals($queryTable, $resp, "ERROR getting data");
     }
 
     public function testDelete()
@@ -148,12 +153,19 @@ class ApplicationTest extends PHPUnit_Extensions_Database_TestCase
         $xmlm->send($method, $msg);
         //$xmlm->displayResponse();
 
-        $APP_UID = array("4670755835065b7eb6a4187052654566");
-        $table = "APPLICATION";
+        $key = array("741388075505cd6bba2e993094312900", "000000000000000000000000000004", "00000000000000000000000000000001");
+        $table = "APP_OWNER";
 
         $rest = new RestMessage();
-        $rest->sendDELETE($table,$APP_UID);
+        $rest->sendDELETE($table,$key);
         //$rest->displayResponse();
+
+        $queryTable = $this->getConnection()->createQueryTable(
+            'APP_OWNER', 'SELECT * FROM APP_OWNER WHERE APP_UID = "741388075505cd6bba2e993094312900"'
+        );
+
+        $resp = array();
+
+        //$this->assertEquals($queryTable, $resp, "ERROR getting data");
     }
 }
-
