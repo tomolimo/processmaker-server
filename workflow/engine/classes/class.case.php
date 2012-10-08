@@ -463,7 +463,7 @@ class Cases
         return $rows;
     }
 
-    public function isSelfService($USR_UID, $TAS_UID)
+    public function isSelfService($USR_UID, $TAS_UID, $APP_UID = '')
     {
         $tasks = $this->getSelfServiceTasks($USR_UID);
 
@@ -472,6 +472,23 @@ class Cases
                 return true;
             }
         }
+
+        if ($APP_UID != '') {
+            $groupsInstance = new Groups();
+            $groups = $groupsInstance->getActiveGroupsForAnUser($USR_UID);
+            $taskInstance = new Task();
+            $taskData = $taskInstance->Load($TAS_UID);
+            $tasGroupVariable = str_replace(array('@', '#'), '', $taskData['TAS_GROUP_VARIABLE']);
+            $caseData = $this->LoadCase($APP_UID);
+            if (isset($caseData['APP_DATA'][$tasGroupVariable])) {
+                if (trim($caseData['APP_DATA'][$tasGroupVariable]) != '') {
+                  if (in_array(trim($caseData['APP_DATA'][$tasGroupVariable]), $groups)) {
+                    return true;
+                  }
+                }
+            }
+        }
+
         return false;
     }
 
@@ -4752,10 +4769,15 @@ class Cases
         $RESULT_OBJECTS['OUTPUT_DOCUMENTS'] = array_merge_recursive(
             G::arrayDiff($MAIN_OBJECTS['VIEW']['OUTPUT_DOCUMENTS'],$MAIN_OBJECTS['BLOCK']['OUTPUT_DOCUMENTS']),
             G::arrayDiff($MAIN_OBJECTS['DELETE']['OUTPUT_DOCUMENTS'],$MAIN_OBJECTS['BLOCK']['OUTPUT_DOCUMENTS'])
-         );
+        );
+        $RESULT_OBJECTS['CASES_NOTES'] = G::arrayDiff(
+            $MAIN_OBJECTS['VIEW']['CASES_NOTES'], $MAIN_OBJECTS['BLOCK']['CASES_NOTES']
+        );
         array_push($RESULT_OBJECTS['DYNAFORMS'], -1);
         array_push($RESULT_OBJECTS['INPUT_DOCUMENTS'], -1);
         array_push($RESULT_OBJECTS['OUTPUT_DOCUMENTS'], -1);
+        array_push($RESULT_OBJECTS['CASES_NOTES'], -1);
+        
         return $RESULT_OBJECTS;
     }
 
@@ -4773,7 +4795,7 @@ class Cases
         $aCase = $this->loadCase($APP_UID);
         $USER_PERMISSIONS = Array();
         $GROUP_PERMISSIONS = Array();
-        $RESULT = Array("DYNAFORM" => Array(), "INPUT" => Array(), "OUTPUT" => Array());
+        $RESULT = Array("DYNAFORM" => Array(), "INPUT" => Array(), "OUTPUT" => Array(), "CASES_NOTES" => 0);
 
         //permissions per user
         $oCriteria = new Criteria('workflow');
@@ -4791,11 +4813,12 @@ class Cases
               $oCriteria->getNewCriterion(ObjectPermissionPeer::TAS_UID, '')->addOr(
                 $oCriteria->getNewCriterion(ObjectPermissionPeer::TAS_UID, '0')
               )
-            )->addOr(
-              $oCriteria->getNewCriterion(ObjectPermissionPeer::OP_CASE_STATUS, 'ALL')->addOr(
-                $oCriteria->getNewCriterion(ObjectPermissionPeer::OP_CASE_STATUS, '')->addOr(
-                  $oCriteria->getNewCriterion(ObjectPermissionPeer::OP_CASE_STATUS, '0')
-                )
+            )
+        );
+        $oCriteria->add(
+            $oCriteria->getNewCriterion(ObjectPermissionPeer::OP_CASE_STATUS, 'ALL')->addOr(
+              $oCriteria->getNewCriterion(ObjectPermissionPeer::OP_CASE_STATUS, '')->addOr(
+                $oCriteria->getNewCriterion(ObjectPermissionPeer::OP_CASE_STATUS, '0')
               )
             )
         );
@@ -4826,11 +4849,12 @@ class Cases
                   $oCriteria->getNewCriterion(ObjectPermissionPeer::TAS_UID, '')->addOr(
                     $oCriteria->getNewCriterion(ObjectPermissionPeer::TAS_UID, '0')
                   )
-                )->addOr(
-                  $oCriteria->getNewCriterion(ObjectPermissionPeer::OP_CASE_STATUS, 'ALL')->addOr(
-                    $oCriteria->getNewCriterion(ObjectPermissionPeer::OP_CASE_STATUS, '')->addOr(
-                      $oCriteria->getNewCriterion(ObjectPermissionPeer::OP_CASE_STATUS, '0')
-                    )
+                )
+            );
+            $oCriteria->add(
+                $oCriteria->getNewCriterion(ObjectPermissionPeer::OP_CASE_STATUS, 'ALL')->addOr(
+                  $oCriteria->getNewCriterion(ObjectPermissionPeer::OP_CASE_STATUS, '')->addOr(
+                    $oCriteria->getNewCriterion(ObjectPermissionPeer::OP_CASE_STATUS, '0')
                   )
                 )
             );
@@ -4841,7 +4865,6 @@ class Cases
             }
         }
         $PERMISSIONS = array_merge($USER_PERMISSIONS, $GROUP_PERMISSIONS);
-
         foreach ($PERMISSIONS as $row) {
             $USER = $row['USR_UID'];
             $USER_RELATION = $row['OP_USER_RELATION'];
@@ -4927,6 +4950,7 @@ class Cases
                             }
                             $oDataset->next();
                         }
+                        $RESULT['CASES_NOTES'] = 1;
                         break;
                     case 'DYNAFORM':
                         $oCriteria = new Criteria('workflow');
@@ -5000,13 +5024,17 @@ class Cases
                             $oDataset->next();
                         }
                         break;
+                    case 'CASES_NOTES':
+                        $RESULT['CASES_NOTES'] = 1;
+                        break;
                 }
             }
         }
         return Array(
             "DYNAFORMS" => $RESULT['DYNAFORM'],
             "INPUT_DOCUMENTS" => $RESULT['INPUT'],
-            "OUTPUT_DOCUMENTS" => $RESULT['OUTPUT']
+            "OUTPUT_DOCUMENTS" => $RESULT['OUTPUT'],
+            "CASES_NOTES" => $RESULT['CASES_NOTES']
         );
     }
 

@@ -54,7 +54,7 @@ class workspaceTools {
      *
      * @param   bool $first true if this is the first workspace to be upgrade
      */
-    public function upgrade($first=false, $buildCacheView=false)
+    public function upgrade($first=false, $buildCacheView=false, $workSpace=SYS_SYS) 
     {
         $start = microtime(true);
         CLI::logging("> Updating database...\n");
@@ -72,7 +72,7 @@ class workspaceTools {
 
         $start = microtime(true);
         CLI::logging("> Updating Content...\n");
-        $this->upgradeContent();
+        $this->upgradeContent($workSpace);
         $stop = microtime(true);
         $final = $stop - $start;
         CLI::logging("<*>   Process Updating Content carried out in $final seconds.\n");
@@ -290,7 +290,7 @@ class workspaceTools {
      * Upgrade this workspace Content.
      *
      */
-    public function upgradeContent() {
+    public function upgradeContent($workSpace=SYS_SYS) {
         $this->initPropel(true);
         require_once('classes/model/Language.php');
         G::LoadThirdParty('pear/json', 'class.json');
@@ -304,7 +304,7 @@ class workspaceTools {
         }
         require_once('classes/model/Content.php');
         $regenerateContent = new Content();
-        $regenerateContent->regenerateContent($arrayLang);
+        $regenerateContent->regenerateContent($arrayLang, $workSpace);
     }
 
   /**
