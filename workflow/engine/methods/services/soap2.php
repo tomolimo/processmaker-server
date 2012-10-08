@@ -516,7 +516,7 @@ function GetVariables($params)
     return $res;
 }
 
-function GetAllVariables($params)
+function GetVariablesNames($params)
 {
 
     $vsResult = isValidSession($params->sessionId);
@@ -533,7 +533,7 @@ function GetAllVariables($params)
 
     $ws = new wsBase();
 
-    $res = $ws->getAllVariables($params->caseId);
+    $res = $ws->getVariablesNames($params->caseId);
 
     return $res;
 }
@@ -1191,7 +1191,7 @@ $server->addFunction("removeDocument");
 $server->addFunction("SendMessage");
 $server->addFunction("SendVariables");
 $server->addFunction("GetVariables");
-$server->addFunction("GetAllVariables");
+$server->addFunction("GetVariablesNames");
 $server->addFunction("DerivateCase");
 $server->addFunction("RouteCase");
 $server->addFunction("executeTrigger");

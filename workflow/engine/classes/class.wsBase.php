@@ -1659,7 +1659,7 @@ class wsBase
      *
      * @return $result will return an object
      */
-    public function getAllVariables($caseId)
+    public function getVariablesNames($caseId)
     {
         try {
 
