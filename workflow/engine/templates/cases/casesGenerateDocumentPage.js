@@ -7,7 +7,6 @@
         if(res == 'yes') {
           Ext.MessageBox.show({
             msg: _('ID_LOADING'),
-            progressText: 'Saving...',
             width:300,
             wait:true,
             waitConfig: {interval:200},
