@@ -342,6 +342,7 @@ var G_Grid = function(oForm, sGridName){
   };
 
   this.addGridRow = function() {
+    this.oGrid = document.getElementById(this.sGridName);
     var i, aObjects;
     var defaultValue = '';
     var n,a,x;
@@ -629,13 +630,16 @@ var G_Grid = function(oForm, sGridName){
     }
 
     if (this.aFields.length > 0) {
+    alert("set fields "+this.aFields.length)
       this.setFields(this.aFields, currentRow);
     }
     if (this.aFunctions.length > 0) {
+    alert("set fields "+this.aFunctions.length)
       this.assignFunctions(this.aFunctions, 'change', currentRow);
     }
 
     if (this.aFormulas.length > 0) {
+    alert("set fields "+this.aFormulas.length);
       this.assignFormulas(this.aFormulas, 'change', currentRow);
     }
 
@@ -679,6 +683,7 @@ var G_Grid = function(oForm, sGridName){
     }
     //Fires OnAddRow Event
     if (this.onaddrow) {
+    alert("addrow");
       this.onaddrow(currentRow);
     }
   };
