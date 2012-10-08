@@ -76,17 +76,22 @@ class RbacUsers extends BaseRbacUsers {
         $aFields = $rs[0]->toArray(BasePeer::TYPE_FIELDNAME);
         //verify password with md5, and md5 format
         //if ( $aFields['USR_PASSWORD'] == md5 ($sPassword ) ) {
-        if ( $aFields['USR_PASSWORD'] == md5 ($sPassword ) || 'md5:'.$aFields['USR_PASSWORD'] === $sPassword) {
-          if ($aFields['USR_DUE_DATE'] < date('Y-m-d') )
-            return -4;
-          if ($aFields['USR_STATUS'] != 1 )
-            return -3;
-          return $aFields['USR_UID'];
+        if (mb_strtoupper($sUsername, 'utf-8') === mb_strtoupper($aFields['USR_USERNAME'], 'utf-8')) {
+            if ( $aFields['USR_PASSWORD'] == md5 ($sPassword ) || 'md5:'.$aFields['USR_PASSWORD'] === $sPassword) {
+                if ($aFields['USR_DUE_DATE'] < date('Y-m-d') ) {
+                    return -4;
+                }
+                if ($aFields['USR_STATUS'] != 1 ) {
+                    return -3;
+                }
+                return $aFields['USR_UID'];
+            } else {
+                return -2;
+            }
+        } else  {
+            return -1;
         }
-        else
-          return -2;
-      }
-      else {
+      } else {
         return -1;
       }
     }
