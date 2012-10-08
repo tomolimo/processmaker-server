@@ -4796,11 +4796,12 @@ class Cases
               $oCriteria->getNewCriterion(ObjectPermissionPeer::TAS_UID, '')->addOr(
                 $oCriteria->getNewCriterion(ObjectPermissionPeer::TAS_UID, '0')
               )
-            )->addOr(
-              $oCriteria->getNewCriterion(ObjectPermissionPeer::OP_CASE_STATUS, 'ALL')->addOr(
-                $oCriteria->getNewCriterion(ObjectPermissionPeer::OP_CASE_STATUS, '')->addOr(
-                  $oCriteria->getNewCriterion(ObjectPermissionPeer::OP_CASE_STATUS, '0')
-                )
+            )
+        );
+        $oCriteria->add(
+            $oCriteria->getNewCriterion(ObjectPermissionPeer::OP_CASE_STATUS, 'ALL')->addOr(
+              $oCriteria->getNewCriterion(ObjectPermissionPeer::OP_CASE_STATUS, '')->addOr(
+                $oCriteria->getNewCriterion(ObjectPermissionPeer::OP_CASE_STATUS, '0')
               )
             )
         );
@@ -4831,11 +4832,12 @@ class Cases
                   $oCriteria->getNewCriterion(ObjectPermissionPeer::TAS_UID, '')->addOr(
                     $oCriteria->getNewCriterion(ObjectPermissionPeer::TAS_UID, '0')
                   )
-                )->addOr(
-                  $oCriteria->getNewCriterion(ObjectPermissionPeer::OP_CASE_STATUS, 'ALL')->addOr(
-                    $oCriteria->getNewCriterion(ObjectPermissionPeer::OP_CASE_STATUS, '')->addOr(
-                      $oCriteria->getNewCriterion(ObjectPermissionPeer::OP_CASE_STATUS, '0')
-                    )
+                )
+            );
+            $oCriteria->add(
+                $oCriteria->getNewCriterion(ObjectPermissionPeer::OP_CASE_STATUS, 'ALL')->addOr(
+                  $oCriteria->getNewCriterion(ObjectPermissionPeer::OP_CASE_STATUS, '')->addOr(
+                    $oCriteria->getNewCriterion(ObjectPermissionPeer::OP_CASE_STATUS, '0')
                   )
                 )
             );
