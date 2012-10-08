@@ -465,9 +465,6 @@ var G_Grid = function(oForm, sGridName){
                         eval('aObjects[n].onclick = ' + onclickevn.replace(/\[1\]/g, '\[' + currentRow + '\]') + ';');
                     }
                     break;
-                  case "file":
-                      aObjects[n].value = "";
-                      break;
                 }
               }
             }
@@ -633,16 +630,13 @@ var G_Grid = function(oForm, sGridName){
     }
 
     if (this.aFields.length > 0) {
-    alert("set fields "+this.aFields.length)
       this.setFields(this.aFields, currentRow);
     }
     if (this.aFunctions.length > 0) {
-    alert("set fields "+this.aFunctions.length)
       this.assignFunctions(this.aFunctions, 'change', currentRow);
     }
 
     if (this.aFormulas.length > 0) {
-    alert("set fields "+this.aFormulas.length);
       this.assignFormulas(this.aFormulas, 'change', currentRow);
     }
 
@@ -686,7 +680,6 @@ var G_Grid = function(oForm, sGridName){
     }
     //Fires OnAddRow Event
     if (this.onaddrow) {
-    alert("addrow");
       this.onaddrow(currentRow);
     }
   };
@@ -726,10 +719,6 @@ var G_Grid = function(oForm, sGridName){
     var iRow = Number(sRow);
     var iRowAux = iRow + 1;
     var lastItem = oObj.oGrid.rows.length - 2;
-    var elem2ParentNode;
-    var elem2Id   = "";
-    var elem2Name = "";
-    var elemAux;
 
     deleteRowOnDynaform(oObj, iRow);
 
@@ -737,40 +726,16 @@ var G_Grid = function(oForm, sGridName){
       for (i = 1; i < oObj.oGrid.rows[iRowAux - 1].cells.length; i++) {
         var oCell1 = oObj.oGrid.rows[iRowAux - 1].cells[i];
         var oCell2 = oObj.oGrid.rows[iRowAux].cells[i];
-
         switch (oCell1.innerHTML.replace(/^\s+|\s+$/g, '').substr(0, 6).toLowerCase()){
           case '<input':
             aObjects1 = oCell1.getElementsByTagName('input');
             aObjects2 = oCell2.getElementsByTagName('input');
-
             if (aObjects1 && aObjects2) {
-                switch (aObjects2[0].type) {
-                    case "file":
-                        elem2ParentNode = aObjects2[0].parentNode;
-                        elem2Id   = aObjects2[0].id;
-                        elem2Name = aObjects2[0].name;
-
-                        aObjects2[0].id = aObjects1[0].id;
-                        aObjects2[0].name = aObjects1[0].name;
-
-                        aObjects1[0].parentNode.replaceChild(aObjects2[0], aObjects1[0]);
-
-                        elemAux = document.createElement("input");
-                        elemAux.type = "file";
-                        elemAux.setAttribute("id", elem2Id);
-                        elemAux.setAttribute("name", elem2Name);
-
-                        elem2ParentNode.insertBefore(elemAux, elem2ParentNode.firstChild);
-                        break;
-                    default:
-                        if (aObjects2[0].type == "checkbox") {
-                            aObjects1[0].checked = aObjects2[0].checked;
-                        }
-
-                        aObjects1[0].value = aObjects2[0].value;
-                        aObjects1[0].className = aObjects2[0].className;
-                        break;
-                }
+              if(aObjects1[0].type=='checkbox'){
+                aObjects1[0].checked = aObjects2[0].checked;
+              }
+              aObjects1[0].value = aObjects2[0].value;
+              aObjects1[0].className = aObjects2[0].className;
             }
 
             aObjects = oCell1.getElementsByTagName('div');
@@ -827,14 +792,13 @@ var G_Grid = function(oForm, sGridName){
             }
             break;
           default:
-              if ((oCell2.innerHTML.indexOf("changeValues") == 111 || oCell2.innerHTML.indexOf("changeValues") == 115)) {
-                  break;
-              }
-
-              if (oCell2.innerHTML.toLowerCase().indexOf("deletegridrow") == -1) {
-                  oCell1.innerHTML = oCell2.innerHTML;
-              }
+            if (( oCell2.innerHTML.indexOf('changeValues')==111 || oCell2.innerHTML.indexOf('changeValues')==115 ) ) {
               break;
+            }
+          if (oCell2.innerHTML.toLowerCase().indexOf('deletegridrow') == -1) {
+            oCell1.innerHTML = oCell2.innerHTML;
+          }
+          break;
         }
       }
       iRowAux++;
