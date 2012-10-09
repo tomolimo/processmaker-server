@@ -1101,7 +1101,7 @@ function G_Text(form, element, name)
       cursorStart = currentSel.selectionStart;
       cursorEnd = currentSel.selectionEnd;
       switch(keyCode){
-        case 8:        
+        case 8:
           newValue  = currentValue.substring(0, cursorStart - 1);
           newValue += currentValue.substring(cursorEnd, currentValue.length);
           newCursor = cursorStart - 1;
