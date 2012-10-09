@@ -993,10 +993,30 @@ class processMap {
           $G_PUBLISH->AddContent('propeltable', 'paged-table', 'users/users_ShortList2', $this->getTaskUsersCriteria($sTaskUID, $_SESSION ['iType']), $aFields);
         }
 
+<<<<<<< HEAD
         G::RenderPage('publish', 'raw');
         return true;
       } catch (Exception $oError) {
         throw ($oError);
+=======
+        //If the function returns a DEFAULT calendar it means that this object doesn't have assigned any calendar
+        $aFields ['TAS_CALENDAR'] = $calendarInfo ['CALENDAR_APPLIED'] != 'DEFAULT' ? $calendarInfo ['CALENDAR_UID'] : "";
+      }
+
+      if ($iForm == 2) {
+        if ($aFields['TAS_ASSIGN_TYPE'] == 'SELF_SERVICE' && $aFields['TAS_GROUP_VARIABLE'] != '') {
+          $aFields['TAS_ASSIGN_TYPE'] = 'SELF_SERVICE_EVALUATE';
+        }
+      }
+
+      global $G_PUBLISH;
+      G::LoadClass('xmlfield_InputPM');
+      $G_PUBLISH = new Publisher ( );
+      if($sw_template){
+      	$G_PUBLISH->AddContent('view', $sFilename);
+      }else{
+      	$G_PUBLISH->AddContent('xmlform', 'xmlform', $sFilename, '', $aFields);
+>>>>>>> upstream/master
       }
     }
 
@@ -3030,9 +3050,47 @@ class processMap {
         $aConditions [] = array(ContentPeer::CON_LANG, DBAdapter::getStringDelimiter () . SYS_LANG . DBAdapter::getStringDelimiter ());
         $oCriteria->addJoinMC($aConditions, Criteria::LEFT_JOIN);
 
+<<<<<<< HEAD
         $oCriteria->add(ProcessUserPeer::PU_TYPE, 'GROUP_SUPERVISOR');
         $oCriteria->add(ProcessUserPeer::PRO_UID, $sProcessUID);
         $oCriteria->addAscendingOrderByColumn(ContentPeer::CON_VALUE);
+=======
+  /**
+   * listProcessesUser
+   *
+   * @param  string           $sProcessUID
+   * @return object(Criteria) $oCriteria
+   */
+  function listProcessesUser($sProcessUID) {
+    $aResp = array(
+      array(
+        'LA_PU_UID'  => 'char',
+        'LA_PRO_UID' => 'char',
+        'LA_USR_UID' => 'char',
+        'LA_PU_NAME' => 'char',
+        'LA_PU_TYPE_NAME' => 'char')
+    );
+
+    // Groups
+    $oCriteria = new Criteria('workflow');
+    $oCriteria->addSelectColumn(ProcessUserPeer::PU_UID);
+    $oCriteria->addSelectColumn(ProcessUserPeer::USR_UID);
+    $oCriteria->addSelectColumn(ProcessUserPeer::PRO_UID);
+    $oCriteria->addAsColumn('GRP_TITLE', ContentPeer::CON_VALUE);
+
+    $aConditions [] = array(ProcessUserPeer::USR_UID, ContentPeer::CON_ID);
+    $aConditions [] = array(ContentPeer::CON_CATEGORY, DBAdapter::getStringDelimiter () . 'GRP_TITLE' . DBAdapter::getStringDelimiter ());
+    $aConditions [] = array(ContentPeer::CON_LANG, DBAdapter::getStringDelimiter () . SYS_LANG . DBAdapter::getStringDelimiter ());
+    $oCriteria->addJoinMC($aConditions, Criteria::LEFT_JOIN);
+
+    $oCriteria->add(ProcessUserPeer::PU_TYPE, 'GROUP_SUPERVISOR');
+    $oCriteria->add(ProcessUserPeer::PRO_UID, $sProcessUID);
+    $oCriteria->addAscendingOrderByColumn(ContentPeer::CON_VALUE);
+
+    $oDataset = ProcessUserPeer::doSelectRS($oCriteria);
+    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    $oDataset->next();
+>>>>>>> upstream/master
 
         $oDataset = ProcessUserPeer::doSelectRS($oCriteria);
         $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
@@ -3128,8 +3186,33 @@ class processMap {
         $aConditions [] = array(ContentPeer::CON_CATEGORY, DBAdapter::getStringDelimiter () . 'GRP_TITLE' . DBAdapter::getStringDelimiter ());
         $aConditions [] = array(ContentPeer::CON_LANG, DBAdapter::getStringDelimiter () . SYS_LANG . DBAdapter::getStringDelimiter ());
 
+<<<<<<< HEAD
         $oCriteria->addJoinMC($aConditions, Criteria::LEFT_JOIN);
         $oCriteria->add(GroupwfPeer::GRP_UID, $aGRUS, Criteria::NOT_IN);
+=======
+    $aRespLi = array(
+      array(
+        'UID' => 'char',
+        'USER_GROUP' => 'char',
+        'TYPE_UID' => 'char',
+        'PRO_UID' => 'char')
+    );
+    $oCriteria = new Criteria('workflow');
+    $oCriteria->addSelectColumn(GroupwfPeer::GRP_UID);
+    $oCriteria->addAsColumn('GRP_TITLE', ContentPeer::CON_VALUE);
+
+    $aConditions [] = array(GroupwfPeer::GRP_UID, ContentPeer::CON_ID);
+    $aConditions [] = array(ContentPeer::CON_CATEGORY, DBAdapter::getStringDelimiter () . 'GRP_TITLE' . DBAdapter::getStringDelimiter ());
+    $aConditions [] = array(ContentPeer::CON_LANG, DBAdapter::getStringDelimiter () . SYS_LANG . DBAdapter::getStringDelimiter ());
+
+    $oCriteria->addJoinMC($aConditions, Criteria::LEFT_JOIN);
+    $oCriteria->add(GroupwfPeer::GRP_UID, $aGRUS, Criteria::NOT_IN);
+
+    $oCriteria->addAscendingOrderByColumn(ContentPeer::CON_VALUE);
+    $oDataset = GroupwfPeer::doSelectRS($oCriteria);
+    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    $oDataset->next();
+>>>>>>> upstream/master
 
         $oCriteria->addAscendingOrderByColumn(ContentPeer::CON_VALUE);
         $oDataset = GroupwfPeer::doSelectRS($oCriteria);
@@ -3347,6 +3430,10 @@ class processMap {
           } else {
             $sObject = G::LoadTranslation('ID_ALL');
           }
+          break;
+        case 'CASES_NOTES' :
+          $sObjectType = G::LoadTranslation('ID_CASES_NOTES');
+          $sObject = G::LoadTranslation('ID_ALL');
           break;
         default :
           $sObjectType = G::LoadTranslation('ID_ALL');
