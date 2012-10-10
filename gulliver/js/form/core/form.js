@@ -3082,7 +3082,6 @@ var validateForm = function(sRequiredFields) {
         }
       }
     }
-
     return true;
   }
 };
