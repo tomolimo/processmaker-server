@@ -402,13 +402,15 @@ public function userExists($UsrUid)
     public function userVacation($UsrUid = "")
     {
         $aFields = array();
+        $cnt = 0;
         do {
-            if ($UsrUid != ""){
+            if ($UsrUid != "" && $cnt < 100) {
                 $aFields = $this->load($UsrUid);
                 $UsrUid = $aFields['USR_REPLACED_BY'];
             } else {
                 break;
             }
+            $cnt++;
         } while ($aFields['USR_STATUS'] != 'ACTIVE');
         return $aFields;
     }
