@@ -382,7 +382,6 @@ class Content extends BaseContent {
             FROM CONTENT_BACKUP");
         $statement->executeQuery();
 
-        $connection = Propel::getConnection('workflow');
         $statement  = $connection->prepareStatement("DROP TABLE CONTENT_BACKUP");
         $statement->executeQuery();
 
@@ -419,7 +418,7 @@ class Content extends BaseContent {
     }
 
     function fastInsertContent ($ConCategory, $ConParent, $ConId, $ConLang, $ConValue) {
-        $ConValue = htmlentities($ConValue, ENT_QUOTES, "UTF-8");
+        $ConValue = mysql_real_escape_string($ConValue);
         $connection = Propel::getConnection('workflow');
         $statement  = $connection->prepareStatement("INSERT INTO CONTENT_BACKUP (
         CON_CATEGORY, CON_PARENT, CON_ID , CON_LANG, CON_VALUE)

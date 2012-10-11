@@ -295,7 +295,7 @@ class workspaceTools {
         require_once 'classes/model/Translation.php';
         $translation = new Translation();
         $information = $translation->getTranslationEnvironments();
-
+        $arrayLang = array();
         foreach ($information as $key => $value) {
             $arrayLang[] = trim($value['LOCALE']);
         }

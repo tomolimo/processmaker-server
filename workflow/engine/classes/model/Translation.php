@@ -283,9 +283,8 @@ class Translation extends BaseTranslation {
             if (file_exists(PATH_CORE . "META-INF" . PATH_SEP . "translation.".$locale)) {
                 G::rm_dir(PATH_DATA . "META-INF" . PATH_SEP . "translation.".$locale);
             }
-
-            if (file_exists(PATH_CORE . '/content/translations/processmaker.'.$locale.'.po')) {
-                G::rm_dir(PATH_CORE . '/content/translations/processmaker.'.$locale.'.po');
+            if (file_exists(PATH_CORE . PATH_SEP . 'content' . PATH_SEP . 'translations' . PATH_SEP . 'processmaker' . $locale . '.po')) {
+                G::rm_dir(PATH_CORE . PATH_SEP . 'content' . PATH_SEP . 'translations' . PATH_SEP . 'processmaker' . $locale . '.po');
             }
         }
     }
