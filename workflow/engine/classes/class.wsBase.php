@@ -76,7 +76,7 @@ class wsBase
 {
     public $stored_system_variables; //boolean
     public $wsSessionId; //web service session id, if the wsbase function is used from a WS request
-    private $originalValues = array ();  // SESSION temporary array store.
+    private $originalValues = array (); // SESSION temporary array store.
 
     public function __construct ($params = null)
     {
