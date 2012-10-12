@@ -91,7 +91,7 @@ abstract class BaseProcess extends BaseObject implements Persistent
      * The value for the pro_subprocess field.
      * @var        int
      */
-    protected $pro_subprocess = 1;
+    protected $pro_subprocess = 0;
 
     /**
      * The value for the pro_show_delegate field.
@@ -754,7 +754,7 @@ abstract class BaseProcess extends BaseObject implements Persistent
             $v = (int) $v;
         }
 
-        if ($this->pro_subprocess !== $v || $v === 1) {
+        if ($this->pro_subprocess !== $v || $v === 0) {
             $this->pro_subprocess = $v;
             $this->modifiedColumns[] = ProcessPeer::PRO_SUBPROCESS;
         }
