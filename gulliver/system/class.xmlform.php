@@ -3861,7 +3861,7 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
                 . '<a onclick="removeValue(\''.$pID.'\'); return false;" style="position:relative;left:-17px;top:5px;" >'
                 . '  <img src="/images/icons_silk/calendar_x_button.png" />'
                 . '</a>'
-                . '<a id="'.$pID.'[btn]" style="position:relative;left:-22px;top:0px;" >x'
+                . '<a id="'.$pID.'[btn]" style="position:relative;left:-22px;top:0px;" >'
                 . '  <img src="/images/pmdateicon.png" border="0" width="12" height="14" />'
                 . '</a>'
                 . '<script>datePicker4("", \''.$pID.'\', \''.$mask.'\', \''.$startDate.'\', \''.$endDate.'\','.$Time.')</script>';
