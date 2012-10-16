@@ -3861,7 +3861,7 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
                 . '<a onclick="removeValue(\''.$pID.'\'); return false;" style="position:relative;left:-17px;top:5px;" >'
                 . '  <img src="/images/icons_silk/calendar_x_button.png" />'
                 . '</a>'
-                . '<a id="'.$pID.'[btn]" style="position:relative;left:-22px;top:0px;" >'
+                . '<a id="'.$pID.'[btn]" style="position:relative;left:-22px;top:0px;" >x'
                 . '  <img src="/images/pmdateicon.png" border="0" width="12" height="14" />'
                 . '</a>'
                 . '<script>datePicker4("", \''.$pID.'\', \''.$mask.'\', \''.$startDate.'\', \''.$endDate.'\','.$Time.')</script>';
@@ -4789,19 +4789,16 @@ class xmlformTemplate extends Smarty
       $value = (isset ( $form->values [$k] )) ? $form->values [$k] : NULL;
       $result [$k] = G::replaceDataField ( $form->fields [$k]->label, $form->values );
       if ($form->type == 'xmlform') {
-        if ($v->type == 'checkgroup' || $v->type == 'radiogroup') {
-          $firstValueOptions = '';
-          foreach ($v->options as $indexOption => $valueOptions) {
-            $firstValueOptions = $indexOption;
-            break;
-          }
-          if ($firstValueOptions != '') {
-            $result[$k] = '<label for="form[' . $k . '][' . $firstValueOptions . ']">' . $result[$k] . '</label>';
-          } else {
-            $result[$k] = '<label for="form[' . $k . ']">' . $result[$k] . '</label>';
-          }
-        } else {
+        if ($v->type != 'checkgroup' && $v->type != 'radiogroup') {
           $result[$k] = '<label for="form[' . $k . ']">' . $result[$k] . '</label>';
+        } else {
+          if (is_array($v->options)) {
+            foreach ($v->options as $optionValue => $optionLabel) {
+              if (isset($form->fields[$k]->options[$optionValue])) {
+                $form->fields[$k]->options[$optionValue] = '<label for="form[' . $k . '][' . $optionValue . ']">' . $form->fields[$k]->options[$optionValue] . '</label>';
+              }
+            }
+          }
         }
       }
       if (! is_array ( $value )) {
