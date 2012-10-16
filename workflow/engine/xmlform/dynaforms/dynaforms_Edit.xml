@@ -17,7 +17,7 @@
   <en>Create from a PM Table</en>
 </ADD_TABLE>
 
-<DYN_TITLE type="text" maxlength="48" size ="48" required="1">
+<DYN_TITLE type="text" maxlength="256" size ="48" required="1">
   <en>Title</en>
 </DYN_TITLE>
 
