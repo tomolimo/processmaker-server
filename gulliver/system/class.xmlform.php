@@ -4781,7 +4781,9 @@ class xmlformTemplate extends Smarty
   function getFields(&$form, $therow = -1)
   {
     $result = array ();
+
     foreach ( $form->fields as $k => $v ) {
+
       if ($form->mode != '') { #@ last modification: erik
         $v->mode = $form->mode; #@
       } #@
@@ -4789,7 +4791,20 @@ class xmlformTemplate extends Smarty
       $value = (isset ( $form->values [$k] )) ? $form->values [$k] : NULL;
       $result [$k] = G::replaceDataField ( $form->fields [$k]->label, $form->values );
       if ($form->type == 'xmlform') {
-        $result[$k] = '<label for="form[' . $k . ']">' . $result[$k] . '</label>';
+        if ($v->type == 'checkgroup' || $v->type == 'radiogroup') {
+          $firstValueOptions = '';
+          foreach ($v->options as $indexOption => $valueOptions) {
+            $firstValueOptions = $indexOption;
+            break;
+          }
+          if ($firstValueOptions != '') {
+            $result[$k] = '<label for="form[' . $k . '][' . $firstValueOptions . ']">' . $result[$k] . '</label>';
+          } else {
+            $result[$k] = '<label for="form[' . $k . ']">' . $result[$k] . '</label>';
+          }
+        } else {
+          $result[$k] = '<label for="form[' . $k . ']">' . $result[$k] . '</label>';
+        }
       }
       if (! is_array ( $value )) {
         if ($form->type == 'grid') {
