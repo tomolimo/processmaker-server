@@ -5503,7 +5503,7 @@ function getDirectorySize($path,$maxmtime=0)
     */
     function isPMUnderUpdating($setFlag = 2)
     {
-        $fileCheck = PATH_TRUNK."UPDATE.dat";
+        $fileCheck = PATH_DATA."UPDATE.dat";
         if($setFlag == 0){
             if (file_exists($fileCheck)){
                 unlink ($fileCheck);

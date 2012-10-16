@@ -273,7 +273,6 @@
   // the request correspond to valid php page, now parse the URI
   G::parseURI(getenv("REQUEST_URI"), $isRestRequest);
 
-  //if(isset($_SERVER['Updating']) && $_SERVER['Updating'] == true)
   if(G::isPMUnderUpdating())
   {
       header("location: /update/updating.php");
