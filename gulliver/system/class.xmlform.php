@@ -4781,9 +4781,7 @@ class xmlformTemplate extends Smarty
   function getFields(&$form, $therow = -1)
   {
     $result = array ();
-
     foreach ( $form->fields as $k => $v ) {
-
       if ($form->mode != '') { #@ last modification: erik
         $v->mode = $form->mode; #@
       } #@

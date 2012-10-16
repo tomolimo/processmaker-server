@@ -685,7 +685,6 @@ var G_Grid = function(oForm, sGridName){
     if (this.onaddrow) {
       this.onaddrow(currentRow);
     }
-
     newInputs = oNewRow.getElementsByTagName('input');
     for (var i = 0; i <= newInputs.length; i++) {
       if (typeof(newInputs[i]) != 'undefined' && newInputs[i].type != 'hidden') {
