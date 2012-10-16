@@ -258,11 +258,6 @@
         if ( DEBUG_TIME_LOG ) G::logTimeByPage(); //log this page
         die;
         break;
-      case 'update':
-        header ("location: /update/updating.php");
-        if ( DEBUG_TIME_LOG ) G::logTimeByPage();
-        die;
-        break;
       default :
         if (substr($realPath, 0, 12) == 'rest-service') {
           $isRestRequest = true;
@@ -278,13 +273,13 @@
   // the request correspond to valid php page, now parse the URI
   G::parseURI(getenv("REQUEST_URI"), $isRestRequest);
 
-  if(isset($_SERVER['Updating']) && $_SERVER['Updating'] == true)
+  //if(isset($_SERVER['Updating']) && $_SERVER['Updating'] == true)
+  if(G::isPMUnderUpdating())
   {
       header("location: /update/updating.php");
       if ( DEBUG_TIME_LOG ) G::logTimeByPage();
       die;
   }
-
   
   // verify if index.html exists
   if (!file_exists(PATH_HTML . 'index.html')) { // if not, create it from template
