@@ -29,3 +29,4 @@ if ($RBAC->userCanAccess( 'PM_SETUP_ADVANCE' ) != 1) {
 }
 
 $RBAC->removeAuthSource( $_POST['AUTH_SOURCE_UID'] );
+
