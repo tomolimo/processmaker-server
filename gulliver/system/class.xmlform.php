@@ -3101,7 +3101,7 @@ class XmlForm_Field_RadioGroup extends XmlForm_Field {
         if( isset($this->linkType) && ($this->linkType == 1 || $this->linkType == "1") ){
             $html .= '<input id="form['.$this->name.']['.$optionName.']" name="form['.$this->name.']" type="radio" value="'.$optionName.'" '.(($optionName==$value) ? ' checked' : '') . '><a href="#" onclick="executeEvent(\'form['.$this->name.']['.$optionName.']\', \'click\'); return false;">' . $option . '</a></input>';
         } else {
-            $html .= '<input id="form['.$this->name.']['.$optionName.']" name="form['.$this->name.']" type="radio" value="'.$optionName.'" '.(($optionName==$value) ? ' checked' : '') . '>' . $option . '</input>';
+            $html .= '<input id="form['.$this->name.']['.$optionName.']" name="form['.$this->name.']" type="radio" value="'.$optionName.'" '.(($optionName==$value) ? ' checked' : '') . '><label for="form[' . $this->name . '][' . $optionName . ']">' . $option . '</label></input>';
         }
         if(++$i==count($this->options)){
           $html .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$this->renderHint();
@@ -3117,7 +3117,7 @@ class XmlForm_Field_RadioGroup extends XmlForm_Field {
     } elseif ($this->mode === 'view') {
       $html = '';
       foreach ( $this->options as $optionName => $option ) {
-        $html .= '<input class="module_app_input___gray" id="form[' . $this->name . '][' . $optionName . ']" name="form[' . $this->name . ']" type=\'radio\' value="' . $optionName . '" ' . (($optionName == $value) ? 'checked' : '') . ' disabled><span class="FormCheck">' . $option . '</span></input><br>';
+        $html .= '<input class="module_app_input___gray" id="form[' . $this->name . '][' . $optionName . ']" name="form[' . $this->name . ']" type=\'radio\' value="' . $optionName . '" ' . (($optionName == $value) ? 'checked' : '') . ' disabled><span class="FormCheck"><label for="form[' . $this->name . '][' . $optionName . ']">' . $option . '</label></span></input><br>';
        if($optionName == $value)
          $html .= '<input type="hidden"  id="form[' . $this->name . '][' . $optionName . ']" name="form[' . $this->name . ']" value="' . (($optionName == $value) ? $optionName : '') . '">';
       }
@@ -3198,7 +3198,7 @@ class XmlForm_Field_CheckGroup extends XmlForm_Field
       $i=0;
       $html = '';
       foreach ( $this->options as $optionName => $option ) {
-        $html .= '<input id="form[' . $this->name . '][' . $optionName . ']" name="form[' . $this->name . '][]" type=\'checkbox\' value="' . $optionName . '"' . (in_array ( $optionName, $value ) ? 'checked' : '') . '><span class="FormCheck">' . $option . '</span></input>';
+        $html .= '<input id="form[' . $this->name . '][' . $optionName . ']" name="form[' . $this->name . '][]" type=\'checkbox\' value="' . $optionName . '"' . (in_array ( $optionName, $value ) ? 'checked' : '') . '><span class="FormCheck"><label for="form[' . $this->name . '][' . $optionName . ']">' . $option . '</label></span></input>';
         if(++$i==count($this->options)){
              $html .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$this->renderHint();
         }
@@ -3208,7 +3208,7 @@ class XmlForm_Field_CheckGroup extends XmlForm_Field
     } elseif ($this->mode === 'view') {
       $html = '';
       foreach ( $this->options as $optionName => $option ) {
-        $html .= '<input class="FormCheck" id="form[' . $this->name . '][' . $optionName . ']" name="form[' . $this->name . '][]" type=\'checkbox\' value="' . $optionName . '"' . (in_array ( $optionName, $value ) ? 'checked' : '') . ' disabled><span class="FormCheck">' . $option . '</span></input><br>';
+        $html .= '<input class="FormCheck" id="form[' . $this->name . '][' . $optionName . ']" name="form[' . $this->name . '][]" type=\'checkbox\' value="' . $optionName . '"' . (in_array ( $optionName, $value ) ? 'checked' : '') . ' disabled><span class="FormCheck"><label for="form[' . $this->name . '][' . $optionName . ']">' . $option . '</label></span></input><br>';
         $html .= '<input type="hidden"  id="form[' . $this->name . '][' . $optionName . ']" name="form[' . $this->name . '][]"  value="'.((in_array ( $optionName, $value )) ? $optionName : '').'">';
       }
       return $html;
@@ -4789,18 +4789,7 @@ class xmlformTemplate extends Smarty
       $value = (isset ( $form->values [$k] )) ? $form->values [$k] : NULL;
       $result [$k] = G::replaceDataField ( $form->fields [$k]->label, $form->values );
       if ($form->type == 'xmlform') {
-        if ($v->type == 'checkgroup' || $v->type == 'radiogroup') {
-          $firstValueOptions = '';
-          foreach ($v->options as $indexOption => $valueOptions) {
-            $firstValueOptions = $indexOption;
-            break;
-          }
-          if ($firstValueOptions != '') {
-            $result[$k] = '<label for="form[' . $k . '][' . $firstValueOptions . ']">' . $result[$k] . '</label>';
-          } else {
-            $result[$k] = '<label for="form[' . $k . ']">' . $result[$k] . '</label>';
-          }
-        } else {
+        if ($v->type != 'checkgroup' && $v->type != 'radiogroup') {
           $result[$k] = '<label for="form[' . $k . ']">' . $result[$k] . '</label>';
         }
       }
