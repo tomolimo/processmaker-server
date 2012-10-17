@@ -55,7 +55,6 @@ class XmlForm_Field_HTML extends XmlForm_Field_Textarea
     }
     return $html;
     }*/
-
     /**
      * attachEvents function is putting its events
      *
