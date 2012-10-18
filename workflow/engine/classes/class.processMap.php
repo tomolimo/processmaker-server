@@ -3428,7 +3428,8 @@ class processMap
      * @param string $sProcessUID
      * @return object(Criteria) $oCriteria
      */
-    public function listNoProcessesUser($sProcessUID) {
+    public function listNoProcessesUser ($sProcessUID)
+    {
         G::LoadSystem('rbac');
         $memcache = & PMmemcached::getSingleton(SYS_SYS);
 
@@ -3543,13 +3544,14 @@ class processMap
      * @param string $sUsrUID
      * @return void
      */
-    function assignProcessUser($sProcessUID, $sUsrUID, $sTypeUID) {
-      $oProcessUser = new ProcessUser ( );
-      $puType = 'SUPERVISOR';
-      if ($sTypeUID == 'Group') {
-        $puType = 'GROUP_SUPERVISOR';
-      }
-      $oProcessUser->create(array('PU_UID' => G::generateUniqueID (), 'PRO_UID' => $sProcessUID, 'USR_UID' => $sUsrUID, 'PU_TYPE' => $puType));
+    public function assignProcessUser($sProcessUID, $sUsrUID, $sTypeUID)
+    {
+        $oProcessUser = new ProcessUser ( );
+        $puType = 'SUPERVISOR';
+        if ($sTypeUID == 'Group') {
+            $puType = 'GROUP_SUPERVISOR';
+        }
+        $oProcessUser->create(array('PU_UID' => G::generateUniqueID (), 'PRO_UID' => $sProcessUID, 'USR_UID' => $sUsrUID, 'PU_TYPE' => $puType));
     }
 
     /**
