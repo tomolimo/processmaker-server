@@ -205,14 +205,10 @@ function downloadDoc($alfrescoServerUrl, $pathFile , $pathFolder, $user, $pwd) {
         die;
     }
 
-    $partPathFile = explode('/',$pathFile);
-    if (count($partPathFile) == 1) {
-        $nameFile = $pathFile;
-    } else {
-        $nameFile = $partPathFile[count($partPathFile)-1];
-    }
+    $dataPathFile = pathinfo($pathFile);
+    $nameFile = $dataPathFile['basename'];
 
-    $alfresco_url = "$alfrescoServerUrl/s/cmis/p/Sites/$pathFile";
+    $alfresco_url = "$alfrescoServerUrl" . PATH_SEP . "s" . PATH_SEP . "cmis" . PATH_SEP . "p" . PATH_SEP . "Sites" . PATH_SEP . "$pathFile";
     $alfresco_exec = RestClient::get($alfresco_url,$user,$pwd,'application/atom+xml');
     $sXmlArray = $alfresco_exec->getResponse();
     $sXmlArray = eregi_replace("[\n|\r|\n\r]", '', $sXmlArray);
@@ -233,7 +229,7 @@ function downloadDoc($alfrescoServerUrl, $pathFile , $pathFolder, $user, $pwd) {
         $pathFolder .= '/';
     }
 
-    $fp = fopen($pathFolder . $nameFile, "x");
+    $fp = fopen($pathFolder . $nameFile, "w+");
     fwrite($fp, $content);
     fclose($fp);
     return true;
