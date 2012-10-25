@@ -60,12 +60,12 @@ if (($RBAC_Response=$RBAC->userCanAccess("PM_FACTORY"))!=1) return $RBAC_Respons
   else {
     $_POST['form']['PME_SAVELABEL'] = 0;
   }
-
-  if (isset($_POST['form']['PME_SAVELABEL']) 
+  $A = $_POST['form']['PME_A'];
+  if (isset($_POST['form']['PME_SAVELABEL'])
       && isset($_POST['form']['PME_CODE'])
       && $_POST['form']['PME_TYPE'] === 'javascript'){
     $sType     = $_POST['form']['PME_TYPE'];
-    $A         = $_POST['form']['PME_A'];
+    // $A         = $_POST['form']['PME_A'];
     $fieldName = $_POST['form']['PME_XMLNODE_NAME'];
     $pmeCode   = $_POST['form']['PME_CODE'];
     $_POST['form']['PME_CODE'] = '';
@@ -82,9 +82,9 @@ if (($RBAC_Response=$RBAC->userCanAccess("PM_FACTORY"))!=1) return $RBAC_Respons
   define('DB_XMLDB_NAME','');
   define('DB_XMLDB_TYPE','myxml');
 
-  if (isset($_POST['form']['PME_XMLNODE_VALUE'])){
-    $_POST['form']['PME_XMLNODE_VALUE'] = str_replace("'", "''" , $_POST['form']['PME_XMLNODE_VALUE']);
-  }
+  //  if (isset($_POST['form']['PME_XMLNODE_VALUE'])){
+  //    $_POST['form']['PME_XMLNODE_VALUE'] = str_replace("'", "''" , $_POST['form']['PME_XMLNODE_VALUE']);
+  //  }
 
   if (file_exists( PATH_XMLFORM . 'dynaforms/fields/' . $type . '.xml')) {
     $form=new Form('dynaforms/fields/' . $type , PATH_XMLFORM);
@@ -142,12 +142,12 @@ if (($RBAC_Response=$RBAC->userCanAccess("PM_FACTORY"))!=1) return $RBAC_Respons
   if ($_POST['form']['XMLNODE_NAME']==='') return;
 
   $attributes = $_POST['form'];
-  
+
   if (isset($attributes['HINT'])) {
     $attributes['HINT'] = addslashes($attributes['HINT']);
     $attributes['HINT'] = htmlspecialchars($attributes['HINT'], ENT_QUOTES, "UTF-8");
   }
-  
+
   if (isset($attributes['CODE'])) $attributes['XMLNODE_VALUE'] = ($attributes['CODE']);
 
   $labels = array();
@@ -202,7 +202,22 @@ if (($RBAC_Response=$RBAC->userCanAccess("PM_FACTORY"))!=1) return $RBAC_Respons
     }
   }
   unset($attributes['VALIDATE_NAME']);
-  $fields->Save( $attributes , $labels , $options );
+  $fields->setFileName(PATH_DYNAFORM . $file . '.xml' );
+
+  $FieldAttributes  = $attributes;
+  $FieldAttrib = array();
+  unset($FieldAttributes['XMLNODE_NAME']);
+  unset($FieldAttributes['XMLNODE_NAME_OLD']);
+  unset($FieldAttributes['XMLNODE_VALUE']);
+  unset($FieldAttributes['BTN_CANCEL']);
+  unset($FieldAttributes['SAVELABEL']);
+  foreach ($FieldAttributes as $key => $value) {
+      if ($value != "") {
+          $FieldAttrib[strtolower($key)] = $value;
+      }
+  }
+
+  $fields->saveField($attributes, $FieldAttrib, $labels );
 
   G::LoadClass('xmlDb');
   $i         = 0;

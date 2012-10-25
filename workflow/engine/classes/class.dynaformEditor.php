@@ -38,7 +38,7 @@ G::LoadClass( 'dynaFormField' );
 require_once ('classes/model/Process.php');
 require_once ('classes/model/Dynaform.php');
 G::LoadClass( 'xmlDb' );
-
+G::LoadSystem('dynaformhandler');
 /**
  *
  * @package workflow.engine.classes
@@ -699,30 +699,40 @@ class dynaformEditorAjax extends dynaformEditor implements iDynaformEditorAjax
                 $tmp['Properties'] = $Fields;
                 self::_setTmpData( $tmp );
             }
+            $dynaform = new dynaFormHandler( PATH_DYNAFORM . "{$file}.xml" );
             $dbc2 = new DBConnection( PATH_DYNAFORM . $file . '.xml', '', '', '', 'myxml' );
             $ses2 = new DBSession( $dbc2 );
             //if (!isset($Fields['ENABLETEMPLATE'])) $Fields['ENABLETEMPLATE'] ="0";
-            if (isset( $Fields['WIDTH'] )) {
-                $ses2->execute( G::replaceDataField( "UPDATE . SET WIDTH = @@WIDTH WHERE XMLNODE_NAME = 'dynaForm' ", $Fields ) );
-            }
+
             /*if (isset($Fields['ENABLETEMPLATE'])) {
-      $ses2->execute(G::replaceDataField("UPDATE . SET ENABLETEMPLATE = @@ENABLETEMPLATE WHERE XMLNODE_NAME = 'dynaForm' ", $Fields));
-      }*/
+                $ses2->execute(G::replaceDataField("UPDATE . SET ENABLETEMPLATE = @@ENABLETEMPLATE WHERE XMLNODE_NAME = 'dynaForm' ", $Fields));
+            }*/
             if (isset( $Fields['DYN_TYPE'] )) {
-                $ses2->execute( G::replaceDataField( "UPDATE . SET TYPE = @@DYN_TYPE WHERE XMLNODE_NAME = 'dynaForm' ", $Fields ) );
+                //$ses2->execute( G::replaceDataField( "UPDATE . SET TYPE = @@DYN_TYPE WHERE XMLNODE_NAME = 'dynaForm' ", $Fields ) );
+                $dynaform->modifyHeaderAttribute('type', $Fields['DYN_TYPE']);
+            }
+            if (isset( $Fields['WIDTH'] )) {
+                // $ses2->execute( G::replaceDataField( "UPDATE . SET WIDTH = @@WIDTH WHERE XMLNODE_NAME = 'dynaForm' ", $Fields ) );
+                $dynaform->modifyHeaderAttribute('width', $Fields['WIDTH']);
+                //g::pr($dynaform->getHeaderAttribute('width'));
             }
             if (isset( $Fields['MODE'] )) {
-                $ses2->execute( G::replaceDataField( "UPDATE . SET MODE = @@MODE WHERE XMLNODE_NAME = 'dynaForm' ", $Fields ) );
+                // $ses2->execute( G::replaceDataField( "UPDATE . SET MODE = @@MODE WHERE XMLNODE_NAME = 'dynaForm' ", $Fields ) );
+                $dynaform->modifyHeaderAttribute('mode', $Fields['MODE']);
             }
             if (isset( $Fields['NEXTSTEPSAVE'] )) {
-                $ses2->execute( G::replaceDataField( "UPDATE . SET NEXTSTEPSAVE = @@NEXTSTEPSAVE WHERE XMLNODE_NAME = 'dynaForm' ", $Fields ) );
+                //$ses2->execute( G::replaceDataField( "UPDATE . SET NEXTSTEPSAVE = @@NEXTSTEPSAVE WHERE XMLNODE_NAME = 'dynaForm' ", $Fields ) );
+                $dynaform->modifyHeaderAttribute('nextstepsave', $Fields['NEXTSTEPSAVE']);
             }
             if (isset( $Fields['PRINTDYNAFORM'] )) {
-                $ses2->execute( G::replaceDataField( "UPDATE . SET PRINTDYNAFORM = @@PRINTDYNAFORM WHERE XMLNODE_NAME = 'dynaForm' ", $Fields ) );
+                //$ses2->execute( G::replaceDataField( "UPDATE . SET PRINTDYNAFORM = @@PRINTDYNAFORM WHERE XMLNODE_NAME = 'dynaForm' ", $Fields ) );
+                $dynaform->modifyHeaderAttribute('printdynaform', $Fields['PRINTDYNAFORM']);
             }
             if (isset( $Fields['ADJUSTGRIDSWIDTH'] )) {
-                $ses2->execute( G::replaceDataField( "UPDATE . SET ADJUSTGRIDSWIDTH = @@ADJUSTGRIDSWIDTH WHERE XMLNODE_NAME = 'dynaForm' ", $Fields ) );
+                //$ses2->execute( G::replaceDataField( "UPDATE . SET ADJUSTGRIDSWIDTH = @@ADJUSTGRIDSWIDTH WHERE XMLNODE_NAME = 'dynaForm' ", $Fields ) );
+                $dynaform->modifyHeaderAttribute('adjustgridswidth', $Fields['ADJUSTGRIDSWIDTH']);
             }
+
             return 0;
         } catch (Exception $e) {
             return (array) $e;
@@ -753,9 +763,13 @@ class dynaformEditorAjax extends dynaformEditor implements iDynaformEditorAjax
     {
         $file = G::decrypt( $A, URL_KEY );
         $value = $value == "1" ? "1" : "0";
-        $dbc2 = new DBConnection( PATH_DYNAFORM . $file . '.xml', '', '', '', 'myxml' );
-        $ses2 = new DBSession( $dbc2 );
-        $ses2->execute( "UPDATE . SET ENABLETEMPLATE = '$value'" );
+        // $dbc2 = new DBConnection( PATH_DYNAFORM . $file . '.xml', '', '', '', 'myxml' );
+        // $ses2 = new DBSession( $dbc2 );
+        // $ses2->execute( "UPDATE . SET ENABLETEMPLATE = '$value'" );
+
+        $dynaform = new dynaFormHandler( PATH_DYNAFORM . "{$file}.xml" );
+        $dynaform->modifyHeaderAttribute('enabletemplate', $value);
+
         return $value;
     }
 

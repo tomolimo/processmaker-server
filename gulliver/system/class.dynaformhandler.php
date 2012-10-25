@@ -1,11 +1,11 @@
 <?php
-/** 
+/**
  * class.dynaformhandler.php
- * @package gulliver.system 
+ * @package gulliver.system
 
  * ProcessMaker Open Source Edition
  * Copyright (C) 2004 - 2008 Colosa Inc.
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
  * published by the Free Software Foundation, either version 3 of the
@@ -15,13 +15,13 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Affero General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * 
- * For more information, contact Colosa Inc, 2566 Le Jeune Rd., 
+ *
+ * For more information, contact Colosa Inc, 2566 Le Jeune Rd.,
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
- * 
+ *
  */
 
 /**
@@ -45,7 +45,7 @@ class dynaFormHandler
    */
  function __construct($file=null)
   {
-    if( !isset($file) ) 
+    if( !isset($file) )
       throw new Exception('[Class dynaFormHandler] ERROR:  xml file was not set!!');
     $this->xmlfile = $file;
     $this->load();
@@ -76,7 +76,7 @@ class dynaFormHandler
    * @return void
    */
   function __cloneEmpty()
-  {    
+  {
     $xPath = new DOMXPath($this->dom);
     $nodeList = $xPath->query('/dynaForm/*');
     foreach ($nodeList as $domElement){
@@ -99,7 +99,7 @@ class dynaFormHandler
       default: return file_get_contents($this->xmlfile);
     }
   }
-  
+
   /**
    * Function getNode
    * @access public
@@ -135,6 +135,12 @@ class dynaFormHandler
   function add($name, $attributes, $childs, $childs_childs=null)
   {
     $newnode = $this->root->appendChild($this->dom->createElement($name));
+    if( isset($attributes['#cdata']) ) {
+      $newnode->appendChild($this->dom->createTextNode("\n"));
+      $newnode->appendChild($this->dom->createCDATASection($attributes['#cdata']));
+      $newnode->appendChild($this->dom->createTextNode("\n"));
+      unset($attributes['#cdata']);
+    }
     foreach($attributes as $att_name => $att_value) {
       $newnode->setAttribute($att_name, $att_value);
     }
@@ -159,6 +165,35 @@ class dynaFormHandler
     $this->save();
   }
 
+    private function hasChild($p)
+    {
+        if ($p->hasChildNodes()) {
+            foreach ($p->childNodes as $c) {
+                if ($c->nodeType == XML_ELEMENT_NODE) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private function getChildNode($x)
+    {
+        $chidNode = array();
+        foreach ($x->childNodes as $p) {
+            if ($this->hasChild($p)) {
+                getChildNode($p);
+            } else {
+                if ($p->nodeType == XML_ELEMENT_NODE) {
+
+                    $chidNode[] = array('node' => $x->nodeName, 'nodeName' => $p->nodeName,
+                                         'name' => $p->getAttribute('name'), 'nodeValue' => $p->nodeValue);
+                }
+            }
+        }
+        return array($x->nodeName => $chidNode);
+    }
+
   /**
    * Function replace
    * @access public
@@ -171,39 +206,69 @@ class dynaFormHandler
    */
   function replace($replaced, $name, $attributes, $childs=null, $childs_childs=null)
   {
+    $chidNode= array();
     $element = $this->root->getElementsByTagName($replaced)->item(0);
     $this->root->replaceChild($this->dom->createElement($name), $element);
-    $newnode = $element = $this->root->getElementsByTagName($name)->item(0);
-    
+    // $newnode = $element = $this->root->getElementsByTagName($name)->item(0);
+    $newnode = $this->root->getElementsByTagName($name)->item(0);
+
     if( isset($attributes['#text']) ) {
       $newnode->appendChild($this->dom->createTextNode($attributes['#text']));
       unset($attributes['#text']);
     }
     if( isset($attributes['#cdata']) ) {
+      $newnode->appendChild($this->dom->createTextNode("\n"));
       $newnode->appendChild($this->dom->createCDATASection($attributes['#cdata']));
+      $newnode->appendChild($this->dom->createTextNode("\n"));
       unset($attributes['#cdata']);
     }
-    
+
     foreach($attributes as $att_name => $att_value) {
-      $newnode->setAttribute($att_name, $att_value);
+      if (!is_array($att_value)) {
+        $newnode->setAttribute($att_name, $att_value);
+      }
+
     }
     if(is_array($childs)){
+      foreach ($element->childNodes as $pNode) {
+          if( $pNode->nodeName != SYS_LANG && $pNode->nodeName != '#cdata-section' && $pNode->nodeName != '#text') {
+            $chidNode[] = $this->getChildNode($pNode);
+            $childs[$pNode->nodeName] = $pNode->firstChild->nodeValue;
+          }
+      }
+
       foreach($childs as $child_name => $child_text) {
+
+        $newnode->appendChild($this->dom->createTextNode("    "));
         $newnode_child = $newnode->appendChild($this->dom->createElement($child_name));
         if( is_string($child_text) )
           $newnode_child->appendChild($this->dom->createTextNode($child_text));
         else if( is_array($child_text) && isset($child_text['cdata']) )
           $newnode_child->appendChild($this->dom->createCDATASection($child_text));
-        
-        if($childs_childs != null and is_array($childs_childs)){
-          foreach($childs_childs as $cc) {
-            $ccmode = $newnode_child->appendChild($this->dom->createElement($cc['name']));
-            $ccmode->appendChild($this->dom->createTextNode($cc['value']));
-            foreach($cc['attributes'] as $cc_att_name => $cc_att_value) {
-              $ccmode->setAttribute($cc_att_name, $cc_att_value);
+        if ($child_name == SYS_LANG ) {
+            if($childs_childs != null and is_array($childs_childs)){
+                foreach($childs_childs as $cc) {
+                    $ccmode = $newnode_child->appendChild($this->dom->createElement($cc['name']));
+                    $ccmode->appendChild($this->dom->createTextNode($cc['value']));
+                    foreach($cc['attributes'] as $cc_att_name => $cc_att_value) {
+                        $ccmode->setAttribute($cc_att_name, $cc_att_value);
+                    }
+                }
             }
-          }
+        } else {
+            foreach ($chidNode as $valueNode) {
+                if ( array_key_exists($child_name, $valueNode) ) {
+                    foreach($valueNode[$child_name] as $valOption) {
+                        $ccmode = $newnode_child->appendChild($this->dom->createElement($valOption['nodeName']));
+                        $ccmode->appendChild($this->dom->createTextNode($valOption['nodeValue']));
+                        $ccmode->setAttribute('name', $valOption['name']);
+                    }
+
+                }
+            }
         }
+
+        $newnode->appendChild($this->dom->createTextNode("\n"));
       }
     } else if( isset($childs) ){
       $text_node = $childs;
@@ -257,7 +322,10 @@ class dynaFormHandler
     $this->root->setAttribute($att_name, $att_value);
     $this->save();
   }
-
+  function getHeaderAttribute($att_name)
+  {
+      return $this->root->getAttribute($att_name);
+  }
 /**
   * Function modifyHeaderAttribute
   * @param string $att_name
@@ -317,7 +385,7 @@ class dynaFormHandler
     }
     $this->save();
   }
-  
+
 /**
   * Function nodeExists
   * @param string $node_name
@@ -335,7 +403,7 @@ class dynaFormHandler
     }
   }
 
-  //new features 
+  //new features
  /**
   * Function moveUp
   * @param string $selected_node
@@ -409,7 +477,7 @@ class dynaFormHandler
     }
     $this->save();
   }
-  
+
  /**
   * Function getFields
   * @param array $aFilter
@@ -446,7 +514,7 @@ class dynaFormHandler
     }
     return  $aList;
   }
-  
+
  /**
   * Function getFieldNames
   * @param array $aFilter
@@ -461,8 +529,8 @@ class dynaFormHandler
     }
     return $aFieldNames;
   }
-  
-  // 
+
+  //
   function addChilds($name, $childs, $childs_childs=null)
   {
     //
@@ -471,35 +539,35 @@ class dynaFormHandler
     if( ! $nodeList ){
       throw new Exception("Error trying get the field dynaform $name, maybe it doesn't exist in {$this->xmlfile}");
     }
-    
+
     if( $nodeList->length == 0 ) {
       $element = $this->root->appendChild($this->dom->createElement($name));
     } else
       $element = $this->root->getElementsByTagName($name)->item(0);
-    
+
     if( is_array($childs) ) {
       foreach( $childs as $child_name => $child_text ) {
-        
+
         $nodeList = $xpath->query("/dynaForm/$name/$child_name");
-        
+
         if( $nodeList->length == 0 ){ //the node doesn't exist
-          //$newnode_child 
+          //$newnode_child
           $childNode = $element->appendChild($this->dom->createElement($child_name));
           $childNode->appendChild($this->dom->createCDATASection($child_text));
         } else { // the node already exists
           //update its value
           $childNode = $element->getElementsByTagName($child_name)->item(0);
-          
+
           //
           if($child_text !== NULL){
             $xnode = $this->dom->createElement($childNode->nodeName);
             $xnode->appendChild($this->dom->createCDATASection($child_text));
-                
-            $element->replaceChild($xnode, $childNode); 
+
+            $element->replaceChild($xnode, $childNode);
             $childNode = $element->getElementsByTagName($child_name)->item(0);
           }
         }
-        
+
         if($childs_childs != null and is_array($childs_childs)){
           foreach($childs_childs as $cc) {
             $ccnode = $childNode->appendChild($this->dom->createElement($cc['name']));
@@ -518,14 +586,14 @@ class dynaFormHandler
   }
 
 
-  function addOrUpdateChild($xnode, $childName, $childValue, $childAttributes){    
+  function addOrUpdateChild($xnode, $childName, $childValue, $childAttributes){
     $newNode = $this->dom->createElement($childName);
     $newNode->appendChild($this->dom->createCDATASection($childValue));
-    
+
     foreach($childAttributes as $attName => $attValue) {
       $newNode->setAttribute($attName, $attValue);
     }
-    
+
     if( $xnode->hasChildNodes() ) {
       foreach($xnode->childNodes as $cnode) {
         if( $cnode->nodeName == $childName ) {
@@ -533,17 +601,17 @@ class dynaFormHandler
           break;
         }
       }
-    } else 
+    } else
       $xnode->appendChild($newNode);
   }
-  
+
   function getArray($node, $attributes = null)
   {
     $array = false;
     $array['__nodeName__'] = $node->nodeName;
     $text = simplexml_import_dom($node);
     $array['__nodeText__'] = trim((string) $text);
-    
+
     if ($node->hasAttributes()) {
       if( isset($attributes) ) {
         foreach ($attributes as $attr) {
@@ -576,5 +644,5 @@ class dynaFormHandler
     }
 
     return $array;
-  } 
+  }
 }
