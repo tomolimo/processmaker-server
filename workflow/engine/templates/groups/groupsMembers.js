@@ -486,16 +486,6 @@ RemoveAllUsersAction = function(){
 //Function DoSearch Available
 DoSearchA = function(){
     numPage = parseInt(bbarpagingAvailable.getPageData().activePage);
-    /*availableGrid.store.load(
-        {params: {textFilter: searchTextA.getValue()},
-        callback: function (r, options, success) {
-        total = parseInt(bbarpagingAvailable.getPageData().total);
-        if (((numPage)*pageSize) >= total) {
-            numPage--;
-        }
-        availableGrid.getBottomToolbar().changePage(getPageData().activePage);
-        }
-        });*/
     availableGrid.store.setBaseParam( 'textFilter', searchTextA.getValue());
     availableGrid.store.load();
     total = parseInt(bbarpagingAvailable.getPageData().total);
