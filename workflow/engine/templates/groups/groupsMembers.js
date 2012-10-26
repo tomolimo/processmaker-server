@@ -507,6 +507,7 @@ GridByDefaultA = function(){
   availableGrid.store.load();
 };
 
+
 //Load Grid By Default Assigned Members
 GridByDefaultP = function(){
   searchTextP.reset();
