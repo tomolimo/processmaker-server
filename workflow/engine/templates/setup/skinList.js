@@ -418,10 +418,10 @@ selectedSkinChecked = function (value){
 nameWorkspace = function (value){
     if(value[0]=='@'){
         str = value.substring(1);
-        return '<b><i>' + ((value == 'Global') ? value : 'Workspace') + '</i></b>';
+        return '<b><i>' + ((value == _('ID_GLOBAL')) ? value : _('ID_WORKSPACE')) + '</i></b>';
     }
-    if (value != 'Global') {
-        value = "Workspace";
+    if (value != _('ID_GLOBAL')) {
+        value = _('ID_WORKSPACE');
     }
     return value;
 };
@@ -533,13 +533,13 @@ newSkin = function(){
             name: 'workspace',
             inputValue: 'global',
             checked: true,
-            boxLabel: 'All Workspace'
+            boxLabel: _('ID_ALL_WORKSPACES')
         },
         {
             xtype: 'radio',
             name: 'workspace',
             inputValue: 'current',
-            boxLabel: 'Current Workspace'
+            boxLabel: _('ID_CURRENT_WORKSPACE')
         }
       ],
       buttons:[
@@ -653,13 +653,13 @@ importSkin = function(){
             name: 'workspace',
             inputValue: 'global',
             checked: true,
-            boxLabel: 'All Workspace'
+            boxLabel: _('ID_ALL_WORKSPACES')
         },
         {
             xtype: 'radio',
             name: 'workspace',
             inputValue: 'current',
-            boxLabel: 'Current Workspace'
+            boxLabel: _('ID_CURRENT_WORKSPACE')
         }
       ],
       buttons:[
