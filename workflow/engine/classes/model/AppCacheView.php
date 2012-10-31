@@ -182,32 +182,6 @@ class AppCacheView extends BaseAppCacheView
     }
 
     /**
-     * gets the SENT cases list criteria
-     * param $userUid the current userUid
-     * param $doCount if true this will return the criteria for count cases only
-     * @return Criteria object $Criteria
-     */
-    public function getSent($userUid, $doCount)
-    {
-        //adding configuration fields from the configuration options
-        //and forming the criteria object
-        if ($doCount && !isset($this->confCasesList['PMTable']) && !empty($this->confCasesList['PMTable'])) {
-            $criteria = new Criteria('workflow');
-        } else {
-            $criteria = $this->addPMFieldsToCriteria('sent');
-        }
-
-        $criteria->add(AppCacheViewPeer::APP_STATUS, "DRAFT", CRITERIA::EQUAL);
-        $criteria->add(AppCacheViewPeer::USR_UID, $userUid);
-
-        //$criteria->add(AppCacheViewPeer::DEL_FINISH_DATE, null, Criteria::ISNULL);
-        $criteria->add(AppCacheViewPeer::APP_THREAD_STATUS, 'OPEN');
-        $criteria->add(AppCacheViewPeer::DEL_THREAD_STATUS, 'OPEN');
-
-        return $criteria;
-    }
-
-    /**
      * Gets the criteria object of the sent cases
      *
      * Return the criteria object of the sent cases
@@ -216,7 +190,7 @@ class AppCacheView extends BaseAppCacheView
      * @param bool $doCount If true this will return the criteria for count cases only
      * @return criteria Object criteria
      */
-    public function getSent2($userUid, $doCount)
+    public function getSent($userUid, $doCount)
     {
         //Adding configuration fields from the configuration options
         //and forming the criteria object
@@ -252,7 +226,7 @@ class AppCacheView extends BaseAppCacheView
         return $criteria;*/
         //return $this->getSentListCriteria($userUid);
 
-        return $this->getSent2($userUid, true);
+        return $this->getSent($userUid, true);
     }
 
     /**
@@ -276,7 +250,7 @@ class AppCacheView extends BaseAppCacheView
         return $criteria;
         */
 
-        return $this->getSent2($userUid, false);
+        return $this->getSent($userUid, false);
     }
 
     public function getSentListProcessCriteria($userUid)
