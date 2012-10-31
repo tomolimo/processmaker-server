@@ -507,7 +507,9 @@ class AppCacheView extends BaseAppCacheView
                 $criteria->getNewCriterion(AppCacheViewPeer::PRO_UID, $aProcesses, Criteria::IN))
             );
         } else {
-            $criteria->add(AppCacheViewPeer::PRO_UID, $aProcesses, Criteria::IN);
+            if (count($aProcesses) > 0) {
+                $criteria->add(AppCacheViewPeer::PRO_UID, $aProcesses, Criteria::IN);
+            }
         }
 
         //join with APP_DELAY table using APP_UID and DEL_INDEX
