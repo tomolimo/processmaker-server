@@ -276,7 +276,6 @@ class RBAC
             return - 4; //due date
         }
 
-
         foreach ($this->aRbacPlugins as $sClassName) {
             if (strtolower( $sClassName ) == strtolower( $sAuthType )) {
                 $plugin = new $sClassName();

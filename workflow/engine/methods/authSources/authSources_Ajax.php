@@ -129,8 +129,6 @@ try {
             echo '{sources: ' . G::json_encode( $aSources ) . ', total_sources: ' . $total_sources . '}';
             break;
         case 'canDeleteAuthSource':
-            //echo 'llego';
-            //require_once PATH_RBAC.'model/RbacUsers.php';
             try {
                 $authUID = $_POST['auth_uid'];
                 global $RBAC;
