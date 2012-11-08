@@ -49,7 +49,6 @@
   define('PATH_HOME',     $pathhome);
   define('PATH_TRUNK',    $pathTrunk);
   define('PATH_OUTTRUNK', $pathOutTrunk);
-
   // Including these files we get the PM paths and definitions (that should be just one file.
   require_once $pathhome . PATH_SEP . 'engine' . PATH_SEP . 'config' . PATH_SEP . 'paths.php';
   require_once PATH_CORE . 'classes' . PATH_SEP . 'class.system.php';
