@@ -35,7 +35,7 @@ class AppProxy extends HttpProxyController
         $case = new Cases();
         $caseLoad = '';
 
-        if ((!isset($_SESSION['PROCESS']) || !isset($_SESSION['TASK'])) && (!isset($httpData->pro) || !isset($httpData->tas))) {
+        if (!isset($_SESSION['PROCESS']) && !isset($httpData->pro)) {
             $caseLoad = $case->loadCase($appUid);
             $httpData->pro = $caseLoad['PRO_UID'];
         }
