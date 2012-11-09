@@ -459,16 +459,16 @@ function roundNumber(iNumber,iDecimals)
 {if(typeof(iDecimals)==='undefined')
 iDecimals=2;var iNumber=parseFloat(iNumber||0);var iDecimals=parseFloat(iDecimals||0);return Math.round(iNumber*Math.pow(10,iDecimals))/Math.pow(10,iDecimals);}
 function toMaskNumber(iNumber,dec)
-{iNumber=fix(iNumber.toString(),dec||2);var t=iNumber.split(".");var arrayResult=iNumber.replace(/\D/g,'').replace(/^0*/,'').split("").reverse();var final="";var aux=0;var sep=0;for(var i=0;i<arrayResult.length;i++)
+{iNumber=fix(iNumber.toString(),dec||2);var t=iNumber.split(".");var arrayResult=iNumber.replace(/\D/g,'').replace(/^0*/,'').split("").reverse();var result="";var aux=0;var sep=0;for(var i=0;i<arrayResult.length;i++)
 {if(i==1)
-{final="."+arrayResult[i]+final;}
+{result="."+arrayResult[i]+result;}
 else
 {if(i>1&&aux>=3&&((aux%3)==0))
-{final=arrayResult[i]+","+final;aux+=1;sep+=1;}
+{result=arrayResult[i]+","+result;aux+=1;sep+=1;}
 else
-{final=arrayResult[i]+final;if(i>1)
+{result=arrayResult[i]+result;if(i>1)
 {aux+=1;}}}}
-return final;}
+return result;}
 function fix(val,dec)
 {var a=val.split(".");var r="";if(a.length==1)
 {r=a[0]+"."+creaZero(dec);}
