@@ -23,7 +23,7 @@
  */
 
 /**
- * sysGeneric - ProcessMaker Bootstrap
+ * bootstrap - ProcessMaker Bootstrap
  * this file is used initialize main variables, redirect and dispatch all requests
  */
 
@@ -49,6 +49,24 @@ define( 'PATH_HOME', $pathhome );
 define( 'PATH_TRUNK', $pathTrunk );
 define( 'PATH_OUTTRUNK', $pathOutTrunk );
 
+//we are focusing in have this behaivour
+//1. if the uri is a existing file return the file inmediately
+//2. if the uri point to png, jpg, js, or css mapped in other place, return it inmediately
+//3. process the uri,
+
+//here we are putting approved CONSTANTS, I mean constants be sure we need,
+define( 'PATH_HTML', PATH_HOME . 'public_html' . PATH_SEP );
+
+//this is the first path, if the file exists...
+if (file_exists(PATH_HTML . $_SERVER['REQUEST_URI'])) {
+    //we are missing the header part
+    //to do: add header mime part
+    readfile(PATH_HTML . $_SERVER['REQUEST_URI']);
+die;
+
+}
+
+
 // Defining RBAC Paths constants
 define( 'PATH_RBAC_HOME', PATH_TRUNK . 'rbac' . PATH_SEP );
 
@@ -60,7 +78,6 @@ define( 'PATH_TEMPLATE', PATH_GULLIVER_HOME . 'templates' . PATH_SEP );
 define( 'PATH_THIRDPARTY', PATH_GULLIVER_HOME . 'thirdparty' . PATH_SEP );
 define( 'PATH_RBAC', PATH_RBAC_HOME . 'engine' . PATH_SEP . 'classes' . PATH_SEP ); //to enable rbac version 2
 define( 'PATH_RBAC_CORE', PATH_RBAC_HOME . 'engine' . PATH_SEP );
-define( 'PATH_HTML', PATH_HOME . 'public_html' . PATH_SEP );
 
 // Defining PMCore Path constants
 define( 'PATH_CORE', PATH_HOME . 'engine' . PATH_SEP );
@@ -92,38 +109,37 @@ define( 'PATH_SERVICES_REST', PATH_CORE . 'services' . PATH_SEP . 'rest' . PATH_
 require_once (PATH_GULLIVER . PATH_SEP . 'class.bootstrap.php');
 
 if (file_exists( FILE_PATHS_INSTALLED )) {
-    // backward compatibility; parsing old definitions in the compiled path constant
-    $tmp = file_get_contents( FILE_PATHS_INSTALLED );
-    
-    if (strpos( $tmp, 'PATH_OUTTRUNK' ) !== false) {
-        @file_put_contents( FILE_PATHS_INSTALLED, str_replace( 'PATH_OUTTRUNK', 'PATH_DATA', $tmp ) );
-    }
-    // end backward compatibility
-    
 
-    // include the workspace installed configuration
+    // include the server installed configuration
     require_once FILE_PATHS_INSTALLED;
-    
-    // defining system constant when a valid workspace environment exists
+
+    // defining system constant when a valid server environment exists
     define( 'PATH_LANGUAGECONT', PATH_DATA . "META-INF" . PATH_SEP );
     define( 'PATH_CUSTOM_SKINS', PATH_DATA . 'skins' . PATH_SEP );
     define( 'PATH_TEMPORAL', PATH_C . 'dynEditor/' );
     define( 'PATH_DB', PATH_DATA . 'sites' . PATH_SEP );
+
     // smarty constants
     define( 'PATH_SMARTY_C', PATH_C . 'smarty' . PATH_SEP . 'c' );
     define( 'PATH_SMARTY_CACHE', PATH_C . 'smarty' . PATH_SEP . 'cache' );
-    
+/* To do:
     if (! is_dir( PATH_SMARTY_C )) {
         G::mk_dir( PATH_SMARTY_C );
     }
-    
+
     if (! is_dir( PATH_SMARTY_CACHE )) {
         G::mk_dir( PATH_SMARTY_CACHE );
     }
+    */
 }
 
 // set include path
-set_include_path( PATH_CORE . PATH_SEPARATOR . PATH_THIRDPARTY . PATH_SEPARATOR . PATH_THIRDPARTY . 'pear' . PATH_SEPARATOR . PATH_RBAC_CORE . PATH_SEPARATOR . get_include_path() );
+set_include_path( PATH_CORE . PATH_SEPARATOR .
+                  PATH_THIRDPARTY . PATH_SEPARATOR .
+                  PATH_THIRDPARTY . 'pear' . PATH_SEPARATOR .
+                  PATH_RBAC_CORE . PATH_SEPARATOR .
+                  get_include_path()
+);
 
 /**
  * Global definitions, before it was the defines.php file
@@ -158,13 +174,10 @@ define( 'PML_WSDL_URL', PML_SERVER . '/syspmLibrary/en/green/services/wsdl' );
 define( 'PML_UPLOAD_URL', PML_SERVER . '/syspmLibrary/en/green/services/uploadProcess' );
 define( 'PML_DOWNLOAD_URL', PML_SERVER . '/syspmLibrary/en/green/services/download' );
 
-// Including these files we get the PM paths and definitions (that should be just one file.
-require_once PATH_CORE . 'classes' . PATH_SEP . 'class.system.php';
-
 // starting session
 session_start();
 
-$config = System::getSystemConfiguration();
+$config = Bootstrap::getSystemConfiguration();
 
 $e_all = defined( 'E_DEPRECATED' ) ? E_ALL & ~ E_DEPRECATED : E_ALL;
 $e_all = defined( 'E_STRICT' ) ? $e_all & ~ E_STRICT : $e_all;
@@ -191,15 +204,10 @@ $_SERVER['SERVER_ADDR'] = isset( $_SERVER['SERVER_ADDR'] ) ? $_SERVER['SERVER_AD
 
 //to do: make different environments.  sys
 
-
-define( 'ERROR_SHOW_SOURCE_CODE', true ); // enable ERROR_SHOW_SOURCE_CODE to display the source code for any WARNING OR NOTICE
-//define ( 'ERROR_LOG_NOTICE_ERROR', true );  //enable ERROR_LOG_NOTICE_ERROR to log Notices messages in default apache log
-
-
 //check if it is a installation instance
 if (! defined( 'PATH_C' )) {
     // is a intallation instance, so we need to define PATH_C and PATH_LANGUAGECONT constants temporarily
-    define( 'PATH_C', (rtrim( G::sys_get_temp_dir(), PATH_SEP ) . PATH_SEP) );
+    define( 'PATH_C', (rtrim( Bootstrap::sys_get_temp_dir(), PATH_SEP ) . PATH_SEP) );
     define( 'PATH_LANGUAGECONT', PATH_HOME . 'engine/content/languages/' );
 }
 
@@ -216,7 +224,7 @@ if (defined( 'PATH_C' )) {
 }
 
 $virtualURITable['/htmlarea/(*)'] = PATH_THIRDPARTY . 'htmlarea/';
-$virtualURITable['/sys[a-zA-Z][a-zA-Z0-9]{0,}()/'] = 'sysNamed';
+//$virtualURITable['/sys[a-zA-Z][a-zA-Z0-9]{0,}()/'] = 'sysNamed';
 $virtualURITable['/(sys*)'] = FALSE;
 $virtualURITable['/errors/(*)'] = PATH_GULLIVER_HOME . 'methods/errors/';
 $virtualURITable['/gulliver/(*)'] = PATH_GULLIVER_HOME . 'methods/';
@@ -225,15 +233,15 @@ $virtualURITable['/html2ps_pdf/(*)'] = PATH_THIRDPARTY . 'html2ps_pdf/';
 $virtualURITable['/images/'] = 'errorFile';
 $virtualURITable['/skins/'] = 'errorFile';
 $virtualURITable['/files/'] = 'errorFile';
-$virtualURITable['/[a-zA-Z][a-zA-Z0-9]{0,}()'] = 'sysUnnamed';
+//$virtualURITable['/[a-zA-Z][a-zA-Z0-9]{0,}()'] = 'sysUnnamed';
 $virtualURITable['/rest/(*)'] = 'rest-service';
 $virtualURITable['/update/(*)'] = PATH_GULLIVER_HOME . 'methods/update/';
-$virtualURITable['/(*)'] = PATH_HTML;
+//$virtualURITable['/(*)'] = PATH_HTML;
+$virtualURITable['/css/(*)'] = PATH_HTML . 'css/'; //ugly
 
 $isRestRequest = false;
-
 // Verify if we need to redirect or stream the file, if G:VirtualURI returns true means we are going to redirect the page
-if (G::virtualURI( $_SERVER['REQUEST_URI'], $virtualURITable, $realPath )) {
+if (Bootstrap::virtualURI( $_SERVER['REQUEST_URI'], $virtualURITable, $realPath )) {
     // review if the file requested belongs to public_html plugin
     if (substr( $realPath, 0, 6 ) == 'plugin') {
         // Another way to get the path of Plugin public_html and stream the correspondent file, By JHL Jul 14, 08
@@ -245,7 +253,7 @@ if (G::virtualURI( $_SERVER['REQUEST_URI'], $virtualURITable, $realPath )) {
         if (isset( $forQuery[1] )) {
             $pathsQuery = $forQuery[1];
         }
-        
+
         //Get that path in array
         $paths = explode( PATH_SEP, $forQuery[0] );
         //remove the "plugin" word from
@@ -255,15 +263,15 @@ if (G::virtualURI( $_SERVER['REQUEST_URI'], $virtualURITable, $realPath )) {
         //The other parts are the realpath into public_html (no matter how many elements)
         $filePath = implode( PATH_SEP, $paths );
         $pluginFilename = PATH_PLUGINS . $pluginFolder . PATH_SEP . 'public_html' . PATH_SEP . $filePath;
-        
+
         if (file_exists( $pluginFilename )) {
-            G::streamFile( $pluginFilename );
+            Bootstrap::streamFile( $pluginFilename );
         }
         die();
     }
-    
+
     $requestUriArray = explode( "/", $_SERVER['REQUEST_URI'] );
-    
+
     if ((isset( $requestUriArray[1] )) && ($requestUriArray[1] == 'skin')) {
         // This will allow to public images of Custom Skins, By JHL Feb 28, 11
         $pathsQuery = "";
@@ -273,13 +281,13 @@ if (G::virtualURI( $_SERVER['REQUEST_URI'], $virtualURITable, $realPath )) {
         if (isset( $forQuery[1] )) {
             $pathsQuery = $forQuery[1];
         }
-        
+
         //Get that path in array
         $paths = explode( PATH_SEP, $forQuery[0] );
         $fileToBeStreamed = str_replace( "/skin/", PATH_CUSTOM_SKINS, $_SERVER['REQUEST_URI'] );
-        
+
         if (file_exists( $fileToBeStreamed )) {
-            G::streamFile( $fileToBeStreamed );
+            Bootstrap::streamFile( $fileToBeStreamed );
         }
         die();
     }
@@ -293,15 +301,15 @@ if (G::virtualURI( $_SERVER['REQUEST_URI'], $virtualURITable, $realPath )) {
             die();
             break;
         case 'jsMethod':
-            G::parseURI( getenv( "REQUEST_URI" ) );
+            Bootstrap::parseURI( getenv( "REQUEST_URI" ) );
             $filename = PATH_METHODS . SYS_COLLECTION . '/' . SYS_TARGET . '.js';
-            G::streamFile( $filename );
+            Bootstrap::streamFile( $filename );
             die();
             break;
         case 'errorFile':
             header( "location: /errors/error404.php?url=" . urlencode( $_SERVER['REQUEST_URI'] ) );
             if (DEBUG_TIME_LOG)
-                G::logTimeByPage(); //log this page
+                Bootstrap::logTimeByPage(); //log this page
             die();
             break;
         default:
@@ -310,26 +318,25 @@ if (G::virtualURI( $_SERVER['REQUEST_URI'], $virtualURITable, $realPath )) {
             } else {
                 $realPath = explode( '?', $realPath );
                 $realPath[0] .= strpos( basename( $realPath[0] ), '.' ) === false ? '.php' : '';
-                G::streamFile( $realPath[0] );
+                Bootstrap::streamFile( $realPath[0] );
                 die();
             }
     }
 } //virtual URI parser
 
-
 // the request correspond to valid php page, now parse the URI
-G::parseURI( getenv( "REQUEST_URI" ), $isRestRequest );
+Bootstrap::parseURI( getenv( "REQUEST_URI" ), $isRestRequest );
 
-if (G::isPMUnderUpdating()) {
+if (Bootstrap::isPMUnderUpdating()) {
     header( "location: /update/updating.php" );
     if (DEBUG_TIME_LOG)
-        G::logTimeByPage();
+        Bootstrap::logTimeByPage();
     die();
 }
 
 // verify if index.html exists
 if (! file_exists( PATH_HTML . 'index.html' )) { // if not, create it from template
-    file_put_contents( PATH_HTML . 'index.html', G::parseTemplate( PATH_TPL . 'index.html', array ('lang' => SYS_LANG,'skin' => SYS_SKIN 
+    file_put_contents( PATH_HTML . 'index.html', Bootstrap::parseTemplate( PATH_TPL . 'index.html', array ('lang' => SYS_LANG,'skin' => SYS_SKIN
     ) ) );
 }
 
@@ -338,55 +345,54 @@ define( 'SYS_URI', '/sys' . SYS_TEMP . '/' . SYS_LANG . '/' . SYS_SKIN . '/' );
 // defining the serverConf singleton
 if (defined( 'PATH_DATA' ) && file_exists( PATH_DATA )) {
     //Instance Server Configuration Singleton
-    G::LoadClass( 'serverConfiguration' );
+    Bootstrap::LoadClass( 'serverConfiguration' );
     $oServerConf = & serverConf::getSingleton();
 }
 
 // Call Gulliver Classes
-G::LoadThirdParty( 'pear/json', 'class.json' );
-G::LoadThirdParty( 'smarty/libs', 'Smarty.class' );
-G::LoadSystem( 'error' );
-G::LoadSystem( 'dbconnection' );
-G::LoadSystem( 'dbsession' );
-G::LoadSystem( 'dbrecordset' );
-G::LoadSystem( 'dbtable' );
-G::LoadSystem( 'rbac' );
-G::LoadSystem( 'publisher' );
-G::LoadSystem( 'templatePower' );
-G::LoadSystem( 'xmlDocument' );
-G::LoadSystem( 'xmlform' );
-G::LoadSystem( 'xmlformExtension' );
-G::LoadSystem( 'form' );
-G::LoadSystem( 'menu' );
-G::LoadSystem( "xmlMenu" );
-G::LoadSystem( 'dvEditor' );
-G::LoadSystem( 'controller' );
-G::LoadSystem( 'httpProxyController' );
-G::LoadSystem( 'pmException' );
+Bootstrap::LoadThirdParty( 'smarty/libs', 'Smarty.class' );
+//Bootstrap::LoadSystem( 'error' );
+//Bootstrap::LoadSystem( 'dbconnection' );
+//Bootstrap::LoadSystem( 'dbsession' );
+//Bootstrap::LoadSystem( 'dbrecordset' );
+//Bootstrap::LoadSystem( 'dbtable' );
 
+  //* Bootstrap::LoadSystem( 'publisher' );
+  //Bootstrap::LoadSystem( 'templatePower' );
+  //* Bootstrap::LoadSystem( 'xmlDocument' );
+  //* Bootstrap::LoadSystem( 'xmlform' );
+  //Bootstrap::LoadSystem( 'xmlformExtension' );
+  //* Bootstrap::LoadSystem( 'form' );
+  //* Bootstrap::LoadSystem( 'menu' );
+  //Bootstrap::LoadSystem( "xmlMenu" );
+  //Bootstrap::LoadSystem( 'dvEditor' );
+  //Bootstrap::LoadSystem( 'controller' );
+  //Bootstrap::LoadSystem( 'httpProxyController' );
+  //Bootstrap::LoadSystem( 'pmException' );
+  //
 // Create headPublisher singleton
-G::LoadSystem( 'headPublisher' );
+Bootstrap::LoadSystem( 'headPublisher' );
 $oHeadPublisher = & headPublisher::getSingleton();
 
 // Installer, redirect to install if we don't have a valid shared data folder
 if (! defined( 'PATH_DATA' ) || ! file_exists( PATH_DATA )) {
-    
+
     // new installer, extjs based
     define( 'PATH_DATA', PATH_C );
     require_once (PATH_CONTROLLERS . 'installer.php');
     $controller = 'Installer';
-    
+
     // if the method name is empty set default to index method
     if (strpos( SYS_TARGET, '/' ) !== false) {
         list ($controller, $controllerAction) = explode( '/', SYS_TARGET );
     } else {
         $controllerAction = SYS_TARGET;
     }
-    
+
     $controllerAction = ($controllerAction != '' && $controllerAction != 'login') ? $controllerAction : 'index';
-    
+
     // create the installer controller and call its method
-    if (is_callable( Array ('Installer',$controllerAction 
+    if (is_callable( Array ('Installer',$controllerAction
     ) )) {
         $installer = new $controller();
         $installer->setHttpRequestData( $_REQUEST );
@@ -399,14 +405,14 @@ if (! defined( 'PATH_DATA' ) || ! file_exists( PATH_DATA )) {
 }
 
 // Load Language Translation
-G::LoadTranslationObject( defined( 'SYS_LANG' ) ? SYS_LANG : "en" );
+Bootstrap::LoadTranslationObject( defined( 'SYS_LANG' ) ? SYS_LANG : "en" );
 
 // look for a disabled workspace
 if ($oServerConf->isWSDisabled( SYS_TEMP )) {
-    $aMessage['MESSAGE'] = G::LoadTranslation( 'ID_DISB_WORKSPACE' );
+    $aMessage['MESSAGE'] = Bootstrap::LoadTranslation( 'ID_DISB_WORKSPACE' );
     $G_PUBLISH = new Publisher();
     $G_PUBLISH->AddContent( 'xmlform', 'xmlform', 'login/showMessage', '', $aMessage );
-    G::RenderPage( 'publish' );
+    Bootstrap::RenderPage( 'publish' );
     die();
 }
 
@@ -417,14 +423,14 @@ if (defined( 'SYS_TEMP' ) && SYS_TEMP != '') {
     if (file_exists( PATH_DB . SYS_TEMP . '/db.php' )) {
         require_once (PATH_DB . SYS_TEMP . '/db.php');
         define( 'SYS_SYS', SYS_TEMP );
-        
+
         // defining constant for workspace shared directory
         define( 'PATH_WORKSPACE', PATH_DB . SYS_SYS . PATH_SEP );
         // including workspace shared classes -> particularlly for pmTables
         set_include_path( get_include_path() . PATH_SEPARATOR . PATH_WORKSPACE );
     } else {
-        G::SendTemporalMessage( 'ID_NOT_WORKSPACE', "error" );
-        G::header( 'location: /sys/' . SYS_LANG . '/' . SYS_SKIN . '/main/sysLogin?errno=2' );
+        Bootstrap::SendTemporalMessage( 'ID_NOT_WORKSPACE', "error" );
+        Bootstrap::header( 'location: /sys/' . SYS_LANG . '/' . SYS_SKIN . '/main/sysLogin?errno=2' );
         die();
     }
 } else { //when we are in global pages, outside any valid workspace
@@ -436,25 +442,30 @@ if (defined( 'SYS_TEMP' ) && SYS_TEMP != '') {
         if (SYS_TARGET == "dbInfo") { //Show dbInfo when no SYS_SYS
             require_once (PATH_METHODS . "login/dbInfo.php");
         } else {
-            
+
             if (substr( SYS_SKIN, 0, 2 ) === 'ux' && SYS_TARGET != 'sysLoginVerify') { // new ux sysLogin - extjs based form
                 require_once PATH_CONTROLLERS . 'main.php';
                 $controllerClass = 'Main';
                 $controllerAction = SYS_TARGET == 'sysLoginVerify' ? SYS_TARGET : 'sysLogin';
                 //if the method exists
-                if (is_callable( Array ($controllerClass,$controllerAction 
+                if (is_callable( Array ($controllerClass,$controllerAction
                 ) )) {
                     $controller = new $controllerClass();
                     $controller->setHttpRequestData( $_REQUEST );
                     $controller->call( $controllerAction );
                 }
             } else { // classic sysLogin interface
+                Bootstrap::LoadSystem( 'g');
+                Bootstrap::LoadSystem( 'publisher' );
+                Bootstrap::LoadSystem( 'xmlform' );
+                Bootstrap::LoadSystem( 'form' );
+                Bootstrap::LoadSystem( 'menu' );
                 require_once (PATH_METHODS . "login/sysLogin.php");
                 die();
             }
         }
         if (DEBUG_TIME_LOG)
-            G::logTimeByPage(); //log this page
+            Bootstrap::logTimeByPage(); //log this page
         die();
     }
 }
@@ -472,7 +483,7 @@ define( 'SERVER_NAME', $_SERVER['SERVER_NAME'] );
 define( 'SERVER_PORT', $_SERVER['SERVER_PORT'] );
 
 // create memcached singleton
-G::LoadClass( 'memcached' );
+Bootstrap::LoadClass( 'memcached' );
 $memcache = & PMmemcached::getSingleton( SYS_SYS );
 
 // verify configuration for rest service
@@ -481,7 +492,7 @@ if ($isRestRequest) {
     $isRestRequest = false;
     $confFile = '';
     $restApiClassPath = '';
-    
+
     // try load and getting rest configuration
     if (file_exists( PATH_DATA_SITE . 'rest-config.ini' )) {
         $confFile = PATH_DATA_SITE . 'rest-config.ini';
@@ -499,7 +510,7 @@ if ($isRestRequest) {
 }
 
 // load Plugins base class
-G::LoadClass( 'plugin' );
+Bootstrap::LoadClass( 'plugin' );
 
 //here we are loading all plugins registered
 //the singleton has a list of enabled plugins
@@ -517,13 +528,13 @@ require_once ("creole/Creole.php");
 if (defined( 'DEBUG_SQL_LOG' ) && DEBUG_SQL_LOG) {
     define( 'PM_PID', mt_rand( 1, 999999 ) );
     require_once 'Log.php';
-    
+
     // register debug connection decorator driver
     Creole::registerDriver( '*', 'creole.contrib.DebugConnection' );
-    
+
     // initialize Propel with converted config file
     Propel::init( PATH_CORE . "config/databases.php" );
-    
+
     // unified log file for all databases
     $logFile = PATH_DATA . 'log' . PATH_SEP . 'propel.log';
     $logger = Log::singleton( 'file', $logFile, 'wf ' . SYS_SYS, null, PEAR_LOG_INFO );
@@ -535,11 +546,11 @@ if (defined( 'DEBUG_SQL_LOG' ) && DEBUG_SQL_LOG) {
     }
     // log file for rbac database
     $con = Propel::getConnection( 'rbac' );
-    
+
     if ($con instanceof DebugConnection) {
         $con->setLogger( $logger );
     }
-    
+
     // log file for report database
     $con = Propel::getConnection( 'rp' );
     if ($con instanceof DebugConnection) {
@@ -576,7 +587,7 @@ $oPluginRegistry->setupPlugins(); //get and setup enabled plugins
 $avoidChangedWorkspaceValidation = false;
 
 // Load custom Classes and Model from Plugins.
-G::LoadAllPluginModelClasses();
+Bootstrap::LoadAllPluginModelClasses();
 
 // jump to php file in methods directory
 $collectionPlugin = '';
@@ -586,16 +597,16 @@ if ($oPluginRegistry->isRegisteredFolder( SYS_COLLECTION )) {
     $collectionPlugin = $targetPlugin[0];
     $avoidChangedWorkspaceValidation = true;
 } else {
-    $phpFile = G::ExpandPath( 'methods' ) . SYS_COLLECTION . PATH_SEP . SYS_TARGET . '.php';
+    $phpFile = Bootstrap::ExpandPath( 'methods' ) . SYS_COLLECTION . PATH_SEP . SYS_TARGET . '.php';
 }
 
 // services is a special folder,
 if (SYS_COLLECTION == 'services') {
     $avoidChangedWorkspaceValidation = true;
     $targetPlugin = explode( '/', SYS_TARGET );
-    
+
     if ($targetPlugin[0] == 'webdav') {
-        $phpFile = G::ExpandPath( 'methods' ) . SYS_COLLECTION . PATH_SEP . 'webdav.php';
+        $phpFile = Bootstrap::ExpandPath( 'methods' ) . SYS_COLLECTION . PATH_SEP . 'webdav.php';
     }
 }
 
@@ -603,12 +614,6 @@ if (SYS_COLLECTION == 'login' && SYS_TARGET == 'login') {
     $avoidChangedWorkspaceValidation = true;
 }
 
-//the index.php file, this new feature will allow automatically redirects to valid php file inside any methods folder
-/* DEPRECATED
-  if ( SYS_TARGET == '' ) {
-    $phpFile = str_replace ( '.php', 'index.php', $phpFile );
-    $phpFile = include ( $phpFile );
-  }*/
 $bWE = false;
 $isControllerCall = false;
 if (substr( SYS_COLLECTION, 0, 8 ) === 'gulliver') {
@@ -625,30 +630,31 @@ if (substr( SYS_COLLECTION, 0, 8 ) === 'gulliver') {
         $phpFile = PATH_DATA_SITE . 'public' . PATH_SEP . SYS_COLLECTION . PATH_SEP . urldecode( $auxPart[count( $auxPart ) - 1] );
         $aAux = explode( '?', $phpFile );
         $phpFile = $aAux[0];
-        
+
         if ($extension != 'php') {
-            G::streamFile( $phpFile );
+            Bootstrap::streamFile( $phpFile );
             die();
         }
-        
+
         $avoidChangedWorkspaceValidation = true;
         $bWE = true;
         //$phpFile = PATH_DATA_SITE . 'public' . PATH_SEP .  SYS_COLLECTION . PATH_SEP . $auxPart[ count($auxPart)-1];
     }
-    
+
     //erik: verify if it is a Controller Class or httpProxyController Class
     if (is_file( PATH_CONTROLLERS . SYS_COLLECTION . '.php' )) {
+        Bootstrap::LoadSystem( 'controller' );
         require_once PATH_CONTROLLERS . SYS_COLLECTION . '.php';
         $controllerClass = SYS_COLLECTION;
         //if the method name is empty set default to index method
         $controllerAction = SYS_TARGET != '' ? SYS_TARGET : 'index';
         //if the method exists
-        if (is_callable( Array ($controllerClass,$controllerAction 
+        if (is_callable( Array ($controllerClass,$controllerAction
         ) )) {
             $isControllerCall = true;
         }
     }
-    
+
     if (! $isControllerCall && ! file_exists( $phpFile ) && ! $isRestRequest) {
         $_SESSION['phpFileNotFound'] = $_SERVER['REQUEST_URI'];
         header( "location: /errors/error404.php?url=" . urlencode( $_SERVER['REQUEST_URI'] ) );
@@ -659,17 +665,39 @@ if (substr( SYS_COLLECTION, 0, 8 ) === 'gulliver') {
 //redirect to login, if user changed the workspace in the URL
 if (! $avoidChangedWorkspaceValidation && isset( $_SESSION['WORKSPACE'] ) && $_SESSION['WORKSPACE'] != SYS_SYS) {
     $_SESSION['WORKSPACE'] = SYS_SYS;
-    G::SendTemporalMessage( 'ID_USER_HAVENT_RIGHTS_SYSTEM', "error" );
+    Bootstrap::SendTemporalMessage( 'ID_USER_HAVENT_RIGHTS_SYSTEM', "error" );
     // verify if the current skin is a 'ux' variant
     $urlPart = substr( SYS_SKIN, 0, 2 ) == 'ux' && SYS_SKIN != 'uxs' ? '/main/login' : '/login/login';
-    
+
     header( 'Location: /sys' . SYS_SYS . '/' . SYS_LANG . '/' . SYS_SKIN . $urlPart );
     die();
 }
 
 // enable rbac
+Bootstrap::LoadSystem( 'rbac' );
 $RBAC = &RBAC::getSingleton( PATH_DATA, session_id() );
 $RBAC->sSystem = 'PROCESSMAKER';
+
+Bootstrap::LoadSystem( 'g');
+Bootstrap::LoadSystem( 'publisher' );
+Bootstrap::LoadSystem( 'xmlDocument' );
+Bootstrap::LoadSystem( 'xmlform' );
+Bootstrap::LoadSystem( 'form' );
+Bootstrap::LoadSystem( 'menu' );
+
+Bootstrap::LoadSystem( 'templatePower' );
+  //Bootstrap::LoadSystem( 'xmlformExtension' );
+  //Bootstrap::LoadSystem( "xmlMenu" );
+  //Bootstrap::LoadSystem( 'dvEditor' );
+  //Bootstrap::LoadSystem( 'httpProxyController' );
+  //Bootstrap::LoadSystem( 'pmException' );
+
+//Bootstrap::LoadSystem( 'dbconnection' );
+//Bootstrap::LoadSystem( 'dbsession' );
+//Bootstrap::LoadSystem( 'dbrecordset' );
+Bootstrap::LoadSystem( 'dbtable' );
+Bootstrap::LoadClass( 'system' );
+
 
 // define and send Headers for all pages
 if (! defined( 'EXECUTE_BY_CRON' )) {
@@ -678,10 +706,10 @@ if (! defined( 'EXECUTE_BY_CRON' )) {
     header( "Cache-Control: no-store, no-cache, must-revalidate" );
     header( "Cache-Control: post-check=0, pre-check=0", false );
     header( "Pragma: no-cache" );
-    
+
     // get the language direction from ServerConf
     define( 'SYS_LANG_DIRECTION', $oServerConf->getLanDirection() );
-    
+
     if ((isset( $_SESSION['USER_LOGGED'] )) && (! (isset( $_GET['sid'] )))) {
         $RBAC->initRBAC();
         //using optimization with memcache, the user data will be in memcache 8 hours, or until session id goes invalid
@@ -708,17 +736,17 @@ if (! defined( 'EXECUTE_BY_CRON' )) {
         $noLoginFiles[] = 'retrivePassword';
         $noLoginFiles[] = 'defaultAjaxDynaform';
         $noLoginFiles[] = 'dynaforms_checkDependentFields';
-        
+
         $noLoginFolders[] = 'services';
         $noLoginFolders[] = 'tracker';
         $noLoginFolders[] = 'installer';
-        
+
         // This sentence is used when you lost the Session
         if (! in_array( SYS_TARGET, $noLoginFiles ) && ! in_array( SYS_COLLECTION, $noLoginFolders ) && $bWE != true && $collectionPlugin != 'services' && ! $isRestRequest) {
             $bRedirect = true;
-            
+
             if (isset( $_GET['sid'] )) {
-                G::LoadClass( 'sessions' );
+                Bootstrap::LoadClass( 'sessions' );
                 $oSessions = new Sessions();
                 if ($aSession = $oSessions->verifySession( $_GET['sid'] )) {
                     require_once 'classes/model/Users.php';
@@ -733,7 +761,7 @@ if (! defined( 'EXECUTE_BY_CRON' )) {
                     $memcache->set( $memKey, $RBAC->aUserInfo, PMmemcached::EIGHT_HOURS );
                 }
             }
-            
+
             if ($bRedirect) {
                 if (substr( SYS_SKIN, 0, 2 ) == 'ux' && SYS_SKIN != 'uxs') { // verify if the current skin is a 'ux' variant
                     $loginUrl = 'main/login';
@@ -742,10 +770,10 @@ if (! defined( 'EXECUTE_BY_CRON' )) {
                 } else {
                     $loginUrl = 'login/login'; // just set up the classic login
                 }
-                
+
                 if (empty( $_POST )) {
                     header( 'location: ' . SYS_URI . $loginUrl . '?u=' . urlencode( $_SERVER['REQUEST_URI'] ) );
-                
+
                 } else {
                     if ($isControllerCall) {
                         header( "HTTP/1.0 302 session lost in controller" );
@@ -758,30 +786,30 @@ if (! defined( 'EXECUTE_BY_CRON' )) {
         }
     }
     $_SESSION['phpLastFileFound'] = $_SERVER['REQUEST_URI'];
-    
+
     /**
      * New feature for Gulliver framework to support Controllers & HttpProxyController classes handling
-     * 
-     * @author Erik Amaru Ortiz <erik@colosa.com, aortiz.erik@gmail.com>
+     *
+     * @author <erik@colosa.com
      */
     if ($isControllerCall) { //Instance the Controller object and call the request method
         $controller = new $controllerClass();
         $controller->setHttpRequestData( $_REQUEST );
         $controller->call( $controllerAction );
     } elseif ($isRestRequest) {
-        G::dispatchRestService( SYS_TARGET, $restConfig, $restApiClassPath );
+        Bootstrap::dispatchRestService( SYS_TARGET, $restConfig, $restApiClassPath );
     } else {
         require_once $phpFile;
     }
-    
+
     if (defined( 'SKIP_HEADERS' )) {
         header( "Expires: " . gmdate( "D, d M Y H:i:s", mktime( 0, 0, 0, date( 'm' ), date( 'd' ), date( 'Y' ) + 1 ) ) . " GMT" );
         header( 'Cache-Control: public' );
         header( 'Pragma: ' );
     }
-    
+
     ob_end_flush();
     if (DEBUG_TIME_LOG) {
-        G::logTimeByPage(); //log this page
+        bootstrap::logTimeByPage(); //log this page
     }
 }

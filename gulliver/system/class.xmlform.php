@@ -4922,8 +4922,9 @@ class XmlForm
                 }
             }
 
-            $oJSON = new Services_JSON();
-            $this->objectRequiredFields = str_replace( '"', "%27", str_replace( "'", "%39", $oJSON->encode( $this->requiredFields ) ) );
+            //$oJSON = new Services_JSON();
+            $jsonRequired =  G::json_encode( $this->requiredFields );
+            $this->objectRequiredFields = str_replace( '"', "%27", str_replace( "'", "%39", $jsonRequired ) );
 
             //Load the default values
             //$this->setDefaultValues();

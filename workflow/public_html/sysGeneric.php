@@ -234,7 +234,6 @@
   }
 
   // Call Gulliver Classes
-  G::LoadThirdParty('pear/json','class.json');
   G::LoadThirdParty('smarty/libs','Smarty.class');
   G::LoadSystem('error');
   G::LoadSystem('dbconnection');

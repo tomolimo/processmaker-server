@@ -120,7 +120,9 @@ if (strlen($msgType) > 0) {
 $_SESSION['FAILED_LOGINS'] = $sFailedLogins;
 
 //translation
-$Translations = G::getModel("Translation");
+//$Translations = G::getModel("Translation");
+require_once "classes/model/Translation.php";
+$Translations = new Translation();
 $translationsTable = $Translations->getTranslationEnvironments();
 
 $availableLangArray = array ();

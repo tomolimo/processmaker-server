@@ -1,14 +1,101 @@
 <?php
 /**
- * class.util.php
+ * class.bootstrap.php
  *
  * @package gulliver.system
  *
- *
  */
 
-class G
+class Bootstrap
 {
+    //below here only approved methods
+
+    /*
+     * this function still under revision
+    */
+    public function getSystemConfiguration ($globalIniFile = '', $wsIniFile = '', $wsName = '')
+    {
+        $readGlobalIniFile = false;
+        $readWsIniFile = false;
+
+        if (empty( $globalIniFile )) {
+            $globalIniFile = PATH_CORE . 'config' . PATH_SEP . 'env.ini';
+        }
+
+        if (empty( $wsIniFile )) {
+            if (defined( 'PATH_DB' )) {
+                // if we're on a valid workspace env.
+                if (empty( $wsName )) {
+                    $uriParts = explode( '/', getenv( "REQUEST_URI" ) );
+                    if (isset( $uriParts[1] )) {
+                        if (substr( $uriParts[1], 0, 3 ) == 'sys') {
+                            $wsName = substr( $uriParts[1], 3 );
+                        }
+                    }
+                }
+                $wsIniFile = PATH_DB . $wsName . PATH_SEP . 'env.ini';
+            }
+        }
+
+        $readGlobalIniFile = file_exists( $globalIniFile ) ? true : false;
+        $readWsIniFile = file_exists( $wsIniFile ) ? true : false;
+
+        if (isset( $_SESSION['PROCESSMAKER_ENV'] )) {
+            $md5 = array ();
+
+            if ($readGlobalIniFile) {
+                $md5[] = md5_file( $globalIniFile );
+            }
+            if ($readWsIniFile) {
+                $md5[] = md5_file( $wsIniFile );
+            }
+            $hash = implode( '-', $md5 );
+
+            if ($_SESSION['PROCESSMAKER_ENV_HASH'] === $hash) {
+                $_SESSION['PROCESSMAKER_ENV']['from_cache'] = 1;
+                return $_SESSION['PROCESSMAKER_ENV'];
+            }
+        }
+
+        // default configuration
+        $config = array ('debug' => 0,'debug_sql' => 0,'debug_time' => 0,'debug_calendar' => 0,'wsdl_cache' => 1,'memory_limit' => '128M','time_zone' => 'America/New_York','memcached' => 0,'memcached_server' => '','default_skin' => 'classic','default_lang' => 'en','proxy_host' => '','proxy_port' => '','proxy_user' => '','proxy_pass' => ''
+        );
+
+        // read the global env.ini configuration file
+        if ($readGlobalIniFile && ($globalConf = @parse_ini_file( $globalIniFile )) !== false) {
+            $config = array_merge( $config, $globalConf );
+        }
+
+        // Workspace environment configuration
+        if ($readWsIniFile && ($wsConf = @parse_ini_file( $wsIniFile )) !== false) {
+            $config = array_merge( $config, $wsConf );
+        }
+
+        // validation debug config, only binary value is valid; debug = 1, to enable
+        $config['debug'] = $config['debug'] == 1 ? 1 : 0;
+
+        if ($config['proxy_pass'] != '') {
+            $config['proxy_pass'] = G::decrypt( $config['proxy_pass'], 'proxy_pass' );
+        }
+
+        $md5 = array ();
+        if ($readGlobalIniFile) {
+            $md5[] = md5_file( $globalIniFile );
+        }
+        if ($readWsIniFile) {
+            $md5[] = md5_file( $wsIniFile );
+        }
+        $hash = implode( '-', $md5 );
+
+        $_SESSION['PROCESSMAKER_ENV'] = $config;
+        $_SESSION['PROCESSMAKER_ENV_HASH'] = $hash;
+
+        return $config;
+    }
+
+
+    //below this line, still not approved methods
+
 	/**
 	 * mk_dir , copied from class.G.php
 	 *
@@ -217,191 +304,101 @@ class G
 	 * @param string $downloadFileName
 	 * @return string
 	 */
-	public function streamFile($file, $download = false, $downloadFileName = '') {
-		require_once (PATH_THIRDPARTY . 'jsmin/jsmin.php');
-		$folderarray = explode ( '/', $file );
-		$typearray = explode ( '.', basename ( $file ) );
-		$typefile = $typearray [count ( $typearray ) - 1];
-		$filename = $file;
+    public function streamFile ($file, $download = false, $downloadFileName = '')
+    {
+        $folderarray = explode( '/', $file );
+        $typearray = explode( '.', basename( $file ) );
+        $typefile = $typearray[count( $typearray ) - 1];
+        $filename = $file;
 
-		// trick to generate the translation.language.js file , merging two
-		// files and then minified the content.
-		if (strtolower ( $typefile ) == 'js' && $typearray [0] == 'translation') {
-			$output = g::streamJSTranslationFile ( $filename, $typearray [1] );
-			print $output;
-			return;
-		}
+        //trick to generate the translation.language.js file , merging two files
+        if (strtolower( $typefile ) == 'js' && $typearray[0] == 'translation') {
+            Bootstrap::sendHeaders( $filename, 'text/javascript', $download, $downloadFileName );
+            $output = Bootstrap::streamJSTranslationFile( $filename, $typearray[1] );
+            print $output;
+            return;
+        }
 
-		// trick to generate the big css file for ext style .
-		if (strtolower ( $typefile ) == 'css' && $folderarray [count ( $folderarray ) - 2] == 'css') {
-			$output = g::streamCSSBigFile ( $typearray [0] );
-			print $output;
-			return;
-		}
+        //trick to generate the big css file for ext style .
+        if (strtolower( $typefile ) == 'css' && $folderarray[count( $folderarray ) - 2] == 'css') {
+            Bootstrap::sendHeaders( $filename, 'text/css', $download, $downloadFileName );
+            $output = Bootstrap::streamCSSBigFile( $typearray[0] );
+            print $output;
+            return;
+        }
 
-		if (file_exists ( $filename )) {
-			switch (strtolower ( $typefile )) {
-				case 'swf' :
-					g::sendHeaders ( $filename, 'application/x-shockwave-flash', $download, $downloadFileName );
-					break;
-				case 'js' :
-					g::sendHeaders ( $filename, 'text/javascript', $download, $downloadFileName );
-					break;
-				case 'htm' :
-				case 'html' :
-					g::sendHeaders ( $filename, 'text/html', $download, $downloadFileName );
-					break;
-				case 'htc' :
-					g::sendHeaders ( $filename, 'text/plain', $download, $downloadFileName );
-					break;
-				case 'json' :
-					g::sendHeaders ( $filename, 'text/plain', $download, $downloadFileName );
-					break;
-				case 'gif' :
-					g::sendHeaders ( $filename, 'image/gif', $download, $downloadFileName );
-					break;
-				case 'png' :
-					g::sendHeaders ( $filename, 'image/png', $download, $downloadFileName );
-					break;
-				case 'jpg' :
-					g::sendHeaders ( $filename, 'image/jpg', $download, $downloadFileName );
-					break;
-				case 'css' :
-					g::sendHeaders ( $filename, 'text/css', $download, $downloadFileName );
-					break;
-				case 'css' :
-					g::sendHeaders ( $filename, 'text/css', $download, $downloadFileName );
-					break;
-				case 'xml' :
-					g::sendHeaders ( $filename, 'text/xml', $download, $downloadFileName );
-					break;
-				case 'txt' :
-					g::sendHeaders ( $filename, 'text/html', $download, $downloadFileName );
-					break;
-				case 'doc' :
-				case 'pdf' :
-				case 'pm' :
-				case 'po' :
-					g::sendHeaders ( $filename, 'application/octet-stream', $download, $downloadFileName );
-					break;
-				case 'php' :
-					if ($download) {
-						g::sendHeaders ( $filename, 'text/plain', $download, $downloadFileName );
-					} else {
-						require_once ($filename);
-						return;
-					}
-					break;
-				case 'tar' :
-					g::sendHeaders ( $filename, 'application/x-tar', $download, $downloadFileName );
-					break;
-				default :
-					// throw new Exception ( "Unknown type of file '$file'. " );
-					g::sendHeaders ( $filename, 'application/octet-stream', $download, $downloadFileName );
-					break;
-					break;
-			}
-		} else {
-			if (strpos ( $file, 'gulliver' ) !== false) {
-				list ( $path, $filename ) = explode ( 'gulliver', $file );
-			}
+        if (file_exists( $filename )) {
+            switch (strtolower( $typefile )) {
+                case 'swf':
+                    Bootstrap::sendHeaders( $filename, 'application/x-shockwave-flash', $download, $downloadFileName );
+                    break;
+                case 'js':
+                    Bootstrap::sendHeaders( $filename, 'text/javascript', $download, $downloadFileName );
+                    break;
+                case 'htm':
+                case 'html':
+                    Bootstrap::sendHeaders( $filename, 'text/html', $download, $downloadFileName );
+                    break;
+                case 'htc':
+                    Bootstrap::sendHeaders( $filename, 'text/plain', $download, $downloadFileName );
+                    break;
+                case 'json':
+                    Bootstrap::sendHeaders( $filename, 'text/plain', $download, $downloadFileName );
+                    break;
+                case 'gif':
+                    Bootstrap::sendHeaders( $filename, 'image/gif', $download, $downloadFileName );
+                    break;
+                case 'png':
+                    Bootstrap::sendHeaders( $filename, 'image/png', $download, $downloadFileName );
+                    break;
+                case 'jpg':
+                    Bootstrap::sendHeaders( $filename, 'image/jpg', $download, $downloadFileName );
+                    break;
+                case 'css':
+                    Bootstrap::sendHeaders( $filename, 'text/css', $download, $downloadFileName );
+                    break;
+                case 'xml':
+                    Bootstrap::sendHeaders( $filename, 'text/xml', $download, $downloadFileName );
+                    break;
+                case 'txt':
+                    Bootstrap::sendHeaders( $filename, 'text/html', $download, $downloadFileName );
+                    break;
+                case 'doc':
+                case 'pdf':
+                case 'pm':
+                case 'po':
+                    Bootstrap::sendHeaders( $filename, 'application/octet-stream', $download, $downloadFileName );
+                    break;
+                case 'php':
+                    if ($download) {
+                        G::sendHeaders( $filename, 'text/plain', $download, $downloadFileName );
+                    } else {
+                        require_once ($filename);
+                        return;
+                    }
+                    break;
+                case 'tar':
+                    Bootstrap::sendHeaders( $filename, 'application/x-tar', $download, $downloadFileName );
+                    break;
+                default:
+                    //throw new Exception ( "Unknown type of file '$file'. " );
+                    Bootstrap::sendHeaders( $filename, 'application/octet-stream', $download, $downloadFileName );
+                    break;
+            }
+        } else {
+            if (strpos( $file, 'gulliver' ) !== false) {
+                list ($path, $filename) = explode( 'gulliver', $file );
+            }
 
-			$_SESSION ['phpFileNotFound'] = $file;
-			g::header ( "location: /errors/error404.php?l=" . $_SERVER ['REQUEST_URI'] );
-		}
+            $_SESSION['phpFileNotFound'] = $file;
+            Bootstrap::header( "location: /errors/error404.php?l=" . $_SERVER['REQUEST_URI'] );
+        }
 
-		switch (strtolower ( $typefile )) {
-			case "js" :
-				$paths = explode ( '/', $filename );
-				$jsName = $paths [count ( $paths ) - 1];
-				$output = '';
-				$pathJs = PATH_GULLIVER_HOME . PATH_SEP . 'js' . PATH_SEP;
-				switch ($jsName) {
-					//
-					case 'draw2d.js' :
-						$cachePath = PATH_C . 'ExtJs' . PATH_SEP;
-						$checksum = g::getCheckSum ( array (
-								$pathJs . 'ext/wz_jsgraphics.js',
-								$pathJs . 'ext/mootools.js',
-								$pathJs . 'ext/moocanvas.js'
-						) );
-
-						$cf = $cachePath . "ext-draw2d-cache.$checksum.js";
-						$cfStored = g::getCacheFileNameByPattern ( $cachePath, 'ext-draw2d-cache.*.js' );
-						// error_log("draw2d.js ".$checksum ."==".
-						// $cfStored['checksum']);
-						if (is_file ( $cfStored ['filename'] ) && $checksum == $cfStored ['checksum']) {
-							$output = file_get_contents ( $cf );
-						} else {
-							if (is_file ( $cfStored ['filename'] )) {
-								@unlink ( $cfStored ['filename'] );
-							}
-							$output .= JSMin::minify ( file_get_contents ( $pathJs . 'ext/wz_jsgraphics.js' ) );
-							$output .= JSMin::minify ( file_get_contents ( $pathJs . 'ext/mootools.js' ) );
-							$output .= JSMin::minify ( file_get_contents ( $pathJs . 'ext/moocanvas.js' ) );
-							$output .= file_get_contents ( $pathJs . 'ext/draw2d.js' ); // already
-							// minified
-							file_put_contents ( $cf, $output );
-						}
-						break;
-					case 'ext-all.js' :
-						$cachePath = PATH_C . 'ExtJs' . PATH_SEP;
-						$checksum = g::getCheckSum ( array (
-								$pathJs . 'ext/pmos-common.js',
-								$pathJs . 'ext/ux/miframe.js',
-								$pathJs . 'ext/ux.locationbar/Ext.ux.LocationBar.js',
-								$pathJs . 'ext/ux.statusbar/ext-statusbar.js',
-								$pathJs . 'ext/ux.treefilterx/Ext.ux.tree.TreeFilterX.js'
-						) );
-
-						$cfStored = g::getCacheFileNameByPattern ( $cachePath, 'ext-all-cache.*.js' );
-						$cf = PATH_C . 'ExtJs' . PATH_SEP . "ext-all-cache.$checksum.js";
-						if (is_file ( $cfStored ['filename'] ) && $checksum == $cfStored ['checksum']) {
-							$output = file_get_contents ( $cf );
-						} else {
-							if (is_file ( $cfStored ['filename'] )) {
-								@unlink ( $cfStored ['filename'] );
-							}
-
-							$output .= file_get_contents ( $pathJs . 'ext/ext-all.js' ); // already
-							// minified
-							$output .= file_get_contents ( $pathJs . 'ext/ux/ux-all.js' ); // already
-							// minified
-							$output .= JSMin::minify ( file_get_contents ( $pathJs . 'ext/pmos-common.js' ) );
-							$output .= JSMin::minify ( file_get_contents ( $pathJs . 'ext/ux/miframe.js' ) );
-							$output .= JSMin::minify ( file_get_contents ( $pathJs . 'ext/ux.locationbar/Ext.ux.LocationBar.js' ) );
-							$output .= JSMin::minify ( file_get_contents ( $pathJs . 'ext/ux.statusbar/ext-statusbar.js' ) );
-							$output .= JSMin::minify ( file_get_contents ( $pathJs . 'ext/ux.treefilterx/Ext.ux.tree.TreeFilterX.js' ) );
-
-							file_put_contents ( $cf, $output );
-						}
-						break;
-					case 'maborak.js' :
-						$oHeadPublisher = & headPublisher::getSingleton ();
-						foreach ( $oHeadPublisher->maborakFiles as $fileJS ) {
-							$output .= JSMin::minify ( file_get_contents ( $fileJS ) );
-				 	}
-				 	break;
-					case 'maborak.loader.js' :
-						$oHeadPublisher = & headPublisher::getSingleton ();
-						foreach ( $oHeadPublisher->maborakLoaderFiles as $fileJS ) {
-							$output .= JSMin::minify ( file_get_contents ( $fileJS ) );
-				 	}
-				 	break;
-					default :
-						$output = JSMin::minify ( file_get_contents ( $filename ) );
-						break;
-				}
-				print $output;
-				break;
-			case 'css' :
-				print g::trimSourceCodeFile ( $filename );
-				break;
-			default :
-				@readfile ( $filename );
-				break;
-		}
-	}
+        if ( substr($filename,-10) == "ext-all.js" ) {
+            $filename = PATH_GULLIVER_HOME . 'js/ext/min/ext-all.js';
+        }
+        @readfile( $filename );
+    }
 
 	/**
 	 * Parsing the URI
@@ -496,7 +493,7 @@ class G
 	 * @return void
 	 */
 	public function LoadClass($strClass) {
-		$classfile = g::ExpandPath ( "classes" ) . 'class.' . $strClass . '.php';
+		$classfile = Bootstrap::ExpandPath ( "classes" ) . 'class.' . $strClass . '.php';
 		if (! file_exists ( $classfile )) {
 			if (file_exists ( PATH_GULLIVER . 'class.' . $strClass . '.php' )) {
 				return require_once (PATH_GULLIVER . 'class.' . $strClass . '.php');
@@ -531,8 +528,7 @@ class G
 	 *
 	 * @author Hugo Loza. <hugo@colosa.com>
 	 * @access public
-	 * @param
-	 *        	eter string lang
+	 * @param  string lang
 	 * @return void
 	 */
 	public function LoadTranslationObject($lang = SYS_LANG) {
@@ -584,7 +580,7 @@ class G
 	    $G_SKIN = $strSkin;
 
 	    try {
-	 	   $file = g::ExpandPath ( 'skinEngine' ) . 'skinEngine.php';
+	 	   $file = Bootstrap::ExpandPath ( 'skinEngine' ) . 'skinEngine.php';
 	 	   include $file;
 	 	   $skinEngine = new SkinEngine ( $G_TEMPLATE, $G_SKIN, $G_CONTENT );
 	 	   $skinEngine->setLayout ( $layout );
@@ -641,7 +637,7 @@ class G
 	 	case 'label' :
 	 	case 'labels' :
 	 		$_SESSION ['G_MESSAGE_TYPE'] = $strType;
-	 		$_SESSION ['G_MESSAGE'] = nl2br ( g::LoadTranslation ( $msgID ) );
+	 		$_SESSION ['G_MESSAGE'] = nl2br ( Bootstrap::LoadTranslation ( $msgID ) );
 	 		break;
 	 	case 'string' :
 	 		$_SESSION ['G_MESSAGE_TYPE'] = $strType;
@@ -667,7 +663,7 @@ class G
 		*/
 	public function header($parameter) {
 		if (defined ( 'ENABLE_ENCRYPT' ) && (ENABLE_ENCRYPT == 'yes') && (substr ( $parameter, 0, 9 ) == 'location:')) {
-			$url = g::encrypt ( substr ( $parameter, 10 ), URL_KEY );
+			$url = Bootstrap::encrypt ( substr ( $parameter, 10 ), URL_KEY );
 			header ( 'location:' . $url );
 		} else {
 			header ( $parameter );
@@ -742,7 +738,7 @@ class G
 		$rest->setSupportedFormats( 'JsonFormat', 'XmlFormat' );
 		// getting all services class
 		$restClasses = array ();
-		$restClassesList = g::rglob( '*', 0, PATH_CORE . 'services/' );
+		$restClassesList = Bootstrap::rglob( '*', 0, PATH_CORE . 'services/' );
 		foreach ($restClassesList as $classFile) {
 			if (substr( $classFile, - 4 ) === '.php') {
 			 $restClasses[str_replace( '.php', '', basename( $classFile ) )] = $classFile;
@@ -750,7 +746,7 @@ class G
 		}
 		if (! empty( $apiClassesPath )) {
 			$pluginRestClasses = array ();
-			$restClassesList = g::rglob( '*', 0, $apiClassesPath . 'services/' );
+			$restClassesList = Bootstrap::rglob( '*', 0, $apiClassesPath . 'services/' );
 			foreach ($restClassesList as $classFile) {
 			 if (substr( $classFile, - 4 ) === '.php') {
 			 	$pluginRestClasses[str_replace( '.php', '', basename( $classFile ) )] = $classFile;
@@ -864,7 +860,7 @@ class G
 	public function streamJSTranslationFile($filename, $locale = 'en') {
 		header ( 'Content-Type: text/javascript' );
 
-		if (! g::LoadTranslationObject ( $locale )) {
+		if (! Bootstrap::LoadTranslationObject ( $locale )) {
 			header ( 'Cache-Control: no-cache' );
 			header ( 'Pragma: no-cache' );
 			return;
@@ -902,7 +898,7 @@ class G
 	 	}
 	 }
 
-	 return JSMin::minify ( 'var TRANSLATIONS = ' . g::json_encode ( $translation ) . ';' );
+	 return 'var TRANSLATIONS = ' . Bootstrap::json_encode ( $translation ) . ";\n";
 	}
 
 	/**
@@ -934,24 +930,14 @@ class G
 			$skinName = "classic";
 		}
 		if ($skinName == "classic") {
-			$configurationFile = g::ExpandPath( "skinEngine" ) . 'base' . PATH_SEP . 'config.xml';
+			$configurationFile = Bootstrap::ExpandPath( "skinEngine" ) . 'base' . PATH_SEP . 'config.xml';
 		} else {
 			$configurationFile = PATH_CUSTOM_SKINS . $skinName . PATH_SEP . 'config.xml';
 
 			if (! is_file( $configurationFile )) {
-				$configurationFile = g::ExpandPath( "skinEngine" ) . $skinName . PATH_SEP . 'config.xml';
+				$configurationFile = Bootstrap::ExpandPath( "skinEngine" ) . $skinName . PATH_SEP . 'config.xml';
 			}
 		}
-
-		//Read Configuration File
-		$xmlConfiguration = file_get_contents( $configurationFile );
-		$xmlConfigurationObj = g::xmlParser( $xmlConfiguration );
-		$baseSkinDirectory = dirname( $configurationFile );
-		$directorySize = g::getDirectorySize( $baseSkinDirectory );
-		$mtime = $directorySize['maxmtime'];
-
-		//if userAgent (BROWSER) is MSIE we need special headers to avoid MSIE behaivor.
-		//$userAgent = strtolower($_SERVER['HTTP_USER_AGENT']);
 
 		$gmt_mtime = gmdate( "D, d M Y H:i:s", $mtime ) . " GMT";
 		header( 'Pragma: cache' );
@@ -974,6 +960,16 @@ class G
 			}
 		}
 
+		//Read Configuration File
+		$xmlConfiguration    = file_get_contents( $configurationFile );
+		$xmlConfigurationObj = Bootstrap::xmlParser( $xmlConfiguration );
+		$baseSkinDirectory   = dirname( $configurationFile );
+		$directorySize       = Bootstrap::getDirectorySize( $baseSkinDirectory );
+		$mtime = $directorySize['maxmtime'];
+
+		//if userAgent (BROWSER) is MSIE we need special headers to avoid MSIE behaivor.
+		//$userAgent = strtolower($_SERVER['HTTP_USER_AGENT']);
+
 		$outputHeader = "/* Autogenerated CSS file by gulliver framework \n";
 		$outputHeader .= "   Skin: $filename\n";
 		$outputHeader .= "   Configuration: $configurationFile\n";
@@ -981,46 +977,11 @@ class G
 		$gmt_mtimeNow = gmdate( "D, d M Y H:i:s", $mtimeNow ) . " GMT";
 		$outputHeader .= "   Date: $gmt_mtimeNow*/\n";
 		$output = "";
+
 		//Base files
 		switch (strtolower( $skinVariant )) {
 			case "extjs":
-				//Basepublic function getDirectorySize ($path, $maxmtime = 0)
-				{
-					$totalsize = 0;
-					$totalcount = 0;
-					$dircount = 0;
-					if ($handle = opendir( $path )) {
-						while (false !== ($file = readdir( $handle ))) {
-							$nextpath = $path . '/' . $file;
-							if ($file != '.' && $file != '..' && ! is_link( $nextpath ) && $file != '.svn') {
-								if (is_dir( $nextpath )) {
-									$dircount ++;
-									$result = g::getDirectorySize( $nextpath, $maxmtime );
-									$totalsize += $result['size'];
-									$totalcount += $result['count'];
-									$dircount += $result['dircount'];
-									$maxmtime = $result['maxmtime'] > $maxmtime ? $result['maxmtime'] : $maxmtime;
-								} elseif (is_file( $nextpath )) {
-									$totalsize += filesize( $nextpath );
-									$totalcount ++;
-
-									$mtime = filemtime( $nextpath );
-									if ($mtime > $maxmtime) {
-										$maxmtime = $mtime;
-									}
-								}
-							}
-						}
-					}
-					closedir( $handle );
-					$total['size'] = $totalsize;
-					$total['count'] = $totalcount;
-					$total['dircount'] = $dircount;
-					$total['maxmtime'] = $maxmtime;
-
-					return $total;
-				}
-
+				//Base
 				$baseCSSPath = PATH_SKIN_ENGINE . "base" . PATH_SEP . "baseCss" . PATH_SEP;
 				$output .= file_get_contents( $baseCSSPath . 'ext-all-notheme.css' );
 				//$output .= file_get_contents ( $publicExtPath . 'ext-all.css' );
@@ -1030,13 +991,11 @@ class G
 
 				break;
 			default:
-
 				break;
-
 		}
 
 		//Get Browser Info
-		$infoBrowser = g::get_current_browser();
+		$infoBrowser = Bootstrap::get_current_browser();
 		$browserName = $infoBrowser['browser_working'];
 		if (isset( $infoBrowser[$browserName . '_data'] )) {
 			if ($infoBrowser[$browserName . '_data'][0] != "") {
@@ -1046,7 +1005,7 @@ class G
 
 		//Read Configuration File
 		$xmlConfiguration = file_get_contents ( $configurationFile );
-		$xmlConfigurationObj = g::xmlParser($xmlConfiguration);
+		$xmlConfigurationObj = Bootstrap::xmlParser($xmlConfiguration);
 
 		$skinFilesArray=$xmlConfigurationObj->result['skinConfiguration']['__CONTENT__']['cssFiles']['__CONTENT__'][$skinVariant]['__CONTENT__']['cssFile'] ;
 		foreach ($skinFilesArray as $keyFile => $cssFileInfo) {
@@ -1055,7 +1014,7 @@ class G
 
 			if (((in_array($browserName, $enabledBrowsers))||(in_array('ALL', $enabledBrowsers)))&&(!(in_array($browserName, $disabledBrowsers)))) {
 				if ($cssFileInfo['__ATTRIBUTES__']['file'] == 'rtl.css') {
-					g::LoadClass('serverConfiguration');
+					Bootstrap::LoadClass('serverConfiguration');
 					$oServerConf =& serverConf::getSingleton();
 					if (!(defined('SYS_LANG'))) {
 						if (isset($_SERVER['HTTP_REFERER'])) {
@@ -1126,9 +1085,9 @@ class G
 		}
 
 		if (! $download) {
-				
+
 			header ( 'Pragma: cache' );
-				
+
 			if (file_exists ( $filename )) {
 				$mtime = filemtime ( $filename );
 			} else {
@@ -1145,7 +1104,7 @@ class G
 					exit ();
 				}
 			}
-				
+
 			if (isset ( $_SERVER ['HTTP_IF_NONE_MATCH'] )) {
 				if (str_replace ( '"', '', stripslashes ( $_SERVER ['HTTP_IF_NONE_MATCH'] ) ) == md5 ( $mtime . $filename )) {
 					header ( "HTTP/1.1 304 Not Modified" );
@@ -1162,7 +1121,7 @@ class G
 	 */
 	public function getCheckSum ($files)
 	{
-		g::LoadClass( 'system' );
+		Bootstrap::LoadClass( 'system' );
 		$key = System::getVersion();
 
 		if (! is_array( $files )) {
@@ -1252,7 +1211,7 @@ class G
 		if (is_array( $vVar )) {
 			foreach ($vVar as $sKey => $vValue) {
 				if (is_array( $vValue )) {
-					g::strip_slashes( $vVar[$sKey] );
+					Bootstrap::strip_slashes( $vVar[$sKey] );
 				} else {
 					$vVar[$sKey] = stripslashes( $vVar[$sKey] );
 				}
@@ -1321,7 +1280,7 @@ class G
 		$paths = glob($path.'*', GLOB_MARK|GLOB_ONLYDIR|GLOB_NOSORT);
 		$files = glob($path.$pattern, $flags);
 		foreach ($paths as $path) {
-			$files = array_merge($files, g::rglob($pattern, $flags, $path));
+			$files = array_merge($files, Bootstrap::rglob($pattern, $flags, $path));
 		}
 		return $files;
 	}
@@ -1336,7 +1295,7 @@ class G
 		if ( function_exists('json_encode') ) {
 			return json_encode($Json);
 		} else {
-			g::LoadThirdParty('pear/json', 'class.json');
+			Bootstrap::LoadThirdParty('pear/json', 'class.json');
 			$oJSON = new Services_JSON();
 			return $oJSON->encode($Json);
 		}
@@ -1352,7 +1311,7 @@ class G
 		if (function_exists('json_decode')) {
 			return json_decode($Json);
 		} else {
-			g::LoadThirdParty('pear/json', 'class.json');
+			Bootstrap::LoadThirdParty('pear/json', 'class.json');
 			$oJSON = new Services_JSON();
 			return $oJSON->decode($Json);
 		}
@@ -1453,7 +1412,7 @@ class G
 				if ($file != '.' && $file != '..' && ! is_link( $nextpath ) && $file != '.svn') {
 					if (is_dir( $nextpath )) {
 						$dircount ++;
-						$result = g::getDirectorySize( $nextpath, $maxmtime );
+						$result = Bootstrap::getDirectorySize( $nextpath, $maxmtime );
 						$totalsize += $result['size'];
 						$totalcount += $result['count'];
 						$dircount += $result['dircount'];
@@ -1501,14 +1460,14 @@ class G
 
 	/**
 	 * Refactor function
-	 * @author Ralph A. 
+	 * @author Ralph A.
 	 * @return multitype:array containing browser name and type
 	 */
 	public function get_current_browser()
 	{
 	    static $a_full_assoc_data, $a_mobile_data, $browser_user_agent;
 	    static $browser_working, $moz_type, $webkit_type;
-	
+
 	    //initialize all variables with default values to prevent error
 	    $a_full_assoc_data = '';
 	    $a_mobile_data = '';
@@ -1518,14 +1477,14 @@ class G
 	    $moz_type = '';
 	    $ua_type = 'bot';// default to bot since you never know with bots
 	    $webkit_type = '';
-	
+
 	    /*
 	     make navigator user agent string lower case to make sure all versions get caught
 	    isset protects against blank user agent failure. tolower also lets the script use
 	    strstr instead of stristr, which drops overhead slightly.
 	    */
 	    $browser_user_agent = strtolower( $_SERVER['HTTP_USER_AGENT'] );
-	     
+
 	    // known browsers, list will be updated routinely, check back now and then
 	    $a_browser_types = array(
             array( 'opera', true, 'op', 'bro' ),
@@ -1651,11 +1610,11 @@ class G
                }
                break;
             }
-        }	
-      
-        $mobile_test = g::check_is_mobile( $browser_user_agent );
+        }
+
+        $mobile_test = Bootstrap::check_is_mobile( $browser_user_agent );
         if ( $mobile_test ) {
-            $a_mobile_data = g::get_mobile_data( $browser_user_agent );
+            $a_mobile_data = Bootstrap::get_mobile_data( $browser_user_agent );
             $ua_type = 'mobile';
         }
 
@@ -1666,10 +1625,10 @@ class G
 				'webkit_data' => array($webkit_type),
 				'mobile_data' => array($a_mobile_data),
 		);
-     
+
 	    return $a_full_assoc_data;
 	}
-	
+
 	/**
 	 * track total script execution time
 	 */
@@ -1719,7 +1678,7 @@ class G
 			}
 		}
 
-		$start_pos += g::get_set_count( 'get' );
+		$start_pos += Bootstrap::get_set_count( 'get' );
 		$string_working_number = substr( $pv_browser_user_agent, $start_pos, $substring_length );
 		$string_working_number = substr( $string_working_number, 0, strcspn($string_working_number, ' );/') );
 		if (!is_numeric( substr( $string_working_number, 0, 1 ))) {
@@ -1841,7 +1800,7 @@ class G
 					case 'mac':
 						if (strstr($pv_browser_string, 'os x')) {
 							if (strstr($pv_browser_string, 'os x ')) {
-								$os_working_number = str_replace( '_', '.', g::get_item_version( $pv_browser_string, 'os x' ) );
+								$os_working_number = str_replace( '_', '.', Bootstrap::get_item_version( $pv_browser_string, 'os x' ) );
 							} else {
 								$os_working_number = 10;
 							}
@@ -1940,7 +1899,7 @@ class G
 		for ($k = 0; $k < $k_count; $k++) {
 			if (strstr( $pv_browser_user_agent, $a_mobile_browser[$k] )) {
 				$mobile_browser = $a_mobile_browser[$k];
-				$mobile_browser_number = g::get_item_version( $pv_browser_user_agent, $mobile_browser );
+				$mobile_browser_number = Bootstrap::get_item_version( $pv_browser_user_agent, $mobile_browser );
 				break;
 			}
 		}
@@ -1949,9 +1908,9 @@ class G
 			if (strstr( $pv_browser_user_agent, $a_mobile_device[$k] )) {
 				$mobile_device = trim ( $a_mobile_device[$k], '-_' ); // but not space trims yet
 				if ($mobile_device == 'blackberry') {
-					g::get_set_count( 'set', 0 );
+					Bootstrap::get_set_count( 'set', 0 );
 				}
-				$mobile_device_number = g::get_item_version( $pv_browser_user_agent, $mobile_device );
+				$mobile_device_number = Bootstrap::get_item_version( $pv_browser_user_agent, $mobile_device );
 				$mobile_device = trim( $mobile_device ); // some of the id search strings have white space
 				break;
 			}
@@ -1960,7 +1919,7 @@ class G
 		for ($k = 0; $k < $k_count; $k++) {
 			if (strstr( $pv_browser_user_agent, $a_mobile_os[$k] )) {
 				$mobile_os = $a_mobile_os[$k];
-				$mobile_os_number = str_replace( '_', '.', g::get_item_version( $pv_browser_user_agent, $mobile_os ) );
+				$mobile_os_number = str_replace( '_', '.', Bootstrap::get_item_version( $pv_browser_user_agent, $mobile_os ) );
 				break;
 			}
 		}
@@ -1968,14 +1927,14 @@ class G
 		for ($k = 0; $k < $k_count; $k++) {
 			if (strstr( $pv_browser_user_agent, $a_mobile_server[$k] )) {
 				$mobile_server = $a_mobile_server[$k];
-				$mobile_server_number = g::get_item_version( $pv_browser_user_agent, $mobile_server );
+				$mobile_server_number = Bootstrap::get_item_version( $pv_browser_user_agent, $mobile_server );
 				break;
 			}
 		}
 		// just for cases where we know it's a mobile device already
 		if (!$mobile_os && ( $mobile_browser || $mobile_device || $mobile_server ) && strstr( $pv_browser_user_agent, 'linux' ) ) {
 			$mobile_os = 'linux';
-			$mobile_os_number = g::get_item_version( $pv_browser_user_agent, 'linux' );
+			$mobile_os_number = Bootstrap::get_item_version( $pv_browser_user_agent, 'linux' );
 		}
 
 		$a_mobile_data = array( $mobile_device, $mobile_browser, $mobile_browser_number, $mobile_os, $mobile_os_number, $mobile_server, $mobile_server_number, $mobile_device_number );
@@ -2020,7 +1979,7 @@ class G
 			$plain = '/sys' . SYS_TEMP;
 
 			for ($i = 2; $i < count( $aRequestUri ); $i ++) {
-				$decoded = g::decrypt( urldecode( $aRequestUri[$i] ), URL_KEY );
+				$decoded = Bootstrap::decrypt( urldecode( $aRequestUri[$i] ), URL_KEY );
 				if ($decoded == 'sWì›') {
 					$decoded = $VARS[$i]; //this is for the string  "../"
 				}
@@ -2169,7 +2128,7 @@ class G
 		public function createUID ($scope, $id)
 		{
 			$e = $scope . $id;
-			$e = g::encrypt( $e, URL_KEY );
+			$e = Bootstrap::encrypt( $e, URL_KEY );
 			$e = str_replace( array ('+','/','='
 			), array ('__','_','___'
 			), base64_encode( $e ) );
@@ -2192,7 +2151,7 @@ class G
 			), array ('___','__','_'
 			), $uid );
 			$e = base64_decode( $e );
-			$e = g::decrypt( $e, URL_KEY );
+			$e = Bootstrap::decrypt( $e, URL_KEY );
 			$e = substr( $e, strlen( $scope ) );
 			return $e;
 		}
@@ -2210,7 +2169,7 @@ class G
 			$arrays = & func_get_args();
 			foreach ($arrays as $array_i) {
 				if (is_array( $array_i )) {
-					g::array_merge_2( $array, $array_i );
+					Bootstrap::array_merge_2( $array, $array_i );
 				}
 			}
 			return $array;
@@ -2232,7 +2191,7 @@ class G
 					if (! isset( $array[$k] )) {
 						$array[$k] = array ();
 					}
-					g::array_merge_2( $array[$k], $v );
+					Bootstrap::array_merge_2( $array[$k], $v );
 				} else {
 					if (isset( $array[$k] ) && is_array( $array[$k] )) {
 						$array[$k][0] = $v;
@@ -2265,7 +2224,7 @@ class G
 			if (! is_array( $result )) {
 				$result = array ();
 			}
-			$result = $result + g::getSystemConstants();
+			$result = $result + Bootstrap::getSystemConstants();
 			$__textoEval = "";
 			$u = 0;
 			//$count=preg_match_all('/\@(?:([\@\%\#\!Qq])([a-zA-Z\_]\w*)|([a-zA-Z\_][\w\-\>\:]*)\(((?:[^\\\\\)]*(?:[\\\\][\w\W])?)*)\))/',$sqlString,$match,PREG_PATTERN_ORDER | PREG_OFFSET_CAPTURE);
@@ -2280,7 +2239,7 @@ class G
 						$u = $match[0][$r][1] + strlen( $match[0][$r][0] );
 						//Mysql quotes scape
 						if (($match[1][$r][0] == '@') && (isset( $result[$match[2][$r][0]] ))) {
-							$__textoEval .= "\"" . g::sqlEscape( $result[$match[2][$r][0]], $DBEngine ) . "\"";
+							$__textoEval .= "\"" . Bootstrap::sqlEscape( $result[$match[2][$r][0]], $DBEngine ) . "\"";
 							continue;
 						}
 						//URL encode
@@ -2300,14 +2259,14 @@ class G
 						}
 						//Substring (Sub replaceDataField)
 						if (($match[1][$r][0]=='!')&&(isset($result[$match[2][$r][0]]))) {
-							$__textoEval.=g::replaceDataField($result[$match[2][$r][0]],$result);
+							$__textoEval.=Bootstrap::replaceDataField($result[$match[2][$r][0]],$result);
 							continue;
 						}
 						//Call function
 						if (($match[1][$r][0]==='')&&($match[2][$r][0]==='')&&($match[3][$r][0]!=='')) {
-							eval('$strAux = ' . $match[3][$r][0] . '(\'' . addcslashes(g::replaceDataField(stripslashes($match[4][$r][0]),$result),'\\\'') . '\');');
+							eval('$strAux = ' . $match[3][$r][0] . '(\'' . addcslashes(Bootstrap::replaceDataField(stripslashes($match[4][$r][0]),$result),'\\\'') . '\');');
 
-							if ($match[3][$r][0] == "g::LoadTranslation") {
+							if ($match[3][$r][0] == "Bootstrap::LoadTranslation") {
 								$arraySearch  = array("'");
 								$arrayReplace = array("\\'");
 								$strAux = str_replace($arraySearch, $arrayReplace, $strAux);
@@ -2318,12 +2277,12 @@ class G
 						}
 						//Non-quoted
 						if (($match[1][$r][0]=='#')&&(isset($result[$match[2][$r][0]]))) {
-							$__textoEval.=g::replaceDataField($result[$match[2][$r][0]],$result);
+							$__textoEval.=Bootstrap::replaceDataField($result[$match[2][$r][0]],$result);
 							continue;
 						}
 						//Non-quoted =
 						if (($match[1][$r][0]=='=')&&(isset($result[$match[2][$r][0]]))) {
-							$__textoEval.=g::replaceDataField($result[$match[2][$r][0]],$result);
+							$__textoEval.=Bootstrap::replaceDataField($result[$match[2][$r][0]],$result);
 							continue;
 						}
 					}
@@ -2351,7 +2310,7 @@ class G
 		 */
 		public function getSystemConstants($params = null)
 		{
-			$t1 = g::microtime_float();
+			$t1 = Bootstrap::microtime_float();
 			$sysCon = array();
 
 			if (defined("SYS_LANG")) {
@@ -2382,7 +2341,7 @@ class G
 					switch ($params->option) {
 						case "STORED SESSION":
 							if (isset($params->SID)) {
-								g::LoadClass("sessions");
+								Bootstrap::LoadClass("sessions");
 
 								$oSessions = new Sessions($params->SID);
 								$sysCon = array_merge($sysCon, $oSessions->getGlobals());
@@ -2446,7 +2405,7 @@ class G
 			}
 
 			$temp = $strTemplateName . ".php";
-			$file = g::ExpandPath( 'templates' ) . $temp;
+			$file = Bootstrap::ExpandPath( 'templates' ) . $temp;
 			// Check if its a user template
 			if (file_exists( $file )) {
 				//require_once( $file );
@@ -2479,7 +2438,7 @@ class G
 			} else {
 				if ($createPath) {
 					//TODO:: Define Environment constants: Devel (0777), Production (0770), ...
-					G::mk_dir( $strPath, 0777 );
+					Bootstrap::mk_dir( $strPath, 0777 );
 				} else {
 					return false;
 				}
@@ -2555,18 +2514,18 @@ class G
 
 			$MONTHS = Array ();
 			for ($i = 1; $i <= 12; $i ++) {
-				$MONTHS[$i] = g::LoadTranslation( "ID_MONTH_$i", $lang );
+				$MONTHS[$i] = Bootstrap::LoadTranslation( "ID_MONTH_$i", $lang );
 			}
 
 			$d = (int) $day;
-			$dd = g::complete_field( $day, 2, 1 );
+			$dd = Bootstrap::complete_field( $day, 2, 1 );
 
 			//missing D
 
 
 			$M = $MONTHS[$month];
 			$m = (int) $month;
-			$mm = g::complete_field( $month, 2, 1 );
+			$mm = Bootstrap::complete_field( $month, 2, 1 );
 
 			$yy = substr( $year, strlen( $year ) - 2, 2 );
 			$yyyy = $year;
@@ -2667,7 +2626,7 @@ class G
 		{
 			print ("<script language=\"javascript\">{$c}</script>") ;
 		}
-		
+
 		/**
 		 * Generate random number
 		 *
@@ -2683,7 +2642,7 @@ class G
 		    return $sUID;
 		    //return strtoupper(substr(uniqid(rand(0, 9), false),0,14));
 		}
-		
+
 		/**
 		 * Encrypt URL
 		 *
@@ -2695,7 +2654,7 @@ class G
 		public function encryptlink ($url)
 		{
 		    if (defined( 'ENABLE_ENCRYPT' ) && ENABLE_ENCRYPT == 'yes') {
-		        return urlencode( G::encrypt( $url, URL_KEY ) );
+		        return urlencode( Bootstrap::encrypt( $url, URL_KEY ) );
 		    } else {
 		        return $url;
 		    }
