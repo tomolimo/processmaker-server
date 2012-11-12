@@ -66,7 +66,6 @@ die;
 
 }
 
-
 // Defining RBAC Paths constants
 define( 'PATH_RBAC_HOME', PATH_TRUNK . 'rbac' . PATH_SEP );
 
@@ -104,6 +103,12 @@ define( 'PATH_WORKFLOW_MSSQL_DATA', PATH_CORE . 'data' . PATH_SEP . 'mssql' . PA
 define( 'PATH_RBAC_MSSQL_DATA', PATH_RBAC_CORE . 'data' . PATH_SEP . 'mssql' . PATH_SEP );
 define( 'PATH_CONTROLLERS', PATH_CORE . 'controllers' . PATH_SEP );
 define( 'PATH_SERVICES_REST', PATH_CORE . 'services' . PATH_SEP . 'rest' . PATH_SEP );
+
+//TEST
+//if($_SERVER['REQUEST_URI'] == "/sysworkflow/en/classic/processes/mainInit")
+//{
+//    echo PATH_TRUNK . "engine/methods/processes/mainInit.php";
+//}
 
 // include Gulliver Class
 require_once (PATH_GULLIVER . PATH_SEP . 'class.bootstrap.php');
