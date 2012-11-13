@@ -250,8 +250,9 @@
   G::LoadSystem('xmlformExtension');
   G::LoadSystem('form');
   G::LoadSystem('menu');
-  G::LoadSystem("xmlMenu");
+  G::LoadSystem('xmlMenu');
   G::LoadSystem('dvEditor');
+  G::LoadSystem('wysiwygEditor');
   G::LoadSystem('controller');
   G::LoadSystem('httpProxyController');
   G::LoadSystem('pmException');
@@ -259,6 +260,7 @@
   // Create headPublisher singleton
   G::LoadSystem('headPublisher');
   $oHeadPublisher =& headPublisher::getSingleton();
+  $oHeadPublisher->addScriptFile('/js/tinymce/jscripts/tiny_mce/tiny_mce.js');
 
   // Installer, redirect to install if we don't have a valid shared data folder
   if ( !defined('PATH_DATA') || !file_exists(PATH_DATA)) {
