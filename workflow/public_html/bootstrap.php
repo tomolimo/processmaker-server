@@ -59,11 +59,14 @@ define( 'PATH_HTML', PATH_HOME . 'public_html' . PATH_SEP );
 
 //this is the first path, if the file exists...
 if (file_exists(PATH_HTML . $_SERVER['REQUEST_URI'])) {
+    if(!is_file(PATH_HTML . $_SERVER['REQUEST_URI'])) {
+        header( "location: /errors/error404.php?url=" . urlencode( $_SERVER['REQUEST_URI'] ) );
+        die();
+    }
     //we are missing the header part
     //to do: add header mime part
     readfile(PATH_HTML . $_SERVER['REQUEST_URI']);
-die;
-
+    die;
 }
 
 // Defining RBAC Paths constants
@@ -235,14 +238,14 @@ $virtualURITable['/errors/(*)'] = PATH_GULLIVER_HOME . 'methods/errors/';
 $virtualURITable['/gulliver/(*)'] = PATH_GULLIVER_HOME . 'methods/';
 $virtualURITable['/controls/(*)'] = PATH_GULLIVER_HOME . 'methods/controls/';
 $virtualURITable['/html2ps_pdf/(*)'] = PATH_THIRDPARTY . 'html2ps_pdf/';
-$virtualURITable['/images/'] = 'errorFile';
-$virtualURITable['/skins/'] = 'errorFile';
-$virtualURITable['/files/'] = 'errorFile';
-//$virtualURITable['/[a-zA-Z][a-zA-Z0-9]{0,}()'] = 'sysUnnamed';
+//$virtualURITable['/images/'] = 'errorFile';
+//$virtualURITable['/skins/'] = 'errorFile';
+//$virtualURITable['/files/'] = 'errorFile';
 $virtualURITable['/rest/(*)'] = 'rest-service';
 $virtualURITable['/update/(*)'] = PATH_GULLIVER_HOME . 'methods/update/';
 //$virtualURITable['/(*)'] = PATH_HTML;
 $virtualURITable['/css/(*)'] = PATH_HTML . 'css/'; //ugly
+$virtualURITable['/[a-zA-Z][a-zA-Z0-9]{0,}/'] = 'errorFile';
 
 $isRestRequest = false;
 // Verify if we need to redirect or stream the file, if G:VirtualURI returns true means we are going to redirect the page
@@ -297,14 +300,14 @@ if (Bootstrap::virtualURI( $_SERVER['REQUEST_URI'], $virtualURITable, $realPath 
         die();
     }
     switch ($realPath) {
-        case 'sysUnnamed':
+        /*case 'sysUnnamed':
             require_once ('sysUnnamed.php');
             die();
             break;
         case 'sysNamed':
             header( 'location : ' . $_SERVER['REQUEST_URI'] . '/' . SYS_LANG . '/classic/login/login' );
             die();
-            break;
+            break;*/
         case 'jsMethod':
             Bootstrap::parseURI( getenv( "REQUEST_URI" ) );
             $filename = PATH_METHODS . SYS_COLLECTION . '/' . SYS_TARGET . '.js';
