@@ -8,10 +8,36 @@
 
 class Bootstrap
 {
+    static $includeClassPaths = array();
+
+    protected $relativeIncludePaths = array();
+
     //below here only approved methods
 
+    /* the autoloader functions */
+
+    static function autoloadClass($class)
+    {
+        //error_log( "$class ");
+        $className = strtolower($class);
+        if (array_key_exists($className, BootStrap::$includeClassPaths)) {
+            require_once BootStrap::$includeClassPaths[$className];
+            return true;
+        } else {
+          //print "$class "; //die;
+          //print_r ( debug_backtrace(false));
+        }
+        return;
+    }
+
+    public function registerClass($classname, $includeFile)
+    {
+        BootStrap::$includeClassPaths[strtolower($classname)] = $includeFile;
+        return;
+    }
+
     /*
-     * this function still under revision
+     * these functions still under revision
     */
     public function getSystemConfiguration ($globalIniFile = '', $wsIniFile = '', $wsName = '')
     {

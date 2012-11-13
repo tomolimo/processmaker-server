@@ -522,7 +522,6 @@ class XmlForm_Field
     public function getAttributes ()
     {
         $attributes = array ();
-        $json = new Services_JSON();
         foreach ($this as $attribute => $value) {
             switch ($attribute) {
                 case 'sql':
@@ -540,7 +539,9 @@ class XmlForm_Field
         if (sizeof( $attributes ) < 1) {
             return '{}';
         }
-        return $json->encode( $attributes );
+        //$json = new Services_JSON();
+        //return $json->encode( $attributes );
+        return G::json_encode( $attributes );
     }
 
     /**
@@ -553,7 +554,6 @@ class XmlForm_Field
     public function getEvents ()
     {
         $events = array ();
-        $json = new Services_JSON();
         foreach ($this as $attribute => $value) {
             if (substr( $attribute, 0, 2 ) === 'on') {
                 $events[$attribute] = $value;
@@ -562,7 +562,9 @@ class XmlForm_Field
         if (sizeof( $events ) < 1) {
             return '{}';
         }
-        return $json->encode( $events );
+        //$json = new Services_JSON();
+        //return $json->encode( $events );
+        return G::json_encode( $events );
     }
 
     /**
@@ -1336,7 +1338,6 @@ class XmlForm_Field_Suggest extends XmlForm_Field_SimpleText //by neyek
                 }
 
                 $hash = str_rot13( base64_encode( $this->sql . '@|' . $this->sqlConnection ) );
-                //        $sOptions  = 'script:"'.$this->ajaxServer.'?request=suggest&json=true&limit='.$this->maxresults.'&hash='.$hash.'&dependentFields='. $this->dependentFields .'&field=" + getField(\''. $this->name .'\').value + "&",';
                 $sSQL = $this->sql;
                 $nCount = preg_match_all( '/\@(?:([\@\%\#\!Qq])([a-zA-Z\_]\w*)|([a-zA-Z\_][\w\-\>\:]*)\(((?:[^\\\\\)]*?)*)\))/', $sSQL, $match, PREG_PATTERN_ORDER | PREG_OFFSET_CAPTURE );
 

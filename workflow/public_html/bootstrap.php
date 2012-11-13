@@ -1,6 +1,6 @@
 <?php
 /**
- * sysGeneric.php
+ * Bootstrap.php
  *
  * ProcessMaker Open Source Edition
  * Copyright (C) 2004 - 2008 Colosa Inc.
@@ -375,13 +375,39 @@ Bootstrap::LoadThirdParty( 'smarty/libs', 'Smarty.class' );
   //Bootstrap::LoadSystem( 'httpProxyController' );
   //Bootstrap::LoadSystem( 'pmException' );
   //
+
+//testing the autoloader feature
+spl_autoload_register(array(Bootstrap, 'autoloadClass'));
+Bootstrap::registerClass('headPublisher', PATH_GULLIVER . "class.headPublisher.php");
+Bootstrap::registerClass('G', PATH_GULLIVER . "class.g.php");
+Bootstrap::registerClass('publisher', PATH_GULLIVER . "class.publisher.php");
+Bootstrap::registerClass('xmlform', PATH_GULLIVER . "class.xmlform.php");
+Bootstrap::registerClass('XmlForm_Field', PATH_GULLIVER . "class.xmlform.php");
+Bootstrap::registerClass('xmlformExtension', PATH_GULLIVER . "class.xmlformExtension.php");
+Bootstrap::registerClass('form',         PATH_GULLIVER . "class.form.php");
+Bootstrap::registerClass('menu',         PATH_GULLIVER . "class.menu.php");
+Bootstrap::registerClass('Xml_Document', PATH_GULLIVER . "class.xmlDocument.php");
+Bootstrap::registerClass('DBSession',    PATH_GULLIVER . "class.dbsession.php");
+Bootstrap::registerClass('DBConnection', PATH_GULLIVER . "class.dbconnection.php");
+Bootstrap::registerClass('DBRecordset',  PATH_GULLIVER . "class.dbrecordset.php");
+Bootstrap::registerClass('DBTable',      PATH_GULLIVER . "class.dbtable.php");
+Bootstrap::registerClass('xmlMenu',      PATH_GULLIVER . "class.xmlMenu.php");
+Bootstrap::registerClass('XmlForm_Field_XmlMenu', PATH_GULLIVER . "class.xmlMenu.php");
+Bootstrap::registerClass('XmlForm_Field_HTML',  PATH_GULLIVER . "class.dvEditor.php");
+Bootstrap::registerClass('Controller',          PATH_GULLIVER . "class.controller.php");
+Bootstrap::registerClass('HttpProxyController', PATH_GULLIVER . "class.httpProxyController.php");
+Bootstrap::registerClass('templatePower',            PATH_GULLIVER . "class.templatePower.php");
+Bootstrap::registerClass('XmlForm_Field_SimpleText', PATH_GULLIVER . "class.xmlformExtension.php");
+Bootstrap::registerClass('System',        PATH_HOME . "engine/classes/class.system.php");
+
+  //Bootstrap::LoadSystem( 'pmException' );
+
 // Create headPublisher singleton
-Bootstrap::LoadSystem( 'headPublisher' );
+//Bootstrap::LoadSystem( 'headPublisher' );
 $oHeadPublisher = & headPublisher::getSingleton();
 
 // Installer, redirect to install if we don't have a valid shared data folder
 if (! defined( 'PATH_DATA' ) || ! file_exists( PATH_DATA )) {
-
     // new installer, extjs based
     define( 'PATH_DATA', PATH_C );
     require_once (PATH_CONTROLLERS . 'installer.php');
@@ -460,11 +486,6 @@ if (defined( 'SYS_TEMP' ) && SYS_TEMP != '') {
                     $controller->call( $controllerAction );
                 }
             } else { // classic sysLogin interface
-                Bootstrap::LoadSystem( 'g');
-                Bootstrap::LoadSystem( 'publisher' );
-                Bootstrap::LoadSystem( 'xmlform' );
-                Bootstrap::LoadSystem( 'form' );
-                Bootstrap::LoadSystem( 'menu' );
                 require_once (PATH_METHODS . "login/sysLogin.php");
                 die();
             }
@@ -682,27 +703,6 @@ if (! $avoidChangedWorkspaceValidation && isset( $_SESSION['WORKSPACE'] ) && $_S
 Bootstrap::LoadSystem( 'rbac' );
 $RBAC = &RBAC::getSingleton( PATH_DATA, session_id() );
 $RBAC->sSystem = 'PROCESSMAKER';
-
-Bootstrap::LoadSystem( 'g');
-Bootstrap::LoadSystem( 'publisher' );
-Bootstrap::LoadSystem( 'xmlDocument' );
-Bootstrap::LoadSystem( 'xmlform' );
-Bootstrap::LoadSystem( 'form' );
-Bootstrap::LoadSystem( 'menu' );
-
-Bootstrap::LoadSystem( 'templatePower' );
-  //Bootstrap::LoadSystem( 'xmlformExtension' );
-  //Bootstrap::LoadSystem( "xmlMenu" );
-  //Bootstrap::LoadSystem( 'dvEditor' );
-  //Bootstrap::LoadSystem( 'httpProxyController' );
-  //Bootstrap::LoadSystem( 'pmException' );
-
-//Bootstrap::LoadSystem( 'dbconnection' );
-//Bootstrap::LoadSystem( 'dbsession' );
-//Bootstrap::LoadSystem( 'dbrecordset' );
-Bootstrap::LoadSystem( 'dbtable' );
-Bootstrap::LoadClass( 'system' );
-
 
 // define and send Headers for all pages
 if (! defined( 'EXECUTE_BY_CRON' )) {
