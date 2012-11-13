@@ -59,7 +59,7 @@ define( 'PATH_HTML', PATH_HOME . 'public_html' . PATH_SEP );
 
 //this is the first path, if the file exists...
 if (file_exists(PATH_HTML . $_SERVER['REQUEST_URI'])) {
-    if(!is_file(PATH_HTML . $_SERVER['REQUEST_URI'])) {
+    if (!is_file(PATH_HTML . $_SERVER['REQUEST_URI'])) {
         header( "location: /errors/error404.php?url=" . urlencode( $_SERVER['REQUEST_URI'] ) );
         die();
     }
@@ -300,14 +300,6 @@ if (Bootstrap::virtualURI( $_SERVER['REQUEST_URI'], $virtualURITable, $realPath 
         die();
     }
     switch ($realPath) {
-        /*case 'sysUnnamed':
-            require_once ('sysUnnamed.php');
-            die();
-            break;
-        case 'sysNamed':
-            header( 'location : ' . $_SERVER['REQUEST_URI'] . '/' . SYS_LANG . '/classic/login/login' );
-            die();
-            break;*/
         case 'jsMethod':
             Bootstrap::parseURI( getenv( "REQUEST_URI" ) );
             $filename = PATH_METHODS . SYS_COLLECTION . '/' . SYS_TARGET . '.js';
@@ -402,6 +394,11 @@ Bootstrap::registerClass('HttpProxyController', PATH_GULLIVER . "class.httpProxy
 Bootstrap::registerClass('templatePower',            PATH_GULLIVER . "class.templatePower.php");
 Bootstrap::registerClass('XmlForm_Field_SimpleText', PATH_GULLIVER . "class.xmlformExtension.php");
 Bootstrap::registerClass('System',        PATH_HOME . "engine/classes/class.system.php");
+Bootstrap::registerClass('Propel',          PATH_THIRDPARTY . "propel/Propel.php");
+Bootstrap::registerClass('Creole',          PATH_THIRDPARTY . "creole/Creole.php");
+
+//Bootstrap::registerClass('LoginLog',          PATH_HOME . "engine/classes/model/LoginLog.php");
+//Bootstrap::registerClass('LoginLogPeer',      PATH_HOME . "engine/classes/model/LoginLogPeer.php");
 
   //Bootstrap::LoadSystem( 'pmException' );
 
@@ -551,8 +548,9 @@ if (file_exists( $sSerializedFile )) {
 }
 
 // setup propel definitions and logging
-require_once ("propel/Propel.php");
-require_once ("creole/Creole.php");
+//changed to autoloader
+//require_once ("propel/Propel.php");
+//require_once ("creole/Creole.php");
 
 if (defined( 'DEBUG_SQL_LOG' ) && DEBUG_SQL_LOG) {
     define( 'PM_PID', mt_rand( 1, 999999 ) );
@@ -678,12 +676,10 @@ if (substr( SYS_COLLECTION, 0, 8 ) === 'gulliver') {
         //if the method name is empty set default to index method
         $controllerAction = SYS_TARGET != '' ? SYS_TARGET : 'index';
         //if the method exists
-        if (is_callable( Array ($controllerClass,$controllerAction
-        ) )) {
+        if (is_callable( Array ($controllerClass,$controllerAction ) )) {
             $isControllerCall = true;
         }
     }
-
     if (! $isControllerCall && ! file_exists( $phpFile ) && ! $isRestRequest) {
         $_SESSION['phpFileNotFound'] = $_SERVER['REQUEST_URI'];
         header( "location: /errors/error404.php?url=" . urlencode( $_SERVER['REQUEST_URI'] ) );
@@ -752,7 +748,6 @@ if (! defined( 'EXECUTE_BY_CRON' )) {
         // This sentence is used when you lost the Session
         if (! in_array( SYS_TARGET, $noLoginFiles ) && ! in_array( SYS_COLLECTION, $noLoginFolders ) && $bWE != true && $collectionPlugin != 'services' && ! $isRestRequest) {
             $bRedirect = true;
-
             if (isset( $_GET['sid'] )) {
                 Bootstrap::LoadClass( 'sessions' );
                 $oSessions = new Sessions();
