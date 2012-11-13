@@ -76,7 +76,7 @@ foreach ($_POST['aUsers'] as $sUser) {
                     $evalValue = $aData[$value['attributeUser']];
 
                     $statusValue = 'INACTIVE';
-                    if (is_string($evalValue) && $evalValue == 'ACTIVE') {
+                    if (is_string($evalValue) && G::toUpper($evalValue) == 'ACTIVE') {
                         $statusValue = 'ACTIVE';
                     }
                     if (is_bool($evalValue) && $evalValue == true) {
