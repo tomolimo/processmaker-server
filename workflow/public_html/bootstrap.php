@@ -464,6 +464,7 @@ if (defined( 'SYS_TEMP' ) && SYS_TEMP != '') {
                 Bootstrap::LoadSystem( 'publisher' );
                 Bootstrap::LoadSystem( 'xmlform' );
                 Bootstrap::LoadSystem( 'form' );
+                Bootstrap::LoadSystem( 'xmlDocument' );
                 Bootstrap::LoadSystem( 'menu' );
                 require_once (PATH_METHODS . "login/sysLogin.php");
                 die();
