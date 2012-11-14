@@ -58,14 +58,27 @@ define( 'PATH_OUTTRUNK', $pathOutTrunk );
 define( 'PATH_HTML', PATH_HOME . 'public_html' . PATH_SEP );
 
 //this is the first path, if the file exists...
-if (file_exists(PATH_HTML . $_SERVER['REQUEST_URI'])) {
-    if (!is_file(PATH_HTML . $_SERVER['REQUEST_URI'])) {
+$requestFile = PATH_HTML . $_SERVER['REQUEST_URI'];
+if (file_exists($requestFile)) {
+    if (!is_file($requestFile)) {
         header( "location: /errors/error404.php?url=" . urlencode( $_SERVER['REQUEST_URI'] ) );
-        die();
+        die;
     }
-    //we are missing the header part
-    //to do: add header mime part
-    readfile(PATH_HTML . $_SERVER['REQUEST_URI']);
+    $pos = strripos($requestFile, ".") + 1;
+    $size = strlen($requestFile);
+    if($pos < $size) {
+        //if this file got an extension then assign the content
+    	$ext_file = substr($requestFile, $pos, $size);
+        if ($ext_file == "gif" || $ext_file == "png" || $ext_file == "jpg") {
+            $ext_file = 'image/'.$ext_file ;
+	    } elseif ($ext_file=="css") {
+	        //may this line be innecesary, all the css are been generated at run time
+	        $ext_file = 'css/'.$ext_file;
+	    }
+	    header ('Content-Type: ' . $ext_file);
+    }
+    header ('Pragma: cache');
+    readfile($requestFile);
     die;
 }
 
