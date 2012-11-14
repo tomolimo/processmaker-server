@@ -94,8 +94,8 @@ class XmlForm_Field_WYSIWYG_EDITOR extends XmlForm_Field
                         plugins : "fullpage",
                         mode    : "specific_textareas",
                         editor_selector : "tmceEditor",
-                        width   : "640",
-                        height  : "300",
+                        width   : "'.$this->width.'",
+                        height  : "'.$this->height.'",
                         theme_advanced_buttons3_add : "fullpage"
                     });
                 ';
@@ -168,8 +168,8 @@ class XmlForm_Field_WYSIWYG_EDITOR extends XmlForm_Field
                         plugins : "fullpage",
                         mode    : "specific_textareas",
                         editor_selector : "tmceEditor",
-                        width   : "640",
-                        height  : "300",
+                        width   : "'. $this->width. '",
+                        height  : "'. $this->height. '",
                         theme_advanced_buttons3_add : "fullpage"
                     });
                 ';

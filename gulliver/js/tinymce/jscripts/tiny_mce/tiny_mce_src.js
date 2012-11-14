@@ -4206,12 +4206,21 @@ tinymce.html.Styles = function(settings, schema) {
 					// Remove already removed children
 					fi = nodes.length;
 					while (fi--) {
-						if (!nodes[fi].parent)
-							nodes.splice(fi, 1);
+                                           
+                                            if(name!='toStr'&&name!='concat'&&name!='get_by_key'&&name!='expand'&&name!='setParent'&&name!='isset_key'){
+						if (!nodes[fi].parent){
+                                                    nodes.splice(fi, 1);
+                                                }
+                                            }
 					}
-
-					for (i = 0, l = list.length; i < l; i++)
-						list[i](nodes, name, args);
+                                        
+                                        
+					for (i = 0, l = list.length; i < l; i++){
+                                            if(name!='toStr'&&name!='concat'&&name!='get_by_key'&&name!='expand'&&name!='setParent'&&name!='isset_key'){
+                                                list[i](nodes, name, args);
+                                            }
+                                        }
+                                            
 				}
 
 				// Run attribute filters
@@ -13693,7 +13702,7 @@ tinymce.create('tinymce.ui.Toolbar:tinymce.ui.Container', {
 				bc = bc[t.id] || '';
 			}
 
-			t.iframeHTML += '</head><body id="' + bi + '" class="mceContentBody ' + bc + '" onload="window.parent.tinyMCE.get(\'' + t.id + '\').onLoad.dispatch();"><br></body></html>';
+			t.iframeHTML += '</head><body id="' + bi + '" class="mceContentBody ' + bc + '" onload="window.parent.tinyMCE.get(\'' + t.id + '\').onLoad.dispatch();"><br>NOT LOADED</body></html>';
 
 			// Domain relaxing enabled, then set document domain
 			if (tinymce.relaxedDomain && (isIE || (tinymce.isOpera && parseFloat(opera.version()) < 11))) {
@@ -14317,7 +14326,7 @@ tinymce.create('tinymce.ui.Toolbar:tinymce.ui.Container', {
 		},
 
 		load : function(o) {
-			var t = this, e = t.getElement(), h;
+                        var t = this, e = t.getElement(), h;
 
 			if (e) {
 				o = o || {};
@@ -14328,8 +14337,8 @@ tinymce.create('tinymce.ui.Toolbar:tinymce.ui.Container', {
 				o.element = e;
 
 				if (!o.no_events)
-					t.onLoadContent.dispatch(t, o);
-
+                                    t.onLoadContent.dispatch(t, o);
+                                
 				o.element = e = null;
 
 				return h;
@@ -14385,7 +14394,7 @@ tinymce.create('tinymce.ui.Toolbar:tinymce.ui.Container', {
 			// Do preprocessing
 			if (!args.no_events)
 				self.onBeforeSetContent.dispatch(self, args);
-
+                        
 			content = args.content;
 
 			// Padd empty content in Gecko and Safari. Commands will otherwise fail on the content
