@@ -58,17 +58,18 @@ define( 'PATH_OUTTRUNK', $pathOutTrunk );
 define( 'PATH_HTML', PATH_HOME . 'public_html' . PATH_SEP );
 
 //this is the first path, if the file exists...
-$requestFile = PATH_HTML . $_SERVER['REQUEST_URI'];
+$request = substr($_SERVER['REQUEST_URI'],1,strlen($_SERVER['REQUEST_URI']));
+$requestFile = PATH_HTML . $request;
 if (file_exists($requestFile)) {
     if (!is_file($requestFile)) {
         header( "location: /errors/error404.php?url=" . urlencode( $_SERVER['REQUEST_URI'] ) );
         die;
     }
-    $pos = strripos($requestFile, ".") + 1;
-    $size = strlen($requestFile);
+    $pos = strripos($request, ".") + 1;
+    $size = strlen($request);
     if($pos < $size) {
         //if this file got an extension then assign the content
-    	$ext_file = substr($requestFile, $pos, $size);
+    	$ext_file = substr($request, $pos, $size);
         if ($ext_file == "gif" || $ext_file == "png" || $ext_file == "jpg") {
             $ext_file = 'image/'.$ext_file ;
         } elseif ($ext_file == "swf") {
@@ -106,7 +107,7 @@ if (file_exists($requestFile)) {
 	        }
 	    }
 	    if (isset ( $_SERVER ['HTTP_IF_NONE_MATCH'] )) {
-	        if (str_replace ( '"', '', stripslashes ( $_SERVER ['HTTP_IF_NONE_MATCH'] ) ) == md5 ( $mtime . $filename )) {
+	        if (str_replace ( '"', '', stripslashes ( $_SERVER ['HTTP_IF_NONE_MATCH'] ) ) == md5 ( $mtime . $requestFile )) {
 	            header ( "HTTP/1.1 304 Not Modified" );
             }
 	    }
