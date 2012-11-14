@@ -17,19 +17,24 @@
 <en>Refresh View</en>
 </PME_REFRESH_VIEW>
 
-<HTML type="html" width="100%" height="300px" toolbarSet="toolbar2lines">
+<!-- HTML type="html" width="100%" height="300px" toolbarSet="toolbar2lines">
+<en>HTML View</en>
+</HTML -->
+
+<HTML type="wysiwyg_editor" editorType="DYNAFORM_TEMPLATE" width="100%" height="300px">
 <en>HTML View</en>
 </HTML>
 
 <HTML2 type="textarea" cols="120" rows="16" style="width:100%;" className="htmleditor">
 <en>HTML Code</en>
 </HTML2>
+
 <PME_SYNCH_JS type="javascript"><![CDATA[
 
-  getField("HTML").onchange=function()
+  /*getField("HTML").onchange=function()
   {
     html_html2();
-  }
+  }*/
   function html_html2()
   {
     if (window._editorHTML.doc.forms.length>0)
@@ -57,7 +62,7 @@
   var restore_html = function() {
     alert('restore_html');
   };
-  html_html2();
+  //html_html2();
 
 ]]></PME_SYNCH_JS>
 <PME_RESIZE_JS type="javascript"><![CDATA[
@@ -68,11 +73,12 @@ function resizeHTMLEditor(){
    }catch(e){
    }
 }
-resizeHTMLEditor();
+//resizeHTMLEditor();
 getField("PME_HTML_ENABLETEMPLATE","dynaforms_HtmlEditor").onclick=function()
 {
 	/*getField("ENABLETEMPLATE","dynaforms_Properties").checked=this.checked;
 	dynaformEditor.saveProperties();*/
+   
     if (getField("PME_HTML_ENABLETEMPLATE","dynaforms_HtmlEditor").checked == true) {
         new leimnud.module.app.confirm().make(
         {

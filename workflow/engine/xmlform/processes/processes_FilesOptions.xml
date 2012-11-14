@@ -6,7 +6,7 @@
 </MNU_NEWEMPTY>
 
 <MNU_UPLOAD type="link" value="" link="#" onclick="uploadFilesScreen(@QPRO_UID, @QMAIN_DIRECTORY, @QCURRENT_DIRECTORY);return false;" colAlign="left" colWidth="100">
-  <en>Upload</en>
+  <en>Upload...............</en>
 </MNU_UPLOAD>
 
 <PRO_UID type="private"/>
@@ -16,7 +16,6 @@
 <CURRENT_DIRECTORY type="private"/>
 
 <JS type="javascript"><![CDATA[
-
 
 var CURRENT_PRO_UID = @QPRO_UID;
 var CURRENT_MAIN_DIRECTORY;
@@ -78,7 +77,7 @@ var typofile = fileName.split(".");
 if( typofile[typofile.length-1].toLowerCase() != 'txt' && typofile[typofile.length-1].toLowerCase() != 'html' ){
          	msgBox(G_STRINGS.HTML_FILES,"alert");return;
          } 
-
+///////////////////////////////////////////////////////////
 	oPanel = new leimnud.module.panel();
 	oPanel.options={
 		limit	   : true,
@@ -101,8 +100,7 @@ if( typofile[typofile.length-1].toLowerCase() != 'txt' && typofile[typofile.leng
 	  	oPanel.addContent(rpc.xmlhttp.responseText);
 	  	var scs=rpc.xmlhttp.responseText.extractScript();
 	  	scs.evalScript();
-	  	
-  	}.extend(this);
+	}.extend(this);
 	oRPC.make();
 }
 

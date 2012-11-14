@@ -57,15 +57,15 @@ class XmlForm_Field_WYSIWYG_EDITOR extends XmlForm_Field
      */
     public function render ($value, $owner = null)
     {
-        $value = ($value == '') ? '<br/>' : $value;        
-        $html  = "<textArea class='tmceEditor' id='form[" . $this->name . "]' name='form[" . $this->name . "]' >" . htmlentities( $value, ENT_QUOTES, 'UTF-8' ) . "</textarea>";                      
+        $value = ($value == '') ? '<br/>' : $value;
+        $html  = "<textArea class='tmceEditor' id='form[" . $this->name . "]' name='form[" . $this->name . "]' >" . htmlentities( $value, ENT_QUOTES, 'UTF-8' ) . "</textarea>";
         return $html;
     }
 
     /**
-     * attachEvents method executes javascript code in order to initialize 
+     * attachEvents method executes javascript code in order to initialize
      * the component configuration, attributes, and additional stuff.
-     * 
+     *
      * @author
      *
      *
@@ -81,16 +81,16 @@ class XmlForm_Field_WYSIWYG_EDITOR extends XmlForm_Field
         switch ($this->editorType){
             case 'EMAIL_TEMPLATE':
                 $editorDefinition = '
-//                    delete Array.prototype.toStr;
-//                    delete Object.prototype.toStr;
-//                    delete Object.prototype.concat;
-//                    delete Object.prototype.get_by_key;
-//                    delete Object.prototype.expand;
-//                    delete Object.prototype.setParent;
-//                    delete Object.prototype.isset_key;
+                    //delete Array.prototype.toStr;
+                    //delete Object.prototype.toStr;
+                    //delete Object.prototype.concat;
+                    //delete Object.prototype.get_by_key;
+                    //delete Object.prototype.expand;
+                    //delete Object.prototype.setParent;
+                    //delete Object.prototype.isset_key;
                     tinyMCE.baseURL = "/js/tinymce/jscripts/tiny_mce"
-                    tinyMCE.init({                
-                        theme   : "advanced",                
+                    tinyMCE.init({
+                        theme   : "advanced",
                         plugins : "fullpage",
                         mode    : "specific_textareas",
                         editor_selector : "tmceEditor",
@@ -101,13 +101,59 @@ class XmlForm_Field_WYSIWYG_EDITOR extends XmlForm_Field
                 ';
                 break;
             case 'OUTPUT_DOCUMENT':
-                $editorDefinition = 'alert("outputdoc")';
+                $editorDefinition = '
+                //alert("outputdoc");
+                //delete Array.prototype.toStr;
+                //delete Object.prototype.toStr;
+                //delete Object.prototype.concat;
+                //delete Object.prototype.get_by_key;
+                //delete Object.prototype.expand;
+                //delete Object.prototype.setParent;
+                //delete Object.prototype.isset_key;
+
+                tinyMCE.baseURL = "/js/tinymce/jscripts/tiny_mce"
+                tinyMCE.init({
+                theme   : "advanced",
+                plugins : "advhr,advimage,advlink,advlist,autolink,autoresize,autosave,bbcode,contextmenu,directionality,emotions,example,example_dependency,fullpage,fullscreen,iespell,inlinepopups,insertdatetime,layer,legacyoutput,lists,media,nonbreaking,noneditable,pagebreak,paste,preview,print,save,searchreplace,spellchecker,style,tabfocus,table,template,visualblocks,visualchars,wordcount,xhtmlxtras",
+                mode    : "specific_textareas",
+                editor_selector : "tmceEditor",
+                width   : "640",
+                height  : "300",
+                theme_advanced_buttons1 : "fontselect,bold,italic,underline,forecolor,backcolor,|,justifyleft,justifycenter,justifyright,justifyfull,|,link,numlist,bullist,|,insertfile"
+                });
+                ';
+
                 break;
             case 'DYNAFORM_TEMPLATE':
-                $editorDefinition = 'alert("dynaform")';
+                $editorDefinition = '
+
+                //delete Array.prototype.toStr;
+                //delete Object.prototype.toStr;
+                //delete Object.prototype.concat;
+                //delete Object.prototype.get_by_key;
+                //delete Object.prototype.expand;
+                //delete Object.prototype.setParent;
+                //delete Object.prototype.isset_key;
+
+                tinyMCE.baseURL = "/js/tinymce/jscripts/tiny_mce"
+                tinyMCE.init({
+                theme   : "advanced",
+                plugins : "advhr,advimage,advlink,advlist,autolink,autoresize,autosave,bbcode,contextmenu,directionality,emotions,example,example_dependency,fullpage,fullscreen,iespell,inlinepopups,insertdatetime,layer,legacyoutput,lists,media,nonbreaking,noneditable,pagebreak,paste,preview,print,save,searchreplace,spellchecker,style,tabfocus,table,template,visualblocks,visualchars,wordcount,xhtmlxtras",
+                mode    : "specific_textareas",
+                editor_selector : "tmceEditor",
+                width   : "640",
+                height  : "300",
+                    theme_advanced_buttons1 : "bold,italic,underline,|,justifyleft,justifycenter,justifyright,justifyfull,|,fontselect,fontsizeselect,|,cut,copy,paste,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo",
+                    theme_advanced_buttons2 : "link,unlink,image,|,forecolor,backcolor,|,hr,removeformat,visualaid,|,sub,sup,|,ltr,rtl",//,|,insertimage",
+                skin : "o2k7",
+                skin_variant : "silver"//,
+
+                });
+                ';
                 break;
             default:
                 $editorDefinition = '
+
 //                  delete Array.prototype.toStr;
 //                  delete Object.prototype.toStr;
 //                  delete Object.prototype.concat;
@@ -115,10 +161,10 @@ class XmlForm_Field_WYSIWYG_EDITOR extends XmlForm_Field
 //                  delete Object.prototype.expand;
 //                  delete Object.prototype.setParent;
 //                  delete Object.prototype.isset_key;
-                
+
                     tinyMCE.baseURL = "/js/tinymce/jscripts/tiny_mce"
-                    tinyMCE.init({                
-                        theme   : "advanced",                
+                    tinyMCE.init({
+                        theme   : "advanced",
                         plugins : "fullpage",
                         mode    : "specific_textareas",
                         editor_selector : "tmceEditor",
@@ -128,8 +174,8 @@ class XmlForm_Field_WYSIWYG_EDITOR extends XmlForm_Field
                     });
                 ';
                 break;
-        }        
-        
+        }
+
         return $editorDefinition;
     }
 }

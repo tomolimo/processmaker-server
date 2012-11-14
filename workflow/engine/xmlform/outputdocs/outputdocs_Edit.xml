@@ -9,7 +9,7 @@
 
 <OUT_DOC_UID type="hidden" showInTable="0"/>
 
-<OUT_DOC_TEMPLATE type="html" width="100%" height="365px" defaultValue="&lt;br/&gt;"/>
+<OUT_DOC_TEMPLATE type="wysiwyg_editor" editorType="OUTPUT_DOCUMENT" width="100%" height="365px" defaultValue="&lt;br/&gt;"/>
 
 <ACCEPT type="button" onclick="outputdocsSave(this.form);">
   <en>Save</en>
