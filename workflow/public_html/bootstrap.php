@@ -71,13 +71,46 @@ if (file_exists($requestFile)) {
     	$ext_file = substr($requestFile, $pos, $size);
         if ($ext_file == "gif" || $ext_file == "png" || $ext_file == "jpg") {
             $ext_file = 'image/'.$ext_file ;
+        } elseif ($ext_file == "swf") {
+            $ext_file = "application/x-shockwave-flash";
+        } elseif ($ext_file == "json" || $ext_file == "htc" ) {
+            $ext_file = "text/plain";
+        } elseif ($ext_file == "htm" || $ext_file == "html" || $ext_file == "txt") {
+            $ext_file = "text/html";
+        } elseif ($ext_file == "doc" || $ext_file == "pdf" || $ext_file == "pm" || $ext_file == "po") {
+            $ext_file = "application/octet-stream";
+        } elseif ($ext_file == "tar") {
+            $ext_file = "application/x-tar";
 	    } elseif ($ext_file=="css") {
-	        //may this line be innecesary, all the css are been generated at run time
+	        //may this line be innecesary, all the .css are been generated at run time
 	        $ext_file = 'css/'.$ext_file;
+	    } else {
+	        $ext_file = "application/octet-stream";
 	    }
 	    header ('Content-Type: ' . $ext_file);
     }
-    header ('Pragma: cache');
+    header ( 'Pragma: cache' );
+    $mtime = filemtime ( $requestFile );
+	$gmt_mtime = gmdate ( "D, d M Y H:i:s", $mtime ) . " GMT";
+	header ( 'ETag: "' . md5 ( $mtime . $requestFile ) . '"' );
+	header ( "Last-Modified: " . $gmt_mtime );
+	header ( 'Cache-Control: public' );
+    $userAgent = strtolower ( $_SERVER ['HTTP_USER_AGENT'] );
+	if (preg_match ( "/msie/i", $userAgent )) {
+		header ( "Expires: " . gmdate ( "D, d M Y H:i:s", time () + 60 * 10 ) . " GMT" );
+	} else {
+	    header ( "Expires: " . gmdate ( "D, d M Y H:i:s", time () + 90 * 60 * 60 * 24 ) . " GMT" );
+	    if (isset ( $_SERVER ['HTTP_IF_MODIFIED_SINCE'] )) {
+	        if ($_SERVER ['HTTP_IF_MODIFIED_SINCE'] == $gmt_mtime) {
+	            header ( 'HTTP/1.1 304 Not Modified' );
+	        }
+	    }
+	    if (isset ( $_SERVER ['HTTP_IF_NONE_MATCH'] )) {
+	        if (str_replace ( '"', '', stripslashes ( $_SERVER ['HTTP_IF_NONE_MATCH'] ) ) == md5 ( $mtime . $filename )) {
+	            header ( "HTTP/1.1 304 Not Modified" );
+            }
+	    }
+	}
     readfile($requestFile);
     die;
 }
