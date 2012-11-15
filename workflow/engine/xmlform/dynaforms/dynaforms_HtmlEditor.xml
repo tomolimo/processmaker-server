@@ -25,16 +25,16 @@
 <en>HTML View</en>
 </HTML>
 
-<HTML2 type="textarea" cols="120" rows="16" style="width:100%;" className="htmleditor">
+<!-- HTML2 type="textarea" cols="120" rows="16" style="width:100%;" className="htmleditor">
 <en>HTML Code</en>
-</HTML2>
+</HTML2 -->
 
 <PME_SYNCH_JS type="javascript"><![CDATA[
 
   /*getField("HTML").onchange=function()
   {
     html_html2();
-  }*/
+  }
   function html_html2()
   {
     if (window._editorHTML.doc.forms.length>0)
@@ -58,7 +58,7 @@
       window._editorHTML.setHTML(getField("HTML2").value);
       getField("HTML").value=getField("HTML2").value;
     }
-  }
+  }*/
   var restore_html = function() {
     alert('restore_html');
   };

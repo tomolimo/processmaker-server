@@ -27,6 +27,8 @@ var outputdocsEditor;
     var targetWin = window.open (pageURL, title, 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width='+w+', height='+h+', top='+top+', left='+left);
   } 
 ////////////////////////////////////////////////////
+
+var outputdocsEditor;
   function outputdocsEdit( uid, typ ) {
      
     if (( _BROWSER.name == 'msie' ) && ( _BROWSER.version < '9' )) {
@@ -90,8 +92,10 @@ var outputdocsEditor;
   }
   
   function outputdocsSave( form ) {
+    alert(form.action);
     ajax_post( form.action, form, 'POST' );
-    currentPopupWindow.remove();
+    outputdocsEditor.remove();
+    
     @#PAGED_TABLE_ID.refresh();
       
   }

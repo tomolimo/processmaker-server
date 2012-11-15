@@ -81,28 +81,44 @@ class XmlForm_Field_WYSIWYG_EDITOR extends XmlForm_Field
         switch ($this->editorType){
             case 'EMAIL_TEMPLATE':
                 $editorDefinition = '
-                    //delete Array.prototype.toStr;
-                    //delete Object.prototype.toStr;
-                    //delete Object.prototype.concat;
-                    //delete Object.prototype.get_by_key;
-                    //delete Object.prototype.expand;
-                    //delete Object.prototype.setParent;
-                    //delete Object.prototype.isset_key;
-                    tinyMCE.baseURL = "/js/tinymce/jscripts/tiny_mce"
-                    tinyMCE.init({
-                        theme   : "advanced",
-                        plugins : "fullpage",
-                        mode    : "specific_textareas",
-                        editor_selector : "tmceEditor",
-                        width   : "'.$this->width.'",
-                        height  : "'.$this->height.'",
-                        theme_advanced_buttons3_add : "fullpage"
-                    });
+                //delete Array.prototype.toStr;
+                //delete Object.prototype.toStr;
+                //delete Object.prototype.concat;
+                //delete Object.prototype.get_by_key;
+                //delete Object.prototype.expand;
+                //delete Object.prototype.setParent;
+                //delete Object.prototype.isset_key;
+
+
+                tinyMCE.baseURL = "/js/tinymce/jscripts/tiny_mce"
+                tinyMCE.init({
+                    theme   : "advanced",
+                    plugins : "fullpage",
+                    mode    : "specific_textareas",
+                    editor_selector : "tmceEditor",
+                    //width   : "'.$this->width.'",
+                    //height  : "'.$this->height.'",
+                    width   : 760,
+                    height  : "'.$this->height.'",
+                    theme_advanced_buttons3_add : "fullpage",
+                    /*
+                    onchange_callback: function(inst) {
+                		if(inst.isDirty()) {
+                			inst.save();
+                		}
+                		return true;
+                	},*/
+                	handle_event_callback : function(e) {
+                		if(this.isDirty()) {
+                			this.save();
+                		}
+                		return true;
+                	}
+                });
                 ';
                 break;
             case 'OUTPUT_DOCUMENT':
                 $editorDefinition = '
-                //alert("outputdoc");
                 //delete Array.prototype.toStr;
                 //delete Object.prototype.toStr;
                 //delete Object.prototype.concat;
@@ -114,12 +130,20 @@ class XmlForm_Field_WYSIWYG_EDITOR extends XmlForm_Field
                 tinyMCE.baseURL = "/js/tinymce/jscripts/tiny_mce"
                 tinyMCE.init({
                 theme   : "advanced",
-                plugins : "advhr,advimage,advlink,advlist,autolink,autoresize,autosave,bbcode,contextmenu,directionality,emotions,example,example_dependency,fullpage,fullscreen,iespell,inlinepopups,insertdatetime,layer,legacyoutput,lists,media,nonbreaking,noneditable,pagebreak,paste,preview,print,save,searchreplace,spellchecker,style,tabfocus,table,template,visualblocks,visualchars,wordcount,xhtmlxtras",
+                plugins : "fullpage",
                 mode    : "specific_textareas",
                 editor_selector : "tmceEditor",
-                width   : "640",
-                height  : "300",
-                theme_advanced_buttons1 : "fontselect,bold,italic,underline,forecolor,backcolor,|,justifyleft,justifycenter,justifyright,justifyfull,|,link,numlist,bullist,|,insertfile"
+                width   : "770",
+                height  : "305",
+                theme_advanced_buttons1 : "fontselect,bold,italic,underline,forecolor,backcolor,|,justifyleft,justifycenter,justifyright,justifyfull,|,link,numlist,bullist,|,insertfile",
+
+                handle_event_callback : function(e) {
+            		if(this.isDirty()) {
+            			this.save();
+            		}
+            		return true;
+            	}
+
                 });
                 ';
 
@@ -140,13 +164,35 @@ class XmlForm_Field_WYSIWYG_EDITOR extends XmlForm_Field
                 theme   : "advanced",
                 plugins : "advhr,advimage,advlink,advlist,autolink,autoresize,autosave,bbcode,contextmenu,directionality,emotions,example,example_dependency,fullpage,fullscreen,iespell,inlinepopups,insertdatetime,layer,legacyoutput,lists,media,nonbreaking,noneditable,pagebreak,paste,preview,print,save,searchreplace,spellchecker,style,tabfocus,table,template,visualblocks,visualchars,wordcount,xhtmlxtras",
                 mode    : "specific_textareas",
+                //apply_source_formatting : true,
+                //remove_linebreaks: false,
                 editor_selector : "tmceEditor",
-                width   : "640",
+                width   : "700",
                 height  : "300",
                     theme_advanced_buttons1 : "bold,italic,underline,|,justifyleft,justifycenter,justifyright,justifyfull,|,fontselect,fontsizeselect,|,cut,copy,paste,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo",
-                    theme_advanced_buttons2 : "link,unlink,image,|,forecolor,backcolor,|,hr,removeformat,visualaid,|,sub,sup,|,ltr,rtl",//,|,insertimage",
+                    theme_advanced_buttons2 : "link,unlink,image,|,forecolor,backcolor,|,hr,removeformat,visualaid,|,sub,sup,|,ltr,rtl,|,code",//,|,insertimage",
+
                 skin : "o2k7",
-                skin_variant : "silver"//,
+                skin_variant : "silver",
+
+                content_css : "content.css",
+
+                template_external_list_url : "js/template_list.js",
+                external_link_list_url : "js/link_list.js",
+                external_image_list_url : "js/image_list.js",
+                media_external_list_url : "js/media_list.js",
+
+                template_replace_values : {
+                    username : "Some User",
+                    staffid : "991234"
+                },
+
+                handle_event_callback : function(e) {
+            		if(this.isDirty()) {
+            			this.save();
+            		}
+            		return true;
+            	}
 
                 });
                 ';
@@ -172,6 +218,13 @@ class XmlForm_Field_WYSIWYG_EDITOR extends XmlForm_Field
                         height  : "'. $this->height. '",
                         theme_advanced_buttons3_add : "fullpage"
                     });
+
+                    handle_event_callback : function(e) {
+                		if(this.isDirty()) {
+                			this.save();
+                		}
+                		return true;
+                	}
                 ';
                 break;
         }
