@@ -749,6 +749,11 @@ class wsBase
                 }
             }
             $aSetup['MESS_PASSWORD'] = $passwd;
+            if ($aSetup['MESS_RAUTH'] == false || (is_string($aSetup['MESS_RAUTH']) && $aSetup['MESS_RAUTH'] == 'false')) {
+                $aSetup['MESS_RAUTH'] = 0;
+            } else {
+                $aSetup['MESS_RAUTH'] = 1;
+            }
 
             $oSpool = new spoolRun();
             $oSpool->setConfig( array ('MESS_ENGINE' => $aSetup['MESS_ENGINE'],'MESS_SERVER' => $aSetup['MESS_SERVER'],'MESS_PORT' => $aSetup['MESS_PORT'],'MESS_ACCOUNT' => $aSetup['MESS_ACCOUNT'],'MESS_PASSWORD' => $aSetup['MESS_PASSWORD'],'SMTPAuth' => $aSetup['MESS_RAUTH']
@@ -1212,7 +1217,41 @@ class wsBase
 
             return $result;
         } catch (Exception $e) {
-            $result = wsResponse( 100, $e->getMessage() );
+            $result = new wsResponse(100, $e->getMessage());
+
+            return $result;
+        }
+    }
+
+    /**
+     * Information User
+     * @param string userUid : The user UID.
+     * @return $result will return an object
+     */
+    public function informationUser($userUid)
+    {
+        try {
+            if (empty($userUid)) {
+                $result = new wsResponse(100, G::LoadTranslation("ID_REQUIRED_FIELD") . " userUid");
+
+                return $result;
+            }
+
+            $user = new Users();
+            $userInfo = $user->getAllInformation($userUid);
+
+            //Response
+            $res = new wsResponse(0, G::LoadTranslation("ID_COMMAND_EXECUTED_SUCCESSFULLY"));
+
+            $result = new stdClass();
+            $result->status_code = $res->status_code;
+            $result->message     = $res->message;
+            $result->timestamp   = $res->timestamp;
+            $result->info = $userInfo;
+
+            return $result;
+        } catch (Exception $e) {
+            $result = new wsResponse(100, $e->getMessage());
 
             return $result;
         }
@@ -1643,7 +1682,7 @@ class wsBase
             $this->originalValues['INDEX'] = $_SESSION['INDEX'];
             unset( $_SESSION['INDEX'] );
         }
-        
+
         if (isset( $_SESSION['USER_LOGGED'] )) {
             $this->originalValues['USER_LOGGED'] = $_SESSION['USER_LOGGED'];
             unset( $_SESSION['USER_LOGGED'] );
@@ -1659,7 +1698,7 @@ class wsBase
             unset( $_SESSION['STEP_POSITION'] );
         }
     }
-    
+
     /**
      * restore the Session variables with values of $originalValues array, if this is set.
      *
@@ -1691,7 +1730,7 @@ class wsBase
             $_SESSION['USR_USERNAME'] = $this->originalValues['USR_USERNAME'];
             unset( $this->originalValues['USR_USERNAME']);
         }
-        
+
         if (isset( $this->originalValues['USER_LOGGED'] )) {
             $_SESSION['USER_LOGGED'] = $this->originalValues['USER_LOGGED'];
             unset( $this->originalValues['USER_LOGGED']);
@@ -1715,9 +1754,9 @@ class wsBase
     public function newCase ($processId, $userId, $taskId, $variables)
     {
         try {
-        
+
             $this->saveTemporarySessionVars();
-    
+
             $Fields = array ();
 
             if (is_array( $variables ) && count( $variables ) > 0) {
@@ -1791,7 +1830,7 @@ class wsBase
             $up_case = $oCase->updateCase( $caseId, $oldFields );
 
             $this->restoreSessionVars();
-            
+
             $result = new wsResponse( 0, G::loadTranslation( 'ID_STARTED_SUCCESSFULLY' ) );
             $result->caseId = $caseId;
             $result->caseNumber = $caseNr;
@@ -2834,7 +2873,7 @@ class wsBase
 
             return $result;
         } catch (Exception $e) {
-            $result = wsResponse( 100, $e->getMessage() );
+            $result = new wsResponse(100, $e->getMessage());
 
             return $result;
         }
@@ -2880,7 +2919,7 @@ class wsBase
 
             return $result;
         } catch (Exception $e) {
-            $result = wsResponse( 100, $e->getMessage() );
+            $result = new wsResponse(100, $e->getMessage());
 
             return $result;
         }
@@ -2936,7 +2975,7 @@ class wsBase
 
             return $result;
         } catch (Exception $e) {
-            $result = wsResponse( 100, $e->getMessage() );
+            $result = new wsResponse(100, $e->getMessage());
 
             return $result;
         }
@@ -2982,7 +3021,7 @@ class wsBase
 
             return $result;
         } catch (Exception $e) {
-            $result = wsResponse( 100, $e->getMessage() );
+            $result = new wsResponse(100, $e->getMessage());
 
             return $result;
         }
