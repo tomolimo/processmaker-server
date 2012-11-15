@@ -86,7 +86,7 @@ echo '
 ';
 ?>
 
-<textarea name="form[fcontent]" id="form[fcontent]" class="tmceEditor"><p>news</p></textarea>
+<textarea name="form[fcontent]" id="form[fcontent]" class="tmceEditor"><p>news<table><tr><td>cell 1</td></tr><tr><td>cell 2</td></tr></table></p></textarea>
 <!--<textarea name="new" id="new" class="tmceEditor">another one</textarea>-->
 
 <?php

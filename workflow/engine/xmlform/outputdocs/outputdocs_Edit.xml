@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<dynaForm name="outputdocs/outputdocs_Edit" type="xmlform" width="100%" labelWidth="2px" enableTemplate="1">
+<dynaForm name="outputdocs/outputdocs_Edit" action="outputdocs/outputdocs_Save" type="xmlform" width="100%" labelWidth="2px" enableTemplate="1">
 
 <INSERT_VARIABLE type="button" align="right" style="position:absolute;left:700px;top:420px;border-style:double;" onmouseover="saveSelection();" onclick="showDynaformsFormVars(&#039;form[TEXT_TEST]&#039;,&#039;../controls/varsAjax&#039;,&#039;@#PRO_UID&#039;,&#039;@#&#039;);">
   <en>@#</en>
@@ -8,8 +8,9 @@
 <PRO_UID type="hidden"/>
 
 <OUT_DOC_UID type="hidden" showInTable="0"/>
+<OUT_DOC_TITLE type="hidden" showInTable="0"/>
 
-<OUT_DOC_TEMPLATE type="wysiwyg_editor" editorType="OUTPUT_DOCUMENT" width="100%" height="365px" defaultValue="&lt;br/&gt;"/>
+<OUT_DOC_TEMPLATE type="wysiwyg_editor" editorType="OUTPUT_DOCUMENT" width="640" height="365" defaultValue="&lt;br/&gt;"/>
 
 <ACCEPT type="button" onclick="outputdocsSave(this.form);">
   <en>Save</en>

@@ -79,11 +79,26 @@ switch ($action) {
     case 'loadOutputEditor':
         global $G_PUBLISH;
         $G_PUBLISH = new Publisher();
-        $aData = "";
+        $fcontent  = '';
+        $proUid    = '';
+        $filename  = '';
+        $title  = '';
+
+        require_once 'classes/model/OutputDocument.php';
+        $oOutputDocument = new OutputDocument();
+        if (isset( $_REQUEST['OUT_DOC_UID'] )) {
+            $aFields = $oOutputDocument->load( $_REQUEST['OUT_DOC_UID'] );
+            $fcontent = $aFields['OUT_DOC_TEMPLATE'];
+            $proUid   = $aFields['PRO_UID'];
+            $filename = $aFields['OUT_DOC_FILENAME'];
+            $title    = $aFields['OUT_DOC_TITLE'];
+        }
+
+        $aData = Array ( 'PRO_UID' => $proUid,'OUT_DOC_TEMPLATE' => $fcontent, 'FILENAME' => $filename, 'OUT_DOC_UID'=> $_REQUEST['OUT_DOC_UID'], 'OUT_DOC_TITLE'=> $title);
 
         $G_PUBLISH->AddContent( 'xmlform', 'xmlform', 'outputdocs/outputdocs_Edit', '', $aData );
-        //$G_PUBLISH->AddContent( 'xmlform', 'xmlform', 'outputdocs/outputdocs_Edit', '', $aData );
+        
         G::RenderPage( 'publish', 'raw' );
-        //echo '<h3>outputss</h3>';
+        
         break;
 }

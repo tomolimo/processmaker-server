@@ -52,9 +52,9 @@ var outputdocsEditor;
 	  outputdocsEditor.make();
 	  
 	  
-	  var oRPC = new leimnud.module.rpc.xmlhttp({
+      var oRPC = new leimnud.module.rpc.xmlhttp({
         url : '../outputdocs/outputdocs_Ajax',
-        args: 'action=loadOutputEditor'
+        args: 'action=loadOutputEditor&OUT_DOC_UID='+uid+'&OUT_DOC_TYPE='+typ
       });
 
       outputdocsEditor.loader.show();
@@ -92,10 +92,9 @@ var outputdocsEditor;
   }
   
   function outputdocsSave( form ) {
-    alert(form.action);
+    form.action = '../outputdocs/outputdocs_Save';
     ajax_post( form.action, form, 'POST' );
     outputdocsEditor.remove();
-    
     @#PAGED_TABLE_ID.refresh();
       
   }

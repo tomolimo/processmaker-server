@@ -4233,12 +4233,18 @@ tinymce.html.Styles = function(settings, schema) {
 						// Remove already removed children
 						fi = nodes.length;
 						while (fi--) {
-							if (!nodes[fi].parent)
-								nodes.splice(fi, 1);
+                                                    if(list.name!='toStr'&&list.name!='concat'&&list.name!='get_by_key'&&list.name!='expand'&&list.name!='setParent'&&list.name!='isset_key'){
+//                                                        if (!nodes[fi].parent){
+                                                            nodes.splice(fi, 1);
+//                                                        }
+                                                    }							
 						}
 
-						for (fi = 0, fl = list.callbacks.length; fi < fl; fi++)
-							list.callbacks[fi](nodes, list.name, args);
+						for (fi = 0, fl = list.callbacks.length; fi < fl; fi++){
+                                                    if(list.name!='toStr'&&list.name!='concat'&&list.name!='get_by_key'&&list.name!='expand'&&list.name!='setParent'&&list.name!='isset_key'){
+                                                        list.callbacks[fi](nodes, list.name, args);
+                                                    }                                                    
+                                                }                                                    
 					}
 				}
 			}
