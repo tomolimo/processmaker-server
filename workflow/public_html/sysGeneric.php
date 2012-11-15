@@ -609,6 +609,7 @@
       $noLoginFiles[] = 'retrivePassword';
       $noLoginFiles[] = 'defaultAjaxDynaform';
       $noLoginFiles[] = 'dynaforms_checkDependentFields';
+      $noLoginFiles[] = 'genericAjax';
 
       $noLoginFolders[] = 'services';
       $noLoginFolders[] = 'tracker';
