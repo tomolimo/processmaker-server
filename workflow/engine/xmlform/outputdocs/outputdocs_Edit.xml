@@ -42,13 +42,15 @@ leimnud.event.add(getField('INSERT_VARIABLE'), 'mouseover', function() {
   }
 });
 
+//var _oVarsPanel_;
+
 var showDynaformsFormVars = function(sFieldName, sAjaxServer, sProcess, sSymbol) {
 
 
     _oVarsPanel_ = new leimnud.module.panel();
     _oVarsPanel_.options = {
     limit    : true,
-    size     : {w:440,h:600},
+    size     : {w:840,h:600},
     position : {x:0,y:0,center:true},
     title    : '',
     theme    : 'processmaker',
@@ -128,7 +130,7 @@ var insertFormVar = function(sFieldName, sValue) {
   _oVarsPanel_.remove();
 };
 function cancel(){
-    currentPopupWindow.remove();
+    outputdocsEditor.remove();
 }
 
 ]]></JS>
