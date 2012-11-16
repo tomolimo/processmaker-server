@@ -254,6 +254,8 @@ if($limit != 0){
         $oCriteria->add ( AppDocumentPeer::APP_UID, $data, CRITERIA::IN );
     }
 
+    $numRecTotal = AppDocumentPeer::doCount($oCriteria);
+
     $oCase->verifyTable ();
 
 
@@ -305,8 +307,10 @@ if($limit != 0){
       }
       $rs->next ();
     }
-    $response['totalDocumentsCount'] = count($response['documents']);
-    return ($response);
+
+    $response["totalDocumentsCount"] = $numRecTotal;
+
+    return $response;
   }
   function getCompleteDocumentInfo($appUid, $appDocUid, $docVersion, $docUid, $usrId) {
     require_once ("classes/model/AppDocument.php");
