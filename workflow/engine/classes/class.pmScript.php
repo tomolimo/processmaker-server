@@ -545,7 +545,7 @@ function handleErrors ($errno, $errstr, $errfile, $errline)
             if (isset($oPMScript) && isset($_SESSION['APPLICATION'])) {
                 G::LoadClass( 'case' );
                 $oCase = new Cases();
-                $oPMScript->aFields['__ERROR__'] = $aAux[0];
+                $oPMScript->aFields['__ERROR__'] = $errstr;
                 $oCase->updateCase($_SESSION['APPLICATION'], array('APP_DATA' => $oPMScript->aFields));
             }
             registerError( 1, $errstr, $errline - 1, $sCode );
