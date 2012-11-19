@@ -109,38 +109,27 @@ class XmlForm_Field_WYSIWYG_EDITOR extends XmlForm_Field
                 ';
                 break;
             case 'OUTPUT_DOCUMENT':
-                $editorDefinition = '
 
+                $editorDefinition = '
                 tinyMCE.baseURL = "/js/tinymce/jscripts/tiny_mce"
                 tinyMCE.init({
-                theme   : "advanced",
-                plugins : "fullpage, pmSimpleUploader",
-                mode    : "specific_textareas",
-                editor_selector : "tmceEditor",
-                width   : "770",
-                height  : "305",
-                theme_advanced_buttons1 : "fontselect,bold,italic,underline,forecolor,backcolor,|,justifyleft,justifycenter,justifyright,justifyfull,|,link,numlist,bullist,|,code,|,pmSimpleUploader",
-                onchange_callback: function(inst) {
-                        if(inst.isDirty()) {
-                                inst.save();
-                        }
-                        return true;
-                }/*,
-
-                theme_advanced_buttons1 : "pmSimpleUploader",
-                theme_advanced_buttons2 : "fontselect,bold,italic,underline,forecolor,backcolor,|,justifyleft,justifycenter,justifyright,justifyfull,|,link,numlist,bullist,|,insertfile",
-
-                handle_event_callback : function(e) {
-            		if(this.isDirty()) {
-            			this.save();
-            		}
-            		return true;
-            	}*/
-
-            });
-            ';
-
+                    theme   : "advanced",
+                    plugins : "fullpage, pmSimpleUploader, pmVariablePicker",
+                    mode    : "specific_textareas",
+                    editor_selector : "tmceEditor",
+                    width   : "770",
+                    height  : "305",
+                    theme_advanced_buttons1 : "fontselect,bold,italic,underline,forecolor,backcolor,|,justifyleft,justifycenter,justifyright,justifyfull,|,link,numlist,bullist,|,code,|,pmSimpleUploader,|,pmVariablePicker",
+                    onchange_callback: function(inst) {
+                            if(inst.isDirty()) {
+                                    inst.save();
+                            }
+                            return true;
+                    }
+                });
+                ';
                 break;
+
             case 'DYNAFORM_TEMPLATE':
                 $editorDefinition = '
 
