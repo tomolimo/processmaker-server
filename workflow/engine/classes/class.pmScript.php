@@ -541,10 +541,10 @@ function handleErrors ($errno, $errstr, $errfile, $errline)
         if (isset( $_SESSION['_CODE_'] )) {
             $sCode = $_SESSION['_CODE_'];
             unset( $_SESSION['_CODE_'] );
-            G::LoadClass( 'case' );
-            $oCase = new Cases();
             global $oPMScript;
             if (isset($oPMScript) && isset($_SESSION['APPLICATION'])) {
+                G::LoadClass( 'case' );
+                $oCase = new Cases();
                 $oCase->updateCase($_SESSION['APPLICATION'], array('APP_DATA' => $oPMScript->aFields));
             }
             registerError( 1, $errstr, $errline - 1, $sCode );
@@ -585,7 +585,9 @@ function handleFatalErrors ($buffer)
             }
             $_SESSION['_NO_EXECUTE_TRIGGERS_'] = 1;
             global $oPMScript;
-            $oCase->updateCase($_SESSION['APPLICATION'], array('APP_DATA' => $oPMScript->aFields));
+            if (isset($oPMScript) && isset($_SESSION['APPLICATION'])) {
+                $oCase->updateCase($_SESSION['APPLICATION'], array('APP_DATA' => $oPMScript->aFields));
+            }
             G::header( 'Location: ' . $_SERVER['REQUEST_URI'] );
             die();
         } else {
