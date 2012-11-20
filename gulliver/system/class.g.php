@@ -997,9 +997,10 @@ class G
 
         $calendarJs = '';
         $calendarJsFile = PATH_GULLIVER_HOME . "js/widgets/js-calendar/lang/" . $locale .".js";
-        if (file_exists($calendarJsFile)) {
-            $calendarJs = file_get_contents($calendarJsFile) . "\n";
+        if (! file_exists($calendarJsFile)) {
+            $calendarJsFile = PATH_GULLIVER_HOME . "js/widgets/js-calendar/lang/en.js";
         }
+        $calendarJs = file_get_contents($calendarJsFile) . "\n";
 
         return $calendarJs . 'var TRANSLATIONS = ' . G::json_encode( $translation ) . ';' ;
     }
