@@ -435,12 +435,11 @@ if ($actionAjax == 'historyDynaformGridPreview') {
     $Fields['APP_DATA']['__DYNAFORM_OPTIONS']['NEXT_ACTION'] = 'return false;';
     $Fields['APP_DATA']['__DYNAFORM_OPTIONS']['DYNUIDPRINT'] = $_POST['DYN_UID'];
     ?>
+
     <script language="javascript">
     window.onload = function () {
         var inputs = document.getElementsByTagName('input');
-        console.log(inputs);
         for(var i= 0; i<inputs.length; i++) {
-            console.log(inputs[i].type);
             if(inputs[i].type == 'button' || inputs[i].type == 'submit')
                 {
             	   inputs[i].disabled = true;

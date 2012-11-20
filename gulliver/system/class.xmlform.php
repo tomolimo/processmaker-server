@@ -3010,9 +3010,9 @@ class XmlForm_Field_Submit extends XmlForm_Field
             $html = '';
             if (isset( $_SESSION['CURRENT_DYN_UID'] )) {
                 $sLinkNextStep = 'window.location=("casesSaveDataView?UID=' . $_SESSION['CURRENT_DYN_UID'] . '");';
-                //$html = '<input style="' . $this->style . '" class="module_app_button___gray ' . $this->className . '" id="form[' . $this->name . ']" name="form[' . $this->name . ']" type="button" value="' . G::LoadTranslation( 'ID_CONTINUE' ) . '"  onclick="' . htmlentities( $sLinkNextStep, ENT_COMPAT, 'utf-8' ) . '" />';
-                $html = "<input style=\"{$this->style};display:disabled\" disabled='disabled' class='module_app_button___gray module_app_buttonDisabled___gray {$this->className}' id=\"form[{$this->name}]\" name=\"form[{$this->name}]\" type='submit' value=\"{$this->label}\" " . (($this->onclick) ? 'onclick="' . htmlentities ( $onclick, ENT_COMPAT, 'utf-8' ) . '"' : '') . " />";
+                $html = '<input style="' . $this->style . '" class="module_app_button___gray ' . $this->className . '" id="form[' . $this->name . ']" name="form[' . $this->name . ']" type="button" value="' . G::LoadTranslation( 'ID_CONTINUE' ) . '"  onclick="' . htmlentities( $sLinkNextStep, ENT_COMPAT, 'utf-8' ) . '" />';
             }
+
             $html .= '<input ';
             $html .= 'id="form[' . $this->name . ']" ';
             $html .= 'name="form[' . $this->name . ']" ';
