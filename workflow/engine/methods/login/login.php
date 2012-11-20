@@ -121,7 +121,7 @@ $_SESSION['FAILED_LOGINS'] = $sFailedLogins;
 
 //translation
 //$Translations = G::getModel("Translation");
-require_once "classes/model/Translation.php";
+//require_once "classes/model/Translation.php";
 $Translations = new Translation();
 $translationsTable = $Translations->getTranslationEnvironments();
 

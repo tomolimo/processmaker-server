@@ -58,8 +58,8 @@ define( 'PATH_HTML', PATH_HOME . 'public_html' . PATH_SEP );
 
 //this is the first path, if the file exists...
 $request = substr($_SERVER['REQUEST_URI'],1,strlen($_SERVER['REQUEST_URI']));
-$fileX = explode("?",$request);
-$requestFile = PATH_HTML . $fileX[0];
+$fileWithoutParam = explode("?",$request);
+$requestFile = PATH_HTML . $fileWithoutParam[0];
 if (file_exists($requestFile)) {
     if (!is_file($requestFile)) {
         header( "location: /errors/error404.php?url=" . urlencode( $_SERVER['REQUEST_URI'] ) );
@@ -398,25 +398,6 @@ if (defined( 'PATH_DATA' ) && file_exists( PATH_DATA )) {
 
 // Call Gulliver Classes
 Bootstrap::LoadThirdParty( 'smarty/libs', 'Smarty.class' );
-//Bootstrap::LoadSystem( 'error' );
-//Bootstrap::LoadSystem( 'dbconnection' );
-//Bootstrap::LoadSystem( 'dbsession' );
-//Bootstrap::LoadSystem( 'dbrecordset' );
-//Bootstrap::LoadSystem( 'dbtable' );
-
-  //* Bootstrap::LoadSystem( 'publisher' );
-  //Bootstrap::LoadSystem( 'templatePower' );
-  //* Bootstrap::LoadSystem( 'xmlDocument' );
-  //* Bootstrap::LoadSystem( 'xmlform' );
-  //Bootstrap::LoadSystem( 'xmlformExtension' );
-  //* Bootstrap::LoadSystem( 'form' );
-  //* Bootstrap::LoadSystem( 'menu' );
-  //Bootstrap::LoadSystem( "xmlMenu" );
-  //Bootstrap::LoadSystem( 'dvEditor' );
-  //Bootstrap::LoadSystem( 'controller' );
-  //Bootstrap::LoadSystem( 'httpProxyController' );
-  //Bootstrap::LoadSystem( 'pmException' );
-  //
 
 //testing the autoloader feature
 spl_autoload_register(array(Bootstrap, 'autoloadClass'));
@@ -444,11 +425,14 @@ Bootstrap::registerClass('System',        PATH_HOME . "engine/classes/class.syst
 Bootstrap::registerClass('Propel',          PATH_THIRDPARTY . "propel/Propel.php");
 Bootstrap::registerClass('Creole',          PATH_THIRDPARTY . "creole/Creole.php");
 
+
 //DATABASE propel classes used in 'Cases' Options
+Bootstrap::registerClass('Entity_Base',         PATH_HOME . "engine/classes/entities/Base.php");
 
 Bootstrap::registerClass('BaseContent',        PATH_HOME . "engine/classes/model/om/BaseContent.php");
 Bootstrap::registerClass('Content',            PATH_HOME . "engine/classes/model/Content.php");
 Bootstrap::registerClass('BaseApplication',    PATH_HOME . "engine/classes/model/om/BaseApplication.php");
+Bootstrap::registerClass('ApplicationPeer',    PATH_HOME . "engine/classes/model/ApplicationPeer.php");
 Bootstrap::registerClass('Application',        PATH_HOME . "engine/classes/model/Application.php");
 
 Bootstrap::registerClass('BaseAppDelegation',  PATH_HOME . "engine/classes/model/om/BaseAppDelegation.php");
@@ -462,6 +446,7 @@ Bootstrap::registerClass('Task',               PATH_HOME . "engine/classes/model
 Bootstrap::registerClass('TaskPeer',           PATH_HOME . "engine/classes/model/TaskPeer.php");
 Bootstrap::registerClass('dates',              PATH_HOME . "engine/classes/class.dates.php");
 Bootstrap::registerClass('AppDelegation',      PATH_HOME . "engine/classes/model/AppDelegation.php");
+Bootstrap::registerClass('AppDelegationPeer',  PATH_HOME . "engine/classes/model/AppDelegationPeer.php");
 Bootstrap::registerClass('BaseAppDelay',       PATH_HOME . "engine/classes/model/om/BaseAppDelay.php");
 Bootstrap::registerClass('AppDelayPeer',       PATH_HOME . "engine/classes/model/AppDelayPeer.php");
 Bootstrap::registerClass('AppDelay',           PATH_HOME . "engine/classes/model/AppDelay.php");
@@ -469,11 +454,13 @@ Bootstrap::registerClass('BaseAdditionalTables',PATH_HOME . "engine/classes/mode
 Bootstrap::registerClass('AdditionalTables',   PATH_HOME . "engine/classes/model/AdditionalTables.php");
 Bootstrap::registerClass('BaseAppCacheView',   PATH_HOME . "engine/classes/model/om/BaseAppCacheView.php");
 Bootstrap::registerClass('AppCacheView',       PATH_HOME . "engine/classes/model/AppCacheView.php");
+Bootstrap::registerClass('AppCacheViewPeer',   PATH_HOME . "engine/classes/model/AppCacheViewPeer.php");
 
 Bootstrap::registerClass('BaseInputDocument',  PATH_HOME . "engine/classes/model/om/BaseInputDocument.php");
 Bootstrap::registerClass('InputDocument',      PATH_HOME . "engine/classes/model/InputDocument.php");
 Bootstrap::registerClass('BaseAppDocument',    PATH_HOME . "engine/classes/model/om/BaseAppDocument.php");
 Bootstrap::registerClass('AppDocument',        PATH_HOME . "engine/classes/model/AppDocument.php");
+Bootstrap::registerClass('AppDocumentPeer',    PATH_HOME . "engine/classes/model/AppDocumentPeer.php");
 
 Bootstrap::registerClass('BaseAppEvent',       PATH_HOME . "engine/classes/model/om/BaseAppEvent.php");
 Bootstrap::registerClass('AppEvent',           PATH_HOME . "engine/classes/model/AppEvent.php");
@@ -496,6 +483,7 @@ Bootstrap::registerClass('AppSolrQueue',        PATH_HOME . "engine/classes/mode
 
 Bootstrap::registerClass('BaseAppThread',       PATH_HOME . "engine/classes/model/om/BaseAppThread.php");
 Bootstrap::registerClass('AppThread',           PATH_HOME . "engine/classes/model/AppThread.php");
+Bootstrap::registerClass('AppThreadPeer',       PATH_HOME . "engine/classes/model/AppThreadPeer.php");
 
 Bootstrap::registerClass('BaseCaseTracker',     PATH_HOME . "engine/classes/model/om/BaseCaseTracker.php");
 Bootstrap::registerClass('CaseTracker',         PATH_HOME . "engine/classes/model/CaseTracker.php");
@@ -514,6 +502,17 @@ Bootstrap::registerClass('dynaFormHandler',    PATH_GULLIVER . "class.dynaformha
 Bootstrap::registerClass('DynaFormField',      PATH_HOME . "engine/classes/class.dynaFormField.php");
 Bootstrap::registerClass('BaseDynaform',       PATH_HOME . "engine/classes/model/om/BaseDynaform.php");
 Bootstrap::registerClass('Dynaform',           PATH_HOME . "engine/classes/model/Dynaform.php");
+Bootstrap::registerClass('DynaformPeer',       PATH_HOME . "engine/classes/model/DynaformPeer.php");
+
+Bootstrap::registerClass('BaseFields',         PATH_HOME . "engine/classes/model/om/BaseFields.php");
+Bootstrap::registerClass('Fields',             PATH_HOME . "engine/classes/model/Fields.php");
+
+Bootstrap::registerClass('BaseGroupUser',      PATH_HOME . "engine/classes/model/om/BaseGroupUser.php");
+Bootstrap::registerClass('Groupwf',            PATH_HOME . "engine/classes/model/Groupwf.php");
+Bootstrap::registerClass('GroupUser',          PATH_HOME . "engine/classes/model/GroupUser.php");
+
+Bootstrap::registerClass('BaseInputDocumentPeer',PATH_HOME . 'engine/classes/model/om/BaseInputDocumentPeer.php');
+Bootstrap::registerClass('InputDocumentPeer',  PATH_HOME . 'classes/model/InputDocumentPeer.php');
 
 Bootstrap::registerClass('BaseIsoCountry',     PATH_HOME . "engine/classes/model/om/BaseIsoCountry.php");
 Bootstrap::registerClass('IsoCountry',         PATH_HOME . "engine/classes/model/IsoCountry.php");
@@ -524,6 +523,7 @@ Bootstrap::registerClass('Language',           PATH_HOME . "engine/classes/model
 
 Bootstrap::registerClass('BaseObjectPermission',PATH_HOME . "engine/classes/model/om/BaseObjectPermission.php");
 Bootstrap::registerClass('ObjectPermission',    PATH_HOME . "engine/classes/model/ObjectPermission.php");
+Bootstrap::registerClass('ObjectPermissionPeer',PATH_HOME . "engine/classes/model/ObjectPermissionPeer.php");
 
 Bootstrap::registerClass('BaseOutputDocument',  PATH_HOME . "engine/classes/model/om/BaseOutputDocument.php");
 Bootstrap::registerClass('OutputDocument',      PATH_HOME . "engine/classes/model/OutputDocument.php");
@@ -540,6 +540,7 @@ Bootstrap::registerClass('ProcessUser',         PATH_HOME . "engine/classes/mode
 
 Bootstrap::registerClass('BaseReportTable',     PATH_HOME . "engine/classes/model/om/BaseReportTable.php");
 Bootstrap::registerClass('ReportTable',         PATH_HOME . "engine/classes/model/ReportTable.php");
+Bootstrap::registerClass('ReportTablePeer',     PATH_HOME . "engine/classes/model/ReportTablePeer.php");
 
 Bootstrap::registerClass('BaseReportVar',       PATH_HOME . "engine/classes/model/om/BaseReportVar.php");
 Bootstrap::registerClass('ReportVar',           PATH_HOME . "engine/classes/model/ReportVar.php");
@@ -549,12 +550,18 @@ Bootstrap::registerClass('Route',               PATH_HOME . "engine/classes/mode
 
 Bootstrap::registerClass('BaseStep',            PATH_HOME . "engine/classes/model/om/BaseStep.php");
 Bootstrap::registerClass('Step',                PATH_HOME . "engine/classes/model/Step.php");
+Bootstrap::registerClass('StepPeer',            PATH_HOME . "engine/classes/model/StepPeer.php");
 
 Bootstrap::registerClass('BaseStepSupervisor',  PATH_HOME . "engine/classes/model/om/BaseStepSupervisor.php");
 Bootstrap::registerClass('StepSupervisor',      PATH_HOME . "engine/classes/model/StepSupervisor.php");
 
 Bootstrap::registerClass('BaseStepTrigger',     PATH_HOME . "engine/classes/model/om/BaseStepTrigger.php");
 Bootstrap::registerClass('StepTrigger',         PATH_HOME . "engine/classes/model/StepTrigger.php");
+Bootstrap::registerClass('StepTriggerPeer',     PATH_HOME . "engine/classes/model/StepTriggerPeer.php");
+
+Bootstrap::registerClass('SolrRequestData',     PATH_HOME . "engine/classes/entities/SolrRequestData.php");
+
+Bootstrap::registerClass('SolrUpdateDocument',  PATH_HOME . "engine/classes/entities/SolrUpdateDocument.php");
 
 Bootstrap::registerClass('BaseSubApplication',  PATH_HOME . "engine/classes/model/om/BaseSubApplication.php");
 Bootstrap::registerClass('SubApplication',      PATH_HOME . "engine/classes/model/SubApplication.php");
@@ -568,6 +575,7 @@ Bootstrap::registerClass('TaskUser',            PATH_HOME . "engine/classes/mode
 
 Bootstrap::registerClass('BaseTriggers',        PATH_HOME . "engine/classes/model/om/BaseTriggers.php");
 Bootstrap::registerClass('Triggers',            PATH_HOME . "engine/classes/model/Triggers.php");
+Bootstrap::registerClass('TriggersPeer',        PATH_HOME . "engine/classes/model/TriggersPeer.php");
 
 Bootstrap::registerClass('BaseUsers',           PATH_HOME . "engine/classes/model/om/BaseUsers.php");
 Bootstrap::registerClass('IsoCountry',          PATH_HOME . "engine/classes/model/IsoCountry.php");
@@ -575,7 +583,12 @@ Bootstrap::registerClass('BaseIsoSubdivision',  PATH_HOME . "engine/classes/mode
 Bootstrap::registerClass('IsoSubdivision',      PATH_HOME . "engine/classes/model/IsoSubdivision.php");
 Bootstrap::registerClass('BaseIsoLocation',     PATH_HOME . "engine/classes/model/om/BaseIsoLocation.php");
 Bootstrap::registerClass('Users',               PATH_HOME . "engine/classes/model/Users.php");
+Bootstrap::registerClass('UsersPeer',           PATH_HOME . "engine/classes/model/UsersPeer.php");
 
+Bootstrap::registerClass('Xml_Node',            PATH_GULLIVER . "class.xmlDocument.php");
+
+//Bootstrap::registerClass('Cases',               PATH_HOME . "engine/classes/class.case.php");
+//Bootstrap::registerClass('configuration',       PATH_HOME . "engine/classes/class.configuration.php");
 
 //Bootstrap::registerClass('LoginLog',          PATH_HOME . "engine/classes/model/LoginLog.php");
 //Bootstrap::registerClass('LoginLogPeer',      PATH_HOME . "engine/classes/model/LoginLogPeer.php");
