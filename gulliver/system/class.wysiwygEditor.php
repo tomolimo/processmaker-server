@@ -132,7 +132,7 @@ class XmlForm_Field_WYSIWYG_EDITOR extends XmlForm_Field
                 $editorDefinition = '
                 tinyMCE.init({
                     theme   : "advanced",
-                    plugins : "advhr,advimage,advlink,advlist,autolink,autoresize,autosave,bbcode,contextmenu,directionality,emotions,example,example_dependency,fullpage,fullscreen,iespell,inlinepopups,insertdatetime,layer,legacyoutput,lists,media,nonbreaking,noneditable,pagebreak,paste,preview,print,save,searchreplace,spellchecker,style,tabfocus,table,template,visualblocks,visualchars,wordcount,xhtmlxtras",
+                    plugins : "advhr,advimage,advlink,advlist,autolink,autoresize,autosave,contextmenu,directionality,emotions,example,example_dependency,fullpage,fullscreen,iespell,inlinepopups,insertdatetime,layer,legacyoutput,lists,media,nonbreaking,noneditable,pagebreak,paste,preview,print,save,searchreplace,spellchecker,style,tabfocus,table,template,visualblocks,visualchars,wordcount,xhtmlxtras",
                     mode    : "specific_textareas",
                     //apply_source_formatting : true,
                     //remove_linebreaks: false,
@@ -174,7 +174,7 @@ class XmlForm_Field_WYSIWYG_EDITOR extends XmlForm_Field
                         editor_selector : "tmceEditor",
                         width   : "'. $this->width. '",
                         height  : "'. $this->height. '",
-                        theme_advanced_buttons3_add : "fullpage",                    
+                        theme_advanced_buttons3_add : "fullpage",
                         handle_event_callback : function(e) {
                                 if(this.isDirty()) {
                                         this.save();
