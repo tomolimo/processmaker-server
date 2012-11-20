@@ -23,9 +23,9 @@
 function displayUploadForm()
 {
 	echo '<form action="uploader.php?'.$_SERVER["QUERY_STRING"].'&q=upload" method="post" enctype="multipart/form-data" onsubmit="">'
-                .'File Name: <br/>'
-                .'<input type="text" size="10" name="upload_variable" ID="Text1"/><br/>'
-                .'<input type="submit" name="Variable" value="Variable" style="width: 150px;" onclick="document.getElementById(\'progress_div\').style.visibility=\'visible\';"/>'
+                .'Variable Name: <br/>'
+                .'<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <input type="text" size="20" name="upload_variable" ID="Text1"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp'
+                .'<input type="submit" name="Variable" value="Variable" style="width: 100px;" onclick="document.getElementById(\'progress_div\').style.visibility=\'visible\';"/>'
                 .'  <div id="progress_div" style="visibility: hidden;"><img src="progress.gif" alt="wait..." style="padding-top: 5px;"></div>'
              .'</form>';
 }
