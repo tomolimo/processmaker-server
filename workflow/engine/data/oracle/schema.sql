@@ -85,6 +85,7 @@ CREATE TABLE "APP_DOCUMENT"
 		ADD CONSTRAINT "APP_DOCUMENT_PK"
 	PRIMARY KEY ("APP_DOC_UID");
 
+    CREATE INDEX "indexAppDocument" ON "APP_DOCUMENT" ("FOLDER_UID","APP_DOC_UID");
 
 /* -----------------------------------------------------------------------
    APP_MESSAGE
