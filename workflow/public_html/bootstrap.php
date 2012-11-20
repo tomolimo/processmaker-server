@@ -58,7 +58,8 @@ define( 'PATH_HTML', PATH_HOME . 'public_html' . PATH_SEP );
 
 //this is the first path, if the file exists...
 $request = substr($_SERVER['REQUEST_URI'],1,strlen($_SERVER['REQUEST_URI']));
-$requestFile = PATH_HTML . $request;
+$fileX = explode("?",$request);
+$requestFile = PATH_HTML . $fileX[0];
 if (file_exists($requestFile)) {
     if (!is_file($requestFile)) {
         header( "location: /errors/error404.php?url=" . urlencode( $_SERVER['REQUEST_URI'] ) );
