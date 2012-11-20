@@ -561,7 +561,7 @@ var dynaformEditor={
     delete myScripts;
   },
   refresh_htmlcode:function()
-  {
+  {    
     var dynaformEditorHTML = this.views["htmlcode"];
     if (this.htmlEditorLoaded)
     {
@@ -575,9 +575,9 @@ var dynaformEditor={
     }
     if ((response.error==0) && (this.htmlEditorLoaded))
     {
-      window._editorHTML.doc.body.innerHTML=response.html;
-      html_html2();
-      html2_html();
+//      window._editorHTML.doc.body.innerHTML=response.html;
+//      html_html2();
+//      html2_html();
     }
     else if ((response.error==0) && (!this.htmlEditorLoaded))
     {
@@ -800,9 +800,9 @@ var dynaformEditor={
   },
   restoreHTML:function()
   {
-    window._editorHTML.doc.body.innerHTML = this.ajax.restore_html(this.A);
-    html_html2();
-    html2_html();
+//    window._editorHTML.doc.body.innerHTML = this.ajax.restore_html(this.A);
+//    html_html2();
+//    html2_html();
   },
   displayError:function(err,rr)
   {

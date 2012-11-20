@@ -44,7 +44,7 @@ class XmlForm_Field_WYSIWYG_EDITOR extends XmlForm_Field
     public $defaultValue = '<br/>';
     public $editorType = '';
     /**
-     * render function is drawing the dynaform
+     * render function returns the HTML definition for the Dynaform Field
      *
      * @author
      *
@@ -63,8 +63,8 @@ class XmlForm_Field_WYSIWYG_EDITOR extends XmlForm_Field
     }
 
     /**
-     * attachEvents method executes javascript code in order to initialize
-     * the component configuration, attributes, and additional stuff.
+     * attachEvents method returns some javascript code in order to initialize
+     * the Dynaform Field configuration, attributes, and additional stuff.
      *
      * @author
      *
@@ -77,13 +77,10 @@ class XmlForm_Field_WYSIWYG_EDITOR extends XmlForm_Field
     public function attachEvents ($element)
     {
         //cleaning the conflictive prototype functions
-        $editorDefinition = '';
+        $editorDefinition = 'tinyMCE.baseURL = "/js/tinymce/jscripts/tiny_mce"';
         switch ($this->editorType){
             case 'EMAIL_TEMPLATE':
                 $editorDefinition = '
-
-
-                tinyMCE.baseURL = "/js/tinymce/jscripts/tiny_mce"
                 tinyMCE.init({
                     theme   : "advanced",
                     plugins : "fullpage",
@@ -119,12 +116,13 @@ class XmlForm_Field_WYSIWYG_EDITOR extends XmlForm_Field
                     editor_selector : "tmceEditor",
                     width   : "770",
                     height  : "305",
-                    theme_advanced_buttons1 : "fontselect,bold,italic,underline,forecolor,backcolor,|,justifyleft,justifycenter,justifyright,justifyfull,|,link,numlist,bullist,|,code,|,pmSimpleUploader,|,pmVariablePicker",
+                    theme_advanced_buttons1 : "pmSimpleUploader,|,pmVariablePicker",
+                    theme_advanced_buttons2 : "fontselect,bold,italic,underline,forecolor,backcolor,|,justifyleft,justifycenter,justifyright,justifyfull,|,link,numlist,bullist,|,code",
                     onchange_callback: function(inst) {
-                            if(inst.isDirty()) {
-                                    inst.save();
-                            }
-                            return true;
+                        if(inst.isDirty()) {
+                            inst.save();
+                        }
+                        return true;
                     }
                 });
                 ';
@@ -132,8 +130,6 @@ class XmlForm_Field_WYSIWYG_EDITOR extends XmlForm_Field
 
             case 'DYNAFORM_TEMPLATE':
                 $editorDefinition = '
-
-                tinyMCE.baseURL = "/js/tinymce/jscripts/tiny_mce"
                 tinyMCE.init({
                     theme   : "advanced",
                     plugins : "advhr,advimage,advlink,advlist,autolink,autoresize,autosave,bbcode,contextmenu,directionality,emotions,example,example_dependency,fullpage,fullscreen,iespell,inlinepopups,insertdatetime,layer,legacyoutput,lists,media,nonbreaking,noneditable,pagebreak,paste,preview,print,save,searchreplace,spellchecker,style,tabfocus,table,template,visualblocks,visualchars,wordcount,xhtmlxtras",
@@ -148,8 +144,6 @@ class XmlForm_Field_WYSIWYG_EDITOR extends XmlForm_Field
 
                     skin : "o2k7",
                     skin_variant : "silver",
-
-                    content_css : "content.css",
 
                     template_external_list_url : "js/template_list.js",
                     external_link_list_url : "js/link_list.js",
@@ -167,12 +161,12 @@ class XmlForm_Field_WYSIWYG_EDITOR extends XmlForm_Field
                         return true;
                     }
                 });
+                alert("new");
+                alert(tinyMCE.execCommand("mceRmoveControl", false, "form[HTML]"));
                 ';
                 break;
             default:
                 $editorDefinition = '
-
-                    tinyMCE.baseURL = "/js/tinymce/jscripts/tiny_mce"
                     tinyMCE.init({
                         theme   : "advanced",
                         plugins : "fullpage",
@@ -180,15 +174,14 @@ class XmlForm_Field_WYSIWYG_EDITOR extends XmlForm_Field
                         editor_selector : "tmceEditor",
                         width   : "'. $this->width. '",
                         height  : "'. $this->height. '",
-                        theme_advanced_buttons3_add : "fullpage"
+                        theme_advanced_buttons3_add : "fullpage",                    
+                        handle_event_callback : function(e) {
+                                if(this.isDirty()) {
+                                        this.save();
+                                }
+                                return true;
+                        }
                     });
-
-                    handle_event_callback : function(e) {
-                		if(this.isDirty()) {
-                			this.save();
-                		}
-                		return true;
-                	}
                 ';
                 break;
         }
