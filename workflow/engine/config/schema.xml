@@ -198,6 +198,7 @@
       <rule name="validValues" value="ACTIVE|DELETED" message="Please select a valid document status (ACTIVE|DELETED)."/>
       <rule name="required" message="Application Document Status is required."/>
     </validator>
+
     <index name="indexAppDocument">
       <index-column name="FOLDER_UID"/>
       <index-column name="APP_DOC_UID"/>

@@ -91,6 +91,7 @@ CREATE TABLE `APP_DOCUMENT`
 	`APP_DOC_STATUS_DATE` DATETIME,
 	`APP_DOC_FIELDNAME` VARCHAR(150),
 	PRIMARY KEY (`APP_DOC_UID`,`DOC_VERSION`),
+    
     KEY `indexAppDocument`(`FOLDER_UID`, `APP_DOC_UID`)
 )ENGINE=MyISAM  DEFAULT CHARSET='utf8' COMMENT='Documents in an Application';
 #-----------------------------------------------------------------------------
