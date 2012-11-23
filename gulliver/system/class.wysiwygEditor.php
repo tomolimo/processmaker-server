@@ -111,7 +111,7 @@ class XmlForm_Field_WYSIWYG_EDITOR extends XmlForm_Field
                 tinyMCE.baseURL = "/js/tinymce/jscripts/tiny_mce"
                 tinyMCE.init({
                     theme   : "advanced",
-                    plugins : "fullpage, pmSimpleUploader, pmVariablePicker",
+                    plugins : "fullpage, pmSimpleUploader, pmVariablePicker, inlinepopups",
                     mode    : "specific_textareas",
                     editor_selector : "tmceEditor",
                     width   : "770",

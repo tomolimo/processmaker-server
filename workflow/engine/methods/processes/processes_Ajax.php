@@ -519,6 +519,20 @@ try {
         case 'events':
             $oProcessMap->eventsList( $oData->pro_uid, $oData->type );
             break;
+        case 'getVariableList':
+            G::LoadClass( 'xmlfield_InputPM' );
+            $proUid= isset($_REQUEST['process'])?$_REQUEST['process']:'';
+            $aFields = getDynaformsVars( $proUid, true, isset( $_REQUEST['bIncMulSelFields'] ) ? $_REQUEST['bIncMulSelFields'] : 0 );
+            $_REQUEST['queryString'] = 'SYS';
+            $aVariables = array();
+            foreach ($aFields as $key => $value) {
+                if(stristr($aFields[$key]['sName'], $_REQUEST['queryString'])){
+                    $aVariables[] = $aFields[$key];
+                }
+            }      
+            $oJSON = new Services_JSON();            
+            echo $oJSON->encode($aFields);
+            break;
         /*
 	       case 'saveFile':
          global $G_PUBLISH;
