@@ -25,6 +25,7 @@
 $html = '<form action="uploader.php?'.$_SERVER["QUERY_STRING"].'&q=upload" method="post" enctype="multipart/form-data" onsubmit="">';
 
 $html .= '<div id="d_variables">';
+
 $html .= '<table width="90%" align="center">';
 $html .= '<tr>';
 $html .= '<td width="50%">';
@@ -43,7 +44,7 @@ $html .= '</tr>';
 
 $html .= '<tr>';
 $html .= '<td width="25%">';
-$html .= '<select name="type_variables">';
+$html .= '<select name="type_variables" id="type_variables">';
 $html .= '<option value="all">All Variables</option>';
 $html .= '<option value="system">System Variables</option>';
 $html .= '<option value="process">Process Variables</option>';
@@ -51,7 +52,8 @@ $html .= '</select> &nbsp;&nbsp;&nbsp;&nbsp;';
 $html .= '</td>';
 
 $html .= '<td width="25%">';
-$html .= '<select name="prefix" id="prefix" onChange="Seleccionar(this);">';
+//$html .= '<select name="prefix" id="prefix" onChange="Seleccionar(this);">';
+$html .= '<select name="prefix" id="prefix">';
 $html .= '<option value="ID_TO_FLOAT">@#</option>';
 $html .= '<option value="ID_TO_STRING">@@</option>';
 $html .= '<option value="ID_TO_INTEGER">@%</option>';
@@ -62,7 +64,8 @@ $html .= '</select> &nbsp;&nbsp;&nbsp;&nbsp;';
 $html .= '</td>';
 
 $html .= '<td width="20%">';
-$html .= '<input type="text" size="15">';
+//$html .= '<input type="text" id="search" size="15" onkeydown="validartexto(event);">';
+$html .= '<input type="text" id="search" size="15">';
 $html .= '</td>';
 $html .= '</tr>';
 
@@ -81,31 +84,19 @@ $aFields = getDynaformsVars( $_POST['sProcess'], true, isset( $_POST['bIncMulSel
 
 //$html .= '<select name="_Var_Form_" id="_Var_Form_" size="' . count( $aFields ) . '" style="width:100%;' . (! isset( $_POST['sNoShowLeyend'] ) ? 'height:50%;' : '') . '" ondblclick="insertFormVar(\'' . $_POST['sFieldName'] . '\', this.value);">';
 
-$html .= '<select name="_Var_Form_" id="_Var_Form_" size="4"  style="width:100%;' . (! isset( $_POST['sNoShowLeyend'] ) ? 'height:50%;' : '') . '" ondblclick="insertFormVar(\'' . $_POST['sFieldName'] . '\', this.value);">';
+$html .= '<select name="_Var_Form_" id="_Var_Form_" size="4"  style="width:100%;' . (! isset( $_POST['sNoShowLeyend'] ) ? 'height:50%;' : '') . '" ondblclick="getValue(this);">';
 
 foreach ($aFields as $aField) {
     $html .= '<option value="' . $_POST['sSymbol'] . $aField['sName'] . '">' . $_POST['sSymbol'] . $aField['sName'] . ' (' . $aField['sType'] . ')</option>';
 }
 
-$aRows[0] = Array ('fieldname' => 'char','variable' => 'char','type' => 'type','label' => 'char'
-);
+$aRows[0] = Array ('fieldname' => 'char','variable' => 'char','type' => 'type','label' => 'char');
 foreach ($aFields as $aField) {
     $aRows[] = Array ('fieldname' => $_POST['sFieldName'],'variable' => $_POST['sSymbol'] . $aField['sName'],'variable_label' => '<div class="pm__dynavars"> <a id="dynalink" href=# onclick="insertFormVar(\'' . $_POST['sFieldName'] . '\',\'' . $_POST['sSymbol'] . $aField['sName'] . '\');">' . $_POST['sSymbol'] . $aField['sName'] . '</a></div>','type' => $aField['sType'],'label' => $aField['sLabel']
     );
 }
-
 $html .= '</select>';
 
-
-/*
-$html .= '</select> &nbsp;&nbsp;&nbsp;&nbsp;';
-$html .= '</td>';
-$html .= '<td width="30%">';
-$html .= '<select name="variables">';
-$html .= '<option value="quotes">@@SYS_SYS</option>';
-$html .= '<option value="float">@@SYS_LANG</option>';
-$html .= '<option value="encoding">@@SYS_SKIN</option>';
-$html .= '</select>';*/
 $html .= '</td>';
 $html .= '</tr>';
 $html .= '</table>';
@@ -134,7 +125,13 @@ $html .= '</div>';
 
 $html .= '</form>';
 
+
+$G_PUBLISH = new Publisher();
+$oHeadPublisher = & headPublisher::getSingleton();
+$oHeadPublisher->addScriptFile('/jscore/controls/variablePicker.js');
 echo $html;
+
+G::RenderPage( 'publish', 'raw' );
 /*
 $alll = '<script type="text/javascript" language="javascript">';
 $alll .= 'function Seleccionar(combo){';
