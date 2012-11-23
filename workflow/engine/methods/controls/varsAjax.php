@@ -21,9 +21,134 @@
  * For more information, contact Colosa Inc, 2566 Le Jeune Rd.,
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  */
+
+$html = '<form action="uploader.php?'.$_SERVER["QUERY_STRING"].'&q=upload" method="post" enctype="multipart/form-data" onsubmit="">';
+
+$html .= '<div id="d_variables">';
+$html .= '<table width="90%" align="center">';
+$html .= '<tr>';
+$html .= '<td width="50%">';
+$html .= '<label for="type_label">Type Variable</label>';
+$html .= '</td>';
+
+$html .= '<td width="25%">';
+$html .= '<label for="prefix_label">Prefix</label>';
+$html .= '</td>';
+
+$html .= '<td width="25%">';
+$html .= '<label for="variables_label">Search</label>';
+$html .= '</td>';
+$html .= '</tr>';
+
+
+$html .= '<tr>';
+$html .= '<td width="25%">';
+$html .= '<select name="type_variables">';
+$html .= '<option value="all">All Variables</option>';
+$html .= '<option value="system">System Variables</option>';
+$html .= '<option value="process">Process Variables</option>';
+$html .= '</select> &nbsp;&nbsp;&nbsp;&nbsp;';
+$html .= '</td>';
+
+$html .= '<td width="25%">';
+$html .= '<select name="prefix" id="prefix" onChange="Seleccionar(this);">';
+$html .= '<option value="ID_TO_FLOAT">@#</option>';
+$html .= '<option value="ID_TO_STRING">@@</option>';
+$html .= '<option value="ID_TO_INTEGER">@%</option>';
+$html .= '<option value="ID_TO_URL">@?</option>';
+$html .= '<option value="ID_SQL_ESCAPE">@$</option>';
+$html .= '<option value="ID_REPLACE_WITHOUT_CHANGES">@=</option>';
+$html .= '</select> &nbsp;&nbsp;&nbsp;&nbsp;';
+$html .= '</td>';
+
+$html .= '<td width="20%">';
+$html .= '<input type="text" size="15">';
+$html .= '</td>';
+$html .= '</tr>';
+
+$html .= '<br>';
+$html .= '<tr><td>&nbsp;</td></tr>';
+$html .= '<tr>';
+
+$html .= '<br>';
+$html .= '<tr><td><label for="prefix_label">Variables</label></td></tr>';
+$html .= '<tr>';
+//onChange="Seleccionar(this);
+$html .= '<td colspan="3">';
+
 G::LoadClass( 'xmlfield_InputPM' );
 $aFields = getDynaformsVars( $_POST['sProcess'], true, isset( $_POST['bIncMulSelFields'] ) ? $_POST['bIncMulSelFields'] : 0 );
 
+//$html .= '<select name="_Var_Form_" id="_Var_Form_" size="' . count( $aFields ) . '" style="width:100%;' . (! isset( $_POST['sNoShowLeyend'] ) ? 'height:50%;' : '') . '" ondblclick="insertFormVar(\'' . $_POST['sFieldName'] . '\', this.value);">';
+
+$html .= '<select name="_Var_Form_" id="_Var_Form_" size="4"  style="width:100%;' . (! isset( $_POST['sNoShowLeyend'] ) ? 'height:50%;' : '') . '" ondblclick="insertFormVar(\'' . $_POST['sFieldName'] . '\', this.value);">';
+
+foreach ($aFields as $aField) {
+    $html .= '<option value="' . $_POST['sSymbol'] . $aField['sName'] . '">' . $_POST['sSymbol'] . $aField['sName'] . ' (' . $aField['sType'] . ')</option>';
+}
+
+$aRows[0] = Array ('fieldname' => 'char','variable' => 'char','type' => 'type','label' => 'char'
+);
+foreach ($aFields as $aField) {
+    $aRows[] = Array ('fieldname' => $_POST['sFieldName'],'variable' => $_POST['sSymbol'] . $aField['sName'],'variable_label' => '<div class="pm__dynavars"> <a id="dynalink" href=# onclick="insertFormVar(\'' . $_POST['sFieldName'] . '\',\'' . $_POST['sSymbol'] . $aField['sName'] . '\');">' . $_POST['sSymbol'] . $aField['sName'] . '</a></div>','type' => $aField['sType'],'label' => $aField['sLabel']
+    );
+}
+
+$html .= '</select>';
+
+
+/*
+$html .= '</select> &nbsp;&nbsp;&nbsp;&nbsp;';
+$html .= '</td>';
+$html .= '<td width="30%">';
+$html .= '<select name="variables">';
+$html .= '<option value="quotes">@@SYS_SYS</option>';
+$html .= '<option value="float">@@SYS_LANG</option>';
+$html .= '<option value="encoding">@@SYS_SKIN</option>';
+$html .= '</select>';*/
+$html .= '</td>';
+$html .= '</tr>';
+$html .= '</table>';
+$html .= '</div>';
+
+$html .= '<br>';
+$html .= '<div id="desc_variables">';
+$html .= '<table border="1" width="90%" align="center">';
+$html .= '<tr width="40%">';
+$html .= '<td>Result</td>';
+$html .= '<td>@#SYS_LANG</td>';
+$html .= '</tr>';
+$html .= '<tr width="60%">';
+$html .= '<td>Description</td>';
+$html .= '<td>Description @#SYS_LANG</td>';
+$html .= '</tr>';
+$html .= '</table>';
+$html .= '</div>';
+$html .= '<br>';
+$html .= '<div id="desc_variables">';
+$html .= '<table width="90%" align="center">';
+$html .= '<tr><td>';
+$html .= '<label for="desc_prefix">' . G::LoadTranslation( 'ID_TO_FLOAT' ) . '</label>';
+$html .= '</td></tr>';
+$html .= '</div>';
+
+$html .= '</form>';
+
+echo $html;
+/*
+$alll = '<script type="text/javascript" language="javascript">';
+$alll .= 'function Seleccionar(combo){';
+$alll .= 'alert(combo.value);';
+$alll .= '}';
+$alll .= '</script>';
+
+echo $alll;
+*/
+
+
+
+//echo var_dump($aFields);
+/*
 $sHTML = '<select name="_Var_Form_" id="_Var_Form_" size="' . count( $aFields ) . '" style="width:100%;' . (! isset( $_POST['sNoShowLeyend'] ) ? 'height:50%;' : '') . '" ondblclick="insertFormVar(\'' . $_POST['sFieldName'] . '\', this.value);">';
 foreach ($aFields as $aField) {
     $sHTML .= '<option value="' . $_POST['sSymbol'] . $aField['sName'] . '">' . $_POST['sSymbol'] . $aField['sName'] . ' (' . $aField['sType'] . ')</option>';
@@ -45,11 +170,11 @@ if (! isset( $_POST['sNoShowLeyend'] )) {
     if (isset( $_POST['sType'] )) {
         $sHTML .= '<tr><td class="module_app_input___gray">' . G::LoadTranslation( 'ID_ESC' ) . '</td></tr>';
         $sHTML .= '<tr><td class="module_app_input___gray">' . G::LoadTranslation( 'ID_NONEC' ) . '</td></tr>';
-        /*$sHTML .= '<tr><td class="module_app_input___gray">' . G::LoadTranslation('ID_EURL') . '</td></tr>';
-        $sHTML .= '<tr><td class="module_app_input___gray">' . G::LoadTranslation('ID_EVAL') . '</td></tr>';
-        $sHTML .= '<tr><td class="module_app_input___gray">' . G::LoadTranslation('ID_ESCJS') . '</td></tr>';
-        $sHTML .= '<tr><td class="module_app_input___gray">' . G::LoadTranslation('ID_ESCSJS') . '</td></tr>';
-        $sHTML .= '<tr><td class="module_app_input___gray">' . G::LoadTranslation('ID_FUNCTION') . '</td></tr>';*/
+        //$sHTML .= '<tr><td class="module_app_input___gray">' . G::LoadTranslation('ID_EURL') . '</td></tr>';
+        //$sHTML .= '<tr><td class="module_app_input___gray">' . G::LoadTranslation('ID_EVAL') . '</td></tr>';
+        //$sHTML .= '<tr><td class="module_app_input___gray">' . G::LoadTranslation('ID_ESCJS') . '</td></tr>';
+        //$sHTML .= '<tr><td class="module_app_input___gray">' . G::LoadTranslation('ID_ESCSJS') . '</td></tr>';
+        //$sHTML .= '<tr><td class="module_app_input___gray">' . G::LoadTranslation('ID_FUNCTION') . '</td></tr>';
     } else {
         $sHTML .= '<tr><td class="module_app_input___gray" width="5%">@@</td><td class="module_app_input___gray">' . G::LoadTranslation( 'ID_TO_STRING' ) . '</td></tr>';
         $sHTML .= '<tr><td class="module_app_input___gray" width="5%">@#</td><td class="module_app_input___gray">' . G::LoadTranslation( 'ID_TO_FLOAT' ) . '</td></tr>';
@@ -70,48 +195,48 @@ $sStyle = " <style type=\"text/css\">
 
 .pm__dynavars a#dynalink{color:#000000;}
 
-/* begin css tabs */
-ul#tabnav { /* general settings */
-text-align: left; /* set to left, right or center */
-margin: 1em 0 1em 0; /* set margins as desired */
-font: bold 11px verdana, arial, sans-serif; /* set font as desired */
-border-bottom: 1px solid #ccc; /* set border COLOR as desired */
+// begin css tabs
+ul#tabnav { // general settings
+text-align: left; // set to left, right or center
+margin: 1em 0 1em 0; // set margins as desired
+font: bold 11px verdana, arial, sans-serif; // set font as desired
+border-bottom: 1px solid #ccc; // set border COLOR as desired
 list-style-type: none;
-padding: 3px 10px 3px 10px; /* THIRD number must change with respect to padding-top (X) below */
+padding: 3px 10px 3px 10px; // THIRD number must change with respect to padding-top (X) below
 }
 
-ul#tabnav li { /* do not change */
+ul#tabnav li { // do not change
 display: inline;
 }
 
-div#all li.all, div#system li.system, div#process li.process, div#tab4 li.tab4 { /* settings for selected tab */
-border-bottom: 1px solid #fff; /* set border color to page background color */
-background-color: #fff; /* set background color to match above border color */
+div#all li.all, div#system li.system, div#process li.process, div#tab4 li.tab4 { // settings for selected tab
+border-bottom: 1px solid #fff; // set border color to page background color
+background-color: #fff; // set background color to match above border color
 }
 
-div#all li.all a, div#system li.system a, div#process li.process a, div#tab4 li.tab4 a { /* settings for selected tab link */
-background-color: #fff; /* set selected tab background color as desired */
-color: #000; /* set selected tab link color as desired */
+div#all li.all a, div#system li.system a, div#process li.process a, div#tab4 li.tab4 a { // settings for selected tab link
+background-color: #fff; // set selected tab background color as desired
+color: #000; // set selected tab link color as desired
 position: relative;
 top: 1px;
-padding-top: 4px; /* must change with respect to padding (X) above and below */
+padding-top: 4px; // must change with respect to padding (X) above and below
 }
 
-ul#tabnav li a { /* settings for all tab links */
-padding: 3px 4px; /* set padding (tab size) as desired; FIRST number must change with respect to padding-top (X) above */
-border: 1px solid #aaa; /* set border COLOR as desired; usually matches border color specified in #tabnav */
-background-color: #ccc; /* set unselected tab background color as desired */
-color: #666; /* set unselected tab link color as desired */
-margin-right: 10px; /* set additional spacing between tabs as desired */
+ul#tabnav li a { // settings for all tab links
+padding: 3px 4px; // set padding (tab size) as desired; FIRST number must change with respect to padding-top (X) above
+border: 1px solid #aaa; // set border COLOR as desired; usually matches border color specified in #tabnav
+background-color: #ccc; // set unselected tab background color as desired
+color: #666; // set unselected tab link color as desired
+margin-right: 10px; // set additional spacing between tabs as desired
 text-decoration: none;
 border-bottom: none;
 }
 
-ul#tabnav a:hover { /* settings for hover effect */
-background: #fff; /* set desired hover color */
+ul#tabnav a:hover { // settings for hover effect
+background: #fff; // set desired hover color
 }
 
-/* end css tabs */
+// end css tabs
 
 </style>";
 $cssTabs = "<div id=\"all\">
@@ -129,11 +254,11 @@ echo $sStyle;
 
 
 echo "<div id=\"processVariablesContent\">";
-echo $cssTabs;
+//echo $cssTabs;
 G::LoadClass( 'ArrayPeer' );
 
 global $_DBArray;
-$_DBArray['dynavars'] = $aRows;
+//$_DBArray['dynavars'] = $aRows;
 $_SESSION['_DBArray'] = $_DBArray;
 
 G::LoadClass( 'ArrayPeer' );
@@ -150,3 +275,4 @@ G::RenderPage( 'publish', 'raw' );
 
 echo "</div>";
 
+*/

@@ -44,10 +44,11 @@ function pmVariablePicker(field_name, url, type, win) {
         strUploaderURL = strUploaderURL + "&type=" + type + "&d=" + strUploadPath + "&subs=" + strSubstitutePath;
     }
     tinyMCE.activeEditor.windowManager.open({                                                                       // open the plugin popup
-        file            : strUploaderURL,
-        title           : 'Upload Variable',
-        width           : 500,  
-        height          : 100,
+        //file            : strUploaderURL,
+        file 			: strPluginPath + '/VariablePicker.html',
+    	title           : 'Upload Variable',
+        width           : '600px',  
+        height          : '150px',
         resizable       : "yes", 
         inline          : 1,        // This parameter only has an effect if you use the inlinepopups plugin!
         close_previous  : "no"
