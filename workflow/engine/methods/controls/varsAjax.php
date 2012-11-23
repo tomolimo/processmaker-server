@@ -71,8 +71,7 @@ $html .= '<option value="ID_REPLACE_WITHOUT_CHANGES">@=</option>';
 $html .= '</select> &nbsp;&nbsp;&nbsp;&nbsp;';
 $html .= '</td>';
 
-$html .= '<td width="20%">';
-//$html .= '<input type="text" id="search" size="15" onkeydown="validartexto(event);">';
+$html .= '<td width="20%" valign="top">';
 $html .= '<input type="text" id="search" size="15">';
 $html .= '</td>';
 $html .= '</tr>';

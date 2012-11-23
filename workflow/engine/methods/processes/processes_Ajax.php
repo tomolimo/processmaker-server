@@ -522,16 +522,17 @@ try {
         case 'getVariableList':
             G::LoadClass( 'xmlfield_InputPM' );
             $proUid= isset($_REQUEST['process'])?$_REQUEST['process']:'';
+            $queryText= isset($_REQUEST['queryText'])?$_REQUEST['queryText']:'';
             $aFields = getDynaformsVars( $proUid, true, isset( $_REQUEST['bIncMulSelFields'] ) ? $_REQUEST['bIncMulSelFields'] : 0 );
-            $_REQUEST['queryString'] = 'SYS';
+            //$_REQUEST['queryString'] = 'SYS';
             $aVariables = array();
             foreach ($aFields as $key => $value) {
-                if(stristr($aFields[$key]['sName'], $_REQUEST['queryString'])){
+                if(stristr($aFields[$key]['sName'], $queryText)){
                     $aVariables[] = $aFields[$key];
                 }
             }      
             $oJSON = new Services_JSON();            
-            echo $oJSON->encode($aFields);
+            echo $oJSON->encode($aVariables);
             break;
         /*
 	       case 'saveFile':
