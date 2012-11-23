@@ -38,9 +38,6 @@ var verifyLogin = function() {
                 case 'save_as':
                     dynaformEditor.save_as();
                     break;
-                case 'save_as':
-                    dynaformEditor.save_as();
-                    break;
                 case 'saveJavascript':
                     dynaformEditor.saveJavascript();
                     break;

@@ -154,7 +154,7 @@ switch ($request) {
                             <td align="" colspan="2" style="background: none repeat scroll 0 0 #E0E7EF; border-bottom: 1px solid #C3D1DF;
                                 color: #000000; font-weight: bold; padding-left: 5px; text-shadow: 0 1px 0 #FFFFFF;
                                 font: 8px">
-                                <span>Select dynaform to import</span>
+                                <span>' . G::LoadTranslation('ID_SELECT_DYNAFORM_IMPORT') . '</span>
                             </td>
                         </tr>
                         <tr>
