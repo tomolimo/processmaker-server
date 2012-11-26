@@ -31,7 +31,7 @@ leimnud.event.add(document.getElementById('search'), 'keypress', function(e) {
 	if(key == '13')
 	{
             //var ref  = document.getElementById("PRO_UID").value;
-            var list = getVariableList(document.getElementById('search').value, document.getElementById("PRO_UID").value, document.getElementById('type_variables').value);
+            var list = getVariableList(document.getElementById('search').value, document.getElementById("process").value, document.getElementById('type_variables').value);
             for (var i=0; i< list.length; i++){
                 console.log(list[i].sName);
             }
@@ -47,8 +47,8 @@ leimnud.event.add(document.getElementById('search'), 'keypress', function(e) {
 
 var generateListValues = function(){
 	
-	var combo = document.getElementById("_Var_Form_");
-	var option = document.createElement('option');
+    var combo = document.getElementById("_Var_Form_");
+    var option = document.createElement('option');
     combo.options.add(option, 0);
     combo.options[0].value = "valor";
     combo.options[0].text = "Textojjjjj";
