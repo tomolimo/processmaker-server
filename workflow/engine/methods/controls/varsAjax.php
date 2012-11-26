@@ -21,12 +21,18 @@
  * For more information, contact Colosa Inc, 2566 Le Jeune Rd.,
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  */
-
 $html = '<form action="uploader.php?'.$_SERVER["QUERY_STRING"].'&q=upload" method="post" enctype="multipart/form-data" onsubmit="">';
 
 $html .= '<div id="d_variables">';
 
 $html .= '<table width="90%" align="center">';
+
+$html .= '<tr>';
+$html .= '<td colspan="3">';
+$html .= '<input type="hidden" id="process" value="'.$_POST['sProcess'].'">';
+$html .= '</td>';
+$html .= '</tr>';
+
 $html .= '<tr>';
 $html .= '<td width="50%">';
 $html .= '<label for="type_label">Type Variable</label>';
@@ -41,14 +47,7 @@ $html .= '<label for="variables_label">Search</label>';
 $html .= '</td>';
 $html .= '</tr>';
 
-$html = '<form action="uploader.php?'.$_SERVER["QUERY_STRING"].'&q=upload" method="post" enctype="multipart/form-data" onsubmit="">';
-
-$html .= '<div id="d_variables">';
-$html .= '<table width="90%" align="center">';
-$html .= '<tr>';
-$html .= '<td width="50%">';
-$html .= '<label for="type_label">Type Variable</label>';
-$html .= '</td>';
+//$html = '<form action="uploader.php?'.$_SERVER["QUERY_STRING"].'&q=upload" method="post" enctype="multipart/form-data" onsubmit="">';
 
 $html .= '<tr>';
 $html .= '<td width="25%">';
@@ -71,7 +70,7 @@ $html .= '<option value="ID_REPLACE_WITHOUT_CHANGES">@=</option>';
 $html .= '</select> &nbsp;&nbsp;&nbsp;&nbsp;';
 $html .= '</td>';
 
-$html .= '<td width="20%" valign="top">';
+$html .= '<td width="25%" valign="top">';
 $html .= '<input type="text" id="search" size="15">';
 $html .= '</td>';
 $html .= '</tr>';
@@ -91,7 +90,7 @@ $aFields = getDynaformsVars( $_POST['sProcess'], true, isset( $_POST['bIncMulSel
 
 //$html .= '<select name="_Var_Form_" id="_Var_Form_" size="' . count( $aFields ) . '" style="width:100%;' . (! isset( $_POST['sNoShowLeyend'] ) ? 'height:50%;' : '') . '" ondblclick="insertFormVar(\'' . $_POST['sFieldName'] . '\', this.value);">';
 
-$html .= '<select name="_Var_Form_" id="_Var_Form_" size="4"  style="width:100%;' . (! isset( $_POST['sNoShowLeyend'] ) ? 'height:50%;' : '') . '" ondblclick="getValue(this);">';
+$html .= '<select name="_Var_Form_" id="_Var_Form_" size="8"  style="width:100%;' . (! isset( $_POST['sNoShowLeyend'] ) ? 'height:50%;' : '') . '" ondblclick="getValue(this);">';
 
 foreach ($aFields as $aField) {
     $html .= '<option value="' . $_POST['sSymbol'] . $aField['sName'] . '">' . $_POST['sSymbol'] . $aField['sName'] . ' (' . $aField['sType'] . ')</option>';

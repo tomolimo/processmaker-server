@@ -44,7 +44,11 @@ leimnud.event.add(document.getElementById('search'), 'keypress', function(e) {
 	}
 });
 
-leimnud.event.add(document.getElementById('type_variables'), 'change', function(event) {
-    console.log('Dropdown Type of Variables');
-});
-
+var generateListValues = function(){
+	
+	var combo = document.getElementById("_Var_Form_");
+	var option = document.createElement('option');
+    combo.options.add(option, 0);
+    combo.options[0].value = "valor";
+    combo.options[0].text = "Textojjjjj";
+}
