@@ -56,6 +56,8 @@ $html .= '<option value="all">All Variables</option>';
 $html .= '<option value="system">System Variables</option>';
 $html .= '<option value="process">Process Variables</option>';
 $html .= '</select> &nbsp;&nbsp;&nbsp;&nbsp;';
+$html .= '<input type="hidden" id="PRO_UID" name="PRO_UID" value="'.$_POST['sProcess'].'"/> ';
+$html .= '<input type="hidden" id="selectedField" name="selectedField" value="'.$_POST['selectedField'].'"/> ';
 $html .= '</td>';
 
 $html .= '<td width="25%">';

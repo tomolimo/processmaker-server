@@ -1,5 +1,5 @@
-var getValue = function (list) {
-	console.log(list.value);
+var getValue = function (list) {   
+    insertFormVar(document.getElementById('selectedField').value,list.value)
 }
 
 var getVariableList = function (queryText, proUid, varType){
@@ -10,11 +10,11 @@ var getVariableList = function (queryText, proUid, varType){
         async : false,
         method: "POST",
         args  : "action=getVariableList&process="+proUid+"&queryText="+queryText+"&type="+varType
-    }); 
+    });
     
-     oRPC.make();
-     responseData = eval ("(" +oRPC.xmlhttp.responseText+ ")");
-     return responseData;
+    oRPC.make();
+    responseData = eval ("(" +oRPC.xmlhttp.responseText+ ")");
+    return responseData;
 }
 
 leimnud.event.add(document.getElementById('type_variables'), 'change', function(event) {
@@ -30,7 +30,8 @@ leimnud.event.add(document.getElementById('search'), 'keypress', function(e) {
 	var key = e.keyCode;
 	if(key == '13')
 	{
-            var list = getVariableList('nuev','2527075735085b447a58523099748463','system');
+            //var ref  = document.getElementById("PRO_UID").value;
+            var list = getVariableList(document.getElementById('search').value, document.getElementById("PRO_UID").value, document.getElementById('type_variables').value);
             for (var i=0; i< list.length; i++){
                 console.log(list[i].sName);
             }

@@ -522,11 +522,20 @@ try {
         case 'getVariableList':
             G::LoadClass( 'xmlfield_InputPM' );
             $proUid= isset($_REQUEST['process'])?$_REQUEST['process']:'';
-            $queryText= isset($_REQUEST['queryText'])?$_REQUEST['queryText']:'';
-            $aFields = getDynaformsVars( $proUid, true, isset( $_REQUEST['bIncMulSelFields'] ) ? $_REQUEST['bIncMulSelFields'] : 0 );
-            //$_REQUEST['queryString'] = 'SYS';
+            $queryText= isset($_REQUEST['queryText'])?$_REQUEST['queryText']:'';            
+            if ($_REQUEST['type']=='system'){
+                $isSystem = true;
+            } else {
+                $isSystem = false;
+            }
+            var_dump($isSystem);
+            if ($_REQUEST['type']=='all'){
+                $aFields = getDynaformsVars( $proUid );
+            } else {
+                $aFields = getDynaformsVars( $proUid, $isSystem, isset( $_REQUEST['bIncMulSelFields'] ) ? $_REQUEST['bIncMulSelFields'] : 1 );
+            }
             $aVariables = array();
-            foreach ($aFields as $key => $value) {
+            foreach ($aFields as $key => $value){
                 if(stristr($aFields[$key]['sName'], $queryText)){
                     $aVariables[] = $aFields[$key];
                 }
