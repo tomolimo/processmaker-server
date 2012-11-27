@@ -520,19 +520,18 @@ try {
             $oProcessMap->eventsList( $oData->pro_uid, $oData->type );
             break;
         case 'getVariableList':
-            G::LoadClass( 'xmlfield_InputPM' );
-            $proUid= isset($_REQUEST['process'])?$_REQUEST['process']:'';
-            $queryText= isset($_REQUEST['queryText'])?$_REQUEST['queryText']:'';            
+            G::LoadClass('xmlfield_InputPM');
+            $proUid= isset( $_REQUEST['process'] )?$_REQUEST['process']:'';
+            $queryText= isset( $_REQUEST['queryText'] )?$_REQUEST['queryText']:'';            
             if ($_REQUEST['type']=='system'){
                 $isSystem = true;
             } else {
                 $isSystem = false;
             }
-            var_dump($isSystem);
             if ($_REQUEST['type']=='all'){
                 $aFields = getDynaformsVars( $proUid );
             } else {
-                $aFields = getDynaformsVars( $proUid, $isSystem, isset( $_REQUEST['bIncMulSelFields'] ) ? $_REQUEST['bIncMulSelFields'] : 1 );
+                $aFields = getDynaformsVars( $proUid, $isSystem, isset( $_REQUEST['bIncMulSelFields'] ) ? $_REQUEST['bIncMulSelFields'] : 1);
             }
             $aVariables = array();
             foreach ($aFields as $key => $value){
@@ -541,7 +540,11 @@ try {
                 }
             }      
             $oJSON = new Services_JSON();            
-            echo $oJSON->encode($aVariables);
+            echo $oJSON->encode( $aVariables );
+            break;
+        case 'getVariablePrefix':
+            $_REQUEST['prefix'] = $_REQUEST['prefix']!=null?$_REQUEST['prefix']:'ID_TO_STRING';
+            echo G::LoadTranslation($_REQUEST['prefix']);
             break;
         /*
 	       case 'saveFile':

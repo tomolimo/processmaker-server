@@ -27,9 +27,10 @@ $html .= '<div id="d_variables">';
 
 $html .= '<table width="90%" align="center">';
 
-$html .= '<tr>';
+$html .= '<tr style="display:none; visibility:hidden;">';
 $html .= '<td colspan="3">';
 $html .= '<input type="hidden" id="process" value="'.$_POST['sProcess'].'">';
+$html .= '<input type="hidden" id="selectedField" name="selectedField" value="'.$_POST['sFieldName'].'"/> ';
 $html .= '</td>';
 $html .= '</tr>';
 
@@ -56,7 +57,6 @@ $html .= '<option value="all">All Variables</option>';
 $html .= '<option value="system">System Variables</option>';
 $html .= '<option value="process">Process Variables</option>';
 $html .= '</select> &nbsp;&nbsp;&nbsp;&nbsp;';
-$html .= '<input type="hidden" id="selectedField" name="selectedField" value="'.$_POST['sFieldName'].'"/> ';
 $html .= '</td>';
 
 $html .= '<td width="25%">';
@@ -75,12 +75,7 @@ $html .= '<td width="25%" valign="top">';
 $html .= '<input type="text" id="search" size="15">';
 $html .= '</td>';
 $html .= '</tr>';
-
-$html .= '<br>';
-$html .= '<tr><td>&nbsp;</td></tr>';
 $html .= '<tr>';
-
-$html .= '<br>';
 $html .= '<tr><td><label for="prefix_label">Variables</label></td></tr>';
 $html .= '<tr>';
 //onChange="Seleccionar(this);
@@ -91,7 +86,7 @@ $aFields = getDynaformsVars( $_POST['sProcess'], true, isset( $_POST['bIncMulSel
 
 //$html .= '<select name="_Var_Form_" id="_Var_Form_" size="' . count( $aFields ) . '" style="width:100%;' . (! isset( $_POST['sNoShowLeyend'] ) ? 'height:50%;' : '') . '" ondblclick="insertFormVar(\'' . $_POST['sFieldName'] . '\', this.value);">';
 
-$html .= '<select name="_Var_Form_" id="_Var_Form_" size="8"  style="width:100%;' . (! isset( $_POST['sNoShowLeyend'] ) ? 'height:50%;' : '') . '" ondblclick="getValue(this);">';
+$html .= '<select name="_Var_Form_" id="_Var_Form_" size="8"  style="width:100%;' . (! isset( $_POST['sNoShowLeyend'] ) ? 'height:170;' : '') . '" ondblclick="getValue(this);">';
 
 foreach ($aFields as $aField) {
     $html .= '<option value="' . $_POST['sSymbol'] . $aField['sName'] . '">' . $_POST['sSymbol'] . $aField['sName'] . ' (' . $aField['sType'] . ')</option>';
@@ -99,7 +94,7 @@ foreach ($aFields as $aField) {
 
 $aRows[0] = Array ('fieldname' => 'char','variable' => 'char','type' => 'type','label' => 'char');
 foreach ($aFields as $aField) {
-    $aRows[] = Array ('fieldname' => $_POST['sFieldName'],'variable' => $_POST['sSymbol'] . $aField['sName'],'variable_label' => '<div class="pm__dynavars"> <a id="dynalink" href=# onclick="insertFormVar(\'' . $_POST['sFieldName'] . '\',\'' . $_POST['sSymbol'] . $aField['sName'] . '\');">' . $_POST['sSymbol'] . $aField['sName'] . '</a></div>','type' => $aField['sType'],'label' => $aField['sLabel']
+    $aRows[] = Array ('fieldname' => $_POST['sFieldName'], 'variable' => $_POST['sSymbol'] . $aField['sName'],'variable_label' => '<div class="pm__dynavars"> <a id="dynalink" href=# onclick="insertFormVar(\'' . $_POST['sFieldName'] . '\',\'' . $_POST['sSymbol'] . $aField['sName'] . '\');">' . $_POST['sSymbol'] . $aField['sName'] . '</a></div>','type' => $aField['sType'],'label' => $aField['sLabel']
     );
 }
 $html .= '</select>';
@@ -110,23 +105,21 @@ $html .= '</table>';
 $html .= '</div>';
 
 $html .= '<br>';
-$html .= '<div id="desc_variables">';
 $html .= '<table border="1" width="90%" align="center">';
 $html .= '<tr width="40%">';
 $html .= '<td>Result</td>';
-$html .= '<td>@#SYS_LANG</td>';
+$html .= '<td><span id="selectedVariableLabel">@@SYS_LANG</span></td>';
 $html .= '</tr>';
 $html .= '<tr width="60%">';
 $html .= '<td>Description</td>';
-$html .= '<td>Description @#SYS_LANG</td>';
+$html .= '<td><span id="desc_variables">'.G::LoadTranslation('ID_SYSTEM').'</span></td>';
 $html .= '</tr>';
 $html .= '</table>';
 $html .= '</div>';
 $html .= '<br>';
-$html .= '<div id="desc_variables">';
 $html .= '<table width="90%" align="center">';
 $html .= '<tr><td>';
-$html .= '<label for="desc_prefix">' . G::LoadTranslation( 'ID_TO_FLOAT' ) . '</label>';
+$html .= '<label for="desc_prefix">*<span id="desc_prefix">' . G::LoadTranslation( 'ID_TO_STRING' ) . '</span></label>';
 $html .= '</td></tr>';
 $html .= '</div>';
 
