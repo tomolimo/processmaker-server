@@ -44,12 +44,12 @@ function pmVariablePicker(field_name, url, type, win) {
         strUploaderURL = strUploaderURL + "&type=" + type + "&d=" + strUploadPath + "&subs=" + strSubstitutePath;
     }
     tinyMCE.activeEditor.windowManager.open({                                                                       // open the plugin popup
-        //file            : strUploaderURL,
-        file 			: strPluginPath + '/VariablePicker.html',
+        file 		: '/sysworkflow/en/classic/controls/varsAjax?displayOption=tinyMCE&sSymbol=@@',
     	title           : 'Upload Variable',
-        width           : '600px',  
-        height          : '150px',
-        resizable       : "yes", 
+        width           : '400px',
+        height          : '350px',
+        resizable       : "yes",
+        overflow        : false,
         inline          : 1,        // This parameter only has an effect if you use the inlinepopups plugin!
         close_previous  : "no"
     }, {
@@ -68,4 +68,9 @@ function closePluginPopup(){
 
 function updateEditorContent(serializedHTML){
 	tinyMCE.activeEditor.execCommand('mceInsertContent', false, serializedHTML);
+}
+
+function insertFormVar(fieldName,serializedHTML){
+	tinyMCE.activeEditor.execCommand('mceInsertContent', false, serializedHTML);
+        closePluginPopup();
 }

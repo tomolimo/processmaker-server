@@ -95,10 +95,10 @@ $aFields = getDynaformsVars( $_POST['sProcess'], true, isset( $_POST['bIncMulSel
 
 //$html .= '<select name="_Var_Form_" id="_Var_Form_" size="' . count( $aFields ) . '" style="width:100%;' . (! isset( $_POST['sNoShowLeyend'] ) ? 'height:50%;' : '') . '" ondblclick="insertFormVar(\'' . $_POST['sFieldName'] . '\', this.value);">';
 
-$html .= '<select name="_Var_Form_" id="_Var_Form_" size="8"  style="width:100%;' . (! isset( $_POST['sNoShowLeyend'] ) ? 'height:170;' : '') . '" ondblclick="getValue(this);">';
+$html .= '<select name="_Var_Form_" id="_Var_Form_" size="8"  style="width:100%;' . (! isset( $_POST['sNoShowLeyend'] ) ? 'height:170;' : '') . '" >';
 
 foreach ($aFields as $aField) {
-    $html .= '<option value="' . $_POST['sSymbol'] . $aField['sName'] . '">' . $_POST['sSymbol'] . $aField['sName'] . ' (' . $aField['sType'] . ')</option>';
+    $html .= '<option value="' . $_REQUEST['sSymbol'] . $aField['sName'] . '">' . $_REQUEST['sSymbol'] . $aField['sName'] . ' (' . $aField['sType'] . ')</option>';
 }
 
 $aRows[0] = Array ('fieldname' => 'char','variable' => 'char','type' => 'type','label' => 'char');
@@ -134,13 +134,20 @@ $html .= '</div>';
 
 $html .= '</form>';
 
+$display     = 'raw';
 
 $G_PUBLISH = new Publisher();
 $oHeadPublisher = & headPublisher::getSingleton();
 $oHeadPublisher->addScriptFile('/jscore/controls/variablePicker.js');
+if($_REQUEST['displayOption']=='tinyMCE'){
+    $display = 'blank';
+    $oHeadPublisher->addScriptFile('/js/tinymce/jscripts/tiny_mce/tiny_mce_popup.js');
+    $oHeadPublisher->addScriptFile('/js/tinymce/jscripts/tiny_mce/plugins/pmVariablePicker/editor_plugin_src.js');
+}
+
 echo $html;
 
-G::RenderPage( 'publish', 'raw' );
+G::RenderPage( 'publish', $display );
 /*
 $alll = '<script type="text/javascript" language="javascript">';
 $alll .= 'function Seleccionar(combo){';
