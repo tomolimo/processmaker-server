@@ -84,22 +84,28 @@ leimnud.event.add(document.getElementById('search'), 'keypress', function(e) {
 });
 
 function generateListValues (prefix){
-    
     var list = getVariableList(document.getElementById('search').value, document.getElementById('process').value, document.getElementById('type_variables').value);
     var combo = document.getElementById("_Var_Form_");
     var option = document.createElement('option');
-    for (m=combo.options.length-1;m>=0;m--){
-        combo.options[m]=null
+    
+    for(i=(combo.length-1); i>=0; i--)
+    {
+       aBorrar = combo.options[i];
+       aBorrar.parentNode.removeChild(aBorrar);
     }
+        
     if(list.length>0){
-        for (var i=0; i< list.length; i++){
-            combo.options.add(option, 0);
-            combo.options[0].value = list[i].sName;
-            combo.options[0].text = prefix+list[i].sName+' ('+list[i].sLabel+')';
+        for(i=0; i<list.length; i++)
+        {
+           option = document.createElement("OPTION");
+           option.value = list[i].sName;
+           option.text = prefix+list[i].sName+' ('+list[i].sLabel+')';
+           combo.add(option);
         }
     } else {
-        combo.options.add(option, 0);
-        combo.options[0].value = '0';
-        combo.options[0].text = 'No results';
-    }        
+        option = document.createElement("OPTION");
+        option.value = 0;
+        option.text = 'No results';
+        combo.add(option);
+    }  
 }
