@@ -139,10 +139,12 @@ $display     = 'raw';
 $G_PUBLISH = new Publisher();
 $oHeadPublisher = & headPublisher::getSingleton();
 $oHeadPublisher->addScriptFile('/jscore/controls/variablePicker.js');
-if($_REQUEST['displayOption']=='tinyMCE'){
-    $display = 'blank';
-    $oHeadPublisher->addScriptFile('/js/tinymce/jscripts/tiny_mce/tiny_mce_popup.js');
-    $oHeadPublisher->addScriptFile('/js/tinymce/jscripts/tiny_mce/plugins/pmVariablePicker/editor_plugin_src.js');
+if (isset($_REQUEST['displayOption'])) {
+    if($_REQUEST['displayOption']=='tinyMCE'){
+        $display = 'blank';
+        $oHeadPublisher->addScriptFile('/js/tinymce/jscripts/tiny_mce/tiny_mce_popup.js');
+        $oHeadPublisher->addScriptFile('/js/tinymce/jscripts/tiny_mce/plugins/pmVariablePicker/editor_plugin_src.js');
+    }
 }
 
 echo $html;
