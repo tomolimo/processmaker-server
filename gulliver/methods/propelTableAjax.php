@@ -77,7 +77,7 @@
 
   //order by
   $orderBy = get_ajax_value('order');
-   if (isset($orderBy) && $orderBy !== 'ZDZXRHkzVzNmWVE___%3DASC' && $orderBy !== 'ZDZXRHkzUzRnSFhFdVE___%3DASC' && $orderBy !== 'ZXFpRXk0VzhlQQ______%3DASC') {
+   if (isset($orderBy)) {
        $orderBy = urldecode($orderBy);
        $ntable->orderBy = $orderBy;
    }
