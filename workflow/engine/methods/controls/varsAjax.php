@@ -21,7 +21,7 @@
  * For more information, contact Colosa Inc, 2566 Le Jeune Rd.,
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  */
-$html = '<form action="uploader.php?'.$_SERVER["QUERY_STRING"].'&q=upload" method="post" enctype="multipart/form-data" onsubmit="">';
+$html = '<form action="uploader.php?'.$_SERVER["QUERY_STRING"].'&q=upload" onLoad="onLoad()" method="post" enctype="multipart/form-data" onsubmit="">';
 
 $html .= '<div id="d_variables">';
 
@@ -62,12 +62,21 @@ $html .= '</td>';
 $html .= '<td width="25%">';
 //$html .= '<select name="prefix" id="prefix" onChange="Seleccionar(this);">';
 $html .= '<select name="prefix" id="prefix">';
-$html .= '<option value="ID_TO_FLOAT">@#</option>';
+
 $html .= '<option value="ID_TO_STRING">@@</option>';
+$html .= '<option value="ID_TO_FLOAT">@#</option>';
 $html .= '<option value="ID_TO_INTEGER">@%</option>';
 $html .= '<option value="ID_TO_URL">@?</option>';
 $html .= '<option value="ID_SQL_ESCAPE">@$</option>';
 $html .= '<option value="ID_REPLACE_WITHOUT_CHANGES">@=</option>';
+/*
+$html .= '<option value="@@">@@</option>';
+$html .= '<option value="@#">@#</option>';
+$html .= '<option value="@%">@%</option>';
+$html .= '<option value="@?">@?</option>';
+$html .= '<option value="@$">@$</option>';
+$html .= '<option value="@=">@=</option>';
+*/
 $html .= '</select> &nbsp;&nbsp;&nbsp;&nbsp;';
 $html .= '</td>';
 
