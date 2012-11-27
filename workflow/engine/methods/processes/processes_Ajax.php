@@ -535,7 +535,11 @@ try {
             }
             $aVariables = array();
             foreach ($aFields as $key => $value){
-                if(stristr($aFields[$key]['sName'], $queryText)){
+                if($queryText!='') {
+                    if(stristr($aFields[$key]['sName'], $queryText)){
+                        $aVariables[] = $aFields[$key];
+                    }
+                } else {
                     $aVariables[] = $aFields[$key];
                 }
             }      
