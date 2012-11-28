@@ -1,5 +1,4 @@
 <?php
-
 /**
  * class.wysiwygEditor.php
  *
@@ -83,13 +82,17 @@ class XmlForm_Field_WYSIWYG_EDITOR extends XmlForm_Field
                 $editorDefinition = '
                 tinyMCE.init({
                     theme   : "advanced",
-                    plugins : "fullpage",
+                    plugins : "advhr,advimage,advlink,advlist,autolink,autoresize,autosave,contextmenu,directionality,emotions,example,example_dependency,fullpage,fullscreen,iespell,inlinepopups,insertdatetime,layer,legacyoutput,lists,media,nonbreaking,noneditable,pagebreak,paste,preview,print,save,searchreplace,spellchecker,style,tabfocus,table,template,visualblocks,visualchars,wordcount,xhtmlxtras,pmSimpleUploader,pmVariablePicker",
                     mode    : "specific_textareas",
                     editor_selector : "tmceEditor",
                     width   : 760,
                     height  : "'.$this->height.'",
-                    theme_advanced_buttons3_add : "fullpage",
-
+                    //theme_advanced_buttons1 : "pmSimpleUploader,|,pmVariablePicker,|,bold,italic,underline,|,justifyleft,justifycenter,justifyright,justifyfull",
+                    //theme_advanced_buttons2 : "bold,italic,underline,|,justifyleft,justifycenter,justifyright,justifyfull",
+                    
+                    theme_advanced_buttons1 : "pmSimpleUploader,|,pmVariablePicker,|,bold,italic,underline,|,justifyleft,justifycenter,justifyright,justifyfull,|,fontselect,fontsizeselect,|,cut,copy,paste,|,bullist,numlist,|,outdent,indent,blockquote",
+                    theme_advanced_buttons2 : "tablecontrols,|,undo,redo,|,link,unlink,image,|,forecolor,backcolor,|,hr,removeformat,visualaid,|,sub,sup,|,ltr,rtl,|,code",
+                    
                     onchange_callback: function(inst) {
                 		if(inst.isDirty()) {
                 			inst.save();
@@ -111,13 +114,17 @@ class XmlForm_Field_WYSIWYG_EDITOR extends XmlForm_Field
                 tinyMCE.baseURL = "/js/tinymce/jscripts/tiny_mce"
                 tinyMCE.init({
                     theme   : "advanced",
-                    plugins : "fullpage, pmSimpleUploader, pmVariablePicker, inlinepopups",
+                    plugins : "advhr,advimage,advlink,advlist,autolink,autoresize,autosave,contextmenu,directionality,emotions,example,example_dependency,fullpage,fullscreen,iespell,inlinepopups,insertdatetime,layer,legacyoutput,lists,media,nonbreaking,noneditable,pagebreak,paste,preview,print,save,searchreplace,spellchecker,style,tabfocus,table,template,visualblocks,visualchars,wordcount,xhtmlxtras,pmSimpleUploader,pmVariablePicker",
                     mode    : "specific_textareas",
                     editor_selector : "tmceEditor",
                     width   : "770",
                     height  : "305",
-                    theme_advanced_buttons1 : "pmSimpleUploader,|,pmVariablePicker",
-                    theme_advanced_buttons2 : "fontselect,bold,italic,underline,forecolor,backcolor,|,justifyleft,justifycenter,justifyright,justifyfull,|,link,numlist,bullist,|,code",
+                    //theme_advanced_buttons1 : "pmSimpleUploader,|,pmVariablePicker",
+                    // theme_advanced_buttons2 : "fontselect,bold,italic,underline,forecolor,backcolor,|,justifyleft,justifycenter,justifyright,justifyfull,|,link,numlist,bullist,|,code",
+                    
+                    theme_advanced_buttons1 : "pmSimpleUploader,|,pmVariablePicker,|,bold,italic,underline,|,justifyleft,justifycenter,justifyright,justifyfull,|,fontselect,fontsizeselect,|,cut,copy,paste,|,bullist,numlist,|,outdent,indent,blockquote",
+                    theme_advanced_buttons2 : "tablecontrols,|,undo,redo,|,link,unlink,image,|,forecolor,backcolor,|,hr,removeformat,visualaid,|,sub,sup,|,ltr,rtl,|,code",
+                    
                     onchange_callback: function(inst) {
                         if(inst.isDirty()) {
                             inst.save();
@@ -139,9 +146,9 @@ class XmlForm_Field_WYSIWYG_EDITOR extends XmlForm_Field
                     editor_selector : "tmceEditor",
                     width   : "700",
                     height  : "300",
-                        theme_advanced_buttons1 : "bold,italic,underline,|,justifyleft,justifycenter,justifyright,justifyfull,|,fontselect,fontsizeselect,|,cut,copy,paste,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo",
-                        theme_advanced_buttons2 : "link,unlink,image,|,forecolor,backcolor,|,hr,removeformat,visualaid,|,sub,sup,|,ltr,rtl,|,code",//,|,insertimage",
-
+                    theme_advanced_buttons1 : "pmSimpleUploader,|,pmVariablePicker,|,bold,italic,underline,|,justifyleft,justifycenter,justifyright,justifyfull,|,fontselect,fontsizeselect,|,cut,copy,paste,|,bullist,numlist",
+                    theme_advanced_buttons2 : "outdent,indent,blockquote,|,undo,redo,|,link,unlink,image,|,forecolor,backcolor,|,hr,removeformat,visualaid,|,sub,sup,|,ltr,rtl,|,code",
+                    
                     skin : "o2k7",
                     skin_variant : "silver",
 
