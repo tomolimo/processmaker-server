@@ -341,7 +341,7 @@ class Bootstrap
         if (strtolower( $typefile ) == 'js' && $typearray[0] == 'translation') {
             Bootstrap::sendHeaders( $filename, 'text/javascript', $download, $downloadFileName );
             $output = Bootstrap::streamJSTranslationFile( $filename, $typearray[1] );
-            print $output;
+            echo $output;
             return;
         }
 
@@ -349,7 +349,7 @@ class Bootstrap
         if (strtolower( $typefile ) == 'css' && $folderarray[count( $folderarray ) - 2] == 'css') {
             Bootstrap::sendHeaders( $filename, 'text/css', $download, $downloadFileName );
             $output = Bootstrap::streamCSSBigFile( $typearray[0] );
-            print $output;
+            echo $output;
             return;
         }
 
@@ -397,7 +397,7 @@ class Bootstrap
                     break;
                 case 'php':
                     if ($download) {
-                        G::sendHeaders( $filename, 'text/plain', $download, $downloadFileName );
+                        Bootstrap::sendHeaders( $filename, 'text/plain', $download, $downloadFileName );
                     } else {
                         require_once ($filename);
                         return;
@@ -469,6 +469,10 @@ class Bootstrap
 	 * return true if the file exists, otherwise false.
 	 */
 	public function isPMUnderUpdating($setFlag = 2) {
+                if (!defined('PATH_DATA')) {
+                    return false;
+                }
+
 		$fileCheck = PATH_DATA . "UPDATE.dat";
 		if ($setFlag == 0) {
 			if (file_exists ( $fileCheck )) {
@@ -1101,7 +1105,11 @@ class Bootstrap
 			// if ( ereg("msie", $userAgent)) {
 			header ( 'Pragma: cache' );
 
-			$mtime = filemtime ( $filename );
+		    if (file_exists ( $filename )) {
+				$mtime = filemtime ( $filename );
+			} else {
+				$mtime = date ( 'U' );
+			}
 			$gmt_mtime = gmdate ( "D, d M Y H:i:s", $mtime ) . " GMT";
 			header ( 'ETag: "' . md5 ( $mtime . $filename ) . '"' );
 			header ( "Last-Modified: " . $gmt_mtime );

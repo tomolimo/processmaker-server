@@ -57,9 +57,10 @@ define( 'PATH_OUTTRUNK', $pathOutTrunk );
 define( 'PATH_HTML', PATH_HOME . 'public_html' . PATH_SEP );
 
 //this is the first path, if the file exists...
-$request = substr($_SERVER['REQUEST_URI'],1,strlen($_SERVER['REQUEST_URI']));
-$fileWithoutParam = explode("?",$request);
-$requestFile = PATH_HTML . $fileWithoutParam[0];
+$request = substr($_SERVER['REQUEST_URI'], 1, strlen($_SERVER['REQUEST_URI'])); //removes the first '/' 
+$fileWithoutParam = explode("?", $request); // split the URI by '?'
+$request = $fileWithoutParam[0];            // get the first element of the split URI
+$requestFile = PATH_HTML . $request;        // temporary assemble a path for the file embedded in the URI
 if (file_exists($requestFile)) {
     if (!is_file($requestFile)) {
         header( "location: /errors/error404.php?url=" . urlencode( $_SERVER['REQUEST_URI'] ) );
@@ -70,8 +71,10 @@ if (file_exists($requestFile)) {
     if($pos < $size) {
         //if this file got an extension then assign the content
     	$ext_file = substr($request, $pos, $size);
-        if ($ext_file == "gif" || $ext_file == "png" || $ext_file == "jpg") {
+        if ($ext_file == "gif" || $ext_file == "png") {
             $ext_file = 'image/'.$ext_file ;
+        } elseif ($ext_file == "jpg" || $ext_file == "jpeg") {
+            $ext_file = 'image/jpeg';
         } elseif ($ext_file == "swf") {
             $ext_file = "application/x-shockwave-flash";
         } elseif ($ext_file == "json" || $ext_file == "htc" ) {
@@ -116,6 +119,7 @@ if (file_exists($requestFile)) {
     die;
 }
 
+
 // Defining RBAC Paths constants
 define( 'PATH_RBAC_HOME', PATH_TRUNK . 'rbac' . PATH_SEP );
 
@@ -153,12 +157,6 @@ define( 'PATH_WORKFLOW_MSSQL_DATA', PATH_CORE . 'data' . PATH_SEP . 'mssql' . PA
 define( 'PATH_RBAC_MSSQL_DATA', PATH_RBAC_CORE . 'data' . PATH_SEP . 'mssql' . PATH_SEP );
 define( 'PATH_CONTROLLERS', PATH_CORE . 'controllers' . PATH_SEP );
 define( 'PATH_SERVICES_REST', PATH_CORE . 'services' . PATH_SEP . 'rest' . PATH_SEP );
-
-//TEST
-//if($_SERVER['REQUEST_URI'] == "/sysworkflow/en/classic/processes/mainInit")
-//{
-//    echo PATH_TRUNK . "engine/methods/processes/mainInit.php";
-//}
 
 // include Gulliver Class
 require_once (PATH_GULLIVER . PATH_SEP . 'class.bootstrap.php');
@@ -430,10 +428,12 @@ Bootstrap::registerClass('Calendar',     PATH_HOME . "engine/classes/class.calen
 Bootstrap::registerClass('processMap',   PATH_HOME . "engine/classes/class.processMap.php");
 
 //DATABASE propel classes used in 'Cases' Options
-Bootstrap::registerClass('Entity_Base',         PATH_HOME . "engine/classes/entities/Base.php");
+Bootstrap::registerClass('Entity_Base',        PATH_HOME . "engine/classes/entities/Base.php");
 
 Bootstrap::registerClass('BaseContent',        PATH_HOME . "engine/classes/model/om/BaseContent.php");
 Bootstrap::registerClass('Content',            PATH_HOME . "engine/classes/model/Content.php");
+Bootstrap::registerClass('BaseContentPeer',    PATH_HOME . "engine/classes/model/om/BaseContentPeer.php");
+Bootstrap::registerClass('ContentPeer',        PATH_HOME . "engine/classes/model/ContentPeer.php");
 Bootstrap::registerClass('BaseApplication',    PATH_HOME . "engine/classes/model/om/BaseApplication.php");
 Bootstrap::registerClass('ApplicationPeer',    PATH_HOME . "engine/classes/model/ApplicationPeer.php");
 Bootstrap::registerClass('Application',        PATH_HOME . "engine/classes/model/Application.php");
@@ -473,6 +473,10 @@ Bootstrap::registerClass('BaseAppHistory',     PATH_HOME . "engine/classes/model
 Bootstrap::registerClass('AppHistory',         PATH_HOME . "engine/classes/model/AppHistory.php");
 Bootstrap::registerClass('AppHistoryPeer',     PATH_HOME . "engine/classes/model/AppHistoryPeer.php");
 
+Bootstrap::registerClass('BaseAppFolder',      PATH_HOME . "engine/classes/model/om/BaseAppFolder.php");
+Bootstrap::registerClass('AppFolder',          PATH_HOME . "engine/classes/model/AppFolder.php");
+Bootstrap::registerClass('AppFolderPeer',      PATH_HOME . "engine/classes/model/AppFolderPeer.php");
+
 Bootstrap::registerClass('BaseAppMessage',     PATH_HOME . "engine/classes/model/om/BaseAppMessage.php");
 Bootstrap::registerClass('AppMessage',         PATH_HOME . "engine/classes/model/AppMessage.php");
 Bootstrap::registerClass('BaseAppMessagePeer', PATH_HOME . "engine/classes/model/om/BaseAppMessagePeer.php");
@@ -495,8 +499,8 @@ Bootstrap::registerClass('BaseAppThread',       PATH_HOME . "engine/classes/mode
 Bootstrap::registerClass('AppThread',           PATH_HOME . "engine/classes/model/AppThread.php");
 Bootstrap::registerClass('AppThreadPeer',       PATH_HOME . "engine/classes/model/AppThreadPeer.php");
 
-Bootstrap::registerClass('BaseCaseScheduler',  PATH_HOME . "engine/classes/model/om/BaseCaseScheduler.php");
-Bootstrap::registerClass('CaseScheduler',      PATH_HOME . "engine/classes/model/CaseScheduler.php");
+Bootstrap::registerClass('BaseCaseScheduler',   PATH_HOME . "engine/classes/model/om/BaseCaseScheduler.php");
+Bootstrap::registerClass('CaseScheduler',       PATH_HOME . "engine/classes/model/CaseScheduler.php");
 
 Bootstrap::registerClass('BaseCaseTracker',     PATH_HOME . "engine/classes/model/om/BaseCaseTracker.php");
 Bootstrap::registerClass('CaseTracker',         PATH_HOME . "engine/classes/model/CaseTracker.php");
@@ -579,6 +583,9 @@ Bootstrap::registerClass('StepPeer',            PATH_HOME . "engine/classes/mode
 Bootstrap::registerClass('BaseStepSupervisor',  PATH_HOME . "engine/classes/model/om/BaseStepSupervisor.php");
 Bootstrap::registerClass('StepSupervisor',      PATH_HOME . "engine/classes/model/StepSupervisor.php");
 
+Bootstrap::registerClass('BaseStepSupervisorPeer',PATH_HOME . "engine/classes/model/om/BaseStepSupervisorPeer.php");
+Bootstrap::registerClass('StepSupervisorPeer',  PATH_HOME . "engine/classes/model/StepSupervisorPeer.php");
+
 Bootstrap::registerClass('BaseStepTrigger',     PATH_HOME . "engine/classes/model/om/BaseStepTrigger.php");
 Bootstrap::registerClass('StepTrigger',         PATH_HOME . "engine/classes/model/StepTrigger.php");
 Bootstrap::registerClass('StepTriggerPeer',     PATH_HOME . "engine/classes/model/StepTriggerPeer.php");
@@ -608,6 +615,7 @@ Bootstrap::registerClass('TaskUser',            PATH_HOME . "engine/classes/mode
 
 Bootstrap::registerClass('BaseTriggers',        PATH_HOME . "engine/classes/model/om/BaseTriggers.php");
 Bootstrap::registerClass('Triggers',            PATH_HOME . "engine/classes/model/Triggers.php");
+Bootstrap::registerClass('BaseTriggersPeer',    PATH_HOME . "engine/classes/model/om/BaseTriggersPeer.php");
 Bootstrap::registerClass('TriggersPeer',        PATH_HOME . "engine/classes/model/TriggersPeer.php");
 
 Bootstrap::registerClass('BaseUsers',           PATH_HOME . "engine/classes/model/om/BaseUsers.php");
