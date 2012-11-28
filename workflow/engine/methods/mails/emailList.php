@@ -1,6 +1,6 @@
 <?php
 /**
- * eventList.php
+ * emailList.php
  *
  * ProcessMaker Open Source Edition
  * Copyright (C) 2004 - 2008 Colosa Inc.23
@@ -46,12 +46,7 @@ $status = array (
     array ("sent", "Sent"),
     array ("pending", "Pending")
 );
-//$type = array (array ('',G::LoadTranslation( 'ID_ALL' )
-//),array ('SEND_MESSAGE',G::LoadTranslation( 'ID_EVENT_MESSAGE' )
-//),array ('EXECUTE_TRIGGER',G::LoadTranslation( 'ID_EVENT_TIMER' )
-//),array ('EXECUTE_CONDITIONAL_TRIGGER',G::LoadTranslation( 'ID_EVENT_CONDITIONAL' )
-//)
-//);
+
 $processes = getProcessArray( $userUid );
 
 $G_PUBLISH = new Publisher();
@@ -60,7 +55,6 @@ $oHeadPublisher = & headPublisher::getSingleton();
 $oHeadPublisher->addExtJsScript( 'mails/emailList', false ); //adding a javascript file .js
 $oHeadPublisher->addContent( 'mails/emailList' ); //adding a html file  .html.
 //sending the columns to display in grid
-//$oHeadPublisher->assign( 'typeValues', $type );
 $oHeadPublisher->assign( 'statusValues', $status );
 $oHeadPublisher->assign( 'processValues', $processes );
 
