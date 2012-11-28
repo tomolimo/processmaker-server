@@ -1,7 +1,11 @@
 var setVariablePickerJS = function(){       
     
     document.getElementById('_Var_Form_').addEventListener('dblclick', function(){
-        insertFormVar(document.getElementById('selectedField').value, this.value);
+        if (this.getAttribute('displayOption')=='event'){
+            e.insertFormVar(this.value.substring(2), this.value.substring(2), 'dyn' );
+        } else {
+            insertFormVar(document.getElementById('selectedField').value, this.value);
+        }
     });
 
     var getVariableList = function (queryText, proUid, varType){

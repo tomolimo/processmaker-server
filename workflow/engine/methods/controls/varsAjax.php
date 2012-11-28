@@ -22,7 +22,7 @@
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  */
 $_SERVER["QUERY_STRING"] = isset($_SERVER["QUERY_STRING"])?$_SERVER["QUERY_STRING"]:'';
-$_POST["sProcess"] = isset($_POST["sProcess"])?$_POST["sProcess"]:'';
+$_POST["sProcess"] = isset($_POST["sProcess"])?$_POST["sProcess"]:$_SESSION['process'];
 $_POST["sFieldName"] = isset($_POST["sFieldName"])?$_POST["sFieldName"]:'';
 $_POST['sSymbol']= isset($_POST["sSymbol"])?$_POST["sSymbol"]:'';
 
@@ -98,9 +98,15 @@ $aFields = getDynaformsVars( $_POST['sProcess'], true, isset( $_POST['bIncMulSel
 
 //$html .= '<select name="_Var_Form_" id="_Var_Form_" size="' . count( $aFields ) . '" style="width:100%;' . (! isset( $_POST['sNoShowLeyend'] ) ? 'height:50%;' : '') . '" ondblclick="insertFormVar(\'' . $_POST['sFieldName'] . '\', this.value);">';
 
-$html .= '<select name="_Var_Form_" id="_Var_Form_" size="8"  style="width:100%;' . (! isset( $_POST['sNoShowLeyend'] ) ? 'height:170;' : '') . '" >';
+$displayOption = '';
+if (isset($_REQUEST['displayOption'])){
+    $displayOption = 'displayOption="'.$_REQUEST['displayOption'].'"';
+} else {
+    $displayOption = 'displayOption="normal"' ;
+}
+$html .= '<select name="_Var_Form_" id="_Var_Form_" size="8"  style="width:100%;' . (! isset( $_POST['sNoShowLeyend'] ) ? 'height:170;' : '') . '" '.$displayOption.'>';
 
-foreach ($aFields as $aField) {
+foreach ($aFields as $aField) {   
     $html .= '<option value="' . $_REQUEST['sSymbol'] . $aField['sName'] . '">' . $_REQUEST['sSymbol'] . $aField['sName'] . ' (' . $aField['sType'] . ')</option>';
 }
 

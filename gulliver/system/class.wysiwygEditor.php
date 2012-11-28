@@ -75,11 +75,12 @@ class XmlForm_Field_WYSIWYG_EDITOR extends XmlForm_Field
      */
     public function attachEvents ($element)
     {
-        //cleaning the conflictive prototype functions
-        $editorDefinition = 'tinyMCE.baseURL = "/js/tinymce/jscripts/tiny_mce"';
+        
+        $editorDefinition = 'tinyMCE.baseURL = "/js/tinymce/jscripts/tiny_mce"; ';
+        
         switch ($this->editorType){
             case 'EMAIL_TEMPLATE':
-                $editorDefinition = '
+                $editorDefinition .= '
                 tinyMCE.init({
                     theme   : "advanced",
                     plugins : "advhr,advimage,advlink,advlist,autolink,autoresize,autosave,contextmenu,directionality,emotions,example,example_dependency,fullpage,fullscreen,iespell,inlinepopups,insertdatetime,layer,legacyoutput,lists,media,nonbreaking,noneditable,pagebreak,paste,preview,print,save,searchreplace,spellchecker,style,tabfocus,table,template,visualblocks,visualchars,wordcount,xhtmlxtras,pmSimpleUploader,pmVariablePicker",
@@ -110,7 +111,7 @@ class XmlForm_Field_WYSIWYG_EDITOR extends XmlForm_Field
                 break;
             case 'OUTPUT_DOCUMENT':
 
-                $editorDefinition = '
+                $editorDefinition .= '
                 tinyMCE.baseURL = "/js/tinymce/jscripts/tiny_mce"
                 tinyMCE.init({
                     theme   : "advanced",
@@ -136,7 +137,7 @@ class XmlForm_Field_WYSIWYG_EDITOR extends XmlForm_Field
                 break;
 
             case 'DYNAFORM_TEMPLATE':
-                $editorDefinition = '
+                $editorDefinition .= '
                 tinyMCE.init({
                     theme   : "advanced",
                     plugins : "advhr,advimage,advlink,advlist,autolink,autoresize,autosave,contextmenu,directionality,emotions,example,example_dependency,fullpage,fullscreen,iespell,inlinepopups,insertdatetime,layer,legacyoutput,lists,media,nonbreaking,noneditable,pagebreak,paste,preview,print,save,searchreplace,spellchecker,style,tabfocus,table,template,visualblocks,visualchars,wordcount,xhtmlxtras",
@@ -168,12 +169,11 @@ class XmlForm_Field_WYSIWYG_EDITOR extends XmlForm_Field
                         return true;
                     }
                 });
-                alert("new");
-                alert(tinyMCE.execCommand("mceRmoveControl", false, "form[HTML]"));
+                
                 ';
                 break;
             default:
-                $editorDefinition = '
+                $editorDefinition .= '
                     tinyMCE.init({
                         theme   : "advanced",
                         plugins : "fullpage",
@@ -192,7 +192,6 @@ class XmlForm_Field_WYSIWYG_EDITOR extends XmlForm_Field
                 ';
                 break;
         }
-
         return $editorDefinition;
     }
 }
