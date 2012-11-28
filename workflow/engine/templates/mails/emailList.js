@@ -121,7 +121,7 @@ Ext.onReady(function(){
         iconCls: 'no-icon'
     });
 
-    actions = _addPluginActions([ {xtype: 'tbfill'}, _('ID_PROCESS'), comboProcess, '-', /*_('ID_TYPE'), comboType, '-',*/ _('ID_STATUS'), comboStatus, _('ID_DELEGATE_DATE_FROM'),
+    actions = _addPluginActions([ {xtype: 'tbfill'}, _('ID_PROCESS'), comboProcess, '-', _('ID_STATUS'), comboStatus, _('ID_DELEGATE_DATE_FROM'),
       dateFrom,
       ' ',
       _('ID_TO'),
@@ -177,15 +177,15 @@ Ext.onReady(function(){
 
     var expander = new Ext.ux.grid.RowExpander({
         tpl : new Ext.Template(
-            '<p><hr/><b>'+_('ID_PREVIEW')+':</b><br/>'+
-            '<center>'+
-            '<div style = "display: table; width: 100%; margin: 5px;">'+
-                '<div style="float: left; width: 10%;">&nbsp;</div>'+
-                '<div style="float: left; width: 80%; border: 0px dashed #660000;"> {APP_MSG_BODY}</div>'+
-                '<div style="float: left; width: 10%;">&nbsp;</div>'+
-            '</div>'+
-            '</center>'+
-            '</p><hr/><br>'
+            "<hr/><b>"+
+            _('ID_PREVIEW')+
+            ":</b><br/>"+
+            "<div style = 'display: table; width: 100%; margin: 5px;'>"+
+                "<div style='float: left; width: 10%;'>&nbsp;</div>"+
+                "<div style='float: left; width: 80%; border: 0px dashed #660000;'> {APP_MSG_BODY}</div>"+
+                "<div style='float: left; width: 10%;'>&nbsp;</div>"+
+            "</div>"+
+            "<hr/><br>"
         )
     });
 
@@ -211,19 +211,14 @@ Ext.onReady(function(){
             {header: _('ID_TASK'), dataIndex: 'TAS_TITLE', width: 100, hidden: false,renderer: columnRenderer, sortable: false},
             {header: _('ID_TYPE'), dataIndex: 'APP_MSG_TYPE', width: 50, hidden: false,renderer: columnRenderer, sortable: true},
             {header: _('ID_DATE_LABEL'), dataIndex: 'APP_MSG_DATE', width: 80,hidden:false, renderer: columnRenderer, sortable: true},
-            //{header: _('ID_DERIVED'), dataIndex: 'APP_MSG_SEND_DATE', width: 80,hidden:false,hideable:false, renderer: columnRenderer, sortable: true},
             {header: _('ID_SUBJECT'), dataIndex: 'APP_MSG_SUBJECT', width: 80,hidden:false, renderer: columnRenderer, sortable: true},
             {header: _('ID_FROM'), dataIndex: 'APP_MSG_FROM', width: 80,hidden:false,renderer: columnRenderer, sortable: true},
             {header: _('ID_TO'), dataIndex: 'APP_MSG_TO', width: 80,hidden:false,renderer: columnRenderer, sortable: true},
-            //{header: _('ID_STATUS'), dataIndex: 'APP_MSG_STATUS', width: 50,hidden:false,hideable:false, renderer: columnRenderer, sortable: true}
             {
                 header:  _('ID_STATUS'),
                 dataIndex: 'APP_MSG_STATUS',
                 width: 50,
-                //hidden:false,
-                //hideable:false,
                 renderer: columnRenderer,
-                //sortable: true,
                 editor: new Ext.form.ComboBox({
                   listClass: 'x-combo-list-small',
                   mode: 'local',
