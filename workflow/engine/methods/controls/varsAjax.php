@@ -21,10 +21,13 @@
  * For more information, contact Colosa Inc, 2566 Le Jeune Rd.,
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  */
+$_SERVER["QUERY_STRING"] = isset($_SERVER["QUERY_STRING"])?$_SERVER["QUERY_STRING"]:'';
+$_POST["sProcess"] = isset($_POST["sProcess"])?$_POST["sProcess"]:'';
+$_POST["sFieldName"] = isset($_POST["sFieldName"])?$_POST["sFieldName"]:'';
+$_POST['sSymbol']= isset($_POST["sSymbol"])?$_POST["sSymbol"]:'';
+
 $html = '<form action="uploader.php?'.$_SERVER["QUERY_STRING"].'&q=upload" onLoad="onLoad()" method="post" enctype="multipart/form-data" onsubmit="">';
-
 $html .= '<div id="d_variables">';
-
 $html .= '<table width="90%" align="center">';
 
 $html .= '<tr style="display:none; visibility:hidden;">';
