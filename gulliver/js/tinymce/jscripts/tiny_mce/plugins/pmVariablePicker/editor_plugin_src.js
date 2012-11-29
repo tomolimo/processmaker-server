@@ -36,8 +36,7 @@ function pmVariablePicker(field_name, url, type, win) {
     var uloc=String(location);
     //alert(uloc);
     var new_text = uloc.split('/');
-    var loc='/'+new_text[3]+'/'+new_text[4]+'/'+new_text[5]+'/controls/varsAjax?displayOption=tinyMCE&sSymbol=@@';
-    
+    var loc='/'+new_text[3]+'/'+new_text[4]+'/'+new_text[5]+'/controls/varsAjax?displayOption=tinyMCE&sSymbol=@@&&sProcess='+tinyMCE.activeEditor.processID;
     var strPluginPath  = tinyMCE.activeEditor.plugins.pmVariablePicker.getPluginURL();                               // get the path to the uploader plugin    
     var strUploaderURL = strPluginPath + "/uploader.php";                                                           // generate the path to the uploader script    
     var strUploadPath  = tinyMCE.activeEditor.getParam('plugin_pmVariablePicker_upload_path');                       // get the relative upload path

@@ -42,6 +42,7 @@ class XmlForm_Field_WYSIWYG_EDITOR extends XmlForm_Field
     public $height = '300';
     public $defaultValue = '<br/>';
     public $editorType = '';
+    public $processID = '';
     /**
      * render function returns the HTML definition for the Dynaform Field
      *
@@ -81,6 +82,8 @@ class XmlForm_Field_WYSIWYG_EDITOR extends XmlForm_Field
         switch ($this->editorType){
             case 'EMAIL_TEMPLATE':
                 $editorDefinition .= '
+                // is necessary the process uid variable in order to load the picker correctly
+                var formProcessID = document.getElementById("form[pro_uid]").value;               
                 tinyMCE.init({
                     theme   : "advanced",
                     plugins : "advhr,advimage,advlink,advlist,autolink,autoresize,autosave,contextmenu,directionality,emotions,example,example_dependency,fullpage,fullscreen,iespell,inlinepopups,insertdatetime,layer,legacyoutput,lists,media,nonbreaking,noneditable,pagebreak,paste,preview,print,save,searchreplace,spellchecker,style,tabfocus,table,template,visualblocks,visualchars,wordcount,xhtmlxtras,pmSimpleUploader,pmVariablePicker",
@@ -93,7 +96,9 @@ class XmlForm_Field_WYSIWYG_EDITOR extends XmlForm_Field
                     
                     theme_advanced_buttons1 : "pmSimpleUploader,|,pmVariablePicker,|,bold,italic,underline,|,justifyleft,justifycenter,justifyright,justifyfull,|,fontselect,fontsizeselect,|,cut,copy,paste,|,bullist,numlist,|,outdent,indent,blockquote",
                     theme_advanced_buttons2 : "tablecontrols,|,undo,redo,|,link,unlink,image,|,forecolor,backcolor,|,hr,removeformat,visualaid,|,sub,sup,|,ltr,rtl,|,code",
-                    
+                    oninit: function (){
+                        tinyMCE.activeEditor.processID =formProcessID;
+                    },
                     onchange_callback: function(inst) {
                 		if(inst.isDirty()) {
                 			inst.save();
@@ -110,9 +115,9 @@ class XmlForm_Field_WYSIWYG_EDITOR extends XmlForm_Field
                 ';
                 break;
             case 'OUTPUT_DOCUMENT':
-
-                $editorDefinition .= '
-                tinyMCE.baseURL = "/js/tinymce/jscripts/tiny_mce"
+                $editorDefinition .= '                    
+                // is necessary the process uid variable in order to load the picker correctly
+                var formProcessID = document.getElementById("form[PRO_UID]").value;
                 tinyMCE.init({
                     theme   : "advanced",
                     plugins : "advhr,advimage,advlink,advlist,autolink,autoresize,autosave,contextmenu,directionality,emotions,example,example_dependency,fullpage,fullscreen,iespell,inlinepopups,insertdatetime,layer,legacyoutput,lists,media,nonbreaking,noneditable,pagebreak,paste,preview,print,save,searchreplace,spellchecker,style,tabfocus,table,template,visualblocks,visualchars,wordcount,xhtmlxtras,pmSimpleUploader,pmVariablePicker",
@@ -121,11 +126,13 @@ class XmlForm_Field_WYSIWYG_EDITOR extends XmlForm_Field
                     width   : "770",
                     height  : "305",
                     //theme_advanced_buttons1 : "pmSimpleUploader,|,pmVariablePicker",
-                    // theme_advanced_buttons2 : "fontselect,bold,italic,underline,forecolor,backcolor,|,justifyleft,justifycenter,justifyright,justifyfull,|,link,numlist,bullist,|,code",
+                    //theme_advanced_buttons2 : "fontselect,bold,italic,underline,forecolor,backcolor,|,justifyleft,justifycenter,justifyright,justifyfull,|,link,numlist,bullist,|,code",
                     
                     theme_advanced_buttons1 : "pmSimpleUploader,|,pmVariablePicker,|,bold,italic,underline,|,justifyleft,justifycenter,justifyright,justifyfull,|,fontselect,fontsizeselect,|,cut,copy,paste,|,bullist,numlist,|,outdent,indent,blockquote",
                     theme_advanced_buttons2 : "tablecontrols,|,undo,redo,|,link,unlink,image,|,forecolor,backcolor,|,hr,removeformat,visualaid,|,sub,sup,|,ltr,rtl,|,code",
-                    
+                    oninit: function (){
+                        tinyMCE.activeEditor.processID=formProcessID;                        
+                    },
                     onchange_callback: function(inst) {
                         if(inst.isDirty()) {
                             inst.save();
@@ -181,7 +188,7 @@ class XmlForm_Field_WYSIWYG_EDITOR extends XmlForm_Field
                         editor_selector : "tmceEditor",
                         width   : "'. $this->width. '",
                         height  : "'. $this->height. '",
-                        theme_advanced_buttons3_add : "fullpage",
+                        theme_advanced_buttons3_add : "fullpage",                        
                         handle_event_callback : function(e) {
                                 if(this.isDirty()) {
                                         this.save();

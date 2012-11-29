@@ -78,11 +78,20 @@ getField("PME_HTML_ENABLETEMPLATE","dynaforms_HtmlEditor").onclick=function()
 {
 	/*getField("ENABLETEMPLATE","dynaforms_Properties").checked=this.checked;
 	dynaformEditor.saveProperties();*/
-        
    
-    //if (getField("PME_HTML_ENABLETEMPLATE","dynaforms_HtmlEditor").checked == true) {
+    /*if (getField("PME_HTML_ENABLETEMPLATE","dynaforms_HtmlEditor").checked == true) {
+        new leimnud.module.app.confirm().make(
+        {
+            label: "@G::LoadTranslation(ID_MSG_ENABLE_HTML_EDITING)",
+            size:{ w: 350, h: 150 },
+            action: function() { },
+            cancel: function () {
+                getField("PME_HTML_ENABLETEMPLATE","dynaforms_HtmlEditor").checked = false;
+            }
+        });
+*/
         dynaformEditor.setEnableTemplate(this.checked);
-    //}
+//    }
 }
 ]]></PME_RESIZE_JS>
 
