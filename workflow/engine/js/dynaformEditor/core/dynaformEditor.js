@@ -264,6 +264,50 @@ var dynaformEditor={
     url='dynaforms_Saveas';
     popupWindow('Save as', url+'?DYN_UID='+this.dynUid+'&AA='+this.A , 500, 350);
   },
+  importForm:function(){
+    panelImportDyna = new leimnud.module.panel();
+    panelImportDyna.options={
+      limit    : true,
+      size     : {w:410,h:160},
+      position : {x:0,y:0,center:true},
+      title    : '',
+      theme    : 'processmaker',
+      statusBar: false,
+      control  : {drag:false,resize:true,close:false},
+      fx       : {opacity:true,rolled:false,modal:true}
+    };
+    panelImportDyna.setStyle = {modal: {
+      backgroundColor: 'white'
+    }};
+    panelImportDyna.make();
+    panelImportDyna.addContent('<div id="importAjax" align="center"><img src="/images/ext/default/grid/loading.gif" /></div>');
+    var oRPC = new leimnud.module.rpc.xmlhttp({
+      url   : '../dynaforms/fieldsHandlerAjax',
+      async : false,
+      method: 'POST',
+      args  : 'request=showImportForm' + '&DYN_UID=' + this.dynUid
+    });
+    oRPC.make();
+    document.getElementById('importAjax').style.display = 'none';
+    panelImportDyna.addContent(oRPC.xmlhttp.responseText);
+  },
+  import:function(uidDynaSelect){
+    document.getElementById('importAjax').style.display = 'block';
+    document.getElementById('importForm').style.display = 'none';
+    var oRPC = new leimnud.module.rpc.xmlhttp({
+      url   : '../dynaforms/fieldsHandlerAjax',
+      async : false,
+      method: 'POST',
+      args  : 'request=import' + '&DYN_UID=' + this.dynUid + '&FILE=' + uidDynaSelect
+    });
+    oRPC.make();
+    resp = oRPC.xmlhttp.responseText;
+    if (resp == 'success') {
+        location.reload(true);
+    } else {
+        alert("Error: " + resp);
+    }
+  },
   close:function()
   {
     if (!sessionPersits()) {
@@ -561,7 +605,7 @@ var dynaformEditor={
     delete myScripts;
   },
   refresh_htmlcode:function()
-  {
+  {    
     var dynaformEditorHTML = this.views["htmlcode"];
     if (this.htmlEditorLoaded)
     {
@@ -575,9 +619,9 @@ var dynaformEditor={
     }
     if ((response.error==0) && (this.htmlEditorLoaded))
     {
-      window._editorHTML.doc.body.innerHTML=response.html;
-      html_html2();
-      html2_html();
+//      window._editorHTML.doc.body.innerHTML=response.html;
+//      html_html2();
+//      html2_html();
     }
     else if ((response.error==0) && (!this.htmlEditorLoaded))
     {
@@ -800,9 +844,9 @@ var dynaformEditor={
   },
   restoreHTML:function()
   {
-    window._editorHTML.doc.body.innerHTML = this.ajax.restore_html(this.A);
-    html_html2();
-    html2_html();
+//    window._editorHTML.doc.body.innerHTML = this.ajax.restore_html(this.A);
+//    html_html2();
+//    html2_html();
   },
   displayError:function(err,rr)
   {

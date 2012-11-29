@@ -118,8 +118,8 @@ function chDir( directory, loadGridOnly ) {
     if( directory == '' || conn && !conn.isLoading()) {
       datastore.load({
         params:{
-          start:0,
-          limit:25,
+          start: 0,
+          limit: 100,
           dir: directory,
           node: directory,
           option:'gridDocuments',
@@ -737,8 +737,8 @@ datastore = new Ext.data.Store({
     url : "../appFolder/appFolderAjax.php",
     directory : "/",
     params : {
-      start : 0,
-      limit : 25,
+      start: 0,
+      limit: 100,
       dir : this.directory,
       node : this.directory,
       option : "gridDocuments",
@@ -1082,22 +1082,18 @@ function filterDataStore(btn, e) {
 }
 // add a paging toolbar to the grid's footer
 var gridbb = new Ext.PagingToolbar({
-  store : datastore,
-  pageSize : 25 ,
-  displayInfo : true,
-  // displayMsg : '% % %',
-  emptyMsg : TRANSLATIONS.ID_DISPLAY_EMPTY,
+  store: datastore,
+  pageSize: 100,
+  displayInfo: true,
+  displayMsg: _("ID_DISPLAY_TOTAL"),
+  emptyMsg: _("ID_DISPLAY_EMPTY"),
   beforePageText : TRANSLATIONS.ID_PAGE,
   // afterPageText : 'of %',
   firstText : TRANSLATIONS.ID_FIRST,
   lastText : TRANSLATIONS.ID_LAST,
   nextText : TRANSLATIONS.ID_NEXT,
   prevText : TRANSLATIONS.ID_PREVIOUS,
-  refreshText : TRANSLATIONS.ID_RELOAD,
-  items : [ '-', ' ', ' ', ' ', ' ', ' ', new Ext.ux.StatusBar({
-    defaultText : TRANSLATIONS.ID_DONE,
-    id : 'statusPanel'
-  }) ]
+  refreshText: TRANSLATIONS.ID_RELOAD
 });
 
 var grid;
@@ -1303,8 +1299,8 @@ function loadDir() {
   // console.trace();
   datastore.load({
     params : {
-      start : 0,
-      limit : 25,
+      start: 0,
+      limit: 100,
       dir : datastore.directory,
       node : datastore.directory,
       option : 'gridDocuments',

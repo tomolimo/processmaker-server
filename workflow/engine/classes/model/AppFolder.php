@@ -5,8 +5,8 @@
  * @package workflow.engine.classes.model
  */
 
-require_once 'classes/model/om/BaseAppFolder.php';
-require_once 'classes/model/Application.php';
+//require_once 'classes/model/om/BaseAppFolder.php';
+//require_once 'classes/model/Application.php';
 
 /**
  * Skeleton subclass for representing a row from the 'APP_FOLDER' table.
@@ -152,7 +152,6 @@ class AppFolder extends BaseAppFolder
         $Criteria->add( appFolderPeer::FOLDER_PARENT_UID, $folderID, CRITERIA::EQUAL );
         $Criteria->addAscendingOrderByColumn( AppFolderPeer::FOLDER_NAME );
 
-        $response['totalFoldersCount'] = AppFolderPeer::doCount( $Criteria );
         $response['folders'] = array ();
 
         if ($limit != 0) {
@@ -168,6 +167,7 @@ class AppFolder extends BaseAppFolder
             $response['folders'][] = $row;
             $rs->next();
         }
+        $response['totalFoldersCount'] = count($response['folders']);
         return ($response);
     }
 
@@ -275,12 +275,20 @@ class AppFolder extends BaseAppFolder
             $oCriteria->add( AppDocumentPeer::APP_DOC_STATUS, 'ACTIVE' );
         }
 
+        $numRecTotal = AppDocumentPeer::doCount($oCriteria);
+
+        $auxCriteria = clone $oCriteria;
+        $auxCriteria->addJoin(AppDocumentPeer::DOC_UID, OutputDocumentPeer::OUT_DOC_UID);
+        $auxCriteria->add(AppDocumentPeer::APP_DOC_TYPE, 'OUTPUT');
+        $auxCriteria->add(OutputDocumentPeer::OUT_DOC_UID, '-1', Criteria::NOT_EQUAL);
+        $auxCriteria->add(OutputDocumentPeer::OUT_DOC_GENERATE, 'BOTH');
+        $numRecTotal += AppDocumentPeer::doCount($auxCriteria);
+
         $oCase->verifyTable();
 
         $oCriteria->addAscendingOrderByColumn( AppDocumentPeer::APP_DOC_INDEX );
         $oCriteria->addDescendingOrderByColumn( AppDocumentPeer::DOC_VERSION );
 
-        $response['totalDocumentsCount'] = AppDocumentPeer::doCount( $oCriteria );
         $response['documents'] = array ();
 
         $oCriteria->setLimit( $limit );
@@ -322,7 +330,10 @@ class AppFolder extends BaseAppFolder
             }
             $rs->next();
         }
-        return ($response);
+
+        $response["totalDocumentsCount"] = $numRecTotal;
+
+        return $response;
     }
 
     public function getCompleteDocumentInfo ($appUid, $appDocUid, $docVersion, $docUid, $usrId)

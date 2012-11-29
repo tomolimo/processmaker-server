@@ -41,7 +41,7 @@ G::LoadClass( 'pmScript' );
 G::LoadClass( 'case' );
 G::LoadClass( 'derivation' );
 
-require_once 'classes/model/Event.php';
+//require_once 'classes/model/Event.php';
 
 /* GET , POST & $_SESSION Vars */
 /* Process the info */
@@ -53,7 +53,7 @@ try {
     //load data
     $oCase = new Cases();
     //warning: we are not using the result value of function thisIsTheCurrentUser, so I'm commenting to optimize speed.
-    //$oCase->thisIsTheCurrentUser( $_SESSION['APPLICATION'], $_SESSION['INDEX'], $_SESSION['USER_LOGGED'], 'REDIRECT', 'cases_List');
+    //$oCase->thisIsTheCurrentUser( $_SESSION['APPLICATION'], $_SESSION['INDEX'], $_SESSION['USER_LOGGED'], 'REDIRECT', 'casesListExtJs');
     $appFields = $oCase->loadCase( $_SESSION['APPLICATION'] );
     $appFields['APP_DATA'] = array_merge( $appFields['APP_DATA'], G::getSystemConstants() );
     //cleaning debug variables

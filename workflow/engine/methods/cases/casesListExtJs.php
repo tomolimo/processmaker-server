@@ -9,10 +9,10 @@ if ($action == 'selfservice') {
 
 G::LoadClass( "BasePeer" );
 G::LoadClass( 'configuration' );
-require_once ("classes/model/Fields.php");
-require_once ("classes/model/AppCacheView.php");
-require_once ("classes/model/Process.php");
-require_once ("classes/model/Users.php");
+//require_once ("classes/model/Fields.php");
+//require_once ("classes/model/AppCacheView.php");
+//require_once ("classes/model/Process.php");
+//require_once ("classes/model/Users.php");
 
 $oHeadPublisher = & headPublisher::getSingleton();
 // oHeadPublisher->setExtSkin( 'xtheme-blue');
@@ -427,9 +427,6 @@ function getParticipated ()
     $caseColumns[] = array ('header' => G::LoadTranslation( 'ID_PROCESS' ),'dataIndex' => 'APP_PRO_TITLE','width' => 120
     );
     $caseColumns[] = array ('header' => G::LoadTranslation( 'ID_TASK' ),'dataIndex' => 'APP_TAS_TITLE','width' => 120
-    );
-    //$caseColumns[] = array( 'header' => G::LoadTranslation('ID_SENT_BY'),     'dataIndex' => 'APP_DEL_PREVIOUS_USER', 'width' => 120 );
-    $caseColumns[] = array ('header' => G::LoadTranslation( 'ID_CURRENT_USER' ),'dataIndex' => 'APP_CURRENT_USER','width' => 120,'sortable' => false
     );
     $caseColumns[] = array ('header' => G::LoadTranslation( 'ID_LAST_MODIFY' ),'dataIndex' => 'APP_UPDATE_DATE','width' => 80
     );

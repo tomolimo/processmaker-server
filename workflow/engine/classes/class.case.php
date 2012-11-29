@@ -25,7 +25,7 @@
  *
  */
 
-require_once ("classes/model/Application.php");
+/*require_once ("classes/model/Application.php");
 require_once ("classes/model/AppCacheView.php");
 require_once ("classes/model/AppDelay.php");
 require_once ("classes/model/AppDelegation.php");
@@ -42,24 +42,24 @@ require_once ("classes/model/CaseTrackerObject.php");
 require_once ("classes/model/Configuration.php");
 require_once ("classes/model/Content.php");
 require_once ("classes/model/DbSource.php");
-require_once ("classes/model/Dynaform.php");
-require_once ("classes/model/InputDocument.php");
-require_once ("classes/model/Language.php");
-require_once ("classes/model/ObjectPermission.php");
-require_once ("classes/model/OutputDocument.php");
-require_once ("classes/model/Process.php");
-require_once ("classes/model/ProcessUser.php");
-require_once ("classes/model/ReportTable.php");
-require_once ("classes/model/ReportVar.php");
-require_once ("classes/model/Route.php");
-require_once ("classes/model/Step.php");
-require_once ("classes/model/StepSupervisor.php");
-require_once ("classes/model/StepTrigger.php");
-require_once ("classes/model/SubApplication.php");
-require_once ("classes/model/Task.php");
-require_once ("classes/model/TaskUser.php");
-require_once ("classes/model/Triggers.php");
-require_once ("classes/model/Users.php");
+require_once ("classes/model/Dynaform.php");*/
+//require_once ("classes/model/InputDocument.php");
+//require_once ("classes/model/Language.php");
+//require_once ("classes/model/ObjectPermission.php");
+//require_once ("classes/model/OutputDocument.php");
+//require_once ("classes/model/Process.php");
+//require_once ("classes/model/ProcessUser.php");
+//require_once ("classes/model/ReportTable.php");
+//require_once ("classes/model/ReportVar.php");
+//require_once ("classes/model/Route.php");
+//require_once ("classes/model/Step.php");
+//require_once ("classes/model/StepSupervisor.php");
+//require_once ("classes/model/StepTrigger.php");
+//require_once ("classes/model/SubApplication.php");
+//require_once ("classes/model/Task.php");
+//require_once ("classes/model/TaskUser.php");
+//require_once ("classes/model/Triggers.php");
+//require_once ("classes/model/Users.php");
 
 G::LoadClass("pmScript");
 
@@ -3467,6 +3467,201 @@ class Cases
         }
     }
 
+    /**
+     * Add a input document
+     *
+     * Return the application document ID
+     *
+     * @param string $inputDocumentUid Input document ID
+     * @param string $appDocUid Application document ID
+     * @param int $docVersion Document version
+     * @param string $appDocType Document type
+     * @param string $appDocComment Document comment
+     * @param string $inputDocumentAction Action, posible values: null or empty (Add), "R" (Replace), "NV" (New Version)
+     * @param string $applicationUid Application ID
+     * @param int $delIndex Delegation index
+     * @param string $taskUid Task ID
+     * @param string $userUid User ID
+     * @param string $option Option, posible values: "xmlform", "file"
+     * @param string $file File ($_FILES["form"]["name"]["APP_DOC_FILENAME"] or path to file)
+     * @param int $fileError File error ($_FILES["form"]["error"]["APP_DOC_FILENAME"] or 0)
+     * @param string $fileTmpName File temporal name ($_FILES["form"]["tmp_name"]["APP_DOC_FILENAME"] or null)
+     * @return string Return application document ID
+     */
+    public function addInputDocument(
+        $inputDocumentUid,
+        $appDocUid,
+        $docVersion,
+        $appDocType,
+        $appDocComment,
+        $inputDocumentAction,
+        $applicationUid,
+        $delIndex,
+        $taskUid,
+        $userUid,
+        $option,
+        $file,
+        $fileError = 0,
+        $fileTmpName = null
+    ) {
+        $appDocFileName = null;
+        $sw = 0;
+
+        switch ($option) {
+            case "xmlform":
+                $appDocFileName = $file;
+
+                if ($fileError == 0) {
+                    $sw = 1;
+                }
+                break;
+            case "file":
+                $appDocFileName = basename($file);
+
+                if (file_exists($file) && is_file($file)) {
+                    $sw = 1;
+                }
+                break;
+        }
+
+        if ($sw == 0) {
+            return null;
+        }
+
+        //Info
+        $inputDocument = new InputDocument();
+        $arrayInputDocumentData = $inputDocument->load($inputDocumentUid);
+
+        //Get the Custom Folder ID (create if necessary)
+        $appFolder = new AppFolder();
+        $folderId = $appFolder->createFromPath($arrayInputDocumentData["INP_DOC_DESTINATION_PATH"], $applicationUid);
+
+        $tags = $appFolder->parseTags($arrayInputDocumentData["INP_DOC_TAGS"], $applicationUid);
+
+        $appDocument = new AppDocument();
+        $arrayField = array();
+
+        switch ($inputDocumentAction) {
+            case "R":
+                //Replace
+                $arrayField = array(
+                    "APP_DOC_UID" => $appDocUid,
+                    "APP_UID"     => $applicationUid,
+                    "DOC_VERSION" => $docVersion,
+                    "DEL_INDEX" => $delIndex,
+                    "USR_UID"   => $userUid,
+                    "DOC_UID"   => $inputDocumentUid,
+                    "APP_DOC_TYPE"        => $appDocType,
+                    "APP_DOC_CREATE_DATE" => date("Y-m-d H:i:s"),
+                    "APP_DOC_COMMENT"  => $appDocComment,
+                    "APP_DOC_TITLE"    => "",
+                    "APP_DOC_FILENAME" => $appDocFileName,
+                    "FOLDER_UID"   => $folderId,
+                    "APP_DOC_TAGS" => $tags
+                );
+
+                $appDocument->update($arrayField);
+                break;
+            case "NV":
+                //New Version
+                $arrayField = array(
+                    "APP_DOC_UID" => $appDocUid,
+                    "APP_UID"     => $applicationUid,
+                    "DEL_INDEX"   => $delIndex,
+                    "USR_UID" => $userUid,
+                    "DOC_UID" => $inputDocumentUid,
+                    "APP_DOC_TYPE"        => $appDocType,
+                    "APP_DOC_CREATE_DATE" => date("Y-m-d H:i:s"),
+                    "APP_DOC_COMMENT"  => $appDocComment,
+                    "APP_DOC_TITLE"    => "",
+                    "APP_DOC_FILENAME" => $appDocFileName,
+                    "FOLDER_UID"   => $folderId,
+                    "APP_DOC_TAGS" => $tags
+                );
+
+                $appDocument->create($arrayField);
+                break;
+            default:
+                //New
+                $arrayField = array(
+                    "APP_UID"   => $applicationUid,
+                    "DEL_INDEX" => $delIndex,
+                    "USR_UID" => $userUid,
+                    "DOC_UID" => $inputDocumentUid,
+                    "APP_DOC_TYPE"        => $appDocType,
+                    "APP_DOC_CREATE_DATE" => date("Y-m-d H:i:s"),
+                    "APP_DOC_COMMENT"  => $appDocComment,
+                    "APP_DOC_TITLE"    => "",
+                    "APP_DOC_FILENAME" => $appDocFileName,
+                    "FOLDER_UID"   => $folderId,
+                    "APP_DOC_TAGS" => $tags
+                );
+
+                $appDocument->create($arrayField);
+                break;
+        }
+
+        //Save the file
+        $appDocUid = $appDocument->getAppDocUid();
+        $docVersion = $appDocument->getDocVersion();
+        $arrayInfo = pathinfo($appDocument->getAppDocFilename());
+        $extension = (isset($arrayInfo["extension"]))? $arrayInfo["extension"] : null;
+        $strPathName = PATH_DOCUMENT . $applicationUid . PATH_SEP;
+        $strFileName = $appDocUid . "_" . $docVersion . "." . $extension;
+
+        switch ($option) {
+            case "xmlform":
+                G::uploadFile($fileTmpName, $strPathName, $strFileName);
+                break;
+            case "file":
+                $umaskOld = umask(0);
+
+                if (!is_dir($strPathName)) {
+                    G::verifyPath($strPathName, true);
+                }
+
+                copy($file, $strPathName . $strFileName);
+                chmod($strPathName . $strFileName, 0666);
+                umask($umaskOld);
+                break;
+        }
+
+        //Plugin Hook PM_UPLOAD_DOCUMENT for upload document
+        $pluginRegistry = &PMPluginRegistry::getSingleton();
+
+        if ($pluginRegistry->existsTrigger(PM_UPLOAD_DOCUMENT) && class_exists("uploadDocumentData")) {
+            $triggerDetail = $pluginRegistry->getTriggerInfo(PM_UPLOAD_DOCUMENT);
+            $documentData = new uploadDocumentData(
+                $applicationUid,
+                $userUid,
+                $strPathName . $strFileName,
+                $arrayField["APP_DOC_FILENAME"],
+                $appDocUid,
+                $docVersion
+            );
+            $uploadReturn = $pluginRegistry->executeTriggers(PM_UPLOAD_DOCUMENT, $documentData);
+
+            if ($uploadReturn) {
+                $arrayField["APP_DOC_PLUGIN"] = $triggerDetail->sNamespace;
+
+                if (!isset($arrayField["APP_DOC_UID"])) {
+                    $arrayField["APP_DOC_UID"] = $appDocUid;
+                }
+
+                if (!isset($arrayField["DOC_VERSION"])) {
+                    $arrayField["DOC_VERSION"] = $docVersion;
+                }
+
+                $appDocument->update($arrayField);
+
+                unlink($strPathName . $strFileName);
+            }
+        }
+        //End plugin
+
+        return $appDocUid;
+    }
+
     /*
      * Return the input documents list to Review
      *
@@ -4717,6 +4912,11 @@ class Cases
 
                 if ($sTo != null) {
                     $oSpool = new spoolRun();
+                    if ($aConfiguration['MESS_RAUTH'] == false || (is_string($aConfiguration['MESS_RAUTH']) && $aConfiguration['MESS_RAUTH'] == 'false')) {
+                        $aConfiguration['MESS_RAUTH'] = 0;
+                    } else {
+                        $aConfiguration['MESS_RAUTH'] = 1;
+                    }
 
                     $oSpool->setConfig(array(
                         "MESS_ENGINE"   => $aConfiguration["MESS_ENGINE"],

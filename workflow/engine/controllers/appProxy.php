@@ -33,9 +33,15 @@ class AppProxy extends HttpProxyController
 
         G::LoadClass( 'case' );
         $case = new Cases();
+        $caseLoad = '';
 
-        $proUid = ($httpData->pro == '') ? $_SESSION['PROCESS'] : $httpData->pro;
-        $tasUid = ($httpData->tas == '') ? $_SESSION['TASK'] : $httpData->tas;
+        if (!isset($_SESSION['PROCESS']) && !isset($httpData->pro)) {
+            $caseLoad = $case->loadCase($appUid);
+            $httpData->pro = $caseLoad['PRO_UID'];
+        }
+
+        $proUid = (!isset($httpData->pro)) ? $_SESSION['PROCESS'] : $httpData->pro;
+        $tasUid = (!isset($httpData->tas)) ? ((isset($_SESSION['TASK'])) ? $_SESSION['TASK'] : '') : $httpData->tas;
         $usrUid = $_SESSION['USER_LOGGED'];
 
         $respView = $case->getAllObjectsFrom( $proUid, $appUid, $tasUid, $usrUid, 'VIEW' );
@@ -67,6 +73,8 @@ class AppProxy extends HttpProxyController
      */
     function postNote ($httpData)
     {
+        require_once ("classes/model/AppNotes.php");
+
         //extract(getExtJSParams());
         if (isset( $httpData->appUid ) && trim( $httpData->appUid ) != "") {
             $appUid = $httpData->appUid;
@@ -79,43 +87,23 @@ class AppProxy extends HttpProxyController
         }
 
         $usrUid = (isset( $_SESSION['USER_LOGGED'] )) ? $_SESSION['USER_LOGGED'] : "";
-        require_once ("classes/model/AppNotes.php");
-
-        $appNotes = new AppNotes();
         $noteContent = addslashes( $httpData->noteText );
 
-        $result = $appNotes->postNewNote( $appUid, $usrUid, $noteContent, false );
-
         //Disabling the controller response because we handle a special behavior
-        $this->setSendResponse( false );
+        $this->setSendResponse(false);
+
+        //Add note case
+        $appNote = new AppNotes();
+        $response = $appNote->addCaseNote($appUid, $usrUid, $noteContent, intval($httpData->swSendMail));
 
         //Send the response to client
-        @ini_set( 'implicit_flush', 1 );
+        @ini_set("implicit_flush", 1);
         ob_start();
-        echo G::json_encode( $result );
+        echo G::json_encode($response);
         @ob_flush();
         @flush();
         @ob_end_flush();
-        ob_implicit_flush( 1 );
-
-        //Send notification in background
-        if (intval( $httpData->swSendMail ) == 1) {
-            G::LoadClass( "case" );
-
-            $oCase = new Cases();
-
-            $p = $oCase->getUsersParticipatedInCase( $appUid );
-            $noteRecipientsList = array ();
-
-            foreach ($p["array"] as $key => $userParticipated) {
-                $noteRecipientsList[] = $key;
-            }
-
-            $noteRecipients = implode( ",", $noteRecipientsList );
-            $noteContent = stripslashes( $noteContent );
-
-            $appNotes->sendNoteNotification( $appUid, $usrUid, $noteContent, $noteRecipients );
-        }
+        ob_implicit_flush(1);
     }
 
     /**
@@ -147,6 +135,20 @@ class AppProxy extends HttpProxyController
             throw new Exception( G::LoadTranslation( 'ID_NO_PERMISSION_NO_PARTICIPATED' ) );
         }
 
+        if ($httpData->action == 'sent') { // Get the last valid delegation for participated list
+            $criteria = new Criteria();
+            $criteria->addSelectColumn(AppDelegationPeer::DEL_INDEX);
+            $criteria->add(AppDelegationPeer::APP_UID, $httpData->appUid);
+            $criteria->add(AppDelegationPeer::DEL_FINISH_DATE, null, Criteria::ISNULL);
+            $criteria->addDescendingOrderByColumn(AppDelegationPeer::DEL_INDEX);
+            if (AppDelegationPeer::doCount($criteria) > 0) {
+                $dataset = AppDelegationPeer::doSelectRS($criteria);
+                $dataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+                $dataset->next();
+                $row = $dataset->getRow();
+                $httpData->delIndex = $row['DEL_INDEX'];
+            }
+        }
         $applicationFields = $case->loadCase( $httpData->appUid, $httpData->delIndex );
         $process = new Process();
         $processData = $process->load( $applicationFields['PRO_UID'] );
@@ -188,6 +190,20 @@ class AppProxy extends HttpProxyController
             $processData = $_SESSION['_processData'];
             unset( $_SESSION['_processData'] );
         } else {
+            if ($httpData->action == 'sent') { // Get the last valid delegation for participated list
+                $criteria = new Criteria();
+                $criteria->addSelectColumn(AppDelegationPeer::DEL_INDEX);
+                $criteria->add(AppDelegationPeer::APP_UID, $httpData->appUid);
+                $criteria->add(AppDelegationPeer::DEL_FINISH_DATE, null, Criteria::ISNULL);
+                $criteria->addDescendingOrderByColumn(AppDelegationPeer::DEL_INDEX);
+                if (AppDelegationPeer::doCount($criteria) > 0) {
+                    $dataset = AppDelegationPeer::doSelectRS($criteria);
+                    $dataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+                    $dataset->next();
+                    $row = $dataset->getRow();
+                    $httpData->delIndex = $row['DEL_INDEX'];
+                }
+            }
             $applicationFields = $case->loadCase( $httpData->appUid, $httpData->delIndex );
             $process = new Process();
             $processData = $process->load( $applicationFields['PRO_UID'] );

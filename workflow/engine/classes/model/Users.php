@@ -25,10 +25,10 @@
  *
  */
 
-require_once 'classes/model/om/BaseUsers.php';
-require_once 'classes/model/IsoCountry.php';
-require_once 'classes/model/IsoSubdivision.php';
-require_once 'classes/model/IsoLocation.php';
+//require_once 'classes/model/om/BaseUsers.php';
+//require_once 'classes/model/IsoCountry.php';
+//require_once 'classes/model/IsoSubdivision.php';
+//require_once 'classes/model/IsoLocation.php';
 
 /**
  * Skeleton subclass for representing a row from the 'USERS' table.
@@ -138,9 +138,9 @@ class Users extends BaseUsers
                 $aIsoSubdivision = IsoSubdivision::findById( $aFields['USR_COUNTRY'], $aFields['USR_CITY'] );
                 $aIsoLocation = IsoLocation::findById( $aFields['USR_COUNTRY'], $aFields['USR_CITY'], $aFields['USR_LOCATION'] );
 
-                $aFields['USR_COUNTRY_NAME'] = $aIsoCountry['IC_NAME'];
-                $aFields['USR_CITY_NAME'] = $aIsoSubdivision['IS_NAME'];
-                $aFields['USR_LOCATION_NAME'] = $aIsoLocation['IL_NAME'];
+                $aFields["USR_COUNTRY_NAME"]  = (!empty($aIsoCountry["IC_NAME"]))? $aIsoCountry["IC_NAME"] : "";
+                $aFields["USR_CITY_NAME"]     = (!empty($aIsoSubdivision["IS_NAME"]))? $aIsoSubdivision["IS_NAME"] : "";
+                $aFields["USR_LOCATION_NAME"] = (!empty($aIsoLocation["IL_NAME"]))? $aIsoLocation["IL_NAME"] : "";
 
                 $result = $aFields;
 

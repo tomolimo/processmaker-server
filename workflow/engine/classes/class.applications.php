@@ -35,13 +35,13 @@ class Applications
 
         G::LoadClass("BasePeer");
         G::LoadClass("configuration");
-        require_once ("classes/model/AppCacheView.php");
-        require_once ("classes/model/AppDelegation.php");
-        require_once ("classes/model/AdditionalTables.php");
-        require_once ("classes/model/AppDelay.php");
-        require_once ("classes/model/Fields.php");
-        require_once ("classes/model/Users.php");
-        require_once ("classes/model/Process.php");
+        //require_once ("classes/model/AppCacheView.php");
+        //require_once ("classes/model/AppDelegation.php");
+        //require_once ("classes/model/AdditionalTables.php");
+        //require_once ("classes/model/AppDelay.php");
+        //require_once ("classes/model/Fields.php");
+        //require_once ("classes/model/Users.php");
+        //require_once ("classes/model/Process.php");
 
         $oAppCache = new AppCacheView();
 
@@ -149,6 +149,7 @@ class Applications
 
         $Criteria->addAlias( 'CU', 'USERS' );
         $Criteria->addJoin( AppCacheViewPeer::USR_UID, 'CU.USR_UID', Criteria::LEFT_JOIN );
+        $Criteria->addAsColumn( 'USR_UID', 'CU.USR_UID' );
         $Criteria->addAsColumn( 'USR_FIRSTNAME', 'CU.USR_FIRSTNAME' );
         $Criteria->addAsColumn( 'USR_LASTNAME', 'CU.USR_LASTNAME' );
         $Criteria->addAsColumn( 'USR_USERNAME', 'CU.USR_USERNAME' );
@@ -692,14 +693,14 @@ class Applications
 
     public function getSteps ($appUid, $index, $tasUid, $proUid)
     {
-        require_once 'classes/model/Step.php';
-        require_once 'classes/model/Content.php';
-        require_once 'classes/model/AppDocument.php';
-        require_once 'classes/model/InputDocumentPeer.php';
-        require_once 'classes/model/OutputDocument.php';
-        require_once 'classes/model/Dynaform.php';
+        //require_once 'classes/model/Step.php';
+        //require_once 'classes/model/Content.php';
+        //require_once 'classes/model/AppDocument.php';
+        //require_once 'classes/model/InputDocumentPeer.php';
+        //require_once 'classes/model/OutputDocument.php';
+        //require_once 'classes/model/Dynaform.php';
 
-        G::LoadClass( 'pmScript' );
+        //G::LoadClass( 'pmScript' );
         G::LoadClass( 'case' );
 
         $steps = Array ();

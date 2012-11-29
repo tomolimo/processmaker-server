@@ -39,7 +39,7 @@ try {
 
     //Load the variables
     $oCase = new Cases();
-    $oCase->thisIsTheCurrentUser( $_SESSION["APPLICATION"], $_SESSION["INDEX"], $_SESSION["USER_LOGGED"], "REDIRECT", "cases_List" );
+    $oCase->thisIsTheCurrentUser( $_SESSION["APPLICATION"], $_SESSION["INDEX"], $_SESSION["USER_LOGGED"], "REDIRECT", "casesListExtJs" );
     $Fields = $oCase->loadCase( $_SESSION["APPLICATION"] );
 
     $Fields["APP_DATA"] = array_merge( $Fields["APP_DATA"], G::getSystemConstants() );
@@ -162,7 +162,7 @@ try {
     }
 
     //Save files
-    require_once ("classes/model/AppDocument.php");
+    //require_once ("classes/model/AppDocument.php");
 
     if (isset( $_FILES["form"]["name"] ) && count( $_FILES["form"]["name"] ) > 0) {
         $arrayField = array ();
@@ -218,8 +218,8 @@ try {
                     }
 
                     if ($indocUid != null) {
-                        require_once ("classes/model/AppFolder.php");
-                        require_once ("classes/model/InputDocument.php");
+                        //require_once ("classes/model/AppFolder.php");
+                        //require_once ("classes/model/InputDocument.php");
 
                         $oInputDocument = new InputDocument();
                         $aID = $oInputDocument->load( $indocUid );
@@ -296,9 +296,9 @@ try {
     }
 
     $oForm->validatePost();
-    $oJSON = new Services_JSON();
+    //$oJSON = new Services_JSON();
     $_POST['__notValidateThisFields__'] = (isset( $_POST['__notValidateThisFields__'] ) && $_POST['__notValidateThisFields__'] != '') ? $_POST['__notValidateThisFields__'] : $_POST['DynaformRequiredFields'];
-    if ($missing_req_values = $oForm->validateRequiredFields( $_POST['form'], $oJSON->decode( stripslashes( $_POST['__notValidateThisFields__'] ) ) )) {
+    if ($missing_req_values = $oForm->validateRequiredFields( $_POST['form'], Bootstrap::json_decode( stripslashes( $_POST['__notValidateThisFields__'] ) ) )) {
         $_POST['next_step'] = $aNextStep;
         $_POST['previous_step'] = $oCase->getPreviousStep( $_SESSION['PROCESS'], $_SESSION['APPLICATION'], $_SESSION['INDEX'], $_SESSION['STEP_POSITION'] );
         $_POST['req_val'] = $missing_req_values;

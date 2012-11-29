@@ -160,7 +160,7 @@ if (isset( $_GET['breakpoint'] )) {
 #end trigger debug session.......
 
 
-//$oCase->thisIsTheCurrentUser($_SESSION['APPLICATION'], $_SESSION['INDEX'], $_SESSION['USER_LOGGED'], 'REDIRECT', 'cases_List');
+//$oCase->thisIsTheCurrentUser($_SESSION['APPLICATION'], $_SESSION['INDEX'], $_SESSION['USER_LOGGED'], 'REDIRECT', 'casesListExtJs');
 
 
 //Save data - Start
@@ -297,8 +297,8 @@ try {
                     $oHeadPublisher->addScriptCode( "documentName='{$titleDocument}';" );
                     break;
                 case 'VIEW':
-                    require_once 'classes/model/AppDocument.php';
-                    require_once 'classes/model/Users.php';
+                    //require_once 'classes/model/AppDocument.php';
+                    //require_once 'classes/model/Users.php';
                     $oAppDocument = new AppDocument();
                     $oAppDocument->Fields = $oAppDocument->load( $_GET['DOC'], $_GET['VERSION'] );
                     $Fields['POSITION'] = $_SESSION['STEP_POSITION'];
@@ -325,7 +325,7 @@ try {
         case 'OUTPUT_DOCUMENT':
             //$G_PUBLISH->AddContent('smarty', 'cases/cases_title', '', '', $array);
 
-            require_once 'classes/model/OutputDocument.php';
+            //require_once 'classes/model/OutputDocument.php';
             $oOutputDocument = new OutputDocument();
             $aOD = $oOutputDocument->load( $_GET['UID'] );
             if (! $aPreviousStep) {
@@ -347,8 +347,8 @@ try {
                     //END: If there is a Break Step registered from Plugin
 
                     $sFilenameOriginal = $sFilename = preg_replace( '[^A-Za-z0-9_]', '_', G::replaceDataField( $aOD['OUT_DOC_FILENAME'], $Fields['APP_DATA'] ) );
-                    require_once 'classes/model/AppFolder.php';
-                    require_once 'classes/model/AppDocument.php';
+                    //require_once 'classes/model/AppFolder.php';
+                    //require_once 'classes/model/AppDocument.php';
 
                     //Get the Custom Folder ID (create if necessary)
                     $oFolder = new AppFolder();
@@ -438,6 +438,9 @@ try {
                             $aProperties['margins'] = array ('left' => $aOD['OUT_DOC_LEFT_MARGIN'],'right' => $aOD['OUT_DOC_RIGHT_MARGIN'],'top' => $aOD['OUT_DOC_TOP_MARGIN'],'bottom' => $aOD['OUT_DOC_BOTTOM_MARGIN']);
                             if ($aOD['OUT_DOC_PDF_SECURITY_ENABLED'] == '1') {
                                 $aProperties['pdfSecurity'] = array ('openPassword' => $aOD['OUT_DOC_PDF_SECURITY_OPEN_PASSWORD'],'ownerPassword' => $aOD['OUT_DOC_PDF_SECURITY_OWNER_PASSWORD'],'permissions' => $aOD['OUT_DOC_PDF_SECURITY_PERMISSIONS']);
+                            }
+                            if (isset($aOD['OUT_DOC_REPORT_GENERATOR'])) {
+                                $aProperties['report_generator'] = $aOD['OUT_DOC_REPORT_GENERATOR'];
                             }
                             $oOutputDocument->generate( $_GET['UID'], $Fields['APP_DATA'], $pathOutput, $sFilename, $aOD['OUT_DOC_TEMPLATE'], (boolean) $aOD['OUT_DOC_LANDSCAPE'], $aOD['OUT_DOC_GENERATE'], $aProperties );
                             //$sFilename, $aOD['OUT_DOC_TEMPLATE'], (boolean)$aOD['OUT_DOC_LANDSCAPE'], $aOD['OUT_DOC_GENERATE'] );
@@ -578,7 +581,7 @@ try {
                     if ($noShowTitle == 0) {
                         $G_PUBLISH->AddContent( 'smarty', 'cases/cases_title', '', '', $array );
                     }
-                    require_once 'classes/model/AppDocument.php';
+                    //require_once 'classes/model/AppDocument.php';
                     $oAppDocument = new AppDocument();
                     $lastVersion = $oAppDocument->getLastAppDocVersion( $_GET['DOC'], $_SESSION['APPLICATION'] );
                     $aFields = $oAppDocument->load( $_GET['DOC'], $lastVersion );
@@ -591,7 +594,7 @@ try {
                         $listing = $oPluginRegistry->executeTriggers( PM_CASE_DOCUMENT_LIST, $folderData );
                     }
 
-                    require_once 'classes/model/OutputDocument.php';
+                    //require_once 'classes/model/OutputDocument.php';
                     $oOutputDocument = new OutputDocument();
                     $aGields = $oOutputDocument->load( $aFields['DOC_UID'] );
 
