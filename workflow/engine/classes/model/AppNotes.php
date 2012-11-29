@@ -1,6 +1,6 @@
 <?php
 
-require_once 'classes/model/om/BaseAppNotes.php';
+//require_once 'classes/model/om/BaseAppNotes.php';
 
 /**
  * Skeleton subclass for representing a row from the 'APP_NOTES' table.
@@ -234,6 +234,31 @@ class AppNotes extends BaseAppNotes
         } catch (Exception $oException) {
             throw $oException;
         }
+    }
+
+    public function addCaseNote($applicationUid, $userUid, $note, $sendMail)
+    {
+        $response = $this->postNewNote($applicationUid, $userUid, $note, false);
+
+        if ($sendMail == 1) {
+            G::LoadClass("case");
+
+            $case = new Cases();
+
+            $p = $case->getUsersParticipatedInCase($applicationUid);
+            $noteRecipientsList = array();
+
+            foreach ($p["array"] as $key => $userParticipated) {
+                $noteRecipientsList[] = $key;
+            }
+
+            $noteRecipients = implode(",", $noteRecipientsList);
+            $note = stripslashes($note);
+
+            $this->sendNoteNotification($applicationUid, $userUid, $note, $noteRecipients);
+        }
+
+        return $response;
     }
 }
 

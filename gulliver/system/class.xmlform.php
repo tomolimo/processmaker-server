@@ -522,7 +522,6 @@ class XmlForm_Field
     public function getAttributes ()
     {
         $attributes = array ();
-        $json = new Services_JSON();
         foreach ($this as $attribute => $value) {
             switch ($attribute) {
                 case 'sql':
@@ -540,7 +539,9 @@ class XmlForm_Field
         if (sizeof( $attributes ) < 1) {
             return '{}';
         }
-        return $json->encode( $attributes );
+        //$json = new Services_JSON();
+        //return $json->encode( $attributes );
+        return G::json_encode( $attributes );
     }
 
     /**
@@ -553,7 +554,6 @@ class XmlForm_Field
     public function getEvents ()
     {
         $events = array ();
-        $json = new Services_JSON();
         foreach ($this as $attribute => $value) {
             if (substr( $attribute, 0, 2 ) === 'on') {
                 $events[$attribute] = $value;
@@ -562,7 +562,9 @@ class XmlForm_Field
         if (sizeof( $events ) < 1) {
             return '{}';
         }
-        return $json->encode( $events );
+        //$json = new Services_JSON();
+        //return $json->encode( $events );
+        return G::json_encode( $events );
     }
 
     /**
@@ -805,7 +807,7 @@ class XmlForm_Field
 
     public function NSGridLabel ($show = false)
     {
-        $idv = 'pm:label="' . $this->pmLabel . '"';
+        $idv = 'pm:label="' . htmlentities($this->pmLabel, ENT_COMPAT, 'utf-8') . '"';
         if ($show) {
             return $idv;
         } else {
@@ -1336,7 +1338,6 @@ class XmlForm_Field_Suggest extends XmlForm_Field_SimpleText //by neyek
                 }
 
                 $hash = str_rot13( base64_encode( $this->sql . '@|' . $this->sqlConnection ) );
-                //        $sOptions  = 'script:"'.$this->ajaxServer.'?request=suggest&json=true&limit='.$this->maxresults.'&hash='.$hash.'&dependentFields='. $this->dependentFields .'&field=" + getField(\''. $this->name .'\').value + "&",';
                 $sSQL = $this->sql;
                 $nCount = preg_match_all( '/\@(?:([\@\%\#\!Qq])([a-zA-Z\_]\w*)|([a-zA-Z\_][\w\-\>\:]*)\(((?:[^\\\\\)]*?)*)\))/', $sSQL, $match, PREG_PATTERN_ORDER | PREG_OFFSET_CAPTURE );
 
@@ -2494,19 +2495,54 @@ class XmlForm_Field_Link extends XmlForm_Field
      * @param string value
      * @return string
      */
-    public function render ($value = null, $owner = null)
+    public function render($value = null, $label = null, $owner = null, $row = -1)
     {
-        $onclick = G::replaceDataField( $this->onclick, $owner->values );
-        $link = G::replaceDataField( $this->link, $owner->values );
-        $target = G::replaceDataField( $this->target, $owner->values );
-        $value = G::replaceDataField( $this->value, $owner->values );
-        $label = G::replaceDataField( $this->label, $owner->values );
-        $html = '<a class="tableOption" href=\'' . $this->htmlentities( $link, ENT_QUOTES, 'utf-8' ) . '\'';
-        $html .= 'id="form[' . $this->name . ']" name="form[' . $this->name . ']" style="' . htmlentities( $this->style, ENT_QUOTES, 'utf-8' ) . '" ';
-        $html .= (($this->onclick) ? ' onclick="' . htmlentities( $onclick, ENT_QUOTES, 'utf-8' ) . '"' : '');
-        $html .= (($this->target) ? ' target="' . htmlentities( $target, ENT_QUOTES, 'utf-8' ) . '"' : '') . '>';
-        $html .= $this->htmlentities( $this->value === '' ? $label : $value, ENT_QUOTES, 'utf-8' ) . '</a>';
-        $html .= $this->renderHint();
+        $id = null;
+        $v = null;
+
+        switch ($owner->type) {
+            case "grid":
+                $id = $owner->name . "][" . $row . "][" . $this->name;
+                $v = (isset($owner->values[$owner->name][$row]))? $owner->values[$owner->name][$row] : array();
+                break;
+            default:
+                $id = $this->name;
+                $v = $owner->values;
+                break;
+        }
+
+        $link = (!empty($value))? $value : G::replaceDataField($this->link, $v);
+        $labelAux1 = (!empty($label))? $label : G::replaceDataField($this->label, $v);
+        $labelAux2 = (!empty($label))? $label : G::replaceDataField($this->value, $v);
+        $onclick = G::replaceDataField($this->onclick, $v);
+        $target = G::replaceDataField($this->target, $v);
+
+        $html = "<a class=\"tableOption\" href=\"" . $this->htmlentities($link, ENT_QUOTES, "utf-8") . "\"";
+        $html = $html . " id=\"form[$id]\" name=\"form[$id]\" pm:field=\"pm:field\"";
+        $html = $html . (($this->onclick)? " onclick=\"" . htmlentities($onclick, ENT_QUOTES, "utf-8") . "\"" : null);
+        $html = $html . (($this->target)? " target=\"" . htmlentities($target, ENT_QUOTES, "utf-8") . "\"" : null);
+
+        switch ($owner->type) {
+            case "grid":
+                if ($this->mode == "view") {
+                    $html = $html . " style=\"color: #006699; text-decoration: none; font-weight: normal;\"";
+                }
+                break;
+            default:
+                $html = $html . " style=\"" . htmlentities($this->style, ENT_QUOTES, "utf-8") . "\"";
+                break;
+        }
+
+        $html = $html . ">" . $this->htmlentities(($this->value == "")? $labelAux1 : $labelAux2, ENT_QUOTES, "utf-8") . "</a>";
+
+        switch ($owner->type) {
+            case "grid":
+                break;
+            default:
+                $html = $html . $this->renderHint();
+                break;
+        }
+
         return $html;
     }
 
@@ -2517,30 +2553,22 @@ class XmlForm_Field_Link extends XmlForm_Field
      * @param $owner
      * @return <array>
      */
-    public function renderGrid ($values = array(), $owner = null)
+    public function renderGrid($value = array(), $label = array(), $owner = null)
     {
-        $result = array ();
-        $r = 1;
-        foreach ($values as $v) {
-            $_aData_ = (isset( $owner->values[$owner->name][$r] ) ? $owner->values[$owner->name][$r] : array ());
-            $onclick = G::replaceDataField( $this->onclick, $_aData_ );
-            $link = G::replaceDataField( $this->link, $_aData_ );
-            $target = G::replaceDataField( $this->target, $_aData_ );
-            $value = G::replaceDataField( $this->value, $_aData_ );
-            $label = G::replaceDataField( $this->label, $_aData_ );
-            $html = '<a class="tableOption" href=\'' . $this->htmlentities( $link, ENT_QUOTES, 'utf-8' ) . '\'';
-            $html .= 'id="form[' . $owner->name . '][' . $r . '][' . $this->name . ']"';
-            $html .= 'name="form[' . $owner->name . '][' . $r . '][' . $this->name . ']"';
-            $html .= (($this->onclick) ? ' onclick="' . htmlentities( $onclick, ENT_QUOTES, 'utf-8' ) . '"' : '');
-            $html .= (($this->target) ? ' target="' . htmlentities( $target, ENT_QUOTES, 'utf-8' ) . '"' : '');
-            if ($this->mode == 'view') {
-                $html .= 'style="color: #006699; text-decoration: none;font-weight: normal;"';
-            }
-            $html .= '>' . $this->htmlentities( $this->value === '' ? $label : $value, ENT_QUOTES, 'utf-8' ) . '</a>';
-            $result[] = $html;
-            $r ++;
+        $arrayResult = array();
+        $row = 1;
+
+        foreach ($value as $index => $v) {
+            $arrayResult[] = $this->render(
+                (isset($value[$index]))? $value[$index] : null,
+                (isset($label[$index]))? $label[$index] : null,
+                $owner,
+                $row
+            );
+            $row = $row + 1;
         }
-        return $result;
+
+        return $arrayResult;
     }
 
     /**
@@ -3005,13 +3033,14 @@ class XmlForm_Field_Submit extends XmlForm_Field
             //        return '<input id="form['.$this->name.']" name="form['.$this->name.']" type=\'submit\' value=\''. $this->label .'\' disabled/>';
             return "<input style=\"{$this->style}\" class='module_app_button___gray {$this->className}' id=\"form[{$this->name}]\" name=\"form[{$this->name}]\" type='submit' value=\"{$this->label}\" " . (($this->onclick) ? 'onclick="' . htmlentities( $onclick, ENT_COMPAT, 'utf-8' ) . '"' : '') . " />";
         } elseif ($this->mode === 'view') {
-            // return "<input style=\"{$this->style};display:none\" disabled='disabled' class='module_app_button___gray module_app_buttonDisabled___gray {$this->className}' id=\"form[{$this->name}]\" name=\"form[{$this->name}]\" type='submit' value=\"{$this->label}\" " . (($this->onclick) ? 'onclick="' . htmlentities ( $onclick, ENT_COMPAT, 'utf-8' ) . '"' : '') . " />";
+            //return "<input style=\"{$this->style};display:none\" disabled='disabled' class='module_app_button___gray module_app_buttonDisabled___gray {$this->className}' id=\"form[{$this->name}]\" name=\"form[{$this->name}]\" type='submit' value=\"{$this->label}\" " . (($this->onclick) ? 'onclick="' . htmlentities ( $onclick, ENT_COMPAT, 'utf-8' ) . '"' : '') . " />";
             //$sLinkNextStep = 'window.open("' . $owner->fields['__DYNAFORM_OPTIONS']->xmlMenu->values['NEXT_STEP'] . '", "_self");';
             $html = '';
             if (isset( $_SESSION['CURRENT_DYN_UID'] )) {
                 $sLinkNextStep = 'window.location=("casesSaveDataView?UID=' . $_SESSION['CURRENT_DYN_UID'] . '");';
                 $html = '<input style="' . $this->style . '" class="module_app_button___gray ' . $this->className . '" id="form[' . $this->name . ']" name="form[' . $this->name . ']" type="button" value="' . G::LoadTranslation( 'ID_CONTINUE' ) . '"  onclick="' . htmlentities( $sLinkNextStep, ENT_COMPAT, 'utf-8' ) . '" />';
             }
+
             $html .= '<input ';
             $html .= 'id="form[' . $this->name . ']" ';
             $html .= 'name="form[' . $this->name . ']" ';
@@ -4922,8 +4951,9 @@ class XmlForm
                 }
             }
 
-            $oJSON = new Services_JSON();
-            $this->objectRequiredFields = str_replace( '"', "%27", str_replace( "'", "%39", $oJSON->encode( $this->requiredFields ) ) );
+            //$oJSON = new Services_JSON();
+            $jsonRequired =  G::json_encode( $this->requiredFields );
+            $this->objectRequiredFields = str_replace( '"', "%27", str_replace( "'", "%39", $jsonRequired ) );
 
             //Load the default values
             //$this->setDefaultValues();
@@ -5243,7 +5273,18 @@ class xmlformTemplate extends Smarty
                     }
                     $result['form'][$k] = $form->fields[$k]->renderGrid( $aAux, $form );
                 } else {
-                    $result['form'][$k] = $form->fields[$k]->render( $value, $form );
+                    switch ($v->type) {
+                        case "link":
+                            $result["form"][$k] = $form->fields[$k]->render(
+                                $value,
+                                (isset($form->values[$k . "_label"]))? $form->values[$k . "_label"] : null,
+                                $form
+                            );
+                            break;
+                        default:
+                            $result["form"][$k] = $form->fields[$k]->render($value, $form);
+                            break;
+                    }
                 }
             } else {
                 /*if (isset ( $form->owner )) {
@@ -5266,6 +5307,13 @@ class xmlformTemplate extends Smarty
                             break;
                         case "file":
                             $result["form"][$k] = $form->fields[$k]->renderGrid( $value, $form, $therow );
+                            break;
+                        case "link":
+                            $result["form"][$k] = $form->fields[$k]->renderGrid(
+                                $value,
+                                (isset($form->values[$k . "_label"]))? $form->values[$k . "_label"] : array(),
+                                $form
+                            );
                             break;
                         default:
                             $result["form"][$k] = $form->fields[$k]->renderGrid( $value, $form );
