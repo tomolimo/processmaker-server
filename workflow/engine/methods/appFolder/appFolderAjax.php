@@ -23,7 +23,11 @@ if (($_REQUEST['action']) != 'rename') {
     $functionParams = isset ($_REQUEST ['params']) ? $_REQUEST ['params'] : array ();
     $oldname = $_REQUEST ['item'];
     $newname = $_REQUEST ['newitemname'];
-    $uid = $_REQUEST ['selitems'];
+    $oUid = $_REQUEST ['selitems'];
+
+    if ((isset($oUid))) {
+        $uid = $oUid[0];
+    }
 
     $functionName ($oldname, $newname, $uid);
 }
@@ -33,17 +37,16 @@ if (($_REQUEST['action']) != 'rename') {
 function renameFolder($oldname, $newname, $uid)
 {
     $folder = new AppFolder();
-
     //Clean Folder name (delete spaces...)
     $newname = trim( $newname );
 
-    $fiels = array();
+    $fields = array();
 
-    $fiels['FOLDER_UID'] = $uid[0];
-    $fiels['FOLDER_NAME'] = $newname;
-    $fiels['FOLDER_UPDATE_DATE'] = date('Y-m-d H:i:s');
+    $fields['FOLDER_UID'] = $uid;
+    $fields['FOLDER_NAME'] = $newname;
+    $fields['FOLDER_UPDATE_DATE'] = date('Y-m-d H:i:s');
 
-    $folder->update($fiels);
+    $folder->update($fields);
 
     $msgLabel= G::LoadTranslation ('ID_EDIT_SUCCESSFULLY');
     echo "{action: '', error:'error',message: '$msgLabel', success: 'success',folderUID: 'root'}";
