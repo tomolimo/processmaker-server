@@ -21,10 +21,11 @@
  * For more information, contact Colosa Inc, 2566 Le Jeune Rd.,
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  */
+G::pr($_SERVER);
 $_SERVER["QUERY_STRING"] = isset($_SERVER["QUERY_STRING"])?$_SERVER["QUERY_STRING"]:'';
-$_POST["sProcess"] = isset($_POST["sProcess"])?$_POST["sProcess"]:$_SESSION['process'];
-$_POST["sFieldName"] = isset($_POST["sFieldName"])?$_POST["sFieldName"]:'';
-$_POST['sSymbol']= isset($_POST["sSymbol"])?$_POST["sSymbol"]:'';
+$_REQUEST["sProcess"] = isset($_REQUEST["sProcess"])?$_REQUEST["sProcess"]:'';
+$_REQUEST["sFieldName"] = isset($_REQUEST["sFieldName"])?$_REQUEST["sFieldName"]:'';
+$_REQUEST['sSymbol']= isset($_REQUEST["sSymbol"])?$_REQUEST["sSymbol"]:'';
 
 $html = '<form action="uploader.php?'.$_SERVER["QUERY_STRING"].'&q=upload" onLoad="onLoad()" method="post" enctype="multipart/form-data" onsubmit="">';
 $html .= '<div id="d_variables">';
@@ -32,8 +33,8 @@ $html .= '<table width="90%" align="center">';
 
 $html .= '<tr style="display:none; visibility:hidden;">';
 $html .= '<td colspan="3">';
-$html .= '<input type="hidden" id="process" value="'.$_POST['sProcess'].'">';
-$html .= '<input type="hidden" id="selectedField" name="selectedField" value="'.$_POST['sFieldName'].'"/> ';
+$html .= '<input type="hidden" id="process" value="'.$_REQUEST['sProcess'].'">';
+$html .= '<input type="hidden" id="selectedField" name="selectedField" value="'.$_REQUEST['sFieldName'].'"/> ';
 $html .= '</td>';
 $html .= '</tr>';
 
@@ -94,7 +95,7 @@ $html .= '<tr>';
 $html .= '<td colspan="3">';
 
 G::LoadClass( 'xmlfield_InputPM' );
-$aFields = getDynaformsVars( $_POST['sProcess'], true, isset( $_POST['bIncMulSelFields'] ) ? $_POST['bIncMulSelFields'] : 0 );
+$aFields = getDynaformsVars( $_REQUEST['sProcess'], true, isset( $_POST['bIncMulSelFields'] ) ? $_POST['bIncMulSelFields'] : 0 );
 
 //$html .= '<select name="_Var_Form_" id="_Var_Form_" size="' . count( $aFields ) . '" style="width:100%;' . (! isset( $_POST['sNoShowLeyend'] ) ? 'height:50%;' : '') . '" ondblclick="insertFormVar(\'' . $_POST['sFieldName'] . '\', this.value);">';
 
@@ -106,13 +107,13 @@ if (isset($_REQUEST['displayOption'])){
 }
 $html .= '<select name="_Var_Form_" id="_Var_Form_" size="8"  style="width:100%;' . (! isset( $_POST['sNoShowLeyend'] ) ? 'height:170;' : '') . '" '.$displayOption.'>';
 
-foreach ($aFields as $aField) {   
+foreach ($aFields as $aField) {
     $html .= '<option value="' . $_REQUEST['sSymbol'] . $aField['sName'] . '">' . $_REQUEST['sSymbol'] . $aField['sName'] . ' (' . $aField['sType'] . ')</option>';
 }
 
 $aRows[0] = Array ('fieldname' => 'char','variable' => 'char','type' => 'type','label' => 'char');
 foreach ($aFields as $aField) {
-    $aRows[] = Array ('fieldname' => $_POST['sFieldName'], 'variable' => $_POST['sSymbol'] . $aField['sName'],'variable_label' => '<div class="pm__dynavars"> <a id="dynalink" href=# onclick="insertFormVar(\'' . $_POST['sFieldName'] . '\',\'' . $_POST['sSymbol'] . $aField['sName'] . '\');">' . $_POST['sSymbol'] . $aField['sName'] . '</a></div>','type' => $aField['sType'],'label' => $aField['sLabel']
+    $aRows[] = Array ('fieldname' => $_REQUEST['sFieldName'], 'variable' => $_REQUEST['sSymbol'] . $aField['sName'],'variable_label' => '<div class="pm__dynavars"> <a id="dynalink" href=# onclick="insertFormVar(\'' . $_REQUEST['sFieldName'] . '\',\'' . $_REQUEST['sSymbol'] . $aField['sName'] . '\');">' . $_REQUEST['sSymbol'] . $aField['sName'] . '</a></div>','type' => $aField['sType'],'label' => $aField['sLabel']
     );
 }
 $html .= '</select>';
