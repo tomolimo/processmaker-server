@@ -22,9 +22,9 @@
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  */
 $_SERVER["QUERY_STRING"] = isset($_SERVER["QUERY_STRING"])?$_SERVER["QUERY_STRING"]:'';
-$_POST["sProcess"] = isset($_POST["sProcess"])?$_POST["sProcess"]:$_SESSION['PROCESS'];
-$_POST["sFieldName"] = isset($_POST["sFieldName"])?$_POST["sFieldName"]:'';
-$_POST['sSymbol']= isset($_POST["sSymbol"])?$_POST["sSymbol"]:'';
+$_REQUEST["sProcess"] = isset($_REQUEST["sProcess"])?$_REQUEST["sProcess"]:'';
+$_REQUEST["sFieldName"] = isset($_REQUEST["sFieldName"])?$_REQUEST["sFieldName"]:'';
+$_REQUEST['sSymbol']= isset($_REQUEST["sSymbol"])?$_REQUEST["sSymbol"]:'';
 
 $html = '<form action="uploader.php?'.$_SERVER["QUERY_STRING"].'&q=upload" onLoad="onLoad()" method="post" enctype="multipart/form-data" onsubmit="">';
 $html .= '<div id="d_variables">';
