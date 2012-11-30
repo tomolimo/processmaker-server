@@ -112,6 +112,7 @@ class Dashboard extends Controller
             G::loadClass('configuration');
             $oConfiguration = new Configurations();
             $aConfiguration = $oConfiguration->load('Dashboard', '', '', $_SESSION['USER_LOGGED']);
+
             $dataDashboard = array();
             if (isset($aConfiguration["CFG_VALUE"])) {
                 $dataDashboard = $aConfiguration["CFG_VALUE"];
