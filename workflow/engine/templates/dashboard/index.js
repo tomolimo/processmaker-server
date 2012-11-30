@@ -1,8 +1,8 @@
 function generatedOrder () {
-    var orderNow = new Array();
-    orderNow[0] = new Array();
-    orderNow[1] = new Array();
-    orderNow[2] = new Array();
+    var orderNow = [];;
+    orderNow[0] = [];
+    orderNow[1] = [];
+    orderNow[2] = [];
 
     for (var i = 0; i < Ext.getCmp('columnPos0').items.items.length; i++) {
       orderNow[0][i] = Ext.getCmp('columnPos0').items.items[i].dasInsUid;
@@ -43,7 +43,6 @@ Ext.onReady(function(){
         handler : function(a) {
           Ext.MessageBox.show({
             msg: _('ID_LOADING'),
-            progressText: 'Saving...',
             width:300,
             wait:true,
             waitConfig: {interval:200},
@@ -64,20 +63,20 @@ Ext.onReady(function(){
           var orderNow = generatedOrder();
           Ext.Ajax.request({
             params: {
-              postionCol0: Ext.encode(orderNow[0]),
-              postionCol1: Ext.encode(orderNow[1]),
-              postionCol2: Ext.encode(orderNow[2]),
+              positionCol0: Ext.encode(orderNow[0]),
+              positionCol1: Ext.encode(orderNow[1]),
+              positionCol2: Ext.encode(orderNow[2]),
               columns: 3
             },
             url: 'dashboard/saveOrderDashlet',
-              success: function (retorno) {
-                var data = Ext.decode(retorno.responseText);
+              success: function (res) {
+                var data = Ext.decode(res.responseText);
                 if (data.success) {
                   Ext.MessageBox.hide();
                 }
               },
               failure: function () {
-                Ext.MessageBox.alert('Error', 'Error al Guardar');
+            	  Ext.MessageBox.alert(_('ID_ERROR'), _('ID_IMPORTING_ERROR');
               }
           });
         }
@@ -123,20 +122,20 @@ Ext.onReady(function(){
           var orderNow = generatedOrder();
           Ext.Ajax.request({
             params: {
-              postionCol0: Ext.encode(orderNow[0]),
-              postionCol1: Ext.encode(orderNow[1]),
-              postionCol2: Ext.encode(orderNow[2]),
+              positionCol0: Ext.encode(orderNow[0]),
+              positionCol1: Ext.encode(orderNow[1]),
+              positionCol2: Ext.encode(orderNow[2]),
               columns: 2
             },
             url: 'dashboard/saveOrderDashlet',
-              success: function (retorno) {
-                var data = Ext.decode(retorno.responseText);
+              success: function (res) {
+                var data = Ext.decode(res.responseText);
                 if (data.success) {
                   Ext.MessageBox.hide();
                 }
               },
               failure: function () {
-                Ext.MessageBox.alert('Error', 'Error al Guardar');
+                Ext.MessageBox.alert(_('ID_ERROR'), _('ID_IMPORTING_ERROR');
               }
           });
         }
@@ -190,20 +189,20 @@ Ext.onReady(function(){
           }
           Ext.Ajax.request({
             params: {
-              postionCol0: Ext.encode(orderNow[0]),
-              postionCol1: Ext.encode(orderNow[1]),
-              postionCol2: Ext.encode(orderNow[2]),
+              positionCol0: Ext.encode(orderNow[0]),
+              positionCol1: Ext.encode(orderNow[1]),
+              positionCol2: Ext.encode(orderNow[2]),
               columns: colum
             },
             url: 'dashboard/saveOrderDashlet',
-              success: function (retorno) {
-                var data = Ext.decode(retorno.responseText);
+              success: function (res) {
+                var data = Ext.decode(res.responseText);
                 if (data.success) {
                   Ext.MessageBox.hide();
                 }
               },
               failure: function () {
-                Ext.MessageBox.alert('Error', 'Error al Guardar');
+                Ext.MessageBox.alert(_('ID_ERROR'), _('ID_IMPORTING_ERROR');
               }
           });
         }
