@@ -39,7 +39,7 @@ try {
     //$oJSON = new Services_JSON();
 
     if (isset( $_REQUEST['data'] )) {
-        $oData = G::json_decode( stripslashes( $_REQUEST['data'] ) );
+        $oData = Bootstrap::json_decode( stripslashes( $_REQUEST['data'] ) );
         //$oData = $oJSON->decode( stripslashes( $_REQUEST['data'] ) );
         $sOutput = '';
         $sTask = '';
@@ -319,7 +319,7 @@ try {
             $oProcessMap->processFilesManager( $oData->pro_uid );
             break;
         case 'exploreDirectory':
-            $objData = G::json_decode( $_REQUEST['data'] );
+            $objData = Bootstrap::json_decode( $_REQUEST['data'] );
             $_SESSION['PFMDirectory'] = $objData->{'main_directory'};
             $oProcessMap->exploreDirectory( $oData->pro_uid, $oData->main_directory, $oData->directory );
             break;
@@ -421,8 +421,7 @@ try {
                 $oResponse->sLink = '../processes/downloadPML?id=' . $oData->pro_uid . '&s=' . $sessionId;
             }
             $oResponse->bExists = $bExists;
-            $oJSON = new Services_JSON();
-            echo $oJSON->encode( $oResponse );
+            echo Bootstrap::json_encode( $oResponse );
             break;
         case 'editFile':
             //echo $_REQUEST['filename'];
@@ -450,7 +449,7 @@ try {
 //            $oHeadPublisher->clearScripts();
 //            $oHeadPublisher->addScriptFile( '/js/tinymce/jscripts/tiny_mce/tiny_mce.js' );
 //            $jscriptCode .= '
-//                                        
+//
 ////                    var tmpArrToStr = Array.prototype.toStr;
 ////                    var tmpObjToStr = Object.prototype.toStr;
 ////                    var tmpObjConcat = Object.prototype.concat;
@@ -470,24 +469,24 @@ try {
 ////                document.body.onload = function(){
 //                    alert ("hello");
 //                    tinyMCE.baseURL = "/js/tinymce/jscripts/tiny_mce";
-//                    tinyMCE.init({                
-//                        theme   : "advanced",                
+//                    tinyMCE.init({
+//                        theme   : "advanced",
 //                        plugins : "fullpage",
 //                        mode    : "specific_textareas",
 //                        editor_selector : "tmceEditor",
 //                        width   : "640",
-//                        height  : "300",                       
+//                        height  : "300",
 //                        theme_advanced_buttons3_add : "fullpage"
 //                    });
 ////                    alert ("goodbye");
 ////                }
 //            ';
 //            $oHeadPublisher->addScriptCode($jscriptCode);
-            $_REQUEST['fcontent'] = $fcontent;  
+            $_REQUEST['fcontent'] = $fcontent;
             //if($extion[count($extion)-1]=='html' || $extion[count($extion)-1]=='txt'){
             $aData = Array ( 'pro_uid' => $_REQUEST['pro_uid'],'fcontent' => $fcontent,'filename' => $_REQUEST['filename'] );
             $G_PUBLISH->AddContent( 'xmlform', 'xmlform', 'processes/processes_FileEdit', '', $aData );
-            G::RenderPage( 'publish', 'raw' );                                    
+            G::RenderPage( 'publish', 'raw' );
 //            $G_PUBLISH->AddContent( 'view', 'processes/processesFileEditEmail' );
 //            G::RenderPage( 'publish', 'blank' );
             break;
@@ -525,7 +524,7 @@ try {
         case 'getVariableList':
             G::LoadClass('xmlfield_InputPM');
             $proUid= isset( $_REQUEST['process'] )?$_REQUEST['process']:'';
-            $queryText= isset( $_REQUEST['queryText'] )?$_REQUEST['queryText']:'';            
+            $queryText= isset( $_REQUEST['queryText'] )?$_REQUEST['queryText']:'';
             if ($_REQUEST['type']=='system'){
                 $isSystem = true;
             } else {
@@ -545,9 +544,8 @@ try {
                 } else {
                     $aVariables[] = $aFields[$key];
                 }
-            }      
-            $oJSON = new Services_JSON();            
-            echo $oJSON->encode( $aVariables );
+            }
+            echo Bootstrap::json_encode( $aVariables );
             break;
         case 'getVariablePrefix':
             $_REQUEST['prefix'] = $_REQUEST['prefix']!=null?$_REQUEST['prefix']:'ID_TO_STRING';
@@ -607,8 +605,7 @@ try {
             }
             $response = new stdclass();
             $response->casesNumRec = $casesNumRec;
-            $json = new Services_JSON();
-            $sOutput = $json->encode( $response );
+            echo Bootstrap::json_encode( $response );
             break;
     }
     if (isset( $sOutput )) {
