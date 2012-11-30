@@ -21,7 +21,6 @@
  * For more information, contact Colosa Inc, 2566 Le Jeune Rd.,
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  */
-G::pr($_SERVER);
 $_SERVER["QUERY_STRING"] = isset($_SERVER["QUERY_STRING"])?$_SERVER["QUERY_STRING"]:'';
 $_POST["sProcess"] = isset($_POST["sProcess"])?$_POST["sProcess"]:$_SESSION['PROCESS'];
 $_POST["sFieldName"] = isset($_POST["sFieldName"])?$_POST["sFieldName"]:'';
