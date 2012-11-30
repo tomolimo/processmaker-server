@@ -399,7 +399,7 @@ try {
             break;
         case 'loginPML':
             G::LoadClass( 'processes' );
-            G::LoadThirdParty( 'pear/json', 'class.json' );
+            //G::LoadThirdParty( 'pear/json', 'class.json' );
             $oProcesses = new Processes();
             try {
                 if ($oProcesses->ws_open( $oData->u, $oData->p ) == 1) {
@@ -421,6 +421,7 @@ try {
                 $oResponse->sLink = '../processes/downloadPML?id=' . $oData->pro_uid . '&s=' . $sessionId;
             }
             $oResponse->bExists = $bExists;
+            //$oJSON = new Services_JSON();
             echo Bootstrap::json_encode( $oResponse );
             break;
         case 'editFile':
@@ -605,7 +606,8 @@ try {
             }
             $response = new stdclass();
             $response->casesNumRec = $casesNumRec;
-            echo Bootstrap::json_encode( $response );
+            //$json = new Services_JSON();
+            $sOutput = Bootstrap::json_encode( $response );
             break;
     }
     if (isset( $sOutput )) {
