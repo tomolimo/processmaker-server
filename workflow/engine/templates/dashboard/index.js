@@ -76,7 +76,7 @@ Ext.onReady(function(){
                 }
               },
               failure: function () {
-            	  Ext.MessageBox.alert(_('ID_ERROR'), _('ID_IMPORTING_ERROR');
+            	  Ext.MessageBox.alert(_('ID_ERROR'), _('ID_IMPORTING_ERROR'));
               }
           });
         }
@@ -135,7 +135,7 @@ Ext.onReady(function(){
                 }
               },
               failure: function () {
-                Ext.MessageBox.alert(_('ID_ERROR'), _('ID_IMPORTING_ERROR');
+                Ext.MessageBox.alert(_('ID_ERROR'), _('ID_IMPORTING_ERROR'));
               }
           });
         }
@@ -202,7 +202,7 @@ Ext.onReady(function(){
                 }
               },
               failure: function () {
-                Ext.MessageBox.alert(_('ID_ERROR'), _('ID_IMPORTING_ERROR');
+                Ext.MessageBox.alert(_('ID_ERROR'), _('ID_IMPORTING_ERROR'));
               }
           });
         }
