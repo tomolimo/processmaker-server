@@ -98,17 +98,17 @@ class XmlForm_Field_WYSIWYG_EDITOR extends XmlForm_Field
                         tinyMCE.activeEditor.processID =formProcessID;
                     },
                     onchange_callback: function(inst) {
-                		if(inst.isDirty()) {
-                			inst.save();
-                		}
-                		return true;
-                	},
+                        if(inst.isDirty()) {
+                                inst.save();
+                        }
+                        return true;
+                    },
                     handle_event_callback : function(e) {
-                		if(this.isDirty()) {
-                			this.save();
-                		}
-                		return true;
-                	}
+                        if(this.isDirty()) {
+                            this.save();
+                        }
+                        return true;
+                    }
                 });
                 ';
                 break;
@@ -118,7 +118,7 @@ class XmlForm_Field_WYSIWYG_EDITOR extends XmlForm_Field
                 var formProcessID = document.getElementById("form[PRO_UID]").value;
                 tinyMCE.init({
                     theme   : "advanced",
-                    plugins : "advhr,advimage,advlink,advlist,autolink,autoresize,autosave,contextmenu,directionality,emotions,example,example_dependency,fullpage,fullscreen,iespell,inlinepopups,insertdatetime,layer,legacyoutput,lists,media,nonbreaking,noneditable,pagebreak,paste,preview,print,save,searchreplace,spellchecker,style,tabfocus,table,template,visualblocks,visualchars,wordcount,xhtmlxtras,pmSimpleUploader,pmVariablePicker",
+                    plugins : "advhr,advimage,advlink,advlist,autolink,autoresize,autosave,contextmenu,directionality,emotions,example,example_dependency,fullpage,fullscreen,iespell,inlinepopups,insertdatetime,layer,legacyoutput,lists,media,nonbreaking,noneditable,pagebreak,paste,preview,print,save,searchreplace,spellchecker,style,tabfocus,table,template,visualblocks,visualchars,wordcount,xhtmlxtras,pmSimpleUploader,pmVariablePicker,pmGrids",
                     mode    : "specific_textareas",
                     editor_selector : "tmceEditor",
                     width   : "770",

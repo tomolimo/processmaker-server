@@ -1,0 +1,87 @@
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <script src="/js/jquery/jquery-1.7.1.min.js" type="text/javascript"></script>
+	<script type="text/javascript" src="../../tiny_mce_popup.js"></script>
+        <script src="editor_plugin_src.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                alert(tinyMCE.baseURL);
+                /*$.ajax({
+                    url: "/processes/processes_Ajax",
+                    type: "POST",
+                    data: {action : 'getDynagridList', PRO_UID: tinyMCE.activeEditor.processID},
+                    dataType: "html",
+                    success: function(){
+                        
+                    }
+                });*/
+            });
+        </script>
+        <style type="text/css">
+            #container {
+                display: table;
+            }
+            #row {
+                display: table-row;
+            }
+            #left, #right, #middle {
+                display: table-cell;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="container">
+            <div id="row">
+                <div id="left">
+                    Chose a grid
+                </div>
+                <div id="middle">
+                    <div id="gridDropdown">
+                        
+                    </div>                    
+                </div>
+            </div>
+            <div id="row">
+                <div id="left">
+                    Prefix
+                </div>
+                <div id="middle">
+                    <div id="gridDropdown">
+                        
+                    </div>                    
+                </div>
+            </div>
+            <div id="row">
+                <div id="left">
+                    
+                </div>
+                <div id="middle">
+                    <div id="gridDropdown">
+                        <input type="checkbox"> Border    
+                    </div>                    
+                </div>
+            </div>
+            <div id="row">
+                <div id="left">
+                    
+                </div>
+                <div id="middle">
+                    <div id="gridDropdown">
+                        <input type="checkbox"> Headers
+                    </div>                    
+                </div>
+            </div>
+            
+        </div>
+        <div id="list-container">
+            
+        </div>        
+    </body>
+</html>
