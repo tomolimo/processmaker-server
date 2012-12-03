@@ -81,7 +81,7 @@ function editFile(pro_uid, fileName){
 	oPanel = new leimnud.module.panel();
 	oPanel.options={
 		limit	   : true,
-		size	   : {w:800,h:600},
+		size	   : {w:800,h:530},
 		position   : {x:50,y:50,center:true},
 		title	   : '',
 		control    : {close:true,resize:false},
