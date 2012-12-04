@@ -4057,13 +4057,6 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
         //$this->defaultValue = G::replaceDataField( $this->defaultValue, $owner->values);
         $id = "form[$this->name]";
 
-        if ($this->renderMode == 'edit' && $this->renderMode == 'view') {
-            if ($value == 'today') {
-                $mask = str_replace( "%", "", $this->mask );
-                $value = date( masktophp($mask) );
-                return $value;
-            }
-        }
         return $this->__draw_widget( $id, $value, $owner );
     }
 
@@ -4096,7 +4089,7 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
                     }
                     if ($v == 'today') {
                         $mask = str_replace( "%", "", $this->mask );
-                        $v = date( masktophp($mask) );
+                        $v = date( masktophp($mask, $v) );
                     }
                     $html = '<input ' . $this->NSRequiredValue() . ' class="module_app_input___gray" id="form[' . $owner->name . '][' . $r . '][' . $this->name . ']" name="form[' . $owner->name . '][' . $r . '][' . $this->name . ']" type ="text" size="' . $this->size . '" maxlength="' . $this->maxLength . '" value="' . $this->htmlentities( $v, ENT_COMPAT, 'utf-8' ) . '" required="' . $isRequired . '" style="display:none;' . htmlentities( $this->style, ENT_COMPAT, 'utf-8' ) . '"/>' . htmlentities( $v, ENT_COMPAT, 'utf-8' );
                 } else {
@@ -4172,7 +4165,7 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
         }
 
         if ($this->defaultValue != "") {
-            $defaultValue = masktophp( $mask );
+            $defaultValue = masktophp( $mask, $defaultValue);
         }
 
         if (strpos( $mask, '%' ) === false) {
@@ -4213,7 +4206,7 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
             $value = ''; //date ($tmp);
         } else {
             if ($value != "") {
-                $value = masktophp( $mask );
+                $value = masktophp( $mask, $value);
             }
         }
 
@@ -5453,7 +5446,7 @@ class XmlForm_Field_Image extends XmlForm_Field
 }
 
 //mask function to php
-function masktophp ($mask)
+function masktophp ($mask, $value)
 {
     $tmp = str_replace("%", "", $mask);
     if (preg_match('/M/',$tmp)) {
@@ -5501,7 +5494,12 @@ function masktophp ($mask)
     if (preg_match('/P/',$tmp)) {
         $tmp = str_replace("P", "a", $tmp);
     }
-    $value = date($tmp);
+
+    if ($value == 'today') {
+        $value = date($tmp);
+    } else {
+        $value = date($tmp, strtotime ($value));
+    }
     return $value;
 }
 
