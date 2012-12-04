@@ -10,33 +10,29 @@ and open the template in the editor.
         <script src="/js/jquery/jquery-1.7.1.min.js" type="text/javascript"></script>
 	<script type="text/javascript" src="../../tiny_mce_popup.js"></script>
         <script src="editor_plugin_src.js"></script>
-        <script type="text/javascript">
-            $(document).ready(function () {
-                alert(tinyMCE.baseURL);
-                /*$.ajax({
-                    url: "/processes/processes_Ajax",
-                    type: "POST",
-                    data: {action : 'getDynagridList', PRO_UID: tinyMCE.activeEditor.processID},
-                    dataType: "html",
-                    success: function(){
-                        
-                    }
-                });*/
-            });
-        </script>
+        <script src="pmGrids.js"></script>
         <style type="text/css">
+            
+            body {
+                position: absolute;
+                top: 0px;
+                left: 45%;
+                margin-left: -70px;
+            }
             #container {
+                
                 display: table;
             }
             #row {
                 display: table-row;
             }
-            #left, #right, #middle {
+            #left, #right, #middle, .gridCell {
                 display: table-cell;
             }
         </style>
     </head>
     <body>
+        
         <div id="container">
             <div id="row">
                 <div id="left">
@@ -44,7 +40,9 @@ and open the template in the editor.
                 </div>
                 <div id="middle">
                     <div id="gridDropdown">
-                        
+                        <select id="gridList">
+                            
+                        </select>
                     </div>                    
                 </div>
             </div>
@@ -53,8 +51,11 @@ and open the template in the editor.
                     Prefix
                 </div>
                 <div id="middle">
-                    <div id="gridDropdown">
-                        
+                    <div id="prefixDropdown">
+                        <select name="prefixList" id="prefixList">
+                            <option value="@#">@#</option>
+                            <option value="@@">@@</option>
+                        </select>
                     </div>                    
                 </div>
             </div>
@@ -63,7 +64,7 @@ and open the template in the editor.
                     
                 </div>
                 <div id="middle">
-                    <div id="gridDropdown">
+                    <div id="borderCheckBox">
                         <input type="checkbox"> Border    
                     </div>                    
                 </div>
@@ -73,15 +74,32 @@ and open the template in the editor.
                     
                 </div>
                 <div id="middle">
-                    <div id="gridDropdown">
+                    <div id="headersCheckBox">
                         <input type="checkbox"> Headers
                     </div>                    
                 </div>
             </div>
             
         </div>
-        <div id="list-container">
-            
-        </div>        
+        <center>
+        <table id="listContainer" border="1" cellspacing="0" cellpadding="3">
+        </table>
+        <div id="container">
+            <div id="row">
+                <div id="left">
+                </div>
+                <div id="middle">
+                    <button id="addButton" style="width: 100px">
+                        Add
+                    </button>
+                    <button id="cancelButton" style="width: 100px">
+                        Cancel
+                    </button>
+                </div>
+                <div id="right">
+                </div>
+            </div>
+        </div>
+    </center>
     </body>
 </html>

@@ -109,9 +109,13 @@ var setVariablePickerJS = function(){
         }  
     }
 }
+// check wether the document has been already loaded or not, 
+// whatever the state is this condition ensures that the events are always loaded
 if (document.readyState == 'complete'){
+    // if completed load the functions and events
     setVariablePickerJS();
 } else {
+    // if not set the function call in the body onload event
     document.body.onload = setVariablePickerJS;
 }
 

@@ -13,7 +13,7 @@
             });
             ed.addButton('pmGrids', {
                 title: 'pmGrids',
-                label : '  @# Grids',
+                label : '  @#',
                 cmd: 'mcepmGrids',
                 image: url + '/img/grids.png'
             }); 
@@ -33,11 +33,14 @@
 // with the path of the uploaded file
 function pmGrids(field_name, url, type, win) {    
     //tinyMCE.activeEditor.anyVariable='path/to/ProcessMaker' 
+    var strPluginPath  = tinyMCE.activeEditor.plugins.pmGrids.getPluginURL();                               // get the path to the uploader plugin    
+    var strScriptURL   = strPluginPath + "/pmGrids.html";
+    
     tinyMCE.activeEditor.windowManager.open({                                                                       // open the plugin popup
-        file            : '/js/tinymce/jscripts/tiny_mce/plugins/pmGrids/pmGrids.html',
-        title           : '',
+        file            : strScriptURL,
+        title           : 'ProcessMaker Grid Wizard',
         width           : '600px',
-        height          : '330px',
+        height          : '230px',
         resizable       : "yes",
         scrollbars      : "no",
         overflow        : false,
