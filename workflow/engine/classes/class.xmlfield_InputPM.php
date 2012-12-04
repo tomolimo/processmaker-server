@@ -25,7 +25,7 @@
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  *
  * @package workflow.engine.classes
- */
+ **/
 
 class XmlForm_Field_TextPM extends XmlForm_Field_SimpleText
 {
@@ -456,22 +456,51 @@ function getGridsVars ($sProcessUID)
     }
     return $aFields;
 }
-
+/*
 function getVarsGrid ()
 {
+
     $aFields = array ();
     $aFieldsNames = array ();
     require_once 'classes/model/Dynaform.php';
 
-
     $aFields = new Dynaform();
     //$aFields->getDynaformFields( $caseId );
-
     $aFields->getDynaformFields( '45855056550a69a8cbeed24036053462' );
-
     G::pr($aFields);
     return $aFields;
 }
+*/
+
+function getVarsGrid ($proUid, $dynUid)
+{
+    G::LoadClass( 'dynaformhandler' );
+    G::LoadClass( 'AppSolr' );
+
+    $dynaformFields = array ();
+
+    if (is_file( PATH_DATA . '/sites/'. SYS_SYS .'/xmlForms/'. $proUid .'/'.$dynUid. '.xml' ) && filesize( PATH_DATA . '/sites/'. SYS_SYS .'/xmlForms/'. $proUid .'/'. $dynUid .'.xml' ) > 0) {
+        $dyn = new dynaFormHandler( PATH_DATA . '/sites/'. SYS_SYS .'/xmlForms/' .$proUid. '/' . $dynUid .'.xml' );
+        $dynaformFields[] = $dyn->getFields();
+    }
+
+    $dynaformFieldTypes = array ();
+
+    foreach ($dynaformFields as $aDynFormFields) {
+        foreach ($aDynFormFields as $field) {
+
+            if ($field->getAttribute( 'validate' ) == 'Int') {
+                $dynaformFieldTypes[$field->nodeName] = 'Int';
+            } elseif ($field->getAttribute( 'validate' ) == 'Real') {
+                $dynaformFieldTypes[$field->nodeName] = 'Real';
+            } else {
+                $dynaformFieldTypes[$field->nodeName] = $field->getAttribute( 'type' );
+            }
+        }
+    }
+    return $dynaformFieldTypes;
+}
+
 
 /**
  * Class XmlForm_Field_CheckBoxTable
