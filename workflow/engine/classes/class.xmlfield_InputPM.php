@@ -432,6 +432,7 @@ function getGridsVars ($sProcessUID)
 {
     $aFields = array ();
     $aFieldsNames = array ();
+
     require_once 'classes/model/Dynaform.php';
     $oCriteria = new Criteria( 'workflow' );
     $oCriteria->addSelectColumn( DynaformPeer::DYN_FILENAME );
@@ -445,8 +446,7 @@ function getGridsVars ($sProcessUID)
             foreach ($G_FORM->fields as $k => $v) {
                 if ($v->type == 'grid') {
                     if (! in_array( $k, $aFieldsNames )) {
-                        $aFields[] = array ('sName' => $k,'sXmlForm' => str_replace( $sProcessUID . '/', '', $v->xmlGrid )
-                        );
+                        $aFields[] = array ('sName' => $k,'sXmlForm' => str_replace( $sProcessUID . '/', '', $v->xmlGrid ));
                         $aFieldsNames[] = $k;
                     }
                 }
@@ -454,6 +454,22 @@ function getGridsVars ($sProcessUID)
         }
         $oDataset->next();
     }
+    return $aFields;
+}
+
+function getVarsGrid ()
+{
+    $aFields = array ();
+    $aFieldsNames = array ();
+    require_once 'classes/model/Dynaform.php';
+
+
+    $aFields = new Dynaform();
+    //$aFields->getDynaformFields( $caseId );
+
+    $aFields->getDynaformFields( '45855056550a69a8cbeed24036053462' );
+
+    G::pr($aFields);
     return $aFields;
 }
 

@@ -552,6 +552,33 @@ try {
             $_REQUEST['prefix'] = $_REQUEST['prefix']!=null?$_REQUEST['prefix']:'ID_TO_STRING';
             echo G::LoadTranslation($_REQUEST['prefix']);
             break;
+
+        case 'getGridList':
+            G::LoadClass('xmlfield_InputPM');
+            $proUid= isset( $_REQUEST['PRO_UID'] )?$_REQUEST['PRO_UID']:'';
+
+            $aFields = getGridsVars( $proUid );
+
+            $aVariables = array();
+            foreach ($aFields as $key => $value){
+                $aVariables[] = $aFields[$key];
+            }
+            echo Bootstrap::json_encode( $aVariables );
+            break;
+
+        case 'getVariableGrid':
+            G::LoadClass('xmlfield_InputPM');
+            //$proUid= isset( $_REQUEST['PRO_UID'] )?$_REQUEST['PRO_UID']:'';
+            //$dynUid= isset( $_REQUEST['DYN_UID'] )?$_REQUEST['DYN_UID']:'';
+
+            $aFields = getVarsGrid();
+
+            $aVariables = array();
+            foreach ($aFields as $key => $value){
+                $aVariables[] = $aFields[$key];
+            }
+            echo Bootstrap::json_encode( $aVariables );
+            break;
         /*
 	       case 'saveFile':
          global $G_PUBLISH;
