@@ -33,10 +33,10 @@
 // with the path of the uploaded file
 function pmGrids(field_name, url, type, win) {    
     //tinyMCE.activeEditor.anyVariable='path/to/ProcessMaker' 
-    var strPluginPath  = tinyMCE.activeEditor.plugins.pmGrids.getPluginURL();                               // get the path to the uploader plugin    
-    var strScriptURL   = strPluginPath + "/pmGrids.html";             
-
-tinyMCE.activeEditor.windowManager.open({                                                                       // open the plugin popup
+    var strPluginPath  = tinyMCE.activeEditor.plugins.pmGrids.getPluginURL(); // get the path to the uploader plugin    
+    var strScriptURL   = strPluginPath + "/pmGrids.html";
+    
+    tinyMCE.activeEditor.windowManager.open({                                                                       // open the plugin popup
         file            : strScriptURL,
         title           : 'ProcessMaker Grid Wizard',
         width           : '600px',

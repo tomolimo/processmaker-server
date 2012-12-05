@@ -3,6 +3,7 @@
 **/
 
 (function(){
+    tinyMCE.baseURL = "/js/tinymce/jscripts/tiny_mce";
     var strPluginURL;
     tinymce.create('tinymce.plugins.pmVariablePickerPlugin', {
     	init: function(ed, url) 
@@ -69,7 +70,7 @@ function pmVariablePicker(field_name, url, type, win) {
 // This function will get called when the uploader is done uploading the file and ready to update
 // calling dialog and close the upload popup
 // strReturnURL should be the string with the path to the uploaded file
-function closePluginPopup(){    
+function closePluginPopup(){
     tinyMCEPopup.close();	                                                                    // close popup window
 }
 

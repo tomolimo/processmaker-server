@@ -19,26 +19,26 @@ and open the template in the editor.
                 left: 45%;
                 margin-left: -70px;
             }
-            #container {
+            .container {
                 
                 display: table;
             }
-            #row {
+            .row {
                 display: table-row;
             }
-            #left, #right, #middle, .gridCell {
+            .left, .right, .middle, .gridCell {
                 display: table-cell;
             }
         </style>
     </head>
     <body>
         
-        <div id="container">
-            <div id="row">
-                <div id="left">
+        <div class="container">
+            <div class="row">
+                <div class="left">
                     Chose a grid
                 </div>
-                <div id="middle">
+                <div class="middle">
                     <div id="gridDropdown">
                         <select id="gridList">
                             
@@ -46,11 +46,11 @@ and open the template in the editor.
                     </div>                    
                 </div>
             </div>
-            <div id="row">
-                <div id="left">
+            <div class="row">
+                <div class="left">
                     Prefix
                 </div>
-                <div id="middle">
+                <div class="middle">
                     <div id="prefixDropdown">
                         <select name="prefixList" id="prefixList">
                             <option value="@#">@#</option>
@@ -59,36 +59,25 @@ and open the template in the editor.
                     </div>                    
                 </div>
             </div>
-            <div id="row">
-                <div id="left">
-                    
-                </div>
-                <div id="middle">
-                    <div id="borderCheckBox">
-                        <input type="checkbox"> Border    
-                    </div>                    
+            <div class="row">
+                <div class="middle">
+                    <input type="checkbox" id="borderCheckbox"> Border    
                 </div>
             </div>
-            <div id="row">
-                <div id="left">
-                    
-                </div>
-                <div id="middle">
-                    <div id="headersCheckBox">
-                        <input type="checkbox"> Headers
-                    </div>                    
+            <div class="row">
+                <div class="middle">
+                    <input type="checkbox" id="headersCheckbox"> Headers
                 </div>
             </div>
             
         </div>
-        <center>
         <table id="listContainer" border="1" cellspacing="0" cellpadding="3">
         </table>
-        <div id="container">
-            <div id="row">
-                <div id="left">
+        <div class="container">
+            <div class="row">
+                <div class="left">
                 </div>
-                <div id="middle">
+                <div class="middle">
                     <button id="addButton" style="width: 100px">
                         Add
                     </button>
@@ -96,10 +85,9 @@ and open the template in the editor.
                         Cancel
                     </button>
                 </div>
-                <div id="right">
+                <div class="right">
                 </div>
             </div>
         </div>
-    </center>
     </body>
 </html>

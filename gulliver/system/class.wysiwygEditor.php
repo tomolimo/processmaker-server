@@ -76,8 +76,8 @@ class XmlForm_Field_WYSIWYG_EDITOR extends XmlForm_Field
      */
     public function attachEvents ($element)
     {
-
-        $editorDefinition = 'tinyMCE.baseURL = "/js/tinymce/jscripts/tiny_mce"; ';
+        $editorDefinition  = 'tinyMCE.baseURL = "/js/tinymce/jscripts/tiny_mce"; ';
+        $editorDefinition .= 'var domainURL   = "/sys'.SYS_SYS.'/'.SYS_LANG.'/'.SYS_SKIN.'/"';
 
         switch ($this->editorType){
             case 'EMAIL_TEMPLATE':
@@ -95,11 +95,13 @@ class XmlForm_Field_WYSIWYG_EDITOR extends XmlForm_Field
                     theme_advanced_buttons1 : "pmSimpleUploader,|,pmVariablePicker,|,bold,italic,underline,|,justifyleft,justifycenter,justifyright,justifyfull,|,fontselect,fontsizeselect,|,cut,copy,paste,|,bullist,numlist,|,outdent,indent,blockquote",
                     theme_advanced_buttons2 : "tablecontrols,|,undo,redo,|,link,unlink,image,|,forecolor,backcolor,|,hr,removeformat,visualaid,|,sub,sup,|,ltr,rtl,|,code",
                     oninit: function (){
-                        tinyMCE.activeEditor.processID =formProcessID;
+                        tinyMCE.activeEditor.processID = formProcessID;
+                        tinyMCE.activeEditor.domainURL = domainURL;
+                        
                     },
                     onchange_callback: function(inst) {
                         if(inst.isDirty()) {
-                                inst.save();
+                            inst.save();
                         }
                         return true;
                     },
@@ -126,8 +128,9 @@ class XmlForm_Field_WYSIWYG_EDITOR extends XmlForm_Field
                     verify_html : false,
                     theme_advanced_buttons1 : "pmSimpleUploader,|,pmVariablePicker,|,pmGrids,|,bold,italic,underline,|,justifyleft,justifycenter,justifyright,justifyfull,|,fontselect,fontsizeselect,|,cut,copy,paste,|,bullist,numlist,|,outdent,indent,blockquote",
                     theme_advanced_buttons2 : "tablecontrols,|,undo,redo,|,link,unlink,image,|,forecolor,backcolor,|,hr,removeformat,visualaid,|,sub,sup,|,ltr,rtl,|,code",
-                    oninit: function (){
-                        tinyMCE.activeEditor.processID=formProcessID;
+                    oninit: function () {
+                        tinyMCE.activeEditor.processID = formProcessID;
+                        tinyMCE.activeEditor.domainURL = domainURL;
                     },
                     onchange_callback: function(inst) {
                         if(inst.isDirty()) {

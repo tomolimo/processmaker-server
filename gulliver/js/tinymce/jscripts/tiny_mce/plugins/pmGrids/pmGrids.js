@@ -1,64 +1,40 @@
- $(document).ready(function () {
-
+$(document).ready(function () {
     var getGridList = function(){
         var responseData
-        responseData = '[{"id":"grid_01","name":"grid_01"},{"id":"grid_02","name":"grid_02"}]';
-        /*$.ajax({
-            url : "/processes/processes_Ajax",
+//      responseData = '[{"id":"grid_01","name":"grid_01"},{"id":"grid_02","name":"grid_02"}]';
+        var url = tinyMCE.activeEditor.domainURL+"processes/processes_Ajax";
+        responseData = $.ajax({
+            url : url,
             type: "POST",
-            data: {action : 'getDynagridList', PRO_UID: tinyMCE.activeEditor.processID},
-            dataType: "html",
-            
-            success: function (data) { 
-                
-                $.each(data, function(index, element) {
-                    $('#listContainer').append($('<div class="gridCell">', {
-                        text: element.name
-                    }));
-                });
-            },
-            failure: function(){
-//                responseData = '[{"id":"1","name":"grid_01"},{"id":"2","name":"grid_02"}]';
-            }
-        });*/
-        responseData = eval ("(" +responseData+ ")");
+            data: {action : 'getGridList', PRO_UID: tinyMCE.activeEditor.processID},
+            async: false,
+            dataType: "json"           
+        }).responseText;
+        responseData = eval("(" +responseData+ ")");
         return responseData;
     }
     
-    var getGridFieldList = function (gridUid){
-        var responseData
-        if (gridUid=='1'||gridUid==1){
-            responseData = eval ('([{"id":"1","name":"field01"},{"id":"2","name":"field02"}])');
-        } else {
-            responseData = eval ('([{"id":"3","name":"field03"},{"id":"4","name":"field04"}])');
-        }
-        /*$.ajax({
-            url: "/processes/processes_Ajax",
+    var getGridFieldList = function(gridUid){
+        var responseData = $.ajax({
+            url : tinyMCE.activeEditor.domainURL+"processes/processes_Ajax",
             type: "POST",
-            data: {action : 'getGridFieldList', PRO_UID: tinyMCE.activeEditor.processID, DYN_UID: gridUid},
+            data: {action : 'getVariableGrid', PRO_UID: tinyMCE.activeEditor.processID, DYN_UID: gridUid},
             dataType: "json",
-            success: function (data) { 
-                $.each(responseData, function(index, element) {
-                    $('#listContainer').append($('<div class="gridCell">', {
-                        text: element.name
-                    }));
-                });
-            }
-        });*/
+            async:false
+        }).responseText;
         
+        responseData = eval("("+responseData+")");
         $('#listContainer').html('');
         var divHeader = '<tr>';
         var divCell   = '<tr>';
         $.each(responseData, function(index, element){
-            divHeader += "<td><input type='checkbox' class='headerField' name='headerField' value='"+element.name+"'/><input type='text' style='width:100px;' name='dynafield' class='dynaField' value='"+element.name+"' id='"+element.name+"'></td>";
-            divCell   += "<td align='center'><input type='hidden' id='field_"+element.name+"' value='"+element.name+"'>"+element.name+"</td>";            
+            divHeader += "<td><input type='checkbox' class='headerField' name='headerField' value='"+element+"'/><input type='text' style='width:80px;' name='dynafield' class='dynaField' value='"+element+"' id='"+element+"'></td>";
+            divCell   += "<td align='center'><input type='hidden' id='field_"+element+"' value='"+element+"'>"+element+"</td>";            
         });
-        divHeader += "</tr>";
-        divCell   += "</tr>";
-            
-        $('#listContainer').append(divHeader+divCell);
-
-    }
+        divHeader += '</tr>';
+        divCell   += '</tr>';
+        $('#listContainer').append(divHeader+divCell);            
+    };
     
     var generateListValues = function(){
         var list = getGridList();
@@ -66,16 +42,16 @@
         var option = document.createElement('option');
         for(i=(combo.length-1); i>=0; i--)
         {
-           var aDelete = combo.options[i];
-           aDelete.parentNode.removeChild(aDelete);
+            var aDelete = combo.options[i];
+            aDelete.parentNode.removeChild(aDelete);
         }
 
         if(list.length>0){
             for(i=0; i<list.length; i++)
             {
                option = document.createElement("OPTION");
-               option.value = list[i].id;
-               option.text  = list[i].name;
+               option.value = list[i].sXmlForm;
+               option.text  = list[i].sName;
                combo.add(option);
             }
         } else {
@@ -101,11 +77,12 @@
         });
         headerCode += "</tr>";
         fieldCode  += "</tr>";
-
-        gridCode  += fieldCode+"<!--@<"+gridName+"-->";
+        if ($("#headersCheckbox").attr("checked")!="checked"){
+            headerCode = '';
+        }
+        gridCode  += headerCode+fieldCode+"<!--@<"+gridName+"-->";
         tableCode += gridCode+"</table>"
         updateEditorContent (tableCode);
-        closePluginPopup();
     }
     
     $('#gridList').change(function(){
