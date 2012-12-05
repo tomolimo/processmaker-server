@@ -161,11 +161,9 @@ if ($action == "uploadFileNewProcess") {
 
         G::LoadClass( 'Users' );
         $user = new Users();
-        $existUser = $user->userExists( $UsrUid );
-        if ($existUser == false)
+        if (!$user->userExists( $UsrUid ))
         {
-            $UsrUid = $_SESSION['USER_LOGGED'];
-            $oData->process['PRO_CREATE_USER'] = $UsrUid;
+            $oData->process['PRO_CREATE_USER'] = $_SESSION['USER_LOGGED'];
         }
 
         //!respect of the groups
