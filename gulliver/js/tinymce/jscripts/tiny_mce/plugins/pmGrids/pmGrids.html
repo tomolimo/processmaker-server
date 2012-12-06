@@ -11,6 +11,7 @@ and open the template in the editor.
 	<script type="text/javascript" src="../../tiny_mce_popup.js"></script>
         <script src="editor_plugin_src.js"></script>
         <script src="pmGrids.js"></script>
+        <link href="css/table.css" rel="stylesheet" type="text/css" />
         <style type="text/css">
             
             body {
@@ -32,11 +33,12 @@ and open the template in the editor.
         </style>
     </head>
     <body>
-        
-        <div class="container">
+    
+        <div class="panel current">
+            <fieldset>
             <div class="row">
                 <div class="left">
-                    Chose a grid
+                    Chose a grid&nbsp;&nbsp;&nbsp;&nbsp;
                 </div>
                 <div class="middle">
                     <div id="gridDropdown">
@@ -46,11 +48,12 @@ and open the template in the editor.
                     </div>                    
                 </div>
             </div>
+            <br>
             <div class="row">
-                <div class="left">
-                    Prefix
-                </div>
                 <div class="middle">
+                    Prefix&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+                <div class="right">
                     <div id="prefixDropdown">
                         <select name="prefixList" id="prefixList">
                             <option value="@#">@#</option>
@@ -59,6 +62,8 @@ and open the template in the editor.
                     </div>                    
                 </div>
             </div>
+            
+            <br>
             <div class="row">
                 <div class="middle">
                     <input type="checkbox" id="borderCheckbox"> Border    
@@ -69,25 +74,20 @@ and open the template in the editor.
                     <input type="checkbox" id="headersCheckbox"> Headers
                 </div>
             </div>
-            
+            </fieldset>
         </div>
+        
+        <br> 
         <table id="listContainer" border="1" cellspacing="0" cellpadding="3">
         </table>
-        <div class="container">
-            <div class="row">
-                <div class="left">
-                </div>
-                <div class="middle">
-                    <button id="addButton" style="width: 100px">
-                        Add
-                    </button>
-                    <button id="cancelButton" style="width: 100px">
-                        Cancel
-                    </button>
-                </div>
-                <div class="right">
-                </div>
-            </div>
+        <br>
+        <div align="center">
+            <button id="addButton" style="width: 100px">
+                Add
+            </button>
+            <button id="cancelButton" style="width: 100px">
+                Cancel
+            </button>
         </div>
     </body>
 </html>
