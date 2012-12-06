@@ -81,7 +81,7 @@ class XmlForm_Field_WYSIWYG_EDITOR extends XmlForm_Field
 
         switch ($this->editorType){
             case 'EMAIL_TEMPLATE':
-                $editorDefinition .= '
+                $editorDefinition.= '
                 // is necessary the process uid variable in order to load the picker correctly
                 var formProcessID = document.getElementById("form[pro_uid]").value;
                 tinyMCE.init({
@@ -94,10 +94,11 @@ class XmlForm_Field_WYSIWYG_EDITOR extends XmlForm_Field
 
                     theme_advanced_buttons1 : "pmSimpleUploader,|,pmVariablePicker,|,bold,italic,underline,|,justifyleft,justifycenter,justifyright,justifyfull,|,fontselect,fontsizeselect,|,cut,copy,paste,|,bullist,numlist,|,outdent,indent,blockquote",
                     theme_advanced_buttons2 : "tablecontrols,|,undo,redo,|,link,unlink,image,|,forecolor,backcolor,|,hr,removeformat,visualaid,|,sub,sup,|,ltr,rtl,|,code",
+                    popup_css : "/js/tinymce/jscripts/tiny_mce/themes/advanced/skins/default/dialog.css",
                     oninit: function (){
                         tinyMCE.activeEditor.processID = formProcessID;
                         tinyMCE.activeEditor.domainURL = domainURL;
-                        
+
                     },
                     onchange_callback: function(inst) {
                         if(inst.isDirty()) {
@@ -115,7 +116,7 @@ class XmlForm_Field_WYSIWYG_EDITOR extends XmlForm_Field
                 ';
                 break;
             case 'OUTPUT_DOCUMENT':
-                $editorDefinition .= '
+                $editorDefinition.= '
                 // is necessary the process uid variable in order to load the picker correctly
                 var formProcessID = document.getElementById("form[PRO_UID]").value;
                 tinyMCE.init({
@@ -128,6 +129,7 @@ class XmlForm_Field_WYSIWYG_EDITOR extends XmlForm_Field
                     verify_html : false,
                     theme_advanced_buttons1 : "pmSimpleUploader,|,pmVariablePicker,|,pmGrids,|,bold,italic,underline,|,justifyleft,justifycenter,justifyright,justifyfull,|,fontselect,fontsizeselect,|,cut,copy,paste,|,bullist,numlist,|,outdent,indent,blockquote",
                     theme_advanced_buttons2 : "tablecontrols,|,undo,redo,|,link,unlink,image,|,forecolor,backcolor,|,hr,removeformat,visualaid,|,sub,sup,|,ltr,rtl,|,code",
+                    popup_css : "/js/tinymce/jscripts/tiny_mce/themes/advanced/skins/default/dialog.css",
                     oninit: function () {
                         tinyMCE.activeEditor.processID = formProcessID;
                         tinyMCE.activeEditor.domainURL = domainURL;
@@ -143,7 +145,7 @@ class XmlForm_Field_WYSIWYG_EDITOR extends XmlForm_Field
                 break;
 
             case 'DYNAFORM_TEMPLATE':
-                $editorDefinition .= '
+                $editorDefinition.= '
                 tinyMCE.init({
                     theme   : "advanced",
                     plugins : "advhr,advimage,advlink,advlist,autolink,autoresize,autosave,contextmenu,directionality,emotions,example,example_dependency,fullpage,fullscreen,iespell,inlinepopups,insertdatetime,layer,legacyoutput,lists,media,nonbreaking,noneditable,pagebreak,paste,preview,print,save,searchreplace,spellchecker,style,tabfocus,table,template,visualblocks,visualchars,wordcount,xhtmlxtras",
@@ -155,7 +157,7 @@ class XmlForm_Field_WYSIWYG_EDITOR extends XmlForm_Field
                     height  : "300",
                     theme_advanced_buttons1 : "bold,italic,underline,|,justifyleft,justifycenter,justifyright,justifyfull,|,fontselect,fontsizeselect,|,cut,copy,paste,|,bullist,numlist",
                     theme_advanced_buttons2 : "outdent,indent,blockquote,|,undo,redo,|,link,unlink,image,|,forecolor,backcolor,|,hr,removeformat,visualaid,|,sub,sup,|,ltr,rtl,|,code",
-
+                    popup_css : "/js/tinymce/jscripts/tiny_mce/themes/advanced/skins/default/dialog.css",
                     skin : "o2k7",
                     skin_variant : "silver",
 
@@ -179,7 +181,7 @@ class XmlForm_Field_WYSIWYG_EDITOR extends XmlForm_Field
                 ';
                 break;
             default:
-                $editorDefinition .= '
+                $editorDefinition.= '
                     tinyMCE.init({
                         theme   : "advanced",
                         plugins : "fullpage",
@@ -188,6 +190,7 @@ class XmlForm_Field_WYSIWYG_EDITOR extends XmlForm_Field
                         width   : "'. $this->width. '",
                         height  : "'. $this->height. '",
                         theme_advanced_buttons3_add : "fullpage",
+                        popup_css : "/js/tinymce/jscripts/tiny_mce/themes/advanced/skins/default/dialog.css",
                         handle_event_callback : function(e) {
                                 if(this.isDirty()) {
                                         this.save();
