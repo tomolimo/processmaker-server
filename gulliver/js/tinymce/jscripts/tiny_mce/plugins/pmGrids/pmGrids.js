@@ -63,7 +63,7 @@ $(document).ready(function () {
     }
         
     var insertFormatedGrid = function(){
-        var gridName = $("#gridList").val();
+        var gridName = $("#gridList option:selected").text();
         var tableCode = "<table>"
         var gridCode  = "<!--"+gridName+"@>-->";
         var headerCode = "<tr>";
@@ -81,19 +81,19 @@ $(document).ready(function () {
             headerCode = '';
         }
         gridCode  += headerCode+fieldCode+"<!--@<"+gridName+"-->";
-        tableCode += gridCode+"</table>"
-        updateEditorContent (tableCode);
+        tableCode += gridCode+"</table>";
+        updateEditorContent(tableCode);
     }
     
     $('#gridList').change(function(){
         getGridFieldList($(this).val());
     });
     
-    $('#addButton').click(function(){
+    $('#insert').click(function(){
         insertFormatedGrid();
     });
     
-    $('#cancelButton').click(function(){
+    $('#cancel').click(function(){
         closePluginPopup();
     });
     

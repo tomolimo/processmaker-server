@@ -192,10 +192,10 @@ class XmlForm_Field_WYSIWYG_EDITOR extends XmlForm_Field
                         theme_advanced_buttons3_add : "fullpage",
                         popup_css : "/js/tinymce/jscripts/tiny_mce/themes/advanced/skins/default/dialog.css",
                         handle_event_callback : function(e) {
-                                if(this.isDirty()) {
-                                        this.save();
-                                }
-                                return true;
+                            if(this.isDirty()) {
+                                this.save();
+                            }
+                            return true;
                         }
                     });
                 ';
