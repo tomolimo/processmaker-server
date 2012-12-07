@@ -64,7 +64,11 @@ $(document).ready(function () {
         
     var insertFormatedGrid = function(){
         var gridName = $("#gridList option:selected").text();
-        var tableCode = "<table>"
+        var borderSet  = "border='1' cellspacing='0'";
+        if ($("#borderCheckbox").attr("checked")!="checked"){
+            borderSet = "border='0' cellspacing='0'";
+        } 
+        var tableCode = "<table "+borderSet+">"
         var gridCode  = "<!--@>"+gridName+"-->";
         var headerCode = "<tr>";
         var fieldCode  = "<tr>";
@@ -80,8 +84,11 @@ $(document).ready(function () {
         if ($("#headersCheckbox").attr("checked")!="checked"){
             headerCode = '';
         }
-        gridCode  += headerCode+fieldCode+"<!--@<"+gridName+"-->";
-        tableCode += gridCode+"</table>";
+        
+        
+        
+        gridCode  += fieldCode+"<!--@<"+gridName+"-->";
+        tableCode += headerCode+gridCode+"</table>";
         updateEditorContent(tableCode);
     }
     
