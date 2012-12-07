@@ -1,7 +1,7 @@
 <?php
 // ProcessMaker Test Unit Bootstrap
-
 // Defining the PATH_SEP constant, he we are defining if the the path separator symbol will be '\\' or '/'
+
 define('PATH_SEP', '/');
 
 if (!defined('__DIR__')) {
