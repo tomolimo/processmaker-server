@@ -65,13 +65,13 @@ $(document).ready(function () {
     var insertFormatedGrid = function(){
         var gridName = $("#gridList option:selected").text();
         var tableCode = "<table>"
-        var gridCode  = "<!--"+gridName+"@>-->";
+        var gridCode  = "<!--@>"+gridName+"-->";
         var headerCode = "<tr>";
         var fieldCode  = "<tr>";
         
         $('#listContainer .headerField').each(function(i){
             if (this.checked == true) {
-                headerCode += "<td>"+$('#'+this.value).val()+"</td>";
+                headerCode += "<th>"+$('#'+this.value).val()+"</th>";
                 fieldCode += "<td>"+$('#prefixList').val()+$('#field_'+this.value).val()+"</td>";
             }
         });

@@ -84,7 +84,7 @@
                 "name": "tinymce",
                 "full": "gulliver/js/tinymce/jscripts/tiny_mce/tiny_mce_src.js",
                 "mini": "gulliver/js/tinymce/jscripts/tiny_mce/tiny_mce_src.js",
-                "minify": true
+                "minify": false
             }
         ],
         "build" : true,

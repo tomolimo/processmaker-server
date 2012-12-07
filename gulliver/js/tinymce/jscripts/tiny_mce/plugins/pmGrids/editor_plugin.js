@@ -31,7 +31,7 @@
 // this function can get called from the plugin inint (above) or from the callback on advlink/advimg plugins..
 // in the latter case, win and type will be set.. In the rist case, we will just update the main editor window
 // with the path of the uploaded file
-function pmGrids(field_name, url, type, win) {    
+function pmGrids(field_name, win) {    
     //tinyMCE.activeEditor.anyVariable='path/to/ProcessMaker' 
     var strPluginPath  = tinyMCE.activeEditor.plugins.pmGrids.getPluginURL(); // get the path to the uploader plugin    
     var strScriptURL   = strPluginPath + "/pmGrids.html";
@@ -61,6 +61,7 @@ function closePluginPopup(){
 }
 
 function updateEditorContent(serializedHTML){
-    tinyMCE.activeEditor.execCommand('mceInsertContent', false, serializedHTML);
+    tinyMCE.activeEditor.execCommand('mceInsertRawHTML', false, serializedHTML);
+    closePluginPopup();
 }
 
