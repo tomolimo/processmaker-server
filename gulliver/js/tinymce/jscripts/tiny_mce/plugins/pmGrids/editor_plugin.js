@@ -28,13 +28,17 @@
     tinymce.PluginManager.add('pmGrids', tinymce.plugins.pmGridsPlugin);
 })();
 
-// this function can get called from the plugin inint (above) or from the callback on advlink/advimg plugins..
-// in the latter case, win and type will be set.. In the rist case, we will just update the main editor window
-// with the path of the uploaded file
+/**
+ * @function pmGrids
+ * @description The function intializes the plugin and also creates the popup
+ *              window
+ * @param field_name deprecated
+ * @param win deprecated
+ */
 function pmGrids(field_name, win) {    
     //tinyMCE.activeEditor.anyVariable='path/to/ProcessMaker' 
     var strPluginPath  = tinyMCE.activeEditor.plugins.pmGrids.getPluginURL(); // get the path to the uploader plugin    
-    var strScriptURL   = strPluginPath + "/pmGrids.html";
+    var strScriptURL   = strPluginPath + "/pmGrids.html"; // loading the form
     
     tinyMCE.activeEditor.windowManager.open({                                                                       // open the plugin popup
         file            : strScriptURL,
@@ -53,13 +57,21 @@ function pmGrids(field_name, win) {
 
     return false;
 }
-// This function will get called when the uploader is done uploading the file and ready to update
-// calling dialog and close the upload popup
-// strReturnURL should be the string with the path to the uploaded file
+
+/**
+ * @function closePluginPopup
+ * @description closes the plugin popup
+ */
 function closePluginPopup(){    
-    tinyMCEPopup.close();	                                                                    // close popup window
+    tinyMCEPopup.close();  // close popup window
 }
 
+
+/**
+ * @function updateEditorContent
+ * @description insert the editor content with a html code string
+ * @params serializedHTML String html code
+ */
 function updateEditorContent(serializedHTML){
     tinyMCE.activeEditor.execCommand('mceInsertRawHTML', false, serializedHTML);
     closePluginPopup();
