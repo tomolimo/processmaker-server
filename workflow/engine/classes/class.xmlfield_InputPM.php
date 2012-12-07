@@ -456,21 +456,14 @@ function getGridsVars ($sProcessUID)
     }
     return $aFields;
 }
-/*
-function getVarsGrid ()
-{
-
-    $aFields = array ();
-    $aFieldsNames = array ();
-    require_once 'classes/model/Dynaform.php';
-
-    $aFields = new Dynaform();
-    //$aFields->getDynaformFields( $caseId );
-    $aFields->getDynaformFields( '45855056550a69a8cbeed24036053462' );
-    G::pr($aFields);
-    return $aFields;
-}
-*/
+/**
+ * Function getVarsGrid returns all variables of Grid
+ *
+ * @access public
+ * @param string proUid process ID
+ * @param string dynUid dynaform ID
+ * @return array
+ */
 
 function getVarsGrid ($proUid, $dynUid)
 {

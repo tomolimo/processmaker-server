@@ -24,7 +24,7 @@
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  *
  */
-//XmlForm_Field_DVEditor
+
 /**
  * XmlForm_Field_HTML class definition
  * It is useful to see dynaforms how are built
@@ -35,9 +35,9 @@
  * @copyright (C) 2012 by Colosa Development Team.
  *
  */
+
 class XmlForm_Field_WYSIWYG_EDITOR extends XmlForm_Field
 {
-    //public $toolbarSet = '';
     public $width = '100%';
     public $height = '300';
     public $defaultValue = '<br/>';
@@ -47,8 +47,6 @@ class XmlForm_Field_WYSIWYG_EDITOR extends XmlForm_Field
      * render function returns the HTML definition for the Dynaform Field
      *
      * @author
-     *
-     *
      * @access public
      * @param string $value
      * @param string $owner
@@ -67,8 +65,6 @@ class XmlForm_Field_WYSIWYG_EDITOR extends XmlForm_Field
      * the Dynaform Field configuration, attributes, and additional stuff.
      *
      * @author
-     *
-     *
      * @access public
      * @param string $element
      * @return string
