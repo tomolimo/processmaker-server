@@ -144,7 +144,7 @@ class XmlForm_Field_WYSIWYG_EDITOR extends XmlForm_Field
                 $editorDefinition.= '
                 tinyMCE.init({
                     theme   : "advanced",
-                    plugins : "advhr,advimage,advlink,advlist,autolink,autoresize,autosave,contextmenu,directionality,emotions,example,example_dependency,fullpage,fullscreen,iespell,inlinepopups,insertdatetime,layer,legacyoutput,lists,media,nonbreaking,noneditable,pagebreak,paste,preview,print,save,searchreplace,spellchecker,style,tabfocus,table,template,visualblocks,visualchars,wordcount,xhtmlxtras,style",
+                    plugins : "advhr,advimage,advlink,advlist,autolink,autoresize,autosave,contextmenu,directionality,emotions,example,example_dependency,fullpage,fullscreen,iespell,inlinepopups,insertdatetime,layer,legacyoutput,lists,media,nonbreaking,noneditable,pagebreak,paste,preview,print,save,searchreplace,spellchecker,style,tabfocus,table,template,visualblocks,visualchars,wordcount,xhtmlxtras,style,table",
                     mode    : "specific_textareas",
                     //apply_source_formatting : true,
                     //remove_linebreaks: false,
@@ -152,11 +152,11 @@ class XmlForm_Field_WYSIWYG_EDITOR extends XmlForm_Field
                     width   : 850,
                     height  : 300,
                     theme_advanced_buttons1 : "bold,italic,underline,|,justifyleft,justifycenter,justifyright,justifyfull,|,fontselect,fontsizeselect,|,cut,copy,paste,|,bullist,numlist",
-                    theme_advanced_buttons2 : "outdent,indent,blockquote,|,undo,redo,|,link,unlink,image,|,forecolor,backcolor,styleprops,|,hr,removeformat,visualaid,|,sub,sup,|,ltr,rtl,|,code",
+                    theme_advanced_buttons2 : "tablecontrols,|outdent,indent,blockquote,|,undo,redo,|,link,unlink,image,|,forecolor,backcolor,styleprops,|,hr,removeformat,visualaid,|,sub,sup,|,ltr,rtl,|,code",
                     popup_css : "/js/tinymce/jscripts/tiny_mce/themes/advanced/skins/default/dialog.css",
                     skin : "o2k7",
                     skin_variant : "silver",
-
+                    content_css : "/css/'.SYS_SKIN.'.css",
                     template_external_list_url : "js/template_list.js",
                     external_link_list_url : "js/link_list.js",
                     external_image_list_url : "js/image_list.js",
