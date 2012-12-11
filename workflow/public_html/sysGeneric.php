@@ -12,7 +12,7 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. BaseCaseTrackerObjectPeerSee the
  * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
@@ -26,6 +26,7 @@
  * bootstrap - ProcessMaker Bootstrap
  * this file is used initialize main variables, redirect and dispatch all requests
  */
+
 // Defining the PATH_SEP constant, he we are defining if the the path separator symbol will be '\\' or '/'
 define( 'PATH_SEP', '/' );
 
@@ -447,6 +448,7 @@ Bootstrap::registerClass('Task',               PATH_HOME . "engine/classes/model
 Bootstrap::registerClass('TaskPeer',           PATH_HOME . "engine/classes/model/TaskPeer.php");
 Bootstrap::registerClass('dates',              PATH_HOME . "engine/classes/class.dates.php");
 Bootstrap::registerClass('AppDelegation',      PATH_HOME . "engine/classes/model/AppDelegation.php");
+Bootstrap::registerClass('BaseAppDelegationPeer',PATH_HOME . "engine/classes/model/om/BaseAppDelegationPeer.php");
 Bootstrap::registerClass('AppDelegationPeer',  PATH_HOME . "engine/classes/model/AppDelegationPeer.php");
 Bootstrap::registerClass('BaseAppDelay',       PATH_HOME . "engine/classes/model/om/BaseAppDelay.php");
 Bootstrap::registerClass('AppDelayPeer',       PATH_HOME . "engine/classes/model/AppDelayPeer.php");
@@ -478,12 +480,15 @@ Bootstrap::registerClass('AppFolderPeer',      PATH_HOME . "engine/classes/model
 
 Bootstrap::registerClass('BaseAppMessage',     PATH_HOME . "engine/classes/model/om/BaseAppMessage.php");
 Bootstrap::registerClass('AppMessage',         PATH_HOME . "engine/classes/model/AppMessage.php");
+
 Bootstrap::registerClass('BaseAppMessagePeer', PATH_HOME . "engine/classes/model/om/BaseAppMessagePeer.php");
 Bootstrap::registerClass('AppMessagePeer',     PATH_HOME . "engine/classes/model/AppMessagePeer.php");
-
+                                                                    
+Bootstrap::registerClass('BaseAppNotesPeer',    PATH_HOME . "engine/classes/model/om/BaseAppNotesPeer.php");
+Bootstrap::registerClass('AppNotesPeer',        PATH_HOME . "engine/classes/model/AppNotesPeer.php");
+                                                                    
 Bootstrap::registerClass('BaseAppNotes',        PATH_HOME . "engine/classes/model/om/BaseAppNotes.php");
 Bootstrap::registerClass('AppNotes',            PATH_HOME . "engine/classes/model/AppNotes.php");
-Bootstrap::registerClass('AppNotesPeer',        PATH_HOME . "engine/classes/model/AppNotesPeer.php");
 
 Bootstrap::registerClass('BaseAppOwner',        PATH_HOME . "engine/classes/model/om/BaseAppOwner.php");
 Bootstrap::registerClass('AppOwner',            PATH_HOME . "engine/classes/model/AppOwner.php");
@@ -501,6 +506,9 @@ Bootstrap::registerClass('AppThreadPeer',       PATH_HOME . "engine/classes/mode
 Bootstrap::registerClass('BaseCaseScheduler',   PATH_HOME . "engine/classes/model/om/BaseCaseScheduler.php");
 Bootstrap::registerClass('CaseScheduler',       PATH_HOME . "engine/classes/model/CaseScheduler.php");
 
+Bootstrap::registerClass('BaseCaseSchedulerPeer',PATH_HOME . "engine/classes/model/om/BaseCaseSchedulerPeer.php");
+Bootstrap::registerClass('CaseSchedulerPeer',    PATH_HOME . "engine/classes/model/CaseSchedulerPeer.php");
+
 Bootstrap::registerClass('BaseCaseTracker',     PATH_HOME . "engine/classes/model/om/BaseCaseTracker.php");
 Bootstrap::registerClass('CaseTracker',         PATH_HOME . "engine/classes/model/CaseTracker.php");
 
@@ -509,6 +517,9 @@ Bootstrap::registerClass('CaseTrackerPeer',     PATH_HOME . "engine/classes/mode
 
 Bootstrap::registerClass('BaseCaseTrackerObject',PATH_HOME . "engine/classes/model/om/BaseCaseTrackerObject.php");
 Bootstrap::registerClass('CaseTrackerObject',    PATH_HOME . "engine/classes/model/CaseTrackerObject.php");
+
+Bootstrap::registerClass('BaseCaseTrackerObjectPeer',PATH_HOME . "engine/classes/model/om/BaseCaseTrackerObjectPeer.php");
+Bootstrap::registerClass('CaseTrackerObjectPeer',    PATH_HOME . "engine/classes/model/CaseTrackerObjectPeer.php");
 
 Bootstrap::registerClass('BaseConfiguration',   PATH_HOME . "engine/classes/model/om/BaseConfiguration.php");
 Bootstrap::registerClass('Configuration',       PATH_HOME . "engine/classes/model/Configuration.php");
@@ -538,6 +549,12 @@ Bootstrap::registerClass('Gateway',            PATH_HOME . "engine/classes/model
 Bootstrap::registerClass('BaseGroupUser',      PATH_HOME . "engine/classes/model/om/BaseGroupUser.php");
 Bootstrap::registerClass('Groupwf',            PATH_HOME . "engine/classes/model/Groupwf.php");
 Bootstrap::registerClass('GroupUser',          PATH_HOME . "engine/classes/model/GroupUser.php");
+
+Bootstrap::registerClass('BaseGroupUserPeer',  PATH_HOME . "engine/classes/model/om/BaseGroupUserPeer.php");
+Bootstrap::registerClass('GroupUserPeer',      PATH_HOME . "engine/classes/model/GroupUserPeer.php");
+
+Bootstrap::registerClass('BaseGroupwfPeer',    PATH_HOME . "engine/classes/model/om/BaseGroupwfPeer.php");
+Bootstrap::registerClass('GroupwfPeer',        PATH_HOME . "engine/classes/model/GroupwfPeer.php");
 
 Bootstrap::registerClass('BaseInputDocumentPeer',PATH_HOME . 'engine/classes/model/om/BaseInputDocumentPeer.php');
 Bootstrap::registerClass('InputDocumentPeer',  PATH_HOME . 'engine/classes/model/InputDocumentPeer.php');
@@ -580,6 +597,9 @@ Bootstrap::registerClass('ReportTablePeer',     PATH_HOME . "engine/classes/mode
 Bootstrap::registerClass('BaseReportVar',       PATH_HOME . "engine/classes/model/om/BaseReportVar.php");
 Bootstrap::registerClass('ReportVar',           PATH_HOME . "engine/classes/model/ReportVar.php");
 
+Bootstrap::registerClass('BaseReportVarPeer',   PATH_HOME . "engine/classes/model/om/BaseReportVarPeer.php");
+Bootstrap::registerClass('ReportVarPeer',       PATH_HOME . "engine/classes/model/ReportVarPeer.php");
+
 Bootstrap::registerClass('BaseRoute',           PATH_HOME . "engine/classes/model/om/BaseRoute.php");
 Bootstrap::registerClass('Route',               PATH_HOME . "engine/classes/model/Route.php");
 Bootstrap::registerClass('RoutePeer',           PATH_HOME . "engine/classes/model/RoutePeer.php");
@@ -613,6 +633,9 @@ Bootstrap::registerClass('SubApplicationPeer',  PATH_HOME . "engine/classes/mode
 
 Bootstrap::registerClass('BaseSubProcess',      PATH_HOME . "engine/classes/model/om/BaseSubProcess.php");
 Bootstrap::registerClass('SubProcess',          PATH_HOME . "engine/classes/model/SubProcess.php");
+
+Bootstrap::registerClass('BaseSubProcessPeer',  PATH_HOME . "engine/classes/model/om/BaseSubProcessPeer.php");
+Bootstrap::registerClass('SubProcessPeer',      PATH_HOME . "engine/classes/model/SubProcessPeer.php");
 
 Bootstrap::registerClass('BaseTask',            PATH_HOME . "engine/classes/model/om/BaseTask.php");
 Bootstrap::registerClass('Task',                PATH_HOME . "engine/classes/model/Task.php");

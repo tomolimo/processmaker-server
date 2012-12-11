@@ -132,7 +132,7 @@ switch ($request) {
         $aRow = $oDataset->getRow();
 
 
-        $select = '<select name="form[IMPORT_DYNA]" id="form[IMPORT_DYNA]"  width="300" style="width: 300px" class="module_app_input___gray">';
+        $select = '<select name="form[IMPORT_DYNA]" id="form[IMPORT_DYNA]"  width="600" style="width: 600px" class="module_app_input___gray">';
         $selectGroup = '';
         while (is_array( $aRow )) {
             if ($selectGroup != $aRow['PROC_NAME']) {
@@ -158,15 +158,15 @@ switch ($request) {
                             </td>
                         </tr>
                         <tr>
-                            <td width="40%" style="font: 11px/180% sans-serif,MiscFixed; color: #808080; text-align: right;">
+                            <td width="25%" style="font: 11px/180% sans-serif,MiscFixed; color: #808080; text-align: right;">
                                 <label for="form[IMPORT_DYNA]">' . G::LoadTranslation('ID_DYNAFORM') . '</label>
                             </td>
-                            <td width="615" class="FormFieldContent">' . $select . '
+                            <td width="75%" class="FormFieldContent">' . $select . '
                             </td>
                         </tr>
                         <tr>
                             <td align="center" colspan="2" class="FormButton">
-                                <input type="button" onclick="dynaformEditor.importation(document.getElementById(&#39;form[IMPORT_DYNA]&#39;).value);" value="' . G::LoadTranslation('ID_IMPORT') . '" class="module_app_button___gray " style=""> &nbsp;
+                                <input type="button" onclick="if (confirm(&#39;' . G::LoadTranslation('ID_CONFIRM_IMPORT_DYNAFORM') . '&#39;)) { dynaformEditor.importation(document.getElementById(&#39;form[IMPORT_DYNA]&#39;).value); }" value="' . G::LoadTranslation('ID_IMPORT') . '" class="module_app_button___gray " style=""> &nbsp;
                                 <input type="button" onclick="panelImportDyna.remove();" value="' . G::LoadTranslation('ID_CANCEL') . '" class="module_app_button___gray " style="">
                             </td>
                         </tr>

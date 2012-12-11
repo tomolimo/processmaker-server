@@ -113,7 +113,7 @@
       	if (typeof(asynchronous)==='undefined') asynchronous = false;
       	data = parameters;
       	questionMark = (ajax_server.split('?').length > 1 ) ? '&' : '?';
-      	if (method==='GET/POST') {
+      	if ((method==='POST')||(method==='GET/POST')) {
       	  objetus.open( 'POST', ajax_server + ((data.length<1024)?(questionMark+data):''), asynchronous );
       	} else {
       	  objetus.open( method, ajax_server + ((method==='GET')? questionMark+data : '') , asynchronous );
@@ -159,7 +159,7 @@
 	  } else if(thisform.elements[i].type == "textarea") { //Handle textareas
 		  formdata += thisform.elements[i].name + "=" + encodeURIComponent(thisform.elements[i].value);
 	  } else if(thisform.elements[i].type == "checkbox") { //Handle checkbox's
-		  formdata += thisform.elements[i].name + '=' + ((thisform.elements[i].checked)? '1': '0');
+          formdata += thisform.elements[i].name + '=' + ((thisform.elements[i].checked)? (typeof(thisform.elements[i].value) != 'undefined' ? thisform.elements[i].value : 'On') : '');
 	  } else if(thisform.elements[i].type == "radio") { //Handle Radio buttons
 		  if(thisform.elements[i].checked==true){
 			  formdata += thisform.elements[i].name + "=" + thisform.elements[i].value;
@@ -2117,13 +2117,14 @@ function _()
 }
 
 /**
- * String Replace function, if StrSearch has special characters "(", "[", must be escape "\\(", "\\[".
+ * String Replace function, if strSearch has special characters "(", "[", must be escape "\\(", "\\[".
+ *
  */
-function stringReplace(strSearch, stringReplace, str)
+function stringReplace(strSearch, strReplace, str)
 {
     var expression = eval("/" + strSearch + "/g");
 
-    return str.replace(expression, stringReplace);
+    return str.replace(expression, strReplace);
 }
 
 var mb_strlen = function(str) {

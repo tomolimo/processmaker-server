@@ -420,14 +420,14 @@ if(method==='POST')objetus.setRequestHeader("Content-Type","application/x-www-fo
 {alert("error"+ss.message);}}
 function ajax_post(ajax_server,parameters,method,callback,asynchronous)
 {var objetus;objetus=get_xmlhttp();var response;try
-{if(typeof(parameters)==='object')parameters=ajax_getForm(parameters);if(!method)method="POST";if(typeof(asynchronous)==='undefined')asynchronous=false;data=parameters;questionMark=(ajax_server.split('?').length>1)?'&':'?';if(method==='GET/POST'){objetus.open('POST',ajax_server+((data.length<1024)?(questionMark+data):''),asynchronous);}else{objetus.open(method,ajax_server+((method==='GET')?questionMark+data:''),asynchronous);}
+{if(typeof(parameters)==='object')parameters=ajax_getForm(parameters);if(!method)method="POST";if(typeof(asynchronous)==='undefined')asynchronous=false;data=parameters;questionMark=(ajax_server.split('?').length>1)?'&':'?';if((method==='POST')||(method==='GET/POST')){objetus.open('POST',ajax_server+((data.length<1024)?(questionMark+data):''),asynchronous);}else{objetus.open(method,ajax_server+((method==='GET')?questionMark+data:''),asynchronous);}
 objetus.onreadystatechange=function(){if(objetus.readyState==4)
 {if(objetus.status==200)
 {if(callback)callback(objetus.responseText);}}}
 if((method==='POST')||(method==='GET/POST'))objetus.setRequestHeader("Content-Type","application/x-www-form-urlencoded; charset=utf-8");objetus.send(((method==='GET')?null:data));if(!asynchronous)
 {if(callback)callback(objetus.responseText);return objetus.responseText;}}catch(ss)
 {alert("Error: "+var_dump(ss));}}
-function ajax_getForm(thisform){var formdata='';for(var i=0;i<thisform.length;i++){if(formdata!=='')formdata+='&';if(thisform.elements[i].type=="text"){formdata+=thisform.elements[i].name+"="+encodeURIComponent(thisform.elements[i].value);}else if(thisform.elements[i].type=="textarea"){formdata+=thisform.elements[i].name+"="+encodeURIComponent(thisform.elements[i].value);}else if(thisform.elements[i].type=="checkbox"){formdata+=thisform.elements[i].name+'='+((thisform.elements[i].checked)?'1':'0');}else if(thisform.elements[i].type=="radio"){if(thisform.elements[i].checked==true){formdata+=thisform.elements[i].name+"="+thisform.elements[i].value;}}else if(thisform.elements[i].type=="select-multiple"){for(var j=0;j<thisform.elements[i].options.length;j++){if(j!==0)formdata+='&';formdata+=((thisform.elements[i].options[j].selected)?thisform.elements[i].name.replace('[]','['+j+']')+"="+encodeURIComponent(thisform.elements[i].options[j].value):'');}}else{formdata+=thisform.elements[i].name+"="+encodeURIComponent(thisform.elements[i].value);}}
+function ajax_getForm(thisform){var formdata='';for(var i=0;i<thisform.length;i++){if(formdata!=='')formdata+='&';if(thisform.elements[i].type=="text"){formdata+=thisform.elements[i].name+"="+encodeURIComponent(thisform.elements[i].value);}else if(thisform.elements[i].type=="textarea"){formdata+=thisform.elements[i].name+"="+encodeURIComponent(thisform.elements[i].value);}else if(thisform.elements[i].type=="checkbox"){formdata+=thisform.elements[i].name+'='+((thisform.elements[i].checked)?(typeof(thisform.elements[i].value)!='undefined'?thisform.elements[i].value:'On'):'');}else if(thisform.elements[i].type=="radio"){if(thisform.elements[i].checked==true){formdata+=thisform.elements[i].name+"="+thisform.elements[i].value;}}else if(thisform.elements[i].type=="select-multiple"){for(var j=0;j<thisform.elements[i].options.length;j++){if(j!==0)formdata+='&';formdata+=((thisform.elements[i].options[j].selected)?thisform.elements[i].name.replace('[]','['+j+']')+"="+encodeURIComponent(thisform.elements[i].options[j].value):'');}}else{formdata+=thisform.elements[i].name+"="+encodeURIComponent(thisform.elements[i].value);}}
 return formdata;}
 function isNumber(sValue)
 {var sValue=new String(sValue);var bDot=false;var i,sCharacter;if((sValue==null)||(sValue.length==0))
@@ -790,8 +790,8 @@ else{trn=TRANSLATIONS[argv[0]];}}
 else{trn='**'+argv[0]+'**';}}
 else{PMExt.error('Processmaker JS Core Error','The TRANSLATIONS global object is not loaded!');trn='';}
 return trn;}
-function stringReplace(strSearch,stringReplace,str)
-{var expression=eval("/"+strSearch+"/g");return str.replace(expression,stringReplace);}
+function stringReplace(strSearch,strReplace,str)
+{var expression=eval("/"+strSearch+"/g");return str.replace(expression,strReplace);}
 var mb_strlen=function(str){str=str||'';var len=0;for(var i=0;i<str.length;i++){len+=str.charCodeAt(i)<0||str.charCodeAt(i)>255?2:1;}
 return len;};var stripNonNumeric=function(str){str+='';var rgx=/^\d|\.|-$/;var out='';for(var i=0;i<str.length;i++){if(rgx.test(str.charAt(i))){if(!((str.charAt(i)=='.'&&out.indexOf('.')!=-1)||(str.charAt(i)=='-'&&out.length!=0))){out+=str.charAt(i);}}}
 return out;};

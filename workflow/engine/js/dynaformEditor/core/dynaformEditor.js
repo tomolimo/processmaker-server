@@ -269,7 +269,7 @@ var dynaformEditor={
     panelImportDyna = new leimnud.module.panel();
     panelImportDyna.options={
       limit    : true,
-      size     : {w:410,h:160},
+      size     : {w:650,h:160},
       position : {x:0,y:0,center:true},
       title    : '',
       theme    : 'processmaker',
@@ -845,6 +845,8 @@ var dynaformEditor={
   },
   restoreHTML:function()
   {
+      var htmlContent = this.ajax.restore_html(this.A);
+      tinyMCE.activeEditor.execCommand('mceSetContent', false, htmlContent);
 //    window._editorHTML.doc.body.innerHTML = this.ajax.restore_html(this.A);
 //    html_html2();
 //    html2_html();
