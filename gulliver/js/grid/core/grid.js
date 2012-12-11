@@ -340,18 +340,24 @@ var G_Grid = function(oForm, sGridName){
 
     return newElem;
   };
-  function replaceHtml(el, html) {
+
+  this.replaceHtml = function (el, html) {
     var oldEl = typeof el === "string" ? document.getElementById(el) : el;
     /*Pure innerHTML is slightly faster in IE
         oldEl.innerHTML = html;
         return oldEl;
     */
-    var newEl = oldEl.cloneNode(false);
-    newEl.innerHTML = html;
-    oldEl.parentNode.replaceChild(newEl, oldEl);
-    /* Since we just removed the old element from the DOM, return a reference
-    to the new element, which can be used to restore variable references. */
-    return newEl;
+    if ( this.determineBrowser() == "MSIE" ) {
+        oldEl.innerHTML = html;
+        return oldEl;
+    } else {
+        var newEl = oldEl.cloneNode(false);
+        newEl.innerHTML = html;
+        oldEl.parentNode.replaceChild(newEl, oldEl);
+        /* Since we just removed the old element from the DOM, return a reference
+        to the new element, which can be used to restore variable references. */
+        return newEl;
+    }
   };
 
   this.addGridRow = function() {
@@ -458,14 +464,40 @@ var G_Grid = function(oForm, sGridName){
                         }
                       }
                     }
-                    aObjectsScript = oNewRow.getElementsByTagName('td')[i].getElementsByTagName('script');
-                    sObjectType = this.aFields[i-1].sType;
+
+                    var aObjectsScript = oNewRow.getElementsByTagName('td')[i].getElementsByTagName('script');
+
+                    var sObjectType = this.aFields[i-1].sType;
                     if (aObjectsScript[0] != 'undefined' && sObjectType == 'suggest') {
-                        sObjScript = aObjectsScript[0].innerHTML;
-                        sNewObjScript = sObjScript.replace(/\[1\]/g, '\[' + currentRow + '\]');
-                        replaceHtml(aObjectsScript[0], sNewObjScript);
-                        eval(aObjectsScript[0].innerHTML);
+						if ( this.determineBrowser() == "MSIE" ) {
+
+                            var firstNode = aCells[i];
+
+                            var firstScriptSuggest = firstNode.childNodes[2].innerHTML ;
+                            var sScriptAdjustRow = firstScriptSuggest.replace(/\[1\]/g, '\[' + currentRow + '\]');
+
+                            var elementTD = oNewRow.getElementsByTagName('td')[i];
+
+                            var elementLabel = elementTD.childNodes[0];
+                            var sNewLabelRow = elementLabel.getAttribute("id").replace(/\[1\]/g, '\[' + currentRow + '\]');
+
+                            var elementHidden = elementTD.childNodes[1];
+
+                            var elementScript = elementTD.childNodes[2];
+                            var parentScript = elementScript.parentNode;
+                            var scriptElement = document.createElement("script");
+                            scriptElement.text = sScriptAdjustRow;
+                            parentScript.removeChild(elementScript);
+                            parentScript.appendChild(scriptElement);
+
+						} else {
+ 	                        var sObjScript = aObjectsScript[0].innerHTML;
+    	                    var sNewObjScript = sObjScript.replace(/\[1\]/g, '\[' + currentRow + '\]');
+            	            aObjectsScript[0].innerHTML = sNewObjScript;
+                	        eval(aObjectsScript[0].innerHTML);
+						}
                     }
+
                     break;
                   case 'checkbox': //CHECKBOX
                       var attributeCheckBox = elementAttributesNS(aObjects[n], "");

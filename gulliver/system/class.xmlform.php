@@ -1409,11 +1409,11 @@ class XmlForm_Field_Suggest extends XmlForm_Field_SimpleText //by neyek
 
                 if ($count > 0) {
                     for ($cnt = 0; $cnt < $count; $cnt ++) {
-                        $sOptions .= 'if ( "' . $this->name . '" == "' . $aDepFields[$cnt] . '" ) {';
-                        $sOptions .= '  jField[\'' . $aDepFields[$cnt] . '\'] = obj.id;';
-                        $sOptions .= '} else { ';
-                        $sOptions .= '  jField[\'' . $aDepFields[$cnt] . '\'] = getField(\'' . $aDepFields[$cnt] . '\').value; ';
-                        $sOptions .= '}';
+                        if ( $this->name == $aDepFields[$cnt] ) {
+                            $sOptions .= '  jField[\'' . $aDepFields[$cnt] . '\'] = obj.id;';
+                        } else {
+                            $sOptions .= '  jField[\'' . $aDepFields[$cnt] . '\'] = getField(\'' . $aDepFields[$cnt] . '\').value; ';
+                        }
                     }
                 }
 
@@ -1470,13 +1470,13 @@ class XmlForm_Field_Suggest extends XmlForm_Field_SimpleText //by neyek
      * @param type $value
      * @param type $owner
      * @param type $rowId
-     * @param type $ownerName
-     * @param type $index
+     * @param type $ownerName   Grid Name
+     * @param type $index       Index on the grid
      * @return string
      */
     public function renderFieldGrid($value = null, $owner = null, $rowId = '', $ownerName = '', $index = 0)
     {
-
+        $rowIdField = substr($rowId, 1);
         if (! $this->sqlConnection) {
             $this->sqlConnection = 'workflow';
         }
@@ -1558,7 +1558,8 @@ class XmlForm_Field_Suggest extends XmlForm_Field_SimpleText //by neyek
                     $sResultKeys = str_rot13( base64_encode( implode( '|', $aResultKeys ) ) );
 
                     foreach ($aResult as $key => $field) {
-                        $depValues .= 'getField("' . $field . '").value';
+                        $depValues .= 'getField(\''. $rowIdField . '[' . $field . '\').value';
+
                         if ($i ++ < count( $aResult )) {
                             $depValues .= '+"|"+';
                         }
@@ -1575,7 +1576,7 @@ class XmlForm_Field_Suggest extends XmlForm_Field_SimpleText //by neyek
                 $count = 0;
                 if ($this->dependentFields !== '') {
                     $dependentFields = explode( ",", $this->dependentFields );
-                    foreach ($dependentFields as $keyDependent => $valueDependent) {
+                    foreach ($dependentFields as $valueDependent) {
                         $sqlDepField = $owner->fields[$valueDependent]->sql;
                         $count = preg_match_all( '/\@(?:([\@\%\#\=\!Qq])([a-zA-Z\_]\w*)|([a-zA-Z\_][\w\-\>\:]*)\(((?:[^\\\\\)]*?)*)\))/', $sqlDepField, $match, PREG_PATTERN_ORDER | PREG_OFFSET_CAPTURE );
                         for ($cnt = 0; $cnt < $count; $cnt ++) {
@@ -1586,9 +1587,7 @@ class XmlForm_Field_Suggest extends XmlForm_Field_SimpleText //by neyek
 
                 $sOptions = 'script: function (input) { ';
 
-                $rowIdField = substr($rowId, 1);
-
-                $sOptions .= '  var inputValue = base64_encode(getField("' . $rowIdField . '[' . $this->name . '_label").value); ';
+                $sOptions .= '  var inputValue = base64_encode(getField(\'' . $rowIdField . '[' . $this->name . '_label\').value); ';
 
                 $sOptions .= '  return "' . $this->ajaxServer . '?request=suggest&json=true&limit=' . $this->maxresults;
                 $sOptions .= '&hash=' . $hash . '&dependentFieldsKeys=' . $sResultKeys . '&dependentFieldsValue="';
@@ -1609,11 +1608,11 @@ class XmlForm_Field_Suggest extends XmlForm_Field_SimpleText //by neyek
 
                 if ($count > 0) {
                     for ($cnt = 0; $cnt < $count; $cnt ++) {
-                        $sOptions .= 'if ( "' . $this->name . '" == "' . $aDepFields[$cnt] . '" ) {';
-                        $sOptions .= '  jField["' . $aDepFields[$cnt] . '"] = obj.id;';
-                        $sOptions .= '} else { ';
-                        $sOptions .= '  jField["' . $aDepFields[$cnt] . '\'] = getField("' . $aDepFields[$cnt] . '").value; ';
-                        $sOptions .= '}';
+                        if ( $this->name  == $aDepFields[$cnt] ) {
+                            $sOptions .= '  jField[\'' . $aDepFields[$cnt] . '\'] = obj.id;';
+//                        } else {
+//                            $sOptions .= '  jField[\'' . $aDepFields[$cnt] . '\'] = getField(\'' . $rowIdField . '[' . $aDepFields[$cnt] . '\').value; ';
+                        }
                     }
                 }
 
@@ -1621,41 +1620,50 @@ class XmlForm_Field_Suggest extends XmlForm_Field_SimpleText //by neyek
                 $sOptions .= $sCallBack . '; getField("' . $rowIdField . '[' . $this->name . '").value = obj.id;';
 
                 $sOwnerId = (isset($owner->owner->id))? $owner->owner->id : $owner->id;
+                $sOptions .= 'var indexField =  "' . $rowIdField . '[' . $this->name . '";';
+                $sOptions .= 'indexField = indexField.match(/\[[0-9]+\]/g); ';
+                $sOptions .= 'indexFieldVal = indexField[0].replace(/\[|\]/g,""); ';
+
                 $sOptions .= 'var response = ajax_function("../gulliver/defaultAjaxDynaform", "reloadField", ';
-                $sOptions .= '               "form=' . $sOwnerId . '&fields=" + sField, "POST"); ';
+                $sOptions .= '               "form=' . $sOwnerId . '&fields=" + sField + "&grid=' . $ownerName . '&row=" + indexFieldVal, "POST" ); ';
 
-                $sOptions .= 'if (response.substr(0,1) === "[") { ';
+                $sOptions .= 'if (response.substr(0,1) === \'[\') { ';
                 $sOptions .= '  var newcont; ';
-                $sOptions .= '  eval("newcont=" + response + ";"); ';
-                $sOptions .= '  for(var i = 0; i<newcont.length; i++) { ';
-                $sOptions .= '    var j = getField(newcont[i].name); ';
-                $sOptions .= '    getField(newcont[i].name).value = newcont[i].value; ';
-                $sOptions .= '    if (newcont[i].content.type == "dropdown") { ';
+                $sOptions .= '  eval(\'newcont=\' + response + \';\'); ';
 
-                $sOptions .= '      fieldLength = getField(newcont[i].name).options.length; ';
+                $sOptions .= '  for(var i = 0; i<newcont.length; i++) { ';
+                // $sOptions .= '    var depField = getField(\'' . $rowIdField . '[\' + ' . 'newcont[i].name); ';
+                $sOptions .= '    var depField = \'' . $rowIdField . '[\' + ' . 'newcont[i].name; ';
+
+                $sOptions .= '    getField(depField).value = newcont[i].value; ';
+                $sOptions .= '    if (newcont[i].content.type == \'dropdown\') { ';
+
+                $sOptions .= '      fieldLength = getField(depField).options.length; ';
+
                 $sOptions .= '      for (ni = 0; ni < fieldLength; ni++ ){ ';
-                $sOptions .= '        getField(newcont[i].name).options.remove(ni); ';
+                $sOptions .= '        getField(depField).options.remove(ni); ';
                 $sOptions .= '      } ';
-                $sOptions .= '      getField(newcont[i].name).length = 0; ';
+                $sOptions .= '      getField(depField).length = 0; ';
 
                 $sOptions .= '      for (ni = 0; ni < newcont[i].content.options.length; ni++ ){ ';
                 $sOptions .= '        var opt = document.createElement("OPTION"); ';
                 $sOptions .= '        opt.value = newcont[i].content.options[ni].key; ';
                 $sOptions .= '        opt.text  = newcont[i].content.options[ni].value; ';
-                $sOptions .= '        getField(newcont[i].name).options.add(opt); ';
+                $sOptions .= '        getField(depField).options.add(opt); ';
+
                 $sOptions .= '      } ';
                 $sOptions .= '    } ';
 
                 $sOptions .= '  } ';
                 $sOptions .= '} else { ';
-                $sOptions .= '  alert("Invalid response: " + response); ';
+                $sOptions .= '  alert(\'Invalid response: \' + response); ';
                 $sOptions .= '} ';
                 $sOptions .= '} ';
                 $sOptions .= 'return false; ';
                 $sOptions .= '}';
 
                 $str .= '<script type="text/javascript">';
-                $str .= 'var as_json = new bsn.AutoSuggest("form' . $rowId . '[' . $this->name . '_label]", {' . $sOptions . $storeEntryData . '}); ';
+                $str .= 'var as_json = new bsn.AutoSuggest(\'form' . $rowId . '[' . $this->name . '_label]\', {' . $sOptions . $storeEntryData . '}); ';
                 $str .= '</script>';
 
                 return $str;
