@@ -1127,7 +1127,6 @@ class XmlForm_Field_Text extends XmlForm_Field_SimpleText
             $value = implode(" ", $title);
         }
         //if ($this->strTo==='CAPITALIZE') $value = strtocapitalize($value);
-        print_r($this->renderMode);
         $onkeypress = G::replaceDataField( $this->onkeypress, $owner->values );
         if ($this->replaceTags == 1) {
             $value = G::replaceDataField( $value, $owner->values );
