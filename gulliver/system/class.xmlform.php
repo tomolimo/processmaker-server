@@ -1113,7 +1113,21 @@ class XmlForm_Field_Text extends XmlForm_Field_SimpleText
         if ($this->strTo === 'LOWER') {
             $value = strtolower( $value );
         }
+        if ($this->strTo === 'TITLE') {
+            $value = strtolower( $value );
+            $value = ucwords( $value );
+        }
+        if ($this->strTo === 'PHRASE') {
+            //$value = strtolower( $value );
+
+            $title = explode(" ",$value);
+
+            $title[0] = ucwords( $title[0] );
+
+            $value = implode(" ", $title);
+        }
         //if ($this->strTo==='CAPITALIZE') $value = strtocapitalize($value);
+        print_r($this->renderMode);
         $onkeypress = G::replaceDataField( $this->onkeypress, $owner->values );
         if ($this->replaceTags == 1) {
             $value = G::replaceDataField( $value, $owner->values );
@@ -1285,6 +1299,7 @@ class XmlForm_Field_Suggest extends XmlForm_Field_SimpleText //by neyek
         if ($this->strTo === 'LOWER') {
             $value = strtolower( $value );
         }
+
             //if ($this->strTo==='CAPITALIZE') $value = strtocapitalize($value);
         $onkeypress = G::replaceDataField( $this->onkeypress, $owner->values );
 
