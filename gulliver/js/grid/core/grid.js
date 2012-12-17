@@ -1152,7 +1152,6 @@ var G_Grid = function(oForm, sGridName){
     for (i = 0; i < aFields.length; i++) {
     	if (!isNumber(aFields[i])) {
         oAux = this.getElementByName(aAux[1], aFields[i]);
-        //sAux = sAux.replace(new RegExp(aFields[i], "g"), "parseFloat(G.cleanMask(this.getElementByName(" + aAux[1] + ", '" + aFields[i] + "').value().replace(/[$|a-zA-Z\s]/g,'') || 0, '" + (oAux.sMask ? oAux.sMask : '')
         sAux = sAux.replace(new RegExp(aFields[i], "g"), "parseFloat(G.cleanMask(this.getElementByName(" + aAux[1] + ", '" + aFields[i] + "').value().replace(/[$|a-zA-Z\s]/g,'') || 0, '" + (oAux.sMask ? oAux.sMask : '')
         + "').result.replace(/,/g, ''))");
         
