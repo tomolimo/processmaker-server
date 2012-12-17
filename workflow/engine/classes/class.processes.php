@@ -2089,6 +2089,18 @@ class Processes
                 $oData->groupwfs[] = $oGroupwf->Load( $aRow['USR_UID'] );
                 $oDataset->next();
             }
+
+            $oCriteria = new Criteria( 'workflow' );
+            $oCriteria->add(ProcessUserPeer::PRO_UID,  $sProUid );
+            $oCriteria->add(ProcessUserPeer::PU_TYPE,  'GROUP_SUPERVISOR' );
+            $oDataset = ProcessUserPeer::doSelectRS( $oCriteria );
+            $oDataset->setFetchmode( ResultSet::FETCHMODE_ASSOC );
+            $oDataset->next();
+            while ($aRow = $oDataset->getRow()) {
+                $oGroupwf = new Groupwf();
+                $oData->groupwfs[] = $oGroupwf->Load( $aRow['USR_UID'] );
+                $oDataset->next();
+            }
             return $oPermissions;
         } catch (Exception $oError) {
             throw ($oError);
@@ -2238,6 +2250,7 @@ class Processes
                 $aGroupwf[] = $oGroupwf->Load( $aRow['GRP_UID'] );
                 $oDataset->next();
             }
+
             return $aGroupwf;
         } catch (Exception $oError) {
             throw ($oError);
