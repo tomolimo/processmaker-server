@@ -284,7 +284,7 @@ function G_Field ( form, element, name )
     return me.element.value;
   };
   this.toJSONString=function()  {
-    return '{'+me.name+':'+me.element.value.toJSONString()+'}';
+    return '{"'+me.name+'":'+me.element.value.toJSONString()+'}';
   };
   this.highLight=function(){
     try{
@@ -886,7 +886,7 @@ function G_Text(form, element, name)
           }
           break;
         case '-':
-          if (me.validate == 'Real'){
+          if (me.validate == 'Real' || me.validate == 'Int'){
             newValue += chars[c];
             newCont++;
             if (c + 1 == cursor.selectionStart){
@@ -987,11 +987,9 @@ function G_Text(form, element, name)
           action = 'none';
           break;
         case 8:
-
           newValue  = currentValue.substring(0, cursorStart - 1);
           newValue += currentValue.substring(cursorEnd, currentValue.length);
           newCursor = cursorStart - 1;
-          //alert('aaa' + newValue + ' , ' + newCursor );
           break;
         case 46:
           newValue  = currentValue.substring(0, cursorStart);
@@ -1108,11 +1106,20 @@ function G_Text(form, element, name)
           newValue += currentValue.substring(cursorEnd, currentValue.length);
           newCursor = cursorStart - 1;
           break;
+        case 45:
         case 46:
-          newValue  = currentValue.substring(0, cursorStart);
-          newValue += currentValue.substring(cursorEnd + 1, currentValue.length);
-          newCursor = cursorStart;
-          break;
+            if (me.validate != "Email") {
+                newValue  = currentValue.substring(0, cursorStart);
+                newValue += currentValue.substring(cursorEnd + 1, currentValue.length);
+                newCursor = cursorStart;
+            } else {
+                newKey = String.fromCharCode(keyCode);
+                newValue  = currentValue.substring(0, cursorStart);
+                newValue += newKey;
+                newValue += currentValue.substring(cursorEnd, currentValue.length);
+                newCursor = cursorStart + 1;
+            }
+            break;
         case 256:
           newValue  = currentValue.substring(0, cursorStart);
           newValue += '.';
@@ -1174,10 +1181,16 @@ function G_Text(form, element, name)
       case 8: case 46:  //BACKSPACE OR DELETE
       case 35: case 36: //HOME OR END
       case 37: case 38: case 39: case 40: // ARROW KEYS
-        if (me.validate == 'NodeName' && ((pressKey == 8) || (pressKey == 46))) {
-          return true;
+        if ((pressKey == 8 || pressKey == 46) && me.validate == "NodeName") {
+            return true;
         }
+
+        if (pressKey == 46 && me.validate == "Email") {
+            return true;
+        }
+
         me.applyMask(pressKey);
+
         if ((pressKey == 8 || pressKey == 46) && (me.validate != 'Login' && me.validate != 'NodeName')) me.sendOnChange();
         me.checkBrowser();
         if (me.browser.name == 'Chrome' || me.browser.name == 'Safari'){
@@ -1277,7 +1290,7 @@ function G_Text(form, element, name)
       //pressKey = window.event ? event.keyCode : event.which;
       var pressKey = (window.event)? window.event.keyCode : event.which;
 
-      if (me.mType == 'date') me.validate = 'Int';
+      //if (me.mType == 'date') me.validate = 'Int';
 
       keyValid = true;
       updateOnChange = true;
@@ -1287,7 +1300,7 @@ function G_Text(form, element, name)
           keyValid = true;
           break;
         case 'Int':
-          patron = /[0-9]/;
+          patron = /[0-9\-]/;
           key = String.fromCharCode(pressKey);
           keyValid = patron.test(key);
           break;
@@ -1358,7 +1371,10 @@ function G_Text(form, element, name)
 
       if (keyValid){
         //APPLY MASK
-        if ((me.validate == "Login" || me.validate == "NodeName") && me.mask == "") return true;
+        if ((me.validate == "Login" || me.validate == "NodeName") && me.mask == "") {
+            return true;
+        }
+
         if (pressKey == 46){
           me.applyMask(256); //This code send [.] period to the mask
         }
@@ -1366,7 +1382,9 @@ function G_Text(form, element, name)
           me.applyMask(pressKey);
         }
 
-        if (updateOnChange) me.sendOnChange();
+        if (updateOnChange) {
+            me.sendOnChange();
+        }
       }
 
       if (me.browser.name == 'Firefox') {
@@ -1474,10 +1492,9 @@ function G_Text(form, element, name)
         }
       }
 
-      if(this.validate=="Email")
-      {
-        //var pat=/^[\w\_\-\.ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â§ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â±]{2,255}@[\w\_\-]{2,255}\.[a-z]{1,3}\.?[a-z]{0,3}$/;
-        var pat=/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,6})+$/;
+      if (this.validate == "Email") {
+        var pat = /^\w+(?:[\.-]?\w+)*@\w+(?:[\.-]?\w+)*\.\w{2,6}$/;
+
         if(!pat.test(this.element.value))
         {
           //old|if(this.required=="0"&&this.element.value=="") {
@@ -1502,6 +1519,16 @@ function G_Text(form, element, name)
             break;
           case 'LOWER':
             this.element.value = this.element.value.toLowerCase();
+            break;
+          case 'TITLE':
+        	this.element.value = this.element.value.toLowerCase();
+            this.element.value = this.element.value.toInitCap(this.element.value);
+            break;
+          case 'PHRASE':
+            //this.element.value = this.element.value.toLowerCase();
+            var phrase = this.element.value.split(' ');
+            phrase[0] = phrase[0].toInitCap(phrase[0]);
+            this.element.value = phrase.join(' ');
             break;
         }
       }
@@ -2630,6 +2657,19 @@ function contractExpandSubtitle(subTitleName){
   else contractSubtitle(subTitleName);
 }
 
+function concat_collection(obj1, obj2) {
+    var i;
+    var arr = new Array();
+    var len1 = obj1.length;
+    var len2 = obj2.length;
+    for (i=0; i<len1; i++) {
+        arr.push(obj1[i]);
+    }
+    for (i=0; i<len2; i++) {
+        arr.push(obj2[i]);
+    }
+    return arr;
+}
 var getControlsInTheRow = function(oRow) {
   var aAux1 = [];
   if (oRow.cells) {
@@ -2638,12 +2678,18 @@ var getControlsInTheRow = function(oRow) {
     var sFieldName;
     for (i = 0; i < oRow.cells.length; i++) {
       var aAux2 = oRow.cells[i].getElementsByTagName('input');
+
+      aAux2 = concat_collection(aAux2, oRow.cells[i].getElementsByTagName('a'));
+      aAux2 = concat_collection(aAux2, oRow.cells[i].getElementsByTagName('select'));
+      aAux2 = concat_collection(aAux2, oRow.cells[i].getElementsByTagName('textarea'));
       if (aAux2) {
         for (j = 0; j < aAux2.length; j++) {
           sFieldName = aAux2[j].id.replace('form[', '');
           //sFieldName = sFieldName.replace(']', '');
           sFieldName = sFieldName.replace(/]$/, '');
-          aAux1.push(sFieldName);
+          if (sFieldName != '') {
+            aAux1.push(sFieldName);
+          }
         }
       }
     }
@@ -3061,18 +3107,22 @@ var validateForm = function(sRequiredFields) {
   }
   else {
     var arrayForm = document.getElementsByTagName("form");
+    var inputAux;
+    var id = "";
+    var i1 = 0;
+    var i2 = 0;
 
-    for (var i = 0; i <= arrayForm.length - 1; i++) {
-      var frm = arrayForm[i];
+    for (i1 = 0; i1 <= arrayForm.length - 1; i1++) {
+      var frm = arrayForm[i1];
 
-      for (var i = 0; i <= frm.elements.length - 1; i++)  {
-        var elem = frm.elements[i];
+      for (i2 = 0; i2 <= frm.elements.length - 1; i2++)  {
+        var elem = frm.elements[i2];
 
         if (elem.type == "checkbox" && elem.disabled && elem.checked) {
-          var id = elem.id + "_";
+          id = elem.id + "_";
 
           if (!document.getElementById(id)) {
-              var inputAux   = document.createElement("input");
+              inputAux       = document.createElement("input");
               inputAux.type  = "hidden";
               inputAux.id    = id;
               inputAux.name  = elem.name;
@@ -3081,6 +3131,45 @@ var validateForm = function(sRequiredFields) {
               frm.appendChild(inputAux);
           }
         }
+      }
+
+      var arrayLink = frm.getElementsByTagName("a");
+
+      for (i2 = 0; i2 <= arrayLink.length - 1; i2++)  {
+          var link = arrayLink[i2];
+
+          if (typeof link.id != "undefined" && link.id != "" && link.id != "form[DYN_BACKWARD]" && link.id != "form[DYN_FORWARD]") {
+              var strHtml = link.parentNode.innerHTML;
+
+              strHtml = stringReplace("\\x0A", "", strHtml); //\n 10
+              strHtml = stringReplace("\\x0D", "", strHtml); //\r 13
+              strHtml = stringReplace("\\x09", "", strHtml); //\t  9
+
+              if (/^.*pm:field.*$/.test(strHtml)) {
+                  id = link.id + "_";
+
+                  if (!document.getElementById(id)) {
+                      var strAux = link.id.replace("form[", "");
+                      strAux = strAux.substring(0, strAux.length - 1);
+
+                      inputAux       = document.createElement("input");
+                      inputAux.type  = "hidden";
+                      inputAux.id    = id;
+                      inputAux.name  = link.id;
+                      inputAux.value = link.href;
+
+                      frm.appendChild(inputAux);
+
+                      inputAux   = document.createElement("input");
+                      inputAux.type  = "hidden";
+                      inputAux.id    = id + "label";
+                      inputAux.name  = "form[" + strAux + "_label]";
+                      inputAux.value = link.innerHTML;
+
+                      frm.appendChild(inputAux);
+                  }
+              }
+          }
       }
     }
 

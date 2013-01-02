@@ -1,6 +1,6 @@
 <?php
-require_once 'classes/model/om/BaseTask.php';
-require_once 'classes/model/Content.php';
+//require_once 'classes/model/om/BaseTask.php';
+//require_once 'classes/model/Content.php';
 
 
 /**
@@ -775,5 +775,4 @@ class Task extends BaseTask
         return $event_uid;
     }
 }
-//Task
 

@@ -29,7 +29,6 @@ function openCaseNotesWindow(appUid1, modalSw, appTitle, proUid, taskUid)
   proUid  = !proUid  ? "": proUid;
   taskUid = !taskUid ? "": taskUid;
 
-  title   = appTitle;
   var startRecord=0;
   var loadSize=10;
 
@@ -57,16 +56,18 @@ function openCaseNotesWindow(appUid1, modalSw, appTitle, proUid, taskUid)
           return false;
         }
 
-        caseNotesWindow.show();
-        newNoteAreaActive = false;
-        newNoteHandler();
         caseNotesWindow.setTitle(_('ID_CASES_NOTES') + ' (' + storeNotes.data.items.length + ')');
+        title = !appTitle ? storeNotes.reader.jsonData.appTitle : appTitle ;
 
         if(storeNotes.getCount()<storeNotes.getTotalCount()){
           Ext.getCmp('CASES_MORE_BUTTON').show();
         }else{
           Ext.getCmp('CASES_MORE_BUTTON').hide();
         }
+
+        caseNotesWindow.show();
+        newNoteAreaActive = false;
+        newNoteHandler();
       }
     }
   });
@@ -221,7 +222,7 @@ function openCaseNotesWindow(appUid1, modalSw, appTitle, proUid, taskUid)
           text: _('ID_CANCEL'),
           cls: 'x-toolbar1',
           //iconCls: 'xx',
-          icon: '/images/add_notes.png',
+          //icon: '/images/add_notes.png',
           handler: newNoteHandler,
           tooltip: {
             title: _('ID_CASES_NOTES_ADD'),
@@ -390,7 +391,7 @@ function statusBarMessage( msg, isLoading, success ) {
 /* Case Notes - End */
 
 /* Case Summary - Start */
-var openSummaryWindow = function(appUid, delIndex)
+var openSummaryWindow = function(appUid, delIndex, action)
 {
   if (summaryWindowOpened) {
     return;
@@ -400,12 +401,13 @@ var openSummaryWindow = function(appUid, delIndex)
     url : '../appProxy/requestOpenSummary',
     params : {
       appUid  : appUid,
-      delIndex: delIndex
+      delIndex: delIndex,
+      action: action
     },
     success: function (result, request) {
       var response = Ext.util.JSON.decode(result.responseText);
       if (response.success) {
-        var sumaryInfPanel = PMExt.createInfoPanel('../appProxy/getSummary', {appUid: appUid, delIndex: delIndex});
+        var sumaryInfPanel = PMExt.createInfoPanel('../appProxy/getSummary', {appUid: appUid, delIndex: delIndex, action: action});
         sumaryInfPanel.setTitle(_('ID_GENERATE_INFO'));
 
         var summaryWindow = new Ext.Window({

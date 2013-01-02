@@ -79,11 +79,18 @@ if ($RBAC->userCanAccess('PM_SETUP_ADVANCE') == 1) {
   $G_TMP_MENU->AddIdRawOption('AUTHSOURCES', '../authSources/authSources_List', G::LoadTranslation('ID_AUTH_SOURCES'), '', '', 'users');
   $G_TMP_MENU->AddIdRawOption('UX', '../admin/uxList', G::LoadTranslation('ID_USER_EXPERIENCE'), '', '', 'users');
   $G_TMP_MENU->AddIdRawOption('SYSTEM', '../admin/system', G::LoadTranslation('ID_SYSTEM'), '', '', 'settings');
+  $G_TMP_MENU->AddIdRawOption('INFORMATION', '../setup/systemInfo?option=processInfo', G::LoadTranslation('ID_SYSTEM_INFO'), '', '', 'settings');
 }
 
 if ($RBAC->userCanAccess('PM_SETUP') == 1) {
     $G_TMP_MENU->AddIdRawOption('EVENT', '../events/eventList', G::LoadTranslation('ID_EVENTS'), '', '', 'logs');
     $G_TMP_MENU->AddIdRawOption('LOG_CASE_SCHEDULER', '../cases/cases_Scheduler_Log', G::LoadTranslation('ID_CASE_SCHEDULER'), "icon-logs-list.png",'', 'logs');
     $G_TMP_MENU->AddIdRawOption("CRON", "../setup/cron", G::LoadTranslation("ID_CRON_ACTIONS"), null, null, "logs");
+    $G_TMP_MENU->AddIdRawOption('EMAILS', '../mails/emailList', ucfirst (strtolower ( G::LoadTranslation('ID_EMAILS'))), '', '', 'logs');
+}
+
+if ($RBAC->userCanAccess("PM_SETUP") == 1) {
+  $G_TMP_MENU->AddIdRawOption("PM_REQUIREMENTS", "../setup/systemInfo", G::LoadTranslation("ID_PROCESSMAKER_REQUIREMENTS_CHECK"), "", "", "settings");
+  $G_TMP_MENU->AddIdRawOption("PHP_INFO", "../setup/systemInfo?option=php", G::LoadTranslation("ID_PHP_INFO"), "", "", "settings");
 }
 

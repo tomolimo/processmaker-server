@@ -64,6 +64,9 @@ function run_upgrade($command, $args)
 {
     CLI::logging("UPGRADE", PROCESSMAKER_PATH . "upgrade.log");
     CLI::logging("Checking files integrity...\n");
+    //setting flag to true to check into sysGeneric.php
+    $flag = G::isPMUnderUpdating(1);
+    //start to upgrade
     $checksum = System::verifyChecksum();
     if ($checksum === false) {
         CLI::logging(CLI::error("checksum.txt not found, integrity check is not possible") . "\n");
@@ -93,7 +96,8 @@ function run_upgrade($command, $args)
     }
     CLI::logging("Clearing cache...\n");
     if (defined('PATH_C')) {
-        rm_dir(PATH_C, true);
+        G::rm_dir(PATH_C);
+        mkdir(PATH_C, 0777, true);
     }
     $workspaces = get_workspaces_from_args($command);
     $count = count($workspaces);
@@ -117,5 +121,7 @@ function run_upgrade($command, $args)
     } else {
         CLI::logging("Upgrade successful\n");
     }
+    //setting flag to false
+    $flag = G::isPMUnderUpdating(0);
 }
 

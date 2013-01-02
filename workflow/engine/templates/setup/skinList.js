@@ -54,14 +54,11 @@ var deleteButton;
 var searchButton;
 var searchText;
 var contextMenu;
-var pageSize;
 
 var classicSkin = '00000000000000000000000000000001';
 
 Ext.onReady(function(){
   Ext.QuickTips.init();
-
-  pageSize = parseInt(CONFIG.pageSize);
 
   newButton = new Ext.Action({
     text: _('ID_NEW'),
@@ -183,6 +180,10 @@ Ext.onReady(function(){
         name : 'SKIN_NAME'
       },
 
+        {
+            name : 'SKIN_WORKSPACE'
+        },
+
       {
         name : 'SKIN_DESCRIPTION'
       },
@@ -228,6 +229,14 @@ Ext.onReady(function(){
     },
 
     {
+      header: _('ID_ROOT_FOLDER'),
+      dataIndex: 'SKIN_WORKSPACE',
+      width: 80,
+      align:'left',
+      renderer: nameWorkspace
+    },
+
+    {
       header: _('ID_DESCRIPTION'),
       dataIndex: 'SKIN_DESCRIPTION',
       width: 200,
@@ -258,7 +267,7 @@ Ext.onReady(function(){
       align:'center',
       renderer: showdate
     },
-    
+
     {
       header: _('ID_STATUS'),
       dataIndex: 'SKIN_STATUS',
@@ -269,42 +278,6 @@ Ext.onReady(function(){
 
     ]
   });
-
-  storePageSize = new Ext.data.SimpleStore({
-    fields: ['size'],
-    data: [['20'],['30'],['40'],['50'],['100']],
-    autoLoad: true
-  });
-
-  comboPageSize = new Ext.form.ComboBox({
-    typeAhead     : false,
-    mode          : 'local',
-    triggerAction : 'all',
-    store: storePageSize,
-    valueField: 'size',
-    displayField: 'size',
-    width: 50,
-    editable: false,
-    listeners:{
-      select: function(c,d,i){
-        UpdatePageConfig(d.data['size']);
-        bbarpaging.pageSize = parseInt(d.data['size']);
-        bbarpaging.moveFirst();
-      }
-    }
-  });
-
-  comboPageSize.setValue(pageSize);
-
-  bbarpaging = new Ext.PagingToolbar({
-    pageSize: pageSize,
-    store: store,
-    displayInfo: true,
-    displayMsg: _('ID_GRID_PAGE_DISPLAYING_SKIN_MESSAGE') + '&nbsp; &nbsp; ',
-    emptyMsg: _('ID_GRID_PAGE_NO_SKIN_MESSAGE')//,
-  //items: ['-',_('ID_PAGE_SIZE')+':',comboPageSize]
-  });
-
 
   infoGrid = new Ext.grid.GridPanel({
     region: 'center',
@@ -329,7 +302,6 @@ Ext.onReady(function(){
     tbar: [newButton, '-', importButton,exportButton,'-',deleteButton, {
       xtype: 'tbfill'
     }, searchText,clearTextButton,searchButton],
-    bbar: bbarpaging,
     listeners: {
       rowdblclick: function(grid, n,e){
         rowSelected = infoGrid.getSelectionModel().getSelected();
@@ -400,6 +372,16 @@ selectedSkinChecked = function (value){
     if(value[0]=='@'){
         str = value.substring(1);
         return '<b><i><img src="/images/checkedsmall.gif">' + str + '</i></b>';
+    }
+    return value;
+};
+nameWorkspace = function (value){
+    if(value[0]=='@'){
+        str = value.substring(1);
+        return '<b><i>' + ((value == _('ID_GLOBAL')) ? value : _('ID_WORKSPACE')) + '</i></b>';
+    }
+    if (value != _('ID_GLOBAL')) {
+        value = _('ID_WORKSPACE');
     }
     return value;
 };
@@ -505,7 +487,20 @@ newSkin = function(){
         allowBlank: false,
         selectOnFocus:true,
         width:200
-      })
+      }),
+        {
+            xtype: 'radio',
+            name: 'workspace',
+            inputValue: 'global',
+            checked: true,
+            boxLabel: _('ID_ALL_WORKSPACES')
+        },
+        {
+            xtype: 'radio',
+            name: 'workspace',
+            inputValue: 'current',
+            boxLabel: _('ID_CURRENT_WORKSPACE')
+        }
       ],
       buttons:[
       {
@@ -529,14 +524,18 @@ newSkin = function(){
               PMExt.notify(_('ID_SKINS'),_('ID_SKIN_SUCCESS_CREATE'));
             },
             failure: function(form, action) {
-              Ext.getCmp("newDialog").destroy();
-
-              if( !action.result ) {
-                Ext.MessageBox.alert("error", action.response.responseText);
+              if (typeof(action.failureType) != 'undefined') {
+                Ext.MessageBox.alert("error", _('ID_REQUIRED_FIELDS_ERROR'));
+                newDialog.getEl().unmask();
                 return;
+              } else {
+                Ext.getCmp("newDialog").destroy();
+                if( !action.result ) {
+                  Ext.MessageBox.alert("error", action.response.responseText);
+                  return;
+                }
+                Ext.MessageBox.alert("error", action.result.error);
               }
-              Ext.MessageBox.alert("error", action.result.error);
-
             },
             scope: Ext.getCmp("newform"),
             // add some vars to the request, similar to hidden fields
@@ -612,7 +611,20 @@ importSkin = function(){
         fieldLabel: _('ID_OVERWRITE'),
         name:       "overwrite_files",
         checked:    true
-      }
+      },
+        {
+            xtype: 'radio',
+            name: 'workspace',
+            inputValue: 'global',
+            checked: true,
+            boxLabel: _('ID_ALL_WORKSPACES')
+        },
+        {
+            xtype: 'radio',
+            name: 'workspace',
+            inputValue: 'current',
+            boxLabel: _('ID_CURRENT_WORKSPACE')
+        }
       ],
       buttons:[
       {
@@ -769,18 +781,16 @@ deleteSkin = function(){
           );
 }
 
-
-
-//Update Page Size Configuration
-UpdatePageConfig = function(pageSize){
-  Ext.Ajax.request({
-    url: 'calendar_Ajax',
-    params: {
-      action:'updatePageSize',
-      size: pageSize
+function createCookie (name, value, time) {
+    if (time) {
+        var date = new Date();
+        date.setTime(date.getTime()+(time*24*60*60*1000));
+        var expires = "; expires="+date.toGMTString();
+    } else {
+        var expires = "";
     }
-  });
-};
+    document.cookie = name+"="+value+expires+"; path=/"+SYS_SYS;
+}
 
 function changeSkin(newSkin,currentSkin){
   Ext.Ajax.request({
@@ -792,6 +802,7 @@ function changeSkin(newSkin,currentSkin){
         var response = Ext.util.JSON.decode(r.responseText);
         if (response.success) {
           currentLocation = top.location.href;
+          createCookie ('workspaceSkin', newSkin, '1');
           if (currentSkin.substring(0,2) != 'ux') {
             if (newSkin.substring(0,2) == 'ux') {
               newLocation = currentLocation.replace("/" + currentSkin + "/setup/", "/" + newSkin + "/");

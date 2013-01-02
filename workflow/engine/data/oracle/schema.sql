@@ -86,6 +86,8 @@ CREATE TABLE "APP_DOCUMENT"
 	PRIMARY KEY ("APP_DOC_UID");
 
 
+    CREATE INDEX "indexAppDocument" ON "APP_DOCUMENT" ("FOLDER_UID","APP_DOC_UID");
+
 /* -----------------------------------------------------------------------
    APP_MESSAGE
    ----------------------------------------------------------------------- */
@@ -488,6 +490,11 @@ CREATE TABLE "PROCESS"
 	"PRO_ASSIGNMENT" VARCHAR2(20) default 'FALSE' NOT NULL,
 	"PRO_SHOW_MAP" NUMBER(3,0) default 1 NOT NULL,
 	"PRO_SHOW_MESSAGE" NUMBER(3,0) default 1 NOT NULL,
+	"PRO_SUBPROCESS" NUMBER(3,0) default 0 NOT NULL,
+	"PRO_TRI_DELETED" VARCHAR(32) default '' NOT NULL,
+	"PRO_TRI_CANCELED" VARCHAR(32) default '' NOT NULL,
+	"PRO_TRI_PAUSED" VARCHAR(32) default '' NOT NULL,
+	"PRO_TRI_REASSIGNED" VARCHAR(32) default '' NOT NULL,
 	"PRO_SHOW_DELEGATE" NUMBER(3,0) default 1 NOT NULL,
 	"PRO_SHOW_DYNAFORM" NUMBER(3,0) default 0 NOT NULL,
 	"PRO_CATEGORY" VARCHAR2(48) default '' NOT NULL,

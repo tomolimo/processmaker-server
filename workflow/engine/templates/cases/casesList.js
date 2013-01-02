@@ -26,7 +26,7 @@ var textJump;
 var caseSummary = function() {
   var rowModel = grid.getSelectionModel().getSelected();
   if (rowModel) {
-    openSummaryWindow(rowModel.data.APP_UID, rowModel.data.DEL_INDEX);
+    openSummaryWindow(rowModel.data.APP_UID, rowModel.data.DEL_INDEX, action);
   }
   else {
     msgBox(_('ID_INFORMATION'), _('ID_SELECT_ONE_AT_LEAST'));
@@ -472,14 +472,14 @@ Ext.onReady ( function() {
 
   var renderSummary = function (val, p, r) {
     var summaryIcon = '<img src="/images/ext/default/s.gif" class="x-tree-node-icon ss_layout_header" unselectable="off" id="extdd-17" ';
-    summaryIcon += 'onclick="openSummaryWindow(' + "'" + r.data['APP_UID'] + "'" + ', ' + r.data['DEL_INDEX'] + ')" title="' + _('ID_SUMMARY') + '" />';
+    summaryIcon += 'onclick="openSummaryWindow(' + "'" + r.data['APP_UID'] + "'" + ', ' + r.data['DEL_INDEX'] + ', action)" title="' + _('ID_SUMMARY') + '" />';
     return summaryIcon;
   };
 
   function renderNote(val,p,r) {
     pro = r.json.PRO_UID;
     tas = r.json.TAS_UID;
-    
+
     appUid = r.data['APP_UID'];
     title  = r.data['APP_TITLE'];
     return '<img src="/images/ext/default/s.gif" class="x-tree-node-icon ICON_CASES_NOTES" unselectable="off" id="extdd-17" onClick="openCaseNotesWindow(\''+appUid+'\', true, \''+title+'\', \''+pro+'\', \''+tas+'\')">';
@@ -491,7 +491,7 @@ Ext.onReady ( function() {
         return _FNF(s.data.USR_USERNAME, s.data.USR_FIRSTNAME, s.data.USR_LASTNAME);
       }
       else {
-        return '';
+        return '[' + _('ID_UNASSIGNED').toUpperCase() + ']';
       }
   };
 
@@ -514,8 +514,10 @@ Ext.onReady ( function() {
     if( c.id == 'unpauseLink')                  c.renderer = unpauseLink;
     if( c.dataIndex == 'CASE_SUMMARY')          c.renderer = renderSummary;
     if( c.dataIndex == 'CASE_NOTES_COUNT')      c.renderer = renderNote;
-    if( c.dataIndex == 'APP_DEL_PREVIOUS_USER') c.renderer = previous_full_name;
-    if( c.dataIndex == 'APP_CURRENT_USER')      c.renderer = full_name;
+    if (solrEnabled == 0) {
+        if( c.dataIndex == 'APP_DEL_PREVIOUS_USER') c.renderer = previous_full_name;
+        if( c.dataIndex == 'APP_CURRENT_USER')      c.renderer = full_name;
+    }
   }
 
   //adding the hidden field DEL_INIT_DATE
@@ -806,12 +808,14 @@ Ext.onReady ( function() {
             comboProcess.getStore().loadData(processValues);
         },
         failure: function ( result, request) {
-            Ext.MessageBox.alert('Failed', result.responseText);
+            if (typeof(result.responseText) != 'undefined') {
+                Ext.MessageBox.alert(_('ID_FAILED'), result.responseText);
+            }
         }
     });
 
   var comboProcess = new Ext.form.ComboBox({
-    width         : 200,
+    width         : 180,
     boxMaxWidth   : 200,
     editable      : true,
     displayField  : 'APP_PRO_TITLE',
@@ -886,7 +890,7 @@ Ext.onReady ( function() {
   });
 
     var comboCategory = new Ext.form.ComboBox({
-        width           : 200,
+        width           : 180,
         boxMaxWidth     : 200,
         editable        : true,
         displayField    : 'CATEGORY_NAME',
@@ -925,7 +929,9 @@ Ext.onReady ( function() {
 
                 },
                 failure: function ( result, request) {
-                    Ext.MessageBox.alert('Failed', result.responseText);
+                    if (typeof(result.responseText) != 'undefined') {
+                        Ext.MessageBox.alert(_('ID_FAILED'), result.responseText);
+                    }
                 }
             });
           }},
@@ -1002,7 +1008,7 @@ Ext.onReady ( function() {
   });
   // ComboBox creation
   var comboStatus = new Ext.form.ComboBox({
-    width         : 90,
+    width         : 80,
     boxMaxWidth   : 90,
     editable      : false,
     mode          : 'local',
@@ -1070,7 +1076,7 @@ Ext.onReady ( function() {
   var textSearch = new Ext.form.TextField ({
     allowBlank: true,
     ctCls:'pm_search_text_field',
-    width: 150,
+    width: 140,
     emptyText: _('ID_EMPTY_SEARCH'),
     listeners: {
       specialkey: function(f,e){
@@ -1255,7 +1261,9 @@ Ext.onReady ( function() {
             }
           },
           failure: function ( result, request) {
-            Ext.MessageBox.alert( _('ID_FAILED'), result.responseText);
+            if (typeof(result.responseText) != 'undefined') {
+              Ext.MessageBox.alert( _('ID_FAILED'), result.responseText);
+            }
           }
         });
       });
@@ -1283,7 +1291,9 @@ Ext.onReady ( function() {
             }
           },
           failure: function ( result, request) {
-            Ext.MessageBox.alert('Failed', result.responseText);
+            if (typeof(result.responseText) != 'undefined') {
+              Ext.MessageBox.alert(_('ID_FAILED'), result.responseText);
+            }
           }
         });
       });
@@ -1457,8 +1467,6 @@ Ext.onReady ( function() {
     value: ''
   });
 
-  var optionCategory = (solrEnabled == 1)? [""] : [_("ID_CATEGORY"), comboCategory, "-"];
-
   var toolbarTodo = [
     optionMenuOpen,
     {
@@ -1474,7 +1482,9 @@ Ext.onReady ( function() {
     '-',
     btnAll,
     '->', // begin using the right-justified button container
-    optionCategory,
+    _("ID_CATEGORY"),
+    comboCategory,
+    "-",
     _('ID_PROCESS'),
     comboProcess,
     '-',
@@ -1496,7 +1506,9 @@ Ext.onReady ( function() {
     '-',
     btnAll,
     '->', // begin using the right-justified button container
-    optionCategory,
+    _("ID_CATEGORY"),
+    comboCategory,
+    "-",
     _('ID_PROCESS'),
     comboProcess,
     '-',
@@ -1518,7 +1530,9 @@ Ext.onReady ( function() {
     '-',
     btnAll,
     '->', // begin using the right-justified button container
-    optionCategory,
+    _("ID_CATEGORY"),
+    comboCategory,
+    "-",
     _('ID_PROCESS'),
     comboProcess,
     '-',
@@ -1542,7 +1556,9 @@ Ext.onReady ( function() {
       menu: menuItems
     },
     '->',
-    optionCategory,
+    _("ID_CATEGORY"),
+    comboCategory,
+    "-",
     _('ID_PROCESS'),
     comboProcess,
     '-',
@@ -1559,7 +1575,9 @@ Ext.onReady ( function() {
   var toolbarToRevise = [
     optionMenuOpen,
     '->', // begin using the right-justified button container
-    optionCategory,
+    _("ID_CATEGORY"),
+    comboCategory,
+    "-",
     _('ID_PROCESS'),
     comboProcess,
     '-',
@@ -1584,7 +1602,9 @@ Ext.onReady ( function() {
       _("ID_USER"),
       comboAllUsers,
       "-",
-      optionCategory,
+      _("ID_CATEGORY"),
+      comboCategory,
+      "-",
       _("ID_PROCESS"),
       comboProcess,
       textSearch,
@@ -1602,7 +1622,9 @@ Ext.onReady ( function() {
     '-',
     btnAll,
     '->', // begin using the right-justified button container
-    optionCategory,
+    _("ID_CATEGORY"),
+    comboCategory,
+    "-",
     _('ID_PROCESS'),
     comboProcess,
     '-',
@@ -1638,8 +1660,6 @@ Ext.onReady ( function() {
       })
     ];
 
-  var arrayAux = (solrEnabled == 1)? [""] : ["-", _("ID_USER"), comboUser];
-
   var firstToolbarSearch = new Ext.Toolbar({
     region: 'north',
     width: '100%',
@@ -1647,13 +1667,17 @@ Ext.onReady ( function() {
     items: [
       optionMenuOpen,
       '->',
-      optionCategory,
+      _("ID_CATEGORY"),
+      comboCategory,
+      "-",
       _('ID_PROCESS'),
       comboProcess,
       '-',
       _('ID_STATUS'),
       comboStatus,
-      arrayAux,
+      "-",
+      _("ID_USER"),
+      comboUser,
       '-',
       textSearch,
       resetSearchButton,
@@ -1876,46 +1900,50 @@ var gridForm = new Ext.FormPanel({
     //Manually trigger the data store load
     switch (action) {
         case "draft":
-            storeCases.setBaseParam("process", '');
+            storeCases.setBaseParam("category", "");
+            storeCases.setBaseParam("process", "");
             storeCases.setBaseParam("search", textSearch.getValue());
             break;
         case "sent":
-            storeCases.setBaseParam("process", '');
+            storeCases.setBaseParam("category", "");
+            storeCases.setBaseParam("process", "");
             storeCases.setBaseParam("status", comboStatus.store.getAt(0).get(comboStatus.valueField));
             storeCases.setBaseParam("search", textSearch.getValue());
             break;
         case "to_revise":
-            storeCases.setBaseParam("process", '');
+            storeCases.setBaseParam("category", "");
+            storeCases.setBaseParam("process", "");
             storeCases.setBaseParam("search", textSearch.getValue());
             break;
         case "to_reassign":
             storeCases.setBaseParam("user", comboAllUsers.store.getAt(0).get(comboAllUsers.valueField));
-            storeCases.setBaseParam("process", '');
+            storeCases.setBaseParam("category", "");
+            storeCases.setBaseParam("process", "");
             storeCases.setBaseParam("search", textSearch.getValue());
             break;
         case "search":
-            storeCases.setBaseParam("process", '');
+            storeCases.setBaseParam("category", "");
+            storeCases.setBaseParam("process", "");
             storeCases.setBaseParam("status", comboStatus.store.getAt(0).get(comboStatus.valueField));
-
-            if (!(solrEnabled == 1)) {
-                storeCases.setBaseParam("user", comboUser.store.getAt(0).get(comboUser.valueField));
-            }
-
+            storeCases.setBaseParam("user", comboUser.store.getAt(0).get(comboUser.valueField));
             storeCases.setBaseParam("search", textSearch.getValue());
             storeCases.setBaseParam("dateFrom", dateFrom.getValue());
             storeCases.setBaseParam("dateTo", dateTo.getValue());
             break;
         case "unassigned":
-            storeCases.setBaseParam("process", '');
+            storeCases.setBaseParam("category", "");
+            storeCases.setBaseParam("process", "");
             storeCases.setBaseParam("search", textSearch.getValue());
             break;
         case "gral":
-            storeCases.setBaseParam("process", '');
+            storeCases.setBaseParam("process", "");
             storeCases.setBaseParam("search", textSearch.getValue());
             break;
         default:
             //todo
-            storeCases.setBaseParam("process", '');
+            //paused
+            storeCases.setBaseParam("category", "");
+            storeCases.setBaseParam("process", "");
             storeCases.setBaseParam("search", textSearch.getValue());
             break;
     }
@@ -2029,6 +2057,7 @@ var gridForm = new Ext.FormPanel({
     // Nothing to do
   }
 
+  comboCategory.setValue("");
   comboProcess.setValue("");
   comboStatus.setValue("");
   comboUser.setValue("CURRENT_USER");

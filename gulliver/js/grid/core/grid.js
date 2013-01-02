@@ -341,6 +341,25 @@ var G_Grid = function(oForm, sGridName){
     return newElem;
   };
 
+  this.replaceHtml = function (el, html) {
+    var oldEl = typeof el === "string" ? document.getElementById(el) : el;
+    /*Pure innerHTML is slightly faster in IE
+        oldEl.innerHTML = html;
+        return oldEl;
+    */
+    if ( this.determineBrowser() == "MSIE" ) {
+        oldEl.innerHTML = html;
+        return oldEl;
+    } else {
+        var newEl = oldEl.cloneNode(false);
+        newEl.innerHTML = html;
+        oldEl.parentNode.replaceChild(newEl, oldEl);
+        /* Since we just removed the old element from the DOM, return a reference
+        to the new element, which can be used to restore variable references. */
+        return newEl;
+    }
+  };
+
   this.addGridRow = function() {
     this.oGrid = document.getElementById(this.sGridName);
     var i, aObjects;
@@ -361,7 +380,7 @@ var G_Grid = function(oForm, sGridName){
 
     // Clone Cells Loop
     for (i = 0; i < aCells.length; i++) {
-      oNewRow.appendChild(aCells[i].cloneNode(true)); //Clone First Cell exactly.
+        oNewRow.appendChild(aCells[i].cloneNode(true)); //Clone First Cell exactly.
       switch (i){
         case 0:
           oNewRow.getElementsByTagName('td')[i].innerHTML = currentRow;
@@ -445,6 +464,40 @@ var G_Grid = function(oForm, sGridName){
                         }
                       }
                     }
+
+                    var aObjectsScript = oNewRow.getElementsByTagName('td')[i].getElementsByTagName('script');
+
+                    var sObjectType = this.aFields[i-1].sType;
+                    if (aObjectsScript[0] != 'undefined' && sObjectType == 'suggest') {
+						if ( this.determineBrowser() == "MSIE" ) {
+
+                            var firstNode = aCells[i];
+
+                            var firstScriptSuggest = firstNode.childNodes[2].innerHTML ;
+                            var sScriptAdjustRow = firstScriptSuggest.replace(/\[1\]/g, '\[' + currentRow + '\]');
+
+                            var elementTD = oNewRow.getElementsByTagName('td')[i];
+
+                            var elementLabel = elementTD.childNodes[0];
+                            var sNewLabelRow = elementLabel.getAttribute("id").replace(/\[1\]/g, '\[' + currentRow + '\]');
+
+                            var elementHidden = elementTD.childNodes[1];
+
+                            var elementScript = elementTD.childNodes[2];
+                            var parentScript = elementScript.parentNode;
+                            var scriptElement = document.createElement("script");
+                            scriptElement.text = sScriptAdjustRow;
+                            parentScript.removeChild(elementScript);
+                            parentScript.appendChild(scriptElement);
+
+						} else {
+ 	                        var sObjScript = aObjectsScript[0].innerHTML;
+    	                    var sNewObjScript = sObjScript.replace(/\[1\]/g, '\[' + currentRow + '\]');
+            	            aObjectsScript[0].innerHTML = sNewObjScript;
+                	        eval(aObjectsScript[0].innerHTML);
+						}
+                    }
+
                     break;
                   case 'checkbox': //CHECKBOX
                       var attributeCheckBox = elementAttributesNS(aObjects[n], "");
@@ -456,8 +509,12 @@ var G_Grid = function(oForm, sGridName){
                       }
                       break;
                   case 'hidden': //HIDDEN
-                    if ((attributes.gridtype != 'yesno' && attributes.gridtype != 'dropdown') || typeof attributes.gridtype == 'undefined')
-                      aObjects[n].value = defaultValue;
+                    if ((attributes.gridtype != 'yesno' && attributes.gridtype != 'dropdown') || typeof attributes.gridtype == 'undefined') {
+                        aObjects[n].value = defaultValue;
+                        newID = aObjects[n].id.replace(/\[1\]/g, '\[' + currentRow + '\]');
+                        aObjects[n].id = newID;
+                        aObjects[n].name = newID;
+                    }
                     break;
                   case 'button':
                     if (aObjects[n].onclick){
@@ -681,6 +738,19 @@ var G_Grid = function(oForm, sGridName){
           }
         }
     }
+
+    //Set focus the first element in the grid
+    for (var i = 0; i < this.aFields.length; i++) {
+      var fieldName = 'form[' + sGridName + '][' + currentRow + '][' + this.aFields[i].sFieldName + ']';
+      if (this.aFields[i].sType == 'suggest' ) {
+          fieldName = 'form[' + sGridName + '][' + currentRow + '][' + this.aFields[i].sFieldName + '_label]';
+      }
+      if (this.aFields[i].sType != 'file' && this.aFields[i].sType != 'hidden' && document.getElementById(fieldName).focus) {
+        document.getElementById(fieldName).focus();
+        break;
+      }
+    }
+
     //Fires OnAddRow Event
     if (this.onaddrow) {
       this.onaddrow(currentRow);
@@ -733,12 +803,12 @@ var G_Grid = function(oForm, sGridName){
       for (i = 1; i < oObj.oGrid.rows[iRowAux - 1].cells.length; i++) {
         var oCell1 = oObj.oGrid.rows[iRowAux - 1].cells[i];
         var oCell2 = oObj.oGrid.rows[iRowAux].cells[i];
-        
+
         switch (oCell1.innerHTML.replace(/^\s+|\s+$/g, '').substr(0, 6).toLowerCase()){
           case '<input':
             aObjects1 = oCell1.getElementsByTagName('input');
             aObjects2 = oCell2.getElementsByTagName('input');
-            
+
             if (aObjects1 && aObjects2) {
                 switch (aObjects2[0].type) {
                     case "file":
@@ -760,6 +830,9 @@ var G_Grid = function(oForm, sGridName){
                         }
                         aObjects1[0].value = aObjects2[0].value;
                         aObjects1[0].className = aObjects2[0].className;
+                        if ( typeof(aObjects1[1]) != 'undefined' && typeof(aObjects2[1]) != 'undefined' ) {
+                            aObjects1[1].value = aObjects2[1].value;
+                        }
                         break;
                 }
             }
@@ -821,7 +894,7 @@ var G_Grid = function(oForm, sGridName){
             if (( oCell2.innerHTML.indexOf('changeValues') == 111 || oCell2.innerHTML.indexOf('changeValues') == 115 ) ) {
               break;
             }
-            
+
             if (oCell2.innerHTML.toLowerCase().indexOf('deletegridrow') == -1) {
               oCell1.innerHTML = oCell2.innerHTML;
             }
@@ -1077,25 +1150,31 @@ var G_Grid = function(oForm, sGridName){
     aFields = aFields.unique();
     sAux = oField.sFormula;
     for (i = 0; i < aFields.length; i++) {
-      if (!isNumber(aFields[i])) {
+    	if (!isNumber(aFields[i])) {
         oAux = this.getElementByName(aAux[1], aFields[i]);
         sAux = sAux.replace(new RegExp(aFields[i], "g"), "parseFloat(G.cleanMask(this.getElementByName(" + aAux[1] + ", '" + aFields[i] + "').value().replace(/[$|a-zA-Z\s]/g,'') || 0, '" + (oAux.sMask ? oAux.sMask : '')
-            + "').result.replace(/,/g, ''))");
+        + "').result.replace(/,/g, ''))");
+        
         eval("if (!document.getElementById('" + aAux[0] + '][' + aAux[1] + '][' + aFields[i] + "]')) { oContinue = false; }");
       }
     }
     eval("if (!document.getElementById('" + aAux[0] + '][' + aAux[1] + '][' + oField.sFieldName + "]')) { oContinue = false; }");
 
+    var swReal=0;
+    
     if (oContinue) {
       //we're selecting the mask to put in the field with the formula
       for (i = 0; i < this.aFields.length; i++) {
         if(oField.sFieldName==this.aFields[i].sFieldName) {
-          maskformula =this.aFields[i].oProperties.mask;
+        	maskformula=this.aFields[i].oProperties.mask;
+        	
+        	if(this.aFields[i].oProperties.validate=='Real')
+        		swReal=1;
         }
       }
+      
       if(maskformula!=''){
         maskDecimal=maskformula.split(";");
-
         if(maskDecimal.length > 1) {
           maskDecimal=maskDecimal[1].split(".");
         } else {
@@ -1107,21 +1186,23 @@ var G_Grid = function(oForm, sGridName){
         } else {
           maskToPut=0;
         }
-
       } else {
-        maskToPut=0;
+    	  if(swReal==1)
+    		  maskToPut=2;
+    	  else
+    		  maskToPut=0;
       }
-
+      
       // clean the field and load mask execute event keypress
       document.getElementById(aAux[0]+']['+ aAux[1] + '][' + oField.sFieldName + ']').value = '';
       this.executeEvent(document.getElementById(aAux[0]+']['+ aAux[1] + '][' + oField.sFieldName + ']'), 'keypress');
 
       // execute formula and set decimal
       eval("document.getElementById('" + aAux[0] + '][' + aAux[1] + '][' + oField.sFieldName + "]').value = (" + sAux + ').toFixed('+maskToPut+');');
-
+      
       // trim value
       document.getElementById(aAux[0] + '][' + aAux[1] + '][' + oField.sFieldName + ']').value = document.getElementById(aAux[0] + '][' + aAux[1] + '][' + oField.sFieldName + ']').value.replace(/^\s*|\s*$/g,"");
-
+      
       // set '' to field if response is NaN
       if (document.getElementById(aAux[0] + '][' + aAux[1] + '][' + oField.sFieldName + ']').value =='NaN')
         document.getElementById(aAux[0] + '][' + aAux[1] + '][' + oField.sFieldName + ']').value = '';

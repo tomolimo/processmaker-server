@@ -48,11 +48,11 @@ if (!isset($_SESSION['FAILED_LOGINS'])) {
 
 $sFailedLogins = $_SESSION['FAILED_LOGINS'];
 
-require_once 'classes/model/LoginLog.php';
-
 $aFields['LOGIN_VERIFY_MSG'] = G::loadTranslation('LOGIN_VERIFY_MSG');
+//$aFields['LOGIN_VERIFY_MSG'] = Bootstrap::loadTranslation('LOGIN_VERIFY_MSG');
 
 if (isset ($_SESSION['USER_LOGGED'])) {
+    require_once 'classes/model/LoginLog.php';
     //close the session, if the current session_id was used in PM.
     $oCriteria = new Criteria('workflow');
 
@@ -69,6 +69,7 @@ if (isset ($_SESSION['USER_LOGGED'])) {
     $aRow = $oDataset->getRow();
 
     if ($aRow) {
+        setcookie("workspaceSkin", SYS_SKIN, time() + 24*60*60, "/sys".SYS_SYS);
         if ($aRow['LOG_STATUS'] != 'CLOSED' && $aRow['LOG_END_DATE'] == null) {
             $weblog = new LoginLog();
 
@@ -120,7 +121,9 @@ if (strlen($msgType) > 0) {
 $_SESSION['FAILED_LOGINS'] = $sFailedLogins;
 
 //translation
-$Translations = G::getModel("Translation");
+//$Translations = G::getModel("Translation");
+//require_once "classes/model/Translation.php";
+$Translations = new Translation();
 $translationsTable = $Translations->getTranslationEnvironments();
 
 $availableLangArray = array ();
@@ -141,6 +144,7 @@ global $_DBArray;
 $_DBArray ['langOptions'] = $availableLangArray;
 
 G::LoadClass('configuration');
+//BootStrap::LoadClass('configuration');
 
 $oConf = new Configurations();
 $oConf->loadConfig($obj, 'ENVIRONMENT_SETTINGS', '');
@@ -151,7 +155,7 @@ $aFields['USER_LANG'] = isset($oConf->aConfig['login_defaultLanguage'])
 $G_PUBLISH = new Publisher();
 $G_PUBLISH->AddContent('xmlform', 'xmlform', 'login/login', '', $aFields, SYS_URI . 'login/authentication.php');
 G::LoadClass('serverConfiguration');
-
+//Bootstrap::LoadClass('serverConfiguration');
 //get the serverconf singleton, and check if we can send the heartbeat
 $oServerConf = & serverConf::getSingleton();
 
@@ -190,12 +194,7 @@ if ($flagGettingStarted == 0) {
 
 $dummy = '';
 
-G::loadClass('configuration');
-
-$oConf = new Configurations();
-
 $oConf->loadConfig($dummy, 'ENVIRONMENT_SETTINGS', '');
-
 $flagForgotPassword = isset($oConf->aConfig['login_enableForgotPassword'])
                       ? $oConf->aConfig['login_enableForgotPassword']
                       : 'off';

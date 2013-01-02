@@ -1043,6 +1043,14 @@ function saveUser()
         return false;
       }
     }
+
+    if (USR_UID == '00000000000000000000000000000001') {
+    	if (Ext.getCmp('USR_ROLE').getValue() != 'PROCESSMAKER_ADMIN') {
+    		Ext.Msg.alert( _('ID_ERROR'), _('ID_ADMINISTRATOR_ROLE_CANT_CHANGED'));
+            return false;
+    	}
+    }
+
   } else {
     Ext.Msg.alert( _('ID_ERROR'), _('ID_MSG_ERROR_USR_USERNAME'));
     return false;
@@ -1239,6 +1247,7 @@ function loadUserData()
 
             comboReplacedBy.store.on("load", function (store) {
                 comboReplacedBy.setValue(data.user.USR_REPLACED_BY);
+                comboReplacedBy.setRawValue(data.user.REPLACED_NAME);
             });
 
             comboCalendar.store.on("load", function (store) {

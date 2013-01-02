@@ -13,11 +13,47 @@ if (! function_exists ($_REQUEST ['action'])) {
     die ();
 }
 
-$functionName = $_REQUEST ['action'];
-$functionParams = isset ($_REQUEST ['params']) ? $_REQUEST ['params'] : array ();
+if (($_REQUEST['action']) != 'rename') {
+    $functionName = $_REQUEST ['action'];
+    $functionParams = isset ($_REQUEST ['params']) ? $_REQUEST ['params'] : array ();
 
-$functionName ($functionParams);
+    $functionName ($functionParams);
+} else {
+    $functionName = 'renameFolder';
+    $functionParams = isset ($_REQUEST ['params']) ? $_REQUEST ['params'] : array ();
+    $oldname = $_REQUEST ['item'];
+    $newname = $_REQUEST ['newitemname'];
+    $oUid = $_REQUEST ['selitems'];
+
+    if (isset($oUid[0])) {
+        $uid = $oUid[0];
+    } else {
+        $uid = $oUid;
+    }
+
+    renameFolder ($oldname, $newname, $uid);
+}
+
 /////////////////////////////////////////////
+
+function renameFolder($oldname, $newname, $uid)
+{
+    $folder = new AppFolder();
+    //Clean Folder name (delete spaces...)
+    $newname = trim( $newname );
+
+    $fields = array();
+
+    $fields['FOLDER_UID'] = $uid;
+    $fields['FOLDER_NAME'] = $newname;
+    $fields['FOLDER_UPDATE_DATE'] = date('Y-m-d H:i:s');
+
+    $folder->update($fields);
+
+    $msgLabel= G::LoadTranslation ('ID_EDIT_SUCCESSFULLY');
+    echo "{action: '', error:'error',message: '$msgLabel', success: 'success',folderUID: 'root'}";
+}
+
 /**
  * delete folders and documents
  * created by carlos pacha carlos@colosa.com, pckrlos@gmail.com
@@ -121,30 +157,40 @@ function expandNode()
     $totalDocuments=0;
 
     if (($_POST['sendWhat'] == "dirs") || ($_POST['sendWhat'] == "both")) {
-        $folderListObj = $oPMFolder->getFolderList ($_POST ['node'] != 'root' ?
-            $_POST ['node'] == 'NA' ? "" : $_POST ['node'] : $rootFolder, $limit, $start);
-        //G::pr($folderListObj);
+        $folderListObj = $oPMFolder->getFolderList(
+            ($_POST["node"] != "root")? (($_POST["node"] == "NA")? "" : $_POST["node"]) : $rootFolder,
+            $limit,
+            $start
+        );
+
         $folderList=$folderListObj['folders'];
         $totalFolders=$folderListObj['totalFoldersCount'];
         $totalItems+=count($folderList);
-        //G::pr($folderListObj);
     }
     if (($_POST['sendWhat'] == "files") || ($_POST['sendWhat'] == "both")) {
         global $RBAC;
+
         $user = ($RBAC->userCanAccess('PM_ALLCASES') == 1)? '' : $_SESSION['USER_LOGGED'];
-        $folderContentObj = $oPMFolder->getFolderContent ($_POST ['node'] != 'root' ?
-            $_POST ['node'] == 'NA' ? "" : $_POST ['node'] : $rootFolder, array(), null, null, $limit, $start, $user);
+
+        $folderContentObj = $oPMFolder->getFolderContent(
+            ($_POST["node"] != "root")? (($_POST["node"] == "NA")? "" : $_POST["node"]) : $rootFolder,
+            array(),
+            null,
+            null,
+            $limit,
+            $start,
+            $user,
+            true
+        );
+
         $folderContent=$folderContentObj['documents'];
         $totalDocuments=$folderContentObj['totalDocumentsCount'];
         $totalItems+=count($folderContent);
-        //G::pr($folderContent);
     }
-    //    G::pr($folderList);
-    //var_dump(isset($folderList));
+
     $processListTree=array();
     $tempTree=array();
     if (isset($folderList) && sizeof($folderList)>0) {
-        //print'krlos';
         //$tempTree=array();
         foreach ($folderList as $key => $obj) {
             //$tempTree ['all-obj'] = $obj;
@@ -339,15 +385,15 @@ function expandNode()
             $tempTree=array();
         }
     }
-    //G::pr($processListTree);
+
     if ((isset($_POST['option'])) && ($_POST['option'] == "gridDocuments")) {
-        $processListTreeTemp['totalCount']=$totalFolders+$totalDocuments;//count($processListTree);
+        $processListTreeTemp["totalCount"] = $totalFolders + $totalDocuments;
         $processListTreeTemp['msg']='correct reload';
         $processListTreeTemp['items']=$processListTree;
         $processListTree = $processListTreeTemp;
     }
-    //G::pr ($processListTree);die;
-    print G::json_encode ($processListTree);
+
+    echo G::json_encode($processListTree);
 }
 
 function openPMFolder()
@@ -615,7 +661,7 @@ function uploadDocument()
     $functionsToReplace["function_standardupload_btnsave"]=' function() {
                 statusBarMessage("'.G::LoadTranslation('ID_UPLOADING_FILE').'", true, true);
                 form = Ext.getCmp("uploadform").getForm();
-                
+
                 //Ext.getCmp("uploadform").getForm().submit();
                 //console.log(form);
                 //console.log(form.url);
@@ -623,13 +669,13 @@ function uploadDocument()
                     //reset: true,
                     reset: false,
                     success: function(form, action) {
-                        
+
                         datastore.reload();
                         statusBarMessage(action.result.message, false, true);
                         Ext.getCmp("dialog").destroy();
                     },
                     failure: function(form, action) {
-                        
+
                         if(!action.result) return;
                         Ext.MessageBox.alert("error", action.result.error);
                         statusBarMessage(action.result.error, false, false);

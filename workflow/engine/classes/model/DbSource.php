@@ -24,8 +24,8 @@
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  *
  */
-require_once 'classes/model/Content.php';
-require_once 'classes/model/om/BaseDbSource.php';
+//require_once 'classes/model/Content.php';
+//require_once 'classes/model/om/BaseDbSource.php';
 
 /**
  * Skeleton subclass for representing a row from the 'DB_SOURCE' table.
@@ -84,7 +84,7 @@ class DbSource extends BaseDbSource
         return $oCriteria;
     }
 
-    public function load($Uid, $ProUID='')
+    public function load($Uid, $ProUID = '')
     {
         try {
             $oRow = DbSourcePeer::retrieveByPK($Uid, $ProUID);
@@ -203,5 +203,4 @@ class DbSource extends BaseDbSource
         }
     }
 }
-// DbSource
- 
+

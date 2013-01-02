@@ -113,7 +113,7 @@
       	if (typeof(asynchronous)==='undefined') asynchronous = false;
       	data = parameters;
       	questionMark = (ajax_server.split('?').length > 1 ) ? '&' : '?';
-      	if (method==='GET/POST') {
+      	if ((method==='POST')||(method==='GET/POST')) {
       	  objetus.open( 'POST', ajax_server + ((data.length<1024)?(questionMark+data):''), asynchronous );
       	} else {
       	  objetus.open( method, ajax_server + ((method==='GET')? questionMark+data : '') , asynchronous );
@@ -159,7 +159,7 @@
 	  } else if(thisform.elements[i].type == "textarea") { //Handle textareas
 		  formdata += thisform.elements[i].name + "=" + encodeURIComponent(thisform.elements[i].value);
 	  } else if(thisform.elements[i].type == "checkbox") { //Handle checkbox's
-		  formdata += thisform.elements[i].name + '=' + ((thisform.elements[i].checked)? '1': '0');
+          formdata += thisform.elements[i].name + '=' + ((thisform.elements[i].checked)? (typeof(thisform.elements[i].value) != 'undefined' ? thisform.elements[i].value : 'On') : '');
 	  } else if(thisform.elements[i].type == "radio") { //Handle Radio buttons
 		  if(thisform.elements[i].checked==true){
 			  formdata += thisform.elements[i].name + "=" + thisform.elements[i].value;
@@ -260,26 +260,26 @@ function toMaskNumber(iNumber,dec)
 	iNumber = fix(iNumber.toString(),dec || 2);
 	var t=iNumber.split(".");
 	var arrayResult=iNumber.replace(/\D/g,'').replace(/^0*/,'').split("").reverse();
-	var final="";
+	var result="";
 	var aux=0;
 	var sep=0;
 	for(var i=0;i<arrayResult.length;i++)
 	{
 		if(i==1)
 		{
-			final="."+arrayResult[i]+final;
+			result="."+arrayResult[i]+result;
 		}
 		else
 		{
 			if(i>1 && aux>=3 && ((aux%3)==0))
 			{
-				final=arrayResult[i]+","+final;
+				result=arrayResult[i]+","+result;
 				aux+=1;
 				sep+=1;
 			}
 			else
 			{
-				final=arrayResult[i]+final;
+				result=arrayResult[i]+result;
 				if(i>1)
 				{
 					aux+=1;
@@ -287,7 +287,7 @@ function toMaskNumber(iNumber,dec)
 			}
 		}
 	}
-	return final;
+	return result;
 }
 
 function fix(val, dec)
@@ -2022,6 +2022,9 @@ function removeValue(id){
 
 function datePicker4(obj, id, mask, startDate, endDate, showTIme, idIsoDate)
 {
+    var aux = id.replace(/[\[\]]/g, '_');
+  __lastMasks__[aux] = mask;
+
   if (showTIme=='false') {
     showTIme = false;
   }
@@ -2115,16 +2118,18 @@ function _()
 }
 
 /**
- * String Replace function, if StrSearch has special characters "(", "[", must be escape "\\(", "\\[".
+ * String Replace function, if strSearch has special characters "(", "[", must be escape "\\(", "\\[".
+ *
  */
-function stringReplace(strSearch, stringReplace, str)
+function stringReplace(strSearch, strReplace, str)
 {
     var expression = eval("/" + strSearch + "/g");
 
-    return str.replace(expression, stringReplace);
+    return str.replace(expression, strReplace);
 }
 
 var mb_strlen = function(str) {
+    str = str || '';
     var len = 0;
     for (var i = 0; i < str.length; i++) {
         len += str.charCodeAt(i) < 0 || str.charCodeAt(i) > 255 ? 2 : 1;

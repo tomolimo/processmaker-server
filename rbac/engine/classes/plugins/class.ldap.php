@@ -147,18 +147,21 @@ class LDAP
         $sKeyword .= '*';
       }
     }
+
+    $additionalFilter = isset($aAuthSource['AUTH_SOURCE_DATA']['AUTH_SOURCE_ADDITIONAL_FILTER']) ? trim($aAuthSource['AUTH_SOURCE_DATA']['AUTH_SOURCE_ADDITIONAL_FILTER']) : '';
+
     $sFilter  = '(&(|(objectClass=*))';
-    
+
     if ( isset( $aAuthSource['AUTH_SOURCE_DATA']['LDAP_TYPE']) && $aAuthSource['AUTH_SOURCE_DATA']['LDAP_TYPE'] == 'ad' ) {
-      $sFilter = "(&(|(objectClass=*))(|(samaccountname=$sKeyword)(userprincipalname=$sKeyword))(objectCategory=person))";
+      $sFilter = "(&(|(objectClass=*))(|(samaccountname=$sKeyword)(userprincipalname=$sKeyword))$additionalFilter)";
     }
     else
-      $sFilter = "(&(|(objectClass=*))(|(uid=$sKeyword)(cn=$sKeyword)))";
+      $sFilter = "(&(|(objectClass=*))(|(uid=$sKeyword)(cn=$sKeyword))$additionalFilter)";
 
     //G::pr($sFilter);
     $aUsers  = array();
     $oSearch = @ldap_search($oLink, $aAuthSource['AUTH_SOURCE_BASE_DN'], $sFilter, array('dn','uid','samaccountname', 'cn','givenname','sn','mail','userprincipalname','objectcategory', 'manager'));
-    
+
     if ($oError = @ldap_errno($oLink)) {
       return $aUsers;
     }
@@ -179,7 +182,7 @@ class LDAP
                               'sFirstname' => isset($aAttr['givenname']) ? $aAttr['givenname'] : '',
                               'sLastname' => isset($aAttr['sn']) ? $aAttr['sn'] : '',
                               'sEmail' => isset($aAttr['mail']) ? $aAttr['mail'] : ( isset($aAttr['userprincipalname'])?$aAttr['userprincipalname'] : '') ,
-                              'sDN' => $aAttr['dn'] ); 
+                              'sDN' => $aAttr['dn'] );
             }
           } while ($oEntry = @ldap_next_entry($oLink, $oEntry));
         }

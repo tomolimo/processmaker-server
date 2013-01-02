@@ -1,4 +1,5 @@
 <?php
+//test
 class PmBootstrap extends Bootstrap
 {
     public $pmConfig = array();
@@ -65,7 +66,7 @@ class PmBootstrap extends Bootstrap
         // pm workflow classes (static load)
         $this->autoloader->registerClass('System', PATH_CORE . 'classes/class.system');
 
-        $this->autoloader->registerClass('Services_JSON', PATH_THIRDPARTY .'pear/json/class.json');
+        //$this->autoloader->registerClass('Services_JSON', PATH_THIRDPARTY .'pear/json/class.json');
         $this->autoloader->registerClass('Smarty', PATH_THIRDPARTY . 'smarty/libs/Smarty.class');
 
         $this->autoloader->registerClass('Propel', PATH_THIRDPARTY . 'propel/Propel');
@@ -90,6 +91,7 @@ class PmBootstrap extends Bootstrap
         $this->autoloader->registerClass('menu', PATH_GULLIVER . 'class.menu');
         $this->autoloader->registerClass('xmlMenu', PATH_GULLIVER . 'class.xmlMenu');
         $this->autoloader->registerClass('dvEditor', PATH_GULLIVER . 'class.dvEditor');
+        $this->autoloader->registerClass('wysiwygEditor', PATH_GULLIVER . 'class.wysiwygEditor');
         $this->autoloader->registerClass('Controller', PATH_GULLIVER . 'class.controller');
         $this->autoloader->registerClass('HttpProxyController', PATH_GULLIVER . 'class.httpProxyController');
         $this->autoloader->registerClass('PmException', PATH_GULLIVER . 'class.pmException');
@@ -146,6 +148,7 @@ class PmBootstrap extends Bootstrap
         $oHeadPublisher->addMaborakFile(PATH_GULLIVER_HOME . 'js' . PATH_SEP . 'common/core/effects.js' );
         $oHeadPublisher->addMaborakFile(PATH_GULLIVER_HOME . 'js' . PATH_SEP . 'common/core/webResource.js' );
         $oHeadPublisher->addMaborakFile(PATH_GULLIVER_HOME . 'js' . PATH_SEP . 'dveditor/core/dveditor.js' );
+        $oHeadPublisher->addMaborakFile(PATH_GULLIVER_HOME . 'js' . PATH_SEP . 'tinymce/jscripts/tiny_mce/tiny_mce.js' );
         $oHeadPublisher->addMaborakFile(PATH_GULLIVER_HOME . 'js' . PATH_SEP . 'common/tree/tree.js' );
         $oHeadPublisher->addMaborakFile(PATH_GULLIVER_HOME . 'js' . PATH_SEP . 'json/core/json.js' );
         $oHeadPublisher->addMaborakFile(PATH_GULLIVER_HOME . 'js' . PATH_SEP . 'form/core/form.js' );

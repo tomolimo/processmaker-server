@@ -5,16 +5,16 @@
  */
 
   // include base peer class
-  require_once 'classes/model/om/BaseReportVarPeer.php';
+  //require_once 'classes/model/om/BaseReportVarPeer.php';
 
   // include object class
-  include_once 'classes/model/ReportVar.php';
+  //include_once 'classes/model/ReportVar.php';
 
 
 /**
  * Skeleton subclass for performing query and update operations on the 'REPORT_VAR' table.
  *
- * 
+ *
  *
  * You should add additional methods to this class to meet the
  * application requirements.  This class will only be generated as
@@ -22,6 +22,7 @@
  *
  * @package    workflow.engine.classes.model
  */
-class ReportVarPeer extends BaseReportVarPeer {
+class ReportVarPeer extends BaseReportVarPeer
+{
+}
 
-} // ReportVarPeer

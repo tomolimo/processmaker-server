@@ -230,7 +230,19 @@ class SkinEngine
       $styles = $oHeadPublisher->getExtJsStylesheets($this->cssFileName);
       $body   = $oHeadPublisher->getExtJsScripts();
 
+      //default
       $templateFile = G::ExpandPath( "skinEngine" ).'base'.PATH_SEP .'extJsInitLoad.html';
+      //Custom skins
+      if (defined('PATH_CUSTOM_SKINS') && is_dir(PATH_CUSTOM_SKINS . $this->mainSkin)) {
+        $templateFile = PATH_CUSTOM_SKINS . $this->mainSkin . PATH_SEP .'extJsInitLoad.html';
+      }
+      //Skin uxs - simplified
+      if (!isset($_SESSION['user_experience'])) {
+        $_SESSION['user_experience'] = 'NORMAL';
+      }
+      if ($_SESSION['user_experience'] != 'NORMAL') {
+        $templateFile = (is_dir(PATH_CUSTOM_SKINS . 'uxs')) ? PATH_CUSTOM_SKINS . 'simplified' . PATH_SEP . 'extJsInitLoad.html' : $templateFile;
+      }
     }
     else {
       $styles  = "";
@@ -247,34 +259,36 @@ class SkinEngine
     $template->assign('styles', $styles);
     $template->assign('bodyTemplate', $body);
 
-    // verify is RTL
-    $oServerConf =& serverConf::getSingleton();
-    if ($oServerConf->isRtl(SYS_LANG)) {
-    	$template->assign('dirBody', 'dir="RTL"');
+    $doctype = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">";
+    $meta    = null;
+    $dirBody = null;
+
+    if (preg_match("/^.*\(.*MSIE (\d+)\..+\).*$/", $_SERVER["HTTP_USER_AGENT"], $arrayMatch)) {
+        $ie = intval($arrayMatch[1]);
+        $swTrident = (preg_match("/^.*Trident.*$/", $_SERVER["HTTP_USER_AGENT"]))? 1 : 0; //Trident only in IE8+
+
+        $sw = 1;
+
+        if ((($ie == 7 && $swTrident == 1) || $ie == 8) && !preg_match("/^ux.+$/", SYS_SKIN)) { //IE8
+            $sw = 0;
+        }
+
+        if ($sw == 1) {
+            $doctype = null;
+            $meta    = "<meta http-equiv=\"X-UA-Compatible\" content=\"IE=$ie\" />";
+        }
     }
-    // end verify
 
-    // verify is IE
-    $doctype = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">';
-    $meta = '';
-    $iexplores = array(
-      'IE=10' => '(MSIE 10\.[0-9]+)',
-      'IE=9' => '(MSIE 9\.[0-9]+)',
-      'IE=8' => '(MSIE 8\.[0-9]+)',
-      'IE=7' => '(MSIE 7\.[0-9]+)',
-      'IE=6' => '(MSIE 6\.[0-9]+)'
-    );
+    $serverConf = &serverConf::getSingleton();
 
-          foreach ($iexplores as $browser => $pattern) {
-      if (preg_match('/'.$pattern.'/', $_SERVER['HTTP_USER_AGENT'])) {
-        $doctype = '';
-        $meta = '<meta http-equiv="X-UA-Compatible" content="'. $browser .'"/>';
-              }
+    if ($serverConf->isRtl(SYS_LANG)) {
+        $dirBody = "dir=\"RTL\"";
     }
-    // end verify
 
-    	    $template->assign('meta', $meta);
-    $template->assign('doctype', $doctype);
+    $template->assign("doctype", $doctype);
+    $template->assign("meta", $meta);
+    $template->assign("dirBody", $dirBody);
+
     echo $template->getOutputContent();
   }
 
@@ -318,9 +332,6 @@ class SkinEngine
     global $G_ID_MENU_SELECTED;
     global $G_ID_SUB_MENU_SELECTED;
 
-    if (! defined('DB_SYSTEM_INFORMATION'))
-      define('DB_SYSTEM_INFORMATION', 1);
-
     G::verifyPath(PATH_SMARTY_C, true);
     G::verifyPath(PATH_SMARTY_CACHE, true);
 
@@ -347,10 +358,6 @@ class SkinEngine
       $footer = '';
 
       if (strpos($_SERVER['REQUEST_URI'], '/login/login') !== false) {
-        if (DB_SYSTEM_INFORMATION == 1) {
-          $footer = "<a href=\"#\" onclick=\"openInfoPanel();return false;\" class=\"FooterLink\">| " . G::LoadTranslation('ID_SYSTEM_INFO') . " |</a><br />";
-        }
-
         $freeOfChargeText = "";
         if (! defined('SKIP_FREE_OF_CHARGE_TEXT')) {
           $freeOfChargeText = "Supplied free of charge with no support, certification, warranty, <br>maintenance nor indemnity by Colosa and its Certified Partners.";
@@ -444,9 +451,6 @@ class SkinEngine
       $footer = '';
 
       if (strpos($_SERVER['REQUEST_URI'], '/login/login') !== false) {
-        if ( defined('SYS_SYS') ) {
-          $footer = "<a href=\"#\" onclick=\"openInfoPanel();return false;\" class=\"FooterLink\">| " . G::LoadTranslation('ID_SYSTEM_INFO') . " |</a><br />";
-        }
         $footer .= "<br />Copyright &copy; 2003-" . date('Y') . " Colosa, Inc. All rights reserved.";
       }
 
@@ -560,10 +564,6 @@ class SkinEngine
     global $G_ID_MENU_SELECTED;
     global $G_ID_SUB_MENU_SELECTED;
 
-    if (! defined('DB_SYSTEM_INFORMATION')) {
-      define('DB_SYSTEM_INFORMATION', 1);
-    }
-
     G::verifyPath(PATH_SMARTY_C, true);
     G::verifyPath(PATH_SMARTY_CACHE, true);
 
@@ -608,9 +608,6 @@ class SkinEngine
       $footer = '';
 
       if (strpos($_SERVER['REQUEST_URI'], '/login/login') !== false) {
-        if (DB_SYSTEM_INFORMATION == 1) {
-          $footer = "<a href=\"#\" onclick=\"openInfoPanel();return false;\" class=\"FooterLink\">| " . G::LoadTranslation('ID_SYSTEM_INFO') . " |</a><br />";
-        }
 
         $freeOfChargeText = "";
         if (! defined('SKIP_FREE_OF_CHARGE_TEXT'))
@@ -705,5 +702,4 @@ class SkinEngine
   }
 
 }
-
 

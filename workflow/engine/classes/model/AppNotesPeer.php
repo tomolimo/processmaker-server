@@ -1,16 +1,16 @@
 <?php
 
   // include base peer class
-  require_once 'classes/model/om/BaseAppNotesPeer.php';
+  //require_once 'classes/model/om/BaseAppNotesPeer.php';
 
   // include object class
-  include_once 'classes/model/AppNotes.php';
+  //include_once 'classes/model/AppNotes.php';
 
 
 /**
  * Skeleton subclass for performing query and update operations on the 'APP_NOTES' table.
  *
- * 
+ *
  *
  * You should add additional methods to this class to meet the
  * application requirements.  This class will only be generated as
@@ -18,6 +18,7 @@
  *
  * @package    classes.model
  */
-class AppNotesPeer extends BaseAppNotesPeer {
+class AppNotesPeer extends BaseAppNotesPeer
+{
+}
 
-} // AppNotesPeer

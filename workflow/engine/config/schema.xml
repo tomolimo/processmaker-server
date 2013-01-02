@@ -77,6 +77,15 @@
         <parameter name="Seq_in_index" value="1"/>
       </vendor>
     </index>
+    <index name="indexAppCreateDate">
+      <index-column name="APP_CREATE_DATE"/>
+      <vendor type="mysql">
+        <parameter name="Table" value="APPLICATION"/>
+        <parameter name="Non_unique" value="1"/>
+        <parameter name="Key_name" value="indexAppCreateDate"/>
+        <parameter name="Seq_in_index" value="1"/>
+      </vendor>
+    </index>
   </table>
   <table name="APP_DELEGATION">
     <vendor type="mysql">
@@ -198,6 +207,25 @@
       <rule name="validValues" value="ACTIVE|DELETED" message="Please select a valid document status (ACTIVE|DELETED)."/>
       <rule name="required" message="Application Document Status is required."/>
     </validator>
+
+    <index name="indexAppDocument">
+      <index-column name="FOLDER_UID"/>
+      <index-column name="APP_DOC_UID"/>
+      <vendor type="mysql">
+        <parameter name="Table" value="APP_DOCUMENT"/>
+        <parameter name="Non_unique" value="1"/>
+        <parameter name="Key_name" value="indexAppDocument"/>
+        <parameter name="Seq_in_index" value="1"/>
+        <parameter name="Column_name" value="APP_DOCUMENT"/>
+        <parameter name="Collation" value="A"/>
+        <parameter name="Cardinality" value=""/>
+        <parameter name="Sub_part" value=""/>
+        <parameter name="Packed" value=""/>
+        <parameter name="Null" value=""/>
+        <parameter name="Index_type" value="BTREE"/>
+        <parameter name="Comment" value=""/>
+      </vendor>
+    </index>
   </table>
   <table name="APP_MESSAGE" idMethod="native">
     <vendor type="mysql">
@@ -236,6 +264,7 @@
     <column name="APP_MSG_STATUS" type="VARCHAR" size="20"/>
     <column name="APP_MSG_ATTACH" type="LONGVARCHAR" required="false"/>
     <column name="APP_MSG_SEND_DATE" type="TIMESTAMP" required="true"/>
+    <column name="APP_MSG_SHOW_MESSAGE" type="TINYINT" required="true" default="1"/>
   </table>
   <table name="APP_OWNER">
     <vendor type="mysql">
@@ -732,6 +761,7 @@
     </vendor>
     <column name="OUT_DOC_UID" type="VARCHAR" size="32" required="true" primaryKey="true" default=""/>
     <column name="PRO_UID" type="VARCHAR" size="32" required="true" default=""/>
+    <column name="OUT_DOC_REPORT_GENERATOR" type="VARCHAR" size="10" required="true" default="HTML2PDF"/>
     <column name="OUT_DOC_LANDSCAPE" type="TINYINT" required="true" default="0"/>
     <column name="OUT_DOC_MEDIA" type="VARCHAR" size="10" required="true" default="Letter"/>
     <column name="OUT_DOC_LEFT_MARGIN" type="INTEGER" default="30"/>
@@ -795,6 +825,11 @@
     <column name="PRO_ASSIGNMENT" type="VARCHAR" size="20" required="true" default="FALSE"/>
     <column name="PRO_SHOW_MAP" type="TINYINT" required="true" default="1"/>
     <column name="PRO_SHOW_MESSAGE" type="TINYINT" required="true" default="1"/>
+    <column name="PRO_SUBPROCESS" type="TINYINT" required="true" default="0"/>
+    <column name="PRO_TRI_DELETED" type="VARCHAR" size="32" required="true" default=""/>
+    <column name="PRO_TRI_CANCELED" type="VARCHAR" size="32" required="true" default=""/>
+    <column name="PRO_TRI_PAUSED" type="VARCHAR" size="32" required="true" default=""/>
+    <column name="PRO_TRI_REASSIGNED" type="VARCHAR" size="32" required="true" default=""/>
     <column name="PRO_SHOW_DELEGATE" type="TINYINT" required="true" default="1"/>
     <column name="PRO_SHOW_DYNAFORM" type="TINYINT" required="true" default="0"/>
     <column name="PRO_CATEGORY" type="VARCHAR" size="48" required="true" default=""/>
@@ -1192,6 +1227,10 @@
     <column name="TAS_EVN_UID" type="VARCHAR" size="32" required="true" default=""/>
     <column name="TAS_BOUNDARY" type="VARCHAR" size="32" required="true" default=""/>
     <column name="TAS_DERIVATION_SCREEN_TPL" type="VARCHAR" size="128" default="" required="false"/>
+    <column name="TAS_SELFSERVICE_TIMEOUT" type="INTEGER" default="0"/>
+    <column name="TAS_SELFSERVICE_TIME" type="VARCHAR" size="15" default=""/>
+    <column name="TAS_SELFSERVICE_TIME_UNIT" type="VARCHAR" size="15" default=""/>
+    <column name="TAS_SELFSERVICE_TRIGGER_UID" type="VARCHAR" size="32" default=""/>
 
     <validator column="TAS_TYPE">
       <rule name="validValues" value="NORMAL|ADHOC|SUBPROCESS|HIDDEN" message="Please select a valid value for TAS_TYPE."/>
@@ -2015,6 +2054,24 @@
     <column name="LOG_END_DATE" type="TIMESTAMP" required="false"/>
     <column name="LOG_CLIENT_HOSTNAME" type="VARCHAR" size="100" required="true" default=""/>
     <column name="USR_UID" type="VARCHAR" size="32" required="true" default=""/>
+    <index name="indexLoginLog">
+      <index-column name="USR_UID"/>
+      <index-column name="LOG_INIT_DATE"/>
+      <vendor type="mysql">
+        <parameter name="Table" value="LOGIN_LOG"/>
+        <parameter name="Non_unique" value="1"/>
+        <parameter name="Key_name" value="indexLoginLog"/>
+        <parameter name="Seq_in_index" value="1"/>
+        <parameter name="Column_name" value="USR_UID"/>
+        <parameter name="Collation" value="A"/>
+        <parameter name="Cardinality" value=""/>
+        <parameter name="Sub_part" value=""/>
+        <parameter name="Packed" value=""/>
+        <parameter name="Null" value=""/>
+        <parameter name="Index_type" value="BTREE"/>
+        <parameter name="Comment" value=""/>
+      </vendor>
+    </index>
   </table>
   <table name="USERS_PROPERTIES">
     <vendor type="mysql">

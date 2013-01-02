@@ -136,6 +136,7 @@
           <xs:element name="name" type="xs:string"/>
           <xs:element name="status" type="xs:string"/>
           <xs:element name="delIndex" type="xs:string"/>
+          <xs:element name="processId" type="xs:string"/>
         </xs:sequence>
       </xs:complexType>
       <xs:complexType name="unassignedCaseListStruct">
@@ -143,6 +144,7 @@
           <xs:element name="guid" type="xs:string"/>
           <xs:element name="name" type="xs:string"/>
           <xs:element name="delIndex" type="xs:string"/>
+          <xs:element name="processId" type="xs:string"/>
         </xs:sequence>
       </xs:complexType>
       <xs:element name="caseListRequest">
@@ -220,6 +222,50 @@
             <xs:element name="status_code" type="xs:integer"/>
             <xs:element name="message" type="xs:string"/>
             <xs:element name="timestamp" type="xs:string"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:complexType name="informationUserStruct">
+        <xs:sequence>
+          <xs:element name="username" type="xs:string"/>
+          <xs:element name="firstname" type="xs:string"/>
+          <xs:element name="lastname" type="xs:string"/>
+          <xs:element name="mail" type="xs:string"/>
+          <xs:element name="address" type="xs:string"/>
+          <xs:element name="zipcode" type="xs:string"/>
+          <xs:element name="country" type="xs:string"/>
+          <xs:element name="state" type="xs:string"/>
+          <xs:element name="location" type="xs:string"/>
+          <xs:element name="phone" type="xs:string"/>
+          <xs:element name="fax" type="xs:string"/>
+          <xs:element name="cellular" type="xs:string"/>
+          <xs:element name="birthday" type="xs:string"/>
+          <xs:element name="position" type="xs:string"/>
+          <xs:element name="replacedby" type="xs:string"/>
+          <xs:element name="duedate" type="xs:string"/>
+          <xs:element name="calendar" type="xs:string"/>
+          <xs:element name="status" type="xs:string"/>
+          <xs:element name="department" type="xs:string"/>
+          <xs:element name="reportsto" type="xs:string"/>
+          <xs:element name="userexperience" type="xs:string"/>
+          <xs:element name="photo" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="informationUserRequest">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="sessionId" type="xs:string"/>
+            <xs:element name="userUid" type="xs:string"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="informationUserResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="status_code" type="xs:integer"/>
+            <xs:element name="message" type="xs:string"/>
+            <xs:element name="timestamp" type="xs:string"/>
+            <xs:element name="info" minOccurs="0" maxOccurs="unbounded" type="xs0:informationUserStruct"/>
           </xs:sequence>
         </xs:complexType>
       </xs:element>
@@ -515,6 +561,8 @@
         <xs:sequence>
           <xs:element name="guid" type="xs:string"/>
           <xs:element name="name" type="xs:string"/>
+          <xs:element name="processId" type="xs:string"/>
+          <xs:element name="initialTask" type="xs:string"/>
         </xs:sequence>
       </xs:complexType>
       <xs:element name="taskListResponse">
@@ -823,6 +871,28 @@
           </xs:sequence>
         </xs:complexType>
       </xs:element>
+      <xs:element name="addCaseNoteRequest">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="sessionId" type="xs:string"/>
+            <xs:element name="caseUid" type="xs:string"/>
+            <xs:element name="processUid" type="xs:string"/>
+            <xs:element name="taskUid" type="xs:string"/>
+            <xs:element name="userUid" type="xs:string"/>
+            <xs:element name="note" type="xs:string"/>
+            <xs:element name="sendMail" minOccurs="0" maxOccurs="unbounded" type="xs:integer"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="addCaseNoteResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="status_code" type="xs:integer"/>
+            <xs:element name="message" type="xs:string"/>
+            <xs:element name="timestamp" type="xs:string"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
     </xs:schema>
   </types>
 
@@ -891,6 +961,12 @@
   </message>
   <message name="updateUserResponse">
     <part name="parameters" element="xs0:updateUserResponse"/>
+  </message>
+  <message name="informationUserRequest">
+    <part name="parameters" element="xs0:informationUserRequest"/>
+  </message>
+  <message name="informationUserResponse">
+    <part name="parameters" element="xs0:informationUserResponse"/>
   </message>
   <message name="createGroupRequest">
     <part name="parameters" element="xs0:createGroupRequest"/>
@@ -1045,6 +1121,12 @@
   <message name="unpauseCaseResponse">
     <part name="parameters" element="xs0:unpauseCaseResponse"/>
   </message>
+  <message name="addCaseNoteRequest">
+    <part name="parameters" element="xs0:addCaseNoteRequest"/>
+  </message>
+  <message name="addCaseNoteResponse">
+    <part name="parameters" element="xs0:addCaseNoteResponse"/>
+  </message>
 
   <portType name="ProcessMakerServiceSoap">
     <operation name="login">
@@ -1086,6 +1168,10 @@
     <operation name="updateUser">
       <input message="xs0:updateUserRequest"/>
       <output message="xs0:updateUserResponse"/>
+    </operation>
+    <operation name="informationUser">
+      <input message="xs0:informationUserRequest"/>
+      <output message="xs0:informationUserResponse"/>
     </operation>
     <operation name="createGroup">
       <input message="xs0:createGroupRequest"/>
@@ -1203,6 +1289,10 @@
       <input message="xs0:unpauseCaseRequest"/>
       <output message="xs0:unpauseCaseResponse"/>
     </operation>
+    <operation name="addCaseNote">
+      <input message="xs0:addCaseNoteRequest"/>
+      <output message="xs0:addCaseNoteResponse"/>
+    </operation>
   </portType>
 
   <binding name="ProcessMakerServiceSoap" type="xs0:ProcessMakerServiceSoap">
@@ -1290,6 +1380,15 @@
     </operation>
     <operation name="updateUser">
       <soap12:operation soapAction="urn:updateUser" soapActionRequired="true" style="document"/>
+      <input>
+        <soap12:body use="literal"/>
+      </input>
+      <output>
+        <soap12:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="informationUser">
+      <soap12:operation soapAction="urn:informationUser" soapActionRequired="true" style="document"/>
       <input>
         <soap12:body use="literal"/>
       </input>
@@ -1551,6 +1650,15 @@
     </operation>
     <operation name="unpauseCase">
       <soap12:operation soapAction="urn:unpauseCase" soapActionRequired="true" style="document"/>
+      <input>
+        <soap12:body use="literal"/>
+      </input>
+      <output>
+        <soap12:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="addCaseNote">
+      <soap12:operation soapAction="urn:addCaseNote" soapActionRequired="true" style="document"/>
       <input>
         <soap12:body use="literal"/>
       </input>

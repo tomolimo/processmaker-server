@@ -5,16 +5,16 @@
  */
 
   // include base peer class
-  require_once 'classes/model/om/BaseCaseTrackerObjectPeer.php';
+  //require_once 'classes/model/om/BaseCaseTrackerObjectPeer.php';
 
   // include object class
-  include_once 'classes/model/CaseTrackerObject.php';
+  //include_once 'classes/model/CaseTrackerObject.php';
 
 
 /**
  * Skeleton subclass for performing query and update operations on the 'CASE_TRACKER_OBJECT' table.
  *
- * 
+ *
  *
  * You should add additional methods to this class to meet the
  * application requirements.  This class will only be generated as
@@ -22,6 +22,7 @@
  *
  * @package    workflow.engine.classes.model
  */
-class CaseTrackerObjectPeer extends BaseCaseTrackerObjectPeer {
+class CaseTrackerObjectPeer extends BaseCaseTrackerObjectPeer
+{
+}
 
-} // CaseTrackerObjectPeer
