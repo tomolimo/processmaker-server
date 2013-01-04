@@ -2673,7 +2673,7 @@ var mainPanel;
 
 function showDbConnectionsList(PRO_UID)
 {
-    if (typeof(this.Pm.menu) != undefined) {
+    if (typeof(this.Pm.menu) != 'undefined') {
         this.Pm.menu.remove();
     }
   mainPanel = new leimnud.module.panel();
@@ -2706,7 +2706,7 @@ function showDbConnectionsList(PRO_UID)
 
 function showCaseSchedulerList(PRO_UID)
 {
-    if (typeof(this.Pm.menu) != undefined) {
+    if (typeof(this.Pm.menu) != 'undefined') {
         this.Pm.menu.remove();
     }
   mainPanel = new leimnud.module.panel();
