@@ -576,6 +576,7 @@ var dynaformEditor={
     }
     if ((response.error==0) && (this.htmlEditorLoaded))
     {
+        alert("hi");
 //      window._editorHTML.doc.body.innerHTML=response.html;
 //      html_html2();
 //      html2_html();
