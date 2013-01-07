@@ -110,14 +110,6 @@ class XmlForm_Field_WYSIWYG_EDITOR extends XmlForm_Field
                             this.save();
                         }
                         return true;
-                    },
-                    setup: function (ed) {
-                        ed.onKeyUp.add(function (ed, e) {
-                            actualCaretPositionBookmark = tinyMCE.activeEditor.selection.getBookmark();
-                        });
-                        ed.onClick.add(function (ed, e) {
-                            actualCaretPositionBookmark = tinyMCE.activeEditor.selection.getBookmark();
-                        }); 
                     }
                 });
                 ';
@@ -191,14 +183,6 @@ class XmlForm_Field_WYSIWYG_EDITOR extends XmlForm_Field
                             this.save();
                         }
                         return true;
-                    },
-                    setup: function (ed) {
-                        ed.onKeyUp.add(function (ed, e) {
-                            actualCaretPositionBookmark = tinyMCE.activeEditor.selection.getBookmark();
-                        });
-                        ed.onClick.add(function (ed, e) {
-                            actualCaretPositionBookmark = tinyMCE.activeEditor.selection.getBookmark();
-                        }); 
                     }
                 });
 
