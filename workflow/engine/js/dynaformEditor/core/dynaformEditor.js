@@ -576,10 +576,11 @@ var dynaformEditor={
     }
     if ((response.error==0) && (this.htmlEditorLoaded))
     {
-        alert("hi");
-//      window._editorHTML.doc.body.innerHTML=response.html;
-//      html_html2();
-//      html2_html();
+        // window._editorHTML.doc.body.innerHTML=response.html;
+        //html_html2();
+        //html2_html();
+        var htmlContent = this.ajax.get_htmlcode(this.A);
+        tinyMCE.activeEditor.execCommand('mceSetContent', false, htmlContent);
     }
     else if ((response.error==0) && (!this.htmlEditorLoaded))
     {
@@ -910,7 +911,7 @@ function getElementByPMClass(__class){
     if(typePopup == 0)
       popupWindow(G_STRINGS.ID_ADD + ' ' + label , '../dynaforms/fields_Edit?A='+DYNAFORM_URL+'&TYPE='+encodeURIComponent(type) , 510, 650, null,false,true);
     else
-      popupWindow(G_STRINGS.ID_ADD + ' ' + label , '../dynaforms/fields_Edit?A='+DYNAFORM_URL+'&TYPE='+encodeURIComponent(type) , 510, 400 );
+      popupWindow(G_STRINGS.ID_ADD + ' ' + label , '../dynaforms/fields_Edit?A='+DYNAFORM_URL+'&TYPE='+encodeURIComponent(type) , 530, 400 );
 
     return false;
   }

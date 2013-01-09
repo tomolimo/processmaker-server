@@ -414,6 +414,7 @@ Bootstrap::registerClass('DBConnection', PATH_GULLIVER . "class.dbconnection.php
 Bootstrap::registerClass('DBRecordset',  PATH_GULLIVER . "class.dbrecordset.php");
 Bootstrap::registerClass('DBTable',      PATH_GULLIVER . "class.dbtable.php");
 Bootstrap::registerClass('xmlMenu',      PATH_GULLIVER . "class.xmlMenu.php");
+Bootstrap::registerClass('XmlForm_Field_FastSearch', PATH_GULLIVER . "class.xmlformExtension.php");
 Bootstrap::registerClass('XmlForm_Field_XmlMenu', PATH_GULLIVER . "class.xmlMenu.php");
 Bootstrap::registerClass('XmlForm_Field_HTML',  PATH_GULLIVER . "class.dvEditor.php");
 Bootstrap::registerClass('XmlForm_Field_WYSIWYG_EDITOR',  PATH_GULLIVER . "class.wysiwygEditor.php");
@@ -423,6 +424,7 @@ Bootstrap::registerClass('templatePower',            PATH_GULLIVER . "class.temp
 Bootstrap::registerClass('XmlForm_Field_SimpleText', PATH_GULLIVER . "class.xmlformExtension.php");
 Bootstrap::registerClass('Propel',          PATH_THIRDPARTY . "propel/Propel.php");
 Bootstrap::registerClass('Creole',          PATH_THIRDPARTY . "creole/Creole.php");
+Bootstrap::registerClass('Criteria',        PATH_THIRDPARTY . "propel/util/Criteria.php");
 Bootstrap::registerClass('Groups',       PATH_HOME . "engine/classes/class.groups.php");
 Bootstrap::registerClass('Tasks',        PATH_HOME . "engine/classes/class.tasks.php");
 Bootstrap::registerClass('Calendar',     PATH_HOME . "engine/classes/class.calendar.php");

@@ -150,6 +150,7 @@ class Bootstrap
         self::registerClass("AppDelay",           PATH_HOME . "engine" . PATH_SEP . "classes" . PATH_SEP . "model" . PATH_SEP . "AppDelay.php");
         self::registerClass("BaseAdditionalTables",PATH_HOME . "engine" . PATH_SEP . "classes" . PATH_SEP . "model" . PATH_SEP . "om" . PATH_SEP . "BaseAdditionalTables.php");
         self::registerClass("AdditionalTables",   PATH_HOME . "engine" . PATH_SEP . "classes" . PATH_SEP . "model" . PATH_SEP . "AdditionalTables.php");
+        self::registerClass("AdditionalTablesPeer", PATH_HOME . "engine" . PATH_SEP . "classes" . PATH_SEP . "model" . PATH_SEP . "AdditionalTablesPeer.php");
         self::registerClass("BaseAppCacheView",   PATH_HOME . "engine" . PATH_SEP . "classes" . PATH_SEP . "model" . PATH_SEP . "om" . PATH_SEP . "BaseAppCacheView.php");
         self::registerClass("AppCacheView",       PATH_HOME . "engine" . PATH_SEP . "classes" . PATH_SEP . "model" . PATH_SEP . "AppCacheView.php");
         self::registerClass("BaseAppCacheViewPeer",PATH_HOME . "engine" . PATH_SEP . "classes" . PATH_SEP . "model" . PATH_SEP . "om" . PATH_SEP . "BaseAppCacheViewPeer.php");
@@ -2917,5 +2918,32 @@ class Bootstrap
 		        return $url;
 		    }
 		}
-	}
+    /**
+    * isWinOs
+    *
+    * @return true if the 3 first letters of PHP_OS got 'WIN', otherwise false.
+    */
+    function isWinOs()
+    {
+        return strtoupper(substr(PHP_OS, 0, 3)) == "WIN";
+    }
+    /**
+    * isNTOs
+    *
+    * @return true if PHP_OS is 'WINNT', otherwise false.
+    */
+    function isNTOs()
+    {
+        return PHP_OS == "WINNT";
+    }
+    /**
+    * isLinuxOs
+    *
+    * @return true if PHP_OS (upper text) got 'LINUX', otherwise false.
+    */
+    function isLinuxOs()
+    {
+        return strtoupper(PHP_OS) == "LINUX";
+    }
+}
 
