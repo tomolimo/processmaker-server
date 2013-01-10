@@ -118,28 +118,13 @@ switch($req){
             $row = $result->getRow();
             $row['APP_MSG_FROM'] =htmlentities($row['APP_MSG_FROM'], ENT_QUOTES, "UTF-8");
             $row['APP_MSG_STATUS'] = ucfirst ( $row['APP_MSG_STATUS']);
-            $row['TAS_TITLE'] = $tasTitleDefault;
             if ($row['DEL_INDEX'] != 0) {
-                $criteria = new Criteria();
-                $criteria->addSelectColumn(AppDelegationPeer::PRO_UID);
-                $criteria->addSelectColumn(AppDelegationPeer::TAS_UID);
-                $criteria->addSelectColumn(AppDelegationPeer::DEL_INDEX);
-                $criteria->add(AppDelegationPeer::APP_UID, $row['APP_UID']);
-                $resultDelegation = AppDelegationPeer::doSelectRS($criteria);
-                $resultDelegation->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-                $row['TAS_TITLE'] = '-';
-                while ($resultDelegation->next()) {
-                    $rowDelegation = $resultDelegation->getRow();
-                    if ($row['DEL_INDEX'] == $rowDelegation['DEL_INDEX']) {
-                        $index = $row['DEL_INDEX'];
-                        $row['TAS_TITLE'] = $content->load( 'TAS_TITLE', '', $rowDelegation['TAS_UID'], SYS_LANG );
-                        break;
-                    }
-                }
+                $index = $row['DEL_INDEX'];
             }
 
             $criteria = new Criteria();
             $criteria->addSelectColumn(AppCacheViewPeer::APP_TITLE);
+            $criteria->addSelectColumn(AppCacheViewPeer::APP_TAS_TITLE);
             $criteria->add(AppCacheViewPeer::APP_UID, $row['APP_UID']);
             $criteria->add(AppCacheViewPeer::DEL_INDEX, $index);
             $resultCacheView = AppCacheViewPeer::doSelectRS($criteria);
@@ -148,6 +133,10 @@ switch($req){
             while ($resultCacheView->next()) {
                 $rowCacheView = $resultCacheView->getRow();
                 $row['APP_TITLE'] = $rowCacheView['APP_TITLE'];
+                $row['TAS_TITLE'] = $rowCacheView['APP_TAS_TITLE'];
+            }
+            if ($row['DEL_INDEX'] == 0) {
+                $row['TAS_TITLE'] = $tasTitleDefault;
             }
             $data[] = $row;
         }
