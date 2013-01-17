@@ -2434,13 +2434,13 @@ class wsBase
         $result = array ();
         try {
             $oCriteria = new Criteria( 'workflow' );
-            $del = DBAdapter::getStringDelimiter();
+            $del       = DBAdapter::getStringDelimiter();
             $oCriteria->addSelectColumn( AppDelegationPeer::DEL_INDEX );
             $oCriteria->addSelectColumn( AppDelegationPeer::TAS_UID );
 
             $oCriteria->addAsColumn( 'TAS_TITLE', 'C1.CON_VALUE' );
             $oCriteria->addAlias( "C1", 'CONTENT' );
-            $tasTitleConds = array ();
+            $tasTitleConds   = array ();
             $tasTitleConds[] = array (AppDelegationPeer::TAS_UID,'C1.CON_ID');
             $tasTitleConds[] = array ('C1.CON_CATEGORY',$del . 'TAS_TITLE' . $del);
             $tasTitleConds[] = array ('C1.CON_LANG',$del . SYS_LANG . $del);
@@ -2464,8 +2464,7 @@ class wsBase
 
             return $result;
         } catch (Exception $e) {
-            $result[] = array ('guid' => $e->getMessage(),'name' => $e->getMessage()
-            );
+            $result[] = array ('guid' => $e->getMessage(),'name' => $e->getMessage(), 'delegate' => $e->getMessage() );
 
             return $result;
         }
