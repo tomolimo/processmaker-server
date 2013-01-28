@@ -708,14 +708,14 @@ class AdditionalTables extends BaseAdditionalTables
                     $criteriaField->add(FieldsPeer::ADD_TAB_UID, $row['ADD_TAB_UID']);
                     $datasetField = FieldsPeer::doSelectRS($criteriaField);
                     $datasetField->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-                    $fieldType = array();
+                    $fieldTypes = array();
                     while ($datasetField->next()) {
                         $rowfield = $datasetField->getRow();
                         switch ($rowfield['FLD_TYPE']) {
                             case 'FLOAT':
                             case 'DOUBLE':
                             case 'INTEGER':
-                                $fieldType[] = array($rowfield['FLD_NAME']=>$rowfield['FLD_TYPE']);
+                                $fieldTypes[] = array($rowfield['FLD_NAME']=>$rowfield['FLD_TYPE']);
                                 break;
                             default:
                                 break;
@@ -724,11 +724,11 @@ class AdditionalTables extends BaseAdditionalTables
 
                     // parsing empty values to null
                     foreach ($caseData as $i => $v) {
-                        foreach ($fieldType as $key => $value) {
-                            foreach ($value as $keys => $values) {
-                                if ( strtoupper ( $i) == $keys) {
-                                    $v = validateType ($v, $values);
-                                    unset($key);
+                        foreach ($fieldTypes as $key => $fieldType) {
+                            foreach ($fieldType as $name => $type) {
+                                if ( strtoupper ( $i) == $name) {
+                                    $v = validateType ($v, $type);
+                                    unset($name);
                                 }
                             }
                         }
