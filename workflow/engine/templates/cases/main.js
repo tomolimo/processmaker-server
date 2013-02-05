@@ -532,10 +532,11 @@ Ext.onReady(function(){
   setTimeout("timer()", parseInt(FORMATS.casesListRefreshTime) * 1000);
 });
 
-function updateCasesView(view) {
+function updateCasesView(viewList) {
+    var refreshList = viewList || false;
   try{
     if (document.getElementById('casesSubFrame').contentWindow.storeCases) {
-        if (view) {
+        if (refreshList) {
               document.getElementById('casesSubFrame').contentWindow.storeCases.reload();
         } else {
             switch (document.getElementById('casesSubFrame').contentWindow.storeCases.baseParams.action) {
