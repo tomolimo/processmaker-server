@@ -1116,7 +1116,7 @@ class OutputDocument extends BaseOutputDocument
             unlink(PATH_OUTPUT_FILE_DIRECTORY . $sFilename . '.pdf');
             unlink(PATH_OUTPUT_FILE_DIRECTORY . $sFilename . '.html');
         } catch (Exception $e) {
-            if ($e->getMessage() == 'Pdf not created') {
+            if ($e->getMessage() == 'ID_OUTPUT_NOT_GENERATE') {
                 include_once ("classes/model/AppDocument.php");
                 list($sFileUID,$docVersion) = explode('_',$sFilename);
                 $oAppDocument = new AppDocument ();
