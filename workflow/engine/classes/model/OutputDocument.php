@@ -1118,10 +1118,13 @@ class OutputDocument extends BaseOutputDocument
         } catch (Exception $e) {
             if ($e->getMessage() == 'ID_OUTPUT_NOT_GENERATE') {
                 include_once ("classes/model/AppDocument.php");
-                list($sFileUID,$docVersion) = explode('_',$sFilename);
+                $dataDocument = explode('_',$sFilename);
                 $oAppDocument = new AppDocument ();
-                $oAppDocument->remove($sFileUID,$docVersion);
-                G::SendTemporalMessage (G::loadTranslation("ID_OUTPUT_NOT_GENERATE"), "Error");
+                if (isset($dataDocument['1'])) {
+                    $oAppDocument->remove($dataDocument['0'], $dataDocument['1']);
+                    G::SendTemporalMessage (G::loadTranslation("ID_OUTPUT_NOT_GENERATE"), "Error");    
+                }
+                
             }
         }
     }
