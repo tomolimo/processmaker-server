@@ -375,8 +375,8 @@ var dynaformEditor={
   saveHtmlCode:function()
   {
     //var htmlCode = getField("HTML");
-    var contenido = document.getElementById("form[HTML]_ifr");
-    var htmlCode = contenido.contentWindow.document.body.innerHTML;
+    var htmlField = document.getElementById("form[HTML]_ifr");
+    var htmlCode = htmlField.contentWindow.document.body.innerHTML;
 
     todoRefreshHtmlCode = htmlCode === null;
     if (todoRefreshHtmlCode) return;
