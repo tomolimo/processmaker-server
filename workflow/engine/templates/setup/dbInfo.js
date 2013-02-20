@@ -31,5 +31,5 @@ Ext.onReady(dbInfo.application.init, dbInfo.application);
 
 
 function showUpgradedLogs() {
-    window.location = '../../uxmodern/main/screamFileUpgrades.php';
+    window.location = '../../uxmodern/main/screamFileUpgrades';
 }
