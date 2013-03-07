@@ -63,9 +63,7 @@
   //require_once( 'lime/lime.php');
 
   require_once (PATH_GULLIVER . "class.bootstrap.php");
-echo "boot\n";
   spl_autoload_register(array('Bootstrap', 'autoloadClass'));
-echo "autoloadclass\n";
   Bootstrap::registerClass('G', PATH_GULLIVER . "class.g.php");
   Bootstrap::registerClass('System',        PATH_HOME . "engine/classes/class.system.php");
 // Call more Classes
@@ -99,7 +97,7 @@ echo "autoloadclass\n";
   Bootstrap::registerClass('processMap',   PATH_HOME . "engine/classes/class.processMap.php");
 
   Bootstrap::registerSystemClasses();
-echo "classes registed \n";
+  
   require_once( PATH_THIRDPARTY . 'pake' . PATH_SEP . 'pakeFunction.php');
   require_once( PATH_THIRDPARTY . 'pake' . PATH_SEP . 'pakeGetopt.class.php');
   require_once( PATH_CORE . 'config' . PATH_SEP . 'environments.php');
