@@ -843,6 +843,7 @@ class Installer extends Controller
 
             $info->result = true;
             $info->message = G::LoadTranslation('ID_INSTALL_SUCESS');
+            $info->messageFinish = G::LoadTranslation('ID_PROCESSMAKER_SUCCESS_INSTALLED', SYS_LANG, Array($workspace));;
         } catch (Exception $e) {
             $info->canRedirect = false;
             $info->result = false;
@@ -1026,6 +1027,7 @@ class Installer extends Controller
             $info->result = true;
             $info->message = G::LoadTranslation('ID_INSTALL_SUCESS');
             $info->url = '/sys' . $_REQUEST['workspace'] . '/en/classic/main/login';
+            $info->messageFinish = G::LoadTranslation('ID_PROCESSMAKER_SUCCESS_INSTALLED', SYS_LANG, Array($workspace));;
         } catch (Exception $e) {
             $info->result = false;
             $info->message = $e->getMessage();
@@ -1198,4 +1200,5 @@ class Installer extends Controller
         return $info;
     }
 }
+
 
