@@ -1,4 +1,4 @@
-    <?php
+<?php
 /**
  * class.g.php
  * @package gulliver.system
