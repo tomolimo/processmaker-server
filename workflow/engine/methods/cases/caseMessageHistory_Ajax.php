@@ -40,8 +40,8 @@ if ($actionAjax == 'messageHistoryGridList_JXP') {
     global $G_PUBLISH;
     $oCase = new Cases();
 
-    $appMessageArray = $oCase->getHistoryMessagesTrackerExt( $_SESSION['APPLICATION'], $_REQUEST['start'], $_REQUEST['limit']);
-    $appMessageCountArray = $oCase->getHistoryMessagesTrackerExt( $_SESSION['APPLICATION']);
+    $appMessageArray = $oCase->getHistoryMessagesTrackerExt( $_SESSION['APPLICATION'], true, $_REQUEST['start'], $_REQUEST['limit']);
+    $appMessageCountArray = $oCase->getHistoryMessagesTrackerExt( $_SESSION['APPLICATION'], true);
 
     $result = new stdClass();
     $aProcesses = Array ();
