@@ -972,6 +972,13 @@ class Cases
             $oReportTables = new ReportTables();
             $addtionalTables = new additionalTables();
 
+            if (!isset($Fields['APP_NUMBER'])) {
+                $Fields['APP_NUMBER'] = $appFields['APP_NUMBER'];
+            }
+            if (!isset($Fields['APP_STATUS'])) {
+                $Fields['APP_STATUS'] = $appFields['APP_STATUS'];
+            }
+            
             $oReportTables->updateTables($appFields['PRO_UID'], $sAppUid, $Fields['APP_NUMBER'], $aApplicationFields);
             $addtionalTables->updateReportTables(
                 $appFields['PRO_UID'], $sAppUid, $Fields['APP_NUMBER'], $aApplicationFields, $Fields['APP_STATUS']
