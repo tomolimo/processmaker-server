@@ -27,41 +27,25 @@
 G::LoadClass("system");
 G::LoadClass("wsTools");
 
-//-------------------------------------------------------------------------------------------
 CLI::taskName('plugins-translation-update');
 CLI::taskDescription(<<<EOT
-    Upgrade workspaces.
+    Update language of plugin
 
-    This command should be run after ProcessMaker files are upgraded so that all
-    workspaces are upgraded to the current version.
 EOT
 );
 CLI::taskArg('plugin', false);
 CLI::taskArg('lang', false);
-//CLI::taskOpt("buildACV", "If the option is enabled, performs the Build Cache View.", "ACV", "buildACV");
 CLI::taskRun(run_update);
 
-//-------------------------------------------------------------------------------------------
 CLI::taskName('plugins-translation-create');
 CLI::taskDescription(<<<EOT
-    Upgrade workspaces.
+    Created language .po of plugin
 
-    This command should be run after ProcessMaker files are upgraded so that all
-    workspaces are upgraded to the current version.
 EOT
 );
 CLI::taskArg('plugin', true);
 CLI::taskArg('lang', true);
-//CLI::taskOpt("buildACV", "If the option is enabled, performs the Build Cache View.", "ACV", "buildACV");
 CLI::taskRun(run_create);
-
-
-/**
- * A version of rm_dir which does not exits on error.
- *
- * @param  string $filename directory or file to remove
- * @param  bool $filesOnly either to remove the containing directory as well or not
- */
 
 
 function run_create($command, $args)
