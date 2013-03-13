@@ -225,7 +225,7 @@ class Translation extends BaseTranslation
         //to do: uniform  coderror structures for all classes
     }
 
-    /* Load strings from plugin translation.php .
+    /* Load strings from plugin translation.php.
      * @parameter $languageId   (es|en|...).
     */
     public function generateFileTranslationPlugin ($plugin, $languageId = '')
@@ -236,7 +236,6 @@ class Translation extends BaseTranslation
         if ($languageId === '') {
             $languageId = defined( 'SYS_LANG' ) ? SYS_LANG : 'en';
         }
-        global $translations;
         include PATH_PLUGINS . $plugin . PATH_SEP . 'translations'. PATH_SEP . 'translation.php';
 
         $cacheFile = PATH_LANGUAGECONT . $plugin . "." . $languageId;
@@ -255,7 +254,7 @@ class Translation extends BaseTranslation
             }
             $f = fopen( $cacheFile, 'w+' );
             fwrite( $f, "<?php\n" );
-            fwrite( $f, '$translation =' . 'unserialize(\'' . addcslashes( serialize( $translation ), '\\\'' ) . "');\n" );
+            fwrite( $f, '$translation' . $plugin . ' =' . 'unserialize(\'' . addcslashes( serialize( $translation ), '\\\'' ) . "');\n" );
             fwrite( $f, "?>" );
             fclose( $f );
 

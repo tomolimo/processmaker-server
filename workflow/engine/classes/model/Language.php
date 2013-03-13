@@ -44,6 +44,7 @@
  */
 class Language extends BaseLanguage
 {
+    private $exceptionFields = array ('','javascript','hidden','phpvariable','private','toolbar','xmlmenu','toolbutton','cellmark','grid','CheckboxTable');
 
     public function load ($sLanUid)
     {
@@ -423,11 +424,6 @@ class Language extends BaseLanguage
 
         //$timer->setMarker('end making 1th .po from db');
 
-
-        //now find labels in xmlforms
-        $aExceptionFields = array ('','javascript','hidden','phpvariable','private','toolbar','xmlmenu','toolbutton','cellmark','grid','CheckboxTable'
-        );
-
         //find all xml files into PATH_XMLFORM
         $aXMLForms = glob( PATH_XMLFORM . '*/*.xml' );
         //from a sublevel to
@@ -455,7 +451,7 @@ class Language extends BaseLanguage
                 //$arrayNode = $dynaForm->getArray($oNode, Array('type', $_BASE_LANG, $_BASE_LANG));
                 $arrayNode = $dynaForm->getArray( $oNode );
                 //if has not native language translation
-                if (! isset( $arrayNode[$_BASE_LANG] ) || ! isset( $arrayNode['type'] ) || (isset( $arrayNode['type'] ) && in_array( $arrayNode['type'], $aExceptionFields ))) {
+                if (! isset( $arrayNode[$_BASE_LANG] ) || ! isset( $arrayNode['type'] ) || (isset( $arrayNode['type'] ) && in_array( $arrayNode['type'], $this->exceptionFields ))) {
                     continue; //just continue with the next node
                 }
 
@@ -548,7 +544,7 @@ class Language extends BaseLanguage
             die();
         }
         if (!file_exists(PATH_CORE . 'content' . PATH_SEP . 'translations' . PATH_SEP . $plugin . '.' . $idLanguage . '.po')) {
-            throw new Exception( 'The not exist the file ' . $plugin . '.' . $idLanguage . '.po' );
+            throw new Exception( 'The file ' . $plugin . '.' . $idLanguage . '.po not exists' );
             die();
         }
         $languageFile = PATH_CORE . 'content' . PATH_SEP . 'translations' . PATH_SEP . $plugin . '.' . $idLanguage . '.po' ;//PATH_LANGUAGECONT . $plugin . '.' . $idLanguage;
@@ -664,7 +660,6 @@ class Language extends BaseLanguage
         G::LoadClass( "system" );
 
         //creating the .po file
-        //$sPOFile = PATH_LANGUAGECONT . $plugin . '.' . $idLanguage . '.po';
         $sPOFile = PATH_CORE . 'content' . PATH_SEP . 'translations' . PATH_SEP . $plugin . '.' . $idLanguage . '.po';
         $poFile = new i18n_PO( $sPOFile );
         $poFile->buildInit();
@@ -672,8 +667,8 @@ class Language extends BaseLanguage
         $language = new Language();
 
         $locale = $language;
-        $_TARGET_LANG = $idLanguage;
-        $_BASE_LANG = 'en';
+        $targetLang = $idLanguage;
+        $baseLang = 'en';
 
         //setting headers
         $poFile->addHeader( 'Project-Id-Version', $plugin );
@@ -691,7 +686,6 @@ class Language extends BaseLanguage
         $aLabels = array ();
         $aMsgids = array ('' => true
         );
-        //global $translations;
         include PATH_PLUGINS . $plugin . PATH_SEP . 'translations'. PATH_SEP . 'translation.php';
 
         foreach ($translations as $id => $translation) {
@@ -705,9 +699,6 @@ class Language extends BaseLanguage
             $aMsgids[$msgid] = true;
         }
 
-        //now find labels in xmlforms
-        $aExceptionFields = array ('','javascript','hidden','phpvariable','private','toolbar','xmlmenu','toolbutton','cellmark','grid','CheckboxTable'
-        );
         $aXMLForms = glob( PATH_PLUGINS . $plugin . PATH_SEP  . '*.xml' );
         $aXMLForms2 = glob( PATH_PLUGINS . $plugin . PATH_SEP  . '*/*.xml' );
         $aXMLForms = array_merge( $aXMLForms, $aXMLForms2 );
@@ -729,22 +720,22 @@ class Language extends BaseLanguage
                 $sNodeName = $oNode->nodeName;
                 $arrayNode = $dynaForm->getArray( $oNode );
                 //if has not native language translation
-                if (! isset( $arrayNode[$_BASE_LANG] ) || ! isset( $arrayNode['type'] ) || (isset( $arrayNode['type'] ) && in_array( $arrayNode['type'], $aExceptionFields ))) {
+                if (! isset( $arrayNode[$baseLang] ) || ! isset( $arrayNode['type'] ) || (isset( $arrayNode['type'] ) && in_array( $arrayNode['type'], $this->exceptionFields ))) {
                     continue; //just continue with the next node
                 }
                 // Getting the Base Origin Text
-                if (! is_array( $arrayNode[$_BASE_LANG] )) {
-                    $originNodeText = trim( $arrayNode[$_BASE_LANG] );
+                if (! is_array( $arrayNode[$baseLang] )) {
+                    $originNodeText = trim( $arrayNode[$baseLang] );
                 } else {
-                    $langNode = $arrayNode[$_BASE_LANG][0];
+                    $langNode = $arrayNode[$baseLang][0];
                     $originNodeText = $langNode['__nodeText__'];
                 }
                 // Getting the Base Target Text
-                if (isset( $arrayNode[$_TARGET_LANG] )) {
-                    if (! is_array( $arrayNode[$_TARGET_LANG] )) {
-                        $targetNodeText = trim( $arrayNode[$_TARGET_LANG] );
+                if (isset( $arrayNode[$targetLang] )) {
+                    if (! is_array( $arrayNode[$targetLang] )) {
+                        $targetNodeText = trim( $arrayNode[$targetLang] );
                     } else {
-                        $langNode = $arrayNode[$_TARGET_LANG][0];
+                        $langNode = $arrayNode[$targetLang][0];
                         $targetNodeText = $langNode['__nodeText__'];
                     }
                 } else {
@@ -764,11 +755,11 @@ class Language extends BaseLanguage
 
                 $aMsgids[$msgid] = true;
                 //if this node has options child nodes
-                if (isset( $arrayNode[$_BASE_LANG] ) && isset( $arrayNode[$_BASE_LANG][0] ) && isset( $arrayNode[$_BASE_LANG][0]['option'] )) {
-                    $originOptionNode = $arrayNode[$_BASE_LANG][0]['option']; //get the options
+                if (isset( $arrayNode[$baseLang] ) && isset( $arrayNode[$baseLang][0] ) && isset( $arrayNode[$baseLang][0]['option'] )) {
+                    $originOptionNode = $arrayNode[$baseLang][0]['option']; //get the options
                     $targetOptionExists = false;
-                    if (isset( $arrayNode[$_TARGET_LANG] ) && isset( $arrayNode[$_TARGET_LANG][0] ) && isset( $arrayNode[$_TARGET_LANG][0]['option'] )) {
-                        $targetOptionNode = $arrayNode[$_TARGET_LANG][0]['option'];
+                    if (isset( $arrayNode[$targetLang] ) && isset( $arrayNode[$targetLang][0] ) && isset( $arrayNode[$targetLang][0]['option'] )) {
+                        $targetOptionNode = $arrayNode[$targetLang][0]['option'];
                         $targetOptionExists = true;
                     }
                     if (! is_array( $originOptionNode )) {
@@ -800,7 +791,6 @@ class Language extends BaseLanguage
                 }
             } //end foreach
         }
-        //G::streamFile( $sPOFile, true );
     }
 }
 // Language

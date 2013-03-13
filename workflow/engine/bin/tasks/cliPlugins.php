@@ -29,7 +29,7 @@ G::LoadClass("wsTools");
 
 CLI::taskName('plugins-translation-update');
 CLI::taskDescription(<<<EOT
-    Update language of plugin
+    Update plugin translations
 
 EOT
 );
@@ -39,7 +39,7 @@ CLI::taskRun(run_update);
 
 CLI::taskName('plugins-translation-create');
 CLI::taskDescription(<<<EOT
-    Created language .po of plugin
+    Create .po file for the plugin
 
 EOT
 );
@@ -50,11 +50,11 @@ CLI::taskRun(run_create);
 
 function run_create($command, $args)
 {
-    CLI::logging("Creating file .po ..\n");
+    CLI::logging("Create .po file ...\n");
 
     $language = new Language();
     $language->createLanguagePlugin($command[0], $command[1]);
-    CLI::logging("Creating successful\n");
+    CLI::logging("Create successful\n");
 
 }
 
