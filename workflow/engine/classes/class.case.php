@@ -980,6 +980,13 @@ class Cases
             require_once 'classes/model/AdditionalTables.php';
             $oReportTables = new ReportTables();
             $addtionalTables = new additionalTables();
+            
+            if (!isset($Fields['APP_NUMBER'])) {
+                $Fields['APP_NUMBER'] = $appFields['APP_NUMBER'];
+            }
+            if (!isset($Fields['APP_STATUS'])) {
+                $Fields['APP_STATUS'] = $appFields['APP_STATUS'];
+            }
 
             $oReportTables->updateTables($appFields['PRO_UID'], $sAppUid, $Fields['APP_NUMBER'], $aApplicationFields);
             $addtionalTables->updateReportTables(
@@ -5751,7 +5758,7 @@ class Cases
      * @return array
      */
 
-    public function getHistoryMessagesTrackerExt($sApplicationUID)
+    public function getHistoryMessagesTrackerExt($sApplicationUID, $onlyVisibles = false, $start = null, $limit = null)
     {
         G::LoadClass('ArrayPeer');
         global $_DBArray;
@@ -5759,7 +5766,16 @@ class Cases
         $oAppDocument = new AppDocument();
         $oCriteria = new Criteria('workflow');
         $oCriteria->add(AppMessagePeer::APP_UID, $sApplicationUID);
+        if ($onlyVisibles) {
+            $oCriteria->add(AppMessagePeer::APP_MSG_SHOW_MESSAGE, 1);
+        }
         $oCriteria->addAscendingOrderByColumn(AppMessagePeer::APP_MSG_DATE);
+        if (!is_null($start)) {
+            $oCriteria->setOffset($start);
+        }
+        if (!is_null($limit)) {
+            $oCriteria->setLimit($limit);
+        }
         $oDataset = AppMessagePeer::doSelectRS($oCriteria);
         $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
         $oDataset->next();
