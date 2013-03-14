@@ -36,8 +36,6 @@ if (isset( $_GET['EVN_UID'] )) {
     require_once 'classes/model/Event.php';
     $oEvent = new Event();
     $aFields = $oEvent->load( $_GET['EVN_UID'] );
-    //G::pr($aFields);
-    //die;
 } else {
     $aFields = array ('PRO_UID' => $_GET['PRO_UID'] );
 }
@@ -60,7 +58,8 @@ foreach ($aAux1 as $aAux2) {
 
 $oProcessMap = new processMap( new DBConnection() );
 $aTriggersList = $oProcessMap->getTriggers( $_SESSION['PROCESS'] );
-$aTriggersFileds[0] = Array ('TRI_UID' => 'char','TRI_TITLE' => 'char');
+$aTriggersFileds = array ();
+$aTriggersFileds[] = array ('TRI_UID' => 'char','TRI_TITLE' => 'char');
 
 foreach ($aTriggersList as $i => $v) {
     unset( $aTriggersList[$i]['PRO_UID'] );
