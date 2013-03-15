@@ -225,7 +225,7 @@ switch ($REQUEST) {
             $RBAC->deleteUserRole( $ROL_UID, $aUID );
             if ($aUID == '00000000000000000000000000000001') {
                 $sData['USR_UID'] = $aUID;
-                $sData['ROL_UID'] = $RBAC->getPermisionSystem();
+                $sData['ROL_UID'] = '00000000000000000000000000000002';
                 $RBAC->assignUserToRole( $sData );
             }
         }
