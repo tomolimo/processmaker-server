@@ -230,6 +230,13 @@ class Translation extends BaseTranslation
     */
     public function generateFileTranslationPlugin ($plugin, $languageId = '')
     {
+        if (!file_exists(PATH_PLUGINS . $plugin . 'translations' . PATH_SEP . 'translation.php')) {
+            return;
+        }
+
+        if (!file_exists(PATH_CORE . 'content' . PATH_SEP . 'translations' . PATH_SEP . $plugin . '.' . $languageId . '.po')) {
+            return;
+        }
         $translation = Array ();
         $translationJS = Array ();
 
@@ -271,8 +278,8 @@ class Translation extends BaseTranslation
                 }
             }
             if ($identifier == 'TRANSLATION') {
-                    list ($category, $id) = explode( '/', $context );
-                    $translation[$id] = $rowTranslation['msgstr'] ;
+                list ($category, $id) = explode( '/', $context );
+                $translation[$id] = $rowTranslation['msgstr'] ;
             }
         }
 
