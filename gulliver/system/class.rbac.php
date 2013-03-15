@@ -562,17 +562,6 @@ class RBAC
     }
 
     /**
-     * Return Permision System PROCESSMAKER_ADMIN
-     *
-     * @access public
-     *
-     * @return type
-     */
-    public function getPermisionSystem()
-    {
-        return $this->permissionsObj->getPerSystem();
-    }
-    /**
      * loading role by code
      *
      *
