@@ -1,4 +1,4 @@
-ProcessMaker's "README.txt" filemmmmmm
+ProcessMaker's "README.txt" file
 
 Contents:
   Overview
