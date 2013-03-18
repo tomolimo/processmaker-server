@@ -1,5 +1,5 @@
 ProcessMaker's "README.txt" file
-ssss
+
 Contents:
   Overview
   More Information and license
