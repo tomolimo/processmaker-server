@@ -1828,7 +1828,6 @@ class wsBase
                     $Fields = $variables;
                 } else {
                     if ($c == 0) {
-                        //Si no tenenmos ninguna variables en el array variables.
                         $result = new wsResponse( 10, G::loadTranslation( 'ID_ARRAY_VARIABLES_EMPTY' ) );
 
                         return $result;
@@ -1860,19 +1859,12 @@ class wsBase
 
             $numTasks = 0;
             if ($taskId != '') {
-                $task = new Tasks();
-                $steps = $task->getStepsOfTask ($taskId);
-                if (count($steps) > 0) {
-                    $aTasks = $processes->getStartingTaskForUser( $processId, null );
-                    foreach ($aTasks as $task) {
-                        if ($task['TAS_UID'] == $taskId) {
-                             $arrayTask[0]['TAS_UID'] = $taskId;
-                             $numTasks = 1;
-                        }
+                $aTasks = $processes->getStartingTaskForUser( $processId, null );
+                foreach ($aTasks as $task) {
+                    if ($task['TAS_UID'] == $taskId) {
+                         $arrayTask[0]['TAS_UID'] = $taskId;
+                         $numTasks = 1;
                     }
-                } else {
-                    $result = new wsResponse( 11, G::loadTranslation( 'ID_INVALID_PROCESS' ) . " " . $processId . "!!" );
-                    return $result; 
                 }
             } else {
                 $arrayTask = $processes->getStartingTaskForUser( $processId, null );
