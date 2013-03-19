@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: ProcessMaker (Branch master) 2.0.41-testing.4-2086-gdc14a1f\n"
+"Project-Id-Version: ProcessMaker (Branch master) 2.0.46-testing.9\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2012-12-12 18:04:11\n"
+"PO-Revision-Date: 2013-03-04 11:23:27\n"
 "Last-Translator: \n"
 "Language-Team: Colosa Developers Team <developers@colosa.com>\n"
 "MIME-Version: 1.0\n"
@@ -36,6 +36,12 @@ msgstr "User does not have rights on this page."
 #: LABEL/ID_WRONG_PASS
 msgid "Wrong password"
 msgstr "Wrong password"
+
+# TRANSLATION
+# LABEL/WRONG_LOGIN_CREDENTIALS
+#: LABEL/WRONG_LOGIN_CREDENTIALS
+msgid "Wrong login credentials"
+msgstr "Wrong login credentials"
 
 # TRANSLATION
 # LABEL/ABOUT
@@ -4294,8 +4300,8 @@ msgstr "Processes"
 # TRANSLATION
 # LABEL/ID_ENTER_SEARCH_TERM
 #: LABEL/ID_ENTER_SEARCH_TERM
-msgid "enter search term"
-msgstr "enter search term"
+msgid "Enter search term"
+msgstr "Enter search term"
 
 # TRANSLATION
 # LABEL/ID_DETAILS
@@ -9364,8 +9370,8 @@ msgstr "Ad Hoc Groups Actors"
 # TRANSLATION
 # LABEL/ID_EXIST_DYNAFORM
 #: LABEL/ID_EXIST_DYNAFORM
-msgid "[LABEL/ID_EXIST_DYNAFORM] There is a Dynaform with the same name in this process. It is not saving"
-msgstr "There is a Dynaform with the same name in this process. It is not saving"
+msgid "There is a Dynaform with the same title in the current process. Please use another title for the new Dynaform."
+msgstr "There is a Dynaform with the same title in the current process. Please use another title for the new Dynaform."
 
 # TRANSLATION
 # LABEL/ID_INPUT_DOC_SUCCESS_NEW
@@ -12494,6 +12500,126 @@ msgid "FALSE"
 msgstr "FALSE"
 
 # TRANSLATION
+# LABEL/ID_USER_BROWSER
+#: LABEL/ID_USER_BROWSER
+msgid "User's Browser"
+msgstr "User's Browser"
+
+# TRANSLATION
+# LABEL/ID_SERVER_PROTOCOL
+#: LABEL/ID_SERVER_PROTOCOL
+msgid "Server Protocol"
+msgstr "Server Protocol"
+
+# TRANSLATION
+# LABEL/ID_SERVER_PORT
+#: LABEL/ID_SERVER_PORT
+msgid "Server Port"
+msgstr "Server Port"
+
+# TRANSLATION
+# LABEL/ID_AVAILABLE_DB
+#: LABEL/ID_AVAILABLE_DB
+msgid "Available DB Engines"
+msgstr "Available DB Engines"
+
+# TRANSLATION
+# LABEL/ID_DATABASE_SERVER
+#: LABEL/ID_DATABASE_SERVER
+msgid "Data Base Server"
+msgstr "Data Base Server"
+
+# TRANSLATION
+# LABEL/ID_DATABASE
+#: LABEL/ID_DATABASE
+msgid "Data Base"
+msgstr "Data Base"
+
+# TRANSLATION
+# LABEL/ID_PHP_VERSION
+#: LABEL/ID_PHP_VERSION
+msgid "PHP Version"
+msgstr "PHP Version"
+
+# TRANSLATION
+# LABEL/ID_WEB_SERVER
+#: LABEL/ID_WEB_SERVER
+msgid "Web Server"
+msgstr "Web Server"
+
+# TRANSLATION
+# LABEL/ID_SERVER_IP
+#: LABEL/ID_SERVER_IP
+msgid "Server IP Address"
+msgstr "Server IP Address"
+
+# TRANSLATION
+# LABEL/ID_OPERATING_SYSTEM
+#: LABEL/ID_OPERATING_SYSTEM
+msgid "Operating System"
+msgstr "Operating System"
+
+# TRANSLATION
+# LABEL/ID_UPGRADES_PATCHES
+#: LABEL/ID_UPGRADES_PATCHES
+msgid "Upgrades/Patches"
+msgstr "Upgrades/Patches"
+
+# TRANSLATION
+# LABEL/ID_UPGRADE_VIEW_LOG
+#: LABEL/ID_UPGRADE_VIEW_LOG
+msgid "View log"
+msgstr "View log"
+
+# TRANSLATION
+# LABEL/ID_UPGRADE_NEVER_UPGRADE
+#: LABEL/ID_UPGRADE_NEVER_UPGRADE
+msgid "Never upgraded"
+msgstr "Never upgraded"
+
+# TRANSLATION
+# LABEL/ID_ERROR_FILE_NOT_EXIST
+#: LABEL/ID_ERROR_FILE_NOT_EXIST
+msgid "The file '{filename}' does not exist, possibly the system failed to generate the file or the file was not moved correctly if the process is migrated from another server."
+msgstr "The file '{filename}' does not exist, possibly the system failed to generate the file or the file was not moved correctly if the process is migrated from another server."
+
+# TRANSLATION
+# LABEL/ID_DISPLAY_PROCESSES
+#: LABEL/ID_DISPLAY_PROCESSES
+msgid "Displaying Processes {0} - {1} of {2}"
+msgstr "Displaying Processes {0} - {1} of {2}"
+
+# TRANSLATION
+# LABEL/ID_ENTER_SEARCH_CRITERIA
+#: LABEL/ID_ENTER_SEARCH_CRITERIA
+msgid "Enter a search criteria and press search"
+msgstr "Enter a search criteria and press search"
+
+# TRANSLATION
+# LABEL/ID_LOGIN_AGAIN
+#: LABEL/ID_LOGIN_AGAIN
+msgid "You have lost your session and you have to login again."
+msgstr "You have lost your session and you have to login again."
+
+# TRANSLATION
+# LABEL/ID_PMTABLE_DATA_KEEP
+#: LABEL/ID_PMTABLE_DATA_KEEP
+msgid "Keep the records of the table"
+msgstr "Keep the records of the table"
+
+# TRANSLATION
+# LABEL/ID_DYNAFORM_COPY_REQUIRED
+#: LABEL/ID_DYNAFORM_COPY_REQUIRED
+msgid "Select the dynaform you want to copy/import."
+msgstr "Select the dynaform you want to copy/import."
+
+# TRANSLATION
+# LABEL/ID_DYNAFORM_COPY
+#: LABEL/ID_DYNAFORM_COPY
+msgid "Copy/Import Dynaform"
+msgstr "Copy/Import Dynaform"
+
+# TRANSLATION
 # LABEL/ID_INSTRUCTIONS_TEXT
 #: LABEL/ID_INSTRUCTIONS_TEXT
 msgid "To assign a case it should be selected from the grid and then on the Search enter a name to do the user search to whom the case will be reasigned and then select one from the list."
@@ -13090,8 +13216,8 @@ msgstr "The \"{0}\" function has {1} the current case, the script has stopped to
 # TRANSLATION
 # LABEL/ID_DYNAFORM_EDITOR_LOGIN_AGAIN
 #: LABEL/ID_DYNAFORM_EDITOR_LOGIN_AGAIN
-msgid "You have lost your session and you have to login to continue. Please enter you password."
-msgstr "You have lost your session and you have to login to continue. Please enter you password."
+msgid "You have lost your session and you have to login to continue. Please enter your password."
+msgstr "You have lost your session and you have to login to continue. Please enter your password."
 
 # TRANSLATION
 # LABEL/ID_DATE_FORMAT_14
@@ -13248,12 +13374,6 @@ msgstr "Memory Limit >= 80M"
 #: LABEL/ID_ADMINISTRATOR_ROLE_CANT_CHANGED
 msgid "The administrator's role can't be changed!"
 msgstr "The administrator's role can't be changed!"
-
-# TRANSLATION
-# LABEL/ID_SELECT_DYNAFORM_IMPORT
-#: LABEL/ID_SELECT_DYNAFORM_IMPORT
-msgid "Select the dynaform you want to import"
-msgstr "Select the dynaform you want to import"
 
 # TRANSLATION
 # LABEL/ID_CONFIRM_IMPORT_DYNAFORM
@@ -14221,174 +14341,6 @@ msgstr "Continue"
 msgid "[authSources/authSources_SelectType.xml?BTN_CANCEL] Cancel"
 msgstr "Cancel"
 
-# authSources/ldapAdvancedEdit.xml?TITLE
-# authSources/ldapAdvancedEdit.xml
-#: title - TITLE
-msgid "[authSources/ldapAdvancedEdit.xml?TITLE] Authentication Source Information"
-msgstr "Authentication Source Information"
-
-# authSources/ldapAdvancedEdit.xml?AUTH_SOURCE_NAME
-# authSources/ldapAdvancedEdit.xml
-#: text - AUTH_SOURCE_NAME
-msgid "[authSources/ldapAdvancedEdit.xml?AUTH_SOURCE_NAME] Name"
-msgstr "Name"
-
-# authSources/ldapAdvancedEdit.xml?LDAP_TYPE
-# authSources/ldapAdvancedEdit.xml
-#: dropdown - LDAP_TYPE
-msgid "[authSources/ldapAdvancedEdit.xml?LDAP_TYPE] Type"
-msgstr "Type"
-
-# authSources/ldapAdvancedEdit.xml?LDAP_TYPE-ldap
-# authSources/ldapAdvancedEdit.xml
-#: dropdown - LDAP_TYPE - ldap
-msgid "[authSources/ldapAdvancedEdit.xml?LDAP_TYPE-ldap]"
-msgstr "LDAP"
-
-# authSources/ldapAdvancedEdit.xml?LDAP_TYPE-ad
-# authSources/ldapAdvancedEdit.xml
-#: dropdown - LDAP_TYPE - ad
-msgid "[authSources/ldapAdvancedEdit.xml?LDAP_TYPE-ad]"
-msgstr "Active Directory"
-
-# authSources/ldapAdvancedEdit.xml?AUTH_SOURCE_AUTO_REGISTER
-# authSources/ldapAdvancedEdit.xml
-#: dropdown - AUTH_SOURCE_AUTO_REGISTER
-msgid "Enabled Automatic Register"
-msgstr "Enabled Automatic Register"
-
-# authSources/ldapAdvancedEdit.xml?AUTH_SOURCE_AUTO_REGISTER-0
-# authSources/ldapAdvancedEdit.xml
-#: dropdown - AUTH_SOURCE_AUTO_REGISTER - 0
-msgid "[authSources/ldapAdvancedEdit.xml?AUTH_SOURCE_AUTO_REGISTER-0]"
-msgstr "No"
-
-# authSources/ldapAdvancedEdit.xml?AUTH_SOURCE_AUTO_REGISTER-1
-# authSources/ldapAdvancedEdit.xml
-#: dropdown - AUTH_SOURCE_AUTO_REGISTER - 1
-msgid "[authSources/ldapAdvancedEdit.xml?AUTH_SOURCE_AUTO_REGISTER-1]"
-msgstr "Yes"
-
-# authSources/ldapAdvancedEdit.xml?AUTH_SOURCE_SERVER_NAME
-# authSources/ldapAdvancedEdit.xml
-#: text - AUTH_SOURCE_SERVER_NAME
-msgid "[authSources/ldapAdvancedEdit.xml?AUTH_SOURCE_SERVER_NAME] Server Name"
-msgstr "Server Name"
-
-# authSources/ldapAdvancedEdit.xml?AUTH_SOURCE_PORT
-# authSources/ldapAdvancedEdit.xml
-#: text - AUTH_SOURCE_PORT
-msgid "[authSources/ldapAdvancedEdit.xml?AUTH_SOURCE_PORT] Port"
-msgstr "Port"
-
-# authSources/ldapAdvancedEdit.xml?AUTH_SOURCE_ENABLED_TLS
-# authSources/ldapAdvancedEdit.xml
-#: dropdown - AUTH_SOURCE_ENABLED_TLS
-msgid "[authSources/ldapAdvancedEdit.xml?AUTH_SOURCE_ENABLED_TLS] Enabled TLS"
-msgstr "Enabled TLS"
-
-# authSources/ldapAdvancedEdit.xml?AUTH_SOURCE_ENABLED_TLS-
-# authSources/ldapAdvancedEdit.xml
-#: dropdown - AUTH_SOURCE_ENABLED_TLS -
-msgid "[authSources/ldapAdvancedEdit.xml?AUTH_SOURCE_ENABLED_TLS-]"
-msgstr "No"
-
-# authSources/ldapAdvancedEdit.xml?AUTH_SOURCE_ENABLED_TLS-1
-# authSources/ldapAdvancedEdit.xml
-#: dropdown - AUTH_SOURCE_ENABLED_TLS - 1
-msgid "[authSources/ldapAdvancedEdit.xml?AUTH_SOURCE_ENABLED_TLS-1]"
-msgstr "Yes"
-
-# authSources/ldapAdvancedEdit.xml?AUTH_SOURCE_VERSION
-# authSources/ldapAdvancedEdit.xml
-#: dropdown - AUTH_SOURCE_VERSION
-msgid "[authSources/ldapAdvancedEdit.xml?AUTH_SOURCE_VERSION] Version"
-msgstr "Version"
-
-# authSources/ldapAdvancedEdit.xml?AUTH_SOURCE_VERSION-2
-# authSources/ldapAdvancedEdit.xml
-#: dropdown - AUTH_SOURCE_VERSION - 2
-msgid "[authSources/ldapAdvancedEdit.xml?AUTH_SOURCE_VERSION-2]"
-msgstr "2"
-
-# authSources/ldapAdvancedEdit.xml?AUTH_SOURCE_VERSION-3
-# authSources/ldapAdvancedEdit.xml
-#: dropdown - AUTH_SOURCE_VERSION - 3
-msgid "[authSources/ldapAdvancedEdit.xml?AUTH_SOURCE_VERSION-3]"
-msgstr "3"
-
-# authSources/ldapAdvancedEdit.xml?AUTH_SOURCE_BASE_DN
-# authSources/ldapAdvancedEdit.xml
-#: text - AUTH_SOURCE_BASE_DN
-msgid "[authSources/ldapAdvancedEdit.xml?AUTH_SOURCE_BASE_DN] Base DN"
-msgstr "Base DN"
-
-# authSources/ldapAdvancedEdit.xml?AUTH_ANONYMOUS
-# authSources/ldapAdvancedEdit.xml
-#: dropdown - AUTH_ANONYMOUS
-msgid "[authSources/ldapAdvancedEdit.xml?AUTH_ANONYMOUS] Anonymous"
-msgstr "Anonymous"
-
-# authSources/ldapAdvancedEdit.xml?AUTH_ANONYMOUS-
-# authSources/ldapAdvancedEdit.xml
-#: dropdown - AUTH_ANONYMOUS -
-msgid "[authSources/ldapAdvancedEdit.xml?AUTH_ANONYMOUS-]"
-msgstr "No"
-
-# authSources/ldapAdvancedEdit.xml?AUTH_ANONYMOUS-1
-# authSources/ldapAdvancedEdit.xml
-#: dropdown - AUTH_ANONYMOUS - 1
-msgid "[authSources/ldapAdvancedEdit.xml?AUTH_ANONYMOUS-1]"
-msgstr "Yes"
-
-# authSources/ldapAdvancedEdit.xml?AUTH_SOURCE_SEARCH_USER
-# authSources/ldapAdvancedEdit.xml
-#: text - AUTH_SOURCE_SEARCH_USER
-msgid "Search User"
-msgstr "Search User"
-
-# authSources/ldapAdvancedEdit.xml?AUTH_SOURCE_PASSWORD
-# authSources/ldapAdvancedEdit.xml
-#: password - AUTH_SOURCE_PASSWORD
-msgid "[authSources/ldapAdvancedEdit.xml?AUTH_SOURCE_PASSWORD] Password"
-msgstr "Password"
-
-# authSources/ldapAdvancedEdit.xml?AUTH_SOURCE_IDENTIFIER_FOR_USER
-# authSources/ldapAdvancedEdit.xml
-#: text - AUTH_SOURCE_IDENTIFIER_FOR_USER
-msgid "User Identifier"
-msgstr "User Identifier"
-
-# authSources/ldapAdvancedEdit.xml?AUTH_SOURCE_OBJECT_CLASSES
-# authSources/ldapAdvancedEdit.xml
-#: textarea - AUTH_SOURCE_OBJECT_CLASSES
-msgid "[authSources/ldapAdvancedEdit.xml?AUTH_SOURCE_OBJECT_CLASSES] Object Classes"
-msgstr "Object Classes"
-
-# authSources/ldapAdvancedEdit.xml?AUTH_SOURCE_ATTRIBUTES
-# authSources/ldapAdvancedEdit.xml
-#: textarea - AUTH_SOURCE_ATTRIBUTES
-msgid "Filter Fields"
-msgstr "Filter Fields"
-
-# authSources/ldapAdvancedEdit.xml?AUTH_SOURCE_RETIRED_OU
-# authSources/ldapAdvancedEdit.xml
-#: text - AUTH_SOURCE_RETIRED_OU
-msgid "OU for Retired Employees OU"
-msgstr "OU for Retired Employees OU"
-
-# authSources/ldapAdvancedEdit.xml?btnSave
-# authSources/ldapAdvancedEdit.xml
-#: submit - btnSave
-msgid "[authSources/ldapAdvancedEdit.xml?btnSave] Save"
-msgstr "Save"
-
-# authSources/ldapAdvancedEdit.xml?btnCancel
-# authSources/ldapAdvancedEdit.xml
-#: button - btnCancel
-msgid "[authSources/ldapAdvancedEdit.xml?btnCancel] Cancel"
-msgstr "Cancel"
-
 # authSources/ldapEdit.xml?TITLE
 # authSources/ldapEdit.xml
 #: title - TITLE
@@ -14494,7 +14446,7 @@ msgstr "Yes"
 # authSources/ldapEdit.xml?AUTH_SOURCE_SEARCH_USER
 # authSources/ldapEdit.xml
 #: text - AUTH_SOURCE_SEARCH_USER
-msgid "[authSources/ldapEdit.xml?AUTH_SOURCE_SEARCH_USER] Search User"
+msgid "Search User"
 msgstr "Search User"
 
 # authSources/ldapEdit.xml?AUTH_SOURCE_PASSWORD
@@ -19321,6 +19273,12 @@ msgstr "Edit"
 msgid "[dbConnections/dbConnections.xml?DBS_DELETE] Delete"
 msgstr "Delete"
 
+# dbConnections/dbConnections.xml?SEARCH
+# dbConnections/dbConnections.xml
+#: button - SEARCH
+msgid "[dbConnections/dbConnections.xml?SEARCH] Apply Filter"
+msgstr "Apply Filter"
+
 # dbConnections/dbConnections_Edit.xml?DBS_UID
 # dbConnections/dbConnections_Edit.xml
 #: text - DBS_UID
@@ -19919,6 +19877,12 @@ msgstr "Blank Dynaform"
 msgid "[dynaforms/dynaforms_ChoseType.xml?DYN_SOURCE-pmtable]"
 msgstr "PM Table Dynaform"
 
+# dynaforms/dynaforms_ChoseType.xml?DYN_SOURCE-copy
+# dynaforms/dynaforms_ChoseType.xml
+#: radiogroup - DYN_SOURCE - copy
+msgid "[dynaforms/dynaforms_ChoseType.xml?DYN_SOURCE-copy]"
+msgstr "Copy/Import Dynaform"
+
 # dynaforms/dynaforms_ChoseType.xml?BTN_CANCEL
 # dynaforms/dynaforms_ChoseType.xml
 #: button - BTN_CANCEL
@@ -20301,6 +20265,78 @@ msgstr "Save & Open"
 # dynaforms/dynaforms_Edit.xml
 #: button - BTN_CANCEL
 msgid "[dynaforms/dynaforms_Edit.xml?BTN_CANCEL] Cancel"
+msgstr "Cancel"
+
+# dynaforms/dynaforms_Edit.xml?COPY_PROCESS_UID
+# dynaforms/dynaforms_Edit.xml
+#: dropdown - COPY_PROCESS_UID
+msgid "[dynaforms/dynaforms_Edit.xml?COPY_PROCESS_UID] Process"
+msgstr "Process"
+
+# dynaforms/dynaforms_Edit.xml?COPY_PROCESS_UID-
+# dynaforms/dynaforms_Edit.xml
+#: dropdown - COPY_PROCESS_UID -
+msgid "[dynaforms/dynaforms_Edit.xml?COPY_PROCESS_UID-]"
+msgstr "- Select a process -"
+
+# dynaforms/dynaforms_Edit.xml?COPY_TYPE
+# dynaforms/dynaforms_Edit.xml
+#: dropdown - COPY_TYPE
+msgid "Showing forms of type"
+msgstr "Showing forms of type"
+
+# dynaforms/dynaforms_Edit.xml?COPY_TYPE-xmlform
+# dynaforms/dynaforms_Edit.xml
+#: dropdown - COPY_TYPE - xmlform
+msgid "[dynaforms/dynaforms_Edit.xml?COPY_TYPE-xmlform]"
+msgstr "Normal"
+
+# dynaforms/dynaforms_Edit.xml?COPY_TYPE-grid
+# dynaforms/dynaforms_Edit.xml
+#: dropdown - COPY_TYPE - grid
+msgid "[dynaforms/dynaforms_Edit.xml?COPY_TYPE-grid]"
+msgstr "Grid"
+
+# dynaforms/dynaforms_Edit.xml?COPY_DYNAFORM_UID
+# dynaforms/dynaforms_Edit.xml
+#: dropdown - COPY_DYNAFORM_UID
+msgid "Dynaform to copy/import"
+msgstr "Dynaform to copy/import"
+
+# dynaforms/dynaforms_Edit.xml?COPY_DYNAFORM_UID-
+# dynaforms/dynaforms_Edit.xml
+#: dropdown - COPY_DYNAFORM_UID -
+msgid "[dynaforms/dynaforms_Edit.xml?COPY_DYNAFORM_UID-]"
+msgstr "- Select a dynaform -"
+
+# dynaforms/dynaforms_Edit.xml?COPY_DYNAFORM_TITLE
+# dynaforms/dynaforms_Edit.xml
+#: text - COPY_DYNAFORM_TITLE
+msgid "Title of the new dynaform"
+msgstr "Title of the new dynaform"
+
+# dynaforms/dynaforms_Edit.xml?COPY_DYNAFORM_DESCRIPTION
+# dynaforms/dynaforms_Edit.xml
+#: textarea - COPY_DYNAFORM_DESCRIPTION
+msgid "Description of the new dynaform"
+msgstr "Description of the new dynaform"
+
+# dynaforms/dynaforms_Edit.xml?BTNCOPYSAVE
+# dynaforms/dynaforms_Edit.xml
+#: button - BTNCOPYSAVE
+msgid "Copy/Import"
+msgstr "Copy/Import"
+
+# dynaforms/dynaforms_Edit.xml?BTNCOPYSAVEOPEN
+# dynaforms/dynaforms_Edit.xml
+#: button - BTNCOPYSAVEOPEN
+msgid "Copy/Import and Open"
+msgstr "Copy/Import and Open"
+
+# dynaforms/dynaforms_Edit.xml?BTNCOPYCANCEL
+# dynaforms/dynaforms_Edit.xml
+#: button - BTNCOPYCANCEL
+msgid "[dynaforms/dynaforms_Edit.xml?BTNCOPYCANCEL] Cancel"
 msgstr "Cancel"
 
 # dynaforms/dynaforms_Editor.xml?title
@@ -21076,12 +21112,6 @@ msgstr "Save"
 #: toolButton - saveasDyna
 msgid "Save as"
 msgstr "Save as"
-
-# dynaforms/fields_Toolbar.xml?importDyna
-# dynaforms/fields_Toolbar.xml
-#: toolButton - importDyna
-msgid "[dynaforms/fields_Toolbar.xml?importDyna] Import"
-msgstr "Import"
 
 # dynaforms/fields_Toolbar.xml?text
 # dynaforms/fields_Toolbar.xml
@@ -22466,7 +22496,7 @@ msgstr "ProcessMaker"
 # login/dbInfo.xml?SYSTEM
 # login/dbInfo.xml
 #: caption - SYSTEM
-msgid "Operating System"
+msgid "[login/dbInfo.xml?SYSTEM] Operating System"
 msgstr "Operating System"
 
 # login/dbInfo.xml?TIME_ZONE
@@ -22478,7 +22508,7 @@ msgstr "Time zone"
 # login/dbInfo.xml?SERVER_SOFTWARE
 # login/dbInfo.xml
 #: caption - SERVER_SOFTWARE
-msgid "Web Server"
+msgid "[login/dbInfo.xml?SERVER_SOFTWARE] Web Server"
 msgstr "Web Server"
 
 # login/dbInfo.xml?SERVER_NAME
@@ -22490,7 +22520,7 @@ msgstr "Server Name"
 # login/dbInfo.xml?SERVER_ADDR
 # login/dbInfo.xml
 #: caption - SERVER_ADDR
-msgid "Server IP Address"
+msgid "[login/dbInfo.xml?SERVER_ADDR] Server IP Address"
 msgstr "Server IP Address"
 
 # login/dbInfo.xml?PHP
@@ -22526,7 +22556,7 @@ msgstr "Available Databases"
 # login/dbInfo.xml?HTTP_USER_AGENT
 # login/dbInfo.xml
 #: caption - HTTP_USER_AGENT
-msgid "User's Browser"
+msgid "[login/dbInfo.xml?HTTP_USER_AGENT] User's Browser"
 msgstr "User's Browser"
 
 # login/dbInfo.xml?IP
@@ -24680,8 +24710,8 @@ msgstr "New"
 # processes/processes_FilesOptions.xml?MNU_UPLOAD
 # processes/processes_FilesOptions.xml
 #: link - MNU_UPLOAD
-msgid "Upload..............."
-msgstr "Upload..............."
+msgid "[processes/processes_FilesOptions.xml?MNU_UPLOAD] Upload"
+msgstr "Upload"
 
 # processes/processes_Import.xml?TITLE1
 # processes/processes_Import.xml
@@ -29516,14 +29546,20 @@ msgstr "Role Title"
 # setup/wsrTaskCase.xml?guid
 # setup/wsrTaskCase.xml
 #: text - guid
-msgid "[setup/wsrTaskCase.xml?guid] Del Index"
-msgstr "Del Index"
+msgid "Task Uid"
+msgstr "Task Uid"
 
 # setup/wsrTaskCase.xml?name
 # setup/wsrTaskCase.xml
 #: text - name
 msgid "Task Title"
 msgstr "Task Title"
+
+# setup/wsrTaskCase.xml?delegate
+# setup/wsrTaskCase.xml
+#: text - delegate
+msgid "Delegate Index"
+msgstr "Delegate Index"
 
 # setup/wsrTaskList.xml?guid
 # setup/wsrTaskList.xml
@@ -30737,10 +30773,10 @@ msgstr "Copy"
 msgid "[tracker/tracker_ViewAnyInputDocument1.xml?APP_DOC_CREATE_DATE] Created Date"
 msgstr "Created Date"
 
-# tracker/tracker_ViewAnyInputDocument1.xml?APP_DOC_FILENAME
+# tracker/tracker_ViewAnyInputDocument1.xml?APP_DOC_FILENAME1
 # tracker/tracker_ViewAnyInputDocument1.xml
-#: link - APP_DOC_FILENAME
-msgid "[tracker/tracker_ViewAnyInputDocument1.xml?APP_DOC_FILENAME] File"
+#: link - APP_DOC_FILENAME1
+msgid "[tracker/tracker_ViewAnyInputDocument1.xml?APP_DOC_FILENAME1] File"
 msgstr "File"
 
 # tracker/tracker_ViewAnyInputDocument2.xml?INP_DOC_TITLE
@@ -30887,10 +30923,10 @@ msgstr "Created Date"
 msgid "[tracker/tracker_ViewAnyInputDocument3.xml?APP_DOC_COMMENT] Comments"
 msgstr "Comments"
 
-# tracker/tracker_ViewAnyInputDocument3.xml?APP_DOC_FILENAME
+# tracker/tracker_ViewAnyInputDocument3.xml?APP_DOC_FILENAME1
 # tracker/tracker_ViewAnyInputDocument3.xml
-#: link - APP_DOC_FILENAME
-msgid "[tracker/tracker_ViewAnyInputDocument3.xml?APP_DOC_FILENAME] File"
+#: link - APP_DOC_FILENAME1
+msgid "[tracker/tracker_ViewAnyInputDocument3.xml?APP_DOC_FILENAME1] File"
 msgstr "File"
 
 # tracker/tracker_ViewAnyOutputDocument.xml?OUT_DOC_TITLE
@@ -33917,10 +33953,10 @@ msgstr "Type of date range"
 msgid "[dynaforms/fields/date.xml?PME_RELATIVEDATE-1]"
 msgstr "Relative Dates"
 
-# dynaforms/fields/date.xml?PME_RELATIVEDATE-
+# dynaforms/fields/date.xml?PME_RELATIVEDATE-0
 # dynaforms/fields/date.xml
-#: dropdown - PME_RELATIVEDATE -
-msgid "[dynaforms/fields/date.xml?PME_RELATIVEDATE-]"
+#: dropdown - PME_RELATIVEDATE - 0
+msgid "[dynaforms/fields/date.xml?PME_RELATIVEDATE-0]"
 msgstr "Static Dates"
 
 # dynaforms/fields/date.xml?PME_SUBTITLE3
@@ -35458,6 +35494,18 @@ msgstr "UPPER"
 #: dropdown - PME_STRTO - LOWER
 msgid "[dynaforms/fields/text.xml?PME_STRTO-LOWER]"
 msgstr "LOWER"
+
+# dynaforms/fields/text.xml?PME_STRTO-PHRASE
+# dynaforms/fields/text.xml
+#: dropdown - PME_STRTO - PHRASE
+msgid "[dynaforms/fields/text.xml?PME_STRTO-PHRASE]"
+msgstr "CAPITALIZE PHRASE"
+
+# dynaforms/fields/text.xml?PME_STRTO-TITLE
+# dynaforms/fields/text.xml
+#: dropdown - PME_STRTO - TITLE
+msgid "[dynaforms/fields/text.xml?PME_STRTO-TITLE]"
+msgstr "TITLE CASE"
 
 # dynaforms/fields/text.xml?PME_REQUIRED
 # dynaforms/fields/text.xml

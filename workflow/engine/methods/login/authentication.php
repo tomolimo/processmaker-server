@@ -46,12 +46,11 @@ try {
         switch ($uid) {
             //The user does doesn't exist
             case -1:
-                $errLabel = 'ID_USER_NOT_REGISTERED';
+                $errLabel = 'WRONG_LOGIN_CREDENTIALS';
                 break;
             //The password is incorrect
             case -2:
-                $errLabel = 'ID_WRONG_PASS';
-
+                $errLabel = 'WRONG_LOGIN_CREDENTIALS';
                 if (isset($_SESSION['__AUTH_ERROR__'])) {
                     G::SendMessageText($_SESSION['__AUTH_ERROR__'], "warning");
                     unset($_SESSION['__AUTH_ERROR__']);
@@ -87,7 +86,7 @@ try {
         //to avoid empty string in user field.  This will avoid a weird message "this row doesn't exist"
         if ( !isset($uid) ) {
             $uid = -1;
-            $errLabel = 'ID_USER_NOT_REGISTERED';
+            $errLabel = 'WRONG_LOGIN_CREDENTIALS';
         }
 
         if (!isset($uid) || $uid < 0) {
@@ -151,12 +150,6 @@ try {
         $usr = $RBAC->userObj->fields['USR_USERNAME'];
         $_SESSION['USER_LOGGED']  = $uid;
         $_SESSION['USR_USERNAME'] = $usr;
-    }
-
-    if (PHP_VERSION < 5.2) {
-        setcookie(session_name(), session_id(), null, '/', '; HttpOnly');
-    } else {
-        setcookie(session_name(), session_id(), null, '/', null, null, true);
     }
 
     $aUser = $RBAC->userObj->load($_SESSION['USER_LOGGED']);

@@ -52,37 +52,37 @@ Ext.onReady(function(){
   var checkWorkspaceConfiguration = function() {
     var canInstall = false;
     if (!Ext.getCmp('workspace').isValid()) {
-      Ext.getCmp('finish_message').setValue(getFieldOutput('Please enter a valid Workspace Name.', false));
+      Ext.getCmp('finish_message').setValue(getFieldOutput(_('ID_VALID_WORKSPACE'), false));
       wizard.onClientValidation(2, false);
       return;
     }
     if (!Ext.getCmp('adminUsername').isValid()) {
-      Ext.getCmp('finish_message').setValue(getFieldOutput('Please enter a valid Admin Username.', false));
+      Ext.getCmp('finish_message').setValue(getFieldOutput(_('ID_VALID_ADMIN_NAME'), false));
       wizard.onClientValidation(2, false);
       return;
     }
     if (Ext.getCmp('adminPassword').getValue() == '') {
-      Ext.getCmp('finish_message').setValue(getFieldOutput('Please enter the Admin Password.', false));
+      Ext.getCmp('finish_message').setValue(getFieldOutput(_('ID_VALID_ADMIN_PASSWORD'), false));
       wizard.onClientValidation(2, false);
       return;
     }
     if (Ext.getCmp('adminPassword').getValue() != Ext.getCmp('confirmPassword').getValue()) {
-      Ext.getCmp('finish_message').setValue(getFieldOutput('The password confirmation is incorrect.', false));
+      Ext.getCmp('finish_message').setValue(getFieldOutput(_('ID_PASSWORD_CONFIRMATION_INCORRECT'), false));
       wizard.onClientValidation(2, false);
       return;
     }
     if (!Ext.getCmp('wfDatabase').isValid()) {
-      Ext.getCmp('finish_message').setValue(getFieldOutput('Please enter the Workflow Database Name.', false));
+      Ext.getCmp('finish_message').setValue(getFieldOutput(_('ID_WORKFLOW_DATABASE_NAME'), false));
       wizard.onClientValidation(2, false);
       return;
     }
     if (!Ext.getCmp('rbDatabase').isValid()) {
-      Ext.getCmp('finish_message').setValue(getFieldOutput('Please enter the Rbac Database Name.', false));
+      Ext.getCmp('finish_message').setValue(getFieldOutput(_('ID_RBAC_DATABASE_NAME'), false));
       wizard.onClientValidation(2, false);
       return;
     }
     if (!Ext.getCmp('rpDatabase').isValid()) {
-      Ext.getCmp('finish_message').setValue(getFieldOutput('Please enter the Report Database Name.', false));
+      Ext.getCmp('finish_message').setValue(getFieldOutput(_('ID_REPORT_DATABASE_NAME'), false));
       wizard.onClientValidation(2, false);
       return;
     }
@@ -95,7 +95,7 @@ Ext.onReady(function(){
       url: 'newSite',
       success: function(response){
         var existMsg = '<span style="color: red;">(Exists)</span>';
-        var noExistsMsg = '<span style="color: green;">(No exists)</span>';
+        var noExistsMsg = '<span style="color: green;">(Not Exist)</span>';
         var response = Ext.util.JSON.decode(response.responseText);
         Ext.get('wfDatabaseSpan').dom.innerHTML = (response.wfDatabaseExists ? existMsg : noExistsMsg);
         Ext.get('rbDatabaseSpan').dom.innerHTML = (response.rbDatabaseExists ? existMsg : noExistsMsg);
@@ -139,12 +139,12 @@ Ext.onReady(function(){
   });
 
   steps[setIndex++] = new Ext.ux.Wiz.Card({
-    title: 'Database Configuration',
+    title: 'Database Configuration' ,
     monitorValid: false,
     items: [
       {
         border: false,
-        html: 'Database Configuration',
+        html: 'Database Configuration' ,
         bodyStyle: 'background:none;padding-top:0px;padding-bottom:5px;font-weight:bold;font-size:1.3em;'
       },
       {
@@ -255,7 +255,7 @@ Ext.onReady(function(){
                     id: 'db_message'
                   },
                   new Ext.Button({
-                    text: ' Test Connection',
+                    text: 'Test Connection',
                     handler: testConnection,
                     scope: this
                   })
@@ -392,7 +392,7 @@ Ext.onReady(function(){
                  }),
                  {
                     xtype: 'textfield',
-                    fieldLabel: 'Workflow Database Name <span id="wfDatabaseSpan"></span>',
+                    fieldLabel: 'Workflow Database Name' + '<span id="wfDatabaseSpan"></span>',
                     id: 'wfDatabase',
                     value:'wf_workflow',
                     allowBlank: false,
@@ -442,7 +442,7 @@ Ext.onReady(function(){
                     }}
                   },
                   new Ext.form.Checkbox({
-              	    boxLabel: "Delete Databases if exists",
+              	    boxLabel: 'Delete Databases if exists',
               	    id: 'deleteDB',
               	    handler: function() {
               	      wizard.onClientValidation(2, false);
@@ -454,7 +454,7 @@ Ext.onReady(function(){
                   },
                   new Ext.Button({
                     id: 'checkWSConfiguration',
-                    text: ' Check Workspace Configuration',
+                    text: 'Check Workspace Configuration',
                     handler: checkWorkspaceConfiguration,
                     scope: this
                   })
@@ -509,7 +509,7 @@ Ext.onReady(function(){
             'action': 'createWorkspace',
           	'db_engine': Ext.getCmp('db_engine').getValue(),
           	'db_hostname': Ext.getCmp('db_hostname').getValue(),
-        	  'db_username': Ext.getCmp('db_username').getValue(),
+        	'db_username': Ext.getCmp('db_username').getValue(),
           	'db_password': Ext.getCmp('db_password').getValue(),
           	'db_port': Ext.getCmp('db_port').getValue(),
             'pathConfig': pathConfig,

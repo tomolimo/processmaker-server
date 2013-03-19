@@ -1,13 +1,13 @@
 <?php
 if (! isset( $_REQUEST['action'] )) {
     $res['success'] = 'failure';
-    $res['message'] = 'You may request an action';
+    $res['message'] = G::LoadTranslation( 'ID_REQUEST_ACTION' );
     print G::json_encode( $res );
     die();
 }
 if (! function_exists( $_REQUEST['action'] )) {
     $res['success'] = 'failure';
-    $res['message'] = 'The requested action does not exist';
+    $res['message'] = G::LoadTranslation( 'ID_REQUEST_ACTION_NOT_EXIST' );
     print G::json_encode( $res );
     die();
 }
@@ -62,7 +62,7 @@ function getProcessList ()
         if (1) {
             foreach ($processList as $key => $processInfo) {
                 $tempTree['text'] = $key;
-                $tempTree['id'] = $key;
+                $tempTree['id'] = preg_replace('([^A-Za-z0-9])', '', $key);
                 $tempTree['cls'] = 'folder';
                 $tempTree['draggable'] = true;
                 $tempTree['optionType'] = "category";
@@ -77,9 +77,9 @@ function getProcessList ()
                 $tempTreeChildren = array ();
                 foreach ($processList[$key] as $keyChild => $processInfoChild) {
                     //print_r($processInfo);
-                    $tempTreeChild['text'] = $keyChild; //ellipsis ( $keyChild, 50 );
+                    $tempTreeChild['text'] = htmlentities($keyChild, ENT_QUOTES, 'UTF-8'); //ellipsis ( $keyChild, 50 );
                     //$tempTree['text']=$key;
-                    $tempTreeChild['id'] = $keyChild;
+                    $tempTreeChild['id'] = preg_replace('([^A-Za-z0-9 ()])', '', $keyChild);
                     $tempTreeChild['draggable'] = true;
                     $tempTreeChild['leaf'] = true;
                     $tempTreeChild['icon'] = '/images/icon.trigger.png';
@@ -90,7 +90,7 @@ function getProcessList ()
                     $processInfoChild['myInbox'] = 0;
                     $processInfoChild['totalInbox'] = 0;
                     if (isset( $proData[$processInfoChild['pro_uid']] )) {
-                        $tempTreeChild['otherAttributes'] = array_merge( $processInfoChild, $proData[$processInfoChild['pro_uid']], $calendar->getCalendarFor( $processInfoChild['uid'], $processInfoChild['uid'], $processInfoChild['uid'] ) );
+                        $tempTreeChild['otherAttributes'] = array_merge( $processInfoChild, $proData[$processInfoChild['pro_uid']], $calendar->getCalendarFor( $_SESSION['USER_LOGGED'], $processInfoChild['pro_uid'], $processInfoChild['uid'] ) );
                         $tempTreeChild['otherAttributes']['PRO_TAS_TITLE'] = str_replace( ")", "", str_replace( "(", "", trim( str_replace( $tempTreeChild['otherAttributes']['PRO_TITLE'], "", $tempTreeChild['otherAttributes']["value"] ) ) ) );
                         $tempTreeChild['qtip'] = $tempTreeChild['otherAttributes']['PRO_DESCRIPTION'];
                         //$tempTree['cls']='file';
@@ -127,7 +127,7 @@ function getProcessList ()
         $processList = $processListTree;
     } else {
         $processList['success'] = 'failure';
-        $processList['message'] = 'User can\'t start process';
+        $processList['message'] = G::LoadTranslation('ID_USER_PROCESS_NOT_START');
     }
     print G::json_encode( $processList );
     die();

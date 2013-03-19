@@ -26,7 +26,7 @@ new Ext.KeyMap(document, {
         document.location = document.location;
       }
       else
-        Ext.Msg.alert('Refresh', 'You clicked: CTRL-F5');
+        Ext.Msg.alert( _('ID_REFRESH_LABEL') , _('ID_REFRESH_MESSAGE') );
   }
 });
 
@@ -292,7 +292,7 @@ Ext.onReady(function(){
         }
       }),{
         text:'X',
-        ctCls:'pm_search_x_button',
+        ctCls:'pm_search_x_button_des',
         handler: function(){
           //store.setBaseParam( 'category', '<reset>');
           store.setBaseParam('processName', '');
@@ -311,7 +311,7 @@ Ext.onReady(function(){
         pageSize: 25,
         store: store,
         displayInfo: true,
-        displayMsg: 'Displaying Processes {0} - {1} of {2}',
+        displayMsg: _('ID_DISPLAY_PROCESSES'),
         emptyMsg: "",
         items:[]
     }),
@@ -627,7 +627,7 @@ deleteProcess = function(){
         errMsg += e + '<br/>';
       }
       Ext.MessageBox.show({
-        title: 'Error',
+        title: _('ID_ERROR'),
         msg: errMsg,
         buttons: Ext.MessageBox.OK,
         icon: Ext.MessageBox.ERROR

@@ -105,15 +105,20 @@ function G_Field ( form, element, name )
   var tempValue;
   if (me.dependentFields.length===0) return true;
   var fields=[],Fields = [],i,grid='',row=0;
+  var gridField = "";
+
   for(i in me.dependentFields) {
     if (me.dependentFields[i].dependentOf) {
       for (var j = 0; j < me.dependentFields[i].dependentOf.length; j++) {
         var oAux = me.dependentFields[i].dependentOf[j];
         if (oAux.name.indexOf('][') > -1) {
-          var aAux  = oAux.name.split('][');
-          grid      = aAux[0];
-          row       = aAux[1];
-          fieldName = aAux[2];
+          var arrayAux = oAux.name.split("][");
+          grid = arrayAux[0];
+          row  = parseInt(arrayAux[1]);
+          fieldName = arrayAux[2];
+
+          gridField = gridGetAllFieldAndValue(oAux.name, 0); //Not get current field
+
           if (Fields.length > 0){
             aux = Fields;
             aux.push('?');
@@ -145,15 +150,19 @@ function G_Field ( form, element, name )
         }
       }
     }
+
     var callServer;
+
     callServer = new leimnud.module.rpc.xmlhttp({
-      url     : me.form.ajaxServer,
-      async   : false,
-      method  : "POST",
-      args    : "function=reloadField&" + 'form='+encodeURIComponent(me.form.id)+'&fields='+encodeURIComponent(fields.toJSONString())+(grid!=''?'&grid='+grid:'')+(row>0?'&row='+row:'')
+        url: me.form.ajaxServer,
+        async: false,
+        method: "POST",
+        args: "function=reloadField" + "&form=" + encodeURIComponent(me.form.id) + "&fields=" + encodeURIComponent(fields.toJSONString()) + ((grid != "")? "&grid=" + grid + ((gridField != "")? "&gridField=" + encodeURIComponent("{" + gridField + "}") : "") : "") + ((row > 0)? "&row=" + row: "")
     });
+
     callServer.make();
     var response = callServer.xmlhttp.responseText;
+
     //Validate the response
     if (response.substr(0,1)==='[') {
       var newcont;
@@ -162,9 +171,11 @@ function G_Field ( form, element, name )
         for(var i=0;i<newcont.length;i++) {
           //alert(newcont[i].name + '-' +  newcont[i].value);
           var j=me.form.getElementIdByName(newcont[i].name);
-          me.form.aElements[j].setValue(newcont[i].value);
-          me.form.aElements[j].setContent(newcont[i].content);
-          me.form.aElements[j].updateDepententFields();
+          if (typeof(me.form.aElements[j]) != 'undefined' ) {
+            me.form.aElements[j].setValue(newcont[i].value);
+            me.form.aElements[j].setContent(newcont[i].content);
+            me.form.aElements[j].updateDepententFields();
+          }
           /*if (me.form.aElements[j].element.fireEvent) {
             me.form.aElements[j].element.fireEvent("onchange");
           } else {
@@ -314,6 +325,9 @@ function G_DropDown( form, element, name )
         dd.options[key] = null;
       }
     }
+
+    dd.options.length = 0; //Delete options
+
     // the remove function is no longer reliable
     // while(dd.options.length>1) dd.remove(0);
     for(var o=0;o<content.options.length;o++) {
@@ -321,6 +335,10 @@ function G_DropDown( form, element, name )
       optn.text = content.options[o].value;
       optn.value = content.options[o].key;
       dd.options[o]=optn;
+    }
+
+    if (dd.options.length == 0) {
+        dd.options[0] = new Option("", "");
     }
   };
   if (!element) return;
@@ -980,9 +998,12 @@ function G_Text(form, element, name)
       currentSel = dataWOMask.cursor;
       cursorStart = currentSel.selectionStart;
       cursorEnd = currentSel.selectionEnd;
-      action = 'mask';
-      swPeriod = false;
-      switch(keyCode){
+
+      var action = "mask";
+      var swPeriod = false;
+      var i = 0;
+
+      switch (keyCode) {
         case 0:
           action = 'none';
           break;
@@ -1018,71 +1039,86 @@ function G_Text(form, element, name)
           action = 'move';
           break;
         case 45:
-          if (me.mType == 'currency') {
-            newValue = currentValue.substring(0, currentValue.length).split('');
-            for (var numI = 0; newValue.length > numI; numI++) {
-              var campVal = newValue[numI];
-              if ((typeof(campVal) === 'number' || typeof(campVal) === 'string') && (campVal !== '') && (!isNaN(campVal))) {
-                newValue = currentValue.substring(0, numI-1);
-                newValue += '-' + currentValue.substring(numI);
-                numI = newValue.length + 1;
-                newCursor = cursorStart+1;
-              } else {
-                if (campVal == '-') {
-                  newValue = currentValue.substring(0, numI-1);
-                  newValue += currentValue.substring(numI+1);
-                  newCursor = cursorStart-1;
-                  numI = newValue.length + 1;
+            if (me.mType == "currency" || (me.mType == "text" && (me.validate == "Real" || me.validate == "Int"))) {
+                newValue = currentValue.substring(0, currentValue.length).split("");
+
+                if (newValue.length > 0) {
+                    for (i = 0; i <= newValue.length - 1; i++) {
+                        var campVal = newValue[i];
+
+                        if ((typeof campVal == "number" || typeof campVal == "string") && campVal != "" && !isNaN(campVal)) {
+                            newValue = currentValue.substring(0, i - 1);
+                            newValue = newValue + "-" + currentValue.substring(i);
+                            i = newValue.length + 1;
+                            newCursor = cursorStart + 1;
+                        } else {
+                            if (campVal == "-") {
+                                newValue = currentValue.substring(0, i - 1);
+                                newValue = newValue + currentValue.substring(i + 1);
+                                newCursor = cursorStart - 1;
+                                i = newValue.length + 1;
+                            }
+                        }
+                    }
+
+                    if (newValue.join) {
+                        newValue = newValue.join("");
+                    }
+                } else {
+                    //default
+                    newKey = String.fromCharCode(keyCode);
+                    newValue = currentValue.substring(0, cursorStart);
+                    newValue = newValue + newKey;
+                    newValue = newValue + currentValue.substring(cursorEnd, currentValue.length);
+                    newCursor = cursorStart + 1;
                 }
-              }
             }
-            if (newValue.join) {
-              newValue = newValue.join('');
-            }
-          }
-          break;
+            break;
         default:
-          newKey = String.fromCharCode(keyCode);
-          newValue  = currentValue.substring(0, cursorStart);
-          newValue += newKey;
-          newValue += currentValue.substring(cursorEnd, currentValue.length);
-          newCursor = cursorStart + 1;
-          break;
+            newKey = String.fromCharCode(keyCode);
+            newValue = currentValue.substring(0, cursorStart);
+            newValue = newValue + newKey;
+            newValue = newValue + currentValue.substring(cursorEnd, currentValue.length);
+            newCursor = cursorStart + 1;
+            break;
       }
-      if (newCursor < 0)  newCursor = 0;
+
+      if (newCursor < 0) {
+          newCursor = 0;
+      }
+
       if (keyCode != 8 && keyCode != 46 && keyCode != 35 && keyCode != 36 && keyCode != 37 && keyCode != 39){
-        testData = dataWOMask.result;
-        tamData = testData.length;
-        cleanMask = me.getCleanMask();
-        tamMask = cleanMask.length;
-        sw = false;
+        var testData = dataWOMask.result;
+        var tamData = testData.length;
+        var cleanMask = me.getCleanMask();
+        var tamMask = cleanMask.length;
+        var sw = false;
+
         if (testData.indexOf(me.comma_separator) == -1){
           aux = cleanMask.split('_');
           tamMask = aux[0].length;
           sw = true;
         }
-        if (tamData >= tamMask){
-          var minusExi;
-          for (var numI = 0; newValue.length > numI; numI++) {
-            var campVal = newValue[numI];
-            if ((typeof(campVal) === 'number' || typeof(campVal) === 'string') && (campVal !== '') && (!isNaN(campVal))) {
-              minusExi = false;
-            } else {
-              if (campVal == '-') {
-                minusExi = true;
-                numI = newValue.length + 1;
-              }
-            }
-          }
 
-          if (!(keyCode == 45 || (minusExi && tamMask >= tamData))) {
-            if (sw && !swPeriod && testData.indexOf(me.comma_separator) == -1){
-              action = 'none';
+        if (tamData >= tamMask) {
+            var swMinus = false;
+
+            if (/^.*\-.*$/.test(newValue)) {
+                swMinus = true;
             }
-            if (!sw) action = 'none';
-          }
+
+            if (!(keyCode == 45 || (swMinus && tamMask >= tamData))) {
+                if (sw && !swPeriod){
+                    action = "none";
+                }
+
+                if (!sw) {
+                    action = "none";
+                }
+            }
         }
       }
+
       switch(action){
         case 'mask': case 'move':
           dataNewMask = me.replaceMasks(newValue, newCursor);
@@ -1370,6 +1406,17 @@ function G_Text(form, element, name)
       }
 
       if (keyValid){
+        if (me.mask == "" && (me.validate == 'Real' || me.validate == 'Int') && me.mType == 'text') {
+          if (key == '-') {
+            currentValue = me.element.value;
+            if (currentValue.charAt(0) == '-') {
+              currentValue = currentValue.substring(1, currentValue.length);
+              me.element.value = currentValue;
+            } else {
+              me.element.value = '-'+currentValue;
+            }
+          }
+        }
         //APPLY MASK
         if ((me.validate == "Login" || me.validate == "NodeName") && me.mask == "") {
             return true;
@@ -1884,14 +1931,26 @@ function G()
 
   //Apply a mask to a number
    this.ApplyMask = function(num, mask, cursor, dir, comma_sep){
-     myOut = '';
-     myCursor = cursor;
-     if (num.length == 0) return {result: '', cursor: 0};
-     switch(dir){
+     var myOut = "";
+     var myCursor = cursor;
+     var key = "";
+
+     if (num.length == 0) {
+         return {result: "", cursor: 0};
+     }
+
+     switch (dir) {
        case 'forward':
-         iMask = mask.split('');
-         value = _getOnlyNumbers(num,'');
-         iNum = value.split('');
+         iMask = mask.split("");
+         value = _getOnlyNumbers(num, "");
+         iNum = value.split("");
+
+         var swMinus = (iNum.length > 0 && iNum[0] == "-")? 1 : 0;
+
+         if (swMinus == 1) {
+             key = iNum.shift();
+         }
+
          for(e=0; e < iMask.length && iNum.length > 0; e++){
            switch(iMask[e]){
              case '#': case '0': case 'd': case 'm': case 'y': case 'Y':
@@ -1905,6 +1964,10 @@ function G()
               if (e < myCursor) myCursor++;
               break;
            }
+         }
+
+         if (swMinus == 1) {
+             myOut = "-" + myOut;
          }
          break;
        case 'reverse':
@@ -2043,6 +2106,8 @@ function G()
           }
         }
         else if(cursor == num.length){
+          var last = 0;
+
           for(l=0; l < aOut.length; l++){
             switch(aOut[l]){
               case '0': case '1': case '2': case '3': case '4':
@@ -2833,6 +2898,21 @@ var validateGridForms = function(invalidFields){
   return (invalidFields);
 };
 
+var changeStatusSubmitFields = function(newStatusTo) {
+  var newStatus = newStatusTo == 'disabled';
+  var formElements = document.getElementsByTagName('form');
+  for (var i = 0; i < formElements.length; i++) {
+    var inputElements = formElements[i].getElementsByTagName('input');
+    for (var j = 0; j < inputElements.length; j++) {
+      if (typeof(inputElements[j].type) != 'undefined') {
+        if (inputElements[j].type == 'submit') {
+            inputElements[j].disabled = newStatus;
+        }
+      }
+    }
+  }
+};
+
 /**
  *
  * This function validates via javascript
@@ -2843,6 +2923,9 @@ var validateGridForms = function(invalidFields){
  **/
 
 var validateForm = function(sRequiredFields) {
+  // Disabling submit buttons
+  changeStatusSubmitFields('disabled');
+
   /**
    *  replacing the %27 code by " character (if exists), this solve the problem that " broke the properties definition into a html
    *  i.ei <form onsubmit="myaction(MyjsString)" ...   with var MyjsString = "some string that is into a variable, so this broke the html";
@@ -3103,6 +3186,8 @@ var validateForm = function(sRequiredFields) {
 
 
     alert(systemMessaggeInvalid);
+    // Enabling submit buttons
+    changeStatusSubmitFields('enabled');
     return false;
   }
   else {
@@ -3217,14 +3302,16 @@ var saveAndRefreshForm = function(oObject) {
  *         refreshed or submited, at least not in the traditional sense.
  **/
 
-var saveForm = function(oObject) {
+var saveForm = function(oObject, actionParameter) {
   if (oObject) {
-    ajax_post(oObject.form.action,oObject.form,'POST');
+    var actionUrl = actionParameter || oObject.form.action.replace('cases_SaveData', 'saveForm');
+    ajax_post(actionUrl, oObject.form, 'POST');
   }
   else {
     var oAux = window.document.getElementsByTagName('form');
     if (oAux.length > 0) {
-      ajax_post(oAux[0].action,oAux[0],'POST');
+      var actionUrl = actionParameter || oAux[0].action.replace('cases_SaveData', 'saveForm');
+      ajax_post(actionUrl, oAux[0], 'POST');
     }
   }
 };
@@ -3308,7 +3395,15 @@ function dynaformVerifyFieldName(){
   return true;
 }
 
-function verifyFieldName1(){
+function verifyFieldName1() {
+  if (getField('PME_VALIDATE_NAME').value == '__error_session__') {
+    showPrompt('refreshDynaformEditor');
+    return;
+  }
+  verifyFieldNameFunction();
+}
+
+function verifyFieldNameFunction() {
   var newFieldName=fieldName.value;
   var msj = _('DYNAFIELD_ALREADY_EXIST');
   var validatedFieldName=getField("PME_VALIDATE_NAME",fieldForm).value;
@@ -3340,6 +3435,9 @@ function verifyFieldName1(){
   return valid;
 }
 
+function refreshDynaformEditor() {
+  window.location.href = window.location.href.replace('#', '');
+}
 
 var objectsWithFormula = Array();
 
@@ -3592,4 +3690,39 @@ function getNumericValue(val, decimalSeparator)
 
     return num;
 }
+
+var gridGetAllFieldAndValue = function (fieldId, swCurrentField)
+{
+    var frm = G.getObject(getField(fieldId).form);
+
+    var arrayAux = fieldId.split("][");
+    var gridName = arrayAux[0];
+    var row = parseInt(arrayAux[1]);
+    var fieldName = arrayAux[2];
+
+    var grid;
+    var gridField = "";
+    var fieldNameAux  = "";
+    var fieldValueAux = "";
+    var i1 = 0;
+    var i2 = 0;
+
+    //Get all fields of grid
+    for (i1 = 0; i1 <= frm.aElements.length - 1; i1++) {
+        if (frm.aElements[i1].name == gridName) {
+            grid = frm.aElements[i1];
+
+            for (i2 = 0; i2 <= grid.aFields.length - 1; i2++) {
+                fieldNameAux  = grid.aFields[i2].sFieldName;
+                fieldValueAux = grid.getElementByName(row, fieldNameAux).value();
+
+                if ((swCurrentField == 1 || fieldNameAux != fieldName) && typeof fieldValueAux != "undefined") {
+                    gridField = gridField + ((gridField != "")? "," : "") + "\"" + fieldNameAux + "\":\"" + fieldValueAux + "\"";
+                }
+            }
+        }
+    }
+
+    return gridField;
+};
 

@@ -1375,6 +1375,7 @@ INSERT INTO TRANSLATION (TRN_CATEGORY,TRN_ID,TRN_LANG,TRN_VALUE,TRN_UPDATE_DATE 
 ( 'LABEL','CASES','en','Cases','2012-06-01') ,
 ( 'LABEL','ID_USER_HAVENT_RIGHTS_PAGE','en','User does not have rights on this page.','2012-06-01') ,
 ( 'LABEL','ID_WRONG_PASS','en','Wrong password','2012-06-01') ,
+( 'LABEL','WRONG_LOGIN_CREDENTIALS','en','Wrong login credentials','2013-03-04') ,
 ( 'LABEL','ABOUT','en','About','2012-06-01') ,
 ( 'LABEL','ID_PROCESSMAP_MESSAGES','en','Messages','2012-06-01') ,
 ( 'JAVASCRIPT','demo','en','test javaScript','2012-06-01') ,
@@ -2100,7 +2101,7 @@ INSERT INTO TRANSLATION (TRN_CATEGORY,TRN_ID,TRN_LANG,TRN_VALUE,TRN_UPDATE_DATE 
 ( 'LABEL','ID_CLEAR_CACHE_CONFIRM1','en','Clear all cache files now?','2012-06-01') ,
 ( 'LABEL','ID_SELFSERVICE','en','Self Service','2012-06-01') ,
 ( 'LABEL','ID_PROCESSES','en','Processes','2012-06-01') ,
-( 'LABEL','ID_ENTER_SEARCH_TERM','en','enter search term','2012-06-01') ,
+( 'LABEL','ID_ENTER_SEARCH_TERM','en','Enter search term','2013-02-06') ,
 ( 'LABEL','ID_DETAILS','en','Details','2012-06-01') ,
 ( 'LABEL','ID_METHOD','en','Method','2012-06-01') ,
 ( 'JAVASCRIPT','ID_FIELD_DUPLICATE','en','Duplicate Field','2012-06-01') ,
@@ -2967,7 +2968,7 @@ INSERT INTO TRANSLATION (TRN_CATEGORY,TRN_ID,TRN_LANG,TRN_VALUE,TRN_UPDATE_DATE 
 ( 'LABEL','ID_ADHOC_USERS_ACTORS','en','Ad hoc Users Actors','2012-06-01') ,
 ( 'LABEL','ID_GROUPS_ACTORS','en','Groups Actors','2012-06-01') ,
 ( 'LABEL','ID_ADHOC_GROUPS_ACTORS','en','Ad Hoc Groups Actors','2012-06-01') ,
-( 'LABEL','ID_EXIST_DYNAFORM','en','There is a Dynaform with the same name in this process. It is not saving','2012-06-01') ,
+( 'LABEL','ID_EXIST_DYNAFORM','en','There is a Dynaform with the same title in the current process. Please use another title for the new Dynaform.','2013-01-03') ,
 ( 'LABEL','ID_INPUT_DOC_SUCCESS_NEW','en','Input Document has been created correctly.','2012-06-01') ,
 ( 'LABEL','ID_INPUT_DOC_SUCCESS_UPDATE','en','Input Document has been updated correctly.','2012-06-01') ,
 ( 'LABEL','ID_INPUT_DOC_SUCCESS_DELETE','en','Input Document has been deleted correctly.','2012-06-01') ,
@@ -3503,6 +3504,26 @@ INSERT INTO TRANSLATION (TRN_CATEGORY,TRN_ID,TRN_LANG,TRN_VALUE,TRN_UPDATE_DATE 
 ( 'LABEL','ID_FALSE','en','FALSE','2012-06-06') ;
 INSERT INTO TRANSLATION (TRN_CATEGORY,TRN_ID,TRN_LANG,TRN_VALUE,TRN_UPDATE_DATE )  VALUES 
 
+( 'LABEL','ID_USER_BROWSER','en','User''s Browser','2013-02-21') ,
+( 'LABEL','ID_SERVER_PROTOCOL','en','Server Protocol','2013-02-21') ,
+( 'LABEL','ID_SERVER_PORT','en','Server Port','2013-02-21') ,
+( 'LABEL','ID_AVAILABLE_DB','en','Available DB Engines','2013-02-21') ,
+( 'LABEL','ID_DATABASE_SERVER','en','Data Base Server','2013-02-21') ,
+( 'LABEL','ID_DATABASE','en','Data Base','2013-02-21') ,
+( 'LABEL','ID_PHP_VERSION','en','PHP Version','2013-02-21') ,
+( 'LABEL','ID_WEB_SERVER','en','Web Server','2013-02-20') ,
+( 'LABEL','ID_SERVER_IP','en','Server IP Address','2013-02-21') ,
+( 'LABEL','ID_OPERATING_SYSTEM','en','Operating System','2013-02-20') ,
+( 'LABEL','ID_UPGRADES_PATCHES','en','Upgrades/Patches','2013-02-20') ,
+( 'LABEL','ID_UPGRADE_VIEW_LOG','en','View log','2013-02-20') ,
+( 'LABEL','ID_UPGRADE_NEVER_UPGRADE','en','Never upgraded','2013-02-20') ,
+( 'LABEL','ID_ERROR_FILE_NOT_EXIST','en','The file ''{filename}'' does not exist, possibly the system failed to generate the file or the file was not moved correctly if the process is migrated from another server.','2013-02-13') ,
+( 'LABEL','ID_DISPLAY_PROCESSES','en','Displaying Processes {0} - {1} of {2}','2013-02-08') ,
+( 'LABEL','ID_ENTER_SEARCH_CRITERIA','en','Enter a search criteria and press search','2013-01-29') ,
+( 'LABEL','ID_LOGIN_AGAIN','en','You have lost your session and you have to login again.','2013-01-29') ,
+( 'LABEL','ID_PMTABLE_DATA_KEEP','en','Keep the records of the table','2013-01-08') ,
+( 'LABEL','ID_DYNAFORM_COPY_REQUIRED','en','Select the dynaform you want to copy/import.','2013-01-03') ,
+( 'LABEL','ID_DYNAFORM_COPY','en','Copy/Import Dynaform','2013-01-02') ,
 ( 'LABEL','ID_INSTRUCTIONS_TEXT','en','To assign a case it should be selected from the grid and then on the Search enter a name to do the user search to whom the case will be reasigned and then select one from the list.','2012-06-21') ,
 ( 'LABEL','ID_CONFIRM_TO_REASSIGN','en','There are cases which are not reassigned to a user. Do you like to continue?','2012-06-21') ,
 ( 'LABEL','ID_USERNAME_TESTING','en','Verifying username availability','2012-06-25') ,
@@ -3562,7 +3583,9 @@ INSERT INTO TRANSLATION (TRN_CATEGORY,TRN_ID,TRN_LANG,TRN_VALUE,TRN_UPDATE_DATE 
 ( 'LABEL','ID_EVENT_TIMER','en','Event Timer','2012-08-17') ,
 ( 'LABEL','ID_EVENT_CONDITIONAL','en','Event Conditional','2012-08-17') ,
 ( 'LABEL','ID_PMTABLE_INVALID_FIELD_NAME','en','The following fields cannot have these names because the are reserved words "{0}"','2012-09-03') ,
-( 'LABEL','ID_USER_CASES_NOT_START','en','User can''t start a case because doesn''t have a starting task assigned','2012-09-05') ,
+( 'LABEL','ID_USER_CASES_NOT_START','en','User can''t start a case because doesn''t have a starting task assigned','2012-09-05') ;
+INSERT INTO TRANSLATION (TRN_CATEGORY,TRN_ID,TRN_LANG,TRN_VALUE,TRN_UPDATE_DATE )  VALUES 
+
 ( 'LABEL','ID_USERS_HAS_ASSIGNED_CASES','en','The user has assigned cases, Do you like to continue anyway?','2012-09-07') ,
 ( 'LABEL','ID_GRID_PAGE_DISPLAYING_REPORT_PERMISSIONS_MESSAGE','en','Displaying Permissions Simple Reports {0} - {1} of {2}','2012-09-07') ,
 ( 'LABEL','ID_GRID_PAGE_NO_PERMISSIONS_MESSAGE','en','No Permissions to display','2012-09-07') ,
@@ -3582,9 +3605,7 @@ INSERT INTO TRANSLATION (TRN_CATEGORY,TRN_ID,TRN_LANG,TRN_VALUE,TRN_UPDATE_DATE 
 ( 'LABEL','ID_CRON_STATUS_ACTIVE','en','Active','2012-09-20') ,
 ( 'LABEL','ID_CRON_STATUS','en','Cron status','2012-09-20') ,
 ( 'LABEL','ID_RESET_DATES','en','Reset Dates','2012-09-24') ,
-( 'LABEL','ID_CRON_ACTIONS','en','Cron','2012-10-02') ;
-INSERT INTO TRANSLATION (TRN_CATEGORY,TRN_ID,TRN_LANG,TRN_VALUE,TRN_UPDATE_DATE )  VALUES 
-
+( 'LABEL','ID_CRON_ACTIONS','en','Cron','2012-10-02') ,
 ( 'LABEL','ID_ALL_WORKSPACES','en','All Workspaces','2012-09-21') ,
 ( 'LABEL','ID_CRON_LOG_CLEAR','en','Are you sure to clear the cron log?','2012-09-21') ,
 ( 'LABEL','ID_CRON_GRID_PAGE_DISPLAYING_MESSAGE','en','Displaying actions {0} - {1} of {2}','2012-09-21') ,
@@ -3604,7 +3625,7 @@ INSERT INTO TRANSLATION (TRN_CATEGORY,TRN_ID,TRN_LANG,TRN_VALUE,TRN_UPDATE_DATE 
 ( 'LABEL','ID_TIME_REQUIRED','en','Time is required','2012-10-17') ,
 ( 'LABEL','ID_CURRENT_WORKSPACE','en','Current Workspace','2012-10-29') ,
 ( 'LABEL','ID_PM_FUNCTION_CHANGE_CASE','en','The "{0}" function has {1} the current case, the script has stopped to avoid conflicts.','2012-10-29') ,
-( 'LABEL','ID_DYNAFORM_EDITOR_LOGIN_AGAIN','en','You have lost your session and you have to login to continue. Please enter you password.','2012-10-31') ,
+( 'LABEL','ID_DYNAFORM_EDITOR_LOGIN_AGAIN','en','You have lost your session and you have to login to continue. Please enter your password.','2013-01-29') ,
 ( 'LABEL','ID_DATE_FORMAT_14','en','d.m.Y','2012-11-06') ,
 ( 'LABEL','ID_TRIGGER_COPY_TITLE','en','Copy/Import Trigger','2012-11-07') ,
 ( 'LABEL','ID_TRIGGER_COPY_OPTION','en','Copy/Import Triggers from a Process','2012-11-07') ,
@@ -3631,7 +3652,6 @@ INSERT INTO TRANSLATION (TRN_CATEGORY,TRN_ID,TRN_LANG,TRN_VALUE,TRN_UPDATE_DATE 
 ( 'LABEL','ID_PROCESSMAKER_REQUIREMENTS_LDAP','en','LDAP Support (*)','2012-11-30') ,
 ( 'LABEL','ID_PROCESSMAKER_REQUIREMENTS_MEMORYLIMIT','en','Memory Limit >= 80M','2012-11-30') ,
 ( 'LABEL','ID_ADMINISTRATOR_ROLE_CANT_CHANGED','en','The administrator''s role can''t be changed!','2012-11-30') ,
-( 'LABEL','ID_SELECT_DYNAFORM_IMPORT','en','Select the dynaform you want to import','2012-12-05') ,
 ( 'LABEL','ID_CONFIRM_IMPORT_DYNAFORM','en','When you import the selected form, lose the information of the current form. Are you sure you import the form?','2012-12-05') ,
 ( 'LABEL','ID_CASESLIST_FIELD_RESET','en','Restart everything with the system fields','2012-12-10') ,
 ( 'LABEL','ID_CASESLIST_FIELD_RESET_ID','en','Restart everything with the system fields, with the ID of the label for its translation','2012-12-10') ,
@@ -58997,14 +59017,14 @@ INSERT INTO ISO_LOCATION (IC_UID,IL_UID,IL_NAME,IL_NORMAL_NAME,IS_UID)  VALUES
 ('ZW','WKI','Hwange',' ','') ;
 
 INSERT INTO DASHLET (DAS_UID,DAS_CLASS,DAS_TITLE,DAS_DESCRIPTION,DAS_VERSION,DAS_CREATE_DATE,DAS_UPDATE_DATE,DAS_STATUS) VALUES 
-('00000000000000000000000000000002','dashletProcessMakerCommunity','ProcessMaker Community','ProcessMaker Community Links and Information','1.0','2011-12-01 00:00:00','2011-12-01 00:00:00','1'),
 ('00000000000000000000000000000001','dashletOpenVSCompleted','Open Cases VS Completed Cases','Open Cases VS Completed Cases','1.0','2011-10-28 00:00:00','2011-10-28 00:00:00','1'),
+('00000000000000000000000000000002','dashletProcessMakerCommunity','ProcessMaker Community','ProcessMaker Community Links and Information','1.0','2011-12-01 00:00:00','2011-12-01 00:00:00','1'),
 ('00000000000000000000000000000003','dashletProcessMakerEnterprise','ProcessMaker Enterprise Plugins and Addons','The following list of Enterprise plug-ins includes features and functionality that extend and enhance ProcessMaker''s performance and functionality.','1.0','2011-12-05 00:00:00','2011-12-05 00:00:00','1'),
 ('00000000000000000000000000000004','dashletRssReader','Simple RSS reader','Simple RSS reader for ProcessMaker','1.0','2012-04-16 00:00:00','2012-04-16 00:00:00','1');
 
 INSERT INTO DASHLET_INSTANCE (DAS_INS_UID,DAS_UID,DAS_INS_OWNER_TYPE,DAS_INS_OWNER_UID,DAS_INS_ADDITIONAL_PROPERTIES,DAS_INS_CREATE_DATE,DAS_INS_UPDATE_DATE,DAS_INS_STATUS) VALUES 
-('00000000000000000000000000000001','00000000000000000000000000000001','EVERYBODY','','a:7:{s:20:"DAS_INS_CONTEXT_TIME";s:5:"TODAY";s:12:"DAS_RED_FROM";s:1:"0";s:10:"DAS_RED_TO";s:2:"30";s:15:"DAS_YELLOW_FROM";s:2:"30";s:13:"DAS_YELLOW_TO";s:2:"50";s:14:"DAS_GREEN_FROM";s:2:"50";s:12:"DAS_GREEN_TO";s:3:"100";}','2011-12-02 00:00:00','2011-12-02 00:00:00',1),
+('00000000000000000000000000000004','00000000000000000000000000000004','EVERYBODY','','a:2:{s:13:"DAS_INS_TITLE";s:15:"PM Plugins News";s:7:"DAS_URL";s:71:"http://license.processmaker.com/syspmLicenseSrv/en/green/services/rssAP";}','2012-04-16 00:00:00','2012-04-16 00:00:00',1),
 ('00000000000000000000000000000002','00000000000000000000000000000002','EVERYBODY','','','2011-12-02 00:00:00','2011-12-02 00:00:00',1),
-('00000000000000000000000000000003','00000000000000000000000000000003','EVERYBODY','','','2011-12-05 00:00:00','2011-12-05 00:00:00',1),
-('00000000000000000000000000000004','00000000000000000000000000000004','EVERYBODY','','a:2:{s:13:"DAS_INS_TITLE";s:15:"PM Plugins News";s:7:"DAS_URL";s:71:"http://license.processmaker.com/syspmLicenseSrv/en/green/services/rssAP";}','2012-04-16 00:00:00','2012-04-16 00:00:00',1);
+('00000000000000000000000000000001','00000000000000000000000000000001','EVERYBODY','','a:7:{s:20:"DAS_INS_CONTEXT_TIME";s:5:"TODAY";s:12:"DAS_RED_FROM";s:1:"0";s:10:"DAS_RED_TO";s:2:"30";s:15:"DAS_YELLOW_FROM";s:2:"30";s:13:"DAS_YELLOW_TO";s:2:"50";s:14:"DAS_GREEN_FROM";s:2:"50";s:12:"DAS_GREEN_TO";s:3:"100";}','2011-12-02 00:00:00','2011-12-02 00:00:00',1),
+('00000000000000000000000000000003','00000000000000000000000000000003','EVERYBODY','','','2011-12-05 00:00:00','2011-12-05 00:00:00',1);
 

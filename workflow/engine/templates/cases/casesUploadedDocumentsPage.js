@@ -168,7 +168,7 @@
           }
         }
         if (!http_request){
-          alert('This browser is not supported.');
+          alert( _('ID_BROWSER_NOT_SUPPORTED') );
           return false;
         }
         
@@ -215,7 +215,7 @@
           }
         }
         if (!http_request){
-          alert('This browser is not supported.');
+          alert( _('ID_BROWSER_NOT_SUPPORTED') );
           return false;
         }
         
@@ -253,7 +253,7 @@
               document.location = document.location;
             }
             else{
-              Ext.Msg.alert('Refresh', 'You clicked: CTRL-F5');
+              Ext.Msg.alert(_('ID_REFRESH_LABEL'), _('ID_REFRESH_MESSAGE'));
             }
 
         }
@@ -456,7 +456,7 @@
           pageSize: 10,
           store: store,
           displayInfo: true,
-          displayMsg: 'Displaying Processes {0} - {1} of {2}',
+          displayMsg: _('ID_DISPLAY_PROCESSES'),
           emptyMsg: "",
           items:[]
         }),
@@ -474,7 +474,7 @@
                 uploadDocumentGridDownload();
             },
             render: function(){
-                this.loadMask = new Ext.LoadMask(this.body, {msg:'Loading...'});
+                this.loadMask = new Ext.LoadMask(this.body, {msg:_('ID_LOADING')});
                 processesGrid.getSelectionModel().on('rowselect', function() {
                     var rowSelected = processesGrid.getSelectionModel().getSelected();
                 });

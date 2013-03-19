@@ -148,6 +148,7 @@ if ($action == "uploadFileNewProcess") {
                 $oNewGroup = $oProcess->mergeExistingGroups( $oData->groupwfs );
                 $oData->groupwfs = $oNewGroup;
                 $oData->taskusers = $oProcess->mergeExistingUsers( $oBaseGroup, $oNewGroup, $oData->taskusers );
+                $oData->objectPermissions = $oProcess->mergeExistingUsers( $oBaseGroup, $oNewGroup, $oData->objectPermissions );
             }
             $result->ExistGroupsInDatabase = 0;
         } else {
@@ -274,7 +275,7 @@ if ($action == "uploadFileNewProcessExist") {
                 //krumo ($oData); die;
                 $sNewProUid = $oProcess->getUnusedProcessGUID();
                 $oProcess->setProcessGuid( $oData, $sNewProUid );
-                $oData->process['PRO_TITLE'] = "Copy of  - " . $oData->process['PRO_TITLE'] . ' - ' . date( 'M d, H:i' );
+                $oData->process['PRO_TITLE'] = G::LoadTranslation('ID_COPY_OF'). ' - ' . $oData->process['PRO_TITLE'] . ' - ' . date( 'M d, H:i' );
                 $oProcess->renewAll( $oData );
 
                 if ($processFileType == "pm") {

@@ -224,6 +224,12 @@ define( 'PML_UPLOAD_URL', PML_SERVER . '/syspmLibrary/en/green/services/uploadPr
 define( 'PML_DOWNLOAD_URL', PML_SERVER . '/syspmLibrary/en/green/services/download' );
 
 // starting session
+$timelife = ini_get('session.gc_maxlifetime');
+if (is_null($timelife)) {
+    $timelife = 1440;
+}
+ini_set('session.gc_maxlifetime', $timelife);
+ini_set('session.cookie_lifetime', $timelife);
 session_start();
 
 $config = Bootstrap::getSystemConfiguration();
@@ -422,9 +428,6 @@ Bootstrap::registerClass('Controller',          PATH_GULLIVER . "class.controlle
 Bootstrap::registerClass('HttpProxyController', PATH_GULLIVER . "class.httpProxyController.php");
 Bootstrap::registerClass('templatePower',            PATH_GULLIVER . "class.templatePower.php");
 Bootstrap::registerClass('XmlForm_Field_SimpleText', PATH_GULLIVER . "class.xmlformExtension.php");
-Bootstrap::registerClass('Propel',          PATH_THIRDPARTY . "propel/Propel.php");
-Bootstrap::registerClass('Creole',          PATH_THIRDPARTY . "creole/Creole.php");
-Bootstrap::registerClass('Criteria',        PATH_THIRDPARTY . "propel/util/Criteria.php");
 Bootstrap::registerClass('Groups',       PATH_HOME . "engine/classes/class.groups.php");
 Bootstrap::registerClass('Tasks',        PATH_HOME . "engine/classes/class.tasks.php");
 Bootstrap::registerClass('Calendar',     PATH_HOME . "engine/classes/class.calendar.php");
@@ -579,6 +582,8 @@ $oPluginRegistry = & PMPluginRegistry::getSingleton();
 
 if (file_exists( $sSerializedFile )) {
     $oPluginRegistry->unSerializeInstance( file_get_contents( $sSerializedFile ) );
+    $attributes = $oPluginRegistry->getAttributes();
+    Bootstrap::LoadTranslationPlugins( defined( 'SYS_LANG' ) ? SYS_LANG : "en" , $attributes);
 }
 
 // setup propel definitions and logging
@@ -713,6 +718,10 @@ if (substr( SYS_COLLECTION, 0, 8 ) === 'gulliver') {
         if (is_callable( Array ($controllerClass,$controllerAction ) )) {
             $isControllerCall = true;
         }
+
+        if (substr(SYS_SKIN, 0, 2) != "ux" && $controllerClass == "main") {
+            $isControllerCall = false;
+        }
     }
     if (! $isControllerCall && ! file_exists( $phpFile ) && ! $isRestRequest) {
         $_SESSION['phpFileNotFound'] = $_SERVER['REQUEST_URI'];
@@ -749,6 +758,11 @@ if (! defined( 'EXECUTE_BY_CRON' )) {
     define( 'SYS_LANG_DIRECTION', $oServerConf->getLanDirection() );
 
     if ((isset( $_SESSION['USER_LOGGED'] )) && (! (isset( $_GET['sid'] )))) {
+        if (PHP_VERSION < 5.2) {
+            setcookie(session_name(), session_id(), time() + $timelife, '/', '; HttpOnly');
+        } else {
+            setcookie(session_name(), session_id(), time() + $timelife, '/', null, false, true);
+        }
         $RBAC->initRBAC();
         //using optimization with memcache, the user data will be in memcache 8 hours, or until session id goes invalid
         $memKey = 'rbacSession' . session_id();
@@ -774,6 +788,10 @@ if (! defined( 'EXECUTE_BY_CRON' )) {
         $noLoginFiles[] = 'retrivePassword';
         $noLoginFiles[] = 'defaultAjaxDynaform';
         $noLoginFiles[] = 'dynaforms_checkDependentFields';
+        $noLoginFiles[] = 'fields_Ajax';
+        $noLoginFiles[] = 'appFolderAjax';
+        $noLoginFiles[] = 'steps_Ajax';
+        $noLoginFiles[] = 'proxyCasesList';
 
         $noLoginFolders[] = 'services';
         $noLoginFolders[] = 'tracker';
@@ -792,6 +810,11 @@ if (! defined( 'EXECUTE_BY_CRON' )) {
                     $_SESSION['USER_LOGGED'] = $aUser['USR_UID'];
                     $_SESSION['USR_USERNAME'] = $aUser['USR_USERNAME'];
                     $bRedirect = false;
+                    if (PHP_VERSION < 5.2) {
+                        setcookie(session_name(), session_id(), time() + $timelife, '/', '; HttpOnly');
+                    } else {
+                        setcookie(session_name(), session_id(), time() + $timelife, '/', null, false, true);
+                    }
                     $RBAC->initRBAC();
                     $RBAC->loadUserRolePermission( $RBAC->sSystem, $_SESSION['USER_LOGGED'] );
                     $memKey = 'rbacSession' . session_id();

@@ -84,6 +84,9 @@ class Derivation
         $taskInfo = array ();
 
         $oUser = new Users();
+        if (!class_exists('Cases')) {
+            G::LoadClass('case');
+        }
         $this->case = new Cases();
         // 1. there is no rule
         if (is_null( $aDerivation['ROU_NEXT_TASK'] )) {
@@ -135,6 +138,7 @@ class Derivation
                             break;
                     }
                     $aDerivation['NEXT_TASK']['USR_UID'] = '';
+                    $aDerivation['NEXT_TASK']['USER_ASSIGNED'] = array('USR_UID' => '');
                 } else {
                     //3. load the task information of normal NEXT_TASK
                     $aDerivation['NEXT_TASK'] = $oTask->load( $aDerivation['ROU_NEXT_TASK'] ); //print $aDerivation['ROU_NEXT_TASK']." **** ".$aDerivation['NEXT_TASK']['TAS_TYPE']."<hr>";
@@ -413,7 +417,7 @@ class Derivation
                 $userFields['USR_EMAIL'] = '';
 
                 //get the report_to user & its full info
-                $useruid = $this->getDenpendentUser( $this->checkReplacedByUser( $tasInfo['USER_UID'] ) );
+                $useruid = $this->checkReplacedByUser( $this->getDenpendentUser( $tasInfo['USER_UID'] ) );
 
                 if (isset( $useruid ) && $useruid != '') {
                     $userFields = $this->getUsersFullNameFromArray( $useruid );
@@ -764,7 +768,7 @@ class Derivation
 
             if ($aSP['SP_SYNCHRONOUS'] == 0) {
                 $this->case->setDelInitDate( $currentDelegation['APP_UID'], $iNewDelIndex );
-                $aDeriveTasks = $this->prepareInformation( array ('USER_UID' => - 1,'APP_UID' => $currentDelegation['APP_UID'],'DEL_INDEX' => $iNewDelIndex
+                $aDeriveTasks = $this->prepareInformation( array ('USER_UID' => -1,'APP_UID' => $currentDelegation['APP_UID'],'DEL_INDEX' => $iNewDelIndex
                 ) );
 
                 if (isset( $aDeriveTasks[1] )) {

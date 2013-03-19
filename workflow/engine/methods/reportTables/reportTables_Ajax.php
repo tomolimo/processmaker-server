@@ -201,7 +201,7 @@ switch ($action) {
                 }
 
                 if (in_array( strtoupper( $data['REP_TAB_NAME'] ), $aReservedWords )) {
-                    throw new Exception( 'Could not create the table with the name "' . $data['REP_TAB_NAME'] . '" because it is a reserved word.' );
+                    throw new Exception( G::LoadTranslation('ID_NOT_CREATE_TABLE') . '"' . $data['REP_TAB_NAME'] . '"' . G::LoadTranslation('ID_RESERVED_WORD') );
                 }
                 //create record
                 $addTabUid = $oAdditionalTables->create( $repTabData );
@@ -260,7 +260,7 @@ switch ($action) {
 
             $oAdditionalTables->createPropelClasses( $data['REP_TAB_NAME'], $repTabClassName, $fieldsList, $addTabUid );
 
-            $oAdditionalTables->populateReportTable( $data['REP_TAB_NAME'], $data['REP_TAB_CONNECTION'], $data['REP_TAB_TYPE'], $fieldsList, $data['PRO_UID'], $data['REP_TAB_GRID'] );
+            $oAdditionalTables->populateReportTable( $data['REP_TAB_NAME'], $data['REP_TAB_CONNECTION'], $data['REP_TAB_TYPE'], $fieldsList, $data['PRO_UID'], $data['REP_TAB_GRID'], $repTabData['ADD_TAB_UID'] );
 
             $result->success = true;
         } catch (Exception $e) {

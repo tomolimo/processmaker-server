@@ -136,7 +136,7 @@
           }
         }
         if (!http_request){
-          alert('This browser is not supported.');
+          alert(_('ID_BROWSER_NOT_SUPPORTED'));
           return false;
         }
 
@@ -183,7 +183,7 @@ var ActionTabFrameGlobal = '';
               document.location = document.location;
             }
             else{
-              Ext.Msg.alert('Refresh', 'You clicked: CTRL-F5');
+              Ext.Msg.alert( _('ID_REFRESH_LABEL'), _('ID_REFRESH_MESSAGE'));
             }
 
         }
@@ -326,7 +326,7 @@ var ActionTabFrameGlobal = '';
               {name : 'APP_MSG_FROM'},
               {name : 'APP_MSG_TO'},
               {name : 'APP_MSG_STATUS'},
-	      {name : 'APP_MSG_BODY'}
+              {name : 'APP_MSG_BODY'}
 
             ]
           }
@@ -517,10 +517,10 @@ var ActionTabFrameGlobal = '';
           }
         ],
         bbar: new Ext.PagingToolbar({
-          pageSize: 10,
+          pageSize: 20,
           store: store,
           displayInfo: true,
-          displayMsg: 'Displaying Processes {0} - {1} of {2}',
+          displayMsg: _('ID_DISPLAY_PROCESSES'),
           emptyMsg: "",
           items:[]
         }),
@@ -536,7 +536,7 @@ var ActionTabFrameGlobal = '';
         }
       });
 
-    processesGrid.store.load({params: {"function":"languagesList"}});
+    processesGrid.store.load({params: {"actionAjax":"messageHistoryGridList_JXP"}});
 
       processesGrid.store.on(
         'load',
@@ -550,46 +550,11 @@ var ActionTabFrameGlobal = '';
         }
       );
 
-    processesGrid.addListener('rowcontextmenu', emptyReturn,this);
-    processesGrid.on('rowcontextmenu', function (grid, rowIndex, evt) {
-      var sm = grid.getSelectionModel();
-      sm.selectRow(rowIndex, sm.isSelected(rowIndex));
-
-      var rowSelected = Ext.getCmp('processesGrid').getSelectionModel().getSelected();
-      var activator = Ext.getCmp('activator2');
-      var debug = Ext.getCmp('debug');
-
-      if( rowSelected.data.PRO_STATUS == 'ACTIVE' ){
-        activator.setIconClass('icon-deactivate');
-        activator.setText(TRANSLATIONS.ID_DEACTIVATE);
-      } else {
-        activator.setIconClass('icon-activate');
-        activator.setText(TRANSLATIONS.ID_ACTIVATE);
-      }
-
-      if( rowSelected.data.PRO_DEBUG == 1){
-        debug.setIconClass('icon-debug-disabled');
-        debug.setText(_('ID_DISABLE_DEBUG'));
-      } else {
-        debug.setIconClass('icon-debug');
-        debug.setText(_('ID_ENABLE_DEBUG'));
-      }
-    }, this);
-
     processesGrid.on('contextmenu', function (evt) {
       evt.preventDefault();
     }, this);
-
-
-
-
-
     function emptyReturn(){
-
     }
-
-
-
 
     var viewport = new Ext.Viewport({
       layout: 'border',

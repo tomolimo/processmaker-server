@@ -76,6 +76,7 @@ class XmlForm_Field_WYSIWYG_EDITOR extends XmlForm_Field
     {
         $editorDefinition  = 'tinyMCE.baseURL = "/js/tinymce/jscripts/tiny_mce"; ';
         $editorDefinition .= 'var domainURL   = "/sys'.SYS_SYS.'/'.SYS_LANG.'/'.SYS_SKIN.'/"';
+        $serverConf =& serverConf::getSingleton();
 
         switch ($this->editorType){
             case 'EMAIL_TEMPLATE':
@@ -84,20 +85,22 @@ class XmlForm_Field_WYSIWYG_EDITOR extends XmlForm_Field
                 var actualCaretPositionBookmark;
                 var formProcessID = document.getElementById("form[pro_uid]").value;
                 tinyMCE.init({
-                    theme   : "advanced",
-                    plugins : "advhr,advimage,advlink,advlist,autolink,autoresize,contextmenu,directionality,emotions,example,example_dependency,fullpage,fullscreen,iespell,inlinepopups,insertdatetime,layer,legacyoutput,lists,media,nonbreaking,noneditable,pagebreak,paste,preview,print,save,searchreplace,style,tabfocus,table,template,visualblocks,visualchars,wordcount,xhtmlxtras,pmSimpleUploader,pmVariablePicker,style",
-                    mode    : "specific_textareas",
-                    editor_selector : "tmceEditor",
-                    width   : "760",
-                    height  : "'.$this->height.'",
-
-                    theme_advanced_buttons1 : "pmSimpleUploader,|,pmVariablePicker,|,bold,italic,underline,|,justifyleft,justifycenter,justifyright,justifyfull,|,fontselect,fontsizeselect,|,cut,copy,paste,|,bullist,numlist,|,outdent,indent,blockquote",
-                    theme_advanced_buttons2 : "tablecontrols,|,undo,redo,|,link,unlink,image,|,forecolor,backcolor,styleprops,|,hr,removeformat,visualaid,|,sub,sup,|,ltr,rtl,|,code",
+                    theme: "advanced",
+                    plugins: "advhr,advimage,advlink,advlist,autolink,autoresize,contextmenu,directionality,emotions,example,example_dependency,fullpage,fullscreen,iespell,inlinepopups,insertdatetime,layer,legacyoutput,lists,media,nonbreaking,noneditable,pagebreak,paste,preview,print,save,searchreplace,style,tabfocus,table,template,visualblocks,visualchars,wordcount,xhtmlxtras,pmSimpleUploader,pmVariablePicker,pmGrids,style",
+                    mode: "specific_textareas",
+                    editor_selector: "tmceEditor",
+                    width:  "770",
+                    height: "' . $this->height . '",
+                    directionality: "' . ($serverConf->isRtl(SYS_LANG) ? 'rtl' : 'ltr') . '",
+                    verify_html: false,
+                    theme_advanced_buttons1: "pmSimpleUploader,|,pmVariablePicker,|,pmGrids,|,bold,italic,underline,|,justifyleft,justifycenter,justifyright,justifyfull,|,fontselect,fontsizeselect,|,cut,copy,paste,|,bullist,numlist,|,outdent,indent,blockquote",
+                    theme_advanced_buttons2: "tablecontrols,|,undo,redo,|,link,unlink,image,|,forecolor,backcolor,styleprops,|,hr,removeformat,visualaid,|,sub,sup,|,ltr,rtl,|,code",
                     popup_css : "/js/tinymce/jscripts/tiny_mce/themes/advanced/skins/default/dialog.css",
+                    skin : "o2k7",
+                    skin_variant : "silver",
                     oninit: function (){
                         tinyMCE.activeEditor.processID = formProcessID;
                         tinyMCE.activeEditor.domainURL = domainURL;
-
                     },
                     onchange_callback: function(inst) {
                         if(inst.isDirty()) {
@@ -119,16 +122,19 @@ class XmlForm_Field_WYSIWYG_EDITOR extends XmlForm_Field
                 // is necessary the process uid variable in order to load the picker correctly
                 var formProcessID = document.getElementById("form[PRO_UID]").value;
                 tinyMCE.init({
-                    theme   : "advanced",
-                    plugins : "advhr,advimage,advlink,advlist,autolink,autoresize,contextmenu,directionality,emotions,example,example_dependency,fullpage,fullscreen,iespell,inlinepopups,insertdatetime,layer,legacyoutput,lists,media,nonbreaking,noneditable,pagebreak,paste,preview,print,save,searchreplace,style,tabfocus,table,template,visualblocks,visualchars,wordcount,xhtmlxtras,pmSimpleUploader,pmVariablePicker,pmGrids,style",
-                    mode    : "specific_textareas",
-                    editor_selector : "tmceEditor",
-                    width   : "770",
-                    height  : "305",
-                    verify_html : false,
-                    theme_advanced_buttons1 : "pmSimpleUploader,|,pmVariablePicker,|,pmGrids,|,bold,italic,underline,|,justifyleft,justifycenter,justifyright,justifyfull,|,fontselect,fontsizeselect,|,cut,copy,paste,|,bullist,numlist,|,outdent,indent,blockquote",
-                    theme_advanced_buttons2 : "tablecontrols,|,undo,redo,|,link,unlink,image,|,forecolor,backcolor,styleprops,|,hr,removeformat,visualaid,|,sub,sup,|,ltr,rtl,|,code",
+                    theme: "advanced",
+                    plugins: "advhr,advimage,advlink,advlist,autolink,autoresize,contextmenu,directionality,emotions,example,example_dependency,fullpage,fullscreen,iespell,inlinepopups,insertdatetime,layer,legacyoutput,lists,media,nonbreaking,noneditable,pagebreak,paste,preview,print,save,searchreplace,style,tabfocus,table,template,visualblocks,visualchars,wordcount,xhtmlxtras,pmSimpleUploader,pmVariablePicker,pmGrids,style",
+                    mode: "specific_textareas",
+                    editor_selector: "tmceEditor",
+                    width:  "770",
+                    height: "305",
+                    directionality: "' . ($serverConf->isRtl(SYS_LANG) ? 'rtl' : 'ltr') . '",
+                    verify_html: false,
+                    theme_advanced_buttons1: "pmSimpleUploader,|,pmVariablePicker,|,pmGrids,|,bold,italic,underline,|,justifyleft,justifycenter,justifyright,justifyfull,|,fontselect,fontsizeselect,|,cut,copy,paste,|,bullist,numlist,|,outdent,indent,blockquote",
+                    theme_advanced_buttons2: "tablecontrols,|,undo,redo,|,link,unlink,image,|,forecolor,backcolor,styleprops,|,hr,removeformat,visualaid,|,sub,sup,|,ltr,rtl,|,code",
                     popup_css : "/js/tinymce/jscripts/tiny_mce/themes/advanced/skins/default/dialog.css",
+                    skin : "o2k7",
+                    skin_variant : "silver",
                     oninit: function () {
                         tinyMCE.activeEditor.processID = formProcessID;
                         tinyMCE.activeEditor.domainURL = domainURL;
@@ -136,6 +142,12 @@ class XmlForm_Field_WYSIWYG_EDITOR extends XmlForm_Field
                     onchange_callback: function(inst) {
                         if(inst.isDirty()) {
                             inst.save();
+                        }
+                        return true;
+                    },
+                    handle_event_callback : function(e) {
+                        if(this.isDirty()) {
+                            this.save();
                         }
                         return true;
                     }
@@ -157,6 +169,7 @@ class XmlForm_Field_WYSIWYG_EDITOR extends XmlForm_Field
                     editor_selector : "tmceEditor",
                     width   : \'100%\',
                     height  : \'300\',
+                    directionality: "' . ($serverConf->isRtl(SYS_LANG) ? 'rtl' : 'ltr') . '",
                     theme_advanced_buttons1 : "bold,italic,underline,|,justifyleft,justifycenter,justifyright,justifyfull,|,fontselect,fontsizeselect,|,cut,copy,paste,|,bullist,numlist,|,pmFieldPicker",
                     theme_advanced_buttons2 : "tablecontrols,|outdent,indent,blockquote,|,undo,redo,|,link,unlink,image,|,forecolor,backcolor,styleprops,|,hr,removeformat,visualaid,|,sub,sup,|,ltr,rtl,|,code",
                     popup_css : "/js/tinymce/jscripts/tiny_mce/themes/advanced/skins/default/dialog.css",
@@ -206,7 +219,8 @@ class XmlForm_Field_WYSIWYG_EDITOR extends XmlForm_Field
                         theme_advanced_statusbar_location : "bottom",
                         theme_advanced_resizing : true,
                         width: "100%",
-                        height: "400"
+                        height: "400",
+                        directionality: "' . ($serverConf->isRtl(SYS_LANG) ? 'rtl' : 'ltr') . '"
                     });
                 ';
                 break;
@@ -214,3 +228,4 @@ class XmlForm_Field_WYSIWYG_EDITOR extends XmlForm_Field
         return $editorDefinition;
     }
 }
+

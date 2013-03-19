@@ -72,6 +72,7 @@ function run_upgrade($command, $args)
         CLI::logging(CLI::error("checksum.txt not found, integrity check is not possible") . "\n");
         if (!CLI::question("Integrity check failed, do you want to continue the upgrade?")) {
             CLI::logging("Upgrade failed\n");
+            $flag = G::isPMUnderUpdating(0);
             die();
         }
     } else {
@@ -90,6 +91,7 @@ function run_upgrade($command, $args)
         if (!(empty($checksum['missing']) || empty($checksum['diff']))) {
             if (!CLI::question("Integrity check failed, do you want to continue the upgrade?")) {
                 CLI::logging("Upgrade failed\n");
+                $flag = G::isPMUnderUpdating(0);
                 die();
             }
         }
@@ -97,16 +99,18 @@ function run_upgrade($command, $args)
     CLI::logging("Clearing cache...\n");
     if (defined('PATH_C')) {
         G::rm_dir(PATH_C);
-        mkdir(PATH_C, 0777, true);
+        G::mk_dir(PATH_C, 0777);
     }
     $workspaces = get_workspaces_from_args($command);
     $count = count($workspaces);
     $first = true;
     $errors = false;
+    $countWorkspace = 0;
     $buildCacheView = array_key_exists("buildACV", $args);
     foreach ($workspaces as $index => $workspace) {
         try {
-            CLI::logging("Upgrading workspaces ($index/$count): " . CLI::info($workspace->name) . "\n");
+            $countWorkspace++;
+            CLI::logging("Upgrading workspaces ($countWorkspace/$count): " . CLI::info($workspace->name) . "\n");
             $workspace->upgrade($first, $buildCacheView, $workspace->name);
             $workspace->close();
             $first = false;
@@ -121,6 +125,32 @@ function run_upgrade($command, $args)
     } else {
         CLI::logging("Upgrade successful\n");
     }
+
+    // SAVE Upgrades/Patches
+    $arrayPatch = glob(PATH_TRUNK . 'patch-*');
+
+    if ($arrayPatch) {
+        foreach ($arrayPatch as $value) {
+            if (file_exists($value)) {
+                // copy content the patch
+                $names = pathinfo($value);
+                $nameFile = $names['basename'];
+
+                $contentFile = file_get_contents($value);
+                $contentFile = preg_replace("[\n|\r|\n\r]", '', $contentFile);
+                CLI::logging($contentFile . ' installed (' . $nameFile . ')', PATH_DATA . 'log/upgrades.log');
+
+                // move file of patch
+                $newFile = PATH_DATA . $nameFile;
+                G::rm_dir($newFile);
+                copy($value, $newFile);
+                G::rm_dir($value);
+            }
+        }
+    } else {
+        CLI::logging('ProcessMaker ' . System::getVersion(). ' installed', PATH_DATA . 'log/upgrades.log');
+    }
+
     //setting flag to false
     $flag = G::isPMUnderUpdating(0);
 }

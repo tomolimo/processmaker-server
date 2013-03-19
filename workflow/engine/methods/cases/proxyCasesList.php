@@ -1,4 +1,10 @@
 <?php
+if (!isset($_SESSION['USER_LOGGED'])) {
+    $result = new stdclass();
+    $result->error = G::LoadTranslation('ID_LOGIN_AGAIN');
+    die(G::json_encode($result));
+}
+
 //Getting the extJs parameters
 $callback = isset( $_POST["callback"] ) ? $_POST["callback"] : "stcCallback1001";
 $dir = isset( $_POST["dir"] ) ? $_POST["dir"] : "DESC";
@@ -15,14 +21,23 @@ $action = isset( $_GET["action"] ) ? $_GET["action"] : (isset( $_POST["action"] 
 $type = isset( $_GET["type"] ) ? $_GET["type"] : (isset( $_POST["type"] ) ? $_POST["type"] : "extjs");
 $dateFrom = isset( $_POST["dateFrom"] ) ? substr( $_POST["dateFrom"], 0, 10 ) : "";
 $dateTo = isset( $_POST["dateTo"] ) ? substr( $_POST["dateTo"], 0, 10 ) : "";
+$first = isset( $_POST["first"] ) ? true :false;
 
 try {
     $userUid = (isset($_SESSION["USER_LOGGED"]) && $_SESSION["USER_LOGGED"] != "")? $_SESSION["USER_LOGGED"] : null;
     $result = "";
+    $solrEnabled = false;
 
     switch ($action) {
         case "search":
         case "to_reassign":
+            if ($first) {
+                $result['totalCount'] = 0;
+                $result['data'] = array();
+                $result = G::json_encode($result);
+                echo $result;
+                return ;
+            }
             $user = ($user == "CURRENT_USER")? $userUid : $user;
             $userUid = $user;
             break;
@@ -44,6 +59,16 @@ try {
             $solrConf["solr_instance"]
         );
 
+        if ($ApplicationSolrIndex->isSolrEnabled()) {
+            //Check if there are missing records to reindex and reindex them
+            $ApplicationSolrIndex->synchronizePendingApplications();
+            $solrEnabled = true;
+        } else{
+            $solrEnabled = false;
+        }
+    }
+
+    if ($solrEnabled) {
         $data = $ApplicationSolrIndex->getAppGridData(
             $userUid,
             $start,
@@ -81,7 +106,7 @@ try {
             $dateTo,
             $callback,
             $dir,
-            $sort,
+            (strpos($sort, ".") !== false)? $sort : "APP_CACHE_VIEW." . $sort,
             $category
         );
 

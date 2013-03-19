@@ -31,6 +31,7 @@ catch(z){
   rc=/^(true|false|null|\[.*\]|\{.*\}|".*"|\d+|\d+\.\d+)$/;
 }
 
+itemSelected = "";
 var conn = new Ext.data.Connection();
 
 streamFilefromPM=function(fileStream) {
@@ -59,13 +60,13 @@ streamFilefromPM=function(fileStream) {
         });
       }else{
 
-        msgbox = Ext.Msg.alert('Error', results.message);
+        msgbox = Ext.Msg.alert( _('ID_ERROR'), results.message);
         msgbox.setIcon( Ext.MessageBox.ERROR );
       }
     },
     failure: function() {
       if (results.message) {
-        Ext.Msg.alert('Infomation',results.message);
+        Ext.Msg.alert( _('ID_INFORMATION'),results.message);
       }
 
     }
@@ -235,6 +236,7 @@ function expandNode( node, dir ) {
 function handleNodeClick( sm, node ) {
   if( node && node.id ) {
     // console.log("Node Clicked: "+node);
+    itemSelected = node.id;
     chDir( node.id );
   }
 }
@@ -274,7 +276,8 @@ function getURLParam( strParamName, myWindow){
   return strReturn;
 }
 
-function openActionDialog( caller, action ) {
+function openActionDialog(caller, action, dataAux)
+{
   // console.log("Dialog open: "+caller+" ->"+action);
   var dialog;
   var selectedRows = ext_itemgrid.getSelectionModel().getSelections();
@@ -346,12 +349,17 @@ function openActionDialog( caller, action ) {
               json = Ext.decode( oResponse.responseText );
 
               if( json.error && typeof json.error != 'xml' ) {
-                Ext.Msg.alert( "error", json.error );
+                if (typeof(json.login) != 'undefined') {
+                    msgbox = Ext.Msg.alert( _('ID_ERROR') , json.error, function(){try{parent.parent.window.location = '../login/login';} catch(e){}} );
+                } else {
+                    msgbox = Ext.Msg.alert( _('ID_ERROR') , json.error );
+                }
+                msgbox.setIcon( Ext.MessageBox.ERROR );
                 dialog.destroy();
                 return false;
               }
             } catch(e) {
-              msgbox = Ext.Msg.alert( "error", "JSON Decode Error: " + e.message );
+              msgbox = Ext.Msg.alert( _('ID_ERROR') , "JSON Decode Error: " + e.message );
               msgbox.setIcon( Ext.MessageBox.ERROR );
               return false;
             }
@@ -428,7 +436,7 @@ function openActionDialog( caller, action ) {
               dialog.center();
             }
           } else if( !response || !oResponse.responseText) {
-            msgbox = Ext.Msg.alert( "error", "Received an empty response");
+            msgbox = Ext.Msg.alert( _('ID_ERROR') , _('ID_RECEIVED_EMPTY_RESPONSE') );
             msgbox.setIcon( Ext.MessageBox.ERROR );
 
           }
@@ -455,28 +463,34 @@ function openActionDialog( caller, action ) {
 
       var urlDownload = ext_itemgrid.getSelectionModel().getSelected().get("downloadLink");
 
-      if (ext_itemgrid.getSelectionModel().getSelected().get("appDocPlugin") != "") {
-        messageText = TRANSLATIONS.ID_DOWNLOADING_FILE + " " + ext_itemgrid.getSelectionModel().getSelected().get("name");
-        statusBarMessage(messageText, true, true);
+      if (selectedRows.length == 1) {
+          if (ext_itemgrid.getSelectionModel().getSelected().get("appDocType") == "Output" && ext_itemgrid.getSelectionModel().getSelected().get("outDocGenerate") != "") {
+              dataAux = (dataAux != "")? dataAux : "pdf";
 
-        try {
-          Ext.destroy(Ext.get("downloadIframe"));
-        }
-        catch (e) {
-        }
+              urlDownload = stringReplace("&ext=.{3,}&", "&ext=" + dataAux + "&", urlDownload);
+          }
 
-        Ext.DomHelper.append(document.body, {
-          tag: "iframe",
-          id: "downloadIframe",
-          frameBorder: 0,
-          width: 0,
-          height: 0,
-          css: "display: none; visibility: hidden; height: 0px;",
-          src: urlDownload
-        });
-      }
-      else {
-         streamFilefromPM(urlDownload);
+          if (ext_itemgrid.getSelectionModel().getSelected().get("appDocPlugin") != "") {
+              messageText = _("ID_DOWNLOADING_FILE") + " " + ext_itemgrid.getSelectionModel().getSelected().get("name");
+              statusBarMessage(messageText, true, true);
+
+              try {
+                  Ext.destroy(Ext.get("downloadIframe"));
+              } catch (e) {
+              }
+
+              Ext.DomHelper.append(document.body, {
+                  tag: "iframe",
+                  id: "downloadIframe",
+                  frameBorder: 0,
+                  width: 0,
+                  height: 0,
+                  css: "display: none; visibility: hidden; height: 0px;",
+                  src: urlDownload
+              });
+          } else {
+             streamFilefromPM(urlDownload);
+          }
       }
 
       /*
@@ -504,16 +518,23 @@ function handleCallback(requestParams, node) {
         if( json.success ) {
           if( json.success == "success"){
             statusBarMessage( json.message, false, true );
+            if (options.params.action == 'rename') {
+              node = dirTree.getSelectionModel().getSelectedNode();
+            }
             try {
-              if( dropEvent) {
+              if( typeof(dropEvent) != 'undefined' ) {
                 dropEvent.target.parentNode.reload();
                 dropEvent = null;
               }
-              if( node ) {
-                if( options.params.action == 'delete' || options.params.action == 'rename' ) {
+              if( typeof(node) != 'undefined' ) {
+                if( options.params.action == 'delete' ) {
                   node.parentNode.select();
+                  node.parentNode.reload();
                 }
-                node.parentNode.reload();
+                if( options.params.action == 'rename' ) {
+                  node.reload();
+                  node.select();
+                }
               } else {
                 datastore.reload();
               }
@@ -533,7 +554,7 @@ function handleCallback(requestParams, node) {
         }
       }
       else {
-        Ext.Msg.alert( 'Error', 'Failed to connect to the server.');
+        Ext.Msg.alert( _('ID_ERROR'), _('ID_SERVER_COMMUNICATION_ERROR'));
       }
 
     }
@@ -693,11 +714,11 @@ function statusBarMessage( msg, isLoading, success ) {
     Ext.msgBoxSlider.msg('', msg );
   } else {
     statusBar.setStatus({
-      text: 'Error: ' + msg,
+      text: _('ID_ERROR') +': ' + msg,
       iconCls: 'error',
       clear: true
     });
-    Ext.msgBoxSlider.msg('Error', msg );
+    Ext.msgBoxSlider.msg(_('ID_ERROR'), msg );
 
   }
 
@@ -808,8 +829,9 @@ datastore = new Ext.data.Store({
     name : "downloadLink"
   },{
     name : "downloadLabel"
+  }, {
+      name: "outDocGenerate"
   }
-
   ])),
 
   // turn on remote sorting
@@ -820,12 +842,23 @@ datastore.paramNames["sort"] = "order";
 
 datastore.on("beforeload",
   function(ds, options) {
-    options.params.dir = options.params.dir ? options.params.dir
-    : ds.directory;
+    options.params.dir  = options.params.dir ? options.params.dir : ds.directory;
     options.params.node = options.params.dir ? options.params.dir : ds.directory;
     options.params.option = "gridDocuments";
     options.params.action = "expandNode";
     options.params.sendWhat = datastore.sendWhat;
+  });
+
+datastore.on("loadexception",
+  function(proxy, options, response, e) {
+    try {
+      responseData = Ext.decode(response.responseText);
+      if (typeof(responseData.login) != 'undefined') {
+        msgbox = Ext.Msg.alert('error', _('ID_LOGIN_AGAIN'), function(){try{parent.parent.window.location = '../login/login';} catch(e){}} );
+        msgbox.setIcon(Ext.MessageBox.ERROR);
+      }
+    } catch(e) {
+    }
   });
 // pluggable renders
 function renderFileName(value, p, record) {
@@ -833,13 +866,20 @@ function renderFileName(value, p, record) {
     '<img src="{0}" alt="* " align="absmiddle" />&nbsp;<b>{1}</b>',
     record.get('icon'), value);
 }
-function renderType(value, p, record) {
-  if(record.get('appDocType')!=""){
-    return String.format('{1}, {0}', value,record.get('appDocType'));
-  }else{
-    return String.format('<i>{0}</i>', value);
-  }
+
+function renderType(value, p, record)
+{
+    if (record.get("appDocType") != "") {
+        if (record.get("appDocType") == "Output" && record.get("outDocGenerate") != "") {
+            return String.format("{0}", _("ID_OUTPUT_DOCUMENT"));
+        } else {
+            return String.format("{1}, {0}", value, record.get("appDocType"));
+        }
+    } else {
+        return String.format("<i>{0}</i>", value);
+    }
 }
+
 function renderVersion(value, p, record) {
   if(record.get("appDocVersionable")=="1"){
     if(value>1){
@@ -928,7 +968,7 @@ var gridtb = new Ext.Toolbar(
     disabled : true,
     hidden: true,
     handler : function() {
-      openActionDialog(this, 'search');
+      openActionDialog(this, "search", "");
     }
   },
   '-',
@@ -942,7 +982,7 @@ var gridtb = new Ext.Toolbar(
     cls : 'x-btn-icon',
    // disabled : false,
     handler : function() {
-      openActionDialog(this, 'newFolder');
+      openActionDialog(this, "newFolder", "");
     }
   },
   {
@@ -956,7 +996,7 @@ var gridtb = new Ext.Toolbar(
     disabled : false,
     hidden: true,
     handler : function() {
-      openActionDialog(this, 'copyAction');
+      openActionDialog(this, "copyAction", "");
     }
   },
   {
@@ -969,7 +1009,7 @@ var gridtb = new Ext.Toolbar(
     disabled : false,
     hidden: true,
     handler : function() {
-      openActionDialog(this, 'moveAction');
+      openActionDialog(this, "moveAction", "");
     }
   },
   {
@@ -983,8 +1023,8 @@ var gridtb = new Ext.Toolbar(
     disabled : false,
 //    hidden: (showdelete==1)?false:true,
     handler : function() {
-      openActionDialog(this, 'delete');
-//      openActionDialog(this, 'deleteDir');
+      openActionDialog(this, "delete", "");
+//      openActionDialog(this, "deleteDir", "");
     }
   },
   {
@@ -997,7 +1037,7 @@ var gridtb = new Ext.Toolbar(
     disabled : true,
     hidden: true,
     handler : function() {
-      openActionDialog(this, 'rename');
+      openActionDialog(this, "rename", "");
     }
   },
   '-',
@@ -1011,7 +1051,7 @@ var gridtb = new Ext.Toolbar(
     cls : 'x-btn-icon',
    // disabled : true,
     handler : function() {
-      openActionDialog(this, 'download');
+      openActionDialog(this, "download", "");
     }
   },
   {
@@ -1031,10 +1071,10 @@ var gridtb = new Ext.Toolbar(
 						 * .load("/scripts/extjs3-ext/ux.swfupload/SwfUpload.js");
 						 * Ext.ux.OnDemandLoad .load(
 						 * "/scripts/extjs3-ext/ux.swfupload/SwfUploadPanel.js",
-						 * function(options) { openActionDialog(this, 'upload');
+						 * function(options) { openActionDialog(this, "upload", "");
 						 * });
 						 */
-      openActionDialog(this, 'uploadDocument');
+      openActionDialog(this, "uploadDocument", "");
     }
   },
   '-',
@@ -1123,13 +1163,13 @@ var getGrid = function( data, element) {
   return grid;
 };
 
+/*
 var expander = new Ext.ux.grid.RowExpander({
   tpl              : '<div class="ux-row-expander-box" style="border: 2px solid red;"></div>',
   // header:'Version',
-  /*
- * tpl : new Ext.Template( '<p><b>Company:</b> {company}</p><br>', '<p><b>Summary:</b>
- * {desc}</p>' ),
- */
+
+ //* tpl : new Ext.Template( '<p><b>Company:</b> {company}</p><br>', '<p><b>Summary:</b>
+ //* {desc}</p>' ),
 
 
   // width : 50,
@@ -1149,11 +1189,19 @@ var expander = new Ext.ux.grid.RowExpander({
   },
   renderer : renderVersionExpander
 });
+*/
+
+var rowExpander = new Ext.ux.grid.RowExpander({
+    tpl: new Ext.Template(
+        "{outDocGenerate}"
+    )
+});
 
 //The column model has information about grid columns
 //dataIndex maps the column to the specific data field in
 //the data store
-var cm = new Ext.grid.ColumnModel([{
+var cm = new Ext.grid.ColumnModel([
+rowExpander, {
   id: "gridcm", //id assigned so we can apply custom css (e.g. -> .x-grid-col-topic b { color:#333 })
   header: _("ID_NAME"),
   dataIndex: "name",
@@ -1265,6 +1313,10 @@ var cm = new Ext.grid.ColumnModel([{
   dataIndex: "id",
   hidden: true,
   hideable: false
+}, {
+    dataIndex: "outDocGenerate",
+    hidden: true,
+    hideable: false
 }]);
 
 //By default columns are sortable
@@ -1357,7 +1409,7 @@ gridCtxMenu = new Ext.menu.Menu({
     // '/images/documents/_editcopy.png',
     text : TRANSLATIONS.ID_COPY,
     handler : function() {
-      openActionDialog(this, 'copyAction');
+      openActionDialog(this, "copyAction", "");
     }
   }, {
     id : 'gc_move',
@@ -1365,7 +1417,7 @@ gridCtxMenu = new Ext.menu.Menu({
     // '/images/documents/_move.png',
     text : TRANSLATIONS.ID_MOVE,
     handler : function() {
-      openActionDialog(this, 'moveAction');
+      openActionDialog(this, "moveAction", "");
     }
   },*/ {
     id : 'gc_delete',
@@ -1373,8 +1425,8 @@ gridCtxMenu = new Ext.menu.Menu({
     // '/images/documents/_editdelete.png',
     text : TRANSLATIONS.ID_DELETE,
     handler : function() {
-      openActionDialog(this, 'delete');
-//      openActionDialog(this, 'deleteDocument');
+      openActionDialog(this, "delete", "");
+//      openActionDialog(this, "deleteDocument", "");
 
     }
   }, '-', {
@@ -1383,7 +1435,7 @@ gridCtxMenu = new Ext.menu.Menu({
     // '/images/documents/_down.png',
     text : TRANSLATIONS.ID_DOWNLOAD,
     handler : function() {
-      openActionDialog(this, 'download');
+      openActionDialog(this, "download", "");
     }
   },
 
@@ -1499,7 +1551,7 @@ var dirCtxMenu = new Ext.menu.Menu(
     text : TRANSLATIONS.ID_NEW_FOLDER,
     handler : function() {
       dirCtxMenu.hide();
-      openActionDialog(this, 'newFolder');
+      openActionDialog(this, "newFolder", "");
     }
   },
   {
@@ -1508,7 +1560,7 @@ var dirCtxMenu = new Ext.menu.Menu(
     text : TRANSLATIONS.ID_RENAME,
     handler : function() {
       dirCtxMenu.hide();
-      openActionDialog(this, 'rename');
+      openActionDialog(this, "rename", "");
     }
   },
   {
@@ -1519,7 +1571,7 @@ var dirCtxMenu = new Ext.menu.Menu(
     text : TRANSLATIONS.ID_COPY,
     handler : function() {
       dirCtxMenu.hide();
-      openActionDialog(this, 'copyAction');
+      openActionDialog(this, "copyAction", "");
     }
   },
   {
@@ -1530,7 +1582,7 @@ var dirCtxMenu = new Ext.menu.Menu(
     text : TRANSLATIONS.ID_MOVE,
     handler : function() {
       dirCtxMenu.hide();
-      openActionDialog(this, 'moveAction');
+      openActionDialog(this, "moveAction", "");
     }
   },
   {
@@ -1739,7 +1791,8 @@ var documentsTab = {
         bbar : gridbb,
         ddGroup : 'TreeDD',
         enableDragDrop: true,
-        plugins: expander,
+        //plugins: expander,
+        plugins: rowExpander,
         selModel : new Ext.grid.RowSelectionModel({
           listeners : {
             'rowselect' : {
@@ -1757,8 +1810,7 @@ var documentsTab = {
           ctrl : true,
           stopEvent : true,
           handler : function() {
-            openActionDialog(this,
-              'copyAction');
+            openActionDialog(this, "copyAction", "");
           }
 
         },
@@ -1767,8 +1819,7 @@ var documentsTab = {
           ctrl : true,
           stopEvent : true,
           handler : function() {
-            openActionDialog(this,
-              'moveAction');
+            openActionDialog(this, "moveAction", "");
           }
 
         },
@@ -1785,8 +1836,7 @@ var documentsTab = {
         {
           key : Ext.EventObject.DELETE,
           handler : function() {
-            openActionDialog(this,
-              'delete');
+            openActionDialog(this, "delete", "");
           }
         } ],
         listeners : {
@@ -1822,12 +1872,10 @@ var documentsTab = {
                     .get('id'));
                 } else if (selections[0]
                   .get('is_editable')) {
-                  openActionDialog(this,
-                    'edit');
+                  openActionDialog(this, "edit", "");
                 } else if (selections[0]
                   .get('is_readable')) {
-                  openActionDialog(this,
-                    'view');
+                  openActionDialog(this, "view", "");
                 }
               }
             }
@@ -1909,13 +1957,18 @@ var documentsTab = {
         // console.log("tree editor created");
 
         // console.log("before the first chdir");
-        chDir('');
+        // chDir('');
+        chDir(itemSelected);
         // console.log("starting locatiobar first time");
         Ext.getCmp("locationbarcmp").tree = Ext.getCmp("dirTreePanel");
         Ext.getCmp("locationbarcmp").initComponent();
-        var node = dirTree.getNodeById("root");
+
+        if (itemSelected == "") {
+            itemSelected = "root";
+        }
+        var node = dirTree.getNodeById(itemSelected);
         node.select();
-        datastore.directory = 'root';
+        datastore.directory = itemSelected;
       // console.log("location abr started first time");
 
       }

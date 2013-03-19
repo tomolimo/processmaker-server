@@ -128,6 +128,7 @@ Ext.onReady(function() {
     layout:'form',
     defaults: {width: 350},
     defaultType: 'displayfield',
+    autoScroll: true,
     items: [{
         fieldLabel: TRANSLATIONS.ID_PROCESS,
         name: 'processName',
@@ -137,7 +138,8 @@ Ext.onReady(function() {
         style : {
           fontSize:'11px'
         },
-        id:"processName"
+        id:"processName",
+        htmlEncode: true
       },
       {
         xtype: 'compositefield',
@@ -168,7 +170,8 @@ Ext.onReady(function() {
             allowBlank:false,
             value: '',
             width:200,
-            id:"taskName"
+            id:"taskName",
+            htmlEncode: true
           }
         ]},
         {
@@ -191,7 +194,8 @@ Ext.onReady(function() {
           style : {
             fontSize:'11px'
           },
-          id:"processCategory"
+          id:"processCategory",
+          htmlEncode: true
         },
         {
           fieldLabel: TRANSLATIONS.ID_CALENDAR,
@@ -320,7 +324,7 @@ function showDetailsA(selectedNode) {
   if ((selectedNode)&&(selectedNode.attributes.otherAttributes)) {
     otherAttributes = selectedNode.attributes.otherAttributes;
     calendarDays=(otherAttributes.CALENDAR_WORK_DAYS).split("|");
-    calendarObj={};
+    calendarObj={0: false, 1: false, 2: false, 3: false, 4: false, 5: false, 6: false};
 
     for(i=0;i<calendarDays.length;i++){
     calendarObj[calendarDays[i]]=true;

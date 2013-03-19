@@ -770,8 +770,17 @@ class wsBase
             }
 
             $oSpool = new spoolRun();
-            $oSpool->setConfig( array ('MESS_ENGINE' => $aSetup['MESS_ENGINE'],'MESS_SERVER' => $aSetup['MESS_SERVER'],'MESS_PORT' => $aSetup['MESS_PORT'],'MESS_ACCOUNT' => $aSetup['MESS_ACCOUNT'],'MESS_PASSWORD' => $aSetup['MESS_PASSWORD'],'SMTPAuth' => $aSetup['MESS_RAUTH']
-            ) );
+            $oSpool->setConfig( 
+                array (
+                    'MESS_ENGINE' => $aSetup['MESS_ENGINE'],
+                    'MESS_SERVER' => $aSetup['MESS_SERVER'],
+                    'MESS_PORT' => $aSetup['MESS_PORT'],
+                    'MESS_ACCOUNT' => $aSetup['MESS_ACCOUNT'],
+                    'MESS_PASSWORD' => $aSetup['MESS_PASSWORD'],
+                    'SMTPSecure' => $aSetup['SMTPSecure'],
+                    'SMTPAuth' => $aSetup['MESS_RAUTH']
+                )
+            );
 
             $oCase = new Cases();
             $oldFields = $oCase->loadCase( $caseId );
@@ -1771,7 +1780,7 @@ class wsBase
             $_SESSION['TASK'] = $taskId;
             $_SESSION['INDEX'] = $case['INDEX'];
             $_SESSION['USER_LOGGED'] = $userId;
-            $_SESSION['USR_USERNAME'] = $case['USR_USERNAME'];
+            $_SESSION['USR_USERNAME'] = (isset($case['USR_USERNAME'])) ? $case['USR_USERNAME'] : '';
             $_SESSION['STEP_POSITION'] = 0;
 
             $caseId = $case['APPLICATION'];
@@ -1781,6 +1790,8 @@ class wsBase
 
             $oldFields['APP_DATA'] = array_merge( $oldFields['APP_DATA'], $Fields );
 
+            $oldFields['DEL_INDEX'] = $case['INDEX'];
+            $oldFields['TAS_UID'] = $taskId;
             $up_case = $oCase->updateCase( $caseId, $oldFields );
 
             $result = new wsResponse( 0, G::loadTranslation( 'ID_STARTED_SUCCESSFULLY' ) );
@@ -2431,21 +2442,19 @@ class wsBase
      */
     public function taskCase ($caseId)
     {
+        $result = array ();
         try {
-            $result = array ();
             $oCriteria = new Criteria( 'workflow' );
-            $del = DBAdapter::getStringDelimiter();
+            $del       = DBAdapter::getStringDelimiter();
             $oCriteria->addSelectColumn( AppDelegationPeer::DEL_INDEX );
+            $oCriteria->addSelectColumn( AppDelegationPeer::TAS_UID );
 
             $oCriteria->addAsColumn( 'TAS_TITLE', 'C1.CON_VALUE' );
             $oCriteria->addAlias( "C1", 'CONTENT' );
-            $tasTitleConds = array ();
-            $tasTitleConds[] = array (AppDelegationPeer::TAS_UID,'C1.CON_ID'
-            );
-            $tasTitleConds[] = array ('C1.CON_CATEGORY',$del . 'TAS_TITLE' . $del
-            );
-            $tasTitleConds[] = array ('C1.CON_LANG',$del . SYS_LANG . $del
-            );
+            $tasTitleConds   = array ();
+            $tasTitleConds[] = array (AppDelegationPeer::TAS_UID,'C1.CON_ID');
+            $tasTitleConds[] = array ('C1.CON_CATEGORY',$del . 'TAS_TITLE' . $del);
+            $tasTitleConds[] = array ('C1.CON_LANG',$del . SYS_LANG . $del);
             $oCriteria->addJoinMC( $tasTitleConds, Criteria::LEFT_JOIN );
 
             $oCriteria->add( AppDelegationPeer::APP_UID, $caseId );
@@ -2456,15 +2465,17 @@ class wsBase
             $oDataset->next();
 
             while ($aRow = $oDataset->getRow()) {
-                $result[] = array ('guid' => $aRow['DEL_INDEX'],'name' => $aRow['TAS_TITLE']
+                $result[] = array (
+                    'guid'     => $aRow['TAS_UID'],
+                    'name'     => $aRow['TAS_TITLE'],
+                    'delegate' => $aRow['DEL_INDEX']
                 );
                 $oDataset->next();
             }
 
             return $result;
         } catch (Exception $e) {
-            $result[] = array ('guid' => $e->getMessage(),'name' => $e->getMessage()
-            );
+            $result[] = array ('guid' => $e->getMessage(),'name' => $e->getMessage(), 'delegate' => $e->getMessage() );
 
             return $result;
         }

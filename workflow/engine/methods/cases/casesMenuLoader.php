@@ -175,11 +175,20 @@ function getAllCounters ()
     $aTypes['selfservice'] = 'CASES_SELFSERVICE';
     //$aTypes['to_revise']   = 'CASES_TO_REVISE';
     //$aTypes['to_reassign'] = 'CASES_TO_REASSIGN';
+    $solrEnabled = false;
 
     if ((($solrConf = System::solrEnv()) !== false)) {
         G::LoadClass( 'AppSolr' );
         $ApplicationSolrIndex = new AppSolr( $solrConf['solr_enabled'], $solrConf['solr_host'], $solrConf['solr_instance'] );
 
+        if ($ApplicationSolrIndex->isSolrEnabled()) {
+            $solrEnabled = true;
+        } else {
+            $solrEnabled = false;
+        }
+    }
+
+    if ($solrEnabled) {
         $aCount = $ApplicationSolrIndex->getCasesCount( $userUid );
 
         //get paused count
@@ -195,6 +204,7 @@ function getAllCounters ()
     $response = Array ();
     $i = 0;
     foreach ($aCount as $type => $count) {
+        $response[$i] = new stdclass();
         $response[$i]->item = $aTypes[$type];
         $response[$i]->count = $count;
         $i ++;

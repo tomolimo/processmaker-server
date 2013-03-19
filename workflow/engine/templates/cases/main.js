@@ -33,7 +33,8 @@ Ext.onReady(function(){
         updateCasesTree();
       }
       else
-        Ext.Msg.alert('Refresh', 'You clicked: CTRL-F5');
+        //Ext.Msg.alert('Refresh', 'You clicked: CTRL-F5');
+       	Ext.Msg.alert(_('ID_REFRESH_LABEL'),_('ID_REFRESH_MESSAGE'));
     }
   });
 
@@ -131,7 +132,7 @@ Ext.onReady(function(){
 
                   },
                   render: function(){
-                    this.loadMask = new Ext.LoadMask(this.body, { msg:'Loading...' });
+                    this.loadMask = new Ext.LoadMask(this.body, { msg:_('ID_LOADING_GRID') });
                   }
                 }
               });
@@ -398,7 +399,7 @@ Ext.onReady(function(){
       items: [],
       listeners:{
         show:function() {
-          this.loadMask = new Ext.LoadMask(this.body, { msg:'Loading. Please wait...' });
+          this.loadMask = new Ext.LoadMask(this.body, { msg:_('ID_LOADING') });
         }
       }
     });
@@ -532,10 +533,25 @@ Ext.onReady(function(){
   setTimeout("timer()", parseInt(FORMATS.casesListRefreshTime) * 1000);
 });
 
-function updateCasesView() {
+function updateCasesView(viewList) {
+    var refreshList = viewList || false;
   try{
     if (document.getElementById('casesSubFrame').contentWindow.storeCases) {
-      document.getElementById('casesSubFrame').contentWindow.storeCases.reload();
+        if (refreshList) {
+              document.getElementById('casesSubFrame').contentWindow.storeCases.reload();
+        } else {
+            switch (document.getElementById('casesSubFrame').contentWindow.storeCases.baseParams.action) {
+                case "todo":
+                case "unassigned":
+                case "paused":
+                case "to_revise":
+                case "to_reassign":
+                    document.getElementById('casesSubFrame').contentWindow.storeCases.reload();
+                    break;
+                default:
+                    break;
+            }
+        }
     }
   }
   catch(e){};

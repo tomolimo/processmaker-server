@@ -1,5 +1,4 @@
 <?php
-
 /**
  * pmTablesProxy
  *
@@ -187,7 +186,6 @@ class pmTablesProxy extends HttpProxyController
                 }
             }
         }
-
         return $fields;
     }
 
@@ -196,8 +194,8 @@ class pmTablesProxy extends HttpProxyController
      */
     public function save ($httpData, $alterTable = true)
     {
-        require_once 'classes/model/AdditionalTables.php';
-        require_once 'classes/model/Fields.php';
+        //require_once 'classes/model/AdditionalTables.php';
+        //require_once 'classes/model/Fields.php';
 
         try {
             ob_start();
@@ -273,12 +271,18 @@ class pmTablesProxy extends HttpProxyController
                 }
             }
 
-            G::loadClass( 'pmTable' );
+            G::LoadClass("pmTable");
 
             $pmTable = new pmTable( $data['REP_TAB_NAME'] );
             $pmTable->setDataSource( $data['REP_TAB_CONNECTION'] );
             $pmTable->setColumns( $columns );
             $pmTable->setAlterTable( $alterTable );
+
+            if (isset($data["keepData"]) && $data["keepData"] == 1) {
+                //PM Table
+                $pmTable->setKeepData(true);
+            }
+
             $pmTable->build();
 
             $buildResult = ob_get_contents();
@@ -313,7 +317,7 @@ class pmTablesProxy extends HttpProxyController
             if ($isReportTable && $alterTable) {
                 // the table was create successfully but we're catching problems while populating table
                 try {
-                    $oAdditionalTables->populateReportTable( $data['REP_TAB_NAME'], $pmTable->getDataSource(), $data['REP_TAB_TYPE'], $data['PRO_UID'], $data['REP_TAB_GRID'] );
+                    $oAdditionalTables->populateReportTable( $data['REP_TAB_NAME'], $pmTable->getDataSource(), $data['REP_TAB_TYPE'], $data['PRO_UID'], $data['REP_TAB_GRID'], $addTabData['ADD_TAB_UID'] );
                 } catch (Exception $e) {
                     $result->message = $result->msg = $e->getMessage();
                 }
@@ -358,7 +362,12 @@ class pmTablesProxy extends HttpProxyController
                 $table = $at->load( $row->id );
 
                 if (! isset( $table )) {
-                    throw new Exception( "Table does not exist... skipped!\n" );
+                    require_once 'classes/model/ReportTable.php';
+                    $rtOld = new ReportTable();
+                    $existReportTableOld = $rtOld->load( $row->id );
+                    if (count($existReportTableOld) == 0) {
+                        throw new Exception( G::LoadTranslation('ID_TABLE_NOT_EXIST_SKIPPED') );
+                    }
                 }
 
                 if ($row->type == 'CLASSIC') {
@@ -379,10 +388,10 @@ class pmTablesProxy extends HttpProxyController
 
         if ($errors == '') {
             $result->success = true;
-            $result->message = "$count tables removed Successfully.";
+            $result->message = $count.G::LoadTranslation( 'ID_TABLES_REMOVED_SUCCESSFULLY' );
         } else {
             $result->success = false;
-            $result->message = "$count tables removed but with errors.\n$errors";
+            $result->message = $count. G::LoadTranslation( 'ID_TABLES_REMOVED_WITH_ERRORS' ) .$errors;
         }
 
         $result->errors = $errors;
@@ -477,7 +486,7 @@ class pmTablesProxy extends HttpProxyController
                     foreach ($obj->getValidationFailures() as $objValidationFailure) {
                         $msg .= $objValidationFailure->getMessage() . "\n";
                     }
-                    throw new Exception( 'Error trying insert into "' . $table['ADD_TAB_NAME'] . "\"\n" . $msg );
+                    throw new Exception( G::LoadTranslation('ID_ERROR_TRYING_INSERT'). '"' . $table['ADD_TAB_NAME'] . "\"\n" . $msg );
                 }
 
                 $index = G::encrypt( implode( ',', $primaryKeysValues ), 'pmtable' );
@@ -487,7 +496,7 @@ class pmTablesProxy extends HttpProxyController
 
             if ($toSave) {
                 $result->success = true;
-                $result->message = 'Record saved successfully';
+                $result->message = G::LoadTranslation('ID_RECORD_SAVED_SUCCESFULLY');
                 $result->rows = $obj->toArray( BasePeer::TYPE_FIELDNAME );
                 $result->rows['__index__'] = $index;
             } else {
@@ -874,7 +883,7 @@ class pmTablesProxy extends HttpProxyController
                         $table = $additionalTable->loadByName( $tableNameMap[$contentSchema['ADD_TAB_NAME']] );
                         if ($table['PRO_UID'] != '') {
                             // is a report table, try populate it
-                            $additionalTable->populateReportTable( $table['ADD_TAB_NAME'], pmTable::resolveDbSource( $table['DBS_UID'] ), $table['ADD_TAB_TYPE'], $table['PRO_UID'], $table['ADD_TAB_GRID'] );
+                            $additionalTable->populateReportTable( $table['ADD_TAB_NAME'], pmTable::resolveDbSource( $table['DBS_UID'] ), $table['ADD_TAB_TYPE'], $table['PRO_UID'], $table['ADD_TAB_GRID'], $table['ADD_TAB_UID'] );
                         }
                         break;
                     case '@DATA':
@@ -1205,7 +1214,7 @@ class pmTablesProxy extends HttpProxyController
         $additionalTables = new AdditionalTables();
         $table = $additionalTables->load( $httpData->id );
         if ($table['PRO_UID'] != '') {
-            $additionalTables->populateReportTable( $table['ADD_TAB_NAME'], pmTable::resolveDbSource( $table['DBS_UID'] ), $table['ADD_TAB_TYPE'], $table['PRO_UID'], $table['ADD_TAB_GRID'] );
+            $additionalTables->populateReportTable( $table['ADD_TAB_NAME'], pmTable::resolveDbSource( $table['DBS_UID'] ), $table['ADD_TAB_TYPE'], $table['PRO_UID'], $table['ADD_TAB_GRID'], $table['ADD_TAB_UID'] );
             $result->message = 'generated for table ' . $table['ADD_TAB_NAME'];
         }
 
@@ -1243,6 +1252,21 @@ class pmTablesProxy extends HttpProxyController
         $application->field_label = 'APP_NUMBER';
         $application->field_type = 'INTEGER';
         $application->field_size = 11;
+        $application->field_dyn = '';
+        $application->field_key = 0;
+        $application->field_null = 0;
+        $application->field_filter = false;
+        $application->field_autoincrement = false;
+        array_push( $defaultColumns, $application );
+
+        $application = new stdClass(); //APP_STATUS
+        $application->uid = '';
+        $application->field_dyn = '';
+        $application->field_uid = '';
+        $application->field_name = 'APP_STATUS';
+        $application->field_label = 'APP_STATUS';
+        $application->field_type = 'VARCHAR';
+        $application->field_size = 10;
         $application->field_dyn = '';
         $application->field_key = 0;
         $application->field_null = 0;
@@ -1347,11 +1371,10 @@ class pmTablesProxy extends HttpProxyController
             $oDataset->setFetchmode( ResultSet::FETCHMODE_ASSOC );
             $oDataset->next();
 
-            $excludeFieldsList = array ('title','subtitle','link','file','button','reset','submit','listbox','checkgroup','grid','javascript'
+            $excludeFieldsList = array ('title','subtitle','link','file','button','reset','submit','listbox','checkgroup','grid','javascript', ''
             );
 
-            $labelFieldsTypeList = array ('dropdown','radiogroup'
-            );
+            $labelFieldsTypeList = array ('dropdown','radiogroup');
             G::loadSystem( 'dynaformhandler' );
             $index = 0;
 
@@ -1363,15 +1386,26 @@ class pmTablesProxy extends HttpProxyController
                     foreach ($nodeFieldsList as $node) {
                         $arrayNode = $dynaformHandler->getArray( $node );
                         $fieldName = $arrayNode['__nodeName__'];
-                        $fieldType = $arrayNode['type'];
+                        $fieldType = isset($arrayNode['type']) ? $arrayNode['type']: '';
+                        $fieldValidate = ( isset($arrayNode['validate'])) ? $arrayNode['validate'] : '';
 
-                        if (! in_array( $fieldType, $excludeFieldsList ) && ! in_array( $fieldName, $fieldsNames )) {
-                            $fields[] = array ('FIELD_UID' => $fieldName . '-' . $fieldType,'FIELD_NAME' => $fieldName,'_index' => $index ++,'_isset' => true
+                        if (! in_array( $fieldType, $excludeFieldsList ) && ! in_array( $fieldName, $fieldsNames ) ) {
+                            $fields[] = array (
+                                'FIELD_UID' => $fieldName . '-' . $fieldType,
+                                'FIELD_NAME' => $fieldName,
+                                'FIELD_VALIDATE'=>$fieldValidate,
+                                '_index' => $index ++,
+                                '_isset' => true
                             );
                             $fieldsNames[] = $fieldName;
 
                             if (in_array( $fieldType, $labelFieldsTypeList ) && ! in_array( $fieldName . '_label', $fieldsNames )) {
-                                $fields[] = array ('FIELD_UID' => $fieldName . '_label' . '-' . $fieldType,'FIELD_NAME' => $fieldName . '_label','_index' => $index ++,'_isset' => true
+                                $fields[] = array (
+                                    'FIELD_UID' => $fieldName . '_label' . '-' . $fieldType,
+                                    'FIELD_NAME' => $fieldName . '_label',
+                                    'FIELD_VALIDATE'=>$fieldValidate,
+                                    '_index' => $index ++,
+                                    '_isset' => true
                                 );
                                 $fieldsNames[] = $fieldName;
                             }
@@ -1396,7 +1430,7 @@ class pmTablesProxy extends HttpProxyController
                 }
             } //end editing
 
-
+            $indexes = array();
             foreach ($fields as $i => $field) {
                 $fields[$i]['_index'] = $i;
                 $indexes[$field['FIELD_NAME']] = $i;

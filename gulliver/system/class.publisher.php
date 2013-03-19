@@ -431,8 +431,14 @@ class Publisher
                 if (isset( $Part['ajaxServer'] ) && ($Part['ajaxServer'] !== '')) {
                     $oTable->ajaxServer = $Part['ajaxServer'];
                 }
+                if (!isset($G_FORM->xmlform)) {
+                    $G_FORM->xmlform = new stdclass();
+                }
                 $G_FORM->xmlform->fileXml = $G_FORM->fileName;
                 $G_FORM->xmlform->home = $G_FORM->home;
+                if (!isset($G_FORM->xmlform->tree)) {
+                    $G_FORM->xmlform->tree = new stdclass();
+                }
                 $G_FORM->xmlform->tree->attribute = $G_FORM->tree->attributes;
                 if (is_array( $Part['Data'] )) {
                     $G_FORM->values = array_merge( $G_FORM->values, $Part['Data'] );

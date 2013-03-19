@@ -17,11 +17,11 @@ var removeButton;
 var removeAllButton;
 var tmp1 = new Array();
 var pageSize = 50;
-var mainMask = new Ext.LoadMask(Ext.getBody(), {msg:"Please wait..."});
+var mainMask = new Ext.LoadMask(Ext.getBody(), {msg: _('ID_PLEASE_WAIT') });
 var bbarpaging;
 //main
 Ext.onReady(function(){
-  mainMask = new Ext.LoadMask(Ext.getBody(), {msg:"Please wait..."});
+  mainMask = new Ext.LoadMask(Ext.getBody(), {msg: _('ID_PLEASE_WAIT') });
   var fm = Ext.form;
   var fieldsCount = 0;
 
@@ -35,6 +35,7 @@ Ext.onReady(function(){
       totalProperty: 'count',
       fields : [
         {name : 'FIELD_UID'},
+        {name : 'FIELD_VALIDATE'},
         {name : 'FIELD_NAME'},
         {name : '_index'},
         {name : '_isset'}
@@ -69,6 +70,11 @@ Ext.onReady(function(){
         hidden:true,
         hideable:false
       }, {
+        dataIndex:'FIELD_VALIDATE',
+        hidden:true,
+        hideable:false
+      }
+      , {
         dataIndex:'_index',
         hidden:true,
         hideable:false
@@ -129,7 +135,7 @@ Ext.onReady(function(){
       store: storeA,
       displayInfo: true,
       displayMsg: '{0} - {1} of {2}',
-      emptyMsg: 'No records'/*,
+      emptyMsg: _('ID_NO_RECORDS')/*,
       items: ['-',_('ID_PAGE_SIZE')+':',comboPageSize]*/
   });
 
@@ -234,30 +240,36 @@ Ext.onReady(function(){
       {
         id: 'uid',
         dataIndex: 'uid',
-        hidden: true
+        hidden: true,
+        hideable:false
       },
       {
         dataIndex: '_index',
-        hidden: true
+        hidden: true,
+        hideable:false
       },
       {
         dataIndex: '_isset',
-        hidden: true
+        hidden: true,
+        hideable:false
       },
       {
           id: 'field_uid',
           dataIndex: 'field_uid',
-          hidden: true
+          hidden: true,
+        hideable:false
       },
       {
           id: 'field_key',
           dataIndex: 'field_key',
-          hidden: true
+          hidden: true,
+        hideable:false
       },
       {
           id: 'field_null',
           dataIndex: 'field_null',
-          hidden: true
+          hidden: true,
+        hideable:false
       },
       {
           id: 'field_dyn',
@@ -327,8 +339,8 @@ Ext.onReady(function(){
         dataIndex: 'field_autoincrement',
         align: 'center',
         width: 100,
-        trueText: 'Yes',
-        falseText: 'No',
+        trueText: _('ID_YES'),
+        falseText: _('ID_NO'),
         editor: {
             xtype: 'checkbox'
         }
@@ -343,8 +355,8 @@ Ext.onReady(function(){
         dataIndex: 'field_filter',
         align: 'center',
         width: 50,
-        trueText: 'Yes',
-        falseText: 'No',
+        trueText: _('ID_YES'),
+        falseText: _('ID_NO'),
         editor: {
             xtype: 'checkbox'
         }
@@ -412,7 +424,7 @@ Ext.onReady(function(){
     sm             : sm,
     store          : store,
     plugins        : [editor, checkColumn],
-    loadMask: {message:'Loading...'},
+    loadMask: {message: _('ID_LOADING_GRID')},
     tbar           : [
       {
         icon: '/images/add-row-after.png',
@@ -790,6 +802,7 @@ Ext.onReady(function(){
     xtype:'textfield',
     emptyText: _("ID_SET_A_TABLE_NAME"),
     width: 250,
+    autoCreate: {tag: "input", type: "text", autocomplete: "off", maxlength: sizeTableName },
     stripCharsRe: /(\W+)/g,
     listeners:{
       change: function(){
@@ -881,7 +894,6 @@ Ext.onReady(function(){
       if(TABLE.ADD_TAB_TYPE != 'GRID')
         loadFieldNormal();
     }
-
   }
 
   DDLoadFields();
@@ -1175,6 +1187,15 @@ function setReportFields(records) {
     }
 
     var meta = mapPMFieldType(records[i].data['FIELD_UID']);
+    var typeField = meta.type;
+    var sizeField = meta.size;
+    if (records[i].data['FIELD_VALIDATE'].toUpperCase() == 'REAL') {
+      typeField = 'DOUBLE';
+      sizeField = '';
+    }
+    if (records[i].data['FIELD_VALIDATE'].toUpperCase() == 'INT') {
+      typeField = 'INTEGER';
+    }
     var row = new PMRow({
       uid  : '',
       _index      : records[i].data['_index'] !== '' ? records[i].data['_index'] : records[i].data['FIELD_DYN'],
@@ -1182,8 +1203,8 @@ function setReportFields(records) {
       field_dyn   : records[i].data['FIELD_NAME'],
       field_name  : records[i].data['FIELD_NAME'].toUpperCase(),
       field_label : records[i].data['FIELD_NAME'].toUpperCase(),
-      field_type  : meta.type,
-      field_size  : meta.size,
+      field_type  : typeField,
+      field_size  : sizeField,
       field_key   : 0,
       field_null  : 1,
       field_filter: 0,
