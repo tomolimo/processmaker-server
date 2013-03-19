@@ -264,7 +264,7 @@ Ext.onReady(function(){
           importProcess();
         }
       },
-	  PARTNER_FLAG ?
+	  !PARTNER_FLAG ?
 	  [{
 		  text: _('ID_BROWSE_LIBRARY'),
 		  iconCls: 'button_menu_ext ss_sprite  ss_world',

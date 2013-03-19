@@ -158,8 +158,8 @@ G::LoadClass('serverConfiguration');
 //Bootstrap::LoadClass('serverConfiguration');
 //get the serverconf singleton, and check if we can send the heartbeat
 $oServerConf = & serverConf::getSingleton();
-$valueShow = (defined('PARTNER_FLAG')) ? PARTNER_FLAG : true;
-if ($valueShow) {
+$partnerFlag = (defined('PARTNER_FLAG')) ? PARTNER_FLAG : false;
+if (!$partnerFlag) {
     $sflag = $oServerConf->getHeartbeatProperty('HB_OPTION', 'HEART_BEAT_CONF');
     $sflag = (trim($sflag) != '') ? $sflag : '1';
 

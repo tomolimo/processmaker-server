@@ -680,7 +680,9 @@ class Installer extends Controller
             $dbText .= sprintf( "  define ('DB_REPORT_NAME', '%s' );\n", $rp );
             $dbText .= sprintf( "  define ('DB_REPORT_USER', '%s' );\n", $rp );
             $dbText .= sprintf( "  define ('DB_REPORT_PASS', '%s' );\n", $rpPass );
-            $dbText .= "  define ('PARTNER_FLAG', true );\n";
+            if (defined('PARTNER_FLAG')) {
+                $dbText .= "define ('PARTNER_FLAG', PARTNER_FLAG);\n";
+            }
 
             $this->installLog( G::LoadTranslation('ID_CREATING', SYS_LANG, Array($db_file) ));
             file_put_contents( $db_file, $dbText );
@@ -945,7 +947,9 @@ class Installer extends Controller
             $dbText .= sprintf( "  define ('DB_REPORT_NAME', '%s' );\n", $rp );
             $dbText .= sprintf( "  define ('DB_REPORT_USER', '%s' );\n", $rp );
             $dbText .= sprintf( "  define ('DB_REPORT_PASS', '%s' );\n", $rpPass );
-            $dbText .= "  define ('PARTNER_FLAG', true );\n";
+            if (defined('PARTNER_FLAG')) {
+                $dbText .= "define ('PARTNER_FLAG', PARTNER_FLAG);\n";
+            }
 
             $this->installLog( G::LoadTranslation('ID_CREATING', SYS_LANG, Array($db_file) ));
             file_put_contents( $db_file, $dbText );
