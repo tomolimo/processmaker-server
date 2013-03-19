@@ -2006,7 +2006,7 @@ function PMFDerivateCase ($caseId, $delIndex, $bExecuteTriggersBeforeAssignment 
  * @return int | $result | Result | Returns 1 if new case was created successfully; otherwise, returns 0 if an error occurred.
  *
  */
-function PMFNewCaseImpersonate ($processId, $userId, $variables, $taskId = '0')
+function PMFNewCaseImpersonate ($processId, $userId, $variables, $taskId = '')
 {
     G::LoadClass( "wsBase" );
 
