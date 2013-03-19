@@ -1862,8 +1862,8 @@ class wsBase
                 $aTasks = $processes->getStartingTaskForUser( $processId, null );
                 foreach ($aTasks as $task) {
                     if ($task['TAS_UID'] == $taskId) {
-                         $arrayTask[0]['TAS_UID'] = $taskId;
-                         $numTasks = 1;
+                        $arrayTask[0]['TAS_UID'] = $taskId;
+                        $numTasks = 1;
                     }
                 }
             } else {
@@ -1875,7 +1875,7 @@ class wsBase
                 $case = $oCase->startCase( $arrayTask[0]['TAS_UID'], $userId );
                 $caseId = $case['APPLICATION'];
                 $caseNumber = $case['CASE_NUMBER'];
-                
+
                 $oldFields = $oCase->loadCase( $caseId );
 
                 $oldFields['APP_DATA'] = array_merge( $oldFields['APP_DATA'], $Fields );
