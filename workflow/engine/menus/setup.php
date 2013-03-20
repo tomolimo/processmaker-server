@@ -63,8 +63,8 @@ if ($RBAC->userCanAccess('PM_SETUP') == 1) {
 }
 //tools options
 if ($RBAC->userCanAccess('PM_SETUP_ADVANCE') == 1 ) {
-    $valueShow = (defined('PARTNER_FLAG')) ? PARTNER_FLAG : false;
-    if (!$valueShow) {
+    $partnerFlag = (defined('PARTNER_FLAG')) ? PARTNER_FLAG : false;
+    if (!$partnerFlag) {
         $G_TMP_MENU->AddIdRawOption('PLUGINS',   'pluginsMain', 'Plugins Manager', 'icon-plugins.png', '', 'plugins');
     }
 }
