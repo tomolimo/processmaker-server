@@ -68,6 +68,7 @@ foreach ($_POST['aUsers'] as $sUser) {
         $G_PUBLISH = new Publisher();
         $G_PUBLISH->AddContent( 'xmlform', 'xmlform', 'login/showMessage', '', array ('MESSAGE' => $oError->getMessage()) );
         G::RenderPage("publish", "blank");
+        die();
     }
     $aData['USR_STATUS'] = 'ACTIVE';
     $aData['USR_UID'] = $sUserUID;

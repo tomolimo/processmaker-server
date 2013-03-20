@@ -193,12 +193,14 @@ class RbacUsers extends BaseRbacUsers
 
     public function create($aData)
     {
-        $pluginRegistry = & PMPluginRegistry::getSingleton();
-        if ($pluginRegistry->existsTrigger(PM_BEFORE_CREATE_USER)) {
-            try {
-                $pluginRegistry->executeTriggers(PM_BEFORE_CREATE_USER);
-            } catch(Exception $error) {
-                throw new Exception($error->getMessage());
+        if (class_exists('PMPluginRegistry')) {
+            $pluginRegistry = & PMPluginRegistry::getSingleton();
+            if ($pluginRegistry->existsTrigger(PM_BEFORE_CREATE_USER)) {
+                try {
+                    $pluginRegistry->executeTriggers(PM_BEFORE_CREATE_USER);
+                } catch(Exception $error) {
+                    throw new Exception($error->getMessage());
+                }
             }
         }
         $oConnection = Propel::getConnection(RbacUsersPeer::DATABASE_NAME);
