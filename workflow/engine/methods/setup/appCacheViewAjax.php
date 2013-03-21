@@ -27,21 +27,35 @@ function testConnection($type, $server, $user, $passwd, $port = 'none', $dbName 
     G::LoadClass('net');
     $Server = new NET($server);
 
-    define("SUCCESSFULL", 'SUCCESSFULL');
-    define("FAILED", 'FAILED');
-
     if ($Server->getErrno() == 0) {
         $Server->scannPort($port);
         if ($Server->getErrno() == 0) {
             $Server->loginDbServer($user, $passwd);
             $Server->setDataBase($dbName, $port);
-            $Server->setDataBase("", $port);
             if ($Server->errno == 0) {
                 $response = $Server->tryConnectServer($type);
                 if ($response->status == 'SUCCESS') {
                     if ($Server->errno == 0) {
+                        $message = "";
                         $response = $Server->tryConnectServer($type);
-                        return array(true, $Server->error);
+                        $connDatabase = @mysql_connect($server, $user, $passwd);
+                        $dbNameTest = "PROCESSMAKERTESTDC";
+                        $db = @mysql_query("CREATE DATABASE " . $dbNameTest, $connDatabase);
+                        if (!$db) {
+                            $message = G::LoadTranslation('ID_SUCCESSFUL_CONNECTION');
+                        } else {
+                            $usrTest = "wfrbtest";
+                            $chkG = "GRANT ALL PRIVILEGES ON `" . $dbNameTest . "`.* TO " . $usrTest . "@'%' IDENTIFIED BY 'sample' WITH GRANT OPTION";
+                            $ch = @mysql_query($chkG, $connDatabase);
+                            if (!$ch) {
+                                $message = G::LoadTranslation('ID_SUCCESSFUL_CONNECTION');
+                            } else {
+                                @mysql_query("DROP USER " . $usrTest . "@'%'", $connDatabase);
+                                $message = G::LoadTranslation('ID_SUCCESSFUL_CONNECTION');
+                            }
+                            @mysql_query("DROP DATABASE " . $dbNameTest, $connDatabase);
+                        }
+                        return array(true, ($message != "")? $message : $Server->error);
                     } else {
                         return array(false, $Server->error);
                     }
