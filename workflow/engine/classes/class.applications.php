@@ -155,7 +155,12 @@ class Applications
         $Criteria->addAsColumn( 'USR_USERNAME', 'CU.USR_USERNAME' );
 
         //Current delegation
-        $Criteria->addAsColumn("APPCVCR_APP_TAS_TITLE", "APPCVCR.APP_TAS_TITLE");
+        if ($action == "to_reassign") {
+            $Criteria->addAsColumn("APPCVCR_APP_TAS_TITLE", "APP_CACHE_VIEW.APP_TAS_TITLE");
+        } else {
+            $Criteria->addAsColumn("APPCVCR_APP_TAS_TITLE", "APPCVCR.APP_TAS_TITLE");
+        }
+
         $Criteria->addAsColumn("USRCR_USR_UID", "USRCR.USR_UID");
         $Criteria->addAsColumn("USRCR_USR_FIRSTNAME", "USRCR.USR_FIRSTNAME");
         $Criteria->addAsColumn("USRCR_USR_LASTNAME", "USRCR.USR_LASTNAME");
