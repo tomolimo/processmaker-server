@@ -41,21 +41,32 @@ function testConnection($type, $server, $user, $passwd, $port = 'none', $dbName 
                         $connDatabase = @mysql_connect($server, $user, $passwd);
                         $dbNameTest = "PROCESSMAKERTESTDC";
                         $db = @mysql_query("CREATE DATABASE " . $dbNameTest, $connDatabase);
+                        $success = false;
                         if (!$db) {
-                            $message = G::LoadTranslation('ID_SUCCESSFUL_CONNECTION');
+                            $message = mysql_error();;
                         } else {
                             $usrTest = "wfrbtest";
                             $chkG = "GRANT ALL PRIVILEGES ON `" . $dbNameTest . "`.* TO " . $usrTest . "@'%' IDENTIFIED BY 'sample' WITH GRANT OPTION";
                             $ch = @mysql_query($chkG, $connDatabase);
                             if (!$ch) {
-                                $message = G::LoadTranslation('ID_SUCCESSFUL_CONNECTION');
+                                $message = mysql_error();
                             } else {
+                                $sqlCreateUser = "CREATE USER '" . $user . "_usertest'@'%' IDENTIFIED BY 'sample'";
+                                $result = @mysql_query($sqlCreateUser, $connDatabase);
+                                if (!$result) {
+                                    $message = mysql_error();
+                                } else {
+                                    $success = true;
+                                    $message = G::LoadTranslation('ID_SUCCESSFUL_CONNECTION');
+                                }
+                                $sqlDropUser = "DROP USER '" . $user . "_usertest'@'%'";
+                                @mysql_query($sqlDropUser, $connDatabase);
+
                                 @mysql_query("DROP USER " . $usrTest . "@'%'", $connDatabase);
-                                $message = G::LoadTranslation('ID_SUCCESSFUL_CONNECTION');
                             }
                             @mysql_query("DROP DATABASE " . $dbNameTest, $connDatabase);
                         }
-                        return array(true, ($message != "")? $message : $Server->error);
+                        return array($success, ($message != "")? $message : $Server->error);
                     } else {
                         return array(false, $Server->error);
                     }
