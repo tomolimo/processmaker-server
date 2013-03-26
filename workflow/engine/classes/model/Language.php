@@ -678,39 +678,10 @@ class Language extends BaseLanguage
         include PATH_PLUGINS . $plugin . PATH_SEP . 'translations'. PATH_SEP . 'translations.php';
         $translatedText = array();
 
-        if (file_exists( PATH_PLUGINS . $plugin . PATH_SEP . 'translations' . PATH_SEP . $plugin . '.' . $idLanguage . '.po' )) {
+        if (file_exists( PATH_LANGUAGECONT . $plugin . "." . $idLanguage)) {
             //reading the .po file
-            G::LoadSystem( 'i18n_po' );
-            $POFile = new i18n_PO( PATH_PLUGINS . $plugin . PATH_SEP . 'translations' . PATH_SEP . $plugin . '.' . $idLanguage . '.po' );
-            $POFile->readInit();
-
-            while ($rowTranslation = $POFile->getTranslation()) {
-                foreach ($POFile->translatorComments as $a => $aux) {
-                    $aux = trim( $aux );
-                    if ($aux == 'TRANSLATION') {
-                        $identifier = $aux;
-                    } else {
-                        $var = explode( '/', $aux );
-                        if ($var[0] == 'LABEL') {
-                            $context = $aux;
-                        }
-                        if ($var[0] == 'JAVASCRIPT') {
-                            $context = $aux;
-                        }
-                    }
-                    if (preg_match( '/^([\w-]+)\/([\w-]+\/*[\w-]*\.xml\?)/', $aux, $match )) {
-                        $identifier = $aux;
-                    } else {
-                        if (preg_match( '/^([\w-]+)\/([\w-]+\/*[\w-]*\.xml$)/', $aux, $match )) {
-                            $context = $aux;
-                        }
-                    }
-                }
-                if ($identifier == 'TRANSLATION') {
-                    list ($category, $id) = explode( '/', $context );
-                    $translatedText[$id] = $rowTranslation['msgstr'];
-                }
-            }
+            include PATH_LANGUAGECONT . $plugin . "." . $idLanguage;
+            eval('$translatedText = $translation'.$plugin.';');
         }
 
         //creating the .po file
