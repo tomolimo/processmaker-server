@@ -1134,7 +1134,7 @@ function saveUser()
                 },
 
                 success: function (response, opts) {
-                    var dataRespuesta = eval("(" + response.responseText + ")");
+                    var dataRespuesta = Ext.util.JSON.decode(response.responseText);
 
                     if (dataRespuesta.result == "OK") {
                         userFrmEditSubmit();
