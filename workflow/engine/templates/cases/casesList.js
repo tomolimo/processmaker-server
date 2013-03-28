@@ -22,6 +22,7 @@ var storeCases;
 var storeReassignCases;
 var grid;
 var textJump;
+var ids = '';
 
 Ext.Ajax.timeout = 4 * 60 * 1000;
 
