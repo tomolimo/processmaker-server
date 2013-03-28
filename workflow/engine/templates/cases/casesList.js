@@ -22,6 +22,7 @@ var storeCases;
 var storeReassignCases;
 var grid;
 var textJump;
+var ids = '';
 
 Ext.Ajax.timeout = 4 * 60 * 1000;
 
@@ -2127,6 +2128,7 @@ function reassign(){
          ids += rows[i].get('APP_UID') + "|" + rows[i].get('TAS_UID')+ "|" + rows[i].get('DEL_INDEX');
     }
     storeReassignCases.setBaseParam( 'APP_UIDS', ids);
+	//storeReassignCases.setBaseParam( 'action', 'to_reassign');
     storeReassignCases.load();
 
     newPopUp.show();
