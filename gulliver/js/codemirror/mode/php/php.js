@@ -63,6 +63,11 @@
           state.curState = state.php;
           return "meta";
         }
+        if( config.PMEnabled == true) {
+          state.curMode = phpMode;
+          state.curState = state.php;
+          return "meta";
+        }
         if (state.pending == '"') {
           while (!stream.eol() && stream.next() != '"') {}
           var style = "string";
