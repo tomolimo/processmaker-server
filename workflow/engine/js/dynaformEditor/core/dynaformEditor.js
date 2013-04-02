@@ -696,7 +696,6 @@ var dynaformEditor={
     if( jsEditor ) {
         if(typeof jsEditor.setValue == 'function')
         {
-            alert("Asigning xml contents: " + newCode);
             jsEditor.setValue(newCode);//jsEditor.setCode(newCode);
         }
     }

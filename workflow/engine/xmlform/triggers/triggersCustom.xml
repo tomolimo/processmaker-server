@@ -38,7 +38,11 @@
     "../contrib/php/js/parsephphtmlmixed.js"],
     stylesheet: ["css/xmlcolors.css", "css/jscolors.css", "css/csscolors.css", "css/phpcolors.css" ],
     path: "js/", lineNumbers: true, continuousScanning: 500, parserConfig: { phpOnly:true} });*/
-    
+
+CodeMirror.commands.autocomplete = function(cm) {
+    CodeMirror.showHint(cm, CodeMirror.phpHint);
+}
+
 var triggerEditor = CodeMirror.fromTextArea(document.getElementById("form[TRI_WEBBOT]"), {
     lineNumbers: true,
     matchBrackets: true,
