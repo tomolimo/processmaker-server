@@ -4013,6 +4013,7 @@ class processMap
     public function editObjectPermission ($sOP_UID, $sProcessUID)
     {
 
+        $user = '';
         $oCriteria = new Criteria();
         $oCriteria->add( ObjectPermissionPeer::OP_UID, $sOP_UID );
         $oDataset = ObjectPermissionPeer::doSelectRS( $oCriteria );
