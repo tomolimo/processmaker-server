@@ -75,7 +75,7 @@
 
 <JS type="javascript">
     <![CDATA[
-    var triggerEditor = CodeMirror.fromTextArea('form[TRI_WEBBOT]', {
+    /*var triggerEditor = CodeMirror.fromTextArea('form[TRI_WEBBOT]', {
     height: "200px",
     width: "90%",
     parserfile: ["parsexml.js", "parsecss.js", "tokenizejavascript.js", "parsejavascript.js",
@@ -83,6 +83,17 @@
     "../contrib/php/js/parsephphtmlmixed.js"],
     stylesheet: ["css/xmlcolors.css", "css/jscolors.css", "css/csscolors.css", "css/phpcolors.css" ],
     path: "js/", lineNumbers: true, continuousScanning: 500, readOnly:true, parserConfig: { phpOnly:true} });
+    */
+    var triggerEditor = CodeMirror.fromTextArea(document.getElementById("form[TRI_WEBBOT]"), {
+	    lineNumbers: true,
+	    matchBrackets: true,
+	    mode: "application/x-httpd-php",
+	    PMEnabled: true,
+	    indentUnit: 2,
+	    indentWithTabs: false,
+	    readOnly: true
+	});
+	triggerEditor.setSize(350,200);
     
     function cancel()
     {
@@ -112,7 +123,8 @@
                 txtTgrTitle.value = cboTriggerUid.options[cboTriggerUid.selectedIndex].text;
             }
             if (triggerEditor) {
-            	triggerEditor.setCode(document.getElementById('form[TRI_WEBBOT]').value);
+                triggerEditor.setValue(document.getElementById('form[TRI_WEBBOT]').value);
+            	//triggerEditor.setCode(document.getElementById('form[TRI_WEBBOT]').value);
             }
         }
     );

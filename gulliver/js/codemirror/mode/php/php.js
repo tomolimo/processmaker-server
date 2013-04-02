@@ -57,6 +57,7 @@
     function dispatch(stream, state) {
       var isPHP = state.curMode == phpMode;
       if (stream.sol() && state.pending != '"') state.pending = null;
+      
       if (!isPHP) {
         if (stream.match(/^<\?\w*/)) {
           state.curMode = phpMode;
@@ -80,6 +81,7 @@
         state.pending = null;
         var cur = stream.current(), openPHP = cur.search(/<\?/);
         if (openPHP != -1) {
+          alert("openPHP");   
           if (style == "string" && /\"$/.test(cur) && !/\?>/.test(cur)) state.pending = '"';
           else state.pending = {end: stream.pos, style: style};
           stream.backUp(cur.length - openPHP);

@@ -205,9 +205,9 @@
         forEach (phpPMFunctions, yesAdd);
     } else {
         for (index = 0; index < phpKeywords.length; index++) {
-	    if ( phpKeywords[index].indexOf(functionName) == 0 ) {
-		found.push(phpKeywords[index]);
-	    }
+	        if ( phpKeywords[index].indexOf(functionName) == 0 ) {
+		        found.push(phpKeywords[index]);
+	        }
         } 
         forEach(keywords, maybeAdd);
     }

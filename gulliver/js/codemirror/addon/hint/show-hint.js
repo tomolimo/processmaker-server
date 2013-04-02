@@ -26,7 +26,7 @@ CodeMirror.showHint = function(cm, getHints, options) {
   function getMaxAccordingList(list) {
     var max = 0;
     for (var i = 0; i < list.length; i++) {
-	if (list[i].length > max)
+	    if (list[i].length > max)
            max = list[i].length;
     }
     return max;
@@ -45,27 +45,30 @@ CodeMirror.showHint = function(cm, getHints, options) {
     // Build the select widget
     var hints = document.createElement("ul"), selectedHint = 0;
     hints.className = "CodeMirror-hints";
-    for (var i = 0; i < completions.length; ++i) {
+    for (var i = 0; i < completions.length; ++i) { 
       var elt = hints.appendChild(document.createElement("li")), completion = completions[i];
       var className = "CodeMirror-hint" + (i ? "" : " CodeMirror-hint-active");
       if (completion.className != null) className = completion.className + " " + className;
       elt.className = className;
-      if (completion.render) completion.render(elt, data, completion);
+      if (completion.render) {completion.render(elt, data, completion);} 
       else elt.appendChild(document.createTextNode(getText(completion)));
       elt.hintId = i;
     }
+    
     var pos = cm.cursorCoords(options.alignWithWord !== false ? data.from : null);
     var left = pos.left, top = pos.bottom, below = true;
     hints.style.left = left + "px";
     hints.style.top = top + "px";
-    hints.style.width = (maxWidth * 8) + "px";
-
+    hints.style.width = (maxWidth * 18) + "px";
+    
+    hints.style.zIndex = "5000";
     document.body.appendChild(hints);
 
     // If we're at the edge of the screen, then we want the menu to appear on the left of the cursor.
     var winW = window.innerWidth || Math.max(document.body.offsetWidth, document.documentElement.offsetWidth);
     var winH = window.innerHeight || Math.max(document.body.offsetHeight, document.documentElement.offsetHeight);
     var box = hints.getBoundingClientRect();
+    
     var overlapX = box.right - winW, overlapY = box.bottom - winH;
     if (overlapX > 0) {
       if (box.right - box.left > winW) {
