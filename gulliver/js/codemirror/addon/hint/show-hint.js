@@ -61,6 +61,12 @@ CodeMirror.showHint = function(cm, getHints, options) {
     hints.style.top = top + "px";
     hints.style.width = (maxWidth * 18) + "px";
     
+    ie = /MSIE \d/.test(navigator.userAgent);
+    if( ie.length > 0  ) {
+      hints.style.left = (left + 2) + "px";
+      hints.style.top = (top + 20) + "px";
+    }
+    
     hints.style.zIndex = "5000";
     document.body.appendChild(hints);
 

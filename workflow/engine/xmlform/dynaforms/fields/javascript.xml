@@ -63,7 +63,7 @@ var jsEditorPrompt = CodeMirror.fromTextArea(document.getElementById("form[PME_C
           mode: "javascript",
           lineNumbers: true,
           lineWrapping: true });
-jsEditorPrompt.setSize(330, 170);
+jsEditorPrompt.setSize(430, 170);
 
 function saveJavascript()
 {
