@@ -177,15 +177,8 @@ switch ($_POST['action']) {
         require_once 'classes/model/ObjectPermission.php';
         $criteria = new Criteria( 'workflow' );
         $criteria->add(ObjectPermissionPeer::USR_UID, $_POST['GRP_UID']);
-        $dataset = ObjectPermissionPeer::doSelectRS($criteria);
-        $dataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-        $dataset->next();
-        $oOP = new ObjectPermission();
-        while ($row = $dataset->getRow()) {
-            $oOP = ObjectPermissionPeer::retrieveByPK( $row['OP_UID'] );
-            $oOP->delete();
-            $dataset->next();
-        }
+        ObjectPermissionPeer::doDelete( $criteria );
+
         echo '{success: true}';
         break;
     case 'assignedMembers':
