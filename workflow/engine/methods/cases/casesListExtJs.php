@@ -175,6 +175,8 @@ function getCategoryArray ()
     $criteria = new Criteria( 'workflow' );
     $criteria->addSelectColumn( ProcessCategoryPeer::CATEGORY_UID );
     $criteria->addSelectColumn( ProcessCategoryPeer::CATEGORY_NAME );
+    $criteria->addAscendingOrderByColumn(ProcessCategoryPeer::CATEGORY_NAME);
+    
     $dataset = ProcessCategoryPeer::doSelectRS( $criteria );
     $dataset->setFetchmode( ResultSet::FETCHMODE_ASSOC );
     $dataset->next();
