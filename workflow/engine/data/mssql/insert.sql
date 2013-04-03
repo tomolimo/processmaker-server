@@ -1599,8 +1599,6 @@ SELECT 'LABEL','ID_YOU_ARE_FIRST_STEP','en','You are in the first step!','2012-0
   UNION ALL
 SELECT 'JAVASCRIPT','EDIT_PROCESS','en','Edit process','2012-06-01' 
   UNION ALL
-SELECT 'JAVASCRIPT','curriculum','en','Resume','2012-06-01' 
-  UNION ALL
 SELECT 'JAVASCRIPT','ID_OPEN_SEARCH','en','Advanced Search','2012-06-01' 
   UNION ALL
 SELECT 'JAVASCRIPT','ID_CLOSE_SEARCH','en','Close Search','2012-06-01' 
@@ -4751,7 +4749,7 @@ SELECT 'LABEL','ID_PROFILE','en','Profile','2012-06-01'
   UNION ALL
 SELECT 'LABEL','ID_PLEASE_SELECT_PHOTO','en','Please select a photo','2012-06-01' 
   UNION ALL
-SELECT 'LABEL','ID_RESUME','en','Résumé','2012-06-01' 
+SELECT 'LABEL','ID_RESUME','en','Resume','2012-06-01' 
   UNION ALL
 SELECT 'LABEL','ID_USER_ID','en','User ID (*)','2012-06-01' 
   UNION ALL

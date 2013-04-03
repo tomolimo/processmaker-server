@@ -22,6 +22,18 @@ var storeCases;
 var storeReassignCases;
 var grid;
 var textJump;
+var ids = '';
+
+function formatAMPM(date, initVal) {
+  var hours = date.getHours();
+  var minutes = (initVal === true)? ((date.getMinutes()<15)? 0: ((date.getMinutes()<30)? 15: ((date.getMinutes()<45)? 30: 45))): date.getMinutes();
+  var ampm = hours >= 12 ? 'PM' : 'AM';
+  hours = hours % 12;
+  hours = hours ? hours : 12; // the hour '0' should be '12'
+  minutes = minutes < 10 ? '0' + minutes : minutes;
+  var strTime = hours + ':' + minutes + ' ' + ampm;
+  return strTime;
+}
 
 Ext.Ajax.timeout = 4 * 60 * 1000;
 
@@ -202,6 +214,14 @@ function pauseCase(date){
               {
                 html: '<div align="center" style="font: 14px tahoma,arial,helvetica,sans-serif">' + _('ID_PAUSE_CASE_TO_DATE') +' '+date.format('M j, Y')+'? </div> <br/>'
               },
+              new Ext.form.TimeField({
+                  id: 'unpauseTime',
+                  fieldLabel: _('ID_UNPAUSE_TIME'),
+                  name: 'unpauseTime',
+                  value: formatAMPM(new Date(), false),
+                  minValue: formatAMPM(new Date(), true),
+                  format: 'h:i A'
+              }),
               {
                 xtype: 'textarea',
                 id: 'noteReason',
@@ -251,7 +271,15 @@ function pauseCase(date){
                       Ext.MessageBox.hide();
                       msgPause.close();
                     },
-                    params: {action:'pauseCase', unpausedate:unpauseDate, APP_UID:rowModel.data.APP_UID, DEL_INDEX: rowModel.data.DEL_INDEX, NOTE_REASON: noteReasonTxt, NOTIFY_PAUSE: notifyReasonVal}
+                    params: {
+                        action: 'pauseCase',
+                        unpausedate: unpauseDate,
+                        unpauseTime: Ext.getCmp('unpauseTime').getValue(),
+                        APP_UID: rowModel.data.APP_UID,
+                        DEL_INDEX: rowModel.data.DEL_INDEX,
+                        NOTE_REASON: noteReasonTxt,
+                        NOTIFY_PAUSE: notifyReasonVal
+                    }
                   });
               }
           },{
@@ -2127,6 +2155,7 @@ function reassign(){
          ids += rows[i].get('APP_UID') + "|" + rows[i].get('TAS_UID')+ "|" + rows[i].get('DEL_INDEX');
     }
     storeReassignCases.setBaseParam( 'APP_UIDS', ids);
+	//storeReassignCases.setBaseParam( 'action', 'to_reassign');
     storeReassignCases.load();
 
     newPopUp.show();

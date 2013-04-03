@@ -97,7 +97,7 @@ switch ($_POST['action']) {
         $roles = new Roles();
         $rolesData = $roles->getAllRoles();
         foreach ($rolesData as $rowid => $row) {
-            $oData[] = array('ROL_UID' => $row['ROL_CODE'], 'ROL_CODE' => $row['ROL_CODE']);
+            $oData[] = array('ROL_UID' => $row['ROL_CODE'], 'ROL_CODE' => $row['ROL_NAME']);
         }
         print (G::json_encode($oData));
         break;
@@ -147,7 +147,11 @@ switch ($_POST['action']) {
                 //fixing bug in inactive user when the admin create a new user.
                 $statusWF = $form['USR_STATUS'];
                 $aData['USR_STATUS'] = $form['USR_STATUS'] == 'ACTIVE' ? 1 : 0;
-                $sUserUID = $RBAC->createUser($aData, $form['USR_ROLE']);
+                try {
+                    $sUserUID = $RBAC->createUser($aData, $form['USR_ROLE']);
+                } catch(Exception $oError) {
+                    throw new Exception($oError->getMessage());
+                }
                 $aData['USR_STATUS'] = $statusWF;
                 $aData['USR_UID'] = $sUserUID;
                 $aData['USR_PASSWORD'] = md5($sUserUID); //fake :p
@@ -608,5 +612,19 @@ switch ($_POST['action']) {
         $response['descriptionText'] = $span . $gif . $text . '</span>';
         echo G::json_encode($response);
         break;
+    case "passwordValidate":
+        $messageResultLogin = "";
+        $password = $_POST["password"];
+        $resultLogin = $RBAC->VerifyLogin($_SESSION["USR_USERNAME"], $password);
+
+        if($resultLogin ==  $_SESSION["USER_LOGGED"]) {
+            $messageResultLogin = "OK";
+        } else {
+            $messageResultLogin = "ERROR";
+        }
+
+        $response = array();
+        $response["result"] = $messageResultLogin;
+        echo G::json_encode($response);
+        break;
 }
- 

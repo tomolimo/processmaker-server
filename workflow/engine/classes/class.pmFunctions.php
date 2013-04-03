@@ -1137,8 +1137,11 @@ function WSCreateUser ($userId, $password, $firstname, $lastname, $email, $role,
     $params = array ("sessionId" => $sessionId,"userId" => $userId,"firstname" => $firstname,"lastname" => $lastname,"email" => $email,"role" => $role,"password" => $password,"dueDate" => $dueDate,"status" => $status
     );
 
-    $result = $client->__soapCall( "CreateUser", array ($params
-    ) );
+    try {
+        $result = $client->__soapCall( "CreateUser", array ($params) );
+    } catch(Exception $oError) {
+        return $oError->getMessage();
+    }
 
     $fields["status_code"] = $result->status_code;
     $fields["message"] = $result->message;
@@ -2216,7 +2219,7 @@ function generateCode ($iDigits = 4, $sType = 'NUMERIC')
  * @param string(32) | $sApplicationUID | Case ID | The unique ID for a case (which can be found with WSCaseList()
  * @param string(32) | $sCode | New Code for case | The new code for a case, which will be stored in the field wf_<WORKSPACE>.APPLICATION.APP_CODE
  * @param string(32) | $sPIN = "" | New Code PIN for case |The new code for a case.
- * @return int | $result | Result | If successful, returns zero, otherwise a non-zero error number.
+ * @return int | $result | Result | If successful, returns one, otherwise zero or error number.
  *
  */
 function setCaseTrackerCode ($sApplicationUID, $sCode, $sPIN = '')
