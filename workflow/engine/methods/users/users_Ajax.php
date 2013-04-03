@@ -206,9 +206,10 @@ try {
 
             //Delete Dashboard
             require_once 'classes/model/DashletInstance.php';
-            $oCriteria = new Criteria( 'workflow' );
-            $oCriteria->add( DashletInstancePeer::DAS_INS_OWNER_UID, $UID );
-            DashletInstancePeer::doDelete( $oCriteria );
+            $criteria = new Criteria( 'workflow' );
+            $criteria->add( DashletInstancePeer::DAS_INS_OWNER_UID, $UID );
+            $criteria->add( DashletInstancePeer::DAS_INS_OWNER_TYPE , 'USER');
+            DashletInstancePeer::doDelete( $criteria );
             break;
         case 'changeUserStatus':
             $response = new stdclass();
