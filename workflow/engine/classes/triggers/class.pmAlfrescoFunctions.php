@@ -37,7 +37,7 @@
  * @param string | $user | Valid Admin username to connect to Alfresco server
  * @param string | $pwd | Valid Admin password to connect to Alfresco server
  *
- * @return string | $result | Response
+ * @return string | $result | Response |
  *
  */
 G::LoadSystem('restClient');
@@ -65,7 +65,7 @@ return $domapi_res;
  * @param string | $user | Valid Admin username to connect to Alfresco server
  * @param string | $pwd | Valid Admin password to connect to Alfresco server
  *
- * @return string | $result | Response
+ * @return string | $result | Response |
  *
  */
 // Validation done
@@ -98,7 +98,7 @@ return $alfrescoMessage;
  * @param string | $user | Valid Admin username to connect to Alfresco server
  * @param string | $pwd | Valid Admin password to connect to Alfresco server
  *
- * @return string | $result | Response
+ * @return string | $result | Response |
  *
  */
 // Validation done
@@ -131,7 +131,7 @@ return $alfrescoMessage;
  * @param string | $user | Valid Admin username to connect to Alfresco server
  * @param string | $pwd | Valid Admin password to connect to Alfresco server
  *
- * @return string | $result | Response
+ * @return string | $result | Response |
  *
  */
 function createFolder($alfrescoServerUrl, $parentFolder, $folderName, $user, $pwd) {
@@ -169,7 +169,7 @@ function createFolder($alfrescoServerUrl, $parentFolder, $folderName, $user, $pw
  * @param string | $user | Valid Admin username to connect to Alfresco server
  * @param string | $pwd | Valid Admin password to connect to Alfresco server
  *
- * @return string | $result | Response
+ * @return string | $result | Response |
  *
  */
 function deleteObject($alfrescoServerUrl, $objetcId, $user, $pwd) {
@@ -195,7 +195,7 @@ function deleteObject($alfrescoServerUrl, $objetcId, $user, $pwd) {
  * @param string | $user | Valid Admin username to connect to Alfresco server
  * @param string | $pwd | Valid Admin password to connect to Alfresco server
  *
- * @return string | $result | Response
+ * @return string | $result | Response |
  *
  */
 function downloadDoc($alfrescoServerUrl, $pathFile , $pathFolder, $user, $pwd) {
@@ -247,7 +247,7 @@ function downloadDoc($alfrescoServerUrl, $pathFile , $pathFolder, $user, $pwd) {
  * @param string | $user | Valid Admin username to connect to Alfresco server
  * @param string | $pwd | Valid Admin password to connect to Alfresco server
  *
- * @return string | $result | Response
+ * @return string | $result | Response |
  *
  */
 function getCheckedoutFiles($alfrescoServerUrl, $user, $pwd) {
@@ -275,7 +275,7 @@ function getCheckedoutFiles($alfrescoServerUrl, $user, $pwd) {
  * @param string | $user | Valid Admin username to connect to Alfresco server
  * @param string | $pwd | Valid Admin password to connect to Alfresco server
  *
- * @return string | $result | Response
+ * @return string | $result | Response |
  *
  */
 function getFolderChildren($alfrescoServerUrl, $folderId,  $user, $pwd) {
@@ -306,7 +306,7 @@ function getFolderChildren($alfrescoServerUrl, $folderId,  $user, $pwd) {
  * @param string | $pwd | Valid Admin password to connect to Alfresco server
  * @param string | $path | Path of document to be Uploaded
  *
- * @return string | $result | Response
+ * @return string | $result | Response |
  *
  */
 function uploadDoc($alfrescoServerUrl, $fileSource, $title, $description, $docType, $user, $pwd, $path = '') {
