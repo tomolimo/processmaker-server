@@ -232,6 +232,11 @@ class Applications
 
         if ($dateFrom != '') {
             if ($dateTo != '') {
+                if ($dateFrom == $dateTo) {
+                    $dateAux = $dateFrom;
+                    $dateFrom = $dateAux . " 00:00:00";
+                    $dateTo = $dateAux . " 23:23:59";
+               }
                 $Criteria->add( $Criteria->getNewCriterion( AppCacheViewPeer::DEL_DELEGATE_DATE, $dateFrom, Criteria::GREATER_EQUAL )->addAnd( $Criteria->getNewCriterion( AppCacheViewPeer::DEL_DELEGATE_DATE, $dateTo, Criteria::LESS_EQUAL ) ) );
                 $CriteriaCount->add( $CriteriaCount->getNewCriterion( AppCacheViewPeer::DEL_DELEGATE_DATE, $dateFrom, Criteria::GREATER_EQUAL )->addAnd( $Criteria->getNewCriterion( AppCacheViewPeer::DEL_DELEGATE_DATE, $dateTo, Criteria::LESS_EQUAL ) ) );
             } else {
@@ -443,7 +448,7 @@ class Applications
         $oDataset = AppCacheViewPeer::doSelectRS( $Criteria );
         $oDataset->setFetchmode( ResultSet::FETCHMODE_ASSOC );
         $oDataset->next();
-
+//g::pr($oDataset);
         $result = array ();
         $result['totalCount'] = $totalCount;
         $rows = array ();
@@ -476,7 +481,7 @@ class Applications
              $maxDataset->close();
               }*/
 
-            //Current delegation
+            //Current delegation (*)
             if (($action == "sent" || $action == "search" || $action == "simple_search" || $action == "to_revise" || $action == "to_reassign") && ($status != "TO_DO")) {
                 //Current task
                 $aRow["APP_TAS_TITLE"] = $aRow["APPCVCR_APP_TAS_TITLE"];
