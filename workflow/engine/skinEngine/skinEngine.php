@@ -393,7 +393,11 @@ class SkinEngine
         
         G::LoadClass( "configuration" );
         $conf = new Configurations();
-        $smarty->assign('udate', $conf->getSystemDate(date('Y-m-d')));//G::getformatedDate(date('Y-m-d'), $currentFormat, SYS_LANG));
+        if (defined('SYS_SYS') && $conf->exists("ENVIRONMENT_SETTINGS")) {
+            $smarty->assign('udate', $conf->getSystemDate(date('Y-m-d')));
+        } else {
+            $smarty->assign('udate', G::getformatedDate(date('Y-m-d'), 'M d, yyyy', SYS_LANG));
+        }
       }
 
       if (defined('SYS_SYS')) {
@@ -647,8 +651,12 @@ class SkinEngine
         
         G::LoadClass( "configuration" );
         $conf = new Configurations();
-        $smarty->assign('udate', $conf->getSystemDate(date('Y-m-d')));//G::getformatedDate(date('Y-m-d'), $currentFormat, SYS_LANG));
-
+        if ( defined('SYS_SYS') && $conf->exists("ENVIRONMENT_SETTINGS")) {
+            $smarty->assign('udate', $conf->getSystemDate(date('Y-m-d')));
+        } else {
+            $smarty->assign('udate', G::getformatedDate(date('Y-m-d'), 'M d, yyyy', SYS_LANG));
+        }
+    
       }
       if(class_exists('pmLicenseManager')){
         $pmLicenseManagerO = &pmLicenseManager::getSingleton();
