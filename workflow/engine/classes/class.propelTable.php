@@ -63,7 +63,7 @@ class propelTable
     public $query;
     public $totPages;
     public $totRows;
-    public $sortable = 'true';
+    public $sortable = '1';
 
     //SQL QUERIES
     public $criteria;
@@ -343,7 +343,7 @@ class propelTable
 
                 if ($this->style[$r]['titleVisibility'] != '0') {
                     $this->style[$r]['href'] = $this->ownerPage . '?order=' . ($sortOrder !== '' ? (G::createUID( '', $this->fields[$r]['Name'] ) . '=' . $sortOrder) : '') . '&page=' . $this->currentPage;
-                    if ($this->sortable == 'false') {
+                    if ($this->sortable == '0') {
                         $this->style[$r]['onsort'] = $this->id . '.doSort("' . G::createUID( '', $this->fields[$r]['Name'] ) . '" , ""); return false;';;
                     } else {
                         $this->style[$r]['onsort'] = $this->id . '.doSort("' . G::createUID( '', $this->fields[$r]['Name'] ) . '" , "' . $sortOrder . '"); return false;';
