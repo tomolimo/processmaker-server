@@ -63,6 +63,7 @@ class propelTable
     public $query;
     public $totPages;
     public $totRows;
+    public $sortable = 'true';
 
     //SQL QUERIES
     public $criteria;
@@ -330,15 +331,6 @@ class propelTable
             }
         }
 
-        // triggers validation table
-        $tablesName = $this->criteria->getTables();
-        $triggerEditTable = false;
-        foreach ($tablesName as $table) {
-            if ($table == 'STEP_TRIGGER') {
-                $triggerEditTable = true;
-            }
-        }
-
         //Render headers
         $this->colCount = 0;
         $this->shownFields = '[';
@@ -351,7 +343,7 @@ class propelTable
 
                 if ($this->style[$r]['titleVisibility'] != '0') {
                     $this->style[$r]['href'] = $this->ownerPage . '?order=' . ($sortOrder !== '' ? (G::createUID( '', $this->fields[$r]['Name'] ) . '=' . $sortOrder) : '') . '&page=' . $this->currentPage;
-                    if ($triggerEditTable) {
+                    if ($this->sortable == 'false') {
                         $this->style[$r]['onsort'] = $this->id . '.doSort("' . G::createUID( '', $this->fields[$r]['Name'] ) . '" , ""); return false;';;
                     } else {
                         $this->style[$r]['onsort'] = $this->id . '.doSort("' . G::createUID( '', $this->fields[$r]['Name'] ) . '" , "' . $sortOrder . '"); return false;';
