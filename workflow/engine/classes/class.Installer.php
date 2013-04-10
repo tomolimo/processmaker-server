@@ -219,7 +219,8 @@ class Installer
      */
     public function setPartner()
     {
-        if (defined('PARTNER_FLAG')) {
+        $partnerFlag = (defined('PARTNER_FLAG')) ? PARTNER_FLAG : false;
+        if ($partnerFlag) {
             // Execute sql for partner
             $pathMysqlPartner = PATH_CORE . 'data' . PATH_SEP . 'partner' . PATH_SEP . 'mysql' . PATH_SEP;
             if (G::verifyPath($pathMysqlPartner)) {
