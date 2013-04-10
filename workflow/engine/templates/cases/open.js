@@ -531,7 +531,7 @@ Ext.onReady(function(){
                 params : {action : 'cancelCase', NOTE_REASON: noteReasonTxt, NOTIFY_PAUSE: notifyReasonVal},
                 success: function ( result, request ) {
                   try {
-                    parent.notify('', 'The case ' + parent._CASE_TITLE + ' was cancelled!');
+                    parent.notify('', 'The case ' + stringReplace("\\: ", "", _APP_NUM) + ' was cancelled!');
                   }
                   catch (e) {
                   }
@@ -681,7 +681,7 @@ Ext.onReady(function(){
         style: 'font-weight: bold'
       },
       items : [
-        {fieldLabel: 'Case', text: parent._CASE_TITLE},
+        {fieldLabel: _("ID_CASE"), text: stringReplace("\\: ", "", _APP_NUM)},
         {fieldLabel: 'Pause Date', text: _ENV_CURRENT_DATE},
         new Ext.form.DateField({
           id:   'unpauseDate',
@@ -772,7 +772,7 @@ Ext.onReady(function(){
             NOTE_REASON: noteReasonTxt,
             NOTIFY_PAUSE: notifyReasonVal
             },
-        waitMsg:'Pausing Case '+parent._CASE_TITLE+'...',
+        waitMsg:'Pausing Case '+stringReplace("\\: ", "", _APP_NUM)+'...',
         timeout : 36000,
         success : function(res, req) {
             if(req.result.success) {
