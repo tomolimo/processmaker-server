@@ -89,6 +89,11 @@ Ext.onReady(function(){
   _fields.push({name: _idProperty});
   
   for (i=0;i<tableDef.FIELDS.length; i++) {
+    if (tableDef.FIELDS[i].FLD_KEY==1) {
+      blank=false;
+    } else{
+      blank=true;
+    };
     switch (tableDef.FIELDS[i].FLD_TYPE) {
       case 'DATE':
         columnRenderer = function (value) { 
@@ -103,7 +108,7 @@ Ext.onReady(function(){
         columnEditor = {
           xtype      : 'datefield',
           format     : 'Y-m-d',
-          allowBlank : true
+          allowBlank : blank
         }; 
         break;
 
@@ -113,7 +118,7 @@ Ext.onReady(function(){
         columnEditor = {
           xtype      : 'numberfield',
           decimalPrecision : 8,
-          allowBlank : true
+          allowBlank : blank
         }; 
         break;
       
@@ -122,7 +127,7 @@ Ext.onReady(function(){
         columnAlign = 'left';
         columnEditor = {
           xtype      : 'textfield',
-          allowBlank : true
+          allowBlank : blank
         };
     }
 
@@ -183,13 +188,7 @@ Ext.onReady(function(){
     editor = new Ext.ux.grid.RowEditor({
       saveText  : _("ID_UPDATE"),
       listeners : {
-  	    afteredit : {
-  	      fn:function(rowEditor, obj, data, rowIndex ){            	  
-    		    if (data.phantom === true) {
-    			  //store.reload(); // only if it is an insert 
-    	    	}
-  	      }
-  	    }
+        
       }
     });
   }
