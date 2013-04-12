@@ -905,7 +905,7 @@ try {
                 }
             }
 
-            $title = htmlentities($aFields['TASK'][$sKey]['NEXT_TASK']['TAS_TITLE']);
+            $title = htmlentities($aFields['TASK'][$sKey]['NEXT_TASK']['TAS_TITLE'], ENT_QUOTES, 'UTF-8');
             $aFields['TASK'][$sKey]['NEXT_TASK']['TAS_TITLE'] = $title;
 
             $G_PUBLISH->AddContent( 'smarty', $tplFile, '', '', $aFields );
