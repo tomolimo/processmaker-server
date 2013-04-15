@@ -397,11 +397,18 @@ NewPMTableRow = function(){
 
   var row = new PMRow(new props);
   len = infoGrid.getStore().data.length;
-  if (infoGrid.store.getAt(len-1).data[tableDef.FIELDS[0].FLD_NAME]=="") {
-    PMExt.error( _('ID_ERROR'), _('ID_EMPTY_ROW'));
-    store.load();
+  if (len>0) {
+    if (infoGrid.store.getAt(len-1).data[tableDef.FIELDS[0].FLD_NAME]=="") {
+      PMExt.error( _('ID_ERROR'), _('ID_EMPTY_ROW'));
+      store.load();
+    } else{
+      editor.stopEditing();
+      store.insert(len, row);
+      infoGrid.getView().refresh();
+      infoGrid.getSelectionModel().selectRow(len);
+      editor.startEditing(len);
+    }
   } else{
-  
     editor.stopEditing();
     store.insert(len, row);
     infoGrid.getView().refresh();
