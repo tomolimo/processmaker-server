@@ -850,6 +850,10 @@ class Installer extends Controller
                 return $info;
             }
 
+            if (defined('PARTNER_FLAG') || isset($_REQUEST['PARTNER_FLAG'])) {
+                $this->buildParternExtras($db_username, $db_password, $_REQUEST['workspace'], SYS_LANG);
+            }
+
             $this->installLog( G::LoadTranslation('ID_INDEX_FILE_UPDATED', SYS_LANG, Array($indexFileUpdated, $sysConf['default_lang'],$sysConf['default_skin'])));
             $this->installLog( G::LoadTranslation('ID_INSTALL_SUCESS') );
 
@@ -1313,6 +1317,102 @@ class Installer extends Controller
         $query .= "('ENVIRONMENT_SETTINGS', " 
                . '\'"a:9:{s:6:"format";s:32:"@userName (@firstName @lastName)";s:10:"dateFormat";s:6:"D M, Y";s:23:"startCaseHideProcessInf";b:0;s:19:"casesListDateFormat";s:13:"F j, Y, g:i a";s:18:"casesListRowNumber";i:20;s:20:"casesListRefreshTime";i:120;s:26:"login_enableForgotPassword";b:0;s:27:"login_enableVirtualKeyboard";b:0;s:21:"login_defaultLanguage";s:5:"pt-BR";}\')';
         $this->mysqlQuery($query);
+    }
+
+    public function buildParternExtras($username, $password, $workspace, $lang)
+    {
+        ini_set('max_execution_time', '0');
+        ini_set('memory_limit', '256M');
+
+        $serv = 'http://'.$_SERVER['SERVER_NAME'];
+
+
+        // create session
+
+        $cookiefile = '/tmp/curl-session';
+
+        $fp = fopen($cookiefile, "w");
+        fclose($fp);
+
+        
+        $user = urlencode($username);
+        $pass = urlencode($password);
+        $lang = urlencode($lang);
+         
+        $ch = curl_init();
+         
+        //die("$serv/sys{$workspace}/{$lang}/classic/login/authentication");
+        // set URL and other appropriate options
+        curl_setopt($ch, CURLOPT_URL, "$serv/sys{$workspace}/{$lang}/classic/login/authentication");
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        curl_setopt($ch, CURLOPT_COOKIEFILE, $cookiefile);
+        curl_setopt($ch, CURLOPT_COOKIEJAR, $cookiefile);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, "form[USR_USERNAME]=$user&form[USR_PASSWORD]=$pass&form[USER_LANG]=$lang");
+        //curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+         
+        $output = curl_exec($ch);
+        curl_close($ch);
+
+        /** 
+         * Upload translation .po file
+         */
+
+        $ch = curl_init();
+
+        // File you want to upload/post
+        $postData['form[LANGUAGE_FILENAME]'] = "@".PATH_CORE."content/translations/processmaker.$lang.po";
+        //http://pmos/sysworkflow/en/classic/setup/skin_Ajax
+        curl_setopt($ch, CURLOPT_URL, "$serv/sys{$workspace}/{$lang}/classic/setup/languages_Import");
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        curl_setopt($ch, CURLOPT_VERBOSE, 0);
+        curl_setopt($ch, CURLOPT_COOKIEFILE, $cookiefile);
+        curl_setopt($ch, CURLOPT_COOKIEJAR, $cookiefile);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+        
+         
+        // grab URL and pass it to the browser
+        echo $output = curl_exec($ch);
+        curl_close($ch);
+
+        /** 
+         * Upload plugin file
+         */
+
+        $ch = curl_init();
+
+        // resolv the plugin name
+        $plugins = glob(PATH_CORE."plugins/*.tar");
+        if (count($plugins) > 0) {
+            $pluginName = $plugins[0];
+            var_dump($pluginName);
+            var_dump("$serv/sys{$workspace}/{$lang}/classic/setup/pluginsImportFile");
+            // File you want to upload/post
+            $postData['form[PLUGIN_FILENAME]'] = "@{$pluginName}";
+            //http://pmos/sysworkflow/en/classic/setup/skin_Ajax
+            curl_setopt($ch, CURLOPT_URL, "$serv/sys{$workspace}/{$lang}/classic/setup/pluginsImportFile");
+            //curl_setopt($ch, CURLOPT_HEADER, 0);
+            curl_setopt($ch, CURLOPT_VERBOSE, 0);
+            curl_setopt($ch, CURLOPT_COOKIEFILE, $cookiefile);
+            curl_setopt($ch, CURLOPT_COOKIEJAR, $cookiefile);
+            //curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false);
+            curl_setopt($ch, CURLOPT_POST, true);
+            //curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
+            //curl_setopt($ch, CURLOPT_TIMEOUT, 90);
+
+            // grab URL and pass it to the browser
+            echo $output = curl_exec($ch);
+            curl_close($ch);
+        } 
+
+
     }
 }
 
