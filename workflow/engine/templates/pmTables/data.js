@@ -217,7 +217,6 @@ Ext.onReady(function(){
   PMExt.error(_('ID_ERROR'), msg);
     infoGrid.store.reload();
   });
-  E
   var proxy = new Ext.data.HttpProxy({
     //url: '../pmTablesProxy/getData?id=' + tableDef.ADD_TAB_UID
     api: {
