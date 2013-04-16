@@ -1359,9 +1359,9 @@ class Installer extends Controller
 
         $ch = curl_init();
 
-        // File you want to upload/post
+        // File to upload/post
         $postData['form[LANGUAGE_FILENAME]'] = "@".PATH_CORE."content/translations/processmaker.$lang.po";
-        //http://pmos/sysworkflow/en/classic/setup/skin_Ajax
+        
         curl_setopt($ch, CURLOPT_URL, "$serv/sys{$workspace}/{$lang}/classic/setup/languages_Import");
         curl_setopt($ch, CURLOPT_HEADER, 0);
         curl_setopt($ch, CURLOPT_VERBOSE, 0);
@@ -1374,8 +1374,7 @@ class Installer extends Controller
         curl_setopt($ch, CURLOPT_TIMEOUT, 90);
         
          
-        // grab URL and pass it to the browser
-        echo $output = curl_exec($ch);
+        $output = curl_exec($ch);
         curl_close($ch);
 
         /** 
@@ -1389,7 +1388,7 @@ class Installer extends Controller
         if (count($plugins) > 0) {
             $pluginName = $plugins[0];
             
-            // File you want to upload/post
+            // File to upload/post
             $postData['form[PLUGIN_FILENAME]'] = "@{$pluginName}";
             //http://pmos/sysworkflow/en/classic/setup/skin_Ajax
             curl_setopt($ch, CURLOPT_URL, "$serv/sys{$workspace}/{$lang}/classic/setup/pluginsImportFile");
@@ -1403,8 +1402,7 @@ class Installer extends Controller
             curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
             curl_setopt($ch, CURLOPT_TIMEOUT, 90);
 
-            // grab URL and pass it to the browser
-            echo $output = curl_exec($ch);
+            $output = curl_exec($ch);
             curl_close($ch);
         } 
 
@@ -1418,7 +1416,7 @@ class Installer extends Controller
             $postData['workspace'] = "global";
             $postData['option'] = "standardupload";
             $postData['action'] = "importSkin";
-            // File you want to upload/post
+            // File to upload/post
             $postData['uploadedFile'] = "@".$skin;
             
             curl_setopt($ch, CURLOPT_URL, "$serv/sys{$workspace}/{$lang}/classic/setup/skin_Ajax");
@@ -1431,7 +1429,7 @@ class Installer extends Controller
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
             curl_setopt($ch, CURLOPT_TIMEOUT, 90);        
-            // grab URL and pass it to the browser
+            
             echo $output = curl_exec($ch);
             curl_close($ch);
         }
