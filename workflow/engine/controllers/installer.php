@@ -256,7 +256,8 @@ class Installer extends Controller
             $info->success = false;
         }
 
-        $info->pathPublic = new stdclass();
+        $info->pathPublic = new stdclass();
+
         $info->pathShared = new stdclass();
         $info->pathPublic->message = G::LoadTranslation('ID_INDEX_NOT_WRITEABLE');
         $info->pathPublic->result = G::is_writable_r( $_REQUEST['pathPublic'], $noWritableFiles );
@@ -362,6 +363,9 @@ class Installer extends Controller
      */
     public function createWorkspace ()
     {
+        if (file_exists($this->path_shared . 'partner.info')) {
+            $_REQUEST['PARTNER_FLAG'] = true;
+        }
         $this->setResponseType( 'json' );
         if ($_REQUEST['db_engine'] == 'mysql') {
             $info = $this->createMySQLWorkspace();
@@ -719,6 +723,11 @@ class Installer extends Controller
             $this->mysqlFileQuery( PATH_HOME . 'engine/data/mysql/schema.sql' );
             $this->mysqlFileQuery( PATH_HOME . 'engine/data/mysql/insert.sql' );
 
+            if (defined('PARTNER_FLAG') || isset($_REQUEST['PARTNER_FLAG'])) {
+                $this->setPartner();
+                $this->setConfiguration();
+            }
+
             // Create the triggers
             if (file_exists( PATH_HOME . 'engine/methods/setup/setupSchemas/triggerAppDelegationInsert.sql' ) && file_exists( PATH_HOME . 'engine/methods/setup/setupSchemas/triggerAppDelegationUpdate.sql' ) && file_exists( PATH_HOME . 'engine/methods/setup/setupSchemas/triggerApplicationUpdate.sql' ) && file_exists( PATH_HOME . 'engine/methods/setup/setupSchemas/triggerApplicationDelete.sql' ) && file_exists( PATH_HOME . 'engine/methods/setup/setupSchemas/triggerContentUpdate.sql' )) {
                 $this->mysqlQuery( @file_get_contents( PATH_HOME . 'engine/methods/setup/setupSchemas/triggerAppDelegationInsert.sql' ) );
@@ -839,6 +848,10 @@ class Installer extends Controller
                 $info->message .= G::LoadTranslation('ID_PROCESSMAKER_UI_NOT_INSTALL');
                 $this->installLog( G::LoadTranslation('ID_INSTALL_BUT_ERROR', SYS_LANG, Array('index.html')));
                 return $info;
+            }
+
+            if (defined('PARTNER_FLAG') || isset($_REQUEST['PARTNER_FLAG'])) {
+                $this->buildParternExtras($db_username, $db_password, $_REQUEST['workspace'], SYS_LANG);
             }
 
             $this->installLog( G::LoadTranslation('ID_INDEX_FILE_UPDATED', SYS_LANG, Array($indexFileUpdated, $sysConf['default_lang'],$sysConf['default_skin'])));
@@ -1204,6 +1217,202 @@ class Installer extends Controller
         $info->message .= G::LoadTranslation('ID_MSSQL_SUCCESS_CONNECT');
         $info->result = true;
         return $info;
+    }
+
+    public function setPartner()
+    {
+        if (defined('PARTNER_FLAG') || isset($_REQUEST['PARTNER_FLAG'])) {
+            // Execute sql for partner
+            $pathMysqlPartner = PATH_CORE . 'data' . PATH_SEP . 'partner' . PATH_SEP . 'mysql' . PATH_SEP;
+            if (G::verifyPath($pathMysqlPartner)) {
+                $res = array();
+                $filesSlq = glob($pathMysqlPartner . '*.sql');
+                foreach ($filesSlq as $value) {
+                    $this->mysqlFileQuery($value);
+                }
+            }
+
+            // Execute to change of skin
+            $pathSkinPartner = PATH_CORE . 'data' . PATH_SEP . 'partner' . PATH_SEP . 'skin' . PATH_SEP;
+            if (G::verifyPath($pathSkinPartner)) {
+                $res = array();
+                $fileTar = glob($pathSkinPartner . '*.tar');
+                foreach ($fileTar as $value) {
+                    $dataFile = pathinfo($value);
+                    $nameSkinTmp = $dataFile['filename'];
+                    G::LoadThirdParty( 'pear/Archive', 'Tar' );
+                    $tar = new Archive_Tar( $value );
+
+                    $pathSkinTmp = $pathSkinPartner . 'tmp' . PATH_SEP;
+                    G::rm_dir($pathSkinTmp);
+                    G::verifyPath($pathSkinTmp, true);
+                    chmod( $pathSkinTmp, 0777);
+                    $tar->extract($pathSkinTmp);
+
+                    $pathSkinName = $pathSkinTmp . $nameSkinTmp . PATH_SEP;
+                    chmod( $pathSkinName, 0777);
+                    G::verifyPath(PATH_CORE . 'skinEngine' . PATH_SEP . 'tmp', true);
+                    $skinClassic = PATH_CORE . 'skinEngine' . PATH_SEP . 'tmp' . PATH_SEP;
+
+                    if (is_dir($pathSkinName)) {
+                        $this->copyFile($pathSkinName, $skinClassic);
+                    }
+
+                    G::rm_dir(PATH_CORE . 'skinEngine' . PATH_SEP . 'base');
+                    rename(PATH_CORE . 'skinEngine' . PATH_SEP . 'tmp', PATH_CORE . 'skinEngine' . PATH_SEP . 'base');
+                    G::rm_dir(PATH_CORE . 'skinEngine' . PATH_SEP . 'tmp');
+
+                    break;
+                }
+            }
+        }
+    }
+
+    function copyFile($fromDir, $toDir, $chmod=0777)
+    {
+        $errors = array();
+        $messages = array();
+
+        if (!is_writable($toDir))  {
+            $errors[]='target '.$toDir.' is not writable';
+        }
+        if (!is_dir($toDir)) {
+            $errors[]='target '.$toDir.' is not a directory';
+        }
+        if (!is_dir($fromDir)) {
+            $errors[]='source '.$fromDir.' is not a directory';
+        }
+        if (!empty($errors)) {
+            return false;
+        }
+
+        $exceptions = array ('.','..');
+        $handle = opendir($fromDir);
+        while (false !== ($item=readdir($handle))) {
+            if (!in_array($item,$exceptions)) {
+                $from = str_replace('//','/',$fromDir.'/'.$item);
+                $to = str_replace('//','/',$toDir.'/'.$item);
+                if (is_file($from)) {
+                    if (@copy($from,$to)) {
+                        chmod($to,$chmod);
+                        touch($to,filemtime($from));
+                    }
+                }
+
+                if (is_dir($from)) {
+                    if (@mkdir($to)) {
+                        chmod($to,$chmod);
+                    }
+                    $this->copyFile($from,$to,$chmod);
+                }
+            }
+        }
+
+        closedir($handle);
+    }
+
+    public function setConfiguration()
+    {
+        $query = 'INSERT INTO CONFIGURATION (CFG_UID, CFG_VALUE) VALUES';
+        $query .= "('ENVIRONMENT_SETTINGS', " 
+               . '\'"a:9:{s:6:"format";s:32:"@userName (@firstName @lastName)";s:10:"dateFormat";s:6:"D M, Y";s:23:"startCaseHideProcessInf";b:0;s:19:"casesListDateFormat";s:13:"F j, Y, g:i a";s:18:"casesListRowNumber";i:20;s:20:"casesListRefreshTime";i:120;s:26:"login_enableForgotPassword";b:0;s:27:"login_enableVirtualKeyboard";b:0;s:21:"login_defaultLanguage";s:5:"pt-BR";}\')';
+        $this->mysqlQuery($query);
+    }
+
+    public function buildParternExtras($username, $password, $workspace, $lang)
+    {
+        ini_set('max_execution_time', '0');
+        ini_set('memory_limit', '256M');
+
+        $serv = 'http://'.$_SERVER['SERVER_NAME'];
+
+
+        // create session
+
+        $cookiefile = '/tmp/curl-session';
+
+        $fp = fopen($cookiefile, "w");
+        fclose($fp);
+
+        
+        $user = urlencode($username);
+        $pass = urlencode($password);
+        $lang = urlencode($lang);
+         
+        $ch = curl_init();
+         
+        //die("$serv/sys{$workspace}/{$lang}/classic/login/authentication");
+        // set URL and other appropriate options
+        curl_setopt($ch, CURLOPT_URL, "$serv/sys{$workspace}/{$lang}/classic/login/authentication");
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        curl_setopt($ch, CURLOPT_COOKIEFILE, $cookiefile);
+        curl_setopt($ch, CURLOPT_COOKIEJAR, $cookiefile);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, "form[USR_USERNAME]=$user&form[USR_PASSWORD]=$pass&form[USER_LANG]=$lang");
+        //curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+         
+        $output = curl_exec($ch);
+        curl_close($ch);
+
+        /** 
+         * Upload translation .po file
+         */
+
+        $ch = curl_init();
+
+        // File you want to upload/post
+        $postData['form[LANGUAGE_FILENAME]'] = "@".PATH_CORE."content/translations/processmaker.$lang.po";
+        //http://pmos/sysworkflow/en/classic/setup/skin_Ajax
+        curl_setopt($ch, CURLOPT_URL, "$serv/sys{$workspace}/{$lang}/classic/setup/languages_Import");
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        curl_setopt($ch, CURLOPT_VERBOSE, 0);
+        curl_setopt($ch, CURLOPT_COOKIEFILE, $cookiefile);
+        curl_setopt($ch, CURLOPT_COOKIEJAR, $cookiefile);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+        
+         
+        // grab URL and pass it to the browser
+        echo $output = curl_exec($ch);
+        curl_close($ch);
+
+        /** 
+         * Upload plugin file
+         */
+
+        $ch = curl_init();
+
+        // resolv the plugin name
+        $plugins = glob(PATH_CORE."plugins/*.tar");
+        if (count($plugins) > 0) {
+            $pluginName = $plugins[0];
+            var_dump($pluginName);
+            var_dump("$serv/sys{$workspace}/{$lang}/classic/setup/pluginsImportFile");
+            // File you want to upload/post
+            $postData['form[PLUGIN_FILENAME]'] = "@{$pluginName}";
+            //http://pmos/sysworkflow/en/classic/setup/skin_Ajax
+            curl_setopt($ch, CURLOPT_URL, "$serv/sys{$workspace}/{$lang}/classic/setup/pluginsImportFile");
+            //curl_setopt($ch, CURLOPT_HEADER, 0);
+            curl_setopt($ch, CURLOPT_VERBOSE, 0);
+            curl_setopt($ch, CURLOPT_COOKIEFILE, $cookiefile);
+            curl_setopt($ch, CURLOPT_COOKIEJAR, $cookiefile);
+            //curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false);
+            curl_setopt($ch, CURLOPT_POST, true);
+            //curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
+            //curl_setopt($ch, CURLOPT_TIMEOUT, 90);
+
+            // grab URL and pass it to the browser
+            echo $output = curl_exec($ch);
+            curl_close($ch);
+        } 
+
+
     }
 }
 
