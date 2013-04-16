@@ -13294,8 +13294,14 @@ msgstr "Check again"
 # TRANSLATION
 # LABEL/ID_PROCESSMAKER_REQUIREMENTS_DESCRIPTION
 #: LABEL/ID_PROCESSMAKER_REQUIREMENTS_DESCRIPTION
-msgid "If any of these items is not supported (marked as No) then please take actions to correct them.<br /><br />Failure to do so could lead to your ProcessMaker installation not functioning correctly!<br /><br />(*) OpenSSL is optional.<br /><br />(*) LDAP is optional."
-msgstr "If any of these items is not supported (marked as No) then please take actions to correct them.<br /><br />Failure to do so could lead to your ProcessMaker installation not functioning correctly!<br /><br />(*) OpenSSL is optional.<br /><br />(*) LDAP is optional."
+msgid "If any of these items is not supported (marked as No) then please take actions to correct them.<br /><br />"
+msgstr "If any of these items is not supported (marked as No) then please take actions to correct them.<br /><br />"
+
+# TRANSLATION
+# LABEL/ID_PROCESSMAKER_REQUIREMENTS_DESCRIPTION2
+#: LABEL/ID_PROCESSMAKER_REQUIREMENTS_DESCRIPTION2
+msgid "Failure to do so could lead to your ProcessMaker installation not functioning correctly!<br /><br />(*) OpenSSL is optional.<br /><br />(*) LDAP is optional."
+msgstr "Failure to do so could lead to your ProcessMaker installation not functioning correctly!<br /><br />(*) OpenSSL is optional.<br /><br />(*) LDAP is optional."
 
 # TRANSLATION
 # LABEL/ID_PROCESSMAKER_REQUIREMENTS_PHP

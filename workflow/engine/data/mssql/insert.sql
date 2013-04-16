@@ -5851,7 +5851,9 @@ SELECT 'LABEL','ID_CHECKING','en','Checking...','2012-11-30'
   UNION ALL
 SELECT 'LABEL','ID_CHECK_AGAIN','en','Check again','2012-11-30' 
   UNION ALL
-SELECT 'LABEL','ID_PROCESSMAKER_REQUIREMENTS_DESCRIPTION','en','If any of these items is not supported (marked as No) then please take actions to correct them.<br /><br />Failure to do so could lead to your ProcessMaker installation not functioning correctly!<br /><br />(*) OpenSSL is optional.<br /><br />(*) LDAP is optional.','2012-11-30' 
+SELECT 'LABEL','ID_PROCESSMAKER_REQUIREMENTS_DESCRIPTION','en','If any of these items is not supported (marked as No) then please take actions to correct them.<br /><br />','2012-11-30' 
+  UNION ALL
+SELECT 'LABEL','ID_PROCESSMAKER_REQUIREMENTS_DESCRIPTION2','en','Failure to do so could lead to your ProcessMaker installation not functioning correctly!<br /><br />(*) OpenSSL is optional.<br /><br />(*) LDAP is optional.','2012-11-30' 
   UNION ALL
 SELECT 'LABEL','ID_PROCESSMAKER_REQUIREMENTS_PHP','en','PHP Version >= 5.2.10','2012-11-30' 
   UNION ALL
