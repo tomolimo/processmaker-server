@@ -1,7 +1,7 @@
 <html>
 <head>
     <script type="text/javascript" src="{siteUrl}/jscore/labels/{sysLang}.js"></script>
-    <script type="text/javascript" src="{siteUrl}/js/maborak/core/maborak.js{BROWSER_CACHE_FILES_UID}"></script>
+    <script type="text/javascript" src="{siteUrl}{URL_MABORAK_JS}"></script>
     <script type="text/javascript" src="{siteUrl}/js/jscalendar/lang/calendar-{sysLang}.js"></script>
     <script type="text/javascript" src="{siteUrl}/jsform/gulliver/dynaforms_Options.js"></script>
 

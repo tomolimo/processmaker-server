@@ -140,7 +140,7 @@ try {
 
         $browserCacheFilesUid = G::browserCacheFilesGetUid();
 
-        $template->assign("BROWSER_CACHE_FILES_UID", ($browserCacheFilesUid != null)? "?c=" . $browserCacheFilesUid : null);
+        $template->assign("URL_MABORAK_JS", G::browserCacheFilesUrl("/js/maborak/core/maborak.js"));
         $template->assign("siteUrl", $http . $_SERVER["HTTP_HOST"]);
         $template->assign("sysSys", SYS_SYS);
         $template->assign("sysLang", SYS_LANG);
