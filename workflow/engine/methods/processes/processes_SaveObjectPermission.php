@@ -67,9 +67,6 @@ switch ($sValue['OP_OBJ_TYPE']) {
     case 'OUTPUT':
         $sObjectUID = $sValue['OUTPUTS'];
         break;
-    case 'MSGS_HISTORY':
-        $sObjectUID = $sValue['MSGS_HISTORY'];
-        break;
 }
 require_once 'classes/model/ObjectPermission.php';
 $oOP = new ObjectPermission();

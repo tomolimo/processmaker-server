@@ -3622,7 +3622,7 @@ class processMap
                     $sObject = 'N/A';
                     break;
                 case 'MSGS_HISTORY':
-                    $sObjectType = G::LoadTranslation('ID_ALL');
+                    $sObjectType = G::LoadTranslation('MSGS_HISTORY');
                     $sObject = G::LoadTranslation('ID_ALL');
                     break;
                 default:
