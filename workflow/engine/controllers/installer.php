@@ -839,20 +839,19 @@ class Installer extends Controller
             // getting configuration from env.ini
             $sysConf = System::getSystemConfiguration( $envFile );
 
-            try {
-                // update the main index file
-                $indexFileUpdated = System::updateIndexFile( array ('lang' => 'en','skin' => $updatedConf['default_skin']
-                ) );
-            } catch (Exception $e) {
-                $info->result = false;
-                $info->message = G::LoadTranslation('ID_PROCESSMAKER_WRITE_CONFIG_INDEX', SYS_LANG, Array(PATH_HTML . "index.html."));
-                $info->message .= G::LoadTranslation('ID_PROCESSMAKER_UI_NOT_INSTALL');
-                $this->installLog( G::LoadTranslation('ID_INSTALL_BUT_ERROR', SYS_LANG, Array('index.html')));
-                return $info;
-            }
-
             if (defined('PARTNER_FLAG') || isset($_REQUEST['PARTNER_FLAG'])) {
                 $this->buildParternExtras($adminUsername, $adminPassword, $_REQUEST['workspace'], SYS_LANG);
+            } else {
+                try {
+                    // update the main index file
+                    $indexFileUpdated = System::updateIndexFile(array('lang' => 'en','skin' => $updatedConf['default_skin']));
+                } catch (Exception $e) {
+                    $info->result = false;
+                    $info->message = G::LoadTranslation('ID_PROCESSMAKER_WRITE_CONFIG_INDEX', SYS_LANG, Array(PATH_HTML . "index.html."));
+                    $info->message .= G::LoadTranslation('ID_PROCESSMAKER_UI_NOT_INSTALL');
+                    $this->installLog( G::LoadTranslation('ID_INSTALL_BUT_ERROR', SYS_LANG, Array('index.html')));
+                    return $info;
+                }
             }
 
             $this->installLog( G::LoadTranslation('ID_INDEX_FILE_UPDATED', SYS_LANG, Array($indexFileUpdated, $sysConf['default_lang'],$sysConf['default_skin'])));
@@ -1406,16 +1405,16 @@ class Installer extends Controller
             curl_setopt($ch, CURLOPT_POST, true);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
-            curl_setopt($ch, CURLOPT_TIMEOUT, 90);        
+            curl_setopt($ch, CURLOPT_TIMEOUT, 90);
 
             $output = curl_exec($ch);
             curl_close($ch);
         }
 
-        /** 
+        /**
          * Upload plugin file
          */
-        
+
         $ch = curl_init();
         $postData = array();
         // resolv the plugin name

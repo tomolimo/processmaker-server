@@ -1,13 +1,4 @@
 <?php
-
-include_once PATH_CONTROLLERS."installer.php";
-
-$ins = new Installer();
-$ins->buildParternExtras('admin', 'sample', 'workflow', 'pt-BR');
-
-
-die;
-
 ini_set( "soap.wsdl_cache_enabled", "0" ); // disabling WSDL cache
 
 
