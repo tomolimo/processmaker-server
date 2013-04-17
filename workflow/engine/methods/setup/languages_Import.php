@@ -99,7 +99,7 @@ try {
 
     $dir = PATH_CORE . 'content' . PATH_SEP . 'translations' . PATH_SEP;
     if (! is_writable( $dir )) {
-        throw new Exception( G::LoadTranslation( 'ID_CONTENT_FOLDER_PERMISSIONS' ) );
+        throw new Exception( G::LoadTranslation( 'ID_TRANSLATIONS_FOLDER_PERMISSIONS' ) );
     }
     G::uploadFile($languageFile, $dir, $languageFilename, 0777);
 
