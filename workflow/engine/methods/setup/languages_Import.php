@@ -96,6 +96,12 @@ try {
     $configuration->aConfig = Array ('headers' => $importResults->headers,'language' => $importResults->lang,'import-date' => date( 'Y-m-d H:i:s' ),'user' => '','version' => '1.0'
     );
     $configuration->saveConfig( 'LANGUAGE_META', $importResults->lang );
+    
+    $dir = PATH_CORE . 'content' . PATH_SEP . 'translations' . PATH_SEP;
+    if (!is_writable( $dir )) {
+        throw new Exception( G::LoadTranslation( 'ID_TRANSLATIONS_FOLDER_PERMISSIONS' ) );
+    }
+    G::uploadFile($languageFile, $dir, $languageFilename, 0777);
 
     ini_set( 'max_execution_time', $sMaxExecutionTime );
 
