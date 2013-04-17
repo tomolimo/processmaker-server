@@ -838,7 +838,7 @@ Ext.onReady ( function() {
   var comboProcess = new Ext.form.ComboBox({
     width         : 180,
     boxMaxWidth   : 200,
-    editable      : true,
+    editable      : false,
     displayField  : 'APP_PRO_TITLE',
     valueField    : 'PRO_UID',
     forceSelection: false,
@@ -914,7 +914,7 @@ Ext.onReady ( function() {
     var comboCategory = new Ext.form.ComboBox({
         width           : 180,
         boxMaxWidth     : 200,
-        editable        : true,
+        editable        : false,
         displayField    : 'CATEGORY_NAME',
         valueField      : 'CATEGORY_UID',
         forceSelection  : false,
@@ -1081,7 +1081,7 @@ Ext.onReady ( function() {
       triggerAction : 'all',
       emptyText : _('ID_ALL_USERS'),
       selectOnFocus : true,
-      editable : true,
+      editable : false,
       width: 180,
       allowBlank : true,
       autocomplete: true,
@@ -1472,6 +1472,7 @@ Ext.onReady ( function() {
     id:'dateFrom',
     format: 'Y-m-d',
     width: 120,
+    editable: false,
     value: ''
   });
 
@@ -1479,6 +1480,7 @@ Ext.onReady ( function() {
     id:'dateTo',
     format: 'Y-m-d',
     width: 120,
+    editable: false,
     value: ''
   });
 
