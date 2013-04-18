@@ -526,12 +526,17 @@ class Configurations // extends Configuration
                         $newCreation .= $maskTime[$creationDateMask[$i]];
                     }
                 }
-                if (substr(SYS_LANG,0,2) == 'pt') {
-                    setlocale(LC_TIME,"pt_BR");
-                } else if (substr(SYS_LANG,0,2) == 'es') {
-                    setlocale(LC_TIME,"es_ES");
+
+                $langLocate = SYS_LANG;
+                if (SYS_LANG == 'es') {
+                    $langLocate = 'es_ES';
+                } else if (strlen(SYS_LANG) > 2) {
+                    $langLocate = str_replace('-', '_', SYS_LANG);
+                } else {
+                    $langLocate = 'en_US';
                 }
 
+                setlocale(LC_TIME, $langLocate);
                 $dateTime = utf8_encode(strftime($newCreation, mktime(0, 0, 0, $m, $d, $y)));
             }
         }
