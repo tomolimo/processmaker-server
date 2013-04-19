@@ -159,7 +159,7 @@ Ext.onReady(function(){
   }
 
   if (navigator.userAgent.toLowerCase().indexOf("chrome") != -1){
-    if (_columns.length > 6 + 1) {
+    if (_columns.length > 7) {
         _columns.push({header:"", dataIndex:"", width: 30, menuDisabled: true, hideable: false});
     }
   }
