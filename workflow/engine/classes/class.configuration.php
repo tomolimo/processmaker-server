@@ -532,7 +532,7 @@ class Configurations // extends Configuration
                 }
 
                 $langLocate = SYS_LANG;
-                if (G::toLower(PHP_OS) == 'linux') {
+                if (G::toLower(PHP_OS) == 'linux' || G::toLower(PHP_OS) == 'darwin') {
                     if (SYS_LANG == 'es') {
                         $langLocate = 'es_ES';
                     } else if (strlen(SYS_LANG) > 2) {
@@ -551,7 +551,7 @@ class Configurations // extends Configuration
                             $langLocate = 'PTB';
                             break;
                         case 'en':
-                        case 'en':
+                        case 'en_US':
                         default:
                             $langLocate = 'EST';
                             break;
