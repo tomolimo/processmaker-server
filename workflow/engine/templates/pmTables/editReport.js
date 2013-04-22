@@ -910,8 +910,7 @@ function createReportTable()
 {
   var tableName        = Ext.getCmp('REP_TAB_NAME').getValue().trim();
   var tableDescription = Ext.getCmp('REP_TAB_DSC').getValue().trim();
-  var process          = Ext.getCmp('PROCESS').getValue().trim();
-
+  
   //validate table name
   if(Ext.getCmp('REP_TAB_NAME').getValue().trim() == '') {
     Ext.getCmp('REP_TAB_NAME').focus();
