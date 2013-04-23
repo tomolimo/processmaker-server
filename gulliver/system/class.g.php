@@ -4902,7 +4902,7 @@ class G
     {
         $arrayLibrary = array();
 
-        $library = json_decode(file_get_contents(PATH_HOME . "engine" . PATH_SEP . "bin" . PATH_SEP . "tasks" . PATH_SEP . "libraries.json"));
+        $library = G::json_decode(file_get_contents(PATH_HOME . "engine" . PATH_SEP . "bin" . PATH_SEP . "tasks" . PATH_SEP . "libraries.json"));
 
         foreach ($library as $index => $value) {
             $lib = $value;
