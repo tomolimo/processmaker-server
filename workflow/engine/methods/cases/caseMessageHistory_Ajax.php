@@ -56,23 +56,30 @@ if ($actionAjax == 'messageHistoryGridList_JXP') {
     $respBlock = $oCase->getAllObjectsFrom( $proUid, $appUid, $tasUid, $usrUid, 'BLOCK' );
     $respResend = $oCase->getAllObjectsFrom( $proUid, $appUid, $tasUid, $usrUid, 'RESEND' );
 
-    if ($respView['MSGS_HISTORY'] != "" ) {
-        $respMess = $respView['MSGS_HISTORY'];
+    $delIndex = array();
+    $respMess = "";
+    if (count($respView['MSGS_HISTORY'])>0) {
+        $respMess = $respView['MSGS_HISTORY']['PERMISSION'];
+        $delIndex = $respView['MSGS_HISTORY']['DEL_INDEX'];
     } else {
-        if ( $respBlock['MSGS_HISTORY'] != "" ) {
-            $respMess = $respBlock['MSGS_HISTORY'];
+        if (count($respBlock['MSGS_HISTORY'])>0) {
+            $respMess = $respBlock['MSGS_HISTORY']['PERMISSION'];
+            $delIndex = $respView['MSGS_HISTORY']['DEL_INDEX'];
         } else {
-            if ($respResend['MSGS_HISTORY'] != "") {
-                $respMess = $respResend['MSGS_HISTORY'];
-            } else {
-                $respMess = "";
+            if (count($respResend['MSGS_HISTORY'])>0) {
+                $respMess = $respResend['MSGS_HISTORY']['PERMISSION'];
+                $delIndex = $respView['MSGS_HISTORY']['DEL_INDEX'];
             }
         }
     }
 
     foreach ($appMessageArray as $index => $value) {
-        if ($appMessageArray[$index]['APP_MSG_SHOW_MESSAGE'] == 1  && $respMess != 'BLOCK' ) {
+        if (($appMessageArray[$index]['APP_MSG_SHOW_MESSAGE'] == 1  && $respMess != 'BLOCK' ) && 
+            ($appMessageArray[$index]['DEL_INDEX'] == 0 || in_array($appMessageArray[$index]['DEL_INDEX'], $delIndex ))) {
             $appMessageArray[$index]['ID_MESSAGE'] = $appMessageArray[$index]['APP_UID'] . '_' . $appMessageArray[$index]['APP_MSG_UID'];
+            if ($respMess == 'BLOCK' || $respMess == '') {
+                $appMessageArray[$index]['APP_MSG_BODY'] = "";
+            }
             $aProcesses[] = array_merge($appMessageArray[$index], array('MSGS_HISTORY' => $respMess));
         }
     }

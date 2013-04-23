@@ -5090,7 +5090,7 @@ class Cases
             "INPUT" => Array(),
             "OUTPUT" => Array(),
             "CASES_NOTES" => 0,
-            "MSGS_HISTORY" => ""
+            "MSGS_HISTORY" => Array()
         );
 
         //permissions per user
@@ -5349,7 +5349,34 @@ class Cases
                         $RESULT['CASES_NOTES'] = 1;
                         break;
                     case 'MSGS_HISTORY':
-                        $RESULT['MSGS_HISTORY'] = $ACTION;
+                        // Permission
+                        $RESULT['MSGS_HISTORY'] = array('PERMISSION' => $ACTION);
+                        $delIndex = array();
+                        if ($TASK_SOURCE != "" && (int)$TASK_SOURCE != 0) {
+                            $oCriteria = new Criteria('workflow');
+
+                            $oCriteria->add(AppDelegationPeer::APP_UID, $APP_UID);
+                            $oCriteria->add(AppDelegationPeer::PRO_UID, $PRO_UID);
+                            if ($aCase['APP_STATUS'] != 'COMPLETED') {
+                                if ($TASK_SOURCE != '' && $TASK_SOURCE != "0" && $TASK_SOURCE != 0) {
+                                    $oCriteria->add(AppDelegationPeer::TAS_UID, $TASK_SOURCE);
+                                }
+                            }
+                            $oCriteria->add(AppDelegationPeer::USR_UID, $USER);
+
+                            $oDataset = AppDelegationPeer::doSelectRS($oCriteria);
+                            $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+                            $oDataset->next();
+
+                            while ($aRow = $oDataset->getRow()) {
+                                if ($TASK_SOURCE == $aRow['TAS_UID']) {
+                                    $delIndex[] = $aRow['DEL_INDEX'];  
+                                }
+                                $oDataset->next();
+                            }
+
+                            $RESULT['MSGS_HISTORY'] = array_merge(array('DEL_INDEX' => $delIndex), $RESULT['MSGS_HISTORY']);
+                        } 
                         break;
 
                 }
