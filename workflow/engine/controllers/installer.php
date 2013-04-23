@@ -337,7 +337,9 @@ class Installer extends Controller
         if (substr( $pathShared, - 1 ) != '/') {
             $pathShared .= '/';
         }
-        $logFile = $pathShared . 'log/install.log';
+        $pathSharedLog =  $pathShared . 'log/';
+        G::verifyPath($pathSharedLog, true);
+        $logFile = $pathSharedLog . 'install.log';
 
         if (! is_file( $logFile )) {
             G::mk_dir( dirname( $pathShared ) );
@@ -839,8 +841,9 @@ class Installer extends Controller
             $updatedConf['default_skin'] = $skinUri;
             $info->uri =  PATH_SEP . 'sys' . $_REQUEST['workspace'] . PATH_SEP . $langUri . PATH_SEP . $skinUri . PATH_SEP . 'login' . PATH_SEP . 'login';
 
+            $indexFileUpdated = true;
             if (defined('PARTNER_FLAG') || isset($_REQUEST['PARTNER_FLAG'])) {
-                $this->buildParternExtras($adminUsername, $adminPassword, $_REQUEST['workspace'], SYS_LANG);
+                $this->buildParternExtras($adminUsername, $adminPassword, $_REQUEST['workspace'], $langUri);
             } else {
                 try {
                     G::update_php_ini( $envFile, $updatedConf );
@@ -1335,8 +1338,14 @@ EOL;
         ini_set('max_execution_time', '0');
         ini_set('memory_limit', '256M');
 
-        $serv = 'http://'.$_SERVER['SERVER_NAME'];
-
+        $serv = 'http://';
+        if (isset($_SERVER['HTTPS']) && trim($_SERVER['HTTPS']) != '') {
+            $serv = 'https://';
+        }
+        $serv .= $_SERVER['SERVER_NAME'];
+        if (isset($_SERVER['SERVER_PORT']) && trim($_SERVER['SERVER_PORT']) != '') {
+            $serv .= ':' . $_SERVER['SERVER_PORT'];
+        }
 
         // create session
         $cookiefile =  sys_get_temp_dir() . PATH_SEP . 'curl-session';
@@ -1374,7 +1383,6 @@ EOL;
 
         // File to upload/post
         $postData['form[LANGUAGE_FILENAME]'] = "@".PATH_CORE."content/translations/processmaker.$lang.po";
-
         curl_setopt($ch, CURLOPT_URL, "$serv/sys{$workspace}/{$lang}/classic/setup/languages_Import");
         curl_setopt($ch, CURLOPT_HEADER, 0);
         curl_setopt($ch, CURLOPT_VERBOSE, 0);
@@ -1445,7 +1453,6 @@ EOL;
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
             curl_setopt($ch, CURLOPT_TIMEOUT, 90);
-
 
             $output = curl_exec($ch);
             curl_close($ch);
