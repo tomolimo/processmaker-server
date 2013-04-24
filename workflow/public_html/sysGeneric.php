@@ -27,6 +27,50 @@
  * this file is used initialize main variables, redirect and dispatch all requests
  */
 
+function transactionLog($transactionName){
+    if (extension_loaded('newrelic')) {
+        $baseName="ProcessMaker";
+        
+        //Application base name
+        newrelic_set_appname ($baseName);
+        
+        
+        //Custom parameters
+        if(defined("SYS_SYS")){
+            newrelic_add_custom_parameter ("workspace", SYS_SYS);
+        }
+        if(defined("SYS_LANG")){
+            newrelic_add_custom_parameter ("lang", SYS_LANG);
+        }
+        if(defined("SYS_SKIN")){
+            newrelic_add_custom_parameter ("skin", SYS_SKIN);
+        }
+        if(defined("SYS_COLLECTION")){
+            newrelic_add_custom_parameter ("collection", SYS_COLLECTION);
+        }
+        if(defined("SYS_TARGET")){
+            newrelic_add_custom_parameter ("target", SYS_TARGET);
+        }
+        if(defined("SYS_URI")){
+            newrelic_add_custom_parameter ("uri", SYS_URI);
+        }
+        if(defined("PATH_CORE")){
+            newrelic_add_custom_parameter ("path_core", PATH_CORE);
+        }
+        if(defined("PATH_DATA_SITE")){
+            newrelic_add_custom_parameter ("path_site", PATH_DATA_SITE);
+        }
+        
+        //Show correct transaction name
+        if(defined("SYS_SYS")){
+            newrelic_set_appname ("PM-".SYS_SYS.";$baseName");            
+        }
+        if(defined("PATH_CORE")){
+            $transactionName=str_replace(PATH_CORE,"",$transactionName);
+        }
+        newrelic_name_transaction ($transactionName);
+    }
+}
 // Defining the PATH_SEP constant, he we are defining if the the path separator symbol will be '\\' or '/'
 define( 'PATH_SEP', '/' );
 
@@ -321,6 +365,9 @@ if (Bootstrap::virtualURI( $_SERVER['REQUEST_URI'], $virtualURITable, $realPath 
         $pluginFilename = PATH_PLUGINS . $pluginFolder . PATH_SEP . 'public_html' . PATH_SEP . $filePath;
 
         if (file_exists( $pluginFilename )) {
+            //NewRelic Snippet - By JHL
+            transactionLog($pluginFilename);
+
             Bootstrap::streamFile( $pluginFilename );
         }
         die();
@@ -343,6 +390,9 @@ if (Bootstrap::virtualURI( $_SERVER['REQUEST_URI'], $virtualURITable, $realPath 
         $fileToBeStreamed = str_replace( "/skin/", PATH_CUSTOM_SKINS, $_SERVER['REQUEST_URI'] );
 
         if (file_exists( $fileToBeStreamed )) {
+            //NewRelic Snippet - By JHL
+            transactionLog($fileToBeStreamed);
+
             Bootstrap::streamFile( $fileToBeStreamed );
         }
         die();
@@ -351,6 +401,8 @@ if (Bootstrap::virtualURI( $_SERVER['REQUEST_URI'], $virtualURITable, $realPath 
         case 'jsMethod':
             Bootstrap::parseURI( getenv( "REQUEST_URI" ) );
             $filename = PATH_METHODS . SYS_COLLECTION . '/' . SYS_TARGET . '.js';
+            //NewRelic Snippet - By JHL
+            transactionLog($filename);
             Bootstrap::streamFile( $filename );
             die();
             break;
@@ -366,6 +418,9 @@ if (Bootstrap::virtualURI( $_SERVER['REQUEST_URI'], $virtualURITable, $realPath 
             } else {
                 $realPath = explode( '?', $realPath );
                 $realPath[0] .= strpos( basename( $realPath[0] ), '.' ) === false ? '.php' : '';
+                //NewRelic Snippet - By JHL
+                transactionLog($realPath[0]);
+
                 Bootstrap::streamFile( $realPath[0] );
                 die();
             }
@@ -447,6 +502,8 @@ $oHeadPublisher = & headPublisher::getSingleton();
 if (! defined( 'PATH_DATA' ) || ! file_exists( PATH_DATA )) {
     // new installer, extjs based
     define( 'PATH_DATA', PATH_C );
+    //NewRelic Snippet - By JHL
+    transactionLog(PATH_CONTROLLERS.'installer.php');
     require_once (PATH_CONTROLLERS . 'installer.php');
     $controller = 'Installer';
 
@@ -464,6 +521,9 @@ if (! defined( 'PATH_DATA' ) || ! file_exists( PATH_DATA )) {
     ) )) {
         $installer = new $controller();
         $installer->setHttpRequestData( $_REQUEST );
+        //NewRelic Snippet - By JHL
+        transactionLog($controllerAction);
+
         $installer->call( $controllerAction );
     } else {
         $_SESSION['phpFileNotFound'] = $_SERVER['REQUEST_URI'];
@@ -508,6 +568,8 @@ if (defined( 'SYS_TEMP' ) && SYS_TEMP != '') {
 } else { //when we are in global pages, outside any valid workspace
     if (SYS_TARGET === 'newSite') {
         $phpFile = G::ExpandPath( 'methods' ) . SYS_COLLECTION . "/" . SYS_TARGET . '.php';
+        //NewRelic Snippet - By JHL
+        transactionLog($phpFile);
         require_once ($phpFile);
         die();
     } else {
@@ -700,6 +762,8 @@ if (substr( SYS_COLLECTION, 0, 8 ) === 'gulliver') {
         $phpFile = $aAux[0];
 
         if ($extension != 'php') {
+            //NewRelic Snippet - By JHL
+            transactionLog($phpFile);
             Bootstrap::streamFile( $phpFile );
             die();
         }
@@ -857,10 +921,16 @@ if (! defined( 'EXECUTE_BY_CRON' )) {
     if ($isControllerCall) { //Instance the Controller object and call the request method
         $controller = new $controllerClass();
         $controller->setHttpRequestData( $_REQUEST );
+        //NewRelic Snippet - By JHL
+        transactionLog($controllerAction);
         $controller->call( $controllerAction );
     } elseif ($isRestRequest) {
+        //NewRelic Snippet - By JHL
+        transactionLog($restConfig.$restApiClassPath.SYS_TARGET);
         Bootstrap::dispatchRestService( SYS_TARGET, $restConfig, $restApiClassPath );
     } else {
+        //NewRelic Snippet - By JHL
+        transactionLog($phpFile);
         require_once $phpFile;
     }
 
