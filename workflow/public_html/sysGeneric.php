@@ -37,24 +37,38 @@ function transactionLog($transactionName){
         
         
         //Custom parameters
-        if(defined("SYS_SYS")) newrelic_add_custom_parameter ("workspace", SYS_SYS);
-        if(defined("SYS_LANG")) newrelic_add_custom_parameter ("lang", SYS_LANG);
-        if(defined("SYS_SKIN")) newrelic_add_custom_parameter ("skin", SYS_SKIN);
-        if(defined("SYS_COLLECTION")) newrelic_add_custom_parameter ("collection", SYS_COLLECTION);
-        if(defined("SYS_TARGET")) newrelic_add_custom_parameter ("target", SYS_TARGET);
-        if(defined("SYS_URI")) newrelic_add_custom_parameter ("uri", SYS_URI);
-        if(defined("PATH_CORE")) newrelic_add_custom_parameter ("path_core", PATH_CORE);
-        if(defined("PATH_DATA_SITE")) newrelic_add_custom_parameter ("path_site", PATH_DATA_SITE);
+        if(defined("SYS_SYS")){
+            newrelic_add_custom_parameter ("workspace", SYS_SYS);
+        }
+        if(defined("SYS_LANG")){
+            newrelic_add_custom_parameter ("lang", SYS_LANG);
+        }
+        if(defined("SYS_SKIN")){
+            newrelic_add_custom_parameter ("skin", SYS_SKIN);
+        }
+        if(defined("SYS_COLLECTION")){
+            newrelic_add_custom_parameter ("collection", SYS_COLLECTION);
+        }
+        if(defined("SYS_TARGET")){
+            newrelic_add_custom_parameter ("target", SYS_TARGET);
+        }
+        if(defined("SYS_URI")){
+            newrelic_add_custom_parameter ("uri", SYS_URI);
+        }
+        if(defined("PATH_CORE")){
+            newrelic_add_custom_parameter ("path_core", PATH_CORE);
+        }
+        if(defined("PATH_DATA_SITE")){
+            newrelic_add_custom_parameter ("path_site", PATH_DATA_SITE);
+        }
         
         //Show correct transaction name
         if(defined("SYS_SYS")){
-            newrelic_set_appname ("PM-".SYS_SYS.";$baseName");
-            
+            newrelic_set_appname ("PM-".SYS_SYS.";$baseName");            
         }
         if(defined("PATH_CORE")){
             $transactionName=str_replace(PATH_CORE,"",$transactionName);
         }
-        
         newrelic_name_transaction ($transactionName);
     }
 }
