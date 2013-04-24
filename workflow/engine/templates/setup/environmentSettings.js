@@ -23,8 +23,7 @@ Ext.onReady(function() {
     items: [
       {xtype: 'label', fieldLabel: _('IS_USER_NAME_DISPLAY_FORMAT'), id: 'lblFullName', width: 400},
       {xtype: 'label', fieldLabel: _('ID_GLOBAL_DATE_FORMAT'), id: 'lblDateFormat', width: 400},
-      {xtype: 'label', fieldLabel: _('ID_CASE_LIST') +': '+_('ID_CASES_DATE_MASK'), id: 'lblCasesDateFormat', width: 400}
-      //,
+      {xtype: 'label', fieldLabel: _('ID_CASE_LIST') +': '+_('ID_CASES_DATE_MASK'), id: 'lblCasesDateFormat', width: 400}//,
       //{xtype: "label", fieldLabel: _("ID_CASE_LIST") + ": " +_("ID_CASES_ROW_NUMBER"), id: "lblCasesRowsList", width: 400},
       //{xtype: "label", fieldLabel: _("ID_CASE_LIST") + ": " + _("ID_REFRESH_TIME_SECONDS"), id: "lblCasesRefreshTime", width: 400}
     ]
