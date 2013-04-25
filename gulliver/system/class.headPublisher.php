@@ -226,7 +226,7 @@ class headPublisher
         }
 
         if (!in_array($this->translationsFile, $this->scriptFiles)) {
-            $head .= "<script type='text/javascript' src='" . $this->translationsFile . "'></script>\n";
+            $head = $head . "<script type=\"text/javascript\" src=\"" . G::browserCacheFilesUrl($this->translationsFile) . "\"></script>\n";
         }
 
         $head .= "<script type='text/javascript'>\n";
@@ -321,7 +321,7 @@ class headPublisher
         $head .= $this->getExtJsLibraries();
 
         // $head .= "  <script type='text/javascript' src='/js/ext/draw2d.js'></script>\n";
-        // $head .= "  <script type='text/javascript' src='/js/ext/translation." . SYS_LANG . ".js'></script>\n";
+        // $head .= "  <script type=\"text/javascript\" src=\"" . G::browserCacheFilesUrl("/js/ext/translation." . SYS_LANG . ".js") . "\"></script>\n";
 
         if (!isset($this->extJsSkin) || $this->extJsSkin == '') {
             $this->extJsSkin = 'xtheme-gray';
@@ -341,7 +341,7 @@ class headPublisher
     public function getExtJsStylesheets($skinName)
     {
         $script = "  <link rel='stylesheet' type='text/css' href='/css/$skinName.css' />\n";
-        //$script .= "  <script type='text/javascript' src='/js/ext/translation." . SYS_LANG . ".js'></script>\n";
+        //$script .= "  <script type=\"text/javascript\" src=\"" . G::browserCacheFilesUrl("/js/ext/translation." . SYS_LANG . ".js") . "\"></script>\n";
         /*
           $script .= "  <link rel='stylesheet' type='text/css' href='/skins/ext/ext-all-notheme.css' />\n";
           $script .= "  <link rel='stylesheet' type='text/css' href='/skins/ext/" . $this->extJsSkin.".css' />\n";
@@ -413,7 +413,7 @@ class headPublisher
             }
         }
         if (!in_array($this->translationsFile, $this->extJsLibrary)) {
-            $script .= "  <script type='text/javascript' src='" . $this->translationsFile . "'></script>\n";
+            $script = $script . "  <script type=\"text/javascript\" src=\"" . G::browserCacheFilesUrl($this->translationsFile) . "\"></script>\n";
         }
         return $script;
     }

@@ -4899,6 +4899,28 @@ class G
     {
         $arrayLibrary = array();
 
+        //Translations /js/ext/translation.en.js
+        $arrayLibrary["translation"] = ""; //Not use null
+
+        //Translation environment /jscore/labels/en.js
+        $translationEnvFilePath = PATH_DATA . "META-INF" . PATH_SEP . "translations.env";
+
+        if (file_exists($translationEnvFilePath)) {
+            $arrayData = unserialize(file_get_contents($translationEnvFilePath));
+            $path = PATH_CORE . "js" . PATH_SEP . "labels" . PATH_SEP;
+
+            foreach ($arrayData as $index1 => $value1) {
+                foreach ($value1 as $index2 => $value2) {
+                    $record = $value2;
+
+                    if (file_exists($path . $record["LOCALE"] . ".js")) {
+                        $arrayLibrary[$record["LOCALE"]] = $path;
+                    }
+                }
+            }
+        }
+
+        //Libraries
         $library = G::json_decode(file_get_contents(PATH_HOME . "engine" . PATH_SEP . "bin" . PATH_SEP . "tasks" . PATH_SEP . "libraries.json"));
 
         foreach ($library as $index => $value) {
@@ -4933,13 +4955,17 @@ class G
             $name = $index;
             $path = $value;
 
-            foreach (glob($path . $name . "*") as $file) {
-                if (preg_match("/^\.\w{32}\.js$/i", str_replace($path . $name, null, $file))) {
-                    @unlink($file); //Delete old file
+            if (!empty($path)) {
+                foreach (glob($path . $name . "*") as $file) {
+                    if (preg_match("/^\.\w{32}\.js$/i", str_replace($path . $name, null, $file))) {
+                        @unlink($file); //Delete old file
+                    }
+                }
+
+                if (file_exists($path . $name . ".js")) {
+                    @copy($path . $name . ".js", $path . $name . "." . $uid . ".js"); //Create new file
                 }
             }
-
-            @copy($path . $name . ".js", $path . $name . "." . $uid . ".js"); //Create new file
         }
     }
 
@@ -4959,15 +4985,28 @@ class G
             $n = count($arrayAux);
 
             if ($n > 0 && !empty($arrayAux[$n - 1])) {
-                $name = $arrayAux[$n - 1];
+                $arrayAux = explode("?", $arrayAux[$n - 1]);
+                $name = $arrayAux[0];
 
                 if (preg_match("/^(.*)\.js$/i", $name, $arrayMatch)) {
+                    $index = $arrayMatch[1];
+                    $index = (preg_match("/^translation\..*$/", $index))? "translation" : $index;
+
                     $arrayLibrary = G::browserCacheFilesGetLibraryJs();
 
-                    if (isset($arrayLibrary[$arrayMatch[1]])) {
-                        $path = $arrayLibrary[$arrayMatch[1]];
+                    if (isset($arrayLibrary[$index])) {
+                        $path = $arrayLibrary[$index];
+                        $sw = 0;
 
-                        if (file_exists($path . $arrayMatch[1] . "." . $browserCacheFilesUid . ".js")) {
+                        if (!empty($path)) {
+                            if (file_exists($path . $arrayMatch[1] . "." . $browserCacheFilesUid . ".js")) {
+                                $sw = 1;
+                            }
+                        } else {
+                            $sw = 1;
+                        }
+
+                        if ($sw == 1) {
                             $url = str_replace($name, $arrayMatch[1] . "." . $browserCacheFilesUid . ".js", $url);
                         }
                     }
