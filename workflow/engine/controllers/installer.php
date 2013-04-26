@@ -1090,8 +1090,8 @@ class Installer extends Controller
 
         if (file_exists($pathShared . 'partner.info')) {
             $dataInfo = parse_ini_file($pathShared . 'partner.info');
-            if (isset($dataInfo['vendor'])) {
-                $systemName = trim($dataInfo['vendor']);
+            if (isset($dataInfo['system_name'])) {
+                $systemName = trim($dataInfo['system_name']);
             }
         }
         return $systemName;
