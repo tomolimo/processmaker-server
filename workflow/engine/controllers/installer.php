@@ -15,7 +15,6 @@ class Installer extends Controller
     public $path_plugins;
     public $path_xmlforms;
     public $path_shared;
-    public $systemName;
     public $path_sep;
 
     public $link; #resource for database connection
@@ -368,8 +367,7 @@ class Installer extends Controller
     {
         $pathSharedPartner = trim( $_REQUEST['pathShared'] );
         if (file_exists($pathSharedPartner.'partner.info')) {
-        	
-            $_REQUEST['PARTNER_FLAG'] = true;    
+            $_REQUEST["PARTNER_FLAG"] = true;
         }
         $this->setResponseType( 'json' );
         if ($_REQUEST['db_engine'] == 'mysql') {
@@ -384,13 +382,13 @@ class Installer extends Controller
     public function forceTogenerateTranslationsFiles ($url)
     {
         $ch = curl_init();
-        curl_setopt( $ch, CURLOPT_URL, (isset( $_SERVER['HTTPS'] ) ? ($_SERVER['HTTPS'] != '' ? 'https://' : 'http://') : 'http://') . $_SERVER['HTTP_HOST'] . '/js/ext/translation.en.js?r=' . rand( 1, 10000 ) );
-        curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
-        curl_setopt( $ch, CURLOPT_FRESH_CONNECT, 1 );
-        curl_setopt( $ch, CURLOPT_TIMEOUT, 60 );
-        curl_setopt( $ch, CURLOPT_CONNECTTIMEOUT, 20 );
-        curl_exec( $ch );
-        curl_close( $ch );
+        curl_setopt($ch, CURLOPT_URL, G::browserCacheFilesUrl((isset($_SERVER["HTTPS"])? (($_SERVER["HTTPS"] != "")? "https://" : "http://") : "http://") . $_SERVER["HTTP_HOST"] . "/js/ext/translation.en.js?r=" . rand(1, 10000)));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_FRESH_CONNECT, 1);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 60);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 20);
+        curl_exec($ch);
+        curl_close($ch);
     }
 
     /**
@@ -693,7 +691,9 @@ class Installer extends Controller
             if (defined('PARTNER_FLAG') || isset($_REQUEST['PARTNER_FLAG'])) {
                 $dbText .= "\n";
                 $dbText .= "  define ('PARTNER_FLAG', " . ((defined('PARTNER_FLAG')) ? PARTNER_FLAG : ((isset($_REQUEST['PARTNER_FLAG'])) ? $_REQUEST['PARTNER_FLAG']:'false')) . ");\n";
-                $systemName = $this->getSystemName();
+                error_log('1 --------');
+                error_log($pathSharedSites);
+                $systemName = $this->getNameSystem($pathSharedSites);
                 if ($systemName != '') {
                     $dbText .= "  define ('SYSTEM_NAME', " . $systemName . ");\n";
                 }
@@ -984,7 +984,7 @@ class Installer extends Controller
             if (defined('PARTNER_FLAG') || isset($_REQUEST['PARTNER_FLAG'])) {
                 $dbText .= "\n";
                 $dbText .= "  define ('PARTNER_FLAG', " . ((defined('PARTNER_FLAG')) ? PARTNER_FLAG : ((isset($_REQUEST['PARTNER_FLAG'])) ? $_REQUEST['PARTNER_FLAG']:'false')) . ");\n";
-                $systemName = $this->getSystemName();
+                $systemName = $this->getNameSystem($pathShared);
                 if ($systemName != '') {
                     $dbText .= "  define ('SYSTEM_NAME', " . $systemName . ");\n";
                 }
@@ -1080,14 +1080,20 @@ class Installer extends Controller
         return $info;
     }
 
-    public function getSystemName ()
+    public function getNameSystem ($siteShared = '')
     {
-        $systemName = ''
-        $siteShared = $this->path_shared;
+        $systemName = '';
+        error_log('PASE --------');
+        error_log($siteShared);
+        if ($siteShared == '') {
+            $siteShared = trim( $_REQUEST['pathShared'] );
+        }
+				
         if (substr( $siteShared, - 1 ) != '/') {
             $siteShared .= '/';
         }
-
+        error_log('2 --------');
+				error_log($siteShared . 'partner.info');
         if (file_exists($siteShared . 'partner.info')) {
             $dataInfo = parse_ini_file($siteShared . 'partner.info');
             if (isset($dataInfo['system_name'])) {
@@ -1404,7 +1410,7 @@ EOL;
         $output = curl_exec($ch);
         curl_close($ch);
 
-        /** 
+        /**
          * Upload translation .po file
          */
 
@@ -1427,7 +1433,7 @@ EOL;
         $output = curl_exec($ch);
         curl_close($ch);
 
-        /** 
+        /**
          * Upload skin file
          */
 
@@ -1490,4 +1496,5 @@ EOL;
 
     }
 }
+
 
