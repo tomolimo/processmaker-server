@@ -216,7 +216,6 @@ class Installer extends Controller
     public function getPermissionInfo ()
     {
         $this->setResponseType( 'json' );
-
         $info = new StdClass();
         $info->success = true;
         $noWritableFiles = array ();
