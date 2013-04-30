@@ -84,7 +84,7 @@ bb41c150ef43d52b01d192b8be2be48d  ./workflow/engine/services/rest/crud/ReportVar
 825e7fd682c6b7e9ee3a88e5c657ad86  ./workflow/engine/services/rest/crud/CalendarHolidays.php
 eaa07a51b8c61eb32ed1edf92f332d6f  ./workflow/engine/services/rest/crud/Route.php
 8434c66e0134534a7c2840e5704c320a  ./workflow/engine/classes/class.applications.php
-3cd040aa787258ea73dc8632329965fb  ./workflow/engine/classes/class.wsTools.php
+cfde1296fd481802afa4bbcb629f056d  ./workflow/engine/classes/class.wsTools.php
 f3a3d84985d513c5dfb45ddd079969af  ./workflow/engine/classes/class.BasePeer.php
 5babafcb3c7aea28a30981f50dbe6543  ./workflow/engine/classes/class.dashletOpenVSCompleted.php
 272c47efed10aac97055a803cfc46935  ./workflow/engine/classes/class.processes.php
