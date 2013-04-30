@@ -40,7 +40,7 @@ class Bootstrap
      * these functions still under revision
      */
 
-    public function getSystemConfiguration($globalIniFile = '', $wsIniFile = '', $wsName = '')
+    public static function getSystemConfiguration($globalIniFile = '', $wsIniFile = '', $wsName = '')
     {
         $readGlobalIniFile = false;
         $readWsIniFile = false;
@@ -2752,7 +2752,7 @@ class Bootstrap
      * @param boolean $createPath if true this public function will create the path
      * @return boolean
      */
-    public function verifyPath($strPath, $createPath = false)
+    public static function verifyPath($strPath, $createPath = false)
     {
         $folder_path = strstr($strPath, '.') ? dirname($strPath) : $strPath;
 
