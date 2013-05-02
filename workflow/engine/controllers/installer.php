@@ -16,6 +16,7 @@ class Installer extends Controller
     public $path_xmlforms;
     public $path_shared;
     public $path_sep;
+    public $systemName;
 
     public $link; #resource for database connection
 
@@ -29,6 +30,7 @@ class Installer extends Controller
         $this->path_public = PATH_HOME . 'public_html/index.html';
         $this->path_shared = PATH_TRUNK . 'shared/';
         $this->path_sep = PATH_SEP;
+        $this->systemName = '';
     }
 
     public function index ($httpData)
@@ -366,7 +368,8 @@ class Installer extends Controller
     public function createWorkspace ()
     {
         $pathSharedPartner = trim( $_REQUEST['pathShared'] );
-        if (file_exists($pathSharedPartner.'partner.info')) {
+        if (file_exists(trim($pathSharedPartner,PATH_SEP). PATH_SEP .'partner.info')) {
+            $this->systemName = $this->getSystemName($pathSharedPartner);
             $_REQUEST["PARTNER_FLAG"] = true;
         }
         $this->setResponseType( 'json' );
@@ -663,6 +666,7 @@ class Installer extends Controller
             $this->setGrantPrivilegesMySQL( $rp, $rpPass, $rp, $db_hostname );
 
             // Generate the db.php file and folders
+            $pathSharedSites = $pathShared;
             $path_site = $pathShared . "/sites/" . $workspace . "/";
             $db_file = $path_site . "db.php";
             @mkdir( $path_site, 0777, true );
@@ -688,7 +692,11 @@ class Installer extends Controller
             $dbText .= sprintf( "  define ('DB_REPORT_USER', '%s' );\n", $rp );
             $dbText .= sprintf( "  define ('DB_REPORT_PASS', '%s' );\n", $rpPass );
             if (defined('PARTNER_FLAG') || isset($_REQUEST['PARTNER_FLAG'])) {
-                $dbText .= "define ('PARTNER_FLAG', " . ((defined('PARTNER_FLAG')) ? PARTNER_FLAG : ((isset($_REQUEST['PARTNER_FLAG'])) ? $_REQUEST['PARTNER_FLAG']:'false')) . ");\n";
+                $dbText .= "\n";
+                $dbText .= "  define ('PARTNER_FLAG', " . ((defined('PARTNER_FLAG')) ? PARTNER_FLAG : ((isset($_REQUEST['PARTNER_FLAG'])) ? $_REQUEST['PARTNER_FLAG']:'false')) . ");\n";
+                if ($this->systemName != '') {
+                    $dbText .= "  define ('SYSTEM_NAME', " . $this->systemName . ");\n";
+                }
             }
 
             $this->installLog( G::LoadTranslation('ID_CREATING', SYS_LANG, Array($db_file) ));
@@ -974,7 +982,11 @@ class Installer extends Controller
             $dbText .= sprintf( "  define ('DB_REPORT_USER', '%s' );\n", $rp );
             $dbText .= sprintf( "  define ('DB_REPORT_PASS', '%s' );\n", $rpPass );
             if (defined('PARTNER_FLAG') || isset($_REQUEST['PARTNER_FLAG'])) {
-                $dbText .= "define ('PARTNER_FLAG', " . ((defined('PARTNER_FLAG')) ? PARTNER_FLAG : ((isset($_REQUEST['PARTNER_FLAG'])) ? $_REQUEST['PARTNER_FLAG']:'false')) . ");\n";
+                $dbText .= "\n";
+                $dbText .= "  define ('PARTNER_FLAG', " . ((defined('PARTNER_FLAG')) ? PARTNER_FLAG : ((isset($_REQUEST['PARTNER_FLAG'])) ? $_REQUEST['PARTNER_FLAG']:'false')) . ");\n";
+                if ($this->systemName != '') {
+                    $dbText .= "  define ('SYSTEM_NAME', " . $this->systemName . ");\n";
+                }
             }
 
             $this->installLog( G::LoadTranslation('ID_CREATING', SYS_LANG, Array($db_file) ));
@@ -1065,6 +1077,22 @@ class Installer extends Controller
             $info->message = $e->getMessage();
         }
         return $info;
+    }
+
+    public function getSystemName ($siteShared)
+    {
+        $systemName = '';
+        if (substr( $siteShared, - 1 ) != '/') {
+            $siteShared .= '/';
+        }
+
+        if (file_exists($siteShared . 'partner.info')) {
+            $dataInfo = parse_ini_file($siteShared . 'partner.info');
+            if (isset($dataInfo['system_name'])) {
+                $systemName = trim($dataInfo['system_name']);
+            }
+        }
+        return $systemName;
     }
 
     public function getEngines ()

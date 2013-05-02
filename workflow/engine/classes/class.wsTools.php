@@ -302,12 +302,12 @@ class workspaceTools
             $names = explode(".", basename($poFile));
             $extension = array_pop($names);
             $langid = array_pop($names);
+            CLI::logging("Updating database translations with $poName\n");
+            Language::import($poFile, false, true);
             if ($first) {
                 CLI::logging("Updating XML form translations with $poName\n");
                 Language::import($poFile, true, false);
             }
-            CLI::logging("Updating database translations with $poName\n");
-            Language::import($poFile, false, true);
         }
     }
 
@@ -1099,6 +1099,12 @@ class workspaceTools
             foreach ($metadata->directories as $dir) {
                 CLI::logging("+> Restoring directory '$dir'\n");
 
+                if(file_exists("$tempDirectory/$dir" . "/ee")) {
+                    G::rm_dir("$tempDirectory/$dir" . "/ee");
+                }
+                if(file_exists("$tempDirectory/$dir" . "/plugin.singleton")) {
+                    G::rm_dir("$tempDirectory/$dir" . "/plugin.singleton");
+                }
                 if (!rename("$tempDirectory/$dir", $workspace->path)) {
                     throw new Exception("There was an error copying the backup files ($tempDirectory/$dir) to the workspace directory {$workspace->path}.");
                 }
