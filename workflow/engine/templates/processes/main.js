@@ -264,12 +264,6 @@ Ext.onReady(function(){
           importProcess();
         }
       },{
-        text: _('ID_BROWSE_LIBRARY'),
-        iconCls: 'button_menu_ext ss_sprite  ss_world',
-        //icon: '/images/icon-pmwebservices.png',
-        handler: browseLibrary
-      },
-      {
         xtype: 'tbfill'
       },{
         xtype: 'tbseparator'
@@ -1090,10 +1084,6 @@ importProcess = function()
       ]
     });
   w.show();
-}
-
-browseLibrary = function(){
-  window.location = 'processes_Library';
 }
 
 function activeDeactive(){
