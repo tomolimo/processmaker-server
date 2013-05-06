@@ -16,7 +16,7 @@ Ext.onReady(function() {
   storeDasInsOwnerType = new Ext.data.ArrayStore({
     idIndex: 0,
     fields: ['id', 'value'],
-    data:   PARTNER_FLAG?[['USER', 'Usuário'], ['DEPARTMENT', 'Departmento'], ['GROUP', 'Grupo'], ['EVERYBODY', 'Todos']]:[['USER', 'User'], ['DEPARTMENT', 'Department'], ['GROUP', 'Group'], ['EVERYBODY', 'Everybody']]
+    data:   ['USER', _('ID_USER')], ['DEPARTMENT', _('ID_DEPARTMENT')], ['GROUP', _('ID_GROUP')], ['EVERYBODY', _('ID_ALL')]]
   });
 
   storeDasInsOwnerUID = new Ext.data.Store({

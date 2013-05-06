@@ -26,30 +26,17 @@ class dashletOpenVSCompleted implements DashletInterface
         $contextTimeStore->xtype = 'arraystore';
         $contextTimeStore->fields = array ('id','value'
         );
-        if (defined('PARTNER_FLAG')) {
-            $contextTimeStore->data = array (array ('TODAY','Hoje'
-            ),array ('YESTERDAY','Ontem'
-            ),array ('THIS_WEEK','Essa semana'
-            ),array ('PREVIOUS_WEEK','Semana anterior'
-            ),array ('THIS_MONTH','Este mês'
-            ),array ('PREVIOUS_MONTH','Mês Anterior'
-            ),array ('THIS_YEAR','Este ano'
-            ),array ('PREVIOUS_YEAR','Ano anterior'
-            )
-            );
-        } else {
-            $contextTimeStore->data = array (array ('TODAY','Today'
-            ),array ('YESTERDAY','Yesterday'
-            ),array ('THIS_WEEK','This week'
-            ),array ('PREVIOUS_WEEK','Previous Week'
-            ),array ('THIS_MONTH','This Month'
-            ),array ('PREVIOUS_MONTH','Previous Month'
-            ),array ('THIS_YEAR','This Year'
-            ),array ('PREVIOUS_YEAR','Previous Year'
-            )
-            );
-        }
-
+        $contextTimeStore->data = array (array ('TODAY', G::LoadTranslation('ID_TODAY')
+        ),array ('YESTERDAY', G::LoadTranslation('ID_YESTERDAY')
+        ),array ('THIS_WEEK', G::LoadTranslation('ID_THIS_WEEK')
+        ),array ('PREVIOUS_WEEK', G::LoadTranslation('ID_PREVIOUS_WEEK')
+        ),array ('THIS_MONTH', G::LoadTranslation('ID_THIS_MONTH')
+        ),array ('PREVIOUS_MONTH', G::LoadTranslation('ID_PREVIOUS_MONTH')
+        ),array ('THIS_YEAR', G::LoadTranslation('ID_THIS_YEAR')
+        ),array ('PREVIOUS_YEAR', G::LoadTranslation('ID_PREVIOUS_YEAR')
+        )
+        );
+        
         $contextTime = new stdclass();
         $contextTime->xtype = 'combo';
         $contextTime->name = 'DAS_INS_CONTEXT_TIME';
