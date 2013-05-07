@@ -851,7 +851,7 @@ class Installer extends Controller
 
             $indexFileUpdated = true;
             if (defined('PARTNER_FLAG') || isset($_REQUEST['PARTNER_FLAG'])) {
-                $this->buildParternExtras($adminUsername, $adminPassword, $_REQUEST['workspace'], $langUri);
+                $this->buildParternExtras($adminUsername, $adminPassword, $_REQUEST['workspace'], $langUri, $skinUri);
             } else {
                 try {
                     G::update_php_ini( $envFile, $updatedConf );
@@ -1361,7 +1361,7 @@ EOL;
         $this->mysqlQuery($query);
     }
 
-    public function buildParternExtras($username, $password, $workspace, $lang)
+    public function buildParternExtras($username, $password, $workspace, $lang, $skin)
     {
         ini_set('max_execution_time', '0');
         ini_set('memory_limit', '256M');
@@ -1389,7 +1389,7 @@ EOL;
         $ch = curl_init();
 
         // set URL and other appropriate options
-        curl_setopt($ch, CURLOPT_URL, "$serv/sys{$workspace}/{$lang}/classic/login/authentication");
+        curl_setopt($ch, CURLOPT_URL, "$serv/sys{$workspace}/{$lang}/{$skin}/login/authentication");
         curl_setopt($ch, CURLOPT_HEADER, 0);
         curl_setopt($ch, CURLOPT_COOKIEFILE, $cookiefile);
         curl_setopt($ch, CURLOPT_COOKIEJAR, $cookiefile);
@@ -1410,8 +1410,21 @@ EOL;
         $postData = array();
 
         // File to upload/post
+        $parm1 = "@".PATH_CORE."content/translations/processmaker.$lang.po";
+
+        error_log('parm1 ------');
+        error_log($parm1);
+        error_log('------');
+
+        $parm2 = "$serv/sys{$workspace}/{$lang}/{$skin}/setup/languages_Import";
+
+        error_log('parm2 ------');
+        error_log($parm2);
+        error_log('------');
+
+
         $postData['form[LANGUAGE_FILENAME]'] = "@".PATH_CORE."content/translations/processmaker.$lang.po";
-        curl_setopt($ch, CURLOPT_URL, "$serv/sys{$workspace}/{$lang}/classic/setup/languages_Import");
+        curl_setopt($ch, CURLOPT_URL, "$serv/sys{$workspace}/{$lang}/{$skin}/setup/languages_Import");
         curl_setopt($ch, CURLOPT_HEADER, 0);
         curl_setopt($ch, CURLOPT_VERBOSE, 0);
         curl_setopt($ch, CURLOPT_COOKIEFILE, $cookiefile);
@@ -1423,6 +1436,9 @@ EOL;
         curl_setopt($ch, CURLOPT_TIMEOUT, 90);
 
         $output = curl_exec($ch);
+        error_log('respuesta ------');
+        error_log($output);
+        error_log('------');
         curl_close($ch);
 
         /**
@@ -1443,7 +1459,7 @@ EOL;
             // File to upload/post
             $postData['uploadedFile'] = "@".$skin;
 
-            curl_setopt($ch, CURLOPT_URL, "$serv/sys{$workspace}/{$lang}/classic/setup/skin_Ajax");
+            curl_setopt($ch, CURLOPT_URL, "$serv/sys{$workspace}/{$lang}/{$skin}/setup/skin_Ajax");
             curl_setopt($ch, CURLOPT_HEADER, 0);
             curl_setopt($ch, CURLOPT_VERBOSE, 0);
             curl_setopt($ch, CURLOPT_COOKIEFILE, $cookiefile);
@@ -1471,7 +1487,7 @@ EOL;
 
             // File to upload/post
             $postData['form[PLUGIN_FILENAME]'] = "@{$pluginName}";
-            curl_setopt($ch, CURLOPT_URL, "$serv/sys{$workspace}/{$lang}/classic/setup/pluginsImportFile");
+            curl_setopt($ch, CURLOPT_URL, "$serv/sys{$workspace}/{$lang}/{$skin}/setup/pluginsImportFile");
             curl_setopt($ch, CURLOPT_HEADER, 0);
             curl_setopt($ch, CURLOPT_VERBOSE, 0);
             curl_setopt($ch, CURLOPT_COOKIEFILE, $cookiefile);
