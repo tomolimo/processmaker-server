@@ -540,7 +540,6 @@ class Form extends XmlForm
                             case "checkgroup":
                             case "listbox":
                                 //This value is added when the user does not mark any checkbox
-                                $values[$k . "_label"] = "__NULL__";
                                 $values[$k] = "__NULL__";
                                 break;
                         }
