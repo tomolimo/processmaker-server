@@ -295,11 +295,11 @@ class Translation extends BaseTranslation
             fwrite( $f, '$translation' . $plugin . ' =' . 'unserialize(\'' . addcslashes( serialize( $translation ), '\\\'' ) . "');\n" );
             fwrite( $f, "?>" );
             fclose( $f );
-
+/*
             $f = fopen( $cacheFileJS, 'w' );
             fwrite( $f, "var G_STRINGS =" . Bootstrap::json_encode( $translationJS ) . ";\n" );
             fclose( $f );
-
+*/
             $res['cacheFile'] = $cacheFile;
             $res['cacheFileJS'] = $cacheFileJS;
             $res['rows'] = count( $translation );
