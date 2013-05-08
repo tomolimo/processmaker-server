@@ -457,7 +457,7 @@ function openActionDialog(caller, action, dataAux)
       break;
 
     case 'download':
-      if(ext_itemgrid.getSelectionModel().getSelected() == undefined) {
+      if(typeof(ext_itemgrid.getSelectionModel().getSelected()) == 'undefined') {
          break;
       }
       fileName=ext_itemgrid.getSelectionModel().getSelected().get('name');

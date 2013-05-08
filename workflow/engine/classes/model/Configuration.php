@@ -127,6 +127,9 @@ class Configuration extends BaseConfiguration
         }
     }
 
+    /**
+    * To check if the configuration row exists, by using Configuration Uid data 
+    */
     public function exists($CfgUid, $ObjUid='', $ProUid='', $UsrUid='', $AppUid='')
     {
         $oRow = ConfigurationPeer::retrieveByPK( $CfgUid, $ObjUid, $ProUid, $UsrUid, $AppUid );
