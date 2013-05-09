@@ -19,8 +19,8 @@ new Ext.KeyMap(document, {
 
 // Ext.BLANK_IMAGE_URL = 'resources/s.gif';
 
-Ext.chart.Chart.CHART_URL = '/images/charts.swf';
-Ext.FlashComponent.EXPRESS_INSTALL_URL = '/images/expressinstall.swf';
+Ext.chart.Chart.CHART_URL = '/skins/neoclassic/images/charts.swf';
+Ext.FlashComponent.EXPRESS_INSTALL_URL = '/skins/neoclassic/images/expressinstall.swf';
 // The Quicktips are used for the toolbar and Tree mouseover tooltips!
 Ext.QuickTips.init();
 
@@ -83,24 +83,7 @@ function rootNodeCreate()
         text: "/",
         draggable: false,
         expanded: true,
-        cls: "folder",
-
-        listeners: {
-            beforeload: function (nodeRoot) {
-                nodeRoot.setIcon("");
-            },
-            load: function (nodeRoot) {
-                nodeRoot.setIcon("/images/ext/default/tree/folder.gif");
-            },
-            expand: function (nodeRoot) {
-                if (nodeRoot.hasChildNodes()) {
-                    nodeRoot.setIcon("/images/ext/default/tree/folder-open.gif");
-                }
-            },
-            collapse: function (nodeRoot) {
-                nodeRoot.setIcon("/images/ext/default/tree/folder.gif");
-            }
-        }
+        cls: "folder"
     });
 
     return node;
@@ -244,7 +227,7 @@ function handleNodeClick( sm, node ) {
 function showLoadingIndicator( el, replaceContent ) {
   // console.info("showLoadingIndicator");
   if( !el ) return;
-  var loadingimg = '/images/documents/_indicator.gif';
+  var loadingimg = '/skins/neoclassic/images/documents/_indicator.gif';
   var imgtag = '<' + 'img src="'+ loadingimg + '" alt="'+TRANSLATIONS.ID_LOADING+'" border="0" name="'+TRANSLATIONS.ID_LOADING+'" align="absmiddle" />';
 
   if( replaceContent ) {
@@ -681,7 +664,7 @@ Ext.msgBoxSlider = function(){
       m.setWidth(400 );
       m.position(null, 5000 );
       m.alignTo(document, 't-t');
-      Ext.get('x-box-mc-inner' ).setStyle('background-image', 'url("/images/documents/_accept.png")');
+      Ext.get('x-box-mc-inner' ).setStyle('background-image', 'url("/skins/neoclassic/images/documents/_accept.png")');
       Ext.get('x-box-mc-inner' ).setStyle('background-position', '5px 10px');
       Ext.get('x-box-mc-inner' ).setStyle('background-repeat', 'no-repeat');
       Ext.get('x-box-mc-inner' ).setStyle('padding-left', '35px');
@@ -886,14 +869,14 @@ function renderVersion(value, p, record) {
       // return String.format('<b>{0}</b>&nbsp;&nbsp;&nbsp;<a
       // href="#"><img src="{1}" border="0" title="Upload New Version"
       // valign="absmiddle" onClick="alert(\'{2}\');return false;"/></a>',
-      // value,'/images/documents/_up.png','Upload new Version');
+      // value,'/skins/neoclassic/images/documents/_up.png','Upload new Version');
       //return String.format('<b>{0}</b><table cellspacing="0" class="x-btn x-btn-icon" id="tb_upload"><tbody class="x-btn-small x-btn-icon-small-left"><tr><td class="x-btn-tl"><i>&nbsp;</i></td><td class="x-btn-tc"></td><td class="x-btn-tr"><i>&nbsp;</i></td></tr><tr><td class="x-btn-ml"><i>&nbsp;</i></td><td class="x-btn-mc"><em unselectable="on" class=""><button type="button" id="ext-gen100" class=" x-btn-text button_menu_ext ss_sprite ss_page_white_get">&nbsp;</button></em></td><td class="x-btn-mr"><i>&nbsp;</i></td></tr><tr><td class="x-btn-bl"><i>&nbsp;</i></td><td class="x-btn-bc"></td><td class="x-btn-br"><i>&nbsp;</i></td></tr></tbody></table>', value);
       return String.format('<b>{0}</b>', value);
     }else{
       // return String.format('{0}&nbsp;&nbsp;&nbsp;<a href="#"><img
       // src="{1}" border="0" title="Upload New Version"
       // valign="absmiddle" onClick="alert(\'{2}\');return false;"/></a>',
-      // value,'/images/documents/_up.png','Upload new Version');
+      // value,'/skins/neoclassic/images/documents/_up.png','Upload new Version');
       //return String.format('{0}<table cellspacing="0" class="x-btn x-btn-icon" id="tb_upload"><tbody class="x-btn-small x-btn-icon-small-left"><tr><td class="x-btn-tl"><i>&nbsp;</i></td><td class="x-btn-tc"></td><td class="x-btn-tr"><i>&nbsp;</i></td></tr><tr><td class="x-btn-ml"><i>&nbsp;</i></td><td class="x-btn-mc"><em unselectable="on" class=""><button type="button" id="ext-gen100" class=" x-btn-text button_menu_ext ss_sprite ss_page_white_get">&nbsp;</button></em></td><td class="x-btn-mr"><i>&nbsp;</i></td></tr><tr><td class="x-btn-bl"><i>&nbsp;</i></td><td class="x-btn-bc"></td><td class="x-btn-br"><i>&nbsp;</i></td></tr></tbody></table>', value);
       return String.format('{0}', value);
     }
@@ -935,7 +918,7 @@ var gridtb = new Ext.Toolbar(
     xtype : "tbbutton",
     id : 'tb_home',
     iconCls: 'button_menu_ext ss_sprite ss_house',// icon :
-    // '/images/documents/_home.png',
+    // '/skins/neoclassic/images/documents/_home.png',
     // text : 'Root',
     tooltip : TRANSLATIONS.ID_ROOT_FOLDER,
     // cls : 'x-btn-text-icon',
@@ -949,7 +932,7 @@ var gridtb = new Ext.Toolbar(
     id : 'tb_reload',
     iconCls: 'button_menu_ext ss_sprite ss_arrow_refresh',// icon
     // :
-    // '/images/documents/_reload.png',
+    // '/skins/neoclassic/images/documents/_reload.png',
     // text : 'Reload',
     tooltip : TRANSLATIONS.ID_RELOAD,
     // cls : 'x-btn-text-icon',
@@ -960,7 +943,7 @@ var gridtb = new Ext.Toolbar(
   {
     xtype : "tbbutton",
     id : 'tb_search',
-    icon : '/images/documents/_filefind.png',
+    icon : '/skins/neoclassic/images/documents/_filefind.png',
     // text : 'Search',
     tooltip : TRANSLATIONS.ID_SEARCH,
     // cls : 'x-btn-text-icon',
@@ -977,7 +960,7 @@ var gridtb = new Ext.Toolbar(
     id : 'tb_new',
     iconCls: 'button_menu_ext ss_sprite ss_folder_add',// icon
     // :
-    // '/images/documents/_filenew.png',
+    // '/skins/neoclassic/images/documents/_filenew.png',
     tooltip : TRANSLATIONS.ID_NEW_FOLDER,
     cls : 'x-btn-icon',
    // disabled : false,
@@ -989,7 +972,7 @@ var gridtb = new Ext.Toolbar(
     xtype : "tbbutton",
     id : 'tb_copy',
     iconCls: 'button_menu_ext ss_sprite ss_page_white_copy',// icon :
-    // '/images/documents/_editcopy.png',
+    // '/skins/neoclassic/images/documents/_editcopy.png',
 
     tooltip : TRANSLATIONS.ID_COPY,
     cls : 'x-btn-icon',
@@ -1003,7 +986,7 @@ var gridtb = new Ext.Toolbar(
     xtype : "tbbutton",
     id : 'tb_move',
     iconCls: 'button_menu_ext ss_sprite ss_page_white_go',// icon :
-    // '/images/documents/_move.png',
+    // '/skins/neoclassic/images/documents/_move.png',
     tooltip : TRANSLATIONS.ID_MOVE,
     cls : 'x-btn-icon',
     disabled : false,
@@ -1017,7 +1000,7 @@ var gridtb = new Ext.Toolbar(
     id : 'tb_delete',
     iconCls: 'button_menu_ext ss_sprite ss_folder_delete',// icon
     // :
-    // '/images/documents/_editdelete.png',
+    // '/skins/neoclassic/images/documents/_editdelete.png',
     tooltip : TRANSLATIONS.ID_DELETE,
     cls : 'x-btn-icon',
     disabled : false,
@@ -1031,7 +1014,7 @@ var gridtb = new Ext.Toolbar(
     xtype : "tbbutton",
     id : 'tb_rename',
     iconCls: 'button_menu_ext ss_sprite ss_textfield_rename',// icon :
-    // '/images/documents/_fonts.png',
+    // '/skins/neoclassic/images/documents/_fonts.png',
     tooltip : TRANSLATIONS.ID_RENAME,
     cls : 'x-btn-icon',
     disabled : true,
@@ -1046,7 +1029,7 @@ var gridtb = new Ext.Toolbar(
     id : 'tb_download',
     iconCls: 'button_menu_ext ss_sprite ss_page_white_put',// icon
     // :
-    // '/images/documents/_down.png',
+    // '/skins/neoclassic/images/documents/_down.png',
     tooltip : TRANSLATIONS.ID_DOWNLOAD,
     cls : 'x-btn-icon',
    // disabled : true,
@@ -1059,7 +1042,7 @@ var gridtb = new Ext.Toolbar(
     id : 'tb_upload',
     iconCls: 'button_menu_ext ss_sprite ss_page_white_get',// icon
     // :
-    // '/images/documents/_up.png',
+    // '/skins/neoclassic/images/documents/_up.png',
     tooltip : TRANSLATIONS.ID_UPLOAD,
     cls : 'x-btn-icon',
     disabled : false,
@@ -1397,7 +1380,7 @@ gridCtxMenu = new Ext.menu.Menu({
   items : [ {
     id : 'gc_rename',
     iconCls: 'button_menu_ext ss_sprite ss_textfield_rename',// icon :
-    hidden : true,															// '/images/documents/_fonts.png',
+    hidden : true,															// '/skins/neoclassic/images/documents/_fonts.png',
     text : TRANSLATIONS.ID_RENAME,
     handler : function() {
       ext_itemgrid.onCellDblClick(ext_itemgrid, gsm.clickedRow, 0);
@@ -1406,7 +1389,7 @@ gridCtxMenu = new Ext.menu.Menu({
   }, /*{
     id : 'gc_copy',
     iconCls: 'button_menu_ext ss_sprite ss_page_white_copy',// icon :
-    // '/images/documents/_editcopy.png',
+    // '/skins/neoclassic/images/documents/_editcopy.png',
     text : TRANSLATIONS.ID_COPY,
     handler : function() {
       openActionDialog(this, "copyAction", "");
@@ -1414,7 +1397,7 @@ gridCtxMenu = new Ext.menu.Menu({
   }, {
     id : 'gc_move',
     iconCls: 'button_menu_ext ss_sprite ss_page_white_go',// icon :
-    // '/images/documents/_move.png',
+    // '/skins/neoclassic/images/documents/_move.png',
     text : TRANSLATIONS.ID_MOVE,
     handler : function() {
       openActionDialog(this, "moveAction", "");
@@ -1422,7 +1405,7 @@ gridCtxMenu = new Ext.menu.Menu({
   },*/ {
     id : 'gc_delete',
     iconCls: 'button_menu_ext ss_sprite ss_page_white_delete',// icon :
-    // '/images/documents/_editdelete.png',
+    // '/skins/neoclassic/images/documents/_editdelete.png',
     text : TRANSLATIONS.ID_DELETE,
     handler : function() {
       openActionDialog(this, "delete", "");
@@ -1432,7 +1415,7 @@ gridCtxMenu = new Ext.menu.Menu({
   }, '-', {
     id : 'gc_download',
     iconCls: 'button_menu_ext ss_sprite ss_page_white_put',// icon :
-    // '/images/documents/_down.png',
+    // '/skins/neoclassic/images/documents/_down.png',
     text : TRANSLATIONS.ID_DOWNLOAD,
     handler : function() {
       openActionDialog(this, "download", "");
@@ -1442,7 +1425,7 @@ gridCtxMenu = new Ext.menu.Menu({
   '-', {
     id : 'cancel',
     iconCls: 'button_menu_ext ss_sprite ss_cross',// icon :
-    // '/images/documents/_cancel.png',
+    // '/skins/neoclassic/images/documents/_cancel.png',
     text : TRANSLATIONS.ID_CANCEL,
     handler : function() {
       gridCtxMenu.hide();
@@ -1547,7 +1530,7 @@ var dirCtxMenu = new Ext.menu.Menu(
     id : 'dirCtxMenu_new',
     iconCls: 'button_menu_ext ss_sprite ss_folder_add',// icon
     // :
-    // '/images/documents/_folder_new.png',
+    // '/skins/neoclassic/images/documents/_folder_new.png',
     text : TRANSLATIONS.ID_NEW_FOLDER,
     handler : function() {
       dirCtxMenu.hide();
@@ -1566,7 +1549,7 @@ var dirCtxMenu = new Ext.menu.Menu(
   {
     id : 'dirCtxMenu_copy',
     iconCls: 'button_menu_ext ss_sprite ss_page_white_copy',// icon :
-    // '/images/documents/_editcopy.png',
+    // '/skins/neoclassic/images/documents/_editcopy.png',
 
     text : TRANSLATIONS.ID_COPY,
     handler : function() {
@@ -1578,7 +1561,7 @@ var dirCtxMenu = new Ext.menu.Menu(
     id : 'dirCtxMenu_move',
     iconCls: 'button_menu_ext ss_sprite ss_folder_go',// icon
     // :
-    // '/images/documents/_move.png',
+    // '/skins/neoclassic/images/documents/_move.png',
     text : TRANSLATIONS.ID_MOVE,
     handler : function() {
       dirCtxMenu.hide();
@@ -1589,7 +1572,7 @@ var dirCtxMenu = new Ext.menu.Menu(
     id : 'dirCtxMenu_remove',
     iconCls: 'button_menu_ext ss_sprite ss_folder_delete',// icon
     // :
-    // '/images/documents/_editdelete.png',
+    // '/skins/neoclassic/images/documents/_editdelete.png',
 
     text : TRANSLATIONS.ID_DELETE,
     handler : function() {
@@ -1610,7 +1593,7 @@ var dirCtxMenu = new Ext.menu.Menu(
     id : 'dirCtxMenu_reload',
     iconCls: 'button_menu_ext ss_sprite ss_arrow_refresh',// icon
     // :
-    // '/images/documents/_reload.png',
+    // '/skins/neoclassic/images/documents/_reload.png',
     text : TRANSLATIONS.ID_REFRESH_LABEL,
     handler : function() {
       dirCtxMenu.hide();
@@ -1620,7 +1603,7 @@ var dirCtxMenu = new Ext.menu.Menu(
     id : 'dirCtxMenu_cancel',
     iconCls: 'button_menu_ext ss_sprite ss_cross',// icon
     // :
-    // '/images/documents/_cancel.png',
+    // '/skins/neoclassic/images/documents/_cancel.png',
     text : TRANSLATIONS.ID_CANCEL,
     handler : function() {
       dirCtxMenu.hide();
@@ -1632,7 +1615,7 @@ var copymoveCtxMenu = new Ext.menu.Menu({
   items : [ {
     id : 'copymoveCtxMenu_copy',
     iconCls: 'button_menu_ext ss_sprite ss_page_white_copy',// icon :
-    // '/images/documents/_editcopy.png',
+    // '/skins/neoclassic/images/documents/_editcopy.png',
     text : TRANSLATIONS.ID_COPY,
     handler : function() {
       copymoveCtxMenu.hide();
@@ -1641,7 +1624,7 @@ var copymoveCtxMenu = new Ext.menu.Menu({
   }, {
     id : 'copymoveCtxMenu_move',
     iconCls: 'button_menu_ext ss_sprite ss_page_white_go',// icon :
-    // '/images/documents/_move.png',
+    // '/skins/neoclassic/images/documents/_move.png',
     text : TRANSLATIONS.ID_MOVE,
     handler : function() {
       copymoveCtxMenu.hide();
@@ -1650,7 +1633,7 @@ var copymoveCtxMenu = new Ext.menu.Menu({
   }, '-', {
     id : 'copymoveCtxMenu_cancel',
     iconCls: 'button_menu_ext ss_sprite ss_cross',// icon :
-    // '/images/documents/_cancel.png',
+    // '/skins/neoclassic/images/documents/_cancel.png',
     text : TRANSLATIONS.ID_CANCEL,
     handler : function() {
       copymoveCtxMenu.hide();
