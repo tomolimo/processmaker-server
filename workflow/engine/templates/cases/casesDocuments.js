@@ -83,24 +83,7 @@ function rootNodeCreate()
         text: "/",
         draggable: false,
         expanded: true,
-        cls: "folder",
-
-        listeners: {
-            beforeload: function (nodeRoot) {
-                nodeRoot.setIcon("");
-            },
-            load: function (nodeRoot) {
-                nodeRoot.setIcon("/images/ext/default/tree/folder.gif");
-            },
-            expand: function (nodeRoot) {
-                if (nodeRoot.hasChildNodes()) {
-                    nodeRoot.setIcon("/images/ext/default/tree/folder-open.gif");
-                }
-            },
-            collapse: function (nodeRoot) {
-                nodeRoot.setIcon("/images/ext/default/tree/folder.gif");
-            }
-        }
+        cls: "folder"
     });
 
     return node;
@@ -457,6 +440,9 @@ function openActionDialog(caller, action, dataAux)
       break;
 
     case 'download':
+      if(typeof(ext_itemgrid.getSelectionModel().getSelected()) == 'undefined') {
+         break;
+      }
       fileName=ext_itemgrid.getSelectionModel().getSelected().get('name');
       // alert(ext_itemgrid.getSelectionModel().getSelected().get('downloadLink'));
       // alert(ext_itemgrid.getSelectionModel().getSelected().get('downloadLabel'));
