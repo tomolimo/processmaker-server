@@ -138,8 +138,8 @@ class workspaceTools
          * ((define('(<key>)2', ')1 (<value>)3 (');)4 )0
          */
         $dbPrefix = array('DB_NAME' => 'wf_', 'DB_USER' => 'wf_', 'DB_RBAC_NAME' => 'rb_', 'DB_RBAC_USER' => 'rb_', 'DB_REPORT_NAME' => 'rp_', 'DB_REPORT_USER' => 'rp_');
-        $key = $matches['key'];
-        $value = $matches['value'];
+        $key = isset($matches['key']) ? $matches['key'] : $matches[2];
+        $value = isset($matches['value']) ? $matches['value'] : $matches[3];
         if (array_search($key, array('DB_HOST', 'DB_RBAC_HOST', 'DB_REPORT_HOST')) !== false) {
             /* Change the database hostname for these keys */
             $value = $this->newHost;
@@ -501,7 +501,7 @@ class workspaceTools
         $filesDir = $doclevel[$length - 1];
 
         if (is_dir(PATH_DOCUMENT) && is_writable($filesDir)) {
-            CLI::logging("Error:" . PATH_DOCUMENT . " is not writable... please check the su permissions.\n");
+            CLI::logging(CLI::error("Error:" . PATH_DOCUMENT . " is not writable... please check the su permissions.\n"));
             return;
         }
 
@@ -511,7 +511,7 @@ class workspaceTools
         $dirslength = sizeof($directory);
 
         if (! @chdir(PATH_DOCUMENT)) {
-            CLI::logging("Cannot use Document directory. The upgrade must be done as root.\n");
+            CLI::logging(CLI::error("Cannot use Document directory. The upgrade must be done as root.\n"));
             return;
         }
 
@@ -535,7 +535,7 @@ class workspaceTools
                         G::rm_dir($UIdDir);
                         rmdir($UIdDir);//remove the diretory itself, G::rm_dir cannot do it
                     } else {
-                        CLI::logging("Error: Failure at coping from $UIdDir...\n");
+                        CLI::logging(CLI::error("Error: Failure at coping from $UIdDir...\n"));
                     }                        
                 } else {
                     CLI::logging("$UIdDir is empty, removing it\n");
@@ -562,7 +562,7 @@ class workspaceTools
                 if (copy($black . $goalFile, $black . $newpattern[0] . '/' . $newpattern[1])) {
                     unlink($file[$index]);
                 } else {
-                    CLI::logging("Error: Failure at copy $file[$index] files...\n");
+                    CLI::logging(CLI::error("Error: Failure at copy $file[$index] files...\n"));
                 }     
             }
         }
@@ -571,11 +571,11 @@ class workspaceTools
         $this->initPropel(true);
         G::LoadClass("configuration");
         $conf = new Configurations();
-        if ($conf->exists("ENVIRONMENT_SETTINGS")) {
+            if ($conf->exists("ENVIRONMENT_SETTINGS")) {
             $conf->setDirectoryStructureVer(2);
-            CLI::logging("Please notice Version Directory Structure is 2 now.\n");
+            CLI::logging(CLI::info("Version Directory Structure is 2 now.\n"));
         } else {
-            CLI::logging("Error: Issue found at try to use ENVIRONMENT_SETTINGS row.\n");
+            CLI::logging(CLI::error("Error: found at try to use ENVIRONMENT_SETTINGS row.\n"));
             return;
         }
     }
