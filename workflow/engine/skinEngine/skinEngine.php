@@ -543,6 +543,7 @@ class SkinEngine
   private function _mvc()
   {
     require_once PATH_THIRDPARTY . 'smarty/libs/Smarty.class.php'; // put full path to Smarty.class.php
+    require_once PATH_GULLIVER_HOME . 'includes' . PATH_SEP . 'smarty_plugins' . PATH_SEP . 'function.pmos.php';
     G::LoadClass('serverConfiguration');
     $oServerConf =& serverConf::getSingleton();
     $oHeadPublisher =& headPublisher::getSingleton();
@@ -552,6 +553,7 @@ class SkinEngine
     $smarty->compile_dir  = PATH_SMARTY_C;
     $smarty->cache_dir    = PATH_SMARTY_CACHE;
     $smarty->config_dir   = PATH_THIRDPARTY . 'smarty/configs';
+    $smarty->register_function('translate', 'translate');
 
     $viewVars = $oHeadPublisher->getVars();
 
@@ -784,6 +786,4 @@ class SkinEngine
       $smarty->display($this->layoutFile['basename']);
     }
   }
-
 }
-
