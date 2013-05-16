@@ -2905,7 +2905,7 @@ var changeStatusSubmitFields = function(newStatusTo) {
 var validateForm = function(sRequiredFields) {
 
     sFormName = document.getElementById('__DynaformName__');
-    if ((typeof(sFormName) != 'undefined' && sFormName != 'login') && (typeof(usernameLogged) != 'undefined' && usernameLogged != '') ) {
+    if ((typeof(sFormName) != 'undefined' && sFormName != 'login') && (typeof(__usernameLogged__) != 'undefined' && __usernameLogged__ != '') ) {
         if (!sessionPersits()) {
             showPromptLogin('session');
             return false;
@@ -3288,7 +3288,7 @@ var saveAndRefreshForm = function(oObject) {
 var sessionPersits = function() {
     var rpc = new leimnud.module.rpc.xmlhttp({
         url: '../services/sessionPersists',
-        args: 'dynaformRestoreValues=' + dynaformSVal,
+        args: 'dynaformRestoreValues=' + __dynaformSVal__,
         async: false
     });
     rpc.make();
@@ -3369,7 +3369,7 @@ var verifyLogin = function() {
     }
     var rpc = new leimnud.module.rpc.xmlhttp({
         url : '../login/authentication',
-        args: 'form[USR_USERNAME]=' + usernameLogged + '&form[USR_PASSWORD]=' + document.getElementById('thePassword').value.trim() + '&form[USR_LANG]=' + SYS_LANG
+        args: 'form[USR_USERNAME]=' + __usernameLogged__ + '&form[USR_PASSWORD]=' + document.getElementById('thePassword').value.trim() + '&form[USR_LANG]=' + SYS_LANG
     });
     rpc.callback = function(rpc) {
         if (rpc.xmlhttp.responseText.indexOf('form[USR_USERNAME]') == -1) {

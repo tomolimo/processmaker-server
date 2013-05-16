@@ -184,7 +184,7 @@ $aRequiredFields = array(
     'INDEX'         => $Fields['APP_DATA']['INDEX'],
     'APP_DATA'      => $Fields['APP_DATA']
 );
-$oHeadPublisher->addScriptCode('var dynaformSVal = \'' . serialize($aRequiredFields) . '\';');
+$oHeadPublisher->addScriptCode('var __dynaformSVal__ = \'' . serialize($aRequiredFields) . '\';');
 
 try {
     //Add content content step - Start
