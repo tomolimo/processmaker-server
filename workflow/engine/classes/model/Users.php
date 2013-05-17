@@ -52,7 +52,7 @@ class Users extends BaseUsers
             if ($this->validate()) {
                 $result = $this->save();
             } else {
-                $e = new Exception( G::LoadTranslation("ID_FAILED_VALIDATION_CLASS") . get_class( $this ) . "." );
+                $e = new Exception(G::LoadTranslation("ID_FAILED_VALIDATION_IN_CLASS1", SYS_LANG, array("CLASS" => get_class($this))));
                 $e->aValidationFailures = $this->getValidationFailures();
                 throw ($e);
             }
@@ -88,13 +88,12 @@ class Users extends BaseUsers
                 $this->setNew( false );
                 return $aFields;
             } else {
-                throw (new Exception( G::LoadTranslation("ID_THE_ROW") ." '" . $UsrUid . "' ". G::LoadTranslation("ID_TABLE_USER_DOESNT_EXIST")));
+                throw (new Exception(G::LoadTranslation("ID_USER_UID_DOESNT_EXIST", SYS_LANG, array("USR_UID" => $UsrUid))));
             }
         } catch (PropelException $e) {
             //capture invalid birthday date and replace by null
             $msg = $e->getMessage();
-            //if (strpos( 'Unable to parse value of [usr_birthday]', $msg ) != - 1) {
-            if (strpos( G::LoadTranslation("ID_UNABLE_PARSE_VALUE_URS_BIRTHDAY"), $msg ) != - 1) {
+            if (strpos( 'Unable to parse value of [usr_birthday]', $msg ) != - 1) {
                 $oRow->setUsrBirthday( null );
                 $oRow->save();
                 return $this->load( $UsrUid );
@@ -116,8 +115,8 @@ class Users extends BaseUsers
                 $result['USR_EMAIL'] = $oUser->getUsrEmail();
                 return $result;
             } else {
-                //        return $result;
-                throw (new Exception( G::LoadTranslation("ID_THE_ROW") ." '" . $UsrUid . "' ". G::LoadTranslation("ID_TABLE_USER_DOESNT_EXIST")));
+                // return $result;
+                throw (new Exception(G::LoadTranslation("ID_USER_UID_DOESNT_EXIST", SYS_LANG, array("USR_UID" => $UsrUid))));
             }
         } catch (Exception $oError) {
             throw ($oError);
@@ -153,7 +152,7 @@ class Users extends BaseUsers
                 return $result;
             } else {
                 //return $result;
-                throw (new Exception( G::LoadTranslation("ID_THE_ROW") ." '" . $UsrUid . "' ". G::LoadTranslation("ID_TABLE_USER_DOESNT_EXIST")));
+                throw (new Exception(G::LoadTranslation("ID_USER_UID_DOESNT_EXIST", SYS_LANG, array("USR_UID" => $UsrUid))));
             }
         } catch (Exception $oError) {
             throw ($oError);
@@ -173,7 +172,7 @@ class Users extends BaseUsers
                 return $result;
             } else {
                 $con->rollback();
-                throw (new Exception(G::LoadTranslation("ID_FAILED_VALIDATION_IN_CLASS") . get_class( $this ) . "." ));
+                throw (new Exception(G::LoadTranslation("ID_FAILED_VALIDATION_IN_CLASS1", SYS_LANG, array("CLASS" => get_class($this)))));
             }
         } catch (Exception $e) {
             $con->rollback();

@@ -49,12 +49,12 @@
       modal: true,
       buttons: {
         {/literal}"{translate label="ID_CASE_START"}"{literal}: function() {
-          $(this).dialog({/literal}"{translate label="ID_CLOSE"}"{literal});
+          $( this ).dialog( "close" );
           redirect('home/startCase?id='+id);
         },
 
-        Cancel: function() {
-          $(this).dialog({/literal}"{translate label="ID_CLOSE"}"{literal});
+        {/literal}"{translate label="ID_CANCEL"}"{literal}: function() {
+          $( this ).dialog( "close" );
         }
       }
     });

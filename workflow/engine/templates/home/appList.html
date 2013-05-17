@@ -54,7 +54,7 @@
       d.hide('slow');
     }
     else {
-      d.show({/literal}"{translate label="ID_SLOW"}"{literal});
+      d.show('slow');
     }
   }
 
@@ -84,7 +84,7 @@
                   {/literal}"{translate label="ID_ADD_NOTE"}"{literal}: function() {
                       var sendMail = document.getElementById('chkSendMail').checked;
                       sendMail = (sendMail == true) ? '1' : '0';
-                      $(this).dialog({/literal}"{translate label="ID_CLOSE"}"{literal});
+                      $(this).dialog("close");
                     $.post(
                       '../appProxy/postNote',
                       {appUid  : appUid,
@@ -96,9 +96,8 @@
                     );
                     //redirect('home/startCase?id='+id);
                   },
-                  Cancel: function() {
-                    //$(this).dialog( "close" );
-                    $(this).dialog({/literal}"{translate label="ID_CLOSE"}"{literal});
+                  {/literal}"{translate label="ID_CANCEL"}"{literal}: function() {
+                    $(this).dialog( "close" );
                   }
                 }
               });
@@ -134,7 +133,7 @@
           $('#n_'+appUid).show('slow');
         }
         d = $('#m_'+appUid);
-        d.show({/literal}"{translate label="ID_SLOW"}"{literal});
+        d.show('slow');
       }
     );
     return true;
@@ -153,7 +152,7 @@
             $('#loadmorebutton').html( {/literal}"{translate label="ID_LOAD_MORE"}"{literal} );
           }
           else {
-            $('#loadmorebutton').replaceWith({/literal}"<center> {translate label="ID_NO_MORE_APPLICATIONS"}</center>"{literal});
+            $('#loadmorebutton').replaceWith(<center>{/literal}"{translate label="ID_NO_MORE_APPLICATIONS"}"{literal}</center>);
           }
         }
       });

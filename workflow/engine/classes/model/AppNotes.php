@@ -106,7 +106,7 @@ class AppNotes extends BaseAppNotes
             $response['message'] = $msg;
         } else {
             $response['success'] = G::LoadTranslation("ID_SUCCESS");
-            $response['message'] = G::LoadTranslation("ID_SAVEDS");
+            $response['message'] = G::LoadTranslation("ID_SAVED2");
         }
 
         if ($notify) {
@@ -134,16 +134,16 @@ class AppNotes extends BaseAppNotes
             $oConfiguration = new Configuration();
             $sDelimiter = DBAdapter::getStringDelimiter();
             $oCriteria = new Criteria( 'workflow' );
-            $oCriteria->add( ConfigurationPeer::CFG_UID, G::LoadTranslation("ID_EMAILSS"));
+            $oCriteria->add( ConfigurationPeer::CFG_UID, 'Emails' );
             $oCriteria->add( ConfigurationPeer::OBJ_UID, '' );
             $oCriteria->add( ConfigurationPeer::PRO_UID, '' );
             $oCriteria->add( ConfigurationPeer::USR_UID, '' );
             $oCriteria->add( ConfigurationPeer::APP_UID, '' );
             if (ConfigurationPeer::doCount( $oCriteria ) == 0) {
-                $oConfiguration->create( array ('CFG_UID' => G::LoadTranslation("ID_EMAILSS"), 'OBJ_UID' => '','CFG_VALUE' => '','PRO_UID' => '','USR_UID' => '','APP_UID' => '') );
+                $oConfiguration->create( array ('CFG_UID' => 'Emails', 'OBJ_UID' => '','CFG_VALUE' => '','PRO_UID' => '','USR_UID' => '','APP_UID' => '') );
                 $aConfiguration = array ();
             } else {
-                $aConfiguration = $oConfiguration->load( G::LoadTranslation("ID_EMAILSS"), '', '', '', '' );
+                $aConfiguration = $oConfiguration->load('Emails', '', '', '', '' );
                 if ($aConfiguration['CFG_VALUE'] != '') {
                     $aConfiguration = unserialize( $aConfiguration['CFG_VALUE'] );
                     $passwd = $aConfiguration['MESS_PASSWORD'];
