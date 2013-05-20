@@ -67,35 +67,35 @@ class workspaceTools
         $this->upgradeDatabase();
         $stop = microtime(true);
         $final = $stop - $start;
-        CLI::logging("<*>   Process Updating database carried out in $final seconds.\n");
+        CLI::logging("<*>   Database Upgrade Process took $final seconds.\n");
 
         $start = microtime(true);
         CLI::logging("> Updating translations...\n");
         $this->upgradeTranslation($first);
         $stop = microtime(true);
         $final = $stop - $start;
-        CLI::logging("<*>   Process Updating translations carried out in $final seconds.\n");
+        CLI::logging("<*>   Updating Translations Process took $final seconds.\n");
 
         $start = microtime(true);
         CLI::logging("> Updating Content...\n");
         $this->upgradeContent($workSpace);
         $stop = microtime(true);
         $final = $stop - $start;
-        CLI::logging("<*>   Process Updating Content carried out in $final seconds.\n");
+        CLI::logging("<*>   Updating Content Process took $final seconds.\n");
 
         $start = microtime(true);
         CLI::logging("> Updating cache view...\n");
         $this->upgradeCacheView($buildCacheView, true, $lang);
         $stop = microtime(true);
         $final = $stop - $start;
-        CLI::logging("<*>   Process Updating cache view carried out in $final seconds.\n");
+        CLI::logging("<*>   Updating cache view Process took $final seconds.\n");
         
         $start = microtime(true);
         CLI::logging("> Updating cases directories structure...\n");
         $this->upgradeCasesDirectoryStructure($workSpace);
         $stop = microtime(true);
         $final = $stop - $start;
-        CLI::logging("<*>   Process Updating directories structure carried out in $final seconds.\n");
+        CLI::logging("<*>   Database Upgrade Structure Process took $final seconds.\n");
     }
 
     /**
@@ -1252,21 +1252,22 @@ class workspaceTools
                 $workspace->upgradeDatabase();
                 $stop = microtime(true);
                 $final = $stop - $start;
-                CLI::logging("<*>   Process Updating database carried out in $final seconds.\n");
+                CLI::logging("<*>   Database Upgrade Process took $final seconds.\n");
 
                 $start = microtime(true);
                 CLI::logging("> Updating cases directories structure...\n");
                 $workspace->upgradeCasesDirectoryStructure($workspaceName);
                 $stop = microtime(true);
                 $final = $stop - $start;
-                CLI::logging("<*>   Process Updating directories structure carried out in $final seconds.\n");
+                CLI::logging("<*>   Database Upgrade Structure Process took $final seconds.\n");
             }
             $start = microtime(true);
             CLI::logging("> Updating cache view...\n");
             $workspace->upgradeCacheView(true, false, $lang);
             $stop = microtime(true);
             $final = $stop - $start;
-            CLI::logging("<*>   Process Updating cache view carried out in $final seconds.\n");
+            CLI::logging("<*>   Updating cache view Process took $final seconds.\n");
+            
 
             mysql_close($link);
         }

@@ -74,7 +74,7 @@ CLI::taskOpt("info", "Only shows information about a backup archive.", "i");
 CLI::taskOpt("multiple", "Restore from multiple compresed enumerated files.", "m");
 CLI::taskOpt("workspace", "Select which workspace to restore if multiple workspaces are present in the archive.",
              "w:", "workspace=");
-CLI::taskOpt("lang", "Set the language for upgrade cacheView, by default en.", "l:","lang=");
+CLI::taskOpt("lang", "You must specify language on which rebuild of the case cache list builder will be done; if you don't specify this, it will use 'en' by default", "l:","lang=");
 CLI::taskRun(run_workspace_restore);
 
 CLI::taskName('cacheview-repair');
@@ -92,7 +92,7 @@ CLI::taskDescription(<<<EOT
 EOT
 );
 CLI::taskArg('workspace', true, true);
-CLI::taskOpt("lang", "Set the language for upgrade cacheView, by default en.", "l:","lang=");
+CLI::taskOpt("lang", "You must specify language on which rebuild of the case cache list builder will be done; if you don't specify this, it will use 'en' by default", "l:","lang=");
 CLI::taskRun(run_cacheview_upgrade);
 
 CLI::taskName('database-upgrade');
