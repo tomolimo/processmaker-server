@@ -358,13 +358,25 @@ Ext.onReady(function(){
                               Ext.getCmp('sizeEdit').disable();
                           }
                           if(selCombo == 'CHAR' || selCombo == 'VARCHAR') {
-                              Ext.getCmp('sizeEdit').setMaxValue(999);
+                              Ext.getCmp('sizeEdit').setMaxValue(((selCombo == 'CHAR')?255:999));
                               sizeField.getEl().dom.maxLength = 3;
                           } else {
                               Ext.getCmp('sizeEdit').setMaxValue(99);
                               sizeField.getEl().dom.maxLength = 2;
                           }
-                          
+                          if( selCombo == 'CHAR' 
+                              || selCombo == 'VARCHAR' 
+                              || selCombo == 'TIME'
+                              || selCombo == 'DATE'
+                              || selCombo == 'DATETIME'
+                              || selCombo == 'BOOLEAN'
+                              || selCombo == 'REAL'
+                              || selCombo == 'FLOAT'
+                              || selCombo == 'DOUBLE') {
+                              Ext.getCmp('field_incre').disable();
+                          } else {
+                              Ext.getCmp('field_incre').enable();
+                          }
                       }
                   }//select
               }
@@ -377,6 +389,7 @@ Ext.onReady(function(){
           align: 'right',
           editor: sizeField
       }, {
+        
         xtype: 'booleancolumn',
         header: _('ID_AUTO_INCREMENT'),
         dataIndex: 'field_autoincrement',
@@ -385,7 +398,10 @@ Ext.onReady(function(){
         trueText: _('ID_YES'),
         falseText: _('ID_NO'),
         editor: {
-            xtype: 'checkbox'
+            xtype: 'checkbox',
+            id: 'field_incre',
+            disabled: true,
+            inputValue: 'always'
         }
       }
   ];

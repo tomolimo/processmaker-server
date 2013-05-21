@@ -229,13 +229,31 @@ Ext.onReady(function(){
                               Ext.getCmp('sizeEdit').disable();
                           }
                           if(selCombo == 'CHAR' || selCombo == 'VARCHAR') {
-                              Ext.getCmp('sizeEdit').setMaxValue(999);
+                              Ext.getCmp('sizeEdit').setMaxValue(((selCombo == 'CHAR')?255:999));
                               sizeField.getEl().dom.maxLength = 3;
+                              Ext.getCmp('field_null').enable();
+                              Ext.getCmp('field_null').setValue(true);
                           } else {
                               Ext.getCmp('sizeEdit').setMaxValue(99);
                               sizeField.getEl().dom.maxLength = 2;
+                              Ext.getCmp('field_null').disable();
+                              Ext.getCmp('field_null').setValue(false);
                           }
-                          
+                          if( selCombo == 'CHAR' 
+                              || selCombo == 'VARCHAR' 
+                              || selCombo == 'TIME'
+                              || selCombo == 'DATE'
+                              || selCombo == 'DATETIME'
+                              || selCombo == 'BOOLEAN'
+                              || selCombo == 'REAL'
+                              || selCombo == 'FLOAT'
+                              || selCombo == 'DOUBLE') {
+                              Ext.getCmp('field_primary_key').disable();
+                              Ext.getCmp('field_incre').disable();
+                          } else {
+                              Ext.getCmp('field_primary_key').enable();
+                              Ext.getCmp('field_incre').enable();
+                          }
                       }
                   }//select
               }
@@ -256,7 +274,10 @@ Ext.onReady(function(){
         trueText: _('ID_YES'),
         falseText: _('ID_NO'),
         editor: {
-            xtype: 'checkbox'
+            xtype: 'checkbox',
+            id: 'field_null',
+            checked: false,
+            disabled: true
         }
       }, {
         xtype: 'booleancolumn',
@@ -267,7 +288,10 @@ Ext.onReady(function(){
         trueText: _('ID_YES'),
         falseText: _('ID_NO'),
         editor: {
-            xtype: 'checkbox'
+            xtype: 'checkbox',
+            id: 'field_primary_key',
+            disabled: true,
+            inputValue: 'always'
         }
       }, {
         xtype: 'booleancolumn',
@@ -278,7 +302,10 @@ Ext.onReady(function(){
         trueText: _('ID_YES'),
         falseText: _('ID_NO'),
         editor: {
-            xtype: 'checkbox'
+            xtype: 'checkbox',
+            id: 'field_incre',
+            disabled: true,
+            inputValue: 'always'
         }
       }
   ];
