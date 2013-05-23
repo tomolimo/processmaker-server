@@ -143,9 +143,9 @@ Ext.onReady(function(){
   //columns for table columns grid
   var cmColumns = [
       {
-        id: 'uid',
-        dataIndex: 'uid',
-        hidden: true
+          id: 'uid',
+          dataIndex: 'uid',
+          hidden: true
       },
       {
           id: 'field_uid',
@@ -331,7 +331,7 @@ Ext.onReady(function(){
     // specify any defaults for each column
     defaults: {
         resizable: false,
-        sortable: true // columns are not sortable by default
+        sortable:  true // columns are not sortable by default
     },
     columns:cmColumns
   });

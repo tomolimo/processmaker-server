@@ -254,38 +254,38 @@ Ext.onReady(function(){
   //columns for table columns grid
   var cmColumns = [
       {
-        id: 'uid',
-        dataIndex: 'uid',
-        hidden: true,
-        hideable:false
+          id: 'uid',
+          dataIndex: 'uid',
+          hidden: true,
+          hideable:false
       },
       {
-        dataIndex: '_index',
-        hidden: true,
-        hideable:false
+          dataIndex: '_index',
+          hidden: true,
+          hideable:false
       },
       {
-        dataIndex: '_isset',
-        hidden: true,
-        hideable:false
+          dataIndex: '_isset',
+          hidden: true,
+          hideable:false
       },
       {
           id: 'field_uid',
           dataIndex: 'field_uid',
           hidden: true,
-        hideable:false
+          hideable:false
       },
       {
           id: 'field_key',
           dataIndex: 'field_key',
           hidden: true,
-        hideable:false
+          hideable:false
       },
       {
           id: 'field_null',
           dataIndex: 'field_null',
           hidden: true,
-        hideable:false
+          hideable:false
       },
       {
           id: 'field_dyn',
@@ -427,7 +427,7 @@ Ext.onReady(function(){
     // specify any defaults for each column
     defaults: {
         resizable: false,
-        sortable: true // columns are not sortable by default
+        sortable:  true // columns are not sortable by default
     },
     columns:cmColumns
   });
