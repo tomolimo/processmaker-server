@@ -277,11 +277,10 @@ Ext.onReady(function() {
             PMExt.notify(_('ID_PM_ENV_SETTINGS_TITLE'), req.result.msg);
             saveButton.disable();
             currentLocation = parent.parent.location.href;
-            frame = parent.location.href;
-            settingsPage = location.href;
-            
-            location = settingsPage;
-            parent.location = frame;
+            //frame = parent.location.href;
+            //settingsPage = location.href;
+            //location = settingsPage;
+            //parent.location = frame;
             parent.parent.location = currentLocation; 
         }
       });
