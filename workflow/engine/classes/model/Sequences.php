@@ -18,7 +18,7 @@ class Sequences extends BaseSequences {
 
     /**
      * Create Sequences Table
-     * 
+     *
      * @param type $aData
      * @return type
      * @throws type
@@ -46,11 +46,11 @@ class Sequences extends BaseSequences {
 
     /**
      * Change Sequence with native query
-     * 
+     *
      * @param type $seqName
      * @param type $seqValue
      * @return type
-     * 
+     *
      */
     public function changeSequence($seqName, $seqValue)
     {
@@ -65,22 +65,22 @@ class Sequences extends BaseSequences {
             $rs = $stmt->executeQuery($sql, ResultSet::FETCHMODE_ASSOC);
             return $rs;
         } catch(Exception $e) {
-            // throw ($e); 
+            // throw ($e);
             throw new Exception( G::LoadTranslation('ID_ERROR_CHANGE_SEQUENCE_NUMBER'));
         }
     }
 
     /**
      * Lock Sequence Table
-     * 
+     *
      * @return type
-     * 
+     *
      */
     public function lockSequenceTable()
     {
         try {
             $con = Propel::getConnection('workflow');
-            $sql = "LOCK TABLES SEQUENCES READ, APPLICATION READ ";
+            $sql = "LOCK TABLES SEQUENCES WRITE, APPLICATION READ ";
 
             $stmt = $con->createStatement();
             $rs = $stmt->executeQuery($sql, ResultSet::FETCHMODE_ASSOC);
@@ -92,13 +92,13 @@ class Sequences extends BaseSequences {
 
     /**
      * Unlock Sequence Table
-     * 
+     *
      * @return type
-     * 
+     *
      */
     public function unlockSequenceTable()
     {
-        try { 
+        try {
             $con = Propel::getConnection('workflow');
             $sql = "UNLOCK TABLES ";
             $stmt = $con->createStatement();
@@ -106,12 +106,12 @@ class Sequences extends BaseSequences {
             return $rs;
         } catch(Exeption $e) {
             throw ($e);
-        } 
+        }
     }
 
     /**
      * Name Exists
-     * 
+     *
      * @param type $seqName
      * @return boolean
      *
@@ -132,7 +132,7 @@ class Sequences extends BaseSequences {
 
     /**
      * Load Sequences
-     * 
+     *
      * @param type $seqName
      * @return type
      * @throws type
@@ -157,7 +157,7 @@ class Sequences extends BaseSequences {
 
     /**
      *  Update Sequences
-     * 
+     *
      * @param type $fields
      * @return type
      * @throws type
@@ -185,7 +185,7 @@ class Sequences extends BaseSequences {
 
     /**
      * Remove Sequences
-     * 
+     *
      * @param type $seqName
      * @return type
      * @throws type
@@ -208,7 +208,7 @@ class Sequences extends BaseSequences {
 
     /**
      * Get new sequece number
-     * 
+     *
      * @param type $seqName
      * @return type
      * @throws type

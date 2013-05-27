@@ -388,6 +388,7 @@ class Application extends BaseApplication
             }
 
             $this->setAppNumber($maxNumber);
+            $oSequences->changeSequence('APP_NUMBER', $maxNumber);
 
             if ($this->validate()) {
                 $con->begin();
@@ -403,7 +404,6 @@ class Application extends BaseApplication
                 $con->commit();
 
                 $oSequences->unlockSequenceTable();
-                $oSequences->changeSequence('APP_NUMBER', $maxNumber);
                 return $this->getAppUid();
             } else {
                 $msg = '';
@@ -412,7 +412,7 @@ class Application extends BaseApplication
                     $msg .= $objValidationFailure->getMessage() . "<br/>";
                 }
                 $oSequences->unlockSequenceTable();
-                $oSequences->changeSequence('APP_NUMBER', $maxNumber);
+
                 throw (new PropelException('The APPLICATION row cannot be created!', new PropelException($msg)));
             }
         } catch (Exception $e) {
