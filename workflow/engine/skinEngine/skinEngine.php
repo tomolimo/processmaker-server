@@ -421,7 +421,7 @@ class SkinEngine
         G::LoadClass( "configuration" );
         $conf = new Configurations();
         if (defined('SYS_SYS') && $conf->exists("ENVIRONMENT_SETTINGS")) {
-            $smarty->assign('udate', $conf->getSystemDate(date('Y-m-d')));
+            $smarty->assign('udate', $conf->getSystemDate(date('Y-m-d H:i:s')));
         } else {
             $smarty->assign('udate', G::getformatedDate(date('Y-m-d'), 'M d, yyyy', SYS_LANG));
         }
@@ -713,6 +713,7 @@ class SkinEngine
         $switch_interface = isset($_SESSION['user_experience']) && $_SESSION['user_experience'] == 'SWITCHABLE';
 
         $smarty->assign('user_logged', (isset($_SESSION['USER_LOGGED'])? $_SESSION['USER_LOGGED'] : ''));
+        $smarty->assign('tracker', (SYS_COLLECTION == 'tracker') ? ( ($G_PUBLISH->Parts[0]['File'] != 'tracker/login' ) ? true : '') : '');
         $smarty->assign('switch_interface', $switch_interface);
         $smarty->assign('switch_interface_label', G::LoadTranslation('ID_SWITCH_INTERFACE'));
         $smarty->assign('rolename', isset($_SESSION['USR_ROLENAME']) ? $_SESSION['USR_ROLENAME'] . '' : '');
@@ -725,7 +726,7 @@ class SkinEngine
         G::LoadClass( "configuration" );
         $conf = new Configurations();
         if ( defined('SYS_SYS') && $conf->exists("ENVIRONMENT_SETTINGS")) {
-            $smarty->assign('udate', $conf->getSystemDate(date('Y-m-d')));
+            $smarty->assign('udate', $conf->getSystemDate(date('Y-m-d H:i:s')));
         } else {
             $smarty->assign('udate', G::getformatedDate(date('Y-m-d'), 'M d, yyyy', SYS_LANG));
         }
