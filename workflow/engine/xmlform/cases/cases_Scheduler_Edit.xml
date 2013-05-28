@@ -50,7 +50,7 @@
 
 
 <SCH_NAME type="text" maxlength="100" validate="Any" required="1" readonly="0" size="40" mode="edit" mask="" strto="" dependentfields="" defaultvalue="" hint="" formula="" function="" sqlconnection="" savelabel="0">
-<en>Description</en>
+<en>Name</en>
 </SCH_NAME>
 <PRO_UID type="hidden" required="1"  style="width:300px" dependentfields="TAS_UID" mode="edit">
 </PRO_UID>
