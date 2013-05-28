@@ -771,7 +771,7 @@ function validateSchedulerFields(oForm) {
     }
     
     var listNames = document.getElementById('form[SCH_LIST]').value;
-    listNames = listNames.split("|");
+    listNames = listNames.split("^");
     for (var i= 1; i<listNames.length; i++) {
         if (schedulerTitle == listNames[i]) {
             document.getElementById('form[SCH_NAME]').focus();

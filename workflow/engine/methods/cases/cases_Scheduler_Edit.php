@@ -127,7 +127,7 @@ try {
 
     $aFields['SCH_LIST'] = '';
     foreach ($_SESSION['_DBArray']['cases_scheduler'] as $key => $item) {
-        $aFields['SCH_LIST'] .= ($item['SCH_UID'] != $_GET['SCH_UID']) ? $item['SCH_NAME'] . '|' : '' ;
+        $aFields['SCH_LIST'] .= ($item['SCH_UID'] != $_GET['SCH_UID']) ? $item['SCH_NAME'] . '^' : '' ;
     }
 
 
