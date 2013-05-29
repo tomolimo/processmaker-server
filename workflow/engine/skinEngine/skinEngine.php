@@ -726,7 +726,7 @@ class SkinEngine
         G::LoadClass( "configuration" );
         $conf = new Configurations();
         if ( defined('SYS_SYS') && $conf->exists("ENVIRONMENT_SETTINGS")) {
-            $smarty->assign('udate', $conf->getSystemDate(date('Y-m-d H:i:s')));
+            $smarty->assign('udate', $conf->getSystemDate(date('Y-m-d')));
         } else {
             $smarty->assign('udate', G::getformatedDate(date('Y-m-d'), 'M d, yyyy', SYS_LANG));
         }
