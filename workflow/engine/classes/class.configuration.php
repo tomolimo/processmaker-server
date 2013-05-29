@@ -88,7 +88,7 @@ class Configurations // extends Configuration
             }
         }
     }
-    
+
     public function exists($cfgID)
     {
         return $this->Configuration->exists($cfgID,"",'','','');
@@ -314,11 +314,11 @@ class Configurations // extends Configuration
             return null;
         }
     }
-    
-    
+
+
     public function userNameFormat($username, $fullname)
     {
-        
+
         try {
             if (!isset($this->UserConfig)) {
                 $this->UserConfig = $this->getConfiguration('ENVIRONMENT_SETTINGS', '');
@@ -486,6 +486,7 @@ class Configurations // extends Configuration
         $arrayFormat[] = array("id" => "d M, Y", "name" => G::LoadTranslation("ID_DATE_FORMAT_12")); //"d M, Y"          i.e: "17 Nov, 2010"
         $arrayFormat[] = array("id" => "d m, Y", "name" => G::LoadTranslation("ID_DATE_FORMAT_13")); //"d m, Y"          i.e: "17 11, 2010"
         $arrayFormat[] = array("id" => "d.m.Y", "name" => G::LoadTranslation("ID_DATE_FORMAT_14")); //"d.m.Y"           i.e: "17.11.2010"
+        $arrayFormat[] = array("id" => "d \d\e F \d\e Y", "name" => G::LoadTranslation("ID_DATE_FORMAT_17")); //"d \d\e F \d\e Y" i.e: "2 de Febrero de 2013" (Spanish format)
 
         return $arrayFormat;
     }
@@ -940,4 +941,4 @@ class Configurations // extends Configuration
         return $ver;
     }
 }
- 
+

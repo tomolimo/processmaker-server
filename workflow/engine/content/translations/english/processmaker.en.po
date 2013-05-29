@@ -12506,6 +12506,12 @@ msgid "m D, Y"
 msgstr "m D, Y"
 
 # TRANSLATION
+# LABEL/ID_DATE_FORMAT_17
+#: LABEL/ID_DATE_FORMAT_17
+msgid "d de F de Y"
+msgstr "d de F de Y"
+
+# TRANSLATION
 # LABEL/ID_EXPIRES_IN
 #: LABEL/ID_EXPIRES_IN
 msgid "Expires in"

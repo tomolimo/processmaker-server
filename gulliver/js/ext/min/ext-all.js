@@ -50,6 +50,7 @@ function _DF(DATE_TIME,D_FORMAT)
 {function LZ(x){return(x<0||x>9?"":"0")+x;}
 if(typeof D_FORMAT=='undefined'){if(typeof FORMATS!='undefined'){D_FORMAT=FORMATS.dateFormat;}
 else{D_FORMAT='m/d/Y';}}
+if(D_FORMAT.indexOf(' \\d\\e ')){D_FORMAT=D_FORMAT.replace(/ \\d\\e /gi," [of] ");}
 if(!(DATE_TIME!='')){if(DATE_TIME=='')
 return'';else
 return'**'+DATE_TIME+'**';}
@@ -60,6 +61,7 @@ else if(H>12){values['g']=H-12;}
 else{values['g']=H;}
 values['h']=LZ(values['g']);values['i']=LZ(m);values['s']=LZ(s);if(H>11)values['a']='pm';else values['a']='am';if(H>11)values['A']='PM';else values['A']='AM';if(typeof FORMATS=='undefined')values['T']='**';else values['T']=FORMATS.TimeZone;var aDate=D_FORMAT.split('');var aux='';var xParts=new Array('Y','y','F','M','m','n','d','j','D','l','G','H','g','h','i','s','a','A','T');for(var i=0;i<aDate.length;i++){if(xParts.indexOf(aDate[i])==-1){aux=aux+aDate[i];}
 else{aux=aux+values[aDate[i]];}}
+if(aux.indexOf(" [of] ")){aux=aux.replace(/\[of\]/g,"de");}
 return aux;}
 Ext.util.Format.capitalize=(function(){var re=/(^|[^\w])([a-z])/g,fn=function(m,a,b){return a+b.toUpperCase();};return function(v){return v.toLowerCase().replace(re,fn);}})();String.prototype.trim=function(){return this.replace(/^\s+|\s+$/g,"");}
 String.prototype.nl2br=function(){return this.replace(/\n/g,'<br />');}

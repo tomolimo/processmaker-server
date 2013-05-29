@@ -358,14 +358,14 @@ function __()
   var existTranslations = true;
   var existIdLabel = true;
   eval("if( typeof TRANSLATIONS_" + argv[0].toUpperCase() + " != 'undefined' && TRANSLATIONS_" + argv[0].toUpperCase() + ") { existTranslations = true; } else { existTranslations = false; }");
-  if (existTranslations) {  
+  if (existTranslations) {
     eval("if( typeof TRANSLATIONS_" + argv[0].toUpperCase() + "[argv[1]] != 'undefined' ) { existIdLabel = true; } else { existIdLabel = false; }");
     if (existIdLabel) {
       if (argc > 2) {
         eval("trn = TRANSLATIONS_" + argv[0].toUpperCase() + "[argv[0]];");
         for (i = 2; i < argv.length; i++) {
           trn = trn.replace('{'+(i-2)+'}', argv[i]);
-        }        
+        }
       } else {
         eval("trn = TRANSLATIONS_" + argv[0].toUpperCase() + "[argv[1]];");
       }
@@ -426,6 +426,10 @@ function _DF(DATE_TIME, D_FORMAT)
       else {
         D_FORMAT = 'm/d/Y';
       }
+    }
+
+    if (D_FORMAT.indexOf(' \\d\\e ')) {
+        D_FORMAT = D_FORMAT.replace(/ \\d\\e /gi, " [of] ");
     }
 
     if (!(DATE_TIME != '')) {
@@ -499,6 +503,11 @@ function _DF(DATE_TIME, D_FORMAT)
          aux = aux + values[aDate[i]];
        }
     }
+
+    if (aux.indexOf(" [of] ")) {
+        aux = aux.replace(/\[of\]/g, "de");
+    }
+
     return aux;
   }
 
