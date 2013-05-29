@@ -1356,7 +1356,7 @@ class Installer extends Controller
     {
         $query = <<<EOL
 INSERT INTO CONFIGURATION (CFG_UID, CFG_VALUE) VALUES
-('ENVIRONMENT_SETTINGS', 'a:3:{s:26:"login_enableForgotPassword";b:0;s:27:"login_enableVirtualKeyboard";b:0;s:21:"login_defaultLanguage";s:5:"pt-BR";}');
+('ENVIRONMENT_SETTINGS', 'a:4:{s:26:"login_enableForgotPassword";b:0;s:27:"login_enableVirtualKeyboard";b:0;s:21:"login_defaultLanguage";s:5:"pt-BR";s:10:"dateFormat";s:15:"d \d\e F \d\e Y";}');
 EOL;
         $this->mysqlQuery($query);
     }
