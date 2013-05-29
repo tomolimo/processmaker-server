@@ -524,6 +524,12 @@ class Configurations // extends Configuration
                 $newCreation = '';
                 $maskTime = array('d' => '%d', 'D' => '%A', 'j' => '%e', 'l' => '%A', 'N' => '%u', 'S' => '%d', 'w' => '%w', 'z' => '%j', 'W' => '%W', 'F' => '%B', 'm' => '%m', 'M' => '%B', 'n' => '%m', 'o' => '%Y', 'Y' => '%Y', 'y' => '%g', 'a' => '%P', 'A' => '%p', 'g' => '%l', 'G' => '%k', 'h' => '%I', 'H' => '%H', 'i' => '%M', 's' => '%S');
                 $creationDateMask = trim($creationDateMask);
+                
+                if (strpos($creationDateMask, ' \\d\\e ') !== false) {
+                    $creationDateMask = str_replace(' \\d\\e ', ' [xx] ', $creationDateMask);  
+                }
+
+
                 for ($i = 0; $i < strlen($creationDateMask); $i++) {
                     if ($creationDateMask[$i] != ' ' && isset($maskTime[$creationDateMask[$i]])) {
                         $newCreation .= $maskTime[$creationDateMask[$i]];
@@ -561,8 +567,19 @@ class Configurations // extends Configuration
 
                 setlocale(LC_TIME, $langLocate);
                 $dateTime = utf8_encode(strftime($newCreation, mktime(0, 0, 0, $m, $d, $y)));
+
+                if (strpos($dateTime, ' ') !== false) {
+                    $dateTime = ucwords($dateTime);    
+                }
+                
+                if (strpos($dateTime, ' [xx] ') !== false) {
+                    $dateTime = str_replace('[xx]', ' de ', $dateTime);  
+                }
             }
+
+            
         }
+
         return $dateTime;
     }
 
