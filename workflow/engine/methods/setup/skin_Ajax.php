@@ -50,13 +50,16 @@ function skinList ()
         $wildcard = '@';
     }
 
-    $classicSkin = '';
+    $filterList = array();
     if (defined('PARTNER_FLAG')) {
-        $classicSkin = '00000000000000000000000000000001';
+        $filterList = array(
+            '00000000000000000000000000000001',
+            '00000000000000000000000000000002'
+        );
     }
 
     foreach ($skinList['skins'] as $key => $value) {
-        if (!isset($value['SKIN_ID']) || $value['SKIN_ID'] != $classicSkin) {
+        if (! isset($value['SKIN_ID']) || ! in_array($value['SKIN_ID'], $filterList)) {
             if ($value['SKIN_FOLDER_ID'] != 'simplified' && $value['SKIN_FOLDER_ID'] != 'uxs' && $value['SKIN_FOLDER_ID'] != 'uxmodern') {
                 if ($skinList['currentSkin'] == $value['SKIN_FOLDER_ID']) {
                     $value['SKIN_STATUS'] = $wildcard . G::LoadTranslation( 'ID_ACTIVE' );
