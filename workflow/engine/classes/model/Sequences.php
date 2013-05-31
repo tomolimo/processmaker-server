@@ -215,9 +215,22 @@ class Sequences extends BaseSequences {
      */
     public function getSequeceNumber($seqName)
     {
+        $c = new Criteria();
+        $c->clearSelectColumns();
         try {
-            $aSequence = $this->load($seqName);
-            $nSeqValue = ($aSequence['SEQ_VALUE'] + 1);
+
+            if ($this->nameExists("APP_NUMBER") ) {
+                $aSequence = $this->load($seqName);
+                $nSeqValue = ($aSequence['SEQ_VALUE'] + 1);
+            } else {
+                $c->addSelectColumn('MAX(' . ApplicationPeer::APP_NUMBER . ')'); //the appnumber is based in all processes
+                                                                                 //active, not only in the specified
+                                                                                 //process guid
+                $result = ApplicationPeer::doSelectRS($c);
+                $result->next();
+                $row = $result->getRow();
+                $nSeqValue = $row[0] + 1;
+            }
 
             return $nSeqValue;
         } catch (Exception $e) {

@@ -375,20 +375,11 @@ class Application extends BaseApplication
             $oSequences = new Sequences();
             $oSequences->lockSequenceTable();
 
-            if ($oSequences->nameExists("APP_NUMBER") ) {
-                $maxNumber = $oSequences->getSequeceNumber("APP_NUMBER");
-            } else {
-                $c->addSelectColumn('MAX(' . ApplicationPeer::APP_NUMBER . ')'); //the appnumber is based in all processes
-                                                                                 //active, not only in the specified
-                                                                                 //process guid
-                $result = ApplicationPeer::doSelectRS($c);
-                $result->next();
-                $row = $result->getRow();
-                $maxNumber = $row[0] + 1;
-            }
+            $maxNumber = $oSequences->getSequeceNumber("APP_NUMBER");
 
             $this->setAppNumber($maxNumber);
             $oSequences->changeSequence('APP_NUMBER', $maxNumber);
+            $oSequences->unlockSequenceTable();
 
             if ($this->validate()) {
                 $con->begin();
@@ -403,7 +394,6 @@ class Application extends BaseApplication
 
                 $con->commit();
 
-                $oSequences->unlockSequenceTable();
                 return $this->getAppUid();
             } else {
                 $msg = '';
@@ -411,7 +401,6 @@ class Application extends BaseApplication
                 foreach ($this->getValidationFailures() as $objValidationFailure) {
                     $msg .= $objValidationFailure->getMessage() . "<br/>";
                 }
-                $oSequences->unlockSequenceTable();
 
                 throw (new PropelException('The APPLICATION row cannot be created!', new PropelException($msg)));
             }
