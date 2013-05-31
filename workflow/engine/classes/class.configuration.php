@@ -88,7 +88,7 @@ class Configurations // extends Configuration
             }
         }
     }
-    
+
     public function exists($cfgID)
     {
         return $this->Configuration->exists($cfgID,"",'','','');
@@ -314,11 +314,11 @@ class Configurations // extends Configuration
             return null;
         }
     }
-    
-    
+
+
     public function userNameFormat($username, $fullname)
     {
-        
+
         try {
             if (!isset($this->UserConfig)) {
                 $this->UserConfig = $this->getConfiguration('ENVIRONMENT_SETTINGS', '');
@@ -486,6 +486,7 @@ class Configurations // extends Configuration
         $arrayFormat[] = array("id" => "d M, Y", "name" => G::LoadTranslation("ID_DATE_FORMAT_12")); //"d M, Y"          i.e: "17 Nov, 2010"
         $arrayFormat[] = array("id" => "d m, Y", "name" => G::LoadTranslation("ID_DATE_FORMAT_13")); //"d m, Y"          i.e: "17 11, 2010"
         $arrayFormat[] = array("id" => "d.m.Y", "name" => G::LoadTranslation("ID_DATE_FORMAT_14")); //"d.m.Y"           i.e: "17.11.2010"
+        $arrayFormat[] = array("id" => "d \d\e F \d\e Y", "name" => G::LoadTranslation("ID_DATE_FORMAT_17")); //"d \d\e F \d\e Y" i.e: "2 de Febrero de 2013" (Spanish format)
 
         return $arrayFormat;
     }
@@ -523,6 +524,12 @@ class Configurations // extends Configuration
                 $newCreation = '';
                 $maskTime = array('d' => '%d', 'D' => '%A', 'j' => '%e', 'l' => '%A', 'N' => '%u', 'S' => '%d', 'w' => '%w', 'z' => '%j', 'W' => '%W', 'F' => '%B', 'm' => '%m', 'M' => '%B', 'n' => '%m', 'o' => '%Y', 'Y' => '%Y', 'y' => '%g', 'a' => '%P', 'A' => '%p', 'g' => '%l', 'G' => '%k', 'h' => '%I', 'H' => '%H', 'i' => '%M', 's' => '%S');
                 $creationDateMask = trim($creationDateMask);
+                
+                if (strpos($creationDateMask, ' \\d\\e ') !== false) {
+                    $creationDateMask = str_replace(' \\d\\e ', ' [xx] ', $creationDateMask);  
+                }
+
+
                 for ($i = 0; $i < strlen($creationDateMask); $i++) {
                     if ($creationDateMask[$i] != ' ' && isset($maskTime[$creationDateMask[$i]])) {
                         $newCreation .= $maskTime[$creationDateMask[$i]];
@@ -560,8 +567,19 @@ class Configurations // extends Configuration
 
                 setlocale(LC_TIME, $langLocate);
                 $dateTime = utf8_encode(strftime($newCreation, mktime(0, 0, 0, $m, $d, $y)));
+
+                if (strpos($dateTime, ' ') !== false) {
+                    $dateTime = ucwords($dateTime);    
+                }
+                
+                if (strpos($dateTime, ' [xx] ') !== false) {
+                    $dateTime = str_replace('[xx]', ' de ', $dateTime);  
+                }
             }
+
+            
         }
+
         return $dateTime;
     }
 
@@ -940,4 +958,4 @@ class Configurations // extends Configuration
         return $ver;
     }
 }
- 
+
