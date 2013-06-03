@@ -1515,13 +1515,13 @@ class processMap
                 $aFields['TAS_CALENDAR'] = $calendarInfo['CALENDAR_APPLIED'] != 'DEFAULT' ? $calendarInfo['CALENDAR_UID'] : "";
             }
 
-            if ($iForm == 2) {
-                switch ($aFields["TAS_ASSIGN_TYPE"]) {
-                    case "SELF_SERVICE":
-                        $aFields["TAS_ASSIGN_TYPE"] = (!empty($aFields["TAS_GROUP_VARIABLE"])) ? "SELF_SERVICE_EVALUATE" : $aFields["TAS_ASSIGN_TYPE"];
-                        break;
-                }
-            }
+            //if ($iForm == 2) {
+            //    switch ($aFields["TAS_ASSIGN_TYPE"]) {
+            //        case "SELF_SERVICE":
+            //            $aFields["TAS_ASSIGN_TYPE"] = (!empty($aFields["TAS_GROUP_VARIABLE"])) ? "SELF_SERVICE_EVALUATE" : $aFields["TAS_ASSIGN_TYPE"];
+            //            break;
+            //    }
+            //}
 
             global $G_PUBLISH;
             G::LoadClass('xmlfield_InputPM');

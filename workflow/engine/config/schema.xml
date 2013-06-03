@@ -1243,7 +1243,7 @@
       <rule name="validValues" value="TRUE|FALSE" message="Please select a valid value for TAS_ALERT."/>
     </validator>
     <validator column="TAS_ASSIGN_TYPE">
-      <rule name="validValues" value="BALANCED|MANUAL|EVALUATE|REPORT_TO|SELF_SERVICE|STATIC_MI|CANCEL_MI" message="Please select a valid value for TAS_ASSIGN_TYPE."/>
+      <rule name="validValues" value="BALANCED|MANUAL|EVALUATE|REPORT_TO|SELF_SERVICE|SELF_SERVICE_EVALUATE|STATIC_MI|CANCEL_MI" message="Please select a valid value for TAS_ASSIGN_TYPE."/>
     </validator>
     <validator column="TAS_ASSIGN_LOCATION">
       <rule name="validValues" value="TRUE|FALSE" message="Please select a valid value for TAS_ASSIGN_LOCATION."/>
