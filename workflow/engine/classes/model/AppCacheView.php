@@ -343,7 +343,7 @@ class AppCacheView extends BaseAppCacheView
         $c->addJoin(TaskPeer::PRO_UID, ProcessPeer::PRO_UID, Criteria::LEFT_JOIN);
         $c->addJoin(TaskPeer::TAS_UID, TaskUserPeer::TAS_UID, Criteria::LEFT_JOIN);
         $c->add(ProcessPeer::PRO_STATUS, 'ACTIVE');
-        $c->add(TaskPeer::TAS_ASSIGN_TYPE, 'SELF_SERVICE_EVALUATE');
+        $c->add(TaskPeer::TAS_ASSIGN_TYPE, 'SELF_SERVICE');
         $c->add(TaskPeer::TAS_GROUP_VARIABLE, '', Criteria::NOT_EQUAL);
         $rs = TaskPeer::doSelectRS($c);
         $rs->setFetchmode(ResultSet::FETCHMODE_ASSOC);

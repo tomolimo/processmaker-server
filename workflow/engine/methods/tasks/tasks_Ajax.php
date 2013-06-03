@@ -64,12 +64,15 @@ try {
             }
 
             //Validating TAS_ASSIGN_VARIABLE value
-            //if (!isset($aData['TAS_ASSIGN_TYPE'])) {
-            //    $aData['TAS_ASSIGN_TYPE'] = 'BALANCED';
-            //}
-            if ($aData['TAS_ASSIGN_TYPE'] != 'SELF_SERVICE_EVALUATE') {
-            //    $aData['TAS_ASSIGN_TYPE'] = 'SELF_SERVICE';
-            //} else {
+            if (!isset($aData['TAS_ASSIGN_TYPE'])) {
+                $aData['TAS_ASSIGN_TYPE'] = 'BALANCED';
+            }
+            if ($aData['TAS_ASSIGN_TYPE'] == 'SELF_SERVICE_EVALUATE') {
+                $aData['TAS_ASSIGN_TYPE'] = 'SELF_SERVICE';
+                if(trim($aData['TAS_GROUP_VARIABLE']) == '') {
+                   $aData['TAS_GROUP_VARIABLE'] = '@@SYS_GROUP_TO_BE_ASSIGNED';
+                }
+            } else {
                 $aData['TAS_GROUP_VARIABLE'] = '';
             }
 

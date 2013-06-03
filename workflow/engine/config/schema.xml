@@ -1198,7 +1198,7 @@
     <column name="TAS_PRIORITY_VARIABLE" type="VARCHAR" size="100" required="true" default=""/>
     <column name="TAS_ASSIGN_TYPE" type="VARCHAR" size="30" required="true" default="BALANCED"/>
     <column name="TAS_ASSIGN_VARIABLE" type="VARCHAR" size="100" required="true" default="@@SYS_NEXT_USER_TO_BE_ASSIGNED"/>
-    <column name="TAS_GROUP_VARIABLE" type="VARCHAR" size="100" required="false" default="@@SYS_GROUP_TO_BE_ASSIGNED"/>
+    <column name="TAS_GROUP_VARIABLE" type="VARCHAR" size="100" required="false"/>
     <column name="TAS_MI_INSTANCE_VARIABLE" type="VARCHAR" size="100" required="true" default="@@SYS_VAR_TOTAL_INSTANCE"/>
     <column name="TAS_MI_COMPLETE_VARIABLE" type="VARCHAR" size="100" required="true" default="@@SYS_VAR_TOTAL_INSTANCES_COMPLETE"/>
     <column name="TAS_ASSIGN_LOCATION" type="VARCHAR" size="20" required="true" default="FALSE"/>
@@ -1243,7 +1243,7 @@
       <rule name="validValues" value="TRUE|FALSE" message="Please select a valid value for TAS_ALERT."/>
     </validator>
     <validator column="TAS_ASSIGN_TYPE">
-      <rule name="validValues" value="BALANCED|MANUAL|EVALUATE|REPORT_TO|SELF_SERVICE|SELF_SERVICE_EVALUATE|STATIC_MI|CANCEL_MI" message="Please select a valid value for TAS_ASSIGN_TYPE."/>
+      <rule name="validValues" value="BALANCED|MANUAL|EVALUATE|REPORT_TO|SELF_SERVICE|STATIC_MI|CANCEL_MI" message="Please select a valid value for TAS_ASSIGN_TYPE."/>
     </validator>
     <validator column="TAS_ASSIGN_LOCATION">
       <rule name="validValues" value="TRUE|FALSE" message="Please select a valid value for TAS_ASSIGN_LOCATION."/>
