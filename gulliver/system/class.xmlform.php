@@ -4464,6 +4464,8 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
             $mask = '%Y-%m-%d'; //set default
         }
 
+        $valueDemo = masktophp($mask, "today");
+
         if ($this->defaultValue != "") {
             $defaultValue = masktophp( $mask, $defaultValue);
         }
@@ -4528,20 +4530,21 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
             $Time = 'false';
 
             if (($sizehour !== false) && ($sizemin !== false) && ($sizesec !== false)) {
-                $sizeend = $maskleng + 2;
-                $Time = 'true';
-            } else {
-                $sizeend = $maskleng + 2;
+                $Time = "true";
             }
+
+            $sizeend = strlen($valueDemo) + 3;
+
             if ($this->required) {
                 $isRequired = '1';
             } else {
                 $isRequired = '0';
             }
+
             if ($this->editable != "0") {
-                $html = '<input pm:required="' . $isRequired . '" id="' . $pID . '" name="' . $pID . '" pm:mask="' . $mask . '" pm:start="' . $startDate . '" pm:end="' . $endDate . '" pm:time="' . $Time . '" ' . $onchange . ' class="module_app_input___gray" size="' . $sizeend . '" value="' . $value . '" pm:defaultvalue="' . $defaultValue . '"  />' . '<a onclick="removeValue(\'' . $pID . '\'); return false;" style="position:relative;left:-17px;top:2px;" >' . '  <img src="/images/icons_silk/calendar_x_button.png" />' . '</a>' . '<a id="' . $pID . '[btn]" style="position:relative;left:-17px;top:2px;" >' . '  <img src="/images/pmdateicon.png" border="0" width="12" height="14" />' . '</a>' . '<script>datePicker4("", \'' . $pID . '\', \'' . $mask . '\', \'' . $startDate . '\', \'' . $endDate . '\',' . $Time . ')</script>';
+                $html = '<input pm:required="' . $isRequired . '" id="' . $pID . '" name="' . $pID . '" pm:mask="' . $mask . '" pm:start="' . $startDate . '" pm:end="' . $endDate . '" pm:time="' . $Time . '" ' . $onchange . ' class="module_app_input___gray" size="' . $sizeend . '" value="' . $value . '" pm:defaultvalue="' . $defaultValue . '"  />' . '<a onclick="removeValue(\'' . $pID . '\'); return false;" style="position:relative;left:-17px;top:2px;" >' . '  <img src="/images/icons_silk/calendar_x_button.png" />' . '</a>' . '<a id="' . $pID . '[btn]" style="position: relative; top: 2px; left: -16px;" >' . '  <img src="/images/pmdateicon.png" border="0" width="12" height="14" />' . '</a>' . '<script>datePicker4("", \'' . $pID . '\', \'' . $mask . '\', \'' . $startDate . '\', \'' . $endDate . '\',' . $Time . ')</script>';
             } else {
-                $html = '<input pm:required="' . $isRequired . '" id="' . $pID . '" name="' . $pID . '" pm:mask="' . $mask . '" pm:start="' . $startDate . '" pm:end="' . $endDate . '" pm:time="' . $Time . '" ' . $onchange . ' class="module_app_input___gray" size="' . $sizeend . '" value="' . $value . '" pm:defaultvalue="' . $defaultValue . '" readonly="readonly"  />' . '<a onclick="removeValue(\'' . $pID . '\'); return false;" style="position:relative;left:-17px;top:2px;" >' . '  <img src="/images/icons_silk/calendar_x_button.png" />' . '</a>' . '<a id="' . $pID . '[btn]" style="position:relative;left:-17px;top:2px;" >' . '  <img src="/images/pmdateicon.png" border="0" width="12" height="14" />' . '</a>' . '<script>datePicker4("", \'' . $pID . '\', \'' . $mask . '\', \'' . $startDate . '\', \'' . $endDate . '\',' . $Time . ')</script>';
+                $html = '<input pm:required="' . $isRequired . '" id="' . $pID . '" name="' . $pID . '" pm:mask="' . $mask . '" pm:start="' . $startDate . '" pm:end="' . $endDate . '" pm:time="' . $Time . '" ' . $onchange . ' class="module_app_input___gray" size="' . $sizeend . '" value="' . $value . '" pm:defaultvalue="' . $defaultValue . '" readonly="readonly"  />' . '<a onclick="removeValue(\'' . $pID . '\'); return false;" style="position:relative;left:-17px;top:2px;" >' . '  <img src="/images/icons_silk/calendar_x_button.png" />' . '</a>' . '<a id="' . $pID . '[btn]" style="position: relative; top: 2px; left: -16px;" >' . '  <img src="/images/pmdateicon.png" border="0" width="12" height="14" />' . '</a>' . '<script>datePicker4("", \'' . $pID . '\', \'' . $mask . '\', \'' . $startDate . '\', \'' . $endDate . '\',' . $Time . ')</script>';
             }
         } else {
             $html = "<span style='border:1;border-color:#000;width:100px;' name='" . $pID . "'>$value</span>" . '<input type="hidden" id="' . $pID . '" name="' . $pID . '" pm:mask="' . $mask . '" pm:start="' . $startDate . '"' . 'pm:end="' . $endDate . '"  ' . $onchange . ' class="module_app_input___gray" value="' . $value . '"/>';
@@ -4567,7 +4570,7 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
         }
         return $html;
     }
-    
+
     public function maskDateValue ($value, $field)
     {
         $value = trim($value);
@@ -4607,13 +4610,13 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
                 $mask .= '%' . $part;
             }
         }
-        
+
         $withHours = (strpos($mask, '%H') !== false || strpos($mask, '%M') !== false || strpos($mask, '%S') !== false);
 
         $tmp = str_replace( "%", "", $mask );
         return $this->date_create_from_format($tmp, $value, $withHours);
     }
-    
+
     function date_create_from_format( $dformat, $dvalue, $withHours = false )
     {
         $schedule = $dvalue;
@@ -4623,9 +4626,9 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
             '%04d-%02d-%02d %02d:%02d:%02d',
             $ugly['tm_year'] + 1900,
             $ugly['tm_mon'] + 1,
-            $ugly['tm_mday'], 
-            $ugly['tm_hour'], 
-            $ugly['tm_min'], 
+            $ugly['tm_mday'],
+            $ugly['tm_hour'],
+            $ugly['tm_min'],
             $ugly['tm_sec']
         );
         $new_schedule = new DateTime($ymd);
@@ -5935,29 +5938,29 @@ function masktophp ($mask, $value)
 
 if (!function_exists('strptime')) {
     function strptime($date, $format) {
-        $masks = array( 
-            '%d' => '(?P<d>[0-9]{2})', 
-            '%m' => '(?P<m>[0-9]{2})', 
-            '%Y' => '(?P<Y>[0-9]{4})', 
-            '%H' => '(?P<H>[0-9]{2})', 
-            '%M' => '(?P<M>[0-9]{2})', 
-            '%S' => '(?P<S>[0-9]{2})', 
-            // usw.. 
-        ); 
-    
+        $masks = array(
+            '%d' => '(?P<d>[0-9]{2})',
+            '%m' => '(?P<m>[0-9]{2})',
+            '%Y' => '(?P<Y>[0-9]{4})',
+            '%H' => '(?P<H>[0-9]{2})',
+            '%M' => '(?P<M>[0-9]{2})',
+            '%S' => '(?P<S>[0-9]{2})',
+            // usw..
+        );
+
         $rexep = "#".strtr(preg_quote($format), $masks)."#";
         if(!preg_match($rexep, $date, $out)) {
-            return false; 
+            return false;
         }
 
-        $ret = array( 
+        $ret = array(
             "tm_sec"  => (int) isset($out['S']) ? $out['S'] : 0,
-            "tm_min"  => (int) isset($out['M']) ? $out['M'] : 0, 
-            "tm_hour" => (int) isset($out['H']) ? $out['H'] : 0, 
-            "tm_mday" => (int) $out['d'], 
-            "tm_mon"  => $out['m'] ? $out['m'] - 1 : 0, 
+            "tm_min"  => (int) isset($out['M']) ? $out['M'] : 0,
+            "tm_hour" => (int) isset($out['H']) ? $out['H'] : 0,
+            "tm_mday" => (int) $out['d'],
+            "tm_mon"  => $out['m'] ? $out['m'] - 1 : 0,
             "tm_year" => $out['Y'] > 1900 ? $out['Y'] - 1900 : 0,
-        ); 
-        return $ret; 
+        );
+        return $ret;
     }
 }
