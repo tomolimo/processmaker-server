@@ -164,7 +164,9 @@ switch ($REQUEST) {
             $sData['ROL_UID'] = $ROL_UID;
             if ($sData['USR_UID'] == '00000000000000000000000000000001') {
                 if ($sData['ROL_UID'] != 'PROCESSMAKER_ADMIN') {
-                    echo '{userRole: true}';
+                    $response = new stdclass();
+					$response->userRole = true;
+					echo G::json_encode($response);
                     break;
                 }
             }
