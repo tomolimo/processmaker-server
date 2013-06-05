@@ -27,64 +27,28 @@
 // var_dump($argv);
 //(count ($argv) == 4) || ((count ($argv) == 5) && ($argv [3] != '-skip'))
 $commandLineSyntaxMsg = "Invalid command line arguments: \n " .
+  "Verify the list of cases comparing db vs solr lists by user if usr_uid is specify only verify one user otherwhise all users ".
   "syntax: ".
-  "php reindex_solr.php [workspace_name] [reindexall|reindexmissing|optimizeindex|reindexone] [-skip {record_number}] [-reindextrunksize {trunk_size}] [-appuid {APP_UID}]\n" . 
+  "php verify_solr.php [workspace_name] [-usruid {USR_UID}]\n" . 
   " Where \n".
-  "       reindexall : reindex all the database. \n" . 
-  "       reindexmissing: reindex only the missing records stored in database. \n".
-  "                     (records defined in APP_SOLR_QUEUE table are required)\n" .
-  "       optimizeindex: optimize the changes in the search index. (used to get faster results) \n" .
+  "       workspace_name : is the workspace that is being verified. \n" . 
   " Optional Options: \n" .
-  " -skip {record_number}: used to skip a number of records. \n ex: -skip 10000 //skips the first 10000 records. \n" .
-  " -reindextrunksize {trunk_size}: specify the number of records sent to index each time. \n ex: -reindextrunksize 100 //(default = 1000) \n Reduce the trunk if using big documents, and memory is not enough. \n"; 
+  " -usruid {USR_UID}: verify only one user with the specified user uid. \n "; 
 
-if ( (count ($argv) < 3) || ((count ($argv) % 2) == 0) || 
-    ($argv [2] != 'reindexall' && $argv [2] != 'reindexmissing' && $argv [2] != 'optimizeindex'  && $argv [2] != 'reindexone')) {    
+if ( (count ($argv) < 2) || ((count ($argv) > 2) && ((count ($argv) % 2) != 0))) {    
   print $commandLineSyntaxMsg;
   die ();
 }
 $workspaceName = $argv [1];
-$ScriptAction = $argv [2];
-$SkipRecords = 0;
-$TrunkSize = 1000;
-$appUid = "";
-//3 5 7
-if(count ($argv) > 3) {
-  for($argNumber = 3 ; $argNumber < count ($argv) ; $argNumber += 2) {
-    if(($argv [$argNumber] == '-skip' || $argv [$argNumber] == '-reindextrunksize' || $argv [$argNumber] == '-appuid')) {
-      //get options
-      if($argv [$argNumber] == '-skip') {
-        //use skip option
-        $SkipRecords = intval($argv [$argNumber + 1]);
-      }
-      if($argv [$argNumber] == '-reindextrunksize') {
-        //use skip option
-        $TrunkSize = intval($argv [$argNumber + 1]);
-      }
-      if($argv [$argNumber] == '-appuid') {
-        //use skip option
-        $appUid = $argv [$argNumber + 1];
-      }      
-    }
-    else {
-      print $commandLineSyntaxMsg;
-      die ();
-    }
-  }
+$usrUid = "";
+
+if((count ($argv) > 2)){
+  $usrUid = $argv [3];  
 }
 
-$debug = 1;
-
 ini_set ('display_errors', 1);
-//error_reporting (E_ALL);
+error_reporting (E_ALL);
 ini_set ('memory_limit', '256M'); // set enough memory for the script
-
-$e_all = defined( 'E_DEPRECATED' ) ? E_ALL & ~ E_DEPRECATED : E_ALL;
-$e_all = defined( 'E_STRICT' ) ? $e_all & ~ E_STRICT : $e_all;
-$e_all = $debug ? $e_all : $e_all & ~ E_NOTICE;
-
-ini_set( 'error_reporting', $e_all );
-
 
 if (! defined ('SYS_LANG')) {
   define ('SYS_LANG', 'en');
@@ -112,9 +76,6 @@ if (! defined ('PATH_HOME')) {
   define ('PATH_OUTTRUNK', $pathOutTrunk);
   
   require_once (PATH_HOME . 'engine' . PATH_SEP . 'config' . PATH_SEP . 'paths.php');
-  require_once (PATH_GULLIVER . "class.bootstrap.php");
-  Bootstrap::registerSystemClasses();
-  spl_autoload_register(array('Bootstrap', 'autoloadClass'));
   
   G::LoadThirdParty ('pear/json', 'class.json');
   G::LoadThirdParty ('smarty/libs', 'Smarty.class');
@@ -168,11 +129,12 @@ print "PATH_CORE: " . PATH_CORE . "\n";
 if (! defined ('SYS_SYS')) {
   $sObject = $workspaceName;
   $sNow = ''; // $argv[2];
+  /*
   $sFilter = '';
   
   for ($i = 3; $i < count ($argv); $i++) {
     $sFilter .= ' ' . $argv [$i];
-  }
+  }*/
   
   $oDirectory = dir (PATH_DB);
   
@@ -290,44 +252,261 @@ function processWorkspace()
 {
   global $sLastExecution;
   global $ScriptAction;
-  global $SkipRecords;
-  global $TrunkSize;
-  global $appUid;
+  //global $SkipRecords;
+  //global $TrunkSize;
+  global $usrUid;
   
   try {
     
-    if (($solrConf = System::solrEnv (SYS_SYS)) !== false) {
-      G::LoadClass ('AppSolr');
-      print "Solr Configuration file: " . PATH_DATA_SITE . "env.ini\n";
-      print "solr_enabled: " . $solrConf ['solr_enabled'] . "\n";
-      print "solr_host: " . $solrConf ['solr_host'] . "\n";
-      print "solr_instance: " . $solrConf ['solr_instance'] . "\n";
-      
-      $oAppSolr = new AppSolr ($solrConf ['solr_enabled'], $solrConf ['solr_host'], $solrConf ['solr_instance']);
-      if ($ScriptAction == "reindexall") {
-        $oAppSolr->reindexAllApplications ($SkipRecords, $TrunkSize);
-      }
-      if ($ScriptAction == "reindexmissing") {
-        $oAppSolr->synchronizePendingApplications ();
-      }
-      if ($ScriptAction == "optimizeindex") {
-        $oAppSolr->optimizeSearchIndex ();
-      }
-      if($ScriptAction == "reindexone"){
-        if($appUid == ""){
-          print "Missing -appuid parameter. please complete it with this option.\n";
-        }
-        $oAppSolr->updateApplicationSearchIndex ($appUid, false);
-      }
-    }
-    else {
-      print "Incomplete Solr configuration. See configuration file: " . PATH_DATA_SITE . "env.ini";
-    }
-  
+    //if $usrUid is not set get all the users
+    
+    //verify inbox
+    verifyInboxList($usrUid);
+
+    //verify draft
+    verifyDraftList($usrUid);
+
+    //verify participated list
+    verifyParticipatedList($usrUid);
+
+    //verify unassigned list
+    verifyUnassignedList($usrUid);
+
   }
   catch (Exception $oError) {
     saveLog ("main", "error", "Error processing workspace : " . $oError->getMessage () . "\n");
   }
+}
+
+function verifyInboxList($usrUid)
+{
+  print "***********************\n";
+  print "Verify Inbox list:  \n";
+  print "***********************\n";
+
+  $result = getListUids($usrUid, 'todo');
+
+  $aAppUidsDB = $result['aDBAppUids'];
+  $aAppUidsSolr = $result['aSolrAppUids'];
+
+  displayMissingCases($aAppUidsDB, $aAppUidsSolr);
+}
+
+function verifyDraftList($usrUid)
+{
+  print "***********************\n";
+  print "Verify Draft list: \n";
+  print "***********************\n";
+
+  $result = getListUids($usrUid, 'draft');
+
+  $aAppUidsDB = $result['aDBAppUids'];
+  $aAppUidsSolr = $result['aSolrAppUids'];
+
+  displayMissingCases($aAppUidsDB, $aAppUidsSolr);
+}
+
+function verifyParticipatedList($usrUid)
+{
+  print "******************************\n";
+  print "Verify Participated list: \n";
+  print "******************************\n";
+
+  $result = getListUids($usrUid, 'sent');
+
+  $aAppUidsDB = $result['aDBAppUids'];
+  $aAppUidsSolr = $result['aSolrAppUids'];
+
+  displayMissingCases($aAppUidsDB, $aAppUidsSolr);
+}
+
+function verifyUnassignedList($usrUid)
+{
+  print "******************************\n";
+  print "Verify Unassigned list: \n";
+  print "******************************\n";
+
+  $result = getListUids($usrUid, 'unassigned');
+
+  $aAppUidsDB = $result['aDBAppUids'];
+  $aAppUidsSolr = $result['aSolrAppUids'];
+
+  displayMissingCases($aAppUidsDB, $aAppUidsSolr);
+}
+
+function displayMissingCases($aAppUidsDB, $aAppUidsSolr)
+{
+  //verify missing records
+  //verify size
+  print "  Number of cases: DB:" . count($aAppUidsDB) . " Solr:" . count($aAppUidsSolr) . "\n";
+  //
+  if( count($aAppUidsDB) != count($aAppUidsSolr) ){
+    print "  Different number of cases !!! \n";
+  }
+
+  $casesInDBNotSolr = array_diff($aAppUidsDB, $aAppUidsSolr);
+  $casesInSolrNotDB = array_diff($aAppUidsSolr, $aAppUidsDB);
+
+  print "  Cases in DB but not in Solr: \n";
+  foreach($casesInDBNotSolr as $caseDB){
+    print "  ". $caseDB . " \n";
+  }
+  print "  Cases in Solr but not in DB: \n";            
+  foreach($casesInSolrNotDB as $caseSolr){
+    print "  ". $caseSolr . " \n";
+  }  
+}
+
+function getListUids($usrUid, $action)
+{
+  if (($solrConf = System::solrEnv (SYS_SYS)) !== false) {
+    G::LoadClass ('AppSolr');
+    print "Solr Configuration file: " . PATH_DATA_SITE . "env.ini\n";
+    print "solr_enabled: " . $solrConf ['solr_enabled'] . "\n";
+    print "solr_host: " . $solrConf ['solr_host'] . "\n";
+    print "solr_instance: " . $solrConf ['solr_instance'] . "\n";
+    
+    $oAppSolr = new AppSolr ($solrConf ['solr_enabled'], $solrConf ['solr_host'], $solrConf ['solr_instance']);
+
+    G::LoadClass("applications");
+    $apps = new Applications();
+  }
+  else {
+    print "Incomplete Solr configuration. See configuration file: " . PATH_DATA_SITE . "env.ini"; 
+    return;
+  }        
+  //get the list of id's
+  $userUid = $usrUid;
+  $start = 0;
+  $limit = 1;
+  $action = $action; //todo, 
+  $filter = '';
+  $search = '';
+  $process = '';
+  $user = '';
+  $status = '';
+  $type = 'extjs';
+  $dateFrom = '';
+  $dateTo = '';
+  $callback = 'stcCallback1001';
+  $dir = 'DESC';
+  $sort = 'APP_NUMBER';
+  $category = '';
+  
+  $dataSolr = $oAppSolr->getAppGridData(
+      $userUid,
+      $start,
+      $limit,
+      $action,
+      $filter,
+      $search,
+      $process,
+      $user,
+      $status,
+      $type,
+      $dateFrom,
+      $dateTo,
+      $callback,
+      $dir,
+      $sort
+  );
+
+  
+  $dataDB = $apps->getAll(
+      $userUid,
+      $start,
+      $limit,
+      $action,
+      $filter,
+      $search,
+      $process,
+      $user,
+      $status,
+      $type,
+      $dateFrom,
+      $dateTo,
+      $callback,
+      $dir,
+      $sort,
+      $category
+  );
+
+  $aAppUidsSolr = array();
+  $aAppUidsDB = array();
+  $trunkSize = 1000;
+
+  //get DB uids
+  print "Get DB Uids \n";
+  $totalCasesDB = $dataDB["totalCount"];
+  $loops = ((($totalCasesDB % $trunkSize) > 0 )? ($totalCasesDB / $trunkSize)+1: ($totalCasesDB / $trunkSize));
+  for ($i = 0; $i < $loops; $i++) {
+    $start = $i * $trunkSize;
+    $limit = $trunkSize;
+    //print "  Loop $start to " . (String)($start + $trunkSize) . " \n";
+    
+    $dataDB = $apps->getAll(
+        $userUid,
+        $start,
+        $limit,
+        $action,
+        $filter,
+        $search,
+        $process,
+        $user,
+        $status,
+        $type,
+        $dateFrom,
+        $dateTo,
+        $callback,
+        $dir,
+        $sort,
+        $category
+    );          
+    foreach($dataDB["data"] as $caseDB){
+      $aAppUidsDB[] = $caseDB["APP_UID"];
+    }
+  }
+
+  //get Solr uids
+  print "Get Solr Uids \n";
+  $totalCasesSolr = $dataSolr["totalCount"];
+  $loops = ((($totalCasesSolr % $trunkSize) > 0 )? ($totalCasesSolr / $trunkSize)+1: ($totalCasesSolr / $trunkSize));
+  for ($i = 0; $i < $loops; $i++) {
+    $start = $i * $trunkSize;
+    $limit = $trunkSize;
+    //print "  Loop $start to " . (String)($start + $trunkSize) . " \n";
+    
+    $dataSolr = $oAppSolr->getAppGridData(
+      $userUid,
+      $start,
+      $limit,
+      $action,
+      $filter,
+      $search,
+      $process,
+      $user,
+      $status,
+      $type,
+      $dateFrom,
+      $dateTo,
+      $callback,
+      $dir,
+      $sort
+    );
+
+    foreach($dataSolr["data"] as $caseSolr){
+      $aAppUidsSolr[] = $caseSolr["APP_UID"];
+    }
+  }
+
+  $result = array();
+  $result['total_cases_db'] = $totalCasesDB;
+  $result['aDBAppUids'] = $aAppUidsDB;
+  $result['total_cases_solr'] = $totalCasesSolr;
+  $result['aSolrAppUids'] = $aAppUidsSolr;
+
+
+  return $result;
 }
 
 function saveLog($sSource, $sType, $sDescription)

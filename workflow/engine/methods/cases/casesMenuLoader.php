@@ -181,10 +181,8 @@ function getAllCounters ()
         G::LoadClass( 'AppSolr' );
         $ApplicationSolrIndex = new AppSolr( $solrConf['solr_enabled'], $solrConf['solr_host'], $solrConf['solr_instance'] );
 
-        if ($ApplicationSolrIndex->isSolrEnabled()) {
+        if ($ApplicationSolrIndex->isSolrEnabled() && $solrConf['solr_enabled'] == true) {
             $solrEnabled = true;
-        } else {
-            $solrEnabled = false;
         }
     }
 

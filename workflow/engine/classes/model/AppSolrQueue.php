@@ -81,22 +81,30 @@ class AppSolrQueue extends BaseAppSolrQueue
      * Returns the list of updated applications
      * array of Entity_AppSolrQueue
      */
-    public function getListUpdatedApplications ()
+    public function getListUpdatedApplications($updated = true, $deleted = true)
     {
         $updatedApplications = array ();
         try {
             $c = new Criteria();
-
+            
             $c->addSelectColumn(AppSolrQueuePeer::APP_UID);
             $c->addSelectColumn(AppSolrQueuePeer::APP_CHANGE_DATE);
             $c->addSelectColumn(AppSolrQueuePeer::APP_CHANGE_TRACE);
             $c->addSelectColumn(AppSolrQueuePeer::APP_UPDATED);
-
-            //"WHERE
-            $c->add( AppSolrQueuePeer::APP_UPDATED, 0, Criteria::NOT_EQUAL );
-
-            $rs = AppSolrQueuePeer::doSelectRS( $c );
-            $rs->setFetchmode( ResultSet::FETCHMODE_ASSOC );
+            
+            //"WHERE 
+            if($updated == true && $deleted == true){
+                $c->add(AppSolrQueuePeer::APP_UPDATED, 0, Criteria::NOT_EQUAL);    
+            }
+            if($updated == true && $deleted == false){
+                $c->add(AppSolrQueuePeer::APP_UPDATED, 1, Criteria::EQUAL);    
+            }
+            if($updated == false && $deleted == true){
+                $c->add(AppSolrQueuePeer::APP_UPDATED, 2, Criteria::EQUAL);    
+            }
+            
+            $rs = AppSolrQueuePeer::doSelectRS($c);
+            $rs->setFetchmode(ResultSet::FETCHMODE_ASSOC);
             //echo $c->toString();
             $rs->next();
             $row = $rs->getRow();
@@ -111,11 +119,11 @@ class AppSolrQueue extends BaseAppSolrQueue
                 $rs->next();
                 $row = $rs->getRow();
             }
+            
             return $updatedApplications;
         } catch (Exception $e) {
             $con->rollback();
             throw ($e);
         }
     }
-}
-
+} // AppSolrQueue

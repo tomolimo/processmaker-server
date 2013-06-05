@@ -62,7 +62,7 @@ try {
             $solrConf["solr_instance"]
         );
 
-        if ($ApplicationSolrIndex->isSolrEnabled()) {
+        if ($ApplicationSolrIndex->isSolrEnabled() && $solrConf['solr_enabled'] == true) {
             //Check if there are missing records to reindex and reindex them
             $ApplicationSolrIndex->synchronizePendingApplications();
             $solrEnabled = true;

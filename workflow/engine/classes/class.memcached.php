@@ -153,7 +153,7 @@ class PMmemcached
 
     public function delete($key)
     {
-        if (!$this->connected) {
+        if (! $this->connected || $this->class == 'filecache') {
             return false;
         }
 
@@ -162,7 +162,7 @@ class PMmemcached
 
     public function flush()
     {
-        if (!$this->connected) {
+        if (! $this->connected || $this->class == 'filecache') {
             return false;
         }
 
@@ -171,7 +171,7 @@ class PMmemcached
 
     public function getStats()
     {
-        if (!$this->connected) {
+        if (! $this->connected || $this->class == 'filecache') {
             return false;
         }
 
@@ -180,13 +180,13 @@ class PMmemcached
 
     public function printDetails()
     {
-        if (!$this->connected) {
+        if (! $this->connected || $this->class == 'filecache') {
             return false;
         }
 
         $status = $this->mem->getStats();
 
-        if (!is_array($status)) {
+        if (! is_array($status)) {
             return false;
         }
 

@@ -1,43 +1,43 @@
 <?php
-//require_once ('Base.php');
+require_once ('Base.php');
 
 /**
  * Application Solr Queue
  */
 class Entity_AppSolrQueue extends Entity_Base
 {
-    public $appUid = "";
-    public $appChangeDate = "";
-    public $appChangeTrace = "";
-    public $appUpdated = 0;
+  public $appUid = '';
+  public $appChangeDate = '';
+  public $appChangeTrace = '';
+  public $appUpdated = 0;
+  
+  private function __construct()
+  {
+  
+  }
+  
+  static function createEmpty()
+  {
+    $obj = new Entity_AppSolrQueue ();
+    return $obj;
+  }
+  
+  static function createForRequest($data)
+  {
+    $obj = new Entity_AppSolrQueue ();
+    
+    $obj->initializeObject ($data);
+    
+    $requiredFields = array (
+        "appUid",
+        "appChangeDate",
+        "appChangeTrace",
+        "appUpdated" 
+    );
+    
+    $obj->validateRequiredFields ($requiredFields);
+    
+    return $obj;
+  }
 
-    private function __construct ()
-    {
-
-    }
-
-    static function createEmpty ()
-    {
-        $obj = new Entity_AppSolrQueue();
-        return $obj;
-    }
-
-    static function createForRequest ($data)
-    {
-        $obj = new Entity_AppSolrQueue();
-
-        $obj->initializeObject( $data );
-
-        $requiredFields = array(
-            "appUid",
-            "appChangeDate",
-            "appChangeTrace",
-            "appUpdated"
-        );
-
-        $obj->validateRequiredFields( $requiredFields );
-
-        return $obj;
-    }
 }
-
