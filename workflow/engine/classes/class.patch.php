@@ -2,9 +2,7 @@
 
 G::LoadClass("Task");
 G::LoadClass("TaskUser");
-
-require_once ("propel/Propel.php");
-require_once ("creole/Creole.php");
+G::LoadClass("System");
 
 /**
  * class, helping to set some not desirable settings but necesary
@@ -29,8 +27,13 @@ class patch
         $rs = $stmt->executeQuery();
         $rs->next();
         while($row = $rs->getRow()) {
-            if ($row ['Field'] == "TAS_GROUP_VARIABLE"){
-                patch::$isPathchable = true;
+            if ($row ['Field'] == "TAS_GROUP_VARIABLE") {
+                $version = System::getVersion ();
+                $pos = strpos($version,'2.5.1-testing');
+                if ($version == '2.5.0.1' || $pos !== false) {
+                    echo "Version ".$version . " Patch\n";
+                    patch::$isPathchable = true;
+                }
                 break;
             }
             $rs->next();
@@ -64,12 +67,9 @@ class patch
                     echo "Patching uid: " . $tasUid . "\n";
                     //Set the values if they match the pattern
                     $conChange = Propel::getConnection("workflow");
-                    $stmtChange = $conChange->prepareStatement("update TASK set TAS_GROUP_VARIABLE = '';");
+                    $stmtChange = $conChange->prepareStatement("update TASK set TAS_GROUP_VARIABLE = '' where TAS_UID = '".$tasUid."';");
                     $recordResult = $stmtChange->executeQuery();
                     $count++;
-                    //$task->load( $tasUid );
-                    //$task->setTasGroupVariable('');
-                    //$task->save();
                 }
                 $recordSet->next();
                 $aRow = $recordSet->getRow();
@@ -78,4 +78,5 @@ class patch
         echo $count. " records where patched to use SELF_SERVICE feature.\n";
     }
 }
+
 
