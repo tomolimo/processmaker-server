@@ -29,9 +29,10 @@ class patch
         while($row = $rs->getRow()) {
             if ($row ['Field'] == "TAS_GROUP_VARIABLE") {
                 $version = System::getVersion ();
-                $pos = strpos($version,'2.5.1-testing');
-                if ($version == '2.5.0.1' || $pos !== false) {
-                    echo "Version ".$version . " Patch\n";
+                $version = explode('-',$version);
+                //$pos = strpos($version,'2.5.1-testing');
+                if ($version[0] == '2.5.1') {
+                    echo "Version " . $version[0] . " Patch\n";
                     patch::$isPathchable = true;
                 }
                 break;
@@ -54,7 +55,7 @@ class patch
         $task = new Task();
         if ( patch::$isPathchable && method_exists($task,'getTasGroupVariable')) {
             $con = Propel::getConnection("workflow");
-            $stmt = $con->prepareStatement("select TAS_UID from TASK;");
+            $stmt = $con->prepareStatement("select TAS_UID from TASK where TAS_ASSIGN_TYPE = 'SELF_SERVICE';");
             $recordSet = $stmt->executeQuery();
             $recordSet->next();
             $aRow = $recordSet->getRow();
