@@ -474,14 +474,23 @@ class headPublisher
             $aux = explode(PATH_SEP, $filename);
             //check if G_PLUGIN_CLASS is defined, because publisher can be called without an environment
             if (count($aux) > 2 && defined('G_PLUGIN_CLASS')) {
+                $flagPlugin = false;
                 $keyPlugin = count($aux)-2;
 
                 $oPluginRegistry = & PMPluginRegistry::getSingleton();
-                if (!($oPluginRegistry->isRegisteredFolder($aux[$keyPlugin]))) {
+                if ($oPluginRegistry->isRegisteredFolder($aux[$keyPlugin])) {
+                    $flagPlugin = true;
+                } else {
                     $keyPlugin --;
+                    if ($oPluginRegistry->isRegisteredFolder($aux[$keyPlugin]))) {
+                        $flagPlugin = true;
+                    }
                 }
-                array_push($this->extJsLibrary, 'translation.' . trim($aux[$keyPlugin]) . '.' . SYS_LANG);
-                $sPath = PATH_PLUGINS;
+
+                if ($flagPlugin) {
+                    array_push($this->extJsLibrary, 'translation.' . trim($aux[$keyPlugin]) . '.' . SYS_LANG);
+                    $sPath = PATH_PLUGINS;
+                }
             }
         }
 
