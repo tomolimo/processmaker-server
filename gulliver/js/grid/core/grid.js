@@ -942,6 +942,8 @@ var G_Grid = function(oForm, sGridName){
     this.clearRowWC = function (oObj, aRow)
     {
         var i = 0;
+        var j = 0;
+        var iAux = 0;
         var pmLabel = '';
         var elemNodeName = '';
         var objects = '';
