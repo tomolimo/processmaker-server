@@ -763,6 +763,8 @@ if (SYS_COLLECTION == 'login' && SYS_TARGET == 'login') {
 
 $bWE = false;
 $isControllerCall = false;
+$isPluginController = false;
+
 if (substr( SYS_COLLECTION, 0, 8 ) === 'gulliver') {
     $phpFile = PATH_GULLIVER_HOME . 'methods/' . substr( SYS_COLLECTION, 8 ) . SYS_TARGET . '.php';
 } else {
@@ -806,6 +808,40 @@ if (substr( SYS_COLLECTION, 0, 8 ) === 'gulliver') {
             $isControllerCall = false;
         }
     }
+
+    if (is_dir(PATH_PLUGINS . SYS_COLLECTION) && $oPluginRegistry->isRegisteredFolder(SYS_COLLECTION)) {
+        $pluginName = SYS_COLLECTION;
+        $pluginResourceRequest = explode('/', rtrim(SYS_TARGET, '/'));
+        $isPluginController = true;
+        
+        if ($pluginResourceRequest > 0) {
+            $controllerClass = $pluginResourceRequest[0];
+
+            if (count($pluginResourceRequest) == 1) {
+                $controllerAction = 'index';
+            } else {
+                $controllerAction = $pluginResourceRequest[1];
+            }   
+        }
+
+        $pluginControllerPath = PATH_PLUGINS . $pluginName . PATH_SEP . 'controllers' . PATH_SEP;
+
+        if (is_file($pluginControllerPath. $controllerClass . '.php')) {
+            require_once $pluginControllerPath. $controllerClass . '.php';
+            $isControllerCall = true;
+        } elseif (is_file($pluginControllerPath. ucfirst($controllerClass) . '.php')) {
+            $controllerClass = ucfirst($controllerClass);
+            require_once $pluginControllerPath. $controllerClass . '.php';
+            $isControllerCall = true;
+        } elseif (is_file($pluginControllerPath. ucfirst($controllerClass) . 'Controller.php')) {
+            $controllerClass = ucfirst($controllerClass) . 'Controller';
+            require_once $pluginControllerPath. $controllerClass . '.php';
+            $isControllerCall = true;
+        } else {
+            $isControllerCall = false;
+        }
+    }
+
     if (! $isControllerCall && ! file_exists( $phpFile ) && ! $isRestRequest) {
         $_SESSION['phpFileNotFound'] = $_SERVER['REQUEST_URI'];
         header( "location: /errors/error404.php?url=" . urlencode( $_SERVER['REQUEST_URI'] ) );
@@ -948,9 +984,9 @@ if (! defined( 'EXECUTE_BY_CRON' )) {
      */
     if ($isControllerCall) { //Instance the Controller object and call the request method
         $controller = new $controllerClass();
-        $controller->setHttpRequestData( $_REQUEST );//NewRelic Snippet - By JHL
-            transactionLog($controllerAction);
-        $controller->call( $controllerAction );
+        $controller->setHttpRequestData($_REQUEST);//NewRelic Snippet - By JHL
+        transactionLog($controllerAction);
+        $controller->call($controllerAction);
     } elseif ($isRestRequest) {
         //NewRelic Snippet - By JHL
         transactionLog($restConfig.$restApiClassPath.SYS_TARGET);
