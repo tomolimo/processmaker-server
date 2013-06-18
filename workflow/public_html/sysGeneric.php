@@ -828,17 +828,17 @@ if (substr( SYS_COLLECTION, 0, 8 ) === 'gulliver') {
 
         if (is_file($pluginControllerPath. $controllerClass . '.php')) {
             require_once $pluginControllerPath. $controllerClass . '.php';
-            $isControllerCall = true;
         } elseif (is_file($pluginControllerPath. ucfirst($controllerClass) . '.php')) {
             $controllerClass = ucfirst($controllerClass);
             require_once $pluginControllerPath. $controllerClass . '.php';
-            $isControllerCall = true;
         } elseif (is_file($pluginControllerPath. ucfirst($controllerClass) . 'Controller.php')) {
             $controllerClass = ucfirst($controllerClass) . 'Controller';
             require_once $pluginControllerPath. $controllerClass . '.php';
+        }
+
+        //if the method exists
+        if (is_callable(array($controllerClass, $controllerAction))) {
             $isControllerCall = true;
-        } else {
-            $isControllerCall = false;
         }
     }
 
@@ -986,6 +986,12 @@ if (! defined( 'EXECUTE_BY_CRON' )) {
         $controller = new $controllerClass();
         $controller->setHttpRequestData($_REQUEST);//NewRelic Snippet - By JHL
         transactionLog($controllerAction);
+        
+        if ($isPluginController) {
+            $controller->setPluginName($pluginName);
+            $controller->setPluginHomeDir(PATH_PLUGINS . $pluginName . PATH_SEP);
+        }
+        
         $controller->call($controllerAction);
     } elseif ($isRestRequest) {
         //NewRelic Snippet - By JHL

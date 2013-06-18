@@ -15,6 +15,7 @@ class Controller
      * @var boolean debug switch for general purpose
      */
     public $debug = null;
+
     /**
      *
      * @var array - private array to store proxy data
@@ -44,6 +45,18 @@ class Controller
      * @var string - layout to pass skinEngine
      */
     private $layout = '';
+
+    /**
+     *
+     * @var string contains the pluin name, in case the controller is on a plugin
+     */
+    private $pluginName = '';
+
+    /**
+     *
+     * @var string contains the plugin path
+     */
+    private $pluginHomeDir = '';
 
     /**
      * Magic setter method
@@ -291,6 +304,26 @@ class Controller
     public function redirect ($url)
     {
         G::header( "Location: $url" );
+    }
+
+    public function setPluginName($name)
+    {
+        $this->pluginName = $name;
+    }
+
+    public function getPluginName()
+    {
+        return $this->pluginName;
+    }
+
+    public function setPluginHomeDir($dir)
+    {
+        $this->pluginHomeDir = $dir;
+    }
+
+    public function getPluginHomeDir()
+    {
+        return $this->pluginHomeDir;
     }
 }
 
