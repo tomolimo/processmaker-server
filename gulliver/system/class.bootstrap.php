@@ -569,7 +569,7 @@ class Bootstrap
      * @param string $downloadFileName
      * @return string
      */
-    public function streamFile($file, $download = false, $downloadFileName = '')
+    public function streamFile($file, $download = false, $downloadFileName = '', $forceLoad = false)
     {
         $fileNameIni = $file;
 
@@ -596,7 +596,7 @@ class Bootstrap
         }
 
         //trick to generate the big css file for ext style .
-        if (strtolower($typefile) == 'css' && $folderarray[count($folderarray) - 2] == 'css') {
+        if (strtolower($typefile) == 'css' && $folderarray[count($folderarray) - 2] == 'css' && ! $forceLoad) {
             Bootstrap::sendHeaders($fileNameIni, "text/css", $download, $downloadFileName);
             $output = Bootstrap::streamCSSBigFile($typearray[0]);
             echo $output;

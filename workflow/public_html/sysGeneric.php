@@ -386,7 +386,7 @@ if (Bootstrap::virtualURI( $_SERVER['REQUEST_URI'], $virtualURITable, $realPath 
             //NewRelic Snippet - By JHL
             transactionLog($pluginFilename);
 
-            Bootstrap::streamFile( $pluginFilename );
+            Bootstrap::streamFile( $pluginFilename, false, '', true );
         }
         die();
     }
