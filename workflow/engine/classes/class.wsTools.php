@@ -89,7 +89,7 @@ class workspaceTools
         $stop = microtime(true);
         $final = $stop - $start;
         CLI::logging("<*>   Updating cache view Process took $final seconds.\n");
-        
+
         $start = microtime(true);
         CLI::logging("> Updating cases directories structure...\n");
         $this->upgradeCasesDirectoryStructure($workSpace);
@@ -460,6 +460,20 @@ class workspaceTools
         //Update APP_DELEGATION.DEL_LAST_INDEX data
         $res = $appCache->updateAppDelegationDelLastIndex($lang, $checkOnly);
 
+        CLI::logging("-> Verifying roles permissions in RBAC \n");
+        //Update table RBAC permissions
+        Bootstrap::LoadSystem( 'rbac' );
+        $RBAC = & RBAC::getSingleton();
+        $RBAC->initRBAC();
+        $result = $RBAC->verifyPermissions();
+        if (count($result) > 1) {
+            foreach($result as $item) {
+                CLI::logging("    $item... \n");
+            }
+        } else {
+            CLI::logging("    All roles permissions already updated \n");
+        }
+
         CLI::logging("-> Creating triggers\n");
         //now check if we have the triggers installed
         $triggers = array();
@@ -534,7 +548,7 @@ class workspaceTools
                         rmdir($UIdDir);//remove the diretory itself, G::rm_dir cannot do it
                     } else {
                         CLI::logging(CLI::error("Error: Failure at coping from $UIdDir...\n"));
-                    }                        
+                    }
                 } else {
                     CLI::logging("$UIdDir is empty, removing it\n");
                     rmdir($UIdDir);//remove the diretory itself
@@ -561,7 +575,7 @@ class workspaceTools
                     unlink($file[$index]);
                 } else {
                     CLI::logging(CLI::error("Error: Failure at copy $file[$index] files...\n"));
-                }     
+                }
             }
         }
 
@@ -608,7 +622,7 @@ class workspaceTools
         $this->upgradeData();
         p11835::execute();
         return true;
-    }	
+    }
 
     /**
      * Upgrade this workspace database from a schema
@@ -1166,12 +1180,12 @@ class workspaceTools
         if (isset($srcWorkspace) && !in_array("$srcWorkspace.meta", array_map(BASENAME, $metaFiles))) {
             throw new Exception("Workspace $srcWorkspace not found in backup");
         }
-        
+
         $version = System::getVersion();
         $version = explode('-', $version);
         $versionPresent = ( isset($version[0])) ? $version[0] : '';
         CLI::logging(CLI::warning("
-            Note.- If you try to execute a restore from a generated backup on a recent version of Processmaker 
+            Note.- If you try to execute a restore from a generated backup on a recent version of Processmaker
             than version you are using currently to restore it, it may be occur errors on the restore process,
             it shouldn't be restaured generated backups on later versions than version when the restore is executed") . "\n");
 
@@ -1271,7 +1285,7 @@ class workspaceTools
             $stop = microtime(true);
             $final = $stop - $start;
             CLI::logging("<*>   Updating cache view Process took $final seconds.\n");
-            
+
 
             mysql_close($link);
         }
