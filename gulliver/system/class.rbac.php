@@ -1204,8 +1204,8 @@ class RBAC
             $data['PER_STATUS']      = 1;
             $permission              = new Permissions();
             $permission->fromArray($data, BasePeer::TYPE_FIELDNAME);
-            $iResult = $permission->save();
-            $message[] = 'Add permission ' . $item['PER_CODE'];
+            $permission->save();
+            $message[] = 'Add permission missing ' . $item['PER_CODE'];
         }
         return $message;
     }

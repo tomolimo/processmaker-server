@@ -8,7 +8,6 @@
 G::LoadSystem('dbMaintenance');
 G::LoadClass("cli");
 G::LoadClass("multipleFilesBackup");
-G::LoadSystem('rbac' );
 
 /**
  * class workspaceTools
@@ -461,18 +460,18 @@ class workspaceTools
         //Update APP_DELEGATION.DEL_LAST_INDEX data
         $res = $appCache->updateAppDelegationDelLastIndex($lang, $checkOnly);
 
-        CLI::logging("-> Update table RBAC Permissions... \n");
+        CLI::logging("-> Verifying roles permissions in RBAC \n");
         //Update table RBAC permissions
         Bootstrap::LoadSystem( 'rbac' );
         $RBAC = & RBAC::getSingleton();
         $RBAC->initRBAC();
-        $resutl = $RBAC->verifyPermissions();
-        if (count($resutl) > 1) {
-            foreach($resutl as $item) {
+        $result = $RBAC->verifyPermissions();
+        if (count($result) > 1) {
+            foreach($result as $item) {
                 CLI::logging("    $item... \n");
             }
         } else {
-            CLI::logging("    No Changes... \n");
+            CLI::logging("    All roles permissions already updated \n");
         }
 
         CLI::logging("-> Creating triggers\n");
