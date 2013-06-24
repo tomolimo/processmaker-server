@@ -5182,19 +5182,35 @@ class G
             $strAux = str_replace($strSearch, null, $_SERVER["REQUEST_URI"]);
 
             if ($strAux != "") {
+                $skin = "base"; //classic
+
+                if (isset($_SESSION["currentSkin"])) {
+                    $skin = $_SESSION["currentSkin"];
+                } else {
+                    $sysConf = System::getSystemConfiguration(PATH_CONFIG . "env.ini");
+
+                    if (isset($sysConf["default_skin"])) {
+                        $skin = $sysConf["default_skin"];
+                    }
+                }
+
                 $arrayAux = explode("?", $strAux);
                 $fileTemplate = $arrayAux[0];
 
-                if (file_exists(PATH_SKIN_ENGINE . $_SESSION["currentSkin"] . PATH_SEP . $fileTemplate)) {
-                    $path = PATH_SKIN_ENGINE . $_SESSION["currentSkin"] . PATH_SEP;
+                if (file_exists(PATH_SKIN_ENGINE . "base" . PATH_SEP . $fileTemplate)) {
+                    $path = PATH_SKIN_ENGINE . "base" . PATH_SEP;
                 }
 
-                if (file_exists(PATH_SKINS . $_SESSION["currentSkin"] . PATH_SEP . $fileTemplate)) {
-                    $path = PATH_SKINS . $_SESSION["currentSkin"] . PATH_SEP;
+                if (file_exists(PATH_SKIN_ENGINE . $skin . PATH_SEP . $fileTemplate)) {
+                    $path = PATH_SKIN_ENGINE . $skin . PATH_SEP;
                 }
 
-                if (file_exists(PATH_CUSTOM_SKINS . $_SESSION["currentSkin"] . PATH_SEP . $fileTemplate)) {
-                    $path = PATH_CUSTOM_SKINS . $_SESSION["currentSkin"] . PATH_SEP;
+                if (file_exists(PATH_SKINS . $skin . PATH_SEP . $fileTemplate)) {
+                    $path = PATH_SKINS . $skin . PATH_SEP;
+                }
+
+                if (file_exists(PATH_CUSTOM_SKINS . $skin . PATH_SEP . $fileTemplate)) {
+                    $path = PATH_CUSTOM_SKINS . $skin . PATH_SEP;
                 }
             }
         }

@@ -344,7 +344,7 @@ if (defined( 'PATH_C' )) {
 $virtualURITable['/htmlarea/(*)'] = PATH_THIRDPARTY . 'htmlarea/';
 //$virtualURITable['/sys[a-zA-Z][a-zA-Z0-9]{0,}()/'] = 'sysNamed';
 $virtualURITable['/(sys*)'] = FALSE;
-$virtualURITable["/errors/(*)"] = ($skinPathErrors != "")? $skinPathErrors : PATH_SKIN_ENGINE . "base" . PATH_SEP;
+$virtualURITable["/errors/(*)"] = ($skinPathErrors != "")? $skinPathErrors : PATH_GULLIVER_HOME . "methods" . PATH_SEP . "errors" . PATH_SEP;
 $virtualURITable['/gulliver/(*)'] = PATH_GULLIVER_HOME . 'methods/';
 $virtualURITable['/controls/(*)'] = PATH_GULLIVER_HOME . 'methods/controls/';
 $virtualURITable['/html2ps_pdf/(*)'] = PATH_THIRDPARTY . 'html2ps_pdf/';
@@ -352,7 +352,7 @@ $virtualURITable['/html2ps_pdf/(*)'] = PATH_THIRDPARTY . 'html2ps_pdf/';
 //$virtualURITable['/skins/'] = 'errorFile';
 //$virtualURITable['/files/'] = 'errorFile';
 $virtualURITable['/rest/(*)'] = 'rest-service';
-$virtualURITable["/update/(*)"] = ($skinPathUpdate != "")? $skinPathUpdate : PATH_SKIN_ENGINE . "base" . PATH_SEP;
+$virtualURITable["/update/(*)"] = ($skinPathUpdate != "")? $skinPathUpdate : PATH_GULLIVER_HOME . "methods" . PATH_SEP . "update" . PATH_SEP;
 //$virtualURITable['/(*)'] = PATH_HTML;
 $virtualURITable['/css/(*)'] = PATH_HTML . 'css/'; //ugly
 $virtualURITable['/skin/(*)'] = PATH_HTML;
@@ -454,7 +454,6 @@ if (Bootstrap::virtualURI( $_SERVER['REQUEST_URI'], $virtualURITable, $realPath 
 Bootstrap::parseURI( getenv( "REQUEST_URI" ), $isRestRequest );
 
 //Bootstrap::mylog("sys_temp: ".SYS_TEMP);
-
 if (Bootstrap::isPMUnderUpdating()) {
     header( "location: /update/updating.php" );
     if (DEBUG_TIME_LOG)
