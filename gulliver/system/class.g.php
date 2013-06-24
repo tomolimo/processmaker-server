@@ -5182,7 +5182,7 @@ class G
             $strAux = str_replace($strSearch, null, $_SERVER["REQUEST_URI"]);
 
             if ($strAux != "") {
-                $skin = "base"; //classic
+                $skin = "base"; // classic
 
                 if (isset($_SESSION["currentSkin"])) {
                     $skin = $_SESSION["currentSkin"];

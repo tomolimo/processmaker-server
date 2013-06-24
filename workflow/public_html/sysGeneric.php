@@ -453,7 +453,7 @@ if (Bootstrap::virtualURI( $_SERVER['REQUEST_URI'], $virtualURITable, $realPath 
 // the request correspond to valid php page, now parse the URI
 Bootstrap::parseURI( getenv( "REQUEST_URI" ), $isRestRequest );
 
-//Bootstrap::mylog("sys_temp: ".SYS_TEMP);
+// Bootstrap::mylog("sys_temp: ".SYS_TEMP);
 if (Bootstrap::isPMUnderUpdating()) {
     header( "location: /update/updating.php" );
     if (DEBUG_TIME_LOG)
