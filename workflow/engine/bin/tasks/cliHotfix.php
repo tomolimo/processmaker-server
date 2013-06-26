@@ -4,7 +4,7 @@ CLI::taskName("hotfix-install");
 CLI::taskDescription(<<<EOT
     Install hotfix to system
 
-    This command is executed when you want to update certain files, which have improvements or solution to bugs.
+    This command is executed when you want to update certain files, which have improvements or bugs solutions.
 EOT
 );
 
@@ -42,7 +42,7 @@ function runHotfixInstall($command, $args)
 
         CLI::logging("HOTFIX done\n");
     } else {
-        CLI::logging("Not exist hotfixes to install in the command\n");
+        CLI::logging("Please specify the hotfix to install\n");
     }
 }
 

@@ -1332,7 +1332,7 @@ class workspaceTools
 
         if ($arrayPathInfo["extension"] != "tar") {
             $swv  = 0;
-            $msgv = $msgv . (($msgv != "")? "\n": null) . "- The file's extension \"$file\" no is \"tar\"";
+            $msgv = $msgv . (($msgv != "")? "\n": null) . "- The file extension \"$file\" is not \"tar\"";
         }
 
         if ($swv == 1) {
@@ -1345,7 +1345,7 @@ class workspaceTools
 
             if ($swTar) {
                 $result["status"] = 1;
-                $result["message"] = "- Successfully to install hotfix \"$f\"";
+                $result["message"] = "- Hotfix installed successfully \"$f\"";
             } else {
                 $result["status"] = 0;
                 $result["message"] = "- Could not extract file \"$f\"";
