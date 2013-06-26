@@ -215,8 +215,12 @@ class dynaformEditor extends WebResource
         $G_PUBLISH->AddContent('panel-tab', G::LoadTranslation("ID_FIELDS_LIST"), $sName . '[6]', 'dynaformEditor.changeToFieldsList', 'dynaformEditor.saveCurrentView');
         $G_PUBLISH->AddContent('panel-tab', G::LoadTranslation("ID_JAVASCRIPTS"), $sName . '[7]', 'dynaformEditor.changeToJavascripts', 'dynaformEditor.saveCurrentView');
         $G_PUBLISH->AddContent('panel-tab', G::LoadTranslation("ID_PROPERTIES"), $sName . '[8]', 'dynaformEditor.changeToProperties', 'dynaformEditor.saveCurrentView');
+
         //for showHide tab option @Neyek
-        $G_PUBLISH->AddContent('panel-tab', G::LoadTranslation("ID_CONDITIONS_EDITOR"), $sName . '[9]', 'dynaformEditor.changeToShowHide', 'dynaformEditor.saveShowHide');
+        if ($Properties["DYN_TYPE"] != "grid") {
+            $G_PUBLISH->AddContent("panel-tab", G::LoadTranslation("ID_CONDITIONS_EDITOR"), $sName . "[9]", "dynaformEditor.changeToShowHide", "dynaformEditor.saveShowHide");
+        }
+
         $G_PUBLISH->AddContent('panel-close');
         $oHeadPublisher->addScriptFile("/js/maborak/core/maborak.loader.js",2);
         $oHeadPublisher->addScriptFile('/jscore/dynaformEditor/core/dynaformEditor.js');
@@ -539,6 +543,18 @@ class dynaformEditorAjax extends dynaformEditor implements iDynaformEditorAjax
     public function set_htmlcode($A, $htmlcode)
     {
         try {
+            $iOcurrences = preg_match_all('/\{[\S*\<[^\>]*\S*\s*\>*\S*]*\$\S*\<[^\>]*\S*\s*\>*\S*\}/im', $htmlcode, $matches);
+            if ($iOcurrences) {
+                if (isset($matches[0])) {
+                    $tagsHtml = $matches[0];
+                    foreach ($tagsHtml as $value) {
+                        $aTagVar =  str_replace("{", "&#123;", $value);
+                        $aTagVar =  str_replace("}", "&#125;", $aTagVar);
+                        $aTagVar =  str_replace("$", "&#36;", $aTagVar);
+                        $htmlcode = str_replace($value, $aTagVar, $htmlcode);
+                    }
+                }
+            }
             $file = G::decrypt($A, URL_KEY);
             $form = new Form($file, PATH_DYNAFORM, SYS_LANG, true);
             $filename = substr($form->fileName, 0, - 3) . ($form->type === 'xmlform' ? '' : '.' . $form->type) . 'html';
