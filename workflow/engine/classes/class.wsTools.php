@@ -1307,5 +1307,55 @@ class workspaceTools
 
         CLI::logging(CLI::info("Done restoring") . "\n");
     }
+
+    public static function hotfixInstall($file)
+    {
+        $result = array();
+
+        $dirHotfix = PATH_DATA . "hotfixes";
+
+        $arrayPathInfo = pathinfo($file);
+
+        $f = ($arrayPathInfo["dirname"] == ".")? $dirHotfix . PATH_SEP . $file : $file;
+
+        $swv  = 1;
+        $msgv = "";
+
+        if (!file_exists($dirHotfix)) {
+            G::mk_dir($dirHotfix, 0777);
+        }
+
+        if (!file_exists($f)) {
+            $swv  = 0;
+            $msgv = $msgv . (($msgv != "")? "\n": null) . "- The file \"$f\" does not exist";
+        }
+
+        if ($arrayPathInfo["extension"] != "tar") {
+            $swv  = 0;
+            $msgv = $msgv . (($msgv != "")? "\n": null) . "- The file extension \"$file\" is not \"tar\"";
+        }
+
+        if ($swv == 1) {
+            G::LoadThirdParty("pear/Archive", "Tar");
+
+            //Extract
+            $tar = new Archive_Tar($f);
+
+            $swTar = $tar->extract(PATH_OUTTRUNK); //true on success, false on error
+
+            if ($swTar) {
+                $result["status"] = 1;
+                $result["message"] = "- Hotfix installed successfully \"$f\"";
+            } else {
+                $result["status"] = 0;
+                $result["message"] = "- Could not extract file \"$f\"";
+            }
+        } else {
+            $result["status"] = 0;
+            $result["message"] = $msgv;
+        }
+
+        return $result;
+    }
 }
 
