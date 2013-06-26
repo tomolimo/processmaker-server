@@ -1,28 +1,28 @@
 <?php
-CLI::taskName("patch-install");
+CLI::taskName("hotfix-install");
 
 CLI::taskDescription(<<<EOT
-    Install patch to system
+    Install hotfix to system
 
     This command is executed when you want to update certain files, which have improvements or solution to bugs.
 EOT
 );
 
-CLI::taskRun(runPatchInstall);
+CLI::taskRun(runHotfixInstall);
 
-function runPatchInstall($command, $args)
+function runHotfixInstall($command, $args)
 {
-    CLI::logging("PATCH", PATH_DATA . "log" . PATH_SEP . "upgrades.log");
-    CLI::logging("Install patch to system\n");
+    CLI::logging("HOTFIX", PATH_DATA . "log" . PATH_SEP . "upgrades.log");
+    CLI::logging("Install hotfix to system\n");
 
     $arrayFile = $command;
 
     if (count($arrayFile) > 0) {
-        //Install patch
+        //Install hotfix
         foreach ($arrayFile as $value) {
             $f = $value;
 
-            $result = workspaceTools::patchInstall($f);
+            $result = workspaceTools::hotfixInstall($f);
 
             CLI::logging($result["message"] . "\n");
         }
@@ -40,9 +40,9 @@ function runPatchInstall($command, $args)
 
         G::browserCacheFilesSetUid();
 
-        CLI::logging("PATCH done\n");
+        CLI::logging("HOTFIX done\n");
     } else {
-        CLI::logging("Not exist patchs to install in the command\n");
+        CLI::logging("Not exist hotfixes to install in the command\n");
     }
 }
 

@@ -1308,21 +1308,21 @@ class workspaceTools
         CLI::logging(CLI::info("Done restoring") . "\n");
     }
 
-    public static function patchInstall($file)
+    public static function hotfixInstall($file)
     {
         $result = array();
 
-        $dirPatch = PATH_DATA . "patchs";
+        $dirHotfix = PATH_DATA . "hotfixes";
 
         $arrayPathInfo = pathinfo($file);
 
-        $f = ($arrayPathInfo["dirname"] == ".")? $dirPatch . PATH_SEP . $file : $file;
+        $f = ($arrayPathInfo["dirname"] == ".")? $dirHotfix . PATH_SEP . $file : $file;
 
         $swv  = 1;
         $msgv = "";
 
-        if (!file_exists($dirPatch)) {
-            G::mk_dir($dirPatch, 0777);
+        if (!file_exists($dirHotfix)) {
+            G::mk_dir($dirHotfix, 0777);
         }
 
         if (!file_exists($f)) {
@@ -1345,7 +1345,7 @@ class workspaceTools
 
             if ($swTar) {
                 $result["status"] = 1;
-                $result["message"] = "- Successfully to install patch \"$f\"";
+                $result["message"] = "- Successfully to install hotfix \"$f\"";
             } else {
                 $result["status"] = 0;
                 $result["message"] = "- Could not extract file \"$f\"";
