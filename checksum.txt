@@ -272,7 +272,7 @@ f8dfd7e60de06111b16c78d9662470b7  ./workflow/engine/classes/model/IsoLocationPee
 c3d0cafb327f56e8a35e496a6debad9b  ./workflow/engine/classes/model/Translation.php
 0cb57df995704e63aa749d9bb4e5f838  ./workflow/engine/classes/model/DepartmentPeer.php
 092cf4e1241c04f4a81a139d537ee520  ./workflow/engine/classes/model/ProcessOwner.php
-11e42fc6a047080e4926ee672bd9b492  ./workflow/engine/classes/model/AppNotes.php
+3e4845ef74c67c040af7c3062e2ce000  ./workflow/engine/classes/model/AppNotes.php
 36718a04df91ea620963fe88cb9f60e3  ./workflow/engine/classes/model/Dashlet.php
 9d80eec6c820d645279c3e56cdb6f9c2  ./workflow/engine/classes/model/IsoCountry.php
 c946f53abfb00fae3ed8d4567d4f3b7d  ./workflow/engine/classes/model/ProcessCategoryPeer.php
@@ -1180,7 +1180,7 @@ a8242164d63813114f4767868cc26fc8  ./workflow/engine/xmlform/triggers/triggersCus
 be6b7b84ec4b016eb5006c7a476087cd  ./workflow/engine/xmlform/triggers/triggers_Edit.html
 ceb3c5efd826af36566274fe06d965d0  ./workflow/engine/xmlform/triggers/triggers_ShortList.xml
 69d5557bc5c7d54e7c0009cab55e76ee  ./workflow/engine/xmlform/triggers/dynavars.xml
-76ef964587bfc0e9f15c1c8bd9bb2035  ./workflow/engine/xmlform/triggers/triggerCopy.xml
+f79d70f29a24b090462ec3dedeb54326  ./workflow/engine/xmlform/triggers/triggerCopy.xml
 c2030639920c9a93e9b1209a4c257354  ./workflow/engine/xmlform/triggers/triggersNarrowEdit.xml
 d9396fdc129ab7965ec0195c82591822  ./workflow/engine/xmlform/triggers/wizardOptions.xml
 f7422cd7b5c8cb2aebd5c14bc527b413  ./workflow/engine/xmlform/inputdocs/inputdocs_Edit.html
