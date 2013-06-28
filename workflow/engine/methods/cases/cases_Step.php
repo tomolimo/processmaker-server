@@ -184,7 +184,11 @@ try {
 //Obtain previous and next step - End
 
 $aRequiredFields = array(
-    'APP_DATA' => $Fields['APP_DATA']
+    'APPLICATION'   => $Fields['APP_DATA']['APPLICATION'],
+    'PROCESS'       => $Fields['APP_DATA']['PROCESS'],
+    'TASK'          => $Fields['APP_DATA']['TASK'],
+    'INDEX'         => $Fields['APP_DATA']['INDEX'],
+    'TRIGGER_DEBUG' => $Fields['APP_DATA']['TRIGGER_DEBUG']
 );
 
 $oHeadPublisher->addScriptCode('var __dynaformSVal__ = \'' . base64_encode(serialize($aRequiredFields)) . '\'; ');
@@ -219,12 +223,15 @@ try {
             $Fields['APP_DATA']['__DYNAFORM_OPTIONS']['DYNUIDPRINT'] = $_GET['UID'];
 
             $oHeadPublisher = & headPublisher::getSingleton();
-            $oHeadPublisher->addScriptCode( "
-      if (typeof parent != 'undefined') {
-        if (parent.setNode) {
-          parent.setNode('" . $_GET['UID'] . "');
-        }
-      }" );
+
+            if (!isset($_SESSION["PM_RUN_OUTSIDE_MAIN_APP"])) {
+                $oHeadPublisher->addScriptCode( "
+                                                    if (typeof parent != 'undefined') {
+                                                        if (parent.setNode) {
+                                                            parent.setNode('" . $_GET['UID'] . "');
+                                                        }
+                                                    }" );
+            }
 
             $oStep = new Step();
             $oStep = $oStep->loadByProcessTaskPosition( $_SESSION['PROCESS'], $_SESSION['TASK'], $_GET['POSITION'] );
@@ -996,16 +1003,20 @@ try {
 
 $oHeadPublisher = & headPublisher::getSingleton();
 $oHeadPublisher->addScriptFile( "/jscore/cases/core/cases_Step.js" );
-$oHeadPublisher->addScriptCode( "
-  if (typeof parent != 'undefined') {
-    if (parent.showCaseNavigatorPanel) {
-      parent.showCaseNavigatorPanel('$sStatus');
-    }
 
-    if (parent.setCurrent) {
-      parent.setCurrent('" . $_GET['UID'] . "');
-    }
-  }" );
+if (!isset($_SESSION["PM_RUN_OUTSIDE_MAIN_APP"])) {
+    $oHeadPublisher->addScriptCode( "
+                                        if (typeof parent != 'undefined') {
+                                            if (parent.showCaseNavigatorPanel) {
+                                                parent.showCaseNavigatorPanel('$sStatus');
+                                            }
+
+                                            if (parent.setCurrent) {
+                                                parent.setCurrent('" . $_GET['UID'] . "');
+                                            }
+                                        }" );
+
+}
 
 G::RenderPage( 'publish', 'blank' );
 
