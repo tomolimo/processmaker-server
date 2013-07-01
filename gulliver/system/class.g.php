@@ -5161,7 +5161,7 @@ class G
         return $url;
     }
 
-    public static function skinGetPathToSrcByVirtualUri($option)
+    public static function skinGetPathToSrcByVirtualUri($option, $sysConf)
     {
         $path = "";
         $ereg = "";
@@ -5182,12 +5182,11 @@ class G
             $strAux = str_replace($strSearch, null, $_SERVER["REQUEST_URI"]);
 
             if ($strAux != "") {
-                $skin = "base"; // classic
+                $skin = "base"; //classic
 
                 if (isset($_SESSION["currentSkin"])) {
                     $skin = $_SESSION["currentSkin"];
                 } else {
-                    $sysConf = System::getSystemConfiguration(PATH_CONFIG . "env.ini");
 
                     if (isset($sysConf["default_skin"])) {
                         $skin = $sysConf["default_skin"];

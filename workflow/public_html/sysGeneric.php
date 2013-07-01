@@ -326,8 +326,8 @@ spl_autoload_register(array("Bootstrap", "autoloadClass"));
 Bootstrap::registerClass("G",      PATH_GULLIVER . "class.g.php");
 Bootstrap::registerClass("System", PATH_HOME . "engine/classes/class.system.php");
 
-$skinPathErrors = G::skinGetPathToSrcByVirtualUri("errors");
-$skinPathUpdate = G::skinGetPathToSrcByVirtualUri("update");
+$skinPathErrors = G::skinGetPathToSrcByVirtualUri("errors", $config);
+$skinPathUpdate = G::skinGetPathToSrcByVirtualUri("update", $config);
 
 // defining Virtual URLs
 $virtualURITable = array ();
