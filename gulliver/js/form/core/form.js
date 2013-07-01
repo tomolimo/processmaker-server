@@ -2906,7 +2906,7 @@ var validateForm = function(sRequiredFields) {
         swSubmitValidateForm = 0;
 
         sFormName = document.getElementById('__DynaformName__');
-        if ((typeof(sFormName) != 'undefined' && sFormName != 'login') && (typeof(__usernameLogged__) != 'undefined' && __usernameLogged__ != '') ) {
+        if (typeof(__dynaformSVal__) != 'undefined' && (typeof(sFormName) != 'undefined' && sFormName != 'login') && (typeof(__usernameLogged__) != 'undefined' && __usernameLogged__ != '') ) {
             if (!sessionPersits()) {
                 showPromptLogin('session');
 
@@ -3294,7 +3294,7 @@ var saveAndRefreshForm = function(oObject) {
 var sessionPersits = function() {
     var rpc = new leimnud.module.rpc.xmlhttp({
         url: '../services/sessionPersists',
-        args: 'dynaformRestoreValues=' + __dynaformSVal__,
+        args: 'dynaformRestoreValues=' + (typeof(__dynaformSVal__) != 'undefined' ? __dynaformSVal__ : ''),
         async: false
     });
     rpc.make();
