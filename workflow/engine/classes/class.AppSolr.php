@@ -1213,51 +1213,57 @@ class AppSolr
 
         // validate phrase in case of < and <=
         $result1 = strpos($searchText, '<');        
-        if($result1 !== FALSE){
+        if($result1 !== false)
+        {
           $result = strpos($searchText, '<=');  
-          if ($result !== FALSE){
+          if($result !== false)
+             {
              $v1 = str_replace( '<=', '', $searchText ); 
              $v2 = str_replace( ':', '', $v1);                                  
              $v3 = str_replace( '<','' ,':[* TO '.$v2.']' );                 
              $searchText = $v3;            
-          }      
+             }      
           else {
             $v1 = str_replace( '<', '', $searchText ); 
             $v2 = str_replace( ':', '', $v1);               
             $v3 = (int) $v2-1;          
             $v4 = str_replace( '<','' ,':[* TO '.$v3.']' );                 
             $searchText = $v4;
-          }                    
+            }                    
           }
         // validate phrase in case of > and >=
         $result2 = strpos($searchText, '>');
-        if($result2 !== FALSE){
+        if($result2 !== false)
+          {
           $result = strpos($searchText, '>=');  
-          if ($result !== FALSE){
+          if($result !== false)
+             {
              $v1 = str_replace( '>=', '', $searchText ); 
              $v2 = str_replace( ':', '', $v1);                                  
              $v3 = str_replace( '>','' ,':['.$v2.' TO *]' );                  
              $searchText = $v3;            
-          }      
+             }      
           else {
              $v1 = str_replace( '>', '', $searchText );    
              $v2 = str_replace( ':', '', $v1 );    
              $v3 = (int) $v2+1;          
              $v4 = str_replace( '>','' ,':['.$v3.' TO *]' );                
              $searchText = $v4;      
-          }                    
-           
-        }
-
+             }                               
+          }
         // validate phrase in case of |
         $result2 = strpos($searchText, '|');
-        if($result2 !== FALSE){        
+        if($result2 !== false)
+          {        
           $v1 = str_replace( '|', ' TO ', $searchText );
           $v2 = str_replace( ':', '', $v1 );                  
           $v3 = str_replace( '','' ,':['.$v2.']' );                
           $searchText = $v3;                   
           }
-        //echo $searchText;
+
+        $formattedSearchText .= $indexFieldName . $searchText;
+        $includeToken = true;
+      }
         $formattedSearchText .= $indexFieldName . $searchText;
         $includeToken = true;
       }
