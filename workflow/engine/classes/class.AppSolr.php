@@ -1260,10 +1260,7 @@ class AppSolr
           $v3 = str_replace( '','' ,':['.$v2.']' );                
           $searchText = $v3;                   
           }
-
-        $formattedSearchText .= $indexFieldName . $searchText;
-        $includeToken = true;
-      }
+          
         $formattedSearchText .= $indexFieldName . $searchText;
         $includeToken = true;
       }
