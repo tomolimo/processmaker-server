@@ -2252,6 +2252,10 @@ class wsBase
                         $appFields['APP_DATA'] = $oPMScript->aFields;
                         //$appFields['APP_DATA']['APPLICATION'] = $caseId;
                         //$appFields = $oCase->loadCase($caseId);
+                        unset($aFields['APP_STATUS']);
+                        unset($aFields['APP_PROC_STATUS']);
+                        unset($aFields['APP_PROC_CODE']);
+                        unset($aFields['APP_PIN']);
                         $oCase->updateCase( $caseId, $appFields );
                     }
                 }
@@ -2452,6 +2456,10 @@ class wsBase
 
                 //Save data - Start
                 $appFields['APP_DATA'] = $oPMScript->aFields;
+                unset($appFields['APP_STATUS']);
+                unset($appFields['APP_PROC_STATUS']);
+                unset($appFields['APP_PROC_CODE']);
+                unset($appFields['APP_PIN']);
                 //$appFields = $oCase->loadCase($caseId);
                 $oCase->updateCase( $caseId, $appFields );
                 //Save data - End

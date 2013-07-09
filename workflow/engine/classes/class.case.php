@@ -6544,6 +6544,10 @@ class Cases
             $oPMScript->setScript($webBotTrigger);
             $oPMScript->execute();
             $aFields['APP_DATA'] = array_merge($aFields['APP_DATA'], $oPMScript->aFields);
+            unset($aFields['APP_STATUS']);
+            unset($aFields['APP_PROC_STATUS']);
+            unset($aFields['APP_PROC_CODE']);
+            unset($aFields['APP_PIN']);
             $this->updateCase($aFields['APP_UID'], $aFields);
             return true;
         }
