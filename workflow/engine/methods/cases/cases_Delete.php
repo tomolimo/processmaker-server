@@ -48,7 +48,7 @@ try {
         $pmTable = new PmTable();
 
         foreach ($ids as $id) {
-            $pmTable->reportTableDeleteRecord($id);
+            $oCase->reportTableDeleteRecord($id);
             $oCase->removeCase( $id );
         }
 
