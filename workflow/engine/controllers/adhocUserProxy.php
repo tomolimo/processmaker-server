@@ -62,7 +62,6 @@ class adhocUserProxy extends HttpProxyController
             $data['APP_NUMBER'] = $caseData['APP_NUMBER'];
 
             $oCase = new Cases();
-            $oCase->reportTableDeleteRecord($applicationUID);
             $oCase->removeCase( $applicationUID );
 
             $this->success = true;

@@ -1100,7 +1100,6 @@ class Cases
             $criteria = new Criteria("workflow");
             $criteria->add(AppSolrQueuePeer::APP_UID, $sAppUid);
             AppSolrQueuePeer::doDelete($criteria);
-
             //Before delete verify if is a child case
             $oCriteria2 = new Criteria('workflow');
             $oCriteria2->add(SubApplicationPeer::APP_UID, $sAppUid);
@@ -1118,10 +1117,12 @@ class Cases
             $oCriteria2->add(SubApplicationPeer::APP_PARENT, $sAppUid);
             SubApplicationPeer::doDelete($oCriteria2);
 
+            //Delete records of the Report Table
+            $this->reportTableDeleteRecord($sAppUid);
+
             //Delete record of the APPLICATION table (trigger: delete records of the APP_CACHE_VIEW table)
             $application = new Application();
             $result = $application->remove($sAppUid);
-
             //delete application from index
             if ($this->appSolr != null) {
                 $this->appSolr->deleteApplicationSearchIndex($sAppUid);

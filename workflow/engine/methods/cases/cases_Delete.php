@@ -43,15 +43,9 @@ try {
     $oCase = new Cases();
     if (isset( $_POST['APP_UIDS'] )) {
         $ids = explode( ',', $_POST['APP_UIDS'] );
-
-        G::LoadClass("pmTable");
-        $pmTable = new PmTable();
-
         foreach ($ids as $id) {
-            $oCase->reportTableDeleteRecord($id);
             $oCase->removeCase( $id );
         }
-
         if (count( $_POST['APP_UIDS'] ) > 1) {
             echo 'The Case was deleted successfully';
         } else {
