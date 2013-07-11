@@ -477,7 +477,7 @@ class wsBase
                         "guid" => $e->getMessage(),
                         "name" => $e->getMessage(),
                         "status" => $e->getMessage(),
-                        "status" => $e->getMessage(),
+                        "delIndex" => $e->getMessage(),
                         "processId" => $e->getMessage()
                     );
 
@@ -535,7 +535,7 @@ class wsBase
                 "guid" => $e->getMessage(),
                 "name" => $e->getMessage(),
                 "status" => $e->getMessage(),
-                "status" => $e->getMessage(),
+                "delIndex" => $e->getMessage(),
                 "processId" => $e->getMessage()
             );
 
