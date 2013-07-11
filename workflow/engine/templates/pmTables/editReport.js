@@ -936,7 +936,7 @@ Ext.onReady(function(){
       }, {
         text:_("ID_CANCEL"),
         handler: function() {
-            proParam = (typeof('PROCESSMAP') != 'undefined' && PROCESSMAP == 1) ? (PRO_UID !== false ? '?PROCESSMAP=1&PRO_UID='+PRO_UID : '') : '';
+            proParam = (typeof('flagProcessmap') != 'undefined' && flagProcessmap == 1) ? (PRO_UID !== false ? '?flagProcessmap=1&PRO_UID='+PRO_UID : '') : '';
             location.href = '../pmTables' + proParam; //history.back();
         }
     }]
@@ -1087,7 +1087,7 @@ function createReportTable()
       Ext.MessageBox.hide();
 
       if (result.success) {
-        proParam = (typeof('PROCESSMAP') != 'undefined' && PROCESSMAP == 1) ? (PRO_UID !== false ? '?PROCESSMAP=1&PRO_UID='+PRO_UID : '') : '';
+        proParam = (typeof('flagProcessmap') != 'undefined' && flagProcessmap == 1) ? (PRO_UID !== false ? '?flagProcessmap=1&PRO_UID='+PRO_UID : '') : '';
         location.href = '../pmTables' + proParam; //history.back();
       } else {
         PMExt.error(_('ID_ERROR'), result.type +': '+result.msg);
