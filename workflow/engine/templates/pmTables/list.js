@@ -275,7 +275,7 @@ Ext.onReady(function(){
             break;
         }
       }
-      
+
       v = Ext.util.Format.htmlEncode(v);
 
       return r.get("ADD_TAB_TAG") ? "<span style = \"font-size:9px; color:green\">" + tag + ":</span> "+ v : v;
@@ -321,7 +321,7 @@ Ext.onReady(function(){
       autoWidth : true,
       title : (PRO_UID? _('ID_REPORT_TABLES') : _('ID_PMTABLE')),
       stateful : true,
-      stateId : 'grid',
+      stateId : 'gridList',
       enableColumnResize: true,
       enableHdMenu: true,
       frame:false,
@@ -413,11 +413,13 @@ capitalize = function(s){
 DoNothing = function(){};
 
 //Load New PM Table Forms
-NewReportTable = function(){
-  if(PRO_UID !== false)
-    location.href = 'pmTables/edit?PRO_UID='+PRO_UID+'&tableType=report';
-  else
-    location.href = 'pmTables/edit?tableType=report';
+NewReportTable = function() {
+    var flagProcessmap =  (typeof('flagProcessmap') != 'undefined') ? flagProcessmap : 0;
+    if(PRO_UID !== false) {
+        location.href = 'pmTables/edit?PRO_UID='+PRO_UID+'&tableType=report&flagProcessmap='+flagProcessmap;
+    } else {
+        location.href = 'pmTables/edit?tableType=report&flagProcessmap='+flagProcessmap;
+    }
 };
 
 NewReportTableOld = function(){
