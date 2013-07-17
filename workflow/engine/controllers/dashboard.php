@@ -435,7 +435,7 @@ class Dashboard extends Controller
             $dataset->setFetchmode( ResultSet::FETCHMODE_ASSOC );
             $dataset->next();
             while ($row = $dataset->getRow()) {
-                if (strstr($row['DAS_TITLE'], '_')) {
+                if (strstr($row['DAS_TITLE'], '*')) {
                     $row['DAS_TITLE'] = str_replace('*', '', $row['DAS_TITLE']);
                     $row['DAS_TITLE'] = G::LoadTranslationPlugin('advancedDashboards', $row['DAS_TITLE']);          
                 }
@@ -450,7 +450,6 @@ class Dashboard extends Controller
         } catch (Exception $error) {
             throw $error;
         }
-        //G::pr($dashlets);die;
         return $dashlets;
     }
 

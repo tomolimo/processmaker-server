@@ -99,7 +99,7 @@ class PMDashlet extends DashletInstance implements DashletInterface
 
                 if (strstr($row['DAS_TITLE'], '*')) {
                     $row['DAS_TITLE'] = G::LoadTranslationPlugin('advancedDashboards', str_replace("*","",$row['DAS_TITLE']));    
-                }//G::pr($row['DAS_TITLE']);
+                }
                 $row['DAS_INS_STATUS_LABEL'] = ($row['DAS_INS_STATUS'] == '1' ? G::LoadTranslation( 'ID_ACTIVE' ) : G::LoadTranslation( 'ID_INACTIVE' ));
                 $row['DAS_INS_TITLE'] = (isset( $arrayField['DAS_INS_TITLE'] ) && ! empty( $arrayField['DAS_INS_TITLE'] )) ? $arrayField['DAS_INS_TITLE'] : '';
                 if (! class_exists( $row['DAS_CLASS'] )) {
