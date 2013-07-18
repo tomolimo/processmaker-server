@@ -78,10 +78,10 @@ class AppDelegation extends BaseAppDelegation
             throw (new Exception( 'Column "APP_THREAD" cannot be null.' ));
         }
 
-        //get max DEL_INDEX
-        $criteria = new Criteria('workflow');
-        $criteria->add( AppDelegationPeer::APP_UID, $sAppUid );
-        $criteria->add( AppDelegationPeer::DEL_LAST_INDEX , 1);
+        //Get max DEL_INDEX
+        $criteria = new Criteria("workflow");
+        $criteria->add(AppDelegationPeer::APP_UID, $sAppUid);
+        $criteria->add(AppDelegationPeer::DEL_LAST_INDEX, 1);
 
         $criteriaIndex = clone $criteria;
 
@@ -95,15 +95,24 @@ class AppDelegation extends BaseAppDelegation
 
             $delIndex = (isset($row["DEL_INDEX"]))? $row["DEL_INDEX"] + 1 : 1;
         } else {
-            G::LoadClass("case");
+            $criteriaDelIndex = new Criteria("workflow");
 
-            $case = new Cases();
-            $delIndexAux = $case->getCurrentDelegationCase($sAppUid);
+            $criteriaDelIndex->addSelectColumn(AppDelegationPeer::DEL_INDEX);
+            $criteriaDelIndex->addSelectColumn(AppDelegationPeer::DEL_DELEGATE_DATE);
+            $criteriaDelIndex->add(AppDelegationPeer::APP_UID, $sAppUid);
+            $criteriaDelIndex->addDescendingOrderByColumn(AppDelegationPeer::DEL_DELEGATE_DATE);
 
-            $delIndex = (isset($delIndexAux))? $delIndexAux + 1 : 1;
+            $rsCriteriaDelIndex = AppDelegationPeer::doSelectRS($criteriaDelIndex);
+            $rsCriteriaDelIndex->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+
+            if ($rsCriteriaDelIndex->next()) {
+                $row = $rsCriteriaDelIndex->getRow();
+
+                $delIndex = (isset($row["DEL_INDEX"]))? $row["DEL_INDEX"] + 1 : 1;
+            }
         }
 
-        // update set
+        //Update set
         $criteriaUpdate = new Criteria('workflow');
         $criteriaUpdate->add(AppDelegationPeer::DEL_LAST_INDEX, 0);
         BasePeer::doUpdate($criteria, $criteriaUpdate, Propel::getConnection('workflow'));
