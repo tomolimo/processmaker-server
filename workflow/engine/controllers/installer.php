@@ -1491,26 +1491,31 @@ class Installer extends Controller
             curl_close($ch);
         }
 
-        $plugins = array('advancedDashboards');
+        $plugins = glob(PATH_CORE."plugins/*.php");
+        //$plugins = array('advancedDashboards');
         foreach ($plugins as $value) {
-            $ch = curl_init();
-            $postData = array();
-            $postData['action'] = "enable";
-            $postData['addon'] = $value;
+            $namePlugin = str_replace('.php', '', $value);
+            error_log('---------->'.$namePlugin);
+            if ($value != 'enterprise') {
+                $ch = curl_init();
+                $postData = array();
+                $postData['action'] = "enable";
+                $postData['addon'] = $namePlugin;
 
-            curl_setopt($ch, CURLOPT_URL, "$serv/sys{$workspace}/{$lang}/{$skinName}/enterprise/addonsStoreAction");
-            curl_setopt($ch, CURLOPT_HEADER, 0);
-            curl_setopt($ch, CURLOPT_VERBOSE, 0);
-            curl_setopt($ch, CURLOPT_COOKIEFILE, $cookiefile);
-            curl_setopt($ch, CURLOPT_COOKIEJAR, $cookiefile);
-            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false);
-            curl_setopt($ch, CURLOPT_POST, true);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
-            curl_setopt($ch, CURLOPT_TIMEOUT, 90);
+                curl_setopt($ch, CURLOPT_URL, "$serv/sys{$workspace}/{$lang}/{$skinName}/enterprise/addonsStoreAction");
+                curl_setopt($ch, CURLOPT_HEADER, 0);
+                curl_setopt($ch, CURLOPT_VERBOSE, 0);
+                curl_setopt($ch, CURLOPT_COOKIEFILE, $cookiefile);
+                curl_setopt($ch, CURLOPT_COOKIEJAR, $cookiefile);
+                curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false);
+                curl_setopt($ch, CURLOPT_POST, true);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
+                curl_setopt($ch, CURLOPT_TIMEOUT, 90);
 
-            $output = curl_exec($ch);
-            curl_close($ch);
+                $output = curl_exec($ch);
+                curl_close($ch);
+            }
         }
     }
 }
