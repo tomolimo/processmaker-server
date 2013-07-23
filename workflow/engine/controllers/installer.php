@@ -1491,16 +1491,28 @@ class Installer extends Controller
             curl_close($ch);
         }
 
+        /**
+         * Active plugins to enterprise
+         */
+
         $plugins = glob(PATH_CORE."plugins/*.php");
         foreach ($plugins as $value) {
             $dataPlugin = pathinfo($value);
             $namePlugin = $dataPlugin['filename'];
-            error_log('---------->'.$namePlugin);
             if ($value != 'enterprise') {
+                $oCriteria = new Criteria( 'workflow' );
+                $oCriteria->addSelectColumn( AddonsManagerPeer::STORE_ID );
+                $oCriteria->add( AddonsManagerPeer::ADDON_NAME, $namePlugin, Criteria::EQUAL );
+                $oDataset  = ApplicationPeer::doSelectRs( $oCriteria );
+                $oDataset->setFetchmode( ResultSet::FETCHMODE_ASSOC );
+                $oDataset->next();
+                $dataStore = $oDataset->getRow();
+
                 $ch = curl_init();
                 $postData = array();
                 $postData['action'] = "enable";
-                $postData['addon'] = $namePlugin;
+                $postData['addon']  = $namePlugin;
+                $postData['store']  = $dataStore['STORE_ID'];
 
                 curl_setopt($ch, CURLOPT_URL, "$serv/sys{$workspace}/{$lang}/{$skinName}/enterprise/addonsStoreAction");
                 curl_setopt($ch, CURLOPT_HEADER, 0);
