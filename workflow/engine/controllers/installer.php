@@ -1490,6 +1490,53 @@ class Installer extends Controller
             $output = curl_exec($ch);
             curl_close($ch);
         }
+
+        /**
+         * Active plugins to enterprise
+         */
+
+        if (!defined("PATH_PM_ENTERPRISE")) {
+            define("PATH_PM_ENTERPRISE", PATH_CORE . "/plugins/enterprise/");
+        }
+        set_include_path(PATH_PM_ENTERPRISE . PATH_SEPARATOR . get_include_path());
+        require_once ('classes/model/AddonsManager.php');
+
+        $plugins = glob(PATH_CORE."plugins/*.php");
+        foreach ($plugins as $value) {
+            $dataPlugin = pathinfo($value);
+            $namePlugin = $dataPlugin['filename'];
+            if ($value != 'enterprise') {
+                $db_host = trim( $_REQUEST['db_hostname'] );
+                $db_username = trim( $_REQUEST['db_username'] );
+                $db_password = trim( $_REQUEST['db_password'] );
+                $wf = trim( $_REQUEST['wfDatabase'] );
+
+                $link = @mysql_connect( $db_host, $db_username, $db_password );
+                @mysql_select_db($wf, $link);
+                $res = mysql_query( "SELECT STORE_ID FROM ADDONS_MANAGER WHERE ADDON_NAME = '" . $namePlugin . "'", $link );
+                if ($row = mysql_fetch_array( $res )) {
+                    $ch = curl_init();
+                    $postData = array();
+                    $postData['action'] = "enable";
+                    $postData['addon']  = $namePlugin;
+                    $postData['store']  = $row['STORE_ID'];
+
+                    curl_setopt($ch, CURLOPT_URL, "$serv/sys{$workspace}/{$lang}/{$skinName}/enterprise/addonsStoreAction");
+                    curl_setopt($ch, CURLOPT_HEADER, 0);
+                    curl_setopt($ch, CURLOPT_VERBOSE, 0);
+                    curl_setopt($ch, CURLOPT_COOKIEFILE, $cookiefile);
+                    curl_setopt($ch, CURLOPT_COOKIEJAR, $cookiefile);
+                    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false);
+                    curl_setopt($ch, CURLOPT_POST, true);
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                    curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
+                    curl_setopt($ch, CURLOPT_TIMEOUT, 90);
+
+                    $output = curl_exec($ch);
+                    curl_close($ch);
+                }
+            }
+        }
     }
 }
 
