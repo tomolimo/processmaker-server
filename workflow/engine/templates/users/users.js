@@ -37,7 +37,7 @@ var userLogedName = '';
 var userLogedRole = '';
 var userRoleLoad = '';
 
-const PROCESSMAKER_ADMIN = 'PROCESSMAKER_ADMIN';
+var PROCESSMAKER_ADMIN = 'PROCESSMAKER_ADMIN';
 
 global.IC_UID        = '';
 global.IS_UID        = '';
@@ -47,8 +47,6 @@ global.aux           = '';
 Ext.onReady(function () {
   Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
   Ext.QuickTips.init();
-
-  getUserLogedRoleRequest();
 
   box = new Ext.BoxComponent({
     width          : 100,
@@ -1199,6 +1197,8 @@ function saveUser()
 //Load data
 function loadData()
 {
+    getUserLogedRoleRequest();
+
     comboCountry.store.load();
 
 
@@ -1287,7 +1287,9 @@ function loadUserData()
                 //
             }
 
-            userRoleLoad = data.user.USR_ROLE;
+            userRoleLoad  = data.user.USR_ROLE;
+            userLogedName = data.user.USER_LOGGED_NAME;
+            userLogedRole = data.user.USER_LOGGED_ROLE;
 
             comboCountry.store.on("load", function(store) {
                 comboCountry.setValue(data.user.USR_COUNTRY);
