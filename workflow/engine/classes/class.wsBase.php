@@ -975,10 +975,10 @@ class wsBase
             $hasEmailFrom = preg_match( '/(.+)@(.+)\.(.+)/', $sFrom, $match );
 
             if (!$hasEmailFrom || strpos($sFrom, $aSetup["MESS_ACCOUNT"]) === false) {
-                if (isset($aSetup["MESS_ACCOUNT"]) && $aSetup["MESS_ENGINE"] != "MAIL") {
+                if (trim($aSetup["MESS_ACCOUNT"]) != "") {
                     $sFrom = "\"" . stripslashes($sFrom) . "\" <" . $aSetup["MESS_ACCOUNT"] . ">";
                 } else {
-                    $sFrom = "<info@processmaker.com>";
+                    $sFrom = "<info@" . $_SERVER["HTTP_HOST"] . ">";
                 }
             }
 
