@@ -58,14 +58,14 @@ $sLastExecution = null;
 $processcTimeProcess = 0;
 $processcTimeStart   = 0;
 if (file_exists(PATH_DATA . "cron")) {
-    $reset = false;
+    $force = false;
     for ($i = 1; $i <= count($argv) - 1; $i++) {
-        if (strpos($argv[$i], "+reset") !== false) {
-            $reset = true;
+        if (strpos($argv[$i], "+force") !== false) {
+            $force = true;
             break;
         }
     }
-    if (!$reset) {
+    if (!$force) {
         $arrayCron = unserialize(trim(@file_get_contents(PATH_DATA . "cron")));
         $bCronIsRunning = (boolean)($arrayCron["bCronIsRunning"]);
         $sLastExecution = $arrayCron["sLastExecution"];
@@ -146,6 +146,6 @@ if (!$bCronIsRunning) {
     @file_put_contents(PATH_DATA . "cron", serialize($arrayCron));
 } else {
     eprintln("The cron is running, please wait for it to finish.\nStarted in $sLastExecution");
-    eprintln("If do you want force the execution use the command '+reset'" ,"green");
+    eprintln("If do you want force the execution use the option '+force', example: php -f +wworkflow +force" ,"green");
 }
 
