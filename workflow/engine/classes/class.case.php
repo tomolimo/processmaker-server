@@ -4920,10 +4920,10 @@ class Cases
                     case "SELF_SERVICE":
                         if ($swtplDefault == 1) {
                             G::verifyPath($pathEmail, true); //Create if it does not exist
-                            $fileTemplate = $pathEmail . "unassignedMessage.html";
+                            $fileTemplate = $pathEmail . G::LoadTranslation('ID_UNASSIGNED_MESSAGE');
 
                             if (!file_exists($fileTemplate)) {
-                                @copy(PATH_TPL . "mails" . PATH_SEP . "unassignedMessage.html", $fileTemplate);
+                                @copy(PATH_TPL . "mails" . PATH_SEP . G::LoadTranslation('ID_UNASSIGNED_MESSAGE'), $fileTemplate);
                             }
 
                             $sBody = G::replaceDataField(file_get_contents($fileTemplate), $aFields);
@@ -5932,6 +5932,7 @@ class Cases
         $oCriteria->addSelectColumn(AppDocumentPeer::APP_DOC_TYPE);
         $oCriteria->addSelectColumn(AppDocumentPeer::APP_DOC_CREATE_DATE);
         $oCriteria->addSelectColumn(AppDocumentPeer::APP_DOC_INDEX);
+        $oCriteria->addSelectColumn(AppDocumentPeer::DOC_VERSION);
 
         $oCriteria->add(ApplicationPeer::PRO_UID, $PRO_UID);
         $oCriteria->addJoin(ApplicationPeer::APP_UID, AppDocumentPeer::APP_UID);
