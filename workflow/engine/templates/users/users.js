@@ -33,8 +33,6 @@ var canEdit = true;
 var flagPoliciesPassword = false;
 var flagValidateUsername = false;
 //var rendeToPage='document.body';
-var userLogedName = '';
-var userLogedRole = '';
 var userRoleLoad = '';
 
 var PROCESSMAKER_ADMIN = 'PROCESSMAKER_ADMIN';
@@ -1084,25 +1082,6 @@ function userFrmEditSubmit()
     });
 }
 
-function getUserLogedRoleRequest() {
-    var retVal;
-    Ext.Ajax.request({
-        url:    "usersAjax",
-        method: "POST",
-        params: {
-            action: "getUserLogedRole"
-        },
-        success: function (response, opts) {
-            var dataRetval = Ext.util.JSON.decode(response.responseText);
-            userLogedName = dataRetval.USR_USERNAME;
-            userLogedRole = dataRetval.USR_ROLE;
-        },
-        failure: function (response, opts) {
-            userLogedName = '';
-            userLogedRole = '';
-        }
-    });
-}
 
 function saveUser()
 {
@@ -1126,16 +1105,6 @@ function saveUser()
     		Ext.Msg.alert( _('ID_ERROR'), _('ID_ADMINISTRATOR_ROLE_CANT_CHANGED'));
             return false;
     	}
-    } else {
-        if (typeof(userRoleLoad) != 'undefined') {
-            if (Ext.getCmp('USR_ROLE').getValue() != userRoleLoad ) {
-                if (userLogedRole != PROCESSMAKER_ADMIN && Ext.getCmp('USR_ROLE').getValue() == PROCESSMAKER_ADMIN) {
-                    Ext.Msg.alert( _('ID_ERROR'), userLogedName + ' ' + _('ID_USER_ROLE_CANT_CHANGED_TO_ADMINISTRATOR'));
-                    return false;
-                }
-            }
-
-        }
     }
 
   } else {
@@ -1173,7 +1142,29 @@ function saveUser()
                     var dataRespuesta = Ext.util.JSON.decode(response.responseText);
 
                     if (dataRespuesta.result == "OK") {
-                        userFrmEditSubmit();
+                        Ext.Ajax.request({
+                            url:    "usersAjax",
+                            method: "POST",
+                            params: {
+                                action: "getUserLogedRole"
+                            },
+                            success: function (response, opts) {
+                                var dataRetval = Ext.util.JSON.decode(response.responseText);
+                                if (typeof(userRoleLoad) != 'undefined') {
+                                    if (Ext.getCmp('USR_ROLE').getValue() != userRoleLoad ) {
+                                        if (dataRetval.USR_ROLE != PROCESSMAKER_ADMIN && Ext.getCmp('USR_ROLE').getValue() == PROCESSMAKER_ADMIN) {
+                                            Ext.Msg.alert( _('ID_ERROR'), dataRetval.USR_USERNAME + ' ' + _('ID_USER_ROLE_CANT_CHANGED_TO_ADMINISTRATOR'));
+                                            return false;
+                                        } else {
+                                            userFrmEditSubmit();
+                                        }
+                                    }
+                                }
+                            },
+                            failure: function (response, opts) {
+                            }
+                        });
+
                     } else {
                         Ext.MessageBox.alert(_("ID_ERROR"), _("ID_PASSWORD_CURRENT_INCORRECT"));
                     }
@@ -1186,7 +1177,28 @@ function saveUser()
             Ext.MessageBox.alert(_("ID_ERROR"), _("ID_PASSWORD_CURRENT_ENTER"));
         }
     } else {
-        userFrmEditSubmit();
+        Ext.Ajax.request({
+            url:    "usersAjax",
+            method: "POST",
+            params: {
+                action: "getUserLogedRole"
+            },
+            success: function (response, opts) {
+                var dataRetval = Ext.util.JSON.decode(response.responseText);
+                if (typeof(userRoleLoad) != 'undefined') {
+                    if (Ext.getCmp('USR_ROLE').getValue() != userRoleLoad ) {
+                        if (dataRetval.USR_ROLE != PROCESSMAKER_ADMIN && Ext.getCmp('USR_ROLE').getValue() == PROCESSMAKER_ADMIN) {
+                            Ext.Msg.alert( _('ID_ERROR'), dataRetval.USR_USERNAME + ' ' + _('ID_USER_ROLE_CANT_CHANGED_TO_ADMINISTRATOR'));
+                            return false;
+                        } else {
+                            userFrmEditSubmit();
+                        }
+                    }
+                }
+            },
+            failure: function (response, opts) {
+            }
+        });
     }
 
   } else {
@@ -1197,7 +1209,6 @@ function saveUser()
 //Load data
 function loadData()
 {
-    getUserLogedRoleRequest();
 
     comboCountry.store.load();
 
@@ -1288,8 +1299,6 @@ function loadUserData()
             }
 
             userRoleLoad  = data.user.USR_ROLE;
-            userLogedName = data.user.USER_LOGGED_NAME;
-            userLogedRole = data.user.USER_LOGGED_ROLE;
 
             comboCountry.store.on("load", function(store) {
                 comboCountry.setValue(data.user.USR_COUNTRY);
