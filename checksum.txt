@@ -737,8 +737,8 @@ d9396fdc129ab7965ec0195c82591822  ./workflow/engine/xmlform/triggers/wizardOptio
 ceb3c5efd826af36566274fe06d965d0  ./workflow/engine/xmlform/triggers/triggers_ShortList.xml
 be6b7b84ec4b016eb5006c7a476087cd  ./workflow/engine/xmlform/triggers/triggers_Edit.html
 9e1fca483f5f6114dc67353e20ad1b84  ./workflow/engine/xmlform/triggers/triggersNarrowEdit.html
-6994e080c7208eec2b878ba95c224cdd  ./workflow/engine/xmlform/triggers/triggerCopy.html
-f79d70f29a24b090462ec3dedeb54326  ./workflow/engine/xmlform/triggers/triggerCopy.xml
+61b09bb0c2f5d2d0d73c009c15534579  ./workflow/engine/xmlform/triggers/triggerCopy.html
+05cf9a0d0dd996eeeb62145223a79163  ./workflow/engine/xmlform/triggers/triggerCopy.xml
 de1ffff94a2d1fe8629d5ebc00e775ec  ./workflow/engine/xmlform/triggers/triggersProperties.html
 dd41860a4aa0dc9a3da6420c05adc93c  ./workflow/engine/xmlform/triggers/triggersCustom.xml
 69d5557bc5c7d54e7c0009cab55e76ee  ./workflow/engine/xmlform/triggers/dynavars.xml
@@ -1080,8 +1080,8 @@ af2c3949f750cce778e0feb2f2613ce9  ./workflow/engine/xmlform/cases/cases_ViewInpu
 cf2a2cbfff9f7a2299349d025575facd  ./workflow/engine/xmlform/cases/cases_advancedSearch.xml
 8bf8f2c8c6018919a8fa07261d0948eb  ./workflow/engine/xmlform/cases/cases_TransferHistory.xml
 5d0d0ca04fc4802fa0e9211b5e3c385f  ./workflow/engine/xmlform/cases/cases_ReassignShowInfo.xml
-a700f9b3998dbc359507494fa72e1667  ./workflow/engine/xmlform/steps/triggersAfter_List.xml
-e87dc1535f024fb040d64f85ecab91e8  ./workflow/engine/xmlform/steps/triggersBefore_List.xml
+db8aae45588fa1a0111d44045f057f34  ./workflow/engine/xmlform/steps/triggersAfter_List.xml
+3b64460bf7b9fee27a50ddd5a5ca3dbd  ./workflow/engine/xmlform/steps/triggersBefore_List.xml
 f9f61fb7995e89a060efb2424238e27b  ./workflow/engine/xmlform/steps/triggers_NoAssign.xml
 af96ef49c325c458ed4b35f1f7af57ba  ./workflow/engine/xmlform/steps/triggers_Assign.xml
 cfc6f76d736514006820005ec2613f9e  ./workflow/engine/xmlform/steps/conditions_List.xml
@@ -1127,10 +1127,10 @@ efac7bde074fd4159e37c267a7b97a70  ./workflow/engine/templates/groups/groups_Tree
 51117355c5ed885cb33ababe248b41b8  ./workflow/engine/templates/pmTables/list.html
 17a85657567de826bea8cbedf5304fb9  ./workflow/engine/templates/pmTables/export.js
 51117355c5ed885cb33ababe248b41b8  ./workflow/engine/templates/pmTables/export.html
-a64a65c57fab48516c6d5d996c2bc633  ./workflow/engine/templates/pmTables/data.js
+58990a1682ecf81cfee98b16a71183b1  ./workflow/engine/templates/pmTables/data.js
 6f38cd28fded4c5500bd96e600ab195d  ./workflow/engine/templates/pmTables/edit.js
 d9688813bfc6e43e707150668a15d777  ./workflow/engine/templates/pmTables/editReport.js
-42ad29c77d4d642b3395dbeae1de59db  ./workflow/engine/templates/pmTables/list.js
+e5e13e37d6dd83cadc85e01603e7422b  ./workflow/engine/templates/pmTables/list.js
 97e06baf9cf4e56ca5933e1dcb7f74db  ./workflow/engine/templates/testAuthenticationSource.html
 7a03acb821e97eedc590d4a5030cbb33  ./workflow/engine/templates/outputdocs/htmlEditor.js
 c5ae33047d4eb3bd008dc8bc7a680d04  ./workflow/engine/templates/outputdocs/editJrxml.php
@@ -1309,7 +1309,7 @@ bfe6142ac773f8448e412d9737e8258c  ./workflow/engine/templates/cases/casesUploade
 3a1822c7ab93f476a9e1d77c7ccc92cb  ./workflow/engine/templates/cases/cases_toRevise.php
 4c1b5f8ed85bfe413dbd8172c2353ab7  ./workflow/engine/templates/cases/cases_toReviseIn.html
 d442c1c0afbdf214e035bb24e94d675d  ./workflow/engine/templates/cases/caseHistory.html
-6b96ba211a96de35c25827395f675cf5  ./workflow/engine/templates/cases/main.js
+e6c312364c3c38b697f2bd366b4ecbd7  ./workflow/engine/templates/cases/main.js
 9d74dd86f4b23357937fdfbe8c18f5e5  ./workflow/engine/templates/cases/paged-table-reassigByUser2.html
 46f7babbb60709dcbc76925ba3d9946c  ./workflow/engine/templates/cases/casesList.js
 0d0589d417691624865bc6dee3e97f2e  ./workflow/engine/templates/cases/caseMessageHistory.js
@@ -1354,7 +1354,7 @@ e28c3e4559567de2398285c286323b55  ./workflow/engine/templates/pagedTableLdap.htm
 768ace8d2754de51843b27258399a688  ./workflow/engine/bin/cron_single.php
 1e159b0177a5fa9befd50103a7c31f16  ./workflow/engine/bin/plugins/.gitignore
 86ff12b7e1c5ba175c65e7903970e265  ./workflow/engine/bin/rest-gen
-7ff1d75dfc1b4d541b1c9dc6e02ba2e3  ./workflow/engine/bin/cron.php
+fd4b0f42b22de4db12fd380851e22559  ./workflow/engine/bin/cron.php
 66177869a19bdca979e86c2769e8a393  ./workflow/engine/bin/reindex_solr.php
 693c177a514a08b4780f3d0b7631f19c  ./workflow/engine/bin/cli.php
 0bb75615d5818cc63001ae564963b313  ./workflow/engine/bin/tasks/cliUpgrade.php
@@ -1867,7 +1867,7 @@ d3878a39c3b3d679f2d07be45e08556c  ./workflow/engine/methods/cases/cases_Schedule
 6e13b9e2b7b04be32fa5ed9ae7d585e2  ./workflow/engine/methods/cases/cases_Scheduler_List.php
 6a7691cd298d3365675fb8462ca51c87  ./workflow/engine/methods/cases/cases_Derivate.php
 2efa01a808491dc463f93b67f6b8444f  ./workflow/engine/methods/cases/cases_ToReviseOutputDocView.php
-ac91afd651fde4a8510736a70ed5bc08  ./workflow/engine/methods/cases/casesMenuLoader.php
+8ad722456452191b0a05bf8736cff711  ./workflow/engine/methods/cases/casesMenuLoader.php
 66793e8ceffb9983c3ea0fe122fa23cd  ./workflow/engine/methods/cases/cases_Reassign.php
 a0cfe4eafa0579e773a7318a64d4d491  ./workflow/engine/methods/cases/cases_SaveDataSupervisor.php
 d0b4a60bc0a0ee259f3134e23892418c  ./workflow/engine/methods/cases/cases_UsersReassign.php
@@ -1880,7 +1880,7 @@ c3d6bdfcb20208fcac754c5e86a3cfc5  ./workflow/engine/methods/cases/main_init.php
 f2c610244286ba772b693c4df133ad4a  ./workflow/engine/methods/cases/casesToRevisePanelExtJs.php
 c65bb2f4eb469b144502790b9cfed728  ./workflow/engine/methods/cases/cases_SaveData.php
 9b3ac676dcdfb14b21e982f8a4e56ec3  ./workflow/engine/methods/cases/casesToReviseTreeContent.php
-07058d78a7f43ac652d6fe9895ce5e20  ./workflow/engine/methods/cases/casesSaveDataView.php
+98ffb5b06c4dcca071944ea31f6265e3  ./workflow/engine/methods/cases/casesSaveDataView.php
 c55b9888622c4cebf0510f6136d11480  ./workflow/engine/methods/cases/cases_Scheduler_Log_Detail.php
 687329b86fe5cd7acdee65538f4e3ad0  ./workflow/engine/methods/cases/cases_ShowToReviseOutputDocument.php
 a60a7c0d93114813b81e450688e8a225  ./workflow/engine/methods/cases/casesListExtJsRedirector.php
@@ -2007,7 +2007,7 @@ b96ac7e401d3d882543caf4a5c74eb69  ./workflow/engine/classes/interfaces/dashletIn
 611d9ef8a8dcf5ddf538a15eff596999  ./workflow/engine/classes/class.dashletOpenVSCompleted.php
 faaaa1e958b55e303f4dad1290ef70c8  ./workflow/engine/classes/class.patch.php
 4248ef57d079337bff594223ee29fd38  ./workflow/engine/classes/class.system.php
-c79fe8b64f8cbcc0857041ae6b804686  ./workflow/engine/classes/class.case.php
+438005e2f449a41da335f55981c3e1d1  ./workflow/engine/classes/class.case.php
 215c5f7c04132141181c6ad831df08b7  ./workflow/engine/classes/class.net.php
 9253deb4c7b1e3d3c6982b410d4c0747  ./workflow/engine/classes/class.cli.php
 b5ab63c6d1fec5f3cd3f6bdb5697f1e9  ./workflow/engine/classes/class.dashletRssReader.php
@@ -2095,7 +2095,7 @@ fa7a9dca2e0da1be620a4f9486f94b23  ./workflow/engine/classes/model/GroupUser.php
 79b56770139531baac44487c0543f093  ./workflow/engine/classes/model/GatewayPeer.php
 8b4b4573364e35973a94b60370a738ab  ./workflow/engine/classes/model/TaskPeer.php
 990d7d2b5056799b60e1670c9a4dc8e5  ./workflow/engine/classes/model/Gateway.php
-9be561ce11865ca52f022ec26e2d942f  ./workflow/engine/classes/model/AppDelegation.php
+2ae09abc85b21002be8aa4c25962c177  ./workflow/engine/classes/model/AppDelegation.php
 9811d1c61c96fc14555c237a8aa2aeed  ./workflow/engine/classes/model/AppHistoryPeer.php
 ab71aa4e6b447a34ac3e776d8d68c335  ./workflow/engine/classes/model/AppNotesPeer.php
 4d3e99d82a837cb5f3010efd031ab2c3  ./workflow/engine/classes/model/CalendarDefinitionPeer.php
@@ -2382,11 +2382,11 @@ bddf7e83d2bf5f0cc132fe11bd5a60b1  ./workflow/engine/classes/model/om/BaseStep.ph
 21267932ec6d88fad3e9e5648c3c939e  ./workflow/engine/classes/model/AppDocumentPeer.php
 568f2e7d0de6e3fb8cc8d01af09ef745  ./workflow/engine/classes/model/TranslationPeer.php
 e3f52ff6bca3a47a428c16d09b60b147  ./workflow/engine/classes/model/Step.php
-c3d0cafb327f56e8a35e496a6debad9b  ./workflow/engine/classes/model/Translation.php
+11da926ca36f6730a4639d6199712d63  ./workflow/engine/classes/model/Translation.php
 5241cf08ab32d402842ff4b789ed1fc2  ./workflow/engine/classes/model/AppDelayPeer.php
 272a9068e08ccf1e48c2cf831f2eeb7a  ./workflow/engine/classes/model/AppDelay.php
 68cec4899a9ab5c2777a1719e7e8a877  ./workflow/engine/classes/model/AdditionalTablesPeer.php
-9103f5fa7badc6359afcf6fa87ba7cfd  ./workflow/engine/classes/model/CaseScheduler.php
+fefe76e12df6edd7edebd1564b119855  ./workflow/engine/classes/model/CaseScheduler.php
 1434ce3fb14af0d4ff986dc7dde74b75  ./workflow/engine/classes/model/ReportTable.php
 ed31ab6b2462dbf477de3cfacfdabe40  ./workflow/engine/classes/model/SubProcessPeer.php
 b9355a6d94c45c7e8d60ecdf07408b6f  ./workflow/engine/classes/model/SubProcess.php
@@ -5208,7 +5208,7 @@ fa89c447f8f089ae38d9e9d083daf971  ./workflow/public_html/images/classic/grid.tit
 b022b11cc8ecfb414d62e0372891314a  ./workflow/public_html/images/classic/ftr.blue.gif
 75ebf5a05a166900826a19f7685cb4cb  ./workflow/public_html/images/classic/ok.png
 1e4279b27baff4a7318298c8efe03614  ./workflow/public_html/images/classic/separator.up.gif
-0b17ac71f0e56a02f771a883850a85fc  ./workflow/public_html/sysGeneric.php
+790cdff28f846bb0301fc686952b9968  ./workflow/public_html/sysGeneric.php
 e491de5fb64a1dc80b3dbbbc0e919546  ./workflow/public_html/Web.config
 f3155cf03c776c71ae5309e6ed03bebe  ./workflow/public_html/sysUnnamed.php
 ecb9d7c897b7aa1c6f4cc0af57f0a6bc  ./workflow/public_html/bootstrap.php
@@ -5220,10 +5220,10 @@ fb6c26ace2ac0e0c90ef151463d08803  ./gulliver/system/class.database_mssql.php
 d92a3c797126e733ea9038c6c675d418  ./gulliver/system/class.i18n_po.php
 1cc1e921ffb49f084ddb9d2461545bcc  ./gulliver/system/class.soapNtlm.php
 9cc266097164f2469ff94480ba3df9c1  ./gulliver/system/class.filterForm.php
-b495294e5cca62c804edbc8c90eb7a36  ./gulliver/system/class.headPublisher.php
+9cde07c85ef36a633a5747ad077423a3  ./gulliver/system/class.headPublisher.php
 456af9f25765664e16e3cd9b4ea9b769  ./gulliver/system/class.dbconnection.php
 ce218eddd816c4c69bc1b3a414eecaab  ./gulliver/system/class.mailer.php
-668e302652454d45cb19a96347611b78  ./gulliver/system/class.form.php
+9bb40e4e1ddef1f012024adb36537486  ./gulliver/system/class.form.php
 d4d984ba9fbb33308823801fbec2a1d5  ./gulliver/system/class.objectTemplate.php
 9b38b8b1e227980a35b0876339ce5ccf  ./gulliver/system/class.table.php
 e401e80853d6d59a663e9ca6f1294e14  ./gulliver/system/class.rbac.php
@@ -7924,7 +7924,7 @@ ada8a04c5c04b25da3a30142ae170bec  ./gulliver/js/maborak/core/images/app.slide/cl
 b022b11cc8ecfb414d62e0372891314a  ./gulliver/js/maborak/core/images/ftr.blue.gif
 75ebf5a05a166900826a19f7685cb4cb  ./gulliver/js/maborak/core/images/ok.png
 1e4279b27baff4a7318298c8efe03614  ./gulliver/js/maborak/core/images/separator.up.gif
-f7641a10a09e1d23e202d34115655cba  ./gulliver/js/maborak/core/maborak.js
+5e313963104e43047c1707857643d121  ./gulliver/js/maborak/core/maborak.js
 bb3894909c470bad4632f219cc09b35f  ./gulliver/js/maborak/core/module.dom.js
 804f8cb6f4a2f837d6afc84be81a0e1c  ./gulliver/js/maborak/core/maborak.38048315051ca0a3b7587d4095063316.js
 375a32a7280a265f7d96098211a9ee97  ./gulliver/js/maborak/core/module.dashboard.js
@@ -8334,7 +8334,7 @@ fd5358dac27006fefef0713e15800c76  ./gulliver/js/codemirror/mode/ecl/index.html
 d306cc8186c7610353ced61d14e33afc  ./gulliver/js/codemirror/mode/javascript/typescript.html
 9aa5dc538d7daa28902d3b96a52f2b65  ./gulliver/js/codemirror/mode/javascript/index.html
 f9cdecc5d3dc8fab1ef3e333ae6ef86f  ./gulliver/js/codemirror/mode/javascript/javascript.js
-7195a1011c77805070052222c484e21a  ./gulliver/js/codemirror/mode/php/php.js
+aae24691d200593944dfe1356f81e1a0  ./gulliver/js/codemirror/mode/php/php.js
 433261db5451e6afaf5b61dfc3ae449b  ./gulliver/js/codemirror/mode/php/index.html
 b25ddfcf7fbc58e6484ff9eaf495c89c  ./gulliver/js/codemirror/mode/yaml/yaml.js
 68e044d5f9684f80544acce3d69a1a9c  ./gulliver/js/codemirror/mode/yaml/index.html
@@ -8407,7 +8407,7 @@ eae9a92d9d10cc99827764d25ed48221  ./gulliver/js/thirdparty/codepress/languages/r
 4eed9ee12b3b7da80c678bb0759de70f  ./gulliver/js/thirdparty/codepress/license.txt
 fe01b6a345820516b3ec77040e8e941e  ./gulliver/js/grid/core/grid.js
 6ed5281a892208a2769cbcf3471b768d  ./gulliver/js/form/core/pagedTable.js
-7f3819c24307e17b5cc9b21da9cf5865  ./gulliver/js/form/core/form.js
+b21a649f40b84d17d9e03aaa38ff7a77  ./gulliver/js/form/core/form.js
 a6f5acbd6170b3c2c31a45c4cbb93d3e  ./gulliver/js/common/tree/tree.js
 d50aa8ba6f26c351fd1a02bd328ee93b  ./gulliver/js/common/core/images/default_logo.gif
 1613d9705161498d28849b679b0b8b5e  ./gulliver/js/common/core/common.js
