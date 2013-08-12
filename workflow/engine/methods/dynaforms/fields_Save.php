@@ -232,10 +232,21 @@ unset($FieldAttributes['XMLNODE_VALUE']);
 unset($FieldAttributes['BTN_CANCEL']);
 unset($FieldAttributes['SAVELABEL']);
 foreach ($FieldAttributes as $key => $value) {
-    if (!empty($value) || is_integer($value)) {
-        $FieldAttrib[strtolower($key)] = $value;
+    switch (gettype($value)) {
+        case 'string':
+            if (!empty($value)) {
+                $FieldAttrib[strtolower($key)] = $value;
+            }        
+        break;
+        case 'integer':
+            $FieldAttrib[strtolower($key)] = $value;
+        break;
+        default:
+            //Nothing
+        break;
     }
 }
+
 $fields->saveField($attributes, $FieldAttrib, $labels);
 
 G::LoadClass('xmlDb');
