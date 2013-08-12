@@ -726,7 +726,7 @@ Ext.app.menuLoader = Ext.extend(Ext.ux.tree.XmlTreeLoader, {
 
       attr.iconCls = 'ICON_' + attr.id;
       attr.loaded = true;
-      attr.expanded = false;
+      attr.expanded = attr.expanded ? true : false;
 
     } else if(attr.PRO_UID){
       attr.loaded = true;

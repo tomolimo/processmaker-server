@@ -43,7 +43,7 @@ function getLoadTreeMenuData ()
 
     //now drawing the treeview using the menu options from menu/cases.php
     $menuCases = array ();
-    foreach ($oMenu->Options as $i => $option) {
+    for ($i = 0; $i < count($oMenu->Options); $i++) {
         if ($oMenu->Types[$i] == 'blockHeader') {
             $CurrentBlockID = $oMenu->Id[$i];
             $menuCases[$CurrentBlockID]['blockTitle'] = $oMenu->Labels[$i];
@@ -60,8 +60,25 @@ function getLoadTreeMenuData ()
             $menuCases[$CurrentBlockID]['blockTitle'] = $oMenu->Labels[$i];
             $menuCases[$CurrentBlockID]['blockType'] = $oMenu->Types[$i];
             $menuCases[$CurrentBlockID]['link'] = $oMenu->Options[$i];
+        } elseif ($oMenu->Types[$i] == 'rootNode') {
+            $menuCases[$CurrentBlockID]['blockItems'][$oMenu->Id[$i]] = array (
+                'label' => $oMenu->Labels[$i],
+                'link' => $oMenu->Options[$i],
+                'icon' => (isset($oMenu->Icons[$i]) && $oMenu->Icons[$i] != '') ? $oMenu->Icons[$i] : 'kcmdf.png'
+            );
+
+            $index = $i;
+            list($childs, $index) = getChilds($oMenu, ++$index);
+
+            $menuCases[$CurrentBlockID]['blockItems'][$oMenu->Id[$i]]['childs'] = $childs;
+
+            $i = $index;
         } else {
-            $menuCases[$CurrentBlockID]['blockItems'][$oMenu->Id[$i]] = Array ('label' => $oMenu->Labels[$i],'link' => $oMenu->Options[$i],'icon' => (isset( $oMenu->Icons[$i] ) && $oMenu->Icons[$i] != '') ? $oMenu->Icons[$i] : 'kcmdf.png');
+            $menuCases[$CurrentBlockID]['blockItems'][$oMenu->Id[$i]] = array (
+                'label' => $oMenu->Labels[$i],
+                'link' => $oMenu->Options[$i],
+                'icon' => (isset($oMenu->Icons[$i]) && $oMenu->Icons[$i] != '') ? $oMenu->Icons[$i] : 'kcmdf.png'
+            );
 
             if (isset( $aTypesID[$oMenu->Id[$i]] )) {
                 $menuCases[$CurrentBlockID]['blockItems'][$oMenu->Id[$i]]['cases_count'] = $aCount[$aTypesID[$oMenu->Id[$i]]]['count'];
@@ -106,6 +123,23 @@ function getLoadTreeMenuData ()
             // adding "menu_block" childs nodes
             foreach ($menuBlock['blockItems'] as $id => $menu)
             {
+                if (! empty($menu['childs'])) {
+                    $rootNode = $menuBlockNode->addChild('menu_block');
+                    $rootNode->addAttribute('id', $id);
+                    $rootNode->addAttribute('title', $menu['label']);
+                    $rootNode->addAttribute('url', $menu['link']);
+                    $rootNode->addAttribute('expanded', true);
+
+                    foreach ($menu['childs'] as $id => $child) {
+                        $childNode = $rootNode->addChild('option');
+                        $childNode->addAttribute('id', $id);
+                        $childNode->addAttribute('title', $child['label']);
+                        $childNode->addAttribute('url', $child['link']);
+                    }
+
+                    continue;
+                }
+
                 $option = $menuBlockNode->addChild('option');
                 $option->addAttribute('id', $id);
                 $option->addAttribute('title', $menu['label']);
@@ -273,5 +307,26 @@ function getAllCounters ()
         $i ++;
     }
     echo G::json_encode( $response );
+}
+
+function getChilds($menu, $index)
+{
+    $childs = array();
+
+    for ($i = $index; $i < count($menu->Options); $i++) {
+        if ($menu->Types[$i] == 'childNode') {
+
+            $childs[$menu->Id[$i]] = array(
+                'label' => $menu->Labels[$i],
+                'link' => $menu->Options[$i],
+                'icon' => ''
+            );
+        } else {
+            //TODO we can add more recursive logic here to enable more childs levels
+            break;
+        }
+    }
+
+    return array($childs, --$i);
 }
 
