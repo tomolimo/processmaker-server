@@ -1730,6 +1730,7 @@ class Bootstrap
 
         self::_del_p($mnary);
 
+        $obj_resp = new StdClass();
         $obj_resp->code = xml_get_error_code($parser);
         $obj_resp->message = xml_error_string($obj_resp->code);
         $obj_resp->result = $mnary;
