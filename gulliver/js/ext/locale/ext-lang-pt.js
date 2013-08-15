@@ -245,6 +245,15 @@ if(Ext.grid.GridView){
    });
 }
 
+
+if(Ext.grid.GroupingView){
+  Ext.apply(Ext.grid.GroupingView.prototype, {
+    emptyGroupText : '(Nenhum)',
+    groupByText    : 'Grupo por este campo',
+    showGroupsText : 'Mostrar em Grupos'
+  });
+}
+
 if(Ext.grid.PropertyColumnModel){
    Ext.apply(Ext.grid.PropertyColumnModel.prototype, {
       nameText   : "Nome",
