@@ -4366,7 +4366,9 @@ class Cases
         $oCriteria->add(AppDocumentPeer::APP_DOC_TYPE, array('INPUT'), Criteria::IN);
         $oCriteria->add(AppDocumentPeer::APP_DOC_STATUS, array('ACTIVE'), Criteria::IN);
         $oCriteria->add(AppDocumentPeer::DEL_INDEX, 100000);
-
+        $oCriteria->addJoin(AppDocumentPeer::APP_UID, ApplicationPeer::APP_UID, Criteria::LEFT_JOIN);
+        $oCriteria->add(ApplicationPeer::PRO_UID, $sProcessUID);
+        $oCriteria->addAscendingOrderByColumn(AppDocumentPeer::APP_DOC_INDEX);
         $oDataset = AppDocumentPeer::doSelectRS($oCriteria);
         $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
         $oDataset->next();
