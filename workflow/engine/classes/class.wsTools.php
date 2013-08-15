@@ -1060,8 +1060,14 @@ class workspaceTools
     private function executeSQLScript($database, $filename, $parameters)
     {
         mysql_query("CREATE DATABASE IF NOT EXISTS " . mysql_real_escape_string($database));
-        // Check for safe mode
+        
+        // Check for safe mode and if mysql exist on server
+        $flagFunction = '';
         if ( !ini_get('safe_mode') ) {
+            $flagFunction = shell_exec('mysql --version');
+        }
+        
+        if ( !ini_get('safe_mode') && !is_null($flagFunction) ) {
             $command = 'mysql'
             . ' --host=' . $parameters['dbHost']
             . ' --user=' . $parameters['dbUser']
