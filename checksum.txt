@@ -1991,7 +1991,7 @@ abf8f45dc5d8a0b5b7409e147ba2ecae  ./workflow/engine/classes/class.serverConfigur
 40254001697889393c48ecfb8e283b0c  ./workflow/engine/classes/class.pmPhing.php
 da3cd417dca0cb79eae6db8790bad9d6  ./workflow/engine/classes/class.pmScript.php
 064f1c9bc1d6b148dcfeb15defc1d7a4  ./workflow/engine/classes/class.replacementLogo.php
-6da51db4af8c6676193e041d44b544a7  ./workflow/engine/classes/class.AppSolr.php
+a61d833b3b1309dd666ee612ad9c4655  ./workflow/engine/classes/class.AppSolr.php
 3c1bc66d362feb8b94959120abec1315  ./workflow/engine/classes/class.applications.php
 2996688936927eae18574425fa54107e  ./workflow/engine/classes/class.solr.php
 781b34dba2e9e11f7754b7a9f930b17c  ./workflow/engine/classes/class.report.php
