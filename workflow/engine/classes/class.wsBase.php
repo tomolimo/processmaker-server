@@ -974,10 +974,10 @@ class wsBase
             $hasEmailFrom = preg_match( '/(.+)@(.+)\.(.+)/', $sFrom, $match );
 
             if (!$hasEmailFrom || strpos($sFrom, $aSetup["MESS_ACCOUNT"]) === false) {
-                if ($aConfiguration["MESS_ENGINE"] != "MAIL" && trim($aSetup["MESS_ACCOUNT"]) != "") {
+                if (trim($aSetup["MESS_ACCOUNT"]) != "") {
                     $sFrom = "\"" . stripslashes($sFrom) . "\" <" . $aSetup["MESS_ACCOUNT"] . ">";
                 } else {
-                    if ($aConfiguration["MESS_ENGINE"] = "MAIL") {
+                    if ($aSetup["MESS_ENGINE"] == "MAIL") {
                         $sFrom = "\"" . stripslashes($sFrom) . "\"";
                     } else {
                         $sFrom = $sFrom . " <info@" . ((isset($_SERVER["HTTP_HOST"]) && $_SERVER["HTTP_HOST"] != "")? $_SERVER["HTTP_HOST"] : "processmaker.com") . ">";
