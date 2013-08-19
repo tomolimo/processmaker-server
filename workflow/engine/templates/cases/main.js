@@ -720,7 +720,8 @@ Ext.app.menuLoader = Ext.extend(Ext.ux.tree.XmlTreeLoader, {
         attr.expanded = true;
       //}
     }else if(attr.title){
-      attr.text = attr.title;
+      attr.text = Ext.util.Format.htmlDecode(attr.title);
+      
       if( attr.cases_count )
         attr.text += ' (<label id="NOTIFIER_'+attr.id+'">' + attr.cases_count + '</label>)';
 
