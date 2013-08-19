@@ -98,8 +98,9 @@ try {
                     $aAllFields = $dynInstance->getDynaformFields($value);
                     if (is_array($aAllFields)) {
                         foreach ($aAllFields as $kInput => $input) {
-                            $aPropertiesField = get_object_vars($input);
-                            if ($aPropertiesField['type'] == 'file' && $aPropertiesField['input'] == $_GET['UID'] && !empty($aAppDataFields['APP_DATA'][$kInput])) {
+                            if (!isset($input->input)) continue;
+
+                            if ($input->type == 'file' && $input->input == $_GET['UID'] && !empty($aAppDataFields['APP_DATA'][$kInput])) {
                                 $aAppDataFields['APP_DATA'][$kInput] = $sOriginalName;
                                 $oCase->updateCase( $_GET['APP_UID'], $aAppDataFields );
                             }
