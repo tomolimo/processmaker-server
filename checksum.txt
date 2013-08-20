@@ -1309,7 +1309,7 @@ bfe6142ac773f8448e412d9737e8258c  ./workflow/engine/templates/cases/casesUploade
 3a1822c7ab93f476a9e1d77c7ccc92cb  ./workflow/engine/templates/cases/cases_toRevise.php
 4c1b5f8ed85bfe413dbd8172c2353ab7  ./workflow/engine/templates/cases/cases_toReviseIn.html
 d442c1c0afbdf214e035bb24e94d675d  ./workflow/engine/templates/cases/caseHistory.html
-e6c312364c3c38b697f2bd366b4ecbd7  ./workflow/engine/templates/cases/main.js
+608a8caf2f2f11cfb7f582c63411cec3  ./workflow/engine/templates/cases/main.js
 9d74dd86f4b23357937fdfbe8c18f5e5  ./workflow/engine/templates/cases/paged-table-reassigByUser2.html
 46f7babbb60709dcbc76925ba3d9946c  ./workflow/engine/templates/cases/casesList.js
 0d0589d417691624865bc6dee3e97f2e  ./workflow/engine/templates/cases/caseMessageHistory.js
