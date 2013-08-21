@@ -1990,11 +1990,12 @@ class XmlForm_Field_Textarea extends XmlForm_Field
 
         foreach ($values as $v) {
             $this->executeSQL( $owner, $r );
-            $firstElement = key( $this->sqlOption );
-            if (isset( $firstElement )) {
-                $v = $firstElement;
+            if (isset( $this->sqlOption )) {
+                $firstElement = key( $this->sqlOption );
+                if (isset( $firstElement )) {
+                    $v = $firstElement;
+                }
             }
-
             $scrollStyle = $this->style . "overflow:scroll;overflow-y:scroll;overflow-x:hidden;overflow:-moz-scrollbars-vertical;";
             $html = '';
             if ($this->renderMode == 'edit') {
