@@ -3222,14 +3222,18 @@ class Processes
      */
     public function createTaskExtraPropertiesRows ($aTaskExtraProperties)
     {
-        foreach ($aTaskExtraProperties as $key => $row) {
+        if (count($aTaskExtraProperties) > 0) {
             $oConfig = new Configuration();
-
-            if ($oConfig->exists( $row['CFG_UID'], $row['OBJ_UID'], $row['PRO_UID'], $row['USR_UID'], $row['APP_UID']) ) {
-                $oConfig->remove( $row['CFG_UID'], $row['OBJ_UID'], $row['PRO_UID'], $row['USR_UID'], $row['APP_UID'] );
+            foreach ($aTaskExtraProperties as $key => $row) {
+                if ($oConfig->exists( $row['CFG_UID'], $row['OBJ_UID'], $row['PRO_UID'], $row['USR_UID'], $row['APP_UID']) ) {                    
+                    $oConfig->remove( $row['CFG_UID'], $row['OBJ_UID'], $row['PRO_UID'], $row['USR_UID'], $row['APP_UID'] );
+                    $oConfig->setDeleted(false);
+                }
+                $res = $oConfig->create( $row );
+                $oConfig->setNew(true);
+                $oConfig->setProperties();
             }
-            $res = $oConfig->create( $row );
-        }
+        }    
         return;
     }
 
@@ -3509,6 +3513,12 @@ class Processes
 
             //Delete the TaskExtraProperties of the process
             $oCriteria = new Criteria( 'workflow' );
+            $oCriteria->addSelectColumn( ConfigurationPeer::CFG_UID );
+            $oCriteria->addSelectColumn( ConfigurationPeer::OBJ_UID );
+            $oCriteria->addSelectColumn( ConfigurationPeer::CFG_VALUE );
+            $oCriteria->addSelectColumn( TaskPeer::PRO_UID );
+            $oCriteria->addSelectColumn( ConfigurationPeer::USR_UID );
+            $oCriteria->addSelectColumn( ConfigurationPeer::APP_UID );
             $oCriteria->add( TaskPeer::PRO_UID, $sProUid );
             $oCriteria->add( ConfigurationPeer::CFG_UID, 'TAS_EXTRA_PROPERTIES' );
             $oCriteria->addJoin( ConfigurationPeer::OBJ_UID, TaskPeer::TAS_UID );
@@ -3915,6 +3925,12 @@ class Processes
         try {
             
             $oCriteria = new Criteria('workflow');
+            $oCriteria->addSelectColumn( ConfigurationPeer::CFG_UID );
+            $oCriteria->addSelectColumn( ConfigurationPeer::OBJ_UID );
+            $oCriteria->addSelectColumn( ConfigurationPeer::CFG_VALUE );
+            $oCriteria->addSelectColumn( ConfigurationPeer::PRO_UID );
+            $oCriteria->addSelectColumn( ConfigurationPeer::USR_UID );
+            $oCriteria->addSelectColumn( ConfigurationPeer::APP_UID );
             $oCriteria->add( TaskPeer::PRO_UID, $proId );
             $oCriteria->add( ConfigurationPeer::CFG_UID, 'TAS_EXTRA_PROPERTIES' );
             $oCriteria->addJoin( ConfigurationPeer::OBJ_UID, TaskPeer::TAS_UID );
