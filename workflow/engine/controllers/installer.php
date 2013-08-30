@@ -35,6 +35,7 @@ class Installer extends Controller
 
     public function index ($httpData)
     {
+
         if ((strtoupper(substr(PHP_OS, 0, 3)) == 'WIN') && (file_exists($this->path_shared . 'partner.info'))){
             $this->includeExtJS( 'installer/stopInstall');
             $this->setView( 'installer/mainStopInstall' );
