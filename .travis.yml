@@ -1,0 +1,14 @@
+language: php
+script: phpunit
+
+php:
+  - 5.3
+  - 5.4
+  
+before_install:
+  - composer install
+
+branches:
+  only:
+    - michelangelo
+
