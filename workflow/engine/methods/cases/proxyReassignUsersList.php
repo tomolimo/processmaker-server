@@ -75,7 +75,7 @@ $flagSupervisors = false;
 foreach ($rows as $row) {
     $sCaseUser = G::getFormatUserList( $ConfEnv['format'], $row );
     $aUsersInvolved[] = array ('userUid' => $row['USR_UID'], 'userFullname' => $sCaseUser);
-    if ($row['USR_UID'] == $sReassignFromUser) {
+    if ($row['USR_UID'] == $_SESSION['USER_LOGGED']) {
         $flagSupervisors = true;
     }
 }
@@ -100,7 +100,7 @@ if (!$flagSupervisors) {
     $oCriteria->addJoin(ProcessUserPeer::USR_UID, UsersPeer::USR_UID, Criteria::LEFT_JOIN);
     $oCriteria->add(ProcessUserPeer::PU_TYPE, 'SUPERVISOR');
     $oCriteria->add(ProcessUserPeer::PRO_UID, $sProcessUID);
-    $oCriteria->add(ProcessUserPeer::USR_UID, $sReassignFromUser);
+    $oCriteria->add(ProcessUserPeer::USR_UID, $_SESSION['USER_LOGGED']);
     $oCriteria->addAscendingOrderByColumn(UsersPeer::USR_FIRSTNAME);
     $oDataset = ProcessUserPeer::doSelectRS($oCriteria);
     $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
@@ -131,7 +131,7 @@ if (!$flagSupervisors) {
 
         $oCriteria->add(ProcessUserPeer::PU_TYPE, 'GROUP_SUPERVISOR');
         $oCriteria->add(ProcessUserPeer::PRO_UID, $sProcessUID);
-        $oCriteria->add(GroupUserPeer::USR_UID, $sReassignFromUser);
+        $oCriteria->add(GroupUserPeer::USR_UID, $_SESSION['USER_LOGGED']);
 
         $oDataset = ProcessUserPeer::doSelectRS($oCriteria);
         $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
