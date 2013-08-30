@@ -35,8 +35,7 @@ class Installer extends Controller
 
     public function index ($httpData)
     {
-        $partnerFlag = (defined('PARTNER_FLAG')) ? PARTNER_FLAG : false;
-        if ($partnerFlag){
+        if (file_exists($this->path_shared . 'partner.info')){
             $this->includeExtJS( 'installer/stopInstall');
             $this->setView( 'installer/mainStopInstall' );
             G::RenderPage( 'publish', 'extJs' );
