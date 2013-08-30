@@ -115,30 +115,16 @@ class Content extends BaseContent
     */
     public function updateEqualValue ($ConCategory, $ConParent, $ConId, $ConValue)
     {
-        $Criteria = new Criteria( 'workflow' );
-        $Criteria->clearSelectColumns()->clearOrderByColumns();
+        $con = Propel::getConnection('workflow');
+        $c1 = new Criteria('workflow');
+        $c1->add(ContentPeer::CON_CATEGORY, $ConCategory);
+        $c1->add(ContentPeer::CON_PARENT, $ConParent);
+        $c1->add(ContentPeer::CON_ID, $ConId);
 
-        $Criteria->addSelectColumn( ContentPeer::CON_CATEGORY );
-        $Criteria->addSelectColumn( ContentPeer::CON_PARENT );
-        $Criteria->addSelectColumn( ContentPeer::CON_ID );
-        $Criteria->addSelectColumn( ContentPeer::CON_LANG );
-
-        $Criteria->add( ContentPeer::CON_CATEGORY, $ConCategory, CRITERIA::EQUAL );
-        $Criteria->add( ContentPeer::CON_PARENT, $ConParent, CRITERIA::EQUAL );
-        $Criteria->add( ContentPeer::CON_ID, $ConId, CRITERIA::EQUAL );
-
-        $rs = ContentPeer::doSelectRS( $Criteria );
-        $rs->setFetchmode( ResultSet::FETCHMODE_ASSOC );
-        while ($rs->next()) {
-            $row = $rs->getRow();
-            $con = ContentPeer::retrieveByPK( $row['CON_CATEGORY'], $row['CON_PARENT'], $row['CON_ID'] , $row['CON_LANG'] );
-            $con->setConCategory( $row['CON_CATEGORY'] );
-            $con->setConParent( $row['CON_PARENT'] );
-            $con->setConId( $row['CON_ID'] );
-            $con->setConLang( $row['CON_LANG'] );
-            $con->setConValue( $ConValue );
-            $res = $con->save();
-        }
+        // update set
+        $c2 = new Criteria('workflow');
+        $c2->add(ContentPeer::CON_VALUE, $ConValue);
+        BasePeer::doUpdate($c1, $c2, $con);
     }
 
     /*
@@ -211,26 +197,27 @@ class Content extends BaseContent
 
             if (is_null( $con )) {
                 $con = new Content();
+                $con->setConCategory( $ConCategory );
+                if ($con->getConParent() != $ConParent) {
+                    $con->setConParent( $ConParent );
+                }
+                $con->setConId( $ConId );
+                $con->setConLang( $ConLang );
+                $con->setConValue( $ConValue );
+                if ($con->validate()) {
+                    $res = $con->save();
+                    return $res;
+                } else {
+                    $e = new Exception( "Error in addcontent, the row $ConCategory, $ConParent, $ConId, $ConLang is not Valid" );
+                    throw ($e);
+                }
             } else {
                 if ($con->getConParent() == $ConParent && $con->getConCategory() == $ConCategory && $con->getConValue() == $ConValue && $con->getConLang() == $ConLang && $con->getConId() == $ConId) {
                     return true;
                 }
             }
-            $con->setConCategory( $ConCategory );
-            if ($con->getConParent() != $ConParent) {
-                $con->setConParent( $ConParent );
-            }
-            $con->setConId( $ConId );
-            $con->setConLang( $ConLang );
-            $con->setConValue( $ConValue );
-            if ($con->validate()) {
-                $res = $con->save();
-                Content::updateEqualValue( $ConCategory, $ConParent, $ConId, $ConValue );
-                return $res;
-            } else {
-                $e = new Exception( "Error in addcontent, the row $ConCategory, $ConParent, $ConId, $ConLang is not Valid" );
-                throw ($e);
-            }
+            Content::updateEqualValue( $ConCategory, $ConParent, $ConId, $ConValue );
+            return true;
         } catch (Exception $e) {
             throw ($e);
         }
