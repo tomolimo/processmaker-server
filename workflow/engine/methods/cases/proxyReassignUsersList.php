@@ -104,15 +104,15 @@ if (!$flagSupervisors) {
     $oCriteria->addAscendingOrderByColumn(UsersPeer::USR_FIRSTNAME);
     $oDataset = ProcessUserPeer::doSelectRS($oCriteria);
     $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-    $oDataset->next();
     $flagSupervisors = false;
 
-    while ($aRow = $oDataset->getRow()) {
+    if ($oDataset->next()) {
+        $aRow = $oDataset->getRow();
         $supervisors = G::getFormatUserList( $ConfEnv['format'], $aRow );
         $aUsersInvolved[] = array ('userUid' => $aRow['USR_UID'], 'userFullname' => $supervisors);
-        $oDataset->next();
         $flagSupervisors = true;
     }
+
     if (!$flagSupervisors) {
         // Groups
         $oCriteria = new Criteria('workflow');
@@ -135,13 +135,13 @@ if (!$flagSupervisors) {
 
         $oDataset = ProcessUserPeer::doSelectRS($oCriteria);
         $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-        $oDataset->next();
 
-        while ($aRow = $oDataset->getRow()) {
+        if ($oDataset->next()) {
+            $aRow = $oDataset->getRow();
             $supervisors = G::getFormatUserList( $ConfEnv['format'], $aRow );
             $aUsersInvolved[] = array ('userUid' => $aRow['USR_UID'], 'userFullname' => $supervisors);
-            $oDataset->next();
         }
+
     }
 }
 
