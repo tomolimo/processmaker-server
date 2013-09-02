@@ -360,7 +360,15 @@
                                    icon: Ext.MessageBox.ERROR,
                                    buttons: Ext.MessageBox.OK,
                                    fn : function(btn) {
-                                   top.location = top.location;
+                                     try 
+                                       {
+                                        prnt = parent.parent;
+                                        top.location = top.location;
+                                       }
+                                     catch (err) 
+                                       {
+                                        parent.location = parent.location;
+                                       }
                                    }
                                });
                            } else {
@@ -426,7 +434,15 @@
                                    icon: Ext.MessageBox.ERROR,
                                    buttons: Ext.MessageBox.OK,
                                    fn : function(btn) {
-                                   top.location = top.location;
+                                     try 
+                                       {
+                                         prnt = parent.parent;
+                                         top.location = top.location;
+                                       }
+                                     catch (err) 
+                                       {
+                                         parent.location = parent.location;
+                                       }
                                    }
                                });
                            } else {
