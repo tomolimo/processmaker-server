@@ -74,7 +74,6 @@ G::LoadClass( 'tasks' );
 $task = new Task();
 $tasks = $task->load($_SESSION['TASK']);
 $rows = $oCases->getUsersToReassign($TaskUid, $_SESSION['USER_LOGGED'], $tasks['PRO_UID']);
-$flagSupervisors = false;
 foreach ($rows as $row) {
     $sCaseUser = G::getFormatUserList( $ConfEnv['format'], $row );
     $aUsersInvolved[] = array ('userUid' => $row['USR_UID'], 'userFullname' => $sCaseUser);
