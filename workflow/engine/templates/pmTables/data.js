@@ -199,7 +199,7 @@ Ext.onReady(function(){
   var flagShowMessageError = 1;
 
   if (!isReport) {
-    editor = new Ext.ux.grid.RowEditor({
+      editor = new Ext.ux.grid.RowEditor({
       saveText  : _("ID_UPDATE"),
       isValid: function ()
       {
