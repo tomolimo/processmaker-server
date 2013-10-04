@@ -435,6 +435,7 @@ try {
 
             $oRoles = new Roles();
             $rows = Array();
+            $uRole = Array();
             while ($oDataset->next()) {
                 $row = $oDataset->getRow();
                 try {
