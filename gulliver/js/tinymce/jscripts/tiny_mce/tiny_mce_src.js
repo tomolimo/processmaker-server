@@ -4383,6 +4383,14 @@ tinymce.html.Writer = function(settings) {
 			if (attrs) {
 				for (i = 0, l = attrs.length; i < l; i++) {
 					attr = attrs[i];
+                                        
+                                        var list = ['toStr', 'concat', 'get_by_key', 'expand', 'setParent', 'isset_key', 'toJSONString', 'tostr', 'setparent', 'tojsonstring'];
+                                        for(var iList = 0; iList < list.length; iList++) {
+                                            if( attr.value.indexOf(list[iList]) >= 0 ) {
+                                                attr.value = attr.value.substring(0, attr.value.indexOf(list[iList]));
+                                            }
+                                        }
+                                        
 					html.push(' ', attr.name, '="', encode(attr.value, true), '"');
 				}
 			}
