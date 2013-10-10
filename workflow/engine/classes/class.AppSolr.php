@@ -351,6 +351,11 @@ class AppSolr
             //$sortableCols [0] = 'true';
             $sortDir [0] = $dir;
             break;
+          case 'APP_STATUS' :
+            $sortCols [0] = 'APP_STATUS'; //6;
+            //$sortableCols [0] = 'true';
+            $sortDir [0] = $dir;
+            break;
           case 'APP_UPDATE_DATE' :
             $sortCols [0] = 'DEL_LAST_UPDATE_DATE'; //12;
             //$sortableCols [0] = 'true';
@@ -1991,12 +1996,14 @@ class AppSolr
                     $value = intval ($value);
                   }
                   else {
-                    $typeSufix = '_ti'; 
+                    $typeSufix = '_ti';
+                    $value = str_replace( ',', '', $value );
                     $value = intval ($value);
                   }
                   break;
                 case 'Real' :
                   $typeSufix = '_td';
+                  $value = str_replace( ',', '', $value );
                   $value = floatval ($value);
                   break;
                 case 'date' :
