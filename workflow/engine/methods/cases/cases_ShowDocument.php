@@ -28,13 +28,19 @@
  */
 
 require_once ("classes/model/AppDocumentPeer.php");
-if(isset($_REQUEST['actionAjax']) && $_REQUEST['actionAjax'] == "verifySession" ) {
+if (isset($_REQUEST['actionAjax']) && $_REQUEST['actionAjax'] == "verifySession" ) {
     if (!isset($_SESSION['USER_LOGGED'])) {
-        $response = new stdclass();
-        $response->message = G::LoadTranslation('ID_LOGIN_AGAIN');
-        $response->lostSession = true;
-        print G::json_encode( $response );
-        die();
+        if ((isset( $_POST['request'] )) && ($_POST['request'] == true)) {
+            $response = new stdclass();
+            $response->message = G::LoadTranslation('ID_LOGIN_AGAIN');
+            $response->lostSession = true;
+            print G::json_encode( $response );
+            die();
+        } else {
+            G::SendMessageText( G::LoadTranslation('ID_LOGIN_TO_SEE_OUTPUTDOCS'), "WARNING" );
+            G::header("location: " . "/");
+            die();
+        }
     } else {
         $response = new stdclass();
         print G::json_encode( $response );

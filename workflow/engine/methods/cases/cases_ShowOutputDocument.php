@@ -1,10 +1,16 @@
 <?php
 if (!isset($_SESSION['USER_LOGGED'])) {
-    $response = new stdclass();
-    $response->message = G::LoadTranslation('ID_LOGIN_AGAIN');
-    $response->lostSession = true;
-    print G::json_encode( $response );
-    die();
+    if ((isset( $_POST['request'] )) && ($_POST['request'] == true)) {
+        $response = new stdclass();
+        $response->message = G::LoadTranslation('ID_LOGIN_AGAIN1');
+        $response->lostSession = true;
+        print G::json_encode( $response );
+        die();
+    } else {
+        G::SendMessageText( G::LoadTranslation('ID_LOGIN_TO_SEE_OUTPUTDOCS'), "WARNING" );
+        G::header("location: " . "/");
+        die();
+    }
 }
 /**
  * cases_ShowOutputDocument.php
@@ -37,7 +43,7 @@ if (!isset($_SESSION['USER_LOGGED'])) {
 require_once ("classes/model/AppDocumentPeer.php");
 
 $oAppDocument = new AppDocument();
-$oAppDocument->Fields = $oAppDocument->load( $_GET['a'], (isset( $_GET['v'] )) ? $_GET['v'] : NULL );
+$oAppDocument->Fields = $oAppDocument->load( $_GET['a'], (isset( $_GET['v'] )) ? $_GET['v'] : null );
 
 $sAppDocUid = $oAppDocument->getAppDocUid();
 $info = pathinfo( $oAppDocument->getAppDocFilename() );
