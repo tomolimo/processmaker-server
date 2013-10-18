@@ -23,7 +23,7 @@ if (typeof(_b.Autosuggest) == "undefined")
 else
 	alert("Autosuggest is already set!");
 
-_b.AutoSuggest = function (id, param)
+_b.AutoSuggest = function (id, param, st)
 {
 	// no DOM - give up!
 	//
@@ -33,6 +33,8 @@ _b.AutoSuggest = function (id, param)
 	// get field via DOM
 	//
 	this.fld = _b.DOM.gE(id);
+
+	this.searchType = st;
 
 	if (!this.fld)
 		return 0;
@@ -67,6 +69,7 @@ _b.AutoSuggest = function (id, param)
 	//_b.DOM.addEvent( this.fld, 'keyup', function(ev){ return pointer.onKeyPress(ev); } );
 
 	this.fld.onkeypress 	= function(ev){ return p.onKeyPress(ev); };
+
 	this.fld.onkeyup 		= function(ev){ return p.onKeyUp(ev); };
 
 	this.fld.setAttribute("autocomplete","off");
@@ -162,7 +165,6 @@ _b.AutoSuggest.prototype.onKeyUp = function (ev)
 
 _b.AutoSuggest.prototype.getSuggestions = function (val)
 {
-
 	// if input stays the same, do nothing
 	//
 	if (val == this.sInp)
@@ -171,7 +173,6 @@ _b.AutoSuggest.prototype.getSuggestions = function (val)
 	// kill list
 	//
 	_b.DOM.remE(this.idAs);
-
 
 	this.sInp = val;
 
@@ -191,6 +192,8 @@ _b.AutoSuggest.prototype.getSuggestions = function (val)
 	// if caching enabled, and user is typing (ie. length of input is increasing)
 	// filter results out of aSuggestions from last request
 	//
+
+
 	var l = this.aSug.length;
 	if (this.nInpC > ol && l && l<this.oP.maxentries && this.oP.cache)
 	{
@@ -198,9 +201,24 @@ _b.AutoSuggest.prototype.getSuggestions = function (val)
 		for (var i=0;i<l;i++)
 		{
 			// if (this.aSug[i].value.substr(0,val.length).toLowerCase() == val.toLowerCase())
-			if (this.aSug[i].value.substr(0,val.length).toLowerCase() == val.toLowerCase() ||
-			    this.aSug[i].value.toLowerCase().indexOf(val.toLowerCase()) > 0)
-				arr.push( this.aSug[i] );
+
+			var flagSearch = 0;
+
+			if (this.searchType == "*searchtype*" && this.aSug[i].value.toLowerCase().indexOf(val.toLowerCase()) > 0) {
+				  flagSearch = 1;
+			}
+
+			if (this.searchType == "searchtype*" && this.aSug[i].value.substr(0,val.length).toLowerCase() == val.toLowerCase()) {
+				  flagSearch = 1;
+			}
+
+			if (this.searchType == "*searchtype" && this.aSug[i].value.substr(this.aSug[i].value.length - val.length).toLowerCase() == val.toLowerCase()) {
+				  flagSearch = 1;
+			}
+
+			if (flagSearch == 1) {
+				  arr.push(this.aSug[i]);
+			}
 		}
 		this.aSug = arr;
 

@@ -107,6 +107,14 @@ select XMLNODE_NAME, XMLNODE_NAME AS NAME FROM dynaForm WHERE	XMLNODE_NAME <> @@
   <en>Store new entry</en>
 </PME_STORE_NEW_ENTRY>
 
+<PME_SEARCHTYPE type="dropdown" required="0" readonly="0" optgroup="0" mode="edit">
+    <en>Search Type
+      <option name="*searchtype*">Results that contain the entered text</option>
+      <option name="searchtype*">Results that start with the entered text</option>
+      <option name="*searchtype">Results that finish with the entered text</option>
+    </en>
+</PME_SEARCHTYPE>
+
 <PME_TABLE_DATA type="hidden"/>
 <PME_TABLE type="dropdown" sqlconnection="" required="1">
   <en>Table</en>
