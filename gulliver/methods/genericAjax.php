@@ -73,9 +73,11 @@ if( isset($request) ){
         G::LoadClass('phpSqlParser');
 
         $parser = new PHPSQLParser($SQL);
+        $searchType = $_GET["searchType"];
+
         // Verif parsed array
         // print_r($parser->parsed);
-        $SQL = queryModified($parser->parsed, $_GET['input']);
+        $SQL = queryModified($parser->parsed, $_GET['input'], $searchType);
 
         $aRows = Array();
         try {
@@ -225,7 +227,7 @@ function sortByChar($aRows, $charSel)
  * @param string $inputSel default value empty string
  * @return string
  */
-function queryModified($sqlParsed, $inputSel = "")
+function queryModified($sqlParsed, $inputSel = "", $searchType)
 {
   if(!empty($sqlParsed['SELECT'])) {
     $sqlSelectOptions = (isset($sqlParsed["OPTIONS"]) && count($sqlParsed["OPTIONS"]) > 0)? implode(" ", $sqlParsed["OPTIONS"]) : null;
@@ -278,16 +280,27 @@ function queryModified($sqlParsed, $inputSel = "")
       }
     }
 
+    $sqlConditionLike = "LIKE '%" . $inputSel . "%'";
+
+    switch ($searchType) {
+        case "searchtype*":
+            $sqlConditionLike = "LIKE '" . $inputSel . "%'";
+            break;
+        case "*searchtype":
+            $sqlConditionLike = "LIKE '%" . $inputSel . "'";
+            break;
+    }
+
     if(!empty($sqlParsed['WHERE'])){
       $sqlWhere = " WHERE ";
       $aWhere   = $sqlParsed['WHERE'];
       foreach($aWhere as $key => $value ){
         $sqlWhere .= $value['base_expr'] . " ";
       }
-      $sqlWhere .= " AND " . $sFieldSel . " LIKE '%". $inputSel . "%'";
+      $sqlWhere .= " AND " . $sFieldSel . " " . $sqlConditionLike;
     }
     else {
-      $sqlWhere = " WHERE " . $sFieldSel . " LIKE '%". $inputSel ."%' ";
+      $sqlWhere = " WHERE " . $sFieldSel . " " . $sqlConditionLike;
     }
 
     $sqlGroupBy = "";

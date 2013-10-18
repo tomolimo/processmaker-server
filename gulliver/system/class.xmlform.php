@@ -1267,6 +1267,7 @@ class XmlForm_Field_Suggest extends XmlForm_Field_SimpleText //by neyek
     public $sqlConnection = 0;
     public $sql = '';
     public $sqlOption = array ();
+    public $searchType = "*searchtext*";
     //Atributes only for grids
     public $gridFieldType = 'suggest';
     public $formula = '';
@@ -1418,7 +1419,9 @@ class XmlForm_Field_Suggest extends XmlForm_Field_SimpleText //by neyek
 
                 $sOptions .= '  return "' . $this->ajaxServer . '?request=suggest&json=true&limit=' . $this->maxresults;
                 $sOptions .= '&hash=' . $hash . '&dependentFieldsKeys=' . $sResultKeys . '&dependentFieldsValue="';
-                $sOptions .= $depValues . '"&input="+inputValue+"&inputEnconde64=enable"; ';
+
+                $sOptions .= $depValues . '"&input="+inputValue+"&inputEnconde64=enable&searchType=' . $this->searchType . '";';
+
                 $sOptions .= '},';
                 $sOptions .= 'json: true,';
                 $sOptions .= 'limit: ' . $this->maxresults . ',';
@@ -1481,7 +1484,7 @@ class XmlForm_Field_Suggest extends XmlForm_Field_SimpleText //by neyek
                 $sOptions .= '}';
 
                 $str .= '<script type="text/javascript">';
-                $str .= 'var as_json = new bsn.AutoSuggest(\'form[' . $this->name . '_label]\', {' . $sOptions . $storeEntryData . '});';
+                $str .= 'var as_json = new bsn.AutoSuggest(\'form[' . $this->name . '_label]\', {' . $sOptions . $storeEntryData . '}, "' . $this->searchType . '");';
                 $str .= '</script>';
 
                 return $str;
@@ -1609,7 +1612,8 @@ class XmlForm_Field_Suggest extends XmlForm_Field_SimpleText //by neyek
 
                 $sOptions .= '  return "' . $this->ajaxServer . '?request=suggest&json=true&limit=' . $this->maxresults;
                 $sOptions .= '&hash=' . $hash . '&dependentFieldsKeys=' . $sResultKeys . '&dependentFieldsValue="';
-                $sOptions .= $depValues . '"&input="+inputValue+"&inputEnconde64=enable"; ';
+                $sOptions .= $depValues . '"&input="+inputValue+"&inputEnconde64=enable&searchType=' . $this->searchType . '";';
+
                 $sOptions .= '},';
                 $sOptions .= 'json: true,';
                 $sOptions .= 'limit: ' . $this->maxresults . ',';
@@ -1665,7 +1669,7 @@ class XmlForm_Field_Suggest extends XmlForm_Field_SimpleText //by neyek
                 $sOptions .= '}';
 
                 $str .= '<script type="text/javascript">';
-                $str .= 'var as_json = new bsn.AutoSuggest(\'form' . $rowId . '[' . $this->name . '_label]\', {' . $sOptions . $storeEntryData . '}); ';
+                $str .= 'var as_json = new bsn.AutoSuggest(\'form' .  $rowId . '[' . $this->name . '_label]\', {' . $sOptions . $storeEntryData . '}, "' . $this->searchType . '"); ';
                 $str .= '</script>';
 
                 return $str;
