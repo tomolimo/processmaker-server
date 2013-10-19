@@ -1235,15 +1235,17 @@ class processMap
             $result = $groups->getAllGroup($start, $limit, $filter);
             $c = 0;
             foreach ($result['rows'] as $results) {
-                $c++;
-                $oCriteria = new Criteria('workflow');
-                $oCriteria->addSelectColumn('COUNT(*) AS MEMBERS_NUMBER');
-                $oCriteria->add(GroupUserPeer::GRP_UID, $results['GRP_UID']);
-                $oDataset2 = GroupUserPeer::doSelectRS($oCriteria);
-                $oDataset2->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-                $oDataset2->next();
-                $aRow2 = $oDataset2->getRow();
-                $aUsers[] = array('LABEL' => $results['GRP_TITLE'] . ' <a href="#" onclick="usersGroup(\'' . $results['GRP_UID'] . '\', \'' . $c . '\');return false;"><font color="green"><strong>(' . $aRow2['MEMBERS_NUMBER'] . ' ' . ((int) $aRow2['MEMBERS_NUMBER'] == 1 ? G::LoadTranslation('ID_USER') : G::LoadTranslation('ID_USERS')) . ')</strong></font></a> <br /><div id="users' . $c . '" style="display: none"></div>', 'TAS_UID' => $sTaskUID, 'USR_UID' => $results['GRP_UID'], 'TU_TYPE' => $iType, 'TU_RELATION' => 2 );
+                if (!in_array($results['GRP_UID'], $aUIDS1)) {
+                    $c++;
+                    $oCriteria = new Criteria('workflow');
+                    $oCriteria->addSelectColumn('COUNT(*) AS MEMBERS_NUMBER');
+                    $oCriteria->add(GroupUserPeer::GRP_UID, $results['GRP_UID']);
+                    $oDataset2 = GroupUserPeer::doSelectRS($oCriteria);
+                    $oDataset2->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+                    $oDataset2->next();
+                    $aRow2 = $oDataset2->getRow();
+                    $aUsers[] = array('LABEL' => $results['GRP_TITLE'] . ' <a href="#" onclick="usersGroup(\'' . $results['GRP_UID'] . '\', \'' . $c . '\');return false;"><font color="green"><strong>(' . $aRow2['MEMBERS_NUMBER'] . ' ' . ((int) $aRow2['MEMBERS_NUMBER'] == 1 ? G::LoadTranslation('ID_USER') : G::LoadTranslation('ID_USERS')) . ')</strong></font></a> <br /><div id="users' . $c . '" style="display: none"></div>', 'TAS_UID' => $sTaskUID, 'USR_UID' => $results['GRP_UID'], 'TU_TYPE' => $iType, 'TU_RELATION' => 2 );
+                }
             }
             $sDelimiter = DBAdapter::getStringDelimiter();
             $oCriteria = new Criteria('workflow');
