@@ -343,7 +343,7 @@ class AdditionalTables extends BaseAdditionalTables
         }
     }
 
-    public function getAllData($sUID, $start = null, $limit = null, $keyOrderUppercase = true)
+    public function getAllData($sUID, $start = null, $limit = null, $keyOrderUppercase = true, $filter = '')
     {
         $addTab = new AdditionalTables();
         $aData = $addTab->load($sUID, true);
@@ -370,14 +370,42 @@ class AdditionalTables extends BaseAdditionalTables
         if ($keyOrderUppercase == true) {
             foreach ($aData['FIELDS'] as $aField) {
                 eval('$oCriteria->addSelectColumn(' . $sClassPeerName . '::' . $aField['FLD_NAME'] . ');');
-                if ($aField['FLD_KEY'] == '1') {
+                /*if ($aField['FLD_KEY'] == '1') {
                     eval('$oCriteria->addAscendingOrderByColumn('. $sClassPeerName . '::' . $aField['FLD_NAME'] . ');');
-                }
+                }*/
             }
         }
         $oCriteriaCount = clone $oCriteria;
         //$count = $sClassPeerName::doCount($oCriteria);
         eval('$count = ' . $sClassPeerName . '::doCount($oCriteria);');
+
+        if ($filter != '' && is_string($filter)) {
+            eval('$fieldsTable = ' . $sClassPeerName . '::getFieldNames(BasePeer::TYPE_FIELDNAME);');
+            $countField = count($fieldsTable);
+            $stringOr = '$oCriteria->add(';
+            $cont = 1;
+            foreach ($fieldsTable as $value) {
+                if ($cont == $countField) {
+                    $stringOr .= '$oCriteria->getNewCriterion(' . $sClassPeerName . '::' . strtoupper($value) . ', "%' . $filter . '%", Criteria::LIKE)';
+                } else {
+                    $stringOr .= '$oCriteria->getNewCriterion(' . $sClassPeerName . '::' . strtoupper($value) . ', "%' . $filter . '%", Criteria::LIKE)->addOr(';
+                }
+                $cont++;
+            }
+            for ($c = 1; $c < $countField; $c ++) {
+                $stringOr .= ')';
+            }
+            $stringOr .= ');';
+            eval($stringOr);
+        }
+
+        if (isset($_POST['sort'])) {
+            if ($_POST['dir'] == 'ASC') {
+                eval('$oCriteria->addAscendingOrderByColumn(' . $sClassPeerName . '::' . $_POST['sort'] . ');');
+            } else {
+                eval('$oCriteria->addDescendingOrderByColumn(' . $sClassPeerName . '::' . $_POST['sort'] . ');');
+            }
+        }
 
         if (isset($limit)) {
             $oCriteria->setLimit($limit);
