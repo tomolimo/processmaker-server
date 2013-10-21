@@ -384,7 +384,11 @@ var dynaformEditor={
   saveHtmlCode:function()
   {
     //var htmlCode = getField("HTML");
-    var response = this.ajax.set_htmlcode(this.A, tinyMCE.activeEditor.getContent());
+    var response = null;
+    try {
+        response = this.ajax.set_htmlcode(this.A, tinyMCE.activeEditor.getContent());
+    } catch (e) {
+    }
 
     if (response) {
         if (typeof(response["*message"]) != 'undefined') {
