@@ -16,14 +16,14 @@ SELECT XMLNODE_NAME, TYPE FROM dynaForm WHERE XMLNODE_NAME = @@PME_XMLNODE_NAME
 
 <PME_XMLGRID type="dropdown"><![CDATA[
 SELECT DYN_FILENAME, C.CON_VALUE FROM DYNAFORM LEFT JOIN CONTENT C ON (DYN_UID=C.CON_ID AND C.CON_LANG=@@SYS_LANG AND C.CON_CATEGORY="DYN_TITLE") WHERE DYN_TYPE="grid" AND PRO_UID=@@PME_PRO_UID
-  ]]><en>Grid <option name="0">- Select a Grid- </option></en>
+  ]]><en>Grid <option name="0">- Select a Grid -</option></en>
 </PME_XMLGRID>
 
-<PME_ADDROW type="checkbox" falseValue="0" value="1" defaultvalue="1">
+<PME_ADDROW type="checkbox" falseValue="0" value="1" defaultvalue="1" labelOnRight="1">
   <en>Add new rows</en>
 </PME_ADDROW>
 
-<PME_DELETEROW type="checkbox" falseValue="0" value="1" defaultvalue="1">
+<PME_DELETEROW type="checkbox" falseValue="0" value="1" defaultvalue="1" labelOnRight="1">
   <en>Delete rows</en>
 </PME_DELETEROW>
 
