@@ -302,6 +302,7 @@ switch ($_POST['action']) {
         if ($filter != '') {
             $oCriteria->add( $oCriteria->getNewCriterion( UsersPeer::USR_USERNAME, '%' . $filter . '%', Criteria::LIKE )->addOr( $oCriteria->getNewCriterion( UsersPeer::USR_FIRSTNAME, '%' . $filter . '%', Criteria::LIKE )->addOr( $oCriteria->getNewCriterion( UsersPeer::USR_LASTNAME, '%' . $filter . '%', Criteria::LIKE ) ) ) );
         }
+        $oCriteria->addAscendingOrderByColumn( UsersPeer::USR_USERNAME );
         $oCriteria->setOffset( $start );
         $oCriteria->setLimit( $limit );
         $oDataset = UsersPeer::doSelectRS( $oCriteria );
