@@ -236,7 +236,11 @@ foreach ($FieldAttributes as $key => $value) {
         case 'string':
             if (!empty($value)) {
                 $FieldAttrib[strtolower($key)] = $value;
-            }        
+            } else {
+                if ($_POST["form"]["TYPE"] == "link" && $key == "TARGET_SEL") {
+                    $FieldAttrib[strtolower($key)] = $value;
+                }
+            }
         break;
         case 'integer':
             $FieldAttrib[strtolower($key)] = $value;
