@@ -1162,7 +1162,11 @@ class workspaceTools
         $chgrp = @chgrp($filename, $group);
         $chmod = @chmod($filename, $perms);
         if ($chgrp === false || $chmod === false || $chown === false) {
-            CLI::logging(CLI::error("Failed to set permissions for $filename") . "\n");
+            if (strtoupper( substr( PHP_OS, 0, 3 ) ) === 'WIN') {
+                exec( 'icacls ' . $dirNameWin . '/grant Administrador:(D,WDAC) /T', $res );
+            } else {
+                CLI::logging(CLI::error("Failed to set permissions for $filename") . "\n");
+            }
         }
         if (is_dir($filename)) {
             foreach (array_merge(glob($filename . "/*"), glob($filename . "/.*")) as $item) {
