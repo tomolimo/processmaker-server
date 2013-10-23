@@ -1908,6 +1908,11 @@ var documentsTab = {
           'rowcontextmenu' : {
             fn : rowContextMenu
           },
+          'cellclick': function(){
+        	  if (ext_itemgrid.getSelectionModel().getSelected().get('outDocGenerate') == '') {
+        		  openActionDialog(this, 'download', '');
+        	  }
+          },
           'celldblclick' : {
             fn : function(grid, rowIndex,
               columnIndex, e) {
