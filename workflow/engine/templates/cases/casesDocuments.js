@@ -1908,14 +1908,12 @@ var documentsTab = {
           'rowcontextmenu' : {
             fn : rowContextMenu
           },
-          'cellclick': function(){
-        	  if (ext_itemgrid.getSelectionModel().getSelected().get('outDocGenerate') == '') {
-        		  openActionDialog(this, 'download', '');
-        	  }
-          },
           'celldblclick' : {
             fn : function(grid, rowIndex,
               columnIndex, e) {
+              if (ext_itemgrid.getSelectionModel().getSelected().get('outDocGenerate') == '') {
+          		openActionDialog(this, 'download', '');
+          	  }
               if (Ext.isOpera) {
                 // because Opera <= 9
                 // doesn't support the
