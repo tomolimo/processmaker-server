@@ -143,6 +143,7 @@ if (aTaskFlag[1])
         if (oTaskData.TAS_ASSIGN_TYPE == "SELF_SERVICE") {
             getField("TAS_ASSIGN_TYPE][SELF_SERVICE").checked = true;
         } else {
+            getField("TAS_GROUP_VARIABLE").value = oTaskData.TAS_GROUP_VARIABLE;
             if (getField("TAS_ASSIGN_TYPE][SELF_SERVICE_EVALUATE")) {
                 getField("TAS_ASSIGN_TYPE][SELF_SERVICE_EVALUATE").checked = true;
             }
