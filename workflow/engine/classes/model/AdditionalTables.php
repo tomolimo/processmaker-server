@@ -383,12 +383,20 @@ class AdditionalTables extends BaseAdditionalTables
             eval('$fieldsTable = ' . $sClassPeerName . '::getFieldNames(BasePeer::TYPE_FIELDNAME);');
             $countField = count($fieldsTable);
             $stringOr = '$oCriteria->add(';
-            $cont = 1;
+            $cont = 0;
             foreach ($fieldsTable as $value) {
-                if ($cont == $countField) {
-                    $stringOr .= '$oCriteria->getNewCriterion(' . $sClassPeerName . '::' . strtoupper($value) . ', "%' . $filter . '%", Criteria::LIKE)';
+                if (($cont+1) == $countField) {
+                    if ($aData['FIELDS'][$cont]['FLD_TYPE'] == 'VARCHAR') {
+                        $stringOr .= '$oCriteria->getNewCriterion(' . $sClassPeerName . '::' . strtoupper($value) . ', "%' . $filter . '%", Criteria::LIKE)';
+                    } else {
+                        $stringOr .= '$oCriteria->getNewCriterion(' . $sClassPeerName . '::' . strtoupper($value) . ', "' . $filter . '", Criteria::LIKE)';
+                    }
                 } else {
-                    $stringOr .= '$oCriteria->getNewCriterion(' . $sClassPeerName . '::' . strtoupper($value) . ', "%' . $filter . '%", Criteria::LIKE)->addOr(';
+                    if ($aData['FIELDS'][$cont]['FLD_TYPE'] == 'VARCHAR') {
+                        $stringOr .= '$oCriteria->getNewCriterion(' . $sClassPeerName . '::' . strtoupper($value) . ', "%' . $filter . '%", Criteria::LIKE)->addOr(';
+                    } else {
+                        $stringOr .= '$oCriteria->getNewCriterion(' . $sClassPeerName . '::' . strtoupper($value) . ', "' . $filter . '", Criteria::LIKE)->addOr(';
+                    }
                 }
                 $cont++;
             }
