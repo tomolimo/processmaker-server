@@ -1208,7 +1208,7 @@ function addCaseNote($params)
     return $result;
 }
 
-function ClaimCase($params)
+function claimCase($params)
 {
     $vsResult = isValidSession($params->sessionId);
     if ($vsResult->status_code !== 0) {
@@ -1275,6 +1275,6 @@ $server->addFunction("cancelCase");
 $server->addFunction("pauseCase");
 $server->addFunction("unpauseCase");
 $server->addFunction("addCaseNote");
-$server->addFunction("ClaimCase");
+$server->addFunction("claimCase");
 $server->handle();
 
