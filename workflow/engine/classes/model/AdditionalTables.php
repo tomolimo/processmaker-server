@@ -384,24 +384,31 @@ class AdditionalTables extends BaseAdditionalTables
             $countField = count($fieldsTable);
             $stringOr = '$oCriteria->add(';
             $cont = 0;
+            $fieldAppUid = '';
             foreach ($fieldsTable as $value) {
-                if (($cont+1) == $countField) {
-                    if ($aData['FIELDS'][$cont]['FLD_TYPE'] == 'VARCHAR') {
-                        $stringOr .= '$oCriteria->getNewCriterion(' . $sClassPeerName . '::' . strtoupper($value) . ', "%' . $filter . '%", Criteria::LIKE)';
-                    } else {
-                        $stringOr .= '$oCriteria->getNewCriterion(' . $sClassPeerName . '::' . strtoupper($value) . ', "' . $filter . '", Criteria::LIKE)';
-                    }
+            	if ($value != 'APP_UID') {
+	                if (($cont+1) == $countField) {
+	                    if ($aData['FIELDS'][$cont]['FLD_TYPE'] == 'VARCHAR') {
+	                        $stringOr .= '$oCriteria->getNewCriterion(' . $sClassPeerName . '::' . strtoupper($value) . ', "%' . $filter . '%", Criteria::LIKE)';
+	                    } else {
+	                        $stringOr .= '$oCriteria->getNewCriterion(' . $sClassPeerName . '::' . strtoupper($value) . ', "' . $filter . '", Criteria::LIKE)';
+	                    }
+	                } else {
+	                    if ($aData['FIELDS'][$cont]['FLD_TYPE'] == 'VARCHAR') {
+	                        $stringOr .= '$oCriteria->getNewCriterion(' . $sClassPeerName . '::' . strtoupper($value) . ', "%' . $filter . '%", Criteria::LIKE)->addOr(';
+	                    } else {
+	                        $stringOr .= '$oCriteria->getNewCriterion(' . $sClassPeerName . '::' . strtoupper($value) . ', "' . $filter . '", Criteria::LIKE)->addOr(';
+	                    }
+	                }
                 } else {
-                    if ($aData['FIELDS'][$cont]['FLD_TYPE'] == 'VARCHAR') {
-                        $stringOr .= '$oCriteria->getNewCriterion(' . $sClassPeerName . '::' . strtoupper($value) . ', "%' . $filter . '%", Criteria::LIKE)->addOr(';
-                    } else {
-                        $stringOr .= '$oCriteria->getNewCriterion(' . $sClassPeerName . '::' . strtoupper($value) . ', "' . $filter . '", Criteria::LIKE)->addOr(';
-                    }
+                    $fieldAppUid = $cont;
                 }
                 $cont++;
             }
-            for ($c = 1; $c < $countField; $c ++) {
-                $stringOr .= ')';
+            for ($c = 0; $c < $countField-1; $c++) {            	
+                if ($fieldAppUid !== $c) {
+                	$stringOr .= ')';
+                }
             }
             $stringOr .= ');';
             eval($stringOr);
