@@ -221,7 +221,7 @@ foreach ($dependentFields as $d) {
                     $sendContent[$r]->content->{$attribute} = $value;
                     break;
                 case 'options':
-                    if ($sendContent[$r]->content->type != 'text') {
+                    if ($sendContent[$r]->content->type != "text" && $sendContent[$r]->content->type != "textarea") {
                         $sendContent[$r]->content->{$attribute} = toJSArray($value);
                     } else {
                         $sendContent[$r]->content->{$attribute} = toJSArray((isset($value[$_POST["row"]])? array($value[$_POST["row"]]) : array()));

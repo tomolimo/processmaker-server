@@ -192,7 +192,20 @@ function G_Field ( form, element, name )
             var oAux2 = oAux.getElementByName(row, newcont[i].name);
             if (oAux2) {
               oAux2.setValue(newcont[i].value);
-              oAux2.setContent(newcont[i].content);
+
+              if (oAux2.element.type != "textarea") {
+                  oAux2.setContent(newcont[i].content);
+              } else {
+                  //This code fragment is copy of method G_Text.setContent()
+                  oAux2.element.value = "";
+
+                  if (newcont[i].content.options) {
+                     if (newcont[i].content.options[0]) {
+                         oAux2.element.value = newcont[i].content.options[0].value;
+                     }
+                  }
+              }
+
               oAux2.updateDepententFields();
               // this line is also needed to trigger the onchange event to trigger the calculation of
               // sumatory or average functions in text fields

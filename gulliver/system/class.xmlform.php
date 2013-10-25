@@ -1982,24 +1982,32 @@ class XmlForm_Field_Textarea extends XmlForm_Field
      * @param string owner
      * @return string
      */
-    public function renderGrid ($values = null, $owner = null)
+    public function renderGrid ($values = array(), $owner = null)
     {
         $this->gridFieldType = 'textarea';
 
         if ($owner->mode != 'view') {
             $this->renderMode = $this->modeForGrid;
         }
-        $result = array ();
+
+        $result = array();
+        $arrayOptions = array();
+
         $r = 1;
 
         foreach ($values as $v) {
-            $this->executeSQL( $owner, $r );
-            if (isset( $this->sqlOption )) {
-                $firstElement = key( $this->sqlOption );
-                if (isset( $firstElement )) {
-                    $v = $firstElement;
-                }
+            $this->executeSQL($owner, $r);
+
+            if (isset($this->sqlOption)) {
+                $firstElement = key($this->sqlOption);
             }
+
+            if (isset($firstElement)) {
+                $v = $firstElement;
+            }
+
+            $arrayOptions[$r] = $v;
+
             $scrollStyle = $this->style . "overflow:scroll;overflow-y:scroll;overflow-x:hidden;overflow:-moz-scrollbars-vertical;";
             $html = '';
             if ($this->renderMode == 'edit') {
@@ -2031,6 +2039,8 @@ class XmlForm_Field_Textarea extends XmlForm_Field
             $result[] = $html;
             $r ++;
         }
+
+        $this->options = $arrayOptions;
         return $result;
     }
 }
