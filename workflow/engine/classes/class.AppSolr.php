@@ -1547,7 +1547,7 @@ class AppSolr
     }
     // search data from DB
     $xmlDoc = "<?xml version='1.0' encoding='UTF-8'?>\n";
-    $xmlDoc .= "<add commitWithin='5000'>\n";
+    $xmlDoc .= "<add>\n";
     
     //get all application data from DB of all applications and delegations
     $aAPPUIDs = array();
