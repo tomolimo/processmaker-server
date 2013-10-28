@@ -1084,7 +1084,7 @@ class workspaceTools
                 mysql_select_db($database);
                 $script = file_get_contents($filename);
 
-                $lines = explode(";\n", $script);
+                $lines = explode("\n", $script);
                 $previous = null;
                 foreach ($lines as $j => $line) {
                     // Remove comments from the script
