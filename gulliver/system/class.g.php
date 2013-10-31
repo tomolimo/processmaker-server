@@ -1775,7 +1775,7 @@ class G
                     }
 
                     $strContentAux = $strContentAux1 . $strContentAux;
-                
+
                 }
             }
         }
@@ -5221,6 +5221,14 @@ class G
         }
 
         return $path;
+    }
+
+    public function isUserFunction($functionName) {
+        $allFunctions = get_defined_functions();
+        if (!isset($allFunctions['user'])) {
+            $allFunctions['user'] = array();
+        }
+        return in_array(strtolower($functionName), $allFunctions['user']);
     }
 }
 
