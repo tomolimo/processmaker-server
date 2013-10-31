@@ -422,7 +422,7 @@ class pmTablesProxy extends HttpProxyController
         $table = $additionalTables->load( $httpData->id, true );
 
         if ($filter != '') {
-            $result = $additionalTables::getAllData( $httpData->id, $start, $limit, true, $filter);
+            $result = $additionalTables->getAllData( $httpData->id, $start, $limit, true, $filter);
         } else {
             $result = $additionalTables->getAllData( $httpData->id, $start, $limit );
         }
