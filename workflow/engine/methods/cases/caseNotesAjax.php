@@ -5,7 +5,7 @@ if (! isset( $_REQUEST['action'] )) {
     print G::json_encode( $res );
     die();
 }
-if (! function_exists( $_REQUEST['action'] )) {
+if (! function_exists( $_REQUEST['action'] ) || !G::isUserFunction($_REQUEST['action'])) {
     $res['success'] = 'failure';
     $res['message'] = 'The requested action does not exist';
     header( "Content-Type: application/json" );
