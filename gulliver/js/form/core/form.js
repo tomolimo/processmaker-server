@@ -3903,39 +3903,63 @@ function dropDownSetOption(elem, arrayOption)
 function dynaFormPrint(arrayForm, link, width, height, left, top, resizable)
 {
     var frm = arrayForm[0];
-    var flagRequiredField = 1;
-    var requiredField = frm.DynaformRequiredFields.value;
 
-    if (requiredField != "") {
-        flagRequiredField = (validateForm(requiredField))? 1 : 0;
-    }
+    if (dynaFormChanged(frm)) {
+       swSubmitValidateForm = 1;
 
-    if (flagRequiredField == 1) {
-        swSubmitValidateForm = 1;
+       new leimnud.module.app.confirm().make({
+           label: _("ID_SAVE_DYNAFORM_INFORMATION_BEFORE_PRINTING"),
 
-        new leimnud.module.app.confirm().make({
-            label: _("ID_DYNAFORM_SAVE_CHANGES"),
+           action: function ()
+           {
+               if (frm.length > 0) {
+                   var result = ajax_post(
+                       frm.action,
+                       frm,
+                       "POST",
+                       function (responseText)
+                       {
+                           popUp(link, width, height, left, top, resizable);
+                       },
+                       true
+                   );
+               }
+           },
 
-            action: function ()
-            {
-                if (frm.length > 0) {
-                    var result = ajax_post(
-                        frm.action,
-                        frm,
-                        "POST",
-                        function (responseText)
-                        {
-                            popUp(link, width, height, left, top, resizable);
-                        },
-                        true
-                    );
+           cancel: function()
+           {
+               popUp(link, width, height, left, top, resizable);
+           }
+       });
+   }
+}
+
+function dynaFormChanged(frm)
+{
+    for (var i1 = 0; i1 <= frm.elements.length - 1; i1++) {
+        if (frm.elements[i1].type == "text" && frm.elements[i1].value != frm.elements[i1].defaultValue) {
+            return true;
+        }
+
+        if (frm.elements[i1].type == "textarea" && frm.elements[i1].value != frm.elements[i1].defaultValue) {
+            return true;
+        }
+
+        if (frm.elements[i1].tagName.toLowerCase() == "select") {
+            var selectDefaultValue = frm.elements[i1].value;
+
+            for (var i2 = 0; i2 <= frm.elements[i1].options.length - 1; i2++) {
+                if (frm.elements[i1].options[i2].defaultSelected) {
+                    selectDefaultValue = frm.elements[i1].options[i2].value;
+                    break;
                 }
-            },
-
-            cancel: function()
-            {
-                popUp(link, width, height, left, top, resizable);
             }
-        });
+
+            if (frm.elements[i1].value != selectDefaultValue) {
+                return true;
+            }
+        }
     }
+
+    return false;
 }
