@@ -102,7 +102,7 @@ Ext.onReady(function(){
   clearTextButton = new Ext.Action({
     text: 'X',
     ctCls:'pm_search_x_button',
-    handler: GridByDefault 
+    handler: GridByDefault
   });
 
   //This loop loads columns and fields to store and column model
@@ -463,14 +463,15 @@ onMessageContextMenu = function (grid, rowIndex, e) {
 /////JS FUNCTIONS
 
 //Do Search Function
-
 DoSearch = function(){
-   infoGrid.store.load({params: {textFilter: searchText.getValue()}});
+   infoGrid.store.setBaseParam('textFilter', searchText.getValue());
+   infoGrid.store.load({params: {start : 0 , limit : pageSize }});
 };
 
 //Load Grid By Default
 GridByDefault = function(){
   searchText.reset();
+  infoGrid.store.setBaseParam('textFilter', searchText.getValue());
   infoGrid.store.load();
 }; 
 
