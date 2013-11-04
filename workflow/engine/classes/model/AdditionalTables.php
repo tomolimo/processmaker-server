@@ -412,6 +412,9 @@ class AdditionalTables extends BaseAdditionalTables
             }
             $stringOr .= ');';
             eval($stringOr);
+
+            $oCriteriaCount = clone $oCriteria;
+            eval('$count = ' . $sClassPeerName . '::doCount($oCriteria);');
         }
 
         if (isset($_POST['sort'])) {
