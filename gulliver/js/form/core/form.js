@@ -3900,40 +3900,6 @@ function dropDownSetOption(elem, arrayOption)
     }
 }
 
-function dynaFormPrint(arrayForm, link, width, height, left, top, resizable)
-{
-    var frm = arrayForm[0];
-
-    if (dynaFormChanged(frm)) {
-       swSubmitValidateForm = 1;
-
-       new leimnud.module.app.confirm().make({
-           label: _("ID_SAVE_DYNAFORM_INFORMATION_BEFORE_PRINTING"),
-
-           action: function ()
-           {
-               if (frm.length > 0) {
-                   var result = ajax_post(
-                       frm.action,
-                       frm,
-                       "POST",
-                       function (responseText)
-                       {
-                           popUp(link, width, height, left, top, resizable);
-                       },
-                       true
-                   );
-               }
-           },
-
-           cancel: function()
-           {
-               popUp(link, width, height, left, top, resizable);
-           }
-       });
-   }
-}
-
 function dynaFormChanged(frm)
 {
     for (var i1 = 0; i1 <= frm.elements.length - 1; i1++) {
@@ -3962,4 +3928,40 @@ function dynaFormChanged(frm)
     }
 
     return false;
+}
+
+function dynaFormPrint(formId, link, width, height, left, top, resizable)
+{
+    var frm = document.getElementById(formId);
+
+    if (dynaFormChanged(frm)) {
+       swSubmitValidateForm = 1;
+
+       new leimnud.module.app.confirm().make({
+           label: _("ID_SAVE_DYNAFORM_INFORMATION_BEFORE_PRINTING"),
+
+           action: function ()
+           {
+               if (frm.length > 0) {
+                   var result = ajax_post(
+                       frm.action,
+                       frm,
+                       "POST",
+                       function (responseText)
+                       {
+                           popUp(link, width, height, left, top, resizable);
+                       },
+                       true
+                   );
+               }
+           },
+
+           cancel: function()
+           {
+               popUp(link, width, height, left, top, resizable);
+           }
+       });
+   } else {
+       popUp(link, width, height, left, top, resizable);
+   }
 }
