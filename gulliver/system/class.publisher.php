@@ -191,7 +191,7 @@ class Publisher
 
                 if (($this->publishType == 'dynaform') && (($Part['Template'] == 'xmlform') || ($Part['Template'] == 'xmlform_preview'))) {
                     $dynaformShow = (isset( $G_FORM->printdynaform ) && ($G_FORM->printdynaform)) ? 'gulliver/dynaforms_OptionsPrint' : 'gulliver/dynaforms_Options';
-                    $G_FORM->fields = G::array_merges( array ('__DYNAFORM_OPTIONS' => new XmlForm_Field_XmlMenu( new Xml_Node( '__DYNAFORM_OPTIONS', 'complete', '', array ('type' => 'xmlmenu','xmlfile' => $dynaformShow
+                    $G_FORM->fields = G::array_merges( array ('__DYNAFORM_OPTIONS' => new XmlForm_Field_XmlMenu( new Xml_Node( '__DYNAFORM_OPTIONS', 'complete', '', array ('type' => 'xmlmenu','xmlfile' => $dynaformShow, 'parentFormId' => $G_FORM->id
                     ) ), SYS_LANG, PATH_XMLFORM, $G_FORM )
                     ), $G_FORM->fields );
                 }

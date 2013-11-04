@@ -33,6 +33,7 @@
 class xmlMenu extends form
 {
     public $type = 'xmlmenu';
+    public $parentFormId;
 }
 
 /**
@@ -50,6 +51,7 @@ class XmlForm_Field_XmlMenu extends XmlForm_Field
     public $xmlMenu;
     public $home = '';
     public $withoutLabel = true;
+    public $parentFormId;
 
     /**
      * XmlForm_Field_XmlMenu
@@ -78,6 +80,7 @@ class XmlForm_Field_XmlMenu extends XmlForm_Field
     {
         $this->xmlMenu = new xmlMenu( $this->xmlfile, $this->home );
         $this->xmlMenu->setValues( $value );
+        $this->xmlMenu->parentFormId = $this->parentFormId;
         $this->type = 'xmlmenuDyn';
         $template = PATH_CORE . 'templates/' . $this->type . '.html';
         $out = $this->xmlMenu->render( $template, $scriptCode );
