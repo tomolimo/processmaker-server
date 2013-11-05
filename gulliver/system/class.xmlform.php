@@ -2894,7 +2894,7 @@ class XmlForm_Field_File extends XmlForm_Field
             $styleDisplay = "display: none;";
         }
 
-        $html = $html1 . "<input type=\"file\" id=\"form" . $rowId . "[" . $this->name . "]\" name=\"form" . $rowId . "[" . $this->name . "]\" value=\"" . $value . "\" class=\"module_app_input___gray_file\" style=\"" . $styleDisplay . "\"" . $mode . " />" . $html2;
+        $html = $html1 . "<input type=\"file\" id=\"form" . $rowId . "[" . $this->name . "]\" name=\"form" . $rowId . "[" . $this->name . "]\" value=\"" . $value . "\" class=\"module_app_input___gray_file\" style=\"" . $styleDisplay . "\"" . $mode . " " . $this->NSRequiredValue() . " />" . $html2;
 
         if (isset( $this->input ) && $this->input != null) {
             require_once ("classes/model/InputDocument.php");
