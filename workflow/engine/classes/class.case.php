@@ -3904,6 +3904,13 @@ class Cases
         if (AppDelegationPeer::doCount($oCriteria) == 1) {
             $aFields['APP_STATUS'] = 'CANCELLED';
             $oApplication->update($aFields);
+                                    
+            G::LoadClass('reportTables');
+            require_once 'classes/model/AdditionalTables.php';
+            $oReportTables = new ReportTables();
+            $addtionalTables = new additionalTables();
+            $oReportTables->updateTables($aFields['PRO_UID'], $aFields['APP_UID'], $aFields['APP_NUMBER'], $aFields['APP_DATA']);
+            $addtionalTables->updateReportTables($aFields['PRO_UID'], $aFields['APP_UID'], $aFields['APP_NUMBER'], $aFields['APP_DATA'], $aFields['APP_STATUS']);
         }
         $this->CloseCurrentDelegation($sApplicationUID, $iIndex);
         $oAppDel = new AppDelegation();
