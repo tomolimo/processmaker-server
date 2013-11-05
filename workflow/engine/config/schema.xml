@@ -1547,6 +1547,9 @@
         <parameter name="Comment" value=""/>
       </vendor>
     </index>
+    <index name="indexAppUid">
+      <index-column name="APP_UID"/>
+    </index>
   </table>
   <table name="PROCESS_USER">
     <vendor type="mysql">
