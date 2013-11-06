@@ -1376,7 +1376,7 @@ class workspaceTools
             //Extract
             $tar = new Archive_Tar($f);
 
-            $swTar = $tar->extract(PATH_OUTTRUNK); //true on success, false on error
+            $swTar = $tar->extractModify(PATH_TRUNK, "processmaker"); //true on success, false on error
 
             if ($swTar) {
                 $result["status"] = 1;
