@@ -736,15 +736,20 @@ class Process extends BaseProcess
         }
         
         $memcache = & PMmemcached::getSingleton( SYS_SYS );
-        if ($memcache->enabled == 0) {
-            if ($dir=='ASC') {
-    	        usort( $aProcesses, 'ordProcessAsc' );
-    	    } else {
-    		    usort( $aProcesses, 'ordProcessDesc' );
-    	    }
-        	$aProcesses = array_splice($aProcesses, $start, $limit);
+        if (isset($memcache) && $memcache->enabled == 1 ) {
+        	return $aProcesses;
         }
-        
+
+        if ($limit == '') {
+        	$limit = count($aProcesses);
+        }
+        if ($dir=='ASC') {
+            usort( $aProcesses, 'ordProcessAsc' );
+        } else {
+            usort( $aProcesses, 'ordProcessDesc' );
+        }
+        $aProcesses = array_splice($aProcesses, $start, $limit);
+
         return $aProcesses;
     }
 
