@@ -587,7 +587,7 @@ class Process extends BaseProcess
         }
     }
 
-    public function getAllProcesses ($start, $limit, $category = null, $processName = null, $counters = true, $reviewSubProcess = false)
+    public function getAllProcesses ($start, $limit, $category = null, $processName = null, $counters = true, $reviewSubProcess = false, $dir = 'ASC')
     {
     	require_once PATH_RBAC . "model/RbacUsers.php";
         require_once "classes/model/ProcessCategory.php";
@@ -737,7 +737,11 @@ class Process extends BaseProcess
         
         $memcache = & PMmemcached::getSingleton( SYS_SYS );
         if ($memcache->enabled == 0) {
-        	usort( $aProcesses, 'ordProcess' );
+            if ($dir=='ASC') {
+    	        usort( $aProcesses, 'ordProcessAsc' );
+    	    } else {
+    		    usort( $aProcesses, 'ordProcessDesc' );
+    	    }
         	$aProcesses = array_splice($aProcesses, $start, $limit);
         }
         
@@ -847,34 +851,38 @@ class Process extends BaseProcess
         }
     }
     
-    public function orderMemcache($dataMemcache, $start, $limit)
+    public function orderMemcache($dataMemcache, $start, $limit, $dir)
     {
-    	usort( $dataMemcache, 'ordProcess' );
-        $dataMemcache = array_splice($dataMemcache, $start, $limit);
+    	if ($dir=='ASC') {
+    	    usort( $dataMemcache, 'ordProcessAsc' );
+    	} else {
+    		usort( $dataMemcache, 'ordProcessDesc' );
+    	}
+    	$dataMemcache = array_splice($dataMemcache, $start, $limit);
     	return $dataMemcache;
     }
 }
 
-function ordProcess ($a, $b)
-{
-    if (isset($_POST['sort'])) {
-        if ($_POST['dir']=='ASC') {
-            if ($a[$_POST['sort']] > $b[$_POST['sort']]) {
-                return 1;
-            } elseif ($a[$_POST['sort']] < $b[$_POST['sort']]) {
-                return - 1;
-            } else {
-                return 0;
-            }
+function ordProcessAsc ($a, $b)
+{	
+        if ($a[$_POST['sort']] > $b[$_POST['sort']]) {
+            return 1;
+        } elseif ($a[$_POST['sort']] < $b[$_POST['sort']]) {
+            return - 1;
         } else {
-            if ($a[$_POST['sort']] > $b[$_POST['sort']]) {
-                return - 1;
-            } elseif ($a[$_POST['sort']] < $b[$_POST['sort']]) {
-            	return 1;
-            } else {
-                return 0;
-            }
-       }
-    }
+            return 0;
+        }
+    
+}
+
+function ordProcessDesc ($a, $b)
+{
+		if ($a[$_POST['sort']] > $b[$_POST['sort']]) {
+			return - 1;
+		} elseif ($a[$_POST['sort']] < $b[$_POST['sort']]) {
+			return 1;
+		} else {
+			return 0;
+		}
 }
 
