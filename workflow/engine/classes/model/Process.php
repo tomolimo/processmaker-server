@@ -387,7 +387,12 @@ class Process extends BaseProcess
             }
         }
 
-        usort( $processes, 'ordProcess' );
+        if ($_POST['dir']=='ASC') {
+        	usort( $processes, 'ordProcessAsc' );
+        } else {
+        	usort( $processes, 'ordProcessDesc' );
+        }
+
         return $processes;
     }
 
