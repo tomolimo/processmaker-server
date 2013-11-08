@@ -289,7 +289,7 @@ function getAllCounters ()
         $aCount = $ApplicationSolrIndex->getCasesCount( $userUid );
 
         //get paused count
-        $aCountMissing = $oAppCache->getAllCounters( array ('paused','completed','cancelled'), $userUid );
+        $aCountMissing = $oAppCache->getAllCounters( array ('completed','cancelled'), $userUid );
 
         $aCount = array_merge( $aCount, $aCountMissing );
     } else {
