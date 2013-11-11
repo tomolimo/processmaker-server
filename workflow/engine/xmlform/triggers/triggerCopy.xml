@@ -74,7 +74,7 @@
     <en>Script</en>
 </TRI_WEBBOT>
 
-<BTNCOPYSAVE type="button" onclick="/*document.getElementById('form[TRI_WEBBOT]').value = triggerEditor.getValue();*/ triggerSave1(this.form);">
+<BTNCOPYSAVE type="button" onclick="triggerSave1(this.form);">
     <en>Copy/Import and Save</en>
 </BTNCOPYSAVE>
 
