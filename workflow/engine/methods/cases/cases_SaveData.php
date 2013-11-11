@@ -166,11 +166,7 @@ try {
     if (! empty( $newValues )) {
         $id = key( $newValues );
        	$newValues[$id] = $aData['APP_DATA'][$id];
-       	$idPmtable = $oForm->fields[$id]->owner->tree->children[0]->attributes['pmtable'];
-
-       	while (strlen($id) < 3) {
-       		$id = '_' . $id;
-        }
+       	$idPmtable = $oForm->fields[$id]->pmconnection->pmtable != '' ? $oForm->fields[$id]->pmconnection->pmtable : $oForm->fields[$id]->owner->tree->children[0]->attributes['pmtable'];
 
         if (!($oAdditionalTables->updateDataInTable($idPmtable, $newValues ))) {
             //<--This is to know if it is a new registry on the PM Table
