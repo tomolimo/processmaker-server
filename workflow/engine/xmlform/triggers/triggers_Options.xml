@@ -37,32 +37,6 @@
 
 <JS type="javascript" replaceTags="1">
 <![CDATA[
-/*
-	document.onkeypress=function(e){
-	var esIE=(document.all);
-	var esNS=(document.layers);
-	tecla=(esIE) ? event.keyCode : e.which;
-	if(tecla==13){
-		return false;
-	  }
-	}
-*/
-/*
-    //Add css Codemirror
-    var head = document.getElementsByTagName('head')[0];
-    var s = document.createElement('link');
-    s.setAttribute('href', '/js/codemirror/lib/codemirror.css');
-    s.setAttribute('type', 'text/css');
-    s.setAttribute('rel', 'stylesheet');
-    head.appendChild(s);
-
-    var s = document.createElement('link');
-    s.setAttribute('href', '/js/codemirror/addon/hint/show-hint.css');
-    s.setAttribute('type', 'text/css');
-    s.setAttribute('rel', 'stylesheet');
-    head.appendChild(s);
-*/
-
   var windowWidth = 600;
   var windowHeight = 460;
 
@@ -81,7 +55,7 @@
 
   function triggerCopy()
   {
-      popupWindow("@G::LoadTranslation(ID_TRIGGER_COPY_TITLE)", "@G::encryptlink(@#triggerCopy)?PRO_UID=@%PRO_UID" , windowWidth, windowHeight);
+      popupWindow("@G::LoadTranslation(ID_TRIGGER_COPY_TITLE)", "@G::encryptlink(@#triggerCopy)?PRO_UID=@%PRO_UID" , 900, 460);
   }
 
   function triggerFromLibrary() {
@@ -98,8 +72,7 @@
   }
 
   function triggerEdit(sUID) {
-    //popupWindow('@G::LoadTranslation(ID_EDIT_TRIGGERS)', '@G::encryptlink(@#triggersEdit)?TRI_UID='+ sUID , 930, 600);
-    window.open('@G::encryptlink(@#triggersEdit)?TRI_UID='+ sUID,'@G::LoadTranslation(ID_EDIT_TRIGGERS)'.replace(/\s/g,'_'),'toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=930,height=600,top=85,left=140');
+    window.open('@G::encryptlink(@#triggersEdit)?TRI_UID='+ sUID,'@G::LoadTranslation(ID_EDIT_TRIGGERS)'.replace(/\s/g,'_'),'toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width='+screen.width+',height='+screen.height);
   }
 
   function triggerProperties( sUID ) {
