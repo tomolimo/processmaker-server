@@ -474,7 +474,7 @@ class workspaceTools
         $RBAC->initRBAC();
         $result = $RBAC->verifyPermissions();
         if (count($result) > 1) {
-            foreach($result as $item) {
+            foreach ($result as $item) {
                 CLI::logging("    $item... \n");
             }
         } else {
@@ -1077,7 +1077,6 @@ class workspaceTools
             . ' --default_character_set utf8'
             . ' --execute="SOURCE '.$filename.'"';
             shell_exec($command);
-
         } else {
             //If the safe mode of the server is actived
             try {
@@ -1100,6 +1099,7 @@ class workspaceTools
                         $line = $previous . " " . $line;
                     }
                     $previous = null;
+
                     // If the current line doesnt end with ; then put this line together
                     // with the next one, thus supporting multi-line statements.
                     if (strrpos($line, ";") != strlen($line) - 1) {
@@ -1107,18 +1107,33 @@ class workspaceTools
                         continue;
                     }
                     $line = substr($line, 0, strrpos($line, ";"));
+
+                    if (strrpos($line, "INSERT INTO") !== false) {
+                        if ($insert) {
+                            $result = mysql_query("START TRANSACTION");
+                            $insert = false;
+                        }
+                        $result = mysql_query($line);
+                        continue;
+                    } else {
+                        if (!$insert) {
+                            $result = mysql_query("COMMIT");
+                            $insert = true;
+                        }
+                    }
+
                     $result = mysql_query($line);
                     if ($result === false) {
                         throw new Exception("Error when running script '$filename', line $j, query '$line': " . mysql_error());
                     }
                 }
+                if (!$insert) {
+                    $result = mysql_query("COMMIT");
+                }
             } catch (Exception $e) {
                 CLI::logging(CLI::error("Error:" . "There are problems running script '$filename': " . $e));
             }
-
         }
-
-
     }
 
     static public function restoreLegacy($directory)
@@ -1268,10 +1283,10 @@ class workspaceTools
             foreach ($metadata->directories as $dir) {
                 CLI::logging("+> Restoring directory '$dir'\n");
 
-                if(file_exists("$tempDirectory/$dir" . "/ee")) {
+                if (file_exists("$tempDirectory/$dir" . "/ee")) {
                     G::rm_dir("$tempDirectory/$dir" . "/ee");
                 }
-                if(file_exists("$tempDirectory/$dir" . "/plugin.singleton")) {
+                if (file_exists("$tempDirectory/$dir" . "/plugin.singleton")) {
                     G::rm_dir("$tempDirectory/$dir" . "/plugin.singleton");
                 }
                 if (!rename("$tempDirectory/$dir", $workspace->path)) {
