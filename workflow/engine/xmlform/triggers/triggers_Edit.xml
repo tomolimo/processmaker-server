@@ -20,16 +20,6 @@
 </SAVE>
 <JS type="JavaScript"><![CDATA[
 
-/*var triggerEditor = CodeMirror.fromTextArea('form[TRI_WEBBOT]', {
-    height: "380px",
-    width: "90%",
-    parserfile: ["parsexml.js", "parsecss.js", "tokenizejavascript.js", "parsejavascript.js",
-    "../contrib/php/js/tokenizephp.js", "../contrib/php/js/parsephp.js",
-    "../contrib/php/js/parsephphtmlmixed.js"],
-    stylesheet: ["css/xmlcolors.css", "css/jscolors.css", "css/csscolors.css", "css/phpcolors.css" ],
-    path: "js/", lineNumbers: true, continuousScanning: 500, parserConfig: { phpOnly:true} });
-*/
-
 CodeMirror.commands.autocomplete = function(cm) {
     CodeMirror.showHint(cm, CodeMirror.phpHint);
 }
@@ -90,8 +80,13 @@ var insertFormVar = function(sFieldName, sValue) {
 };
 
 function cancel(){
-    currentPopupWindow.remove();
+    window.close();
 }
 
+function triggerSave1(form){
+    window.close();
+    ajax_post(form.action, form, 'POST');
+}
+    
 ]]></JS>
 </dynaForm> 
