@@ -870,8 +870,11 @@ class Process extends BaseProcess
     	} else {
     		usort( $dataMemcache, array($this, "ordProcessDesc") );
     	}
-    	$dataMemcache = array_splice($dataMemcache, $start, $limit);
-    	return $dataMemcache;
+    	$response = new stdclass();
+        $response->totalCount = count($dataMemcache);
+        $dataMemcache = array_splice($dataMemcache, $start, $limit);
+        $response->dataMemcache = $dataMemcache;
+    	return $response;
     }
 
     public function ordProcessAsc ($a, $b)
