@@ -49,7 +49,7 @@ class Process extends BaseProcess
      */
     protected $pro_title = '';
     public $dir = 'ASC';
-    public $sort = '';
+    public $sort = 'PRO_TITLE';
 
     /**
      * Get the [Pro_title] column value.
@@ -878,7 +878,7 @@ class Process extends BaseProcess
     }
 
     public function ordProcessAsc ($a, $b)
-    {	
+    {
         if ($a[$this->sort] > $b[$this->sort]) {
             return 1;
         } elseif ($a[$this->sort] < $b[$this->sort]) {
