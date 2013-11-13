@@ -466,12 +466,12 @@ function openActionDialog(caller, action, dataAux)
                         icon: Ext.MessageBox.ERROR,
                         buttons: Ext.MessageBox.OK,
                         fn : function(btn) {
-                          try 
+                          try
                                   {
                                     prnt = parent.parent;
                                     top.location = top.location;
                                   }
-                                catch (err) 
+                                catch (err)
                                   {
                                     parent.location = parent.location;
                                   }
@@ -865,8 +865,12 @@ var datastore = new Ext.data.Store({
 datastore.on("beforeload",
   function(ds, options) {
 
-    options.params.dir  = (itemSelected.length === 0) ? options.params.dir : ds.directory;
-    options.params.node = (itemSelected.length === 0) ? options.params.dir : ds.directory;
+    var dirAux  = (itemSelected.length == 0 && options.params.dir)? options.params.dir : ds.directory;
+    var nodeAux = (itemSelected.length == 0 && options.params.dir)? options.params.dir : ds.directory;
+
+    options.params.dir  = dirAux;
+    options.params.node = nodeAux;
+
     options.params.option = "gridDocuments";
     options.params.sendWhat = datastore.sendWhat;
     if (options.params.dir == "ASC" || options.params.dir == "DESC") {
