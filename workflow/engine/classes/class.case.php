@@ -3904,13 +3904,6 @@ class Cases
         if (AppDelegationPeer::doCount($oCriteria) == 1) {
             $aFields['APP_STATUS'] = 'CANCELLED';
             $oApplication->update($aFields);
-                                    
-            G::LoadClass('reportTables');
-            require_once 'classes/model/AdditionalTables.php';
-            $oReportTables = new ReportTables();
-            $addtionalTables = new additionalTables();
-            $oReportTables->updateTables($aFields['PRO_UID'], $aFields['APP_UID'], $aFields['APP_NUMBER'], $aFields['APP_DATA']);
-            $addtionalTables->updateReportTables($aFields['PRO_UID'], $aFields['APP_UID'], $aFields['APP_NUMBER'], $aFields['APP_DATA'], $aFields['APP_STATUS']);
         }
         $this->CloseCurrentDelegation($sApplicationUID, $iIndex);
         $oAppDel = new AppDelegation();
@@ -5908,12 +5901,7 @@ class Cases
             $oCriteria->add(AppMessagePeer::APP_MSG_SHOW_MESSAGE, 1);
         }
         $oCriteria->addAscendingOrderByColumn(AppMessagePeer::APP_MSG_DATE);
-        if (!is_null($start)) {
-            $oCriteria->setOffset($start);
-        }
-        if (!is_null($limit)) {
-            $oCriteria->setLimit($limit);
-        }
+        
         $oDataset = AppMessagePeer::doSelectRS($oCriteria);
         $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
         $oDataset->next();
@@ -5946,7 +5934,9 @@ class Cases
 
         $oCriteria = new Criteria('dbarray');
         $oCriteria->setDBArrayTable('messages');
-
+        
+        usort( $aMessages, 'ordProcess' );
+        $aMessages = array_splice($aMessages, $start, $limit);
         return $aMessages;
     }
 
@@ -6759,5 +6749,28 @@ class Cases
                 throw $e;
             }
         }
+    }
+}
+
+function ordProcess ($a, $b)
+{
+    if (isset($_POST['sort'])) {
+	    if ($_POST['dir']=='ASC') {
+		    if ($a[$_POST['sort']] > $b[$_POST['sort']]) {
+		        return 1;
+            } elseif ($a[$_POST['sort']] < $b[$_POST['sort']]) {
+                return - 1;
+            } else {
+                return 0;
+            }
+        } else {
+            if ($a[$_POST['sort']] > $b[$_POST['sort']]) {
+               return - 1;
+            } elseif ($a[$_POST['sort']] < $b[$_POST['sort']]) {
+               return 1;
+            } else {
+               return 0;
+            }
+      }
     }
 }
