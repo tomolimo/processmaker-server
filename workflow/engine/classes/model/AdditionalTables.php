@@ -109,14 +109,11 @@ class AdditionalTables extends BaseAdditionalTables
         $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
 
         while ($oDataset->next()) {
-            $this->fields[] = $oDataset->getRow();
-        }
-
-        foreach ($this->fields as $field) {
-        	if ($field['FLD_TYPE'] == 'TIMESTAMP') {
-        		$indx = $field['FLD_INDEX'];
-        		$this->fields[$indx]['FLD_TYPE'] = 'DATETIME';
+        	$auxField = $oDataset->getRow();
+        	if ($auxField['FLD_TYPE'] == 'TIMESTAMP') {
+        		$auxField['FLD_TYPE'] = 'DATETIME';
         	}
+        	$this->fields[] = $auxField;
         }
 
         return $this->fields;
