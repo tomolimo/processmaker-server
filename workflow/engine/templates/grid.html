@@ -20,9 +20,15 @@
    <table class="tableGrid" name="{$form->name}" id="{$form->name}" cellpadding="0" cellspacing="0" border="0">
      <tr>
       <td> </td>
+
 {foreach from=$form->fields item=field}
-      <td class='vFormTitle'>{if (isset($field->required)&&$field->required&&$field->mode==='edit')}<font color="red">*  </font>{/if}{$field->label}{$field->renderHint()}</td>
+      {if ($field->type != "hidden")}
+          <td class="vFormTitle">{if (isset($field->required) && $field->required && $field->mode == "edit")}<font color="red">* </font>{/if}{$field->label}{$field->renderHint()}</td>
+      {else}
+          <td style="display: none;"></td>
+      {/if}
 {/foreach}
+
      </tr>
 {literal}
 {section name=row loop=$form_rows}
@@ -33,9 +39,15 @@
 {/if}
       <td class='GridLabel'> {$smarty.section.row.index+1} </td>
 {/literal}
+
 {foreach from=$form->fields item=field}
-      <td style="white-space:nowrap;">{$field->field}</td>
+      {if ($field->type != "hidden")}
+         <td style="white-space: nowrap;">{$field->field}</td>
+      {else}
+         <td style="display: none;">{$field->field}</td>
+      {/if}
 {/foreach}
+
 {if $form->deleteRow == '1' }
       <td align="center"><A class="GridLink" href="javascript:;" onclick="form_{$form->owner->id}.getElementByName('{$form->name}').deleteGridRow('[{literal}{$smarty.section.row.index+1}{/literal}]'); return false;">{$form->DeleteLabel}</A>&nbsp;</td>
 {/if}
