@@ -36,9 +36,14 @@ if ($actionAjax == 'messageHistoryGridList_JXP') {
 
     G::LoadClass( 'case' );
     G::LoadClass( "BasePeer" );
+    
+    $dir = isset( $_POST['dir'] ) ? $_POST['dir'] : 'ASC';
+    $sort = isset( $_POST['sort'] ) ? $_POST['sort'] : '';
 
     global $G_PUBLISH;
     $oCase = new Cases();
+    $oCase->dir = $dir;
+    $oCase->sort = $sort;
 
     $appMessageArray = $oCase->getHistoryMessagesTrackerExt( $_SESSION['APPLICATION'], true, $_REQUEST['start'], $_REQUEST['limit']);
     $appMessageCountArray = $oCase->getHistoryMessagesTrackerExt( $_SESSION['APPLICATION'], true);
@@ -97,6 +102,8 @@ if ($actionAjax == 'messageHistoryGridList_JXP') {
             $totalCount ++;
         }
     }
+
+    $aProcesses = array_splice($aProcesses, $_REQUEST['start'], $_REQUEST['limit']);
 
     $newDir = '/tmp/test/directory';
     $r = G::verifyPath( $newDir );

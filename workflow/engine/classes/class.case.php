@@ -71,6 +71,8 @@ class Cases
 {
 
     private $appSolr = null;
+    public $dir = 'ASC';
+    public $sort = 'APP_MSG_DATE';
 
     public function __construct()
     {
@@ -5941,9 +5943,8 @@ class Cases
 
         $oCriteria = new Criteria('dbarray');
         $oCriteria->setDBArrayTable('messages');
-        
-        usort( $aMessages, 'ordProcess' );
-        $aMessages = array_splice($aMessages, $start, $limit);
+
+        usort( $aMessages, array($this, "ordProcess") );
         return $aMessages;
     }
 
@@ -6757,27 +6758,28 @@ class Cases
             }
         }
     }
-}
 
-function ordProcess ($a, $b)
-{
-    if (isset($_POST['sort'])) {
-	    if ($_POST['dir']=='ASC') {
-		    if ($a[$_POST['sort']] > $b[$_POST['sort']]) {
+    public function ordProcess ($a, $b)
+    {
+    	if ($this->sort == '') {
+    		$this->sort = 'APP_MSG_DATE';
+    	}
+	    if ($this->dir=='ASC') {
+		    if ($a[$this->sort] > $b[$this->sort]) {
 		        return 1;
-            } elseif ($a[$_POST['sort']] < $b[$_POST['sort']]) {
+            } elseif ($a[$this->sort] < $b[$this->sort]) {
                 return - 1;
             } else {
                 return 0;
             }
         } else {
-            if ($a[$_POST['sort']] > $b[$_POST['sort']]) {
+            if ($a[$this->sort] > $b[$this->sort]) {
                return - 1;
-            } elseif ($a[$_POST['sort']] < $b[$_POST['sort']]) {
+            } elseif ($a[$this->sort] < $b[$this->sort]) {
                return 1;
             } else {
                return 0;
             }
-      }
+        }
     }
 }
