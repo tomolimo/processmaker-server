@@ -5230,6 +5230,23 @@ class G
         }
         return in_array(strtolower($functionName), $allFunctions['user']);
     }
+
+    /** 
+      * Constructor for inputFilter class. Only first parameter is required.
+      * @access constructor
+      * @data Mixed - input string/array-of-string to be 'cleaned'
+      * @param Array $tagsArray - list of user-defined tags
+      * @param Array $attrArray - list of user-defined attributes
+      * @param int $tagsMethod - 0= allow just user-defined, 1= allow all but user-defined
+      * @param int $attrMethod - 0= allow just user-defined, 1= allow all but user-defined
+      * @param int $xssAuto - 0= only auto clean essentials, 1= allow clean blacklisted tags/attr
+      */
+    public function sanitizeInput($data, $tagsArray = array(), $attrArray = array(), $tagsMethod = 0, $attrMethod = 0, $xssAuto = 1)
+    {
+        G::LoadSystem('inputfilter');
+        $filtro = new InputFilter($tagsArray , $attrArray, $tagsMethod, $attrMethod, $xssAuto);
+        return $filtro->process($data);
+    }
 }
 
 /**

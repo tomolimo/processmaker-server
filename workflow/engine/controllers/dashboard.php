@@ -155,7 +155,7 @@ class Dashboard extends Controller
             if ($data->DAS_INS_UID == '') {
                 throw new Exception( 'Parameter "DAS_INS_UID" is empty.' );
             }
-            $this->pmDashlet->setup( $data->DAS_INS_UID );
+            $this->pmDashlet->setup( G::sanitizeInput($data->DAS_INS_UID) );
 
             if (! isset( $_REQUEST['w'] )) {
                 $width = 300;
