@@ -1,7 +1,7 @@
 <?php
 ob_start();
 
-$request = isset( $_POST['request'] ) ? $_POST['request'] : (isset( $_GET['request'] ) ? $_GET['request'] : null);
+$request = isset( $_POST['request'] ) ? G::sanitizeInput($_POST['request']) : (isset( $_GET['request'] ) ? G::sanitizeInput($_GET['request']) : null);
 
 switch ($request) {
     case 'loadMenu':
