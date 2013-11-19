@@ -4555,7 +4555,8 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
                 $Time = "true";
             }
 
-            $sizeend = strlen($valueDemo) + 3;
+            //$sizeend = strlen($valueDemo) + 3;
+            $sizeend = $this->size;
 
             if ($this->required) {
                 $isRequired = '1';
