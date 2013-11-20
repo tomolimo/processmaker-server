@@ -641,11 +641,9 @@ class AppSolr
         }
         //remove duplicated
         $delIndexes = array_unique($delIndexes);
-        
+
         //var_dump($delIndexes);
 
-
-        $row = '';
         foreach ($delIndexes as $delIndex) {
           $aRow = array ();
 
@@ -676,25 +674,25 @@ class AppSolr
           $localDate = date ('Y-m-d H:i:s', strtotime ($solrdate));
           $aRow ['APP_UPDATE_DATE'] = $localDate;
           */
-          
+
           // get delegation data from DB
           //filter data from db
           $indexes = $this->aaSearchRecords ($aaappsDBData, array (
               'APP_UID' => $appUID,
               'DEL_INDEX' => $delIndex
           ));
-          
+          $row = '';
           foreach ($indexes as $index) {
             $row = $aaappsDBData [$index];
-          }          
-          
-          if(!isset($row))
+          }
+
+          if (empty($row))
           {
             $fh = fopen("SolrAppWithoutDelIndex.txt", 'a') or die("can't open file to store Solr search time.");
             fwrite($fh, sprintf("Solr AppUid: %s DelIndex: %s not found.\r\n", $appUID, $delIndex));
             fclose($fh);
             continue;
-          }          
+          }
           //$row = $this->getAppDelegationData ($appUID, $delIndex);
           $aRow ['APP_CREATE_DATE'] = $row ['APP_CREATE_DATE'];
           $aRow ['APP_UPDATE_DATE'] = $row ['APP_UPDATE_DATE'];
