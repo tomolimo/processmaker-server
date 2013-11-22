@@ -2796,3 +2796,44 @@ function PMFAddCaseNote($caseUid, $processUid, $taskUid, $userUid, $note, $sendM
     }
 }
 
+/**
+ *@method
+ *
+ * It adds an element to the asociative array of attached documents that will be sent by mail, if it exists a file with the same name, it wll return a generated name with an autoincrementable sequential number.
+ *
+ * @name PMFAddAttachmentToArray
+ * @label Add Element in Array
+ * @link http://wiki.processmaker.com/index.php/ProcessMaker_Functions#arrayDocumentAddElement.28.29
+ *
+ * @param array | $arrayData | Array that will contain new data | Array value comes where will contain the new data.
+ * @param string(32) | $index | Name of the index | New index name
+ * @param string(32) | $value | Index value | New value will contain the index
+ * @param string | $suffix = " Copy({i})" | Is suffix | A string that is concatenated to index different
+ * @return array | $arrayData | Array with new data | The array will contain the new data
+ *
+ */
+
+function PMFAddAttachmentToArray($arrayData, $index, $value, $suffix = " Copy({i})")
+{
+    if (isset($suffix) && $suffix == "") {
+        $suffix = " Copy ({i})";
+    }
+
+    $newIndex = $index;
+    $count = 2;
+
+    $newIndexFormat = $index . $suffix;
+
+    if (preg_match("/^(.+)\.(.+)$/", $index, $arrayMatch)) {
+        $newIndexFormat = $arrayMatch[1] . $suffix . "." . $arrayMatch[2];
+    }
+
+    while (isset($arrayData[$newIndex])) {
+        $newIndex = str_replace("{i}", $count, $newIndexFormat);
+        $count = $count + 1;
+    }
+
+    $arrayData[$newIndex] = $value;
+
+    return $arrayData;
+}
