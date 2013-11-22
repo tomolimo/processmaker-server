@@ -2799,9 +2799,9 @@ function PMFAddCaseNote($caseUid, $processUid, $taskUid, $userUid, $note, $sendM
 /**
  *@method
  *
- * Document Add Element array.
+ * It adds an element to the asociative array of attached documents that will be sent by mail, if it exists a file with the same name, it wll return a generated name with an autoincrementable sequential number.
  *
- * @name arrayDocumentAddElement
+ * @name PMFAddAttachmentToArray
  * @label Add Element in Array
  * @link http://wiki.processmaker.com/index.php/ProcessMaker_Functions#arrayDocumentAddElement.28.29
  *
@@ -2813,7 +2813,7 @@ function PMFAddCaseNote($caseUid, $processUid, $taskUid, $userUid, $note, $sendM
  *
  */
 
-function arrayDocumentAddElement($arrayData, $index, $value, $suffix = " Copy({i})")
+function PMFAddAttachmentToArray($arrayData, $index, $value, $suffix = " Copy({i})")
 {
     if (isset($suffix) && $suffix == "") {
         $suffix = " Copy ({i})";
