@@ -383,11 +383,7 @@ class workspaceTools
      */
     public function getSchema($rbac = false)
     {
-        if($rbac == false){
-        	$oDataBase = $this->getDatabase();
-        } else {
-        	$oDataBase = $this->getDatabase(true);
-        }
+        $oDataBase = $this->getDatabase($rbac);
 
         $aOldSchema = array();
 
