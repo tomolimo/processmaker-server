@@ -337,7 +337,7 @@ class workspaceTools
      * @return database connection
      */
     private function getDatabase($rbac = false)
-    { 
+    {
         if (isset($this->db) && $this->db->isConnected()) {
             return $this->db;
         }
@@ -381,11 +381,9 @@ class workspaceTools
      *
      * @return array with the database schema
      */
-    public function getSchema($rbac = null)
+    public function getSchema($rbac = false)
     {
-        
-        
-        if($rbac == null){
+        if($rbac == false){
         	$oDataBase = $this->getDatabase();
         } else {
         	$oDataBase = $this->getDatabase(true);
@@ -673,11 +671,7 @@ class workspaceTools
             throw new Exception("Only MySQL is supported");
         }
 
-        if($rbac == true) {
-        	$workspaceSchema = $this->getSchema(true);
-        } else {
-        	$workspaceSchema = $this->getSchema();
-        }
+        $workspaceSchema = $this->getSchema($rbac); 
 
         $changes = System::compareSchema($workspaceSchema, $schema);
 
@@ -691,11 +685,9 @@ class workspaceTools
                 return $changed;
             }
         }
-        if($rbac == true) {
-        	$oDataBase = $this->getDatabaseRbac();
-        } else {
-        	$oDataBase = $this->getDatabase();
-        }
+
+        $oDataBase = $this->getDatabase($rbac);
+ 
         $oDataBase->iFetchType = MYSQL_NUM;
 
         $oDataBase->logQuery(count($changes));
