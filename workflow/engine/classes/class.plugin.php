@@ -97,7 +97,6 @@ class PMPlugin
         $oPluginRegistry->registerDashlets($this->sNamespace);
     }
 
-
     /**
      * With this function we can register the report
      * param
@@ -359,6 +358,17 @@ class PMPlugin
     {
         $oPluginRegistry =& PMPluginRegistry::getSingleton();
         $oPluginRegistry->unregisterRestService($this->sNamespace, $classname, $path);
+    }
+
+    /**
+     * With this function we can register a cron file
+     * param string $cronFile
+     * @return void
+     */
+    public function registerCronFile($cronFile)
+    {
+        $oPluginRegistry =& PMPluginRegistry::getSingleton();
+        $oPluginRegistry->registerCronFile($this->sNamespace, $cronFile);
     }
 }
 
@@ -682,3 +692,20 @@ class dashboardPage
     }
 }
 
+class cronFile
+{
+    public $namespace;
+    public $cronFile;
+
+    /**
+     * This function is the constructor of the cronFile class
+     * param string $namespace
+     * param string $cronFile
+     * @return void
+     */
+    public function __construct($namespace, $cronFile)
+    {
+        $this->namespace = $namespace;
+        $this->cronFile  = $cronFile;
+    }
+}
