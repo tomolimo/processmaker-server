@@ -72,7 +72,8 @@
   }
 
   function triggerEdit(sUID) {
-    window.open('@G::encryptlink(@#triggersEdit)?TRI_UID='+ sUID,'@G::LoadTranslation(ID_EDIT_TRIGGERS)'.replace(/\s/g,'_'),'toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width='+screen.width+',height='+screen.height);
+    var win = window.open('@G::encryptlink(@#triggersEdit)?TRI_UID='+ sUID,'@G::LoadTranslation(ID_EDIT_TRIGGERS)'.replace(/\s/g,'_')+document.cookie,'toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=950,height=570,top='+((screen.height-570)/2)+',left='+((screen.width-950)/2));
+    win.focus();
   }
 
   function triggerProperties( sUID ) {
