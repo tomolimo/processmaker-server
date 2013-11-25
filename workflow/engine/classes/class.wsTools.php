@@ -1417,13 +1417,15 @@ class workspaceTools
     
     public function backupLogFiles()
     {
+        $config = System::getSystemConfiguration();
+        
         clearstatcache();
         $path = PATH_DATA . "log" . PATH_SEP;
         $filePath = $path . "cron.log";
         if (file_exists($filePath)) {
             $size = filesize($filePath);
-            /* 5000000 -> approximately 5 megabytes */
-            if ($size > 5000000) {
+            /* $config['size_log_file'] has the value 5000000 -> approximately 5 megabytes */
+            if ($size > $config['size_log_file']) {
                 rename($filePath, $filePath . ".bak");
             }
         }
