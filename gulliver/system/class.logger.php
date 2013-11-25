@@ -14,7 +14,7 @@
  * @author Roly Rudy Gutierrez Pinto
  * @package gulliver.system
  */
-class Logger
+class logger
 {
 
     public static $instance = null;
@@ -31,10 +31,10 @@ class Logger
     {
         $this->limitFile = 5;
         $this->limitSize = 1000000;
-        $filename = pathinfo($file);
-        if (isset($filename['filename']) && isset($filename['extension'])) {
-            $this->fileName = $filename['filename'];
-            $this->fileExtension = '.' . $filename['extension'];
+        $filename = explode(".", $file);
+        if (isset($filename[0]) && isset($filename[1])) {
+            $this->fileName = $filename[0];
+            $this->fileExtension = '.' . $filename[1];
         } else {
             $this->fileName = 'cron';
             $this->fileExtension = '.log';
@@ -49,7 +49,7 @@ class Logger
     public function getSingleton($pathData, $pathSep, $file = 'cron.log')
     {
         if (self::$instance == null) {
-            self::$instance = new Logger($pathData, $pathSep, $file);
+            self::$instance = new logger($pathData, $pathSep, $file);
         }
         return self::$instance;
     }

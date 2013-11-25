@@ -5261,7 +5261,7 @@ class G
         $config = System::getSystemConfiguration();
         G::LoadSystem('logger');
         
-        $oLogger =& Logger::getSingleton($pathData, PATH_SEP, $file);
+        $oLogger = logger::getSingleton($pathData, PATH_SEP, $file);
         $oLogger->limitFile = $config['number_log_file']; 
         $oLogger->limitSize = $config['size_log_file'];
         $oLogger->write($message);
