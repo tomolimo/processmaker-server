@@ -554,38 +554,56 @@ function executePlugins()
 {
     global $sFilter;
 
-    if ($sFilter!='' && strpos($sFilter, 'plugins') === false) {
+    if ($sFilter != '' && strpos($sFilter, 'plugins') === false) {
         return false;
     }
 
-    $pathCronPlugins = PATH_CORE.'bin'.PATH_SEP.'plugins'.PATH_SEP;
+    $pathCronPlugins = PATH_CORE . 'bin' . PATH_SEP . 'plugins' . PATH_SEP;
 
-    //erik: verify if the plugin dir exists
+    // Executing cron files in bin/plugins directory
     if (!is_dir($pathCronPlugins)) {
         return false;
     }
 
     if ($handle = opendir($pathCronPlugins)) {
+        setExecutionMessage('--- Executing cron files in bin/plugins directory in Workspace:' . SYS_SYS);
         while (false !== ($file = readdir($handle))) {
             if (strpos($file, '.php',1) && is_file($pathCronPlugins . $file)) {
                 $filename  = str_replace('.php' , '', $file);
                 $className = $filename . 'ClassCron';
 
-                include_once ( $pathCronPlugins . $file );  //$filename. ".php"
-
-                $oPlugin = new $className();
-
-                if (method_exists($oPlugin, 'executeCron')) {
-                    $arrayCron = unserialize(trim(@file_get_contents(PATH_DATA . "cron")));
-                    $arrayCron["processcTimeProcess"] = 60; //Minutes
-                    $arrayCron["processcTimeStart"]   = time();
-                    @file_put_contents(PATH_DATA . "cron", serialize($arrayCron));
-
-                    $oPlugin->executeCron();
-                    setExecutionMessage("Executing Plugins");
-                    setExecutionResultMessage('DONE');
-                }
+                // Execute custom cron function
+                executeCustomCronFunction($pathCronPlugins . $file, $className);
             }
+        }
+    }
+
+    // Executing registered cron files
+    // -> Get registered cron files
+    // -> Execute functions
+
+}
+function executeCustomCronFunction($pathFile, $className)
+{
+    include_once $pathFile;
+
+    $oPlugin = new $className();
+
+    if (method_exists($oPlugin, 'executeCron')) {
+        $arrayCron = unserialize(trim(@file_get_contents(PATH_DATA . "cron")));
+        $arrayCron["processcTimeProcess"] = 60; //Minutes
+        $arrayCron["processcTimeStart"]   = time();
+        @file_put_contents(PATH_DATA . "cron", serialize($arrayCron));
+
+        //Try to execute Plugin Cron. If there is an error then continue with the next file
+        setExecutionMessage("------ Executing cron file: $filename");
+        try {
+            $oPlugin->executeCron();
+            setExecutionResultMessage('DONE');
+        } catch (Exception $e) {
+            setExecutionResultMessage('FAILED', 'error');
+            eprintln("  '-".$e->getMessage(), 'red');
+            saveLog('executePlugins', 'error', 'Error executing Plugin ' . $filename . ': ' . $e->getMessage());
         }
     }
 }

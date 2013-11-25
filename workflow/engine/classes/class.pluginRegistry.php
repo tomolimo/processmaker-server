@@ -97,6 +97,7 @@ class PMPluginRegistry
     private $_aCaseSchedulerPlugin = array ();
     private $_aTaskExtendedProperties = array ();
     private $_aDashboardPages = array ();
+    private $_aCronFiles = array ();
 
     /**
      * Registry a plugin javascript to include with js core at same runtime
@@ -1435,6 +1436,27 @@ class PMPluginRegistry
             }
             $language->updateLanguagePlugin($namePlugin, SYS_LANG);
         }
-    } 
+    }
+
+    /**
+     * Register a cron file in the singleton
+     *
+     * @param unknown_type $namespace
+     * @param unknown_type $cronFile
+     */
+    public function registerCronFile ($namespace, $cronFile)
+    {
+        $found = false;
+        foreach ($this->_aCronFiles as $row => $detail) {
+            if ($cronFile == $detail->cronFile && $namespace == $detail->namespace) {
+                $detail->cronFile = $cronFile;
+                $found = true;
+            }
+        }
+        if (!$found) {
+            $cronFile = new cronFile( $namespace, $cronFile );
+            $this->_aCronFiles[] = $cronFile;
+        }
+    }
 }
 
