@@ -89,6 +89,13 @@ class workspaceTools
         $stop = microtime(true);
         $final = $stop - $start;
         CLI::logging("<*>   Updating cache view Process took $final seconds.\n");
+
+        $start = microtime(true);
+        CLI::logging("> Backup log files...\n");
+        $this->backupLogFiles();
+        $stop = microtime(true);
+        $final = $stop - $start;
+        CLI::logging("<*>   Backup log files Process took $final seconds.\n");
     }
 
     /**
@@ -1423,6 +1430,22 @@ class workspaceTools
         }
 
         return $result;
+    }
+    
+    public function backupLogFiles()
+    {
+        $config = System::getSystemConfiguration();
+        
+        clearstatcache();
+        $path = PATH_DATA . "log" . PATH_SEP;
+        $filePath = $path . "cron.log";
+        if (file_exists($filePath)) {
+            $size = filesize($filePath);
+            /* $config['size_log_file'] has the value 5000000 -> approximately 5 megabytes */
+            if ($size > $config['size_log_file']) {
+                rename($filePath, $filePath . ".bak");
+            }
+        }
     }
 }
 
