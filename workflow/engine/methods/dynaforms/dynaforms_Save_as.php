@@ -35,7 +35,7 @@ if (! class_exists( "FieldCondition" )) {
 }
 
 try {
-    $con = Propel::getConnection( DynaformPeer::DATABASE_NAME );
+
     $frm = $_POST['form'];
     $PRO_UID = $frm['PRO_UID'];
     $DYN_UID = $frm['DYN_UID'];
@@ -46,22 +46,18 @@ try {
     $aConditions = $oFieldCondition->getAllByDynUid( $DYN_UID );
 
     $dynaform = new dynaform();
-    /*Save Register*/
+    $arrayData = array();
 
-    $dynUid = (G::generateUniqueID());
+    $arrayData["PRO_UID"] = $PRO_UID;
+    $arrayData["DYN_TYPE"] = $DYN_TYPE;
+    $arrayData["DYN_TITLE"] = $frm["DYN_TITLENEW"];
 
-    $dynaform->setDynUid( $dynUid );
-    $dynaform->setProUid( $PRO_UID );
-    $dynaform->setDynType( $DYN_TYPE );
-    $dynaform->setDynFilename( $PRO_UID . PATH_SEP . $dynUid );
+    if (isset($frm["DYN_DESCRIPTIONNEW"])) {
+        $arrayData["DYN_DESCRIPTION"] = $frm["DYN_DESCRIPTIONNEW"];
+    }
 
-    $con->begin();
-    $res = $dynaform->save();
-    $dynaform->setDynTitle( $frm['DYN_TITLENEW'] );
-    $dynaform->setDynDescription( (! $frm['DYN_DESCRIPTIONNEW']) ? 'Default Dynaform Description' : $frm['DYN_DESCRIPTIONNEW'] );
-
-    //$con->commit();
-
+    $aFields = $dynaform->create($arrayData);
+    $dynUid = $dynaform->getDynUid();
 
     $hd = fopen( PATH_DYNAFORM . $PRO_UID . '/' . $DYN_UID . '.xml', "r" );
     $hd1 = fopen( PATH_DYNAFORM . $PRO_UID . '/' . $dynUid . '.xml', "w" );
