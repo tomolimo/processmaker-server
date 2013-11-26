@@ -278,7 +278,7 @@ class spoolRun
             $this->fileData['from_name'] = '';
             $this->fileData['from_email'] = $matches[0];
         }
-        
+
         // Set reply to
         preg_match( $this->longMailEreg, $this->fileData['from_name'], $matches );
         if (isset($matches[3])) {
@@ -566,7 +566,10 @@ class spoolRun
         $aConfiguration = $oConfiguration->load( "Emails", "", "", "", "" );
 
         $aConfiguration = unserialize( $aConfiguration["CFG_VALUE"] );
-        $passwd = $aConfiguration["MESS_PASSWORD"];
+        if (!isset($aConfiguration["MESS_ENABLED"])) {
+            $aConfiguration["MESS_ENABLED"] = 0;
+        }
+        $passwd = isset($aConfiguration["MESS_PASSWORD"]) ? $aConfiguration["MESS_PASSWORD"] : '';
         $passwdDec = G::decrypt( $passwd, "EMAILENCRYPT" );
         $auxPass = explode( "hash:", $passwdDec );
 
