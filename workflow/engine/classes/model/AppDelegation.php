@@ -309,6 +309,12 @@ class AppDelegation extends BaseAppDelegation
     public function calculateDuration ($cron = 0)
     {
         try {
+            if ($cron == 1) {
+                $arrayCron = unserialize( trim( @file_get_contents( PATH_DATA . "cron" ) ) );
+                $arrayCron["processcTimeStart"] = time();
+                @file_put_contents( PATH_DATA . "cron", serialize( $arrayCron ) );
+            }
+
             //patch  rows with initdate = null and finish_date
             $c = new Criteria();
             $c->clearSelectColumns();
@@ -327,12 +333,6 @@ class AppDelegation extends BaseAppDelegation
             $row = $rs->getRow();
 
             while (is_array( $row )) {
-                if ($cron == 1) {
-                    $arrayCron = unserialize( trim( @file_get_contents( PATH_DATA . "cron" ) ) );
-                    $arrayCron["processcTimeStart"] = time();
-                    @file_put_contents( PATH_DATA . "cron", serialize( $arrayCron ) );
-                }
-
                 $oAppDel = AppDelegationPeer::retrieveByPk( $row['APP_UID'], $row['DEL_INDEX'] );
                 if (isset( $row['DEL_FINISH_DATE'] )) {
                     $oAppDel->setDelInitDate( $row['DEL_FINISH_DATE'] );
@@ -387,12 +387,6 @@ class AppDelegation extends BaseAppDelegation
 
             $now = strtotime( 'now' );
             while (is_array( $row )) {
-                if ($cron == 1) {
-                    $arrayCron = unserialize( trim( @file_get_contents( PATH_DATA . "cron" ) ) );
-                    $arrayCron["processcTimeStart"] = time();
-                    @file_put_contents( PATH_DATA . "cron", serialize( $arrayCron ) );
-                }
-
                 $fTaskDuration = $row['TAS_DURATION'];
                 $iDelegateDate = strtotime( $row['DEL_DELEGATE_DATE'] );
                 $iInitDate = strtotime( $row['DEL_INIT_DATE'] );
@@ -475,6 +469,12 @@ class AppDelegation extends BaseAppDelegation
                 $RES = $oAppDel->save();
                 $rs->next();
                 $row = $rs->getRow();
+            }
+
+            if ($cron == 1) {
+                $arrayCron = unserialize( trim( @file_get_contents( PATH_DATA . "cron" ) ) );
+                $arrayCron["processcTimeStart"] = time();
+                @file_put_contents( PATH_DATA . "cron", serialize( $arrayCron ) );
             }
         } catch (Exception $oError) {
             error_log( $oError->getMessage() );
