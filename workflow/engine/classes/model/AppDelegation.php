@@ -299,8 +299,6 @@ class AppDelegation extends BaseAppDelegation
         }
 
         $iDueDate = $calendar->calculateDate( $this->getDelDelegateDate(), $aData['TAS_DURATION'], $aData['TAS_TIMEUNIT']         //hours or days, ( we only accept this two types or maybe weeks
-        //$aData['TAS_TYPE_DAY'],         //working or calendar days
-        // $this->getUsrUid(), $task->getProUid(), $aData['TAS_UID'], $aCalendarUID 
         );
 
         return $iDueDate;

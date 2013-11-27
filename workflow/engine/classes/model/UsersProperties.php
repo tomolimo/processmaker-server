@@ -174,11 +174,11 @@ class UsersProperties extends BaseUsersProperties
             }
         }
         if (PPP_EXPIRATION_IN > 0) {
-            G::LoadClass( 'dates' );
+            G::LoadClass( 'calendar' );
             $oCalendar = new calendar();
 
             if ($calendar->pmCalendarUid == '') {
-            	$calendar->getCalendar($this->usrID);
+            	$calendar->pmCalendarUid = '00000000000000000000000000000001';
             	$calendar->getCalendarData();
             }
 
