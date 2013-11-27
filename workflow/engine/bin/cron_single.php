@@ -566,7 +566,7 @@ function executePlugins()
     }
 
     if ($handle = opendir($pathCronPlugins)) {
-        setExecutionMessage('--- Executing cron files in bin/plugins directory in Workspace:' . SYS_SYS);
+        setExecutionMessage('Executing cron files in bin/plugins directory in Workspace: ' . SYS_SYS);
         while (false !== ($file = readdir($handle))) {
             if (strpos($file, '.php',1) && is_file($pathCronPlugins . $file)) {
                 $filename  = str_replace('.php' , '', $file);
@@ -579,8 +579,22 @@ function executePlugins()
     }
 
     // Executing registered cron files
+
     // -> Get registered cron files
+    Bootstrap::LoadClass( 'plugin' );
+    $oPluginRegistry =& PMPluginRegistry::getSingleton();
+    if (file_exists(PATH_DATA_SITE . 'plugin.singleton')) {
+        $oPluginRegistry->unSerializeInstance(file_get_contents(PATH_DATA_SITE . 'plugin.singleton'));
+    }
+    $cronFiles = $oPluginRegistry->getCronFiles();
+
     // -> Execute functions
+    if (!empty($cronFiles)) {
+        setExecutionMessage('Executing registered cron files for Workspace: ' . SYS_SYS);
+        foreach($cronFiles as $cronFile) {
+            executeCustomCronFunction(PATH_PLUGINS . $cronFile->namespace . PATH_SEP . 'bin' . PATH_SEP . $cronFile->cronFile . '.php', $cronFile->cronFile);
+        }
+    }
 
 }
 function executeCustomCronFunction($pathFile, $className)
@@ -596,14 +610,14 @@ function executeCustomCronFunction($pathFile, $className)
         @file_put_contents(PATH_DATA . "cron", serialize($arrayCron));
 
         //Try to execute Plugin Cron. If there is an error then continue with the next file
-        setExecutionMessage("------ Executing cron file: $filename");
+        setExecutionMessage("\n--- Executing cron file: $pathFile");
         try {
             $oPlugin->executeCron();
             setExecutionResultMessage('DONE');
         } catch (Exception $e) {
             setExecutionResultMessage('FAILED', 'error');
             eprintln("  '-".$e->getMessage(), 'red');
-            saveLog('executePlugins', 'error', 'Error executing Plugin ' . $filename . ': ' . $e->getMessage());
+            saveLog('executePlugins', 'error', 'Error executing cron file: ' . $pathFile . ' - ' . $e->getMessage());
         }
     }
 }
@@ -895,7 +909,12 @@ function saveLog($sSource, $sType, $sDescription)
         }
 
         G::verifyPath(PATH_DATA . "log" . PATH_SEP, true);
-        G::log(date("Y-m-d H:i:s") . " | $sObject | " . $sSource . " | $sType | " . $sDescription . "\n", PATH_DATA);
+
+        //setExecutionMessage( PATH_DATA."log".PATH_SEP);
+
+        $oFile = @fopen(PATH_DATA . "log" . PATH_SEP . "cron.log", "a+");
+        @fwrite($oFile, date("Y-m-d H:i:s") . " | $sObject | " . $sSource . " | $sType | " . $sDescription . "\n");
+        @fclose($oFile);
     } catch (Exception $e) {
         //CONTINUE
     }

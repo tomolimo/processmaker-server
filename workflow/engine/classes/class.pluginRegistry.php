@@ -1458,5 +1458,15 @@ class PMPluginRegistry
             $this->_aCronFiles[] = $cronFile;
         }
     }
+
+    /**
+     * Return all cron files registered
+     *
+     * @return array
+     */
+    public function getCronFiles()
+    {
+        return $this->_aCronFiles;
+    }
 }
 
