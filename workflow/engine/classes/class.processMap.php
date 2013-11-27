@@ -2165,6 +2165,7 @@ class processMap
         $oCriteria = new Criteria('workflow');
         $oCriteria->addSelectColumn(TriggersPeer::TRI_UID);
         $oCriteria->addSelectColumn(TriggersPeer::PRO_UID);
+        $oCriteria->addAsColumn('TRI_LOCATE_WEBBOT_PARAM', 'LOCATE(' . TriggersPeer::TRI_WEBBOT . ',' . TriggersPeer::TRI_PARAM . ')');
         $oCriteria->addAsColumn('TRI_TITLE', 'C1.CON_VALUE');
         $oCriteria->addAsColumn('TRI_DESCRIPTION', 'C2.CON_VALUE');
         $oCriteria->addAlias('C1', 'CONTENT');

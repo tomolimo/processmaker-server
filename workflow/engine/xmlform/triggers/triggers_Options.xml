@@ -41,7 +41,7 @@
   var windowHeight = 460;
 
   function triggerEditWizardSource (sUID){
-    popupWindow('@G::LoadTranslation(ID_EDIT_TRIGGERS)', '@G::encryptlink(@#triggersEdit)?TRI_UID=' + sUID +'&BYPASS=1' , 770, 510);
+    window.open('@G::encryptlink(@#triggersEdit)?TRI_UID='+ sUID +'&BYPASS=1','@G::LoadTranslation(ID_EDIT_TRIGGERS)'.replace(/\s/g,'_')+document.cookie+sUID,'toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=950,height=570,top='+((screen.height-570)/2)+',left='+((screen.width-950)/2)).focus();
   }
 
   function triggerNew() {
@@ -71,9 +71,13 @@
     }
   }
 
-  function triggerEdit(sUID) {
-    var win = window.open('@G::encryptlink(@#triggersEdit)?TRI_UID='+ sUID,'@G::LoadTranslation(ID_EDIT_TRIGGERS)'.replace(/\s/g,'_')+document.cookie,'toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=950,height=570,top='+((screen.height-570)/2)+',left='+((screen.width-950)/2));
-    win.focus();
+  function triggerEdit(sUID,sw) {
+  console.log(sw);
+    if(parseInt(sw) > 0){
+        popupWindow('@G::LoadTranslation(ID_EDIT_TRIGGERS)', '@G::encryptlink(@#triggersEdit)?TRI_UID='+ sUID , 930, 600);        
+    } else {
+        window.open('@G::encryptlink(@#triggersEdit)?TRI_UID='+ sUID,'@G::LoadTranslation(ID_EDIT_TRIGGERS)'.replace(/\s/g,'_')+document.cookie+sUID,'toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=950,height=570,top='+((screen.height-570)/2)+',left='+((screen.width-950)/2)).focus();
+    }
   }
 
   function triggerProperties( sUID ) {
