@@ -73,11 +73,11 @@
   }
 
   // Additional functions required in triggers
-  function triggerEditWizardSource (sUID){
-    window.open('@G::encryptlink(@#triggersEdit)?TRI_UID=' + sUID +'&BYPASS=1','@G::LoadTranslation(ID_EDIT_TRIGGERS)'.replace(/\s/g,'_'),'toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width='+screen.width+',height='+screen.height);
+  function triggerEditWizardSource (sUID,STEP_UID,ST_TYPE){
+    window.open('@G::encryptlink(@#triggersEdit)?TRI_UID='+ sUID +'&BYPASS=1&STEP_UID='+STEP_UID+'&ST_TYPE='+ST_TYPE,'@G::LoadTranslation(ID_EDIT_TRIGGERS)'.replace(/\s/g,'_')+(function(s){var r='';for(var i in s)if(typeof s[i]=='string')r+=s[i].charCodeAt(0);return r;})(document.cookie)+sUID,'toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=950,height=570,top='+((screen.height-570)/2)+',left='+((screen.width-950)/2)).focus();
   }
 
-  function triggerSave(form)
+  function triggerSave(form,STEP_UID,ST_TYPE)
   {
     var triUid = "";
     if(document.getElementById('TRI_UID')) {
@@ -101,6 +101,7 @@
       ajax_post(form.action, form, 'POST');
       currentPopupWindow.remove();
     }
+    showTriggers(STEP_UID,ST_TYPE);
   }
 
   function triggerSave1(form)

@@ -7,6 +7,10 @@
 
 <TRI_TYPE type="hidden"/>
 
+<STEP_UID type="hidden"/>
+
+<ST_TYPE type="hidden"/>
+
 <TRI_WEBBOT type="textareapm" class="formLabel" cols="115" rows="28" width="100%" height="380px" showVars="1" process="@#PRO_UID">
 </TRI_WEBBOT>
 
@@ -84,8 +88,12 @@ function cancel(){
 }
 
 function triggerSave1(form){
-    window.close();
     ajax_post(form.action, form, 'POST');
+    if(@QSTEP_UID!="" && @QST_TYPE!="" && opener.showTriggers)
+        opener.showTriggers(@QSTEP_UID,@QST_TYPE);
+    if(opener.reloadTriggersShortList)
+        opener.reloadTriggersShortList();
+    window.close();
 }
     
 ]]></JS>

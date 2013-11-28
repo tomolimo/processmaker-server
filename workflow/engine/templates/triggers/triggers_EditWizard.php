@@ -98,6 +98,8 @@ try {
     $template->assign ( 'TITLE', G::LoadTranslation ( 'ID_TITLE' ) );
     $template->assign ( 'TITLE_CONTENT', $_GET['TRI_TITLE'] );
     $template->assign ( 'TRI_UID', $_GET['TRI_UID'] );
+    $template->assign ( 'STEP_UID', $_GET['STEP_UID'] );
+    $template->assign ( 'ST_TYPE', $_GET['ST_TYPE'] );
     $template->assign ( 'SOURCE_LINK', G::LoadTranslation ( 'ID_TRIGGER_SOURCE_LINK' ) );
     $template->assign ( 'DESCRIPTION', G::LoadTranslation ( 'ID_DESCRIPTION' ) );
     $template->assign ( 'DESCRIPTION_CONTENT', $_GET['TRI_DESCRIPTION'] );

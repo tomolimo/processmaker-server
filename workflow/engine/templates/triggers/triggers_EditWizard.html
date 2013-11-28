@@ -34,8 +34,8 @@
                                                     <table border="0" cellpadding="0" cellspacing="0">
                                                         <tr>
                                                             <td nowrap valign="top">
-                                                                <span onclick="currentPopupWindow.remove();triggerEditWizardSource('{TRI_UID}');" style="cursor: pointer;" >
-                                                                    <img src='/images/50px-Edit.png' width='15px' heigth='15px' valing='middle'/>&nbsp;&nbsp;<b>{SOURCE_LINK}</b>wrewr
+                                                                <span onclick="currentPopupWindow.remove();triggerEditWizardSource('{TRI_UID}','{STEP_UID}','{ST_TYPE}');" style="cursor: pointer;" >
+                                                                    <img src='/images/50px-Edit.png' width='15px' heigth='15px' valing='middle'/>&nbsp;&nbsp;<b>{SOURCE_LINK}</b>
                                                                 </span>
                                                             </td>
                                                         </tr>
@@ -141,7 +141,7 @@
                                                     <input type="hidden" name="PMFUNTION_LABEL" id="PMFUNTION_LABEL" value="{PMFUNTION_LABEL}"/>
                                                     <input style="" class='module_app_button___gray ' id="savek"
                                                     name="savek" type='button' value="{ID_SAVE}"
-                                                    onclick="triggerSave(this.form);" />
+                                                    onclick="triggerSave(this.form,'{STEP_UID}','{ST_TYPE}');" />
                                                     <input style="" class='module_app_button___gray ' id="cancel"
                                                     name="cancel" type='button' value="{ID_CANCEL}"
                                                     onclick="currentPopupWindow.remove(); if(typeof triggerFromLibrary == 'function'){ triggerFromLibrary(); } return false;" />

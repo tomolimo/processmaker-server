@@ -5,6 +5,8 @@
 
 <TRI_UID type="hidden" showInTable="0"/>
 
+<TRI_LOCATE_WEBBOT_PARAM type="hidden" showInTable="0"/>
+
 <ST_POSITION type="hidden" showInTable="0"/>
 
 <TRI_TITLE type="text" colWidth="400" titleAlign="left" align="left">
@@ -13,7 +15,7 @@
 
 <triggersEdit type="hidden" defaultValue="../triggers/triggers_Edit"/>
 
-<EDIT type="link" colWidth="" value="@G::LoadTranslation(ID_EDIT)" link="#" onclick="window.open('@G::encryptlink(@#triggersEdit)?TRI_UID=' + @QTRI_UID,'@G::LoadTranslation(ID_EDIT_TRIGGERS)'.replace(/\s/g,'_')+document.cookie+@QTRI_UID,'toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=950,height=570,top='+((screen.height-570)/2)+',left='+((screen.width-950)/2)).focus(); return false;"/>
+<EDIT type="link" colWidth="" value="@G::LoadTranslation(ID_EDIT)" link="#" onclick="triggerEdit(@QTRI_UID,@QTRI_LOCATE_WEBBOT_PARAM); return false;"/>
 
 <CONDITION type="link" colWidth="" value="@G::LoadTranslation(ID_CONDITION)" link="#" onclick="editTriggerCondition(@QSTEP_UID, @QTRI_UID, &#039;BEFORE&#039;);return false;"/>
 
@@ -22,4 +24,5 @@
 <DOWN type="link" colWidth="" value="@G::LoadTranslation(ID_DOWN)" link="#" onclick="downTrigger(@QSTEP_UID, @QTRI_UID, &#039;BEFORE&#039;, @QST_POSITION);return false;"/>
 
 <DELETE type="link" colWidth="" value="@G::LoadTranslation(ID_DE_ASSIGN)" link="#" onclick="ofToAssignTrigger(@QSTEP_UID, @QTRI_UID, &#039;BEFORE&#039;, @QST_POSITION);return false;"><en></en></DELETE>
+
 </dynaForm>
