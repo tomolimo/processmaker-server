@@ -294,7 +294,7 @@ class AppDelegation extends BaseAppDelegation
         $calendar = new calendar();
 
         if ($calendar->pmCalendarUid == '') {
-        	$calendar->getCalendar(null, $task->getProUid());
+        	$calendar->getCalendar(null, $task->getProUid(), $aData['TAS_UID']);
         	$calendar->getCalendarData();
         }
 
