@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: ProcessMaker (Branch master) 2.5.1-testing.3\n"
+"Project-Id-Version: ProcessMaker 2.5.1.1\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2013-06-26 12:29:31\n"
+"PO-Revision-Date: 2013-11-28 15:47:45\n"
 "Last-Translator: \n"
 "Language-Team: Colosa Developers Team <developers@colosa.com>\n"
 "MIME-Version: 1.0\n"
@@ -12616,8 +12616,8 @@ msgstr "The current password is incorrect"
 # TRANSLATION
 # LABEL/ID_MAX_LIFETIME
 #: LABEL/ID_MAX_LIFETIME
-msgid "Maximum lifetime cleaned up"
-msgstr "Maximum lifetime cleaned up"
+msgid "Maximum lifetime cleaned up (ms)"
+msgstr "Maximum lifetime cleaned up (ms)"
 
 # TRANSLATION
 # LABEL/ID_SUCCESSFUL_CONNECTION
@@ -14458,8 +14458,8 @@ msgstr "Copy/Import Triggers from a Process"
 # TRANSLATION
 # LABEL/ID_TRIGGER_COPY_OPTION_DESCRIPTION
 #: LABEL/ID_TRIGGER_COPY_OPTION_DESCRIPTION
-msgid "With this option is it possible to copy/import a trigger from any existent process on the System"
-msgstr "With this option is it possible to copy/import a trigger from any existent process on the System"
+msgid "With this option you can copy/import a trigger from any other processes in the system."
+msgstr "With this option you can copy/import a trigger from any other processes in the system."
 
 # TRANSLATION
 # LABEL/ID_EDITING_DYNAFORM
@@ -14928,6 +14928,234 @@ msgstr "Accept"
 #: LABEL/ID_ERROR_SEND_NOTIFICATIONS
 msgid "The following error has occurred when trying to send the notifications:"
 msgstr "The following error has occurred when trying to send the notifications:"
+
+# TRANSLATION
+# LABEL/ID_DATE_FORMAT_17
+#: LABEL/ID_DATE_FORMAT_17
+msgid "dd de M de Y"
+msgstr "dd de M de Y"
+
+# TRANSLATION
+# LABEL/ID_THIS_QUARTER
+#: LABEL/ID_THIS_QUARTER
+msgid "This quarter"
+msgstr "This quarter"
+
+# TRANSLATION
+# LABEL/ID_PREVIOUS_QUARTER
+#: LABEL/ID_PREVIOUS_QUARTER
+msgid "Previous quarter"
+msgstr "Previous quarter"
+
+# TRANSLATION
+# LABEL/ID_ON_TIME
+#: LABEL/ID_ON_TIME
+msgid "On Time"
+msgstr "On Time"
+
+# TRANSLATION
+# LABEL/ID_AT_RISK
+#: LABEL/ID_AT_RISK
+msgid "At Risk"
+msgstr "At Risk"
+
+# TRANSLATION
+# LABEL/ID_OVERDUE
+#: LABEL/ID_OVERDUE
+msgid "Overdue"
+msgstr "Overdue"
+
+# TRANSLATION
+# LABEL/ID_SUCCESS_RECORD
+#: LABEL/ID_SUCCESS_RECORD
+msgid "Success Records:"
+msgstr "Success Records:"
+
+# TRANSLATION
+# LABEL/ID_FILE_NUM_RECORD
+#: LABEL/ID_FILE_NUM_RECORD
+msgid "PO File num. records:"
+msgstr "PO File num. records:"
+
+# TRANSLATION
+# LABEL/ID_FAILED_RECORD
+#: LABEL/ID_FAILED_RECORD
+msgid "Failed Records:"
+msgstr "Failed Records:"
+
+# TRANSLATION
+# LABEL/ID_UPLOAD_FILE
+#: LABEL/ID_UPLOAD_FILE
+msgid "Upload File"
+msgstr "Upload File"
+
+# TRANSLATION
+# LABEL/ID_PM_GRID
+#: LABEL/ID_PM_GRID
+msgid "pmGrid"
+msgstr "pmGrid"
+
+# TRANSLATION
+# LABEL/ID_VARIABLE_PICKER
+#: LABEL/ID_VARIABLE_PICKER
+msgid "pmVariablePicker"
+msgstr "pmVariablePicker"
+
+# TRANSLATION
+# LABEL/ID_GRID_WIZARD
+#: LABEL/ID_GRID_WIZARD
+msgid "ProcessMaker Grid Wizard"
+msgstr "ProcessMaker Grid Wizard"
+
+# TRANSLATION
+# LABEL/ID_UPLOAD_FROM_FILE
+#: LABEL/ID_UPLOAD_FROM_FILE
+msgid "Upload from file"
+msgstr "Upload from file"
+
+# TRANSLATION
+# LABEL/ID_FIELD_REQUIRED
+#: LABEL/ID_FIELD_REQUIRED
+msgid "This field is required"
+msgstr "This field is required"
+
+# TRANSLATION
+# LABEL/ID_ERROR_REGISTERED
+#: LABEL/ID_ERROR_REGISTERED
+msgid "Errors registered:"
+msgstr "Errors registered:"
+
+# TRANSLATION
+# LABEL/ID_ACTIONS_BY_EMAIL
+#: LABEL/ID_ACTIONS_BY_EMAIL
+msgid "actionsByEmail.html"
+msgstr "actionsByEmail.html"
+
+# TRANSLATION
+# LABEL/ID_UNASSIGNED_MESSAGE
+#: LABEL/ID_UNASSIGNED_MESSAGE
+msgid "unassignedMessage.html"
+msgstr "unassignedMessage.html"
+
+# TRANSLATION
+# LABEL/ID_USER_ROLE_CANT_CHANGED_TO_ADMINISTRATOR
+#: LABEL/ID_USER_ROLE_CANT_CHANGED_TO_ADMINISTRATOR
+msgid "cant changed or create to administrator role."
+msgstr "cant changed or create to administrator role."
+
+# TRANSLATION
+# LABEL/ID_DIRECTORY_NAME_EXISTS_ENTER_ANOTHER
+#: LABEL/ID_DIRECTORY_NAME_EXISTS_ENTER_ANOTHER
+msgid "The name \"{0}\" already exists, please enter another."
+msgstr "The name \"{0}\" already exists, please enter another."
+
+# TRANSLATION
+# LABEL/ID_DELETE_SUPERVISOR
+#: LABEL/ID_DELETE_SUPERVISOR
+msgid "You cannot unassign the supervisor"
+msgstr "You cannot unassign the supervisor"
+
+# TRANSLATION
+# LABEL/ID_CONFIRM_ASSIGNED_GRID
+#: LABEL/ID_CONFIRM_ASSIGNED_GRID
+msgid "The row data that you recently created will be deleted?"
+msgstr "The row data that you recently created will be deleted?"
+
+# TRANSLATION
+# LABEL/ID_PLUGINS_MANAGER
+#: LABEL/ID_PLUGINS_MANAGER
+msgid "Plugins Manager"
+msgstr "Plugins Manager"
+
+# TRANSLATION
+# LABEL/ID_CASE_FIELD
+#: LABEL/ID_CASE_FIELD
+msgid "Case Field"
+msgstr "Case Field"
+
+# TRANSLATION
+# LABEL/ID_DELAY_FIELD
+#: LABEL/ID_DELAY_FIELD
+msgid "Delay Field"
+msgstr "Delay Field"
+
+# TRANSLATION
+# LABEL/ID_LOGS
+#: LABEL/ID_LOGS
+msgid "Logs"
+msgstr "Logs"
+
+# TRANSLATION
+# LABEL/ID_ENTERPRISE_INSTALLED
+#: LABEL/ID_ENTERPRISE_INSTALLED
+msgid "Enterprise Plugin has been correctly installed."
+msgstr "Enterprise Plugin has been correctly installed."
+
+# TRANSLATION
+# LABEL/ID_LOG_AGAIN
+#: LABEL/ID_LOG_AGAIN
+msgid "Please login again to apply the changes."
+msgstr "Please login again to apply the changes."
+
+# TRANSLATION
+# LABEL/ID_ROLE_CODE_INVALID_CHARACTER
+#: LABEL/ID_ROLE_CODE_INVALID_CHARACTER
+msgid "The 'Code' field cannot contain special characters or spaces."
+msgstr "The 'Code' field cannot contain special characters or spaces."
+
+# TRANSLATION
+# LABEL/ID_ROLE_NAME_NOT_EMPTY
+#: LABEL/ID_ROLE_NAME_NOT_EMPTY
+msgid "The 'Name' field can not be empty."
+msgstr "The 'Name' field can not be empty."
+
+# TRANSLATION
+# LABEL/ID_TITLE_NO_INSTALL
+#: LABEL/ID_TITLE_NO_INSTALL
+msgid "SYSTEM INSTALLATION FAILED"
+msgstr "SYSTEM INSTALLATION FAILED"
+
+# TRANSLATION
+# LABEL/ID_NO_INSTALL
+#: LABEL/ID_NO_INSTALL
+msgid "A problem occurred during the installation of the system. Please, uninstall the partial installation and try again."
+msgstr "A problem occurred during the installation of the system. Please, uninstall the partial installation and try again."
+
+# TRANSLATION
+# LABEL/ID_LICENSE_EMPTY
+#: LABEL/ID_LICENSE_EMPTY
+msgid "Can not find any license"
+msgstr "Can not find any license"
+
+# TRANSLATION
+# LABEL/ID_ADD_LICENSE
+#: LABEL/ID_ADD_LICENSE
+msgid "Please add a new license"
+msgstr "Please add a new license"
+
+# TRANSLATION
+# LABEL/ID_DEFAULT_CALENDAR
+#: LABEL/ID_DEFAULT_CALENDAR
+msgid "Default Calendar"
+msgstr "Default Calendar"
+
+# TRANSLATION
+# LABEL/ID_DELETED
+#: LABEL/ID_DELETED
+msgid "Deleted"
+msgstr "Deleted"
+
+# TRANSLATION
+# LABEL/ID_SEND_AT
+#: LABEL/ID_SEND_AT
+msgid "send at"
+msgstr "send at"
+
+# TRANSLATION
+# LABEL/ID_SAVE_DYNAFORM_INFORMATION_BEFORE_PRINTING
+#: LABEL/ID_SAVE_DYNAFORM_INFORMATION_BEFORE_PRINTING
+msgid "Do you want to save the dynaform information before printing it?"
+msgstr "Do you want to save the dynaform information before printing it?"
 
 # additionalTables/additionalTablesData.xml?ADD_TAB_NAME
 # additionalTables/additionalTablesData.xml
@@ -32549,6 +32777,12 @@ msgstr "Trigger"
 msgid "[triggers/triggerCopy.xml?TRIGGER_UID-]"
 msgstr "- Select a trigger -"
 
+# triggers/triggerCopy.xml?TRIGGER_UID_AUX
+# triggers/triggerCopy.xml
+#: text - TRIGGER_UID_AUX
+msgid "[triggers/triggerCopy.xml?TRIGGER_UID_AUX] "
+msgstr ""
+
 # triggers/triggerCopy.xml?TRI_TITLE
 # triggers/triggerCopy.xml
 #: text - TRI_TITLE
@@ -35889,7 +36123,7 @@ msgstr "Grid"
 # dynaforms/fields/grid.xml
 #: dropdown - PME_XMLGRID - 0
 msgid "[dynaforms/fields/grid.xml?PME_XMLGRID-0]"
-msgstr "- Select a Grid-"
+msgstr "- Select a Grid -"
 
 # dynaforms/fields/grid.xml?PME_ADDROW
 # dynaforms/fields/grid.xml
@@ -36886,6 +37120,30 @@ msgstr "Label"
 #: checkbox - PME_STORE_NEW_ENTRY
 msgid "Store new entry"
 msgstr "Store new entry"
+
+# dynaforms/fields/suggest.xml?PME_SEARCHTYPE
+# dynaforms/fields/suggest.xml
+#: dropdown - PME_SEARCHTYPE
+msgid "Search Type"
+msgstr "Search Type"
+
+# dynaforms/fields/suggest.xml?PME_SEARCHTYPE-*searchtype*
+# dynaforms/fields/suggest.xml
+#: dropdown - PME_SEARCHTYPE - *searchtype*
+msgid "[dynaforms/fields/suggest.xml?PME_SEARCHTYPE-*searchtype*]"
+msgstr "Results that contain the entered text"
+
+# dynaforms/fields/suggest.xml?PME_SEARCHTYPE-searchtype*
+# dynaforms/fields/suggest.xml
+#: dropdown - PME_SEARCHTYPE - searchtype*
+msgid "[dynaforms/fields/suggest.xml?PME_SEARCHTYPE-searchtype*]"
+msgstr "Results that start with the entered text"
+
+# dynaforms/fields/suggest.xml?PME_SEARCHTYPE-*searchtype
+# dynaforms/fields/suggest.xml
+#: dropdown - PME_SEARCHTYPE - *searchtype
+msgid "[dynaforms/fields/suggest.xml?PME_SEARCHTYPE-*searchtype]"
+msgstr "Results that finish with the entered text"
 
 # dynaforms/fields/suggest.xml?PME_TABLE
 # dynaforms/fields/suggest.xml
