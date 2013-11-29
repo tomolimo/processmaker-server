@@ -462,27 +462,28 @@ var dynaformEditor={
     if( ! xmlEditor ) {
       clientWinSize = getClientWindowSize();
 
-        if (_BROWSER.name == 'msie') {
+        //if (_BROWSER.name == 'msie') {
           var content_withoutLabel = document.getElementById("form[XML]").parentNode;
           content_withoutLabel.style.height = (clientWinSize.height - 140) + 'px';
-        }
-
-        /*xmlEditor = CodeMirror.fromTextArea('form[XML]', {
-        height: (clientWinSize.height - 120) + "px",
-        width: (_BROWSER.name == 'msie' ? '100%' : '98%'),
-        parserfile: ["parsexml.js", "parsecss.js", "tokenizejavascript.js", "parsejavascript.js",
-                     "../contrib/php/js/tokenizephp.js", "../contrib/php/js/parsephp.js",
-                     "../contrib/php/js/parsephphtmlmixed.js"],
-        stylesheet: ["css/xmlcolors.css", "css/jscolors.css"],
-        path: "js/",
-        lineNumbers: true,
-        continuousScanning: 500 });*/
-
-        xmlEditor = CodeMirror.fromTextArea(document.getElementById("form[XML]"), {
-        mode: "application/xml",
-        styleActiveLine: true,
-        lineNumbers: true,
-        lineWrapping: true });
+          startJSCodePress();
+          xmlEditor = CodeMirror.fromTextArea('form[XML]', {
+                height: (clientWinSize.height - 120) + "px",
+                width: '100%',
+                parserfile: ["parsexml.js", "parsecss.js", "tokenizejavascript.js", "parsejavascript.js",
+                             "../contrib/php/js/tokenizephp.js", "../contrib/php/js/parsephp.js",
+                             "../contrib/php/js/parsephphtmlmixed.js"],
+                stylesheet: ["style/xmlcolors.css", "style/jscolors.css", "style/csscolors.css", "contrib/php/style/phpcolors.css"],
+                path: "js/",
+                lineNumbers: true,
+                continuousScanning: 500
+            });
+        //} else {
+        //    xmlEditor = CodeMirror.fromTextArea(document.getElementById("form[XML]"), {
+        //    mode: "application/xml",
+        //    styleActiveLine: true,
+        //    lineNumbers: true,
+        //    lineWrapping: true });
+        //}
     }
   },
   changeToHtmlCode:function()
@@ -542,25 +543,29 @@ var dynaformEditor={
       {
         clientWinSize = getClientWindowSize();
 
-        if (_BROWSER.name == 'msie') {
-          var content_withoutLabel = document.getElementById("form[JS]").parentNode;
-          content_withoutLabel.style.height = (clientWinSize.height - 140) + 'px';
-        }
-        startJSCodePress();
-
-        /*jsEditor = CodeMirror.fromTextArea('form[JS]', {
-          height: (clientWinSize.height - 140) + "px",
-          width: (_BROWSER.name == 'msie' ? '100%' : '98%'),
-          parserfile: ["tokenizejavascript.js", "parsejavascript.js"],
-          stylesheet: ["css/jscolors.css"],
-          path: "js/",
-          lineNumbers: true,
-          continuousScanning: 500 });*/
-
-          jsEditor = CodeMirror.fromTextArea(document.getElementById("form[JS]"), {
-            mode: "javascript",
-            lineNumbers: true,
-            lineWrapping: true });
+        //if (_BROWSER.name == 'msie') {
+            var content_withoutLabel = document.getElementById("form[JS]").parentNode;
+            content_withoutLabel.style.height = (clientWinSize.height - 140) + 'px';
+            clientWinSize = getClientWindowSize();
+            startJSCodePress();
+            jsEditor = CodeMirror.fromTextArea('form[JS]', {
+                height: (clientWinSize.height - 140) + "px",
+                width: (_BROWSER.name == 'msie' ? '100%' : '98%'),
+                parserfile: ["tokenizejavascript.js", "parsejavascript.js"],
+                stylesheet: ["style/jscolors.css"],
+                path: "js/",
+                lineNumbers: true,
+                continuousScanning: 500
+            });
+        //} else {
+        //    startJSCodePress();
+        //
+        //    jsEditor = CodeMirror.fromTextArea(document.getElementById("form[JS]"), {
+        //    mode: "javascript",
+        //    lineNumbers: true,
+        //    lineWrapping: true });
+        //}
+        
       }
     } else {
       showRowById('JS_TITLE');
@@ -722,15 +727,15 @@ var dynaformEditor={
   {
     //if (JSCodePress)
     if( jsEditor ) {
-        if(typeof jsEditor.setValue == 'function')
+        //if(typeof jsEditor.setValue == 'function')
+        if(typeof jsEditor.setCode == 'function')
         {
-            jsEditor.setValue(newCode);//jsEditor.setCode(newCode);
+            //jsEditor.setValue(newCode);
+            jsEditor.setCode(newCode);
         }
-    }
-    else
-    {
-      var code=getField("JS","dynaforms_JSEditor");
-      code.value=newCode;
+    } else {
+        var code=getField("JS","dynaforms_JSEditor");
+        code.value=newCode;
     }
   },
   getXMLCode:function()
@@ -743,7 +748,7 @@ var dynaformEditor={
   setXMLCode:function(newCode)
   {
     if( xmlEditor ) {
-      xmlEditor.setValue(newCode);//setCode(newCode);
+      xmlEditor.setCode(newCode);//setValue(newCode);//setCode(newCode);
     } else {
       var code = getField("XML","dynaforms_XmlEditor");
       code.value = newCode;
@@ -769,6 +774,7 @@ var dynaformEditor={
       }
     }
     this.currentJS=field.value;
+    
     var res=this.ajax.get_javascripts(this.A,field.value);
     if(field.value == ''){
       if( typeof(res.aOptions[0]) !== "undefined" && res.aOptions[0].value != '___pm_boot_strap___'){
@@ -780,7 +786,9 @@ var dynaformEditor={
 
     if (typeof(res["*message"])==="undefined")
     {
-      while(field.options.length>0) field.remove(0);
+        while(field.options.length>0) {
+            field.remove(0);
+        }
       for(var i=0;i<res.aOptions.length;i++)
       {
         var optn = document.createElement ("OPTION");
@@ -790,10 +798,8 @@ var dynaformEditor={
       }
       field.value = this.currentJS;
       this.setJSCode(res.sCode);
-    }
-    else
-    {
-      G.alert(response.error["*message"],"Error");
+    } else {
+        G.alert(response.error["*message"],"Error");
     }
 
     var field=getField("JS_LIST","dynaforms_JSEditor");
@@ -825,12 +831,14 @@ var dynaformEditor={
       }
     }
     var field=getField("JS_LIST","dynaforms_JSEditor");
+    
     var value=field.value;
+    
     if (this.currentJS)
     {
-      field.value=this.currentJS;
-      this.saveJavascript();
-      field.value=value;
+        field.value=this.currentJS;
+        this.saveJavascript();
+        field.value=value;
     }
     this.refreshJavascripts();
   },
@@ -857,11 +865,15 @@ var dynaformEditor={
     }
     for(var rr=0; rr < myScripts.length ; rr++){
       try {
-        if (myScripts[rr]!=="")
-          if (window.execScript) {
-            window.execScript( myScripts[rr], "javascript" );}
-            else
-              window.setTimeout( "try{\n"+myScripts[rr]+"\n}catch(e){\ndynaformEditor.displayError(e,"+rr+")}", 0 );
+        if (myScripts[rr]!=="") {
+            if (window.execScript) {
+                //console.debug(window.execScript);
+                //console.debug(myScripts[rr]);
+                window.execScript( myScripts[rr], "javascript" );
+            } else {
+                window.setTimeout( "try{\n"+myScripts[rr]+"\n}catch(e){\ndynaformEditor.displayError(e,"+rr+")}", 0 );
+            }
+        }
       } catch (e) {
         dynaformEditor.displayError(e,rr);
       }
