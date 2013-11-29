@@ -345,12 +345,12 @@ class workspaceTools
      */
     private function getDatabase($rbac = false)
     {
-        if (isset($this->db) && $this->db->isConnected()) {
+        if (isset($this->db) && $this->db->isConnected() &&  $rbac == false) {
             return $this->db;
         }
 
         G::LoadSystem('database_' . strtolower($this->dbAdapter));
-        if ($rbac = true){
+        if ($rbac == true){
             $this->db = new database($this->dbAdapter, $this->dbRbacHost, $this->dbRbacUser, $this->dbRbacPass, $this->dbRbacName);
         } else {
         	$this->db = new database($this->dbAdapter, $this->dbHost, $this->dbUser, $this->dbPass, $this->dbName);
@@ -390,7 +390,7 @@ class workspaceTools
      */
     public function getSchema($rbac = false)
     {
-        $oDataBase = $this->getDatabase($rbac);
+    	$oDataBase = $this->getDatabase($rbac);
 
         $aOldSchema = array();
 
@@ -674,7 +674,7 @@ class workspaceTools
             throw new Exception("Only MySQL is supported");
         }
 
-        $workspaceSchema = $this->getSchema($rbac); 
+        $workspaceSchema = $this->getSchema($rbac);
 
         $changes = System::compareSchema($workspaceSchema, $schema);
 

@@ -108,7 +108,7 @@
     <column name="SYS_UPDATE_DATE" type="TIMESTAMP" />
     <column name="SYS_STATUS" type="INTEGER" required="true" default="0" />
   </table>
-  <table name="RBAC_USERS">
+  <table name="USERS">
     <vendor type="mysql">
       <parameter name="Name" value="USERS"/>
       <parameter name="Engine" value="MyISAM"/>
