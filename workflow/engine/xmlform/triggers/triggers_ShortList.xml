@@ -3,11 +3,13 @@
 
 <TRI_UID type="hidden" showInTable="0"/>
 
+<TRI_LOCATE_WEBBOT_PARAM type="hidden" showInTable="0"/>
+
 <TRI_TITLE type="text" colWidth="350" titleAlign="left" align="left">
   <en>Title</en>
 </TRI_TITLE>
 
-<EDIT type="link" colWidth="40" value="@G::LoadTranslation(ID_EDIT)" link="#" onclick="triggerEdit(@QTRI_UID);return false;"/>
+<EDIT type="link" colWidth="40" value="@G::LoadTranslation(ID_EDIT)" link="#" onclick="triggerEdit(@QTRI_UID,@QTRI_LOCATE_WEBBOT_PARAM); return false;"/>
 
 <PROPERTIES type="link" colWidth="40" value="@G::LoadTranslation(ID_PROPERTIES)" link="#" onclick="triggerProperties(@QTRI_UID);return false;"/>
 

@@ -42,8 +42,12 @@ if (isset( $_GET['TRI_UID'] )) {
         // if the trigger has been modified manually, it cant be edited with the wizard.
         if (md5( $aFields['TRI_WEBBOT'] ) == $aTriggerData['hash']) {
             $triUid = $_GET['TRI_UID'];
+            $STEP_UID = isset($_GET['STEP_UID'])?$_GET['STEP_UID']:'';
+            $ST_TYPE = isset($_GET['ST_TYPE'])?$_GET['ST_TYPE']:'';
             $_GET = $aTriggerData['params'];
             $_GET['TRI_UID'] = $triUid;
+            $_GET['STEP_UID']=$STEP_UID;
+            $_GET['ST_TYPE']=$ST_TYPE;
             require_once ('triggers_EditWizard.php');
             die();
         } else {
@@ -63,6 +67,8 @@ if (isset( $_GET['TRI_UID'] )) {
     $xmlform = 'triggers/triggersProperties';
     $xmlform_action = '../triggers/triggers_Save';
 }
+$aFields['STEP_UID'] = isset($_GET['STEP_UID'])?$_GET['STEP_UID']:'';
+$aFields['ST_TYPE'] = isset($_GET['ST_TYPE'])?$_GET['ST_TYPE']:'';
 G::LoadClass( 'xmlfield_InputPM' );
 $G_PUBLISH = new Publisher();
 $G_PUBLISH->AddContent( 'xmlform', 'xmlform', $xmlform, '', $aFields, $xmlform_action );

@@ -5,6 +5,8 @@
 
 <TRI_UID type="hidden" showInTable="0"/>
 
+<TRI_LOCATE_WEBBOT_PARAM type="hidden" showInTable="0"/>
+
 <ST_POSITION type="hidden" showInTable="0"/>
 
 <TRI_TITLE type="text" colWidth="400" titleAlign="left" align="left">
@@ -13,7 +15,7 @@
 
 <triggersEdit type="hidden" defaultValue="../triggers/triggers_Edit"/>
 
-<EDIT type="link" colWidth="" value="@G::LoadTranslation(ID_EDIT)" link="#" onclick="window.open('@G::encryptlink(@#triggersEdit)?TRI_UID=' + @QTRI_UID,'@G::LoadTranslation(ID_EDIT_TRIGGERS)'.replace(/\s/g,'_'),'toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width='+screen.width+',height='+screen.height); return false;"/>
+<EDIT type="link" colWidth="" value="@G::LoadTranslation(ID_EDIT)" link="#" onclick="triggerEdit(@QTRI_UID,@QTRI_LOCATE_WEBBOT_PARAM); return false;"/>
 
 <CONDITION type="link" colWidth="" value="@G::LoadTranslation(ID_CONDITION)" link="#" onclick="editTriggerCondition(@QSTEP_UID, @QTRI_UID, &#039;AFTER&#039;);return false;"/>
 
