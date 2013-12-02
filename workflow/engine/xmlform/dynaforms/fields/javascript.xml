@@ -49,28 +49,28 @@ function cancel(){
     currentPopupWindow.remove();
 }
 
-/*var jsEditorPrompt = CodeMirror.fromTextArea('form[PME_CODE]', {
+var jsEditorPrompt = CodeMirror.fromTextArea(document.getElementById("form[PME_CODE]"), {
   height: "170px",
   width: "430px",
   parserfile: ["tokenizejavascript.js", "parsejavascript.js"],
-  stylesheet: ["css/jscolors.css"],
+  stylesheet: ["style/jscolors.css"],
   path: "js/",
   lineNumbers: true,
   continuousScanning: 500
-});*/
+});
 
-var jsEditorPrompt = CodeMirror.fromTextArea(document.getElementById("form[PME_CODE]"), {
+/*var jsEditorPrompt = CodeMirror.fromTextArea(document.getElementById("form[PME_CODE]"), {
           mode: "javascript",
           lineNumbers: true,
           lineWrapping: true });
-jsEditorPrompt.setSize(430, 170);
+jsEditorPrompt.setSize(430, 170);*/
 
 function saveJavascript()
 {
-  document.getElementById('form[PME_CODE]').value = jsEditorPrompt.getValue();
-  jsEditorPrompt.save();
-  //jsEditorPrompt.setCode(jsEditorPrompt.getCode());
+  //document.getElementById('form[PME_CODE]').value = jsEditorPrompt.getValue();
   //jsEditorPrompt.save();
+  jsEditorPrompt.setCode(jsEditorPrompt.getCode());
+  jsEditorPrompt.save();
 }
 
 function setFocus1() {

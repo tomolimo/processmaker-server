@@ -226,19 +226,14 @@ class dynaformEditor extends WebResource
         $oHeadPublisher->addScriptFile('/jscore/dynaformEditor/core/dynaformEditor.js');
         //$oHeadPublisher->addScriptFile('/js/dveditor/core/dveditor.js');
         //$oHeadPublisher->addScriptFile('/codepress/codepress.js',1);
-        $oHeadPublisher->addScriptFile('/js/codemirror/lib/codemirror.js', 1);
-        //Xml codemirror 3.13
-        $oHeadPublisher->addScriptFile('/js/codemirror/mode/xml/xml.js', 1);
-        $oHeadPublisher->addScriptFile('/js/codemirror/addon/selection/active-line.js', 1);
-        //Javascript codemirror 3.13
-        $oHeadPublisher->addScriptFile('/js/codemirror/addon/edit/closebrackets.js', 1);
-        $oHeadPublisher->addScriptFile('/js/codemirror/mode/javascript/javascript.js', 1);
+
+        $oHeadPublisher->addScriptFile('/js/codemirrorOld/js/codemirror.js',1);
 
         $oHeadPublisher->addScriptFile('/js/grid/core/grid.js');
         $oHeadPublisher->addScriptCode('
-    var DYNAFORM_URL="' . $Parameters['URL'] . '";
-    leimnud.event.add(window,"load",function(){ loadEditor(); });
-    ');
+        var DYNAFORM_URL="' . $Parameters['URL'] . '";
+        leimnud.event.add(window,"load",function(){ loadEditor(); });
+        ');
         $oHeadPublisher->addScriptCode(' var jsMeta;var __usernameLogged__ = "' . (isset($_SESSION['USR_USERNAME']) ? $_SESSION['USR_USERNAME'] : '') . '";var SYS_LANG = "' . SYS_LANG . '";var __DYN_UID__ = "' . $this->dyn_uid . '";');
         $oHeadPublisher->addScriptCode('var dynaformEditorParams = \'' . serialize($Parameters) . '\';');
         G::RenderPage("publish", 'blank');
