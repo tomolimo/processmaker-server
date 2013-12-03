@@ -44,7 +44,7 @@ function dynaformSaveas ( frm ) {
                "POST",
                function (responseText)
                {
-                    var dataResponse = eval("(" + responseText + ")"); //json
+                    var dataResponse = responseText.parseJSON(); //json
                     var elementSelected = document.getElementById("_dynaformsList_").value;
                     document.getElementById("_dynaformsList_").length = 0;
 
