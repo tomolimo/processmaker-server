@@ -478,7 +478,7 @@ UpdateRole = function(){
       return;
   }
 
-  rol_name = newForm.getForm().findField('name').getValue();
+  rol_name = editForm.getForm().findField('name').getValue();
   if( rol_name == null || rol_name.length == 0 || /^\s+$/.test(rol_name)) {
       Ext.Msg.alert(_('ID_WARNING'),_('ID_ROLE_NAME_NOT_EMPTY'));
       return;
