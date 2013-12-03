@@ -177,9 +177,9 @@ class UsersProperties extends BaseUsersProperties
             G::LoadClass( 'calendar' );
             $oCalendar = new calendar();
 
-            if ($calendar->pmCalendarUid == '') {
-            	$calendar->pmCalendarUid = '00000000000000000000000000000001';
-            	$calendar->getCalendarData();
+            if ($oCalendar->pmCalendarUid == '') {
+            	$oCalendar->pmCalendarUid = '00000000000000000000000000000001';
+            	$oCalendar->getCalendarData();
             }
 
             $fDays = $oCalendar->calculateDuration( date( 'Y-m-d H:i:s' ), $sLastUpdate );
