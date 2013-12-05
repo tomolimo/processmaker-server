@@ -535,13 +535,13 @@ class Configurations // extends Configuration
         return $formats;
     }
 
-    public function getSystemDate($dateTime)
+    public function getSystemDate($dateTime, $type='dateFormat')
     {
         $oConf = new Configurations();
         $oConf->getFormats();
         $dateFormat = $oConf->UserConfig['dateFormat'];
         $oConf->loadConfig($obj, 'ENVIRONMENT_SETTINGS', '');
-        $creationDateMask = isset($oConf->aConfig['dateFormat']) ? $oConf->aConfig['dateFormat'] : '';
+        $creationDateMask = isset($oConf->aConfig[$type]) ? $oConf->aConfig[$type] : '';
         $creationDateMask = ($creationDateMask == '') ? $dateFormat : $creationDateMask;
         if ($creationDateMask != '') {
             if (strpos($dateTime, ' ') !== false) {

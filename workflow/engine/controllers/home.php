@@ -332,7 +332,18 @@ class Home extends Controller
             }
 
             if (isset( $row['DEL_DELEGATE_DATE'] )) {
-                $cases['data'][$i]['DEL_DELEGATE_DATE'] = G::getformatedDate( $row['DEL_DELEGATE_DATE'], 'M d, yyyy - h:i:s' );
+                G::LoadClass( "configuration" );
+                $conf = new Configurations();
+                $generalConfCasesList = $conf->getConfiguration( 'ENVIRONMENT_SETTINGS', '' );
+                $cases['data'][$i]['DEL_DELEGATE_DATE'] = '';
+                if (defined('SYS_SYS')) {
+                    if (isset( $generalConfCasesList['casesListDateFormat'] ) && ! empty( $generalConfCasesList['casesListDateFormat'] )) {
+                        $cases['data'][$i]['DEL_DELEGATE_DATE'] = $conf->getSystemDate($row['DEL_DELEGATE_DATE'], 'casesListDateFormat');
+                    }
+                }
+                if ($cases['data'][$i]['DEL_DELEGATE_DATE'] == '') {
+                    $cases['data'][$i]['DEL_DELEGATE_DATE'] = $conf->getSystemDate($row['DEL_DELEGATE_DATE']);
+                }
             }
             if (isset( $row['APP_DEL_PREVIOUS_USER'] )) {
                 $cases['data'][$i]['APP_DEL_PREVIOUS_USER'] = ucwords( $row['APP_DEL_PREVIOUS_USER'] );
