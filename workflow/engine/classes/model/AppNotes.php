@@ -254,7 +254,9 @@ class AppNotes extends BaseAppNotes
             $noteRecipientsList = array();
 
             foreach ($p["array"] as $key => $userParticipated) {
-                $noteRecipientsList[] = $key;
+                if ($key != '') {
+                    $noteRecipientsList[] = $key;
+                }
             }
 
             $noteRecipients = implode(",", $noteRecipientsList);
