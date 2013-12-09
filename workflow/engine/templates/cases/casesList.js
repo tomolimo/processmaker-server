@@ -1975,7 +1975,7 @@ var gridForm = new Ext.FormPanel({
                     }*/
                 }),
                 //autoExpandColumn: 'company',
-                height: 350,
+                height: 265,
                 title  : _('ID_CASES_TO_REASSIGN_TASK_LIST'),
                 border : true,
 
