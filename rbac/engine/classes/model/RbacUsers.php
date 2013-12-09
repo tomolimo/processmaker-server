@@ -90,7 +90,7 @@ class RbacUsers extends BaseRbacUsers
                         if ($aFields['USR_STATUS'] != 1) {
                             return -3;
                         }
-                        $role = $this->verifyRolUser($aFields['USR_UID']);
+                        $role = $this->getUserRole($aFields['USR_UID']);
                         if ($role['ROL_STATUS'] == 0) {
                             return -6;
                         }
@@ -299,7 +299,7 @@ class RbacUsers extends BaseRbacUsers
         return $aUsers;
     }
 
-    public function verifyRolUser($UsrUid)
+    public function getUserRole($UsrUid)
     {
         $con = Propel::getConnection(UsersRolesPeer::DATABASE_NAME);
         try {
