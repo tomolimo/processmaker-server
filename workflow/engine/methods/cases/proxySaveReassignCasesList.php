@@ -54,6 +54,7 @@ if (is_array( $aData )) {
     $currentCasesReassigned = 0;
     foreach ($aData as $data) {
         $oTmpReassignCriteria = $oCasesReassignList;
+        $oTmpReassignCriteria->add( AppCacheViewPeer::APP_UID, $data->APP_UID );
         $oTmpReassignCriteria->add( AppCacheViewPeer::TAS_UID, $data->TAS_UID );
         $rs = AppCacheViewPeer::doSelectRS( $oTmpReassignCriteria );
         $rs->setFetchmode( ResultSet::FETCHMODE_ASSOC );
