@@ -1760,12 +1760,6 @@ class G
 
                         if (isset($aFields[$grdName]) && is_array($aFields[$grdName])) {
                             foreach ($aFields[$grdName] as $aRow) {
-                                foreach ($aRow as $sKey => $vValue) {
-                                    if (!is_array($vValue)) {
-                                        $aRow[$sKey] = nl2br($aRow[$sKey]);
-                                    }
-                                }
-
                                 $strData = $strData . G::replaceDataField($arrayMatch2[2], $aRow);
                             }
                         }
@@ -1783,12 +1777,6 @@ class G
         $strContentAux = str_replace($nrthtml, $nrt, $strContentAux);
 
         $sContent = $strContentAux;
-
-        foreach ($aFields as $sKey => $vValue) {
-            if (!is_array($vValue)) {
-                $aFields[$sKey] = nl2br($aFields[$sKey]);
-            }
-        }
 
         $sContent = G::replaceDataField($sContent, $aFields);
 
