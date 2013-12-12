@@ -2735,7 +2735,12 @@ class XmlForm_Field_Link extends XmlForm_Field
                 break;
         }
 
-        $link = (!empty($value))? $value : G::replaceDataField($this->link, $v);
+        $link = "";
+        if ($this->link != "") {
+            $link = G::replaceDataField($this->link, $v);
+        } else {
+            $link = !empty($value) ? $value : "";
+        }
         $labelAux1 = (!empty($label))? $label : G::replaceDataField($this->label, $v);
         $labelAux2 = (!empty($label))? $label : G::replaceDataField($this->value, $v);
         $onclick = G::replaceDataField($this->onclick, $v);
