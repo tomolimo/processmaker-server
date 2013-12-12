@@ -67,13 +67,7 @@
  
   leimnud.event.add(getField('PME_LINK'), 'blur', function() {
     var valor_form = new input(getField('PME_LINK'));
-    getField('PME_LINK').value=getField('PME_LINK').value.replace(/ /g, ''); 
-    if(getField('PME_LINK').value==''){
-      valor_form.failed();
-      alert('Invalid URL');
-    } else {
-      valor_form.passed();      
-      }
+    getField('PME_LINK').value=getField('PME_LINK').value.replace(/ /g, '');
   });
 function cancel(){
   currentPopupWindow.remove();
