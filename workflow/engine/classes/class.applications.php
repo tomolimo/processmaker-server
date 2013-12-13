@@ -377,6 +377,7 @@ class Applications
             $doCountAlreadyExecuted = true;
         }
         */
+        $tableNameAux = '';
 
         if ($doCountAlreadyExecuted == false) {
             // in the case of reassign the distinct attribute shows a diferent count result comparing to the
@@ -394,6 +395,7 @@ class Applications
                 // then
                 $oAdditionalTables = AdditionalTablesPeer::retrieveByPK( $oAppCache->confCasesList['PMTable'] );
                 $tableName = $oAdditionalTables->getAddTabName();
+                $tableNameAux = $tableName;
                 $tableName = strtolower( $tableName );
                 $tableNameArray = explode( '_', $tableName );
                 foreach ($tableNameArray as $item) {
@@ -422,22 +424,37 @@ class Applications
                         break;
                 }
             }
-            if (isset( $oAppCache->confCasesList['PMTable'] ) && ! empty( $oAppCache->confCasesList['PMTable'] )) {
+            if (isset( $oAppCache->confCasesList['PMTable'] ) && ! empty( $oAppCache->confCasesList['PMTable'] ) && $tableNameAux != '') {
+                $sortTable = explode(".", $sort);
+
                 $additionalTableUid = $oAppCache->confCasesList["PMTable"];
+                require_once 'classes/model/Fields.php';
+                $oCriteria = new Criteria('workflow');
 
-                $additionalTable = AdditionalTablesPeer::retrieveByPK($additionalTableUid);
-                $tableName = $additionalTable->getAddTabName();
+                $oCriteria->addSelectColumn(FieldsPeer::FLD_UID);
+                $oCriteria->addSelectColumn(FieldsPeer::FLD_INDEX);
+                $oCriteria->addSelectColumn(FieldsPeer::FLD_NAME);
+                $oCriteria->addSelectColumn(FieldsPeer::FLD_DESCRIPTION);
+                $oCriteria->addSelectColumn(FieldsPeer::FLD_TYPE);
+                $oCriteria->addSelectColumn(FieldsPeer::FLD_SIZE);
+                $oCriteria->addSelectColumn(FieldsPeer::FLD_NULL);
+                $oCriteria->addSelectColumn(FieldsPeer::FLD_AUTO_INCREMENT);
+                $oCriteria->addSelectColumn(FieldsPeer::FLD_KEY);
+                $oCriteria->addSelectColumn(FieldsPeer::FLD_FOREIGN_KEY);
+                $oCriteria->addSelectColumn(FieldsPeer::FLD_FOREIGN_KEY_TABLE);
+                $oCriteria->addSelectColumn(FieldsPeer::FLD_DYN_NAME);
+                $oCriteria->addSelectColumn(FieldsPeer::FLD_DYN_UID);
+                $oCriteria->addSelectColumn(FieldsPeer::FLD_FILTER);
+                $oCriteria->add(FieldsPeer::ADD_TAB_UID, $additionalTableUid);
+                $oCriteria->add(FieldsPeer::FLD_NAME, $sortTable[1]);
+                $oCriteria->addAscendingOrderByColumn(FieldsPeer::FLD_INDEX);
 
-                $additionalTable = new AdditionalTables();
-                $tableData = $additionalTable->load($additionalTableUid, true);
-
-                $tableField = array();
-
-                $fieldTable = explode(".", $sort);
-                foreach ($tableData["FIELDS"] as $arrayField) {
-                    if ($fieldTable[1] == $arrayField["FLD_NAME"]) {
-                        $sort =  strtoupper($tableName) . "." . $fieldTable[1];
-                    }
+                $oDataset = FieldsPeer::doSelectRS($oCriteria);
+                $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+                $oDataset->next();
+                $row = $oDataset->getRow();
+                if (is_array($row)) {
+                    $sort = $tableNameAux . "." . $sortTable[1];
                 }
             }
 
