@@ -27,9 +27,7 @@
  */
 //
 // It works with the table CONFIGURATION in a WF dataBase
-//
 // Copyright (C) 2007 COLOSA
-//
 // License: LGPL, see LICENSE
 ////////////////////////////////////////////////////
 
