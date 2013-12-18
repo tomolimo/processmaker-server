@@ -1023,7 +1023,8 @@ switch(action){case'mask':case'move':dataNewMask=me.replaceMasks(newValue,newCur
 break;case 256:newValue=currentValue.substring(0,cursorStart);newValue+='.';newValue+=currentValue.substring(cursorEnd,currentValue.length);newCursor=cursorStart+1;break;case 35:case 36:case 37:case 38:case 39:case 40:newValue=currentValue;switch(keyCode){case 36:newCursor=0;break;case 35:newCursor=currentValue.length;break;case 37:newCursor=cursorStart-1;break;case 39:newCursor=cursorStart+1;break;}
 break;default:newKey=String.fromCharCode(keyCode);newValue=currentValue.substring(0,cursorStart);newValue+=newKey;newValue+=currentValue.substring(cursorEnd,currentValue.length);newCursor=cursorStart+1;break;}
 if(newCursor<0)newCursor=0;me.element.value=newValue;me.setSelectionRange(newCursor,newCursor);}};this.sendOnChange=function(){if(me.element.fireEvent){me.element.fireEvent("onchange");}else{var evObj=document.createEvent('HTMLEvents');evObj.initEvent('change',true,true);me.element.dispatchEvent(evObj);}};this.handleKeyDown=function(event){if(me.element.readOnly){return true;}
-if(me.validate=='Any'&&me.mask=='')return true;var pressKey=(window.event)?window.event.keyCode:event.which;switch(pressKey){case 8:case 46:case 35:case 36:case 37:case 38:case 39:case 40:if((pressKey==8||pressKey==46)&&me.validate=="NodeName"){return true;}
+if(me.validate=='Any'&&me.mask=='')return true;var pressKey=(window.event)?window.event.keyCode:event.which;if(pressKey==107||pressKey==187){pressKey=43;}
+switch(pressKey){case 8:case 46:case 35:case 36:case 37:case 38:case 39:case 40:case 43:if((pressKey==8||pressKey==46)&&me.validate=="NodeName"){return true;}
 if(pressKey==46&&me.validate=="Email"){return true;}
 me.applyMask(pressKey);if((pressKey==8||pressKey==46)&&(me.validate!='Login'&&me.validate!='NodeName'))me.sendOnChange();me.checkBrowser();if(me.browser.name=='Chrome'||me.browser.name=='Safari'){event.returnValue=false;}
 else{return false;}
@@ -1063,7 +1064,7 @@ var decimalSet=numberSet[1];var decimalCade=decimalSet.split('');var countDecima
 if(countDecimalNow<countDecimal){for(;countDecimalNow<countDecimal;countDecimalNow++){decimalString+='0';}
 me.element.value=pluginAfter+numberSet[0]+separatorField+decimalString+pluginDecimal;}}
 break;}}
-if(this.validate=="Email"){var pat=/^\w+(?:[\.-]?\w+)*@\w+(?:[\.-]?\w+)*\.\w{2,9}$/;if(!pat.test(this.element.value))
+if(this.validate=="Email"){var pat=/^([a-zA-Z0-9])+([a-zA-Z0-9\.\+_-])*@([a-zA-Z0-9_-])+([a-zA-Z0-9\._-]+)+$/;if(!pat.test(this.element.value))
 {if(this.element.value==""){this.element.className="module_app_input___gray";return;}
 else{this.element.className=this.element.className.split(" ")[0]+" FormFieldInvalid";}}
 else
@@ -1222,7 +1223,7 @@ if(bOneChecked==false)
 invalid_fields.push(aRequiredFields[i].label);break;case'checkgroup':var bOneChecked=false;var aAux=document.getElementsByName('form['+aRequiredFields[i].name+'][]');for(var k=0;k<aAux.length;k++){if(aAux[k].checked){bOneChecked=true;k=aAux.length;}}
 if(!bOneChecked){invalid_fields.push(aRequiredFields[i].label);}
 break;}}
-if(validate!=''){switch(aRequiredFields[i].type){case'suggest':break;case'text':if(validate=="Email"){var vtext=new input(getField(aRequiredFields[i].name));if(getField(aRequiredFields[i].name).value.trim()!=""){var email=getField(aRequiredFields[i].name);var filter=/^\w+(?:[\.-]?\w+)*@\w+(?:[\.-]?\w+)*\.\w{2,9}$/;if(!filter.test(email.value.trim())&&email.value!=""){fielEmailInvalid.push(aRequiredFields[i].label);vtext.failed();email.focus();}else{vtext.passed();}}}
+if(validate!=''){switch(aRequiredFields[i].type){case'suggest':break;case'text':if(validate=="Email"){var vtext=new input(getField(aRequiredFields[i].name));if(getField(aRequiredFields[i].name).value.trim()!=""){var email=getField(aRequiredFields[i].name);var filter=/^([a-zA-Z0-9])+([a-zA-Z0-9\.\+_-])*@([a-zA-Z0-9_-])+([a-zA-Z0-9\._-]+)+$/;if(!filter.test(email.value.trim())&&email.value!=""){fielEmailInvalid.push(aRequiredFields[i].label);vtext.failed();email.focus();}else{vtext.passed();}}}
 break;}}}}
 invalid_fields=validateGridForms(invalid_fields);if(invalid_fields.length>0||fielEmailInvalid.length>0){for(j=0;j<invalid_fields.length;j++){sMessage+=(j>0)?', ':'';sMessage+=invalid_fields[j];}
 var emailInvalidMessage="";for(j=0;j<fielEmailInvalid.length;j++){emailInvalidMessage+=(j>0)?', ':'';emailInvalidMessage+=fielEmailInvalid[j];}
