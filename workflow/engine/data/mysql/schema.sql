@@ -312,7 +312,7 @@ CREATE TABLE `ISO_SUBDIVISION`
 	PRIMARY KEY (`IC_UID`,`IS_UID`)
 )ENGINE=InnoDB  DEFAULT CHARSET='utf8';
 #-----------------------------------------------------------------------------
-#-- LANGUAGE --
+#-- LANGUAGE
 #-----------------------------------------------------------------------------
 
 DROP TABLE IF EXISTS `LANGUAGE`;
