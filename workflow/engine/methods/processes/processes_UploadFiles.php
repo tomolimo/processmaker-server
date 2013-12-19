@@ -3,7 +3,7 @@ global $RBAC;
 if ( $RBAC->userCanAccess('PM_FACTORY') == 1) {
     G::LoadClass('processes');
     $app = new Processes();
-    if (!$app->processExists($_REQUEST['pro_uid'])) {
+    if (!$app->processExists($_POST['form']['PRO_UID'])) {
         echo G::LoadTranslation('ID_PROCESS_UID_NOT_DEFINED');
         die;
     }
