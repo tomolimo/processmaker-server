@@ -7,7 +7,9 @@ if ( $RBAC->userCanAccess('PM_FACTORY') == 1) {
         G::LoadClass('processes');
         $app = new Processes();
         if (!$app->processExists($form['PRO_UID'])) {
-            echo G::LoadTranslation('ID_PROCESS_UID_NOT_DEFINED');
+            $result = 0;
+            $msg = G::LoadTranslation('ID_PROCESS_UID_NOT_DEFINED');
+            echo "{'result': $result, 'msg':'$msg'}";
             die;
         }
         switch ($form['MAIN_DIRECTORY']) {
