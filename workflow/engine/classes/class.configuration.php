@@ -567,7 +567,7 @@ class Configurations // extends Configuration
                 require_once 'model/Language.php';
                 $language = new language();
                 $lanLocation = $language->findLocationByLanId(SYS_LANG);
-                $location = $location['LAN_LOCATION']?$location['LAN_LOCATION']:'';    
+                $location = isset($location['LAN_LOCATION'])?$location['LAN_LOCATION']:'';    
 
                 if (G::toLower(PHP_OS) == 'linux' || G::toLower(PHP_OS) == 'darwin') {
                     if (SYS_LANG == 'es') {

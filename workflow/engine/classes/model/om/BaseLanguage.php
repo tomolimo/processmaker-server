@@ -848,7 +848,7 @@ abstract class BaseLanguage extends BaseObject implements Persistent
     public function copyInto($copyObj, $deepCopy = false)
     {
 
-        $copyObj->setLanName($this->lan_location);
+        $copyObj->setLanLocation($this->lan_location);
 
         $copyObj->setLanName($this->lan_name);
 
