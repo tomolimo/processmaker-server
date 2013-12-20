@@ -896,6 +896,7 @@ abstract class BaseLanguage extends BaseObject implements Persistent
      * same instance for all member of this class. The method could therefore
      * be static, but this would prevent one from overriding the behavior.
      *
+     *
      * @return     LanguagePeer
      */
     public function getPeer()
