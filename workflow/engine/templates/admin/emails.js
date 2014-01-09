@@ -67,18 +67,17 @@ Ext.onReady(function(){
           Ext.getCmp('SendaTestMail').setVisible(true);
           Ext.getCmp('SendaTestMail').getEl().up('.x-form-item').setDisplayed(true);
 
+          Ext.getCmp('eFromName').setVisible(true);
+          Ext.getCmp('eFromName').getEl().up('.x-form-item').setDisplayed(true);
+
           if(Ext.getCmp('SendaTestMail').checked) {
             Ext.getCmp('eMailto').setVisible(true);
             Ext.getCmp('eMailto').getEl().up('.x-form-item').setDisplayed(true);
-            Ext.getCmp('eFromName').setVisible(true);
-            Ext.getCmp('eFromName').getEl().up('.x-form-item').setDisplayed(true);
           }
           else {
             Ext.getCmp('eMailto').setVisible(false);
             Ext.getCmp('eMailto').getEl().up('.x-form-item').setDisplayed(false);
             Ext.getCmp('eMailto').setValue(' ');
-            Ext.getCmp('eFromName').setVisible(false);
-            Ext.getCmp('eFromName').getEl().up('.x-form-item').setDisplayed(false);
           }
 
         }
@@ -97,20 +96,18 @@ Ext.onReady(function(){
           Ext.getCmp('Password').getEl().up('.x-form-item').setDisplayed(false);
           Ext.getCmp('SendaTestMail').setVisible(false);
           Ext.getCmp('SendaTestMail').getEl().up('.x-form-item').setDisplayed(false);
+          Ext.getCmp('eFromName').setVisible(false);
+          Ext.getCmp('eFromName').getEl().up('.x-form-item').setDisplayed(false);
 
           if (Ext.getCmp('SendaTestMail').getValue().checked) {
             Ext.getCmp('eMailto').setVisible(true);
             Ext.getCmp('eMailto').setVisible(true);
             Ext.getCmp('eMailto').setValue('');
-            Ext.getCmp('eFromName').setVisible(true);
-            Ext.getCmp('eFromName').getEl().up('.x-form-item').setDisplayed(true);
           }
           else {
             Ext.getCmp('eMailto').setVisible(false);
             Ext.getCmp('eMailto').getEl().up('.x-form-item').setDisplayed(false);
             Ext.getCmp('eMailto').setValue(' ');
-            Ext.getCmp('eFromName').setVisible(false);
-            Ext.getCmp('eFromName').getEl().up('.x-form-item').setDisplayed(false);
           }
 
           Ext.getCmp('UseSecureConnection').setVisible(false);
