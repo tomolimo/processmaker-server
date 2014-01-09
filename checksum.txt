@@ -207,7 +207,7 @@ fec9cddd7f1065404faeed2fa334cb55  ./rbac/engine/classes/model/map/RolesMapBuilde
 57644c3a2413cad0bfdc0923db9ecf92  ./rbac/engine/classes/model/map/AuthenticationSourceMapBuilder.php
 8f303b7d09fae3640e374fc42d1daf07  ./rbac/engine/classes/model/map/SystemsMapBuilder.php
 c26c89eb820e2898c64c72a874948dc8  ./rbac/engine/classes/model/PermissionsPeer.php
-41f63f0f101f775ef7496b759032fb9f  ./rbac/engine/classes/model/RbacUsers.php
+88197d595de6436432763f4bdb4ff014  ./rbac/engine/classes/model/RbacUsers.php
 d607d4e8a41d6f03616c098d6f574ce6  ./rbac/engine/classes/model/Systems.php
 c093d3dac665df0eb87e5d6e2bdb2533  ./rbac/engine/classes/model/om/BaseAuthenticationSourcePeer.php
 f10290e0ccdb1e9cb32f0a3fa6634b58  ./rbac/engine/classes/model/om/BaseRolesPermissionsPeer.php
@@ -639,7 +639,7 @@ e64b08810c52d945a6c7a42cb0f69eb2  ./workflow/engine/xmlform/dynaforms/fields/che
 18fd55dc77b5e497f3055be1c78bc3ce  ./workflow/engine/xmlform/dynaforms/fields/checkbox.html
 66c87a33c201edae8dcc9f3ca0c45b70  ./workflow/engine/xmlform/dynaforms/fields/submit.html
 3bea24fef3d001d80fee3f186704576a  ./workflow/engine/xmlform/dynaforms/fields/title.html
-8da43937edc94ad52a3beb2fed8bc727  ./workflow/engine/xmlform/dynaforms/fields/link.xml
+f6a462bd616b856f02e13aeb47346945  ./workflow/engine/xmlform/dynaforms/fields/link.xml
 2ddd875f78e52d27656f24fc520d8d03  ./workflow/engine/xmlform/dynaforms/fields/grid.html
 56e3cc5dee3dc78872df819793657d42  ./workflow/engine/xmlform/dynaforms/fields/checkgroup.xml
 293904fb0e8f885726976f1fa5183c9e  ./workflow/engine/xmlform/dynaforms/fields/radiogroup.html
@@ -1188,7 +1188,7 @@ efac7bde074fd4159e37c267a7b97a70  ./workflow/engine/templates/groups/groups_Tree
 17a85657567de826bea8cbedf5304fb9  ./workflow/engine/templates/pmTables/export.js
 51117355c5ed885cb33ababe248b41b8  ./workflow/engine/templates/pmTables/export.html
 e4382f0c8067f07e8e7d911fd09f02c0  ./workflow/engine/templates/pmTables/data.js
-805c4ab07c654d7d0d988e0516f7899f  ./workflow/engine/templates/pmTables/edit.js
+77184839793c626266b6b38138f3ea36  ./workflow/engine/templates/pmTables/edit.js
 76350b23f54fa70d4305e666efa4d7a2  ./workflow/engine/templates/pmTables/editReport.js
 e261abdd5fe1a7d32d81cd70e5d23bef  ./workflow/engine/templates/pmTables/list.js
 97e06baf9cf4e56ca5933e1dcb7f74db  ./workflow/engine/templates/testAuthenticationSource.html
@@ -1374,7 +1374,7 @@ d31e13e14260ff983de986825bf5bcf4  ./workflow/engine/templates/cases/cases_Action
 d442c1c0afbdf214e035bb24e94d675d  ./workflow/engine/templates/cases/caseHistory.html
 857d981c18495ee798615ca23e94ff6b  ./workflow/engine/templates/cases/main.js
 9d74dd86f4b23357937fdfbe8c18f5e5  ./workflow/engine/templates/cases/paged-table-reassigByUser2.html
-cf41d6a76539742cb452e660801ee3ed  ./workflow/engine/templates/cases/casesList.js
+557cc2f3ad5f8afcc1520853294ffc31  ./workflow/engine/templates/cases/casesList.js
 b9888aaf446ed900ce5ecc5073f4fe05  ./workflow/engine/templates/cases/caseMessageHistory.js
 92ccd4fbbf2d9fe035987db65534ab01  ./workflow/engine/templates/cases/casesStartCase.html
 25792cd2c2052600d2970461abcc1e5b  ./workflow/engine/templates/cases/cases_PrintViewTitle.html
@@ -1605,7 +1605,7 @@ d3e0e0b92bdbd1738a39462cb96ee76c  ./workflow/engine/methods/authSources/authSour
 8d30873e6540cbbd5b6c00d06012e290  ./workflow/engine/methods/authSources/authSources_SelectType.php
 b23f9ad9141ad08f606e0b56fd23e3e7  ./workflow/engine/methods/authSources/authSources_Ajax.php
 a1218d1256c0abcff46fc5b46a01d668  ./workflow/engine/methods/authSources/authSources_List.php
-404504712ba564ca8b6772efc6885aa7  ./workflow/engine/methods/login/authentication.php
+3607b4c25a00810847b149084f243c4b  ./workflow/engine/methods/login/authentication.php
 c1be5a3187e642d2c9880bae5ffbca60  ./workflow/engine/methods/login/dbInfo.php
 f454cbd3499437638745c578e36d3b5c  ./workflow/engine/methods/login/retrivePassword.php
 29a6a83a2d967fd677aab212f7a1c252  ./workflow/engine/methods/login/index.php
@@ -1671,7 +1671,7 @@ cc632086f75dab526ed091bb573367c1  ./workflow/engine/methods/tracker/tracker_Show
 6ca57b5abc5899965cb87e0aab509ef7  ./workflow/engine/methods/dbConnections/genericDbConnections.php
 e3152168241f1807bb81a377267514cd  ./workflow/engine/methods/dbConnections/dbConnections.php
 a8a1af7275749f28786ac2cedf5e9d81  ./workflow/engine/methods/dbConnections/dbConnectionsAjax.php
-8a6052cee707dc301db5e23ebfa7de23  ./workflow/engine/methods/processes/processes_doUpload.php
+ca3025020d51a5b1f4a343cbfa7a5443  ./workflow/engine/methods/processes/processes_doUpload.php
 0bcb3470ffd9440f52350d856b3e52b8  ./workflow/engine/methods/processes/processes_DeleteObjectPermission.php
 5dc1269e9f6fe97b3f5037c3ff2560b4  ./workflow/engine/methods/processes/process_DeleteCases.php
 cadf1e5c638799cf5a9d6ecb4d19ece7  ./workflow/engine/methods/processes/processes_Delete.php
@@ -1682,7 +1682,7 @@ dd9ff66f6edb6fa609b52604b0f7ea10  ./workflow/engine/methods/processes/processes_
 8e88994693d25f91c21f80c08777cda1  ./workflow/engine/methods/processes/processes_UploadFilesForm.php
 adf0ee592b572a161c580bd982e8f7a2  ./workflow/engine/methods/processes/processesList.php
 db14b3926ecf308c8489a137799eedd2  ./workflow/engine/methods/processes/processes_List.php
-ae1b1cf4415daf8e94467929e5c8411c  ./workflow/engine/methods/processes/processes_Ajax.php
+abf6aad5f2f01cf23b1475c60e287b70  ./workflow/engine/methods/processes/processes_Ajax.php
 2065604e95f090a6e20ef921a41a1833  ./workflow/engine/methods/processes/index.php
 9125f2de49283935e49fa7287530a80d  ./workflow/engine/methods/processes/processes_Import.php
 84ee8958ca75273b19a806c265e18f71  ./workflow/engine/methods/processes/downloadPML_ImportExisting.php
@@ -1692,7 +1692,7 @@ a880cd1a1e009826027db3f966420920  ./workflow/engine/methods/processes/processes_
 33cb3ae7a155261ff54da2d10bf99e4c  ./workflow/engine/methods/processes/processes_User.php
 71d919740a2874de973e3084264b1084  ./workflow/engine/methods/processes/processes_subProcessSave.php
 5068555e197d0808f28a0b9c0d4252a8  ./workflow/engine/methods/processes/webEntry_Val_Assig.php
-75fba57ea1f8f2981f9a171575c30618  ./workflow/engine/methods/processes/processes_UploadFiles.php
+744f66b15a28f8017e564c8f2b9b094a  ./workflow/engine/methods/processes/processes_UploadFiles.php
 c7f39a3a76e77580b77219d6e457ee14  ./workflow/engine/methods/processes/processes_DownloadFile.php
 61912868baa14aa1e6ad3bd5fced8215  ./workflow/engine/methods/processes/processes_availableProcessesUser.php
 79868ddab603e0424d652d8ad8cc2dc1  ./workflow/engine/methods/processes/downloadPML.php
@@ -1864,7 +1864,7 @@ b5026203885a7c85973f5f3c9735e581  ./workflow/engine/methods/users/usersNew.php
 eb11c78e5989695984651a5ab3275be7  ./workflow/engine/methods/users/users_DeleteReassign.php
 323a0ad964450c4fda2aa9d0f7429655  ./workflow/engine/methods/users/usersEdit.php
 98c52e21b9645ef2e4e0be125671f582  ./workflow/engine/methods/users/users_AuthSourceSave.php
-11f6e39fefe552534c8932d27885de25  ./workflow/engine/methods/users/usersAjax.php
+122b792797500230a03b07f1af78b192  ./workflow/engine/methods/users/usersAjax.php
 d2981f1e29ab80cdde0e9469ed67836c  ./workflow/engine/methods/inputdocs/inputdocs_Save.php
 2046c6acf3fef73c77b5ea78e7ffc322  ./workflow/engine/methods/inputdocs/inputdocs_Delete.php
 e695a35ba48af1783a464acbed4a7fb3  ./workflow/engine/methods/inputdocs/inputdocs_Edit.php
@@ -1872,7 +1872,7 @@ e695a35ba48af1783a464acbed4a7fb3  ./workflow/engine/methods/inputdocs/inputdocs_
 2a63496609f93b1ae4c577f2c72dec63  ./workflow/engine/methods/dashboard/main.php
 ac9fe263afb4663240b4767beb619b22  ./workflow/engine/methods/cases/cases_Delete.php
 7aea84bbe1aa1435a6914f386b3841fc  ./workflow/engine/methods/cases/caseHistory_Ajax.php
-3ddf88a32e6b299ea3b0c65937e8281e  ./workflow/engine/methods/cases/proxySaveReassignCasesList.php
+94d8c60eb6bed93dc498f05431349031  ./workflow/engine/methods/cases/proxySaveReassignCasesList.php
 751379f0ecd39286cd298702fa180f93  ./workflow/engine/methods/cases/debug_vars.php
 b623f501b7cd3a76255c9f8dea78bcc3  ./workflow/engine/methods/cases/cases_Step.php
 16a491a05ef965cf80f8788af3ce7d53  ./workflow/engine/methods/cases/cases_NextStep.php
@@ -1903,6 +1903,7 @@ b7804c9a63040ab622bc83692ba7f092  ./workflow/engine/methods/cases/cases_Redirect
 3a2e46281bf52d359bf0d6b208de4ee4  ./workflow/engine/methods/cases/ajaxListener.php
 e4000a2deb2643a8600411dfe0a67357  ./workflow/engine/methods/cases/cases_Scheduler_Log.php
 85d7466edc195f06837a4b52f67997e3  ./workflow/engine/methods/cases/caseMessageHistory_Ajax.php
+f882a31d48ec431efbd8c080fe1c2398  ./workflow/engine/methods/cases/saveFormSupervisor.php
 b0bcc5408c7391c56bdbcc911f8781da  ./workflow/engine/methods/cases/casesSchedulerLog_Ajax.php
 433d4abe664f9514fe0d23a70fa7d6e0  ./workflow/engine/methods/cases/caseNotesAjax.php
 f3ee053405b2fd9488e81436dfbddc69  ./workflow/engine/methods/cases/cases_Scheduler_Update.php
@@ -1943,7 +1944,7 @@ c3d6bdfcb20208fcac754c5e86a3cfc5  ./workflow/engine/methods/cases/main_init.php
 5fa92558796ae31c8969447f3a59e65b  ./workflow/engine/methods/cases/proxyProcessList.php
 663fd85c752bcdcec0420935563ec4d8  ./workflow/engine/methods/cases/debug_triggers.php
 f2c610244286ba772b693c4df133ad4a  ./workflow/engine/methods/cases/casesToRevisePanelExtJs.php
-dc72cd179a957caa6a77f18813059436  ./workflow/engine/methods/cases/cases_SaveData.php
+101075fddb276a2782f0fb16d7109f34  ./workflow/engine/methods/cases/cases_SaveData.php
 9b3ac676dcdfb14b21e982f8a4e56ec3  ./workflow/engine/methods/cases/casesToReviseTreeContent.php
 98ffb5b06c4dcca071944ea31f6265e3  ./workflow/engine/methods/cases/casesSaveDataView.php
 c55b9888622c4cebf0510f6136d11480  ./workflow/engine/methods/cases/cases_Scheduler_Log_Detail.php
@@ -2057,7 +2058,7 @@ abf8f45dc5d8a0b5b7409e147ba2ecae  ./workflow/engine/classes/class.serverConfigur
 de90df3c7d14588cff8c514a6c3223d6  ./workflow/engine/classes/class.pmScript.php
 064f1c9bc1d6b148dcfeb15defc1d7a4  ./workflow/engine/classes/class.replacementLogo.php
 e77da0bab2eac8f856b27fe74a3ce935  ./workflow/engine/classes/class.AppSolr.php
-3c93f9c96e86ebfc428ed119ccc5fba4  ./workflow/engine/classes/class.applications.php
+6bd8a6fb4e4aabf3ed0baa827b44baff  ./workflow/engine/classes/class.applications.php
 2996688936927eae18574425fa54107e  ./workflow/engine/classes/class.solr.php
 781b34dba2e9e11f7754b7a9f930b17c  ./workflow/engine/classes/class.report.php
 7b64be595becb1306533207555b3c70b  ./workflow/engine/classes/class.reportTables.php
@@ -2144,7 +2145,7 @@ d76d1c479b86f803e17b6701f2bd47e5  ./workflow/engine/classes/model/ProcessOwnerPe
 c6a27bb4e0014b487d0874bc743b205e  ./workflow/engine/classes/model/ShadowTablePeer.php
 d203247e3e29400355b5b3328e02a0ce  ./workflow/engine/classes/model/SequencesPeer.php
 a8f0ad8c3b50669bee75c119896fa574  ./workflow/engine/classes/model/Users.php
-8a85c314c39e8877a06c4f1c72c649ef  ./workflow/engine/classes/model/AppNotes.php
+fac6762ef5c441b1784ceabb7111aed3  ./workflow/engine/classes/model/AppNotes.php
 0842da041faa7b00b536166e544bb11f  ./workflow/engine/classes/model/UsersPeer.php
 86a98e9d0d1548240e0fc10e124f5230  ./workflow/engine/classes/model/IsoCountryPeer.php
 dc0f1ec59413b5e2b046e69066a9284e  ./workflow/engine/classes/model/AppCacheView.php
@@ -2292,7 +2293,7 @@ f4013fa2b9a544d1402ece5d40a415ff  ./workflow/engine/classes/model/SubApplication
 c4fd8efc7425a25eb91fe906a754d477  ./workflow/engine/classes/model/Groupwf.php
 d8cd56cd74b11397146fbc8247093ac1  ./workflow/engine/classes/model/DashletPeer.php
 f4a0507c427055fa2a5f34868f30e879  ./workflow/engine/classes/model/Dynaform.php
-41115087e62976cf32c276591c7ca7ed  ./workflow/engine/classes/model/OutputDocument.php
+f88c26b09ca10d50affab6653452b70b  ./workflow/engine/classes/model/OutputDocument.php
 9d80eec6c820d645279c3e56cdb6f9c2  ./workflow/engine/classes/model/IsoCountry.php
 2a6a57f1b635e03e7fca208a7f7f823e  ./workflow/engine/classes/model/AppOwner.php
 590ff8ed23672d0024c05e273512d44f  ./workflow/engine/classes/model/AppMessagePeer.php
@@ -5263,16 +5264,17 @@ fa89c447f8f089ae38d9e9d083daf971  ./workflow/public_html/images/classic/grid.tit
 b022b11cc8ecfb414d62e0372891314a  ./workflow/public_html/images/classic/ftr.blue.gif
 75ebf5a05a166900826a19f7685cb4cb  ./workflow/public_html/images/classic/ok.png
 1e4279b27baff4a7318298c8efe03614  ./workflow/public_html/images/classic/separator.up.gif
-7417b24dc796d1e1382980249a4c1660  ./workflow/public_html/sysGeneric.php
+729c3fed34d55fc2104841f12303215f  ./workflow/public_html/sysGeneric.php
 e491de5fb64a1dc80b3dbbbc0e919546  ./workflow/public_html/Web.config
 f3155cf03c776c71ae5309e6ed03bebe  ./workflow/public_html/sysUnnamed.php
 ecb9d7c897b7aa1c6f4cc0af57f0a6bc  ./workflow/public_html/bootstrap.php
 84393a011f099ce55e473d6a8199c522  ./processmaker
+c89e90770f3d1d2657dbbc4145acd581  ./checksum.txt
 c2d833ee077cfb1bb523a7ff07007545  ./gulliver/system/class.wysiwygEditor.php
 5a254e26da2a680b97104f6ad2a76773  ./gulliver/system/class.helper.php
 fb6c26ace2ac0e0c90ef151463d08803  ./gulliver/system/class.database_mssql.php
 4139527f32d863da24bdb05a4486bb7c  ./gulliver/system/class.dvEditor.php
-ec6c90c82d4631c5db412f6ca9519d79  ./gulliver/system/class.bootstrap.php
+197958d44fb32ea56f4653c969d93ba2  ./gulliver/system/class.bootstrap.php
 d92a3c797126e733ea9038c6c675d418  ./gulliver/system/class.i18n_po.php
 1cc1e921ffb49f084ddb9d2461545bcc  ./gulliver/system/class.soapNtlm.php
 9cc266097164f2469ff94480ba3df9c1  ./gulliver/system/class.filterForm.php
@@ -5299,7 +5301,7 @@ ee1511617317810ae754707c8af88174  ./gulliver/system/class.restClient.php
 c5e5de84dbccc4572fad0e0a940597c0  ./gulliver/system/class.ymlDomain.php
 fcd02edc0445e6b0f22175af6553aa3a  ./gulliver/system/class.dbsession.php
 2c70a1fc333296371b8821a6527549da  ./gulliver/system/class.xmlDocument.php
-d680c5492f640ff76eb6e6204b09025c  ./gulliver/system/class.xmlform.php
+9b683f4b7b97273d6a8124b45caa8068  ./gulliver/system/class.xmlform.php
 3f76cffe6175c0c6707edf24e165053d  ./gulliver/system/class.htmlArea.php
 ea6845305113f54f97b982419e021a4f  ./gulliver/system/class.functionTest.php
 2a25416000fe909da14faa777a409d39  ./gulliver/system/class.ymlTestCases.php
@@ -5307,7 +5309,7 @@ ea6845305113f54f97b982419e021a4f  ./gulliver/system/class.functionTest.php
 0aef8d084619571dc93365bfc728ea4e  ./gulliver/system/class.unitTest.php
 5ab1ec6c02ea32da4e77d7ef984fdcaf  ./gulliver/system/class.inputfilter.php
 e6aafab02972ea83037482198e094914  ./gulliver/system/class.dynaformhandler.php
-512c7e489020c4a704fca72b7c9ce952  ./gulliver/system/class.g.php
+b21f33fbd85c3fe14f8667c2ee155183  ./gulliver/system/class.g.php
 b8532eec3b8735853adb9e9cb1cc1d9e  ./gulliver/system/class.httpProxyController.php
 3dac5d98b5ab6518a58a8229b1b3167c  ./gulliver/system/VERSION
 3df7d9359287c27cb1815d01830096db  ./gulliver/system/class.database_base.php
