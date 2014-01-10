@@ -62,6 +62,7 @@ if (file_exists(PATH_DATA . "cron")) {
     for ($i = 1; $i <= count($argv) - 1; $i++) {
         if (strpos($argv[$i], "+force") !== false) {
             $force = true;
+            unset($argv[$i]);
             break;
         }
     }
