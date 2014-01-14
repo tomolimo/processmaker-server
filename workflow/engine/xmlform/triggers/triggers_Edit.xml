@@ -84,8 +84,16 @@ var insertFormVar = function(sFieldName, sValue) {
 };
 
 function cancel(){
+    if(opener) {
+        opener.windowCode[document.getElementById('form[TRI_UID]').value] = false;
+    }
     window.close();
 }
+window.onbeforeunload=function(){
+    if(opener) {
+        opener.windowCode[document.getElementById('form[TRI_UID]').value] = false;
+    }
+};
 
 function triggerSave1(form){
     ajax_post(form.action, form, 'POST');
