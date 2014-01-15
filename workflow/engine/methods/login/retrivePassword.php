@@ -129,7 +129,7 @@ if ($userData['USR_EMAIL'] != '' && $userData['USR_EMAIL'] === $data['USR_EMAIL'
     }
 } else {
     if ($userData['USR_AUTH_TYPE'] === '') {
-    $msg = G::LoadTranslation('ID_USER') . ' ' . htmlentities($data['USR_USERNAME'], ENT_QUOTES, 'UTF-8') . ' '. G::LoadTranslation('ID_IS_NOT_REGISTERED');
+        $msg = G::LoadTranslation('ID_USER') . ' ' . htmlentities($data['USR_USERNAME'], ENT_QUOTES, 'UTF-8') . ' '. G::LoadTranslation('ID_IS_NOT_REGISTERED');
     } else {
         $msg = G::LoadTranslation('ID_USER_NOT_FUNCTIONALITY');
     }
