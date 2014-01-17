@@ -361,7 +361,7 @@ class workspaceTools
         }
         return $this->db;
     }
-    
+
     /**
      * Close any database opened with getDatabase
      */
@@ -690,7 +690,7 @@ class workspaceTools
         }
 
         $oDataBase = $this->getDatabase($rbac);
- 
+
         $oDataBase->iFetchType = MYSQL_NUM;
 
         $oDataBase->logQuery(count($changes));
@@ -1356,13 +1356,6 @@ class workspaceTools
                 $stop = microtime(true);
                 $final = $stop - $start;
                 CLI::logging("<*>   Database Upgrade Process took $final seconds.\n");
-
-                $start = microtime(true);
-                CLI::logging("> Updating cases directories structure...\n");
-                $workspace->upgradeCasesDirectoryStructure($workspaceName);
-                $stop = microtime(true);
-                $final = $stop - $start;
-                CLI::logging("<*>   Database Upgrade Structure Process took $final seconds.\n");
             }
             $start = microtime(true);
             CLI::logging("> Updating cache view...\n");
@@ -1431,11 +1424,11 @@ class workspaceTools
 
         return $result;
     }
-    
+
     public function backupLogFiles()
     {
         $config = System::getSystemConfiguration();
-        
+
         clearstatcache();
         $path = PATH_DATA . "log" . PATH_SEP;
         $filePath = $path . "cron.log";
