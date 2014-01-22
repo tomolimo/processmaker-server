@@ -1727,7 +1727,7 @@ class G
     * @param type Array $aFields
     * @return type String
     */
-    public function replaceDataGridField($sContent, $aFields)
+    public function replaceDataGridField($sContent, $aFields, $nl2brRecursive = true)
     {
         $nrt     = array("\n",    "\r",    "\t");
         $nrthtml = array("(n /)", "(r /)", "(t /)");
@@ -1760,6 +1760,13 @@ class G
 
                         if (isset($aFields[$grdName]) && is_array($aFields[$grdName])) {
                             foreach ($aFields[$grdName] as $aRow) {
+                                if ($nl2brRecursive) {
+                                    foreach ($aRow as $sKey => $vValue) {
+                                        if (!is_array($vValue)) {
+                                            $aRow[$sKey] = nl2br($aRow[$sKey]);
+                                        }
+                                    }
+                                }
                                 $strData = $strData . G::replaceDataField($arrayMatch2[2], $aRow);
                             }
                         }
@@ -1777,6 +1784,14 @@ class G
         $strContentAux = str_replace($nrthtml, $nrt, $strContentAux);
 
         $sContent = $strContentAux;
+
+        if ($nl2brRecursive) {
+            foreach ($aFields as $sKey => $vValue) {
+                if (!is_array($vValue)) {
+                    $aFields[$sKey] = nl2br($aFields[$sKey]);
+                }
+            }
+        }
 
         $sContent = G::replaceDataField($sContent, $aFields);
 
@@ -5219,7 +5234,7 @@ class G
         return in_array(strtolower($functionName), $allFunctions['user']);
     }
 
-    /** 
+    /**
       * Constructor for inputFilter class. Only first parameter is required.
       * @access constructor
       * @data Mixed - input string/array-of-string to be 'cleaned'
@@ -5235,11 +5250,11 @@ class G
         $filtro = new InputFilter($tagsArray , $attrArray, $tagsMethod, $attrMethod, $xssAuto);
         return $filtro->process($data);
     }
-    
+
     /**
-     * Stores a message in the log file, if the file size exceeds 
+     * Stores a message in the log file, if the file size exceeds
      * specified log file is renamed and a new one is created.
-     * 
+     *
      * @param type $message
      * @param type $pathData
      * @param type $file
@@ -5248,9 +5263,9 @@ class G
     {
         $config = System::getSystemConfiguration();
         G::LoadSystem('logger');
-        
+
         $oLogger =& Logger::getSingleton($pathData, PATH_SEP, $file);
-        $oLogger->limitFile = $config['number_log_file']; 
+        $oLogger->limitFile = $config['number_log_file'];
         $oLogger->limitSize = $config['size_log_file'];
         $oLogger->write($message);
     }
