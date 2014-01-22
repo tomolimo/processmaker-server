@@ -477,7 +477,7 @@ class OutputDocument extends BaseOutputDocument
     public function generate($sUID, $aFields, $sPath, $sFilename, $sContent, $sLandscape = false, $sTypeDocToGener = 'BOTH', $aProperties = array())
     {
         if (($sUID != '') && is_array($aFields) && ($sPath != '')) {
-            $sContent = nl2br(G::replaceDataGridField($sContent, $aFields));
+            $sContent = G::replaceDataGridField($sContent, $aFields);
 
             G::verifyPath($sPath, true);
 
