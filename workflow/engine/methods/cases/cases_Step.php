@@ -2,12 +2,12 @@
 if (!isset($_SESSION['USER_LOGGED'])) {
       G::SendTemporalMessage( 'ID_LOGIN_AGAIN', 'warning', 'labels' );
       die( '<script type="text/javascript">
-                try 
+                try
                   {
                      prnt = parent.parent;
                      top.location = top.location;
                   }
-                catch (err) 
+                catch (err)
                   {
                      parent.location = parent.location;
                   }
@@ -842,6 +842,7 @@ try {
                         }
                         break;
                     case '': //when this task is the Finish process
+                    case 'nobody':
                         $userFields = $oDerivation->getUsersFullNameFromArray( $aFields['TASK'][$sKey]['USER_UID'] );
                         $aFields['TASK'][$sKey]['NEXT_TASK']['USR_UID'] = $userFields['USR_FULLNAME'];
                         $aFields['TASK'][$sKey]['NEXT_TASK']['ROU_FINISH_FLAG'] = true;

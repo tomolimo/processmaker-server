@@ -881,9 +881,9 @@ class Process extends BaseProcess
     	if (($this->sort) == '')  {
     		$this->sort = 'PRO_TITLE'; 
     	}
-        if ($a[$this->sort] > $b[$this->sort]) {
+        if (strtolower($a[$this->sort]) > strtolower($b[$this->sort])) {
             return 1;
-        } elseif ($a[$this->sort] < $b[$this->sort]) {
+        } elseif (strtolower($a[$this->sort]) < strtolower($b[$this->sort])) {
             return - 1;
         } else {
             return 0;
@@ -895,9 +895,9 @@ class Process extends BaseProcess
     	if (($this->sort) == '')  {
     		$this->sort = 'PRO_TITLE';
     	}
-		if ($a[$this->sort] > $b[$this->sort]) {
+		if (strtolower($a[$this->sort]) > strtolower($b[$this->sort])) {
 			return - 1;
-		} elseif ($a[$this->sort] < $b[$this->sort]) {
+		} elseif (strtolower($a[$this->sort]) < strtolower($b[$this->sort])) {
 			return 1;
 		} else {
 			return 0;
