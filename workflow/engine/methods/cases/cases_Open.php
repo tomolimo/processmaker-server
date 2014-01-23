@@ -98,16 +98,18 @@ try {
             /**
              * these routine is to verify if the case was acceded from advaced search list
              */
+            
             if ($_action == 'search') {
                 //verify if the case is with teh current user
+                
                 $c = new Criteria( 'workflow' );
                 $c->add( AppDelegationPeer::APP_UID, $sAppUid );
-                $c->addDescendingOrderByColumn( AppDelegationPeer::DEL_INDEX );
+                $c->addAscendingOrderByColumn( AppDelegationPeer::DEL_INDEX );
                 $oDataset = AppDelegationPeer::doSelectRs( $c );
                 $oDataset->setFetchmode( ResultSet::FETCHMODE_ASSOC );
                 $oDataset->next();
                 $aData = $oDataset->getRow();
-
+                
                 if ($aData['USR_UID'] != $_SESSION['USER_LOGGED'] && $aData['USR_UID'] != "") {
                     //distinct "" for selfservice
                     //so we show just the resume
