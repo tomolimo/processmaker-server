@@ -73,6 +73,11 @@ function transactionLog($transactionName){
     }
 }
 
+// Validating if exists 'HTTP_USER_AGENT' key in $_SERVER array
+if (!isset($_SERVER['HTTP_USER_AGENT'])) {
+    $_SERVER['HTTP_USER_AGENT'] = '';
+}
+
 // Defining the PATH_SEP constant, he we are defining if the the path separator symbol will be '\\' or '/'
 define( 'PATH_SEP', '/' );
 
