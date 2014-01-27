@@ -155,6 +155,7 @@ class processMap
                 $oTask->position->x = (int) $aRow1['TAS_POSX'];
                 $oTask->position->y = (int) $aRow1['TAS_POSY'];
                 $oTask->derivation = null;
+                $oTask->derivation->type = '';
                 $oTask->derivation->to = array();
                 $oCriteria = new Criteria('workflow');
                 $oCriteria->add(RoutePeer::PRO_UID, $sProcessUID);
