@@ -25,7 +25,7 @@ abstract class BaseLanguagePeer
     const CLASS_DEFAULT = 'classes.model.Language';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 7;
+    const NUM_COLUMNS = 8;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
@@ -69,7 +69,7 @@ abstract class BaseLanguagePeer
         BasePeer::TYPE_PHPNAME => array ('LanId', 'LanLocation', 'LanName', 'LanNativeName', 'LanDirection', 'LanWeight', 'LanEnabled', 'LanCalendar', ),
         BasePeer::TYPE_COLNAME => array (LanguagePeer::LAN_ID, LanguagePeer::LAN_LOCATION, LanguagePeer::LAN_NAME, LanguagePeer::LAN_NATIVE_NAME, LanguagePeer::LAN_DIRECTION, LanguagePeer::LAN_WEIGHT, LanguagePeer::LAN_ENABLED, LanguagePeer::LAN_CALENDAR, ),
         BasePeer::TYPE_FIELDNAME => array ('LAN_ID', 'LAN_LOCATION', 'LAN_NAME', 'LAN_NATIVE_NAME', 'LAN_DIRECTION', 'LAN_WEIGHT', 'LAN_ENABLED', 'LAN_CALENDAR', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7,)
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, )
     );
 
     /**
@@ -82,7 +82,7 @@ abstract class BaseLanguagePeer
         BasePeer::TYPE_PHPNAME => array ('LanId' => 0, 'LanLocation' => 1, 'LanName' => 2, 'LanNativeName' => 3, 'LanDirection' => 4, 'LanWeight' => 5, 'LanEnabled' => 6, 'LanCalendar' => 7, ),
         BasePeer::TYPE_COLNAME => array (LanguagePeer::LAN_ID => 0, LanguagePeer::LAN_LOCATION => 1, LanguagePeer::LAN_NAME => 2, LanguagePeer::LAN_NATIVE_NAME => 3, LanguagePeer::LAN_DIRECTION => 4, LanguagePeer::LAN_WEIGHT => 5, LanguagePeer::LAN_ENABLED => 6, LanguagePeer::LAN_CALENDAR => 7, ),
         BasePeer::TYPE_FIELDNAME => array ('LAN_ID' => 0, 'LAN_LOCATION' => 1, 'LAN_NAME' => 2, 'LAN_NATIVE_NAME' => 3, 'LAN_DIRECTION' => 4, 'LAN_WEIGHT' => 5, 'LAN_ENABLED' => 6, 'LAN_CALENDAR' => 7, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7,)
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, )
     );
 
     /**

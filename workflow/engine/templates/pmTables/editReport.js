@@ -207,6 +207,9 @@ Ext.onReady(function(){
   sm = new Ext.grid.RowSelectionModel({
     selectSingle: false,
     listeners:{
+      rowselect: function(sm) {
+        validateFieldSizeAutoincrement(assignedGrid.getSelectionModel().getSelected().get('field_type'), false);
+      },
       selectionchange: function(sm){
           switch(sm.getCount()){
             case 0:
@@ -247,7 +250,12 @@ Ext.onReady(function(){
                       nanText: 'This field should content a number',
                       minValue: 1,
                       maxValue: 99,
-                      minLength: 0
+                      minLength: 0,
+                      listeners:{
+                        render:function(){
+                            validateFieldSizeAutoincrement(assignedGrid.getSelectionModel().getSelected().get('field_type'), false);
+                        }
+                      }
                   });
 
 
@@ -353,65 +361,12 @@ Ext.onReady(function(){
                       }
                   },
                   'select': function(combo, row, index) {
-                      if( cm && cm instanceof Ext.grid.ColumnModel) {
-                          if(selCombo != combo.getValue()) {
-                              Ext.getCmp('sizeEdit').setValue('');
-                          }
-                          selCombo = combo.getValue();
-
-                          var swSize = 1;  //Enable
-                          var swAI = 1;
-
-                          //Date
-                          if (selCombo == "TIME" || selCombo == "DATE" || selCombo == "DATETIME") {
-                              swSize = 0;  //Disable
-                              swAI = 0;
-                          }
-
-                          //Numbers
-                          if (selCombo == "BIGINT" || selCombo == "INTEGER" || selCombo == "SMALLINT" || selCombo == "TINYINT") {
-                              //Enable All
-                          }
-
-                          if (selCombo == "DECIMAL" || selCombo == "FLOAT" || selCombo == "REAL" || selCombo == "DOUBLE") {
-                              swSize = 0;
-                              swAI = 0;
-                          }
-
-                          if (selCombo == "CHAR" || selCombo =="VARCHAR" || selCombo == "LONGVARCHAR") {
-                             var swAI = 0;
-                          }
-
-                          //Boolean
-                          if (selCombo == "BOOLEAN") {
-                              swSize = 0;
-                              swAI = 0;
-                          }
-
-                          if (swAI == 1) {
-                              Ext.getCmp("field_incre").enable();
-                          } else {
-                              Ext.getCmp("field_incre").disable();
-                              Ext.getCmp("field_incre").setValue(false);
-                          }
-
-                          if (swSize == 1) {
-                              Ext.getCmp("sizeEdit").enable();
-
-                              if (selCombo == "CHAR" || selCombo =="VARCHAR" || selCombo == "LONGVARCHAR") {
-                                  Ext.getCmp("sizeEdit").setMaxValue(((selCombo == "CHAR") ? 255 : 999));
-                                  sizeField.getEl().dom.maxLength = 3;
-                              } else {
-                                  Ext.getCmp("sizeEdit").setMaxValue(99);
-                                  sizeField.getEl().dom.maxLength = 2;
-                              }
-                          } else {
-                              Ext.getCmp("sizeEdit").disable();
-                              Ext.getCmp("sizeEdit").setValue("");
-                          }
-
-                          flagShowMessageError = 1;
-                      }
+                    if (cm && cm instanceof Ext.grid.ColumnModel) {
+                        var valueCombo = combo.getValue();
+                        var changeValue = !(valueCombo === assignedGrid.getSelectionModel().getSelected().get('field_type'));
+                        validateFieldSizeAutoincrement(valueCombo, changeValue);
+                        flagShowMessageError = 1;
+                    }
                   }//select
               }
           })
@@ -439,6 +394,45 @@ Ext.onReady(function(){
         }
       }
   ];
+  
+function validateFieldSizeAutoincrement(valueType, defaultValue) {
+    if (Ext.getCmp("sizeEdit").getEl()) {
+        
+        if (valueType === 'INTEGER' || valueType === 'BIGINT' || valueType === 'SMALLINT' || valueType === 'TINYINT') {
+            Ext.getCmp("sizeEdit").enable();
+            Ext.getCmp("sizeEdit").setMaxValue(99);
+            Ext.getCmp("sizeEdit").getEl().dom.maxLength = 2;
+            if (defaultValue) {
+                Ext.getCmp("sizeEdit").setValue('');
+            }
+            
+            Ext.getCmp("field_incre").enable();
+            if (defaultValue) {
+                Ext.getCmp("field_incre").setValue(false);
+            }
+        }
+        
+        if (valueType === 'CHAR' || valueType === 'VARCHAR' || valueType === 'LONGVARCHAR') {
+            Ext.getCmp("sizeEdit").enable();
+            Ext.getCmp("sizeEdit").setMaxValue(((valueType === 'CHAR') ? 255 : 999));
+            Ext.getCmp("sizeEdit").getEl().dom.maxLength = 3;
+            if (defaultValue) {
+                Ext.getCmp("sizeEdit").setValue('');
+            }
+            
+            Ext.getCmp("field_incre").disable();
+            Ext.getCmp("field_incre").setValue(false);
+        }
+        
+        if (valueType === 'BOOLEAN' || valueType === 'DATE' || valueType === 'DATETIME' || valueType === 'TIME' || valueType === 'DECIMAL' || valueType === 'DOUBLE' || valueType === 'FLOAT' || valueType === 'REAL') {
+            Ext.getCmp("sizeEdit").disable();
+            Ext.getCmp("sizeEdit").setValue('');
+            
+            Ext.getCmp("field_incre").disable();
+            Ext.getCmp("field_incre").setValue(false);
+        }
+    }
+}
 
   //if permissions plugin is enabled
   if (TABLE !== false && TABLE.ADD_TAB_TAG == 'plugin@simplereport') {
@@ -533,6 +527,7 @@ Ext.onReady(function(){
     beforeedit: function(roweditor, rowIndex) {
       row = assignedGrid.getSelectionModel().getSelected();
       if (row.get('field_name') == 'APP_UID' || row.get('field_name') == 'APP_NUMBER' || row.get('field_name') == 'ROW') {
+          editor.stopEditing();
         return false;
       }
     }

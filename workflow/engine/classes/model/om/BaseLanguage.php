@@ -1,12 +1,18 @@
 <?php
+
 require_once 'propel/om/BaseObject.php';
+
 require_once 'propel/om/Persistent.php';
 
+
 include_once 'propel/util/Criteria.php';
+
 include_once 'classes/model/LanguagePeer.php';
 
 /**
  * Base class that represents a row from the 'LANGUAGE' table.
+ *
+ * 
  *
  * @package    workflow.classes.model.om
  */
@@ -385,7 +391,7 @@ abstract class BaseLanguage extends BaseObject implements Persistent
             $this->setNew(false);
 
             // FIXME - using NUM_COLUMNS may be clearer.
-            return $startcol + 7; // 7 = LanguagePeer::NUM_COLUMNS - LanguagePeer::NUM_LAZY_LOAD_COLUMNS).
+            return $startcol + 8; // 8 = LanguagePeer::NUM_COLUMNS - LanguagePeer::NUM_LAZY_LOAD_COLUMNS).
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Language object", $e);
@@ -750,6 +756,7 @@ abstract class BaseLanguage extends BaseObject implements Persistent
         if (array_key_exists($keys[7], $arr)) {
             $this->setLanCalendar($arr[$keys[7]]);
         }
+
     }
 
     /**
@@ -766,7 +773,7 @@ abstract class BaseLanguage extends BaseObject implements Persistent
         }
 
         if ($this->isColumnModified(LanguagePeer::LAN_LOCATION)) {
-            $criteria->add(LanguagePeer::LAN_ID, $this->lan_location);
+            $criteria->add(LanguagePeer::LAN_LOCATION, $this->lan_location);
         }
 
         if ($this->isColumnModified(LanguagePeer::LAN_NAME)) {
@@ -895,7 +902,6 @@ abstract class BaseLanguage extends BaseObject implements Persistent
      * Since Peer classes are not to have any instance attributes, this method returns the
      * same instance for all member of this class. The method could therefore
      * be static, but this would prevent one from overriding the behavior.
-     *
      *
      * @return     LanguagePeer
      */
