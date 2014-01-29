@@ -75,7 +75,7 @@ try {
 
         //save trigger variables for debugger
         $_SESSION['TRIGGER_DEBUG']['info'][0]['NUM_TRIGGERS'] = sizeof( $triggers );
-        $_SESSION['TRIGGER_DEBUG']['info'][0]['TIME'] = 'BEFORE';
+        $_SESSION['TRIGGER_DEBUG']['info'][0]['TIME'] = G::toUpper(G::loadTranslation('ID_BEFORE'));
         $_SESSION['TRIGGER_DEBUG']['info'][0]['TRIGGERS_NAMES'] = $oCase->getTriggerNames( $triggers );
         $_SESSION['TRIGGER_DEBUG']['info'][0]['TRIGGERS_VALUES'] = $triggers;
     }
@@ -104,7 +104,7 @@ try {
 
 
         $_SESSION['TRIGGER_DEBUG']['info'][1]['NUM_TRIGGERS'] = sizeof( $triggers );
-        $_SESSION['TRIGGER_DEBUG']['info'][1]['TIME'] = 'AFTER';
+        $_SESSION['TRIGGER_DEBUG']['info'][1]['TIME'] = G::toUpper(G::loadTranslation('ID_AFTER'));
         $_SESSION['TRIGGER_DEBUG']['info'][1]['TRIGGERS_NAMES'] = $oCase->getTriggerNames( $triggers );
         $_SESSION['TRIGGER_DEBUG']['info'][1]['TRIGGERS_VALUES'] = $triggers;
     }

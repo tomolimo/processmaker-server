@@ -145,7 +145,7 @@ Ext.onReady(function(){
 
   comboStatusStore = new Ext.data.SimpleStore({
     fields: ['id','value'],
-    data: [['1','ACTIVE'],['0','INACTIVE']]
+    data: [['1',_('ID_ACTIVE').toUpperCase()],['0', _('ID_INACTIVE').toUpperCase()]]
   });
 
   newForm = new Ext.FormPanel({
@@ -164,7 +164,7 @@ Ext.onReady(function(){
              store: comboStatusStore,
              listeners   : {
                  beforerender: function(status){
-                   status.setValue('ACTIVE');
+                   status.setValue(_('ID_ACTIVE').toUpperCase());
                  }
              },
              displayField: 'value',

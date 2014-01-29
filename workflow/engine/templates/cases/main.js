@@ -359,8 +359,8 @@ Ext.onReady(function(){
       store: triggerStore,
 
       columns: [
-        {id:'name',header: "Name", width: 60, sortable: true, dataIndex: 'name'},
-        {header: "Execution", width: 30, sortable: true, dataIndex: 'execution_time'},
+        {id:'name',header: _('ID_NAME'), width: 60, sortable: true, dataIndex: 'name'},
+        {header: _('ID_EXECUTION'), width: 30, sortable: true, dataIndex: 'execution_time'},
         {header: "Code", width: 30, sortable: false, dataIndex: 'code', hidden: true}
       ],
 
