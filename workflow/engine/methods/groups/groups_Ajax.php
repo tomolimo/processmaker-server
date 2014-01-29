@@ -144,7 +144,7 @@ switch ($_POST['action']) {
     case 'saveNewGroup':
         G::LoadClass( 'groups' );
         $newGroup['GRP_UID'] = '';
-        $newGroup['GRP_STATUS'] = G::toUpper( $_POST['status'] );
+        $newGroup['GRP_STATUS'] = ($_POST['status'] == '1') ? 'ACTIVE' : 'INACTIVE';
         $newGroup['GRP_TITLE'] = trim( $_POST['name'] );
         unset( $newGroup['GRP_UID'] );
         $group = new Groupwf();
@@ -154,7 +154,7 @@ switch ($_POST['action']) {
     case 'saveEditGroup':
         G::LoadClass( 'groups' );
         $editGroup['GRP_UID'] = $_POST['grp_uid'];
-        $editGroup['GRP_STATUS'] = G::toUpper( $_POST['status'] );
+        $editGroup['GRP_STATUS'] = ($_POST['status'] == '1') ? 'ACTIVE' : 'INACTIVE';
         $editGroup['GRP_TITLE'] = trim( $_POST['name'] );
         $group = new Groupwf();
         $group->update( $editGroup );
