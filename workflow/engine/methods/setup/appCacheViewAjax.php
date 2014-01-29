@@ -138,15 +138,15 @@ switch ($request) {
         if (! $currentUserIsSuper && ! $result->error) {
             $res = $appCache->checkGrantsForUser( true );
             if (! isset( $res['error'] )) {
-                $result->info[] = array ('name' => 'Root User','value' => $res['user']);
-                $result->info[] = array ('name' => 'Root User has SUPER privilege','value' => $res['super']);
+                $result->info[] = array ('name' => G::LoadTranslation ( 'ID_ROOT_USER' ), 'value' => $res['user']);
+                $result->info[] = array ('name' => G::LoadTranslation ( 'ID_ROOT_USER_SUPER' ), 'value' => $res['super']);
             } else {
                 $result->info[] = array ('name' => 'Error','value' => $res['msg']);
             }
 
             $res = $appCache->setSuperForUser( $currentUser );
             if (! isset( $res['error'] )) {
-                $result->info[] = array ('name' => 'Setting SUPER privilege','value' => 'Successfully');
+                $result->info[] = array ('name' => G::LoadTranslation ( 'ID_SETTING_SUPER' ), 'value' => G::LoadTranslation ( 'ID_SUCCESSFULLY' ));
             } else {
                 $result->error = true;
                 $result->errorMsg = $res['msg'];

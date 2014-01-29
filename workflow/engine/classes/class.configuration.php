@@ -597,8 +597,8 @@ class Configurations // extends Configuration
                     }
                 }
 
-                setlocale(LC_TIME, $langLocate . ".utf8");
-                $dateTime = strftime($newCreation, mktime($h, $i, $s, $m, $d, $y));
+                setlocale(LC_TIME, $langLocate);
+                $dateTime = utf8_encode(strftime($newCreation, mktime($h, $i, $s, $m, $d, $y)));
 
                 if (strpos($dateTime, ' ') !== false) {
                     $dateTime = ucwords($dateTime);

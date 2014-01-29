@@ -88,7 +88,7 @@ switch ($_POST['action']) {
         G::LoadClass('calendar');
         $calendar = new Calendar();
         $calendarObj = $calendar->getCalendarList(true, true);
-        $oData[] = array('CALENDAR_UID' => '', 'CALENDAR_NAME' => '- None -');
+        $oData[] = array('CALENDAR_UID' => '', 'CALENDAR_NAME' => '- ' . G::LoadTranslation('ID_NONE') . ' -');
         foreach ($calendarObj['array'] as $rowid => $row) {
             if ($rowid > 0) {
                 $oData[] = array('CALENDAR_UID' => $row['CALENDAR_UID'], 'CALENDAR_NAME' => $row['CALENDAR_NAME']);

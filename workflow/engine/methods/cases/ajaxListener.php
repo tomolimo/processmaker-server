@@ -334,8 +334,9 @@ class Ajax
             $processData['PRO_AUTHOR'] = '(USER DELETED)';
         }
 
-        $processData['PRO_CREATE_DATE'] = date('F j, Y', strtotime($processData['PRO_CREATE_DATE']));
-
+        $conf = new Configurations();
+        $conf->getFormats();
+        $processData['PRO_CREATE_DATE'] = $conf->getSystemDate($processData['PRO_CREATE_DATE']);
         print (G::json_encode($processData));
     }
 
