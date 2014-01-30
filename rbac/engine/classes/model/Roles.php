@@ -607,7 +607,9 @@ class Roles extends BaseRoles {
         $o = new RolesPermissions();
         $o->setPerUid($sData['PER_UID']);
         $o->setRolUid($sData['ROL_UID']);
-        $o->setPermissionName($sData['PER_NAME']);
+        if (isset($sData['PER_NAME'])) {
+            $o->setPermissionName($sData['PER_NAME']);
+        }
         $o->save();
     }
 
