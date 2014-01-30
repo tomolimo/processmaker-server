@@ -64,6 +64,7 @@ $aTriggersFileds[] = array ('TRI_UID' => 'char','TRI_TITLE' => 'char');
 foreach ($aTriggersList as $i => $v) {
     unset( $aTriggersList[$i]['PRO_UID'] );
     unset( $aTriggersList[$i]['TRI_DESCRIPTION'] );
+    unset( $aTriggersList[$i]['TRI_LOCATE_WEBBOT_PARAM'] );
     $aTriggersList[$i]['TRI_TITLE'] = (strlen( $aTriggersList[$i]['TRI_TITLE'] ) > 32) ? substr( $aTriggersList[$i]['TRI_TITLE'], 0, 32 ) . '...' : $aTriggersList[$i]['TRI_TITLE'];
 }
 
