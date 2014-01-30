@@ -1096,7 +1096,7 @@ class workspaceTools
             $command = 'mysql'
             . ' --host=' . $parameters['dbHost']
             . ' --user=' . $parameters['dbUser']
-            . ' --password=' . $parameters['dbPass']
+            . ' --password=' . str_replace('"', '\"', str_replace("'", "\'", quotemeta($parameters['dbPass'])))//no change! supports the type passwords: .\+*?[^]($)'"\"'
             . ' --database=' . mysql_real_escape_string($database)
             . ' --default_character_set utf8'
             . ' --execute="SOURCE '.$filename.'"';
