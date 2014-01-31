@@ -478,6 +478,6 @@ if ($actionAjax == 'historyDynaformGridPreview') {
     </script>
     <?php
 
-    G::RenderPage( 'publish', 'raw' );
+    G::RenderPage( 'publish', 'blank' );
 }
 
