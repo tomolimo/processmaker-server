@@ -52,6 +52,7 @@ try {
         $applicationFields['APP_DATA']['__DYNAFORM_OPTIONS']['PREVIOUS_STEP'] = '#';
         $applicationFields['APP_DATA']['__DYNAFORM_OPTIONS']['NEXT_STEP_LABEL'] = '';
         $applicationFields['APP_DATA']['__DYNAFORM_OPTIONS']['NEXT_ACTION'] = '#';
+        $applicationFields['APP_DATA']['__DYNAFORM_OPTIONS']['DYNUIDPRINT'] = $_REQUEST['DYN_UID'];
 
         G::LoadClass( 'dbConnections' );
         $_SESSION['PROCESS'] = $applicationFields['PRO_UID'];
