@@ -256,8 +256,8 @@ Ext.onReady(function(){
                         }
                     }
 
-                    if (swDynaformChange) {
-	                    if ((swRequiredField == 1)){
+                      if (swRequiredField == 1){
+                          if (swDynaformChange) {
 	                        Ext.MessageBox.show({
 	                            title: _("ID_CONFIRM"),
 	                            msg: _("ID_DYNAFORM_SAVE_CHANGES"),
@@ -292,14 +292,13 @@ Ext.onReady(function(){
 	                                }
 	                            }
 	                        });
-	                    } else {
+                          } else {
+                            loadMaskStep.show(); 
+                            document.getElementById("openCaseFrame").src = node.attributes.url;
+                          }
+                      } else {
 	                    	swNodeCurrentSelect = 1;
-	                    }
-                	} else {
-	                	loadMaskStep.show();
-	                    //Set URL and redirect
-	                    document.getElementById("openCaseFrame").src = node.attributes.url;	
-                	}
+	                }
                 } else {
                     loadMaskStep.show();
 

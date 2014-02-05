@@ -3908,13 +3908,15 @@ function dropDownSetOption(elem, arrayOption)
 function dynaFormChanged(frm)
 {
     for (var i1 = 0; i1 <= frm.elements.length - 1; i1++) {
-        if (frm.elements[i1].type == "text" && frm.elements[i1].value != frm.elements[i1].defaultValue) {
-            return true;
+        
+        if((frm.elements[i1].type=="radio" || frm.elements[i1].type=="checkbox") && (frm.elements[i1].checked!=frm.elements[i1].defaultChecked)) {
+          return true;
         }
-
-        if (frm.elements[i1].type == "textarea" && frm.elements[i1].value != frm.elements[i1].defaultValue) {
-            return true;
+        
+        if((frm.elements[i1].type=="textarea" || frm.elements[i1].type=="text" || frm.elements[i1].type=="file") && (frm.elements[i1].value!=frm.elements[i1].defaultValue)) {
+          return true;
         }
+        
 
         if (frm.elements[i1].tagName.toLowerCase() == "select") {
             var selectDefaultValue = frm.elements[i1].value;
