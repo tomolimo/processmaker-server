@@ -582,7 +582,7 @@ function handleFatalErrors ($buffer)
             if (strpos( $_SERVER['REQUEST_URI'], '&ACTION=GENERATE' ) !== false) {
                 $aNextStep = $oCase->getNextStep( $_SESSION['PROCESS'], $_SESSION['APPLICATION'], $_SESSION['INDEX'], $_SESSION['STEP_POSITION'] );
                 if ($_SESSION['TRIGGER_DEBUG']['ISSET']) {
-                    $_SESSION['TRIGGER_DEBUG']['TIME'] = 'AFTER';
+                    $_SESSION['TRIGGER_DEBUG']['TIME'] = G::toUpper(G::loadTranslation('ID_AFTER'));
                     $_SESSION['TRIGGER_DEBUG']['BREAKPAGE'] = $aNextStep['PAGE'];
                     $aNextStep['PAGE'] = $aNextStep['PAGE'] . '&breakpoint=triggerdebug';
                 }
@@ -605,7 +605,7 @@ function handleFatalErrors ($buffer)
         } else {
             $aNextStep = $oCase->getNextStep( $_SESSION['PROCESS'], $_SESSION['APPLICATION'], $_SESSION['INDEX'], $_SESSION['STEP_POSITION'] );
             if (isset($_SESSION['TRIGGER_DEBUG']['ISSET']) && $_SESSION['TRIGGER_DEBUG']['ISSET']) {
-                $_SESSION['TRIGGER_DEBUG']['TIME'] = 'AFTER';
+                $_SESSION['TRIGGER_DEBUG']['TIME'] = G::toUpper(G::loadTranslation('ID_AFTER'));
                 $_SESSION['TRIGGER_DEBUG']['BREAKPAGE'] = $aNextStep['PAGE'];
                 $aNextStep['PAGE'] = $aNextStep['PAGE'] . '&breakpoint=triggerdebug';
             }
