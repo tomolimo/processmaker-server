@@ -229,6 +229,7 @@ $_DBArray['triggers'] = $aTriggers;
 
 $_SESSION['_DBArray'] = $_DBArray;
 
+$aFields = array_merge($aFields, setLabels());
 $G_PUBLISH = new Publisher();
 $G_PUBLISH->AddContent( 'xmlform', 'xmlform', 'events/eventsEditAction', '', $aFields, '../events/eventsSave' );
 //$G_PUBLISH->AddContent('xmlform', 'xmlform', 'events/eventsEditAction', '', $aFields, '../events/eventsSave');
@@ -237,5 +238,17 @@ G::RenderPage( 'publish', 'raw' );
 function replaceQuotes ($aData)
 {
     return str_replace( '"', '&quote;', $aData );
+}
+
+function setLabels () {
+    $labels = array(
+        'LABEL_ADD' => G::LoadTranslation( 'ID_ADD' ),
+        'LABEL_ADD_CURRENT' => G::LoadTranslation( 'ID_EVENT_ADD_CURRENT' ),
+        'LABEL_ADD_USERS'   => G::LoadTranslation( 'ID_EVENT_ADD_USERS' ),
+        'LABEL_REMOVED_SELECTED'    => G::LoadTranslation( 'ID_EVENT_REMOVE_SELECTED' ),
+        'LABEL_ADD_DYNAVAR' => G::LoadTranslation( 'ID_EVENT_ADD_DYNAVAR' ),
+        'LABEL_ADD_GROUPS'  => G::LoadTranslation( 'ID_EVENT_ADD_GROUPS' )
+    );
+    return $labels;
 }
 
