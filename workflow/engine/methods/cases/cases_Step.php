@@ -138,7 +138,7 @@ if (! isset( $_GET['breakpoint'] )) {
     $triggers = $oCase->loadTriggers( $_SESSION['TASK'], $_GET['TYPE'], $_GET['UID'], 'BEFORE' );
 
     $_SESSION['TRIGGER_DEBUG']['NUM_TRIGGERS'] = count( $triggers );
-    $_SESSION['TRIGGER_DEBUG']['TIME'] = 'BEFORE';
+    $_SESSION['TRIGGER_DEBUG']['TIME'] = G::toUpper(G::loadTranslation('ID_BEFORE'));
     if ($_SESSION['TRIGGER_DEBUG']['NUM_TRIGGERS'] != 0) {
         $_SESSION['TRIGGER_DEBUG']['TRIGGERS_NAMES'] = $oCase->getTriggerNames( $triggers );
         $_SESSION['TRIGGER_DEBUG']['TRIGGERS_VALUES'] = $triggers;
