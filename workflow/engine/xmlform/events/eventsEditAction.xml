@@ -83,6 +83,14 @@ SELECT TRI_UID, TRI_TITLE FROM triggers
   <en>Save</en>
 </SAVE>
 
+
+<LABEL_ADD type="hidden" />
+<LABEL_ADD_CURRENT type="hidden" />
+<LABEL_ADD_USERS type="hidden" />
+<LABEL_REMOVED_SELECTED type="hidden" />
+<LABEL_ADD_DYNAVAR type="hidden" />
+<LABEL_ADD_GROUPS type="hidden" />
+
 <JS type="javascript"><![CDATA[
 
 
@@ -149,6 +157,37 @@ leimnud.event.add(document.getElementById('form[SAVE]'), 'mouseout', function() 
 
 function cancel(){
     currentPopupWindow.remove();
+}
+
+
+var lAdd = document.getElementsByName("labelAdd");
+for(var i=0; i<lAdd.length; i++) {
+    lAdd[i].title = getField('LABEL_ADD').value;
+}
+
+var lAddCur = document.getElementsByName("labelAddCurrent");
+for(var i=0; i<lAddCur.length; i++) {
+    lAddCur[i].title = getField('LABEL_ADD_CURRENT').value;
+}
+
+var lAddCur = document.getElementsByName("labelAddUsers");
+for(var i=0; i<lAddCur.length; i++) {
+    lAddCur[i].title = getField('LABEL_ADD_USERS').value;
+}
+
+var lRemo = document.getElementsByName("labelRemoved");
+for(var i=0; i<lRemo.length; i++) {
+    lRemo[i].title = getField('LABEL_REMOVED_SELECTED').value;
+}
+
+var lAddDyn = document.getElementsByName("labelAddDynavar");
+for(var i=0; i<lAddDyn.length; i++) {
+    lAddDyn[i].title = getField('LABEL_ADD_DYNAVAR').value;
+}
+
+var lAddGro = document.getElementsByName("labelAddGroup");
+for(var i=0; i<lAddGro.length; i++) {
+    lAddGro[i].title = getField('LABEL_ADD_GROUPS').value;
 }
 
 ]]></JS>
