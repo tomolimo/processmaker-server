@@ -117,6 +117,14 @@ class Home extends Controller
             }
         }
 
+        $oServerConf = & serverConf::getSingleton();
+
+        if ($oServerConf->isRtl( SYS_LANG )) {
+            $swRtl = 1; 
+        } else {
+            $swRtl = 0;
+        }
+
         //Get simplified options
         global $G_TMP_MENU;
 
@@ -149,6 +157,7 @@ class Home extends Controller
         $this->setVar( 'switchLink', $switchLink );
         $this->setVar( 'arrayMnuOption', $arrayMnuOption );
         $this->setVar( 'mnuNewCase', $mnuNewCase );
+        $this->setVar( 'rtl', $swRtl );
 
         $this->render();
     }
@@ -209,7 +218,6 @@ class Home extends Controller
                 $title = G::LoadTranslation("ID_UNASSIGNED_INBOX");
                 break;
             default:
-                G::pr('sueñooooo');die();
                 $title = ucwords( $httpData->t );
                 break;
         }
