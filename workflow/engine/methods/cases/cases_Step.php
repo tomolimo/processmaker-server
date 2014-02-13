@@ -187,7 +187,7 @@ $oCase->updateCase( $_SESSION['APPLICATION'], $Fields );
 
 
 //Obtain previous and next step - Start
-try {
+try { 
     $oCase = new Cases();
     $aNextStep = $oCase->getNextStep( $_SESSION['PROCESS'], $_SESSION['APPLICATION'], $_SESSION['INDEX'], $_SESSION['STEP_POSITION'] );
     $aPreviousStep = $oCase->getPreviousStep( $_SESSION['PROCESS'], $_SESSION['APPLICATION'], $_SESSION['INDEX'], $_SESSION['STEP_POSITION'] );
@@ -259,12 +259,12 @@ try {
 
             $G_PUBLISH->AddContent( 'dynaform', 'xmlform', $_SESSION['PROCESS'] . '/' . $_GET['UID'], '', $Fields['APP_DATA'], 'cases_SaveData?UID=' . $_GET['UID'] . '&APP_UID=' . $_SESSION['APPLICATION'], '', (strtolower( $oStep->getStepMode() ) != 'edit' ? strtolower( $oStep->getStepMode() ) : '') );
             break;
-        case 'INPUT_DOCUMENT':
+        case 'INPUT_DOCUMENT': 
             if ($noShowTitle == 0) {
                 $G_PUBLISH->AddContent( 'smarty', 'cases/cases_title', '', '', $array );
             }
             $oInputDocument = new InputDocument();
-            $Fields = $oInputDocument->load( $_GET['UID'] );
+            $Fields = $oInputDocument->load( $_GET['UID'] ); 
             if (! $aPreviousStep) {
                 $Fields['__DYNAFORM_OPTIONS']['PREVIOUS_STEP_LABEL'] = '';
                 $Fields['PREVIOUS_STEP_LABEL'] = '';
@@ -278,13 +278,13 @@ try {
             $Fields['NEXT_STEP'] = $aNextStep['PAGE'];
             $Fields['NEXT_STEP_LABEL'] = G::loadTranslation( "ID_NEXT_STEP" );
             switch ($_GET['ACTION']) {
-                case 'ATTACH':
+                case 'ATTACH': 
                     switch ($Fields['INP_DOC_FORM_NEEDED']) {
                         case 'REAL':
                             $Fields['TYPE_LABEL'] = G::LoadTranslation( 'ID_NEW' );
                             $sXmlForm = 'cases/cases_AttachInputDocument2';
                             break;
-                        case 'VIRTUAL':
+                        case 'VIRTUAL': 
                             $Fields['TYPE_LABEL'] = G::LoadTranslation( 'ID_ATTACH' );
                             $sXmlForm = 'cases/cases_AttachInputDocument1';
                             break;
@@ -319,8 +319,8 @@ try {
 
                     $oHeadPublisher = & headPublisher::getSingleton();
                     $titleDocument = "<h3>" . $Fields['INP_DOC_TITLE'] . "<br><small>" . G::LoadTranslation( 'ID_INPUT_DOCUMENT' ) . "</small></h3>";
-                    if ($Fields['INP_DOC_DESCRIPTION']) {
-                        $titleDocument .= " " . str_replace( "\n", "", str_replace( "'", "\'", nl2br( htmlentities( utf8_decode( $Fields['INP_DOC_DESCRIPTION'] ) ) ) ) ) . "";
+                    if ($Fields['INP_DOC_DESCRIPTION']) { 
+                        $titleDocument .= " " . str_replace( "\n", "", str_replace( "'", "\'", nl2br( html_entity_decode($Fields['INP_DOC_DESCRIPTION'], ENT_COMPAT | ENT_HTML401, "UTF-8") ) ) ) . "";
                     }
 
                     $oHeadPublisher->addScriptCode( "documentName='{$titleDocument}';" );
