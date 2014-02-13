@@ -78,6 +78,7 @@ Ext.onReady(function(){
       {name : 'USR_LASTNAME'},
       {name : 'USR_EMAIL'},
       {name : 'USR_ROLE'},
+      {name : 'USR_ROLE_ID'},
       {name : 'USR_DUE_DATE'},
       {name : 'DEP_TITLE'},
       {name : 'LAST_LOGIN'},
@@ -153,6 +154,7 @@ Ext.onReady(function(){
       //{header: '', dataIndex: 'USR_UID', width: 30, align:'center', sortable: false, renderer: photo_user},
       {header: _('ID_USER_NAME'), dataIndex: 'USR_USERNAME', width: 90, hidden:false, align:'left'},
       {header: _('ID_FULL_NAME'), dataIndex: 'USR_USERNAME', width: 50, align:'left', renderer: full_name},
+      {id: 'USR_ROLE_ID', dataIndex: 'USR_ROLE_ID', hidden:true},
       {header: _('ID_ROLE'), dataIndex: 'USR_ROLE', width: 50, hidden:false, align:'left'},
       {header: _('ID_STATUS'), dataIndex: 'USR_STATUS', width: 50, hidden: true, align: 'center', renderer: render_status},
       {
@@ -174,8 +176,8 @@ Ext.onReady(function(){
           listeners: {
             select: function(a, b) {
               var row = usersGrid.getSelectionModel().getSelected();
-              role = row.get('USR_ROLE');
-
+              role = row.get('USR_ROLE_ID');
+              
               if (role == 'PROCESSMAKER_ADMIN' && (this.value == 'SIMPLIFIED' || this.value == 'SINGLE')) {
                 PMExt.warning(_('ID_WARNING'), _('ID_ADMINS_CANT_USE_UXS'));
                 this.setValue('NORMAL');

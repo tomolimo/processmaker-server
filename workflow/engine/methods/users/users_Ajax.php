@@ -443,6 +443,7 @@ try {
                 } catch (exception $oError) {
                     $uRole['ROL_NAME'] = G::loadTranslation( 'ID_DELETED' );
                 }
+                $row['USR_ROLE_ID'] = $row['USR_ROLE'];
                 $row['USR_ROLE'] = isset($uRole['ROL_NAME']) ? ($uRole['ROL_NAME'] != '' ? $uRole['ROL_NAME'] : $uRole['USR_ROLE']) : $uRole['USR_ROLE'];
                 $row['DUE_DATE_OK'] = (date('Y-m-d') > date('Y-m-d', strtotime($row['USR_DUE_DATE']))) ? 0 : 1;
                 $row['LAST_LOGIN'] = isset($aLogin[$row['USR_UID']]) ? $aLogin[$row['USR_UID']] : '';
@@ -450,7 +451,7 @@ try {
                 $row['DEP_TITLE'] = isset($aDepart[$row['USR_UID']]) ? $aDepart[$row['USR_UID']] : '';
                 $row['USR_UX'] = isset($uxList[$row['USR_UX']]) ? $uxList[$row['USR_UX']] : $uxList['NORMAL'];
                 $row['USR_AUTH_SOURCE'] = isset($aAuthSources[$row['USR_UID']]) ? $aAuthSources[$row['USR_UID']] : 'ProcessMaker (MYSQL)';
-
+                
                 $rows[] = $row;
             }
             echo '{users: ' . G::json_encode($rows) . ', total_users: ' . $totalRows . '}';
