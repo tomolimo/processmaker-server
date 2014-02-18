@@ -921,7 +921,7 @@ class XmlForm_Field_Title extends XmlForm_Field
     public function render ($value = null, &$owner = null)
     {
         $this->label = G::replaceDataField( $this->label, $owner->values );
-        return '<span id=\'form[' . $this->name . ']\' name=\'form[' . $this->name . ']\'' . $this->NSFieldType() . '>' . $this->htmlentities( $this->label ) . '</span>';
+        return '<span id=\'form[' . $this->name . ']\' name=\'form[' . $this->name . ']\' ' . $this->NSFieldType() . ' >' . $this->htmlentities( $this->label ) . '</span>';
     }
 
     /**
@@ -956,7 +956,7 @@ class XmlForm_Field_Subtitle extends XmlForm_Field
      */
     public function render ($value = null)
     {
-        return '<span id=\'form[' . $this->name . ']\' name=\'form[' . $this->name . ']\'' . $this->NSFieldType() . '>' . $this->htmlentities( $this->label ) . '</span>';
+        return '<span id=\'form[' . $this->name . ']\' name=\'form[' . $this->name . ']\' ' . $this->NSFieldType() . ' >' . $this->htmlentities( $this->label ) . '</span>';
     }
 
     /**
@@ -1882,14 +1882,14 @@ class XmlForm_Field_Password extends XmlForm_Field
 
         if ($this->mode === 'edit') {
             if ($this->readOnly) {
-                return '<input class="module_app_input___gray" id="form[' . $this->name . ']" name="form[' . $this->name . ']" type ="password" autocomplete="' . $this->autocomplete . '" size="' . $this->size . '" maxlength="' . $this->maxLength . '" value=\'' . $this->htmlentities( $value, ENT_COMPAT, 'utf-8' ) . '\' ' . $this->NSFieldType() . 'readOnly="readOnly"/>';
+                return '<input class="module_app_input___gray" id="form[' . $this->name . ']" name="form[' . $this->name . ']" type ="password" autocomplete="' . $this->autocomplete . '" size="' . $this->size . '" maxlength="' . $this->maxLength . '" value=\'' . $this->htmlentities( $value, ENT_COMPAT, 'utf-8' ) . '\' ' . $this->NSFieldType() . ' readOnly="readOnly"/>';
             } else {
                 $html = '<input class="module_app_input___gray" id="form[' . $this->name . ']" name="form[' . $this->name . ']" type ="password" autocomplete="' . $this->autocomplete . '" size="' . $this->size . '" maxlength="' . $this->maxLength . '" value=\'' . $this->htmlentities( $value, ENT_COMPAT, 'utf-8' ) . '\' ' . $this->NSFieldType() . '/>';
                 $html .= $this->renderHint();
                 return $html;
             }
         } elseif ($this->mode === 'view') {
-            $html = '<input class="module_app_input___gray" id="form[' . $this->name . ']" name="form[' . $this->name . ']" type ="hidden" autocomplete="' . $this->autocomplete . '" size="' . $this->size . '" maxlength="' . $this->maxLength . '" value=\'' . $this->htmlentities( $value, ENT_COMPAT, 'utf-8' ) .  '\'' . $this->NSFieldType() . ' readOnly="readOnly"/>';
+            $html = '<input class="module_app_input___gray" id="form[' . $this->name . ']" name="form[' . $this->name . ']" type ="hidden" autocomplete="' . $this->autocomplete . '" size="' . $this->size . '" maxlength="' . $this->maxLength . '" value=\'' . $this->htmlentities( $value, ENT_COMPAT, 'utf-8' ) .  '\' ' . $this->NSFieldType() . ' readOnly="readOnly"/>';
             $html .= $this->htmlentities( str_repeat( '*', 10 ), ENT_COMPAT, 'utf-8' );
             return $html;
         } else {
@@ -2749,7 +2749,7 @@ class XmlForm_Field_Link extends XmlForm_Field
         $target = G::replaceDataField($this->target, $v);
 
         $html = "<a class=\"tableOption\" href=\"" . $this->htmlentities($link, ENT_QUOTES, "utf-8") . "\"";
-        $html = $html . " id=\"form[$id]\" name=\"form[$id]\" pm:field=\"pm:field\"";
+        $html = $html . " id=\"form[$id]\" name=\"form[$id]\" pm:field=\"pm:field\" ";
         $html .= $this->NSFieldType() . ' ';
         if ((strrpos($_SERVER['HTTP_USER_AGENT'], "Chrome") === false ? false : true) && trim($this->htmlentities($link, ENT_QUOTES, "utf-8")) === "#") {
             $html = $html . (($this->onclick) ? " onclick=\"" . htmlentities($onclick, ENT_QUOTES, "utf-8") . " return false;\"" : " onclick=\" return false;\"");
@@ -2906,7 +2906,7 @@ class XmlForm_Field_File extends XmlForm_Field
             $styleDisplay = "display: none;";
         }
 
-        $html = $html1 . "<input type=\"file\" id=\"form" . $rowId . "[" . $this->name . "]\" name=\"form" . $rowId . "[" . $this->name . "]\" " .$this->NSFieldType(). " value=\"" . $value . "\"class=\"module_app_input___gray_file\" style=\"" . $styleDisplay . "\"" . $mode . " " . $this->NSRequiredValue() . " />" . $html2;
+        $html = $html1 . "<input type=\"file\" id=\"form" . $rowId . "[" . $this->name . "]\" name=\"form" . $rowId . "[" . $this->name . "]\" " .$this->NSFieldType(). " value=\"" . $value . "\" class=\"module_app_input___gray_file\" style=\"" . $styleDisplay . "\"" . $mode . " " . $this->NSRequiredValue() . " />" . $html2;
         if (isset( $this->input ) && $this->input != null) {
             require_once ("classes/model/InputDocument.php");
 
@@ -3197,7 +3197,7 @@ class XmlForm_Field_Button extends XmlForm_Field
         $onclick = G::replaceDataField( $this->onclick, $owner->values );
         $label = G::replaceDataField( $this->label, $owner->values );
         if ($this->mode === 'edit') {
-            $re = "<input style=\"{$this->style}\" class='module_app_button___gray {$this->className}' id=\"form[{$this->name}]\" " . $this->NSFieldType() . "name=\"form[{$this->name}]\" type='button' value=\"{$label}\" " . (($this->onclick) ? 'onclick="' . htmlentities( $onclick, ENT_COMPAT, 'utf-8' ) . '"' : '') . " />";
+            $re = "<input style=\"{$this->style}\" class='module_app_button___gray {$this->className}' id=\"form[{$this->name}]\" " . $this->NSFieldType() . " name=\"form[{$this->name}]\" type='button' value=\"{$label}\" " . (($this->onclick) ? 'onclick="' . htmlentities( $onclick, ENT_COMPAT, 'utf-8' ) . '"' : '') . " />";
             return $re;
         } elseif ($this->mode === 'view') {
             return "<input style=\"{$this->style};display:none\" disabled='disabled' class='module_app_button___gray module_app_buttonDisabled___gray {$this->className}' id=\"form[{$this->name}]\" name=\"form[{$this->name}]\" type='button' value=\"{$label}\" " . (($this->onclick) ? 'onclick="' . htmlentities( $onclick, ENT_COMPAT, 'utf-8' ) . '"' : '') . " />";
@@ -3232,7 +3232,7 @@ class XmlForm_Field_Reset extends XmlForm_Field
         //return '<input name="'.$this->name.'" type ="reset" value="'.$this->label.'"/>';
         //    return "<input style=\"{$this->style}\" $mode class='module_app_button___gray {$this->className}' id=\"form[{$this->name}]\" name=\"form[{$this->name}]\" type='reset' value=\"{$this->label}\" " . (($this->onclick) ? 'onclick="' . htmlentities ( $onclick, ENT_COMPAT, 'utf-8' ) . '"' : '') . " />";
         if ($this->mode === 'edit') {
-            return "<input style=\"{$this->style}\" $mode class='module_app_button___gray {$this->className}' id=\"form[{$this->name}]\" " . $this->NSFieldType() . "name=\"form[{$this->name}]\" type='reset' value=\"{$this->label}\" " . (($this->onclick) ? 'onclick="' . htmlentities( $onclick, ENT_COMPAT, 'utf-8' ) . '"' : '') . " />";
+            return "<input style=\"{$this->style}\" $mode class='module_app_button___gray {$this->className}' id=\"form[{$this->name}]\" " . $this->NSFieldType() . " name=\"form[{$this->name}]\" type='reset' value=\"{$this->label}\" " . (($this->onclick) ? 'onclick="' . htmlentities( $onclick, ENT_COMPAT, 'utf-8' ) . '"' : '') . " />";
         } elseif ($this->mode === 'view') {
             return "<input style=\"{$this->style};display:none\" $mode class='module_app_button___gray {$this->className}' id=\"form[{$this->name}]\" name=\"form[{$this->name}]\" type='reset' value=\"{$this->label}\" " . (($this->onclick) ? 'onclick="' . htmlentities( $onclick, ENT_COMPAT, 'utf-8' ) . '"' : '') . " />";
         } else {
@@ -3349,15 +3349,13 @@ class XmlForm_Field_Hidden extends XmlForm_Field
         $result = array ();
         $r = 1;
         foreach ($values as $v) {
-            $result[] = '<input type="hidden" ' . $this->NSGridType() . 'value="' . $this->htmlentities( $v, ENT_COMPAT, 'utf-8' ) . '" id="form[' . $owner->name . '][' . $r . '][' . $this->name . ']" name="form[' . $owner->name . '][' . $r . '][' . $this->name . ']" />';
+            $result[] = '<input type="hidden" ' . $this->NSGridType() . ' value="' . $this->htmlentities( $v, ENT_COMPAT, 'utf-8' ) . '" id="form[' . $owner->name . '][' . $r . '][' . $this->name . ']" name="form[' . $owner->name . '][' . $r . '][' . $this->name . ']" />';
             $r ++;
         }
 
         return $result;
     }
 
-            //$arrayResult[] = $this->render( $v, $owner, "[" . $owner->name . "][" . $r . "]", $r, $therow );
-        
     /**
      * Render the field in a table
      *
@@ -4571,7 +4569,7 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
             if ($this->editable != "0") {
                 $html = '<input pm:required="' . $isRequired . '" id="' . $pID . '" name="' . $pID . '" pm:mask="' . $mask . '" pm:start="' . $startDate . '" pm:end="' . $endDate . '" pm:time="' . $Time . '" ' . $onchange . ' class="module_app_input___gray" size="' . $sizeend . '" value="' . $value . '" pm:defaultvalue="' . $defaultValue . '"  />' . '<a onclick="removeValue(\'' . $pID . '\'); return false;" style="position:relative;left:-17px;top:2px;" >' . '  <img src="/images/icons_silk/calendar_x_button.png" />' . '</a>' . '<a id="' . $pID . '[btn]" style="position: relative; top: 2px; left: -16px;" >' . '  <img src="/images/pmdateicon.png" border="0" width="12" height="14" />' . '</a>' . '<script>datePicker4("", \'' . $pID . '\', \'' . $mask . '\', \'' . $startDate . '\', \'' . $endDate . '\',' . $Time . ')</script>';
             } else {
-                $html = '<input ' . $this->NSFieldType() . 'pm:required="' . $isRequired . '" id="' . $pID . '" name="' . $pID . '" pm:mask="' . $mask . '" pm:start="' . $startDate . '" pm:end="' . $endDate . '" pm:time="' . $Time . '" ' . $onchange . ' class="module_app_input___gray" size="' . $sizeend . '" value="' . $value . '" pm:defaultvalue="' . $defaultValue . '" readonly="readonly"  />' . '<a onclick="removeValue(\'' . $pID . '\'); return false;" style="position:relative;left:-17px;top:2px;" >' . '  <img src="/images/icons_silk/calendar_x_button.png" />' . '</a>' . '<a id="' . $pID . '[btn]" style="position: relative; top: 2px; left: -16px;" >' . '  <img src="/images/pmdateicon.png" border="0" width="12" height="14" />' . '</a>' . '<script>datePicker4("", \'' . $pID . '\', \'' . $mask . '\', \'' . $startDate . '\', \'' . $endDate . '\',' . $Time . ')</script>';
+                $html = '<input ' . $this->NSFieldType() . ' pm:required="' . $isRequired . '" id="' . $pID . '" name="' . $pID . '" pm:mask="' . $mask . '" pm:start="' . $startDate . '" pm:end="' . $endDate . '" pm:time="' . $Time . '" ' . $onchange . ' class="module_app_input___gray" size="' . $sizeend . '" value="' . $value . '" pm:defaultvalue="' . $defaultValue . '" readonly="readonly"  />' . '<a onclick="removeValue(\'' . $pID . '\'); return false;" style="position:relative;left:-17px;top:2px;" >' . '  <img src="/images/icons_silk/calendar_x_button.png" />' . '</a>' . '<a id="' . $pID . '[btn]" style="position: relative; top: 2px; left: -16px;" >' . '  <img src="/images/pmdateicon.png" border="0" width="12" height="14" />' . '</a>' . '<script>datePicker4("", \'' . $pID . '\', \'' . $mask . '\', \'' . $startDate . '\', \'' . $endDate . '\',' . $Time . ')</script>';
             }
         } else {
             $html = "<span style='border:1;border-color:#000;width:100px;' name='" . $pID . "'>$value</span>" . '<input type="hidden" id="' . $pID . '" name="' . $pID . '" pm:mask="' . $mask . '" pm:start="' . $startDate . '"' . 'pm:end="' . $endDate . '"  ' . $onchange . ' class="module_app_input___gray" value="' . $value . '"/>';
