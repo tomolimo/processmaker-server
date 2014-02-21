@@ -135,6 +135,7 @@ class adminProxy extends HttpProxyController
             $list =  $data;
         }
 
+        $oRoles = new Roles();
         $rows = array();
 
         foreach ($list as $value) {
@@ -144,6 +145,13 @@ class adminProxy extends HttpProxyController
             $user->save();
 
             $row = $user->toArray(BasePeer::TYPE_FIELDNAME);
+            try {
+                $uRole = $oRoles->loadByCode($row['USR_ROLE']);
+            } catch (exception $oError) {
+                $uRole['ROL_NAME'] = G::loadTranslation( 'ID_DELETED' );
+            }
+            $row['USR_ROLE_ID'] = $row['USR_ROLE'];
+            $row['USR_ROLE'] = isset($uRole['ROL_NAME']) ? ($uRole['ROL_NAME'] != '' ? $uRole['ROL_NAME'] : $uRole['USR_ROLE']) : $uRole['USR_ROLE'];
 
             $uxList = self::getUxTypesList();
             $row['USR_UX'] = $uxList[$user->getUsrUx()];
