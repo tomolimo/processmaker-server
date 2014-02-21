@@ -390,7 +390,9 @@ try {
             $oCriteria->addSelectColumn(UsersPeer::USR_FIRSTNAME);
             $oCriteria->addSelectColumn(UsersPeer::USR_LASTNAME);
             $oCriteria->addSelectColumn(UsersPeer::USR_EMAIL);
+            
             $oCriteria->addSelectColumn(UsersPeer::USR_ROLE);
+            
             $oCriteria->addSelectColumn(UsersPeer::USR_DUE_DATE);
             $oCriteria->addSelectColumn(UsersPeer::USR_STATUS);
             $oCriteria->addSelectColumn(UsersPeer::USR_UX);
@@ -438,13 +440,16 @@ try {
             $uRole = Array();
             while ($oDataset->next()) {
                 $row = $oDataset->getRow();
+                
                 try {
                     $uRole = $oRoles->loadByCode($row['USR_ROLE']);
                 } catch (exception $oError) {
                     $uRole['ROL_NAME'] = G::loadTranslation( 'ID_DELETED' );
                 }
+
                 $row['USR_ROLE_ID'] = $row['USR_ROLE'];
                 $row['USR_ROLE'] = isset($uRole['ROL_NAME']) ? ($uRole['ROL_NAME'] != '' ? $uRole['ROL_NAME'] : $uRole['USR_ROLE']) : $uRole['USR_ROLE'];
+
                 $row['DUE_DATE_OK'] = (date('Y-m-d') > date('Y-m-d', strtotime($row['USR_DUE_DATE']))) ? 0 : 1;
                 $row['LAST_LOGIN'] = isset($aLogin[$row['USR_UID']]) ? $aLogin[$row['USR_UID']] : '';
                 $row['TOTAL_CASES'] = isset($aCases[$row['USR_UID']]) ? $aCases[$row['USR_UID']] : 0;
@@ -454,6 +459,7 @@ try {
                 
                 $rows[] = $row;
             }
+
             echo '{users: ' . G::json_encode($rows) . ', total_users: ' . $totalRows . '}';
             break;
         case 'updatePageSize':
