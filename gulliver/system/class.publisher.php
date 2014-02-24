@@ -238,6 +238,11 @@ class Publisher
                                 // Show Prompt only if there are no required fields can submit the form.
                                 $G_FORM->values['__DYNAFORM_OPTIONS']['NEXT_ACTION'] = 'if (document.getElementById("' . $G_FORM->id . '")&&validateForm(document.getElementById(\'DynaformRequiredFields\').value)) {new leimnud.module.app.confirm().make({label:"@G::LoadTranslation(ID_DYNAFORM_SAVE_CHANGES)",action:function(){document.getElementById("' . $G_FORM->id . '").submit();}.extend(this),cancel:function(){window.location = getField("DYN_FORWARD").href;}.extend(this)});return false;} return false;';
                                 break;
+
+                            case 'prompt':
+                                // Show Prompt only if there are no required fields can submit the form.
+                                $G_FORM->values['__DYNAFORM_OPTIONS']['NEXT_ACTION'] = 'if (document.getElementById("' . $G_FORM->id . '")&&validateForm(document.getElementById(\'DynaformRequiredFields\').value)) {if(dynaFormChanged(document.getElementsByTagName(\'form\').item(0))) {new leimnud.module.app.confirm().make({label:"@G::LoadTranslation(ID_DYNAFORM_SAVE_CHANGES)", action:function(){document.getElementById("' . $G_FORM->id . '").submit();}.extend(this), cancel:function(){window.location = getField("DYN_FORWARD").href;}.extend(this)});return false;} else {window.location = getField("DYN_FORWARD").href;return false;}}return false;';
+                                break;
                         }
                     }
                 }
