@@ -461,6 +461,7 @@ if ($actionAjax == 'historyDynaformGridPreview') {
     </script>
     <?php
 
+    $_SESSION['CURRENT_DYN_UID'] = $_POST['DYN_UID'];
     $_SESSION['DYN_UID_PRINT'] = $_POST['DYN_UID'];
     $G_PUBLISH->AddContent( 'dynaform', 'xmlform', $_SESSION['PROCESS'] . '/' . $_POST['DYN_UID'], '', $Fields['APP_DATA'], '', '', 'view' );
 
