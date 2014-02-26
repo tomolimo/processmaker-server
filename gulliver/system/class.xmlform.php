@@ -2629,7 +2629,7 @@ class XmlForm_Field_YesNo extends XmlForm_Field
             }
         } else {
             //VIEW MODE
-            $html .= '<span id="form[' . $this->name . ']">';
+            $html .= '<span id=" ' . $this->name . ' ">';
             $html .= ($value === '0') ? G::LoadTranslation( 'ID_NO_VALUE' ) : G::LoadTranslation( 'ID_YES_VALUE' );
             $html .= '<input ';
             $html .= 'id="form[' . $this->name . ']" ';
