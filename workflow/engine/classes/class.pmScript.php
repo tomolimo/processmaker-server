@@ -151,6 +151,39 @@ class PMScript
      */
     public function setScript ($sScript = '')
     {
+        if (!defined("T_ML_COMMENT")) {
+            define("T_ML_COMMENT", T_COMMENT);
+        } else {
+            define("T_DOC_COMMENT", T_ML_COMMENT);
+        }
+
+        $script = "<?php " . $sScript;
+        $tokens = token_get_all($script);
+        $result = "";
+
+        foreach ($tokens as $token) {
+            if (is_string($token)) {
+                $result = $result . $token;
+            } else {
+                list($id, $text) = $token;
+
+                switch ($id) {
+                    case T_OPEN_TAG:
+                    case T_CLOSE_TAG:
+                    case T_COMMENT:
+                    case T_ML_COMMENT:  //we've defined this
+                    case T_DOC_COMMENT: //and this
+                        break;
+                    default:
+                        $result = $result . $text;
+                        break;
+                }
+            }
+        }
+
+        $result = trim($result);
+        $sScript = $result;
+
         $this->sScript = $sScript;
     }
 
