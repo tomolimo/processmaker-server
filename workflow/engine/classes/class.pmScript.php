@@ -151,38 +151,36 @@ class PMScript
      */
     public function setScript ($sScript = '')
     {
-        $nrt     = array("\n",    "\r",    "\t");
-        $nrthtml = array("(n /)", "(r /)", "(t /)");
-
-        $script = $sScript;
-        $script = str_replace($nrt, $nrthtml, $script);
-
-        while (preg_match("/^(.*)\/\*(.*)$/", $script, $arrayMatch)) {
-            $scriptAux = "";
-
-            if (preg_match("/^.*\*\/.*$/", $arrayMatch[2])) {
-                $arrayAux = explode("*/", $arrayMatch[2]);
-                unset($arrayAux[0]);
-                $scriptAux = implode("*/", $arrayAux);
-            }
-
-            $script = $arrayMatch[1] . $scriptAux;
+        if (!defined("T_ML_COMMENT")) {
+            define("T_ML_COMMENT", T_COMMENT);
+        } else {
+            define("T_DOC_COMMENT", T_ML_COMMENT);
         }
 
-        while (preg_match("/^(.*)(?:\/\/|#)(.*)$/", $script, $arrayMatch)) {
-            $scriptAux = "";
+        $script = "<?php " . $sScript;
+        $tokens = token_get_all($script);
+        $result = "";
 
-            if (preg_match("/^.*\(n\s\/\).*$/", $arrayMatch[2])) {
-                $arrayAux = explode("(n /)", $arrayMatch[2]);
-                unset($arrayAux[0]);
-                $scriptAux = implode("(n /)", $arrayAux);
+        foreach ($tokens as $token) {
+            if (is_string($token)) {
+                $result = $result . $token;
+            } else {
+                list($id, $text) = $token;
+
+                switch ($id) {
+                    case T_COMMENT:
+                    case T_ML_COMMENT:  //we've defined this
+                    case T_DOC_COMMENT: //and this
+                        break;
+                    default:
+                        $result = $result . $text;
+                        break;
+                }
             }
-
-            $script = $arrayMatch[1] . $scriptAux;
         }
 
-        $script = str_replace($nrthtml, $nrt, $script);
-        $sScript = $script;
+        $result = trim(str_replace(array("<?php", "<?", "?>"), array("", "", ""), $result));
+        $sScript = $result;
 
         $this->sScript = $sScript;
     }
