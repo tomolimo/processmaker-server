@@ -168,6 +168,8 @@ class PMScript
                 list($id, $text) = $token;
 
                 switch ($id) {
+                    case T_OPEN_TAG:
+                    case T_CLOSE_TAG:
                     case T_COMMENT:
                     case T_ML_COMMENT:  //we've defined this
                     case T_DOC_COMMENT: //and this
@@ -179,7 +181,7 @@ class PMScript
             }
         }
 
-        $result = trim(str_replace(array("<?php", "<?", "?>"), array("", "", ""), $result));
+        $result = trim($result);
         $sScript = $result;
 
         $this->sScript = $sScript;
