@@ -15,10 +15,10 @@
 </TAS_TITLE>
 
 <SCH_TIME_NEXT_RUN type="text" titlealign="left" align="left" colWidth="120">
-  <en>Time next run</en>
+  <en>Next execution time</en>
 </SCH_TIME_NEXT_RUN>
 <SCH_LAST_RUN_TIME type="text" titlealign="left" align="left" colWidth="120">
-  <en>Last run time</en>
+  <en>Last execution time</en>
 </SCH_LAST_RUN_TIME>
 
 <SCH_STATUS_LNK type="link" align="left" titlealign="left" colWidth="50" value="@G::LoadTranslation(ID_@#SCH_STATE)" link="cases_Scheduler_ChangeStatus?SCH_UID=@#SCH_UID">
