@@ -33,8 +33,7 @@ if (!isset($_SESSION['USER_LOGGED'])) {
  *
  * For more information, contact Colosa Inc, 2566 Le Jeune Rd.,
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
- */
-/*
+ *
  * Created on 13-02-2008
  *
  * @author David Callizaya <davidsantos@colosa.com>
