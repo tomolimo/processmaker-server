@@ -689,7 +689,7 @@ class G
      * @param string $strClass
      * @return void
      */
-    public function LoadClass ($strClass)
+    public static function LoadClass ($strClass)
     {
         $classfile = G::ExpandPath( "classes" ) . 'class.' . $strClass . '.php';
         if (! file_exists( $classfile )) {
@@ -3294,7 +3294,7 @@ class G
      *
      * @author Erik A.O. <erik@colosa.com>
      */
-    public function json_encode($Json)
+    public static function json_encode($Json)
     {
         if ( function_exists('json_encode') ) {
             return json_encode($Json);
