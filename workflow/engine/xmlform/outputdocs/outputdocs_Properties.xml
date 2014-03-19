@@ -116,6 +116,7 @@
 </ACCEPT>
 
 <JS type="JavaScript"><![CDATA[
+
 var _oVarsPanel_;
 var showDynaformsFormVars = function(sFieldName, sAjaxServer, sProcess, sSymbol) {
   _oVarsPanel_ = new leimnud.module.panel();
@@ -196,7 +197,6 @@ var verifyTitle = function(oForm)
 
 }
 
-
 function cancel(){
     currentPopupWindow.remove();
 }
@@ -231,5 +231,6 @@ leimnud.event.add(getField('OUT_DOC_GENERATE'), 'change', function() {
 
 showPdfSecuritySwitch();
 togglePDFSecurity();
+
 ]]></JS>
 </dynaForm>

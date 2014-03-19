@@ -12,6 +12,7 @@ include_once 'classes/model/OutputDocumentPeer.php';
  * Base class that represents a row from the 'OUTPUT_DOCUMENT' table.
  * 
  *
+ *
  * @package    workflow.classes.model.om
  */
 abstract class BaseOutputDocument extends BaseObject implements Persistent

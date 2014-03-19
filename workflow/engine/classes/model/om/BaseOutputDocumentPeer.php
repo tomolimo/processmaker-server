@@ -9,6 +9,7 @@ include_once 'classes/model/OutputDocument.php';
  * Base static class for performing query and update operations on the 'OUTPUT_DOCUMENT' table.
  * 
  *
+ *
  * @package    workflow.classes.model.om
  */
 abstract class BaseOutputDocumentPeer

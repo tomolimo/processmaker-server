@@ -740,7 +740,6 @@
     <column name="LEX_VALUE" type="VARCHAR" size="128" required="true" default=""/>
     <column name="LEX_CAPTION" type="VARCHAR" size="128" required="true" default=""/>
   </table>
-  
   <table name="OUTPUT_DOCUMENT">
     <vendor type="mysql">
       <parameter name="Name" value="OUTPUT_DOCUMENT"/>
@@ -798,7 +797,6 @@
       <rule name="validValues" value="HTML|ITEXT|JRXML|ACROFORM" message="Please select a valid Output Document Type."/>
     </validator>
   </table>
-
   <table name="PROCESS">
     <vendor type="mysql">
       <parameter name="Name" value="PROCESS"/>
