@@ -439,7 +439,7 @@ EditPMTable = function(){
     if (row.data.TYPE != 'CLASSIC') {
       tableType = row.data.PRO_UID ? 'report' : 'table';
       proParam = PRO_UID !== false ? '&PRO_UID='+PRO_UID : '';
-      location.href = 'pmTables/edit?id='+row.data.ADD_TAB_UID+'&tableType=' + tableType + proParam;
+      location.href = 'pmTables/edit?id='+row.data.ADD_TAB_UID+'&flagProcessmap='+flagProcessmap+'&tableType=' + tableType + proParam;
     }
     else { //edit old report table
       location.href = 'reportTables/reportTables_Edit?REP_TAB_UID='+row.data.ADD_TAB_UID
@@ -488,6 +488,10 @@ DeletePMTable = function() {
             Ext.Msg.alert( _('ID_ERROR'), resp.result.message);
           }
         });
+        editButton.disable();
+        deleteButton.disable();
+        exportButton.disable();
+        dataButton.disable();
       }
     }
   );
