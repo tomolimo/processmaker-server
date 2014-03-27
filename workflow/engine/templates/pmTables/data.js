@@ -559,6 +559,7 @@ ImportPMTableCSV = function(){
                                     [',', 'Comma (,)']]
                        });
   var w = new Ext.Window({
+    id: 'windowImportUploader',
     title       : '',
     width       : 440,
     height      : 180,
@@ -672,6 +673,7 @@ ExportPMTableCSV = function(){
                                     [',', 'Comma (,)']]
                        });
   var w = new Ext.Window({
+    id: 'windowExportUploader',
     title       : '',
     width       : 320,
     height      : 140,

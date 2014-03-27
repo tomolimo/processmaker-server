@@ -15,6 +15,7 @@ PMExtJSCommon = function() {
 
   this.info = function(title, msg, fn) {
     Ext.MessageBox.show({
+      id: 'infoMessageBox',
       title: title,
       msg: msg,
       buttons: Ext.MessageBox.OK,
@@ -26,6 +27,7 @@ PMExtJSCommon = function() {
 
   this.question = function(title, msg, fn) {
     Ext.MessageBox.show({
+      id: 'questionMessageBox',
       title: title,
       msg: msg,
       buttons: Ext.MessageBox.YESNO,
@@ -40,6 +42,7 @@ PMExtJSCommon = function() {
 
   this.warning = function(title, msg, fn) {
     Ext.MessageBox.show({
+      id: 'warningMessageBox',
       title: title,
       msg: msg,
       buttons: Ext.MessageBox.OK,
@@ -51,6 +54,7 @@ PMExtJSCommon = function() {
 
   this.error = function(title, msg, fn) {
     Ext.MessageBox.show({
+      id: 'errorMessageBox',
       title: title,
       msg: msg,
       buttons: Ext.MessageBox.OK,
