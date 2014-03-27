@@ -552,15 +552,30 @@ try {
                 $aFields = getDynaformsVars($proUid, $isSystem, isset($_REQUEST['bIncMulSelFields']) ? $_REQUEST['bIncMulSelFields'] : 1);
             }
             $aVariables = array();
-            foreach ($aFields as $key => $value) {
-                if ($queryText != '') {
-                    if (stristr($aFields[$key]['sName'], $queryText)) {
+
+            if ($queryText != "") {
+                foreach ($aFields as $key => $value) {
+                    if (stristr($aFields[$key]["sName"], $queryText)) {
                         $aVariables[] = $aFields[$key];
                     }
-                } else {
-                    $aVariables[] = $aFields[$key];
+                }
+            } else {
+                switch ($_REQUEST["type"]) {
+                    case "system" :
+                        foreach ($aFields as $key => $value) {
+                            if ($aFields[$key]["sType"] == "system") {
+                                $aVariables[] = $aFields[$key];
+                            }
+                        }
+                        break;
+                    default :
+                        foreach ($aFields as $key => $value) {
+                            $aVariables[] = $aFields[$key];
+                        }
+                        break;
                 }
             }
+
             echo Bootstrap::json_encode($aVariables);
             break;
             /**
