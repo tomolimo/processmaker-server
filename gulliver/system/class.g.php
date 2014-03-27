@@ -177,7 +177,7 @@ class G
      * getIpAddress
      * @return string $ip
      */
-    public function getIpAddress ()
+    public static function getIpAddress ()
     {
         if (getenv( 'HTTP_CLIENT_IP' )) {
             $ip = getenv( 'HTTP_CLIENT_IP' );
