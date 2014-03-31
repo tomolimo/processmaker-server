@@ -854,7 +854,7 @@ class XmlForm_Field
     public function NSGridType ($show = false)
     {
         $igt = 'pm:gridtype="' . $this->gridFieldType . '"';
-        
+
         if ($show) {
             return $igt;
         } else {
@@ -892,7 +892,7 @@ class XmlForm_Field
     {
         $_outHint = '';
         if ($this->hint != '' && $this->mode == 'edit') {
-            $_outHint = '<a href="#" onmouseout="hideTooltip()" onmouseover="showTooltip(event, \'' . $this->hint . '\');return false;">
+            $_outHint = '<a href="#" onclick="return false;" onmouseout="hideTooltip()" onmouseover="showTooltip(event, \'' . $this->hint . '\');return false;">
                      <image src="/images/help4.gif" width="13" height="13" border="0"/>
                    </a>';
         }

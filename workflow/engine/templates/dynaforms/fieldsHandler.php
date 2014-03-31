@@ -87,7 +87,7 @@
 	<table border="0" width="100%" cellpadding="0" cellspacing="0" class="fieldshandler_item">
 	<tr>
 	<td width="15%"  valign="top" align="left">
-	     <a href='#' onmouseout="parent.hideTooltip()" onmouseover="parent.showTooltip(event,document.getElementById('help').innerHTML);return false;">
+	     <a href='#' onclick="return false;" onmouseout="parent.hideTooltip()" onmouseover="parent.showTooltip(event,document.getElementById('help').innerHTML);return false;">
 	 	    <image src="/images/help4.gif" width="16" height="16" border="0"/>
 	 	 </a>
 	</td>
