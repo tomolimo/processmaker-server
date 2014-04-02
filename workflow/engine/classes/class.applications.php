@@ -248,9 +248,6 @@ class Applications
             $Criteria->add( AppCacheViewPeer::USR_UID, $user, Criteria::EQUAL );
             $CriteriaCount->add( AppCacheViewPeer::USR_UID, $user, Criteria::EQUAL );
         }
-        */
-
-        /*
         if ($status != '') {
             $Criteria->add( AppCacheViewPeer::APP_STATUS, $status, Criteria::EQUAL );
             $CriteriaCount->add( AppCacheViewPeer::APP_STATUS, $status, Criteria::EQUAL );
