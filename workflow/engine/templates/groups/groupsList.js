@@ -494,31 +494,54 @@ SaveEditGroup = function(){
 };
 
 //Delete Button Action
-DeleteButtonAction = function(){
-  Ext.Msg.confirm(_('ID_CONFIRM'), _('ID_MSG_CONFIRM_DELETE_GROUP'),
-      function(btn, text){
-    if (btn=="yes"){
-      rowSelected = infoGrid.getSelectionModel().getSelected();
-      viewport.getEl().mask(_('ID_PROCESSING'));
-      Ext.Ajax.request({
-        url: 'groups_Ajax',
-        params: {action: 'deleteGroup', GRP_UID: rowSelected.data.GRP_UID},
-        success: function(r,o){
-          viewport.getEl().unmask();
-          DoSearch();
-          editButton.disable();  //Disable Edit Button
-          deleteButton.disable(); //Disable Delete Button
-          membersButton.disable(); //Disable Members Button
-          PMExt.notify(_('ID_GROUPS'), _('ID_GROUPS_SUCCESS_DELETE'));
-        },
-        failure: function(){
-          viewport.getEl().unmask();
-        }
-      });
+DeleteButtonAction = function() {
+    Ext.Msg.confirm(_('ID_CONFIRM'), _('ID_MSG_CONFIRM_DELETE_GROUP'),
+        function (btn, text) {
+            if (btn == "yes") {
+                rowSelected = infoGrid.getSelectionModel().getSelected();
 
-    }
-  }
-  );
+                Ext.Ajax.request({
+                    url:    "groups_Ajax",
+                    method: "POST",
+                    params: {
+                        action:   "verifyIfAssigned",
+                        groupUid: rowSelected.data.GRP_UID
+                    },
+
+                    success: function (response, opts) {
+                        var dataRespuesta = Ext.util.JSON.decode(response.responseText);
+                        if (dataRespuesta.result == "OK") {
+                            viewport.getEl().mask(_("ID_PROCESSING"));
+                            Ext.Ajax.request({
+                                url: "groups_Ajax",
+                                    params: {
+                                        action: "deleteGroup",
+                                        GRP_UID: rowSelected.data.GRP_UID
+                                    },
+
+                                    success: function(r,o) {
+                                        viewport.getEl().unmask();
+                                        DoSearch();
+                                        editButton.disable();  //Disable Edit Button
+                                        deleteButton.disable(); //Disable Delete Button
+                                        membersButton.disable(); //Disable Members Button
+                                        PMExt.notify(_('ID_GROUPS'), _('ID_GROUPS_SUCCESS_DELETE'));
+                                    },
+                                    failure: function() {
+                                        viewport.getEl().unmask();
+                                    }
+                            });
+                        } else {
+                            Ext.MessageBox.alert(_("ID_ERROR"),   _("ID_GROUP_CANNOT_DELETE_WHILE_ASSIGNED_TO_TASK"));
+                        }
+                    },
+                    failure: function (response, opts){
+                      //
+                    }
+                });
+            }
+        }
+    );
 };
 
 //Render Status
