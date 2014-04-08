@@ -90,7 +90,7 @@ class Publisher
             $this->Parts[$pos]['RenderedContent'] = ob_get_contents();
         }
         ob_end_clean();
-        $_SESSION['CONDITION_DYN_UID'] = isset($_SESSION['CURRENT_DYN_UID']) ? $_SESSION['CURRENT_DYN_UID']: isset($_SESSION['CONDITION_DYN_UID']) ? $_SESSION['CONDITION_DYN_UID'] : '';
+        $_SESSION['CONDITION_DYN_UID'] = (isset($_SESSION['CURRENT_DYN_UID']) ? $_SESSION['CURRENT_DYN_UID'] : (isset($_SESSION['CONDITION_DYN_UID']) ? $_SESSION['CONDITION_DYN_UID'] : ''));
         unset($_SESSION['CURRENT_DYN_UID']);
     }
 
