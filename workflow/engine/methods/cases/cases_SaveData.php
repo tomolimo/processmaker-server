@@ -310,6 +310,16 @@ try {
     //$oJSON = new Services_JSON();
     $_POST['__notValidateThisFields__'] = (isset( $_POST['__notValidateThisFields__'] ) && $_POST['__notValidateThisFields__'] != '') ? $_POST['__notValidateThisFields__'] : $_POST['DynaformRequiredFields'];
     if ($missing_req_values = $oForm->validateRequiredFields( $_POST['form'], Bootstrap::json_decode( stripslashes( $_POST['__notValidateThisFields__'] ) ) )) {
+        $fieldsRequired = Bootstrap::json_decode(str_replace(array("%27", "%39"), array("\"", "'"), $_POST["DynaformRequiredFields"]));
+
+        foreach ($fieldsRequired as $key1 => $value1) {
+           foreach ($missing_req_values as $key2 => $value2) {
+                if ($value1->name == $value2) {
+                    $missing_req_values[$key2] = $value1->label;
+                }
+           }
+        }
+
         $_POST['next_step'] = $aNextStep;
         $_POST['previous_step'] = $oCase->getPreviousStep( $_SESSION['PROCESS'], $_SESSION['APPLICATION'], $_SESSION['INDEX'], $_SESSION['STEP_POSITION'] );
         $_POST['req_val'] = $missing_req_values;
