@@ -299,7 +299,6 @@ class Publisher
 
                 if (isset( $ConditionalShowHideRoutines ) && $ConditionalShowHideRoutines) {
                     G::evalJScript( $ConditionalShowHideRoutines );
-                    unset($_SESSION['CONDITION_DYN_UID']);
                 }
                 break;
             case 'pagedtable':
