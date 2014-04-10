@@ -1491,7 +1491,10 @@ class XmlForm_Field_Suggest extends XmlForm_Field_SimpleText //by neyek
                 return $str;
             }
         } else {
-            return $this->htmlentities( $formVariableValue, ENT_COMPAT, 'utf-8' );
+            $html  = '<span id="form[' . $this->name . ']">';
+            $html .= $this->htmlentities($formVariableValue, ENT_COMPAT, 'utf-8');
+            $html .= '</span>';
+            return $html;
         }
     }
 
@@ -2629,7 +2632,7 @@ class XmlForm_Field_YesNo extends XmlForm_Field
             }
         } else {
             //VIEW MODE
-            $html .= '<span id=" ' . $this->name . ' ">';
+            $html .= '<span id="' . $this->name . '">';
             $html .= ($value === '0') ? G::LoadTranslation( 'ID_NO_VALUE' ) : G::LoadTranslation( 'ID_YES_VALUE' );
             $html .= '<input ';
             $html .= 'id="form[' . $this->name . ']" ';
