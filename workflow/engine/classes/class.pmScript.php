@@ -154,7 +154,9 @@ class PMScript
         if (!defined("T_ML_COMMENT")) {
             define("T_ML_COMMENT", T_COMMENT);
         } else {
-            define("T_DOC_COMMENT", T_ML_COMMENT);
+            if (!defined("T_DOC_COMMENT")) {
+                define("T_DOC_COMMENT", T_ML_COMMENT);
+            }
         }
 
         $script = "<?php " . $sScript;
@@ -163,7 +165,7 @@ class PMScript
 
         foreach ($tokens as $token) {
             if (is_string($token)) {
-                $result = $result . $token;
+                $result .= $token;
             } else {
                 list($id, $text) = $token;
 
@@ -173,18 +175,18 @@ class PMScript
                     case T_COMMENT:
                     case T_ML_COMMENT:  //we've defined this
                     case T_DOC_COMMENT: //and this
+                        if ($text != '<?php ' && $text != '<?php' && $text != '<? ' && $text != '<?' && $text != '<% ' && $text != '<%') {
+                            $result .= $text;
+                        }
                         break;
                     default:
-                        $result = $result . $text;
+                        $result .= $text;
                         break;
                 }
             }
         }
 
-        $result = trim($result);
-        $sScript = $result;
-
-        $this->sScript = $sScript;
+        $this->sScript = trim($result);
     }
 
     /**
