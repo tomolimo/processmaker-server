@@ -387,7 +387,7 @@ function getDynaformsVars ($sProcessUID, $bSystemVars = true, $bIncMulSelFields 
     }
 
     $aInvalidTypes = array("title", "subtitle", "file", "button", "reset", "submit", "javascript");
-    $aMultipleSelectionFields = array("listbox", "checkgroup", "grid");
+    $aMultipleSelectionFields = array("listbox", "checkgroup");
 
     if ($bIncMulSelFields != 0) {
         $aInvalidTypes = array_merge( $aInvalidTypes, $aMultipleSelectionFields );
