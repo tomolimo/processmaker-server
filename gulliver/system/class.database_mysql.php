@@ -98,7 +98,7 @@ class database extends database_base
         if ($sKeys != '') {
             $sSQL .= ',PRIMARY KEY(' . substr( $sKeys, 0, - 1 ) . ')';
         }
-        $sSQL .= ')' . $this->sEndLine;
+        $sSQL .= ')ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci' . $this->sEndLine;
 
         return $sSQL;
     }
