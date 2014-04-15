@@ -973,7 +973,7 @@ class wsBase
             $sBody = G::replaceDataGridField(file_get_contents($fileTemplate), $Fields, false);
             $hasEmailFrom = preg_match( '/(.+)@(.+)\.(.+)/', $sFrom, $match );
 
-            if (!$hasEmailFrom || strpos($sFrom, $aSetup["MESS_ACCOUNT"]) === false) {
+            if (!$hasEmailFrom || ($aSetup["MESS_ACCOUNT"] != '' && strpos($sFrom, $aSetup["MESS_ACCOUNT"]) === false)) {
                 if (trim($aSetup["MESS_ACCOUNT"]) != "") {
                     $sFrom = "\"" . stripslashes($sFrom) . "\" <" . $aSetup["MESS_ACCOUNT"] . ">";
                 } else {
