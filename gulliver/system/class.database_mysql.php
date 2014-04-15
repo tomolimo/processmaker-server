@@ -80,7 +80,7 @@ class database extends database_base
                     if (isset( $aParameters['Null'] ) && $aParameters['Null'] == 'YES') {
                         $sSQL .= ' NULL';
                     } else {
-                        $sSQL .= ' NOT NULL';
+                        $sSQL .= ' NOT NULL'; 
                     }
                     if (isset( $aParameters['Key'] ) && $aParameters['Key'] == 'PRI') {
                         $sKeys .= $this->sQuoteCharacter . $sColumnName . $this->sQuoteCharacter . ',';
