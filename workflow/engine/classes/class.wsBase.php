@@ -977,7 +977,7 @@ class wsBase
                 if (trim($aSetup["MESS_ACCOUNT"]) != "") {
                     $sFrom = "\"" . stripslashes($sFrom) . "\" <" . $aSetup["MESS_ACCOUNT"] . ">";
                 } else {
-                    if ($aSetup["MESS_ENGINE"] == "MAIL") {
+                    if ($aSetup["MESS_ENGINE"] == "MAIL" && $sFrom != '') {
                         $sFrom = "\"" . stripslashes($sFrom) . "\"";
                     } else {
                         $sFrom = $sFrom . " <info@" . ((isset($_SERVER["HTTP_HOST"]) && $_SERVER["HTTP_HOST"] != "")? $_SERVER["HTTP_HOST"] : "processmaker.com") . ">";
