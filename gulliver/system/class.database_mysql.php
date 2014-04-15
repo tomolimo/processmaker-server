@@ -80,7 +80,7 @@ class database extends database_base
                     if (isset( $aParameters['Null'] ) && $aParameters['Null'] == 'YES') {
                         $sSQL .= ' NULL';
                     } else {
-                        $sSQL .= ' NOT NULL';
+                        $sSQL .= ' NOT NULL'; 
                     }
                     if (isset( $aParameters['Key'] ) && $aParameters['Key'] == 'PRI') {
                         $sKeys .= $this->sQuoteCharacter . $sColumnName . $this->sQuoteCharacter . ',';
@@ -98,7 +98,7 @@ class database extends database_base
         if ($sKeys != '') {
             $sSQL .= ',PRIMARY KEY(' . substr( $sKeys, 0, - 1 ) . ')';
         }
-        $sSQL .= ')' . $this->sEndLine;
+        $sSQL .= ')ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci' . $this->sEndLine;
 
         return $sSQL;
     }
