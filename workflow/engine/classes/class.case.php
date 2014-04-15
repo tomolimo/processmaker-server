@@ -3906,7 +3906,7 @@ class Cases
         if (AppDelegationPeer::doCount($oCriteria) == 1) {
             $aFields['APP_STATUS'] = 'CANCELLED';
             $oApplication->update($aFields);
-            
+
             G::LoadClass('reportTables');
             require_once 'classes/model/AdditionalTables.php';
             $oReportTables = new ReportTables();
@@ -4932,9 +4932,9 @@ class Cases
                     throw (new Exception("Template file \"$fileTemplate\" does not exist."));
                 }
 
-                $sBody = G::replaceDataGridField(file_get_contents($fileTemplate), $aFields);
+                $sBody = G::replaceDataGridField(file_get_contents($fileTemplate), $aFields, false);
             } else {
-                $sBody = nl2br(G::replaceDataGridField($aTaskInfo["TAS_DEF_MESSAGE"], $aFields));
+                $sBody = nl2br(G::replaceDataGridField($aTaskInfo["TAS_DEF_MESSAGE"], $aFields, false));
             }
 
             G::LoadClass("tasks");
@@ -5910,7 +5910,7 @@ class Cases
             $oCriteria->add(AppMessagePeer::APP_MSG_SHOW_MESSAGE, 1);
         }
         $oCriteria->addAscendingOrderByColumn(AppMessagePeer::APP_MSG_DATE);
-        
+
         $oDataset = AppMessagePeer::doSelectRS($oCriteria);
         $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
         $oDataset->next();

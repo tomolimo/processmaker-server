@@ -274,7 +274,7 @@
     } else {
       var selectId = "form[TASKS]["+optionSelect+"][USR_UID]";
 
-      if (typeof(document.getElementById(selectId)) != 'undefined' && document.getElementById(selectId) != null && userHidden == '') {
+      if (typeof(document.getElementById(selectId)) != 'undefined' && document.getElementById(selectId) != null && (rouType == 'SELECT' || userHidden == '')) {
         var vtext  = new input(document.getElementById(selectId));
 
         // verify value select the option select

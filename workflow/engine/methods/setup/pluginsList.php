@@ -58,6 +58,9 @@ if ($handle = opendir( PATH_PLUGINS )) {
             $status_label = $pluginDetail->enabled ? G::LoadTranslation( 'ID_ENABLED' ) : G::LoadTranslation( 'ID_DISABLED' );
             $status = $pluginDetail->enabled ? 1 : 0;
             if (isset( $pluginDetail->aWorkspaces )) {
+                if (!is_array($pluginDetail->aWorkspaces)) {
+                    $pluginDetail->aWorkspaces = array();
+                }
                 if (! in_array( SYS_SYS, $pluginDetail->aWorkspaces ))
                     continue;
             }

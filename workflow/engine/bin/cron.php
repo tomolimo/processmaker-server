@@ -3,10 +3,6 @@
  * cron.php
  * @package workflow-engine-bin
  */
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
-ini_set('memory_limit', '300M'); // nore: this may need to be higher for many projects
-$mem_limit = (int) ini_get('memory_limit');
 
 if ( !defined('PATH_SEP') ) {
   define('PATH_SEP', ( substr(PHP_OS, 0, 3) == 'WIN' ) ? '\\' : '/');
@@ -62,6 +58,7 @@ if (file_exists(PATH_DATA . "cron")) {
     for ($i = 1; $i <= count($argv) - 1; $i++) {
         if (strpos($argv[$i], "+force") !== false) {
             $force = true;
+            unset($argv[$i]);
             break;
         }
     }

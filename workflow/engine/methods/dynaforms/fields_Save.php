@@ -118,10 +118,10 @@ if (file_exists(PATH_XMLFORM . 'dynaforms/fields/' . $type . '.xml')) {
     }
     if ($type === 'grid') {
         if (!isset($_POST['form']['PME_ADDROW']) || $_POST['form']['PME_ADDROW'] == '') {
-            $_POST['form']['PME_ADDROW'] = '0';
+            $_POST['form']['PME_ADDROW'] = 0;
         }
         if (!isset($_POST['form']['PME_DELETEROW']) || $_POST['form']['PME_DELETEROW'] == '') {
-            $_POST['form']['PME_DELETEROW'] = '0';
+            $_POST['form']['PME_DELETEROW'] = 0;
         }
     }
     if ($type === 'dropdown' || $type === 'listbox') {
@@ -147,7 +147,7 @@ foreach ($_POST['form'] as $key => $value) {
 
 $_POST['form'] = $res;
 
-$dbc = new DBConnection(PATH_DYNAFORM . $file . '.xml', '', '', '', 'myxml');
+$dbc = new DBConnection(PATH_DYNAFORM . $file . '.xml', '', '', '', 'myxml'); 
 $ses = new DBSession($dbc);
 
 $fields = new DynaFormField($dbc);
@@ -179,7 +179,7 @@ unset($attributes['PRO_UID']);
 
 $options = null;
 foreach ($attributes as $key => $value) {
-    if ($key === 'OPTIONS') {
+    if ($key === 'OPTIONS') { 
         if (is_array($value)) {
             if (is_array(reset($value))) {
                 $langs = array();
@@ -210,7 +210,7 @@ foreach ($attributes as $key => $value) {
                   } */
             }
         }
-    } else {
+    } else { 
         if (is_array($value)) {
             //Is a list:
             if (is_string(reset($value))) {
@@ -223,14 +223,15 @@ foreach ($attributes as $key => $value) {
 }
 unset($attributes['VALIDATE_NAME']);
 $fields->setFileName(PATH_DYNAFORM . $file . '.xml');
-
 $FieldAttributes = $attributes;
 $FieldAttrib = array();
+
 unset($FieldAttributes['XMLNODE_NAME']);
 unset($FieldAttributes['XMLNODE_NAME_OLD']);
 unset($FieldAttributes['XMLNODE_VALUE']);
 unset($FieldAttributes['BTN_CANCEL']);
 unset($FieldAttributes['SAVELABEL']);
+
 foreach ($FieldAttributes as $key => $value) {
     switch (gettype($value)) {
         case 'string':

@@ -1,5 +1,6 @@
 <?php
 /**
+ *
  * processes_ImportFile.php
  *
  * ProcessMaker Open Source Edition
@@ -20,6 +21,7 @@
  *
  * For more information, contact Colosa Inc, 2566 Le Jeune Rd.,
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
+ *
  */
 
 global $RBAC;
@@ -58,9 +60,9 @@ try {
         ) ) ));
     }
     foreach ($aFiles as $key => $val) {
-        if ($val['filename'] == $sClassName . '.php')
+        if (trim($val['filename']) == $sClassName . '.php')
             $bMainFile = true;
-        if ($val['filename'] == $sClassName . PATH_SEP . 'class.' . $sClassName . '.php')
+        if (trim($val['filename']) == $sClassName . PATH_SEP . 'class.' . $sClassName . '.php')
             $bClassFile = true;
     }
 

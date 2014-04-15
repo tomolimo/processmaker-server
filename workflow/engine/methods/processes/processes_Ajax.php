@@ -498,30 +498,38 @@ try {
         case 'saveFile':
             global $G_PUBLISH;
             $G_PUBLISH = new Publisher();
-            $sDir = "";
-            if (isset($_REQUEST['MAIN_DIRECTORY'])) {
-                $sDir = $_REQUEST['MAIN_DIRECTORY'];
-            }
+            global $RBAC;
+            if ( $RBAC->userCanAccess('PM_FACTORY') == 1) {
+                G::LoadClass('processes');
+                $app = new Processes();
+                if (!$app->processExists($_REQUEST['pro_uid'])) {
+                    echo G::LoadTranslation('ID_PROCESS_UID_NOT_DEFINED');
+                    die;
+                }
 
-            switch ($sDir) {
-                case 'mailTemplates':
-                    $sDirectory = PATH_DATA_MAILTEMPLATES . $_REQUEST['pro_uid'] . PATH_SEP . $_REQUEST['filename'];
-                    break;
-                case 'public':
-                    $sDirectory = PATH_DATA_PUBLIC . $_REQUEST['pro_uid'] . PATH_SEP . $_REQUEST['filename'];
-                    break;
-                default:
-                    $sDirectory = PATH_DATA_MAILTEMPLATES . $_REQUEST['pro_uid'] . PATH_SEP . $_REQUEST['filename'];
-                    break;
+                $sDir = "";
+                if (isset($_REQUEST['MAIN_DIRECTORY'])) {
+                    $sDir = $_REQUEST['MAIN_DIRECTORY'];
+                }
+                switch ($sDir) {
+                    case 'mailTemplates':
+                        $sDirectory = PATH_DATA_MAILTEMPLATES . $_REQUEST['pro_uid'] . PATH_SEP . $_REQUEST['filename'];
+                        break;
+                    case 'public':
+                        $sDirectory = PATH_DATA_PUBLIC . $_REQUEST['pro_uid'] . PATH_SEP . $_REQUEST['filename'];
+                        break;
+                    default:
+                        $sDirectory = PATH_DATA_MAILTEMPLATES . $_REQUEST['pro_uid'] . PATH_SEP . $_REQUEST['filename'];
+                        break;
+                }
+                $fp = fopen($sDirectory, 'w');
+                $content = stripslashes($_REQUEST['fcontent']);
+                $content = str_replace("@amp@", "&", $content);
+                $content = base64_decode($content);
+                fwrite($fp, $content);
+                fclose($fp);
+                echo 'saved: ' . $sDirectory;
             }
-
-            $fp = fopen($sDirectory, 'w');
-            $content = stripslashes($_REQUEST['fcontent']);
-            $content = str_replace("@amp@", "&", $content);
-            $content = base64_decode($content);
-            fwrite($fp, $content);
-            fclose($fp);
-            echo 'saved: ' . $sDirectory;
             break;
         case 'events':
             $oProcessMap->eventsList($oData->pro_uid, $oData->type);
@@ -544,15 +552,30 @@ try {
                 $aFields = getDynaformsVars($proUid, $isSystem, isset($_REQUEST['bIncMulSelFields']) ? $_REQUEST['bIncMulSelFields'] : 1);
             }
             $aVariables = array();
-            foreach ($aFields as $key => $value) {
-                if ($queryText != '') {
-                    if (stristr($aFields[$key]['sName'], $queryText)) {
+
+            if ($queryText != "") {
+                foreach ($aFields as $key => $value) {
+                    if (stristr($aFields[$key]["sName"], $queryText)) {
                         $aVariables[] = $aFields[$key];
                     }
-                } else {
-                    $aVariables[] = $aFields[$key];
+                }
+            } else {
+                switch ($_REQUEST["type"]) {
+                    case "system" :
+                        foreach ($aFields as $key => $value) {
+                            if ($aFields[$key]["sType"] == "system") {
+                                $aVariables[] = $aFields[$key];
+                            }
+                        }
+                        break;
+                    default :
+                        foreach ($aFields as $key => $value) {
+                            $aVariables[] = $aFields[$key];
+                        }
+                        break;
                 }
             }
+
             echo Bootstrap::json_encode($aVariables);
             break;
             /**

@@ -103,6 +103,9 @@
   </en>
 </OUT_DOC_PDF_SECURITY_PERMISSIONS>
 
+<OUT_DOC_OPEN_TYPE type="dropdown">
+  <en>By clicking on the generated file link<option name="0">Download the file</option><option name="1">Open the file</option></en>
+</OUT_DOC_OPEN_TYPE>
 
 <BTN_CANCEL type="button" onclick="cancel();">
   <en>Cancel</en>
@@ -193,7 +196,6 @@ var verifyTitle = function(oForm)
   }
 
 }
-
 
 function cancel(){
     currentPopupWindow.remove();

@@ -144,7 +144,7 @@ switch ($_POST['action']) {
     case 'saveNewGroup':
         G::LoadClass( 'groups' );
         $newGroup['GRP_UID'] = '';
-        $newGroup['GRP_STATUS'] = G::toUpper( $_POST['status'] );
+        $newGroup['GRP_STATUS'] = ($_POST['status'] == '1') ? 'ACTIVE' : 'INACTIVE';
         $newGroup['GRP_TITLE'] = trim( $_POST['name'] );
         unset( $newGroup['GRP_UID'] );
         $group = new Groupwf();
@@ -154,7 +154,7 @@ switch ($_POST['action']) {
     case 'saveEditGroup':
         G::LoadClass( 'groups' );
         $editGroup['GRP_UID'] = $_POST['grp_uid'];
-        $editGroup['GRP_STATUS'] = G::toUpper( $_POST['status'] );
+        $editGroup['GRP_STATUS'] = ($_POST['status'] == '1') ? 'ACTIVE' : 'INACTIVE';
         $editGroup['GRP_TITLE'] = trim( $_POST['name'] );
         $group = new Groupwf();
         $group->update( $editGroup );
@@ -178,7 +178,7 @@ switch ($_POST['action']) {
         $criteria = new Criteria( 'workflow' );
         $criteria->add(ObjectPermissionPeer::USR_UID, $_POST['GRP_UID']);
         ObjectPermissionPeer::doDelete( $criteria );
-        
+
         //Delete supervisors assignments
         require_once 'classes/model/ProcessUser.php';
         $criteria = new Criteria( 'workflow' );
@@ -342,5 +342,24 @@ switch ($_POST['action']) {
         $c->saveConfig( 'groupList', 'pageSize', '', $_SESSION['USER_LOGGED'] );
         echo '{success: true}';
         break;
-}
+    case "verifyIfAssigned":
+        $groupUid = $_POST["groupUid"];
+        $message = "OK";
 
+        $criteria = new Criteria("workflow");
+        $criteria->addSelectColumn(TaskUserPeer::TAS_UID);
+        $criteria->add(TaskUserPeer::USR_UID, $groupUid, Criteria::EQUAL);
+        $criteria->add(TaskUserPeer::TU_RELATION, "2", Criteria::EQUAL);
+
+        $rsCriteria = TaskUserPeer::doSelectRS($criteria);
+        $rsCriteria->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+
+        if($rsCriteria->next() != 0) {
+            $message = "ERROR";
+        }
+
+        $response = array();
+        $response["result"] = $message;
+        echo G::json_encode($response);
+        break;
+}

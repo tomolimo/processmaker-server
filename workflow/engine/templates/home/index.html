@@ -136,14 +136,16 @@
             </li>
             {/if}
           </ul>
-
-          <ul class="nav secondary-nav">
+          {if $rtl eq 1}
+          <ul class="nav rtl-secondary-nav">
+          {else}
+          <ul class="nav secondary-nav">    
+          {/if}
             <li class="account">
               <a class="menu user-photo" href="javascript:;">
                 <img alt="user_avatar_mini" height="24" src="users/users_ViewPhotoGrid?pUID={$usrUid}" width="24" />
                 <span class="menu-label screen-name">{$userName}</span>
               </a>
-
               <ul class="menu-dropdown">
                 <!--<li><a href="#" accesskey="s" id="settings_link">Settings</a></li>
                 <li><a href="#" accesskey="?" id="help_link">Help</a></li>-->

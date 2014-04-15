@@ -970,7 +970,7 @@ class wsBase
                 $Fields = array_merge( $oldFields['APP_DATA'], $appFields );
             }
 
-            $sBody = G::replaceDataGridField(file_get_contents($fileTemplate), $Fields);
+            $sBody = G::replaceDataGridField(file_get_contents($fileTemplate), $Fields, false);
             $hasEmailFrom = preg_match( '/(.+)@(.+)\.(.+)/', $sFrom, $match );
 
             if (!$hasEmailFrom || strpos($sFrom, $aSetup["MESS_ACCOUNT"]) === false) {
@@ -3288,7 +3288,7 @@ class wsBase
             return $result;
         }
     }
-    
+
     /**
      * ClaimCase
      *

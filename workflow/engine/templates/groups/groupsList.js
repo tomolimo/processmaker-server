@@ -144,8 +144,8 @@ Ext.onReady(function(){
   });
 
   comboStatusStore = new Ext.data.SimpleStore({
-    fields: ['id','value'],
-    data: [['1','ACTIVE'],['0','INACTIVE']]
+    fields: ['changeInt','value'],
+    data: [['1',_('ID_ACTIVE').toUpperCase()],['0', _('ID_INACTIVE').toUpperCase()]]
   });
 
   newForm = new Ext.FormPanel({
@@ -164,11 +164,11 @@ Ext.onReady(function(){
              store: comboStatusStore,
              listeners   : {
                  beforerender: function(status){
-                   status.setValue('ACTIVE');
+                   status.setValue('1');
                  }
              },
              displayField: 'value',
-             valueField:'value',
+             valueField:'changeInt',
              allowBlank: false,
              triggerAction: 'all',
              emptyText: _('ID_SELECT_STATUS'),
@@ -189,13 +189,15 @@ Ext.onReady(function(){
            {xtype: 'textfield', fieldLabel: _('ID_GROUP_NAME'), name: 'name', width: 200, allowBlank: false},
            {
              xtype: 'combo',
+             id: 'statusEdit',
+             name: 'statusEdit',
              fieldLabel: _('ID_STATUS'),
              hiddenName: 'status',
              typeAhead: true,
              mode: 'local',
              store: comboStatusStore,
              displayField: 'value',
-             valueField:'value',
+             valueField:'changeInt',
              allowBlank: false,
              editable:false,
              triggerAction: 'all',
@@ -409,6 +411,7 @@ DuplicateGroupName = function(){
 
 //Save New Group
 SaveNewGroup = function(){
+  document.getElementById('status').value = Ext.getCmp('status').getValue();
   newForm.getForm().submit({
     waitTitle : "&nbsp;",
     success: function(f,a){
@@ -438,7 +441,8 @@ EditGroupWindow = function(){
 
   editForm.getForm().findField('grp_uid').setValue(rowSelected.data.GRP_UID);
   editForm.getForm().findField('name').setValue(strName);
-  editForm.getForm().findField('status').setValue(rowSelected.data.GRP_STATUS);
+  var valueEditChangeInt = (rowSelected.data.GRP_STATUS == 'ACTIVE') ? '1' : '0';
+  editForm.getForm().findField('status').setValue(valueEditChangeInt);
   w = new Ext.Window({
     autoHeight: true,
     width: 440,
@@ -467,6 +471,7 @@ SaveEditGroupAction = function(){
 
 //Save Edit Group
 SaveEditGroup = function(){
+  document.getElementById('statusEdit').value = Ext.getCmp('statusEdit').getValue();
   editForm.getForm().submit({
     waitTitle : "&nbsp;",
     success: function(f,a){
@@ -489,31 +494,54 @@ SaveEditGroup = function(){
 };
 
 //Delete Button Action
-DeleteButtonAction = function(){
-  Ext.Msg.confirm(_('ID_CONFIRM'), _('ID_MSG_CONFIRM_DELETE_GROUP'),
-      function(btn, text){
-    if (btn=="yes"){
-      rowSelected = infoGrid.getSelectionModel().getSelected();
-      viewport.getEl().mask(_('ID_PROCESSING'));
-      Ext.Ajax.request({
-        url: 'groups_Ajax',
-        params: {action: 'deleteGroup', GRP_UID: rowSelected.data.GRP_UID},
-        success: function(r,o){
-          viewport.getEl().unmask();
-          DoSearch();
-          editButton.disable();  //Disable Edit Button
-          deleteButton.disable(); //Disable Delete Button
-          membersButton.disable(); //Disable Members Button
-          PMExt.notify(_('ID_GROUPS'), _('ID_GROUPS_SUCCESS_DELETE'));
-        },
-        failure: function(){
-          viewport.getEl().unmask();
-        }
-      });
+DeleteButtonAction = function() {
+    Ext.Msg.confirm(_('ID_CONFIRM'), _('ID_MSG_CONFIRM_DELETE_GROUP'),
+        function (btn, text) {
+            if (btn == "yes") {
+                rowSelected = infoGrid.getSelectionModel().getSelected();
 
-    }
-  }
-  );
+                Ext.Ajax.request({
+                    url:    "groups_Ajax",
+                    method: "POST",
+                    params: {
+                        action:   "verifyIfAssigned",
+                        groupUid: rowSelected.data.GRP_UID
+                    },
+
+                    success: function (response, opts) {
+                        var dataRespuesta = Ext.util.JSON.decode(response.responseText);
+                        if (dataRespuesta.result == "OK") {
+                            viewport.getEl().mask(_("ID_PROCESSING"));
+                            Ext.Ajax.request({
+                                url: "groups_Ajax",
+                                    params: {
+                                        action: "deleteGroup",
+                                        GRP_UID: rowSelected.data.GRP_UID
+                                    },
+
+                                    success: function(r,o) {
+                                        viewport.getEl().unmask();
+                                        DoSearch();
+                                        editButton.disable();  //Disable Edit Button
+                                        deleteButton.disable(); //Disable Delete Button
+                                        membersButton.disable(); //Disable Members Button
+                                        PMExt.notify(_('ID_GROUPS'), _('ID_GROUPS_SUCCESS_DELETE'));
+                                    },
+                                    failure: function() {
+                                        viewport.getEl().unmask();
+                                    }
+                            });
+                        } else {
+                            Ext.MessageBox.alert(_("ID_ERROR"),   _("ID_GROUP_CANNOT_DELETE_WHILE_ASSIGNED_TO_TASK"));
+                        }
+                    },
+                    failure: function (response, opts){
+                      //
+                    }
+                });
+            }
+        }
+    );
 };
 
 //Render Status

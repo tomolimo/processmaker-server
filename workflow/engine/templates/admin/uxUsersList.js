@@ -78,6 +78,7 @@ Ext.onReady(function(){
       {name : 'USR_LASTNAME'},
       {name : 'USR_EMAIL'},
       {name : 'USR_ROLE'},
+      {name : 'USR_ROLE_ID'},
       {name : 'USR_DUE_DATE'},
       {name : 'DEP_TITLE'},
       {name : 'LAST_LOGIN'},
@@ -150,9 +151,9 @@ Ext.onReady(function(){
   cmodel = new Ext.grid.ColumnModel({
     columns: [
       {id:'USR_UID', dataIndex: 'USR_UID', hidden:true, hideable:false},
-      //{header: '', dataIndex: 'USR_UID', width: 30, align:'center', sortable: false, renderer: photo_user},
       {header: _('ID_USER_NAME'), dataIndex: 'USR_USERNAME', width: 90, hidden:false, align:'left'},
       {header: _('ID_FULL_NAME'), dataIndex: 'USR_USERNAME', width: 50, align:'left', renderer: full_name},
+      {dataIndex: 'USR_ROLE_ID', hidden:true, hideable:false},
       {header: _('ID_ROLE'), dataIndex: 'USR_ROLE', width: 50, hidden:false, align:'left'},
       {header: _('ID_STATUS'), dataIndex: 'USR_STATUS', width: 50, hidden: true, align: 'center', renderer: render_status},
       {
@@ -171,12 +172,12 @@ Ext.onReady(function(){
             fields: ['id', 'name'],
             data : uxTypes
           }),
-          listeners: {
-            select: function(a, b) {
+          listeners: { 
+            select: function(combo, newValue) {
               var row = usersGrid.getSelectionModel().getSelected();
-              role = row.get('USR_ROLE');
+              role = row.get('USR_ROLE_ID');
 
-              if (role == 'PROCESSMAKER_ADMIN' && (this.value == 'SIMPLIFIED' || this.value == 'SINGLE')) {
+              if (role == 'PROCESSMAKER_ADMIN'  && (combo.getValue() == 'SIMPLIFIED' || combo.getValue() == 'SINGLE')) {
                 PMExt.warning(_('ID_WARNING'), _('ID_ADMINS_CANT_USE_UXS'));
                 this.setValue('NORMAL');
               }

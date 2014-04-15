@@ -162,7 +162,7 @@ class SMTP {
     // make sure we are __not__ connected
     if($this->connected()) {
       // already connected, generate error
-      $this->error = array("error" => "Already connected to a server");
+      $this->error = array("error" => G::LoadTranslation( 'ID_SMTP_ALREADY_CONNECTED' ));
       return false;
     }
 
@@ -178,7 +178,7 @@ class SMTP {
                                  $tval);   // give up after ? secs
     // verify we connected properly
     if(empty($this->smtp_conn)) {
-      $this->error = array("error" => "Failed to connect to server",
+      $this->error = array("error" => G::LoadTranslation( 'ID_SMTP_FAILED_CONNECT_SERVER' ),
                            "errno" => $errno,
                            "errstr" => $errstr);
       if($this->do_debug >= 1) {
@@ -220,7 +220,7 @@ class SMTP {
     $this->error = null; # to avoid confusion
 
     if(!$this->connected()) {
-      $this->error = array("error" => "Called StartTLS() without being connected");
+      $this->error = array("error" => G::LoadTranslation( 'ID_SMTP_ERROR_START_TLS' ));
       return false;
     }
 
@@ -235,7 +235,7 @@ class SMTP {
 
     if($code != 220) {
       $this->error =
-         array("error"     => "STARTTLS not accepted from server",
+         array("error"     => G::LoadTranslation( 'ID_SMTP_ERROR_START_TLS_NOT_ACCEPTED' ),
                "smtp_code" => $code,
                "smtp_msg"  => substr($rply,4));
       if($this->do_debug >= 1) {
@@ -278,7 +278,7 @@ class SMTP {
     
         if($code != 334) {
           $this->error =
-            array("error" => "AUTH not accepted from server",
+            array("error" => G::LoadTranslation( 'ID_SMTP_ERROR_AUTH_NOT_ACCEPTED' ),
                   "smtp_code" => $code,
                   "smtp_msg" => substr($rply,4));
           if($this->do_debug >= 1) {
@@ -294,7 +294,7 @@ class SMTP {
     
         if($code != 235) {
           $this->error =
-            array("error" => "Authentication not accepted from server",
+            array("error" => G::LoadTranslation( 'ID_SMTP_ERROR_AUTH_NOT_ACCEPTED' ),
                   "smtp_code" => $code,
                   "smtp_msg" => substr($rply,4));
           if($this->do_debug >= 1) {
@@ -312,7 +312,7 @@ class SMTP {
     
         if($code != 334) {
           $this->error =
-            array("error" => "AUTH not accepted from server",
+            array("error" => G::LoadTranslation( 'ID_SMTP_ERROR_AUTH_NOT_ACCEPTED' ),
                   "smtp_code" => $code,
                   "smtp_msg" => substr($rply,4));
           if($this->do_debug >= 1) {
@@ -329,7 +329,7 @@ class SMTP {
     
         if($code != 334) {
           $this->error =
-            array("error" => "Username not accepted from server",
+            array("error" => G::LoadTranslation( 'ID_SMTP_ERROR_USERNAME_NOT_ACCEPTED' ),
                   "smtp_code" => $code,
                   "smtp_msg" => substr($rply,4));
           if($this->do_debug >= 1) {
@@ -346,7 +346,7 @@ class SMTP {
     
         if($code != 235) {
           $this->error =
-            array("error" => "Password not accepted from server",
+            array("error" => G::LoadTranslation( 'ID_SMTP_ERROR_PASSWORD_NOT_ACCEPTED' ),
                   "smtp_code" => $code,
                   "smtp_msg" => substr($rply,4));
           if($this->do_debug >= 1) {
@@ -369,7 +369,7 @@ class SMTP {
         if(! $ntlm_client->Initialize($temp)){//let's test if every function its available
             $this->error = array("error" => $temp->error);
             if($this->do_debug >= 1) {
-                $this->edebug("You need to enable some modules in your php.ini file: " . $this->error["error"] . $this->CRLF);
+                $this->edebug(G::LoadTranslation( 'ID_SMTP_ERROR_ENABLE_PHPINI' ) . ": " . $this->error["error"] . $this->CRLF);
             }
             return false;
         }
@@ -383,7 +383,7 @@ class SMTP {
 
         if($code != 334) {
             $this->error =
-                array("error" => "AUTH not accepted from server",
+                array("error" => G::LoadTranslation( 'ID_SMTP_ERROR_AUTH_NOT_ACCEPTED' ),
                       "smtp_code" => $code,
                       "smtp_msg" => substr($rply,4));
             if($this->do_debug >= 1) {
@@ -404,7 +404,7 @@ class SMTP {
 
         if($code != 235) {
             $this->error =
-                array("error" => "Could not authenticate",
+                array("error" => G::LoadTranslation( 'ID_SMTP_ERROR_COULD_NOT_AUTH' ),
                       "smtp_code" => $code,
                       "smtp_msg" => substr($rply,4));
             if($this->do_debug >= 1) {
@@ -428,7 +428,7 @@ class SMTP {
       if($sock_status["eof"]) {
         // the socket is valid but we are not connected
         if($this->do_debug >= 1) {
-            $this->edebug("SMTP -> NOTICE:" . $this->CRLF . "EOF caught while checking if connected");
+            $this->edebug("SMTP -> NOTICE:" . $this->CRLF . G::LoadTranslation( 'ID_SMTP_ERROR_EOF_CAUGHT' ));
         }
         $this->Close();
         return false;
@@ -484,7 +484,7 @@ class SMTP {
 
     if(!$this->connected()) {
       $this->error = array(
-              "error" => "Called Data() without being connected");
+              "error" => G::LoadTranslation( 'ID_SMTP_ERROR_CALLED_DATA_WITHOUT' ));
       return false;
     }
 
@@ -499,7 +499,7 @@ class SMTP {
 
     if($code != 354) {
       $this->error =
-        array("error" => "DATA command not accepted from server",
+        array("error" => G::LoadTranslation( 'ID_SMTP_ERROR_DATA_COM_NOT_ACCEPTED' ),
               "smtp_code" => $code,
               "smtp_msg" => substr($rply,4));
       if($this->do_debug >= 1) {
@@ -593,7 +593,7 @@ class SMTP {
 
     if($code != 250) {
       $this->error =
-        array("error" => "DATA not accepted from server",
+        array("error" => G::LoadTranslation( 'ID_SMTP_ERROR_DATA_NOT_ACCEPTED' ),
               "smtp_code" => $code,
               "smtp_msg" => substr($rply,4));
       if($this->do_debug >= 1) {
@@ -622,7 +622,7 @@ class SMTP {
 
     if(!$this->connected()) {
       $this->error = array(
-            "error" => "Called Hello() without being connected");
+            "error" => G::LoadTranslation( 'ID_SMTP_ERROR_CALLED_HELLO_WITHOUT' ));
       return false;
     }
 
@@ -661,7 +661,7 @@ class SMTP {
 
     if($code != 250) {
       $this->error =
-        array("error" => $hello . " not accepted from server",
+        array("error" => $hello . ' ' . G::LoadTranslation( 'ID_SMTP_ERROR_NOT_ACCEPTED' ),
               "smtp_code" => $code,
               "smtp_msg" => substr($rply,4));
       if($this->do_debug >= 1) {
@@ -695,7 +695,7 @@ class SMTP {
 
     if(!$this->connected()) {
       $this->error = array(
-              "error" => "Called Mail() without being connected");
+              "error" => G::LoadTranslation( 'ID_SMTP_ERROR_CALLED_MAIL_WITHOUT' ));
       return false;
     }
 
@@ -711,7 +711,7 @@ class SMTP {
 
     if($code != 250) {
       $this->error =
-        array("error" => "MAIL not accepted from server",
+        array("error" => G::LoadTranslation( 'ID_SMTP_ERROR_MAIL_NOT_ACCEPTED' ),
               "smtp_code" => $code,
               "smtp_msg" => substr($rply,4));
       if($this->do_debug >= 1) {
@@ -739,7 +739,7 @@ class SMTP {
 
     if(!$this->connected()) {
       $this->error = array(
-              "error" => "Called Quit() without being connected");
+              "error" => G::LoadTranslation( 'ID_SMTP_ERROR_CALLED_QUIT_WITHOUT' ));
       return false;
     }
 
@@ -759,7 +759,7 @@ class SMTP {
     $code = substr($byemsg,0,3);
     if($code != 221) {
       // use e as a tmp var cause Close will overwrite $this->error
-      $e = array("error" => "SMTP server rejected quit command",
+      $e = array("error" => G::LoadTranslation( 'ID_SMTP_ERROR_SERVER_REJECTED' ),
                  "smtp_code" => $code,
                  "smtp_rply" => substr($byemsg,4));
       $rval = false;
@@ -793,7 +793,7 @@ class SMTP {
 
     if(!$this->connected()) {
       $this->error = array(
-              "error" => "Called Recipient() without being connected");
+              "error" => G::LoadTranslation( 'ID_SMTP_ERROR_CALLED_RECIPIENT_WITHOUT' ));
       return false;
     }
 
@@ -808,7 +808,7 @@ class SMTP {
 
     if($code != 250 && $code != 251) {
       $this->error =
-        array("error" => "RCPT not accepted from server",
+        array("error" => G::LoadTranslation( 'ID_SMTP_ERROR_RCPT_NOT_ACCEPTED' ),
               "smtp_code" => $code,
               "smtp_msg" => substr($rply,4));
       if($this->do_debug >= 1) {
@@ -836,7 +836,7 @@ class SMTP {
 
     if(!$this->connected()) {
       $this->error = array(
-              "error" => "Called Reset() without being connected");
+              "error" => G::LoadTranslation( 'ID_SMTP_ERROR_CALLED_RESET_WITHOUT' ));
       return false;
     }
 
@@ -851,7 +851,7 @@ class SMTP {
 
     if($code != 250) {
       $this->error =
-        array("error" => "RSET failed",
+        array("error" => G::LoadTranslation( 'ID_SMTP_ERROR_RSET_FAILED' ),
               "smtp_code" => $code,
               "smtp_msg" => substr($rply,4));
       if($this->do_debug >= 1) {
@@ -885,7 +885,7 @@ class SMTP {
 
     if(!$this->connected()) {
       $this->error = array(
-          "error" => "Called SendAndMail() without being connected");
+          "error" => G::LoadTranslation( 'ID_SMTP_ERROR_CALLED_SENDANDMAIL_WITHOUT' ));
       return false;
     }
 
@@ -900,7 +900,7 @@ class SMTP {
 
     if($code != 250) {
       $this->error =
-        array("error" => "SAML not accepted from server",
+        array("error" => G::LoadTranslation( 'ID_SMTP_ERROR_SAML_NOT_ACCEPTED' ),
               "smtp_code" => $code,
               "smtp_msg" => substr($rply,4));
       if($this->do_debug >= 1) {
@@ -925,8 +925,7 @@ class SMTP {
    * @return bool
    */
   public function Turn() {
-    $this->error = array("error" => "This method, TURN, of the SMTP ".
-                                    "is not implemented");
+    $this->error = array("error" => G::LoadTranslation( 'ID_SMTP_ERROR_MET_TURN_SMTP_NOT_IMPLEMENTED' ));
     if($this->do_debug >= 1) {
       $this->edebug("SMTP -> NOTICE: " . $this->error["error"] . $this->CRLF . '<br />');
     }

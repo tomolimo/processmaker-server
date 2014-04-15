@@ -386,8 +386,8 @@ function getDynaformsVars ($sProcessUID, $bSystemVars = true, $bIncMulSelFields 
         $aFields[] = array ('sName' => 'PIN','sType' => 'system','sLabel' => G::LoadTranslation('ID_TINY_SYSTEM_VARIABLES'));
     }
 
-    $aInvalidTypes = array("title", "subtitle", "file", "button", "reset", "submit", "javascript");
-    $aMultipleSelectionFields = array("listbox", "checkgroup", "grid");
+    $aInvalidTypes = array("title", "subtitle", "file", "button", "reset", "submit", "javascript", "pmconnection");
+    $aMultipleSelectionFields = array("listbox", "checkgroup");
 
     if ($bIncMulSelFields != 0) {
         $aInvalidTypes = array_merge( $aInvalidTypes, $aMultipleSelectionFields );

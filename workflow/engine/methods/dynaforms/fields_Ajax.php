@@ -88,7 +88,7 @@ $r = 0;
 foreach ($dependentFields as $d) {
     $sendContent[$r] = new stdclass();
     $sendContent[$r]->name = $d;
-    $sendContent[$r]->content = null;
+    $sendContent[$r]->content = new stdclass();
     foreach ($G_FORM->fields[$d] as $attribute => $value) {
         switch ($attribute) {
             case 'type':
@@ -108,7 +108,7 @@ function toJSArray ($array)
 {
     $result = array ();
     foreach ($array as $k => $v) {
-        $o = null;
+        $o = new stdclass();
         $o->key = $k;
         $o->value = $v;
         $result[] = $o;

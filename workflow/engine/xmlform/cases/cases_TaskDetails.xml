@@ -9,11 +9,11 @@
   <en>User</en>
 </USER>
 
-<INIT_DATE type="date" mode="view">
+<INIT_DATE type="text" mode="view">
   <en>Init Date</en>
 </INIT_DATE>
 
-<DUE_DATE type="date" mode="view">
+<DUE_DATE type="text" mode="view">
   <en>Due date</en>
 </DUE_DATE>
 
@@ -25,4 +25,4 @@
   <en>Duration</en>
 </DURATION>
 
-</dynaForm>  
+</dynaForm>

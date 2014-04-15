@@ -721,7 +721,7 @@ class Process extends BaseProcess
                 $process['PRO_CREATE_DATE'] = date( $creationDateMask, mktime( $h, $i, $s, $m, $d, $y ) );
             }
 
-            $process['PRO_CATEGORY_LABEL'] = trim( $process['PRO_CATEGORY'] ) != '' ? $process['CATEGORY_NAME'] : G::LoadTranslation( 'ID_PROCESS_NO_CATEGORY' );
+            $process['PRO_CATEGORY_LABEL'] = trim( $process['PRO_CATEGORY'] ) != '' ? $process['CATEGORY_NAME'] : '- ' . G::LoadTranslation( 'ID_PROCESS_NO_CATEGORY' ) . ' -';
             $process['PRO_TITLE'] = $proTitle;
             $process['PRO_DESCRIPTION'] = $proDescription;
             $process['PRO_DEBUG'] = $process['PRO_DEBUG'];
@@ -881,9 +881,9 @@ class Process extends BaseProcess
     	if (($this->sort) == '')  {
     		$this->sort = 'PRO_TITLE'; 
     	}
-        if ($a[$this->sort] > $b[$this->sort]) {
+        if (strtolower($a[$this->sort]) > strtolower($b[$this->sort])) {
             return 1;
-        } elseif ($a[$this->sort] < $b[$this->sort]) {
+        } elseif (strtolower($a[$this->sort]) < strtolower($b[$this->sort])) {
             return - 1;
         } else {
             return 0;
@@ -895,9 +895,9 @@ class Process extends BaseProcess
     	if (($this->sort) == '')  {
     		$this->sort = 'PRO_TITLE';
     	}
-		if ($a[$this->sort] > $b[$this->sort]) {
+		if (strtolower($a[$this->sort]) > strtolower($b[$this->sort])) {
 			return - 1;
-		} elseif ($a[$this->sort] < $b[$this->sort]) {
+		} elseif (strtolower($a[$this->sort]) < strtolower($b[$this->sort])) {
 			return 1;
 		} else {
 			return 0;

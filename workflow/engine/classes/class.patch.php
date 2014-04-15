@@ -2,7 +2,6 @@
 
 G::LoadClass("Task");
 G::LoadClass("TaskUser");
-G::LoadClass("System");
 
 /**
  * class, helping to set some not desirable settings but necesary
@@ -26,6 +25,10 @@ class p11835 extends patch
      */
     static public function isApplicable()
     {
+        if (! class_exists('System')) {
+            G::LoadClass("System");
+        }
+
         patch::$isPathchable = false;
         $con = Propel::getConnection("workflow");
         $stmt = $con->prepareStatement("describe TASK;");

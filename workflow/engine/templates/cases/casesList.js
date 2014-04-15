@@ -483,8 +483,10 @@ Ext.onReady ( function() {
         style = style + chain;
       }
     }
+
+    data = Ext.util.Format.htmlEncode(data);
     metadata.attr = 'ext:qtip="' + data + '" style="'+ style +' white-space: normal; "';
-    return Ext.util.Format.htmlEncode(data);
+    return data;
   };
 
   function openLink(value, p, r){
@@ -545,9 +547,9 @@ Ext.onReady ( function() {
   function renderNote(val,p,r) {
     pro = r.json.PRO_UID;
     tas = r.json.TAS_UID;
-
     appUid = r.data['APP_UID'];
-    title  = r.data['APP_TITLE'];
+    title = Ext.util.Format.htmlEncode(r.data['APP_TITLE']);
+
     return '<img src="/images/ext/default/s.gif" class="x-tree-node-icon ICON_CASES_NOTES" unselectable="off" id="extdd-17" onClick="openCaseNotesWindow(\''+appUid+'\', true, \''+title+'\', \''+pro+'\', \''+tas+'\')">';
   }
 

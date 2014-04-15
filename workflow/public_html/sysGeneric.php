@@ -73,6 +73,11 @@ function transactionLog($transactionName){
     }
 }
 
+// Validating if exists 'HTTP_USER_AGENT' key in $_SERVER array
+if (!isset($_SERVER['HTTP_USER_AGENT'])) {
+    $_SERVER['HTTP_USER_AGENT'] = '';
+}
+
 // Defining the PATH_SEP constant, he we are defining if the the path separator symbol will be '\\' or '/'
 define( 'PATH_SEP', '/' );
 
@@ -280,7 +285,9 @@ if (is_null($timelife)) {
     $timelife = 1440;
 }
 ini_set('session.gc_maxlifetime', $timelife);
-ini_set('session.cookie_lifetime', $timelife);
+if (preg_match("/msie/i", $_SERVER ['HTTP_USER_AGENT']) != 1 || $config['ie_cookie_lifetime'] == 1) {
+    ini_set('session.cookie_lifetime', $timelife);
+}
 session_start();
 
 
@@ -881,10 +888,12 @@ if (! defined( 'EXECUTE_BY_CRON' )) {
     define( 'SYS_LANG_DIRECTION', $oServerConf->getLanDirection() );
 
     if ((isset( $_SESSION['USER_LOGGED'] )) && (! (isset( $_GET['sid'] )))) {
-        if (PHP_VERSION < 5.2) {
-            setcookie(session_name(), session_id(), time() + $timelife, '/', '; HttpOnly');
-        } else {
-            setcookie(session_name(), session_id(), time() + $timelife, '/', null, false, true);
+        if (preg_match("/msie/i", $_SERVER ['HTTP_USER_AGENT']) != 1 || $config['ie_cookie_lifetime'] == 1) {
+            if (PHP_VERSION < 5.2) {
+                setcookie(session_name(), session_id(), time() + $timelife, '/', '; HttpOnly');
+            } else {
+                setcookie(session_name(), session_id(), time() + $timelife, '/', null, false, true);
+            }
         }
         $RBAC->initRBAC();
         //using optimization with memcache, the user data will be in memcache 8 hours, or until session id goes invalid
@@ -948,10 +957,12 @@ if (! defined( 'EXECUTE_BY_CRON' )) {
                     $_SESSION['USER_LOGGED'] = $aUser['USR_UID'];
                     $_SESSION['USR_USERNAME'] = $aUser['USR_USERNAME'];
                     $bRedirect = false;
-                    if (PHP_VERSION < 5.2) {
-                        setcookie(session_name(), session_id(), time() + $timelife, '/', '; HttpOnly');
-                    } else {
-                        setcookie(session_name(), session_id(), time() + $timelife, '/', null, false, true);
+                    if (preg_match("/msie/i", $_SERVER ['HTTP_USER_AGENT']) != 1 || $config['ie_cookie_lifetime'] == 1) {
+                        if (PHP_VERSION < 5.2) {
+                            setcookie(session_name(), session_id(), time() + $timelife, '/', '; HttpOnly');
+                        } else {
+                            setcookie(session_name(), session_id(), time() + $timelife, '/', null, false, true);
+                        }
                     }
                     $RBAC->initRBAC();
                     $RBAC->loadUserRolePermission( $RBAC->sSystem, $_SESSION['USER_LOGGED'] );
