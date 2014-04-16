@@ -600,7 +600,7 @@ var processmap=function(){
             this.tmp.caseTrackerPanel = panel =new leimnud.module.panel();
             panel.options={
               limit :true,
-              size  :{w:300,h:180},
+              size  :{w:300,h:200},
               position:{x:50,y:50,center:true},
               title :G_STRINGS.ID_CASE_TRACKER,
               theme :this.options.theme,
@@ -2472,7 +2472,7 @@ processmap.prototype={
           height:25
         });
       } catch(e) {
-        
+
       }
     }
 
