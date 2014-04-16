@@ -6,11 +6,11 @@ PMExtJSCommon=function(){this.version='1.8';this.notify_time_out=3;this.confirm=
 setTimeout(fnYes,0)
 else if(fnNo!=undefined)
 setTimeout(fnNo,0)});}
-this.info=function(title,msg,fn){Ext.MessageBox.show({title:title,msg:msg,buttons:Ext.MessageBox.OK,animEl:'mb9',fn:fn!=undefined?fn:function(){},icon:Ext.MessageBox.INFO});}
-this.question=function(title,msg,fn){Ext.MessageBox.show({title:title,msg:msg,buttons:Ext.MessageBox.YESNO,animEl:'mb9',fn:function(btn,text){if(btn=='yes')
+this.info=function(title,msg,fn){Ext.MessageBox.show({id:'infoMessageBox',title:title,msg:msg,buttons:Ext.MessageBox.OK,animEl:'mb9',fn:fn!=undefined?fn:function(){},icon:Ext.MessageBox.INFO});}
+this.question=function(title,msg,fn){Ext.MessageBox.show({id:'questionMessageBox',title:title,msg:msg,buttons:Ext.MessageBox.YESNO,animEl:'mb9',fn:function(btn,text){if(btn=='yes')
 setTimeout(fn,0);},icon:Ext.MessageBox.QUESTION});}
-this.warning=function(title,msg,fn){Ext.MessageBox.show({title:title,msg:msg,buttons:Ext.MessageBox.OK,animEl:'mb9',fn:fn!=undefined?fn:function(){},icon:Ext.MessageBox.WARNING});}
-this.error=function(title,msg,fn){Ext.MessageBox.show({title:title,msg:msg,buttons:Ext.MessageBox.OK,animEl:'mb9',fn:fn!=undefined?fn:function(){},icon:Ext.MessageBox.ERROR});}
+this.warning=function(title,msg,fn){Ext.MessageBox.show({id:'warningMessageBox',title:title,msg:msg,buttons:Ext.MessageBox.OK,animEl:'mb9',fn:fn!=undefined?fn:function(){},icon:Ext.MessageBox.WARNING});}
+this.error=function(title,msg,fn){Ext.MessageBox.show({id:'errorMessageBox',title:title,msg:msg,buttons:Ext.MessageBox.OK,animEl:'mb9',fn:fn!=undefined?fn:function(){},icon:Ext.MessageBox.ERROR});}
 this.notify=function(title,msg,type,time)
 {Ext.msgBoxSlider.msg(title,msg,type,time);}
 this.getBrowser=function()

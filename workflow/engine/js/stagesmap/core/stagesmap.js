@@ -452,8 +452,8 @@ stagesmap.prototype={
 		this.panels.editor=new leimnud.module.panel();
 		this.panels.editor.options={
 			limit:true,
-			size:{w:this.options.size.w,h:this.options.size.h},
-			position:{x:200,y:0,centerX:true},
+			size:{w:this.options.size.w,h:this.options.size.h - 10},
+			position:{x:0,y:0},
 			title:"",
 			titleBar:false,
 			control:{

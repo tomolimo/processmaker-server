@@ -71,6 +71,12 @@ class CaseTracker extends BaseCaseTracker
         try {
             $oCaseTracker = CaseTrackerPeer::retrieveByPK( $aData['PRO_UID'] );
             if (! is_null( $oCaseTracker )) {
+                if ($aData['CT_DERIVATION_HISTORY'] == '') {
+                    $aData['CT_DERIVATION_HISTORY'] = 0;
+                }
+                if ($aData['CT_MESSAGE_HISTORY'] == '') {
+                    $aData['CT_MESSAGE_HISTORY'] = 0;
+                }
                 $oCaseTracker->fromArray( $aData, BasePeer::TYPE_FIELDNAME );
                 if ($oCaseTracker->validate()) {
                     $oConnection->begin();
