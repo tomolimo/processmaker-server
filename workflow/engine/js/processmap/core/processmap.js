@@ -1908,9 +1908,7 @@ var processmap=function(){
             link:{
               elements:a,
               ref:[a,c,d,t]
-            },
-            limit:true
-            //group:[a,c]
+            }
           });
           this.observers.lineas.register(this.parent.closure({instance:options.object.drag,method:function(){}}),options.object.drag);
           options.object.drag.events={
