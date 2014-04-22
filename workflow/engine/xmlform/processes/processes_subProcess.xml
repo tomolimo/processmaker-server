@@ -109,11 +109,23 @@ var processes_subProcessSave = function(oForm) {
 
 var _oVarsPanel_;
 var showDynaformsFormVars = function(sFieldName, sAjaxServer, sProcess, sSymbol) {
-   if (sProcess == '') {
-     var sAux = getField('PROCESSES').options[getField('TASKS').selectedIndex].value;
-     var aAux = sAux.split('_');
-     sProcess = aAux[0];
+   var arrayMatch = [];
+   var field = "";
+
+   if ((arrayMatch = /^.*\[(.*)\]$/.exec(sFieldName))) {
+       field = arrayMatch[1];
    }
+
+   if (field == "VAR_OUT1" || field == "VAR_IN2") {
+       sProcess = getField("PRO_PARENT").value;
+   } else {
+       if (sProcess == "") {
+           var sAux = getField("PROCESSES").options[getField("TASKS").selectedIndex].value;
+           var aAux = sAux.split("_");
+           sProcess = aAux[0];
+       }
+   }
+
 	_oVarsPanel_ = new leimnud.module.panel();
 	_oVarsPanel_.options = {
     limit    : true,
