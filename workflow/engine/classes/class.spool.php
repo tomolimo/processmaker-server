@@ -616,10 +616,18 @@ class spoolRun
 
                 try {
                     $sFrom = $row["APP_MSG_FROM"];
-                    $hasEmailFrom = preg_match('/(.+)@(.+)\.(.+)/', $row["APP_MSG_FROM"], $match);
+                    $hasEmailFrom = preg_match('/(.+)@(.+)\.(.+)/', $sFrom, $match);
 
-                    if (! $hasEmailFrom || strpos( $row["APP_MSG_FROM"], $aConfiguration['MESS_ACCOUNT'] ) === false) {
-                        $sFrom = '"' . stripslashes( $row["APP_MSG_FROM"] ) . '" <' . $aConfiguration['MESS_ACCOUNT'] . ">";
+                    if (!$hasEmailFrom || ($aConfiguration["MESS_ACCOUNT"] != '' && strpos($sFrom, $aConfiguration["MESS_ACCOUNT"]) === false)) {
+                        if (trim($aConfiguration["MESS_ACCOUNT"]) != "") {
+                            $sFrom = "\"" . stripslashes($sFrom) . "\" <" . $aConfiguration["MESS_ACCOUNT"] . ">";
+                        } else {
+                            if ($aConfiguration["MESS_ENGINE"] == "MAIL" && $sFrom != '') {
+                                $sFrom = "\"" . stripslashes($sFrom) . "\"";
+                            } else {
+                                $sFrom = $sFrom . " <info@" . ((isset($_SERVER["HTTP_HOST"]) && $_SERVER["HTTP_HOST"] != "")? $_SERVER["HTTP_HOST"] : "processmaker.com") . ">";
+                            }
+                        }
                     }
                     $this->setData( $row["APP_MSG_UID"], $row["APP_MSG_SUBJECT"], $sFrom, $row["APP_MSG_TO"], $row["APP_MSG_BODY"], date( "Y-m-d H:i:s" ), $row["APP_MSG_CC"], $row["APP_MSG_BCC"], $row["APP_MSG_TEMPLATE"], $row["APP_MSG_ATTACH"] );
 
