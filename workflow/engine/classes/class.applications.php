@@ -200,6 +200,7 @@ class Applications
         $CriteriaCount->addJoinMC($arrayCondition, Criteria::LEFT_JOIN);
 
         //Previous user
+
         if (($action == "todo" || $action == "selfservice" || $action == "unassigned" || $action == "paused" || $action == "to_revise" || $action == "sent") || ($status == "TO_DO" || $status == "DRAFT" || $status == "PAUSED" || $status == "CANCELLED" || $status == "COMPLETED")) {
             $Criteria->addAlias( 'PU', 'USERS' );
             $Criteria->addJoin( AppCacheViewPeer::PREVIOUS_USR_UID, 'PU.USR_UID', Criteria::LEFT_JOIN );
@@ -407,7 +408,7 @@ class Applications
             //Check also $distinct in the method getListCounters(), this in AppCacheView.php
             $distinct = true;
 
-            if (($action == "todo" || $action == "selfservice" || $action == "unassigned" || $action == "to_reassign") || ($status == "TO_DO")) {
+            if (($action == "todo" || $action == "selfservice" || $action == "unassigned" || $action == "to_reassign" || $action == "to_revise") || ($status == "TO_DO")) {
                 $distinct = false;
             }
 
@@ -429,7 +430,6 @@ class Applications
                     require_once (PATH_DB . SYS_SYS . PATH_SEP . "classes" . PATH_SEP . $tableName . ".php");
                 }
             }
-
             $totalCount = AppCacheViewPeer::doCount($CriteriaCount, $distinct);
         }
 
@@ -528,13 +528,14 @@ class Applications
              $maxDataset->close();
               }*/
 
-            //Current delegation (*)
-            if (($action == "sent" || $action == "search" || $action == "simple_search" || $action == "to_revise" || $action == "to_reassign") && ($status != "TO_DO")) {
+            //Current delegation (*) || $action == "search" || $action == "to_revise"
+            if (($action == "sent" || $action == "simple_search" || $action == "to_reassign") && ($status != "TO_DO")) {
                 //Current task
                 $aRow["APP_TAS_TITLE"] = $aRow["APPCVCR_APP_TAS_TITLE"];
 
                 //Current user
-                if ($action != "to_reassign" ) {
+                //if ($action != "to_reassign" ) {
+                if (($action != "to_reassign") && ($action != "search") && ($action != "to revise")) {
                     $aRow["USR_UID"] = $aRow["USRCR_USR_UID"];
                     $aRow["USR_FIRSTNAME"] = $aRow["USRCR_USR_FIRSTNAME"];
                     $aRow["USR_LASTNAME"] = $aRow["USRCR_USR_LASTNAME"];

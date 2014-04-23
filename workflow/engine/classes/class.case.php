@@ -507,7 +507,7 @@ class Cases
      * @return Fields
      */
 
-    public function loadCase($sAppUid, $iDelIndex = 0)
+    public function loadCase($sAppUid, $iDelIndex = 0, $jump = '')
     {
         try {
             $oApp = new Application;
@@ -575,9 +575,25 @@ class Cases
                 $aFields['DEL_FINISH_DATE'] = $aAppDel['DEL_FINISH_DATE'];
                 $aFields['CURRENT_USER_UID'] = $aAppDel['USR_UID'];
                 try {
+                    //$oCurUser = new Users();
+                    //$oCurUser->load($aAppDel['USR_UID']);
+                    //$aFields['CURRENT_USER'] = $oCurUser->getUsrFirstname() . ' ' . $oCurUser->getUsrLastname();
                     $oCurUser = new Users();
-                    $oCurUser->load($aAppDel['USR_UID']);
-                    $aFields['CURRENT_USER'] = $oCurUser->getUsrFirstname() . ' ' . $oCurUser->getUsrLastname();
+                    if ($jump != '') {
+                        $aCases = $oAppDel->LoadParallel($sAppUid);
+                        $aFields['TAS_UID'] = '';
+                        $aFields['CURRENT_USER'] = '';
+                        foreach ($aCases as $key => $value) {
+                            $oCurUser->load($value['USR_UID']);
+                            $aFields['CURRENT_USER'][]= $oCurUser->getUsrFirstname() . ' ' . $oCurUser->getUsrLastname();
+                            $aFields['TAS_UID'].= $value['TAS_UID'].'-';
+                        }
+                       $aFields['CURRENT_USER'] = implode(" - ", array_values($aFields['CURRENT_USER']));
+                    } else {
+                        $oCurUser->load($aAppDel['USR_UID']);
+                        $aFields['CURRENT_USER'] = $oCurUser->getUsrFirstname() . ' ' . $oCurUser->getUsrLastname();
+                    }
+
                 } catch (Exception $oError) {
                     $aFields['CURRENT_USER'] = '';
                 }

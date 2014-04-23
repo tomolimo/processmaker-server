@@ -49,7 +49,13 @@ $G_ID_SUB_MENU_SELECTED = '_';
 
 /* Prepare page before to show */
 $oCase = new Cases();
-$Fields = $oCase->loadCase( $_SESSION['APPLICATION'], $_SESSION['INDEX'] );
+//$Fields = $oCase->loadCase( $_SESSION['APPLICATION'], $_SESSION['INDEX'] );
+if (isset($_SESSION['ACTION']) && ($_SESSION['ACTION'] == 'jump')) {
+    $Fields = $oCase->loadCase( $_SESSION['APPLICATION'], $_SESSION['INDEX'], $_SESSION['ACTION']);
+} else {
+    $Fields = $oCase->loadCase( $_SESSION['APPLICATION'], $_SESSION['INDEX']);
+}
+
 $participated = $oCase->userParticipatedInCase( $_GET['APP_UID'], $_SESSION['USER_LOGGED'] );
 
 if ($RBAC->userCanAccess( 'PM_ALLCASES' ) < 0 && $participated == 0) {
@@ -110,9 +116,21 @@ $aProc = $objProc->load( $Fields['PRO_UID'] );
 $Fields['PRO_TITLE'] = $aProc['PRO_TITLE'];
 
 $objTask = new Task();
-$aTask = $objTask->load( $Fields['TAS_UID'] );
-$Fields['TAS_TITLE'] = $aTask['TAS_TITLE'];
+//$aTask = $objTask->load( $Fields['TAS_UID'] );
+//$Fields['TAS_TITLE'] = $aTask['TAS_TITLE'];
 
+if (isset($_SESSION['ACTION']) && ($_SESSION['ACTION'] == 'jump')) {
+    $task = explode('-', $Fields['TAS_UID']);
+    $Fields['TAS_TITLE'] = '';
+    for( $i = 0; $i < sizeof($task)-1; $i ++ ) {
+        $aTask = $objTask->load( $task[$i] );
+        $Fields['TAS_TITLE'][] = $aTask['TAS_TITLE'];
+    }
+    $Fields['TAS_TITLE'] = implode(" - ", array_values($Fields['TAS_TITLE']));
+} else {
+    $aTask = $objTask->load( $Fields['TAS_UID'] );
+    $Fields['TAS_TITLE'] = $aTask['TAS_TITLE'];
+}
 $oHeadPublisher = & headPublisher::getSingleton();
 $oHeadPublisher->addScriptFile( '/jscore/cases/core/cases_Step.js' );
 $G_PUBLISH = new Publisher();
