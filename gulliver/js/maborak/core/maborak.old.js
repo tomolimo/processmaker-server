@@ -610,7 +610,11 @@ var maborak = function(forceCssLoad){
 			var args=argumentsToArray(arguments);
 			return function()
 			{
-				return oThis.apply(oThis,argumentsToArray(arguments).concat(args));
+			    try {
+				    return oThis.apply(oThis,argumentsToArray(arguments).concat(args));
+				} catch (theError) {
+				    //Unknow error
+				}
 			};
 		};
 		String.prototype.isAlphaUS=function()
