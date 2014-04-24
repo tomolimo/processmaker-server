@@ -105,7 +105,7 @@ return this;};Function.prototype.isObject=false;Function.prototype.isArray=false
 {return oThis.apply(Class,argumentsToArray(arguments).concat(args));};}
 catch(e){return this;}};Function.prototype.args=function()
 {var oThis=this;var args=argumentsToArray(arguments);return function()
-{return oThis.apply(oThis,argumentsToArray(arguments).concat(args));};};String.prototype.isAlphaUS=function()
+{try{return oThis.apply(oThis,argumentsToArray(arguments).concat(args));}catch(theError){}};};String.prototype.isAlphaUS=function()
 {var a=this.split("");var b="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_".split("");for(var i=0;i<a.length;i++)
 {if(!b.inArray(a[i])){return false;}}
 return true;};String.prototype.isString=true;String.prototype.trim=function(){return(this.replace(new RegExp("^([\\s]+)|([\\s]+)$","gm"),""));};String.prototype.leftTrim=function(){return(this.replace(new RegExp("^[\\s]+","gm"),""));};String.prototype.rightTrim=function(){return(this.replace(new RegExp("[\\s]+$","gm"),""));};String.prototype.stripTags=function()
