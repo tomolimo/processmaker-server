@@ -915,42 +915,17 @@ class wsBase
         $delIndex = 0
     ) {
         try {
-            G::LoadClass("system");
-
+            if (!class_exists('System')) {
+                G::LoadClass('system');
+            }
             $aSetup = System::getEmailConfiguration();
 
-            $passwd = $aSetup['MESS_PASSWORD'];
-            $passwdDec = G::decrypt( $passwd, 'EMAILENCRYPT' );
-            $auxPass = explode( 'hash:', $passwdDec );
-            if (count( $auxPass ) > 1) {
-                if (count( $auxPass ) == 2) {
-                    $passwd = $auxPass[1];
-                } else {
-                    array_shift( $auxPass );
-                    $passwd = implode( '', $auxPass );
-                }
-            }
-            $aSetup['MESS_PASSWORD'] = $passwd;
-            if ($aSetup['MESS_RAUTH'] == false || (is_string($aSetup['MESS_RAUTH']) && $aSetup['MESS_RAUTH'] == 'false')) {
-                $aSetup['MESS_RAUTH'] = 0;
-            } else {
-                $aSetup['MESS_RAUTH'] = 1;
-            }
-
             $oSpool = new spoolRun();
-            $oSpool->setConfig(
-                array (
-                    'MESS_ENGINE' => $aSetup['MESS_ENGINE'],
-                    'MESS_SERVER' => $aSetup['MESS_SERVER'],
-                    'MESS_PORT' => $aSetup['MESS_PORT'],
-                    'MESS_ACCOUNT' => $aSetup['MESS_ACCOUNT'],
-                    'MESS_PASSWORD' => $aSetup['MESS_PASSWORD'],
-                    'SMTPSecure' => $aSetup['SMTPSecure'],
-                    'SMTPAuth' => $aSetup['MESS_RAUTH']
-                )
-            );
+
+            $oSpool->setConfig($aSetup);
 
             $oCase = new Cases();
+
             $oldFields = $oCase->loadCase( $caseId );
 
             $pathEmail = PATH_DATA_SITE . 'mailTemplates' . PATH_SEP . $oldFields['PRO_UID'] . PATH_SEP;

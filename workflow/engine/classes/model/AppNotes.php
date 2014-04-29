@@ -130,38 +130,10 @@ class AppNotes extends BaseAppNotes
     public function sendNoteNotification ($appUid, $usrUid, $noteContent, $noteRecipients, $sFrom = "")
     {
         try {
-            require_once ('classes/model/Configuration.php');
-            $oConfiguration = new Configuration();
-            $sDelimiter = DBAdapter::getStringDelimiter();
-            $oCriteria = new Criteria( 'workflow' );
-            $oCriteria->add( ConfigurationPeer::CFG_UID, 'Emails' );
-            $oCriteria->add( ConfigurationPeer::OBJ_UID, '' );
-            $oCriteria->add( ConfigurationPeer::PRO_UID, '' );
-            $oCriteria->add( ConfigurationPeer::USR_UID, '' );
-            $oCriteria->add( ConfigurationPeer::APP_UID, '' );
-            if (ConfigurationPeer::doCount( $oCriteria ) == 0) {
-                $oConfiguration->create( array ('CFG_UID' => 'Emails', 'OBJ_UID' => '','CFG_VALUE' => '','PRO_UID' => '','USR_UID' => '','APP_UID' => '') );
-                $aConfiguration = array ();
-            } else {
-                $aConfiguration = $oConfiguration->load('Emails', '', '', '', '' );
-                if ($aConfiguration['CFG_VALUE'] != '') {
-                    $aConfiguration = unserialize( $aConfiguration['CFG_VALUE'] );
-                    $passwd = $aConfiguration['MESS_PASSWORD'];
-                    $passwdDec = G::decrypt( $passwd, 'EMAILENCRYPT' );
-                    $auxPass = explode( 'hash:', $passwdDec );
-                    if (count( $auxPass ) > 1) {
-                        if (count( $auxPass ) == 2) {
-                            $passwd = $auxPass[1];
-                        } else {
-                            array_shift( $auxPass );
-                            $passwd = implode( '', $auxPass );
-                        }
-                    }
-                    $aConfiguration['MESS_PASSWORD'] = $passwd;
-                } else {
-                    $aConfiguration = array ();
-                }
+            if (!class_exists('System')) {
+                G::LoadClass('system');
             }
+            $aConfiguration = System::getEmailConfiguration();
 
             if (! isset( $aConfiguration['MESS_ENABLED'] ) || $aConfiguration['MESS_ENABLED'] != '1') {
                 return false;
@@ -214,13 +186,8 @@ class AppNotes extends BaseAppNotes
 
                 $sTo = ((($aUser['USR_FIRSTNAME'] != '') || ($aUser['USR_LASTNAME'] != '')) ? $aUser['USR_FIRSTNAME'] . ' ' . $aUser['USR_LASTNAME'] . ' ' : '') . '<' . $aUser['USR_EMAIL'] . '>';
                 $oSpool = new spoolRun();
-                if ($aConfiguration['MESS_RAUTH'] == false || (is_string($aConfiguration['MESS_RAUTH']) && $aConfiguration['MESS_RAUTH'] == 'false')) {
-                    $aConfiguration['MESS_RAUTH'] = 0;
-                } else {
-                    $aConfiguration['MESS_RAUTH'] = 1;
-                }
 
-                $oSpool->setConfig( array ('MESS_ENGINE' => $aConfiguration['MESS_ENGINE'],'MESS_SERVER' => $aConfiguration['MESS_SERVER'],'MESS_PORT' => $aConfiguration['MESS_PORT'],'MESS_ACCOUNT' => $aConfiguration['MESS_ACCOUNT'],'MESS_PASSWORD' => $aConfiguration['MESS_PASSWORD'],'SMTPAuth' => $aConfiguration['MESS_RAUTH'] == '1' ? true : false,'SMTPSecure' => isset( $aConfiguration['SMTPSecure'] ) ? $aConfiguration['SMTPSecure'] : '') );
+                $oSpool->setConfig($aConfiguration);
                 $oSpool->create( array ('msg_uid' => '','app_uid' => $appUid,'del_index' => 0,'app_msg_type' => 'DERIVATION','app_msg_subject' => $sSubject,'app_msg_from' => $sFrom,'app_msg_to' => $sTo,'app_msg_body' => $sBody,'app_msg_cc' => '','app_msg_bcc' => '','app_msg_attach' => '','app_msg_template' => '','app_msg_status' => 'pending') );
                 if (($aConfiguration['MESS_BACKGROUND'] == '') || ($aConfiguration['MESS_TRY_SEND_INMEDIATLY'] == '1')) {
                     $oSpool->sendMail();
