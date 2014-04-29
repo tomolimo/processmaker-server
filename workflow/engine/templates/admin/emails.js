@@ -376,9 +376,10 @@ Ext.onReady(function(){
         xtype:      "textfield",
         id:         "fromMail",
         name:       "fromMail",
-        fieldLabel: "From Mail",  //"From Mail",
+        fieldLabel: _('ID_FROM_EMAIL'),  //"From Mail",
         width:      250,
-        disabled:   true
+        disabled:   true,
+        vtype:'email'
       },
       {
         xtype: 'textfield',
@@ -849,7 +850,8 @@ var testMethod = function()
         request   : 'mailTestMail_Show',
         mail_to   : 'admin@processmaker.com',
         send_test_mail  : 'yes',
-        from_mail : Ext.getCmp("fromMail").getValue()
+        from_mail : Ext.getCmp("fromMail").getValue(),
+        from_name : Ext.getCmp("eFromName").getValue()
       };
 
       Ext.getCmp('step11').setText('<span id="rstep11"></span>  '+_('LOGIN_VERIFY_MSG')+' <b> Mail Transport Agent </b>', false);

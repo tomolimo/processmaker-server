@@ -374,8 +374,8 @@ class adminProxy extends HttpProxyController
             define("FAILED", 'FAILED');
             $mail_to                = $_POST['mail_to'];
             $send_test_mail         = $_POST['send_test_mail'];
-            $_POST['FROM_NAME']     = G::LoadTranslation("ID_MESS_TEST_BODY");
             $_POST['FROM_EMAIL']    = ($_POST["from_mail"] != "" && preg_match($eregMail, $_POST["from_mail"]))? $_POST["from_mail"] : "";
+            $_POST['FROM_NAME']     = $_POST["from_name"] != "" ? $_POST["from_name"] : G::LoadTranslation("ID_MESS_TEST_BODY");
             $_POST['MESS_ENGINE']   = 'MAIL';
             $_POST['MESS_SERVER']   = 'localhost';
             $_POST['MESS_PORT']     = 25;
