@@ -368,12 +368,14 @@ class adminProxy extends HttpProxyController
         G::LoadThirdParty('phpmailer', 'class.smtp');
 
         if ($_POST['typeTest'] == 'MAIL') {
+            $eregMail = "/^[0-9a-zA-Z]+(?:[._][0-9a-zA-Z]+)*@[0-9a-zA-Z]+(?:[._-][0-9a-zA-Z]+)*\.[0-9a-zA-Z]{2,3}$/";
+
             define("SUCCESSFUL", 'SUCCESSFUL');
             define("FAILED", 'FAILED');
             $mail_to                = $_POST['mail_to'];
             $send_test_mail         = $_POST['send_test_mail'];
-            $_POST['FROM_NAME']     = $mail_to;
-            $_POST['FROM_EMAIL']    = $mail_to;
+            $_POST['FROM_NAME']     = G::LoadTranslation("ID_MESS_TEST_BODY");
+            $_POST['FROM_EMAIL']    = ($_POST["from_mail"] != "" && preg_match($eregMail, $_POST["from_mail"]))? $_POST["from_mail"] : "";
             $_POST['MESS_ENGINE']   = 'MAIL';
             $_POST['MESS_SERVER']   = 'localhost';
             $_POST['MESS_PORT']     = 25;
