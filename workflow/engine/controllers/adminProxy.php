@@ -528,8 +528,8 @@ class adminProxy extends HttpProxyController
                     try {
                         $eregMail = "/^[0-9a-zA-Z]+(?:[._][0-9a-zA-Z]+)*@[0-9a-zA-Z]+(?:[._-][0-9a-zA-Z]+)*\.[0-9a-zA-Z]{2,3}$/";
 
-                        $_POST['FROM_NAME']     = G::LoadTranslation('ID_MESS_TEST_BODY');
-                        $_POST["FROM_EMAIL"]    = ($fromMail != "" && preg_match($eregMail, $fromMail))? $fromMail : $user;
+                        $_POST['FROM_EMAIL']    = ($fromMail != "" && preg_match($eregMail, $fromMail))? $fromMail : "";
+                        $_POST['FROM_NAME']     = $_POST["fromName"] != "" ? $_POST["fromName"] : G::LoadTranslation("ID_MESS_TEST_BODY");
                         $_POST['MESS_ENGINE']   = 'PHPMAILER';
                         $_POST['MESS_SERVER']   = $server;
                         $_POST['MESS_PORT']     = $port;
