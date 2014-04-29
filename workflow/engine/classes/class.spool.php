@@ -251,9 +251,13 @@ class spoolRun
      */
     private function handleFrom ()
     {
+        $eregA = "/^.*@.*$/";
+
         if (strpos( $this->fileData['from'], '<' ) !== false) {
             //to validate complex email address i.e. Erik A. O <erik@colosa.com>
-            preg_match( $this->longMailEreg, $this->fileData['from'], $matches );
+            $ereg = (preg_match($eregA, $this->fileData["from"]))? $this->longMailEreg : "/^(.*)(<(.*)>)$/";
+            preg_match($ereg, $this->fileData["from"], $matches);
+
             if (isset( $matches[1] ) && $matches[1] != '') {
                 //drop the " characters if they exist
                 $this->fileData['from_name'] = trim( str_replace( '"', '', $matches[1] ) );
@@ -269,7 +273,8 @@ class spoolRun
             $this->fileData['from_email'] = trim( $matches[3] );
         } else {
             //to validate simple email address i.e. erik@colosa.com
-            preg_match( $this->mailEreg, $this->fileData['from'], $matches );
+            $ereg = (preg_match($eregA, $this->fileData["from"]))? $this->mailEreg : "/^(.*)$/";
+            preg_match($ereg, $this->fileData["from"], $matches);
 
             if (! isset( $matches[0] )) {
                 throw new Exception( 'Invalid email address in FROM parameter (' . $this->fileData['from'] . ')', $this->ExceptionCode['WARNING'] );
