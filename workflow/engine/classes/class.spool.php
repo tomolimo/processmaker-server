@@ -169,6 +169,30 @@ class spoolRun
      */
     public function setConfig ($aConfig)
     {
+        // Processing password
+        $passwd = isset($aConfig['MESS_PASSWORD']) ? $aConfig['MESS_PASSWORD'] : '';
+        $passwdDec = G::decrypt($passwd, 'EMAILENCRYPT');
+        $auxPass = explode('hash:', $passwdDec);
+        if (count($auxPass) > 1) {
+            if (count($auxPass) == 2) {
+                $passwd = $auxPass[1];
+            } else {
+                array_shift($auxPass);
+                $passwd = implode('', $auxPass);
+            }
+        }
+        $aConfig['MESS_PASSWORD'] = $passwd;
+
+        // Validating authorization flag
+        if (isset($aConfig['MESS_RAUTH'])) {
+            if ($aConfig['MESS_RAUTH'] == false || (is_string($aConfig['MESS_RAUTH']) && $aConfig['MESS_RAUTH'] == 'false')) {
+                $aConfig['MESS_RAUTH'] = 0;
+            } else {
+                $aConfig['MESS_RAUTH'] = 1;
+            }
+        } else {
+            $aConfig['MESS_RAUTH'] = 0;
+        }
         $this->config = $aConfig;
     }
 
@@ -564,41 +588,15 @@ class spoolRun
      */
     public function resendEmails ($dateResend = null, $cron = 0)
     {
-        require_once ("classes/model/Configuration.php");
-
-        $oConfiguration = new Configuration();
-
-        $aConfiguration = $oConfiguration->load( "Emails", "", "", "", "" );
-
-        $aConfiguration = unserialize( $aConfiguration["CFG_VALUE"] );
-        if (!isset($aConfiguration["MESS_ENABLED"])) {
-            $aConfiguration["MESS_ENABLED"] = 0;
+        if (!class_exists('System')) {
+            G::LoadClass('system');
         }
-        $passwd = isset($aConfiguration["MESS_PASSWORD"]) ? $aConfiguration["MESS_PASSWORD"] : '';
-        $passwdDec = G::decrypt( $passwd, "EMAILENCRYPT" );
-        $auxPass = explode( "hash:", $passwdDec );
-
-        if (count( $auxPass ) > 1) {
-            if (count( $auxPass ) == 2) {
-                $passwd = $auxPass[1];
-            } else {
-                array_shift( $auxPass );
-                $passwd = implode( "", $auxPass );
-            }
-        }
-
-        $aConfiguration["MESS_PASSWORD"] = $passwd;
+        $aConfiguration = System::getEmailConfiguration();
 
         if ($aConfiguration["MESS_ENABLED"] == "1") {
             require_once ("classes/model/AppMessage.php");
-            if ($aConfiguration['MESS_RAUTH'] == false || (is_string($aConfiguration['MESS_RAUTH']) && $aConfiguration['MESS_RAUTH'] == 'false')) {
-                $aConfiguration['MESS_RAUTH'] = 0;
-            } else {
-                $aConfiguration['MESS_RAUTH'] = 1;
-            }
 
-            $this->setConfig( array ("MESS_ENGINE" => $aConfiguration["MESS_ENGINE"],"MESS_SERVER" => $aConfiguration["MESS_SERVER"],"MESS_PORT" => $aConfiguration["MESS_PORT"],"MESS_ACCOUNT" => $aConfiguration["MESS_ACCOUNT"],"MESS_PASSWORD" => $aConfiguration["MESS_PASSWORD"],"SMTPAuth" => $aConfiguration["MESS_RAUTH"],"SMTPSecure" => $aConfiguration["SMTPSecure"]
-            ) );
+            $this->setConfig($aConfiguration);
 
             $criteria = new Criteria( "workflow" );
             $criteria->add( AppMessagePeer::APP_MSG_STATUS, "sent", Criteria::NOT_EQUAL );
