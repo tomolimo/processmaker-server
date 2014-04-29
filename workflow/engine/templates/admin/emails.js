@@ -34,8 +34,8 @@ Ext.onReady(function(){
             Ext.getCmp('Password').getEl().up('.x-form-item').setDisplayed(false);
             Ext.getCmp('UseSecureConnection').setVisible(false);
             Ext.getCmp('UseSecureConnection').getEl().up('.x-form-item').setDisplayed(false);
-            Ext.getCmp("fromMail").setVisible(false);
-            Ext.getCmp("fromMail").getEl().up('.x-form-item').setDisplayed(false);
+            Ext.getCmp("fromMail").setVisible(true);
+            Ext.getCmp("fromMail").getEl().up('.x-form-item').setDisplayed(true);
           } else {
             Ext.getCmp('Server').setVisible(true);
             Ext.getCmp('Server').getEl().up('.x-form-item').setDisplayed(true); // hide label
@@ -165,8 +165,9 @@ Ext.onReady(function(){
           Ext.getCmp('Password').getEl().up('.x-form-item').setDisplayed(false);
           Ext.getCmp('UseSecureConnection').setVisible(false);
           Ext.getCmp('UseSecureConnection').getEl().up('.x-form-item').setDisplayed(false);
-          Ext.getCmp("fromMail").setVisible(false);
-          Ext.getCmp("fromMail").getEl().up('.x-form-item').setDisplayed(false);
+
+          Ext.getCmp("fromMail").setVisible(true);
+          Ext.getCmp("fromMail").getEl().up('.x-form-item').setDisplayed(true);
         } else {
           Ext.getCmp('Server').setVisible(true);
           Ext.getCmp('Server').getEl().up('.x-form-item').setDisplayed(true); // hide label
@@ -299,7 +300,7 @@ Ext.onReady(function(){
       },
       {
         xtype: 'textfield',
-        fieldLabel: _('ACCOUNT_FROM'),//'Account From',
+        fieldLabel: _("ID_USER_NAME"),  //'Account From',
         id:'AccountFrom',
         name:'AccountFrom',
         vtype:'emailUrlValidation',
@@ -467,8 +468,14 @@ Ext.onReady(function(){
                   Ext.getCmp('UseSecureConnection').setVisible(false);
                   Ext.getCmp('UseSecureConnection').getEl().up('.x-form-item').setDisplayed(false);
 
-                  Ext.getCmp("fromMail").setVisible(false);
-                  Ext.getCmp("fromMail").getEl().up('.x-form-item').setDisplayed(false);
+                  Ext.getCmp("fromMail").setVisible(true);
+                  Ext.getCmp("fromMail").getEl().up('.x-form-item').setDisplayed(true);
+
+                  if (typeof (res.data.MESS_FROM_MAIL) != "undefined"){
+                     Ext.getCmp("fromMail").setValue(res.data.MESS_FROM_MAIL);
+                  } else {
+                     Ext.getCmp("fromMail").setValue("");
+                  }
                 } else {
                   Ext.getCmp('Server').setVisible(true);
                   Ext.getCmp('Server').getEl().up('.x-form-item').setDisplayed(true); // hide label
@@ -841,7 +848,8 @@ var testMethod = function()
         typeTest  : 'MAIL',
         request   : 'mailTestMail_Show',
         mail_to   : 'admin@processmaker.com',
-        send_test_mail  : 'yes'
+        send_test_mail  : 'yes',
+        from_mail : Ext.getCmp("fromMail").getValue()
       };
 
       Ext.getCmp('step11').setText('<span id="rstep11"></span>  '+_('LOGIN_VERIFY_MSG')+' <b> Mail Transport Agent </b>', false);
