@@ -2084,6 +2084,18 @@ class XmlForm_Field_Currency extends XmlForm_Field_SimpleText
      */
     public function render ($value = null, $owner = null)
     {
+        if (($this->pmconnection != '') && ($this->pmfield != '') && $value == null) {
+            $value = $this->getPMTableValue( $owner );
+        } else {
+            $this->executeSQL( $owner );
+            if (isset( $this->sqlOption )) {
+                $firstElement = key( $this->sqlOption );
+            }
+            if (isset( $firstElement )) {
+                $value = $firstElement;
+            }
+        }
+
         if ($this->renderMode == '') {
             $this->renderMode = $this->mode;
         }
@@ -2144,6 +2156,12 @@ class XmlForm_Field_Currency extends XmlForm_Field_SimpleText
         }
 
         foreach ($values as $v) {
+            $this->executeSQL( $owner, $r );
+            $firstElement = key( $this->sqlOption );
+            if (isset( $firstElement )) {
+                $v = $firstElement;
+            }
+
             $html = '';
             $currency = preg_replace( '/([_;#,.])/', '', $this->mask );
             if (! $v) {
