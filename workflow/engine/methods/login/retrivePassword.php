@@ -11,7 +11,7 @@ $user = new Users();
 
 $userData = $rbacUser->getByUsername($data['USR_USERNAME']);
 
-if ($userData['USR_EMAIL'] != '' && $userData['USR_EMAIL'] === $data['USR_EMAIL'] && $userData['USR_AUTH_TYPE'] === '' ) {
+if ($userData['USR_EMAIL'] != '' && $userData['USR_EMAIL'] === $data['USR_EMAIL'] && ($userData['USR_AUTH_TYPE'] === '' || $userData['USR_AUTH_TYPE'] == 'MYSQL') ) {
     $aSetup = System::getEmailConfiguration();
     if (count($aSetup) == 0 || !isset($aSetup['MESS_ENGINE'])) {
         G::SendTemporalMessage ('ID_EMAIL_ENGINE_IS_NOT_ENABLED', "warning");
@@ -28,18 +28,7 @@ if ($userData['USR_EMAIL'] != '' && $userData['USR_EMAIL'] === $data['USR_EMAIL'
       $user->update($aData);
     */
 
-    if (trim($aSetup["MESS_FROM_NAME"]) === '') {
-        $aSetup["MESS_FROM_NAME"] = 'PROCESSMAKER';
-    }
-    if ($aSetup['MESS_ENGINE'] === 'MAIL') {
-        $sFrom = $aSetup["MESS_FROM_NAME"] . " <info@" . ((isset($_SERVER["HTTP_HOST"]) && $_SERVER["HTTP_HOST"] != "") ? $_SERVER["HTTP_HOST"] : "processmaker.com") . ">";
-    } else {
-        if (trim($aSetup["MESS_ACCOUNT"]) === '') {
-            $sFrom = $aSetup["MESS_FROM_NAME"] . " <info@" . ((isset($_SERVER["HTTP_HOST"]) && $_SERVER["HTTP_HOST"] != "") ? $_SERVER["HTTP_HOST"] : "processmaker.com") . ">";
-        } else {
-            $sFrom = $aSetup["MESS_FROM_NAME"] . " <" . $aSetup["MESS_ACCOUNT"] . ">";
-        }
-    }
+    $sFrom = G::buildFrom($aSetup, $sFrom);
 
     $sSubject = G::LoadTranslation('ID_RESET_PASSWORD').' - ProcessMaker' ;
     $msg = '<h3>ProcessMaker Forgot password Service</h3>';
@@ -92,13 +81,13 @@ if ($userData['USR_EMAIL'] != '' && $userData['USR_EMAIL'] === $data['USR_EMAIL'
         $oSpool->sendMail();
         $rbacUser->update($aData);
         $user->update($aData);
-        G::header  ("location: login.html");
+        G::header  ("location: login");
         G::SendTemporalMessage ('ID_NEW_PASSWORD_SENT', "info");
     } catch (phpmailerException $e) {
-        G::header  ("location: login.html");
+        G::header  ("location: login");
         G::SendTemporalMessage (G::LoadTranslation('MISSING_OR_NOT_CONFIGURED_SMTP'), "warning", 'string');
     } catch (Exception $e) {
-        G::header  ("location: login.html");
+        G::header  ("location: login");
         G::SendTemporalMessage ($e->getMessage(), "warning", 'string');
     }
 } else {

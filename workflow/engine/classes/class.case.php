@@ -4836,28 +4836,8 @@ class Cases
             if ($aTaskInfo['TAS_SEND_LAST_EMAIL'] != 'TRUE') {
                 return false;
             }
-            /*
-            if ($sFrom == '') {
-                $sFrom = '"ProcessMaker"';
-            }
-            */
-            if (isset($aConfiguration['MESS_FROM_NAME']) && $aConfiguration['MESS_FROM_NAME'] != '') {
-                $sFrom = $aConfiguration['MESS_FROM_NAME'];
-            }
 
-            $hasEmailFrom = preg_match('/(.+)@(.+)\.(.+)/', $sFrom, $match);
-
-            if (!$hasEmailFrom || ($aConfiguration["MESS_ACCOUNT"] != '' && strpos($sFrom, $aConfiguration["MESS_ACCOUNT"]) === false)) {
-                if (trim($aConfiguration["MESS_ACCOUNT"]) != "") {
-                    $sFrom = "\"" . stripslashes($sFrom) . "\" <" . $aConfiguration["MESS_ACCOUNT"] . ">";
-                } else {
-                    if ($aConfiguration["MESS_ENGINE"] == "MAIL" && $sFrom != '') {
-                        $sFrom = "\"" . stripslashes($sFrom) . "\"";
-                    } else {
-                        $sFrom = $sFrom . " <info@" . ((isset($_SERVER["HTTP_HOST"]) && $_SERVER["HTTP_HOST"] != "")? $_SERVER["HTTP_HOST"] : "processmaker.com") . ">";
-                    }
-                }
-            }
+            $sFrom = G::buildFrom($aConfiguration, $sFrom);
 
             if (isset($aTaskInfo['TAS_DEF_SUBJECT_MESSAGE']) && $aTaskInfo['TAS_DEF_SUBJECT_MESSAGE'] != '') {
                 $sSubject = G::replaceDataField($aTaskInfo['TAS_DEF_SUBJECT_MESSAGE'], $aFields);

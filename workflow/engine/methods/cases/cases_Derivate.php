@@ -117,10 +117,7 @@ try {
     // Send notifications - Start
     $oUser = new Users();
     $aUser = $oUser->load( $_SESSION['USER_LOGGED'] );
-    if (trim( $aUser['USR_EMAIL'] ) == '') {
-        $aUser['USR_EMAIL'] = 'info@' . $_SERVER['HTTP_HOST'];
-    }
-    $sFromName = '"' . $aUser['USR_FIRSTNAME'] . ' ' . $aUser['USR_LASTNAME'] . '" <' . $aUser['USR_EMAIL'] . '>';
+    $sFromName = $aUser['USR_FIRSTNAME'] . ' ' . $aUser['USR_LASTNAME'] . ($aUser['USR_EMAIL'] != '' ? ' <' . $aUser['USR_EMAIL'] . '>' : '');
     try {
         $oCase->sendNotifications( $_SESSION['TASK'], $_POST['form']['TASKS'], $appFields['APP_DATA'], $_SESSION['APPLICATION'], $_SESSION['INDEX'], $sFromName );
     } catch (Exception $e) {

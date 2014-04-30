@@ -946,19 +946,8 @@ class wsBase
             }
 
             $sBody = G::replaceDataGridField(file_get_contents($fileTemplate), $Fields, false);
-            $hasEmailFrom = preg_match( '/(.+)@(.+)\.(.+)/', $sFrom, $match );
 
-            if (!$hasEmailFrom || ($aSetup["MESS_ACCOUNT"] != '' && strpos($sFrom, $aSetup["MESS_ACCOUNT"]) === false)) {
-                if (trim($aSetup["MESS_ACCOUNT"]) != "") {
-                    $sFrom = "\"" . stripslashes($sFrom) . "\" <" . $aSetup["MESS_ACCOUNT"] . ">";
-                } else {
-                    if ($aSetup["MESS_ENGINE"] == "MAIL" && $sFrom != '') {
-                        $sFrom = "\"" . stripslashes($sFrom) . "\"";
-                    } else {
-                        $sFrom = $sFrom . " <info@" . ((isset($_SERVER["HTTP_HOST"]) && $_SERVER["HTTP_HOST"] != "")? $_SERVER["HTTP_HOST"] : "processmaker.com") . ">";
-                    }
-                }
-            }
+            $sFrom = G::buildFrom($aSetup, $sFrom);
 
             $showMessage = ($showMessage) ? 1 : 0 ;
 

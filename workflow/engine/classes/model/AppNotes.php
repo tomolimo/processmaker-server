@@ -149,28 +149,7 @@ class AppNotes extends BaseAppNotes
             $configNoteNotification['subject'] = G::LoadTranslation( 'ID_MESSAGE_SUBJECT_NOTE_NOTIFICATION' ) . " @#APP_TITLE ";
             $configNoteNotification['body'] = G::LoadTranslation( 'ID_CASE' ) . ": @#APP_TITLE<br />" . G::LoadTranslation( 'ID_AUTHOR' ) . ": $authorName<br /><br />$noteContent";
 
-            /*
-            if ($sFrom == '') {
-                $sFrom = '"ProcessMaker"';
-            }
-            */
-            if (isset($aConfiguration['MESS_FROM_NAME']) && $aConfiguration['MESS_FROM_NAME'] != '') {
-                $sFrom = $aConfiguration['MESS_FROM_NAME'];
-            }
-
-            $hasEmailFrom = preg_match( '/(.+)@(.+)\.(.+)/', $sFrom, $match );
-
-            if (!$hasEmailFrom || ($aConfiguration["MESS_ACCOUNT"] != '' && strpos($sFrom, $aConfiguration["MESS_ACCOUNT"]) === false)) {
-                if (trim($aConfiguration["MESS_ACCOUNT"]) != "") {
-                    $sFrom = "\"" . stripslashes($sFrom) . "\" <" . $aConfiguration["MESS_ACCOUNT"] . ">";
-                } else {
-                    if ($aConfiguration["MESS_ENGINE"] == "MAIL" && $sFrom != '') {
-                        $sFrom = "\"" . stripslashes($sFrom) . "\"";
-                    } else {
-                        $sFrom = $sFrom . " <info@" . ((isset($_SERVER["HTTP_HOST"]) && $_SERVER["HTTP_HOST"] != "")? $_SERVER["HTTP_HOST"] : "processmaker.com") . ">";
-                    }
-                }
-            }
+            $sFrom = G::buildFrom($aConfiguration, $sFrom);
 
             $sSubject = G::replaceDataField( $configNoteNotification['subject'], $aFields );
 
