@@ -194,6 +194,15 @@ class spoolRun
             $aConfig['MESS_RAUTH'] = 0;
         }
         $aConfig['SMTPAuth'] = $aConfig['MESS_RAUTH'];
+
+        // Validating for old configurations
+        if (!isset($aConfig['MESS_FROM_NAME'])) {
+            $aConfig['MESS_FROM_NAME'] = '';
+        }
+        if (!isset($aConfig['MESS_FROM_MAIL'])) {
+            $aConfig['MESS_FROM_MAIL'] = '';
+        }
+
         $this->config = $aConfig;
     }
 
