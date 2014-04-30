@@ -193,6 +193,7 @@ class spoolRun
         } else {
             $aConfig['MESS_RAUTH'] = 0;
         }
+        $aConfig['SMTPAuth'] = $aConfig['MESS_RAUTH'];
         $this->config = $aConfig;
     }
 
@@ -438,20 +439,6 @@ class spoolRun
                     $oPHPMailer->Host = $this->config['MESS_SERVER'];
                     $oPHPMailer->Port = $this->config['MESS_PORT'];
                     $oPHPMailer->Username = $this->config['MESS_ACCOUNT'];
-                    $passwd = $this->config['MESS_PASSWORD'];
-                    $passwdDec = G::decrypt( $passwd, 'EMAILENCRYPT' );
-                    $auxPass = explode( 'hash:', $passwdDec );
-
-                    if (count( $auxPass ) > 1) {
-                        if (count( $auxPass ) == 2) {
-                            $passwd = $auxPass[1];
-                        } else {
-                            array_shift( $auxPass );
-                            $passwd = implode( '', $auxPass );
-                        }
-                    }
-
-                    $this->config['MESS_PASSWORD'] = $passwd;
                     $oPHPMailer->Password = $this->config['MESS_PASSWORD'];
                     $oPHPMailer->From = $this->fileData['from_email'];
                     $oPHPMailer->FromName = utf8_decode( $this->fileData['from_name'] );
@@ -618,20 +605,8 @@ class spoolRun
                 $row = $rsCriteria->getRow();
 
                 try {
-                    $sFrom = $row["APP_MSG_FROM"];
-                    $hasEmailFrom = preg_match('/(.+)@(.+)\.(.+)/', $sFrom, $match);
+                    $sFrom = G::buildFrom($aConfiguration, $row["APP_MSG_FROM"]);
 
-                    if (!$hasEmailFrom || ($aConfiguration["MESS_ACCOUNT"] != '' && strpos($sFrom, $aConfiguration["MESS_ACCOUNT"]) === false)) {
-                        if (trim($aConfiguration["MESS_ACCOUNT"]) != "") {
-                            $sFrom = "\"" . stripslashes($sFrom) . "\" <" . $aConfiguration["MESS_ACCOUNT"] . ">";
-                        } else {
-                            if ($aConfiguration["MESS_ENGINE"] == "MAIL" && $sFrom != '') {
-                                $sFrom = "\"" . stripslashes($sFrom) . "\"";
-                            } else {
-                                $sFrom = $sFrom . " <info@" . ((isset($_SERVER["HTTP_HOST"]) && $_SERVER["HTTP_HOST"] != "")? $_SERVER["HTTP_HOST"] : "processmaker.com") . ">";
-                            }
-                        }
-                    }
                     $this->setData( $row["APP_MSG_UID"], $row["APP_MSG_SUBJECT"], $sFrom, $row["APP_MSG_TO"], $row["APP_MSG_BODY"], date( "Y-m-d H:i:s" ), $row["APP_MSG_CC"], $row["APP_MSG_BCC"], $row["APP_MSG_TEMPLATE"], $row["APP_MSG_ATTACH"] );
 
                     $this->sendMail();
