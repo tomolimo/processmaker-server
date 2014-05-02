@@ -4336,12 +4336,12 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
 
     public $startDate = '';
     public $endDate = '';
-    /*
+    /**
     * for dinamically dates,   beforeDate << currentDate << afterDate
     * beforeDate='1y' means one year before,  beforeDate='3m' means 3 months before
     * afterDate='5y' means five year after,  afterDate='15d' means 15 days after
     * startDate and endDate have priority over beforeDate and AfterDate
-    */
+    **/
     public $afterDate = '';
     public $beforeDate = '';
     public $defaultValue = null;
@@ -4494,7 +4494,7 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
      * @return <String>
      */
     public function __draw_widget ($pID, $value, $owner = '', $inGrid = false)
-    {
+    {   
         $startDate = G::replaceDataField( $this->startDate, $owner->values );
         $endDate = G::replaceDataField( $this->endDate, $owner->values );
         $beforeDate = G::replaceDataField( $this->beforeDate, $owner->values );
@@ -4613,17 +4613,25 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
                 $Time = "true";
             }
 
-            //$sizeend = strlen($valueDemo) + 3;
             $sizeend = $this->size;
-
+            
             if ($this->required) {
                 $isRequired = '1';
             } else {
                 $isRequired = '0';
             }
-
+                
+            if ($inGrid) {
+                $pmtype = 'pmgridtype="date"';
+            } else {
+                $pmtype = 'pmfieldtype="date"';
+            }
+        
             if ($this->editable != "0") {
-                $html = '<input ' . $this->NSFieldType() . ' pm:required="' . $isRequired . '" id="' . $pID . '" name="' . $pID . '" pm:mask="' . $mask . '" pm:start="' . $startDate . '" pm:end="' . $endDate . '" pm:time="' . $Time . '" ' . $onchange . ' class="module_app_input___gray" size="' . $sizeend . '" value="' . $value . '" pm:defaultvalue="' . $defaultValue . '"  />' . '<a onclick="removeValue(\'' . $pID . '\'); return false;" style="position:relative;left:-17px;top:2px;" >' . '  <img src="/images/icons_silk/calendar_x_button.png" />' . '</a>' . '<a id="' . $pID . '[btn]" style="position: relative; top: 2px; left: -16px;" >' . '  <img src="/images/pmdateicon.png" border="0" width="12" height="14" />' . '</a>' . '<script>datePicker4("", \'' . $pID . '\', \'' . $mask . '\', \'' . $startDate . '\', \'' . $endDate . '\',' . $Time . ')</script>';
+                $html = '<input '.$pmtype.' pm:required="' . $isRequired . '" id="' . $pID . '" name="' . $pID . '" pm:mask="' . $mask . '" pm:start="' . $startDate . '" pm:end="' . $endDate . '" pm:time="' . $Time . '" class="module_app_input___gray" size="' . $sizeend . '" value="' . $value . '" pm:defaultvalue="' . $defaultValue . '" />';
+                $html .= '<a onclick="removeValue(\'' . $pID . '\'); return false;" style="position:relative;left:-17px;top:2px;" ><img src="/images/icons_silk/calendar_x_button.png" /></a>';
+                $html .= '<a id="' . $pID . '[btn]" style="position: relative; top: 2px; left: -16px;" ><img src="/images/pmdateicon.png" border="0" width="12" height="14" /></a>';
+                $html .= '<script>datePicker4("", \'' . $pID . '\', \'' . $mask . '\', \'' . $startDate . '\', \'' . $endDate . '\',' . $Time . ')</script>';
             } else {
                 $html = '<input pm:required="' . $isRequired . '" id="' . $pID . '" name="' . $pID . '" pm:mask="' . $mask . '" pm:start="' . $startDate . '" pm:end="' . $endDate . '" pm:time="' . $Time . '" ' . $onchange . ' class="module_app_input___gray" size="' . $sizeend . '" value="' . $value . '" pm:defaultvalue="' . $defaultValue . '" readonly="readonly"  />' . '<a onclick="removeValue(\'' . $pID . '\'); return false;" style="position:relative;left:-17px;top:2px;" >' . '  <img src="/images/icons_silk/calendar_x_button.png" />' . '</a>' . '<a id="' . $pID . '[btn]" style="position: relative; top: 2px; left: -16px;" >' . '  <img src="/images/pmdateicon.png" border="0" width="12" height="14" />' . '</a>' . '<script>datePicker4("", \'' . $pID . '\', \'' . $mask . '\', \'' . $startDate . '\', \'' . $endDate . '\',' . $Time . ')</script>';
             }
