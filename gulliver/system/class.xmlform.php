@@ -4299,7 +4299,7 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
     public $editable;
     public $onchange;
     public $renderMode = '';
-    public $gridFieldType = 'date';
+    public $gridFieldType = '';
 
     /*
     * Verify the format of a date
@@ -4601,9 +4601,9 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
          * $html .= '<input type="hidden" id="'.$idIsoDate.'" name="'.$idIsoDate.'" value="'.$valisoDate.'"/>';
          * *
          */
-        /*if ($this->gridFieldType == '') {
+        if ($this->gridFieldType == '') {
             $html .= $this->renderHint();
-        }*/
+        }
         return $html;
     }
 
