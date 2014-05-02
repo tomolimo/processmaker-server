@@ -4336,12 +4336,12 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
 
     public $startDate = '';
     public $endDate = '';
-    /*
+    /**
     * for dinamically dates,   beforeDate << currentDate << afterDate
     * beforeDate='1y' means one year before,  beforeDate='3m' means 3 months before
     * afterDate='5y' means five year after,  afterDate='15d' means 15 days after
     * startDate and endDate have priority over beforeDate and AfterDate
-    */
+    **/
     public $afterDate = '';
     public $beforeDate = '';
     public $defaultValue = null;
