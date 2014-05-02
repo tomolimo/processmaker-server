@@ -2241,6 +2241,17 @@ class XmlForm_Field_Percentage extends XmlForm_Field_SimpleText
 
     public function render ($value = null, $owner = null)
     {
+        if (($this->pmconnection != '') && ($this->pmfield != '') && $value == null) {
+            $value = $this->getPMTableValue( $owner );
+        } else {
+            $this->executeSQL( $owner );
+            if (isset( $this->sqlOption )) {
+                $firstElement = key( $this->sqlOption );
+            }
+            if (isset( $firstElement )) {
+                $value = $firstElement;
+            }
+        }
 
         if ($this->renderMode == '') {
             $this->renderMode = $this->mode;
@@ -2278,30 +2289,54 @@ class XmlForm_Field_Percentage extends XmlForm_Field_SimpleText
         }
         $html .= $this->renderHint();
         return $html;
+    }
 
-        //    $onkeypress = G::replaceDataField ( $this->onkeypress, $owner->values );
-        //    if ($this->mode === 'edit') {
-        //      if ($this->readOnly)
-        //        return '<input class="module_app_input___gray" id="form[' . $this->name . ']" name="form[' . $this->name . ']" type ="text" size="' . $this->size . '" maxlength="' . $this->maxLength . '" value=\'' . $this->htmlentities ( $value, ENT_QUOTES, 'utf-8' ) . '\' readOnly="readOnly" style="' . htmlentities ( $this->style, ENT_COMPAT, 'utf-8' ) . '" onkeypress="' . htmlentities ( $onkeypress, ENT_COMPAT, 'utf-8' ) . '"/>';
-        //      else {
-        //
-        //        $html = '<input class="module_app_input___gray" id="form[' . $this->name . ']" name="form[' . $this->name . ']" type ="text" size="' . $this->size . '" maxlength="' . $this->maxLength . '" value=\'' . $this->htmlentities ( $value, ENT_QUOTES, 'utf-8' ) . '\' style="' . htmlentities ( $this->style, ENT_COMPAT, 'utf-8' ) . '" onkeypress="' . htmlentities ( $onkeypress, ENT_COMPAT, 'utf-8' ) . '"/>';
-        //
-        //        if($this->hint){
-        //           $html .= '<a href="#" onmouseout="hideTooltip()" onmouseover="showTooltip(event, \''.$this->hint.'\');return false;">
-        //                  <image src="/images/help4.gif" width="15" height="15" border="0"/>
-        //                </a>';
-        //        }
-        //
-        //        return $html;
-        //      }
-        //    } elseif ($this->mode === 'view') {
-        //      return '<input class="module_app_input___gray" id="form[' . $this->name . ']" name="form[' . $this->name . ']" type ="text" size="' . $this->size . '" maxlength="' . $this->maxLength . '" value=\'' . $this->htmlentities ( $value, ENT_QUOTES, 'utf-8' ) . '\' style="display:none;' . htmlentities ( $this->style, ENT_COMPAT, 'utf-8' ) . '" onkeypress="' . htmlentities ( $onkeypress, ENT_COMPAT, 'utf-8' ) . '"/>' . $this->htmlentities ( $value, ENT_COMPAT, 'utf-8' );
-        //    } else {
-        //      return $this->htmlentities ( $value, ENT_QUOTES, 'utf-8' );
-        //    }
+    public function renderGrid ($values = array(), $owner = null)
+    {
+        $result = array ();
+        $r = 1;
+        if ($owner->mode != 'view') {
+            $this->renderMode = $this->modeForGrid;
+        }
 
+        foreach ($values as $v) {
+            $this->executeSQL( $owner, $r );
+            $firstElement = key( $this->sqlOption );
+            if (isset( $firstElement )) {
+                $v = $firstElement;
+            }
 
+            $html = '';
+            $percentage = preg_replace( '/([_;#,.])/', '', $this->mask );
+            if (! $v) {
+                $v = $percentage;
+            }
+            if ($this->renderMode === 'edit') {
+                //EDIT MODE
+                $readOnlyText = ($this->readOnly == 1 || $this->readOnly == '1') ? 'readOnly="readOnly"' : '';
+                $html .= '<input ' . $readOnlyText . ' class="module_app_input___gray" ';
+                $html .= 'id="form[' . $owner->name . '][' . $r . '][' . $this->name . ']" ';
+                $html .= 'name="form[' . $owner->name . '][' . $r . '][' . $this->name . ']" ';
+                $html .= 'type="text" size="' . $this->size . '" maxlength="' . $this->maxLength . '" ';
+                $html .= 'value="' . $this->htmlentities( $v, ENT_QUOTES, 'utf-8' ) . '" ';
+                $html .= 'style="' . $this->htmlentities( $this->style, ENT_COMPAT, 'utf-8' ) . '" ';
+                $html .= $this->NSDefaultValue() . ' ';
+                $html .= $this->NSRequiredValue() . ' ';
+                $html .= $this->NSGridType() . ' ';
+                $html .= $this->NSGridLabel() . ' ';
+                $html .= '/>';
+            } else {
+                //VIEW MODE
+                $html .= $this->htmlentities( $v, ENT_QUOTES, 'utf-8' );
+                $html .= '<input ';
+                $html .= 'id="form[' . $owner->name . '][' . $r . '][' . $this->name . ']" ';
+                $html .= 'name="form[' . $owner->name . '][' . $r . '][' . $this->name . ']" ';
+                $html .= 'type="hidden" value="' . $this->htmlentities( $v, ENT_QUOTES, 'utf-8' ) . '" />';
+            }
+            $result[] = $html;
+            $r ++;
+        }
+        return $result;
     }
 }
 
