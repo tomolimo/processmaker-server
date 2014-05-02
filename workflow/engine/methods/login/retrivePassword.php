@@ -11,8 +11,8 @@ $user = new Users();
 
 $userData = $rbacUser->getByUsername($data['USR_USERNAME']);
 
-if ($userData['USR_EMAIL'] != '' && $userData['USR_EMAIL'] === $data['USR_EMAIL'] && $userData['USR_AUTH_TYPE'] === '' ) {
-    $aSetup = getEmailConfiguration();
+if ($userData['USR_EMAIL'] != '' && $userData['USR_EMAIL'] === $data['USR_EMAIL'] && ($userData['USR_AUTH_TYPE'] === '' || $userData['USR_AUTH_TYPE'] == 'MYSQL') ) {
+    $aSetup = System::getEmailConfiguration();
     if (count($aSetup) == 0 || !isset($aSetup['MESS_ENGINE'])) {
         G::SendTemporalMessage ('ID_EMAIL_ENGINE_IS_NOT_ENABLED', "warning");
         G::header('location: forgotPassword');
@@ -27,20 +27,9 @@ if ($userData['USR_EMAIL'] != '' && $userData['USR_EMAIL'] === $data['USR_EMAIL'
       $rbacUser->update($aData);
       $user->update($aData);
     */
-    
-    if (trim($aSetup["MESS_FROM_NAME"]) === '') {
-        $aSetup["MESS_FROM_NAME"] = 'PROCESSMAKER';
-    }
-    if ($aSetup['MESS_ENGINE'] === 'MAIL') {
-        $sFrom = $aSetup["MESS_FROM_NAME"] . " <info@" . ((isset($_SERVER["HTTP_HOST"]) && $_SERVER["HTTP_HOST"] != "") ? $_SERVER["HTTP_HOST"] : "processmaker.com") . ">";
-    } else {
-        if (trim($aSetup["MESS_ACCOUNT"]) === '') {
-            $sFrom = $aSetup["MESS_FROM_NAME"] . " <info@" . ((isset($_SERVER["HTTP_HOST"]) && $_SERVER["HTTP_HOST"] != "") ? $_SERVER["HTTP_HOST"] : "processmaker.com") . ">";
-        } else {
-            $sFrom = $aSetup["MESS_FROM_NAME"] . " <" . $aSetup["MESS_ACCOUNT"] . ">";
-        }
-    }
-    
+
+    $sFrom = G::buildFrom($aSetup, $sFrom);
+
     $sSubject = G::LoadTranslation('ID_RESET_PASSWORD').' - ProcessMaker' ;
     $msg = '<h3>ProcessMaker Forgot password Service</h3>';
     $msg .='<p>'.G::LoadTranslation('ID_YOUR_USERMANE_IS').' :  <strong>'.$userData['USR_USERNAME'].'</strong></p>';
@@ -67,36 +56,10 @@ if ($userData['USR_EMAIL'] != '' && $userData['USR_EMAIL'] === $data['USR_EMAIL'
   </tr></tbody></table>";
 
     G::LoadClass('spool');
+
     $oSpool = new spoolRun();
-    if ($aSetup['MESS_RAUTH'] == false || (is_string($aSetup['MESS_RAUTH']) && $aSetup['MESS_RAUTH'] == 'false')) {
-        $aSetup['MESS_RAUTH'] = 0;
-    } else {
-        $aSetup['MESS_RAUTH'] = 1;
-    }
-    $oSpool->setConfig( array(
-        'MESS_ENGINE'   => $aSetup['MESS_ENGINE'],
-        'MESS_SERVER'   => $aSetup['MESS_SERVER'],
-        'MESS_PORT'     => $aSetup['MESS_PORT'],
-        'MESS_ACCOUNT'  => $aSetup['MESS_ACCOUNT'],
-        'MESS_PASSWORD' => $aSetup['MESS_PASSWORD'],
-        'SMTPAuth'      => $aSetup['MESS_RAUTH'],
-        'SMTPSecure'    => $aSetup['SMTPSecure']
-    ));
 
-    $passwd = $oSpool->config['MESS_PASSWORD'];
-    $passwdDec = G::decrypt($passwd,'EMAILENCRYPT');
-    $auxPass = explode('hash:', $passwdDec);
-    if (count($auxPass) > 1) {
-        if (count($auxPass) == 2) {
-            $passwd = $auxPass[1];
-        } else {
-            array_shift($auxPass);
-            $passwd = implode('', $auxPass);
-        }
-    }
-
-    $oSpool->config['MESS_PASSWORD'] = $passwd;
-
+    $oSpool->setConfig($aSetup);
     $oSpool->create(array(
         'msg_uid'          => '',
         'app_uid'          => '',
@@ -118,13 +81,13 @@ if ($userData['USR_EMAIL'] != '' && $userData['USR_EMAIL'] === $data['USR_EMAIL'
         $oSpool->sendMail();
         $rbacUser->update($aData);
         $user->update($aData);
-        G::header  ("location: login.html");
+        G::header  ("location: login");
         G::SendTemporalMessage ('ID_NEW_PASSWORD_SENT', "info");
     } catch (phpmailerException $e) {
-        G::header  ("location: login.html");
+        G::header  ("location: login");
         G::SendTemporalMessage (G::LoadTranslation('MISSING_OR_NOT_CONFIGURED_SMTP'), "warning", 'string');
     } catch (Exception $e) {
-        G::header  ("location: login.html");
+        G::header  ("location: login");
         G::SendTemporalMessage ($e->getMessage(), "warning", 'string');
     }
 } else {

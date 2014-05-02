@@ -368,19 +368,21 @@ class adminProxy extends HttpProxyController
         G::LoadThirdParty('phpmailer', 'class.smtp');
 
         if ($_POST['typeTest'] == 'MAIL') {
+            $eregMail = "/^[0-9a-zA-Z]+(?:[._][0-9a-zA-Z]+)*@[0-9a-zA-Z]+(?:[._-][0-9a-zA-Z]+)*\.[0-9a-zA-Z]{2,3}$/";
+
             define("SUCCESSFUL", 'SUCCESSFUL');
             define("FAILED", 'FAILED');
             $mail_to                = $_POST['mail_to'];
             $send_test_mail         = $_POST['send_test_mail'];
-            $_POST['FROM_NAME']     = $mail_to;
-            $_POST['FROM_EMAIL']    = $mail_to;
+            $_POST['FROM_EMAIL']    = ($_POST["from_mail"] != "" && preg_match($eregMail, $_POST["from_mail"]))? $_POST["from_mail"] : "";
+            $_POST['FROM_NAME']     = $_POST["from_name"] != "" ? $_POST["from_name"] : G::LoadTranslation("ID_MESS_TEST_BODY");
             $_POST['MESS_ENGINE']   = 'MAIL';
             $_POST['MESS_SERVER']   = 'localhost';
             $_POST['MESS_PORT']     = 25;
             $_POST['MESS_ACCOUNT']  = $mail_to;
             $_POST['MESS_PASSWORD'] = '';
             $_POST['TO']            = $mail_to;
-            $_POST['SMTPAuth']      = true;
+            $_POST['MESS_RAUTH']    = true;
 
             try {
                 $resp = $this->sendTestMail();
@@ -403,6 +405,7 @@ class adminProxy extends HttpProxyController
         $server = $_POST['server'];
         $user = $_POST['user'];
         $passwd = $_POST['passwd'];
+        $fromMail = $_POST["fromMail"];
         $passwdHide = $_POST['passwdHide'];
 
         if (trim($passwdHide) != '') {
@@ -523,8 +526,10 @@ class adminProxy extends HttpProxyController
             case 5:
                 if ($SendaTestMail == 'true') {
                     try {
-                        $_POST['FROM_NAME']     = G::LoadTranslation('ID_MESS_TEST_BODY');
-                        $_POST['FROM_EMAIL']    = $user;
+                        $eregMail = "/^[0-9a-zA-Z]+(?:[._][0-9a-zA-Z]+)*@[0-9a-zA-Z]+(?:[._-][0-9a-zA-Z]+)*\.[0-9a-zA-Z]{2,3}$/";
+
+                        $_POST['FROM_EMAIL']    = ($fromMail != "" && preg_match($eregMail, $fromMail))? $fromMail : "";
+                        $_POST['FROM_NAME']     = $_POST["fromName"] != "" ? $_POST["fromName"] : G::LoadTranslation("ID_MESS_TEST_BODY");
                         $_POST['MESS_ENGINE']   = 'PHPMAILER';
                         $_POST['MESS_SERVER']   = $server;
                         $_POST['MESS_PORT']     = $port;
@@ -533,9 +538,9 @@ class adminProxy extends HttpProxyController
                         $_POST['TO'] = $Mailto;
 
                         if ($auth_required == 'true') {
-                            $_POST['SMTPAuth'] = true;
+                            $_POST['MESS_RAUTH'] = true;
                         } else {
-                            $_POST['SMTPAuth'] = false;
+                            $_POST['MESS_RAUTH'] = false;
                         }
                         if (strtolower($_POST["UseSecureCon"]) != "no") {
                             $_POST["SMTPSecure"] = $_POST["UseSecureCon"];
@@ -546,6 +551,7 @@ class adminProxy extends HttpProxyController
                         }
                         */
                         $resp = $this->sendTestMail();
+
                         if ($resp->status == '1') {
                             $this->success=true;
                         } else {
@@ -576,7 +582,20 @@ class adminProxy extends HttpProxyController
         G::LoadClass("system");
         G::LoadClass('spool');
 
-        $sFrom    = ($_POST['FROM_NAME'] != '' ? $_POST['FROM_NAME'] . ' ' : '') . '<' . $_POST['FROM_EMAIL'] . '>';
+        $aConfiguration = array(
+            'MESS_ENGINE'    => $_POST['MESS_ENGINE'],
+            'MESS_SERVER'    => $_POST['MESS_SERVER'],
+            'MESS_PORT'      => $_POST['MESS_PORT'],
+            'MESS_ACCOUNT'   => $_POST['MESS_ACCOUNT'],
+            'MESS_PASSWORD'  => $_POST['MESS_PASSWORD'],
+            'MESS_FROM_NAME' => $_POST["FROM_NAME"],
+            'MESS_FROM_MAIL' => $_POST["FROM_EMAIL"],
+            'MESS_RAUTH'     => $_POST['MESS_RAUTH'],
+            'SMTPSecure'     => isset($_POST['SMTPSecure'])?$_POST['SMTPSecure']:'none'
+        );
+
+        $sFrom = G::buildFrom($aConfiguration);
+
         $sSubject = G::LoadTranslation('ID_MESS_TEST_SUBJECT');
         $msg      = G::LoadTranslation('ID_MESS_TEST_BODY');
 
@@ -602,17 +621,8 @@ class adminProxy extends HttpProxyController
         $sBody = $sBodyPre->getOutputContent();
 
         $oSpool = new spoolRun();
-        $oSpool->setConfig(
-            array(
-                'MESS_ENGINE'   => $_POST['MESS_ENGINE'],
-                'MESS_SERVER'   => $_POST['MESS_SERVER'],
-                'MESS_PORT'     => $_POST['MESS_PORT'],
-                'MESS_ACCOUNT'  => $_POST['MESS_ACCOUNT'],
-                'MESS_PASSWORD' => $_POST['MESS_PASSWORD'],
-                'SMTPAuth'      => $_POST['SMTPAuth'],
-                'SMTPSecure'    => isset($_POST['SMTPSecure'])?$_POST['SMTPSecure']:'none'
-            )
-        );
+
+        $oSpool->setConfig($aConfiguration);
 
         $oSpool->create(
             array(
@@ -687,7 +697,7 @@ class adminProxy extends HttpProxyController
             $aFields['MESS_ENGINE']              = $_POST['EmailEngine'];
             $aFields['MESS_SERVER']              = trim($_POST['server']);
             $aFields['MESS_RAUTH']               = isset($_POST['req_auth']) ? $_POST['req_auth'] : '';
-            $aFields['MESS_RAUTH']               = ($aFields['MESS_RAUTH'] == 'true') ? '1' : $aFields['MESS_RAUTH'];
+            $aFields['MESS_RAUTH']               = ($aFields['MESS_RAUTH'] == 'true') ? true : $aFields['MESS_RAUTH'];
             $aFields['MESS_PORT']                = $_POST['port'];
             $aFields['MESS_ACCOUNT']             = $_POST['from'];
             $aFields['MESS_BACKGROUND']          = '';//isset($_POST['background']) ? $_POST['background'] : '';
@@ -699,6 +709,8 @@ class adminProxy extends HttpProxyController
             $aFields['MESS_FROM_NAME']           = $_POST['FromName'];
             $aFields['MESS_TRY_SEND_INMEDIATLY'] = $_POST['SendaTestMail'];//isset($_POST['form']['MESS_TRY_SEND_INMEDIATLY']) ? $_POST['form']['MESS_TRY_SEND_INMEDIATLY'] : '';
             $aFields['MESS_TRY_SEND_INMEDIATLY'] = ($aFields['MESS_TRY_SEND_INMEDIATLY'] == 'true') ? '1' : $aFields['MESS_TRY_SEND_INMEDIATLY'];
+            $aFields["MESS_FROM_MAIL"]           = $_POST["fromMail"];
+
             $CfgUid='Emails';
             $ObjUid='';
             $ProUid='';

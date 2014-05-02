@@ -4820,44 +4820,10 @@ class Cases
             $applicationData = $this->loadCase($sApplicationUID);
             $aFields["APP_NUMBER"] = $applicationData["APP_NUMBER"];
 
-            $oConfiguration = new Configuration();
-            $sDelimiter = DBAdapter::getStringDelimiter();
-            $oCriteria = new Criteria('workflow');
-            $oCriteria->add(ConfigurationPeer::CFG_UID, 'Emails');
-            $oCriteria->add(ConfigurationPeer::OBJ_UID, '');
-            $oCriteria->add(ConfigurationPeer::PRO_UID, '');
-            $oCriteria->add(ConfigurationPeer::USR_UID, '');
-            $oCriteria->add(ConfigurationPeer::APP_UID, '');
-            if (ConfigurationPeer::doCount($oCriteria) == 0) {
-                $oConfiguration->create(array(
-                    'CFG_UID' => 'Emails',
-                    'OBJ_UID' => '',
-                    'CFG_VALUE' => '',
-                    'PRO_UID' => '',
-                    'USR_UID' => '',
-                    'APP_UID' => ''
-                ));
-                $aConfiguration = array();
-            } else {
-                $aConfiguration = $oConfiguration->load('Emails', '', '', '', '');
-                if ($aConfiguration['CFG_VALUE'] != '') {
-                    $aConfiguration = unserialize($aConfiguration["CFG_VALUE"]);
-                    $passwd = $aConfiguration["MESS_PASSWORD"];
-                    $passwdDec = G::decrypt($passwd, "EMAILENCRYPT");
-                    $auxPass = explode('hash:', $passwdDec);
-                    if (count($auxPass) > 1) {
-                        if (count($auxPass) == 2) {
-                            $passwd = $auxPass[1];
-                        } else {
-                            array_shift($auxPass);
-                            $passwd = implode('', $auxPass);
-                        }
-                    }
-                    $aConfiguration["MESS_PASSWORD"] = $passwd;
-                } else {
-                    $aConfiguration = array();
-                }
+            if (!class_exists('System')) {
+                G::LoadClass('system');
             }
+            $aConfiguration = System::getEmailConfiguration();
 
             if (!isset($aConfiguration['MESS_ENABLED']) || $aConfiguration['MESS_ENABLED'] != '1') {
                 return false;
@@ -4870,28 +4836,8 @@ class Cases
             if ($aTaskInfo['TAS_SEND_LAST_EMAIL'] != 'TRUE') {
                 return false;
             }
-            /*
-            if ($sFrom == '') {
-                $sFrom = '"ProcessMaker"';
-            }
-            */
-            if (isset($aConfiguration['MESS_FROM_NAME']) && $aConfiguration['MESS_FROM_NAME'] != '') {
-                $sFrom = $aConfiguration['MESS_FROM_NAME'];
-            }
 
-            $hasEmailFrom = preg_match('/(.+)@(.+)\.(.+)/', $sFrom, $match);
-
-            if (!$hasEmailFrom || ($aConfiguration["MESS_ACCOUNT"] != '' && strpos($sFrom, $aConfiguration["MESS_ACCOUNT"]) === false)) {
-                if (trim($aConfiguration["MESS_ACCOUNT"]) != "") {
-                    $sFrom = "\"" . stripslashes($sFrom) . "\" <" . $aConfiguration["MESS_ACCOUNT"] . ">";
-                } else {
-                    if ($aConfiguration["MESS_ENGINE"] == "MAIL" && $sFrom != '') {
-                        $sFrom = "\"" . stripslashes($sFrom) . "\"";
-                    } else {
-                        $sFrom = $sFrom . " <info@" . ((isset($_SERVER["HTTP_HOST"]) && $_SERVER["HTTP_HOST"] != "")? $_SERVER["HTTP_HOST"] : "processmaker.com") . ">";
-                    }
-                }
-            }
+            $sFrom = G::buildFrom($aConfiguration, $sFrom);
 
             if (isset($aTaskInfo['TAS_DEF_SUBJECT_MESSAGE']) && $aTaskInfo['TAS_DEF_SUBJECT_MESSAGE'] != '') {
                 $sSubject = G::replaceDataField($aTaskInfo['TAS_DEF_SUBJECT_MESSAGE'], $aFields);
@@ -5022,22 +4968,8 @@ class Cases
 
                 if ($sTo != null) {
                     $oSpool = new spoolRun();
-                    if ($aConfiguration['MESS_RAUTH'] == false || (is_string($aConfiguration['MESS_RAUTH']) && $aConfiguration['MESS_RAUTH'] == 'false')) {
-                        $aConfiguration['MESS_RAUTH'] = 0;
-                    } else {
-                        $aConfiguration['MESS_RAUTH'] = 1;
-                    }
 
-                    $oSpool->setConfig(array(
-                        "MESS_ENGINE" => $aConfiguration["MESS_ENGINE"],
-                        "MESS_SERVER" => $aConfiguration["MESS_SERVER"],
-                        "MESS_PORT" => $aConfiguration["MESS_PORT"],
-                        "MESS_ACCOUNT" => $aConfiguration["MESS_ACCOUNT"],
-                        "MESS_PASSWORD" => $aConfiguration["MESS_PASSWORD"],
-                        "SMTPAuth" => ($aConfiguration["MESS_RAUTH"] == "1") ? true : false,
-                        "SMTPSecure" => (isset($aConfiguration["SMTPSecure"])) ? $aConfiguration["SMTPSecure"] : ""
-                    ));
-
+                    $oSpool->setConfig($aConfiguration);
                     $oSpool->create(array(
                         "msg_uid" => "",
                         "app_uid" => $sApplicationUID,

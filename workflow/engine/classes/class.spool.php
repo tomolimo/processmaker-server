@@ -169,6 +169,40 @@ class spoolRun
      */
     public function setConfig ($aConfig)
     {
+        // Processing password
+        $passwd = isset($aConfig['MESS_PASSWORD']) ? $aConfig['MESS_PASSWORD'] : '';
+        $passwdDec = G::decrypt($passwd, 'EMAILENCRYPT');
+        $auxPass = explode('hash:', $passwdDec);
+        if (count($auxPass) > 1) {
+            if (count($auxPass) == 2) {
+                $passwd = $auxPass[1];
+            } else {
+                array_shift($auxPass);
+                $passwd = implode('', $auxPass);
+            }
+        }
+        $aConfig['MESS_PASSWORD'] = $passwd;
+
+        // Validating authorization flag
+        if (isset($aConfig['MESS_RAUTH'])) {
+            if ($aConfig['MESS_RAUTH'] == false || (is_string($aConfig['MESS_RAUTH']) && $aConfig['MESS_RAUTH'] == 'false')) {
+                $aConfig['MESS_RAUTH'] = 0;
+            } else {
+                $aConfig['MESS_RAUTH'] = 1;
+            }
+        } else {
+            $aConfig['MESS_RAUTH'] = 0;
+        }
+        $aConfig['SMTPAuth'] = $aConfig['MESS_RAUTH'];
+
+        // Validating for old configurations
+        if (!isset($aConfig['MESS_FROM_NAME'])) {
+            $aConfig['MESS_FROM_NAME'] = '';
+        }
+        if (!isset($aConfig['MESS_FROM_MAIL'])) {
+            $aConfig['MESS_FROM_MAIL'] = '';
+        }
+
         $this->config = $aConfig;
     }
 
@@ -251,9 +285,13 @@ class spoolRun
      */
     private function handleFrom ()
     {
+        $eregA = "/^.*@.*$/";
+
         if (strpos( $this->fileData['from'], '<' ) !== false) {
             //to validate complex email address i.e. Erik A. O <erik@colosa.com>
-            preg_match( $this->longMailEreg, $this->fileData['from'], $matches );
+            $ereg = (preg_match($eregA, $this->fileData["from"]))? $this->longMailEreg : "/^(.*)(<(.*)>)$/";
+            preg_match($ereg, $this->fileData["from"], $matches);
+
             if (isset( $matches[1] ) && $matches[1] != '') {
                 //drop the " characters if they exist
                 $this->fileData['from_name'] = trim( str_replace( '"', '', $matches[1] ) );
@@ -269,7 +307,8 @@ class spoolRun
             $this->fileData['from_email'] = trim( $matches[3] );
         } else {
             //to validate simple email address i.e. erik@colosa.com
-            preg_match( $this->mailEreg, $this->fileData['from'], $matches );
+            $ereg = (preg_match($eregA, $this->fileData["from"]))? $this->mailEreg : "/^(.*)$/";
+            preg_match($ereg, $this->fileData["from"], $matches);
 
             if (! isset( $matches[0] )) {
                 throw new Exception( 'Invalid email address in FROM parameter (' . $this->fileData['from'] . ')', $this->ExceptionCode['WARNING'] );
@@ -409,20 +448,6 @@ class spoolRun
                     $oPHPMailer->Host = $this->config['MESS_SERVER'];
                     $oPHPMailer->Port = $this->config['MESS_PORT'];
                     $oPHPMailer->Username = $this->config['MESS_ACCOUNT'];
-                    $passwd = $this->config['MESS_PASSWORD'];
-                    $passwdDec = G::decrypt( $passwd, 'EMAILENCRYPT' );
-                    $auxPass = explode( 'hash:', $passwdDec );
-
-                    if (count( $auxPass ) > 1) {
-                        if (count( $auxPass ) == 2) {
-                            $passwd = $auxPass[1];
-                        } else {
-                            array_shift( $auxPass );
-                            $passwd = implode( '', $auxPass );
-                        }
-                    }
-
-                    $this->config['MESS_PASSWORD'] = $passwd;
                     $oPHPMailer->Password = $this->config['MESS_PASSWORD'];
                     $oPHPMailer->From = $this->fileData['from_email'];
                     $oPHPMailer->FromName = utf8_decode( $this->fileData['from_name'] );
@@ -559,41 +584,15 @@ class spoolRun
      */
     public function resendEmails ($dateResend = null, $cron = 0)
     {
-        require_once ("classes/model/Configuration.php");
-
-        $oConfiguration = new Configuration();
-
-        $aConfiguration = $oConfiguration->load( "Emails", "", "", "", "" );
-
-        $aConfiguration = unserialize( $aConfiguration["CFG_VALUE"] );
-        if (!isset($aConfiguration["MESS_ENABLED"])) {
-            $aConfiguration["MESS_ENABLED"] = 0;
+        if (!class_exists('System')) {
+            G::LoadClass('system');
         }
-        $passwd = isset($aConfiguration["MESS_PASSWORD"]) ? $aConfiguration["MESS_PASSWORD"] : '';
-        $passwdDec = G::decrypt( $passwd, "EMAILENCRYPT" );
-        $auxPass = explode( "hash:", $passwdDec );
-
-        if (count( $auxPass ) > 1) {
-            if (count( $auxPass ) == 2) {
-                $passwd = $auxPass[1];
-            } else {
-                array_shift( $auxPass );
-                $passwd = implode( "", $auxPass );
-            }
-        }
-
-        $aConfiguration["MESS_PASSWORD"] = $passwd;
+        $aConfiguration = System::getEmailConfiguration();
 
         if ($aConfiguration["MESS_ENABLED"] == "1") {
             require_once ("classes/model/AppMessage.php");
-            if ($aConfiguration['MESS_RAUTH'] == false || (is_string($aConfiguration['MESS_RAUTH']) && $aConfiguration['MESS_RAUTH'] == 'false')) {
-                $aConfiguration['MESS_RAUTH'] = 0;
-            } else {
-                $aConfiguration['MESS_RAUTH'] = 1;
-            }
 
-            $this->setConfig( array ("MESS_ENGINE" => $aConfiguration["MESS_ENGINE"],"MESS_SERVER" => $aConfiguration["MESS_SERVER"],"MESS_PORT" => $aConfiguration["MESS_PORT"],"MESS_ACCOUNT" => $aConfiguration["MESS_ACCOUNT"],"MESS_PASSWORD" => $aConfiguration["MESS_PASSWORD"],"SMTPAuth" => $aConfiguration["MESS_RAUTH"],"SMTPSecure" => $aConfiguration["SMTPSecure"]
-            ) );
+            $this->setConfig($aConfiguration);
 
             $criteria = new Criteria( "workflow" );
             $criteria->add( AppMessagePeer::APP_MSG_STATUS, "sent", Criteria::NOT_EQUAL );
@@ -615,20 +614,8 @@ class spoolRun
                 $row = $rsCriteria->getRow();
 
                 try {
-                    $sFrom = $row["APP_MSG_FROM"];
-                    $hasEmailFrom = preg_match('/(.+)@(.+)\.(.+)/', $sFrom, $match);
+                    $sFrom = G::buildFrom($aConfiguration, $row["APP_MSG_FROM"]);
 
-                    if (!$hasEmailFrom || ($aConfiguration["MESS_ACCOUNT"] != '' && strpos($sFrom, $aConfiguration["MESS_ACCOUNT"]) === false)) {
-                        if (trim($aConfiguration["MESS_ACCOUNT"]) != "") {
-                            $sFrom = "\"" . stripslashes($sFrom) . "\" <" . $aConfiguration["MESS_ACCOUNT"] . ">";
-                        } else {
-                            if ($aConfiguration["MESS_ENGINE"] == "MAIL" && $sFrom != '') {
-                                $sFrom = "\"" . stripslashes($sFrom) . "\"";
-                            } else {
-                                $sFrom = $sFrom . " <info@" . ((isset($_SERVER["HTTP_HOST"]) && $_SERVER["HTTP_HOST"] != "")? $_SERVER["HTTP_HOST"] : "processmaker.com") . ">";
-                            }
-                        }
-                    }
                     $this->setData( $row["APP_MSG_UID"], $row["APP_MSG_SUBJECT"], $sFrom, $row["APP_MSG_TO"], $row["APP_MSG_BODY"], date( "Y-m-d H:i:s" ), $row["APP_MSG_CC"], $row["APP_MSG_BCC"], $row["APP_MSG_TEMPLATE"], $row["APP_MSG_ATTACH"] );
 
                     $this->sendMail();
