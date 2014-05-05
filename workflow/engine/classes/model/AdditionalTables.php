@@ -396,27 +396,23 @@ class AdditionalTables extends BaseAdditionalTables
         eval('$count = ' . $sClassPeerName . '::doCount($oCriteria);');
 
         if ($filter != '' && is_string($filter)) {
-            $stringOr = '$oCriteria->add(';
+            $stringOr = '';
             $closure = '';
-            $compare = '';
             $types = array('INTEGER', 'BIGINT', 'SMALLINT', 'TINYINT', 'DECIMAL', 'DOUBLE', 'FLOAT', 'REAL');
             foreach ($aData['FIELDS'] as $aField) {
                 if ($aField['FLD_NAME'] != 'APP_UID') {
-                    $compare = '"%' . $filter . '%", Criteria::LIKE';
-                    
                     if (in_array($aField['FLD_TYPE'], $types)) {
                         if (is_numeric($filter)) {
-                            $compare = '"' . $filter . '", Criteria::EQUAL';
-                        } else {
-                            $compare = 'null, Criteria::ISNULL';
+                            $stringOr = $stringOr . '$a = $oCriteria->getNewCriterion(' . $sClassPeerName . '::' . $aField['FLD_NAME'] . ', "' . $filter . '", Criteria::EQUAL)' . $closure . ';';
+                            $closure = '->addOr($a)';
                         }
+                    } else {
+                        $stringOr = $stringOr . '$a = $oCriteria->getNewCriterion(' . $sClassPeerName . '::' . $aField['FLD_NAME'] . ', "%' . $filter . '%", Criteria::LIKE)' . $closure . ';';
+                        $closure = '->addOr($a)';
                     }
-
-                    $stringOr = $stringOr . '$oCriteria->getNewCriterion(' . $sClassPeerName . '::' . $aField['FLD_NAME'] . ', ' . $compare . ')->addOr(';
-                    $closure = $closure . ")";
                 }
             }
-            $stringOr = rtrim($stringOr, '->addOr(') . $closure . ';';
+            $stringOr = $stringOr . '$oCriteria->add($a);';
             eval($stringOr);
 
             $oCriteriaCount = clone $oCriteria;
