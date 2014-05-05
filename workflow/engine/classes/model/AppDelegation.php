@@ -228,6 +228,7 @@ class AppDelegation extends BaseAppDelegation
         $row = $rs->getRow();
 
         while (is_array($row)) {
+            $case = array();
             $case['TAS_UID'] = $row['TAS_UID'];
             $case['USR_UID'] = $row['USR_UID'];
             $aCases[] = $case;

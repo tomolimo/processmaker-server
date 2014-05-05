@@ -98,10 +98,10 @@ try {
             /**
              * these routine is to verify if the case was acceded from advaced search list
              */
-            
+
             if ($_action == 'search') {
                 //verify if the case is with teh current user
-                
+
                 $c = new Criteria( 'workflow' );
                 $c->add( AppDelegationPeer::APP_UID, $sAppUid );
                 $c->addAscendingOrderByColumn( AppDelegationPeer::DEL_INDEX );
@@ -109,7 +109,7 @@ try {
                 $oDataset->setFetchmode( ResultSet::FETCHMODE_ASSOC );
                 $oDataset->next();
                 $aData = $oDataset->getRow();
-                
+
                 if ($aData['USR_UID'] != $_SESSION['USER_LOGGED'] && $aData['USR_UID'] != "") {
                     //distinct "" for selfservice
                     //so we show just the resume
@@ -194,6 +194,7 @@ try {
                     $_SESSION['ACTION'] = 'jump';
                 } else {
                     $Fields = $oCase->loadCase( $_SESSION['APPLICATION'], $_SESSION['INDEX']);
+                    unset($_SESSION['ACTION']);
                 }
 
                 $_SESSION['CURRENT_TASK'] = $Fields['TAS_UID'];
