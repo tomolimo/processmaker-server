@@ -203,6 +203,41 @@ class AppDelegation extends BaseAppDelegation
         }
     }
 
+    /* Load the Application Delegation row specified in [app_id] column value.
+     *
+     * @param string $AppUid the uid of the application
+     * @return array $Fields the fields
+     */
+
+    public function LoadParallel ($AppUid)
+    {
+        $c = new Criteria( 'workflow' );
+        $c->addSelectColumn( AppDelegationPeer::APP_UID );
+        $c->addSelectColumn( AppDelegationPeer::DEL_INDEX );
+        $c->addSelectColumn( AppDelegationPeer::PRO_UID );
+        $c->addSelectColumn( AppDelegationPeer::TAS_UID );
+        $c->addSelectColumn( AppDelegationPeer::USR_UID );
+
+        $c->add( AppDelegationPeer::DEL_THREAD_STATUS, 'OPEN' );
+        $c->add( AppDelegationPeer::APP_UID, $AppUid );
+        $c->addDescendingOrderByColumn( AppDelegationPeer::DEL_INDEX );
+        $rs = AppDelegationPeer::doSelectRS( $c );
+        $row= $rs->setFetchmode( ResultSet::FETCHMODE_ASSOC );
+
+        $rs->next();
+        $row = $rs->getRow();
+
+        while (is_array($row)) {
+            $case['TAS_UID'] = $row['TAS_UID'];
+            $case['USR_UID'] = $row['USR_UID'];
+            $aCases[] = $case;
+            $rs->next();
+            $row = $rs->getRow();
+        }
+
+        return $aCases;
+    }
+
     /**
      * Update the application row
      *

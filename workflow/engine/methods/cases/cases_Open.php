@@ -188,7 +188,14 @@ try {
                 $_SESSION['INDEX'] = $row['DEL_INDEX'];
                 $_SESSION['PROCESS'] = $aFields['PRO_UID'];
                 $_SESSION['TASK'] = - 1;
-                $Fields = $oCase->loadCase( $_SESSION['APPLICATION'], $_SESSION['INDEX'] );
+                //$Fields = $oCase->loadCase( $_SESSION['APPLICATION'], $_SESSION['INDEX'] );
+                if ($_action == 'jump') {
+                    $Fields = $oCase->loadCase( $_SESSION['APPLICATION'], $_SESSION['INDEX'], 1);
+                    $_SESSION['ACTION'] = 'jump';
+                } else {
+                    $Fields = $oCase->loadCase( $_SESSION['APPLICATION'], $_SESSION['INDEX']);
+                }
+
                 $_SESSION['CURRENT_TASK'] = $Fields['TAS_UID'];
                 $_SESSION['STEP_POSITION'] = 0;
                 require_once (PATH_METHODS . 'cases' . PATH_SEP . 'cases_Resume.php');

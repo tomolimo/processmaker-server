@@ -61,7 +61,12 @@ foreach ($_GET as $k => $v) {
     $uri .= ($uri == '') ? "$k=$v" : "&$k=$v";
 }
 
-$case = $oCase->loadCase( $_GET['APP_UID'], $_GET['DEL_INDEX'] );
+//$case = $oCase->loadCase( $_GET['APP_UID'], $_GET['DEL_INDEX'] );
+if( isset($_GET['action']) && ($_GET['action'] == 'jump') ) {
+    $case = $oCase->loadCase( $_GET['APP_UID'], $_GET['DEL_INDEX'], $_GET['action']);
+} else {
+    $case = $oCase->loadCase( $_GET['APP_UID'], $_GET['DEL_INDEX'] );
+}
 
 if (! isset( $_GET['to_revise'] )) {
     $script = 'cases_Open?';
