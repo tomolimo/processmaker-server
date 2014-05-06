@@ -103,6 +103,9 @@
    */
   function ajax_post(ajax_server, parameters, method, callback, asynchronous )
   {
+      if (ajax_server == '') {
+        return;
+      }
       var objetus;
       objetus = get_xmlhttp();
       var response;
