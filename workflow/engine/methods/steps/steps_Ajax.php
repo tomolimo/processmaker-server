@@ -68,9 +68,9 @@ try {
             $oStepTrigger->orderPosition( $aData['sStep'], $_SESSION['TASK'], $aData['sType']);
 
             if ($aData['sType'] == 'BEFORE') {
-                $G_PUBLISH->AddContent( 'propeltable', 'paged-table', 'steps/triggersBefore_List', $oProcessMap->getStepTriggersCriteria( $aData['sStep'], $_SESSION['TASK'], $aData['sType'] ), array ('STEP' => $aData['sStep']) );
+                $G_PUBLISH->AddContent( 'propeltable', 'steps/paged-table', 'steps/triggersBefore_List', $oProcessMap->getStepTriggersCriteria( $aData['sStep'], $_SESSION['TASK'], $aData['sType'] ), array ('STEP' => $aData['sStep']) );
             } else {
-                $G_PUBLISH->AddContent( 'propeltable', 'paged-table', 'steps/triggersAfter_List',  $oProcessMap->getStepTriggersCriteria( $aData['sStep'], $_SESSION['TASK'], $aData['sType'] ), array ('STEP' => $aData['sStep']) );
+                $G_PUBLISH->AddContent( 'propeltable', 'steps/paged-table', 'steps/triggersAfter_List',  $oProcessMap->getStepTriggersCriteria( $aData['sStep'], $_SESSION['TASK'], $aData['sType'] ), array ('STEP' => $aData['sStep']) );
             }
             G::RenderPage( 'publish-twocolumns', 'raw' );
             break;

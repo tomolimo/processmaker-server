@@ -776,7 +776,7 @@ class processMap
             $aFields['CONFIRM'] = G::LoadTranslation('ID_MSG_CONFIRM_DELETE_STEP');
             global $G_PUBLISH;
             $G_PUBLISH = new Publisher();
-            $G_PUBLISH->AddContent('propeltable', 'paged-table', 'steps/steps_List', $this->getStepsCriteria($sTaskUID), $aFields);
+            $G_PUBLISH->AddContent('propeltable', 'steps/paged-table', 'steps/steps_List', $this->getStepsCriteria($sTaskUID), $aFields);
             G::RenderPage('publish', 'raw');
             return true;
         } catch (Exception $oError) {
