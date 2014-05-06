@@ -164,6 +164,7 @@ try {
 
     // saving the data ina pm table in case that is a new record
     if (! empty( $newValues )) {
+
         $id = key( $newValues );
         $newValues[$id] = $aData['APP_DATA'][$id];
         foreach ($aKeys as $key => $value) {
