@@ -165,8 +165,18 @@ try {
     // saving the data ina pm table in case that is a new record
     if (! empty( $newValues )) {
         $id = key( $newValues );
-       	$newValues[$id] = $aData['APP_DATA'][$id];
-       	$idPmtable = $oForm->fields[$id]->pmconnection->pmtable != '' ? $oForm->fields[$id]->pmconnection->pmtable : $oForm->fields[$id]->owner->tree->children[0]->attributes['pmtable'];
+        $newValues[$id] = $aData['APP_DATA'][$id];
+        foreach ($aKeys as $key => $value) {
+            if (!isset($newValues[$key]) || $newValues[$key] == '') {
+                $G_PUBLISH = new Publisher();
+                $aMessage = array ();
+                $aMessage['MESSAGE'] = G::LoadTranslation('ID_FILL_PRIMARY_KEYS') . ' ('. $key . ') ';
+                $G_PUBLISH->AddContent( 'xmlform', 'xmlform', 'login/showMessage', '', $aMessage );
+                G::RenderPage( 'publish', 'blank' );
+                die();
+            }
+        }
+        $idPmtable = $oForm->fields[$id]->pmconnection->pmtable != '' ? $oForm->fields[$id]->pmconnection->pmtable : $oForm->fields[$id]->owner->tree->children[0]->attributes['pmtable'];
 
         if (!($oAdditionalTables->updateDataInTable($idPmtable, $newValues ))) {
             //<--This is to know if it is a new registry on the PM Table
