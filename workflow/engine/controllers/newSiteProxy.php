@@ -49,6 +49,9 @@ class newSiteProxy extends HttpProxyController
             } else {
                 //the site does not available
                 $this->error = true;
+                $this->message = $result['result']['database']['ao']['ao_db_wf']['message'];
+                $this->message .= ', ' . $result['result']['database']['ao']['ao_db_rb']['message'];
+                $this->message .= ', ' . $result['result']['database']['ao']['ao_db_rp']['message'];
             }
         } else {
             $this->error = true;
