@@ -371,14 +371,14 @@ class AdditionalTables extends BaseAdditionalTables
         $oCriteria = new Criteria($aData['DBS_UID']);
 
         //eval('$oCriteria->addSelectColumn("\'1\' AS DUMMY");');
-        
+
         /*
          * data type:
          * 'INTEGER'  'BIGINT'  'SMALLINT'  'TINYINT'  'DECIMAL'  'DOUBLE'  'FLOAT'  'REAL'
          * 'CHAR'  'VARCHAR'  'LONGVARCHAR'  'BOOLEAN'  'DATE'  'DATETIME'  'TIME'
          */
         $types = array('DECIMAL', 'DOUBLE', 'FLOAT', 'REAL');
-        
+
         if ($keyOrderUppercase == true) {
             foreach ($aData['FIELDS'] as $aField) {
                 $field = '$oCriteria->addSelectColumn(' . $sClassPeerName . '::' . $aField['FLD_NAME'] . ');';
@@ -952,7 +952,7 @@ class AdditionalTables extends BaseAdditionalTables
                 eval('$oCriteria->addDescendingOrderByColumn(AdditionalTablesPeer::' . $_POST['sort'] . ');');
             }
         } else {
-            //$oCriteria->addAscendingOrderByColumn(AdditionalTablesPeer::ADD_TAB_UID);
+            $oCriteria->addAscendingOrderByColumn(AdditionalTablesPeer::ADD_TAB_NAME);
         }
 
         $criteriaCount = clone $oCriteria;
