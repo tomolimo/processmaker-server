@@ -567,7 +567,7 @@ class Installer extends Controller
         if (! $query) {
             $errorMessage = mysql_error( $this->link );
             $this->installLog( G::LoadTranslation('ID_MYSQL_ERROR', SYS_LANG, Array($errorMessage) ) );
-            if (mysql_errno( $this->link) == 1410 ){
+            if (mysql_errno( $this->link) == 1410 || mysql_errno( $this->link) == 1132) {
                 $errorMessage .= '. ' . G::LoadTranslation('ID_INSTALL_USE_CURRENT_USER');
             }
             throw new Exception( $errorMessage );
