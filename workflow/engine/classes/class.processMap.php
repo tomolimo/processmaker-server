@@ -3453,6 +3453,7 @@ class processMap
         $oCriteria->addSelectColumn(UsersPeer::USR_FIRSTNAME);
         $oCriteria->addSelectColumn(UsersPeer::USR_LASTNAME);
         $oCriteria->add(UsersPeer::USR_UID, $aUIDS, Criteria::IN);
+        $oCriteria->add(UsersPeer::USR_STATUS, array('ACTIVE', 'VACATION'), Criteria::IN);
         $oCriteria->addAscendingOrderByColumn(UsersPeer::USR_FIRSTNAME);
         $oDataset = UsersPeer::doSelectRS($oCriteria);
         $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
