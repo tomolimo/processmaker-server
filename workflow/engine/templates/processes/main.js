@@ -1106,7 +1106,7 @@ function activeDeactive(){
         store.reload();
         var activator = Ext.getCmp('activator');
         activator.setDisabled(true);
-        activator.setText('Status');
+        activator.setText(_('ID_STATUS'));
         activator.setIcon('');
       },
       failure: function ( result, request) {
@@ -1142,7 +1142,7 @@ function enableDisableDebug()
         store.reload();
         var activator = Ext.getCmp('activator');
         activator.setDisabled(true);
-        activator.setText('Status');
+        activator.setText(_('ID_STATUS'));
         activator.setIcon('');
       },
       failure: function ( result, request) {
