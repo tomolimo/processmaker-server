@@ -554,11 +554,11 @@ class Configurations // extends Configuration
                     $creationDateMask = str_replace(' \\d\\e ', ' [xx] ', $creationDateMask);
                 }
 
-                for ($i = 0; $i < strlen($creationDateMask); $i++) {
-                    if ($creationDateMask[$i] != ' ' && isset($maskTime[$creationDateMask[$i]])) {
-                        $newCreation .= $maskTime[$creationDateMask[$i]];
+                for ($j = 0; $j < strlen($creationDateMask); $j++) {
+                    if ($creationDateMask[$j] != ' ' && isset($maskTime[$creationDateMask[$j]])) {
+                        $newCreation .= $maskTime[$creationDateMask[$j]];
                     } else {
-                        $newCreation .= $creationDateMask[$i];
+                        $newCreation .= $creationDateMask[$j];
                     }
                 }
 
