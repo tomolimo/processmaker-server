@@ -171,7 +171,12 @@ Ext.onReady(function(){
                                     Ext.Msg.alert(_('ID_FAILURE'), _('ID_SERVER_REPORTED') + ':' + a.response.status+' '+a.response.statusText);
                                 }
                                 if (a.failureType === Ext.form.Action.SERVER_INVALID){
-                                    Ext.Msg.alert(_('ID_WARNING'), _('NEW_SITE_NOT_AVAILABLE'));
+                                    var text = JSON.parse(a.response.responseText);
+                                    if (typeof text.message) {
+                                        Ext.Msg.alert(_('ID_ERROR'), _('ID_MYSQL_ERROR', text.message));
+                                    } else {
+                                        Ext.Msg.alert(_('ID_WARNING'), _('NEW_SITE_NOT_AVAILABLE'));
+                                    }
                                 }
                             }
                         });
