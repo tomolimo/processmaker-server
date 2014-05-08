@@ -33,6 +33,8 @@ try {
         $currentDynUid = $_SESSION['DYN_UID_PRINT'];
     } elseif (isset( $_SESSION['CURRENT_DYN_UID'] )) {
         $currentDynUid = $_SESSION['CURRENT_DYN_UID'];
+    } elseif (isset( $_SESSION['CONDITION_DYN_UID'] )) {
+        $currentDynUid = $_SESSION['CONDITION_DYN_UID'];
     }
 
     $oDynaform = new Dynaform();
