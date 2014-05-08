@@ -747,6 +747,15 @@ form.formDefault select {
   font: normal 11px "Open Sans", Tahoma, sans-serif, MiscFixed;
   color: #000;
 }
+form.formDefault select[disabled] {
+  color: #000;
+}
+form.formDefault select[disabled] > option {
+  color: #000;
+}
+form.formDefault select[disabled] > option:checked {
+  color: #000;
+}
 form.formDefault table {
   font: normal 11px "Open Sans", Tahoma, sans-serif, MiscFixed;
   color: #666666;
