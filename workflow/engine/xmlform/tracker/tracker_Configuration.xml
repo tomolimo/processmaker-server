@@ -70,7 +70,7 @@ var editStagesMap = function(sProcessUID) {
 		fx	:{modal:true,opacity:true,blinkToFront:false,fadeIn:false,drag:false}
   };
   oPanel.events = {
-  	remove: function() { delete(oPanel); }.extend(this)
+  	remove: function() { delete(oPanel); menu_right.remove(); }.extend(this)
   };
 	oPanel.make();
 	oPanel.loader.show();

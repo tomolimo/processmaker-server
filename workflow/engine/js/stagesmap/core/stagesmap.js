@@ -22,6 +22,7 @@ var stagesmap=function(){
 					    {image:"/images/add.png",text:G_STRINGS.ID_PROCESSMAP_ADD_STAGE,launch:this.addStage.extend(this)}
 					  ]
 				  });
+				  menu_right = this.menu;
 				  this.observers.menu.register(this.parent.closure({instance:this.menu,method:this.menu.remove}),this.menu);
 				}
 				this.data.render.title();
@@ -318,6 +319,7 @@ var stagesmap=function(){
 				  	},args:index})}
 				  	]
 				  });
+				  menu_right = this.menu;
 				  this.observers.menu.register(menu.remove,menu);
 				}
 				this.panels.editor.elements.content.appendChild(a);
