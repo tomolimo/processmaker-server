@@ -5721,12 +5721,7 @@ class xmlformTemplate extends Smarty
                 $form->jsDesignerPreview = "
                 //JS designer>preview
                 $js
-
                 loadForm_" . $form->id . "(\"../gulliver/defaultAjaxDynaform\");
-
-                if (typeof(dynaformOnload) != \"undefined\") {
-                    dynaformOnload();
-                }
                 ";
             }
         }
