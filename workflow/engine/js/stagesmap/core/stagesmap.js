@@ -320,7 +320,6 @@ var stagesmap=function(){
 				  	]
 				  });
 				  menu_edit = menu;
-				  //this.observers.menu.register(this.parent.closure({instance:menu,method:menu.remove}),menu);
 				  this.observers.menu.register(menu.remove,menu);
 				}
 				this.panels.editor.elements.content.appendChild(a);
