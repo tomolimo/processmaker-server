@@ -221,15 +221,6 @@ function validDate() {
   reltype = getField('PME_RELATIVEDATE').value;
 
   if (getField('PME_RELATIVEDATE').value == 1) {
-    if(getField('PME_BEFOREDATE').value == ''){
-      msgBox('@G::LoadTranslation(ID_SEL_BEFORE_DATE)', "alert");
-      return false;
-    }
-
-    if(getField('PME_AFTERDATE').value == ''){
-      msgBox('@G::LoadTranslation(ID_SEL_AFTER_DATE)', "alert");
-      return false;
-    }
   }
   else {
     if(getField('PME_STARTDATE').value == ''){
