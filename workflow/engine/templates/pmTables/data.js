@@ -277,6 +277,7 @@ Ext.onReady(function(){
 
   Ext.data.DataProxy.addListener('write', function(proxy, action, result, res, rs) {
     //PMExt.notify(_('ID_UPDATE'), res.raw.message)
+	  infoGrid.store.reload();
   });
 
   // all exception events
@@ -542,8 +543,8 @@ DeletePMTableRow = function(){
   PMExt.confirm(_('ID_CONFIRM'), _('ID_CONFIRM_REMOVE_FIELD'), function(){
     var records = Ext.getCmp('infoGrid').getSelectionModel().getSelections();
     Ext.each(records, Ext.getCmp('infoGrid').store.remove, Ext.getCmp('infoGrid').store);
+    infoGrid.store.reload();
   });
-
 };
 
 //Load Import PM Table From CSV Source
