@@ -6415,9 +6415,6 @@ class Cases
     {
         G::LoadClass('groups');
         G::LoadClass('tasks');
-        $r = new Roles();
-        $rolPerm = new RolesPermissions();
-        $perm = false;
 
         $oTasks = new Tasks();
         $aAux = $oTasks->getGroupsOfTask($TAS_UID, 1);
@@ -6426,14 +6423,7 @@ class Cases
         foreach ($aAux as $aGroup) {
             $aUsers = $groups->getUsersOfGroup($aGroup['GRP_UID']);
             foreach ($aUsers as $aUser) {
-            	$rol_perm = $r->loadByCode($aUser['USR_ROLE']);
-            	$permissions = $rolPerm->getPermissionsByRolUid( $rol_perm['ROL_UID'] );
-            	foreach ($permissions as $permission){
-            		if ($permission['PER_UID'] == "00000000000000000000000000000007"){
-            			$perm = true;
-            		}
-            	}
-                if ($aUser['USR_UID'] != $USR_UID || $perm == true) {
+                if ($aUser['USR_UID'] != $USR_UID) {
                     $row[] = $aUser['USR_UID'];
                 }
             }
@@ -6441,14 +6431,7 @@ class Cases
 
         $aAux = $oTasks->getUsersOfTask($TAS_UID, 1);
         foreach ($aAux as $aUser) {
-        	$rol_perm = $r->loadByCode($aUser['USR_ROLE']);        	      	
-        	$permissions = $rolPerm->getPermissionsByRolUid( $rol_perm['ROL_UID'] );
-        	foreach ($permissions as $permission){
-        		if ($permission['PER_UID'] == "00000000000000000000000000000007"){
-        			$perm = true;
-        		}
-        	}
-            if ($aUser['USR_UID'] != $USR_UID || $perm == true) {
+            if ($aUser['USR_UID'] != $USR_UID) {
                 $row[] = $aUser['USR_UID'];
             }
         }
@@ -6460,14 +6443,7 @@ class Cases
         foreach ($aAux as $aGroup) {
             $aUsers = $groups->getUsersOfGroup($aGroup['GRP_UID']);
             foreach ($aUsers as $aUser) {
-            	$rol_perm = $r->loadByCode($aUser['USR_ROLE']);
-            	$permissions = $rolPerm->getPermissionsByRolUid( $rol_perm['ROL_UID'] );
-            	foreach ($permissions as $permission){
-            		if ($permission['PER_UID'] == "00000000000000000000000000000007"){
-            			$perm = true;
-            		}
-            	}
-                if ($aUser['USR_UID'] != $USR_UID || $perm == true) {
+                if ($aUser['USR_UID'] != $USR_UID) {
                     $row[] = $aUser['USR_UID'];
                 }
             }
@@ -6476,16 +6452,23 @@ class Cases
         // User Ad Hoc
         $aAux = $oTasks->getUsersOfTask($TAS_UID, 2);
         foreach ($aAux as $aUser) {
-        	$rol_perm = $r->loadByCode($aUser['USR_ROLE']);
-        	$permissions = $rolPerm->getPermissionsByRolUid( $rol_perm['ROL_UID'] );
-        	foreach ($permissions as $permission){
-        		if ($permission['PER_UID'] == "00000000000000000000000000000007"){
-        			$perm = true;
-        		}
-        	}
-        	if ($aUser['USR_UID'] != $USR_UID || $perm == true) {
+        	if ($aUser['USR_UID'] != $USR_UID) {
                 $row[] = $aUser['USR_UID'];
             }
+        }
+        
+        global $RBAC;
+        //Adding the actual user if this has the PM_REASSIGNCASE permission assigned.
+        if ($RBAC->userCanAccess('PM_REASSIGNCASE') == 1){
+        	foreach ($row as $usr) {
+        		$usr_exist = false;
+        		if($usr == $USR_UID){
+        		    $usr_exist = true;
+        		}
+        	}
+        	if ($usr_exist == false){
+        		$row[] = $USR_UID;
+        	}
         }
 
         require_once 'classes/model/Users.php';
