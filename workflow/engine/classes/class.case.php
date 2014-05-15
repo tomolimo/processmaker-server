@@ -6419,7 +6419,6 @@ class Cases
         $oTasks = new Tasks();
         $aAux = $oTasks->getGroupsOfTask($TAS_UID, 1);
         $row = array();
-
         $groups = new Groups();
         foreach ($aAux as $aGroup) {
             $aUsers = $groups->getUsersOfGroup($aGroup['GRP_UID']);
@@ -6456,6 +6455,14 @@ class Cases
             if ($aUser['USR_UID'] != $USR_UID) {
                 $row[] = $aUser['USR_UID'];
             }
+        }
+        
+        global $RBAC;
+        //Adding the actual user if this has the PM_REASSIGNCASE permission assigned.
+        if ($RBAC->userCanAccess('PM_REASSIGNCASE') == 1){
+        	if(!in_array($RBAC->aUserInfo['USER_INFO']['USR_UID'], $row)){
+        	    $row[] = $RBAC->aUserInfo['USER_INFO']['USR_UID'];
+        	}
         }
 
         require_once 'classes/model/Users.php';
@@ -6527,7 +6534,6 @@ class Cases
                 }
             }
         }
-
         return $rows;
     }
 
