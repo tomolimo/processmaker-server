@@ -319,6 +319,9 @@ class PMDashlet extends DashletInstance implements DashletInterface
                     $dataset->next();
                 }
             }
+            foreach ($dashletsInstances as $key => $field) {
+                $dashletsInstances[$key]['DAS_TITLE'] = $field['DAS_TITLE'] . '</span><span style="float:right; font: bold;" id="'. $field['DAS_INS_UID'] .'">';
+            }
             // Check for role assigments
             // ToDo: Next release
             // Check for permission assigments
