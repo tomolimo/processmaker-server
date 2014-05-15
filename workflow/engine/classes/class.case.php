@@ -6452,7 +6452,7 @@ class Cases
         // User Ad Hoc
         $aAux = $oTasks->getUsersOfTask($TAS_UID, 2);
         foreach ($aAux as $aUser) {
-        	if ($aUser['USR_UID'] != $USR_UID) {
+            if ($aUser['USR_UID'] != $USR_UID) {
                 $row[] = $aUser['USR_UID'];
             }
         }
