@@ -6460,14 +6460,8 @@ class Cases
         global $RBAC;
         //Adding the actual user if this has the PM_REASSIGNCASE permission assigned.
         if ($RBAC->userCanAccess('PM_REASSIGNCASE') == 1){
-        	foreach ($row as $usr) {
-        		$usr_exist = false;
-        		if($usr == $USR_UID){
-        		    $usr_exist = true;
-        		}
-        	}
-        	if ($usr_exist == false){
-        		$row[] = $USR_UID;
+        	if(!in_array($RBAC->aUserInfo['USER_INFO']['USR_UID'], $row)){
+        	    $row[] = $RBAC->aUserInfo['USER_INFO']['USR_UID'];
         	}
         }
 
