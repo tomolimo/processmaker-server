@@ -5231,6 +5231,7 @@ class G
         if (!isset($allFunctions['user'])) {
             $allFunctions['user'] = array();
         }
+        $allFunctions['user'][] = 'sort';
         return in_array(strtolower($functionName), $allFunctions['user']);
     }
 
