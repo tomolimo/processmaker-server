@@ -1411,6 +1411,22 @@ class Processes
     }
 
     /**
+     * Remove All Fields Conditions from an array of Field Conditions and Dynaforms,
+     * from the arrays data.
+     *
+     * @param $aDynaform array
+     * @return void
+     */
+    public function removeAllFieldCondition ($aDynaform)
+    {
+        foreach ($aDynaform as $key => $row) {
+            $oCriteria = new Criteria();
+            $oCriteria->add( FieldConditionPeer::FCD_DYN_UID, $row['DYN_UID'] );
+            FieldConditionPeer::doDelete( $oCriteria );
+        }
+    }
+
+    /**
      * Create Field Conditions from an array of Field Conditions and Dynaforms,
      * removing those Objects with the same UID, and recreaiting the records
      * from the arrays data.
@@ -3606,6 +3622,7 @@ class Processes
     {
         $this->updateProcessRow( $oData->process );
         $this->removeProcessRows( $oData->process['PRO_UID'] );
+        $this->removeAllFieldCondition($oData->dynaforms );
         $this->createTaskRows( $oData->tasks );
         $this->createRouteRows( $oData->routes );
         $this->createLaneRows( $oData->lanes );
