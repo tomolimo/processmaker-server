@@ -246,6 +246,22 @@ class PMScript
                     }
                 }
                 $sScript .= $sAux;
+                /** patch1: support for the expression: @@a = @@b = @@c = @@d; */
+                $bEqual = true;
+                if ($i < $iOcurrences - 1) {
+                    $ii = $aMatch[0][$i][1] + strlen($aMatch[0][$i][0]);
+                    $ss = trim(substr($this->sScript, $ii, $aMatch[0][$i + 1][1] - $ii));
+                } else {
+                    $ii = $aMatch[0][$i][1] + strlen($aMatch[0][$i][0]);
+                    $ss = trim(substr($this->sScript, $ii));
+                }
+                $sw0 = strpos($ss, '=') === 0 || strpos($ss, '+=') === 0 || strpos($ss, '-=') === 0;
+                $sw1 = strpos($ss, '==') === 0 || strpos($ss, '===') === 0 || strpos($ss, '!=') === 0 || strpos($ss, '!==') === 0 || strpos($ss, '<=') === 0 || strpos($ss, '>=') === 0;
+                $sw3 = substr(trim($sAux), strlen(trim($sAux)) - 6, strlen(trim($sAux))) === "empty(";
+                if (($sw0 && !$sw1) || $sw3) {
+                    $bEqual = false;
+                }
+                /** patch1 end */
                 $iAux = $aMatch[0][$i][1] + strlen( $aMatch[0][$i][0] );
                 switch ($aMatch[1][$i][0]) {
                     case '@':
