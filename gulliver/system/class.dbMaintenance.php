@@ -500,6 +500,7 @@ class DataBaseMaintenance
         $schema .= " -- Tables:    " . (count( $aTables )) . "\n";
         $schema .= " -- Date:      " . (date( 'l jS \of F Y h:i:s A' )) . "\n";
         $schema .= " --\n\n";
+        $schema .= "SET FOREIGN_KEY_CHECKS=0; \n\n";
 
         $file = fopen( $outfile, "w+" );
 
