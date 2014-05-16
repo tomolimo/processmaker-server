@@ -276,10 +276,12 @@ try {
                 case 'ID_PPP_MINIMUM_LENGTH':
                     $aFields['DESCRIPTION'] .= ' - ' . G::LoadTranslation($sError).': ' . PPP_MINIMUM_LENGTH . '<br />';
                     $aFields[substr($sError, 3)] = PPP_MINIMUM_LENGTH;
+                    $aFields['PPP_MINIMUN_LENGTH'] = PPP_MINIMUM_LENGTH;
                     break;
                 case 'ID_PPP_MAXIMUM_LENGTH':
                     $aFields['DESCRIPTION'] .= ' - ' . G::LoadTranslation($sError).': ' . PPP_MAXIMUM_LENGTH . '<br />';
                     $aFields[substr($sError, 3)] = PPP_MAXIMUM_LENGTH;
+                    $aFields['PPP_MAXIMUN_LENGTH'] = PPP_MAXIMUM_LENGTH;
                     break;
                 case 'ID_PPP_EXPIRATION_IN':
                     $aFields['DESCRIPTION'] .= ' - ' . G::LoadTranslation($sError).' ' . PPP_EXPIRATION_IN . ' ' . G::LoadTranslation('ID_DAYS') . '<br />';
