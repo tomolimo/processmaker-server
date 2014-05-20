@@ -135,7 +135,7 @@ Ext.onReady(function(){
           }
         }
 
-        if( record.data.DAS_INS_STATUS_LABEL == 'Active' ){
+        if( record.data.DAS_INS_STATUS == 1 ){
         	statusButton.setIconClass('icon-activate');
         	statusButton.setText( _('ID_DEACTIVATE') );
         } else {
