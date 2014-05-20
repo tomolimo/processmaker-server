@@ -235,7 +235,7 @@ unset($FieldAttributes['SAVELABEL']);
 foreach ($FieldAttributes as $key => $value) {
     switch (gettype($value)) {
         case 'string':
-            if (!empty($value)) {
+            if (!empty($value) || $value !== '') {
                 $FieldAttrib[strtolower($key)] = $value;
             } else {
                 if ($_POST["form"]["TYPE"] == "link" && $key == "TARGET_SEL") {
