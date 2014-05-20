@@ -41,7 +41,7 @@ $oTemplatePower->newBlock('users');
 $oTemplatePower->assign('USR_UID', $aUser['USR_UID']);
 $oTemplatePower->assign('USR_FULLNAME', $aData['USR_FIRSTNAME'] . ' ' . $aData['USR_LASTNAME'] . ' (' . $aData['USR_USERNAME'] . ')');
 */
-$userName = 'Admin';
+$userName = 'admin';
 require_once 'classes/model/Users.php';
 $oCriteria = new Criteria( 'workflow' );
 $oCriteria->addSelectColumn( UsersPeer::USR_USERNAME);
