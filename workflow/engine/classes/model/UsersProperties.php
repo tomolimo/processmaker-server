@@ -143,9 +143,6 @@ class UsersProperties extends BaseUsersProperties
         if (! defined( 'PPP_EXPIRATION_IN' )) {
             define( 'PPP_EXPIRATION_IN', 0 );
         }
-        if (! defined( 'PPP_CHANGE_PASSWORD_AFTER_NEXT_LOGIN' )) {
-            define( 'PPP_CHANGE_PASSWORD_AFTER_NEXT_LOGIN', 0 );
-        }
         if (function_exists( 'mb_strlen' )) {
             $iLength = mb_strlen( $sPassword );
         } else {
@@ -187,10 +184,8 @@ class UsersProperties extends BaseUsersProperties
                 $aErrors[] = 'ID_PPP_EXPIRATION_IN';
             }
         }
-        if (PPP_CHANGE_PASSWORD_AFTER_NEXT_LOGIN == 1) {
-            if ($iChangePasswordNextTime == 1) {
-                $aErrors[] = 'ID_PPP_CHANGE_PASSWORD_AFTER_NEXT_LOGIN';
-            }
+        if ($iChangePasswordNextTime == 1) {
+            $aErrors[] = 'ID_PPP_CHANGE_PASSWORD_AFTER_NEXT_LOGIN';
         }
         return $aErrors;
     }

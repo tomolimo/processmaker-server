@@ -3089,7 +3089,7 @@ class wsBase
             }
 
             if (! empty( $unpauseDate )) {
-                if (! preg_match( "/^\d{4}-\d{2}-\d{2}$/", $unpauseDate )) {
+                if (! preg_match( "/^\d{4}-\d{2}-\d{2}| \d{2}:\d{2}:\d{2}$/", $unpauseDate )) {
                     $result = new wsResponse( 100, G::LoadTranslation( "ID_INVALID_DATA" ) . " $unpauseDate" );
 
                     $g->sessionVarRestore();
