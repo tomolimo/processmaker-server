@@ -140,6 +140,9 @@ switch ($_POST['action']) {
             if (!isset($form['USR_AUTH_USER_DN'])) {
                 $form['USR_AUTH_USER_DN'] = '';
             }
+            if (!isset($form['USR_LOGGED_NEXT_TIME'])) {
+                $form['USR_LOGGED_NEXT_TIME'] = 0;
+            }
 
             if ($form['USR_UID'] == '') {
                 $criteria = new Criteria();
@@ -208,6 +211,11 @@ switch ($_POST['action']) {
                   die;
                   }
                  */
+                require_once 'classes/model/UsersProperties.php';
+                $oUserProperty = new UsersProperties();
+                $aUserProperty = $oUserProperty->loadOrCreateIfNotExists($aData['USR_UID'], array('USR_PASSWORD_HISTORY' => serialize(array(md5($aData['USR_PASSWORD'])))));
+                $aUserProperty['USR_LOGGED_NEXT_TIME'] = $form['USR_LOGGED_NEXT_TIME'];
+                $oUserProperty->update($aUserProperty);
             } else {
 
                 $aData['USR_UID'] = $form['USR_UID'];
@@ -229,7 +237,7 @@ switch ($_POST['action']) {
                         }
                         if ($RBAC->aUserInfo['PROCESSMAKER']['ROLE']['ROL_CODE'] == 'PROCESSMAKER_ADMIN') {
                             $aUserProperty['USR_LAST_UPDATE_DATE'] = date('Y-m-d H:i:s');
-                            $aUserProperty['USR_LOGGED_NEXT_TIME'] = 1;
+                            $aUserProperty['USR_LOGGED_NEXT_TIME'] = $form['USR_LOGGED_NEXT_TIME'];
                             $oUserProperty->update($aUserProperty);
                         }
 
@@ -292,7 +300,7 @@ switch ($_POST['action']) {
                             $aHistory[] = $form['USR_PASSWORD'];
                         }
                         $aUserProperty['USR_LAST_UPDATE_DATE'] = date('Y-m-d H:i:s');
-                        $aUserProperty['USR_LOGGED_NEXT_TIME'] = 1;
+                        $aUserProperty['USR_LOGGED_NEXT_TIME'] = $form['USR_LOGGED_NEXT_TIME'];
                         $aUserProperty['USR_PASSWORD_HISTORY'] = serialize($aHistory);
                         $oUserProperty->update($aUserProperty);
                     }
@@ -499,7 +507,12 @@ switch ($_POST['action']) {
         $aFields['USER_LOGGED_ROLE'] = $aUserLog['USR_ROLE'];
 
         $aFields['CASES_MENUSELECTED_NAME'] = $casesMenuSelected;
-
+        
+        require_once 'classes/model/UsersProperties.php';
+        $oUserProperty = new UsersProperties();
+        $aFieldsUserProperty = $oUserProperty->load($_POST['USR_UID']);
+        $aFields['USR_LOGGED_NEXT_TIME'] = $aFieldsUserProperty['USR_LOGGED_NEXT_TIME'];
+        
         $result->success = true;
         $result->user = $aFields;
 
