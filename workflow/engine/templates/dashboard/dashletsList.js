@@ -175,7 +175,8 @@ Ext.onReady(function(){
         {name : 'DAS_VERSION'},
         {name : 'DAS_INS_OWNER_TITLE'},
         {name : 'DAS_INS_UPDATE_DATE'},
-        {name : 'DAS_INS_STATUS_LABEL'}
+        {name : 'DAS_INS_STATUS_LABEL'},
+        {name : 'DAS_INS_STATUS'}
       ]
     }),
     sortInfo: {
@@ -389,7 +390,7 @@ statusDashletInstance = function(){
 	  if( rows.length > 0 ) {
 	    for(i=0; i<rows.length; i++) {
 	    	var status;
-	    	if(rows[i].data.DAS_INS_STATUS_LABEL == "Active"){
+	    	if(rows[i].data.DAS_INS_STATUS == 1){
 	    		status = 0;
 	    	} else {
 	    		status = 1;
