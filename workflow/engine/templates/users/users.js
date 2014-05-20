@@ -620,7 +620,20 @@ Ext.onReady(function () {
 
     ]
   });
-
+    
+    var accountOptions = new Ext.form.FieldSet({
+        title: _('ID_ACCOUNT_OPTIONS'),
+        items: [{
+            xtype: 'checkbox',
+            id: 'USR_LOGGED_NEXT_TIME',
+            name: 'USR_LOGGED_NEXT_TIME',
+            boxLabel: _('ID_USER_MUST_CHANGE_PASSWORD_AT_NEXT_LOGON'),
+            value: 0,
+            inputValue: 1,
+            uncheckedValue: 0
+        }]
+    });
+    
   storeDefaultMainMenuOption = new Ext.data.Store({
       proxy: new Ext.data.HttpProxy({
           url: "usersAjax",
@@ -727,6 +740,7 @@ Ext.onReady(function () {
     items : [
       informationFields,
       passwordFields,
+      accountOptions,
       profileFields,
       preferencesFields
     ],
@@ -1277,7 +1291,8 @@ function loadUserData()
                 USR_PHONE     : data.user.USR_PHONE,
                 USR_POSITION  : data.user.USR_POSITION,
                 USR_DUE_DATE  : data.user.USR_DUE_DATE,
-                USR_STATUS    : data.user.USR_STATUS
+                USR_STATUS    : data.user.USR_STATUS,
+                USR_LOGGED_NEXT_TIME    : data.user.USR_LOGGED_NEXT_TIME
             });
 
             if (infoMode) {
