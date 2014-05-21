@@ -3643,7 +3643,11 @@ class XmlForm_Field_Dropdown extends XmlForm_Field
             $html .= $this->renderHint();
         }
         if ($displayStyle != '') {
-            $html = $displayLabel . $html;
+            if ($value === $findValue) {
+                $html = $displayLabel . $html;
+            } else {
+                $html = $value . $html;
+            }
         }
         return $html;
     }
@@ -3691,12 +3695,6 @@ class XmlForm_Field_Listbox extends XmlForm_Field
     public $sql = '';
     public $sqlOption = array ();
 
-    public function validateValue ($value, $owner)
-    {
-        $this->executeSQL( $owner );
-        return true; // isset($value) && ( array_key_exists( $value , $this->options ) );
-    }
-
     /**
      * Function render
      *
@@ -3741,12 +3739,25 @@ class XmlForm_Field_Listbox extends XmlForm_Field
             $html .= $this->renderHint();
             return $html;
         } elseif ($this->mode === 'view') {
+            $valuesFound = array();
             $html = '<select multiple="multiple" id="form[' . $this->name . ']" ' . $this->NSFieldType() . ' name="form[' . $this->name . '][]" size="' . $this->size . '" ' . $this->NSFieldType() . ' style="background: none;" disabled="disabled">';
             foreach ($this->option as $optionName => $option) {
+                if (in_array( $optionName . "", $value )) {
+                    $valuesFound[] = $optionName . "";
+                }
                 $html .= "<option value=\"" . $optionName . "\" " . ((in_array( $optionName . "", $value )) ? "class=\"module_ListBoxView\" selected=\"selected\"" : "") . ">" . $option . "</option>";
             }
             foreach ($this->sqlOption as $optionName => $option) {
+                if (in_array( $optionName . "", $value )) {
+                    $valuesFound[] = $optionName . "";
+                }
                 $html .= "<option value=\"" . $optionName . "\" " . ((in_array( $optionName . "", $value )) ? "class=\"module_ListBoxView\" selected=\"selected\"" : "") . ">" . $option . "</option>";
+            }
+            if (count($valuesFound) < count($value)) {
+                $valuesNotFound = array_diff($value, $valuesFound);
+                foreach ($valuesNotFound as $option) {
+                    $html .= "<option value=\"" . $option . "\" class=\"module_ListBoxView\" selected=\"selected\">" . $option . "</option>";
+                }
             }
             $html .= '</select>';
             foreach ($this->option as $optionName => $option) {
@@ -3754,6 +3765,12 @@ class XmlForm_Field_Listbox extends XmlForm_Field
             }
             foreach ($this->sqlOption as $optionName => $option) {
                 $html .= "<input type=\"hidden\" id=\"form[" . $this->name . "]\" name=\"form[" . $this->name . "][]\" value=\"" . ((in_array( $optionName . "", $value )) ? $optionName : "__NULL__") . "\">";
+            }
+            if (count($valuesFound) < count($value)) {
+                $valuesNotFound = array_diff($value, $valuesFound);
+                foreach ($valuesNotFound as $option) {
+                    $html .= "<input type=\"hidden\" id=\"form[" . $this->name . "]\" name=\"form[" . $this->name . "][]\" value=\"" . $option . "\">";
+                }
             }
             return $html;
         } else {
@@ -3793,19 +3810,6 @@ class XmlForm_Field_RadioGroup extends XmlForm_Field
     public $linkType;
 
     /**
-     * validate the execution of a query
-     *
-     * @param $value
-     * @param $owner
-     * @return $value
-     */
-    public function validateValue ($value, $owner)
-    {
-        $this->executeSQL( $owner );
-        return isset( $value ) && (array_key_exists( $value, $this->options ));
-    }
-
-    /**
      * Function render
      *
      * @author David S. Callizaya S. <davidsantos@colosa.com>
@@ -3842,11 +3846,17 @@ class XmlForm_Field_RadioGroup extends XmlForm_Field
             return $html;
         } elseif ($this->mode === 'view') {
             $html = '';
+            $existsValue = false;
             foreach ($this->options as $optionName => $option) {
                 $html .= '<input class="module_app_input___gray" id="form[' . $this->name . '][' . $optionName . ']" ' . $this->NSFieldType() . ' name="form[' . $this->name . ']" type=\'radio\' value="' . $optionName . '" ' . (($optionName == $value) ? 'checked' : '') . ' disabled><span class="FormCheck"><label for="form[' . $this->name . '][' . $optionName . ']">' . $option . '</label></span></input><br>';
                 if ($optionName == $value) {
+                    $existsValue = true;
                     $html .= '<input type="hidden"  id="form[' . $this->name . '][' . $optionName . ']" name="form[' . $this->name . ']" value="' . (($optionName == $value) ? $optionName : '') . '">';
                 }
+            }
+            if (!$existsValue && $value !== '') {
+                $html .= '<input class="module_app_input___gray" id="form[' . $this->name . '][' . $value . ']" ' . $this->NSFieldType() . ' name="form[' . $this->name . ']" type=\'radio\' value="' . $value . '" checked disabled><span class="FormCheck"><label for="form[' . $this->name . '][' . $value . ']">' . $value . '</label></span></input><br>';
+                $html .= '<input type="hidden"  id="form[' . $this->name . '][' . $value . ']" name="form[' . $this->name . ']" value="' . $value . '">';
             }
             return $html;
         } else {
@@ -3949,10 +3959,21 @@ class XmlForm_Field_CheckGroup extends XmlForm_Field
             } //fin for
             return $html;
         } elseif ($this->mode === 'view') {
+            $valuesFound = array();
             $html = '';
             foreach ($this->options as $optionName => $option) {
+                if (in_array( $optionName . "", $value )) {
+                    $valuesFound[] = $optionName . "";
+                }
                 $html .= "<input " . $this->NSFieldType() . "class=\"FormCheck\" type=\"checkbox\" id=\"form[" . $this->name . "][" . $optionName . "]\" value=\"" . $optionName . "\"" . (in_array( $optionName . "", $value ) ? " checked=\"checked\" " : "") . " disabled=\"disabled\"><span class=\"FormCheck\"><label for=\"form[" . $this->name . "][" . $optionName . "]\">" . $option . "</label></span></input><br />";
                 $html .= "<input type=\"hidden\" name=\"form[" . $this->name . "][]\"  value=\"" . ((in_array( $optionName . "", $value )) ? $optionName : "__NULL__") . "\">";
+            }
+            if (count($valuesFound) < count($value)) {
+                $valuesNotFound = array_diff($value, $valuesFound);
+                foreach ($valuesNotFound as $option) {
+                    $html .= "<input " . $this->NSFieldType() . "class=\"FormCheck\" type=\"checkbox\" id=\"form[" . $this->name . "][" . $option . "]\" value=\"" . $option . "\" checked=\"checked\" disabled=\"disabled\"><span class=\"FormCheck\"><label for=\"form[" . $this->name . "][" . $option . "]\">" . $option . "</label></span></input><br />";
+                    $html .= "<input type=\"hidden\" name=\"form[" . $this->name . "][]\"  value=\"" . $option . "\">";
+                }
             }
             return $html;
         } else {
