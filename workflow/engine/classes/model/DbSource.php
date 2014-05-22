@@ -68,8 +68,8 @@ class DbSource extends BaseDbSource
         $oCriteria->addSelectColumn(DbSourcePeer::DBS_UID);
         $oCriteria->addSelectColumn(DbSourcePeer::PRO_UID);
         $oCriteria->addSelectColumn(DbSourcePeer::DBS_TYPE);
-        $oCriteria->addSelectColumn(DbSourcePeer::DBS_SERVER);
-        $oCriteria->addSelectColumn(DbSourcePeer::DBS_DATABASE_NAME);
+        $oCriteria->addAsColumn("DBS_SERVER", "CASE WHEN " . DbSourcePeer::DBS_TYPE . " = 'oracle' AND " . DbSourcePeer::DBS_CONNECTION_TYPE . " = 'TNS' THEN CONCAT('[', " . DbSourcePeer::DBS_TNS . ", ']') ELSE " . DbSourcePeer::DBS_SERVER . " END");
+        $oCriteria->addAsColumn("DBS_DATABASE_NAME", "CASE WHEN " . DbSourcePeer::DBS_TYPE . " = 'oracle' AND " . DbSourcePeer::DBS_CONNECTION_TYPE . " = 'TNS' THEN CONCAT('[', " . DbSourcePeer::DBS_TNS . ", ']') ELSE " . DbSourcePeer::DBS_DATABASE_NAME . " END");
         $oCriteria->addSelectColumn(DbSourcePeer::DBS_USERNAME);
         $oCriteria->addSelectColumn(DbSourcePeer::DBS_PASSWORD);
         $oCriteria->addSelectColumn(DbSourcePeer::DBS_PORT);
