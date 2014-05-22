@@ -74,6 +74,8 @@ class dbConnections
             $c->addSelectColumn( DbSourcePeer::DBS_PASSWORD );
             $c->addSelectColumn( DbSourcePeer::DBS_PORT );
             $c->addSelectColumn( DbSourcePeer::DBS_ENCODE );
+            $c->addSelectColumn(DbSourcePeer::DBS_CONNECTION_TYPE);
+            $c->addSelectColumn(DbSourcePeer::DBS_TNS);
             $c->addSelectColumn( ContentPeer::CON_VALUE );
 
             $c->add( DbSourcePeer::PRO_UID, $this->PRO_UID );
@@ -85,8 +87,20 @@ class dbConnections
             $row = $result->getRow();
 
             while ($row = $result->getRow()) {
-                $connections[] = Array ('DBS_UID' => $row[0],'DBS_TYPE' => $row[2],'DBS_SERVER' => $row[3],'DBS_DATABASE_NAME' => $row[4],'DBS_USERNAME' => $row[5],'DBS_PASSWORD' => $row[6],'DBS_PORT' => $row[7],'DBS_ENCODE' => $row[8],'CON_VALUE' => $row[9]
+                $connections[] = array (
+                    "DBS_UID"             => $row[0],
+                    "DBS_TYPE"            => $row[2],
+                    "DBS_SERVER"          => $row[3],
+                    "DBS_DATABASE_NAME"   => $row[4],
+                    "DBS_USERNAME"        => $row[5],
+                    "DBS_PASSWORD"        => $row[6],
+                    "DBS_PORT"            => $row[7],
+                    "DBS_ENCODE"          => $row[8],
+                    "DBS_CONNECTION_TYPE" => $row[9],
+                    "DBS_TNS"             => $row[10],
+                    "CON_VALUE"           => $row[11]
                 );
+
                 $result->next();
             }
             if (! in_array( $row[2], $types )) {

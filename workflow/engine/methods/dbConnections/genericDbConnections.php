@@ -13,13 +13,21 @@ if (isset( $_SESSION['PROCESS'] )) {
     $oDbConnections = new dbConnections( $_SESSION['PROCESS'] );
     foreach ($oDbConnections->connections as $db) {
         $db['DBS_PASSWORD'] = $oDbConnections->getPassWithoutEncrypt( $db );
-        $dbsPort = ($db['DBS_PORT'] == '') ? ('') : (':' . $db['DBS_PORT']);
-        $ENCODE = (trim( $db['DBS_ENCODE'] ) == '') ? '' : '?encoding=' . $db['DBS_ENCODE'];
-        if (strpos( $db['DBS_SERVER'], "\\" ) && $db['DBS_TYPE'] == 'mssql') {
-            $pro['datasources'][$db['DBS_UID']]['connection'] = $db['DBS_TYPE'] . '://' . $db['DBS_USERNAME'] . ':' . $db['DBS_PASSWORD'] . '@' . $db['DBS_SERVER'] . '/' . $db['DBS_DATABASE_NAME'] . $ENCODE;
+
+        $flagTns = ($db["DBS_TYPE"] == "oracle" && $db["DBS_CONNECTION_TYPE"] == "TNS")? 1 : 0;
+
+        if ($flagTns == 0) {
+            $dbsPort = ($db['DBS_PORT'] == '') ? ('') : (':' . $db['DBS_PORT']);
+            $ENCODE = (trim( $db['DBS_ENCODE'] ) == '') ? '' : '?encoding=' . $db['DBS_ENCODE'];
+            if (strpos( $db['DBS_SERVER'], "\\" ) && $db['DBS_TYPE'] == 'mssql') {
+                $pro['datasources'][$db['DBS_UID']]['connection'] = $db['DBS_TYPE'] . '://' . $db['DBS_USERNAME'] . ':' . $db['DBS_PASSWORD'] . '@' . $db['DBS_SERVER'] . '/' . $db['DBS_DATABASE_NAME'] . $ENCODE;
+            } else {
+                $pro['datasources'][$db['DBS_UID']]['connection'] = $db['DBS_TYPE'] . '://' . $db['DBS_USERNAME'] . ':' . $db['DBS_PASSWORD'] . '@' . $db['DBS_SERVER'] . $dbsPort . '/' . $db['DBS_DATABASE_NAME'] . $ENCODE;
+            }
         } else {
-            $pro['datasources'][$db['DBS_UID']]['connection'] = $db['DBS_TYPE'] . '://' . $db['DBS_USERNAME'] . ':' . $db['DBS_PASSWORD'] . '@' . $db['DBS_SERVER'] . $dbsPort . '/' . $db['DBS_DATABASE_NAME'] . $ENCODE;
+            $pro["datasources"][$db["DBS_UID"]]["connection"] = $db["DBS_TYPE"] . "://" . $db["DBS_USERNAME"] . ":" . $db["DBS_PASSWORD"] . "@" . $db["DBS_TNS"];
         }
+
         $pro['datasources'][$db['DBS_UID']]['adapter'] = $db['DBS_TYPE'];
     }
     return $pro;

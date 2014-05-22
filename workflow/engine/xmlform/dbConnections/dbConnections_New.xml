@@ -15,7 +15,7 @@
 </DBS_ENCODE>
 
 <DBS_CONNECTION_TYPE type="dropdown" defaultvalue="NORMAL" required="0" readonly="0" optgroup="0" mode="edit">
-    <en>Select type connection
+    <en>Select Connection Type
         <option name="NORMAL">Normal</option>
         <option name="TNS">TNS</option>
 				</en>
