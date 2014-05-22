@@ -1271,7 +1271,7 @@ rowExpander, {
   header: _("ID_OWNER"),
   dataIndex: "owner",
   width: 100,
-  sortable: true,
+  sortable: false,
   groupable: true,
   renderer: renderFullName
   //sortable: false
@@ -1290,7 +1290,7 @@ rowExpander, {
   header: _("ID_TYPE"),
   dataIndex: "type",
   width: 100,
-  sortable: true,
+  sortable: false,
   groupable: true,
   //align: "right",
   renderer: renderType
@@ -1298,7 +1298,7 @@ rowExpander, {
   header: _("ID_PROCESS"),
   dataIndex: "proTitle",
   width: 150,
-  sortable: true,
+  sortable: false,
   groupable: true
   //align: "right"
   //renderer: renderType
@@ -1306,7 +1306,7 @@ rowExpander, {
   header: _("ID_CASE"),
   dataIndex: "appLabel",
   width: 150,
-  sortable: true,
+  sortable: false,
   groupable: true
   //align: "right"
   //renderer: renderType

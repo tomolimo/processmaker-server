@@ -8,9 +8,7 @@ if (! isset ($_SESSION ['USER_LOGGED'])) {
 }
 
 if (isset ($_REQUEST ['action']) && isset($_REQUEST['sort']) && isset($_REQUEST['dir'])) {
-    if ($_REQUEST['sort'] == "appDocCreateDate" && ($_REQUEST['dir'] == 'ASC' || $_REQUEST['dir'] == 'DESC')) {
-        sortContent();
-    }
+    sortContent();
 }
 
 

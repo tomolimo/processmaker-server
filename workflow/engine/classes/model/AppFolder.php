@@ -394,10 +394,25 @@ class AppFolder extends BaseAppFolder
         $oCase = new Cases();
         G::LoadClass( 'process' );
         $oProcess = new Process();
-    
+
         $oAppDocument = new AppDocument();
         $oCriteria = new Criteria();
-    
+        $oCriteria->addSelectColumn( AppDocumentPeer::APP_DOC_UID);
+        $oCriteria->addSelectColumn( AppDocumentPeer::DOC_VERSION);
+        $oCriteria->addSelectColumn( AppDocumentPeer::APP_UID);
+        $oCriteria->addSelectColumn( AppDocumentPeer::DEL_INDEX);
+        $oCriteria->addSelectColumn( AppDocumentPeer::DOC_UID);
+        $oCriteria->addSelectColumn( AppDocumentPeer::USR_UID);
+        $oCriteria->addSelectColumn( AppDocumentPeer::APP_DOC_TYPE);
+        $oCriteria->addSelectColumn( AppDocumentPeer::APP_DOC_CREATE_DATE);
+        $oCriteria->addSelectColumn( AppDocumentPeer::APP_DOC_INDEX);
+        $oCriteria->addSelectColumn( AppDocumentPeer::FOLDER_UID);
+        $oCriteria->addSelectColumn( AppDocumentPeer::APP_DOC_PLUGIN);
+        $oCriteria->addSelectColumn( AppDocumentPeer::APP_DOC_TAGS);
+        $oCriteria->addSelectColumn( AppDocumentPeer::APP_DOC_STATUS);
+        $oCriteria->addSelectColumn( AppDocumentPeer::APP_DOC_STATUS_DATE);
+        $oCriteria->addSelectColumn( AppDocumentPeer::APP_DOC_FIELDNAME);
+
         if ((is_array( $docIdFilter )) && (count( $docIdFilter ) > 0)) {
             //Search by App Doc UID no matter what Folder it is
             $oCriteria->add( AppDocumentPeer::APP_DOC_UID, $docIdFilter, CRITERIA::IN );
@@ -410,23 +425,24 @@ class AppFolder extends BaseAppFolder
         } elseif ($searchType == "TAG") {
             $oCriteria->add( AppDocumentPeer::APP_DOC_TAGS, "%" . $keyword . "%", CRITERIA::LIKE );
         }
-    
+
+        require_once ("classes/model/AppDelegation.php");
         if ($user != '') {
             require_once ("classes/model/AppDelegation.php");
             $criteria = new Criteria();
             $criteria->addSelectColumn( AppDelegationPeer::APP_UID );
             $criteria->setDistinct();
-    
+
             $conditions = array ();
             $conditions[] = array (AppDelegationPeer::APP_UID,AppDocumentPeer::APP_UID);
             $conditions[] = array (AppDelegationPeer::DEL_INDEX,AppDocumentPeer::DEL_INDEX);
-    
+
             $criteria->addJoinMC( $conditions, Criteria::LEFT_JOIN );
-    
+
             $criteria->add( AppDelegationPeer::USR_UID, $user );
-    
+
             $rs2 = AppDocumentPeer::doSelectRS( $criteria );
-    
+
             $rs2->setFetchmode( ResultSet::FETCHMODE_ASSOC );
             $data = array ();
             while ($rs2->next()) {
@@ -435,33 +451,43 @@ class AppFolder extends BaseAppFolder
             }
             $oCriteria->add( AppDocumentPeer::APP_UID, $data, CRITERIA::IN );
         }
-    
+
         if ($onlyActive) {
             $oCriteria->add( AppDocumentPeer::APP_DOC_STATUS, 'ACTIVE' );
         }
-    
+
+        $oCriteria->addSelectColumn( ContentPeer::CON_VALUE . ' AS NAME');
+        $oCriteria->add( ContentPeer::CON_CATEGORY, "APP_DOC_FILENAME");
+        $oCriteria->add( ContentPeer::CON_LANG, SYS_LANG);
+        $oCriteria->addJoin( AppDocumentPeer::APP_DOC_UID, ContentPeer::CON_ID, Criteria::LEFT_JOIN );
+
         $numRecTotal = AppDocumentPeer::doCount($oCriteria);
-    
+
         $oCase->verifyTable();
-    
+
         //Need to review hot to get the Column Type name 
         switch($ColumnSort) {
-            case 'appDocCreateDate' : $ColumnSort = AppDocumentPeer::APP_DOC_CREATE_DATE; break;
-            //...
-            default: break;
+            case 'appDocCreateDate' :
+                $ColumnSort = AppDocumentPeer::APP_DOC_CREATE_DATE;
+                break;
+            case 'name' :
+                $ColumnSort = 'NAME';
+                break;
+            default:
+                break;
         }
-        
+
         if($direction == 'ASC') {
             $oCriteria->addAscendingOrderByColumn( $ColumnSort );
         } else {
             $oCriteria->addDescendingOrderByColumn( $ColumnSort );
         }
-    
+
         $response['documents'] = array ();
-    
+
         $oCriteria->setLimit( $limit );
         $oCriteria->setOffset( $start );
-    
+
         $rs = AppDocumentPeer::doSelectRS( $oCriteria );
         $rs->setFetchmode( ResultSet::FETCHMODE_ASSOC );
         $rs->next();
@@ -474,7 +500,7 @@ class AppFolder extends BaseAppFolder
                 $completeInfo = $this->getCompleteDocumentInfo( $row['APP_UID'], $row['APP_DOC_UID'], $row['DOC_VERSION'], $row['DOC_UID'], $row['USR_UID'] );
                 $oAppDocument = new AppDocument();
                 $lastVersion = $oAppDocument->getLastAppDocVersion( $row['APP_DOC_UID'], $row['APP_UID'] );
-    
+
                 if ($completeInfo['APP_DOC_STATUS'] != "DELETED") {
                     if (in_array($row["APP_DOC_UID"], $completeInfo["INPUT_DOCUMENTS"]) || in_array($row["APP_DOC_UID"], $completeInfo["OUTPUT_DOCUMENTS"]) || in_array($completeInfo["USR_UID"], array($_SESSION["USER_LOGGED"], "-1")) || $user == "") {
                         if (count( $docIdFilter ) > 0) {
@@ -498,17 +524,15 @@ class AppFolder extends BaseAppFolder
                     }
                 }
             }
-    
+
             $rs->next();
         }
-    
+
         $response["totalDocumentsCount"] = $numRecTotal;
-    
+
         return $response;
     }
-    
-    
-    
+
     public function getCompleteDocumentInfo ($appUid, $appDocUid, $docVersion, $docUid, $usrId)
     {
         //require_once ("classes/model/AppDocument.php");
