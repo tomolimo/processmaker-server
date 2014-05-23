@@ -3739,7 +3739,7 @@ class XmlForm_Field_Listbox extends XmlForm_Field
             $html .= $this->renderHint();
             return $html;
         } elseif ($this->mode === 'view') {
-            $valuesFound = array();
+            $valuesFound = array('__NULL__');
             $html = '<select multiple="multiple" id="form[' . $this->name . ']" ' . $this->NSFieldType() . ' name="form[' . $this->name . '][]" size="' . $this->size . '" ' . $this->NSFieldType() . ' style="background: none;" disabled="disabled">';
             foreach ($this->option as $optionName => $option) {
                 if (in_array( $optionName . "", $value )) {
@@ -3959,7 +3959,7 @@ class XmlForm_Field_CheckGroup extends XmlForm_Field
             } //fin for
             return $html;
         } elseif ($this->mode === 'view') {
-            $valuesFound = array();
+            $valuesFound = array('__NULL__');
             $html = '';
             foreach ($this->options as $optionName => $option) {
                 if (in_array( $optionName . "", $value )) {
