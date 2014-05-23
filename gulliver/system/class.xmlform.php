@@ -3616,6 +3616,10 @@ class XmlForm_Field_Dropdown extends XmlForm_Field
                 $html = $html . "<option value=\"\"></option>";
             }
 
+            if ($value !== $findValue) {
+                $html .= "<option value=\"$value\" selected=\"selected\">$value</option>";
+            }
+
             $html .= '</select>';
             if ($readOnlyField != '') {
                 $html .= '<input type="hidden" ';
@@ -3753,7 +3757,7 @@ class XmlForm_Field_Listbox extends XmlForm_Field
                 }
                 $html .= "<option value=\"" . $optionName . "\" " . ((in_array( $optionName . "", $value )) ? "class=\"module_ListBoxView\" selected=\"selected\"" : "") . ">" . $option . "</option>";
             }
-            if (count($valuesFound) < count($value)) {
+            if (count($valuesFound) - 1 < count($value)) {
                 $valuesNotFound = array_diff($value, $valuesFound);
                 foreach ($valuesNotFound as $option) {
                     $html .= "<option value=\"" . $option . "\" class=\"module_ListBoxView\" selected=\"selected\">" . $option . "</option>";
@@ -3766,7 +3770,7 @@ class XmlForm_Field_Listbox extends XmlForm_Field
             foreach ($this->sqlOption as $optionName => $option) {
                 $html .= "<input type=\"hidden\" id=\"form[" . $this->name . "]\" name=\"form[" . $this->name . "][]\" value=\"" . ((in_array( $optionName . "", $value )) ? $optionName : "__NULL__") . "\">";
             }
-            if (count($valuesFound) < count($value)) {
+            if (count($valuesFound) - 1 < count($value)) {
                 $valuesNotFound = array_diff($value, $valuesFound);
                 foreach ($valuesNotFound as $option) {
                     $html .= "<input type=\"hidden\" id=\"form[" . $this->name . "]\" name=\"form[" . $this->name . "][]\" value=\"" . $option . "\">";
@@ -3968,7 +3972,7 @@ class XmlForm_Field_CheckGroup extends XmlForm_Field
                 $html .= "<input " . $this->NSFieldType() . "class=\"FormCheck\" type=\"checkbox\" id=\"form[" . $this->name . "][" . $optionName . "]\" value=\"" . $optionName . "\"" . (in_array( $optionName . "", $value ) ? " checked=\"checked\" " : "") . " disabled=\"disabled\"><span class=\"FormCheck\"><label for=\"form[" . $this->name . "][" . $optionName . "]\">" . $option . "</label></span></input><br />";
                 $html .= "<input type=\"hidden\" name=\"form[" . $this->name . "][]\"  value=\"" . ((in_array( $optionName . "", $value )) ? $optionName : "__NULL__") . "\">";
             }
-            if (count($valuesFound) < count($value)) {
+            if (count($valuesFound) - 1 < count($value)) {
                 $valuesNotFound = array_diff($value, $valuesFound);
                 foreach ($valuesNotFound as $option) {
                     $html .= "<input " . $this->NSFieldType() . "class=\"FormCheck\" type=\"checkbox\" id=\"form[" . $this->name . "][" . $option . "]\" value=\"" . $option . "\" checked=\"checked\" disabled=\"disabled\"><span class=\"FormCheck\"><label for=\"form[" . $this->name . "][" . $option . "]\">" . $option . "</label></span></input><br />";
