@@ -1121,7 +1121,7 @@ var gridtb = new Ext.Toolbar(
   },
   '-',
   new Ext.Toolbar.Button({
-    text : TRANSLATIONS.ID_SHOW_DIRS,
+    text : _('ID_SHOW_DIRS'),
     id: 'showOrHiDirs',
     enableToggle : true,
     pressed : false,
@@ -1134,10 +1134,10 @@ var gridtb = new Ext.Toolbar(
             loadDir();
         }
         if (showDirs) {
-            Ext.getCmp("showOrHiDirs").setText(TRANSLATIONS.ID_SHOW_DIRS);
+            Ext.getCmp("showOrHiDirs").setText(_('ID_SHOW_DIRS'));
             showDirs = false;
         } else {
-            Ext.getCmp("showOrHiDirs").setText(TRANSLATIONS.ID_HIDE_DIRS);
+            Ext.getCmp("showOrHiDirs").setText(_('ID_HIDE_DIRS'));
             showDirs = true;
         }
     }
