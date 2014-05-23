@@ -370,9 +370,8 @@ class AppFolder extends BaseAppFolder
         if ($search) {
             $oCriteria->add(
                 $oCriteria->getNewCriterion( ContentPeer::CON_VALUE, '%' . $search . '%', Criteria::LIKE )->
-                    addOr( $oCriteria->getNewCriterion( AppDocumentPeer::APP_DOC_CREATE_DATE, '%' . $search . '%', Criteria::LIKE )->
                     addOr( $oCriteria->getNewCriterion( UsersPeer::USR_FIRSTNAME, '%' . $search . '%', Criteria::LIKE )->
-                    addOr( $oCriteria->getNewCriterion( UsersPeer::USR_LASTNAME, '%' . $search . '%', Criteria::LIKE ))))
+                    addOr( $oCriteria->getNewCriterion( UsersPeer::USR_LASTNAME, '%' . $search . '%', Criteria::LIKE )))
                 );
         }
 
@@ -523,9 +522,8 @@ class AppFolder extends BaseAppFolder
         if ($search) {
             $oCriteria->add(
                 $oCriteria->getNewCriterion( ContentPeer::CON_VALUE, '%' . $search . '%', Criteria::LIKE )->
-                    addOr( $oCriteria->getNewCriterion( AppDocumentPeer::APP_DOC_CREATE_DATE, '%' . $search . '%', Criteria::LIKE )->
                     addOr( $oCriteria->getNewCriterion( UsersPeer::USR_FIRSTNAME, '%' . $search . '%', Criteria::LIKE )->
-                    addOr( $oCriteria->getNewCriterion( UsersPeer::USR_LASTNAME, '%' . $search . '%', Criteria::LIKE ))))
+                    addOr( $oCriteria->getNewCriterion( UsersPeer::USR_LASTNAME, '%' . $search . '%', Criteria::LIKE )))
                 );
         }
 
