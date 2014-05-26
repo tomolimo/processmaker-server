@@ -34,6 +34,7 @@ catch(z){
 itemSelected = "";
 lastDir = "";
 var conn = new Ext.data.Connection();
+var showDirs = 'noFolders';
 
 streamFilefromPM=function(fileStream) {
   Ext.Ajax.request({
@@ -605,6 +606,9 @@ function getRequestParams() {
   }
   else {
     sOptiondir='documents';
+    if (selectedRows[0].data.owner == '') {
+        sOptiondir='directory';
+    }
     selitems = Array(selectedRows.length);
 
     if( selectedRows.length > 0 ) {
@@ -1128,18 +1132,10 @@ var gridtb = new Ext.Toolbar(
     handler : function(btn, e) {
         if (btn.pressed) {
             datastore.sendWhat = 'both';
-            loadDir();
         } else {
             datastore.sendWhat = 'files';
-            loadDir();
         }
-        if (showDirs) {
-            Ext.getCmp("showOrHiDirs").setText(_('ID_SHOW_DIRS'));
-            showDirs = false;
-        } else {
-            Ext.getCmp("showOrHiDirs").setText(_('ID_HIDE_DIRS'));
-            showDirs = true;
-        }
+        loadDir();
     }
   }), '-', new Ext.form.TextField({
     name : "filterValue",
@@ -1321,11 +1317,15 @@ rowExpander, {
   header: _("ID_SIZE"),
   dataIndex: "size",
   width: 50,
+  sortable: false,
+  hideable: false,
   hidden: true
 }, {
   header: _("ID_PERMISSIONS"),
   dataIndex: "perms",
   width: 100,
+  sortable: false,
+  hideable: false,
   hidden: true
 }, {
   dataIndex: "is_deletable",
@@ -1373,28 +1373,34 @@ rowExpander, {
 cm.defaultSortable = true;
 
 function handleRowClick(sm, rowIndex) {//alert(rowIndex);
-  // console.log("Row Clicked: "+rowIndex);
-  var selections = sm.getSelections();
-  tb = ext_itemgrid.getTopToolbar();
-  if (selections.length > 1) {
-//    tb.items.get('tb_delete').enable();
-    tb.items.get('tb_delete')[permitodelete==1 ? 'enable': 'disable']();
-    tb.items.get('tb_rename').disable();
-   tb.items.get('tb_download').hide();
-    //tb.items.get('tb_download').disable();
-  } else if (selections.length == 1) {
-
-//    tb.items.get('tb_delete')[selections[0].get('is_deletable') ? 'enable': 'disable']();
-    tb.items.get('tb_delete')[permitodelete==1 ? 'enable': 'disable']();
-    tb.items.get('tb_rename')[selections[0].get('is_deletable') ? 'disable': 'disable']();
-    tb.items.get('tb_download')[selections[0].get('is_readable')
-    && selections[0].get('is_file') ? 'show' : 'hide']();
-  } else {
-    tb.items.get('tb_delete').disable();
-    tb.items.get('tb_rename').disable();
-    tb.items.get('tb_download').hide();
-  }
-  return true;
+    //console.log("Row Clicked: ", rowIndex);
+    var selections = sm.getSelections();
+    tb = ext_itemgrid.getTopToolbar();
+    if (selections.length > 1) {
+        //tb.items.get('tb_delete').enable();
+        tb.items.get('tb_delete')[permitodelete==1 ? 'enable': 'disable']();
+        tb.items.get('tb_rename').disable();
+        tb.items.get('tb_download').hide();
+        //tb.items.get('tb_download').disable();
+    } else if (selections.length == 1) {
+        //tb.items.get('tb_delete')[selections[0].get('is_deletable') ? 'enable': 'disable']();
+        tb.items.get('tb_delete')[permitodelete==1 ? 'enable': 'disable']();
+        tb.items.get('tb_rename')[selections[0].get('is_deletable') ? 'disable': 'disable']();
+        tb.items.get('tb_download')[selections[0].get('is_readable')
+        && selections[0].get('is_file') ? 'show' : 'hide']();
+        if (showDirs == 'folders') {
+            Ext.getCmp("showOrHiDirs").setText(_('ID_SHOW_DIRS'));
+            showDirs = 'noFolders';
+        } else {
+            Ext.getCmp("showOrHiDirs").setText(_('ID_HIDE_DIRS'));
+            showDirs = 'folders';
+        }
+    } else {
+        tb.items.get('tb_delete').disable();
+        tb.items.get('tb_rename').disable();
+        tb.items.get('tb_download').hide();
+    }
+    return true;
 }
 
 
@@ -1402,18 +1408,23 @@ function handleRowClick(sm, rowIndex) {//alert(rowIndex);
 function loadDir() {
   // console.info("loadDir");
   // console.trace();
-  itemSelected = "loadDir";
-  datastore.load({
-    params : {
-      start: 0,
-      limit: 100,
-      dir : datastore.directory,
-      node : datastore.directory,
-      option : 'gridDocuments',
-      action : 'expandNode',
-      sendWhat : datastore.sendWhat
+    itemSelected = "loadDir";
+    datastore.load({
+      params : {
+        start: 0,
+        limit: 100,
+        dir : datastore.directory,
+        node : datastore.directory,
+        option : 'gridDocuments',
+        action : 'expandNode',
+        sendWhat : datastore.sendWhat
+      }
+    });
+    if (datastore.sendWhat == 'files') {
+        Ext.getCmp("showOrHiDirs").setText(_('ID_SHOW_DIRS'));
+    } else {
+        Ext.getCmp("showOrHiDirs").setText(_('ID_HIDE_DIRS'));
     }
-  });
 }
 
 function rowContextMenu(grid, rowIndex, e, f) {
@@ -1438,6 +1449,14 @@ function rowContextMenu(grid, rowIndex, e, f) {
     gridCtxMenu.items.get('gc_rename')[selections[0].get('is_deletable') ? 'disable': 'disable']();
     gridCtxMenu.items.get('gc_download')[selections[0].get('is_readable')
     && selections[0].get('is_file') ? 'enable' : 'disable']();
+    if (showDirs == 'folders') {
+        Ext.getCmp("showOrHiDirs").setText(_('ID_SHOW_DIRS'));
+        showDirs = 'noFolders';
+    } else {
+        Ext.getCmp("showOrHiDirs").setText(_('ID_HIDE_DIRS'));
+        showDirs = 'folders';
+    }
+    
   }
   gridCtxMenu.show(e.getTarget(), 'tr-br?');
 
