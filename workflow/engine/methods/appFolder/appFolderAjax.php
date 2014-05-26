@@ -20,12 +20,6 @@ if (! isset ($_REQUEST ['action'])) {
     print G::json_encode ($res);
     die ();
 }
-if (! function_exists ($_REQUEST['action']) || !G::isUserFunction($_REQUEST['action'])) {
-    $res ['success'] = false;
-    $res ['message'] = 'The requested action does not exist';
-    print G::json_encode ($res);
-    die ();
-}
 
 if (($_REQUEST['action']) != 'rename') {
     $functionName = $_REQUEST ['action'];
@@ -48,6 +42,12 @@ if (($_REQUEST['action']) != 'rename') {
     renameFolder ($oldname, $newname, $uid);
 }
 
+if (! function_exists ($_REQUEST['action']) || !G::isUserFunction($_REQUEST['action'])) {
+    $res ['success'] = false;
+    $res ['message'] = 'The requested action does not exist';
+    print G::json_encode ($res);
+    die ();
+}
 /////////////////////////////////////////////
 
 function renameFolder($oldname, $newname, $uid)
