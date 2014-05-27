@@ -399,11 +399,9 @@ statusDashletInstance = function(){
 	    	var data = {
 	    		DAS_INS_UID: rows[i].data.DAS_INS_UID,
 	    		DAS_INS_TITLE: rows[i].data.DAS_INS_TITLE,
-	    		DAS_UID: rows[i].data.DAS_INS_UID,
-	    		DAS_INS_STATUS: status,
-	    		DAS_STATUS: status
+	    		DAS_INS_STATUS: status
 	    	};
-
+	    	
 	    	Ext.Ajax.request({
 	             url:      'saveDashletInstance',
 	             method:   'POST',
