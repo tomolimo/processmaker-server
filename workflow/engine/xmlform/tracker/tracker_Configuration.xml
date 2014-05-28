@@ -72,9 +72,9 @@ var editStagesMap = function(sProcessUID) {
   oPanel.events = {
   	remove: function() { 
   	  delete(oPanel); 
-  	  if(menu_edit.maked === true){
+  	  if(typeof menu_edit != "undefined" && menu_edit.maked === true){
   	      menu_edit.remove();
-  	  } else if (menu_add.maked === true) {
+  	  } else if (typeof menu_add != "undefined" && menu_add.maked === true) {
   	      menu_add.remove();
   	  }
   	}.extend(this)
