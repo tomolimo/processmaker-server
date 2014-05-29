@@ -293,15 +293,13 @@ class Publisher
                         $oFieldCondition = new FieldCondition();
 
                         //This dynaform has show/hide field conditions
-                        $dynUid = '';
                         if (isset($_SESSION['CURRENT_DYN_UID']) && $_SESSION['CURRENT_DYN_UID'] != '') {
-                            $dynUid = $_SESSION['CURRENT_DYN_UID'];
+                            $ConditionalShowHideRoutines = $oFieldCondition->getConditionScript($_SESSION["CURRENT_DYN_UID"]); //lsl
                         } else {
                             if (isset($_SESSION['CONDITION_DYN_UID']) && $_SESSION['CONDITION_DYN_UID'] != '') {
-                                $dynUid = $_SESSION['CONDITION_DYN_UID'];
+                                $ConditionalShowHideRoutines = $oFieldCondition->getConditionScript($_SESSION["CONDITION_DYN_UID"]); //lsl
                             }
                         }
-                        $ConditionalShowHideRoutines = $oFieldCondition->getConditionScript($dynUid);
                     }
                 }
 
