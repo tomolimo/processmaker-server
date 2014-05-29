@@ -588,7 +588,15 @@ abstract class ".$this->getClassname()." extends ".ClassTools::classname($this->
 
         $script .= "
         if (\$v !== null && !is_int(\$v)) {
-            \$ts = strtotime(\$v);
+            \$ts = strtotime(\$v);";
+        if ($col->getPhpDefaultValue() != 1) {
+            $script .= "
+            //Date/time accepts null values
+            if (\$v == '') {
+                \$ts = null;
+            }";
+        }
+        $script .="
             if (\$ts === -1 || \$ts === false) {
                 throw new PropelException(\"Unable to parse date/time value for [$clo] from input: \" .
                     var_export(\$v, true));
