@@ -2843,8 +2843,9 @@ function PMFAddAttachmentToArray($arrayData, $index, $value, $suffix = " Copy({i
  *
  * It delete the mask a field.
  *
- * @name PMFAddAttachmentToArray
- *
+ * @name PMFRemoveMask
+ * @label PMF Remove Mask
+ * 
  * @param string | $field | Value the field
  * @param string | $separator | Separator of thousands (, or .)
  * @param string | $currency | symbol of currency
@@ -2852,7 +2853,7 @@ function PMFAddAttachmentToArray($arrayData, $index, $value, $suffix = " Copy({i
  *
  */
 
-function PMRemoveMask ($field, $separator = '.', $currency = '')
+function PMFRemoveMask ($field, $separator = '.', $currency = '')
 {
     $sep = array();
     if ( trim($currency) != '') {
