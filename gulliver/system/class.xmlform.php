@@ -3178,17 +3178,12 @@ class XmlForm_Field_Checkbox extends XmlForm_Field
             $checked = (isset( $value ) && ($value == $this->value)) ? 'checked' : '';
             if ($this->labelOnRight) {
                 $html = '';
-                $html = "<input id='form[" . $this->name . "]' value='{$this->value}' " . $this->NSFieldType() . " name='form[" . $this->name . "]' type='checkbox' $checked $readOnly disabled >
+                $html = "<input value='{$this->value}' " . $this->NSFieldType() . " type='checkbox' $checked $readOnly disabled />
                  <span class='FormCheck'>" . $this->label . '</span></input>';
             } else {
-                $html = "<input id='form[" . $this->name . "]' value='{$this->value}' " . $this->NSFieldType() . " name='form[" . $this->name . "]' type='checkbox' $checked $readOnly disabled/>";
+                $html = "<input value='{$this->value}' " . $this->NSFieldType() . " type='checkbox' $checked $readOnly disabled />";
             }
             $html .= "<input id='form[" . $this->name . "]' value='{$value}' name='form[" . $this->name . "]' type='hidden' />";
-            //      if($this->hint){
-            //           $html .= '<a href="#" onmouseout="hideTooltip()" onmouseover="showTooltip(event, \''.$this->hint.'\');return false;">
-            //                  <image src="/images/help4.gif" width="15" height="15" border="0"/>
-            //                </a>';
-            //      }
             return $html;
         }
     }
@@ -3360,11 +3355,6 @@ class XmlForm_Field_Submit extends XmlForm_Field
                 $sLinkNextStep = 'window.location=("casesSaveDataView?UID=' . $_SESSION['CURRENT_DYN_UID'] . '");';
                 $html = '<input style="' . $this->style . '" class="module_app_button___gray ' . $this->className . '" id="form[' . $this->name . ']" ' . $this->NSFieldType() . ' name="form[' . $this->name . ']" type="button" value="' . G::LoadTranslation( 'ID_CONTINUE' ) . '"  onclick="' . htmlentities( $sLinkNextStep, ENT_COMPAT, 'utf-8' ) . '" />';
             }
-
-            $html .= '<input ';
-            $html .= 'id="form[' . $this->name . ']" ';
-            $html .= 'name="form[' . $this->name . ']" ';
-            $html .= 'type="hidden" value="' . $this->htmlentities( $this->label, ENT_QUOTES, 'utf-8' ) . '" />';
             return $html;
         } else {
             return $this->htmlentities( $value, ENT_COMPAT, 'utf-8' );
@@ -3616,7 +3606,7 @@ class XmlForm_Field_Dropdown extends XmlForm_Field
                 $html = $html . "<option value=\"\"></option>";
             }
 
-            if ($value !== $findValue) {
+            if ($value !== $findValue && $this->renderMode == 'view') {
                 $html .= "<option value=\"$value\" selected=\"selected\">$value</option>";
             }
 
