@@ -13,7 +13,7 @@ var lastTypeSelected = '';
 var sessionPersits = function() {
     var rpc = new leimnud.module.rpc.xmlhttp({
         url: '../services/sessionPersists',
-        args: 'dynaformEditorParams=' + dynaformEditorParams + (lastActionPerformed != '' ? '&DYN_UID=' + __DYN_UID__ : ''),
+        args: "dynaformEditorParams=" + encodeURIComponent(dynaformEditorParams) + ((lastActionPerformed != "")? "&DYN_UID=" + __DYN_UID__ : ""),
         async: false
     });
     rpc.make();
@@ -565,7 +565,7 @@ var dynaformEditor={
         //    lineNumbers: true,
         //    lineWrapping: true });
         //}
-        
+
       }
     } else {
       showRowById('JS_TITLE');
@@ -774,7 +774,7 @@ var dynaformEditor={
       }
     }
     this.currentJS=field.value;
-    
+
     var res=this.ajax.get_javascripts(this.A,field.value);
     if(field.value == ''){
       if( typeof(res.aOptions[0]) !== "undefined" && res.aOptions[0].value != '___pm_boot_strap___'){
@@ -831,9 +831,9 @@ var dynaformEditor={
       }
     }
     var field=getField("JS_LIST","dynaforms_JSEditor");
-    
+
     var value=field.value;
-    
+
     if (this.currentJS)
     {
         field.value=this.currentJS;
