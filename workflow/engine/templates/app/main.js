@@ -476,7 +476,7 @@ var openSummaryWindow = function(appUid, delIndex, action)
           title: _('ID_SUMMARY'),
           layout: 'fit',
           width: 750,
-          height: 450,
+          height: 500,
           resizable: true,
           closable: true,
           modal: true,
