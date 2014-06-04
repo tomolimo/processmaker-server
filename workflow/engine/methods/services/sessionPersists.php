@@ -2,7 +2,8 @@
 $response = new stdclass();
 $response->status = isset($_SESSION['USER_LOGGED']);
 if (isset($_REQUEST['dynaformEditorParams'])) {
-    $_SESSION['Current_Dynafom']['Parameters'] = unserialize(stripslashes($_REQUEST['dynaformEditorParams']));
+    $_SESSION['Current_Dynafom']['Parameters'] = unserialize(stripslashes(utf8_decode(rawurldecode($_REQUEST["dynaformEditorParams"]))));
+
     if (isset($_REQUEST['DYN_UID'])) {
         $dynaform = new dynaform();
         $dynaform->load($_REQUEST['DYN_UID']);
@@ -34,7 +35,7 @@ if (isset($_REQUEST['dynaformEditorParams'])) {
 if (isset($_REQUEST['dynaformRestoreValues'])) {
 
     $aRetValues = unserialize(stripslashes(base64_decode($_REQUEST['dynaformRestoreValues'])));
- 
+
     if (isset($aRetValues['APPLICATION'])) {
         $_SESSION['APPLICATION'] = $aRetValues['APPLICATION'];
     }
