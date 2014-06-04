@@ -1383,6 +1383,12 @@ function handleRowClick(sm, rowIndex) {//alert(rowIndex);
         tb.items.get('tb_download').hide();
         //tb.items.get('tb_download').disable();
     } else if (selections.length == 1) {
+        if (selections[0].get('type') == "Directory") {
+            itemSelected = selections[0].get('id');
+            chDir( selections[0].get('id'));
+            itemSelected = "";
+            return true;
+        }
         //tb.items.get('tb_delete')[selections[0].get('is_deletable') ? 'enable': 'disable']();
         tb.items.get('tb_delete')[permitodelete==1 ? 'enable': 'disable']();
         tb.items.get('tb_rename')[selections[0].get('is_deletable') ? 'disable': 'disable']();
