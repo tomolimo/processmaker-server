@@ -180,7 +180,9 @@ function expandNode()
         $folderListObj = $oPMFolder->getFolderList(
             ($_POST["node"] != "root")? (($_POST["node"] == "NA")? "" : $_POST["node"]) : $rootFolder,
             $limit,
-            $start
+            $start,
+            'ASC',
+            'name'
         );
 
         $folderList=$folderListObj['folders'];
