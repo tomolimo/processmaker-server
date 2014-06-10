@@ -3741,7 +3741,7 @@ class XmlForm_Field_Listbox extends XmlForm_Field
             return $html;
         } elseif ($this->mode === 'view') {
             $valuesFound = array('__NULL__');
-            $html = '<select multiple="multiple" size="' . $this->size . '" style="background: none;" disabled="disabled">';
+            $html = '<select id="form[' . $this->name . ']" ' . $this->NSFieldType() . ' multiple="multiple" size="' . $this->size . '" style="background: none;" disabled="disabled">';
             foreach ($this->option as $optionName => $option) {
                 if (in_array( $optionName . "", $value )) {
                     $valuesFound[] = $optionName . "";
