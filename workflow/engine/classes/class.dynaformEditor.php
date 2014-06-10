@@ -131,10 +131,12 @@ class dynaformEditor extends WebResource
     {
         global $G_PUBLISH;
         $script = '';
+
         /* Start Block: Load (Create if doesn't exist) the xmlform */
         $Parameters = array('SYS_LANG' => SYS_LANG, 'URL' => G::encrypt($this->file, URL_KEY), 'DYN_UID' => $this->dyn_uid, 'PRO_UID' => $this->pro_uid, 'DYNAFORM_NAME' => $this->dyn_title, 'FILE' => $this->file, 'DYN_EDITOR' => $this->dyn_editor
         );
         $_SESSION['Current_Dynafom']['Parameters'] = $Parameters;
+
         $XmlEditor = array('URL' => G::encrypt($this->file, URL_KEY), 'XML' => ''  //$openDoc->getXml()
         );
         $JSEditor = array('URL' => G::encrypt($this->file, URL_KEY)
@@ -237,7 +239,11 @@ class dynaformEditor extends WebResource
         leimnud.event.add(window,"load",function(){ loadEditor(); });
         ');
         $oHeadPublisher->addScriptCode(' var jsMeta;var __usernameLogged__ = "' . (isset($_SESSION['USR_USERNAME']) ? $_SESSION['USR_USERNAME'] : '') . '";var SYS_LANG = "' . SYS_LANG . '";var __DYN_UID__ = "' . $this->dyn_uid . '";');
-        $oHeadPublisher->addScriptCode('var dynaformEditorParams = \'' . serialize($Parameters) . '\';');
+
+        $arrayParameterAux = $Parameters;
+        $arrayParameterAux["DYNAFORM_NAME"] = base64_encode($arrayParameterAux["DYNAFORM_NAME"]);
+        $oHeadPublisher->addScriptCode('var dynaformEditorParams = \'' . serialize($arrayParameterAux) . '\';');
+
         G::RenderPage("publish", 'blank');
     }
 
