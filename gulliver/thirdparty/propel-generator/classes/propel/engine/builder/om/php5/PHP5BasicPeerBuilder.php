@@ -850,11 +850,14 @@ if (Propel::isInit()) {
         foreach ($table->getColumns() as $col) {
             $cfc = $col->getPhpName();
             if ($col->isPrimaryKey() && $col->isAutoIncrement() && $table->getIdMethod() != "none") {
+                $comment = ($col->isPrimaryKey() && $col->isAutoIncrement()) ? "//" : "";
+
                 $script .= "
-        \$criteria->remove(".$this->getColumnConstant($col)."); // remove pkey col since this table uses auto-increment
-";
+                " . $comment . "\$criteria->remove(".$this->getColumnConstant($col)."); // remove pkey col since this table uses auto-increment
+                ";
             }
         }
+
         $script .= "
 
         // Set the correct dbName

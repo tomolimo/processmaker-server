@@ -769,6 +769,7 @@ class pmTablesProxy extends HttpProxyController
             $sType = fread( $fp, $fsData );
 
             // first create the tables structures
+
             while (! feof( $fp )) {
                 switch ($sType) {
                     case '@META':
@@ -877,9 +878,8 @@ class pmTablesProxy extends HttpProxyController
             $fp = fopen( $PUBLIC_ROOT_PATH . $filename, "rb" );
             $fsData = intval( fread( $fp, 9 ) );
             $sType = fread( $fp, $fsData );
+
             // data processing
-
-
             while (! feof( $fp )) {
 
                 switch ($sType) {
