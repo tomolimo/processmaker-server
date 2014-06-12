@@ -21,6 +21,8 @@ if (! isset ($_REQUEST ['action'])) {
     die ();
 }
 
+$_REQUEST['action'] = ($_REQUEST['action'] == 'rename') ? 'renameFolder' : $_REQUEST['action'];
+
 if (! function_exists ($_REQUEST['action']) || !G::isUserFunction($_REQUEST['action'])) {
     $res ['success'] = false;
     $res ['message'] = 'The requested action does not exist';
@@ -28,7 +30,7 @@ if (! function_exists ($_REQUEST['action']) || !G::isUserFunction($_REQUEST['act
     die ();
 }
 
-if (($_REQUEST['action']) != 'rename') {
+if (($_REQUEST['action']) != 'renameFolder') {
     $functionName = $_REQUEST ['action'];
     $functionParams = isset ($_REQUEST ['params']) ? $_REQUEST ['params'] : array ();
 
