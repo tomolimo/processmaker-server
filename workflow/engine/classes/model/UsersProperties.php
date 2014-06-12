@@ -125,7 +125,6 @@ class UsersProperties extends BaseUsersProperties
 
     public function validatePassword ($sPassword, $sLastUpdate, $iChangePasswordNextTime, $nowLogin = false)
     {
-        error_log(PPP_MINIMUM_LENGTH);
         if (! defined( 'PPP_MINIMUM_LENGTH' )) {
             define( 'PPP_MINIMUM_LENGTH', 5 );
         }
