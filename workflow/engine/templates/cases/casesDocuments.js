@@ -1246,7 +1246,7 @@ var rowExpander = new Ext.ux.grid.RowExpander({
 //dataIndex maps the column to the specific data field in
 //the data store
 var cm = new Ext.grid.ColumnModel([
-rowExpander, {
+{
   id: "gridcm", //id assigned so we can apply custom css (e.g. -> .x-grid-col-topic b { color:#333 })
   header: _("ID_NAME"),
   dataIndex: "name",
@@ -1383,12 +1383,6 @@ function handleRowClick(sm, rowIndex) {//alert(rowIndex);
         tb.items.get('tb_download').hide();
         //tb.items.get('tb_download').disable();
     } else if (selections.length == 1) {
-        if (selections[0].get('type') == "Directory") {
-            itemSelected = selections[0].get('id');
-            chDir( selections[0].get('id'));
-            itemSelected = "";
-            return true;
-        }
         //tb.items.get('tb_delete')[selections[0].get('is_deletable') ? 'enable': 'disable']();
         tb.items.get('tb_delete')[permitodelete==1 ? 'enable': 'disable']();
         tb.items.get('tb_rename')[selections[0].get('is_deletable') ? 'disable': 'disable']();
@@ -1947,9 +1941,15 @@ var documentsTab = {
           'celldblclick' : {
             fn : function(grid, rowIndex,
               columnIndex, e) {
+                if (ext_itemgrid.getSelectionModel().getSelected().get('type') == "Directory") {
+                    itemSelected = ext_itemgrid.getSelectionModel().getSelected().get('id');
+                    chDir( ext_itemgrid.getSelectionModel().getSelected().get('id'));
+                    itemSelected = "";
+                    return true;
+                }
               if (ext_itemgrid.getSelectionModel().getSelected().get('outDocGenerate') == '') {
-          		openActionDialog(this, 'download', '');
-          	  }
+                openActionDialog(this, 'download', '');
+              }
               if (Ext.isOpera) {
                 // because Opera <= 9
                 // doesn't support the
