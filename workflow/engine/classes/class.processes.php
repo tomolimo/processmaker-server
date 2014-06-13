@@ -1567,6 +1567,9 @@ class Processes
             $oData->inputFiles[$oData->inputs[$key]['INP_DOC_UID']] = $newGuid;
             $oData->inputs[$key]['INP_DOC_UID'] = $newGuid;
         }
+        if (!isset($oData->inputFiles)) {
+        	$oData->inputFiles = array();
+        }
         foreach ($oData->steps as $key => $val) {
             if (isset( $val['STEP_TYPE_OBJ'] )) {
                 if ($val['STEP_TYPE_OBJ'] == 'INPUT_DOCUMENT') {
