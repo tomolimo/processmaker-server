@@ -415,13 +415,23 @@ class RBAC
      */
     public function createUser ($aData = array(), $sRolCode = '')
     {
+        if ($aData["USR_STATUS"] . "" == "1") {
+            $aData["USR_STATUS"] = "ACTIVE";
+        }
+
+        if ($aData["USR_STATUS"] . "" == "0") {
+            $aData["USR_STATUS"] = "INACTIVE";
+        }
+
         if ($aData['USR_STATUS'] == 'ACTIVE') {
             $aData['USR_STATUS'] = 1;
         }
         if ($aData['USR_STATUS'] == 'INACTIVE') {
             $aData['USR_STATUS'] = 0;
         }
+
         $sUserUID = $this->userObj->create( $aData );
+
         if ($sRolCode != '') {
             $this->assignRoleToUser( $sUserUID, $sRolCode );
         }
