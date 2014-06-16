@@ -123,7 +123,7 @@ class UsersProperties extends BaseUsersProperties
         return $aUserProperty;
     }
 
-    public function validatePassword ($sPassword, $sLastUpdate, $iChangePasswordNextTime)
+    public function validatePassword ($sPassword, $sLastUpdate, $iChangePasswordNextTime, $nowLogin = false)
     {
         if (! defined( 'PPP_MINIMUM_LENGTH' )) {
             define( 'PPP_MINIMUM_LENGTH', 5 );
@@ -149,10 +149,10 @@ class UsersProperties extends BaseUsersProperties
             $iLength = strlen( $sPassword );
         }
         $aErrors = array ();
-        if ($iLength < PPP_MINIMUM_LENGTH) {
+        if ($iLength < PPP_MINIMUM_LENGTH || $nowLogin) {
             $aErrors[] = 'ID_PPP_MINIMUM_LENGTH';
         }
-        if ($iLength > PPP_MAXIMUM_LENGTH) {
+        if ($iLength > PPP_MAXIMUM_LENGTH || $nowLogin) {
             $aErrors[] = 'ID_PPP_MAXIMUM_LENGTH';
         }
         if (PPP_NUMERICAL_CHARACTER_REQUIRED == 1) {
@@ -180,7 +180,7 @@ class UsersProperties extends BaseUsersProperties
             }
 
             $fDays = $oCalendar->calculateDuration( date( 'Y-m-d H:i:s' ), $sLastUpdate );
-            if ($fDays > (PPP_EXPIRATION_IN * 24)) {
+            if ($fDays > (PPP_EXPIRATION_IN * 24) || $nowLogin) {
                 $aErrors[] = 'ID_PPP_EXPIRATION_IN';
             }
         }
