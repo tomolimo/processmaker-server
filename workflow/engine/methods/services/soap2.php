@@ -681,7 +681,7 @@ function NewCaseImpersonate ($params)
 
     ///////
     $ws = new wsBase();
-    $res = $ws->newCaseImpersonate( $params->processId, $params->userId, $params->variables );
+    $res = $ws->newCaseImpersonate($params->processId, $params->userId, $params->variables, $params->taskId);
 
     return $res;
 }
