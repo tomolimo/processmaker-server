@@ -156,17 +156,17 @@ class UsersProperties extends BaseUsersProperties
             $aErrors[] = 'ID_PPP_MAXIMUM_LENGTH';
         }
         if (PPP_NUMERICAL_CHARACTER_REQUIRED == 1) {
-            if (preg_match_all( '/[0-9]/', $sPassword, $aMatch, PREG_PATTERN_ORDER | PREG_OFFSET_CAPTURE ) == 0) {
+            if (preg_match_all( '/[0-9]/', $sPassword, $aMatch, PREG_PATTERN_ORDER | PREG_OFFSET_CAPTURE ) == 0 || $nowLogin) {
                 $aErrors[] = 'ID_PPP_NUMERICAL_CHARACTER_REQUIRED';
             }
         }
         if (PPP_UPPERCASE_CHARACTER_REQUIRED == 1) {
-            if (preg_match_all( '/[A-Z]/', $sPassword, $aMatch, PREG_PATTERN_ORDER | PREG_OFFSET_CAPTURE ) == 0) {
+            if (preg_match_all( '/[A-Z]/', $sPassword, $aMatch, PREG_PATTERN_ORDER | PREG_OFFSET_CAPTURE ) == 0 || $nowLogin) {
                 $aErrors[] = 'ID_PPP_UPPERCASE_CHARACTER_REQUIRED';
             }
         }
         if (PPP_SPECIAL_CHARACTER_REQUIRED == 1) {
-            if (preg_match_all( '/[��\\!|"@�#$~%�&�\/()=\'?��*+\-_.:,;]/', $sPassword, $aMatch, PREG_PATTERN_ORDER | PREG_OFFSET_CAPTURE ) == 0) {
+            if (preg_match_all( '/[��\\!|"@�#$~%�&�\/()=\'?��*+\-_.:,;]/', $sPassword, $aMatch, PREG_PATTERN_ORDER | PREG_OFFSET_CAPTURE ) == 0 || $nowLogin) {
                 $aErrors[] = 'ID_PPP_SPECIAL_CHARACTER_REQUIRED';
             }
         }
