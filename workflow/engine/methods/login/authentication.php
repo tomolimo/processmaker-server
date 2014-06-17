@@ -262,9 +262,9 @@ try {
     }
 
     $aUserProperty = $oUserProperty->loadOrCreateIfNotExists($_SESSION['USER_LOGGED'], array('USR_PASSWORD_HISTORY' => serialize(array(md5($pwd)))));
-    $aErrors       = $oUserProperty->validatePassword($_POST['form']['USR_PASSWORD'], $aUserProperty['USR_LAST_UPDATE_DATE'], $aUserProperty['USR_LOGGED_NEXT_TIME']);
+    $aErrors       = $oUserProperty->validatePassword($_POST['form']['USR_PASSWORD'], $aUserProperty['USR_LAST_UPDATE_DATE'], $aUserProperty['USR_LOGGED_NEXT_TIME'], true);
 
-    if (!empty($aErrors)) {
+    if (!empty($aErrors) && in_array("ID_PPP_CHANGE_PASSWORD_AFTER_NEXT_LOGIN", $aErrors)) {
         if (!defined('NO_DISPLAY_USERNAME')) {
             define('NO_DISPLAY_USERNAME', 1);
         }
