@@ -309,6 +309,7 @@ ini_set( 'soap.wsdl_cache_enabled', $config['wsdl_cache'] );
 ini_set( 'date.timezone', $config['time_zone'] );
 
 define( 'DEBUG_SQL_LOG', $config['debug_sql'] );
+define( 'DEBUG_SQL', $config['debug'] );
 define( 'DEBUG_TIME_LOG', $config['debug_time'] );
 define( 'DEBUG_CALENDAR_LOG', $config['debug_calendar'] );
 define( 'MEMCACHED_ENABLED', $config['memcached'] );
