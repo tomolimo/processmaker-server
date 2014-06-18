@@ -90,6 +90,7 @@ try {
                 $_SESSION['PROCESS'] = $aFields['PRO_UID'];
                 $_SESSION['TASK'] = - 1;
                 $_SESSION['STEP_POSITION'] = 0;
+                $_SESSION['CURRENT_TASK'] = $aFields['TAS_UID'];
 
                 require_once (PATH_METHODS . 'cases' . PATH_SEP . 'cases_Resume.php');
                 exit();
