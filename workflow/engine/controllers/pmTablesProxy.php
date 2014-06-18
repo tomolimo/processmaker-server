@@ -421,6 +421,7 @@ class pmTablesProxy extends HttpProxyController
         $start = isset( $httpData->start ) ? $httpData->start : 0;
         $limit = isset( $httpData->limit ) ? $httpData->limit : $limit_size;
         $appUid = isset( $httpData->appUid ) ? $httpData->appUid : false;
+        $appUid = ($appUid == "true") ? true : false;
         $filter = isset( $httpData->textFilter ) ? $httpData->textFilter : '';
         $additionalTables = new AdditionalTables();
         $table = $additionalTables->load( $httpData->id, true );

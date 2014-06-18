@@ -400,7 +400,7 @@ class AdditionalTables extends BaseAdditionalTables
             $closure = '';
             $types = array('INTEGER', 'BIGINT', 'SMALLINT', 'TINYINT', 'DECIMAL', 'DOUBLE', 'FLOAT', 'REAL');
             foreach ($aData['FIELDS'] as $aField) {
-	            if (($appUid == "false" && $aField['FLD_NAME'] != 'APP_UID') || ($appUid == "true")) {
+	            if (($appUid == false && $aField['FLD_NAME'] != 'APP_UID') || ($appUid == true)) {
 	                if (in_array($aField['FLD_TYPE'], $types)) {
 	                    if (is_numeric($filter)) {
 	                        $stringOr = $stringOr . '$a = $oCriteria->getNewCriterion(' . $sClassPeerName . '::' . $aField['FLD_NAME'] . ', "' . $filter . '", Criteria::EQUAL)' . $closure . ';';
