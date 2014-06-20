@@ -326,9 +326,7 @@ Bootstrap::registerClass('UsersPeer',           PATH_HOME . "engine/classes/mode
 
 Bootstrap::registerClass('Xml_Node',            PATH_GULLIVER . "class.xmlDocument.php");
 
-G::LoadClass("case");
 G::LoadClass("dates");
-G::LoadClass("pmScript");
 
 if (!defined('SYS_SYS')) {
     $sObject = $argv[1];
@@ -451,6 +449,13 @@ if (!defined('SYS_SYS')) {
 function processWorkspace()
 {
     try {
+        Bootstrap::LoadClass("plugin");
+        $oPluginRegistry =& PMPluginRegistry::getSingleton();
+        if (file_exists(PATH_DATA_SITE . 'plugin.singleton')) {
+            $oPluginRegistry->unSerializeInstance(file_get_contents(PATH_DATA_SITE . 'plugin.singleton'));
+        }
+        Bootstrap::LoadClass("case");
+
         global $sObject;
         global $sLastExecution;
 
@@ -578,11 +583,7 @@ function executePlugins()
     // Executing registered cron files
 
     // -> Get registered cron files
-    Bootstrap::LoadClass( 'plugin' );
     $oPluginRegistry =& PMPluginRegistry::getSingleton();
-    if (file_exists(PATH_DATA_SITE . 'plugin.singleton')) {
-        $oPluginRegistry->unSerializeInstance(file_get_contents(PATH_DATA_SITE . 'plugin.singleton'));
-    }
     $cronFiles = $oPluginRegistry->getCronFiles();
 
     // -> Execute functions
