@@ -23,6 +23,8 @@
  */
 
 //$oHeadPublisher = & headPublisher::getSingleton();
+global $RBAC;
+$RBAC->requirePermissions( 'PM_FACTORY' );
 
 G::loadClass( 'configuration' );
 $conf = new Configurations();

@@ -16,6 +16,12 @@ class Dashboard extends Controller
     // Class constructor
     public function __construct ()
     {
+        global $RBAC;
+        if ($RBAC->userCanAccess('PM_DASHBOARD') != 1) {
+            G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');
+            G::header( 'location: login/login' );
+            exit(0);
+        }
         G::LoadClass( 'pmDashlet' );
         $this->pmDashlet = new PMDashlet();
     }

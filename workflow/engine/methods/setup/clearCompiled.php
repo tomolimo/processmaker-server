@@ -21,6 +21,8 @@
  * For more information, contact Colosa Inc, 2566 Le Jeune Rd.,
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  */
+global $RBAC;
+$RBAC->requirePermissions( 'PM_SETUP' );
 
 $oHeadPublisher = & headPublisher::getSingleton();
 $oHeadPublisher->addExtJsScript( 'setup/clearCompiled', true ); //adding a javascript file .js
