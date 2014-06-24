@@ -1,4 +1,6 @@
 <?php
+global $RBAC;
+$RBAC->requirePermissions( 'PM_SETUP' );
 //  header('Pragma: no-cache');
 //  header('Cache-Control: no-store, no-cache, must-revalidate');
 
