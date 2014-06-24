@@ -12,7 +12,7 @@ leimnud.Package.Public({
 			this.options = options || {};
 			this.make=function()
 			{
-				this.options.concat(this.coords());
+				this.options.concatMaborak(this.coords());
 				this.direction  = this.getDirection();
 				this.lines	= this.createLines();
 				this.elements	= [];
@@ -254,7 +254,7 @@ leimnud.Package.Public({
 				if(this.changed())
 				{
 					//alert(9)
-					this.options.concat(this.coords());
+					this.options.concatMaborak(this.coords());
 					if(this.kase()%2===0)
 					{
 						this.elements[3].style.visibility="visible";
@@ -277,7 +277,7 @@ leimnud.Package.Public({
 				this.options = {
 						bubble:true,
 						theme :"firefox"
-					}.concat(options || {});
+					}.concatMaborak(options || {});
 				if(!this.validate()){return false;}
 				if(this.options.auto_event){return false;}
 				this.parent.event.add(this.options.targetRemove || this.options.target,"click",this.updateObservers);
@@ -479,7 +479,7 @@ leimnud.Package.Public({
 			this.options = {
 				inProgress:function(){},
 				callback:function(){}
-			}.concat(options || {});
+			}.concatMaborak(options || {});
 			if(!this.parent.dom.element(this.options.form)){return false;}
 			this.make = function(onSub)
 			{
@@ -564,7 +564,7 @@ leimnud.Package.Public({
 					size	: {w:400,h:310},
 					position: {x:0,y:0,center:true},
 					images:[]
-				}.concat(options || {});
+				}.concatMaborak(options || {});
 				this.windowImage();
 				this.image=$dce("img");
 				this.image.id=this.id;
@@ -758,7 +758,7 @@ leimnud.Package.Public({
 					position: {x:0,y:30,centerX:true},
 					skin_images:this.parent.info.base+"images/app.slide/",
 					images:[]
-				}.concat(options || {});
+				}.concatMaborak(options || {});
 				//510 - 310
 				//90 - 65
 				//alert(this.parent.info.base)
@@ -766,7 +766,7 @@ leimnud.Package.Public({
 					show:4,
 					size:{w:90,h:55},
 					images:[]
-				}.concat(options.thumbnail || {});
+				}.concatMaborak(options.thumbnail || {});
 				//alert(this.options.target)
 				this.windowImage();
 				this.toolbarImage();
@@ -1360,7 +1360,7 @@ leimnud.Package.Public({
 				this.panel = new this.parent.module.panel();
 				this.options = {
 					action:function(){}
-				}.concat(options || {});
+				}.concatMaborak(options || {});
 				this.panel.options={
 					statusBarButtons:[
 					{value:label.accept},
@@ -1429,7 +1429,7 @@ leimnud.Package.Public({
 				this.options = {
 					action:function(){},
 					target:document.body
-				}.concat(options || {});
+				}.concatMaborak(options || {});
 				this.panel.options={
 					statusBarButtons:[
 					{value:label.accept}
@@ -1485,7 +1485,7 @@ leimnud.Package.Public({
 				this.options = {
 					action:function(){},
 					target:document.body
-				}.concat(options || {});
+				}.concatMaborak(options || {});
 				this.panel.options={
 					statusBarButtons:[
 					{value:label.accept}
@@ -1542,7 +1542,7 @@ leimnud.Package.Public({
 				this.options = {
 					action	:function(){},
 					value	:""
-				}.concat(options || {});
+				}.concatMaborak(options || {});
 				this.panel.options={
 					statusBarButtons:[
 					{value:label.accept},

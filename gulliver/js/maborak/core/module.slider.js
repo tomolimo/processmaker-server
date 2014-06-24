@@ -17,7 +17,7 @@ leimnud.Package.Public({
 					selected:0,
 					name:"val_"+Math.floor(Math.random(5)*100),
 					onchange:function(){}
-				}.concat(options || {});
+				}.concatMaborak(options || {});
 				if(typeof this.options.points=='string'){
 					this.options.points=this.parse_string_points(this.options.points);
 				}
@@ -153,7 +153,7 @@ leimnud.Package.Public({
 					target:$(document.body),
 					name:"val_"+Math.floor(Math.random(5)*100),
 					result:function(){}
-				}.concat(options || {});
+				}.concatMaborak(options || {});
 				this.options.target.append(
 					this.input_hidden=new DOM('input',{type:'hidden',name:this.options.name})
 				);

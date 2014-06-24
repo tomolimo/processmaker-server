@@ -15,7 +15,7 @@ leimnud.Package.Public({
 					className:"module_app_button___gray",
 					type	:"button",
 					value	:label || "Button"
-				}.concat(prop || {}),style || {}));
+				}.concatMaborak(prop || {}),style || {}));
 /*				this.button = $dce("input");
 				this.button.className="module_app_button___gray";
 				this.button.type="button";
@@ -66,7 +66,7 @@ leimnud.Package.Public({
 					type	:"text",
 					value	:options.label || "",
 					maxLength :options.maxlength || "30"
-				}.concat(options.properties || {}),(options.style || {})));
+				}.concatMaborak(options.properties || {}),(options.style || {})));
 
 				this.input.disable=function()
 				{
@@ -124,7 +124,7 @@ leimnud.Package.Public({
                 selected:0,
                 properties:{},
                 style:{}
-            }.concat(options || {});
+            }.concatMaborak(options || {});
 			this.make=function()
 			{
                 this.select = new this.parent.module.dom.create("select",this.options.properties,this.options.style);
@@ -150,7 +150,7 @@ leimnud.Package.Public({
                         text    :null,
                         selected:false,
                         key     :false
-                    }.concat(data || {});
+                    }.concatMaborak(data || {});
                     var o = new Option(data.text,data.value,data.selected);
                     if(data.key===false)
                     {

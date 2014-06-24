@@ -20,7 +20,7 @@ leimnud.Package.Public({
 					begin		: 0,
 					end			: 100,
 					timeBegin	: new Date().getTime()
-				}.concat(options || {});
+				}.concatMaborak(options || {});
 				this.timer	= setInterval(function(){
 					var time = new Date().getTime();
 					if (time < this.options.timeBegin + this.options.duration)
@@ -248,7 +248,7 @@ leimnud.Package.Public({
 					transition:"sineInOut",
 					end	: 0,
 					onFinish:function(){}
-				}.concat(options);
+				}.concatMaborak(options);
 				this.dom = ((this.options.dom || []).isArray)?this.options.dom:[this.options.dom];
 				for(var i=0;i<this.dom.length;i++)
 				{
@@ -280,7 +280,7 @@ leimnud.Package.Public({
 					transition:"sineInOut",
 					end	: 0,
 					onFinish:function(){}
-				}.concat(options);
+				}.concatMaborak(options);
 				this.dom = this.options.dom;
 				new this.parent.module.fx.algorithm().make({
 					duration 	: this.options.duration,

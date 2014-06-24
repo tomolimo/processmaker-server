@@ -37,7 +37,7 @@ leimnud.Package.Public({
 						id:1,
 						uid:1
 					}
-				}.concat(options || {});
+				}.concatMaborak(options || {});
 				this.callback = callback || function(){};
 				var rpc = new this.parent.module.rpc['json']({
 					url		: this.provider,
@@ -63,7 +63,7 @@ leimnud.Package.Public({
 				this.make=function(options)
 				{
 					this.options = {
-					}.concat(options || {});
+					}.concatMaborak(options || {});
 					this.service.Execute({service:'rate',action:'get',data:this.capsule()},function(r){
 						var d = r.parseJSON();
 						this.rate=d['RATE'];
@@ -149,7 +149,7 @@ leimnud.Package.Public({
 				{
 					this.options = {
 						limit:10
-					}.concat(options || {});					
+					}.concatMaborak(options || {});					
 					var t = this.target();
 					t.append(
 						this.dom.a = new DOM('div').append(

@@ -161,7 +161,7 @@ leimnud.Package.Public({
 				url	:false,
 				method	:"GET",
 				args	:""
-			}.concat(options || {});
+			}.concatMaborak(options || {});
 			this.begin=new Date().getTime();
 			this.tmp = "rpcJson_"+this.begin;
 			this.server= this.parent.info.base+"server/proxy.js.php";

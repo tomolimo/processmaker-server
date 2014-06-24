@@ -341,7 +341,7 @@ var processmap=function(){
       base:function(xml)
       {
         this.panels.editor.loader.hide();
-        this.data.db=xml.xmlhttp.responseText.parseJSON().concat({
+        this.data.db=xml.xmlhttp.responseText.parseJSON().concatMaborak({
           //derivations :["Sequential","Evaluate (manual)","Evaluate (auto)","Parallel (fork)","Parallel by evaluation (fork)","Parallel (join)"],
         });
         this.data.db.subprocess=[];
@@ -1192,10 +1192,10 @@ var processmap=function(){
         //console.log(index);
         options_task = {
             tp:'task'
-        }.concat(options_task || {});
+        }.concatMaborak(options_task || {});
         /*var options   = {
           color:((options_task.tp==='task')?"auto":"green")
-        }.concat(this.data.db[(options_task.tp=='task')?'task':'subprocess'][index] || {});*/
+        }.concatMaborak(this.data.db[(options_task.tp=='task')?'task':'subprocess'][index] || {});*/
         //var options = this.data.db[(options_task.tp=='task')?'task':'subprocess'][index];
         var options = this.data.db['task'][index];
 
@@ -2225,7 +2225,7 @@ var processmap=function(){
     var vars  = {
       tas_uid:task.uid,
       pro_uid:this.options.uid
-    }.concat((din)?{
+    }.concatMaborak((din)?{
       type   : din.type,
       next_task: this.data.db.task[din.to].uid
     }:{});
@@ -2385,7 +2385,7 @@ processmap.prototype={
       mi  :true,
       ct  :false,
       hideMenu:true
-    }.concat(this.options || {});
+    }.concatMaborak(this.options || {});
     this.options.target = this.parent.dom.element(this.options.target);
     if(!this.validate()){return false;}
     this.observers = {

@@ -31,7 +31,7 @@ leimnud.Package.Public({
 				cursorToDrag	:"default",
 				elementToDrag	:"title",
 				strict_position:true
-			}.concat(this.options || {});
+			}.concatMaborak(this.options || {});
 			this.options.fx		= {
 				blinkToFront:true,
 				shadow	:true,
@@ -40,21 +40,21 @@ leimnud.Package.Public({
 				fadeIn	:false,
 				fadeOut	:false,
 				drag	:true
-			}.concat(this.options.fx || {});
+			}.concatMaborak(this.options.fx || {});
 			//this.options.fx		= this.options.fx || {};
 			this.options.control	= {
 				resize:false,
 				close:true,
 				drag:true
-			}.concat(this.options.control || {});
+			}.concatMaborak(this.options.control || {});
 			this.options.statusBar = (this.options.statusBarButtons || this.options.control.resize)?true:this.options.statusBar;
 
 			this.options.size	= {
 				w:200,h:200
-			}.concat(this.options.size || {});
+			}.concatMaborak(this.options.size || {});
 			this.options.position= {
 				x:20,y:20
-			}.concat(this.options.position || {});
+			}.concatMaborak(this.options.position || {});
 
 
 			/**
@@ -428,7 +428,7 @@ leimnud.Package.Public({
 				fx:true,
 				x:this.options.position.x,
 				y:this.options.position.y
-			}.concat(opt);
+			}.concatMaborak(opt);
 			//if(typeof opt.x!=="undefined" && typeof opt.y!=="undefined")
 			//{
 				this.options.position.x = opt.x;
@@ -710,7 +710,7 @@ leimnud.Package.Public({
 			var tc = (typeof this.tab.options[this.tabSelected].content);
 			if(!dynamic)
 			{
-				/*this.parent.dom.setStyle(tb,this.styles.tabCSS.sel.concat({
+				/*this.parent.dom.setStyle(tb,this.styles.tabCSS.sel.concatMaborak({
 				width		:parseInt(this.parent.dom.getStyle(tb,"width"),10)-((!this.parent.browser.isIE)?3:0),
 				borderLeftWidth	:4
 				}));*/
@@ -754,7 +754,7 @@ leimnud.Package.Public({
 					return false;
 				}.extend(this,this.tabLastSelected);
 
-				/*this.parent.dom.setStyle(tls,this.styles.tabCSS.def.concat({
+				/*this.parent.dom.setStyle(tls,this.styles.tabCSS.def.concatMaborak({
 				width		:parseInt(this.parent.dom.getStyle(tb,"width"),10)+((!this.parent.browser.isIE)?3:0),
 				borderLeftWidth	:1
 				}));*/
@@ -1046,7 +1046,7 @@ leimnud.Package.Public({
 		{
 			options = {
 				proxy:false
-			}.concat(options || {});
+			}.concatMaborak(options || {});
 			this.clearContent();
 			if(options.proxy===false)
 			{
@@ -1467,7 +1467,7 @@ leimnud.Package.Public({
 					optHeight:20,
 					widthFixed:true,
 					optWidth:this.tab.width-4
-				}.concat(this.tab);
+				}.concatMaborak(this.tab);
 				var thm = this.tab.display==="vertical"?"":"H";
 				var heightContent = this.options.size.h-(this.elements.titleBar.offsetHeight+this.elements.statusBar.offsetHeight);
 				//alert(this.elements.headerBar.offsetHeight+":"+this.elements.headerBar.clientHeight)

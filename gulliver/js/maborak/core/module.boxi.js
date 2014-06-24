@@ -22,7 +22,7 @@ leimnud.Package.Public({
 				h:400,
 				bg:"#000",
 				opacity:80
-			}.concat(options || {});
+			}.concatMaborak(options || {});
 			var links = this.options.target.getElementsByTagName("a");
 			for(var i=0;i<links.length;i++)
 			{
@@ -32,7 +32,7 @@ leimnud.Package.Public({
 					links[i].onclick=this.href.args({
 						l:links[i],
 						c:onC,
-						o:{}.concat(this.options).concat(this.load_options(links[i]))
+						o:{}.concatMaborak(this.options).concatMaborak(this.load_options(links[i]))
 					});
 				}
 			}

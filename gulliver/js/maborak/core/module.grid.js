@@ -12,11 +12,11 @@ leimnud.Package.Public({
 		{
 			this.options = {
 				theme:"gray"
-			}.concat(options || {});
+			}.concatMaborak(options || {});
 			this.options.paginator={
 				limit:this.options.data.rows.length,
 				page	:1
-			}.concat(this.options.paginator || {});
+			}.concatMaborak(this.options.paginator || {});
 			/* Search Begin */
 			if(this.options.search===true)
 			{
@@ -90,7 +90,7 @@ leimnud.Package.Public({
 				cell.className="app_grid_title___"+this.options.theme;
 				this.parent.dom.setStyle(cell,{
 					width	:dataColumn[i].width || width
-				}.concat(dataColumn[i].style || {}));
+				}.concatMaborak(dataColumn[i].style || {}));
 				dataRow.searchable = (dataRow.searchable===false)?false:true;
 				if(dataRow.type==="counter" || dataRow.type==="drag")
 				{
@@ -140,7 +140,7 @@ leimnud.Package.Public({
 				var domCell = [];
 				this.options.data.rows[this.dataToRender[i]].info={
 					rowIndex:i+1
-				}.concat(this.options.data.rows[this.dataToRender[i]].info || {});
+				}.concatMaborak(this.options.data.rows[this.dataToRender[i]].info || {});
 				dataCell = this.options.data.rows[this.dataToRender[i]].data;
 				for(var j=0;j<rows;j++)
 				{
@@ -155,7 +155,7 @@ leimnud.Package.Public({
 					}
 					this.parent.dom.setStyle(cell,{
 						width	: dataColumn[j].width || width
-					}.concat(dataColumn[j].styleValues || dataRow.style || {}));
+					}.concatMaborak(dataColumn[j].styleValues || dataRow.style || {}));
 					if(dataColumn[j].type==="counter" || dataColumn[j].type==="drag")
 					{
 						var value = dataRow.value || i+1;
@@ -430,7 +430,7 @@ leimnud.Package.Public({
 		{
 			data = {
 				column:1
-			}.concat(data || {});
+			}.concatMaborak(data || {});
 			var d	 = this.dataToRender;
 			var r	 = this.options.data.rows;
 			var c	 = this.options.data.column[data.column];

@@ -24,8 +24,8 @@ leimnud.Package.Public({
 				rpc       :"xmlhttp",
 				proxy	  :"server/maborak.module.rss.php",
 				fileJson  :"data/maborak.module.rss.feeds.json"
-			}.concat(this.options);
-			this.options = this.options.concat({
+			}.concatMaborak(this.options);
+			this.options = this.options.concatMaborak({
 				fromObject:false,
 				theme	  :"gray",
 				multiple  :true,
@@ -38,7 +38,7 @@ leimnud.Package.Public({
 				inline	  :false,
 				title	  :"Rss Reader",
 				feed	  :[]
-			}).concat(options || {}).concat({
+			}).concatMaborak(options || {}).concatMaborak({
 				multiple  :((this.options.openFeed)?false:true)
 			});
 			this.options.target=this.setTarget();

@@ -13,7 +13,7 @@ leimnud.Package.Public({
 			this.options = {
 				file:'myInfo.xml',
 				debug:false
-			}.concat(options || {});
+			}.concatMaborak(options || {});
 			this.db=[];
 			this.debug = new this.parent.module.debug(this.options.debug || false);
 			/*Samples load XML*/

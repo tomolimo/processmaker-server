@@ -28,7 +28,7 @@ leimnud.Package.Public({
 	content	:function(options){
 		this.options	= {
 			limitbox:false
-		}.concat(options || {});
+		}.concatMaborak(options || {});
 		this.loaded		= false;
 		this.eventHandlers=[];
 		this.cursor 	= "move";
@@ -41,7 +41,7 @@ leimnud.Package.Public({
 			this.options.fx = {
 				type:"simple",
 				target:document.body
-			}.concat(this.options.fx || {});
+			}.concatMaborak(this.options.fx || {});
 			this.events =this.events || {};
 			//alert(this.options.elements.length);
 			var elements=(this.options.elements || []).length;

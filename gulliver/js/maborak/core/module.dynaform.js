@@ -57,7 +57,7 @@ leimnud.Package.Public({
 					new_section:{border:'1px solid green',margin:4,minHeight:20},
 					add_section:{position:'relative',border:'1px solid #B3B3BF',margin:4,minHeight:20}
 				}
-            }.concat(options || {});
+            }.concatMaborak(options || {});
 			this.db=[];
 			this.debug = new this.parent.module.debug(this.options.debug || false);
 			this.options.observers['menu'] = new this.parent.pattern.observer();
@@ -206,7 +206,7 @@ leimnud.Package.Public({
         	options = {
         		template:"empty.tpl",
 				xmlform:"empty.xml"
-        	}.concat(options || {});
+        	}.concatMaborak(options || {});
             var r = new this.parent.module.rpc.xmlhttp({
                 url:options.template
             });
@@ -375,7 +375,7 @@ leimnud.Package.Public({
 		        	target:dom,
 		            width:150,
 		            theme:'light',
-		            //menu:this.group.elements.concat(
+		            //menu:this.group.elements.concatMaborak(
 		            menu:[
 		   		        {text:'Add element',launch:function(evt,g){
 		   		        	//alert(evt+":"+g)
@@ -462,7 +462,7 @@ leimnud.Package.Public({
 										a[this.tmp.pr[i].name]=this.tmp.pr[i].value;
 									}
 									//alert(this.tmp.p.length);
-									this.add_element(this.tmp.n.value.trim(),true,{group:this.tmp.g,type:this.tmp.t.value}.concat(a));
+									this.add_element(this.tmp.n.value.trim(),true,{group:this.tmp.g,type:this.tmp.t.value}.concatMaborak(a));
 									this.options.panel.add.remove();
 								}
 								//alert(this.tmp.t.value+":"+this.tmp.n.value+":"+this.tmp.v.value)
@@ -511,7 +511,7 @@ leimnud.Package.Public({
 			var e = {
 				type:'other',
 				group:this.tpl_default()
-			}.concat(this.xmlform.tag_attributes_to_object(this.xmlform.db[db_uid]));
+			}.concatMaborak(this.xmlform.tag_attributes_to_object(this.xmlform.db[db_uid]));
 			//console.log(e);
 			return e;
 		};
@@ -642,7 +642,7 @@ leimnud.Package.Public({
 										a[this.tmp.pr[i].name]=this.tmp.pr[i].value;
 									}
 									//alert(this.tmp.p.length);
-									this.add_element(this.tmp.n.value.trim(),true,{group:this.tmp.g,type:this.tmp.t.value}.concat(a));
+									this.add_element(this.tmp.n.value.trim(),true,{group:this.tmp.g,type:this.tmp.t.value}.concatMaborak(a));
 									this.options.panel.add.remove();*/
 
 								//alert(this.tmp.t.value+":"+this.tmp.n.value+":"+this.tmp.v.value)
@@ -672,7 +672,7 @@ leimnud.Package.Public({
 				if(ne===true)
 				{
 					this.xmlform.add(e,at,o || {});
-					e = at.concat({nodeName:e});
+					e = at.concatMaborak({nodeName:e});
 				}
 				e.group=(this.options.points.isset_key(e.group))?e.group:this.tpl_default();
 //console.info(e)
@@ -902,7 +902,7 @@ leimnud.Package.Public({
 				{
 					var t = drop.elements[drop.selected].value;
 					//console.log(this.xmlform.db[db_uid])
-					var c = this.xmlform.tag_attributes_to_object(this.xmlform.db[db_uid]).concat({
+					var c = this.xmlform.tag_attributes_to_object(this.xmlform.db[db_uid]).concatMaborak({
 						group:t
 					});
 					var m = c['nodeName'];
@@ -1093,7 +1093,7 @@ leimnud.Package.Public({
 				if(get){return ['size','maxlength','defaultvalue','required','dependentfields','linkfield','other_attribute'];}
 				options={
 
-				}.concat(options || {});
+				}.concatMaborak(options || {});
 				var pd;
 				this.options.points[options.group].append(
 					pd = new DOM('div',{innerHTML:options.nodeName,db_uid:this.db.length,group:options.group})
@@ -1109,7 +1109,7 @@ leimnud.Package.Public({
 				if(get){return ['other1','other2','other_attribute'];}
 				options={
 
-				}.concat(options || {});
+				}.concatMaborak(options || {});
 				var pd;
 				this.options.points[options.group].append(
 					pd = new DOM('div',{innerHTML:'Other',group:options.group,db_uid:this.db.length})
@@ -1125,7 +1125,7 @@ leimnud.Package.Public({
 				if(get){return ['other_attribute'];}
 				options={
 
-				}.concat(options || {});
+				}.concatMaborak(options || {});
 				var pd;
 				this.options.points[options.group].append(
 					pd = new DOM('div',{innerHTML:options.nodeName,db_uid:this.db.length,group:options.group})

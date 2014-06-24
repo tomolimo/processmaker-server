@@ -45,7 +45,7 @@ var maborak = function(forceCssLoad){
 		}.expand(this);
 		this.options={
             thisIsNotPM:false
-        }.concat(options || {});
+        }.concatMaborak(options || {});
 		this.report	= new this.bitacora();
 		this.loadMethods([this.checkBrowser],this);
 		this.event	= this.factory(this.mantis,true);
@@ -474,11 +474,11 @@ var maborak = function(forceCssLoad){
 			return j;
 		};*/
 		/**
-		* Concat Object
+		* ConcatMaborak Object
 		* @param {Object} obj Object
 		* @return {Object} this
 		*/
-		Object.prototype.concat = function(obj)
+		Object.prototype.concatMaborak = function(obj)
 		{
 			for (var i in obj)
 			{
@@ -1129,7 +1129,7 @@ var maborak = function(forceCssLoad){
 		{
 			this.options	=	{
 				zip:false
-			}.concat(options || {});
+			}.concatMaborak(options || {});
 			if(arguments.length<2 || !this.check()){return false;}
 			this.toLoad = ((this.options.Absolute===true)?this.options.Path:file).split(",");
 			if(this.type === 'module' && (this.options.zip===true || this.parent.options.zip===true))
@@ -1966,7 +1966,7 @@ var maborak = function(forceCssLoad){
 					if(!val){return val;}
 					if(typeof val==="object")
 					{
-						this.serialized.concat(val);
+						this.serialized.concatMaborak(val);
 					}
 					else
 					{

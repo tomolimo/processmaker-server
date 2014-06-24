@@ -33,7 +33,7 @@ leimnud.Package.Public({
 				drag:true,
 				panel:[],
 				data:[]
-			}.concat(options || {});
+			}.concatMaborak(options || {});
 			this.drop = new this.parent.module.drop();
 			this.drop.make();
 
@@ -76,7 +76,7 @@ leimnud.Package.Public({
 						target:this.elements.column[i],
 						column:i,
 						index:j
-					}.concat(wd));
+					}.concatMaborak(wd));
 					this.matriz[i].push(j);
 				}
 			}
@@ -86,7 +86,7 @@ leimnud.Package.Public({
 			options = {
 				style:{},
 				titleBar:true
-			}.concat(options || {});
+			}.concatMaborak(options || {});
 			var _panel = new this.parent.module.panel();
 			_panel.options={
 				target:options.target,
@@ -103,44 +103,44 @@ leimnud.Package.Public({
 				fx:{shadow:false,opacity:false}
 			};
 			_panel.setStyle={
-				containerWindow:(options.style.containerWindow || {}).concat({
+				containerWindow:(options.style.containerWindow || {}).concatMaborak({
 					position:'relative',
 					border:"1px solid #afafaf",
 					margin:3
 				}),
-				content:(options.style.content || {}).concat({
+				content:(options.style.content || {}).concatMaborak({
 					overflow:"hidden",
 					margin:0,
 					borderLeftWidth:0,
 					borderRightWidth:0,
 					borderBottomWidth:0
 				}),
-				titleBar:(options.style.titleBar || {}).concat({
+				titleBar:(options.style.titleBar || {}).concatMaborak({
 					backgroundImage:"url("+this.parent.info.images+"grid.title.gray.gif)",
 					height:16,
 					backgroundPosition:"0pt -5px"
 				}),
-				title:(options.style.title || {}).concat({
+				title:(options.style.title || {}).concatMaborak({
 					padding:1,
 					fontWeight:"normal"
 				}),
-				roll:(options.style.roll || {}).concat({
+				roll:(options.style.roll || {}).concatMaborak({
 					top:1
 				}),
-				close:(options.style.close || {}).concat({
+				close:(options.style.close || {}).concatMaborak({
 					top:1
 				}),
-				setup:(options.style.setup || {}).concat({
+				setup:(options.style.setup || {}).concatMaborak({
 					top:1
 				})
 			};
 			if(options.noBg)
 			{
-				_panel.setStyle.content.concat({
+				_panel.setStyle.content.concatMaborak({
 					backgroundColor	: "#DFDFDF",
 					borderWidth	: 0
 				});
-				_panel.setStyle.containerWindow.concat({
+				_panel.setStyle.containerWindow.concatMaborak({
 					backgroundColor	: "#DFDFDF"
 				});
 				_panel.setStyle.frontend={
