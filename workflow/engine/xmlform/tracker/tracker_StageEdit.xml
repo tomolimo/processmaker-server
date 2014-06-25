@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?> 
+<?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="tracker_StageEdit" width="100%" labelWidth="20%">
 
 <TITLE1 type="title" group="1">
@@ -23,9 +23,13 @@
 
 <JS type="javascript" replacetags="1"><![CDATA[
 var updateStage = function(oForm) {
-	ajax_post(oForm.action, oForm, 'POST');
-	Sm.data.db.stages[getField('THEINDEX').value].label = Sm.data.db.stages[getField('THEINDEX').value].object.elements.label.innerHTML = getField('STG_TITLE').value;
-  Sm.tmp.stagePanel.remove();
+    if (document.getElementById("form[STG_TITLE]").value.trim() != "") {
+        ajax_post(oForm.action, oForm, 'POST');
+        Sm.data.db.stages[getField('THEINDEX').value].label = Sm.data.db.stages[getField('THEINDEX').value].object.elements.label.innerHTML = getField('STG_TITLE').value;
+        Sm.tmp.stagePanel.remove();
+    } else {
+        msgBox("@G::LoadTranslation(ID_NAME_STG_TITLE_REQUIRE)", "alert");
+    }
 };
 ]]></JS>
 
