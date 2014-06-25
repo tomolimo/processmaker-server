@@ -141,11 +141,11 @@ $aField ['LOGIN_VERIFY_MSG'] = G::loadTranslation ('LOGIN_VERIFY_MSG');
 $aField['USER_LANG'] = SYS_LANG;
 
 $G_PUBLISH = new Publisher ();
-if (!defined('ws_in_login')) {
-    define('ws_in_login', 'serverconf');
+if (!defined('WS_IN_LOGIN')) {
+    define('WS_IN_LOGIN', 'serverconf');
 }
 $fileLogin = 'login/sysLogin';
-switch (ws_in_login) {
+switch (WS_IN_LOGIN) {
     case 'serverconf':
         //Get Server Configuration
         $oServerConf = & serverConf::getSingleton ();
