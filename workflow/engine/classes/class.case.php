@@ -512,16 +512,11 @@ class Cases
         try {
             $oApp = new Application;
             $aFields = $oApp->Load($sAppUid);
-            //$aFields = $oApp->toArray(BasePeer::TYPE_FIELDNAME);
-            $appData = @unserialize($aFields['APP_DATA']);
 
-            // BUG 8134, FIX!// for single/double quote troubles // Unserialize with utf8 content get trouble
-            if ($appData === false) {
-                $appData = preg_replace('!s:(\d+):"(.*?)";!e', "'s:'.strlen('$2').':\"$2\";'", $aFields['APP_DATA']);
-                $appData = @unserialize($appData);
-            }
+            $appData = self::unserializeData($aFields['APP_DATA']);
 
             $aFields['APP_DATA'] = G::array_merges(G::getSystemConstants(), $appData);
+
             switch ($oApp->getAppStatus()) {
                 case 'COMPLETED':
                     $aFields['STATUS'] = G::LoadTranslation('ID_COMPLETED');
@@ -6456,7 +6451,7 @@ class Cases
                 $row[] = $aUser['USR_UID'];
             }
         }
-        
+
         global $RBAC;
         //Adding the actual user if this has the PM_REASSIGNCASE permission assigned.
         if ($RBAC->userCanAccess('PM_REASSIGNCASE') == 1){
@@ -6727,5 +6722,17 @@ class Cases
                return 0;
             }
         }
+    }
+
+    public function unserializeData($data) {
+        $unserializedData = @unserialize($data);
+
+        // BUG 8134, FIX!// for single/double quote troubles // Unserialize with utf8 content get trouble
+        if ($unserializedData === false) {
+            $unserializedData = preg_replace('!s:(\d+):"(.*?)";!e', "'s:'.strlen('$2').':\"$2\";'", $data);
+            $unserializedData = @unserialize($unserializedData);
+        }
+
+        return $unserializedData;
     }
 }

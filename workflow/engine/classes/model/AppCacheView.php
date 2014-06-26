@@ -361,6 +361,8 @@ class AppCacheView extends BaseAppCacheView
                 $c2 = new Criteria();
                 $c2->clearSelectColumns();
                 $c2->addSelectColumn(AppDelegationPeer::APP_UID);
+                $c2->addSelectColumn(ApplicationPeer::APP_DATA);
+                $c2->addJoin(AppDelegationPeer::APP_UID, ApplicationPeer::APP_UID, Criteria::LEFT_JOIN);
                 $c2->add(AppDelegationPeer::TAS_UID, $row['TAS_UID']);
                 $c2->add(AppDelegationPeer::USR_UID, '');
                 $c2->add(AppDelegationPeer::DEL_THREAD_STATUS, 'OPEN');
@@ -368,10 +370,11 @@ class AppCacheView extends BaseAppCacheView
                 $rs2->setFetchmode(ResultSet::FETCHMODE_ASSOC);
                 $rs2->next();
                 while ($row2 = $rs2->getRow()) {
-                    $caseData = $caseInstance->LoadCase($row2['APP_UID']);
-                    if (isset($caseData['APP_DATA'][$tasGroupVariable])) {
-                        if (trim($caseData['APP_DATA'][$tasGroupVariable]) != '') {
-                            if (in_array(trim($caseData['APP_DATA'][$tasGroupVariable]), $aGroups)) {
+                    $caseData = $caseInstance->unserializeData($row2['APP_DATA']);
+
+                    if (isset($caseData[$tasGroupVariable])) {
+                        if (trim($caseData[$tasGroupVariable]) != '') {
+                            if (in_array(trim($caseData[$tasGroupVariable]), $aGroups)) {
                                 $cases[] = $row2['APP_UID'];
                             }
                         }
