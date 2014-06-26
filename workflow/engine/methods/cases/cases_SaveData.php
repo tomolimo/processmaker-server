@@ -76,7 +76,7 @@ try {
         $oProcess = new Process();
         $oProcessFieds = $oProcess->Load( $_SESSION['PROCESS'] );
 
-        #trigger debug routines...
+        //trigger debug routines...
         if (isset( $oProcessFieds['PRO_DEBUG'] ) && $oProcessFieds['PRO_DEBUG']) {
             $trigger_debug_session = true;
         }
