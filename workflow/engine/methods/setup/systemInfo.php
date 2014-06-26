@@ -1,4 +1,7 @@
 <?php
+global $RBAC;
+$RBAC->requirePermissions( 'PM_SETUP' );
+
 $option = (isset($_GET["option"]))? $_GET["option"] : null;
 
 switch ($option) {

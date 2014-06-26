@@ -15,6 +15,8 @@ class Admin extends Controller
 
     public function system ()
     {
+        global $RBAC;
+        $RBAC->requirePermissions( 'PM_SETUP' );
         require_once PATH_CONTROLLERS . 'main.php';
         G::loadClass( 'system' );
         $skinsList = System::getSkingList();
@@ -60,6 +62,8 @@ class Admin extends Controller
 
     public function uxList ()
     {
+        global $RBAC;
+        $RBAC->requirePermissions( 'PM_SETUP' );
         require_once PATH_CONTROLLERS . 'adminProxy.php';
         $this->includeExtJS( 'admin/uxUsersList' );
         G::LoadClass( 'configuration' );

@@ -22,9 +22,11 @@
  * For more information, contact Colosa Inc, 2566 Le Jeune Rd.,
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  */
+global $RBAC;
 if (($RBAC_Response = $RBAC->userCanAccess( "PM_LOGIN" )) != 1) {
     return $RBAC_Response;
 }
+$RBAC->requirePermissions( 'PM_SETUP' );
 
 $G_PUBLISH = new Publisher();
 G::LoadClass( 'configuration' );

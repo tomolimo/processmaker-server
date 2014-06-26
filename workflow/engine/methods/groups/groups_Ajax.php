@@ -354,7 +354,7 @@ switch ($_POST['action']) {
         $rsCriteria = TaskUserPeer::doSelectRS($criteria);
         $rsCriteria->setFetchmode(ResultSet::FETCHMODE_ASSOC);
 
-        if($rsCriteria->next() != 0) {
+        if ($rsCriteria->next()) {
             $message = "ERROR";
         }
 
