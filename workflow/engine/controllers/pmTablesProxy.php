@@ -549,7 +549,7 @@ class pmTablesProxy extends HttpProxyController
 
         require_once $sPath . $this->className . '.php';
 
-        $rows = G::json_decode( stripslashes( $httpData->rows ) );
+        $rows = G::json_decode( $httpData->rows );
 
         if (is_array( $rows )) {
             foreach ($rows as $row) {
