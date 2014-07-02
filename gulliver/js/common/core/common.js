@@ -497,6 +497,7 @@ function popupWindow ( title , url, width, height, callbackFn , autoSizeWidth, a
 	var myPanel = new leimnud.module.panel();
 	currentPopupWindow = myPanel;
 	myPanel.options = {
+		id: 'panelFieldProperties',
 	    limit: true,
 		size:{w:width,h:height},
 		position:{center:true},
