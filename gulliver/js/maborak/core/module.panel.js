@@ -75,6 +75,9 @@ leimnud.Package.Public({
 			*
 			*/
 			this.elements.containerWindow = $dce("div");
+            if (typeof this.options.id != 'undefined') {
+                this.elements.containerWindow.id=this.options.id;
+            }
 			this.elements.containerWindow.className="panel_containerWindow___"+this.getTheme("containerWindow");
 			this.styles.containerWindow();
 			if(this.options.fx.fadeIn===true)
