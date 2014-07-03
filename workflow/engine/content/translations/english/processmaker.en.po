@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: ProcessMaker 2.5.1.1\n"
+"Project-Id-Version: ProcessMaker 2.5.2.3\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2013-11-28 15:47:45\n"
+"PO-Revision-Date: 2014-07-03 12:29:08\n"
 "Last-Translator: \n"
 "Language-Team: Colosa Developers Team <developers@colosa.com>\n"
 "MIME-Version: 1.0\n"
@@ -1342,8 +1342,8 @@ msgstr "None"
 # TRANSLATION
 # LABEL/ID_CASE_NOT_YET_STARTED
 #: LABEL/ID_CASE_NOT_YET_STARTED
-msgid "Case not yet started"
-msgstr "Case not yet started"
+msgid "Case not started yet"
+msgstr "Case not started yet"
 
 # TRANSLATION
 # JAVASCRIPT/ID_CONFIRM_CANCEL_CASE
@@ -15016,8 +15016,8 @@ msgstr "Upload from file"
 # TRANSLATION
 # LABEL/ID_FIELD_REQUIRED
 #: LABEL/ID_FIELD_REQUIRED
-msgid "This field is required"
-msgstr "This field is required"
+msgid "The field {0} is required."
+msgstr "The field {0} is required."
 
 # TRANSLATION
 # LABEL/ID_ERROR_REGISTERED
@@ -15156,6 +15156,1188 @@ msgstr "send at"
 #: LABEL/ID_SAVE_DYNAFORM_INFORMATION_BEFORE_PRINTING
 msgid "Do you want to save the dynaform information before printing it?"
 msgstr "Do you want to save the dynaform information before printing it?"
+
+# TRANSLATION
+# LABEL/ID_ROLE_INACTIVE
+#: LABEL/ID_ROLE_INACTIVE
+msgid "The user's role is inactive"
+msgstr "The user's role is inactive"
+
+# TRANSLATION
+# LABEL/ID_USER_NOT_FUNCTIONALITY
+#: LABEL/ID_USER_NOT_FUNCTIONALITY
+msgid "This functionality is not available for users who have an external authentication source related (ie LDAP)"
+msgstr "This functionality is not available for users who have an external authentication source related (ie LDAP)"
+
+# TRANSLATION
+# LABEL/ID_ROOT_USER
+#: LABEL/ID_ROOT_USER
+msgid "Root User"
+msgstr "Root User"
+
+# TRANSLATION
+# LABEL/ID_ROOT_USER_SUPER
+#: LABEL/ID_ROOT_USER_SUPER
+msgid "Root User has SUPER privilege"
+msgstr "Root User has SUPER privilege"
+
+# TRANSLATION
+# LABEL/ID_SETTING_SUPER
+#: LABEL/ID_SETTING_SUPER
+msgid "Setting SUPER privilege"
+msgstr "Setting SUPER privilege"
+
+# TRANSLATION
+# LABEL/ID_SUCCESSFULLY
+#: LABEL/ID_SUCCESSFULLY
+msgid "Successfully"
+msgstr "Successfully"
+
+# TRANSLATION
+# LABEL/ID_SMTP_ALREADY_CONNECTED
+#: LABEL/ID_SMTP_ALREADY_CONNECTED
+msgid "Already connected to a server"
+msgstr "Already connected to a server"
+
+# TRANSLATION
+# LABEL/ID_SMTP_FAILED_CONNECT_SERVER
+#: LABEL/ID_SMTP_FAILED_CONNECT_SERVER
+msgid "Failed to connect to server"
+msgstr "Failed to connect to server"
+
+# TRANSLATION
+# LABEL/ID_SMTP_ERROR_START_TLS
+#: LABEL/ID_SMTP_ERROR_START_TLS
+msgid "Called StartTLS() without being connected"
+msgstr "Called StartTLS() without being connected"
+
+# TRANSLATION
+# LABEL/ID_SMTP_ERROR_START_TLS_NOT_ACCEPTED
+#: LABEL/ID_SMTP_ERROR_START_TLS_NOT_ACCEPTED
+msgid "STARTTLS not accepted from server"
+msgstr "STARTTLS not accepted from server"
+
+# TRANSLATION
+# LABEL/ID_SMTP_ERROR_AUTH_NOT_ACCEPTED
+#: LABEL/ID_SMTP_ERROR_AUTH_NOT_ACCEPTED
+msgid "Authentication not accepted from server"
+msgstr "Authentication not accepted from server"
+
+# TRANSLATION
+# LABEL/ID_SMTP_ERROR_USERNAME_NOT_ACCEPTED
+#: LABEL/ID_SMTP_ERROR_USERNAME_NOT_ACCEPTED
+msgid "Username not accepted from server"
+msgstr "Username not accepted from server"
+
+# TRANSLATION
+# LABEL/ID_SMTP_ERROR_PASSWORD_NOT_ACCEPTED
+#: LABEL/ID_SMTP_ERROR_PASSWORD_NOT_ACCEPTED
+msgid "Password not accepted from server"
+msgstr "Password not accepted from server"
+
+# TRANSLATION
+# LABEL/ID_SMTP_ERROR_ENABLE_PHPINI
+#: LABEL/ID_SMTP_ERROR_ENABLE_PHPINI
+msgid "You need to enable some modules in your php.ini file"
+msgstr "You need to enable some modules in your php.ini file"
+
+# TRANSLATION
+# LABEL/ID_SMTP_ERROR_COULD_NOT_AUTH
+#: LABEL/ID_SMTP_ERROR_COULD_NOT_AUTH
+msgid "Could not authenticate"
+msgstr "Could not authenticate"
+
+# TRANSLATION
+# LABEL/ID_SMTP_ERROR_EOF_CAUGHT
+#: LABEL/ID_SMTP_ERROR_EOF_CAUGHT
+msgid "EOF caught while checking if connected"
+msgstr "EOF caught while checking if connected"
+
+# TRANSLATION
+# LABEL/ID_SMTP_ERROR_CALLED_DATA_WITHOUT
+#: LABEL/ID_SMTP_ERROR_CALLED_DATA_WITHOUT
+msgid "Called Data() without being connected"
+msgstr "Called Data() without being connected"
+
+# TRANSLATION
+# LABEL/ID_SMTP_ERROR_DATA_COM_NOT_ACCEPTED
+#: LABEL/ID_SMTP_ERROR_DATA_COM_NOT_ACCEPTED
+msgid "DATA command not accepted from server"
+msgstr "DATA command not accepted from server"
+
+# TRANSLATION
+# LABEL/ID_SMTP_ERROR_DATA_NOT_ACCEPTED
+#: LABEL/ID_SMTP_ERROR_DATA_NOT_ACCEPTED
+msgid "DATA not accepted from server"
+msgstr "DATA not accepted from server"
+
+# TRANSLATION
+# LABEL/ID_SMTP_ERROR_CALLED_HELLO_WITHOUT
+#: LABEL/ID_SMTP_ERROR_CALLED_HELLO_WITHOUT
+msgid "Called Hello() without being connected"
+msgstr "Called Hello() without being connected"
+
+# TRANSLATION
+# LABEL/ID_SMTP_ERROR_NOT_ACCEPTED
+#: LABEL/ID_SMTP_ERROR_NOT_ACCEPTED
+msgid "not accepted from server"
+msgstr "not accepted from server"
+
+# TRANSLATION
+# LABEL/ID_SMTP_ERROR_CALLED_MAIL_WITHOUT
+#: LABEL/ID_SMTP_ERROR_CALLED_MAIL_WITHOUT
+msgid "Called Mail() without being connected"
+msgstr "Called Mail() without being connected"
+
+# TRANSLATION
+# LABEL/ID_SMTP_ERROR_MAIL_NOT_ACCEPTED
+#: LABEL/ID_SMTP_ERROR_MAIL_NOT_ACCEPTED
+msgid "MAIL not accepted from server"
+msgstr "MAIL not accepted from server"
+
+# TRANSLATION
+# LABEL/ID_SMTP_ERROR_CALLED_QUIT_WITHOUT
+#: LABEL/ID_SMTP_ERROR_CALLED_QUIT_WITHOUT
+msgid "Called Quit() without being connected"
+msgstr "Called Quit() without being connected"
+
+# TRANSLATION
+# LABEL/ID_SMTP_ERROR_SERVER_REJECTED
+#: LABEL/ID_SMTP_ERROR_SERVER_REJECTED
+msgid "SMTP server rejected quit command"
+msgstr "SMTP server rejected quit command"
+
+# TRANSLATION
+# LABEL/ID_SMTP_ERROR_CALLED_RECIPIENT_WITHOUT
+#: LABEL/ID_SMTP_ERROR_CALLED_RECIPIENT_WITHOUT
+msgid "Called Recipient() without being connected"
+msgstr "Called Recipient() without being connected"
+
+# TRANSLATION
+# LABEL/ID_SMTP_ERROR_RCPT_NOT_ACCEPTED
+#: LABEL/ID_SMTP_ERROR_RCPT_NOT_ACCEPTED
+msgid "RCPT not accepted from server"
+msgstr "RCPT not accepted from server"
+
+# TRANSLATION
+# LABEL/ID_SMTP_ERROR_CALLED_RESET_WITHOUT
+#: LABEL/ID_SMTP_ERROR_CALLED_RESET_WITHOUT
+msgid "Called Reset() without being connected"
+msgstr "Called Reset() without being connected"
+
+# TRANSLATION
+# LABEL/ID_SMTP_ERROR_RSET_FAILED
+#: LABEL/ID_SMTP_ERROR_RSET_FAILED
+msgid "RSET failed"
+msgstr "RSET failed"
+
+# TRANSLATION
+# LABEL/ID_SMTP_ERROR_CALLED_SENDANDMAIL_WITHOUT
+#: LABEL/ID_SMTP_ERROR_CALLED_SENDANDMAIL_WITHOUT
+msgid "Called SendAndMail() without being connected"
+msgstr "Called SendAndMail() without being connected"
+
+# TRANSLATION
+# LABEL/ID_SMTP_ERROR_SAML_NOT_ACCEPTED
+#: LABEL/ID_SMTP_ERROR_SAML_NOT_ACCEPTED
+msgid "SAML not accepted from server"
+msgstr "SAML not accepted from server"
+
+# TRANSLATION
+# LABEL/ID_SMTP_ERROR_MET_TURN_SMTP_NOT_IMPLEMENTED
+#: LABEL/ID_SMTP_ERROR_MET_TURN_SMTP_NOT_IMPLEMENTED
+msgid "This method, TURN, of the SMTP is not implemented"
+msgstr "This method, TURN, of the SMTP is not implemented"
+
+# TRANSLATION
+# LABEL/ID_EVENT_ADD_CURRENT
+#: LABEL/ID_EVENT_ADD_CURRENT
+msgid "Add current task user"
+msgstr "Add current task user"
+
+# TRANSLATION
+# LABEL/ID_EVENT_ADD_USERS
+#: LABEL/ID_EVENT_ADD_USERS
+msgid "Add users"
+msgstr "Add users"
+
+# TRANSLATION
+# LABEL/ID_EVENT_REMOVE_SELECTED
+#: LABEL/ID_EVENT_REMOVE_SELECTED
+msgid "Remove selected"
+msgstr "Remove selected"
+
+# TRANSLATION
+# LABEL/ID_EVENT_ADD_DYNAVAR
+#: LABEL/ID_EVENT_ADD_DYNAVAR
+msgid "Add dynavar"
+msgstr "Add dynavar"
+
+# TRANSLATION
+# LABEL/ID_EVENT_ADD_GROUP
+#: LABEL/ID_EVENT_ADD_GROUP
+msgid "Add groups"
+msgstr "Add groups"
+
+# TRANSLATION
+# LABEL/ID_EXECUTION
+#: LABEL/ID_EXECUTION
+msgid "Execution"
+msgstr "Execution"
+
+# TRANSLATION
+# LABEL/ID_GROUP_CANNOT_DELETE_WHILE_ASSIGNED_TO_TASK
+#: LABEL/ID_GROUP_CANNOT_DELETE_WHILE_ASSIGNED_TO_TASK
+msgid "Group cannot be deleted while it's assigned to a task"
+msgstr "Group cannot be deleted while it's assigned to a task"
+
+# TRANSLATION
+# LABEL/ID_FROM_EMAIL
+#: LABEL/ID_FROM_EMAIL
+msgid "From Mail"
+msgstr "From Mail"
+
+# TRANSLATION
+# LABEL/ID_UNSAVED_TRIGGERS_WINDOW
+#: LABEL/ID_UNSAVED_TRIGGERS_WINDOW
+msgid "You have unsaved changes in popup! If you leave the page all the windows are closed."
+msgstr "You have unsaved changes in popup! If you leave the page all the windows are closed."
+
+# TRANSLATION
+# LABEL/ID_INSTALL_USE_CURRENT_USER
+#: LABEL/ID_INSTALL_USE_CURRENT_USER
+msgid "Use the current user as a Database owner (It doesn't create new users in the Database )"
+msgstr "Use the current user as a Database owner (It doesn't create new users in the Database )"
+
+# TRANSLATION
+# LABEL/ID_ACCOUNT_OPTIONS
+#: LABEL/ID_ACCOUNT_OPTIONS
+msgid "Account Options"
+msgstr "Account Options"
+
+# TRANSLATION
+# LABEL/ID_USER_MUST_CHANGE_PASSWORD_AT_NEXT_LOGON
+#: LABEL/ID_USER_MUST_CHANGE_PASSWORD_AT_NEXT_LOGON
+msgid "User must change password at next logon"
+msgstr "User must change password at next logon"
+
+# TRANSLATION
+# LABEL/ID_HIDE_DIRS
+#: LABEL/ID_HIDE_DIRS
+msgid "Hide Dirs"
+msgstr "Hide Dirs"
+
+# TRANSLATION
+# LABEL/ID_UNDEFINED_VALUE_IS_REQUIRED
+#: LABEL/ID_UNDEFINED_VALUE_IS_REQUIRED
+msgid "Undefined value for \"{0}\", it is required."
+msgstr "Undefined value for \"{0}\", it is required."
+
+# TRANSLATION
+# LABEL/ID_INVALID_VALUE_CAN_NOT_BE_EMPTY
+#: LABEL/ID_INVALID_VALUE_CAN_NOT_BE_EMPTY
+msgid "Invalid value for \"{0}\", it can not be empty."
+msgstr "Invalid value for \"{0}\", it can not be empty."
+
+# TRANSLATION
+# LABEL/ID_INVALID_VALUE_ONLY_ACCEPTS_VALUES
+#: LABEL/ID_INVALID_VALUE_ONLY_ACCEPTS_VALUES
+msgid "Invalid value for \"{0}\", it only accepts values: \"{1}\"."
+msgstr "Invalid value for \"{0}\", it only accepts values: \"{1}\"."
+
+# TRANSLATION
+# LABEL/ID_INVALID_VALUE
+#: LABEL/ID_INVALID_VALUE
+msgid "Invalid value for \"{0}\"."
+msgstr "Invalid value for \"{0}\"."
+
+# TRANSLATION
+# LABEL/ID_INVALID_VALUE_THIS_MUST_BE_ARRAY
+#: LABEL/ID_INVALID_VALUE_THIS_MUST_BE_ARRAY
+msgid "Invalid value for \"{0}\", this value must be an array."
+msgstr "Invalid value for \"{0}\", this value must be an array."
+
+# TRANSLATION
+# LABEL/ID_INVALID_VALUE_EXPECTING_POSITIVE_INTEGER
+#: LABEL/ID_INVALID_VALUE_EXPECTING_POSITIVE_INTEGER
+msgid "Invalid value for \"{0}\". Expecting positive integer value."
+msgstr "Invalid value for \"{0}\". Expecting positive integer value."
+
+# TRANSLATION
+# LABEL/ID_CALENDAR_DOES_NOT_EXIST
+#: LABEL/ID_CALENDAR_DOES_NOT_EXIST
+msgid "The calendar with {0}: {1} does not exist."
+msgstr "The calendar with {0}: {1} does not exist."
+
+# TRANSLATION
+# LABEL/ID_CALENDAR_NAME_ALREADY_EXISTS
+#: LABEL/ID_CALENDAR_NAME_ALREADY_EXISTS
+msgid "The calendar name with {0}: \"{1}\" already exists."
+msgstr "The calendar name with {0}: \"{1}\" already exists."
+
+# TRANSLATION
+# LABEL/ID_VALUE_SPECIFIED_DOES_NOT_EXIST
+#: LABEL/ID_VALUE_SPECIFIED_DOES_NOT_EXIST
+msgid "Value specified for \"{0}\" does not exist in \"{1}\"."
+msgstr "Value specified for \"{0}\" does not exist in \"{1}\"."
+
+# TRANSLATION
+# LABEL/ID_PROJECT_DOES_NOT_EXIST
+#: LABEL/ID_PROJECT_DOES_NOT_EXIST
+msgid "The project with {0}: {1} does not exist."
+msgstr "The project with {0}: {1} does not exist."
+
+# TRANSLATION
+# LABEL/ID_PROJECT_TITLE_ALREADY_EXISTS
+#: LABEL/ID_PROJECT_TITLE_ALREADY_EXISTS
+msgid "The project title with {0}: \"{1}\" already exists."
+msgstr "The project title with {0}: \"{1}\" already exists."
+
+# TRANSLATION
+# LABEL/ID_PROJECT_CATEGORY_DOES_NOT_EXIST
+#: LABEL/ID_PROJECT_CATEGORY_DOES_NOT_EXIST
+msgid "The project category with {0}: {1} does not exist."
+msgstr "The project category with {0}: {1} does not exist."
+
+# TRANSLATION
+# LABEL/ID_PMTABLE_DOES_NOT_EXIST
+#: LABEL/ID_PMTABLE_DOES_NOT_EXIST
+msgid "The PM Table with {0}: {1} does not exist."
+msgstr "The PM Table with {0}: {1} does not exist."
+
+# TRANSLATION
+# LABEL/ID_PMTABLE_FIELD_IS_NOT_PRIMARY_KEY
+#: LABEL/ID_PMTABLE_FIELD_IS_NOT_PRIMARY_KEY
+msgid "The field {0}: {1}, is not a primary key field of the PM Table."
+msgstr "The field {0}: {1}, is not a primary key field of the PM Table."
+
+# TRANSLATION
+# LABEL/ID_PMTABLE_PRIMARY_KEY_FIELD_IS_MISSING_IN_ATTRIBUTE
+#: LABEL/ID_PMTABLE_PRIMARY_KEY_FIELD_IS_MISSING_IN_ATTRIBUTE
+msgid "The primary key field {0} of the PM Table is missing in the attribute {1}."
+msgstr "The primary key field {0} of the PM Table is missing in the attribute {1}."
+
+# TRANSLATION
+# LABEL/ID_PMTABLE_TOTAL_PRIMARY_KEY_FIELDS_IS_NOT_EQUAL_IN_ATTRIBUTE
+#: LABEL/ID_PMTABLE_TOTAL_PRIMARY_KEY_FIELDS_IS_NOT_EQUAL_IN_ATTRIBUTE
+msgid "The total primary key fields of the PM Table is {0}, the attribute {1} has {2} primary keys."
+msgstr "The total primary key fields of the PM Table is {0}, the attribute {1} has {2} primary keys."
+
+# TRANSLATION
+# LABEL/ID_USER_DOES_NOT_EXIST
+#: LABEL/ID_USER_DOES_NOT_EXIST
+msgid "The user with {0}: {1} does not exist."
+msgstr "The user with {0}: {1} does not exist."
+
+# TRANSLATION
+# LABEL/ID_USER_DOES_NOT_HAVE_ACTIVITY_ASSIGNED
+#: LABEL/ID_USER_DOES_NOT_HAVE_ACTIVITY_ASSIGNED
+msgid "The user \"{0}\" does not have the activity \"{1}\" assigned."
+msgstr "The user \"{0}\" does not have the activity \"{1}\" assigned."
+
+# TRANSLATION
+# LABEL/ID_ACTIVITY_DOES_NOT_EXIST
+#: LABEL/ID_ACTIVITY_DOES_NOT_EXIST
+msgid "The activity with {0}: {1} does not exist."
+msgstr "The activity with {0}: {1} does not exist."
+
+# TRANSLATION
+# LABEL/ID_ACTIVITY_IS_NOT_INITIAL_ACTIVITY
+#: LABEL/ID_ACTIVITY_IS_NOT_INITIAL_ACTIVITY
+msgid "The activity \"{0}\" is not initial activity."
+msgstr "The activity \"{0}\" is not initial activity."
+
+# TRANSLATION
+# LABEL/ID_ACTIVITY_DOES_NOT_HAVE_USERS
+#: LABEL/ID_ACTIVITY_DOES_NOT_HAVE_USERS
+msgid "The activity \"{0}\" does not have users."
+msgstr "The activity \"{0}\" does not have users."
+
+# TRANSLATION
+# LABEL/ID_ROUTING_SCREEN_TEMPLATE_DOES_NOT_EXIST
+#: LABEL/ID_ROUTING_SCREEN_TEMPLATE_DOES_NOT_EXIST
+msgid "The routing screen template with {0}: {1} does not exist."
+msgstr "The routing screen template with {0}: {1} does not exist."
+
+# TRANSLATION
+# LABEL/ID_RECORD_EXISTS_IN_TABLE
+#: LABEL/ID_RECORD_EXISTS_IN_TABLE
+msgid "The record \"{0}\", exists in table {1}."
+msgstr "The record \"{0}\", exists in table {1}."
+
+# TRANSLATION
+# LABEL/ID_RECORD_DOES_NOT_EXIST_IN_TABLE
+#: LABEL/ID_RECORD_DOES_NOT_EXIST_IN_TABLE
+msgid "The record \"{0}\", does not exist in table {1}."
+msgstr "The record \"{0}\", does not exist in table {1}."
+
+# TRANSLATION
+# LABEL/ID_RECORD_CANNOT_BE_CREATED
+#: LABEL/ID_RECORD_CANNOT_BE_CREATED
+msgid "The record cannot be created!."
+msgstr "The record cannot be created!."
+
+# TRANSLATION
+# LABEL/ID_CASE_TRACKER_OBJECT_DOES_NOT_EXIST
+#: LABEL/ID_CASE_TRACKER_OBJECT_DOES_NOT_EXIST
+msgid "The case tracker object with {0}: {1} does not exist."
+msgstr "The case tracker object with {0}: {1} does not exist."
+
+# TRANSLATION
+# LABEL/ID_ATTRIBUTE_HAS_INVALID_ELEMENT_KEY
+#: LABEL/ID_ATTRIBUTE_HAS_INVALID_ELEMENT_KEY
+msgid "The attribute {0}, has an invalid element (incorrect keys)."
+msgstr "The attribute {0}, has an invalid element (incorrect keys)."
+
+# TRANSLATION
+# LABEL/ID_DYNAFORM_DOES_NOT_EXIST
+#: LABEL/ID_DYNAFORM_DOES_NOT_EXIST
+msgid "The DynaForm with {0}: {1} does not exist."
+msgstr "The DynaForm with {0}: {1} does not exist."
+
+# TRANSLATION
+# LABEL/ID_DYNAFORM_TITLE_ALREADY_EXISTS
+#: LABEL/ID_DYNAFORM_TITLE_ALREADY_EXISTS
+msgid "The DynaForm title with {0}: \"{1}\" already exists."
+msgstr "The DynaForm title with {0}: \"{1}\" already exists."
+
+# TRANSLATION
+# LABEL/ID_DYNAFORM_IS_NOT_GRID
+#: LABEL/ID_DYNAFORM_IS_NOT_GRID
+msgid "The DynaForm with {0}: {1}, is not grid."
+msgstr "The DynaForm with {0}: {1}, is not grid."
+
+# TRANSLATION
+# LABEL/ID_DYNAFORM_IT_IS_TRYING_CREATE_BY_SEVERAL_METHODS
+#: LABEL/ID_DYNAFORM_IT_IS_TRYING_CREATE_BY_SEVERAL_METHODS
+msgid "It is trying to create a DynaForm by \"{0}\", please send only one attribute for creation."
+msgstr "It is trying to create a DynaForm by \"{0}\", please send only one attribute for creation."
+
+# TRANSLATION
+# LABEL/ID_DYNAFORM_IS_NOT_ASSIGNED_TO_ACTIVITY
+#: LABEL/ID_DYNAFORM_IS_NOT_ASSIGNED_TO_ACTIVITY
+msgid "The DynaForm \"{0}\" is not assigned to activity \"{1}\"."
+msgstr "The DynaForm \"{0}\" is not assigned to activity \"{1}\"."
+
+# TRANSLATION
+# LABEL/ID_GROUP_DOES_NOT_EXIST
+#: LABEL/ID_GROUP_DOES_NOT_EXIST
+msgid "The group with {0}: {1} does not exist."
+msgstr "The group with {0}: {1} does not exist."
+
+# TRANSLATION
+# LABEL/ID_GROUP_TITLE_ALREADY_EXISTS
+#: LABEL/ID_GROUP_TITLE_ALREADY_EXISTS
+msgid "The group title with {0}: \"{1}\" already exists."
+msgstr "The group title with {0}: \"{1}\" already exists."
+
+# TRANSLATION
+# LABEL/ID_GROUP_USER_IS_NOT_ASSIGNED
+#: LABEL/ID_GROUP_USER_IS_NOT_ASSIGNED
+msgid "The user with {0}: {1} is not assigned to the group."
+msgstr "The user with {0}: {1} is not assigned to the group."
+
+# TRANSLATION
+# LABEL/ID_GROUP_USER_IS_ALREADY_ASSIGNED
+#: LABEL/ID_GROUP_USER_IS_ALREADY_ASSIGNED
+msgid "The user with {0}: {1} is already assigned to the group."
+msgstr "The user with {0}: {1} is already assigned to the group."
+
+# TRANSLATION
+# LABEL/ID_INPUT_DOCUMENT_DOES_NOT_EXIST
+#: LABEL/ID_INPUT_DOCUMENT_DOES_NOT_EXIST
+msgid "The Input Document with {0}: {1} does not exist."
+msgstr "The Input Document with {0}: {1} does not exist."
+
+# TRANSLATION
+# LABEL/ID_INPUT_DOCUMENT_TITLE_ALREADY_EXISTS
+#: LABEL/ID_INPUT_DOCUMENT_TITLE_ALREADY_EXISTS
+msgid "The Input Document title with {0}: \"{1}\" already exists."
+msgstr "The Input Document title with {0}: \"{1}\" already exists."
+
+# TRANSLATION
+# LABEL/ID_OUTPUT_DOCUMENT_DOES_NOT_EXIST
+#: LABEL/ID_OUTPUT_DOCUMENT_DOES_NOT_EXIST
+msgid "The Output Document with {0}: {1} does not exist."
+msgstr "The Output Document with {0}: {1} does not exist."
+
+# TRANSLATION
+# LABEL/ID_TRIGGER_DOES_NOT_EXIST
+#: LABEL/ID_TRIGGER_DOES_NOT_EXIST
+msgid "The trigger with {0}: {1} does not exist."
+msgstr "The trigger with {0}: {1} does not exist."
+
+# TRANSLATION
+# LABEL/ID_TRIGGER_TITLE_ALREADY_EXISTS
+#: LABEL/ID_TRIGGER_TITLE_ALREADY_EXISTS
+msgid "The trigger title with {0}: \"{1}\" already exists."
+msgstr "The trigger title with {0}: \"{1}\" already exists."
+
+# TRANSLATION
+# LABEL/ID_TRIGGER_HAS_NOT_BEEN_CREATED_WITH_WIZARD
+#: LABEL/ID_TRIGGER_HAS_NOT_BEEN_CREATED_WITH_WIZARD
+msgid "The trigger with {0}: {1}, has not been created with the wizard."
+msgstr "The trigger with {0}: {1}, has not been created with the wizard."
+
+# TRANSLATION
+# LABEL/ID_TRIGGER_HAS_BEEN_MODIFIED_MANUALLY_INVALID_FOR_WIZARD
+#: LABEL/ID_TRIGGER_HAS_BEEN_MODIFIED_MANUALLY_INVALID_FOR_WIZARD
+msgid "The trigger with {0}: {1}, has been modified manually. It is invalid for the wizard."
+msgstr "The trigger with {0}: {1}, has been modified manually. It is invalid for the wizard."
+
+# TRANSLATION
+# LABEL/ID_STEP_DOES_NOT_EXIST
+#: LABEL/ID_STEP_DOES_NOT_EXIST
+msgid "The step with {0}: {1} does not exist."
+msgstr "The step with {0}: {1} does not exist."
+
+# TRANSLATION
+# LABEL/ID_LIBRARY_DOES_NOT_EXIST
+#: LABEL/ID_LIBRARY_DOES_NOT_EXIST
+msgid "The library with {0}: \"{1}\" does not exist."
+msgstr "The library with {0}: \"{1}\" does not exist."
+
+# TRANSLATION
+# LABEL/ID_LIBRARY_FUNCTION_DOES_NOT_EXIST
+#: LABEL/ID_LIBRARY_FUNCTION_DOES_NOT_EXIST
+msgid "The function with {0}: \"{1}\" does not exist in the library."
+msgstr "The function with {0}: \"{1}\" does not exist in the library."
+
+# TRANSLATION
+# LABEL/ID_WIZARD_LIBRARY_AND_FUNCTION_IS_INVALID_FOR_TRIGGER
+#: LABEL/ID_WIZARD_LIBRARY_AND_FUNCTION_IS_INVALID_FOR_TRIGGER
+msgid "The wizard with the library \"{0}\" and function \"{1}\", is invalid for the trigger with {2}: {3}."
+msgstr "The wizard with the library \"{0}\" and function \"{1}\", is invalid for the trigger with {2}: {3}."
+
+# TRANSLATION
+# LABEL/ID_WEB_ENTRY_DOES_NOT_EXIST
+#: LABEL/ID_WEB_ENTRY_DOES_NOT_EXIST
+msgid "The web entry with {0}: {1} does not exist."
+msgstr "The web entry with {0}: {1} does not exist."
+
+# TRANSLATION
+# LABEL/ID_WEB_ENTRY_TITLE_ALREADY_EXISTS
+#: LABEL/ID_WEB_ENTRY_TITLE_ALREADY_EXISTS
+msgid "The web entry title with {0}: \"{1}\" already exists."
+msgstr "The web entry title with {0}: \"{1}\" already exists."
+
+# TRANSLATION
+# LABEL/ID_WEB_ENTRY_ACTIVITY_DOES_NOT_HAVE_VALID_ASSIGNMENT_TYPE
+#: LABEL/ID_WEB_ENTRY_ACTIVITY_DOES_NOT_HAVE_VALID_ASSIGNMENT_TYPE
+msgid "Web entry only works with activities which have \"Cyclical Assignment\", the activity \"{0}\" does not have a valid assignment type. Please change the Assignment Rules."
+msgstr "Web entry only works with activities which have \"Cyclical Assignment\", the activity \"{0}\" does not have a valid assignment type. Please change the Assignment Rules."
+
+# TRANSLATION
+# LABEL/ID_IMPORTER_PROJECT_ALREADY_EXISTS_SET_ACTION_TO_CONTINUE
+#: LABEL/ID_IMPORTER_PROJECT_ALREADY_EXISTS_SET_ACTION_TO_CONTINUE
+msgid "Project already exists, you need set an action to continue. Available actions: [{0}]."
+msgstr "Project already exists, you need set an action to continue. Available actions: [{0}]."
+
+# TRANSLATION
+# LABEL/ID_IMPORTER_GROUP_ALREADY_EXISTS_SET_ACTION_TO_CONTINUE
+#: LABEL/ID_IMPORTER_GROUP_ALREADY_EXISTS_SET_ACTION_TO_CONTINUE
+msgid "Group already exists, you need set an action to continue. Available actions: [{0}]."
+msgstr "Group already exists, you need set an action to continue. Available actions: [{0}]."
+
+# TRANSLATION
+# LABEL/ID_IMPORTER_ERROR_FILE_INVALID_TYPE_OR_CORRUPT_DATA
+#: LABEL/ID_IMPORTER_ERROR_FILE_INVALID_TYPE_OR_CORRUPT_DATA
+msgid "Error, Invalid file type or the file have corrupt data."
+msgstr "Error, Invalid file type or the file have corrupt data."
+
+# TRANSLATION
+# LABEL/ID_IMPORTER_BPMN_DEFINITION_IS_MISSING
+#: LABEL/ID_IMPORTER_BPMN_DEFINITION_IS_MISSING
+msgid "BPMN Definition is missing."
+msgstr "BPMN Definition is missing."
+
+# TRANSLATION
+# LABEL/ID_IMPORTER_BPMN_PROJECT_TABLE_DEFINITION_IS_MISSING
+#: LABEL/ID_IMPORTER_BPMN_PROJECT_TABLE_DEFINITION_IS_MISSING
+msgid "BPMN table: \"Project\", definition is missing or has multiple definition."
+msgstr "BPMN table: \"Project\", definition is missing or has multiple definition."
+
+# TRANSLATION
+# LABEL/ID_IMPORTER_COULD_NOT_FIND_SPECIFIED_SOURCE_IN_PHP_GLOBALS
+#: LABEL/ID_IMPORTER_COULD_NOT_FIND_SPECIFIED_SOURCE_IN_PHP_GLOBALS
+msgid "Couldn't find specified source \"{0}\" in PHP Globals."
+msgstr "Couldn't find specified source \"{0}\" in PHP Globals."
+
+# TRANSLATION
+# LABEL/ID_IMPORTER_ERROR_WHILE_UPLOADING_FILE
+#: LABEL/ID_IMPORTER_ERROR_WHILE_UPLOADING_FILE
+msgid "Error while uploading file. Error code: {0}."
+msgstr "Error while uploading file. Error code: {0}."
+
+# TRANSLATION
+# LABEL/ID_IMPORTER_FILE_EXTENSION_IS_NOT_PMX
+#: LABEL/ID_IMPORTER_FILE_EXTENSION_IS_NOT_PMX
+msgid "The file extension is not \"pmx\"."
+msgstr "The file extension is not \"pmx\"."
+
+# TRANSLATION
+# LABEL/ID_IMPORTER_FILE_DOES_NOT_EXIST
+#: LABEL/ID_IMPORTER_FILE_DOES_NOT_EXIST
+msgid "The file with {0}: \"{1}\" does not exist."
+msgstr "The file with {0}: \"{1}\" does not exist."
+
+# TRANSLATION
+# LABEL/ID_IMPORTER_FILE_PROCESSMAKER_PROJECT_VERSION_IS_MISSING
+#: LABEL/ID_IMPORTER_FILE_PROCESSMAKER_PROJECT_VERSION_IS_MISSING
+msgid "ProcessMaker Project version is missing on file source."
+msgstr "ProcessMaker Project version is missing on file source."
+
+# TRANSLATION
+# LABEL/ID_IMPORTER_FILE_INVALID_DOCUMENT_FORMAT_METADATA_IS_MISSING
+#: LABEL/ID_IMPORTER_FILE_INVALID_DOCUMENT_FORMAT_METADATA_IS_MISSING
+msgid "Invalid Document format, metadata section is missing or has multiple definition."
+msgstr "Invalid Document format, metadata section is missing or has multiple definition."
+
+# TRANSLATION
+# LABEL/ID_IMPORTER_FILE_INVALID_DOCUMENT_FORMAT_METADATA_IS_CORRUPT
+#: LABEL/ID_IMPORTER_FILE_INVALID_DOCUMENT_FORMAT_METADATA_IS_CORRUPT
+msgid "Invalid Document format, metadata information is corrupt."
+msgstr "Invalid Document format, metadata information is corrupt."
+
+# TRANSLATION
+# LABEL/ID_IMPORTER_FILE_DEFINITION_SECTION_IS_MISSING
+#: LABEL/ID_IMPORTER_FILE_DEFINITION_SECTION_IS_MISSING
+msgid "Definition section is missing."
+msgstr "Definition section is missing."
+
+# TRANSLATION
+# LABEL/ID_IMPORTER_FILE_DEFINITION_SECTION_IS_INCOMPLETE
+#: LABEL/ID_IMPORTER_FILE_DEFINITION_SECTION_IS_INCOMPLETE
+msgid "Definition section is incomplete."
+msgstr "Definition section is incomplete."
+
+# TRANSLATION
+# LABEL/ID_CASES_INPUT_DOES_NOT_EXIST
+#: LABEL/ID_CASES_INPUT_DOES_NOT_EXIST
+msgid "This input document with inp_doc_uid: {0} does not exist!"
+msgstr "This input document with inp_doc_uid: {0} does not exist!"
+
+# TRANSLATION
+# LABEL/ID_CASES_INPUT_FILENAME_DOES_NOT_EXIST
+#: LABEL/ID_CASES_INPUT_FILENAME_DOES_NOT_EXIST
+msgid "This document filename does not exist!"
+msgstr "This document filename does not exist!"
+
+# TRANSLATION
+# LABEL/ID_CASES_OUTPUT_DOES_NOT_EXIST
+#: LABEL/ID_CASES_OUTPUT_DOES_NOT_EXIST
+msgid "This output document with out_doc_id: {0} does not exist!"
+msgstr "This output document with out_doc_id: {0} does not exist!"
+
+# TRANSLATION
+# LABEL/ID_CASES_INCORRECT_INFORMATION
+#: LABEL/ID_CASES_INCORRECT_INFORMATION
+msgid "Incorrect or unavailable information about this case: {0}"
+msgstr "Incorrect or unavailable information about this case: {0}"
+
+# TRANSLATION
+# LABEL/ID_INVALID_VALUE_FOR
+#: LABEL/ID_INVALID_VALUE_FOR
+msgid "Invalid value specified for: {0}"
+msgstr "Invalid value specified for: {0}"
+
+# TRANSLATION
+# LABEL/ID_CASE_SCHEDULER_DOES_NOT_EXIST
+#: LABEL/ID_CASE_SCHEDULER_DOES_NOT_EXIST
+msgid "This case scheduler with sch_uid: {0} does not exist!"
+msgstr "This case scheduler with sch_uid: {0} does not exist!"
+
+# TRANSLATION
+# LABEL/ID_INFORMATION_EMPTY
+#: LABEL/ID_INFORMATION_EMPTY
+msgid "The information sended is empty!"
+msgstr "The information sended is empty!"
+
+# TRANSLATION
+# LABEL/ID_TASK_NOT_FOUND
+#: LABEL/ID_TASK_NOT_FOUND
+msgid "Task not found for id: {0}"
+msgstr "Task not found for id: {0}"
+
+# TRANSLATION
+# LABEL/ID_CAN_NOT_BE_EMPTY
+#: LABEL/ID_CAN_NOT_BE_EMPTY
+msgid "{0}, can not be empty"
+msgstr "{0}, can not be empty"
+
+# TRANSLATION
+# LABEL/ID_CASE_SCHEDULER_DUPLICATE
+#: LABEL/ID_CASE_SCHEDULER_DUPLICATE
+msgid "Duplicate Case Scheduler name"
+msgstr "Duplicate Case Scheduler name"
+
+# TRANSLATION
+# LABEL/ID_INVALID_SCH_START_TIME
+#: LABEL/ID_INVALID_SCH_START_TIME
+msgid "Invalid value specified for sch_start_time. Expecting time in HH:MM format (The time can not be increased to 23:59)"
+msgstr "Invalid value specified for sch_start_time. Expecting time in HH:MM format (The time can not be increased to 23:59)"
+
+# TRANSLATION
+# LABEL/ID_INVALID_SCH_START_DATE
+#: LABEL/ID_INVALID_SCH_START_DATE
+msgid "Invalid value specified for sch_start_date. Expecting date in YYYY-MM-DD format, such as 2014-01-01"
+msgstr "Invalid value specified for sch_start_date. Expecting date in YYYY-MM-DD format, such as 2014-01-01"
+
+# TRANSLATION
+# LABEL/ID_INVALID_SCH_END_DATE
+#: LABEL/ID_INVALID_SCH_END_DATE
+msgid "Invalid value specified for sch_end_date. Expecting date in YYYY-MM-DD format, such as 2014-01-01"
+msgstr "Invalid value specified for sch_end_date. Expecting date in YYYY-MM-DD format, such as 2014-01-01"
+
+# TRANSLATION
+# LABEL/ID_CAN_NOT_BE_NULL
+#: LABEL/ID_CAN_NOT_BE_NULL
+msgid "{0}, can not be null"
+msgstr "{0}, can not be null"
+
+# TRANSLATION
+# LABEL/ID_INVALID_SCH_START_DAY_1
+#: LABEL/ID_INVALID_SCH_START_DAY_1
+msgid "Invalid value specified for sch_start_day_opt_1. Must be between 1 and 31"
+msgstr "Invalid value specified for sch_start_day_opt_1. Must be between 1 and 31"
+
+# TRANSLATION
+# LABEL/ID_INVALID_SCH_REPEAT
+#: LABEL/ID_INVALID_SCH_REPEAT
+msgid "Invalid value specified for sch_repeat_every. Expecting time in HH.MM format"
+msgstr "Invalid value specified for sch_repeat_every. Expecting time in HH.MM format"
+
+# TRANSLATION
+# LABEL/ID_INVALID_PRF_PATH
+#: LABEL/ID_INVALID_PRF_PATH
+msgid "Invalid value specified for prf_path. Expecting templates/ or public/"
+msgstr "Invalid value specified for prf_path. Expecting templates/ or public/"
+
+# TRANSLATION
+# LABEL/ID_EXISTS_FILE
+#: LABEL/ID_EXISTS_FILE
+msgid "The file: {0} already exists."
+msgstr "The file: {0} already exists."
+
+# TRANSLATION
+# LABEL/ID_UNABLE_TO_EDIT
+#: LABEL/ID_UNABLE_TO_EDIT
+msgid "Unable to edit. Make sure your file has an editable extension."
+msgstr "Unable to edit. Make sure your file has an editable extension."
+
+# TRANSLATION
+# LABEL/ID_REGISTRY_CANNOT_BE_UPDATED
+#: LABEL/ID_REGISTRY_CANNOT_BE_UPDATED
+msgid "The registry cannot be updated!"
+msgstr "The registry cannot be updated!"
+
+# TRANSLATION
+# LABEL/ID_ROW_DOES_NOT_EXIST
+#: LABEL/ID_ROW_DOES_NOT_EXIST
+msgid "This row does not exist!"
+msgstr "This row does not exist!"
+
+# TRANSLATION
+# LABEL/ID_NOT_VALID_RELATION
+#: LABEL/ID_NOT_VALID_RELATION
+msgid "This id for pu_uid: {0} does not correspond to a valid relation"
+msgstr "This id for pu_uid: {0} does not correspond to a valid relation"
+
+# TRANSLATION
+# LABEL/ID_NOT_REGISTERED_PROCESS_SUPERVISOR
+#: LABEL/ID_NOT_REGISTERED_PROCESS_SUPERVISOR
+msgid "This id: {0} does not correspond to a registered process supervisor"
+msgstr "This id: {0} does not correspond to a registered process supervisor"
+
+# TRANSLATION
+# LABEL/ID_USER_DOES_NOT_CORRESPOND_TYPE
+#: LABEL/ID_USER_DOES_NOT_CORRESPOND_TYPE
+msgid "This id: {0} does not correspond to a registered {1}"
+msgstr "This id: {0} does not correspond to a registered {1}"
+
+# TRANSLATION
+# LABEL/ID_RELATION_EXIST
+#: LABEL/ID_RELATION_EXIST
+msgid "This relation already exist!"
+msgstr "This relation already exist!"
+
+# TRANSLATION
+# LABEL/ID_DOES NOT_DYNAFORM
+#: LABEL/ID_DOES NOT_DYNAFORM
+msgid "This id for dyn_uid: {0} does not correspond to a registered Dynaform"
+msgstr "This id for dyn_uid: {0} does not correspond to a registered Dynaform"
+
+# TRANSLATION
+# LABEL/ID_DOES NOT_INPUT_DOCUMENT
+#: LABEL/ID_DOES NOT_INPUT_DOCUMENT
+msgid "This id for inp_doc_uid: {0} does not correspond to a registered InputDocument"
+msgstr "This id for inp_doc_uid: {0} does not correspond to a registered InputDocument"
+
+# TRANSLATION
+# LABEL/ID_USER_NOT_INITIAL ACTIVITIES
+#: LABEL/ID_USER_NOT_INITIAL ACTIVITIES
+msgid "This user usr_uid: {0} does not have initial activities assigned in this project"
+msgstr "This user usr_uid: {0} does not have initial activities assigned in this project"
+
+# TRANSLATION
+# LABEL/ID_USER_NOT_ID_ACTIVITY
+#: LABEL/ID_USER_NOT_ID_ACTIVITY
+msgid "The usr_uid: {0} does not have the activity act_uid: {1} assigned"
+msgstr "The usr_uid: {0} does not have the activity act_uid: {1} assigned"
+
+# TRANSLATION
+# LABEL/ID_USER_NOT_ACTIVITY
+#: LABEL/ID_USER_NOT_ACTIVITY
+msgid "The usr_uid: {0} does not have an activity assigned"
+msgstr "The usr_uid: {0} does not have an activity assigned"
+
+# TRANSLATION
+# LABEL/ID_INVALID_START
+#: LABEL/ID_INVALID_START
+msgid "Invalid value specified for start"
+msgstr "Invalid value specified for start"
+
+# TRANSLATION
+# LABEL/ID_INVALID_LIMIT
+#: LABEL/ID_INVALID_LIMIT
+msgid "Invalid value specified for limit"
+msgstr "Invalid value specified for limit"
+
+# TRANSLATION
+# LABEL/ID_RECORD_NOT_FOUND
+#: LABEL/ID_RECORD_NOT_FOUND
+msgid "Record not found for id: {0}"
+msgstr "Record not found for id: {0}"
+
+# TRANSLATION
+# LABEL/ID_ALREADY_ASSIGNED
+#: LABEL/ID_ALREADY_ASSIGNED
+msgid "This id: {0} is already assigned to task: {1}"
+msgstr "This id: {0} is already assigned to task: {1}"
+
+# TRANSLATION
+# LABEL/ID_DOES_NOT_CORRESPOND
+#: LABEL/ID_DOES_NOT_CORRESPOND
+msgid "[LABEL/ID_DOES_NOT_CORRESPOND] This id: {0} does not correspond to a registered {1}"
+msgstr "This id: {0} does not correspond to a registered {1}"
+
+# TRANSLATION
+# LABEL/ID_USER_CAN_NOT_UPDATE
+#: LABEL/ID_USER_CAN_NOT_UPDATE
+msgid "This user: {0}, can not update the data."
+msgstr "This user: {0}, can not update the data."
+
+# TRANSLATION
+# LABEL/ID_USER_CAN_NOT_BE_DELETED
+#: LABEL/ID_USER_CAN_NOT_BE_DELETED
+msgid "The user with usr_uid: {0}, cannot be deleted while it has cases assigned."
+msgstr "The user with usr_uid: {0}, cannot be deleted while it has cases assigned."
+
+# TRANSLATION
+# LABEL/ID_ROLE_DOES_NOT_EXIST
+#: LABEL/ID_ROLE_DOES_NOT_EXIST
+msgid "The role with {0}: {1} does not exist."
+msgstr "The role with {0}: {1} does not exist."
+
+# TRANSLATION
+# LABEL/ID_ROLE_CODE_ALREADY_EXISTS
+#: LABEL/ID_ROLE_CODE_ALREADY_EXISTS
+msgid "The role code with {0}: \"{1}\" already exists."
+msgstr "The role code with {0}: \"{1}\" already exists."
+
+# TRANSLATION
+# LABEL/ID_ROLE_NAME_ALREADY_EXISTS
+#: LABEL/ID_ROLE_NAME_ALREADY_EXISTS
+msgid "The role name with {0}: \"{1}\" already exists."
+msgstr "The role name with {0}: \"{1}\" already exists."
+
+# TRANSLATION
+# LABEL/ID_ROLE_FIELD_CANNOT_CONTAIN_SPECIAL_CHARACTERS
+#: LABEL/ID_ROLE_FIELD_CANNOT_CONTAIN_SPECIAL_CHARACTERS
+msgid "The \"{0}\" field cannot contain special characters or spaces."
+msgstr "The \"{0}\" field cannot contain special characters or spaces."
+
+# TRANSLATION
+# LABEL/ID_ROLE_USER_IS_ALREADY_ASSIGNED
+#: LABEL/ID_ROLE_USER_IS_ALREADY_ASSIGNED
+msgid "The user with {0}: {1} is already assigned to the role."
+msgstr "The user with {0}: {1} is already assigned to the role."
+
+# TRANSLATION
+# LABEL/ID_ROLE_USER_IS_NOT_ASSIGNED
+#: LABEL/ID_ROLE_USER_IS_NOT_ASSIGNED
+msgid "The user with {0}: {1} is not assigned to the role."
+msgstr "The user with {0}: {1} is not assigned to the role."
+
+# TRANSLATION
+# LABEL/ID_PERMISSION_DOES_NOT_EXIST
+#: LABEL/ID_PERMISSION_DOES_NOT_EXIST
+msgid "The permission with {0}: {1} does not exist."
+msgstr "The permission with {0}: {1} does not exist."
+
+# TRANSLATION
+# LABEL/ID_ROLE_PERMISSION_IS_ALREADY_ASSIGNED
+#: LABEL/ID_ROLE_PERMISSION_IS_ALREADY_ASSIGNED
+msgid "The permission with {0}: {1} is already assigned to the role."
+msgstr "The permission with {0}: {1} is already assigned to the role."
+
+# TRANSLATION
+# LABEL/ID_ROLE_PERMISSION_IS_NOT_ASSIGNED
+#: LABEL/ID_ROLE_PERMISSION_IS_NOT_ASSIGNED
+msgid "The permission with {0}: {1} is not assigned to the role."
+msgstr "The permission with {0}: {1} is not assigned to the role."
+
+# TRANSLATION
+# LABEL/ID_ROLE_PERMISSION_ROLE_PERMISSIONS_CAN_NOT_BE_CHANGED
+#: LABEL/ID_ROLE_PERMISSION_ROLE_PERMISSIONS_CAN_NOT_BE_CHANGED
+msgid "The permissions of the \"{0}\" role can not be changed."
+msgstr "The permissions of the \"{0}\" role can not be changed."
+
+# TRANSLATION
+# LABEL/ID_DEPARTMENT_NOT_EXIST
+#: LABEL/ID_DEPARTMENT_NOT_EXIST
+msgid "The departament with {0}: '{1}' does not exist."
+msgstr "The departament with {0}: '{1}' does not exist."
+
+# TRANSLATION
+# LABEL/ID_USER_NOT_EXIST
+#: LABEL/ID_USER_NOT_EXIST
+msgid "The user with {0}: '{1}' does not exist."
+msgstr "The user with {0}: '{1}' does not exist."
+
+# TRANSLATION
+# LABEL/ID_APPLICATION_NOT_EXIST
+#: LABEL/ID_APPLICATION_NOT_EXIST
+msgid "The application with {0}: '{1}' does not exist."
+msgstr "The application with {0}: '{1}' does not exist."
+
+# TRANSLATION
+# LABEL/ID_TRIGGER_NOT_EXIST
+#: LABEL/ID_TRIGGER_NOT_EXIST
+msgid "The trigger with {0}: '{1}' does not exist."
+msgstr "The trigger with {0}: '{1}' does not exist."
+
+# TRANSLATION
+# LABEL/ID_EVENT_NOT_EXIST
+#: LABEL/ID_EVENT_NOT_EXIST
+msgid "The event with {0}: '{1}' does not exist."
+msgstr "The event with {0}: '{1}' does not exist."
+
+# TRANSLATION
+# LABEL/ID_TASK_NOT_EXIST
+#: LABEL/ID_TASK_NOT_EXIST
+msgid "The task with {0}: '{1}' does not exist."
+msgstr "The task with {0}: '{1}' does not exist."
+
+# TRANSLATION
+# LABEL/ID_PROCESS_PERMISSION_NOT_EXIST
+#: LABEL/ID_PROCESS_PERMISSION_NOT_EXIST
+msgid "The process permission with {0}: '{1}' does not exist."
+msgstr "The process permission with {0}: '{1}' does not exist."
+
+# TRANSLATION
+# LABEL/ID_GROUP_NOT_EXIST
+#: LABEL/ID_GROUP_NOT_EXIST
+msgid "The group with {0}: '{1}' does not exist."
+msgstr "The group with {0}: '{1}' does not exist."
+
+# TRANSLATION
+# LABEL/ID_DYNAFORM_NOT_EXIST
+#: LABEL/ID_DYNAFORM_NOT_EXIST
+msgid "The dynaform with {0}: '{1}' does not exist."
+msgstr "The dynaform with {0}: '{1}' does not exist."
+
+# TRANSLATION
+# LABEL/ID_INPUT_NOT_EXIST
+#: LABEL/ID_INPUT_NOT_EXIST
+msgid "The input with {0}: '{1}' does not exist."
+msgstr "The input with {0}: '{1}' does not exist."
+
+# TRANSLATION
+# LABEL/ID_OUTPUT_NOT_EXIST
+#: LABEL/ID_OUTPUT_NOT_EXIST
+msgid "The output with {0}: '{1}' does not exist."
+msgstr "The output with {0}: '{1}' does not exist."
+
+# TRANSLATION
+# LABEL/ID_PROCESS_NOT_EXIST
+#: LABEL/ID_PROCESS_NOT_EXIST
+msgid "The process with {0}: '{1}' does not exist."
+msgstr "The process with {0}: '{1}' does not exist."
+
+# TRANSLATION
+# LABEL/ID_PROJECT_NOT_EXIST
+#: LABEL/ID_PROJECT_NOT_EXIST
+msgid "The project with {0}: '{1}' does not exist."
+msgstr "The project with {0}: '{1}' does not exist."
+
+# TRANSLATION
+# LABEL/ID_DBC_NOT_EXIST
+#: LABEL/ID_DBC_NOT_EXIST
+msgid "The database connection with {0}: '{1}' does not exist."
+msgstr "The database connection with {0}: '{1}' does not exist."
+
+# TRANSLATION
+# LABEL/ID_CATEGORY_NOT_EXIST
+#: LABEL/ID_CATEGORY_NOT_EXIST
+msgid "The category with {0}: '{1}' does not exist."
+msgstr "The category with {0}: '{1}' does not exist."
+
+# TRANSLATION
+# LABEL/ID_DATE_NOT_VALID
+#: LABEL/ID_DATE_NOT_VALID
+msgid "The value '{0}' is not a valid date for the format '{1}'."
+msgstr "The value '{0}' is not a valid date for the format '{1}'."
+
+# TRANSLATION
+# LABEL/ID_INVALID_VALUE_ARRAY
+#: LABEL/ID_INVALID_VALUE_ARRAY
+msgid "Invalid value for '{0}' it must be an array."
+msgstr "Invalid value for '{0}' it must be an array."
+
+# TRANSLATION
+# LABEL/ID_INVALID_VALUE_STRING
+#: LABEL/ID_INVALID_VALUE_STRING
+msgid "Invalid value for '{0}' it must be a string."
+msgstr "Invalid value for '{0}' it must be a string."
+
+# TRANSLATION
+# LABEL/ID_INVALID_VALUE_INTEGER
+#: LABEL/ID_INVALID_VALUE_INTEGER
+msgid "Invalid value for '{0}' it must be a integer."
+msgstr "Invalid value for '{0}' it must be a integer."
+
+# TRANSLATION
+# LABEL/ID_INVALID_VALUE_BOOLEAN
+#: LABEL/ID_INVALID_VALUE_BOOLEAN
+msgid "Invalid value for '{0}' it must be a boolean."
+msgstr "Invalid value for '{0}' it must be a boolean."
+
+# TRANSLATION
+# LABEL/ID_INVALID_VALUE_IS_EMPTY
+#: LABEL/ID_INVALID_VALUE_IS_EMPTY
+msgid "The field '{0}' is empty."
+msgstr "The field '{0}' is empty."
+
+# TRANSLATION
+# LABEL/ID_INCORRECT_VALUE_ACTION
+#: LABEL/ID_INCORRECT_VALUE_ACTION
+msgid "The value for $action is incorrect."
+msgstr "The value for $action is incorrect."
+
+# TRANSLATION
+# LABEL/ID_CASE_ALREADY_CANCELED
+#: LABEL/ID_CASE_ALREADY_CANCELED
+msgid "The case '{0}' is already canceled"
+msgstr "The case '{0}' is already canceled"
+
+# TRANSLATION
+# LABEL/ID_CASE_IS_CANCELED
+#: LABEL/ID_CASE_IS_CANCELED
+msgid "The case '{0}' is canceled"
+msgstr "The case '{0}' is canceled"
+
+# TRANSLATION
+# LABEL/ID_INVALID_MAX_PERMITTED
+#: LABEL/ID_INVALID_MAX_PERMITTED
+msgid "Invalid value for '{0}', the permitted maximum length of {1} characters."
+msgstr "Invalid value for '{0}', the permitted maximum length of {1} characters."
+
+# TRANSLATION
+# LABEL/ID_DBC_TYPE_INVALID
+#: LABEL/ID_DBC_TYPE_INVALID
+msgid "The dababase connection with dbs_type: '{0}' is invalid"
+msgstr "The dababase connection with dbs_type: '{0}' is invalid"
+
+# TRANSLATION
+# LABEL/ID_DBC_SERVER_INVALID
+#: LABEL/ID_DBC_SERVER_INVALID
+msgid "The dababase connection with dbs_server: '{0}', is invalid"
+msgstr "The dababase connection with dbs_server: '{0}', is invalid"
+
+# TRANSLATION
+# LABEL/ID_DBC_DBNAME_INVALID
+#: LABEL/ID_DBC_DBNAME_INVALID
+msgid "The dababase connection with dbs_database_name: '{0}' is invalid"
+msgstr "The dababase connection with dbs_database_name: '{0}' is invalid"
+
+# TRANSLATION
+# LABEL/ID_DBC_PORT_INVALID
+#: LABEL/ID_DBC_PORT_INVALID
+msgid "The dababase connection with dbs_port: '{0}' is invalid"
+msgstr "The dababase connection with dbs_port: '{0}' is invalid"
+
+# TRANSLATION
+# LABEL/ID_DBC_ENCODE_INVALID
+#: LABEL/ID_DBC_ENCODE_INVALID
+msgid "The dababase connection with dbs_encode: '{0}' is invalid"
+msgstr "The dababase connection with dbs_encode: '{0}' is invalid"
+
+# TRANSLATION
+# LABEL/ID_CANT_DELETE_DEPARTMENT_HAS_CHILDREN
+#: LABEL/ID_CANT_DELETE_DEPARTMENT_HAS_CHILDREN
+msgid "Can not delete the department, it has a children department."
+msgstr "Can not delete the department, it has a children department."
+
+# TRANSLATION
+# LABEL/ID_CANT_DELETE_DEPARTMENT_HAS_USERS
+#: LABEL/ID_CANT_DELETE_DEPARTMENT_HAS_USERS
+msgid "[LABEL/ID_CANT_DELETE_DEPARTMENT_HAS_USERS] Department cannot be deleted while has assigned users."
+msgstr "Department cannot be deleted while has assigned users."
+
+# TRANSLATION
+# LABEL/ID_CANT_SAVE_TRIGGER
+#: LABEL/ID_CANT_SAVE_TRIGGER
+msgid "A trigger with the same name already exists in this process."
+msgstr "A trigger with the same name already exists in this process."
+
+# TRANSLATION
+# LABEL/ID_CASE_DOES_NOT_EXIST2
+#: LABEL/ID_CASE_DOES_NOT_EXIST2
+msgid "The case with {0}: {1} does not exist."
+msgstr "The case with {0}: {1} does not exist."
+
+# TRANSLATION
+# LABEL/ID_CATEGORY_NAME_ALREADY_EXISTS
+#: LABEL/ID_CATEGORY_NAME_ALREADY_EXISTS
+msgid "The category name with {0}: \"{1}\" already exists."
+msgstr "The category name with {0}: \"{1}\" already exists."
+
+# TRANSLATION
+# LABEL/ID_MSG_CONFIRM_DELETE_USER_ASSINGED_SUPERVISOR
+#: LABEL/ID_MSG_CONFIRM_DELETE_USER_ASSINGED_SUPERVISOR
+msgid "The user can not be deleted while this assigned as a supervisor. Want removed anyway?"
+msgstr "The user can not be deleted while this assigned as a supervisor. Want removed anyway?"
+
+# TRANSLATION
+# LABEL/ID_NAME_STG_TITLE_REQUIRE
+#: LABEL/ID_NAME_STG_TITLE_REQUIRE
+msgid "Stage title required"
+msgstr "Stage title required"
+
+# TRANSLATION
+# LABEL/ID_INPUT_DOCUMENT_ITS_ASSIGNED
+#: LABEL/ID_INPUT_DOCUMENT_ITS_ASSIGNED
+msgid "The Input Document with {0}: {1} it's assigned in \"{2}\"."
+msgstr "The Input Document with {0}: {1} it's assigned in \"{2}\"."
+
+# TRANSLATION
+# LABEL/ID_PROCESS_VARIABLE_DOES_NOT_EXIST
+#: LABEL/ID_PROCESS_VARIABLE_DOES_NOT_EXIST
+msgid "The variable with {0}: {1} does not exist."
+msgstr "The variable with {0}: {1} does not exist."
+
+# TRANSLATION
+# LABEL/ID_PROCESS_VARIABLE_REQUIRED_VARIABLES_FOR_QUERY
+#: LABEL/ID_PROCESS_VARIABLE_REQUIRED_VARIABLES_FOR_QUERY
+msgid "The variable \"{0}\" required the variables \"{1}\" for the query."
+msgstr "The variable \"{0}\" required the variables \"{1}\" for the query."
+
+# TRANSLATION
+# LABEL/ID_OUTPUT_DOCUMENT_ITS_ASSIGNED
+#: LABEL/ID_OUTPUT_DOCUMENT_ITS_ASSIGNED
+msgid "The Output Document with {0}: {1} it's assigned in \"{2}\"."
+msgstr "The Output Document with {0}: {1} it's assigned in \"{2}\"."
 
 # additionalTables/additionalTablesData.xml?ADD_TAB_NAME
 # additionalTables/additionalTablesData.xml
@@ -19072,14 +20254,14 @@ msgstr "Task"
 # cases/cases_Scheduler_List.xml?SCH_TIME_NEXT_RUN
 # cases/cases_Scheduler_List.xml
 #: text - SCH_TIME_NEXT_RUN
-msgid "Time next run"
-msgstr "Time next run"
+msgid "Next execution time"
+msgstr "Next execution time"
 
 # cases/cases_Scheduler_List.xml?SCH_LAST_RUN_TIME
 # cases/cases_Scheduler_List.xml
 #: text - SCH_LAST_RUN_TIME
-msgid "Last run time"
-msgstr "Last run time"
+msgid "Last execution time"
+msgstr "Last execution time"
 
 # cases/cases_Scheduler_List.xml?SCH_STATUS_LNK
 # cases/cases_Scheduler_List.xml
@@ -19671,13 +20853,13 @@ msgstr "User"
 
 # cases/cases_TaskDetails.xml?INIT_DATE
 # cases/cases_TaskDetails.xml
-#: date - INIT_DATE
+#: text - INIT_DATE
 msgid "[cases/cases_TaskDetails.xml?INIT_DATE] Init Date"
 msgstr "Init Date"
 
 # cases/cases_TaskDetails.xml?DUE_DATE
 # cases/cases_TaskDetails.xml
-#: date - DUE_DATE
+#: text - DUE_DATE
 msgid "Due date"
 msgstr "Due date"
 
@@ -21049,6 +22231,30 @@ msgstr "Encode"
 msgid "[dbConnections/dbConnections_Edit.xml?DBS_ENCODE-]"
 msgstr "..."
 
+# dbConnections/dbConnections_Edit.xml?DBS_CONNECTION_TYPE
+# dbConnections/dbConnections_Edit.xml
+#: dropdown - DBS_CONNECTION_TYPE
+msgid "Select Connection Type"
+msgstr "Select Connection Type"
+
+# dbConnections/dbConnections_Edit.xml?DBS_CONNECTION_TYPE-NORMAL
+# dbConnections/dbConnections_Edit.xml
+#: dropdown - DBS_CONNECTION_TYPE - NORMAL
+msgid "[dbConnections/dbConnections_Edit.xml?DBS_CONNECTION_TYPE-NORMAL]"
+msgstr "Normal"
+
+# dbConnections/dbConnections_Edit.xml?DBS_CONNECTION_TYPE-TNS
+# dbConnections/dbConnections_Edit.xml
+#: dropdown - DBS_CONNECTION_TYPE - TNS
+msgid "[dbConnections/dbConnections_Edit.xml?DBS_CONNECTION_TYPE-TNS]"
+msgstr "TNS"
+
+# dbConnections/dbConnections_Edit.xml?DBS_TNS
+# dbConnections/dbConnections_Edit.xml
+#: text - DBS_TNS
+msgid "TNS"
+msgstr "TNS"
+
 # dbConnections/dbConnections_Edit.xml?DBS_SERVER
 # dbConnections/dbConnections_Edit.xml
 #: text - DBS_SERVER
@@ -21126,6 +22332,30 @@ msgstr "Encode"
 #: dropdown - DBS_ENCODE -
 msgid "[dbConnections/dbConnections_New.xml?DBS_ENCODE-]"
 msgstr "..."
+
+# dbConnections/dbConnections_New.xml?DBS_CONNECTION_TYPE
+# dbConnections/dbConnections_New.xml
+#: dropdown - DBS_CONNECTION_TYPE
+msgid "[dbConnections/dbConnections_New.xml?DBS_CONNECTION_TYPE] Select Connection Type"
+msgstr "Select Connection Type"
+
+# dbConnections/dbConnections_New.xml?DBS_CONNECTION_TYPE-NORMAL
+# dbConnections/dbConnections_New.xml
+#: dropdown - DBS_CONNECTION_TYPE - NORMAL
+msgid "[dbConnections/dbConnections_New.xml?DBS_CONNECTION_TYPE-NORMAL]"
+msgstr "Normal"
+
+# dbConnections/dbConnections_New.xml?DBS_CONNECTION_TYPE-TNS
+# dbConnections/dbConnections_New.xml
+#: dropdown - DBS_CONNECTION_TYPE - TNS
+msgid "[dbConnections/dbConnections_New.xml?DBS_CONNECTION_TYPE-TNS]"
+msgstr "TNS"
+
+# dbConnections/dbConnections_New.xml?DBS_TNS
+# dbConnections/dbConnections_New.xml
+#: text - DBS_TNS
+msgid "[dbConnections/dbConnections_New.xml?DBS_TNS] TNS"
+msgstr "TNS"
 
 # dbConnections/dbConnections_New.xml?DBS_SERVER
 # dbConnections/dbConnections_New.xml
@@ -25354,6 +26584,24 @@ msgstr "Copy"
 #: listbox - OUT_DOC_PDF_SECURITY_PERMISSIONS - annot-forms
 msgid "[outputdocs/outputdocs_Properties.xml?OUT_DOC_PDF_SECURITY_PERMISSIONS-annot-forms]"
 msgstr "Forms"
+
+# outputdocs/outputdocs_Properties.xml?OUT_DOC_OPEN_TYPE
+# outputdocs/outputdocs_Properties.xml
+#: dropdown - OUT_DOC_OPEN_TYPE
+msgid "By clicking on the generated file link"
+msgstr "By clicking on the generated file link"
+
+# outputdocs/outputdocs_Properties.xml?OUT_DOC_OPEN_TYPE-0
+# outputdocs/outputdocs_Properties.xml
+#: dropdown - OUT_DOC_OPEN_TYPE - 0
+msgid "[outputdocs/outputdocs_Properties.xml?OUT_DOC_OPEN_TYPE-0]"
+msgstr "Download the file"
+
+# outputdocs/outputdocs_Properties.xml?OUT_DOC_OPEN_TYPE-1
+# outputdocs/outputdocs_Properties.xml
+#: dropdown - OUT_DOC_OPEN_TYPE - 1
+msgid "[outputdocs/outputdocs_Properties.xml?OUT_DOC_OPEN_TYPE-1]"
+msgstr "Open the file"
 
 # outputdocs/outputdocs_Properties.xml?BTN_CANCEL
 # outputdocs/outputdocs_Properties.xml
