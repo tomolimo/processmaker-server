@@ -139,7 +139,7 @@ try {
             	$browser = $_SERVER['HTTP_USER_AGENT'];
 
             	$path = PATH_DATA;
-            	$message = " | Many failed authentication attempts for USER: " . $usr . " | IP: " . $ip . " |  WS: " . SYS_SYS . " | BROWSER: " .$browser ." \n" ;
+            	$message = "| Many failed authentication attempts for USER: " . $usr . " | IP: " . $ip . " |  WS: " . SYS_SYS . " | BROWSER: " .$browser ." | \n" ;
             	$file = "loginFailed.log";
 
             	G::log($message, $path, $file);
