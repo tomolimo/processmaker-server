@@ -854,24 +854,26 @@ class Derivation
                         );
                         $this->derivate( $currentDelegation2, $nextDelegations2 );
 
-                        // Send notifications - Start
-                        $oUser = new Users();
+                        if($delIndex > 0 ) {
+                            // Send notifications - Start
+                            $oUser = new Users();
+                            $aUser = $oUser->load($appFields["CURRENT_USER_UID"]);
 
-                        $aUser = $oUser->load($appFields["APP_DATA"]["USER_LOGGED"]);
-                        $sFromName = $aUser["USR_FIRSTNAME"] . " " . $aUser["USR_LASTNAME"] . ($aUser["USR_EMAIL"] != "" ? " <" . $aUser["USR_EMAIL"] . ">" : "");
+                            $sFromName = $aUser["USR_FIRSTNAME"] . " " . $aUser["USR_LASTNAME"] . ($aUser["USR_EMAIL"] != "" ? " <" . $aUser["USR_EMAIL"] . ">" : "");
 
-                        try {
-                            $oCase->sendNotifications($appFields["APP_DATA"]["TASK"],
-                                                      $nextDelegations2,
-                                                      $appFields["APP_DATA"],
-                                                      $sApplicationUID,
-                                                      $delIndex,
-                                                      $sFromName);
+                            try {
+                                $oCase->sendNotifications($appFields["TAS_UID"],
+                                                          $nextDelegations2,
+                                                          $appFields["APP_DATA"],
+                                                          $sApplicationUID,
+                                                          $delIndex,
+                                                          $sFromName);
 
-                        } catch (Exception $e) {
-                            G::SendTemporalMessage(G::loadTranslation("ID_NOTIFICATION_ERROR") . " - " . $e->getMessage(), "warning", "string", null, "100%");
+                            } catch (Exception $e) {
+                                G::SendTemporalMessage(G::loadTranslation("ID_NOTIFICATION_ERROR") . " - " . $e->getMessage(), "warning", "string", null, "100%");
+                            }
+                            // Send notifications - End
                         }
-                        // Send notifications - End
                     }
                 }
             }

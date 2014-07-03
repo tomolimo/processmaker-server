@@ -3970,7 +3970,7 @@ class Cases
         if (SubApplicationPeer::doCount($oCriteria2) > 0) {
             G::LoadClass('derivation');
             $oDerivation = new Derivation();
-            $oDerivation->verifyIsCaseChild($sApplicationUID);
+            $oDerivation->verifyIsCaseChild($sApplicationUID, $iIndex);
         }
 
         //update searchindex
