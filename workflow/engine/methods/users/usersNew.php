@@ -1,4 +1,6 @@
 <?php
+global $RBAC;
+$RBAC->requirePermissions( 'PM_USERS' );
 
 //calculating the max upload file size;
 $POST_MAX_SIZE = ini_get( 'post_max_size' );
