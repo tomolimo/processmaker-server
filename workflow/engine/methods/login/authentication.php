@@ -54,7 +54,7 @@ try {
                 if (isset($_SESSION['__AUTH_ERROR__'])) {
                     G::SendMessageText($_SESSION['__AUTH_ERROR__'], "warning");
                     unset($_SESSION['__AUTH_ERROR__']);
-                }                
+                }
                 break;
             //The user is inactive
             case -3:
@@ -139,7 +139,7 @@ try {
             	$browser = $_SERVER['HTTP_USER_AGENT'];
 
             	$path = PATH_DATA;
-            	$message = date('Y-m-d H:i:s'). " | Many failed authentication attempts for USER: " . $usr . " | IP: " . $ip . " |  WS: " . SYS_SYS . " | Browser: " .$browser ." \n" ;
+            	$message = " | Many failed authentication attempts for USER: " . $usr . " | IP: " . $ip . " |  WS: " . SYS_SYS . " | BROWSER: " .$browser ." \n" ;
             	$file = "loginFailed.log";
 
             	G::log($message, $path, $file);
