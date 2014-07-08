@@ -211,6 +211,8 @@ class AppDelegation extends BaseAppDelegation
 
     public function LoadParallel ($AppUid)
     {
+        $aCases = array();
+
         $c = new Criteria( 'workflow' );
         $c->addSelectColumn( AppDelegationPeer::APP_UID );
         $c->addSelectColumn( AppDelegationPeer::DEL_INDEX );
