@@ -577,7 +577,7 @@ class Cases
                     if ($jump != '') {
                         $aCases = $oAppDel->LoadParallel($sAppUid);
                         $aFields['TAS_UID'] = '';
-                        $aFields['CURRENT_USER'] = '';
+                        $aFields['CURRENT_USER'] = array();
                         foreach ($aCases as $key => $value) {
                             $oCurUser->load($value['USR_UID']);
                             $aFields['CURRENT_USER'][]= $oCurUser->getUsrFirstname() . ' ' . $oCurUser->getUsrLastname();
