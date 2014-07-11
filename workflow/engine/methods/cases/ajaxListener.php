@@ -334,6 +334,7 @@ class Ajax
             $processData['PRO_AUTHOR'] = '(USER DELETED)';
         }
 
+        G::LoadClass('configuration');
         $conf = new Configurations();
         $conf->getFormats();
         $processData['PRO_CREATE_DATE'] = $conf->getSystemDate($processData['PRO_CREATE_DATE']);
