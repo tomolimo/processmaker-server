@@ -93,7 +93,7 @@ try {
         }
 
         if (!isset($uid) || $uid < 0) {
-            if (isset($_SESSION['FAILED_LOGINS'])) {
+            if (isset($_SESSION['FAILED_LOGINS']) && ($uid == -1 || $uid == -2)) {
                 $_SESSION['FAILED_LOGINS']++;
             }
             if (!defined('PPP_FAILED_LOGINS')) {
@@ -113,8 +113,13 @@ try {
                         $oStatement  = $oConnection->prepareStatement("UPDATE USERS SET USR_STATUS = 'INACTIVE' WHERE USR_UID = '" . $sUserUID . "'");
                         $oStatement->executeQuery();
                         unset($_SESSION['FAILED_LOGINS']);
-                        G::SendMessageText(G::LoadTranslation('ID_ACCOUNT') . ' "' . $usr . '" ' . G::LoadTranslation('ID_ACCOUNT_DISABLED_CONTACT_ADMIN'), 'warning');
+                        $errLabel = G::LoadTranslation('ID_ACCOUNT') . ' "' . $usr . '" ' . G::LoadTranslation('ID_ACCOUNT_DISABLED_CONTACT_ADMIN');
                     }
+                    //Log failed authentications
+            	    $message  = "| Many failed authentication attempts for USER: " . $usr . " | IP: " . G::getIpAddress() . " |  WS: " . SYS_SYS;
+            	    $message .= " | BROWSER: " . $_SERVER['HTTP_USER_AGENT'] ." | \n" ;
+
+            	    G::log($message, PATH_DATA, 'loginFailed.log');
                 }
             }
 
@@ -129,20 +134,6 @@ try {
                 } else {
                     $loginUrl = '../main/login';
                 }
-            }
-
-            //LOG Filed authentications
-            $filedTimes = (defined(PPP_FAILED_LOGINS)) ? PPP_FAILED_LOGINS : 3;
-
-            if($_SESSION['FAILED_LOGINS'] > $filedTimes){
-            	$ip = G::getIpAddress();
-            	$browser = $_SERVER['HTTP_USER_AGENT'];
-
-            	$path = PATH_DATA;
-            	$message = "| Many failed authentication attempts for USER: " . $usr . " | IP: " . $ip . " |  WS: " . SYS_SYS . " | BROWSER: " .$browser ." | \n" ;
-            	$file = "loginFailed.log";
-
-            	G::log($message, $path, $file);
             }
 
             G::header("location: $loginUrl");
