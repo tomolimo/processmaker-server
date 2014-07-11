@@ -810,7 +810,7 @@ class Ajax
     public function dynaformViewFromHistory()
     {
         ?>
-        <link rel="stylesheet" type="text/css" href="/css/classic.css" />
+        <link rel="stylesheet" type="text/css" href="/css/<?php echo SYS_SKIN; ?>.css" />
 
         <script type="text/javascript">
             //!Code that simulated reload library javascript maborak
