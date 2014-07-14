@@ -622,12 +622,14 @@ render_lastlogin = function(v){
 //Load Grid By Default
 GridByDefault = function(){
   searchText.reset();
-  infoGrid.store.load();
+  store.setBaseParam( 'textFilter', '');
+  store.load();
 };
 
 //Do Search Function
 DoSearch = function(){
-  infoGrid.store.load({params: {textFilter: searchText.getValue()}});
+  store.setBaseParam( 'textFilter', searchText.getValue());
+  store.load();
 };
 
 //Delete User Function
