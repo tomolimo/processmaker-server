@@ -152,17 +152,25 @@ try {
             $oContent = new Content();
             $aRow = $oDataset->getRow();
 
-            //THERE IS NO ANY CASE STARTED FROM THES LANGUAGE
-            if ($aRow[0] == 0) { //so we can delete this language
-                try {
-                    Content::removeLanguageContent( $locale );
-                    $trn->removeTranslationEnvironment( $locale );
-                    echo G::LoadTranslation( 'ID_LANGUAGE_DELETED_SUCCESSFULLY' );
-                } catch (Exception $e) {
-                    echo $e->getMessage();
-                }
+            if($locale != "en"){ //Default Lengage 'en'
+            	if($locale != SYS_LANG){ //Current lenguage
+            		//THERE IS NO ANY CASE STARTED FROM THES LANGUAGE
+            		if ($aRow[0] == 0) { //so we can delete this language
+            			try {
+            				Content::removeLanguageContent( $locale );
+            				$trn->removeTranslationEnvironment( $locale );
+            				echo G::LoadTranslation( 'ID_LANGUAGE_DELETED_SUCCESSFULLY' );
+            			} catch (Exception $e) {
+            				echo $e->getMessage();
+            			}
+            		} else {
+            			echo str_replace( '{0}', $aRow[0], G::LoadTranslation( 'ID_LANGUAGE_CANT_DELETE' ) );
+            		}
+            	} else {
+            		echo str_replace( '{0}', $aRow[0], G::LoadTranslation( 'ID_LANGUAGE_CANT_DELETE_CURRENTLY' ) );
+            	}
             } else {
-                echo str_replace( '{0}', $aRow[0], G::LoadTranslation( 'ID_LANGUAGE_CANT_DELETE' ) );
+            	echo str_replace( '{0}', $aRow[0], G::LoadTranslation( 'ID_LANGUAGE_CANT_DELETE_DEFAULT' ) );
             }
             break;
     }
