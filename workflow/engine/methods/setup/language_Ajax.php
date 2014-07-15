@@ -152,11 +152,8 @@ try {
             $oContent = new Content();
             $aRow = $oDataset->getRow();
 
-            $actualLanguage = $_ENV['REQUEST_URI'];
-            $actualLanguage = explode("/", $actualLanguage);
-
             if($locale != "en"){ //Default Lengage 'en'
-            	if($locale != $actualLanguage[2]){ //Current lenguage
+            	if($locale != SYS_LANG){ //Current lenguage
             		//THERE IS NO ANY CASE STARTED FROM THES LANGUAGE
             		if ($aRow[0] == 0) { //so we can delete this language
             			try {
