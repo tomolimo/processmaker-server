@@ -695,6 +695,21 @@ try {
             //$json = new Services_JSON();
             $sOutput = Bootstrap::json_encode($response);
             break;
+        case "verifyNameFile":
+            $response = array();
+            $status = "OK";
+
+            $filename = $_POST["filename"];
+
+            $pathDirectory = PATH_DATA_MAILTEMPLATES . $_REQUEST["pro_uid"] . PATH_SEP;
+
+            if (file_exists($pathDirectory . PATH_SEP . $filename)) {
+                $status = "ERROR";
+            }
+
+            $response["status"] = $status;
+            echo Bootstrap::json_encode($response);
+            break;
     }
     if (isset($sOutput)) {
         die($sOutput);
