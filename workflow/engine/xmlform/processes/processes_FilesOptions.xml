@@ -187,12 +187,12 @@ function saveEmptyFile(){
                 }.extend(this);
 	               oRPC.make();
              } else {
-                 new leimnud.module.app.alert().make({label: "The file exists."});
+                 new leimnud.module.app.alert().make({label: _("ID_EXISTS_FILES")});
              }
          }.extend(this);
          rpcAjax.make();
      } else {
-         new leimnud.module.app.alert().make({label: "File name required."});
+         new leimnud.module.app.alert().make({label: _("ID_FILENAME_REQUIRED")});
      }
 }
 

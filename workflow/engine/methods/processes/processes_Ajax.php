@@ -700,18 +700,11 @@ try {
             $status = "OK";
 
             $filename = $_POST["filename"];
+
             $pathDirectory = PATH_DATA_MAILTEMPLATES . $_REQUEST["pro_uid"] . PATH_SEP;
 
-            if (is_dir($pathDirectory)) {
-                $myDirectory = opendir($pathDirectory);
-
-                while ($myFile = readdir($myDirectory)) {
-                    if ($myFile == $filename) {
-                        $status = "ERROR";
-                    }
-                }
-
-                closedir($myDirectory);
+            if (file_exists($pathDirectory . PATH_SEP . $filename)) {
+                $status = "ERROR";
             }
 
             $response["status"] = $status;
