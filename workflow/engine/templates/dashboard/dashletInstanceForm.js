@@ -66,6 +66,7 @@ Ext.onReady(function() {
     name:       'DAS_INS_TITLE',
     fieldLabel: _('ID_TITLE'),
     allowBlank: false,
+    maxLength: 200,
     width:      320,
     listeners:  {
       blur: function() {
