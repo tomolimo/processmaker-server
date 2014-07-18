@@ -699,6 +699,9 @@ class Form extends XmlForm
                         break;
                     case "grid":
                         $i = 0;
+                        if (!is_array($data[$v->name])) {
+                            $data[$v->name] = array();
+                        }
                         foreach ($data[$v->name] as $dataGrid) {
                             $i = $i + 1;
 
