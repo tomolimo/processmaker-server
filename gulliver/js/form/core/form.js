@@ -1213,8 +1213,17 @@ function G_Text(form, element, name)
     if (me.validate == 'Any' && me.mask == '') return true;
 
     var pressKey = (window.event)? window.event.keyCode : event.which;
-    if (pressKey == 107 || pressKey == 187 || pressKey == 191 || pressKey == 192 || pressKey == 172 || pressKey == 171 || pressKey == 226 || pressKey == 220 || pressKey == 226 || pressKey == 0 || pressKey == 221 || pressKey == 222 || pressKey == 186) {
-        pressKey = 43;
+
+    if (me.validate == "NodeName" && (pressKey == 189 || pressKey == 173)) {
+        return true;
+    }
+
+    if (me.validate == "NodeName" && (pressKey == 0 || pressKey == 192 ||  pressKey == 109)) {
+        return false;
+    }
+
+    if (pressKey == 107 || pressKey == 187 || pressKey == 191 || pressKey == 172 || pressKey == 171 || pressKey == 226 || pressKey == 220 || pressKey == 226 || pressKey == 221 || pressKey == 222 || pressKey == 186) {
+       pressKey = 43;
     }
 
     switch(pressKey){
@@ -3930,15 +3939,15 @@ function dropDownSetOption(elem, arrayOption)
 function dynaFormChanged(frm)
 {
     for (var i1 = 0; i1 <= frm.elements.length - 1; i1++) {
-        
+
         if((frm.elements[i1].type=="radio" || frm.elements[i1].type=="checkbox") && (frm.elements[i1].checked!=frm.elements[i1].defaultChecked)) {
           return true;
         }
-        
+
         if((frm.elements[i1].type=="textarea" || frm.elements[i1].type=="text" || frm.elements[i1].type=="file") && (frm.elements[i1].value!=frm.elements[i1].defaultValue)) {
           return true;
         }
-        
+
 
         if (frm.elements[i1].tagName.toLowerCase() == "select") {
             var selectDefaultValue = frm.elements[i1].value;

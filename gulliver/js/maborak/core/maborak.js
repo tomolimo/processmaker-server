@@ -1024,7 +1024,9 @@ switch(action){case'mask':case'move':dataNewMask=me.replaceMasks(newValue,newCur
 break;case 256:newValue=currentValue.substring(0,cursorStart);newValue+='.';newValue+=currentValue.substring(cursorEnd,currentValue.length);newCursor=cursorStart+1;break;case 35:case 36:case 37:case 38:case 39:case 40:newValue=currentValue;switch(keyCode){case 36:newCursor=0;break;case 35:newCursor=currentValue.length;break;case 37:newCursor=cursorStart-1;break;case 39:newCursor=cursorStart+1;break;}
 break;default:newKey=String.fromCharCode(keyCode);newValue=currentValue.substring(0,cursorStart);newValue+=newKey;newValue+=currentValue.substring(cursorEnd,currentValue.length);newCursor=cursorStart+1;break;}
 if(newCursor<0)newCursor=0;me.element.value=newValue;me.setSelectionRange(newCursor,newCursor);}};this.sendOnChange=function(){if(me.element.fireEvent){me.element.fireEvent("onchange");}else{var evObj=document.createEvent('HTMLEvents');evObj.initEvent('change',true,true);me.element.dispatchEvent(evObj);}};this.handleKeyDown=function(event){if(me.element.readOnly){return true;}
-if(me.validate=='Any'&&me.mask=='')return true;var pressKey=(window.event)?window.event.keyCode:event.which;if(pressKey==107||pressKey==187||pressKey==191||pressKey==192||pressKey==172||pressKey==171||pressKey==226||pressKey==220||pressKey==226||pressKey==0||pressKey==221||pressKey==222||pressKey==186){pressKey=43;}
+if(me.validate=='Any'&&me.mask=='')return true;var pressKey=(window.event)?window.event.keyCode:event.which;if(me.validate=="NodeName"&&(pressKey==189||pressKey==173)){return true;}
+if(me.validate=="NodeName"&&(pressKey==0||pressKey==192||pressKey==109)){return false;}
+if(pressKey==107||pressKey==187||pressKey==191||pressKey==172||pressKey==171||pressKey==226||pressKey==220||pressKey==226||pressKey==221||pressKey==222||pressKey==186){pressKey=43;}
 switch(pressKey){case 8:case 46:case 35:case 36:case 37:case 38:case 39:case 40:case 43:if((pressKey==8||pressKey==46)&&me.validate=="NodeName"){return true;}
 if(pressKey==46&&me.validate=="Email"){return true;}
 if(me.validate=="Email"&&pressKey!=8&&(me.element.value.length>me.element.maxLength-1)){return false;}
