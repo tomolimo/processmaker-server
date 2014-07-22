@@ -319,6 +319,11 @@ class XmlForm_Field
         if ($this->sql === '') {
             return 1;
         }
+
+        if($this->renderMode == "view" && ($this->type == "text" || $this->type == "currency" || $this->type == "percentage" || $this->type == "textarea" || $this->type == "hidden" || $this->type == "suggest")){
+        	return 1;
+        }
+
         if (! $this->sqlConnection) {
             $this->sqlConnection = 'workflow';
         }
