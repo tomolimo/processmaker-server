@@ -1209,7 +1209,7 @@ dropdowns=grids[j].getElementsByTagName('select');for(i=0;i<dropdowns.length;i++
 fieldGridName=$label[1]+"["+$label[2]+"["+$label[3].split("]")[0];if(!notValidateThisFields.inArray(fieldGridName)){invalidFields.push($fieldName);}
 vtext.failed();}else{vtext.passed();}}}
 return(invalidFields);};var swSubmitValidateForm=1;var validateForm=function(sRequiredFields){if(swSubmitValidateForm==1){swSubmitValidateForm=0;sFormName=document.getElementById('__DynaformName__');if(typeof(__dynaformSVal__)!='undefined'&&(typeof(sFormName)!='undefined'&&sFormName!='login')&&(typeof(__usernameLogged__)!='undefined'&&__usernameLogged__!='')){if(!sessionPersits()){showPromptLogin('session');swSubmitValidateForm=1;return false;}}
-if(typeof(sRequiredFields)!='object'||sRequiredFields.indexOf("%27")>0){sRequiredFields=sRequiredFields.replace(/%27/gi,'"');}
+sRequiredFields=sRequiredFields.replace(/\n/g," ");if(typeof(sRequiredFields)!='object'||sRequiredFields.indexOf("%27")>0){sRequiredFields=sRequiredFields.replace(/%27/gi,'"');}
 if(typeof(sRequiredFields)!='object'||sRequiredFields.indexOf("%39")>0){sRequiredFields=sRequiredFields.replace(/%39/gi,"'");}
 aRequiredFields=eval(sRequiredFields);var sMessage='';var invalid_fields=Array();var fielEmailInvalid=Array();for(var i=0;i<aRequiredFields.length;i++){aRequiredFields[i].label=(aRequiredFields[i].label=='')?aRequiredFields[i].name:aRequiredFields[i].label;if(!notValidateThisFields.inArray(aRequiredFields[i].name)){if(typeof aRequiredFields[i].required!='undefined'){required=aRequiredFields[i].required;}else{required=1;}
 if(typeof aRequiredFields[i].validate!='undefined'){validate=aRequiredFields[i].validate;}else{validate='';}

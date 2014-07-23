@@ -2969,6 +2969,7 @@ var validateForm = function(sRequiredFields) {
          *  i.ei <form onsubmit="myaction(MyjsString)" ...   with var MyjsString = "some string that is into a variable, so this broke the html";
         */
 
+        sRequiredFields = sRequiredFields.replace(/\n/g, " ");
         if( typeof(sRequiredFields) != 'object' || sRequiredFields.indexOf("%27") > 0 ) {
             sRequiredFields = sRequiredFields.replace(/%27/gi, '"');
         }
