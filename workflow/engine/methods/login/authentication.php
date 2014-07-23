@@ -311,16 +311,11 @@ try {
     $oHeadPublisher->addExtJsScript('login/init', false);    //adding a javascript file .js
     $oHeadPublisher->assign('uriReq', $sLocation);
 
-    $sFilename = PATH_PLUGINS . 'pmEnhancedLogin.php' ;
-
-    if (file_exists($sFilename)) {
-        require_once $sFilename;
-
-        if (class_exists( 'pmEnhancedLoginplugin' )) {
-            $oPlugin = new pmEnhancedLoginplugin( 'pmEnhancedLogin', $sFilename );
-            $oPlugin->authenticationandcontrolWS();
-        }
+    $oPluginRegistry =& PMPluginRegistry::getSingleton();
+    if ($oPluginRegistry->existsTrigger ( PM_AFTER_LOGIN )) {
+        $oPluginRegistry->executeTriggers ( PM_AFTER_LOGIN , $_SESSION['USER_LOGGED'] );
     }
+
     G::RenderPage('publish', 'extJs');
     //G::header('Location: ' . $sLocation);
     die;
