@@ -525,6 +525,18 @@ class workspaceTools
         $oCriteria->add(ConfigurationPeer::OBJ_UID, array("todo", "draft", "sent", "unassigned", "paused", "cancelled"), Criteria::NOT_IN);
         ConfigurationPeer::doDelete($oCriteria);
         // end of reset
+        
+        //close connection
+        $connection = Propel::getConnection( 'workflow' );
+        $sql = "SELECT * FROM information_schema.processlist WHERE user = SUBSTRING_INDEX(USER(),'@',1) and db = DATABASE() ORDER BY id;";
+        $stmt = $connection->createStatement();
+        $rs = $stmt->executeQuery( $sql, ResultSet::FETCHMODE_ASSOC );
+        while ($rs->next()) {
+        	$row = $rs->getRow();
+        	$oStatement = $connection->prepareStatement( "kill ". $row['ID'] );
+        	$oStatement->executeQuery();
+        }
+       
     }
 
     /**
