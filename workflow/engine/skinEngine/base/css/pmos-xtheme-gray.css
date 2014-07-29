@@ -1591,8 +1591,9 @@ td.x-cnotes-label {
   padding-right: 3px;
 }
 
-.title-dashboard-text {
-  margin:5px  !important;
-  white-space:pre-wrap !important;
-  display:inline-block;
+.x-grid3-cell-inner, .x-grid3-hd-inner {
+overflow:hidden;
+padding:3px 3px 3px 5px;
+white-space:normal;
 }
+
