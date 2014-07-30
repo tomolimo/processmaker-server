@@ -489,20 +489,20 @@ try {
             //            $oHeadPublisher->addScriptCode($jscriptCode);
             $_REQUEST['fcontent'] = $fcontent;
 
-            preg_match('/\@(?:([\>])([a-zA-Z\_]\w*)|([a-zA-Z\_][\w\-\>\:]*)\(((?:[^\\\\\)]*(?:[\\\\][\w\W])?)*)\))((?:\s*\[[\'"]?\w+[\'"]?\])+)?/',$fcontent,$coincidencias);
-            foreach ($coincidencias as $key => $value) {
+            preg_match('/\@(?:([\>])([a-zA-Z\_]\w*)|([a-zA-Z\_][\w\-\>\:]*)\(((?:[^\\\\\)]*(?:[\\\\][\w\W])?)*)\))((?:\s*\[[\'"]?\w+[\'"]?\])+)?/',$fcontent,$matches);
+            foreach ($matches as $key => $value) {
                 if ($key % 3 == 0) {
-                    preg_match('/(\!--)'.$value.'(-->)/',$fcontent, $coincidencia);
-                    if (count($coincidencia)==0) {
+                    preg_match('/(\!--)'.$value.'(-->)/',$fcontent, $match);
+                    if (count($match)==0) {
                         $fcontent = preg_replace('/'.$value.'/','<!--'.$value.'-->',$fcontent);
                     }
                 }
             }
-            preg_match('/\@(?:([\<])([a-zA-Z\_]\w*)|([a-zA-Z\_][\w\-\>\:]*)\(((?:[^\\\\\)]*(?:[\\\\][\w\W])?)*)\))((?:\s*\[[\'"]?\w+[\'"]?\])+)?/',$fcontent,$coincidencias);
-            foreach ($coincidencias as $key => $value) {
+            preg_match('/\@(?:([\<])([a-zA-Z\_]\w*)|([a-zA-Z\_][\w\-\>\:]*)\(((?:[^\\\\\)]*(?:[\\\\][\w\W])?)*)\))((?:\s*\[[\'"]?\w+[\'"]?\])+)?/',$fcontent,$matches);
+            foreach ($matches as $key => $value) {
                 if ($key % 3 == 0) {
-                    preg_match('/(\!--)'.$value.'(-->)/',$fcontent, $coincidencia);
-                    if (count($coincidencia)==0) {
+                    preg_match('/(\!--)'.$value.'(-->)/',$fcontent, $match);
+                    if (count($match)==0) {
                         $fcontent = preg_replace('/'.$value.'/','<!--'.$value.'-->',$fcontent);
                     }
                 }
