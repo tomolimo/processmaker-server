@@ -489,23 +489,19 @@ try {
             //            $oHeadPublisher->addScriptCode($jscriptCode);
             $_REQUEST['fcontent'] = $fcontent;
 
-            preg_match('/\@(?:([\>])([a-zA-Z\_]\w*)|([a-zA-Z\_][\w\-\>\:]*)\(((?:[^\\\\\)]*(?:[\\\\][\w\W])?)*)\))((?:\s*\[[\'"]?\w+[\'"]?\])+)?/',$fcontent,$matches);
-            foreach ($matches as $key => $value) {
-                if ($key % 3 == 0) {
-                    preg_match('/(\!--)'.$value.'(-->)/',$fcontent, $match);
-                    if (count($match)==0) {
-                        $fcontent = preg_replace('/'.$value.'/','<!--'.$value.'-->',$fcontent);
-                    }
+            preg_match_all('/\@(?:([\>])([a-zA-Z\_]\w*)|([a-zA-Z\_][\w\-\>\:]*)\(((?:[^\\\\\)]*(?:[\\\\][\w\W])?)*)\))((?:\s*\[[\'"]?\w+[\'"]?\])+)?/',$fcontent,$matches);
+            foreach ($matches[0] as $key => $value) {
+                preg_match('/(\!--)'.$value.'(-->)/',$fcontent, $match);
+                if (count($match)==0) {
+                    $fcontent = preg_replace ('/'.$value.'/i','<!--'.$value.'-->',$fcontent);
                 }
             }
-            preg_match('/\@(?:([\<])([a-zA-Z\_]\w*)|([a-zA-Z\_][\w\-\>\:]*)\(((?:[^\\\\\)]*(?:[\\\\][\w\W])?)*)\))((?:\s*\[[\'"]?\w+[\'"]?\])+)?/',$fcontent,$matches);
-            foreach ($matches as $key => $value) {
-                if ($key % 3 == 0) {
+            preg_match_all('/\@(?:([\<])([a-zA-Z\_]\w*)|([a-zA-Z\_][\w\-\>\:]*)\(((?:[^\\\\\)]*(?:[\\\\][\w\W])?)*)\))((?:\s*\[[\'"]?\w+[\'"]?\])+)?/',$fcontent,$matches);
+            foreach ($matches[0] as $key => $value) {
                     preg_match('/(\!--)'.$value.'(-->)/',$fcontent, $match);
                     if (count($match)==0) {
-                        $fcontent = preg_replace('/'.$value.'/','<!--'.$value.'-->',$fcontent);
+                        $fcontent = preg_replace ('/'.$value.'/i','<!--'.$value.'-->',$fcontent);
                     }
-                }
             }
 
             //if($extion[count($extion)-1]=='html' || $extion[count($extion)-1]=='txt'){
