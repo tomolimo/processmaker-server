@@ -488,6 +488,26 @@ try {
             //            ';
             //            $oHeadPublisher->addScriptCode($jscriptCode);
             $_REQUEST['fcontent'] = $fcontent;
+
+            preg_match('/\@(?:([\>])([a-zA-Z\_]\w*)|([a-zA-Z\_][\w\-\>\:]*)\(((?:[^\\\\\)]*(?:[\\\\][\w\W])?)*)\))((?:\s*\[[\'"]?\w+[\'"]?\])+)?/',$fcontent,$matches);
+            foreach ($matches as $key => $value) {
+                if ($key % 3 == 0) {
+                    preg_match('/(\!--)'.$value.'(-->)/',$fcontent, $match);
+                    if (count($match)==0) {
+                        $fcontent = preg_replace('/'.$value.'/','<!--'.$value.'-->',$fcontent);
+                    }
+                }
+            }
+            preg_match('/\@(?:([\<])([a-zA-Z\_]\w*)|([a-zA-Z\_][\w\-\>\:]*)\(((?:[^\\\\\)]*(?:[\\\\][\w\W])?)*)\))((?:\s*\[[\'"]?\w+[\'"]?\])+)?/',$fcontent,$matches);
+            foreach ($matches as $key => $value) {
+                if ($key % 3 == 0) {
+                    preg_match('/(\!--)'.$value.'(-->)/',$fcontent, $match);
+                    if (count($match)==0) {
+                        $fcontent = preg_replace('/'.$value.'/','<!--'.$value.'-->',$fcontent);
+                    }
+                }
+            }
+
             //if($extion[count($extion)-1]=='html' || $extion[count($extion)-1]=='txt'){
             $aData = Array('pro_uid' => $_REQUEST['pro_uid'], 'fcontent' => $fcontent, 'filename' => $_REQUEST['filename']);
             $G_PUBLISH->AddContent('xmlform', 'xmlform', 'processes/processes_FileEdit', '', $aData);
