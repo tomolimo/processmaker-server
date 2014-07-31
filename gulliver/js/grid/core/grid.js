@@ -98,6 +98,13 @@ var G_Grid = function(oForm, sGridName){
                             this.aElements[this.aElements.length - 1].mask = this.aFields[j].oProperties.sMask;
                         }
                         break;
+                    case "date":
+                        this.aElements.push(new G_Date(oForm, elem, elemName));
+
+                        if (this.aFields[j].oProperties) {
+                            this.aElements[this.aElements.length - 1].mask = dateSetMask(this.aFields[j].oProperties.mask);
+                        }
+                        break;
                     default:
                         this.aElements.push(new G_Field(oForm, elem, elemName));
 
