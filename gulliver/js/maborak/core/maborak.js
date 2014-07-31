@@ -1357,6 +1357,7 @@ this.aElements[this.aElements.length-1].validate=this.aFields[j].oProperties.val
 break;case"percentage":this.aElements.push(new G_Percentage(oForm,elem,elemName));if(this.aFields[j].oProperties){if(this.aFields[j].oProperties.comma_separator){this.aElements[this.aElements.length-1].comma_separator=this.aFields[j].oProperties.comma_separator;}
 this.aElements[this.aElements.length-1].validate=this.aFields[j].oProperties.validate;this.aElements[this.aElements.length-1].mask=this.aFields[j].oProperties.mask;}
 break;case"dropdown":this.aElements.push(new G_DropDown(oForm,elem,elemName));if(this.aFields[j].oProperties){this.aElements[this.aElements.length-1].mask=this.aFields[j].oProperties.sMask;}
+break;case"date":this.aElements.push(new G_Date(oForm,elem,elemName));if(this.aFields[j].oProperties){this.aElements[this.aElements.length-1].mask=dateSetMask(this.aFields[j].oProperties.mask);}
 break;default:this.aElements.push(new G_Field(oForm,elem,elemName));if(this.aFields[j].oProperties){this.aElements[this.aElements.length-1].mask=this.aFields[j].oProperties.sMask;}
 break;}}}}
 var sw=false;if(this.allDependentFields==""){sw=true;}
