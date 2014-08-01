@@ -275,6 +275,7 @@ Ext.onReady(function(){
             region: 'center',
             xtype : 'fieldset',
             labelWidth: 200,
+            autoScroll: true,
             items:[
               {
                 xtype     : 'displayfield',
@@ -683,6 +684,7 @@ Ext.onReady(function(){
             region: 'center',
             xtype : 'panel',
             bodyStyle : 'background:none;padding-left:20px;padding-right:20px;padding-top:20px;padding-bottom:20px;font-size:1.2em;',
+            autoScroll: true,
             items:[
               {
                 xtype:'fieldset',
