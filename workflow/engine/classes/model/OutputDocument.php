@@ -844,7 +844,9 @@ class OutputDocument extends BaseOutputDocument
         //$pdf->SetFont('dejavusans', '', 14, '', true);
         // Detect chinese, japanese, thai
         if (preg_match('/[\x{30FF}\x{3040}-\x{309F}\x{4E00}-\x{9FFF}\x{0E00}-\x{0E7F}]/u', $sContent, $matches)) {
-            $pdf->SetFont('kozminproregular');
+            $fileArialunittf = PATH_THIRDPARTY . "tcpdf" . PATH_SEP . "fonts" . PATH_SEP . "arialuni.ttf";
+
+            $pdf->SetFont((!file_exists($fileArialunittf))? "kozminproregular" : $pdf->addTTFfont($fileArialunittf, "TrueTypeUnicode", "", 32));
         }
 
         // Add a page
