@@ -525,18 +525,29 @@ class workspaceTools
         $oCriteria->add(ConfigurationPeer::OBJ_UID, array("todo", "draft", "sent", "unassigned", "paused", "cancelled"), Criteria::NOT_IN);
         ConfigurationPeer::doDelete($oCriteria);
         // end of reset
-        
+
         //close connection
         $connection = Propel::getConnection( 'workflow' );
-        $sql = "SELECT * FROM information_schema.processlist WHERE user = SUBSTRING_INDEX(USER(),'@',1) and db = DATABASE() ORDER BY id;";
-        $stmt = $connection->createStatement();
-        $rs = $stmt->executeQuery( $sql, ResultSet::FETCHMODE_ASSOC );
-        while ($rs->next()) {
-        	$row = $rs->getRow();
-        	$oStatement = $connection->prepareStatement( "kill ". $row['ID'] );
-        	$oStatement->executeQuery();
+
+        $sql_sleep = "SELECT * FROM information_schema.processlist WHERE command = 'Sleep' and user = SUBSTRING_INDEX(USER(),'@',1) and db = DATABASE() ORDER BY id;";
+        $stmt_sleep = $connection->createStatement();
+        $rs_sleep = $stmt_sleep->executeQuery( $sql_sleep, ResultSet::FETCHMODE_ASSOC );
+
+        while ($rs_sleep->next()) {
+            $row_sleep = $rs_sleep->getRow();
+            $oStatement_sleep = $connection->prepareStatement( "kill ". $row_sleep['ID'] );
+            $oStatement_sleep->executeQuery();
         }
-       
+
+        $sql_query = "SELECT * FROM information_schema.processlist WHERE user = SUBSTRING_INDEX(USER(),'@',1) and db = DATABASE() ORDER BY id;";
+        $stmt_query = $connection->createStatement();
+        $rs_query = $stmt_query->executeQuery( $sql_query, ResultSet::FETCHMODE_ASSOC );
+
+        while ($rs_query->next()) {
+            $row_query = $rs_query->getRow();
+            $oStatement_query = $connection->prepareStatement( "kill ". $row_query['ID'] );
+            $oStatement_query->executeQuery();
+        }
     }
 
     /**
