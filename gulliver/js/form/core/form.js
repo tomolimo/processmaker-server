@@ -1473,6 +1473,14 @@ function G_Text(form, element, name)
         if (keyCode == 0) return true;
       }
 
+      if (me.browser.name == 'Microsoft Internet Explorer' || me.browser.name == 'Netscape'){
+    	    if (event.preventDefault) {
+    		    event.preventDefault();
+    		} else {
+    			event.returnValue = false;
+    		}
+      }
+
       if (me.browser.name == 'Chrome' || me.browser.name == 'Safari'){
         event.returnValue = false;
       }
