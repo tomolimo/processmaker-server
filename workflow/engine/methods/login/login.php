@@ -155,7 +155,7 @@ $myUrl = explode("/", $_SERVER["REQUEST_URI"]);
 if (isset($myUrl) && $myUrl != "") {
     $aFields["USER_LANG"] = $myUrl[2];
 } else {
-    $aFields["USER_LANG"] = isset($oConf->aConfig["login_defaultLanguage"])? $oConf->aConfig["login_defaultLanguage"] : "en";
+    $aFields["USER_LANG"] = isset($oConf->aConfig["login_defaultLanguage"])? $oConf->aConfig["login_defaultLanguage"] : SYS_LANG;
 }
 
 $G_PUBLISH = new Publisher();
