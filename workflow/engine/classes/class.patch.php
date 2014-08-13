@@ -94,6 +94,7 @@ class p11835 extends patch
         }
         
         //Fix BUG-15394
+        
         G::LoadClass("configuration");
         
         $conf = new Configurations();
@@ -121,6 +122,7 @@ class p11835 extends patch
             $conf->saveConfig("HOTFIX", "");
         }
         
+        //echo
         echo $count . " records where patched to use SELF_SERVICE feature.\n";
     }
 }
