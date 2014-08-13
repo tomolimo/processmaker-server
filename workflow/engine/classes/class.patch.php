@@ -95,7 +95,6 @@ class p11835 extends patch
         
         //Fix BUG-15394
         G::LoadClass("configuration");
-        
         $conf = new Configurations();
         
         if (!$conf->exists("HOTFIX")) {
@@ -109,7 +108,7 @@ class p11835 extends patch
         
         $pmVersion = self::pmVersion(System::getVersion()) . "";
         
-        if (($pmVersion == "2.5.2.4" || $pmVersion == "2.5.3") && !in_array("15394", $arrayHotfix)) {
+        if (($pmVersion == "2.5.3" || $pmVersion == "2.8") && !in_array("15394", $arrayHotfix)) {
             $cnn = Propel::getConnection("workflow");
             $stmt = $cnn->prepareStatement("UPDATE USERS_PROPERTIES SET USR_LOGGED_NEXT_TIME = 0");
             $rs = $stmt->executeQuery();
