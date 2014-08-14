@@ -571,6 +571,15 @@ class Form extends XmlForm
                                 //This value is added when the user does not mark any checkbox
                                 $values[$k] = "__NULL__";
                                 break;
+                            case "grid":
+                                $values[$k] = $_FILES["form"]["name"][$k];
+                                foreach ($values[$k] as $inp => $ii){
+                                 foreach ($ii as $oo => $ee){
+                                  $x = $v->fields;
+                                  $_POST["INPUTS"][$k][$oo] = $x[$oo]->input;
+                                 }
+                                }
+                                break;
                         }
                     }
                 } else {
@@ -713,7 +722,9 @@ class Form extends XmlForm
                         break;
                     case "grid":
                         $i = 0;
-
+                        if (!is_array($data[$v->name])) {
+                            $data[$v->name] = array();
+                        }
                         foreach ($data[$v->name] as $dataGrid) {
                             $i = $i + 1;
 
