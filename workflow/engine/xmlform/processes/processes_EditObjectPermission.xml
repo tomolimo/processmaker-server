@@ -45,6 +45,7 @@
     <option name="OUTPUT">Output Document</option>
     <option name="CASES_NOTES">Cases Notes</option>
     <option name="MSGS_HISTORY">Messages History</option>
+    <option name="SUMMARY_FORM">Summary Form</option>
   </en>
 </OP_OBJ_TYPE>
 <ALL type="dropdown" mode="edit" sqlConnection="dbarray">
@@ -187,7 +188,7 @@ if (getField('OP_OBJ_TYPE').value=='OUTPUT') {
     hideRowById( 'INPUTS' );
     showRowById( 'OP_ACTION' );
 }
-if (getField('OP_OBJ_TYPE').value=='CASES_NOTES') {
+if (getField('OP_OBJ_TYPE').value=='CASES_NOTES' || getField('OP_OBJ_TYPE').value=='SUMMARY_FORM') {
     hideRowById( 'ALL' );
     hideRowById( 'DYNAFORMS' );
     hideRowById( 'INPUTS' );
@@ -227,7 +228,7 @@ leimnud.event.add(document.getElementById('form[OP_OBJ_TYPE]'), 'change', functi
         showRowById( 'OUTPUTS' );
         showRowById( 'OP_ACTION' );
     }
-    if (getField('OP_OBJ_TYPE').value=='CASES_NOTES') {
+    if (getField('OP_OBJ_TYPE').value=='CASES_NOTES' || getField('OP_OBJ_TYPE').value=='SUMMARY_FORM') {
         hideRowById( 'ALL' );
         hideRowById( 'DYNAFORMS' );
         hideRowById( 'INPUTS' );
