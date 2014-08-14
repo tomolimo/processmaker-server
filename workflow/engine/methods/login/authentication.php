@@ -191,7 +191,7 @@ try {
             $lang = $frm['USER_LANG'];
         }
     } else {
-        if (defined('SYS_LANG')) {
+        if (defined("SYS_LANG") && SYS_LANG != "") {
             $lang = SYS_LANG;
         } else {
             $lang = 'en';
