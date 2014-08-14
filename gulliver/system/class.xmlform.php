@@ -320,7 +320,7 @@ class XmlForm_Field
             return 1;
         }
 
-        if(isset($this->mode) && $this->mode == "edit" && ($this->owner->values[$this->name] !== "")){
+        if(isset($this->mode) && $this->mode == "edit" && (isset($this->owner->values[$this->name]) && $this->owner->values[$this->name] !== "")){
         	return 1;
         }
 
