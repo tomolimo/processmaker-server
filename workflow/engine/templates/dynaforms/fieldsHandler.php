@@ -144,7 +144,7 @@
               &nbsp;<?php echo "$node_name";?>
           </td>
 					<td><p style="font-size:12px; color:#1C3166; font-weight:bold">
-					<?php if( isset($node['__CONTENT__'][SYS_LANG]['__VALUE__']) ){
+					<?php if (isset($node["__CONTENT__"][SYS_LANG]["__VALUE__"]) && $node["__CONTENT__"][SYS_LANG]["__VALUE__"] != "") {
 						  if( strlen($node['__CONTENT__'][SYS_LANG]['__VALUE__']) > 30 ){
 						  	$label = substr(trim(strip_tags(G::stripCDATA($node['__CONTENT__'][SYS_LANG]['__VALUE__']))), 0, 30 ) . '...';
 						  } else {
