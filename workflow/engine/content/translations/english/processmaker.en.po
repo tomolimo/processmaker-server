@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ProcessMaker 2.5.2.3\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-07-22 13:19:57\n"
+"PO-Revision-Date: 2014-08-20 11:59:14\n"
 "Last-Translator: \n"
 "Language-Team: Colosa Developers Team <developers@colosa.com>\n"
 "MIME-Version: 1.0\n"
@@ -16351,6 +16351,48 @@ msgstr "The file exists."
 msgid "The filename is required."
 msgstr "The filename is required."
 
+# TRANSLATION
+# LABEL/ID_VARIABLE_IN_USE
+#: LABEL/ID_VARIABLE_IN_USE
+msgid "The variable with var_uid: {0} is being used by dynaform with dyn_uid: {1}"
+msgstr "The variable with var_uid: {0} is being used by dynaform with dyn_uid: {1}"
+
+# TRANSLATION
+# LABEL/ID_ROUTE_IS_SECJOIN
+#: LABEL/ID_ROUTE_IS_SECJOIN
+msgid "The route is of \"SEC-JOIN\" type."
+msgstr "The route is of \"SEC-JOIN\" type."
+
+# TRANSLATION
+# LABEL/ID_ROUTE_PARENT_DOES_NOT_EXIST_FOR_ROUTE_SECJOIN
+#: LABEL/ID_ROUTE_PARENT_DOES_NOT_EXIST_FOR_ROUTE_SECJOIN
+msgid "The parent route does not exist for this route of \"SEC-JOIN\" type."
+msgstr "The parent route does not exist for this route of \"SEC-JOIN\" type."
+
+# TRANSLATION
+# LABEL/ID_GENERATE_BPMN_PROJECT
+#: LABEL/ID_GENERATE_BPMN_PROJECT
+msgid "Generate BPMN Project"
+msgstr "Generate BPMN Project"
+
+# TRANSLATION
+# LABEL/ID_PROCESS_DOES_NOT_EXIST
+#: LABEL/ID_PROCESS_DOES_NOT_EXIST
+msgid "The process with {0}: {1} does not exist."
+msgstr "The process with {0}: {1} does not exist."
+
+# TRANSLATION
+# LABEL/ID_PROJECT_IS_BPMN
+#: LABEL/ID_PROJECT_IS_BPMN
+msgid "The project with {0}: {1} is BPMN process."
+msgstr "The project with {0}: {1} is BPMN process."
+
+# TRANSLATION
+# LABEL/ID_USE_LANGUAGE_URL
+#: LABEL/ID_USE_LANGUAGE_URL
+msgid "Use the language of URL"
+msgstr "Use the language of URL"
+
 # additionalTables/additionalTablesData.xml?ADD_TAB_NAME
 # additionalTables/additionalTablesData.xml
 #: text - ADD_TAB_NAME
@@ -27545,6 +27587,12 @@ msgstr "Cases Notes"
 msgid "[processes/processes_EditObjectPermission.xml?OP_OBJ_TYPE-MSGS_HISTORY]"
 msgstr "Messages History"
 
+# processes/processes_EditObjectPermission.xml?OP_OBJ_TYPE-SUMMARY_FORM
+# processes/processes_EditObjectPermission.xml
+#: dropdown - OP_OBJ_TYPE - SUMMARY_FORM
+msgid "[processes/processes_EditObjectPermission.xml?OP_OBJ_TYPE-SUMMARY_FORM]"
+msgstr "Summary Form"
+
 # processes/processes_EditObjectPermission.xml?ALL
 # processes/processes_EditObjectPermission.xml
 #: dropdown - ALL
@@ -28144,6 +28192,12 @@ msgstr "Cases Notes"
 #: dropdown - OP_OBJ_TYPE - MSGS_HISTORY
 msgid "[processes/processes_NewObjectPermission.xml?OP_OBJ_TYPE-MSGS_HISTORY]"
 msgstr "Messages History"
+
+# processes/processes_NewObjectPermission.xml?OP_OBJ_TYPE-SUMMARY_FORM
+# processes/processes_NewObjectPermission.xml
+#: dropdown - OP_OBJ_TYPE - SUMMARY_FORM
+msgid "[processes/processes_NewObjectPermission.xml?OP_OBJ_TYPE-SUMMARY_FORM]"
+msgstr "Summary Form"
 
 # processes/processes_NewObjectPermission.xml?ALL
 # processes/processes_NewObjectPermission.xml

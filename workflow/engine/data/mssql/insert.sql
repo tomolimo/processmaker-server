@@ -46,7 +46,7 @@ SELECT 'ca','Catalan','','L','16','0','GREGORIAN'  UNION ALL
 SELECT 'co','Corsican','','L','17','0','GREGORIAN'  UNION ALL
 SELECT 'cs','Czech','','L','18','0','GREGORIAN'  UNION ALL
 SELECT 'cy','Welsh','','L','19','0','GREGORIAN'  UNION ALL
-SELECT 'da','Danish','','L','20','0','GREGORIAN'  UNION ALL
+SELECT 'da','Danish','','L','20','1','GREGORIAN'  UNION ALL
 SELECT 'de','German','','L','21','0','GREGORIAN'  UNION ALL
 SELECT 'dz','Bhutani','','L','22','0','GREGORIAN'  UNION ALL
 SELECT 'el','Greek','','L','23','0','GREGORIAN'  UNION ALL
@@ -113,9 +113,9 @@ SELECT 'oc','Occitan','','L','83','0','GREGORIAN'  UNION ALL
 SELECT 'om','Oromo','','L','84','0','GREGORIAN'  UNION ALL
 SELECT 'or','Oriya','','L','85','0','GREGORIAN'  UNION ALL
 SELECT 'pa','Punjabi','','L','86','0','GREGORIAN'  UNION ALL
-SELECT 'pl','Polish','','L','87','0','GREGORIAN'  UNION ALL
+SELECT 'pl','Polish','','L','87','1','GREGORIAN'  UNION ALL
 SELECT 'ps','Pashto','','L','88','0','GREGORIAN'  UNION ALL
-SELECT 'pt','Portuguese','','L','89','0','GREGORIAN'  UNION ALL
+SELECT 'pt','Portuguese','','L','89','1','GREGORIAN'  UNION ALL
 SELECT 'qu','Quechua','','L','90','0','GREGORIAN'  UNION ALL
 SELECT 'rm','Rhaeto-Romance','','L','91','0','GREGORIAN'  UNION ALL
 SELECT 'rn','Kirundi','','L','92','0','GREGORIAN'  UNION ALL
@@ -3082,7 +3082,7 @@ SELECT 'LABEL','ID_DISPLAY_OF','en','of','2014-01-15'
   UNION ALL
 SELECT 'LABEL','ID_DELETE_LANGUAGE_WARNING','en','To delete a language you should select a item from the list first.','2014-01-15' 
   UNION ALL
-SELECT 'LABEL','ID_DELETE_LANGUAGE_CONFIRM','en','Do you want remove the language "{0}" ?','2014-01-15' 
+SELECT 'LABEL','ID_DELETE_LANGUAGE_CONFIRM','en','Are you sure you want to delete the language "{0}"?','2014-07-15' 
   UNION ALL
 SELECT 'LABEL','ID_DELETE_LANGUAGE','en','Remove','2014-01-15' 
   UNION ALL
@@ -6899,6 +6899,24 @@ SELECT 'LABEL','ID_PROCESS_VARIABLE_REQUIRED_VARIABLES_FOR_QUERY','en','The vari
 INSERT INTO [TRANSLATION] ([TRN_CATEGORY],[TRN_ID],[TRN_LANG],[TRN_VALUE],[TRN_UPDATE_DATE]) 
 
 SELECT 'LABEL','ID_OUTPUT_DOCUMENT_ITS_ASSIGNED','en','The Output Document with {0}: {1} it''s assigned in "{2}".','2014-07-01' 
+  UNION ALL
+SELECT 'LABEL','ID_EXISTS_FILES','en','The file exists.','2014-07-17' 
+  UNION ALL
+SELECT 'LABEL','ID_FILENAME_REQUIRED','en','The filename is required.','2014-07-17' 
+  UNION ALL
+SELECT 'LABEL','ID_VARIABLE_IN_USE','en','The variable with var_uid: {0} is being used by dynaform with dyn_uid: {1}','2014-08-01' 
+  UNION ALL
+SELECT 'LABEL','ID_ROUTE_IS_SECJOIN','en','The route is of "SEC-JOIN" type.','2014-07-29' 
+  UNION ALL
+SELECT 'LABEL','ID_ROUTE_PARENT_DOES_NOT_EXIST_FOR_ROUTE_SECJOIN','en','The parent route does not exist for this route of "SEC-JOIN" type.','2014-07-29' 
+  UNION ALL
+SELECT 'LABEL','ID_GENERATE_BPMN_PROJECT','en','Generate BPMN Project','2014-07-24' 
+  UNION ALL
+SELECT 'LABEL','ID_PROCESS_DOES_NOT_EXIST','en','The process with {0}: {1} does not exist.','2014-07-24' 
+  UNION ALL
+SELECT 'LABEL','ID_PROJECT_IS_BPMN','en','The project with {0}: {1} is BPMN process.','2014-07-24' 
+  UNION ALL
+SELECT 'LABEL','ID_USE_LANGUAGE_URL','en','Use the language of URL','2014-08-08' 
  ;
 
 INSERT INTO ISO_LOCATION ([IC_UID],[IL_UID],[IL_NAME],[IL_NORMAL_NAME],[IS_UID]) 
