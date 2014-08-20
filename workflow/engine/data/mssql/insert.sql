@@ -46,7 +46,7 @@ SELECT 'ca','Catalan','','L','16','0','GREGORIAN'  UNION ALL
 SELECT 'co','Corsican','','L','17','0','GREGORIAN'  UNION ALL
 SELECT 'cs','Czech','','L','18','0','GREGORIAN'  UNION ALL
 SELECT 'cy','Welsh','','L','19','0','GREGORIAN'  UNION ALL
-SELECT 'da','Danish','','L','20','1','GREGORIAN'  UNION ALL
+SELECT 'da','Danish','','L','20','0','GREGORIAN'  UNION ALL
 SELECT 'de','German','','L','21','0','GREGORIAN'  UNION ALL
 SELECT 'dz','Bhutani','','L','22','0','GREGORIAN'  UNION ALL
 SELECT 'el','Greek','','L','23','0','GREGORIAN'  UNION ALL
@@ -113,9 +113,9 @@ SELECT 'oc','Occitan','','L','83','0','GREGORIAN'  UNION ALL
 SELECT 'om','Oromo','','L','84','0','GREGORIAN'  UNION ALL
 SELECT 'or','Oriya','','L','85','0','GREGORIAN'  UNION ALL
 SELECT 'pa','Punjabi','','L','86','0','GREGORIAN'  UNION ALL
-SELECT 'pl','Polish','','L','87','1','GREGORIAN'  UNION ALL
+SELECT 'pl','Polish','','L','87','0','GREGORIAN'  UNION ALL
 SELECT 'ps','Pashto','','L','88','0','GREGORIAN'  UNION ALL
-SELECT 'pt','Portuguese','','L','89','1','GREGORIAN'  UNION ALL
+SELECT 'pt','Portuguese','','L','89','0','GREGORIAN'  UNION ALL
 SELECT 'qu','Quechua','','L','90','0','GREGORIAN'  UNION ALL
 SELECT 'rm','Rhaeto-Romance','','L','91','0','GREGORIAN'  UNION ALL
 SELECT 'rn','Kirundi','','L','92','0','GREGORIAN'  UNION ALL
