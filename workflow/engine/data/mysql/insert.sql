@@ -2246,7 +2246,7 @@ INSERT INTO TRANSLATION (TRN_CATEGORY,TRN_ID,TRN_LANG,TRN_VALUE,TRN_UPDATE_DATE 
 ( 'LABEL','ID_PRO_TITLE','en','Process Title','2014-01-15') ,
 ( 'LABEL','ID_DISPLAY_OF','en','of','2014-01-15') ,
 ( 'LABEL','ID_DELETE_LANGUAGE_WARNING','en','To delete a language you should select a item from the list first.','2014-01-15') ,
-( 'LABEL','ID_DELETE_LANGUAGE_CONFIRM','en','Do you want remove the language "{0}" ?','2014-01-15') ,
+( 'LABEL','ID_DELETE_LANGUAGE_CONFIRM','en','Are you sure you want to delete the language "{0}"?','2014-07-15') ,
 ( 'LABEL','ID_DELETE_LANGUAGE','en','Remove','2014-01-15') ,
 ( 'LABEL','ID_LANGUAGE_DELETED_SUCCESSFULLY','en','Language deleted successfully!','2014-01-15') ,
 ( 'LABEL','ID_LANGUAGE_CANT_DELETE','en','There is {0} cases started with this language, delete action canceled!','2014-01-15') ,
@@ -4178,7 +4178,16 @@ INSERT INTO TRANSLATION (TRN_CATEGORY,TRN_ID,TRN_LANG,TRN_VALUE,TRN_UPDATE_DATE 
 ( 'LABEL','ID_PROCESS_VARIABLE_REQUIRED_VARIABLES_FOR_QUERY','en','The variable "{0}" required the variables "{1}" for the query.','2014-06-30') ;
 INSERT INTO TRANSLATION (TRN_CATEGORY,TRN_ID,TRN_LANG,TRN_VALUE,TRN_UPDATE_DATE )  VALUES 
 
-( 'LABEL','ID_OUTPUT_DOCUMENT_ITS_ASSIGNED','en','The Output Document with {0}: {1} it''s assigned in "{2}".','2014-07-01') ;
+( 'LABEL','ID_OUTPUT_DOCUMENT_ITS_ASSIGNED','en','The Output Document with {0}: {1} it''s assigned in "{2}".','2014-07-01') ,
+( 'LABEL','ID_EXISTS_FILES','en','The file exists.','2014-07-17') ,
+( 'LABEL','ID_FILENAME_REQUIRED','en','The filename is required.','2014-07-17') ,
+( 'LABEL','ID_VARIABLE_IN_USE','en','The variable with var_uid: {0} is being used by dynaform with dyn_uid: {1}','2014-08-01') ,
+( 'LABEL','ID_ROUTE_IS_SECJOIN','en','The route is of "SEC-JOIN" type.','2014-07-29') ,
+( 'LABEL','ID_ROUTE_PARENT_DOES_NOT_EXIST_FOR_ROUTE_SECJOIN','en','The parent route does not exist for this route of "SEC-JOIN" type.','2014-07-29') ,
+( 'LABEL','ID_GENERATE_BPMN_PROJECT','en','Generate BPMN Project','2014-07-24') ,
+( 'LABEL','ID_PROCESS_DOES_NOT_EXIST','en','The process with {0}: {1} does not exist.','2014-07-24') ,
+( 'LABEL','ID_PROJECT_IS_BPMN','en','The project with {0}: {1} is BPMN process.','2014-07-24') ,
+( 'LABEL','ID_USE_LANGUAGE_URL','en','Use the language of URL','2014-08-08') ;
 
 INSERT INTO ISO_LOCATION (IC_UID,IL_UID,IL_NAME,IL_NORMAL_NAME,IS_UID)  VALUES 
 ('AD','','',' ','') ,
