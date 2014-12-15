@@ -1,25 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm sqlConnection="" rowsPerPage="20">
-
-<DOC_UID type="hidden" showInTable="0"/>
-
-<POSITION type="hidden" showInTable="0"/>
-
-<APP_DOC_UID type="hidden" showInTable="0"/>
-
-<CONFIRM type="hidden" showInTable="0"/>
-
-<TITLE type="text" colWidth="150" titleAlign="left" align="left">
-  <en>Type</en>
-<es>Tipo</es></TITLE>
-
-<TYPE type="text" colWidth="100" titleAlign="left" align="left">
-  <en>Type</en>
-<es>Tipo</es></TYPE>
-
-<CREATE_DATE type="text" colWidth="110" titleAlign="left" align="left">
-  <en>Create Date</en>
-<es>Crear Fecha</es></CREATE_DATE>
-
-<VIEW type="link" colWidth="25" value="@G::LoadTranslation(ID_VIEW)" link="cases_ToReviseInputDocView?UID=@#DOC_UID&amp;DOC=@#APP_DOC_UID" onclick=""><en></en></VIEW>
-</dynaForm>   
+  <DOC_UID type="hidden" showInTable="0"/>
+  <POSITION type="hidden" showInTable="0"/>
+  <APP_DOC_UID type="hidden" showInTable="0"/>
+  <CONFIRM type="hidden" showInTable="0"/>
+  <TITLE type="text" colWidth="150" titleAlign="left" align="left">
+    <en><![CDATA[Type]]></en>
+    <es>Tipo</es>
+  </TITLE>
+  <TYPE type="text" colWidth="100" titleAlign="left" align="left">
+    <en><![CDATA[Type]]></en>
+    <es>Tipo</es>
+  </TYPE>
+  <CREATE_DATE type="text" colWidth="110" titleAlign="left" align="left">
+    <en><![CDATA[Create Date]]></en>
+    <es>Crear Fecha</es>
+  </CREATE_DATE>
+  <VIEW type="link" colWidth="25" value="@G::LoadTranslation(ID_VIEW)" link="cases_ToReviseInputDocView?UID=@#DOC_UID&amp;DOC=@#APP_DOC_UID" onclick="">
+    <en><![CDATA[]]></en>
+  </VIEW>
+</dynaForm>

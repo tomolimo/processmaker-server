@@ -4,7 +4,7 @@
   <table name="PLUGIN_DEMO">
     <vendor type="mysql">
       <parameter name="Name" value="PLUGIN_DEMO"/>
-      <parameter name="Engine" value="MyISAM"/>
+      <parameter name="Engine" value="InnoDB"/>
       <parameter name="Version" value="10"/>
       <parameter name="Row_format" value="Dynamic"/>
       <parameter name="Auto_increment" value=""/>

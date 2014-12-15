@@ -299,7 +299,10 @@ class AppFolder extends BaseAppFolder
         $oProcess = new Process();
 
         $oAppDocument = new AppDocument();
-        $oCriteria = new Criteria();
+
+        //Query
+        $oCriteria = new Criteria("workflow");
+
         $oCriteria->addSelectColumn( AppDocumentPeer::APP_DOC_UID);
         $oCriteria->addSelectColumn( AppDocumentPeer::DOC_VERSION);
         $oCriteria->addSelectColumn( AppDocumentPeer::APP_UID);
@@ -375,17 +378,21 @@ class AppFolder extends BaseAppFolder
                 );
         }
 
-        $numRecTotal = AppDocumentPeer::doCount($oCriteria);
+        //Number records total
+        $criteriaCount = clone $oCriteria;
 
-        /*
-        $auxCriteria = clone $oCriteria;
-        $auxCriteria->addJoin(AppDocumentPeer::DOC_UID, OutputDocumentPeer::OUT_DOC_UID);
-        $auxCriteria->add(AppDocumentPeer::APP_DOC_TYPE, 'OUTPUT');
-        $auxCriteria->add(OutputDocumentPeer::OUT_DOC_UID, '-1', Criteria::NOT_EQUAL);
-        $auxCriteria->add(OutputDocumentPeer::OUT_DOC_GENERATE, 'BOTH');
-        $numRecTotal += AppDocumentPeer::doCount($auxCriteria);
-        */
+        $criteriaCount->clearSelectColumns();
+        $criteriaCount->addSelectColumn("COUNT(DISTINCT " . AppDocumentPeer::APP_DOC_UID . ") AS NUM_REC");
 
+        $rsCriteriaCount = AppDocumentPeer::doSelectRS($criteriaCount);
+        $rsCriteriaCount->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+
+        $rsCriteriaCount->next();
+        $row = $rsCriteriaCount->getRow();
+
+        $numRecTotal = $row["NUM_REC"];
+
+        //Query
         $oCase->verifyTable();
 
         $oCriteria->addAscendingOrderByColumn( AppDocumentPeer::APP_DOC_INDEX );
@@ -531,7 +538,7 @@ class AppFolder extends BaseAppFolder
 
         $oCase->verifyTable();
 
-        //Need to review hot to get the Column Type name 
+        //Need to review hot to get the Column Type name
         switch($ColumnSort) {
             case 'appDocCreateDate' :
                 $ColumnSort = AppDocumentPeer::APP_DOC_CREATE_DATE;

@@ -46,6 +46,19 @@ $noShowTitle = 0;
 if (isset( $aProcessFieds['PRO_SHOW_MESSAGE'] )) {
     $noShowTitle = $aProcessFieds['PRO_SHOW_MESSAGE'];
 }
+
+// getting bpmn projects
+$c = new Criteria('workflow');
+$c->addSelectColumn(BpmnProjectPeer::PRJ_UID);
+$ds = ProcessPeer::doSelectRS($c);
+$ds->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+$bpmnProjects = array();
+
+while ($ds->next()) {
+    $row = $ds->getRow();
+    $bpmnProjects[] = $row['PRJ_UID'];
+}
+        
 switch (($aCaseTracker['CT_MAP_TYPE'])) {
     case 'NONE':
         //Nothing
@@ -55,6 +68,15 @@ switch (($aCaseTracker['CT_MAP_TYPE'])) {
         G::LoadClass( 'processMap' );
         $oCase = new Cases();
         $aFields = $oCase->loadCase( $_SESSION['APPLICATION'] );
+        if (in_array($aFields['PRO_UID'], $bpmnProjects)) {
+            //bpmb
+            $_SESSION["APP_UID"] = $aFields["APP_UID"];
+            $G_PUBLISH = new Publisher();
+            $G_PUBLISH->AddContent( 'view', 'tracker/viewMap' );
+            G::RenderPage( 'publish' );
+            //note: url processmap "../designer?prj_uid=$_SESSION['PROCESS']&prj_readonly=true&app_uid=$_SESSION['APP_UID']"
+            break;
+        }
         if (isset( $aFields['TITLE'] )) {
             $aFields['APP_TITLE'] = $aFields['TITLE'];
         }
@@ -139,6 +161,15 @@ switch (($aCaseTracker['CT_MAP_TYPE'])) {
         G::LoadClass( 'case' );
         $oCase = new Cases();
         $aFields = $oCase->loadCase( $_SESSION['APPLICATION'] );
+        if (in_array($aFields['PRO_UID'], $bpmnProjects)) {
+            //bpmb
+            $_SESSION["APP_UID"] = $aFields["APP_UID"];
+            $G_PUBLISH = new Publisher();
+            $G_PUBLISH->AddContent( 'view', 'tracker/viewMap' );
+            G::RenderPage( 'publish' );
+            //note: url processmap "../designer?prj_uid=$_SESSION['PROCESS']&prj_readonly=true&app_uid=$_SESSION['APP_UID']"
+            break;
+        }
         if (isset( $aFields['TITLE'] )) {
             $aFields['APP_TITLE'] = $aFields['TITLE'];
         }

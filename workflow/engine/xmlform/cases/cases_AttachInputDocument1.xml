@@ -1,56 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="cases_AttachInputDocument1" type="xmlform" width="500px" labelWidth="120px">
-
-<__DYNAFORM_OPTIONS type="xmlmenu" xmlfile="gulliver/dynaforms_Options" colWidth="200px">
-  <en/>
-</__DYNAFORM_OPTIONS>
-
-<TYPE_LABEL type="private"/>
-
-<TITLE1 type="title">
-  <en>Attach Input document</en>
-</TITLE1>
-
-<INP_DOC_TITLE type="caption">
-  <en>Title</en>
-</INP_DOC_TITLE>
-
-<INP_DOC_DESCRIPTION type="caption">
-  <en>Description</en>
-</INP_DOC_DESCRIPTION>
-
-<INP_DOC_FORM_NEEDED type="dropdown" colWidth="80" titleAlign="left" align="left" mode="view">
-  <en>Document Type<option name="VIRTUAL">Digital</option><option name="REAL">Printed</option><option name="VREAL">Digital/Printed</option></en>
-</INP_DOC_FORM_NEEDED>
-
-<INP_DOC_ORIGINAL type="dropdown" colWidth="80" titleAlign="left" align="left" mode="view">
-  <en>Format<option name="ORIGINAL">Original</option><option name="COPYLEGAL">Legal Copy</option><option name="COPY">Copy</option></en>
-</INP_DOC_ORIGINAL>
-
-
-<APP_DOC_TYPE type="hidden" defaultValue="INPUT"/>
-
-<APP_DOC_FILENAME type="file">
-  <en>File</en>
-</APP_DOC_FILENAME>
-
-<APP_DOC_COMMENT type="textarea" rows="5" cols="32" colWidth="200" titleAlign="left" align="left">
-  <en>Comments</en>
-</APP_DOC_COMMENT>
-
-<MORE type="checkbox">
-  <en>Upload Multiple Input Documents</en>
-</MORE>
-
-<SAVE type="button" onclick="verifyInfo(this.form);">
-  <en>Save</en>
-</SAVE>
-
-<MESSAGE1 type="phpvariable"/>
-
-<MESSAGE2 type="phpvariable"/>
-
-<JS type="javascript"><![CDATA[
+  <__DYNAFORM_OPTIONS type="xmlmenu" xmlfile="gulliver/dynaforms_Options" colWidth="200px">
+    <en/>
+  </__DYNAFORM_OPTIONS>
+  <TYPE_LABEL type="private"/>
+  <TITLE1 type="title">
+    <en><![CDATA[Attach Input document]]></en>
+  </TITLE1>
+  <INP_DOC_TITLE type="caption">
+    <en><![CDATA[Title]]></en>
+  </INP_DOC_TITLE>
+  <INP_DOC_DESCRIPTION type="caption">
+    <en><![CDATA[Description]]></en>
+  </INP_DOC_DESCRIPTION>
+  <INP_DOC_FORM_NEEDED type="dropdown" colWidth="80" titleAlign="left" align="left" mode="view">
+    <en><![CDATA[Document Type]]><option name="VIRTUAL"><![CDATA[Digital]]></option><option name="REAL"><![CDATA[Printed]]></option><option name="VREAL"><![CDATA[Digital/Printed]]></option></en>
+  </INP_DOC_FORM_NEEDED>
+  <INP_DOC_ORIGINAL type="dropdown" colWidth="80" titleAlign="left" align="left" mode="view">
+    <en><![CDATA[Format]]><option name="ORIGINAL"><![CDATA[Original]]></option><option name="COPYLEGAL"><![CDATA[Legal Copy]]></option><option name="COPY"><![CDATA[Copy]]></option></en>
+  </INP_DOC_ORIGINAL>
+  <APP_DOC_TYPE type="hidden" defaultValue="INPUT"/>
+  <APP_DOC_FILENAME type="file">
+    <en><![CDATA[File]]></en>
+  </APP_DOC_FILENAME>
+  <APP_DOC_COMMENT type="textarea" rows="5" cols="32" colWidth="200" titleAlign="left" align="left">
+    <en><![CDATA[Comments]]></en>
+  </APP_DOC_COMMENT>
+  <MORE type="checkbox">
+    <en><![CDATA[Upload Multiple Input Documents]]></en>
+  </MORE>
+  <SAVE type="button" onclick="verifyInfo(this.form);">
+    <en><![CDATA[Save]]></en>
+  </SAVE>
+  <MESSAGE1 type="phpvariable"/>
+  <MESSAGE2 type="phpvariable"/>
+  <JS type="javascript"><![CDATA[
 leimnud.event.add(window, 'load', function() {
   if (getField('INP_DOC_FORM_NEEDED').value == 'VIRTUAL') {
     hideRow('INP_DOC_ORIGINAL');
@@ -69,5 +53,4 @@ var verifyInfo = function(oForm)
   oForm.submit();
 };
 ]]></JS>
-
 </dynaForm>

@@ -64,7 +64,7 @@ if (isset( $_POST['category'] ) && $_POST['category'] !== '<reset>') {
         $memkeyTotal = $memkey . '-total';
         $memcacheUsed = 'yes';
         if (($proData = $memcache->get( $memkey )) === false || ($totalCount = $memcache->get( $memkeyTotal )) === false) {
-        	$proData = $oProcess->getAllProcesses( $start, $limit);
+            $proData = $oProcess->getAllProcesses( $start, $limit, null, null, true, false, $_SESSION["USER_LOGGED"]);
             $totalCount = count($proData);
             $proData = array_splice($proData, $start, $limit);
             $memcache->set( $memkey, $proData, PMmemcached::ONE_HOUR );

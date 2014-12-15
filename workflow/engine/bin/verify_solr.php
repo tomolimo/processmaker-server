@@ -1,6 +1,6 @@
 <?php
 /**
- * 
+ *
  * ProcessMaker Open Source Edition
  * Copyright (C) 2004 - 2012 Colosa Inc.23
  *
@@ -19,7 +19,7 @@
  *
  * For more information, contact Colosa Inc, 5304 Ventura Drive,
  * Delray Beach, FL, 33484, USA, or email info@colosa.com.
- * 
+ *
  */
 
 // check script parameters
@@ -29,13 +29,13 @@
 $commandLineSyntaxMsg = "Invalid command line arguments: \n " .
   "Verify the list of cases comparing db vs solr lists by user if usr_uid is specify only verify one user otherwhise all users ".
   "syntax: ".
-  "php verify_solr.php [workspace_name] [-usruid {USR_UID}]\n" . 
+  "php verify_solr.php [workspace_name] [-usruid {USR_UID}]\n" .
   " Where \n".
-  "       workspace_name : is the workspace that is being verified. \n" . 
+  "       workspace_name : is the workspace that is being verified. \n" .
   " Optional Options: \n" .
-  " -usruid {USR_UID}: verify only one user with the specified user uid. \n "; 
+  " -usruid {USR_UID}: verify only one user with the specified user uid. \n ";
 
-if ( (count ($argv) < 2) || ((count ($argv) > 2) && ((count ($argv) % 2) != 0))) {    
+if ( (count ($argv) < 2) || ((count ($argv) > 2) && ((count ($argv) % 2) != 0))) {
   print $commandLineSyntaxMsg;
   die ();
 }
@@ -43,7 +43,7 @@ $workspaceName = $argv [1];
 $usrUid = "";
 
 if((count ($argv) > 2)){
-  $usrUid = $argv [3];  
+  $usrUid = $argv [3];
 }
 
 ini_set ('display_errors', 1);
@@ -70,13 +70,13 @@ if (! defined ('PATH_HOME')) {
   array_pop ($docuroot);
   $pathOutTrunk = implode (PATH_SEP, $docuroot) . PATH_SEP;
   // to do: check previous algorith for Windows $pathTrunk = "c:/home/";
-  
+
   define ('PATH_HOME', $pathhome);
   define ('PATH_TRUNK', $pathTrunk);
   define ('PATH_OUTTRUNK', $pathOutTrunk);
-  
+
   require_once (PATH_HOME . 'engine' . PATH_SEP . 'config' . PATH_SEP . 'paths.php');
-  
+
   G::LoadThirdParty ('pear/json', 'class.json');
   G::LoadThirdParty ('smarty/libs', 'Smarty.class');
   G::LoadSystem ('error');
@@ -107,20 +107,6 @@ require_once 'classes/model/AppEvent.php';
 require_once 'classes/model/CaseScheduler.php';
 // G::loadClass('pmScript');
 
-// //default values
-// $bCronIsRunning = false;
-// $sLastExecution = '';
-// if ( file_exists(PATH_DATA . 'cron') ) {
-// $aAux = unserialize( trim( @file_get_contents(PATH_DATA . 'cron')) );
-// $bCronIsRunning = (boolean)$aAux['bCronIsRunning'];
-// $sLastExecution = $aAux['sLastExecution'];
-// }
-// else {
-// //if not exists the file, just create a new one with current date
-// @file_put_contents(PATH_DATA . 'cron', serialize(array('bCronIsRunning' =>
-// '1', 'sLastExecution' => date('Y-m-d H:i:s'))));
-// }
-
 print "PATH_HOME: " . PATH_HOME . "\n";
 print "PATH_DB: " . PATH_DB . "\n";
 print "PATH_CORE: " . PATH_CORE . "\n";
@@ -131,19 +117,19 @@ if (! defined ('SYS_SYS')) {
   $sNow = ''; // $argv[2];
   /*
   $sFilter = '';
-  
+
   for ($i = 3; $i < count ($argv); $i++) {
     $sFilter .= ' ' . $argv [$i];
   }*/
-  
+
   $oDirectory = dir (PATH_DB);
-  
+
   if (is_dir (PATH_DB . $sObject)) {
     saveLog ('main', 'action', "checking folder " . PATH_DB . $sObject);
     if (file_exists (PATH_DB . $sObject . PATH_SEP . 'db.php')) {
-      
+
       define ('SYS_SYS', $sObject);
-      
+
       // ****************************************
       // read initialize file
       require_once PATH_HOME . 'engine' . PATH_SEP . 'classes' . PATH_SEP . 'class.system.php';
@@ -151,16 +137,16 @@ if (! defined ('SYS_SYS')) {
       define ('MEMCACHED_ENABLED', $config ['memcached']);
       define ('MEMCACHED_SERVER', $config ['memcached_server']);
       define ('TIME_ZONE', $config ['time_zone']);
-      
+
       date_default_timezone_set (TIME_ZONE);
       print "TIME_ZONE: " . TIME_ZONE . "\n";
       print "MEMCACHED_ENABLED: " . MEMCACHED_ENABLED . "\n";
       print "MEMCACHED_SERVER: " . MEMCACHED_SERVER . "\n";
       // ****************************************
-      
+
       include_once (PATH_HOME . 'engine' . PATH_SEP . 'config' . PATH_SEP . 'paths_installed.php');
       include_once (PATH_HOME . 'engine' . PATH_SEP . 'config' . PATH_SEP . 'paths.php');
-      
+
       // ***************** PM Paths DATA **************************
       define ('PATH_DATA_SITE', PATH_DATA . 'sites/' . SYS_SYS . '/');
       define ('PATH_DOCUMENT', PATH_DATA_SITE . 'files/');
@@ -170,7 +156,7 @@ if (! defined ('SYS_SYS')) {
       define ('PATH_DYNAFORM', PATH_DATA_SITE . 'xmlForms/');
       define ('PATH_IMAGES_ENVIRONMENT_FILES', PATH_DATA_SITE . 'usersFiles' . PATH_SEP);
       define ('PATH_IMAGES_ENVIRONMENT_USERS', PATH_DATA_SITE . 'usersPhotographies' . PATH_SEP);
-      
+
       // server info file
       if (is_file (PATH_DATA_SITE . PATH_SEP . '.server_info')) {
         $SERVER_INFO = file_get_contents (PATH_DATA_SITE . PATH_SEP . '.server_info');
@@ -182,10 +168,10 @@ if (! defined ('SYS_SYS')) {
       else {
         eprintln ("WARNING! No server info found!", 'red');
       }
-      
+
       // read db configuration
       $sContent = file_get_contents (PATH_DB . $sObject . PATH_SEP . 'db.php');
-      
+
       $sContent = str_replace ('<?php', '', $sContent);
       $sContent = str_replace ('<?', '', $sContent);
       $sContent = str_replace ('?>', '', $sContent);
@@ -193,7 +179,7 @@ if (! defined ('SYS_SYS')) {
       $sContent = str_replace ("('", "$", $sContent);
       $sContent = str_replace ("',", '=', $sContent);
       $sContent = str_replace (");", ';', $sContent);
-      
+
       eval ($sContent);
       $dsn = $DB_ADAPTER . '://' . $DB_USER . ':' . $DB_PASS . '@' . $DB_HOST . '/' . $DB_NAME;
       $dsnRbac = $DB_ADAPTER . '://' . $DB_RBAC_USER . ':' . $DB_RBAC_PASS . '@' . $DB_RBAC_HOST . '/' . $DB_RBAC_NAME;
@@ -225,7 +211,7 @@ if (! defined ('SYS_SYS')) {
       fclose ($oFile);
       Propel::init (PATH_CORE . 'config/_databases_.php');
       // Creole::registerDriver('dbarray', 'creole.contrib.DBArrayConnection');
-      
+
       eprintln ("Processing workspace: " . $sObject, 'green');
       try {
         processWorkspace ();
@@ -244,10 +230,6 @@ else {
   processWorkspace ();
 }
 
-// finally update the file
-// @file_put_contents(PATH_DATA . 'cron', serialize(array('bCronIsRunning' =>
-// '0', 'sLastExecution' => date('Y-m-d H:i:s'))));
-
 function processWorkspace()
 {
   global $sLastExecution;
@@ -255,11 +237,11 @@ function processWorkspace()
   //global $SkipRecords;
   //global $TrunkSize;
   global $usrUid;
-  
+
   try {
-    
+
     //if $usrUid is not set get all the users
-    
+
     //verify inbox
     verifyInboxList($usrUid);
 
@@ -351,10 +333,10 @@ function displayMissingCases($aAppUidsDB, $aAppUidsSolr)
   foreach($casesInDBNotSolr as $caseDB){
     print "  ". $caseDB . " \n";
   }
-  print "  Cases in Solr but not in DB: \n";            
+  print "  Cases in Solr but not in DB: \n";
   foreach($casesInSolrNotDB as $caseSolr){
     print "  ". $caseSolr . " \n";
-  }  
+  }
 }
 
 function getListUids($usrUid, $action)
@@ -365,21 +347,21 @@ function getListUids($usrUid, $action)
     print "solr_enabled: " . $solrConf ['solr_enabled'] . "\n";
     print "solr_host: " . $solrConf ['solr_host'] . "\n";
     print "solr_instance: " . $solrConf ['solr_instance'] . "\n";
-    
+
     $oAppSolr = new AppSolr ($solrConf ['solr_enabled'], $solrConf ['solr_host'], $solrConf ['solr_instance']);
 
     G::LoadClass("applications");
     $apps = new Applications();
   }
   else {
-    print "Incomplete Solr configuration. See configuration file: " . PATH_DATA_SITE . "env.ini"; 
+    print "Incomplete Solr configuration. See configuration file: " . PATH_DATA_SITE . "env.ini";
     return;
-  }        
+  }
   //get the list of id's
   $userUid = $usrUid;
   $start = 0;
   $limit = 1;
-  $action = $action; //todo, 
+  $action = $action; //todo,
   $filter = '';
   $search = '';
   $process = '';
@@ -392,7 +374,7 @@ function getListUids($usrUid, $action)
   $dir = 'DESC';
   $sort = 'APP_NUMBER';
   $category = '';
-  
+
   $dataSolr = $oAppSolr->getAppGridData(
       $userUid,
       $start,
@@ -411,7 +393,7 @@ function getListUids($usrUid, $action)
       $sort
   );
 
-  
+
   $dataDB = $apps->getAll(
       $userUid,
       $start,
@@ -443,7 +425,7 @@ function getListUids($usrUid, $action)
     $start = $i * $trunkSize;
     $limit = $trunkSize;
     //print "  Loop $start to " . (String)($start + $trunkSize) . " \n";
-    
+
     $dataDB = $apps->getAll(
         $userUid,
         $start,
@@ -461,7 +443,7 @@ function getListUids($usrUid, $action)
         $dir,
         $sort,
         $category
-    );          
+    );
     foreach($dataDB["data"] as $caseDB){
       $aAppUidsDB[] = $caseDB["APP_UID"];
     }
@@ -475,7 +457,7 @@ function getListUids($usrUid, $action)
     $start = $i * $trunkSize;
     $limit = $trunkSize;
     //print "  Loop $start to " . (String)($start + $trunkSize) . " \n";
-    
+
     $dataSolr = $oAppSolr->getAppGridData(
       $userUid,
       $start,
@@ -515,9 +497,9 @@ function saveLog($sSource, $sType, $sDescription)
     global $isDebug;
     if ($isDebug)
       print date ('H:i:s') . " ($sSource) $sType $sDescription <br>\n";
-    
+
     G::verifyPath (PATH_DATA . 'log' . PATH_SEP, true);
-    $message = '(' . $sSource . ') ' . $sDescription . "\n";
+    $message = '(' . $sSource . ') ' . $sDescription;
     if ($sType == 'action') {
       G::log($message, PATH_DATA);
     }
@@ -535,7 +517,7 @@ function setExecutionMessage($m)
   $len = strlen ($m);
   $linesize = 60;
   $rOffset = $linesize - $len;
-  
+
   eprint ("* $m");
   for ($i = 0; $i < $rOffset; $i++)
     eprint ('.');

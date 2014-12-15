@@ -21,16 +21,33 @@
  * For more information, contact Colosa Inc, 2566 Le Jeune Rd.,
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  */
-//add more security, and catch any error or exception
 
-
-$sFileName = $_GET['p'] . '.pm';
-$file = PATH_DOCUMENT . 'output' . PATH_SEP . $sFileName . 'tpm';
-$filex = PATH_DOCUMENT . 'output' . PATH_SEP . $sFileName;
-
-if (file_exists( $file )) {
-    rename( $file, $filex );
+if (! isset($_GET["file_hash"])) {
+    throw new Exception("Invalid Request, param 'file_hash' was not sent.");
 }
 
-$realPath = PATH_DOCUMENT . 'output' . PATH_SEP . $sFileName;
-G::streamFile( $realPath, true );
+$httpStream = new \ProcessMaker\Util\IO\HttpStream();
+$outputDir = PATH_DATA . "sites" . PATH_SEP . SYS_SYS . PATH_SEP . "files" . PATH_SEP . "output" . PATH_SEP;
+$filename = base64_decode($_GET["file_hash"]);
+$fileExtension = pathinfo($outputDir . $filename, PATHINFO_EXTENSION);
+
+if (! file_exists($outputDir . $filename)) {
+    throw new Exception("Error, couldn't find request file: $filename");
+}
+
+$httpStream->loadFromFile($outputDir . $filename);
+$httpStream->setHeader("Content-Type", "application/$fileExtension");
+$httpStream->send();
+
+//  ************* DEPRECATED (it will be removed soon) *********************************
+//add more security, and catch any error or exception
+//$sFileName = $_GET['p'] . '.pm';
+//$file = PATH_DOCUMENT . 'output' . PATH_SEP . $sFileName . 'tpm';
+//$filex = PATH_DOCUMENT . 'output' . PATH_SEP . $sFileName;
+//
+//if (file_exists( $file )) {
+//    rename( $file, $filex );
+//}
+//
+//$realPath = PATH_DOCUMENT . 'output' . PATH_SEP . $sFileName;
+//G::streamFile( $realPath, true );

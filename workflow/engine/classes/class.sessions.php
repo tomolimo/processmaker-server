@@ -117,7 +117,7 @@ class Sessions
             $oCriteria->add( SessionPeer::SES_STATUS, 'ACTIVE' );
             $oCriteria->add( SessionPeer::SES_DUE_DATE, $date, Criteria::GREATER_EQUAL );
 
-            $oDataset = SessionPeer::doSelectRS( $oCriteria );
+            $oDataset = SessionPeer::doSelectRS( $oCriteria, Propel::getDbConnection('workflow_ro') );
             $oDataset->setFetchmode( ResultSet::FETCHMODE_ASSOC );
             $oDataset->next();
             $aRow = $oDataset->getRow();

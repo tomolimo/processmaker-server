@@ -204,7 +204,7 @@ _b.AutoSuggest.prototype.getSuggestions = function (val)
 
 			var flagSearch = 0;
 
-			if (this.searchType == "*searchtype*" && this.aSug[i].value.toLowerCase().indexOf(val.toLowerCase()) > 0) {
+			if (this.searchType == "*searchtype*" && this.aSug[i].value.toLowerCase().indexOf(val.toLowerCase()) > -1) {
 				  flagSearch = 1;
 			}
 

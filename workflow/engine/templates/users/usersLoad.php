@@ -12,7 +12,7 @@
 }
 </style>
 <body onresize="autoResizeScreen()" onload="autoResizeScreen()">
-<iframe name="frameMain" id="frameMain" src ="../users/usersInit" width="100%" height="200" frameborder="0">
+<iframe name="frameMain" id="frameMain" src ="../users/userMain<?php echo ((isset($_GET["create_app"]))? "?create_app" : ""); ?>" width="100%" height="200" frameborder="0">
   <p>Your browser does not support iframes.</p>
 </iframe>
 </body>
@@ -21,7 +21,7 @@
   h = getStyle(document.getElementById('pm_menu'),'top');
   h = h.replace("px", "");
   h = parseInt(h) + 18;
-  if ( document.getElementById('pm_submenu') ) 
+  if ( document.getElementById('pm_submenu') )
     document.getElementById('pm_submenu').style.display = 'none';
   document.documentElement.style.overflowY = 'hidden';
   function autoResizeScreen()

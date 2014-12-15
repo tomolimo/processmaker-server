@@ -1,18 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="tracker_AvailableCaseTrackerObjects" width="100%" rowsPerPage="10">
-
-<PRO_UID type="hidden" showInTable="0"/>
-
-<OBJECT_UID type="hidden" showInTable="0"/>
-
-<OBJECT_TITLE type="text" colWidth="300" titleAlign="left" align="left">
-  <en>Title</en>
-</OBJECT_TITLE>
-
-<OBJECT_TYPE type="dropdown">
-  <en>Type<option name="DYNAFORM">Dynaform</option><option name="INPUT_DOCUMENT">Input Document</option><option name="OUTPUT_DOCUMENT">Output Document</option></en>
-</OBJECT_TYPE>
-
-<ASSIGN type="link" colWidth="40" value="@G::LoadTranslation(ID_ASSIGN)" link="#" onclick="assignCaseTrackerObject(@QPRO_UID, @QOBJECT_TYPE, @QOBJECT_UID);return false;"><en></en></ASSIGN>
-
-</dynaForm>  
+  <PRO_UID type="hidden" showInTable="0"/>
+  <OBJECT_UID type="hidden" showInTable="0"/>
+  <OBJECT_TITLE type="text" colWidth="300" titleAlign="left" align="left">
+    <en><![CDATA[Title]]></en>
+  </OBJECT_TITLE>
+  <OBJECT_TYPE type="dropdown">
+    <en><![CDATA[Type]]><option name="DYNAFORM"><![CDATA[Dynaform]]></option><option name="INPUT_DOCUMENT"><![CDATA[Input Document]]></option><option name="OUTPUT_DOCUMENT"><![CDATA[Output Document]]></option></en>
+  </OBJECT_TYPE>
+  <ASSIGN type="link" colWidth="40" value="@G::LoadTranslation(ID_ASSIGN)" link="#" onclick="assignCaseTrackerObject(@QPRO_UID, @QOBJECT_TYPE, @QOBJECT_UID);return false;">
+    <en><![CDATA[]]></en>
+  </ASSIGN>
+</dynaForm>

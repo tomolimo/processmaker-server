@@ -148,5 +148,14 @@ class SubProcess extends BaseSubProcess
             throw ($oError);
         }
     }
+
+    public static function findByParents($proParent, $tasParent)
+    {
+        $criteria = new Criteria('workflow');
+        $criteria->add(SubProcessPeer::PRO_PARENT, $proParent);
+        $criteria->add(SubProcessPeer::TAS_PARENT, $tasParent);
+
+        return SubProcessPeer::doSelectOne($criteria);
+    }
 }
 

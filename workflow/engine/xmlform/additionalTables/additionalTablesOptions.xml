@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="xmlmenu">
   <MNU_ADD type="link" link="additionalTablesNew" colAlign="left" colWidth="50">
-    <en>New</en>
+    <en><![CDATA[New]]></en>
   </MNU_ADD>
   <MNU_IMPORT type="link" link="additionalTablesToImport" colAlign="left" colWidth="60">
-    <en>Import</en>
+    <en><![CDATA[Import]]></en>
   </MNU_IMPORT>
   <MNU_EXPORT type="link" link="#" onclick="toExport()" colAlign="left" colWidth="100">
-    <en>Export</en>
+    <en><![CDATA[Export]]></en>
   </MNU_EXPORT>
   <PAGED_TABLE_ID type="private"/>
   <JS type="javascript" replaceTags="1"><![CDATA[

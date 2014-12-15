@@ -338,7 +338,7 @@ class CaseScheduler extends BaseCaseScheduler
                 $processId = $aRow["PRO_UID"];
                 $taskId = $aRow["TAS_UID"];
                 $client = new SoapClient( $defaultEndpoint );
-                $params = array ('userid' => $user,'password' => 'md5:' . $pass);
+                $params = array ('userid' => $user,'password' => Bootstrap::getPasswordHashType() . ':' . $pass);
                 $result = $client->__SoapCall( 'login', array ($params) );
                 eprint( " - Logging as user $user............." );
                 if ($result->status_code == 0) {
@@ -500,7 +500,7 @@ class CaseScheduler extends BaseCaseScheduler
                 $processId = $aRow["PRO_UID"];
                 $taskId = $aRow["TAS_UID"];
                 $client = new SoapClient( $defaultEndpoint );
-                $params = array ('userid' => $user,'password' => 'md5:' . $pass);
+                $params = array ('userid' => $user,'password' => Bootstrap::getPasswordHashType() . ':' . $pass);
                 $result = $client->__SoapCall( 'login', array ($params) );
                 eprint( " - Logging as user $user............." );
                 if ($result->status_code == 0) {
@@ -620,6 +620,8 @@ class CaseScheduler extends BaseCaseScheduler
     {
         $nActualDate = $currentDate . " " . $sActualTime;
         $dEstimatedDate = '';
+        $sWeeks = trim($sWeeks, "|");
+
         switch ($sOption) {
             case '1':
                 switch ($sValue) {
@@ -644,27 +646,27 @@ class CaseScheduler extends BaseCaseScheduler
             case '2':
                 if (strlen( $sWeeks ) > 0) {
                     //die($sActualTime);
-                    $nDayOfTheWeek = date( 'w', strtotime( $sActualTime ) );
+                    $nDayOfTheWeek = (int)(date("w", strtotime($sActualTime)));
                     //$nDayOfTheWeek = 1;
-                    //echo "*".$nDayOfTheWeek."*";
                     $aWeeks = explode( '|', $sWeeks );
-                    $nFirstDay = $aWeeks[0];
+                    $nFirstDay = (int)($aWeeks[0]) - 1;
                     $aDaysWeek = array ('Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday');
-                    $nFirstDay = $nFirstDay - 1;
-                    //echo "¨¨".$nFirstDay."¨¨";
                     $nDayOfTheWeek = ($nDayOfTheWeek == 0) ? 7 : $nDayOfTheWeek;
-                    //echo $nDayOfTheWeek;
+                    $day = 0;
                     $nSW = 0;
-                    $nNextDay = 0;
+                    $flagIsTheSameDay = false;
+
                     foreach ($aWeeks as $value) {
-                        if ($value > $nDayOfTheWeek) {
-                            $nNextDay = $value - 1;
+                        if ($nDayOfTheWeek <= (int)($value)) {
+                            $day = (int)($value) - 1;
                             $nSW = 1;
+                            $flagIsTheSameDay = $nDayOfTheWeek == (int)($value);
                             break;
                         }
                     }
+
                     if ($nSW == 1) {
-                        $dEstimatedDate = date( 'Y-m-d', strtotime( "$nActualDate next " . $aDaysWeek[$nNextDay] ) ) . ' ' . date( 'H:i:s', strtotime( $sActualTime ) );
+                        $dEstimatedDate = date("Y-m-d", strtotime("$nActualDate " . (($flagIsTheSameDay)? "this" : "next") . " " . $aDaysWeek[$day])) . " " . date("H:i:s", strtotime($sActualTime));
                     } else {
                         $nEveryDays = $sDaysPerformTask;
                         //                                                                $nEveryDays = '1';

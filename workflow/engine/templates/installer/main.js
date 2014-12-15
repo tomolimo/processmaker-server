@@ -101,8 +101,6 @@ function finishInstallation()
       'adminUsername' : Ext.getCmp('adminUsername'    ).getValue(),
       'adminPassword' : Ext.getCmp('adminPassword'    ).getValue(),
       'wfDatabase'    : Ext.getCmp('wfDatabase'       ).getValue(),
-      'rbDatabase'    : Ext.getCmp('rbDatabase'       ).getValue(),
-      'rpDatabase'    : Ext.getCmp('rpDatabase'       ).getValue(),
       'deleteDB'      : Ext.getCmp('deleteDB'         ).getValue(),
       'userLogged'    : Ext.getCmp('createUserLogged' ).getValue()
     },

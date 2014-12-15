@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm sqlConnection="" width="100%" rowsPerPage="10">
-<PROCESS type="hidden" showInTable="0"/>
-<TASK type="hidden" showInTable="0"/>
-<STEP_UID type="hidden" showInTable="0"/>
-<STEP_TITLE type="text" colWidth="250" titleAlign="left" align="left">
-  <en>Title</en>
-</STEP_TITLE>
-<STEP_TYPE_OBJ type="dropdown" colWidth="100" titleAlign="left" align="left">
-  <en>Type<option name="DYNAFORM">Dynaform</option><option name="OUTPUT_DOCUMENT">Output Document</option><option name="INPUT_DOCUMENT">Input Document</option><option name="EXTERNAL">External Step</option></en>
-</STEP_TYPE_OBJ>     
-
-<STEP_MODE type="text" colWidth="250" titleAlign="left" align="left" enableHtml="1">
-  <en>Mode</en>
-</STEP_MODE>
-
-<ASSIGN type="link" colWidth="50" value="@G::LoadTranslation(ID_SELECT)" link="#" onclick="stepSave(@QPROCESS, @QTASK, @QSTEP_TYPE_OBJ, @QSTEP_UID);return false;"><en></en></ASSIGN>
-<PAGED_TABLE_ID type="private" showInTable="0"/>
-<JSFILTER type="javascript" replaceTags="1" showInTable="0">
+  <PROCESS type="hidden" showInTable="0"/>
+  <TASK type="hidden" showInTable="0"/>
+  <STEP_UID type="hidden" showInTable="0"/>
+  <STEP_TITLE type="text" colWidth="250" titleAlign="left" align="left">
+    <en><![CDATA[Title]]></en>
+  </STEP_TITLE>
+  <STEP_TYPE_OBJ type="dropdown" colWidth="100" titleAlign="left" align="left">
+    <en><![CDATA[Type]]><option name="DYNAFORM"><![CDATA[Dynaform]]></option><option name="OUTPUT_DOCUMENT"><![CDATA[Output Document]]></option><option name="INPUT_DOCUMENT"><![CDATA[Input Document]]></option><option name="EXTERNAL"><![CDATA[External Step]]></option></en>
+  </STEP_TYPE_OBJ>
+  <STEP_MODE type="text" colWidth="250" titleAlign="left" align="left" enableHtml="1">
+    <en><![CDATA[Mode]]></en>
+  </STEP_MODE>
+  <ASSIGN type="link" colWidth="50" value="@G::LoadTranslation(ID_SELECT)" link="#" onclick="stepSave(@QPROCESS, @QTASK, @QSTEP_TYPE_OBJ, @QSTEP_UID);return false;">
+    <en><![CDATA[]]></en>
+  </ASSIGN>
+  <PAGED_TABLE_ID type="private" showInTable="0"/>
+  <JSFILTER type="javascript" replaceTags="1" showInTable="0">
 function pagedTableFilter( form ) {
   @#PAGED_TABLE_ID.doFilter( form );
 }
 </JSFILTER>
-</dynaForm>  
+</dynaForm>

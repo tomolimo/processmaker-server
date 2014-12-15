@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="pagetable" menu="processes/processes_FilesOptions" rowsPerPage="10">
-	<PATH type="text" titleAlign="left" colWidth="280" enableHtml="1">
-	  <en/>
-	</PATH>
-	
-	<EDIT_JS type="private" showInTable="0"/>
-	<EDIT type="link" value="@#EDIT" link="#" onclick="@#EDIT_JS" colWidth="2"><en></en></EDIT>
-	
-	<DOWNLOAD_TEXT type="private" showInTable="0"/>
-	<DOWNLOAD_JS type="private" showInTable="0"/>
-	<DOWNLOAD type="link" value="@#DOWNLOAD_TEXT" link="#" onclick="@#DOWNLOAD_JS" colWidth="50"/>
-	
-	<DELETE_TEXT type="private" showInTable="0"/>
-	<DELETE_JS type="private" showInTable="0"/>
-	<DELETE type="link" value="@#DELETE_TEXT" link="#" onclick="@#DELETE_JS" colWidth="50"><en></en></DELETE>
-</dynaForm>  
+  <PATH type="text" titleAlign="left" colWidth="280" enableHtml="1">
+    <en><![CDATA[]]></en>
+  </PATH>
+  <EDIT_JS type="private" showInTable="0"/>
+  <EDIT type="link" value="@#EDIT" link="#" onclick="@#EDIT_JS" colWidth="2">
+    <en><![CDATA[]]></en>
+  </EDIT>
+  <DOWNLOAD_TEXT type="private" showInTable="0"/>
+  <DOWNLOAD_JS type="private" showInTable="0"/>
+  <DOWNLOAD type="link" value="@#DOWNLOAD_TEXT" link="#" onclick="@#DOWNLOAD_JS" colWidth="50"/>
+  <DELETE_TEXT type="private" showInTable="0"/>
+  <DELETE_JS type="private" showInTable="0"/>
+  <DELETE type="link" value="@#DELETE_TEXT" link="#" onclick="@#DELETE_JS" colWidth="50">
+    <en><![CDATA[]]></en>
+  </DELETE>
+</dynaForm>

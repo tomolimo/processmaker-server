@@ -19,6 +19,13 @@ try {
     $aData = get_object_vars( G::json_decode( $_POST['oData'] ));
     //$aData = get_object_vars( $oJSON->decode( $_POST['oData'] ) );
 
+    if (isset($aData["TAS_TITLE"])) {
+        $aData["TAS_TITLE"] = str_replace("__ADD__", "+", $aData["TAS_TITLE"]);
+    }
+    if (isset($aData["TAS_DESCRIPTION"])) {
+        $aData["TAS_DESCRIPTION"] = str_replace("__ADD__", "+", $aData["TAS_DESCRIPTION"]);
+    }
+
     if (isset( $_POST['function'] )) {
         $sAction = $_POST['function'];
     } else {

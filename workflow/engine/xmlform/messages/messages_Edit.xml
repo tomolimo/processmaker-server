@@ -1,19 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="messages_Edit" type="xmlform" width="100%">
-<PRO_UID type="hidden"/>
-<MESS_UID type="hidden" showInTable="0"/>
-<MESS_TITLE type="text" colWidth="200" titleAlign="left" align="left" dataCompareField="T.CON_VALUE" dataCompareType="contains">
-  <en>Message Title</en>
-</MESS_TITLE>
-<MESS_TYPE type="dropdown" colWidth="120" titleAlign="left" align="left" dataCompareField="TYPE" dataCompareType="=">
-  <en>Send as<option name="HTML">HTML</option><option name="TEXT">Plain text</option><option name="SMS">SMS</option></en>
-</MESS_TYPE>
-
-<MESS_DESCRIPTION type="textarea" rows="8" cols="32" colWidth="200" titleAlign="left" align="left" dataCompareField="D.CON_VALUE" dataCompareType="contains">
-  <en>Content</en>
-</MESS_DESCRIPTION>
-
-<ACCEPT type="button" onclick="messagesSave( this.form );">
-  <en>Save</en>
-</ACCEPT>
-</dynaForm>  
+  <PRO_UID type="hidden"/>
+  <MESS_UID type="hidden" showInTable="0"/>
+  <MESS_TITLE type="text" colWidth="200" titleAlign="left" align="left" dataCompareField="T.CON_VALUE" dataCompareType="contains">
+    <en><![CDATA[Message Title]]></en>
+  </MESS_TITLE>
+  <MESS_TYPE type="dropdown" colWidth="120" titleAlign="left" align="left" dataCompareField="TYPE" dataCompareType="=">
+    <en><![CDATA[Send as]]><option name="HTML"><![CDATA[HTML]]></option><option name="TEXT"><![CDATA[Plain text]]></option><option name="SMS"><![CDATA[SMS]]></option></en>
+  </MESS_TYPE>
+  <MESS_DESCRIPTION type="textarea" rows="8" cols="32" colWidth="200" titleAlign="left" align="left" dataCompareField="D.CON_VALUE" dataCompareType="contains">
+    <en><![CDATA[Content]]></en>
+  </MESS_DESCRIPTION>
+  <ACCEPT type="button" onclick="messagesSave( this.form );">
+    <en><![CDATA[Save]]></en>
+  </ACCEPT>
+</dynaForm>

@@ -12,6 +12,7 @@ G::LoadClass("TaskUser");
 abstract class patch
 {
     static protected $isPathchable = false;
+    static public $dbAdapter = 'mysql';
     abstract static public function isApplicable();
     abstract static public function execute();
 }

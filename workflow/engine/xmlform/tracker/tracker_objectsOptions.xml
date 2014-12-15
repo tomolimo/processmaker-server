@@ -1,17 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<dynaForm type="xmlmenu"> 
-
-<PRO_UID type="private"/>
-
-<MNU_ASSIGN type="link" value="" link="#" onclick="availableCaseTrackerObjects(@QPRO_UID);return false;" colAlign="left" colWidth="100">
-  <en>Assign</en>
-</MNU_ASSIGN>
-
-<PAGED_TABLE_ID type="private"/>
-
-<PRO_UID type="private"/>
-
-<JS type="javascript" replaceTags="1"><![CDATA[
+<dynaForm type="xmlmenu">
+  <PRO_UID type="private"/>
+  <MNU_ASSIGN type="link" value="" link="#" onclick="availableCaseTrackerObjects(@QPRO_UID);return false;" colAlign="left" colWidth="100">
+    <en><![CDATA[Assign]]></en>
+  </MNU_ASSIGN>
+  <PAGED_TABLE_ID type="private"/>
+  <PRO_UID type="private"/>
+  <JS type="javascript" replaceTags="1"><![CDATA[
 
 var oPanel;
 var availableCaseTrackerObjects = function(sProcessUID) {
@@ -100,5 +95,4 @@ var saveConditionCaseTrackerObject = function(oForm) {
 };
 
 ]]></JS>
-
 </dynaForm>

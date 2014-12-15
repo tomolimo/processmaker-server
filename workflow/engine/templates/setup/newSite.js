@@ -18,8 +18,8 @@ Ext.onReady(function(){
                 c.getEl().on('keyup', function() {
                   namews=formNewSite.getForm().findField('NW_TITLE').getValue();
                   formNewSite.getForm().findField('AO_DB_WF').setValue('wf_'+namews);
-                  formNewSite.getForm().findField('AO_DB_RB').setValue('rb_'+namews);
-                  formNewSite.getForm().findField('AO_DB_RP').setValue('rp_'+namews);
+                  formNewSite.getForm().findField('AO_DB_WF').setValue('wf_'+namews);
+                  formNewSite.getForm().findField('AO_DB_WF').setValue('wf_'+namews);
                 }, c);
               }
             }
@@ -42,7 +42,7 @@ Ext.onReady(function(){
         autoCreate: {tag: 'input', type: 'text', size: '20', autocomplete: 'off', maxlength: '13'},
         allowBlank: false
       },
-      {
+      /*{
         id: 'AO_DB_RB',
         fieldLabel: _('ID_RBAC_DATABASE'),
         xtype:'textfield',
@@ -59,7 +59,7 @@ Ext.onReady(function(){
         width: 200,
         autoCreate: {tag: 'input', type: 'text', size: '20', autocomplete: 'off', maxlength: '13'},
         allowBlank: false
-      },
+      },*/
       {
             xtype: 'checkbox',
             fieldLabel: _('ID_DROP_DATABASE_EXISTS'),
@@ -156,8 +156,8 @@ Ext.onReady(function(){
                             success: function(f,a){
                              nwTitle    =formNewSite.getForm().findField('NW_TITLE').getValue();
                              aoDbWf     =formNewSite.getForm().findField('AO_DB_WF').getValue();
-                             aoDbRb     =formNewSite.getForm().findField('AO_DB_RB').getValue();
-                             aoDbRp     =formNewSite.getForm().findField('AO_DB_RP').getValue();
+                             aoDbRb     =aoDbWf;
+                             aoDbRp     =aoDbWf;
                              nwUsername =formNewSite.getForm().findField('NW_USERNAME').getValue();
                              nwPassword =formNewSite.getForm().findField('NW_PASSWORD').getValue();
                              nwPassword2=formNewSite.getForm().findField('NW_PASSWORD2').getValue();
@@ -172,7 +172,7 @@ Ext.onReady(function(){
                                 }
                                 if (a.failureType === Ext.form.Action.SERVER_INVALID){
                                     var text = JSON.parse(a.response.responseText);
-                                    if (typeof text.message) {
+                                    if (typeof(text.message) != 'undefined') {
                                         Ext.Msg.alert(_('ID_ERROR'), _('ID_MYSQL_ERROR', text.message));
                                     } else {
                                         Ext.Msg.alert(_('ID_WARNING'), _('NEW_SITE_NOT_AVAILABLE'));

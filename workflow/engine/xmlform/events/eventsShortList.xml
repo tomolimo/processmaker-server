@@ -1,28 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm menu="events/eventsOptions" width="100%" rowsPerPage="10">
-
   <EVN_UID type="private" showInTable="0"/>
-
   <EVN_DESCRIPTION type="text" colWidth="300" titleAlign="left" align="left">
-    <en>Description</en>
+    <en><![CDATA[Description]]></en>
   </EVN_DESCRIPTION>
-
   <EVN_WHEN_OCCURS type="dropdown" value="" link="" colWidth="180" titleAlign="left" align="left">
-    <en>When occurs<option name="AFTER_TIME">After time elapses</option><option name="TASK_STARTED">After task started</option></en>
+    <en><![CDATA[When occurs]]><option name="AFTER_TIME"><![CDATA[After time elapses]]></option><option name="TASK_STARTED"><![CDATA[After task started]]></option></en>
   </EVN_WHEN_OCCURS>
-
   <EVN_RELATED_TO type="dropdown" value="" link="" colWidth="50" titleAlign="left" align="left">
-    <en>Type<option name="SINGLE">Single</option><option name="MULTIPLE">Multiple</option></en>
+    <en><![CDATA[Type]]><option name="SINGLE"><![CDATA[Single]]></option><option name="MULTIPLE"><![CDATA[Multiple]]></option></en>
   </EVN_RELATED_TO>
-
   <EVN_STATUS type="dropdown" value="" link="" colWidth="40" titleAlign="left" align="left">
-    <en>Status<option name="ACTIVE">Active</option><option name="INACTIVE">Inactive</option></en>
+    <en><![CDATA[Status]]><option name="ACTIVE"><![CDATA[Active]]></option><option name="INACTIVE"><![CDATA[Inactive]]></option></en>
   </EVN_STATUS>
-
   <EDIT_EVENT type="link" colWidth="40" value="@G::LoadTranslation(ID_EDIT)" link="#" onclick="eventsEdit(@QEVN_UID);return false;"/>
-
   <EDIT_ACTION type="link" colWidth="40" value="@G::LoadTranslation(ID_ACTION)" link="#" onclick="eventsEditAction(@QEVN_UID);return false;"/>
-
-  <DELETE type="link" colWidth="40" value="@G::LoadTranslation(ID_DELETE)" link="#" onclick="eventsDelete(@QEVN_UID);return false;"><en></en></DELETE>
-
-</dynaForm>  
+  <DELETE type="link" colWidth="40" value="@G::LoadTranslation(ID_DELETE)" link="#" onclick="eventsDelete(@QEVN_UID);return false;">
+    <en><![CDATA[]]></en>
+  </DELETE>
+</dynaForm>

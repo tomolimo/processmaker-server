@@ -1,26 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="processes_FileEdit" type="xmlform" width="100%" enableTemplate="1">
-<pro_uid type="hidden" defaultValue=""/>
-
-	<filename type="hidden" defaultValue=""/>
-
-	<TITLE type="title" enableHTML="1">
-	  <en><![CDATA[<div align="center">Edit @#filename email template</div>]]></en>
-	</TITLE>
-
-	<fcontent type="wysiwyg_editor" editorType="EMAIL_TEMPLATE" height="380" width="720" defaultValue="">
-	  <en/>
-	</fcontent>
-
-	<ACCEPT type="button" onclick="getField('fcontent').value = tinyMCE.activeEditor.getContent(); saveFile(@@pro_uid, @@filename);">
-	  <en>Save</en>
-	</ACCEPT>
-    <BTN_CANCEL type="button" onclick="cancel();">
-      <en>Cancel</en>
-    </BTN_CANCEL>
-
-
-<JS type="javascript" replacetags="1"><![CDATA[
+  <pro_uid type="hidden" defaultValue=""/>
+  <filename type="hidden" defaultValue=""/>
+  <TITLE type="title" enableHTML="1">
+    <en><![CDATA[<div align="center">Edit @#filename email template</div>]]></en>
+  </TITLE>
+  <fcontent type="wysiwyg_editor" editorType="EMAIL_TEMPLATE" height="380" width="720" defaultValue="">
+    <en><![CDATA[]]></en>
+  </fcontent>
+  <ACCEPT type="button" onclick="getField('fcontent').value = tinyMCE.activeEditor.getContent(); saveFile(@@pro_uid, @@filename);">
+    <en><![CDATA[Save]]></en>
+  </ACCEPT>
+  <BTN_CANCEL type="button" onclick="cancel();">
+    <en><![CDATA[Cancel]]></en>
+  </BTN_CANCEL>
+  <JS type="javascript" replacetags="1"><![CDATA[
 
 function cancel() {
     tinyMCE.execCommand('mceRemoveControl',false,'form[fcontent]');
@@ -28,5 +22,4 @@ function cancel() {
 }
 
 ]]></JS>
-
 </dynaForm>

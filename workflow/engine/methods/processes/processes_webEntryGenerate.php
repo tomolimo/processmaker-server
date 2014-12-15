@@ -71,7 +71,7 @@ try {
         $template->assign( 'dynaformUid', $sDYNAFORM );
         $template->assign( 'taskUid', $sTASKS );
         $template->assign( 'wsUser', $sWS_USER );
-        $template->assign( 'wsPass', 'md5:' . md5( $sWS_PASS ) );
+        $template->assign( 'wsPass', Bootstrap::hashPassword($sWS_PASS, '', true) );
         $template->assign( 'wsRoundRobin', $sWS_ROUNDROBIN );
 
         if ($sWE_USR == "2") {
@@ -89,8 +89,8 @@ try {
         file_put_contents( $fileName, $template->getOutputContent() );
         //creating the third file, only if this wsClient.php file doesn't exist.
         $fileName = $pathProcess . 'wsClient.php';
-        $pluginTpl = PATH_CORE . 'test' . PATH_SEP . 'unit' . PATH_SEP . 'ws' . PATH_SEP . 'wsClient.php';
-
+        $pluginTpl = file_exists(PATH_CORE . 'test' . PATH_SEP . 'unit' . PATH_SEP . 'ws' . PATH_SEP . 'wsClient.php') ? PATH_CORE . 'test' . PATH_SEP . 'unit' . PATH_SEP . 'ws' . PATH_SEP . 'wsClient.php' : PATH_CORE . 'templates' . PATH_SEP . 'processes' . PATH_SEP . 'wsClient.php';
+        
         if (file_exists( $fileName )) {
             if (filesize( $fileName ) != filesize( $pluginTpl )) {
                 @copy( $fileName, $pathProcess . 'wsClient.php.bck' );

@@ -1,32 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="ProcessCategory" width="400" mode="edit" enableTemplate="1" border="0">
-
-<title1 type="title" >
-  <en>Delete Process Category</en>
-</title1>
-
-<CATEGORY_UID type="hidden" colWidth='32'  >
+  <title1 type="title">
+    <en><![CDATA[Delete Process Category]]></en>
+  </title1>
+  <CATEGORY_UID type="hidden" colWidth="32">
 </CATEGORY_UID>
-
-<LABEL_CATEGORY_NAME type="caption" colWidth='32'  >
-  <en>Category Name</en>
-</LABEL_CATEGORY_NAME>
-
-<CATEGORY_NAME type="hidden" colWidth='32'  >
+  <LABEL_CATEGORY_NAME type="caption" colWidth="32">
+    <en><![CDATA[Category Name]]></en>
+  </LABEL_CATEGORY_NAME>
+  <CATEGORY_NAME type="hidden" colWidth="32">
 </CATEGORY_NAME>
-
-<BTN_SUBMIT type="submit" >
-  <en>delete</en>
-</BTN_SUBMIT>
-<BTN_CANCEL type="button" onclick="cancel();">
-  <en>Cancel</en>
-</BTN_CANCEL>
-<JS type="javascript" replacetags="1"><![CDATA[
+  <BTN_SUBMIT type="submit">
+    <en><![CDATA[delete]]></en>
+  </BTN_SUBMIT>
+  <BTN_CANCEL type="button" onclick="cancel();">
+    <en><![CDATA[Cancel]]></en>
+  </BTN_CANCEL>
+  <JS type="javascript" replacetags="1"><![CDATA[
 function cancel(){
     window.location = 'processCategoryList';
 }
 
 ]]></JS>
-
-
 </dynaForm>

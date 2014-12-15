@@ -46,6 +46,8 @@ switch ($request) {
         $conf->aConfig = $config;
         $conf->saveConfig( "ENVIRONMENT_SETTINGS", "" );
 
+        G::auditLog("UpdateEnvironmentSettings", "UserNameDisplayFormat -> ".$_POST["userFormat"].", GlobalDateFormat -> ".$_POST["dateFormat"].", HideProcessInformation -> ".(string)isset($_POST["hideProcessInf"]).", DateFormat -> ".$_POST["casesListDateFormat"].", NumberOfRowsPerPage -> ".$_POST["casesListRowNumber"].", RefreshTimeSeconds -> ".$_POST["txtCasesRefreshTime"]);
+
         $response = new stdclass();
         $response->success = true;
         $response->msg = G::LoadTranslation( "ID_SAVED_SUCCESSFULLY" );

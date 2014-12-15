@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="additionalTables/additionalTablesTitle" type="xmlform" width="400">
-
-<ADD_TAB_NAME type="hidden"/>
-
-<TITLE type="title" label="@#ADD_TAB_NAME"><en>@#ADD_TAB_NAME</en></TITLE>
-
-</dynaForm>  
+  <ADD_TAB_NAME type="hidden"/>
+  <TITLE type="title" label="@#ADD_TAB_NAME">
+    <en><![CDATA[@#ADD_TAB_NAME]]></en>
+  </TITLE>
+</dynaForm>

@@ -1,33 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="pagetable" sqlConnection="" menu="reports/report1_back">
-<PRO_UID type="private" showInTable="0"/>
-
-<PRO_TITLE type="text" align="left" colWidth="300">
-  <en>Processes</en>
-</PRO_TITLE>
-
-<CANTCASES type="text" align="right" colWidth="80">
-  <en>Cases</en>
-</CANTCASES>
-
-<MIN type="hours" align="right" colWidth="120">
-  <en>Best Completion Time</en>
-</MIN>
-
-<MAX type="hours" align="right" colWidth="120">
-  <en>Slowest Completion Time</en>
-</MAX>
-
-<TOTALDUR type="hours" align="right" colWidth="100">
-  <en>Total Duration (Hours)</en>
-</TOTALDUR>
-
-<PROMEDIO type="text" align="right" colWidth="100">
-  <en>Average (Hours)</en>
-</PROMEDIO>
-
-<RPT_VIEW type="link" colWidth="60" link="#" onclick="panDel(&#039;@#PRO_UID&#039;);return false;">
-  <en>Detaills</en>
-</RPT_VIEW>
-
-</dynaForm> 
+  <PRO_UID type="private" showInTable="0"/>
+  <PRO_TITLE type="text" align="left" colWidth="300">
+    <en><![CDATA[Processes]]></en>
+  </PRO_TITLE>
+  <CANTCASES type="text" align="right" colWidth="80">
+    <en><![CDATA[Cases]]></en>
+  </CANTCASES>
+  <MIN type="hours" align="right" colWidth="120">
+    <en><![CDATA[Best Completion Time]]></en>
+  </MIN>
+  <MAX type="hours" align="right" colWidth="120">
+    <en><![CDATA[Slowest Completion Time]]></en>
+  </MAX>
+  <TOTALDUR type="hours" align="right" colWidth="100">
+    <en><![CDATA[Total Duration (Hours)]]></en>
+  </TOTALDUR>
+  <PROMEDIO type="text" align="right" colWidth="100">
+    <en><![CDATA[Average (Hours)]]></en>
+  </PROMEDIO>
+  <RPT_VIEW type="link" colWidth="60" link="#" onclick="panDel('@#PRO_UID');return false;">
+    <en><![CDATA[Details]]></en>
+  </RPT_VIEW>
+</dynaForm>

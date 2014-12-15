@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="xmlmenu">
-
-<GRP_UID type="private"/>
-
-<GRP_NAME type="hidden" showInTable="0"/>
-
-<MNU_ADD_EMPLOYE type="link" value="" link="#" onclick='addUserGroup(&#034;@#GRP_UID&#034;, &#034;@#GRP_NAME&#034;); return false;' colAlign="left" colWidth="150">
-  <en>Assign</en>
-  <es>Asignar</es>
-</MNU_ADD_EMPLOYE>
-
-</dynaForm> 
+  <GRP_UID type="private"/>
+  <GRP_NAME type="hidden" showInTable="0"/>
+  <MNU_ADD_EMPLOYE type="link" value="" link="#" onclick="addUserGroup(&quot;@#GRP_UID&quot;, &quot;@#GRP_NAME&quot;); return false;" colAlign="left" colWidth="150">
+    <en><![CDATA[Assign]]></en>
+    <es>Asignar</es>
+  </MNU_ADD_EMPLOYE>
+</dynaForm>

@@ -1,10 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?> 
+<?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="xmlmenu">
-
-
-<MESSAGE type="title" titleAlign="center">
-  <en>It is not possible to see information related to this case.  Please contact the System Administrator.</en>
-</MESSAGE>
-
-
+  <MESSAGE type="title" titleAlign="center">
+    <en><![CDATA[It is not possible to see information related to this case.  Please contact the System Administrator.]]></en>
+  </MESSAGE>
 </dynaForm>

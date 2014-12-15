@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <dynaForm type="pagetable" menu="processes/processes_DirectoriesOptions">
-<DIRECTORY type="text" titleAlign="left" colWidth="600" enableHtml="1">
-  <en></en>
-</DIRECTORY>
-</dynaForm> 
+  <DIRECTORY type="text" titleAlign="left" colWidth="600" enableHtml="1">
+    <en><![CDATA[]]></en>
+  </DIRECTORY>
+</dynaForm>

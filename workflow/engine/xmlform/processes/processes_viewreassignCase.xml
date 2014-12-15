@@ -1,25 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm sqlConnection="" width="100%" rowsPerPage="10">
-
-<USR_UID type="hidden" showInTable="0"/>
-
-<USR_FIRSTNAME type="text" colWidth="120" titleAlign="left" align="left" enableHtml="1">
-  <en>First Name</en>
-</USR_FIRSTNAME>
-
-<USR_LASTNAME type="text" colWidth="120" titleAlign="left" align="left" enableHtml="1">
-  <en>Last Name</en>
-</USR_LASTNAME>
-
-
-<ASSIGN type="link" colWidth="50" value="@G::LoadTranslation(ID_REASSIGN)" link="#" onclick="reassignCase(@QUSR_UID, &#039;@#THETYPE&#039;);return false;"/>
-
-<PAGED_TABLE_ID type="private" showInTable="0"/>
-
-<JSFILTER type="javascript" replaceTags="1" showInTable="0">
+  <USR_UID type="hidden" showInTable="0"/>
+  <USR_FIRSTNAME type="text" colWidth="120" titleAlign="left" align="left" enableHtml="1">
+    <en><![CDATA[First Name]]></en>
+  </USR_FIRSTNAME>
+  <USR_LASTNAME type="text" colWidth="120" titleAlign="left" align="left" enableHtml="1">
+    <en><![CDATA[Last Name]]></en>
+  </USR_LASTNAME>
+  <ASSIGN type="link" colWidth="50" value="@G::LoadTranslation(ID_REASSIGN)" link="#" onclick="reassignCase(@QUSR_UID, '@#THETYPE');return false;"/>
+  <PAGED_TABLE_ID type="private" showInTable="0"/>
+  <JSFILTER type="javascript" replaceTags="1" showInTable="0">
 function pagedTableFilter( form ) {
   @#PAGED_TABLE_ID.doFilter( form );
 }
 </JSFILTER>
-
-</dynaForm>  
+</dynaForm>

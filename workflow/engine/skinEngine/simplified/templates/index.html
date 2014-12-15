@@ -29,9 +29,14 @@
   function resize()
   {
     var h = $(window).height() - 42;
-    $('iframe').height(h)
+    $('iframe').height(h);
+    //IE V8-V10-V11
+    if ((navigator.appVersion.indexOf("MSIE 8") != -1) || (navigator.appVersion.indexOf("MSIE 1") != -1) || (!!(navigator.userAgent.match(/Trident/) && !navigator.userAgent.match(/MSIE/)))) {
+      h = $('iframe').attr('style');
+      $('iframe').attr('style', h+' padding-top : 40px;');
+    }
   }
-  
+
   function redirect(url)
   {
     var $iframe = $('#iframex');

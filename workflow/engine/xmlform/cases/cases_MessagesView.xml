@@ -1,27 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="xmlform" name="" width="500" menu="">
-
-<title type="title">
-  <en>MESSAGE</en>
-</title>
-
-<APP_MSG_SUBJECT type="text" mode="view">
-  <en>SUBJECT</en>
-</APP_MSG_SUBJECT>
-
-<APP_MSG_FROM type="text" mode="view">
-  <en>FROM</en>
-</APP_MSG_FROM>
-
-<APP_MSG_TO type="text" mode="view">
-  <en>TO</en>
-</APP_MSG_TO>
-
-<APP_MSG_DATE type="text" mode="view">
-  <en>DATE</en>
-</APP_MSG_DATE>
-
-<APP_MSG_BODY type="text" cols="70" rows="10" mode="view" enableHTML="1"> 
-  <en/>
-</APP_MSG_BODY>
+  <title type="title">
+    <en><![CDATA[MESSAGE]]></en>
+  </title>
+  <APP_MSG_SUBJECT type="text" mode="view">
+    <en><![CDATA[SUBJECT]]></en>
+  </APP_MSG_SUBJECT>
+  <APP_MSG_FROM type="text" mode="view">
+    <en><![CDATA[FROM]]></en>
+  </APP_MSG_FROM>
+  <APP_MSG_TO type="text" mode="view">
+    <en><![CDATA[TO]]></en>
+  </APP_MSG_TO>
+  <APP_MSG_DATE type="text" mode="view">
+    <en><![CDATA[DATE]]></en>
+  </APP_MSG_DATE>
+  <APP_MSG_BODY type="text" cols="70" rows="10" mode="view" enableHTML="1">
+    <en><![CDATA[]]></en>
+  </APP_MSG_BODY>
 </dynaForm>

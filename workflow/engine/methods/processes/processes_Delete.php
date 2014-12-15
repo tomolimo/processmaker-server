@@ -38,23 +38,28 @@ if ($access != 1) {
             break;
     }
 }
-G::LoadClass( 'processMap' );
-$oProcessMap = new ProcessMap();
+//G::LoadClass( 'processMap' );
+//$oProcessMap = new ProcessMap();
 
-$UIDS = explode( ',', $_POST['PRO_UIDS'] );
+$uids = explode(',', $_POST['PRO_UIDS']);
 
 try {
-
-    foreach ($UIDS as $UID) {
-        $oProcessMap->deleteProcess( $UID );
+    foreach ($uids as $uid) {
+        //$oProcessMap->deleteProcess($uid);
+        ProcessMaker\Project\Workflow::removeIfExists($uid);
+        ProcessMaker\Project\Bpmn::removeIfExists($uid);
     }
+
+    $resp = new StdClass();
     $resp->status = 0;
     $resp->msg = 'All process was deleted successfully';
-    echo G::json_encode( $resp );
+
+    echo G::json_encode($resp);
+
 } catch (Exception $e) {
     $resp->status = 1;
     $resp->msg = $e->getMessage();
-    echo G::json_encode( $resp );
+    echo G::json_encode($resp);
 }
 
 

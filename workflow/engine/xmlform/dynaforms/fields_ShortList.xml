@@ -1,21 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<dynaForm name="fields_ShortList" type="filterform" sql="SELECT *, XMLNODE_NAME as XMLNODE_NAME2 FROM dynaForm WHERE NOT( XMLNODE_NAME = &#039;&#039; )" sqlConnection="XMLDB" width="100%" rowsPerPage="25">
-<XMLNODE_NAME type="text" colWidth="120" titleAlign="left" align="left" dataCompareField="XMLNODE_NAME" dataCompareType="contains">
-  <en>Field name</en>
-</XMLNODE_NAME>
-
-
-<EDIT type="link" colWidth="40" value="@G::LoadTranslation(ID_EDIT)" link="#" onclick="fieldsEdit(@QXMLNODE_NAME);return false;"/>
-<DELETE type="link" colWidth="40" value="@G::LoadTranslation(ID_DELETE)" link="#" onclick="if (confirm(&#039;@G::LoadTranslation(ID_DELETE_FIELD_SURE)&#039;)) fieldsDelete(@QXMLNODE_NAME);return false;"><en></en></DELETE>
-
-
-<SEARCH type="button" onclick="pagedTableFilter( this.form );" showInTable="0">
-  <en>Apply Filter</en>
-</SEARCH>
-<PAGED_TABLE_ID type="private" showInTable="0"/>
-<JSFILTER type="javascript" replaceTags="1" showInTable="0">
+<dynaForm name="fields_ShortList" type="filterform" sql="SELECT *, XMLNODE_NAME as XMLNODE_NAME2 FROM dynaForm WHERE NOT( XMLNODE_NAME = '' )" sqlConnection="XMLDB" width="100%" rowsPerPage="25">
+  <XMLNODE_NAME type="text" colWidth="120" titleAlign="left" align="left" dataCompareField="XMLNODE_NAME" dataCompareType="contains">
+    <en><![CDATA[Field name]]></en>
+  </XMLNODE_NAME>
+  <EDIT type="link" colWidth="40" value="@G::LoadTranslation(ID_EDIT)" link="#" onclick="fieldsEdit(@QXMLNODE_NAME);return false;"/>
+  <DELETE type="link" colWidth="40" value="@G::LoadTranslation(ID_DELETE)" link="#" onclick="if (confirm('@G::LoadTranslation(ID_DELETE_FIELD_SURE)')) fieldsDelete(@QXMLNODE_NAME);return false;">
+    <en><![CDATA[]]></en>
+  </DELETE>
+  <SEARCH type="button" onclick="pagedTableFilter( this.form );" showInTable="0">
+    <en><![CDATA[Apply Filter]]></en>
+  </SEARCH>
+  <PAGED_TABLE_ID type="private" showInTable="0"/>
+  <JSFILTER type="javascript" replaceTags="1" showInTable="0">
 function pagedTableFilter( form ) {
   @#PAGED_TABLE_ID.doFilter( form );
 }
 </JSFILTER>
-</dynaForm> 
+</dynaForm>

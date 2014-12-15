@@ -1,16 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="noViewPage" basedir="" width="400">Login to system
 
-<title type="title">
-  <en><![CDATA[You don\'t have permission]]></en>
-</title>
+<title type="title"><en><![CDATA[You don't have permission]]></en></title>
 
-<subtitle1 type="subtitle">
-  <en>The account you are logged in under does not have enough security privileges to view this page</en>
-</subtitle1>
+<subtitle1 type="subtitle"><en><![CDATA[The user account which you are currently logged in does not have security privileges to view this page]]></en></subtitle1>
 
-<subtitle2 type="subtitle">
-    <en>Please press back button to continue working with this system.</en>
-</subtitle2>
+<subtitle2 type="subtitle"><en><![CDATA[Please press the 'back' button to continue working with this system.]]></en></subtitle2>
 
-</dynaForm>  
+</dynaForm>

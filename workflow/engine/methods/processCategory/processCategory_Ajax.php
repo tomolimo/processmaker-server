@@ -104,6 +104,7 @@ if (isset( $_REQUEST['action'] )) {
                 $pcat->setCategoryUid( G::GenerateUniqueID() );
                 $pcat->setCategoryName( $catName );
                 $pcat->save();
+                G::auditLog("CreateCategory", "Category Name: ".$catName);
                 echo '{success: true}';
             } catch (Exception $ex) {
                 echo '{success: false, error: ' . $ex->getMessage() . '}';
@@ -134,6 +135,7 @@ if (isset( $_REQUEST['action'] )) {
                 $pcat->setCategoryUid( $catUID );
                 $pcat->setCategoryName( $catName );
                 $pcat->save();
+                g::auditLog("UpdateCategory", "Category Name: ".$catName." Category ID: (".$catUID.") ");
                 echo '{success: true}';
             } catch (Exception $ex) {
                 echo '{success: false, error: ' . $ex->getMessage() . '}';
@@ -153,7 +155,9 @@ if (isset( $_REQUEST['action'] )) {
                 $catUID = $_REQUEST['cat_uid'];
                 $cat = new ProcessCategory();
                 $cat->setCategoryUid( $catUID );
+                $catName = $cat->loadByCategoryId( $catUID );
                 $cat->delete();
+                G::auditLog("DeleteCategory", "Category Name: ".$catName." Category ID: (".$catUID.") ");
                 echo '{success: true}';
             } catch (Exception $ex) {
                 echo '{success: false, error: ' . $ex->getMessage() . '}';

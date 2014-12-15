@@ -1,43 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<dynaForm name="AppFolder" width="540" mode="edit" enableTemplate="1" border="0" > 
-
-<title1 type="title">
-  <en>New Folder</en>
-</title1>
-
-
-<FOLDER_PATH type="caption" colWidth="32">
-  <en>Path</en>
-</FOLDER_PATH>
-
-<FOLDER_UID type="hidden" size="32" maxlength="32">
-  <en>folder Uid
+<dynaForm name="AppFolder" width="540" mode="edit" enableTemplate="1" border="0">
+  <title1 type="title">
+    <en><![CDATA[New Folder]]></en>
+  </title1>
+  <FOLDER_PATH type="caption" colWidth="32">
+    <en><![CDATA[Path]]></en>
+  </FOLDER_PATH>
+  <FOLDER_UID type="hidden" size="32" maxlength="32">
+    <en>folder Uid
   </en>
-</FOLDER_UID>
-
-<FOLDER_PARENT_UID type="hidden" size="32" maxlength="32">
-  <en>Parent Parent Uid
+  </FOLDER_UID>
+  <FOLDER_PARENT_UID type="hidden" size="32" maxlength="32">
+    <en>Parent Parent Uid
   </en>
-</FOLDER_PARENT_UID>
-
-<FOLDER_NAME type="text" size="25" maxlength="25">
-  <en>Folder Name</en>
-</FOLDER_NAME>
-
-<BTN_CANCEL type="button" onclick="cancel();">
-  <en>Cancel</en>
-</BTN_CANCEL>
-
-<BTN_SUBMIT type="submit">
-  <en>Save</en>
-</BTN_SUBMIT>
-
-<JS type="javascript" replacetags="1"><![CDATA[
+  </FOLDER_PARENT_UID>
+  <FOLDER_NAME type="text" size="25" maxlength="25">
+    <en><![CDATA[Folder Name]]></en>
+  </FOLDER_NAME>
+  <BTN_CANCEL type="button" onclick="cancel();">
+    <en><![CDATA[Cancel]]></en>
+  </BTN_CANCEL>
+  <BTN_SUBMIT type="submit">
+    <en><![CDATA[Save]]></en>
+  </BTN_SUBMIT>
+  <JS type="javascript" replacetags="1"><![CDATA[
 
 function cancel() {
     oPanel.remove();
 }
 
 ]]></JS>
-
 </dynaForm>

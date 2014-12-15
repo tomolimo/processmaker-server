@@ -1,26 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="pagetable" menu="departments/departments_Options" width="95%" rowsPerPage="50">
-
-<USR_UID type="hidden" showInTable="0"/>
-<DEP_UID type="hidden" showInTable="0"/>
-
-<USR_USERNAME type="text" colWidth="90" align="left" titleAlign="left">
-  <en>Username</en>
-</USR_USERNAME>
-
-<USR_FULLNAME type="text" colWidth="190" align="left" titleAlign="left">
-  <en>User</en>
-</USR_FULLNAME>
-
-<USR_MANAGER type="text" colWidth="70" align="left" titleAlign="left">
-  <en>Manager</en>
-</USR_MANAGER>
-
-<USR_REPORTS_NAME type="text" colWidth="190" align="left" titleAlign="left">
-  <en>Reports To</en>
-</USR_REPORTS_NAME>
-
-<DELETE type="link" colWidth="60" align="center" value="@G::LoadTranslation(ID_DE_ASSIGN)" link="#" onclick="removeUserFromDepartment(@QDEP_UID, @QUSR_UID);return false;">
+  <USR_UID type="hidden" showInTable="0"/>
+  <DEP_UID type="hidden" showInTable="0"/>
+  <USR_USERNAME type="text" colWidth="90" align="left" titleAlign="left">
+    <en><![CDATA[Username]]></en>
+  </USR_USERNAME>
+  <USR_FULLNAME type="text" colWidth="190" align="left" titleAlign="left">
+    <en><![CDATA[User]]></en>
+  </USR_FULLNAME>
+  <USR_MANAGER type="text" colWidth="70" align="left" titleAlign="left">
+    <en><![CDATA[Manager]]></en>
+  </USR_MANAGER>
+  <USR_REPORTS_NAME type="text" colWidth="190" align="left" titleAlign="left">
+    <en><![CDATA[Reports To]]></en>
+  </USR_REPORTS_NAME>
+  <DELETE type="link" colWidth="60" align="center" value="@G::LoadTranslation(ID_DE_ASSIGN)" link="#" onclick="removeUserFromDepartment(@QDEP_UID, @QUSR_UID);return false;">
 </DELETE>
-
-</dynaForm>  
+</dynaForm>

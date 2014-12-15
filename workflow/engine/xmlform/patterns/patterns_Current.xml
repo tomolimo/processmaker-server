@@ -1,48 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="patterns_Current" type="xmlform" width="100%" enableTemplate="1">
-
-<action type="hidden"/>
-
-<LANG type="private"/>
-
-<ROU_UID type="hidden"/>
-
-<PROCESS type="hidden"/>
-
-<TASK type="hidden"/>
-
-<ROU_TYPE_OLD type="hidden"/>
-
-<TITLE type="title" showInTable="0">
-  <en>Workflow Pattern</en>
-</TITLE>
-
-<ROU_TYPE type="dropdown">
-  <en>Type<option name="">- Select - </option><option name="SEQUENTIAL">Sequential</option><option name="SELECT">Selection</option><option name="EVALUATE">Evaluation</option><option name="PARALLEL">Parallel (fork)</option><option name="PARALLEL-BY-EVALUATION">Parallel by evaluation (fork)</option><option name="SEC-JOIN">Parallel (join)</option></en>
-</ROU_TYPE>
-
-<ROU_NEXT_TASK type="dropdown"><![CDATA[
+  <action type="hidden"/>
+  <LANG type="private"/>
+  <ROU_UID type="hidden"/>
+  <PROCESS type="hidden"/>
+  <TASK type="hidden"/>
+  <ROU_TYPE_OLD type="hidden"/>
+  <TITLE type="title" showInTable="0">
+    <en><![CDATA[Workflow Pattern]]></en>
+  </TITLE>
+  <ROU_TYPE type="dropdown">
+    <en><![CDATA[Type]]><option name=""><![CDATA[- Select -]]></option><option name="SEQUENTIAL"><![CDATA[Sequential]]></option><option name="SELECT"><![CDATA[Selection]]></option><option name="EVALUATE"><![CDATA[Evaluation]]></option><option name="PARALLEL"><![CDATA[Parallel (fork)]]></option><option name="PARALLEL-BY-EVALUATION"><![CDATA[Parallel by evaluation (fork)]]></option><option name="SEC-JOIN"><![CDATA[Parallel (join)]]></option></en>
+  </ROU_TYPE>
+  <ROU_NEXT_TASK type="dropdown"><![CDATA[
 SELECT TAS_UID, CON_VALUE FROM TASK LEFT JOIN CONTENT ON (TAS_UID = CON_ID AND CON_CATEGORY = 'TAS_TITLE' AND CON_LANG = '@#LANG') WHERE PRO_UID = '@#PROCESS'
-  ]]><en>Next Task<option name="-1">End of process</option><option name="-2">Leaf task</option></en>
-</ROU_NEXT_TASK>
-
-<ROU_TO_LAST_USER type="dropdown">
-  <en>Selection of executant<option name="FALSE">Rules and user groups</option><option name="TRUE">Last executant of the task</option></en>
-</ROU_TO_LAST_USER>
-
-<GRID_SELECT_TYPE type="grid" xmlgrid="patterns/patterns_GridSelectType" addRow="1" deleteRow="1" editRow=""/>
-
-<GRID_EVALUATE_TYPE type="grid" xmlgrid="patterns/patterns_GridEvaluateType" addRow="1" deleteRow="1" editRow=""/>
-
-<GRID_PARALLEL_TYPE type="grid" xmlgrid="patterns/patterns_GridParallelType" addRow="1" deleteRow="1" editRow=""/>
-
-<GRID_PARALLEL_EVALUATION_TYPE type="grid" xmlgrid="patterns/patterns_GridParallelByEvaluationType" addRow="1" deleteRow="1" editRow=""/>
-
-<SAVE type="button" onclick="savePattern(this.form);">
-  <en>Save</en>
-</SAVE>
-
-<JS type="javascript"><![CDATA[
+  ]]><en><![CDATA[Next Task]]><option name="-1"><![CDATA[End of process]]></option><option name="-2"><![CDATA[Leaf task]]></option></en></ROU_NEXT_TASK>
+  <ROU_TO_LAST_USER type="dropdown">
+    <en><![CDATA[Selection of executant]]><option name="FALSE"><![CDATA[Rules and user groups]]></option><option name="TRUE"><![CDATA[Last executant of the task]]></option></en>
+  </ROU_TO_LAST_USER>
+  <GRID_SELECT_TYPE type="grid" xmlgrid="patterns/patterns_GridSelectType" addRow="1" deleteRow="1" editRow=""/>
+  <GRID_EVALUATE_TYPE type="grid" xmlgrid="patterns/patterns_GridEvaluateType" addRow="1" deleteRow="1" editRow=""/>
+  <GRID_PARALLEL_TYPE type="grid" xmlgrid="patterns/patterns_GridParallelType" addRow="1" deleteRow="1" editRow=""/>
+  <GRID_PARALLEL_EVALUATION_TYPE type="grid" xmlgrid="patterns/patterns_GridParallelByEvaluationType" addRow="1" deleteRow="1" editRow=""/>
+  <SAVE type="button" onclick="savePattern(this.form);">
+    <en><![CDATA[Save]]></en>
+  </SAVE>
+  <JS type="javascript"><![CDATA[
 var savePattern = function(oForm)
 {
   var oAux;
@@ -237,5 +220,4 @@ var onChangePattern = function(oEvent, oType)
 leimnud.event.add(getField('ROU_TYPE'), 'change', {method:onChangePattern, instance:this, event:true});
 onChangePattern(null, getField('ROU_TYPE'));
 ]]></JS>
-
-</dynaForm> 
+</dynaForm>

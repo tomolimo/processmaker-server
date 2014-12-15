@@ -219,16 +219,16 @@ class PMScript
     {
         $sScript = "";
         $iAux = 0;
-        $bEqual = false;
         $iOcurrences = preg_match_all( '/\@(?:([\@\%\#\?\$\=])([a-zA-Z\_]\w*)|([a-zA-Z\_][\w\-\>\:]*)\(((?:[^\\\\\)]' . '*(?:[\\\\][\w\W])?)*)\))((?:\s*\[[\'"]?\w+[\'"]?\])+)?/', $this->sScript, $aMatch, PREG_PATTERN_ORDER | PREG_OFFSET_CAPTURE );
         if ($iOcurrences) {
             for ($i = 0; $i < $iOcurrences; $i ++) {
+                $bEqual = false;
                 $sAux = substr( $this->sScript, $iAux, $aMatch[0][$i][1] - $iAux );
                 if (! $bEqual) {
-                    if (strpos( $sAux, '==' ) !== false) {
+                    if (strpos($sAux, "==") !== false || strpos($sAux, "!=") !== false || strpos($sAux, ">") !== false || strpos($sAux, "<") !== false || strpos($sAux, ">=") !== false || strpos($sAux, "<=") !== false || strpos($sAux, "<>") !== false || strpos($sAux, "===") !== false || strpos($sAux, "!==") !== false) {
                         $bEqual = false;
                     } else {
-                        if (strpos( $sAux, '=' ) !== false) {
+                        if (strpos($sAux, "=") !== false || strpos($sAux, "+=") !== false || strpos($sAux, "-=") !== false || strpos($sAux, "*=") !== false || strpos($sAux, "/=") !== false || strpos($sAux, "%=") !== false || strpos($sAux, ".=") !== false) {
                             $bEqual = true;
                         }
                     }
@@ -246,22 +246,6 @@ class PMScript
                     }
                 }
                 $sScript .= $sAux;
-                /** patch1: support for the expression: @@a = @@b = @@c = @@d; */
-                $bEqual = true;
-                if ($i < $iOcurrences - 1) {
-                    $ii = $aMatch[0][$i][1] + strlen($aMatch[0][$i][0]);
-                    $ss = trim(substr($this->sScript, $ii, $aMatch[0][$i + 1][1] - $ii));
-                } else {
-                    $ii = $aMatch[0][$i][1] + strlen($aMatch[0][$i][0]);
-                    $ss = trim(substr($this->sScript, $ii));
-                }
-                $sw0 = strpos($ss, '=') === 0 || strpos($ss, '+=') === 0 || strpos($ss, '-=') === 0;
-                $sw1 = strpos($ss, '==') === 0 || strpos($ss, '===') === 0 || strpos($ss, '!=') === 0 || strpos($ss, '!==') === 0 || strpos($ss, '<=') === 0 || strpos($ss, '>=') === 0;
-                $sw3 = substr(trim($sAux), strlen(trim($sAux)) - 6, strlen(trim($sAux))) === "empty(";
-                if (($sw0 && !$sw1) || $sw3) {
-                    $bEqual = false;
-                }
-                /** patch1 end */
                 $iAux = $aMatch[0][$i][1] + strlen( $aMatch[0][$i][0] );
                 switch ($aMatch[1][$i][0]) {
                     case '@':

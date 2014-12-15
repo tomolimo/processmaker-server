@@ -95,6 +95,10 @@ class ProcessMapBuilder
 
         $tMap->addColumn('PRO_TRI_REASSIGNED', 'ProTriReassigned', 'string', CreoleTypes::VARCHAR, true, 32);
 
+        $tMap->addColumn('PRO_TRI_UNPAUSED', 'ProTriUnpaused', 'string', CreoleTypes::VARCHAR, true, 32);
+
+        $tMap->addColumn('PRO_TYPE_PROCESS', 'ProTypeProcess', 'string', CreoleTypes::VARCHAR, true, 32);
+
         $tMap->addColumn('PRO_SHOW_DELEGATE', 'ProShowDelegate', 'int', CreoleTypes::TINYINT, true, null);
 
         $tMap->addColumn('PRO_SHOW_DYNAFORM', 'ProShowDynaform', 'int', CreoleTypes::TINYINT, true, null);

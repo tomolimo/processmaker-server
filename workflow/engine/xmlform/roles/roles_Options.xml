@@ -1,19 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="xmlmenu">
-
-<MNU_ADD type="link" value="" link="javascript:newRol();" onclick="" colAlign="left" colWidth="35">
-  <en>New</en>
-<es>Nuevo</es><pt>Novo</pt></MNU_ADD>
-
-<PAGED_TABLE_ID type="private"/>
-<PAGED_TABLE_FAST_SEARCH type="FastSearch" label="@G::LoadTranslation(ID_SEARCH)"/>
-
-<SEARCH_FILTER_FORM type="private"/>
-
-
-<CONFIRM type="private"/>
-
-<JS type="javascript"><![CDATA[
+  <MNU_ADD type="link" value="" link="javascript:newRol();" onclick="" colAlign="left" colWidth="35">
+    <en><![CDATA[New]]></en>
+    <es>Nuevo</es>
+    <pt>Novo</pt>
+  </MNU_ADD>
+  <PAGED_TABLE_ID type="private"/>
+  <PAGED_TABLE_FAST_SEARCH type="FastSearch" label="@G::LoadTranslation(ID_SEARCH)"/>
+  <SEARCH_FILTER_FORM type="private"/>
+  <CONFIRM type="private"/>
+  <JS type="javascript"><![CDATA[
 PROCESS_REQUEST_FILE = '../roles/roles_Ajax';
 PROCESS_REQUEST_FILE_USER = '../roles/roles_AddUser';
 
@@ -440,5 +436,4 @@ function resetChecks(){
   checks_selected_ids.length = 0;
 }
 ]]></JS>
-
 </dynaForm>

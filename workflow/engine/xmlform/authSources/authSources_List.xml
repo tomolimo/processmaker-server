@@ -1,28 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm menu="authSources/authSources_Options" width="100%">
-
-<AUTH_SOURCE_UID type="private" showInTable="0"/>
-
-<AUTH_SOURCE_NAME type="text" colWidth="200" titleAlign="left" align="left">
-  <en>Name</en>
-</AUTH_SOURCE_NAME>
-
-<AUTH_SOURCE_PROVIDER type="text" colWidth="150" titleAlign="left" align="left">
-  <en>Provider</en>
-</AUTH_SOURCE_PROVIDER>
-
-<AUTH_SOURCE_SERVER_NAME type="text" colWidth="150" titleAlign="left" align="left">
-  <en>Server Name</en>
-</AUTH_SOURCE_SERVER_NAME>
-
-<AUTH_SOURCE_PORT type="text" colWidth="40" titleAlign="left" align="left">
-  <en>Port</en>
-</AUTH_SOURCE_PORT>
-
-<EDIT type="link" colWidth="40" value="@G::LoadTranslation(ID_EDIT)" link="authSources_Edit?sUID=@#AUTH_SOURCE_UID" onclick=""><en></en></EDIT>
-
-<DELETE type="link" colWidth="40" value="@G::LoadTranslation(ID_DELETE)" link="#" onclick="authSourcesDelete(@QAUTH_SOURCE_UID);return false;"><en></en></DELETE>
-
-<IMPORT_USERS type="link" colWidth="40" value="@G::LoadTranslation(ID_IMPORT_USERS)" link="authSources_SearchUsers?sUID=@#AUTH_SOURCE_UID" onclick=""/>
-
-</dynaForm>  
+  <AUTH_SOURCE_UID type="private" showInTable="0"/>
+  <AUTH_SOURCE_NAME type="text" colWidth="200" titleAlign="left" align="left">
+    <en><![CDATA[Name]]></en>
+  </AUTH_SOURCE_NAME>
+  <AUTH_SOURCE_PROVIDER type="text" colWidth="150" titleAlign="left" align="left">
+    <en><![CDATA[Provider]]></en>
+  </AUTH_SOURCE_PROVIDER>
+  <AUTH_SOURCE_SERVER_NAME type="text" colWidth="150" titleAlign="left" align="left">
+    <en><![CDATA[Server Name]]></en>
+  </AUTH_SOURCE_SERVER_NAME>
+  <AUTH_SOURCE_PORT type="text" colWidth="40" titleAlign="left" align="left">
+    <en><![CDATA[Port]]></en>
+  </AUTH_SOURCE_PORT>
+  <EDIT type="link" colWidth="40" value="@G::LoadTranslation(ID_EDIT)" link="authSources_Edit?sUID=@#AUTH_SOURCE_UID" onclick="">
+    <en><![CDATA[]]></en>
+  </EDIT>
+  <DELETE type="link" colWidth="40" value="@G::LoadTranslation(ID_DELETE)" link="#" onclick="authSourcesDelete(@QAUTH_SOURCE_UID);return false;">
+    <en><![CDATA[]]></en>
+  </DELETE>
+  <IMPORT_USERS type="link" colWidth="40" value="@G::LoadTranslation(ID_IMPORT_USERS)" link="authSources_SearchUsers?sUID=@#AUTH_SOURCE_UID" onclick=""/>
+</dynaForm>

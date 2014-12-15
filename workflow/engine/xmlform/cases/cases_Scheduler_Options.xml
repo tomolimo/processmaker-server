@@ -1,26 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="xmlmenu">
-
-<PRO_UID type="private"/>
-<cases_Scheduler_New type="private" defaultValue="../cases/cases_Scheduler_New"/>
-<cases_Scheduler_Edit type="private" defaultValue="../cases/cases_Scheduler_Edit"/>
-<cases_Scheduler_Delete type="private" defaultValue="../cases/cases_Scheduler_Delete"/>
-<PAGED_TABLE_ID type="private"/>
-
-
-<SEARCH_FILTER_FORM type="private"/>
-
-<MNU_ADD type="link" value="" link="javascript:newScheduler();" onclick="" colAlign="left" colWidth="100">
-  <en>New</en>
-</MNU_ADD>
-
-<PAGED_TABLE_ID type="private"/>
-<PAGED_TABLE_FAST_SEARCH type="FastSearch" label=""/>
-<MNU_FAST_SEARCH type="button" label="@G::LoadTranslation(ID_SEARCH)" colAlign="right" colWidth="50" onclick="@#PAGED_TABLE_ID.doFastSearch(getField(&#039;PAGED_TABLE_FAST_SEARCH&#039;,this.form).value);"/>
-
-
-
-<JS type="javascript"><![CDATA[
+  <PRO_UID type="private"/>
+  <cases_Scheduler_New type="private" defaultValue="../cases/cases_Scheduler_New"/>
+  <cases_Scheduler_Edit type="private" defaultValue="../cases/cases_Scheduler_Edit"/>
+  <cases_Scheduler_Delete type="private" defaultValue="../cases/cases_Scheduler_Delete"/>
+  <PAGED_TABLE_ID type="private"/>
+  <SEARCH_FILTER_FORM type="private"/>
+  <MNU_ADD type="link" value="" link="javascript:newScheduler();" onclick="" colAlign="left" colWidth="100">
+    <en><![CDATA[New]]></en>
+  </MNU_ADD>
+  <PAGED_TABLE_ID type="private"/>
+  <PAGED_TABLE_FAST_SEARCH type="FastSearch" label=""/>
+  <MNU_FAST_SEARCH type="button" label="@G::LoadTranslation(ID_SEARCH)" colAlign="right" colWidth="50" onclick="@#PAGED_TABLE_ID.doFastSearch(getField('PAGED_TABLE_FAST_SEARCH',this.form).value);"/>
+  <JS type="javascript"><![CDATA[
 function $_GET(q,s) {
     s = (s) ? s : self.location.search;
     var re = new RegExp('&'+q+'=([^&]*)','i');

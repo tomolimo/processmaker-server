@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="xmlmenu">
-
-<SelectAll type="link" value='[SELECT-ALL]' link="#" onclick="selectAll(); return false;" colAlign="left" colWidth="100">
-  <en></en>
-</SelectAll>
-<PAGE type="hidden" value="1"/>
-<PAGED_TABLE_ID type="private"/>
-
-<js type="javascript" replaceTags="1"><![CDATA[
+  <SelectAll type="link" value="[SELECT-ALL]" link="#" onclick="selectAll(); return false;" colAlign="left" colWidth="100">
+    <en><![CDATA[]]></en>
+  </SelectAll>
+  <PAGE type="hidden" value="1"/>
+  <PAGED_TABLE_ID type="private"/>
+  <js type="javascript" replaceTags="1"><![CDATA[
 
 function selectAll(){
   var oAux;
@@ -34,4 +32,4 @@ function selectAll(){
   }
 }
 ]]></js>
-</dynaForm> 
+</dynaForm>

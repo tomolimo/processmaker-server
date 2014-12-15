@@ -1,28 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<dynaForm sqlConnection="" menu="steps/triggersBefore_Options" width="100%" disableFooter="1" rowsPerPage="100" sortable="0" >
-
-<STEP_UID type="hidden" showInTable="0"/>
-
-<TRI_UID type="hidden" showInTable="0"/>
-
-<TRI_LOCATE_WEBBOT_PARAM type="hidden" showInTable="0"/>
-
-<ST_POSITION type="hidden" showInTable="0"/>
-
-<TRI_TITLE type="text" colWidth="400" titleAlign="left" align="left">
-  <en>Title</en>
-</TRI_TITLE>
-
-<triggersEdit type="hidden" defaultValue="../triggers/triggers_Edit"/>
-
-<EDIT type="link" colWidth="" value="@G::LoadTranslation(ID_EDIT)" link="#" onclick="triggerEdit(@QTRI_UID,@QTRI_LOCATE_WEBBOT_PARAM); return false;"/>
-
-<CONDITION type="link" colWidth="" value="@G::LoadTranslation(ID_CONDITION)" link="#" onclick="editTriggerCondition(@QSTEP_UID, @QTRI_UID, &#039;BEFORE&#039;);return false;"/>
-
-<UP type="link" colWidth="" value="@G::LoadTranslation(ID_UP)" link="#" onclick="upTrigger(@QSTEP_UID, @QTRI_UID, &#039;BEFORE&#039;, @QST_POSITION);return false;"/>
-
-<DOWN type="link" colWidth="" value="@G::LoadTranslation(ID_DOWN)" link="#" onclick="downTrigger(@QSTEP_UID, @QTRI_UID, &#039;BEFORE&#039;, @QST_POSITION);return false;"/>
-
-<DELETE type="link" colWidth="" value="@G::LoadTranslation(ID_DE_ASSIGN)" link="#" onclick="ofToAssignTrigger(@QSTEP_UID, @QTRI_UID, &#039;BEFORE&#039;, @QST_POSITION);return false;"><en></en></DELETE>
-
+<dynaForm sqlConnection="" menu="steps/triggersBefore_Options" width="100%" disableFooter="1" rowsPerPage="100" sortable="0">
+  <STEP_UID type="hidden" showInTable="0"/>
+  <TRI_UID type="hidden" showInTable="0"/>
+  <TRI_LOCATE_WEBBOT_PARAM type="hidden" showInTable="0"/>
+  <ST_POSITION type="hidden" showInTable="0"/>
+  <TRI_TITLE type="text" colWidth="400" titleAlign="left" align="left">
+    <en><![CDATA[Title]]></en>
+  </TRI_TITLE>
+  <triggersEdit type="hidden" defaultValue="../triggers/triggers_Edit"/>
+  <EDIT type="link" colWidth="" value="@G::LoadTranslation(ID_EDIT)" link="#" onclick="triggerEdit(@QTRI_UID,@QTRI_LOCATE_WEBBOT_PARAM); return false;"/>
+  <CONDITION type="link" colWidth="" value="@G::LoadTranslation(ID_CONDITION)" link="#" onclick="editTriggerCondition(@QSTEP_UID, @QTRI_UID, 'BEFORE');return false;"/>
+  <CONDITION_SET type="text" enablehtml="1" align="left" colWidth=""/>
+  <UP type="link" colWidth="" value="@G::LoadTranslation(ID_UP)" link="#" onclick="upTrigger(@QSTEP_UID, @QTRI_UID, 'BEFORE', @QST_POSITION);return false;"/>
+  <DOWN type="link" colWidth="" value="@G::LoadTranslation(ID_DOWN)" link="#" onclick="downTrigger(@QSTEP_UID, @QTRI_UID, 'BEFORE', @QST_POSITION);return false;"/>
+  <DELETE type="link" colWidth="" value="@G::LoadTranslation(ID_DE_ASSIGN)" link="#" onclick="ofToAssignTrigger(@QSTEP_UID, @QTRI_UID, 'BEFORE', @QST_POSITION);return false;">
+    <en><![CDATA[]]></en>
+  </DELETE>
 </dynaForm>

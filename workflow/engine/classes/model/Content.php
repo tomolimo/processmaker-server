@@ -51,7 +51,7 @@ class Content extends BaseContent
      * @param string $sUID
      * @return variant
     */
-    public function load ($ConCategory, $ConParent, $ConId, $ConLang)
+    public static function load ($ConCategory, $ConParent, $ConId, $ConLang)
     {
         $content = ContentPeer::retrieveByPK( $ConCategory, $ConParent, $ConId, $ConLang );
         if (is_null( $content )) {
@@ -76,7 +76,7 @@ class Content extends BaseContent
     * @return string
     *
     */
-    public function getDefaultContentLang ($ConCategory, $ConParent, $ConId, $destConLang)
+    public static function getDefaultContentLang ($ConCategory, $ConParent, $ConId, $destConLang)
     {
         $Criteria = new Criteria( 'workflow' );
         $Criteria->clearSelectColumns()->clearOrderByColumns();
@@ -113,7 +113,7 @@ class Content extends BaseContent
     * @return void
     *
     */
-    public function updateEqualValue ($ConCategory, $ConParent, $ConId, $ConValue)
+    public static function updateEqualValue ($ConCategory, $ConParent, $ConId, $ConValue)
     {
         $con = Propel::getConnection('workflow');
         $c1 = new Criteria('workflow');
@@ -136,7 +136,7 @@ class Content extends BaseContent
     * @return string
     * if the row doesn't exist, it will be created automatically, even the default 'en' language
     */
-    public function autoLoadSave ($ConCategory, $ConParent, $ConId, $destConLang)
+    public static function autoLoadSave ($ConCategory, $ConParent, $ConId, $destConLang)
     {
         //search in 'en' language, the default language
         $content = ContentPeer::retrieveByPK( $ConCategory, $ConParent, $ConId, 'en' );
@@ -183,7 +183,7 @@ class Content extends BaseContent
     * @param string $ConValue
     * @return variant
     */
-    public function addContent ($ConCategory, $ConParent, $ConId, $ConLang, $ConValue)
+    public static function addContent ($ConCategory, $ConParent, $ConId, $ConLang, $ConValue)
     {
         try {
             if ($ConLang != 'en') {
@@ -262,7 +262,7 @@ class Content extends BaseContent
     * @param string $ConValue
     * @return variant
     */
-    public function removeContent ($ConCategory, $ConParent, $ConId)
+    public static function removeContent ($ConCategory, $ConParent, $ConId)
     {
         try {
             $c = new Criteria();
@@ -342,7 +342,7 @@ class Content extends BaseContent
             `CON_LANG` VARCHAR(10) default '' NOT NULL,
             `CON_VALUE` MEDIUMTEXT NOT NULL,
             CONSTRAINT CONTENT_BACKUP_PK PRIMARY KEY (CON_CATEGORY,CON_PARENT,CON_ID,CON_LANG)
-        )Engine=MyISAM  DEFAULT CHARSET='utf8' COMMENT='Table for add content';" );
+        )Engine=InnoDB  DEFAULT CHARSET='utf8' COMMENT='Table for add content';" );
         $oStatement->executeQuery();
 
         $sql = " SELECT DISTINCT CON_LANG

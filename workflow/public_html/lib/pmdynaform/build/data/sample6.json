@@ -1,0 +1,328 @@
+{
+    "name": "form-example",
+    "items": [
+        {
+            "type":"panel",       
+            "items":
+            [
+                [
+                    {
+                        "type": "title",
+                        "colSpan": 12,
+                        "name": "title",
+                        "label": "PMDynaform 6 - Formula"
+                    }
+                ],
+                [
+                    {
+                        "var_name": "simplevariable",
+                        "var_uid": "299463130541b212c93a3d7047589419",
+                        "type": "text",
+                        "colSpan":4,
+                        "name": "fieldOne",
+                        "label": "Field 1",
+                        "required": false,
+                        "readonly": false,
+                        "placeholder": "enter a number",
+                        "dataType": "integer",
+                        "maxLength": 10
+                    },
+                    {
+                        "var_name": "simplevariabletwo",
+                        "var_uid": "992707483545248537300e5085346250",
+                        "type": "text",
+                        "colSpan":4,
+                        "name": "fieldTwo",
+                        "label": "Field 2",
+                        "readonly": false,
+                        "dataType": "integer",
+                        "placeholder": "enter a number",
+                        "maxLength": 5
+                    },
+                    {
+                        "var_name": "var_three",
+                        "var_uid": "123456789",
+                        "type": "text",
+                        "colSpan":4,
+                        "name": "fieldThree",
+                        "label": "Field 3",
+                        "readonly": false,
+                        "dataType": "integer",
+                        "placeholder": "enter a number",
+                        "maxLength": 5
+                    }
+                ],
+                [
+                    {
+                        "type": "text",
+                        "colSpan":12,
+                        "name": "result3",
+                        "label": "fieldOne + fieldTwo",
+                        "formula": "fieldOne + fieldTwo",
+                        "var_uid": "12345",
+                        "var_name": "variable1-name",
+                        "readonly": true,
+                        "dataType": "integer",
+                        "maxLength": 10
+                    }
+                ],
+                [
+                    {
+                        "type": "text",
+                        "colSpan":12,
+                        "name": "result3",
+                        "label": "fieldOne + fieldTwo + fieldThree",
+                        "formula": "fieldOne + fieldTwo + fieldThree",
+                        "readonly": true,
+                        "var_uid": "56789",
+                        "var_name": "variable1-name",
+                        "dataType": "integer",
+                        "maxLength": 10
+                    }
+                ],
+                [
+                    {
+                        "type": "text",
+                        "colSpan":12,
+                        "name": "result3",
+                        "label": "100 + fieldOne + fieldTwo",
+                        "formula": "100 + fieldOne + fieldTwo",
+                        "readonly": true,
+                        "var_uid": "012345678",
+                        "var_name": "variable1-name",
+                        "dataType": "integer",
+                        "maxLength": 10
+                    }
+                ],
+                [
+                    {
+                        "type": "text",
+                        "colSpan":12,
+                        "name": "result2",
+                        "label": "(fieldOne * fieldTwo) - (100 - (fieldOne +100)-200 - (fieldTwo-1))*fieldOne",
+                        "formula": "(fieldOne * fieldTwo) - (100 - (fieldOne +100)-200 - (fieldTwo-1))*fieldOne",
+                        "readonly": true,
+                        "dataType": "integer",
+                        "var_uid": "13578",
+                        "var_name": "variable1-name",
+                        "maxLength": 10
+                    }
+                ],
+                [
+                    {
+                        "type": "text",
+                        "colSpan":12,
+                        "name": "result1",
+                        "label": "2 + 2 - sqrt(4) + fieldOne + fieldTwo + fieldOne +1000",
+                        "formula": "2 + 2 - sqrt(4) + fieldOne + fieldTwo + fieldOne +1000",
+                        "readonly": true,
+                        "dataType": "integer",
+                        "var_uid": "2468",
+                        "var_name": "variable1-name",
+                        "maxLength": 10
+                    }
+                ],
+                [
+                    {
+                      "type" : "submit",
+                      "colSpan" : 12,
+                      "label" : "Submit"
+                    }
+                ]
+            ],
+            "variables": 
+            [
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "workflow",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "string",
+                    "var_label": "formula-one",
+                    "var_name": "var_three",
+                    "var_allowNull": 1,
+                    "var_sql": "SELECT USR_UID, USR_USERNAME\nFROM USERS\nWHERE USR_USERNAME <>  \" \"",
+                    "var_uid": "123456789"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "workflow",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "string",
+                    "var_label": "formula-two",
+                    "var_name": "formula-two",
+                    "var_allowNull": 1,
+                    "var_sql": "SELECT IC_UID,IC_NAME   \nFROM ISO_COUNTRY WHERE IC_NAME <> \" \"",
+                    "var_uid": "56789"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "workflow",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "string",
+                    "var_label": "subdivision",
+                    "var_name": "formula-three",
+                    "var_allowNull": 1,
+                    "var_sql": "SELECT \nIS_UID,\nIS_NAME FROM ISO_SUBDIVISION WHERE IC_UID = \"@#country\" AND IS_NAME <> \" \"",
+                    "var_uid": "012345678"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "workflow",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "string",
+                    "var_label": "location",
+                    "var_name": "formula-fourth",
+                    "var_allowNull": 1,
+                    "var_sql": "SELECT IL_UID, IL_NAME\nFROM ISO_LOCATION\nWHERE IS_UID =  \"@#subdivision\" AND IL_NAME <> \" \" AND IC_UID = \"@#country\"",
+                    "var_uid": "13578"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "workflow",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "string",
+                    "var_label": "varname",
+                    "var_name": "varname1",
+                    "var_allowNull": 1,
+                    "var_sql": "",
+                    "var_uid": "2468"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "workflow",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "string",
+                    "var_label": "varname",
+                    "var_name": "varname2",
+                    "var_allowNull": 1,
+                    "var_sql": "",
+                    "var_uid": "12345"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "none",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "string",
+                    "var_label": "simplevariable",
+                    "var_name": "simplevariable",
+                    "var_allowNull": 1,
+                    "var_sql": "",
+                    "var_uid": "299463130541b212c93a3d7047589419"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "none",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "string",
+                    "var_label": "Simple Variable Two",
+                    "var_name": "simplevariabletwo",
+                    "var_allowNull": 1,
+                    "var_sql": "",
+                    "var_uid": "992707483545248537300e5085346250"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "none",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "datetime",
+                    "var_label": "Simple Variable Three",
+                    "var_name": "simplevariablethree",
+                    "var_allowNull": 1,
+                    "var_sql": "",
+                    "var_uid": "31319212954524865487616020584523"
+                },
+                {
+                    "var_acceptedValues": [
+                        {
+                          "value": "First Value",
+                          "keyValue": "firstvalue"
+                        },
+                        {
+                          "value": "Second Value",
+                          "keyValue": "secondvalue"
+                        }
+                    ],
+                    "var_dbConnection": "none",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 100,
+                    "var_fieldType": "string",
+                    "var_label": "optionsvariable",
+                    "var_name": "optionsvariable",
+                    "var_allowNull": 1,
+                    "var_sql": "",
+                    "var_uid": "109090183545298e8505313008393063"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "none",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "string",
+                    "var_label": "variablegridone",
+                    "var_name": "variablegridone",
+                    "var_allowNull": 1,
+                    "var_sql": "",
+                    "var_uid": "8391557125458eb60509b60057650758"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "none",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 100,
+                    "var_fieldType": "string",
+                    "var_label": "variablegridtwo",
+                    "var_name": "variablegridtwo",
+                    "var_allowNull": 1,
+                    "var_sql": "",
+                    "var_uid": "5746882395458eb6b8b54a2015704374"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "none",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "string",
+                    "var_label": "variablegridthree",
+                    "var_name": "variablegridthree",
+                    "var_allowNull": 1,
+                    "var_sql": "",
+                    "var_uid": "5532828265458eb76ebf700002684261"
+                },
+                {
+                    "var_acceptedValues": [
+                    {
+                      "value": "variable option 1",
+                      "keyValue": "variable_option_1"
+                    },
+                    {
+                      "value": "variable option 2",
+                      "keyValue": "variable_option_2"
+                    },
+                    {
+                      "value": "variable option 3",
+                      "keyValue": "variable_option_3"
+                    }
+                  ],
+                  "var_dbConnection": "none",
+                  "var_defaultValue": "",
+                  "var_fieldSize": 10,
+                  "var_fieldType": "string",
+                  "var_label": "variablegridfour",
+                  "var_name": "variablegridfour",
+                  "var_allowNull": 1,
+                  "var_sql": "",
+                  "var_uid": "6551198965458ebe28477c5094393260"
+                }
+            ]
+        }
+    ]
+}

@@ -3,8 +3,8 @@
   <!-- <tit1 type="title" enablehtml="0">
     <en>Conditions Editor</en>
   </tit1> -->
-  <vars type="listbox" required="0" size="6" width="200" sqlconnection = "dbarray">
+  <vars type="listbox" required="0" size="6" width="200" sqlconnection="dbarray">
     SELECT * FROM DYNAFIELDS
-    <en></en>
+    <en><![CDATA[]]></en>
   </vars>
-</dynaForm> 
+</dynaForm>

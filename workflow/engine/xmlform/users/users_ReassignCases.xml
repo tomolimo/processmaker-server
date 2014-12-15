@@ -1,18 +1,12 @@
-<?xml version="1.0" encoding="UTF-8"?> 
-<dynaForm type="pagetable"> 
-
-
-
-<PROCESS type="text" colWidth="250" titleAlign="left" align="left">
-  <en>Process</en>
-</PROCESS>
-
-<CANTITY type="text" colWidth="50" titleAlign="left" align="left">
-  <en>No. of cases</en>
-</CANTITY>
-
-<USERS type="text" colWidth="200" titleAlign="left" align="left" enableHtml="1">
-  <en>Reassign to</en>
-</USERS>
-
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm type="pagetable">
+  <PROCESS type="text" colWidth="250" titleAlign="left" align="left">
+    <en><![CDATA[Process]]></en>
+  </PROCESS>
+  <CANTITY type="text" colWidth="50" titleAlign="left" align="left">
+    <en><![CDATA[No. of cases]]></en>
+  </CANTITY>
+  <USERS type="text" colWidth="200" titleAlign="left" align="left" enableHtml="1">
+    <en><![CDATA[Reassign to]]></en>
+  </USERS>
 </dynaForm>

@@ -1,54 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm width="100%" menu="appFolder/appFolderDocsListSearchOptions">
-
-<PRO_TITLE type="hidden" colWidth="160" titleAlign="left" align="left">
-  <en>Process</en>
-</PRO_TITLE>
-<APP_TITLE type="hidden" colWidth="160" titleAlign="left" align="left">
-  <en>Case Title</en>
-</APP_TITLE>
-<APP_DOC_FILENAME type="text" colWidth="160" titleAlign="left" align="left">
-  <en>File Name</en>
-</APP_DOC_FILENAME>
-<DOC_VERSION type="text" colWidth="20" titleAlign="left" align="left">
-  <en>Version</en>
-</DOC_VERSION>
-<APP_DOC_TYPE type="hidden" colWidth="160" titleAlign="left" align="left">
-  <en>Type</en>
-</APP_DOC_TYPE>
-
-<USR_USERNAME type="text" colWidth="90" titleAlign="left" align="left">
-  <en>Creator</en>
-</USR_USERNAME>
-<APP_DOC_CREATE_DATE type="text" colWidth="120" titleAlign="left" align="left">
-  <en>Created</en>
-</APP_DOC_CREATE_DATE>
-
-
-
-<random type="text" showInTable="0">
-  <en/>
-</random>
-
-<info type="link" value="@G::LoadTranslation(ID_INFO)" link="javascript:documentInfo(&#039;@#DOC_UID&#039;,&#039;@#APP_DOC_UID&#039;,&#039;@#DOC_VERSION&#039;,&#039;NV&#039;,&#039;@#APP_UID&#039;,&#039;@#APP_DOC_TYPE&#039;,&#039;@#USR_UID&#039;);" colWidth="40" align="center">
-  <en/>
-</info>
-
-<open type="link" value="@#DOWNLOAD_LABEL" link="@#DOWNLOAD_LINK" colWidth="40" align="center">
-  <en/>
-</open>
-<open1 type="link" value="@#DOWNLOAD_LABEL1" link="@#DOWNLOAD_LINK1" colWidth="40" align="center">
-  <en/>
-</open1>
-<newVersion type="link" value="@#NEWVERSION_LABEL" link="javascript:uploadDocument(&#039;@#DOC_UID&#039;,&#039;@#APP_DOC_UID&#039;,&#039;@#DOC_VERSION&#039;,&#039;NV&#039;,&#039;@#APP_UID&#039;,&#039;@#APP_DOC_TYPE&#039;);" colWidth="40" align="center">
-  <en/>
-</newVersion>
-<versionHistory type="link" value="@#VERSIONHISTORY_LABEL" link="javascript:documentVersionHistory(&#039;@#folderID&#039;,&#039;@#APP_DOC_UID&#039;);" colWidth="40" align="center">
-  <en/>
-</versionHistory>
-
-<APP_DOC_UID_VERSION type="CheckboxTable" colWidth="3" titleAlign="left" align="left" value="@#APP_DOC_UID_VERSION" onclick="getField(&#039;MOVE_FOLDER_PATH&#039;).value+=this.checked+&#039;|&#039;+this.value+&#039;;&#039;">
-  <en/>
-</APP_DOC_UID_VERSION>
-
+  <PRO_TITLE type="hidden" colWidth="160" titleAlign="left" align="left">
+    <en>Process</en>
+  </PRO_TITLE>
+  <APP_TITLE type="hidden" colWidth="160" titleAlign="left" align="left">
+    <en>Case Title</en>
+  </APP_TITLE>
+  <APP_DOC_FILENAME type="text" colWidth="160" titleAlign="left" align="left">
+    <en><![CDATA[File Name]]></en>
+  </APP_DOC_FILENAME>
+  <DOC_VERSION type="text" colWidth="20" titleAlign="left" align="left">
+    <en><![CDATA[Version]]></en>
+  </DOC_VERSION>
+  <APP_DOC_TYPE type="hidden" colWidth="160" titleAlign="left" align="left">
+    <en>Type</en>
+  </APP_DOC_TYPE>
+  <USR_USERNAME type="text" colWidth="90" titleAlign="left" align="left">
+    <en><![CDATA[Creator]]></en>
+  </USR_USERNAME>
+  <APP_DOC_CREATE_DATE type="text" colWidth="120" titleAlign="left" align="left">
+    <en><![CDATA[Created]]></en>
+  </APP_DOC_CREATE_DATE>
+  <random type="text" showInTable="0">
+    <en><![CDATA[]]></en>
+  </random>
+  <info type="link" value="@G::LoadTranslation(ID_INFO)" link="javascript:documentInfo('@#DOC_UID','@#APP_DOC_UID','@#DOC_VERSION','NV','@#APP_UID','@#APP_DOC_TYPE','@#USR_UID');" colWidth="40" align="center">
+    <en><![CDATA[]]></en>
+  </info>
+  <open type="link" value="@#DOWNLOAD_LABEL" link="@#DOWNLOAD_LINK" colWidth="40" align="center">
+    <en><![CDATA[]]></en>
+  </open>
+  <open1 type="link" value="@#DOWNLOAD_LABEL1" link="@#DOWNLOAD_LINK1" colWidth="40" align="center">
+    <en><![CDATA[]]></en>
+  </open1>
+  <newVersion type="link" value="@#NEWVERSION_LABEL" link="javascript:uploadDocument('@#DOC_UID','@#APP_DOC_UID','@#DOC_VERSION','NV','@#APP_UID','@#APP_DOC_TYPE');" colWidth="40" align="center">
+    <en><![CDATA[]]></en>
+  </newVersion>
+  <versionHistory type="link" value="@#VERSIONHISTORY_LABEL" link="javascript:documentVersionHistory('@#folderID','@#APP_DOC_UID');" colWidth="40" align="center">
+    <en><![CDATA[]]></en>
+  </versionHistory>
+  <APP_DOC_UID_VERSION type="CheckboxTable" colWidth="3" titleAlign="left" align="left" value="@#APP_DOC_UID_VERSION" onclick="getField('MOVE_FOLDER_PATH').value+=this.checked+'|'+this.value+';'">
+    <en/>
+  </APP_DOC_UID_VERSION>
 </dynaForm>

@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="grid" name="setup/wsVariablesGrid" width="" mode="edit">
-<NAME type="text" maxlength="120" validate="Any" size="25" mode="edit">
-  <en>Name</en>
-<es>Nombre</es></NAME>
-<VALUE type="text" maxlength="120" validate="Any" size="25" mode="edit">
-  <en>Value</en>
-<es>Valor</es></VALUE>
-</dynaForm> 
+  <NAME type="text" maxlength="120" validate="Any" size="25" mode="edit">
+    <en><![CDATA[Name]]></en>
+    <es>Nombre</es>
+  </NAME>
+  <VALUE type="text" maxlength="120" validate="Any" size="25" mode="edit">
+    <en><![CDATA[Value]]></en>
+    <es>Valor</es>
+  </VALUE>
+</dynaForm>

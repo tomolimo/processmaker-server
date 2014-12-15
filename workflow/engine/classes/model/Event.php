@@ -104,6 +104,10 @@ class Event extends BaseEvent
             $aData['EVN_UID'] = G::generateUniqueID();
         }
 
+        if (isset($aData["EVN_DESCRIPTION"])) {
+            $aData["EVN_DESCRIPTION"] = str_replace("__AMP__", "&", $aData["EVN_DESCRIPTION"]);
+        }
+
         $oConnection = Propel::getConnection( EventPeer::DATABASE_NAME );
         try {
             $oEvent = new Event();
@@ -503,12 +507,12 @@ class Event extends BaseEvent
                 $estimatedDuration = (float) $aData['EVN_TAS_ESTIMATED_DURATION'];
                 $when = (float) $aData['EVN_WHEN'];
                 $whenOccurs = $aData['EVN_WHEN_OCCURS'];
- 
+
                 if ($oCalendar->pmCalendarUid == '') {
                 	$oCalendar->getCalendar(null, $aData['PRO_UID'], $aData['TAS_UID']);
                 	$oCalendar->getCalendarData();
                 }
-                
+
                 if ($whenOccurs == 'AFTER_TIME') {
                     //for multiple $sDueDate = date('Y-m-d H:i:s', $oDates->calculateDate($aData['DEL_DELEGATE_DATE'], $estimatedDuration, 'days', 1));
                     $sDueDate = $aData['DEL_TASK_DUE_DATE'];
@@ -619,7 +623,7 @@ class Event extends BaseEvent
                 $estimatedDuration = (float) $aData['EVN_TAS_ESTIMATED_DURATION'];
                 $when = (float) $aData['EVN_WHEN'];
                 $whenOccurs = $aData['EVN_WHEN_OCCURS'];
-                
+
                 if ($oCalendar->pmCalendarUid == '') {
                 	$oCalendar->getCalendar(null, $aData['PRO_UID'], $aData['TAS_UID']);
                 	$oCalendar->getCalendarData();

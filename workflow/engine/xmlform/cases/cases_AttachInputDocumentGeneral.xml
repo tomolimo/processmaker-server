@@ -1,46 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="cases_AttachInputDocument1" type="xmlform" width="500px" labelWidth="120px" enableTemplate="1">
+  <TYPE_LABEL type="private"/>
+  <APP_DOC_TYPE type="hidden" defaultValue="INPUT"/>
+  <DOC_UID type="hidden"/>
+  <APP_DOC_UID type="hidden"/>
+  <actionType type="hidden"/>
+  <docVersion type="hidden"/>
+  <fileTypes type="hidden"/>
+  <INP_DOC_MAX_FILESIZE type="hidden" showInTable="0" />
 
+  <INP_DOC_MAX_FILESIZE_LABEL type="text" maxlength="30" validate="Any" size="10" mode="view">
+      <en>Max. file size</en>
+  </INP_DOC_MAX_FILESIZE_LABEL>
 
-<TYPE_LABEL type="private"/>
+  <APP_DOC_FILENAME type="file">
+    <en><![CDATA[File]]></en>
+  </APP_DOC_FILENAME>
 
-<APP_DOC_TYPE type="hidden" defaultValue="INPUT"/>
+  <INP_DOC_SUPPORTED_EXTENSIONS_FILENAME_LABEL type="text" maxlength="30" validate="Any" size="10" mode="view">
+     <en>Allowed Extensions</en>
+  </INP_DOC_SUPPORTED_EXTENSIONS_FILENAME_LABEL>
 
-<DOC_UID type="hidden"/>
-<APP_DOC_UID type="hidden"/>
-<actionType type="hidden"/>
-<docVersion type="hidden"/>
-
-<APP_DOC_FILENAME type="file">
-  <en>File</en>
-</APP_DOC_FILENAME>
-
-<APP_DOC_COMMENT type="textarea" rows="5" cols="32" colWidth="200" titleAlign="left" align="left">
-  <en>Comments</en>
-</APP_DOC_COMMENT>
-
-<MORE type="hidden">
-  <en>Upload Multiple Input Documents</en>
-</MORE>
-
-<BTN_CANCEL type="button" onclick="cancel();">
-  <en>Cancel</en>
-</BTN_CANCEL>
-
-<SAVE type="button" onclick="verifyInfo(this.form);">
-  <en>Save</en>
-</SAVE>
-
-<MESSAGE1 type="phpvariable"/>
-
-<MESSAGE2 type="phpvariable"/>
-
-<JS type="javascript"><![CDATA[
+  <APP_DOC_COMMENT type="textarea" rows="5" cols="32" colWidth="200" titleAlign="left" align="left">
+    <en><![CDATA[Comments]]></en>
+  </APP_DOC_COMMENT>
+  <MORE type="hidden">
+    <en>Upload Multiple Input Documents</en>
+  </MORE>
+  <BTN_CANCEL type="button" onclick="cancel();">
+    <en><![CDATA[Cancel]]></en>
+  </BTN_CANCEL>
+  <SAVE type="button" onclick="verifyInfo(this.form);">
+    <en><![CDATA[Save]]></en>
+  </SAVE>
+  <MESSAGE1 type="phpvariable"/>
+  <MESSAGE2 type="phpvariable"/>
+  <JS type="javascript"><![CDATA[
 leimnud.event.add(window, 'load', function() {
   if (getField('INP_DOC_FORM_NEEDED').value == 'VIRTUAL') {
     hideRow('INP_DOC_ORIGINAL');
   }
 });
+
+if (getField("INP_DOC_MAX_FILESIZE").value != "" && parseInt(getField("INP_DOC_MAX_FILESIZE").value) > 0) {
+    showRow("INP_DOC_MAX_FILESIZE_LABEL");
+}
 
 var verifyInfo = function(oForm)
 {
@@ -51,6 +55,36 @@ var verifyInfo = function(oForm)
     oAux.focus();
     return;
   }
+
+  if (getField("INP_DOC_MAX_FILESIZE").value != "" && getField("INP_DOC_MAX_FILESIZE").value > 0) {
+      var flagFilesize = inputDocumentVerifySize(parseInt(getField("INP_DOC_MAX_FILESIZE").value), getField("APP_DOC_FILENAME"));
+
+      if (flagFilesize == 0) {
+          new leimnud.module.app.alert().make({label: _("ID_SIZE_VERY_LARGE_PERMITTED")});
+          return;
+      }
+  }
+
+  docType = oAux.value.split(".");
+  docType = docType[docType.length - 1];
+
+  allowedTypes = getField('fileTypes').value.split(", ");
+
+  for(i=0; i<allowedTypes.length; i++){
+    allowed = allowedTypes[i].replace('*','').replace('.','');
+    if((allowed != '*') && (docType.toLowerCase() != allowed.toLowerCase())){
+      flag = 1;
+    } else {
+      flag = 0;
+      i = allowedTypes.length;
+    }
+  }
+  if( flag == 1){
+    alert('@G::LoadTranslation(ID_UPLOAD_ERR_NOT_ALLOWED_EXTENSION)');
+    oAux.focus();
+    return;
+  }
+
   getField('SAVE').disabled = true;
   getField('BTN_CANCEL').disabled = true;
   oForm.submit();
@@ -61,5 +95,4 @@ function cancel(){
 }
 
 ]]></JS>
-
 </dynaForm>

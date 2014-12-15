@@ -886,6 +886,11 @@ antes funcionaba.
   background-image: url(/skins/neoclassic/images/icons_silk/sprites.png) !important;
   background-position: 0 -10873px !important;
 }
+.ICON_AUDIT_LOG{
+  background-image: url(/images/Audit.png) !important;
+    width: 16px !important;
+    height: 16px !important;
+}
 .ICON_EMAILS {
   /*ss_email_edit*/
 
@@ -1679,3 +1684,104 @@ padding:3px 3px 3px 5px;
 white-space:normal;
 }
 
+/**
+ * Cases Interface styles
+ */
+
+
+.ICON_PMENTERPRISE {
+    background-image: url(/images/icon-pmlogo-15x15.png) !important;
+}
+
+.ICON_ADDONSSTORE {
+    background-image: url(/images/enterprise/store-medium.png) !important;
+}
+
+.msg .x-box-mc {
+    font-size:14px;
+}
+
+#msg-div {
+    position:absolute;
+    left:35%;
+    top:10px;
+    width:250px;
+    z-index:20000;
+}
+
+.x-form-display-field {
+  padding: 3px !important;
+}
+
+.download-start {
+  background-color: #fff !important;
+}
+
+.download {
+  background-color: #333333 !important;
+  /*padding-left: 17px !important;*/
+
+  background-image: url(/images/enterprise/loader-black.gif);
+  background-repeat: no-repeat;
+  background-position: 2px center;
+}
+
+.install {
+  background-color: #333333 !important;
+  /*padding-left: 17px !important;*/
+
+  background-image: url(/images/enterprise/loader-black.gif);
+  background-repeat: no-repeat;
+  background-position: 2px center;
+}
+
+.installed {
+  background-color: #959595 !important;
+
+  /*background-image: url(tick-circle-frame.png);*/
+  background-repeat: no-repeat;
+  background-position: 2px center;
+}
+
+.disabled {
+  background-color: #959595 !important;
+
+/*  background-image: url(minus-circle-frame.png);*/
+  background-repeat: no-repeat;
+  background-position: 2px center;
+}
+
+.upgrade {
+  background-color: #1da001  !important;
+/*  background-image: url(wooden-box--exclamation.png);*/
+  background-repeat: no-repeat;
+  background-position: 2px center;
+}
+
+.ready {
+  background-color: #1da001 !important;
+/*  background-image: url(wooden-box--plus.png);*/
+  background-repeat: no-repeat;
+  background-position: 2px center;
+}
+
+.available {
+  background-color: #ee2a0d !important;
+/*  background-image: url(store--plus.png);*/
+  background-repeat: no-repeat;
+  background-position: 2px center;
+}
+
+.roundedCorners{
+  width: 100px;
+  padding: 2px;
+  /*border:1px solid #DDEEF6;*/
+  background-color: #fffb00;
+  text-align: center;
+  text-shadow: 0 1px 0 #444444;
+  color: #FFFFFF !important;
+
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  vertical-align: middle;
+}

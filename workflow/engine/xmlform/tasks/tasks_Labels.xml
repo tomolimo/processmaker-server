@@ -1,25 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="tasks_Labels" width="99%" mode="edit" enableTemplate="0" border="0" height="305px">
-
-<PRO_UID type="private"/>
-
-<TAS_UID type="hidden"/>
-
-<INDEX type="hidden"/>
-
-<IFORM type="hidden"/>
-
-<TAS_DEF_TITLE type="textareapm" required="0" cols="42" rows="5" group="1" showVars="1" process="@#PRO_UID" symbol="@#">
-  <en>Case Title</en>
-</TAS_DEF_TITLE>
-
-<TAS_DEF_DESCRIPTION type="textareapm" required="0" cols="42" rows="5" group="1" showVars="1" process="@#PRO_UID" symbol="@#">
-  <en>Case Description</en>
-</TAS_DEF_DESCRIPTION>
-
-
-
-<JS type="javascript"><![CDATA[
+  <PRO_UID type="private"/>
+  <TAS_UID type="hidden"/>
+  <INDEX type="hidden"/>
+  <IFORM type="hidden"/>
+  <TAS_DEF_TITLE type="textareapm" required="0" cols="42" rows="5" group="1" showVars="1" process="@#PRO_UID" symbol="@#">
+    <en><![CDATA[Case Title]]></en>
+  </TAS_DEF_TITLE>
+  <TAS_DEF_DESCRIPTION type="textareapm" required="0" cols="42" rows="5" group="1" showVars="1" process="@#PRO_UID" symbol="@#">
+    <en><![CDATA[Case Description]]></en>
+  </TAS_DEF_DESCRIPTION>
+  <JS type="javascript"><![CDATA[
 
 /* Recovery data */
 if (aTaskFlag[5])
@@ -87,5 +78,4 @@ var insertFormVar = function(sFieldName, sValue) {
 };
 
 ]]></JS>
-
-</dynaForm>  
+</dynaForm>

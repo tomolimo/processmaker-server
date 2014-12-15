@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="processes_FileEdit" type="xmlform" width="100%" enableTemplate="1">
-	<emptyfilename type="text" size="30" defaultValue="" validate="AlphaNum">
-	  <en>Filename</en>
-	</emptyfilename>
-	<ACCEPT type="button" onclick="saveEmptyFile();">
-	  <en>Create</en>
-	</ACCEPT>
-</dynaForm>  
+  <emptyfilename type="text" size="30" defaultValue="" validate="AlphaNum">
+    <en><![CDATA[Filename]]></en>
+  </emptyfilename>
+  <ACCEPT type="button" onclick="saveEmptyFile();">
+    <en><![CDATA[Create]]></en>
+  </ACCEPT>
+</dynaForm>

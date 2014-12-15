@@ -37,7 +37,7 @@ CREATE TABLE <?php echo "`" . $table->getName() . "`" ?>
             if(isset($vendorSpecific['Type']))
                 $mysqlTableType = $vendorSpecific['Type'];
             else
-                $mysqlTableType = 'MyISAM';
+                $mysqlTableType = 'InnoDB';
        }
 ?>
 

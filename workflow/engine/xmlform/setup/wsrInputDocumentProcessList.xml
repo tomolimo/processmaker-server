@@ -1,18 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm rowsPerPage="24" width="100%">
-
-
-<guid type="text" colWidth="120" align="left" titleAlign="left">
-  <en>InputDocument GUID</en>
-</guid>
-
-<name type="text" colWidth="280" align="left" titleAlign="left">
-  <en>Name</en>
-</name>
-
-<description type="text" colWidth="280" align="left" titleAlign="left">
-  <en>description</en>
-</description>
-
-
-</dynaForm>  
+  <guid type="text" colWidth="120" align="left" titleAlign="left">
+    <en><![CDATA[InputDocument GUID]]></en>
+  </guid>
+  <name type="text" colWidth="280" align="left" titleAlign="left">
+    <en><![CDATA[Name]]></en>
+  </name>
+  <description type="text" colWidth="280" align="left" titleAlign="left">
+    <en><![CDATA[description]]></en>
+  </description>
+</dynaForm>

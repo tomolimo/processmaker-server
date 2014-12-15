@@ -1,25 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="users/users_ReassignSelectType" type="xmlform" width="100%" enableTemplate="1">
-
-<TITLE1 type="title">
-  <en>Select the reassign type</en>
-</TITLE1>
-
-<USR_UID type="hidden"/>
-
-<TYPE type="dropdown" size="20" maxlength="20" required="0">
-  <en>Type<option name="ANY_USER">Any user</option></en>
-</TYPE>
-
-<BTN_CANCEL type="button" onclick="cancel()">
-  <en>Cancel</en>
-</BTN_CANCEL>
-
-<CONTINUE type="button" onclick="goToStep2();">
-  <en>Continue</en>
-</CONTINUE>
-
-<JS type="javascript"><![CDATA[
+  <TITLE1 type="title">
+    <en><![CDATA[Select the reassign type]]></en>
+  </TITLE1>
+  <USR_UID type="hidden"/>
+  <TYPE type="dropdown" size="20" maxlength="20" required="0">
+    <en><![CDATA[Type]]><option name="ANY_USER"><![CDATA[Any user]]></option></en>
+  </TYPE>
+  <BTN_CANCEL type="button" onclick="cancel()">
+    <en><![CDATA[Cancel]]></en>
+  </BTN_CANCEL>
+  <CONTINUE type="button" onclick="goToStep2();">
+    <en><![CDATA[Continue]]></en>
+  </CONTINUE>
+  <JS type="javascript"><![CDATA[
 
 var goToStep2 = function() {
   oRPC = new leimnud.module.rpc.xmlhttp({
@@ -42,5 +36,4 @@ function cancel(){
     currentPopupWindow.remove();
 }
 ]]></JS>
-
-</dynaForm> 
+</dynaForm>

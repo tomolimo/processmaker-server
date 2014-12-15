@@ -66,7 +66,7 @@ function cronArraySet ($str, $filter)
     $arrayData = array ();
 
     if ($sw == 1) {
-        $arrayData = array ("DATE" => $date,"WORKSPACE" => $workspace,"ACTION" => $action,"STATUS" => $status,"DESCRIPTION" => $description
+        $arrayData = array ("DATE" => $date, "ACTION" => $action, "STATUS" => $status, "DESCRIPTION" => $description
         );
     }
 
@@ -116,7 +116,7 @@ $response = array ();
 switch ($option) {
     case "LST":
         $pageSize = $_REQUEST["pageSize"];
-        $workspace = $_REQUEST["workspace"];
+        $workspace = SYS_SYS;
         $status = $_REQUEST["status"];
         $dateFrom = $_REQUEST["dateFrom"];
         $dateTo = $_REQUEST["dateTo"];
@@ -144,6 +144,7 @@ switch ($option) {
             }
 
             $response["status"] = "OK";
+            G::auditLog("ClearCron");
         } catch (Exception $e) {
             $response["message"] = $e->getMessage();
             $status = 0;

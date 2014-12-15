@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="patterns_GridParallelType" type="grid" width="100%">
-
-<ROU_NEXT_TASK type="dropdown"><![CDATA[
+  <ROU_NEXT_TASK type="dropdown"><![CDATA[
 SELECT TAS_UID, CON_VALUE FROM TASK LEFT JOIN CONTENT ON (TAS_UID = CON_ID AND CON_CATEGORY = 'TAS_TITLE' AND CON_LANG = '@#LANG') WHERE PRO_UID = '@#PROCESS'
-  ]]><en>Next Task</en>
-</ROU_NEXT_TASK>
-
-</dynaForm>  
+  ]]><en><![CDATA[Next Task]]></en></ROU_NEXT_TASK>
+</dynaForm>

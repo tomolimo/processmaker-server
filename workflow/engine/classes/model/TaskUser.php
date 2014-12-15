@@ -188,6 +188,7 @@ class TaskUser extends BaseTaskUser
         while ($dataset->next()) {
             $usersTask[] = $dataset->getRow();
         }
+        $result = new stdClass();
         $result->data = $usersTask;
         $result->totalCount = sizeof( $usersTask );
 

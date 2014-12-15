@@ -1,41 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="mail" width="500" xmlform_type="NORMAL">
-<TITLE6171 type="title" group="9">
-  <en>Email Settings</en>
-
-</TITLE6171>
-<MAILER type="dropdown" defaultvalue="mail" required="0" group="1" dependentfields="" readonly="0" sqlconnection="">
-  <en>Method<option name="mail">sendmail</option><option name="smtp">SMTP</option></en>
-</MAILER>
-
-<HOST type="text" size="35" maxlength="35" validate="0" defaultvalue="" required="0" group="1" dependentfields="" linkfield="" strto="" readonly="0" sqlconnection="">
-  <en>Server</en>
-</HOST>
-
-<PORT type="text" size="10" maxlength="5" validate="2" defaultvalue="" required="0" group="1" dependentfields="" linkfield="" strto="" readonly="0" sqlconnection="">
-  <en>Port</en>
-</PORT>
-<TIMEOUT type="text" size="10" maxlength="5" validate="2" defaultvalue="" required="0" group="1" dependentfields="" linkfield="" strto="" readonly="0" sqlconnection="">
-  <en>Timeout</en>
-</TIMEOUT>
-
-<SMTPAUTH type="yesno" required="0" group="1" readonly="0">
-  <en>Requires Authentication</en>
-</SMTPAUTH>
-
-<USERNAME type="text" size="35" maxlength="35" validate="0" defaultvalue="" required="0" group="1" dependentfields="" linkfield="" strto="" readonly="0" sqlconnection="">
-  <en>Email Account</en>
-</USERNAME>
-
-<PASSWORD type="password" size="35" maxlength="35" required="0" group="1" readonly="0">
-  <en>Password</en>
-</PASSWORD>
-
-<BSUBMIT type="submit" group="1">
-  <en>Save</en>
-</BSUBMIT>
-
-<BTEST type="button" group="1" onclick="testEmail();return false;">
-  <en>Test</en>
-</BTEST>
-</dynaForm>  
+  <TITLE6171 type="title" group="9">
+    <en><![CDATA[Email Settings]]></en>
+  </TITLE6171>
+  <MAILER type="dropdown" defaultvalue="mail" required="0" group="1" dependentfields="" readonly="0" sqlconnection="">
+    <en><![CDATA[Method]]><option name="mail"><![CDATA[sendmail]]></option><option name="smtp"><![CDATA[SMTP]]></option></en>
+  </MAILER>
+  <HOST type="text" size="35" maxlength="35" validate="0" defaultvalue="" required="0" group="1" dependentfields="" linkfield="" strto="" readonly="0" sqlconnection="">
+    <en><![CDATA[Server]]></en>
+  </HOST>
+  <PORT type="text" size="10" maxlength="5" validate="2" defaultvalue="" required="0" group="1" dependentfields="" linkfield="" strto="" readonly="0" sqlconnection="">
+    <en><![CDATA[Port]]></en>
+  </PORT>
+  <TIMEOUT type="text" size="10" maxlength="5" validate="2" defaultvalue="" required="0" group="1" dependentfields="" linkfield="" strto="" readonly="0" sqlconnection="">
+    <en><![CDATA[Timeout]]></en>
+  </TIMEOUT>
+  <SMTPAUTH type="yesno" required="0" group="1" readonly="0">
+    <en><![CDATA[Requires Authentication]]></en>
+  </SMTPAUTH>
+  <USERNAME type="text" size="35" maxlength="35" validate="0" defaultvalue="" required="0" group="1" dependentfields="" linkfield="" strto="" readonly="0" sqlconnection="">
+    <en><![CDATA[Email Account]]></en>
+  </USERNAME>
+  <PASSWORD type="password" size="35" maxlength="35" required="0" group="1" readonly="0">
+    <en><![CDATA[Password]]></en>
+  </PASSWORD>
+  <BSUBMIT type="submit" group="1">
+    <en><![CDATA[Save]]></en>
+  </BSUBMIT>
+  <BTEST type="button" group="1" onclick="testEmail();return false;">
+    <en><![CDATA[Test]]></en>
+  </BTEST>
+</dynaForm>

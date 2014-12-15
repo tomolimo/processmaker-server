@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="xmlmenu">
-
-<DEP_UID type="private"/>
-
-<DEP_NAME type="hidden" showInTable="0"/>
-
-<MNU_ADD_EMPLOYE type="link" value="" link="#" onclick="addUserDpto(&#039;@#DEP_UID&#039;); return false;" colAlign="left" colWidth="150">
-  <en>Assign user</en>
-</MNU_ADD_EMPLOYE>
-
-</dynaForm>   
+  <DEP_UID type="private"/>
+  <DEP_NAME type="hidden" showInTable="0"/>
+  <MNU_ADD_EMPLOYE type="link" value="" link="#" onclick="addUserDpto('@#DEP_UID'); return false;" colAlign="left" colWidth="150">
+    <en><![CDATA[Assign user]]></en>
+  </MNU_ADD_EMPLOYE>
+</dynaForm>

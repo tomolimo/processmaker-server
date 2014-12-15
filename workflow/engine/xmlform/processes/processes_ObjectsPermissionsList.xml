@@ -1,37 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="pagetable" menu="processes/processes_ObjectsPermissionsOptions">
-<OP_UID type="private" showInTable="0"/>
-<TASK_TARGET type="text" titleAlign="left" colWidth="150">
-  <en>Target Task</en>
-<es>Tarea Objetivo</es><pt>Tarefa Alvo</pt></TASK_TARGET>
-<GROUP_USER type="text" titleAlign="left" colWidth="150">
-  <en>Group or User</en>
-<es>Grupo o Usuario</es><pt><![CDATA[Grupo ou Usuário]]></pt></GROUP_USER>
-<TASK_SOURCE type="text" titleAlign="left" colWidth="150">
-  <en>Origin Task</en>
-<es>Tarea de Origen</es><pt>Tarefa Origem</pt></TASK_SOURCE>
-<PARTICIPATED type="text" titleAlign="left" colWidth="70">
-  <en>Participation</en>
-<es><![CDATA[Participación]]></es><pt><![CDATA[Participação]]></pt></PARTICIPATED>
-<OBJECT_TYPE type="text" titleAlign="left" colWidth="70">
-  <en>Type</en>
-<es>Tipo</es><pt>Tipo</pt></OBJECT_TYPE>
-<OBJECT type="text" titleAlign="left" colWidth="150">
-  <en>Object</en>
-<es>Objeto</es><pt>Objeto</pt></OBJECT>
-<ACTION type="text" titleAlign="left" colWidth="60">
-  <en>Permission</en>
-<es>Permiso</es><pt><![CDATA[Permissão]]></pt></ACTION>
-<OP_CASE_STATUS type="text" titleAlign="left" colWidth="60">
-  <en>Status</en>
-<es>Estado</es></OP_CASE_STATUS>
-
-<EDIT type="link" titleAlign="center" colWidth="50" link="#" onclick="editObjectPermission(&#039;@#OP_UID&#039;);return false;">
-  <en>Edit</en>
-<es>Editar</es>
-</EDIT>
-
-<DELETE type="link" titleAlign="center" colWidth="50" link="processes_DeleteObjectPermission?OP_UID=@#OP_UID" onclick="deleteObjectPermission(this.href);return false;">
-  <en>Delete</en>
-<es>Borrar</es><pt>Eliminar</pt></DELETE>
-</dynaForm>  
+  <OP_UID type="private" showInTable="0"/>
+  <TASK_TARGET type="text" titleAlign="left" colWidth="150">
+    <en><![CDATA[Target Task]]></en>
+    <es>Tarea Objetivo</es>
+    <pt>Tarefa Alvo</pt>
+  </TASK_TARGET>
+  <GROUP_USER type="text" titleAlign="left" colWidth="150">
+    <en><![CDATA[Group or User]]></en>
+    <es>Grupo o Usuario</es>
+    <pt><![CDATA[Grupo ou Usuário]]></pt>
+  </GROUP_USER>
+  <TASK_SOURCE type="text" titleAlign="left" colWidth="150">
+    <en><![CDATA[Origin Task]]></en>
+    <es>Tarea de Origen</es>
+    <pt>Tarefa Origem</pt>
+  </TASK_SOURCE>
+  <PARTICIPATED type="text" titleAlign="left" colWidth="70">
+    <en><![CDATA[Participation]]></en>
+    <es><![CDATA[Participación]]></es>
+    <pt><![CDATA[Participação]]></pt>
+  </PARTICIPATED>
+  <OBJECT_TYPE type="text" titleAlign="left" colWidth="70">
+    <en><![CDATA[Type]]></en>
+    <es>Tipo</es>
+    <pt>Tipo</pt>
+  </OBJECT_TYPE>
+  <OBJECT type="text" titleAlign="left" colWidth="150">
+    <en><![CDATA[Object]]></en>
+    <es>Objeto</es>
+    <pt>Objeto</pt>
+  </OBJECT>
+  <ACTION type="text" titleAlign="left" colWidth="60">
+    <en><![CDATA[Permission]]></en>
+    <es>Permiso</es>
+    <pt><![CDATA[Permissão]]></pt>
+  </ACTION>
+  <OP_CASE_STATUS type="text" titleAlign="left" colWidth="60">
+    <en><![CDATA[Status]]></en>
+    <es>Estado</es>
+  </OP_CASE_STATUS>
+  <EDIT type="link" titleAlign="center" colWidth="50" link="#" onclick="editObjectPermission('@#OP_UID');return false;">
+    <en><![CDATA[Edit]]></en>
+    <es>Editar</es>
+  </EDIT>
+  <DELETE type="link" titleAlign="center" colWidth="50" link="processes_DeleteObjectPermission?OP_UID=@#OP_UID" onclick="deleteObjectPermission(this.href);return false;">
+    <en><![CDATA[Delete]]></en>
+    <es>Borrar</es>
+    <pt>Eliminar</pt>
+  </DELETE>
+</dynaForm>

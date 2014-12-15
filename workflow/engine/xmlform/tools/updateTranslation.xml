@@ -1,29 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="tools" width="680" mode="view" enableTemplate="0" border="0">
-
-
-<titles type="title">
-  <en>UpdateTranslation</en>
-</titles>
-
-<cacheFile type="text">
-  <en>file</en>
-</cacheFile>
-
-<rows type="text">
-  <en>rows</en>
-</rows>
-
-<titles2 type="title">
-  <en>JavaScript Update Translation</en>
-</titles2>
-
-<cacheFileJS type="text">
-  <en>file</en>
-</cacheFileJS>
-
-<rowsJS type="text">
-  <en>rows</en>
-</rowsJS>
-
-</dynaForm>  
+  <titles type="title">
+    <en><![CDATA[UpdateTranslation]]></en>
+  </titles>
+  <cacheFile type="text">
+    <en><![CDATA[file]]></en>
+  </cacheFile>
+  <rows type="text">
+    <en><![CDATA[rows]]></en>
+  </rows>
+  <titles2 type="title">
+    <en><![CDATA[JavaScript Update Translation]]></en>
+  </titles2>
+  <cacheFileJS type="text">
+    <en><![CDATA[file]]></en>
+  </cacheFileJS>
+  <rowsJS type="text">
+    <en><![CDATA[rows]]></en>
+  </rowsJS>
+</dynaForm>

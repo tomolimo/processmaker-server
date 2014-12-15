@@ -1,6 +1,7 @@
 <?php
 
 global $RBAC;
+$result = new StdClass();
 
 switch ($_POST['action']) {
     case 'countryList':
@@ -117,6 +118,7 @@ switch ($_POST['action']) {
         break;
     case 'saveUser':
         try {
+            
             $form = $_POST;
 
             if (isset($_POST['USR_UID'])) {
@@ -129,7 +131,7 @@ switch ($_POST['action']) {
                 $form['USR_NEW_PASS'] = '';
             }
             if ($form['USR_NEW_PASS'] != '') {
-                $form['USR_PASSWORD'] = md5($form['USR_NEW_PASS']);
+                $form['USR_PASSWORD'] = Bootstrap::hashPassword($form['USR_NEW_PASS']);
             }
             if (!isset($form['USR_CITY'])) {
                 $form['USR_CITY'] = '';
@@ -144,6 +146,17 @@ switch ($_POST['action']) {
                 $form['USR_LOGGED_NEXT_TIME'] = 0;
             }
 
+                $firstName = $form['USR_FIRSTNAME'] ? " - First Name: ". $form['USR_FIRSTNAME'] : "";
+                $lastName = $form['USR_LASTNAME'] ? " - Last Name: ". $form['USR_LASTNAME'] : "";
+                $email = $form['USR_EMAIL'] ? " - Email: ". $form['USR_EMAIL'] : "";
+                $dueDate = $form['USR_DUE_DATE'] ? " - Due Date: ". $form['USR_DUE_DATE'] : "";
+                $status = $form['USR_STATUS'] ? " - Status: ". $form['USR_STATUS'] : "";
+                $address = $form['USR_ADDRESS'] ? " - Address: ". $form['USR_ADDRESS'] : "";
+                $phone = $form['USR_PHONE'] ? " - Phone: ". $form['USR_PHONE'] : "";  
+                $zipCode = $form['USR_ZIP_CODE'] ? " - Zip Code: ". $form['USR_ZIP_CODE'] : "";  
+                $position = $form['USR_POSITION'] ? " - Position: ". $form['USR_POSITION'] : "";  
+                $role = $form['USR_ROLE'] ? " - Role: ". $form['USR_ROLE'] : "";
+                
             if ($form['USR_UID'] == '') {
                 $criteria = new Criteria();
                 $criteria->addSelectColumn(UsersPeer::USR_USERNAME);
@@ -186,6 +199,7 @@ switch ($_POST['action']) {
                 require_once 'classes/model/Users.php';
                 $oUser = new Users();
                 $oUser->create($aData);
+                G::auditLog("CreateUser", "User Name: ". $aData['USR_USERNAME']." - User ID: (".$aData['USR_UID'].") ".$firstName.$lastName.$email.$dueDate.$status.$address.$phone.$zipCode.$position.$role );
 
                 if ($_FILES['USR_PHOTO']['error'] != 1) {
                     //print (PATH_IMAGES_ENVIRONMENT_USERS);
@@ -213,7 +227,7 @@ switch ($_POST['action']) {
                  */
                 require_once 'classes/model/UsersProperties.php';
                 $oUserProperty = new UsersProperties();
-                $aUserProperty = $oUserProperty->loadOrCreateIfNotExists($aData['USR_UID'], array('USR_PASSWORD_HISTORY' => serialize(array(md5($aData['USR_PASSWORD'])))));
+                $aUserProperty = $oUserProperty->loadOrCreateIfNotExists($aData['USR_UID'], array('USR_PASSWORD_HISTORY' => serialize(array(Bootstrap::hashPassword($aData['USR_PASSWORD'])))));
                 $aUserProperty['USR_LOGGED_NEXT_TIME'] = $form['USR_LOGGED_NEXT_TIME'];
                 $oUserProperty->update($aUserProperty);
             } else {
@@ -227,7 +241,7 @@ switch ($_POST['action']) {
                         $aData['USR_PASSWORD'] = $form['USR_PASSWORD'];
                         require_once 'classes/model/UsersProperties.php';
                         $oUserProperty = new UsersProperties();
-                        $aUserProperty = $oUserProperty->loadOrCreateIfNotExists($form['USR_UID'], array('USR_PASSWORD_HISTORY' => serialize(array(md5($form['USR_PASSWORD'])))));
+                        $aUserProperty = $oUserProperty->loadOrCreateIfNotExists($form['USR_UID'], array('USR_PASSWORD_HISTORY' => serialize(array(Bootstrap::hashPassword($form['USR_PASSWORD'])))));
 
                         $memKey = 'rbacSession' . session_id();
                         $memcache = & PMmemcached::getSingleton(defined('SYS_SYS') ? SYS_SYS : '' );
@@ -362,6 +376,9 @@ switch ($_POST['action']) {
                 require_once 'classes/model/Users.php';
                 $oUser = new Users();
                 $oUser->update($aData);
+                
+                G::auditLog("UpdateUser", "User Name: ". $aData['USR_USERNAME']." - User ID: (".$aData['USR_UID'].") ".$firstName.$lastName.$email.$dueDate.$status.$address.$phone.$zipCode.$position.$role );
+                
                 if ($_FILES['USR_PHOTO']['error'] != 1) {
                     if ($_FILES['USR_PHOTO']['tmp_name'] != '') {
                         $aAux = explode('.', $_FILES['USR_PHOTO']['name']);

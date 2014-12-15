@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="xmlmenu">
-
   <processCategoryNew type="private" defaultValue="../processCategory/processCategoryNew"/>
-  
-  <MNU_NEW type="link" value='' link="@G::encryptLink(@#processCategoryNew)" colAlign="left" colWidth="85">
-    <en>New</en>
+  <MNU_NEW type="link" value="" link="@G::encryptLink(@#processCategoryNew)" colAlign="left" colWidth="85">
+    <en><![CDATA[New]]></en>
   </MNU_NEW>
-
 </dynaForm>

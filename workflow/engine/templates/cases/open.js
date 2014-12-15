@@ -367,7 +367,7 @@ Ext.onReady(function(){
           frameConfig:{name:'openCaseFrame', id:'openCaseFrame'},
           defaultSrc : uri,
           loadMask:{msg: _('ID_LOADING_GRID') },
-          bodyStyle:{height: (PMExt.getBrowser().screen.height-60) + 'px', overflow:'auto'},
+          bodyStyle:{height: (PMExt.getBrowser().screen.height-60) + 'px', overflow:'hidden'},
           width:screenWidth
 
           }
@@ -1517,23 +1517,27 @@ Ext.onReady(function(){
 	                  var uri = 'casesGenerateDocumentPage_Ajax.php?actionAjax=casesGenerateDocumentPage';
 	                }
 
+	                if (name == "processMap" && _PROJECT_TYPE === 'bpmn') {
+	                  var uri = '../designer?prj_uid=' + _PRO_UID + '&prj_readonly=true&app_uid=' + _APP_UID;
+	                }
+
 	                if( tab ) {
 	                  TabPanel.setActiveTab(tabId);
 	                }
 	                else {
-	                  TabPanel.add({
-	                    id: tabId,
-	                    title: menuSelectedTitle[name],
-	                    frameConfig:{name: name + 'Frame', id: name + 'Frame'},
-	                    defaultSrc : uri,
-	                    loadMask:{msg:_('ID_LOADING_GRID')+'...'},
-	                    autoWidth: true,
-	                    closable:true,
-	                    autoScroll: true,
-	                    bodyStyle:{height: (PMExt.getBrowser().screen.height-60) + 'px', overflow:'auto'}
-	                  }).show();
+                            TabPanel.add({
+                                id: tabId,
+                                title: menuSelectedTitle[name],
+                                frameConfig: {name: name + 'Frame', id: name + 'Frame'},
+                                defaultSrc: uri,
+                                loadMask: {msg: _('ID_LOADING_GRID') + '...'},
+                                autoWidth: true,
+                                closable: true,
+                                autoScroll: true,
+                                bodyStyle: {height: (PMExt.getBrowser().screen.height - 60) + 'px', overflow: 'auto'}
+                            }).show();
 
-	                  TabPanel.doLayout();
+                            TabPanel.doLayout();
 	                }
 	            }
 	          },

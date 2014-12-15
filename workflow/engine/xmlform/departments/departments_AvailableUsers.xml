@@ -1,25 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm width="100%" rowsPerPage="11" menu="groups/groups_userSearch" searchBy="USR_FIRSTNAME | USR_LASTNAME">
-
-<USR_UID type="CheckboxTable" colWidth="3" titleAlign="left" align="left" value="@#USR_UID">
-  <en/>
-</USR_UID>
-
-<USR_FIRSTNAME type="text" colWidth="150" titleAlign="left" align="left" enableHtml="1">
-  <en>Firstname</en>
-</USR_FIRSTNAME>
-
-<USR_LASTNAME type="text" colWidth="150" titleAlign="left" align="left" enableHtml="1">
-  <en>Lastname</en>
-</USR_LASTNAME>
-
-
-<PAGED_TABLE_ID type="private" showInTable="0"/>
-
-<JSFILTER type="javascript" replaceTags="1" showInTable="0">
+  <USR_UID type="CheckboxTable" colWidth="3" titleAlign="left" align="left" value="@#USR_UID">
+    <en/>
+  </USR_UID>
+  <USR_FIRSTNAME type="text" colWidth="150" titleAlign="left" align="left" enableHtml="1">
+    <en><![CDATA[Firstname]]></en>
+  </USR_FIRSTNAME>
+  <USR_LASTNAME type="text" colWidth="150" titleAlign="left" align="left" enableHtml="1">
+    <en><![CDATA[Lastname]]></en>
+  </USR_LASTNAME>
+  <PAGED_TABLE_ID type="private" showInTable="0"/>
+  <JSFILTER type="javascript" replaceTags="1" showInTable="0">
 function pagedTableFilter( form ) {
   @#PAGED_TABLE_ID.doFilter( form );
 }
 </JSFILTER>
-
-</dynaForm>  
+</dynaForm>

@@ -1,46 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="cases_TransferHistory" width="100%">
-<TAS_TITLE type="text" colWidth="140">
-  <en>Task</en>
-</TAS_TITLE>
-
-<USR_LASTNAME type="private" showInTable="0">
-  <en>Delegated User</en>
-</USR_LASTNAME>
-
-<USR_FIRSTNAME type="private" showInTable="0">
-  <en>Delegated User</en>
-</USR_FIRSTNAME>
-
-<USR_NAME type="text">
-  <en>Delegated User</en>
-</USR_NAME>
-
-<DEL_DELEGATE_DATE type="date" colWidth="122" colAlign="center" titleAlign="center">
-  <en>Task Transfer Date</en>
-</DEL_DELEGATE_DATE>
-
-<DEL_INIT_DATE type="date" colWidth="100" colAlign="center" titleAlign="center">
-  <en>Start Date</en>
-</DEL_INIT_DATE>
-
-<DEL_FINISH_DATE type="date" colWidth="100" colAlign="center" titleAlign="center">
-  <en>End Date</en>
-</DEL_FINISH_DATE>
-
-<APP_TYPE type="dropdown" colWidth="100" colAlign="center" titleAlign="center">
-  <en>Action<option name="PAUSE">Paused</option><option name="CANCEL">Cancelled</option><option name="IN_PROGRESS">In Progress</option><option name="">Routed</option><option name="REASSIGN">Reassigned</option></en>
-</APP_TYPE>
-
-<APP_ENABLE_ACTION_DATE type="text" colWidth="100" colAlign="center" titleAlign="center">
-  <en>Enable Action</en>
-</APP_ENABLE_ACTION_DATE>
-
-<APP_DISABLE_ACTION_DATE type="text" colWidth="100" colAlign="center" titleAlign="center">
-  <en>Disable Action</en>
-</APP_DISABLE_ACTION_DATE>
-
-
-<CASE_HISTORY type="link" colWidth="100" value="@G::LoadTranslation(ID_DYNAFORM_HISTORY)" link="javascript:dynaformHistory(&#039;@#PRO_UID&#039;,&#039;@#APP_UID&#039;,&#039;@#TAS_UID&#039;);"/>
-
+  <TAS_TITLE type="text" colWidth="140">
+    <en><![CDATA[Task]]></en>
+  </TAS_TITLE>
+  <USR_LASTNAME type="private" showInTable="0">
+    <en>Delegated User</en>
+  </USR_LASTNAME>
+  <USR_FIRSTNAME type="private" showInTable="0">
+    <en>Delegated User</en>
+  </USR_FIRSTNAME>
+  <USR_NAME type="text">
+    <en><![CDATA[Delegated User]]></en>
+  </USR_NAME>
+  <DEL_DELEGATE_DATE type="date" colWidth="122" colAlign="center" titleAlign="center">
+    <en><![CDATA[Task Transfer Date]]></en>
+  </DEL_DELEGATE_DATE>
+  <DEL_INIT_DATE type="date" colWidth="100" colAlign="center" titleAlign="center">
+    <en><![CDATA[Start Date]]></en>
+  </DEL_INIT_DATE>
+  <DEL_FINISH_DATE type="date" colWidth="100" colAlign="center" titleAlign="center">
+    <en><![CDATA[End Date]]></en>
+  </DEL_FINISH_DATE>
+  <APP_TYPE type="dropdown" colWidth="100" colAlign="center" titleAlign="center">
+    <en><![CDATA[Action]]><option name="PAUSE"><![CDATA[Paused]]></option><option name="CANCEL"><![CDATA[Cancelled]]></option><option name="IN_PROGRESS"><![CDATA[In Progress]]></option><option name=""><![CDATA[Routed]]></option><option name="REASSIGN"><![CDATA[Reassigned]]></option></en>
+  </APP_TYPE>
+  <APP_ENABLE_ACTION_DATE type="text" colWidth="100" colAlign="center" titleAlign="center">
+    <en><![CDATA[Enable Action]]></en>
+  </APP_ENABLE_ACTION_DATE>
+  <APP_DISABLE_ACTION_DATE type="text" colWidth="100" colAlign="center" titleAlign="center">
+    <en><![CDATA[Disable Action]]></en>
+  </APP_DISABLE_ACTION_DATE>
+  <CASE_HISTORY type="link" colWidth="100" value="@G::LoadTranslation(ID_DYNAFORM_HISTORY)" link="javascript:dynaformHistory('@#PRO_UID','@#APP_UID','@#TAS_UID');"/>
 </dynaForm>

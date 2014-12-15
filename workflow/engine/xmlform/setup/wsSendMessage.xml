@@ -1,44 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="SendVariables" width="500" mode="edit" border="0" enableTemplate="0" height="350px">
-
-<SESSION_ID type="text" size="36" maxlength="32">
-  <en>Session Id</en>
-<es><![CDATA[Id de Sesión]]></es></SESSION_ID>
-
-<CASE_ID type="dropdown" sqlConnection="dbarray">
+  <SESSION_ID type="text" size="36" maxlength="32">
+    <en><![CDATA[Session Id]]></en>
+    <es><![CDATA[Id de Sesión]]></es>
+  </SESSION_ID>
+  <CASE_ID type="dropdown" sqlConnection="dbarray">
   SELECT * from case
-  <en>Case ID</en>
+  <en><![CDATA[Case ID]]></en>
 </CASE_ID>
-
-<FROM type="text" size="30">
-  <en>From</en>
-</FROM>
-
-<TO_EMAIL type="text" size="30">
-  <en>TO</en>
-</TO_EMAIL>
-
-<CC_EMAIL type="text" size="30">
-  <en>CC</en>
-</CC_EMAIL>
-
-<BCC_MAIL type="text" size="30">
-  <en>BCC</en>
-</BCC_MAIL>
-
-<SUBJECT type="text" size="30">
-  <en>Subject</en>
-</SUBJECT>
-
-<MESSAGE type="textarea" cols="42" rows="8">
-  <en>Message</en>
-</MESSAGE>
-
-<ACTION type="hidden">
+  <FROM type="text" size="30">
+    <en><![CDATA[From]]></en>
+  </FROM>
+  <TO_EMAIL type="text" size="30">
+    <en><![CDATA[TO]]></en>
+  </TO_EMAIL>
+  <CC_EMAIL type="text" size="30">
+    <en><![CDATA[CC]]></en>
+  </CC_EMAIL>
+  <BCC_MAIL type="text" size="30">
+    <en><![CDATA[BCC]]></en>
+  </BCC_MAIL>
+  <SUBJECT type="text" size="30">
+    <en><![CDATA[Subject]]></en>
+  </SUBJECT>
+  <MESSAGE type="textarea" cols="42" rows="8">
+    <en><![CDATA[Message]]></en>
+  </MESSAGE>
+  <ACTION type="hidden">
 </ACTION>
-
-<ACTIONB type="button" onclick="submitThisForm(this.form);">
-  <en>SendMessage</en>
-<es>Enviar Mensaje</es></ACTIONB>
-
-</dynaForm>  
+  <ACTIONB type="button" onclick="submitThisForm(this.form);">
+    <en><![CDATA[SendMessage]]></en>
+    <es>Enviar Mensaje</es>
+  </ACTIONB>
+</dynaForm>

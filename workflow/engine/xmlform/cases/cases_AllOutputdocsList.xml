@@ -1,38 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm sqlConnection="" rowsPerPage="20" name="cases_AllOutputdocsList">
-
-<DOC_UID type="hidden" showInTable="0"/>
-
-<POSITION type="hidden" showInTable="0"/>
-
-<APP_DOC_UID type="hidden" showInTable="0"/>
-
-<CONFIRM type="hidden" showInTable="0"/>
-
-<TITLE type="text" colWidth="200" titleAlign="left" align="left">
-  <en>Title</en>
-<es><![CDATA[Título]]></es><pt><![CDATA[Título]]></pt></TITLE>
-
-<OUTDOCTITLE type="text" colWidth="200" titleAlign="left" align="left">
-  <en>Output Document</en>
-<es>Documento Generado</es><pt>Documento Generado</pt></OUTDOCTITLE>
-
-<ORIGIN type="text" colWidth="200" titleAlign="left" align="left">
-  <en>Origin Task</en>
-<es><![CDATA[Tarea orígen]]></es><pt>Tarefa Origem</pt></ORIGIN>
-
-<CREATED_BY type="text" colWidth="90" titleAlign="left" align="left">
-  <en>Created By</en>
-<es>Creado por</es></CREATED_BY>
-
-<CREATE_DATE type="text" colWidth="50" titleAlign="left" align="left">
-  <en>Create Date</en>
-<es><![CDATA[Fecha de creación]]></es></CREATE_DATE>
-
-
-<DELETE type="link" colWidth="" value="@#ID_DELETE" link="#" onclick="deleteGeneratedDocument(@QAPP_DOC_UID);"><en></en></DELETE>
-
-<DOWNLOAD_DOC type="link" colWidth="10" target="_blank" value="@#FILEDOCLABEL" link="@#FILEDOC"></DOWNLOAD_DOC>
-<DOWNLOAD_PDF type="link" colWidth="10" target="_blank" value="@#FILEPDFLABEL" link="@#FILEPDF"/>
-
+  <DOC_UID type="hidden" showInTable="0"/>
+  <POSITION type="hidden" showInTable="0"/>
+  <APP_DOC_UID type="hidden" showInTable="0"/>
+  <CONFIRM type="hidden" showInTable="0"/>
+  <TITLE type="text" colWidth="200" titleAlign="left" align="left">
+    <en><![CDATA[Title]]></en>
+    <es><![CDATA[Título]]></es>
+    <pt><![CDATA[Título]]></pt>
+  </TITLE>
+  <OUTDOCTITLE type="text" colWidth="200" titleAlign="left" align="left">
+    <en><![CDATA[Output Document]]></en>
+    <es>Documento Generado</es>
+    <pt>Documento Generado</pt>
+  </OUTDOCTITLE>
+  <ORIGIN type="text" colWidth="200" titleAlign="left" align="left">
+    <en><![CDATA[Origin Task]]></en>
+    <es><![CDATA[Tarea orígen]]></es>
+    <pt>Tarefa Origem</pt>
+  </ORIGIN>
+  <CREATED_BY type="text" colWidth="90" titleAlign="left" align="left">
+    <en><![CDATA[Created By]]></en>
+    <es>Creado por</es>
+  </CREATED_BY>
+  <CREATE_DATE type="text" colWidth="50" titleAlign="left" align="left">
+    <en><![CDATA[Create Date]]></en>
+    <es><![CDATA[Fecha de creación]]></es>
+  </CREATE_DATE>
+  <DELETE type="link" colWidth="" value="@#ID_DELETE" link="#" onclick="deleteGeneratedDocument(@QAPP_DOC_UID);">
+    <en><![CDATA[]]></en>
+  </DELETE>
+  <DOWNLOAD_DOC type="link" colWidth="10" target="_blank" value="@#FILEDOCLABEL" link="@#FILEDOC"/>
+  <DOWNLOAD_PDF type="link" colWidth="10" target="_blank" value="@#FILEPDFLABEL" link="@#FILEPDF"/>
 </dynaForm>

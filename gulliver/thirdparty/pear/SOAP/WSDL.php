@@ -212,7 +212,7 @@ class SOAP_WSDL extends SOAP_Base
      */
     function parseURL($wsdl_uri)
     {
-        $parser =& new $this->wsdlParserClass($wsdl_uri, $this, $this->docs);
+        $parser = new $this->wsdlParserClass($wsdl_uri, $this, $this->docs);
 
         if ($parser->fault) {
             $this->_raiseSoapFault($parser->fault);
@@ -233,7 +233,7 @@ class SOAP_WSDL extends SOAP_Base
     function parseObject(&$wsdl_obj, $targetNamespace, $service_name,
                          $service_desc = '')
     {
-        $parser =& new SOAP_WSDL_ObjectParser($wsdl_obj, $this,
+        $parser = new SOAP_WSDL_ObjectParser($wsdl_obj, $this,
                                               $targetNamespace, $service_name,
                                               $service_desc);
 
@@ -785,7 +785,7 @@ class SOAP_WSDL extends SOAP_Base
             require_once 'SOAP/Client.php';
             eval($proxy);
         }
-        $proxy =& new $classname;
+        $proxy = new $classname;
 
         return $proxy;
     }
@@ -1063,7 +1063,7 @@ class SOAP_WSDL_Cache extends SOAP_Base
                 $file_data = file_get_contents($wsdl_fname);
             } else {
                 $uri = explode('?', $wsdl_fname);
-                $rq =& new HTTP_Request($uri[0], $proxy_params);
+                $rq = new HTTP_Request($uri[0], $proxy_params);
                 // the user agent HTTP_Request uses fouls things up
                 if (isset($uri[1])) {
                     $rq->addRawQueryString($uri[1]);
@@ -1146,7 +1146,7 @@ class SOAP_WSDL_Parser extends SOAP_Base
     function SOAP_WSDL_Parser($uri, &$wsdl, $docs = false)
     {
         parent::SOAP_Base('WSDLPARSER');
-        $this->cache =& new SOAP_WSDL_Cache($wsdl->cacheUse,
+        $this->cache = new SOAP_WSDL_Cache($wsdl->cacheUse,
                                             $wsdl->cacheMaxAge,
                                             $wsdl->cacheDir);
         $this->uri = $uri;
@@ -1672,7 +1672,7 @@ class SOAP_WSDL_Parser extends SOAP_Base
 
                 $this->wsdl->imports[$attrs['namespace']] = $attrs;
                 $import_parser_class = get_class($this);
-                $import_parser =& new $import_parser_class($uri, $this->wsdl, $this->docs);
+                $import_parser = new $import_parser_class($uri, $this->wsdl, $this->docs);
                 if ($import_parser->fault) {
                     unset($this->wsdl->imports[$attrs['namespace']]);
                     return false;

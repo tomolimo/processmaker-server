@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="helpdate" type="xmlform" width="100%">
-<A type="hidden"/>
-<mask type="title" enablehtml="0" btn_cancel="Cancel">
-<en>Options Mask</en>
-</mask>
-<option1 type="subtitle" enablehtml="1" btn_cancel="Cancel">
-<en><![CDATA[ %a — abbreviated weekday name
+  <A type="hidden"/>
+  <mask type="title" enablehtml="0" btn_cancel="Cancel">
+    <en><![CDATA[Options Mask]]></en>
+  </mask>
+  <option1 type="subtitle" enablehtml="1" btn_cancel="Cancel">
+    <en><![CDATA[%a — abbreviated weekday name
 <br> %A — full weekday name
 <br> %b — abbreviated month name
 <br> %B — full month name
@@ -32,6 +32,5 @@
 <br> %y — year without the century (range 00 to 99)
 <br> %Y — year with the century
 <br> %% — a literal '%' character]]></en>
-</option1>
-
-</dynaForm> 
+  </option1>
+</dynaForm>

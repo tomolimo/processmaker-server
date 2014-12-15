@@ -1,0 +1,715 @@
+
+{
+    "name": "form-example",
+    "items": 
+    [
+        {
+            "type": "form",
+            "items": 
+            [
+                [
+                    {
+                        "colSpan": 12,
+                        "name": "91621240253e8ed7d146fc9075381174",
+                        "label": "PMDynaform 8 - Layouts",
+                        "type": "title"
+                    }
+                ],
+                [
+                    {
+                        "var_name": "plainVariable",
+                        "var_uid": "10",
+                        "dataType": "float",
+                        "colSpan": 4,
+                        "name": "drp_Cost",
+                        "label": "Cost",
+                        "defaultValue": "",
+                        "required": false,
+                        "hint": "",
+                        "dependentFields": [
+                          "age",
+                          "text_name_1",
+                          "text_name",
+                          "text_name_2",
+                          "text_name_3",
+                          "text_name_4"
+                        ],
+                        "dependenceStates": {
+                          "directDependence": "[]",
+                          "indirectDependence": "[]",
+                          "dependentFields": "[\"age\",\"text_name_1\",\"text_name\",\"text_name_2\",\"text_name_3\",\"text_name_4\"]"
+                        },
+                        "textTransform": "lower",
+                        "validate": "alphabetic",
+                        "mask": "",
+                        "maxLength": 100,
+                        "formula": "(text_name_1-10)-text_name+(2+text_name)+sqrt(4)",
+                        "type": "text"
+                    },
+                    {
+                        "var_name": "plainVariable",
+                        "var_uid": "11",
+                        "dataType": "datetime",
+                        "colSpan": 4,
+                        "name": "drp_Expires",
+                        "label": "Expires",
+                        "defaultValue": "",
+                        "required": false,
+                        "hint": "",
+                        "mask": "",
+                        "typeOfDateRange": [],
+                        "editable": false,
+                        "pickDate": "date",
+                        "type": "datetime"
+                    },
+                    {
+                        "var_name": "plainVariable",
+                        "var_uid": "11",
+                    "dataType": "date",
+                    "colSpan": 4,
+                    "name": "date_of_birth",
+                    "label": "Date of Birth",
+                    "defaultValue": "",
+                    "required": false,
+                    "hint": "",
+                    "mask": "",
+                    "typeOfDateRange": [],
+                    "editable": false,
+                    "pickDate": "date",
+                    "type": "datetime"
+                    }
+                ],
+                [
+                  {
+                    "var_name": "plainVariable",
+                        "var_uid": "12",
+                    "dataType": "integer",
+                    "colSpan": 6,
+                    "name": "age",
+                    "label": "Age",
+                    "defaultValue": "",
+                    "required": false,
+                    "hint": "",
+                    "dependentFields": [
+                      "text_name_1",
+                      "text_name",
+                      "text_name_2",
+                      "text_name_3",
+                      "text_name_4"
+                    ],
+                    "dependenceStates": {
+                      "directDependence": "[\"drp_Cost\"]",
+                      "indirectDependence": "[]",
+                      "dependentFields": "[\"text_name_1\",\"text_name\",\"text_name_2\",\"text_name_3\",\"text_name_4\"]"
+                    },
+                    "includeOptionGroup": false,
+                    "disabled": false,
+                    "options": [
+                      {
+                        "value": "2",
+                        "label": "Two",
+                        "disabled": false,
+                        "isGroup": false
+                      },
+                      {
+                        "value": "3",
+                        "label": "Three",
+                        "disabled": false,
+                        "isGroup": false
+                      },
+                      {
+                        "value": "3",
+                        "label": "Three",
+                        "disabled": false,
+                        "isGroup": false
+                      },
+                      {
+                        "value": "4",
+                        "label": "Four",
+                        "disabled": false,
+                        "isGroup": false
+                      },
+                      {
+                        "value": "5",
+                        "label": "Five",
+                        "disabled": false,
+                        "isGroup": false
+                      }
+                    ],
+                    "type": "dropdown"
+                  },
+                  {
+                        "var_name": "plainVariable",
+                        "var_uid": "13",
+                    "dataType": "boolean",
+                    "colSpan": 6,
+                    "name": "var_gender",
+                    "label": "Gender",
+                    "defaultValue": "",
+                    "required": false,
+                    "hint": "",
+                    "disabled": false,
+                    "options": [
+                      {
+                        "label": "One",
+                        "value": "1",
+                        "disabled": false,
+                        "selected": false
+                      },
+                      {
+                        "label": "Three",
+                        "value": "3",
+                        "disabled": false,
+                        "selected": false
+                      },
+                      {
+                        "label": "Three",
+                        "value": "3",
+                        "disabled": false,
+                        "selected": false
+                      },
+                      {
+                        "label": "Four",
+                        "value": "4",
+                        "disabled": false,
+                        "selected": false
+                      },
+                      {
+                        "label": "Five",
+                        "value": "5",
+                        "disabled": false,
+                        "selected": false
+                      }
+                    ],
+                    "type": "checkbox"
+                  }
+                ],
+                [
+                  {
+                    "colSpan": 12,
+                    "name": "75043463053e8ed99148095072334632",
+                    "label": "[Subtitle]",
+                    "type": "subtitle"
+                  }
+                ],
+                [
+                  {
+                    "colSpan": 4
+                  },
+                  {
+                        "var_name": "plainVariable",
+                        "var_uid": "14",
+                    "dataType": "string",
+                    "colSpan": 4,
+                    "name": "text_name_1",
+                    "label": "Name",
+                    "defaultValue": "Noel",
+                    "required": false,
+                    "hint": "",
+                    "dependentFields": [
+                      "text_name",
+                      "text_name_2",
+                      "text_name_3",
+                      "text_name_4"
+                    ],
+                    "dependenceStates": {
+                      "directDependence": "[\"drp_Cost\",\"age\"]",
+                      "indirectDependence": "[\"drp_Cost\"]",
+                      "dependentFields": "[\"text_name\",\"text_name_2\",\"text_name_3\",\"text_name_4\"]"
+                    },
+                    "textTransform": "none",
+                    "validate": "any",
+                    "mask": "",
+                    "maxLength": 100,
+                    "formula": "",
+                    "type": "text"
+                  },
+                  {
+                    "colSpan": 4
+                  }
+                ],
+                [
+                  {
+                    "var_name": "plainVariable",
+                        "var_uid": "15",
+                    "dataType": "string",
+                    "colSpan": 12,
+                    "name": "text_name",
+                    "label": "Name",
+                    "defaultValue": "TexField",
+                    "required": true,
+                    "hint": "",
+                    "dependentFields": [
+                      "text_name_2",
+                      "text_name_3",
+                      "text_name_4"
+                    ],
+                    "dependenceStates": {
+                      "directDependence": "[\"drp_Cost\",\"age\",\"text_name_1\"]",
+                      "indirectDependence": "[\"drp_Cost\",\"age\"]",
+                      "dependentFields": "[\"text_name_2\",\"text_name_3\",\"text_name_4\"]"
+                    },
+                    "textTransform": "upper",
+                    "validate": "integer",
+                    "mask": "",
+                    "maxLength": 100,
+                    "formula": "",
+                    "type": "text"
+                  }
+                ],
+                [
+                  {
+                    "var_name": "plainVariable",
+                        "var_uid": "16",
+                    "dataType": "string",
+                    "colSpan": 12,
+                    "name": "text_name_2",
+                    "label": "Nombre",
+                    "defaultValue": "",
+                    "required": false,
+                    "hint": "",
+                    "dependentFields": [
+                      "text_name_3",
+                      "text_name_4"
+                    ],
+                    "dependenceStates": {
+                      "directDependence": "[\"drp_Cost\",\"age\",\"text_name_1\",\"text_name\"]",
+                      "indirectDependence": "[\"drp_Cost\",\"age\",\"text_name_1\"]",
+                      "dependentFields": "[\"text_name_3\",\"text_name_4\"]"
+                    },
+                    "sql": "",
+                    "disabled": false,
+                    "type": "suggest"
+                  }
+                ],
+                [
+                  {
+                    "var_name": "plainVariable",
+                        "var_uid": "17",
+                    "dataType": "string",
+                    "colSpan": 6,
+                    "name": "text_name_3",
+                    "label": "Nombre",
+                    "defaultValue": "",
+                    "required": false,
+                    "hint": "",
+                    "dependentFields": [
+                      "text_name_4"
+                    ],
+                    "dependenceStates": {
+                      "directDependence": "[\"drp_Cost\",\"age\",\"text_name_1\",\"text_name\",\"text_name_2\"]",
+                      "indirectDependence": "[\"drp_Cost\",\"age\",\"text_name_1\",\"text_name\"]",
+                      "dependentFields": "[\"text_name_4\"]"
+                    },
+                    "textTransform": "none",
+                    "validate": "any",
+                    "mask": "",
+                    "maxLength": 100,
+                    "formula": "",
+                    "type": "text"
+                  },
+                  {
+                    "var_name": "plainVariable",
+                        "var_uid": "18",
+                    "dataType": "string",
+                    "colSpan": 6,
+                    "name": "text_name_4",
+                    "label": "Nombre",
+                    "defaultValue": "",
+                    "required": false,
+                    "hint": "",
+                    "dependentFields": [],
+                    "dependenceStates": {
+                      "directDependence": "[\"drp_Cost\",\"age\",\"text_name_1\",\"text_name\",\"text_name_2\",\"text_name_3\"]",
+                      "indirectDependence": "[\"drp_Cost\",\"age\",\"text_name_1\",\"text_name\",\"text_name_2\"]",
+                      "dependentFields": "[]"
+                    },
+                    "textTransform": "none",
+                    "validate": "any",
+                    "mask": "",
+                    "maxLength": 100,
+                    "formula": "",
+                    "type": "text"
+                  }
+                ],
+                [
+                  {
+                    "var_name": "plainVariable",
+                        "var_uid": "19",
+                    "dataType": "string",
+                    "colSpan": 12,
+                    "name": "var_options",
+                    "label": "fibonaci",
+                    "defaultValue": "",
+                    "required": false,
+                    "hint": "",
+                    "dependentFields": [],
+                    "dependenceStates": {
+                      "directDependence": "[]",
+                      "indirectDependence": "[]",
+                      "dependentFields": "[]"
+                    },
+                    "includeOptionGroup": false,
+                    "disabled": false,
+                    "options": [
+                      {
+                        "value": "1",
+                        "label": "One",
+                        "disabled": false,
+                        "isGroup": false
+                      },
+                      {
+                        "value": "2",
+                        "label": "Three",
+                        "disabled": false,
+                        "isGroup": false
+                      },
+                      {
+                        "value": "3",
+                        "label": "Three",
+                        "disabled": false,
+                        "isGroup": false
+                      },
+                      {
+                        "value": "4",
+                        "label": "Four",
+                        "disabled": false,
+                        "isGroup": false
+                      },
+                      {
+                        "value": "5",
+                        "label": "Five",
+                        "disabled": false,
+                        "isGroup": false
+                      }
+                    ],
+                    "type": "dropdown"
+                  }
+                ],
+                [
+                  {
+                    "var_name": "plainVariable",
+                        "var_uid": "20",
+                    "dataType": "string",
+                    "colSpan": 12,
+                    "name": "var_options_1",
+                    "label": "fibonaci",
+                    "defaultValue": "",
+                    "required": false,
+                    "hint": "",
+                    "disabled": false,
+                    "options": [
+                      {
+                        "label": "Two",
+                        "value": "1",
+                        "disabled": false,
+                        "selected": true
+                      },
+                      {
+                        "label": "Three",
+                        "value": "2",
+                        "disabled": false,
+                        "selected": true
+                      },
+                      {
+                        "label": "Three",
+                        "value": "3",
+                        "disabled": false,
+                        "selected": false
+                      },
+                      {
+                        "label": "Four",
+                        "value": "4",
+                        "disabled": false,
+                        "selected": false
+                      },
+                      {
+                        "label": "Five",
+                        "value": "5",
+                        "disabled": false,
+                        "selected": false
+                      }
+                    ],
+                    "type": "checkbox"
+                  }
+                ],
+                [
+                  {
+                    "var_name": "plainVariable",
+                        "var_uid": "21",
+                    "dataType": "string",
+                    "colSpan": 12,
+                    "name": "var_options_2",
+                    "label": "fibonaci",
+                    "defaultValue": "",
+                    "required": false,
+                    "hint": "",
+                    "disabled": null,
+                    "options": [
+                      {
+                        "label": "Two",
+                        "value": "1",
+                        "disabled": false,
+                        "selected": false
+                      },
+                      {
+                        "label": "Three",
+                        "value": "2",
+                        "disabled": false,
+                        "selected": true
+                      },
+                      {
+                        "label": "Three",
+                        "value": "3",
+                        "disabled": false,
+                        "selected": false
+                      },
+                      {
+                        "label": "Four",
+                        "value": "4",
+                        "disabled": false,
+                        "selected": false
+                      },
+                      {
+                        "label": "Five",
+                        "value": "5",
+                        "disabled": false,
+                        "selected": false
+                      }
+                    ],
+                    "type": "radio"
+                  }
+                ],
+                [
+                  {
+                    "label": "Submit",
+                    "colSpan": 6,
+                    "type": "submit"
+                  },
+                  {
+                    "label": "Button",
+                    "colSpan": 6,
+                    "type": "button"
+                  }
+                ]
+            ],
+            "variables":
+            [
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "workflow",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "string",
+                    "var_label": "users",
+                    "var_name": "field10",
+                    "var_allowNull": 1,
+                    "var_sql": "SELECT USR_UID, USR_USERNAME\nFROM USERS\nWHERE USR_USERNAME <>  \" \"",
+                    "var_uid": "10"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "workflow",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "string",
+                    "var_label": "country",
+                    "var_name": "field11",
+                    "var_allowNull": 1,
+                    "var_sql": "SELECT IC_UID,IC_NAME   \nFROM ISO_COUNTRY WHERE IC_NAME <> \" \"",
+                    "var_uid": "11"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "workflow",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "string",
+                    "var_label": "subdivision",
+                    "var_name": "field12",
+                    "var_allowNull": 1,
+                    "var_sql": "SELECT \nIS_UID,\nIS_NAME FROM ISO_SUBDIVISION WHERE IC_UID = \"@#country\" AND IS_NAME <> \" \"",
+                    "var_uid": "12"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "workflow",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "string",
+                    "var_label": "location",
+                    "var_name": "field13",
+                    "var_allowNull": 1,
+                    "var_sql": "SELECT IL_UID, IL_NAME\nFROM ISO_LOCATION\nWHERE IS_UID =  \"@#subdivision\" AND IL_NAME <> \" \" AND IC_UID = \"@#country\"",
+                    "var_uid": "13"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "workflow",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "string",
+                    "var_label": "varname",
+                    "var_name": "field14",
+                    "var_allowNull": 1,
+                    "var_sql": "",
+                    "var_uid": "14"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "none",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "string",
+                    "var_label": "simplevariable",
+                    "var_name": "field15",
+                    "var_allowNull": 1,
+                    "var_sql": "",
+                    "var_uid": "15"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "none",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "string",
+                    "var_label": "Simple Variable Two",
+                    "var_name": "field16",
+                    "var_allowNull": 1,
+                    "var_sql": "",
+                    "var_uid": "16"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "none",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "datetime",
+                    "var_label": "Simple Variable Three",
+                    "var_name": "field17",
+                    "var_allowNull": 1,
+                    "var_sql": "",
+                    "var_uid": "17"
+                },
+                {
+                    "var_acceptedValues": [
+                        {
+                          "value": "First Value",
+                          "keyValue": "firstvalue"
+                        },
+                        {
+                          "value": "Second Value",
+                          "keyValue": "secondvalue"
+                        }
+                    ],
+                    "var_dbConnection": "none",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 100,
+                    "var_fieldType": "string",
+                    "var_label": "optionsvariable",
+                    "var_name": "field18",
+                    "var_allowNull": 1,
+                    "var_sql": "",
+                    "var_uid": "18"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "none",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "string",
+                    "var_label": "variablegridone",
+                    "var_name": "field19",
+                    "var_allowNull": 1,
+                    "var_sql": "",
+                    "var_uid": "19"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "none",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 100,
+                    "var_fieldType": "string",
+                    "var_label": "field20",
+                    "var_name": "field20",
+                    "var_allowNull": 1,
+                    "var_sql": "",
+                    "var_uid": "20"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "none",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "string",
+                    "var_label": "variablegridthree",
+                    "var_name": "field21",
+                    "var_allowNull": 1,
+                    "var_sql": "",
+                    "var_uid": "21"
+                },
+                {
+                    "var_acceptedValues": [
+                    {
+                      "value": "variable option 1",
+                      "keyValue": "variable_option_1"
+                    },
+                    {
+                      "value": "variable option 2",
+                      "keyValue": "variable_option_2"
+                    },
+                    {
+                      "value": "variable option 3",
+                      "keyValue": "variable_option_3"
+                    }
+                  ],
+                  "var_dbConnection": "none",
+                  "var_defaultValue": "",
+                  "var_fieldSize": 10,
+                  "var_fieldType": "string",
+                  "var_label": "variablegridfour",
+                  "var_name": "field22",
+                  "var_allowNull": 1,
+                  "var_sql": "",
+                  "var_uid": "22"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "none",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "string",
+                    "var_label": "variablegridthree",
+                    "var_name": "field23",
+                    "var_allowNull": 1,
+                    "var_sql": "",
+                    "var_uid": "23"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "none",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "string",
+                    "var_label": "variablegridthree",
+                    "var_name": "field24",
+                    "var_allowNull": 1,
+                    "var_sql": "",
+                    "var_uid": "24"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "none",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "string",
+                    "var_label": "variablegridthree",
+                    "var_name": "datetime",
+                    "var_allowNull": 1,
+                    "var_sql": "",
+                    "var_uid": "datetimeId"
+                }
+            ]
+        }
+    ]
+}

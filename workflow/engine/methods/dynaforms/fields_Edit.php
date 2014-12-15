@@ -175,7 +175,11 @@ if (! (isset( $fields->Fields['XMLNODE_NAME'] ) && ($fields->Fields['XMLNODE_NAM
         }
         if ($tableExists) {
             $con = Propel::getConnection( $Fields['PME_SQLCONNECTION'] );
-            $rs = $con->executeQuery( "SHOW COLUMNS FROM USERS" );
+            if ($Fields['PME_SQLCONNECTION'] == 'rbac') {
+                $rs = $con->executeQuery( "SHOW COLUMNS FROM RBAC_USERS" );
+            } else {
+                $rs = $con->executeQuery( "SHOW COLUMNS FROM USERS" );
+            }
             $result = Array ();
             $i = 0;
             while ($rs->next()) {

@@ -1,28 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="xmlmenu">
-
-<MNU_ADD type="link" value='' link="#" onclick="dynaformAdd(); return false;" colAlign="left" colWidth="100">
-  <en>New</en>
-</MNU_ADD>
-
-<PAGED_TABLE_ID type="private"/>
-<PAGED_TABLE_FAST_SEARCH type="FastSearch" label="@G::LoadTranslation(ID_SEARCH)"/>
-
-<PRO_UID type="private"/>
-
-<dynaformsEdit type="private" defaultValue="../dynaforms/dynaforms_Edit"/>
-
-<dynaformsChoseType type="private" defaultValue="../dynaforms/dynaforms_ChoseType"/>
-
-<dynaformsNewPlugin type="private" defaultValue="../dynaforms/dynaforms_NewPlugin"/>
-
-<dynaformsEditor    type="private" defaultValue="../dynaforms/dynaforms_Editor"/>
-
-<dynaformsFlatEditor type="private" defaultValue="../dynaforms/dynaforms_FlatEditor"/>
-
-<dynaformsDelete type="private" defaultValue="../dynaforms/dynaforms_Delete"/>
-
-<js type="javascript" replaceTags="1"><![CDATA[
+  <MNU_ADD type="link" value="" link="#" onclick="dynaformAdd(); return false;" colAlign="left" colWidth="100">
+    <en><![CDATA[New]]></en>
+  </MNU_ADD>
+  <PAGED_TABLE_ID type="private"/>
+  <PAGED_TABLE_FAST_SEARCH type="FastSearch" label="@G::LoadTranslation(ID_SEARCH)"/>
+  <PRO_UID type="private"/>
+  <dynaformsEdit type="private" defaultValue="../dynaforms/dynaforms_Edit"/>
+  <dynaformsChoseType type="private" defaultValue="../dynaforms/dynaforms_ChoseType"/>
+  <dynaformsNewPlugin type="private" defaultValue="../dynaforms/dynaforms_NewPlugin"/>
+  <dynaformsEditor type="private" defaultValue="../dynaforms/dynaforms_Editor"/>
+  <dynaformsFlatEditor type="private" defaultValue="../dynaforms/dynaforms_FlatEditor"/>
+  <dynaformsDelete type="private" defaultValue="../dynaforms/dynaforms_Delete"/>
+  <js type="javascript" replaceTags="1"><![CDATA[
   function dynaformAdd(){
     popupWindow("@G::LoadTranslation(ID_NEW_DYNAFORM)", "@G::encryptlink(@#dynaformsChoseType)?PRO_UID=@%PRO_UID" , 500, 225);
 	//popupWindow('@G::LoadTranslation(ID_NEW_DYNAFORM)', '@G::encryptlink(@#dynaformsNewPlugin)?PRO_UID=@%PRO_UID' , 500, 350);
@@ -173,7 +163,5 @@
 	return strValue;
 }
 ]]></js>
-
-<SEARCH_FILTER_FORM type="private"/>
+  <SEARCH_FILTER_FORM type="private"/>
 </dynaForm>
-

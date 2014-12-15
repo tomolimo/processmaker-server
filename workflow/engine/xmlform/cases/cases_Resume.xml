@@ -1,54 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="cases_Resume" type="xmlform" width="550px" labelWidth="150px">
-<TITLE1 type="title">
-  <en>Case Properties</en>
-</TITLE1>
-<PRO_TITLE type="text" mode="view">
-  <en>Process</en>
-</PRO_TITLE>
-<TITLE type="text" mode="view">
-  <en>Case Title</en>
-</TITLE>
-<APP_NUMBER type="text" mode="view">
-  <en>Case Number</en>
-</APP_NUMBER>
-<STATUS type="text" mode="view">
-  <en>Case Status</en>
-</STATUS>
-<APP_UID type="text" mode="view">
-  <en>Case Uid</en>
-</APP_UID>
-<CREATOR type="text" mode="view">
-  <en>Creator</en>
-</CREATOR>
-<CREATE_DATE type="text" mode="view">
-  <en>Create Date</en>
-</CREATE_DATE>
-<UPDATE_DATE type="text" mode="view">
-  <en>Last Update</en>
-</UPDATE_DATE>
-<TITLE2 type="title">
-  <en>Current Task Properties</en>
-</TITLE2>
-<TAS_TITLE type="text" mode="view">
-  <en>Task</en>
-</TAS_TITLE>
-<CURRENT_USER type="text" mode="view">
-  <en>Current User</en>
-</CURRENT_USER>
-<DEL_DELEGATE_DATE type="text" mode="view">
-  <en>Task Delegate Date</en>
-</DEL_DELEGATE_DATE>
-<DEL_INIT_DATE type="text" mode="view">
-  <en>Task Init Date</en>
-</DEL_INIT_DATE>
-<DEL_TASK_DUE_DATE type="text" mode="view">
-  <en>Task Due Date</en>
-</DEL_TASK_DUE_DATE>
-<DEL_FINISH_DATE type="text" mode="view">
-  <en>Finish Date</en>
-</DEL_FINISH_DATE>
-<DESCRIPTION type="text" mode="view">
-  <en>Case Description</en>
-</DESCRIPTION>
+  <TITLE1 type="title">
+    <en><![CDATA[Case Properties]]></en>
+  </TITLE1>
+  <PRO_TITLE type="text" mode="view">
+    <en><![CDATA[Process]]></en>
+  </PRO_TITLE>
+  <TITLE type="text" mode="view">
+    <en><![CDATA[Case Title]]></en>
+  </TITLE>
+  <APP_NUMBER type="text" mode="view">
+    <en><![CDATA[Case Number]]></en>
+  </APP_NUMBER>
+  <STATUS type="text" mode="view">
+    <en><![CDATA[Case Status]]></en>
+  </STATUS>
+  <APP_UID type="text" mode="view">
+    <en><![CDATA[Case Uid]]></en>
+  </APP_UID>
+  <CREATOR type="text" mode="view">
+    <en><![CDATA[Creator]]></en>
+  </CREATOR>
+  <CREATE_DATE type="text" mode="view">
+    <en><![CDATA[Create Date]]></en>
+  </CREATE_DATE>
+  <UPDATE_DATE type="text" mode="view">
+    <en><![CDATA[Last Update]]></en>
+  </UPDATE_DATE>
+  <TITLE2 type="title">
+    <en><![CDATA[Current Task Properties]]></en>
+  </TITLE2>
+  <TAS_TITLE type="text" mode="view">
+    <en><![CDATA[Task]]></en>
+  </TAS_TITLE>
+  <CURRENT_USER type="text" mode="view">
+    <en><![CDATA[Current User]]></en>
+  </CURRENT_USER>
+  <DEL_DELEGATE_DATE type="text" mode="view">
+    <en><![CDATA[Task Delegate Date]]></en>
+  </DEL_DELEGATE_DATE>
+  <DEL_INIT_DATE type="text" mode="view">
+    <en><![CDATA[Task Init Date]]></en>
+  </DEL_INIT_DATE>
+  <DEL_TASK_DUE_DATE type="text" mode="view">
+    <en><![CDATA[Task Due Date]]></en>
+  </DEL_TASK_DUE_DATE>
+  <DEL_FINISH_DATE type="text" mode="view">
+    <en><![CDATA[Finish Date]]></en>
+  </DEL_FINISH_DATE>
+  <DESCRIPTION type="text" mode="view">
+    <en><![CDATA[Case Description]]></en>
+  </DESCRIPTION>
 </dynaForm>

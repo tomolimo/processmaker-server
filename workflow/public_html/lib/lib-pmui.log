@@ -1,0 +1,30 @@
+[20 hours ago] 52fb2e9  remove http://demos.duhnnie.net  direction into menu sass class <rodrigo quelca>
+[3 weeks ago] ca80302  move to right vertical edit label <rodrigo quelca>
+[3 months ago] fbb746f  update sortbehavior <Richard Noel>
+[3 months ago] 1d0a7ec  fix two times has been appended a shape to the DOM <rodrigo quelca>
+[3 months ago] 7fd83f6  implement build connection method for comand connect <rodrigo quelca>
+[3 months ago] 416b1a3  bug in gridpanel resolved and fix className in title item accordion <Richard Noel>
+[3 months ago] 63a37cd  restore sort method to arrayList class <rodrigo quelca>
+[3 months ago] e9192ba  update define events in field type group <Richard Noel>
+[3 months ago] ede31b3  update textareaField in method setLabel() <Richard Noel>
+[3 months ago] f4a070d  update contextmenu <Richard Noel>
+[3 months ago] 02aad54  add isDragging property to regular shape behavior <rodrigo quelca>
+[3 months ago] 97ecead  fix bad cross cursor to move an element <rodrigo quelca>
+[3 months ago] f1a1e3a  Adding a validation for keyboard events <Omar Suca>
+[4 months ago] 444611e  validate if a shape has label for drop <rodrigo quelca>
+[4 months ago] 8815459  enable hideAllLabels when a shape was dropped <rodrigo quelca>
+[4 months ago] 87e65a0  fix method getValueFromControls() in fields checkbox, radio <Richard Noel>
+[4 months ago] de74f29  fix documentation for get options in check, radio field <Richard Noel>
+[4 months ago] 16cc273  disable applyBorderMarging method to solve resize problems <rodrigo quelca>
+[4 months ago] 2b5f395  fix bad determinate percentage method to recalculte port position <Rodrigo Quelca>
+[4 months ago] 729acdd  remove hideAllFoculLabels for drop behavior <rodrigo quelca>
+[4 months ago] 7f2ed4b  fix method getOptions() in dropdown and checkbox field <Richard Noel>
+[4 months ago] 1702059  remove drag parent settings because causes several behavioral problems <Rodrigo Quelca>
+[4 months ago] 973b117  enable hideOrShowSnapers <Rodrigo Quelca>
+[4 months ago] 65df603  fix to support containers and drop behavior <Rodrigo Quelca>
+[4 months ago] a3024d7  update event click in field classs <Richard Noel>
+[4 months ago] 025474a  update validtypes in field and valid for type number in regexpvalidator class <Richard Noel>
+[4 months ago] 63f0cc8  add fixes to support layouts <rodrigo quelca>
+[4 months ago] e6d85e3  fix method onStart in containerItemsorBehavior, change methos moveItem in container class, and fix array filtrable in list panel <Richard Noel>
+[5 months ago] 14b0913  fixes for decorators and canvas position <rodrigo quelca>
+[5 months ago] 6d6d8ee  adding log task <eriknyk>

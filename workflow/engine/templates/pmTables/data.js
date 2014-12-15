@@ -78,13 +78,13 @@ Ext.onReady(function(){
 
   appUidSearch = new Ext.form.Checkbox ({
 	  id: 'appUidSearch',
-      boxLabel : 'Search also in the APP_UID field'
+      boxLabel : _('ID_SEARCH_ALSO_APP_UID')
   });
 
   contextMenu = new Ext.menu.Menu({
       items : [ editButton, deleteButton ]
   });
-  
+
   searchText = new Ext.form.TextField ({
     id: 'searchTxt',
     ctCls:'pm_search_text_field',
@@ -180,7 +180,9 @@ Ext.onReady(function(){
       dataIndex : tableDef.FIELDS[i].FLD_NAME,
       width     : 95,
       align     : 'center',
-      renderer  : columnRenderer
+      renderer  : function (columnRenderer) {
+          return Ext.util.Format.htmlEncode(columnRenderer);
+      }
     };
     if (tableDef.FIELDS[i].FLD_AUTO_INCREMENT != 1) {
       column.editor = columnEditor
@@ -398,7 +400,7 @@ Ext.onReady(function(){
     ];
   }
   else
-	tbar = [genDataReportButton, 
+	tbar = [genDataReportButton,
        '->',
        appUidSearch,
        searchText,
@@ -473,7 +475,8 @@ onMessageContextMenu = function (grid, rowIndex, e) {
 //Do Search Function
 DoSearch = function(){
    infoGrid.store.setBaseParam('textFilter', searchText.getValue());
-   infoGrid.store.load({params: {start : 0 , limit : pageSize , appUid : appUidSearch.getValue() }});
+   infoGrid.store.setBaseParam('appUid', appUidSearch.getValue() );
+   infoGrid.store.load()
 };
 
 //Load Grid By Default
@@ -482,7 +485,7 @@ GridByDefault = function(){
   appUidSearch.reset();
   infoGrid.store.setBaseParam('textFilter', searchText.getValue());
   infoGrid.store.load();
-}; 
+};
 
 //Capitalize String Function
 capitalize = function(s){

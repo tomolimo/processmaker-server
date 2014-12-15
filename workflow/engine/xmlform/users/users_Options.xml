@@ -1,19 +1,13 @@
-<?xml version="1.0" encoding="UTF-8"?> 
+<?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="xmlmenu">
-
-<MNU_ADD type="link" value="" link="#" onclick="window.location = &#039;users_New&#039;;return false;" colAlign="left" colWidth="35">
-  <en>New</en>
-</MNU_ADD>
-
-<PAGED_TABLE_ID type="private"/>
-<PAGED_TABLE_FAST_SEARCH type="FastSearch" label="@G::LoadTranslation(ID_SEARCH)"/>
-
-<SEARCH_FILTER_FORM type="private"/>
-
-
-<CONFIRM type="private"/>
-
-<JS type="javascript"><![CDATA[ 
+  <MNU_ADD type="link" value="" link="#" onclick="window.location = 'users_New';return false;" colAlign="left" colWidth="35">
+    <en><![CDATA[New]]></en>
+  </MNU_ADD>
+  <PAGED_TABLE_ID type="private"/>
+  <PAGED_TABLE_FAST_SEARCH type="FastSearch" label="@G::LoadTranslation(ID_SEARCH)"/>
+  <SEARCH_FILTER_FORM type="private"/>
+  <CONFIRM type="private"/>
+  <JS type="javascript"><![CDATA[ 
 var simpleUserDelete = function(sUser) {
   new leimnud.module.app.confirm().make({
   	label:'@#CONFIRM',
@@ -203,5 +197,4 @@ function userReassing(USR_UID){
 }
 
 ]]></JS>
-
 </dynaForm>

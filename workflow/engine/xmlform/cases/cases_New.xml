@@ -1,22 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="cases_Edit" type="xmlform" width="550px" labelWidth="25%" enableTemplate="1">
-    <LANG type="private"/>
-    <USER type="private"/>
-    <CHANGE_LINK type="private"/>
-    <TITLE type="title">
-      <en>Start a new case</en>
-    </TITLE>
-    
-    <DESCRIPTION type="link" value="@!CHANGE_LINK" link="../cases/cases_New?change=link">
-      <en/>
-    </DESCRIPTION>
-
-    <TAS_UID type="dropdown" style="width:350px" sqlConnection="dbarray">
+  <LANG type="private"/>
+  <USER type="private"/>
+  <CHANGE_LINK type="private"/>
+  <TITLE type="title">
+    <en><![CDATA[Start a new case]]></en>
+  </TITLE>
+  <DESCRIPTION type="link" value="@!CHANGE_LINK" link="../cases/cases_New?change=link">
+    <en><![CDATA[]]></en>
+  </DESCRIPTION>
+  <TAS_UID type="dropdown" style="width:350px" sqlConnection="dbarray">
       SELECT * FROM NewCase
-      <en>Process</en>
+      <en><![CDATA[Process]]></en>
     </TAS_UID>
-
-    <START type="submit">
-      <en>Start</en>
-    </START>
-</dynaForm> 
+  <START type="submit">
+    <en><![CDATA[Start]]></en>
+  </START>
+</dynaForm>

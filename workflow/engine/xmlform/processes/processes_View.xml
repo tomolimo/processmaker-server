@@ -1,20 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="processes_View" width="500px" labelWidth="200px" mode="view" enableTemplate="0">
-
-<menuUser type="xmlmenu" xmlfile="processes/processes_ViewOptions">
-  <en/>
-</menuUser>
-
-<TITLE1 type="title" group="1">
-  <en>Process Information</en>
-</TITLE1>
-
-<PRO_TITLE type="text" size="35" maxlength="255" defaultvalue="" required="0" group="1" dependentfields="" linkfield="" strto="" readonly="0" noshowingrid="0" readonlyingrid="0" totalizeable="0" sqlconnection="">
-  <en>Title</en>
-</PRO_TITLE>
-
-<PRO_DESCRIPTION type="textarea" cols="60" rows="5">
-  <en>Description</en>
-</PRO_DESCRIPTION>
-
-</dynaForm>  
+  <menuUser type="xmlmenu" xmlfile="processes/processes_ViewOptions">
+    <en/>
+  </menuUser>
+  <TITLE1 type="title" group="1">
+    <en><![CDATA[Process Information]]></en>
+  </TITLE1>
+  <PRO_TITLE type="text" size="35" maxlength="255" defaultvalue="" required="0" group="1" dependentfields="" linkfield="" strto="" readonly="0" noshowingrid="0" readonlyingrid="0" totalizeable="0" sqlconnection="">
+    <en><![CDATA[Title]]></en>
+  </PRO_TITLE>
+  <PRO_DESCRIPTION type="textarea" cols="60" rows="5">
+    <en><![CDATA[Description]]></en>
+  </PRO_DESCRIPTION>
+</dynaForm>

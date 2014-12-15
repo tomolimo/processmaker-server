@@ -61,7 +61,9 @@ if ($actionAjax == 'historyDynaformGrid_Ajax') {
     }
 
     $newDir = '/tmp/test/directory';
-    $r = G::verifyPath( $newDir );
+    G::verifyPath( $newDir );
+
+    $r = new stdclass();
     $r->data = $aProcesses;
     $r->totalCount = 2;
 
@@ -380,7 +382,14 @@ if ($actionAjax == 'dynaformChangeLogViewHistory') {
     $Fields['APP_DATA']['__DYNAFORM_OPTIONS']['NEXT_STEP_LABEL'] = '';
     $Fields['APP_DATA']['__DYNAFORM_OPTIONS']['NEXT_STEP'] = '#';
     $Fields['APP_DATA']['__DYNAFORM_OPTIONS']['NEXT_ACTION'] = 'return false;';
-    $G_PUBLISH->AddContent( 'dynaform', 'xmlform', $_SESSION['PROCESS'] . '/' . $_POST['DYN_UID'], '', $Fields['APP_DATA'], '', '', 'view' );
+    G::LoadClass('pmDynaform');
+    $a = new pmDynaform($_GET['DYN_UID'], $Fields['APP_DATA']);
+    if ($a->isResponsive()) {
+        $a->mergeValues();
+        $a->printView((!isset($_SESSION["PM_RUN_OUTSIDE_MAIN_APP"])) ? "true" : "false", $_SESSION['APPLICATION']);
+    } else {
+        $G_PUBLISH->AddContent('dynaform', 'xmlform', $_SESSION['PROCESS'] . '/' . $_POST['DYN_UID'], '', $Fields['APP_DATA'], '', '', 'view');
+    }
     ?>
 
     <script language="javascript">
@@ -463,8 +472,14 @@ if ($actionAjax == 'historyDynaformGridPreview') {
 
     $_SESSION['CURRENT_DYN_UID'] = $_POST['DYN_UID'];
     $_SESSION['DYN_UID_PRINT'] = $_POST['DYN_UID'];
-    $G_PUBLISH->AddContent( 'dynaform', 'xmlform', $_SESSION['PROCESS'] . '/' . $_POST['DYN_UID'], '', $Fields['APP_DATA'], '', '', 'view' );
-
+    G::LoadClass('pmDynaform');
+    $a = new pmDynaform($_GET['DYN_UID'], $Fields['APP_DATA']);
+    if ($a->isResponsive()) {
+        $a->mergeValues();
+        $a->printView((!isset($_SESSION["PM_RUN_OUTSIDE_MAIN_APP"])) ? "true" : "false", $_SESSION['APPLICATION']);
+    } else {
+        $G_PUBLISH->AddContent('dynaform', 'xmlform', $_SESSION['PROCESS'] . '/' . $_POST['DYN_UID'], '', $Fields['APP_DATA'], '', '', 'view');
+    }
     ?>
     <script language="javascript">
 

@@ -1,26 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="xmlmenu">
-
-<MNU_ADD type="link" value="" link="#" onclick="eventsNew(); return false;" colAlign="left" colWidth="100">
-  <en>New</en>
-</MNU_ADD>
-
-<PRO_UID type="private"/>
-<EVN_TYPE type="private"/>
-
-<eventsNew type="private" defaultValue="../events/eventsNew"/>
-
-<eventsEdit type="private" defaultValue="../events/eventsEdit"/>
-
-<eventsEditAction type="private" defaultValue="../events/eventsEditAction"/>
-
-<eventsDelete type="private" defaultValue="../events/eventsDelete"/>
-
-<triggersEdit type="private" defaultValue="../triggers/triggers_Edit"/>
-
-<PAGED_TABLE_ID type="private"/>
-
-<JS type="javascript" replaceTags="1"><![CDATA[
+  <MNU_ADD type="link" value="" link="#" onclick="eventsNew(); return false;" colAlign="left" colWidth="100">
+    <en><![CDATA[New]]></en>
+  </MNU_ADD>
+  <PRO_UID type="private"/>
+  <EVN_TYPE type="private"/>
+  <eventsNew type="private" defaultValue="../events/eventsNew"/>
+  <eventsEdit type="private" defaultValue="../events/eventsEdit"/>
+  <eventsEditAction type="private" defaultValue="../events/eventsEditAction"/>
+  <eventsDelete type="private" defaultValue="../events/eventsDelete"/>
+  <triggersEdit type="private" defaultValue="../triggers/triggers_Edit"/>
+  <PAGED_TABLE_ID type="private"/>
+  <JS type="javascript" replaceTags="1"><![CDATA[
 
 var triggerEditWizardSource = function (sUID){
     popupWindow('@G::LoadTranslation(ID_EDIT_TRIGGERS)', '@G::encryptlink(@#triggersEdit)?TRI_UID=' + sUID +'&BYPASS=1' + '&PRO_UID=@%PRO_UID' , 770, 510);
@@ -30,7 +21,7 @@ var triggerSave = function (form){
    ajax_post(form.action, form, 'POST');
     currentPopupWindow.remove();
   }
-  
+
 var eventsNew = function() {
   popupWindow('@G::LoadTranslation(ID_NEW_EVENT)', '@G::encryptlink(@#eventsNew)?PRO_UID=@%PRO_UID&EVN_TYPE=@%EVN_TYPE' , 540, 500);
 };
@@ -44,19 +35,35 @@ var eventsEditAction = function(sUID) {
 };
 
 var eventsSave = function(oForm) {
-  if (oForm.onsubmit()) {
-    res = ajax_post(oForm.action, oForm, 'POST');
-    currentPopupWindow.remove();
-    @#PAGED_TABLE_ID.refresh();
+  if (getField("EVN_DESCRIPTION").value.trim() == "") {
+      new leimnud.module.app.alert().make({label: _("ID_PLEASE_ENTER_DESCRIPTION")});
+
+      return false;
   }
+
+  if (getField("EVN_TAS_ESTIMATED_DURATION").value.trim() == "") {
+      new leimnud.module.app.alert().make({label: _("ID_PLEASE_CONFIGURE_ESTIMATED_DURATION_TASK")});
+
+      return false;
+  }
+
+  if (getField("EVN_WHEN").value.trim() == ""){
+      new leimnud.module.app.alert().make({label: _("ID_PLEASE_SET_VALUE_DAYS_EXECUTION_TIME_FIELD")});
+
+      return false;
+  }
+
+  res = ajax_post(oForm.action, oForm, 'POST');
+  currentPopupWindow.remove();
+  @#PAGED_TABLE_ID.refresh();
+
 };
 
 var eventsTriggerSave = function(oForm) {
-  if (oForm.onsubmit()) {
     res = ajax_post(oForm.action, oForm, 'POST');
     currentPopupWindow.remove();
     @#PAGED_TABLE_ID.refresh();
-  }
+				
 };
 
 var eventsDelete = function(sUID) {
@@ -133,5 +140,4 @@ function saveTriggerCondition(oForm)
 }
 
 ]]></JS>
-
-</dynaForm>  
+</dynaForm>

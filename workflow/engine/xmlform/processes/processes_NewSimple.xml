@@ -1,38 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<dynaForm name="processes_New" width="600" labelWidth="115px"   mode="edit" enableTemplate="1">
-
-<menuUser type="xmlmenu" xmlfile="processes/processes_NewOptions">
-  <en></en>
-</menuUser>
-
-<TITLE1 type="title" group="1">
-  <en>Process Information</en>
-</TITLE1>
-
-<PRO_TITLE type="text" size="60" maxlength="255"  defaultvalue="" required="0" group="1" dependentfields="" linkfield="" strto="" readonly="0" noshowingrid="0" readonlyingrid="0" totalizeable="0" sqlconnection="">
-  <en>Title</en>
-</PRO_TITLE>
-<!-- <PRO_DESCRIPTION type="html"> -->
-<PRO_DESCRIPTION type="textarea" rows="7" cols="58">
-  <en>Description</en>
-</PRO_DESCRIPTION>
-
-<PRO_CATEGORY type="dropdown" >
+<dynaForm name="processes_New" width="600" labelWidth="115px" mode="edit" enableTemplate="1">
+  <menuUser type="xmlmenu" xmlfile="processes/processes_NewOptions">
+    <en/>
+  </menuUser>
+  <TITLE1 type="title" group="1">
+    <en><![CDATA[Process Information]]></en>
+  </TITLE1>
+  <PRO_TITLE type="text" size="60" maxlength="255" defaultvalue="" required="0" group="1" dependentfields="" linkfield="" strto="" readonly="0" noshowingrid="0" readonlyingrid="0" totalizeable="0" sqlconnection="">
+    <en><![CDATA[Title]]></en>
+  </PRO_TITLE>
+  <!-- <PRO_DESCRIPTION type="html"> -->
+  <PRO_DESCRIPTION type="textarea" rows="7" cols="58">
+    <en><![CDATA[Description]]></en>
+  </PRO_DESCRIPTION>
+  <PRO_CATEGORY type="dropdown">
 SELECT CATEGORY_UID, CATEGORY_NAME FROM PROCESS_CATEGORY
-<en>Process Category<option name="">- None -</option></en>
+<en><![CDATA[Process Category]]><option name=""><![CDATA[- None -]]></option></en>
 </PRO_CATEGORY>
-
-<SUBMIT type="button" onclick="verifyProcessInformation(this.form);" group="1">
-  <en>Save</en>
-</SUBMIT>
-
-<BTN_CANCEL type="button" onclick="cancel();">
-  <en>Cancel</en>
-</BTN_CANCEL>
-
-<MESSAGE1 type="phpvariable" />
-
-<JS type="javascript" replacetags="1">
+  <SUBMIT type="button" onclick="verifyProcessInformation(this.form);" group="1">
+    <en><![CDATA[Save]]></en>
+  </SUBMIT>
+  <BTN_CANCEL type="button" onclick="cancel();">
+    <en><![CDATA[Cancel]]></en>
+  </BTN_CANCEL>
+  <MESSAGE1 type="phpvariable"/>
+  <JS type="javascript" replacetags="1">
 
 document.onkeypress=function(e){
 var esIE=(document.all);
@@ -75,5 +67,4 @@ function cancel(){
 }
 
 </JS>
-
-</dynaForm> 
+</dynaForm>

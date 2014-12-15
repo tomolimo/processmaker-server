@@ -1,43 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<dynaForm 
-    width="100%" 
-    rowsPerPage="20" 
-    
->
-
-<!--USR_DEPARTMENT type="dropdown" required="0" readonly="0"  savelabel="0" mode="edit" options="Array" > 
+<dynaForm width="100%" rowsPerPage="20">
+  <!--USR_DEPARTMENT type="dropdown" required="0" readonly="0"  savelabel="0" mode="edit" options="Array" > 
 	SELECT CON_ID,CON_VALUE FROM CONTENT WHERE CON_CATEGORY='DEPO_TITLE' <en></en>
 		<option name="YES">YES</option>
 </USR_DEPARTMENT-->
-
-<!--USR_DEPARTMENT type="dropdown" required="0" readonly="0" savelabel="0" mode="edit" options="Array">
+  <!--USR_DEPARTMENT type="dropdown" required="0" readonly="0" savelabel="0" mode="edit" options="Array">
 SELECT CON_ID,CON_VALUE FROM CONTENT WHERE CON_CATEGORY='DEPO_TITLE' 
 <en>next 
 </en>
 </USR_DEPARTMENT-->
-
-
-<!--USR_UID type="CheckboxTable" colWidth="3" titleAlign="left" align="left" value="@#USR_UID">
+  <!--USR_UID type="CheckboxTable" colWidth="3" titleAlign="left" align="left" value="@#USR_UID">
   <en/>
 </USR_UID-->
-
-<USR_FIRSTNAME type="text" colWidth="150" titleAlign="left" align="left" enableHtml="1">
-  <en>Firstname</en>
-</USR_FIRSTNAME>
-
-<USR_LASTNAME type="text" colWidth="150" titleAlign="left" align="left" enableHtml="1">
-  <en>Lastname</en>
-</USR_LASTNAME>
-<!--
+  <USR_FIRSTNAME type="text" colWidth="150" titleAlign="left" align="left" enableHtml="1">
+    <en><![CDATA[Firstname]]></en>
+  </USR_FIRSTNAME>
+  <USR_LASTNAME type="text" colWidth="150" titleAlign="left" align="left" enableHtml="1">
+    <en><![CDATA[Lastname]]></en>
+  </USR_LASTNAME>
+  <!--
 <ASSIGN type="link" colWidth="50" value="@G::LoadTranslation(ID_ASSIGN)" link="#" onclick="saveUserGroup(@QUSR_UID);return false;"/>
 -->
-
-<PAGED_TABLE_ID type="private" showInTable="0"/>
-
-<!--JSFILTER type="javascript" replaceTags="1" showInTable="0">
+  <PAGED_TABLE_ID type="private" showInTable="0"/>
+  <!--JSFILTER type="javascript" replaceTags="1" showInTable="0">
 function pagedTableFilter( form ) {
   @#PAGED_TABLE_ID.doFilter( form );
 }
 </JSFILTER-->
-
-</dynaForm>  
+</dynaForm>

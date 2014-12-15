@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="xmlform" name="cases_ReassignUsers.xml" width="500" enabletemplate="0" mode="edit">
-<REASSIGN_USER type="dropdown" required="0" readonly="0" mode="edit"><![CDATA[
+  <REASSIGN_USER type="dropdown" required="0" readonly="0" mode="edit"><![CDATA[
 SELECT USR_UID, CONCAT(USR_FIRSTNAME, ' ', USR_LASTNAME, ' (', USR_USERNAME, ')') AS USER_FULLNAME FROM USERS WHERE USR_STATUS <> 'CLOSED'
-  ]]><en>User<option name=""> - Select - </option></en>
-</REASSIGN_USER>
-</dynaForm>  
+  ]]><en><![CDATA[User]]><option name=""><![CDATA[- Select -]]></option></en></REASSIGN_USER>
+</dynaForm>

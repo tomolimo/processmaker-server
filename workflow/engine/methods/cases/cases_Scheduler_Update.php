@@ -54,7 +54,7 @@ try {
 
     $aData['SCH_DEL_USER_NAME'] = $_POST['form']['SCH_USER_NAME'];
     if ($_POST['form']['SCH_USER_PASSWORD'] != 'DefaultPM') {
-        $aData['SCH_DEL_USER_PASS'] = md5( $_POST['form']['SCH_USER_PASSWORD'] );
+        $aData['SCH_DEL_USER_PASS'] = Bootstrap::hashPassword($_POST['form']['SCH_USER_PASSWORD']);
     }
     $aData['SCH_DEL_USER_UID'] = $_POST['form']['SCH_USER_UID'];
 

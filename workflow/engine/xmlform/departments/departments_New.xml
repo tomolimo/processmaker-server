@@ -1,30 +1,20 @@
 <?xml version="1.0"?>
-<dynaForm
-  type="xmlform"
-  labelWidth= "250px"
-  width="95%" enableTemplate="1"
->
-
-<title type="title" colWidth="200" showInTable="0" >
-  <en>Department Information</en>
-</title>
-
-<DEP_UID type="hidden" showInTable="0" />
-<DEP_PARENT type="hidden" showInTable="0" />
-
-<DEP_TITLE type="text" colWidth="200" size="30" maxlength="64" required="1">
-  <en>Department Name</en>
-</DEP_TITLE>
-
-<BTN_CANCEL type="button" onclick="cancel();">
-  <en>Cancel</en>
-</BTN_CANCEL>
-
-<button type="button" onclick="return validateLocalFields(this.form);" showInTable="0">
-  <en>Save</en>
-</button> 
-<JS type="javascript" replacetags="1">
-<![CDATA[
+<dynaForm type="xmlform" labelWidth="250px" width="95%" enableTemplate="1">
+  <title type="title" colWidth="200" showInTable="0">
+    <en><![CDATA[Department Information]]></en>
+  </title>
+  <DEP_UID type="hidden" showInTable="0"/>
+  <DEP_PARENT type="hidden" showInTable="0"/>
+  <DEP_TITLE type="text" colWidth="200" size="30" maxlength="64" required="1">
+    <en><![CDATA[Department Name]]></en>
+  </DEP_TITLE>
+  <BTN_CANCEL type="button" onclick="cancel();">
+    <en><![CDATA[Cancel]]></en>
+  </BTN_CANCEL>
+  <button type="button" onclick="return validateLocalFields(this.form);" showInTable="0">
+    <en><![CDATA[Save]]></en>
+  </button>
+  <JS type="javascript" replacetags="1"><![CDATA[
 	document.onkeypress=function(e){
 var esIE=(document.all);
 var esNS=(document.layers);
@@ -88,7 +78,5 @@ var validateLocalFields = function(oForm){
 function cancel(){
     currentPopupWindow.remove();
 }
-]]>
-</JS>
-
-</dynaForm>  
+]]></JS>
+</dynaForm>

@@ -1,42 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="webservices" width="500" mode="edit" border="0" enableTemplate="0" height="205px">
-
-<SESSION_ID type="text" size="36" maxlength="32">
-  <en>Session Id</en>
-<es><![CDATA[Id de Sesión]]></es></SESSION_ID>
-
-<USER_ID type="text" size="32" maxlength="32">
-  <en>User ID</en>
-<es>ID de Usuario</es></USER_ID>
-
-<PASSWORD type="password" size="25" maxlength="32">
-  <en>Password</en>
-<es><![CDATA[Contraseña]]></es></PASSWORD>
-
-<FIRST_NAME type="text" size="32" maxlength="32">
-  <en>First Name</en>
-<es>Nombres</es></FIRST_NAME>
-
-<LAST_NAME type="text" size="32" maxlength="32">
-  <en>Last Name</en>
-<es>Apellidos</es></LAST_NAME>
-
-<EMAIL type="text" size="32" maxlength="32">
-  <en>Email</en>
-<es><![CDATA[Correo Electrónico]]></es></EMAIL>
-
-<ROLE type="dropdown" sqlConnection="dbarray">
+  <SESSION_ID type="text" size="36" maxlength="32">
+    <en><![CDATA[Session Id]]></en>
+    <es><![CDATA[Id de Sesión]]></es>
+  </SESSION_ID>
+  <USER_ID type="text" size="32" maxlength="32">
+    <en><![CDATA[User ID]]></en>
+    <es>ID de Usuario</es>
+  </USER_ID>
+  <PASSWORD type="password" size="25" maxlength="32">
+    <en><![CDATA[Password]]></en>
+    <es><![CDATA[Contraseña]]></es>
+  </PASSWORD>
+  <FIRST_NAME type="text" size="32" maxlength="32">
+    <en><![CDATA[First Name]]></en>
+    <es>Nombres</es>
+  </FIRST_NAME>
+  <LAST_NAME type="text" size="32" maxlength="32">
+    <en><![CDATA[Last Name]]></en>
+    <es>Apellidos</es>
+  </LAST_NAME>
+  <EMAIL type="text" size="32" maxlength="32">
+    <en><![CDATA[Email]]></en>
+    <es><![CDATA[Correo Electrónico]]></es>
+  </EMAIL>
+  <ROLE type="dropdown" sqlConnection="dbarray">
   SELECT * from role
-  <en>Role</en>
+  <en><![CDATA[Role]]></en>
 <es>Rol</es>
 </ROLE>
-
-<ACTION type="hidden">
+  <ACTION type="hidden">
 </ACTION>
-
-<ACTIONB type="button" onclick="submitThisForm(this.form);">
-  <en>CreateUser</en>
-  <es>Craer Usuario</es>
-</ACTIONB>
-
-</dynaForm>   
+  <ACTIONB type="button" onclick="submitThisForm(this.form);">
+    <en><![CDATA[CreateUser]]></en>
+    <es>Craer Usuario</es>
+  </ACTIONB>
+</dynaForm>

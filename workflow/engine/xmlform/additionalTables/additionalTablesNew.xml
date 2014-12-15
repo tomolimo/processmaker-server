@@ -1,74 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="additionalTables/additionalTablesNew" type="xmlform" width="900" enableTemplate="1">
-
-<TITLE1 type="title">
-  <en>Table Information</en>
-</TITLE1>
-
-<ADD_TAB_UID type="hidden" />
-
-<ADD_TAB_NAME type="text" size="60" maxlength="64" validate="Field" required="1">
-  <en>Table Name</en>
-</ADD_TAB_NAME>
-
-<ADD_TAB_NAME_OLD type="hidden" />
-<!-- renamed text by hidden -->
-<ADD_TAB_CLASS_NAME type="hidden" size="60" maxlength="100" validate="Field" required="0" readonly="1" >
-  <en>PHP Class Name</en>
-</ADD_TAB_CLASS_NAME> 
-
-<ADD_TAB_CLASS_NAME_OLD type="hidden" />
-
-<ADD_TAB_DESCRIPTION type="textarea" cols="70" rows="5" required="0">
-  <en>Description</en>
-</ADD_TAB_DESCRIPTION>
-
-<TITLE2 type="title">
-  <en>Log configuration</en>
-</TITLE2>
-
-<ADD_TAB_SDW_LOG_INSERT type="checkbox" defaultValue="on">
-  <en>Save log for insert actions</en>
-</ADD_TAB_SDW_LOG_INSERT>
-
-<ADD_TAB_SDW_LOG_UPDATE type="checkbox" defaultValue="on">
-  <en>Save log for update actions</en>
-</ADD_TAB_SDW_LOG_UPDATE>
-
-<ADD_TAB_SDW_LOG_DELETE type="checkbox" defaultValue="on">
-  <en>Save log for delete actions</en>
-</ADD_TAB_SDW_LOG_DELETE>
-
-<!--<ADD_TAB_SDW_LOG_SELECT type="checkbox" defaultValue="off">
+  <TITLE1 type="title">
+    <en><![CDATA[Table Information]]></en>
+  </TITLE1>
+  <ADD_TAB_UID type="hidden"/>
+  <ADD_TAB_NAME type="text" size="60" maxlength="64" validate="Field" required="1">
+    <en><![CDATA[Table Name]]></en>
+  </ADD_TAB_NAME>
+  <ADD_TAB_NAME_OLD type="hidden"/>
+  <!-- renamed text by hidden -->
+  <ADD_TAB_CLASS_NAME type="hidden" size="60" maxlength="100" validate="Field" required="0" readonly="1">
+    <en>PHP Class Name</en>
+  </ADD_TAB_CLASS_NAME>
+  <ADD_TAB_CLASS_NAME_OLD type="hidden"/>
+  <ADD_TAB_DESCRIPTION type="textarea" cols="70" rows="5" required="0">
+    <en><![CDATA[Description]]></en>
+  </ADD_TAB_DESCRIPTION>
+  <TITLE2 type="title">
+    <en><![CDATA[Log configuration]]></en>
+  </TITLE2>
+  <ADD_TAB_SDW_LOG_INSERT type="checkbox" defaultValue="on">
+    <en><![CDATA[Save log for insert actions]]></en>
+  </ADD_TAB_SDW_LOG_INSERT>
+  <ADD_TAB_SDW_LOG_UPDATE type="checkbox" defaultValue="on">
+    <en><![CDATA[Save log for update actions]]></en>
+  </ADD_TAB_SDW_LOG_UPDATE>
+  <ADD_TAB_SDW_LOG_DELETE type="checkbox" defaultValue="on">
+    <en><![CDATA[Save log for delete actions]]></en>
+  </ADD_TAB_SDW_LOG_DELETE>
+  <!--<ADD_TAB_SDW_LOG_SELECT type="checkbox" defaultValue="off">
   <en>Save log for select actions</en>
 </ADD_TAB_SDW_LOG_SELECT>
 
 <ADD_TAB_SDW_MAX_LENGTH type="text" size="5" maxlength="10" required="1" defaultValue="-1">
   <en>Maximun rows to store (-1 for unlimited)</en>
 </ADD_TAB_SDW_MAX_LENGTH>-->
-
-<ADD_TAB_SDW_AUTO_DELETE type="checkbox" defaultValue="off">
-  <en>Delete related log when table is deleted</en>
-</ADD_TAB_SDW_AUTO_DELETE>
-
-<!--<ADD_TAB_STATUS type="hidden" defaultValue="ACTIVE" />-->
-
-<TITLE3 type="title">
-  <en>Fields</en>
-</TITLE3>
-
-<FIELDS type="grid" xmlgrid="additionalTables/additionalTablesFields" addrow="1" deleterow="1" mode="edit" />
-
-<btnSave type="button" onclick="verifyData(this.form);">
-  <en>Save</en>
-</btnSave>
-
-<BTN_CANCEL type="button" onclick="cancel();">
-  <en>Cancel</en>
-</BTN_CANCEL>
-
-<JS type="javascript">
-<![CDATA[
+  <ADD_TAB_SDW_AUTO_DELETE type="checkbox" defaultValue="off">
+    <en><![CDATA[Delete related log when table is deleted]]></en>
+  </ADD_TAB_SDW_AUTO_DELETE>
+  <!--<ADD_TAB_STATUS type="hidden" defaultValue="ACTIVE" />-->
+  <TITLE3 type="title">
+    <en><![CDATA[Fields]]></en>
+  </TITLE3>
+  <FIELDS type="grid" xmlgrid="additionalTables/additionalTablesFields" addrow="1" deleterow="1" mode="edit"/>
+  <btnSave type="button" onclick="verifyData(this.form);">
+    <en><![CDATA[Save]]></en>
+  </btnSave>
+  <BTN_CANCEL type="button" onclick="cancel();">
+    <en><![CDATA[Cancel]]></en>
+  </BTN_CANCEL>
+  <JS type="javascript"><![CDATA[
 var onChangeType = function(iRow) {
   var iRow = iRow | this.name.split('][')[1];
   var oAux;
@@ -398,7 +379,5 @@ function cancel(){
 
 dynaformOnload = LoadPMTable;
 
-]]>
-</JS>
-
+]]></JS>
 </dynaForm>

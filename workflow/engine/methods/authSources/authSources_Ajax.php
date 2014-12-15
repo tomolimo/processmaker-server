@@ -174,6 +174,7 @@ try {
                 }
             }
             unset( $fields['AUTH_SOURCE_DATA'] );
+            $result = new stdclass();
             $result->success = true;
             $result->sources = $fields;
             print (G::json_encode( $result )) ;

@@ -1,33 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<dynaForm
-  name="translationsList"
-  type="pagedtable"
-  sql="SELECT * from TRANSLATION WHERE TRN_LANG = 'en' order by TRN_CATEGORY, TRN_ID "
-  sqlConnection=""
-  searchBy="TRN_CATEGORY | TRN_ID | TRN_VALUE"
-  menu="gulliver/pagedTable_Options"
-  deleteRow="0"
-  width="100%"
->
-
-<TRN_CATEGORY type="text" colWidth="150">
-  <en>Category</en>
-</TRN_CATEGORY>
-
-<TRN_ID type="text" colWidth="200">
-  <en>Id</en>
-</TRN_ID>
-
-<TRN_VALUE type="text" colWidth="300">
-  <en>Value</en>
-</TRN_VALUE>
-
-<LINK type="link" colWidth="60" titleAlign="left" align="left" link='translationsEdit?id=@@TRN_CATEGORY|@@TRN_ID' >
-  <en>Edit</en>
-</LINK >
-
-<LINK2 type="link" colWidth="60" titleAlign="left" align="left" link='translationsDelete?id=@@TRN_CATEGORY|@@TRN_ID' >
-  <en>Delete</en>
-</LINK2 >
-
-</dynaForm>  
+<dynaForm name="translationsList" type="pagedtable" sql="SELECT * from TRANSLATION WHERE TRN_LANG = 'en' order by TRN_CATEGORY, TRN_ID " sqlConnection="" searchBy="TRN_CATEGORY | TRN_ID | TRN_VALUE" menu="gulliver/pagedTable_Options" deleteRow="0" width="100%">
+  <TRN_CATEGORY type="text" colWidth="150">
+    <en><![CDATA[Category]]></en>
+  </TRN_CATEGORY>
+  <TRN_ID type="text" colWidth="200">
+    <en><![CDATA[Id]]></en>
+  </TRN_ID>
+  <TRN_VALUE type="text" colWidth="300">
+    <en><![CDATA[Value]]></en>
+  </TRN_VALUE>
+  <LINK type="link" colWidth="60" titleAlign="left" align="left" link="translationsEdit?id=@@TRN_CATEGORY|@@TRN_ID">
+    <en><![CDATA[Edit]]></en>
+  </LINK>
+  <LINK2 type="link" colWidth="60" titleAlign="left" align="left" link="translationsDelete?id=@@TRN_CATEGORY|@@TRN_ID">
+    <en><![CDATA[Delete]]></en>
+  </LINK2>
+</dynaForm>

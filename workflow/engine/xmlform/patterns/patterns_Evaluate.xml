@@ -1,34 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="patterns_Evaluate" id="patterns_Evaluate" type="xmlform" width="100%" enableTemplate="1">
-
-<action type="hidden"/>
-
-<LANG type="private"/>
-
-<ROU_UID type="hidden"/>
-
-<PROCESS type="hidden"/>
-
-<TASK type="hidden"/>
-
-<ROU_TYPE_OLD type="hidden"/>
-
-<TITLE type="title" showInTable="0">
-  <en>Evaluation</en>
-</TITLE>
-
-<ROU_TYPE type="hidden"/>
-
-<GRID_EVALUATE_TYPE type="grid" xmlgrid="patterns/patterns_GridEvaluateType" addRow="1" deleteRow="1" editRow=""/>
-
-<BTN_CANCEL type="button" onclick="cancel();">
-  <en>Cancel</en>
-</BTN_CANCEL>
-
-<SAVE type="button" onclick="savePattern();">
-  <en>Save</en>
-</SAVE>
-<JS type="javascript"><![CDATA[
+  <action type="hidden"/>
+  <LANG type="private"/>
+  <ROU_UID type="hidden"/>
+  <PROCESS type="hidden"/>
+  <TASK type="hidden"/>
+  <ROU_TYPE_OLD type="hidden"/>
+  <TITLE type="title" showInTable="0">
+    <en><![CDATA[Evaluation]]></en>
+  </TITLE>
+  <ROU_TYPE type="hidden"/>
+  <GRID_EVALUATE_TYPE type="grid" xmlgrid="patterns/patterns_GridEvaluateType" addRow="1" deleteRow="1" editRow=""/>
+  <BTN_CANCEL type="button" onclick="cancel();">
+    <en><![CDATA[Cancel]]></en>
+  </BTN_CANCEL>
+  <SAVE type="button" onclick="savePattern();">
+    <en><![CDATA[Save]]></en>
+  </SAVE>
+  <JS type="javascript"><![CDATA[
 
 var _oVarsPanel_;
 var showDynaformsFormVars = function(sFieldName, sAjaxServer, sProcess, sSymbol) {
@@ -262,5 +251,4 @@ function cancel(){
 }
 
 ]]></JS>
-
-</dynaForm>  
+</dynaForm>

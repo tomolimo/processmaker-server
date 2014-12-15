@@ -91,6 +91,15 @@ class GroupUser extends BaseGroupUser
                 $oConnection->begin();
                 $iResult = $oGroupUser->delete();
                 $oConnection->commit();
+
+                $oGrpwf = new Groupwf();
+                $grpName = $oGrpwf->loadByGroupUid($sGrpUid);
+
+                $oUsr = new Users();
+                $usrName = $oUsr->load($sUserUid);
+                
+                G::auditLog("AssignUserToGroup", "Remove user: ".$usrName['USR_USERNAME'] ." (".$sUserUid.") from group ".$grpName['CON_VALUE']." (".$sGrpUid.") ");
+
                 return $iResult;
             } else {
                 throw (new Exception( 'This row doesn\'t exist!' ));

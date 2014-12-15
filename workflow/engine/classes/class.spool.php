@@ -184,16 +184,18 @@ class spoolRun
         $aConfig['MESS_PASSWORD'] = $passwd;
 
         // Validating authorization flag
-        if (isset($aConfig['MESS_RAUTH'])) {
-            if ($aConfig['MESS_RAUTH'] == false || (is_string($aConfig['MESS_RAUTH']) && $aConfig['MESS_RAUTH'] == 'false')) {
-                $aConfig['MESS_RAUTH'] = 0;
-            } else {
-                $aConfig['MESS_RAUTH'] = 1;
-            }
-        } else {
-            $aConfig['MESS_RAUTH'] = 0;
+        if(!isset($aConfig['SMTPAuth'])){
+	        if (isset($aConfig['MESS_RAUTH'])) {
+	            if ($aConfig['MESS_RAUTH'] == false || (is_string($aConfig['MESS_RAUTH']) && $aConfig['MESS_RAUTH'] == 'false')) {
+	                $aConfig['MESS_RAUTH'] = 0;
+	            } else {
+	                $aConfig['MESS_RAUTH'] = 1;
+	            }
+	        } else {
+	            $aConfig['MESS_RAUTH'] = 0;
+	        }
+	        $aConfig['SMTPAuth'] = $aConfig['MESS_RAUTH'];
         }
-        $aConfig['SMTPAuth'] = $aConfig['MESS_RAUTH'];
 
         // Validating for old configurations
         if (!isset($aConfig['MESS_FROM_NAME'])) {
@@ -588,6 +590,10 @@ class spoolRun
             G::LoadClass('system');
         }
         $aConfiguration = System::getEmailConfiguration();
+
+        if (!isset($aConfiguration["MESS_ENABLED"])) {
+            $aConfiguration["MESS_ENABLED"] = '0';
+        }
 
         if ($aConfiguration["MESS_ENABLED"] == "1") {
             require_once ("classes/model/AppMessage.php");

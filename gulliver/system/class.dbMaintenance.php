@@ -489,6 +489,12 @@ class DataBaseMaintenance
      */
     function backupDataBase ($outfile)
     {
+        $tablesBpmn = array(
+            'BPMN_PROJECT','BPMN_DIAGRAM','BPMN_DOCUMENTATION','BPMN_EXTENSION','BPMN_PARTICIPANT',
+            'BPMN_PROCESS','BPMN_ACTIVITY','BPMN_ARTIFACT','BPMN_DATA','BPMN_EVENT','BPMN_GATEWAY',
+            'BPMN_LANESET','BPMN_BOUND','BPMN_FLOW','BPMN_LANE'
+        );
+        $sqlTablesBpmn = array();
         $aTables = $this->getTablesList();
         $ws = explode( '_', $this->dbName );
         $ws = isset( $ws[1] ) ? $ws[1] : $this->dbName;
@@ -510,8 +516,18 @@ class DataBaseMaintenance
             $tableSchema = "\nDROP TABLE IF EXISTS `$table`;\n\n";
             $tableSchema .= $this->getSchemaFromTable( $table );
             $data = $this->dumpSqlInserts( $table );
-            fwrite( $file, $tableSchema );
-            fwrite( $file, $data );
+            if (in_array($table, $tablesBpmn)) {
+                $sqlTablesBpmn[$table] = $tableSchema . $data;
+            } else {
+                fwrite( $file, $tableSchema );
+                fwrite( $file, $data );
+            }
+        }
+        
+        if (count ($sqlTablesBpmn) > 0) {
+            foreach ($tablesBpmn as $table) {
+                fwrite( $file, $sqlTablesBpmn[$table] );
+            }
         }
 
         fclose( $file );
@@ -608,7 +624,7 @@ class DataBaseMaintenance
      * @return string $tableSchema
      */
     function getSchemaFromTable ($tablename)
-    {
+    {   
         //$tableSchema = "/* Structure for table `$tablename` */\n";
         //$tableSchema .= "DROP TABLE IF EXISTS `$tablename`;\n\n";
         $tableSchema = "";

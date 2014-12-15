@@ -712,6 +712,30 @@ class Form extends XmlForm
 
     public function validateFields ($data)
     {
+        if (isset($_FILES["form"])) {
+            if (isset($_FILES["form"]["name"])) {
+                if (is_array($_FILES["form"]["name"])) {
+                    if (!isset($_POST["INPUTS"]) || !is_array($_POST["INPUTS"])) {
+                        $_POST["INPUTS"] = array();
+                    }
+                    foreach ($_FILES["form"]["name"] as $gridName => $gridFiles) {
+                        if (!isset($_POST["INPUTS"][$gridName]) || !is_array($_POST["INPUTS"][$gridName])) {
+                            if (is_array($gridFiles)) {
+                                $_POST["INPUTS"][$gridName] = array();
+                                foreach ($gridFiles as $row => $file) {
+                                    $_POST["INPUTS"][$gridName][key($file)] = '';
+                                    if (!isset($data[$gridName][$row]) || !is_array($data[$gridName][$row])) {
+                                        $data[$gridName][$row] = array();
+                                    }
+                                    $data[$gridName][$row][key($file)] = '';
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         $excludeTypes = array ("submit","file" );
 
         foreach ($this->fields as $k => $v) {
@@ -722,7 +746,7 @@ class Form extends XmlForm
                         break;
                     case "grid":
                         $i = 0;
-                        if (!is_array($data[$v->name])) {
+                        if (!isset($data[$v->name]) || !is_array($data[$v->name])) {
                             $data[$v->name] = array();
                         }
                         foreach ($data[$v->name] as $dataGrid) {
@@ -731,7 +755,7 @@ class Form extends XmlForm
                             foreach ($v->fields as $gridField) {
                                 switch ($gridField->type) {
                                     case "file":
-                                        $data[$v->name][$i][$gridField->name] = (isset( $_FILES["form"]["name"][$v->name][$i][$gridField->name] )) ? $_FILES["form"]["name"][$v->name][$i][$gridField->name] : ((isset( $gridField->falseValue )) ? $gridField->falseValue : null);
+                                        $data[$v->name][$i][$gridField->name] = isset($gridField->input) ? $gridField->input : '';
                                         break;
                                     case "checkbox":
                                         $data[$v->name][$i][$gridField->name] = (isset( $data[$v->name][$i][$gridField->name] )) ? $data[$v->name][$i][$gridField->name] : ((isset( $gridField->falseValue )) ? $gridField->falseValue : null);

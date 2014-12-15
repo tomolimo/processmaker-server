@@ -300,7 +300,7 @@ class TableMap {
 		$col = new ColumnMap($name, $this);
 
 		if ($fkTable && $fkColumn) {
-			if (substr($fkColumn, '.') > 0 && substr($fkColumn, $fkTable) !== false) {
+			if (substr_count($fkColumn, '.') > 0 && substr($fkColumn, strlen($fkTable)) !== false) {
 				$fkColumn = substr($fkColumn, strlen($fkTable) + 1);
 			}
 			$col->setForeignKey($fkTable, $fkColumn);

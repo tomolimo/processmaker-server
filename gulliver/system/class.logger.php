@@ -2,7 +2,7 @@
 
 /**
  * class.logger.php
- * Stores a message in the log file, if the file size exceeds 
+ * Stores a message in the log file, if the file size exceeds
  * specified log file is renamed and a new one is created.
  * $fileName = "filename";
  * $fileExtension = ".log";
@@ -10,7 +10,7 @@
  * $limitSize = 1000000;
  *      10000000 -> approximately 10 megabytes
  *      1000000 -> approximately 1 megabytes
- * 
+ *
  * @author Roly Rudy Gutierrez Pinto
  * @package gulliver.system
  */
@@ -46,7 +46,7 @@ class Logger
         $this->filePath = $this->path . $this->fullName;
     }
 
-    public function getSingleton($pathData, $pathSep, $file = 'cron.log')
+    public static function getSingleton($pathData, $pathSep, $file = 'cron.log')
     {
         if (self::$instance == null) {
             self::$instance = new Logger($pathData, $pathSep, $file);
@@ -103,7 +103,7 @@ class Logger
     {
         $this->renameFile();
         $file = fopen($this->filePath, "a+");
-        $message = date('Y-m-d H:i:s') . " " . $message;
+        $message = date('Y-m-d H:i:s') . " " . $message . "\n";
         fwrite($file, $message);
         fclose($file);
     }

@@ -39,6 +39,7 @@ class serverConf
     private $_aProperties = array();
     private $_aHeartbeatConfig = array();
     private $_aWSapces = array();
+    private $_auditLogConfig = array();
     private $aWSinfo = array();
     private $pluginsA = array();
     private $errors = array();
@@ -75,7 +76,7 @@ class serverConf
      *
      * @return object
      */
-    public function &getSingleton()
+    public static function &getSingleton()
     {
         if (self::$instance == null) {
             self::$instance = new serverConf();
@@ -465,10 +466,55 @@ class serverConf
         }
     }
 
+    /**
+     * With this is possible to save a property that will be saved in the properties
+     * array of this class.
+     *
+     * @param string $propertyName
+     * @param string $propertyValue
+     * @param string $workspace
+     */
+    public function setAuditLogProperty($propertyName, $propertyValue, $workspace)
+    {
+        $this->_auditLogConfig[$workspace][$propertyName] = $propertyValue;
+        $this->saveSingleton();
+    }
+
+    /**
+     * To unset a defined property.
+     * If it doesn't exist then it does nothing.
+     *
+     * @param string $propertyName
+     * @param string $workspace
+     * @return void
+     */
+    public function unsetAuditLogProperty($propertyName, $workspace)
+    {
+        if (isset($this->_auditLogConfig[$workspace][$propertyName])) {
+            unset($this->_auditLogConfig[$workspace][$propertyName]);
+        }
+        $this->saveSingleton();
+    }
+
+    /**
+     * Returns the value of a defined property.
+     * If it doesn't exist then returns null
+     *
+     * @param string $propertyName
+     * @return string/null
+     */
+    public function getAuditLogProperty($propertyName, $workspace)
+    {
+        if (isset($this->_auditLogConfig[$workspace][$propertyName])) {
+            return $this->_auditLogConfig[$workspace][$propertyName];
+        } else {
+            return null;
+        }
+    }
+
     public function isRtl($lang = SYS_LANG)
     {
         $lang = substr($lang, 0, 2);
         return in_array($lang, $this->rtlLang);
     }
 }
- 

@@ -1,72 +1,77 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="cases_List" type="filterform" sqlConnection="" menu="cases/cases_Options" filterForm="cases/cases_List" searchBy="APPLICATION.APP_NUMBER | APP_TITLE.CON_VALUE | TAS_TITLE.CON_VALUE | PRO_TITLE.CON_VALUE " width="100%">
-<cases_Open type="private" defaultValue="cases_Open" showInTable="0"/>
-<APP_UID type="private" showInTable="0"/>
-<DEL_INDEX type="private" showInTable="0"/>
-<MARK type="cellMark" className="cellSelected1" classNameAlt="cellSelected2" condition="&#039;@#DEL_INIT_DATE&#039;==&#039;&#039;"/>
-
-<APP_NUMBER type="text" colWidth="50" titleAlign="left" align="left" dataCompareField="APP_NUMBER" dataCompareType="=">
-  <en>#</en>
-<es>#</es><pt>#</pt></APP_NUMBER>
-
-<APP_TITLE type="text" value="@#APP_TITLE" link="@G::encryptlink(@#cases_Open)?APP_UID=@#APP_UID&amp;DEL_INDEX=@#DEL_INDEX" colWidth="100" titleAlign="left" align="left" dataCompareField="APP_TITLE.CON_VALUE" dataCompareType="contains" enableHtml="1">
-  <en>Case</en>
-<es>Caso</es><pt>Caso</pt></APP_TITLE>
-
-<APP_TAS_TITLE type="text" value="@#APP_TAS_TITLE" link="@G::encryptlink(@#cases_Open)?APP_UID=@#APP_UID&amp;DEL_INDEX=@#DEL_INDEX" colWidth="130" titleAlign="left" align="left" dataCompareField="TAS_TITLE.CON_VALUE" dataCompareType="contains">
-  <en>Task</en>
-<es>Tarea</es><pt>Tarefa</pt></APP_TAS_TITLE>
-
-<APP_PRO_TITLE type="text" colWidth="180" titleAlign="left" align="left" dataCompareField="PRO_TITLE.CON_VALUE" dataCompareType="contains">
-  <en>Process</en>
-<es>Proceso</es><pt>Processo</pt></APP_PRO_TITLE>
-
-<APP_CURRENT_USER type="text" colWidth="120" titleAlign="left" align="left" dataCompareField="USER.USR_USERNAME" dataCompareType="contains">
-  <en>Current User</en>
-<es>Usuario Actual</es><pt><![CDATA[Usuário Corrente]]></pt></APP_CURRENT_USER>
-
-<APP_DEL_PREVIOUS_USER type="text" colWidth="120" titleAlign="left" align="left" dataCompareField="APP_LAST_USER.USR_USERNAME" dataCompareType="contains">
-  <en>Sent by</en>
-<es>Enviado por</es><pt>Enviado por</pt></APP_DEL_PREVIOUS_USER>
-
-<DEL_TASK_DUE_DATE type="text" showInTable="0" rows="3" cols="32" colWidth="120" titleAlign="left" align="left" dataCompareField="APP_DELEGATION.DEL_TASK_DUE_DATE" dataCompareType="contains" enableHtml="1">
-  <en>Due Date</en>
-<es>Fecha de vencimiento</es><pt>Data-limite</pt></DEL_TASK_DUE_DATE>
-
-<APP_UPDATE_DATE type="text" rows="3" cols="32" colWidth="120" titleAlign="left" align="left" dataCompareField="APPLICATION.APP_UPDATE_DATE" dataCompareType="contains" enableHtml="1">
-  <en>Last Modify</en>
-<es><![CDATA[Última Modificación]]></es><pt><![CDATA[Última Alteração]]></pt></APP_UPDATE_DATE>
-
-<DEL_INIT_DATE type="text" showInTable="0" rows="3" cols="32" colWidth="120" titleAlign="left" align="left" dataCompareField="APPLICATION.APP_UPDATE_DATE" dataCompareType="contains" enableHtml="1">
-  <en>Start Date</en>
-<es>Fechas inicial del caso</es><pt>Data Inicial</pt></DEL_INIT_DATE>
-
-<DEL_FINISH_DATE type="text" showInTable="0" rows="3" cols="32" colWidth="120" titleAlign="left" align="left" dataCompareField="APPLICATION.APP_UPDATE_DATE" dataCompareType="contains" enableHtml="1">
- <en>Finish Date</en>
-<es>Fecha final</es><pt>Data Final</pt></DEL_FINISH_DATE>
-
-
-<APP_STATUS type="dropdown">
-  <en>Status<option name="DRAFT">Draft</option><option name="TO_DO">To Do</option><option name="CANCELLED">Cancelled</option><option name="COMPLETED">Completed</option></en>
-<es>Estado<option name="DRAFT">Borrador</option><option name="TO_DO">Pendientes</option><option name="CANCELLED">Cancelado</option><option name="COMPLETED">Completado</option></es><pt>Estado<option name="DRAFT">Rascunho</option><option name="TO_DO">A Fazer</option><option name="CANCELLED">Cancelado</option><option name="COMPLETED">Completado</option></pt></APP_STATUS>
-
-
-<MARK2 type="cellMark" className="RowLink1" classNameAlt="RowLink2" defaultValue="1"/>
-
-
-<OPEN type="link" value="@G::LoadTranslation(ID_OPEN)" link="@G::encryptlink(@#cases_Open)?APP_UID=@#APP_UID&amp;DEL_INDEX=@#DEL_INDEX" colWidth="40" titleAlign="left" align="left" dataCompareField="APP_TITLE.CON_VALUE" dataCompareType="contains">
-  <en/>
-</OPEN>
-
-<SEARCH type="button" onclick="pagedTableFilter( this.form );" showInTable="0">
-  <en>Apply Filter</en>
-<es>Aplicar Filtro</es><pt>Aplicar Filtro</pt></SEARCH>
-
-<PAGED_TABLE_ID type="private" showInTable="0"/>
-
-<JSFILTER type="javascript" replaceTags="1" showInTable="0">
+  <cases_Open type="private" defaultValue="cases_Open" showInTable="0"/>
+  <APP_UID type="private" showInTable="0"/>
+  <DEL_INDEX type="private" showInTable="0"/>
+  <MARK type="cellMark" className="cellSelected1" classNameAlt="cellSelected2" condition="'@#DEL_INIT_DATE'==''"/>
+  <APP_NUMBER type="text" colWidth="50" titleAlign="left" align="left" dataCompareField="APP_NUMBER" dataCompareType="=">
+    <en><![CDATA[#]]></en>
+    <es>#</es>
+    <pt>#</pt>
+  </APP_NUMBER>
+  <APP_TITLE type="text" value="@#APP_TITLE" link="@G::encryptlink(@#cases_Open)?APP_UID=@#APP_UID&amp;DEL_INDEX=@#DEL_INDEX" colWidth="100" titleAlign="left" align="left" dataCompareField="APP_TITLE.CON_VALUE" dataCompareType="contains" enableHtml="1">
+    <en><![CDATA[Case]]></en>
+    <es>Caso</es>
+    <pt>Caso</pt>
+  </APP_TITLE>
+  <APP_TAS_TITLE type="text" value="@#APP_TAS_TITLE" link="@G::encryptlink(@#cases_Open)?APP_UID=@#APP_UID&amp;DEL_INDEX=@#DEL_INDEX" colWidth="130" titleAlign="left" align="left" dataCompareField="TAS_TITLE.CON_VALUE" dataCompareType="contains">
+    <en><![CDATA[Task]]></en>
+    <es>Tarea</es>
+    <pt>Tarefa</pt>
+  </APP_TAS_TITLE>
+  <APP_PRO_TITLE type="text" colWidth="180" titleAlign="left" align="left" dataCompareField="PRO_TITLE.CON_VALUE" dataCompareType="contains">
+    <en><![CDATA[Process]]></en>
+    <es>Proceso</es>
+    <pt>Processo</pt>
+  </APP_PRO_TITLE>
+  <APP_CURRENT_USER type="text" colWidth="120" titleAlign="left" align="left" dataCompareField="USER.USR_USERNAME" dataCompareType="contains">
+    <en><![CDATA[Current User]]></en>
+    <es>Usuario Actual</es>
+    <pt><![CDATA[Usuário Corrente]]></pt>
+  </APP_CURRENT_USER>
+  <APP_DEL_PREVIOUS_USER type="text" colWidth="120" titleAlign="left" align="left" dataCompareField="APP_LAST_USER.USR_USERNAME" dataCompareType="contains">
+    <en><![CDATA[Sent by]]></en>
+    <es>Enviado por</es>
+    <pt>Enviado por</pt>
+  </APP_DEL_PREVIOUS_USER>
+  <DEL_TASK_DUE_DATE type="text" showInTable="0" rows="3" cols="32" colWidth="120" titleAlign="left" align="left" dataCompareField="APP_DELEGATION.DEL_TASK_DUE_DATE" dataCompareType="contains" enableHtml="1">
+    <en><![CDATA[Due Date]]></en>
+    <es>Fecha de vencimiento</es>
+    <pt>Data-limite</pt>
+  </DEL_TASK_DUE_DATE>
+  <APP_UPDATE_DATE type="text" rows="3" cols="32" colWidth="120" titleAlign="left" align="left" dataCompareField="APPLICATION.APP_UPDATE_DATE" dataCompareType="contains" enableHtml="1">
+    <en><![CDATA[Last Modify]]></en>
+    <es><![CDATA[Última Modificación]]></es>
+    <pt><![CDATA[Última Alteração]]></pt>
+  </APP_UPDATE_DATE>
+  <DEL_INIT_DATE type="text" showInTable="0" rows="3" cols="32" colWidth="120" titleAlign="left" align="left" dataCompareField="APPLICATION.APP_UPDATE_DATE" dataCompareType="contains" enableHtml="1">
+    <en><![CDATA[Start Date]]></en>
+    <es>Fechas inicial del caso</es>
+    <pt>Data Inicial</pt>
+  </DEL_INIT_DATE>
+  <DEL_FINISH_DATE type="text" showInTable="0" rows="3" cols="32" colWidth="120" titleAlign="left" align="left" dataCompareField="APPLICATION.APP_UPDATE_DATE" dataCompareType="contains" enableHtml="1">
+    <en><![CDATA[Finish Date]]></en>
+    <es>Fecha final</es>
+    <pt>Data Final</pt>
+  </DEL_FINISH_DATE>
+  <APP_STATUS type="dropdown">
+    <en><![CDATA[Status]]><option name="DRAFT"><![CDATA[Draft]]></option><option name="TO_DO"><![CDATA[To Do]]></option><option name="CANCELLED"><![CDATA[Cancelled]]></option><option name="COMPLETED"><![CDATA[Completed]]></option></en>
+    <es>Estado<option name="DRAFT">Borrador</option><option name="TO_DO">Pendientes</option><option name="CANCELLED">Cancelado</option><option name="COMPLETED">Completado</option></es>
+    <pt>Estado<option name="DRAFT">Rascunho</option><option name="TO_DO">A Fazer</option><option name="CANCELLED">Cancelado</option><option name="COMPLETED">Completado</option></pt>
+  </APP_STATUS>
+  <MARK2 type="cellMark" className="RowLink1" classNameAlt="RowLink2" defaultValue="1"/>
+  <OPEN type="link" value="@G::LoadTranslation(ID_OPEN)" link="@G::encryptlink(@#cases_Open)?APP_UID=@#APP_UID&amp;DEL_INDEX=@#DEL_INDEX" colWidth="40" titleAlign="left" align="left" dataCompareField="APP_TITLE.CON_VALUE" dataCompareType="contains">
+    <en><![CDATA[]]></en>
+  </OPEN>
+  <SEARCH type="button" onclick="pagedTableFilter( this.form );" showInTable="0">
+    <en><![CDATA[Apply Filter]]></en>
+    <es>Aplicar Filtro</es>
+    <pt>Aplicar Filtro</pt>
+  </SEARCH>
+  <PAGED_TABLE_ID type="private" showInTable="0"/>
+  <JSFILTER type="javascript" replaceTags="1" showInTable="0">
 function pagedTableFilter( form ) {
   @#PAGED_TABLE_ID.doFilter( form );
 }
 </JSFILTER>
-</dynaForm>   
+</dynaForm>

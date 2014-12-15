@@ -1,21 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="xmlmenu">
-
-<MNU_NEWEMPTY type="link" value="" link="#" onclick="showCreateEmptyOptions(event, @QMAIN_DIRECTORY);return false;" colAlign="left" colWidth="100">
-	<en>New</en>
-</MNU_NEWEMPTY>
-
-<MNU_UPLOAD type="link" value="" link="#" onclick="uploadFilesScreen(@QPRO_UID, @QMAIN_DIRECTORY, @QCURRENT_DIRECTORY);return false;" colAlign="left" colWidth="100">
-  <en>Upload</en>
-</MNU_UPLOAD>
-
-<PRO_UID type="private"/>
-
-<MAIN_DIRECTORY type="private"/>
-
-<CURRENT_DIRECTORY type="private"/>
-
-<JS type="javascript"><![CDATA[
+  <MNU_NEWEMPTY type="link" value="" link="#" onclick="showCreateEmptyOptions(event, @QMAIN_DIRECTORY);return false;" colAlign="left" colWidth="100">
+    <en><![CDATA[New]]></en>
+  </MNU_NEWEMPTY>
+  <MNU_UPLOAD type="link" value="" link="#" onclick="uploadFilesScreen(@QPRO_UID, @QMAIN_DIRECTORY, @QCURRENT_DIRECTORY);return false;" colAlign="left" colWidth="100">
+    <en><![CDATA[Upload]]></en>
+  </MNU_UPLOAD>
+  <PRO_UID type="private"/>
+  <MAIN_DIRECTORY type="private"/>
+  <CURRENT_DIRECTORY type="private"/>
+  <JS type="javascript"><![CDATA[
 
 var CURRENT_PRO_UID = @QPRO_UID;
 var CURRENT_MAIN_DIRECTORY;
@@ -202,6 +196,4 @@ function xReaload(){
 
 
 ]]></JS>
-
 </dynaForm>
-

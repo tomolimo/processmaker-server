@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="processes_Export" type="xmlform" width="100%" labelWidth="130px">
-<FILENAME type="phpVariable"/>
-<FILENAME_LINK type="phpVariable"/>
-<FILENAME_LABEL type="link" value="@#FILENAME" link="@#FILENAME_LINK" target="_blank">
-  <en>File</en>
-</FILENAME_LABEL>
-<SIZE type="caption">
-  <en>File size</en>
-</SIZE>
-<META type="textarea" required="0" readonly="0" rows="14" cols="82" mode="view">
-  <en>Summary</en>
-</META>
-</dynaForm> 
+  <FILENAME type="phpVariable"/>
+  <FILENAME_LINK type="phpVariable"/>
+  <FILENAME_LABEL type="link" value="@#FILENAME" link="@#FILENAME_LINK" target="_blank">
+    <en><![CDATA[File]]></en>
+  </FILENAME_LABEL>
+  <SIZE type="caption">
+    <en><![CDATA[File size]]></en>
+  </SIZE>
+  <META type="textarea" required="0" readonly="0" rows="14" cols="82" mode="view">
+    <en><![CDATA[Summary]]></en>
+  </META>
+</dynaForm>

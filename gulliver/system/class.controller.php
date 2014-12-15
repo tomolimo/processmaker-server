@@ -129,20 +129,17 @@ class Controller
                 print G::json_encode( $result );
             }
         } catch (Exception $e) {
+            $result = new StdClass();
             if ($this->responseType != 'json') {
-                $result->exception->class = get_class( $e );
-                $result->exception->code = $e->getCode();
-
-                $template = new TemplatePower( PATH_TEMPLATE . 'controller.exception.tpl' );
-                $template->prepare();
-                $template->assign( 'controller', (function_exists( 'get_called_class' ) ? get_called_class() : 'Controller') );
-                $template->assign( 'message', $e->getMessage() );
-                $template->assign( 'file', $e->getFile() );
-                $template->assign( 'line', $e->getLine() );
-                $template->assign( 'trace', $e->getTraceAsString() );
-
-                echo $template->getOutputContent();
-
+                Bootstrap::renderTemplate('controller.exception.tpl', array(
+                    'title' => 'Controller Exception',
+                    'message' => nl2br($e->getMessage()),
+                    'controller' => (function_exists( 'get_called_class' ) ? get_called_class() : 'Controller'),
+                    'exceptionClass' => get_class($e),
+                    'file' => $e->getFile(),
+                    'line' => $e->getLine(),
+                    'trace' => $e->getTrace()
+                ));
             } else {
                 $result->success = false;
                 $result->msg = $e->getMessage();

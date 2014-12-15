@@ -1,21 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="dynaforms_Edit" type="xmlform" width="98%" labelWidth="400px">
-
-<STEP_UID type="hidden" showInTable="0"/>
-
-<PRO_UID type="hidden" showInTable="0"/>
-
-<TAS_UID type="hidden" showInTable="0"/>
-
-<STEP_CONDITION type="textareapm" cols="50" rows="5" showVars="1" process="@#PRO_UID">
-  <en>Condition</en>
-</STEP_CONDITION>
-
-<ACCEPT type="button" onclick="saveCondition(this.form);">
-  <en>Save</en>
-</ACCEPT>
-
-<JS type="JavaScript"><![CDATA[
+  <STEP_UID type="hidden" showInTable="0"/>
+  <PRO_UID type="hidden" showInTable="0"/>
+  <TAS_UID type="hidden" showInTable="0"/>
+  <STEP_CONDITION type="textareapm" cols="50" rows="5" showVars="1" process="@#PRO_UID">
+    <en><![CDATA[Condition]]></en>
+  </STEP_CONDITION>
+  <ACCEPT type="button" onclick="saveCondition(this.form);">
+    <en><![CDATA[Save]]></en>
+  </ACCEPT>
+  <JS type="JavaScript"><![CDATA[
 
 var _oVarsPanel_;
 var showDynaformsFormVars = function(sFieldName, sAjaxServer, sProcess, sSymbol) {
@@ -70,5 +64,4 @@ var insertFormVar = function(sFieldName, sValue) {
 };
 
 ]]></JS>
-
 </dynaForm>

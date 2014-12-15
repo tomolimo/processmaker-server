@@ -1,29 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="processes_Edit" width="500px" labelWidth="200px" mode="edit" enableTemplate="0">
-
-<menuUser type="xmlmenu" xmlfile="processes/processes_NewOptions">
-  <en/>
-</menuUser>
-
-<TITLE1 type="title" group="1">
-  <en>Process Information</en>
-</TITLE1>
-
-<PRO_TITLE type="text" size="35" maxlength="255" defaultvalue="" required="0" group="1" dependentfields="" linkfield="" strto="" readonly="0" noshowingrid="0" readonlyingrid="0" totalizeable="0" sqlconnection="">
-  <en>Title</en>
-</PRO_TITLE>
-
-<PRO_DESCRIPTION type="textarea" cols="60" rows="5">
-  <en>Description</en>
-</PRO_DESCRIPTION>
-
-<SUBMIT type="button" onclick="verifyProcessInformation(this.form);" group="1">
-  <en>Save</en>
-</SUBMIT>
-
-<MESSAGE1 type="phpvariable"/>
-
-<JS type="javascript" replacetags="1"><![CDATA[
+  <menuUser type="xmlmenu" xmlfile="processes/processes_NewOptions">
+    <en/>
+  </menuUser>
+  <TITLE1 type="title" group="1">
+    <en><![CDATA[Process Information]]></en>
+  </TITLE1>
+  <PRO_TITLE type="text" size="35" maxlength="255" defaultvalue="" required="0" group="1" dependentfields="" linkfield="" strto="" readonly="0" noshowingrid="0" readonlyingrid="0" totalizeable="0" sqlconnection="">
+    <en><![CDATA[Title]]></en>
+  </PRO_TITLE>
+  <PRO_DESCRIPTION type="textarea" cols="60" rows="5">
+    <en><![CDATA[Description]]></en>
+  </PRO_DESCRIPTION>
+  <SUBMIT type="button" onclick="verifyProcessInformation(this.form);" group="1">
+    <en><![CDATA[Save]]></en>
+  </SUBMIT>
+  <MESSAGE1 type="phpvariable"/>
+  <JS type="javascript" replacetags="1"><![CDATA[
 
 var verifyProcessInformation = function(oForm)
 {
@@ -42,5 +35,4 @@ var verifyProcessInformation = function(oForm)
 	}
 };
 ]]></JS>
-
-</dynaForm> 
+</dynaForm>

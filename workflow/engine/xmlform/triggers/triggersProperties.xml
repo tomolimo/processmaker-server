@@ -3,21 +3,21 @@
   <PRO_UID type="hidden"/>
   <FIELDS_REQUIRED type="hidden"/>
   <TITLE type="title" group="1">
-    <en>Trigger Information</en>
+    <en><![CDATA[Trigger Information]]></en>
   </TITLE>
   <TRI_UID type="hidden"/>
   <TRI_TITLE type="text" size="80" maxlength="100">
-    <en>Title</en>
+    <en><![CDATA[Title]]></en>
   </TRI_TITLE>
   <TRI_TYPE type="hidden"/>
   <TRI_DESCRIPTION type="textarea" rows="8" cols="77">
-    <en>Description</en>
+    <en><![CDATA[Description]]></en>
   </TRI_DESCRIPTION>
   <BTN_CANCEL type="button" onclick="cancel();">
-    <en>Cancel</en>
+    <en><![CDATA[Cancel]]></en>
   </BTN_CANCEL>
   <SAVE type="button" onclick="triggerSave1(this.form);">
-    <en>Save</en>
+    <en><![CDATA[Save]]></en>
   </SAVE>
   <JS type="JavaScript"><![CDATA[
 

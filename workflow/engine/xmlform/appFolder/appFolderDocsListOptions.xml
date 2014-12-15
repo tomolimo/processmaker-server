@@ -1,27 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="xmlmenu">
-
-<PRO_UID type="private"/>
-<DOC_UID type="private"/>
-<folderID type="private"/>
-<labelFolderAddFolder type="private"/>
-<labelFolderAddFile type="private"/>
-
-<upload_New type="private" defaultValue="javascript:uploadExternalDocument(&#039;@#folderID&#039;);"/>
-<folder_New type="private" defaultValue="javascript:newFolder(&#039;@#folderID&#039;);"/>
-<PAGED_TABLE_ID type="private"/>
-
-
-<MNU_NEW type="link" label="@#labelFolderAddFolder" value="" link="@G::encryptLink(@#folder_New)" colAlign="left" colWidth="85">
-  
-<en>@#labelFolderAddFolder</en></MNU_NEW>
-<MNU_NEW1 type="link" label="@#labelFolderAddFile" value="" link="@G::encryptLink(@#upload_New)" colAlign="left" colWidth="85">
-  
-<en>@#labelFolderAddFile</en></MNU_NEW1>
-
-<PAGED_TABLE_FAST_SEARCH type="FastSearch" label=""/>
-<MNU_FAST_SEARCH type="button" label="@G::LoadTranslation(ID_SEARCH)" colAlign="right" colWidth="50" onclick="getPMFolderSearchResult(getField(&#039;PAGED_TABLE_FAST_SEARCH&#039;,this.form).value,&#039;ALL&#039;);"/>
-
-<PAGED_TABLE_ID type="private"/>
-
+  <PRO_UID type="private"/>
+  <DOC_UID type="private"/>
+  <folderID type="private"/>
+  <labelFolderAddFolder type="private"/>
+  <labelFolderAddFile type="private"/>
+  <upload_New type="private" defaultValue="javascript:uploadExternalDocument('@#folderID');"/>
+  <folder_New type="private" defaultValue="javascript:newFolder('@#folderID');"/>
+  <PAGED_TABLE_ID type="private"/>
+  <MNU_NEW type="link" label="@#labelFolderAddFolder" value="" link="@G::encryptLink(@#folder_New)" colAlign="left" colWidth="85">
+    <en><![CDATA[@#labelFolderAddFolder]]></en>
+  </MNU_NEW>
+  <MNU_NEW1 type="link" label="@#labelFolderAddFile" value="" link="@G::encryptLink(@#upload_New)" colAlign="left" colWidth="85">
+    <en><![CDATA[@#labelFolderAddFile]]></en>
+  </MNU_NEW1>
+  <PAGED_TABLE_FAST_SEARCH type="FastSearch" label=""/>
+  <MNU_FAST_SEARCH type="button" label="@G::LoadTranslation(ID_SEARCH)" colAlign="right" colWidth="50" onclick="getPMFolderSearchResult(getField('PAGED_TABLE_FAST_SEARCH',this.form).value,'ALL');"/>
+  <PAGED_TABLE_ID type="private"/>
 </dynaForm>

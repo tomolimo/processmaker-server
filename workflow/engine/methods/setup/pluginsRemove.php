@@ -49,6 +49,6 @@ if (file_exists( PATH_PLUGINS . $pluginName . ".php" )) {
 
     $pluginRegistry->unSerializeInstance( file_get_contents( PATH_DATA_SITE . "plugin.singleton" ) );
 }
-
+G::auditLog("RemovePlugin","Plugin Name: ".$pluginName);
 echo $pluginName . " " . nl2br( G::LoadTranslation( "ID_MSG_REMOVE_PLUGIN_SUCCESS" ) );
 

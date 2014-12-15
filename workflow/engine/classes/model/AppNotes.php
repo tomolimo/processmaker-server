@@ -15,12 +15,17 @@
  */
 class AppNotes extends BaseAppNotes
 {
-    public function getNotesList ($appUid, $usrUid = '', $start = '', $limit = '')
+    public function getNotesList (
+        $appUid,
+        $usrUid = '',
+        $start = '',
+        $limit = 25,
+        $sort = 'APP_NOTES.NOTE_DATE',
+        $dir = 'DESC',
+        $dateFrom = '',
+        $dateTo = '',
+        $search = '')
     {
-        require_once ("classes/model/Users.php");
-
-        G::LoadClass( 'ArrayPeer' );
-
         $Criteria = new Criteria( 'workflow' );
         $Criteria->clearSelectColumns();
 
@@ -41,13 +46,26 @@ class AppNotes extends BaseAppNotes
 
         $Criteria->addJoin( AppNotesPeer::USR_UID, UsersPeer::USR_UID, Criteria::LEFT_JOIN );
 
-        $Criteria->add( appNotesPeer::APP_UID, $appUid, CRITERIA::EQUAL );
+        $Criteria->add( AppNotesPeer::APP_UID, $appUid, Criteria::EQUAL );
 
         if ($usrUid != '') {
-            $Criteria->add( appNotesPeer::USR_UID, $usrUid, CRITERIA::EQUAL );
+            $Criteria->add( AppNotesPeer::USR_UID, $usrUid, Criteria::EQUAL );
+        }
+        if ($dateFrom != '') {
+            $Criteria->add( AppNotesPeer::NOTE_DATE, $dateFrom, Criteria::GREATER_EQUAL );
+        }
+        if ($dateTo != '') {
+            $Criteria->add( AppNotesPeer::NOTE_DATE, $dateTo, Criteria::LESS_EQUAL );
+        }
+        if ($search != '') {
+            $Criteria->add( AppNotesPeer::NOTE_CONTENT, '%'.$search.'%', Criteria::LIKE );
         }
 
-        $Criteria->addDescendingOrderByColumn( AppNotesPeer::NOTE_DATE );
+        if ($dir == 'DESC') {
+            $Criteria->addDescendingOrderByColumn($sort);
+        } else {
+            $Criteria->addAscendingOrderByColumn($sort);
+        }
 
         $response = array ();
         $totalCount = AppNotesPeer::doCount( $Criteria );

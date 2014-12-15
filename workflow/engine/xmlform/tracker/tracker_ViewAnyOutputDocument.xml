@@ -1,28 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="tracker_ViewAnyOutputDocument" type="xmlform" width="100%" labelWidth="">
-
-<OUT_DOC_TITLE type="caption">
-  <en>Output document</en>
-</OUT_DOC_TITLE>
-
-
-
-<APP_DOC_CREATE_DATE type="caption">
-  <en>Create Date</en>
-</APP_DOC_CREATE_DATE>
-
-<VIEW type="phpVariable"/>
-
-<FILE1 type="phpVariable"/>
-
-<FILE2 type="phpVariable"/>
-
-<APP_DOC_FILENAME1 type="link" value="@#VIEW" link="@#FILE1" target="_blank">
-  <en>File (.doc)</en>
-</APP_DOC_FILENAME1>
-
-<APP_DOC_FILENAME2 type="link" value="@#VIEW" link="@#FILE2" target="_blank">
-  <en>File (.pdf)</en>
-</APP_DOC_FILENAME2>
-
+  <OUT_DOC_TITLE type="caption">
+    <en><![CDATA[Output document]]></en>
+  </OUT_DOC_TITLE>
+  <APP_DOC_CREATE_DATE type="caption">
+    <en><![CDATA[Create Date]]></en>
+  </APP_DOC_CREATE_DATE>
+  <VIEW type="phpVariable"/>
+  <FILE1 type="phpVariable"/>
+  <FILE2 type="phpVariable"/>
+  <APP_DOC_FILENAME1 type="link" value="@#VIEW" link="@#FILE1" target="_blank">
+    <en><![CDATA[File (.doc)]]></en>
+  </APP_DOC_FILENAME1>
+  <APP_DOC_FILENAME2 type="link" value="@#VIEW" link="@#FILE2" target="_blank">
+    <en><![CDATA[File (.pdf)]]></en>
+  </APP_DOC_FILENAME2>
 </dynaForm>

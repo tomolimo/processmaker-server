@@ -460,15 +460,7 @@ Ext.onReady(function(){
 	});
 
 	smodelU = new Ext.grid.RowSelectionModel({
-		selectSingle: false,
-		listeners:{
-			selectionchange: function(sm){
-    			switch(sm.getCount()){
-    			case 0: Ext.getCmp('removeUButton').disable(); break;
-    			default: Ext.getCmp('removeUButton').enable(); break;
-    			}
-    		}
-		}
+		selectSingle: false
 	});
 
 	searchTextU = new Ext.form.TextField ({
@@ -542,30 +534,27 @@ Ext.onReady(function(){
     });
 
     assignedUGrid = new Ext.grid.GridPanel({
-	    layout			: 'fit',
-	    title			: _('ID_ASSIGNED_USERS'),
-		ddGroup         : 'availableUGridDDGroup',
+        layout          : 'fit',
+        title           : _('ID_ASSIGNED_USERS'),
+        ddGroup         : 'availableUGridDDGroup',
         store           : storeU,
-        cm          	: cmodelU,
-        sm				: smodelU,
-        enableDragDrop  : true,
+        cm              : cmodelU,
+        sm              : smodelU,
+        enableDragDrop  : false,
         stripeRows      : true,
         autoExpandColumn: 'USR_USERNAME',
-        iconCls			: 'icon-grid',
-        id				: 'assignedUGrid',
-    	height			: 100,
-    	autoWidth 		: true,
-    	stateful 		: true,
-    	stateId 		: 'gridUserPermissionAssigned2',
-    	enableColumnResize : true,
-    	enableHdMenu	: true,
-    	frame			: false,
-    	columnLines		: false,
-    	viewConfig		: {forceFit:true},
-        tbar: [editPermissionsUButton,{xtype: 'tbfill'},'-',searchTextX, clearTextButtonX],
-        //bbar: [{xtype: 'tbfill'},removeUAllButton],
-    	listeners: {rowdblclick: function(){
-  	      (availableUGrid.hidden)? DoNothing() : RemoveUserAction();}}
+        iconCls         : 'icon-grid',
+        id              : 'assignedUGrid',
+        height          : 100,
+        autoWidth       : true,
+        stateful        : true,
+        stateId         : 'gridUserPermissionAssigned2',
+        enableColumnResize : true,
+        enableHdMenu    : true,
+        frame           : false,
+        columnLines     : false,
+        viewConfig      : {forceFit:true},
+        tbar            : [editPermissionsUButton,{xtype: 'tbfill'},'-',searchTextX, clearTextButtonX]
     });
 
     buttonsUPanel = new Ext.Panel({
@@ -579,9 +568,7 @@ Ext.onReady(function(){
         defaults:{margins:'0 0 35 0'},
         items:[
                {xtype:'button',text: '>', handler: AssignUserAction, id: 'assignUButton', disabled: true},
-               {xtype:'button',text: '&lt;', handler: RemoveUserAction, id: 'removeUButton', disabled: true},
-               {xtype:'button',text: '>>', handler: AssignAllUsersAction, id: 'assignUButtonAll', disabled: false},
-               {xtype:'button',text: '&lt;&lt;', handler: RemoveAllUsersAction, id: 'removeUButtonAll', disabled: false}
+               {xtype:'button',text: '>>', handler: AssignAllUsersAction, id: 'assignUButtonAll', disabled: false}
                ],
         hidden: true
     });
@@ -891,16 +878,6 @@ AssignUserAction = function(){
 	SaveUsersRole(arrAux,RefreshUsers,FailureProcess);
 };
 
-//RemoveUButton Functionality
-RemoveUserAction = function(){
-	rowsSelected = assignedUGrid.getSelectionModel().getSelections();
-	var arrAux = new Array();
-	for(var a=0; a < rowsSelected.length; a++){
-		arrAux[a] = rowsSelected[a].get('USR_UID');
-	}
-	DeleteUsersRole(arrAux,RefreshUsers,FailureProcess);
-};
-
 //AssignUALLButton Functionality
 AssignAllUsersAction = function(){
 	var allRows = availableUGrid.getStore();
@@ -917,19 +894,6 @@ AssignAllUsersAction = function(){
 	            }
 			}
 		);
-	}
-};
-
-//RevomeALLButton Functionality
-RemoveAllUsersAction = function(){
-	var allRows = assignedUGrid.getStore();
-	var arrAux = new Array();
-	if (allRows.getCount()>0){
-		for (var r=0; r < allRows.getCount(); r++){
-			row = allRows.getAt(r);
-			arrAux[r] = row.data['USR_UID'];
-		}
-		DeleteUsersRole(arrAux,RefreshUsers,FailureProcess);
 	}
 };
 

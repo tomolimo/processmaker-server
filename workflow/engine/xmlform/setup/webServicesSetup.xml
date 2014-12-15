@@ -1,36 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm width="95%" enableTemplate="1">
-
-<title2 type="title">
-  <en>Client Setup</en>
-<es><![CDATA[Configuración del Cliente]]></es></title2>
-
-<WS_PROTOCOL type="dropdown" mode="edit" options="Array" sqlconnection="dbarray">
+  <title2 type="title">
+    <en><![CDATA[Client Setup]]></en>
+    <es><![CDATA[Configuración del Cliente]]></es>
+  </title2>
+  <WS_PROTOCOL type="dropdown" mode="edit" options="Array" sqlconnection="dbarray">
   select * from protocol
-  <en>Protocol</en>
+  <en><![CDATA[Protocol]]></en>
 <es>Protocolo</es></WS_PROTOCOL>
-
-<WS_HOST type="text" size="30" maxlength="64">
-  <en>Server Host</en>
-<es>Host Servidor</es></WS_HOST>
-
-<WS_WORKSPACE type="text" size="30" maxlength="64">
-  <en>Workspace</en>
-<es>Espacio de Trabajo</es></WS_WORKSPACE>
-
-<WS_PORT type="text" size="10" maxlength="64">
-  <en>Port</en>
-<es>Puerto</es></WS_PORT>
-
-<button type="submit">
-  <en>Save</en>
-<es>Guardar</es></button> 
-
-<BTN_CANCEL type="button" onclick="cancel();">
-  <en>Cancel</en>
-</BTN_CANCEL>
-
-<JS type="javascript" replacetags="1"><![CDATA[
+  <WS_HOST type="text" size="30" maxlength="64">
+    <en><![CDATA[Server Host]]></en>
+    <es>Host Servidor</es>
+  </WS_HOST>
+  <WS_WORKSPACE type="text" size="30" maxlength="64">
+    <en><![CDATA[Workspace]]></en>
+    <es>Espacio de Trabajo</es>
+  </WS_WORKSPACE>
+  <WS_PORT type="text" size="10" maxlength="64">
+    <en><![CDATA[Port]]></en>
+    <es>Puerto</es>
+  </WS_PORT>
+  <button type="submit">
+    <en><![CDATA[Save]]></en>
+    <es>Guardar</es>
+  </button>
+  <BTN_CANCEL type="button" onclick="cancel();">
+    <en><![CDATA[Cancel]]></en>
+  </BTN_CANCEL>
+  <JS type="javascript" replacetags="1"><![CDATA[
 
 function cancel(){
     currentPopupWindow.remove();
@@ -38,5 +35,4 @@ function cancel(){
 
 
 ]]></JS>
-
-</dynaForm>  
+</dynaForm>

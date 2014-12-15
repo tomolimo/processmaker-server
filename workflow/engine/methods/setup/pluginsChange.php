@@ -42,6 +42,7 @@ if ($handle = opendir( PATH_PLUGINS )) {
                 $details = $oPluginRegistry->getPluginDetails( $pluginFile );
                 $oPluginRegistry->disablePlugin( $details->sNamespace );
                 $size = file_put_contents( PATH_DATA_SITE . 'plugin.singleton', $oPluginRegistry->serializeInstance() );
+                G::auditLog("DisablePlugin", "Plugin Name: ".$details->sNamespace);
                 print "size saved : $size  <br>";
             } else {
                 //print "change to ENABLED";
@@ -50,6 +51,7 @@ if ($handle = opendir( PATH_PLUGINS )) {
                 $oPluginRegistry->enablePlugin( $details->sNamespace );
                 $oPluginRegistry->setupPlugins(); //get and setup enabled plugins
                 $size = file_put_contents( PATH_DATA_SITE . 'plugin.singleton', $oPluginRegistry->serializeInstance() );
+                G::auditLog("EnablePlugin", "Plugin Name: ".$details->sNamespace);
                 print "size saved : $size  <br>";
             }
         }

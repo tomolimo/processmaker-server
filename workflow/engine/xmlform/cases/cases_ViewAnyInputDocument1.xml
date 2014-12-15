@@ -1,49 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="cases_ViewAnyInputDocument1" type="xmlform" width="100%" labelWidth="">
-
-<INP_DOC_UID type="private"/>
-
-<POSITION type="private"/>
-
-<INP_DOC_TITLE type="caption">
-  <en>Title</en>
-</INP_DOC_TITLE>
-
-<INP_DOC_DESCRIPTION type="caption">
-  <en>Description</en>
-</INP_DOC_DESCRIPTION>
-
-<INP_DOC_FORM_NEEDED type="dropdown" colWidth="80" titleAlign="left" align="left" mode="view">
-  <en>Document Type<option name="VIRTUAL">Digital</option><option name="REAL">Printed</option><option name="VREAL">Digital/Printed</option></en>
-</INP_DOC_FORM_NEEDED>
-
-<INP_DOC_ORIGINAL type="dropdown" colWidth="80" titleAlign="left" align="left" mode="view">
-  <en>Format<option name="ORIGINAL">Original</option><option name="COPYLEGAL">Legal Copy</option><option name="COPY">Copy</option></en>
-</INP_DOC_ORIGINAL>
-
-<APP_DOC_CREATE_DATE type="date" mode="view">
-  <en>Created Date</en>
-</APP_DOC_CREATE_DATE>
-
-<CREATOR type="text" mode="view">
-  <en>Creator</en>
-</CREATOR>
-
-<ORIGIN type="text" mode="view">
-  <en>Origin Task</en>
-</ORIGIN>
-
-
-
-<VIEW type="phpVariable"/>
-
-<FILE type="phpVariable"/>
-
-<APP_DOC_FILENAME type="link" value="@#VIEW" link="@#FILE" target="_blank">
-  <en>File</en>
-</APP_DOC_FILENAME>
-
-<JS type="javascript"><![CDATA[
+  <INP_DOC_UID type="private"/>
+  <POSITION type="private"/>
+  <INP_DOC_TITLE type="caption">
+    <en><![CDATA[Title]]></en>
+  </INP_DOC_TITLE>
+  <INP_DOC_DESCRIPTION type="caption">
+    <en><![CDATA[Description]]></en>
+  </INP_DOC_DESCRIPTION>
+  <INP_DOC_FORM_NEEDED type="dropdown" colWidth="80" titleAlign="left" align="left" mode="view">
+    <en><![CDATA[Document Type]]><option name="VIRTUAL"><![CDATA[Digital]]></option><option name="REAL"><![CDATA[Printed]]></option><option name="VREAL"><![CDATA[Digital/Printed]]></option></en>
+  </INP_DOC_FORM_NEEDED>
+  <INP_DOC_ORIGINAL type="dropdown" colWidth="80" titleAlign="left" align="left" mode="view">
+    <en><![CDATA[Format]]><option name="ORIGINAL"><![CDATA[Original]]></option><option name="COPYLEGAL"><![CDATA[Legal Copy]]></option><option name="COPY"><![CDATA[Copy]]></option></en>
+  </INP_DOC_ORIGINAL>
+  <APP_DOC_CREATE_DATE type="date" mode="view">
+    <en><![CDATA[Created Date]]></en>
+  </APP_DOC_CREATE_DATE>
+  <CREATOR type="text" mode="view">
+    <en><![CDATA[Creator]]></en>
+  </CREATOR>
+  <ORIGIN type="text" mode="view">
+    <en><![CDATA[Origin Task]]></en>
+  </ORIGIN>
+  <VIEW type="phpVariable"/>
+  <FILE type="phpVariable"/>
+  <APP_DOC_FILENAME type="link" value="@#VIEW" link="@#FILE" target="_blank">
+    <en><![CDATA[File]]></en>
+  </APP_DOC_FILENAME>
+  <JS type="javascript"><![CDATA[
 
 leimnud.event.add(window, 'load', function() {
   if (getField('INP_DOC_FORM_NEEDED').value == 'VIRTUAL') {
@@ -52,5 +37,4 @@ leimnud.event.add(window, 'load', function() {
 });
 
 ]]></JS>
-
-</dynaForm> 
+</dynaForm>

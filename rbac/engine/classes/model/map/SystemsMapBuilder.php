@@ -59,7 +59,7 @@ class SystemsMapBuilder {
 	{
 		$this->dbMap = Propel::getDatabaseMap('rbac');
 
-		$tMap = $this->dbMap->addTable('SYSTEMS');
+		$tMap = $this->dbMap->addTable('RBAC_SYSTEMS');
 		$tMap->setPhpName('Systems');
 
 		$tMap->setUseIdGenerator(false);

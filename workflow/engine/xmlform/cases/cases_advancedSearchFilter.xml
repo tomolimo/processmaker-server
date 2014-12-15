@@ -1,51 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="xmlform" name="" width="95%" enableTemplate="1" mode="edit" rowsPerPage="25">
-
-<CASE_NUMBER type="text">
-  <en>Case Number</en>
-</CASE_NUMBER>
-
-<PROCESS type="dropdown" dependentfields="TASKS" defaultvalue="" mode="edit"><![CDATA[
+  <CASE_NUMBER type="text">
+    <en><![CDATA[Case Number]]></en>
+  </CASE_NUMBER>
+  <PROCESS type="dropdown" dependentfields="TASKS" defaultvalue="" mode="edit"><![CDATA[
 	SELECT PROCESS.PRO_UID AS UID, CONTENT.CON_VALUE AS VALUE FROM PROCESS, CONTENT 	
 	WHERE (PROCESS.PRO_UID=CONTENT.CON_ID AND PROCESS.PRO_STATUS!='DISABLED' AND CONTENT.CON_CATEGORY='PRO_TITLE' AND CONTENT.CON_LANG='en') 
 	ORDER BY CONTENT.CON_VALUE
-	]]><en>Process<option name="">All</option></en>
-</PROCESS>
-
-<TASKS type="dropdown" defaultvalue="" mode="edit" options="Array"><![CDATA[
+	]]><en><![CDATA[Process]]><option name=""><![CDATA[All]]></option></en></PROCESS>
+  <TASKS type="dropdown" defaultvalue="" mode="edit" options="Array"><![CDATA[
 	SELECT TASK.TAS_UID AS TUID, CONTENT.CON_VALUE AS TVALUE FROM TASK 
   LEFT JOIN PROCESS ON (PROCESS.PRO_UID=TASK.PRO_UID)
   LEFT JOIN CONTENT ON (TASK.TAS_UID=CONTENT.CON_ID AND CONTENT.CON_CATEGORY='TAS_TITLE' AND CONTENT.CON_LANG='en')
   WHERE TASK.PRO_UID=@@PROCESS ORDER BY CONTENT.CON_VALUE 
-  ]]><en>Tasks<option name="">All</option></en>
-</TASKS>
-
-<CURRENT_USER type="dropdown"><![CDATA[
+  ]]><en><![CDATA[Tasks]]><option name=""><![CDATA[All]]></option></en></TASKS>
+  <CURRENT_USER type="dropdown"><![CDATA[
   
 	SELECT USR_UID, CONCAT(USR_LASTNAME,' ',USR_FIRSTNAME) AS USERNAME FROM USERS ORDER BY USR_USERNAME 
-  ]]><en>Current User<option name="">All</option></en>
-</CURRENT_USER>
-
-<SENT_BY type="dropdown"><![CDATA[
+  ]]><en><![CDATA[Current User]]><option name=""><![CDATA[All]]></option></en></CURRENT_USER>
+  <SENT_BY type="dropdown"><![CDATA[
   
 	SELECT USR_UID, CONCAT(USR_LASTNAME,' ',USR_FIRSTNAME) AS USERNAME FROM USERS ORDER BY USR_USERNAME 
-  ]]><en>Sent by<option name="">All</option></en>
-</SENT_BY>
-
-<LAST_MODIFICATION_F type="date" startdate="2008-01-01" enddate="" size="15" mode="edit">
-  <en>From</en>
-</LAST_MODIFICATION_F>
-
-<LAST_MODIFICATION_T type="date" startdate="2008-01-01" enddate="" size="15" mode="edit">
-  <en>To</en>
-</LAST_MODIFICATION_T>
-
-<APP_STATUS type="dropdown">
-  <en>Status<option name="">All</option><option name="DRAFT">Draft</option><option name="TO_DO">To Do</option><option name="CANCELLED">Cancelled</option><option name="COMPLETED">Completed</option></en>
-</APP_STATUS>
-
-<FILTER type="submit">
-  <en>Filter</en>  
-</FILTER>
-
-</dynaForm>  
+  ]]><en><![CDATA[Sent by]]><option name=""><![CDATA[All]]></option></en></SENT_BY>
+  <LAST_MODIFICATION_F type="date" startdate="2008-01-01" enddate="" size="15" mode="edit">
+    <en><![CDATA[From]]></en>
+  </LAST_MODIFICATION_F>
+  <LAST_MODIFICATION_T type="date" startdate="2008-01-01" enddate="" size="15" mode="edit">
+    <en><![CDATA[To]]></en>
+  </LAST_MODIFICATION_T>
+  <APP_STATUS type="dropdown">
+    <en><![CDATA[Status]]><option name=""><![CDATA[All]]></option><option name="DRAFT"><![CDATA[Draft]]></option><option name="TO_DO"><![CDATA[To Do]]></option><option name="CANCELLED"><![CDATA[Cancelled]]></option><option name="COMPLETED"><![CDATA[Completed]]></option></en>
+  </APP_STATUS>
+  <FILTER type="submit">
+    <en><![CDATA[Filter]]></en>
+  </FILTER>
+</dynaForm>

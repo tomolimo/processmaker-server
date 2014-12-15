@@ -1,27 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<dynaForm name="dynaforms_List" type="filterform" sql="SELECT *, T.CON_VALUE AS OUT_DOC_TITLE, D.CON_VALUE AS OUT_DOC_DESCRIPTION FROM OUTPUT_DOCUMENT LEFT JOIN CONTENT as T ON (T.CON_ID=OUT_DOC_UID AND T.CON_CATEGORY=&#039;OUT_DOC_TITLE&#039;) LEFT JOIN CONTENT AS D ON (D.CON_ID=OUT_DOC_UID AND D.CON_CATEGORY=&#039;OUT_DOC_DESCRIPTION&#039;)" sqlConnection="" menu="outputdocs/outputdocs_Options" filterForm="outputdocs/outputdocs_List" width="100%">
-<OUT_DOC_UID type="hidden" showInTable="0"/>
-<OUT_DOC_TITLE type="text" colWidth="200" titleAlign="left" align="left" dataCompareField="T.CON_VALUE" dataCompareType="contains">
-  <en>Output document</en>
-</OUT_DOC_TITLE>
-<OUT_DOC_FILENAME type="text" colWidth="200" titleAlign="left" align="left" dataCompareField="OUT_DOC_FILENAME" dataCompareType="contains">
-  <en>Filename</en>
-</OUT_DOC_FILENAME>
-<OUT_DOC_DESCRIPTION type="textarea" rows="3" cols="32" colWidth="200" titleAlign="left" align="left" dataCompareField="D.CON_VALUE" dataCompareType="contains">
-  <en>Description</en>
-</OUT_DOC_DESCRIPTION>
-
-<EDIT type="link" colWidth="40" value="@G::LoadTranslation(ID_EDIT)" link="#" onclick="outputdocsEdit(@QOUT_DOC_UID);return false;"><en></en></EDIT>
-<DELETE type="link" colWidth="40" value="@G::LoadTranslation(ID_DELETE)" link="#" onclick="if (confirm(&#039;@G::LoadTranslation(ID_MSG_CONFIRM_DELETE_OUTDOC)&#039;)) outputdocsDelete(@QOUT_DOC_UID);return false;"><en></en></DELETE>
-
-
-<SEARCH type="button" onclick="pagedTableFilter( this.form );" showInTable="0">
-  <en>Apply Filter</en>
-</SEARCH>
-<PAGED_TABLE_ID type="private" showInTable="0"/>
-<JSFILTER type="javascript" replaceTags="1" showInTable="0">
+<dynaForm name="dynaforms_List" type="filterform" sql="SELECT *, T.CON_VALUE AS OUT_DOC_TITLE, D.CON_VALUE AS OUT_DOC_DESCRIPTION FROM OUTPUT_DOCUMENT LEFT JOIN CONTENT as T ON (T.CON_ID=OUT_DOC_UID AND T.CON_CATEGORY='OUT_DOC_TITLE') LEFT JOIN CONTENT AS D ON (D.CON_ID=OUT_DOC_UID AND D.CON_CATEGORY='OUT_DOC_DESCRIPTION')" sqlConnection="" menu="outputdocs/outputdocs_Options" filterForm="outputdocs/outputdocs_List" width="100%">
+  <OUT_DOC_UID type="hidden" showInTable="0"/>
+  <OUT_DOC_TITLE type="text" colWidth="200" titleAlign="left" align="left" dataCompareField="T.CON_VALUE" dataCompareType="contains">
+    <en><![CDATA[Output document]]></en>
+  </OUT_DOC_TITLE>
+  <OUT_DOC_FILENAME type="text" colWidth="200" titleAlign="left" align="left" dataCompareField="OUT_DOC_FILENAME" dataCompareType="contains">
+    <en><![CDATA[Filename]]></en>
+  </OUT_DOC_FILENAME>
+  <OUT_DOC_DESCRIPTION type="textarea" rows="3" cols="32" colWidth="200" titleAlign="left" align="left" dataCompareField="D.CON_VALUE" dataCompareType="contains">
+    <en><![CDATA[Description]]></en>
+  </OUT_DOC_DESCRIPTION>
+  <EDIT type="link" colWidth="40" value="@G::LoadTranslation(ID_EDIT)" link="#" onclick="outputdocsEdit(@QOUT_DOC_UID);return false;">
+    <en><![CDATA[]]></en>
+  </EDIT>
+  <DELETE type="link" colWidth="40" value="@G::LoadTranslation(ID_DELETE)" link="#" onclick="if (confirm('@G::LoadTranslation(ID_MSG_CONFIRM_DELETE_OUTDOC)')) outputdocsDelete(@QOUT_DOC_UID);return false;">
+    <en><![CDATA[]]></en>
+  </DELETE>
+  <SEARCH type="button" onclick="pagedTableFilter( this.form );" showInTable="0">
+    <en><![CDATA[Apply Filter]]></en>
+  </SEARCH>
+  <PAGED_TABLE_ID type="private" showInTable="0"/>
+  <JSFILTER type="javascript" replaceTags="1" showInTable="0">
 function pagedTableFilter( form ) {
   @#PAGED_TABLE_ID.doFilter( form );
 }
 </JSFILTER>
-</dynaForm> 
+</dynaForm>

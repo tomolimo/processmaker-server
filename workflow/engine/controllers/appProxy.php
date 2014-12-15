@@ -34,19 +34,33 @@ class AppProxy extends HttpProxyController
             print G::json_encode( $response );
             die();
         }
+
         $appUid = null;
 
-        if (isset( $httpData->appUid ) && trim( $httpData->appUid ) != "") {
-            $appUid = $httpData->appUid;
+        if (isset($httpData->appUid) && trim($httpData->appUid) != "") {
+            $appUid = trim($httpData->appUid);
         } else {
-            if (isset( $_SESSION['APPLICATION'] )) {
-                $appUid = $_SESSION['APPLICATION'];
+            if (isset($_SESSION["APPLICATION"])) {
+                $appUid = $_SESSION["APPLICATION"];
             }
+        }
+
+        $delIndex = 0;
+
+        if (isset($httpData->delIndex) && trim($httpData->delIndex) != "") {
+            $delIndex = (int)(trim($httpData->delIndex));
+        } else {
+            if (isset($_SESSION["INDEX"])) {
+                $delIndex = (int)($_SESSION["INDEX"]);
+            }
+        }
+
+        if (!isset($appUid)) {
+            throw new Exception(G::LoadTranslation("ID_RESOLVE_APPLICATION_ID"));
         }
 
         G::LoadClass( 'case' );
         $case = new Cases();
-        $caseLoad = '';
 
         if (!isset($_SESSION['PROCESS']) && !isset($httpData->pro)) {
             $caseLoad = $case->loadCase($appUid);
@@ -70,8 +84,8 @@ class AppProxy extends HttpProxyController
         //$tasUid = (!isset($httpData->tas)) ? ((isset($_SESSION['TASK'])) ? $_SESSION['TASK'] : '') : $httpData->tas;
         $usrUid = $_SESSION['USER_LOGGED'];
 
-        $respView = $case->getAllObjectsFrom( $proUid, $appUid, $tasUid, $usrUid, 'VIEW' );
-        $respBlock = $case->getAllObjectsFrom( $proUid, $appUid, $tasUid, $usrUid, 'BLOCK' );
+        $respView  = $case->getAllObjectsFrom($proUid, $appUid, $tasUid, $usrUid, "VIEW",  $delIndex);
+        $respBlock = $case->getAllObjectsFrom($proUid, $appUid, $tasUid, $usrUid, "BLOCK", $delIndex);
 
         if ($respView['CASES_NOTES'] == 0 && $respBlock['CASES_NOTES'] == 0) {
             return array ('totalCount' => 0,'notes' => array (),'noPerms' => 1
@@ -79,10 +93,6 @@ class AppProxy extends HttpProxyController
         }
 
         //require_once ("classes/model/AppNotes.php");
-
-        if (! isset( $appUid )) {
-            throw new Exception( G::LoadTranslation('ID_RESOLVE_APPLICATION_ID' ) );
-        }
 
         $usrUid = isset( $_SESSION['USER_LOGGED'] ) ? $_SESSION['USER_LOGGED'] : "";
         $appNotes = new AppNotes();
@@ -188,7 +198,7 @@ class AppProxy extends HttpProxyController
             $criteria->add(AppDelegationPeer::DEL_FINISH_DATE, null, Criteria::ISNULL);
             $criteria->addDescendingOrderByColumn(AppDelegationPeer::DEL_INDEX);
             if (AppDelegationPeer::doCount($criteria) > 0) {
-                $dataset = AppDelegationPeer::doSelectRS($criteria);
+                $dataset = AppDelegationPeer::doSelectRS($criteria, Propel::getDbConnection('workflow_ro'));
                 $dataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
                 $dataset->next();
                 $row = $dataset->getRow();
@@ -243,7 +253,7 @@ class AppProxy extends HttpProxyController
                 $criteria->add(AppDelegationPeer::DEL_FINISH_DATE, null, Criteria::ISNULL);
                 $criteria->addDescendingOrderByColumn(AppDelegationPeer::DEL_INDEX);
                 if (AppDelegationPeer::doCount($criteria) > 0) {
-                    $dataset = AppDelegationPeer::doSelectRS($criteria);
+                    $dataset = AppDelegationPeer::doSelectRS($criteria, Propel::getDbConnection('workflow_ro'));
                     $dataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
                     $dataset->next();
                     $row = $dataset->getRow();

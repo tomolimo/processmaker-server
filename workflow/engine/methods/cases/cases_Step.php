@@ -257,7 +257,14 @@ try {
             $oDbConnections->loadAdditionalConnections();
             $_SESSION['CURRENT_DYN_UID'] = $_GET['UID'];
 
-            $G_PUBLISH->AddContent( 'dynaform', 'xmlform', $_SESSION['PROCESS'] . '/' . $_GET['UID'], '', $Fields['APP_DATA'], 'cases_SaveData?UID=' . $_GET['UID'] . '&APP_UID=' . $_SESSION['APPLICATION'], '', (strtolower( $oStep->getStepMode() ) != 'edit' ? strtolower( $oStep->getStepMode() ) : '') );
+            G::LoadClass('pmDynaform');
+            $a = new pmDynaform($_GET['UID'], $Fields['APP_DATA']);
+            if ($a->isResponsive()) {
+                $a->mergeValues();
+                $a->printEdit((!isset($_SESSION["PM_RUN_OUTSIDE_MAIN_APP"])) ? "true" : "false", $_SESSION['APPLICATION'], $array);
+            } else {
+                $G_PUBLISH->AddContent('dynaform', 'xmlform', $_SESSION['PROCESS'] . '/' . $_GET['UID'], '', $Fields['APP_DATA'], 'cases_SaveData?UID=' . $_GET['UID'] . '&APP_UID=' . $_SESSION['APPLICATION'], '', (strtolower($oStep->getStepMode()) != 'edit' ? strtolower($oStep->getStepMode()) : ''));
+            }
             break;
         case 'INPUT_DOCUMENT': 
             if ($noShowTitle == 0) {

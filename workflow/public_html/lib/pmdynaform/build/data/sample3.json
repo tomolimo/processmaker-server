@@ -1,0 +1,375 @@
+{
+    "name": "form-example2",
+    "items": [
+        {
+            "type":"form",       
+            "items":
+            [
+                [
+                    {
+                        "type": "title",
+                        "colSpan": 12,
+                        "name": "title",
+                        "label": "PMDynaform 3 - Fields with mask"
+                    }
+                ],
+                [
+                    {
+                        "var_name": "simplevariable",
+                        "var_uid": "752292886541b20d3325955025125925",
+                        "type": "text",
+                        "colSpan":12,
+                        "name": "name",
+                        "value": "",
+                        "label": "Mask ##:##:## .000#",
+                        "readonly": false,
+                        "dataType": "string",
+                        "mask": "##:##:## .000#"
+                    }
+                ],
+                [
+                    {
+                        "var_name": "simplevariable",
+                        "var_uid": "752292886541b20d3325955025125925",
+                        "type": "text",
+                        "colSpan":12,
+                        "name": "name",
+                        "value": "",
+                        "label": "Mask Cellphone +###-#########",
+                        "readonly": false,
+                        "dataType": "string",
+                        "mask": "Cellphone +###-#########"
+                    }
+                ],
+                [
+                    {
+                        "var_name": "simplevariable",
+                        "var_uid": "752292886541b20d3325955025125925",
+                        "type": "text",
+                        "colSpan":12,
+                        "name": "name",
+                        "value": "",
+                        "label": "Mask (###) (###) (###) (###) (######)",
+                        "readonly": false,
+                        "dataType": "string",
+                        "mask": "(###) (###) (###) (###) (######)"
+                    }
+                ],
+                [
+                    {
+                        "var_name": "simplevariable",
+                        "var_uid": "752292886541b20d3325955025125925",
+                        "type": "text",
+                        "colSpan":12,
+                        "name": "name",
+                        "value": "",
+                        "label": "#-##-###--####---# Bs.",
+                        "readonly": false,
+                        "dataType": "string",
+                        "mask": "#-##-###--####---# Bs."
+                    }
+                ],
+                [
+                    {
+                        "var_name": "simplevariable",
+                        "var_uid": "752292886541b20d3325955025125925",
+                        "type": "text",
+                        "colSpan": 12,
+                        "name": "name",
+                        "value": "",
+                        "label": "Mask $ ###,##",
+                        "readonly": false,
+                        "dataType": "string",
+                        "mask": "$ ###,##"
+                    }
+                ],
+                [
+                    {
+                        "var_name": "simplevariable",
+                        "var_uid": "752292886541b20d3325955025125925",
+                        "type": "text",
+                        "colSpan":12,
+                        "name": "name",
+                        "value": "1234567890",
+                        "label": "Mask #,#,#,#,#,#,#,#,#",
+                        "readonly": false,
+                        "dataType": "string",
+                        "mask": "#,#,#,#,#,#,#,#,#"
+                    }
+                ],
+                [
+                    {
+                        "var_name": "simplevariablethree",
+                        "var_uid": "31319212954524865487616020584523",
+                        "type": "datetime",
+                        "pickType":"datetime",
+                        "colSpan":12,
+                        "name": "name",
+                        "value": "",
+                        "label": "Datetime dd-MM-yyyy hh-mm-ss",
+                        "readonly": false,
+                        "format": "dd-MM-yyyy hh-mm-ss"
+                    }
+                ],
+                [
+                    {
+                        "var_name": "simplevariablethree",
+                        "var_uid": "31319212954524865487616020584523",
+                        "type": "datetime",
+                        "pickType":"datetime",
+                        "colSpan":12,
+                        "name": "name",
+                        "value": "",
+                        "label": "Datetime dd.MM.yyyy (hh.mm.ss)",
+                        "readonly": false,
+                        "format": "dd.MM.yyyy (hh.mm.ss)"
+                    }
+                ],
+                [
+                    {
+                        "var_name": "simplevariablethree",
+                        "var_uid": "31319212954524865487616020584523",
+                        "type": "datetime",
+                        "pickType":"date",
+                        "colSpan":12,
+                        "name": "name",
+                        "value": "12/12/1212",
+                        "label": "Date dd/MM/yyyy",
+                        "readonly": false,
+                        "format": "dd/MM/yyyy"
+                    }
+                ],
+                [
+                    {
+                        "var_name": "simplevariablethree",
+                        "var_uid": "31319212954524865487616020584523",
+                        "type": "datetime",
+                        "pickType":"date",
+                        "colSpan":12,
+                        "name": "name",
+                        "value": "12/12/1212",
+                        "label": "Date dd, MM, yyyy",
+                        "readonly": false,
+                        "format": "dd, MM, yyyy"
+                    }
+                ],
+                [
+                    {
+                        "var_name": "simplevariablethree",
+                        "var_uid": "31319212954524865487616020584523",
+                        "type": "datetime",
+                        "pickType":"time",
+                        "colSpan":12,
+                        "name": "name",
+                        "value": "",
+                        "label": "Time hh:mm:ss",
+                        "readonly": false,
+                        "format": "hh:mm:ss"
+                    }
+                ],
+                [
+                    {
+                        "var_name": "simplevariablethree",
+                        "var_uid": "31319212954524865487616020584523",
+                        "type": "datetime",
+                        "pickType":"time",
+                        "colSpan":12,
+                        "name": "name",
+                        "value": "",
+                        "label": "Time [hh] [mm] [ss]",
+                        "readonly": false,
+                        "format": "[hh] [mm] [ss]"
+                    }
+                ],
+                [
+                    {
+                      "type" : "submit",
+                      "colSpan" : 12,
+                      "label" : "Submit"
+                    }
+                ]
+            ],
+            "variables":
+            [
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "workflow",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "string",
+                    "var_label": "users",
+                    "var_name": "users",
+                    "var_allowNull": 1,
+                    "var_sql": "SELECT USR_UID, USR_USERNAME\nFROM USERS\nWHERE USR_USERNAME <>  \" \"",
+                    "var_uid": "752292886541b20d3325955025125925"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "workflow",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "string",
+                    "var_label": "country",
+                    "var_name": "country",
+                    "var_allowNull": 1,
+                    "var_sql": "SELECT IC_UID,IC_NAME   \nFROM ISO_COUNTRY WHERE IC_NAME <> \" \"",
+                    "var_uid": "943312492541b2101075730071729173"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "workflow",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "string",
+                    "var_label": "subdivision",
+                    "var_name": "subdivision",
+                    "var_allowNull": 1,
+                    "var_sql": "SELECT \nIS_UID,\nIS_NAME FROM ISO_SUBDIVISION WHERE IC_UID = \"@#country\" AND IS_NAME <> \" \"",
+                    "var_uid": "562853519541b20e79b6960026331275"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "workflow",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "string",
+                    "var_label": "location",
+                    "var_name": "location",
+                    "var_allowNull": 1,
+                    "var_sql": "SELECT IL_UID, IL_NAME\nFROM ISO_LOCATION\nWHERE IS_UID =  \"@#subdivision\" AND IL_NAME <> \" \" AND IC_UID = \"@#country\"",
+                    "var_uid": "448293955541b20b5e393c3052081446"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "workflow",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "string",
+                    "var_label": "varname",
+                    "var_name": "varname",
+                    "var_allowNull": 1,
+                    "var_sql": "",
+                    "var_uid": "752292886541b20d3325955025125927"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "none",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "string",
+                    "var_label": "simplevariable",
+                    "var_name": "simplevariable",
+                    "var_allowNull": 1,
+                    "var_sql": "",
+                    "var_uid": "299463130541b212c93a3d7047589419"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "none",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "string",
+                    "var_label": "Simple Variable Two",
+                    "var_name": "simplevariabletwo",
+                    "var_allowNull": 1,
+                    "var_sql": "",
+                    "var_uid": "992707483545248537300e5085346250"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "none",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "datetime",
+                    "var_label": "Simple Variable Three",
+                    "var_name": "simplevariablethree",
+                    "var_allowNull": 1,
+                    "var_sql": "",
+                    "var_uid": "31319212954524865487616020584523"
+                },
+                {
+                    "var_acceptedValues": [
+                        {
+                          "value": "First Value",
+                          "keyValue": "firstvalue"
+                        },
+                        {
+                          "value": "Second Value",
+                          "keyValue": "secondvalue"
+                        }
+                    ],
+                    "var_dbConnection": "none",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 100,
+                    "var_fieldType": "string",
+                    "var_label": "optionsvariable",
+                    "var_name": "optionsvariable",
+                    "var_allowNull": 1,
+                    "var_sql": "",
+                    "var_uid": "109090183545298e8505313008393063"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "none",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "string",
+                    "var_label": "variablegridone",
+                    "var_name": "variablegridone",
+                    "var_allowNull": 1,
+                    "var_sql": "",
+                    "var_uid": "8391557125458eb60509b60057650758"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "none",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 100,
+                    "var_fieldType": "string",
+                    "var_label": "variablegridtwo",
+                    "var_name": "variablegridtwo",
+                    "var_allowNull": 1,
+                    "var_sql": "",
+                    "var_uid": "5746882395458eb6b8b54a2015704374"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "none",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "string",
+                    "var_label": "variablegridthree",
+                    "var_name": "variablegridthree",
+                    "var_allowNull": 1,
+                    "var_sql": "",
+                    "var_uid": "5532828265458eb76ebf700002684261"
+                },
+                {
+                    "var_acceptedValues": [
+                    {
+                      "value": "variable option 1",
+                      "keyValue": "variable_option_1"
+                    },
+                    {
+                      "value": "variable option 2",
+                      "keyValue": "variable_option_2"
+                    },
+                    {
+                      "value": "variable option 3",
+                      "keyValue": "variable_option_3"
+                    }
+                  ],
+                  "var_dbConnection": "none",
+                  "var_defaultValue": "",
+                  "var_fieldSize": 10,
+                  "var_fieldType": "string",
+                  "var_label": "variablegridfour",
+                  "var_name": "variablegridfour",
+                  "var_allowNull": 1,
+                  "var_sql": "",
+                  "var_uid": "6551198965458ebe28477c5094393260"
+                }
+            ]
+        }
+    ]
+}

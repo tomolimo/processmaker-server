@@ -299,7 +299,7 @@ function dynaformHistory(PRO_UID,APP_UID,TAS_UID, DYN_UID)
       scs.evalScript();
   }.extend(this);
   oRPC.make();
-}  
+}
 function toggleTable(tablename){
   table=getElementByName(tablename);
   if(table.style.display == ''){
@@ -377,11 +377,11 @@ var pauseCase = function() {
     var oPauseDiv = document.getElementById('pausediv');
     document.getElementById('spause').style.display = 'none';
     document.getElementById('scpause').style.display = 'block';
-    
+
     oPauseDiv.style.display = 'block';
 
   /*pausecasePanel = new leimnud.module.panel();
-  
+
   pausecasePanel.options = {
     size    :{w:400,h:150},
     position:{x:0,y:0,center:true},
@@ -721,7 +721,7 @@ var showDynaforms = function() {
         remove: function() {delete(oPanel2);}.extend(this)
     };
     oPanel2.make();
-    
+
      var iframe=document.createElement('iframe');
      iframe.setAttribute('id','dynaFormIframe');
      iframe.src = 'cases_Ajax?action=showDynaform&DYN_UID='+DYN_UID;
@@ -729,9 +729,9 @@ var showDynaforms = function() {
      iframe.style.width='790';
      iframe.style.height=_client.height-20;
      oPanel2.addContent(iframe);
-                
+
   }
-  
+
   function showDynaformHistory(DYN_UID,HISTORY_ID)
   {
     oPanel2 = new leimnud.module.panel();
@@ -874,7 +874,7 @@ var deleteGeneratedDocument = function(APP_DOC_UID) {
 
 /**
  * Resend the message that was sent.
- * 
+ *
  * @Param Application ID
  * @Param Message ID
  * @Author Erik Amaru Ortiz <erik@colosa.com, aortiz.erik@gmail.com>
@@ -905,7 +905,7 @@ var resendMessage = function(APP_UID, APP_MSG_UID)
           scs.evalScript();
         }.extend(this);
         oRPC2.make();
-        
+
       }.extend(this);
       oRPC.make();
       }.extend(this)
@@ -931,7 +931,7 @@ function showdebug()
   }
 }
 
-var uploadInputDocument = function(docID,appDocId,docVersion,actionType){   
+var uploadInputDocument = function(docID,appDocId,docVersion,actionType){
     if(actionType){
         if(actionType=="R"){
             windowTitle=G_STRINGS.ID_UPLOAD_REPLACE_INPUT;
@@ -947,7 +947,7 @@ var uploadInputDocument = function(docID,appDocId,docVersion,actionType){
     }
   oPanel = new leimnud.module.panel();
   oPanel.options = {
-    size  :{w:550,h:300},
+    size  :{w:550,h:355},
     position:{x:0,y:0,center:true},
     title :windowTitle,
     theme :"processmaker",

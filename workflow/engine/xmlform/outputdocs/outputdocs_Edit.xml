@@ -1,22 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="outputdocs/outputdocs_Edit" action="outputdocs/outputdocs_Save" type="xmlform" width="100%" labelWidth="2px" enableTemplate="1">
-
-
-<PRO_UID type="hidden"/>
-
-<OUT_DOC_UID type="hidden" showInTable="0"/>
-<OUT_DOC_TITLE type="hidden" showInTable="0"/>
-
-<OUT_DOC_TEMPLATE type="wysiwyg_editor" editorType="OUTPUT_DOCUMENT" width="640" height="365" defaultValue="&lt;br/&gt;"/>
-
-<ACCEPT type="button" onclick="outputdocsSave(this.form);">
-  <en>Save</en>
-</ACCEPT>
-<BTN_CANCEL type="button" onclick="cancel();">
-  <en>Cancel</en>
-</BTN_CANCEL>
-
-<JS type="JavaScript"><![CDATA[
+  <PRO_UID type="hidden"/>
+  <OUT_DOC_UID type="hidden" showInTable="0"/>
+  <OUT_DOC_TITLE type="hidden" showInTable="0"/>
+  <OUT_DOC_TEMPLATE type="wysiwyg_editor" editorType="OUTPUT_DOCUMENT" width="640" height="365" defaultValue="&lt;br/&gt;"/>
+  <ACCEPT type="button" onclick="outputdocsSave(this.form);">
+    <en><![CDATA[Save]]></en>
+  </ACCEPT>
+  <BTN_CANCEL type="button" onclick="cancel();">
+    <en><![CDATA[Cancel]]></en>
+  </BTN_CANCEL>
+  <JS type="JavaScript"><![CDATA[
 
     function cancel(){
         tinyMCE.execCommand('mceRemoveControl',false,'form[OUT_DOC_TEMPLATE]');
@@ -40,5 +34,4 @@ if ( typeof outputdocsSave  == 'undefined'){
     }
 }
 ]]></JS>
-
 </dynaForm>

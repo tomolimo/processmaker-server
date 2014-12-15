@@ -1,25 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="processesdc" type="xmlform" width="100%">
-
-<MESSAGE type="title" group="1" enableHTML="1">
-  <en><![CDATA[<center>User cases summary</center>]]></en>
-</MESSAGE>
-
-<USR_UID type="hidden">
-  <en/>
-</USR_UID>
-
-<TO_DO type="text" mode="view">
-  <en>To Do</en>
-</TO_DO> 
-<DRAFT type="text" mode="view">
-  <en>Draft</en>
-</DRAFT>
-<COMPLETED type="text" mode="view">
-  <en>Completed</en>
-</COMPLETED>
-<CANCELLED type="text" mode="view">
-  <en>Cancelled</en>
-</CANCELLED>
-
-</dynaForm> 
+  <MESSAGE type="title" group="1" enableHTML="1">
+    <en><![CDATA[<center>User cases summary</center>]]></en>
+  </MESSAGE>
+  <USR_UID type="hidden">
+    <en/>
+  </USR_UID>
+  <TO_DO type="text" mode="view">
+    <en><![CDATA[To Do]]></en>
+  </TO_DO>
+  <DRAFT type="text" mode="view">
+    <en><![CDATA[Draft]]></en>
+  </DRAFT>
+  <COMPLETED type="text" mode="view">
+    <en><![CDATA[Completed]]></en>
+  </COMPLETED>
+  <CANCELLED type="text" mode="view">
+    <en><![CDATA[Cancelled]]></en>
+  </CANCELLED>
+</dynaForm>

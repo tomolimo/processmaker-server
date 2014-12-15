@@ -197,8 +197,9 @@ $r = 0;
 //Set data
 foreach ($dependentFields as $d) {
     $d = trim($d);
+    $sendContent[$r] = new stdclass();
     $sendContent[$r]->name = $d;
-    $sendContent[$r]->content = null;
+    $sendContent[$r]->content = new stdclass();
 
     if (! isset( $_POST['grid'] )) {
         if (isset( $G_FORM->fields[$d] )) {
@@ -241,7 +242,7 @@ function toJSArray ($array, $type = '')
 {
     $result = array ();
     foreach ($array as $k => $v) {
-        $o = NULL;
+        $o = new stdclass();
         $o->key = $k;
         // TODO: review the condition to make the differentiation to dependent dropdowns in a grid function.
         // this way of validation is if you have a dependent field in text fields

@@ -61,6 +61,12 @@ class Department extends BaseDepartment
                 $this->setDepUid( G::generateUniqueID() );
             }
 
+            if (isset( $aData['DEP_PARENT'] ) && ($aData['DEP_PARENT'] =='')) {
+                $msgLog = 'Departament';
+            } else {
+                $msgLog = 'SubDepartament';
+            }
+
             if (isset( $aData['DEP_PARENT'] )) {
                 $this->setDepParent( $aData['DEP_PARENT'] );
             } else {
@@ -108,6 +114,9 @@ class Department extends BaseDepartment
                 $res = $this->save();
 
                 $con->commit();
+                
+                G::auditLog("Create".$msgLog, $msgLog." Name: ". $aData['DEP_TITLE']);
+
                 return $this->getDepUid();
             } else {
                 $msg = '';
@@ -277,8 +286,11 @@ class Department extends BaseDepartment
 
             $oPro = DepartmentPeer::retrieveByPK( $ProUid );
             if (! is_null( $oPro )) {
+                $dptoTitle = $this->Load($oPro->getDepUid());
                 Content::removeContent( 'DEPO_TITLE', '', $oPro->getDepUid() );
                 Content::removeContent( 'DEPO_DESCRIPTION', '', $oPro->getDepUid() );
+
+                G::auditLog("DeleteDepartament", "Departament Name: ".$dptoTitle['DEPO_TITLE']." Departament ID: (".$oPro->getDepUid().") ");
                 return $oPro->delete();
             } else {
                 throw (new Exception( "The row '$ProUid' in table Group doesn't exist!" ));
@@ -320,10 +332,11 @@ class Department extends BaseDepartment
     }
 
     public function updateDepartmentManager ($depId)
-    {
+    {   
         $managerId = '';
         $depParent = '';
         $oDept = DepartmentPeer::retrieveByPk( $depId );
+
         if (is_object( $oDept ) && get_class( $oDept ) == 'Department') {
             $managerId = $oDept->getDepManager();
             $depParent = $oDept->getDepParent();
@@ -353,7 +366,14 @@ class Department extends BaseDepartment
             }
             $oUser->save();
         }
-
+        
+        if ($managerId) {
+            $user = $oUser->loadDetailed ($managerId);
+            if (is_object( $oDept ) && get_class( $oDept ) == 'Department') {
+                $dptoTitle = $oDept->Load($depId);
+                G::auditLog("AssignManagerToDepartament", "Assign Manager ".$user['USR_USERNAME']." (".$managerId.") to ".$dptoTitle['DEPO_TITLE']." (".$depId.") ");
+            }
+        }
         // get children departments to update the reportsTo of these children
         $childrenCriteria = new Criteria( 'workflow' );
         $childrenCriteria->add( DepartmentPeer::DEP_PARENT, $depId );
@@ -378,9 +398,13 @@ class Department extends BaseDepartment
         try {
             //update the field in user table
             $oUser = UsersPeer::retrieveByPk( $userId );
+            $user = $oUser->loadDetailed ($userId);
+            $dptoTitle = $this->Load($depId);
+
             if (is_object( $oUser ) && get_class( $oUser ) == 'Users') {
                 $oUser->setDepUid( $depId );
                 $oUser->save();
+                G::auditLog("AssignUserToDepartament", "Assign user ".$user['USR_USERNAME']." (".$userId.") to departament ".$dptoTitle['DEPO_TITLE']." (".$depId.") ");
             }
 
             //if the user is a manager update Department Table
@@ -412,7 +436,7 @@ class Department extends BaseDepartment
             $criteria->add( DepartmentPeer::DEP_PARENT, $DepParent, Criteria::EQUAL );
             $con = Propel::getConnection( DepartmentPeer::DATABASE_NAME );
             $objects = DepartmentPeer::doSelect( $criteria, $con );
-            global $RBAC;
+            $oUsers = new Users();
 
             foreach ($objects as $oDepartment) {
                 $node = array ();
@@ -426,7 +450,7 @@ class Department extends BaseDepartment
 
                 $manager = $oDepartment->getDepManager();
                 if ($manager != '') {
-                    $UserUID = $RBAC->load( $manager );
+                    $UserUID = $oUsers->load($manager);
                     $node['DEP_MANAGER_USERNAME'] = isset( $UserUID['USR_USERNAME'] ) ? $UserUID['USR_USERNAME'] : '';
                     $node['DEP_MANAGER_FIRSTNAME'] = isset( $UserUID['USR_FIRSTNAME'] ) ? $UserUID['USR_FIRSTNAME'] : '';
                     $node['DEP_MANAGER_LASTNAME'] = isset( $UserUID['USR_LASTNAME'] ) ? $UserUID['USR_LASTNAME'] : '';
@@ -549,11 +573,16 @@ class Department extends BaseDepartment
         );
         try {
             $oUser = UsersPeer::retrieveByPk( $UsrUid );
+            $user = $oUser->loadDetailed ($UsrUid);
+            $dptoTitle = $this->Load($DepUid);
+
             if (is_object( $oUser ) && get_class( $oUser ) == 'Users') {
                 //$oDepto = new Users();
                 $oUser->setDepUid( '' );
                 $oUser->setUsrReportsTo( '' );
                 $oUser->save();
+            
+                G::auditLog("RemoveUsersFromDepartament", "Remove user ".$user['USR_USERNAME']."( ".$UsrUid.") from departament ".$dptoTitle['DEPO_TITLE']." (".$DepUid.") ");
             }
         } catch (exception $oError) {
             throw ($oError);

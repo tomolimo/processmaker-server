@@ -23,6 +23,14 @@ $conf = new Configurations();
 try {
     // the setup for search is the same as the Sent (participated)
     $confCasesList = $conf->getConfiguration( 'casesList', ($action == 'search' || $action == 'simple_search') ? 'search' : $action );
+
+    $table = null;
+    if (isset($confCasesList['PMTable'])) {
+        $aditionalTable = new AdditionalTables();
+        $table = $aditionalTable->load($confCasesList['PMTable']);
+    }
+    $confCasesList = ($table != null) ? $confCasesList : array ();
+
     $generalConfCasesList = $conf->getConfiguration( 'ENVIRONMENT_SETTINGS', '' );
 } catch (Exception $e) {
     $confCasesList = array ();
@@ -33,7 +41,7 @@ try {
 $confReassignList = getReassignList();
 
 // evaluates an action and the configuration for the list that will be rendered
-$config = getAdditionalFields( $action, (class_exists( 'enterprisePlugin' ) ? $confCasesList : array ()) );
+$config = getAdditionalFields( $action, $confCasesList );
 $columns = $config['caseColumns'];
 $readerFields = $config['caseReaderFields'];
 $reassignColumns = $confReassignList['caseColumns'];
@@ -101,6 +109,12 @@ $allUsers = getAllUsersArray( $action );
 
 $oHeadPublisher->assign( 'reassignReaderFields', $reassignReaderFields ); //sending the fields to get from proxy
 $oHeadPublisher->addExtJsScript( 'cases/reassignList', false );
+$enableEnterprise = false;
+if (class_exists( 'enterprisePlugin' )) {
+    $enableEnterprise = true;
+    $oHeadPublisher->addExtJsScript(PATH_PLUGINS . "enterprise" . PATH_SEP . "advancedTools" . PATH_SEP , false, true);
+}
+
 $oHeadPublisher->assign( 'pageSize', $pageSize ); //sending the page size
 $oHeadPublisher->assign( 'columns', $columns ); //sending the columns to display in grid
 $oHeadPublisher->assign( 'readerFields', $readerFields ); //sending the fields to get from proxy
@@ -113,6 +127,7 @@ $oHeadPublisher->assign( 'categoryValues', $category ); //Sending the listing of
 $oHeadPublisher->assign( 'userValues', $users ); //Sending the listing of users
 $oHeadPublisher->assign( 'allUsersValues', $allUsers ); //Sending the listing of all users
 $oHeadPublisher->assign( 'solrEnabled', $solrEnabled ); //Sending the status of solar
+$oHeadPublisher->assign( 'enableEnterprise', $enableEnterprise ); //sending the page size
 
 //menu permissions
 /*$c = new Criteria('workflow');
@@ -209,7 +224,7 @@ function getAllUsersArray ($action)
         }
 
         $cUsers->addAscendingOrderByColumn( AppCacheViewPeer::APP_CURRENT_USER );
-        $oDataset = AppCacheViewPeer::doSelectRS( $cUsers );
+        $oDataset = AppCacheViewPeer::doSelectRS( $cUsers, Propel::getDbConnection('workflow_ro') );
         $oDataset->setFetchmode( ResultSet::FETCHMODE_ASSOC );
         $oDataset->next();
         while ($aRow = $oDataset->getRow()) {
@@ -275,7 +290,7 @@ function getStatusArray ($action, $userUid)
         $cStatus->clearSelectColumns();
         $cStatus->setDistinct();
         $cStatus->addSelectColumn( AppCacheViewPeer::APP_STATUS );
-        $oDataset = AppCacheViewPeer::doSelectRS( $cStatus );
+        $oDataset = AppCacheViewPeer::doSelectRS( $cStatus, Propel::getDbConnection('workflow_ro') );
         $oDataset->setFetchmode( ResultSet::FETCHMODE_ASSOC );
         $oDataset->next();
         while ($aRow = $oDataset->getRow()) {
@@ -362,7 +377,7 @@ function getAdditionalFields($action, $confCasesList = array())
     $config = new Configurations();
     $arrayConfig = $config->casesListDefaultFieldsAndConfig($action);
 
-    if (is_array($confCasesList) && count($confCasesList) > 0 && count($confCasesList["second"]["data"]) > 0) {
+    if (is_array($confCasesList) && count($confCasesList) > 0 && isset($confCasesList["second"]) && count($confCasesList["second"]["data"]) > 0) {
         //For the case list builder in the enterprise plugin
         $caseColumns = array();
         $caseReaderFields = array();

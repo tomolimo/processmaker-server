@@ -573,6 +573,10 @@ abstract class BaseAppDelay extends BaseObject implements Persistent
 
         if ($v !== null && !is_int($v)) {
             $ts = strtotime($v);
+            //Date/time accepts null values
+            if ($v == '') {
+                $ts = null;
+            }
             if ($ts === -1 || $ts === false) {
                 throw new PropelException("Unable to parse date/time value for [app_enable_action_date] from input: " .
                     var_export($v, true));
@@ -620,6 +624,10 @@ abstract class BaseAppDelay extends BaseObject implements Persistent
 
         if ($v !== null && !is_int($v)) {
             $ts = strtotime($v);
+            //Date/time accepts null values
+            if ($v == '') {
+                $ts = null;
+            }
             if ($ts === -1 || $ts === false) {
                 throw new PropelException("Unable to parse date/time value for [app_disable_action_date] from input: " .
                     var_export($v, true));
@@ -645,6 +653,10 @@ abstract class BaseAppDelay extends BaseObject implements Persistent
 
         if ($v !== null && !is_int($v)) {
             $ts = strtotime($v);
+            //Date/time accepts null values
+            if ($v == '') {
+                $ts = null;
+            }
             if ($ts === -1 || $ts === false) {
                 throw new PropelException("Unable to parse date/time value for [app_automatic_disabled_date] from input: " .
                     var_export($v, true));

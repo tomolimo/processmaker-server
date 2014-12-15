@@ -593,6 +593,8 @@ CREATE TABLE [INPUT_DOCUMENT]
 	[INP_DOC_VERSIONING] TINYINT default 0 NOT NULL,
 	[INP_DOC_DESTINATION_PATH] NVARCHAR(MAX)  NULL,
 	[INP_DOC_TAGS] NVARCHAR(MAX)  NULL,
+ [INP_DOC_MAX_FILESIZE] INT default 0 NOT NULL,
+	[INP_DOC_MAX_FILESIZE_UNIT] VARCHAR(2) default 'KB' NOT NULL,
 	CONSTRAINT INPUT_DOCUMENT_PK PRIMARY KEY ([INP_DOC_UID])
 );
 
@@ -904,6 +906,8 @@ CREATE TABLE [PROCESS]
 	[PRO_TRI_CANCELED] VARCHAR(32) default '' NOT NULL,
 	[PRO_TRI_PAUSED] VARCHAR(32) default '' NOT NULL,
 	[PRO_TRI_REASSIGNED] VARCHAR(32) default '' NOT NULL,
+ [PRO_TRI_UNPAUSED] VARCHAR(32) default '' NOT NULL,
+ [PRO_TYPE_PROCESS] VARCHAR(32) default 'PUBLIC' NOT NULL,
 	[PRO_SHOW_DELEGATE] TINYINT default 1 NOT NULL,
 	[PRO_SHOW_DYNAFORM] TINYINT default 0 NOT NULL,
 	[PRO_CATEGORY] VARCHAR(48) default '' NOT NULL,
@@ -3186,3 +3190,51 @@ CREATE TABLE [APP_SOLR_QUEUE]
 	[APP_UPDATED] TINYINT default 1 NOT NULL,
 	CONSTRAINT APP_SOLR_QUEUE_PK PRIMARY KEY ([APP_UID])
 );
+
+/* ---------------------------------------------------------------------- */
+/* WEB_ENTRY */
+/* ---------------------------------------------------------------------- */
+
+IF EXISTS (SELECT 1 FROM sysobjects WHERE type = 'U' AND name = 'WEB_ENTRY')
+BEGIN
+  DECLARE @reftable_70 nvarchar(60), @constraintname_70 nvarchar(60)
+  DECLARE refcursor CURSOR FOR
+  select reftables.name tablename, cons.name constraintname
+   from sysobjects tables,
+     sysobjects reftables,
+     sysobjects cons,
+     sysreferences ref
+    where tables.id = ref.rkeyid
+   and cons.id = ref.constid
+   and reftables.id = ref.fkeyid
+   and tables.name = 'WEB_ENTRY'
+  OPEN refcursor
+  FETCH NEXT from refcursor into @reftable_70, @constraintname_70
+  while @@FETCH_STATUS = 0
+  BEGIN
+    exec ('alter table ' + @reftable_70 + ' drop constraint ' + @constraintname_70)
+    FETCH NEXT from refcursor into @reftable_70, @constraintname_70
+  END
+  CLOSE refcursor
+  DEALLOCATE refcursor
+  DROP TABLE [WEB_ENTRY]
+END
+
+CREATE TABLE WEB_ENTRY
+(
+    WE_UID    VARCHAR(32) NOT NULL,
+    PRO_UID   VARCHAR(32) NOT NULL,
+    TAS_UID   VARCHAR(32) NOT NULL,
+    DYN_UID   VARCHAR(32) NOT NULL,
+    USR_UID   VARCHAR(32) DEFAULT '',
+    WE_METHOD VARCHAR(4) DEFAULT 'HTML',
+    WE_INPUT_DOCUMENT_ACCESS INT DEFAULT 0,
+    WE_DATA           NVARCHAR(MAX),
+    WE_CREATE_USR_UID VARCHAR(32) DEFAULT '' NOT NULL,
+    WE_UPDATE_USR_UID VARCHAR(32) DEFAULT '',
+    WE_CREATE_DATE    CHAR(19) NOT NULL,
+    WE_UPDATE_DATE    CHAR(19),
+
+    CONSTRAINT WEB_ENTRY_PK PRIMARY KEY (WE_UID)
+);
+

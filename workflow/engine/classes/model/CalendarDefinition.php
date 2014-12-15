@@ -248,12 +248,17 @@ class CalendarDefinition extends BaseCalendarDefinition
         }
         $CalendarWorkDays = isset( $aData['CALENDAR_WORK_DAYS'] ) ? implode( "|", $aData['CALENDAR_WORK_DAYS'] ) : "";
 
+        $msgCalendarDescriptionStatus = ($aData["CALENDAR_DESCRIPTION"] != "")? ", Description: " . $aData["CALENDAR_DESCRIPTION"] . ", Status: " . ucwords(strtolower($aData["CALENDAR_STATUS"])) : ", Status: " . ucwords(strtolower($aData["CALENDAR_STATUS"]));
         //if exists the row in the database propel will update it, otherwise will insert.
         $tr = CalendarDefinitionPeer::retrieveByPK( $CalendarUid );
         if (! (is_object( $tr ) && get_class( $tr ) == 'CalendarDefinition')) {
             $tr = new CalendarDefinition();
             $tr->setCalendarCreateDate( 'now' );
+            G::auditLog("CreateCalendar", "Calendar Name: ".$aData['CALENDAR_NAME'] . $msgCalendarDescriptionStatus);
+        } else {
+            G::auditLog("UpdateCalendar", "Calendar Name: ".$aData['CALENDAR_NAME'] . $msgCalendarDescriptionStatus . ", Calendar ID: (".$CalendarUid.") ");
         }
+
         $tr->setCalendarUid( $CalendarUid );
         $tr->setCalendarName( $CalendarName );
         $tr->setCalendarUpdateDate( 'now' );
@@ -315,6 +320,8 @@ class CalendarDefinition extends BaseCalendarDefinition
         if ($tr->validate()) {
             // we save it, since we get no validation errors, or do whatever else you like.
             $res = $tr->save();
+            $deletedCalendar = $tr->getCalendarName();
+            G::auditLog("DeleteCalendar", "Calendar Name: ".$deletedCalendar." Calendar ID: (".$CalendarUid.") ");
         } else {
             // Something went wrong. We can now get the validationFailures and handle them.
             $msg = '';

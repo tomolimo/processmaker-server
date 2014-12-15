@@ -1,20 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm cols="4" type="filterform" name="processes_Search" width="100%">
-
-<PRO_UID type="text" style="width:100%;" dataCompareField="PRO_UID" dataCompareType="=">
-  <en>UID</en>
-</PRO_UID>
-
-<PRO_TITLE type="text" style="width:100%;" dataCompareField="PRO_TITLE" dataCompareType="contains">
-  <en>Title</en>
-</PRO_TITLE>
-
-<PRO_DESCRIPTION type="text" style="width:100%;" dataCompareField="PRO_DESCRIPTION" dataCompareType="contains">
-  <en>Description</en>
-</PRO_DESCRIPTION>
-
-<search type="button" onclick="pagedTableFilter( this.form )">
-  <en>Apply Filter</en>
-</search>
-
-</dynaForm>  
+  <PRO_UID type="text" style="width:100%;" dataCompareField="PRO_UID" dataCompareType="=">
+    <en><![CDATA[UID]]></en>
+  </PRO_UID>
+  <PRO_TITLE type="text" style="width:100%;" dataCompareField="PRO_TITLE" dataCompareType="contains">
+    <en><![CDATA[Title]]></en>
+  </PRO_TITLE>
+  <PRO_DESCRIPTION type="text" style="width:100%;" dataCompareField="PRO_DESCRIPTION" dataCompareType="contains">
+    <en><![CDATA[Description]]></en>
+  </PRO_DESCRIPTION>
+  <search type="button" onclick="pagedTableFilter( this.form )">
+    <en><![CDATA[Apply Filter]]></en>
+  </search>
+</dynaForm>

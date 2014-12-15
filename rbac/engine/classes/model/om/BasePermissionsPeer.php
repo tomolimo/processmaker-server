@@ -18,7 +18,7 @@ abstract class BasePermissionsPeer {
 	const DATABASE_NAME = 'rbac';
 
 	/** the table name for this class */
-	const TABLE_NAME = 'PERMISSIONS';
+	const TABLE_NAME = 'RBAC_PERMISSIONS';
 
 	/** A class that can be returned by this peer. */
 	const CLASS_DEFAULT = 'classes.model.Permissions';
@@ -31,22 +31,22 @@ abstract class BasePermissionsPeer {
 
 
 	/** the column name for the PER_UID field */
-	const PER_UID = 'PERMISSIONS.PER_UID';
+	const PER_UID = 'RBAC_PERMISSIONS.PER_UID';
 
 	/** the column name for the PER_CODE field */
-	const PER_CODE = 'PERMISSIONS.PER_CODE';
+	const PER_CODE = 'RBAC_PERMISSIONS.PER_CODE';
 
 	/** the column name for the PER_CREATE_DATE field */
-	const PER_CREATE_DATE = 'PERMISSIONS.PER_CREATE_DATE';
+	const PER_CREATE_DATE = 'RBAC_PERMISSIONS.PER_CREATE_DATE';
 
 	/** the column name for the PER_UPDATE_DATE field */
-	const PER_UPDATE_DATE = 'PERMISSIONS.PER_UPDATE_DATE';
+	const PER_UPDATE_DATE = 'RBAC_PERMISSIONS.PER_UPDATE_DATE';
 
 	/** the column name for the PER_STATUS field */
-	const PER_STATUS = 'PERMISSIONS.PER_STATUS';
+	const PER_STATUS = 'RBAC_PERMISSIONS.PER_STATUS';
 
 	/** the column name for the PER_SYSTEM field */
-	const PER_SYSTEM = 'PERMISSIONS.PER_SYSTEM';
+	const PER_SYSTEM = 'RBAC_PERMISSIONS.PER_SYSTEM';
 
 	/** The PHP to DB Name Mapping */
 	private static $phpNameMap = null;
@@ -190,8 +190,8 @@ abstract class BasePermissionsPeer {
 
 	}
 
-	const COUNT = 'COUNT(PERMISSIONS.PER_UID)';
-	const COUNT_DISTINCT = 'COUNT(DISTINCT PERMISSIONS.PER_UID)';
+	const COUNT = 'COUNT(RBAC_PERMISSIONS.PER_UID)';
+	const COUNT_DISTINCT = 'COUNT(DISTINCT RBAC_PERMISSIONS.PER_UID)';
 
 	/**
 	 * Returns the number of rows matching criteria.

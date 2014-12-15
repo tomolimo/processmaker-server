@@ -1,36 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="triggers_Assign" type="xmlform" width="100%">
-
-<LANG type="private"/>
-
-<UIDS type="private"/>
-
-<PROCESS type="private"/>
-
-<action type="hidden"/>
-
-<STEP_UID type="hidden"/>
-
-<TITLE type="title" group="1">
-  <en>Available Triggers</en>
-</TITLE>
-
-<TRI_UID type="dropdown" colWidth="80" align="center"><![CDATA[
+  <LANG type="private"/>
+  <UIDS type="private"/>
+  <PROCESS type="private"/>
+  <action type="hidden"/>
+  <STEP_UID type="hidden"/>
+  <TITLE type="title" group="1">
+    <en><![CDATA[Available Triggers]]></en>
+  </TITLE>
+  <TRI_UID type="dropdown" colWidth="80" align="center"><![CDATA[
 SELECT TRI_UID, CON_VALUE FROM `TRIGGERS` LEFT JOIN CONTENT ON (TRI_UID = CON_ID AND CON_CATEGORY = 'TRI_TITLE' AND CON_LANG = '@#LANG') WHERE TRI_UID NOT IN (@#UIDS) AND PRO_UID = '@#PROCESS' ORDER BY CON_VALUE ASC
-]]><en>Triggers</en>
-</TRI_UID>
-
-<ST_TYPE type="hidden"/>
-
-<ST_CONDITION type="textareapm" required="0" cols="32" rows="3" showVars="1" process="@#PROCESS">
-<en>Condition</en>
-</ST_CONDITION>
-
-<ASSIGN type="button" onclick="assignTrigger(this.form);">
-<en>Assign</en>
-</ASSIGN>
-
-<JS type="javascript" replaceTags="1"><![CDATA[
+]]><en><![CDATA[Triggers]]></en></TRI_UID>
+  <ST_TYPE type="hidden"/>
+  <ST_CONDITION type="textareapm" required="0" cols="32" rows="3" showVars="1" process="@#PROCESS">
+    <en><![CDATA[Condition]]></en>
+  </ST_CONDITION>
+  <ASSIGN type="button" onclick="assignTrigger(this.form);">
+    <en><![CDATA[Assign]]></en>
+  </ASSIGN>
+  <JS type="javascript" replaceTags="1"><![CDATA[
 
 var _oVarsPanel_;
 var showDynaformsFormVars = function(sFieldName, sAjaxServer, sProcess, sSymbol) {
@@ -95,5 +83,4 @@ function assignTrigger(oForm)
 
 
 ]]></JS>
-
-</dynaForm>  
+</dynaForm>

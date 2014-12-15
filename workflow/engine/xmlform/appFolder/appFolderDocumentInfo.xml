@@ -1,27 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm width="100%">
-
-<PRO_TITLE type="caption" colWidth="160" titleAlign="left" align="left">
-  <en>Process</en>
-</PRO_TITLE>
-<APP_TITLE type="caption" colWidth="160" titleAlign="left" align="left">
-  <en>Case Title</en>
-</APP_TITLE>
-<APP_DOC_FILENAME type="caption" colWidth="160" titleAlign="left" align="left">
-  <en>File Name</en>
-</APP_DOC_FILENAME>
-<DOC_VERSION type="caption" colWidth="20" titleAlign="left" align="left">
-  <en>Version</en>
-</DOC_VERSION>
-<APP_DOC_TYPE type="caption" colWidth="50" titleAlign="left" align="left">
-  <en>Type</en>
-</APP_DOC_TYPE>
-
-<USR_USERNAME type="caption" colWidth="90" titleAlign="left" align="left">
-  <en>Creator</en>
-</USR_USERNAME>
-<APP_DOC_CREATE_DATE type="caption" colWidth="120" titleAlign="left" align="left">
-  <en>Created</en>
-</APP_DOC_CREATE_DATE>
-
+  <PRO_TITLE type="caption" colWidth="160" titleAlign="left" align="left">
+    <en><![CDATA[Process]]></en>
+  </PRO_TITLE>
+  <APP_TITLE type="caption" colWidth="160" titleAlign="left" align="left">
+    <en><![CDATA[Case Title]]></en>
+  </APP_TITLE>
+  <APP_DOC_FILENAME type="caption" colWidth="160" titleAlign="left" align="left">
+    <en><![CDATA[File Name]]></en>
+  </APP_DOC_FILENAME>
+  <DOC_VERSION type="caption" colWidth="20" titleAlign="left" align="left">
+    <en><![CDATA[Version]]></en>
+  </DOC_VERSION>
+  <APP_DOC_TYPE type="caption" colWidth="50" titleAlign="left" align="left">
+    <en><![CDATA[Type]]></en>
+  </APP_DOC_TYPE>
+  <USR_USERNAME type="caption" colWidth="90" titleAlign="left" align="left">
+    <en><![CDATA[Creator]]></en>
+  </USR_USERNAME>
+  <APP_DOC_CREATE_DATE type="caption" colWidth="120" titleAlign="left" align="left">
+    <en><![CDATA[Created]]></en>
+  </APP_DOC_CREATE_DATE>
 </dynaForm>

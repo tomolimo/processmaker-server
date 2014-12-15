@@ -1,22 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="xmlmenu">
-
-<PRO_UID type="private"/>
-
-<MNU_ASSIGN type="link" value="" link="#" onclick="availableSupervisorDynaforms(@QPRO_UID);return false;" colAlign="left" colWidth="100">
-  <en>Assign</en>
-</MNU_ASSIGN>
-
-<PAGED_TABLE_ID type="private"/>
-
-<PRO_UID type="private"/>
-<dynaformsEdit type="private" defaultValue="../dynaforms/dynaforms_Edit"/>
-<dynaformsNewPlugin type="private" defaultValue="../dynaforms/dynaforms_NewPlugin"/>
-<dynaformsEditor type="private" defaultValue="../dynaforms/dynaforms_Editor"/>
-<dynaformsFlatEditor type="private" defaultValue="../dynaforms/dynaforms_FlatEditor"/>
-<dynaformsDelete type="private" defaultValue="../dynaforms/dynaforms_Delete"/>
-
-<JS type="javascript" replaceTags="1"><![CDATA[
+  <PRO_UID type="private"/>
+  <MNU_ASSIGN type="link" value="" link="#" onclick="availableSupervisorDynaforms(@QPRO_UID);return false;" colAlign="left" colWidth="100">
+    <en><![CDATA[Assign]]></en>
+  </MNU_ASSIGN>
+  <PAGED_TABLE_ID type="private"/>
+  <PRO_UID type="private"/>
+  <dynaformsEdit type="private" defaultValue="../dynaforms/dynaforms_Edit"/>
+  <dynaformsNewPlugin type="private" defaultValue="../dynaforms/dynaforms_NewPlugin"/>
+  <dynaformsEditor type="private" defaultValue="../dynaforms/dynaforms_Editor"/>
+  <dynaformsFlatEditor type="private" defaultValue="../dynaforms/dynaforms_FlatEditor"/>
+  <dynaformsDelete type="private" defaultValue="../dynaforms/dynaforms_Delete"/>
+  <JS type="javascript" replaceTags="1"><![CDATA[
 
 var oPanel;
 var availableSupervisorDynaforms = function(sProcessUID) {
@@ -76,5 +71,4 @@ var removeSupervisorDynaform = function(sStepUID, sProcessUID, sDynaformUID, iPo
 };
 
 ]]></JS>
-
-</dynaForm> 
+</dynaForm>

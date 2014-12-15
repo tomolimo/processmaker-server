@@ -103,7 +103,7 @@ abstract class BaseTask extends BaseObject implements Persistent
      * The value for the tas_group_variable field.
      * @var        string
      */
-    protected $tas_group_variable = '@@SYS_GROUP_TO_BE_ASSIGNED';
+    protected $tas_group_variable;
 
     /**
      * The value for the tas_mi_instance_variable field.
@@ -302,6 +302,12 @@ abstract class BaseTask extends BaseObject implements Persistent
      * @var        string
      */
     protected $tas_selfservice_trigger_uid = '';
+
+    /**
+     * The value for the tas_selfservice_execution field.
+     * @var        string
+     */
+    protected $tas_selfservice_execution = 'EVERY_TIME';
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -824,6 +830,17 @@ abstract class BaseTask extends BaseObject implements Persistent
     }
 
     /**
+     * Get the [tas_selfservice_execution] column value.
+     * 
+     * @return     string
+     */
+    public function getTasSelfserviceExecution()
+    {
+
+        return $this->tas_selfservice_execution;
+    }
+
+    /**
      * Set the value of [pro_uid] column.
      * 
      * @param      string $v new value
@@ -1090,7 +1107,7 @@ abstract class BaseTask extends BaseObject implements Persistent
             $v = (string) $v;
         }
 
-        if ($this->tas_group_variable !== $v || $v === '@@SYS_GROUP_TO_BE_ASSIGNED') {
+        if ($this->tas_group_variable !== $v) {
             $this->tas_group_variable = $v;
             $this->modifiedColumns[] = TaskPeer::TAS_GROUP_VARIABLE;
         }
@@ -1824,6 +1841,28 @@ abstract class BaseTask extends BaseObject implements Persistent
     } // setTasSelfserviceTriggerUid()
 
     /**
+     * Set the value of [tas_selfservice_execution] column.
+     * 
+     * @param      string $v new value
+     * @return     void
+     */
+    public function setTasSelfserviceExecution($v)
+    {
+
+        // Since the native PHP type for this column is string,
+        // we will cast the input to a string (if it is not).
+        if ($v !== null && !is_string($v)) {
+            $v = (string) $v;
+        }
+
+        if ($this->tas_selfservice_execution !== $v || $v === 'EVERY_TIME') {
+            $this->tas_selfservice_execution = $v;
+            $this->modifiedColumns[] = TaskPeer::TAS_SELFSERVICE_EXECUTION;
+        }
+
+    } // setTasSelfserviceExecution()
+
+    /**
      * Hydrates (populates) the object variables with values from the database resultset.
      *
      * An offset (1-based "start column") is specified so that objects can be hydrated
@@ -1932,12 +1971,14 @@ abstract class BaseTask extends BaseObject implements Persistent
 
             $this->tas_selfservice_trigger_uid = $rs->getString($startcol + 45);
 
+            $this->tas_selfservice_execution = $rs->getString($startcol + 46);
+
             $this->resetModified();
 
             $this->setNew(false);
 
             // FIXME - using NUM_COLUMNS may be clearer.
-            return $startcol + 46; // 46 = TaskPeer::NUM_COLUMNS - TaskPeer::NUM_LAZY_LOAD_COLUMNS).
+            return $startcol + 47; // 47 = TaskPeer::NUM_COLUMNS - TaskPeer::NUM_LAZY_LOAD_COLUMNS).
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Task object", $e);
@@ -2279,6 +2320,9 @@ abstract class BaseTask extends BaseObject implements Persistent
             case 45:
                 return $this->getTasSelfserviceTriggerUid();
                 break;
+            case 46:
+                return $this->getTasSelfserviceExecution();
+                break;
             default:
                 return null;
                 break;
@@ -2345,6 +2389,7 @@ abstract class BaseTask extends BaseObject implements Persistent
             $keys[43] => $this->getTasSelfserviceTime(),
             $keys[44] => $this->getTasSelfserviceTimeUnit(),
             $keys[45] => $this->getTasSelfserviceTriggerUid(),
+            $keys[46] => $this->getTasSelfserviceExecution(),
         );
         return $result;
     }
@@ -2513,6 +2558,9 @@ abstract class BaseTask extends BaseObject implements Persistent
                 break;
             case 45:
                 $this->setTasSelfserviceTriggerUid($value);
+                break;
+            case 46:
+                $this->setTasSelfserviceExecution($value);
                 break;
         } // switch()
     }
@@ -2721,6 +2769,10 @@ abstract class BaseTask extends BaseObject implements Persistent
             $this->setTasSelfserviceTriggerUid($arr[$keys[45]]);
         }
 
+        if (array_key_exists($keys[46], $arr)) {
+            $this->setTasSelfserviceExecution($arr[$keys[46]]);
+        }
+
     }
 
     /**
@@ -2916,6 +2968,10 @@ abstract class BaseTask extends BaseObject implements Persistent
             $criteria->add(TaskPeer::TAS_SELFSERVICE_TRIGGER_UID, $this->tas_selfservice_trigger_uid);
         }
 
+        if ($this->isColumnModified(TaskPeer::TAS_SELFSERVICE_EXECUTION)) {
+            $criteria->add(TaskPeer::TAS_SELFSERVICE_EXECUTION, $this->tas_selfservice_execution);
+        }
+
 
         return $criteria;
     }
@@ -3059,6 +3115,8 @@ abstract class BaseTask extends BaseObject implements Persistent
         $copyObj->setTasSelfserviceTimeUnit($this->tas_selfservice_time_unit);
 
         $copyObj->setTasSelfserviceTriggerUid($this->tas_selfservice_trigger_uid);
+
+        $copyObj->setTasSelfserviceExecution($this->tas_selfservice_execution);
 
 
         $copyObj->setNew(true);

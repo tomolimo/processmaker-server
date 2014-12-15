@@ -1,42 +1,24 @@
 <?xml version="1.0"?>
-<dynaForm
-  type="xmlform"
-  sqlConnection=""
-  deleteRow="0"
-  menu="departments/departments_Options"
-  filterForm="groups/groups_Search"
-  width="95%" enableTemplate="1"
-
->
-<title type="title" colWidth="200" showInTable="0">
-  <en>Department Information</en>
-</title>
-
-<DEP_UID type="hidden" size="40" showInTable="0">
+<dynaForm type="xmlform" sqlConnection="" deleteRow="0" menu="departments/departments_Options" filterForm="groups/groups_Search" width="95%" enableTemplate="1">
+  <title type="title" colWidth="200" showInTable="0">
+    <en><![CDATA[Department Information]]></en>
+  </title>
+  <DEP_UID type="hidden" size="40" showInTable="0">
 </DEP_UID>
-
-<DEPO_TITLE type="text" colWidth="200" size="30" maxlength="64" required="1">
-  <en>Name</en>
-</DEPO_TITLE>
-
-<DEP_STATUS type="dropdown" colWidth="150" align="center">
-  <en>Status
-  <option name="ACTIVE">Active</option>
-  <option name="INACTIVE">Inactive</option>
-  </en>
-</DEP_STATUS>
-
-<DEP_MANAGER type="dropdown" mode="edit" colWidth="150" align="center">
+  <DEPO_TITLE type="text" colWidth="200" size="30" maxlength="64" required="1">
+    <en><![CDATA[Name]]></en>
+  </DEPO_TITLE>
+  <DEP_STATUS type="dropdown" colWidth="150" align="center">
+    <en><![CDATA[Status]]><option name="ACTIVE"><![CDATA[Active]]></option><option name="INACTIVE"><![CDATA[Inactive]]></option></en>
+  </DEP_STATUS>
+  <DEP_MANAGER type="dropdown" mode="edit" colWidth="150" align="center">
 SELECT USR_UID, USR_USERNAME from USERS where DEP_UID =  "@#DEP_UID"
-  <en>Manager/Supervisor
-  <!--option name="">No manager</option-->
-  </en>
+  <en><![CDATA[Manager/Supervisor]]></en>
 </DEP_MANAGER>
-
-<button type="button" onclick="validateLocalFields(this.form);" showInTable="0">
-  <en>Save</en>
-</button> 
-<JS type="javascript" replacetags="1">
+  <button type="button" onclick="validateLocalFields(this.form);" showInTable="0">
+    <en><![CDATA[Save]]></en>
+  </button>
+  <JS type="javascript" replacetags="1">
   var sGroupname;
   sGroupname = document.forms[0].elements['form[DEPO_TITLE]'].value;
      
@@ -84,5 +66,4 @@ var validateLocalFields = function(oForm)
 
 leimnud.event.add(document.forms[0].elements['form[DEPO_TITLE]'],'change',verifyDptoname);  
 </JS>
-
-</dynaForm>   
+</dynaForm>

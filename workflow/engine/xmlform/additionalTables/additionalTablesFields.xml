@@ -1,35 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="grid" name="additionalTablesFields">
-
-<FLD_UID type="text" size="1" style="display:none;"/>
-
-<FLD_NAME type="text" size="15" maxlength="64" validate="Field" strto="UPPER">
-  <en>Field Name</en>
-</FLD_NAME>
-
-<FLD_DESCRIPTION type="text" size="20" maxlength="255">
-  <en>Field Label</en>
-</FLD_DESCRIPTION>
-
-<FLD_TYPE type="dropdown">
-  <en>Type<option name="VARCHAR">VARCHAR</option><option name="TEXT">TEXT</option><option name="DATE">DATE</option><option name="INT">INT</option><option name="FLOAT">FLOAT</option></en>
-</FLD_TYPE>
-
-<FLD_SIZE type="text" size="3" maxlength="3" validate="Int">
-  <en>Size</en>
-</FLD_SIZE>
-
-<FLD_NULL type="checkbox" defaultValue="on">
-  <en>Null</en>
-</FLD_NULL>
-
-<FLD_KEY type="checkbox" defaultValue="on">
-  <en>Primary Key</en>
-</FLD_KEY>
-
-<FLD_NULL_HDN type="hidden" defaultvalue="" mode="edit" btn_cancel="Cancel">
+  <FLD_UID type="text" size="1" style="display:none;"/>
+  <FLD_NAME type="text" size="15" maxlength="64" validate="Field" strto="UPPER">
+    <en><![CDATA[Field Name]]></en>
+  </FLD_NAME>
+  <FLD_DESCRIPTION type="text" size="20" maxlength="255">
+    <en><![CDATA[Field Label]]></en>
+  </FLD_DESCRIPTION>
+  <FLD_TYPE type="dropdown">
+    <en><![CDATA[Type]]><option name="VARCHAR"><![CDATA[VARCHAR]]></option><option name="TEXT"><![CDATA[TEXT]]></option><option name="DATE"><![CDATA[DATE]]></option><option name="INT"><![CDATA[INT]]></option><option name="FLOAT"><![CDATA[FLOAT]]></option></en>
+  </FLD_TYPE>
+  <FLD_SIZE type="text" size="3" maxlength="3" validate="Int">
+    <en><![CDATA[Size]]></en>
+  </FLD_SIZE>
+  <FLD_NULL type="checkbox" defaultValue="on">
+    <en><![CDATA[Null]]></en>
+  </FLD_NULL>
+  <FLD_KEY type="checkbox" defaultValue="on">
+    <en><![CDATA[Primary Key]]></en>
+  </FLD_KEY>
+  <FLD_NULL_HDN type="hidden" defaultvalue="" mode="edit" btn_cancel="Cancel">
 </FLD_NULL_HDN>
-<FLD_KEY_HDN type="hidden" defaultvalue="" mode="edit" btn_cancel="Cancel">
+  <FLD_KEY_HDN type="hidden" defaultvalue="" mode="edit" btn_cancel="Cancel">
 </FLD_KEY_HDN>
-
 </dynaForm>

@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="tracker_AvailableStageTasks" sqlConnection="" width="100%" rowsPerPage="10">
-
-<STG_UID type="hidden" showInTable="0"/>
-
-<TAS_UID type="hidden" showInTable="0"/>
-
-<TAS_TITLE type="text" colWidth="350" titleAlign="left" align="left">
-  <en>Title</en>
-</TAS_TITLE>
-
-<ASSIGN type="link" colWidth="40" value="@G::LoadTranslation(ID_ASSIGN)" link="#" onclick="assignTaskToStage(@QSTG_UID, @QTAS_UID);return false;"><en></en></ASSIGN>
-
-</dynaForm> 
+  <STG_UID type="hidden" showInTable="0"/>
+  <TAS_UID type="hidden" showInTable="0"/>
+  <TAS_TITLE type="text" colWidth="350" titleAlign="left" align="left">
+    <en><![CDATA[Title]]></en>
+  </TAS_TITLE>
+  <ASSIGN type="link" colWidth="40" value="@G::LoadTranslation(ID_ASSIGN)" link="#" onclick="assignTaskToStage(@QSTG_UID, @QTAS_UID);return false;">
+    <en><![CDATA[]]></en>
+  </ASSIGN>
+</dynaForm>

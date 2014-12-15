@@ -1,28 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="pagetable" sqlConnection="" menu="reports/report1_back">
-
-<FECHA type="text" align="left" colWidth="100">
-  <en>Date</en>
-</FECHA>
-
-<CANTCASES type="text" align="right" colWidth="80">
-  <en>Total Cases</en>
-</CANTCASES>
-
-<MIN type="hours" align="right" colWidth="180">
-  <en>Best Completion Time</en>
-</MIN>
-
-<MAX type="hours" align="right" colWidth="180">
-  <en>Slowest Completion Time</en>
-</MAX>
-
-<TOTALDUR type="hours" align="right" colWidth="150">
-  <en>Total Duration (Hours)</en>
-</TOTALDUR>
-
-<PROMEDIO type="hours" align="right" colWidth="100">
-  <en>Average (Hours)</en>
-</PROMEDIO>
-
-</dynaForm>  
+  <FECHA type="text" align="left" colWidth="100">
+    <en><![CDATA[Date]]></en>
+  </FECHA>
+  <CANTCASES type="text" align="right" colWidth="80">
+    <en><![CDATA[Total Cases]]></en>
+  </CANTCASES>
+  <MIN type="hours" align="right" colWidth="180">
+    <en><![CDATA[Best Completion Time]]></en>
+  </MIN>
+  <MAX type="hours" align="right" colWidth="180">
+    <en><![CDATA[Slowest Completion Time]]></en>
+  </MAX>
+  <TOTALDUR type="hours" align="right" colWidth="150">
+    <en><![CDATA[Total Duration (Hours)]]></en>
+  </TOTALDUR>
+  <PROMEDIO type="hours" align="right" colWidth="100">
+    <en><![CDATA[Average (Hours)]]></en>
+  </PROMEDIO>
+</dynaForm>

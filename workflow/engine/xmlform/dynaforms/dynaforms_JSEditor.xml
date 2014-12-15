@@ -1,26 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<dynaForm
-  name="dynaforms_JSEditor"
-  type="xmlform"
-  width="98%"
-  border="0"
->
-<!--<toolbar type="toolbar" xmlfile="dynaforms/dynaforms_Toolbar"/>-->
-
-<JS_TITLE type="title" enablehtml="0" align="center" style="display:none">
-<en>There is no javascript code</en>
-</JS_TITLE>
-
-<JS_LIST withoutLabel="1" type="dropdown" sqlconnection="XMLDB">
+<dynaForm name="dynaforms_JSEditor" type="xmlform" width="98%" border="0">
+  <!--<toolbar type="toolbar" xmlfile="dynaforms/dynaforms_Toolbar"/>-->
+  <JS_TITLE type="title" enablehtml="0" align="center" style="display:none">
+    <en><![CDATA[There is no javascript code]]></en>
+  </JS_TITLE>
+  <JS_LIST withoutLabel="1" type="dropdown" sqlconnection="XMLDB">
 SELECT XMLNODE_NAME AS UID, XMLNODE_NAME AS NAME FROM dynaForm WHERE TYPE = "javascript"
-  <en>Section</en>
+  <en><![CDATA[Section]]></en>
 </JS_LIST>
-
-<JS withoutLabel="1" type="textarea" rows="25" cols="60" sqlconnection="XMLDB" style="width:100%">
-  <en>Code</en>
-</JS>
-
-<PME_RESIZE_JS type="javascript"><![CDATA[
+  <JS withoutLabel="1" type="textarea" rows="25" cols="60" sqlconnection="XMLDB" style="width:100%">
+    <en><![CDATA[Code]]></en>
+  </JS>
+  <PME_RESIZE_JS type="javascript"><![CDATA[
 getField('JS_TITLE').style.font ="9pt tahoma";
 function resizeJSEditor(){
   try{
@@ -45,5 +36,4 @@ function startJSCodePress()
   };
 }
 ]]></PME_RESIZE_JS>
-
-</dynaForm>  
+</dynaForm>

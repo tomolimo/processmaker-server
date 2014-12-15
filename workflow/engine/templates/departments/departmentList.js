@@ -383,7 +383,7 @@ SaveEditDepartment = function(){
       if (res_ok){
         Ext.Ajax.request({
           url: 'departments_Ajax',
-          params: {action: 'updateDepartment', uid: dep_uid, name: dep_name, status: dep_status, manager: dep_manager},
+          params: {action: 'updateDepartment', uid: dep_uid, name: dep_name, status: dep_status, manager: dep_manager, parent: dep_parent},
           success: function(r,o){
             var xtree = Ext.getCmp('treePanel');
             xtree.getLoader().load(xtree.root);

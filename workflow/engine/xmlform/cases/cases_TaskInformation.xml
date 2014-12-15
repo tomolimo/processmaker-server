@@ -1,29 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="cases_TaskInformation" width="100%" labelWidth="35%" mode="view" enableTemplate="0">
-
-
-<TAS_TITLE type="text" size="40" maxlength="255" defaultvalue="" required="1" group="1" dependentfields="" linkfield="" strto="" readonly="0" noshowingrid="0" readonlyingrid="0" totalizeable="0" sqlconnection="">
-  <en>Title</en>
-</TAS_TITLE>
-
-<TAS_DESCRIPTION type="textarea" required="0" cols="38" rows="5" group="1">
-  <en>Description</en>
-</TAS_DESCRIPTION>
-
-<INIT_DATE type="date" mode="view">
-  <en>Init Date</en>
-</INIT_DATE>
-
-<DUE_DATE type="date" mode="view">
-  <en>Due Date</en>
-</DUE_DATE>
-
-<FINISH type="text" mode="view">
-  <en>Finish date</en>
-</FINISH>
-
-<DURATION type="text" mode="view">
-  <en>Duration</en>
-</DURATION>
-
+  <TAS_TITLE type="text" size="40" maxlength="255" defaultvalue="" required="1" group="1" dependentfields="" linkfield="" strto="" readonly="0" noshowingrid="0" readonlyingrid="0" totalizeable="0" sqlconnection="">
+    <en><![CDATA[Title]]></en>
+  </TAS_TITLE>
+  <TAS_DESCRIPTION type="textarea" required="0" cols="38" rows="5" group="1">
+    <en><![CDATA[Description]]></en>
+  </TAS_DESCRIPTION>
+  <INIT_DATE type="date" mode="view">
+    <en><![CDATA[Init Date]]></en>
+  </INIT_DATE>
+  <DUE_DATE type="date" mode="view">
+    <en><![CDATA[Due Date]]></en>
+  </DUE_DATE>
+  <FINISH type="text" mode="view">
+    <en><![CDATA[Finish date]]></en>
+  </FINISH>
+  <DURATION type="text" mode="view">
+    <en><![CDATA[Duration]]></en>
+  </DURATION>
 </dynaForm>

@@ -1,55 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<dynaForm name="processes_subProcess" width="650px" labelWidth="200px" mode="edit" enableTemplate="1" ajaxSubmit="1" >
-
-<TITLE1 type="title">
-  <en>Sub-Process</en>
-</TITLE1>
-
-<SP_UID type="hidden"/>
-
-<PRO_PARENT type="hidden"/>
-
-<TAS_PARENT type="hidden"/>
-
-<INDEX type="hidden"/>
-
-<SPROCESS_NAME type="text" size="30">
-<en>SubProcess name</en>
-</SPROCESS_NAME>
-
-<TASKS type="dropdown" style="width:350px" sqlConnection="dbarray">
+<dynaForm name="processes_subProcess" width="650px" labelWidth="200px" mode="edit" enableTemplate="1" ajaxSubmit="1">
+  <TITLE1 type="title">
+    <en><![CDATA[Sub-Process]]></en>
+  </TITLE1>
+  <SP_UID type="hidden"/>
+  <PRO_PARENT type="hidden"/>
+  <TAS_PARENT type="hidden"/>
+  <INDEX type="hidden"/>
+  <SPROCESS_NAME type="text" size="30">
+    <en><![CDATA[SubProcess name]]></en>
+  </SPROCESS_NAME>
+  <TASKS type="dropdown" style="width:350px" sqlConnection="dbarray">
   SELECT * FROM NewCase
-  <en>Process<option name="">Select a process</option></en>
+  <en><![CDATA[Process]]><option name=""><![CDATA[Select a process]]></option></en>
 </TASKS>
-
-<PROCESSES type="dropdown" style="width:350px;display:none;" sqlConnection="dbarray">
+  <PROCESSES type="dropdown" style="width:350px;display:none;" sqlConnection="dbarray">
   SELECT * FROM TheProcesses
-  <en><option name=""/></en>
+  <en><![CDATA[]]><option name=""><![CDATA[]]></option></en>
 </PROCESSES>
-
-<SP_SYNCHRONOUS type="dropdown" defaultvalue="0">
-  <en>Type<option name="0">Asynchronous</option><option name="1">Synchronous</option></en>
-</SP_SYNCHRONOUS>
-
-<SUBTITLE1 type="subtitle">
-  <en>Variables Out</en>
-</SUBTITLE1>
-<grid1 type="grid" xmlgrid="processes/processes_subProcess_Out" addrow="1" deleterow="1" mode="edit"/>
-
-<SUBTITLE2 type="subtitle">
-  <en>Variables In</en>
-</SUBTITLE2>
-<grid2 type="grid" xmlgrid="processes/processes_subProcess_In" addrow="1" deleterow="1" mode="edit"/>
-
-<BTN_CANCEL type="button" onclick="cancel();">
-  <en>Cancel</en>
-</BTN_CANCEL>
-
-<SAVE type="button" onclick="processes_subProcessSave(this.form);">
-  <en>Save</en>
-</SAVE>
-
-<JS type="javascript"><![CDATA[
+  <SP_SYNCHRONOUS type="dropdown" defaultvalue="0">
+    <en><![CDATA[Type]]><option name="0"><![CDATA[Asynchronous]]></option><option name="1"><![CDATA[Synchronous]]></option></en>
+  </SP_SYNCHRONOUS>
+  <SUBTITLE1 type="subtitle">
+    <en><![CDATA[Variables Out]]></en>
+  </SUBTITLE1>
+  <grid1 type="grid" xmlgrid="processes/processes_subProcess_Out" addrow="1" deleterow="1" mode="edit"/>
+  <SUBTITLE2 type="subtitle">
+    <en><![CDATA[Variables In]]></en>
+  </SUBTITLE2>
+  <grid2 type="grid" xmlgrid="processes/processes_subProcess_In" addrow="1" deleterow="1" mode="edit"/>
+  <BTN_CANCEL type="button" onclick="cancel();">
+    <en><![CDATA[Cancel]]></en>
+  </BTN_CANCEL>
+  <SAVE type="button" onclick="processes_subProcessSave(this.form);">
+    <en><![CDATA[Save]]></en>
+  </SAVE>
+  <JS type="javascript"><![CDATA[
 
 if(getField('SP_SYNCHRONOUS').value!=1){
 hideRowById('SUBTITLE2')

@@ -1,22 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="nologin" basedir="">Login to system
 
-<DYNA_HEADER>
-  <en>[CDATA]
+<DYNA_HEADER><en>[CDATA]
     <center class="subtitle">Your session has expired. </center>
-  [/CDATA]</en>
-</DYNA_HEADER>
+  [/CDATA]</en></DYNA_HEADER>
 
 
-<subtitle type="subtitle">
-  <en/>
-<en/>
-</subtitle>
+<subtitle type="subtitle"><en><![CDATA[]]></en><en/></subtitle>
 
 <subtitle type="subtitle">
   </subtitle>
 
-<BSUBMIT type="submit">
-  <en>Login</en>
-</BSUBMIT>
-</dynaForm>  
+<BSUBMIT type="submit"><en><![CDATA[Login]]></en></BSUBMIT>
+</dynaForm>

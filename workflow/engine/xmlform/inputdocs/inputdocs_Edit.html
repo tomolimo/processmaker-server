@@ -1,4 +1,4 @@
-<form id="{$form_id}" name="{$form_name}" action="{$form_action}" class="{$form_className}" method="post" encType="multipart/form-data" style="margin:0px;" onsubmit='return validateForm("{$form_objectRequiredFields}".parseJSON());'>  
+<form id="{$form_id}" name="{$form_name}" action="{$form_action}" class="{$form_className}" method="post" encType="multipart/form-data" style="margin:0px;" onsubmit='return validateForm("{$form_objectRequiredFields}".parseJSON());'>
   <div class="borderForm" style="padding-left: 0pt; padding-right: 0pt;">
 		<div class="boxTop"><div class="a"></div><div class="b"></div><div class="c"></div></div>
 		<div class="content" style="">
@@ -8,8 +8,12 @@
         <input class="notValidateThisFields" name="__notValidateThisFields__" id="__notValidateThisFields__" value="" type="hidden">
         <input name="DynaformRequiredFields" id="DynaformRequiredFields" value="{$form_objectRequiredFields}" type="hidden">
            <table border="0" cellpadding="0" cellspacing="0" width="100%">
-                                  <tbody><tr style="display: none;">
-              <td colspan="2">{$form.PRO_UID}</td>
+            <tbody>
+             <tr style="display: none;">
+                 <td colspan="2">
+                    {$form.PRO_UID}
+                    {$form.INP_DOC_UPLOAD_MAX_FILESIZE}
+                 </td>
              </tr>
                                               <tr style="display: none;">
               <td colspan="2">{$form.INP_DOC_UID}</td>
@@ -18,40 +22,51 @@
               <td class="FormTitle" colspan="2" align="">{$form.TITLE}</td>
              </tr>
                                                 <tr>
-              <td class="FormLabel" width="{$form_labelWidth}">{$INP_DOC_TITLE}</td>
+              <td class="FormLabel" width="{$form_labelWidth}"><font color="red">*  </font>{$INP_DOC_TITLE}</td>
               <!-- <td class='FormFieldContent' width="{$form_width}" >{$form.INP_DOC_TITLE} </td>  //-->
-              <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.INP_DOC_TITLE}</td> 
+              <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.INP_DOC_TITLE}</td>
               </tr>
                                                 <tr>
               <td class="FormLabel" width="{$form_labelWidth}">{$INP_DOC_FORM_NEEDED}</td>
               <!-- <td class='FormFieldContent' width="{$form_width}" >{$form.INP_DOC_FORM_NEEDED} </td>  //-->
-              <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.INP_DOC_FORM_NEEDED}</td> 
+              <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.INP_DOC_FORM_NEEDED}</td>
               </tr>
                                                 <tr>
               <td class="FormLabel" width="{$form_labelWidth}">{$INP_DOC_ORIGINAL}</td>
               <!-- <td class='FormFieldContent' width="{$form_width}" >{$form.INP_DOC_ORIGINAL} </td>  //-->
-              <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.INP_DOC_ORIGINAL}</td> 
+              <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.INP_DOC_ORIGINAL}</td>
               </tr>
                                                 <tr>
               <td class="FormLabel" width="{$form_labelWidth}">{$INP_DOC_DESCRIPTION}</td>
               <!-- <td class='FormFieldContent' width="{$form_width}" >{$form.INP_DOC_DESCRIPTION} </td>  //-->
-              <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.INP_DOC_DESCRIPTION}</td> 
+              <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.INP_DOC_DESCRIPTION}</td>
               </tr>
                                                 <tr>
               <td class="FormLabel" width="{$form_labelWidth}">{$INP_DOC_VERSIONING}</td>
               <!-- <td class='FormFieldContent' width="{$form_width}" >{$form.INP_DOC_VERSIONING} </td>  //-->
-              <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.INP_DOC_VERSIONING}</td> 
+              <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.INP_DOC_VERSIONING}</td>
               </tr>
                                                 <tr>
               <td class="FormLabel" width="{$form_labelWidth}">{$INP_DOC_DESTINATION_PATH}</td>
               <!-- <td class='FormFieldContent' width="{$form_width}" >{$form.INP_DOC_DESTINATION_PATH} </td>  //-->
-              <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.INP_DOC_DESTINATION_PATH}</td> 
+              <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.INP_DOC_DESTINATION_PATH}</td>
               </tr>
                                                 <tr>
               <td class="FormLabel" width="{$form_labelWidth}">{$INP_DOC_TAGS}</td>
               <!-- <td class='FormFieldContent' width="{$form_width}" >{$form.INP_DOC_TAGS} </td>  //-->
-              <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.INP_DOC_TAGS}</td> 
+              <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.INP_DOC_TAGS}</td>
               </tr>
+              									<tr>
+              <td class="FormLabel" width="{$form_labelWidth}"><font color="red">*  </font>{$INP_DOC_TYPE_FILE}</td>
+              <!-- <td class='FormFieldContent' width="{$form_width}" >{$form.INP_DOC_TYPE_FILE} </td>  //-->
+              <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.INP_DOC_TYPE_FILE}</td>
+              </tr>
+
+              <tr>
+                  <td class='FormLabel' width="{$form_labelWidth}"><font color="red">*  </font>{$INP_DOC_MAX_FILESIZE}</td>
+                  <td class='FormFieldContent' >{$form.INP_DOC_MAX_FILESIZE}  {$form.INP_DOC_MAX_FILESIZE_UNIT}   {$INP_DOC_UPLOAD_MAX_FILESIZE_LABEL} {$form.INP_DOC_UPLOAD_MAX_FILESIZE_LABEL}</td>
+              </tr>
+
                                                <tr>
               <td class="FormButton" colspan="2" align="center"> <br/> {$form.ACCEPT} &nbsp; {$form.BTN_CANCEL} </td>
              </tr>
@@ -60,9 +75,10 @@
       </tr>
     </tbody></table>
     		</div>
+    		<div class="FormRequiredTextMessage"><font color="red">*  </font>{php}echo (G::LoadTranslation('ID_REQUIRED_FIELD'));{/php}</div>
 		<div class="boxBottom"><div class="a"></div><div class="b"></div><div class="c"></div></div>
   </div>
                             <script type="text/javascript">
     {$form.JS}
   </script>
- </form>	
+ </form>

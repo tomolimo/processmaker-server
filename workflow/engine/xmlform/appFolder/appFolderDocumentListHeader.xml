@@ -1,18 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="AppFolder" width="600" mode="edit" enableTemplate="0" border="0">
-
-
-<FOLDER_UID type="dropdown" required="0" readonly="0" savelabel="0" mode="edit" options="dbarray">
+  <FOLDER_UID type="dropdown" required="0" readonly="0" savelabel="0" mode="edit" options="dbarray">
     SELECT FOLDER_UID, FOLDER_NAME FROM APP_FOLDER
-  <en>Move selected to:<option name=""></option></en>
+  <en><![CDATA[Move selected to:]]><option name=""><![CDATA[]]></option></en>
 </FOLDER_UID>
-<MOVE_FOLDER_PATH type="hidden" size="30" maxlength="250" validate="Any">
-  <en/>
-</MOVE_FOLDER_PATH>
-
-
-<BTN_SUBMIT type="submit">
-  <en>Move</en>
-</BTN_SUBMIT>
-
+  <MOVE_FOLDER_PATH type="hidden" size="30" maxlength="250" validate="Any">
+    <en/>
+  </MOVE_FOLDER_PATH>
+  <BTN_SUBMIT type="submit">
+    <en><![CDATA[Move]]></en>
+  </BTN_SUBMIT>
 </dynaForm>

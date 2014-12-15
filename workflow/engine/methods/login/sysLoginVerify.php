@@ -23,11 +23,16 @@
  * 
  */
 
-if (! isset ( $_POST )) {
-    G::header ( 'location: /sys/' . $lang . '/' . SYS_SKIN . '/' . 'login/login' );
+if (array_key_exists("d", $_GET)) {
+    $_POST = unserialize(base64_decode($_GET["d"]));
 }
-if (isset ( $_SESSION ['sysLogin'] )) {
-    $_POST ['form'] = $_SESSION ['sysLogin'];
+
+if (! isset ($_POST)) {
+    G::header('location: /sys/' . $lang . '/' . SYS_SKIN . '/' . 'login/login');
 }
-require_once ('authentication.php');
+if (isset($_SESSION['sysLogin'])) {
+    $_POST['form'] = $_SESSION['sysLogin'];
+}
+
+require_once 'authentication.php';
 

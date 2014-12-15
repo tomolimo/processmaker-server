@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="users_ViewOptions" type="xmlmenu">
-<MNU1 type="link" value="" link="#" onclick="window.location = &#039;users_List&#039;;return false;" colAlign="left" colWidth="80">
-  <en>Back to list</en>
-</MNU1>
-<MNU2 type="link" value="" link="#" onclick="changeToEditMode();return false;" colAlign="right" colWidth="80">
-  <en>Edit</en>
-</MNU2>
-<js type="javascript"><![CDATA[
+  <MNU1 type="link" value="" link="#" onclick="window.location = 'users_List';return false;" colAlign="left" colWidth="80">
+    <en><![CDATA[Back to list]]></en>
+  </MNU1>
+  <MNU2 type="link" value="" link="#" onclick="changeToEditMode();return false;" colAlign="right" colWidth="80">
+    <en><![CDATA[Edit]]></en>
+  </MNU2>
+  <js type="javascript"><![CDATA[
 function changeToViewMode(){
   document.forms[0].parentNode.parentNode.parentNode.style.display='';
   document.forms[1].parentNode.parentNode.parentNode.style.display='none';
@@ -14,4 +14,4 @@ function changeToViewMode(){
   document.forms[1].parentNode.style.display='none';
 }
 ]]></js>
-</dynaForm> 
+</dynaForm>

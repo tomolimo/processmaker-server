@@ -89,6 +89,9 @@ $G_PUBLISH = new Publisher();
 $G_PUBLISH->ROWS_PER_PAGE = 10;
 $G_PUBLISH->AddContent( 'propeltable', 'paged-table', 'cases/cases_Scheduler_List', $oCriteria, array ('CONFIRM' => G::LoadTranslation( 'ID_MSG_CONFIRM_DELETE_CASE_SCHEDULER' )
 ) );
+if (!isset($G_PUBLISH->oPropelTable) || !is_object($G_PUBLISH->oPropelTable)) {
+    $G_PUBLISH->oPropelTable = new stdclass();
+}
 $G_PUBLISH->oPropelTable->rowsPerPage = 10;
 G::RenderPage( 'publishBlank', 'blank' );
 

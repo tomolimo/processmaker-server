@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="grid" name="processes_subProcess_Out" width="500px" mode="edit">
-
-<VAR_OUT1 type="textpm" mode="edit" showVars="1" process="@#PRO_PARENT">
-<en>Origin</en>
-</VAR_OUT1>
-
-<VAR_OUT2 type="textpm" mode="edit" showVars="1" process="">
-<en>Target</en>
-</VAR_OUT2>
-
-</dynaForm>  
+  <VAR_OUT1 type="textpm" mode="edit" showVars="1" process="@#PRO_PARENT">
+    <en><![CDATA[Origin]]></en>
+  </VAR_OUT1>
+  <VAR_OUT2 type="textpm" mode="edit" showVars="1" process="">
+    <en><![CDATA[Target]]></en>
+  </VAR_OUT2>
+</dynaForm>

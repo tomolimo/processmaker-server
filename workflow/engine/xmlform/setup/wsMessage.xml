@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="xmlform" name="" width="600" enabletemplate="0" mode="edit">
-
-<MESSAGE type="title" align="center">	
-  <en>You do not have enabled the SOAP extension</en>
-<es><![CDATA[Usted no han permitido la extensión SOAP]]></es></MESSAGE>
-
-</dynaForm>   
+  <MESSAGE type="title" align="center">
+    <en><![CDATA[You do not have enabled the SOAP extension]]></en>
+    <es><![CDATA[Usted no han permitido la extensión SOAP]]></es>
+  </MESSAGE>
+</dynaForm>

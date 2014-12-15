@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <database name="rbac">
-  <table name="PERMISSIONS">
+  <table name="RBAC_PERMISSIONS">
     <vendor type="mysql">
-      <parameter name="Name" value="PERMISSIONS"/>
-      <parameter name="Engine" value="MyISAM"/>
+      <parameter name="Name" value="RBAC_PERMISSIONS"/>
+      <parameter name="Engine" value="InnoDB"/>
       <parameter name="Version" value="10"/>
       <parameter name="Row_format" value="Dynamic"/>
       <parameter name="Rows" value="5"/>
@@ -28,10 +29,10 @@
     <column name="PER_STATUS" type="INTEGER" required="true" default="1" />
     <column name="PER_SYSTEM" type="VARCHAR" size="32" required="true" default="00000000000000000000000000000002" />
   </table>
-  <table name="ROLES">
+  <table name="RBAC_ROLES">
     <vendor type="mysql">
-      <parameter name="Name" value="ROLES"/>
-      <parameter name="Engine" value="MyISAM"/>
+      <parameter name="Name" value="RBAC_ROLES"/>
+      <parameter name="Engine" value="InnoDB"/>
       <parameter name="Version" value="10"/>
       <parameter name="Row_format" value="Dynamic"/>
       <parameter name="Rows" value="3"/>
@@ -57,10 +58,10 @@
     <column name="ROL_UPDATE_DATE" type="TIMESTAMP" />
     <column name="ROL_STATUS" type="INTEGER" required="true" default="1" />
   </table>
-  <table name="ROLES_PERMISSIONS">
+  <table name="RBAC_ROLES_PERMISSIONS">
     <vendor type="mysql">
-      <parameter name="Name" value="ROLES_PERMISSIONS"/>
-      <parameter name="Engine" value="MyISAM"/>
+      <parameter name="Name" value="RBAC_ROLES_PERMISSIONS"/>
+      <parameter name="Engine" value="InnoDB"/>
       <parameter name="Version" value="10"/>
       <parameter name="Row_format" value="Dynamic"/>
       <parameter name="Rows" value="7"/>
@@ -81,10 +82,10 @@
     <column name="ROL_UID" type="VARCHAR" size="32" required="true" primaryKey="true" default="" />
     <column name="PER_UID" type="VARCHAR" size="32" required="true" primaryKey="true" default="" />
   </table>
-  <table name="SYSTEMS">
+  <table name="RBAC_SYSTEMS">
     <vendor type="mysql">
-      <parameter name="Name" value="SYSTEMS"/>
-      <parameter name="Engine" value="MyISAM"/>
+      <parameter name="Name" value="RBAC_SYSTEMS"/>
+      <parameter name="Engine" value="InnoDB"/>
       <parameter name="Version" value="10"/>
       <parameter name="Row_format" value="Dynamic"/>
       <parameter name="Rows" value="2"/>
@@ -108,10 +109,10 @@
     <column name="SYS_UPDATE_DATE" type="TIMESTAMP" />
     <column name="SYS_STATUS" type="INTEGER" required="true" default="0" />
   </table>
-  <table name="USERS">
+  <table name="RBAC_USERS">
     <vendor type="mysql">
-      <parameter name="Name" value="USERS"/>
-      <parameter name="Engine" value="MyISAM"/>
+      <parameter name="Name" value="RBAC_USERS"/>
+      <parameter name="Engine" value="InnoDB"/>
       <parameter name="Version" value="10"/>
       <parameter name="Row_format" value="Dynamic"/>
       <parameter name="Rows" value="11"/>
@@ -131,7 +132,7 @@
     </vendor>
     <column name="USR_UID" type="VARCHAR" size="32" required="true" primaryKey="true" default="" />
     <column name="USR_USERNAME" type="VARCHAR" size="100" required="true" default="" />
-    <column name="USR_PASSWORD" type="VARCHAR" size="32" required="true" default="" />
+    <column name="USR_PASSWORD" type="VARCHAR" size="128" required="true" default="" />
     <column name="USR_FIRSTNAME" type="VARCHAR" size="50" required="true" default="" />
     <column name="USR_LASTNAME" type="VARCHAR" size="50" required="true" default="" />
     <column name="USR_EMAIL" type="VARCHAR" size="100" required="true" default="" />
@@ -144,10 +145,10 @@
     <column name="USR_AUTH_USER_DN" type="VARCHAR" size="255" required="true" default="" />
     <column name="USR_AUTH_SUPERVISOR_DN" type="VARCHAR" size="255" required="true" default="" />
   </table>
-  <table name="USERS_ROLES">
+  <table name="RBAC_USERS_ROLES">
     <vendor type="mysql">
-      <parameter name="Name" value="USERS_ROLES"/>
-      <parameter name="Engine" value="MyISAM"/>
+      <parameter name="Name" value="RBAC_USERS_ROLES"/>
+      <parameter name="Engine" value="InnoDB"/>
       <parameter name="Version" value="10"/>
       <parameter name="Row_format" value="Dynamic"/>
       <parameter name="Rows" value="11"/>
@@ -168,10 +169,10 @@
     <column name="USR_UID" type="VARCHAR" size="32" required="true" primaryKey="true" default="" />
     <column name="ROL_UID" type="VARCHAR" size="32" required="true" primaryKey="true" default="" />
   </table>
-  <table name="AUTHENTICATION_SOURCE">
+  <table name="RBAC_AUTHENTICATION_SOURCE">
     <vendor type="mysql">
       <parameter name="Name" value="AUTHENTICATION_SOURCE"/>
-      <parameter name="Engine" value="MyISAM"/>
+      <parameter name="Engine" value="InnoDB"/>
       <parameter name="Version" value="10"/>
       <parameter name="Row_format" value="Dynamic"/>
       <parameter name="Rows" value="88"/>

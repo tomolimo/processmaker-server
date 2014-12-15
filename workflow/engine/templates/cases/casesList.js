@@ -56,7 +56,8 @@ function caseNotes(){
     var caseTitle = (rowModel.data.APP_TITLE) ? rowModel.data.APP_TITLE : rowModel.data.APP_UID;
     var task = (typeof(rowModel.json.TAS_UID) != 'undefined') ? rowModel.json.TAS_UID : '';
     var proid = (typeof(rowModel.json.PRO_UID) != 'undefined') ? rowModel.json.PRO_UID : '';
-    openCaseNotesWindow(appUid,true,caseTitle,proid,task);
+
+    openCaseNotesWindow(appUid, delIndex, true, caseTitle, proid, task);
   }else{
     msgBox(_('ID_INFORMATION'), _('ID_SELECT_ONE_AT_LEAST') );
   }
@@ -545,12 +546,13 @@ Ext.onReady ( function() {
   };
 
   function renderNote(val,p,r) {
-    pro = r.json.PRO_UID;
-    tas = r.json.TAS_UID;
-    appUid = r.data['APP_UID'];
-    title = Ext.util.Format.htmlEncode(r.data['APP_TITLE']);
+      var pro = r.json.PRO_UID;
+      var tas = r.json.TAS_UID;
+      var appUid = r.data.APP_UID;
+      var delIndex = r.data.DEL_INDEX;
+      var title = Ext.util.Format.htmlEncode(r.data.APP_TITLE);
 
-    return '<img src="/images/ext/default/s.gif" class="x-tree-node-icon ICON_CASES_NOTES" unselectable="off" id="extdd-17" onClick="openCaseNotesWindow(\''+appUid+'\', true, \''+title+'\', \''+pro+'\', \''+tas+'\')">';
+      return "<img src=\"/images/ext/default/s.gif\" class=\"x-tree-node-icon ICON_CASES_NOTES\" unselectable=\"off\" id=\"extdd-17\" onClick=\"openCaseNotesWindow(\'" + appUid + "\', " + delIndex + ", true, \'" + title + "\', \'" + pro + "\', \'" + tas + "\');\" />";
   }
 
   //Render Full Name
@@ -591,6 +593,7 @@ Ext.onReady ( function() {
         if( c.dataIndex == 'APP_DEL_PREVIOUS_USER') c.renderer = previous_full_name;
         if( c.dataIndex == 'APP_CURRENT_USER')      c.renderer = full_name;
     }
+    c.header = _(c.header);
   }
 
   //adding the hidden field DEL_INIT_DATE
@@ -1788,15 +1791,31 @@ Ext.onReady ( function() {
     ' '
   ];
 
+  var clearDateFrom = new Ext.Action({
+      text:  "X",
+      ctCls: "pm_search_x_button_des",
+      handler: function(){
+          Ext.getCmp("dateFrom").setValue("");
+      }
+  });
 
+  var clearDateTo = new Ext.Action({
+      text:  "X",
+      ctCls: "pm_search_x_button_des",
+      handler: function(){
+          Ext.getCmp("dateTo").setValue("");
+      }
+  });
 
   var toolbarSearch = [
       ' ',
       _('ID_DELEGATE_DATE_FROM'),
       dateFrom,
+      clearDateFrom,
       ' ',
       _('ID_TO'),
       dateTo,
+      clearDateTo,
       "->",
       '-',
       textSearch,

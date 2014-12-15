@@ -8,7 +8,7 @@ CLI::taskDescription(<<<EOT
 EOT
 );
 
-CLI::taskRun(runBrowserCacheFiles);
+CLI::taskRun("runBrowserCacheFiles");
 
 function runBrowserCacheFiles($command, $args)
 {

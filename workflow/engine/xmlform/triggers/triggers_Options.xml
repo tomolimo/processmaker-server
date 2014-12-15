@@ -1,42 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="xmlmenu">
-
-<MNU_ADD type="link" value='' link="#" onclick="if('@%PARTNER_FLAG' == '' || '@%PARTNER_FLAG' == 0) { triggerFromLibrary(); } else { triggerNewCustom(); } return false;" colAlign="left" colWidth="100">
-  <en>New</en>
-</MNU_ADD>
-
-
-
-
-<PRO_UID type="private"/>
-<PARTNER_FLAG type="private"/>
-<FIELDS_REQUIRED type="private"/>
-
-<triggersEdit type="private" defaultValue="../triggers/triggers_Edit"/>
-
-<triggersEditCustom type="private" defaultValue="../triggers/triggers_EditCustom"/>
-
-<triggerCopy type="private" defaultValue="../triggers/triggerCopy"/>
-
-<triggersDelete type="private" defaultValue="../triggers/triggers_Delete"/>
-
-<triggersProperties type="private" defaultValue="../triggers/triggersProperties"/>
-
-<triggersOptionList type="private" defaultValue="../triggers/triggersTree"/>
-
-<triggerNewWizard type="private" defaultValue="../triggers/triggers_CreateWizard"/>
-
-<triggerNewTalend type="private" defaultValue="../triggers/triggers_CreateTalend"/>
-
-<triggerNewGoogleWebContent type="private" defaultValue="../triggers/triggers_CreateGoogleWebContent"/>
-
-<triggerNewGoogleCreateEvent type="private" defaultValue="../triggers/triggers_CreateGoogleEvent"/>
-
-<PAGED_TABLE_ID type="private" />
-<PAGED_TABLE_FAST_SEARCH type="FastSearch" label="@G::LoadTranslation(ID_SEARCH)"/>
-
-<JS type="javascript" replaceTags="1">
-<![CDATA[
+  <MNU_ADD type="link" value="" link="#" onclick="if('@%PARTNER_FLAG' == '' || '@%PARTNER_FLAG' == 0) { triggerFromLibrary(); } else { triggerNewCustom(); } return false;" colAlign="left" colWidth="100">
+    <en><![CDATA[New]]></en>
+  </MNU_ADD>
+  <PRO_UID type="private"/>
+  <PARTNER_FLAG type="private"/>
+  <FIELDS_REQUIRED type="private"/>
+  <triggersEdit type="private" defaultValue="../triggers/triggers_Edit"/>
+  <triggersEditCustom type="private" defaultValue="../triggers/triggers_EditCustom"/>
+  <triggerCopy type="private" defaultValue="../triggers/triggerCopy"/>
+  <triggersDelete type="private" defaultValue="../triggers/triggers_Delete"/>
+  <triggersProperties type="private" defaultValue="../triggers/triggersProperties"/>
+  <triggersOptionList type="private" defaultValue="../triggers/triggersTree"/>
+  <triggerNewWizard type="private" defaultValue="../triggers/triggers_CreateWizard"/>
+  <triggerNewTalend type="private" defaultValue="../triggers/triggers_CreateTalend"/>
+  <triggerNewGoogleWebContent type="private" defaultValue="../triggers/triggers_CreateGoogleWebContent"/>
+  <triggerNewGoogleCreateEvent type="private" defaultValue="../triggers/triggers_CreateGoogleEvent"/>
+  <PAGED_TABLE_ID type="private"/>
+  <PAGED_TABLE_FAST_SEARCH type="FastSearch" label="@G::LoadTranslation(ID_SEARCH)"/>
+  <JS type="javascript" replaceTags="1"><![CDATA[
   var windowWidth = 600;
   var windowHeight = 460;
 
@@ -217,14 +199,10 @@
     }
   }
 
-]]>
-</JS>
-
-<!-- Default Search option -->
-<!--<MNU_SEARCH type="link" value='' link="#" onclick="showHideSearch('@#SEARCH_FILTER_FORM',this);return false;" colAlign="right" colWidth="130">
+]]></JS>
+  <!-- Default Search option -->
+  <!--<MNU_SEARCH type="link" value='' link="#" onclick="showHideSearch('@#SEARCH_FILTER_FORM',this);return false;" colAlign="right" colWidth="130">
   <en>Advanced Search</en>
 </MNU_SEARCH>-->
-
-<SEARCH_FILTER_FORM type="private"/>
-
+  <SEARCH_FILTER_FORM type="private"/>
 </dynaForm>

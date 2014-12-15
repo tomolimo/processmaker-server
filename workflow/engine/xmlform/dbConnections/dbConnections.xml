@@ -1,46 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="pagetable" menu="dbConnections/dbConnections_Options" searchBy="DBS_DATABASE_NAME|CON_VALUE">
-
-<DBS_UID type="private" showInTable="0"/>
-
-<PRO_UID type="hidden" showInTable="0"/>
-
-<DBS_TYPE type="text" titlealign="left" colWidth="50">
-  <en>Type</en>
-</DBS_TYPE>
-
-<DBS_SERVER type="text" titlealign="left" colWidth="100">
-  <en>Server</en>
-</DBS_SERVER>
-
-<DBS_DATABASE_NAME type="text" titlealign="left" colWidth="100">
-  <en>Database Name</en>
-</DBS_DATABASE_NAME>
-
-<DBS_DESCRIPTION type="text" titlealign="left" colWidth="200">
-  <en>Description</en>
-</DBS_DESCRIPTION>
-
-<DBS_EDIT type="link" colWidth="50" link="javascript:editDbConnection(&#039;@#DBS_UID&#039;)">
-  <en>Edit</en>
-</DBS_EDIT>
-
-<DBS_DELETE type="link" colWidth="50" link="javascript:deleteDbConnection(&#039;@#DBS_UID&#039;,&#039;@#PRO_UID&#039;)">
-  <en>Delete</en>
-</DBS_DELETE>
-
-<GET_UID type="link" colWidth="40" value="UID" link="#" onclick="msgBox(&#039;UID: &#039;+@QDBS_UID, &#039;info&#039;);return false;"/>
-
-<SEARCH type="button" onclick="pagedTableFilter(this.form);" showInTable="0">
-  <en>Apply Filter</en>
-</SEARCH>
-
-<PAGED_TABLE_ID type="private" showInTable="0"/>
-
-<JSFILTER type="javascript" replaceTags="1" showInTable="0">
+  <DBS_UID type="private" showInTable="0"/>
+  <PRO_UID type="hidden" showInTable="0"/>
+  <DBS_TYPE type="text" titlealign="left" colWidth="50">
+    <en><![CDATA[Type]]></en>
+  </DBS_TYPE>
+  <DBS_SERVER type="text" titlealign="left" colWidth="100">
+    <en><![CDATA[Server]]></en>
+  </DBS_SERVER>
+  <DBS_DATABASE_NAME type="text" titlealign="left" colWidth="100">
+    <en><![CDATA[Database Name]]></en>
+  </DBS_DATABASE_NAME>
+  <DBS_DESCRIPTION type="text" titlealign="left" colWidth="200">
+    <en><![CDATA[Description]]></en>
+  </DBS_DESCRIPTION>
+  <DBS_EDIT type="link" colWidth="50" link="javascript:editDbConnection('@#DBS_UID')">
+    <en><![CDATA[Edit]]></en>
+  </DBS_EDIT>
+  <DBS_DELETE type="link" colWidth="50" link="javascript:deleteDbConnection('@#DBS_UID','@#PRO_UID')">
+    <en><![CDATA[Delete]]></en>
+  </DBS_DELETE>
+  <GET_UID type="link" colWidth="40" value="UID" link="#" onclick="msgBox('UID: '+@QDBS_UID, 'info');return false;"/>
+  <SEARCH type="button" onclick="pagedTableFilter(this.form);" showInTable="0">
+    <en><![CDATA[Apply Filter]]></en>
+  </SEARCH>
+  <PAGED_TABLE_ID type="private" showInTable="0"/>
+  <JSFILTER type="javascript" replaceTags="1" showInTable="0">
 function pagedTableFilter(form) {
   @#PAGED_TABLE_ID.doFilter(form);
 }
 </JSFILTER>
-
 </dynaForm>

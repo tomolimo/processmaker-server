@@ -1,20 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="languages_ImportForm" type="xmlform" width="100%" labelWidth="40%" enableTemplate="1">
-
-<DBS_UID type="hidden"/>
-<PRO_UID type="hidden"/>
-<TIME_STAMP type="hidden"/>
-
-<title1 type="title" enableHTML="1">
-  <en><![CDATA[Pause on: @#TIME_STAMP<br/>]]></en>
-</title1>
-
-<unpause_date type="date" afterdate="5y" beforedate="1d" size="15">
-  <en>Unpause date</en>
-</unpause_date>
-
-<pause_exec type="button" onclick="toPause()">
-  <en>Pause</en>
-</pause_exec>
-
-</dynaForm>  
+  <DBS_UID type="hidden"/>
+  <PRO_UID type="hidden"/>
+  <TIME_STAMP type="hidden"/>
+  <title1 type="title" enableHTML="1">
+    <en><![CDATA[Pause on: @#TIME_STAMP<br/>]]></en>
+  </title1>
+  <unpause_date type="date" afterdate="5y" beforedate="1d" size="15">
+    <en><![CDATA[Unpause date]]></en>
+  </unpause_date>
+  <pause_exec type="button" onclick="toPause()">
+    <en><![CDATA[Pause]]></en>
+  </pause_exec>
+</dynaForm>

@@ -1,32 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<dynaForm name="sysLogin" version="1.0" basedir="" xmlform_type="NORMAL" width="400px" >
-<TITLE type="title">
-  <en>Login</en>
-</TITLE>
-
-<USR_USERNAME type="text" size="30" maxlength="50" validate="Any" >
-  <en>User</en>
-</USR_USERNAME>
-
-<USR_PASSWORD type="password" size="30" maxlength="32" autocomplete="0">
-  <en>Password</en>
-</USR_PASSWORD>
-
-<USER_ENV type="dropdown" sqlconnection="dbarray">
+<dynaForm name="sysLogin" version="1.0" basedir="" xmlform_type="NORMAL" width="400px">
+  <TITLE type="title">
+    <en><![CDATA[Login]]></en>
+  </TITLE>
+  <USR_USERNAME type="text" size="30" maxlength="50" validate="Any">
+    <en><![CDATA[User]]></en>
+  </USR_USERNAME>
+  <USR_PASSWORD type="password" size="30" maxlength="32" autocomplete="0">
+    <en><![CDATA[Password]]></en>
+  </USR_PASSWORD>
+  <USER_ENV type="dropdown" sqlconnection="dbarray">
 SELECT ENV_ID, ENV_NAME FROM availableWorkspace
-<en>Workspace</en>
+<en><![CDATA[Workspace]]></en>
 </USER_ENV>
-
-<USER_LANG type="dropdown" sqlconnection="dbarray">
+  <USER_LANG type="dropdown" sqlconnection="dbarray">
 SELECT LANG_ID, LANG_NAME FROM langOptions
-<en>Language</en>
+<en><![CDATA[Language]]></en>
 </USER_LANG>
-
-<BSUBMIT type="submit">
-  <en>Login</en>
-</BSUBMIT>
-
-<JS type="javascript"><![CDATA[
+  <BSUBMIT type="submit">
+    <en><![CDATA[Login]]></en>
+  </BSUBMIT>
+  <JS type="javascript"><![CDATA[
 
 
 setFocus (getField ('USR_USERNAME'));

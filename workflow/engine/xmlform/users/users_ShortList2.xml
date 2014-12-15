@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<dynaForm type="pagetable" sql="(SELECT CONCAT(C.CON_VALUE, &#039; (@#GROUP)&#039;) AS LABEL, &#039;@#OF_TO_ASSIGN&#039; AS OF_TO_ASSIGN, &#039;@#CONFIRM&#039; AS CONFIRM, TU.TAS_UID AS TAS_UID, TU.USR_UID AS USR_UID, TU.TU_TYPE AS TU_TYPE, TU.TU_RELATION AS TU_RELATION FROM TASK_USER AS TU LEFT JOIN GROUPWF AS G ON (TU.USR_UID = G.GRP_UID) LEFT JOIN CONTENT AS C ON (G.GRP_UID = C.CON_ID AND C.CON_CATEGORY = &#039;GRP_TITLE&#039; AND C.CON_LANG = &#039;@#LANG&#039;) WHERE TU_TYPE = @#TYPE AND TU_RELATION = 2 AND TU.TAS_UID = &#039;@#TASK&#039;) UNION (SELECT CONCAT(U.USR_FIRSTNAME, &#039; &#039;, U.USR_LASTNAME) AS LABEL, &#039;@#OF_TO_ASSIGN&#039; AS OF_TO_ASSIGN, &#039;@#CONFIRM&#039; AS CONFIRM, TU.TAS_UID AS TAS_UID, TU.USR_UID AS USR_UID, TU.TU_TYPE AS TU_TYPE, TU.TU_RELATION AS TU_RELATION FROM TASK_USER AS TU LEFT JOIN USERS AS U ON (TU.USR_UID = U.USR_UID) WHERE TU_TYPE = @#TYPE AND TU_RELATION = 1 AND TU.TAS_UID = &#039;@#TASK&#039; AND TU.USR_UID NOT IN (@#UIDS))" sqlConnection="" deleteRow="0" menu="users/users_ShortOptions2" height="230px">
-<USR_UID type="private" showInTable="0"/>
-<TU_TYPE type="private" showInTable="0"/>
-<TU_RELATION type="private" showInTable="0"/>
-<LABEL type="text" titlealign="left" align="left" colWidth="250" enableHtml="1">
-  <en>Group or User</en>
-</LABEL>
-<OF_TO_ASSIGN type="link" colWidth="80" value="@#OF_TO_ASSIGN" link="" onclick="return ofToAssignGroupOrUser(&#039;@#TAS_UID&#039;, &#039;@#USR_UID&#039;, &#039;@#TU_TYPE&#039;, &#039;@#TU_RELATION&#039;);">
-  <en/>
-</OF_TO_ASSIGN>
-</dynaForm> 
+<dynaForm type="pagetable" sql="(SELECT CONCAT(C.CON_VALUE, ' (@#GROUP)') AS LABEL, '@#OF_TO_ASSIGN' AS OF_TO_ASSIGN, '@#CONFIRM' AS CONFIRM, TU.TAS_UID AS TAS_UID, TU.USR_UID AS USR_UID, TU.TU_TYPE AS TU_TYPE, TU.TU_RELATION AS TU_RELATION FROM TASK_USER AS TU LEFT JOIN GROUPWF AS G ON (TU.USR_UID = G.GRP_UID) LEFT JOIN CONTENT AS C ON (G.GRP_UID = C.CON_ID AND C.CON_CATEGORY = 'GRP_TITLE' AND C.CON_LANG = '@#LANG') WHERE TU_TYPE = @#TYPE AND TU_RELATION = 2 AND TU.TAS_UID = '@#TASK') UNION (SELECT CONCAT(U.USR_FIRSTNAME, ' ', U.USR_LASTNAME) AS LABEL, '@#OF_TO_ASSIGN' AS OF_TO_ASSIGN, '@#CONFIRM' AS CONFIRM, TU.TAS_UID AS TAS_UID, TU.USR_UID AS USR_UID, TU.TU_TYPE AS TU_TYPE, TU.TU_RELATION AS TU_RELATION FROM TASK_USER AS TU LEFT JOIN USERS AS U ON (TU.USR_UID = U.USR_UID) WHERE TU_TYPE = @#TYPE AND TU_RELATION = 1 AND TU.TAS_UID = '@#TASK' AND TU.USR_UID NOT IN (@#UIDS))" sqlConnection="" deleteRow="0" menu="users/users_ShortOptions2" height="230px">
+  <USR_UID type="private" showInTable="0"/>
+  <TU_TYPE type="private" showInTable="0"/>
+  <TU_RELATION type="private" showInTable="0"/>
+  <LABEL type="text" titlealign="left" align="left" colWidth="250" enableHtml="1">
+    <en><![CDATA[Group or User]]></en>
+  </LABEL>
+  <OF_TO_ASSIGN type="link" colWidth="80" value="@#OF_TO_ASSIGN" link="" onclick="return ofToAssignGroupOrUser('@#TAS_UID', '@#USR_UID', '@#TU_TYPE', '@#TU_RELATION');">
+    <en><![CDATA[]]></en>
+  </OF_TO_ASSIGN>
+</dynaForm>

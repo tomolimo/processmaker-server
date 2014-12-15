@@ -1,36 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="pagetable" menu="dynaforms/dynaforms_ConditionalShowHideOptions">
-
-<FCD_UID type="private" showInTable="0"/>
-<FCD_NRO type="text" titlealign="left" align="left" colWidth="5">
-  <en>#</en>
-</FCD_NRO>
-<FCD_FUNCTION type="text" titlealign="left" align="left" colWidth="60">
-  <en>Function</en>
-</FCD_FUNCTION>
-<FCD_FIELDS type="text" titlealign="left" align="left" colWidth="120">
-  <en>Fields</en>
-</FCD_FIELDS>
-<FCD_CONDITION type="text" titlealign="left" align="left" colWidth="190">
-  <en>Condition</en>
-</FCD_CONDITION>
-<FCD_EVENTS type="text" titlealign="left" align="left" colWidth="100">
-  <en>Events</en>
-</FCD_EVENTS>
-<FCD_EVENT_OWNERS type="text" titlealign="left" align="left" colWidth="180">
-  <en>Event Owner</en>
-</FCD_EVENT_OWNERS>
-
-<FCD_STATUS type="dropdown" colWidth="20">
-  <en>Enabled<option name="1">yes</option><option name="">no</option></en>
-</FCD_STATUS>
-
-<USR_VIEW type="link" colWidth="20" link="#" onclick="oConditional.editor(@@FCD_UID);return false;">
-  <en>Edit</en>
-</USR_VIEW>
-
-<USR_DELETE type="link" colWidth="20" link="#" onclick="oConditional.remove(@@FCD_UID);return false;">
-  <en>Delete</en>
-</USR_DELETE>
-
-</dynaForm>  
+  <FCD_UID type="private" showInTable="0"/>
+  <FCD_NRO type="text" titlealign="left" align="left" colWidth="5">
+    <en><![CDATA[#]]></en>
+  </FCD_NRO>
+  <FCD_FUNCTION type="text" titlealign="left" align="left" colWidth="60">
+    <en><![CDATA[Function]]></en>
+  </FCD_FUNCTION>
+  <FCD_FIELDS type="text" titlealign="left" align="left" colWidth="120">
+    <en><![CDATA[Fields]]></en>
+  </FCD_FIELDS>
+  <FCD_CONDITION type="text" titlealign="left" align="left" colWidth="190">
+    <en><![CDATA[Condition]]></en>
+  </FCD_CONDITION>
+  <FCD_EVENTS type="text" titlealign="left" align="left" colWidth="100">
+    <en><![CDATA[Events]]></en>
+  </FCD_EVENTS>
+  <FCD_EVENT_OWNERS type="text" titlealign="left" align="left" colWidth="180">
+    <en><![CDATA[Event Owner]]></en>
+  </FCD_EVENT_OWNERS>
+  <FCD_STATUS type="dropdown" colWidth="20">
+    <en><![CDATA[Enabled]]><option name="1"><![CDATA[yes]]></option><option name=""><![CDATA[no]]></option></en>
+  </FCD_STATUS>
+  <USR_VIEW type="link" colWidth="20" link="#" onclick="oConditional.editor(@@FCD_UID);return false;">
+    <en><![CDATA[Edit]]></en>
+  </USR_VIEW>
+  <USR_DELETE type="link" colWidth="20" link="#" onclick="oConditional.remove(@@FCD_UID);return false;">
+    <en><![CDATA[Delete]]></en>
+  </USR_DELETE>
+</dynaForm>

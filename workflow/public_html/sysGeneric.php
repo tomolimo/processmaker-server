@@ -27,7 +27,6 @@
  * this file is used initialize main variables, redirect and dispatch all requests
  */
 
-
 function transactionLog($transactionName){
     if (extension_loaded('newrelic')) {
         $baseName="ProcessMaker";
@@ -122,7 +121,7 @@ if (file_exists($requestFile)) {
     $size = strlen($request);
     if($pos < $size) {
         //if this file got an extension then assign the content
-    	$ext_file = substr($request, $pos, $size);
+        $ext_file = substr($request, $pos, $size);
         if ($ext_file == "gif" || $ext_file == "png") {
             $ext_file = 'image/'.$ext_file ;
         } elseif ($ext_file == "jpg" || $ext_file == "jpeg") {
@@ -137,36 +136,40 @@ if (file_exists($requestFile)) {
             $ext_file = "application/octet-stream";
         } elseif ($ext_file == "tar") {
             $ext_file = "application/x-tar";
-	    } elseif ($ext_file=="css") {
-	        //may this line be innecesary, all the .css are been generated at run time
-	        $ext_file = 'css/'.$ext_file;
-	    } else {
-	        $ext_file = "application/octet-stream";
-	    }
-	    header ('Content-Type: ' . $ext_file);
+        } elseif ($ext_file == "woff") {
+            $ext_file = "application/font-woff";
+        } elseif ($ext_file == "js") {
+            $ext_file = "text/javascript";
+        } elseif ($ext_file=="css") {
+            //may this line be innecesary, all the .css are been generated at run time
+            $ext_file = 'text/css';
+        } else {
+            $ext_file = "application/octet-stream";
+        }
+        header ('Content-Type: ' . $ext_file);
     }
     header ( 'Pragma: cache' );
     $mtime = filemtime ( $requestFile );
-	$gmt_mtime = gmdate ( "D, d M Y H:i:s", $mtime ) . " GMT";
-	header ( 'ETag: "' . md5 ( $mtime . $requestFile ) . '"' );
-	header ( "Last-Modified: " . $gmt_mtime );
-	header ( 'Cache-Control: public' );
+    $gmt_mtime = gmdate ( "D, d M Y H:i:s", $mtime ) . " GMT";
+    header ( 'ETag: "' . md5 ( $mtime . $requestFile ) . '"' );
+    header ( "Last-Modified: " . $gmt_mtime );
+    header ( 'Cache-Control: public' );
     $userAgent = strtolower ( $_SERVER ['HTTP_USER_AGENT'] );
-	if (preg_match ( "/msie/i", $userAgent )) {
-		header ( "Expires: " . gmdate ( "D, d M Y H:i:s", time () + 60 * 10 ) . " GMT" );
-	} else {
-	    header ( "Expires: " . gmdate ( "D, d M Y H:i:s", time () + 90 * 60 * 60 * 24 ) . " GMT" );
-	    if (isset ( $_SERVER ['HTTP_IF_MODIFIED_SINCE'] )) {
-	        if ($_SERVER ['HTTP_IF_MODIFIED_SINCE'] == $gmt_mtime) {
-	            header ( 'HTTP/1.1 304 Not Modified' );
-	        }
-	    }
-	    if (isset ( $_SERVER ['HTTP_IF_NONE_MATCH'] )) {
-	        if (str_replace ( '"', '', stripslashes ( $_SERVER ['HTTP_IF_NONE_MATCH'] ) ) == md5 ( $mtime . $requestFile )) {
-	            header ( "HTTP/1.1 304 Not Modified" );
+    if (preg_match ( "/msie/i", $userAgent )) {
+        header ( "Expires: " . gmdate ( "D, d M Y H:i:s", time () + 60 * 10 ) . " GMT" );
+    } else {
+        header ( "Expires: " . gmdate ( "D, d M Y H:i:s", time () + 90 * 60 * 60 * 24 ) . " GMT" );
+        if (isset ( $_SERVER ['HTTP_IF_MODIFIED_SINCE'] )) {
+            if ($_SERVER ['HTTP_IF_MODIFIED_SINCE'] == $gmt_mtime) {
+                header ( 'HTTP/1.1 304 Not Modified' );
             }
-	    }
-	}
+        }
+        if (isset ( $_SERVER ['HTTP_IF_NONE_MATCH'] )) {
+            if (str_replace ( '"', '', stripslashes ( $_SERVER ['HTTP_IF_NONE_MATCH'] ) ) == md5 ( $mtime . $requestFile )) {
+                header ( "HTTP/1.1 304 Not Modified" );
+            }
+        }
+    }
     readfile($requestFile);
     die;
 }
@@ -186,6 +189,7 @@ define( 'PATH_RBAC_CORE', PATH_RBAC_HOME . 'engine' . PATH_SEP );
 
 // Defining PMCore Path constants
 define( 'PATH_CORE', PATH_HOME . 'engine' . PATH_SEP );
+define( 'PATH_CLASSES', PATH_HOME . "engine" . PATH_SEP . "classes" . PATH_SEP );
 define( 'PATH_SKINS', PATH_CORE . 'skins' . PATH_SEP );
 define( 'PATH_SKIN_ENGINE', PATH_CORE . 'skinEngine' . PATH_SEP );
 define( 'PATH_METHODS', PATH_CORE . 'methods' . PATH_SEP );
@@ -208,7 +212,6 @@ define( 'FILE_PATHS_INSTALLED', PATH_CORE . 'config' . PATH_SEP . 'paths_install
 define( 'PATH_WORKFLOW_MSSQL_DATA', PATH_CORE . 'data' . PATH_SEP . 'mssql' . PATH_SEP );
 define( 'PATH_RBAC_MSSQL_DATA', PATH_RBAC_CORE . 'data' . PATH_SEP . 'mssql' . PATH_SEP );
 define( 'PATH_CONTROLLERS', PATH_CORE . 'controllers' . PATH_SEP );
-define( 'PATH_SERVICES_REST', PATH_CORE . 'services' . PATH_SEP . 'rest' . PATH_SEP );
 
 // include Gulliver Class
 require_once (PATH_GULLIVER . "class.bootstrap.php");
@@ -274,7 +277,9 @@ define( 'PML_WSDL_URL', PML_SERVER . '/syspmLibrary/en/green/services/wsdl' );
 define( 'PML_UPLOAD_URL', PML_SERVER . '/syspmLibrary/en/green/services/uploadProcess' );
 define( 'PML_DOWNLOAD_URL', PML_SERVER . '/syspmLibrary/en/green/services/download' );
 
+
 $config = Bootstrap::getSystemConfiguration();
+
 // starting session
 if (isset($config['session.gc_maxlifetime'])) {
     $timelife = $config['session.gc_maxlifetime'];
@@ -293,15 +298,14 @@ if ((preg_match("/msie/i", $_SERVER ['HTTP_USER_AGENT']) != 1 ||
 }
 session_start();
 
-
-
-$e_all = defined( 'E_DEPRECATED' ) ? E_ALL & ~ E_DEPRECATED : E_ALL;
-$e_all = defined( 'E_STRICT' ) ? $e_all & ~ E_STRICT : $e_all;
-$e_all = $config['debug'] ? $e_all : $e_all & ~ E_NOTICE;
+//$e_all = defined( 'E_DEPRECATED' ) ? E_ALL & ~ E_DEPRECATED : E_ALL;
+//$e_all = defined( 'E_STRICT' ) ? $e_all & ~ E_STRICT : $e_all;
+//$e_all = $config['debug'] ? $e_all : $e_all & ~ E_NOTICE;
+//$e_all = E_ALL & ~ E_DEPRECATED & ~ E_STRICT & ~ E_NOTICE  & ~E_WARNING;
 
 // Do not change any of these settings directly, use env.ini instead
-ini_set( 'display_errors', $config['debug'] );
-ini_set( 'error_reporting', $e_all );
+ini_set( 'display_errors', $config['display_errors']);
+ini_set( 'error_reporting', $config['error_reporting']);
 ini_set( 'short_open_tag', 'On' );
 ini_set( 'default_charset', "UTF-8" );
 ini_set( 'memory_limit', $config['memory_limit'] );
@@ -325,19 +329,16 @@ $_SERVER['SERVER_ADDR'] = isset( $_SERVER['SERVER_ADDR'] ) ? $_SERVER['SERVER_AD
 
 //check if it is a installation instance
 if (! defined( 'PATH_C' )) {
-    // is a intallation instance, so we need to define PATH_C and PATH_LANGUAGECONT constants temporarily
-    define( 'PATH_C', (rtrim( Bootstrap::sys_get_temp_dir(), PATH_SEP ) . PATH_SEP) );
-    define( 'PATH_LANGUAGECONT', PATH_HOME . 'engine/content/languages/' );
+// is a intallation instance, so we need to define PATH_C and PATH_LANGUAGECONT constants temporarily
+define( 'PATH_C', (rtrim( Bootstrap::sys_get_temp_dir(), PATH_SEP ) . PATH_SEP) );
+define( 'PATH_LANGUAGECONT', PATH_HOME . 'engine/content/languages/' );
 }
 
 //Call Gulliver Classes
 Bootstrap::LoadThirdParty("smarty/libs", "Smarty.class");
 
 //Loading the autoloader libraries feature
-spl_autoload_register(array("Bootstrap", "autoloadClass"));
-
-Bootstrap::registerClass("G",      PATH_GULLIVER . "class.g.php");
-Bootstrap::registerClass("System", PATH_HOME . "engine/classes/class.system.php");
+Bootstrap::registerSystemClasses();
 
 $skinPathErrors = G::skinGetPathToSrcByVirtualUri("errors", $config);
 $skinPathUpdate = G::skinGetPathToSrcByVirtualUri("update", $config);
@@ -364,7 +365,6 @@ $virtualURITable['/html2ps_pdf/(*)'] = PATH_THIRDPARTY . 'html2ps_pdf/';
 //$virtualURITable['/images/'] = 'errorFile';
 //$virtualURITable['/skins/'] = 'errorFile';
 //$virtualURITable['/files/'] = 'errorFile';
-$virtualURITable['/rest/(*)'] = 'rest-service';
 $virtualURITable["/update/(*)"] = ($skinPathUpdate != "")? $skinPathUpdate : PATH_GULLIVER_HOME . "methods" . PATH_SEP . "update" . PATH_SEP;
 //$virtualURITable['/(*)'] = PATH_HTML;
 $virtualURITable['/css/(*)'] = PATH_HTML . 'css/'; //ugly
@@ -373,7 +373,6 @@ $virtualURITable['/skins/(*)'] = PATH_HTML . 'skins/'; //ugly
 $virtualURITable['/images/(*)'] = PATH_HTML . 'images/'; //ugly
 $virtualURITable['/[a-zA-Z][a-zA-Z0-9]{0,}/'] = 'errorFile';
 
-$isRestRequest = false;
 // Verify if we need to redirect or stream the file, if G:VirtualURI returns true means we are going to redirect the page
 if (Bootstrap::virtualURI( $_SERVER['REQUEST_URI'], $virtualURITable, $realPath )) {
     // review if the file requested belongs to public_html plugin
@@ -451,22 +450,18 @@ if (Bootstrap::virtualURI( $_SERVER['REQUEST_URI'], $virtualURITable, $realPath 
             break;
         default:
             //Process files loaded with tag head in HTML
-            if (substr( $realPath, 0, 12 ) == 'rest-service') {
-                $isRestRequest = true;
-            } else {
-                $realPath = explode( '?', $realPath );
-                $realPath[0] .= strpos( basename( $realPath[0] ), '.' ) === false ? '.php' : '';
-                //NewRelic Snippet - By JHL
-                transactionLog($realPath[0]);
+            $realPath = explode( '?', $realPath );
+            $realPath[0] .= strpos( basename( $realPath[0] ), '.' ) === false ? '.php' : '';
+            //NewRelic Snippet - By JHL
+            transactionLog($realPath[0]);
 
-                Bootstrap::streamFile( $realPath[0] );
-                die();
-            }
+            Bootstrap::streamFile( $realPath[0] );
+            die();
     }
 } //virtual URI parser
 
 // the request correspond to valid php page, now parse the URI
-Bootstrap::parseURI( getenv( "REQUEST_URI" ), $isRestRequest );
+Bootstrap::parseURI( getenv( "REQUEST_URI" ) );
 
 // Bootstrap::mylog("sys_temp: ".SYS_TEMP);
 if (Bootstrap::isPMUnderUpdating()) {
@@ -490,35 +485,6 @@ if (defined( 'PATH_DATA' ) && file_exists( PATH_DATA )) {
     Bootstrap::LoadClass( 'serverConfiguration' );
     $oServerConf = & serverConf::getSingleton();
 }
-
-// Call more Classes
-Bootstrap::registerClass('headPublisher', PATH_GULLIVER . "class.headPublisher.php");
-Bootstrap::registerClass('publisher', PATH_GULLIVER . "class.publisher.php");
-Bootstrap::registerClass('xmlform', PATH_GULLIVER . "class.xmlform.php");
-Bootstrap::registerClass('XmlForm_Field', PATH_GULLIVER . "class.xmlform.php");
-Bootstrap::registerClass('xmlformExtension', PATH_GULLIVER . "class.xmlformExtension.php");
-Bootstrap::registerClass('form',         PATH_GULLIVER . "class.form.php");
-Bootstrap::registerClass('menu',         PATH_GULLIVER . "class.menu.php");
-Bootstrap::registerClass('Xml_Document', PATH_GULLIVER . "class.xmlDocument.php");
-Bootstrap::registerClass('DBSession',    PATH_GULLIVER . "class.dbsession.php");
-Bootstrap::registerClass('DBConnection', PATH_GULLIVER . "class.dbconnection.php");
-Bootstrap::registerClass('DBRecordset',  PATH_GULLIVER . "class.dbrecordset.php");
-Bootstrap::registerClass('DBTable',      PATH_GULLIVER . "class.dbtable.php");
-Bootstrap::registerClass('xmlMenu',      PATH_GULLIVER . "class.xmlMenu.php");
-Bootstrap::registerClass('XmlForm_Field_FastSearch', PATH_GULLIVER . "class.xmlformExtension.php");
-Bootstrap::registerClass('XmlForm_Field_XmlMenu', PATH_GULLIVER . "class.xmlMenu.php");
-Bootstrap::registerClass('XmlForm_Field_HTML',  PATH_GULLIVER . "class.dvEditor.php");
-Bootstrap::registerClass('XmlForm_Field_WYSIWYG_EDITOR',  PATH_GULLIVER . "class.wysiwygEditor.php");
-Bootstrap::registerClass('Controller',          PATH_GULLIVER . "class.controller.php");
-Bootstrap::registerClass('HttpProxyController', PATH_GULLIVER . "class.httpProxyController.php");
-Bootstrap::registerClass('templatePower',            PATH_GULLIVER . "class.templatePower.php");
-Bootstrap::registerClass('XmlForm_Field_SimpleText', PATH_GULLIVER . "class.xmlformExtension.php");
-Bootstrap::registerClass('Groups',       PATH_HOME . "engine/classes/class.groups.php");
-Bootstrap::registerClass('Tasks',        PATH_HOME . "engine/classes/class.tasks.php");
-Bootstrap::registerClass('Calendar',     PATH_HOME . "engine/classes/class.calendar.php");
-Bootstrap::registerClass('processMap',   PATH_HOME . "engine/classes/class.processMap.php");
-
-Bootstrap::registerSystemClasses();
 
 require_once  PATH_THIRDPARTY . '/pear/PEAR.php';
 
@@ -647,41 +613,19 @@ define( 'SERVER_PORT', $_SERVER['SERVER_PORT'] );
 Bootstrap::LoadClass( 'memcached' );
 $memcache = & PMmemcached::getSingleton( SYS_SYS );
 
-// verify configuration for rest service
-if ($isRestRequest) {
-    // disable until confirm that rest is enabled & configured on rest-config.ini file
-    $isRestRequest = false;
-    $confFile = '';
-    $restApiClassPath = '';
-
-    // try load and getting rest configuration
-    if (file_exists( PATH_DATA_SITE . 'rest-config.ini' )) {
-        $confFile = PATH_DATA_SITE . 'rest-config.ini';
-        $restApiClassPath = PATH_DATA_SITE;
-    } elseif (file_exists( PATH_CONFIG . 'rest-config.ini' )) {
-        $confFile = PATH_CONFIG . 'rest-config.ini';
-    }
-    if (! empty( $confFile ) && $restConfig = @parse_ini_file( $confFile, true )) {
-        if (array_key_exists( 'enable_service', $restConfig )) {
-            if ($restConfig['enable_service'] == 'true' || $restConfig['enable_service'] == '1') {
-                $isRestRequest = true; // rest service enabled
-            }
-        }
-    }
-}
-
 // load Plugins base class
 Bootstrap::LoadClass( 'plugin' );
 
 //here we are loading all plugins registered
 //the singleton has a list of enabled plugins
 $sSerializedFile = PATH_DATA_SITE . 'plugin.singleton';
-$oPluginRegistry = & PMPluginRegistry::getSingleton();
 
 if (file_exists( $sSerializedFile )) {
-    $oPluginRegistry->unSerializeInstance( file_get_contents( $sSerializedFile ) );
+    $oPluginRegistry = PMPluginRegistry::loadSingleton($sSerializedFile);
     $attributes = $oPluginRegistry->getAttributes();
     Bootstrap::LoadTranslationPlugins( defined( 'SYS_LANG' ) ? SYS_LANG : "en" , $attributes);
+} else{
+    $oPluginRegistry = PMPluginRegistry::getSingleton();
 }
 
 // setup propel definitions and logging
@@ -859,7 +803,7 @@ if (substr( SYS_COLLECTION, 0, 8 ) === 'gulliver') {
         }
     }
 
-    if (! $isControllerCall && ! file_exists( $phpFile ) && ! $isRestRequest) {
+    if (! $isControllerCall && ! file_exists( $phpFile )) {
         $_SESSION['phpFileNotFound'] = $_SERVER['REQUEST_URI'];
         header( "location: /errors/error404.php?url=" . urlencode( $_SERVER['REQUEST_URI'] ) );
         die();
@@ -948,13 +892,15 @@ if (! defined( 'EXECUTE_BY_CRON' )) {
         $noLoginFiles[] = 'cases_NextStep';
         $noLoginFiles[] = 'genericAjax';
         $noLoginFiles[] = 'casesSaveDataView';
+        $noLoginFiles[] = 'propelTableAjax';
+        $noLoginFiles[] = 'licenseUpdate';
 
         $noLoginFolders[] = 'services';
         $noLoginFolders[] = 'tracker';
         $noLoginFolders[] = 'installer';
 
         // This sentence is used when you lost the Session
-        if (! in_array( SYS_TARGET, $noLoginFiles ) && ! in_array( SYS_COLLECTION, $noLoginFolders ) && $bWE != true && $collectionPlugin != 'services' && ! $isRestRequest) {
+        if (! in_array( SYS_TARGET, $noLoginFiles ) && ! in_array( SYS_COLLECTION, $noLoginFolders ) && $bWE != true && $collectionPlugin != 'services') {
             $bRedirect = true;
             if (isset( $_GET['sid'] )) {
                 Bootstrap::LoadClass( 'sessions' );
@@ -1024,10 +970,6 @@ if (! defined( 'EXECUTE_BY_CRON' )) {
         }
 
         $controller->call($controllerAction);
-    } elseif ($isRestRequest) {
-        //NewRelic Snippet - By JHL
-        transactionLog($restConfig.$restApiClassPath.SYS_TARGET);
-        Bootstrap::dispatchRestService( SYS_TARGET, $restConfig, $restApiClassPath );
     } else {
         //NewRelic Snippet - By JHL
         transactionLog($phpFile);
@@ -1045,4 +987,3 @@ if (! defined( 'EXECUTE_BY_CRON' )) {
         bootstrap::logTimeByPage(); //log this page
     }
 }
-

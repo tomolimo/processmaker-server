@@ -1,32 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="processesdc" type="xmlform" width="100%">
-<PRO_TITLE type="hidden" />
-<title1 type="title">
-  <en><![CDATA[ Process: @#PRO_TITLE]]></en>
-</title1>
-
-<MESSAGE type="title" group="1">
-  <en>Are you sure that you want to delete this process?</en>
-</MESSAGE>
-
-<PRO_UID type="hidden">
-  <en/>
-</PRO_UID>
-
-<TO_DO type="text" mode="view">
-  <en>To Do</en>
-</TO_DO>
-
-<COMPLETED type="text" mode="view">
-  <en>Completed</en>
-</COMPLETED>
-
-<DRAFT type="text" mode="view">
-  <en>Draft</en>
-</DRAFT>
-
-<CANCELLED type="text" mode="view">
-  <en>Cancelled</en>
-</CANCELLED>
-
-</dynaForm>  
+  <PRO_TITLE type="hidden"/>
+  <title1 type="title">
+    <en><![CDATA[Process: @#PRO_TITLE]]></en>
+  </title1>
+  <MESSAGE type="title" group="1">
+    <en><![CDATA[Are you sure that you want to delete this process?]]></en>
+  </MESSAGE>
+  <PRO_UID type="hidden">
+    <en/>
+  </PRO_UID>
+  <TO_DO type="text" mode="view">
+    <en><![CDATA[To Do]]></en>
+  </TO_DO>
+  <COMPLETED type="text" mode="view">
+    <en><![CDATA[Completed]]></en>
+  </COMPLETED>
+  <DRAFT type="text" mode="view">
+    <en><![CDATA[Draft]]></en>
+  </DRAFT>
+  <CANCELLED type="text" mode="view">
+    <en><![CDATA[Cancelled]]></en>
+  </CANCELLED>
+</dynaForm>

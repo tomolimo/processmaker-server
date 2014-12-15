@@ -1,56 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="file" type="xmlform" width="100%" enableTemplate="1">
-
-<PME_PRO_UID type="hidden"/>
-<PME_A type="hidden"/>
-<PME_TYPE type="hidden"/>
-<PME_TITLE type="title" enableHTML="1">
-  <en>Properties</en>
-</PME_TITLE>
-<PME_XMLNODE_NAME type="text" size="32" maxlength="64" validate="NodeName" dependentFields="PME_VALIDATE_NAME" required="1">
-  <en>Field Name</en>
-</PME_XMLNODE_NAME>
-<PME_XMLNODE_NAME_OLD type="hidden"/>
-<PME_VALIDATE_NAME type="hidden" sqlConnection="XMLDB">
+  <PME_PRO_UID type="hidden"/>
+  <PME_A type="hidden"/>
+  <PME_TYPE type="hidden"/>
+  <PME_TITLE type="title" enableHTML="1">
+    <en><![CDATA[Properties]]></en>
+  </PME_TITLE>
+  <PME_XMLNODE_NAME type="text" size="32" maxlength="64" validate="NodeName" dependentFields="PME_VALIDATE_NAME" required="1">
+    <en><![CDATA[Field Name]]></en>
+  </PME_XMLNODE_NAME>
+  <PME_XMLNODE_NAME_OLD type="hidden"/>
+  <PME_VALIDATE_NAME type="hidden" sqlConnection="XMLDB">
 SELECT XMLNODE_NAME, TYPE FROM dynaForm WHERE XMLNODE_NAME = @@PME_XMLNODE_NAME
 </PME_VALIDATE_NAME>
-
-<PME_LABEL type="text" maxlength="255" size="50">
-  <en>Label</en>
-</PME_LABEL>
-
-<PME_INPUT type="dropdown" defaultvalue="" mode="edit" options="Array"><![CDATA[
+  <PME_LABEL type="text" maxlength="255" size="50">
+    <en><![CDATA[Label]]></en>
+  </PME_LABEL>
+  <PME_INPUT type="dropdown" defaultvalue="" mode="edit" options="Array"><![CDATA[
 SELECT INPUT_DOCUMENT.INP_DOC_UID, CONTENT.CON_VALUE AS VALUE FROM INPUT_DOCUMENT
 LEFT JOIN CONTENT ON (INPUT_DOCUMENT.INP_DOC_UID=CONTENT.CON_ID AND CONTENT.CON_CATEGORY='INP_DOC_TITLE' AND CONTENT.CON_LANG='en')
 WHERE INPUT_DOCUMENT.PRO_UID = @@PME_PRO_UID
 ORDER BY CONTENT.CON_VALUE
-  ]]><en>Input<option name="">None</option></en>
-</PME_INPUT>
-
-
-
-
-
-
-<PME_SUBTITLE3b type="title" enableHTML="1">
-	<en>Behaviour</en>
-</PME_SUBTITLE3b>
-<PME_REQUIRED type="checkbox" falseValue="0" value="1" defaultvalue="0" labelOnRight="0">
-	<en>Required</en>
-</PME_REQUIRED>
-<PME_HINT type="textarea" cols="47" rows="3">
-  <en>Hint</en>
-</PME_HINT>
-
-<BTN_CANCEL type="button" onclick="cancel();">
-  <en>Cancel</en>
-</BTN_CANCEL>
-
-<PME_ACCEPT type="button" onclick="fieldsSave( this.form );">
-  <en>Save</en>
-</PME_ACCEPT>
-
-<PME_JS type="javascript"><![CDATA[
+  ]]><en><![CDATA[Input]]><option name=""><![CDATA[None]]></option></en></PME_INPUT>
+  <PME_SUBTITLE3b type="title" enableHTML="1">
+    <en><![CDATA[Behaviour]]></en>
+  </PME_SUBTITLE3b>
+  <PME_REQUIRED type="checkbox" falseValue="0" value="1" defaultvalue="0" labelOnRight="0">
+    <en><![CDATA[Required]]></en>
+  </PME_REQUIRED>
+  <PME_HINT type="textarea" cols="47" rows="3">
+    <en><![CDATA[Hint]]></en>
+  </PME_HINT>
+  <BTN_CANCEL type="button" onclick="cancel();">
+    <en><![CDATA[Cancel]]></en>
+  </BTN_CANCEL>
+  <PME_ACCEPT type="button" onclick="fieldsSave( this.form );">
+    <en><![CDATA[Save]]></en>
+  </PME_ACCEPT>
+  <PME_JS type="javascript"><![CDATA[
 var fieldForm="file";
 var fieldName=getField("PME_XMLNODE_NAME",fieldForm);
 var savedFieldName=fieldName.value;
@@ -63,4 +50,4 @@ function cancel(){
     currentPopupWindow.remove();
 }
 ]]></PME_JS>
-</dynaForm>  
+</dynaForm>

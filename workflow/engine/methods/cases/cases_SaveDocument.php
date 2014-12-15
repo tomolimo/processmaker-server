@@ -93,27 +93,45 @@ if ($_SESSION["TRIGGER_DEBUG"]["NUM_TRIGGERS"] > 0) {
     $_SESSION["TRIGGER_DEBUG"]["TRIGGERS_VALUES"] = $arrayTrigger;
 }
 
-
-
+//***Validating the file allowed extensions***
+$oInputDocument = new InputDocument();
+$InpDocData = $oInputDocument->load( $inputDocumentUid );
+$res = G::verifyInputDocExtension($InpDocData['INP_DOC_TYPE_FILE'], $_FILES["form"]["name"]["APP_DOC_FILENAME"], $_FILES["form"]["tmp_name"]["APP_DOC_FILENAME"]);
+if($res->status == 0){
+	$message = $res->message;
+	G::SendMessageText( $message, "ERROR" );
+	$backUrlObj = explode( "sys" . SYS_SYS, $_SERVER['HTTP_REFERER'] );
+	G::header( "location: " . "/sys" . SYS_SYS . $backUrlObj[1] );
+	die();
+}
 
 //Add Input Document
 if (isset($_FILES) && isset($_FILES["form"]) && count($_FILES["form"]) > 0) {
-    $appDocUid = $case->addInputDocument(
-        $inputDocumentUid,
-        $appDocUid,
-        $docVersion,
-        $appDocType,
-        $appDocComment,
-        $actionType,
-        $_SESSION["APPLICATION"],
-        $_SESSION["INDEX"],
-        $_SESSION["TASK"],
-        $_SESSION["USER_LOGGED"],
-        "xmlform",
-        $_FILES["form"]["name"]["APP_DOC_FILENAME"],
-        $_FILES["form"]["error"]["APP_DOC_FILENAME"],
-        $_FILES["form"]["tmp_name"]["APP_DOC_FILENAME"]
-    );
+    try {
+        $appDocUid = $case->addInputDocument(
+            $inputDocumentUid,
+            $appDocUid,
+            $docVersion,
+            $appDocType,
+            $appDocComment,
+            $actionType,
+            $_SESSION["APPLICATION"],
+            $_SESSION["INDEX"],
+            $_SESSION["TASK"],
+            $_SESSION["USER_LOGGED"],
+            "xmlform",
+            $_FILES["form"]["name"]["APP_DOC_FILENAME"],
+            $_FILES["form"]["error"]["APP_DOC_FILENAME"],
+            $_FILES["form"]["tmp_name"]["APP_DOC_FILENAME"],
+            $_FILES["form"]["size"]["APP_DOC_FILENAME"]
+        );
+    } catch (Exception $e) {
+        G::SendMessageText($e->getMessage(), "ERROR");
+
+        $arrayAux = explode("sys" . SYS_SYS, $_SERVER["HTTP_REFERER"]);
+        G::header("location: /sys" . SYS_SYS . $arrayAux[1]);
+        exit(0);
+    }
 }
 
 if ($_SESSION["TRIGGER_DEBUG"]["NUM_TRIGGERS"] > 0) {

@@ -746,7 +746,7 @@ class SOAP_Client extends SOAP_Client_Overload
     function &parseResponse($response, $encoding, &$attachments)
     {
         // Parse the response.
-        $response =& new SOAP_Parser($response, $encoding, $attachments);
+        $response = new SOAP_Parser($response, $encoding, $attachments);
         if ($response->fault) {
             $fault =& $this->_raiseSoapFault($response->fault);
             return $fault;

@@ -45,6 +45,19 @@ try {
     }
     $aFields['INP_DOC_TAGS'] = isset( $aFields['INP_DOC_TAGS'] ) ? $aFields['INP_DOC_TAGS'] : 'INPUT';
     $aFields['INP_DOC_VERSIONING'] = strval( isset( $aFields['INP_DOC_VERSIONING'] ) ? $aFields['INP_DOC_VERSIONING'] : '' );
+
+    $uploadMaxFilesize = 0;
+    $uploadMaxFilesizeUnit = "KB";
+
+    if (preg_match("/^(\d+)(.*)$/", ini_get("upload_max_filesize"), $arrayMatch)) {
+        $uploadMaxFilesize = (int)($arrayMatch[1]);
+        $uploadMaxFilesizeUnit = (strlen(strtoupper($arrayMatch[2])) > 1)? $arrayMatch[2] : $arrayMatch[2] . "B";
+        $uploadMaxFilesize = $uploadMaxFilesize * (($uploadMaxFilesizeUnit == "MB")? 1024 * 1024 : 1024); //Bytes
+    }
+
+    $aFields["INP_DOC_UPLOAD_MAX_FILESIZE"] = $uploadMaxFilesize;
+    $aFields["INP_DOC_UPLOAD_MAX_FILESIZE_LABEL"] = "(" . $arrayMatch[1] . " " . $uploadMaxFilesizeUnit . ")";
+
     G::LoadClass( 'xmlfield_InputPM' );
     $G_PUBLISH = new Publisher();
     $G_PUBLISH->AddContent( 'xmlform', 'xmlform', 'inputdocs/inputdocs_Edit', '', $aFields, '../inputdocs/inputdocs_Save' );

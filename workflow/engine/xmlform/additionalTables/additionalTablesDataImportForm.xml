@@ -1,31 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="additionalTables/additionalTablesDataImportForm" type="xmlform" width="500" enableTemplate="1">
-
-<TITLE type="title">
-  <en>Import Data from CSV file</en>
-</TITLE>
-
-<ADD_TAB_UID type="hidden"/>
-
-<CSV_FILE type="file" required="1">
-  <en>CSV File</en>
-</CSV_FILE>
-
-<CSV_DELIMITER type="dropdown">
-  <en>Delimited by<option name=";">SemiColon (;)</option><option name=",">Comma (,)</option></en>
-</CSV_DELIMITER>
-
-<btnSave type="submit">
-  <en>Save</en>
-</btnSave>
-<BTN_CANCEL type="button" onclick="cancel();">
-  <en>Cancel</en>
-</BTN_CANCEL>
-
-<JS type="javascript" replacetags="1"><![CDATA[
+  <TITLE type="title">
+    <en><![CDATA[Import Data from CSV file]]></en>
+  </TITLE>
+  <ADD_TAB_UID type="hidden"/>
+  <CSV_FILE type="file" required="1">
+    <en><![CDATA[CSV File]]></en>
+  </CSV_FILE>
+  <CSV_DELIMITER type="dropdown">
+    <en><![CDATA[Delimited by]]><option name=";"><![CDATA[SemiColon (;)]]></option><option name=","><![CDATA[Comma (,)]]></option></en>
+  </CSV_DELIMITER>
+  <btnSave type="submit">
+    <en><![CDATA[Save]]></en>
+  </btnSave>
+  <BTN_CANCEL type="button" onclick="cancel();">
+    <en><![CDATA[Cancel]]></en>
+  </BTN_CANCEL>
+  <JS type="javascript" replacetags="1"><![CDATA[
 
 function cancel(){
     window.location = 'additionalTablesData?sUID=@#ADD_TAB_UID';
 }
 ]]></JS>
-</dynaForm>  
+</dynaForm>

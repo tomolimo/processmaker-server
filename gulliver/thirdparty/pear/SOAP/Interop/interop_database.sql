@@ -21,7 +21,7 @@ CREATE TABLE clientinfo (
   name char(100) NOT NULL default '',
   version char(20) NOT NULL default '',
   resultsURL char(255) NOT NULL default ''
-) TYPE=MyISAM;
+) TYPE=InnoDB;
 # --------------------------------------------------------
 
 #
@@ -41,7 +41,7 @@ CREATE TABLE results (
   error text,
   wire text NOT NULL,
   PRIMARY KEY  (id)
-) TYPE=MyISAM;
+) TYPE=InnoDB;
 # --------------------------------------------------------
 
 #
@@ -56,7 +56,7 @@ CREATE TABLE serverinfo (
   endpointURL char(255) NOT NULL default '',
   wsdlURL char(255) NOT NULL default '',
   PRIMARY KEY  (id)
-) TYPE=MyISAM;
+) TYPE=InnoDB;
 # --------------------------------------------------------
 
 #
@@ -70,7 +70,7 @@ CREATE TABLE services (
   wsdlURL char(255) NOT NULL default '',
   websiteURL char(255) NOT NULL default '',
   PRIMARY KEY  (id)
-) TYPE=MyISAM;
+) TYPE=InnoDB;
 
     
 

@@ -1,38 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm width="680" menu="setup/plugin_ListOptions">
-
-<id type="text" colWidth="20" titleAlign="left" align="left">
-  <en>#</en>
-</id>
-
-<title type="text" colWidth="150" titleAlign="left" align="left">
-  <en>Name (File)</en>
-</title>
-
-<description type="text" colWidth="350" titleAlign="left" align="left">
-  <en>Description</en>
-</description>
-
-<version type="text" colWidth="50" titleAlign="left" align="left">
-  <en>Version</en>
-</version>
-
-<!--enabled type="link" value="@#enabled" link="@#url" colWidth="40" align="center"-->
-
-<sFile type="hidden"/>
-<sStatusFile type="hidden"/>
-
-<enabled type="link" value="@#enabled" onclick="goonext('@#sFile','@#sStatusFile');return;" colWidth="40" align="center">
-  <en/>
-</enabled>
-
-<remove type="link" value="Remove" link="@#urlRemove" colWidth="20" align="right" >
-  <en></en>
-</remove>
-
-<linkEditValue type="link" value="@#linkEditValue" link="@#urlEdit" colWidth="40" align="center">
-  <en/>
-</linkEditValue>
-
-
-</dynaForm>   
+  <id type="text" colWidth="20" titleAlign="left" align="left">
+    <en><![CDATA[#]]></en>
+  </id>
+  <title type="text" colWidth="150" titleAlign="left" align="left">
+    <en><![CDATA[Name (File)]]></en>
+  </title>
+  <description type="text" colWidth="350" titleAlign="left" align="left">
+    <en><![CDATA[Description]]></en>
+  </description>
+  <version type="text" colWidth="50" titleAlign="left" align="left">
+    <en><![CDATA[Version]]></en>
+  </version>
+  <!--enabled type="link" value="@#enabled" link="@#url" colWidth="40" align="center"-->
+  <sFile type="hidden"/>
+  <sStatusFile type="hidden"/>
+  <enabled type="link" value="@#enabled" onclick="goonext('@#sFile','@#sStatusFile');return;" colWidth="40" align="center">
+    <en><![CDATA[]]></en>
+  </enabled>
+  <remove type="link" value="Remove" link="@#urlRemove" colWidth="20" align="right">
+    <en><![CDATA[]]></en>
+  </remove>
+  <linkEditValue type="link" value="@#linkEditValue" link="@#urlEdit" colWidth="40" align="center">
+    <en><![CDATA[]]></en>
+  </linkEditValue>
+</dynaForm>

@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="xmlmenu">
-
-<MNU_ADD type="link" value="" link="#" onclick="inputdocsAdd(); return false;" colAlign="left" colWidth="100">
-  <en>New</en>
-</MNU_ADD>
-<PAGED_TABLE_ID type="private"/>
-<PAGED_TABLE_FAST_SEARCH type="FastSearch" label="@G::LoadTranslation(ID_SEARCH)"/>
-
-<PRO_UID type="private"/>
-<inputdocsEdit type="private" defaultValue="../inputdocs/inputdocs_Edit"/>
-<inputdocsDelete type="private" defaultValue="../inputdocs/inputdocs_Delete"/>
-<js type="javascript" replaceTags="1"><![CDATA[
+  <MNU_ADD type="link" value="" link="#" onclick="inputdocsAdd(); return false;" colAlign="left" colWidth="100">
+    <en><![CDATA[New]]></en>
+  </MNU_ADD>
+  <PAGED_TABLE_ID type="private"/>
+  <PAGED_TABLE_FAST_SEARCH type="FastSearch" label="@G::LoadTranslation(ID_SEARCH)"/>
+  <PRO_UID type="private"/>
+  <inputdocsEdit type="private" defaultValue="../inputdocs/inputdocs_Edit"/>
+  <inputdocsDelete type="private" defaultValue="../inputdocs/inputdocs_Delete"/>
+  <js type="javascript" replaceTags="1"><![CDATA[
 var currentPagedTable = @#PAGED_TABLE_ID;
   function inputdocsAdd(){//alert('@G::encryptlink(@#inputdocsEdit)?PRO_UID=@%PRO_UID');
 		popupWindow('@G::LoadTranslation(ID_NEW_INPUTDOCS)', '@G::encryptlink(@#inputdocsEdit)?PRO_UID=@%PRO_UID' , 500, 410);
@@ -19,9 +17,56 @@ var currentPagedTable = @#PAGED_TABLE_ID;
 		popupWindow('@G::LoadTranslation(ID_EDIT_INPUTDOCS)', '@G::encryptlink(@#inputdocsEdit)?INP_DOC_UID='+ uid , 500, 410);
   }
   function validate_form(){
-    var sw = true;
-    sw = sw && (getField('INP_DOC_TITLE').value!='');
-    return sw;
+    if(getField('INP_DOC_TITLE').value == ''){
+      alert('@G::LoadTranslation(ID_INPUT_DOC_TITLE_REQUIRED)');
+      getField('INP_DOC_TITLE').focus();
+      return false;
+    }
+
+    oTypeFile = getField('INP_DOC_TYPE_FILE');
+  	if (oTypeFile.value == '' ){
+   	  alert('@G::LoadTranslation(ID_INPUT_DOC_TYPE_FILE_REQUIRED)');
+      oTypeFile.focus();
+      return false;
+    }
+
+    allowedTypes = getField('INP_DOC_TYPE_FILE').value.split(", ");
+    expreg = /^\*\.?[a-zA-Z0-9]{2,15}$/;
+
+    for(i=0; i<allowedTypes.length; i++){
+      atype = allowedTypes[i];
+
+      if((atype=='*.*') || (expreg.test(atype)) ){
+        //
+      } else {
+        alert('@G::LoadTranslation(ID_UPLOAD_ERR_WRONG_ALLOWED_EXTENSION_FORMAT)');
+        oTypeFile.focus();
+        return false;
+      }
+    }
+
+    var maxFilesize = parseInt(getField("INP_DOC_MAX_FILESIZE").value.trim());
+    var maxFilesizeUnit = getField("INP_DOC_MAX_FILESIZE_UNIT").value;
+
+    var uploadMaxFilesize = parseInt(getField("INP_DOC_UPLOAD_MAX_FILESIZE").value);
+
+    maxFilesize = maxFilesize * ((maxFilesizeUnit == "MB")?  1024 * 1024 : 1024);
+
+    if (getField("INP_DOC_MAX_FILESIZE").value != "") {
+        if(maxFilesize > 0) {
+            if(maxFilesize > uploadMaxFilesize) {
+                new leimnud.module.app.alert().make({label: _("ID_INPUT_MAX_SIZE")});
+                getField("INP_DOC_MAX_FILESIZE").focus();
+                return false;
+            }
+        }
+    } else {
+        alert('@G::LoadTranslation(ID_INPUT_DOC_MAX_FILESIZE_REQUIRED)');
+        maxFilesize.focus();
+        return false;
+    }
+
+    return true;
   }
   function inputdocsSave( form ) {
   var nameInput = getField('INP_DOC_TITLE').value;
@@ -36,16 +81,12 @@ var currentPagedTable = @#PAGED_TABLE_ID;
 	   }else{
 	   alert(G_STRINGS.ID_EXIST_INPUTDOCUMENT);return false;
 	   }
-	   }else{
-	     alert('@G::LoadTranslation(ID_INPUT_DOC_TITLE_REQUIRED)'); return false;
 	   }
     }else{
       if (validate_form()){
       ajax_post( form.action, form, 'POST' );
 	    currentPopupWindow.remove();
 	    @#PAGED_TABLE_ID.refresh();
-	  }else{
-	    alert('@G::LoadTranslation(ID_INPUT_DOC_TITLE_REQUIRED)'); return false;
 	  }
     }
   }
@@ -64,6 +105,5 @@ var currentPagedTable = @#PAGED_TABLE_ID;
     });
   }
 ]]></js>
-
-<SEARCH_FILTER_FORM type="private"/>
+  <SEARCH_FILTER_FORM type="private"/>
 </dynaForm>

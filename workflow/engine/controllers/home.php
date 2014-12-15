@@ -43,13 +43,13 @@ class Home extends Controller
     }
 
     public function login ($httpData)
-    {   
+    {
         //start new session
         @session_destroy();
         session_start();
         session_regenerate_id();
 
-        $data = isset( $httpData->d ) ? unserialize( base64_decode( $httpData->d ) ) : ''; 
+        $data = isset( $httpData->d ) ? unserialize( base64_decode( $httpData->d ) ) : '';
         $template = $this->clientBrowser['name'] == 'msie' ? 'login_ie' : 'login_standard';
         $skin = $this->clientBrowser['name'] == 'msie' ? $this->lastSkin : 'simplified';
 
@@ -94,9 +94,9 @@ class Home extends Controller
         $start = 0;
         $limit = '';
 
-        $proData = $process->getAllProcesses( $start, $limit, null, null, false, true ); 
-        $processList = $case->getStartCasesPerType( $_SESSION['USER_LOGGED'], 'category' ); 
-        
+        $proData = $process->getAllProcesses( $start, $limit, null, null, false, true );
+        $processList = $case->getStartCasesPerType( $_SESSION['USER_LOGGED'], 'category' );
+
         unset( $processList[0] );
         $processesList = array ();
 
@@ -104,11 +104,11 @@ class Home extends Controller
             foreach ($proData as $keyPro => $valuePro) {
                 if ($valueProcess['pro_uid'] == $valuePro['PRO_UID']) {
                     $processesList[] = $valueProcess;
-                }       
+                }
             }
         }
-        
-        $switchLink = $userProperty->getUserLocation( $_SESSION['USER_LOGGED'] );
+
+        $switchLink = $userProperty->getUserLocation( $_SESSION['USER_LOGGED'], SYS_LANG );
 
         if (!isset($_COOKIE['workspaceSkin'])) {
             if (substr( $sysConf['default_skin'], 0, 2 ) == 'ux') {
@@ -120,7 +120,7 @@ class Home extends Controller
         $oServerConf = & serverConf::getSingleton();
 
         if ($oServerConf->isRtl( SYS_LANG )) {
-            $swRtl = 1; 
+            $swRtl = 1;
         } else {
             $swRtl = 0;
         }
@@ -202,7 +202,7 @@ class Home extends Controller
     }
 
     public function appList ($httpData)
-    {   
+    {
         // setting default list applications types [default: todo]
         $httpData->t = isset( $httpData->t ) ? $httpData->t : 'todo';
 
@@ -289,7 +289,7 @@ class Home extends Controller
     }
 
     public function getApps ($httpData)
-    {   
+    {
         $cases = $this->getAppsData( $httpData->t, $httpData->start, $httpData->limit );
 
         $this->setView( $this->userUxBaseTemplate . PATH_SEP . 'applications' );
@@ -312,7 +312,7 @@ class Home extends Controller
         $dir = null,
         $sort = "APP_CACHE_VIEW.APP_NUMBER",
         $category = null)
-    {   
+    {
         require_once ("classes/model/AppNotes.php");
         G::LoadClass( 'applications' );
 
@@ -564,7 +564,7 @@ class Home extends Controller
         return $status;
     }
     function getProcessArray($action, $userUid)
-    {  
+    {
         global $oAppCache;
 
         $processes = array();
@@ -595,7 +595,7 @@ class Home extends Controller
                 $cProcess->addJoinMC($conds, Criteria::LEFT_JOIN);
                 $cProcess->add(ProcessPeer::PRO_STATUS, "ACTIVE");
                 $oDataset = ProcessPeer::doSelectRS($cProcess);
-               
+
                 $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
 
                 $oDataset->next();

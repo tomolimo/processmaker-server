@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="xmlmenu">
-
-<MNU_ADD type="link" link="authSources_SelectType" colAlign="left" colWidth="35">
-  <en>New</en>
-</MNU_ADD>
-
-<PAGED_TABLE_ID type="private"/>
-
-<JS type="javascript" replaceTags="1"><![CDATA[
+  <MNU_ADD type="link" link="authSources_SelectType" colAlign="left" colWidth="35">
+    <en><![CDATA[New]]></en>
+  </MNU_ADD>
+  <PAGED_TABLE_ID type="private"/>
+  <JS type="javascript" replaceTags="1"><![CDATA[
 
 var authSourcesDelete = function(sUID) {
   new leimnud.module.app.confirm().make({
@@ -20,4 +17,4 @@ var authSourcesDelete = function(sUID) {
 };
 
 ]]></JS>
-</dynaForm> 
+</dynaForm>

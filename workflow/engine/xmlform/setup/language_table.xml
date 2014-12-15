@@ -1,16 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<dynaForm name="language_table" basedir="xmlform/setup" width="100%" sql="SELECT * FROM LEXICO WHERE LEX_TOPIC = &#039;LANGUAGE&#039;" afterDeleteField="afterDeleteField();">
-<TITLE type="title" group="4">
-  <en>Language</en>
-</TITLE>
-
-<LEX_VALUE type="dropdown" size="40" maxlength="40">
+<dynaForm name="language_table" basedir="xmlform/setup" width="100%" sql="SELECT * FROM LEXICO WHERE LEX_TOPIC = 'LANGUAGE'" afterDeleteField="afterDeleteField();">
+  <TITLE type="title" group="4">
+    <en><![CDATA[Language]]></en>
+  </TITLE>
+  <LEX_VALUE type="dropdown" size="40" maxlength="40">
 SELECT LAN_ID,LAN_NAME FROM LANGUAGE ORDER BY LAN_NAME
-  <en>Language</en>
+  <en><![CDATA[Language]]></en>
 </LEX_VALUE>
-
-<BSUBMIT type="button" onclick="btnClick(this.form);">
-  <en>Add</en>
-</BSUBMIT>
-
-</dynaForm>  
+  <BSUBMIT type="button" onclick="btnClick(this.form);">
+    <en><![CDATA[Add]]></en>
+  </BSUBMIT>
+</dynaForm>

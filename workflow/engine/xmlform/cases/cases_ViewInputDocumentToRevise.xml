@@ -1,52 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="cases_InputDocument" type="xmlform" width="400px" labelWidth="100px">
-
-<INP_DOC_UID type="private"/>
-
-<POSITION type="private"/>
-<APP_UID type="private"/>
-<PRO_UID type="private"/>
-<DEL_INDEX type="private"/>
-
-<APP_DOC_TITLE type="caption">
-  <en>Title</en>
-</APP_DOC_TITLE>
-
-<APP_DOC_COMMENT type="caption">
-  <en>Comment</en>
-</APP_DOC_COMMENT>
-
-<APP_DOC_TYPE type="text" colWidth="80" titleAlign="left" align="left" mode="view">
- <en>Type</en>
-</APP_DOC_TYPE>
-
-<INP_DOC_ORIGINAL type="dropdown" colWidth="80" titleAlign="left" align="left" mode="view">
-  <en>Format<option name="ORIGINAL">Original</option><option name="COPYLEGAL">Legal Copy</option><option name="COPY">Copy</option></en>
-</INP_DOC_ORIGINAL>
-
-<APP_DOC_CREATE_DATE type="date" mode="view">
-  <en>Created Date</en>
-</APP_DOC_CREATE_DATE>
-
-<CREATOR type="text" mode="view">
-  <en>Creator</en>
-</CREATOR>
-
-
-
-<VIEW type="phpVariable"/>
-
-<FILE type="phpVariable"/>
-
-<APP_DOC_FILENAME type="link" value="@#VIEW" link="@#FILE" target="_blank">
-  <en>File</en>
-</APP_DOC_FILENAME>
-
-<BACK type="button" onclick="back();">
-  <en>Back</en>
-</BACK>
-
-<JS type="javascript">
+  <INP_DOC_UID type="private"/>
+  <POSITION type="private"/>
+  <APP_UID type="private"/>
+  <PRO_UID type="private"/>
+  <DEL_INDEX type="private"/>
+  <APP_DOC_TITLE type="caption">
+    <en><![CDATA[Title]]></en>
+  </APP_DOC_TITLE>
+  <APP_DOC_COMMENT type="caption">
+    <en><![CDATA[Comment]]></en>
+  </APP_DOC_COMMENT>
+  <APP_DOC_TYPE type="text" colWidth="80" titleAlign="left" align="left" mode="view">
+    <en><![CDATA[Type]]></en>
+  </APP_DOC_TYPE>
+  <INP_DOC_ORIGINAL type="dropdown" colWidth="80" titleAlign="left" align="left" mode="view">
+    <en><![CDATA[Format]]><option name="ORIGINAL"><![CDATA[Original]]></option><option name="COPYLEGAL"><![CDATA[Legal Copy]]></option><option name="COPY"><![CDATA[Copy]]></option></en>
+  </INP_DOC_ORIGINAL>
+  <APP_DOC_CREATE_DATE type="date" mode="view">
+    <en><![CDATA[Created Date]]></en>
+  </APP_DOC_CREATE_DATE>
+  <CREATOR type="text" mode="view">
+    <en><![CDATA[Creator]]></en>
+  </CREATOR>
+  <VIEW type="phpVariable"/>
+  <FILE type="phpVariable"/>
+  <APP_DOC_FILENAME type="link" value="@#VIEW" link="@#FILE" target="_blank">
+    <en><![CDATA[File]]></en>
+  </APP_DOC_FILENAME>
+  <BACK type="button" onclick="back();">
+    <en><![CDATA[Back]]></en>
+  </BACK>
+  <JS type="javascript">
 
 
 var back = function()
@@ -55,5 +40,4 @@ var back = function()
 };
 
 </JS>
- 
-</dynaForm> 
+</dynaForm>

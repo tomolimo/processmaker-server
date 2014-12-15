@@ -1,3 +1,6 @@
+<?php if (function_exists("http_response_code")) {
+    http_response_code(404);
+}?>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <META http-equiv="Content-Type" content="text/html; charset=utf-8" />

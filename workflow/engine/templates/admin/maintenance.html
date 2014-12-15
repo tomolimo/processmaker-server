@@ -1,0 +1,98 @@
+<script>
+Ext.onReady(main);
+var infoGrid;
+var store;
+
+function main()
+{
+    store = new Ext.data.Store( {
+        autoLoad: true,
+        proxy: new Ext.data.HttpProxy({
+            url: '../adminProxy/getMaintenanceInfo',
+            method: 'POST'
+        }),
+        baseParams : { request : 'info'},
+        reader : new Ext.data.JsonReader( {
+            root : 'info',
+            fields : [
+                {name : 'client_id'},
+                {name : 'name'},
+                {name : 'value'},
+                {name : 'value_ok'},
+                {name : 'option'}
+            ]
+        })
+    });
+
+    infoGrid = new Ext.grid.GridPanel({
+        title : 'Maintenance',
+        stripeRows : true,
+        autoHeight : true,
+        width : 600,
+        enableColumnHide: false,
+        enableColumnResize: false,
+        enableHdMenu: false,
+        disableSelection: true,
+        trackMouseOver:false,
+        columnLines: true,
+        loadMask: true,
+        store : store,
+        columns : [
+            {
+                id : 'client_id',
+                header : 'Client ID',
+                width : 160,
+                sortable : false,
+                dataIndex : 'client_id'
+            }, {
+                id : 'name',
+                header : 'Application',
+                width : 250,
+                sortable : false,
+                dataIndex : 'name'
+            }, {
+                header : 'Status',
+                width : 100,
+                sortable : false,
+                dataIndex : 'value',
+                renderer: function(val, el, row){
+                    if(row.data.value_ok) {
+                        return '<font color="green">'+val+'</font>';
+                    } else {
+                        return '<font color="red">'+val+'</font>';
+                    }
+                }
+            }, {
+                header : '',
+                width : 100,
+                sortable : false,
+                dataIndex : 'option',
+                renderer: function(val, el, row){
+                    return '<a href="#" onclick="'+val.action+'(); return false;">'+val.label+'</a>';
+                }
+            }
+        ]
+    });
+
+    infoGrid.render(document.body)
+}
+
+function doRegisterPMDesignerClient()
+{
+    Ext.Ajax.request({
+        url: '../adminProxy/registerPMDesignerClient',
+        method: 'POST',
+        params: {},
+        waitMsg: 'Registering, please wait!',
+        success: function(r, o){
+            var resp = Ext.util.JSON.decode(r.responseText);
+
+            console.log(resp);
+            store.reload();
+        }
+    });
+
+    return false;
+}
+
+</script>

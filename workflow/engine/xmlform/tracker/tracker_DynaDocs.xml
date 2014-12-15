@@ -1,18 +1,13 @@
-<?xml version="1.0" encoding="UTF-8"?> 
+<?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="tracker_DynaDocs" width="100%" rowsPerPage="50" menu="">
-
-<CTO_UID_OBJ type="private" showInTable="0"/>
-
-<CTO_TITLE type="text" colWidth="300" titleAlign="left" align="left">
-  <en>Title</en>
-</CTO_TITLE>
-
-<CTO_TYPE_OBJ type="dropdown" colWidth="150" titleAlign="left" align="left">
-  <en>Type<option name="DYNAFORM">Form</option><option name="INPUT_DOCUMENT">Document</option><option name="OUTPUT_DOCUMENT">Document</option></en>
-</CTO_TYPE_OBJ>
-
-<CTO_VIEW type="link" colWidth="150" link="tracker_Show?CTO_UID_OBJ=@#CTO_UID_OBJ&amp;CTO_TYPE_OBJ=@#CTO_TYPE_OBJ" value="@#VIEW">
-  <en/>
-</CTO_VIEW>
-
+  <CTO_UID_OBJ type="private" showInTable="0"/>
+  <CTO_TITLE type="text" colWidth="300" titleAlign="left" align="left">
+    <en><![CDATA[Title]]></en>
+  </CTO_TITLE>
+  <CTO_TYPE_OBJ type="dropdown" colWidth="150" titleAlign="left" align="left">
+    <en><![CDATA[Type]]><option name="DYNAFORM"><![CDATA[Form]]></option><option name="INPUT_DOCUMENT"><![CDATA[Document]]></option><option name="OUTPUT_DOCUMENT"><![CDATA[Document]]></option></en>
+  </CTO_TYPE_OBJ>
+  <CTO_VIEW type="link" colWidth="150" link="tracker_Show?CTO_UID_OBJ=@#CTO_UID_OBJ&amp;CTO_TYPE_OBJ=@#CTO_TYPE_OBJ" value="@#VIEW">
+    <en><![CDATA[]]></en>
+  </CTO_VIEW>
 </dynaForm>

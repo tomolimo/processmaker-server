@@ -131,6 +131,10 @@
   G::LoadClass('configuration');
   $conf = new Configurations();
   $conf->setConfig($ntable->__Configuration,$ntable,$conf->aConfig);
-  $conf->saveConfig('pagedTable',$ntable->__OBJ_UID,'',$_SESSION['USER_LOGGED'],'');
+  if (isset($_SESSION['USER_LOGGED'])) {
+    $conf->saveConfig('pagedTable',$ntable->__OBJ_UID,'',$_SESSION['USER_LOGGED'],'');
+  } else {
+    $conf->saveConfig('pagedTable',$ntable->__OBJ_UID);
+  }
 
 ?>

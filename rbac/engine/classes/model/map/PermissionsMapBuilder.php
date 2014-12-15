@@ -59,7 +59,7 @@ class PermissionsMapBuilder {
 	{
 		$this->dbMap = Propel::getDatabaseMap('rbac');
 
-		$tMap = $this->dbMap->addTable('PERMISSIONS');
+		$tMap = $this->dbMap->addTable('RBAC_PERMISSIONS');
 		$tMap->setPhpName('Permissions');
 
 		$tMap->setUseIdGenerator(false);

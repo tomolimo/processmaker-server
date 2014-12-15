@@ -1,32 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="javascript" type="xmlform" width="100%" enableTemplate="1">
-<PME_A type="hidden"/>
-<PME_TYPE type="hidden"/>
-<A type="hidden" showInTable="0"/>
-<PME_TITLE type="title" enableHTML="1">
-  <en>Properties</en>
-</PME_TITLE>
-<PME_XMLNODE_NAME type="text" size="32" maxlength="64" validate="NodeName" dependentFields="PME_VALIDATE_NAME" required="1">
-  <en>Field Name</en>
-</PME_XMLNODE_NAME>
-<PME_XMLNODE_NAME_OLD type="hidden"/>
-<PME_VALIDATE_NAME type="hidden" sqlConnection="XMLDB">
+  <PME_A type="hidden"/>
+  <PME_TYPE type="hidden"/>
+  <A type="hidden" showInTable="0"/>
+  <PME_TITLE type="title" enableHTML="1">
+    <en><![CDATA[Properties]]></en>
+  </PME_TITLE>
+  <PME_XMLNODE_NAME type="text" size="32" maxlength="64" validate="NodeName" dependentFields="PME_VALIDATE_NAME" required="1">
+    <en><![CDATA[Field Name]]></en>
+  </PME_XMLNODE_NAME>
+  <PME_XMLNODE_NAME_OLD type="hidden"/>
+  <PME_VALIDATE_NAME type="hidden" sqlConnection="XMLDB">
 SELECT XMLNODE_NAME, TYPE FROM dynaForm WHERE XMLNODE_NAME = @@PME_XMLNODE_NAME
 </PME_VALIDATE_NAME>
-
-<PME_CODE type="textarea" cols="47" rows="11" defaultvalue="" style="overflow:scroll">
-  <en>Code</en>
-</PME_CODE>
-
-<BTN_CANCEL type="button" onclick="cancel();">
-  <en>Cancel</en>
-</BTN_CANCEL>
-
-<PME_ACCEPT type="button" onclick="saveJavascript(); fieldsSave( this.form );">
-  <en>Save</en>
-</PME_ACCEPT>
-
-<PME_JS type="javascript"><![CDATA[
+  <PME_CODE type="textarea" cols="47" rows="11" defaultvalue="" style="overflow:scroll">
+    <en><![CDATA[Code]]></en>
+  </PME_CODE>
+  <BTN_CANCEL type="button" onclick="cancel();">
+    <en><![CDATA[Cancel]]></en>
+  </BTN_CANCEL>
+  <PME_ACCEPT type="button" onclick="saveJavascript(); fieldsSave( this.form );">
+    <en><![CDATA[Save]]></en>
+  </PME_ACCEPT>
+  <PME_JS type="javascript"><![CDATA[
 getField('PME_CODE').style.font='8pt Courier';
 
 if (navigator.appName != "Microsoft Internet Explorer") {
@@ -82,4 +78,4 @@ function setFocus1() {
 setTimeout('setFocus1()', 500);
 
 ]]></PME_JS>
-</dynaForm>  
+</dynaForm>

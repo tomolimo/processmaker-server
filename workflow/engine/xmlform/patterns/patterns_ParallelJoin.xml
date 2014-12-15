@@ -1,36 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="patterns_Sequential" type="xmlform" width="100%">
-
-<action type="hidden"/>
-
-<LANG type="private"/>
-
-<ROU_UID type="hidden"/>
-
-<PROCESS type="hidden"/>
-
-<TASK type="hidden"/>
-
-<ROU_TYPE_OLD type="hidden"/>
-
-<TITLE type="title" showInTable="0">
-  <en>Parallel Join</en>
-</TITLE>
-
-<ROU_TYPE type="hidden"/>
-
-<ROU_NEXT_TASK type="dropdown"><![CDATA[
+  <action type="hidden"/>
+  <LANG type="private"/>
+  <ROU_UID type="hidden"/>
+  <PROCESS type="hidden"/>
+  <TASK type="hidden"/>
+  <ROU_TYPE_OLD type="hidden"/>
+  <TITLE type="title" showInTable="0">
+    <en><![CDATA[Parallel Join]]></en>
+  </TITLE>
+  <ROU_TYPE type="hidden"/>
+  <ROU_NEXT_TASK type="dropdown"><![CDATA[
 SELECT TAS_UID, CON_VALUE FROM TASK LEFT JOIN CONTENT ON (TAS_UID = CON_ID AND CON_CATEGORY = 'TAS_TITLE' AND CON_LANG = '@#LANG') WHERE PRO_UID = '@#PROCESS'
-  ]]><en>Next Task<option name="-1">End of process</option></en>
-</ROU_NEXT_TASK>
-
-
-
-<SAVE type="button" onclick="savePattern(this.form);">
-  <en>Save</en>
-</SAVE>
-
-<JS type="javascript"><![CDATA[
+  ]]><en><![CDATA[Next Task]]><option name="-1"><![CDATA[End of process]]></option></en></ROU_NEXT_TASK>
+  <SAVE type="button" onclick="savePattern(this.form);">
+    <en><![CDATA[Save]]></en>
+  </SAVE>
+  <JS type="javascript"><![CDATA[
 var bModified = false;
 var modified  = function() {
   bModified   = true;
@@ -197,5 +183,4 @@ var savePattern = function(oForm)
   Pm.tmp.derivationsPanel.remove();
 };
 ]]></JS>
-
-</dynaForm>  
+</dynaForm>

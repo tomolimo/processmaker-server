@@ -1,0 +1,88 @@
+{
+	"name": "form",
+	"items": [
+		{
+			"type": "form",
+			"id": "1322323",
+			"items": [
+				[
+                    {
+                        "type": "title",
+                        "colSpan": 12,
+                        "name": "title",
+                        "label": "PMDynaform 12 - Maps"
+                    }
+                ],
+				[
+					{
+						"type": "geomap",
+						"label": "First GeoMap",
+						"colSpan": 12,
+						"name": "map-name1",
+						"currentLocation": true,
+						"dragMarker": true,
+						"fullscreen": true,
+						"scaleControl": true,
+						"zoomControl": true,
+						"zoom": 15
+					}
+				],
+				[
+					{
+						"type": "geomap",
+						"label": "Second GeoMap",
+						"colSpan": 6,
+						"name": "map-name2",
+						"currentLocation": false,
+						"scaleControl": true,
+						"mapTypeControl": true,
+						"zoom": 5,
+						"latitude": -25.363882,
+						"longitude": 131.044922
+					},
+					{
+						"type": "geomap",
+						"label": "Third GeoMap",
+						"colSpan": 6,
+						"name": "map-name3",
+						"currentLocation": false,
+						"scaleControl": true,
+						"zoom": 10,
+						"latitude": -25.363882,
+						"longitude": 131.044922
+					}
+				],
+				[
+					{
+						"type": "geomap",
+						"label": "Fourth GeoMap",
+						"colSpan": 4,
+						"name": "map-name4",
+						"currentLocation": true,
+						"scaleControl": false,
+						"zoom": 5
+					},
+					{
+						"type": "geomap",
+						"label": "Fifth GeoMap",
+						"colSpan": 4,
+						"name": "map-name5",
+						"currentLocation": false,
+						"scaleControl": false,
+						"zoom": 10,
+						"latitude": -33.890542,
+						"longitude": 151.274856
+					},
+					{
+						"type": "geomap",
+						"label": "Sixth GeoMap",
+						"colSpan": 4,
+						"name": "map-name6",
+						"currentLocation": true,
+						"disabled": true
+					}
+				]
+			]
+		}
+	]
+}

@@ -1,18 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="login" version="1.0" basedir="" xmlform_type="NORMAL" width="400px">
-<TITLE type="title">
-  <en>CASE TRACKER</en>
-</TITLE>
-
-<CASE type="Text" size="30" maxlength="50" validate="Any">
-  <en>Case Code</en>
-</CASE>
-
-<PIN type="password" size="30" maxlength="32">
-  <en>Pin</en>
-</PIN>
-
-<BSUBMIT type="submit">
-  <en>Enter</en>
-</BSUBMIT>
-</dynaForm>  
+  <TITLE type="title">
+    <en><![CDATA[CASE TRACKER]]></en>
+  </TITLE>
+  <CASE type="Text" size="30" maxlength="50" validate="Any">
+    <en><![CDATA[Case Code]]></en>
+  </CASE>
+  <PIN type="password" size="30" maxlength="32">
+    <en><![CDATA[Pin]]></en>
+  </PIN>
+  <BSUBMIT type="submit">
+    <en><![CDATA[Enter]]></en>
+  </BSUBMIT>
+</dynaForm>

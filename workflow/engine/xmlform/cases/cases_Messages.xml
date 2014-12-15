@@ -1,34 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="cases_Messages" width="100%" rowsPerPage="20" menu="">
-
-<APP_UID type="private" showInTable="0"/>
-<APP_MSG_UID type="private" showInTable="0"/>
-
-<APP_MSG_TYPE type="text" colWidth="150" titleAlign="left" align="left">
-  <en>Type</en>
-</APP_MSG_TYPE>
-
-<APP_MSG_DATE type="text" colWidth="150" titleAlign="left" align="left">
-  <en>Date</en>
-</APP_MSG_DATE>
-
-<APP_MSG_SUBJECT type="text" colWidth="200" titleAlign="left" align="left">
-  <en>Subject</en>
-</APP_MSG_SUBJECT>
-
-<APP_MSG_FROM type="text" colWidth="200" titleAlign="left" align="left">
-  <en>From</en>
-</APP_MSG_FROM>
-
-<APP_MSG_TO type="text" colWidth="200" titleAlign="left" align="left">
-  <en>To</en>
-</APP_MSG_TO>
-
-<APP_MSG_STATUS type="text" colWidth="200" titleAlign="left" align="left">
-  <en>Status</en>
-</APP_MSG_STATUS>
-
-<VIEW type="link" colWidth="25" value="@G::LoadTranslation(ID_VIEW)" link="javascript:showHistoryMessage(@QAPP_UID, @QAPP_MSG_UID);"/>
-<RESEND type="link" colWidth="25" value="@G::LoadTranslation(ID_RESEND)" link="javascript:resendMessage(@QAPP_UID, @QAPP_MSG_UID);"/>
-
-</dynaForm>  
+  <APP_UID type="private" showInTable="0"/>
+  <APP_MSG_UID type="private" showInTable="0"/>
+  <APP_MSG_TYPE type="text" colWidth="150" titleAlign="left" align="left">
+    <en><![CDATA[Type]]></en>
+  </APP_MSG_TYPE>
+  <APP_MSG_DATE type="text" colWidth="150" titleAlign="left" align="left">
+    <en><![CDATA[Date]]></en>
+  </APP_MSG_DATE>
+  <APP_MSG_SUBJECT type="text" colWidth="200" titleAlign="left" align="left">
+    <en><![CDATA[Subject]]></en>
+  </APP_MSG_SUBJECT>
+  <APP_MSG_FROM type="text" colWidth="200" titleAlign="left" align="left">
+    <en><![CDATA[From]]></en>
+  </APP_MSG_FROM>
+  <APP_MSG_TO type="text" colWidth="200" titleAlign="left" align="left">
+    <en><![CDATA[To]]></en>
+  </APP_MSG_TO>
+  <APP_MSG_STATUS type="text" colWidth="200" titleAlign="left" align="left">
+    <en><![CDATA[Status]]></en>
+  </APP_MSG_STATUS>
+  <VIEW type="link" colWidth="25" value="@G::LoadTranslation(ID_VIEW)" link="javascript:showHistoryMessage(@QAPP_UID, @QAPP_MSG_UID);"/>
+  <RESEND type="link" colWidth="25" value="@G::LoadTranslation(ID_RESEND)" link="javascript:resendMessage(@QAPP_UID, @QAPP_MSG_UID);"/>
+</dynaForm>

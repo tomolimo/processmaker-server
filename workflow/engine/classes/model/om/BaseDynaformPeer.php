@@ -25,7 +25,7 @@ abstract class BaseDynaformPeer
     const CLASS_DEFAULT = 'classes.model.Dynaform';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 4;
+    const NUM_COLUMNS = 6;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
@@ -43,6 +43,12 @@ abstract class BaseDynaformPeer
     /** the column name for the DYN_FILENAME field */
     const DYN_FILENAME = 'DYNAFORM.DYN_FILENAME';
 
+    /** the column name for the DYN_CONTENT field */
+    const DYN_CONTENT = 'DYNAFORM.DYN_CONTENT';
+
+    /** the column name for the DYN_VERSION field */
+    const DYN_VERSION = 'DYNAFORM.DYN_VERSION';
+
     /** The PHP to DB Name Mapping */
     private static $phpNameMap = null;
 
@@ -54,10 +60,10 @@ abstract class BaseDynaformPeer
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     private static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('DynUid', 'ProUid', 'DynType', 'DynFilename', ),
-        BasePeer::TYPE_COLNAME => array (DynaformPeer::DYN_UID, DynaformPeer::PRO_UID, DynaformPeer::DYN_TYPE, DynaformPeer::DYN_FILENAME, ),
-        BasePeer::TYPE_FIELDNAME => array ('DYN_UID', 'PRO_UID', 'DYN_TYPE', 'DYN_FILENAME', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, )
+        BasePeer::TYPE_PHPNAME => array ('DynUid', 'ProUid', 'DynType', 'DynFilename', 'DynContent', 'DynVersion', ),
+        BasePeer::TYPE_COLNAME => array (DynaformPeer::DYN_UID, DynaformPeer::PRO_UID, DynaformPeer::DYN_TYPE, DynaformPeer::DYN_FILENAME, DynaformPeer::DYN_CONTENT, DynaformPeer::DYN_VERSION, ),
+        BasePeer::TYPE_FIELDNAME => array ('DYN_UID', 'PRO_UID', 'DYN_TYPE', 'DYN_FILENAME', 'DYN_CONTENT', 'DYN_VERSION', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, )
     );
 
     /**
@@ -67,10 +73,10 @@ abstract class BaseDynaformPeer
      * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     private static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('DynUid' => 0, 'ProUid' => 1, 'DynType' => 2, 'DynFilename' => 3, ),
-        BasePeer::TYPE_COLNAME => array (DynaformPeer::DYN_UID => 0, DynaformPeer::PRO_UID => 1, DynaformPeer::DYN_TYPE => 2, DynaformPeer::DYN_FILENAME => 3, ),
-        BasePeer::TYPE_FIELDNAME => array ('DYN_UID' => 0, 'PRO_UID' => 1, 'DYN_TYPE' => 2, 'DYN_FILENAME' => 3, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, )
+        BasePeer::TYPE_PHPNAME => array ('DynUid' => 0, 'ProUid' => 1, 'DynType' => 2, 'DynFilename' => 3, 'DynContent' => 4, 'DynVersion' => 5, ),
+        BasePeer::TYPE_COLNAME => array (DynaformPeer::DYN_UID => 0, DynaformPeer::PRO_UID => 1, DynaformPeer::DYN_TYPE => 2, DynaformPeer::DYN_FILENAME => 3, DynaformPeer::DYN_CONTENT => 4, DynaformPeer::DYN_VERSION => 5, ),
+        BasePeer::TYPE_FIELDNAME => array ('DYN_UID' => 0, 'PRO_UID' => 1, 'DYN_TYPE' => 2, 'DYN_FILENAME' => 3, 'DYN_CONTENT' => 4, 'DYN_VERSION' => 5, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, )
     );
 
     /**
@@ -178,6 +184,10 @@ abstract class BaseDynaformPeer
         $criteria->addSelectColumn(DynaformPeer::DYN_TYPE);
 
         $criteria->addSelectColumn(DynaformPeer::DYN_FILENAME);
+
+        $criteria->addSelectColumn(DynaformPeer::DYN_CONTENT);
+
+        $criteria->addSelectColumn(DynaformPeer::DYN_VERSION);
 
     }
 

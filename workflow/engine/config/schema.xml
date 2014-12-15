@@ -458,6 +458,8 @@
     <column name="PRO_UID" type="VARCHAR" size="32" required="true" default="0"/>
     <column name="DYN_TYPE" type="VARCHAR" size="20" required="true" default="xmlform"/>
     <column name="DYN_FILENAME" type="VARCHAR" size="100" required="true" default=""/>
+    <column name="DYN_CONTENT" type="LONGVARCHAR"/>
+    <column name="DYN_VERSION" type="INTEGER" required="true"/>
     <validator column="DYN_TYPE">
       <rule name="validValues" value="xmlform|grid" message="Please select a valid dynaform type."/>
     </validator>
@@ -578,6 +580,9 @@
     <column name="INP_DOC_VERSIONING" type="TINYINT" required="true" default="0"/>
     <column name="INP_DOC_DESTINATION_PATH" type="LONGVARCHAR" required="false"/>
     <column name="INP_DOC_TAGS" type="LONGVARCHAR" required="false"/>
+    <column name="INP_DOC_TYPE_FILE" type="VARCHAR" size="200" required="false" default="*.*"/>
+    <column name="INP_DOC_MAX_FILESIZE" type="INTEGER" required="true" default="0"/>
+    <column name="INP_DOC_MAX_FILESIZE_UNIT" type="VARCHAR" size="2" required="true" default="KB"/>
     <validator column="INP_DOC_UID">
       <rule name="maxLength" value="32" message="Input Document UID can be no larger than ${value} in size"/>
       <rule name="required" message="Input Document UID is required."/>
@@ -833,6 +838,8 @@
     <column name="PRO_TRI_CANCELED" type="VARCHAR" size="32" required="true" default=""/>
     <column name="PRO_TRI_PAUSED" type="VARCHAR" size="32" required="true" default=""/>
     <column name="PRO_TRI_REASSIGNED" type="VARCHAR" size="32" required="true" default=""/>
+    <column name="PRO_TRI_UNPAUSED" type="VARCHAR" size="32" required="true" default=""/>
+    <column name="PRO_TYPE_PROCESS" type="VARCHAR" size="32" required="true" default="PUBLIC"/>
     <column name="PRO_SHOW_DELEGATE" type="TINYINT" required="true" default="1"/>
     <column name="PRO_SHOW_DYNAFORM" type="TINYINT" required="true" default="0"/>
     <column name="PRO_CATEGORY" type="VARCHAR" size="48" required="true" default=""/>
@@ -1234,6 +1241,7 @@
     <column name="TAS_SELFSERVICE_TIME" type="VARCHAR" size="15" default=""/>
     <column name="TAS_SELFSERVICE_TIME_UNIT" type="VARCHAR" size="15" default=""/>
     <column name="TAS_SELFSERVICE_TRIGGER_UID" type="VARCHAR" size="32" default=""/>
+    <column name="TAS_SELFSERVICE_EXECUTION" type="VARCHAR" size="15" default="EVERY_TIME"/>
 
     <validator column="TAS_TYPE">
       <rule name="validValues" value="NORMAL|ADHOC|SUBPROCESS|HIDDEN" message="Please select a valid value for TAS_TYPE."/>
@@ -2166,21 +2174,22 @@
       <parameter name="Create_options" value=""/>
       <parameter name="Comment" value=""/>
     </vendor>
-    <column name="FLD_UID" type="VARCHAR" size="32" required="true" primaryKey="true" default=""/>
-    <column name="ADD_TAB_UID" type="VARCHAR" size="32" required="true" default=""/>
-    <column name="FLD_INDEX" type="INTEGER" required="true" default="1"/>
-    <column name="FLD_NAME" type="VARCHAR" size="60" required="true" default=""/>
-    <column name="FLD_DESCRIPTION" type="LONGVARCHAR" required="true"/>
-    <column name="FLD_TYPE" type="VARCHAR" size="20" required="true" default=""/>
-    <column name="FLD_SIZE" type="INTEGER" required="false" default="0"/>
-    <column name="FLD_NULL" type="TINYINT" required="true" default="1"/>
-    <column name="FLD_AUTO_INCREMENT" type="TINYINT" required="true" default="0"/>
-    <column name="FLD_KEY" type="TINYINT" required="true" default="0"/>
-    <column name="FLD_FOREIGN_KEY" type="TINYINT" required="true" default="0"/>
-    <column name="FLD_FOREIGN_KEY_TABLE" type="VARCHAR" size="32" required="true" default=""/>
-    <column name="FLD_DYN_NAME" type="VARCHAR" size="128" required="false" default=""/>
-    <column name="FLD_DYN_UID" type="VARCHAR" size="128" required="false" default=""/>
-    <column name="FLD_FILTER" type="TINYINT" required="false" default="0"/>
+    <column name="FLD_UID"                  type="VARCHAR"      size="32" required="true" primaryKey="true" default=""/>
+    <column name="ADD_TAB_UID"              type="VARCHAR"      size="32" required="true" default=""/>
+    <column name="FLD_INDEX"                type="INTEGER"      required="true" default="1"/>
+    <column name="FLD_NAME"                 type="VARCHAR"      size="60" required="true" default=""/>
+    <column name="FLD_DESCRIPTION"          type="LONGVARCHAR"  required="true"/>
+    <column name="FLD_TYPE"                 type="VARCHAR"      size="20" required="true" default=""/>
+    <column name="FLD_SIZE"                 type="INTEGER"      required="false" default="0"/>
+    <column name="FLD_NULL"                 type="TINYINT"      required="true" default="1"/>
+    <column name="FLD_AUTO_INCREMENT"       type="TINYINT"      required="true" default="0"/>
+    <column name="FLD_KEY"                  type="TINYINT"      required="true" default="0"/>
+    <column name="FLD_TABLE_INDEX"          type="TINYINT"      required="true" default="0"/>
+    <column name="FLD_FOREIGN_KEY"          type="TINYINT"      required="false" default="0"/>
+    <column name="FLD_FOREIGN_KEY_TABLE"    type="VARCHAR"      size="32" required="true" default=""/>
+    <column name="FLD_DYN_NAME"             type="VARCHAR"      size="128" required="false" default=""/>
+    <column name="FLD_DYN_UID"              type="VARCHAR"      size="128" required="false" default=""/>
+    <column name="FLD_FILTER"               type="TINYINT"      required="false" default="0"/>
   </table>
   <table name="SHADOW_TABLE">
     <vendor type="mysql">
@@ -3004,4 +3013,850 @@
     <column name="SEQ_NAME" type="VARCHAR" size="50" required="true" primaryKey="true" default=""/>
     <column name="SEQ_VALUE" type="INTEGER" required="true" default="0"/>
   </table>
+
+  <table name="SESSION_STORAGE">
+  	<vendor type="mysql">
+        <parameter name="Name" value="SESSION_STORAGE"/>
+        <parameter name="Engine" value="InnoDB"/>
+        <parameter name="Version" value="10"/>
+        <parameter name="Row_format" value="Dynamic"/>
+        <parameter name="Auto_increment" value=""/>
+        <parameter name="Check_time" value=""/>
+        <parameter name="Collation" value="utf8_general_ci"/>
+        <parameter name="Checksum" value=""/>
+        <parameter name="Create_options" value=""/>
+    </vendor>
+    <column name="ID" type="VARCHAR" size="128" required="true" primaryKey="true" />
+    <column name="SET_TIME" type="VARCHAR"  size="10" required="true" />
+    <column name="DATA" type="LONGVARCHAR" required="true" />
+    <column name="SESSION_KEY" type="VARCHAR" size="128" required="true" />
+    <column name="CLIENT_ADDRESS" type="VARCHAR" size="32" required="false" default="0.0.0.0" />
+
+    <index name="indexSessionStorage">
+      <index-column name="ID"/>
+    </index>
+  </table>
+
+  <table name="PROCESS_FILES">
+    <vendor type="mysql">
+        <parameter name="Name" value="PROCESS_FILES"/>
+        <parameter name="Engine" value="InnoDB"/>
+        <parameter name="Version" value="10"/>
+        <parameter name="Row_format" value="Dynamic"/>
+        <parameter name="Rows" value="129"/>
+        <parameter name="Avg_row_length" value="115"/>
+        <parameter name="Data_length" value="14860"/>
+        <parameter name="Max_data_length" value="281474976710655"/>
+        <parameter name="Index_length" value="5120"/>
+        <parameter name="Data_free" value="0"/>
+        <parameter name="Auto_increment" value=""/>
+        <parameter name="Create_time" value="2011-10-28 09:55:00"/>
+        <parameter name="Update_time" value="2011-10-28 09:55:00"/>
+        <parameter name="Check_time" value=""/>
+        <parameter name="Collation" value="utf8_general_ci"/>
+        <parameter name="Checksum" value=""/>
+        <parameter name="Create_options" value=""/>
+        <parameter name="Comment" value="Application files metadata"/>
+    </vendor>
+    <column name="PRF_UID" type="VARCHAR" size="32" required="true" primaryKey="true" />
+    <column name="PRO_UID" type="VARCHAR" size="32" required="true" />
+    <column name="USR_UID" type="VARCHAR" size="32" required="true" />
+    <column name="PRF_UPDATE_USR_UID" type="VARCHAR" size="32" required="true" />
+    <column name="PRF_PATH" type="VARCHAR" size="256" required="true" default="" />
+    <column name="PRF_TYPE" type="VARCHAR" size="32" required="false" default="" />
+    <column name="PRF_EDITABLE" type="TINYINT" required="false" default="1" />
+    <column name="PRF_CREATE_DATE" type="TIMESTAMP" required="true" />
+    <column name="PRF_UPDATE_DATE" type="TIMESTAMP" required="false" />
+  </table>
+
+  <table name="WEB_ENTRY">
+      <vendor type="mysql">
+          <parameter name="Name" value="WEB_ENTRY" />
+          <parameter name="Engine" value="InnoDB" />
+          <parameter name="Version" value="10" />
+          <parameter name="Row_format" value="Dynamic" />
+          <parameter name="Data_free" value="0" />
+          <parameter name="Auto_increment" value="" />
+          <parameter name="Check_time" value="" />
+          <parameter name="Collation" value="utf8_general_ci" />
+          <parameter name="Checksum" value="" />
+          <parameter name="Create_options" value="" />
+      </vendor>
+      <column name="WE_UID"  type="VARCHAR" size="32" required="true" primaryKey="true" />
+      <column name="PRO_UID" type="VARCHAR" size="32" required="true" />
+      <column name="TAS_UID" type="VARCHAR" size="32" required="true" />
+      <column name="DYN_UID" type="VARCHAR" size="32" required="true" />
+      <column name="USR_UID" type="VARCHAR" size="32" default="" />
+      <column name="WE_METHOD" type="VARCHAR" size="4" default="HTML" />
+      <column name="WE_INPUT_DOCUMENT_ACCESS" type="INTEGER" default="0" />
+      <column name="WE_DATA" type="LONGVARCHAR" />
+      <column name="WE_CREATE_USR_UID" type="VARCHAR" size="32" default="" required="true" />
+      <column name="WE_UPDATE_USR_UID" type="VARCHAR" size="32" default="" />
+      <column name="WE_CREATE_DATE" type="TIMESTAMP" required="true" />
+      <column name="WE_UPDATE_DATE" type="TIMESTAMP" />
+  </table>
+
+  <!--
+    OAUTH TABLES DEFINITION
+  -->
+  <table name="OAUTH_ACCESS_TOKENS">
+    <vendor type="mysql">
+      <parameter name="Name" value="OAUTH_ACCESS_TOKENS"/>
+      <parameter name="Engine" value="InnoDB"/>
+      <parameter name="Version" value="10"/>
+      <parameter name="Row_format" value="Dynamic"/>
+      <parameter name="Data_free" value="0"/>
+      <parameter name="Auto_increment" value=""/>
+      <parameter name="Check_time" value=""/>
+      <parameter name="Collation" value="utf8_general_ci"/>
+      <parameter name="Checksum" value=""/>
+      <parameter name="Create_options" value=""/>
+    </vendor>
+    <column name="ACCESS_TOKEN" type="VARCHAR" size="40" required="true" primaryKey="true" />
+    <column name="CLIENT_ID" type="VARCHAR"  size="80" required="true" />
+    <column name="USER_ID" type="VARCHAR"  size="32" required="false" />
+    <column name="EXPIRES" type="TIMESTAMP" required="true" />
+    <column name="SCOPE" type="VARCHAR" size="2000" required="false" />
+  </table>
+  <table name="OAUTH_AUTHORIZATION_CODES">
+    <vendor type="mysql">
+      <parameter name="Name" value="OAUTH_AUTHORIZATION_CODES"/>
+      <parameter name="Engine" value="InnoDB"/>
+      <parameter name="Version" value="10"/>
+      <parameter name="Row_format" value="Dynamic"/>
+      <parameter name="Data_free" value="0"/>
+      <parameter name="Auto_increment" value=""/>
+      <parameter name="Check_time" value=""/>
+      <parameter name="Collation" value="utf8_general_ci"/>
+      <parameter name="Checksum" value=""/>
+      <parameter name="Create_options" value=""/>
+    </vendor>
+    <column name="AUTHORIZATION_CODE" type="VARCHAR" size="40" required="true" primaryKey="true" />
+    <column name="CLIENT_ID" type="VARCHAR"  size="80" required="true" />
+    <column name="USER_ID" type="VARCHAR"  size="32" required="false" />
+    <column name="REDIRECT_URI" type="VARCHAR" size="2000" required="false" />
+    <column name="EXPIRES" type="TIMESTAMP" required="true" />
+    <column name="SCOPE" type="VARCHAR" size="2000" required="false" />
+  </table>
+  <table name="OAUTH_CLIENTS">
+    <vendor type="mysql">
+      <parameter name="Name" value="OAUTH_CLIENTS"/>
+      <parameter name="Engine" value="InnoDB"/>
+      <parameter name="Version" value="10"/>
+      <parameter name="Row_format" value="Dynamic"/>
+      <parameter name="Data_free" value="0"/>
+      <parameter name="Auto_increment" value=""/>
+      <parameter name="Check_time" value=""/>
+      <parameter name="Collation" value="utf8_general_ci"/>
+      <parameter name="Checksum" value=""/>
+      <parameter name="Create_options" value=""/>
+    </vendor>
+    <column name="CLIENT_ID" type="VARCHAR" size="80" required="true" primaryKey="true" />
+    <column name="CLIENT_SECRET" type="VARCHAR"  size="80" required="true" />
+    <column name="CLIENT_NAME" type="VARCHAR" size="256" required="true" />
+    <column name="CLIENT_DESCRIPTION" type="VARCHAR" size="1024" required="true" />
+    <column name="CLIENT_WEBSITE" type="VARCHAR" size="1024" required="true" />
+    <column name="REDIRECT_URI" type="VARCHAR" size="2000" required="true" />
+    <column name="USR_UID" type="VARCHAR" size="32" required="true" />
+  </table>
+  <table name="OAUTH_REFRESH_TOKENS">
+    <vendor type="mysql">
+      <parameter name="Name" value="OAUTH_REFRESH_TOKENS"/>
+      <parameter name="Engine" value="InnoDB"/>
+      <parameter name="Version" value="10"/>
+      <parameter name="Row_format" value="Dynamic"/>
+      <parameter name="Data_free" value="0"/>
+      <parameter name="Auto_increment" value=""/>
+      <parameter name="Check_time" value=""/>
+      <parameter name="Collation" value="utf8_general_ci"/>
+      <parameter name="Checksum" value=""/>
+      <parameter name="Create_options" value=""/>
+    </vendor>
+    <column name="REFRESH_TOKEN" type="VARCHAR" size="40" required="true" primaryKey="true" />
+    <column name="CLIENT_ID" type="VARCHAR"  size="80" required="true" />
+    <column name="USER_ID" type="VARCHAR"  size="32" required="false" />
+    <column name="EXPIRES" type="TIMESTAMP" required="true" />
+    <column name="SCOPE" type="VARCHAR" size="2000" required="false" />
+  </table>
+  <table name="OAUTH_SCOPES">
+    <vendor type="mysql">
+      <parameter name="Name" value="OAUTH_SCOPES"/>
+      <parameter name="Engine" value="InnoDB"/>
+      <parameter name="Version" value="10"/>
+      <parameter name="Row_format" value="Dynamic"/>
+      <parameter name="Data_free" value="0"/>
+      <parameter name="Auto_increment" value=""/>
+      <parameter name="Check_time" value=""/>
+      <parameter name="Collation" value="utf8_general_ci"/>
+      <parameter name="Checksum" value=""/>
+      <parameter name="Create_options" value=""/>
+    </vendor>
+    <column name="TYPE" type="VARCHAR" size="40" required="true" />
+    <column name="SCOPE" type="VARCHAR" size="2000" required="false" />
+    <column name="CLIENT_ID" type="VARCHAR"  size="80" required="false" />
+  </table>
+
+  <table name="PMOAUTH_USER_ACCESS_TOKENS">
+    <vendor type="mysql">
+      <parameter name="Name" value="PMOAUTH_USER_ACCESS_TOKENS"/>
+      <parameter name="Engine" value="InnoDB"/>
+      <parameter name="Version" value="10"/>
+      <parameter name="Row_format" value="Dynamic"/>
+      <parameter name="Data_free" value="0"/>
+      <parameter name="Auto_increment" value=""/>
+      <parameter name="Check_time" value=""/>
+      <parameter name="Collation" value="utf8_general_ci"/>
+      <parameter name="Checksum" value=""/>
+      <parameter name="Create_options" value=""/>
+    </vendor>
+    <column name="ACCESS_TOKEN" type="VARCHAR" size="40" required="true" primaryKey="true" />
+    <column name="REFRESH_TOKEN" type="VARCHAR" size="40" required="true" />
+    <column name="USER_ID" type="VARCHAR"  size="32" required="false" />
+    <column name="SESSION_ID" type="VARCHAR" size="64" required="true" />
+    <column name="SESSION_NAME" type="VARCHAR" size="64" required="true" />
+  </table>
+
+  <!--
+    BPMN TABLES DEFINITION
+  -->
+  <table name="BPMN_PROJECT">
+    <vendor type="mysql">
+      <parameter name="Name" value="BPMN_PROJECT"/>
+      <parameter name="Engine" value="InnoDB"/>
+      <parameter name="Version" value="10"/>
+      <parameter name="Row_format" value="Dynamic"/>
+      <parameter name="Data_free" value="0"/>
+      <parameter name="Auto_increment" value=""/>
+      <parameter name="Check_time" value=""/>
+      <parameter name="Collation" value="utf8_general_ci"/>
+      <parameter name="Checksum" value=""/>
+      <parameter name="Create_options" value=""/>
+    </vendor>
+    <column name="PRJ_UID" type="VARCHAR" size="32" required="true" default="" primaryKey="true"/>
+    <column name="PRJ_NAME" type="VARCHAR" size="255" required="true" default=""/>
+    <column name="PRJ_DESCRIPTION" type="VARCHAR" size="512" required="false"/>
+    <column name="PRJ_TARGET_NAMESPACE" type="LONGVARCHAR" required="true"/>
+    <column name="PRJ_EXPRESION_LANGUAGE" type="LONGVARCHAR" required="false"/>
+    <column name="PRJ_TYPE_LANGUAGE" type="LONGVARCHAR" required="false"/>
+    <column name="PRJ_EXPORTER" type="LONGVARCHAR" required="false"/>
+    <column name="PRJ_EXPORTER_VERSION" type="LONGVARCHAR" required="false"/>
+    <column name="PRJ_CREATE_DATE" type="TIMESTAMP" required="true"/>
+    <column name="PRJ_UPDATE_DATE" type="TIMESTAMP" required="false"/>
+    <column name="PRJ_AUTHOR" type="LONGVARCHAR" required="false"/>
+    <column name="PRJ_AUTHOR_VERSION" type="LONGVARCHAR" required="false"/>
+    <column name="PRJ_ORIGINAL_SOURCE" type="LONGVARCHAR" required="false"/>
+    <index name="BPMN_PROJECT_I_1">
+      <index-column name="PRJ_UID"/>
+    </index>
+  </table>
+
+  <table name="BPMN_PROCESS">
+    <vendor type="mysql">
+      <parameter name="Name" value="BPMN_PROCESS"/>
+      <parameter name="Engine" value="InnoDB"/>
+      <parameter name="Version" value="10"/>
+      <parameter name="Row_format" value="Dynamic"/>
+      <parameter name="Data_free" value="0"/>
+      <parameter name="Auto_increment" value=""/>
+      <parameter name="Check_time" value=""/>
+      <parameter name="Collation" value="utf8_general_ci"/>
+      <parameter name="Checksum" value=""/>
+      <parameter name="Create_options" value=""/>
+    </vendor>
+    <column name="PRO_UID" type="VARCHAR" size="32" required="true" default="" primaryKey="true"/>
+    <column name="PRJ_UID" type="VARCHAR" size="32" required="true"/>
+    <column name="DIA_UID" type="VARCHAR" size="32" required="false"/>
+    <column name="PRO_NAME" type="VARCHAR" size="255" required="true"/>
+    <column name="PRO_TYPE" type="VARCHAR" size="10" required="true" default="NONE"/>
+    <column name="PRO_IS_EXECUTABLE" type="TINYINT" required="true" default="0"/>
+    <column name="PRO_IS_CLOSED" type="TINYINT" required="true" default="0"/>
+    <column name="PRO_IS_SUBPROCESS" type="TINYINT" required="true" default="0"/>
+    <foreign-key name="fk_bpmn_process_project" foreignTable="BPMN_PROJECT">
+      <reference local="PRJ_UID" foreign="PRJ_UID"/>
+    </foreign-key>
+    <index name="BPMN_PROCESS_I_1">
+      <index-column name="PRO_UID"/>
+    </index>
+    <index name="BPMN_PROCESS_I_2">
+      <index-column name="PRJ_UID"/>
+    </index>
+  </table>
+
+  <table name="BPMN_ACTIVITY">
+    <vendor type="mysql">
+      <parameter name="Name" value="BPMN_ACTIVITY"/>
+      <parameter name="Engine" value="InnoDB"/>
+      <parameter name="Version" value="10"/>
+      <parameter name="Row_format" value="Dynamic"/>
+      <parameter name="Data_free" value="0"/>
+      <parameter name="Auto_increment" value=""/>
+      <parameter name="Check_time" value=""/>
+      <parameter name="Collation" value="utf8_general_ci"/>
+      <parameter name="Checksum" value=""/>
+      <parameter name="Create_options" value=""/>
+    </vendor>
+    <column name="ACT_UID" type="VARCHAR" size="32" required="true" default="" primaryKey="true"/>
+    <column name="PRJ_UID" type="VARCHAR" size="32" required="true" default=""/>
+    <column name="PRO_UID" type="VARCHAR" size="32" required="false" default=""/>
+    <column name="ACT_NAME" type="VARCHAR" size="255" required="true"/>
+    <column name="ACT_TYPE" type="VARCHAR" size="30" required="true" default="TASK"/>
+    <column name="ACT_IS_FOR_COMPENSATION" type="TINYINT" required="false" default="0"/>
+    <column name="ACT_START_QUANTITY" type="INTEGER" required="false" default="1"/>
+    <column name="ACT_COMPLETION_QUANTITY" type="INTEGER" required="false" default="1"/>
+    <column name="ACT_TASK_TYPE" type="VARCHAR" size="20" required="true" default="EMPTY"/>
+    <column name="ACT_IMPLEMENTATION" type="LONGVARCHAR" required="false"/>
+    <column name="ACT_INSTANTIATE" type="TINYINT" required="false" default="0"/>
+    <column name="ACT_SCRIPT_TYPE" type="VARCHAR" size="255" required="false"/>
+    <column name="ACT_SCRIPT" type="LONGVARCHAR" required="false"/>
+    <column name="ACT_LOOP_TYPE" type="VARCHAR" size="20" required="true" default="NONE"/>
+    <column name="ACT_TEST_BEFORE" type="TINYINT" required="false" default="0"/>
+    <column name="ACT_LOOP_MAXIMUM" type="INTEGER" required="false" default="0"/>
+    <column name="ACT_LOOP_CONDITION" type="VARCHAR" size="100" required="false"/>
+    <column name="ACT_LOOP_CARDINALITY" type="INTEGER" required="false" default="0"/>
+    <column name="ACT_LOOP_BEHAVIOR" type="VARCHAR" size="20" required="false" default="NONE"/>
+    <column name="ACT_IS_ADHOC" type="TINYINT" required="false" default="0"/>
+    <column name="ACT_IS_COLLAPSED" type="TINYINT" required="false" default="1"/>
+    <column name="ACT_COMPLETION_CONDITION" type="VARCHAR" size="255" required="false"/>
+    <column name="ACT_ORDERING" type="VARCHAR" size="20" required="false" default="PARALLEL"/>
+    <column name="ACT_CANCEL_REMAINING_INSTANCES" type="TINYINT" required="false" default="1"/>
+    <column name="ACT_PROTOCOL" type="VARCHAR" size="255" required="false"/>
+    <column name="ACT_METHOD" type="VARCHAR" size="255" required="false"/>
+    <column name="ACT_IS_GLOBAL" type="TINYINT" required="false" default="0"/>
+    <column name="ACT_REFERER" type="VARCHAR" size="32" required="false" default=""/>
+    <column name="ACT_DEFAULT_FLOW" type="VARCHAR" size="32" required="false" default=""/>
+    <column name="ACT_MASTER_DIAGRAM" type="VARCHAR" size="32" required="false" default=""/>
+    <foreign-key name="fk_bpmn_activity_project" foreignTable="BPMN_PROJECT">
+      <reference local="PRJ_UID" foreign="PRJ_UID"/>
+    </foreign-key>
+    <foreign-key name="fk_bpmn_activity_process" foreignTable="BPMN_PROCESS">
+      <reference local="PRO_UID" foreign="PRO_UID"/>
+    </foreign-key>
+    <index name="BPMN_ACTIVITY_I_1">
+      <index-column name="ACT_UID"/>
+    </index>
+    <index name="BPMN_ACTIVITY_I_2">
+      <index-column name="PRJ_UID"/>
+    </index>
+    <index name="BPMN_ACTIVITY_I_3">
+      <index-column name="PRO_UID"/>
+    </index>
+  </table>
+
+  <table name="BPMN_ARTIFACT">
+    <vendor type="mysql">
+      <parameter name="Name" value="BPMN_ARTIFACT"/>
+      <parameter name="Engine" value="InnoDB"/>
+      <parameter name="Version" value="10"/>
+      <parameter name="Row_format" value="Dynamic"/>
+      <parameter name="Data_free" value="0"/>
+      <parameter name="Auto_increment" value=""/>
+      <parameter name="Check_time" value=""/>
+      <parameter name="Collation" value="utf8_general_ci"/>
+      <parameter name="Checksum" value=""/>
+      <parameter name="Create_options" value=""/>
+    </vendor>
+    <column name="ART_UID" type="VARCHAR" size="32" required="true" default="" primaryKey="true"/>
+    <column name="PRJ_UID" type="VARCHAR" size="32" required="true"/>
+    <column name="PRO_UID" type="VARCHAR" size="32" required="false" default=""/>
+    <column name="ART_TYPE" type="VARCHAR" size="15" required="true"/>
+    <column name="ART_NAME" type="LONGVARCHAR" required="false"/>
+    <column name="ART_CATEGORY_REF" type="VARCHAR" size="32" required="false"/>
+    <foreign-key name="fk_bpmn_artifact_project" foreignTable="BPMN_PROJECT">
+      <reference local="PRJ_UID" foreign="PRJ_UID"/>
+    </foreign-key>
+    <foreign-key name="fk_bpmn_artifact_process" foreignTable="BPMN_PROCESS">
+      <reference local="PRO_UID" foreign="PRO_UID"/>
+    </foreign-key>
+    <index name="BPMN_ARTIFACT_I_1">
+      <index-column name="ART_UID"/>
+    </index>
+    <index name="BPMN_ARTIFACT_I_2">
+      <index-column name="PRJ_UID"/>
+    </index>
+    <index name="BPMN_ARTIFACT_I_3">
+      <index-column name="PRO_UID"/>
+    </index>
+  </table>
+
+  <table name="BPMN_DIAGRAM">
+    <vendor type="mysql">
+      <parameter name="Name" value="BPMN_DIAGRAM"/>
+      <parameter name="Engine" value="InnoDB"/>
+      <parameter name="Version" value="10"/>
+      <parameter name="Row_format" value="Dynamic"/>
+      <parameter name="Data_free" value="0"/>
+      <parameter name="Auto_increment" value=""/>
+      <parameter name="Check_time" value=""/>
+      <parameter name="Collation" value="utf8_general_ci"/>
+      <parameter name="Checksum" value=""/>
+      <parameter name="Create_options" value=""/>
+    </vendor>
+    <column name="DIA_UID" type="VARCHAR" size="32" required="true" default="" primaryKey="true"/>
+    <column name="PRJ_UID" type="VARCHAR" size="32" required="true"/>
+    <column name="DIA_NAME" type="VARCHAR" size="255" required="false"/>
+    <column name="DIA_IS_CLOSABLE" type="TINYINT" required="false" default="0"/>
+    <foreign-key name="fk_bpmn_diagram_project" foreignTable="BPMN_PROJECT">
+      <reference local="PRJ_UID" foreign="PRJ_UID"/>
+    </foreign-key>
+    <index name="BPMN_DIAGRAM_I_1">
+      <index-column name="DIA_UID"/>
+    </index>
+    <index name="BPMN_DIAGRAM_I_2">
+      <index-column name="PRJ_UID"/>
+    </index>
+  </table>
+
+  <table name="BPMN_BOUND">
+    <vendor type="mysql">
+      <parameter name="Name" value="BPMN_BOUND"/>
+      <parameter name="Engine" value="InnoDB"/>
+      <parameter name="Version" value="10"/>
+      <parameter name="Row_format" value="Dynamic"/>
+      <parameter name="Data_free" value="0"/>
+      <parameter name="Auto_increment" value=""/>
+      <parameter name="Check_time" value=""/>
+      <parameter name="Collation" value="utf8_general_ci"/>
+      <parameter name="Checksum" value=""/>
+      <parameter name="Create_options" value=""/>
+    </vendor>
+    <column name="BOU_UID" type="VARCHAR" size="32" required="true" default="" primaryKey="true"/>
+    <column name="PRJ_UID" type="VARCHAR" size="32" required="true" default=""/>
+    <column name="DIA_UID" type="VARCHAR" size="32" required="true" default=""/>
+    <column name="ELEMENT_UID" type="VARCHAR" size="32" required="false" default=""/>
+    <column name="BOU_ELEMENT" type="VARCHAR" size="32" required="true" default=""/>
+    <column name="BOU_ELEMENT_TYPE" type="VARCHAR" size="32" required="true" default=""/>
+    <column name="BOU_X" type="INTEGER" required="true" default="0"/>
+    <column name="BOU_Y" type="INTEGER" required="true" default="0"/>
+    <column name="BOU_WIDTH" type="INTEGER" required="true" default="0"/>
+    <column name="BOU_HEIGHT" type="INTEGER" required="true" default="0"/>
+    <column name="BOU_REL_POSITION" type="INTEGER" required="false" default="0"/>
+    <column name="BOU_SIZE_IDENTICAL" type="INTEGER" required="false" default="0"/>
+    <column name="BOU_CONTAINER" type="VARCHAR" size="30" required="false" default=""/>
+    <foreign-key name="fk_bpmn_bound_project" foreignTable="BPMN_PROJECT">
+      <reference local="PRJ_UID" foreign="PRJ_UID"/>
+    </foreign-key>
+    <foreign-key name="fk_bpmn_bound_diagram" foreignTable="BPMN_DIAGRAM">
+      <reference local="DIA_UID" foreign="DIA_UID"/>
+    </foreign-key>
+    <index name="BPMN_BOUND_I_1">
+      <index-column name="BOU_UID"/>
+    </index>
+    <index name="BPMN_BOUND_I_2">
+      <index-column name="PRJ_UID"/>
+    </index>
+    <index name="BPMN_BOUND_I_3">
+      <index-column name="DIA_UID"/>
+    </index>
+  </table>
+
+  <table name="BPMN_DATA">
+    <vendor type="mysql">
+      <parameter name="Name" value="BPMN_DATA"/>
+      <parameter name="Engine" value="InnoDB"/>
+      <parameter name="Version" value="10"/>
+      <parameter name="Row_format" value="Dynamic"/>
+      <parameter name="Data_free" value="0"/>
+      <parameter name="Auto_increment" value=""/>
+      <parameter name="Check_time" value=""/>
+      <parameter name="Collation" value="utf8_general_ci"/>
+      <parameter name="Checksum" value=""/>
+      <parameter name="Create_options" value=""/>
+    </vendor>
+    <column name="DAT_UID" type="VARCHAR" size="32" required="true" default="" primaryKey="true"/>
+    <column name="PRJ_UID" type="VARCHAR" size="32" required="true"/>
+    <column name="PRO_UID" type="VARCHAR" size="32" required="false" default=""/>
+    <column name="DAT_NAME" type="VARCHAR" size="255" required="false"/>
+    <column name="DAT_TYPE" type="VARCHAR" size="20" required="true"/>
+    <column name="DAT_IS_COLLECTION" type="TINYINT" required="false" default="0"/>
+    <column name="DAT_ITEM_KIND" type="VARCHAR" size="20" required="true" default="INFORMATION"/>
+    <column name="DAT_CAPACITY" type="INTEGER" required="false" default="0"/>
+    <column name="DAT_IS_UNLIMITED" type="TINYINT" required="false" default="0"/>
+    <column name="DAT_STATE" type="VARCHAR" size="255" required="false" default=""/>
+    <column name="DAT_IS_GLOBAL" type="TINYINT" required="false" default="0"/>
+    <column name="DAT_OBJECT_REF" type="VARCHAR" size="32" required="false" default=""/>
+    <foreign-key name="fk_bpmn_data_process" foreignTable="BPMN_PROCESS">
+      <reference local="PRO_UID" foreign="PRO_UID"/>
+    </foreign-key>
+    <foreign-key name="fk_bpmn_data_project" foreignTable="BPMN_PROJECT">
+      <reference local="PRJ_UID" foreign="PRJ_UID"/>
+    </foreign-key>
+    <index name="BPMN_DATA_I_1">
+      <index-column name="DAT_UID"/>
+    </index>
+    <index name="BPMN_DATA_I_2">
+      <index-column name="PRJ_UID"/>
+    </index>
+    <index name="BPMN_DATA_I_3">
+      <index-column name="PRO_UID"/>
+    </index>
+  </table>
+
+  <table name="BPMN_EVENT">
+    <vendor type="mysql">
+      <parameter name="Name" value="BPMN_EVENT"/>
+      <parameter name="Engine" value="InnoDB"/>
+      <parameter name="Version" value="10"/>
+      <parameter name="Row_format" value="Dynamic"/>
+      <parameter name="Data_free" value="0"/>
+      <parameter name="Auto_increment" value=""/>
+      <parameter name="Check_time" value=""/>
+      <parameter name="Collation" value="utf8_general_ci"/>
+      <parameter name="Checksum" value=""/>
+      <parameter name="Create_options" value=""/>
+    </vendor>
+    <column name="EVN_UID" type="VARCHAR" size="32" required="true" default="" primaryKey="true"/>
+    <column name="PRJ_UID" type="VARCHAR" size="32" required="true" default=""/>
+    <column name="PRO_UID" type="VARCHAR" size="32" required="false" default=""/>
+    <column name="EVN_NAME" type="VARCHAR" size="255" required="false"/>
+    <column name="EVN_TYPE" type="VARCHAR" size="30" required="true" default=""/>
+    <column name="EVN_MARKER" type="VARCHAR" size="30" required="true" default="EMPTY"/>
+    <column name="EVN_IS_INTERRUPTING" type="TINYINT" required="false" default="1"/>
+    <column name="EVN_ATTACHED_TO" type="VARCHAR" size="32" required="false" default=""/>
+    <column name="EVN_CANCEL_ACTIVITY" type="TINYINT" required="false" default="0"/>
+    <column name="EVN_ACTIVITY_REF" type="VARCHAR" size="32" required="false" default=""/>
+    <column name="EVN_WAIT_FOR_COMPLETION" type="TINYINT" required="false" default="1"/>
+    <column name="EVN_ERROR_NAME" type="VARCHAR" size="255" required="false"/>
+    <column name="EVN_ERROR_CODE" type="VARCHAR" size="255" required="false"/>
+    <column name="EVN_ESCALATION_NAME" type="VARCHAR" size="255" required="false"/>
+    <column name="EVN_ESCALATION_CODE" type="VARCHAR" size="255" required="false"/>
+    <column name="EVN_CONDITION" type="VARCHAR" size="255" required="false"/>
+    <column name="EVN_MESSAGE" type="LONGVARCHAR" required="false"/>
+    <column name="EVN_OPERATION_NAME" type="VARCHAR" size="255" required="false"/>
+    <column name="EVN_OPERATION_IMPLEMENTATION_REF" type="VARCHAR" size="255" required="false"/>
+    <column name="EVN_TIME_DATE" type="VARCHAR" size="255" required="false"/>
+    <column name="EVN_TIME_CYCLE" type="VARCHAR" size="255" required="false"/>
+    <column name="EVN_TIME_DURATION" type="VARCHAR" size="255" required="false"/>
+    <column name="EVN_BEHAVIOR" type="VARCHAR" size="20" required="true" default="CATCH"/>
+    <foreign-key name="fk_bpmn_event_project" foreignTable="BPMN_PROJECT">
+      <reference local="PRJ_UID" foreign="PRJ_UID"/>
+    </foreign-key>
+    <foreign-key name="fk_bpmn_event_process" foreignTable="BPMN_PROCESS">
+      <reference local="PRO_UID" foreign="PRO_UID"/>
+    </foreign-key>
+    <index name="BPMN_EVENT_I_1">
+      <index-column name="EVN_UID"/>
+    </index>
+    <index name="BPMN_EVENT_I_2">
+      <index-column name="PRJ_UID"/>
+    </index>
+    <index name="BPMN_EVENT_I_3">
+      <index-column name="PRO_UID"/>
+    </index>
+  </table>
+
+  <table name="BPMN_FLOW">
+  	<vendor type="mysql">
+      <parameter name="Name" value="BPMN_FLOW"/>
+      <parameter name="Engine" value="InnoDB"/>
+      <parameter name="Version" value="10"/>
+      <parameter name="Row_format" value="Dynamic"/>
+      <parameter name="Data_free" value="0"/>
+      <parameter name="Auto_increment" value=""/>
+      <parameter name="Check_time" value=""/>
+      <parameter name="Collation" value="utf8_general_ci"/>
+      <parameter name="Checksum" value=""/>
+      <parameter name="Create_options" value=""/>
+    </vendor>
+    <column name="FLO_UID" type="VARCHAR" size="32" required="true" default="" primaryKey="true"/>
+    <column name="PRJ_UID" type="VARCHAR" size="32" required="true" default=""/>
+    <column name="DIA_UID" type="VARCHAR" size="32" required="true" default=""/>
+    <column name="FLO_TYPE" type="VARCHAR" size="20" required="true" default=""/>
+    <column name="FLO_NAME" type="VARCHAR" size="255" required="false" default=""/>
+    <column name="FLO_ELEMENT_ORIGIN" type="VARCHAR" size="32" required="true" default=""/>
+    <column name="FLO_ELEMENT_ORIGIN_TYPE" type="VARCHAR" size="32" required="true" default=""/>
+    <column name="FLO_ELEMENT_ORIGIN_PORT" type="INTEGER" required="true" default="0"/>
+    <column name="FLO_ELEMENT_DEST" type="VARCHAR" size="32" required="true" default=""/>
+    <column name="FLO_ELEMENT_DEST_TYPE" type="VARCHAR" size="32" required="true" default=""/>
+    <column name="FLO_ELEMENT_DEST_PORT" type="INTEGER" required="true" default="0"/>
+    <column name="FLO_IS_INMEDIATE" type="TINYINT" required="false"/>
+    <column name="FLO_CONDITION" type="VARCHAR" size="255" required="false"/>
+    <column name="FLO_X1" type="INTEGER" required="true" default="0"/>
+    <column name="FLO_Y1" type="INTEGER" required="true" default="0"/>
+    <column name="FLO_X2" type="INTEGER" required="true" default="0"/>
+    <column name="FLO_Y2" type="INTEGER" required="true" default="0"/>
+    <column name="FLO_STATE" type="LONGVARCHAR" required="false"/>
+    <foreign-key name="fk_bpmn_flow_project" foreignTable="BPMN_PROJECT">
+      <reference local="PRJ_UID" foreign="PRJ_UID"/>
+    </foreign-key>
+    <foreign-key name="fk_bpmn_flow_diagram" foreignTable="BPMN_DIAGRAM">
+      <reference local="DIA_UID" foreign="DIA_UID"/>
+    </foreign-key>
+    <index name="BPMN_FLOW_I_1">
+      <index-column name="FLO_UID"/>
+    </index>
+    <index name="BPMN_FLOW_I_2">
+      <index-column name="PRJ_UID"/>
+    </index>
+    <index name="BPMN_FLOW_I_3">
+      <index-column name="DIA_UID"/>
+    </index>
+  </table>
+
+  <table name="BPMN_GATEWAY">
+  	<vendor type="mysql">
+      <parameter name="Name" value="BPMN_GATEWAY"/>
+      <parameter name="Engine" value="InnoDB"/>
+      <parameter name="Version" value="10"/>
+      <parameter name="Row_format" value="Dynamic"/>
+      <parameter name="Data_free" value="0"/>
+      <parameter name="Auto_increment" value=""/>
+      <parameter name="Check_time" value=""/>
+      <parameter name="Collation" value="utf8_general_ci"/>
+      <parameter name="Checksum" value=""/>
+      <parameter name="Create_options" value=""/>
+    </vendor>
+    <column name="GAT_UID" type="VARCHAR" size="32" required="true" default="" primaryKey="true"/>
+    <column name="PRJ_UID" type="VARCHAR" size="32" required="true" default=""/>
+    <column name="PRO_UID" type="VARCHAR" size="32" required="false" default=""/>
+    <column name="GAT_NAME" type="VARCHAR" size="255" required="false"/>
+    <column name="GAT_TYPE" type="VARCHAR" size="30" required="true" default=""/>
+    <column name="GAT_DIRECTION" type="VARCHAR" size="30" required="false" default="UNSPECIFIED"/>
+    <column name="GAT_INSTANTIATE" type="TINYINT" required="false" default="0"/>
+    <column name="GAT_EVENT_GATEWAY_TYPE" type="VARCHAR" size="20" required="false" default="NONE"/>
+    <column name="GAT_ACTIVATION_COUNT" type="INTEGER" required="false" default="0"/>
+    <column name="GAT_WAITING_FOR_START" type="TINYINT" required="false" default="1"/>
+    <column name="GAT_DEFAULT_FLOW" type="VARCHAR" size="32" required="false" default=""/>
+    <foreign-key name="fk_bpmn_gateway_project" foreignTable="BPMN_PROJECT">
+      <reference local="PRJ_UID" foreign="PRJ_UID"/>
+    </foreign-key>
+    <foreign-key name="fk_bpmn_gateway_process" foreignTable="BPMN_PROCESS">
+      <reference local="PRO_UID" foreign="PRO_UID"/>
+    </foreign-key>
+    <index name="BPMN_GATEWAY_I_1">
+      <index-column name="GAT_UID"/>
+    </index>
+    <index name="BPMN_GATEWAY_I_2">
+      <index-column name="PRJ_UID"/>
+    </index>
+    <index name="BPMN_GATEWAY_I_3">
+      <index-column name="PRO_UID"/>
+    </index>
+  </table>
+
+  <table name="BPMN_LANESET">
+    <vendor type="mysql">
+      <parameter name="Name" value="BPMN_LANESET"/>
+      <parameter name="Engine" value="InnoDB"/>
+      <parameter name="Version" value="10"/>
+      <parameter name="Row_format" value="Dynamic"/>
+      <parameter name="Data_free" value="0"/>
+      <parameter name="Auto_increment" value=""/>
+      <parameter name="Check_time" value=""/>
+      <parameter name="Collation" value="utf8_general_ci"/>
+      <parameter name="Checksum" value=""/>
+      <parameter name="Create_options" value=""/>
+    </vendor>
+    <column name="LNS_UID" type="VARCHAR" size="32" required="true" default="" primaryKey="true"/>
+    <column name="PRJ_UID" type="VARCHAR" size="32" required="true"/>
+    <column name="PRO_UID" type="VARCHAR" size="32" required="false"/>
+    <column name="LNS_NAME" type="VARCHAR" size="255" required="false"/>
+    <column name="LNS_PARENT_LANE" type="VARCHAR" size="32" required="false"/>
+    <column name="LNS_IS_HORIZONTAL" type="TINYINT" required="false" default="1"/>
+    <column name="LNS_STATE" type="LONGVARCHAR" required="false"/>
+    <foreign-key name="fk_bpmn_laneset_project" foreignTable="BPMN_PROJECT">
+      <reference local="PRJ_UID" foreign="PRJ_UID"/>
+    </foreign-key>
+    <foreign-key name="fk_bpmn_laneset_process" foreignTable="BPMN_PROCESS">
+      <reference local="PRO_UID" foreign="PRO_UID"/>
+    </foreign-key>
+    <index name="BPMN_LANESET_I_1">
+      <index-column name="LNS_UID"/>
+    </index>
+    <index name="BPMN_LANESET_I_2">
+      <index-column name="PRJ_UID"/>
+    </index>
+    <index name="BPMN_LANESET_I_3">
+      <index-column name="PRO_UID"/>
+    </index>
+  </table>
+
+  <table name="BPMN_LANE">
+  	<vendor type="mysql">
+      <parameter name="Name" value="BPMN_LANE"/>
+      <parameter name="Engine" value="InnoDB"/>
+      <parameter name="Version" value="10"/>
+      <parameter name="Row_format" value="Dynamic"/>
+      <parameter name="Data_free" value="0"/>
+      <parameter name="Auto_increment" value=""/>
+      <parameter name="Check_time" value=""/>
+      <parameter name="Collation" value="utf8_general_ci"/>
+      <parameter name="Checksum" value=""/>
+      <parameter name="Create_options" value=""/>
+    </vendor>
+    <column name="LAN_UID" type="VARCHAR" size="32" required="true" default="" primaryKey="true"/>
+    <column name="PRJ_UID" type="VARCHAR" size="32" required="true"/>
+    <column name="LNS_UID" type="VARCHAR" size="32" required="true"/>
+    <column name="LAN_NAME" type="VARCHAR" size="255" required="false"/>
+    <column name="LAN_CHILD_LANESET" type="VARCHAR" size="32" required="false"/>
+    <column name="LAN_IS_HORIZONTAL" type="TINYINT" required="false" default="1"/>
+    <foreign-key name="fk_bpmn_lane_project" foreignTable="BPMN_PROJECT">
+      <reference local="PRJ_UID" foreign="PRJ_UID"/>
+    </foreign-key>
+    <foreign-key name="fk_bpmn_lane_laneset" foreignTable="BPMN_LANESET">
+      <reference local="LNS_UID" foreign="LNS_UID"/>
+    </foreign-key>
+    <index name="BPMN_LANE_I_1">
+      <index-column name="LAN_UID"/>
+    </index>
+    <index name="BPMN_LANE_I_2">
+      <index-column name="PRJ_UID"/>
+    </index>
+    <index name="BPMN_LANE_I_3">
+      <index-column name="LNS_UID"/>
+    </index>
+  </table>
+
+  <table name="BPMN_PARTICIPANT">
+    <vendor type="mysql">
+      <parameter name="Name" value="BPMN_PARTICIPANT"/>
+      <parameter name="Engine" value="InnoDB"/>
+      <parameter name="Version" value="10"/>
+      <parameter name="Row_format" value="Dynamic"/>
+      <parameter name="Data_free" value="0"/>
+      <parameter name="Auto_increment" value=""/>
+      <parameter name="Check_time" value=""/>
+      <parameter name="Collation" value="utf8_general_ci"/>
+      <parameter name="Checksum" value=""/>
+      <parameter name="Create_options" value=""/>
+    </vendor>
+    <column name="PAR_UID" type="VARCHAR" size="32" required="true" default="" primaryKey="true"/>
+    <column name="PRJ_UID" type="VARCHAR" size="32" required="true" default=""/>
+    <column name="PRO_UID" type="VARCHAR" size="32" required="false" default=""/>
+    <column name="LNS_UID" type="VARCHAR" size="32" required="false" default=""/>
+    <column name="PAR_NAME" type="VARCHAR" size="255" required="true" default=""/>
+    <column name="PAR_MINIMUM" type="INTEGER" required="false" default="0"/>
+    <column name="PAR_MAXIMUM" type="INTEGER" required="false" default="1"/>
+    <column name="PAR_NUM_PARTICIPANTS" type="INTEGER" required="false" default="1"/>
+    <column name="PAR_IS_HORIZONTAL" type="TINYINT" required="true" default="1"/>
+    <foreign-key name="fk_bpmn_participant_project" foreignTable="BPMN_PROJECT">
+      <reference local="PRJ_UID" foreign="PRJ_UID"/>
+    </foreign-key>
+    <index name="BPMN_PARTICIPANT_I_1">
+      <index-column name="PAR_UID"/>
+    </index>
+    <index name="BPMN_PARTICIPANT_I_2">
+      <index-column name="PRJ_UID"/>
+    </index>
+  </table>
+
+  <table name="BPMN_EXTENSION">
+    <vendor type="mysql">
+      <parameter name="Name" value="BPMN_EXTENSION"/>
+      <parameter name="Engine" value="InnoDB"/>
+      <parameter name="Version" value="10"/>
+      <parameter name="Row_format" value="Dynamic"/>
+      <parameter name="Data_free" value="0"/>
+      <parameter name="Auto_increment" value=""/>
+      <parameter name="Check_time" value=""/>
+      <parameter name="Collation" value="utf8_general_ci"/>
+      <parameter name="Checksum" value=""/>
+      <parameter name="Create_options" value=""/>
+    </vendor>
+    <column name="EXT_UID" type="VARCHAR" size="32" required="true" primaryKey="true"/>
+    <column name="PRJ_UID" type="VARCHAR" size="32" required="true"/>
+    <column name="EXT_ELEMENT" type="VARCHAR" size="32" required="true"/>
+    <column name="EXT_ELEMENT_TYPE" type="VARCHAR" size="45" required="true"/>
+    <column name="EXT_EXTENSION" type="LONGVARCHAR" required="false"/>
+    <foreign-key name="fk_bpmn_extension_project" foreignTable="BPMN_PROJECT">
+      <reference local="PRJ_UID" foreign="PRJ_UID"/>
+    </foreign-key>
+    <index name="BPMN_EXTENSION_I_1">
+      <index-column name="EXT_UID"/>
+    </index>
+    <index name="BPMN_EXTENSION_I_2">
+      <index-column name="PRJ_UID"/>
+    </index>
+  </table>
+
+  <table name="BPMN_DOCUMENTATION">
+  	<vendor type="mysql">
+      <parameter name="Name" value="BPMN_DOCUMENTATION"/>
+      <parameter name="Engine" value="InnoDB"/>
+      <parameter name="Version" value="10"/>
+      <parameter name="Row_format" value="Dynamic"/>
+      <parameter name="Data_free" value="0"/>
+      <parameter name="Auto_increment" value=""/>
+      <parameter name="Check_time" value=""/>
+      <parameter name="Collation" value="utf8_general_ci"/>
+      <parameter name="Checksum" value=""/>
+      <parameter name="Create_options" value=""/>
+    </vendor>
+    <column name="DOC_UID" type="VARCHAR" size="32" required="true" primaryKey="true"/>
+    <column name="PRJ_UID" type="VARCHAR" size="32" required="true"/>
+    <column name="DOC_ELEMENT" type="VARCHAR" size="32" required="true"/>
+    <column name="DOC_ELEMENT_TYPE" type="VARCHAR" size="45" required="true"/>
+    <column name="DOC_DOCUMENTATION" type="LONGVARCHAR" required="false"/>
+    <foreign-key name="fk_bpmn_documentation_project" foreignTable="BPMN_PROJECT">
+      <reference local="PRJ_UID" foreign="PRJ_UID"/>
+    </foreign-key>
+    <index name="BPMN_DOCUMENTATION_I_1">
+      <index-column name="DOC_UID"/>
+    </index>
+    <index name="BPMN_DOCUMENTATION_I_2">
+      <index-column name="PRJ_UID"/>
+    </index>
+  </table>
+
+    <table name="PROCESS_VARIABLES">
+        <column name="VAR_UID" type="VARCHAR" size="32" required="true" primaryKey="true" />
+        <column name="PRJ_UID" type="VARCHAR" size="32" required="true"/>
+        <column name="VAR_NAME" type="VARCHAR" size="255" default=""/>
+        <column name="VAR_FIELD_TYPE" type="VARCHAR" size="32" default=""/>
+        <column name="VAR_FIELD_SIZE" type="INTEGER" />
+        <column name="VAR_LABEL" type="VARCHAR" size="255" default=""/>
+        <column name="VAR_DBCONNECTION" type="VARCHAR" size="32" />
+        <column name="VAR_SQL" type="LONGVARCHAR"/>
+        <column name="VAR_NULL" type="TINYINT" size="32" default="0"/>
+        <column name="VAR_DEFAULT" type="VARCHAR" size="32" default=""/>
+        <column name="VAR_ACCEPTED_VALUES" type="LONGVARCHAR"/>
+    </table>
+
+    <table name="APP_TIMEOUT_ACTION_EXECUTED">
+        <column name="APP_UID" type="VARCHAR" size="32" required="true" default="" primaryKey="true" />
+        <column name="DEL_INDEX" type="INTEGER" required="true" default="0"/>
+        <column name="EXECUTION_DATE" type="TIMESTAMP" required="false"/>
+    </table>
+
+    <table name="ADDONS_STORE">
+        <column name="STORE_ID"             type="VARCHAR"  size="32"   primaryKey="true" required="true"/>
+        <column name="STORE_VERSION"        type="INTEGER" />
+        <column name="STORE_LOCATION"       type="VARCHAR"  size="2048" required="true" />
+        <column name="STORE_TYPE"           type="VARCHAR"  size="255"  required="true" />
+        <column name="STORE_LAST_UPDATED"   type="TIMESTAMP" />
+    </table>
+
+    <table name="ADDONS_MANAGER">
+        <column name="ADDON_ID"                 type="VARCHAR"      size="255"  required="true" primaryKey="true" />
+        <column name="STORE_ID"                 type="VARCHAR"      size="32"   required="true" primaryKey="true" />
+        <column name="ADDON_NAME"               type="VARCHAR"      size="255"  required="true" />
+        <column name="ADDON_NICK"               type="VARCHAR"      size="255"  required="true" />
+        <column name="ADDON_DOWNLOAD_FILENAME"  type="VARCHAR"      size="1024" required="false" />
+        <column name="ADDON_DESCRIPTION"        type="VARCHAR"      size="2048" required="false" />
+        <column name="ADDON_STATE"              type="VARCHAR"      size="255"  required="true" />
+        <column name="ADDON_STATE_CHANGED"      type="TIMESTAMP"    required="false" />
+        <column name="ADDON_STATUS"             type="VARCHAR"      size="255"  required="true" />
+        <column name="ADDON_VERSION"            type="VARCHAR"      size="255"  required="true" />
+        <column name="ADDON_TYPE"               type="VARCHAR"      size="255"  required="true" />
+        <column name="ADDON_PUBLISHER"          type="VARCHAR"      size="255"  required="false" />
+        <column name="ADDON_RELEASE_DATE"       type="TIMESTAMP"    required="false" />
+        <column name="ADDON_RELEASE_TYPE"       type="VARCHAR"      size="255"  required="false" />
+        <column name="ADDON_RELEASE_NOTES"      type="VARCHAR"      size="255"  required="false" />
+        <column name="ADDON_DOWNLOAD_URL"       type="VARCHAR"      size="2048" required="false" />
+        <column name="ADDON_DOWNLOAD_PROGRESS"  type="FLOAT"        required="false" />
+        <column name="ADDON_DOWNLOAD_MD5"       type="VARCHAR"      size="32"   required="false" />
+    </table>
+
+    <table name="LICENSE_MANAGER">
+        <column name="LICENSE_UID"          type="VARCHAR"      size="32"       primaryKey="true"  required="true"/>
+        <column name="LICENSE_USER"         type="VARCHAR"      size="150"      required="true" default="0"/>
+        <column name="LICENSE_START"        type="INTEGER"      required="true" default="0"/>
+        <column name="LICENSE_END"          type="INTEGER"      required="true" default="0"/>
+        <column name="LICENSE_SPAN"         type="INTEGER"      required="true" default="0"/>
+        <column name="LICENSE_STATUS"       type="VARCHAR"      size="100"      required="true" default=""/>
+        <column name="LICENSE_DATA"         type="LONGVARCHAR"  required="true" />
+        <column name="LICENSE_PATH"         type="VARCHAR"      size="255"      required="true" default="0"/>
+        <column name="LICENSE_WORKSPACE"    type="VARCHAR"      size="32"       required="true" default="0"/>
+        <column name="LICENSE_TYPE"         type="VARCHAR"      size="32"       required="true" default="0"/>
+    </table>
 </database>
+

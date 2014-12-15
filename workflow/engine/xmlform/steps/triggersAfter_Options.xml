@@ -1,18 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="xmlmenu">
-
-<STEP type="private"/>
-
-<MNU_ADD type="link" value="" link="#" onclick="availableTriggers(&#039;@#STEP&#039;, &#039;AFTER&#039;); return false;" colAlign="right" colWidth="35">
-  <en>Add</en>
-</MNU_ADD>
-
-<triggersEdit type="private" defaultValue="../triggers/triggers_Edit"/>
-
-<PAGED_TABLE_ID type="private"/>
-
-<JS type="javascript" replaceTags="1" showInTable="1">
-<![CDATA[
+  <STEP type="private"/>
+  <MNU_ADD type="link" value="" link="#" onclick="availableTriggers('@#STEP', 'AFTER'); return false;" colAlign="right" colWidth="35">
+    <en><![CDATA[Add]]></en>
+  </MNU_ADD>
+  <triggersEdit type="private" defaultValue="../triggers/triggers_Edit"/>
+  <PAGED_TABLE_ID type="private"/>
+  <JS type="javascript" replaceTags="1" showInTable="1"><![CDATA[
 var windowCode = new Array();
 function triggerEdit(sTRI_UID,modified){
     if(parseInt(modified) == 0){
@@ -27,7 +21,5 @@ function triggerEdit(sTRI_UID,modified){
         popupWindow('@G::LoadTranslation(ID_EDIT_TRIGGERS)', '@G::encryptlink(@#triggersEdit)?TRI_UID='+ sTRI_UID + '&STEP_UID=' + '@#STEP' + '&ST_TYPE=AFTER', 930, 600);
     }
 }
-]]>
-</JS>
-
-</dynaForm>  
+]]></JS>
+</dynaForm>

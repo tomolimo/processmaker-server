@@ -1,46 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm sqlConnection="" rowsPerPage="25">
-
-<DOC_UID type="hidden" showInTable="0"/>
-
-<POSITION type="hidden" showInTable="0"/>
-
-<APP_DOC_UID type="hidden" showInTable="0"/>
-
-<DOC_VERSION type="hidden" showInTable="0"/>
-
-<CONFIRM type="hidden" showInTable="0"/>
-
-<TITLE type="text" colWidth="150" titleAlign="left" align="left">
-  <en>Title</en>
-</TITLE>
-
-<DOC_VERSION_LABEL type="text" colWidth="50" titleAlign="left" align="left">
-  <en>Version</en>
-</DOC_VERSION_LABEL>
-
-<CREATOR type="text" mode="view" colWidth="50">
-  <en>Creator</en>
-</CREATOR>
-
-
-<APP_DOC_CREATE_DATE type="date" mode="view" colWidth="50">
-  <en>Created Date</en>
-</APP_DOC_CREATE_DATE>
-
-
-<DOWNLOAD type="link" colWidth="25" value="@G::LoadTranslation(ID_DOWNLOAD)" link="cases_ShowDocument?a=@#APP_DOC_UID&amp;v=@#DOC_VERSION"/>
-
-
-
-
-
-
-
-
-
-
-
-
-
+  <DOC_UID type="hidden" showInTable="0"/>
+  <POSITION type="hidden" showInTable="0"/>
+  <APP_DOC_UID type="hidden" showInTable="0"/>
+  <DOC_VERSION type="hidden" showInTable="0"/>
+  <CONFIRM type="hidden" showInTable="0"/>
+  <TITLE type="text" colWidth="150" titleAlign="left" align="left">
+    <en><![CDATA[Title]]></en>
+  </TITLE>
+  <DOC_VERSION_LABEL type="text" colWidth="50" titleAlign="left" align="left">
+    <en><![CDATA[Version]]></en>
+  </DOC_VERSION_LABEL>
+  <CREATOR type="text" mode="view" colWidth="50">
+    <en><![CDATA[Creator]]></en>
+  </CREATOR>
+  <APP_DOC_CREATE_DATE type="date" mode="view" colWidth="50">
+    <en><![CDATA[Created Date]]></en>
+  </APP_DOC_CREATE_DATE>
+  <DOWNLOAD type="link" colWidth="25" value="@G::LoadTranslation(ID_DOWNLOAD)" link="cases_ShowDocument?a=@#APP_DOC_UID&amp;v=@#DOC_VERSION"/>
 </dynaForm>

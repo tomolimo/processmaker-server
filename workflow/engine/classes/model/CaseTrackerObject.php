@@ -160,5 +160,30 @@ class CaseTrackerObject extends BaseCaseTrackerObject
             throw ($e);
         }
     }
+
+    /**
+     * verify if a dynaform is assigned some steps
+     *
+     * @param string $proUid the uid of the process
+     * @param string $dynUid the uid of the dynaform
+     *
+     * @return array
+     */
+    public function verifyDynaformAssigCaseTracker ($dynUid, $proUid)
+    {
+        $res = array();
+        $oCriteria = new Criteria();
+        $oCriteria->addSelectColumn( CaseTrackerObjectPeer::CTO_UID );
+        $oCriteria->add( CaseTrackerObjectPeer::PRO_UID, $proUid );
+        $oCriteria->add( CaseTrackerObjectPeer::CTO_UID_OBJ, $dynUid );
+        $oCriteria->add( CaseTrackerObjectPeer::CTO_TYPE_OBJ, 'DYNAFORM' );
+        $oDataset = CaseTrackerObjectPeer::doSelectRS( $oCriteria );
+        $oDataset->setFetchmode( ResultSet::FETCHMODE_ASSOC );
+        while($oDataset->next()) {
+            $res[] = $oDataset->getRow();
+        }
+        return $res;
+    }
+
 }
 

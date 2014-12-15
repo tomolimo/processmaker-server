@@ -1,41 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="javascript" type="xmlform" width="100%" enableTemplate="1">
-<PME_A type="hidden"/>
-<PME_PRO_UID type="hidden"/>
-<PME_TYPE type="hidden"/>
-<PME_TITLE type="title" enableHTML="1">
-  <en>Properties</en>
-</PME_TITLE>
-<PME_XMLNODE_NAME type="text" size="32" maxlength="64" validate="NodeName" dependentFields="PME_VALIDATE_NAME" required="1">
-  <en>Field Name</en>
-</PME_XMLNODE_NAME>
-<PME_XMLNODE_NAME_OLD type="hidden"/>
-<PME_VALIDATE_NAME type="hidden" sqlConnection="XMLDB">
+  <PME_A type="hidden"/>
+  <PME_PRO_UID type="hidden"/>
+  <PME_TYPE type="hidden"/>
+  <PME_TITLE type="title" enableHTML="1">
+    <en><![CDATA[Properties]]></en>
+  </PME_TITLE>
+  <PME_XMLNODE_NAME type="text" size="32" maxlength="64" validate="NodeName" dependentFields="PME_VALIDATE_NAME" required="1">
+    <en><![CDATA[Field Name]]></en>
+  </PME_XMLNODE_NAME>
+  <PME_XMLNODE_NAME_OLD type="hidden"/>
+  <PME_VALIDATE_NAME type="hidden" sqlConnection="XMLDB">
 SELECT XMLNODE_NAME, TYPE FROM dynaForm WHERE XMLNODE_NAME = @@PME_XMLNODE_NAME
 </PME_VALIDATE_NAME>
-
-<PME_XMLGRID type="dropdown"><![CDATA[
+  <PME_XMLGRID type="dropdown"><![CDATA[
 SELECT DYN_FILENAME, C.CON_VALUE FROM DYNAFORM LEFT JOIN CONTENT C ON (DYN_UID=C.CON_ID AND C.CON_LANG=@@SYS_LANG AND C.CON_CATEGORY="DYN_TITLE") WHERE DYN_TYPE="grid" AND PRO_UID=@@PME_PRO_UID
-  ]]><en>Grid <option name="0">- Select a Grid -</option></en>
-</PME_XMLGRID>
-
-<PME_ADDROW type="checkbox" falseValue="0" value="1" defaultvalue="1" labelOnRight="1">
-  <en>Add new rows</en>
-</PME_ADDROW>
-
-<PME_DELETEROW type="checkbox" falseValue="0" value="1" defaultvalue="1" labelOnRight="1">
-  <en>Delete rows</en>
-</PME_DELETEROW>
-
-<BTN_CANCEL type="button" onclick="cancel();">
-  <en>Cancel</en>
-</BTN_CANCEL>
-
-<PME_ACCEPT type="button" onclick="checkGrid( this.form );">
-  <en>Save</en>
-</PME_ACCEPT>
-
-<PME_JS type="javascript"><![CDATA[
+  ]]><en><![CDATA[Grid]]><option name="0"><![CDATA[- Select a Grid -]]></option></en></PME_XMLGRID>
+  <PME_ADDROW type="checkbox" falseValue="0" value="1" defaultvalue="1" labelOnRight="1">
+    <en><![CDATA[Add new rows]]></en>
+  </PME_ADDROW>
+  <PME_DELETEROW type="checkbox" falseValue="0" value="1" defaultvalue="1" labelOnRight="1">
+    <en><![CDATA[Delete rows]]></en>
+  </PME_DELETEROW>
+  <BTN_CANCEL type="button" onclick="cancel();">
+    <en><![CDATA[Cancel]]></en>
+  </BTN_CANCEL>
+  <PME_ACCEPT type="button" onclick="checkGrid( this.form );">
+    <en><![CDATA[Save]]></en>
+  </PME_ACCEPT>
+  <PME_JS type="javascript"><![CDATA[
 var fieldForm="javascript";
 var fieldName=getField("PME_XMLNODE_NAME",fieldForm);
 var savedFieldName=fieldName.value;

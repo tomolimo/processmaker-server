@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="RoleList" width="500" mode="edit" border="0" enableTemplate="0" height="85px">
-
-<SESSION_ID type="text" size="36" maxlength="32">
-  <en>Session Id</en>
-<es><![CDATA[Id de Sesión]]></es></SESSION_ID>
-
-<ACTION type="hidden">
+  <SESSION_ID type="text" size="36" maxlength="32">
+    <en><![CDATA[Session Id]]></en>
+    <es><![CDATA[Id de Sesión]]></es>
+  </SESSION_ID>
+  <ACTION type="hidden">
 </ACTION>
-
-<ACTIONB type="button" onclick="submitThisForm(this.form);">
-  <en>RoleList</en>
-<es>Lista de Roles</es></ACTIONB>
-
-</dynaForm>  
+  <ACTIONB type="button" onclick="submitThisForm(this.form);">
+    <en><![CDATA[RoleList]]></en>
+    <es>Lista de Roles</es>
+  </ACTIONB>
+</dynaForm>

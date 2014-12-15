@@ -5,8 +5,21 @@
 
 var eventsNewAction = function(oForm) {
   if(getField('EVN_DESCRIPTION').value.trim() == ''){
-    msgBox('Set a description please.', 'alert');
+    new leimnud.module.app.alert().make({label: _("ID_PLEASE_ENTER_DESCRIPTION")});
+
     return false;
+  }
+
+  if (getField("EVN_TAS_ESTIMATED_DURATION").value.trim() == "") {
+      new leimnud.module.app.alert().make({label: _("ID_PLEASE_CONFIGURE_ESTIMATED_DURATION_TASK")});
+
+      return false;
+  }
+
+  if (getField("EVN_WHEN").value.trim() == ""){
+      new leimnud.module.app.alert().make({label: _("ID_PLEASE_SET_VALUE_DAYS_EXECUTION_TIME_FIELD")});
+
+      return false;
   }
 
   if (oForm) {
@@ -14,7 +27,7 @@ var eventsNewAction = function(oForm) {
       url   : '../events/eventsNewAction',
       method: 'POST',
       args  : 'PRO_UID=' + getField('PRO_UID').value
-            + '&EVN_DESCRIPTION=' + getField('EVN_DESCRIPTION').value
+            + "&EVN_DESCRIPTION=" + stringReplace("\\&", "__AMP__", getField("EVN_DESCRIPTION").value)
             + '&EVN_STATUS=' + getField('EVN_STATUS').value
             + '&EVN_WHEN=' + getField('EVN_WHEN').value
             + '&EVN_WHEN_OCCURS=' + getField('EVN_WHEN_OCCURS').value

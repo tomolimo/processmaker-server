@@ -1,21 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="AppFolder" width="600" mode="edit" enableTemplate="0" border="0">
-
-<title1 type="title">
-  <en>Delete AppFolder</en>
-</title1>
-
-
-<LABEL_FOLDER_UID type="caption" colWidth="32">
-  <en>Er Uid</en>
-</LABEL_FOLDER_UID>
-
-<FOLDER_UID type="hidden" colWidth="32">
+  <title1 type="title">
+    <en><![CDATA[Delete AppFolder]]></en>
+  </title1>
+  <LABEL_FOLDER_UID type="caption" colWidth="32">
+    <en><![CDATA[Er Uid]]></en>
+  </LABEL_FOLDER_UID>
+  <FOLDER_UID type="hidden" colWidth="32">
 </FOLDER_UID>
-
-
-<BTN_SUBMIT type="submit">
-  <en>delete</en>
-</BTN_SUBMIT>
-
-</dynaForm> 
+  <BTN_SUBMIT type="submit">
+    <en><![CDATA[delete]]></en>
+  </BTN_SUBMIT>
+</dynaForm>

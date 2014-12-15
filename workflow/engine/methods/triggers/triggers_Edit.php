@@ -46,6 +46,7 @@ if (isset( $_GET['TRI_UID'] )) {
             $ST_TYPE = isset($_GET['ST_TYPE'])?$_GET['ST_TYPE']:'';
             $_GET = $aTriggerData['params'];
             $_GET['TRI_UID'] = $triUid;
+            $_GET['PRO_UID'] = $aFields['PRO_UID'];
             $_GET['STEP_UID']=$STEP_UID;
             $_GET['ST_TYPE']=$ST_TYPE;
             require_once ('triggers_EditWizard.php');

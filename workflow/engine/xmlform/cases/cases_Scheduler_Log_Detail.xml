@@ -1,38 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="xmlform" menu="" searchBy="" width="570">
-
-<SCH_UID type="text" titlealign="left" align="left" colWidth="90" mode="view">
-  <en>Scheduled Task ID</en>
-</SCH_UID>
-<TAS_UID type="text" titlealign="left" align="left" colWidth="90" mode="view">
-  <en>Task ID</en>
-</TAS_UID>
-<PRO_UID type="text" titlealign="left" align="left" colWidth="90" mode="view">
-  <en>Process Id</en>
-</PRO_UID>
-
-
-<USR_NAME type="text" titlealign="left" align="left" colWidth="90" mode="view">
-  <en>User</en>
-</USR_NAME>
-
-<EXEC_DATE type="text" titlealign="left" align="left" colWidth="100" mode="view">
-  <en>Execution Date</en>
-</EXEC_DATE>
-
-<EXEC_HOUR type="text" titlealign="left" align="left" colWidth="100" mode="view">
-  <en>Execution Hour</en>
-</EXEC_HOUR>
-
-<RESULT type="text" titlealign="left" align="left" colWidth="90" mode="view">
-  <en>Execution Status</en>
-</RESULT>
-
-<WS_CREATE_CASE_STATUS type="text" titlealign="left" align="left" colWidth="140" mode="view">
-  <en>Created Case Status</en>
-</WS_CREATE_CASE_STATUS>
-
-<WS_ROUTE_CASE_STATUS type="text" titlealign="left" align="left" colWidth="140" mode="view">
-  <en>Routed Case Status</en>
-</WS_ROUTE_CASE_STATUS>
+  <SCH_UID type="text" titlealign="left" align="left" colWidth="90" mode="view">
+    <en><![CDATA[Scheduled Task ID]]></en>
+  </SCH_UID>
+  <TAS_UID type="text" titlealign="left" align="left" colWidth="90" mode="view">
+    <en><![CDATA[Task ID]]></en>
+  </TAS_UID>
+  <PRO_UID type="text" titlealign="left" align="left" colWidth="90" mode="view">
+    <en><![CDATA[Process Id]]></en>
+  </PRO_UID>
+  <USR_NAME type="text" titlealign="left" align="left" colWidth="90" mode="view">
+    <en><![CDATA[User]]></en>
+  </USR_NAME>
+  <EXEC_DATE type="text" titlealign="left" align="left" colWidth="100" mode="view">
+    <en><![CDATA[Execution Date]]></en>
+  </EXEC_DATE>
+  <EXEC_HOUR type="text" titlealign="left" align="left" colWidth="100" mode="view">
+    <en><![CDATA[Execution Hour]]></en>
+  </EXEC_HOUR>
+  <RESULT type="text" titlealign="left" align="left" colWidth="90" mode="view">
+    <en><![CDATA[Execution Status]]></en>
+  </RESULT>
+  <WS_CREATE_CASE_STATUS type="text" titlealign="left" align="left" colWidth="140" mode="view">
+    <en><![CDATA[Created Case Status]]></en>
+  </WS_CREATE_CASE_STATUS>
+  <WS_ROUTE_CASE_STATUS type="text" titlealign="left" align="left" colWidth="140" mode="view">
+    <en><![CDATA[Routed Case Status]]></en>
+  </WS_ROUTE_CASE_STATUS>
 </dynaForm>

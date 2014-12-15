@@ -1,35 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="patterns_Parallel" id="patterns_Parallel" type="xmlform" width="100%" enableTemplate="1">
-
-<action type="hidden"/>
-
-<LANG type="private"/>
-
-<ROU_UID type="hidden"/>
-
-<PROCESS type="hidden"/>
-
-<TASK type="hidden"/>
-
-<ROU_TYPE_OLD type="hidden"/>
-
-<TITLE type="title" showInTable="0">
-  <en>Parallel</en>
-</TITLE>
-
-<ROU_TYPE type="hidden"/>
-
-<GRID_PARALLEL_TYPE type="grid" xmlgrid="patterns/patterns_GridParallelType" addRow="1" deleteRow="1" editRow=""/>
-
-<BTN_CANCEL type="button" onclick="cancel();">
-  <en>Cancel</en>
-</BTN_CANCEL>
-
-<SAVE type="button" onclick="savePattern();">
-  <en>Save</en>
-</SAVE>
-
-<JS type="javascript"><![CDATA[
+  <action type="hidden"/>
+  <LANG type="private"/>
+  <ROU_UID type="hidden"/>
+  <PROCESS type="hidden"/>
+  <TASK type="hidden"/>
+  <ROU_TYPE_OLD type="hidden"/>
+  <TITLE type="title" showInTable="0">
+    <en><![CDATA[Parallel]]></en>
+  </TITLE>
+  <ROU_TYPE type="hidden"/>
+  <GRID_PARALLEL_TYPE type="grid" xmlgrid="patterns/patterns_GridParallelType" addRow="1" deleteRow="1" editRow=""/>
+  <BTN_CANCEL type="button" onclick="cancel();">
+    <en><![CDATA[Cancel]]></en>
+  </BTN_CANCEL>
+  <SAVE type="button" onclick="savePattern();">
+    <en><![CDATA[Save]]></en>
+  </SAVE>
+  <JS type="javascript"><![CDATA[
 var bModified = false;
 var modified  = function() {
   bModified   = true;
@@ -208,5 +196,4 @@ function cancel(){
 }
 
 ]]></JS>
-
 </dynaForm>

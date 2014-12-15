@@ -1,26 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="cases_Reassign" type="xmlform" width="600px" labelWidth="200px">
-
-<TITLE type="title">
-  <en>Finish Reassigned</en>
-</TITLE>
-
-<APP_NUMBER type="text" mode="view">
-  <en>Case #</en>
-</APP_NUMBER>
-
-<USERS type="text" mode="view">
-  <en>Reassigned to</en>
-</USERS>
-
-<BACK type="button" onclick="back();">
-  <en>BACK</en>
-</BACK>
-
-
-<JS type="javascript"><![CDATA[
+  <TITLE type="title">
+    <en><![CDATA[Finish Reassigned]]></en>
+  </TITLE>
+  <APP_NUMBER type="text" mode="view">
+    <en><![CDATA[Case #]]></en>
+  </APP_NUMBER>
+  <USERS type="text" mode="view">
+    <en><![CDATA[Reassigned to]]></en>
+  </USERS>
+  <BACK type="button" onclick="back();">
+    <en><![CDATA[BACK]]></en>
+  </BACK>
+  <JS type="javascript"><![CDATA[
 var back = function() {
   window.location = 'cases_List?l=to_reassign';
 };
 ]]></JS>
-</dynaForm>  
+</dynaForm>

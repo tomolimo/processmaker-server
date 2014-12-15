@@ -57,8 +57,10 @@ class DashletInstance extends BaseDashletInstance
                 $data['DAS_INS_UID'] = G::generateUniqueID();
                 $data['DAS_INS_CREATE_DATE'] = date('Y-m-d H:i:s');
                 $dashletInstance = new DashletInstance();
+                $msg = 'CreateDashletInstance';
             } else {
                 $dashletInstance = DashletInstancePeer::retrieveByPK($data['DAS_INS_UID']);
+                $msg = 'UpdateDashletInstance';
             }
             $data['DAS_INS_UPDATE_DATE'] = date('Y-m-d H:i:s');
             $dashletInstance->fromArray($data, BasePeer::TYPE_FIELDNAME);
@@ -66,6 +68,10 @@ class DashletInstance extends BaseDashletInstance
                 $connection->begin();
                 $result = $dashletInstance->save();
                 $connection->commit();
+
+                $dashletData = $this->load($data['DAS_INS_UID']);
+                G::auditLog($msg, "Dashlet Instance Name: ".$dashletData['DAS_INS_TITLE']." Dashlet Instance ID: (".$dashletData['DAS_INS_UID'].") ");
+
                 return $data['DAS_INS_UID'];
             } else {
                 $message = '';
@@ -88,8 +94,11 @@ class DashletInstance extends BaseDashletInstance
             $dashletInstance = DashletInstancePeer::retrieveByPK($dasInsUid);
             if (!is_null($dashletInstance)) {
                 $connection->begin();
+                $dashletData = $this->load($dasInsUid);
                 $result = $dashletInstance->delete();
                 $connection->commit();
+
+                G::auditLog("DeleteDashletInstance", "Dashlet Instance Name: ". $dashletData['DAS_INS_TITLE']." Dashlet Instance ID: (".$dasInsUid.") ");
                 return $result;
             } else {
                 throw new Exception('Error trying to delete: The row "' .  $dasInsUid. '" does not exist.');

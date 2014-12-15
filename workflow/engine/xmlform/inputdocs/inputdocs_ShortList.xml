@@ -1,29 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm sqlConnection="" menu="inputdocs/inputdocs_Options" width="100%" rowsPerPage="10" searchBy="INP_DOC_TITLE">
-
-<INP_DOC_UID type="hidden" showInTable="0"/>
-
-<INP_DOC_TITLE type="text" colWidth="350" titleAlign="left" align="left">
-  <en>Title</en>
-</INP_DOC_TITLE>
-
-<EDIT type="link" colWidth="40" value="@G::LoadTranslation(ID_EDIT)" link="#" onclick="inputdocsEdit(@QINP_DOC_UID);return false;"/>
-
-<DELETE type="link" colWidth="40" value="@G::LoadTranslation(ID_DELETE)" link="#" onclick="inputdocsDelete(@QINP_DOC_UID);return false;"><en></en></DELETE>
-
-<GET_UID type="link" colWidth="40" value="UID" link="#" onclick="msgBox(&#039;UID: &#039;+@QINP_DOC_UID, &#039;info&#039;);return false;"/>
-
-
-<SEARCH type="button" onclick="pagedTableFilter(this.form);" showInTable="0">
-  <en>Apply Filter</en>
-</SEARCH>
-
-<PAGED_TABLE_ID type="private" showInTable="0"/>
-
-<JSFILTER type="javascript" replaceTags="1" showInTable="0">
+  <INP_DOC_UID type="hidden" showInTable="0"/>
+  <INP_DOC_TITLE type="text" colWidth="350" titleAlign="left" align="left">
+    <en><![CDATA[Title]]></en>
+  </INP_DOC_TITLE>
+  <EDIT type="link" colWidth="40" value="@G::LoadTranslation(ID_EDIT)" link="#" onclick="inputdocsEdit(@QINP_DOC_UID);return false;"/>
+  <DELETE type="link" colWidth="40" value="@G::LoadTranslation(ID_DELETE)" link="#" onclick="inputdocsDelete(@QINP_DOC_UID);return false;">
+    <en><![CDATA[]]></en>
+  </DELETE>
+  <GET_UID type="link" colWidth="40" value="UID" link="#" onclick="msgBox('UID: '+@QINP_DOC_UID, 'info');return false;"/>
+  <SEARCH type="button" onclick="pagedTableFilter(this.form);" showInTable="0">
+    <en><![CDATA[Apply Filter]]></en>
+  </SEARCH>
+  <PAGED_TABLE_ID type="private" showInTable="0"/>
+  <JSFILTER type="javascript" replaceTags="1" showInTable="0">
 function pagedTableFilter(form) {
   @#PAGED_TABLE_ID.doFilter(form);
 }
 </JSFILTER>
-
 </dynaForm>

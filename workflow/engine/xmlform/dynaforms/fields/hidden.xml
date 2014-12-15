@@ -1,50 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="hidden" type="xmlform" width="100%" enableTemplate="1">
-<PME_A type="hidden"/>
-
-<PME_TYPE type="hidden"/>
-<PME_PRO_UID type="hidden"/>
-<PME_TITLE type="title" enableHTML="1">
-  <en>Properties</en>
-</PME_TITLE>
-
-<PME_XMLNODE_NAME type="text" size="32" maxlength="64" validate="NodeName" dependentFields="PME_VALIDATE_NAME" required="1">
-  <en>Field Name</en>
-</PME_XMLNODE_NAME>
-<PME_XMLNODE_NAME_OLD type="hidden"/>
-<PME_VALIDATE_NAME type="hidden" sqlConnection="XMLDB">
+  <PME_A type="hidden"/>
+  <PME_TYPE type="hidden"/>
+  <PME_PRO_UID type="hidden"/>
+  <PME_TITLE type="title" enableHTML="1">
+    <en><![CDATA[Properties]]></en>
+  </PME_TITLE>
+  <PME_XMLNODE_NAME type="text" size="32" maxlength="64" validate="NodeName" dependentFields="PME_VALIDATE_NAME" required="1">
+    <en><![CDATA[Field Name]]></en>
+  </PME_XMLNODE_NAME>
+  <PME_XMLNODE_NAME_OLD type="hidden"/>
+  <PME_VALIDATE_NAME type="hidden" sqlConnection="XMLDB">
 SELECT XMLNODE_NAME, TYPE FROM dynaForm WHERE XMLNODE_NAME = @@PME_XMLNODE_NAME
 </PME_VALIDATE_NAME>
-
-<PME_DEFAULTVALUE type="text" maxlength="" size="30" defaultvalue="">
-  <en>Default Value</en>
-</PME_DEFAULTVALUE>
-
-<PME_MODE type="hidden" defaultvalue="edit">
+  <PME_DEFAULTVALUE type="text" maxlength="" size="30" defaultvalue="">
+    <en><![CDATA[Default Value]]></en>
+  </PME_DEFAULTVALUE>
+  <PME_MODE type="hidden" defaultvalue="edit">
 </PME_MODE>
-
-<PME_SUBTITLE2 type="title" enableHTML="1">
-  <en>Data</en>
-</PME_SUBTITLE2>
-
-<PME_SQLCONNECTION type="dropdown" sqlconnection="dbarray"><![CDATA[
+  <PME_SUBTITLE2 type="title" enableHTML="1">
+    <en><![CDATA[Data]]></en>
+  </PME_SUBTITLE2>
+  <PME_SQLCONNECTION type="dropdown" sqlconnection="dbarray"><![CDATA[
   SELECT * FROM DB_CONNECTIONS
-  ]]><en>Sql Connection<option name="">(none)</option></en>
-</PME_SQLCONNECTION>
-
-<PME_XMLNODE_VALUE type="textarea" cols="47" rows="3">
-  <en>Sql</en>
-</PME_XMLNODE_VALUE>
-
-<BTN_CANCEL type="button" onclick="cancel();">
-  <en>Cancel</en>
-</BTN_CANCEL>
-
-<PME_ACCEPT type="button" onclick="fieldsSave( this.form );">
-  <en>Save</en>
-</PME_ACCEPT>
-
-<PME_JS type="javascript"><![CDATA[
+  ]]><en><![CDATA[Sql Connection]]><option name=""><![CDATA[(none)]]></option></en></PME_SQLCONNECTION>
+  <PME_XMLNODE_VALUE type="textarea" cols="47" rows="3">
+    <en><![CDATA[Sql]]></en>
+  </PME_XMLNODE_VALUE>
+  <BTN_CANCEL type="button" onclick="cancel();">
+    <en><![CDATA[Cancel]]></en>
+  </BTN_CANCEL>
+  <PME_ACCEPT type="button" onclick="fieldsSave( this.form );">
+    <en><![CDATA[Save]]></en>
+  </PME_ACCEPT>
+  <PME_JS type="javascript"><![CDATA[
 var fieldForm="hidden";
 var fieldName=getField("PME_XMLNODE_NAME",fieldForm);
 var savedFieldName=fieldName.value;
@@ -58,4 +47,4 @@ function cancel(){
 }
 
 ]]></PME_JS>
-</dynaForm>  
+</dynaForm>

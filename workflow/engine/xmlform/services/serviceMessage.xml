@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="xmlform" name="serviceMessage" width="500" enabletemplate="0" mode="view">
-<Title type="title" enablehtml="0" btn_cancel="Cancel">
-<en>Information</en>
-</Title>
-<Subtitle type="subtitle" enablehtml="0" btn_cancel="Cancel">
-<en>The access for the service is currently unavailable from the processmaker web interface.</en>
-</Subtitle>
+  <Title type="title" enablehtml="0" btn_cancel="Cancel">
+    <en><![CDATA[Information]]></en>
+  </Title>
+  <Subtitle type="subtitle" enablehtml="0" btn_cancel="Cancel">
+    <en><![CDATA[Access to the service is currently unavailable from the ProcessMaker web interface.]]></en>
+  </Subtitle>
 </dynaForm>

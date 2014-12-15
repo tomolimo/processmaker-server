@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="triggers_NoAssign" type="xmlform" width="100%">
-
-<MESSAGE type="subtitle" align="center">
-<en>Triggers not created or all the triggers available were assigned!</en>
-</MESSAGE>
-
-<ClOSE type="button" onclick="currentPopupWindow.remove();">
-<en>Close</en>
-</ClOSE>
-
-</dynaForm>  
+  <MESSAGE type="subtitle" align="center">
+    <en><![CDATA[Triggers not created or all the triggers available were assigned!]]></en>
+  </MESSAGE>
+  <ClOSE type="button" onclick="currentPopupWindow.remove();">
+    <en><![CDATA[Close]]></en>
+  </ClOSE>
+</dynaForm>

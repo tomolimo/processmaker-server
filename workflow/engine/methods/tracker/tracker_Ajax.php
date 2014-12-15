@@ -203,9 +203,12 @@ try {
             $oData = Bootstrap::json_decode( stripslashes( $_POST['data'] ) );
             $oProcess = new Process();
             $aRow = $oProcess->load( $oData->uid );
+            $oSM = new stdclass();
+            $oSM->title = new stdclass();
             $oSM->title->label = strip_tags( $aRow['PRO_TITLE'] );
             //$oSM->title->position->x = $aRow['PRO_TITLE_X'];
             //$oSM->title->position->y = $aRow['PRO_TITLE_Y'];
+            $oSM->title->position = new stdclass();
             $oSM->title->position->x = 10;
             $oSM->title->position->y = 10;
             $oSM->stages = array ();
@@ -225,12 +228,13 @@ try {
             $oDataset->setFetchmode( ResultSet::FETCHMODE_ASSOC );
             $oDataset->next();
             while ($aRow1 = $oDataset->getRow()) {
-                $oStage = null;
+                $oStage = new stdclass();
                 $oStage->uid = $aRow1['STG_UID'];
                 $oStage->label = strip_tags( $aRow1['CON_VALUE'] );
+                $oStage->position = new stdclass();
                 $oStage->position->x = (int) $aRow1['STG_POSX'];
                 $oStage->position->y = (int) $aRow1['STG_POSY'];
-                $oStage->derivation = null;
+                $oStage->derivation = new stdclass();
                 $oStage->derivation->to = array ();
                 if (! $oData->mode) {
                     $oCriteria = new Criteria( 'workflow' );
@@ -272,7 +276,7 @@ try {
             }
             foreach ($oSM->stages as $iKey => $oStage) {
                 if (isset( $oSM->stages[$iKey + 1] )) {
-                    $oDerivation = new StdClass();
+                    $oDerivation = new stdclass();
                     $oDerivation->stage = $oSM->stages[$iKey + 1]->uid;
                     $oSM->stages[$iKey]->derivation->to = array ($oDerivation);
                     $oSM->stages[$iKey]->derivation->type = 0;
@@ -321,6 +325,7 @@ try {
                 }
             }
             $oStage = new Stage();
+            $oNewStage = new stdclass();
             $oNewStage->label = G::LoadTranslation( 'ID_STAGE' ) . ' ' . $iStageNumber;
 
             if ($oData->position->x < 0)

@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="xmlmenu">
-
-<PRO_UID type="private"/>
-
-<MNU_ASSIGN type="link" value="" link="#" onclick="availableProcessesUser(&#039;@#PRO_UID&#039;);return false;" colAlign="left" colWidth="100">
-  <en>Assign</en>
-</MNU_ASSIGN>
-
-<js type="javascript"><![CDATA[
+  <PRO_UID type="private"/>
+  <MNU_ASSIGN type="link" value="" link="#" onclick="availableProcessesUser('@#PRO_UID');return false;" colAlign="left" colWidth="100">
+    <en><![CDATA[Assign]]></en>
+  </MNU_ASSIGN>
+  <js type="javascript"><![CDATA[
 
 var oPanel1;
 
@@ -70,5 +67,4 @@ var removeProcessUser = function(sPUUID) {
 };
 
 ]]></js>
-
-</dynaForm>  
+</dynaForm>

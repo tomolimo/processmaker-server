@@ -114,7 +114,7 @@ class DbSource extends BaseDbSource
         return $aRow[0];
     }
 
-    public function Exists($Uid, $ProUID)
+    public function Exists($Uid, $ProUID = "")
     {
         try {
             $oPro = DbSourcePeer::retrieveByPk($Uid, $ProUID);

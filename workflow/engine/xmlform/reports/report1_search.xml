@@ -1,21 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="xmlform" name="" width="600" enabletemplate="0" mode="edit">
-
-<FROM type="date" defaultvalue="" startdate="2008-01-01" enddate="" size="15" mode="edit">
-  <en>FROM</en>
-</FROM>
-
-<TO type="date" defaultvalue="" startdate="2008-01-01" enddate="" size="15" mode="edit">
-  <en>TO</en>
-</TO>
-
-<STARTEDBY type="dropdown" defaultvalue="" mode="edit" options="Array"><![CDATA[
+  <FROM type="date" defaultvalue="" startdate="2008-01-01" enddate="" size="15" mode="edit">
+    <en><![CDATA[FROM]]></en>
+  </FROM>
+  <TO type="date" defaultvalue="" startdate="2008-01-01" enddate="" size="15" mode="edit">
+    <en><![CDATA[TO]]></en>
+  </TO>
+  <STARTEDBY type="dropdown" defaultvalue="" mode="edit" options="Array"><![CDATA[
 	SELECT USR_UID, CONCAT(USR_LASTNAME,' ',USR_FIRSTNAME) AS USR_USERNAME FROM USERS
-  ]]><en>STARTED BY<option name="">All</option></en>
-</STARTEDBY>
-
-<FILTER type="submit">
-  <en>Filter</en>
-</FILTER>
-
-</dynaForm>  
+  ]]><en><![CDATA[STARTED BY]]><option name=""><![CDATA[All]]></option></en></STARTEDBY>
+  <FILTER type="submit">
+    <en><![CDATA[Filter]]></en>
+  </FILTER>
+</dynaForm>

@@ -1,23 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="xmlmenu">
-
-<MNU_ADD type="link" value="" link="#" onclick="window.location = &#039;processes_New&#039;;return false;" colAlign="left" colWidth="45">
-  <en>New</en>
-</MNU_ADD>
-
-<MNU_IMPORT type="link" value="" link="#" onclick="window.location = &#039;processes_Import&#039;;return false;" colAlign="left" colWidth="60">
-  <en>Import</en>
-</MNU_IMPORT>
-
-<MNU_LIBRARY type="link" value="" link="#" onclick="window.location = &#039;processes_Library&#039;;return false;" colAlign="left" colWidth="150">
-  <en>Browse Library</en>
-</MNU_LIBRARY>
-
-<PAGED_TABLE_ID type="private"/>
-<PAGED_TABLE_FAST_SEARCH type="FastSearch" label="@G::LoadTranslation(ID_SEARCH)"/>
-
-<SEARCH_FILTER_FORM type="private"/>
-<JS type="javascript" replacetags="1"><![CDATA[
+  <MNU_ADD type="link" value="" link="#" onclick="window.location = 'processes_New';return false;" colAlign="left" colWidth="45">
+    <en><![CDATA[New]]></en>
+  </MNU_ADD>
+  <MNU_IMPORT type="link" value="" link="#" onclick="window.location = 'processes_Import';return false;" colAlign="left" colWidth="60">
+    <en><![CDATA[Import]]></en>
+  </MNU_IMPORT>
+  <MNU_LIBRARY type="link" value="" link="#" onclick="window.location = 'processes_Library';return false;" colAlign="left" colWidth="150">
+    <en><![CDATA[Browse Library]]></en>
+  </MNU_LIBRARY>
+  <PAGED_TABLE_ID type="private"/>
+  <PAGED_TABLE_FAST_SEARCH type="FastSearch" label="@G::LoadTranslation(ID_SEARCH)"/>
+  <SEARCH_FILTER_FORM type="private"/>
+  <JS type="javascript" replacetags="1"><![CDATA[
 var panel;
 var panDel=function(link,uid)
 {
@@ -54,4 +49,4 @@ var panDel=function(link,uid)
   r.make();
 }
 ]]></JS>
-</dynaForm>  
+</dynaForm>

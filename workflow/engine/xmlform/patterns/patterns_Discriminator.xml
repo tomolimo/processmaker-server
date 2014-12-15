@@ -1,37 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="patterns_Sequential" type="xmlform" width="100%" enableTemplate="1">
-
-<action type="hidden"/>
-
-<LANG type="private"/>
-
-<ROU_UID type="hidden"/>
-
-<ROUTE_COUNT type="hidden"/>
-
-<PROCESS type="hidden"/>
-
-<TASK type="hidden"/>
-
-<ROU_TYPE_OLD type="hidden"/>
-
-<TITLE type="title" showInTable="0">
-  <en>Discriminator</en>
-</TITLE>
-
-<ROU_TYPE type="hidden"/>
-
-<GRID_DISCRIMINATOR_TYPE type="grid" xmlgrid="patterns/patterns_GridDiscriminator" addRow="0" deleteRow="0" editRow="" />
-
-<BTN_CANCEL type="button" onclick="cancel();">
-  <en>Cancel</en>
-</BTN_CANCEL>
-
-<SAVE type="button" onclick="savePattern(this.form);">
-  <en>Save</en>
-</SAVE>
-
-<JS type="javascript"><![CDATA[
+  <action type="hidden"/>
+  <LANG type="private"/>
+  <ROU_UID type="hidden"/>
+  <ROUTE_COUNT type="hidden"/>
+  <PROCESS type="hidden"/>
+  <TASK type="hidden"/>
+  <ROU_TYPE_OLD type="hidden"/>
+  <TITLE type="title" showInTable="0">
+    <en><![CDATA[Discriminator]]></en>
+  </TITLE>
+  <ROU_TYPE type="hidden"/>
+  <GRID_DISCRIMINATOR_TYPE type="grid" xmlgrid="patterns/patterns_GridDiscriminator" addRow="0" deleteRow="0" editRow=""/>
+  <BTN_CANCEL type="button" onclick="cancel();">
+    <en><![CDATA[Cancel]]></en>
+  </BTN_CANCEL>
+  <SAVE type="button" onclick="savePattern(this.form);">
+    <en><![CDATA[Save]]></en>
+  </SAVE>
+  <JS type="javascript"><![CDATA[
 
 var savePattern = function(oForm)
 {
@@ -79,5 +66,4 @@ function cancel(){
     Pm.tmp.derivationsPanel.remove();
 }
 ]]></JS>
-
-</dynaForm> 
+</dynaForm>

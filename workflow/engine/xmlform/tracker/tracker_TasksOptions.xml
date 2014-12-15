@@ -1,17 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<dynaForm type="xmlmenu"> 
-
-<PRO_UID type="private"/>
-
-<STG_UID type="private"/>
-
-<MNU_ASSIGN type="link" value="" link="#" onclick="availableTasksForTheStage(@QPRO_UID, @QSTG_UID);return false;" colAlign="left" colWidth="50">
-  <en>Assign</en>
-</MNU_ASSIGN>
-
-<PAGED_TABLE_ID type="private"/>
-
-<JS type="javascript" replaceTags="1"><![CDATA[
+<dynaForm type="xmlmenu">
+  <PRO_UID type="private"/>
+  <STG_UID type="private"/>
+  <MNU_ASSIGN type="link" value="" link="#" onclick="availableTasksForTheStage(@QPRO_UID, @QSTG_UID);return false;" colAlign="left" colWidth="50">
+    <en><![CDATA[Assign]]></en>
+  </MNU_ASSIGN>
+  <PAGED_TABLE_ID type="private"/>
+  <JS type="javascript" replaceTags="1"><![CDATA[
 
 var oPanelStages;
 var availableTasksForTheStage = function(sProcessUID, sStageUID) {
@@ -71,5 +66,4 @@ var removeTaskFromTheStage = function(sTaskUID) {
 };
 
 ]]></JS>
-
 </dynaForm>

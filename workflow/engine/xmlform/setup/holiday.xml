@@ -1,19 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="Holiday" basedir="xmlform/setup" width="450" height="300" enable_template="0" sql="SELECT UID, DATE, DESCRIPTION FROM HOLIDAY" sqlconnection="" xmlPopup="setup/Holiday" onUpdateField="onUpdate(this.form);">
-
-<TITLES type="title" group="4">
-  <en>Holiday</en>
-</TITLES>
-
-<DATE type="date" beforeDate="180d" afterDate="2y" endDate="" validate="" mask="" a="a1" b="b2" c="c3" d="d4" colWidth="100">
-  <en>Date</en>
-</DATE>
-
-<DESCRIPTION type="text" size="40" maxlength="40" colWidth="300">
-  <en>Description</en>
-</DESCRIPTION>
-
-<BSUBMIT type="button" onclick="if (pagedTable.event==&#039;Insert&#039;) onInsert(this.form); if (pagedTable.event==&#039;Update&#039;) onUpdate(this.form);">
-  <en>Accept</en>
-</BSUBMIT>
+  <TITLES type="title" group="4">
+    <en><![CDATA[Holiday]]></en>
+  </TITLES>
+  <DATE type="date" beforeDate="180d" afterDate="2y" endDate="" validate="" mask="" a="a1" b="b2" c="c3" d="d4" colWidth="100">
+    <en><![CDATA[Date]]></en>
+  </DATE>
+  <DESCRIPTION type="text" size="40" maxlength="40" colWidth="300">
+    <en><![CDATA[Description]]></en>
+  </DESCRIPTION>
+  <BSUBMIT type="button" onclick="if (pagedTable.event=='Insert') onInsert(this.form); if (pagedTable.event=='Update') onUpdate(this.form);">
+    <en><![CDATA[Accept]]></en>
+  </BSUBMIT>
 </dynaForm>

@@ -736,6 +736,10 @@ abstract class BaseCaseScheduler extends BaseObject implements Persistent
 
         if ($v !== null && !is_int($v)) {
             $ts = strtotime($v);
+            //Date/time accepts null values
+            if ($v == '') {
+                $ts = null;
+            }
             if ($ts === -1 || $ts === false) {
                 throw new PropelException("Unable to parse date/time value for [sch_time_next_run] from input: " .
                     var_export($v, true));
@@ -761,6 +765,10 @@ abstract class BaseCaseScheduler extends BaseObject implements Persistent
 
         if ($v !== null && !is_int($v)) {
             $ts = strtotime($v);
+            //Date/time accepts null values
+            if ($v == '') {
+                $ts = null;
+            }
             if ($ts === -1 || $ts === false) {
                 throw new PropelException("Unable to parse date/time value for [sch_last_run_time] from input: " .
                     var_export($v, true));
@@ -874,6 +882,10 @@ abstract class BaseCaseScheduler extends BaseObject implements Persistent
 
         if ($v !== null && !is_int($v)) {
             $ts = strtotime($v);
+            //Date/time accepts null values
+            if ($v == '') {
+                $ts = null;
+            }
             if ($ts === -1 || $ts === false) {
                 throw new PropelException("Unable to parse date/time value for [sch_start_time] from input: " .
                     var_export($v, true));
@@ -899,6 +911,10 @@ abstract class BaseCaseScheduler extends BaseObject implements Persistent
 
         if ($v !== null && !is_int($v)) {
             $ts = strtotime($v);
+            //Date/time accepts null values
+            if ($v == '') {
+                $ts = null;
+            }
             if ($ts === -1 || $ts === false) {
                 throw new PropelException("Unable to parse date/time value for [sch_start_date] from input: " .
                     var_export($v, true));
@@ -1034,6 +1050,10 @@ abstract class BaseCaseScheduler extends BaseObject implements Persistent
 
         if ($v !== null && !is_int($v)) {
             $ts = strtotime($v);
+            //Date/time accepts null values
+            if ($v == '') {
+                $ts = null;
+            }
             if ($ts === -1 || $ts === false) {
                 throw new PropelException("Unable to parse date/time value for [sch_end_date] from input: " .
                     var_export($v, true));

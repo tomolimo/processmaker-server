@@ -1,116 +1,72 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="dynaforms_Edit" type="xmlform" width="100%" enableTemplate="1">
-<DYN_UID type="hidden" showInTable="0"/>
-<ACTION type="hidden" showInTable="0"/>
-<PRO_UID type="hidden" showInTable="0"/>
-<LANG type="private"/>
-
-<TITLE type="title" group="1">
-  <en>Dynaform Information</en>
-</TITLE>
-
-<ADD_TABLE type="dropdown" sqlConnection="dbarray" >
+  <DYN_UID type="hidden" showInTable="0"/>
+  <ACTION type="hidden" showInTable="0"/>
+  <PRO_UID type="hidden" showInTable="0"/>
+  <LANG type="private"/>
+  <TITLE type="title" group="1">
+    <en><![CDATA[Dynaform Information]]></en>
+  </TITLE>
+  <ADD_TABLE type="dropdown" sqlConnection="dbarray" required="1">
   SELECT * FROM ADDITIONAL_TABLES
-  <en>Create from a PM Table</en>
+  <en><![CDATA[Create from a PM Table]]></en>
 </ADD_TABLE>
-
-<DYN_TITLE type="text" maxlength="256" size ="48" required="1">
-  <en>Title</en>
-</DYN_TITLE>
-
-<DYN_TYPE type="dropdown" colWidth="80" align="center">
-  <en>Type
-  <option name="xmlform">Normal</option>
-  <option name="grid">Grid</option>
-  </en>
-</DYN_TYPE>
-
-<DYN_DESCRIPTION type="textarea" cols="45" rows="8" >
-  <en>Description</en>
-</DYN_DESCRIPTION>
-
-<CONTINUE type="button" onclick="assignVariables( this.form, false );">
-  <en>Save</en>
-</CONTINUE>
-
-<SAVE_DYNAFORM type="button" onclick="dynaformSave( this.form, false );">
-  <en>Save</en>
-</SAVE_DYNAFORM>
-
-<SAVE_OPEN type="button" onclick="dynaformSave( this.form, true );">
-  <en><![CDATA[Save & Open]]></en>
-</SAVE_OPEN>
-
-<BTN_CANCEL type="button" onclick="cancel();">
-  <en>Cancel</en>
-</BTN_CANCEL>
-
-<!--Copy dynaform-->
-<COPY_PROCESS_UID type="dropdown" dependentfields="COPY_DYNAFORM_UID">
-    <![CDATA[
+  <DYN_TITLE type="text" maxlength="256" size="48" required="1">
+    <en><![CDATA[Title]]></en>
+  </DYN_TITLE>
+  <DYN_TYPE type="dropdown" colWidth="80" align="center">
+    <en><![CDATA[Type]]><option name="xmlform"><![CDATA[Normal]]></option><option name="grid"><![CDATA[Grid]]></option></en>
+  </DYN_TYPE>
+  <DYN_DESCRIPTION type="textarea" cols="45" rows="8">
+    <en><![CDATA[Description]]></en>
+  </DYN_DESCRIPTION>
+  <CONTINUE type="button" onclick="assignVariables( this.form, false );">
+    <en><![CDATA[Save]]></en>
+  </CONTINUE>
+  <SAVE_DYNAFORM type="button" onclick="dynaformSave( this.form, false );">
+    <en><![CDATA[Save]]></en>
+  </SAVE_DYNAFORM>
+  <SAVE_OPEN type="button" onclick="dynaformSave( this.form, true );">
+    <en><![CDATA[Save & Open]]></en>
+  </SAVE_OPEN>
+  <BTN_CANCEL type="button" onclick="cancel();">
+    <en><![CDATA[Cancel]]></en>
+  </BTN_CANCEL>
+  <!--Copy dynaform-->
+  <COPY_PROCESS_UID type="dropdown" dependentfields="COPY_DYNAFORM_UID"><![CDATA[
     SELECT PRO.PRO_UID, CON.CON_VALUE
     FROM   PROCESS AS PRO, CONTENT AS CON
     WHERE  PRO.PRO_UID = CON.CON_ID AND CON.CON_CATEGORY = 'PRO_TITLE' AND CON.CON_LANG = '@#LANG'
     ORDER BY CON.CON_VALUE ASC
-    ]]>
-
-    <en>
-        Process
-        <option name="">- Select a process -</option>
-    </en>
-</COPY_PROCESS_UID>
-
-<COPY_TYPE type="dropdown" dependentfields="COPY_DYNAFORM_UID">
-    <en>
-        Showing forms of type
-        <option name="xmlform">Normal</option>
-        <option name="grid">Grid</option>
-    </en>
-</COPY_TYPE>
-
-<COPY_DYNAFORM_UID type="dropdown" dependentfields="COPY_DYNAFORM_DESCRIPTION">
-    <![CDATA[
+    ]]><en><![CDATA[Process]]><option name=""><![CDATA[- Select a process -]]></option></en></COPY_PROCESS_UID>
+  <COPY_TYPE type="dropdown" dependentfields="COPY_DYNAFORM_UID">
+    <en><![CDATA[Showing forms of type]]><option name="xmlform"><![CDATA[Normal]]></option><option name="grid"><![CDATA[Grid]]></option></en>
+  </COPY_TYPE>
+  <COPY_DYNAFORM_UID type="dropdown" dependentfields="COPY_DYNAFORM_DESCRIPTION"><![CDATA[
     SELECT DYN.DYN_UID, CON.CON_VALUE
     FROM   DYNAFORM AS DYN, CONTENT AS CON
     WHERE  DYN.PRO_UID = '@#COPY_PROCESS_UID' AND DYN.DYN_TYPE = '@#COPY_TYPE' AND
            DYN.DYN_UID = CON.CON_ID AND CON.CON_CATEGORY = 'DYN_TITLE' AND CON.CON_LANG = '@#LANG'
     ORDER BY CON.CON_VALUE ASC
-    ]]>
-
-    <en>
-        Dynaform to copy/import
-        <option name="">- Select a dynaform -</option>
-    </en>
-</COPY_DYNAFORM_UID>
-
-<COPY_DYNAFORM_TITLE type="text" size="48" maxlength="256" required="1">
-    <en>Title of the new dynaform</en>
-</COPY_DYNAFORM_TITLE>
-
-<COPY_DYNAFORM_DESCRIPTION type="textarea" rows="8" cols="45">
-    <![CDATA[
+    ]]><en><![CDATA[Dynaform to copy/import]]><option name=""><![CDATA[- Select a dynaform -]]></option></en></COPY_DYNAFORM_UID>
+  <COPY_DYNAFORM_TITLE type="text" size="48" maxlength="256" required="1">
+    <en><![CDATA[Title of the new dynaform]]></en>
+  </COPY_DYNAFORM_TITLE>
+  <COPY_DYNAFORM_DESCRIPTION type="textarea" rows="8" cols="45"><![CDATA[
     SELECT CON.CON_VALUE
     FROM   CONTENT AS CON
     WHERE  CON.CON_ID = '@#COPY_DYNAFORM_UID' AND CON.CON_CATEGORY = 'DYN_DESCRIPTION' AND CON.CON_LANG = '@#LANG'
-    ]]>
-
-    <en>Description of the new dynaform</en>
-</COPY_DYNAFORM_DESCRIPTION>
-
-<BTNCOPYSAVE type="button" onclick="dynaformSave(this.form, false);">
+    ]]><en><![CDATA[Description of the new dynaform]]></en></COPY_DYNAFORM_DESCRIPTION>
+  <BTNCOPYSAVE type="button" onclick="dynaformSave(this.form, false);">
     <en><![CDATA[Copy/Import]]></en>
-</BTNCOPYSAVE>
-
-<BTNCOPYSAVEOPEN type="button" onclick="dynaformSave(this.form, true);">
+  </BTNCOPYSAVE>
+  <BTNCOPYSAVEOPEN type="button" onclick="dynaformSave(this.form, true);">
     <en><![CDATA[Copy/Import and Open]]></en>
-</BTNCOPYSAVEOPEN>
-
-<BTNCOPYCANCEL type="button" onclick="cancel();">
-    <en>Cancel</en>
-</BTNCOPYCANCEL>
-
-<JS type="javascript">
-<![CDATA[
+  </BTNCOPYSAVEOPEN>
+  <BTNCOPYCANCEL type="button" onclick="cancel();">
+    <en><![CDATA[Cancel]]></en>
+  </BTNCOPYCANCEL>
+  <JS type="javascript"><![CDATA[
     function checkDynaformSource()
     {
         var action = "@#ACTION";
@@ -208,9 +164,8 @@ document.getElementById('form[DYN_TITLE]').value = document.getElementById('form
   }
   var oPanel;
   function assignVariables(){
-    //alert("test");
-
-    if(document.getElementById('form[ADD_TABLE]').value!=''){
+    
+    if ((document.getElementById('form[ADD_TABLE]').value.trim() != '') && (document.getElementById('form[DYN_TITLE]').value.trim() != '')) {
         table_uid = document.getElementById('form[ADD_TABLE]').value;
        	oPanel = new leimnud.module.panel();
       	oPanel.options = {
@@ -229,19 +184,17 @@ document.getElementById('form[DYN_TITLE]').value = document.getElementById('form
         var PRO_UID = document.getElementById('form[PRO_UID]').value;
         var DYN_UID = document.getElementById('form[DYN_UID]').value;
         var ADD_TABLE = document.getElementById('form[ADD_TABLE]').value;
-        var DYN_TITLE = document.getElementById('form[DYN_TITLE]').value;
+        var DYN_TITLE = document.getElementById('form[DYN_TITLE]').value.trim();
         var DYN_TYPE = document.getElementById('form[DYN_TYPE]').value;
         var ACTION = document.getElementById('form[ACTION]').value;
         var DYN_DESCRIPTION = document.getElementById('form[DYN_DESCRIPTION]').value;
-
-        //alert("pepe2");
 
         oRPC = new leimnud.module.rpc.xmlhttp({
             url    : '../dynaforms/dynaforms_AssignVariables',
             method : 'POST',
             args   : 'PRO_UID=' + PRO_UID + '&DYN_UID=' + DYN_UID + '&ADD_TABLE=' + ADD_TABLE + '&DYN_TITLE=' + DYN_TITLE + '&DYN_TYPE=' + DYN_TYPE + '&DYN_DESCRIPTION=' + DYN_DESCRIPTION + '&ACTION=' + ACTION
         });
-        //alert("alert");
+    
         oRPC.callback = function(oRPC) {
             oPanel.loader.hide();
             var scs = oRPC.xmlhttp.responseText.extractScript();
@@ -250,9 +203,14 @@ document.getElementById('form[DYN_TITLE]').value = document.getElementById('form
         }.extend(this);
         oRPC.make();
         lastPopupWindow.remove();
-
-
-        //popupWindow('Assign Variable', '?PRO_UID=@%PRO_UID&TABLE_UID='+table_uid , 500, 300);
+    } else {
+      if (document.getElementById('form[ADD_TABLE]').value.trim() == '') {
+        msgBox("@G::LoadTranslation(ID_PMTABLE_REQUIRED)", "alert");
+        return false;
+      } else {  
+        msgBox("@G::LoadTranslation(ID_REQUIRED_NAME_DYNAFORM)", "alert");        
+        return false;
+      }
     }
   }
 
@@ -260,8 +218,5 @@ document.getElementById('form[DYN_TITLE]').value = document.getElementById('form
     lastPopupWindow.remove();
   }
 
-]]>
-</JS>
-
+]]></JS>
 </dynaForm>
-

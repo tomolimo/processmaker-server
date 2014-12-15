@@ -1,36 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="languages_ImportForm" type="xmlform" width="500" height="" labelWidth="30%">
-
-<TITLE1 type="title">
-  <en>Mail System Test Page</en>
-</TITLE1>
-
-<domain type="text" value="colosa.com">
-  <en>Domain</en>
-</domain>
-
-<to_email type="text" size="40" default="">
-  <en>To:</en>
-</to_email>
-
-<from_name type="text" size="40" default="Test Sender">
-  <en>From Name:</en>
-</from_name>
-
-<from_email type="text" size="40" default="ian@colosa.com">
-  <en>From Email:</en>
-</from_email>
-
-<subject type="text" size="40" default="spool test">
-  <en>Subject:</en>
-</subject>
-
-<body type="textarea" rows="8" cols="45" default="This is a test message">
-  <en>File</en>
-</body>
-
-<BTN_SUBMIT type="submit">
-  <en>Send Email</en>
-</BTN_SUBMIT>
-
-</dynaForm>  
+  <TITLE1 type="title">
+    <en><![CDATA[Mail System Test Page]]></en>
+  </TITLE1>
+  <domain type="text" value="colosa.com">
+    <en><![CDATA[Domain]]></en>
+  </domain>
+  <to_email type="text" size="40" default="">
+    <en><![CDATA[To:]]></en>
+  </to_email>
+  <from_name type="text" size="40" default="Test Sender">
+    <en><![CDATA[From Name:]]></en>
+  </from_name>
+  <from_email type="text" size="40" default="ian@colosa.com">
+    <en><![CDATA[From Email:]]></en>
+  </from_email>
+  <subject type="text" size="40" default="spool test">
+    <en><![CDATA[Subject:]]></en>
+  </subject>
+  <body type="textarea" rows="8" cols="45" default="This is a test message">
+    <en><![CDATA[File]]></en>
+  </body>
+  <BTN_SUBMIT type="submit">
+    <en><![CDATA[Send Email]]></en>
+  </BTN_SUBMIT>
+</dynaForm>

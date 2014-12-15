@@ -88,6 +88,12 @@ abstract class BaseFields extends BaseObject implements Persistent
     protected $fld_key = 0;
 
     /**
+     * The value for the fld_table_index field.
+     * @var        int
+     */
+    protected $fld_table_index = 0;
+
+    /**
      * The value for the fld_foreign_key field.
      * @var        int
      */
@@ -239,6 +245,17 @@ abstract class BaseFields extends BaseObject implements Persistent
     {
 
         return $this->fld_key;
+    }
+
+    /**
+     * Get the [fld_table_index] column value.
+     * 
+     * @return     int
+     */
+    public function getFldTableIndex()
+    {
+
+        return $this->fld_table_index;
     }
 
     /**
@@ -517,6 +534,28 @@ abstract class BaseFields extends BaseObject implements Persistent
     } // setFldKey()
 
     /**
+     * Set the value of [fld_table_index] column.
+     * 
+     * @param      int $v new value
+     * @return     void
+     */
+    public function setFldTableIndex($v)
+    {
+
+        // Since the native PHP type for this column is integer,
+        // we will cast the input value to an int (if it is not).
+        if ($v !== null && !is_int($v) && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->fld_table_index !== $v || $v === 0) {
+            $this->fld_table_index = $v;
+            $this->modifiedColumns[] = FieldsPeer::FLD_TABLE_INDEX;
+        }
+
+    } // setFldTableIndex()
+
+    /**
      * Set the value of [fld_foreign_key] column.
      * 
      * @param      int $v new value
@@ -663,22 +702,24 @@ abstract class BaseFields extends BaseObject implements Persistent
 
             $this->fld_key = $rs->getInt($startcol + 9);
 
-            $this->fld_foreign_key = $rs->getInt($startcol + 10);
+            $this->fld_table_index = $rs->getInt($startcol + 10);
 
-            $this->fld_foreign_key_table = $rs->getString($startcol + 11);
+            $this->fld_foreign_key = $rs->getInt($startcol + 11);
 
-            $this->fld_dyn_name = $rs->getString($startcol + 12);
+            $this->fld_foreign_key_table = $rs->getString($startcol + 12);
 
-            $this->fld_dyn_uid = $rs->getString($startcol + 13);
+            $this->fld_dyn_name = $rs->getString($startcol + 13);
 
-            $this->fld_filter = $rs->getInt($startcol + 14);
+            $this->fld_dyn_uid = $rs->getString($startcol + 14);
+
+            $this->fld_filter = $rs->getInt($startcol + 15);
 
             $this->resetModified();
 
             $this->setNew(false);
 
             // FIXME - using NUM_COLUMNS may be clearer.
-            return $startcol + 15; // 15 = FieldsPeer::NUM_COLUMNS - FieldsPeer::NUM_LAZY_LOAD_COLUMNS).
+            return $startcol + 16; // 16 = FieldsPeer::NUM_COLUMNS - FieldsPeer::NUM_LAZY_LOAD_COLUMNS).
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Fields object", $e);
@@ -913,18 +954,21 @@ abstract class BaseFields extends BaseObject implements Persistent
                 return $this->getFldKey();
                 break;
             case 10:
-                return $this->getFldForeignKey();
+                return $this->getFldTableIndex();
                 break;
             case 11:
-                return $this->getFldForeignKeyTable();
+                return $this->getFldForeignKey();
                 break;
             case 12:
-                return $this->getFldDynName();
+                return $this->getFldForeignKeyTable();
                 break;
             case 13:
-                return $this->getFldDynUid();
+                return $this->getFldDynName();
                 break;
             case 14:
+                return $this->getFldDynUid();
+                break;
+            case 15:
                 return $this->getFldFilter();
                 break;
             default:
@@ -957,11 +1001,12 @@ abstract class BaseFields extends BaseObject implements Persistent
             $keys[7] => $this->getFldNull(),
             $keys[8] => $this->getFldAutoIncrement(),
             $keys[9] => $this->getFldKey(),
-            $keys[10] => $this->getFldForeignKey(),
-            $keys[11] => $this->getFldForeignKeyTable(),
-            $keys[12] => $this->getFldDynName(),
-            $keys[13] => $this->getFldDynUid(),
-            $keys[14] => $this->getFldFilter(),
+            $keys[10] => $this->getFldTableIndex(),
+            $keys[11] => $this->getFldForeignKey(),
+            $keys[12] => $this->getFldForeignKeyTable(),
+            $keys[13] => $this->getFldDynName(),
+            $keys[14] => $this->getFldDynUid(),
+            $keys[15] => $this->getFldFilter(),
         );
         return $result;
     }
@@ -1024,18 +1069,21 @@ abstract class BaseFields extends BaseObject implements Persistent
                 $this->setFldKey($value);
                 break;
             case 10:
-                $this->setFldForeignKey($value);
+                $this->setFldTableIndex($value);
                 break;
             case 11:
-                $this->setFldForeignKeyTable($value);
+                $this->setFldForeignKey($value);
                 break;
             case 12:
-                $this->setFldDynName($value);
+                $this->setFldForeignKeyTable($value);
                 break;
             case 13:
-                $this->setFldDynUid($value);
+                $this->setFldDynName($value);
                 break;
             case 14:
+                $this->setFldDynUid($value);
+                break;
+            case 15:
                 $this->setFldFilter($value);
                 break;
         } // switch()
@@ -1102,23 +1150,27 @@ abstract class BaseFields extends BaseObject implements Persistent
         }
 
         if (array_key_exists($keys[10], $arr)) {
-            $this->setFldForeignKey($arr[$keys[10]]);
+            $this->setFldTableIndex($arr[$keys[10]]);
         }
 
         if (array_key_exists($keys[11], $arr)) {
-            $this->setFldForeignKeyTable($arr[$keys[11]]);
+            $this->setFldForeignKey($arr[$keys[11]]);
         }
 
         if (array_key_exists($keys[12], $arr)) {
-            $this->setFldDynName($arr[$keys[12]]);
+            $this->setFldForeignKeyTable($arr[$keys[12]]);
         }
 
         if (array_key_exists($keys[13], $arr)) {
-            $this->setFldDynUid($arr[$keys[13]]);
+            $this->setFldDynName($arr[$keys[13]]);
         }
 
         if (array_key_exists($keys[14], $arr)) {
-            $this->setFldFilter($arr[$keys[14]]);
+            $this->setFldDynUid($arr[$keys[14]]);
+        }
+
+        if (array_key_exists($keys[15], $arr)) {
+            $this->setFldFilter($arr[$keys[15]]);
         }
 
     }
@@ -1170,6 +1222,10 @@ abstract class BaseFields extends BaseObject implements Persistent
 
         if ($this->isColumnModified(FieldsPeer::FLD_KEY)) {
             $criteria->add(FieldsPeer::FLD_KEY, $this->fld_key);
+        }
+
+        if ($this->isColumnModified(FieldsPeer::FLD_TABLE_INDEX)) {
+            $criteria->add(FieldsPeer::FLD_TABLE_INDEX, $this->fld_table_index);
         }
 
         if ($this->isColumnModified(FieldsPeer::FLD_FOREIGN_KEY)) {
@@ -1263,6 +1319,8 @@ abstract class BaseFields extends BaseObject implements Persistent
         $copyObj->setFldAutoIncrement($this->fld_auto_increment);
 
         $copyObj->setFldKey($this->fld_key);
+
+        $copyObj->setFldTableIndex($this->fld_table_index);
 
         $copyObj->setFldForeignKey($this->fld_foreign_key);
 

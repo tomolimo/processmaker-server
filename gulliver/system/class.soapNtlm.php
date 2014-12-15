@@ -218,7 +218,7 @@ class soapNtlm
 
 class NTLMSoapClient extends SoapClient
 {
-    function __doRequest ($request, $location, $action, $version)
+    function __doRequest ($request, $location, $action, $version, $one_way = 0)
     {
         $headers = array ('Method: POST','Connection: Keep-Alive','User-Agent: PHP-SOAP-CURL','Content-Type: text/xml; charset=utf-8','SOAPAction: "' . $action . '"');
 

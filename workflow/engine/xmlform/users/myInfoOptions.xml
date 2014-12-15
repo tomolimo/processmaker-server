@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="myInfoOptions" type="xmlmenu">
-<MNU_EDIT type="link" value="" link="myInfo_Edit" onclick="" colAlign="right" colWidth="135">
-  <en>Edit</en>
-</MNU_EDIT>
-<js type="javascript"><![CDATA[
+  <MNU_EDIT type="link" value="" link="myInfo_Edit" onclick="" colAlign="right" colWidth="135">
+    <en><![CDATA[Edit]]></en>
+  </MNU_EDIT>
+  <js type="javascript"><![CDATA[
 function changeToEditMode(){
   document.forms[0].parentNode.parentNode.parentNode.style.display='none';
   document.forms[1].parentNode.parentNode.parentNode.style.display='';
@@ -11,4 +11,4 @@ function changeToEditMode(){
   document.forms[1].parentNode.style.display='';
 }
 ]]></js>
-</dynaForm> 
+</dynaForm>

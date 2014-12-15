@@ -1,30 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="xmlform" name="dynaformAssignVariables" width="450" enableTemplate="1">
-<PRO_UID type="hidden"/>
-<DYN_UID type="hidden"/>
-<DYN_TITLE type="hidden"/>
-<DYN_TYPE type="hidden"/>
-<ACTION type="hidden"/>
-<VALIDATION_MESSAGE type="hidden"/>
-<DYN_DESCRIPTION type="hidden"/>
-<ADD_TABLE type="hidden"/>
-
-<FIELDS type="grid" xmlgrid="dynaforms/dynaforms_AssignVariablesGrid" addrow="0" deleterow="0" mode="edit" />
-
-<SAVE_FROM_PMTABLE type="button" onclick="validatePKFields (this.form,'save');">
-  <en>Save </en>
-</SAVE_FROM_PMTABLE>
-
-<SAVE_AND_OPEN_FROM_PMTABLE type="button" onclick="validatePKFields (this.form,'saveAndOpen');">
-  <en><![CDATA[Save & Open]]></en>
-</SAVE_AND_OPEN_FROM_PMTABLE>
-
-<!-- BTN_CANCEL type="button" onclick="cancel();">
+  <PRO_UID type="hidden"/>
+  <DYN_UID type="hidden"/>
+  <DYN_TITLE type="hidden"/>
+  <DYN_TYPE type="hidden"/>
+  <ACTION type="hidden"/>
+  <VALIDATION_MESSAGE type="hidden"/>
+  <DYN_DESCRIPTION type="hidden"/>
+  <ADD_TABLE type="hidden"/>
+  <FIELDS type="grid" xmlgrid="dynaforms/dynaforms_AssignVariablesGrid" addrow="0" deleterow="0" mode="edit"/>
+  <SAVE_FROM_PMTABLE type="button" onclick="validatePKFields (this.form,'save');">
+    <en><![CDATA[Save]]></en>
+  </SAVE_FROM_PMTABLE>
+  <SAVE_AND_OPEN_FROM_PMTABLE type="button" onclick="validatePKFields (this.form,'saveAndOpen');">
+    <en><![CDATA[Save & Open]]></en>
+  </SAVE_AND_OPEN_FROM_PMTABLE>
+  <!-- BTN_CANCEL type="button" onclick="cancel();">
   <en>Cancel</en>
 </BTN_CANCEL //-->
-
-<JSCRIPT type="javascript">
-<![CDATA[
+  <JSCRIPT type="javascript"><![CDATA[
 // function that validates the primary keys in a grid for the Elements 
 function validatePKFields (formElement, value){
     
@@ -127,6 +121,5 @@ function cancel(){
     oPanel.remove();
 }
 
-]]>
-</JSCRIPT>
-</dynaForm> 
+]]></JSCRIPT>
+</dynaForm>

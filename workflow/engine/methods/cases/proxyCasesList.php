@@ -29,6 +29,9 @@ $first = isset( $_POST["first"] ) ? true :false;
 if ($sort == 'CASE_SUMMARY' || $sort == 'CASE_NOTES_COUNT') {
     $sort = 'APP_NUMBER';//DEFAULT VALUE
 }
+if ($sort == 'APP_STATUS_LABEL') {
+    $sort = 'APP_STATUS';
+}
 
 try {
     $userUid = (isset($_SESSION["USER_LOGGED"]) && $_SESSION["USER_LOGGED"] != "")? $_SESSION["USER_LOGGED"] : null;

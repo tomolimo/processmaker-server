@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="xmlform" name="conditionalShowHide" width="350" enabletemplate="0" mode="edit">
   <title1 type="title">
-  	<en>Test values for DynaForm fields</en>
+    <en><![CDATA[Test values for DynaForm fields]]></en>
   </title1>
   <gFields type="grid" xmlgrid="dynaforms/dynaforms_ConditionalShowHideTestGrid" addrow="0" deleterow="0"/>
-  
   <save type="button" onclick="oConditional.createConditionVariablesFromSetup()">
-  	<en>Save values</en>
+    <en><![CDATA[Save values]]></en>
   </save>
-  
   <js1 type="javascript">
   	
   		oConditional.populateTestConditionSetup();
   	
   </js1>
-</dynaForm> 
+</dynaForm>
