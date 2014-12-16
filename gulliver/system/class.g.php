@@ -303,7 +303,7 @@ class G
     /**
      * ************* path functions ****************
      */
-    public function mk_dir ($strPath, $rights = 0770)
+    public static function mk_dir ($strPath, $rights = 0770)
     {
         $folder_path = array ($strPath);
         $oldumask = umask( 0 );
@@ -444,7 +444,7 @@ class G
      * @param string $strPath
      * @return string
      */
-    public function expandPath ($strPath = '')
+    public static function expandPath ($strPath = '')
     {
         $res = "";
         $res = PATH_CORE;
@@ -462,7 +462,7 @@ class G
      * @param string $strClass
      * @return void
      */
-    public function LoadSystem ($strClass)
+    public static function LoadSystem ($strClass)
     {
         require_once (PATH_GULLIVER . 'class.' . $strClass . '.php');
     }
@@ -1068,7 +1068,7 @@ class G
      * @param string $downloadFileName
      * @return string
      */
-    public function streamFile ($file, $download = false, $downloadFileName = '')
+    public static function streamFile ($file, $download = false, $downloadFileName = '')
     {
         require_once (PATH_THIRDPARTY . 'jsmin/jsmin.php');
         $folderarray = explode( '/', $file );
@@ -1403,7 +1403,7 @@ class G
      *
      * @return string $ret
      */
-    public function getformatedDate ($date, $format = 'yyyy-mm-dd', $lang = '')
+    public static function getformatedDate ($date, $format = 'yyyy-mm-dd', $lang = '')
     {
         /**
          * ******************************************************************************************************
@@ -1528,7 +1528,7 @@ class G
      * @author Erik Amaru Ortiz <erik@colosa.com>
      * @name complete_field($string, $lenght, $type={1:number/2:string/3:float})
      */
-    public function complete_field ($campo, $long, $tipo)
+    public static function complete_field ($campo, $long, $tipo)
     {
         $campo = trim( $campo );
         switch ($tipo) {
@@ -2078,7 +2078,7 @@ class G
      * @param eter array data // erik: associative array within data input to replace for formatted string i.e "any messsage {replaced_label} that contains a replace label"
      * @return string
      */
-    public function LoadTranslation ($msgID, $lang = SYS_LANG, $data = null)
+    public static function LoadTranslation ($msgID, $lang = SYS_LANG, $data = null)
     {
         global $translation;
 
@@ -2296,7 +2296,7 @@ class G
      * @param string $sText
      * @return string strtolower($sText)
      */
-    public function toLower ($sText)
+    public static function toLower ($sText)
     {
         return strtolower( $sText );
     }
@@ -2340,7 +2340,7 @@ class G
      * @param string $parameter
      * @return string
      */
-    public function header ($parameter)
+    public static function header ($parameter)
     {
         if (defined( 'ENABLE_ENCRYPT' ) && (ENABLE_ENCRYPT == 'yes') && (substr( $parameter, 0, 9 ) == 'location:')) {
             $url = G::encryptUrl( substr( $parameter, 10 ), URL_KEY );
@@ -2609,7 +2609,7 @@ class G
      * @param integer $permission
      * @return void
      */
-    public function uploadFile ($file, $path, $nameToSave, $permission = 0660)
+    public static function uploadFile ($file, $path, $nameToSave, $permission = 0755)
     {
         try {
             if ($file == '') {
@@ -2746,7 +2746,7 @@ class G
      * @access public
      * @return int
      */
-    public function generateUniqueID ()
+    public static function generateUniqueID ()
     {
         do {
             $sUID = str_replace( '.', '0', uniqid( rand( 0, 999999999 ), true ) );
@@ -2918,7 +2918,11 @@ class G
      */
     public function unhtmlentities ($string)
     {
-        $trans_tbl = get_html_translation_table( HTML_ENTITIES );
+        if (version_compare(PHP_VERSION, '5.4.0', '<')) {
+            $trans_tbl = get_html_translation_table( HTML_ENTITIES );
+        } else {
+            $trans_tbl = get_html_translation_table( HTML_ENTITIES, ENT_COMPAT, 'ISO-8859-1' );
+        }
         foreach ($trans_tbl as $k => $v) {
             $ttr[$v] = utf8_encode( $k );
         }
@@ -3618,7 +3622,7 @@ class G
      * @param $pattern pattern to filter some especified files
      * @return <array> array containing the recursive glob results
      */
-    public function rglob($pattern = '*', $flags = 0, $path = '')
+    public static function rglob($pattern = '*', $flags = 0, $path = '')
     {
         $paths = glob($path.'*', GLOB_MARK|GLOB_ONLYDIR|GLOB_NOSORT);
         $files = glob($path.$pattern, $flags);
@@ -4374,6 +4378,7 @@ class G
         $bname = 'Unknown';
         $platform = 'Unknown';
         $version = "";
+        $ub = "other";
 
         //First get the platform?
         if (preg_match( '/linux/i', $u_agent )) {
@@ -4385,29 +4390,31 @@ class G
         }
 
         // Next get the name of the useragent yes seperately and for good reason
-        if (preg_match( '/MSIE/i', $u_agent ) && ! preg_match( '/Opera/i', $u_agent )) {
+        if ((preg_match('~Trident/7.0; rv:11.0~', $u_agent) || preg_match( '/MSIE/i', $u_agent )) && ! preg_match( '/Opera/i', $u_agent )) {
             $bname = 'Internet Explorer';
             $ub = "MSIE";
         } elseif (preg_match( '/Firefox/i', $u_agent )) {
             $bname = 'Mozilla Firefox';
             $ub = "Firefox";
+        } elseif ((preg_match( '/Opera/i', $u_agent )) || (preg_match( '/OPR/i', $u_agent ))) {
+            $bname = 'Opera';
+            $ub = "Opera";
         } elseif (preg_match( '/Chrome/i', $u_agent )) {
             $bname = 'Google Chrome';
             $ub = "Chrome";
         } elseif (preg_match( '/Safari/i', $u_agent )) {
             $bname = 'Apple Safari';
             $ub = "Safari";
-        } elseif (preg_match( '/Opera/i', $u_agent )) {
-            $bname = 'Opera';
-            $ub = "Opera";
         } elseif (preg_match( '/Netscape/i', $u_agent )) {
             $bname = 'Netscape';
             $ub = "Netscape";
+        } elseif (preg_match( '/bingbot/i', $u_agent )) {
+            $bname = 'Bing Bot';
+            $ub = "bingbot";
         }
 
         // finally get the correct version number
-        $known = array ('Version',$ub,'other'
-        );
+        $known = array ('Version',$ub,'other');
         $pattern = '#(?P<browser>' . join( '|', $known ) . ')[/ ]+(?P<version>[0-9.|a-zA-Z.]*)#';
         @preg_match_all( $pattern, $u_agent, $matches );
 
@@ -4419,7 +4426,7 @@ class G
             if (strripos( $u_agent, "Version" ) < strripos( $u_agent, $ub )) {
                 $version = $matches['version'][0];
             } else {
-                $version = $matches['version'][1];
+                $version = isset($matches['version'][1]) ? $matches['version'][1] : '';
             }
         } else {
             $version = $matches['version'][0];
@@ -4427,7 +4434,19 @@ class G
 
         // check if we have a number
         if ($version == null || $version == "") {
-            $version = "?";
+        	if($ub == 'MSIE'){
+        		$parent = 'RV';
+        	} elseif ($ub == 'Opera'){
+        		$parent = 'OPR';
+        	}
+        	if (isset($parent) && $parent != ""){
+        		$s = strpos(strtoupper($u_agent), $parent);
+        		$f = $s + strlen($parent);
+        		$version = substr($u_agent, $f, 15);
+        		$version = preg_replace('/[^0-9,.]/','',$version);
+            }else {
+                $version = "?";
+        	}
         }
 
         return array ('userAgent' => $u_agent,'name' => strtolower( $ub ),'longName' => $bname,'version' => $version,'platform' => $platform,'pattern' => $pattern
@@ -5260,15 +5279,53 @@ class G
      * @param type $pathData
      * @param type $file
      */
-    public function log($message, $pathData = PATH_DATA, $file = 'cron.log')
+    public static function log($message, $pathData = PATH_DATA, $file = 'cron.log')
     {
         $config = System::getSystemConfiguration();
         G::LoadSystem('logger');
 
-        $oLogger =& Logger::getSingleton($pathData, PATH_SEP, $file);
+        $oLogger = Logger::getSingleton($pathData, PATH_SEP, $file);
         $oLogger->limitFile = $config['number_log_file'];
         $oLogger->limitSize = $config['size_log_file'];
         $oLogger->write($message);
+    }
+
+    /**
+    */
+    public static function auditLog($actionToLog, $valueToLog = "")
+    {
+	    $workspace = defined('SYS_SYS') ? SYS_SYS : 'Wokspace Undefined';
+        $oServerConf = & serverConf::getSingleton();
+        $sflagAudit = $oServerConf->getAuditLogProperty( 'AL_OPTION', $workspace );
+        $ipClient = G::getIpAddress();
+
+        $licensedFeatures = PMLicensedFeatures::getSingleton();
+        if ($sflagAudit && $licensedFeatures->verifyfeature('vtSeHNhT0JnSmo1bTluUVlTYUxUbUFSVStEeXVqc1pEUG5EeXc0MGd2Q3ErYz0=')) {
+            $username = isset($_SESSION['USER_LOGGED']) && $_SESSION['USER_LOGGED'] != '' ? $_SESSION['USER_LOGGED'] : 'Unknow User';
+            $fullname = isset($_SESSION['USR_FULLNAME']) && $_SESSION['USR_FULLNAME'] != '' ? $_SESSION['USR_FULLNAME'] : '-';
+            G::log("|". $workspace ."|". $ipClient ."|". $username . "|" . $fullname ."|" . $actionToLog . "|" . $valueToLog, PATH_DATA, "audit.log");
+        }
+    }
+
+    /**
+     * Changes all keys in an array and sub-arrays
+     *
+     * @param array $arrayData The array to work on
+     * @param int   $case      Either CASE_UPPER or CASE_LOWER (default)
+     *
+     * return array Returns an array with its keys lower or uppercased, or false if $arrayData is not an array
+     */
+    public static function array_change_key_case2($arrayData, $case = CASE_LOWER)
+    {
+        $arrayData = array_change_key_case($arrayData, $case);
+
+        foreach ($arrayData as $key => $value) {
+            if (is_array($value)) {
+                $arrayData[$key] = self::array_change_key_case2($value, $case);
+            }
+        }
+
+        return $arrayData;
     }
 
     public static function buildFrom($configuration, $from = '') {
@@ -5307,6 +5364,194 @@ class G
         }
         return $from;
     }
+
+    public function getRealExtension($extensionInpDoc) {
+        $aux = explode('.', strtolower($extensionInpDoc));
+        return isset($aux[1]) ? $aux[1] : '';
+    }
+
+   /**
+    * Verify the InputDoc extension, cheking the file name extension (.pdf, .ppt) and the file content.
+    *
+    *
+    *
+    */
+    public function verifyInputDocExtension($InpDocAllowedFiles, $fileName, $filesTmpName)
+    {
+        // Initialize variables
+        $res = new stdclass();
+        $allowedTypes = array_map('G::getRealExtension', explode(', ', $InpDocAllowedFiles));
+
+        // If required extension is *.* don't validate
+        if (in_array('*', $allowedTypes)) {
+            $res->status = true;
+            return $res;
+        }
+
+        // Get the file extension
+        $aux = pathinfo($fileName);
+        $fileExtension = isset($aux['extension']) ? strtolower($aux['extension']) : '';
+
+        // If no valid extension finish (unnecesary check file content)
+        $validExtension = in_array($fileExtension, $allowedTypes);
+        if (!$validExtension) {
+            $res->status = false;
+            $res->message = G::LoadTranslation('ID_UPLOAD_ERR_NOT_ALLOWED_EXTENSION' ) . ' ' . $fileName;
+            return $res;
+        }
+
+        // If not enabled fileinfo extension finish validation
+        if (!extension_loaded('fileinfo')) {
+            $res->status = true;
+            return $res;
+        }
+
+        // If enabled fileinfo extension check the content
+        $finfo = new finfo(FILEINFO_MIME_TYPE);
+        $mimeType = $finfo->file($filesTmpName);
+        $docType = explode('/', $mimeType);
+
+        // If is a empty file finish validation
+        if ($docType[1] == 'x-empty') {
+            $res->status = true;
+            return $res;
+        }
+
+        // Check file content
+        foreach ($allowedTypes as $allowedType) {
+            switch ($allowedType) {
+                case 'xls':
+                    if ($docType[1] == 'vnd.ms-excel' || ($fileExtension == 'xls' && $docType[1] == 'plain')) {
+                        $res->status = true;
+                        return $res;
+                    }
+                    break;
+                case 'doc':
+                    if ($docType[1] == 'msword' || ($fileExtension == 'doc' && $docType[1] == 'html')) {
+                        $res->status = true;
+                        return $res;
+                    }
+                    break;
+                case 'ppt':
+                    if ($docType[1] == 'vnd.ms-office') {
+                        $res->status = true;
+                        return $res;
+                    }
+                    break;
+                case 'docx':
+                case 'pptx':
+                case 'xlsx':
+                    if ($docType[1] == 'zip') {
+                        $res->status = true;
+                        return $res;
+                    }
+                    break;
+                case 'exe':
+                case 'wmv':
+                    if($docType[1] == 'octet-stream'){
+                        $res->status = true;
+                        return $res;
+                    }
+                    break;
+                case 'jpg':
+                    if ($docType[1] == 'jpeg'){
+                        $res->status = true;
+                        return $res;
+                    }
+                    break;
+                case 'mp3':
+                    if ($docType[1] == 'mpeg'){
+                        $res->status = true;
+                        return $res;
+                    }
+                    break;
+                case 'rar':
+                    if ($docType[1] == 'x-rar'){
+                        $res->status = true;
+                        return $res;
+                    }
+                    break;
+                case 'txt':
+                case 'pm':
+                    if ($docType[1] == 'plain'){
+                        $res->status = true;
+                        return $res;
+                    }
+                    break;
+                case 'htm':
+                case 'html':
+                    if ($docType[1] == 'html'){
+                        $res->status = true;
+                        return $res;
+                    }
+                    break;
+                case 'po':
+                    if ($docType[1] == 'x-po'){
+                        $res->status = true;
+                        return $res;
+                    }
+                    break;
+                case 'pdf':
+                case 'png':
+                case 'jpeg':
+                case 'gif':
+                case 'zip':
+                case 'mp4':
+                    if ($docType[1] == $allowedType){
+                        $res->status = true;
+                        return $res;
+                    }
+                    break;
+                default:
+                    if ($validExtension) {
+                        $res->status = true;
+                        return $res;
+                    }
+                    break;
+            }
+        }
+
+        // If content don't match return error
+        $res->status = false;
+        $res->message = G::LoadTranslation('ID_UPLOAD_ERR_NOT_ALLOWED_EXTENSION' ) . ' ' . $fileName;
+        return $res;
+
+    }
+
+    /**
+    * Check the browser compativility
+    */
+	public function checkBrowserCompatibility($browser = null, $version = null){
+	    if($browser == null || $version == null){
+	    	$info = G::getBrowser();
+	    	$browser = $info['name'];
+	    	$version = $info['version'];
+	    }
+		if ((($browser== 'msie') && (($version >= 8) && ($version <= 11))) ||
+			(($browser== 'chrome') && ($version >= 26)) ||
+			(($browser== 'firefox') && ($version >= 20))
+		){
+			return true;
+		}
+		return false;
+    }
+
+    /*
+    *     $string       - The string to sanitize.
+    *     $lowercase    - Force the string to lowercase?
+    *     $alpha        - If set to *true*, will remove all non-alphanumeric characters.
+    */
+    public function sanitizeString ($string, $lowercase = true, $alpha = false)
+    {
+       $strip = array("~", "`", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "_", "=", "+", "[", "{", "]",
+                      "}", "\\", "|", ";", ":", "\"", "'", "&#8216;", "&#8217;", "&#8220;", "&#8221;", "&#8211;", "&#8212;",
+                      "â€”", "â€“", ",", "<", ".", ">", "/", "?");
+       $clean = trim(str_replace($strip, "", strip_tags($string)));
+       $clean = preg_replace('/\s+/', "-", $clean);
+       $clean = ($alpha) ? preg_replace("/[^a-zA-Z0-9]/", "", $clean) : $clean ;
+       $clean = ($lowercase) ? (function_exists('mb_strtolower')) ? mb_strtolower($clean, 'UTF-8') : strtolower($clean) : $clean;
+       return $clean;
+   }
 }
 
 /**

@@ -100,7 +100,7 @@ if ($fields['AUTH_SOURCE_PROVIDER'] == 'ldap') {
             G::LoadClass("pmFunctions");
 
             $data = executeQuery("DESCRIBE USERS");
-            $fieldSet = array("USR_UID", "USR_USERNAME", "USR_PASSWORD", "USR_EMAIL", "USR_CREATE_DATE", "USR_UPDATE_DATE", "USR_COUNTRY", "USR_CITY", "USR_LOCATION", "DEP_UID", "USR_RESUME", "USR_ROLE", "USR_REPORTS_TO", "USR_REPLACED_BY", "USR_UX");
+            $fieldSet = array("USR_UID", "USR_USERNAME", "USR_PASSWORD", "USR_CREATE_DATE", "USR_UPDATE_DATE", "USR_COUNTRY", "USR_CITY", "USR_LOCATION", "DEP_UID", "USR_RESUME", "USR_ROLE", "USR_REPORTS_TO", "USR_REPLACED_BY", "USR_UX");
             $attributes = null;
 
             foreach ($data as $value) {

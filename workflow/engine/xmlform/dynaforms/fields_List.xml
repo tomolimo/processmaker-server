@@ -1,29 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="fields_List" type="filterform" sql="" sqlConnection="" menu="dynaforms/fields_Options" width="100%" rowsPerPage="25">
-<XMLNODE_NAME type="text" colWidth="250" titleAlign="left" align="left" dataCompareField="XMLNODE_NAME" dataCompareType="contains">
-  <en>Field Name</en>
-</XMLNODE_NAME>
-
-<TYPE type="dropdown" colWidth="150" titleAlign="left" align="left" dataCompareField="TYPE" dataCompareType="=">
-
-  <en>Type<option name="title">Title</option><option name="subtitle">Subtitle</option><option name="text">Text</option><option name="password">Password</option><option name="textarea">Textarea</option><option name="currency">Currency</option><option name="percentage">Percentage</option><option name="date">Date</option><option name="yesno">Yes/No</option><option name="link">Link</option><option name="file">File</option><option name="checkbox">Checkbox</option><option name="button">Button</option><option name="reset">Reset</option><option name="submit">Submit</option><option name="hidden">Hidden</option><option name="dropdown">Dropdown</option><option name="listbox">Listbox</option><option name="radiogroup">Radios Group</option><option name="checkgroup">Checkboxes Group</option><option name="grid">Grid</option><option name="javascript">Javascript Code</option><option name="private">Private</option></en>
-</TYPE>
-
-<EDIT type="link" colWidth="40" value="@G::LoadTranslation(ID_EDIT)" link="#" onclick="fieldsEdit(@QXMLNODE_NAME);return false;"/>
-<DELETE type="link" colWidth="40" value="@G::LoadTranslation(ID_DELETE)" link="#" onclick="if (confirm(&#039;@G::LoadTranslation(ID_DELETE_FIELD_SURE)&#039;)) fieldsDelete(@QXMLNODE_NAME);return false;"><en></en></DELETE>
-<row__ type="private" showInTable="0"/>
-<UP1 type="link" colWidth="20" value="@#UP" link="#" onclick="changePosition(@QXMLNODE_NAME, @#row__-1);return false;"/>
-<DOWN1 type="link" colWidth="20" value="@#DOWN" link="#" onclick="changePosition(@QXMLNODE_NAME, @#row__+1);return false;"/>
-
-
-
-<SEARCH type="button" onclick="pagedTableFilter( this.form );" showInTable="0">
-  <en>Apply Filter</en>
-</SEARCH>
-<PAGED_TABLE_ID type="private" showInTable="0"/>
-<JSFILTER type="javascript" replaceTags="1" showInTable="0">
+  <XMLNODE_NAME type="text" colWidth="250" titleAlign="left" align="left" dataCompareField="XMLNODE_NAME" dataCompareType="contains">
+    <en><![CDATA[Field Name]]></en>
+  </XMLNODE_NAME>
+  <TYPE type="dropdown" colWidth="150" titleAlign="left" align="left" dataCompareField="TYPE" dataCompareType="=">
+    <en><![CDATA[Type]]><option name="title"><![CDATA[Title]]></option><option name="subtitle"><![CDATA[Subtitle]]></option><option name="text"><![CDATA[Text]]></option><option name="password"><![CDATA[Password]]></option><option name="textarea"><![CDATA[Textarea]]></option><option name="currency"><![CDATA[Currency]]></option><option name="percentage"><![CDATA[Percentage]]></option><option name="date"><![CDATA[Date]]></option><option name="yesno"><![CDATA[Yes/No]]></option><option name="link"><![CDATA[Link]]></option><option name="file"><![CDATA[File]]></option><option name="checkbox"><![CDATA[Checkbox]]></option><option name="button"><![CDATA[Button]]></option><option name="reset"><![CDATA[Reset]]></option><option name="submit"><![CDATA[Submit]]></option><option name="hidden"><![CDATA[Hidden]]></option><option name="dropdown"><![CDATA[Dropdown]]></option><option name="listbox"><![CDATA[Listbox]]></option><option name="radiogroup"><![CDATA[Radios Group]]></option><option name="checkgroup"><![CDATA[Checkboxes Group]]></option><option name="grid"><![CDATA[Grid]]></option><option name="javascript"><![CDATA[Javascript Code]]></option><option name="private"><![CDATA[Private]]></option></en>
+  </TYPE>
+  <EDIT type="link" colWidth="40" value="@G::LoadTranslation(ID_EDIT)" link="#" onclick="fieldsEdit(@QXMLNODE_NAME);return false;"/>
+  <DELETE type="link" colWidth="40" value="@G::LoadTranslation(ID_DELETE)" link="#" onclick="if (confirm('@G::LoadTranslation(ID_DELETE_FIELD_SURE)')) fieldsDelete(@QXMLNODE_NAME);return false;">
+    <en><![CDATA[]]></en>
+  </DELETE>
+  <row__ type="private" showInTable="0"/>
+  <UP1 type="link" colWidth="20" value="@#UP" link="#" onclick="changePosition(@QXMLNODE_NAME, @#row__-1);return false;"/>
+  <DOWN1 type="link" colWidth="20" value="@#DOWN" link="#" onclick="changePosition(@QXMLNODE_NAME, @#row__+1);return false;"/>
+  <SEARCH type="button" onclick="pagedTableFilter( this.form );" showInTable="0">
+    <en><![CDATA[Apply Filter]]></en>
+  </SEARCH>
+  <PAGED_TABLE_ID type="private" showInTable="0"/>
+  <JSFILTER type="javascript" replaceTags="1" showInTable="0">
 function pagedTableFilter( form ) {
   @#PAGED_TABLE_ID.doFilter( form );
 }
 </JSFILTER>
-</dynaForm> 
+</dynaForm>

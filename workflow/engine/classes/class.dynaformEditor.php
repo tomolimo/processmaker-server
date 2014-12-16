@@ -238,7 +238,7 @@ class dynaformEditor extends WebResource
         var DYNAFORM_URL="' . $Parameters['URL'] . '";
         leimnud.event.add(window,"load",function(){ loadEditor(); });
         ');
-        $oHeadPublisher->addScriptCode(' var jsMeta;var __usernameLogged__ = "' . (isset($_SESSION['USR_USERNAME']) ? $_SESSION['USR_USERNAME'] : '') . '";var SYS_LANG = "' . SYS_LANG . '";var __DYN_UID__ = "' . $this->dyn_uid . '";');
+        $oHeadPublisher->addScriptCode(' var jsMeta;var __usernameLoggedDE__ = "' . (isset($_SESSION['USR_USERNAME']) ? $_SESSION['USR_USERNAME'] : '') . '";var SYS_LANG = "' . SYS_LANG . '";var __DYN_UID__ = "' . $this->dyn_uid . '";');
 
         $arrayParameterAux = $Parameters;
         $arrayParameterAux["DYNAFORM_NAME"] = base64_encode($arrayParameterAux["DYNAFORM_NAME"]);

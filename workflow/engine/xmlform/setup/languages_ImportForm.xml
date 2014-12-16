@@ -1,21 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="languages_ImportForm" type="xmlform" width="500" height="75%" labelWidth="30%" enableTemplate="1">
-
   <TITLE1 type="title">
-    <en>Import or Update Language</en>
+    <en><![CDATA[Import or Update Language]]></en>
   </TITLE1>
-
   <LANGUAGE_FILENAME type="file">
-    <en>File</en>
+    <en><![CDATA[File]]></en>
   </LANGUAGE_FILENAME>
-
   <IMPORT type="button" onclick="verifyPOFile(this.form);">
-    <en>Import</en>
+    <en><![CDATA[Import]]></en>
   </IMPORT>
   <BTN_CANCEL type="button" onclick="cancel();">
-    <en>Cancel</en>
+    <en><![CDATA[Cancel]]></en>
   </BTN_CANCEL>
-
   <JS type="javascript"><![CDATA[
   var verifyPOFile = function(oForm) {
     if (document.getElementById('form[LANGUAGE_FILENAME]').value != '') {
@@ -30,5 +26,4 @@
     window.location = 'languages';
   }  
   ]]></JS>
-
-</dynaForm>  
+</dynaForm>

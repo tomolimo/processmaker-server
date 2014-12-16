@@ -1,39 +1,34 @@
-<?xml version="1.0" encoding="UTF-8"?> 
+<?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="pagetable" menu="users/users_Options" searchBy="USR_USERNAME | USR_LASTNAME | USR_FIRSTNAME | USR_EMAIL">
-<USR_UID type="private" showInTable="0"/>
-<USR_COMPLETENAME type="text" titlealign="left" align="left" colWidth="200">
-  <en>Full Name</en>
-</USR_COMPLETENAME>
-<USR_USERNAME type="text" titlealign="left" align="left" colWidth="120">
-  <en>Username</en>
-</USR_USERNAME>
-<USR_EMAIL type="text" titlealign="left" align="left" colWidth="190">
-  <en>E-Mail</en>
-</USR_EMAIL>
-<USR_ROLE type="text" titlealign="left" align="left" colWidth="180">
-  <en>Role</en>
-</USR_ROLE>
-<USR_DUE_DATE type="text" titlealign="left" align="left" colWidth="65">
-  <en>Due Date</en>
-</USR_DUE_DATE>
-
-<USR_EDIT type="link" colWidth="50" value="@#USR_EDIT" link="users_Edit?USR_UID=@#USR_UID">
-  <en/>
-</USR_EDIT>
-<USR_GROUP type="link" colWidth="25" value="@G::LoadTranslation(ID_VIEW_USER_GROUP)" link="#" onclick="viewUserGroups(&#039;@#USR_UID&#039;);return false;">
-  <en/>
-</USR_GROUP>
-
-<USR_AUTH type="link" colWidth="25" value="@#USR_AUTH" link="users_AuthSource?USR_UID=@#USR_UID">
-  <en/>
-</USR_AUTH>
-<!--USR_REASSIGN type="link" colWidth="100" value="@#USR_REASSIGN" link="#" onclick="reassignCases2(&#039;@#USR_UID&#039;);return false;">
+  <USR_UID type="private" showInTable="0"/>
+  <USR_COMPLETENAME type="text" titlealign="left" align="left" colWidth="200">
+    <en><![CDATA[Full Name]]></en>
+  </USR_COMPLETENAME>
+  <USR_USERNAME type="text" titlealign="left" align="left" colWidth="120">
+    <en><![CDATA[Username]]></en>
+  </USR_USERNAME>
+  <USR_EMAIL type="text" titlealign="left" align="left" colWidth="190">
+    <en><![CDATA[E-Mail]]></en>
+  </USR_EMAIL>
+  <USR_ROLE type="text" titlealign="left" align="left" colWidth="180">
+    <en><![CDATA[Role]]></en>
+  </USR_ROLE>
+  <USR_DUE_DATE type="text" titlealign="left" align="left" colWidth="65">
+    <en><![CDATA[Due Date]]></en>
+  </USR_DUE_DATE>
+  <USR_EDIT type="link" colWidth="50" value="@#USR_EDIT" link="users_Edit?USR_UID=@#USR_UID">
+    <en><![CDATA[]]></en>
+  </USR_EDIT>
+  <USR_GROUP type="link" colWidth="25" value="@G::LoadTranslation(ID_VIEW_USER_GROUP)" link="#" onclick="viewUserGroups('@#USR_UID');return false;">
+    <en><![CDATA[]]></en>
+  </USR_GROUP>
+  <USR_AUTH type="link" colWidth="25" value="@#USR_AUTH" link="users_AuthSource?USR_UID=@#USR_UID">
+    <en><![CDATA[]]></en>
+  </USR_AUTH>
+  <!--USR_REASSIGN type="link" colWidth="100" value="@#USR_REASSIGN" link="#" onclick="reassignCases2(&#039;@#USR_UID&#039;);return false;">
   <en/>
 </USR_REASSIGN-->
-
-<USR_DELETE type="link" colWidth="25" value="@#USR_DELETE" link="#" onclick="deleteUser(&#039;@#USR_UID&#039;);return false;">
-  <en/>
-</USR_DELETE>
-
-
+  <USR_DELETE type="link" colWidth="25" value="@#USR_DELETE" link="#" onclick="deleteUser('@#USR_UID');return false;">
+    <en><![CDATA[]]></en>
+  </USR_DELETE>
 </dynaForm>

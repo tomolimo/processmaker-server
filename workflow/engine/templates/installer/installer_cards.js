@@ -56,11 +56,12 @@ Ext.onReady(function(){
         Ext.getCmp('gd').setValue        (getFieldOutput(response.gd.version,       response.gd.result));
         Ext.getCmp('multibyte').setValue (getFieldOutput(response.multibyte.version,response.multibyte.result));
         Ext.getCmp('soap').setValue      (getFieldOutput(response.soap.version,     response.soap.result));
+        Ext.getCmp("mcrypt").setValue    (getFieldOutput(response.mcrypt.version,   response.mcrypt.result));
         Ext.getCmp('ldap').setValue      (getFieldOutput(response.ldap.version,     response.ldap.result));
         Ext.getCmp('memory').setValue    (getFieldOutput(response.memory.version,   response.memory.result));
 
         dbReq  = response.mysql.result || response.mssql.result;
-        phpReq = response.php.result && response.curl.result && response.dom.result && response.gd.result && response.multibyte.result && response.soap.result && response.memory.result;
+        phpReq = response.php.result && response.curl.result && response.dom.result && response.gd.result && response.multibyte.result && response.soap.result && response.memory.result && response.mcrypt.result;
         wizard.onClientValidation(0, dbReq && phpReq);
         wizard.showLoadMask(false);
       },
@@ -192,16 +193,6 @@ Ext.onReady(function(){
       wizard.onClientValidation(4, false);
       return;
     }
-    if (!Ext.getCmp('rbDatabase').isValid()) {
-      Ext.getCmp('finish_message').setValue(getFieldOutput(_('ID_RBAC_DATABASE_NAME'), false));
-      wizard.onClientValidation(4, false);
-      return;
-    }
-    if (!Ext.getCmp('rpDatabase').isValid()) {
-      Ext.getCmp('finish_message').setValue(getFieldOutput(_('ID_REPORT_DATABASE_NAME'), false));
-      wizard.onClientValidation(4, false);
-      return;
-    }
     checkDatabases();
   }
 
@@ -214,10 +205,8 @@ Ext.onReady(function(){
         var noExistsMsg = '<span style="color: green;">' + _('ID_NO_EXIST') + '</span>';
         var response = Ext.util.JSON.decode(response.responseText);
         Ext.get('wfDatabaseSpan').dom.innerHTML = (response.wfDatabaseExists ? existMsg : noExistsMsg);
-        Ext.get('rbDatabaseSpan').dom.innerHTML = (response.rbDatabaseExists ? existMsg : noExistsMsg);
-        Ext.get('rpDatabaseSpan').dom.innerHTML = (response.rpDatabaseExists ? existMsg : noExistsMsg);
 
-        var dbFlag = ((!response.wfDatabaseExists && !response.rbDatabaseExists && !response.rpDatabaseExists) || Ext.getCmp('deleteDB').getValue());
+        var dbFlag = ((!response.wfDatabaseExists) || Ext.getCmp('deleteDB').getValue());
         wizard.onClientValidation(4, dbFlag);
 
         if (dbFlag) {
@@ -237,8 +226,6 @@ Ext.onReady(function(){
         'db_password': Ext.getCmp('db_password').getValue(),
         'db_port'    : Ext.getCmp('db_port').getValue(),
         'wfDatabase' : Ext.getCmp('wfDatabase').getValue(),
-        'rbDatabase' : Ext.getCmp('rbDatabase').getValue(),
-        'rpDatabase' : Ext.getCmp('rpDatabase').getValue()
         }
     });
   }
@@ -321,6 +308,11 @@ Ext.onReady(function(){
                 xtype     : 'displayfield',
                 fieldLabel: _('ID_PROCESSMAKER_REQUIREMENTS_SOAP'),
                 id  : 'soap'
+              },
+              {
+                   xtype: "displayfield",
+                   id: "mcrypt",
+                   fieldLabel: _("ID_MCRYPT_SUPPORT")
               },
               {
                 xtype     : 'displayfield',
@@ -444,7 +436,7 @@ Ext.onReady(function(){
               },
               {
                 xtype: 'textfield',
-                fieldLabel: '<span id="pathLogFileSpan"></span> ' + _('ID_INSTALLATION_LOG'),
+                fieldLabel: '<span id="pathLogFileSpan"></span> ' + _('ID_INSTALLATION_FILE_LOG'),
                 id: 'pathLogFile',
                 width: 430,
                 value: path_shared + 'log' + path_sep + 'install.log',
@@ -706,8 +698,6 @@ Ext.onReady(function(){
                       wizard.onClientValidation(4, false);
                       if (!Ext.getCmp('changeDBNames').getValue()) {
                         Ext.getCmp('wfDatabase').setValue('wf_' + this.getValue());
-                        Ext.getCmp('rbDatabase').setValue('rb_' + this.getValue());
-                        Ext.getCmp('rpDatabase').setValue('rp_' + this.getValue());
                       }
                     }}
                   },
@@ -762,19 +752,10 @@ Ext.onReady(function(){
                    handler: function() {
                      if (this.getValue()) {
                        Ext.getCmp('wfDatabase').enable();
-                       Ext.getCmp('rbDatabase').enable();
-                       Ext.getCmp('rpDatabase').enable();
                        Ext.getCmp('wfDatabase').validate();
-                       Ext.getCmp('rbDatabase').validate();
-                       Ext.getCmp('rpDatabase').validate();
-                     }
-                     else {
+                    } else {
                        Ext.getCmp('wfDatabase').setValue('wf_' + Ext.getCmp('workspace').getValue());
-                       Ext.getCmp('rbDatabase').setValue('rb_' + Ext.getCmp('workspace').getValue());
-                       Ext.getCmp('rpDatabase').setValue('rp_' + Ext.getCmp('workspace').getValue());
                        Ext.getCmp('wfDatabase').disable();
-                       Ext.getCmp('rbDatabase').disable();
-                       Ext.getCmp('rpDatabase').disable();
                      }
                      wizard.onClientValidation(4, false);
                    }
@@ -784,40 +765,6 @@ Ext.onReady(function(){
                     fieldLabel: _('ID_WF_DATABASE_NAME') + ' <span id="wfDatabaseSpan"></span>',
                     id : 'wfDatabase',
                     value  :'wf_workflow',
-                    allowBlank : false,
-                    maxLength: 32,
-                    validator  : function(v){
-                        var t = /^[a-zA-Z_0-9]+$/;
-                        return t.test(v);
-                    },
-                    disabled: true,
-                    enableKeyEvents: true,
-                    listeners: {keyup: function() {
-                      wizard.onClientValidation(4, false);
-                    }}
-                  },
-                  {
-                    xtype     : 'textfield',
-                    fieldLabel: _('ID_RB_DATABASE_NAME') + ' <span id="rbDatabaseSpan"></span>',
-                    id : 'rbDatabase',
-                    value  :'rb_workflow',
-                    allowBlank : false,
-                    maxLength: 32,
-                    validator  : function(v){
-                        var t = /^[a-zA-Z_0-9]+$/;
-                        return t.test(v);
-                    },
-                    disabled: true,
-                    enableKeyEvents: true,
-                    listeners: {keyup: function() {
-                      wizard.onClientValidation(4, false);
-                    }}
-                  },
-                  {
-                    xtype     : 'textfield',
-                    fieldLabel: _('ID_RP_DATABASE_NAME') + ' <span id="rpDatabaseSpan"></span>',
-                    id : 'rpDatabase',
-                    value  :'rp_workflow',
                     allowBlank : false,
                     maxLength: 32,
                     validator  : function(v){

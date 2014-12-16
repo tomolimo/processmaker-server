@@ -49,7 +49,7 @@ try {
     $aData['SCH_UID'] = G::generateUniqueID();
     $aData['SCH_NAME'] = $_POST['form']['SCH_NAME'];
     $aData['SCH_DEL_USER_NAME'] = $_POST['form']['SCH_USER_NAME'];
-    $aData['SCH_DEL_USER_PASS'] = md5( $_POST['form']['SCH_USER_PASSWORD'] );
+    $aData['SCH_DEL_USER_PASS'] = Bootstrap::hashPassword($_POST['form']['SCH_USER_PASSWORD']);
     $aData['SCH_DEL_USER_UID'] = $_POST['form']['SCH_USER_UID'];
     $aData['PRO_UID'] = $_POST['form']['PRO_UID'];
     $aData['TAS_UID'] = $_POST['form']['TAS_UID'];
@@ -158,19 +158,19 @@ try {
             $sValue = $nStartDay;
             break;
     }
-    echo "<br>sOption: " . $sOption;
+
     if (($sOption != '1') && ($sOption != '4') && ($sOption != '5')) {
         if ($sStartDay == '') {
             $sStartDay = date( 'Y-m-d' );
         }
-        //                echo $sOption."*". $sValue."*". $nActualTime."*". $sDaysPerformTask."*". $sWeeks."*". $sStartDay ."*". $sMonths."<br>";
-        $dCurrentDay = date( "d" );
-        $dCurrentMonth = date( "m" );
+
+        $dCurrentMonth = (int)(date("m"));
+        $dCurrentDay = (int)(date("d"));
         $aStartDay = explode( "|", $aData['SCH_START_DAY'] );
         if ($sOption == '3' && $aStartDay[0] == '1') {
             $monthsArray = explode( "|", $sMonths );
             foreach ($monthsArray as $row) {
-                if ($dCurrentMonth == $row && $dCurrentDay < $aStartDay[1]) {
+                if ((int)($row) == $dCurrentMonth && $dCurrentDay <= (int)($aStartDay[1])) {
                     $startTime = $_POST['form']['SCH_START_TIME'] . ":00";
                     $aData['SCH_TIME_NEXT_RUN'] = date( 'Y' ) . '-' . $row . '-' . $aStartDay[1] . ' ' . $startTime;
                     break;
@@ -181,8 +181,6 @@ try {
         } else {
             $aData['SCH_TIME_NEXT_RUN'] = $oCaseScheduler->updateNextRun( $sOption, $sValue, $nActualTime, $sDaysPerformTask, $sWeeks, $sStartDay, $sMonths, $sDateTmp );
         }
-        //                print_r ($aData['SCH_TIME_NEXT_RUN']);
-        //                die;
     } else {
         if ($sOption == '4') {
             $aData['SCH_END_DATE'] = $aData['SCH_START_TIME'];

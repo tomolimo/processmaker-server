@@ -77,7 +77,7 @@ class Autoloader
         $classname = strtolower($classname);
 
         if (! file_exists($includeFile)) {
-            throw new Exception("Error, Autoloader can't register a inexisten file: " . $includeFile);
+            throw new Exception("Error, Autoloader can't register a non exists file: " . $includeFile);
         }
 
         if (strpos($classname, '*') !== false) {

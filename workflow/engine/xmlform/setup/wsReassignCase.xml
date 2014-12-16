@@ -1,35 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="xmlform" name="webservices" width="500" mode="edit" border="0" enableTemplate="0" height="190px">
-
-<SESSION_ID type="text" size="36" maxlength="32">
-  <en>Session Id</en>
-</SESSION_ID>
-
-<CASE_ID type="dropdown" sqlConnection="dbarray">
+  <SESSION_ID type="text" size="36" maxlength="32">
+    <en><![CDATA[Session Id]]></en>
+  </SESSION_ID>
+  <CASE_ID type="dropdown" sqlConnection="dbarray">
   SELECT * from case
-  <en>Case ID</en>
+  <en><![CDATA[Case ID]]></en>
 </CASE_ID>
-
-<DEL_INDEX type="dropdown" sqlConnection="dbarray">
+  <DEL_INDEX type="dropdown" sqlConnection="dbarray">
   SELECT * from taskCases
-  <en>Delindex<option name="">Default</option></en>
+  <en><![CDATA[Delindex]]><option name=""><![CDATA[Default]]></option></en>
 </DEL_INDEX>
-                 
-<USERIDSOURCE type="dropdown" sqlConnection="dbarray">
+  <USERIDSOURCE type="dropdown" sqlConnection="dbarray">
   SELECT * from user
-  <en>User Source</en>
+  <en><![CDATA[User Source]]></en>
 </USERIDSOURCE>
-
-<USERIDTARGET type="dropdown" sqlConnection="dbarray">
+  <USERIDTARGET type="dropdown" sqlConnection="dbarray">
   SELECT * from user
-  <en>User Target</en>
+  <en><![CDATA[User Target]]></en>
 </USERIDTARGET>
-         
-<ACTION type="hidden">
+  <ACTION type="hidden">
 </ACTION>
-                                        
-<ACTIONB type="button" onclick="submitThisForm(this.form);">
-  <en>ReassignCase</en>
-</ACTIONB>
-
-</dynaForm>  
+  <ACTIONB type="button" onclick="submitThisForm(this.form);">
+    <en><![CDATA[ReassignCase]]></en>
+  </ACTIONB>
+</dynaForm>

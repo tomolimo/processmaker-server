@@ -34,7 +34,7 @@ CLI::taskDescription(<<<EOT
 EOT
 );
 //CLI::taskOpt("minify", "If the option is enabled, performs the build only with minified files", "min", "buildmin");
-CLI::taskRun(minify_javascript);
+CLI::taskRun("minify_javascript");
 
 function minify_javascript($command, $args)
 {

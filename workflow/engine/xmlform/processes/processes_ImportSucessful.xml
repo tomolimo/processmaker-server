@@ -1,37 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="processes_New" width="500px" labelWidth="90px" enableTemplate="0">
-
-
-<title type="title">
-  <en>Process sucessfully imported</en>
-</title>
-
-<pro_title type="caption" size="40">
-  <en>Process Title</en>
-</pro_title>
-<version type="caption" size="40">
-  <en>Version</en>
-</version>
-
-<category type="caption" size="40">
-  <en>Category</en>
-</category>
-
-<PRO_UID type="caption" size="40">
-  <en>Process Uid</en>
-</PRO_UID>
-
-<TITLE1 type="subtitle">
-  <en>Please follow these instructions to complete installation</en>
-</TITLE1>
-
-
-<installSteps type="caption" enableHtml="1">
-  <en/>
-</installSteps>
-
-<SUBMIT type="submit">
-  <en>Continue</en>
-</SUBMIT>
-
-</dynaForm>  
+  <title type="title">
+    <en><![CDATA[Process sucessfully imported]]></en>
+  </title>
+  <pro_title type="caption" size="40">
+    <en><![CDATA[Process Title]]></en>
+  </pro_title>
+  <version type="caption" size="40">
+    <en><![CDATA[Version]]></en>
+  </version>
+  <category type="caption" size="40">
+    <en><![CDATA[Category]]></en>
+  </category>
+  <PRO_UID type="caption" size="40">
+    <en><![CDATA[Process Uid]]></en>
+  </PRO_UID>
+  <TITLE1 type="subtitle">
+    <en><![CDATA[Please follow these instructions to complete installation]]></en>
+  </TITLE1>
+  <installSteps type="caption" enableHtml="1">
+    <en><![CDATA[]]></en>
+  </installSteps>
+  <SUBMIT type="submit">
+    <en><![CDATA[Continue]]></en>
+  </SUBMIT>
+</dynaForm>

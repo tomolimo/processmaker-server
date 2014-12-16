@@ -1,88 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="processes_New" width="600px" labelWidth="40%" enableTemplate="1">
-
-<THETITLE type="title" group="1">
-  <en>Configuration</en>
-</THETITLE>
-
-<MESS_ENABLED type="checkbox" value="1">
-  <en>Enable Email Notifications</en>
-</MESS_ENABLED>
-
-<MESS_ENGINE type="dropdown" sqlconnection="dbarray">
+  <THETITLE type="title" group="1">
+    <en><![CDATA[Configuration]]></en>
+  </THETITLE>
+  <MESS_ENABLED type="checkbox" value="1">
+    <en><![CDATA[Enable Email Notifications]]></en>
+  </MESS_ENABLED>
+  <MESS_ENGINE type="dropdown" sqlconnection="dbarray">
   select * from mails
-  <en>Email Engine</en>
+  <en><![CDATA[Email Engine]]></en>
 </MESS_ENGINE>
-
-<MESS_SERVER type="text" size="35" maxlength="100" required="true">
-  <en>Server</en>
-</MESS_SERVER>
-
-<MESS_PORT type="text" size="5" maxlength="5" validate="Int">
-  <en>Port (default 25)</en>
-</MESS_PORT>
-
-<MESS_RAUTH type="checkbox" value="1">
-  <en>Require authentication</en>
-</MESS_RAUTH>
-
-<MESS_ACCOUNT type="text" size="35" maxlength="50" validate="Email">
-  <en>SMTP Username</en>
-</MESS_ACCOUNT>
-
-<MESS_PASSWORD type="password" size="35" maxlength="50">
-  <en>SMTP Password</en>
-</MESS_PASSWORD>
-
-<MESS_PASSWORD_HIDDEN type="hidden" size="35" maxlength="100">
-  <en></en>
-</MESS_PASSWORD_HIDDEN>
-
-<MESS_TEST_MAIL type="checkbox" value="1">
-  <en>Send a test mail</en>
-</MESS_TEST_MAIL>
-
-<MESS_TEST_MAIL_TO type="text" size="35" maxlength="100" required="true">
-  <en>Mail to</en>
-</MESS_TEST_MAIL_TO>
-
-<SMTPSecure type="radiogroup" required="0" mode="edit" options="Array" viewAlign ="horizontal" defaultValue="none">
-  <en>Use Secure Connection  
-    <option name="none">No</option>
-    <option name="tls">TLS</option>
-    <option name="ssl">SSL</option>
-  </en>
-</SMTPSecure>
-
-<MESS_BACKGROUND type="checkbox" value="1">
-  <en>Run in the background</en>
-</MESS_BACKGROUND>
-
-<MESS_EXECUTE_EVERY type="text" size="5" maxlength="5" required="true" validate="Int" defaultValue="5">
-  <en>Execute every (in minutes)</en>
-</MESS_EXECUTE_EVERY>
-
-<MESS_SEND_MAX type="text" size="5" maxlength="5" required="true" validate="Int" defaultValue="50">
-  <en>Maximun number of mails sended by attempt</en>
-</MESS_SEND_MAX>
-
-<MESS_TRY_SEND_INMEDIATLY type="checkbox" value="1">
-  <en>Try send mails inmediatly</en>
-</MESS_TRY_SEND_INMEDIATLY>
-
-<TEST type="button" onclick="javascript:verifyFields();">
-  <en>Test</en>
-</TEST>
-
-<SAVE_CHANGES type="button" onclick="javascript:verifyData(this.form);">
-  <en>Save Changes</en>
-</SAVE_CHANGES>
-<SAVE_CHANGES2 type="button" onclick="javascript:verifyData(this.form);">
-  <en>Save Changes</en>
-</SAVE_CHANGES2>
-
-<JS type="javascript">
-  <![CDATA[
+  <MESS_SERVER type="text" size="35" maxlength="100" required="true">
+    <en><![CDATA[Server]]></en>
+  </MESS_SERVER>
+  <MESS_PORT type="text" size="5" maxlength="5" validate="Int">
+    <en><![CDATA[Port (default 25)]]></en>
+  </MESS_PORT>
+  <MESS_RAUTH type="checkbox" value="1">
+    <en><![CDATA[Require authentication]]></en>
+  </MESS_RAUTH>
+  <MESS_ACCOUNT type="text" size="35" maxlength="50" validate="Email">
+    <en><![CDATA[SMTP Username]]></en>
+  </MESS_ACCOUNT>
+  <MESS_PASSWORD type="password" size="35" maxlength="50">
+    <en><![CDATA[SMTP Password]]></en>
+  </MESS_PASSWORD>
+  <MESS_PASSWORD_HIDDEN type="hidden" size="35" maxlength="100">
+    <en/>
+  </MESS_PASSWORD_HIDDEN>
+  <MESS_TEST_MAIL type="checkbox" value="1">
+    <en><![CDATA[Send a test mail]]></en>
+  </MESS_TEST_MAIL>
+  <MESS_TEST_MAIL_TO type="text" size="35" maxlength="100" required="true">
+    <en><![CDATA[Mail to]]></en>
+  </MESS_TEST_MAIL_TO>
+  <SMTPSecure type="radiogroup" required="0" mode="edit" options="Array" viewAlign="horizontal" defaultValue="none">
+    <en><![CDATA[Use Secure Connection]]><option name="none"><![CDATA[No]]></option><option name="tls"><![CDATA[TLS]]></option><option name="ssl"><![CDATA[SSL]]></option></en>
+  </SMTPSecure>
+  <MESS_BACKGROUND type="checkbox" value="1">
+    <en><![CDATA[Run in the background]]></en>
+  </MESS_BACKGROUND>
+  <MESS_EXECUTE_EVERY type="text" size="5" maxlength="5" required="true" validate="Int" defaultValue="5">
+    <en><![CDATA[Execute every (in minutes)]]></en>
+  </MESS_EXECUTE_EVERY>
+  <MESS_SEND_MAX type="text" size="5" maxlength="5" required="true" validate="Int" defaultValue="50">
+    <en><![CDATA[Maximun number of mails sended by attempt]]></en>
+  </MESS_SEND_MAX>
+  <MESS_TRY_SEND_INMEDIATLY type="checkbox" value="1">
+    <en><![CDATA[Try send mails inmediatly]]></en>
+  </MESS_TRY_SEND_INMEDIATLY>
+  <TEST type="button" onclick="javascript:verifyFields();">
+    <en><![CDATA[Test]]></en>
+  </TEST>
+  <SAVE_CHANGES type="button" onclick="javascript:verifyData(this.form);">
+    <en><![CDATA[Save Changes]]></en>
+  </SAVE_CHANGES>
+  <SAVE_CHANGES2 type="button" onclick="javascript:verifyData(this.form);">
+    <en><![CDATA[Save Changes]]></en>
+  </SAVE_CHANGES2>
+  <JS type="javascript"><![CDATA[
 	leimnud.event.add(getField('MESS_SERVER'), 'change', function() {
 	  getField('MESS_PASSWORD_HIDDEN').value = '';
 	  getField('MESS_PASSWORD').value = '';
@@ -279,7 +255,5 @@
       hideRowById('MESS_PASSWORD');
     getField('SAVE_CHANGES').disabled = true;
     initSet();
-  ]]>
-</JS>
-
+  ]]></JS>
 </dynaForm>

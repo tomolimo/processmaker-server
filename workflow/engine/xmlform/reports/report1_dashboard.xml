@@ -1,26 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="pagetable" sqlConnection="" width="100%" rowsPerPage="3">
-
-<PRO_TITLE type="text" align="center">
-  <en>Processes</en>
-</PRO_TITLE>
-
-<CANTCASES type="text" align="center">
-  <en>Total Cases</en>
-</CANTCASES>
-
-
-
-<MAX type="hours" align="center">
-  <en>Slowest Time</en>
-</MAX>
-
-<TOTALDUR type="hours" align="center">
-  <en>Total Duration</en>
-</TOTALDUR>
-
-<PROMEDIO type="hours" align="center">
-  <en>Average</en>
-</PROMEDIO>
-
-</dynaForm>  
+  <PRO_TITLE type="text" align="center">
+    <en><![CDATA[Processes]]></en>
+  </PRO_TITLE>
+  <CANTCASES type="text" align="center">
+    <en><![CDATA[Total Cases]]></en>
+  </CANTCASES>
+  <MAX type="hours" align="center">
+    <en><![CDATA[Slowest Time]]></en>
+  </MAX>
+  <TOTALDUR type="hours" align="center">
+    <en><![CDATA[Total Duration]]></en>
+  </TOTALDUR>
+  <PROMEDIO type="hours" align="center">
+    <en><![CDATA[Average]]></en>
+  </PROMEDIO>
+</dynaForm>

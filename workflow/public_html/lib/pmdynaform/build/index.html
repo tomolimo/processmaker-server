@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>PMDynaform</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<link rel="stylesheet" href="../libs/bootstrap-3.1.1/css/bootstrap.min.css">
+</head>
+<body>
+	<style type="text/css" media="screen">
+		body {
+			background-color: aliceblue;
+		}
+		.button-responsive {
+			padding: 10px;
+			background: rgb(87, 87, 87);
+		}
+		.demo-resposive iframe{
+			width: 98%;
+			height: 500px;
+			border: 1px solid rgb(155, 139, 112);
+			margin: 10px;
+			border-radius: 10px;
+		}
+	</style>
+	<div class="button-responsive">
+		<button type="button" class="btn btn-primary" onclick="resize('desktop');return false;">Desktop</button>
+		<button type="button" class="btn btn-primary" onclick="resize('tablet');return false;">Tablet</button>
+		<button type="button" class="btn btn-primary" onclick="resize('smartphone');return false;">Smartphone</button>
+	</div>
+
+	<div class="demo-resposive">
+		<iframe id="demo-iframe" src="form.html">
+			
+		</iframe>
+	</div>
+	<script type="text/javascript">
+		var resize = function(type) {
+			var heightFrame = parseInt(document.documentElement.clientHeight-100) + "px";
+			var sizes = {
+				desktop: {
+					height: heightFrame,
+					width: parseInt(document.documentElement.clientWidth-50) + "px"
+				},
+				tablet: {
+					height: heightFrame,
+					width: "1000px"
+				},
+				smartphone: {
+					height: heightFrame,
+					width: "400px"
+				}
+			}
+			document.getElementById("demo-iframe").style.width = sizes[type].width;
+			document.getElementById("demo-iframe").style.height = sizes[type].height;
+		};
+		window.onload = function() {
+			resize("desktop");
+		};
+	</script>		
+</body>
+</html>
+
+

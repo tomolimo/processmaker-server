@@ -272,6 +272,26 @@ class Groupwf extends BaseGroupwf
         return $c;
     }
 
+    public function loadByGroupUid ($UidGroup)
+    {
+        $c = new Criteria( 'workflow' );
+        $del = DBAdapter::getStringDelimiter();
+
+        $c->clearSelectColumns();
+        $c->addSelectColumn( ContentPeer::CON_VALUE );
+
+        $c->add( ContentPeer::CON_CATEGORY, 'GRP_TITLE' );
+        $c->add( ContentPeer::CON_ID, $UidGroup );
+        $c->add( ContentPeer::CON_LANG, SYS_LANG );
+        
+        $dataset = ContentPeer::doSelectRS( $c );
+        $dataset->setFetchmode( ResultSet::FETCHMODE_ASSOC );
+        $dataset->next();
+        $row = $dataset->getRow();
+
+        return $row;
+    }
+
     public function getAll ($start = null, $limit = null, $search = null)
     {
         $totalCount = 0;
@@ -316,6 +336,7 @@ class Groupwf extends BaseGroupwf
             $rows[] = $rs->getRow();
         }
 
+        $result = new stdClass();
         $result->data = $rows;
         $result->totalCount = $totalCount;
 
@@ -347,7 +368,6 @@ class Groupwf extends BaseGroupwf
         $criteria->addSelectColumn( GroupwfPeer::GRP_STATUS );
         $criteria->addSelectColumn( GroupwfPeer::GRP_UX );
         $criteria->addAsColumn( 'GRP_TITLE', ContentPeer::CON_VALUE );
-        $criteria->addSelectColumn( ContentPeer::CON_VALUE, 'COCHALO' );
         $criteria->addJoin( GroupwfPeer::GRP_UID, ContentPeer::CON_ID, Criteria::LEFT_JOIN );
         $criteria->add( ContentPeer::CON_CATEGORY, 'GRP_TITLE' );
         $criteria->add( ContentPeer::CON_LANG, SYS_LANG );

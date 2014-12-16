@@ -508,7 +508,7 @@ class dynaFormHandler
     /**
      * Function getFields
      * @param array $aFilter
-     * @return array
+     * @return DOMElement[]
      */
     public function getFields($aFilter = Array())
     {

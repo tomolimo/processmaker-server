@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="grid" name="additionalTablesFields">
-
-
-<FLD_NAME type="text" size="15" maxlength="64" validate="Field" readonly="1">
-  <en>Primary Key</en>
-</FLD_NAME>
-
-<PRO_VARIABLE type="textpm" size="25" maxlength="100" showVars="1" process="@#PRO_UID" symbol="@#" validate="Field">
-  <en>Variables</en>
-</PRO_VARIABLE>
-
-</dynaForm> 
+  <FLD_NAME type="text" size="15" maxlength="64" validate="Field" readonly="1">
+    <en><![CDATA[Primary Key]]></en>
+  </FLD_NAME>
+  <PRO_VARIABLE type="textpm" size="25" maxlength="100" showVars="1" process="@#PRO_UID" symbol="@#" validate="Field">
+    <en><![CDATA[Variables]]></en>
+  </PRO_VARIABLE>
+</dynaForm>

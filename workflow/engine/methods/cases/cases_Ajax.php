@@ -533,6 +533,12 @@ switch (($_POST['action']) ? $_POST['action'] : $_REQUEST['action']) {
         G::LoadClass( "BasePeer" );
         global $G_PUBLISH;
 
+        $arrayToTranslation = array(
+            "INPUT"    => G::LoadTranslation("ID_INPUT_DB"),
+            "OUTPUT"   => G::LoadTranslation("ID_OUTPUT_DB"),
+            "ATTACHED" => G::LoadTranslation("ID_ATTACHED_DB")
+        );
+
         $oCase = new Cases();
         $aProcesses = Array ();
         $G_PUBLISH = new Publisher();
@@ -551,6 +557,7 @@ switch (($_POST['action']) ? $_POST['action'] : $_REQUEST['action']) {
 
         for ($j = 0; $j < $rs->getRecordCount(); $j ++) {
             $result = $rs->getRow();
+            $result["TYPE"] = (array_key_exists($result["TYPE"], $arrayToTranslation))? $arrayToTranslation[$result["TYPE"]] : $result["TYPE"];
             $aProcesses[] = $result;
             $rs->next();
             $totalCount ++;
@@ -908,6 +915,18 @@ switch (($_POST['action']) ? $_POST['action'] : $_REQUEST['action']) {
         $Fields['APP_DOC_UID'] = $_POST['appDocId'];
         $Fields['actionType'] = $_POST['actionType'];
         $Fields['docVersion'] = $_POST['docVersion'];
+        $oInputDocument = new InputDocument();
+        $InpDocData = $oInputDocument->load( $Fields['DOC_UID'] );
+
+        $inpDocMaxFilesize = $InpDocData["INP_DOC_MAX_FILESIZE"];
+        $inpDocMaxFilesizeUnit = $InpDocData["INP_DOC_MAX_FILESIZE_UNIT"];
+        $inpDocMaxFilesize = $inpDocMaxFilesize * (($inpDocMaxFilesizeUnit == "MB")? 1024 *1024 : 1024); //Bytes
+
+        $Fields["INP_DOC_SUPPORTED_EXTENSIONS_FILENAME_LABEL"] = "[" . $InpDocData["INP_DOC_TYPE_FILE"]. "]";
+        $Fields["INP_DOC_MAX_FILESIZE"] = $inpDocMaxFilesize;
+        $Fields["INP_DOC_MAX_FILESIZE_LABEL"] = ($inpDocMaxFilesize > 0)? "[" . $InpDocData["INP_DOC_MAX_FILESIZE"] . " " . $InpDocData["INP_DOC_MAX_FILESIZE_UNIT"] . "]" : "";
+        $Fields['fileTypes'] = $InpDocData['INP_DOC_TYPE_FILE'];
+
         $G_PUBLISH->AddContent( 'xmlform', 'xmlform', 'cases/cases_AttachInputDocumentGeneral', '', $Fields, 'cases_SaveDocument?UID=' . $_POST['docID'] );
         G::RenderPage( 'publish', 'raw' );
         break;
@@ -918,6 +937,18 @@ switch (($_POST['action']) ? $_POST['action'] : $_REQUEST['action']) {
         $Fields['APP_DOC_UID'] = $_POST['appDocId'];
         $Fields['actionType'] = $_POST['actionType'];
         $Fields['docVersion'] = $_POST['docVersion'];
+        $oInputDocument = new InputDocument();
+        $InpDocData = $oInputDocument->load( $Fields['DOC_UID'] );
+
+        $inpDocMaxFilesize = $InpDocData["INP_DOC_MAX_FILESIZE"];
+        $inpDocMaxFilesizeUnit = $InpDocData["INP_DOC_MAX_FILESIZE_UNIT"];
+        $inpDocMaxFilesize = $inpDocMaxFilesize * (($inpDocMaxFilesizeUnit == "MB")? 1024 *1024 : 1024); //Bytes
+
+        $Fields["INP_DOC_SUPPORTED_EXTENSIONS_FILENAME_LABEL"] = "[" . $InpDocData["INP_DOC_TYPE_FILE"]. "]";
+        $Fields["INP_DOC_MAX_FILESIZE"] = $inpDocMaxFilesize;
+        $Fields["INP_DOC_MAX_FILESIZE_LABEL"] = ($inpDocMaxFilesize > 0)? "[" . $InpDocData["INP_DOC_MAX_FILESIZE"] . " " . $InpDocData["INP_DOC_MAX_FILESIZE_UNIT"] . "]" : "";
+        $Fields['fileTypes'] = $InpDocData['INP_DOC_TYPE_FILE'];
+
         $G_PUBLISH->AddContent( 'xmlform', 'xmlform', 'cases/cases_AttachInputDocumentGeneral', '', $Fields, 'cases_SupervisorSaveDocument?UID=' . $_POST['docID'] . '&APP_UID=' . $_POST['appDocId'] );
         G::RenderPage( 'publish', 'raw' );
         break;

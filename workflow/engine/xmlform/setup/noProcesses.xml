@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="xmlform">
-
-<MESSAGE type="subtitle" alignText="center">
-  <en>No processes available for this environment</en>
-</MESSAGE>
-
-</dynaForm>  
+  <MESSAGE type="subtitle" alignText="center">
+    <en><![CDATA[No processes available for this environment]]></en>
+  </MESSAGE>
+</dynaForm>

@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="grid" name="calendarEdit_BusinessHours" width="500" enabletemplate="0" mode="edit">
-	<CALENDAR_BUSINESS_DAY type="dropdown" required="0" readonly="0" savelabel="1" mode="edit" options="Array" dependentfields="" defaultvalue="7" hint="" sqlconnection="">
-		<en>Day<option name="7">- ALL -</option><option name="0">SUN</option><option name="1">MON</option><option name="2">TUE</option><option name="3">WED</option><option name="4">THU</option><option name="5">FRI</option><option name="6">SAT</option></en>
-	</CALENDAR_BUSINESS_DAY>
-	<CALENDAR_BUSINESS_START type="text" maxlength="64" validate="Any" mask="##:##" required="0" readonly="0" defaultvalue="09:00" size="15" mode="edit">
-		<en>Start (hh:mm)</en>
-	</CALENDAR_BUSINESS_START>
-	<CALENDAR_BUSINESS_END type="text" maxlength="64" validate="Any" mask="##:##" required="0" readonly="0" defaultvalue="17:00" size="15" mode="edit">
-
-
-		<en>End (hh:mm)</en>
-	</CALENDAR_BUSINESS_END>
-
+  <CALENDAR_BUSINESS_DAY type="dropdown" required="0" readonly="0" savelabel="1" mode="edit" options="Array" dependentfields="" defaultvalue="7" hint="" sqlconnection="">
+    <en><![CDATA[Day]]><option name="7"><![CDATA[- ALL -]]></option><option name="0"><![CDATA[SUN]]></option><option name="1"><![CDATA[MON]]></option><option name="2"><![CDATA[TUE]]></option><option name="3"><![CDATA[WED]]></option><option name="4"><![CDATA[THU]]></option><option name="5"><![CDATA[FRI]]></option><option name="6"><![CDATA[SAT]]></option></en>
+  </CALENDAR_BUSINESS_DAY>
+  <CALENDAR_BUSINESS_START type="text" maxlength="64" validate="Any" mask="##:##" required="0" readonly="0" defaultvalue="09:00" size="15" mode="edit">
+    <en><![CDATA[Start (hh:mm)]]></en>
+  </CALENDAR_BUSINESS_START>
+  <CALENDAR_BUSINESS_END type="text" maxlength="64" validate="Any" mask="##:##" required="0" readonly="0" defaultvalue="17:00" size="15" mode="edit">
+    <en><![CDATA[End (hh:mm)]]></en>
+  </CALENDAR_BUSINESS_END>
 </dynaForm>

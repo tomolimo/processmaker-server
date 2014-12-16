@@ -1,36 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="pagetable" menu="cases/cases_Scheduler_Options" searchBy="SCH_NAME  ">
-<SCH_UID type="private" showInTable="0"/>
-<PRO_UID type="private" showInTable="0"/>
-<SCH_NAME type="text" titlealign="left" align="left" colWidth="200">
-  <en>Name</en>
-</SCH_NAME>
-
-<PRO_TITLE type="text" titlealign="left" align="left" colWidth="180">
-  <en>Process</en>
-</PRO_TITLE>
-
-<TAS_TITLE type="text" titlealign="left" align="left" colWidth="180">
-  <en>Task</en>
-</TAS_TITLE>
-
-<SCH_TIME_NEXT_RUN type="text" titlealign="left" align="left" colWidth="120">
-  <en>Next execution time</en>
-</SCH_TIME_NEXT_RUN>
-<SCH_LAST_RUN_TIME type="text" titlealign="left" align="left" colWidth="120">
-  <en>Last execution time</en>
-</SCH_LAST_RUN_TIME>
-
-<SCH_STATUS_LNK type="link" align="left" titlealign="left" colWidth="50" value="@G::LoadTranslation(ID_@#SCH_STATE)" link="cases_Scheduler_ChangeStatus?SCH_UID=@#SCH_UID">
-  <en/>
-</SCH_STATUS_LNK>
-
-<ROL_VIEW type="link" colWidth="30" value="@G::LoadTranslation(ID_EDIT)" link="javascript:editCaseScheduler(&#039;@#SCH_UID&#039;,&#039;@#PRO_UID&#039;)">
-  <en/>
-</ROL_VIEW>
-
-<DELETE type="link" colWidth="40" value="@G::LoadTranslation(ID_DELETE)" link="#" onclick="new leimnud.module.app.confirm().make({label:&#039;@G::LoadTranslation(ID_MSG_CONFIRM_DELETE_CASES)&#039;,action:function(){ casesSchedulerDelete(@@SCH_UID,@@PRO_UID); }});return false;">
-  <en/>
-</DELETE>
-
+  <SCH_UID type="private" showInTable="0"/>
+  <PRO_UID type="private" showInTable="0"/>
+  <SCH_NAME type="text" titlealign="left" align="left" colWidth="200">
+    <en><![CDATA[Name]]></en>
+  </SCH_NAME>
+  <PRO_TITLE type="text" titlealign="left" align="left" colWidth="180">
+    <en><![CDATA[Process]]></en>
+  </PRO_TITLE>
+  <TAS_TITLE type="text" titlealign="left" align="left" colWidth="180">
+    <en><![CDATA[Task]]></en>
+  </TAS_TITLE>
+  <SCH_TIME_NEXT_RUN type="text" titlealign="left" align="left" colWidth="120">
+    <en><![CDATA[Time next run]]></en>
+  </SCH_TIME_NEXT_RUN>
+  <SCH_LAST_RUN_TIME type="text" titlealign="left" align="left" colWidth="120">
+    <en><![CDATA[Last run time]]></en>
+  </SCH_LAST_RUN_TIME>
+  <SCH_STATUS_LNK type="link" align="left" titlealign="left" colWidth="50" value="@G::LoadTranslation(ID_@#SCH_STATE)" link="cases_Scheduler_ChangeStatus?SCH_UID=@#SCH_UID">
+    <en><![CDATA[]]></en>
+  </SCH_STATUS_LNK>
+  <ROL_VIEW type="link" colWidth="30" value="@G::LoadTranslation(ID_EDIT)" link="javascript:editCaseScheduler('@#SCH_UID','@#PRO_UID')">
+    <en><![CDATA[]]></en>
+  </ROL_VIEW>
+  <DELETE type="link" colWidth="40" value="@G::LoadTranslation(ID_DELETE)" link="#" onclick="new leimnud.module.app.confirm().make({label:'@G::LoadTranslation(ID_MSG_CONFIRM_DELETE_CASES)',action:function(){ casesSchedulerDelete(@@SCH_UID,@@PRO_UID); }});return false;">
+    <en><![CDATA[]]></en>
+  </DELETE>
 </dynaForm>

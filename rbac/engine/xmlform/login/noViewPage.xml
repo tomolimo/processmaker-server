@@ -7,12 +7,12 @@
 </title>
 
 <subtitle1 type="subtitle" >
-  <es>The account you are logged in under does not have enough security privileges to view this page</es>
-  <en>The account you are logged in under does not have enough security privileges to view this page</en>
+  <es>The user account which you are currently logged in does not have security privileges to view this page</es>
+  <en>The user account which you are currently logged in does not have security privileges to view this page</en>
 </subtitle1>
 
 <subtitle2 type='subtitle'>
-    <en>Please press back button to continue working with this system.</en>
+    <en>Please press the 'back' button to continue working with this system.</en>
     <es>Por favor presione el boton Regresar.</es>
 </subtitle2>
 

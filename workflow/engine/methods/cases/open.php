@@ -80,11 +80,26 @@ if (! isset( $_GET['to_revise'] )) {
     echo "<div id='toReviseTree'></div>";
 }
 
+// getting bpmn projects
+$c = new Criteria('workflow');
+$c->addSelectColumn(BpmnProjectPeer::PRJ_UID);
+$ds = ProcessPeer::doSelectRS($c);
+$ds->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+$bpmnProjects = array();
+
+while ($ds->next()) {
+    $row = $ds->getRow();
+    $bpmnProjects[] = $row['PRJ_UID'];
+}
+
 $oStep = new Step();
 $oStep = $oStep->loadByProcessTaskPosition( $case['PRO_UID'], $case['TAS_UID'], 1 );
 
 $oHeadPublisher->assign( 'uri', $script . $uri );
 $oHeadPublisher->assign( '_APP_NUM', '#: ' . $case['APP_NUMBER'] );
+$oHeadPublisher->assign( '_PROJECT_TYPE', in_array($case['PRO_UID'], $bpmnProjects) ? 'bpmn' : 'classic' );
+$oHeadPublisher->assign( '_PRO_UID', $case['PRO_UID']);
+$oHeadPublisher->assign( '_APP_UID', $_GET['APP_UID']);
 $oHeadPublisher->assign( '_ENV_CURRENT_DATE', $conf->getSystemDate( date( 'Y-m-d' ) ) );
 $oHeadPublisher->assign( '_ENV_CURRENT_DATE_NO_FORMAT', date( 'Y-m-d-h-i-A' ) );
 $oHeadPublisher->assign( 'idfirstform', is_null( $oStep ) ? '' : $oStep->getStepUidObj() );

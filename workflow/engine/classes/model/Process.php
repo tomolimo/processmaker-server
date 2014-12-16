@@ -149,19 +149,23 @@ class Process extends BaseProcess
      * $aData['PRO_UID'] the process id
      * $aData['USR_UID'] the userid
      * $aData['PRO_CATEGORY'] the id category
-     * @return void
+     * @return string
      */
 
-    public function create ($aData)
+    public function create ($aData, $generateUid = true)
     {
         if (! isset( $aData['USR_UID'] )) {
             throw (new PropelException( 'The process cannot be created. The USR_UID is empty.' ));
         }
         $con = Propel::getConnection( ProcessPeer::DATABASE_NAME );
         try {
-            do {
-                $sNewProUid = G::generateUniqueID();
-            } while ($this->processExists( $sNewProUid ));
+            if ($generateUid) {
+                do {
+                    $sNewProUid = G::generateUniqueID();
+                } while ($this->processExists( $sNewProUid ));
+            } else {
+                $sNewProUid = $aData['PRO_UID'];
+            }
 
             $this->setProUid( $sNewProUid );
             $this->setProParent( $sNewProUid );
@@ -270,7 +274,7 @@ class Process extends BaseProcess
                 if (! $getAllLang) {
                     $c->add( ContentPeer::CON_LANG, $lang );
                 }
-                $rs = ProcessPeer::doSelectRS( $c );
+                $rs = ProcessPeer::doSelectRS( $c, Propel::getDbConnection('workflow_ro') );
                 $rs->setFetchmode( ResultSet::FETCHMODE_ASSOC );
                 $rs->next();
                 $row = $rs->getRow();
@@ -348,7 +352,7 @@ class Process extends BaseProcess
         $oCriteria->add( ProcessPeer::PRO_STATUS, 'DISABLED', Criteria::NOT_EQUAL );
 
         //execute the query
-        $oDataset = ProcessPeer::doSelectRS( $oCriteria );
+        $oDataset = ProcessPeer::doSelectRS( $oCriteria, Propel::getDbConnection('workflow_ro') );
         $oDataset->setFetchmode( ResultSet::FETCHMODE_ASSOC );
         $processes = Array ();
         $uids = array ();
@@ -365,7 +369,7 @@ class Process extends BaseProcess
         $c->add( ContentPeer::CON_LANG, defined( 'SYS_LANG' ) ? SYS_LANG : 'en', Criteria::EQUAL );
         $c->add( ContentPeer::CON_ID, $uids, Criteria::IN );
 
-        $dt = ContentPeer::doSelectRS( $c );
+        $dt = ContentPeer::doSelectRS( $c, Propel::getDbConnection('workflow_ro') );
         $dt->setFetchmode( ResultSet::FETCHMODE_ASSOC );
 
         while ($dt->next()) {
@@ -473,6 +477,7 @@ class Process extends BaseProcess
         $this->setProTriCanceled( isset( $aData['PRO_TRI_CANCELED'] ) ? $aData['PRO_TRI_CANCELED'] : '' );
         $this->setProTriPaused( isset( $aData['PRO_TRI_PAUSED'] ) ? $aData['PRO_TRI_PAUSED'] : '' );
         $this->setProTriReassigned( isset( $aData['PRO_TRI_REASSIGNED'] ) ? $aData['PRO_TRI_REASSIGNED'] : '' );
+        $this->setProTriUnpaused( isset( $aData['PRO_TRI_UNPAUSED'] ) ? $aData['PRO_TRI_UNPAUSED'] : '' );
         $this->setProShowDelegate( $aData['PRO_SHOW_DELEGATE'] );
         $this->setProShowDynaform( $aData['PRO_SHOW_DYNAFORM'] );
         $this->setProDerivationScreenTpl( isset( $aData['PRO_DERIVATION_SCREEN_TPL']) ? $aData['PRO_DERIVATION_SCREEN_TPL'] : '' );
@@ -480,7 +485,7 @@ class Process extends BaseProcess
         // validate if the category exists
         $criteria = new Criteria( 'workflow' );
         $criteria->add( ProcessCategoryPeer::CATEGORY_UID, $aData['PRO_CATEGORY'] );
-        $ds = ProcessCategoryPeer::doSelectRS( $criteria );
+        $ds = ProcessCategoryPeer::doSelectRS( $criteria, Propel::getDbConnection('workflow_ro') );
         $ds->setFetchmode( ResultSet::FETCHMODE_ASSOC );
         $ds->next();
         // if it is not set, set value as empty "No Category"
@@ -563,19 +568,22 @@ class Process extends BaseProcess
         return (is_object( $oPro ) && get_class( $oPro ) == 'Process');
     }
 
-    public function existsByProTitle ($PRO_TITLE)
+    public static function existsByProTitle ($PRO_TITLE)
     {
-        $oCriteria = new Criteria( 'workflow' );
-        $oCriteria->addSelectColumn( 'COUNT(*) AS PROCESS' );
+        $oCriteria = new Criteria("workflow");
+
+        $oCriteria->addSelectColumn("COUNT(" . ContentPeer::CON_ID . ") AS NUM_REC");
+
         $oCriteria->add( ContentPeer::CON_CATEGORY, 'PRO_TITLE' );
         $oCriteria->add( ContentPeer::CON_LANG, SYS_LANG );
         $oCriteria->add( ContentPeer::CON_VALUE, $PRO_TITLE );
-        $oDataset = ContentPeer::doSelectRS( $oCriteria );
+        $oDataset = ContentPeer::doSelectRS( $oCriteria, Propel::getDbConnection('workflow_ro') );
         $oDataset->setFetchmode( ResultSet::FETCHMODE_ASSOC );
+
         $oDataset->next();
         $aRow = $oDataset->getRow();
 
-        return $aRow['PROCESS'] ? true : false;
+        return ((int)($aRow["NUM_REC"]) > 0)? true : false;
     }
 
     public function getAllProcessesCount ()
@@ -583,7 +591,7 @@ class Process extends BaseProcess
         $c = $this->tmpCriteria;
         $c->clearSelectColumns();
         $c->addSelectColumn( 'COUNT(*)' );
-        $oDataset = ProcessPeer::doSelectRS( $c );
+        $oDataset = ProcessPeer::doSelectRS( $c, Propel::getDbConnection('workflow_ro') );
         $oDataset->next();
         $aRow = $oDataset->getRow();
 
@@ -594,7 +602,7 @@ class Process extends BaseProcess
         }
     }
 
-    public function getAllProcesses ($start, $limit, $category = null, $processName = null, $counters = true, $reviewSubProcess = false)
+    public function getAllProcesses ($start, $limit, $category = null, $processName = null, $counters = true, $reviewSubProcess = false, $userLogged = "")
     {
     	require_once PATH_RBAC . "model/RbacUsers.php";
         require_once "classes/model/ProcessCategory.php";
@@ -609,9 +617,11 @@ class Process extends BaseProcess
         $oCriteria->addSelectColumn( ProcessPeer::PRO_PARENT );
         $oCriteria->addSelectColumn( ProcessPeer::PRO_STATUS );
         $oCriteria->addSelectColumn( ProcessPeer::PRO_CATEGORY );
+        $oCriteria->addSelectColumn( ProcessPeer::PRO_UPDATE_DATE );
         $oCriteria->addSelectColumn( ProcessPeer::PRO_CREATE_DATE );
         $oCriteria->addSelectColumn( ProcessPeer::PRO_CREATE_USER );
         $oCriteria->addSelectColumn( ProcessPeer::PRO_DEBUG );
+        $oCriteria->addSelectColumn(ProcessPeer::PRO_TYPE_PROCESS);
 
         $oCriteria->addSelectColumn( UsersPeer::USR_UID );
         $oCriteria->addSelectColumn( UsersPeer::USR_USERNAME );
@@ -634,11 +644,38 @@ class Process extends BaseProcess
         $oCriteria->addJoin( ProcessPeer::PRO_CREATE_USER, UsersPeer::USR_UID, Criteria::LEFT_JOIN );
         $oCriteria->addJoin( ProcessPeer::PRO_CATEGORY, ProcessCategoryPeer::CATEGORY_UID, Criteria::LEFT_JOIN );
 
+        if ($this->sort == "PRO_CREATE_DATE") {
+            if ($this->dir == "DESC") {
+                $oCriteria->addDescendingOrderByColumn(ProcessPeer::PRO_CREATE_DATE);
+            } else {
+                $oCriteria->addAscendingOrderByColumn(ProcessPeer::PRO_CREATE_DATE);
+            }
+        }
+
+        if ($userLogged != "") {
+            $oCriteria->add(
+                $oCriteria->getNewCriterion(ProcessPeer::PRO_TYPE_PROCESS, "PUBLIC", Criteria::EQUAL)->addOr(
+                $oCriteria->getNewCriterion(ProcessPeer::PRO_CREATE_USER, $userLogged, Criteria::EQUAL))
+            );
+        }
+
         $this->tmpCriteria = clone $oCriteria;
 
         //execute a query to obtain numbers, how many cases there are by process
         if ($counters) {
             $casesCnt = $this->getCasesCountInAllProcesses();
+        }
+
+        // getting bpmn projects
+        $c = new Criteria('workflow');
+        $c->addSelectColumn(BpmnProjectPeer::PRJ_UID);
+        $ds = ProcessPeer::doSelectRS($c, Propel::getDbConnection('workflow_ro') );
+        $ds->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+        $bpmnProjects = array();
+
+        while ($ds->next()) {
+            $row = $ds->getRow();
+            $bpmnProjects[] = $row['PRJ_UID'];
         }
 
         //execute the query
@@ -647,7 +684,9 @@ class Process extends BaseProcess
         $processes = Array ();
         $uids = array ();
         while ($oDataset->next()) {
-            $processes[] = $oDataset->getRow();
+            $row = $oDataset->getRow();
+            $row['PROJECT_TYPE'] = in_array($row['PRO_UID'], $bpmnProjects) ? 'bpmn' : 'classic';
+            $processes[] = $row;
             $uids[] = $processes[sizeof( $processes ) - 1]['PRO_UID'];
         }
 
@@ -660,7 +699,7 @@ class Process extends BaseProcess
         $c->add( ContentPeer::CON_LANG, defined( 'SYS_LANG' ) ? SYS_LANG : 'en', Criteria::EQUAL );
         $c->add( ContentPeer::CON_ID, $uids, Criteria::IN );
 
-        $dt = ContentPeer::doSelectRS( $c );
+        $dt = ContentPeer::doSelectRS( $c, Propel::getDbConnection('workflow_ro') );
         $dt->setFetchmode( ResultSet::FETCHMODE_ASSOC );
 
         while ($dt->next()) {
@@ -675,6 +714,7 @@ class Process extends BaseProcess
         foreach ($processes as $process) {
             $proTitle = isset( $processesDetails[$process['PRO_UID']] ) && isset( $processesDetails[$process['PRO_UID']]['PRO_TITLE'] ) ? $processesDetails[$process['PRO_UID']]['PRO_TITLE'] : '';
             $proDescription = isset( $processesDetails[$process['PRO_UID']] ) && isset( $processesDetails[$process['PRO_UID']]['PRO_DESCRIPTION'] ) ? $processesDetails[$process['PRO_UID']]['PRO_DESCRIPTION'] : '';
+            $process["PRO_TYPE_PROCESS"] = ($process["PRO_TYPE_PROCESS"] == "PUBLIC") ? G::LoadTranslation("ID_PUBLIC") : G::LoadTranslation("ID_PRIVATE");
 
             // verify if the title is already set on the current language
             if (trim( $proTitle ) == '') {
@@ -741,7 +781,7 @@ class Process extends BaseProcess
             $aProcesses[] = $process;
 
         }
-        
+
         $memcache = & PMmemcached::getSingleton( SYS_SYS );
         if (isset($memcache) && $memcache->enabled == 1 ) {
         	return $aProcesses;
@@ -750,10 +790,13 @@ class Process extends BaseProcess
         if ($limit == '') {
         	$limit = count($aProcesses);
         }
-        if ($this->dir=='ASC') {
-            usort( $aProcesses, array($this, "ordProcessAsc") );
-        } else {
-            usort( $aProcesses, array($this, "ordProcessDesc") );
+
+        if ($this->sort != "PRO_CREATE_DATE") {
+            if ($this->dir=='ASC') {
+                usort( $aProcesses, array($this, "ordProcessAsc") );
+            } else {
+                usort( $aProcesses, array($this, "ordProcessDesc") );
+            }
         }
 
         return $aProcesses;
@@ -776,7 +819,7 @@ class Process extends BaseProcess
             $oCriteria->addGroupByColumn( ApplicationPeer::PRO_UID );
             $oCriteria->addGroupByColumn( ApplicationPeer::APP_STATUS );
 
-            $oDataset = ProcessPeer::doSelectRS( $oCriteria );
+            $oDataset = ProcessPeer::doSelectRS( $oCriteria, Propel::getDbConnection('workflow_ro') );
             $oDataset->setFetchmode( ResultSet::FETCHMODE_ASSOC );
 
             $aProcesses = Array ();
@@ -789,13 +832,26 @@ class Process extends BaseProcess
         return $aProcesses;
     }
 
+    public function getCasesCountForProcess($pro_uid)
+    {
+        $oCriteria = new Criteria( 'workflow' );
+        $oCriteria->addSelectColumn( 'COUNT(*) AS TOTAL_CASES' );
+        $oCriteria->add( ApplicationPeer::PRO_UID, $pro_uid );
+        $oDataset = ApplicationPeer::doSelectRS( $oCriteria, Propel::getDbConnection('workflow_ro') );
+        $oDataset->setFetchmode( ResultSet::FETCHMODE_ASSOC );
+
+        $oDataset->next();
+        $cases = $oDataset->getRow();
+        return (int)$cases['TOTAL_CASES'];
+    }
+
     public function getAllProcessesByCategory ()
     {
         $oCriteria = new Criteria( 'workflow' );
         $oCriteria->addSelectColumn( ProcessPeer::PRO_CATEGORY );
         $oCriteria->addSelectColumn( 'COUNT(*) AS CNT' );
         $oCriteria->addGroupByColumn( ProcessPeer::PRO_CATEGORY );
-        $oDataSet = ProcessPeer::doSelectRS( $oCriteria );
+        $oDataSet = ProcessPeer::doSelectRS( $oCriteria, Propel::getDbConnection('workflow_ro') );
         $oDataSet->setFetchmode( ResultSet::FETCHMODE_ASSOC );
         $aProc = Array ();
         while ($oDataSet->next()) {
@@ -829,19 +885,24 @@ class Process extends BaseProcess
             case 'REASSIGNED':
                 $var = ProcessPeer::PRO_TRI_REASSIGNED;
                 break;
+            case "UNPAUSE":
+                $var = ProcessPeer::PRO_TRI_UNPAUSED;
+                break;
         }
+
         $oCriteria = new Criteria( 'workflow' );
         $oCriteria->addSelectColumn( $var );
         $oCriteria->addSelectColumn( TriggersPeer::TRI_WEBBOT );
         $oCriteria->addJoin( $var, TriggersPeer::TRI_UID, Criteria::LEFT_JOIN );
         $oCriteria->add( ProcessPeer::PRO_UID, $proUid );
-        $oDataSet = ProcessPeer::doSelectRS( $oCriteria );
+        $oDataSet = ProcessPeer::doSelectRS( $oCriteria, Propel::getDbConnection('workflow_ro') );
 
         $oDataSet->setFetchmode( ResultSet::FETCHMODE_ASSOC );
         if ($oDataSet->next()) {
             $row = $oDataSet->getRow();
             $webBotTrigger = $row['TRI_WEBBOT'];
         }
+
         return $webBotTrigger;
     }
 
@@ -851,7 +912,7 @@ class Process extends BaseProcess
         $limit = 25;
         $start = 0;
 
-        $memcache = &PMmemcached::getSingleton( SYS_SYS );
+        $memcache = PMmemcached::getSingleton( SYS_SYS );
 
         for ($start = 0; $start <= 50 - 1; $start ++) {
             $memkey = "processList-allProcesses-" . ($start * $limit) . "-" . $limit;
@@ -861,7 +922,7 @@ class Process extends BaseProcess
             $r = $memcache->delete( $memkeyTotal );
         }
     }
-    
+
     public function orderMemcache($dataMemcache, $start, $limit)
     {
     	if ($this->dir=='ASC') {
@@ -879,7 +940,7 @@ class Process extends BaseProcess
     public function ordProcessAsc ($a, $b)
     {
     	if (($this->sort) == '')  {
-    		$this->sort = 'PRO_TITLE'; 
+    		$this->sort = 'PRO_TITLE';
     	}
         if (strtolower($a[$this->sort]) > strtolower($b[$this->sort])) {
             return 1;

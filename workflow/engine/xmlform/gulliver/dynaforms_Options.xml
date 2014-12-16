@@ -1,21 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="users_NewOptions" type="xmlmenu">
-<PREVIOUS_STEP type="private"/>
-<PREVIOUS_STEP_LABEL type="private"/>
-<PREVIOUS_ACTION type="private"/>
-<NEXT_STEP type="private"/>
-<NEXT_STEP_LABEL type="private"/>
-<NEXT_ACTION type="private"/>
-<!--MNUP type="print" colWidth="20" title="" value='' colAlign="left" link="../cases/cases_PrintView" width="800" height="600" left="0" top="0" resizable="1">
+  <PREVIOUS_STEP type="private"/>
+  <PREVIOUS_STEP_LABEL type="private"/>
+  <PREVIOUS_ACTION type="private"/>
+  <NEXT_STEP type="private"/>
+  <NEXT_STEP_LABEL type="private"/>
+  <NEXT_ACTION type="private"/>
+  <!--MNUP type="print" colWidth="20" title="" value='' colAlign="left" link="../cases/cases_PrintView" width="800" height="600" left="0" top="0" resizable="1">
   <en>Print form</en>
 </MNUP-->
-
-<DYN_BACKWARD type="link" value='' link="@#PREVIOUS_STEP" onclick="@#PREVIOUS_ACTION" colAlign="left" colWidth="120" label="@#PREVIOUS_STEP_LABEL">
-  <en>Previous Step</en>
-</DYN_BACKWARD>
-
-
-<DYN_FORWARD type="link" value='' link="@#NEXT_STEP" onclick="@#NEXT_ACTION" colAlign="right" colWidth="120" label="@#NEXT_STEP_LABEL">
-  <en>Next Step</en>
-</DYN_FORWARD>
+  <DYN_BACKWARD type="link" value="" link="@#PREVIOUS_STEP" onclick="@#PREVIOUS_ACTION" colAlign="left" colWidth="120" label="@#PREVIOUS_STEP_LABEL">
+    <en><![CDATA[Previous Step]]></en>
+  </DYN_BACKWARD>
+  <DYN_FORWARD type="link" value="" link="@#NEXT_STEP" onclick="@#NEXT_ACTION" colAlign="right" colWidth="120" label="@#NEXT_STEP_LABEL">
+    <en><![CDATA[Next Step]]></en>
+  </DYN_FORWARD>
 </dynaForm>

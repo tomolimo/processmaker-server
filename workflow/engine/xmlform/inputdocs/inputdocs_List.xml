@@ -1,36 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<dynaForm name="dynaforms_List" type="filterform" sql="SELECT *, T.CON_VALUE AS INP_DOC_TITLE, D.CON_VALUE AS INP_DOC_DESCRIPTION FROM INPUT_DOCUMENT LEFT JOIN CONTENT as T ON (T.CON_ID=INP_DOC_UID AND T.CON_CATEGORY=&#039;INP_DOC_TITLE&#039;) LEFT JOIN CONTENT AS D ON (D.CON_ID=INP_DOC_UID AND D.CON_CATEGORY=&#039;INP_DOC_DESCRIPTION&#039;)" sqlConnection="" menu="inputdocs/inputdocs_Options" filterForm="inputdocs/inputdocs_List" width="100%">
-<INP_DOC_UID type="hidden" showInTable="0"/>
-<INP_DOC_TITLE type="text" colWidth="200" titleAlign="left" align="left" dataCompareField="T.CON_VALUE" dataCompareType="contains">
-
-  <en>Input document</en>
-</INP_DOC_TITLE>
-<INP_DOC_FORM_NEEDED type="dropdown" colWidth="80" titleAlign="left" align="left" dataCompareField="INP_DOC_FORM_NEEDED" dataCompareType="=">
-  <en>Type<option name="REAL">Real</option><option name="VIRTUAL">Virtual</option><option name="VREAL">VReal</option></en>
-</INP_DOC_FORM_NEEDED>
-<INP_DOC_ORIGINAL type="dropdown" colWidth="80" titleAlign="left" align="left" dataCompareField="INP_DOC_ORIGINAL" dataCompareType="=">
-
-  <en>Original<option name="COPY">Copy</option><option name="ORIGINAL">Original</option><option name="COPYLEGAL">Legal copy</option><option name="FINAL">Final</option></en>
-</INP_DOC_ORIGINAL>
-<INP_DOC_PUBLISHED type="dropdown" colWidth="80" titleAlign="left" align="left" dataCompareField="INP_DOC_PUBLISHED" dataCompareType="=">
-
-  <en>Access type<option name="PRIVATE">Private</option><option name="PUBLIC">Public</option></en>
-</INP_DOC_PUBLISHED>
-<INP_DOC_DESCRIPTION type="textarea" rows="3" cols="32" colWidth="200" titleAlign="left" align="left" dataCompareField="D.CON_VALUE" dataCompareType="contains">
-  <en>Description</en>
-</INP_DOC_DESCRIPTION>
-
-<EDIT type="link" colWidth="40" value="@G::LoadTranslation(ID_EDIT)" link="#" onclick="inputdocsEdit(@QINP_DOC_UID);return false;"/>
-<DELETE type="link" colWidth="40" value="@G::LoadTranslation(ID_DELETE)" link="#" onclick="if (confirm(&#039;@G::LoadTranslation(ID_MSG_CONFIRM_DELETE_DOCUMENT)&#039;)) inputdocsDelete(@QINP_DOC_UID);return false;"><en></en></DELETE>
-
-
-<SEARCH type="button" onclick="pagedTableFilter( this.form );" showInTable="0">
-  <en>Apply Filter</en>
-</SEARCH>
-<PAGED_TABLE_ID type="private" showInTable="0"/>
-<JSFILTER type="javascript" replaceTags="1" showInTable="0">
+<dynaForm name="dynaforms_List" type="filterform" sql="SELECT *, T.CON_VALUE AS INP_DOC_TITLE, D.CON_VALUE AS INP_DOC_DESCRIPTION FROM INPUT_DOCUMENT LEFT JOIN CONTENT as T ON (T.CON_ID=INP_DOC_UID AND T.CON_CATEGORY='INP_DOC_TITLE') LEFT JOIN CONTENT AS D ON (D.CON_ID=INP_DOC_UID AND D.CON_CATEGORY='INP_DOC_DESCRIPTION')" sqlConnection="" menu="inputdocs/inputdocs_Options" filterForm="inputdocs/inputdocs_List" width="100%">
+  <INP_DOC_UID type="hidden" showInTable="0"/>
+  <INP_DOC_TITLE type="text" colWidth="200" titleAlign="left" align="left" dataCompareField="T.CON_VALUE" dataCompareType="contains">
+    <en><![CDATA[Input document]]></en>
+  </INP_DOC_TITLE>
+  <INP_DOC_FORM_NEEDED type="dropdown" colWidth="80" titleAlign="left" align="left" dataCompareField="INP_DOC_FORM_NEEDED" dataCompareType="=">
+    <en><![CDATA[Type]]><option name="REAL"><![CDATA[Real]]></option><option name="VIRTUAL"><![CDATA[Virtual]]></option><option name="VREAL"><![CDATA[VReal]]></option></en>
+  </INP_DOC_FORM_NEEDED>
+  <INP_DOC_ORIGINAL type="dropdown" colWidth="80" titleAlign="left" align="left" dataCompareField="INP_DOC_ORIGINAL" dataCompareType="=">
+    <en><![CDATA[Original]]><option name="COPY"><![CDATA[Copy]]></option><option name="ORIGINAL"><![CDATA[Original]]></option><option name="COPYLEGAL"><![CDATA[Legal copy]]></option><option name="FINAL"><![CDATA[Final]]></option></en>
+  </INP_DOC_ORIGINAL>
+  <INP_DOC_PUBLISHED type="dropdown" colWidth="80" titleAlign="left" align="left" dataCompareField="INP_DOC_PUBLISHED" dataCompareType="=">
+    <en><![CDATA[Access type]]><option name="PRIVATE"><![CDATA[Private]]></option><option name="PUBLIC"><![CDATA[Public]]></option></en>
+  </INP_DOC_PUBLISHED>
+  <INP_DOC_DESCRIPTION type="textarea" rows="3" cols="32" colWidth="200" titleAlign="left" align="left" dataCompareField="D.CON_VALUE" dataCompareType="contains">
+    <en><![CDATA[Description]]></en>
+  </INP_DOC_DESCRIPTION>
+  <EDIT type="link" colWidth="40" value="@G::LoadTranslation(ID_EDIT)" link="#" onclick="inputdocsEdit(@QINP_DOC_UID);return false;"/>
+  <DELETE type="link" colWidth="40" value="@G::LoadTranslation(ID_DELETE)" link="#" onclick="if (confirm('@G::LoadTranslation(ID_MSG_CONFIRM_DELETE_DOCUMENT)')) inputdocsDelete(@QINP_DOC_UID);return false;">
+    <en><![CDATA[]]></en>
+  </DELETE>
+  <SEARCH type="button" onclick="pagedTableFilter( this.form );" showInTable="0">
+    <en><![CDATA[Apply Filter]]></en>
+  </SEARCH>
+  <PAGED_TABLE_ID type="private" showInTable="0"/>
+  <JSFILTER type="javascript" replaceTags="1" showInTable="0">
 function pagedTableFilter( form ) {
   @#PAGED_TABLE_ID.doFilter( form );
 }
-</JSFILTER>  
-</dynaForm> 
+</JSFILTER>
+</dynaForm>

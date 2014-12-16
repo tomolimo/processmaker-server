@@ -1,32 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="xmlmenu">
-
-<MNU_ADD type="link" value="" link="#" onclick="stepAdd(); return false;" colAlign="left" colWidth="100">
-  <en>New</en>
-</MNU_ADD>
-
-<PROCESS type="hidden" showInTable="0"/>
-
-<TASK type="hidden" showInTable="0"/>
-
-<CONFIRM type="hidden" showInTable="0"/>
-
-<URL_STEPS_EDIT type="private" defaultValue="../steps/steps_New"/>
-
-<URL_STEP_DELETE type="private" defaultValue="../steps/steps_Delete"/>
-
-<URL_STEP_UP type="private" defaultValue="../steps/steps_Up"/>
-
-<URL_STEP_DOWN type="private" defaultValue="../steps/steps_Down"/>
-
-<URL_DYNAFORM_EDITOR type="private" defaultValue="../dynaforms/dynaforms_Editor"/>
-
-<triggersEdit type="private" defaultValue="../triggers/triggers_Edit"/>
-
-<PAGED_TABLE_ID type="private"/>
-
-
-<js type="javascript"><![CDATA[
+  <MNU_ADD type="link" value="" link="#" onclick="stepAdd(); return false;" colAlign="left" colWidth="100">
+    <en><![CDATA[New]]></en>
+  </MNU_ADD>
+  <PROCESS type="hidden" showInTable="0"/>
+  <TASK type="hidden" showInTable="0"/>
+  <CONFIRM type="hidden" showInTable="0"/>
+  <URL_STEPS_EDIT type="private" defaultValue="../steps/steps_New"/>
+  <URL_STEP_DELETE type="private" defaultValue="../steps/steps_Delete"/>
+  <URL_STEP_UP type="private" defaultValue="../steps/steps_Up"/>
+  <URL_STEP_DOWN type="private" defaultValue="../steps/steps_Down"/>
+  <URL_DYNAFORM_EDITOR type="private" defaultValue="../dynaforms/dynaforms_Editor"/>
+  <triggersEdit type="private" defaultValue="../triggers/triggers_Edit"/>
+  <PAGED_TABLE_ID type="private"/>
+  <js type="javascript"><![CDATA[
 
   function stepAdd(){
         popupWindow('@G::LoadTranslation(ID_NEW_STEP)', '@G::encryptlink(@#URL_STEPS_EDIT)?PROCESS=@#PROCESS&TASK=@#TASK', 500, 420);
@@ -131,5 +118,4 @@
   }
 
 ]]></js>
-
 </dynaForm>

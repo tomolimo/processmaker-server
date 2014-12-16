@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="xmlmenu">
-<MNU_NEW type="link" value="" link="#" onclick="newHoliday(event); return false;" colAlign="left" colWidth="35">
-  <en>New</en>
-</MNU_NEW>
-</dynaForm>  
+  <MNU_NEW type="link" value="" link="#" onclick="newHoliday(event); return false;" colAlign="left" colWidth="35">
+    <en><![CDATA[New]]></en>
+  </MNU_NEW>
+</dynaForm>

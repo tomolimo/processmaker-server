@@ -1,0 +1,30 @@
+[2 days ago] d24c595  Rakefile modified <norahmollo>
+[4 weeks ago] 1ced6a8  Resolving some issues for fields <Omar Suca>
+[4 weeks ago] 8156dbb  Updating examples for the library <Omar Suca>
+[4 weeks ago] f857f8d  Adding new field to factory from FormPanel class <Omar Suca>
+[4 weeks ago] 7df6c60  Adding new field called Annotation with their files associated to it <Omar Suca>
+[4 weeks ago] a331607  Changing its the padding property for the message error <Omar Suca>
+[4 weeks ago] a391d95  Working with validation for fields. Some css for validation alert was modified <Omar Suca>
+[4 weeks ago] 0914e52  Implementing the setData for the Project Class <Omar Suca>
+[4 weeks ago] c3efdab  Fixing problems about missing some properties. Sample one fixed <Omar Suca>
+[4 weeks ago] c0501e2  Adding the support for Javascript scripts. There is a demo using Javascript implementations <Omar Suca>
+[4 weeks ago] 7670dab  Working with sets on Fields that have options like dropdowns, checkbox, suggests, etc. <Omar Suca>
+[4 weeks ago] aa114f2  Adding some lines to Fields classes <Omar Suca>
+[4 weeks ago] 901a0a7  Working with Dropdown about their trigger when the values is not valid bases of the domain <Omar Suca>
+[4 weeks ago] f4bb96d  Template updated <Omar Suca>
+[4 weeks ago] bb5b87c  Example1 updated <Omar Suca>
+[4 weeks ago] 3708861  Validating field type inside of FormPanel and Grid <Omar Suca>
+[4 weeks ago] b1fb157  Working with variables. Every field should has variable associated to this. Adding the functionality for options domain <Omar Suca>
+[5 weeks ago] 66a5475  Completing the functionality about setData for grid field <Omar Suca>
+[5 weeks ago] 5339475  Trying to resolve the problem about setData in grids <Omar Suca>
+[6 weeks ago] e0d8956  Seting values to Datetime <Omar Suca>
+[6 weeks ago] 6292b4d  Setting values for controls radio and check <Omar Suca>
+[6 weeks ago] 26a7c76  working on sets for checkbox, grids and changing some examples <Omar Suca>
+[6 weeks ago] 90d8ae7  A little change for variables inside of remoteData <Omar Suca>
+[6 weeks ago] 24634b9  The functionality for sets values to controls is ready <Omar Suca>
+[6 weeks ago] 535374c  Sets value for Form and Suform based on the variables <Omar Suca>
+[6 weeks ago] 7b100b1  Trying set data to SubForm <Omar Suca>
+[6 weeks ago] 5d51b07  Working on variables for set new Data <Omar Suca>
+[6 weeks ago] e8359fa  New files for the library <Omar Suca>
+[6 weeks ago] f9158f5  Changing files and class names <Omar Suca>
+[6 weeks ago] 9e77f5e  Basic example for how will sets data to form <Omar Suca>

@@ -3,7 +3,7 @@
 require_once 'propel/util/BasePeer.php';
 // The object class -- needed for instanceof checks in this class.
 // actual class may be a subclass -- as returned by UsersRolesPeer::getOMClass()
-include_once 'classes/model/UsersRoles.php';
+//include_once 'classes/model/UsersRoles.php';
 
 /**
  * Base static class for performing query and update operations on the 'USERS_ROLES' table.
@@ -18,7 +18,7 @@ abstract class BaseUsersRolesPeer {
 	const DATABASE_NAME = 'rbac';
 
 	/** the table name for this class */
-	const TABLE_NAME = 'USERS_ROLES';
+	const TABLE_NAME = 'RBAC_USERS_ROLES';
 
 	/** A class that can be returned by this peer. */
 	const CLASS_DEFAULT = 'classes.model.UsersRoles';
@@ -31,10 +31,10 @@ abstract class BaseUsersRolesPeer {
 
 
 	/** the column name for the USR_UID field */
-	const USR_UID = 'USERS_ROLES.USR_UID';
+	const USR_UID = 'RBAC_USERS_ROLES.USR_UID';
 
 	/** the column name for the ROL_UID field */
-	const ROL_UID = 'USERS_ROLES.ROL_UID';
+	const ROL_UID = 'RBAC_USERS_ROLES.ROL_UID';
 
 	/** The PHP to DB Name Mapping */
 	private static $phpNameMap = null;
@@ -170,8 +170,8 @@ abstract class BaseUsersRolesPeer {
 
 	}
 
-	const COUNT = 'COUNT(USERS_ROLES.USR_UID)';
-	const COUNT_DISTINCT = 'COUNT(DISTINCT USERS_ROLES.USR_UID)';
+	const COUNT = 'COUNT(RBAC_USERS_ROLES.USR_UID)';
+	const COUNT_DISTINCT = 'COUNT(DISTINCT RBAC_USERS_ROLES.USR_UID)';
 
 	/**
 	 * Returns the number of rows matching criteria.

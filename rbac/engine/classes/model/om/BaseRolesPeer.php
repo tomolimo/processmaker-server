@@ -18,7 +18,7 @@ abstract class BaseRolesPeer {
 	const DATABASE_NAME = 'rbac';
 
 	/** the table name for this class */
-	const TABLE_NAME = 'ROLES';
+	const TABLE_NAME = 'RBAC_ROLES';
 
 	/** A class that can be returned by this peer. */
 	const CLASS_DEFAULT = 'classes.model.Roles';
@@ -31,25 +31,25 @@ abstract class BaseRolesPeer {
 
 
 	/** the column name for the ROL_UID field */
-	const ROL_UID = 'ROLES.ROL_UID';
+	const ROL_UID = 'RBAC_ROLES.ROL_UID';
 
 	/** the column name for the ROL_PARENT field */
-	const ROL_PARENT = 'ROLES.ROL_PARENT';
+	const ROL_PARENT = 'RBAC_ROLES.ROL_PARENT';
 
 	/** the column name for the ROL_SYSTEM field */
-	const ROL_SYSTEM = 'ROLES.ROL_SYSTEM';
+	const ROL_SYSTEM = 'RBAC_ROLES.ROL_SYSTEM';
 
 	/** the column name for the ROL_CODE field */
-	const ROL_CODE = 'ROLES.ROL_CODE';
+	const ROL_CODE = 'RBAC_ROLES.ROL_CODE';
 
 	/** the column name for the ROL_CREATE_DATE field */
-	const ROL_CREATE_DATE = 'ROLES.ROL_CREATE_DATE';
+	const ROL_CREATE_DATE = 'RBAC_ROLES.ROL_CREATE_DATE';
 
 	/** the column name for the ROL_UPDATE_DATE field */
-	const ROL_UPDATE_DATE = 'ROLES.ROL_UPDATE_DATE';
+	const ROL_UPDATE_DATE = 'RBAC_ROLES.ROL_UPDATE_DATE';
 
 	/** the column name for the ROL_STATUS field */
-	const ROL_STATUS = 'ROLES.ROL_STATUS';
+	const ROL_STATUS = 'RBAC_ROLES.ROL_STATUS';
 
 	/** The PHP to DB Name Mapping */
 	private static $phpNameMap = null;
@@ -195,8 +195,8 @@ abstract class BaseRolesPeer {
 
 	}
 
-	const COUNT = 'COUNT(ROLES.ROL_UID)';
-	const COUNT_DISTINCT = 'COUNT(DISTINCT ROLES.ROL_UID)';
+	const COUNT = 'COUNT(RBAC_ROLES.ROL_UID)';
+	const COUNT_DISTINCT = 'COUNT(DISTINCT RBAC_ROLES.ROL_UID)';
 
 	/**
 	 * Returns the number of rows matching criteria.

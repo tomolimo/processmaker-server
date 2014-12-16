@@ -1,121 +1,74 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="outputdocs/outputdocs_Edit" type="xmlform" width="100%" enableTemplate="1">
-
-<PRO_UID type="hidden"/>
-
-<OUT_DOC_UID type="hidden" showInTable="0"/>
-
-<TITLE type="title" group="1">
-  <en>Output Document Information</en>
-</TITLE>
-
-<OUT_DOC_TITLE type="text" style="width:90%">
-  <en>Title</en>
-</OUT_DOC_TITLE>
-
-<OUT_DOC_FILENAME type="textpm" size="30" maxlength="100" showVars="1" process="@#PRO_UID" symbol="@#" validate="Field">
-  <en>Filename generated</en>
-</OUT_DOC_FILENAME>
-
-<OUT_DOC_DESCRIPTION type="textarea" rows="3" style="width:90%;">
-  <en>Description</en>
-</OUT_DOC_DESCRIPTION>
-
-<OUT_DOC_REPORT_GENERATOR type="dropdown" required="0" readonly="0" mode="edit">
-  <en>Report Generator
-    <option name="HTML2PDF">HTML2PDF (Old Version)</option>
-    <option name="TCPDF">TCPDF</option>
-  </en>
-</OUT_DOC_REPORT_GENERATOR>
-
-<OUT_DOC_LANDSCAPE type="dropdown">
-  <en>Orientation<option name="">Portrait</option><option name="1">Landscape</option></en>
-</OUT_DOC_LANDSCAPE>
-
-<OUT_DOC_GENERATE type="dropdown">
-  <en>Output Document to Generate<option name="BOTH">BOTH</option><option name="DOC">DOC</option><option name="PDF">PDF</option></en>
-</OUT_DOC_GENERATE>
-
-<OUT_DOC_VERSIONING type="dropdown">
-  <en>Enable Versioning<option name="">NO</option><option name="1">YES</option></en>
-</OUT_DOC_VERSIONING>
-
-<OUT_DOC_MEDIA type="dropdown">
-  <en>Media
-    <option name="Letter">Letter</option>
-    <option name="Legal">Legal</option>
-    <option name="Executive">Executive</option>
-    <option name="B5">B5</option>
-    <option name="Folio">Folio</option>
-    <option name="A0Oversize">A0Oversize</option>
-    <option name="A0">A0</option>
-    <option name="A1">A1</option>
-    <option name="A2">A2</option>
-    <option name="A3">A3</option>
-    <option name="A4">A4</option>
-    <option name="A5">A5</option>
-    <option name="A6">A6</option>
-    <option name="A7">A7</option>
-    <option name="A8">A8</option>
-    <option name="A9">A9</option>
-    <option name="A10">A10</option>
-    <option name="Screenshot640">Screenshot640</option>
-    <option name="Screenshot800">Screenshot800</option>
-    <option name="Screenshot1024">Screenshot1024</option>
-  </en>
-</OUT_DOC_MEDIA>
-
-<OUT_DOC_LEFT_MARGIN type="text" style="width:15%" validate="Int">
-  <en>Left</en>
-</OUT_DOC_LEFT_MARGIN>
-<OUT_DOC_RIGHT_MARGIN type="text" style="width:15%" validate="Int">
-  <en>Right</en>
-</OUT_DOC_RIGHT_MARGIN>
-<OUT_DOC_TOP_MARGIN type="text" style="width:15%" validate="Int">
-  <en>Top</en>
-</OUT_DOC_TOP_MARGIN>
-<OUT_DOC_BOTTOM_MARGIN type="text" style="width:15%" validate="Int">
-  <en>Bottom</en>
-</OUT_DOC_BOTTOM_MARGIN>
-<OUT_DOC_DESTINATION_PATH type="textpm" size="30" maxlength="200" showVars="1" process="@#PRO_UID" symbol="@#" validate="Path">
-  <en>Destination Path</en>
-</OUT_DOC_DESTINATION_PATH>
-<OUT_DOC_TAGS type="textpm" size="30" maxlength="200" showVars="1" process="@#PRO_UID" symbol="@#" validate="Tag">
-  <en>Tags</en>
-</OUT_DOC_TAGS>
-
-<OUT_DOC_PDF_SECURITY_ENABLED type="dropdown">
-  <en>PDF Security<option name="0">Disabled</option><option name="1">Enabled</option></en>
-</OUT_DOC_PDF_SECURITY_ENABLED>
-
-<OUT_DOC_PDF_SECURITY_OPEN_PASSWORD type="password"  >
-  <en>Open Password</en>
-</OUT_DOC_PDF_SECURITY_OPEN_PASSWORD>
-<OUT_DOC_PDF_SECURITY_OWNER_PASSWORD type="password" >
-  <en>Owner Password</en>
-</OUT_DOC_PDF_SECURITY_OWNER_PASSWORD>
-<OUT_DOC_PDF_SECURITY_PERMISSIONS type="listbox" mode="edit" options="Array">
-  <en>Allowed Permissions
-  <option name='print'>Print</option><!--print-->
-    <option name='modify'>Modify</option><!--print-->
-    <option name='copy'>Copy</option><!--print-->
-    <option name='annot-forms'>Forms</option><!--print-->
-  </en>
-</OUT_DOC_PDF_SECURITY_PERMISSIONS>
-
-<OUT_DOC_OPEN_TYPE type="dropdown">
-  <en>By clicking on the generated file link<option name="0">Download the file</option><option name="1">Open the file</option></en>
-</OUT_DOC_OPEN_TYPE>
-
-<BTN_CANCEL type="button" onclick="cancel();">
-  <en>Cancel</en>
-</BTN_CANCEL>
-
-<ACCEPT type="button" onclick="verifyTitle(this.form);">
-  <en>Save</en>
-</ACCEPT>
-
-<JS type="JavaScript"><![CDATA[
+  <PRO_UID type="hidden"/>
+  <OUT_DOC_UID type="hidden" showInTable="0"/>
+  <TITLE type="title" group="1">
+    <en><![CDATA[Output Document Information]]></en>
+  </TITLE>
+  <OUT_DOC_TITLE type="text" style="width:90%">
+    <en><![CDATA[Title]]></en>
+  </OUT_DOC_TITLE>
+  <OUT_DOC_FILENAME type="textpm" size="30" maxlength="100" showVars="1" process="@#PRO_UID" symbol="@#" validate="Field">
+    <en><![CDATA[Filename generated]]></en>
+  </OUT_DOC_FILENAME>
+  <OUT_DOC_DESCRIPTION type="textarea" rows="3" style="width:90%;">
+    <en><![CDATA[Description]]></en>
+  </OUT_DOC_DESCRIPTION>
+  <OUT_DOC_REPORT_GENERATOR type="dropdown" required="0" readonly="0" mode="edit">
+    <en><![CDATA[Report Generator]]><option name="HTML2PDF"><![CDATA[HTML2PDF (Old Version)]]></option><option name="TCPDF"><![CDATA[TCPDF]]></option></en>
+  </OUT_DOC_REPORT_GENERATOR>
+  <OUT_DOC_LANDSCAPE type="dropdown">
+    <en><![CDATA[Orientation]]><option name=""><![CDATA[Portrait]]></option><option name="1"><![CDATA[Landscape]]></option></en>
+  </OUT_DOC_LANDSCAPE>
+  <OUT_DOC_GENERATE type="dropdown">
+    <en><![CDATA[Output Document to Generate]]><option name="BOTH"><![CDATA[BOTH]]></option><option name="DOC"><![CDATA[DOC]]></option><option name="PDF"><![CDATA[PDF]]></option></en>
+  </OUT_DOC_GENERATE>
+  <OUT_DOC_VERSIONING type="dropdown">
+    <en><![CDATA[Enable Versioning]]><option name=""><![CDATA[NO]]></option><option name="1"><![CDATA[YES]]></option></en>
+  </OUT_DOC_VERSIONING>
+  <OUT_DOC_MEDIA type="dropdown">
+    <en><![CDATA[Media]]><option name="Letter"><![CDATA[Letter]]></option><option name="Legal"><![CDATA[Legal]]></option><option name="Executive"><![CDATA[Executive]]></option><option name="B5"><![CDATA[B5]]></option><option name="Folio"><![CDATA[Folio]]></option><option name="A0Oversize"><![CDATA[A0Oversize]]></option><option name="A0"><![CDATA[A0]]></option><option name="A1"><![CDATA[A1]]></option><option name="A2"><![CDATA[A2]]></option><option name="A3"><![CDATA[A3]]></option><option name="A4"><![CDATA[A4]]></option><option name="A5"><![CDATA[A5]]></option><option name="A6"><![CDATA[A6]]></option><option name="A7"><![CDATA[A7]]></option><option name="A8"><![CDATA[A8]]></option><option name="A9"><![CDATA[A9]]></option><option name="A10"><![CDATA[A10]]></option><option name="Screenshot640"><![CDATA[Screenshot640]]></option><option name="Screenshot800"><![CDATA[Screenshot800]]></option><option name="Screenshot1024"><![CDATA[Screenshot1024]]></option></en>
+  </OUT_DOC_MEDIA>
+  <OUT_DOC_LEFT_MARGIN type="text" style="width:15%" validate="Int">
+    <en><![CDATA[Left]]></en>
+  </OUT_DOC_LEFT_MARGIN>
+  <OUT_DOC_RIGHT_MARGIN type="text" style="width:15%" validate="Int">
+    <en><![CDATA[Right]]></en>
+  </OUT_DOC_RIGHT_MARGIN>
+  <OUT_DOC_TOP_MARGIN type="text" style="width:15%" validate="Int">
+    <en><![CDATA[Top]]></en>
+  </OUT_DOC_TOP_MARGIN>
+  <OUT_DOC_BOTTOM_MARGIN type="text" style="width:15%" validate="Int">
+    <en><![CDATA[Bottom]]></en>
+  </OUT_DOC_BOTTOM_MARGIN>
+  <OUT_DOC_DESTINATION_PATH type="textpm" size="30" maxlength="200" showVars="1" process="@#PRO_UID" symbol="@#" validate="Path">
+    <en><![CDATA[Destination Path]]></en>
+  </OUT_DOC_DESTINATION_PATH>
+  <OUT_DOC_TAGS type="textpm" size="30" maxlength="200" showVars="1" process="@#PRO_UID" symbol="@#" validate="Tag">
+    <en><![CDATA[Tags]]></en>
+  </OUT_DOC_TAGS>
+  <OUT_DOC_PDF_SECURITY_ENABLED type="dropdown">
+    <en><![CDATA[PDF Security]]><option name="0"><![CDATA[Disabled]]></option><option name="1"><![CDATA[Enabled]]></option></en>
+  </OUT_DOC_PDF_SECURITY_ENABLED>
+  <OUT_DOC_PDF_SECURITY_OPEN_PASSWORD type="password">
+    <en><![CDATA[Open Password]]></en>
+  </OUT_DOC_PDF_SECURITY_OPEN_PASSWORD>
+  <OUT_DOC_PDF_SECURITY_OWNER_PASSWORD type="password">
+    <en><![CDATA[Owner Password]]></en>
+  </OUT_DOC_PDF_SECURITY_OWNER_PASSWORD>
+  <OUT_DOC_PDF_SECURITY_PERMISSIONS type="listbox" mode="edit" options="Array">
+    <en><![CDATA[Allowed Permissions]]><option name="print"><![CDATA[Print]]></option><option name="modify"><![CDATA[Modify]]></option><option name="copy"><![CDATA[Copy]]></option><option name="annot-forms"><![CDATA[Forms]]></option></en>
+  </OUT_DOC_PDF_SECURITY_PERMISSIONS>
+  <OUT_DOC_OPEN_TYPE type="dropdown">
+    <en>By clicking on the generated file link<option name="0">Open the file</option><option name="1">Download the file</option></en>
+  </OUT_DOC_OPEN_TYPE>
+  <BTN_CANCEL type="button" onclick="cancel();">
+    <en><![CDATA[Cancel]]></en>
+  </BTN_CANCEL>
+  <ACCEPT type="button" onclick="verifyTitle(this.form);">
+    <en><![CDATA[Save]]></en>
+  </ACCEPT>
+  <JS type="JavaScript"><![CDATA[
 
 var _oVarsPanel_;
 var showDynaformsFormVars = function(sFieldName, sAjaxServer, sProcess, sSymbol) {

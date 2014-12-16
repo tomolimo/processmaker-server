@@ -1,29 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="showInfoUpdate" xmlform_type="NORMAL" width="700px" labelwidth="0">
-
-<THETITLE1 type="title">
-  <en>Information</en>
-</THETITLE1>
-<THEMESSAGE1 type="text" mode="view" enableHtml="1" />
-
-<THETITLE2 type="title">
-  <en>Affected Files</en>
-</THETITLE2>
-<THEMESSAGE2 type="textarea" cols="120" rows="10" mode="view" enableHtml="1" />
-
-<THETITLE4 type="title">
-  <en>Errors</en>
-</THETITLE4>
-<THEMESSAGE4 type="textarea" cols="120" rows="10" mode="view" enableHtml="1" />
-
-<THETITLE3 type="title">
-  <en>Environments Updated</en>
-</THETITLE3>
-
-<SUBTITLE4 type="subtitle">
-  <en></en>
-</SUBTITLE4>
-
-<THEMESSAGE3 type="text" mode="view" enableHtml="1" />
-
-</dynaForm>  
+  <THETITLE1 type="title">
+    <en><![CDATA[Information]]></en>
+  </THETITLE1>
+  <THEMESSAGE1 type="text" mode="view" enableHtml="1"/>
+  <THETITLE2 type="title">
+    <en><![CDATA[Affected Files]]></en>
+  </THETITLE2>
+  <THEMESSAGE2 type="textarea" cols="120" rows="10" mode="view" enableHtml="1"/>
+  <THETITLE4 type="title">
+    <en><![CDATA[Errors]]></en>
+  </THETITLE4>
+  <THEMESSAGE4 type="textarea" cols="120" rows="10" mode="view" enableHtml="1"/>
+  <THETITLE3 type="title">
+    <en><![CDATA[Environments Updated]]></en>
+  </THETITLE3>
+  <SUBTITLE4 type="subtitle">
+    <en><![CDATA[]]></en>
+  </SUBTITLE4>
+  <THEMESSAGE3 type="text" mode="view" enableHtml="1"/>
+</dynaForm>

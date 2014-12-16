@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?> 
+<?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="myInfoOptions" type="xmlmenu">
-<MNU_EDIT type="link" value="" link="#" onclick="changeToViewMode(); return false;" colAlign="right" colWidth="135">
-  <en>Cancel</en>
-</MNU_EDIT>
-<js type="javascript"><![CDATA[
+  <MNU_EDIT type="link" value="" link="#" onclick="changeToViewMode(); return false;" colAlign="right" colWidth="135">
+    <en><![CDATA[Cancel]]></en>
+  </MNU_EDIT>
+  <js type="javascript"><![CDATA[
 function changeToViewMode(){
   document.forms[0].parentNode.parentNode.parentNode.style.display='';
   document.forms[1].parentNode.parentNode.parentNode.style.display='none';

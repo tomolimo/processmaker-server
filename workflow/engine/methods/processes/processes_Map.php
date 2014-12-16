@@ -42,6 +42,25 @@ if ($access != 1) {
             break;
     }
 }
+
+$criteria = new Criteria("workflow");
+
+$criteria->addSelectColumn(ProcessPeer::PRO_UID);
+$criteria->add(ProcessPeer::PRO_UID, $_GET["PRO_UID"], Criteria::EQUAL);
+
+$criteria->add(
+    $criteria->getNewCriterion(ProcessPeer::PRO_CREATE_USER, $_SESSION["USER_LOGGED"], Criteria::EQUAL)->addOr(
+    $criteria->getNewCriterion(ProcessPeer::PRO_TYPE_PROCESS, "PUBLIC", Criteria::EQUAL))
+);
+
+$rsCriteria = ProcessPeer::doSelectRS($criteria);
+$rsCriteria->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+
+if (!$rsCriteria->next()) {
+    echo "You don't have privileges to edit this process.";
+    exit(0);
+}
+
 $processUID = $_GET['PRO_UID'];
 
 $_SESSION['PROCESS'] = $processUID;

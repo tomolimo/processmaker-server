@@ -672,6 +672,7 @@ class AppCacheView extends BaseAppCacheView
         }
 
         $criteria->add(AppCacheViewPeer::APP_STATUS, "CANCELLED", CRITERIA::EQUAL);
+        $criteria->add(AppCacheViewPeer::DEL_LAST_INDEX, '1', Criteria::EQUAL);
 
         if (!empty($userUid)) {
             $criteria->add(AppCacheViewPeer::USR_UID, $userUid);
@@ -889,7 +890,7 @@ class AppCacheView extends BaseAppCacheView
             return $oCriteria;
         } else {
             //This list do not have a PMTable
-            if (is_array($this->confCasesList) && count($this->confCasesList["second"]["data"]) > 0) {
+            if (is_array($this->confCasesList) && isset($this->confCasesList["second"]) && count($this->confCasesList["second"]["data"]) > 0) {
                 foreach ($this->confCasesList["second"]["data"] as $fieldData) {
                     if (in_array($fieldData["name"], $defaultFields)) {
                         switch ($fieldData["fieldType"]) {
@@ -1049,7 +1050,8 @@ class AppCacheView extends BaseAppCacheView
         )->addOr(
             //Cancelled - getCancelled()
             $criteria->getNewCriterion(AppCacheViewPeer::APP_STATUS, "CANCELLED", CRITERIA::EQUAL)->addAnd(
-            $criteria->getNewCriterion(AppCacheViewPeer::DEL_THREAD_STATUS, "CLOSED"))
+            $criteria->getNewCriterion(AppCacheViewPeer::DEL_THREAD_STATUS, "CLOSED"))->addAnd(
+            $criteria->getNewCriterion(AppCacheViewPeer::DEL_LAST_INDEX, '1', Criteria::EQUAL))
         )->addOr(
             $criteria->getNewCriterion(AppCacheViewPeer::APP_STATUS, "COMPLETED", CRITERIA::EQUAL)->addAnd(
             $criteria->getNewCriterion(AppCacheViewPeer::DEL_LAST_INDEX, '1', Criteria::EQUAL))
@@ -1199,7 +1201,6 @@ class AppCacheView extends BaseAppCacheView
             $rs1->next();
             $row = $rs1->getRow();
             $mysqlUser = str_replace('@', "'@'", $row[0]);
-
             $super = false;
 
             $sql = "SELECT *
@@ -1209,8 +1210,8 @@ class AppCacheView extends BaseAppCacheView
             $rs1 = $stmt->executeQuery($sql, ResultSet::FETCHMODE_ASSOC);
             $rs1->next();
             $row = $rs1->getRow();
-
-            if (is_array($row = $rs1->getRow())) {
+            
+            if ($row['PRIVILEGE_TYPE'] == 'SUPER') {
                 $super = G::LoadTranslation('ID_TRUE'); //true;
             }
 

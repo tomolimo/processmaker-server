@@ -1,39 +1,28 @@
 <?xml version="1.0"?>
 <dynaForm type="pagetable" menu="" searchBy="" width="150%">
-
-<PRO_UID type="hidden" showInTable="0"></PRO_UID>
-<LOG_CASE_UID type="hidden" showInTable="0"></LOG_CASE_UID>
-
-<TAS_UID type="hidden" showInTable="0"/>
-
-<SCH_UID type="hidden" showInTable="0"/>
-
-
-
-<EXEC_DATE type="text" titlealign="left" align="left" colWidth="80">
-  <en>Date</en>
-</EXEC_DATE>
-
-<EXEC_HOUR type="text" titlealign="left" align="left" colWidth="60">
-  <en>Time</en>
-</EXEC_HOUR>
-
-<USR_NAME type="text" titlealign="left" align="left" colWidth="90">
-  <en>User</en>
-</USR_NAME><RESULT type="text" titlealign="left" align="left" colWidth="40">
-  <en>Result</en>
-</RESULT>
-
-<WS_CREATE_CASE_STATUS type="text" titlealign="left" align="left" colWidth="250">
-  <en>Created Case Status</en>
-</WS_CREATE_CASE_STATUS>
-
-<WS_ROUTE_CASE_STATUS type="text" titlealign="left" align="left" colWidth="250">
-  <en>Routed Case Status</en>
-</WS_ROUTE_CASE_STATUS>
-
-<VIEW type="link" colWidth="40" value="" link="cases_Scheduler_Log_Detail?LOG_CASE_UID=@#LOG_CASE_UID" onclick="">
-  <en>View</en>
-</VIEW>
-
-</dynaForm>  
+  <PRO_UID type="hidden" showInTable="0"/>
+  <LOG_CASE_UID type="hidden" showInTable="0"/>
+  <TAS_UID type="hidden" showInTable="0"/>
+  <SCH_UID type="hidden" showInTable="0"/>
+  <EXEC_DATE type="text" titlealign="left" align="left" colWidth="80">
+    <en><![CDATA[Date]]></en>
+  </EXEC_DATE>
+  <EXEC_HOUR type="text" titlealign="left" align="left" colWidth="60">
+    <en><![CDATA[Time]]></en>
+  </EXEC_HOUR>
+  <USR_NAME type="text" titlealign="left" align="left" colWidth="90">
+    <en><![CDATA[User]]></en>
+  </USR_NAME>
+  <RESULT type="text" titlealign="left" align="left" colWidth="40">
+    <en><![CDATA[Result]]></en>
+  </RESULT>
+  <WS_CREATE_CASE_STATUS type="text" titlealign="left" align="left" colWidth="250">
+    <en><![CDATA[Created Case Status]]></en>
+  </WS_CREATE_CASE_STATUS>
+  <WS_ROUTE_CASE_STATUS type="text" titlealign="left" align="left" colWidth="250">
+    <en><![CDATA[Routed Case Status]]></en>
+  </WS_ROUTE_CASE_STATUS>
+  <VIEW type="link" colWidth="40" value="" link="cases_Scheduler_Log_Detail?LOG_CASE_UID=@#LOG_CASE_UID" onclick="">
+    <en><![CDATA[View]]></en>
+  </VIEW>
+</dynaForm>

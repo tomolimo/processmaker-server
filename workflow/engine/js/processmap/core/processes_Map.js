@@ -118,6 +118,7 @@ var saveDataTaskTemporal = function(iForm)
         oTaskData.TAS_SELFSERVICE_TIME = (sw == 1)? getField("TAS_SELFSERVICE_TIME").value : "";
         oTaskData.TAS_SELFSERVICE_TIME_UNIT = (sw == 1)? getField("TAS_SELFSERVICE_TIME_UNIT").value : "";
         oTaskData.TAS_SELFSERVICE_TRIGGER_UID = (sw == 1)? getField("TAS_SELFSERVICE_TRIGGER_UID").value : "";
+        oTaskData.TAS_SELFSERVICE_EXECUTION = (sw == 1)? getField("TAS_SELFSERVICE_EXECUTION").value : "";
         break;
       case 3:
       case '3':
@@ -239,7 +240,11 @@ var saveTaskData = function(oForm, iForm, iType)
     return false;
   }
 
-  //Set AJAX
+  oTaskData.TAS_TITLE_BK = oTaskData.TAS_TITLE;
+  oTaskData.TAS_TITLE = stringReplace("\\+", "__ADD__", oTaskData.TAS_TITLE);
+  oTaskData.TAS_DESCRIPTION = stringReplace("\\+", "__ADD__", oTaskData.TAS_DESCRIPTION);
+
+  //Set AJAX   
   var sParameters = "function=saveTaskData";
 
   var oRPC = new leimnud.module.rpc.xmlhttp({
@@ -247,6 +252,8 @@ var saveTaskData = function(oForm, iForm, iType)
     method: "POST",
     args: sParameters + "&oData=" + oTaskData.toJSONString()
   });
+
+  oTaskData.TAS_TITLE =   oTaskData.TAS_TITLE_BK;
 
   oRPC.callback = function (rpc) {
     var res = rpc.xmlhttp.responseText.parseJSON();

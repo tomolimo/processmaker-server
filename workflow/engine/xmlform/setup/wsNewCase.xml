@@ -1,27 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="webservices" width="500" mode="edit" border="0" enableTemplate="0" height="260px">
-
-<SESSION_ID type="text" size="36" maxlength="32">
-  <en>Session Id</en>
-<es><![CDATA[Id de Sesión]]></es></SESSION_ID>
-
-<PROCESS_ID type="dropdown" sqlConnection="dbarray">
+  <SESSION_ID type="text" size="36" maxlength="32">
+    <en><![CDATA[Session Id]]></en>
+    <es><![CDATA[Id de Sesión]]></es>
+  </SESSION_ID>
+  <PROCESS_ID type="dropdown" sqlConnection="dbarray">
   SELECT * from process
-  <en>Process ID</en>
+  <en><![CDATA[Process ID]]></en>
 <es>ID de Proceso</es></PROCESS_ID>
-
-<TASK_ID type="dropdown" sqlConnection="dbarray">
+  <TASK_ID type="dropdown" sqlConnection="dbarray">
   SELECT * from task
-  <en>Task ID<option name="">Default</option></en>
+  <en><![CDATA[Task ID]]><option name=""><![CDATA[Default]]></option></en>
 <es>ID de Tarea</es></TASK_ID>
-
-<VARIABLES type="grid" xmlgrid="setup/wsVariablesGrid" addrow="1" deleterow="1"/>
-
-<ACTION type="hidden">
+  <VARIABLES type="grid" xmlgrid="setup/wsVariablesGrid" addrow="1" deleterow="1"/>
+  <ACTION type="hidden">
 </ACTION>
-
-<ACTIONB type="button" onclick="submitThisForm(this.form);">
-  <en>NewCase</en>
-<es>Caso Nuevo</es></ACTIONB>
-
-</dynaForm>  
+  <ACTIONB type="button" onclick="submitThisForm(this.form);">
+    <en><![CDATA[NewCase]]></en>
+    <es>Caso Nuevo</es>
+  </ACTIONB>
+</dynaForm>

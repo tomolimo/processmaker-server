@@ -2,9 +2,9 @@
 <dynaForm width="450" rowsPerPage="10">
   <id type="private" showInTable="0"/>
   <name type="text" width="200" titleAlign="left" align="left" enableHtml="1">
-    <en>Variable</en>
+    <en><![CDATA[Variable]]></en>
   </name>
   <label type="text" width="250" titleAlign="left" align="left">
-    <en>Label</en>
+    <en><![CDATA[Label]]></en>
   </label>
 </dynaForm>

@@ -1,18 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="pagetable" sqlConnection="" menu="">
-
-<RPT_NUMBER type="text" titlealign="left" colWidth="50">
-  <en>#</en>
-</RPT_NUMBER>
-
-<RPT_TITLE type="text" titlealign="left" colWidth="200">
-  <en>Reports</en>
-</RPT_TITLE>
-
-<RPT_VIEW type="link" colWidth="100" link="reports_View?RPT_UID=@#RPT_UID" value="@#VIEW">
-  <en/>
-</RPT_VIEW>
-
-<RPT_UID type="private" showInTable="0"/>
-
-</dynaForm> 
+  <RPT_NUMBER type="text" titlealign="left" colWidth="50">
+    <en><![CDATA[#]]></en>
+  </RPT_NUMBER>
+  <RPT_TITLE type="text" titlealign="left" colWidth="200">
+    <en><![CDATA[Reports]]></en>
+  </RPT_TITLE>
+  <RPT_VIEW type="link" colWidth="100" link="reports_View?RPT_UID=@#RPT_UID" value="@#VIEW">
+    <en><![CDATA[]]></en>
+  </RPT_VIEW>
+  <RPT_UID type="private" showInTable="0"/>
+</dynaForm>

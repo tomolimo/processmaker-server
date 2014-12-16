@@ -1,20 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="pagetable" sql="SELECT UID, DATE, DESCRIPTION FROM HOLIDAY ORDER BY DATE" sqlConnection="" deleteRow="0" insertRow="0" menu="setup/holidayListMenu" filterForm="setup/usersListFilter">
-
-<UID type="link" maxlength="5" value="@%UID" link="loadUser.php?UID=@%UID" colWidth="35">
-  <en>UID</en>
-</UID>
-
-<DATE type="text" size="2000" maxlength="2050" validate="" mask="" colWidth="100">
-  <en>Date</en>
-</DATE>
-
-<DESCRIPTION type="text" size="40" maxlength="40" colWidth="300">
-  <en>Description</en>
-</DESCRIPTION>
-
-<DELETE type="link" colWidth="50" value="DELETE" link="#" onclick="return deleteHoliday(&#039;@#UID&#039;);">
-  <en>Delete</en>
-</DELETE>
-
-</dynaForm>  
+  <UID type="link" maxlength="5" value="@%UID" link="loadUser.php?UID=@%UID" colWidth="35">
+    <en><![CDATA[UID]]></en>
+  </UID>
+  <DATE type="text" size="2000" maxlength="2050" validate="" mask="" colWidth="100">
+    <en><![CDATA[Date]]></en>
+  </DATE>
+  <DESCRIPTION type="text" size="40" maxlength="40" colWidth="300">
+    <en><![CDATA[Description]]></en>
+  </DESCRIPTION>
+  <DELETE type="link" colWidth="50" value="DELETE" link="#" onclick="return deleteHoliday('@#UID');">
+    <en><![CDATA[Delete]]></en>
+  </DELETE>
+</dynaForm>

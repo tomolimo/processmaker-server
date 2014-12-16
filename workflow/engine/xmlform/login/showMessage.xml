@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="showMessage" version="1.0" basedir="" xmlform_type="NORMAL" width="520px" labelwidth="0">
-<TITLE type="title">
-  <en>Error</en>
-</TITLE>
-<MESSAGE type="text" enableHtml="1" mode="view">
-  <en/>
-</MESSAGE>
-</dynaForm> 
+  <TITLE type="title">
+    <en><![CDATA[Error]]></en>
+  </TITLE>
+  <MESSAGE type="text" enableHtml="1" mode="view">
+    <en><![CDATA[]]></en>
+  </MESSAGE>
+</dynaForm>

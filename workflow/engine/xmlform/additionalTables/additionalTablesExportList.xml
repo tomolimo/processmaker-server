@@ -1,32 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm sqlConnection="" width="100%" rowsPerPage="11">
-
-<ADD_TAB_UID type="CheckboxTable" colWidth="3" titleAlign="left" align="left" value="">
-  <en/>
-</ADD_TAB_UID>
-
-<ADD_TAB_NAME type="text" colWidth="200" titleAlign="left" align="left">
-  <en>Name</en>
-</ADD_TAB_NAME>
-
-<ADD_TAB_DESCRIPTION type="text" colWidth="300" titleAlign="left" align="left">
-  <en>Description</en>
-</ADD_TAB_DESCRIPTION>
-
-<ADD_SCHEMA type="checkboxpt" colWidth="5" value="@#ADD_TAB_UID">
-  <en><![CDATA[Schema&nbsp;]]></en>
-</ADD_SCHEMA>
-
-<ADD_DATA type="checkboxpt" colWidth="5" value="@#ADD_TAB_UID">
-  <en><![CDATA[Data&nbsp;]]></en>
-</ADD_DATA>
-
-<PAGED_TABLE_ID type="private" showInTable="0"/>
-
-<JSFILTER type="javascript" replaceTags="1" showInTable="0">
+  <ADD_TAB_UID type="CheckboxTable" colWidth="3" titleAlign="left" align="left" value="">
+    <en/>
+  </ADD_TAB_UID>
+  <ADD_TAB_NAME type="text" colWidth="200" titleAlign="left" align="left">
+    <en><![CDATA[Name]]></en>
+  </ADD_TAB_NAME>
+  <ADD_TAB_DESCRIPTION type="text" colWidth="300" titleAlign="left" align="left">
+    <en><![CDATA[Description]]></en>
+  </ADD_TAB_DESCRIPTION>
+  <ADD_SCHEMA type="checkboxpt" colWidth="5" value="@#ADD_TAB_UID">
+    <en><![CDATA[Schema&nbsp;]]></en>
+  </ADD_SCHEMA>
+  <ADD_DATA type="checkboxpt" colWidth="5" value="@#ADD_TAB_UID">
+    <en><![CDATA[Data&nbsp;]]></en>
+  </ADD_DATA>
+  <PAGED_TABLE_ID type="private" showInTable="0"/>
+  <JSFILTER type="javascript" replaceTags="1" showInTable="0">
 function pagedTableFilter( form ) {
   @#PAGED_TABLE_ID.doFilter( form );
 }
 </JSFILTER>
-
-</dynaForm> 
+</dynaForm>

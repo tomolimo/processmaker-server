@@ -8,7 +8,7 @@ include_once 'classes/model/Holiday.php';
 /**
  * Base static class for performing query and update operations on the 'HOLIDAY' table.
  *
- * 
+ *
  *
  * @package    workflow.classes.model.om
  */

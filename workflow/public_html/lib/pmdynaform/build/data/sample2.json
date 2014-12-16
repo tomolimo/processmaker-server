@@ -1,0 +1,644 @@
+{
+    "name": "form-example2",
+    "items": [
+        {
+            "type":"form",       
+            "items":
+            [
+                [
+                    {
+                        "type": "title",
+                        "colSpan": 12,
+                        "name": "title",
+                        "label": "PMDynaform 2 - Required, DataType and Hint property"
+                    }
+                ],
+                [
+                    {
+                        "type": "subtitle",
+                        "colSpan": 12,
+                        "name": "subtitle",
+                        "label": "Fields required with helpers and dataType string, integer, float, date, datetime and time"
+                    }
+                ],
+                [
+                    {
+                        "var_name": "simplevariable",
+                        "var_uid": "10",
+                        "type": "text",
+                        "colSpan":12,
+                        "name": "Textinput1",
+                        "defaultValue": "",
+                        "disabled": false,
+                        "label": "Data type - String",
+                        "required": true,
+                        "dataType": "string",
+                        "hint": "Text field example with string validation"
+                    }
+                ],
+                [
+                    {
+                        "var_name": "simplevariable",
+                        "var_uid": "11",
+                        "type": "text",
+                        "colSpan":12,
+                        "name": "Textinput2",
+                        "defaultValue": "",
+                        "label": "Data type - Integer",
+                        "required": true,
+                        "dataType": "integer",
+                        "hint": "Text field example with integer validation"
+                    }
+                ],
+                [
+                    {
+                        "var_name": "simplevariable",
+                        "var_uid": "12",
+                        "type": "text",
+                        "colSpan":12,
+                        "name": "Textinput3",
+                        "defaultValue": "",
+                        "label": "Data type - Float",
+                        "required": true,
+                        "dataType": "float",
+                        "hint": "Text field example with float validation"
+                    }
+                ],
+                [
+                    {
+                        "var_name": "simplevariable",
+                        "var_uid": "13",
+                        "type": "suggest",
+                        "colSpan":12,
+                        "name": "suggestName",
+                        "defaultValue": "",
+                        "label": "Suggest",
+                        "placeholder": "suggest",
+                        "required": true,
+                        "dataType": "string",
+                        "options":[
+                            {
+                                "label": "Option 1",
+                                "value": "option1"
+                            },
+                            {
+                                "label": "Option 2",
+                                "value": "option2"
+                            },
+                            {
+                                "label": "Option 3",
+                                "value": "option2"  
+                            }
+                        ],
+                        "hint": "Suggest field with string validation"
+                    }
+                ],
+                [
+                    {
+                        "var_name": "simplevariable",
+                        "var_uid": "14",
+                        "type": "textarea",
+                        "colSpan":12,
+                        "name": "TextArea",
+                        "defaultValue": "",
+                        "label": "TextArea",
+                        "required": true,
+                        "readonly": false,
+                        "dataType": "string",
+                        "hint": "TextArea field example with string validation"
+                    }
+                ],
+                [
+                    {
+                        "var_name": "simplevariable",
+                        "var_uid": "15",
+                        "type": "dropdown",
+                        "colSpan":12,
+                        "name": "Option",
+                        "label": "Dropdown",
+                        "defaultValue": "option2",
+                        "readonly": false,
+                        "required": true,
+                        "hint": "Dropdown field example with string validation",
+                        "options":[
+                            {
+                                "label": "Option 1",
+                                "value": "option1"
+                            },
+                            {
+                                "label": "Option 2",
+                                "value": "option2"
+                            },
+                            {
+                                "label": "Option 3",
+                                "value": "option3"
+                            }
+                        ]
+                    }
+                ],
+                [
+                    {
+                        "var_name": "simplevariable",
+                        "var_uid": "16",
+                        "type": "checkbox",
+                        "colSpan":12,
+                        "name": "radiogroup1",
+                        "defaultValue": "1",
+                        "label": "CheckBoxGroup",
+                        "required": true,
+                        "dataType": "string",
+                        "hint": "CheckBoxGroup field example with string validation",
+                        "options": [
+                            {
+                                "label": "This is the option AA",
+                                "value": "1"
+                            },
+                            {
+                                "label": "This is the option B",
+                                "value": "2"
+                            },
+                            {
+                                "label": "This is the option C",
+                                "value": "3"
+                            }
+                        ]
+                    }
+                ],
+                [
+                    {
+                        "var_name": "simplevariable",
+                        "var_uid": "17",
+                        "type": "radio",
+                        "colSpan":12,
+                        "name": "radiogroup123",
+                        "defaultValue": "",
+                        "label": "Radio Grp2",
+                        "required": true,
+                        "dataType": "string",
+                        "hint": "RadioGroup field example with string validation",
+                        "options": [
+                            {
+                                "label" : "Radio option A",
+                                "value" : "1"
+                            },
+                            {
+                                "label" : "Radio option B",
+                                "value" : "2"
+                            }
+                        ]
+                    }
+                ],
+                [
+                    {
+                        "var_name": "simplevariable",
+                        "var_uid": "18",
+                        "type": "datetime",
+                        "pickType":"datetime",
+                        "colSpan": 12,
+                        "name": "datetime1",
+                        "defaultValue": "",
+                        "label": "Date time",
+                        "dataType": "datetime",
+                        "hint": "Datetime field example with datetime validation",
+                        "required": true,
+                        "readonly": false
+                    }
+                ],
+                [
+                    {
+                        "var_name": "simplevariablethree",
+                        "var_uid": "18",
+                        "type": "datetime",
+                        "pickType":"date",
+                        "colSpan": 12,
+                        "name": "datetime2",
+                        "defaultValue": "",
+                        "label": "Date",
+                        "dataType": "date",
+                        "hint": "Date field example with date validation",
+                        "required": true,
+                        "readonly": false
+                    }
+                ],
+                [
+                    {
+                        "var_name": "simplevariablethree",
+                        "var_uid": "19",
+                        "type": "datetime",
+                        "pickType":"time",
+                        "colSpan": 12,
+                        "name": "datetime3",
+                        "defaultValue": "",
+                        "label": "Time",
+                        "dataType": "time",
+                        "hint": "Time field example with time validation",
+                        "required": true,
+                        "readonly": false
+                    }
+                ],
+                [
+                    {
+                      "type" : "submit",
+                      "colSpan" : 12,
+                      "label" : "Submit"
+                    }
+                ]
+            ],
+            "variables": 
+            [
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "workflow",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "string",
+                    "var_label": "users",
+                    "var_name": "users",
+                    "var_allowNull": 1,
+                    "var_sql": "SELECT USR_UID, USR_USERNAME\nFROM USERS\nWHERE USR_USERNAME <>  \" \"",
+                    "var_uid": "752292886541b20d3325955025125925"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "workflow",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "string",
+                    "var_label": "country",
+                    "var_name": "country",
+                    "var_allowNull": 1,
+                    "var_sql": "SELECT IC_UID,IC_NAME   \nFROM ISO_COUNTRY WHERE IC_NAME <> \" \"",
+                    "var_uid": "943312492541b2101075730071729173"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "workflow",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "string",
+                    "var_label": "subdivision",
+                    "var_name": "subdivision",
+                    "var_allowNull": 1,
+                    "var_sql": "SELECT \nIS_UID,\nIS_NAME FROM ISO_SUBDIVISION WHERE IC_UID = \"@#country\" AND IS_NAME <> \" \"",
+                    "var_uid": "562853519541b20e79b6960026331275"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "workflow",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "string",
+                    "var_label": "location",
+                    "var_name": "location",
+                    "var_allowNull": 1,
+                    "var_sql": "SELECT IL_UID, IL_NAME\nFROM ISO_LOCATION\nWHERE IS_UID =  \"@#subdivision\" AND IL_NAME <> \" \" AND IC_UID = \"@#country\"",
+                    "var_uid": "448293955541b20b5e393c3052081446"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "workflow",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "string",
+                    "var_label": "varname",
+                    "var_name": "varname",
+                    "var_allowNull": 1,
+                    "var_sql": "",
+                    "var_uid": "752292886541b20d3325955025125927"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "none",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "string",
+                    "var_label": "simplevariable",
+                    "var_name": "simplevariable",
+                    "var_allowNull": 1,
+                    "var_sql": "",
+                    "var_uid": "299463130541b212c93a3d7047589419"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "none",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "string",
+                    "var_label": "Simple Variable Two",
+                    "var_name": "simplevariabletwo",
+                    "var_allowNull": 1,
+                    "var_sql": "",
+                    "var_uid": "992707483545248537300e5085346250"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "none",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "datetime",
+                    "var_label": "Simple Variable Three",
+                    "var_name": "simplevariablethree",
+                    "var_allowNull": 1,
+                    "var_sql": "",
+                    "var_uid": "31319212954524865487616020584523"
+                },
+                {
+                    "var_acceptedValues": [
+                        {
+                          "value": "First Value",
+                          "keyValue": "firstvalue"
+                        },
+                        {
+                          "value": "Second Value",
+                          "keyValue": "secondvalue"
+                        }
+                    ],
+                    "var_dbConnection": "none",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 100,
+                    "var_fieldType": "string",
+                    "var_label": "optionsvariable",
+                    "var_name": "optionsvariable",
+                    "var_allowNull": 1,
+                    "var_sql": "",
+                    "var_uid": "109090183545298e8505313008393063"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "none",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "string",
+                    "var_label": "variablegridone",
+                    "var_name": "variablegridone",
+                    "var_allowNull": 1,
+                    "var_sql": "",
+                    "var_uid": "8391557125458eb60509b60057650758"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "none",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 100,
+                    "var_fieldType": "string",
+                    "var_label": "variablegridtwo",
+                    "var_name": "variablegridtwo",
+                    "var_allowNull": 1,
+                    "var_sql": "",
+                    "var_uid": "5746882395458eb6b8b54a2015704374"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "none",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "string",
+                    "var_label": "variablegridthree",
+                    "var_name": "variablegridthree",
+                    "var_allowNull": 1,
+                    "var_sql": "",
+                    "var_uid": "5532828265458eb76ebf700002684261"
+                },
+                {
+                    "var_acceptedValues": [
+                    {
+                      "value": "variable option 1",
+                      "keyValue": "variable_option_1"
+                    },
+                    {
+                      "value": "variable option 2",
+                      "keyValue": "variable_option_2"
+                    },
+                    {
+                      "value": "variable option 3",
+                      "keyValue": "variable_option_3"
+                    }
+                  ],
+                  "var_dbConnection": "none",
+                  "var_defaultValue": "",
+                  "var_fieldSize": 10,
+                  "var_fieldType": "string",
+                  "var_label": "variablegridfour",
+                  "var_name": "variablegridfour",
+                  "var_allowNull": 1,
+                  "var_sql": "",
+                  "var_uid": "6551198965458ebe28477c5094393260"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "workflow",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "string",
+                    "var_label": "users",
+                    "var_name": "field10",
+                    "var_allowNull": 1,
+                    "var_sql": "SELECT USR_UID, USR_USERNAME\nFROM USERS\nWHERE USR_USERNAME <>  \" \"",
+                    "var_uid": "10"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "workflow",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "string",
+                    "var_label": "country",
+                    "var_name": "field11",
+                    "var_allowNull": 1,
+                    "var_sql": "SELECT IC_UID,IC_NAME   \nFROM ISO_COUNTRY WHERE IC_NAME <> \" \"",
+                    "var_uid": "11"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "workflow",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "string",
+                    "var_label": "subdivision",
+                    "var_name": "field12",
+                    "var_allowNull": 1,
+                    "var_sql": "SELECT \nIS_UID,\nIS_NAME FROM ISO_SUBDIVISION WHERE IC_UID = \"@#country\" AND IS_NAME <> \" \"",
+                    "var_uid": "12"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "workflow",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "string",
+                    "var_label": "location",
+                    "var_name": "field13",
+                    "var_allowNull": 1,
+                    "var_sql": "SELECT IL_UID, IL_NAME\nFROM ISO_LOCATION\nWHERE IS_UID =  \"@#subdivision\" AND IL_NAME <> \" \" AND IC_UID = \"@#country\"",
+                    "var_uid": "13"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "workflow",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "string",
+                    "var_label": "varname",
+                    "var_name": "field14",
+                    "var_allowNull": 1,
+                    "var_sql": "",
+                    "var_uid": "14"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "none",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "string",
+                    "var_label": "simplevariable",
+                    "var_name": "field15",
+                    "var_allowNull": 1,
+                    "var_sql": "",
+                    "var_uid": "15"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "none",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "string",
+                    "var_label": "Simple Variable Two",
+                    "var_name": "field16",
+                    "var_allowNull": 1,
+                    "var_sql": "",
+                    "var_uid": "16"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "none",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "datetime",
+                    "var_label": "Simple Variable Three",
+                    "var_name": "field17",
+                    "var_allowNull": 1,
+                    "var_sql": "",
+                    "var_uid": "17"
+                },
+                {
+                    "var_acceptedValues": [
+                        {
+                          "value": "First Value",
+                          "keyValue": "firstvalue"
+                        },
+                        {
+                          "value": "Second Value",
+                          "keyValue": "secondvalue"
+                        }
+                    ],
+                    "var_dbConnection": "none",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 100,
+                    "var_fieldType": "string",
+                    "var_label": "optionsvariable",
+                    "var_name": "field18",
+                    "var_allowNull": 1,
+                    "var_sql": "",
+                    "var_uid": "18"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "none",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "string",
+                    "var_label": "variablegridone",
+                    "var_name": "field19",
+                    "var_allowNull": 1,
+                    "var_sql": "",
+                    "var_uid": "19"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "none",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 100,
+                    "var_fieldType": "string",
+                    "var_label": "field20",
+                    "var_name": "field20",
+                    "var_allowNull": 1,
+                    "var_sql": "",
+                    "var_uid": "20"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "none",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "string",
+                    "var_label": "variablegridthree",
+                    "var_name": "field21",
+                    "var_allowNull": 1,
+                    "var_sql": "",
+                    "var_uid": "21"
+                },
+                {
+                    "var_acceptedValues": [
+                    {
+                      "value": "variable option 1",
+                      "keyValue": "variable_option_1"
+                    },
+                    {
+                      "value": "variable option 2",
+                      "keyValue": "variable_option_2"
+                    },
+                    {
+                      "value": "variable option 3",
+                      "keyValue": "variable_option_3"
+                    }
+                  ],
+                  "var_dbConnection": "none",
+                  "var_defaultValue": "",
+                  "var_fieldSize": 10,
+                  "var_fieldType": "string",
+                  "var_label": "variablegridfour",
+                  "var_name": "field22",
+                  "var_allowNull": 1,
+                  "var_sql": "",
+                  "var_uid": "22"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "none",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "string",
+                    "var_label": "variablegridthree",
+                    "var_name": "field23",
+                    "var_allowNull": 1,
+                    "var_sql": "",
+                    "var_uid": "23"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "none",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "string",
+                    "var_label": "variablegridthree",
+                    "var_name": "field24",
+                    "var_allowNull": 1,
+                    "var_sql": "",
+                    "var_uid": "24"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "none",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "string",
+                    "var_label": "variablegridthree",
+                    "var_name": "datetime",
+                    "var_allowNull": 1,
+                    "var_sql": "",
+                    "var_uid": "datetimeId"
+                }
+            ]
+        }
+    ]
+}

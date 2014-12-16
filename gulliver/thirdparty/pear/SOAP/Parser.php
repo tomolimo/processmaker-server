@@ -239,7 +239,7 @@ class SOAP_Parser extends SOAP_Base
                              $this->message[$pos]['type_namespace']);
             // Check if value is an empty array
             if ($tqn->name == 'Array') {
-                $response =& new SOAP_Value($nqn->fqn(), $tqn->fqn(),
+                $response = new SOAP_Value($nqn->fqn(), $tqn->fqn(),
                                             array(), $attrs);
             } else {
                 $response = new SOAP_Value($nqn->fqn(),

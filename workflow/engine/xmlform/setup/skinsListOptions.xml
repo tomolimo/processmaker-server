@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="processes_NewOptions" type="xmlmenu">
-
-<MNU_NEW type="link" value="" link="#" onclick="window.location = &#039;skinsNew&#039;;return false;" colAlign="left" colWidth="45">
-  <en>New</en>
-</MNU_NEW>
-
-</dynaForm>  
+  <MNU_NEW type="link" value="" link="#" onclick="window.location = 'skinsNew';return false;" colAlign="left" colWidth="45">
+    <en><![CDATA[New]]></en>
+  </MNU_NEW>
+</dynaForm>

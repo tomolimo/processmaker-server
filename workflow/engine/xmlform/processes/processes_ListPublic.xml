@@ -1,43 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="Objectpm" menu="processes/processes_ListPublicMenu" width="100%" type="pagedtable">
-
-<title type="text" colWidth="160">
-  <en>Title</en>
-</title>
-
-<category type="text" colWidth="100">
-  <en>Category</en>
-</category>
-
-<version type="text" colWidth="50">
-  <en>Version</en>
-</version>
-
-<downloads type="text" colWidth="50">
-  <en>Downloads</en>
-</downloads>
-
-<rating type="text" colWidth="50">
-  <en>Rating</en>
-</rating>
-
-<subscriptions type="text" colWidth="70">
-  <en>Subscriptions</en>
-</subscriptions>
-
-
-<user type="text" colWidth="80">
-  <en>Author</en>
-</user>
-
-<updateDate type="text" colWidth="120">
-  <en>Update Date</en>
-</updateDate>
-
-
-
-<LINK type="link" colWidth="60" titleAlign="left" align="left" link="javascript:showDetails(@@guid);" value="@G::LoadTranslation(ID_VIEW)">
-  <en/>
-</LINK>
-
-</dynaForm> 
+  <title type="text" colWidth="160">
+    <en><![CDATA[Title]]></en>
+  </title>
+  <category type="text" colWidth="100">
+    <en><![CDATA[Category]]></en>
+  </category>
+  <version type="text" colWidth="50">
+    <en><![CDATA[Version]]></en>
+  </version>
+  <downloads type="text" colWidth="50">
+    <en><![CDATA[Downloads]]></en>
+  </downloads>
+  <rating type="text" colWidth="50">
+    <en><![CDATA[Rating]]></en>
+  </rating>
+  <subscriptions type="text" colWidth="70">
+    <en><![CDATA[Subscriptions]]></en>
+  </subscriptions>
+  <user type="text" colWidth="80">
+    <en><![CDATA[Author]]></en>
+  </user>
+  <updateDate type="text" colWidth="120">
+    <en><![CDATA[Update Date]]></en>
+  </updateDate>
+  <LINK type="link" colWidth="60" titleAlign="left" align="left" link="javascript:showDetails(@@guid);" value="@G::LoadTranslation(ID_VIEW)">
+    <en><![CDATA[]]></en>
+  </LINK>
+</dynaForm>

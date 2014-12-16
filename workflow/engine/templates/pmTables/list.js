@@ -40,33 +40,43 @@ Ext.onReady(function(){
 
     pageSize = parseInt(CONFIG.pageSize);
 
-    var newMenuOptions = new Array();
     if (PRO_UID == false) {
+      var newMenuOptions = new Array();
+
       newMenuOptions.push({
         text: _('ID_NEW_PMTABLE'),
         handler: newPMTable
       });
+      newMenuOptions.push({
+        text: _('ID_NEW_REPORT_TABLE'),
+        handler: NewReportTable
+      });
+
+      newButton = new Ext.Action({
+  	    id: 'newButton',
+  	    text: _('ID_NEW'),
+  	    icon: '/images/add-table.png',
+  	    menu: newMenuOptions
+  	  });
     }
+    
     var flagProcessmap =  (typeof('flagProcessmap') != 'undefined') ? flagProcessmap : 0;
 
-    newMenuOptions.push({
-      text: _('ID_NEW_REPORT_TABLE'),
-      handler: NewReportTable
-    });
-
-    if (PRO_UID !== false) {
+    /*if (PRO_UID !== false) {
       newMenuOptions.push({
         text: _('ID_NEW_REPORT_TABLE_OLD'),
         handler: NewReportTableOld
       });
-    }
+    }*/
 
-    newButton = new Ext.Action({
-      id: 'newButton',
-      text: _('ID_NEW'),
-      icon: '/images/add-table.png',
-      menu: newMenuOptions
-    });
+    if (PRO_UID !== false) {
+	  newButton = new Ext.Action({
+	    id: 'newButton',
+	    text: _('ID_NEW'),
+	    icon: '/images/add-table.png',
+	    handler: NewReportTable
+	  });
+    }
 
     editButton = new Ext.Action({
       id: 'editButton',
@@ -634,14 +644,16 @@ ExportPMTable = function(){
   var toExportRows = new Array();
 
   for(var i=0; i<rows.length; i++){
-    toExportRows.push([
-      rows[i].get('ADD_TAB_UID'),
-      rows[i].get('PRO_UID'),
-      rows[i].get('ADD_TAB_NAME'),
-      (rows[i].get('PRO_UID') ? _('ID_REPORT_TABLE'): _('ID_PMTABLE')),
-      true,
-      (rows[i].get('PRO_UID') ? false : true)
-    ]);
+	if (rows[i].get('TYPE') == '') {
+	    toExportRows.push([
+	      rows[i].get('ADD_TAB_UID'),
+	      rows[i].get('PRO_UID'),
+	      rows[i].get('ADD_TAB_NAME'),
+	      (rows[i].get('PRO_UID') ? _('ID_REPORT_TABLE'): _('ID_PMTABLE')),
+	      true,
+	      (rows[i].get('PRO_UID') ? false : true)
+	    ]);
+	}
   }
 
   Export.targetGrid.store.loadData(toExportRows);
@@ -705,12 +717,14 @@ UpdatePageConfig = function(pageSize){
 
 //Do Search Function
 DoSearch = function(){
-   infoGrid.store.load({params: {textFilter: searchText.getValue()}});
+   infoGrid.store.setBaseParam('textFilter', searchText.getValue());
+   infoGrid.store.load();
 };
 
 //Load Grid By Default
 GridByDefault = function(){
   searchText.reset();
+  infoGrid.store.setBaseParam('textFilter', searchText.getValue());
   infoGrid.store.load();
 };
 

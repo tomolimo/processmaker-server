@@ -1,23 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="cases_AttachInputDocument3" type="xmlform" width="400px" labelWidth="100px" enableTemplate="1">
-
-<TITLE1 type="title">
-  <en>Import Process</en>
-</TITLE1>
-
-
-<PROCESS_FILENAME type="file">
-  <en>File</en>
-</PROCESS_FILENAME>
-
-<SAVE type="button" onclick="verifyFile(this.form);">
-  <en>Import</en>
-</SAVE>
-
-<BTN_CANCEL type="button" onclick="cancel();">
-  <en>Cancel</en>
-</BTN_CANCEL>
-<JS type="javascript" replacetags="1"><![CDATA[
+  <TITLE1 type="title">
+    <en><![CDATA[Import Process]]></en>
+  </TITLE1>
+  <PROCESS_FILENAME type="file">
+    <en><![CDATA[File]]></en>
+  </PROCESS_FILENAME>
+  <SAVE type="button" onclick="verifyFile(this.form);">
+    <en><![CDATA[Import]]></en>
+  </SAVE>
+  <BTN_CANCEL type="button" onclick="cancel();">
+    <en><![CDATA[Cancel]]></en>
+  </BTN_CANCEL>
+  <JS type="javascript" replacetags="1"><![CDATA[
 
 var verifyFile = function(oForm) {
   if (document.getElementById('form[PROCESS_FILENAME]').value != '') {
@@ -33,6 +28,4 @@ function cancel(){
 }
 
 ]]></JS>
-
-
-</dynaForm>  
+</dynaForm>

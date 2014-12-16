@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="xmlform" width="95%">
-
-<GRP_NAME type="private"/>
-
-<GRP_LABEL type="title" label="@#GRP_NAME" align="center">
-<en>@#GRP_NAME</en>
-</GRP_LABEL>
-
-</dynaForm> 
+  <GRP_NAME type="private"/>
+  <GRP_LABEL type="title" label="@#GRP_NAME" align="center">
+    <en><![CDATA[@#GRP_NAME]]></en>
+  </GRP_LABEL>
+</dynaForm>

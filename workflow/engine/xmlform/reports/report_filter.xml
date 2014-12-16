@@ -1,26 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="xmlform" name="" width="600" enabletemplate="0" mode="edit">
-
-<PROCESS type="dropdown" dependentfields="TASKS" defaultvalue="" mode="edit"><![CDATA[
+  <PROCESS type="dropdown" dependentfields="TASKS" defaultvalue="" mode="edit"><![CDATA[
 	SELECT PROCESS.PRO_UID AS UID, CONTENT.CON_VALUE AS VALUE FROM PROCESS, CONTENT 	
 	WHERE (PROCESS.PRO_UID=CONTENT.CON_ID AND PROCESS.PRO_STATUS!='DISABLED' AND CONTENT.CON_CATEGORY='PRO_TITLE' AND CONTENT.CON_LANG='en') 
 	ORDER BY CONTENT.CON_VALUE
-  ]]><en>Process<option name="">All</option></en>
-<es>Proceso<option name=""/></es><pt>Processo<option name="">Todos</option></pt></PROCESS>
-
-<TASKS type="dropdown" defaultvalue="" mode="edit" options="Array"><![CDATA[
+  ]]><en><![CDATA[Process]]><option name=""><![CDATA[All]]></option></en><es>Proceso<option name=""/></es><pt>Processo<option name="">Todos</option></pt></PROCESS>
+  <TASKS type="dropdown" defaultvalue="" mode="edit" options="Array"><![CDATA[
 	SELECT TASK.TAS_UID AS TUID, CONTENT.CON_VALUE AS TVALUE FROM TASK 
   LEFT JOIN PROCESS ON (PROCESS.PRO_UID=TASK.PRO_UID)
   LEFT JOIN CONTENT ON (TASK.TAS_UID=CONTENT.CON_ID AND CONTENT.CON_CATEGORY='TAS_TITLE' AND CONTENT.CON_LANG='en')
   WHERE TASK.PRO_UID=@@PROCESS ORDER BY CONTENT.CON_VALUE
-  ]]><en>Tasks<option name="">All</option></en>
-<es>Tareas<option name=""/></es><pt>Tarefas<option name="">Todas</option></pt></TASKS>
-
-<FILTER type="submit">
-  <en>Filter</en>
-<es>Filtro</es><pt>Filtro</pt></FILTER>
-
-<JS type="javascript"><![CDATA[
+  ]]><en><![CDATA[Tasks]]><option name=""><![CDATA[All]]></option></en><es>Tareas<option name=""/></es><pt>Tarefas<option name="">Todas</option></pt></TASKS>
+  <FILTER type="submit">
+    <en><![CDATA[Filter]]></en>
+    <es>Filtro</es>
+    <pt>Filtro</pt>
+  </FILTER>
+  <JS type="javascript"><![CDATA[
 
 
 var dynaformOnload = function()
@@ -46,5 +42,4 @@ leimnud.event.add(document.getElementById('form[PROCESS]'), 'change', function()
 
 
 ]]></JS>
-
-</dynaForm>  
+</dynaForm>

@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: ProcessMaker 2.5.2.3\n"
+"Project-Id-Version: ProcessMaker 2.8.0\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-08-20 11:59:14\n"
+"PO-Revision-Date: 2014-12-05 10:28:39\n"
 "Last-Translator: \n"
 "Language-Team: Colosa Developers Team <developers@colosa.com>\n"
 "MIME-Version: 1.0\n"
@@ -424,8 +424,8 @@ msgstr "Members"
 # TRANSLATION
 # LABEL/ID_MSG_CONFIRM_DELETE_GROUP
 #: LABEL/ID_MSG_CONFIRM_DELETE_GROUP
-msgid "Are you sure to delete this group?"
-msgstr "Are you sure to delete this group?"
+msgid "Are you sure you want to delete this group?"
+msgstr "Are you sure you want to delete this group?"
 
 # TRANSLATION
 # LABEL/ID_INCORRECT_EMAIL
@@ -448,8 +448,8 @@ msgstr "User inactive!"
 # TRANSLATION
 # LABEL/ID_CANNOT_CHANGE_STATUS_ADMIN_USER
 #: LABEL/ID_CANNOT_CHANGE_STATUS_ADMIN_USER
-msgid "Can't change the status of administrator!"
-msgstr "Can't change the status of administrator!"
+msgid "Can't change the status of the Administrator!"
+msgstr "Can't change the status of the Administrator!"
 
 # TRANSLATION
 # LABEL/ID_CANNOT_DELETE_ADMIN_USER
@@ -1786,8 +1786,8 @@ msgstr "Loading test, please wait!..."
 # TRANSLATION
 # JAVASCRIPT/DBCONNECTIONS_MSG5
 #: JAVASCRIPT/DBCONNECTIONS_MSG5
-msgid "You must specify a data base name!"
-msgstr "You must specify a data base name!"
+msgid "You must specify a database name!"
+msgstr "You must specify a database name!"
 
 # TRANSLATION
 # JAVASCRIPT/DBCONNECTIONS_MSG4
@@ -2206,8 +2206,8 @@ msgstr "Ad Hoc Assignment"
 # TRANSLATION
 # LABEL/ID_ADHOC_ASSIGNMENT
 #: LABEL/ID_ADHOC_ASSIGNMENT
-msgid "Adhoc Assignment"
-msgstr "Adhoc Assignment"
+msgid "[LABEL/ID_ADHOC_ASSIGNMENT] Ad Hoc Assignment"
+msgstr "Ad Hoc Assignment"
 
 # TRANSLATION
 # JAVASCRIPT/ID_DYNAFORMS
@@ -2500,8 +2500,8 @@ msgstr "Filename generated, is required!"
 # TRANSLATION
 # JAVASCRIPT/ID_WEBENTRY
 #: JAVASCRIPT/ID_WEBENTRY
-msgid "In order to use the Web Entry Feature, you must first create a S"
-msgstr "In order to use the Web Entry Feature, you must first create a S"
+msgid "In order to use the Web Entry Feature, you must first create a DynaForm and assign it to the selected Task"
+msgstr "In order to use the Web Entry Feature, you must first create a DynaForm and assign it to the selected Task"
 
 # TRANSLATION
 # LABEL/ID_DOWNLOAD
@@ -2950,8 +2950,8 @@ msgstr "Error trying to insert the line"
 # TRANSLATION
 # JAVASCRIPT/ID_CONFIRM_PAUSE_CASE_ALERT
 #: JAVASCRIPT/ID_CONFIRM_PAUSE_CASE_ALERT
-msgid "You should specify an unpause date."
-msgstr "You should specify an unpause date."
+msgid "Specify a date to unpause the case."
+msgstr "Specify a date to unpause the case."
 
 # TRANSLATION
 # JAVASCRIPT/CONDITIONAL_ALERT1
@@ -3034,8 +3034,8 @@ msgstr "Role"
 # TRANSLATION
 # LABEL/ID_MSG_CANNOT_DELETE_USER
 #: LABEL/ID_MSG_CANNOT_DELETE_USER
-msgid "User cannot be deleted while has assigned cases."
-msgstr "User cannot be deleted while has assigned cases."
+msgid "User cannot be deleted while still assigned to cases."
+msgstr "User cannot be deleted while still assigned to cases."
 
 # TRANSLATION
 # LABEL/ID_MSG_REMOVE_PLUGIN
@@ -3220,8 +3220,8 @@ msgstr "Authentication Source for this user is invalid"
 # TRANSLATION
 # LABEL/ID_USER_INACTIVE_BY_DATE
 #: LABEL/ID_USER_INACTIVE_BY_DATE
-msgid "User not allowed access past due date"
-msgstr "User not allowed access past due date"
+msgid "User's account has expired"
+msgstr "User's account has expired"
 
 # TRANSLATION
 # LABEL/ID_MSG_CONFIRM_DELETE_AUTH_SOURCE
@@ -3322,8 +3322,8 @@ msgstr "Special Character is required"
 # TRANSLATION
 # LABEL/ID_PPP_CHANGE_PASSWORD_AFTER_NEXT_LOGIN
 #: LABEL/ID_PPP_CHANGE_PASSWORD_AFTER_NEXT_LOGIN
-msgid "User must change his password after next login"
-msgstr "User must change his password after next login"
+msgid "User must change his/her password after next login"
+msgstr "User must change his/her password after next login"
 
 # TRANSLATION
 # LABEL/ID_PPP_EXPIRATION_IN
@@ -3346,8 +3346,8 @@ msgstr "Account"
 # TRANSLATION
 # LABEL/ID_ACCOUNT_DISABLED_CONTACT_ADMIN
 #: LABEL/ID_ACCOUNT_DISABLED_CONTACT_ADMIN
-msgid "disabled, please contact with the system administrator"
-msgstr "disabled, please contact with the system administrator"
+msgid "Disabled. Please contact the system administrator."
+msgstr "Disabled. Please contact the system administrator."
 
 # TRANSLATION
 # LABEL/ID_WORKSPACE_USING
@@ -3574,8 +3574,8 @@ msgstr "Drag & Drop to move and reorder the fields."
 # TRANSLATION
 # LABEL/ID_FIELD_HANDLER_HELP3
 #: LABEL/ID_FIELD_HANDLER_HELP3
-msgid "Bring the mouse pointer near tool icon and the corresponding options (Edit, Delete) will be shown."
-msgstr "Bring the mouse pointer near tool icon and the corresponding options (Edit, Delete) will be shown."
+msgid "Hover the mouse pointer over the tool icons and the corresponding options (Edit, Delete) will be shown."
+msgstr "Hover the mouse pointer over the tool icons and the corresponding options (Edit, Delete) will be shown."
 
 # TRANSLATION
 # JAVASCRIPT/ID_CONFIRM_WEBENTRY_DELETE
@@ -3646,8 +3646,8 @@ msgstr "Web Entry only works with tasks which have Cyclical Assignment. Please c
 # TRANSLATION
 # JAVASCRIPT/HTML_FILES
 #: JAVASCRIPT/HTML_FILES
-msgid "Make sure your uploaded file has extension html or txt"
-msgstr "Make sure your uploaded file has extension html or txt"
+msgid "Make sure the uploaded file has the .html or .txt extension"
+msgstr "Make sure the uploaded file has the .html or .txt extension"
 
 # TRANSLATION
 # LABEL/ID_SEARCH_RESULT
@@ -3682,14 +3682,14 @@ msgstr "Add"
 # TRANSLATION
 # JAVASCRIPT/CONDITIONAL_ALERT3
 #: JAVASCRIPT/CONDITIONAL_ALERT3
-msgid "You have not tested the condition, do you want save anyway?"
-msgstr "You have not tested the condition, do you want save anyway?"
+msgid "You have not tested the condition. Do you want to save it anyway?"
+msgstr "You have not tested the condition. Do you want to save it anyway?"
 
 # TRANSLATION
 # JAVASCRIPT/CONDITIONAL_ALERT4
 #: JAVASCRIPT/CONDITIONAL_ALERT4
-msgid "You have an error in the condition, do you want save anyway?"
-msgstr "You have an error in the condition, do you want save anyway?"
+msgid "You have an error in the condition. Do you want to save it anyway?"
+msgstr "You have an error in the condition. Do you want to save it anyway?"
 
 # TRANSLATION
 # LABEL/ID_ERROR
@@ -3886,8 +3886,8 @@ msgstr "Error: There is a problem with the next tasks of this process. One of th
 # TRANSLATION
 # LABEL/ID_SELECT_OPTION_TABLE
 #: LABEL/ID_SELECT_OPTION_TABLE
-msgid "Select a option to export schema or data from the selected table(s)."
-msgstr "Select a option to export schema or data from the selected table(s)."
+msgid "Select an option to export the schema or data from the selected table(s)."
+msgstr "Select an option to export the schema or data from the selected table(s)."
 
 # TRANSLATION
 # LABEL/ID_SELECT_TABLE
@@ -3916,8 +3916,8 @@ msgstr "Password history"
 # TRANSLATION
 # JAVASCRIPT/ID_EMAIL_REQUIRED
 #: JAVASCRIPT/ID_EMAIL_REQUIRED
-msgid "The mail to is required, or uncheck the send a test mail"
-msgstr "The mail to is required, or uncheck the send a test mail"
+msgid "Mail To is required, or uncheck the Send a Test Mail option"
+msgstr "Mail To is required, or uncheck the Send a Test Mail option"
 
 # TRANSLATION
 # JAVASCRIPT/ID_PASSWORD_REQUIRED
@@ -5026,8 +5026,8 @@ msgstr "of"
 # TRANSLATION
 # LABEL/ID_DELETE_LANGUAGE_WARNING
 #: LABEL/ID_DELETE_LANGUAGE_WARNING
-msgid "To delete a language you should select a item from the list first."
-msgstr "To delete a language you should select a item from the list first."
+msgid "To delete a language, first select an item from the list."
+msgstr "To delete a language, first select an item from the list."
 
 # TRANSLATION
 # LABEL/ID_DELETE_LANGUAGE_CONFIRM
@@ -5092,8 +5092,8 @@ msgstr "Test message sent successfully"
 # TRANSLATION
 # JAVASCRIPT/ID_MAIL_FAILED
 #: JAVASCRIPT/ID_MAIL_FAILED
-msgid "The test failure, you must configure yourrnserver to send messages"
-msgstr "The test failure, you must configure yourrnserver to send messages"
+msgid "The test failed, because server is not configured to send messages"
+msgstr "The test failed, because server is not configured to send messages"
 
 # TRANSLATION
 # LABEL/ID_CACHE_DIR_ISNOT_WRITABLE
@@ -5248,8 +5248,8 @@ msgstr "You forgot the title of the trigger"
 # TRANSLATION
 # JAVASCRIPT/ID_EXIST_PROCESS
 #: JAVASCRIPT/ID_EXIST_PROCESS
-msgid "There is a process with the same name. this process will not save"
-msgstr "There is a process with the same name. this process will not save"
+msgid "This process will not be saved, because another process has the same name."
+msgstr "This process will not be saved, because another process has the same name."
 
 # TRANSLATION
 # JAVASCRIPT/ID_EXIST_DYNAFORM
@@ -5266,20 +5266,20 @@ msgstr "This Class Table doesn't exist!"
 # TRANSLATION
 # JAVASCRIPT/ID_EXIST_INPUTDOCUMENT
 #: JAVASCRIPT/ID_EXIST_INPUTDOCUMENT
-msgid "There is an Input Document with the same name in this process. It is not saving"
-msgstr "There is an Input Document with the same name in this process. It is not saving"
+msgid "Can not save, because there is an Input Document with the same name in this process."
+msgstr "Can not save, because there is an Input Document with the same name in this process."
 
 # TRANSLATION
 # JAVASCRIPT/ID_EXIST_OUTPUTDOCUMENT
 #: JAVASCRIPT/ID_EXIST_OUTPUTDOCUMENT
-msgid "There is an Output Document with the same name in this process. It is not saving"
-msgstr "There is an Output Document with the same name in this process. It is not saving"
+msgid "Can not save, because, there is an Output Document with the same name in this process."
+msgstr "Can not save, because, there is an Output Document with the same name in this process."
 
 # TRANSLATION
 # LABEL/ID_CASE_SCHEDULER_VALIDATE_ALERT
 #: LABEL/ID_CASE_SCHEDULER_VALIDATE_ALERT
-msgid "User or password are empty."
-msgstr "User or password are empty."
+msgid "User or password is empty."
+msgstr "User or password is empty."
 
 # TRANSLATION
 # LABEL/ID_DELEGATE_DATE_FROM
@@ -5482,8 +5482,8 @@ msgstr "Database tables and triggers"
 # TRANSLATION
 # JAVASCRIPT/ID_EXIST_TRIGGERS
 #: JAVASCRIPT/ID_EXIST_TRIGGERS
-msgid "There is a triggers with the same name in this process."
-msgstr "There is a triggers with the same name in this process."
+msgid "There is a trigger with the same name in the process."
+msgstr "There is a trigger with the same name in the process."
 
 # TRANSLATION
 # LABEL/ID_SELECT_ONE_AT_LEAST
@@ -5980,7 +5980,7 @@ msgstr "Invalid name!"
 # TRANSLATION
 # JAVASCRIPT/ID_CASE_SCHEDULER_VALIDATE_ALERT
 #: JAVASCRIPT/ID_CASE_SCHEDULER_VALIDATE_ALERT
-msgid "[JAVASCRIPT/ID_CASE_SCHEDULER_VALIDATE_ALERT] User or password are empty."
+msgid "User or password are empty."
 msgstr "User or password are empty."
 
 # TRANSLATION
@@ -6010,14 +6010,14 @@ msgstr "Title"
 # TRANSLATION
 # JAVASCRIPT/ID_SCHEDULER_CANT_PUT_TIME
 #: JAVASCRIPT/ID_SCHEDULER_CANT_PUT_TIME
-msgid "The time can not be increased to 23:59"
-msgstr "The time can not be increased to 23:59"
+msgid "Time cannot exceed 23:59"
+msgstr "Time cannot exceed 23:59"
 
 # TRANSLATION
 # JAVASCRIPT/ID_SCHEDULER_CANT_PUT_MINUTES
 #: JAVASCRIPT/ID_SCHEDULER_CANT_PUT_MINUTES
-msgid "The mininutos can not be greater than about 59"
-msgstr "The mininutos can not be greater than about 59"
+msgid "Minutes cannot be greater than 59."
+msgstr "Minutes cannot be greater than 59."
 
 # TRANSLATION
 # JAVASCRIPT/ID_PROCESSMAP_CALENDAR_CONFIRM_DELETE
@@ -6580,8 +6580,8 @@ msgstr "Do you want to assign all available users to this role?"
 # TRANSLATION
 # LABEL/ID_MSG_AJAX_FAILURE
 #: LABEL/ID_MSG_AJAX_FAILURE
-msgid "Some error has happened. Please retry later."
-msgstr "Some error has happened. Please retry later."
+msgid "Some error has occurred. Try again later."
+msgstr "Some error has occurred. Try again later."
 
 # TRANSLATION
 # LABEL/ID_FINISH
@@ -6814,8 +6814,8 @@ msgstr "Vacation"
 # TRANSLATION
 # JAVASCRIPT/ID_DB_CONNECTION_ASSIGN
 #: JAVASCRIPT/ID_DB_CONNECTION_ASSIGN
-msgid "You can not delete this data base connection. This is assigned in some step."
-msgstr "You can not delete this data base connection. This is assigned in some step."
+msgid "You cannot delete this database connection. It is assigned to a step."
+msgstr "You cannot delete this database connection. It is assigned to a step."
 
 # TRANSLATION
 # LABEL/ID_LAST_LOGIN
@@ -7282,8 +7282,8 @@ msgstr "Department has been deleted correctly."
 # TRANSLATION
 # LABEL/ID_MSG_CANNOT_DELETE_DEPARTMENT
 #: LABEL/ID_MSG_CANNOT_DELETE_DEPARTMENT
-msgid "Department cannot be deleted while has assigned users."
-msgstr "Department cannot be deleted while has assigned users."
+msgid "The department cannot be deleted while it has assigned users."
+msgstr "The department cannot be deleted while it has assigned users."
 
 # TRANSLATION
 # LABEL/ID_MANAGER
@@ -7354,8 +7354,8 @@ msgstr "Process category has been deleted correctly."
 # TRANSLATION
 # LABEL/ID_MSG_CANNOT_DELETE_CATEGORY
 #: LABEL/ID_MSG_CANNOT_DELETE_CATEGORY
-msgid "Category cannot be deleted while has assigned processes."
-msgstr "Category cannot be deleted while has assigned processes."
+msgid "The category cannot be deleted while it is still assigned to processes."
+msgstr "The category cannot be deleted while it is still assigned to processes."
 
 # TRANSLATION
 # LABEL/ID_CONFIRM_DELETE_CATEGORY
@@ -7648,7 +7648,7 @@ msgstr "Input document has been created successfully"
 # TRANSLATION
 # LABEL/ID_INPUT_NOT_SAVE
 #: LABEL/ID_INPUT_NOT_SAVE
-msgid "[LABEL/ID_INPUT_NOT_SAVE] There is an Input Document with the same name in this process. It is not saving"
+msgid "There is an Input Document with the same name in this process. It is not saving"
 msgstr "There is an Input Document with the same name in this process. It is not saving"
 
 # TRANSLATION
@@ -8074,8 +8074,8 @@ msgstr "Users and User Groups"
 # TRANSLATION
 # LABEL/ID_MSG_CANNOT_DELETE_AUTHENTICATION
 #: LABEL/ID_MSG_CANNOT_DELETE_AUTHENTICATION
-msgid "Authentication source cannot be deleted while has assigned users."
-msgstr "Authentication source cannot be deleted while has assigned users."
+msgid "The authentication source cannot be deleted while it has assigned users."
+msgstr "The authentication source cannot be deleted while it has assigned users."
 
 # TRANSLATION
 # LABEL/ID_DEFINITION
@@ -8884,8 +8884,8 @@ msgstr "Calendar has been deleted correctly."
 # TRANSLATION
 # LABEL/ID_MSG_CANNOT_DELETE_CALENDAR
 #: LABEL/ID_MSG_CANNOT_DELETE_CALENDAR
-msgid "Calendar cannot be deleted while has assignations."
-msgstr "Calendar cannot be deleted while has assignations."
+msgid "The calendar cannot be deleted while it has assignations"
+msgstr "The calendar cannot be deleted while it has assignations"
 
 # TRANSLATION
 # LABEL/ID_REMOVED_SESSION_FILES
@@ -9364,8 +9364,8 @@ msgstr "Ad Hoc Groups Actors"
 # TRANSLATION
 # LABEL/ID_EXIST_DYNAFORM
 #: LABEL/ID_EXIST_DYNAFORM
-msgid "There is a Dynaform with the same title in the current process. Please use another title for the new Dynaform."
-msgstr "There is a Dynaform with the same title in the current process. Please use another title for the new Dynaform."
+msgid "Can not save, because there is a DynaForm with the same name in this process."
+msgstr "Can not save, because there is a DynaForm with the same name in this process."
 
 # TRANSLATION
 # LABEL/ID_INPUT_DOC_SUCCESS_NEW
@@ -9514,8 +9514,8 @@ msgstr "Uploading the process file..."
 # TRANSLATION
 # LABEL/ID_IMPORT_ALREADY_EXISTS
 #: LABEL/ID_IMPORT_ALREADY_EXISTS
-msgid "The process you are trying to import already exist. Please select one of the following options to continue:"
-msgstr "The process you are trying to import already exist. Please select one of the following options to continue:"
+msgid "The process you are trying to import already exists. Please select one of the following options to continue:"
+msgstr "The process you are trying to import already exists. Please select one of the following options to continue:"
 
 # TRANSLATION
 # LABEL/ID_DEBUG_MESSAGE
@@ -9532,8 +9532,8 @@ msgstr "Are you sure that you want to remove this"
 # TRANSLATION
 # LABEL/ID_PROCESS_EXIST_SOME_GROUP
 #: LABEL/ID_PROCESS_EXIST_SOME_GROUP
-msgid "Some of the groups that are you trying to import, already exists. Please select one of the following options to continue"
-msgstr "Some of the groups that are you trying to import, already exists. Please select one of the following options to continue"
+msgid "Some of the groups that you are trying to import already exist. Please select one of the following options to continue."
+msgstr "Some of the groups that you are trying to import already exist. Please select one of the following options to continue."
 
 # TRANSLATION
 # LABEL/ID_PROCESS_GROUP_RENAME
@@ -9556,8 +9556,8 @@ msgstr "The file has an incorrect extension. Please check the file and upload ag
 # TRANSLATION
 # LABEL/ID_ERROR_UPLOAD_FILE_CONTACT_ADMINISTRATOR
 #: LABEL/ID_ERROR_UPLOAD_FILE_CONTACT_ADMINISTRATOR
-msgid "Error message when you upload the file, please contact your administrator."
-msgstr "Error message when you upload the file, please contact your administrator."
+msgid "An error occurred when uploading the file. Please contact the administrator."
+msgstr "An error occurred when uploading the file. Please contact the administrator."
 
 # TRANSLATION
 # LABEL/ID_DELEGATE_USER
@@ -10036,8 +10036,8 @@ msgstr "Resume"
 # TRANSLATION
 # LABEL/ID_USER_ID
 #: LABEL/ID_USER_ID
-msgid "User ID (*)"
-msgstr "User ID (*)"
+msgid "[LABEL/ID_USER_ID] Username"
+msgstr "Username"
 
 # TRANSLATION
 # LABEL/ID_PHONE
@@ -10132,8 +10132,8 @@ msgstr "Do you want open the new site?"
 # TRANSLATION
 # LABEL/NEW_SITE_NOT_AVAILABLE
 #: LABEL/NEW_SITE_NOT_AVAILABLE
-msgid "This site is not available"
-msgstr "This site is not available"
+msgid "Workspace already exists, please choose a different name."
+msgstr "Workspace already exists, please choose a different name."
 
 # TRANSLATION
 # LABEL/NEW_SITE_CONFIRM_TO_CREATE
@@ -10234,8 +10234,8 @@ msgstr "Update"
 # TRANSLATION
 # LABEL/ID_ALL_RECORDS_DELETED_SUCESSFULLY
 #: LABEL/ID_ALL_RECORDS_DELETED_SUCESSFULLY
-msgid "All records was deleted successfully!"
-msgstr "All records was deleted successfully!"
+msgid "All records were successfully deleted"
+msgstr "All records were successfully deleted"
 
 # TRANSLATION
 # LABEL/ID_DELETION_SUCCESSFULLY
@@ -10414,8 +10414,8 @@ msgstr "Tables To Export"
 # TRANSLATION
 # LABEL/ID_PMTABLES_NOTICE_EXPORT
 #: LABEL/ID_PMTABLES_NOTICE_EXPORT
-msgid "From each table you should select Schema/Data to export at least one."
-msgstr "From each table you should select Schema/Data to export at least one."
+msgid "From each table select at least one Schema/Data to export."
+msgstr "From each table select at least one Schema/Data to export."
 
 # TRANSLATION
 # LABEL/ID_CONFIRM_DELETE_SKIN
@@ -10426,8 +10426,8 @@ msgstr "Do you want to delete selected skin?"
 # TRANSLATION
 # LABEL/ID_MESSAGE_SUBJECT_NOTE_NOTIFICATION
 #: LABEL/ID_MESSAGE_SUBJECT_NOTE_NOTIFICATION
-msgid "A note has added to a case"
-msgstr "A note has added to a case"
+msgid "A note has been added to the case."
+msgstr "A note has been added to the case."
 
 # TRANSLATION
 # LABEL/ID_MSG_CANNOT_EXPORT_DEFAULT_SKIN
@@ -10510,8 +10510,8 @@ msgstr "Can't delete default skin"
 # TRANSLATION
 # LABEL/ID_SKIN_FOLDER_PERMISSIONS
 #: LABEL/ID_SKIN_FOLDER_PERMISSIONS
-msgid "Not enough permissions in Skin Folder"
-msgstr "Not enough permissions in Skin Folder"
+msgid "You do not have permissions to access the Skin Folder"
+msgstr "You do not have permissions to access the Skin Folder"
 
 # TRANSLATION
 # LABEL/ID_SKIN_FOLDER_REQUIRED
@@ -10558,8 +10558,8 @@ msgstr "Switching Skin"
 # TRANSLATION
 # LABEL/ID_CONFIRM_REMOVE_FIELD
 #: LABEL/ID_CONFIRM_REMOVE_FIELD
-msgid "Do you really want remove this field?"
-msgstr "Do you really want remove this field?"
+msgid "Do you want to remove this field?"
+msgstr "Do you want to remove this field?"
 
 # TRANSLATION
 # LABEL/ID_INVALID_EXTENSION
@@ -10582,8 +10582,8 @@ msgstr "Apply as main logo"
 # TRANSLATION
 # LABEL/ID_YOU_ARE_NOT_CAN_SELECT_PHOTO
 #: LABEL/ID_YOU_ARE_NOT_CAN_SELECT_PHOTO
-msgid "You are not can select more than one photo"
-msgstr "You are not can select more than one photo"
+msgid "You can not select more than one photo."
+msgstr "You can not select more than one photo."
 
 # TRANSLATION
 # LABEL/ID_SELECT_AN_IMAGE
@@ -10762,14 +10762,14 @@ msgstr "Please set a field size for:"
 # TRANSLATION
 # LABEL/ID_PMTABLES_ALERT6
 #: LABEL/ID_PMTABLES_ALERT6
-msgid "You need set one column at least as Primary Key."
-msgstr "You need set one column at least as Primary Key."
+msgid "At least one column must be set as Primary Key."
+msgstr "At least one column must be set as Primary Key."
 
 # TRANSLATION
 # LABEL/ID_PMTABLES_ALERT7
 #: LABEL/ID_PMTABLES_ALERT7
-msgid "Set columns for this Report Table please."
-msgstr "Set columns for this Report Table please."
+msgid "Please set columns for this Report Table."
+msgstr "Please set columns for this Report Table."
 
 # TRANSLATION
 # LABEL/ID_AUTO_INCREMENT
@@ -10972,8 +10972,8 @@ msgstr "You have lost your session and you have to login to continue."
 # TRANSLATION
 # LABEL/ID_PMTABLE_DATA_EXISTS_WARNINIG
 #: LABEL/ID_PMTABLE_DATA_EXISTS_WARNINIG
-msgid "record(s) was/were found on this table, if you edit its structure all data will lost."
-msgstr "record(s) was/were found on this table, if you edit its structure all data will lost."
+msgid "record(s) were found in this table. If you edit the structure all data will be lost."
+msgstr "record(s) were found in this table. If you edit the structure all data will be lost."
 
 # TRANSLATION
 # LABEL/ID_HIDE
@@ -10984,8 +10984,8 @@ msgstr "Hide"
 # TRANSLATION
 # LABEL/ID_PMTABLE_SAVE_AND_DATA_LOST
 #: LABEL/ID_PMTABLE_SAVE_AND_DATA_LOST
-msgid "Save the changes accepting the data lost?"
-msgstr "Save the changes accepting the data lost?"
+msgid "Save changes? All data will be lost."
+msgstr "Save changes? All data will be lost."
 
 # TRANSLATION
 # LABEL/ID_EXCEPTION
@@ -11320,8 +11320,8 @@ msgstr "Table Not found"
 # TRANSLATION
 # LABEL/ID_FAILED_IMPORT_PLUGINS
 #: LABEL/ID_FAILED_IMPORT_PLUGINS
-msgid "Failed to import the file {filename} by doesn't a plugin or invalid file."
-msgstr "Failed to import the file {filename} by doesn't a plugin or invalid file."
+msgid "Failed to import the file {filename} . It is an invalid file or is not a plugin."
+msgstr "Failed to import the file {filename} . It is an invalid file or is not a plugin."
 
 # TRANSLATION
 # LABEL/ID_ERROR_UPLOADING_PLUGIN_FILENAME
@@ -11386,14 +11386,14 @@ msgstr "Auto Prefix"
 # TRANSLATION
 # LABEL/ID_NOTIFICATION_ERROR
 #: LABEL/ID_NOTIFICATION_ERROR
-msgid "Some problem happens while trying to send the Task notification."
-msgstr "Some problem happens while trying to send the Task notification."
+msgid "A problem occurred while trying to send the Task Notification."
+msgstr "A problem occurred while trying to send the Task Notification."
 
 # TRANSLATION
 # LABEL/ID_INVALID_APPLICATION_ID_MSG
 #: LABEL/ID_INVALID_APPLICATION_ID_MSG
-msgid "Invalid application id stored on session,<br/>This can happens when you have opened another case on a new tab or window.<br/>Please {0} the case."
-msgstr "Invalid application id stored on session,<br/>This can happens when you have opened another case on a new tab or window.<br/>Please {0} the case."
+msgid "An invalid application ID was stored for the session. <br/> This could have happened if you opened another case in a new tab or window. <br/> Please {0} the case."
+msgstr "An invalid application ID was stored for the session. <br/> This could have happened if you opened another case in a new tab or window. <br/> Please {0} the case."
 
 # TRANSLATION
 # LABEL/ID_REOPEN
@@ -11548,8 +11548,8 @@ msgstr "Password is required"
 # TRANSLATION
 # LABEL/ID_PASSWORD_SURPRASES
 #: LABEL/ID_PASSWORD_SURPRASES
-msgid "Password surprases the maximun length allowed"
-msgstr "Password surprases the maximun length allowed"
+msgid "Password is longer than maximum length allowed"
+msgstr "Password is longer than maximum length allowed"
 
 # TRANSLATION
 # LABEL/ID_USERNAME_ALREADY_EXISTS
@@ -11608,8 +11608,8 @@ msgstr "Group not registered in the system"
 # TRANSLATION
 # LABEL/ID_COMMAND_EXECUTED_SUCCESSFULY
 #: LABEL/ID_COMMAND_EXECUTED_SUCCESSFULY
-msgid "command executed successfuly"
-msgstr "command executed successfuly"
+msgid "command executed successfully"
+msgstr "command executed successfully"
 
 # TRANSLATION
 # LABEL/ID_USER_NOT_REGISTERED_GROUP
@@ -11812,8 +11812,8 @@ msgstr "The process is already in the System and the value for importOption is n
 # TRANSLATION
 # LABEL/ID_CONFIRM_REMOVE_FIELDS
 #: LABEL/ID_CONFIRM_REMOVE_FIELDS
-msgid "Do you really want remove this fields"
-msgstr "Do you really want remove this fields"
+msgid "Do you want to remove these fields?"
+msgstr "Do you want to remove these fields?"
 
 # TRANSLATION
 # LABEL/ID_INTERMEDIATE_MESSAGE_EVENTS
@@ -11866,8 +11866,8 @@ msgstr "Public"
 # TRANSLATION
 # LABEL/ID_DELETE_INPUTDOCUMENT_CONFIRM
 #: LABEL/ID_DELETE_INPUTDOCUMENT_CONFIRM
-msgid "To the deselecting the item will be deleted the Day of the Work hours list. Do you want continue?"
-msgstr "To the deselecting the item will be deleted the Day of the Work hours list. Do you want continue?"
+msgid "The item will be deleted the day of the work hour’s list. Do you want continue?"
+msgstr "The item will be deleted the day of the work hour’s list. Do you want continue?"
 
 # TRANSLATION
 # JAVASCRIPT/ID_SUBJECT_FIELD_REQUIRED
@@ -11962,8 +11962,8 @@ msgstr "The selected image has been deleted."
 # TRANSLATION
 # LABEL/ID_SELECTED_IMAGE_IS_LOGO
 #: LABEL/ID_SELECTED_IMAGE_IS_LOGO
-msgid "The selected image is established as logo."
-msgstr "The selected image is established as logo."
+msgid "The selected image has been established as the logo"
+msgstr "The selected image has been established as the logo"
 
 # TRANSLATION
 # LABEL/ID_DELETE_SELECTED_LOGO
@@ -11998,8 +11998,8 @@ msgstr "Click the lock to prevent further changes."
 # TRANSLATION
 # LABEL/ID_MAX_FILE_SIZE
 #: LABEL/ID_MAX_FILE_SIZE
-msgid "Max upload file size"
-msgstr "Max upload file size"
+msgid "Maximum upload file size"
+msgstr "Maximum upload file size"
 
 # TRANSLATION
 # LABEL/ID_DEFAULT_SKIN
@@ -12070,8 +12070,8 @@ msgstr "Available Authentication Sources"
 # TRANSLATION
 # LABEL/ID_EXTERNAL_STEP_MISSING
 #: LABEL/ID_EXTERNAL_STEP_MISSING
-msgid "The plugin that is related to the step <b> {plugin} </b> was removed or disabled, please consult to your system administrator"
-msgstr "The plugin that is related to the step <b> {plugin} </b> was removed or disabled, please consult to your system administrator"
+msgid "The plugin related to the step <b>{plugin}</b> was removed or disabled.  Please contact your system administrator."
+msgstr "The plugin related to the step <b>{plugin}</b> was removed or disabled.  Please contact your system administrator."
 
 # TRANSLATION
 # LABEL/ID_INIT_DATE
@@ -12214,8 +12214,8 @@ msgstr "Process doesn't exist!"
 # TRANSLATION
 # LABEL/ID_SHOULD_SELECT_LANGUAGE_FROM_LIST
 #: LABEL/ID_SHOULD_SELECT_LANGUAGE_FROM_LIST
-msgid "You should to select a language from the list."
-msgstr "You should to select a language from the list."
+msgid "Select a language from the list."
+msgstr "Select a language from the list."
 
 # TRANSLATION
 # LABEL/ID_COLUMNS
@@ -12232,8 +12232,8 @@ msgstr "Notice"
 # TRANSLATION
 # LABEL/ID_ACTION_DISABLED_TO_LOW_PERFORMANCE_1
 #: LABEL/ID_ACTION_DISABLED_TO_LOW_PERFORMANCE_1
-msgid "This action was disabled to prevent low performance on your browser. This is because there is more than 100 records on the columns definition grid."
-msgstr "This action was disabled to prevent low performance on your browser. This is because there is more than 100 records on the columns definition grid."
+msgid "This action was disabled to prevent slow browser performance, because  there are more than 100 records in the column definition grid."
+msgstr "This action was disabled to prevent slow browser performance, because  there are more than 100 records in the column definition grid."
 
 # TRANSLATION
 # LABEL/ID_ACTION_DISABLED_TO_LOW_PERFORMANCE_2
@@ -12412,8 +12412,8 @@ msgstr "Ajax communication failed"
 # TRANSLATION
 # LABEL/ID_CHECK_FIELDS_MARK_RED
 #: LABEL/ID_CHECK_FIELDS_MARK_RED
-msgid "Please check the fields mark in red."
-msgstr "Please check the fields mark in red."
+msgid "Please check the fields marked in red."
+msgstr "Please check the fields marked in red."
 
 # TRANSLATION
 # LABEL/ID_INPUT_ERROR
@@ -12616,8 +12616,8 @@ msgstr "The current password is incorrect"
 # TRANSLATION
 # LABEL/ID_MAX_LIFETIME
 #: LABEL/ID_MAX_LIFETIME
-msgid "Maximum lifetime cleaned up (ms)"
-msgstr "Maximum lifetime cleaned up (ms)"
+msgid "Cookie lifetime (seconds)"
+msgstr "Cookie lifetime (seconds)"
 
 # TRANSLATION
 # LABEL/ID_SUCCESSFUL_CONNECTION
@@ -12988,8 +12988,8 @@ msgstr "Delete the selected translations?"
 # TRANSLATION
 # LABEL/ID_PMTABLES_ALERT8
 #: LABEL/ID_PMTABLES_ALERT8
-msgid "Set a Phisical Field Name for:"
-msgstr "Set a Phisical Field Name for:"
+msgid "Set a Physical Field Name for:"
+msgstr "Set a Physical Field Name for:"
 
 # TRANSLATION
 # LABEL/ID_EMPTY_LANGUAGE
@@ -13180,8 +13180,8 @@ msgstr "Bad Request!"
 # TRANSLATION
 # LABEL/ID_COLOSA_AND_CERTIFIED_PARTNERS
 #: LABEL/ID_COLOSA_AND_CERTIFIED_PARTNERS
-msgid "Supplied free of charge with no support, certification, warranty,maintenance nor indemnity by Colosa and its Certified Partners."
-msgstr "Supplied free of charge with no support, certification, warranty,maintenance nor indemnity by Colosa and its Certified Partners."
+msgid "Supplied free of charge with no support, certification, warranty, maintenance nor indemnity by Colosa and its Certified Partners."
+msgstr "Supplied free of charge with no support, certification, warranty, maintenance nor indemnity by Colosa and its Certified Partners."
 
 # TRANSLATION
 # LABEL/ID_COPYRIGHT
@@ -13202,10 +13202,16 @@ msgid "xxx"
 msgstr "xxx"
 
 # TRANSLATION
+# LABEL/ID_SIZE_VERY_LARGE_PERMITTED
+#: LABEL/ID_SIZE_VERY_LARGE_PERMITTED
+msgid "The file is too large . Please upload a smaller file."
+msgstr "The file is too large . Please upload a smaller file."
+
+# TRANSLATION
 # LABEL/ID_PROCESSMAKER_REQUIREMENTS_DESCRIPTION_STEP5
 #: LABEL/ID_PROCESSMAKER_REQUIREMENTS_DESCRIPTION_STEP5
-msgid "ProcessMaker uses a workspaces to store data. Please select a valid workspace name and credentials to log in it."
-msgstr "ProcessMaker uses a workspaces to store data. Please select a valid workspace name and credentials to log in it."
+msgid "ProcessMaker uses workspaces to store data. Please enter a valid workspace name and credentials to login."
+msgstr "ProcessMaker uses workspaces to store data. Please enter a valid workspace name and credentials to login."
 
 # TRANSLATION
 # LABEL/ID_PROCESSMAKER_REQUIREMENTS_DESCRIPTION_STEP4_2
@@ -13496,8 +13502,8 @@ msgid "Database Configuration"
 msgstr "Database Configuration"
 
 # TRANSLATION
-# LABEL/ID_INSTALLATION_LOG
-#: LABEL/ID_INSTALLATION_LOG
+# LABEL/ID_INSTALLATION_FILE_LOG
+#: LABEL/ID_INSTALLATION_FILE_LOG
 msgid "Installation log file"
 msgstr "Installation log file"
 
@@ -13558,8 +13564,8 @@ msgstr "Pre-installation check"
 # TRANSLATION
 # LABEL/ID_DIRECTORY_FILE_PERMISSION
 #: LABEL/ID_DIRECTORY_FILE_PERMISSION
-msgid "Directory File Permission"
-msgstr "Directory File Permission"
+msgid "File Permissions"
+msgstr "File Permissions"
 
 # TRANSLATION
 # LABEL/ID_DATA_CORRECT
@@ -13702,8 +13708,8 @@ msgstr "Table APP_CACHE_VIEW"
 # TRANSLATION
 # LABEL/ID_CACHE_BUILDER_USER_SUPER_PRIVILEGE
 #: LABEL/ID_CACHE_BUILDER_USER_SUPER_PRIVILEGE
-msgid "Current User has SUPER privilege"
-msgstr "Current User has SUPER privilege"
+msgid "The current user has SUPERUSER privileges."
+msgstr "The current user has SUPERUSER privileges."
 
 # TRANSLATION
 # LABEL/ID_CACHE_BUILDER_CURRENT_USER
@@ -13798,8 +13804,8 @@ msgstr "Never upgraded"
 # TRANSLATION
 # LABEL/ID_ERROR_FILE_NOT_EXIST
 #: LABEL/ID_ERROR_FILE_NOT_EXIST
-msgid "The file '{filename}' does not exist, possibly the system failed to generate the file or the file was not moved correctly if the process is migrated from another server."
-msgstr "The file '{filename}' does not exist, possibly the system failed to generate the file or the file was not moved correctly if the process is migrated from another server."
+msgid "The file '{filename}' does not exist. Possibly the system failed to generate the file or the file was not moved correctly if the process was migrated from another server."
+msgstr "The file '{filename}' does not exist. Possibly the system failed to generate the file or the file was not moved correctly if the process was migrated from another server."
 
 # TRANSLATION
 # LABEL/ID_DISPLAY_PROCESSES
@@ -13840,14 +13846,14 @@ msgstr "Copy/Import Dynaform"
 # TRANSLATION
 # LABEL/ID_INSTRUCTIONS_TEXT
 #: LABEL/ID_INSTRUCTIONS_TEXT
-msgid "To assign a case it should be selected from the grid and then on the Search enter a name to do the user search to whom the case will be reasigned and then select one from the list."
-msgstr "To assign a case it should be selected from the grid and then on the Search enter a name to do the user search to whom the case will be reasigned and then select one from the list."
+msgid "To assign a case, first select the case in the list. Then enter a user name in the 'Search' field and select a user to whom the case will be reassigned."
+msgstr "To assign a case, first select the case in the list. Then enter a user name in the 'Search' field and select a user to whom the case will be reassigned."
 
 # TRANSLATION
 # LABEL/ID_CONFIRM_TO_REASSIGN
 #: LABEL/ID_CONFIRM_TO_REASSIGN
-msgid "There are cases which are not reassigned to a user. Do you like to continue?"
-msgstr "There are cases which are not reassigned to a user. Do you like to continue?"
+msgid "There are cases which were not reassigned to a user. Do you want to continue?"
+msgstr "There are cases which were not reassigned to a user. Do you want to continue?"
 
 # TRANSLATION
 # LABEL/ID_USERNAME_TESTING
@@ -13906,8 +13912,8 @@ msgstr "The field name already exists!"
 # TRANSLATION
 # LABEL/DYNAFIELD_EMPTY
 #: LABEL/DYNAFIELD_EMPTY
-msgid "The name field is empty"
-msgstr "The name field is empty"
+msgid "The Field Name is empty"
+msgstr "The Field Name is empty"
 
 # TRANSLATION
 # LABEL/DYNAFIELD_NODENAME_NUMBER
@@ -13918,7 +13924,7 @@ msgstr "The field name should not start with a number"
 # TRANSLATION
 # LABEL/ID_EMPTY_NODENAME
 #: LABEL/ID_EMPTY_NODENAME
-msgid "[LABEL/ID_EMPTY_NODENAME] The name field is empty"
+msgid "The name field is empty"
 msgstr "The name field is empty"
 
 # TRANSLATION
@@ -13936,8 +13942,8 @@ msgstr "Task title required"
 # TRANSLATION
 # LABEL/APP_TITLE_CASE_LABEL_UPDATE
 #: LABEL/APP_TITLE_CASE_LABEL_UPDATE
-msgid "The System has detected that the changes on case labels will affect more than 1000 records, so the work will be scheduled by the cron to perform the update the next time the cron will run."
-msgstr "The System has detected that the changes on case labels will affect more than 1000 records, so the work will be scheduled by the cron to perform the update the next time the cron will run."
+msgid "The System has detected that the changes to the case labels will affect more than 1000 records, so the changes will be performed by cron the next time it is scheduled to run."
+msgstr "The System has detected that the changes to the case labels will affect more than 1000 records, so the changes will be performed by cron the next time it is scheduled to run."
 
 # TRANSLATION
 # LABEL/ID_MESSAGE_LOGIN
@@ -14044,8 +14050,8 @@ msgstr "PM Process File"
 # TRANSLATION
 # LABEL/ID_CASE_PAUSE_REASON
 #: LABEL/ID_CASE_PAUSE_REASON
-msgid "Reason of the pause of case"
-msgstr "Reason of the pause of case"
+msgid "Reason to pause the case"
+msgstr "Reason to pause the case"
 
 # TRANSLATION
 # LABEL/ID_NOTIFY_USERS_CASE
@@ -14056,20 +14062,20 @@ msgstr "Notify users of case"
 # TRANSLATION
 # LABEL/ID_CASE_PAUSE_LABEL_NOTE
 #: LABEL/ID_CASE_PAUSE_LABEL_NOTE
-msgid "The Case paused. By the reason:"
-msgstr "The Case paused. By the reason:"
+msgid "The case was paused due to:"
+msgstr "The case was paused due to:"
 
 # TRANSLATION
 # LABEL/ID_CASE_CANCEL_REASON
 #: LABEL/ID_CASE_CANCEL_REASON
-msgid "Reason of the cancel of case"
-msgstr "Reason of the cancel of case"
+msgid "Reason why case was canceled"
+msgstr "Reason why case was canceled"
 
 # TRANSLATION
 # LABEL/ID_CASE_CANCEL_LABEL_NOTE
 #: LABEL/ID_CASE_CANCEL_LABEL_NOTE
-msgid "The Case canceled. By the reason:"
-msgstr "The Case canceled. By the reason:"
+msgid "The case was canceled due to:"
+msgstr "The case was canceled due to:"
 
 # TRANSLATION
 # LABEL/MIME_DES_DOCX
@@ -14104,8 +14110,8 @@ msgstr "New value inserted in the table"
 # TRANSLATION
 # LABEL/ID_FIELD_DYNAFORM_SUGGEST_INPUT_TITLE
 #: LABEL/ID_FIELD_DYNAFORM_SUGGEST_INPUT_TITLE
-msgid "If the value entered doesn't exist, a new registry will be inserted when press Enter Key"
-msgstr "If the value entered doesn't exist, a new registry will be inserted when press Enter Key"
+msgid "If the entered value does not exist, a new registry will be inserted when the ENTER key is pressed."
+msgstr "If the entered value does not exist, a new registry will be inserted when the ENTER key is pressed."
 
 # TRANSLATION
 # LABEL/ID_CASE_NOTES_LABEL_SEND
@@ -14188,8 +14194,8 @@ msgstr "Event Conditional"
 # TRANSLATION
 # LABEL/ID_PMTABLE_INVALID_FIELD_NAME
 #: LABEL/ID_PMTABLE_INVALID_FIELD_NAME
-msgid "The following fields cannot have these names because the are reserved words \"{0}\""
-msgstr "The following fields cannot have these names because the are reserved words \"{0}\""
+msgid "The following fields cannot be created because they contain the reserved words \"{0}\""
+msgstr "The following fields cannot be created because they contain the reserved words \"{0}\""
 
 # TRANSLATION
 # LABEL/ID_USER_CASES_NOT_START
@@ -14374,8 +14380,8 @@ msgstr "Refresh Time (seconds)"
 # TRANSLATION
 # LABEL/ID_MSG_ENABLE_HTML_EDITING
 #: LABEL/ID_MSG_ENABLE_HTML_EDITING
-msgid "<b>Warning:</b> Editing the HTML prevents fields from being added or moved, so only edit the HTML after creating all the fields. Do you like to continue anyway?"
-msgstr "<b>Warning:</b> Editing the HTML prevents fields from being added or moved, so only edit the HTML after creating all the fields. Do you like to continue anyway?"
+msgid "<b>Warning:</b> Editing the HTML prevents fields from being added or moved. Edit the HTML only after creating all the fields. Do you want to continue?"
+msgstr "<b>Warning:</b> Editing the HTML prevents fields from being added or moved. Edit the HTML only after creating all the fields. Do you want to continue?"
 
 # TRANSLATION
 # LABEL/ID_ALL_CATEGORIES
@@ -14386,8 +14392,8 @@ msgstr "All Categories"
 # TRANSLATION
 # LABEL/ID_CASES_NOTES_NO_PERMISSIONS
 #: LABEL/ID_CASES_NOTES_NO_PERMISSIONS
-msgid "You do not have permission to cases notes"
-msgstr "You do not have permission to cases notes"
+msgid "You do not have permission to access the cases notes"
+msgstr "You do not have permission to access the cases notes"
 
 # TRANSLATION
 # LABEL/ID_DELETE_DOCUMENT
@@ -14404,8 +14410,8 @@ msgstr "Cron Actions Log"
 # TRANSLATION
 # LABEL/ID_AUTH_SOURCE_MISSING
 #: LABEL/ID_AUTH_SOURCE_MISSING
-msgid "The plugin that is related to this authentication source was removed or disabled, please consult to your system administrator."
-msgstr "The plugin that is related to this authentication source was removed or disabled, please consult to your system administrator."
+msgid "The plugin related to this authentication source was removed or disabled. Please consult your system administrator."
+msgstr "The plugin related to this authentication source was removed or disabled. Please consult your system administrator."
 
 # TRANSLATION
 # LABEL/ID_TRIGGER_REQUIRED
@@ -14596,8 +14602,8 @@ msgstr "Memory Limit >= 80M"
 # TRANSLATION
 # LABEL/ID_ADMINISTRATOR_ROLE_CANT_CHANGED
 #: LABEL/ID_ADMINISTRATOR_ROLE_CANT_CHANGED
-msgid "The administrator's role can't be changed!"
-msgstr "The administrator's role can't be changed!"
+msgid "The role of the administrator can not be changed!"
+msgstr "The role of the administrator can not be changed!"
 
 # TRANSLATION
 # LABEL/ID_CONFIRM_IMPORT_DYNAFORM
@@ -14878,8 +14884,8 @@ msgstr "Failed Validation in class {CLASS}."
 # TRANSLATION
 # LABEL/ID_ERROR_CHANGE_SEQUENCE_NUMBER
 #: LABEL/ID_ERROR_CHANGE_SEQUENCE_NUMBER
-msgid "Unable to generate numerical sequence another user performing the same request."
-msgstr "Unable to generate numerical sequence another user performing the same request."
+msgid "Unable to generate a numerical sequence. Another user is performing the same request."
+msgstr "Unable to generate a numerical sequence. Another user is performing the same request."
 
 # TRANSLATION
 # LABEL/ID_CANT_RESOLVE_APPLICATION
@@ -15040,8 +15046,8 @@ msgstr "unassignedMessage.html"
 # TRANSLATION
 # LABEL/ID_USER_ROLE_CANT_CHANGED_TO_ADMINISTRATOR
 #: LABEL/ID_USER_ROLE_CANT_CHANGED_TO_ADMINISTRATOR
-msgid "cant changed or create to administrator role."
-msgstr "cant changed or create to administrator role."
+msgid "The administrator role cannot be changed or created."
+msgstr "The administrator role cannot be changed or created."
 
 # TRANSLATION
 # LABEL/ID_DIRECTORY_NAME_EXISTS_ENTER_ANOTHER
@@ -15058,8 +15064,8 @@ msgstr "You cannot unassign the supervisor"
 # TRANSLATION
 # LABEL/ID_CONFIRM_ASSIGNED_GRID
 #: LABEL/ID_CONFIRM_ASSIGNED_GRID
-msgid "The row data that you recently created will be deleted?"
-msgstr "The row data that you recently created will be deleted?"
+msgid "Do you want to delete the row data that you just created?"
+msgstr "Do you want to delete the row data that you just created?"
 
 # TRANSLATION
 # LABEL/ID_PLUGINS_MANAGER
@@ -15166,8 +15172,8 @@ msgstr "The user's role is inactive"
 # TRANSLATION
 # LABEL/ID_USER_NOT_FUNCTIONALITY
 #: LABEL/ID_USER_NOT_FUNCTIONALITY
-msgid "This functionality is not available for users who have an external authentication source related (ie LDAP)"
-msgstr "This functionality is not available for users who have an external authentication source related (ie LDAP)"
+msgid "This functionality is not available for users who have an external authentication source related (i.e. LDAP)"
+msgstr "This functionality is not available for users who have an external authentication source related (i.e. LDAP)"
 
 # TRANSLATION
 # LABEL/ID_ROOT_USER
@@ -15214,26 +15220,26 @@ msgstr "Called StartTLS() without being connected"
 # TRANSLATION
 # LABEL/ID_SMTP_ERROR_START_TLS_NOT_ACCEPTED
 #: LABEL/ID_SMTP_ERROR_START_TLS_NOT_ACCEPTED
-msgid "STARTTLS not accepted from server"
-msgstr "STARTTLS not accepted from server"
+msgid "STARTTLS not accepted by the server"
+msgstr "STARTTLS not accepted by the server"
 
 # TRANSLATION
 # LABEL/ID_SMTP_ERROR_AUTH_NOT_ACCEPTED
 #: LABEL/ID_SMTP_ERROR_AUTH_NOT_ACCEPTED
-msgid "Authentication not accepted from server"
-msgstr "Authentication not accepted from server"
+msgid "Authentication not accepted in server"
+msgstr "Authentication not accepted in server"
 
 # TRANSLATION
 # LABEL/ID_SMTP_ERROR_USERNAME_NOT_ACCEPTED
 #: LABEL/ID_SMTP_ERROR_USERNAME_NOT_ACCEPTED
-msgid "Username not accepted from server"
-msgstr "Username not accepted from server"
+msgid "Username not accepted by the server"
+msgstr "Username not accepted by the server"
 
 # TRANSLATION
 # LABEL/ID_SMTP_ERROR_PASSWORD_NOT_ACCEPTED
 #: LABEL/ID_SMTP_ERROR_PASSWORD_NOT_ACCEPTED
-msgid "Password not accepted from server"
-msgstr "Password not accepted from server"
+msgid "Password not accepted by the server"
+msgstr "Password not accepted by the server"
 
 # TRANSLATION
 # LABEL/ID_SMTP_ERROR_ENABLE_PHPINI
@@ -15262,14 +15268,14 @@ msgstr "Called Data() without being connected"
 # TRANSLATION
 # LABEL/ID_SMTP_ERROR_DATA_COM_NOT_ACCEPTED
 #: LABEL/ID_SMTP_ERROR_DATA_COM_NOT_ACCEPTED
-msgid "DATA command not accepted from server"
-msgstr "DATA command not accepted from server"
+msgid "DATA command not accepted by server"
+msgstr "DATA command not accepted by server"
 
 # TRANSLATION
 # LABEL/ID_SMTP_ERROR_DATA_NOT_ACCEPTED
 #: LABEL/ID_SMTP_ERROR_DATA_NOT_ACCEPTED
-msgid "DATA not accepted from server"
-msgstr "DATA not accepted from server"
+msgid "DATA not accepted by server"
+msgstr "DATA not accepted by server"
 
 # TRANSLATION
 # LABEL/ID_SMTP_ERROR_CALLED_HELLO_WITHOUT
@@ -15280,8 +15286,8 @@ msgstr "Called Hello() without being connected"
 # TRANSLATION
 # LABEL/ID_SMTP_ERROR_NOT_ACCEPTED
 #: LABEL/ID_SMTP_ERROR_NOT_ACCEPTED
-msgid "not accepted from server"
-msgstr "not accepted from server"
+msgid "not accepted by server"
+msgstr "not accepted by server"
 
 # TRANSLATION
 # LABEL/ID_SMTP_ERROR_CALLED_MAIL_WITHOUT
@@ -15292,8 +15298,8 @@ msgstr "Called Mail() without being connected"
 # TRANSLATION
 # LABEL/ID_SMTP_ERROR_MAIL_NOT_ACCEPTED
 #: LABEL/ID_SMTP_ERROR_MAIL_NOT_ACCEPTED
-msgid "MAIL not accepted from server"
-msgstr "MAIL not accepted from server"
+msgid "MAIL not accepted by the server"
+msgstr "MAIL not accepted by the server"
 
 # TRANSLATION
 # LABEL/ID_SMTP_ERROR_CALLED_QUIT_WITHOUT
@@ -15316,8 +15322,8 @@ msgstr "Called Recipient() without being connected"
 # TRANSLATION
 # LABEL/ID_SMTP_ERROR_RCPT_NOT_ACCEPTED
 #: LABEL/ID_SMTP_ERROR_RCPT_NOT_ACCEPTED
-msgid "RCPT not accepted from server"
-msgstr "RCPT not accepted from server"
+msgid "RCPT not accepted by the server"
+msgstr "RCPT not accepted by the server"
 
 # TRANSLATION
 # LABEL/ID_SMTP_ERROR_CALLED_RESET_WITHOUT
@@ -15340,14 +15346,14 @@ msgstr "Called SendAndMail() without being connected"
 # TRANSLATION
 # LABEL/ID_SMTP_ERROR_SAML_NOT_ACCEPTED
 #: LABEL/ID_SMTP_ERROR_SAML_NOT_ACCEPTED
-msgid "SAML not accepted from server"
-msgstr "SAML not accepted from server"
+msgid "SAML not accepted by the server"
+msgstr "SAML not accepted by the server"
 
 # TRANSLATION
 # LABEL/ID_SMTP_ERROR_MET_TURN_SMTP_NOT_IMPLEMENTED
 #: LABEL/ID_SMTP_ERROR_MET_TURN_SMTP_NOT_IMPLEMENTED
-msgid "This method, TURN, of the SMTP is not implemented"
-msgstr "This method, TURN, of the SMTP is not implemented"
+msgid "The method TURN of the SMTP is not implemented"
+msgstr "The method TURN of the SMTP is not implemented"
 
 # TRANSLATION
 # LABEL/ID_EVENT_ADD_CURRENT
@@ -15400,8 +15406,8 @@ msgstr "From Mail"
 # TRANSLATION
 # LABEL/ID_UNSAVED_TRIGGERS_WINDOW
 #: LABEL/ID_UNSAVED_TRIGGERS_WINDOW
-msgid "You have unsaved changes in popup! If you leave the page all the windows are closed."
-msgstr "You have unsaved changes in popup! If you leave the page all the windows are closed."
+msgid "You have unsaved changes in popup! If you leave the page all the windows will be closed."
+msgstr "You have unsaved changes in popup! If you leave the page all the windows will be closed."
 
 # TRANSLATION
 # LABEL/ID_INSTALL_USE_CURRENT_USER
@@ -15436,14 +15442,14 @@ msgstr "Undefined value for \"{0}\", it is required."
 # TRANSLATION
 # LABEL/ID_INVALID_VALUE_CAN_NOT_BE_EMPTY
 #: LABEL/ID_INVALID_VALUE_CAN_NOT_BE_EMPTY
-msgid "Invalid value for \"{0}\", it can not be empty."
-msgstr "Invalid value for \"{0}\", it can not be empty."
+msgid "Invalid value for \"{0}\". It can not be empty."
+msgstr "Invalid value for \"{0}\". It can not be empty."
 
 # TRANSLATION
 # LABEL/ID_INVALID_VALUE_ONLY_ACCEPTS_VALUES
 #: LABEL/ID_INVALID_VALUE_ONLY_ACCEPTS_VALUES
-msgid "Invalid value for \"{0}\", it only accepts values: \"{1}\"."
-msgstr "Invalid value for \"{0}\", it only accepts values: \"{1}\"."
+msgid "Invalid value for \"{0}\". It only accepts values: \"{1}\"."
+msgstr "Invalid value for \"{0}\". It only accepts values: \"{1}\"."
 
 # TRANSLATION
 # LABEL/ID_INVALID_VALUE
@@ -15454,8 +15460,8 @@ msgstr "Invalid value for \"{0}\"."
 # TRANSLATION
 # LABEL/ID_INVALID_VALUE_THIS_MUST_BE_ARRAY
 #: LABEL/ID_INVALID_VALUE_THIS_MUST_BE_ARRAY
-msgid "Invalid value for \"{0}\", this value must be an array."
-msgstr "Invalid value for \"{0}\", this value must be an array."
+msgid "Invalid value for \"{0}\". This value must be an array."
+msgstr "Invalid value for \"{0}\". This value must be an array."
 
 # TRANSLATION
 # LABEL/ID_INVALID_VALUE_EXPECTING_POSITIVE_INTEGER
@@ -15562,8 +15568,8 @@ msgstr "The routing screen template with {0}: {1} does not exist."
 # TRANSLATION
 # LABEL/ID_RECORD_EXISTS_IN_TABLE
 #: LABEL/ID_RECORD_EXISTS_IN_TABLE
-msgid "The record \"{0}\", exists in table {1}."
-msgstr "The record \"{0}\", exists in table {1}."
+msgid "The record \"{0}\" exists in table {1}."
+msgstr "The record \"{0}\" exists in table {1}."
 
 # TRANSLATION
 # LABEL/ID_RECORD_DOES_NOT_EXIST_IN_TABLE
@@ -15574,8 +15580,8 @@ msgstr "The record \"{0}\", does not exist in table {1}."
 # TRANSLATION
 # LABEL/ID_RECORD_CANNOT_BE_CREATED
 #: LABEL/ID_RECORD_CANNOT_BE_CREATED
-msgid "The record cannot be created!."
-msgstr "The record cannot be created!."
+msgid "The record couldn’t be created!"
+msgstr "The record couldn’t be created!"
 
 # TRANSLATION
 # LABEL/ID_CASE_TRACKER_OBJECT_DOES_NOT_EXIST
@@ -15682,8 +15688,8 @@ msgstr "The trigger with {0}: {1}, has not been created with the wizard."
 # TRANSLATION
 # LABEL/ID_TRIGGER_HAS_BEEN_MODIFIED_MANUALLY_INVALID_FOR_WIZARD
 #: LABEL/ID_TRIGGER_HAS_BEEN_MODIFIED_MANUALLY_INVALID_FOR_WIZARD
-msgid "The trigger with {0}: {1}, has been modified manually. It is invalid for the wizard."
-msgstr "The trigger with {0}: {1}, has been modified manually. It is invalid for the wizard."
+msgid "The trigger with {0}: {1} has been manually modified. It is invalid for the wizard."
+msgstr "The trigger with {0}: {1} has been manually modified. It is invalid for the wizard."
 
 # TRANSLATION
 # LABEL/ID_STEP_DOES_NOT_EXIST
@@ -15724,20 +15730,20 @@ msgstr "The web entry title with {0}: \"{1}\" already exists."
 # TRANSLATION
 # LABEL/ID_WEB_ENTRY_ACTIVITY_DOES_NOT_HAVE_VALID_ASSIGNMENT_TYPE
 #: LABEL/ID_WEB_ENTRY_ACTIVITY_DOES_NOT_HAVE_VALID_ASSIGNMENT_TYPE
-msgid "Web entry only works with activities which have \"Cyclical Assignment\", the activity \"{0}\" does not have a valid assignment type. Please change the Assignment Rules."
-msgstr "Web entry only works with activities which have \"Cyclical Assignment\", the activity \"{0}\" does not have a valid assignment type. Please change the Assignment Rules."
+msgid "Web entry only works with activities which have \"Cyclical Assignment\". The activity \"{0}\" does not have a valid assignment type. Please change the Assignment Rules."
+msgstr "Web entry only works with activities which have \"Cyclical Assignment\". The activity \"{0}\" does not have a valid assignment type. Please change the Assignment Rules."
 
 # TRANSLATION
 # LABEL/ID_IMPORTER_PROJECT_ALREADY_EXISTS_SET_ACTION_TO_CONTINUE
 #: LABEL/ID_IMPORTER_PROJECT_ALREADY_EXISTS_SET_ACTION_TO_CONTINUE
-msgid "Project already exists, you need set an action to continue. Available actions: [{0}]."
-msgstr "Project already exists, you need set an action to continue. Available actions: [{0}]."
+msgid "Project already exists. Set an action to continue. Available actions: [{0}]."
+msgstr "Project already exists. Set an action to continue. Available actions: [{0}]."
 
 # TRANSLATION
 # LABEL/ID_IMPORTER_GROUP_ALREADY_EXISTS_SET_ACTION_TO_CONTINUE
 #: LABEL/ID_IMPORTER_GROUP_ALREADY_EXISTS_SET_ACTION_TO_CONTINUE
-msgid "Group already exists, you need set an action to continue. Available actions: [{0}]."
-msgstr "Group already exists, you need set an action to continue. Available actions: [{0}]."
+msgid "Group already exists. You need set an action to continue. Available actions: [{0}]."
+msgstr "Group already exists. You need set an action to continue. Available actions: [{0}]."
 
 # TRANSLATION
 # LABEL/ID_IMPORTER_ERROR_FILE_INVALID_TYPE_OR_CORRUPT_DATA
@@ -15790,8 +15796,8 @@ msgstr "ProcessMaker Project version is missing on file source."
 # TRANSLATION
 # LABEL/ID_IMPORTER_FILE_INVALID_DOCUMENT_FORMAT_METADATA_IS_MISSING
 #: LABEL/ID_IMPORTER_FILE_INVALID_DOCUMENT_FORMAT_METADATA_IS_MISSING
-msgid "Invalid Document format, metadata section is missing or has multiple definition."
-msgstr "Invalid Document format, metadata section is missing or has multiple definition."
+msgid "Invalid Document format, metadata section is missing or has multiple definitions."
+msgstr "Invalid Document format, metadata section is missing or has multiple definitions."
 
 # TRANSLATION
 # LABEL/ID_IMPORTER_FILE_INVALID_DOCUMENT_FORMAT_METADATA_IS_CORRUPT
@@ -15820,8 +15826,8 @@ msgstr "This input document with inp_doc_uid: {0} does not exist!"
 # TRANSLATION
 # LABEL/ID_CASES_INPUT_FILENAME_DOES_NOT_EXIST
 #: LABEL/ID_CASES_INPUT_FILENAME_DOES_NOT_EXIST
-msgid "This document filename does not exist!"
-msgstr "This document filename does not exist!"
+msgid "This filename does not exist!"
+msgstr "This filename does not exist!"
 
 # TRANSLATION
 # LABEL/ID_CASES_OUTPUT_DOES_NOT_EXIST
@@ -15850,8 +15856,8 @@ msgstr "This case scheduler with sch_uid: {0} does not exist!"
 # TRANSLATION
 # LABEL/ID_INFORMATION_EMPTY
 #: LABEL/ID_INFORMATION_EMPTY
-msgid "The information sended is empty!"
-msgstr "The information sended is empty!"
+msgid "The information sent is empty!"
+msgstr "The information sent is empty!"
 
 # TRANSLATION
 # LABEL/ID_TASK_NOT_FOUND
@@ -15874,8 +15880,8 @@ msgstr "Duplicate Case Scheduler name"
 # TRANSLATION
 # LABEL/ID_INVALID_SCH_START_TIME
 #: LABEL/ID_INVALID_SCH_START_TIME
-msgid "Invalid value specified for sch_start_time. Expecting time in HH:MM format (The time can not be increased to 23:59)"
-msgstr "Invalid value specified for sch_start_time. Expecting time in HH:MM format (The time can not be increased to 23:59)"
+msgid "Invalid value specified for sch_start_time. Expecting time in HH:MM format (The time can not be greater than 23:59)"
+msgstr "Invalid value specified for sch_start_time. Expecting time in HH:MM format (The time can not be greater than 23:59)"
 
 # TRANSLATION
 # LABEL/ID_INVALID_SCH_START_DATE
@@ -15958,8 +15964,8 @@ msgstr "This id: {0} does not correspond to a registered {1}"
 # TRANSLATION
 # LABEL/ID_RELATION_EXIST
 #: LABEL/ID_RELATION_EXIST
-msgid "This relation already exist!"
-msgstr "This relation already exist!"
+msgid "This relation already exists!"
+msgstr "This relation already exists!"
 
 # TRANSLATION
 # LABEL/ID_DOES NOT_DYNAFORM
@@ -15970,8 +15976,8 @@ msgstr "This id for dyn_uid: {0} does not correspond to a registered Dynaform"
 # TRANSLATION
 # LABEL/ID_DOES NOT_INPUT_DOCUMENT
 #: LABEL/ID_DOES NOT_INPUT_DOCUMENT
-msgid "This id for inp_doc_uid: {0} does not correspond to a registered InputDocument"
-msgstr "This id for inp_doc_uid: {0} does not correspond to a registered InputDocument"
+msgid "This id for inp_doc_uid: {0} does not correspond to a registered Input Document"
+msgstr "This id for inp_doc_uid: {0} does not correspond to a registered Input Document"
 
 # TRANSLATION
 # LABEL/ID_USER_NOT_INITIAL ACTIVITIES
@@ -16012,8 +16018,8 @@ msgstr "Record not found for id: {0}"
 # TRANSLATION
 # LABEL/ID_ALREADY_ASSIGNED
 #: LABEL/ID_ALREADY_ASSIGNED
-msgid "This id: {0} is already assigned to task: {1}"
-msgstr "This id: {0} is already assigned to task: {1}"
+msgid "This ID: {0} is already assigned to task: {1}"
+msgstr "This ID: {0} is already assigned to task: {1}"
 
 # TRANSLATION
 # LABEL/ID_DOES_NOT_CORRESPOND
@@ -16096,8 +16102,8 @@ msgstr "The permissions of the \"{0}\" role can not be changed."
 # TRANSLATION
 # LABEL/ID_DEPARTMENT_NOT_EXIST
 #: LABEL/ID_DEPARTMENT_NOT_EXIST
-msgid "The departament with {0}: '{1}' does not exist."
-msgstr "The departament with {0}: '{1}' does not exist."
+msgid "The department with {0}: '{1}' does not exist."
+msgstr "The department with {0}: '{1}' does not exist."
 
 # TRANSLATION
 # LABEL/ID_USER_NOT_EXIST
@@ -16192,26 +16198,26 @@ msgstr "The value '{0}' is not a valid date for the format '{1}'."
 # TRANSLATION
 # LABEL/ID_INVALID_VALUE_ARRAY
 #: LABEL/ID_INVALID_VALUE_ARRAY
-msgid "Invalid value for '{0}' it must be an array."
-msgstr "Invalid value for '{0}' it must be an array."
+msgid "Invalid value for '{0}'. It must be an array."
+msgstr "Invalid value for '{0}'. It must be an array."
 
 # TRANSLATION
 # LABEL/ID_INVALID_VALUE_STRING
 #: LABEL/ID_INVALID_VALUE_STRING
-msgid "Invalid value for '{0}' it must be a string."
-msgstr "Invalid value for '{0}' it must be a string."
+msgid "Invalid value for '{0}'. It must be a string."
+msgstr "Invalid value for '{0}'. It must be a string."
 
 # TRANSLATION
 # LABEL/ID_INVALID_VALUE_INTEGER
 #: LABEL/ID_INVALID_VALUE_INTEGER
-msgid "Invalid value for '{0}' it must be a integer."
-msgstr "Invalid value for '{0}' it must be a integer."
+msgid "Invalid value for '{0}' it must be an integer."
+msgstr "Invalid value for '{0}' it must be an integer."
 
 # TRANSLATION
 # LABEL/ID_INVALID_VALUE_BOOLEAN
 #: LABEL/ID_INVALID_VALUE_BOOLEAN
-msgid "Invalid value for '{0}' it must be a boolean."
-msgstr "Invalid value for '{0}' it must be a boolean."
+msgid "Invalid value for '{0}'. It must be a boolean."
+msgstr "Invalid value for '{0}'. It must be a boolean."
 
 # TRANSLATION
 # LABEL/ID_INVALID_VALUE_IS_EMPTY
@@ -16246,43 +16252,43 @@ msgstr "Invalid value for '{0}', the permitted maximum length of {1} characters.
 # TRANSLATION
 # LABEL/ID_DBC_TYPE_INVALID
 #: LABEL/ID_DBC_TYPE_INVALID
-msgid "The dababase connection with dbs_type: '{0}' is invalid"
-msgstr "The dababase connection with dbs_type: '{0}' is invalid"
+msgid "The database connection with dbs_type: '{0}' is invalid"
+msgstr "The database connection with dbs_type: '{0}' is invalid"
 
 # TRANSLATION
 # LABEL/ID_DBC_SERVER_INVALID
 #: LABEL/ID_DBC_SERVER_INVALID
-msgid "The dababase connection with dbs_server: '{0}', is invalid"
-msgstr "The dababase connection with dbs_server: '{0}', is invalid"
+msgid "The database connection with dbs_server: '{0}', is invalid"
+msgstr "The database connection with dbs_server: '{0}', is invalid"
 
 # TRANSLATION
 # LABEL/ID_DBC_DBNAME_INVALID
 #: LABEL/ID_DBC_DBNAME_INVALID
-msgid "The dababase connection with dbs_database_name: '{0}' is invalid"
-msgstr "The dababase connection with dbs_database_name: '{0}' is invalid"
+msgid "The database connection with dbs_database_name: '{0}' is invalid"
+msgstr "The database connection with dbs_database_name: '{0}' is invalid"
 
 # TRANSLATION
 # LABEL/ID_DBC_PORT_INVALID
 #: LABEL/ID_DBC_PORT_INVALID
-msgid "The dababase connection with dbs_port: '{0}' is invalid"
-msgstr "The dababase connection with dbs_port: '{0}' is invalid"
+msgid "The database connection with dbs_port: '{0}' is invalid"
+msgstr "The database connection with dbs_port: '{0}' is invalid"
 
 # TRANSLATION
 # LABEL/ID_DBC_ENCODE_INVALID
 #: LABEL/ID_DBC_ENCODE_INVALID
-msgid "The dababase connection with dbs_encode: '{0}' is invalid"
-msgstr "The dababase connection with dbs_encode: '{0}' is invalid"
+msgid "The database connection with dbs_encode: '{0}' is invalid"
+msgstr "The database connection with dbs_encode: '{0}' is invalid"
 
 # TRANSLATION
 # LABEL/ID_CANT_DELETE_DEPARTMENT_HAS_CHILDREN
 #: LABEL/ID_CANT_DELETE_DEPARTMENT_HAS_CHILDREN
-msgid "Can not delete the department, it has a children department."
-msgstr "Can not delete the department, it has a children department."
+msgid "It is not possible to delete the department because it has subdepartments."
+msgstr "It is not possible to delete the department because it has subdepartments."
 
 # TRANSLATION
 # LABEL/ID_CANT_DELETE_DEPARTMENT_HAS_USERS
 #: LABEL/ID_CANT_DELETE_DEPARTMENT_HAS_USERS
-msgid "[LABEL/ID_CANT_DELETE_DEPARTMENT_HAS_USERS] Department cannot be deleted while has assigned users."
+msgid "Department cannot be deleted while has assigned users."
 msgstr "Department cannot be deleted while has assigned users."
 
 # TRANSLATION
@@ -16306,8 +16312,8 @@ msgstr "The category name with {0}: \"{1}\" already exists."
 # TRANSLATION
 # LABEL/ID_MSG_CONFIRM_DELETE_USER_ASSINGED_SUPERVISOR
 #: LABEL/ID_MSG_CONFIRM_DELETE_USER_ASSINGED_SUPERVISOR
-msgid "The user can not be deleted while this assigned as a supervisor. Want removed anyway?"
-msgstr "The user can not be deleted while this assigned as a supervisor. Want removed anyway?"
+msgid "The user can not be deleted while assigned as a supervisor. Do you want to delete it anyway?"
+msgstr "The user can not be deleted while assigned as a supervisor. Do you want to delete it anyway?"
 
 # TRANSLATION
 # LABEL/ID_NAME_STG_TITLE_REQUIRE
@@ -16330,8 +16336,8 @@ msgstr "The variable with {0}: {1} does not exist."
 # TRANSLATION
 # LABEL/ID_PROCESS_VARIABLE_REQUIRED_VARIABLES_FOR_QUERY
 #: LABEL/ID_PROCESS_VARIABLE_REQUIRED_VARIABLES_FOR_QUERY
-msgid "The variable \"{0}\" required the variables \"{1}\" for the query."
-msgstr "The variable \"{0}\" required the variables \"{1}\" for the query."
+msgid "The variable \"{0}\" requires the variables \"{1}\" for the query."
+msgstr "The variable \"{0}\" requires the variables \"{1}\" for the query."
 
 # TRANSLATION
 # LABEL/ID_OUTPUT_DOCUMENT_ITS_ASSIGNED
@@ -16392,6 +16398,1218 @@ msgstr "The project with {0}: {1} is BPMN process."
 #: LABEL/ID_USE_LANGUAGE_URL
 msgid "Use the language of URL"
 msgstr "Use the language of URL"
+
+# TRANSLATION
+# LABEL/ID_SUMMARY_FORM_NO_PERMISSIONS
+#: LABEL/ID_SUMMARY_FORM_NO_PERMISSIONS
+msgid "You do not have permission to access to the summary form"
+msgstr "You do not have permission to access to the summary form"
+
+# TRANSLATION
+# LABEL/ID_SUMMARY_FORM
+#: LABEL/ID_SUMMARY_FORM
+msgid "Summary form"
+msgstr "Summary form"
+
+# TRANSLATION
+# LABEL/ID_LANGUAGE_CANT_DELETE_DEFAULT
+#: LABEL/ID_LANGUAGE_CANT_DELETE_DEFAULT
+msgid "You can't delete the default language."
+msgstr "You can't delete the default language."
+
+# TRANSLATION
+# LABEL/ID_UPLOAD_ERR_WRONG_ALLOWED_EXTENSION_FORMAT
+#: LABEL/ID_UPLOAD_ERR_WRONG_ALLOWED_EXTENSION_FORMAT
+msgid "The format is incorrect, check the following examples:    *.*   *.png   *.pdf, *.doc, *.xls"
+msgstr "The format is incorrect, check the following examples:    *.*   *.png   *.pdf, *.doc, *.xls"
+
+# TRANSLATION
+# LABEL/ID_UPLOAD_ERR_NOT_ALLOWED_EXTENSION
+#: LABEL/ID_UPLOAD_ERR_NOT_ALLOWED_EXTENSION
+msgid "The file has not been attached because the extension is not allowed or because the content doesn't correspond."
+msgstr "The file has not been attached because the extension is not allowed or because the content doesn't correspond."
+
+# TRANSLATION
+# LABEL/ID_INPUT_DOC_TYPE_FILE_REQUIRED
+#: LABEL/ID_INPUT_DOC_TYPE_FILE_REQUIRED
+msgid "You must specify the allowed file extensions, use *.* to allow any extension."
+msgstr "You must specify the allowed file extensions, use *.* to allow any extension."
+
+# TRANSLATION
+# LABEL/ID_TINY_SYSTEM_VARIABLE
+#: LABEL/ID_TINY_SYSTEM_VARIABLE
+msgid "System Variable"
+msgstr "System Variable"
+
+# TRANSLATION
+# LABEL/ID_CHOOSE_PROVIDER
+#: LABEL/ID_CHOOSE_PROVIDER
+msgid "Please select provider"
+msgstr "Please select provider"
+
+# TRANSLATION
+# LABEL/ID_INDEX
+#: LABEL/ID_INDEX
+msgid "Index"
+msgstr "Index"
+
+# TRANSLATION
+# LABEL/ID_ERROR_JS_NOT_AVAILABLE
+#: LABEL/ID_ERROR_JS_NOT_AVAILABLE
+msgid "Your browser doesn't support JavaScript or it may be disabled. Please use a different browser or enable JavaScript. Dynaforms won't entirely work because JavaScript is required."
+msgstr "Your browser doesn't support JavaScript or it may be disabled. Please use a different browser or enable JavaScript. Dynaforms won't entirely work because JavaScript is required."
+
+# TRANSLATION
+# LABEL/ID_MAXIMUM_SIZE_FILE_REQUIRED
+#: LABEL/ID_MAXIMUM_SIZE_FILE_REQUIRED
+msgid "The maximum size file is required!"
+msgstr "The maximum size file is required!"
+
+# TRANSLATION
+# LABEL/ID_BEFORE_UPDATE
+#: LABEL/ID_BEFORE_UPDATE
+msgid "Before Upgrade"
+msgstr "Before Upgrade"
+
+# TRANSLATION
+# LABEL/ID_WAIT_INSTALLING_PLUGIN
+#: LABEL/ID_WAIT_INSTALLING_PLUGIN
+msgid "Please wait while the plugin is being installed..."
+msgstr "Please wait while the plugin is being installed..."
+
+# TRANSLATION
+# LABEL/ID_UPGRADING_PLUGIN
+#: LABEL/ID_UPGRADING_PLUGIN
+msgid "Please wait while upgrading the plugin..."
+msgstr "Please wait while upgrading the plugin..."
+
+# TRANSLATION
+# LABEL/ID_UPGRADE_FINISHED
+#: LABEL/ID_UPGRADE_FINISHED
+msgid "Upgrade finished."
+msgstr "Upgrade finished."
+
+# TRANSLATION
+# LABEL/ID_DOWNLOADING_UPGRADE
+#: LABEL/ID_DOWNLOADING_UPGRADE
+msgid "Downloading upgrade:"
+msgstr "Downloading upgrade:"
+
+# TRANSLATION
+# LABEL/ID_INSTALLATION_LOG
+#: LABEL/ID_INSTALLATION_LOG
+msgid "Installation log:"
+msgstr "Installation log:"
+
+# TRANSLATION
+# LABEL/ID_UPGRADE_STARTING
+#: LABEL/ID_UPGRADE_STARTING
+msgid "Please wait while the upgrade is starting..."
+msgstr "Please wait while the upgrade is starting..."
+
+# TRANSLATION
+# LABEL/ID_DOWNLOAD_MANUALLY
+#: LABEL/ID_DOWNLOAD_MANUALLY
+msgid "You can download it manually here"
+msgstr "You can download it manually here"
+
+# TRANSLATION
+# LABEL/ID_UNKNOWN
+#: LABEL/ID_UNKNOWN
+msgid "Unknown"
+msgstr "Unknown"
+
+# TRANSLATION
+# LABEL/ID_INSTALL_ERROR
+#: LABEL/ID_INSTALL_ERROR
+msgid "Install Error"
+msgstr "Install Error"
+
+# TRANSLATION
+# LABEL/ID_ERROR_INSTALLING_ADDON
+#: LABEL/ID_ERROR_INSTALLING_ADDON
+msgid "There was a problem installing this add-on."
+msgstr "There was a problem installing this add-on."
+
+# TRANSLATION
+# LABEL/ID_SERVER_ERROR
+#: LABEL/ID_SERVER_ERROR
+msgid "Server error"
+msgstr "Server error"
+
+# TRANSLATION
+# LABEL/ID_MARKET_SERVER_CONTACTING
+#: LABEL/ID_MARKET_SERVER_CONTACTING
+msgid "There was a problem contacting the market server."
+msgstr "There was a problem contacting the market server."
+
+# TRANSLATION
+# LABEL/ID_SALES_DEPARTMENT_REQUEST
+#: LABEL/ID_SALES_DEPARTMENT_REQUEST
+msgid "It sends a request to Sales Department, do you want to continue?"
+msgstr "It sends a request to Sales Department, do you want to continue?"
+
+# TRANSLATION
+# LABEL/ID_SENDING_REQUEST_SALES_DEPARTMENT
+#: LABEL/ID_SENDING_REQUEST_SALES_DEPARTMENT
+msgid "Sending request to ProcessMaker Sales Department, please wait..."
+msgstr "Sending request to ProcessMaker Sales Department, please wait..."
+
+# TRANSLATION
+# LABEL/ID_NO_INTERNET_CONECTION
+#: LABEL/ID_NO_INTERNET_CONECTION
+msgid "Enterprise Plugins Manager no connected to internet."
+msgstr "Enterprise Plugins Manager no connected to internet."
+
+# TRANSLATION
+# LABEL/ID_WAIT_WHILE_UPGRADING_PROCESSMAKER
+#: LABEL/ID_WAIT_WHILE_UPGRADING_PROCESSMAKER
+msgid "Please wait while upgrading ProcessMaker..."
+msgstr "Please wait while upgrading ProcessMaker..."
+
+# TRANSLATION
+# LABEL/ID_ERROR_UPGRADING_SYSTEM
+#: LABEL/ID_ERROR_UPGRADING_SYSTEM
+msgid "Error upgrading System."
+msgstr "Error upgrading System."
+
+# TRANSLATION
+# LABEL/ID_ERROR_CHECK_FOR_UPDATE_DONE
+#: LABEL/ID_ERROR_CHECK_FOR_UPDATE_DONE
+msgid "An error has occurred, press \"OK\" to check whether the system has been upgraded."
+msgstr "An error has occurred, press \"OK\" to check whether the system has been upgraded."
+
+# TRANSLATION
+# LABEL/ID_UPGRADE_LABEL
+#: LABEL/ID_UPGRADE_LABEL
+msgid "Upgrade"
+msgstr "Upgrade"
+
+# TRANSLATION
+# LABEL/ID_UPDATE_LICENSE
+#: LABEL/ID_UPDATE_LICENSE
+msgid "Upload License"
+msgstr "Upload License"
+
+# TRANSLATION
+# LABEL/ID_SELECT_LICENSE_FILE
+#: LABEL/ID_SELECT_LICENSE_FILE
+msgid "Select a license file"
+msgstr "Select a license file"
+
+# TRANSLATION
+# LABEL/ID_LICENSE_FILE
+#: LABEL/ID_LICENSE_FILE
+msgid "License file"
+msgstr "License file"
+
+# TRANSLATION
+# LABEL/ID_WARNING_ENTERPRISE_LICENSE_MSG
+#: LABEL/ID_WARNING_ENTERPRISE_LICENSE_MSG
+msgid "Please select a valid license file."
+msgstr "Please select a valid license file."
+
+# TRANSLATION
+# LABEL/ID_WARNING_ENTERPRISE_LICENSE_MSG_DAT
+#: LABEL/ID_WARNING_ENTERPRISE_LICENSE_MSG_DAT
+msgid "The file doesn't have a .dat extension, please select another file."
+msgstr "The file doesn't have a .dat extension, please select another file."
+
+# TRANSLATION
+# LABEL/ID_UPDATING_LICENSE_MSG
+#: LABEL/ID_UPDATING_LICENSE_MSG
+msgid "Uploading the license file..."
+msgstr "Uploading the license file..."
+
+# TRANSLATION
+# LABEL/ID_SUCCESSFULLY_UPLOADED
+#: LABEL/ID_SUCCESSFULLY_UPLOADED
+msgid "Successfully uploaded."
+msgstr "Successfully uploaded."
+
+# TRANSLATION
+# LABEL/ID_WARNING_ERROR_UPDATING
+#: LABEL/ID_WARNING_ERROR_UPDATING
+msgid "Error uploading the license file."
+msgstr "Error uploading the license file."
+
+# TRANSLATION
+# LABEL/ID_UPLOAD_PLUGIN
+#: LABEL/ID_UPLOAD_PLUGIN
+msgid "Upload Plugin"
+msgstr "Upload Plugin"
+
+# TRANSLATION
+# LABEL/ID_SELECT_PLUGIN_FILE
+#: LABEL/ID_SELECT_PLUGIN_FILE
+msgid "Select a plugin file"
+msgstr "Select a plugin file"
+
+# TRANSLATION
+# LABEL/ID_PLUGIN_FILE
+#: LABEL/ID_PLUGIN_FILE
+msgid "Plugin file"
+msgstr "Plugin file"
+
+# TRANSLATION
+# LABEL/ID_SELECT_PLUGIN
+#: LABEL/ID_SELECT_PLUGIN
+msgid "Please select a plugin"
+msgstr "Please select a plugin"
+
+# TRANSLATION
+# LABEL/ID_INSTALLING_PLUGIN
+#: LABEL/ID_INSTALLING_PLUGIN
+msgid "Installing plugin..."
+msgstr "Installing plugin..."
+
+# TRANSLATION
+# LABEL/ID_ERROR_UPLOADING_PLUGIN
+#: LABEL/ID_ERROR_UPLOADING_PLUGIN
+msgid "Error uploading the plugin"
+msgstr "Error uploading the plugin"
+
+# TRANSLATION
+# LABEL/ID_CURRENT_VERSION
+#: LABEL/ID_CURRENT_VERSION
+msgid "Current version"
+msgstr "Current version"
+
+# TRANSLATION
+# LABEL/ID_NO_NEW_VERSIONS
+#: LABEL/ID_NO_NEW_VERSIONS
+msgid "No new versions available"
+msgstr "No new versions available"
+
+# TRANSLATION
+# LABEL/ID_CHECK_UPDATES
+#: LABEL/ID_CHECK_UPDATES
+msgid "Check for updates (you need to be connected to Internet)"
+msgstr "Check for updates (you need to be connected to Internet)"
+
+# TRANSLATION
+# LABEL/ID_YOUR_LICENSE
+#: LABEL/ID_YOUR_LICENSE
+msgid "Your license"
+msgstr "Your license"
+
+# TRANSLATION
+# LABEL/ID_CURRENT_LICENSE
+#: LABEL/ID_CURRENT_LICENSE
+msgid "Current license"
+msgstr "Current license"
+
+# TRANSLATION
+# LABEL/ID_LICENSE_SERVER
+#: LABEL/ID_LICENSE_SERVER
+msgid "License server"
+msgstr "License server"
+
+# TRANSLATION
+# LABEL/ID_ISSUED_TO
+#: LABEL/ID_ISSUED_TO
+msgid "Issued to"
+msgstr "Issued to"
+
+# TRANSLATION
+# LABEL/ID_EXPIRES
+#: LABEL/ID_EXPIRES
+msgid "Expires (days)"
+msgstr "Expires (days)"
+
+# TRANSLATION
+# LABEL/ID_IMPORT_LICENSE
+#: LABEL/ID_IMPORT_LICENSE
+msgid "Import license"
+msgstr "Import license"
+
+# TRANSLATION
+# LABEL/ID_RENEW
+#: LABEL/ID_RENEW
+msgid "Renew"
+msgstr "Renew"
+
+# TRANSLATION
+# LABEL/ID_UNISTALL
+#: LABEL/ID_UNISTALL
+msgid "Uninstall"
+msgstr "Uninstall"
+
+# TRANSLATION
+# LABEL/ID_UNISTALL_TIP
+#: LABEL/ID_UNISTALL_TIP
+msgid "Uninstall this plugin"
+msgstr "Uninstall this plugin"
+
+# TRANSLATION
+# LABEL/ID_CONFIRM_DELETE_PLUGIN
+#: LABEL/ID_CONFIRM_DELETE_PLUGIN
+msgid "[LABEL/ID_CONFIRM_DELETE_PLUGIN] Are you sure that you want to remove this plugin?"
+msgstr "Are you sure that you want to remove this plugin?"
+
+# TRANSLATION
+# LABEL/ID_CONFIRM_DELETE_PLUGIN_WARNING
+#: LABEL/ID_CONFIRM_DELETE_PLUGIN_WARNING
+msgid "Uninstalling the plugin can affect other workspaces."
+msgstr "Uninstalling the plugin can affect other workspaces."
+
+# TRANSLATION
+# LABEL/ID_ERROR_UNISTALLING
+#: LABEL/ID_ERROR_UNISTALLING
+msgid "Error uninstalling"
+msgstr "Error uninstalling"
+
+# TRANSLATION
+# LABEL/ID_ENABLE_PLUGIN_TIP
+#: LABEL/ID_ENABLE_PLUGIN_TIP
+msgid "Enable the selected add-on"
+msgstr "Enable the selected add-on"
+
+# TRANSLATION
+# LABEL/ID_ERROR_ENABLING
+#: LABEL/ID_ERROR_ENABLING
+msgid "Error enabling"
+msgstr "Error enabling"
+
+# TRANSLATION
+# LABEL/ID_DISABLE_PLUGIN_TIP
+#: LABEL/ID_DISABLE_PLUGIN_TIP
+msgid "Disable the selected plugin"
+msgstr "Disable the selected plugin"
+
+# TRANSLATION
+# LABEL/ID_ERROR_DISABLING
+#: LABEL/ID_ERROR_DISABLING
+msgid "Error disabling"
+msgstr "Error disabling"
+
+# TRANSLATION
+# LABEL/ID_ADMIN
+#: LABEL/ID_ADMIN
+msgid "Admin"
+msgstr "Admin"
+
+# TRANSLATION
+# LABEL/ID_ADMIN_PLUGIN_TIP
+#: LABEL/ID_ADMIN_PLUGIN_TIP
+msgid "Admin the selected plugin"
+msgstr "Admin the selected plugin"
+
+# TRANSLATION
+# LABEL/ID_PUBLISHER
+#: LABEL/ID_PUBLISHER
+msgid "Publisher"
+msgstr "Publisher"
+
+# TRANSLATION
+# LABEL/ID_LATEST_VERSION
+#: LABEL/ID_LATEST_VERSION
+msgid "Latest version"
+msgstr "Latest version"
+
+# TRANSLATION
+# LABEL/ID_BUY_NOW
+#: LABEL/ID_BUY_NOW
+msgid "Buy now"
+msgstr "Buy now"
+
+# TRANSLATION
+# LABEL/ID_INSTALLED
+#: LABEL/ID_INSTALLED
+msgid "Installed"
+msgstr "Installed"
+
+# TRANSLATION
+# LABEL/ID_INSTALL_NOW
+#: LABEL/ID_INSTALL_NOW
+msgid "Install now"
+msgstr "Install now"
+
+# TRANSLATION
+# LABEL/ID_UPGRADE_NOW
+#: LABEL/ID_UPGRADE_NOW
+msgid "Upgrade now"
+msgstr "Upgrade now"
+
+# TRANSLATION
+# LABEL/ID_INSTALLING
+#: LABEL/ID_INSTALLING
+msgid "Installing"
+msgstr "Installing"
+
+# TRANSLATION
+# LABEL/ID_CANCELLING
+#: LABEL/ID_CANCELLING
+msgid "Cancelling"
+msgstr "Cancelling"
+
+# TRANSLATION
+# LABEL/ID_INSTALL_FROM_FILE
+#: LABEL/ID_INSTALL_FROM_FILE
+msgid "Install from file"
+msgstr "Install from file"
+
+# TRANSLATION
+# LABEL/ID_INSTALL_FROM_FILE_PLUGIN_TIP
+#: LABEL/ID_INSTALL_FROM_FILE_PLUGIN_TIP
+msgid "Upload a plugin file"
+msgstr "Upload a plugin file"
+
+# TRANSLATION
+# LABEL/ID_REFRESH_LABEL_PLUGIN_TIP
+#: LABEL/ID_REFRESH_LABEL_PLUGIN_TIP
+msgid "Refresh the plugin list"
+msgstr "Refresh the plugin list"
+
+# TRANSLATION
+# LABEL/ID_ENTERPRISE_PLUGINS
+#: LABEL/ID_ENTERPRISE_PLUGINS
+msgid "Enterprise Plugins"
+msgstr "Enterprise Plugins"
+
+# TRANSLATION
+# LABEL/ID_TITLE_REQUIRED
+#: LABEL/ID_TITLE_REQUIRED
+msgid "Title is required."
+msgstr "Title is required."
+
+# TRANSLATION
+# LABEL/ID_NAME_REQUIRED
+#: LABEL/ID_NAME_REQUIRED
+msgid "[LABEL/ID_NAME_REQUIRED] Table Name is required."
+msgstr "Table Name is required."
+
+# TRANSLATION
+# LABEL/ID_SELECT_LEAST_FIELD
+#: LABEL/ID_SELECT_LEAST_FIELD
+msgid "Select at least one field (You can select a maximum of 80 fields)"
+msgstr "Select at least one field (You can select a maximum of 80 fields)"
+
+# TRANSLATION
+# LABEL/ID_GRID_FIELDS_REQUIRED
+#: LABEL/ID_GRID_FIELDS_REQUIRED
+msgid "Grid Fields are required."
+msgstr "Grid Fields are required."
+
+# TRANSLATION
+# LABEL/ID_TYPE_PROCESS
+#: LABEL/ID_TYPE_PROCESS
+msgid "Process Type"
+msgstr "Process Type"
+
+# TRANSLATION
+# LABEL/ID_PLEASE_SET_VALUE_DAYS_EXECUTION_TIME_FIELD
+#: LABEL/ID_PLEASE_SET_VALUE_DAYS_EXECUTION_TIME_FIELD
+msgid "Please, set a value for the days in the Execution Time field."
+msgstr "Please, set a value for the days in the Execution Time field."
+
+# TRANSLATION
+# LABEL/ID_AUDITLOG_DISPLAY
+#: LABEL/ID_AUDITLOG_DISPLAY
+msgid "Audit Log"
+msgstr "Audit Log"
+
+# TRANSLATION
+# LABEL/ID_ENABLE_AUDIT_LOG
+#: LABEL/ID_ENABLE_AUDIT_LOG
+msgid "Enable Audit Log"
+msgstr "Enable Audit Log"
+
+# TRANSLATION
+# LABEL/ID_AUDIT_LOG_ENABLED
+#: LABEL/ID_AUDIT_LOG_ENABLED
+msgid "Audit Log has been enabled"
+msgstr "Audit Log has been enabled"
+
+# TRANSLATION
+# LABEL/ID_AUDIT_LOG_DISABLED
+#: LABEL/ID_AUDIT_LOG_DISABLED
+msgid "Audit Log has been disabled"
+msgstr "Audit Log has been disabled"
+
+# TRANSLATION
+# LABEL/ID_AUDIT_LOG_DETAILS_1
+#: LABEL/ID_AUDIT_LOG_DETAILS_1
+msgid "When this option is enabled, all changes made in the \"ADMIN\" tab are registered in a log."
+msgstr "When this option is enabled, all changes made in the \"ADMIN\" tab are registered in a log."
+
+# TRANSLATION
+# LABEL/ID_AUDIT_LOG_DETAILS_2
+#: LABEL/ID_AUDIT_LOG_DETAILS_2
+msgid "and the user will be able to see those changes in the \"Audit Log\" option in Logs Menu"
+msgstr "and the user will be able to see those changes in the \"Audit Log\" option in Logs Menu"
+
+# TRANSLATION
+# LABEL/ID_PRIVATE
+#: LABEL/ID_PRIVATE
+msgid "Private"
+msgstr "Private"
+
+# TRANSLATION
+# LABEL/ID_CASES_LIST
+#: LABEL/ID_CASES_LIST
+msgid "[LABEL/ID_CASES_LIST] Cases Lists"
+msgstr "Cases Lists"
+
+# TRANSLATION
+# LABEL/ID_MENU_NAME
+#: LABEL/ID_MENU_NAME
+msgid "Enterprise Manager"
+msgstr "Enterprise Manager"
+
+# TRANSLATION
+# LABEL/ID_LEFT
+#: LABEL/ID_LEFT
+msgid "left"
+msgstr "left"
+
+# TRANSLATION
+# LABEL/ID_CENTER
+#: LABEL/ID_CENTER
+msgid "center"
+msgstr "center"
+
+# TRANSLATION
+# LABEL/ID_RIGHT
+#: LABEL/ID_RIGHT
+msgid "right"
+msgstr "right"
+
+# TRANSLATION
+# LABEL/ID_LANGUAGE_CANT_DELETE_CURRENTLY
+#: LABEL/ID_LANGUAGE_CANT_DELETE_CURRENTLY
+msgid "The language the system is currently using cannot be deleted."
+msgstr "The language the system is currently using cannot be deleted."
+
+# TRANSLATION
+# LABEL/ID_INPUT_DOC_MAX_FILESIZE_REQUIRED
+#: LABEL/ID_INPUT_DOC_MAX_FILESIZE_REQUIRED
+msgid "Maximum file size parameter is required."
+msgstr "Maximum file size parameter is required."
+
+# TRANSLATION
+# LABEL/ID_AUDIT_LOG_ACTIONS
+#: LABEL/ID_AUDIT_LOG_ACTIONS
+msgid "Audit Log Actions"
+msgstr "Audit Log Actions"
+
+# TRANSLATION
+# LABEL/ID_RESET_FILTERS
+#: LABEL/ID_RESET_FILTERS
+msgid "Reset Filters"
+msgstr "Reset Filters"
+
+# TRANSLATION
+# LABEL/ID_INPUT_DB
+#: LABEL/ID_INPUT_DB
+msgid "Input"
+msgstr "Input"
+
+# TRANSLATION
+# LABEL/ID_TRIGGER_DB
+#: LABEL/ID_TRIGGER_DB
+msgid "Trigger"
+msgstr "Trigger"
+
+# TRANSLATION
+# LABEL/ID_IP
+#: LABEL/ID_IP
+msgid "IP Client"
+msgstr "IP Client"
+
+# TRANSLATION
+# LABEL/ID_OUTPUT_DB
+#: LABEL/ID_OUTPUT_DB
+msgid "Output"
+msgstr "Output"
+
+# TRANSLATION
+# LABEL/ID_ATTACHED_DB
+#: LABEL/ID_ATTACHED_DB
+msgid "Attached"
+msgstr "Attached"
+
+# TRANSLATION
+# LABEL/ID_DERIVATION_DB
+#: LABEL/ID_DERIVATION_DB
+msgid "Derivation"
+msgstr "Derivation"
+
+# TRANSLATION
+# LABEL/ID_OPEN_DYNAFORM_TAB
+#: LABEL/ID_OPEN_DYNAFORM_TAB
+msgid "Open the Dynaform in a new tab"
+msgstr "Open the Dynaform in a new tab"
+
+# TRANSLATION
+# LABEL/ID_ENTERPRISE_FEATURES
+#: LABEL/ID_ENTERPRISE_FEATURES
+msgid "Enterprise features"
+msgstr "Enterprise features"
+
+# TRANSLATION
+# LABEL/ID_CREATE_USER
+#: LABEL/ID_CREATE_USER
+msgid "Create User"
+msgstr "Create User"
+
+# TRANSLATION
+# LABEL/ID_UPDATE_USER
+#: LABEL/ID_UPDATE_USER
+msgid "Update User"
+msgstr "Update User"
+
+# TRANSLATION
+# LABEL/ID_DELETE_USER
+#: LABEL/ID_DELETE_USER
+msgid "Delete User"
+msgstr "Delete User"
+
+# TRANSLATION
+# LABEL/ID_ENABLE_USER
+#: LABEL/ID_ENABLE_USER
+msgid "Enable User"
+msgstr "Enable User"
+
+# TRANSLATION
+# LABEL/ID_DISABLE_USER
+#: LABEL/ID_DISABLE_USER
+msgid "Disable User"
+msgstr "Disable User"
+
+# TRANSLATION
+# LABEL/ID_ASSIGN_AUTHENTICATION_SOURCE
+#: LABEL/ID_ASSIGN_AUTHENTICATION_SOURCE
+msgid "Assign Authentication Source"
+msgstr "Assign Authentication Source"
+
+# TRANSLATION
+# LABEL/ID_ASSIGN_USER_TO_GROUP
+#: LABEL/ID_ASSIGN_USER_TO_GROUP
+msgid "Assign Users To Group"
+msgstr "Assign Users To Group"
+
+# TRANSLATION
+# LABEL/ID_CREATE_AUTH_SOURCE
+#: LABEL/ID_CREATE_AUTH_SOURCE
+msgid "Create Authentication Source"
+msgstr "Create Authentication Source"
+
+# TRANSLATION
+# LABEL/ID_UPDATE_AUTH_SOURCE
+#: LABEL/ID_UPDATE_AUTH_SOURCE
+msgid "Update Authentication Source"
+msgstr "Update Authentication Source"
+
+# TRANSLATION
+# LABEL/ID_DELETE_AUTH_SOURCE
+#: LABEL/ID_DELETE_AUTH_SOURCE
+msgid "Delete Authentication Source"
+msgstr "Delete Authentication Source"
+
+# TRANSLATION
+# LABEL/ID_UPDATE_ROLE
+#: LABEL/ID_UPDATE_ROLE
+msgid "Update Role"
+msgstr "Update Role"
+
+# TRANSLATION
+# LABEL/ID_DELETE_ROLE
+#: LABEL/ID_DELETE_ROLE
+msgid "Delete Role"
+msgstr "Delete Role"
+
+# TRANSLATION
+# LABEL/ID_ASSIGN_USER_TO_ROLE
+#: LABEL/ID_ASSIGN_USER_TO_ROLE
+msgid "Assign Users To Role"
+msgstr "Assign Users To Role"
+
+# TRANSLATION
+# LABEL/ID_DELETE_USER_TO_ROLE
+#: LABEL/ID_DELETE_USER_TO_ROLE
+msgid "Delete Users To Role"
+msgstr "Delete Users To Role"
+
+# TRANSLATION
+# LABEL/ID_ADD_PERMISSION_TO_ROLE
+#: LABEL/ID_ADD_PERMISSION_TO_ROLE
+msgid "Add Permission To Role"
+msgstr "Add Permission To Role"
+
+# TRANSLATION
+# LABEL/ID_DELETE_PERMISSION_TO_ROLE
+#: LABEL/ID_DELETE_PERMISSION_TO_ROLE
+msgid "Delete Permission To Role"
+msgstr "Delete Permission To Role"
+
+# TRANSLATION
+# LABEL/ID_CREATE_SKIN
+#: LABEL/ID_CREATE_SKIN
+msgid "Create Skin"
+msgstr "Create Skin"
+
+# TRANSLATION
+# LABEL/ID_IMPORT_SKIN
+#: LABEL/ID_IMPORT_SKIN
+msgid "Import Skin"
+msgstr "Import Skin"
+
+# TRANSLATION
+# LABEL/ID_EXPORT_SKIN
+#: LABEL/ID_EXPORT_SKIN
+msgid "Export Skin"
+msgstr "Export Skin"
+
+# TRANSLATION
+# LABEL/ID_DELETE_SKIN
+#: LABEL/ID_DELETE_SKIN
+msgid "Delete Skin"
+msgstr "Delete Skin"
+
+# TRANSLATION
+# LABEL/ID_UPDATE_GROUP
+#: LABEL/ID_UPDATE_GROUP
+msgid "Update Group"
+msgstr "Update Group"
+
+# TRANSLATION
+# LABEL/ID_CREATE_CATEGORY
+#: LABEL/ID_CREATE_CATEGORY
+msgid "Create Category"
+msgstr "Create Category"
+
+# TRANSLATION
+# LABEL/ID_UPDATE_CATEGORY
+#: LABEL/ID_UPDATE_CATEGORY
+msgid "Update Category"
+msgstr "Update Category"
+
+# TRANSLATION
+# LABEL/ID_DELETE_CATEGORY
+#: LABEL/ID_DELETE_CATEGORY
+msgid "Delete Category"
+msgstr "Delete Category"
+
+# TRANSLATION
+# LABEL/ID_BUILD_CACHE
+#: LABEL/ID_BUILD_CACHE
+msgid "[LABEL/ID_BUILD_CACHE] Build Cache"
+msgstr "Build Cache"
+
+# TRANSLATION
+# LABEL/ID_CLEAR_CRON
+#: LABEL/ID_CLEAR_CRON
+msgid "Clear Cron"
+msgstr "Clear Cron"
+
+# TRANSLATION
+# LABEL/ID_REPLACE_LOGO
+#: LABEL/ID_REPLACE_LOGO
+msgid "Replace Logo"
+msgstr "Replace Logo"
+
+# TRANSLATION
+# LABEL/ID_UPDATE_LOGIN_SETTINGS
+#: LABEL/ID_UPDATE_LOGIN_SETTINGS
+msgid "Update Login Settings"
+msgstr "Update Login Settings"
+
+# TRANSLATION
+# LABEL/ID_DISABLE_HEART_BEAT
+#: LABEL/ID_DISABLE_HEART_BEAT
+msgid "Disable Heart Beat"
+msgstr "Disable Heart Beat"
+
+# TRANSLATION
+# LABEL/ID_CREATE_PMTABLE
+#: LABEL/ID_CREATE_PMTABLE
+msgid "Create PM Table"
+msgstr "Create PM Table"
+
+# TRANSLATION
+# LABEL/ID_UPDATE_PMTABLE
+#: LABEL/ID_UPDATE_PMTABLE
+msgid "Update PM Table"
+msgstr "Update PM Table"
+
+# TRANSLATION
+# LABEL/ID_DELETE_PMTABLE
+#: LABEL/ID_DELETE_PMTABLE
+msgid "Delete PM Table"
+msgstr "Delete PM Table"
+
+# TRANSLATION
+# LABEL/ID_ADD_DATA_PMTABLE
+#: LABEL/ID_ADD_DATA_PMTABLE
+msgid "Add Data to PM table"
+msgstr "Add Data to PM table"
+
+# TRANSLATION
+# LABEL/ID_UPDATE_DATA_PMTABLE
+#: LABEL/ID_UPDATE_DATA_PMTABLE
+msgid "Update Data from PM Table"
+msgstr "Update Data from PM Table"
+
+# TRANSLATION
+# LABEL/ID_DELETE_DATA_PMTABLE
+#: LABEL/ID_DELETE_DATA_PMTABLE
+msgid "Delete Data from PM Table"
+msgstr "Delete Data from PM Table"
+
+# TRANSLATION
+# LABEL/ID_IMPORT_TABLE
+#: LABEL/ID_IMPORT_TABLE
+msgid "Import Table"
+msgstr "Import Table"
+
+# TRANSLATION
+# LABEL/ID_EXPORT_TABLE
+#: LABEL/ID_EXPORT_TABLE
+msgid "Export Table"
+msgstr "Export Table"
+
+# TRANSLATION
+# LABEL/ID_CREATE_CALENDAR
+#: LABEL/ID_CREATE_CALENDAR
+msgid "Create Calendar"
+msgstr "Create Calendar"
+
+# TRANSLATION
+# LABEL/ID_UPDATE_CALENDAR
+#: LABEL/ID_UPDATE_CALENDAR
+msgid "Update Calendar"
+msgstr "Update Calendar"
+
+# TRANSLATION
+# LABEL/ID_DELETE_CALENDAR
+#: LABEL/ID_DELETE_CALENDAR
+msgid "Delete Calendar"
+msgstr "Delete Calendar"
+
+# TRANSLATION
+# LABEL/ID_CREATE_DASHLET_INSTANCE
+#: LABEL/ID_CREATE_DASHLET_INSTANCE
+msgid "Create Dashlet Instance"
+msgstr "Create Dashlet Instance"
+
+# TRANSLATION
+# LABEL/ID_UPDATE_DASHLET_INSTANCE
+#: LABEL/ID_UPDATE_DASHLET_INSTANCE
+msgid "Update Dashlet Instance"
+msgstr "Update Dashlet Instance"
+
+# TRANSLATION
+# LABEL/ID_DELETE_DASHLET_INSTANCE
+#: LABEL/ID_DELETE_DASHLET_INSTANCE
+msgid "Delete Dashlet Instance"
+msgstr "Delete Dashlet Instance"
+
+# TRANSLATION
+# LABEL/ID_CREATE_DEPARTAMENT
+#: LABEL/ID_CREATE_DEPARTAMENT
+msgid "Create Department"
+msgstr "Create Department"
+
+# TRANSLATION
+# LABEL/ID_CREATE_SUB_DEPARTAMENT
+#: LABEL/ID_CREATE_SUB_DEPARTAMENT
+msgid "Create Sub Department"
+msgstr "Create Sub Department"
+
+# TRANSLATION
+# LABEL/ID_UPDATE_DEPARTAMENT
+#: LABEL/ID_UPDATE_DEPARTAMENT
+msgid "Update Department"
+msgstr "Update Department"
+
+# TRANSLATION
+# LABEL/ID_UPDATE_SUB_DEPARTAMENT
+#: LABEL/ID_UPDATE_SUB_DEPARTAMENT
+msgid "Update Sub Department"
+msgstr "Update Sub Department"
+
+# TRANSLATION
+# LABEL/ID_DELETE_DEPARTAMENT
+#: LABEL/ID_DELETE_DEPARTAMENT
+msgid "Delete Department"
+msgstr "Delete Department"
+
+# TRANSLATION
+# LABEL/ID_ASSIGN_MANAGER_TO_DEPARTAMENT
+#: LABEL/ID_ASSIGN_MANAGER_TO_DEPARTAMENT
+msgid "Assign Manager To Department"
+msgstr "Assign Manager To Department"
+
+# TRANSLATION
+# LABEL/ID_ASSIGN_USER_TO_DEPARTAMENT
+#: LABEL/ID_ASSIGN_USER_TO_DEPARTAMENT
+msgid "Assign Users To Department"
+msgstr "Assign Users To Department"
+
+# TRANSLATION
+# LABEL/ID_REMOVE_USERS_FROM_DEPARTAMENT
+#: LABEL/ID_REMOVE_USERS_FROM_DEPARTAMENT
+msgid "Remove Users From Department"
+msgstr "Remove Users From Department"
+
+# TRANSLATION
+# LABEL/ID_UPLOAD_LANGUAGE
+#: LABEL/ID_UPLOAD_LANGUAGE
+msgid "Upload Language"
+msgstr "Upload Language"
+
+# TRANSLATION
+# LABEL/ID_EXPORT_LANGUAGE
+#: LABEL/ID_EXPORT_LANGUAGE
+msgid "Export Language"
+msgstr "Export Language"
+
+# TRANSLATION
+# LABEL/ID_DELETE_LAGUAGE
+#: LABEL/ID_DELETE_LAGUAGE
+msgid "Delete Language"
+msgstr "Delete Language"
+
+# TRANSLATION
+# LABEL/ID_UPLOAD_SYSTEM_SETTINGS
+#: LABEL/ID_UPLOAD_SYSTEM_SETTINGS
+msgid "Upload System Settings"
+msgstr "Upload System Settings"
+
+# TRANSLATION
+# LABEL/ID_UPDATE_EMAIL_SETTINGS
+#: LABEL/ID_UPDATE_EMAIL_SETTINGS
+msgid "Update Email Settings"
+msgstr "Update Email Settings"
+
+# TRANSLATION
+# LABEL/ID_CREATE_EMAIL_SETTINGS
+#: LABEL/ID_CREATE_EMAIL_SETTINGS
+msgid "Create Email Settings"
+msgstr "Create Email Settings"
+
+# TRANSLATION
+# LABEL/ID_UPLOAD_LOGO
+#: LABEL/ID_UPLOAD_LOGO
+msgid "Upload Logo"
+msgstr "Upload Logo"
+
+# TRANSLATION
+# LABEL/ID_DELETE_LOGO
+#: LABEL/ID_DELETE_LOGO
+msgid "Delete Logo"
+msgstr "Delete Logo"
+
+# TRANSLATION
+# LABEL/ID_INSTALL_PLUGIN
+#: LABEL/ID_INSTALL_PLUGIN
+msgid "Install Plugin"
+msgstr "Install Plugin"
+
+# TRANSLATION
+# LABEL/ID_SET_COLUMNS
+#: LABEL/ID_SET_COLUMNS
+msgid "Set Columns"
+msgstr "Set Columns"
+
+# TRANSLATION
+# LABEL/ID_DISABLE_AUDIT_LOG
+#: LABEL/ID_DISABLE_AUDIT_LOG
+msgid "Disable Audit Log"
+msgstr "Disable Audit Log"
+
+# TRANSLATION
+# LABEL/ID_REMOVE_PLUGIN
+#: LABEL/ID_REMOVE_PLUGIN
+msgid "Remove Plugin"
+msgstr "Remove Plugin"
+
+# TRANSLATION
+# LABEL/ID_CREATE_ROLE
+#: LABEL/ID_CREATE_ROLE
+msgid "[LABEL/ID_CREATE_ROLE] Create New Role"
+msgstr "Create New Role"
+
+# TRANSLATION
+# LABEL/ID_CREATE_GROUP
+#: LABEL/ID_CREATE_GROUP
+msgid "[LABEL/ID_CREATE_GROUP] Create New Group"
+msgstr "Create New Group"
+
+# TRANSLATION
+# LABEL/ID_DELETE_GROUP
+#: LABEL/ID_DELETE_GROUP
+msgid "Remove Group"
+msgstr "Remove Group"
+
+# TRANSLATION
+# LABEL/ID_DISABLE_PLUGIN
+#: LABEL/ID_DISABLE_PLUGIN
+msgid "Disable Plugin"
+msgstr "Disable Plugin"
+
+# TRANSLATION
+# LABEL/ID_ENABLE_PLUGIN
+#: LABEL/ID_ENABLE_PLUGIN
+msgid "Enable Plugin"
+msgstr "Enable Plugin"
+
+# TRANSLATION
+# LABEL/ID_UPDATE_ENVIRONMENT_SETTINGS
+#: LABEL/ID_UPDATE_ENVIRONMENT_SETTINGS
+msgid "Update Environment Settings"
+msgstr "Update Environment Settings"
+
+# TRANSLATION
+# LABEL/ID_NAME_EXISTS
+#: LABEL/ID_NAME_EXISTS
+msgid "The name exists"
+msgstr "The name exists"
+
+# TRANSLATION
+# LABEL/ID_MCRYPT_SUPPORT
+#: LABEL/ID_MCRYPT_SUPPORT
+msgid "Mcrypt Support"
+msgstr "Mcrypt Support"
+
+# TRANSLATION
+# LABEL/ID_GENERATE_INFO_SUPPORT
+#: LABEL/ID_GENERATE_INFO_SUPPORT
+msgid "A file with the information of your System will be generated. It will help the support team to provide a better support to any issue that may appear"
+msgstr "A file with the information of your System will be generated. It will help the support team to provide a better support to any issue that may appear"
+
+# TRANSLATION
+# LABEL/ID_CURRENT_BROWSER_NOT_SUPPORTED
+#: LABEL/ID_CURRENT_BROWSER_NOT_SUPPORTED
+msgid "The current browser is not supported, please use a different browser. Minimum system requirements Internet Explorer 8, Chrome 26, Firefox 20"
+msgstr "The current browser is not supported, please use a different browser. Minimum system requirements Internet Explorer 8, Chrome 26, Firefox 20"
+
+# TRANSLATION
+# LABEL/ID_PMTABLES_CANT_EXPORT
+#: LABEL/ID_PMTABLES_CANT_EXPORT
+msgid "There are no tables to export."
+msgstr "There are no tables to export."
+
+# TRANSLATION
+# LABEL/ID_SUPPORT
+#: LABEL/ID_SUPPORT
+msgid "Support"
+msgstr "Support"
+
+# TRANSLATION
+# LABEL/ID_INPUT_MAX_SIZE
+#: LABEL/ID_INPUT_MAX_SIZE
+msgid "The maximum file size exceeds the 'php.ini' max upload file size value."
+msgstr "The maximum file size exceeds the 'php.ini' max upload file size value."
+
+# TRANSLATION
+# LABEL/ID_DASHLET_TITLE_EXISTS
+#: LABEL/ID_DASHLET_TITLE_EXISTS
+msgid "Dashlet title already exists."
+msgstr "Dashlet title already exists."
+
+# TRANSLATION
+# LABEL/ID_PMTABLE_REQUIRED
+#: LABEL/ID_PMTABLE_REQUIRED
+msgid "It is required to select a PM table"
+msgstr "It is required to select a PM table"
+
+# TRANSLATION
+# LABEL/ID_PLEASE_ENTER_DESCRIPTION
+#: LABEL/ID_PLEASE_ENTER_DESCRIPTION
+msgid "Please, enter a description."
+msgstr "Please, enter a description."
+
+# TRANSLATION
+# LABEL/ID_PLEASE_CONFIGURE_ESTIMATED_DURATION_TASK
+#: LABEL/ID_PLEASE_CONFIGURE_ESTIMATED_DURATION_TASK
+msgid "Please, configure the estimated duration of the task."
+msgstr "Please, configure the estimated duration of the task."
+
+# TRANSLATION
+# LABEL/ID_FIELD_REQUIRED2
+#: LABEL/ID_FIELD_REQUIRED2
+msgid "There are {0} fields that are required."
+msgstr "There are {0} fields that are required."
+
+# TRANSLATION
+# LABEL/ID_PMTABLE_NOT_FOUNDED_SAVED_DATA
+#: LABEL/ID_PMTABLE_NOT_FOUNDED_SAVED_DATA
+msgid "The data from this case was saved in the database, but it was not saved in the PM Table, which it couldn't be found."
+msgstr "The data from this case was saved in the database, but it was not saved in the PM Table, which it couldn't be found."
+
+# TRANSLATION
+# LABEL/ID_FORMAT_24_HOURS
+#: LABEL/ID_FORMAT_24_HOURS
+msgid "Format 24 hrs. (HH:MM)"
+msgstr "Format 24 hrs. (HH:MM)"
+
+# TRANSLATION
+# LABEL/ID_PMTABLE_NOT_FOUND
+#: LABEL/ID_PMTABLE_NOT_FOUND
+msgid "The PM Table associated with this DynaForm could not be found."
+msgstr "The PM Table associated with this DynaForm could not be found."
+
+# TRANSLATION
+# LABEL/ID_HOUR_HOURS
+#: LABEL/ID_HOUR_HOURS
+msgid "Hour(s)"
+msgstr "Hour(s)"
+
+# TRANSLATION
+# LABEL/ID_SEARCH_ALSO_APP_UID
+#: LABEL/ID_SEARCH_ALSO_APP_UID
+msgid "Search also in the APP_UID field"
+msgstr "Search also in the APP_UID field"
+
+# TRANSLATION
+# LABEL/ID_DISABLED_CODE_PLUGIN
+#: LABEL/ID_DISABLED_CODE_PLUGIN
+msgid "The plugin has the following unwanted code (this code should be removed)"
+msgstr "The plugin has the following unwanted code (this code should be removed)"
+
+# TRANSLATION
+# LABEL/ID_DISABLED_CODE_TRIGGER
+#: LABEL/ID_DISABLED_CODE_TRIGGER
+msgid "The trigger has the following unwanted code (this code should be removed): {0}"
+msgstr "The trigger has the following unwanted code (this code should be removed): {0}"
+
+# TRANSLATION
+# LABEL/ID_DISABLED_CODE_TRIGGER_TO_EXECUTE
+#: LABEL/ID_DISABLED_CODE_TRIGGER_TO_EXECUTE
+msgid "The following triggers has unwanted code (these triggers are not executed): {0}"
+msgstr "The following triggers has unwanted code (these triggers are not executed): {0}"
+
+# TRANSLATION
+# LABEL/ID_DISABLED_CODE_CODE_AND_LINE
+#: LABEL/ID_DISABLED_CODE_CODE_AND_LINE
+msgid "{0} (Lines {1})"
+msgstr "{0} (Lines {1})"
+
+# TRANSLATION
+# LABEL/ID_DISABLED_CODE_PROCESS
+#: LABEL/ID_DISABLED_CODE_PROCESS
+msgid "The process \"{0}\" has the following unwanted code (this code should be removed): {1}"
+msgstr "The process \"{0}\" has the following unwanted code (this code should be removed): {1}"
+
+# TRANSLATION
+# LABEL/ID_LECA
+#: LABEL/ID_LECA
+msgid "Your license has expired, please contact your administrator."
+msgstr "Your license has expired, please contact your administrator."
+
+# TRANSLATION
+# LABEL/ID_NLIC
+#: LABEL/ID_NLIC
+msgid "License installed successfully"
+msgstr "License installed successfully"
+
+# TRANSLATION
+# LABEL/ID_ENTERPRISE_PACK_CANT_UPLOAD
+#: LABEL/ID_ENTERPRISE_PACK_CANT_UPLOAD
+msgid "The Enterprise plugin pack can't be uploaded from this administrator, upload it from: ADMIN -> Plugins -> Plugins Manager"
+msgstr "The Enterprise plugin pack can't be uploaded from this administrator, upload it from: ADMIN -> Plugins -> Plugins Manager"
 
 # additionalTables/additionalTablesData.xml?ADD_TAB_NAME
 # additionalTables/additionalTablesData.xml
@@ -24710,7 +25928,7 @@ msgstr "-- Default --"
 # events/eventsEditAction.xml?TRI_UID
 # events/eventsEditAction.xml
 #: dropdown - TRI_UID
-msgid "Trigger"
+msgid "[events/eventsEditAction.xml?TRI_UID] Trigger"
 msgstr "Trigger"
 
 # events/eventsEditAction.xml?TRI_UID-
@@ -27806,7 +29024,7 @@ msgstr "<div align=\"center\">Importing Existing Process</div>"
 # processes/processes_ImportExisting.xml?TITLE1
 # processes/processes_ImportExisting.xml
 #: subtitle - TITLE1
-msgid "[processes/processes_ImportExisting.xml?TITLE1] The process you are trying to import already exist. Please select one of the following options to continue:"
+msgid "The process you are trying to import already exist. Please select one of the following options to continue:"
 msgstr "The process you are trying to import already exist. Please select one of the following options to continue:"
 
 # processes/processes_ImportExisting.xml?IMPORT_OPTION
@@ -30440,7 +31658,7 @@ msgstr "File"
 # setup/upgrade.xml?UPGRADE
 # setup/upgrade.xml
 #: button - UPGRADE
-msgid "Upgrade"
+msgid "[setup/upgrade.xml?UPGRADE] Upgrade"
 msgstr "Upgrade"
 
 # setup/uplogo.xml?TITLE1
@@ -35138,7 +36356,7 @@ msgstr "Last Name"
 # users/users_Edit.xml?USR_USERNAME
 # users/users_Edit.xml
 #: text - USR_USERNAME
-msgid "[users/users_Edit.xml?USR_USERNAME] User ID (*)"
+msgid "User ID (*)"
 msgstr "User ID (*)"
 
 # users/users_Edit.xml?USR_EMAIL
@@ -35912,7 +37130,7 @@ msgstr "Photo"
 # users/users_EditRT.xml?MAX_FILES_SIZE
 # users/users_EditRT.xml
 #: edit - MAX_FILES_SIZE
-msgid "[users/users_EditRT.xml?MAX_FILES_SIZE] Max upload file size"
+msgid "Max upload file size"
 msgstr "Max upload file size"
 
 # users/users_EditRT.xml?SUBMIT
@@ -37376,7 +38594,7 @@ msgstr "Label"
 # dynaforms/fields/file.xml?PME_INPUT
 # dynaforms/fields/file.xml
 #: dropdown - PME_INPUT
-msgid "Input"
+msgid "[dynaforms/fields/file.xml?PME_INPUT] Input"
 msgstr "Input"
 
 # dynaforms/fields/file.xml?PME_INPUT-

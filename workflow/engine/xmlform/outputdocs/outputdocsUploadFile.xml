@@ -1,36 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm target="xx" width="450px">
-
-<OUT_DOC_UID type="hidden"/>
-
-
-<FILENAME type="phpVariable"/>
-<FILELINK type="phpVariable"/>
-
-<TITLE1 type="title">
-  <en>Download</en>
-</TITLE1>
-
-<OUT_DOC_LINK type="link" value="@#FILENAME" link="@#FILELINK" target="_blank">
-  <en>Click in the link to download current file</en>
-</OUT_DOC_LINK>
-
-<TITLE2 type="title">
-  <en>Upload</en>
-</TITLE2>
-
-<OUT_DOC_FILE type="file">
-  <en>Upload a modified file</en>
-</OUT_DOC_FILE>
-
-<BTN type="submit" onclick="submitIframe( this ); ">
-  <en>upload</en>
-</BTN>
-
-<javasc type="javascript"><![CDATA[
+  <OUT_DOC_UID type="hidden"/>
+  <FILENAME type="phpVariable"/>
+  <FILELINK type="phpVariable"/>
+  <TITLE1 type="title">
+    <en><![CDATA[Download]]></en>
+  </TITLE1>
+  <OUT_DOC_LINK type="link" value="@#FILENAME" link="@#FILELINK" target="_blank">
+    <en><![CDATA[Click in the link to download current file]]></en>
+  </OUT_DOC_LINK>
+  <TITLE2 type="title">
+    <en><![CDATA[Upload]]></en>
+  </TITLE2>
+  <OUT_DOC_FILE type="file">
+    <en><![CDATA[Upload a modified file]]></en>
+  </OUT_DOC_FILE>
+  <BTN type="submit" onclick="submitIframe( this ); ">
+    <en><![CDATA[upload]]></en>
+  </BTN>
+  <javasc type="javascript"><![CDATA[
   function submitIframe ( th ) {
     th.form.target = 'uploadFormIframe';
     th.submit();    
   }
 ]]></javasc>
-</dynaForm> 
+</dynaForm>

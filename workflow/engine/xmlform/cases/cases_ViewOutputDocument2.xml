@@ -1,44 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="cases_OutputDocument" type="xmlform" width="400px" labelWidth="100px">
-
-<__DYNAFORM_OPTIONS type="xmlmenu" xmlfile="gulliver/dynaforms_Options">
-  <en/>
-</__DYNAFORM_OPTIONS>
-
-<OUT_DOC_TITLE type="caption">
-  <en>Output document</en>
-</OUT_DOC_TITLE>
-
-<OUT_DOC_DESCRIPTION type="caption">
-  <en>Description</en>
-</OUT_DOC_DESCRIPTION>
-
-<APP_DOC_CREATE_DATE type="caption">
-  <en>Create Date</en>
-</APP_DOC_CREATE_DATE>
-
-<VIEW1 type="phpVariable"/>
-
-<VIEW2 type="phpVariable"/>
-
-<FILE1 type="phpVariable"/>
-
-<FILE2 type="phpVariable"/>
-
-<APP_DOC_FILENAME1 type="link" value="@#VIEW1" link="@#FILE1" onclick="window.open(this.href);return false;">
-  <en>File (.doc)</en>
-</APP_DOC_FILENAME1>
-
-<NEXT_STEP type="button" onclick="nextStep(this.form);">
-  <en>Next step</en>
-</NEXT_STEP>
-
-<JS type="javascript"><![CDATA[
+  <__DYNAFORM_OPTIONS type="xmlmenu" xmlfile="gulliver/dynaforms_Options">
+    <en/>
+  </__DYNAFORM_OPTIONS>
+  <OUT_DOC_TITLE type="caption">
+    <en><![CDATA[Output document]]></en>
+  </OUT_DOC_TITLE>
+  <OUT_DOC_DESCRIPTION type="caption">
+    <en><![CDATA[Description]]></en>
+  </OUT_DOC_DESCRIPTION>
+  <APP_DOC_CREATE_DATE type="caption">
+    <en><![CDATA[Create Date]]></en>
+  </APP_DOC_CREATE_DATE>
+  <VIEW1 type="phpVariable"/>
+  <VIEW2 type="phpVariable"/>
+  <FILE1 type="phpVariable"/>
+  <FILE2 type="phpVariable"/>
+  <APP_DOC_FILENAME1 type="link" value="@#VIEW1" link="@#FILE1" onclick="window.open(this.href);return false;">
+    <en><![CDATA[File (.doc)]]></en>
+  </APP_DOC_FILENAME1>
+  <NEXT_STEP type="button" onclick="nextStep(this.form);">
+    <en><![CDATA[Next step]]></en>
+  </NEXT_STEP>
+  <JS type="javascript"><![CDATA[
 var nextStep = function(oForm)
 {
   oForm.action = 'cases_NextStep';
   oForm.submit();
 };
 ]]></JS>
-
 </dynaForm>

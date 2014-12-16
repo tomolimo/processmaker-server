@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="processes_NewOptions" type="xmlmenu">
-<MNU type="link" value="" link="#" onclick="javascript:history.back(); return false;" colAlign="right" colWidth="80">
-  <en>Back to list</en>
-</MNU>
-</dynaForm>  
+  <MNU type="link" value="" link="#" onclick="javascript:history.back(); return false;" colAlign="right" colWidth="80">
+    <en><![CDATA[Back to list]]></en>
+  </MNU>
+</dynaForm>

@@ -1,27 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="languages_ImportForm" type="xmlform" width="450" height="" labelWidth="200">
-
-<TITLE1 type="title">
-  <en>Upload your logo</en>
-</TITLE1>
-
-<MAX_FILE_SIZE type="edit" mode="view" >
-  <en>Max upload file size in bytes</en>
-</MAX_FILE_SIZE>
-
-<LOGO_FILENAME type="file">
-  <en>File</en>
-</LOGO_FILENAME>
-
-<!--<CONTINUE type="checkbox">
+  <TITLE1 type="title">
+    <en><![CDATA[Upload your logo]]></en>
+  </TITLE1>
+  <MAX_FILE_SIZE type="edit" mode="view">
+    <en><![CDATA[Maximum upload file size in bytes]]></en>
+  </MAX_FILE_SIZE>
+  <LOGO_FILENAME type="file">
+    <en><![CDATA[File]]></en>
+  </LOGO_FILENAME>
+  <!--<CONTINUE type="checkbox">
   <en>Continuing where he stayed last update for the patch (if the last update was not completed satisfactorily)</en>
 </CONTINUE>-->
-
-<LOGO_SAVE type="button" onclick="verifyFile(this.form);">
-  <en>Upload</en>
-</LOGO_SAVE>
-
-<JS type="javascript"><![CDATA[
+  <LOGO_SAVE type="button" onclick="verifyFile(this.form);">
+    <en><![CDATA[Upload]]></en>
+  </LOGO_SAVE>
+  <JS type="javascript"><![CDATA[
 var verifyFile = function(oForm) {
 
   if (document.getElementById('form[LOGO_FILENAME]').value != '') {
@@ -32,5 +26,4 @@ var verifyFile = function(oForm) {
   }
 };
 ]]></JS>
-
-</dynaForm>  
+</dynaForm>

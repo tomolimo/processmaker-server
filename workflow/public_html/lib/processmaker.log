@@ -1,0 +1,30 @@
+[20 hours ago] 129b526  PM-1105 "Al actualizar ProcessMaker de la version 2.5.2 a..." SOLVED <Victor Saisa Lopez>
+[23 hours ago] c858264  PM-1099 "El archivo plugin.singleton se reescribe muchas..." SOLVED <Victor Saisa Lopez>
+[23 hours ago] 7b06ac5  PM-1099 "El archivo plugin.singleton se reescribe muchas..." SOLVED <Victor Saisa Lopez>
+[23 hours ago] 5568c4e  PM-1099 "El archivo plugin.singleton se reescribe muchas..." SOLVED <Victor Saisa Lopez>
+[23 hours ago] 0fd0323  PM-1099 "El archivo plugin.singleton se reescribe muchas..." SOLVED <Victor Saisa Lopez>
+[27 hours ago] 6d797d9  Little improvement in the message displayed when a a user wants to change his password <Julio Cesar Laura>
+[2 days ago] 3aa7110  PM-1066 "Al actualizar PM 2.5.2.3 a 2.8 no se puede crear..." SOLVED <Victor Saisa Lopez>
+[2 days ago] 007089d  Adicion de requerimiento de mcrypt par ala instalacion de PM <Brayan Osmar Pereyra Suxo>
+[2 days ago] 72c2da4  PM-1040. Remove code from the Community version. Change password hash method <Freddy Daniel Rojas Valda>
+[5 days ago] 738169b  PM-1040. Remove code from the Community version. Fix EOT space <Freddy Daniel Rojas Valda>
+[5 days ago] 842875f  PM-1055 Fixing CodeMirror Mode and Autocomplete <jennylee>
+[5 days ago] 903e731  Updating .po and .sql files for release 2014-12-05 <Julio Cesar Laura>
+[5 days ago] 1ff61ed  PM-1039 Aniadiendo files para a obviar codigo en la version community. <jennylee>
+[5 days ago] cb5f8a7  PM-1040. Remove code from the Community version. <Freddy Daniel Rojas Valda>
+[5 days ago] f2968a4  PM-1040. Remove code from the Community version. Fix 14636 New Functionality - To allow set index in tables. <Freddy Daniel Rojas Valda>
+[6 days ago] a327f02  PM-694 Deprecated for php 5.4 <norahmollo>
+[7 days ago] f2dc407  PM-1036 Bloquear el acceso a ProcessMaker Enterprise cuando la licencia expira SOLVED <Julio Cesar Laura>
+[8 days ago] 9d73802  Add mark comment to the file class.processMap.php <Julio Cesar Laura>
+[9 days ago] ec09f39  Improvement upload enterprise tar <Marco Antonio Nina>
+[12 days ago] 11d3667  Add some little fixes <Julio Cesar Laura>
+[13 days ago] 42083ea  PM-1006 Renombrar los nombres de las variables que guardan la info de los workspaces SOLVED <Julio Cesar Laura>
+[2 weeks ago] 3fd6d90  PM-921 Correccion <norahmollo>
+[2 weeks ago] d2a8250  PM-921 Installer for community version. <norahmollo>
+[3 weeks ago] ade0d4f  PM-921 Script de podado <norahmollo>
+[3 weeks ago] 0bcd63b  PM-921 Script de podado <norahmollo>
+[5 weeks ago] 659e9ef  PM_697 Correction <norahmollo>
+[5 weeks ago] e2fb87a  Improvement in audit log when a pm table is edited <Julio Cesar Laura>
+[5 weeks ago] 27c4520  PM 798-1 "la descripcióe pmtables..." SOLVED <Luis Fernando Saisa Lopez>
+[5 weeks ago] e8793d4  PM-798 Audit Log <norahmollo>
+[5 weeks ago] 1b090f6  Improvement in authenticatin source form in PHP 5.4 <Julio Cesar Laura>

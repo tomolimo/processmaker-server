@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="cases_CannotInitiateCase" type="xmlform" width="600px" labelWidth="200px">
-
-<TITLE type="title">
-  <en>Start a new case</en>
-</TITLE>
-
-<DESCRIPTION type="label">
-  <en>You cannot initiate a new case.</en>
-</DESCRIPTION>
-
-</dynaForm>  
+  <TITLE type="title">
+    <en><![CDATA[Start a new case]]></en>
+  </TITLE>
+  <DESCRIPTION type="label">
+    <en><![CDATA[You cannot initiate a new case.]]></en>
+  </DESCRIPTION>
+</dynaForm>

@@ -1,6 +1,6 @@
 <?php
 /**
- * 
+ *
  * ProcessMaker Open Source Edition
  * Copyright (C) 2004 - 2012 Colosa Inc.23
  *
@@ -19,7 +19,7 @@
  *
  * For more information, contact Colosa Inc, 5304 Ventura Drive,
  * Delray Beach, FL, 33484, USA, or email info@colosa.com.
- * 
+ *
  */
 
 // check script parameters
@@ -28,18 +28,18 @@
 //(count ($argv) == 4) || ((count ($argv) == 5) && ($argv [3] != '-skip'))
 $commandLineSyntaxMsg = "Invalid command line arguments: \n " .
   "syntax: ".
-  "php reindex_solr.php [workspace_name] [reindexall|reindexmissing|optimizeindex|reindexone] [-skip {record_number}] [-reindextrunksize {trunk_size}] [-appuid {APP_UID}]\n" . 
+  "php reindex_solr.php [workspace_name] [reindexall|reindexmissing|optimizeindex|reindexone] [-skip {record_number}] [-reindextrunksize {trunk_size}] [-appuid {APP_UID}]\n" .
   " Where \n".
-  "       reindexall : reindex all the database. \n" . 
+  "       reindexall : reindex all the database. \n" .
   "       reindexmissing: reindex only the missing records stored in database. \n".
   "                     (records defined in APP_SOLR_QUEUE table are required)\n" .
   "       optimizeindex: optimize the changes in the search index. (used to get faster results) \n" .
   " Optional Options: \n" .
   " -skip {record_number}: used to skip a number of records. \n ex: -skip 10000 //skips the first 10000 records. \n" .
-  " -reindextrunksize {trunk_size}: specify the number of records sent to index each time. \n ex: -reindextrunksize 100 //(default = 1000) \n Reduce the trunk if using big documents, and memory is not enough. \n"; 
+  " -reindextrunksize {trunk_size}: specify the number of records sent to index each time. \n ex: -reindextrunksize 100 //(default = 1000) \n Reduce the trunk if using big documents, and memory is not enough. \n";
 
-if ( (count ($argv) < 3) || ((count ($argv) % 2) == 0) || 
-    ($argv [2] != 'reindexall' && $argv [2] != 'reindexmissing' && $argv [2] != 'optimizeindex'  && $argv [2] != 'reindexone')) {    
+if ( (count ($argv) < 3) || ((count ($argv) % 2) == 0) ||
+    ($argv [2] != 'reindexall' && $argv [2] != 'reindexmissing' && $argv [2] != 'optimizeindex'  && $argv [2] != 'reindexone')) {
   print $commandLineSyntaxMsg;
   die ();
 }
@@ -64,7 +64,7 @@ if(count ($argv) > 3) {
       if($argv [$argNumber] == '-appuid') {
         //use skip option
         $appUid = $argv [$argNumber + 1];
-      }      
+      }
     }
     else {
       print $commandLineSyntaxMsg;
@@ -106,16 +106,50 @@ if (! defined ('PATH_HOME')) {
   array_pop ($docuroot);
   $pathOutTrunk = implode (PATH_SEP, $docuroot) . PATH_SEP;
   // to do: check previous algorith for Windows $pathTrunk = "c:/home/";
-  
+
   define ('PATH_HOME', $pathhome);
   define ('PATH_TRUNK', $pathTrunk);
   define ('PATH_OUTTRUNK', $pathOutTrunk);
-  
+  define( 'PATH_CLASSES', PATH_HOME . "engine" . PATH_SEP . "classes" . PATH_SEP );
+
+  require_once PATH_TRUNK . "framework/src/Maveriks/Util/ClassLoader.php";
   require_once (PATH_HOME . 'engine' . PATH_SEP . 'config' . PATH_SEP . 'paths.php');
   require_once (PATH_GULLIVER . "class.bootstrap.php");
   Bootstrap::registerSystemClasses();
   spl_autoload_register(array('Bootstrap', 'autoloadClass'));
-  
+
+  Bootstrap::registerClass('BaseProcess',         PATH_HOME . "engine/classes/model/om/BaseProcess.php");
+  Bootstrap::registerClass('ProcessPeer',         PATH_HOME . "engine/classes/model/ProcessPeer.php");
+  Bootstrap::registerClass('BaseAppSolrQueue',    PATH_HOME . "engine/classes/model/om/BaseAppSolrQueue.php");
+  Bootstrap::registerClass('BaseDynaform',        PATH_HOME . "engine/classes/model/om/BaseDynaform.php");
+  Bootstrap::registerClass('DynaformPeer',        PATH_HOME . "engine/classes/model/DynaformPeer.php");
+  Bootstrap::registerClass('BaseTaskUser',        PATH_HOME . "engine/classes/model/om/BaseTaskUser.php");
+  Bootstrap::registerClass('BaseTask',            PATH_HOME . "engine/classes/model/om/BaseTask.php");
+  Bootstrap::registerClass('BaseGroupUserPeer',   PATH_HOME . "engine/classes/model/om/BaseGroupUserPeer.php");
+  Bootstrap::registerClass('BaseGroupUser',       PATH_HOME . "engine/classes/model/om/BaseGroupUser.php");
+  Bootstrap::registerClass('BaseUsers',           PATH_HOME . "engine/classes/model/om/BaseUsers.php");
+  Bootstrap::registerClass('BaseContent',         PATH_HOME . "engine/classes/model/om/BaseContent.php");
+  Bootstrap::registerClass('BaseContentPeer',     PATH_HOME . "engine/classes/model/om/BaseContentPeer.php");
+  Bootstrap::registerClass('ContentPeer',         PATH_HOME . "engine/classes/model/ContentPeer.php");
+  Bootstrap::registerClass('BaseAppThread',       PATH_HOME . "engine/classes/model/om/BaseAppThread.php");
+  Bootstrap::registerClass('AppThreadPeer',       PATH_HOME . "engine/classes/model/AppThreadPeer.php");
+  Bootstrap::registerClass('BaseApplication',     PATH_HOME . "engine/classes/model/om/BaseApplication.php");
+  Bootstrap::registerClass('ApplicationPeer',     PATH_HOME . "engine/classes/model/ApplicationPeer.php");
+  Bootstrap::registerClass('BaseAppDelegation',   PATH_HOME . "engine/classes/model/om/BaseAppDelegation.php");
+  Bootstrap::registerClass('BaseAppDelegationPeer',PATH_HOME . "engine/classes/model/om/BaseAppDelegationPeer.php");
+  Bootstrap::registerClass('BaseEvent',           PATH_HOME . "engine/classes/model/om/BaseEvent.php");
+  Bootstrap::registerClass('BaseEventPeer',       PATH_HOME . "engine/classes/model/om/BaseEventPeer.php");
+  Bootstrap::registerClass('BaseAppEvent',        PATH_HOME . "engine/classes/model/om/BaseAppEvent.php");
+  Bootstrap::registerClass('AppEventPeer',        PATH_HOME . "engine/classes/model/AppEventPeer.php");
+  Bootstrap::registerClass('BaseCaseScheduler',   PATH_HOME . "engine/classes/model/om/BaseCaseScheduler.php");
+  Bootstrap::registerClass('BaseCaseSchedulerPeer',PATH_HOME . "engine/classes/model/om/BaseCaseSchedulerPeer.php");
+  Bootstrap::registerClass('CaseSchedulerPeer',    PATH_HOME . "engine/classes/model/CaseSchedulerPeer.php");
+
+  require_once 'classes/model/AppDelegation.php';
+  require_once 'classes/model/Event.php';
+  require_once 'classes/model/AppEvent.php';
+  require_once 'classes/model/CaseScheduler.php';
+
   G::LoadThirdParty ('pear/json', 'class.json');
   G::LoadThirdParty ('smarty/libs', 'Smarty.class');
   G::LoadSystem ('error');
@@ -140,25 +174,7 @@ if (! defined ('PATH_HOME')) {
   require_once ("creole/Creole.php");
 }
 
-require_once 'classes/model/AppDelegation.php';
-require_once 'classes/model/Event.php';
-require_once 'classes/model/AppEvent.php';
-require_once 'classes/model/CaseScheduler.php';
 // G::loadClass('pmScript');
-
-// //default values
-// $bCronIsRunning = false;
-// $sLastExecution = '';
-// if ( file_exists(PATH_DATA . 'cron') ) {
-// $aAux = unserialize( trim( @file_get_contents(PATH_DATA . 'cron')) );
-// $bCronIsRunning = (boolean)$aAux['bCronIsRunning'];
-// $sLastExecution = $aAux['sLastExecution'];
-// }
-// else {
-// //if not exists the file, just create a new one with current date
-// @file_put_contents(PATH_DATA . 'cron', serialize(array('bCronIsRunning' =>
-// '1', 'sLastExecution' => date('Y-m-d H:i:s'))));
-// }
 
 print "PATH_HOME: " . PATH_HOME . "\n";
 print "PATH_DB: " . PATH_DB . "\n";
@@ -169,19 +185,19 @@ if (! defined ('SYS_SYS')) {
   $sObject = $workspaceName;
   $sNow = ''; // $argv[2];
   $sFilter = '';
-  
+
   for ($i = 3; $i < count ($argv); $i++) {
     $sFilter .= ' ' . $argv [$i];
   }
-  
+
   $oDirectory = dir (PATH_DB);
-  
+
   if (is_dir (PATH_DB . $sObject)) {
     saveLog ('main', 'action', "checking folder " . PATH_DB . $sObject);
     if (file_exists (PATH_DB . $sObject . PATH_SEP . 'db.php')) {
-      
+
       define ('SYS_SYS', $sObject);
-      
+
       // ****************************************
       // read initialize file
       require_once PATH_HOME . 'engine' . PATH_SEP . 'classes' . PATH_SEP . 'class.system.php';
@@ -189,16 +205,16 @@ if (! defined ('SYS_SYS')) {
       define ('MEMCACHED_ENABLED', $config ['memcached']);
       define ('MEMCACHED_SERVER', $config ['memcached_server']);
       define ('TIME_ZONE', $config ['time_zone']);
-      
+
       date_default_timezone_set (TIME_ZONE);
       print "TIME_ZONE: " . TIME_ZONE . "\n";
       print "MEMCACHED_ENABLED: " . MEMCACHED_ENABLED . "\n";
       print "MEMCACHED_SERVER: " . MEMCACHED_SERVER . "\n";
       // ****************************************
-      
+
       include_once (PATH_HOME . 'engine' . PATH_SEP . 'config' . PATH_SEP . 'paths_installed.php');
       include_once (PATH_HOME . 'engine' . PATH_SEP . 'config' . PATH_SEP . 'paths.php');
-      
+
       // ***************** PM Paths DATA **************************
       define ('PATH_DATA_SITE', PATH_DATA . 'sites/' . SYS_SYS . '/');
       define ('PATH_DOCUMENT', PATH_DATA_SITE . 'files/');
@@ -208,7 +224,7 @@ if (! defined ('SYS_SYS')) {
       define ('PATH_DYNAFORM', PATH_DATA_SITE . 'xmlForms/');
       define ('PATH_IMAGES_ENVIRONMENT_FILES', PATH_DATA_SITE . 'usersFiles' . PATH_SEP);
       define ('PATH_IMAGES_ENVIRONMENT_USERS', PATH_DATA_SITE . 'usersPhotographies' . PATH_SEP);
-      
+
       // server info file
       if (is_file (PATH_DATA_SITE . PATH_SEP . '.server_info')) {
         $SERVER_INFO = file_get_contents (PATH_DATA_SITE . PATH_SEP . '.server_info');
@@ -220,10 +236,10 @@ if (! defined ('SYS_SYS')) {
       else {
         eprintln ("WARNING! No server info found!", 'red');
       }
-      
+
       // read db configuration
       $sContent = file_get_contents (PATH_DB . $sObject . PATH_SEP . 'db.php');
-      
+
       $sContent = str_replace ('<?php', '', $sContent);
       $sContent = str_replace ('<?', '', $sContent);
       $sContent = str_replace ('?>', '', $sContent);
@@ -231,7 +247,7 @@ if (! defined ('SYS_SYS')) {
       $sContent = str_replace ("('", "$", $sContent);
       $sContent = str_replace ("',", '=', $sContent);
       $sContent = str_replace (");", ';', $sContent);
-      
+
       eval ($sContent);
       $dsn = $DB_ADAPTER . '://' . $DB_USER . ':' . $DB_PASS . '@' . $DB_HOST . '/' . $DB_NAME;
       $dsnRbac = $DB_ADAPTER . '://' . $DB_RBAC_USER . ':' . $DB_RBAC_PASS . '@' . $DB_RBAC_HOST . '/' . $DB_RBAC_NAME;
@@ -263,7 +279,7 @@ if (! defined ('SYS_SYS')) {
       fclose ($oFile);
       Propel::init (PATH_CORE . 'config/_databases_.php');
       // Creole::registerDriver('dbarray', 'creole.contrib.DBArrayConnection');
-      
+
       eprintln ("Processing workspace: " . $sObject, 'green');
       try {
         processWorkspace ();
@@ -282,10 +298,6 @@ else {
   processWorkspace ();
 }
 
-// finally update the file
-// @file_put_contents(PATH_DATA . 'cron', serialize(array('bCronIsRunning' =>
-// '0', 'sLastExecution' => date('Y-m-d H:i:s'))));
-
 function processWorkspace()
 {
   global $sLastExecution;
@@ -293,16 +305,16 @@ function processWorkspace()
   global $SkipRecords;
   global $TrunkSize;
   global $appUid;
-  
+
   try {
-    
+
     if (($solrConf = System::solrEnv (SYS_SYS)) !== false) {
       G::LoadClass ('AppSolr');
       print "Solr Configuration file: " . PATH_DATA_SITE . "env.ini\n";
       print "solr_enabled: " . $solrConf ['solr_enabled'] . "\n";
       print "solr_host: " . $solrConf ['solr_host'] . "\n";
       print "solr_instance: " . $solrConf ['solr_instance'] . "\n";
-      
+
       $oAppSolr = new AppSolr ($solrConf ['solr_enabled'], $solrConf ['solr_host'], $solrConf ['solr_instance']);
       if ($ScriptAction == "reindexall") {
         $oAppSolr->reindexAllApplications ($SkipRecords, $TrunkSize);
@@ -323,7 +335,7 @@ function processWorkspace()
     else {
       print "Incomplete Solr configuration. See configuration file: " . PATH_DATA_SITE . "env.ini";
     }
-  
+
   }
   catch (Exception $oError) {
     saveLog ("main", "error", "Error processing workspace : " . $oError->getMessage () . "\n");
@@ -336,9 +348,9 @@ function saveLog($sSource, $sType, $sDescription)
     global $isDebug;
     if ($isDebug)
       print date ('H:i:s') . " ($sSource) $sType $sDescription <br>\n";
-    
+
     G::verifyPath (PATH_DATA . 'log' . PATH_SEP, true);
-    $message = '(' . $sSource . ') ' . $sDescription . "\n";
+    $message = '(' . $sSource . ') ' . $sDescription;
     if ($sType == 'action') {
       G::log($message, PATH_DATA);
     }
@@ -356,7 +368,7 @@ function setExecutionMessage($m)
   $len = strlen ($m);
   $linesize = 60;
   $rOffset = $linesize - $len;
-  
+
   eprint ("* $m");
   for ($i = 0; $i < $rOffset; $i++)
     eprint ('.');

@@ -1,31 +1,23 @@
-<?xml version="1.0" encoding="UTF-8"?> 
+<?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="triggers_Edit" type="xmlform" width="100%" labelWidth="5px" enableTemplate="1">
-<PRO_UID type="hidden"/>
-
-
-<TITLE type="title">
-  <en>Trigger Script</en>
-</TITLE>
-<TRI_UID type="hidden"/>
-
-<TRI_TITLE type="hidden"/>
-
-<TRI_TYPE type="hidden"/>
-
-<TRI_DESCRIPTION type="hidden"/>
-
-<TRI_WEBBOT type="textareapm" rows="18" cols="80" showVars="1" process="@#PRO_UID">
-  <en/>
-</TRI_WEBBOT>
-
-<BTN_CANCEL type="button" onclick="cancel();">
-  <en>Cancel</en>
-</BTN_CANCEL>
-
-<SAVE type="button" onclick="eventsTriggerSave(this.form);">
-  <en>Save</en>
-</SAVE>
-<JS type="JavaScript"><![CDATA[
+  <PRO_UID type="hidden"/>
+  <TITLE type="title">
+    <en><![CDATA[Trigger Script]]></en>
+  </TITLE>
+  <TRI_UID type="hidden"/>
+  <TRI_TITLE type="hidden"/>
+  <TRI_TYPE type="hidden"/>
+  <TRI_DESCRIPTION type="hidden"/>
+  <TRI_WEBBOT type="textareapm" rows="18" cols="80" showVars="1" process="@#PRO_UID">
+    <en><![CDATA[]]></en>
+  </TRI_WEBBOT>
+  <BTN_CANCEL type="button" onclick="cancel();">
+    <en><![CDATA[Cancel]]></en>
+  </BTN_CANCEL>
+  <SAVE type="button" onclick="eventsTriggerSave(this.form);">
+    <en><![CDATA[Save]]></en>
+  </SAVE>
+  <JS type="JavaScript"><![CDATA[
 
 var _oVarsPanel_;
 var showDynaformsFormVars = function(sFieldName, sAjaxServer, sProcess, sSymbol) {

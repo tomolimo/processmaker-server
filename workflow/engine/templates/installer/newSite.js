@@ -442,7 +442,7 @@ Ext.onReady(function(){
                     }}
                   },
                   new Ext.form.Checkbox({
-              	    boxLabel: 'Delete Databases if exists',
+              	    boxLabel: 'Delete Database if exists',
               	    id: 'deleteDB',
               	    handler: function() {
               	      wizard.onClientValidation(2, false);

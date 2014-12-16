@@ -1,64 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="new_workspace" version="1.0" basedir="" xmlform_type="NORMAL" width="430px" ajaxSubmit="true" in_progress="status_in_progress" callback="status_create">
-<NEW_WORKSPACE type="title">
-  <en>New Workspace</en>
-</NEW_WORKSPACE>
-<NW_TITLE type="text" size="30" maxlength="13" validate="Login" defaultValue="sample" style="width:100%;">
-  <en>Name</en>
-</NW_TITLE>
-<DB type="subtitle">
-  <en>Database Options</en>
-</DB>
-<AO_DB_WF type="text" size="30" maxlength="16" validate="Login" defaultValue="wf_sample" style="width:100%;">
-  <en>Workflow Database:</en>
-</AO_DB_WF>
-<AO_DB_RB type="text" size="30" maxlength="16" validate="Login" defaultValue="rb_sample" style="width:100%;">
-  <en>Rbac Database:</en>
-</AO_DB_RB>
-<AO_DB_RP type="text" size="30" maxlength="16" validate="Login" defaultValue="rp_sample" style="width:100%;">
-  <en>Report Database:</en>
-</AO_DB_RP>
-<AO_DB_DROP type="checkbox">
-  <en>Drop database if exists</en>
-</AO_DB_DROP>
-<WS type="subtitle">
-  <en>Workspace Administrator</en>
-</WS>
-<NW_USERNAME type="text" size="30" maxlength="32" validate="Email" defaultValue="admin" style="width:100%;">
-  <en>Username:</en>
-</NW_USERNAME>
-<NW_PASSWORD type="password" size="30" maxlength="32" validate="Any" defaultValue="admin" style="width:100%;">
-  <en>Password (admin):</en>
-</NW_PASSWORD>
-<NW_PASSWORD2 type="password" size="30" maxlength="32" validate="Any" defaultValue="admin" style="width:100%;">
-  <en>Re-type Password:</en>
-</NW_PASSWORD2>
-
-<DBS type="subtitle">
-  <en>Define Database</en>
-</DBS>
-<DB_ENGINE type="text" size="30" maxlength="32" validate="Any" readonly="1" defaultValue="" style="width:100%;">
-  <en>Engine:</en>
-</DB_ENGINE>
-<DB_SERVER type="text" size="30" maxlength="32" validate="Any" defaultValue="" style="width:90%;">
-  <en>Server:</en>
-</DB_SERVER>
-<DB_PORT type="text" size="5" maxlength="7" validate="Any" defaultValue="" align="left">
-  <en>Port:</en>
-</DB_PORT>
-<DB_USERNAME type="text" size="30" maxlength="32" validate="Any" defaultValue="" style="width:100%;">
-  <en>Username:</en>
-</DB_USERNAME>
-<DB_PASSWORD type="password" size="30" maxlength="32" validate="Any" defaultValue="" style="width:100%;">
-  <en>Password:</en>
-</DB_PASSWORD>
-
-<ACTION type="hidden" defaultValue="test"/>
-<NW_SUB type="submit">
-  <en>Test</en>
-</NW_SUB>
-
-<JS type="JavaScript"><![CDATA[
+  <NEW_WORKSPACE type="title">
+    <en><![CDATA[New Workspace]]></en>
+  </NEW_WORKSPACE>
+  <NW_TITLE type="text" size="30" maxlength="13" validate="Login" defaultValue="sample" style="width:100%;">
+    <en><![CDATA[Name]]></en>
+  </NW_TITLE>
+  <DB type="subtitle">
+    <en><![CDATA[Database Options]]></en>
+  </DB>
+  <AO_DB_WF type="text" size="30" maxlength="16" validate="Login" defaultValue="wf_sample" style="width:100%;">
+    <en><![CDATA[Workflow Database:]]></en>
+  </AO_DB_WF>
+  <AO_DB_RB type="text" size="30" maxlength="16" validate="Login" defaultValue="rb_sample" style="width:100%;">
+    <en><![CDATA[Rbac Database:]]></en>
+  </AO_DB_RB>
+  <AO_DB_RP type="text" size="30" maxlength="16" validate="Login" defaultValue="rp_sample" style="width:100%;">
+    <en><![CDATA[Report Database:]]></en>
+  </AO_DB_RP>
+  <AO_DB_DROP type="checkbox">
+    <en><![CDATA[Drop database if exists]]></en>
+  </AO_DB_DROP>
+  <WS type="subtitle">
+    <en><![CDATA[Workspace Administrator]]></en>
+  </WS>
+  <NW_USERNAME type="text" size="30" maxlength="32" validate="Email" defaultValue="admin" style="width:100%;">
+    <en><![CDATA[Username:]]></en>
+  </NW_USERNAME>
+  <NW_PASSWORD type="password" size="30" maxlength="32" validate="Any" defaultValue="admin" style="width:100%;">
+    <en><![CDATA[Password (admin):]]></en>
+  </NW_PASSWORD>
+  <NW_PASSWORD2 type="password" size="30" maxlength="32" validate="Any" defaultValue="admin" style="width:100%;">
+    <en><![CDATA[Re-type Password:]]></en>
+  </NW_PASSWORD2>
+  <DBS type="subtitle">
+    <en><![CDATA[Define Database]]></en>
+  </DBS>
+  <DB_ENGINE type="text" size="30" maxlength="32" validate="Any" readonly="1" defaultValue="" style="width:100%;">
+    <en><![CDATA[Engine:]]></en>
+  </DB_ENGINE>
+  <DB_SERVER type="text" size="30" maxlength="32" validate="Any" defaultValue="" style="width:90%;">
+    <en><![CDATA[Server:]]></en>
+  </DB_SERVER>
+  <DB_PORT type="text" size="5" maxlength="7" validate="Any" defaultValue="" align="left">
+    <en><![CDATA[Port:]]></en>
+  </DB_PORT>
+  <DB_USERNAME type="text" size="30" maxlength="32" validate="Any" defaultValue="" style="width:100%;">
+    <en><![CDATA[Username:]]></en>
+  </DB_USERNAME>
+  <DB_PASSWORD type="password" size="30" maxlength="32" validate="Any" defaultValue="" style="width:100%;">
+    <en><![CDATA[Password:]]></en>
+  </DB_PASSWORD>
+  <ACTION type="hidden" defaultValue="test"/>
+  <NW_SUB type="submit">
+    <en><![CDATA[Test]]></en>
+  </NW_SUB>
+  <JS type="JavaScript"><![CDATA[
 
 	var data={
 		name:new input(getField('NW_TITLE')).setStyle({fontWeight:'bold'}),

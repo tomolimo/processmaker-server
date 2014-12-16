@@ -42,6 +42,12 @@ function updatePageSize ()
 
 function skinList ()
 {
+    if (isset($_REQUEST['textFilter']) && $_REQUEST['textFilter'] != '') {
+        $textFilter = $_REQUEST['textFilter'];
+    } else {
+        $textFilter = '';
+    }
+
     G::loadClass( 'system' );
 
     $skinList = System::getSkingList();
@@ -58,6 +64,9 @@ function skinList ()
         );
     }
 
+    $skinListArray = array();
+    $skinListArray['skins'] = array();
+
     foreach ($skinList['skins'] as $key => $value) {
         if (! isset($value['SKIN_ID']) || ! in_array($value['SKIN_ID'], $filterList)) {
             if ($value['SKIN_FOLDER_ID'] != 'simplified' && $value['SKIN_FOLDER_ID'] != 'uxs' && $value['SKIN_FOLDER_ID'] != 'uxmodern') {
@@ -73,7 +82,15 @@ function skinList ()
                     $value['SKIN_STATUS'] = G::LoadTranslation( 'ID_INACTIVE' );
                 }
 
-                $skinListArray['skins'][] = $value;
+                if ($textFilter != '') {
+                    if (stripos($value['SKIN_NAME'], $textFilter) !== false ||
+                        stripos($value['SKIN_DESCRIPTION'], $textFilter) !== false ||
+                        stripos($value['SKIN_AUTHOR'], $textFilter) !== false) {
+                        $skinListArray['skins'][] = $value;
+                    }
+                } else {
+                    $skinListArray['skins'][] = $value;
+                }
             }
         }
     }
@@ -170,6 +187,7 @@ function newSkin ($baseSkin = 'classic')
         file_put_contents( $configFileFinal, $xmlConfiguration );
         $response['success'] = true;
         $response['message'] = G::LoadTranslation( 'ID_SKIN_SUCCESS_CREATE' );
+        G::auditLog("CreateSkin", "Skin Name: ".$skinName);
         print_r( G::json_encode( $response ) );
     } catch (Exception $e) {
         $response['success'] = false;
@@ -285,6 +303,7 @@ function importSkin ()
 
         $response['success'] = true;
         $response['message'] = G::LoadTranslation( 'ID_SKIN_SUCCESSFUL_IMPORTED' );
+        G::auditLog("ImportSkin", "Skin Name: ".$skinName);
         print_r( G::json_encode( $response ) );
     } catch (Exception $e) {
         $response['success'] = false;
@@ -329,7 +348,7 @@ function exportSkin ($skinToExport = "")
 
         $response['success'] = true;
         $response['message'] = $skinTar;
-
+        G::auditLog("ExportSkin", "Skin Name: ".$skinName);
         print_r( G::json_encode( $response ) );
     } catch (Exception $e) {
         $response['success'] = false;
@@ -355,6 +374,7 @@ function deleteSkin ()
         G::rm_dir( PATH_CUSTOM_SKINS . $folderId );
         $response['success'] = true;
         $response['message'] = "$folderId deleted";
+        G::auditLog("DeleteSkin", "Skin Name: ".$folderId);
     } catch (Exception $e) {
         $response['success'] = false;
         $response['error'] = $response['message'] = $e->getMessage();

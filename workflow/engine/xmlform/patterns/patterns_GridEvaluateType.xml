@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="patterns_GridEvaluateType" type="grid" width="100%">
-
-<ROU_NEXT_TASK type="dropdown"><![CDATA[
+  <ROU_NEXT_TASK type="dropdown"><![CDATA[
 SELECT TAS_UID, CON_VALUE FROM TASK LEFT JOIN CONTENT ON (TAS_UID = CON_ID AND CON_CATEGORY = 'TAS_TITLE' AND CON_LANG = '@#LANG') WHERE PRO_UID = '@#PROCESS'
-  ]]><en>Next Task<option name="-1">End of process</option></en>
-</ROU_NEXT_TASK>
-
-<ROU_CONDITION type="textpm" size="60" maxlength="512" showVars="1" process="@#PROCESS">
-  <en>Condition</en>
-</ROU_CONDITION>
-
-
+  ]]><en><![CDATA[Next Task]]><option name="-1"><![CDATA[End of process]]></option></en></ROU_NEXT_TASK>
+  <ROU_CONDITION type="textpm" size="60" maxlength="512" showVars="1" process="@#PROCESS">
+    <en><![CDATA[Condition]]></en>
+  </ROU_CONDITION>
 </dynaForm>

@@ -18,7 +18,7 @@ abstract class BaseSystemsPeer {
 	const DATABASE_NAME = 'rbac';
 
 	/** the table name for this class */
-	const TABLE_NAME = 'SYSTEMS';
+	const TABLE_NAME = 'RBAC_SYSTEMS';
 
 	/** A class that can be returned by this peer. */
 	const CLASS_DEFAULT = 'classes.model.Systems';
@@ -31,19 +31,19 @@ abstract class BaseSystemsPeer {
 
 
 	/** the column name for the SYS_UID field */
-	const SYS_UID = 'SYSTEMS.SYS_UID';
+	const SYS_UID = 'RBAC_SYSTEMS.SYS_UID';
 
 	/** the column name for the SYS_CODE field */
-	const SYS_CODE = 'SYSTEMS.SYS_CODE';
+	const SYS_CODE = 'RBAC_SYSTEMS.SYS_CODE';
 
 	/** the column name for the SYS_CREATE_DATE field */
-	const SYS_CREATE_DATE = 'SYSTEMS.SYS_CREATE_DATE';
+	const SYS_CREATE_DATE = 'RBAC_SYSTEMS.SYS_CREATE_DATE';
 
 	/** the column name for the SYS_UPDATE_DATE field */
-	const SYS_UPDATE_DATE = 'SYSTEMS.SYS_UPDATE_DATE';
+	const SYS_UPDATE_DATE = 'RBAC_SYSTEMS.SYS_UPDATE_DATE';
 
 	/** the column name for the SYS_STATUS field */
-	const SYS_STATUS = 'SYSTEMS.SYS_STATUS';
+	const SYS_STATUS = 'RBAC_SYSTEMS.SYS_STATUS';
 
 	/** The PHP to DB Name Mapping */
 	private static $phpNameMap = null;
@@ -185,8 +185,8 @@ abstract class BaseSystemsPeer {
 
 	}
 
-	const COUNT = 'COUNT(SYSTEMS.SYS_UID)';
-	const COUNT_DISTINCT = 'COUNT(DISTINCT SYSTEMS.SYS_UID)';
+	const COUNT = 'COUNT(RBAC_SYSTEMS.SYS_UID)';
+	const COUNT_DISTINCT = 'COUNT(DISTINCT RBAC_SYSTEMS.SYS_UID)';
 
 	/**
 	 * Returns the number of rows matching criteria.

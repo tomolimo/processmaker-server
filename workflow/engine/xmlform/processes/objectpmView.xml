@@ -1,83 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="pbjectpmView" width="100%" mode="">
-
-<thetitle type="title">
-  <en>Process Properties</en>
-</thetitle>
-
-<uid type="hidden"/>
-
-<title type="text" mode="view">
-  <en>Title</en>
-</title>
-
-<version type="text" mode="view">
-  <en>Version</en>
-</version>
-
-<pm_version type="text" mode="view">
-  <en>P.M. rev. required</en>
-</pm_version>
-
-<category type="text" mode="view">
-  <en>Category</en>
-</category>
-
-
-
-<rating type="text" mode="view">
-  <en>Rating</en>
-</rating>
-
-<downloads type="text" mode="view">
-  <en>Downloads</en>
-</downloads>
-
-<subscriptions type="text" mode="view">
-  <en>Subscriptions</en>
-</subscriptions>
-
-<username type="text" colWidth="60" mode="view">
-  <en>Author</en>
-</username>
-
-<privacy type="dropdown" mode="view">
-  <en>Privacy
-  <option name="FREE">Free Download</option>
-  <option name="PUBLIC">Public</option>
-  <option name="PRIVATE">Private</option>
-  <option name="COLOSA">Colosa</option>
-  </en>
-</privacy>
-
-<createDate type="text" mode="view">
-  <en>Create Date</en>
-</createDate>
-
-<updateDate type="text" mode="view">
-  <en>Update Date</en>
-</updateDate>
-
-<description type="text" enableHtml="1" mode="view">
-  <en>Description</en>
-</description>
-
-<subinstallSteps type="subtitle">
-  <en>Install Steps</en>
-</subinstallSteps>
-
-<installSteps type="text" enableHtml="1" mode="view">
-  <en/>
-</installSteps>
-
-<link_label type="private"/>
-
-<link_href type="private"/>
-
-<link type="link" value="@#link_label" link="@#link_href">
-<en></en></link>
-
-<js type="javascript"><![CDATA[
+  <thetitle type="title">
+    <en><![CDATA[Process Properties]]></en>
+  </thetitle>
+  <uid type="hidden"/>
+  <title type="text" mode="view">
+    <en><![CDATA[Title]]></en>
+  </title>
+  <version type="text" mode="view">
+    <en><![CDATA[Version]]></en>
+  </version>
+  <pm_version type="text" mode="view">
+    <en><![CDATA[P.M. rev. required]]></en>
+  </pm_version>
+  <category type="text" mode="view">
+    <en><![CDATA[Category]]></en>
+  </category>
+  <rating type="text" mode="view">
+    <en><![CDATA[Rating]]></en>
+  </rating>
+  <downloads type="text" mode="view">
+    <en><![CDATA[Downloads]]></en>
+  </downloads>
+  <subscriptions type="text" mode="view">
+    <en><![CDATA[Subscriptions]]></en>
+  </subscriptions>
+  <username type="text" colWidth="60" mode="view">
+    <en><![CDATA[Author]]></en>
+  </username>
+  <privacy type="dropdown" mode="view">
+    <en><![CDATA[Privacy]]><option name="FREE"><![CDATA[Free Download]]></option><option name="PUBLIC"><![CDATA[Public]]></option><option name="PRIVATE"><![CDATA[Private]]></option><option name="COLOSA"><![CDATA[Colosa]]></option></en>
+  </privacy>
+  <createDate type="text" mode="view">
+    <en><![CDATA[Create Date]]></en>
+  </createDate>
+  <updateDate type="text" mode="view">
+    <en><![CDATA[Update Date]]></en>
+  </updateDate>
+  <description type="text" enableHtml="1" mode="view">
+    <en><![CDATA[Description]]></en>
+  </description>
+  <subinstallSteps type="subtitle">
+    <en><![CDATA[Install Steps]]></en>
+  </subinstallSteps>
+  <installSteps type="text" enableHtml="1" mode="view">
+    <en><![CDATA[]]></en>
+  </installSteps>
+  <link_label type="private"/>
+  <link_href type="private"/>
+  <link type="link" value="@#link_label" link="@#link_href">
+    <en><![CDATA[]]></en>
+  </link>
+  <js type="javascript"><![CDATA[
 
 var registerPML = function(sUID) {
   oPanel2 = new leimnud.module.panel();
@@ -132,5 +106,4 @@ var loginPML = function(sUID) {
 };
 
 ]]></js>
-
 </dynaForm>

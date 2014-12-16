@@ -1,31 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="setup/weekend" width="450" xmlform_type="NORMAL">
-<TITLE9592 type="title" group="9">
-  <en>Weekend days</en>
-</TITLE9592>
-<MONDAY type="checkbox" group="1">
-  <en>Monday</en>
-</MONDAY>
-<TUESDAY type="checkbox" group="1">
-  <en>Tuesday</en>
-</TUESDAY>
-<WEDNESDAY type="checkbox" group="1">
-  <en>Wednesday</en>
-</WEDNESDAY>
-<THURSDAY type="checkbox" group="1">
-  <en>Thursday</en>
-</THURSDAY>
-<FRIDAY type="checkbox" group="1">
-  <en>Friday</en>
-</FRIDAY>
-<SATURDAY type="checkbox" group="1">
-  <en>Saturday</en>
-</SATURDAY>
-<SUNDAY type="checkbox" group="1">
-  <en>Sunday</en>
-</SUNDAY>
-<BSUBMIT type="button" onclick="on_submit(this.form)" group="1">
-  <en>Accept</en>
-  
-</BSUBMIT>
-</dynaForm>  
+  <TITLE9592 type="title" group="9">
+    <en><![CDATA[Weekend days]]></en>
+  </TITLE9592>
+  <MONDAY type="checkbox" group="1">
+    <en><![CDATA[Monday]]></en>
+  </MONDAY>
+  <TUESDAY type="checkbox" group="1">
+    <en><![CDATA[Tuesday]]></en>
+  </TUESDAY>
+  <WEDNESDAY type="checkbox" group="1">
+    <en><![CDATA[Wednesday]]></en>
+  </WEDNESDAY>
+  <THURSDAY type="checkbox" group="1">
+    <en><![CDATA[Thursday]]></en>
+  </THURSDAY>
+  <FRIDAY type="checkbox" group="1">
+    <en><![CDATA[Friday]]></en>
+  </FRIDAY>
+  <SATURDAY type="checkbox" group="1">
+    <en><![CDATA[Saturday]]></en>
+  </SATURDAY>
+  <SUNDAY type="checkbox" group="1">
+    <en><![CDATA[Sunday]]></en>
+  </SUNDAY>
+  <BSUBMIT type="button" onclick="on_submit(this.form)" group="1">
+    <en><![CDATA[Accept]]></en>
+  </BSUBMIT>
+</dynaForm>

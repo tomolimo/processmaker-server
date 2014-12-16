@@ -1,52 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="intputdocs/inputdocs_Edit" type="xmlform" width="100%" enableTemplate="1">
+  <PRO_UID type="hidden" showInTable="0"/>
+  <INP_DOC_UID type="hidden" showInTable="0"/>
+		<INP_DOC_UPLOAD_MAX_FILESIZE type="hidden" showInTable="0" />
+  <TITLE type="title" group="1">
+    <en><![CDATA[Input Document Information]]></en>
+  </TITLE>
+  <INP_DOC_TITLE type="text" maxlength="100" size="50" colWidth="200" titleAlign="left" align="left" dataCompareField="T.CON_VALUE" dataCompareType="contains">
+    <en><![CDATA[Title]]></en>
+  </INP_DOC_TITLE>
+  <INP_DOC_FORM_NEEDED type="dropdown" colWidth="80" titleAlign="left" align="left" dataCompareField="INP_DOC_FORM_NEEDED" dataCompareType="=">
+    <en><![CDATA[Document Type]]><option name="VIRTUAL"><![CDATA[Digital]]></option><option name="REAL"><![CDATA[Printed]]></option><option name="VREAL"><![CDATA[Digital/Printed]]></option></en>
+  </INP_DOC_FORM_NEEDED>
+  <INP_DOC_ORIGINAL type="dropdown" colWidth="80" titleAlign="left" align="left" dataCompareField="INP_DOC_ORIGINAL" dataCompareType="=">
+    <en><![CDATA[Format]]><option name="ORIGINAL"><![CDATA[Original]]></option><option name="COPYLEGAL"><![CDATA[Legal Copy]]></option><option name="COPY"><![CDATA[Copy]]></option></en>
+  </INP_DOC_ORIGINAL>
+  <INP_DOC_DESCRIPTION type="textarea" rows="5" cols="60" colWidth="200" titleAlign="left" align="left" dataCompareField="D.CON_VALUE" dataCompareType="contains">
+    <en><![CDATA[Description]]></en>
+  </INP_DOC_DESCRIPTION>
+  <INP_DOC_VERSIONING type="dropdown">
+    <en><![CDATA[Enable Versioning]]><option name=""><![CDATA[NO]]></option><option name="1"><![CDATA[YES]]></option></en>
+  </INP_DOC_VERSIONING>
+  <INP_DOC_DESTINATION_PATH type="textpm" size="30" maxlength="200" showVars="1" process="@#PRO_UID" symbol="@#" validate="Path">
+    <en><![CDATA[Destination Path]]></en>
+  </INP_DOC_DESTINATION_PATH>
+  <INP_DOC_TAGS type="textpm" size="30" maxlength="200" showVars="1" process="@#PRO_UID" symbol="@#" validate="Tag">
+    <en><![CDATA[Tags]]></en>
+  </INP_DOC_TAGS>
+  <INP_DOC_TYPE_FILE type="text" defaultvalue="*.*" maxlength="200" size="37" colWidth="200" titleAlign="left" align="left" hint="Configure many extensions separated by comas. e.g *.jpg,*.png,*.bmp. Enable the FILEINFO module to verify the content and the extension of a file. If this is not enabled, the content won\'t be verified." dataCompareField="T.CON_VALUE" dataCompareType="contains">
+    <en><![CDATA[Allowed file extensions (Use *.* to allow any extension)]]></en>
+  </INP_DOC_TYPE_FILE>
 
-<PRO_UID type="hidden" showInTable="0"/>
+  <INP_DOC_MAX_FILESIZE type="text" defaultvalue="0" maxlength="10" size="8" mode="edit">
+      <en>Maximum file size (Use zero if unlimited)</en>
+  </INP_DOC_MAX_FILESIZE>
 
-<INP_DOC_UID type="hidden" showInTable="0"/>
+  <INP_DOC_MAX_FILESIZE_UNIT type="dropdown" colWidth="80" titleAlign="left" align="left">
+      <en>
+          <option name="KB">KB</option>
+          <option name="MB">MB</option>
+      </en>
+  </INP_DOC_MAX_FILESIZE_UNIT>
 
-<TITLE type="title" group="1">
-  <en>Input Document Information</en>
-</TITLE>
+  <INP_DOC_UPLOAD_MAX_FILESIZE_LABEL type="text" maxlength="30" validate="Any" size="10" mode="view">
+      <en>Maximum upload file size</en>
+  </INP_DOC_UPLOAD_MAX_FILESIZE_LABEL>
 
-<INP_DOC_TITLE type="text" maxlength="100" size="50" colWidth="200" titleAlign="left" align="left" dataCompareField="T.CON_VALUE" dataCompareType="contains">
-  <en>Title</en>
-</INP_DOC_TITLE>
-
-<INP_DOC_FORM_NEEDED type="dropdown" colWidth="80" titleAlign="left" align="left" dataCompareField="INP_DOC_FORM_NEEDED" dataCompareType="=">
-  <en>Document Type<option name="VIRTUAL">Digital</option><option name="REAL">Printed</option><option name="VREAL">Digital/Printed</option></en>
-</INP_DOC_FORM_NEEDED>
-
-<INP_DOC_ORIGINAL type="dropdown" colWidth="80" titleAlign="left" align="left" dataCompareField="INP_DOC_ORIGINAL" dataCompareType="=">
-  <en>Format<option name="ORIGINAL">Original</option><option name="COPYLEGAL">Legal Copy</option><option name="COPY">Copy</option></en>
-</INP_DOC_ORIGINAL>
-
-
-
-<INP_DOC_DESCRIPTION type="textarea" rows="5" cols="60" colWidth="200" titleAlign="left" align="left" dataCompareField="D.CON_VALUE" dataCompareType="contains">
-  <en>Description</en>
-</INP_DOC_DESCRIPTION>
-
-<INP_DOC_VERSIONING type="dropdown">
-  <en>Enable Versioning<option name="">NO</option><option name="1">YES</option></en>
-</INP_DOC_VERSIONING>
-
-<INP_DOC_DESTINATION_PATH type="textpm" size="30" maxlength="200" showVars="1" process="@#PRO_UID" symbol="@#" validate="Path">
-  <en>Destination Path</en>
-</INP_DOC_DESTINATION_PATH>
-<INP_DOC_TAGS type="textpm" size="30" maxlength="200" showVars="1" process="@#PRO_UID" symbol="@#" validate="Tag">
-  <en>Tags</en>
-</INP_DOC_TAGS>
-
-<BTN_CANCEL type="button" onclick="cancel();">
-  <en>Cancel</en>
-</BTN_CANCEL>
-
-<ACCEPT type="button" onclick="inputdocsSave( this.form );">
-  <en>Save</en>
-</ACCEPT>
-
-<JS type="javascript"><![CDATA[
+  <BTN_CANCEL type="button" onclick="cancel();">
+    <en><![CDATA[Cancel]]></en>
+  </BTN_CANCEL>
+  <ACCEPT type="button" onclick="inputdocsSave( this.form );">
+    <en><![CDATA[Save]]></en>
+  </ACCEPT>
+  <JS type="javascript"><![CDATA[
 
 
 
@@ -118,5 +124,4 @@ function cancel(){
     currentPopupWindow.remove();
 }
 ]]></JS>
-
-</dynaForm>  
+</dynaForm>

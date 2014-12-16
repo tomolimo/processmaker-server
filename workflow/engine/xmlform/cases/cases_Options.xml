@@ -1,34 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="xmlmenu">
-
-<PRO_UID type="private"/>
-<cases_New type="private" defaultValue="../cases/cases_New"/>
-<cases_Edit type="private" defaultValue="../cases/cases_Edit"/>
-<cases_Open type="private" defaultValue="../cases/cases_Open"/>
-<cases_Delete type="private" defaultValue="../cases/cases_Delete"/>
-<PAGED_TABLE_ID type="private"/>
-
-<!-- Default Search option -->
-
-<PROCESS_FILTER type="dropdown" colWidth="350" sqlconnection = "dbarray" colAlign="left">
+  <PRO_UID type="private"/>
+  <cases_New type="private" defaultValue="../cases/cases_New"/>
+  <cases_Edit type="private" defaultValue="../cases/cases_Edit"/>
+  <cases_Open type="private" defaultValue="../cases/cases_Open"/>
+  <cases_Delete type="private" defaultValue="../cases/cases_Delete"/>
+  <PAGED_TABLE_ID type="private"/>
+  <!-- Default Search option -->
+  <PROCESS_FILTER type="dropdown" colWidth="350" sqlconnection="dbarray" colAlign="left">
     select PRO_UID, APP_PRO_TITLE from _PROCESSES
-    <en>Process
-        <option name="0">All</option>
-    </en>
+    <en><![CDATA[Process]]><option name="0"><![CDATA[All]]></option></en>
 </PROCESS_FILTER>
-
-<SEARCH_FILTER_FORM type="private"/>
-<!--<MNU_NEW type="link" label="@G::LoadTranslation(ID_START_CASE)" value='' link="@G::encryptLink(@#cases_New)" colAlign="left" colWidth="85"/>-->
-<PAGED_TABLE_ID type="private"/>
-<PAGED_TABLE_FAST_SEARCH type="FastSearch" label=""/>
-<MNU_FAST_SEARCH type="button" label="@G::LoadTranslation(ID_SEARCH)" colAlign="right"  colWidth="50" onclick="@#PAGED_TABLE_ID.doFastSearch(getField('PAGED_TABLE_FAST_SEARCH',this.form).value);"/>
-<PAGED_TABLE_JUMP type="text" colAlign="right" colWidth="80" size="4" maxlength="5" label=""/>
-<MNU_JUMP type="button" label="@G::LoadTranslation(ID_JUMP)" colAlign="right"  colWidth="50" onclick="Jump()"/>
-<!--<MNU_SEARCH type="link" value='' link="#" onclick="showHideSearch('@#SEARCH_FILTER_FORM',this); return false;" colAlign="right" colWidth="130">
+  <SEARCH_FILTER_FORM type="private"/>
+  <!--<MNU_NEW type="link" label="@G::LoadTranslation(ID_START_CASE)" value='' link="@G::encryptLink(@#cases_New)" colAlign="left" colWidth="85"/>-->
+  <PAGED_TABLE_ID type="private"/>
+  <PAGED_TABLE_FAST_SEARCH type="FastSearch" label=""/>
+  <MNU_FAST_SEARCH type="button" label="@G::LoadTranslation(ID_SEARCH)" colAlign="right" colWidth="50" onclick="@#PAGED_TABLE_ID.doFastSearch(getField('PAGED_TABLE_FAST_SEARCH',this.form).value);"/>
+  <PAGED_TABLE_JUMP type="text" colAlign="right" colWidth="80" size="4" maxlength="5" label=""/>
+  <MNU_JUMP type="button" label="@G::LoadTranslation(ID_JUMP)" colAlign="right" colWidth="50" onclick="Jump()"/>
+  <!--<MNU_SEARCH type="link" value='' link="#" onclick="showHideSearch('@#SEARCH_FILTER_FORM',this); return false;" colAlign="right" colWidth="130">
   <en>Advanced Search</en>
 </MNU_SEARCH>-->
-<JS type="javascript">
-<![CDATA[
+  <JS type="javascript"><![CDATA[
 function casesDelete(app) {
   ajax_function('cases_Delete','','APP_UID='+encodeURIComponent(app));
   @#PAGED_TABLE_ID.refresh();
@@ -129,6 +122,5 @@ function applyAdditionalFilter(filter){
     location.href = uri + '&PROCESS_UID='+getField('PROCESS_FILTER').value + '&' + filter + '=1'+'&r='+Math.floor(Math.random()*999999);
 }
 
-]]>
-</JS>
-</dynaForm>  
+]]></JS>
+</dynaForm>

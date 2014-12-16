@@ -1,26 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="webservices" width="500" mode="edit" border="0" enableTemplate="0" height="105px" ajaxSubmit="true" callback="callbackWebService">
-
-<title type="title" size="32" maxlength="32">
-  <en>Login to WSDL Server</en>
-</title>
-
-<USER_ID type="text" size="32" maxlength="32">
-  <en>User ID</en>
-</USER_ID>
-
-<PASSWORD type="password" size="32" maxlength="32">
-  <en>Password</en>
-</PASSWORD>
-
-<ACTION type="hidden">
-</ACTION> 
-
-<ACTIONB type="button" onclick="submitThisForm(this.form);">
-  <en>Login</en>
-</ACTIONB>
-
-<JS type="javascript" replacetags="1"><![CDATA[
+  <title type="title" size="32" maxlength="32">
+    <en><![CDATA[Login to WSDL Server]]></en>
+  </title>
+  <USER_ID type="text" size="32" maxlength="32">
+    <en><![CDATA[User ID]]></en>
+  </USER_ID>
+  <PASSWORD type="password" size="32" maxlength="32">
+    <en><![CDATA[Password]]></en>
+  </PASSWORD>
+  <ACTION type="hidden">
+</ACTION>
+  <ACTIONB type="button" onclick="submitThisForm(this.form);">
+    <en><![CDATA[Login]]></en>
+  </ACTIONB>
+  <JS type="javascript" replacetags="1"><![CDATA[
 var submitThisForm = function(oForm)
 {
 	var oAux;
@@ -40,4 +34,4 @@ var submitThisForm = function(oForm)
 	}
 };
 ]]></JS>
-</dynaForm>  
+</dynaForm>

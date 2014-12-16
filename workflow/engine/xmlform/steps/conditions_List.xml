@@ -1,32 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm sqlConnection="" menu="steps/conditions_Options" width="100%" rowsPerPage="10">
-
-<PROCESS type="hidden" showInTable="0"/>
-
-<TASK type="hidden" showInTable="0"/>
-
-<STEP_UID type="hidden" showInTable="0"/>
-
-<STEP_TITLE type="text" colWidth="180" titleAlign="left" align="left">
-  <en>Title</en>
-</STEP_TITLE>
-
-<STEP_CONDITION type="text" colWidth="300" titleAlign="left" align="left" replaceTags="0">
-  <en>Condition</en>
-</STEP_CONDITION>
-
-<EDIT type="link" colWidth="20" value="@G::LoadTranslation(ID_EDIT)" link="#" onclick="editCondition(@QSTEP_UID, @QSTEP_TITLE);return false;"><en></en></EDIT>
-
-
-<SEARCH type="button" onclick="pagedTableFilter( this.form );" showInTable="0">
-  <en>Apply Filter</en>
-</SEARCH>
-<PAGED_TABLE_ID type="private" showInTable="0"/>
-
-<JSFILTER type="javascript" replaceTags="1" showInTable="0">
+  <PROCESS type="hidden" showInTable="0"/>
+  <TASK type="hidden" showInTable="0"/>
+  <STEP_UID type="hidden" showInTable="0"/>
+  <STEP_TITLE type="text" colWidth="180" titleAlign="left" align="left">
+    <en><![CDATA[Title]]></en>
+  </STEP_TITLE>
+  <STEP_CONDITION type="text" colWidth="300" titleAlign="left" align="left" replaceTags="0">
+    <en><![CDATA[Condition]]></en>
+  </STEP_CONDITION>
+  <EDIT type="link" colWidth="20" value="@G::LoadTranslation(ID_EDIT)" link="#" onclick="editCondition(@QSTEP_UID, @QSTEP_TITLE);return false;">
+    <en><![CDATA[]]></en>
+  </EDIT>
+  <SEARCH type="button" onclick="pagedTableFilter( this.form );" showInTable="0">
+    <en><![CDATA[Apply Filter]]></en>
+  </SEARCH>
+  <PAGED_TABLE_ID type="private" showInTable="0"/>
+  <JSFILTER type="javascript" replaceTags="1" showInTable="0">
 function pagedTableFilter( form ) {
   @#PAGED_TABLE_ID.doFilter( form );
 }
 </JSFILTER>
-  
 </dynaForm>

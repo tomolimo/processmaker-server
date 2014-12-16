@@ -1,27 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="showMessage" version="1.0" basedir="" xmlform_type="NORMAL" width="520px" labelwidth="0">
-<TITLE type="title">
-  <en>Information</en>
-</TITLE>
-
-<USR_UID type="hidden">
-  <en/>
-</USR_UID>
-
-<EVA type="text" size="30" maxlength="32" validate="Alpha10" mode="view" enableHtml="1">
-  <en/>
-</EVA>
-
-<MESSAGE type="text" size="30" maxlength="32" validate="Alpha10" mode="view" enableHtml="1">
-  <en/>
-</MESSAGE>
-
-<DELETE type="button" onclick="deleteUser(&#039;@#USR_UID&#039;);">
-  <en>Delete</en>
-</DELETE>
-
-
-<JS type="javascript"><![CDATA[
+  <TITLE type="title">
+    <en><![CDATA[Information]]></en>
+  </TITLE>
+  <USR_UID type="hidden">
+    <en/>
+  </USR_UID>
+  <EVA type="text" size="30" maxlength="32" validate="Alpha10" mode="view" enableHtml="1">
+    <en><![CDATA[]]></en>
+  </EVA>
+  <MESSAGE type="text" size="30" maxlength="32" validate="Alpha10" mode="view" enableHtml="1">
+    <en><![CDATA[]]></en>
+  </MESSAGE>
+  <DELETE type="button" onclick="deleteUser('@#USR_UID');">
+    <en><![CDATA[Delete]]></en>
+  </DELETE>
+  <JS type="javascript"><![CDATA[
 var dynaformOnload = function()
 { var oAux = getField('DELETE');
   if(getField('EVA').value=='')		
@@ -47,4 +41,4 @@ var deleteUser = function(sUser) {
   });
 };
 ]]></JS>
-</dynaForm> 
+</dynaForm>

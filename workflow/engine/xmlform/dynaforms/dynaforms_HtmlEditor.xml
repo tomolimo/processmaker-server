@@ -1,35 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="dynaforms_HtmlEditor" type="xmlform" width="98%" labelWidth="1px" border="0" enabletemplate="1">
-
-
-<URL type="phpvariable"/>
-<DYN_UID type="phpvariable"/>
-
-<PME_HTML_ENABLETEMPLATE type="checkbox" value="1" defaultvalue="0" labelOnRight="0">
-  <en>Enable HTML Editing</en>
-</PME_HTML_ENABLETEMPLATE>
-
-<PME_RESTORE_HTML type="button" onclick="dynaformEditor.restoreHTML(); this.blur();">
-<en>Restore Original HTML</en>
-</PME_RESTORE_HTML>
-
-<!--<PME_REFRESH_VIEW type="button" onclick="html2_html(); this.blur();">
+  <URL type="phpvariable"/>
+  <DYN_UID type="phpvariable"/>
+  <PME_HTML_ENABLETEMPLATE type="checkbox" value="1" defaultvalue="0" labelOnRight="0">
+    <en><![CDATA[Enable HTML Editing]]></en>
+  </PME_HTML_ENABLETEMPLATE>
+  <PME_RESTORE_HTML type="button" onclick="dynaformEditor.restoreHTML(); this.blur();">
+    <en><![CDATA[Restore Original HTML]]></en>
+  </PME_RESTORE_HTML>
+  <!--<PME_REFRESH_VIEW type="button" onclick="html2_html(); this.blur();">
 <en>Refresh View</en>
 </PME_REFRESH_VIEW>-->
-
-<!-- HTML type="html" width="100%" height="300px" toolbarSet="toolbar2lines">
+  <!-- HTML type="html" width="100%" height="300px" toolbarSet="toolbar2lines">
 <en>HTML View</en>
 </HTML -->
-
-<HTML type="wysiwyg_editor" editorType="DYNAFORM_TEMPLATE" dynUID="@@DYN_UID" width="100%" height="300px">
-<en>HTML View</en>
-</HTML>
-
-<!-- HTML2 type="textarea" cols="120" rows="16" style="width:100%;" className="htmleditor">
+  <HTML type="wysiwyg_editor" editorType="DYNAFORM_TEMPLATE" dynUID="@@DYN_UID" width="100%" height="300px">
+    <en><![CDATA[HTML View]]></en>
+  </HTML>
+  <!-- HTML2 type="textarea" cols="120" rows="16" style="width:100%;" className="htmleditor">
 <en>HTML Code</en>
 </HTML2 -->
-
-<PME_SYNCH_JS type="javascript"><![CDATA[
+  <PME_SYNCH_JS type="javascript"><![CDATA[
 
   /*getField("HTML").onchange=function()
   {
@@ -65,7 +56,7 @@
   //html_html2();
 
 ]]></PME_SYNCH_JS>
-<PME_RESIZE_JS type="javascript"><![CDATA[
+  <PME_RESIZE_JS type="javascript"><![CDATA[
 function resizeHTMLEditor(){
   try{
     getField('HTML','dynaforms_HtmlEditor').style.height=
@@ -94,5 +85,4 @@ getField("PME_HTML_ENABLETEMPLATE","dynaforms_HtmlEditor").onclick=function()
 //    }
 }
 ]]></PME_RESIZE_JS>
-
 </dynaForm>

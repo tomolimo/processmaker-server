@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="TriggerList" width="500" mode="edit" border="0" enableTemplate="0" height="85px">
-
-<SESSION_ID type="text" size="36" maxlength="32">
-  <en>Session Id</en>
-</SESSION_ID>
-
-<ACTION type="hidden">
+  <SESSION_ID type="text" size="36" maxlength="32">
+    <en><![CDATA[Session Id]]></en>
+  </SESSION_ID>
+  <ACTION type="hidden">
 </ACTION>
-
-<ACTIONB type="button" onclick="submitThisForm(this.form);">
-  <en>TriggerList</en>
-</ACTIONB>
-
-</dynaForm> 
+  <ACTIONB type="button" onclick="submitThisForm(this.form);">
+    <en><![CDATA[TriggerList]]></en>
+  </ACTIONB>
+</dynaForm>

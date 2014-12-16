@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="showMessage" version="1.0" basedir="" xmlform_type="NORMAL" width="880px" labelwidth="0">
-<TITLE type="subtitle" enableHTML="1">
-  <en><![CDATA[<center>Reassigned Cases Resume</center>]]></en>
-</TITLE>
-<MESSAGE type="text" size="30" maxlength="32" validate="Alpha10" mode="view" enableHtml="1">
-  <en/>
-</MESSAGE>
-<BACK type="button" onclick="back();">
-  <en>BACK</en>
-</BACK>
-<URL type="private"/>
-<JS type="javascript"><![CDATA[
+  <TITLE type="subtitle" enableHTML="1">
+    <en><![CDATA[<center>Reassigned Cases Resume</center>]]></en>
+  </TITLE>
+  <MESSAGE type="text" size="30" maxlength="32" validate="Alpha10" mode="view" enableHtml="1">
+    <en><![CDATA[]]></en>
+  </MESSAGE>
+  <BACK type="button" onclick="back();">
+    <en><![CDATA[BACK]]></en>
+  </BACK>
+  <URL type="private"/>
+  <JS type="javascript"><![CDATA[
 var back = function() {
   window.location = '@#URL';
 };
-]]>
-</JS>
+]]></JS>
 </dynaForm>

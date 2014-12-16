@@ -35,7 +35,7 @@ EOT
 );
 CLI::taskArg('plugin', false);
 CLI::taskArg('lang', false);
-CLI::taskRun(run_update);
+CLI::taskRun("run_update");
 
 CLI::taskName('plugins-translation-create');
 CLI::taskDescription(<<<EOT
@@ -45,7 +45,7 @@ EOT
 );
 CLI::taskArg('plugin', true);
 CLI::taskArg('lang', true);
-CLI::taskRun(run_create);
+CLI::taskRun("run_create");
 
 
 function run_create($command, $args)

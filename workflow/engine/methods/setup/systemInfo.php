@@ -42,6 +42,7 @@ switch ($option) {
         $oHeadPublisher->assign("SYSINFO_GD", "\"" . $systemInfo->gd->version . "\", " . (($systemInfo->gd->result)? 1 : 0));
         $oHeadPublisher->assign("SYSINFO_MULTIBYTESTRING", "\"" . $systemInfo->multibyte->version . "\", " . (($systemInfo->multibyte->result)? 1 : 0));
         $oHeadPublisher->assign("SYSINFO_SOAP", "\"" . $systemInfo->soap->version . "\", " . (($systemInfo->soap->result)? 1 : 0));
+        $oHeadPublisher->assign("SYSINFO_MCRYPT", "\"" . $systemInfo->mcrypt->version . "\", " . (($systemInfo->mcrypt->result)? 1 : 0));
         $oHeadPublisher->assign("SYSINFO_LDAP", "\"" . $systemInfo->ldap->version . "\", " . (($systemInfo->ldap->result)? 1 : 0));
         $oHeadPublisher->assign("SYSINFO_MEMORYLIMIT", "\"" . $systemInfo->memory->version . "\", " . (($systemInfo->memory->result)? 1 : 0));
 

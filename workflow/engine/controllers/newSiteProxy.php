@@ -43,15 +43,15 @@ class newSiteProxy extends HttpProxyController
             $dbRb = $result['result']['database']['ao']['ao_db_rb']['status'];
             $dbRp = $result['result']['database']['ao']['ao_db_rp']['status'];
             $wsAction = ($action != '') ? 1 : 0;
-            if ($dbWf && $dbRb && $dbRp && $action) {
+            if ($dbWf && $action) {
                 $this->success = true;
                 //echo $json->encode($result);
             } else {
                 //the site does not available
                 $this->error = true;
                 $this->message = $result['result']['database']['ao']['ao_db_wf']['message'];
-                $this->message .= ', ' . $result['result']['database']['ao']['ao_db_rb']['message'];
-                $this->message .= ', ' . $result['result']['database']['ao']['ao_db_rp']['message'];
+                //$this->message .= ', ' . $result['result']['database']['ao']['ao_db_rb']['message'];
+                //$this->message .= ', ' . $result['result']['database']['ao']['ao_db_rp']['message'];
             }
         } else {
             $this->error = true;

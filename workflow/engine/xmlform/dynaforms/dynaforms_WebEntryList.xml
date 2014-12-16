@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="xmlform" width="100%" menu="dynaforms/dynaforms_WebEntryOptions">
-
-<W_PRO_UID type="private" showInTable="0"/>
-<W_FILENAME type="private" showInTable="0"/>
-
-<W_LINK type="text" colWidth="500" enableHtml="1">
-  <en/>
-</W_LINK>
-
-<W_DELETE type="link" colWidth="20" link="#" onclick="webEntry_delete(@@W_FILENAME, @@W_PRO_UID)">
-  <en>Delete</en>
-</W_DELETE>
-
-</dynaForm> 
+  <W_PRO_UID type="private" showInTable="0"/>
+  <W_FILENAME type="private" showInTable="0"/>
+  <W_LINK type="text" colWidth="500" enableHtml="1">
+    <en><![CDATA[]]></en>
+  </W_LINK>
+  <W_DELETE type="link" colWidth="20" link="#" onclick="webEntry_delete(@@W_FILENAME, @@W_PRO_UID)">
+    <en><![CDATA[Delete]]></en>
+  </W_DELETE>
+</dynaForm>

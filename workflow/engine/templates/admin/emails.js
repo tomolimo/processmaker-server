@@ -765,7 +765,9 @@ var testEmailWindow = new Ext.Window({
   autoHeight: true,
   layout: 'fit',
   y: 82,
-  items: testConnForm
+  items: testConnForm,
+  draggable: false,
+  resizable: false
 });
 
 var testEmailWindowMail = new Ext.Window({
@@ -776,7 +778,9 @@ var testEmailWindowMail = new Ext.Window({
   autoHeight: true,
   layout: 'fit',
   y: 82,
-  items: testConnFormMail
+  items: testConnFormMail,
+  draggable: false,
+  resizable: false
 });
 
 var params;

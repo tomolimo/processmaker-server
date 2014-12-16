@@ -48,7 +48,7 @@ try {
     } else {
         $sfunction = $_POST['functions'];
     }
-
+    $result = new stdclass();
     switch ($sfunction) {
         case 'getRelationInfDoc':
             try {

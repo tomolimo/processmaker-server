@@ -58,7 +58,7 @@ if ($filter != '') {
     //echo $oCriteria->toString();
 }
 
-$rs = UsersPeer::DoSelectRs( $oCriteria );
+$rs = UsersPeer::DoSelectRS( $oCriteria, Propel::getDbConnection('workflow_ro') );
 $rs->setFetchmode( ResultSet::FETCHMODE_ASSOC );
 
 $rows = Array ();

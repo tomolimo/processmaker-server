@@ -341,6 +341,10 @@ abstract class BaseReportTable extends BaseObject implements Persistent
 
         if ($v !== null && !is_int($v)) {
             $ts = strtotime($v);
+            //Date/time accepts null values
+            if ($v == '') {
+                $ts = null;
+            }
             if ($ts === -1 || $ts === false) {
                 throw new PropelException("Unable to parse date/time value for [rep_tab_create_date] from input: " .
                     var_export($v, true));

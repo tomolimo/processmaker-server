@@ -1,20 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="RemoveDocument" width="500" mode="edit" border="0" enableTemplate="0" height="85px">
-
-<SESSION_ID type="text" size="36" maxlength="32">
-  <en>Session Id</en>
-</SESSION_ID>
-
-<APP_DOC_UID type="dropdown" sqlConnection="dbarray">
+  <SESSION_ID type="text" size="36" maxlength="32">
+    <en><![CDATA[Session Id]]></en>
+  </SESSION_ID>
+  <APP_DOC_UID type="dropdown" sqlConnection="dbarray">
   SELECT * from documents
-  <en>Document ID</en>
+  <en><![CDATA[Document ID]]></en>
 </APP_DOC_UID>
-
-<ACTION type="hidden">
+  <ACTION type="hidden">
 </ACTION>
-
-<ACTIONB type="button" onclick="submitThisForm(this.form);">
-  <en>RemoveDocument</en>
-</ACTIONB>
-
-</dynaForm>  
+  <ACTIONB type="button" onclick="submitThisForm(this.form);">
+    <en><![CDATA[RemoveDocument]]></en>
+  </ACTIONB>
+</dynaForm>

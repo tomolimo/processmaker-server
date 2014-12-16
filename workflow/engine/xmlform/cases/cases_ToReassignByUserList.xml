@@ -1,46 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm width="100%" rowsPerPage="18">
-
-<APP_UID type="CheckboxTable" colWidth="3" titleAlign="left" align="left" value="@#USR_UID">
-  <en/>
-</APP_UID>
-
-<APP_NUMBER type="text" colWidth="50" titleAlign="left" align="left" enableHtml="1">
-  <en>Case #</en>
-</APP_NUMBER>
-
-<APP_TAS_TITLE type="text" colWidth="220" titleAlign="left" align="left" enableHtml="1">
-  <en>Task</en>
-</APP_TAS_TITLE>
-
-<APP_PRO_TITLE type="text" colWidth="220" titleAlign="left" align="left" enableHtml="1">
-  <en>Process</en>
-</APP_PRO_TITLE>
-
-<DEL_PRIORITY type="dropdown" colWidth="50">
-  <en>Priority<option name="1">Very High</option><option name="2">High</option><option name="3">Normal</option><option name="4">Low</option><option name="5">Very Low</option></en>
-</DEL_PRIORITY>
-
-<DEL_INIT_DATE type="text" colWidth="130" titleAlign="left" align="left" enableHtml="1">
-  <en>Init. date</en>
-</DEL_INIT_DATE>
-
-<DEL_TASK_DUE_DATE type="text" colWidth="135" titleAlign="left" align="left" enableHtml="1">
-  <en>Due date</en>
-</DEL_TASK_DUE_DATE>
-
-
-
-<APP_STATUS type="dropdown" colWidth="50">
-  <en>Status<option name="TO_DO">TODO</option><option name="DRAFT">DRAFT</option></en>
-</APP_STATUS>
-
-<PAGED_TABLE_ID type="private" showInTable="0"/>
-
-<JSFILTER type="javascript" replaceTags="1" showInTable="0">
+  <APP_UID type="CheckboxTable" colWidth="3" titleAlign="left" align="left" value="@#USR_UID">
+    <en/>
+  </APP_UID>
+  <APP_NUMBER type="text" colWidth="50" titleAlign="left" align="left" enableHtml="1">
+    <en><![CDATA[Case #]]></en>
+  </APP_NUMBER>
+  <APP_TAS_TITLE type="text" colWidth="220" titleAlign="left" align="left" enableHtml="1">
+    <en><![CDATA[Task]]></en>
+  </APP_TAS_TITLE>
+  <APP_PRO_TITLE type="text" colWidth="220" titleAlign="left" align="left" enableHtml="1">
+    <en><![CDATA[Process]]></en>
+  </APP_PRO_TITLE>
+  <DEL_PRIORITY type="dropdown" colWidth="50">
+    <en><![CDATA[Priority]]><option name="1"><![CDATA[Very High]]></option><option name="2"><![CDATA[High]]></option><option name="3"><![CDATA[Normal]]></option><option name="4"><![CDATA[Low]]></option><option name="5"><![CDATA[Very Low]]></option></en>
+  </DEL_PRIORITY>
+  <DEL_INIT_DATE type="text" colWidth="130" titleAlign="left" align="left" enableHtml="1">
+    <en><![CDATA[Init. date]]></en>
+  </DEL_INIT_DATE>
+  <DEL_TASK_DUE_DATE type="text" colWidth="135" titleAlign="left" align="left" enableHtml="1">
+    <en><![CDATA[Due date]]></en>
+  </DEL_TASK_DUE_DATE>
+  <APP_STATUS type="dropdown" colWidth="50">
+    <en><![CDATA[Status]]><option name="TO_DO"><![CDATA[TODO]]></option><option name="DRAFT"><![CDATA[DRAFT]]></option></en>
+  </APP_STATUS>
+  <PAGED_TABLE_ID type="private" showInTable="0"/>
+  <JSFILTER type="javascript" replaceTags="1" showInTable="0">
 function pagedTableFilter( form ) {
   @#PAGED_TABLE_ID.doFilter( form );
 }
 </JSFILTER>
-
-</dynaForm>  
+</dynaForm>

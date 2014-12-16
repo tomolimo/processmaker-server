@@ -1,33 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="dynaforms_Saveas" type="xmlform" width="100%" enableTemplate="1">
-
-<DYN_UID type="hidden" showInTable="0"/>
-<PRO_UID type="hidden" showInTable="0"/>
-<DYN_TYPE type="hidden" showInTable="0"/>
-
-<TITLE type="title" group="1">
-  <en>Dynaform Information</en>
-</TITLE>
-
-<DYN_TITLENEW type="text" maxlength="128" size="45">
-  <en>Title</en>
-</DYN_TITLENEW>
-
-<DYN_DESCRIPTIONNEW type="textarea" cols="45" rows="8">
-  <en>Description</en>
-</DYN_DESCRIPTIONNEW>
-
-<BTN_CANCEL type="button" onclick="cancel();">
-  <en>Cancel</en>
-</BTN_CANCEL>
-
-<ACCEPT type="button" onclick="dynaformSaveas( this.form );">
-  <en>Save</en>
-</ACCEPT>
-
-
-<PAGED_TABLE_ID type="private"/>
-<JS type="javascript"><![CDATA[
+  <DYN_UID type="hidden" showInTable="0"/>
+  <PRO_UID type="hidden" showInTable="0"/>
+  <DYN_TYPE type="hidden" showInTable="0"/>
+  <TITLE type="title" group="1">
+    <en><![CDATA[Dynaform Information]]></en>
+  </TITLE>
+  <DYN_TITLENEW type="text" maxlength="128" size="45">
+    <en><![CDATA[Title]]></en>
+  </DYN_TITLENEW>
+  <DYN_DESCRIPTIONNEW type="textarea" cols="45" rows="8">
+    <en><![CDATA[Description]]></en>
+  </DYN_DESCRIPTIONNEW>
+  <BTN_CANCEL type="button" onclick="cancel();">
+    <en><![CDATA[Cancel]]></en>
+  </BTN_CANCEL>
+  <ACCEPT type="button" onclick="dynaformSaveas( this.form );">
+    <en><![CDATA[Save]]></en>
+  </ACCEPT>
+  <PAGED_TABLE_ID type="private"/>
+  <JS type="javascript"><![CDATA[
 
 
 function dynaformSaveas ( frm ) {
@@ -76,5 +68,4 @@ function cancel(){
 }
 
 ]]></JS>
-
 </dynaForm>

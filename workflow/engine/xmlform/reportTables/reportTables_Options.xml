@@ -1,21 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="xmlmenu">
-
-<MNU_ADD type="link" value="" link="#" onclick="reportTablesNew(); return false;" colAlign="left" colWidth="35">
-  <en>New</en>
-</MNU_ADD>
-
-
-
-<PRO_UID type="private"/>
-
-<reportTablesEdit type="private" defaultValue="../reportTables/reportTables_Edit"/>
-
-<reportTablesDelete type="private" defaultValue="../reportTables/reportTables_Delete"/>
-
-<PAGED_TABLE_ID type="private"/>
-
-<JS type="javascript" replaceTags="1"><![CDATA[
+  <MNU_ADD type="link" value="" link="#" onclick="reportTablesNew(); return false;" colAlign="left" colWidth="35">
+    <en><![CDATA[New]]></en>
+  </MNU_ADD>
+  <PRO_UID type="private"/>
+  <reportTablesEdit type="private" defaultValue="../reportTables/reportTables_Edit"/>
+  <reportTablesDelete type="private" defaultValue="../reportTables/reportTables_Delete"/>
+  <PAGED_TABLE_ID type="private"/>
+  <JS type="javascript" replaceTags="1"><![CDATA[
 
 function reportTablesNew()
 {
@@ -94,8 +86,5 @@ function reportTablesDelete(sUID)
 }
 
 ]]></JS>
-
-
-<SEARCH_FILTER_FORM type="private"/>
-
+  <SEARCH_FILTER_FORM type="private"/>
 </dynaForm>

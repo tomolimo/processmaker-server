@@ -1,25 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="tools" width="600" mode="edit" enableTemplate="0" border="0">
-
-
-<titles type="title">
-  <en>Insert Translation</en>
-</titles>
-
-<trn_category type="dropdown">
-  <en>category<option name="LABEL">Label</option><option name="JAVASCRIPT">Javascript</option></en>
-</trn_category>
-
-<trn_id type="text" size="45">
-  <en>Id</en>
-</trn_id>
-
-<trn_value type="textarea" rows="3" cols="43" maxlength="200">
-  <en>value</en>
-</trn_value>
-
-<rowsJS type="submit">
-  <en>save</en>
-</rowsJS>
-
-</dynaForm>  
+  <titles type="title">
+    <en><![CDATA[Insert Translation]]></en>
+  </titles>
+  <trn_category type="dropdown">
+    <en><![CDATA[category]]><option name="LABEL"><![CDATA[Label]]></option><option name="JAVASCRIPT"><![CDATA[Javascript]]></option></en>
+  </trn_category>
+  <trn_id type="text" size="45">
+    <en><![CDATA[Id]]></en>
+  </trn_id>
+  <trn_value type="textarea" rows="3" cols="43" maxlength="200">
+    <en><![CDATA[value]]></en>
+  </trn_value>
+  <rowsJS type="submit">
+    <en><![CDATA[save]]></en>
+  </rowsJS>
+</dynaForm>

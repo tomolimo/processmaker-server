@@ -1,34 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<dynaForm name="dynaforms_List" type="filterform" sql="SELECT DYN_UID,PRO_UID,DYN_TYPE, T.CON_VALUE AS DYN_TITLE, D.CON_VALUE AS DYN_DESCRIPTION FROM DYNAFORM LEFT JOIN CONTENT as T ON (T.CON_ID=DYN_UID AND T.CON_CATEGORY=&#039;DYN_TITLE&#039;) LEFT JOIN CONTENT AS D ON (D.CON_ID=DYN_UID AND D.CON_CATEGORY=&#039;DYN_DESCRIPTION&#039;) ORDER BY DYN_TITLE ASC" sqlConnection="" menu="dynaforms/dynaforms_Options" filterForm="dynaforms/dynaforms_List" width="100%">
-
-<DYN_UID type="hidden" showInTable="0"/>
-
-<PRO_UID type="hidden" showInTable="0"/>
-
-<DYN_TITLE type="text" colWidth="200" titleAlign="left" align="left" dataCompareField="T.CON_VALUE" dataCompareType="contains">
-  <en>Dynaform</en>
-</DYN_TITLE>
-
-<DYN_TYPE type="dropdown" colWidth="80" align="left" dataCompareField="DYN_TYPE" dataCompareType="=">
-  <en>Type<option name="1">Master form</option><option name="2">Grid</option></en>
-</DYN_TYPE>
-
-<DYN_DESCRIPTION type="textarea" colWidth="300" align="left" titleAlign="left" dataCompareField="D.CON_VALUE" dataCompareType="contains">
-  <en>Description</en>
-</DYN_DESCRIPTION>
-
-<PROPERTIES type="link" colWidth="40" value="@G::LoadTranslation(ID_PROPERTIES)" link="#" onclick="dynaformProperties(@QDYN_UID);return false;"/>
-<EDIT type="link" colWidth="40" value="@G::LoadTranslation(ID_EDIT)" link="#" onclick="dynaformEdit(@QDYN_UID);return false;"/>
-<DELETE type="link" colWidth="40" value="@G::LoadTranslation(ID_DELETE)" link="#" onclick="if (confirm(&#039;@G::LoadTranslation(ID_MSG_CONFIRM_DELETE_DYNAFORM)&#039;)) dynaformDelete(@QDYN_UID);return false;"><en></en></DELETE>
-
-
-<SEARCH type="button" onclick="pagedTableFilter( this.form );" showInTable="0">
-  <en>Apply Filter</en>
-</SEARCH>
-<PAGED_TABLE_ID type="private" showInTable="0"/>
-<JSFILTER type="javascript" replaceTags="1" showInTable="0">
+<dynaForm name="dynaforms_List" type="filterform" sql="SELECT DYN_UID,PRO_UID,DYN_TYPE, T.CON_VALUE AS DYN_TITLE, D.CON_VALUE AS DYN_DESCRIPTION FROM DYNAFORM LEFT JOIN CONTENT as T ON (T.CON_ID=DYN_UID AND T.CON_CATEGORY='DYN_TITLE') LEFT JOIN CONTENT AS D ON (D.CON_ID=DYN_UID AND D.CON_CATEGORY='DYN_DESCRIPTION') ORDER BY DYN_TITLE ASC" sqlConnection="" menu="dynaforms/dynaforms_Options" filterForm="dynaforms/dynaforms_List" width="100%">
+  <DYN_UID type="hidden" showInTable="0"/>
+  <PRO_UID type="hidden" showInTable="0"/>
+  <DYN_TITLE type="text" colWidth="200" titleAlign="left" align="left" dataCompareField="T.CON_VALUE" dataCompareType="contains">
+    <en><![CDATA[Dynaform]]></en>
+  </DYN_TITLE>
+  <DYN_TYPE type="dropdown" colWidth="80" align="left" dataCompareField="DYN_TYPE" dataCompareType="=">
+    <en><![CDATA[Type]]><option name="1"><![CDATA[Master form]]></option><option name="2"><![CDATA[Grid]]></option></en>
+  </DYN_TYPE>
+  <DYN_DESCRIPTION type="textarea" colWidth="300" align="left" titleAlign="left" dataCompareField="D.CON_VALUE" dataCompareType="contains">
+    <en><![CDATA[Description]]></en>
+  </DYN_DESCRIPTION>
+  <PROPERTIES type="link" colWidth="40" value="@G::LoadTranslation(ID_PROPERTIES)" link="#" onclick="dynaformProperties(@QDYN_UID);return false;"/>
+  <EDIT type="link" colWidth="40" value="@G::LoadTranslation(ID_EDIT)" link="#" onclick="dynaformEdit(@QDYN_UID);return false;"/>
+  <DELETE type="link" colWidth="40" value="@G::LoadTranslation(ID_DELETE)" link="#" onclick="if (confirm('@G::LoadTranslation(ID_MSG_CONFIRM_DELETE_DYNAFORM)')) dynaformDelete(@QDYN_UID);return false;">
+    <en><![CDATA[]]></en>
+  </DELETE>
+  <SEARCH type="button" onclick="pagedTableFilter( this.form );" showInTable="0">
+    <en><![CDATA[Apply Filter]]></en>
+  </SEARCH>
+  <PAGED_TABLE_ID type="private" showInTable="0"/>
+  <JSFILTER type="javascript" replaceTags="1" showInTable="0">
 function pagedTableFilter( form ) {
   @#PAGED_TABLE_ID.doFilter( form );
 }
 </JSFILTER>
-</dynaForm> 
+</dynaForm>

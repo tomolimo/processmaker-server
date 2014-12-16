@@ -1,25 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="AppFolder" width="100%" type="pagedtable" sql="SELECT * from APP_FOLDER " sqlConnection="" menu="appFolder/appFolderOptions">
-
-<FOLDER_PARENT_UID type="text" colWidth="96">
-  <en>Er Parent Uid</en>
-</FOLDER_PARENT_UID>
-
-<FOLDER_CREATE_DATE type="text" colWidth="0">
-  <en>Er Create Date</en>
-</FOLDER_CREATE_DATE>
-
-<FOLDER_UPDATE_DATE type="text" colWidth="0">
-  <en>Er Update Date</en>
-</FOLDER_UPDATE_DATE>
-
-
-<LINK type="link" colWidth="60" titleAlign="left" align="left" link="appFolderEdit?id=@!FOLDER_UID">
-  <en>Edit</en>
-</LINK>
-
-<LINK2 type="link" colWidth="60" titleAlign="left" align="left" link="appFolderDelete?id=@!FOLDER_UID">
-  <en>Delete</en>
-</LINK2>
-
-</dynaForm>  
+  <FOLDER_PARENT_UID type="text" colWidth="96">
+    <en><![CDATA[Er Parent Uid]]></en>
+  </FOLDER_PARENT_UID>
+  <FOLDER_CREATE_DATE type="text" colWidth="0">
+    <en><![CDATA[Er Create Date]]></en>
+  </FOLDER_CREATE_DATE>
+  <FOLDER_UPDATE_DATE type="text" colWidth="0">
+    <en><![CDATA[Er Update Date]]></en>
+  </FOLDER_UPDATE_DATE>
+  <LINK type="link" colWidth="60" titleAlign="left" align="left" link="appFolderEdit?id=@!FOLDER_UID">
+    <en><![CDATA[Edit]]></en>
+  </LINK>
+  <LINK2 type="link" colWidth="60" titleAlign="left" align="left" link="appFolderDelete?id=@!FOLDER_UID">
+    <en><![CDATA[Delete]]></en>
+  </LINK2>
+</dynaForm>

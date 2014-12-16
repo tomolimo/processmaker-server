@@ -1,19 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="tracker_ConditionsEdit" type="xmlform" width="98%" labelWidth="62px">
-
-<CTO_UID type="hidden" showInTable="0"/>
-
-<PRO_UID type="hidden" showInTable="0"/>
-
-<CTO_CONDITION type="textareapm" cols="64" rows="5" showVars="1" process="@#PRO_UID">
-  <en>Condition</en>
-</CTO_CONDITION>
-
-<SAVE type="button" onclick="saveConditionCaseTrackerObject(this.form);">
-  <en>Save</en>
-</SAVE>
-
-<JS type="JavaScript"><![CDATA[
+  <CTO_UID type="hidden" showInTable="0"/>
+  <PRO_UID type="hidden" showInTable="0"/>
+  <CTO_CONDITION type="textareapm" cols="64" rows="5" showVars="1" process="@#PRO_UID">
+    <en><![CDATA[Condition]]></en>
+  </CTO_CONDITION>
+  <SAVE type="button" onclick="saveConditionCaseTrackerObject(this.form);">
+    <en><![CDATA[Save]]></en>
+  </SAVE>
+  <JS type="JavaScript"><![CDATA[
 
 var _oVarsPanel_;
 var showDynaformsFormVars = function(sFieldName, sAjaxServer, sProcess, sSymbol) {
@@ -68,7 +63,4 @@ var insertFormVar = function(sFieldName, sValue) {
 };
 
 ]]></JS>
-
-
-
 </dynaForm>

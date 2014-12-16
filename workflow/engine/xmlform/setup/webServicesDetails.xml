@@ -1,28 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm width="500" mode="view" labelWidth="80">
-
-	<title2 type="title">
-		<en>WSDL Server Details</en>
-	</title2>
-
-	<WS_HOST type="text" size="30" maxlength="64">
-		<en>Server</en>
-	</WS_HOST>
-
-	<WS_PORT type="text" size="10" maxlength="64">
-		<en>Port</en>
-	</WS_PORT>
-
-	<WSDL type="text" size="30" maxlength="64">
-		<en>WSDL URI</en>
-	</WSDL>
-
-	<WS_WORKSPACE type="text" size="30" maxlength="64">
-		<en>Workspace</en>
-		<es>Espacio de Trabajo</es>
-	</WS_WORKSPACE>
-
-	<WSID type="text" size="10" maxlength="64">
-		<en>Session ID</en>
-	</WSID>
-</dynaForm>  
+  <title2 type="title">
+    <en><![CDATA[WSDL Server Details]]></en>
+  </title2>
+  <WS_HOST type="text" size="30" maxlength="64">
+    <en><![CDATA[Server]]></en>
+  </WS_HOST>
+  <WS_PORT type="text" size="10" maxlength="64">
+    <en><![CDATA[Port]]></en>
+  </WS_PORT>
+  <WSDL type="text" size="30" maxlength="64">
+    <en><![CDATA[WSDL URI]]></en>
+  </WSDL>
+  <WS_WORKSPACE type="text" size="30" maxlength="64">
+    <en><![CDATA[Workspace]]></en>
+    <es>Espacio de Trabajo</es>
+  </WS_WORKSPACE>
+  <WSID type="text" size="10" maxlength="64">
+    <en><![CDATA[Session ID]]></en>
+  </WSID>
+</dynaForm>

@@ -1,19 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="ProcessHeartBeatConfig" width="55%" enableTemplate="1">
   <HB_TITLE type="title" enablehtml="0" btn_cancel="Cancel" enableHTML="1">
-    <en>Processmaker Heartbeat</en>
+    <en><![CDATA[Processmaker Heartbeat]]></en>
   </HB_TITLE>
   <HB_OPTION type="dropdown" required="0" readonly="0" savelabel="0" mode="edit" options="Array">
-    <en>Enable Heartbeat
-		<option name="0">No</option>
-		<option name="1">Yes</option>
-	</en>
+    <en><![CDATA[Enable Heartbeat]]><option name="0"><![CDATA[No]]></option><option name="1"><![CDATA[Yes]]></option></en>
   </HB_OPTION>
   <HB_SAVE type="button" onclick="sendValues(this.form);">
-    <en>save</en>
+    <en><![CDATA[save]]></en>
   </HB_SAVE>
   <HB_LINKINFO type="link" colWidth="60" titleAlign="left" align="left" link="#" onclick="var k=window.open('http://wiki.processmaker.com/index.php/Heartbeat ','_blank');return false;">
-    <en>Read Online Documentation</en>
+    <en><![CDATA[Read Online Documentation]]></en>
   </HB_LINKINFO>
   <HB_JS type="javascript">
 	var sendValues=function(form){

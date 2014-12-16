@@ -1,27 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm sqlConnection="" menu="reportTables/reportTables_Options" width="100%" rowsPerPage="10">
-<!--<dynaForm sqlConnection="" width="100%" rowsPerPage="10">-->
-<REP_TAB_UID type="hidden" showInTable="0"/>
-
-<REP_TAB_TITLE type="text" colWidth="350" titleAlign="left" align="left">
-  <en>Title</en>
-</REP_TAB_TITLE>
-
-<EDIT type="link" colWidth="40" value="@G::LoadTranslation(ID_EDIT)" link="#" onclick="reportTablesEdit(@QREP_TAB_UID);return false;"><en></en></EDIT>
-
-<DELETE type="link" colWidth="40" value="@G::LoadTranslation(ID_DELETE)" link="#" onclick="reportTablesDelete(@QREP_TAB_UID);return false;"><en></en></DELETE>
-
-
-<SEARCH type="button" onclick="pagedTableFilter(this.form);" showInTable="0">
-  <en>Apply Filter</en>
-</SEARCH>
-
-<PAGED_TABLE_ID type="private" showInTable="0"/>
-
-<JSFILTER type="javascript" replaceTags="1" showInTable="0">
+  <!--<dynaForm sqlConnection="" width="100%" rowsPerPage="10">-->
+  <REP_TAB_UID type="hidden" showInTable="0"/>
+  <REP_TAB_TITLE type="text" colWidth="350" titleAlign="left" align="left">
+    <en><![CDATA[Title]]></en>
+  </REP_TAB_TITLE>
+  <EDIT type="link" colWidth="40" value="@G::LoadTranslation(ID_EDIT)" link="#" onclick="reportTablesEdit(@QREP_TAB_UID);return false;">
+    <en><![CDATA[]]></en>
+  </EDIT>
+  <DELETE type="link" colWidth="40" value="@G::LoadTranslation(ID_DELETE)" link="#" onclick="reportTablesDelete(@QREP_TAB_UID);return false;">
+    <en><![CDATA[]]></en>
+  </DELETE>
+  <SEARCH type="button" onclick="pagedTableFilter(this.form);" showInTable="0">
+    <en><![CDATA[Apply Filter]]></en>
+  </SEARCH>
+  <PAGED_TABLE_ID type="private" showInTable="0"/>
+  <JSFILTER type="javascript" replaceTags="1" showInTable="0">
 function pagedTableFilter(form) {
   @#PAGED_TABLE_ID.doFilter(form);
 }
 </JSFILTER>
-
 </dynaForm>

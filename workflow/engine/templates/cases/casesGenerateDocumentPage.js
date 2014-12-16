@@ -289,9 +289,9 @@
 
       function renderDeleteFile(val,p,r) {
         if (r.data.DELETE_FILE) {
-          return '<img src="/images/delete-16x16.gif" unselectable="off" onClick="deleteFiles(\'' + r.data.APP_DOC_UID + '\', \'' + r.data.DOC_VERSION + '\');">';
+          return "<img src=\"/images/delete.png\" onclick=\"deleteFiles(\'" + r.data.APP_DOC_UID + "\', \'" + r.data.DOC_VERSION + "\');\" />";
         } else {
-          return '';
+          return "-";
         }
       }
 
@@ -316,8 +316,7 @@
         },
         cm: new Ext.grid.ColumnModel({
           defaults: {
-              width: 200,
-              sortable: true
+              width: 200
           },
           columns:
           [
@@ -326,13 +325,12 @@
             {id:'FILEPDFEXIST', dataIndex: 'FILEPDFEXIST', hidden:true, hideable:false},
             {id:'FILEDOC', dataIndex: 'FILEDOC', hidden:true, hideable:false},
             {id:'FILEPDF', dataIndex: 'FILEPDF', hidden:true, hideable:false},
-            {header: _("ID_TITLE_FIELD"), dataIndex: 'TITLE', width: 70},
-            {header: _("ID_OUTPUT_DOCUMENT"), dataIndex: 'OUTDOCTITLE', width: 70},
-            {header: _("ID_ORIGIN_TASK"), dataIndex: 'ORIGIN', width: 70},
-            {header: _("ID_CREATED_BY"), dataIndex: 'CREATED_BY', width: 70},
-            {header: _("ID_CREATE_DATE"), dataIndex: 'CREATE_DATE', width: 70,renderer:startDateRender},
-            {header: '', dataIndex: 'DELETE_FILE', width: 30,renderer:renderDeleteFile}
-
+            {dataIndex: "TITLE",       header: _("ID_TITLE_FIELD"),     sortable: true, width: 70},
+            {dataIndex: "OUTDOCTITLE", header: _("ID_OUTPUT_DOCUMENT"), sortable: true, width: 70},
+            {dataIndex: "ORIGIN",      header: _("ID_ORIGIN_TASK"),     sortable: true, width: 70},
+            {dataIndex: "CREATED_BY",  header: _("ID_CREATED_BY"),      sortable: true, width: 70},
+            {dataIndex: "CREATE_DATE", header: _("ID_CREATE_DATE"),     sortable: true, width: 70, renderer: startDateRender},
+            {dataIndex: "DELETE_FILE", header: _("ID_ACTIONS"),         sortable: false, menuDisabled: true, hideable: false, width: 30, align: "center", renderer: renderDeleteFile}
           ]
         }),
         store: store,
@@ -360,12 +358,12 @@
                                    icon: Ext.MessageBox.ERROR,
                                    buttons: Ext.MessageBox.OK,
                                    fn : function(btn) {
-                                     try 
+                                     try
                                        {
                                         prnt = parent.parent;
                                         top.location = top.location;
                                        }
-                                     catch (err) 
+                                     catch (err)
                                        {
                                         parent.location = parent.location;
                                        }
@@ -434,12 +432,12 @@
                                    icon: Ext.MessageBox.ERROR,
                                    buttons: Ext.MessageBox.OK,
                                    fn : function(btn) {
-                                     try 
+                                     try
                                        {
                                          prnt = parent.parent;
                                          top.location = top.location;
                                        }
-                                     catch (err) 
+                                     catch (err)
                                        {
                                          parent.location = parent.location;
                                        }

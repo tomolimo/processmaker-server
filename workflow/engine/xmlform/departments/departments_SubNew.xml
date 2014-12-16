@@ -1,25 +1,25 @@
 <?xml version="1.0"?>
 <dynaForm type="xmlform" labelWidth="250px" width="95%" enableTemplate="1">
   <title type="title" colWidth="200" showInTable="0">
-    <en>Department Information </en>
+    <en><![CDATA[Department Information]]></en>
     <es><![CDATA[Información de departamento]]></es>
   </title>
   <DEP_UID type="hidden" showInTable="0"/>
   <DEP_PARENT type="hidden" showInTable="0"/>
   <DEP_PARENT_NAME type="text" colWidth="200" size="30" maxlength="64" readonly="1" mode="view">
 	select CON_VALUE, CON_VALUE FROM CONTENT WHERE CON_ID= '@#DEP_PARENT' 
-  <en>Parent Department </en>
+  <en><![CDATA[Parent Department]]></en>
 <es><![CDATA[Departamento Padre]]></es></DEP_PARENT_NAME>
   <DEP_TITLE type="text" colWidth="200" size="30" maxlength="64" required="1">
-    <en>Department Name</en>
+    <en><![CDATA[Department Name]]></en>
     <es><![CDATA[Nombre del departamento]]></es>
   </DEP_TITLE>
   <BTN_CANCEL type="button" onclick="cancel()">
-    <en>Cancel</en>
+    <en><![CDATA[Cancel]]></en>
     <es><![CDATA[Cancelar]]></es>
   </BTN_CANCEL>
   <button type="button" onclick="return validateLocalFields(this.form);" showInTable="0">
-    <en>Save</en>
+    <en><![CDATA[Save]]></en>
     <es><![CDATA[Guardar]]></es>
   </button>
   <JS type="javascript" replacetags="1">

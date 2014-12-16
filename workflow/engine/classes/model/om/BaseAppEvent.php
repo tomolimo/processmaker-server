@@ -279,6 +279,10 @@ abstract class BaseAppEvent extends BaseObject implements Persistent
 
         if ($v !== null && !is_int($v)) {
             $ts = strtotime($v);
+            //Date/time accepts null values
+            if ($v == '') {
+                $ts = null;
+            }
             if ($ts === -1 || $ts === false) {
                 throw new PropelException("Unable to parse date/time value for [app_evn_action_date] from input: " .
                     var_export($v, true));
@@ -326,6 +330,10 @@ abstract class BaseAppEvent extends BaseObject implements Persistent
 
         if ($v !== null && !is_int($v)) {
             $ts = strtotime($v);
+            //Date/time accepts null values
+            if ($v == '') {
+                $ts = null;
+            }
             if ($ts === -1 || $ts === false) {
                 throw new PropelException("Unable to parse date/time value for [app_evn_last_execution_date] from input: " .
                     var_export($v, true));

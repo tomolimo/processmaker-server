@@ -1,28 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="registerPMLForm" width="100%" enableTemplate="1" labelWidth="50%">
-
-<pro_uid type="hidden"/>
-
-<TITLE type="title">
-  <en>Login into ProcessMaker Library</en>
-</TITLE>
-
-<PML_USER type="text" size="25" maxlength="50" validate="Any" required="1">
-  <en>Username (or Live Workspace)</en>
-</PML_USER>
-
-<PML_PASSWORD type="password" size="25" maxlength="32" required="1">
-  <en>Password</en>
-</PML_PASSWORD>
-
-<PML_LOGIN type="button" onclick="loginPML(&#039;@#pro_uid&#039;);">
-  <en>Login</en>
-</PML_LOGIN>
-
-<link_create_account type="private"/>
-
-<link2 type="link" value="Create a New Account" link="@#link_create_account" target="_blank">
-  <en/>
-</link2>
-
-</dynaForm> 
+  <pro_uid type="hidden"/>
+  <TITLE type="title">
+    <en><![CDATA[Login into ProcessMaker Library]]></en>
+  </TITLE>
+  <PML_USER type="text" size="25" maxlength="50" validate="Any" required="1">
+    <en><![CDATA[Username (or Live Workspace)]]></en>
+  </PML_USER>
+  <PML_PASSWORD type="password" size="25" maxlength="32" required="1">
+    <en><![CDATA[Password]]></en>
+  </PML_PASSWORD>
+  <PML_LOGIN type="button" onclick="loginPML('@#pro_uid');">
+    <en><![CDATA[Login]]></en>
+  </PML_LOGIN>
+  <link_create_account type="private"/>
+  <link2 type="link" value="Create a New Account" link="@#link_create_account" target="_blank">
+    <en><![CDATA[]]></en>
+  </link2>
+</dynaForm>

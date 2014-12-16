@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="xmlmenu">
-
-<PRO_UID type="private"/>
-
-<MNU_ASSIGN type="link" value="" link="#" onclick="webEntry_new(@QPRO_UID);return false;" colAlign="left" colWidth="100">
-  <en>New</en>
-</MNU_ASSIGN>
-
-<JS type="javascript"><![CDATA[
+  <PRO_UID type="private"/>
+  <MNU_ASSIGN type="link" value="" link="#" onclick="webEntry_new(@QPRO_UID);return false;" colAlign="left" colWidth="100">
+    <en><![CDATA[New]]></en>
+  </MNU_ASSIGN>
+  <JS type="javascript"><![CDATA[
 
 var oPanel;
 var webEntry_new = function(sProcessUID) {
@@ -74,5 +71,4 @@ var webEntry_new = function(sProcessUID) {
 }
 
 ]]></JS>
-
-</dynaForm> 
+</dynaForm>

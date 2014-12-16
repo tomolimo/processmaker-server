@@ -4,114 +4,93 @@
   <FCD_FIELDS type="hidden" defaultValue="0"/>
   <FCD_EVENT_OWNERS type="hidden" defaultValue="0"/>
   <FCD_EVENTS type="hidden" defaultValue="0"/>
-  
   <tit1 type="title" enablehtml="0">
-    <en>Conditions Editor</en>
+    <en><![CDATA[Conditions Editor]]></en>
   </tit1>
-
   <FCD_FUNCTION type="dropdown" required="0" readonly="0" savelabel="0" mode="edit" options="Array">
-    <en>Function<option name="show">Show</option><option name="showOnly">Show only</option><option name="showAll">Show all</option><option name="hide">Hide</option><option name="hideOnly">Hide only</option><option name="hideAll">Hide all</option></en>
+    <en><![CDATA[Function]]><option name="show"><![CDATA[Show]]></option><option name="showOnly"><![CDATA[Show only]]></option><option name="showAll"><![CDATA[Show all]]></option><option name="hide"><![CDATA[Hide]]></option><option name="hideOnly"><![CDATA[Hide only]]></option><option name="hideAll"><![CDATA[Hide all]]></option></en>
   </FCD_FUNCTION>
-  
   <fields type="listbox" required="0" size="6" width="250">
-    <en>Applying the function fields</en>
+    <en><![CDATA[Applying the function fields]]></en>
   </fields>
-  
   <fields_selected type="listbox" required="0" size="6" width="250">
-    <en>Selected fields</en>
+    <en><![CDATA[Selected fields]]></en>
   </fields_selected>
-  
   <FCD_CONDITION style="width:408px" type="textarea" required="0" rows="6" cols="60" onchange="changex()" defaultValue="">
-    <en>Condition</en>
+    <en><![CDATA[Condition]]></en>
   </FCD_CONDITION>
-  
-  <op1 type="button" style="width:30px" onclick="oConditional.setCharacter(&#039;/&#039;);">
-    <en>/</en>
+  <op1 type="button" style="width:30px" onclick="oConditional.setCharacter('/');">
+    <en><![CDATA[/]]></en>
   </op1>
-  <op2 type="button" style="width:30px" onclick="oConditional.setCharacter(&#039;(&#039;);">
-    <en>(</en>
+  <op2 type="button" style="width:30px" onclick="oConditional.setCharacter('(');">
+    <en><![CDATA[(]]></en>
   </op2>
-  <op3 type="button" style="width:30px" onclick="oConditional.setCharacter(&#039;)&#039;);">
-    <en>)</en>
+  <op3 type="button" style="width:30px" onclick="oConditional.setCharacter(')');">
+    <en><![CDATA[)]]></en>
   </op3>
-  <op4 type="button" style="width:40px" onclick="oConditional.setCharacter(&#039;&amp;&amp;&#039;);">
-    <en>AND</en>
+  <op4 type="button" style="width:40px" onclick="oConditional.setCharacter('&amp;&amp;');">
+    <en><![CDATA[AND]]></en>
   </op4>
-  
-  
-  <op5 type="button" style="width:30px" onclick="oConditional.setCharacter(&#039;*&#039;);">
-    <en>*</en>
+  <op5 type="button" style="width:30px" onclick="oConditional.setCharacter('*');">
+    <en><![CDATA[*]]></en>
   </op5>
-  <op6 type="button" style="width:30px" onclick="oConditional.setCharacter(&#039;&lt;&#039;);">
+  <op6 type="button" style="width:30px" onclick="oConditional.setCharacter('&lt;');">
     <en><![CDATA[<]]></en>
   </op6>
-  <op7 type="button" style="width:30px" onclick="oConditional.setCharacter(&#039;&gt;&#039;);">
+  <op7 type="button" style="width:30px" onclick="oConditional.setCharacter('&gt;');">
     <en><![CDATA[>]]></en>
   </op7>
-  <op8 type="button" style="width:40px" onclick="oConditional.setCharacter(&#039;||&#039;);">
-    <en>OR</en>
+  <op8 type="button" style="width:40px" onclick="oConditional.setCharacter('||');">
+    <en><![CDATA[OR]]></en>
   </op8>
-  
-  <op9 type="button" style="width:30px" onclick="oConditional.setCharacter(&#039;-&#039;);">
-    <en>-</en>
+  <op9 type="button" style="width:30px" onclick="oConditional.setCharacter('-');">
+    <en><![CDATA[-]]></en>
   </op9>
-  <op10 type="button" style="width:30px" onclick="oConditional.setCharacter(&#039;&lt;=&#039;);">
+  <op10 type="button" style="width:30px" onclick="oConditional.setCharacter('&lt;=');">
     <en><![CDATA[<=]]></en>
   </op10>
-  <op11 type="button" style="width:30px" onclick="oConditional.setCharacter(&#039;&gt;=&#039;);">
+  <op11 type="button" style="width:30px" onclick="oConditional.setCharacter('&gt;=');">
     <en><![CDATA[>=]]></en>
   </op11>
-  <op12 type="button" style="width:40px" onclick="oConditional.setCharacter(&#039;!&#039;);">
-    <en>NOT</en>
+  <op12 type="button" style="width:40px" onclick="oConditional.setCharacter('!');">
+    <en><![CDATA[NOT]]></en>
   </op12>
-  
-  <op13 type="button" style="width:30px" onclick="oConditional.setCharacter(&#039;+&#039;);">
-    <en>+</en>
+  <op13 type="button" style="width:30px" onclick="oConditional.setCharacter('+');">
+    <en><![CDATA[+]]></en>
   </op13>
-  <op14 type="button" style="width:30px" onclick="oConditional.setCharacter(&#039;==&#039;);">
-    <en>==</en>
+  <op14 type="button" style="width:30px" onclick="oConditional.setCharacter('==');">
+    <en><![CDATA[==]]></en>
   </op14>
-  <op15 type="button" style="width:30px" onclick="oConditional.setCharacter(&#039;!=&#039;);">
-    <en>!=</en>
+  <op15 type="button" style="width:30px" onclick="oConditional.setCharacter('!=');">
+    <en><![CDATA[!=]]></en>
   </op15>
   <op16 type="button" style="width:40px" onclick="oConditional.showDynavars(event);">
-    <en>@#</en>
+    <en><![CDATA[@#]]></en>
   </op16>
-  
-  
-  
   <eventOnload type="checkbox" value="1" falsevalue="0" defaultvalue="0" labelonright="1" enablehtml="0">
-    <en>On load event</en>
+    <en><![CDATA[On load event]]></en>
   </eventOnload>
-  
   <eventOnchange type="checkbox" value="1" falsevalue="0" defaultvalue="0" labelonright="1" enablehtml="0">
-    <en>On change event</en>
+    <en><![CDATA[On change event]]></en>
   </eventOnchange>
-  
   <event_owner type="listbox" required="0" size="6" width="250">
-    <en>Field event owner</en>
+    <en><![CDATA[Field event owner]]></en>
   </event_owner>
-  
   <event_owner_selected type="listbox" required="0" size="6" width="250">
-    <en>Selected field event owner</en>
+    <en><![CDATA[Selected field event owner]]></en>
   </event_owner_selected>
-
   <FCD_STATUS type="checkbox" value="1" falsevalue="0" defaultvalue="1" labelonright="1" enablehtml="0">
-    <en>Enabled</en>
+    <en><![CDATA[Enabled]]></en>
   </FCD_STATUS>
-    
   <test_condition type="button" onclick="oConditional.testCondition()" style="width:108px">
-    <en>Test condition</en>
+    <en><![CDATA[Test condition]]></en>
   </test_condition>
-  
   <BTN_CANCEL type="button" onclick="cancel();">
-    <en>Cancel</en>
-  </BTN_CANCEL>  
-  
+    <en><![CDATA[Cancel]]></en>
+  </BTN_CANCEL>
   <save_condition type="button" onclick="oConditional.saveCondition()">
-    <en>Save</en>
+    <en><![CDATA[Save]]></en>
   </save_condition>
-  
   <jsc type="javascript"><![CDATA[
 
     if( @@FCD_UID != '0' ){
@@ -129,4 +108,4 @@
         // oConditional.cancelSave();
     }    
   ]]></jsc>
-</dynaForm> 
+</dynaForm>

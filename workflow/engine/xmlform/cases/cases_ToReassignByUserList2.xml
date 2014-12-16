@@ -1,39 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm width="100%" rowsPerPage="1000">
-
-<APP_UID type="hidden" showInTable="0"/>
-
-<APP_NUMBER type="text" colWidth="50" titleAlign="left" align="left" enableHtml="1">
-  <en>Case #</en>
-</APP_NUMBER>
-
-<APP_TAS_TITLE type="text" colWidth="300" titleAlign="left" align="left" enableHtml="1">
-  <en>Task</en>
-</APP_TAS_TITLE>
-
-<APP_PRO_TITLE type="text" colWidth="350" titleAlign="left" align="left" enableHtml="1">
-  <en>Process</en>
-</APP_PRO_TITLE>
-
-
-
-<APP_STATUS type="dropdown" colWidth="50">
-  <en>Status<option name="TO_DO">TODO</option><option name="DRAFT">DRAFT</option></en>
-</APP_STATUS>
-
-
-
-
-<USERS type="dropdownpt" colWidth="50">
-  <en>Reassign to </en><option name=" ">NONE</option>
-</USERS>
-
-<PAGED_TABLE_ID type="private" showInTable="0"/>
-
-<JSFILTER type="javascript" replaceTags="1" showInTable="0">
+  <APP_UID type="hidden" showInTable="0"/>
+  <APP_NUMBER type="text" colWidth="50" titleAlign="left" align="left" enableHtml="1">
+    <en><![CDATA[Case #]]></en>
+  </APP_NUMBER>
+  <APP_TAS_TITLE type="text" colWidth="300" titleAlign="left" align="left" enableHtml="1">
+    <en><![CDATA[Task]]></en>
+  </APP_TAS_TITLE>
+  <APP_PRO_TITLE type="text" colWidth="350" titleAlign="left" align="left" enableHtml="1">
+    <en><![CDATA[Process]]></en>
+  </APP_PRO_TITLE>
+  <APP_STATUS type="dropdown" colWidth="50">
+    <en><![CDATA[Status]]><option name="TO_DO"><![CDATA[TODO]]></option><option name="DRAFT"><![CDATA[DRAFT]]></option></en>
+  </APP_STATUS>
+  <USERS type="dropdownpt" colWidth="50">
+    <en><![CDATA[Reassign to]]></en>
+    <option name=" ">NONE</option>
+  </USERS>
+  <PAGED_TABLE_ID type="private" showInTable="0"/>
+  <JSFILTER type="javascript" replaceTags="1" showInTable="0">
 function pagedTableFilter( form ) {
   @#PAGED_TABLE_ID.doFilter( form );
 }
 </JSFILTER>
-
-</dynaForm>  
+</dynaForm>

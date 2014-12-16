@@ -49,6 +49,9 @@ pake_task('new-project', 'project_exists');
 pake_desc("build new plugin \n   args: <name>");
 pake_task('new-plugin', 'project_exists');
 
+pake_desc("Update the plugin attributes in all workspaces\n   args: <plugin-name>");
+pake_task("update-plugin-attributes", "project_exists");
+
 pake_desc("pack plugin in .tar file \n   args: <plugin>");
 pake_task('pack-plugin', 'project_exists');
 
@@ -275,7 +278,7 @@ function convertPhpName($f) {
 function copyPluginFile($tplName, $fName, $class) {
   $pluginOutDirectory = PATH_OUTTRUNK . "plugins" . PATH_SEP . $class . PATH_SEP;
   $pluginFilename     = $pluginOutDirectory . $fName;
-  
+
   $fileTpl = PATH_GULLIVER_HOME . 'bin' . PATH_SEP . 'tasks' . PATH_SEP . 'templates' . PATH_SEP . $tplName . '.tpl';
   $content = file_get_contents($fileTpl);
   $iSize = file_put_contents($pluginFilename, $content);
@@ -293,7 +296,7 @@ function savePluginFile($fName, $tplName, $class, $tableName, $fields = null, $u
   $template->assign('className', $class);
   $template->assign('tableName', $tableName);
   $template->assign('menuId', 'ID_' . strtoupper($class));
-  
+
   if( is_array($fields) ) {
     foreach( $fields as $block => $data ) {
       $template->gotoBlock("_ROOT");
@@ -704,7 +707,7 @@ function run_new_plugin($task, $args) {
     $fields["dashboard"][] = array(
       "className" => $pluginName
     );
-    
+
     $fields["dashboardAttribute"] = "private \$dashletsUids;";
     $fields["dashboardAttributeValue"] = "
     \$this->dashletsUids = array(
@@ -720,9 +723,9 @@ function run_new_plugin($task, $args) {
     $fields["dashboardSetup"]   = "\$this->registerDashlets();";
     $fields["dashboardEnable"]  = "\$this->dashletInsert();";
     $fields["dashboardDisable"] = "\$this->dashletDelete();";
-    
+
     G::verifyPath($pluginHome . PATH_SEP . "views", true);
-  
+
     savePluginFile($pluginName . PATH_SEP . "classes" . PATH_SEP . "class.dashlet". $pluginName . ".php", "pluginDashletClass.php", $pluginName, $pluginName);
     copyPluginFile("pluginDashlet.html", $pluginName . PATH_SEP . "views" . PATH_SEP . "dashlet". $pluginName . ".html", $pluginName, null, true);
   }
@@ -2613,3 +2616,28 @@ function run_check_standard_code ( $task, $options) {
            pakeColor::colorize($val['dos'] ? 'dos' : '   ', 'INFO'), $val['file'] );
   }
 }
+
+function run_update_plugin_attributes($task, $args)
+{
+    try {
+        G::LoadClass("plugin");
+
+        //Verify data
+        if (!isset($args[0])) {
+            throw new Exception("Error: You must specify the name of a plugin");
+        }
+
+        //Set variables
+        $pluginName = $args[0];
+
+        //Update plugin attributes
+        $pmPluginRegistry = &PMPluginRegistry::getSingleton();
+
+        $pmPluginRegistry->updatePluginAttributesInAllWorkspaces($pluginName);
+
+        echo "Done!\n";
+    } catch (Exception $e) {
+        echo $e->getMessage() . "\n";
+    }
+}
+

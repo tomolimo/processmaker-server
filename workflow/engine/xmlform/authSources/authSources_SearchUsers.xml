@@ -1,29 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="authSources/authSources_SearchUsers" type="xmlform" enableTemplate="1" width="95%">
-
-<TITLE type="title">
-  <en>Search for user</en>
-</TITLE>
-
-<AUTH_SOURCE_UID type="hidden"/>
-
-<KEYWORD type="text" size="50" maxlength="50" required="0">
-  <en>Keyword</en>
-</KEYWORD>
-
-<btnSearch type="button" onclick="searchUsers();">
-  <en>Search</en>
-</btnSearch>
-
-<btnImport type="button" onclick="importUsers(this.form);">
-  <en>Import</en>
-</btnImport>
-
-<BTN_CANCEL type="button" onclick="cancel();">
-  <en>Cancel</en>
-</BTN_CANCEL>
-
-<JS type="javascript"><![CDATA[
+  <TITLE type="title">
+    <en><![CDATA[Search for user]]></en>
+  </TITLE>
+  <AUTH_SOURCE_UID type="hidden"/>
+  <KEYWORD type="text" size="50" maxlength="50" required="0">
+    <en><![CDATA[Keyword]]></en>
+  </KEYWORD>
+  <btnSearch type="button" onclick="searchUsers();">
+    <en><![CDATA[Search]]></en>
+  </btnSearch>
+  <btnImport type="button" onclick="importUsers(this.form);">
+    <en><![CDATA[Import]]></en>
+  </btnImport>
+  <BTN_CANCEL type="button" onclick="cancel();">
+    <en><![CDATA[Cancel]]></en>
+  </BTN_CANCEL>
+  <JS type="javascript"><![CDATA[
 
 function disableEnterKey(e)
 {
@@ -89,5 +82,4 @@ leimnud.event.add(getField('KEYWORD'), 'keypress', function(event) {
 });
 
 ]]></JS>
-
 </dynaForm>

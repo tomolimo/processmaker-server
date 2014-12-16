@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="grid" name="calendarEdit_Holidays" width="500" enabletemplate="0" mode="edit">
-<CALENDAR_HOLIDAY_NAME type="text" maxlength="64" validate="Any" required="0" readonly="0" size="15" mode="edit">
-<en>Name</en>
-</CALENDAR_HOLIDAY_NAME>
-<CALENDAR_HOLIDAY_START type="date" relativedate="1" beforedate="-2y" afterdate="2y" mask="Y-m-d" editable="0" required="1" readonly="0" showtime="0" defaultvalue_sel="empty" size="15" mode="edit">                        
-<en>Start Date (Recurrent "Y-m-d") </en>
-</CALENDAR_HOLIDAY_START>
-<CALENDAR_HOLIDAY_END type="date" relativedate="1" beforedate="-2y" afterdate="2y" mask="Y-m-d" editable="0" required="0" readonly="0" showtime="0" defaultvalue_sel="empty" size="15" mode="edit">
-<en>End Date (Recurrent "Y-m-d") </en>
-</CALENDAR_HOLIDAY_END>
-</dynaForm>   
+  <CALENDAR_HOLIDAY_NAME type="text" maxlength="64" validate="Any" required="0" readonly="0" size="15" mode="edit">
+    <en><![CDATA[Name]]></en>
+  </CALENDAR_HOLIDAY_NAME>
+  <CALENDAR_HOLIDAY_START type="date" relativedate="1" beforedate="-2y" afterdate="2y" mask="Y-m-d" editable="0" required="1" readonly="0" showtime="0" defaultvalue_sel="empty" size="15" mode="edit">
+    <en><![CDATA[Start Date (Recurrent "Y-m-d")]]></en>
+  </CALENDAR_HOLIDAY_START>
+  <CALENDAR_HOLIDAY_END type="date" relativedate="1" beforedate="-2y" afterdate="2y" mask="Y-m-d" editable="0" required="0" readonly="0" showtime="0" defaultvalue_sel="empty" size="15" mode="edit">
+    <en><![CDATA[End Date (Recurrent "Y-m-d")]]></en>
+  </CALENDAR_HOLIDAY_END>
+</dynaForm>

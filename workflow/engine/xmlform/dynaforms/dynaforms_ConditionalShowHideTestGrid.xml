@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="grid" name="6013394054ac0e22b33dc89058523206/4022699274b5f78050d5043061170502" width="300" enabletemplate="0" mode="edit">
   <dynaid type="hidden"/>
-
   <dynafield type="label" maxlength="64" validate="Any" required="0" readonly="1" size="30" mode="view">
-    <en>Field name</en>
+    <en><![CDATA[Field name]]></en>
   </dynafield>
-
   <dynavalue type="text" maxlength="64" validate="Any" required="0" readonly="0" size="14" mode="edit">
-    <en>Value</en>
+    <en><![CDATA[Value]]></en>
   </dynavalue>
-  
-</dynaForm> 
+</dynaForm>

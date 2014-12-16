@@ -1,59 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="workPeriod" basedir="xmlform/process">
-<TITLE9592 type="title" group="9">
-  <en>Weekend days</en>
-</TITLE9592>
-<SUNDAY type="checkbox" withoutLabel="1">
-  <en>Sunday</en>
-</SUNDAY>
-<MONDAY type="checkbox" withoutLabel="1">
-  <en>Monday</en>
-</MONDAY>
-<TUESDAY type="checkbox" withoutLabel="1">
-  <en>Tuesday</en>
-</TUESDAY>
-<WEDNESDAY type="checkbox" withoutLabel="1">
-  <en>Wednesday</en>
-</WEDNESDAY>
-<THURSDAY type="checkbox" withoutLabel="1">
-  <en>Thursday</en>
-</THURSDAY>
-<FRIDAY type="checkbox" withoutLabel="1">
-  <en>Friday</en>
-</FRIDAY>
-<SATURDAY type="checkbox" withoutLabel="1">
-  <en>Saturday</en>
-</SATURDAY>
-
-<titulo type="title" group="4">
-  <en>First Period</en>
-</titulo>
-
-<initPeriod1 type="dropdown" ajaxSubmit="1">
-  <en>Start time<option name="">00:00 a.m</option><option name="30">00:30 a.m</option><option name="60">01:00 a.m</option><option name="90">01:30 a.m</option><option name="120">02:00 a.m</option><option name="150">02:30 a.m</option><option name="180">03:00 a.m</option><option name="210">03:30 a.m</option><option name="240">04:00 a.m</option><option name="270">04:30 a.m</option><option name="300">05:00 a.m</option><option name="330">05:30 a.m</option><option name="360">06:00 a.m</option><option name="390">06:30 a.m</option><option name="420">07:00 a.m</option><option name="450">07:30 a.m</option><option name="480">08:00 a.m</option><option name="510">08:30 a.m</option><option name="540">09:00 a.m</option><option name="570">09:30 a.m</option><option name="600">10:00 a.m</option><option name="630">10:30 a.m</option><option name="660">11:00 a.m</option><option name="690">11:30 a.m</option><option name="720">12:00 p.m</option><option name="750">12:30 p.m</option><option name="780">13:00 p.m</option><option name="810">13:30 p.m</option><option name="840">14:00 p.m</option><option name="870">14:30 p.m</option><option name="900">15:00 p.m</option><option name="930">15:30 p.m</option><option name="960">16:00 p.m</option><option name="990">16:30 p.m</option><option name="1020">17:00 p.m</option><option name="1050">17:30 p.m</option><option name="1080">18:00 p.m</option><option name="1110">18:30 p.m</option><option name="1140">19:00 p.m</option><option name="1170">19:30 p.m</option><option name="1200">20:00 p.m</option><option name="1230">20:30 p.m</option><option name="1260">21:00 p.m</option><option name="1290">21:30 p.m</option><option name="1320">22:00 p.m</option><option name="1350">22:30 p.m</option><option name="1380">23:00 p.m</option><option name="1410">23:30 p.m</option></en>
-</initPeriod1>
-
-
-<endPeriod1 type="dropdown" group="1">
-  <en>End time<option name="">00:00 a.m</option><option name="30">00:30 a.m</option><option name="60">01:00 a.m</option><option name="90">01:30 a.m</option><option name="120">02:00 a.m</option><option name="150">02:30 a.m</option><option name="180">03:00 a.m</option><option name="210">03:30 a.m</option><option name="240">04:00 a.m</option><option name="270">04:30 a.m</option><option name="300">05:00 a.m</option><option name="330">05:30 a.m</option><option name="360">06:00 a.m</option><option name="390">06:30 a.m</option><option name="420">07:00 a.m</option><option name="450">07:30 a.m</option><option name="480">08:00 a.m</option><option name="510">08:30 a.m</option><option name="540">09:00 a.m</option><option name="570">09:30 a.m</option><option name="600">10:00 a.m</option><option name="630">10:30 a.m</option><option name="660">11:00 a.m</option><option name="690">11:30 a.m</option><option name="720">12:00 p.m</option><option name="750">12:30 p.m</option><option name="780">13:00 p.m</option><option name="810">13:30 p.m</option><option name="840">14:00 p.m</option><option name="870">14:30 p.m</option><option name="900">15:00 p.m</option><option name="930">15:30 p.m</option><option name="960">16:00 p.m</option><option name="990">16:30 p.m</option><option name="1020">17:00 p.m</option><option name="1050">17:30 p.m</option><option name="1080">18:00 p.m</option><option name="1110">18:30 p.m</option><option name="1140">19:00 p.m</option><option name="1170">19:30 p.m</option><option name="1200">20:00 p.m</option><option name="1230">20:30 p.m</option><option name="1260">21:00 p.m</option><option name="1290">21:30 p.m</option><option name="1320">22:00 p.m</option><option name="1350">22:30 p.m</option><option name="1380">23:00 p.m</option><option name="1410">23:30 p.m</option></en>
-
-</endPeriod1>
-
-<titulo2 type="title" group="4">
-  <en>Second period</en>
-</titulo2>
-
-<initPeriod2 type="dropdown" group="1">
-  <en>Start time<option name="">00:00 a.m</option><option name="30">00:30 a.m</option><option name="60">01:00 a.m</option><option name="90">01:30 a.m</option><option name="120">02:00 a.m</option><option name="150">02:30 a.m</option><option name="180">03:00 a.m</option><option name="210">03:30 a.m</option><option name="240">04:00 a.m</option><option name="270">04:30 a.m</option><option name="300">05:00 a.m</option><option name="330">05:30 a.m</option><option name="360">06:00 a.m</option><option name="390">06:30 a.m</option><option name="420">07:00 a.m</option><option name="450">07:30 a.m</option><option name="480">08:00 a.m</option><option name="510">08:30 a.m</option><option name="540">09:00 a.m</option><option name="570">09:30 a.m</option><option name="600">10:00 a.m</option><option name="630">10:30 a.m</option><option name="660">11:00 a.m</option><option name="690">11:30 a.m</option><option name="720">12:00 p.m</option><option name="750">12:30 p.m</option><option name="780">13:00 p.m</option><option name="810">13:30 p.m</option><option name="840">14:00 p.m</option><option name="870">14:30 p.m</option><option name="900">15:00 p.m</option><option name="930">15:30 p.m</option><option name="960">16:00 p.m</option><option name="990">16:30 p.m</option><option name="1020">17:00 p.m</option><option name="1050">17:30 p.m</option><option name="1080">18:00 p.m</option><option name="1110">18:30 p.m</option><option name="1140">19:00 p.m</option><option name="1170">19:30 p.m</option><option name="1200">20:00 p.m</option><option name="1230">20:30 p.m</option><option name="1260">21:00 p.m</option><option name="1290">21:30 p.m</option><option name="1320">22:00 p.m</option><option name="1350">22:30 p.m</option><option name="1380">23:00 p.m</option><option name="1410">23:30 p.m</option></en>
-</initPeriod2>
-
-
-<endPeriod2 type="dropdown" group="1">
-  <en>End time<option name="">00:00 a.m</option><option name="30">00:30 a.m</option><option name="60">01:00 a.m</option><option name="90">01:30 a.m</option><option name="120">02:00 a.m</option><option name="150">02:30 a.m</option><option name="180">03:00 a.m</option><option name="210">03:30 a.m</option><option name="240">04:00 a.m</option><option name="270">04:30 a.m</option><option name="300">05:00 a.m</option><option name="330">05:30 a.m</option><option name="360">06:00 a.m</option><option name="390">06:30 a.m</option><option name="420">07:00 a.m</option><option name="450">07:30 a.m</option><option name="480">08:00 a.m</option><option name="510">08:30 a.m</option><option name="540">09:00 a.m</option><option name="570">09:30 a.m</option><option name="600">10:00 a.m</option><option name="630">10:30 a.m</option><option name="660">11:00 a.m</option><option name="690">11:30 a.m</option><option name="720">12:00 p.m</option><option name="750">12:30 p.m</option><option name="780">13:00 p.m</option><option name="810">13:30 p.m</option><option name="840">14:00 p.m</option><option name="870">14:30 p.m</option><option name="900">15:00 p.m</option><option name="930">15:30 p.m</option><option name="960">16:00 p.m</option><option name="990">16:30 p.m</option><option name="1020">17:00 p.m</option><option name="1050">17:30 p.m</option><option name="1080">18:00 p.m</option><option name="1110">18:30 p.m</option><option name="1140">19:00 p.m</option><option name="1170">19:30 p.m</option><option name="1200">20:00 p.m</option><option name="1230">20:30 p.m</option><option name="1260">21:00 p.m</option><option name="1290">21:30 p.m</option><option name="1320">22:00 p.m</option><option name="1350">22:30 p.m</option><option name="1380">23:00 p.m</option><option name="1410">23:30 p.m</option></en>
-</endPeriod2>
-
-<BSUBMIT type="submit" codeTR="-2">
-  <en>Accept</en>
-</BSUBMIT>
-
+  <TITLE9592 type="title" group="9">
+    <en><![CDATA[Weekend days]]></en>
+  </TITLE9592>
+  <SUNDAY type="checkbox" withoutLabel="1">
+    <en><![CDATA[Sunday]]></en>
+  </SUNDAY>
+  <MONDAY type="checkbox" withoutLabel="1">
+    <en><![CDATA[Monday]]></en>
+  </MONDAY>
+  <TUESDAY type="checkbox" withoutLabel="1">
+    <en><![CDATA[Tuesday]]></en>
+  </TUESDAY>
+  <WEDNESDAY type="checkbox" withoutLabel="1">
+    <en><![CDATA[Wednesday]]></en>
+  </WEDNESDAY>
+  <THURSDAY type="checkbox" withoutLabel="1">
+    <en><![CDATA[Thursday]]></en>
+  </THURSDAY>
+  <FRIDAY type="checkbox" withoutLabel="1">
+    <en><![CDATA[Friday]]></en>
+  </FRIDAY>
+  <SATURDAY type="checkbox" withoutLabel="1">
+    <en><![CDATA[Saturday]]></en>
+  </SATURDAY>
+  <titulo type="title" group="4">
+    <en><![CDATA[First Period]]></en>
+  </titulo>
+  <initPeriod1 type="dropdown" ajaxSubmit="1">
+    <en><![CDATA[Start time]]><option name=""><![CDATA[00:00 a.m]]></option><option name="30"><![CDATA[00:30 a.m]]></option><option name="60"><![CDATA[01:00 a.m]]></option><option name="90"><![CDATA[01:30 a.m]]></option><option name="120"><![CDATA[02:00 a.m]]></option><option name="150"><![CDATA[02:30 a.m]]></option><option name="180"><![CDATA[03:00 a.m]]></option><option name="210"><![CDATA[03:30 a.m]]></option><option name="240"><![CDATA[04:00 a.m]]></option><option name="270"><![CDATA[04:30 a.m]]></option><option name="300"><![CDATA[05:00 a.m]]></option><option name="330"><![CDATA[05:30 a.m]]></option><option name="360"><![CDATA[06:00 a.m]]></option><option name="390"><![CDATA[06:30 a.m]]></option><option name="420"><![CDATA[07:00 a.m]]></option><option name="450"><![CDATA[07:30 a.m]]></option><option name="480"><![CDATA[08:00 a.m]]></option><option name="510"><![CDATA[08:30 a.m]]></option><option name="540"><![CDATA[09:00 a.m]]></option><option name="570"><![CDATA[09:30 a.m]]></option><option name="600"><![CDATA[10:00 a.m]]></option><option name="630"><![CDATA[10:30 a.m]]></option><option name="660"><![CDATA[11:00 a.m]]></option><option name="690"><![CDATA[11:30 a.m]]></option><option name="720"><![CDATA[12:00 p.m]]></option><option name="750"><![CDATA[12:30 p.m]]></option><option name="780"><![CDATA[13:00 p.m]]></option><option name="810"><![CDATA[13:30 p.m]]></option><option name="840"><![CDATA[14:00 p.m]]></option><option name="870"><![CDATA[14:30 p.m]]></option><option name="900"><![CDATA[15:00 p.m]]></option><option name="930"><![CDATA[15:30 p.m]]></option><option name="960"><![CDATA[16:00 p.m]]></option><option name="990"><![CDATA[16:30 p.m]]></option><option name="1020"><![CDATA[17:00 p.m]]></option><option name="1050"><![CDATA[17:30 p.m]]></option><option name="1080"><![CDATA[18:00 p.m]]></option><option name="1110"><![CDATA[18:30 p.m]]></option><option name="1140"><![CDATA[19:00 p.m]]></option><option name="1170"><![CDATA[19:30 p.m]]></option><option name="1200"><![CDATA[20:00 p.m]]></option><option name="1230"><![CDATA[20:30 p.m]]></option><option name="1260"><![CDATA[21:00 p.m]]></option><option name="1290"><![CDATA[21:30 p.m]]></option><option name="1320"><![CDATA[22:00 p.m]]></option><option name="1350"><![CDATA[22:30 p.m]]></option><option name="1380"><![CDATA[23:00 p.m]]></option><option name="1410"><![CDATA[23:30 p.m]]></option></en>
+  </initPeriod1>
+  <endPeriod1 type="dropdown" group="1">
+    <en><![CDATA[End time]]><option name=""><![CDATA[00:00 a.m]]></option><option name="30"><![CDATA[00:30 a.m]]></option><option name="60"><![CDATA[01:00 a.m]]></option><option name="90"><![CDATA[01:30 a.m]]></option><option name="120"><![CDATA[02:00 a.m]]></option><option name="150"><![CDATA[02:30 a.m]]></option><option name="180"><![CDATA[03:00 a.m]]></option><option name="210"><![CDATA[03:30 a.m]]></option><option name="240"><![CDATA[04:00 a.m]]></option><option name="270"><![CDATA[04:30 a.m]]></option><option name="300"><![CDATA[05:00 a.m]]></option><option name="330"><![CDATA[05:30 a.m]]></option><option name="360"><![CDATA[06:00 a.m]]></option><option name="390"><![CDATA[06:30 a.m]]></option><option name="420"><![CDATA[07:00 a.m]]></option><option name="450"><![CDATA[07:30 a.m]]></option><option name="480"><![CDATA[08:00 a.m]]></option><option name="510"><![CDATA[08:30 a.m]]></option><option name="540"><![CDATA[09:00 a.m]]></option><option name="570"><![CDATA[09:30 a.m]]></option><option name="600"><![CDATA[10:00 a.m]]></option><option name="630"><![CDATA[10:30 a.m]]></option><option name="660"><![CDATA[11:00 a.m]]></option><option name="690"><![CDATA[11:30 a.m]]></option><option name="720"><![CDATA[12:00 p.m]]></option><option name="750"><![CDATA[12:30 p.m]]></option><option name="780"><![CDATA[13:00 p.m]]></option><option name="810"><![CDATA[13:30 p.m]]></option><option name="840"><![CDATA[14:00 p.m]]></option><option name="870"><![CDATA[14:30 p.m]]></option><option name="900"><![CDATA[15:00 p.m]]></option><option name="930"><![CDATA[15:30 p.m]]></option><option name="960"><![CDATA[16:00 p.m]]></option><option name="990"><![CDATA[16:30 p.m]]></option><option name="1020"><![CDATA[17:00 p.m]]></option><option name="1050"><![CDATA[17:30 p.m]]></option><option name="1080"><![CDATA[18:00 p.m]]></option><option name="1110"><![CDATA[18:30 p.m]]></option><option name="1140"><![CDATA[19:00 p.m]]></option><option name="1170"><![CDATA[19:30 p.m]]></option><option name="1200"><![CDATA[20:00 p.m]]></option><option name="1230"><![CDATA[20:30 p.m]]></option><option name="1260"><![CDATA[21:00 p.m]]></option><option name="1290"><![CDATA[21:30 p.m]]></option><option name="1320"><![CDATA[22:00 p.m]]></option><option name="1350"><![CDATA[22:30 p.m]]></option><option name="1380"><![CDATA[23:00 p.m]]></option><option name="1410"><![CDATA[23:30 p.m]]></option></en>
+  </endPeriod1>
+  <titulo2 type="title" group="4">
+    <en><![CDATA[Second period]]></en>
+  </titulo2>
+  <initPeriod2 type="dropdown" group="1">
+    <en><![CDATA[Start time]]><option name=""><![CDATA[00:00 a.m]]></option><option name="30"><![CDATA[00:30 a.m]]></option><option name="60"><![CDATA[01:00 a.m]]></option><option name="90"><![CDATA[01:30 a.m]]></option><option name="120"><![CDATA[02:00 a.m]]></option><option name="150"><![CDATA[02:30 a.m]]></option><option name="180"><![CDATA[03:00 a.m]]></option><option name="210"><![CDATA[03:30 a.m]]></option><option name="240"><![CDATA[04:00 a.m]]></option><option name="270"><![CDATA[04:30 a.m]]></option><option name="300"><![CDATA[05:00 a.m]]></option><option name="330"><![CDATA[05:30 a.m]]></option><option name="360"><![CDATA[06:00 a.m]]></option><option name="390"><![CDATA[06:30 a.m]]></option><option name="420"><![CDATA[07:00 a.m]]></option><option name="450"><![CDATA[07:30 a.m]]></option><option name="480"><![CDATA[08:00 a.m]]></option><option name="510"><![CDATA[08:30 a.m]]></option><option name="540"><![CDATA[09:00 a.m]]></option><option name="570"><![CDATA[09:30 a.m]]></option><option name="600"><![CDATA[10:00 a.m]]></option><option name="630"><![CDATA[10:30 a.m]]></option><option name="660"><![CDATA[11:00 a.m]]></option><option name="690"><![CDATA[11:30 a.m]]></option><option name="720"><![CDATA[12:00 p.m]]></option><option name="750"><![CDATA[12:30 p.m]]></option><option name="780"><![CDATA[13:00 p.m]]></option><option name="810"><![CDATA[13:30 p.m]]></option><option name="840"><![CDATA[14:00 p.m]]></option><option name="870"><![CDATA[14:30 p.m]]></option><option name="900"><![CDATA[15:00 p.m]]></option><option name="930"><![CDATA[15:30 p.m]]></option><option name="960"><![CDATA[16:00 p.m]]></option><option name="990"><![CDATA[16:30 p.m]]></option><option name="1020"><![CDATA[17:00 p.m]]></option><option name="1050"><![CDATA[17:30 p.m]]></option><option name="1080"><![CDATA[18:00 p.m]]></option><option name="1110"><![CDATA[18:30 p.m]]></option><option name="1140"><![CDATA[19:00 p.m]]></option><option name="1170"><![CDATA[19:30 p.m]]></option><option name="1200"><![CDATA[20:00 p.m]]></option><option name="1230"><![CDATA[20:30 p.m]]></option><option name="1260"><![CDATA[21:00 p.m]]></option><option name="1290"><![CDATA[21:30 p.m]]></option><option name="1320"><![CDATA[22:00 p.m]]></option><option name="1350"><![CDATA[22:30 p.m]]></option><option name="1380"><![CDATA[23:00 p.m]]></option><option name="1410"><![CDATA[23:30 p.m]]></option></en>
+  </initPeriod2>
+  <endPeriod2 type="dropdown" group="1">
+    <en><![CDATA[End time]]><option name=""><![CDATA[00:00 a.m]]></option><option name="30"><![CDATA[00:30 a.m]]></option><option name="60"><![CDATA[01:00 a.m]]></option><option name="90"><![CDATA[01:30 a.m]]></option><option name="120"><![CDATA[02:00 a.m]]></option><option name="150"><![CDATA[02:30 a.m]]></option><option name="180"><![CDATA[03:00 a.m]]></option><option name="210"><![CDATA[03:30 a.m]]></option><option name="240"><![CDATA[04:00 a.m]]></option><option name="270"><![CDATA[04:30 a.m]]></option><option name="300"><![CDATA[05:00 a.m]]></option><option name="330"><![CDATA[05:30 a.m]]></option><option name="360"><![CDATA[06:00 a.m]]></option><option name="390"><![CDATA[06:30 a.m]]></option><option name="420"><![CDATA[07:00 a.m]]></option><option name="450"><![CDATA[07:30 a.m]]></option><option name="480"><![CDATA[08:00 a.m]]></option><option name="510"><![CDATA[08:30 a.m]]></option><option name="540"><![CDATA[09:00 a.m]]></option><option name="570"><![CDATA[09:30 a.m]]></option><option name="600"><![CDATA[10:00 a.m]]></option><option name="630"><![CDATA[10:30 a.m]]></option><option name="660"><![CDATA[11:00 a.m]]></option><option name="690"><![CDATA[11:30 a.m]]></option><option name="720"><![CDATA[12:00 p.m]]></option><option name="750"><![CDATA[12:30 p.m]]></option><option name="780"><![CDATA[13:00 p.m]]></option><option name="810"><![CDATA[13:30 p.m]]></option><option name="840"><![CDATA[14:00 p.m]]></option><option name="870"><![CDATA[14:30 p.m]]></option><option name="900"><![CDATA[15:00 p.m]]></option><option name="930"><![CDATA[15:30 p.m]]></option><option name="960"><![CDATA[16:00 p.m]]></option><option name="990"><![CDATA[16:30 p.m]]></option><option name="1020"><![CDATA[17:00 p.m]]></option><option name="1050"><![CDATA[17:30 p.m]]></option><option name="1080"><![CDATA[18:00 p.m]]></option><option name="1110"><![CDATA[18:30 p.m]]></option><option name="1140"><![CDATA[19:00 p.m]]></option><option name="1170"><![CDATA[19:30 p.m]]></option><option name="1200"><![CDATA[20:00 p.m]]></option><option name="1230"><![CDATA[20:30 p.m]]></option><option name="1260"><![CDATA[21:00 p.m]]></option><option name="1290"><![CDATA[21:30 p.m]]></option><option name="1320"><![CDATA[22:00 p.m]]></option><option name="1350"><![CDATA[22:30 p.m]]></option><option name="1380"><![CDATA[23:00 p.m]]></option><option name="1410"><![CDATA[23:30 p.m]]></option></en>
+  </endPeriod2>
+  <BSUBMIT type="submit" codeTR="-2">
+    <en><![CDATA[Accept]]></en>
+  </BSUBMIT>
 </dynaForm>

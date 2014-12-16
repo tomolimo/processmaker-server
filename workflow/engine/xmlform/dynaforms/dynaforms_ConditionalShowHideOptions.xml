@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="xmlmenu">
-  <MNU_NEW type="link" value="" link="#" onclick="oConditional.editor(&#039;new&#039;);" colAlign="left" colWidth="50">
-    <en>New</en>
+  <MNU_NEW type="link" value="" link="#" onclick="oConditional.editor('new');" colAlign="left" colWidth="50">
+    <en><![CDATA[New]]></en>
   </MNU_NEW>
   <DYN_UID type="private"/>
-  
   <jscript type="javascript">
    oConditional = new Conditional(@@DYN_UID);
    //oConditional.showID();
   </jscript>
-</dynaForm>  
+</dynaForm>

@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm width="400" xmlform_type="NORMAL">
-<TITLE6171 type="title">
-  <en>Test Email</en>
-</TITLE6171>
-
-<TEST_EMAIL type="text" size="35" maxlength="60" defaultvalue="user@mycompany.com">
-  <en>Send to :</en>
-</TEST_EMAIL>
-
-<BTEST type="button" group="1" onclick="sendEmail();return false;">
-  <en>Test</en>
-</BTEST>
-</dynaForm>  
+  <TITLE6171 type="title">
+    <en><![CDATA[Test Email]]></en>
+  </TITLE6171>
+  <TEST_EMAIL type="text" size="35" maxlength="60" defaultvalue="user@mycompany.com">
+    <en><![CDATA[Send to :]]></en>
+  </TEST_EMAIL>
+  <BTEST type="button" group="1" onclick="sendEmail();return false;">
+    <en><![CDATA[Test]]></en>
+  </BTEST>
+</dynaForm>

@@ -1,29 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm sql="SELECT * FROM GROUPWF" type="xmlform" sqlConnection="" deleteRow="0" menu="groups/groups_Options" filterForm="groups/groups_Search" width="95%" enableTemplate="1">
-
-<title type="title" colWidth="200" showInTable="0">
-  <en>Group Information</en>
-</title>
-
-<GRP_UID type="hidden" showInTable="0">
+  <title type="title" colWidth="200" showInTable="0">
+    <en><![CDATA[Group Information]]></en>
+  </title>
+  <GRP_UID type="hidden" showInTable="0">
 </GRP_UID>
-
-<GRP_TITLE type="text" colWidth="200" size="30" maxlength="64" required="1">
-  <en>Name</en>
-</GRP_TITLE>
-
-<GRP_STATUS type="dropdown" colWidth="150" align="center">
-  <en>Status<option name="ACTIVE">Active</option><option name="INACTIVE">Inactive</option></en>
-</GRP_STATUS>
-
-<BTN_CANCEL type="button" onclick="cancel();">
-  <en>Cancel</en>
-</BTN_CANCEL>
-
-<button type="button" onclick="validateLocalFields(this.form);" showInTable="0">
-  <en>Save</en>
-</button> 
-<JS type="javascript" replacetags="1"><![CDATA[
+  <GRP_TITLE type="text" colWidth="200" size="30" maxlength="64" required="1">
+    <en><![CDATA[Name]]></en>
+  </GRP_TITLE>
+  <GRP_STATUS type="dropdown" colWidth="150" align="center">
+    <en><![CDATA[Status]]><option name="ACTIVE"><![CDATA[Active]]></option><option name="INACTIVE"><![CDATA[Inactive]]></option></en>
+  </GRP_STATUS>
+  <BTN_CANCEL type="button" onclick="cancel();">
+    <en><![CDATA[Cancel]]></en>
+  </BTN_CANCEL>
+  <button type="button" onclick="validateLocalFields(this.form);" showInTable="0">
+    <en><![CDATA[Save]]></en>
+  </button>
+  <JS type="javascript" replacetags="1"><![CDATA[
 var sGroupname;
 sGroupname = document.forms[0].elements['form[GRP_TITLE]'].value;
 
@@ -87,5 +81,4 @@ if(valueKey == 13){
 }
 
 ]]></JS>
-
-</dynaForm> 
+</dynaForm>

@@ -1,18 +1,13 @@
-<?xml version="1.0" encoding="UTF-8"?> 
+<?xml version="1.0" encoding="UTF-8"?>
 <dynaForm sqlConnection="" rowsPerPage="20">
-
-<DOC_UID type="hidden" showInTable="0"/>
-
-<POSITION type="hidden" showInTable="0"/>
-
-<APP_DOC_UID type="hidden" showInTable="0"/>
-
-<CONFIRM type="hidden" showInTable="0"/>
-
-<TITLE type="text" colWidth="300" titleAlign="left" align="left">
-  <en>Title</en>
-</TITLE>
-
-<VIEW type="link" colWidth="25" value="@G::LoadTranslation(ID_VIEW)" link="#" onclick="showGeneratedDocumentTracker(@QAPP_DOC_UID);"><en></en></VIEW>
-
+  <DOC_UID type="hidden" showInTable="0"/>
+  <POSITION type="hidden" showInTable="0"/>
+  <APP_DOC_UID type="hidden" showInTable="0"/>
+  <CONFIRM type="hidden" showInTable="0"/>
+  <TITLE type="text" colWidth="300" titleAlign="left" align="left">
+    <en><![CDATA[Title]]></en>
+  </TITLE>
+  <VIEW type="link" colWidth="25" value="@G::LoadTranslation(ID_VIEW)" link="#" onclick="showGeneratedDocumentTracker(@QAPP_DOC_UID);">
+    <en><![CDATA[]]></en>
+  </VIEW>
 </dynaForm>

@@ -1,32 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="cases_ViewAnyInputDocument" type="xmlform" width="100%" labelWidth="">
-
-<INP_DOC_UID type="private"/>
-
-<POSITION type="private"/>
-
-<FILENAME type="caption">
-  <en>Filename</en>
-</FILENAME>
-
-<APP_DOC_CREATE_DATE type="date" mode="view">
-  <en>Created Date</en>
-</APP_DOC_CREATE_DATE>
-
-<CREATOR type="text" mode="view">
-  <en>Creator</en>
-</CREATOR>
-
-<ORIGIN type="text" mode="view">
-  <en>Origin Task</en>
-</ORIGIN>
-
-<VIEW type="phpVariable"/>
-
-<FILE type="phpVariable"/>
-
-<APP_DOC_FILENAME type="link" value="@#VIEW" link="@#FILE" target="_blank">
-  <en>File</en>
-</APP_DOC_FILENAME>
-
-</dynaForm> 
+  <INP_DOC_UID type="private"/>
+  <POSITION type="private"/>
+  <FILENAME type="caption">
+    <en><![CDATA[Filename]]></en>
+  </FILENAME>
+  <APP_DOC_CREATE_DATE type="date" mode="view">
+    <en><![CDATA[Created Date]]></en>
+  </APP_DOC_CREATE_DATE>
+  <CREATOR type="text" mode="view">
+    <en><![CDATA[Creator]]></en>
+  </CREATOR>
+  <ORIGIN type="text" mode="view">
+    <en><![CDATA[Origin Task]]></en>
+  </ORIGIN>
+  <VIEW type="phpVariable"/>
+  <FILE type="phpVariable"/>
+  <APP_DOC_FILENAME type="link" value="@#VIEW" link="@#FILE" target="_blank">
+    <en><![CDATA[File]]></en>
+  </APP_DOC_FILENAME>
+</dynaForm>

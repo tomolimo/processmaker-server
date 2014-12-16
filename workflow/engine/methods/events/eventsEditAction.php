@@ -247,7 +247,7 @@ function setLabels () {
         'LABEL_ADD_USERS'   => G::LoadTranslation( 'ID_EVENT_ADD_USERS' ),
         'LABEL_REMOVED_SELECTED'    => G::LoadTranslation( 'ID_EVENT_REMOVE_SELECTED' ),
         'LABEL_ADD_DYNAVAR' => G::LoadTranslation( 'ID_EVENT_ADD_DYNAVAR' ),
-        'LABEL_ADD_GROUPS'  => G::LoadTranslation( 'ID_EVENT_ADD_GROUPS' )
+        'LABEL_ADD_GROUPS'  => G::LoadTranslation( 'ID_EVENT_ADD_GROUP' )
     );
     return $labels;
 }

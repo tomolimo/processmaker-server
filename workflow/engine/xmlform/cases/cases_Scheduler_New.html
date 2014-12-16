@@ -92,8 +92,8 @@
                 <td  colspan="2" align="center">
                 <table id="startTime" border="0">
                     <tr>
-                        <td class="FormLabel" width="{$form_labelWidth}"><font color="red">*  </font> {$SCH_START_TIME}</td>
-                        <td class="FormFieldContent">{$form.SCH_START_TIME} format 24 hrs. (HH:MM) </td>
+                        <td class="FormLabel" ><font color="red">*  </font> {$SCH_START_TIME}</td>
+                        <td class="FormFieldContent">{$form.SCH_START_TIME} {php}echo (G::LoadTranslation('ID_FORMAT_24_HOURS'));{/php} </td>
                     </tr>
                 </table>
                 </td>
@@ -103,12 +103,12 @@
                 <table id="everyTime" border="0" style="width: 100%">
                     <tr>
                         <td class="FormLabel" width="{$form_labelWidth}"><font color="red">* </font> {$SCH_REPEAT_EVERY}</td>
-                        <td class="FormFieldContent">{$form.SCH_REPEAT_EVERY} Hour(s). </td>
+                        <td class="FormFieldContent">{$form.SCH_REPEAT_EVERY} {php}echo (G::LoadTranslation('ID_HOUR_HOURS'));{/php} </td>
                     </tr>
                 </table>
                 </td>
               </tr>
-              
+
               <tr>
               <td class="FormSubTitle" colspan="2" id="form[SELECT_DATE]" align="">
                 <span>{$form.SELECT_DATE}</span>

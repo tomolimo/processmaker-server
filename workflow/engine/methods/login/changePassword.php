@@ -5,7 +5,7 @@ $aUser = $oUser->load($_SESSION['USER_LOGGED']);
 global $RBAC;
 $aData['USR_UID']      = $aUser['USR_UID'];
 $aData['USR_USERNAME'] = $aUser['USR_USERNAME'];
-$aData['USR_PASSWORD'] = md5($_POST['form']['USR_PASSWORD']);
+$aData['USR_PASSWORD'] = Bootstrap::hashPassword($_POST['form']['USR_PASSWORD']);
 $aData['USR_FIRSTNAME']   = $aUser['USR_FIRSTNAME'];
 $aData['USR_LASTNAME']    = $aUser['USR_LASTNAME'];
 $aData['USR_EMAIL']       = $aUser['USR_EMAIL'];

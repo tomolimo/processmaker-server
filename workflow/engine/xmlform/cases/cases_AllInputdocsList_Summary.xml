@@ -1,35 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm sqlConnection="" rowsPerPage="20" name="cases_AllInputdocsList">
-
-<DOC_UID type="hidden" showInTable="0"/>
-
-<POSITION type="hidden" showInTable="0"/>
-
-<APP_DOC_UID type="hidden" showInTable="0"/>
-
-<CONFIRM type="hidden" showInTable="0"/>
-<DOWNLOAD_LABEL type="hidden" showInTable="0"/>
-
-
-<TITLE type="text" colWidth="10" titleAlign="left" align="left">
-  <en>Filename</en>
-</TITLE>
-
-<APP_DOC_COMMENT type="text" colWidth="200" titleAlign="left" align="left">
-  <en>Comments</en>
-</APP_DOC_COMMENT>
-
-<CREATED_BY type="text" colWidth="150" titleAlign="left" align="left">
-  <en>Created By</en>
-</CREATED_BY>
-
-<CREATE_DATE type="text" colWidth="100" titleAlign="left" align="left">
-  <en>Create Date</en>
-</CREATE_DATE>
-
-
-<DELETE type="link" colWidth="" value="@#ID_DELETE" link="#" onclick="deleteUploadedDocument(@QAPP_DOC_UID);"><en></en></DELETE>
-
-<DOWNLOAD type="link" colWidth="25" value="@#DOWNLOAD_LABEL" link="@#DOWNLOAD_LINK"/>
-
+  <DOC_UID type="hidden" showInTable="0"/>
+  <POSITION type="hidden" showInTable="0"/>
+  <APP_DOC_UID type="hidden" showInTable="0"/>
+  <CONFIRM type="hidden" showInTable="0"/>
+  <DOWNLOAD_LABEL type="hidden" showInTable="0"/>
+  <TITLE type="text" colWidth="10" titleAlign="left" align="left">
+    <en><![CDATA[Filename]]></en>
+  </TITLE>
+  <APP_DOC_COMMENT type="text" colWidth="200" titleAlign="left" align="left">
+    <en><![CDATA[Comments]]></en>
+  </APP_DOC_COMMENT>
+  <CREATED_BY type="text" colWidth="150" titleAlign="left" align="left">
+    <en><![CDATA[Created By]]></en>
+  </CREATED_BY>
+  <CREATE_DATE type="text" colWidth="100" titleAlign="left" align="left">
+    <en><![CDATA[Create Date]]></en>
+  </CREATE_DATE>
+  <DELETE type="link" colWidth="" value="@#ID_DELETE" link="#" onclick="deleteUploadedDocument(@QAPP_DOC_UID);">
+    <en><![CDATA[]]></en>
+  </DELETE>
+  <DOWNLOAD type="link" colWidth="25" value="@#DOWNLOAD_LABEL" link="@#DOWNLOAD_LINK"/>
 </dynaForm>

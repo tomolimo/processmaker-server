@@ -441,6 +441,10 @@ abstract class ResultSetCommon {
         if (!array_key_exists($idx, $this->fields)) { throw new SQLException("Invalid resultset column: " . $column); }
         if ($this->fields[$idx] === null) { return null; }
 
+        if ($this->fields[$idx] . "" == "") {
+            return "";
+        }
+
         if (($this->fields[$idx] == '0000-00-00 00:00:00') || ($this->fields[$idx] == '0000-00-00')) {
           $ts = '0';
         }
@@ -460,3 +464,4 @@ abstract class ResultSetCommon {
         }
     }
 }
+

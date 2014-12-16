@@ -224,5 +224,29 @@ class StepSupervisor extends BaseStepSupervisor
         $aRow = $oDataset->getRow();
         return ($aRow);
     }
+
+    /**
+     * verify if a dynaform is assigned some steps
+     *
+     * @param string $proUid the uid of the process
+     * @param string $dynUid the uid of the dynaform
+     *
+     * @return array
+     */
+    public function verifyDynaformAssigStepSupervisor ($dynUid, $proUid)
+    {
+        $res = array();
+        $oCriteria = new Criteria();
+        $oCriteria->addSelectColumn( StepSupervisorPeer::STEP_UID );
+        $oCriteria->add( StepSupervisorPeer::PRO_UID, $proUid );
+        $oCriteria->add( StepSupervisorPeer::STEP_UID_OBJ, $dynUid );
+        $oCriteria->add( StepSupervisorPeer::STEP_TYPE_OBJ, 'DYNAFORM' );
+        $oDataset = StepSupervisorPeer::doSelectRS( $oCriteria );
+        $oDataset->setFetchmode( ResultSet::FETCHMODE_ASSOC );
+        while($oDataset->next()) {
+            $res[] = $oDataset->getRow();
+        }
+        return $res;
+    }
 }
 

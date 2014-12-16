@@ -1,34 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm menu="dynaforms/dynaforms_Options" width="100%" rowsPerPage="12" searchBy="C1.CON_VALUE">
-
-<DYN_UID type="hidden" showInTable="0"/>
-<PRO_UID type="hidden" showInTable="1"/>
-
-<DYN_TITLE type="text" colWidth="300" titleAlign="left" align="left" dataCompareField="T.CON_VALUE" dataCompareType="contains">
-  <en>Title</en>
-</DYN_TITLE>
-
-<DYN_TYPE type="dropdown" colWidth="50" colAlign="center" titleAlign="center">
-  <en>Type<option name="xmlform">Normal</option><option name="grid">Grid</option></en>
-</DYN_TYPE>
-
-<EDIT type="link" colWidth="40" colAlign="left" titleAlign="left" value="@G::LoadTranslation(ID_EDIT)" link="#" onclick="dynaformEdit(@QDYN_UID);return false;"/>
-
-<DELETE type="link" colWidth="40" value="@G::LoadTranslation(ID_DELETE)" link="#" onclick="dynaformDelete(@QDYN_UID,@QPRO_UID);return false;"><en></en></DELETE>
-
-<GET_UID type="link" colWidth="40" value="UID" link="#" onclick="msgBox(&#039;UID: &#039;+@QDYN_UID, &#039;info&#039;);return false;"/>
-
-
-<SEARCH type="button" onclick="pagedTableFilter( this.form );" showInTable="0">
-  <en>Apply Filter</en>
-</SEARCH>
-
-<PAGED_TABLE_ID type="private" showInTable="0"/>
-
-<JSFILTER type="javascript" replaceTags="1" showInTable="0">
+  <DYN_UID type="hidden" showInTable="0"/>
+  <PRO_UID type="hidden" showInTable="1"/>
+  <DYN_TITLE type="text" colWidth="300" titleAlign="left" align="left" dataCompareField="T.CON_VALUE" dataCompareType="contains">
+    <en><![CDATA[Title]]></en>
+  </DYN_TITLE>
+  <DYN_TYPE type="dropdown" colWidth="50" colAlign="center" titleAlign="center">
+    <en><![CDATA[Type]]><option name="xmlform"><![CDATA[Normal]]></option><option name="grid"><![CDATA[Grid]]></option></en>
+  </DYN_TYPE>
+  <EDIT type="link" colWidth="40" colAlign="left" titleAlign="left" value="@G::LoadTranslation(ID_EDIT)" link="#" onclick="dynaformEdit(@QDYN_UID);return false;"/>
+  <DELETE type="link" colWidth="40" value="@G::LoadTranslation(ID_DELETE)" link="#" onclick="dynaformDelete(@QDYN_UID,@QPRO_UID);return false;">
+    <en><![CDATA[]]></en>
+  </DELETE>
+  <GET_UID type="link" colWidth="40" value="UID" link="#" onclick="msgBox('UID: '+@QDYN_UID, 'info');return false;"/>
+  <SEARCH type="button" onclick="pagedTableFilter( this.form );" showInTable="0">
+    <en><![CDATA[Apply Filter]]></en>
+  </SEARCH>
+  <PAGED_TABLE_ID type="private" showInTable="0"/>
+  <JSFILTER type="javascript" replaceTags="1" showInTable="0">
 function pagedTableFilter( form ) {
   @#PAGED_TABLE_ID.doFilter( form );
 }
 </JSFILTER>
-
 </dynaForm>

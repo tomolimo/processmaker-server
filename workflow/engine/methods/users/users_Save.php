@@ -63,7 +63,7 @@ try {
         $form['USR_NEW_PASS'] = '';
     }
     if ($form['USR_NEW_PASS'] != '') {
-        $form['USR_PASSWORD'] = md5( $form['USR_NEW_PASS'] );
+        $form['USR_PASSWORD'] = Bootstrap::hashPassword( $form['USR_NEW_PASS'] );
     }
     if (! isset( $form['USR_CITY'] )) {
         $form['USR_CITY'] = '';

@@ -78,7 +78,6 @@ try {
     //  g::pr($aFields);
     //  die;
 
-
     switch ($aFields['APP_STATUS']) {
         case 'DRAFT':
         case 'TO_DO':
@@ -97,12 +96,11 @@ try {
             }
 
             /**
-             * these routine is to verify if the case was acceded from advaced search list
+             * these routine is to verify if the case was acceded from advanced search list
              */
 
             if ($_action == 'search') {
-                //verify if the case is with teh current user
-
+                //verify if the case is with the current user
                 $c = new Criteria( 'workflow' );
                 $c->add( AppDelegationPeer::APP_UID, $sAppUid );
                 $c->addAscendingOrderByColumn( AppDelegationPeer::DEL_INDEX );
@@ -172,7 +170,7 @@ try {
                 G::header( 'location: ' . $sPage );
 
             } else {
-                //when the case have another user or current user doesnt have rights to this selfservice,
+                //when the case have another user or current user doesn't have rights to this self-service,
                 //just view the case Resume
 
                 // Get DEL_INDEX
@@ -201,10 +199,10 @@ try {
                     $Fields = $oCase->loadCase( $_SESSION['APPLICATION'], $_SESSION['INDEX']);
                     unset($_SESSION['ACTION']);
                 }
-
                 $_SESSION['CURRENT_TASK'] = $Fields['TAS_UID'];
                 $_SESSION['STEP_POSITION'] = 0;
                 require_once (PATH_METHODS . 'cases' . PATH_SEP . 'cases_Resume.php');
+
             }
             break;
         default: //APP_STATUS <> DRAFT and TO_DO

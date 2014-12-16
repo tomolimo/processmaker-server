@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="showMessage" version="1.0" basedir="" xmlform_type="NORMAL" width="520px" labelwidth="0">
-<TITLE type="title">
-  <en>Error</en>
-<es>Error</es></TITLE>
-<MESSAGE type="caption" enableHTML="1">
-<en><![CDATA[you can\'t delete it is in use.]]></en>
-</MESSAGE>
-</dynaForm>  
+  <TITLE type="title">
+    <en><![CDATA[Error]]></en>
+    <es>Error</es>
+  </TITLE>
+  <MESSAGE type="caption" enableHTML="1">
+    <en><![CDATA[you can't delete it is in use.]]></en>
+  </MESSAGE>
+</dynaForm>

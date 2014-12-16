@@ -1,23 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm sql="SELECT * FROM GROUPWF" type="filterform" sqlConnection="" deleteRow="0" menu="groups/groups_Options" filterForm="groups/groups_Search" width="100%">
-
-<title type="title" colWidth="200" showInTable="0">
-  <en>Group properties</en>
-</title>
-
-<UID type="hidden" showInTable="0">
+  <title type="title" colWidth="200" showInTable="0">
+    <en><![CDATA[Group properties]]></en>
+  </title>
+  <UID type="hidden" showInTable="0">
 </UID>
-
-<GROUP_TITLE type="text" colWidth="200" align="left" titleAlign="left">
-  <en>Group</en>
-</GROUP_TITLE>
-
-<GROUP_STATUS type="dropdown" colWidth="150" align="left">
-  <en>Status<option name="ACTIVE">Active</option><option name="INACTIVE">Inactive</option><option name="VACATION">Vacation</option><option name="CLOSED">Closed</option></en>
-</GROUP_STATUS>
-
-<button type="button" onclick="saveGroup( this.form );" showInTable="0">
-  <en>Accept</en>
-</button>
-
+  <GROUP_TITLE type="text" colWidth="200" align="left" titleAlign="left">
+    <en><![CDATA[Group]]></en>
+  </GROUP_TITLE>
+  <GROUP_STATUS type="dropdown" colWidth="150" align="left">
+    <en><![CDATA[Status]]><option name="ACTIVE"><![CDATA[Active]]></option><option name="INACTIVE"><![CDATA[Inactive]]></option><option name="VACATION"><![CDATA[Vacation]]></option><option name="CLOSED"><![CDATA[Closed]]></option></en>
+  </GROUP_STATUS>
+  <button type="button" onclick="saveGroup( this.form );" showInTable="0">
+    <en><![CDATA[Accept]]></en>
+  </button>
 </dynaForm>

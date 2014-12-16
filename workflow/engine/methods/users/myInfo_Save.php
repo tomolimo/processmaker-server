@@ -50,7 +50,7 @@ try {
         $_POST['form']['USR_NEW_PASS'] = '';
     }
     if ($_POST['form']['USR_NEW_PASS'] != '') {
-        $_POST['form']['USR_PASSWORD'] = md5( $_POST['form']['USR_NEW_PASS'] );
+        $_POST['form']['USR_PASSWORD'] = Bootstrap::hashPassword( $_POST['form']['USR_NEW_PASS'] );
     }
     if (! isset( $_POST['form']['USR_CITY'] )) {
         $_POST['form']['USR_CITY'] = '';

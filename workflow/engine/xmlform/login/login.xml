@@ -1,28 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="login" version="1.0" basedir="" xmlform_type="NORMAL" width="400px" enabletemplate="1">
-<TITLE type="title">
-  <en>Login</en>
-</TITLE>
-<USR_USERNAME type="text" size="30" maxlength="50" validate="Any">
-  <en>User</en>
-</USR_USERNAME>
-<USR_PASSWORD type="password" size="30" maxlength="32" autocomplete="0">
-  <en>Password</en>
-</USR_PASSWORD>
-<USER_LANG type="dropdown" sqlconnection="dbarray">
+  <TITLE type="title">
+    <en><![CDATA[Login]]></en>
+  </TITLE>
+  <USR_USERNAME type="text" size="30" maxlength="50" validate="Any">
+    <en><![CDATA[User]]></en>
+  </USR_USERNAME>
+  <USR_PASSWORD type="password" size="30" maxlength="32" autocomplete="0">
+    <en><![CDATA[Password]]></en>
+  </USR_PASSWORD>
+  <USER_LANG type="dropdown" sqlconnection="dbarray">
 SELECT LANG_ID, LANG_NAME FROM langOptions
-  <en>Language</en>
+  <en><![CDATA[Language]]></en>
 </USER_LANG>
-<URL type="hidden"/>
-<LOGIN_VERIFY_MSG type="private" showInTable="0"/>
-<BSUBMIT type="submit">
-  <en>Login</en>
-</BSUBMIT>
-<FORGOT_PASWORD_LINK type="link" link="forgotPassword" onclick="" colAlign="right" colWidth="135" style="display:none;">
-  <en>Forgot Password</en>
-</FORGOT_PASWORD_LINK>
-<JS type="javascript">
-<![CDATA[
+  <URL type="hidden"/>
+  <LOGIN_VERIFY_MSG type="private" showInTable="0"/>
+  <BSUBMIT type="submit">
+    <en><![CDATA[Login]]></en>
+  </BSUBMIT>
+  <FORGOT_PASWORD_LINK type="link" link="forgotPassword" onclick="" colAlign="right" colWidth="135" style="display:none;">
+    <en><![CDATA[Forgot Password]]></en>
+  </FORGOT_PASWORD_LINK>
+  <JS type="javascript"><![CDATA[
 // enable/disable forgot password link
 if(flagForgotPassword == 'on' || flagForgotPassword == '1') {
   document.getElementById("form[FORGOT_PASWORD_LINK]").style.display = 'block';//hideRowById('FORGOT_PASWORD_LINK');
@@ -95,7 +94,5 @@ leimnud.event.add(document.getElementById('form[BSUBMIT]'), 'click', function() 
   }
 }.extend(document.getElementById('form[BSUBMIT]')));
 
-]]>
-</JS>
-
+]]></JS>
 </dynaForm>

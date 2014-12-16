@@ -1,127 +1,125 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="myInfo" width="500px" labelWidth="200px" enableTemplate="0">
-
-<menuUser type="xmlmenu" xmlfile="users/users_EditOptions">
-  <en/>
-</menuUser>
-
-<START_DATE type="phpVariable"/>
-
-<END_DATE type="phpVariable"/>
-
-<TITLE1 type="title" group="1">
-  <en>Personal Information</en>
-<es><![CDATA[Información Personal]]></es><pt><![CDATA[Informações Pessoais]]></pt></TITLE1>
-
-<USR_UID type="private"/>
-
-<USR_FIRSTNAME type="text" size="30" maxlength="32" defaultvalue="" required="0" group="1" dependentfields="" linkfield="" strto="" readonly="0" noshowingrid="0" readonlyingrid="0" totalizeable="0" sqlconnection="">
-  <en>First Name</en>
-<es>Nombre</es><pt>Nome</pt></USR_FIRSTNAME>
-
-<USR_LASTNAME type="text" size="30" maxlength="32" defaultvalue="" required="0" group="1" dependentfields="" linkfield="" strto="" readonly="0" noshowingrid="0" readonlyingrid="0" totalizeable="0" sqlconnection="">
-  <en>Last Name</en>
-<es>Apellido</es><pt>Sobrenome</pt></USR_LASTNAME>
-
-<USR_USERNAME type="text" size="15" maxlength="50" validate="" defaultvalue="" required="1" group="1" dependentfields="" linkfield="" strto="" readonly="0" noshowingrid="0" readonlyingrid="0" totalizeable="0" onchange="">
-  <en>User ID (*)</en>
-<es>ID de usuario (*)</es><pt><![CDATA[Identificador de Usuário (*)]]></pt></USR_USERNAME>
-
-<USR_EMAIL type="text" size="35" maxlength="100" validate="Email" defaultvalue="" required="0" group="1" dependentfields="" linkfield="" strto="" readonly="0" noshowingrid="0" readonlyingrid="0" totalizeable="0" sqlconnection="">
-  <en>Email</en>
-<es><![CDATA[Correo Eletrónico]]></es><pt><![CDATA[Endereço de Correio Eletrônico]]></pt></USR_EMAIL>
-
-<USR_ADDRESS type="textarea" rows="3" cols="50" defaultvalue="" required="0" group="1" dependentfields="" linkfield="" strto="" readonly="0" noshowingrid="0" readonlyingrid="0" totalizeable="0" sqlconnection="">
-  <en>Address</en>
-<es><![CDATA[Dirección]]></es><pt><![CDATA[Endereço]]></pt></USR_ADDRESS>
-
-<USR_ZIP_CODE type="text" size="30" maxlength="30" defaultvalue="" required="0" group="1" dependentfields="" linkfield="" strto="" readonly="0" noshowingrid="0" readonlyingrid="0" totalizeable="0" sqlconnection="">
-  <en>Zip/Postal Code</en>
-<es><![CDATA[Código Postal]]></es><pt>CEP</pt></USR_ZIP_CODE>
-
-<USR_COUNTRY type="dropdown" style="width:174pt" defaultvalue="" required="0" group="1" dependentfields="USR_CITY" readonly="0" sqlconnection="" noshowingrid="0" readonlyingrid="0">
+  <menuUser type="xmlmenu" xmlfile="users/users_EditOptions">
+    <en/>
+  </menuUser>
+  <START_DATE type="phpVariable"/>
+  <END_DATE type="phpVariable"/>
+  <TITLE1 type="title" group="1">
+    <en><![CDATA[Personal Information]]></en>
+    <es><![CDATA[Información Personal]]></es>
+    <pt><![CDATA[Informações Pessoais]]></pt>
+  </TITLE1>
+  <USR_UID type="private"/>
+  <USR_FIRSTNAME type="text" size="30" maxlength="32" defaultvalue="" required="0" group="1" dependentfields="" linkfield="" strto="" readonly="0" noshowingrid="0" readonlyingrid="0" totalizeable="0" sqlconnection="">
+    <en><![CDATA[First Name]]></en>
+    <es>Nombre</es>
+    <pt>Nome</pt>
+  </USR_FIRSTNAME>
+  <USR_LASTNAME type="text" size="30" maxlength="32" defaultvalue="" required="0" group="1" dependentfields="" linkfield="" strto="" readonly="0" noshowingrid="0" readonlyingrid="0" totalizeable="0" sqlconnection="">
+    <en><![CDATA[Last Name]]></en>
+    <es>Apellido</es>
+    <pt>Sobrenome</pt>
+  </USR_LASTNAME>
+  <USR_USERNAME type="text" size="15" maxlength="50" validate="" defaultvalue="" required="1" group="1" dependentfields="" linkfield="" strto="" readonly="0" noshowingrid="0" readonlyingrid="0" totalizeable="0" onchange="">
+    <en><![CDATA[User ID (*)]]></en>
+    <es>ID de usuario (*)</es>
+    <pt><![CDATA[Identificador de Usuário (*)]]></pt>
+  </USR_USERNAME>
+  <USR_EMAIL type="text" size="35" maxlength="100" validate="Email" defaultvalue="" required="0" group="1" dependentfields="" linkfield="" strto="" readonly="0" noshowingrid="0" readonlyingrid="0" totalizeable="0" sqlconnection="">
+    <en><![CDATA[Email]]></en>
+    <es><![CDATA[Correo Eletrónico]]></es>
+    <pt><![CDATA[Endereço de Correio Eletrônico]]></pt>
+  </USR_EMAIL>
+  <USR_ADDRESS type="textarea" rows="3" cols="50" defaultvalue="" required="0" group="1" dependentfields="" linkfield="" strto="" readonly="0" noshowingrid="0" readonlyingrid="0" totalizeable="0" sqlconnection="">
+    <en><![CDATA[Address]]></en>
+    <es><![CDATA[Dirección]]></es>
+    <pt><![CDATA[Endereço]]></pt>
+  </USR_ADDRESS>
+  <USR_ZIP_CODE type="text" size="30" maxlength="30" defaultvalue="" required="0" group="1" dependentfields="" linkfield="" strto="" readonly="0" noshowingrid="0" readonlyingrid="0" totalizeable="0" sqlconnection="">
+    <en><![CDATA[Zip/Postal Code]]></en>
+    <es><![CDATA[Código Postal]]></es>
+    <pt>CEP</pt>
+  </USR_ZIP_CODE>
+  <USR_COUNTRY type="dropdown" style="width:174pt" defaultvalue="" required="0" group="1" dependentfields="USR_CITY" readonly="0" sqlconnection="" noshowingrid="0" readonlyingrid="0">
 SELECT IC_UID, IC_NAME FROM ISO_COUNTRY ORDER BY IC_NAME
-  <en>Country<option name=""></option></en>
+  <en><![CDATA[Country]]><option name=""><![CDATA[]]></option></en>
 <es><![CDATA[País]]><option name=""/></es><pt><![CDATA[País]]><option name=""><![CDATA[País]]></option></pt></USR_COUNTRY>
-
-<USR_CITY type="dropdown" style="width:174pt" defaultvalue="" required="0" group="1" dependentfields="USR_LOCATION" readonly="0" sqlconnection="" noshowingrid="0" readonlyingrid="0"><![CDATA[
+  <USR_CITY type="dropdown" style="width:174pt" defaultvalue="" required="0" group="1" dependentfields="USR_LOCATION" readonly="0" sqlconnection="" noshowingrid="0" readonlyingrid="0"><![CDATA[
 SELECT IS_UID, IS_NAME FROM ISO_SUBDIVISION WHERE IC_UID = "@#USR_COUNTRY" ORDER BY IS_NAME
-  ]]><en>State or Region</en>
-<es><![CDATA[Estado o Región]]></es><pt><![CDATA[Estado da União]]></pt></USR_CITY>
-
-<USR_LOCATION type="dropdown" style="width:174pt" defaultvalue="" required="0" group="1" readonly="0" sqlconnection="" noshowingrid="0" readonlyingrid="0"><![CDATA[
+  ]]><en><![CDATA[State or Region]]></en><es><![CDATA[Estado o Región]]></es><pt><![CDATA[Estado da União]]></pt></USR_CITY>
+  <USR_LOCATION type="dropdown" style="width:174pt" defaultvalue="" required="0" group="1" readonly="0" sqlconnection="" noshowingrid="0" readonlyingrid="0"><![CDATA[
 SELECT IL_UID, IL_NAME FROM ISO_LOCATION WHERE IC_UID = "@#USR_COUNTRY" AND IS_UID = "@#USR_CITY" AND IS_UID NOT IN ("") ORDER BY IL_NAME
-  ]]><en>Location</en>
-<es><![CDATA[Ubicación]]></es><pt>Cidade</pt></USR_LOCATION>
-
-<USR_PHONE type="text" size="15" maxlength="16" defaultvalue="" required="0" group="1" dependentfields="" linkfield="" strto="" readonly="0" noshowingrid="0" readonlyingrid="0" totalizeable="0" sqlconnection="">
-  <en>Phone</en>
-<es><![CDATA[Teléfono]]></es><pt>Telefone</pt></USR_PHONE>
-
-<USR_POSITION type="text" size="35" maxlength="35" defaultvalue="" required="0" group="1" dependentfields="" linkfield="" strto="" readonly="0" noshowingrid="0" readonlyingrid="0" totalizeable="0" sqlconnection="">
-
-  <en>Position</en>
-<es><![CDATA[Posición]]></es><pt><![CDATA[Função]]></pt></USR_POSITION>
-
-<USR_REPORTS_TO type="dropdown" defaultvalue="" required="0" group="1" dependentfields="" readonly="0" sqlconnection="rbac" noshowingrid="0" readonlyingrid="0"><![CDATA[
+  ]]><en><![CDATA[Location]]></en><es><![CDATA[Ubicación]]></es><pt>Cidade</pt></USR_LOCATION>
+  <USR_PHONE type="text" size="15" maxlength="16" defaultvalue="" required="0" group="1" dependentfields="" linkfield="" strto="" readonly="0" noshowingrid="0" readonlyingrid="0" totalizeable="0" sqlconnection="">
+    <en><![CDATA[Phone]]></en>
+    <es><![CDATA[Teléfono]]></es>
+    <pt>Telefone</pt>
+  </USR_PHONE>
+  <USR_POSITION type="text" size="35" maxlength="35" defaultvalue="" required="0" group="1" dependentfields="" linkfield="" strto="" readonly="0" noshowingrid="0" readonlyingrid="0" totalizeable="0" sqlconnection="">
+    <en><![CDATA[Position]]></en>
+    <es><![CDATA[Posición]]></es>
+    <pt><![CDATA[Função]]></pt>
+  </USR_POSITION>
+  <USR_REPORTS_TO type="dropdown" defaultvalue="" required="0" group="1" dependentfields="" readonly="0" sqlconnection="rbac" noshowingrid="0" readonlyingrid="0"><![CDATA[
 SELECT USR_UID, CONCAT(USR_LASTNAME, " ", USR_FIRSTNAME) FROM USERS WHERE USR_STATUS = 1 ORDER BY USR_LASTNAME
-  ]]><en>Reports to<option name=""></option></en>
-</USR_REPORTS_TO>
-
-<USR_REPLACED_BY type="dropdown" defaultvalue="" required="0" group="1" dependentfields="" readonly="0" sqlconnection="rbac" noshowingrid="0" readonlyingrid="0"><![CDATA[
+  ]]><en><![CDATA[Reports to]]><option name=""><![CDATA[]]></option></en></USR_REPORTS_TO>
+  <USR_REPLACED_BY type="dropdown" defaultvalue="" required="0" group="1" dependentfields="" readonly="0" sqlconnection="rbac" noshowingrid="0" readonlyingrid="0"><![CDATA[
 SELECT USR_UID, CONCAT(USR_LASTNAME, " ", USR_FIRSTNAME) FROM USERS WHERE USR_STATUS = 1 ORDER BY USR_LASTNAME
-  ]]><en>Replaced by<option name=""></option></en>
-</USR_REPLACED_BY>
-
-<USR_DUE_DATE type="date" mask="Y-m-d" startDate="@#START_DATE" endDate="@#END_DATE" defaultvalue="" required="1" group="1" readonly="0" noshowingrid="0" readonlyingrid="0">
-  <en>Expiration Date</en>
-<es>Fecha de vencimiento</es><pt><![CDATA[Data de Expiração]]></pt></USR_DUE_DATE>
-
-<USR_STATUS type="dropdown" group="1" required="0" mode="view">
-  <en>Status<option name="ACTIVE">ACTIVE</option><option name="INACTIVE">INACTIVE</option><option name="VACATION">ON VACATION</option></en>
-<es>Estado<option name="ACTIVE">ACTIVO</option><option name="INACTIVE">INACTIVO</option><option name="VACATION"><![CDATA[DE VACACIÓN]]></option></es><pt>Estado<option name="ACTIVE">ATIVO</option><option name="INACTIVE">INATIVO</option><option name="VACATION"><![CDATA[EM FÉRIAS]]></option></pt></USR_STATUS>
-
-<USR_ROLE type="dropdown" defaultvalue="" required="0" group="1" dependentfields="" readonly="0" sqlconnection="rbac" noshowingrid="0" readonlyingrid="0" mode="view"><![CDATA[
+  ]]><en><![CDATA[Replaced by]]><option name=""><![CDATA[]]></option></en></USR_REPLACED_BY>
+  <USR_DUE_DATE type="date" mask="Y-m-d" startDate="@#START_DATE" endDate="@#END_DATE" defaultvalue="" required="1" group="1" readonly="0" noshowingrid="0" readonlyingrid="0">
+    <en><![CDATA[Expiration Date]]></en>
+    <es>Fecha de vencimiento</es>
+    <pt><![CDATA[Data de Expiração]]></pt>
+  </USR_DUE_DATE>
+  <USR_STATUS type="dropdown" group="1" required="0" mode="view">
+    <en><![CDATA[Status]]><option name="ACTIVE"><![CDATA[ACTIVE]]></option><option name="INACTIVE"><![CDATA[INACTIVE]]></option><option name="VACATION"><![CDATA[ON VACATION]]></option></en>
+    <es>Estado<option name="ACTIVE">ACTIVO</option><option name="INACTIVE">INACTIVO</option><option name="VACATION"><![CDATA[DE VACACIÓN]]></option></es>
+    <pt>Estado<option name="ACTIVE">ATIVO</option><option name="INACTIVE">INATIVO</option><option name="VACATION"><![CDATA[EM FÉRIAS]]></option></pt>
+  </USR_STATUS>
+  <USR_ROLE type="dropdown" defaultvalue="" required="0" group="1" dependentfields="" readonly="0" sqlconnection="rbac" noshowingrid="0" readonlyingrid="0" mode="view"><![CDATA[
 SELECT ROL_CODE AS USR_ROLE, ROL_CODE AS CODE FROM ROLES WHERE ROL_SYSTEM = '00000000000000000000000000000002' ORDER BY ROL_CODE
-  ]]><en>Role</en>
-<es>Rol</es><pt>Papel</pt></USR_ROLE>
-
-<TITLE2 type="title" group="1">
-  <en>Change Password</en>
-<es><![CDATA[Cambiar Contraseña]]></es><pt>Alterar Senha</pt></TITLE2>
-
-<USR_NEW_PASS type="password" size="30" maxlength="20" validate="5" mask="" required="1">
-  <en>New Password</en>
-<es><![CDATA[Nueva Contraseña]]></es><pt>Nova Senha</pt></USR_NEW_PASS>
-
-<USR_CNF_PASS type="password" size="30" maxlength="20" validate="5" mask="" required="1">
-  <en>Confirm Password</en>
-<es><![CDATA[Confirmar Contraseña]]></es><pt>Confirmar Senha</pt></USR_CNF_PASS>
-
-<TITLE3 type="title" group="1">
-  <en>Additional Information</en>
-<es><![CDATA[Información Adicional]]></es><pt><![CDATA[Informações Adicionais]]></pt></TITLE3>
-
-<USR_PHOTO type="file" group="1">
-  <en>Photo</en>
-<es><![CDATA[Fotografía]]></es><pt>Fotografia</pt></USR_PHOTO>
-<USR_RESUME type="file" group="1">
-  <en>Resume</en>
-<es>Hoja de vida</es><pt>Retomar</pt></USR_RESUME>
-
-<SUBMIT type="button" onclick="verifyUserInformation(this.form);" group="1">
-  <en>Save</en>
-<es>Guardar</es><pt>Salvar</pt></SUBMIT>
-
-<MESSAGE0 type="phpvariable"/>
-
-<MESSAGE1 type="phpvariable"/>
-
-<MESSAGE2 type="phpvariable"/>
-
-<MESSAGE3 type="phpvariable"/>
-
-<JS type="javascript" replacetags="1"><![CDATA[
+  ]]><en><![CDATA[Role]]></en><es>Rol</es><pt>Papel</pt></USR_ROLE>
+  <TITLE2 type="title" group="1">
+    <en><![CDATA[Change Password]]></en>
+    <es><![CDATA[Cambiar Contraseña]]></es>
+    <pt>Alterar Senha</pt>
+  </TITLE2>
+  <USR_NEW_PASS type="password" size="30" maxlength="20" validate="5" mask="" required="1">
+    <en><![CDATA[New Password]]></en>
+    <es><![CDATA[Nueva Contraseña]]></es>
+    <pt>Nova Senha</pt>
+  </USR_NEW_PASS>
+  <USR_CNF_PASS type="password" size="30" maxlength="20" validate="5" mask="" required="1">
+    <en><![CDATA[Confirm Password]]></en>
+    <es><![CDATA[Confirmar Contraseña]]></es>
+    <pt>Confirmar Senha</pt>
+  </USR_CNF_PASS>
+  <TITLE3 type="title" group="1">
+    <en><![CDATA[Additional Information]]></en>
+    <es><![CDATA[Información Adicional]]></es>
+    <pt><![CDATA[Informações Adicionais]]></pt>
+  </TITLE3>
+  <USR_PHOTO type="file" group="1">
+    <en><![CDATA[Photo]]></en>
+    <es><![CDATA[Fotografía]]></es>
+    <pt>Fotografia</pt>
+  </USR_PHOTO>
+  <USR_RESUME type="file" group="1">
+    <en><![CDATA[Resume]]></en>
+    <es>Hoja de vida</es>
+    <pt>Retomar</pt>
+  </USR_RESUME>
+  <SUBMIT type="button" onclick="verifyUserInformation(this.form);" group="1">
+    <en><![CDATA[Save]]></en>
+    <es>Guardar</es>
+    <pt>Salvar</pt>
+  </SUBMIT>
+  <MESSAGE0 type="phpvariable"/>
+  <MESSAGE1 type="phpvariable"/>
+  <MESSAGE2 type="phpvariable"/>
+  <MESSAGE3 type="phpvariable"/>
+  <JS type="javascript" replacetags="1"><![CDATA[
 var sUsername;
 
 var dynaformOnload = function()
@@ -221,5 +219,4 @@ var existsElements = function () {
   }
 };
 ]]></JS>
-
-</dynaForm>  
+</dynaForm>

@@ -1,16 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<dynaForm name="language" basedir="xmlform/setup" width="100%" sql="SELECT * FROM LEXICO WHERE LEX_TOPIC = &#039;LANGUAGE&#039;" optionInsert="1">
-<TITLE type="title" group="4">
-  <en>Language</en>
-</TITLE>
-
-<LEX_VALUE type="dropdown" size="40" maxlength="40"><![CDATA[
+<dynaForm name="language" basedir="xmlform/setup" width="100%" sql="SELECT * FROM LEXICO WHERE LEX_TOPIC = 'LANGUAGE'" optionInsert="1">
+  <TITLE type="title" group="4">
+    <en><![CDATA[Language]]></en>
+  </TITLE>
+  <LEX_VALUE type="dropdown" size="40" maxlength="40"><![CDATA[
 SELECT LAN_ID,LAN_NAME,LEX_VALUE FROM LEXICO RIGHT JOIN LANGUAGE ON LEX_TOPIC = 'LANGUAGE' AND LAN_ID=LEX_VALUE WHERE LEX_VALUE IS NULL  ORDER BY LAN_NAME
-  ]]><en>Language</en>
-</LEX_VALUE>
-
-<BSUBMIT type="button" onclick="btnClick(this.form);">
-  <en>Add</en>
-</BSUBMIT>
-
-</dynaForm>  
+  ]]><en><![CDATA[Language]]></en></LEX_VALUE>
+  <BSUBMIT type="button" onclick="btnClick(this.form);">
+    <en><![CDATA[Add]]></en>
+  </BSUBMIT>
+</dynaForm>

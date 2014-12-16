@@ -1,36 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="pagetable" menu="roles/roles_Options" searchBy="ROL_NAME">
-
-<ROL_CODE type="text" titlealign="left" align="left" colWidth="200">
-  <en>Code</en>
-</ROL_CODE>
-
-<ROL_NAME type="text" titlealign="left" align="left" colWidth="200">
-  <en>Name</en>
-</ROL_NAME>
-
-<ROL_CREATE_DATE type="text" titlealign="left" align="left" colWidth="120">
-  <en>Create date</en>	
-</ROL_CREATE_DATE>
-
-<ROL_UPDATE_DATE type="text" titlealign="left" align="left" colWidth="120">
-  <en>Update date</en>	
-</ROL_UPDATE_DATE>
-
-<ROL_VIEW type="link" colWidth="30" value="@G::LoadTranslation(ID_EDIT)" link="javascript:editRole(&#039;@#ROL_UID&#039;)">
-  <en/>
-</ROL_VIEW>
-
-<ROL_PERMITIONS type="link" colWidth="50" value="@G::LoadTranslation(ID_PERMISSIONS)" link="javascript:viewPermitions(&#039;@#ROL_UID&#039;)">
-  <en/>
-</ROL_PERMITIONS>
-
-<VIEW_INTO_GROUP type="link" colWidth="32" value="@G::LoadTranslation(VIEW_ROLE_USERS)" link="javascript:usersIntoRole(&#039;@#ROL_UID&#039;)">
-  <en/>
-</VIEW_INTO_GROUP>
-
-<ROL_DELETE type="link" colWidth="32" value="@G::LoadTranslation(ID_DELETE)" link="javascript:deleteRole(&#039;@#ROL_UID&#039;);" onclick="">
-  <en/>
-</ROL_DELETE>
-
-</dynaForm>  
+  <ROL_CODE type="text" titlealign="left" align="left" colWidth="200">
+    <en><![CDATA[Code]]></en>
+  </ROL_CODE>
+  <ROL_NAME type="text" titlealign="left" align="left" colWidth="200">
+    <en><![CDATA[Name]]></en>
+  </ROL_NAME>
+  <ROL_CREATE_DATE type="text" titlealign="left" align="left" colWidth="120">
+    <en><![CDATA[Create date]]></en>
+  </ROL_CREATE_DATE>
+  <ROL_UPDATE_DATE type="text" titlealign="left" align="left" colWidth="120">
+    <en><![CDATA[Update date]]></en>
+  </ROL_UPDATE_DATE>
+  <ROL_VIEW type="link" colWidth="30" value="@G::LoadTranslation(ID_EDIT)" link="javascript:editRole('@#ROL_UID')">
+    <en><![CDATA[]]></en>
+  </ROL_VIEW>
+  <ROL_PERMITIONS type="link" colWidth="50" value="@G::LoadTranslation(ID_PERMISSIONS)" link="javascript:viewPermitions('@#ROL_UID')">
+    <en><![CDATA[]]></en>
+  </ROL_PERMITIONS>
+  <VIEW_INTO_GROUP type="link" colWidth="32" value="@G::LoadTranslation(VIEW_ROLE_USERS)" link="javascript:usersIntoRole('@#ROL_UID')">
+    <en><![CDATA[]]></en>
+  </VIEW_INTO_GROUP>
+  <ROL_DELETE type="link" colWidth="32" value="@G::LoadTranslation(ID_DELETE)" link="javascript:deleteRole('@#ROL_UID');" onclick="">
+    <en><![CDATA[]]></en>
+  </ROL_DELETE>
+</dynaForm>

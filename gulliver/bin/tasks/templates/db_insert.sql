@@ -7,7 +7,7 @@ CREATE TABLE `LANGUAGE` (
   `LAN_ENABLED` char(1) NOT NULL default '1',
   `LAN_CALENDAR` varchar(30) NOT NULL default 'GREGORIAN',
   PRIMARY KEY  (`LAN_ID`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- 
 -- Dumping data for table `LANGUAGE`

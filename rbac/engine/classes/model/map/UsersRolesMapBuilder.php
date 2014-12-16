@@ -59,7 +59,7 @@ class UsersRolesMapBuilder {
 	{
 		$this->dbMap = Propel::getDatabaseMap('rbac');
 
-		$tMap = $this->dbMap->addTable('USERS_ROLES');
+		$tMap = $this->dbMap->addTable('RBAC_USERS_ROLES');
 		$tMap->setPhpName('UsersRoles');
 
 		$tMap->setUseIdGenerator(false);

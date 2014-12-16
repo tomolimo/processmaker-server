@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="ProcessCategory" width="600" mode="edit" enableTemplate="1" border="0">
   <title1 type="title">
-    <en>Process Category form</en>
+    <en><![CDATA[Process Category form]]></en>
     <es><![CDATA[Formulario de categoría del proceso]]></es>
   </title1>
   <CATEGORY_UID type="hidden" colWidth="32">
@@ -11,8 +11,7 @@
     <en>Gory Parent </en>
   </CATEGORY_PARENT>
   <CATEGORY_NAME type="text" size="60" maxlength="100">
-    <en>Category Name
-  </en>
+    <en><![CDATA[Category Name]]></en>
     <es><![CDATA[Nombre de la categoria]]></es>
   </CATEGORY_NAME>
   <CATEGORY_ICON type="hidden" size="60" maxlength="100">
@@ -20,11 +19,11 @@
   </en>
   </CATEGORY_ICON>
   <BTN_SUBMIT type="button" onclick="javascript:verifyName(this.form);">
-    <en>save</en>
+    <en><![CDATA[save]]></en>
     <es><![CDATA[Guardar]]></es>
   </BTN_SUBMIT>
   <BTN_CANCEL type="button" onclick="cancel();">
-    <en>Cancel</en>
+    <en><![CDATA[Cancel]]></en>
     <es><![CDATA[Cancelar]]></es>
   </BTN_CANCEL>
   <JS type="javascript" replacetags="1"><![CDATA[

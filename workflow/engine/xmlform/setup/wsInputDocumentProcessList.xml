@@ -1,20 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="InputDocumentProcessList" width="500" mode="edit" border="0" enableTemplate="0" height="85px">
-
-<SESSION_ID type="text" size="36" maxlength="32">
-  <en>Session Id</en>
-</SESSION_ID>
-
-<PROCESS_ID type="dropdown" sqlConnection="dbarray">
+  <SESSION_ID type="text" size="36" maxlength="32">
+    <en><![CDATA[Session Id]]></en>
+  </SESSION_ID>
+  <PROCESS_ID type="dropdown" sqlConnection="dbarray">
   SELECT * from process
-  <en>Process ID</en>
+  <en><![CDATA[Process ID]]></en>
 </PROCESS_ID>
-
-<ACTION type="hidden">
+  <ACTION type="hidden">
 </ACTION>
-
-<ACTIONB type="button" onclick="submitThisForm(this.form);">
-  <en>InputDocumentProcessList</en>
-</ACTIONB>
-
-</dynaForm>  
+  <ACTIONB type="button" onclick="submitThisForm(this.form);">
+    <en><![CDATA[InputDocumentProcessList]]></en>
+  </ACTIONB>
+</dynaForm>

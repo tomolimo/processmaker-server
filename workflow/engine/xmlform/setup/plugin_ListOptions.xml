@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="processes_NewOptions" type="xmlmenu">
-  <MNU_IMPORT type="link" value='' link="pluginsImport" onclick="" colAlign="left" colWidth="100">
-    <en>Import</en>
+  <MNU_IMPORT type="link" value="" link="pluginsImport" onclick="" colAlign="left" colWidth="100">
+    <en><![CDATA[Import]]></en>
   </MNU_IMPORT>
-</dynaForm>   
+</dynaForm>

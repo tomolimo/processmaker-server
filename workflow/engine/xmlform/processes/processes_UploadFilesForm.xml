@@ -1,41 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="processes_UploadFilesForm" type="xmlform" width="100%" height="75%" labelWidth="30%">
-
-<TITLE1 type="title">
-  <en>Upload Files</en>
-</TITLE1>
-
-<PRO_UID type="hidden"/>
-
-<MAIN_DIRECTORY type="hidden"/>
-
-<CURRENT_DIRECTORY type="hidden"/>
-
-<FILENAME1 type="file">
-  <en>File 1</en>
-</FILENAME1>
-
-<FILENAME2 type="file">
-  <en>File 2</en>
-</FILENAME2>
-
-<FILENAME3 type="file">
-  <en>File 3</en>
-</FILENAME3>
-
-<FILENAME4 type="file">
-  <en>File 4</en>
-</FILENAME4>
-
-<FILENAME5 type="file">
-  <en>File 5</en>
-</FILENAME5>
-
-<UPLOAD type="button" onclick="verifyUploadFiles(this.form);">
-  <en>Upload</en>
-</UPLOAD>
-
-<JS type="javascript"><![CDATA[
+  <TITLE1 type="title">
+    <en><![CDATA[Upload Files]]></en>
+  </TITLE1>
+  <PRO_UID type="hidden"/>
+  <MAIN_DIRECTORY type="hidden"/>
+  <CURRENT_DIRECTORY type="hidden"/>
+  <FILENAME1 type="file">
+    <en><![CDATA[File 1]]></en>
+  </FILENAME1>
+  <FILENAME2 type="file">
+    <en><![CDATA[File 2]]></en>
+  </FILENAME2>
+  <FILENAME3 type="file">
+    <en><![CDATA[File 3]]></en>
+  </FILENAME3>
+  <FILENAME4 type="file">
+    <en><![CDATA[File 4]]></en>
+  </FILENAME4>
+  <FILENAME5 type="file">
+    <en><![CDATA[File 5]]></en>
+  </FILENAME5>
+  <UPLOAD type="button" onclick="verifyUploadFiles(this.form);">
+    <en><![CDATA[Upload]]></en>
+  </UPLOAD>
+  <JS type="javascript"><![CDATA[
 
 var verifyUploadFiles = function(oForm) {
   var bContinue = false;
@@ -63,5 +52,4 @@ var verifyUploadFiles = function(oForm) {
 };
 
 ]]></JS>
- 
-</dynaForm>  
+</dynaForm>

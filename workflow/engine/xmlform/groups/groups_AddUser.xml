@@ -1,19 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="xmlform" width="95%">
-
-<title type="title" colWidth="200" showInTable="0">
-  <en>User</en>
-</title>
-
-<USR_UID type="dropdown" colWidth="200">
+  <title type="title" colWidth="200" showInTable="0">
+    <en><![CDATA[User]]></en>
+  </title>
+  <USR_UID type="dropdown" colWidth="200">
   SELECT USR_UID, USR_USERNAME FROM USERS
-  <en>User</en>
+  <en><![CDATA[User]]></en>
 </USR_UID>
-
-<GRP_UID type="hidden"/>
-
-<button type="button" onclick="saveUserGroup( this.form );" showInTable="0">
-  <en>Accept</en>
-</button>
-
-</dynaForm>  
+  <GRP_UID type="hidden"/>
+  <button type="button" onclick="saveUserGroup( this.form );" showInTable="0">
+    <en><![CDATA[Accept]]></en>
+  </button>
+</dynaForm>

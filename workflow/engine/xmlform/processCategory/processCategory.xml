@@ -1,28 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="processCategory" width="600" mode="edit" enableTemplate="0" border="0">
-
-<title1 type="title" >
-  <en>Process Category form</en>
-</title1>
-
-<CATEGORY_UID type="text" size='32' maxlength='32' >
-  <en>Category UID</en>
-</CATEGORY_UID>
-
-<CATEGORY_PARENT type="text" size='32' maxlength='32' >
-  <en>Category Parent</en>
-</CATEGORY_PARENT>
-
-<CATEGORY_NAME type="text" size='60' maxlength='100' >
-  <en>Category Name</en>
-</CATEGORY_NAME>
-
-<CATEGORY_ICON type="text" size='60' maxlength='100' >
-  <en>Category Icon</en>
-</CATEGORY_ICON>
-
-<BTN_SUBMIT type="submit" >
-  <en>Save</en>
-</BTN_SUBMIT>
-
+  <title1 type="title">
+    <en><![CDATA[Process Category form]]></en>
+  </title1>
+  <CATEGORY_UID type="text" size="32" maxlength="32">
+    <en><![CDATA[Category UID]]></en>
+  </CATEGORY_UID>
+  <CATEGORY_PARENT type="text" size="32" maxlength="32">
+    <en><![CDATA[Category Parent]]></en>
+  </CATEGORY_PARENT>
+  <CATEGORY_NAME type="text" size="60" maxlength="100">
+    <en><![CDATA[Category Name]]></en>
+  </CATEGORY_NAME>
+  <CATEGORY_ICON type="text" size="60" maxlength="100">
+    <en><![CDATA[Category Icon]]></en>
+  </CATEGORY_ICON>
+  <BTN_SUBMIT type="submit">
+    <en><![CDATA[Save]]></en>
+  </BTN_SUBMIT>
 </dynaForm>

@@ -115,6 +115,14 @@ class Groups
                 $oGrp->setGrpUid($GrpUid);
                 $oGrp->setUsrUid($UsrUid);
                 $oGrp->Save();
+
+                $oGrpwf = new Groupwf();
+                $grpName = $oGrpwf->loadByGroupUid($GrpUid);
+
+                $oUsr = new Users();
+                $usrName = $oUsr->load($UsrUid);
+                
+                G::auditLog("AssignUserToGroup", "Assign user ". $usrName['USR_USERNAME'] ." (".$UsrUid.") to group ".$grpName['CON_VALUE']." (".$GrpUid.") ");
             }
         } catch (exception $oError) {
             throw ($oError);

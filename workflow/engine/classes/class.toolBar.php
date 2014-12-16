@@ -170,7 +170,7 @@ class XmlForm_Field_toolButton extends XmlForm_Field
                     if ($dataset->getRecordCount() > 0) {
                         $html .= '<span style="display:inline-block; font-size: 8pt;margin-left: 5px;margin-bottom: 3px;">' . G::LoadTranslation('ID_DYNAFORM');
                         $html .= ': <select id="_dynaformsList_" onchange="window.location = \'dynaforms_Editor?PRO_UID=' . $this->owner->values['PRO_UID'];
-                        $html .= '&DYN_UID=\' + this.value;" class="module_app_input___gray">';
+                        $html .= '&DYN_UID=\' + this.value + \'' . (isset($_REQUEST['processMap3']) ? '&processMap3=1' : '') . '\';" class="module_app_input___gray">';
                         $dataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
                         $dataset->next();
                         while ($row = $dataset->getRow()) {
@@ -193,4 +193,3 @@ class XmlForm_Field_toolButton extends XmlForm_Field
         return '<a class="toolButton" ' . (($this->buttonStyle) ? ' style="' . $this->buttonStyle . '"' : '') . (($this->onclick) ? ' onclick="' . htmlentities($this->onclick, ENT_QUOTES, 'utf-8') . '"' : '') . '>' . $html . '</a>';
     }
 }
- 

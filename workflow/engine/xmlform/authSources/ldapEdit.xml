@@ -1,79 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="authSources/ldap_Edit" type="xmlform" enableTemplate="1">
-
-<TITLE type="title">
-  <en>Authentication Source Information</en>
-</TITLE>
-
-<AUTH_SOURCE_UID type="hidden"/>
-
-<AUTH_SOURCE_NAME type="text" size="50" maxlength="50" required="1">
-  <en>Name</en>
-</AUTH_SOURCE_NAME>
-
-<AUTH_SOURCE_PROVIDER type="hidden" defaultValue="ldap"/>
-
-<LDAP_TYPE type="dropdown" required="0">
-  <en>Type<option name="ldap">LDAP</option><option name="ad">Active Directory</option></en>
-</LDAP_TYPE>
-
-<AUTH_SOURCE_SERVER_NAME type="text" size="50" maxlength="50" required="1">
-  <en>Server Name</en>
-</AUTH_SOURCE_SERVER_NAME>
-
-<AUTH_SOURCE_PORT type="text" size="5" maxlength="5" required="1" defaultValue="389" validate="Int">
-  <en>Port</en>
-</AUTH_SOURCE_PORT>
-
-<AUTH_SOURCE_ENABLED_TLS type="dropdown">
-  <en>Enabled TLS<option name="">No</option><option name="1">Yes</option></en>
-</AUTH_SOURCE_ENABLED_TLS>
-
-<AUTH_SOURCE_VERSION type="dropdown" required="0" defaultValue="3">
-  <en>Version<option name="2">2</option><option name="3">3</option></en>
-</AUTH_SOURCE_VERSION>
-
-<AUTH_SOURCE_BASE_DN type="text" size="50" maxlength="128" required="1">
-  <en>Base DN</en>
-</AUTH_SOURCE_BASE_DN>
-
-<AUTH_ANONYMOUS type="dropdown">
-  <en>Anonymous<option name="">No</option><option name="1">Yes</option></en>
-</AUTH_ANONYMOUS>
-
-<AUTH_SOURCE_SEARCH_USER type="text" size="50" maxlength="128" required="0">
-  <en>Search User</en>
-</AUTH_SOURCE_SEARCH_USER>
-
-<AUTH_SOURCE_PASSWORD type="password" size="20" maxlength="32" required="0">
-  <en>Password</en>
-</AUTH_SOURCE_PASSWORD>
-
-<AUTH_SOURCE_IDENTIFIER_FOR_USER type="text" size="20" maxlength="20" required="1" defaultValue="uid">
-  <en>Identifier for an imported user</en>
-</AUTH_SOURCE_IDENTIFIER_FOR_USER>
-
-<AUTH_SOURCE_OBJECT_CLASSES type="textarea" cols="50" rows="5" required="1" defaultValue="*">
-  <en>Object Classes</en>
-</AUTH_SOURCE_OBJECT_CLASSES>
-
-<AUTH_SOURCE_ADDITIONAL_FILTER type="text" size="50" maxlength="200" required="0" defaultValue="">
-  <en>Additional Filter</en>
-</AUTH_SOURCE_ADDITIONAL_FILTER> 
-
-<AUTH_SOURCE_ATTRIBUTES type="textarea" cols="50" rows="5" required="1">
-  <en>Attributes</en>
-</AUTH_SOURCE_ATTRIBUTES>
-
-<btnSave type="submit">
-  <en>Save</en>
-</btnSave>
-
-<BTN_CANCEL type="button" onclick="cancel();">
-  <en>Cancel</en>
-</BTN_CANCEL>
-
-<JS type="javascript"><![CDATA[
+  <TITLE type="title">
+    <en><![CDATA[Authentication Source Information]]></en>
+  </TITLE>
+  <AUTH_SOURCE_UID type="hidden"/>
+  <AUTH_SOURCE_NAME type="text" size="50" maxlength="50" required="1">
+    <en><![CDATA[Name]]></en>
+  </AUTH_SOURCE_NAME>
+  <AUTH_SOURCE_PROVIDER type="hidden" defaultValue="ldap"/>
+  <LDAP_TYPE type="dropdown" required="0">
+    <en><![CDATA[Type]]><option name="ldap"><![CDATA[LDAP]]></option><option name="ad"><![CDATA[Active Directory]]></option></en>
+  </LDAP_TYPE>
+  <AUTH_SOURCE_SERVER_NAME type="text" size="50" maxlength="50" required="1">
+    <en><![CDATA[Server Name]]></en>
+  </AUTH_SOURCE_SERVER_NAME>
+  <AUTH_SOURCE_PORT type="text" size="5" maxlength="5" required="1" defaultValue="389" validate="Int">
+    <en><![CDATA[Port]]></en>
+  </AUTH_SOURCE_PORT>
+  <AUTH_SOURCE_ENABLED_TLS type="dropdown">
+    <en><![CDATA[Enabled TLS]]><option name=""><![CDATA[No]]></option><option name="1"><![CDATA[Yes]]></option></en>
+  </AUTH_SOURCE_ENABLED_TLS>
+  <AUTH_SOURCE_VERSION type="dropdown" required="0" defaultValue="3">
+    <en><![CDATA[Version]]><option name="2"><![CDATA[2]]></option><option name="3"><![CDATA[3]]></option></en>
+  </AUTH_SOURCE_VERSION>
+  <AUTH_SOURCE_BASE_DN type="text" size="50" maxlength="128" required="1">
+    <en><![CDATA[Base DN]]></en>
+  </AUTH_SOURCE_BASE_DN>
+  <AUTH_ANONYMOUS type="dropdown">
+    <en><![CDATA[Anonymous]]><option name=""><![CDATA[No]]></option><option name="1"><![CDATA[Yes]]></option></en>
+  </AUTH_ANONYMOUS>
+  <AUTH_SOURCE_SEARCH_USER type="text" size="50" maxlength="128" required="0">
+    <en><![CDATA[Search User]]></en>
+  </AUTH_SOURCE_SEARCH_USER>
+  <AUTH_SOURCE_PASSWORD type="password" size="20" maxlength="32" required="0">
+    <en><![CDATA[Password]]></en>
+  </AUTH_SOURCE_PASSWORD>
+  <AUTH_SOURCE_IDENTIFIER_FOR_USER type="text" size="20" maxlength="20" required="1" defaultValue="uid">
+    <en><![CDATA[Identifier for an imported user]]></en>
+  </AUTH_SOURCE_IDENTIFIER_FOR_USER>
+  <AUTH_SOURCE_OBJECT_CLASSES type="textarea" cols="50" rows="5" required="1" defaultValue="*">
+    <en><![CDATA[Object Classes]]></en>
+  </AUTH_SOURCE_OBJECT_CLASSES>
+  <AUTH_SOURCE_ADDITIONAL_FILTER type="text" size="50" maxlength="200" required="0" defaultValue="">
+    <en><![CDATA[Additional Filter]]></en>
+  </AUTH_SOURCE_ADDITIONAL_FILTER>
+  <AUTH_SOURCE_ATTRIBUTES type="textarea" cols="50" rows="5" required="1">
+    <en><![CDATA[Attributes]]></en>
+  </AUTH_SOURCE_ATTRIBUTES>
+  <btnSave type="submit">
+    <en><![CDATA[Save]]></en>
+  </btnSave>
+  <BTN_CANCEL type="button" onclick="cancel();">
+    <en><![CDATA[Cancel]]></en>
+  </BTN_CANCEL>
+  <JS type="javascript"><![CDATA[
 
 var dynaformOnload = function() {
   leimnud.event.add(getField('AUTH_ANONYMOUS'), 'change', hideShowSearchUser);
@@ -112,5 +92,4 @@ function cancel(){
 }
 
 ]]></JS>
-
-</dynaForm>  
+</dynaForm>

@@ -1,25 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<dynaForm name="ProcessCategory" width="100%" type="pagedtable"
-  sql="SELECT * from PROCESS_CATEGORY "
-  sqlConnection=""
-  menu = "processCategory/processCategoryOptions"
->
-
-<CATEGORY_PARENT type="hidden" colWidth='96'  >
-  <en>Gory Parent</en>
-</CATEGORY_PARENT>
-
-<CATEGORY_NAME type="text" colWidth='120'  >
-  <en>Category Name</en>
-</CATEGORY_NAME>
-
-<CATEGORY_ICON type="hidden" colWidth='120'  >
-  <en>Category Icon</en>
-</CATEGORY_ICON>
-
-
-<LINK type="link" colWidth="60" titleAlign="left" align="left" link='processCategoryEdit?id=@!CATEGORY_UID' value="@G::LoadTranslation(ID_EDIT)" />
-  
-<LINK2 type="link" colWidth="60" titleAlign="left" align="left" link='processCategoryDelete?id=@!CATEGORY_UID' value="@G::LoadTranslation(ID_DELETE)"/>
-  
+<dynaForm name="ProcessCategory" width="100%" type="pagedtable" sql="SELECT * from PROCESS_CATEGORY " sqlConnection="" menu="processCategory/processCategoryOptions">
+  <CATEGORY_PARENT type="hidden" colWidth="96">
+    <en>Gory Parent</en>
+  </CATEGORY_PARENT>
+  <CATEGORY_NAME type="text" colWidth="120">
+    <en><![CDATA[Category Name]]></en>
+  </CATEGORY_NAME>
+  <CATEGORY_ICON type="hidden" colWidth="120">
+    <en>Category Icon</en>
+  </CATEGORY_ICON>
+  <LINK type="link" colWidth="60" titleAlign="left" align="left" link="processCategoryEdit?id=@!CATEGORY_UID" value="@G::LoadTranslation(ID_EDIT)"/>
+  <LINK2 type="link" colWidth="60" titleAlign="left" align="left" link="processCategoryDelete?id=@!CATEGORY_UID" value="@G::LoadTranslation(ID_DELETE)"/>
 </dynaForm>

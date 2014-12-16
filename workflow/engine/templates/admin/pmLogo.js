@@ -67,14 +67,14 @@ Ext.onReady(function() {
         }
         else {
           PMExt.notify( _('ID_NOTICE'), _('ID_YOU_ARE_NOT_CAN_SELECT_PHOTO'));
-        } 
+        }
       }
       else {
         PMExt.notify( _('ID_NOTICE'), _('ID_SELECT_AN_IMAGE'));
       }
     }
   });
-  
+
   tbar.add({
     text    : _('ID_DELETE'),
     icon    : '/images/delete-16x16.gif',
@@ -99,7 +99,7 @@ Ext.onReady(function() {
               if (oResponse.success == true) {
                  Ext.Msg.alert(_('ID_LOGO'), _('ID_SELECTED_IMAGE_IS_LOGO'));
                  isCurrentLogo = true;
-              } 
+              }
             }
           });
           if(isCurrentLogo == false) {
@@ -118,7 +118,7 @@ Ext.onReady(function() {
                                  oResponse = Ext.decode( response.responseText );
                                  if (oResponse.success == true) {
                                    PMExt.notify( _('ID_NOTICE'), _('ID_SELECTED_IMAGE_DELETED'));
-                                 } 
+                                 }
                                  else {
                                    PMExt.notify( _('ID_NOTICE'), _('ID_SELECTED_IMAGE_IS_LOGO'));
                                  }
@@ -134,7 +134,7 @@ Ext.onReady(function() {
         }
         else {
           PMExt.notify( _('ID_NOTICE'), _('ID_YOU_ARE_NOT_CAN_SELECT_PHOTO'));
-        } 
+        }
       }
       else {
         PMExt.notify( _('ID_NOTICE'), _('ID_SELECT_AN_IMAGE'));
@@ -145,7 +145,7 @@ Ext.onReady(function() {
   tbar.add({
     text    : _('ID_RESTORE_DEFAULT'),
     icon    : '/images/icon-pmlogo-15x15.png',
-    handler : function() {        
+    handler : function() {
       var records = datav.getSelectedRecords();
       var myMask  = new Ext.LoadMask(Ext.getBody(), {msg : _('ID_LOADING')});
       myMask.show();
@@ -183,7 +183,7 @@ Ext.onReady(function() {
     height      : 800,
     multiSelect : true,
     autoScroll: true,
-    overClass   : 'x-view-over', 
+    overClass   : 'x-view-over',
     itemSelector: 'div.thumb-wrap',
     emptyText   : _('ID_NO_IMAGES_TO_DISPLAY'),
 
@@ -195,7 +195,7 @@ Ext.onReady(function() {
           panelLeft.setTitle(_('PHOTO_GALLERY') + '(' + l + ' ' + _('ID_IMAGE') + s + ' ' + _('ID_SELECTED') + ')');
           if (nodes.length > 0) {
             Ext.getCmp('tbarAply').enable();
-            Ext.getCmp('tbarDelete').enable();            
+            Ext.getCmp('tbarDelete').enable();
           }
           else {
             Ext.getCmp('tbarAply').disable();
@@ -209,7 +209,7 @@ Ext.onReady(function() {
 //        fn : function() {
 //        }
 //      }
-      
+
     }
   })
 
@@ -303,6 +303,8 @@ Ext.onReady(function() {
     autoScroll  : true,
     closeAction : 'hide',
     maximizable : false,
+    resizable   : false,
+    draggable   : false,
     items       : [panelRightTop]
   });
 

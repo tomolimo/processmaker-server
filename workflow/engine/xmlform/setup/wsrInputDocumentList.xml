@@ -1,30 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm rowsPerPage="24" width="100%">
-
-<document type="link" colWidth="40" value="@!guid" link="../@!link"/>
-
-<filename type="text" colWidth="280" align="left" titleAlign="left">
-  <en>Filename</en>
-</filename>
-
-<docId type="text" colWidth="120" align="left" titleAlign="left">
-  <en>Document GUID</en>
-</docId>
-
-<version type="text" colWidth="45" align="left" titleAlign="left">
-  <en>version</en>
-</version>
-
-<createDate type="text" colWidth="130" align="left" titleAlign="left">
-  <en>create Date</en>
-</createDate>
-
-<createBy type="text" colWidth="280" align="left" titleAlign="left">
-  <en>created by</en>
-</createBy>
-
-<type type="text" colWidth="280" align="left" titleAlign="left">
-  <en>type</en>
-</type>
-
+  <document type="link" colWidth="40" value="@!guid" link="../@!link"/>
+  <filename type="text" colWidth="280" align="left" titleAlign="left">
+    <en><![CDATA[Filename]]></en>
+  </filename>
+  <docId type="text" colWidth="120" align="left" titleAlign="left">
+    <en><![CDATA[Document GUID]]></en>
+  </docId>
+  <version type="text" colWidth="45" align="left" titleAlign="left">
+    <en><![CDATA[version]]></en>
+  </version>
+  <createDate type="text" colWidth="130" align="left" titleAlign="left">
+    <en><![CDATA[create Date]]></en>
+  </createDate>
+  <createBy type="text" colWidth="280" align="left" titleAlign="left">
+    <en><![CDATA[created by]]></en>
+  </createBy>
+  <type type="text" colWidth="280" align="left" titleAlign="left">
+    <en><![CDATA[type]]></en>
+  </type>
 </dynaForm>

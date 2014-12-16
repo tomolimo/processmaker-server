@@ -1,22 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="xmlform" name="cases_ReassignBy.xml" width="600" enabletemplate="1" mode="edit">
-
-<title type="subtitle" enableHTML="1">
-  <en><![CDATA[<center>Reassignment of Cases</center>]]></en>
-</title>
-
-<REASSIGN_BY type="radiogroup" required="0" defaultvalue="1" mode="edit">
-  <en>Reassign By<option name="1">Case</option><option name="2">User</option></en>
-</REASSIGN_BY>
-
-<REASSIGN_USER type="dropdown" required="0" readonly="0" mode="edit" sqlconnection="dbarray"><![CDATA[
+  <title type="subtitle" enableHTML="1">
+    <en><![CDATA[<center>Reassignment of Cases</center>]]></en>
+  </title>
+  <REASSIGN_BY type="radiogroup" required="0" defaultvalue="1" mode="edit">
+    <en><![CDATA[Reassign By]]><option name="1"><![CDATA[Case]]></option><option name="2"><![CDATA[User]]></option></en>
+  </REASSIGN_BY>
+  <REASSIGN_USER type="dropdown" required="0" readonly="0" mode="edit" sqlconnection="dbarray"><![CDATA[
 SELECT * FROM aUserInfo
-  ]]><en>
-    <option name=""> - Select - </option>
-  </en>
-</REASSIGN_USER>
-
-<JS type="javascript"><![CDATA[
+  ]]><en><![CDATA[]]><option name=""><![CDATA[- Select -]]></option></en></REASSIGN_USER>
+  <JS type="javascript"><![CDATA[
 
 var bFlag = false;
 var client = getBrowserClient();

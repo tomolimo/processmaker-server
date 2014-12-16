@@ -121,6 +121,12 @@ class adminProxy extends HttpProxyController
         $this->restart = $restart;
         $this->url     = "/sys" . SYS_SYS . "/" . (($sysConf["default_lang"] != "")? $sysConf["default_lang"] : ((defined("SYS_LANG") && SYS_LANG != "")? SYS_LANG : "en")) . "/" . $sysConf["default_skin"] . $urlPart;
         $this->message = 'Saved Successfully';
+        $msg = "";
+        if ($httpData->proxy_host != '' || $httpData->proxy_port != '' || $httpData->proxy_user != '') {
+            $msg = ", Host -> " . $httpData->proxy_host . ", Port -> " . $httpData->proxy_port . ", User -> " . $httpData->proxy_user;
+        }
+
+        G::auditLog("UploadSystemSettings", "Time Zone -> " . $httpData->time_zone . ", Memory Limit -> " . $httpData->memory_limit . ", Cookie lifetime -> " . $httpData->max_life_time . ", Default Skin -> " . $httpData->default_skin . ", Default Language -> " . $httpData->default_lang . $msg);
     }
 
     public function uxUserUpdate($httpData)
@@ -186,10 +192,8 @@ class adminProxy extends HttpProxyController
                         $message  = G::loadTranslation('ID_CALENDAR_INVALID_NAME');
                         break;
                     }
-                    if ($aDefinitions['CALENDAR_NAME'] != $_POST['name']) {
-                        $validated = true;
-                    } else {
-                        if ($aDefinitions['CALENDAR_NAME'] != $oldName) {
+                    if (isset($aDefinitions['CALENDAR_NAME'])) {
+                        if ($aDefinitions['CALENDAR_NAME'] == $_POST['name']) {
                             $validated = false;
                             $message  = G::loadTranslation('ID_CALENDAR_INVALID_NAME');
                             break;
@@ -646,6 +650,7 @@ class adminProxy extends HttpProxyController
         $oSpool->sendMail();
         $G_PUBLISH = new Publisher();
 
+        $o = new stdclass();
         if ($oSpool->status == 'sent') {
             $o->status = true;
             $o->success = true;
@@ -717,6 +722,9 @@ class adminProxy extends HttpProxyController
             $UsrUid='';
             $AppUid='';
 
+            $messEnabled = (isset($aFields["MESS_ENABLED"]) && $aFields["MESS_ENABLED"] == "1")? G::LoadTranslation("ID_YES") : G::LoadTranslation("ID_NO");
+            $messRauth = (isset($aFields["MESS_RAUTH"]) && $aFields["MESS_RAUTH"] == "1")? G::LoadTranslation("ID_YES") : G::LoadTranslation("ID_NO");
+
             if ($oConfiguration->exists($CfgUid, $ObjUid, $ProUid, $UsrUid, $AppUid)) {
                 $oConfiguration->update(
                     array (
@@ -730,6 +738,7 @@ class adminProxy extends HttpProxyController
                 );
                 $this->success='true';
                 $this->msg='Saved';
+                G::auditLog("UpdateEmailSettings", "EnableEmailNotifications-> " . $messEnabled . ", EmailEngine-> " . $aFields['MESS_ENGINE'] . ", Server-> " . $aFields['MESS_SERVER'] . ", Port-> " . $aFields['MESS_PORT'] . ", RequireAuthentication-> " . $messRauth . ", FromMail-> " . $aFields['MESS_ACCOUNT'] . ", FromName-> " . $aFields['MESS_FROM_NAME'] . ", Use Secure Connection-> " . $aFields['SMTPSecure']);
             } else {
                 $oConfiguration->create(
                     array(
@@ -743,6 +752,7 @@ class adminProxy extends HttpProxyController
                 );
                 $this->success='true';
                 $this->msg='Saved';
+                G::auditLog("CreateEmailSettings", "EnableEmailNotifications-> " . $messEnabled . ", EmailEngine-> " . $aFields['MESS_ENGINE'] . ", Server-> " . $aFields['MESS_SERVER'] . ", Port-> " . $aFields['MESS_PORT'] . ", RequireAuthentication-> " . $messRauth . ", FromMail-> " . $aFields['MESS_ACCOUNT'] . ", FromName-> " . $aFields['MESS_FROM_NAME'] . ", Use Secure Connection-> " . $aFields['SMTPSecure']);
             }
         } catch (Exception $e) {
             $this->success= false;
@@ -1046,6 +1056,7 @@ class adminProxy extends HttpProxyController
                         try {
                             list($imageWidth, $imageHeight, $imageType) = @getimagesize($dir . '/' . 'tmp' . $fileName);
                             G::resizeImage($dir . '/tmp' . $fileName, $imageWidth, 49, $dir . '/' . $fileName);
+                            G::auditLog("UploadLogo", "File Name: ".$fileName);
                         } catch (Exception $e) {
                             $error = $e->getMessage();
                         }
@@ -1063,7 +1074,6 @@ class adminProxy extends HttpProxyController
         } elseif ($_FILES['img']['type'] != '') {
             $failed = "1";
         }
-
         echo '{success: true, failed: ' . $failed . ', uploaded: ' . $uploaded . ', type: "' . $_FILES['img']['type'] . '"}';
         exit();
     }
@@ -1128,6 +1138,7 @@ class adminProxy extends HttpProxyController
                     if (file_exists($dir . '/tmp' . $imgname)) {
                         unlink ($dir . '/tmp' . $imgname);
                     }
+                    G::auditLog("DeleteLogo", "File Name: ".$imgname);
                 } else {
                     echo '{success: false}';
                     exit();
@@ -1180,6 +1191,8 @@ class adminProxy extends HttpProxyController
                     $oConf->saveConfig('USER_LOGO_REPLACEMENT', '', '', '');
 
                     G::SendTemporalMessage('ID_REPLACED_LOGO', 'tmp-info', 'labels');
+                    G::auditLog("ReplaceLogo", "File Name: ".$snameLogo);
+
                     break;
                 case 'restoreLogo':
                     $snameLogo = $_GET['NAMELOGO'];
@@ -1192,8 +1205,8 @@ class adminProxy extends HttpProxyController
 
                     $oConf->aConfig = $aConf;
                     $oConf->saveConfig('USER_LOGO_REPLACEMENT', '', '', '');
-
                     G::SendTemporalMessage('ID_REPLACED_LOGO', 'tmp-info', 'labels');
+                    G::auditLog("RestoreLogo", "Restore Original Logo");
                     break;
             }
         } catch (Exception $oException) {
@@ -1274,6 +1287,214 @@ class adminProxy extends HttpProxyController
         }
         die;
         exit();
+    }
+
+    public function getMaintenanceInfo()
+    {
+        $data = array('info' => array());
+        $pmRestClient = OauthClientsPeer::retrieveByPK('x-pm-local-client');
+        $status = ! empty($pmRestClient);
+
+        if ($status) {
+            $row = $pmRestClient->toArray(BasePeer::TYPE_FIELDNAME);
+        } else {
+            $row = array("CLIENT_ID" => '');
+        }
+
+        $data['info'] = array(
+            array(
+                'client_id' => $row["CLIENT_ID"],
+                'name' => 'PM Web Designer (REST Client)',
+                'value' => ($status? 'Registered' : 'Not Registered'),
+                'value_ok' => $status,
+                'option' => array(
+                    'label' => ($status? 'Restore' : 'Register'),
+                    'action' => 'doRegisterPMDesignerClient'
+                )
+            )
+        );
+
+        return $data;
+    }
+
+    public function registerPMDesignerClient()
+    {
+        $result = array();
+
+        try {
+
+            $pmRestClient = OauthClientsPeer::retrieveByPK('x-pm-local-client');
+            if (! empty($pmRestClient)) {
+                $pmRestClient->delete();
+            }
+
+            $http = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 'https' : 'http';
+            $lang = defined( 'SYS_LANG' ) ? SYS_LANG : 'en';
+            $host = $_SERVER['SERVER_NAME'] . ($_SERVER['SERVER_PORT'] != '80' ? ':' . $_SERVER['SERVER_PORT'] : '');
+
+            $endpoint = sprintf(
+                '%s://%s/sys%s/%s/%s/oauth2/grant',
+                $http,
+                $host,
+                SYS_SYS,
+                $lang,
+                SYS_SKIN
+            );
+
+            $oauthClients = new OauthClients();
+            $oauthClients->setClientId('x-pm-local-client');
+            $oauthClients->setClientSecret('179ad45c6ce2cb97cf1029e212046e81');
+            $oauthClients->setClientName('PM Web Designer');
+            $oauthClients->setClientDescription('ProcessMaker Web Designer App');
+            $oauthClients->setClientWebsite('www.processmaker.com');
+            $oauthClients->setRedirectUri($endpoint);
+            $oauthClients->save();
+
+            $result['success'] = true;
+            $result['message'] = '';
+        } catch (Exception $e) {
+            $result['success'] = false;
+            $result['message'] = $e->getMessage();
+        }
+
+        return $result;
+    }
+
+    public function generateInfoSupport ()
+    {
+        require_once (PATH_CONTROLLERS . "installer.php");
+        $params = array ();
+
+        $oServerConf = &serverConf::getSingleton();
+        $pluginRegistry = &PMPluginRegistry::getSingleton();
+        $licenseManager = &pmLicenseManager::getSingleton();
+
+        //License Information:
+        $activeLicense = $licenseManager->getActiveLicense();
+        $licenseInfo = array();
+        $noInclude = array('licensedfeaturesList', 'result', 'serial');
+        foreach ($licenseManager as $index => $value) {
+            if (!in_array($index, $noInclude)) {
+                $licenseInfo[$index] = G::sanitizeInput($value);
+            }
+        }
+        $params['l'] = $licenseInfo;
+
+        //Operative System version (Linux, Windows)
+        try {
+            $os = '';
+            if (file_exists( '/etc/redhat-release' )) {
+                $fnewsize = filesize( '/etc/redhat-release' );
+                $fp = fopen( '/etc/redhat-release', 'r' );
+                $os = trim( fread( $fp, $fnewsize ) );
+                fclose( $fp );
+            }
+            $os .= " (" . PHP_OS . ")";
+        } catch (Exception $e) {
+        }
+        $params['s'] = $os;
+
+        //On premise or cloud
+        $licInfo = $oServerConf->getProperty( 'LICENSE_INFO' );
+        $params['lt'] = isset($licInfo[SYS_SYS]) ? isset($licInfo[SYS_SYS]['TYPE'])? $licInfo[SYS_SYS]['TYPE'] : ''  : '';
+
+        //ProcessMaker Version
+        $params['v'] = System::getVersion();
+        if (file_exists(PATH_DATA. 'log/upgrades.log')) {
+            $params['pmu'] = serialize(file_get_contents(PATH_DATA. 'log/upgrades.log', 'r'));
+        } else {
+            $params['pmu'] = serialize(G::LoadTranslation('ID_UPGRADE_NEVER_UPGRADE'));
+        }
+
+        //Database server Version (MySQL version)
+        $installer = new Installer();
+        $systemInfo = $installer->getSystemInfo();
+        try {
+            $params['mysql'] = mysql_get_server_info();
+        } catch (Exception $e) {
+            $params['mysql'] = '';
+        }
+
+        //PHP Version
+        $params['php'] = $systemInfo->php->version;
+
+        //Apache - IIS Version
+        try {
+            $params['apache'] = apache_get_version();
+        } catch (Exception $e) {
+            $params['apache'] = '';
+        }
+
+        //Installed Plugins (license info?)
+        $arrayAddon = array ();
+
+        if (file_exists( PATH_DATA_SITE . "ee" )) {
+            $arrayAddon = unserialize( trim( file_get_contents( PATH_DATA_SITE . "ee" ) ) );
+        }
+
+        $plugins = array();
+        foreach ($arrayAddon as $addon) {
+            $sFileName = substr( $addon["sFilename"], 0, strpos( $addon["sFilename"], "-" ) );
+
+            if (file_exists( PATH_PLUGINS . $sFileName . ".php" )) {
+                $plugin = array();
+                $addonDetails = $pluginRegistry->getPluginDetails( $sFileName . ".php" );
+                $plugin['name'] = $addonDetails->sNamespace;
+                $plugin['description'] = $addonDetails->sDescription;
+                $plugin['version'] = $addonDetails->iVersion;
+                $plugin['enable'] = $addonDetails->enabled;
+                $plugins[] = $plugin;
+            }
+        }
+        $params['pl'] = $plugins;
+
+        //Number of Users registered in PM. Including LDAP users and PM users.
+        require_once ("classes/model/RbacUsers.php");
+        $criteria = new Criteria( "rbac" );
+        $criteria->addSelectColumn( RbacUsersPeer::USR_AUTH_TYPE );
+        $criteria->addSelectColumn( "COUNT(".RbacUsersPeer::USR_UID . ") AS USERS_NUMBER" );
+        $criteria->add( RbacUsersPeer::USR_UID, null, Criteria::ISNOTNULL );
+        $criteria->addGroupByColumn(RbacUsersPeer::USR_AUTH_TYPE);
+        $rs = RbacUsersPeer::doSelectRS( $criteria );
+        $rs->setFetchmode( ResultSet::FETCHMODE_ASSOC );
+        $users = array('local' => 0);
+        while ($rs->next()) {
+            $row = $rs->getRow();
+            if ($row['USR_AUTH_TYPE'] == '' || $row['USR_AUTH_TYPE'] == 'MYSQL') {
+                $users['local'] = (int)$users['local'] + (int)$row['USERS_NUMBER'];
+            } else {
+                $users['USR_AUTH_TYPE'] = $row['USERS_NUMBER'];
+            }
+        }
+        $params['u'] = $users;
+
+        //Number of cases.
+        $oSequences = new Sequences();
+        $maxNumber = $oSequences->getSequeceNumber("APP_NUMBER");
+        $params['c'] = $maxNumber - 1;
+
+        //Number of active processes.
+        $criteria = new Criteria( "workflow" );
+        $criteria->addSelectColumn( ProcessPeer::PRO_STATUS );
+        $criteria->addSelectColumn( "COUNT(PROCESS.PRO_UID) AS NUMBER_PROCESS" );
+        $criteria->addGroupByColumn(ProcessPeer::PRO_STATUS);
+        $rs = UsersPeer::doSelectRS( $criteria );
+        $rs->setFetchmode( ResultSet::FETCHMODE_ASSOC );
+        $process = array();
+        while ($rs->next()) {
+            $row = $rs->getRow();
+            $process[$row['PRO_STATUS']] = $row['NUMBER_PROCESS'];
+        }
+        $params['p'] = $process;
+
+        //Country/city (Timezone)
+        $params['t'] = (defined('TIME_ZONE') && TIME_ZONE != "Unknown") ? TIME_ZONE : date_default_timezone_get();
+        $params['w'] = count(System::listWorkspaces());
+
+        $support = PATH_DATA_SITE . G::sanitizeString($licenseManager->info['FIRST_NAME'] . '-' . $licenseManager->info['LAST_NAME'] . '-' . SYS_SYS . '-' . date('YmdHis'), false, false) . '.spm';
+        file_put_contents($support, serialize($params));
+        G::streamFile($support, true);
+        G::rm_dir($support);
     }
 }
 

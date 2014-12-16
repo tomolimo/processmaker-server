@@ -1,34 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="languages_ImportForm" type="xmlform" width="500px" height="" labelWidth="200px">
-
-<TITLE1 type="title">
-  <en>Upgrade System</en>
-</TITLE1>
-
-
-<PM_VERSION type="edit" mode="view">
-  <en>Current Version</en>
-</PM_VERSION>
-
-<MAX_FILE_SIZE type="edit" mode="view">
-  <en>Max upload file size in bytes</en>
-</MAX_FILE_SIZE>
-
-<UPGRADE_FILENAME type="file">
-  <en>File</en>
-</UPGRADE_FILENAME>
-
-
-
-<UPGRADE type="button" onclick="verifyFile(this.form);">
-  <en>Upgrade</en>
-</UPGRADE>
-
-<!-- BTN_CANCEL type="button" onclick="cancel();">
+  <TITLE1 type="title">
+    <en><![CDATA[Upgrade System]]></en>
+  </TITLE1>
+  <PM_VERSION type="edit" mode="view">
+    <en><![CDATA[Current Version]]></en>
+  </PM_VERSION>
+  <MAX_FILE_SIZE type="edit" mode="view">
+    <en><![CDATA[Maximum upload file size in bytes]]></en>
+  </MAX_FILE_SIZE>
+  <UPGRADE_FILENAME type="file">
+    <en><![CDATA[File]]></en>
+  </UPGRADE_FILENAME>
+  <UPGRADE type="button" onclick="verifyFile(this.form);">
+    <en><![CDATA[Upgrade]]></en>
+  </UPGRADE>
+  <!-- BTN_CANCEL type="button" onclick="cancel();">
   <en>Cancel</en>
 </BTN_CANCEL //-->
-
-<JS type="javascript"><![CDATA[
+  <JS type="javascript"><![CDATA[
 var verifyFile = function(oForm) {
   if (document.getElementById('form[UPGRADE_FILENAME]').value != '') {
     oForm.submit();
@@ -43,5 +33,4 @@ function cancel(){
 }
 
 ]]></JS>
-
-</dynaForm>  
+</dynaForm>

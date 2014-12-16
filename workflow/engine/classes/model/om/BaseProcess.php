@@ -118,6 +118,18 @@ abstract class BaseProcess extends BaseObject implements Persistent
     protected $pro_tri_reassigned = '';
 
     /**
+     * The value for the pro_tri_unpaused field.
+     * @var        string
+     */
+    protected $pro_tri_unpaused = '';
+
+    /**
+     * The value for the pro_type_process field.
+     * @var        string
+     */
+    protected $pro_type_process = 'PUBLIC';
+
+    /**
      * The value for the pro_show_delegate field.
      * @var        int
      */
@@ -384,6 +396,28 @@ abstract class BaseProcess extends BaseObject implements Persistent
     {
 
         return $this->pro_tri_reassigned;
+    }
+
+    /**
+     * Get the [pro_tri_unpaused] column value.
+     * 
+     * @return     string
+     */
+    public function getProTriUnpaused()
+    {
+
+        return $this->pro_tri_unpaused;
+    }
+
+    /**
+     * Get the [pro_type_process] column value.
+     * 
+     * @return     string
+     */
+    public function getProTypeProcess()
+    {
+
+        return $this->pro_type_process;
     }
 
     /**
@@ -918,6 +952,50 @@ abstract class BaseProcess extends BaseObject implements Persistent
     } // setProTriReassigned()
 
     /**
+     * Set the value of [pro_tri_unpaused] column.
+     * 
+     * @param      string $v new value
+     * @return     void
+     */
+    public function setProTriUnpaused($v)
+    {
+
+        // Since the native PHP type for this column is string,
+        // we will cast the input to a string (if it is not).
+        if ($v !== null && !is_string($v)) {
+            $v = (string) $v;
+        }
+
+        if ($this->pro_tri_unpaused !== $v || $v === '') {
+            $this->pro_tri_unpaused = $v;
+            $this->modifiedColumns[] = ProcessPeer::PRO_TRI_UNPAUSED;
+        }
+
+    } // setProTriUnpaused()
+
+    /**
+     * Set the value of [pro_type_process] column.
+     * 
+     * @param      string $v new value
+     * @return     void
+     */
+    public function setProTypeProcess($v)
+    {
+
+        // Since the native PHP type for this column is string,
+        // we will cast the input to a string (if it is not).
+        if ($v !== null && !is_string($v)) {
+            $v = (string) $v;
+        }
+
+        if ($this->pro_type_process !== $v || $v === 'PUBLIC') {
+            $this->pro_type_process = $v;
+            $this->modifiedColumns[] = ProcessPeer::PRO_TYPE_PROCESS;
+        }
+
+    } // setProTypeProcess()
+
+    /**
      * Set the value of [pro_show_delegate] column.
      * 
      * @param      int $v new value
@@ -1038,6 +1116,10 @@ abstract class BaseProcess extends BaseObject implements Persistent
 
         if ($v !== null && !is_int($v)) {
             $ts = strtotime($v);
+            //Date/time accepts null values
+            if ($v == '') {
+                $ts = null;
+            }
             if ($ts === -1 || $ts === false) {
                 throw new PropelException("Unable to parse date/time value for [pro_update_date] from input: " .
                     var_export($v, true));
@@ -1063,6 +1145,10 @@ abstract class BaseProcess extends BaseObject implements Persistent
 
         if ($v !== null && !is_int($v)) {
             $ts = strtotime($v);
+            //Date/time accepts null values
+            if ($v == '') {
+                $ts = null;
+            }
             if ($ts === -1 || $ts === false) {
                 throw new PropelException("Unable to parse date/time value for [pro_create_date] from input: " .
                     var_export($v, true));
@@ -1300,42 +1386,46 @@ abstract class BaseProcess extends BaseObject implements Persistent
 
             $this->pro_tri_reassigned = $rs->getString($startcol + 14);
 
-            $this->pro_show_delegate = $rs->getInt($startcol + 15);
+            $this->pro_tri_unpaused = $rs->getString($startcol + 15);
 
-            $this->pro_show_dynaform = $rs->getInt($startcol + 16);
+            $this->pro_type_process = $rs->getString($startcol + 16);
 
-            $this->pro_category = $rs->getString($startcol + 17);
+            $this->pro_show_delegate = $rs->getInt($startcol + 17);
 
-            $this->pro_sub_category = $rs->getString($startcol + 18);
+            $this->pro_show_dynaform = $rs->getInt($startcol + 18);
 
-            $this->pro_industry = $rs->getInt($startcol + 19);
+            $this->pro_category = $rs->getString($startcol + 19);
 
-            $this->pro_update_date = $rs->getTimestamp($startcol + 20, null);
+            $this->pro_sub_category = $rs->getString($startcol + 20);
 
-            $this->pro_create_date = $rs->getTimestamp($startcol + 21, null);
+            $this->pro_industry = $rs->getInt($startcol + 21);
 
-            $this->pro_create_user = $rs->getString($startcol + 22);
+            $this->pro_update_date = $rs->getTimestamp($startcol + 22, null);
 
-            $this->pro_height = $rs->getInt($startcol + 23);
+            $this->pro_create_date = $rs->getTimestamp($startcol + 23, null);
 
-            $this->pro_width = $rs->getInt($startcol + 24);
+            $this->pro_create_user = $rs->getString($startcol + 24);
 
-            $this->pro_title_x = $rs->getInt($startcol + 25);
+            $this->pro_height = $rs->getInt($startcol + 25);
 
-            $this->pro_title_y = $rs->getInt($startcol + 26);
+            $this->pro_width = $rs->getInt($startcol + 26);
 
-            $this->pro_debug = $rs->getInt($startcol + 27);
+            $this->pro_title_x = $rs->getInt($startcol + 27);
 
-            $this->pro_dynaforms = $rs->getString($startcol + 28);
+            $this->pro_title_y = $rs->getInt($startcol + 28);
 
-            $this->pro_derivation_screen_tpl = $rs->getString($startcol + 29);
+            $this->pro_debug = $rs->getInt($startcol + 29);
+
+            $this->pro_dynaforms = $rs->getString($startcol + 30);
+
+            $this->pro_derivation_screen_tpl = $rs->getString($startcol + 31);
 
             $this->resetModified();
 
             $this->setNew(false);
 
             // FIXME - using NUM_COLUMNS may be clearer.
-            return $startcol + 30; // 30 = ProcessPeer::NUM_COLUMNS - ProcessPeer::NUM_LAZY_LOAD_COLUMNS).
+            return $startcol + 32; // 32 = ProcessPeer::NUM_COLUMNS - ProcessPeer::NUM_LAZY_LOAD_COLUMNS).
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Process object", $e);
@@ -1585,48 +1675,54 @@ abstract class BaseProcess extends BaseObject implements Persistent
                 return $this->getProTriReassigned();
                 break;
             case 15:
-                return $this->getProShowDelegate();
+                return $this->getProTriUnpaused();
                 break;
             case 16:
-                return $this->getProShowDynaform();
+                return $this->getProTypeProcess();
                 break;
             case 17:
-                return $this->getProCategory();
+                return $this->getProShowDelegate();
                 break;
             case 18:
-                return $this->getProSubCategory();
+                return $this->getProShowDynaform();
                 break;
             case 19:
-                return $this->getProIndustry();
+                return $this->getProCategory();
                 break;
             case 20:
-                return $this->getProUpdateDate();
+                return $this->getProSubCategory();
                 break;
             case 21:
-                return $this->getProCreateDate();
+                return $this->getProIndustry();
                 break;
             case 22:
-                return $this->getProCreateUser();
+                return $this->getProUpdateDate();
                 break;
             case 23:
-                return $this->getProHeight();
+                return $this->getProCreateDate();
                 break;
             case 24:
-                return $this->getProWidth();
+                return $this->getProCreateUser();
                 break;
             case 25:
-                return $this->getProTitleX();
+                return $this->getProHeight();
                 break;
             case 26:
-                return $this->getProTitleY();
+                return $this->getProWidth();
                 break;
             case 27:
-                return $this->getProDebug();
+                return $this->getProTitleX();
                 break;
             case 28:
-                return $this->getProDynaforms();
+                return $this->getProTitleY();
                 break;
             case 29:
+                return $this->getProDebug();
+                break;
+            case 30:
+                return $this->getProDynaforms();
+                break;
+            case 31:
                 return $this->getProDerivationScreenTpl();
                 break;
             default:
@@ -1664,21 +1760,23 @@ abstract class BaseProcess extends BaseObject implements Persistent
             $keys[12] => $this->getProTriCanceled(),
             $keys[13] => $this->getProTriPaused(),
             $keys[14] => $this->getProTriReassigned(),
-            $keys[15] => $this->getProShowDelegate(),
-            $keys[16] => $this->getProShowDynaform(),
-            $keys[17] => $this->getProCategory(),
-            $keys[18] => $this->getProSubCategory(),
-            $keys[19] => $this->getProIndustry(),
-            $keys[20] => $this->getProUpdateDate(),
-            $keys[21] => $this->getProCreateDate(),
-            $keys[22] => $this->getProCreateUser(),
-            $keys[23] => $this->getProHeight(),
-            $keys[24] => $this->getProWidth(),
-            $keys[25] => $this->getProTitleX(),
-            $keys[26] => $this->getProTitleY(),
-            $keys[27] => $this->getProDebug(),
-            $keys[28] => $this->getProDynaforms(),
-            $keys[29] => $this->getProDerivationScreenTpl(),
+            $keys[15] => $this->getProTriUnpaused(),
+            $keys[16] => $this->getProTypeProcess(),
+            $keys[17] => $this->getProShowDelegate(),
+            $keys[18] => $this->getProShowDynaform(),
+            $keys[19] => $this->getProCategory(),
+            $keys[20] => $this->getProSubCategory(),
+            $keys[21] => $this->getProIndustry(),
+            $keys[22] => $this->getProUpdateDate(),
+            $keys[23] => $this->getProCreateDate(),
+            $keys[24] => $this->getProCreateUser(),
+            $keys[25] => $this->getProHeight(),
+            $keys[26] => $this->getProWidth(),
+            $keys[27] => $this->getProTitleX(),
+            $keys[28] => $this->getProTitleY(),
+            $keys[29] => $this->getProDebug(),
+            $keys[30] => $this->getProDynaforms(),
+            $keys[31] => $this->getProDerivationScreenTpl(),
         );
         return $result;
     }
@@ -1756,48 +1854,54 @@ abstract class BaseProcess extends BaseObject implements Persistent
                 $this->setProTriReassigned($value);
                 break;
             case 15:
-                $this->setProShowDelegate($value);
+                $this->setProTriUnpaused($value);
                 break;
             case 16:
-                $this->setProShowDynaform($value);
+                $this->setProTypeProcess($value);
                 break;
             case 17:
-                $this->setProCategory($value);
+                $this->setProShowDelegate($value);
                 break;
             case 18:
-                $this->setProSubCategory($value);
+                $this->setProShowDynaform($value);
                 break;
             case 19:
-                $this->setProIndustry($value);
+                $this->setProCategory($value);
                 break;
             case 20:
-                $this->setProUpdateDate($value);
+                $this->setProSubCategory($value);
                 break;
             case 21:
-                $this->setProCreateDate($value);
+                $this->setProIndustry($value);
                 break;
             case 22:
-                $this->setProCreateUser($value);
+                $this->setProUpdateDate($value);
                 break;
             case 23:
-                $this->setProHeight($value);
+                $this->setProCreateDate($value);
                 break;
             case 24:
-                $this->setProWidth($value);
+                $this->setProCreateUser($value);
                 break;
             case 25:
-                $this->setProTitleX($value);
+                $this->setProHeight($value);
                 break;
             case 26:
-                $this->setProTitleY($value);
+                $this->setProWidth($value);
                 break;
             case 27:
-                $this->setProDebug($value);
+                $this->setProTitleX($value);
                 break;
             case 28:
-                $this->setProDynaforms($value);
+                $this->setProTitleY($value);
                 break;
             case 29:
+                $this->setProDebug($value);
+                break;
+            case 30:
+                $this->setProDynaforms($value);
+                break;
+            case 31:
                 $this->setProDerivationScreenTpl($value);
                 break;
         } // switch()
@@ -1884,63 +1988,71 @@ abstract class BaseProcess extends BaseObject implements Persistent
         }
 
         if (array_key_exists($keys[15], $arr)) {
-            $this->setProShowDelegate($arr[$keys[15]]);
+            $this->setProTriUnpaused($arr[$keys[15]]);
         }
 
         if (array_key_exists($keys[16], $arr)) {
-            $this->setProShowDynaform($arr[$keys[16]]);
+            $this->setProTypeProcess($arr[$keys[16]]);
         }
 
         if (array_key_exists($keys[17], $arr)) {
-            $this->setProCategory($arr[$keys[17]]);
+            $this->setProShowDelegate($arr[$keys[17]]);
         }
 
         if (array_key_exists($keys[18], $arr)) {
-            $this->setProSubCategory($arr[$keys[18]]);
+            $this->setProShowDynaform($arr[$keys[18]]);
         }
 
         if (array_key_exists($keys[19], $arr)) {
-            $this->setProIndustry($arr[$keys[19]]);
+            $this->setProCategory($arr[$keys[19]]);
         }
 
         if (array_key_exists($keys[20], $arr)) {
-            $this->setProUpdateDate($arr[$keys[20]]);
+            $this->setProSubCategory($arr[$keys[20]]);
         }
 
         if (array_key_exists($keys[21], $arr)) {
-            $this->setProCreateDate($arr[$keys[21]]);
+            $this->setProIndustry($arr[$keys[21]]);
         }
 
         if (array_key_exists($keys[22], $arr)) {
-            $this->setProCreateUser($arr[$keys[22]]);
+            $this->setProUpdateDate($arr[$keys[22]]);
         }
 
         if (array_key_exists($keys[23], $arr)) {
-            $this->setProHeight($arr[$keys[23]]);
+            $this->setProCreateDate($arr[$keys[23]]);
         }
 
         if (array_key_exists($keys[24], $arr)) {
-            $this->setProWidth($arr[$keys[24]]);
+            $this->setProCreateUser($arr[$keys[24]]);
         }
 
         if (array_key_exists($keys[25], $arr)) {
-            $this->setProTitleX($arr[$keys[25]]);
+            $this->setProHeight($arr[$keys[25]]);
         }
 
         if (array_key_exists($keys[26], $arr)) {
-            $this->setProTitleY($arr[$keys[26]]);
+            $this->setProWidth($arr[$keys[26]]);
         }
 
         if (array_key_exists($keys[27], $arr)) {
-            $this->setProDebug($arr[$keys[27]]);
+            $this->setProTitleX($arr[$keys[27]]);
         }
 
         if (array_key_exists($keys[28], $arr)) {
-            $this->setProDynaforms($arr[$keys[28]]);
+            $this->setProTitleY($arr[$keys[28]]);
         }
 
         if (array_key_exists($keys[29], $arr)) {
-            $this->setProDerivationScreenTpl($arr[$keys[29]]);
+            $this->setProDebug($arr[$keys[29]]);
+        }
+
+        if (array_key_exists($keys[30], $arr)) {
+            $this->setProDynaforms($arr[$keys[30]]);
+        }
+
+        if (array_key_exists($keys[31], $arr)) {
+            $this->setProDerivationScreenTpl($arr[$keys[31]]);
         }
 
     }
@@ -2012,6 +2124,14 @@ abstract class BaseProcess extends BaseObject implements Persistent
 
         if ($this->isColumnModified(ProcessPeer::PRO_TRI_REASSIGNED)) {
             $criteria->add(ProcessPeer::PRO_TRI_REASSIGNED, $this->pro_tri_reassigned);
+        }
+
+        if ($this->isColumnModified(ProcessPeer::PRO_TRI_UNPAUSED)) {
+            $criteria->add(ProcessPeer::PRO_TRI_UNPAUSED, $this->pro_tri_unpaused);
+        }
+
+        if ($this->isColumnModified(ProcessPeer::PRO_TYPE_PROCESS)) {
+            $criteria->add(ProcessPeer::PRO_TYPE_PROCESS, $this->pro_type_process);
         }
 
         if ($this->isColumnModified(ProcessPeer::PRO_SHOW_DELEGATE)) {
@@ -2155,6 +2275,10 @@ abstract class BaseProcess extends BaseObject implements Persistent
         $copyObj->setProTriPaused($this->pro_tri_paused);
 
         $copyObj->setProTriReassigned($this->pro_tri_reassigned);
+
+        $copyObj->setProTriUnpaused($this->pro_tri_unpaused);
+
+        $copyObj->setProTypeProcess($this->pro_type_process);
 
         $copyObj->setProShowDelegate($this->pro_show_delegate);
 

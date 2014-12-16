@@ -33,7 +33,7 @@ Print information about the current system and any specified workspaces.
 EOT
 );
 CLI::taskArg('workspace-name', true, true);
-CLI::taskRun(run_info);
+CLI::taskRun("run_info");
 
 CLI::taskName('workspace-backup');
 CLI::taskDescription(<<<EOT
@@ -53,7 +53,7 @@ EOT
 CLI::taskArg('workspace', false);
 CLI::taskArg('backup-file', true);
 CLI::taskOpt("filesize", "Set the max size of the compressed splitted files, by default the max is 1000 Mb.", "s:","filesize=");
-CLI::taskRun(run_workspace_backup);
+CLI::taskRun("run_workspace_backup");
 
 CLI::taskName('workspace-restore');
 CLI::taskDescription(<<<EOT
@@ -75,7 +75,7 @@ CLI::taskOpt("multiple", "Restore from multiple compresed enumerated files.", "m
 CLI::taskOpt("workspace", "Select which workspace to restore if multiple workspaces are present in the archive.",
              "w:", "workspace=");
 CLI::taskOpt("lang", "You must specify language on which rebuild of the case cache list builder will be done; if you don't specify this, it will use 'en' by default", "l:","lang=");
-CLI::taskRun(run_workspace_restore);
+CLI::taskRun("run_workspace_restore");
 
 CLI::taskName('cacheview-repair');
 CLI::taskDescription(<<<EOT
@@ -93,7 +93,7 @@ EOT
 );
 CLI::taskArg('workspace', true, true);
 CLI::taskOpt("lang", "You must specify language on which rebuild of the case cache list builder will be done; if you don't specify this, it will use 'en' by default", "l:","lang=");
-CLI::taskRun(run_cacheview_upgrade);
+CLI::taskRun("run_cacheview_upgrade");
 
 CLI::taskName('database-upgrade');
 CLI::taskDescription(<<<EOT
@@ -110,7 +110,7 @@ CLI::taskDescription(<<<EOT
 EOT
 );
 CLI::taskArg('workspace', true, true);
-CLI::taskRun(run_database_upgrade);
+CLI::taskRun("run_database_upgrade");
 
 CLI::taskName('plugins-database-upgrade');
 CLI::taskDescription(<<<EOT
@@ -125,7 +125,7 @@ CLI::taskDescription(<<<EOT
 EOT
 );
 CLI::taskArg('workspace', true, true);
-CLI::taskRun(run_plugins_database_upgrade);
+CLI::taskRun("run_plugins_database_upgrade");
 
 CLI::taskName('workspace-upgrade');
 CLI::taskDescription(<<<EOT
@@ -143,7 +143,7 @@ CLI::taskDescription(<<<EOT
 EOT
 );
 CLI::taskArg('workspace-name', true, true);
-CLI::taskRun(run_workspace_upgrade);
+CLI::taskRun("run_workspace_upgrade");
 
 CLI::taskName('translation-repair');
 CLI::taskDescription(<<<EOT
@@ -158,7 +158,7 @@ CLI::taskDescription(<<<EOT
 EOT
 );
 CLI::taskArg('workspace-name', true, true);
-CLI::taskRun(run_translation_upgrade);
+CLI::taskRun("run_translation_upgrade");
 
 CLI::taskName('migrate-cases-folders');
 CLI::taskDescription(<<<EOT
@@ -170,7 +170,7 @@ EOT
 //CLI::taskArg('workspace', true);
 CLI::taskOpt("workspace", "Select which workspace to migrate the cases folders, if multiple workspaces are present in the server.",
              "w:", "workspace=");
-CLI::taskRun(runStructureDirectories);
+CLI::taskRun("runStructureDirectories");
 
   /**
    * Function run_info
@@ -372,60 +372,64 @@ function run_drafts_clean($args, $opts) {
 }
 
 function run_workspace_backup($args, $opts) {
-  $workspaces = array();
-  if (sizeof($args) > 2) {
-    $filename = array_pop($args);
-    foreach ($args as $arg) {
-      $workspaces[] = new workspaceTools($arg);
+    $workspaces = array();
+    if (sizeof($args) > 2) {
+        $filename = array_pop($args);
+        foreach ($args as $arg) {
+            $workspaces[] = new workspaceTools($arg);
+        }
+    } else if (sizeof($args) > 0) {
+        $workspace = new workspaceTools($args[0]);
+        $workspaces[] = $workspace;
+        if (sizeof($args) == 2) {
+            $filename = $args[1];
+        } else {
+            $filename = "{$workspace->name}.tar";
+        }
+    } else {
+        throw new Exception("No workspace specified for backup");
     }
-  } else if (sizeof($args) > 0) {
-    $workspace = new workspaceTools($args[0]);
-    $workspaces[] = $workspace;
-    if (sizeof($args) == 2)
-      $filename = $args[1];
-    else
-      $filename = "{$workspace->name}.tar";
-  } else {
-    throw new Exception("No workspace specified for backup");
-  }
-  foreach ($workspaces as $workspace)
-    if (!$workspace->workspaceExists())
-      throw new Exception("Workspace '{$workspace->name}' not found");
-  //If this is a relative path, put the file in the backups directory
-  if (strpos($filename, "/") === false && strpos($filename, '\\') === false){
-    $filename = PATH_DATA . "backups/$filename";
-  }
-  CLI::logging("Backing up to $filename\n");
 
-  $filesize = array_key_exists("filesize", $opts) ? $opts['filesize'] : -1;
-  if($filesize >= 0)
-  {
-      if(!Bootstrap::isLinuxOs()){
+
+    foreach ($workspaces as $workspace) {
+        if (!$workspace->workspaceExists()) {
+            throw new Exception("Workspace '{$workspace->name}' not found");
+        }        
+    }
+  
+    //If this is a relative path, put the file in the backups directory
+    if (strpos($filename, "/") === false && strpos($filename, '\\') === false){
+        $filename = PATH_DATA . "backups/$filename";
+    }
+    CLI::logging("Backing up to $filename\n");
+
+    $filesize = array_key_exists("filesize", $opts) ? $opts['filesize'] : -1;
+
+    if ($filesize >= 0) {
+        if (!Bootstrap::isLinuxOs()) {
             CLI::error("This is not a Linux enviroment, cannot use this filesize [-s] feature.\n");
             return;
-      }
-      $multipleBackup = new multipleFilesBackup ($filename,$filesize);//if filesize is 0 the default size will be took
-      //using new method
-      foreach ($workspaces as $workspace){
-          $multipleBackup->addToBackup($workspace);
-      }
-      $multipleBackup->letsBackup();
-  }
-  else
-  {
-    //ansient method to backup into one large file
-    $backup = workspaceTools::createBackup($filename);
+        }
+        $multipleBackup = new multipleFilesBackup ($filename,$filesize);//if filesize is 0 the default size will be took
+        //using new method
+        foreach ($workspaces as $workspace) {
+            $multipleBackup->addToBackup($workspace);
+        }
+        $multipleBackup->letsBackup();
+    } else {
+        //ansient method to backup into one large file
+        $backup = workspaceTools::createBackup($filename);
 
-    foreach ($workspaces as $workspace)
-      $workspace->backup($backup);
-  }
-  CLI::logging("\n");
-  workspaceTools::printSysInfo();
-  foreach ($workspaces as $workspace) {
+        foreach ($workspaces as $workspace) {
+            $workspace->backup($backup);
+        }
+    }
     CLI::logging("\n");
-    $workspace->printMetadata(false);
-  }
-
+    workspaceTools::printSysInfo();
+    foreach ($workspaces as $workspace) {
+        CLI::logging("\n");
+        $workspace->printMetadata(false);
+    }
 }
 
 function run_workspace_restore($args, $opts) {
@@ -447,7 +451,7 @@ function run_workspace_restore($args, $opts) {
     $workspace = array_key_exists("workspace", $opts) ? $opts['workspace'] : NULL;
     $overwrite = array_key_exists("overwrite", $opts);
     $multiple = array_key_exists("multiple", $opts);
-    $dstWorkspace = $args[1];
+    $dstWorkspace = isset($args[1]) ? $args[1] : null;
     if(!empty($multiple)){
         if(!Bootstrap::isLinuxOs()){
             CLI::error("This is not a Linux enviroment, cannot use this multiple [-m] feature.\n");

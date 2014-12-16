@@ -1,21 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="xmlmenu">
-
-<PROCESS type="private"/>
-
-<TASK type="private"/>
-
-<TYPE type="private"/>
-
-<MNU_ASSIGN type="link" value="" link="#" onclick="popupWindow(&#039;Assign users group or user&#039;, &#039;../users/users_Ajax?function=availableUsers&amp;sProcess=@#PROCESS&amp;sTask=@#TASK&amp;iType=@#TYPE&#039;, 500, 420);return false;" colAlign="left" colWidth="50">
-  <en>Assign</en>
-</MNU_ASSIGN>
-
-<MNU_CHANGE type="link" value="" link="#" onclick="changeView(@#TYPE);return false;" colAlign="right" colWidth="200">
-  <en><![CDATA[View Users for "Adhoc"]]></en>
-</MNU_CHANGE>
-
-<js type="javascript"><![CDATA[
+  <PROCESS type="private"/>
+  <TASK type="private"/>
+  <TYPE type="private"/>
+  <MNU_ASSIGN type="link" value="" link="#" onclick="popupWindow('Assign users group or user', '../users/users_Ajax?function=availableUsers&amp;sProcess=@#PROCESS&amp;sTask=@#TASK&amp;iType=@#TYPE', 500, 420);return false;" colAlign="left" colWidth="50">
+    <en><![CDATA[Assign]]></en>
+  </MNU_ASSIGN>
+  <MNU_CHANGE type="link" value="" link="#" onclick="changeView(@#TYPE);return false;" colAlign="right" colWidth="200">
+    <en><![CDATA[View Users for "Adhoc"]]></en>
+  </MNU_CHANGE>
+  <js type="javascript"><![CDATA[
 
 var assignGroupOrUser = function(sTask, sUser, iType, iRelation) {
   var oRPC = new leimnud.module.rpc.xmlhttp({
@@ -79,4 +73,4 @@ var usersGroup = function(GRP_UID, c){
 }
 
 ]]></js>
-</dynaForm>  
+</dynaForm>

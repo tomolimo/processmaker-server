@@ -85,7 +85,9 @@ class FieldsMapBuilder
 
         $tMap->addColumn('FLD_KEY', 'FldKey', 'int', CreoleTypes::TINYINT, true, null);
 
-        $tMap->addColumn('FLD_FOREIGN_KEY', 'FldForeignKey', 'int', CreoleTypes::TINYINT, true, null);
+        $tMap->addColumn('FLD_TABLE_INDEX', 'FldTableIndex', 'int', CreoleTypes::TINYINT, true, null);
+
+        $tMap->addColumn('FLD_FOREIGN_KEY', 'FldForeignKey', 'int', CreoleTypes::TINYINT, false, null);
 
         $tMap->addColumn('FLD_FOREIGN_KEY_TABLE', 'FldForeignKeyTable', 'string', CreoleTypes::VARCHAR, true, 32);
 

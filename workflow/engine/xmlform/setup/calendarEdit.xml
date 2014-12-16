@@ -4,9 +4,8 @@
     <en>Ndar Uid
   </en>
   </CALENDAR_UID>
-<OLD_NAME type="hidden" size='32' maxlength='32' >
+  <OLD_NAME type="hidden" size="32" maxlength="32">
 </OLD_NAME>
-
   <DEFINITION_TITLE type="title" enablehtml="0">
     <en><![CDATA[Calendar Definition]]></en>
   </DEFINITION_TITLE>
@@ -19,20 +18,11 @@
   <CALENDAR_STATUS type="checkbox" value="ACTIVE" falsevalue="INACTIVE" defaultvalue="ACTIVE" labelonright="1" enablehtml="0">
     <en><![CDATA[Active]]></en>
   </CALENDAR_STATUS>
-
   <WorkDays type="title" enablehtml="0">
     <en><![CDATA[Work Days]]></en>
   </WorkDays>
   <CALENDAR_WORK_DAYS type="checkgroup" defaultvalue="1|2|3|4|5" mode="edit" options="Array">
-    <en>
-      <option name="0"><![CDATA[SUN]]></option>
-      <option name="1"><![CDATA[MON]]></option>
-      <option name="2"><![CDATA[TUE]]></option>
-      <option name="3"><![CDATA[WED]]></option>
-      <option name="4"><![CDATA[THU]]></option>
-      <option name="5"><![CDATA[FRI]]></option>
-      <option name="6"><![CDATA[SAT]]></option>
-    </en>
+    <en><![CDATA[]]><option name="0"><![CDATA[SUN]]></option><option name="1"><![CDATA[MON]]></option><option name="2"><![CDATA[TUE]]></option><option name="3"><![CDATA[WED]]></option><option name="4"><![CDATA[THU]]></option><option name="5"><![CDATA[FRI]]></option><option name="6"><![CDATA[SAT]]></option></en>
   </CALENDAR_WORK_DAYS>
   <BUSINESS_DAY_TITLE type="title" enablehtml="0" required="0" readonly="0" savelabel="0">
     <en><![CDATA[Work Hours]]></en>
@@ -52,10 +42,10 @@
     <en><![CDATA[Cancel]]></en>
   </BTN_CANCEL>
   <HOLIDAY_STATUS type="checkbox" value="ACTIVE" falsevalue="INACTIVE" defaultvalue="INACTIVE" labelonright="1" enablehtml="0" readonly="0">
-    <en/>
+    <en><![CDATA[]]></en>
   </HOLIDAY_STATUS>
   <BUSINESS_DAY_STATUS type="checkbox" value="ACTIVE" falsevalue="INACTIVE" defaultvalue="INACTIVE" labelonright="1" enablehtml="0" readonly="0">
-    <en/>
+    <en><![CDATA[]]></en>
   </BUSINESS_DAY_STATUS>
   <DEFAULT_CALENDAR_JS type="javascript"><![CDATA[
 var invalidCalendarName = '';
@@ -579,6 +569,5 @@ return aux;
 }
 
 
-]]>
-</DEFAULT_CALENDAR_JS> 
+]]></DEFAULT_CALENDAR_JS>
 </dynaForm>

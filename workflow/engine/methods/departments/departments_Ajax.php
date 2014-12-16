@@ -224,13 +224,39 @@ switch ($_POST['action']) {
             $dep_uid = $_REQUEST['uid'];
             $dep_manager = $_REQUEST['manager'];
             $dep_status = $_REQUEST['status'];
+            $dep_parent = $_REQUEST['parent'];
+            $editDepartment['DEP_PARENT'] = $dep_parent;
             $editDepartment['DEP_UID'] = $dep_uid;
             $editDepartment['DEPO_TITLE'] = $dep_name;
             $editDepartment['DEP_STATUS'] = $dep_status;
             $editDepartment['DEP_MANAGER'] = $dep_manager;
+            
             $oDept = new Department();
             $oDept->update( $editDepartment );
             $oDept->updateDepartmentManager( $dep_uid );
+
+            $managerName = ' - No Manager Selected';
+
+            if ($_REQUEST['manager'] != '') {
+                $oCriteria = new Criteria( 'workflow' );
+                $oCriteria->addSelectColumn( UsersPeer::USR_USERNAME );
+                $oCriteria->add( UsersPeer::USR_UID, $dep_manager);
+
+                $oDataset = UsersPeer::doSelectRS( $oCriteria );
+                $oDataset->setFetchmode( ResultSet::FETCHMODE_ASSOC );
+
+                while ($oDataset->next()) {
+                    $aRow = $oDataset->getRow();
+                    $managerName = $aRow['USR_USERNAME'] ? " - Department Manager: ".$aRow['USR_USERNAME'] : 'No Manager'; 
+                }
+            } 
+
+            if ($dep_parent == '') {
+                G::auditLog("UpdateDepartament", "Department Name: ".$dep_name." (".$dep_uid.")  - Department Status: ".$dep_status.$managerName);
+            } else {
+                G::auditLog("UpdateSubDepartament", "Sub Department Name: ".$dep_name." (".$dep_uid.")  - Sub Department Status: ".$dep_status.$managerName);
+            }            
+
             echo '{success: true}';
         } catch (exception $e) {
             echo '{success: false}';

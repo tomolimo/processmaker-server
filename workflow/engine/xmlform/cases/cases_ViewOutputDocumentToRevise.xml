@@ -1,37 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="cases_ViewOutputDocumentToRevise" type="xmlform" width="400px" labelWidth="100px">
-
-<OUT_DOC_TITLE type="caption">
-  <en>Output document</en>
-</OUT_DOC_TITLE>
-
-<OUT_DOC_DESCRIPTION type="caption">
-  <en>Description</en>
-</OUT_DOC_DESCRIPTION>
-
-<APP_DOC_CREATE_DATE type="caption">
-  <en>Create Date</en>
-</APP_DOC_CREATE_DATE>
-
-<VIEW type="phpVariable"/>
-
-<FILE1 type="phpVariable"/>
-
-<FILE2 type="phpVariable"/>
-
-
-<APP_DOC_FILENAME1 type="link" value="@#VIEW" link="@#FILE1" target="_blank">
-  <en>File (.doc)</en>
-</APP_DOC_FILENAME1>
-
-<APP_DOC_FILENAME2 type="link" value="@#VIEW" link="@#FILE2" target="_blank">
-  <en>File (.pdf)</en>
-</APP_DOC_FILENAME2>
-
-<BACK type="button" onclick="history.go(-1);return false;">
-  <en>Back</en>
-</BACK>
-<JS type="javascript"><![CDATA[
+  <OUT_DOC_TITLE type="caption">
+    <en><![CDATA[Output document]]></en>
+  </OUT_DOC_TITLE>
+  <OUT_DOC_DESCRIPTION type="caption">
+    <en><![CDATA[Description]]></en>
+  </OUT_DOC_DESCRIPTION>
+  <APP_DOC_CREATE_DATE type="caption">
+    <en><![CDATA[Create Date]]></en>
+  </APP_DOC_CREATE_DATE>
+  <VIEW type="phpVariable"/>
+  <FILE1 type="phpVariable"/>
+  <FILE2 type="phpVariable"/>
+  <APP_DOC_FILENAME1 type="link" value="@#VIEW" link="@#FILE1" target="_blank">
+    <en><![CDATA[File (.doc)]]></en>
+  </APP_DOC_FILENAME1>
+  <APP_DOC_FILENAME2 type="link" value="@#VIEW" link="@#FILE2" target="_blank">
+    <en><![CDATA[File (.pdf)]]></en>
+  </APP_DOC_FILENAME2>
+  <BACK type="button" onclick="history.go(-1);return false;">
+    <en><![CDATA[Back]]></en>
+  </BACK>
+  <JS type="javascript"><![CDATA[
   if (@@FILE1 == '')
   {
      hideRowById('APP_DOC_FILENAME1');

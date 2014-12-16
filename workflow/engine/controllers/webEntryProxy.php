@@ -185,7 +185,7 @@ class webEntryProxy extends HttpProxyController
         $template->assign( 'dynaformUid', $sDYNAFORM );
         $template->assign( 'taskUid', $sTASKS );
         $template->assign( 'wsUser', $sWS_USER );
-        $template->assign( 'wsPass', 'md5:' . md5( $sWS_PASS ) );
+        $template->assign( 'wsPass', Bootstrap::hashPassword($sWS_PASS, '', true) );
         $template->assign( 'wsRoundRobin', $sWS_ROUNDROBIN );
 
         if ($sWE_USR == "2") {

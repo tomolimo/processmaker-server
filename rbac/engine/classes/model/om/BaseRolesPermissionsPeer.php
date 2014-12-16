@@ -18,7 +18,7 @@ abstract class BaseRolesPermissionsPeer {
 	const DATABASE_NAME = 'rbac';
 
 	/** the table name for this class */
-	const TABLE_NAME = 'ROLES_PERMISSIONS';
+	const TABLE_NAME = 'RBAC_ROLES_PERMISSIONS';
 
 	/** A class that can be returned by this peer. */
 	const CLASS_DEFAULT = 'classes.model.RolesPermissions';
@@ -31,10 +31,10 @@ abstract class BaseRolesPermissionsPeer {
 
 
 	/** the column name for the ROL_UID field */
-	const ROL_UID = 'ROLES_PERMISSIONS.ROL_UID';
+	const ROL_UID = 'RBAC_ROLES_PERMISSIONS.ROL_UID';
 
 	/** the column name for the PER_UID field */
-	const PER_UID = 'ROLES_PERMISSIONS.PER_UID';
+	const PER_UID = 'RBAC_ROLES_PERMISSIONS.PER_UID';
 
 	/** The PHP to DB Name Mapping */
 	private static $phpNameMap = null;
@@ -170,8 +170,8 @@ abstract class BaseRolesPermissionsPeer {
 
 	}
 
-	const COUNT = 'COUNT(ROLES_PERMISSIONS.ROL_UID)';
-	const COUNT_DISTINCT = 'COUNT(DISTINCT ROLES_PERMISSIONS.ROL_UID)';
+	const COUNT = 'COUNT(RBAC_ROLES_PERMISSIONS.ROL_UID)';
+	const COUNT_DISTINCT = 'COUNT(DISTINCT RBAC_ROLES_PERMISSIONS.ROL_UID)';
 
 	/**
 	 * Returns the number of rows matching criteria.

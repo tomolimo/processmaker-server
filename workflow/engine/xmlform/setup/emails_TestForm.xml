@@ -1,27 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="emails_TestForm" type="xmlform" width="100%" labelWidth="">
-
-<THETITLE type="title">
-  <en>Mail Configuration Test Page</en>
-</THETITLE>
-
-<FROM_NAME type="text" size="25" defaultValue="Process Maker [Test mail]">
-  <en>From Name:</en>
-</FROM_NAME>
-
-<FROM_EMAIL type="text" size="25" defaultValue="" validate="Email" required="true" mode="view">
-  <en>From Email:</en>
-</FROM_EMAIL>
-
-<TO type="text" size="25" validate="Email" required="true">
-  <en>To:</en>
-</TO>
-
-<SEND type="button" onclick="sendTestMail();">
-  <en>Send Email</en>
-</SEND>
-
-<JS type="javascript"><![CDATA[
+  <THETITLE type="title">
+    <en><![CDATA[Mail Configuration Test Page]]></en>
+  </THETITLE>
+  <FROM_NAME type="text" size="25" defaultValue="Process Maker [Test mail]">
+    <en><![CDATA[From Name:]]></en>
+  </FROM_NAME>
+  <FROM_EMAIL type="text" size="25" defaultValue="" validate="Email" required="true" mode="view">
+    <en><![CDATA[From Email:]]></en>
+  </FROM_EMAIL>
+  <TO type="text" size="25" validate="Email" required="true">
+    <en><![CDATA[To:]]></en>
+  </TO>
+  <SEND type="button" onclick="sendTestMail();">
+    <en><![CDATA[Send Email]]></en>
+  </SEND>
+  <JS type="javascript"><![CDATA[
 
 var sendTestMail = function() {
   oAux = getField('FROM_EMAIL');
@@ -64,5 +58,4 @@ var sendTestMail = function() {
 };
 
 ]]></JS>
-
-</dynaForm>  
+</dynaForm>

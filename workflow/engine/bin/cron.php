@@ -23,6 +23,7 @@ define('PATH_HOME',     $pathhome);
 define('PATH_TRUNK',    $pathTrunk);
 define('PATH_OUTTRUNK', $pathOutTrunk);
 
+require_once PATH_TRUNK . "framework/src/Maveriks/Util/ClassLoader.php";
 require_once (PATH_HOME . 'engine' . PATH_SEP . 'config' . PATH_SEP . 'paths.php');
 require_once PATH_CORE . 'classes' . PATH_SEP . 'class.system.php';
 
@@ -53,33 +54,47 @@ $bCronIsRunning = false;
 $sLastExecution = null;
 $processcTimeProcess = 0;
 $processcTimeStart   = 0;
-if (file_exists(PATH_DATA . "cron")) {
-    $force = false;
-    for ($i = 1; $i <= count($argv) - 1; $i++) {
-        if (strpos($argv[$i], "+force") !== false) {
-            $force = true;
-            unset($argv[$i]);
-            break;
-        }
-    }
-    if (!$force) {
-        $arrayCron = unserialize(trim(@file_get_contents(PATH_DATA . "cron")));
-        $bCronIsRunning = (boolean)($arrayCron["bCronIsRunning"]);
-        $sLastExecution = $arrayCron["sLastExecution"];
-        $processcTimeProcess = (isset($arrayCron["processcTimeProcess"]))? intval($arrayCron["processcTimeProcess"]) : 10; //Minutes
-        $processcTimeStart   = (isset($arrayCron["processcTimeStart"]))? $arrayCron["processcTimeStart"] : 0;
-    } else {
-        G::rm_dir(PATH_DATA . "cron");
-    }
-}
-if ($bCronIsRunning && $processcTimeStart != 0) {
-    if ((time() - $processcTimeStart) > ($processcTimeProcess * 60)) {
-        //Cron finished his execution for some reason
-        $bCronIsRunning = false;
+
+$force = false;
+$osIsLinux = strtoupper(substr(PHP_OS, 0, 3)) != "WIN";
+
+for ($i = 1; $i <= count($argv) - 1; $i++) {
+    if (strpos($argv[$i], "+force") !== false) {
+        $force = true;
+        unset($argv[$i]);
+        break;
     }
 }
 
-if (!$bCronIsRunning) {
+if (!$force && file_exists(PATH_DATA . "cron")) {
+    //Windows flag
+    //Get data of cron file
+    $arrayCron = unserialize(trim(file_get_contents(PATH_DATA . "cron")));
+
+    $bCronIsRunning = (boolean)($arrayCron["bCronIsRunning"]);
+    $sLastExecution = $arrayCron["sLastExecution"];
+    $processcTimeProcess = (isset($arrayCron["processcTimeProcess"]))? (int)($arrayCron["processcTimeProcess"]) : 10; //Minutes
+    $processcTimeStart   = (isset($arrayCron["processcTimeStart"]))? $arrayCron["processcTimeStart"] : 0;
+}
+
+if (!$force && $osIsLinux) {
+    //Linux flag
+    //Check if cron it's running
+    exec("ps -fea | grep cron.php | grep -v grep", $arrayOutput);
+
+    if (count($arrayOutput) > 1) {
+        $bCronIsRunning = true;
+    }
+}
+
+//if (!$force && $bCronIsRunning && $processcTimeStart != 0) {
+//    if ((time() - $processcTimeStart) > ($processcTimeProcess * 60)) {
+//        //Cron finished his execution for some reason
+//        $bCronIsRunning = false;
+//    }
+//}
+
+if ($force || !$bCronIsRunning) {
     //Start cron
     $arrayCron = array("bCronIsRunning" => "1", "sLastExecution" => date("Y-m-d H:i:s"));
     @file_put_contents(PATH_DATA . "cron", serialize($arrayCron));

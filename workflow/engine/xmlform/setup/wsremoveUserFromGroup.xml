@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="webservices" width="500" mode="edit" border="0" enableTemplate="0" height="105px">
   <SESSION_ID type="text" size="36" maxlength="32">
-    <en>Session Id</en>
+    <en><![CDATA[Session Id]]></en>
   </SESSION_ID>
   <USER_ID type="dropdown" sqlConnection="dbarray">
   SELECT * from user
-  <en>User ID</en>
+  <en><![CDATA[User ID]]></en>
   </USER_ID>
   <GROUP_ID type="dropdown" sqlConnection="dbarray">
    SELECT * from group
-  <en>Group ID</en>
+  <en><![CDATA[Group ID]]></en>
   </GROUP_ID>
-  <ACTION type="hidden"></ACTION>
+  <ACTION type="hidden"/>
   <ACTIONB type="button" onclick="submitThisForm(this.form);">
-    <en>RemoveUserToGroup</en>    
+    <en><![CDATA[RemoveUserToGroup]]></en>
   </ACTIONB>
 </dynaForm>

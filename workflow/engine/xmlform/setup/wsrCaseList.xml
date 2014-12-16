@@ -1,20 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm rowsPerPage="24">
-
-<guid type="text" colWidth="200" align="left" titleAlign="left">
-  <en>GUID</en>
-</guid>
-
-<name type="text" colWidth="280" align="left" titleAlign="left">
-  <en>Case Title</en>
-</name>
-
-<status type="text" colWidth="100" align="left" titleAlign="left">
-  <en>Status</en>
-</status>
-
-<delIndex type="text" colWidth="70" align="left" titleAlign="left">
-  <en>Del Index</en>
-</delIndex>
-
-</dynaForm> 
+  <guid type="text" colWidth="200" align="left" titleAlign="left">
+    <en><![CDATA[GUID]]></en>
+  </guid>
+  <name type="text" colWidth="280" align="left" titleAlign="left">
+    <en><![CDATA[Case Title]]></en>
+  </name>
+  <status type="text" colWidth="100" align="left" titleAlign="left">
+    <en><![CDATA[Status]]></en>
+  </status>
+  <delIndex type="text" colWidth="70" align="left" titleAlign="left">
+    <en><![CDATA[Del Index]]></en>
+  </delIndex>
+</dynaForm>

@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm sqlConnection="dbArray" width="100%" rowsPerPage="10" menu="users/users_Searchx" searchBy="LABEL">
-<TAS_UID type="hidden" showInTable="0"/>
-<USR_UID type="hidden" showInTable="0"/>
-<TU_TYPE type="hidden" showInTable="0"/>
-<TU_RELATION type="hidden" showInTable="0"/>
-<LABEL type="text" colWidth="250" titleAlign="left" align="left" enableHtml="1">
-  <en>User or Group</en>
-</LABEL>
-<ASSIGN type="link" colWidth="50" value="@G::LoadTranslation(ID_ASSIGN)" link="#" onclick="assignGroupOrUser(@QTAS_UID, @QUSR_UID, @QTU_TYPE, @QTU_RELATION);return false;"><en></en></ASSIGN>
-
+  <TAS_UID type="hidden" showInTable="0"/>
+  <USR_UID type="hidden" showInTable="0"/>
+  <TU_TYPE type="hidden" showInTable="0"/>
+  <TU_RELATION type="hidden" showInTable="0"/>
+  <LABEL type="text" colWidth="250" titleAlign="left" align="left" enableHtml="1">
+    <en><![CDATA[User or Group]]></en>
+  </LABEL>
+  <ASSIGN type="link" colWidth="50" value="@G::LoadTranslation(ID_ASSIGN)" link="#" onclick="assignGroupOrUser(@QTAS_UID, @QUSR_UID, @QTU_TYPE, @QTU_RELATION);return false;">
+    <en><![CDATA[]]></en>
+  </ASSIGN>
 </dynaForm>

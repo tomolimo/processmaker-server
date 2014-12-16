@@ -4,7 +4,7 @@
   <table name="CONFIGURATION">
     <vendor type="mysql">
       <parameter name="Name" value="CONFIGURATION"/>
-      <parameter name="Engine" value="MyISAM"/>
+      <parameter name="Engine" value="InnoDB"/>
       <parameter name="Version" value="10"/>
       <parameter name="Row_format" value="Dynamic"/>
       <parameter name="Rows" value="11"/>
@@ -88,7 +88,7 @@
   <table name="LANGUAGE">
     <vendor type="mysql">
       <parameter name="Name" value="LANGUAGE"/>
-      <parameter name="Engine" value="MyISAM"/>
+      <parameter name="Engine" value="InnoDB"/>
       <parameter name="Version" value="10"/>
       <parameter name="Row_format" value="Dynamic"/>
       <parameter name="Rows" value="136"/>
@@ -189,7 +189,7 @@
   <table name="TRANSLATION">
     <vendor type="mysql">
       <parameter name="Name" value="TRANSLATION"/>
-      <parameter name="Engine" value="MyISAM"/>
+      <parameter name="Engine" value="InnoDB"/>
       <parameter name="Version" value="10"/>
       <parameter name="Row_format" value="Dynamic"/>
       <parameter name="Rows" value="121"/>
@@ -268,7 +268,7 @@
   <table name="USERS">
     <vendor type="mysql">
       <parameter name="Name" value="USERS"/>
-      <parameter name="Engine" value="MyISAM"/>
+      <parameter name="Engine" value="InnoDB"/>
       <parameter name="Version" value="10"/>
       <parameter name="Row_format" value="Dynamic"/>
       <parameter name="Rows" value="9"/>

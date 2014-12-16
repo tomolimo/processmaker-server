@@ -145,6 +145,7 @@ class Dashboard extends Controller
             $oConfiguration->aConfig = $dataDashboard;
             $oConfiguration->saveConfig('Dashboard', '', '', $_SESSION['USER_LOGGED']);
 
+            $result = new stdClass();
             $result->success = '1';
             return $result;
         } catch (Exception $error) {
@@ -153,7 +154,7 @@ class Dashboard extends Controller
     }
 
     public function renderDashletInstance ($data)
-    {   
+    {
         try {
             if (! isset( $data->DAS_INS_UID )) {
                 $data->DAS_INS_UID = '';
@@ -210,7 +211,7 @@ class Dashboard extends Controller
     }
 
     public function getDashletsInstances ($data)
-    {   
+    {
         $this->setResponseType( 'json' );
         $result = new stdclass();
         $result->status = 'OK';
@@ -240,7 +241,7 @@ class Dashboard extends Controller
             }
             $dashlets = $this->getDashlets();
             $this->setJSVar( 'storeDasUID', $dashlets );
-            
+
             if ($data->DAS_INS_UID != '') {
                 $this->pmDashlet->setup( $data->DAS_INS_UID );
                 $this->setJSVar( 'dashletInstance', $this->pmDashlet->getDashletInstance() );
@@ -445,12 +446,12 @@ class Dashboard extends Controller
             while ($row = $dataset->getRow()) {
                 if (strstr($row['DAS_TITLE'], '*')) {
                     $row['DAS_TITLE'] = str_replace('*', '', $row['DAS_TITLE']);
-                    $row['DAS_TITLE'] = G::LoadTranslationPlugin('advancedDashboards', $row['DAS_TITLE']);          
+                    $row['DAS_TITLE'] = G::LoadTranslationPlugin('advancedDashboards', $row['DAS_TITLE']);
                 }
 
                 if ($this->pmDashlet->verifyPluginDashlet($row['DAS_CLASS'])) {
                     $dashlets[] = array ($row['DAS_UID'],$row['DAS_TITLE']);
-                
+
                 }
                 $dataset->next();
             }
@@ -459,6 +460,33 @@ class Dashboard extends Controller
             throw $error;
         }
         return $dashlets;
+    }
+
+    public function verifyTitleDashlet ($data)
+    {
+        $response = new stdclass();
+        $this->setResponseType("json");
+
+        $response->message = "OK";
+        $criteria = new Criteria("workflow");
+
+        $criteria->addSelectColumn(DashletInstancePeer::DAS_INS_UID);
+        $criteria->addSelectColumn(DashletInstancePeer::DAS_INS_ADDITIONAL_PROPERTIES);
+        $rsCriteria = DashletInstancePeer::doSelectRS($criteria);
+        $rsCriteria->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+
+        while ($rsCriteria->next()) {
+            $row = $rsCriteria->getRow();
+            $arrayField = unserialize($row["DAS_INS_ADDITIONAL_PROPERTIES"]);
+
+            if (isset($arrayField["DAS_INS_TITLE"]) && $arrayField["DAS_INS_TITLE"] != "" && ($data->DAS_INS_UID != $row["DAS_INS_UID"])) {
+                if ($data->DAS_INS_TITLE == $arrayField["DAS_INS_TITLE"]) {
+                    $response->message = "ERROR";
+                }
+            }
+        }
+
+        return $response;
     }
 
     // Functions for the dasboards administration module - End

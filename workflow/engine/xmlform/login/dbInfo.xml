@@ -1,52 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<dynaForm name="dbInfo" basedir="" width="450" enableTemplate="0" ajaxSubmit="0" >
-
-
-<ENVIRONMENT type="hidden" />
-
-<DYNA_HEADER type="title">
-  <en>System Information</en>
-</DYNA_HEADER>
-<FLUID type="caption" group="5">
-  <en>ProcessMaker</en>
-</FLUID>
-<SYSTEM type="caption">
-  <en>Operating System</en>
-</SYSTEM>
-<TIME_ZONE type="caption">
-  <en>Time zone</en>
-</TIME_ZONE>
-<SERVER_SOFTWARE type="caption">
-  <en>Web Server</en>
-</SERVER_SOFTWARE>
-<SERVER_NAME type="caption" group="4">
-  <en>Server Name</en>
-</SERVER_NAME>
-<SERVER_ADDR type="caption">
-  <en>Server IP Address</en>
-</SERVER_ADDR>
-<PHP type="caption">
-  <en>PHP version</en>
-</PHP>
-<DATABASE type="caption">
-  <en>Database</en>
-</DATABASE>
-<DATABASE_SERVER type="caption">
-  <en>Database Server IP Address</en>
-</DATABASE_SERVER>
-<DATABASE_NAME type="caption">
-  <en>Database Name</en>
-</DATABASE_NAME>
-<AVAILABLE_DB type="caption">
-  <en>Available Databases</en>
-</AVAILABLE_DB>
-<HTTP_USER_AGENT type="caption">
-  <en><![CDATA[User's Browser]]></en>
-</HTTP_USER_AGENT>
-<IP type="caption">
-  <en><![CDATA[User's Ip Address]]></en>
-</IP>
-<JS type="javascript"><![CDATA[
+<dynaForm name="dbInfo" basedir="" width="450" enableTemplate="0" ajaxSubmit="0">
+  <ENVIRONMENT type="hidden"/>
+  <DYNA_HEADER type="title">
+    <en><![CDATA[System Information]]></en>
+  </DYNA_HEADER>
+  <FLUID type="caption" group="5">
+    <en><![CDATA[ProcessMaker]]></en>
+  </FLUID>
+  <SYSTEM type="caption">
+    <en><![CDATA[Operating System]]></en>
+  </SYSTEM>
+  <TIME_ZONE type="caption">
+    <en><![CDATA[Time zone]]></en>
+  </TIME_ZONE>
+  <SERVER_SOFTWARE type="caption">
+    <en><![CDATA[Web Server]]></en>
+  </SERVER_SOFTWARE>
+  <SERVER_NAME type="caption" group="4">
+    <en><![CDATA[Server Name]]></en>
+  </SERVER_NAME>
+  <SERVER_ADDR type="caption">
+    <en><![CDATA[Server IP Address]]></en>
+  </SERVER_ADDR>
+  <PHP type="caption">
+    <en><![CDATA[PHP version]]></en>
+  </PHP>
+  <DATABASE type="caption">
+    <en><![CDATA[Database]]></en>
+  </DATABASE>
+  <DATABASE_SERVER type="caption">
+    <en><![CDATA[Database Server IP Address]]></en>
+  </DATABASE_SERVER>
+  <DATABASE_NAME type="caption">
+    <en><![CDATA[Database Name]]></en>
+  </DATABASE_NAME>
+  <AVAILABLE_DB type="caption">
+    <en><![CDATA[Available Databases]]></en>
+  </AVAILABLE_DB>
+  <HTTP_USER_AGENT type="caption">
+    <en><![CDATA[User's Browser]]></en>
+  </HTTP_USER_AGENT>
+  <IP type="caption">
+    <en><![CDATA[User's Ip Address]]></en>
+  </IP>
+  <JS type="javascript"><![CDATA[
 // note added by carlos pacha carlos[at]colosa[dot]com pckrlos[at]gmail[dot]com
 // the following fields are hidden if we've not chosen a workspace. Related 8021 bug
 //var dynaformOnload = function(){
@@ -59,6 +56,3 @@
 //};
 ]]></JS>
 </dynaForm>
-
-
-

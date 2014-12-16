@@ -1,29 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="tasks_Permissions" width="99%" mode="edit" enableTemplate="0" border="0" height="305px">
-
-<TAS_UID type="hidden"/>
-
-<INDEX type="hidden"/>
-
-<IFORM type="hidden"/>
-
-<TAS_SUBTITLE1 type="subtitle" value="1" group="1">
-  <en>Exceptions Handling</en>
-</TAS_SUBTITLE1>
-
-
-
-
-
-<TAS_TYPE type="checkbox" value="ADHOC" group="1">
-  <en>Allow arbitrary transfer (Ad hoc)</en>
-</TAS_TYPE>
-
-
-
-
-
-<JS type="javascript"><![CDATA[
+  <TAS_UID type="hidden"/>
+  <INDEX type="hidden"/>
+  <IFORM type="hidden"/>
+  <TAS_SUBTITLE1 type="subtitle" value="1" group="1">
+    <en><![CDATA[Exceptions Handling]]></en>
+  </TAS_SUBTITLE1>
+  <TAS_TYPE type="checkbox" value="ADHOC" group="1">
+    <en><![CDATA[Allow arbitrary transfer (Ad hoc)]]></en>
+  </TAS_TYPE>
+  <JS type="javascript"><![CDATA[
 /* Recovery data */
 if (aTaskFlag[4])
 {
@@ -42,5 +28,4 @@ else
   aTaskFlag[4] = true;
 }
 ]]></JS>
-
-</dynaForm>  
+</dynaForm>

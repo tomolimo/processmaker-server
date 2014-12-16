@@ -1,29 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="users/users_ReassignSelectSubType" type="xmlform" width="100%" enableTemplate="1">
-
-<TITLE1 type="title">
-  <en>Select the type grouping of the cases</en>
-</TITLE1>
-
-<USR_UID type="hidden"/>
-
-<TYPE type="dropdown" size="20" maxlength="20" required="0" mode="view">
-  <en>Reassign Type<option name="ANY_USER">Any user</option></en>
-</TYPE>
-
-<SUB_TYPE type="dropdown" size="20" maxlength="20" required="0">
-  <en>Group Cases By<option name="PROCESS">Process</option></en>
-</SUB_TYPE>
-
-<BTN_CANCEL type="button" onclick="cancel();">
-  <en>Cancel</en>
-</BTN_CANCEL>
-
-<CONTINUE type="button" onclick="goToStep3();">
-  <en>Continue</en>
-</CONTINUE>
-
-<JS type="javascript"><![CDATA[
+  <TITLE1 type="title">
+    <en><![CDATA[Select the type grouping of the cases]]></en>
+  </TITLE1>
+  <USR_UID type="hidden"/>
+  <TYPE type="dropdown" size="20" maxlength="20" required="0" mode="view">
+    <en><![CDATA[Reassign Type]]><option name="ANY_USER"><![CDATA[Any user]]></option></en>
+  </TYPE>
+  <SUB_TYPE type="dropdown" size="20" maxlength="20" required="0">
+    <en><![CDATA[Group Cases By]]><option name="PROCESS"><![CDATA[Process]]></option></en>
+  </SUB_TYPE>
+  <BTN_CANCEL type="button" onclick="cancel();">
+    <en><![CDATA[Cancel]]></en>
+  </BTN_CANCEL>
+  <CONTINUE type="button" onclick="goToStep3();">
+    <en><![CDATA[Continue]]></en>
+  </CONTINUE>
+  <JS type="javascript"><![CDATA[
 
 var goToStep3 = function() {
   oRPC = new leimnud.module.rpc.xmlhttp({
@@ -47,5 +40,4 @@ function cancel(){
 }
 
 ]]></JS>
-
-</dynaForm> 
+</dynaForm>

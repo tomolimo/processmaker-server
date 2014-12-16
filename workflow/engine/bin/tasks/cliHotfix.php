@@ -8,7 +8,7 @@ CLI::taskDescription(<<<EOT
 EOT
 );
 
-CLI::taskRun(runHotfixInstall);
+CLI::taskRun("runHotfixInstall");
 
 function runHotfixInstall($command, $args)
 {

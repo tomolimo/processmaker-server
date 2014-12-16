@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="webservices" width="600" mode="edit" border="0" enableTemplate="0" height="205px">
-
-<status_code type="text" readonly="1" size="34" maxlength="32">
-  <en>Status Code</en>
-<es><![CDATA[Código de estado]]></es></status_code>
-
-<message type="textarea" readonly="1" cols="60" rows="8">
-  <en>Message</en>
-<es>Mensaje</es></message>
-
-<time_stamp type="text" readonly="1" size="34" maxlength="32">
-  <en>Time Stamp</en>
-<es>Time Stamp</es></time_stamp>
-</dynaForm>  
+  <status_code type="text" readonly="1" size="34" maxlength="32">
+    <en><![CDATA[Status Code]]></en>
+    <es><![CDATA[Código de estado]]></es>
+  </status_code>
+  <message type="textarea" readonly="1" cols="60" rows="8">
+    <en><![CDATA[Message]]></en>
+    <es>Mensaje</es>
+  </message>
+  <time_stamp type="text" readonly="1" size="34" maxlength="32">
+    <en><![CDATA[Time Stamp]]></en>
+    <es>Time Stamp</es>
+  </time_stamp>
+</dynaForm>

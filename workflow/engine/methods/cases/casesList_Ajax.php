@@ -178,7 +178,7 @@ if ($actionAjax == "processListExtJs") {
 
     $cProcess->addAscendingOrderByColumn(AppCacheViewPeer::APP_PRO_TITLE);
 
-    $oDataset = AppCacheViewPeer::doSelectRS( $cProcess );
+    $oDataset = AppCacheViewPeer::doSelectRS( $cProcess, Propel::getDbConnection('workflow_ro') );
     $oDataset->setFetchmode( ResultSet::FETCHMODE_ASSOC );
     $oDataset->next();
 

@@ -121,7 +121,7 @@ class SOAP_Base_Object extends PEAR
                 $code = $is_instance ? $this->_myfaultcode : 'Client';
             }
             require_once 'SOAP/Fault.php';
-            $fault =& new SOAP_Fault($str,
+            $fault = new SOAP_Fault($str,
                                      $code,
                                      $actorURI,
                                      $detail,
@@ -744,7 +744,7 @@ class SOAP_Base extends SOAP_Base_Object
                         }
                     }
                 }
-                $return =& new $classname;
+                $return = new $classname;
             } else {
                 $return = array();
             }
@@ -965,7 +965,7 @@ class SOAP_Base extends SOAP_Base_Object
         $params['decode_headers'] = true;
 
         // Lame thing to have to do for decoding.
-        $decoder =& new Mail_mimeDecode($data);
+        $decoder = new Mail_mimeDecode($data);
         $structure = $decoder->decode($params);
 
         if (isset($structure->body)) {
@@ -1009,7 +1009,7 @@ class SOAP_Base extends SOAP_Base_Object
 
         // This SHOULD be moved to the transport layer, e.g. PHP itself should
         // handle parsing DIME ;)
-        $dime =& new Net_DIME_Message();
+        $dime = new Net_DIME_Message();
         $err = $dime->decodeData($data);
         if (PEAR::isError($err)) {
             $this->_raiseSoapFault('Failed to decode the DIME message!', '', '', 'Server');

@@ -1,37 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<dynaForm
-  name="dynaforms_ChoseType"
-  type="xmlform"
-  width="350" enableTemplate="1"
->
-
-<DYN_UID type="hidden" showInTable="0"/>
-<PRO_UID type="hidden" showInTable="0"/>
-
-<TITLE type="title" group="1">
-  <en>Please select the Dynaform Type</en>
-</TITLE>
-
-<DYN_SOURCE type="radiogroup" sqlConnection="dbarray" defaultvalue="normal">
-  <en>Type
-    <option name="normal">Blank Dynaform</option>
-    <option name="pmtable">PM Table Dynaform</option>
-    <option name="copy">Copy/Import Dynaform</option>
-  </en>
-</DYN_SOURCE>
-
-<BTN_CANCEL type="button" onclick="cancel();">
-  <en>Cancel</en>
-</BTN_CANCEL>
-
-<ACCEPT type="button" onclick="choseDynaformType( this.form, false );">
-  <en>Select</en>
-</ACCEPT>
-
-<dynaformsNewPlugin type="private" defaultValue="../dynaforms/dynaforms_NewPlugin"/>
-
-<JS type="javascript">
-    <![CDATA[
+<dynaForm name="dynaforms_ChoseType" type="xmlform" width="350" enableTemplate="1">
+  <DYN_UID type="hidden" showInTable="0"/>
+  <PRO_UID type="hidden" showInTable="0"/>
+  <TITLE type="title" group="1">
+    <en><![CDATA[Please select the Dynaform Type]]></en>
+  </TITLE>
+  <DYN_SOURCE type="radiogroup" sqlConnection="dbarray" defaultvalue="normal">
+    <en><![CDATA[Type]]><option name="normal"><![CDATA[Blank Dynaform]]></option><option name="pmtable"><![CDATA[PM Table Dynaform]]></option><option name="copy"><![CDATA[Copy/Import Dynaform]]></option></en>
+  </DYN_SOURCE>
+  <BTN_CANCEL type="button" onclick="cancel();">
+    <en><![CDATA[Cancel]]></en>
+  </BTN_CANCEL>
+  <ACCEPT type="button" onclick="choseDynaformType( this.form, false );">
+    <en><![CDATA[Select]]></en>
+  </ACCEPT>
+  <dynaformsNewPlugin type="private" defaultValue="../dynaforms/dynaforms_NewPlugin"/>
+  <JS type="javascript"><![CDATA[
     function choseDynaformType(form, bOpen)
     {
         var action = "";
@@ -57,7 +41,5 @@
     {
         currentPopupWindow.remove();
     }
-    ]]>
-</JS>
+    ]]></JS>
 </dynaForm>
-

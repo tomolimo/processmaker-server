@@ -1,32 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="AppFolder" width="600" mode="edit" enableTemplate="0" border="0">
-
-<title1 type="title">
-  <en>AppFolder form</en>
-</title1>
-
-<FOLDER_UID type="text" size="32" maxlength="32">
-  <en>Folder Uid</en>
-</FOLDER_UID>
-
-<FOLDER_PARENT_UID type="text" size="32" maxlength="32">
-  <en>Folder Parent Uid</en>
-</FOLDER_PARENT_UID>
-
-<FOLDER_NAME type="textarea" size="25" maxlength="25">
-  <en>Folder Name</en>
-</FOLDER_NAME>
-
-<FOLDER_CREATE_DATE type="date" size="25" maxlength="25">
-  <en>Folder Create Date</en>
-</FOLDER_CREATE_DATE>
-
-<FOLDER_UPDATE_DATE type="date" size="25" maxlength="25">
-  <en>Folder Update Date</en>
-</FOLDER_UPDATE_DATE>
-
-<BTN_SUBMIT type="submit">
-  <en>save</en>
-</BTN_SUBMIT>
-
-</dynaForm> 
+  <title1 type="title">
+    <en><![CDATA[AppFolder form]]></en>
+  </title1>
+  <FOLDER_UID type="text" size="32" maxlength="32">
+    <en><![CDATA[Folder Uid]]></en>
+  </FOLDER_UID>
+  <FOLDER_PARENT_UID type="text" size="32" maxlength="32">
+    <en><![CDATA[Folder Parent Uid]]></en>
+  </FOLDER_PARENT_UID>
+  <FOLDER_NAME type="textarea" size="25" maxlength="25">
+    <en><![CDATA[Folder Name]]></en>
+  </FOLDER_NAME>
+  <FOLDER_CREATE_DATE type="date" size="25" maxlength="25">
+    <en><![CDATA[Folder Create Date]]></en>
+  </FOLDER_CREATE_DATE>
+  <FOLDER_UPDATE_DATE type="date" size="25" maxlength="25">
+    <en><![CDATA[Folder Update Date]]></en>
+  </FOLDER_UPDATE_DATE>
+  <BTN_SUBMIT type="submit">
+    <en><![CDATA[save]]></en>
+  </BTN_SUBMIT>
+</dynaForm>

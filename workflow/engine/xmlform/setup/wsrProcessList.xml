@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm rowsPerPage="24">
-
-<guid type="text" colWidth="200" align="left" titleAlign="left">
-  <en>GUID</en>
-<es>GUID</es></guid>
-
-<name type="text" colWidth="400" align="left" titleAlign="left">
-  <en>Process Title</en>
-<es><![CDATA[Título del Proceso]]></es></name>
-
-
-</dynaForm>  
+  <guid type="text" colWidth="200" align="left" titleAlign="left">
+    <en><![CDATA[GUID]]></en>
+    <es>GUID</es>
+  </guid>
+  <name type="text" colWidth="400" align="left" titleAlign="left">
+    <en><![CDATA[Process Title]]></en>
+    <es><![CDATA[Título del Proceso]]></es>
+  </name>
+</dynaForm>

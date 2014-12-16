@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="xmlmenu">
-
-<backs type="link" link="reportsList" onclick="">
-  <en>Back</en>
-</backs>
-
-</dynaForm>  
+  <backs type="link" link="reportsList" onclick="">
+    <en><![CDATA[Back]]></en>
+  </backs>
+</dynaForm>

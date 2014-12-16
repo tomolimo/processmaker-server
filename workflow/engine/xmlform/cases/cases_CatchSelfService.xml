@@ -1,63 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<dynaForm
-  enabletemplate="1"
-  name="cases_Resume"
-  type="xmlform"
-  width="500px"
-  labelWidth="100px"
->
-
-<TITLE1 type="title">
-  <en>Claim Case</en>
-</TITLE1>
-
-<PRO_TITLE type="text" mode="view">
-  <en>Process</en>
-</PRO_TITLE>
-
-<STATUS type="text" mode="view">
-  <en>Case Status</en>
-</STATUS>
-
-<TITLE type="text" mode="view">
-  <en>Case Title</en>
-</TITLE>
-
-<APP_NUMBER type="text" mode="view">
-  <en>Case Number</en>
-</APP_NUMBER>
-
-<APP_UID type="text" mode="view">
-  <en>Case Uid</en>
-</APP_UID>
-
-<TAS_TITLE type="text" mode="view">
-  <en>Task</en>
-</TAS_TITLE>
-
-<DEL_DELEGATE_DATE type="text" mode="view">
-  <en>Task Delegate Date</en>
-</DEL_DELEGATE_DATE>
-
-<DEL_TASK_DUE_DATE type="text" mode="view">
-  <en>Task Due Date</en>
-</DEL_TASK_DUE_DATE>
-
-
-<PREVIOUS_TASK type="text" mode="view">
-  <en>Previous Task</en>
-</PREVIOUS_TASK>
-
-<PREVIOUS_USER type="text" mode="view">
-  <en>Previous User</en>
-</PREVIOUS_USER>
-
-<BTN_CATCH type="submit"  >
-  <en>Claim this case</en>
-</BTN_CATCH>
-
-<BTN_CANCEL type="button" onclick="javascript:history.back()">
-  <en>Cancel</en>
-</BTN_CANCEL>
-
+<dynaForm enabletemplate="1" name="cases_Resume" type="xmlform" width="500px" labelWidth="100px">
+  <TITLE1 type="title">
+    <en><![CDATA[Claim Case]]></en>
+  </TITLE1>
+  <PRO_TITLE type="text" mode="view">
+    <en><![CDATA[Process]]></en>
+  </PRO_TITLE>
+  <STATUS type="text" mode="view">
+    <en><![CDATA[Case Status]]></en>
+  </STATUS>
+  <TITLE type="text" mode="view">
+    <en><![CDATA[Case Title]]></en>
+  </TITLE>
+  <APP_NUMBER type="text" mode="view">
+    <en><![CDATA[Case Number]]></en>
+  </APP_NUMBER>
+  <APP_UID type="text" mode="view">
+    <en><![CDATA[Case Uid]]></en>
+  </APP_UID>
+  <TAS_TITLE type="text" mode="view">
+    <en><![CDATA[Task]]></en>
+  </TAS_TITLE>
+  <DEL_DELEGATE_DATE type="text" mode="view">
+    <en><![CDATA[Task Delegate Date]]></en>
+  </DEL_DELEGATE_DATE>
+  <DEL_TASK_DUE_DATE type="text" mode="view">
+    <en><![CDATA[Task Due Date]]></en>
+  </DEL_TASK_DUE_DATE>
+  <PREVIOUS_TASK type="text" mode="view">
+    <en><![CDATA[Previous Task]]></en>
+  </PREVIOUS_TASK>
+  <PREVIOUS_USER type="text" mode="view">
+    <en><![CDATA[Previous User]]></en>
+  </PREVIOUS_USER>
+  <BTN_CATCH type="submit">
+    <en><![CDATA[Claim this case]]></en>
+  </BTN_CATCH>
+  <BTN_CANCEL type="button" onclick="javascript:history.back()">
+    <en><![CDATA[Cancel]]></en>
+  </BTN_CANCEL>
 </dynaForm>

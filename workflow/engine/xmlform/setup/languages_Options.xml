@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="xmlmenu">
-<MNU_IMPORT type="link" value="" link="languages_ImportForm" colAlign="left" colWidth="160">
-  <en>Import / Update</en>
-</MNU_IMPORT>
-
-<JS type="javascript"><![CDATA[
+  <MNU_IMPORT type="link" value="" link="languages_ImportForm" colAlign="left" colWidth="160">
+    <en><![CDATA[Import / Update]]></en>
+  </MNU_IMPORT>
+  <JS type="javascript"><![CDATA[
 var oPanel;
 var importLanguage = function() {
   oPanel = new leimnud.module.panel();
@@ -39,4 +38,4 @@ var languageSelect = function(lang)
     
 }
 ]]></JS>
-</dynaForm>  
+</dynaForm>

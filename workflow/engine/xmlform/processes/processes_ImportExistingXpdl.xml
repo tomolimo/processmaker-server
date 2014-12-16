@@ -1,42 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="processes_New" width="50%" labelWidth="55px" mode="edit" enableTemplate="1">
-
-
-<title type="title" enableHTML="1">
-  <en><![CDATA[<div align="center">Importing Existing Process</div>]]></en>
-</title>
-
-<TITLE1 type="subtitle">
-  <en>The process you are trying to import already exist. Please select one of the following options to continue:</en>
-</TITLE1>
-
-
-<IMPORT_OPTION type="radiogroup">
-  <en>
-    <option name="1">Update the current process, overwriting all tasks and steps</option>
-    <option name="2">Disable the current process and create a new version of the process</option>
-    <option name="3">Create a completely new process without changing the current process</option>
-  </en>
-</IMPORT_OPTION>
-
-<PRO_FILENAME type="hidden">
+  <title type="title" enableHTML="1">
+    <en><![CDATA[<div align="center">Importing Existing Process</div>]]></en>
+  </title>
+  <TITLE1 type="subtitle">
+    <en><![CDATA[The process you are trying to import already exists. Please select one of the following options to continue:]]></en>
+  </TITLE1>
+  <IMPORT_OPTION type="radiogroup">
+    <en><![CDATA[]]><option name="1"><![CDATA[Update the current process, overwriting all tasks and steps]]></option><option name="2"><![CDATA[Disable the current process and create a new version of the process]]></option><option name="3"><![CDATA[Create a completely new process without changing the current process]]></option></en>
+  </IMPORT_OPTION>
+  <PRO_FILENAME type="hidden">
 </PRO_FILENAME>
-
-<OBJ_UID type="hidden">
+  <OBJ_UID type="hidden">
 </OBJ_UID>
-
-<SUBMIT type="submit">
-  <en>Save</en>
-</SUBMIT>
-<BTN_CANCEL type="button" onclick="cancel();">
-  <en>Cancel</en>
-</BTN_CANCEL>
-
-<JS type="javascript" replacetags="1"><![CDATA[
+  <SUBMIT type="submit">
+    <en><![CDATA[Save]]></en>
+  </SUBMIT>
+  <BTN_CANCEL type="button" onclick="cancel();">
+    <en><![CDATA[Cancel]]></en>
+  </BTN_CANCEL>
+  <JS type="javascript" replacetags="1"><![CDATA[
 function cancel(){
     window.location = 'processes_List';
 }
 
 ]]></JS>
-
-</dynaForm>  
+</dynaForm>

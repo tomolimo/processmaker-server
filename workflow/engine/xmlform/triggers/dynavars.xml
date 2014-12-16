@@ -1,18 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm sqlConnection="" menu="" width="100%" rowsPerPage="12">
-
-<fieldname type="hidden" showInTable="0"/>
-
-<variable type="hidden" colWidth="150" titleAlign="left" align="left" enableHTML="1" showInTable="0">
-  <en>Variable</en>
-</variable>
-
-<variable_label type="text" colWidth="250" titleAlign="left" align="left" enableHTML="1" showInTable="1">
-  <en>Variable</en>
-</variable_label>
-
-<label type="text" colWidth="350" titleAlign="left" align="left">
-  <en>Label</en>
-</label>
-
-</dynaForm> 
+  <fieldname type="hidden" showInTable="0"/>
+  <variable type="hidden" colWidth="150" titleAlign="left" align="left" enableHTML="1" showInTable="0">
+    <en>Variable</en>
+  </variable>
+  <variable_label type="text" colWidth="250" titleAlign="left" align="left" enableHTML="1" showInTable="1">
+    <en><![CDATA[Variable]]></en>
+  </variable_label>
+  <label type="text" colWidth="350" titleAlign="left" align="left">
+    <en><![CDATA[Label]]></en>
+  </label>
+</dynaForm>

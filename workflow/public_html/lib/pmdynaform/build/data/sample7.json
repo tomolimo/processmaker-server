@@ -1,0 +1,690 @@
+{
+    "name": "form-example",
+    "items": [
+        {
+            "type":"panel",
+            "items":
+            [
+                [
+                    {
+                        "type": "title",
+                        "colSpan": 12,
+                        "name": "title",
+                        "label": "PMDynaform 7 - Layouts"
+                    }
+                ],
+                [
+                    {
+                        "var_name": "field10",
+                        "var_uid": "10",
+                        "type": "text",
+                        "colSpan":12,
+                        "name": "textName1",
+                        "defaultValue": "1000",
+                        "label": "Integer with max Length",
+                        "required": true,
+                        "readonly": false,
+                        "valueType": "integer",
+                        "maxLength": 10,
+                        "autoComplete": "on",
+                        "hint":null
+                    }
+                ],
+                [
+                    {
+                        "var_name": "field11",
+                        "var_uid": "11",
+                        "type": "suggest",
+                        "colSpan":12,
+                        "name": "textName1",
+                        "defaultValue": "field2",
+                        "label": "Suggest",
+                        "required": true,
+                        "readonly": false,
+                        "valueType": "string",
+                        "maxLength": 10,
+                        "options":[
+                            {
+                                "label": "First",
+                                "value": "FirstValue"
+                            },
+                            {
+                                "label": "Second",
+                                "value": "SecondValue"
+                            }
+                        ],
+                        "hint":null
+                    }
+                ],
+                [
+                    {
+                        "var_name": "field12",
+                        "var_uid": "12",
+                        "type": "link",
+                        "colSpan":12,
+                        "name": "textName1",
+                        "value": "This is the link value",
+                        "label": "link",
+                        "required": true,                        
+                        "maxLength": 10,
+                        "hint":null,
+                        "readOnly": true
+                    }
+                ],
+                [
+                    {
+                        "var_name": "field13",
+                        "var_uid": "13",
+                        "type": "text",
+                        "colSpan":12,
+                        "name": "textName2",
+                        "defaultValue": "field3",
+                        "label": "Float",
+                        "required": true,
+                        "readonly": false,
+                        "valueType": "float",
+                        "hint":null
+                    }
+                ],
+                [
+                    {
+                        "var_name": "field14",
+                        "var_uid": "14",
+                        "type": "text",
+                        "colSpan":12,
+                        "name": "textName3",
+                        "defaultValue": "field4",
+                        "label": "String",
+                        "required": true,
+                        "readonly": false,
+                        "valueType": "string",
+                        "hint":null
+                    }
+                ],
+                [
+                    {
+                        "var_name": "field15",
+                        "var_uid": "15",
+                        "type": "text",
+                        "colSpan":12,
+                        "name": "textName4",
+                        "defaultValue": "New Last name",
+                        "label": "Lastname",
+                        "required": false,
+                        "readonly": false,
+                        "hint":null
+                    }
+                ],
+                [
+                    {
+                        "var_name": "field16",
+                        "var_uid": "16",
+                        "type": "dropdown",
+                        "colSpan":12,
+                        "name": "Option",
+                        "label": "Options",
+                        "defaultValue": "option1",
+                        "readonly": false,
+                        "options":[
+                            {
+                                "label": "Option 1",
+                                "value": "option1"
+                            },
+                            {
+                                "label": "Option 2",
+                                "value": "option2"
+                            },
+                            {
+                                "label": "Option 3",
+                                "value": "option3"
+                            }
+                        ],
+                        "hint":null
+                    }
+                ],
+                [
+                    {
+                        "var_name": "field17",
+                        "var_uid": "17",
+                        "type": "checkbox",
+                        "colSpan":12,
+                        "name": "chekbox1",
+                        "label": "Checkbox",               
+                        "required": true,
+                        "options": [
+                            {
+                                "label": "This is the option A",
+                                "value": 1,
+                                "selected": true
+                            },
+                            {
+                                "label": "This is the option B",
+                                "value": 2
+                            },
+                            {
+                                "label": "This is the option C",
+                                "value": 3,
+                                "selected": true
+                            }
+                        ],
+                        "hint":null
+                    }
+                ],
+                [
+                    {
+                        "var_name": "field18",
+                        "var_uid": "18",
+                        "type": "checkbox",
+                        "colSpan":12,
+                        "name": "checkbox2",
+                        "label": "Incomplete Checkbox",
+                        "hint":null
+                    }
+                ],
+                [
+                    {
+                        "var_name": "field19",
+                        "var_uid": "19",
+                        "type": "text",
+                        "colSpan":6,
+                        "name": "textName5",
+                        "defaultValue": "column1",
+                        "label": "TextField",
+                        "placeholder": "column1",
+                        "required": false,
+                        "readonly": false,
+                        "hint":null
+                    },
+                    {
+                        "var_name": "field20",
+                        "var_uid": "20",
+                        "type": "text",
+                        "colSpan":6,
+                        "name": "name",
+                        "defaultValue": "column2",
+                        "label": "TextField",
+                        "placeholder": "column2",
+                        "required": false,
+                        "readonly": false,
+                        "hint":null
+                    }
+                ],
+                [
+                    {
+                        "var_name": "field21",
+                        "var_uid": "21",
+                        "type": "textarea",
+                        "colSpan":6,
+                        "label": "Textarea",                        
+                        "name": "textarea1",
+                        "placeholder": "Column1",
+                        "defaultValue": "Column1",
+                        "maxLength": 15,
+                        "required": true,
+                        "readonly": false,
+                        "rows":3,
+                        "cols":5,
+                        "hint":null
+                    },
+                    {
+                        "var_name": "field22",
+                        "var_uid": "22",
+                        "type": "textarea",
+                        "colSpan":6,
+                        "label": "Textarea",                        
+                        "name": "textarea2",
+                        "placeholder": "Column2",
+                        "defaultValue": "Column2",
+                        "required": false,
+                        "readonly": false,
+                        "rows":3,
+                        "cols":5,
+                        "hint":null
+                    }
+                ],
+                [
+                    {
+                        "var_name": "field23",
+                        "var_uid": "23",
+                        "type": "text",
+                        "colSpan":4,
+                        "name": "textName6",
+                        "defaultValue": "123",
+                        "label": "Text Field",
+                        "placeholder": "",
+                        "required": true,
+                        "readonly": false,
+                        "hint":null
+                    },
+                    {
+                        "var_name": "field24",
+                        "var_uid": "24",
+                        "type": "checkbox",
+                        "colSpan":4,
+                        "name": "checkbox3",
+                        "label": "CheckBox",                        
+                        "required": false,
+                        "options": [
+                            {
+                                "label" : "optA",
+                                "value" : 1,
+                                "selected" : true
+                            },
+                            {
+                                "label" : "optB",
+                                "value" : 2,
+                                "selected": true
+                            }
+                        ],
+                        "hint":null
+                    },
+                    {
+                        "var_name": "field10",
+                        "var_uid": "10",
+                        "type": "radio",
+                        "colSpan":4,
+                        "name": "radiogroup1",
+                        "defaultValue": "1",
+                        "label": "Radio Grp",
+                        "required": true,
+                        "options": [
+                            {
+                                "label" : "optA",
+                                "value" : "1"
+                            },
+                            {
+                                "label" : "optB",
+                                "value" : "2"
+                            }
+                        ],
+                        "hint":null
+                    }
+                ],
+                [
+                    {
+                        "var_name": "datetime",
+                        "var_uid": "datetimeId",
+                        "type": "datetime",
+                        "pickType":"datetime",
+                        "colSpan":4,
+                        "name": "datetime1",
+                        "defaultValue": "",
+                        "label": "Date time",
+                        "required": true,
+                        "readonly": false,
+                        "hint":null
+                    },
+                    {
+                        "var_name": "datetime",
+                        "var_uid": "datetimeId",
+                        "type": "datetime",
+                        "pickType":"date",
+                        "colSpan":4,
+                        "name": "datetime2",
+                        "defaultValue": "",
+                        "label": "Date",
+                        "required": true,
+                        "readonly": false,
+                        "hint":null
+                    },
+                    {
+                        "var_name": "datetime",
+                        "var_uid": "datetimeId",
+                        "type": "datetime",
+                        "pickType":"time",
+                        "colSpan":4,
+                        "name": "datetime3",
+                        "defaultValue": "",
+                        "label": "Time",
+                        "required": true,
+                        "readonly": false,
+                        "hint":null
+                    }
+                ],
+                [
+                    {
+                        "var_name": "field11",
+                        "var_uid": "11",
+                        "type": "textarea",
+                        "colSpan":4,
+                        "label": "Text area",                        
+                        "name": "textarea3",
+                        "placeholder": "placeholder",
+                        "defaultValue": "123",
+                        "maxLength": 10,
+                        "required": true,
+                        "readonly": false,
+                        "rows":3,
+                        "cols":5,
+                        "hint":null
+                    },
+                    {
+                        "var_name": "field11",
+                        "var_uid": "11",
+                        "type": "text",
+                        "colSpan":4,
+                        "name": "textName7",
+                        "defaultValue": "123",
+                        "label": "TextField",
+                        "placeholder": "placeholder",
+                        "required": false,
+                        "readonly": false,
+                        "hint":null
+                    },
+                    {
+                        "var_name": "field12",
+                        "var_uid": "12",
+                        "type": "dropdown",
+                        "colSpan":4,
+                        "name": "dropdown1",
+                        "label": "Options",
+                        "defaultValue": "option2",
+                        "required": true,
+                        "readonly": false,
+                        "options":[
+                            {
+                                "label": "Select...",
+                                "value": ""
+                            },
+                            {
+                                "label": "Option 1",
+                                "value": "option1"
+                            },
+                            {
+                                "label": "Option 2",
+                                "value": "option2"
+                            },
+                            {
+                                "label": "Option 3",
+                                "value": "option3"
+                            }
+                        ],
+                        "hint":null
+                    }
+                ],
+                [
+                    {
+                        "var_name": "field12",
+                        "var_uid": "12",
+                        "type": "dropdown",
+                        "name": "continent",
+                        "colSpan":4,
+                        "label": "Continent",
+                        "dependentFields": ["country"],
+                        "options":[
+                            {
+                                "label": "America",
+                                "value": "american"
+                            },
+                            {
+                                "label": "Asia",
+                                "value": "asia"
+                            },
+                            {
+                                "label": "Europe",
+                                "value": "europe"
+                            }
+                        ],
+                        "hint":null
+                    },
+                    {
+                        "var_name": "field11",
+                        "var_uid": "11",
+                        "type": "dropdown",
+                        "name": "country",
+                        "colSpan":4,
+                        "label": "Country",
+                        "dependentFields": ["city"],
+                        "maxLength": 10,
+                        "required": false,
+                        "readonly": false,
+                        "options":[],
+                        "hint":null
+                    },
+                    {
+                        "var_name": "field10",
+                        "var_uid": "10",
+                        "type": "dropdown",
+                        "name": "city",
+                        "colSpan":4,
+                        "label": "City",
+                        "maxLength": 10,
+                        "required": false,
+                        "readonly": false,
+                        "options":[],
+                        "hint":null
+                    }
+                ],
+                [
+                    {
+                      "type" : "button",
+                      "colSpan" : 6,
+                      "label":"Button"
+                    },
+                    {
+                      "type" : "submit",
+                      "colSpan" : 6,
+                      "label" : "Submit"
+                    }
+                ]
+            ],
+            "variables":
+            [
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "workflow",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "string",
+                    "var_label": "users",
+                    "var_name": "field10",
+                    "var_allowNull": 1,
+                    "var_sql": "SELECT USR_UID, USR_USERNAME\nFROM USERS\nWHERE USR_USERNAME <>  \" \"",
+                    "var_uid": "10"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "workflow",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "string",
+                    "var_label": "country",
+                    "var_name": "field11",
+                    "var_allowNull": 1,
+                    "var_sql": "SELECT IC_UID,IC_NAME   \nFROM ISO_COUNTRY WHERE IC_NAME <> \" \"",
+                    "var_uid": "11"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "workflow",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "string",
+                    "var_label": "subdivision",
+                    "var_name": "field12",
+                    "var_allowNull": 1,
+                    "var_sql": "SELECT \nIS_UID,\nIS_NAME FROM ISO_SUBDIVISION WHERE IC_UID = \"@#country\" AND IS_NAME <> \" \"",
+                    "var_uid": "12"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "workflow",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "string",
+                    "var_label": "location",
+                    "var_name": "field13",
+                    "var_allowNull": 1,
+                    "var_sql": "SELECT IL_UID, IL_NAME\nFROM ISO_LOCATION\nWHERE IS_UID =  \"@#subdivision\" AND IL_NAME <> \" \" AND IC_UID = \"@#country\"",
+                    "var_uid": "13"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "workflow",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "string",
+                    "var_label": "varname",
+                    "var_name": "field14",
+                    "var_allowNull": 1,
+                    "var_sql": "",
+                    "var_uid": "14"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "none",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "string",
+                    "var_label": "simplevariable",
+                    "var_name": "field15",
+                    "var_allowNull": 1,
+                    "var_sql": "",
+                    "var_uid": "15"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "none",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "string",
+                    "var_label": "Simple Variable Two",
+                    "var_name": "field16",
+                    "var_allowNull": 1,
+                    "var_sql": "",
+                    "var_uid": "16"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "none",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "datetime",
+                    "var_label": "Simple Variable Three",
+                    "var_name": "field17",
+                    "var_allowNull": 1,
+                    "var_sql": "",
+                    "var_uid": "17"
+                },
+                {
+                    "var_acceptedValues": [
+                        {
+                          "value": "First Value",
+                          "keyValue": "firstvalue"
+                        },
+                        {
+                          "value": "Second Value",
+                          "keyValue": "secondvalue"
+                        }
+                    ],
+                    "var_dbConnection": "none",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 100,
+                    "var_fieldType": "string",
+                    "var_label": "optionsvariable",
+                    "var_name": "field18",
+                    "var_allowNull": 1,
+                    "var_sql": "",
+                    "var_uid": "18"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "none",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "string",
+                    "var_label": "variablegridone",
+                    "var_name": "field19",
+                    "var_allowNull": 1,
+                    "var_sql": "",
+                    "var_uid": "19"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "none",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 100,
+                    "var_fieldType": "string",
+                    "var_label": "field20",
+                    "var_name": "field20",
+                    "var_allowNull": 1,
+                    "var_sql": "",
+                    "var_uid": "20"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "none",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "string",
+                    "var_label": "variablegridthree",
+                    "var_name": "field21",
+                    "var_allowNull": 1,
+                    "var_sql": "",
+                    "var_uid": "21"
+                },
+                {
+                    "var_acceptedValues": [
+                    {
+                      "value": "variable option 1",
+                      "keyValue": "variable_option_1"
+                    },
+                    {
+                      "value": "variable option 2",
+                      "keyValue": "variable_option_2"
+                    },
+                    {
+                      "value": "variable option 3",
+                      "keyValue": "variable_option_3"
+                    }
+                  ],
+                  "var_dbConnection": "none",
+                  "var_defaultValue": "",
+                  "var_fieldSize": 10,
+                  "var_fieldType": "string",
+                  "var_label": "variablegridfour",
+                  "var_name": "field22",
+                  "var_allowNull": 1,
+                  "var_sql": "",
+                  "var_uid": "22"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "none",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "string",
+                    "var_label": "variablegridthree",
+                    "var_name": "field23",
+                    "var_allowNull": 1,
+                    "var_sql": "",
+                    "var_uid": "23"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "none",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "string",
+                    "var_label": "variablegridthree",
+                    "var_name": "field24",
+                    "var_allowNull": 1,
+                    "var_sql": "",
+                    "var_uid": "24"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "none",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "string",
+                    "var_label": "variablegridthree",
+                    "var_name": "datetime",
+                    "var_allowNull": 1,
+                    "var_sql": "",
+                    "var_uid": "datetimeId"
+                }
+            ]
+        }
+    ]
+}

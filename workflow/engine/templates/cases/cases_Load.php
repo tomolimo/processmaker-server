@@ -18,16 +18,15 @@
       document.documentElement.style.overflowY = 'hidden';
 
       var oClientWinSize = getClientWindowSize();
-      
 
-    
+
     function autoResizeScreen() {
       oCasesFrame    = document.getElementById('casesFrame');
       height = getClientWindowSize().height-90;
-      oCasesFrame.style.height = height;
+      oCasesFrame.style.height = height + 'px';;
       oCasesSubFrame = oCasesFrame.contentWindow.document.getElementById('casesSubFrame');
         if(oCasesSubFrame){
-          oCasesSubFrame.style.height = height-5;
+          oCasesSubFrame.style.height = (height-5) + 'px';;
         }
         else {
           setTimeout('autoResizeScreen()', 2000);

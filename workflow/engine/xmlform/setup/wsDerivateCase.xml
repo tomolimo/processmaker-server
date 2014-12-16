@@ -1,25 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="xmlform" name="webservices" width="500" mode="edit" border="0" enableTemplate="0" height="105px">
-
-<SESSION_ID type="text" size="36" maxlength="32">
-  <en>Session Id</en>
-</SESSION_ID>
-
-<CASE_ID type="dropdown" sqlConnection="dbarray">
+  <SESSION_ID type="text" size="36" maxlength="32">
+    <en><![CDATA[Session Id]]></en>
+  </SESSION_ID>
+  <CASE_ID type="dropdown" sqlConnection="dbarray">
   SELECT * from case
-  <en>Case ID</en>
+  <en><![CDATA[Case ID]]></en>
 </CASE_ID>
-
-<DEL_INDEX type="dropdown" sqlConnection="dbarray">
+  <DEL_INDEX type="dropdown" sqlConnection="dbarray">
   SELECT * from taskCases
-  <en>Task Case(delindex)<option name="">Default</option></en>
+  <en><![CDATA[Task Case(delindex)]]><option name=""><![CDATA[Default]]></option></en>
 </DEL_INDEX>
-
-<ACTION type="hidden">
-</ACTION>                             
-
-<ACTIONB type="button" onclick="submitThisForm(this.form);">
-  <en>DerivateCase</en>
-</ACTIONB>
-
-</dynaForm>  
+  <ACTION type="hidden">
+</ACTION>
+  <ACTIONB type="button" onclick="submitThisForm(this.form);">
+    <en><![CDATA[DerivateCase]]></en>
+  </ACTIONB>
+</dynaForm>

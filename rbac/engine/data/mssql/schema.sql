@@ -4,7 +4,7 @@
 /* ---------------------------------------------------------------------- */
 
 
-IF EXISTS (SELECT 1 FROM sysobjects WHERE type = 'U' AND name = 'PERMISSIONS')
+IF EXISTS (SELECT 1 FROM sysobjects WHERE type = 'U' AND name = 'RBAC_PERMISSIONS')
 BEGIN
 	 DECLARE @reftable_1 nvarchar(60), @constraintname_1 nvarchar(60)
 	 DECLARE refcursor CURSOR FOR
@@ -16,7 +16,7 @@ BEGIN
 	   where tables.id = ref.rkeyid
 		 and cons.id = ref.constid
 		 and reftables.id = ref.fkeyid
-		 and tables.name = 'PERMISSIONS'
+		 and tables.name = 'RBAC_PERMISSIONS'
 	 OPEN refcursor
 	 FETCH NEXT from refcursor into @reftable_1, @constraintname_1
 	 while @@FETCH_STATUS = 0
@@ -26,11 +26,11 @@ BEGIN
 	 END
 	 CLOSE refcursor
 	 DEALLOCATE refcursor
-	 DROP TABLE [PERMISSIONS]
+	 DROP TABLE [RBAC_PERMISSIONS]
 END
 
 
-CREATE TABLE [PERMISSIONS]
+CREATE TABLE [RBAC_PERMISSIONS]
 (
 	[PER_UID] VARCHAR(32) default '' NOT NULL,
 	[PER_CODE] VARCHAR(32) default '' NOT NULL,
@@ -38,7 +38,7 @@ CREATE TABLE [PERMISSIONS]
 	[PER_UPDATE_DATE] CHAR(19) default '0000-00-00 00:00:00' NOT NULL,
 	[PER_STATUS] INT default 1 NOT NULL,
 	[PER_SYSTEM] VARCHAR(32) default '00000000000000000000000000000002' NOT NULL,
-	CONSTRAINT PERMISSIONS_PK PRIMARY KEY ([PER_UID])
+	CONSTRAINT RBAC_PERMISSIONS_PK PRIMARY KEY ([PER_UID])
 );
 
 /* ---------------------------------------------------------------------- */
@@ -46,7 +46,7 @@ CREATE TABLE [PERMISSIONS]
 /* ---------------------------------------------------------------------- */
 
 
-IF EXISTS (SELECT 1 FROM sysobjects WHERE type = 'U' AND name = 'ROLES')
+IF EXISTS (SELECT 1 FROM sysobjects WHERE type = 'U' AND name = 'RBAC_ROLES')
 BEGIN
 	 DECLARE @reftable_2 nvarchar(60), @constraintname_2 nvarchar(60)
 	 DECLARE refcursor CURSOR FOR
@@ -68,11 +68,11 @@ BEGIN
 	 END
 	 CLOSE refcursor
 	 DEALLOCATE refcursor
-	 DROP TABLE [ROLES]
+	 DROP TABLE [RBAC_ROLES]
 END
 
 
-CREATE TABLE [ROLES]
+CREATE TABLE [RBAC_ROLES]
 (
 	[ROL_UID] VARCHAR(32) default '' NOT NULL,
 	[ROL_PARENT] VARCHAR(32) default '' NOT NULL,
@@ -81,7 +81,7 @@ CREATE TABLE [ROLES]
 	[ROL_CREATE_DATE] CHAR(19) default '0000-00-00 00:00:00' NOT NULL,
 	[ROL_UPDATE_DATE] CHAR(19) default '0000-00-00 00:00:00' NOT NULL,
 	[ROL_STATUS] INT default 1 NOT NULL,
-	CONSTRAINT ROLES_PK PRIMARY KEY ([ROL_UID])
+	CONSTRAINT RBAC_ROLES_PK PRIMARY KEY ([ROL_UID])
 );
 
 /* ---------------------------------------------------------------------- */
@@ -89,7 +89,7 @@ CREATE TABLE [ROLES]
 /* ---------------------------------------------------------------------- */
 
 
-IF EXISTS (SELECT 1 FROM sysobjects WHERE type = 'U' AND name = 'ROLES_PERMISSIONS')
+IF EXISTS (SELECT 1 FROM sysobjects WHERE type = 'U' AND name = 'RBAC_ROLES_PERMISSIONS')
 BEGIN
 	 DECLARE @reftable_3 nvarchar(60), @constraintname_3 nvarchar(60)
 	 DECLARE refcursor CURSOR FOR
@@ -101,7 +101,7 @@ BEGIN
 	   where tables.id = ref.rkeyid
 		 and cons.id = ref.constid
 		 and reftables.id = ref.fkeyid
-		 and tables.name = 'ROLES_PERMISSIONS'
+		 and tables.name = 'RBAC_ROLES_PERMISSIONS'
 	 OPEN refcursor
 	 FETCH NEXT from refcursor into @reftable_3, @constraintname_3
 	 while @@FETCH_STATUS = 0
@@ -111,15 +111,15 @@ BEGIN
 	 END
 	 CLOSE refcursor
 	 DEALLOCATE refcursor
-	 DROP TABLE [ROLES_PERMISSIONS]
+	 DROP TABLE [RBAC_ROLES_PERMISSIONS]
 END
 
 
-CREATE TABLE [ROLES_PERMISSIONS]
+CREATE TABLE [RBAC_ROLES_PERMISSIONS]
 (
 	[ROL_UID] VARCHAR(32) default '' NOT NULL,
 	[PER_UID] VARCHAR(32) default '' NOT NULL,
-	CONSTRAINT ROLES_PERMISSIONS_PK PRIMARY KEY ([ROL_UID],[PER_UID])
+	CONSTRAINT RBAC_ROLES_PERMISSIONS_PK PRIMARY KEY ([ROL_UID],[PER_UID])
 );
 
 /* ---------------------------------------------------------------------- */
@@ -127,7 +127,7 @@ CREATE TABLE [ROLES_PERMISSIONS]
 /* ---------------------------------------------------------------------- */
 
 
-IF EXISTS (SELECT 1 FROM sysobjects WHERE type = 'U' AND name = 'SYSTEMS')
+IF EXISTS (SELECT 1 FROM sysobjects WHERE type = 'U' AND name = 'RBAC_SYSTEMS')
 BEGIN
 	 DECLARE @reftable_4 nvarchar(60), @constraintname_4 nvarchar(60)
 	 DECLARE refcursor CURSOR FOR
@@ -139,7 +139,7 @@ BEGIN
 	   where tables.id = ref.rkeyid
 		 and cons.id = ref.constid
 		 and reftables.id = ref.fkeyid
-		 and tables.name = 'SYSTEMS'
+		 and tables.name = 'RBAC_SYSTEMS'
 	 OPEN refcursor
 	 FETCH NEXT from refcursor into @reftable_4, @constraintname_4
 	 while @@FETCH_STATUS = 0
@@ -149,18 +149,18 @@ BEGIN
 	 END
 	 CLOSE refcursor
 	 DEALLOCATE refcursor
-	 DROP TABLE [SYSTEMS]
+	 DROP TABLE [RBAC_SYSTEMS]
 END
 
 
-CREATE TABLE [SYSTEMS]
+CREATE TABLE [RBAC_SYSTEMS]
 (
 	[SYS_UID] VARCHAR(32) default '' NOT NULL,
 	[SYS_CODE] VARCHAR(32) default '' NOT NULL,
 	[SYS_CREATE_DATE] CHAR(19) default '0000-00-00 00:00:00' NOT NULL,
 	[SYS_UPDATE_DATE] CHAR(19) default '0000-00-00 00:00:00' NOT NULL,
 	[SYS_STATUS] INT default 0 NOT NULL,
-	CONSTRAINT SYSTEMS_PK PRIMARY KEY ([SYS_UID])
+	CONSTRAINT RBAC_SYSTEMS_PK PRIMARY KEY ([SYS_UID])
 );
 
 /* ---------------------------------------------------------------------- */
@@ -218,7 +218,7 @@ CREATE TABLE [RBAC_USERS]
 /* ---------------------------------------------------------------------- */
 
 
-IF EXISTS (SELECT 1 FROM sysobjects WHERE type = 'U' AND name = 'USERS_ROLES')
+IF EXISTS (SELECT 1 FROM sysobjects WHERE type = 'U' AND name = 'RBAC_USERS_ROLES')
 BEGIN
 	 DECLARE @reftable_6 nvarchar(60), @constraintname_6 nvarchar(60)
 	 DECLARE refcursor CURSOR FOR
@@ -230,7 +230,7 @@ BEGIN
 	   where tables.id = ref.rkeyid
 		 and cons.id = ref.constid
 		 and reftables.id = ref.fkeyid
-		 and tables.name = 'USERS_ROLES'
+		 and tables.name = 'RBAC_USERS_ROLES'
 	 OPEN refcursor
 	 FETCH NEXT from refcursor into @reftable_6, @constraintname_6
 	 while @@FETCH_STATUS = 0
@@ -240,15 +240,15 @@ BEGIN
 	 END
 	 CLOSE refcursor
 	 DEALLOCATE refcursor
-	 DROP TABLE [USERS_ROLES]
+	 DROP TABLE [RBAC_USERS_ROLES]
 END
 
 
-CREATE TABLE [USERS_ROLES]
+CREATE TABLE [RBAC_USERS_ROLES]
 (
 	[USR_UID] VARCHAR(32) default '' NOT NULL,
 	[ROL_UID] VARCHAR(32) default '' NOT NULL,
-	CONSTRAINT USERS_ROLES_PK PRIMARY KEY ([USR_UID],[ROL_UID])
+	CONSTRAINT RBAC_USERS_ROLES_PK PRIMARY KEY ([USR_UID],[ROL_UID])
 );
 
 /* ---------------------------------------------------------------------- */
@@ -256,7 +256,7 @@ CREATE TABLE [USERS_ROLES]
 /* ---------------------------------------------------------------------- */
 
 
-IF EXISTS (SELECT 1 FROM sysobjects WHERE type = 'U' AND name = 'AUTHENTICATION_SOURCE')
+IF EXISTS (SELECT 1 FROM sysobjects WHERE type = 'U' AND name = 'RBAC_AUTHENTICATION_SOURCE')
 BEGIN
 	 DECLARE @reftable_7 nvarchar(60), @constraintname_7 nvarchar(60)
 	 DECLARE refcursor CURSOR FOR
@@ -268,7 +268,7 @@ BEGIN
 	   where tables.id = ref.rkeyid
 		 and cons.id = ref.constid
 		 and reftables.id = ref.fkeyid
-		 and tables.name = 'AUTHENTICATION_SOURCE'
+		 and tables.name = 'RBAC_AUTHENTICATION_SOURCE'
 	 OPEN refcursor
 	 FETCH NEXT from refcursor into @reftable_7, @constraintname_7
 	 while @@FETCH_STATUS = 0
@@ -278,11 +278,11 @@ BEGIN
 	 END
 	 CLOSE refcursor
 	 DEALLOCATE refcursor
-	 DROP TABLE [AUTHENTICATION_SOURCE]
+	 DROP TABLE [RBAC_AUTHENTICATION_SOURCE]
 END
 
 
-CREATE TABLE [AUTHENTICATION_SOURCE]
+CREATE TABLE [RBAC_AUTHENTICATION_SOURCE]
 (
 	[AUTH_SOURCE_UID] VARCHAR(32) default '' NOT NULL,
 	[AUTH_SOURCE_NAME] VARCHAR(50) default '' NOT NULL,
@@ -298,7 +298,7 @@ CREATE TABLE [AUTHENTICATION_SOURCE]
 	[AUTH_SOURCE_ATTRIBUTES] VARCHAR(255) default '' NOT NULL,
 	[AUTH_SOURCE_OBJECT_CLASSES] VARCHAR(255) default '' NOT NULL,
 	[AUTH_SOURCE_DATA] TEXT  NULL,
-	CONSTRAINT AUTHENTICATION_SOURCE_PK PRIMARY KEY ([AUTH_SOURCE_UID])
+	CONSTRAINT RBAC_AUTHENTICATION_SOURCE_PK PRIMARY KEY ([AUTH_SOURCE_UID])
 );
 
 
@@ -307,7 +307,7 @@ CREATE TABLE [AUTHENTICATION_SOURCE]
 /* ---------------------------------------------------------------------- */
 
 
-IF EXISTS (SELECT 1 FROM sysobjects WHERE type = 'U' AND name = 'USERS')
+IF EXISTS (SELECT 1 FROM sysobjects WHERE type = 'U' AND name = 'RBAC_USERS')
 BEGIN
 	 DECLARE @reftable_8 nvarchar(60), @constraintname_8 nvarchar(60)
 	 DECLARE refcursor CURSOR FOR
@@ -319,7 +319,7 @@ BEGIN
 	   where tables.id = ref.rkeyid
 		 and cons.id = ref.constid
 		 and reftables.id = ref.fkeyid
-		 and tables.name = 'USERS'
+		 and tables.name = 'RBAC_USERS'
 	 OPEN refcursor
 	 FETCH NEXT from refcursor into @reftable_8, @constraintname_8
 	 while @@FETCH_STATUS = 0
@@ -329,10 +329,10 @@ BEGIN
 	 END
 	 CLOSE refcursor
 	 DEALLOCATE refcursor
-	 DROP TABLE [USERS]
+	 DROP TABLE [RBAC_USERS]
 END
 
-CREATE TABLE [USERS]
+CREATE TABLE [RBAC_USERS]
 (
 	[USR_UID] VARCHAR(32) default '' NOT NULL,
 	[USR_USERNAME] VARCHAR(100) default '' NOT NULL,
@@ -354,7 +354,7 @@ CREATE TABLE [USERS]
 	[USR_REPORTS_TO] varchar(32) NULL,
 
 
-	CONSTRAINT USERS_PK PRIMARY KEY ([USR_UID])
+	CONSTRAINT RBAC_USERS_PK PRIMARY KEY ([USR_UID])
 );
 
 

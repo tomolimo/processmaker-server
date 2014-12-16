@@ -516,7 +516,8 @@ DeleteButtonAction = function() {
                                 url: "groups_Ajax",
                                     params: {
                                         action: "deleteGroup",
-                                        GRP_UID: rowSelected.data.GRP_UID
+                                        GRP_UID: rowSelected.data.GRP_UID,
+                                        GRP_NAME: rowSelected.data.CON_VALUE
                                     },
 
                                     success: function(r,o) {

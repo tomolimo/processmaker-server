@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm sqlConnection="" rowsPerPage="20">
-
-<DYN_UID type="hidden" showInTable="0"/>
-
-<DYN_TITLE type="text" colWidth="200" titleAlign="left" align="left">
-  <en>Title</en>
-</DYN_TITLE>
-
-<VIEW type="link" colWidth="25" value="@G::LoadTranslation(ID_VIEW)" link="javascript:showDynaform(&#039;@#DYN_UID&#039;);"/>
-<DINAFORM_HISTORY type="link" colWidth="100" value="@G::LoadTranslation(ID_DYNAFORM_HISTORY)" link="javascript:dynaformHistory(&#039;@#PRO_UID&#039;,&#039;@#APP_UID&#039;,&#039;@#TAS_UID&#039;,&#039;@#DYN_UID&#039;);"/>
-
+  <DYN_UID type="hidden" showInTable="0"/>
+  <DYN_TITLE type="text" colWidth="200" titleAlign="left" align="left">
+    <en><![CDATA[Title]]></en>
+  </DYN_TITLE>
+  <VIEW type="link" colWidth="25" value="@G::LoadTranslation(ID_VIEW)" link="javascript:showDynaform('@#DYN_UID');"/>
+  <DINAFORM_HISTORY type="link" colWidth="100" value="@G::LoadTranslation(ID_DYNAFORM_HISTORY)" link="javascript:dynaformHistory('@#PRO_UID','@#APP_UID','@#TAS_UID','@#DYN_UID');"/>
 </dynaForm>

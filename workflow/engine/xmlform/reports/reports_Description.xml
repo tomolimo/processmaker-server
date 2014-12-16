@@ -1,24 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="pagetable" sqlConnection="" menu="">
-
-<TAS_TITLE type="text" titlealign="left" colWidth="150">
-  <en>Task</en>
-</TAS_TITLE>
-
-<MIN type="hours" align="right" colWidth="120">
-  <en>Best Completion Time</en>
-</MIN>
-
-<MAX type="hours" align="right" colWidth="120">
-  <en>Slowest Completion Time</en>
-</MAX>
-
-<TOTALDUR type="hours" align="right" colWidth="100">
-  <en>Total Duration (Hours)</en>
-</TOTALDUR>
-
-<PROMEDIO type="hours" align="right" colWidth="100">
-  <en>Average (Hours)</en>
-</PROMEDIO>
-
-</dynaForm>  
+  <TAS_TITLE type="text" titlealign="left" colWidth="150">
+    <en><![CDATA[Task]]></en>
+  </TAS_TITLE>
+  <MIN type="hours" align="right" colWidth="120">
+    <en><![CDATA[Best Completion Time]]></en>
+  </MIN>
+  <MAX type="hours" align="right" colWidth="120">
+    <en><![CDATA[Slowest Completion Time]]></en>
+  </MAX>
+  <TOTALDUR type="hours" align="right" colWidth="100">
+    <en><![CDATA[Total Duration (Hours)]]></en>
+  </TOTALDUR>
+  <PROMEDIO type="hours" align="right" colWidth="100">
+    <en><![CDATA[Average (Hours)]]></en>
+  </PROMEDIO>
+</dynaForm>

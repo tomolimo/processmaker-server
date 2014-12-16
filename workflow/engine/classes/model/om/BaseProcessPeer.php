@@ -25,7 +25,7 @@ abstract class BaseProcessPeer
     const CLASS_DEFAULT = 'classes.model.Process';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 30;
+    const NUM_COLUMNS = 32;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
@@ -75,6 +75,12 @@ abstract class BaseProcessPeer
 
     /** the column name for the PRO_TRI_REASSIGNED field */
     const PRO_TRI_REASSIGNED = 'PROCESS.PRO_TRI_REASSIGNED';
+
+    /** the column name for the PRO_TRI_UNPAUSED field */
+    const PRO_TRI_UNPAUSED = 'PROCESS.PRO_TRI_UNPAUSED';
+
+    /** the column name for the PRO_TYPE_PROCESS field */
+    const PRO_TYPE_PROCESS = 'PROCESS.PRO_TYPE_PROCESS';
 
     /** the column name for the PRO_SHOW_DELEGATE field */
     const PRO_SHOW_DELEGATE = 'PROCESS.PRO_SHOW_DELEGATE';
@@ -132,10 +138,10 @@ abstract class BaseProcessPeer
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     private static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('ProUid', 'ProParent', 'ProTime', 'ProTimeunit', 'ProStatus', 'ProTypeDay', 'ProType', 'ProAssignment', 'ProShowMap', 'ProShowMessage', 'ProSubprocess', 'ProTriDeleted', 'ProTriCanceled', 'ProTriPaused', 'ProTriReassigned', 'ProShowDelegate', 'ProShowDynaform', 'ProCategory', 'ProSubCategory', 'ProIndustry', 'ProUpdateDate', 'ProCreateDate', 'ProCreateUser', 'ProHeight', 'ProWidth', 'ProTitleX', 'ProTitleY', 'ProDebug', 'ProDynaforms', 'ProDerivationScreenTpl', ),
-        BasePeer::TYPE_COLNAME => array (ProcessPeer::PRO_UID, ProcessPeer::PRO_PARENT, ProcessPeer::PRO_TIME, ProcessPeer::PRO_TIMEUNIT, ProcessPeer::PRO_STATUS, ProcessPeer::PRO_TYPE_DAY, ProcessPeer::PRO_TYPE, ProcessPeer::PRO_ASSIGNMENT, ProcessPeer::PRO_SHOW_MAP, ProcessPeer::PRO_SHOW_MESSAGE, ProcessPeer::PRO_SUBPROCESS, ProcessPeer::PRO_TRI_DELETED, ProcessPeer::PRO_TRI_CANCELED, ProcessPeer::PRO_TRI_PAUSED, ProcessPeer::PRO_TRI_REASSIGNED, ProcessPeer::PRO_SHOW_DELEGATE, ProcessPeer::PRO_SHOW_DYNAFORM, ProcessPeer::PRO_CATEGORY, ProcessPeer::PRO_SUB_CATEGORY, ProcessPeer::PRO_INDUSTRY, ProcessPeer::PRO_UPDATE_DATE, ProcessPeer::PRO_CREATE_DATE, ProcessPeer::PRO_CREATE_USER, ProcessPeer::PRO_HEIGHT, ProcessPeer::PRO_WIDTH, ProcessPeer::PRO_TITLE_X, ProcessPeer::PRO_TITLE_Y, ProcessPeer::PRO_DEBUG, ProcessPeer::PRO_DYNAFORMS, ProcessPeer::PRO_DERIVATION_SCREEN_TPL, ),
-        BasePeer::TYPE_FIELDNAME => array ('PRO_UID', 'PRO_PARENT', 'PRO_TIME', 'PRO_TIMEUNIT', 'PRO_STATUS', 'PRO_TYPE_DAY', 'PRO_TYPE', 'PRO_ASSIGNMENT', 'PRO_SHOW_MAP', 'PRO_SHOW_MESSAGE', 'PRO_SUBPROCESS', 'PRO_TRI_DELETED', 'PRO_TRI_CANCELED', 'PRO_TRI_PAUSED', 'PRO_TRI_REASSIGNED', 'PRO_SHOW_DELEGATE', 'PRO_SHOW_DYNAFORM', 'PRO_CATEGORY', 'PRO_SUB_CATEGORY', 'PRO_INDUSTRY', 'PRO_UPDATE_DATE', 'PRO_CREATE_DATE', 'PRO_CREATE_USER', 'PRO_HEIGHT', 'PRO_WIDTH', 'PRO_TITLE_X', 'PRO_TITLE_Y', 'PRO_DEBUG', 'PRO_DYNAFORMS', 'PRO_DERIVATION_SCREEN_TPL', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, )
+        BasePeer::TYPE_PHPNAME => array ('ProUid', 'ProParent', 'ProTime', 'ProTimeunit', 'ProStatus', 'ProTypeDay', 'ProType', 'ProAssignment', 'ProShowMap', 'ProShowMessage', 'ProSubprocess', 'ProTriDeleted', 'ProTriCanceled', 'ProTriPaused', 'ProTriReassigned', 'ProTriUnpaused', 'ProTypeProcess', 'ProShowDelegate', 'ProShowDynaform', 'ProCategory', 'ProSubCategory', 'ProIndustry', 'ProUpdateDate', 'ProCreateDate', 'ProCreateUser', 'ProHeight', 'ProWidth', 'ProTitleX', 'ProTitleY', 'ProDebug', 'ProDynaforms', 'ProDerivationScreenTpl', ),
+        BasePeer::TYPE_COLNAME => array (ProcessPeer::PRO_UID, ProcessPeer::PRO_PARENT, ProcessPeer::PRO_TIME, ProcessPeer::PRO_TIMEUNIT, ProcessPeer::PRO_STATUS, ProcessPeer::PRO_TYPE_DAY, ProcessPeer::PRO_TYPE, ProcessPeer::PRO_ASSIGNMENT, ProcessPeer::PRO_SHOW_MAP, ProcessPeer::PRO_SHOW_MESSAGE, ProcessPeer::PRO_SUBPROCESS, ProcessPeer::PRO_TRI_DELETED, ProcessPeer::PRO_TRI_CANCELED, ProcessPeer::PRO_TRI_PAUSED, ProcessPeer::PRO_TRI_REASSIGNED, ProcessPeer::PRO_TRI_UNPAUSED, ProcessPeer::PRO_TYPE_PROCESS, ProcessPeer::PRO_SHOW_DELEGATE, ProcessPeer::PRO_SHOW_DYNAFORM, ProcessPeer::PRO_CATEGORY, ProcessPeer::PRO_SUB_CATEGORY, ProcessPeer::PRO_INDUSTRY, ProcessPeer::PRO_UPDATE_DATE, ProcessPeer::PRO_CREATE_DATE, ProcessPeer::PRO_CREATE_USER, ProcessPeer::PRO_HEIGHT, ProcessPeer::PRO_WIDTH, ProcessPeer::PRO_TITLE_X, ProcessPeer::PRO_TITLE_Y, ProcessPeer::PRO_DEBUG, ProcessPeer::PRO_DYNAFORMS, ProcessPeer::PRO_DERIVATION_SCREEN_TPL, ),
+        BasePeer::TYPE_FIELDNAME => array ('PRO_UID', 'PRO_PARENT', 'PRO_TIME', 'PRO_TIMEUNIT', 'PRO_STATUS', 'PRO_TYPE_DAY', 'PRO_TYPE', 'PRO_ASSIGNMENT', 'PRO_SHOW_MAP', 'PRO_SHOW_MESSAGE', 'PRO_SUBPROCESS', 'PRO_TRI_DELETED', 'PRO_TRI_CANCELED', 'PRO_TRI_PAUSED', 'PRO_TRI_REASSIGNED', 'PRO_TRI_UNPAUSED', 'PRO_TYPE_PROCESS', 'PRO_SHOW_DELEGATE', 'PRO_SHOW_DYNAFORM', 'PRO_CATEGORY', 'PRO_SUB_CATEGORY', 'PRO_INDUSTRY', 'PRO_UPDATE_DATE', 'PRO_CREATE_DATE', 'PRO_CREATE_USER', 'PRO_HEIGHT', 'PRO_WIDTH', 'PRO_TITLE_X', 'PRO_TITLE_Y', 'PRO_DEBUG', 'PRO_DYNAFORMS', 'PRO_DERIVATION_SCREEN_TPL', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, )
     );
 
     /**
@@ -145,10 +151,10 @@ abstract class BaseProcessPeer
      * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     private static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('ProUid' => 0, 'ProParent' => 1, 'ProTime' => 2, 'ProTimeunit' => 3, 'ProStatus' => 4, 'ProTypeDay' => 5, 'ProType' => 6, 'ProAssignment' => 7, 'ProShowMap' => 8, 'ProShowMessage' => 9, 'ProSubprocess' => 10, 'ProTriDeleted' => 11, 'ProTriCanceled' => 12, 'ProTriPaused' => 13, 'ProTriReassigned' => 14, 'ProShowDelegate' => 15, 'ProShowDynaform' => 16, 'ProCategory' => 17, 'ProSubCategory' => 18, 'ProIndustry' => 19, 'ProUpdateDate' => 20, 'ProCreateDate' => 21, 'ProCreateUser' => 22, 'ProHeight' => 23, 'ProWidth' => 24, 'ProTitleX' => 25, 'ProTitleY' => 26, 'ProDebug' => 27, 'ProDynaforms' => 28, 'ProDerivationScreenTpl' => 29, ),
-        BasePeer::TYPE_COLNAME => array (ProcessPeer::PRO_UID => 0, ProcessPeer::PRO_PARENT => 1, ProcessPeer::PRO_TIME => 2, ProcessPeer::PRO_TIMEUNIT => 3, ProcessPeer::PRO_STATUS => 4, ProcessPeer::PRO_TYPE_DAY => 5, ProcessPeer::PRO_TYPE => 6, ProcessPeer::PRO_ASSIGNMENT => 7, ProcessPeer::PRO_SHOW_MAP => 8, ProcessPeer::PRO_SHOW_MESSAGE => 9, ProcessPeer::PRO_SUBPROCESS => 10, ProcessPeer::PRO_TRI_DELETED => 11, ProcessPeer::PRO_TRI_CANCELED => 12, ProcessPeer::PRO_TRI_PAUSED => 13, ProcessPeer::PRO_TRI_REASSIGNED => 14, ProcessPeer::PRO_SHOW_DELEGATE => 15, ProcessPeer::PRO_SHOW_DYNAFORM => 16, ProcessPeer::PRO_CATEGORY => 17, ProcessPeer::PRO_SUB_CATEGORY => 18, ProcessPeer::PRO_INDUSTRY => 19, ProcessPeer::PRO_UPDATE_DATE => 20, ProcessPeer::PRO_CREATE_DATE => 21, ProcessPeer::PRO_CREATE_USER => 22, ProcessPeer::PRO_HEIGHT => 23, ProcessPeer::PRO_WIDTH => 24, ProcessPeer::PRO_TITLE_X => 25, ProcessPeer::PRO_TITLE_Y => 26, ProcessPeer::PRO_DEBUG => 27, ProcessPeer::PRO_DYNAFORMS => 28, ProcessPeer::PRO_DERIVATION_SCREEN_TPL => 29, ),
-        BasePeer::TYPE_FIELDNAME => array ('PRO_UID' => 0, 'PRO_PARENT' => 1, 'PRO_TIME' => 2, 'PRO_TIMEUNIT' => 3, 'PRO_STATUS' => 4, 'PRO_TYPE_DAY' => 5, 'PRO_TYPE' => 6, 'PRO_ASSIGNMENT' => 7, 'PRO_SHOW_MAP' => 8, 'PRO_SHOW_MESSAGE' => 9, 'PRO_SUBPROCESS' => 10, 'PRO_TRI_DELETED' => 11, 'PRO_TRI_CANCELED' => 12, 'PRO_TRI_PAUSED' => 13, 'PRO_TRI_REASSIGNED' => 14, 'PRO_SHOW_DELEGATE' => 15, 'PRO_SHOW_DYNAFORM' => 16, 'PRO_CATEGORY' => 17, 'PRO_SUB_CATEGORY' => 18, 'PRO_INDUSTRY' => 19, 'PRO_UPDATE_DATE' => 20, 'PRO_CREATE_DATE' => 21, 'PRO_CREATE_USER' => 22, 'PRO_HEIGHT' => 23, 'PRO_WIDTH' => 24, 'PRO_TITLE_X' => 25, 'PRO_TITLE_Y' => 26, 'PRO_DEBUG' => 27, 'PRO_DYNAFORMS' => 28, 'PRO_DERIVATION_SCREEN_TPL' => 29, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, )
+        BasePeer::TYPE_PHPNAME => array ('ProUid' => 0, 'ProParent' => 1, 'ProTime' => 2, 'ProTimeunit' => 3, 'ProStatus' => 4, 'ProTypeDay' => 5, 'ProType' => 6, 'ProAssignment' => 7, 'ProShowMap' => 8, 'ProShowMessage' => 9, 'ProSubprocess' => 10, 'ProTriDeleted' => 11, 'ProTriCanceled' => 12, 'ProTriPaused' => 13, 'ProTriReassigned' => 14, 'ProTriUnpaused' => 15, 'ProTypeProcess' => 16, 'ProShowDelegate' => 17, 'ProShowDynaform' => 18, 'ProCategory' => 19, 'ProSubCategory' => 20, 'ProIndustry' => 21, 'ProUpdateDate' => 22, 'ProCreateDate' => 23, 'ProCreateUser' => 24, 'ProHeight' => 25, 'ProWidth' => 26, 'ProTitleX' => 27, 'ProTitleY' => 28, 'ProDebug' => 29, 'ProDynaforms' => 30, 'ProDerivationScreenTpl' => 31, ),
+        BasePeer::TYPE_COLNAME => array (ProcessPeer::PRO_UID => 0, ProcessPeer::PRO_PARENT => 1, ProcessPeer::PRO_TIME => 2, ProcessPeer::PRO_TIMEUNIT => 3, ProcessPeer::PRO_STATUS => 4, ProcessPeer::PRO_TYPE_DAY => 5, ProcessPeer::PRO_TYPE => 6, ProcessPeer::PRO_ASSIGNMENT => 7, ProcessPeer::PRO_SHOW_MAP => 8, ProcessPeer::PRO_SHOW_MESSAGE => 9, ProcessPeer::PRO_SUBPROCESS => 10, ProcessPeer::PRO_TRI_DELETED => 11, ProcessPeer::PRO_TRI_CANCELED => 12, ProcessPeer::PRO_TRI_PAUSED => 13, ProcessPeer::PRO_TRI_REASSIGNED => 14, ProcessPeer::PRO_TRI_UNPAUSED => 15, ProcessPeer::PRO_TYPE_PROCESS => 16, ProcessPeer::PRO_SHOW_DELEGATE => 17, ProcessPeer::PRO_SHOW_DYNAFORM => 18, ProcessPeer::PRO_CATEGORY => 19, ProcessPeer::PRO_SUB_CATEGORY => 20, ProcessPeer::PRO_INDUSTRY => 21, ProcessPeer::PRO_UPDATE_DATE => 22, ProcessPeer::PRO_CREATE_DATE => 23, ProcessPeer::PRO_CREATE_USER => 24, ProcessPeer::PRO_HEIGHT => 25, ProcessPeer::PRO_WIDTH => 26, ProcessPeer::PRO_TITLE_X => 27, ProcessPeer::PRO_TITLE_Y => 28, ProcessPeer::PRO_DEBUG => 29, ProcessPeer::PRO_DYNAFORMS => 30, ProcessPeer::PRO_DERIVATION_SCREEN_TPL => 31, ),
+        BasePeer::TYPE_FIELDNAME => array ('PRO_UID' => 0, 'PRO_PARENT' => 1, 'PRO_TIME' => 2, 'PRO_TIMEUNIT' => 3, 'PRO_STATUS' => 4, 'PRO_TYPE_DAY' => 5, 'PRO_TYPE' => 6, 'PRO_ASSIGNMENT' => 7, 'PRO_SHOW_MAP' => 8, 'PRO_SHOW_MESSAGE' => 9, 'PRO_SUBPROCESS' => 10, 'PRO_TRI_DELETED' => 11, 'PRO_TRI_CANCELED' => 12, 'PRO_TRI_PAUSED' => 13, 'PRO_TRI_REASSIGNED' => 14, 'PRO_TRI_UNPAUSED' => 15, 'PRO_TYPE_PROCESS' => 16, 'PRO_SHOW_DELEGATE' => 17, 'PRO_SHOW_DYNAFORM' => 18, 'PRO_CATEGORY' => 19, 'PRO_SUB_CATEGORY' => 20, 'PRO_INDUSTRY' => 21, 'PRO_UPDATE_DATE' => 22, 'PRO_CREATE_DATE' => 23, 'PRO_CREATE_USER' => 24, 'PRO_HEIGHT' => 25, 'PRO_WIDTH' => 26, 'PRO_TITLE_X' => 27, 'PRO_TITLE_Y' => 28, 'PRO_DEBUG' => 29, 'PRO_DYNAFORMS' => 30, 'PRO_DERIVATION_SCREEN_TPL' => 31, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, )
     );
 
     /**
@@ -278,6 +284,10 @@ abstract class BaseProcessPeer
         $criteria->addSelectColumn(ProcessPeer::PRO_TRI_PAUSED);
 
         $criteria->addSelectColumn(ProcessPeer::PRO_TRI_REASSIGNED);
+
+        $criteria->addSelectColumn(ProcessPeer::PRO_TRI_UNPAUSED);
+
+        $criteria->addSelectColumn(ProcessPeer::PRO_TYPE_PROCESS);
 
         $criteria->addSelectColumn(ProcessPeer::PRO_SHOW_DELEGATE);
 

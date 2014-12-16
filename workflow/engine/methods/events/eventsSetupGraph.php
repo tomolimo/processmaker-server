@@ -151,7 +151,7 @@ function drawTimerEvent ($im, $x1, $y1, $h)
 imageline( $im, 15, $h - 19, $w - 15, $h - 19, $red );
 imageline( $im, $w - 23, $h - 23, $w - 15, $h - 19, $red );
 imageline( $im, $w - 23, $h - 15, $w - 15, $h - 19, $red );
-imagestring( $im, 2, $w - 30, $h - 37, G::LoadTranslation('ID_DAYS'), $red );
+imagestring( $im, 2, $w - 30, $h - 37, utf8_decode(G::LoadTranslation('ID_DAYS')), $red );
 
 if ($estimated == 0) {
     $s = 'i';

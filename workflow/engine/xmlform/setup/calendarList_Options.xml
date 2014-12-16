@@ -2,6 +2,6 @@
 <dynaForm name="calendarList_Options" type="xmlmenu">
   <calendarNew type="private" defaultValue="../setup/calendarEdit"/>
   <MNU_NEW type="link" value="" link="@G::encryptLink(@#calendarNew)" colAlign="left" colWidth="85">
-    <en>New</en>
+    <en><![CDATA[New]]></en>
   </MNU_NEW>
 </dynaForm>

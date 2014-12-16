@@ -30,7 +30,7 @@
   require_once 'classes/model/om/BaseUsersRolesPeer.php';
 
   // include object class
-  include_once 'classes/model/UsersRoles.php';
+  //include_once 'classes/model/UsersRoles.php';
 
 
 /**

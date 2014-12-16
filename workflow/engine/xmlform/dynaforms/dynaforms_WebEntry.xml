@@ -1,63 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="xmlform" name="" width="450" enabletemplate="0" mode="edit">
-
-<PRO_UID type="hidden" showInTable="0"/>
-<LANG type="private" showInTable="0"/>
-<subtitle1 type="subtitle">
-  <en>Properties</en>
-</subtitle1>
-
-<TASKS type="dropdown" defaultvalue="" dependentfields="DYNAFORM" mode="edit" options="Array"><![CDATA[
+  <PRO_UID type="hidden" showInTable="0"/>
+  <LANG type="private" showInTable="0"/>
+  <subtitle1 type="subtitle">
+    <en><![CDATA[Properties]]></en>
+  </subtitle1>
+  <TASKS type="dropdown" required="1" defaultvalue="" dependentfields="DYNAFORM" mode="edit" options="Array"><![CDATA[
   SELECT TASK.TAS_UID AS TUID, CONTENT.CON_VALUE AS TVALUE FROM TASK
   LEFT JOIN PROCESS ON (PROCESS.PRO_UID=TASK.PRO_UID)
   LEFT JOIN CONTENT ON (TASK.TAS_UID=CONTENT.CON_ID AND CONTENT.CON_CATEGORY='TAS_TITLE' AND CONTENT.CON_LANG='@#LANG')
   WHERE TASK.PRO_UID=@@PRO_UID AND TASK.TAS_START='TRUE' ORDER BY CONTENT.CON_VALUE
-  ]]><en>Initial Task</en>
-</TASKS>
-
-<DYNAFORM type="dropdown" defaultvalue="" mode="edit" options="Array"><![CDATA[
+  ]]><en><![CDATA[Initial Task]]></en></TASKS>
+  <DYNAFORM type="dropdown" required="1" defaultvalue="" mode="edit" options="Array"><![CDATA[
   SELECT DYNAFORM.DYN_UID, CONTENT.CON_VALUE FROM DYNAFORM
   LEFT JOIN PROCESS ON (PROCESS.PRO_UID=DYNAFORM.PRO_UID)
   LEFT JOIN CONTENT ON (DYNAFORM.DYN_UID=CONTENT.CON_ID AND CONTENT.CON_CATEGORY='DYN_TITLE' AND CONTENT.CON_LANG='@#LANG')
   LEFT JOIN STEP ON (DYNAFORM.DYN_UID=STEP.STEP_UID_OBJ)
   WHERE DYNAFORM.PRO_UID=@@PRO_UID AND DYNAFORM.DYN_TYPE!='grid' AND STEP.TAS_UID="@#TASKS" ORDER BY CONTENT.CON_VALUE
-  ]]><en>Initial Dynaform</en>
-</DYNAFORM>
-
-<WE_TYPE type="dropdown" defaultvalue="" mode="edit">
-  <en>Method<option name="WS">PHP pages with Web Services</option><option name="SINGLE">Single HTML </option></en>
-</WE_TYPE>
-
-<WE_USR type="dropdown" defaultvalue="" mode="edit">
-  <en>Input Documents Access<option name="1">No Restriction</option><option name="2">Restricted to process permissions</option></en>
-</WE_USR>
-
-<subtitle2 type="subtitle">
-  <en><![CDATA[User]]></en>
-</subtitle2>
-<WS_USER type="text" defaultvalue="" mode="edit" options="Array">
-  <en>Web Service User</en>
-</WS_USER>
-<WS_PASS type="password" defaultvalue="" mode="edit" options="Array">
-  <en>Web Service Passsword</en>
-</WS_PASS>
-
-<WS_ROUNDROBIN type="yesno" defaultvalue="" mode="edit" options="Array">
-  <en>Cyclical Assignment</en>
-</WS_ROUNDROBIN>
-
-<TEST type="button" onclick="webEntry_validate(@QPRO_UID);">
-  <en>Test Configuration</en>
-</TEST>
-
-<SEARCH type="button" onclick="webEntry_generate(@QPRO_UID);">
-  <en>Generate Web Entry Page</en>
-</SEARCH>
-
-
-<js type="javascript"><![CDATA[
+  ]]><en><![CDATA[Initial Dynaform]]></en></DYNAFORM>
+  <WE_TYPE type="dropdown" defaultvalue="" mode="edit">
+    <en><![CDATA[Method]]><option name="WS"><![CDATA[PHP pages with Web Services]]></option><option name="SINGLE"><![CDATA[Single HTML]]></option></en>
+  </WE_TYPE>
+  <WE_USR type="dropdown" defaultvalue="" mode="edit">
+    <en><![CDATA[Input Documents Access]]><option name="1"><![CDATA[No Restriction]]></option><option name="2"><![CDATA[Restricted to process permissions]]></option></en>
+  </WE_USR>
+  <subtitle2 type="subtitle">
+    <en><![CDATA[User]]></en>
+  </subtitle2>
+  <WS_USER type="text" defaultvalue="" mode="edit" options="Array">
+    <en><![CDATA[Web Service User]]></en>
+  </WS_USER>
+  <WS_PASS type="password" defaultvalue="" mode="edit" options="Array">
+    <en><![CDATA[Web Service Passsword]]></en>
+  </WS_PASS>
+  <WS_ROUNDROBIN type="yesno" defaultvalue="" mode="edit" options="Array">
+    <en><![CDATA[Cyclical Assignment]]></en>
+  </WS_ROUNDROBIN>
+  <TEST type="button" onclick="webEntry_validate(@QPRO_UID);">
+    <en><![CDATA[Test Configuration]]></en>
+  </TEST>
+  <SEARCH type="button" onclick="webEntry_generate(@QPRO_UID);">
+    <en><![CDATA[Generate Web Entry Page]]></en>
+  </SEARCH>
+  <js type="javascript"><![CDATA[
 var oPanel1;
 getField('SEARCH').disabled = true;
+hideRowById("SEARCH");
 
   //hideRowById('WS_USER');
   //hideRowById('WS_PASS');
@@ -71,8 +59,20 @@ leimnud.event.add(getField('TASKS'), 'change', function() {
     }
 });
 /**/
+
+leimnud.event.add(getField("WS_USER"), "keypress", function() {
+    hideRowById("SEARCH");
+});
+
+leimnud.event.add(getField("WS_PASS"), "keypress", function() {
+    hideRowById("SEARCH");
+});
+
 leimnud.event.add(getField('WE_TYPE'), 'change', function() {
   if (getField('WE_TYPE').value=='WS') {
+    hideRowById("SEARCH");
+    showRowById("TEST");
+
     showRowById('WE_USR');
     showRowById('WS_USER');
     showRowById('WS_PASS');
@@ -80,11 +80,14 @@ leimnud.event.add(getField('WE_TYPE'), 'change', function() {
     showRowById('subtitle2');
   }
   else {
+    hideRowById("TEST");
+    showRowById("SEARCH");
+
     hideRowById('WS_USER');
     hideRowById('WS_PASS');
     hideRowById('WS_ROUNDROBIN');
     hideRowById('subtitle2');
-    
+
   }hideRowById('WS_ROUNDROBIN');
 }.extend(getField('WE_TYPE')));
 
@@ -95,7 +98,7 @@ leimnud.event.add(getField('WE_TYPE'), 'change', function() {
  * @makes a rpc to processes_webEntryValidate in order to validate if the
  * process user has the permissions to create and use a webentry
  */
- 
+
 var webEntry_validate = function(PRO_UID, TASKS, DYNAFORM) {
     //G.alert(PRO_UID);
   //  G.alert(getField('WE_TYPE').value);
@@ -131,6 +134,8 @@ var tasksName = getField('TASKS')[getField('TASKS').selectedIndex].innerHTML;
        //var scs=rpc.xmlhttp.responseText.extractScript();
        //scs.evalScript();
          if(rpc.xmlhttp.responseText>=1){
+           showRowById("SEARCH");
+
            getField('SEARCH').disabled = false;
            //webEntry_generate(PRO_UID);
          } else {
@@ -142,7 +147,7 @@ var tasksName = getField('TASKS')[getField('TASKS').selectedIndex].innerHTML;
 
 
 }
-    
+
 }
 
 var webEntry_generate = function(PRO_UID, TASKS, DYNAFORM) {
@@ -157,7 +162,7 @@ var webEntry_generate = function(PRO_UID, TASKS, DYNAFORM) {
   }
   else
   {  if(odynaform.value=='')
-  		{  alert('This process does not have an assigned dynaform'); 
+  		{  alert('This process does not have an assigned dynaform');
   		}
   		else
   		{  sw=1;
@@ -193,7 +198,7 @@ var webEntry_generate = function(PRO_UID, TASKS, DYNAFORM) {
        	scs.evalScript();
        }.extend(this);
        oRPC.make();
-     } 
+     }
     else
      {
      	 var k = new leimnud.module.rpc.xmlhttp({
@@ -201,28 +206,28 @@ var webEntry_generate = function(PRO_UID, TASKS, DYNAFORM) {
              async : true,
              method: 'POST',
              args  : "action=webEntry_Val_Assig&data="+{
-             	PRO_UID:PRO_UID, 
-             	TASKS:getField('TASKS').value, 
+             	PRO_UID:PRO_UID,
+             	TASKS:getField('TASKS').value,
              	DYNAFORM:getField('DYNAFORM').value
              	}.toJSONString()
        });
-       
+
        k.callback = function(rpc){
        if(rpc.xmlhttp.responseText!=1){
          	msgBox(G_STRINGS.WEBEN_ONLY_BALANCEDJS,"alert");
-         } 
+         }
        }.extend(this);
-       k.make(); 
-     	 
+       k.make();
+
      		var oRPC = new leimnud.module.rpc.xmlhttp({
        	    url   : '../processes/processes_Ajax',
              async : true,
              method: 'POST',
              args  : "action=webEntry_generate&data="+{PRO_UID:PRO_UID, TASKS:getField('TASKS').value, DYNAFORM:getField('DYNAFORM').value, WE_TYPE:getField('WE_TYPE').value, WS_USER:getField('WS_USER').value, WS_PASS:getField('WS_PASS').value, WS_ROUNDROBIN:getField('WS_ROUNDROBIN').value, WE_USR:getField('WE_USR').value  }.toJSONString()
-       	});       	
+       	});
        	oRPC.make();
-       	oPanel.remove();  
-       	Pm.tmp.editProcessPanel.clearContent();     	
+       	oPanel.remove();
+       	Pm.tmp.editProcessPanel.clearContent();
         Pm.tmp.editProcessPanel.loader.show();
         var r = new leimnud.module.rpc.xmlhttp({
 					url:'../processes/processes_Ajax',
@@ -235,7 +240,7 @@ var webEntry_generate = function(PRO_UID, TASKS, DYNAFORM) {
 					Pm.tmp.editProcessPanel.loader.hide();
 					var scs = rpc.xmlhttp.responseText.extractScript();
 					Pm.tmp.editProcessPanel.addContent(rpc.xmlhttp.responseText);
-					scs.evalScript();					
+					scs.evalScript();
 				}.extend(this,panel);
 				r.make();
      }
@@ -244,5 +249,4 @@ var webEntry_generate = function(PRO_UID, TASKS, DYNAFORM) {
 
 hideRowById('WS_ROUNDROBIN');
 ]]></js>
-
-</dynaForm> 
+</dynaForm>

@@ -1,23 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="dynaforms_List">
-
-<PRO_UID type="hidden"/>
-
-
-<DYN_UID type="dropdown" colWidth="80" align="left" dataCompareField="DYN_TYPE" dataCompareType="="><![CDATA[
+  <PRO_UID type="hidden"/>
+  <DYN_UID type="dropdown" colWidth="80" align="left" dataCompareField="DYN_TYPE" dataCompareType="="><![CDATA[
   SELECT DYN_UID, T.CON_VALUE AS DYN_TITLE FROM DYNAFORM LEFT JOIN CONTENT as T ON (T.CON_ID=DYN_UID AND T.CON_CATEGORY='DYN_TITLE') 
   LEFT JOIN CONTENT AS D ON (D.CON_ID=DYN_UID AND D.CON_CATEGORY='DYN_DESCRIPTION') 
   where PRO_UID = @@PRO_UID
   ORDER BY DYN_TITLE ASC
-  ]]><en>Dynaform</en>
-</DYN_UID>
-
-<DYN_TYPE type="dropdown">
-  <en>Template<option name="1">Classic Template</option><option name="2">Tabular Template</option></en>
-</DYN_TYPE>
-
-<ACCEPT type="button" onclick="outputdocsSave(this.form);">
-  <en>Save</en>
-</ACCEPT>
-
-</dynaForm> 
+  ]]><en><![CDATA[Dynaform]]></en></DYN_UID>
+  <DYN_TYPE type="dropdown">
+    <en><![CDATA[Template]]><option name="1"><![CDATA[Classic Template]]></option><option name="2"><![CDATA[Tabular Template]]></option></en>
+  </DYN_TYPE>
+  <ACCEPT type="button" onclick="outputdocsSave(this.form);">
+    <en><![CDATA[Save]]></en>
+  </ACCEPT>
+</dynaForm>

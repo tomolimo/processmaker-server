@@ -1,12 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?> 
+<?xml version="1.0" encoding="UTF-8"?>
 <dynaForm cols="2" name="users_Search" width="100%">
-
-<USR_COMPLETENAME type="text" dataCompareField="CONCAT(USR_LASTNAME,&#039;_&#039;,USR_FIRSTNAME)" dataCompareType="contains">
-  <en>Full name</en>
-</USR_COMPLETENAME>
-
-<search type="button" onclick="cU5hVjNxT2lxYVBWNXFUTXdaNnM1bMKwbG9NOA______.doFilter( this.form )">
-  <en>Apply Filter</en>
-</search>
-
+  <USR_COMPLETENAME type="text" dataCompareField="CONCAT(USR_LASTNAME,'_',USR_FIRSTNAME)" dataCompareType="contains">
+    <en><![CDATA[Full name]]></en>
+  </USR_COMPLETENAME>
+  <search type="button" onclick="cU5hVjNxT2lxYVBWNXFUTXdaNnM1bMKwbG9NOA______.doFilter( this.form )">
+    <en><![CDATA[Apply Filter]]></en>
+  </search>
 </dynaForm>

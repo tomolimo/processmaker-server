@@ -1,27 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="triggersCondition_Edit" type="xmlform" width="100%" labelWidth="20%">
-
-<PROCESS type="private"/>
-
-<action type="hidden"/>
-
-<STEP_UID type="hidden"/>
-
-<TRI_UID type="hidden"/>
-
-<ST_TYPE type="hidden"/>
-
-<ST_CONDITION type="textareapm" required="0" cols="55" rows="4" showVars="1" process="@#PROCESS">
-<en>Condition</en>
-</ST_CONDITION>
-
-<ST_POSITION type="hidden"/>
-
-<SAVE type="button" onclick="saveTriggerCondition(this.form);">
-<en>Save</en>
-</SAVE>
-
-<JS type="javascript" replaceTags="1"><![CDATA[
+  <PROCESS type="private"/>
+  <action type="hidden"/>
+  <STEP_UID type="hidden"/>
+  <TRI_UID type="hidden"/>
+  <ST_TYPE type="hidden"/>
+  <ST_CONDITION type="textareapm" required="0" cols="55" rows="4" showVars="1" process="@#PROCESS">
+    <en><![CDATA[Condition]]></en>
+  </ST_CONDITION>
+  <ST_POSITION type="hidden"/>
+  <SAVE type="button" onclick="saveTriggerCondition(this.form);">
+    <en><![CDATA[Save]]></en>
+  </SAVE>
+  <JS type="javascript" replaceTags="1"><![CDATA[
 
 var _oVarsPanel_;
 var showDynaformsFormVars = function(sFieldName, sAjaxServer, sProcess, sSymbol) {
@@ -77,9 +68,10 @@ var insertFormVar = function(sFieldName, sValue) {
 function saveTriggerCondition(oForm)
 {
   ajax_post(oForm.action, oForm, 'POST');
+  var sType = document.getElementById('form[ST_TYPE]').value;
   currentPopupWindow.remove();
+  showTriggers('@#STEP_UID', sType);
 }
 
 ]]></JS>
-
-</dynaForm>  
+</dynaForm>

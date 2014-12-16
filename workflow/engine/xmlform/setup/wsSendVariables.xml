@@ -1,36 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="SendVariables" width="500" mode="edit" border="0" enableTemplate="0" height="250px">
-
-<SESSION_ID type="text" size="36" maxlength="32">
-  <en>Session Id</en>
-<es><![CDATA[Id de Sesión]]></es></SESSION_ID>
-
-<CASE_ID type="dropdown" sqlConnection="dbarray">
+  <SESSION_ID type="text" size="36" maxlength="32">
+    <en><![CDATA[Session Id]]></en>
+    <es><![CDATA[Id de Sesión]]></es>
+  </SESSION_ID>
+  <CASE_ID type="dropdown" sqlConnection="dbarray">
   SELECT * from case
-  <en>Case ID</en>
+  <en><![CDATA[Case ID]]></en>
 <es>ID de Caso</es></CASE_ID>
-
-<NAME1 type="text" size="20" maxlength="32" mode="edit">
-  <en>Name 1</en>
-<es>Nombre 1</es></NAME1>
-
-<VALUE1 type="text" size="20" maxlength="32" mode="edit">
-  <en>Value 1</en>
-<es>Valor 1</es></VALUE1>
-
-<NAME2 type="text" size="20" maxlength="32" mode="edit">
-  <en>Name 2</en>
-<es>Nombre 2</es></NAME2>
-
-<VALUE2 type="text" size="20" maxlength="32" mode="edit">
-  <en>Value 2</en>
-<es>Valor 2</es></VALUE2>
-
-<ACTION type="hidden">
+  <NAME1 type="text" size="20" maxlength="32" mode="edit">
+    <en><![CDATA[Name 1]]></en>
+    <es>Nombre 1</es>
+  </NAME1>
+  <VALUE1 type="text" size="20" maxlength="32" mode="edit">
+    <en><![CDATA[Value 1]]></en>
+    <es>Valor 1</es>
+  </VALUE1>
+  <NAME2 type="text" size="20" maxlength="32" mode="edit">
+    <en><![CDATA[Name 2]]></en>
+    <es>Nombre 2</es>
+  </NAME2>
+  <VALUE2 type="text" size="20" maxlength="32" mode="edit">
+    <en><![CDATA[Value 2]]></en>
+    <es>Valor 2</es>
+  </VALUE2>
+  <ACTION type="hidden">
 </ACTION>
-
-<ACTIONB type="button" onclick="submitThisForm(this.form);">
-  <en>SendVariables</en>
-<es>Variables Enviadas</es></ACTIONB>
-
-</dynaForm>  
+  <ACTIONB type="button" onclick="submitThisForm(this.form);">
+    <en><![CDATA[SendVariables]]></en>
+    <es>Variables Enviadas</es>
+  </ACTIONB>
+</dynaForm>

@@ -1,21 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="pagetable" sqlConnection="" deleteRow="0" menu="groups/groups_Options" width="95%" rowsPerPage="20">
-<GRP_UID type="hidden" showInTable="0"/>
-<USR_UID type="hidden" showInTable="0"/>
-
-<USR_USERNAME type="text" colWidth="200" align="left" titleAlign="left">
-  <en>Username</en>
-</USR_USERNAME>
-
-<USR_FIRSTNAME type="text" colWidth="200" align="left" titleAlign="left">
-  <en>First Name</en>
-</USR_FIRSTNAME>
-
-<USR_LASTNAME type="text" colWidth="200" align="left" titleAlign="left">
-  <en>Last Name</en>
-</USR_LASTNAME>
-
-<DELETE type="link" colWidth="50" align="center" value="@G::LoadTranslation(ID_DE_ASSIGN)" link="#" onclick="ofToAssignUser(@QGRP_UID, @QUSR_UID);return false;"><en></en></DELETE>
-
-
-</dynaForm> 
+  <GRP_UID type="hidden" showInTable="0"/>
+  <USR_UID type="hidden" showInTable="0"/>
+  <USR_USERNAME type="text" colWidth="200" align="left" titleAlign="left">
+    <en><![CDATA[Username]]></en>
+  </USR_USERNAME>
+  <USR_FIRSTNAME type="text" colWidth="200" align="left" titleAlign="left">
+    <en><![CDATA[First Name]]></en>
+  </USR_FIRSTNAME>
+  <USR_LASTNAME type="text" colWidth="200" align="left" titleAlign="left">
+    <en><![CDATA[Last Name]]></en>
+  </USR_LASTNAME>
+  <DELETE type="link" colWidth="50" align="center" value="@G::LoadTranslation(ID_DE_ASSIGN)" link="#" onclick="ofToAssignUser(@QGRP_UID, @QUSR_UID);return false;">
+    <en><![CDATA[]]></en>
+  </DELETE>
+</dynaForm>

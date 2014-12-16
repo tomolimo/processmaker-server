@@ -209,29 +209,45 @@ Ext.onReady(function() {
        text:    _('ID_SAVE'),
        handler: function () {
          if (dashletInstanceFrm.getForm().isValid()) {
-           var myMask = new Ext.LoadMask(Ext.getBody(), {msg: _('ID_SAVING_LABEL') + '.' + _('ID_PLEASE_WAIT') });
-           myMask.show();
-           Ext.Ajax.request({
-             url:      'saveDashletInstance',
-             method:   'POST',
-             params:   dashletInstanceFrm.getForm().getFieldValues(),
-             success:  function (result, request) {
-                         myMask.hide();
-                         var dataResponse = Ext.util.JSON.decode(result.responseText)
-                         switch (dataResponse.status) {
-                           case 'OK':
-                             window.location.href = 'dashletsList';
-                           break;
-                           default:
-                             Ext.MessageBox.alert( _('ID_ALERT'), _('ID_FAILED_DASHBOARD INSTANCE') );
-                           break;
-                        }
-                      },
-             failure: function (result, request) {
-                        myMask.hide();
-                        Ext.MessageBox.alert( _('ID_ALERT'), _('ID_AJAX_COMMUNICATION_FAILED') );
-                      }
-           });
+            Ext.Ajax.request({
+                url: "verifyTitleDashlet",
+                method: "POST",
+                params: dashletInstanceFrm.getForm().getFieldValues(),
+                success: function (response, opts) {
+                    var dataResponse = Ext.util.JSON.decode(response.responseText);
+
+                    if (dataResponse.message == 'OK') {
+                        var myMask = new Ext.LoadMask(Ext.getBody(), {msg: _('ID_SAVING_LABEL') + '.' + _('ID_PLEASE_WAIT') });
+                        myMask.show();
+                        Ext.Ajax.request({
+                          url:      'saveDashletInstance',
+                          method:   'POST',
+                          params:   dashletInstanceFrm.getForm().getFieldValues(),
+                          success:  function (result, request) {
+                                      myMask.hide();
+                                      var dataResponse = Ext.util.JSON.decode(result.responseText);
+                                      switch (dataResponse.status) {
+                                        case 'OK':
+                                          window.location.href = 'dashletsList';
+                                        break;
+                                        default:
+                                          Ext.MessageBox.alert( _('ID_ALERT'), _('ID_FAILED_DASHBOARD_INSTANCE') );
+                                        break;
+                                     }
+                                   },
+                          failure: function (result, request) {
+                                     myMask.hide();
+                                     Ext.MessageBox.alert( _('ID_ALERT'), _('ID_AJAX_COMMUNICATION_FAILED') );
+                                   }
+                        });
+                    } else {
+                        Ext.MessageBox.alert(_('ID_ERROR'), _('ID_DASHLET_TITLE_EXISTS'));
+                    }
+                },
+                failure: function (response, opts) {
+                    //
+                }
+            });
          }
          else {
            Ext.MessageBox.alert(_('ID_INVALID_DATA'), _('ID_CHECK_FIELDS_MARK_RED'));

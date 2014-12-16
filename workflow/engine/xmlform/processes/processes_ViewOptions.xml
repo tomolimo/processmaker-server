@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="processes_ViewOptions" type="xmlmenu">
-<MNU type="link" value="" link="#" onclick="window.location = &#039;processes_List&#039;;return false;" colAlign="right" colWidth="70">
-  <en>Back to list</en>
-</MNU>
-</dynaForm> 
+  <MNU type="link" value="" link="#" onclick="window.location = 'processes_List';return false;" colAlign="right" colWidth="70">
+    <en><![CDATA[Back to list]]></en>
+  </MNU>
+</dynaForm>

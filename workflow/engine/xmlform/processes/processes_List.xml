@@ -1,23 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="pagetable" sqlConnection="" menu="processes/processes_Options" searchBy="PRO_TITLE" filterForm="processes/processes_Search" masterdetail="PRO_CATEGORY_LABEL">
-<PRO_UID type="private" showInTable="0"/>
-<PRO_CATEGORY_LABEL type="text" titlealign="left" colWidth="300">
-  <en>Category</en>
-</PRO_CATEGORY_LABEL>
-<PRO_TITLE type="text" titlealign="left" colWidth="300">
-  <en>Title</en>
-</PRO_TITLE>
-<PRO_DESCRIPTION type="text" titlealign="left" colWidth="400">
-  <en>Description</en>
-</PRO_DESCRIPTION>
-
-<PRO_EDIT type="link" colWidth="50" value="@#PRO_EDIT" link="processes_Map?PRO_UID=@#PRO_UID">
+  <PRO_UID type="private" showInTable="0"/>
+  <PRO_CATEGORY_LABEL type="text" titlealign="left" colWidth="300">
+    <en><![CDATA[Category]]></en>
+  </PRO_CATEGORY_LABEL>
+  <PRO_TITLE type="text" titlealign="left" colWidth="300">
+    <en><![CDATA[Title]]></en>
+  </PRO_TITLE>
+  <PRO_DESCRIPTION type="text" titlealign="left" colWidth="400">
+    <en><![CDATA[Description]]></en>
+  </PRO_DESCRIPTION>
+  <PRO_EDIT type="link" colWidth="50" value="@#PRO_EDIT" link="processes_Map?PRO_UID=@#PRO_UID">
 </PRO_EDIT>
-
-<PRO_DELETE type="link" colWidth="50" value="@#PRO_DELETE" link="processes_DeleteCases?PRO_UID=@#PRO_UID" onclick="panDel(this.href,&#039;@#PRO_UID&#039;);return false;">
+  <PRO_DELETE type="link" colWidth="50" value="@#PRO_DELETE" link="processes_DeleteCases?PRO_UID=@#PRO_UID" onclick="panDel(this.href,'@#PRO_UID');return false;">
 </PRO_DELETE>
-
-<PRO_STATUS type="link" align="left" titlealign="left" colWidth="50" value="@#PRO_STATUS" link="processes_ChangeStatus?PRO_UID=@#PRO_UID">
+  <PRO_STATUS type="link" align="left" titlealign="left" colWidth="50" value="@#PRO_STATUS" link="processes_ChangeStatus?PRO_UID=@#PRO_UID">
 </PRO_STATUS>
-
-</dynaForm>  
+</dynaForm>

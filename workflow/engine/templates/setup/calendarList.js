@@ -172,8 +172,8 @@ Ext.onReady(function(){
         },
         columns: [
             {id:'CALENDAR_UID', dataIndex: 'CALENDAR_UID', hidden:true, hideable:false},
-            {header: _('ID_NAME'), dataIndex: 'CALENDAR_NAME', width: 200, align:'left'},
-            {header: _('ID_DESCRIPTION'), dataIndex: 'CALENDAR_DESCRIPTION', width: 200, align:'left'},
+            {header: _('ID_NAME'), dataIndex: 'CALENDAR_NAME', width: 200, align:'left', renderer: render_text},
+            {header: _('ID_DESCRIPTION'), dataIndex: 'CALENDAR_DESCRIPTION', width: 200, align:'left', renderer: render_text},
             {header: _('ID_STATUS'), dataIndex: 'CALENDAR_STATUS', width: 130, align:'center', renderer: render_status},
             {header: _('ID_USERS'), dataIndex: 'TOTAL_USERS', width: 69, align:'center'},
             {header: _('ID_PROCESSES'), dataIndex: 'TOTAL_PROCESS', width: 69, align:'center'},
@@ -354,6 +354,10 @@ render_status = function(v){
   case 'INACTIVE': return '<font color="red">' + _('ID_INACTIVE') + '</font>';; break;
   case 'VACATION': return '<font color="blue">' + _('ID_VACATION') + '</font>';; break;
   }
+};
+
+render_text = function(v){
+  return Ext.util.Format.htmlEncode(v)
 };
 
 //Members Button Action

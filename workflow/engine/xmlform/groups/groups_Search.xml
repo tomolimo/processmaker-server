@@ -1,25 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm cols="2" name="groups_Search" width="100%">
-
-<USR_USERNAME type="text" dataCompareField="USR_USERNAME" dataCompareType="contains">
-  <en>User name</en>
-</USR_USERNAME>
-
-<CUR_GRP_UID type="hidden" dataCompareField="GRP_UID" dataCompareType="=">
-  <en>User name</en>}
+  <USR_USERNAME type="text" dataCompareField="USR_USERNAME" dataCompareType="contains">
+    <en><![CDATA[User name]]></en>
+  </USR_USERNAME>
+  <CUR_GRP_UID type="hidden" dataCompareField="GRP_UID" dataCompareType="="><en>User name</en>}
 </CUR_GRP_UID>
-<JSFILTER1 type="javascript" replaceTags="1">
+  <JSFILTER1 type="javascript" replaceTags="1">
 var currentPagedTable = @#PAGED_TABLE_ID;
 </JSFILTER1>
-
-
-<SEARCH type="button" onclick="pagedTableFilter( this.form );">
-  <en>Apply Filter</en>
-</SEARCH>
-<PAGED_TABLE_ID type="private"/>
-<JSFILTER type="javascript" replaceTags="1">
+  <SEARCH type="button" onclick="pagedTableFilter( this.form );">
+    <en><![CDATA[Apply Filter]]></en>
+  </SEARCH>
+  <PAGED_TABLE_ID type="private"/>
+  <JSFILTER type="javascript" replaceTags="1">
 function pagedTableFilter( form ) {
   @#PAGED_TABLE_ID.doFilter( form );
 }
 </JSFILTER>
-</dynaForm> 
+</dynaForm>

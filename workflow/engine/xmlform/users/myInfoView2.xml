@@ -1,134 +1,98 @@
-<?xml version="1.0" encoding="UTF-8"?>  
+<?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="myInfoView" width="70%" labelWidth="300px" mode="view" enableTemplate="0">
-
   <TITLEADD type="title" group="1">
-    <en>Profile</en>
+    <en><![CDATA[Profile]]></en>
   </TITLEADD>
-
   <RANDOM type="private"/>
-
   <USR_PHOTO type="image" group="1" file="users/users_ViewPhoto?@#RANDOM" home="methods" style="height:96">
-    <en>Photo</en>
+    <en><![CDATA[Photo]]></en>
   </USR_PHOTO>
-
   <USR_RESUME type="link" group="1" link="#" onclick="showResume();return false;">
-    <en>Resume</en>
+    <en><![CDATA[Resume]]></en>
   </USR_RESUME>
-
   <TITLE9689 type="title" group="1">
-    <en>Personal Information</en>
+    <en><![CDATA[Personal Information]]></en>
   </TITLE9689>
-
   <USR_FIRSTNAME type="text" size="30" maxlength="32" defaultvalue="" required="0" group="1" dependentfields="" linkfield="" strto="" readonly="0" noshowingrid="0" readonlyingrid="0" totalizeable="0" sqlconnection="">
-    <en>First Name</en>
+    <en><![CDATA[First Name]]></en>
   </USR_FIRSTNAME>
-
   <USR_LASTNAME type="text" size="30" maxlength="32" defaultvalue="" required="0" group="1" dependentfields="" linkfield="" strto="" readonly="0" noshowingrid="0" readonlyingrid="0" totalizeable="0" sqlconnection="">
-    <en>Last Name</en>
+    <en><![CDATA[Last Name]]></en>
   </USR_LASTNAME>
-
   <USR_USERNAME type="text" size="15" maxlength="15" validate="AlfaNum" defaultvalue="" required="0" group="1" dependentfields="VERIFY" linkfield="" strto="" readonly="1" noshowingrid="0" readonlyingrid="0" totalizeable="0">
-    <en>User ID</en>
+    <en><![CDATA[User ID]]></en>
   </USR_USERNAME>
-
   <VERIFY type="hidden" size="15" defaultvalue="" required="0" dependentfields="" readonly="0" noshowingrid="0" readonlyingrid="0" totalizeable="0">
     SELECT USR_UID, USR_USERNAME FROM USERS WHERE USR_USERNAME = @@USR_USERNAME
     <en>Exists</en>
   </VERIFY>
-
   <USR_EMAIL type="text" size="35" maxlength="35" validate="Email" defaultvalue="" required="0" group="1" dependentfields="" linkfield="" strto="" readonly="0" noshowingrid="0" readonlyingrid="0" totalizeable="0" sqlconnection="">
-    <en>Email</en>
+    <en><![CDATA[Email]]></en>
   </USR_EMAIL>
-
   <USR_ADDRESS type="textarea" rows="3" cols="50" defaultvalue="" required="0" group="1" dependentfields="" linkfield="" strto="" readonly="0" noshowingrid="0" readonlyingrid="0" totalizeable="0" sqlconnection="">
-    <en>Address</en>
+    <en><![CDATA[Address]]></en>
   </USR_ADDRESS>
-
   <USR_ZIP_CODE type="text" size="30" maxlength="30" defaultvalue="" required="0" group="1" dependentfields="" linkfield="" strto="" readonly="0" noshowingrid="0" readonlyingrid="0" totalizeable="0" sqlconnection="">
-    <en>Zip/Postal Code</en>
+    <en><![CDATA[Zip/Postal Code]]></en>
   </USR_ZIP_CODE>
-
   <USR_COUNTRY type="dropdown" style="width:154pt" defaultvalue="" required="0" group="1" dependentfields="USR_CITY" readonly="0" sqlconnection="" noshowingrid="0" readonlyingrid="0">
     SELECT IC_UID, IC_NAME FROM ISO_COUNTRY ORDER BY IC_NAME
-    <en>Country<option name=""></option></en>
+    <en><![CDATA[Country]]><option name=""><![CDATA[]]></option></en>
   </USR_COUNTRY>
-
   <USR_CITY type="dropdown" style="width:154pt" defaultvalue="" required="0" group="1" dependentfields="USR_LOCATION" readonly="0" sqlconnection="" noshowingrid="0" readonlyingrid="0"><![CDATA[
     SELECT IS_UID, IS_NAME FROM ISO_SUBDIVISION WHERE IC_UID = "@#USR_COUNTRY" ORDER BY IS_NAME
-    ]]><en>State or Region</en>
-  </USR_CITY>
-
+    ]]><en><![CDATA[State or Region]]></en></USR_CITY>
   <USR_LOCATION type="dropdown" style="width:154pt" defaultvalue="" required="0" group="1" readonly="0" sqlconnection="" noshowingrid="0" readonlyingrid="0"><![CDATA[
     SELECT IL_UID, IL_NAME FROM ISO_LOCATION WHERE IC_UID = "@#USR_COUNTRY" AND IS_UID = "@#USR_CITY" AND IS_UID NOT IN ("") ORDER BY IL_NAME
-    ]]><en>Location</en>
-  </USR_LOCATION>
-
+    ]]><en><![CDATA[Location]]></en></USR_LOCATION>
   <USR_PHONE type="text" size="15" maxlength="16" defaultvalue="" required="0" group="1" dependentfields="" linkfield="" strto="" readonly="0" noshowingrid="0" readonlyingrid="0" totalizeable="0" sqlconnection="">
-    <en>Phone</en>
+    <en><![CDATA[Phone]]></en>
   </USR_PHONE>
-
   <USR_POSITION type="text" size="35" maxlength="35" defaultvalue="" required="0" group="1" dependentfields="" linkfield="" strto="" readonly="0" noshowingrid="0" readonlyingrid="0" totalizeable="0" sqlconnection="">
-    <en>Position</en>
+    <en><![CDATA[Position]]></en>
   </USR_POSITION>
-
   <USR_DUE_DATE type="date" mask="yyyy-mm-dd" defaultvalue="" required="0" group="1" readonly="0" noshowingrid="0" readonlyingrid="0" mode="view">
-    <en>Expiration Date</en>
+    <en><![CDATA[Expiration Date]]></en>
   </USR_DUE_DATE>
-
   <USR_STATUS type="dropdown" style="width:86pt" group="1" required="0" mode="view">
-    <en>Status<option name="ACTIVE">ACTIVE</option><option name="INACTIVE">INACTIVE</option><option name="VACATION">ON VACATION</option></en>
+    <en><![CDATA[Status]]><option name="ACTIVE"><![CDATA[ACTIVE]]></option><option name="INACTIVE"><![CDATA[INACTIVE]]></option><option name="VACATION"><![CDATA[ON VACATION]]></option></en>
   </USR_STATUS>
-
   <USR_ROLE type="dropdown" defaultvalue="" style="width:86pt" required="0" group="1" dependentfields="" readonly="0" sqlconnection="rbac" noshowingrid="0" readonlyingrid="0" mode="view"><![CDATA[
     SELECT ROL_CODE AS USR_ROLE, ROL_CODE AS CODE FROM ROLES WHERE ROL_SYSTEM = '00000000000000000000000000000002' ORDER BY ROL_CODE
-    ]]><en>Role</en>
-  </USR_ROLE>
-
-<USR_REPORTS_TO type="caption" size="35" maxlength="35" defaultvalue="" required="0" group="1" dependentfields="" linkfield="" strto="" readonly="1" noshowingrid="0" >
-  <en>Reports to</en>
-</USR_REPORTS_TO>
-
-<USR_DEPARTMENT type="caption" size="35" maxlength="35" defaultvalue="" required="0" group="1" dependentfields="" linkfield="" strto="" readonly="1" noshowingrid="0" readonlyingrid="0" totalizeable="0" sqlconnection="">
-  <en>Department</en>
-</USR_DEPARTMENT >
-
+    ]]><en><![CDATA[Role]]></en></USR_ROLE>
+  <USR_REPORTS_TO type="caption" size="35" maxlength="35" defaultvalue="" required="0" group="1" dependentfields="" linkfield="" strto="" readonly="1" noshowingrid="0">
+    <en><![CDATA[Reports to]]></en>
+  </USR_REPORTS_TO>
+  <USR_DEPARTMENT type="caption" size="35" maxlength="35" defaultvalue="" required="0" group="1" dependentfields="" linkfield="" strto="" readonly="1" noshowingrid="0" readonlyingrid="0" totalizeable="0" sqlconnection="">
+    <en><![CDATA[Department]]></en>
+  </USR_DEPARTMENT>
   <TITLECHP type="title" group="1">
-    <en>Change Password</en>
+    <en><![CDATA[Change Password]]></en>
   </TITLECHP>
-
   <USR_NEW_PASS type="password" size="12" maxlength="10" validate="5" mask="" required="1">
-    <en>New Password</en>
+    <en><![CDATA[New Password]]></en>
   </USR_NEW_PASS>
-
   <USR_CNF_PASS type="password" size="12" maxlength="10" validate="5" mask="" required="1">
-    <en>Confirm Password</en>
+    <en><![CDATA[Confirm Password]]></en>
   </USR_CNF_PASS>
-
   <TITLEPREF type="title" group="1">
-    <en>Preferences</en>
+    <en><![CDATA[Preferences]]></en>
   </TITLEPREF>
-
   <PREF_DEFAULT_LANG type="dropdown"><![CDATA[
     SELECT LAN_ID, LAN_NAME FROM LANGUAGE WHERE LAN_ENABLED = '1' ORDER BY LAN_WEIGHT DESC
-    ]]><en>Default languaje</en>
-  </PREF_DEFAULT_LANG>
-
+    ]]><en><![CDATA[Default language]]></en></PREF_DEFAULT_LANG>
   <PREF_DEFAULT_MENUSELECTED type="dropdown" sqlconnection="dbarray">
     SELECT * FROM menutab
-    <en>Default menu option</en>
+    <en><![CDATA[Default menu option]]></en>
   </PREF_DEFAULT_MENUSELECTED>
-  
   <PREF_DEFAULT_CASES_MENUSELECTED type="dropdown" sqlconnection="dbarray">
     SELECT * FROM CASES_MENU
-    <en>Default Cases menu option</en>
+    <en><![CDATA[Default Cases menu option]]></en>
   </PREF_DEFAULT_CASES_MENUSELECTED>
-
   <SUBMIT3 type="button" onclick="verifyUserInformation(this.form);" group="1">
-    <en>Save</en>
+    <en><![CDATA[Save]]></en>
   </SUBMIT3>
-
   <NO_RESUME type="private"/>
-
   <JS type="javascript" replacetags="1"><![CDATA[
     var showResume = function() {
     if ('@#USR_RESUME' != '') {
@@ -144,5 +108,4 @@
     hideRowById('SUBMIT3');
 
   ]]></JS>
-
 </dynaForm>

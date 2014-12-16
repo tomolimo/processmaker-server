@@ -1,28 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="pluginImport" type="xmlform" width="450px" labelWidth="100px" enableTemplate="1">
-
-<TITLE1 type="title">
-  <en>New Skin</en>
-</TITLE1>
-
-
-<NAME type="text" size="48" maxlength="48" required = "true">
-  <en>Skin Name</en>
-</NAME>
-
-<DESCRIPTION type="textarea" rows="5" cols="45">
-  <en>Description</en>
-</DESCRIPTION>
-
-<SAVE type="button" onclick="javascript:verifyName(this.form);">
-  <en>Continue</en>
-</SAVE>
-
-<BTN_CANCEL type="button" onclick="cancel();">
-  <en>Cancel</en>
-</BTN_CANCEL>
-
-<JS type="javascript" replacetags="1"><![CDATA[
+  <TITLE1 type="title">
+    <en><![CDATA[New Skin]]></en>
+  </TITLE1>
+  <NAME type="text" size="48" maxlength="48" required="true">
+    <en><![CDATA[Skin Name]]></en>
+  </NAME>
+  <DESCRIPTION type="textarea" rows="5" cols="45">
+    <en><![CDATA[Description]]></en>
+  </DESCRIPTION>
+  <SAVE type="button" onclick="javascript:verifyName(this.form);">
+    <en><![CDATA[Continue]]></en>
+  </SAVE>
+  <BTN_CANCEL type="button" onclick="cancel();">
+    <en><![CDATA[Cancel]]></en>
+  </BTN_CANCEL>
+  <JS type="javascript" replacetags="1"><![CDATA[
 var verifyName = function(oForm) {
   oAux = getField('NAME');
         if (oAux.value == '') {
@@ -42,4 +35,4 @@ function cancel(){
 }
 
 ]]></JS>
-</dynaForm>  
+</dynaForm>

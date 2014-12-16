@@ -15,6 +15,7 @@ switch ($request) {
         $aVars = array_merge( $aFields['APP_DATA'], $aVars );
 
         $field = $aVars[$fieldname];
+        $response = new StdClass();
         $response->headers = Array ();
         $response->columns = Array ();
         $response->rows = Array ();
@@ -81,6 +82,7 @@ switch ($request) {
             $aVars = G::getSystemConstants();
         }
         ksort( $aVars );
+        $return_object = new StdClass();
         $return_object->totalCount = 1;
         foreach ($aVars as $i => $var) {
             if (is_array( $var ) || is_object( $var )) {

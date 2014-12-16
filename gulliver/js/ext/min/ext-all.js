@@ -32,11 +32,11 @@ if(image!=''){Ext.get('x-box-mc-inner').setStyle('background-image','url("'+imag
 Ext.get('x-box-mc-inner').setStyle('background-position','5px 10px');Ext.get('x-box-mc-inner').setStyle('background-repeat','no-repeat');Ext.get('x-box-mc-inner').setStyle('padding-left','45px');m.slideIn('t').pause(time).ghost("t",{remove:true});}};}();function _()
 {var argv=_.arguments;var argc=argv.length;if(typeof TRANSLATIONS!='undefined'&&TRANSLATIONS){if(typeof TRANSLATIONS[argv[0]]!='undefined'){if(argc>1){trn=TRANSLATIONS[argv[0]];for(i=1;i<argv.length;i++){trn=trn.replace('{'+(i-1)+'}',argv[i]);}}
 else{trn=TRANSLATIONS[argv[0]];}}
-else{trn='**'+argv[0]+'**';}}
+else{trn=argv[0];}}
 else{PMExt.error('Processmaker JS Core Error','The TRANSLATIONS global object is not loaded!');trn='';}
 return trn;}
 function __()
-{var argv=__.arguments;var argc=argv.length;var existTranslations=true;var existIdLabel=true;eval("if( typeof TRANSLATIONS_"+argv[0].toUpperCase()+" != 'undefined' && TRANSLATIONS_"+argv[0].toUpperCase()+") { existTranslations = true; } else { existTranslations = false; }");if(existTranslations){eval("if( typeof TRANSLATIONS_"+argv[0].toUpperCase()+"[argv[1]] != 'undefined' ) { existIdLabel = true; } else { existIdLabel = false; }");if(existIdLabel){if(argc>2){eval("trn = TRANSLATIONS_"+argv[0].toUpperCase()+"[argv[0]];");for(i=2;i<argv.length;i++){trn=trn.replace('{'+(i-2)+'}',argv[i]);}}else{eval("trn = TRANSLATIONS_"+argv[0].toUpperCase()+"[argv[1]];");}}else{trn='**'+argv[1]+'**';}}else{PMExt.error('Processmaker JS Core Error','The TRANSLATIONS '+argv[0].toUpperCase()+' global object is not loaded!');trn='';}
+{var argv=__.arguments;var argc=argv.length;var existTranslations=true;var existIdLabel=true;eval("if( typeof TRANSLATIONS_"+argv[0].toUpperCase()+" != 'undefined' && TRANSLATIONS_"+argv[0].toUpperCase()+") { existTranslations = true; } else { existTranslations = false; }");if(existTranslations){eval("if( typeof TRANSLATIONS_"+argv[0].toUpperCase()+"[argv[1]] != 'undefined' ) { existIdLabel = true; } else { existIdLabel = false; }");if(existIdLabel){if(argc>2){eval("trn = TRANSLATIONS_"+argv[0].toUpperCase()+"[argv[0]];");for(i=2;i<argv.length;i++){trn=trn.replace('{'+(i-2)+'}',argv[i]);}}else{eval("trn = TRANSLATIONS_"+argv[0].toUpperCase()+"[argv[1]];");}}else{trn=argv[1];}}else{PMExt.error('Processmaker JS Core Error','The TRANSLATIONS '+argv[0].toUpperCase()+' global object is not loaded!');trn='';}
 return trn;}
 function _FNF(USER_NAME,FIRST_NAME,LAST_NAME,FN_FORMAT)
 {if(USER_NAME==null){USER_NAME='';}

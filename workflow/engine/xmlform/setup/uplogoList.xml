@@ -1,27 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="uplogoList" width="250" mode="edit" border="0" enableTemplate="0" height="75px" menu="setup/logo_Option">
-
-<id type="text">
-  <en>No.</en>
-</id>
-<LOG0_IMACE type="text" size="36" maxlength="12" enableHTML="1">
-  <en>imagen</en>
-</LOG0_IMACE>
-<LOG0_NAME type="text" size="15" maxlength="12">
-  <en>name</en>
-</LOG0_NAME>
-<LOG0_SIZE type="text" size="15" maxlength="12">
-  <en>size</en>
-</LOG0_SIZE>
-
-<LOG0_DESCRIPTION type="text" size="15" maxlength="12">
-  <en>Description</en>
-</LOG0_DESCRIPTION>
-
-<LOGO_SELECTED type="text" size="15" maxlength="12" enableHTML="1">
-  <en/>
-</LOGO_SELECTED>
-
-<DELETE_LOGO type="link" colWidth="50" value="Delete" link="#" onclick="deleteLogo(&#039;@#LOG0_NAME&#039;); return;"/>
-  
-</dynaForm>  
+  <id type="text">
+    <en><![CDATA[No.]]></en>
+  </id>
+  <LOG0_IMACE type="text" size="36" maxlength="12" enableHTML="1">
+    <en><![CDATA[imagen]]></en>
+  </LOG0_IMACE>
+  <LOG0_NAME type="text" size="15" maxlength="12">
+    <en><![CDATA[name]]></en>
+  </LOG0_NAME>
+  <LOG0_SIZE type="text" size="15" maxlength="12">
+    <en><![CDATA[size]]></en>
+  </LOG0_SIZE>
+  <LOG0_DESCRIPTION type="text" size="15" maxlength="12">
+    <en><![CDATA[Description]]></en>
+  </LOG0_DESCRIPTION>
+  <LOGO_SELECTED type="text" size="15" maxlength="12" enableHTML="1">
+    <en><![CDATA[]]></en>
+  </LOGO_SELECTED>
+  <DELETE_LOGO type="link" colWidth="50" value="Delete" link="#" onclick="deleteLogo('@#LOG0_NAME'); return;"/>
+</dynaForm>

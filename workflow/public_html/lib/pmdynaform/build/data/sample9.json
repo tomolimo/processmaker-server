@@ -1,0 +1,80 @@
+{
+    "name": "form-files",
+    "items": [
+        {
+            "type":"panel",
+            "action": "server.php",
+            "method": "post",
+            "items":
+            [
+                [
+                    {
+                        "type": "title",
+                        "colSpan": 12,
+                        "name": "title",
+                        "label": "PMDynaform 9 - Upload File - Working"
+                    }
+                ],
+                [
+                    {
+                        "type": "file",
+                        "label": "Multiple upload:true & DnD:true & preview:true [jpg, pdf, mp3, png, mp4]",
+                        "colSpan":12,
+                        "required": true,
+                        "multiple": true,
+                        "dnd": true,
+                        "preview": false,
+                        "extensions": "jpg, pdf, mp3, png, mp4",
+                        "size": 30,
+                        "name": "textName1",
+                        "hint": "Upload file"
+                    }
+                ],
+                [
+                    {
+                        "type": "file",
+                        "label": "Multiple upload:false & DnD:false & preview:true",
+                        "colSpan":12,
+                        "multiple": false,
+                        "dnd": false,
+                        "preview": true,
+                        "name": "textName1",
+                        "hint": "Upload file"
+                    }
+                ],
+                [
+                    {
+                        "type": "file",
+                        "label": "Multiple upload:true & DnD: false",
+                        "colSpan":6,
+                        "multiple": true,
+                        "dnd": false,
+                        "preview": false,
+                        "name": "textName1",
+                        "hint": "Upload file"
+                    },
+                    {
+                        "type": "file",
+                        "label": "Multiple upload:true & DnD: false",
+                        "colSpan":6,
+                        "multiple": true,
+                        "name": "textName1",
+                        "hint": "Upload file"
+                    }
+                ],
+                [
+                    {
+                      "type" : "button",
+                      "colSpan" : 6,
+                      "label":"Button"
+                    },
+                    {
+                      "type" : "submit",
+                      "colSpan" : 6,
+                      "label" : "Submit"
+                    }
+                ]
+            ]
+        }
+    ]
+}

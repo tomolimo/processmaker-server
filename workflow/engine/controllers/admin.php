@@ -198,5 +198,11 @@ class Admin extends Controller
         //render content
         G::RenderPage( 'publish', 'extJs' );
     }
+
+    public function maintenance()
+    {
+        $this->setView('admin/maintenance');
+        $this->render('extJs');
+    }
 }
 

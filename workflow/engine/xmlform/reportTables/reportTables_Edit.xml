@@ -1,46 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="reportTables/reportTables_Edit" type="xmlform" width="100%" enableTemplate="1">
-<LANG type="private"/>
-
-<PRO_UID type="hidden"/>
-
-<REP_TAB_UID type="hidden"/>
-
-<TITLE type="title" group="1">
-  <en>Report Table Information</en>
-</TITLE>
-
-<REP_TAB_TITLE type="text" size="50" maxlength="150" required="1">
-  <en>Title</en>
-</REP_TAB_TITLE>
-
-<REP_TAB_NAME type="text" size="50" maxlength="100" validate="Field" required="1">
-  <en>Table Name</en>
-</REP_TAB_NAME>
-
-<REP_TAB_TYPE type="dropdown" required="1">
-  <en>Type<option name="NORMAL">Global</option><option name="GRID">Grid</option></en>
-</REP_TAB_TYPE>
-
-<REP_TAB_GRID type="dropdown" sqlConnection="dbarray" required="1">
+  <LANG type="private"/>
+  <PRO_UID type="hidden"/>
+  <REP_TAB_UID type="hidden"/>
+  <TITLE type="title" group="1">
+    <en><![CDATA[Report Table Information]]></en>
+  </TITLE>
+  <REP_TAB_TITLE type="text" size="50" maxlength="150" required="1">
+    <en><![CDATA[Title]]></en>
+  </REP_TAB_TITLE>
+  <REP_TAB_NAME type="text" size="50" maxlength="100" validate="Field" required="1">
+    <en><![CDATA[Table Name]]></en>
+  </REP_TAB_NAME>
+  <REP_TAB_TYPE type="dropdown" required="1">
+    <en><![CDATA[Type]]><option name="NORMAL"><![CDATA[Global]]></option><option name="GRID"><![CDATA[Grid]]></option></en>
+  </REP_TAB_TYPE>
+  <REP_TAB_GRID type="dropdown" sqlConnection="dbarray" required="1">
 SELECT * FROM processGridFields
-  <en>Grid Fields</en>
+  <en><![CDATA[Grid Fields]]></en>
 </REP_TAB_GRID>
-
-<FIELDS type="listbox" sqlConnection="dbarray" defaultValue="" required="1" size="20" width="350" >
+  <FIELDS type="listbox" sqlConnection="dbarray" defaultValue="" required="1" size="20" width="350">
 SELECT * FROM processFields
-  <en>Fields</en>
+  <en><![CDATA[Fields]]></en>
 </FIELDS>
-
-<BTN_CANCEL type="button" onclick="history.back();">
-  <en>Cancel</en>
-</BTN_CANCEL>
-
-<SAVE type="button" onclick="reportTablesSave(this.form);">
-  <en>Save</en>
-</SAVE>
-
-<JS type="JavaScript"><![CDATA[
+  <BTN_CANCEL type="button" onclick="history.back();">
+    <en><![CDATA[Cancel]]></en>
+  </BTN_CANCEL>
+  <SAVE type="button" onclick="reportTablesSave(this.form);">
+    <en><![CDATA[Save]]></en>
+  </SAVE>
+  <JS type="JavaScript"><![CDATA[
 var sOldTableName = getField('REP_TAB_NAME').value;
 leimnud.event.add(getField('REP_TAB_TYPE'), 'change', function() {
   if (getField('REP_TAB_TYPE').value == 'NORMAL') {
@@ -93,13 +82,16 @@ function cancel(){
 
 function reportTablesSave(form)
 {
-  var bContinue = true;
-  if (getField('REP_TAB_TITLE').value == '') {
-    bContinue = false;
+  if (getField("REP_TAB_TITLE").value.trim() == "") {
+      new leimnud.module.app.alert().make({label: _("ID_TITLE_REQUIRED")});
+      return false;
   }
-  if (getField('REP_TAB_NAME').value == '') {
-    bContinue = false;
+
+  if (getField("REP_TAB_NAME").value.trim() == ""){
+      new leimnud.module.app.alert().make({label: _("ID_NAME_REQUIRED")});
+      return false;
   }
+
   var j = 0;
   if (getField('REP_TAB_TYPE').value == 'NORMAL') {
     var i;
@@ -111,39 +103,18 @@ function reportTablesSave(form)
       }
     }
     if ((j < 1) || (j > 80)) {
-      bContinue = false;
+      new leimnud.module.app.alert().make({label: _("ID_SELECT_LEAST_FIELD")});
+      return false;
     }
+  } else {
+    if (getField("REP_TAB_GRID").value == "") {
+        new leimnud.module.app.alert().make({label: _("ID_GRID_FIELDS_REQUIRED")});
+        return false;
+     }
   }
-  else {
-    if (getField('REP_TAB_GRID').value == '') {
-      bContinue = false;
-    }
-  }
-  if (bContinue) {
-    ajax_post(form.action, form, 'POST');
-    //currentPopupWindow.remove();
-    //@#PAGED_TABLE_ID.refresh();
-    history.back();
-  }
-  else {
-    if (getField('REP_TAB_TYPE').value == 'NORMAL') {
-      if (j == 0) {
-        new leimnud.module.app.alert().make({
-          label:'@G::LoadTranslation(ID_PLEASE_ENTER_REQUIRED_FIELDS)'
-        });
-      }
-      else {
-        new leimnud.module.app.alert().make({
-          label:'@G::LoadTranslation(ID_PLEASE_SELECT_MAX_X_FIELDS)'
-        });
-      }
-    }
-    else {
-      new leimnud.module.app.alert().make({
-        label:'@G::LoadTranslation(ID_PLEASE_ENTER_REQUIRED_FIELDS)'
-      });
-    }
-  }
+
+  ajax_post(form.action, form, 'POST');
+  history.back();
 }
 
 function reportTablesDelete(sUID)
@@ -158,4 +129,4 @@ function reportTablesDelete(sUID)
   });
 }
 ]]></JS>
-</dynaForm> 
+</dynaForm>

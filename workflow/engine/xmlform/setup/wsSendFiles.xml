@@ -1,39 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="xmlform" name="UploadFiles" width="500" target="">
-
-<SESSION_ID type="text" size="36" maxlength="32">
-  <en>Session Id</en>
-  <es><![CDATA[Id de Sesión]]></es>
-</SESSION_ID>
-
-<USER_ID type="hidden" size="36" maxlength="32">
+  <SESSION_ID type="text" size="36" maxlength="32">
+    <en><![CDATA[Session Id]]></en>
+    <es><![CDATA[Id de Sesión]]></es>
+  </SESSION_ID>
+  <USER_ID type="hidden" size="36" maxlength="32">
 </USER_ID>
-
-<UPLOAD_FILE type="title" enablehtml="0">
-  <en>Send your file to the server</en>
-</UPLOAD_FILE>
-
-<UPLOAD_OPTION type="dropdown" sqlConnection="dbarray">
-  <en>Upload Option<option name="">Attached File</option><option name="1">Input Document</option></en>
-</UPLOAD_OPTION>
-
-<INPUT_DOCUMENT type="dropdown" sqlConnection="dbarray">
+  <UPLOAD_FILE type="title" enablehtml="0">
+    <en><![CDATA[Send your file to the server]]></en>
+  </UPLOAD_FILE>
+  <UPLOAD_OPTION type="dropdown" sqlConnection="dbarray">
+    <en><![CDATA[Upload Option]]><option name=""><![CDATA[Attached File]]></option><option name="1"><![CDATA[Input Document]]></option></en>
+  </UPLOAD_OPTION>
+  <INPUT_DOCUMENT type="dropdown" sqlConnection="dbarray">
   SELECT * from documents
-  <en>Input Document</en>
+  <en><![CDATA[Input Document]]></en>
 </INPUT_DOCUMENT>
-
-<FILE_TO_UPLOAD type="file">
-  <en>File to Send</en>
-</FILE_TO_UPLOAD>
-
-<ACTION type="hidden">
+  <FILE_TO_UPLOAD type="file">
+    <en><![CDATA[File to Send]]></en>
+  </FILE_TO_UPLOAD>
+  <ACTION type="hidden">
 </ACTION>
-
-<SEND_FILE type="submit" onclick="">
-  <en>Sending</en>
-</SEND_FILE>
-
-<JS type="javascript"><![CDATA[
+  <SEND_FILE type="submit" onclick="">
+    <en><![CDATA[Sending]]></en>
+  </SEND_FILE>
+  <JS type="javascript"><![CDATA[
 hideRowById('INPUT_DOCUMENT');
 
 leimnud.event.add(getField('UPLOAD_OPTION'), 'change', function() {
@@ -48,5 +39,4 @@ leimnud.event.add(getField('UPLOAD_OPTION'), 'change', function() {
 }.extend(getField('UPLOAD_OPTION')));
 
 ]]></JS>
-
-</dynaForm>  
+</dynaForm>

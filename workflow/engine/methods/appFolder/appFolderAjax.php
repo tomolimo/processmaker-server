@@ -1140,7 +1140,8 @@ function moveAction()
     copyMoveAction("move");
 }
 
-function findChilds($uidFolder, $path, $arrayPath) {
+function findChilds($uidFolder, $path, $arrayPath)
+{
     $Criteria = new Criteria ();
     $Criteria->addSelectColumn ( AppFolderPeer::FOLDER_UID );
     $Criteria->addSelectColumn ( AppFolderPeer::FOLDER_PARENT_UID );
@@ -1347,7 +1348,8 @@ function documentVersionHistory()
     G::RenderPage ('publish', 'raw');
 }
 
-function overwriteFile ($node, $fileName) {
+function overwriteFile($node, $fileName)
+{
     global $RBAC;
     require_once ("classes/model/AppFolder.php");
     require_once ("classes/model/AppDocument.php");
@@ -1391,8 +1393,24 @@ function copyMoveExecuteTree($uidFolder, $newUidFolder)
         $docInfo['APP_DOC_CREATE_DATE'] = date('Y-m-d H:i:s');
         $docInfo['APP_DOC_STATUS'] = 'ACTIVE';
         if ($action == 'copyExecute') {
+            $path = PATH_DOCUMENT . G::getPathFromUID($docInfo["APP_UID"]) . PATH_SEP;
+
+            $arrayInfo = pathinfo($docInfo["APP_DOC_FILENAME"]);
+            $extension = (isset($arrayInfo["extension"])? $arrayInfo["extension"] : "");
+
+            $arrayPathFromFile = G::getPathFromFileUID($docInfo["APP_UID"], $docInfo["APP_DOC_UID"]);
+            $originFile = $arrayPathFromFile[0] . PATH_SEP . $arrayPathFromFile[1] . "_" . $docInfo["DOC_VERSION"] . "." . $extension;
+
+            //Create Document
             unset($docInfo['APP_DOC_UID']);
+
             $docUid = $appDocument->create($docInfo);
+
+            //Copy file
+            $arrayPathFromFile = G::getPathFromFileUID($docInfo["APP_UID"], $docUid);
+            $newFile = $arrayPathFromFile[0] . PATH_SEP . $arrayPathFromFile[1] . "_" . $docInfo["DOC_VERSION"] . "." . $extension;
+
+            copy($path . $originFile, $path . $newFile);
         } else {
             $appDocument->update($docInfo);
         }
@@ -1406,9 +1424,10 @@ function checkTree ($uidOriginFolder, $uidNewFolder)
     $appFoder = new AppFolder ();
     $newFoldercontent = copyMoveExecuteTree($uidOriginFolder, $uidNewFolder);
     $listfolder = $appFoder->getFolderList($uidOriginFolder);
+
     if (count($listfolder)>0) {
         foreach ($listfolder['folders'] as $key => $value) {
-            copyMoveExecuteTree($value['FOLDER_UID'],$newFoldercontent);
+            checkTree($value["FOLDER_UID"], $newFoldercontent);
         }
     } else {
         return;
@@ -1423,7 +1442,6 @@ function uploadExternalDocument()
     $response['success']=false;
     $overwrite = (isset($_REQUEST['overwrite_files'])) ? $_REQUEST['overwrite_files'] : false;
     if (isset($_POST["confirm"]) && $_POST["confirm"] == "true") {
-        //G::pr($_FILES);
         if (isset($_FILES['uploadedFile'])) {
             $uploadedInstances=count($_FILES['uploadedFile']['name']);
             $sw_error=false;
@@ -1487,13 +1505,14 @@ function uploadExternalDocument()
             } else {
                 require_once ("classes/model/AppDocument.php");
                 $oAppDocument = new AppDocument();
-                foreach ($_POST['selitems'] as $docId) {
-                    $arrayDocId = explode ('_',$docId);
-                    $docInfo=$oAppDocument->load($arrayDocId[0]);
-                    $docInfo['FOLDER_UID'] =  $_POST['new_dir'];
-                    $docInfo['APP_DOC_CREATE_DATE'] = date('Y-m-d H:i:s');
-                    $oAppDocument->update($docInfo);
-                    //G::pr($docInfo);
+                if (isset($_POST['selitems']) && is_array($_POST['selitems'])) {
+                    foreach ($_POST['selitems'] as $docId) {
+                        $arrayDocId = explode ('_',$docId);
+                        $docInfo=$oAppDocument->load($arrayDocId[0]);
+                        $docInfo['FOLDER_UID'] =  $_POST['new_dir'];
+                        $docInfo['APP_DOC_CREATE_DATE'] = date('Y-m-d H:i:s');
+                        $oAppDocument->update($docInfo);
+                    }
                 }
             }
         }
@@ -1916,7 +1935,7 @@ function get_abs_item($dir, $item)
     return extPathName(get_abs_dir($dir)."/".$item);
 }
 
-function extPathName($p_path, $p_addtrailingslash=false)
+function extPathName($p_path, $p_addtrailingslash = false)
 {
     $retval = "";
 

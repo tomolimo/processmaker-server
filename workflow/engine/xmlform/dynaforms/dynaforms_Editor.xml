@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="dynaforms_Editor" type="xmlform" width="100%" enableTemplate="1">
-<toolbar type="toolbar" xmlfile="dynaforms/dynaforms_Toolbar"/>
-<URL type="phpvariable"/>
-<DYN_UID type="phpvariable"/>
-<PRO_UID type="phpvariable"/>
-<DYN_EDITOR type="phpvariable"/>
-<DYNAFORM_NAME type="phpvariable" defaultValue=""/>
-<title type="title" enableHTML="1">
-  <en><![CDATA[<table cellpadding="0" cellspacing="0" width="100%" style="background-color:transparent">    <tr>      <td  class=\'FormTitle\'>Preview</td>      <td align="right"></td>    </tr>  </table>]]></en>
-</title>
-<dynaforms_Preview type="private" defaultValue="../dynaforms/dynaforms_Preview"/>
-<dynaforms_Ajax type="private" defaultValue="../dynaforms/dynaforms_Ajax"/>
-<processMap type="private" defaultValue="../processes/processes_Map"/>
-<processBpmnMap type="private" defaultValue="../bpmn/processmap"/>
-<SCRIPT type="javascript" replaceTags="1"><![CDATA[
+  <toolbar type="toolbar" xmlfile="dynaforms/dynaforms_Toolbar"/>
+  <URL type="phpvariable"/>
+  <DYN_UID type="phpvariable"/>
+  <PRO_UID type="phpvariable"/>
+  <DYN_EDITOR type="phpvariable"/>
+  <DYNAFORM_NAME type="phpvariable" defaultValue=""/>
+  <title type="title" enableHTML="1">
+    <en><![CDATA[<table cellpadding="0" cellspacing="0" width="100%" style="background-color:transparent">    <tr>      <td  class='FormTitle'>Preview</td>      <td align="right"></td>    </tr>  </table>]]></en>
+  </title>
+  <dynaforms_Preview type="private" defaultValue="../dynaforms/dynaforms_Preview"/>
+  <dynaforms_Ajax type="private" defaultValue="../dynaforms/dynaforms_Ajax"/>
+  <processMap type="private" defaultValue="../processes/processes_Map"/>
+  <processMap3 type="private" defaultValue="../designer"/>
+  <processBpmnMap type="private" defaultValue="../bpmn/processmap"/>
+  <SCRIPT type="javascript" replaceTags="1"><![CDATA[
 
 function loadEditor()
 {
@@ -41,6 +42,11 @@ function loadEditor()
     if (canClose && dynEditorType == 'processmap')
     {
       window.location.href="@G::encryptLink(@#processMap)?PRO_UID=@%PRO_UID";
+      return true;
+    }
+    else if(dynEditorType == 'processMap3')
+    {
+      window.location.href="@G::encryptLink(@#processMap3)?prj_uid=@%PRO_UID";
       return true;
     }
     else if(dynEditorType == 'bpmn')
@@ -263,4 +269,4 @@ function saveProperties(){
 }
 */
 ]]></SCRIPT>
-</dynaForm> 
+</dynaForm>

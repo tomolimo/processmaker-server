@@ -148,7 +148,7 @@ class Language extends BaseLanguage
      * @param string $bXml
      * @return void
      */
-    public function import ($sLanguageFile, $updateXml = true, $updateDB = true)
+    public function import ($sLanguageFile, $updateXml = true, $updateDB = true, $generateMafe = true)
     {
         try {
             G::LoadSystem( 'i18n_po' );
@@ -288,6 +288,11 @@ class Language extends BaseLanguage
                 $trn->addTranslationEnvironment( $LOCALE, $POHeaders, $countItemsSuccess );
             }
 
+            if ($generateMafe) {
+                $trn = new Translation();
+                $trn->generateFileTranslationMafe();
+            }
+
             //fill the results
             $results = new stdClass();
             $results->recordsCount = $countItems;
@@ -295,6 +300,8 @@ class Language extends BaseLanguage
             $results->lang = $languageID;
             $results->headers = $POHeaders;
             $results->errMsg = $errorMsg;
+
+            G::auditLog("UploadLanguage", "Language: ".$languageID);
 
             return $results;
         } catch (Exception $oError) {
@@ -544,6 +551,7 @@ class Language extends BaseLanguage
                 }
             } //end foreach
         }
+        G::auditLog("ExportLanguage", "Language: ".$_GET['LOCALE']);
         G::streamFile( $sPOFile, true );
     }
     public function updateLanguagePlugin ($plugin, $idLanguage)

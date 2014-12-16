@@ -1,39 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="processes_New" width="50%" labelWidth="55px" mode="edit" enableTemplate="0">
-
-
-<title type="title" enableHTML="1">
-  <en><![CDATA[<div align="center">Importing Groups</div>]]></en>
-</title>
-
-<TITLE1 type="subtitle">
-  <en>Some of the groups that are you trying to import, already exist. Please select one of the following options to continue:</en>
-</TITLE1>
-
-<IMPORT_OPTION type="hidden">
+  <title type="title" enableHTML="1">
+    <en><![CDATA[<div align="center">Importing Groups</div>]]></en>
+  </title>
+  <TITLE1 type="subtitle">
+    <en><![CDATA[Some of the groups that are you trying to import, already exist. Please select one of the following options to continue:]]></en>
+  </TITLE1>
+  <IMPORT_OPTION type="hidden">
 </IMPORT_OPTION>
-
-<OBJ_UID type="hidden">
+  <OBJ_UID type="hidden">
 </OBJ_UID>
-
-<PRO_FILENAME type="hidden">
+  <PRO_FILENAME type="hidden">
 </PRO_FILENAME>
-
-<PRO_PATH type="hidden">
+  <PRO_PATH type="hidden">
 </PRO_PATH>
-
-<GROUP_IMPORT_OPTION type="radiogroup" defaultvalue="rename">
-  <en>
-    <option name="rename">Rename the imported groups</option>
-    <option name="merge">Merge the imported groups, with the preexistent local groups (no changes will be made to the local groups)</option>
-  </en>
-</GROUP_IMPORT_OPTION>
-
-<OBJ_UID type="hidden">
+  <GROUP_IMPORT_OPTION type="radiogroup" defaultvalue="rename">
+    <en><![CDATA[]]><option name="rename"><![CDATA[Rename the imported groups]]></option><option name="merge"><![CDATA[Merge the imported groups, with the preexistent local groups (no changes will be made to the local groups)]]></option></en>
+  </GROUP_IMPORT_OPTION>
+  <OBJ_UID type="hidden">
 </OBJ_UID>
-
-<SUBMIT type="submit">
-  <en>Save</en>
-</SUBMIT>
-
-</dynaForm>  
+  <SUBMIT type="submit">
+    <en><![CDATA[Save]]></en>
+  </SUBMIT>
+</dynaForm>

@@ -63,7 +63,6 @@ cron.application = {
 
             if (typeof record != "undefined") {
                 var strData = "<b>" + _("ID_DATE_LABEL") + "</b><br />" + record.get("DATE") + "<br />";
-                strData = strData + "<b>" + _("ID_WORKSPACE") + "</b><br />" + record.get("WORKSPACE") + "<br />";
                 strData = strData + "<b>" + _("ID_ACTION") + "</b><br />" + record.get("ACTION") + "<br />";
                 strData = strData + "<b>" + _("ID_STATUS") + "</b><br />" + record.get("STATUS") + "<br />";
                 strData = strData + "<b>" + _("ID_DESCRIPTION") + "</b><br />" + record.get("DESCRIPTION") + "<br />";
@@ -71,7 +70,6 @@ cron.application = {
                 var formItems = Ext.getCmp("frmLogView").form.items;
                 formItems.items[0].setValue(strData);
 
-                winLog.setTitle("Log - " + _("ID_WORKSPACE") + "&nbsp;" + record.get("WORKSPACE"));
                 winLog.show();
             }
         }
@@ -97,7 +95,6 @@ cron.application = {
                 totalProperty: "resultTotal",
                 fields: [
                     {name: "DATE"},
-                    {name: "WORKSPACE"},
                     {name: "ACTION"},
                     {name: "STATUS"},
                     {name: "DESCRIPTION"}
@@ -114,7 +111,6 @@ cron.application = {
                     this.baseParams = {
                         "option": "LST",
                         "pageSize": pageSize,
-                        "workspace": Ext.getCmp("cboWorkspace").getValue(),
                         "status": Ext.getCmp("cboStatus").getValue(),
                         "dateFrom": Ext.getCmp("dateFrom").getValue(),
                         "dateTo": Ext.getCmp("dateTo").getValue()
@@ -127,12 +123,6 @@ cron.application = {
                     loadMaskCron.hide();
                 }
             }
-        });
-
-        var storeWorkspace = new Ext.data.ArrayStore({
-            idIndex: 0,
-            fields: ["id", "value"],
-            data: WORKSPACE
         });
 
         var storeStatus = new Ext.data.ArrayStore({
@@ -164,28 +154,6 @@ cron.application = {
             editable: false,
             width: 90,
             value: ""
-        });
-
-        var cboWorkspace = new Ext.form.ComboBox({
-            id: "cboWorkspace",
-
-            valueField: "id",
-            displayField: "value",
-            value: "ALL",
-            store: storeWorkspace,
-
-            triggerAction: "all",
-            mode: "local",
-            editable: false,
-
-            width: 150,
-
-            listeners: {
-                select: function (combo, record, index)
-                {
-                    pagingCron.moveFirst();
-                }
-            }
         });
 
         var cboStatus = new Ext.form.ComboBox({
@@ -291,6 +259,14 @@ cron.application = {
             items: ["-", _("ID_PAGE_SIZE") + "&nbsp;", cboPageSize]
         });
 
+        var renderStatus = function(val) {
+            if (val == 'action') {
+                return _('ID_COMPLETED');
+            } else {
+                return _('ID_FAILED');
+            }
+        };
+
         var cmodel = new Ext.grid.ColumnModel({
             defaults: {
                 width: 50,
@@ -300,9 +276,8 @@ cron.application = {
                 expander,
                 {id: "ID", dataIndex: "DATE", hidden: true, hideable: false},
                 {header: _("ID_DATE_LABEL"), dataIndex: "DATE", width: 10, align: "center"},
-                {header: _("ID_WORKSPACE"), dataIndex: "WORKSPACE", width: 10},
                 {header: _("ID_ACTION"), dataIndex: "ACTION", width: 10},
-                {header: _("ID_STATUS"), dataIndex: "STATUS", width: 7, align: "center"},
+                {header: _("ID_STATUS"), dataIndex: "STATUS", width: 7, align: "center", renderer: renderStatus},
                 {header: _("ID_DESCRIPTION"), dataIndex: "DESCRIPTION"}
             ]
         });
@@ -399,8 +374,6 @@ cron.application = {
                 //"-",
                 //btnView,
                 "->",
-                {xtype: "tbtext", text: _("ID_WORKSPACE") + "&nbsp;"},
-                cboWorkspace,
                 "-",
                 {xtype: "tbtext", text: _("ID_STATUS") + "&nbsp;"},
                 cboStatus,

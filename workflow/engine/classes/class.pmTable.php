@@ -71,7 +71,7 @@ class PmTable
      */
     public function setColumns ($columns)
     {
-        $this->columns = $columns;
+        $this->columns = $columns;        
     }
 
     /**
@@ -182,7 +182,7 @@ class PmTable
      * Build the pmTable with all dependencies
      */
     public function build ()
-    {
+    {   
         $this->prepare();
         $this->preparePropelIniFile();
         $this->buildSchema();
@@ -273,8 +273,12 @@ class PmTable
                 break;
         }
 
-        foreach ($this->columns as $column) {
+        $indexNode = $this->dom->createElement( 'index' );
+        $indexNode->setAttribute( 'name', 'indexTable' );
+        $flag = false;
 
+        foreach ($this->columns as $column) {
+            
             // create the column node
             $columnNode = $this->dom->createElement( 'column' );
             // setting column node attributes
@@ -285,6 +289,14 @@ class PmTable
                 $columnNode->setAttribute( 'size', $column->field_size );
             }
 
+            if ($column->field_type == 'DECIMAL') {
+                if ($column->field_size > 2) {
+                    $columnNode->setAttribute( 'scale', 2 );
+                } else {
+                    $columnNode->setAttribute( 'scale', 1 );
+                }
+            }
+            
             $columnNode->setAttribute( 'required', ($column->field_null ? 'false' : 'true') );
 
             // only define the primaryKey attribute if it is defined
@@ -296,9 +308,20 @@ class PmTable
             if ($column->field_autoincrement) {
                 $columnNode->setAttribute( 'autoIncrement', "true" );
             }
+
+            // define the Index attribute if it is defined
+            if (isset($column->field_index) && $column->field_index) {
+                $columnNode->setAttribute( 'index', "true" );
+                $indexColumnNode = $this->dom->createElement( 'index-column' );
+                $indexColumnNode->setAttribute( 'name', $column->field_name );
+                $indexNode->appendChild( $indexColumnNode );
+                $flag = true;
+            }
             $tableNode->appendChild( $columnNode );
         }
-
+        if ($flag) {
+            $tableNode->appendChild( $indexNode );
+        }
         $xpath = new DOMXPath( $this->dom );
         $xtable = $xpath->query( '/database/table[@name="' . $this->tableName . '"]' );
 
@@ -377,7 +400,7 @@ class PmTable
      * Save the xml schema for propel
      */
     public function saveSchema ()
-    {
+    {   
         $this->dom->save( $this->configDir . $this->schemaFilename );
     }
 
@@ -770,6 +793,7 @@ class PmTable
         $types['DATE'] = 'DATE';
         $types['TIME'] = 'TIME';
         $types['DATETIME'] = 'DATETIME';
+        $types['TIMESTAMP'] = 'TIMESTAMP';
         //$types['BLOB'] = 'BLOB'; <- disabled
         //$types['CLOB'] = 'CLOB'; <- disabled
 

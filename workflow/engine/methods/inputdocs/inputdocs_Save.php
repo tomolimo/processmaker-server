@@ -88,6 +88,18 @@ try {
                 $aData = $_POST;
             }
 
+            //Validating the format of the allowed extentions
+            //Allowed Types has to have this format -> *.pdf, *.docx or *.* to all.
+            $allowedTypes = explode(", ", $aData['INP_DOC_TYPE_FILE']);
+            foreach ($allowedTypes as $types => $val) {
+            	if((preg_match('/^\*\.?[a-zA-Z0-9]{2,15}$/', $val)) || ($val == '*.*')){
+            	}else {
+            		$message = G::LoadTranslation( 'ID_UPLOAD_ERR_WRONG_ALLOWED_EXTENSION_FORMAT' );
+            		G::SendMessageText( $message, "ERROR" );
+            		die();
+            	}
+            }
+
             if ($aData['INP_DOC_UID'] == '') {
                 unset( $aData['INP_DOC_UID'] );
                 $oInputDocument->create( $aData );

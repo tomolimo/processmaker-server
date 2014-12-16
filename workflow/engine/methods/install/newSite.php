@@ -39,8 +39,8 @@ if (isset( $_POST['form']['NW_TITLE'] )) {
     $ao_db_drop = (isset( $_POST['form']['AO_DB_DROP'] )) ? true : false;
 
     $ao_db_wf = (isset( $_POST['form']['AO_DB_WF'] )) ? $_POST['form']['AO_DB_WF'] : false;
-    $ao_db_rb = (isset( $_POST['form']['AO_DB_RB'] )) ? $_POST['form']['AO_DB_RB'] : false;
-    $ao_db_rp = (isset( $_POST['form']['AO_DB_RP'] )) ? $_POST['form']['AO_DB_RP'] : false;
+    $ao_db_rb = (isset( $_POST['form']['AO_DB_WF'] )) ? $_POST['form']['AO_DB_WF'] : false;
+    $ao_db_rp = (isset( $_POST['form']['AO_DB_WF'] )) ? $_POST['form']['AO_DB_WF'] : false;
 
     $result = $inst->create_site( Array ('isset' => true,'name' => $name,'admin' => Array ('username' => $user,'password' => $pass
     ),'advanced' => Array ('ao_db_drop' => $ao_db_drop,'ao_db_wf' => $ao_db_wf,'ao_db_rb' => $ao_db_rb,'ao_db_rp' => $ao_db_rp

@@ -1,24 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm width="680" menu="setup/skinsListOptions">
-
-<id type="text" colWidth="20" titleAlign="left" align="left">
-  <en>#</en>
-</id>
-
-<name type="text" colWidth="120" titleAlign="left" align="left">
-  <en>Name (File)</en>
-</name>
-
-<description type="text" colWidth="350" titleAlign="left" align="left">
-  <en>Description</en>
-</description>
-
-<version type="text" colWidth="70" titleAlign="left" align="left">
-  <en>Version</en>
-</version>
-
-<linkPackValue type="link" value="@#linkPackValue" link="@#url" colWidth="40" align="center">
-  <en/>
-</linkPackValue>
-
-</dynaForm>  
+  <id type="text" colWidth="20" titleAlign="left" align="left">
+    <en><![CDATA[#]]></en>
+  </id>
+  <name type="text" colWidth="120" titleAlign="left" align="left">
+    <en><![CDATA[Name (File)]]></en>
+  </name>
+  <description type="text" colWidth="350" titleAlign="left" align="left">
+    <en><![CDATA[Description]]></en>
+  </description>
+  <version type="text" colWidth="70" titleAlign="left" align="left">
+    <en><![CDATA[Version]]></en>
+  </version>
+  <linkPackValue type="link" value="@#linkPackValue" link="@#url" colWidth="40" align="center">
+    <en><![CDATA[]]></en>
+  </linkPackValue>
+</dynaForm>

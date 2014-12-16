@@ -1,86 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="xmlform" name="cases/cases_Scheduler_New" width="70%" enabletemplate="1" mode="edit">
-
-<menuUser type="xmlmenu" xmlfile="cases/cases_Scheduler_NewOptions">
-  <en></en>
-</menuUser>
-<GENERAL_INF type="title" enablehtml="1">
-<en>General Information</en>
-</GENERAL_INF>
-
-<PROPERTIES_INF type="subtitle" enablehtml="1">
-<en>Enter the username and password of the user who will be assigned to the initial task in the case.</en>
-</PROPERTIES_INF>
-
-<SCH_UID type="hidden" >
-<![CDATA[ SELECT count( * )+1 AS UID FROM CASE_SCHEDULER  ]]>
-<en></en>
-</SCH_UID>
-<SCH_LIST type="hidden" >
+  <menuUser type="xmlmenu" xmlfile="cases/cases_Scheduler_NewOptions">
+    <en/>
+  </menuUser>
+  <GENERAL_INF type="title" enablehtml="1">
+    <en><![CDATA[General Information]]></en>
+  </GENERAL_INF>
+  <PROPERTIES_INF type="subtitle" enablehtml="1">
+    <en><![CDATA[Enter the username and password of the user who will be assigned to the initial task in the case.]]></en>
+  </PROPERTIES_INF>
+  <SCH_UID type="hidden"><![CDATA[ SELECT count( * )+1 AS UID FROM CASE_SCHEDULER  ]]><en/></SCH_UID>
+  <SCH_LIST type="hidden">
 </SCH_LIST>
-<PHP_CURRENT_DATE type="hidden" >
+  <PHP_CURRENT_DATE type="hidden">
 </PHP_CURRENT_DATE>
-
-<SCH_USER_NAME type="text" maxlength="100" validate="Any" required="1" readonly="0" size="40" mode="edit" >
-<en>User Name</en>
-</SCH_USER_NAME>
-<SCH_USER_PASSWORD type="password" maxlength="100" validate="Any" required="1" readonly="0" size="40" mode="edit">
-<en>Password</en>
-</SCH_USER_PASSWORD>
-<SCH_USER_UID type="hidden" dependentfields="PRO_UID"></SCH_USER_UID>
-<TEST_CONNECTION type="button" onclick="case_userSchedulerValidate(getField('SCH_USER_NAME').value,getField('SCH_USER_PASSWORD').value);">
-  <en>Test User</en>
-</TEST_CONNECTION>
-<EDIT_USER type="button" onclick="resetForm();">
-  <en>Edit User</en>
-</EDIT_USER>
-
-<PERFORM_TASK type="subtitle" enablehtml="1">
-<en>Properties </en>
-</PERFORM_TASK>
-
-<PRO_UID type="hidden" required="1"  style="width:300px" dependentfields="TAS_UID" mode="edit">
+  <SCH_USER_NAME type="text" maxlength="100" validate="Any" required="1" readonly="0" size="40" mode="edit">
+    <en><![CDATA[User Name]]></en>
+  </SCH_USER_NAME>
+  <SCH_USER_PASSWORD type="password" maxlength="100" validate="Any" required="1" readonly="0" size="40" mode="edit">
+    <en><![CDATA[Password]]></en>
+  </SCH_USER_PASSWORD>
+  <SCH_USER_UID type="hidden" dependentfields="PRO_UID"/>
+  <TEST_CONNECTION type="button" onclick="case_userSchedulerValidate(getField('SCH_USER_NAME').value,getField('SCH_USER_PASSWORD').value);">
+    <en><![CDATA[Test User]]></en>
+  </TEST_CONNECTION>
+  <EDIT_USER type="button" onclick="resetForm();">
+    <en><![CDATA[Edit User]]></en>
+  </EDIT_USER>
+  <PERFORM_TASK type="subtitle" enablehtml="1">
+    <en><![CDATA[Properties]]></en>
+  </PERFORM_TASK>
+  <PRO_UID type="hidden" required="1" style="width:300px" dependentfields="TAS_UID" mode="edit">
 </PRO_UID>
-
-<TAS_UID type="dropdown" required="1"  style="width:300px" options="Array"  >
-<en>Task </en>
-</TAS_UID>
-
-<SCH_NAME type="text" maxlength="100" validate="Any" required="1" readonly="0" size="40" mode="edit" mask="" strto="" dependentfields="" defaultvalue="" hint="" formula="" function="" sqlconnection="" savelabel="0">
-<en>Name</en>
-</SCH_NAME>
-
-<SCH_OPTION type="dropdown" required="1" readonly="0" savelabel="0" mode="edit" options="Array">
-<en>Perform this task
-<option name="0">-Select-</option>
-<option name="1">Daily</option>
-<option name="2">Weekly</option>
-<option name="3">Monthly</option>
-<option name="4">One time only</option>
-<option name="5">Every</option>
-</en>
-</SCH_OPTION>
-
-<SELECT_TIME_DAY type="subtitle" enablehtml="1">
-<en>Select the date and time for case(s) to be initiated.</en>
-</SELECT_TIME_DAY>
-
-<SCH_START_TIME type="text" maxlength="5" validate="Any" mask="##:##" required="0" readonly="0" size="5" mode="edit" strto="" dependentfields=""  defaultvalue="" hint="" formula="" function=""  sqlconnection="" savelabel="0">
-<en>Execution time</en>
-</SCH_START_TIME>
-
-<SELECT_DATE type="subtitle" enablehtml="1">
-<en>Select date</en>
-</SELECT_DATE>
-
-<SCH_START_DATE type="date" defaultValue="@#PHP_CURRENT_DATE" relativedate="1" beforedate="0m" afterdate="5y" mask="Y-m-d " editable="0" required="0" readonly="0" showtime="0" defaultvalue_sel="empty" size="15" mode="edit">
-<en>Start date</en>
-</SCH_START_DATE>
-
-<SELECT_1 type="subtitle" enablehtml="1">
-<en> Daily</en>
-</SELECT_1>
-<!--
+  <TAS_UID type="dropdown" required="1" style="width:300px" options="Array">
+    <en><![CDATA[Task]]></en>
+  </TAS_UID>
+  <SCH_NAME type="text" maxlength="100" validate="Any" required="1" readonly="0" size="40" mode="edit" mask="" strto="" dependentfields="" defaultvalue="" hint="" formula="" function="" sqlconnection="" savelabel="0">
+    <en><![CDATA[Name]]></en>
+  </SCH_NAME>
+  <SCH_OPTION type="dropdown" required="1" readonly="0" savelabel="0" mode="edit" options="Array">
+    <en><![CDATA[Perform this task]]><option name="0"><![CDATA[-Select-]]></option><option name="1"><![CDATA[Daily]]></option><option name="2"><![CDATA[Weekly]]></option><option name="3"><![CDATA[Monthly]]></option><option name="4"><![CDATA[One time only]]></option><option name="5"><![CDATA[Every]]></option></en>
+  </SCH_OPTION>
+  <SELECT_TIME_DAY type="subtitle" enablehtml="1">
+    <en><![CDATA[Select the date and time for case(s) to be initiated.]]></en>
+  </SELECT_TIME_DAY>
+  <SCH_START_TIME type="text" maxlength="5" validate="Any" mask="##:##" required="0" readonly="0" size="5" mode="edit" strto="" dependentfields="" defaultvalue="" hint="" formula="" function="" sqlconnection="" savelabel="0">
+    <en><![CDATA[Execution time]]></en>
+  </SCH_START_TIME>
+  <SELECT_DATE type="subtitle" enablehtml="1">
+    <en><![CDATA[Select date]]></en>
+  </SELECT_DATE>
+  <SCH_START_DATE type="date" defaultValue="@#PHP_CURRENT_DATE" relativedate="1" beforedate="0m" afterdate="5y" mask="Y-m-d " editable="0" required="0" readonly="0" showtime="0" defaultvalue_sel="empty" size="15" mode="edit">
+    <en><![CDATA[Start date]]></en>
+  </SCH_START_DATE>
+  <SELECT_1 type="subtitle" enablehtml="1">
+    <en><![CDATA[Daily]]></en>
+  </SELECT_1>
+  <!--
 <SCH_DAYS_PERFORM_TASK type="radiogroup" defaultValue="1" required="0" mode="edit" options="Array">
 <en>Perform this task
 <option name="1">Every Day</option>
@@ -91,155 +67,100 @@
 </en>
 </SCH_DAYS_PERFORM_TASK>
 -->
-<SCH_DAYS_PERFORM_TASK type="hidden" defaultValue="1" value="1" required="0" mode="edit" options="Array">
+  <SCH_DAYS_PERFORM_TASK type="hidden" defaultValue="1" value="1" required="0" mode="edit" options="Array">
 </SCH_DAYS_PERFORM_TASK>
-<!--
+  <!--
 <SCH_DAYS_PERFORM_TASK_OPT_3 type="text" maxlength="3" validate="Int" required="0" readonly="0" defaultvalue="1" size="3" mode="edit">
 <en>Days</en>
 </SCH_DAYS_PERFORM_TASK_OPT_3>
 -->
-<SELECT_2 type="subtitle" enablehtml="1">
-<en> Weekly</en>
-</SELECT_2>
-
-<SCH_EVERY_DAYS type="text" maxlength="2" defaultValue="1" validate="Int" required="0" readonly="0" size="2" mode="edit">
-<en>Every</en>
-</SCH_EVERY_DAYS>
-
-<SCH_WEEK_DAYS type="checkgroup" required="0" mode="edit" options="Array" COLS="2" defaultvalue="" hint="" sqlconnection="" readonly="0" savelabel="0">
-<en>Select the day(s) of the week below
-		<option name="1">Monday</option>
-		<option name="2">Tuesday</option>
-		<option name="3">Wednesday</option>
-		<option name="4">Thursday</option> </en>
-</SCH_WEEK_DAYS>
-
-<SCH_WEEK_DAYS_2 type="checkgroup" required="0" mode="edit" options="Array" defaultvalue="" hint="" sqlconnection="" readonly="0" savelabel="0">
-<en>
-		<option name="5">Friday</option>
-		<option name="6">Saturday</option>
-		<option name="7">Sunday</option></en>
-</SCH_WEEK_DAYS_2>
-
-
-<SELECT_3 type="subtitle" enablehtml="1">
-<en> Monthly</en>
-</SELECT_3>
-
-<SCH_START_DAY type="radiogroup" required="0" mode="edit" options="Array">
-<en> <option name="1">Day of month</option>
-<option name="2">The day </option>
-</en>
-</SCH_START_DAY>
-<SCH_START_DAY_OPT_1 type="text" maxlength="2" validate="Int" mask="##" required="0" readonly="0" defaultvalue="1" size="2" mode="edit">
-<en/>
-</SCH_START_DAY_OPT_1>
-<SCH_START_DAY_OPT_2_WEEKS type="dropdown" required="0" readonly="0" savelabel="0" mode="edit" options="Array" dependentfields="" defaultvalue="" hint="" sqlconnection="">
-<en>
-<option name="1">First</option>
-<option name="2">Second</option>
-<option name="3">Third</option>
-<option name="4">Fourth</option>
-<option name="5">Last</option>
-</en>
-</SCH_START_DAY_OPT_2_WEEKS>
-<SCH_START_DAY_OPT_2_DAYS_WEEK type="dropdown" required="0" readonly="0" savelabel="0" mode="edit" options="Array">
-<en>
-<option name="1">Monday</option>
-<option name="2">Tuesday</option>
-<option name="3">Wednesday</option>
-<option name="4">Thursday</option>
-<option name="5">Friday</option>
-<option name="6">Saturday</option>
-<option name="7">Sunday</option>
-</en>
-</SCH_START_DAY_OPT_2_DAYS_WEEK>
-<SCH_MONTHS type="checkgroup" mode="edit" options="Array">
-<en>Of the month(s)
-<option name="1">Jan</option>
-<option name="2">Feb</option>
-<option name="3">Mar</option>
-<option name="4">Apr</option>
-</en>
-</SCH_MONTHS>
-
-<SCH_MONTHS_2 type="checkgroup" mode="edit" options="Array">
-<en>
-<option name="5">May</option>
-<option name="6">Jun</option>
-<option name="7">Jul</option>
-<option name="8">Aug</option>
-</en>
-</SCH_MONTHS_2>
-
-<SCH_MONTHS_3 type="checkgroup" mode="edit" options="Array">
-<en>
-<option name="9">Sep</option>
-<option name="10">Oct</option>
-<option name="11">Nov</option>
-<option name="12">Dec</option>
-</en>
-</SCH_MONTHS_3>
-
-<!-- Advanced Options  //-->
-<!--<ADVANCED_4 type="subtitle" enablehtml="1">
+  <SELECT_2 type="subtitle" enablehtml="1">
+    <en><![CDATA[Weekly]]></en>
+  </SELECT_2>
+  <SCH_EVERY_DAYS type="text" maxlength="2" defaultValue="1" validate="Int" required="0" readonly="0" size="2" mode="edit">
+    <en><![CDATA[Every]]></en>
+  </SCH_EVERY_DAYS>
+  <SCH_WEEK_DAYS type="checkgroup" required="0" mode="edit" options="Array" COLS="2" defaultvalue="" hint="" sqlconnection="" readonly="0" savelabel="0">
+    <en><![CDATA[Select the day(s) of the week below]]><option name="1"><![CDATA[Monday]]></option><option name="2"><![CDATA[Tuesday]]></option><option name="3"><![CDATA[Wednesday]]></option><option name="4"><![CDATA[Thursday]]></option></en>
+  </SCH_WEEK_DAYS>
+  <SCH_WEEK_DAYS_2 type="checkgroup" required="0" mode="edit" options="Array" defaultvalue="" hint="" sqlconnection="" readonly="0" savelabel="0">
+    <en><![CDATA[]]><option name="5"><![CDATA[Friday]]></option><option name="6"><![CDATA[Saturday]]></option><option name="7"><![CDATA[Sunday]]></option></en>
+  </SCH_WEEK_DAYS_2>
+  <SELECT_3 type="subtitle" enablehtml="1">
+    <en><![CDATA[Monthly]]></en>
+  </SELECT_3>
+  <SCH_START_DAY type="radiogroup" required="0" mode="edit" options="Array">
+    <en><![CDATA[]]><option name="1"><![CDATA[Day of month]]></option><option name="2"><![CDATA[The day]]></option></en>
+  </SCH_START_DAY>
+  <SCH_START_DAY_OPT_1 type="text" maxlength="2" validate="Int" mask="##" required="0" readonly="0" defaultvalue="1" size="2" mode="edit">
+    <en><![CDATA[]]></en>
+  </SCH_START_DAY_OPT_1>
+  <SCH_START_DAY_OPT_2_WEEKS type="dropdown" required="0" readonly="0" savelabel="0" mode="edit" options="Array" dependentfields="" defaultvalue="" hint="" sqlconnection="">
+    <en><![CDATA[]]><option name="1"><![CDATA[First]]></option><option name="2"><![CDATA[Second]]></option><option name="3"><![CDATA[Third]]></option><option name="4"><![CDATA[Fourth]]></option><option name="5"><![CDATA[Last]]></option></en>
+  </SCH_START_DAY_OPT_2_WEEKS>
+  <SCH_START_DAY_OPT_2_DAYS_WEEK type="dropdown" required="0" readonly="0" savelabel="0" mode="edit" options="Array">
+    <en><![CDATA[]]><option name="1"><![CDATA[Monday]]></option><option name="2"><![CDATA[Tuesday]]></option><option name="3"><![CDATA[Wednesday]]></option><option name="4"><![CDATA[Thursday]]></option><option name="5"><![CDATA[Friday]]></option><option name="6"><![CDATA[Saturday]]></option><option name="7"><![CDATA[Sunday]]></option></en>
+  </SCH_START_DAY_OPT_2_DAYS_WEEK>
+  <SCH_MONTHS type="checkgroup" mode="edit" options="Array">
+    <en><![CDATA[Of the month(s)]]><option name="1"><![CDATA[Jan]]></option><option name="2"><![CDATA[Feb]]></option><option name="3"><![CDATA[Mar]]></option><option name="4"><![CDATA[Apr]]></option></en>
+  </SCH_MONTHS>
+  <SCH_MONTHS_2 type="checkgroup" mode="edit" options="Array">
+    <en><![CDATA[]]><option name="5"><![CDATA[May]]></option><option name="6"><![CDATA[Jun]]></option><option name="7"><![CDATA[Jul]]></option><option name="8"><![CDATA[Aug]]></option></en>
+  </SCH_MONTHS_2>
+  <SCH_MONTHS_3 type="checkgroup" mode="edit" options="Array">
+    <en><![CDATA[]]><option name="9"><![CDATA[Sep]]></option><option name="10"><![CDATA[Oct]]></option><option name="11"><![CDATA[Nov]]></option><option name="12"><![CDATA[Dec]]></option></en>
+  </SCH_MONTHS_3>
+  <!-- Advanced Options  //-->
+  <!--<ADVANCED_4 type="subtitle" enablehtml="1">
 <en>Advanced Options</en>
 </ADVANCED_4>-->
-<!--
+  <!--
 <SCH_START_DATE type="date" relativedate="1" beforedate="0m" afterdate="1y" mask="Y-m-d " editable="0" required="0" readonly="0" showtime="0" defaultvalue_sel="empty" size="15" mode="edit">
 <en>Start Date</en>
 </SCH_START_DATE>
 //-->
-<!--
+  <!--
 <SCH_END_DATE_CHK type="checkbox" value="On" falsevalue="Off" defaultvalue="Off" labelonright="1" enablehtml="1">
 <en>End Date</en>
 </SCH_END_DATE_CHK>
 -->
-<SCH_END_DATE type="date" relativedate="1" beforedate="0m" afterdate="5y" mask="Y-m-d " editable="0" required="0" readonly="0" showtime="0" defaultvalue_sel="empty" size="15" mode="edit">
-<en>End Date</en>
-</SCH_END_DATE>
-<SCH_REPEAT_TASK_CHK type="checkbox" value="On" falsevalue="Off" defaultvalue="Off" labelonright="1" enablehtml="1">
-<en>Repeat Task</en>
-</SCH_REPEAT_TASK_CHK>
-<!--<SCH_REPEAT_EVERY type="text" maxlength="4" validate="Int" required="0" readonly="0" size="4" mode="edit">-->
-<!--<en>Every</en>-->
-<!--</SCH_REPEAT_EVERY>-->
-<SCH_REPEAT_EVERY type="text" maxlength="5" validate="Real" mask="##.##" required="0" readonly="0" size="5" mode="edit">
-<en>Execute every</en>
-</SCH_REPEAT_EVERY>
-<!--<SCH_REPEAT_EVERY type="text" maxlength="5" validate="Any" mask="##:##" required="0" readonly="0" size="5" mode="edit" strto="" dependentfields=""  defaultvalue_sel="empty" hint="" formula="" function=""  sqlconnection="" savelabel="0">-->
-<!--<en>Every</en>-->
-<!--</SCH_REPEAT_EVERY>-->
-<!--SCH_START_TIME-->
-
-<SCH_ADVANCED type="hidden" >
-<en></en>
-</SCH_ADVANCED>
-
-<SCH_REPEAT_EVERY_OPT type="dropdown" required="0" readonly="0" savelabel="0" mode="edit" options="Array">
-<en> <option name="1">Minutes</option>
-<option name="2">Hours</option>
-</en>
-</SCH_REPEAT_EVERY_OPT>
-
-<!--
+  <SCH_END_DATE type="date" relativedate="1" beforedate="0m" afterdate="5y" mask="Y-m-d " editable="0" required="0" readonly="0" showtime="0" defaultvalue_sel="empty" size="15" mode="edit">
+    <en><![CDATA[End Date]]></en>
+  </SCH_END_DATE>
+  <SCH_REPEAT_TASK_CHK type="checkbox" value="On" falsevalue="Off" defaultvalue="Off" labelonright="1" enablehtml="1">
+    <en><![CDATA[Repeat Task]]></en>
+  </SCH_REPEAT_TASK_CHK>
+  <!--<SCH_REPEAT_EVERY type="text" maxlength="4" validate="Int" required="0" readonly="0" size="4" mode="edit">-->
+  <!--<en>Every</en>-->
+  <!--</SCH_REPEAT_EVERY>-->
+  <SCH_REPEAT_EVERY type="text" maxlength="5" validate="Real" mask="##.##" required="0" readonly="0" size="5" mode="edit">
+    <en><![CDATA[Execute every]]></en>
+  </SCH_REPEAT_EVERY>
+  <!--<SCH_REPEAT_EVERY type="text" maxlength="5" validate="Any" mask="##:##" required="0" readonly="0" size="5" mode="edit" strto="" dependentfields=""  defaultvalue_sel="empty" hint="" formula="" function=""  sqlconnection="" savelabel="0">-->
+  <!--<en>Every</en>-->
+  <!--</SCH_REPEAT_EVERY>-->
+  <!--SCH_START_TIME-->
+  <SCH_ADVANCED type="hidden">
+    <en/>
+  </SCH_ADVANCED>
+  <SCH_REPEAT_EVERY_OPT type="dropdown" required="0" readonly="0" savelabel="0" mode="edit" options="Array">
+    <en><![CDATA[]]><option name="1"><![CDATA[Minutes]]></option><option name="2"><![CDATA[Hours]]></option></en>
+  </SCH_REPEAT_EVERY_OPT>
+  <!--
 <SUB_SAVE type="subtitle" enablehtml="1">
 <en> </en>
 </SUB_SAVE>
 //-->
-<SELECT_PLUGIN type="subtitle" enablehtml="1">
-<en>Start a case based on following registered Plugin.</en>
-</SELECT_PLUGIN>
-
-<SAVE type="button"  onClick="validateSchedulerFields(this.form)">
-<en>Save</en>
-</SAVE>
-
-<BTNCANCEL type="button"  onClick="javascript:backToList();">
-<en>Cancel</en>
-</BTNCANCEL>
-
-<SHOW_HIDE_JS type="javascript"><![CDATA[
+  <SELECT_PLUGIN type="subtitle" enablehtml="1">
+    <en><![CDATA[Start a case based on following registered Plugin.]]></en>
+  </SELECT_PLUGIN>
+  <SAVE type="button" onClick="validateSchedulerFields(this.form)">
+    <en><![CDATA[Save]]></en>
+  </SAVE>
+  <BTNCANCEL type="button" onClick="javascript:backToList();">
+    <en><![CDATA[Cancel]]></en>
+  </BTNCANCEL>
+  <SHOW_HIDE_JS type="javascript"><![CDATA[
 hideAll();
 hideProperties();
 

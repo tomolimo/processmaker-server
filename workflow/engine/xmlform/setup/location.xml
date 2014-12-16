@@ -1,34 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="location" basedir="xmlform/process" width="500" xmlform_type="NORMAL" enable_template="0">
-
-<DESCRIPTION type="text" size="40" maxlength="40">
-  <en>Region</en>
-  <fa>منطقه</fa>
-</DESCRIPTION>
-
-<BSUBMIT type="button" onclick="btnClick(this.form);">
-  <en>Add</en>
-  <fa>اضافه کردن</fa>
-</BSUBMIT>
-<TITLE type="title">
-	<es><![CDATA[Región]]></es>
-	<en>Region</en>
-</TITLE><USR_COUNTRY type="dropdown" defaultvalue="" required="0" group="1" dependentfields="USR_CITY" readonly="0" sqlconnection="" sql="select uid, caption from TERRITORY where TERRITORY = &#039;COUNTRY&#039; ORDER BY CAPTION">
-
-  <en>COUNTRIES</en>
-</USR_COUNTRY>
-
-<USR_CITY type="dropdown" defaultvalue="" required="0" group="1" dependentfields="" readonly="0" sqlconnection="" onclick="alert(0);">
+  <DESCRIPTION type="text" size="40" maxlength="40">
+    <en><![CDATA[Region]]></en>
+    <fa>منطقه</fa>
+  </DESCRIPTION>
+  <BSUBMIT type="button" onclick="btnClick(this.form);">
+    <en><![CDATA[Add]]></en>
+    <fa>اضافه کردن</fa>
+  </BSUBMIT>
+  <TITLE type="title">
+    <es><![CDATA[Región]]></es>
+    <en><![CDATA[Region]]></en>
+  </TITLE>
+  <USR_COUNTRY type="dropdown" defaultvalue="" required="0" group="1" dependentfields="USR_CITY" readonly="0" sqlconnection="" sql="select uid, caption from TERRITORY where TERRITORY = 'COUNTRY' ORDER BY CAPTION">
+    <en><![CDATA[COUNTRIES]]></en>
+  </USR_COUNTRY>
+  <USR_CITY type="dropdown" defaultvalue="" required="0" group="1" dependentfields="" readonly="0" sqlconnection="" onclick="alert(0);">
 select uid, caption from TERRITORY where RELATION = @@USR_COUNTRY
-  <en>CITY</en>
+  <en><![CDATA[CITY]]></en>
 </USR_CITY>
-
-<ADD_CITY type="button" defaultvalue="" required="0" group="1" dependentfields="" readonly="0" sqlconnection="" onclick="changeCities();">
-  <en>Add city</en>
-</ADD_CITY>
-
-<USR_SUBMIT type="submit" defaultvalue="" required="0" group="1" dependentfields="" readonly="0" sqlconnection="" onclick="changeCity(this.form)">
-  <en>ACCEPT</en>
-</USR_SUBMIT>
-
-</dynaForm>  
+  <ADD_CITY type="button" defaultvalue="" required="0" group="1" dependentfields="" readonly="0" sqlconnection="" onclick="changeCities();">
+    <en><![CDATA[Add city]]></en>
+  </ADD_CITY>
+  <USR_SUBMIT type="submit" defaultvalue="" required="0" group="1" dependentfields="" readonly="0" sqlconnection="" onclick="changeCity(this.form)">
+    <en><![CDATA[ACCEPT]]></en>
+  </USR_SUBMIT>
+</dynaForm>

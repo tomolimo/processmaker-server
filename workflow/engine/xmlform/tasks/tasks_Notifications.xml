@@ -1,36 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="tasks_Notifications" width="99%" labelWidth="160" mode="edit" enableTemplate="1" border="0" height="305px">
-
   <PRO_UID type="private"/>
   <TAS_UID type="hidden"/>
   <TAS_SEND_LAST_EMAIL type="hidden"/>
   <INDEX type="hidden"/>
   <IFORM type="hidden"/>
-  
   <SEND_EMAIL type="checkbox" value="TRUE" group="1">
-    <en>After routing notify the next assigned user(s)</en>
+    <en><![CDATA[After routing notify the next assigned user(s)]]></en>
   </SEND_EMAIL>
-  
   <TAS_DEF_SUBJECT_MESSAGE type="text" size="50" required="1">
-    <en>Subject</en>
+    <en><![CDATA[Subject]]></en>
   </TAS_DEF_SUBJECT_MESSAGE>
-
   <TAS_DEF_MESSAGE_TYPE type="dropdown" defaultValue="text">
-    <en>Content Type
-      <option name="text">Plain Text</option>
-      <option name="template">HTML Template</option>
-    </en>
+    <en><![CDATA[Content Type]]><option name="text"><![CDATA[Plain Text]]></option><option name="template"><![CDATA[HTML Template]]></option></en>
   </TAS_DEF_MESSAGE_TYPE>
-
   <TAS_DEF_MESSAGE type="textareapm" cols="50" rows="10" group="1" showVars="1" process="@#PRO_UID" symbol="@#" required="1">
-    <en>Message</en>
+    <en><![CDATA[Message]]></en>
   </TAS_DEF_MESSAGE>
-
   <TAS_DEF_MESSAGE_TEMPLATE type="dropdown" sqlconnection="dbarray">
   SELECT FILE,NAME FROM _TEMPLATES1
-  <en>Template<option name="alert_message.html">-- Default --</option></en>
+  <en><![CDATA[Template]]><option name="alert_message.html"><![CDATA[-- Default --]]></option></en>
   </TAS_DEF_MESSAGE_TEMPLATE>
-
   <JS type="javascript"><![CDATA[
   
   if (@@TAS_SEND_LAST_EMAIL == 'TRUE')
@@ -226,5 +216,4 @@
   };
 
   ]]></JS>
-
-</dynaForm>  
+</dynaForm>

@@ -68,6 +68,8 @@ if ($dynaform->exists( $DYN_UID )) {
 //creating SESSION for redirecting to new bpmn editor after closing Dynaform
 if (isset( $_GET['bpmn'] ) && $_GET['bpmn'] == '1') {
     $_SESSION['dynaform_editor'] = 'bpmn';
+} elseif (isset( $_GET['processMap3'] )) {
+    $_SESSION['dynaform_editor'] = 'processMap3';
 } elseif (! isset( $_GET['bpmn'] )) {
     $_SESSION['dynaform_editor'] = 'processmap';
 }

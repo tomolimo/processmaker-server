@@ -1,51 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm sqlConnection="" rowsPerPage="25" menu="cases/cases_InputdocsListOptions">
-
-<DOC_UID type="hidden" showInTable="0"/>
-
-<POSITION type="hidden" showInTable="0"/>
-
-<APP_DOC_UID type="hidden" showInTable="0"/>
-
-<DOC_VERSION type="hidden" showInTable="0"/>
-
-<CONFIRM type="hidden" showInTable="0"/>
-
-<TITLE type="text" colWidth="150" titleAlign="left" align="left">
-  <en>Title</en>
-</TITLE>
-
-<DOC_VERSION_LABEL type="text" colWidth="25" titleAlign="left" align="left">
-  <en>Version</en>
-</DOC_VERSION_LABEL>
-
-<CREATOR type="text" mode="view" colWidth="50">
-  <en>Creator</en>
-</CREATOR>
-
-<COMMENT type="text" mode="view" colWidth="50">
-  <en>Comment</en>
-</COMMENT>
-
-<APP_DOC_CREATE_DATE type="date" mode="view" colWidth="120">
-  <en>Created Date</en>
-</APP_DOC_CREATE_DATE>
-
-
-
-<DOWNLOAD type="link" colWidth="25" value="@#DOWNLOAD_LABEL" link="@#DOWNLOAD_LINK"/>
-
-
-
-<NEWVERSION type="link" colWidth="1" value="@#NEWVERSION_LABEL" link="javascript:uploadInputDocument(&#039;@#DOC_UID&#039;,&#039;@#APP_DOC_UID&#039;,&#039;@#DOC_VERSION&#039;,&#039;NV&#039;);"/>
-
-<VERSION_HISTORY type="link" colWidth="1" value="@#VERSIONHISTORY_LABEL" link="javascript:inputDocumentVersionHistory(&#039;@#DOC_UID&#039;,&#039;@#APP_DOC_UID&#039;);"/>
-
-<DELETE type="link" colWidth="25" value="@#ID_DELETE" link="cases_DeleteDocument?TYPE=INPUT&amp;DOC=@#APP_DOC_UID&amp;VERSION=@#DOC_VERSION" onclick="return confirm(&#039;@#CONFIRM&#039;);"><pt>Eliminar</pt><en></en></DELETE>
-
-
-
-
-
-
+  <DOC_UID type="hidden" showInTable="0"/>
+  <POSITION type="hidden" showInTable="0"/>
+  <APP_DOC_UID type="hidden" showInTable="0"/>
+  <DOC_VERSION type="hidden" showInTable="0"/>
+  <CONFIRM type="hidden" showInTable="0"/>
+  <TITLE type="text" colWidth="150" titleAlign="left" align="left">
+    <en><![CDATA[Title]]></en>
+  </TITLE>
+  <DOC_VERSION_LABEL type="text" colWidth="25" titleAlign="left" align="left">
+    <en><![CDATA[Version]]></en>
+  </DOC_VERSION_LABEL>
+  <CREATOR type="text" mode="view" colWidth="50">
+    <en><![CDATA[Creator]]></en>
+  </CREATOR>
+  <COMMENT type="text" mode="view" colWidth="50">
+    <en><![CDATA[Comment]]></en>
+  </COMMENT>
+  <APP_DOC_CREATE_DATE type="date" mode="view" colWidth="120">
+    <en><![CDATA[Created Date]]></en>
+  </APP_DOC_CREATE_DATE>
+  <DOWNLOAD type="link" colWidth="25" value="@#DOWNLOAD_LABEL" link="@#DOWNLOAD_LINK"/>
+  <NEWVERSION type="link" colWidth="1" value="@#NEWVERSION_LABEL" link="javascript:uploadInputDocument('@#DOC_UID','@#APP_DOC_UID','@#DOC_VERSION','NV');"/>
+  <VERSION_HISTORY type="link" colWidth="1" value="@#VERSIONHISTORY_LABEL" link="javascript:inputDocumentVersionHistory('@#DOC_UID','@#APP_DOC_UID');"/>
+  <DELETE type="link" colWidth="25" value="@#ID_DELETE" link="cases_DeleteDocument?TYPE=INPUT&amp;DOC=@#APP_DOC_UID&amp;VERSION=@#DOC_VERSION" onclick="return confirm('@#CONFIRM');">
+    <pt>Eliminar</pt>
+    <en><![CDATA[]]></en>
+  </DELETE>
 </dynaForm>

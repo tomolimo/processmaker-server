@@ -1,28 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="pagetable" sqlConnection="" menu="reports/report1_back">
-
-<PRO_TITLE type="text" align="left" colWidth="300">
-  <en>Processes</en>
-</PRO_TITLE>
-
-<CANTCASES type="text" align="right" colWidth="100">
-  <en>Total Cases</en>
-</CANTCASES>
-
-<MIN type="hours" align="right" colWidth="120">
-  <en>Best Completion Time</en>
-</MIN>
-
-<MAX type="hours" align="right" colWidth="120">
-  <en>Slowest Completion Time</en>
-</MAX>
-
-<CASELASTMONTH type="text" align="right" colWidth="100">
-  <en>Cases last month</en>
-</CASELASTMONTH>
-
-<CASELASTDAY type="text" align="right" colWidth="100">
-  <en>Cases last day</en>
-</CASELASTDAY>
-
-</dynaForm>  
+  <PRO_TITLE type="text" align="left" colWidth="300">
+    <en><![CDATA[Processes]]></en>
+  </PRO_TITLE>
+  <CANTCASES type="text" align="right" colWidth="100">
+    <en><![CDATA[Total Cases]]></en>
+  </CANTCASES>
+  <MIN type="hours" align="right" colWidth="120">
+    <en><![CDATA[Best Completion Time]]></en>
+  </MIN>
+  <MAX type="hours" align="right" colWidth="120">
+    <en><![CDATA[Slowest Completion Time]]></en>
+  </MAX>
+  <CASELASTMONTH type="text" align="right" colWidth="100">
+    <en><![CDATA[Cases last month]]></en>
+  </CASELASTMONTH>
+  <CASELASTDAY type="text" align="right" colWidth="100">
+    <en><![CDATA[Cases last day]]></en>
+  </CASELASTDAY>
+</dynaForm>

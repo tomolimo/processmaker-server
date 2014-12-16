@@ -59,7 +59,7 @@ class AuthenticationSourceMapBuilder {
 	{
 		$this->dbMap = Propel::getDatabaseMap('rbac');
 
-		$tMap = $this->dbMap->addTable('AUTHENTICATION_SOURCE');
+		$tMap = $this->dbMap->addTable('RBAC_AUTHENTICATION_SOURCE');
 		$tMap->setPhpName('AuthenticationSource');
 
 		$tMap->setUseIdGenerator(false);

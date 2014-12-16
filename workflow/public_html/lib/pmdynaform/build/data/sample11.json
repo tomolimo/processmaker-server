@@ -1,0 +1,675 @@
+{
+    "name": "form-example",
+    "items": [
+        {
+            "type":"form",
+            "id": "1357911",
+            "items":
+            [
+                [
+                    {
+                        "type": "title",
+                        "colSpan": 12,
+                        "name": "title",
+                        "label": "PMDynaform 11 - SubForm"
+                    }
+                ],
+                [
+                    {
+                        "var_name": "simplevariable",
+                        "var_uid": "752292886541b20d3325955025125925",
+                        "type": "text",
+                        "colSpan": 12,
+                        "name": "TextName01",
+                        "id": "inputform1",
+                        "placeholder": "TextName01",
+                        "defaultValue": "",
+                        "label": "TextInput",
+                        "required": true,
+                        "dataType": "string",
+                        "hint":null
+                    }
+                ],
+                [
+                    {
+                        "type": "subform",
+                        "colSpan": 6,
+                        "name": "subform-name",
+                        "id": "1234567890",
+                        "items":
+                        [
+                            [
+                                {
+                                    "type": "title",
+                                    "colSpan": 12,
+                                    "name": "title",
+                                    "label": "These are the fields inside of SubForm 1"
+                                }
+                            ],
+                            [
+                                {
+                                    "var_name": "simplevariable",
+                                    "var_uid": "752292886541b20d3325955025125925",
+                                    "type": "text",
+                                    "colSpan": 12,
+                                    "name": "TextName1",
+                                    "id": "inputform2",
+                                    "placeholder": "TextName1",
+                                    "defaultValue": "",
+                                    "label": "TextInput",
+                                    "required": true,
+                                    "dataType": "string",
+                                    "hint":null
+                                }
+                            ],
+                            [
+                                {
+                                    "var_name": "simplevariable",
+                                    "var_uid": "752292886541b20d3325955025125925",
+                                    "type": "hidden",
+                                    "name": "TextName1",
+                                    "defaultValue": "This is the default value for the hidden field",
+                                    "dataType": "string"
+                                }
+                            ],
+                            [
+                                {
+                                    "var_name": "simplevariable",
+                                    "var_uid": "752292886541b20d3325955025125925",
+                                    "type": "textarea",
+                                    "colSpan": 12,
+                                    "label": "Textarea",
+                                    "name": "textarea1",
+                                    "defaultValue": "",
+                                    "required": true,
+                                    "rows":3,
+                                    "hint":null
+                                }
+                            ],
+                            [
+                                {
+                                    "var_name": "optionsvariable",
+                                    "var_uid": "109090183545298e8505313008393063",
+                                    "type": "suggest",
+                                    "colSpan":12,
+                                    "name": "suggestName",
+                                    "defaultValue": "",
+                                    "label": "Suggest",
+                                    "placeholder": "suggest",
+                                    "required": false,
+                                    "dataType": "string",
+                                    "options":[
+                                        {
+                                            "label": "Option 1",
+                                            "value": "option1"
+                                        },
+                                        {
+                                            "label": "AOption 2",
+                                            "value": "option2"
+                                        },
+                                        {
+                                            "label": "BOption 3",
+                                            "value": "option3"  
+                                        },
+                                        {
+                                            "label": "COption 4",
+                                            "value": "option5"
+                                        },
+                                        {
+                                            "label": "DOption 5",
+                                            "value": "option5"
+                                        },
+                                        {
+                                            "label": "EOption 6",
+                                            "value": "option6"  
+                                        }
+                                    ],
+                                    "hint":null
+                                }
+                            ],
+                            [
+                                {
+                                    "type": "link",
+                                    "colSpan":12,
+                                    "name": "linkName",
+                                    "value": "This is the link value",
+                                    "label": "link",
+                                    "href": "http://www.colosa.com/",
+                                    "variable": "simpleVariable",
+                                    "hint": null
+                                }
+                            ],
+                            [
+                                {
+                                    "var_name": "optionsvariable",
+                                    "var_uid": "109090183545298e8505313008393063",
+                                    "type": "dropdown",
+                                    "colSpan":12,
+                                    "name": "Option",
+                                    "label": "Options",
+                                    "hint": null,
+                                    "options":[
+                                        {
+                                            "label": "Option 1",
+                                            "value": "option1"
+                                        },
+                                        {
+                                            "label": "Option 2",
+                                            "value": "option2"
+                                        },
+                                        {
+                                            "label": "Option 3",
+                                            "value": "option3"
+                                        }
+                                    ]
+                                }
+                            ],
+                            [
+                                {
+                                    "var_name": "optionsvariable",
+                                    "var_uid": "109090183545298e8505313008393063",
+                                    "type": "checkbox",
+                                    "colSpan": 12,
+                                    "name": "chekboxName",
+                                    "label": "Checkbox",               
+                                    "required": true,
+                                    "hint":null,
+                                    "options": [
+                                        {
+                                            "label": "This is the option A",
+                                            "value": 1,
+                                            "selected": true
+                                        },
+                                        {
+                                            "label": "This is the option B",
+                                            "value": 2
+                                        },
+                                        {
+                                            "label": "This is the option C",
+                                            "value": 3,
+                                            "selected": true
+                                        }
+                                    ]
+                                }
+                            ],
+                            [
+                                {
+                                    "var_name": "optionsvariable",
+                                    "var_uid": "109090183545298e8505313008393063",
+                                    "type": "radio",
+                                    "colSpan": 12,
+                                    "name": "radiogroupName",
+                                    "defaultValue": 2,
+                                    "label": "RadioGroup",
+                                    "required": false,
+                                    "options": [
+                                        {
+                                            "label": "This is the option A",
+                                            "value": 1
+                                        },
+                                        {
+                                            "label": "This is the option B",
+                                            "value": 2
+                                        },
+                                        {
+                                            "label": "This is the option C",
+                                            "value": 3
+                                        }
+                                    ],
+                                    "hint":null
+                                }
+                            ],
+                            [
+                                {
+                                    "var_name": "simplevariablethree",
+                                    "var_uid": "31319212954524865487616020584523",
+                                    "type": "datetime",
+                                    "pickType":"datetime",
+                                    "colSpan": 12,
+                                    "name": "datetime1",
+                                    "defaultValue": "22/12/2013 10:30:12",
+                                    "label": "Date time",
+                                    "required": true,
+                                    "hint":null
+                                }
+                            ],
+                            [
+                                {
+                                    "var_name": "simplevariablethree",
+                                    "var_uid": "31319212954524865487616020584523",
+                                    "type": "datetime",
+                                    "pickType":"date",
+                                    "colSpan": 12,
+                                    "name": "datetime2",
+                                    "defaultValue": "",
+                                    "label": "Date",
+                                    "required": false,
+                                    "hint":null
+                                }
+                            ],
+                            [
+                                {
+                                    "var_name": "simplevariablethree",
+                                    "var_uid": "31319212954524865487616020584523",
+                                    "type": "datetime",
+                                    "pickType":"time",
+                                    "colSpan": 12,
+                                    "name": "datetime3",
+                                    "defaultValue": "",
+                                    "label": "Time",
+                                    "required": false,
+                                    "hint":null
+                                }
+                            ],
+                            [
+                                {
+                                    "type": "image",
+                                    "label": "Image",
+                                    "shape": "thumbnail",
+                                    "colSpan": 12,
+                                    "alt": "Testing the image",
+                                    "comment": "The image is related to a Task of the old Processmaker... ",
+                                    "src": "http://wiki.processmaker.com/images/c/c2/ConceptsTask.png",
+                                    "hint": "Image field"
+                                }
+                            ],
+                            [
+                                {
+                                  "type" : "button",
+                                  "colSpan" : 12,
+                                  "label":"Button"
+                                }
+                            ],
+                            [
+                                {
+                                  "type" : "submit",
+                                  "colSpan" : 12,
+                                  "label" : "Submit"
+                                }
+                            ]
+                        ]
+                    },
+                    {
+                        "type": "subform",
+                        "colSpan": 6,
+                        "name": "subform-name",
+                        "id": "1234567890",
+                        "items":
+                        [
+                            [
+                                {
+                                    "type": "title",
+                                    "colSpan": 12,
+                                    "name": "title",
+                                    "label": "These are the fields inside of SubForm 2"
+                                }
+                            ],
+                            [
+                                {
+                                    "var_name": "simplevariable",
+                                    "var_uid": "752292886541b20d3325955025125925",
+                                    "type": "text",
+                                    "colSpan": 12,
+                                    "name": "TextName1",
+                                    "id": "inputform2",
+                                    "placeholder": "TextName1",
+                                    "defaultValue": "",
+                                    "label": "TextInput",
+                                    "required": true,
+                                    "dataType": "string",
+                                    "hint":null
+                                }
+                            ],
+                            [
+                                {
+                                    "var_name": "simplevariable",
+                                    "var_uid": "752292886541b20d3325955025125925",
+                                    "type": "hidden",
+                                    "name": "TextName1",
+                                    "defaultValue": "This is the default value for the hidden field",
+                                    "dataType": "string"
+                                }
+                            ],
+                            [
+                                {
+                                    "var_name": "simplevariable",
+                                    "var_uid": "752292886541b20d3325955025125925",
+                                    "type": "textarea",
+                                    "colSpan": 12,
+                                    "label": "Textarea",
+                                    "name": "textarea1",
+                                    "defaultValue": "",
+                                    "required": true,
+                                    "rows":3,
+                                    "hint":null
+                                }
+                            ],
+                            [
+                                {
+                                    "var_name": "simplevariable",
+                                    "var_uid": "752292886541b20d3325955025125925",
+                                    "type": "suggest",
+                                    "colSpan":12,
+                                    "name": "suggestName",
+                                    "defaultValue": "",
+                                    "label": "Suggest",
+                                    "placeholder": "suggest",
+                                    "required": false,
+                                    "dataType": "string",
+                                    "options":[
+                                        {
+                                            "label": "Option 1",
+                                            "value": "option1"
+                                        },
+                                        {
+                                            "label": "AOption 2",
+                                            "value": "option2"
+                                        },
+                                        {
+                                            "label": "BOption 3",
+                                            "value": "option3"  
+                                        },
+                                        {
+                                            "label": "COption 4",
+                                            "value": "option5"
+                                        },
+                                        {
+                                            "label": "DOption 5",
+                                            "value": "option5"
+                                        },
+                                        {
+                                            "label": "EOption 6",
+                                            "value": "option6"  
+                                        }
+                                    ],
+                                    "hint":null
+                                }
+                            ],
+                            [
+                                {
+                                    "type": "link",
+                                    "colSpan":12,
+                                    "name": "linkName",
+                                    "value": "This is the link value",
+                                    "label": "link",
+                                    "href": "http://www.colosa.com/",
+                                    "variable": "simpleVariable",
+                                    "hint": null
+                                }
+                            ],
+                            [
+                                {
+                                    "var_name": "optionsvariable",
+                                    "var_uid": "109090183545298e8505313008393063",
+                                    "type": "dropdown",
+                                    "colSpan":12,
+                                    "name": "Option",
+                                    "label": "Options",
+                                    
+                                    "hint": null,
+                                    "options":[
+                                        {
+                                            "label": "Option 1",
+                                            "value": "option1"
+                                        },
+                                        {
+                                            "label": "Option 2",
+                                            "value": "option2"
+                                        },
+                                        {
+                                            "label": "Option 3",
+                                            "value": "option3"
+                                        }
+                                    ]
+                                }
+                            ],
+                            [
+                                {
+                                    "var_name": "optionsvariable",
+                                    "var_uid": "109090183545298e8505313008393063",
+                                    "type": "checkbox",
+                                    "colSpan": 12,
+                                    "name": "chekboxName",
+                                    "label": "Checkbox",               
+                                    "required": true,
+                                    "hint":null,
+                                    "options": [
+                                        {
+                                            "label": "This is the option A",
+                                            "value": 1,
+                                            "selected": true
+                                        },
+                                        {
+                                            "label": "This is the option B",
+                                            "value": 2
+                                        },
+                                        {
+                                            "label": "This is the option C",
+                                            "value": 3,
+                                            "selected": true
+                                        }
+                                    ]
+                                }
+                            ],
+                            [
+                                {
+                                    "var_name": "optionsvariable",
+                                    "var_uid": "109090183545298e8505313008393063",
+                                    "type": "radio",
+                                    "colSpan": 12,
+                                    "name": "radiogroupName",
+                                    "defaultValue": 2,
+                                    "label": "RadioGroup",
+                                    "required": false,
+                                    "options": [
+                                        {
+                                            "label": "This is the option A",
+                                            "value": 1
+                                        },
+                                        {
+                                            "label": "This is the option B",
+                                            "value": 2
+                                        },
+                                        {
+                                            "label": "This is the option C",
+                                            "value": 3
+                                        }
+                                    ],
+                                    "hint":null
+                                }
+                            ]
+                        ]
+                    }
+                ],
+                [
+                    {
+                      "type" : "submit",
+                      "colSpan" : 12,
+                      "label" : "Submit"
+                    }
+                ]
+            ],
+            "variables":
+            [
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "workflow",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "string",
+                    "var_label": "users",
+                    "var_name": "users",
+                    "var_allowNull": 1,
+                    "var_sql": "SELECT USR_UID, USR_USERNAME\nFROM USERS\nWHERE USR_USERNAME <>  \" \"",
+                    "var_uid": "752292886541b20d3325955025125925"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "workflow",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "string",
+                    "var_label": "country",
+                    "var_name": "country",
+                    "var_allowNull": 1,
+                    "var_sql": "SELECT IC_UID,IC_NAME   \nFROM ISO_COUNTRY WHERE IC_NAME <> \" \"",
+                    "var_uid": "943312492541b2101075730071729173"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "workflow",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "string",
+                    "var_label": "subdivision",
+                    "var_name": "subdivision",
+                    "var_allowNull": 1,
+                    "var_sql": "SELECT \nIS_UID,\nIS_NAME FROM ISO_SUBDIVISION WHERE IC_UID = \"@#country\" AND IS_NAME <> \" \"",
+                    "var_uid": "562853519541b20e79b6960026331275"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "workflow",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "string",
+                    "var_label": "location",
+                    "var_name": "location",
+                    "var_allowNull": 1,
+                    "var_sql": "SELECT IL_UID, IL_NAME\nFROM ISO_LOCATION\nWHERE IS_UID =  \"@#subdivision\" AND IL_NAME <> \" \" AND IC_UID = \"@#country\"",
+                    "var_uid": "448293955541b20b5e393c3052081446"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "workflow",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "string",
+                    "var_label": "varname",
+                    "var_name": "varname",
+                    "var_allowNull": 1,
+                    "var_sql": "",
+                    "var_uid": "752292886541b20d3325955025125927"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "none",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "string",
+                    "var_label": "simplevariable",
+                    "var_name": "simplevariable",
+                    "var_allowNull": 1,
+                    "var_sql": "",
+                    "var_uid": "299463130541b212c93a3d7047589419"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "none",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "string",
+                    "var_label": "Simple Variable Two",
+                    "var_name": "simplevariabletwo",
+                    "var_allowNull": 1,
+                    "var_sql": "",
+                    "var_uid": "992707483545248537300e5085346250"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "none",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "datetime",
+                    "var_label": "Simple Variable Three",
+                    "var_name": "simplevariablethree",
+                    "var_allowNull": 1,
+                    "var_sql": "",
+                    "var_uid": "31319212954524865487616020584523"
+                },
+                {
+                    "var_acceptedValues": [
+                        {
+                          "value": "First Value",
+                          "keyValue": "firstvalue"
+                        },
+                        {
+                          "value": "Second Value",
+                          "keyValue": "secondvalue"
+                        }
+                    ],
+                    "var_dbConnection": "none",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 100,
+                    "var_fieldType": "string",
+                    "var_label": "optionsvariable",
+                    "var_name": "optionsvariable",
+                    "var_allowNull": 1,
+                    "var_sql": "",
+                    "var_uid": "109090183545298e8505313008393063"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "none",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "string",
+                    "var_label": "variablegridone",
+                    "var_name": "variablegridone",
+                    "var_allowNull": 1,
+                    "var_sql": "",
+                    "var_uid": "8391557125458eb60509b60057650758"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "none",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 100,
+                    "var_fieldType": "string",
+                    "var_label": "variablegridtwo",
+                    "var_name": "variablegridtwo",
+                    "var_allowNull": 1,
+                    "var_sql": "",
+                    "var_uid": "5746882395458eb6b8b54a2015704374"
+                },
+                {
+                    "var_acceptedValues": [],
+                    "var_dbConnection": "none",
+                    "var_defaultValue": "",
+                    "var_fieldSize": 10,
+                    "var_fieldType": "string",
+                    "var_label": "variablegridthree",
+                    "var_name": "variablegridthree",
+                    "var_allowNull": 1,
+                    "var_sql": "",
+                    "var_uid": "5532828265458eb76ebf700002684261"
+                },
+                {
+                    "var_acceptedValues": [
+                    {
+                      "value": "variable option 1",
+                      "keyValue": "variable_option_1"
+                    },
+                    {
+                      "value": "variable option 2",
+                      "keyValue": "variable_option_2"
+                    },
+                    {
+                      "value": "variable option 3",
+                      "keyValue": "variable_option_3"
+                    }
+                  ],
+                  "var_dbConnection": "none",
+                  "var_defaultValue": "",
+                  "var_fieldSize": 10,
+                  "var_fieldType": "string",
+                  "var_label": "variablegridfour",
+                  "var_name": "variablegridfour",
+                  "var_allowNull": 1,
+                  "var_sql": "",
+                  "var_uid": "6551198965458ebe28477c5094393260"
+                }
+            ]
+        }
+    ]
+}

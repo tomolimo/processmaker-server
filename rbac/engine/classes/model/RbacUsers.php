@@ -29,6 +29,10 @@
  */
 require_once 'classes/model/om/BaseRbacUsers.php';
 
+if (!class_exists('PMLicensedFeatures')) {
+    G::LoadClass('licensedFeatures');
+}
+
 /**
  * Skeleton subclass for representing a row from the 'USERS' table.
  *
@@ -76,14 +80,12 @@ class RbacUsers extends BaseRbacUsers
         try {
             $c = new Criteria('rbac');
             $c->add(RbacUsersPeer::USR_USERNAME, $sUsername);
-            $rs = RbacUsersPeer::doSelect($c);
+            $rs = RbacUsersPeer::doSelect($c, Propel::getDbConnection('rbac_ro'));
             if (is_array($rs) && isset($rs[0]) && is_object($rs[0]) && get_class($rs[0]) == 'RbacUsers') {
                 $aFields = $rs[0]->toArray(BasePeer::TYPE_FIELDNAME);
                 //verify password with md5, and md5 format
-                //if ( $aFields['USR_PASSWORD'] == md5 ($sPassword ) ) {
                 if (mb_strtoupper($sUsername, 'utf-8') === mb_strtoupper($aFields['USR_USERNAME'], 'utf-8')) {
-                    if ($aFields['USR_PASSWORD'] == md5($sPassword) ||
-                        'md5:' . $aFields['USR_PASSWORD'] === $sPassword) {
+                    if( Bootstrap::verifyHashPassword($sPassword, $aFields['USR_PASSWORD']) ) {
                         if ($aFields['USR_DUE_DATE'] < date('Y-m-d')) {
                             return -4;
                         }
@@ -120,7 +122,7 @@ class RbacUsers extends BaseRbacUsers
         try {
             $c = new Criteria('rbac');
             $c->add(RbacUsersPeer::USR_USERNAME, $sUsername);
-            $rs = RbacUsersPeer::doSelect($c);
+            $rs = RbacUsersPeer::doSelect($c, Propel::getDbConnection('rbac_ro'));
             if (is_array($rs) && isset($rs[0]) && is_object($rs[0]) && get_class($rs[0]) == 'RbacUsers') {
                 //return the row for futher check of which Autentificacion method belongs this user
                 $this->fields = $rs[0]->toArray(BasePeer::TYPE_FIELDNAME);
@@ -144,7 +146,7 @@ class RbacUsers extends BaseRbacUsers
         try {
             $c = new Criteria('rbac');
             $c->add(RbacUsersPeer::USR_USERNAME, $sUsername);
-            $rs = RbacUsersPeer::doSelect($c);
+            $rs = RbacUsersPeer::doSelect($c, Propel::getDbConnection('rbac_ro'));
 
             if (is_array($rs) && isset($rs[0]) && is_object($rs[0]) && get_class($rs[0]) == 'RbacUsers') {
                 $aFields = $rs[0]->toArray(BasePeer::TYPE_FIELDNAME);
@@ -184,7 +186,7 @@ class RbacUsers extends BaseRbacUsers
         try {
             $c = new Criteria('rbac');
             $c->add(RbacUsersPeer::USR_UID, $sUsrUid);
-            $rs = RbacUsersPeer::doSelect($c);
+            $rs = RbacUsersPeer::doSelect($c, Propel::getDbConnection('rbac_ro'));
             if (is_array($rs) && isset($rs[0]) && is_object($rs[0]) && get_class($rs[0]) == 'RbacUsers') {
                 $aFields = $rs[0]->toArray(BasePeer::TYPE_FIELDNAME);
                 return $aFields;
@@ -263,7 +265,7 @@ class RbacUsers extends BaseRbacUsers
         $oCriteria->addSelectColumn('COUNT(*) AS CNT');
         $oCriteria->add(RbacUsersPeer::USR_STATUS, 'CLOSED', Criteria::NOT_EQUAL);
         $oCriteria->addGroupByColumn(RbacUsersPeer::UID_AUTH_SOURCE);
-        $oDataset = RbacUsersPeer::doSelectRS($oCriteria);
+        $oDataset = RbacUsersPeer::doSelectRS($oCriteria, Propel::getDbConnection('rbac_ro'));
         $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
 
         $aAuth = Array();
@@ -289,7 +291,7 @@ class RbacUsers extends BaseRbacUsers
             $oCriteria->add(RbacUsersPeer::UID_AUTH_SOURCE, $auth_source, Criteria::EQUAL);
         }
         $oCriteria->add(RbacUsersPeer::USR_STATUS, 0, Criteria::NOT_EQUAL);
-        $oDataset = RbacUsersPeer::doSelectRS($oCriteria);
+        $oDataset = RbacUsersPeer::doSelectRS($oCriteria, Propel::getDbConnection('rbac_ro'));
         $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
         $aUsers = array();
         while ($oDataset->next()) {
@@ -310,7 +312,7 @@ class RbacUsers extends BaseRbacUsers
             $c->addSelectColumn ( RolesPeer::ROL_STATUS );
             $c->addJoin ( UsersRolesPeer::ROL_UID, RolesPeer::ROL_UID );
             $c->add ( UsersRolesPeer::USR_UID, $UsrUid );
-            $rs = UsersRolesPeer::doSelectRs( $c );
+            $rs = UsersRolesPeer::doSelectRs( $c, Propel::getDbConnection('rbac_ro') );
             $rs->setFetchmode (ResultSet::FETCHMODE_ASSOC);
             $rs->next();
             $row = $rs->getRow();

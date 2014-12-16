@@ -1,30 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="authSources/users_AuthSource" type="xmlform" enableTemplate="1">
-
-<TITLE type="title">
-  <en>Authentication Source Assignment</en>
-</TITLE>
-
-<USR_UID type="hidden"/>
-
-<UID_AUTH_SOURCE type="dropdown" required="0" sqlConnection="rbac">
+  <TITLE type="title">
+    <en><![CDATA[Authentication Source Assignment]]></en>
+  </TITLE>
+  <USR_UID type="hidden"/>
+  <UID_AUTH_SOURCE type="dropdown" required="0" sqlConnection="rbac">
 SELECT AUTH_SOURCE_UID, AUTH_SOURCE_NAME FROM AUTHENTICATION_SOURCE
-  <en>Authentication Source<option name="MYSQL">ProcessMaker</option></en>
+  <en><![CDATA[Authentication Source]]><option name="MYSQL"><![CDATA[ProcessMaker]]></option></en>
 </UID_AUTH_SOURCE>
-
-<USR_AUTH_USER_DN type="text" size="80" maxlength="255" required="0">
-  <en>DN</en>
-</USR_AUTH_USER_DN>
-
-<BTN_CANCEL type="button" onclick="cancel();">
-  <en>Cancel</en>
-</BTN_CANCEL>
-
-<btnSave type="submit">
-  <en>Save</en>
-</btnSave>
-
-<JS type="javascript"><![CDATA[
+  <USR_AUTH_USER_DN type="text" size="80" maxlength="255" required="0">
+    <en><![CDATA[DN]]></en>
+  </USR_AUTH_USER_DN>
+  <BTN_CANCEL type="button" onclick="cancel();">
+    <en><![CDATA[Cancel]]></en>
+  </BTN_CANCEL>
+  <btnSave type="submit">
+    <en><![CDATA[Save]]></en>
+  </btnSave>
+  <JS type="javascript"><![CDATA[
 
 var dynaformOnload = function() {
   leimnud.event.add(getField('UID_AUTH_SOURCE'), 'change', hideShowDN);
@@ -45,5 +38,4 @@ function cancel(){
 }
 
 ]]></JS>
-
-</dynaForm> 
+</dynaForm>
