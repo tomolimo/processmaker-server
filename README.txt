@@ -23,10 +23,10 @@ steps for the server.
 ----------------------------------
 |* More information and licence *|
 ----------------------------------
-ProcessMaker - Automate your Workflow
-Copyright (C) 2002 - 2011 Colosa Inc.
+Copyright 2000-2015
+ProcessMaker Inc. All rights reserved
 
-Licensed under the terms of the GNU Affero General Public License version 3:
+Licensed under the terms of the GNU Affero General Public License version 1:
 http://www.affero.org/oagpl.html
 
 For further information visit:
