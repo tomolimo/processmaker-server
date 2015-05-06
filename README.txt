@@ -361,8 +361,6 @@ more secure in the future before using ProcessMaker in production.
 -------------
 |* Credits *|
 -------------
-ProcessMaker - Automate your Workflow
-Copyright (C) 2002-2011 Colosa
+Copyright 2000-2015
+ProcessMaker Inc. All rights reserved
 http://www.processmaker.com/
-
-Last Update: 2011-04-11, amosbatto AT colosa DOT com
