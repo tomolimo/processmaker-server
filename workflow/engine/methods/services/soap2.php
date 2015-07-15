@@ -612,6 +612,7 @@ function RouteCase ($params)
 
     $user = $oSession->getSessionUser( $params->sessionId );
 
+    $oStd = new stdclass();
     $oStd->stored_system_variables = true;
     $oStd->wsSessionId = $params->sessionId;
 
@@ -689,6 +690,8 @@ function NewCaseImpersonate ($params)
 function NewCase ($params)
 {
     G::LoadClass( "sessions" );
+    G::LoadSystem('inputfilter');
+    $filter = new InputFilter();
 
     $vsResult = isValidSession( $params->sessionId );
 
@@ -757,7 +760,9 @@ function NewCase ($params)
     if (is_array( $variables )) {
         foreach ($variables as $key => $val) {
             if (! is_object( $val->value )) {
-                eval( "\$field[" . $val->name . "]= \$val->value;" );
+                $val->name  = $filter->validateInput($val->name);
+                $val->value = $filter->validateInput($val->value);
+                @eval( "\$field[" . $val->name . "]= \$val->value;" );
             }
         }
     }

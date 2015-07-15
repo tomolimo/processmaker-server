@@ -122,7 +122,10 @@ abstract class CURLMessage
      */
     public function displayResponse ()
     {
+        G::LoadSystem('inputfilter');
+        $filter = new InputFilter();
         $error = curl_error( $this->ch );
+        $error = $filter->xssFilterHard($error);
         $result = array ('header' => '','body' => '','curl_error' => '','http_code' => '','last_url' => ''
         );
         if ($error != "") {
@@ -130,12 +133,15 @@ abstract class CURLMessage
             return $result;
         }
         $response = $this->output;
+        $response = $filter->xssFilterHard($response);
         $header_size = curl_getinfo( $this->ch, CURLINFO_HEADER_SIZE );
         $result['header'] = substr( $response, 0, $header_size );
         $result['body'] = substr( $response, $header_size );
         $result['http_code'] = curl_getinfo( $this->ch, CURLINFO_HTTP_CODE );
         $result['last_url'] = curl_getinfo( $this->ch, CURLINFO_EFFECTIVE_URL );
+        $result = $filter->xssFilterHard($result);
 
+        $this->type = $filter->xssFilterHard($this->type);
         echo $this->type . " Response: " . $response . "<BR>";
         foreach ($result as $index => $data) {
             if ($data != "") {

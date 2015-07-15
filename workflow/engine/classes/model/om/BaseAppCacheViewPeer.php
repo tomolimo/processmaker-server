@@ -25,7 +25,7 @@ abstract class BaseAppCacheViewPeer
     const CLASS_DEFAULT = 'classes.model.AppCacheView';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 31;
+    const NUM_COLUMNS = 32;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
@@ -64,11 +64,14 @@ abstract class BaseAppCacheViewPeer
     /** the column name for the DEL_INIT_DATE field */
     const DEL_INIT_DATE = 'APP_CACHE_VIEW.DEL_INIT_DATE';
 
+    /** the column name for the DEL_FINISH_DATE field */
+    const DEL_FINISH_DATE = 'APP_CACHE_VIEW.DEL_FINISH_DATE';
+
     /** the column name for the DEL_TASK_DUE_DATE field */
     const DEL_TASK_DUE_DATE = 'APP_CACHE_VIEW.DEL_TASK_DUE_DATE';
 
-    /** the column name for the DEL_FINISH_DATE field */
-    const DEL_FINISH_DATE = 'APP_CACHE_VIEW.DEL_FINISH_DATE';
+    /** the column name for the DEL_RISK_DATE field */
+    const DEL_RISK_DATE = 'APP_CACHE_VIEW.DEL_RISK_DATE';
 
     /** the column name for the DEL_THREAD_STATUS field */
     const DEL_THREAD_STATUS = 'APP_CACHE_VIEW.DEL_THREAD_STATUS';
@@ -135,10 +138,10 @@ abstract class BaseAppCacheViewPeer
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     private static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('AppUid', 'DelIndex', 'DelLastIndex', 'AppNumber', 'AppStatus', 'UsrUid', 'PreviousUsrUid', 'TasUid', 'ProUid', 'DelDelegateDate', 'DelInitDate', 'DelTaskDueDate', 'DelFinishDate', 'DelThreadStatus', 'AppThreadStatus', 'AppTitle', 'AppProTitle', 'AppTasTitle', 'AppCurrentUser', 'AppDelPreviousUser', 'DelPriority', 'DelDuration', 'DelQueueDuration', 'DelDelayDuration', 'DelStarted', 'DelFinished', 'DelDelayed', 'AppCreateDate', 'AppFinishDate', 'AppUpdateDate', 'AppOverduePercentage', ),
-        BasePeer::TYPE_COLNAME => array (AppCacheViewPeer::APP_UID, AppCacheViewPeer::DEL_INDEX, AppCacheViewPeer::DEL_LAST_INDEX, AppCacheViewPeer::APP_NUMBER, AppCacheViewPeer::APP_STATUS, AppCacheViewPeer::USR_UID, AppCacheViewPeer::PREVIOUS_USR_UID, AppCacheViewPeer::TAS_UID, AppCacheViewPeer::PRO_UID, AppCacheViewPeer::DEL_DELEGATE_DATE, AppCacheViewPeer::DEL_INIT_DATE, AppCacheViewPeer::DEL_TASK_DUE_DATE, AppCacheViewPeer::DEL_FINISH_DATE, AppCacheViewPeer::DEL_THREAD_STATUS, AppCacheViewPeer::APP_THREAD_STATUS, AppCacheViewPeer::APP_TITLE, AppCacheViewPeer::APP_PRO_TITLE, AppCacheViewPeer::APP_TAS_TITLE, AppCacheViewPeer::APP_CURRENT_USER, AppCacheViewPeer::APP_DEL_PREVIOUS_USER, AppCacheViewPeer::DEL_PRIORITY, AppCacheViewPeer::DEL_DURATION, AppCacheViewPeer::DEL_QUEUE_DURATION, AppCacheViewPeer::DEL_DELAY_DURATION, AppCacheViewPeer::DEL_STARTED, AppCacheViewPeer::DEL_FINISHED, AppCacheViewPeer::DEL_DELAYED, AppCacheViewPeer::APP_CREATE_DATE, AppCacheViewPeer::APP_FINISH_DATE, AppCacheViewPeer::APP_UPDATE_DATE, AppCacheViewPeer::APP_OVERDUE_PERCENTAGE, ),
-        BasePeer::TYPE_FIELDNAME => array ('APP_UID', 'DEL_INDEX', 'DEL_LAST_INDEX', 'APP_NUMBER', 'APP_STATUS', 'USR_UID', 'PREVIOUS_USR_UID', 'TAS_UID', 'PRO_UID', 'DEL_DELEGATE_DATE', 'DEL_INIT_DATE', 'DEL_TASK_DUE_DATE', 'DEL_FINISH_DATE', 'DEL_THREAD_STATUS', 'APP_THREAD_STATUS', 'APP_TITLE', 'APP_PRO_TITLE', 'APP_TAS_TITLE', 'APP_CURRENT_USER', 'APP_DEL_PREVIOUS_USER', 'DEL_PRIORITY', 'DEL_DURATION', 'DEL_QUEUE_DURATION', 'DEL_DELAY_DURATION', 'DEL_STARTED', 'DEL_FINISHED', 'DEL_DELAYED', 'APP_CREATE_DATE', 'APP_FINISH_DATE', 'APP_UPDATE_DATE', 'APP_OVERDUE_PERCENTAGE', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, )
+        BasePeer::TYPE_PHPNAME => array ('AppUid', 'DelIndex', 'DelLastIndex', 'AppNumber', 'AppStatus', 'UsrUid', 'PreviousUsrUid', 'TasUid', 'ProUid', 'DelDelegateDate', 'DelInitDate', 'DelFinishDate', 'DelTaskDueDate', 'DelRiskDate', 'DelThreadStatus', 'AppThreadStatus', 'AppTitle', 'AppProTitle', 'AppTasTitle', 'AppCurrentUser', 'AppDelPreviousUser', 'DelPriority', 'DelDuration', 'DelQueueDuration', 'DelDelayDuration', 'DelStarted', 'DelFinished', 'DelDelayed', 'AppCreateDate', 'AppFinishDate', 'AppUpdateDate', 'AppOverduePercentage', ),
+        BasePeer::TYPE_COLNAME => array (AppCacheViewPeer::APP_UID, AppCacheViewPeer::DEL_INDEX, AppCacheViewPeer::DEL_LAST_INDEX, AppCacheViewPeer::APP_NUMBER, AppCacheViewPeer::APP_STATUS, AppCacheViewPeer::USR_UID, AppCacheViewPeer::PREVIOUS_USR_UID, AppCacheViewPeer::TAS_UID, AppCacheViewPeer::PRO_UID, AppCacheViewPeer::DEL_DELEGATE_DATE, AppCacheViewPeer::DEL_INIT_DATE, AppCacheViewPeer::DEL_FINISH_DATE, AppCacheViewPeer::DEL_TASK_DUE_DATE, AppCacheViewPeer::DEL_RISK_DATE, AppCacheViewPeer::DEL_THREAD_STATUS, AppCacheViewPeer::APP_THREAD_STATUS, AppCacheViewPeer::APP_TITLE, AppCacheViewPeer::APP_PRO_TITLE, AppCacheViewPeer::APP_TAS_TITLE, AppCacheViewPeer::APP_CURRENT_USER, AppCacheViewPeer::APP_DEL_PREVIOUS_USER, AppCacheViewPeer::DEL_PRIORITY, AppCacheViewPeer::DEL_DURATION, AppCacheViewPeer::DEL_QUEUE_DURATION, AppCacheViewPeer::DEL_DELAY_DURATION, AppCacheViewPeer::DEL_STARTED, AppCacheViewPeer::DEL_FINISHED, AppCacheViewPeer::DEL_DELAYED, AppCacheViewPeer::APP_CREATE_DATE, AppCacheViewPeer::APP_FINISH_DATE, AppCacheViewPeer::APP_UPDATE_DATE, AppCacheViewPeer::APP_OVERDUE_PERCENTAGE, ),
+        BasePeer::TYPE_FIELDNAME => array ('APP_UID', 'DEL_INDEX', 'DEL_LAST_INDEX', 'APP_NUMBER', 'APP_STATUS', 'USR_UID', 'PREVIOUS_USR_UID', 'TAS_UID', 'PRO_UID', 'DEL_DELEGATE_DATE', 'DEL_INIT_DATE', 'DEL_FINISH_DATE', 'DEL_TASK_DUE_DATE', 'DEL_RISK_DATE', 'DEL_THREAD_STATUS', 'APP_THREAD_STATUS', 'APP_TITLE', 'APP_PRO_TITLE', 'APP_TAS_TITLE', 'APP_CURRENT_USER', 'APP_DEL_PREVIOUS_USER', 'DEL_PRIORITY', 'DEL_DURATION', 'DEL_QUEUE_DURATION', 'DEL_DELAY_DURATION', 'DEL_STARTED', 'DEL_FINISHED', 'DEL_DELAYED', 'APP_CREATE_DATE', 'APP_FINISH_DATE', 'APP_UPDATE_DATE', 'APP_OVERDUE_PERCENTAGE', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, )
     );
 
     /**
@@ -148,10 +151,10 @@ abstract class BaseAppCacheViewPeer
      * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     private static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('AppUid' => 0, 'DelIndex' => 1, 'DelLastIndex' => 2, 'AppNumber' => 3, 'AppStatus' => 4, 'UsrUid' => 5, 'PreviousUsrUid' => 6, 'TasUid' => 7, 'ProUid' => 8, 'DelDelegateDate' => 9, 'DelInitDate' => 10, 'DelTaskDueDate' => 11, 'DelFinishDate' => 12, 'DelThreadStatus' => 13, 'AppThreadStatus' => 14, 'AppTitle' => 15, 'AppProTitle' => 16, 'AppTasTitle' => 17, 'AppCurrentUser' => 18, 'AppDelPreviousUser' => 19, 'DelPriority' => 20, 'DelDuration' => 21, 'DelQueueDuration' => 22, 'DelDelayDuration' => 23, 'DelStarted' => 24, 'DelFinished' => 25, 'DelDelayed' => 26, 'AppCreateDate' => 27, 'AppFinishDate' => 28, 'AppUpdateDate' => 29, 'AppOverduePercentage' => 30, ),
-        BasePeer::TYPE_COLNAME => array (AppCacheViewPeer::APP_UID => 0, AppCacheViewPeer::DEL_INDEX => 1, AppCacheViewPeer::DEL_LAST_INDEX => 2, AppCacheViewPeer::APP_NUMBER => 3, AppCacheViewPeer::APP_STATUS => 4, AppCacheViewPeer::USR_UID => 5, AppCacheViewPeer::PREVIOUS_USR_UID => 6, AppCacheViewPeer::TAS_UID => 7, AppCacheViewPeer::PRO_UID => 8, AppCacheViewPeer::DEL_DELEGATE_DATE => 9, AppCacheViewPeer::DEL_INIT_DATE => 10, AppCacheViewPeer::DEL_TASK_DUE_DATE => 11, AppCacheViewPeer::DEL_FINISH_DATE => 12, AppCacheViewPeer::DEL_THREAD_STATUS => 13, AppCacheViewPeer::APP_THREAD_STATUS => 14, AppCacheViewPeer::APP_TITLE => 15, AppCacheViewPeer::APP_PRO_TITLE => 16, AppCacheViewPeer::APP_TAS_TITLE => 17, AppCacheViewPeer::APP_CURRENT_USER => 18, AppCacheViewPeer::APP_DEL_PREVIOUS_USER => 19, AppCacheViewPeer::DEL_PRIORITY => 20, AppCacheViewPeer::DEL_DURATION => 21, AppCacheViewPeer::DEL_QUEUE_DURATION => 22, AppCacheViewPeer::DEL_DELAY_DURATION => 23, AppCacheViewPeer::DEL_STARTED => 24, AppCacheViewPeer::DEL_FINISHED => 25, AppCacheViewPeer::DEL_DELAYED => 26, AppCacheViewPeer::APP_CREATE_DATE => 27, AppCacheViewPeer::APP_FINISH_DATE => 28, AppCacheViewPeer::APP_UPDATE_DATE => 29, AppCacheViewPeer::APP_OVERDUE_PERCENTAGE => 30, ),
-        BasePeer::TYPE_FIELDNAME => array ('APP_UID' => 0, 'DEL_INDEX' => 1, 'DEL_LAST_INDEX' => 2, 'APP_NUMBER' => 3, 'APP_STATUS' => 4, 'USR_UID' => 5, 'PREVIOUS_USR_UID' => 6, 'TAS_UID' => 7, 'PRO_UID' => 8, 'DEL_DELEGATE_DATE' => 9, 'DEL_INIT_DATE' => 10, 'DEL_TASK_DUE_DATE' => 11, 'DEL_FINISH_DATE' => 12, 'DEL_THREAD_STATUS' => 13, 'APP_THREAD_STATUS' => 14, 'APP_TITLE' => 15, 'APP_PRO_TITLE' => 16, 'APP_TAS_TITLE' => 17, 'APP_CURRENT_USER' => 18, 'APP_DEL_PREVIOUS_USER' => 19, 'DEL_PRIORITY' => 20, 'DEL_DURATION' => 21, 'DEL_QUEUE_DURATION' => 22, 'DEL_DELAY_DURATION' => 23, 'DEL_STARTED' => 24, 'DEL_FINISHED' => 25, 'DEL_DELAYED' => 26, 'APP_CREATE_DATE' => 27, 'APP_FINISH_DATE' => 28, 'APP_UPDATE_DATE' => 29, 'APP_OVERDUE_PERCENTAGE' => 30, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, )
+        BasePeer::TYPE_PHPNAME => array ('AppUid' => 0, 'DelIndex' => 1, 'DelLastIndex' => 2, 'AppNumber' => 3, 'AppStatus' => 4, 'UsrUid' => 5, 'PreviousUsrUid' => 6, 'TasUid' => 7, 'ProUid' => 8, 'DelDelegateDate' => 9, 'DelInitDate' => 10, 'DelFinishDate' => 11, 'DelTaskDueDate' => 12, 'DelRiskDate' => 13, 'DelThreadStatus' => 14, 'AppThreadStatus' => 15, 'AppTitle' => 16, 'AppProTitle' => 17, 'AppTasTitle' => 18, 'AppCurrentUser' => 19, 'AppDelPreviousUser' => 20, 'DelPriority' => 21, 'DelDuration' => 22, 'DelQueueDuration' => 23, 'DelDelayDuration' => 24, 'DelStarted' => 25, 'DelFinished' => 26, 'DelDelayed' => 27, 'AppCreateDate' => 28, 'AppFinishDate' => 29, 'AppUpdateDate' => 30, 'AppOverduePercentage' => 31, ),
+        BasePeer::TYPE_COLNAME => array (AppCacheViewPeer::APP_UID => 0, AppCacheViewPeer::DEL_INDEX => 1, AppCacheViewPeer::DEL_LAST_INDEX => 2, AppCacheViewPeer::APP_NUMBER => 3, AppCacheViewPeer::APP_STATUS => 4, AppCacheViewPeer::USR_UID => 5, AppCacheViewPeer::PREVIOUS_USR_UID => 6, AppCacheViewPeer::TAS_UID => 7, AppCacheViewPeer::PRO_UID => 8, AppCacheViewPeer::DEL_DELEGATE_DATE => 9, AppCacheViewPeer::DEL_INIT_DATE => 10, AppCacheViewPeer::DEL_FINISH_DATE => 11, AppCacheViewPeer::DEL_TASK_DUE_DATE => 12, AppCacheViewPeer::DEL_RISK_DATE => 13, AppCacheViewPeer::DEL_THREAD_STATUS => 14, AppCacheViewPeer::APP_THREAD_STATUS => 15, AppCacheViewPeer::APP_TITLE => 16, AppCacheViewPeer::APP_PRO_TITLE => 17, AppCacheViewPeer::APP_TAS_TITLE => 18, AppCacheViewPeer::APP_CURRENT_USER => 19, AppCacheViewPeer::APP_DEL_PREVIOUS_USER => 20, AppCacheViewPeer::DEL_PRIORITY => 21, AppCacheViewPeer::DEL_DURATION => 22, AppCacheViewPeer::DEL_QUEUE_DURATION => 23, AppCacheViewPeer::DEL_DELAY_DURATION => 24, AppCacheViewPeer::DEL_STARTED => 25, AppCacheViewPeer::DEL_FINISHED => 26, AppCacheViewPeer::DEL_DELAYED => 27, AppCacheViewPeer::APP_CREATE_DATE => 28, AppCacheViewPeer::APP_FINISH_DATE => 29, AppCacheViewPeer::APP_UPDATE_DATE => 30, AppCacheViewPeer::APP_OVERDUE_PERCENTAGE => 31, ),
+        BasePeer::TYPE_FIELDNAME => array ('APP_UID' => 0, 'DEL_INDEX' => 1, 'DEL_LAST_INDEX' => 2, 'APP_NUMBER' => 3, 'APP_STATUS' => 4, 'USR_UID' => 5, 'PREVIOUS_USR_UID' => 6, 'TAS_UID' => 7, 'PRO_UID' => 8, 'DEL_DELEGATE_DATE' => 9, 'DEL_INIT_DATE' => 10, 'DEL_FINISH_DATE' => 11, 'DEL_TASK_DUE_DATE' => 12, 'DEL_RISK_DATE' => 13, 'DEL_THREAD_STATUS' => 14, 'APP_THREAD_STATUS' => 15, 'APP_TITLE' => 16, 'APP_PRO_TITLE' => 17, 'APP_TAS_TITLE' => 18, 'APP_CURRENT_USER' => 19, 'APP_DEL_PREVIOUS_USER' => 20, 'DEL_PRIORITY' => 21, 'DEL_DURATION' => 22, 'DEL_QUEUE_DURATION' => 23, 'DEL_DELAY_DURATION' => 24, 'DEL_STARTED' => 25, 'DEL_FINISHED' => 26, 'DEL_DELAYED' => 27, 'APP_CREATE_DATE' => 28, 'APP_FINISH_DATE' => 29, 'APP_UPDATE_DATE' => 30, 'APP_OVERDUE_PERCENTAGE' => 31, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, )
     );
 
     /**
@@ -274,9 +277,11 @@ abstract class BaseAppCacheViewPeer
 
         $criteria->addSelectColumn(AppCacheViewPeer::DEL_INIT_DATE);
 
+        $criteria->addSelectColumn(AppCacheViewPeer::DEL_FINISH_DATE);
+
         $criteria->addSelectColumn(AppCacheViewPeer::DEL_TASK_DUE_DATE);
 
-        $criteria->addSelectColumn(AppCacheViewPeer::DEL_FINISH_DATE);
+        $criteria->addSelectColumn(AppCacheViewPeer::DEL_RISK_DATE);
 
         $criteria->addSelectColumn(AppCacheViewPeer::DEL_THREAD_STATUS);
 

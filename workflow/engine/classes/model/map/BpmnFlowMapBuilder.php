@@ -101,6 +101,8 @@ class BpmnFlowMapBuilder
 
         $tMap->addColumn('FLO_STATE', 'FloState', 'string', CreoleTypes::LONGVARCHAR, false, null);
 
+        $tMap->addColumn('FLO_POSITION', 'FloPosition', 'int', CreoleTypes::INTEGER, true, null);
+
     } // doBuild()
 
 } // BpmnFlowMapBuilder

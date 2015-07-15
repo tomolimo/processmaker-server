@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm name="login" version="1.0" basedir="" xmlform_type="NORMAL" width="400px" enabletemplate ="1">
+  <TITLE type="title">
+    <en><![CDATA[CASE TRACKER]]></en>
+  </TITLE>
+  <CASE type="Text" size="30" maxlength="50" validate="Any">
+    <en><![CDATA[Case Code]]></en>
+  </CASE>
+  <PIN type="password" size="30" maxlength="32">
+    <en><![CDATA[Pin]]></en>
+  </PIN>
+  <BSUBMIT type="submit">
+    <en><![CDATA[Enter]]></en>
+  </BSUBMIT>
+     <JS type="javascript"><![CDATA[
+
+function getElementsByClassNameIE8(node, classname) {
+    var a = [];
+    var re = new RegExp('(^| )'+classname+'( |$)');
+    var els = node.getElementsByTagName("*");
+    for(var i=0,j=els.length; i<j; i++)
+        if(re.test(els[i].className))a.push(els[i]);
+    return a;
+};
+
+window.onload= function(){
+var inputCode,
+      inputPin; 
+  if(document.getElementById('form[BSUBMIT]').classList == undefined && document.getElementById('form[CASE]').placeholder === undefined){
+    document.getElementById('form[BSUBMIT]').className = "button-login-success";
+    document.getElementById('form[CASE]').value = _('ID_CASE_CODE');
+    document.getElementById('form[PIN]').value = _('ID_PIN');
+    document.getElementById('form[PIN]').title = _('ID_PIN');                 
+
+    inputCode = document.getElementById('form[CASE]');
+    inputPin = document.getElementById('form[PIN]');
+    
+    inputCode.attachEvent("onclick", function (){
+      if(_('ID_CASE_CODE') == inputCode.value){
+        inputCode.value="";
+      }        
+    });
+    inputCode.attachEvent("onblur", function (){
+      if(inputCode.value == ""){
+        inputCode.value=_('ID_CASE_CODE');
+      }        
+    });
+
+    inputPin.attachEvent("onclick", function (){
+      if(_('ID_PIN') == inputPin.value){
+        inputPin.value="";
+      }        
+    });
+    inputPin.attachEvent("onblur", function (){
+      if(inputPin.value == ""){
+        inputPin.value=_('ID_PIN');
+      }        
+    });
+    
+
+  }else{
+    document.getElementById('form[BSUBMIT]').classList.remove('module_app_button___gray');
+    document.getElementById('form[BSUBMIT]').classList.add('button-login-success');
+    document.getElementById('form[CASE]').placeholder = _('ID_CASE_CODE');
+    document.getElementById('form[PIN]').placeholder = _('ID_PIN');      
+  }  
+};
+]]></JS>
+</dynaForm>

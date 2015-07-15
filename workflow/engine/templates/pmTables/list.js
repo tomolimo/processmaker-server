@@ -44,8 +44,8 @@ Ext.onReady(function(){
       var newMenuOptions = new Array();
 
       newMenuOptions.push({
-        text: _('ID_NEW_PMTABLE'),
-        handler: newPMTable
+         text: _('ID_NEW_PMTABLE'),
+         handler: newPMTable
       });
       newMenuOptions.push({
         text: _('ID_NEW_REPORT_TABLE'),
@@ -59,7 +59,7 @@ Ext.onReady(function(){
   	    menu: newMenuOptions
   	  });
     }
-    
+
     var flagProcessmap =  (typeof('flagProcessmap') != 'undefined') ? flagProcessmap : 0;
 
     /*if (PRO_UID !== false) {
@@ -164,7 +164,7 @@ Ext.onReady(function(){
       ctCls:'pm_search_text_field',
       allowBlank: true,
       width: 150,
-      emptyText: _('ID_ENTER_SEARCH_TERM'),
+      emptyText: _('ID_EMPTY_SEARCH'),
       listeners: {
         specialkey: function(f,e){
           if (e.getKey() == e.ENTER) {
@@ -645,14 +645,14 @@ ExportPMTable = function(){
 
   for(var i=0; i<rows.length; i++){
 	if (rows[i].get('TYPE') == '') {
-	    toExportRows.push([
-	      rows[i].get('ADD_TAB_UID'),
-	      rows[i].get('PRO_UID'),
-	      rows[i].get('ADD_TAB_NAME'),
-	      (rows[i].get('PRO_UID') ? _('ID_REPORT_TABLE'): _('ID_PMTABLE')),
-	      true,
-	      (rows[i].get('PRO_UID') ? false : true)
-	    ]);
+      toExportRows.push([
+        rows[i].get('ADD_TAB_UID'),
+        rows[i].get('PRO_UID'),
+        rows[i].get('ADD_TAB_NAME'),
+        (rows[i].get('PRO_UID') ? _('ID_REPORT_TABLE'): _('ID_PMTABLE')),
+        true,
+        (rows[i].get('PRO_UID') ? false : true)
+      ]);
 	}
   }
 

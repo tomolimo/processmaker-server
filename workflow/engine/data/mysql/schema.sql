@@ -2,6 +2,7 @@
 # This is a fix for InnoDB in MySQL >= 4.1.x
 # It "suspends judgement" for fkey relationships until are tables are set.
 SET FOREIGN_KEY_CHECKS = 0;
+SET @@global.sql_mode='MYSQL40';
 
 #-----------------------------------------------------------------------------
 #-- APPLICATION
@@ -28,6 +29,8 @@ CREATE TABLE `APPLICATION`
 	`APP_UPDATE_DATE` DATETIME  NOT NULL,
 	`APP_DATA` MEDIUMTEXT  NOT NULL,
 	`APP_PIN` VARCHAR(32) default '' NOT NULL,
+    `APP_DURATION` DOUBLE default 0,
+    `APP_DELAY_DURATION` DOUBLE default 0,
 	PRIMARY KEY (`APP_UID`),
 	KEY `indexApp`(`PRO_UID`, `APP_STATUS`, `APP_UID`),
 	KEY `indexAppNumber`(`APP_NUMBER`),
@@ -56,8 +59,9 @@ CREATE TABLE `APP_DELEGATION`
 	`DEL_PRIORITY` VARCHAR(32) default '3' NOT NULL,
 	`DEL_DELEGATE_DATE` DATETIME  NOT NULL,
 	`DEL_INIT_DATE` DATETIME,
-	`DEL_TASK_DUE_DATE` DATETIME,
-	`DEL_FINISH_DATE` DATETIME,
+ `DEL_FINISH_DATE` DATETIME,
+ `DEL_TASK_DUE_DATE` DATETIME,
+ `DEL_RISK_DATE` DATETIME,
 	`DEL_DURATION` DOUBLE default 0,
 	`DEL_QUEUE_DURATION` DOUBLE default 0,
 	`DEL_DELAY_DURATION` DOUBLE default 0,
@@ -121,6 +125,7 @@ CREATE TABLE `APP_MESSAGE`
 	`APP_MSG_ATTACH` MEDIUMTEXT,
 	`APP_MSG_SEND_DATE` DATETIME  NOT NULL,
 	`APP_MSG_SHOW_MESSAGE` TINYINT default 1 NOT NULL,
+	`APP_MSG_ERROR` MEDIUMTEXT default '' NOT NULL,
 	PRIMARY KEY (`APP_MSG_UID`)
 )ENGINE=InnoDB  DEFAULT CHARSET='utf8' COMMENT='Messages in an Application';
 #-----------------------------------------------------------------------------
@@ -205,6 +210,7 @@ CREATE TABLE `DYNAFORM`
 	`DYN_TYPE` VARCHAR(20) default 'xmlform' NOT NULL,
 	`DYN_FILENAME` VARCHAR(100) default '' NOT NULL,
 	`DYN_CONTENT` MEDIUMTEXT,
+	`DYN_LABEL` MEDIUMTEXT,
 	`DYN_VERSION` INTEGER  NOT NULL,
 	PRIMARY KEY (`DYN_UID`)
 )ENGINE=InnoDB  DEFAULT CHARSET='utf8' COMMENT='Forms required';
@@ -268,7 +274,7 @@ CREATE TABLE `INPUT_DOCUMENT`
 	`INP_DOC_DESTINATION_PATH` MEDIUMTEXT,
 	`INP_DOC_TAGS` MEDIUMTEXT,
 	`INP_DOC_TYPE_FILE` VARCHAR(200) default '*.*',
- `INP_DOC_MAX_FILESIZE` INTEGER default 0 NOT NULL,
+	`INP_DOC_MAX_FILESIZE` INTEGER default 0 NOT NULL,
 	`INP_DOC_MAX_FILESIZE_UNIT` VARCHAR(2) default 'KB' NOT NULL,
 	PRIMARY KEY (`INP_DOC_UID`)
 )ENGINE=InnoDB  DEFAULT CHARSET='utf8' COMMENT='Documentation required';
@@ -406,8 +412,8 @@ CREATE TABLE `PROCESS`
 	`PRO_TRI_CANCELED` VARCHAR(32) default '' NOT NULL,
 	`PRO_TRI_PAUSED` VARCHAR(32) default '' NOT NULL,
 	`PRO_TRI_REASSIGNED` VARCHAR(32) default '' NOT NULL,
- `PRO_TRI_UNPAUSED` VARCHAR(32) default '' NOT NULL,
- `PRO_TYPE_PROCESS` VARCHAR(32) default 'PUBLIC' NOT NULL,
+	`PRO_TRI_UNPAUSED` VARCHAR(32) default '' NOT NULL,
+	`PRO_TYPE_PROCESS` VARCHAR(32) default 'PUBLIC' NOT NULL,
 	`PRO_SHOW_DELEGATE` TINYINT default 1 NOT NULL,
 	`PRO_SHOW_DYNAFORM` TINYINT default 0 NOT NULL,
 	`PRO_CATEGORY` VARCHAR(48) default '' NOT NULL,
@@ -489,6 +495,7 @@ CREATE TABLE `ROUTE`
 	`ROU_NEXT_TASK` VARCHAR(32) default '0' NOT NULL,
 	`ROU_CASE` INTEGER default 0 NOT NULL,
 	`ROU_TYPE` VARCHAR(25) default 'SEQUENTIAL' NOT NULL,
+	`ROU_DEFAULT` INTEGER default 0 NOT NULL,
 	`ROU_CONDITION` VARCHAR(512) default '' NOT NULL,
 	`ROU_TO_LAST_USER` VARCHAR(20) default 'FALSE' NOT NULL,
 	`ROU_OPTIONAL` VARCHAR(20) default 'FALSE' NOT NULL,
@@ -567,7 +574,7 @@ CREATE TABLE `TASK`
 (
 	`PRO_UID` VARCHAR(32) default '' NOT NULL,
 	`TAS_UID` VARCHAR(32) default '' NOT NULL,
-	`TAS_TYPE` VARCHAR(20) default 'NORMAL' NOT NULL,
+	`TAS_TYPE` VARCHAR(50) default 'NORMAL' NOT NULL,
 	`TAS_DURATION` DOUBLE default 0 NOT NULL,
 	`TAS_DELAY_TYPE` VARCHAR(30) default '' NOT NULL,
 	`TAS_TEMPORIZER` DOUBLE default 0 NOT NULL,
@@ -696,6 +703,15 @@ CREATE TABLE `USERS`
 	`USR_REPORTS_TO` VARCHAR(32) default '',
 	`USR_REPLACED_BY` VARCHAR(32) default '',
 	`USR_UX` VARCHAR(128) default 'NORMAL',
+	`USR_TOTAL_INBOX` INTEGER default 0,
+	`USR_TOTAL_DRAFT` INTEGER default 0,
+	`USR_TOTAL_CANCELLED` INTEGER default 0,
+	`USR_TOTAL_PARTICIPATED` INTEGER default 0,
+	`USR_TOTAL_PAUSED` INTEGER default 0,
+	`USR_TOTAL_COMPLETED` INTEGER default 0,
+	`USR_TOTAL_UNASSIGNED` INTEGER default 0,
+    `USR_COST_BY_HOUR` DECIMAL(7,2) default 0,
+    `USR_UNIT_COST` VARCHAR(50) default '',
 	PRIMARY KEY (`USR_UID`)
 )ENGINE=InnoDB  DEFAULT CHARSET='utf8' COMMENT='Users';
 #-----------------------------------------------------------------------------
@@ -872,6 +888,21 @@ CREATE TABLE `CASE_TRACKER_OBJECT`
 	KEY `indexCaseTrackerObject`(`PRO_UID`, `CTO_UID_OBJ`)
 )ENGINE=InnoDB  DEFAULT CHARSET='utf8';
 #-----------------------------------------------------------------------------
+#-- CASE_CONSOLIDATED
+#-----------------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `CASE_CONSOLIDATED`;
+
+
+CREATE TABLE `CASE_CONSOLIDATED`
+(
+	`TAS_UID` VARCHAR(32) default '' NOT NULL,
+	`DYN_UID` VARCHAR(32) default '' NOT NULL,
+	`REP_TAB_UID` VARCHAR(32) default '' NOT NULL,
+	`CON_STATUS` VARCHAR(20) default 'ACTIVE' NOT NULL,
+	PRIMARY KEY (`TAS_UID`)
+)ENGINE=InnoDB  DEFAULT CHARSET='utf8';
+#-----------------------------------------------------------------------------
 #-- STAGE
 #-----------------------------------------------------------------------------
 
@@ -1012,8 +1043,8 @@ CREATE TABLE `FIELDS`
 	`FLD_NULL` TINYINT default 1 NOT NULL,
 	`FLD_AUTO_INCREMENT` TINYINT default 0 NOT NULL,
 	`FLD_KEY` TINYINT default 0 NOT NULL,
-        `FLD_TABLE_INDEX` TINYINT default 0 NOT NULL,
-	`FLD_FOREIGN_KEY` TINYINT default 0 NOT NULL,
+	`FLD_TABLE_INDEX` TINYINT default 0 NOT NULL,
+	`FLD_FOREIGN_KEY` TINYINT default 0,
 	`FLD_FOREIGN_KEY_TABLE` VARCHAR(32) default '' NOT NULL,
 	`FLD_DYN_NAME` VARCHAR(128) default '',
 	`FLD_DYN_UID` VARCHAR(128) default '',
@@ -1127,8 +1158,9 @@ CREATE TABLE `APP_CACHE_VIEW`
 	`PRO_UID` VARCHAR(32) default '' NOT NULL,
 	`DEL_DELEGATE_DATE` DATETIME  NOT NULL,
 	`DEL_INIT_DATE` DATETIME,
-	`DEL_TASK_DUE_DATE` DATETIME,
-	`DEL_FINISH_DATE` DATETIME,
+ `DEL_FINISH_DATE` DATETIME,
+ `DEL_TASK_DUE_DATE` DATETIME,
+ `DEL_RISK_DATE` DATETIME,
 	`DEL_THREAD_STATUS` VARCHAR(32) default 'OPEN',
 	`APP_THREAD_STATUS` VARCHAR(32) default 'OPEN',
 	`APP_TITLE` VARCHAR(255) default '' NOT NULL,
@@ -1206,6 +1238,7 @@ CREATE TABLE `APP_HISTORY`
 	`PRO_UID` VARCHAR(32) default '' NOT NULL,
 	`TAS_UID` VARCHAR(32) default '' NOT NULL,
 	`DYN_UID` VARCHAR(32) default '' NOT NULL,
+	`OBJ_TYPE` VARCHAR(20) default 'DYNAFORM' NOT NULL,
 	`USR_UID` VARCHAR(32) default '' NOT NULL,
 	`APP_STATUS` VARCHAR(100) default '' NOT NULL,
 	`HISTORY_DATE` DATETIME,
@@ -1637,7 +1670,7 @@ CREATE TABLE `BPMN_PROJECT`
 	`PRJ_UID` VARCHAR(32) default '' NOT NULL,
 	`PRJ_NAME` VARCHAR(255) default '' NOT NULL,
 	`PRJ_DESCRIPTION` VARCHAR(512),
-	`PRJ_TARGET_NAMESPACE` MEDIUMTEXT  NOT NULL,
+	`PRJ_TARGET_NAMESPACE` MEDIUMTEXT,
 	`PRJ_EXPRESION_LANGUAGE` MEDIUMTEXT,
 	`PRJ_TYPE_LANGUAGE` MEDIUMTEXT,
 	`PRJ_EXPORTER` MEDIUMTEXT,
@@ -1905,6 +1938,7 @@ CREATE TABLE `BPMN_FLOW`
 	`FLO_X2` INTEGER default 0 NOT NULL,
 	`FLO_Y2` INTEGER default 0 NOT NULL,
 	`FLO_STATE` MEDIUMTEXT,
+	`FLO_POSITION` INTEGER default 0 NOT NULL,
 	PRIMARY KEY (`FLO_UID`),
 	KEY `BPMN_FLOW_I_1`(`FLO_UID`),
 	KEY `BPMN_FLOW_I_2`(`PRJ_UID`),
@@ -1995,10 +2029,7 @@ CREATE TABLE `BPMN_LANE`
 	KEY `BPMN_LANE_I_3`(`LNS_UID`),
 	CONSTRAINT `fk_bpmn_lane_project`
 		FOREIGN KEY (`PRJ_UID`)
-		REFERENCES `BPMN_PROJECT` (`PRJ_UID`),
-	CONSTRAINT `fk_bpmn_lane_laneset`
-		FOREIGN KEY (`LNS_UID`)
-		REFERENCES `BPMN_LANESET` (`LNS_UID`)
+		REFERENCES `BPMN_PROJECT` (`PRJ_UID`)
 )ENGINE=InnoDB  DEFAULT CHARSET='utf8';
 #-----------------------------------------------------------------------------
 #-- BPMN_PARTICIPANT
@@ -2089,8 +2120,6 @@ CREATE TABLE `PROCESS_VARIABLES`
 	`VAR_ACCEPTED_VALUES` MEDIUMTEXT,
 	PRIMARY KEY (`VAR_UID`)
 )ENGINE=InnoDB ;
-# This restores the fkey checks, after having unset them earlier
-SET FOREIGN_KEY_CHECKS = 1;
 #-----------------------------------------------------------------------------
 #-- APP_TIMEOUT_ACTION_EXECUTED
 #-----------------------------------------------------------------------------
@@ -2104,13 +2133,14 @@ CREATE TABLE `APP_TIMEOUT_ACTION_EXECUTED`
 	`DEL_INDEX` INTEGER default 0 NOT NULL,
 	`EXECUTION_DATE` DATETIME,
 	PRIMARY KEY (`APP_UID`)
-)ENGINE=InnoDB  DEFAULT CHARSET='utf8';
-
+)ENGINE=InnoDB ;
 #-----------------------------------------------------------------------------
 #-- ADDONS_STORE
 #-----------------------------------------------------------------------------
 
 DROP TABLE IF EXISTS `ADDONS_STORE`;
+
+
 CREATE TABLE `ADDONS_STORE`
 (
 	`STORE_ID` VARCHAR(32)  NOT NULL,
@@ -2120,12 +2150,13 @@ CREATE TABLE `ADDONS_STORE`
 	`STORE_LAST_UPDATED` DATETIME,
 	PRIMARY KEY (`STORE_ID`)
 )ENGINE=InnoDB ;
-
 #-----------------------------------------------------------------------------
 #-- ADDONS_MANAGER
 #-----------------------------------------------------------------------------
 
 DROP TABLE IF EXISTS `ADDONS_MANAGER`;
+
+
 CREATE TABLE `ADDONS_MANAGER`
 (
 	`ADDON_ID` VARCHAR(255)  NOT NULL,
@@ -2147,24 +2178,648 @@ CREATE TABLE `ADDONS_MANAGER`
 	`ADDON_DOWNLOAD_PROGRESS` FLOAT,
 	`ADDON_DOWNLOAD_MD5` VARCHAR(32),
 	PRIMARY KEY (`ADDON_ID`,`STORE_ID`)
-)ENGINE=InnoDB  DEFAULT CHARSET='utf8' COMMENT='Addons manager';
-
-
+)ENGINE=InnoDB ;
 #-----------------------------------------------------------------------------
 #-- LICENSE_MANAGER
 #-----------------------------------------------------------------------------
 
 DROP TABLE IF EXISTS `LICENSE_MANAGER`;
-CREATE TABLE IF NOT EXISTS `LICENSE_MANAGER` (
-  `LICENSE_UID` varchar(32) NOT NULL DEFAULT '',
-  `LICENSE_USER` varchar(150) NOT NULL DEFAULT '0',
-  `LICENSE_START` int(11) NOT NULL DEFAULT '0',
-  `LICENSE_END` int(11) NOT NULL DEFAULT '0',
-  `LICENSE_SPAN` int(11) NOT NULL DEFAULT '0',
-  `LICENSE_STATUS` varchar(100) DEFAULT '',
-  `LICENSE_DATA` mediumtext NOT NULL,
-  `LICENSE_PATH` varchar(255) NOT NULL DEFAULT '0',
-  `LICENSE_WORKSPACE` varchar(32) NOT NULL DEFAULT '0',
-  `LICENSE_TYPE` varchar(32) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`LICENSE_UID`)
-)ENGINE=InnoDB DEFAULT CHARSET='utf8' COMMENT='Licenses Manager';
+
+
+CREATE TABLE `LICENSE_MANAGER`
+(
+	`LICENSE_UID` VARCHAR(32)  NOT NULL,
+	`LICENSE_USER` VARCHAR(150) default '0' NOT NULL,
+	`LICENSE_START` INTEGER default 0 NOT NULL,
+	`LICENSE_END` INTEGER default 0 NOT NULL,
+	`LICENSE_SPAN` INTEGER default 0 NOT NULL,
+	`LICENSE_STATUS` VARCHAR(100) default '' NOT NULL,
+	`LICENSE_DATA` MEDIUMTEXT  NOT NULL,
+	`LICENSE_PATH` VARCHAR(255) default '0' NOT NULL,
+	`LICENSE_WORKSPACE` VARCHAR(32) default '0' NOT NULL,
+	`LICENSE_TYPE` VARCHAR(32) default '0' NOT NULL,
+	PRIMARY KEY (`LICENSE_UID`)
+)ENGINE=InnoDB ;
+#-----------------------------------------------------------------------------
+#-- APP_ASSIGN_SELF_SERVICE_VALUE
+#-----------------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `APP_ASSIGN_SELF_SERVICE_VALUE`;
+
+
+CREATE TABLE `APP_ASSIGN_SELF_SERVICE_VALUE`
+(
+	`APP_UID` VARCHAR(32)  NOT NULL,
+	`DEL_INDEX` INTEGER default 0 NOT NULL,
+	`PRO_UID` VARCHAR(32)  NOT NULL,
+	`TAS_UID` VARCHAR(32)  NOT NULL,
+	`GRP_UID` VARCHAR(32) default '' NOT NULL
+)ENGINE=InnoDB  DEFAULT CHARSET='utf8';
+#-----------------------------------------------------------------------------
+#-- LIST_INBOX
+#-----------------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `LIST_INBOX`;
+
+
+CREATE TABLE `LIST_INBOX`
+(
+	`APP_UID` VARCHAR(32) default '' NOT NULL,
+	`DEL_INDEX` INTEGER default 0 NOT NULL,
+	`USR_UID` VARCHAR(32) default '' NOT NULL,
+	`TAS_UID` VARCHAR(32) default '' NOT NULL,
+	`PRO_UID` VARCHAR(32) default '' NOT NULL,
+	`APP_NUMBER` INTEGER default 0 NOT NULL,
+	`APP_STATUS` VARCHAR(32) default '0',
+	`APP_TITLE` VARCHAR(255) default '' NOT NULL,
+	`APP_PRO_TITLE` VARCHAR(255) default '' NOT NULL,
+	`APP_TAS_TITLE` VARCHAR(255) default '' NOT NULL,
+	`APP_UPDATE_DATE` DATETIME  NOT NULL,
+	`DEL_PREVIOUS_USR_UID` VARCHAR(32) default '',
+	`DEL_PREVIOUS_USR_USERNAME` VARCHAR(100) default '',
+	`DEL_PREVIOUS_USR_FIRSTNAME` VARCHAR(50) default '',
+	`DEL_PREVIOUS_USR_LASTNAME` VARCHAR(50) default '',
+	`DEL_DELEGATE_DATE` DATETIME  NOT NULL,
+	`DEL_INIT_DATE` DATETIME,
+	`DEL_DUE_DATE` DATETIME,
+ `DEL_RISK_DATE` DATETIME,
+	`DEL_PRIORITY` VARCHAR(32) default '3' NOT NULL,
+	PRIMARY KEY (`APP_UID`,`DEL_INDEX`),
+	KEY `indexInboxUser`(`USR_UID`, `DEL_DELEGATE_DATE`)
+)ENGINE=InnoDB  DEFAULT CHARSET='utf8' COMMENT='Inbox list';
+#-----------------------------------------------------------------------------
+#-- LIST_PARTICIPATED_HISTORY
+#-----------------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `LIST_PARTICIPATED_HISTORY`;
+
+
+CREATE TABLE `LIST_PARTICIPATED_HISTORY`
+(
+	`APP_UID` VARCHAR(32) default '' NOT NULL,
+	`DEL_INDEX` INTEGER default 0 NOT NULL,
+	`USR_UID` VARCHAR(32) default '' NOT NULL,
+	`TAS_UID` VARCHAR(32) default '' NOT NULL,
+	`PRO_UID` VARCHAR(32) default '' NOT NULL,
+	`APP_NUMBER` INTEGER default 0 NOT NULL,
+	`APP_TITLE` VARCHAR(255) default '' NOT NULL,
+	`APP_PRO_TITLE` VARCHAR(255) default '' NOT NULL,
+	`APP_TAS_TITLE` VARCHAR(255) default '' NOT NULL,
+	`DEL_PREVIOUS_USR_UID` VARCHAR(32) default '',
+	`DEL_PREVIOUS_USR_USERNAME` VARCHAR(100) default '',
+	`DEL_PREVIOUS_USR_FIRSTNAME` VARCHAR(50) default '',
+	`DEL_PREVIOUS_USR_LASTNAME` VARCHAR(50) default '',
+	`DEL_CURRENT_USR_USERNAME` VARCHAR(100) default '',
+	`DEL_CURRENT_USR_FIRSTNAME` VARCHAR(50) default '',
+	`DEL_CURRENT_USR_LASTNAME` VARCHAR(50) default '',
+	`DEL_DELEGATE_DATE` DATETIME  NOT NULL,
+	`DEL_INIT_DATE` DATETIME,
+	`DEL_DUE_DATE` DATETIME,
+	`DEL_PRIORITY` VARCHAR(32) default '3' NOT NULL,
+	PRIMARY KEY (`APP_UID`,`DEL_INDEX`),
+	KEY `indexInboxUser`(`USR_UID`, `DEL_DELEGATE_DATE`)
+)ENGINE=InnoDB  DEFAULT CHARSET='utf8' COMMENT='Participated history list';
+#-----------------------------------------------------------------------------
+#-- LIST_PARTICIPATED_LAST
+#-----------------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `LIST_PARTICIPATED_LAST`;
+
+
+CREATE TABLE `LIST_PARTICIPATED_LAST`
+(
+	`APP_UID` VARCHAR(32) default '' NOT NULL,
+	`USR_UID` VARCHAR(32) default '' NOT NULL,
+	`DEL_INDEX` INTEGER default 0 NOT NULL,
+	`TAS_UID` VARCHAR(32) default '' NOT NULL,
+	`PRO_UID` VARCHAR(32) default '' NOT NULL,
+	`APP_NUMBER` INTEGER default 0 NOT NULL,
+	`APP_TITLE` VARCHAR(255) default '' NOT NULL,
+	`APP_PRO_TITLE` VARCHAR(255) default '' NOT NULL,
+	`APP_TAS_TITLE` VARCHAR(255) default '' NOT NULL,
+	`APP_STATUS` VARCHAR(20) default '0',
+	`DEL_PREVIOUS_USR_UID` VARCHAR(32) default '',
+	`DEL_PREVIOUS_USR_USERNAME` VARCHAR(100) default '',
+	`DEL_PREVIOUS_USR_FIRSTNAME` VARCHAR(50) default '',
+	`DEL_PREVIOUS_USR_LASTNAME` VARCHAR(50) default '',
+	`DEL_CURRENT_USR_USERNAME` VARCHAR(100) default '',
+	`DEL_CURRENT_USR_FIRSTNAME` VARCHAR(50) default '',
+	`DEL_CURRENT_USR_LASTNAME` VARCHAR(50) default '',
+	`DEL_DELEGATE_DATE` DATETIME  NOT NULL,
+	`DEL_INIT_DATE` DATETIME,
+	`DEL_DUE_DATE` DATETIME,
+	`DEL_PRIORITY` VARCHAR(32) default '3' NOT NULL,
+	`DEL_THREAD_STATUS` VARCHAR(32) default 'OPEN' NOT NULL,
+	PRIMARY KEY (`APP_UID`,`USR_UID`,`DEL_INDEX`)
+)ENGINE=InnoDB  DEFAULT CHARSET='utf8' COMMENT='Participated last list';
+#-----------------------------------------------------------------------------
+#-- LIST_COMPLETED
+#-----------------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `LIST_COMPLETED`;
+
+
+CREATE TABLE `LIST_COMPLETED`
+(
+	`APP_UID` VARCHAR(32) default '' NOT NULL,
+	`USR_UID` VARCHAR(32) default '' NOT NULL,
+	`TAS_UID` VARCHAR(32) default '' NOT NULL,
+	`PRO_UID` VARCHAR(32) default '' NOT NULL,
+	`APP_NUMBER` INTEGER default 0 NOT NULL,
+	`APP_TITLE` VARCHAR(255) default '' NOT NULL,
+	`APP_PRO_TITLE` VARCHAR(255) default '' NOT NULL,
+	`APP_TAS_TITLE` VARCHAR(255) default '' NOT NULL,
+	`APP_CREATE_DATE` DATETIME  NOT NULL,
+	`APP_FINISH_DATE` DATETIME  NOT NULL,
+	`DEL_INDEX` INTEGER default 0 NOT NULL,
+	`DEL_PREVIOUS_USR_UID` VARCHAR(32) default '',
+	`DEL_CURRENT_USR_USERNAME` VARCHAR(100) default '',
+	`DEL_CURRENT_USR_FIRSTNAME` VARCHAR(50) default '',
+	`DEL_CURRENT_USR_LASTNAME` VARCHAR(50) default '',
+	PRIMARY KEY (`APP_UID`)
+)ENGINE=InnoDB  DEFAULT CHARSET='utf8' COMMENT='Completed list';
+#-----------------------------------------------------------------------------
+#-- LIST_PAUSED
+#-----------------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `LIST_PAUSED`;
+
+
+CREATE TABLE `LIST_PAUSED`
+(
+	`APP_UID` VARCHAR(32) default '' NOT NULL,
+	`DEL_INDEX` INTEGER default 0 NOT NULL,
+	`USR_UID` VARCHAR(32) default '' NOT NULL,
+	`TAS_UID` VARCHAR(32) default '' NOT NULL,
+	`PRO_UID` VARCHAR(32) default '' NOT NULL,
+	`APP_NUMBER` INTEGER default 0 NOT NULL,
+	`APP_TITLE` VARCHAR(255) default '' NOT NULL,
+	`APP_PRO_TITLE` VARCHAR(255) default '' NOT NULL,
+	`APP_TAS_TITLE` VARCHAR(255) default '' NOT NULL,
+	`APP_PAUSED_DATE` DATETIME  NOT NULL,
+	`APP_RESTART_DATE` DATETIME  NOT NULL,
+	`DEL_PREVIOUS_USR_UID` VARCHAR(32) default '',
+	`DEL_PREVIOUS_USR_USERNAME` VARCHAR(100) default '',
+	`DEL_PREVIOUS_USR_FIRSTNAME` VARCHAR(50) default '',
+	`DEL_PREVIOUS_USR_LASTNAME` VARCHAR(50) default '',
+	`DEL_CURRENT_USR_USERNAME` VARCHAR(100) default '',
+	`DEL_CURRENT_USR_FIRSTNAME` VARCHAR(50) default '',
+	`DEL_CURRENT_USR_LASTNAME` VARCHAR(50) default '',
+	`DEL_DELEGATE_DATE` DATETIME  NOT NULL,
+	`DEL_INIT_DATE` DATETIME,
+	`DEL_DUE_DATE` DATETIME,
+	`DEL_PRIORITY` VARCHAR(32) default '3' NOT NULL,
+	PRIMARY KEY (`APP_UID`,`DEL_INDEX`),
+	KEY `indexPausedUser`(`USR_UID`)
+)ENGINE=InnoDB  DEFAULT CHARSET='utf8' COMMENT='Paused list';
+#-----------------------------------------------------------------------------
+#-- LIST_CANCELED
+#-----------------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `LIST_CANCELED`;
+
+
+CREATE TABLE `LIST_CANCELED`
+(
+	`APP_UID` VARCHAR(32) default '' NOT NULL,
+	`USR_UID` VARCHAR(32) default '' NOT NULL,
+	`TAS_UID` VARCHAR(32) default '' NOT NULL,
+	`PRO_UID` VARCHAR(32) default '' NOT NULL,
+	`APP_NUMBER` INTEGER default 0 NOT NULL,
+	`APP_TITLE` VARCHAR(255) default '' NOT NULL,
+	`APP_PRO_TITLE` VARCHAR(255) default '' NOT NULL,
+	`APP_TAS_TITLE` VARCHAR(255) default '' NOT NULL,
+	`APP_CANCELED_DATE` DATETIME  NOT NULL,
+	`DEL_INDEX` INTEGER default 0 NOT NULL,
+	`DEL_PREVIOUS_USR_UID` VARCHAR(32) default '',
+	`DEL_CURRENT_USR_USERNAME` VARCHAR(100) default '',
+	`DEL_CURRENT_USR_FIRSTNAME` VARCHAR(50) default '',
+	`DEL_CURRENT_USR_LASTNAME` VARCHAR(50) default '',
+	`DEL_DELEGATE_DATE` DATETIME  NOT NULL,
+	`DEL_INIT_DATE` DATETIME,
+	`DEL_DUE_DATE` DATETIME,
+	`DEL_PRIORITY` VARCHAR(32) default '3' NOT NULL,
+	PRIMARY KEY (`APP_UID`),
+	KEY `indexCanceledUser`(`USR_UID`)
+)ENGINE=InnoDB  DEFAULT CHARSET='utf8' COMMENT='Canceled list';
+#-----------------------------------------------------------------------------
+#-- LIST_MY_INBOX
+#-----------------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `LIST_MY_INBOX`;
+
+
+CREATE TABLE `LIST_MY_INBOX`
+(
+	`APP_UID` VARCHAR(32) default '' NOT NULL,
+	`USR_UID` VARCHAR(32) default '' NOT NULL,
+	`TAS_UID` VARCHAR(32) default '' NOT NULL,
+	`PRO_UID` VARCHAR(32) default '' NOT NULL,
+	`APP_NUMBER` INTEGER default 0 NOT NULL,
+	`APP_TITLE` VARCHAR(255) default '' NOT NULL,
+	`APP_PRO_TITLE` VARCHAR(255) default '' NOT NULL,
+	`APP_TAS_TITLE` VARCHAR(255) default '' NOT NULL,
+	`APP_CREATE_DATE` DATETIME,
+	`APP_UPDATE_DATE` DATETIME,
+	`APP_FINISH_DATE` DATETIME,
+	`APP_STATUS` VARCHAR(100) default '' NOT NULL,
+	`DEL_INDEX` INTEGER default 0 NOT NULL,
+	`DEL_PREVIOUS_USR_UID` VARCHAR(32) default '',
+	`DEL_PREVIOUS_USR_USERNAME` VARCHAR(100) default '',
+	`DEL_PREVIOUS_USR_FIRSTNAME` VARCHAR(50) default '',
+	`DEL_PREVIOUS_USR_LASTNAME` VARCHAR(50) default '',
+	`DEL_CURRENT_USR_UID` VARCHAR(32) default '',
+	`DEL_CURRENT_USR_USERNAME` VARCHAR(100) default '',
+	`DEL_CURRENT_USR_FIRSTNAME` VARCHAR(50) default '',
+	`DEL_CURRENT_USR_LASTNAME` VARCHAR(50) default '',
+	`DEL_DELEGATE_DATE` DATETIME,
+	`DEL_INIT_DATE` DATETIME,
+	`DEL_DUE_DATE` DATETIME,
+	`DEL_PRIORITY` VARCHAR(32) default '3' NOT NULL,
+	PRIMARY KEY (`APP_UID`)
+)ENGINE=InnoDB  DEFAULT CHARSET='utf8' COMMENT='My Inbox list';
+#-----------------------------------------------------------------------------
+#-- LIST_UNASSIGNED
+#-----------------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `LIST_UNASSIGNED`;
+
+
+CREATE TABLE `LIST_UNASSIGNED`
+(
+	`APP_UID` VARCHAR(32) default '' NOT NULL,
+	`UNA_UID` VARCHAR(32) default '' NOT NULL,
+	`TAS_UID` VARCHAR(32) default '' NOT NULL,
+	`PRO_UID` VARCHAR(32) default '' NOT NULL,
+	`APP_NUMBER` INTEGER default 0 NOT NULL,
+	`APP_TITLE` VARCHAR(255) default '' NOT NULL,
+	`APP_PRO_TITLE` VARCHAR(255) default '' NOT NULL,
+	`APP_TAS_TITLE` VARCHAR(255) default '' NOT NULL,
+	`APP_PREVIOUS_USR_USERNAME` VARCHAR(100) default '',
+	`APP_PREVIOUS_USR_FIRSTNAME` VARCHAR(50) default '',
+	`APP_PREVIOUS_USR_LASTNAME` VARCHAR(50) default '',
+	`DEL_INDEX` INTEGER default 0 NOT NULL,
+	`DEL_PREVIOUS_USR_UID` VARCHAR(32) default '',
+	`DEL_DELEGATE_DATE` DATETIME  NOT NULL,
+	`DEL_DUE_DATE` DATETIME,
+	`DEL_PRIORITY` VARCHAR(32) default '3' NOT NULL,
+	PRIMARY KEY (`APP_UID`,`UNA_UID`)
+)ENGINE=InnoDB  DEFAULT CHARSET='utf8' COMMENT='Unassiged list';
+#-----------------------------------------------------------------------------
+#-- LIST_UNASSIGNED_GROUP
+#-----------------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `LIST_UNASSIGNED_GROUP`;
+
+
+CREATE TABLE `LIST_UNASSIGNED_GROUP`
+(
+	`UNA_UID` VARCHAR(32) default '' NOT NULL,
+	`USR_UID` VARCHAR(32) default '' NOT NULL,
+	`TYPE` VARCHAR(255) default '' NOT NULL,
+	`TYP_UID` VARCHAR(32) default '' NOT NULL,
+	PRIMARY KEY (`UNA_UID`,`USR_UID`,`TYPE`)
+)ENGINE=InnoDB  DEFAULT CHARSET='utf8' COMMENT='Unassiged list';
+#-----------------------------------------------------------------------------
+#-- MESSAGE_TYPE
+#-----------------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `MESSAGE_TYPE`;
+
+
+CREATE TABLE `MESSAGE_TYPE`
+(
+	`MSGT_UID` VARCHAR(32)  NOT NULL,
+	`PRJ_UID` VARCHAR(32)  NOT NULL,
+	`MSGT_NAME` VARCHAR(512) default '',
+	PRIMARY KEY (`MSGT_UID`)
+)ENGINE=InnoDB  DEFAULT CHARSET='utf8';
+#-----------------------------------------------------------------------------
+#-- MESSAGE_TYPE_VARIABLE
+#-----------------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `MESSAGE_TYPE_VARIABLE`;
+
+
+CREATE TABLE `MESSAGE_TYPE_VARIABLE`
+(
+	`MSGTV_UID` VARCHAR(32)  NOT NULL,
+	`MSGT_UID` VARCHAR(32)  NOT NULL,
+	`MSGTV_NAME` VARCHAR(512) default '',
+	`MSGTV_DEFAULT_VALUE` VARCHAR(512) default '',
+	PRIMARY KEY (`MSGTV_UID`)
+)ENGINE=InnoDB  DEFAULT CHARSET='utf8';
+#-----------------------------------------------------------------------------
+#-- EMAIL_SERVER
+#-----------------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `EMAIL_SERVER`;
+
+
+CREATE TABLE `EMAIL_SERVER`
+(
+	`MESS_UID` VARCHAR(32) default '' NOT NULL,
+	`MESS_ENGINE` VARCHAR(256) default '' NOT NULL,
+	`MESS_SERVER` VARCHAR(256) default '' NOT NULL,
+	`MESS_PORT` INTEGER default 0 NOT NULL,
+	`MESS_RAUTH` INTEGER default 0 NOT NULL,
+	`MESS_ACCOUNT` VARCHAR(256) default '' NOT NULL,
+	`MESS_PASSWORD` VARCHAR(256) default '' NOT NULL,
+	`MESS_FROM_MAIL` VARCHAR(256) default '',
+	`MESS_FROM_NAME` VARCHAR(256) default '',
+	`SMTPSECURE` VARCHAR(3) default 'No' NOT NULL,
+	`MESS_TRY_SEND_INMEDIATLY` INTEGER default 0 NOT NULL,
+	`MAIL_TO` VARCHAR(256) default '' NOT NULL,
+	`MESS_DEFAULT` INTEGER default 0 NOT NULL,
+	PRIMARY KEY (`MESS_UID`)
+)ENGINE=InnoDB  DEFAULT CHARSET='utf8';
+#-----------------------------------------------------------------------------
+#-- WEB_ENTRY_EVENT
+#-----------------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `WEB_ENTRY_EVENT`;
+
+
+CREATE TABLE `WEB_ENTRY_EVENT`
+(
+	`WEE_UID` VARCHAR(32)  NOT NULL,
+	`PRJ_UID` VARCHAR(32)  NOT NULL,
+	`EVN_UID` VARCHAR(32)  NOT NULL,
+	`ACT_UID` VARCHAR(32)  NOT NULL,
+	`DYN_UID` VARCHAR(32)  NOT NULL,
+	`USR_UID` VARCHAR(32)  NOT NULL,
+	`WEE_STATUS` VARCHAR(10) default 'ENABLED' NOT NULL,
+	`WEE_WE_UID` VARCHAR(32) default '' NOT NULL,
+	`WEE_WE_TAS_UID` VARCHAR(32) default '' NOT NULL,
+	PRIMARY KEY (`WEE_UID`)
+)ENGINE=InnoDB  DEFAULT CHARSET='utf8';
+#-----------------------------------------------------------------------------
+#-- MESSAGE_EVENT_DEFINITION
+#-----------------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `MESSAGE_EVENT_DEFINITION`;
+
+
+CREATE TABLE `MESSAGE_EVENT_DEFINITION`
+(
+	`MSGED_UID` VARCHAR(32)  NOT NULL,
+	`PRJ_UID` VARCHAR(32)  NOT NULL,
+	`EVN_UID` VARCHAR(32)  NOT NULL,
+	`MSGT_UID` VARCHAR(32) default '' NOT NULL,
+	`MSGED_USR_UID` VARCHAR(32) default '' NOT NULL,
+	`MSGED_VARIABLES` MEDIUMTEXT  NOT NULL,
+	`MSGED_CORRELATION` VARCHAR(512) default '' NOT NULL,
+	PRIMARY KEY (`MSGED_UID`)
+)ENGINE=InnoDB  DEFAULT CHARSET='utf8';
+#-----------------------------------------------------------------------------
+#-- MESSAGE_EVENT_RELATION
+#-----------------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `MESSAGE_EVENT_RELATION`;
+
+
+CREATE TABLE `MESSAGE_EVENT_RELATION`
+(
+	`MSGER_UID` VARCHAR(32)  NOT NULL,
+	`PRJ_UID` VARCHAR(32)  NOT NULL,
+	`EVN_UID_THROW` VARCHAR(32)  NOT NULL,
+	`EVN_UID_CATCH` VARCHAR(32)  NOT NULL,
+	PRIMARY KEY (`MSGER_UID`)
+)ENGINE=InnoDB  DEFAULT CHARSET='utf8';
+#-----------------------------------------------------------------------------
+#-- MESSAGE_APPLICATION
+#-----------------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `MESSAGE_APPLICATION`;
+
+
+CREATE TABLE `MESSAGE_APPLICATION`
+(
+	`MSGAPP_UID` VARCHAR(32)  NOT NULL,
+	`APP_UID` VARCHAR(32)  NOT NULL,
+	`PRJ_UID` VARCHAR(32)  NOT NULL,
+	`EVN_UID_THROW` VARCHAR(32)  NOT NULL,
+	`EVN_UID_CATCH` VARCHAR(32)  NOT NULL,
+	`MSGAPP_VARIABLES` MEDIUMTEXT  NOT NULL,
+	`MSGAPP_CORRELATION` VARCHAR(512) default '' NOT NULL,
+	`MSGAPP_THROW_DATE` DATETIME  NOT NULL,
+	`MSGAPP_CATCH_DATE` DATETIME,
+	`MSGAPP_STATUS` VARCHAR(25) default 'UNREAD' NOT NULL,
+	PRIMARY KEY (`MSGAPP_UID`)
+)ENGINE=InnoDB  DEFAULT CHARSET='utf8';
+#-----------------------------------------------------------------------------
+#-- ELEMENT_TASK_RELATION
+#-----------------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `ELEMENT_TASK_RELATION`;
+
+
+CREATE TABLE `ELEMENT_TASK_RELATION`
+(
+	`ETR_UID` VARCHAR(32)  NOT NULL,
+	`PRJ_UID` VARCHAR(32)  NOT NULL,
+	`ELEMENT_UID` VARCHAR(32)  NOT NULL,
+	`ELEMENT_TYPE` VARCHAR(50) default '' NOT NULL,
+	`TAS_UID` VARCHAR(32)  NOT NULL,
+	PRIMARY KEY (`ETR_UID`)
+)ENGINE=InnoDB  DEFAULT CHARSET='utf8';
+#-----------------------------------------------------------------------------
+#-- ABE_CONFIGURATION
+#-----------------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `ABE_CONFIGURATION`;
+
+
+CREATE TABLE `ABE_CONFIGURATION`
+(
+	`ABE_UID` VARCHAR(32) default '' NOT NULL,
+	`PRO_UID` VARCHAR(32) default '' NOT NULL,
+	`TAS_UID` VARCHAR(32) default '' NOT NULL,
+	`ABE_TYPE` VARCHAR(10) default '' NOT NULL,
+	`ABE_TEMPLATE` VARCHAR(100) default '' NOT NULL,
+	`ABE_DYN_TYPE` VARCHAR(10) default 'NORMAL' NOT NULL,
+	`DYN_UID` VARCHAR(32) default '' NOT NULL,
+	`ABE_EMAIL_FIELD` VARCHAR(255) default '' NOT NULL,
+	`ABE_ACTION_FIELD` VARCHAR(255) default '',
+	`ABE_CASE_NOTE_IN_RESPONSE` INTEGER default 0,
+	`ABE_CREATE_DATE` DATETIME  NOT NULL,
+	`ABE_UPDATE_DATE` DATETIME,
+	`ABE_SUBJECT_FIELD` VARCHAR(100) default '' NOT NULL,
+	PRIMARY KEY (`ABE_UID`)
+)ENGINE=InnoDB  DEFAULT CHARSET='utf8' COMMENT='The plugin table for actionsByEmail';
+#-----------------------------------------------------------------------------
+#-- ABE_REQUESTS
+#-----------------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `ABE_REQUESTS`;
+
+
+CREATE TABLE `ABE_REQUESTS`
+(
+	`ABE_REQ_UID` VARCHAR(32) default '' NOT NULL,
+	`ABE_UID` VARCHAR(32) default '' NOT NULL,
+	`APP_UID` VARCHAR(32) default '' NOT NULL,
+	`DEL_INDEX` INTEGER default 0 NOT NULL,
+	`ABE_REQ_SENT_TO` VARCHAR(100) default '' NOT NULL,
+	`ABE_REQ_SUBJECT` VARCHAR(150) default '' NOT NULL,
+	`ABE_REQ_BODY` MEDIUMTEXT  NOT NULL,
+	`ABE_REQ_DATE` DATETIME  NOT NULL,
+	`ABE_REQ_STATUS` VARCHAR(10) default '',
+	`ABE_REQ_ANSWERED` TINYINT default 0 NOT NULL,
+	PRIMARY KEY (`ABE_REQ_UID`)
+)ENGINE=InnoDB  DEFAULT CHARSET='utf8' COMMENT='The plugin table for actionsByEmail';
+#-----------------------------------------------------------------------------
+#-- ABE_RESPONSES
+#-----------------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `ABE_RESPONSES`;
+
+
+CREATE TABLE `ABE_RESPONSES`
+(
+	`ABE_RES_UID` VARCHAR(32) default '' NOT NULL,
+	`ABE_REQ_UID` VARCHAR(32) default '' NOT NULL,
+	`ABE_RES_CLIENT_IP` VARCHAR(20) default '' NOT NULL,
+	`ABE_RES_DATA` MEDIUMTEXT  NOT NULL,
+	`ABE_RES_DATE` DATETIME  NOT NULL,
+	`ABE_RES_STATUS` VARCHAR(10) default '' NOT NULL,
+	`ABE_RES_MESSAGE` VARCHAR(255) default '',
+	PRIMARY KEY (`ABE_RES_UID`)
+)ENGINE=InnoDB  DEFAULT CHARSET='utf8' COMMENT='The plugin table for actionsByEmail';
+# This restores the fkey checks, after having unset them earlier
+SET FOREIGN_KEY_CHECKS = 1;
+
+
+#-----------------------------------------------------------------------------
+#-- USR_REPORTING
+#-----------------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `USR_REPORTING`;
+
+
+CREATE TABLE `USR_REPORTING`
+(
+    `USR_UID`               VARCHAR(32)  NOT NULL,
+    `TAS_UID`               VARCHAR(32)  NOT NULL,
+    `PRO_UID`               VARCHAR(32)  NOT NULL,
+    `MONTH`                 INTEGER default 0 NOT NULL,
+    `YEAR`                  INTEGER default 0 NOT NULL,
+    `TOTAL_TIME_BY_TASK`    DECIMAL(7,2) default 0,
+    `TOTAL_CASES_IN`        DECIMAL(7,2) default 0,
+    `TOTAL_CASES_OUT`       DECIMAL(7,2) default 0,
+    `USER_HOUR_COST`        DECIMAL(7,2) default 0,
+    `AVG_TIME`              DECIMAL(7,2) default 0,
+    `SDV_TIME`              DECIMAL(7,2) default 0,
+    `CONFIGURED_TASK_TIME`  DECIMAL(7,2) default 0,
+    `TOTAL_CASES_OVERDUE`   DECIMAL(7,2) default 0,
+    `TOTAL_CASES_ON_TIME`   DECIMAL(7,2) default 0,
+    PRIMARY KEY (`USR_UID`, `TAS_UID`,`MONTH`,`YEAR`),
+    KEY `indexReporting`(`USR_UID`, `TAS_UID`, `PRO_UID`)
+)ENGINE=InnoDB  DEFAULT CHARSET='utf8' COMMENT='Data calculated users by task';
+#-----------------------------------------------------------------------------
+#-- PRO_REPORTING
+#-----------------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `PRO_REPORTING`;
+
+
+CREATE TABLE `PRO_REPORTING`
+(
+    `PRO_UID`                   VARCHAR(32)  NOT NULL,
+    `MONTH`                     INTEGER default 0 NOT NULL,
+    `YEAR`                      INTEGER default 0 NOT NULL,
+    `AVG_TIME`                  DECIMAL(7,2) default 0,
+    `SDV_TIME`                  DECIMAL(7,2) default 0,
+    `TOTAL_CASES_IN`            DECIMAL(7,2) default 0,
+    `TOTAL_CASES_OUT`           DECIMAL(7,2) default 0,
+    `CONFIGURED_PROCESS_TIME`   DECIMAL(7,2) default 0,
+    `CONFIGURED_PROCESS_COST`   DECIMAL(7,2) default 0,
+    `TOTAL_CASES_OPEN`          DECIMAL(7,2) default 0,
+    `TOTAL_CASES_OVERDUE`       DECIMAL(7,2) default 0,
+    `TOTAL_CASES_ON_TIME`       DECIMAL(7,2) default 0,
+    PRIMARY KEY (`PRO_UID`,`MONTH`,`YEAR`)
+)ENGINE=InnoDB  DEFAULT CHARSET='utf8' COMMENT='Data calculated by process';
+#-----------------------------------------------------------------------------
+#-- DASHBOARD
+#-----------------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `DASHBOARD`;
+
+
+CREATE TABLE `DASHBOARD`
+(
+    `DAS_UID`           VARCHAR(32) default '' NOT NULL,
+    `DAS_TITLE`         VARCHAR(255) default '' NOT NULL,
+    `DAS_DESCRIPTION`   MEDIUMTEXT,
+    `DAS_CREATE_DATE`   DATETIME  NOT NULL,
+    `DAS_UPDATE_DATE`   DATETIME,
+    `DAS_STATUS`        TINYINT default 1 NOT NULL,
+    PRIMARY KEY (`DAS_UID`)
+)ENGINE=InnoDB  DEFAULT CHARSET='utf8' COMMENT='Dashboard definitions';
+#-----------------------------------------------------------------------------
+#-- DASHBOARD_INDICATOR
+#-----------------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `DASHBOARD_INDICATOR`;
+
+
+CREATE TABLE `DASHBOARD_INDICATOR`
+(
+    `DAS_IND_UID`               VARCHAR(32) default '' NOT NULL,
+    `DAS_UID`                   VARCHAR(32) default '' NOT NULL,
+    `DAS_IND_TYPE`              VARCHAR(32) default '' NOT NULL,
+    `DAS_IND_TITLE`             VARCHAR(255) default '' NOT NULL,
+    `DAS_IND_GOAL`              DECIMAL(7,2) default 0,
+    `DAS_IND_DIRECTION`         TINYINT default 2 NOT NULL,
+    `DAS_UID_PROCESS`           VARCHAR(32) default '' NOT NULL,
+    `DAS_IND_FIRST_FIGURE`      VARCHAR(32) default '',
+    `DAS_IND_FIRST_FREQUENCY`   VARCHAR(32) default '',
+    `DAS_IND_SECOND_FIGURE`     VARCHAR(32) default '',
+    `DAS_IND_SECOND_FREQUENCY`  VARCHAR(32) default '',
+    `DAS_IND_CREATE_DATE`       DATETIME  NOT NULL,
+    `DAS_IND_UPDATE_DATE`       DATETIME,
+    `DAS_IND_STATUS`            TINYINT default 1 NOT NULL,
+    PRIMARY KEY (`DAS_IND_UID`),
+    KEY `indexDashboard`(`DAS_UID`, `DAS_IND_TYPE`),
+    CONSTRAINT `fk_dashboard_indicator_dashboard`
+        FOREIGN KEY (`DAS_UID`)
+        REFERENCES `DASHBOARD` (`DAS_UID`)
+)ENGINE=InnoDB  DEFAULT CHARSET='utf8' COMMENT='Dashboard Indicators definitions.';
+#-----------------------------------------------------------------------------
+#-- DASHBOARD_DAS_IND
+#-----------------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `DASHBOARD_DAS_IND`;
+
+
+CREATE TABLE `DASHBOARD_DAS_IND`
+(
+    `DAS_UID`               VARCHAR(32) default '' NOT NULL,
+    `OWNER_UID`             VARCHAR(32) default '' NOT NULL,
+    `OWNER_TYPE`            VARCHAR(15) default '' NOT NULL,
+    PRIMARY KEY (`DAS_UID`,`OWNER_UID`),
+    CONSTRAINT `fk_dashboard_indicator_dashboard_das_ind`
+        FOREIGN KEY (`DAS_UID`)
+        REFERENCES `DASHBOARD` (`DAS_UID`)
+)ENGINE=InnoDB  DEFAULT CHARSET='utf8' COMMENT='Dashboard definitions to user.';
+#-----------------------------------------------------------------------------
+#-- CATALOG
+#-----------------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `CATALOG`;
+
+
+CREATE TABLE `CATALOG`
+(
+    `CAT_UID`           VARCHAR(32) default '' NOT NULL,
+    `CAT_LABEL_ID`      VARCHAR(100) default '' NOT NULL,
+    `CAT_TYPE`          VARCHAR(100) default '' NOT NULL,
+    `CAT_FLAG`          VARCHAR(50) default '',
+    `CAT_OBSERVATION`   MEDIUMTEXT,
+    `CAT_CREATE_DATE`   DATETIME  NOT NULL,
+    `CAT_UPDATE_DATE`   DATETIME,
+    PRIMARY KEY (`CAT_UID`, `CAT_TYPE`),
+    KEY `indexType`( `CAT_TYPE`)
+)ENGINE=InnoDB  DEFAULT CHARSET='utf8' COMMENT='Definitions catalog.';
+# This restores the fkey checks, after having unset them earlier
+SET FOREIGN_KEY_CHECKS = 1;

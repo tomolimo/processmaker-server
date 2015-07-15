@@ -86,7 +86,9 @@ Ext.onReady(function(){
         Ext.get('pathXmlformsSpan').dom.innerHTML  = (response.pathXmlforms.result ? okImage : badImage);
         Ext.get('pathPublicSpan').dom.innerHTML    = (response.pathPublic.result ? okImage : badImage);
         Ext.get('pathSharedSpan').dom.innerHTML    = (response.pathShared.result ? okImage : badImage);
-        Ext.get('pathLogFileSpan').dom.innerHTML    = (response.pathLogFile.result ? okImage : badImage);
+        Ext.get('pathLogFileSpan').dom.innerHTML   = (response.pathLogFile.result ? okImage : badImage);
+        Ext.get('pathTranslationsSpan').dom.innerHTML    = (response.pathTranslations.result ? okImage : badImage);
+        Ext.get('pathTranslationsMafeSpan').dom.innerHTML   = (response.pathTranslationsMafe.result ? okImage : badImage);
 
         wizard.onClientValidation(1,
           response.pathConfig.result &&
@@ -95,7 +97,9 @@ Ext.onReady(function(){
           response.pathXmlforms.result &&
           response.pathPublic.result &&
           response.pathShared.result &&
-          response.pathLogFile.result
+          response.pathLogFile.result &&          
+          response.pathTranslations.result &&
+          response.pathTranslationsMafe.result
         );
 
         wizard.showLoadMask(false);
@@ -115,7 +119,9 @@ Ext.onReady(function(){
         'pathXmlforms': Ext.getCmp('pathXmlforms').getValue(),
         'pathShared': Ext.getCmp('pathShared').getValue(),
         'pathLogFile': Ext.getCmp('pathLogFile').getValue(),
-        'pathPublic': Ext.getCmp('pathPublic').getValue()
+        'pathPublic': Ext.getCmp('pathPublic').getValue(),
+        'pathTranslations': Ext.getCmp('pathTranslations').getValue(),
+        'pathTranslationsMafe': Ext.getCmp('pathTranslationsMafe').getValue()
       }
     });
   }
@@ -201,10 +207,10 @@ Ext.onReady(function(){
     Ext.Ajax.request({
       url: 'checkDatabases',
       success: function(response){
-        var existMsg = '<span style="color: red;">' + _('ID_EXIST') + '</span>';
-        var noExistsMsg = '<span style="color: green;">' + _('ID_NO_EXIST') + '</span>';
+        var existMsg = '<span style="color: red;">' + _('ID_NOT_AVAILABLE_DATABASE') + '</span>';
+        var noExistsMsg = '<span style="color: green;">' + _('ID_AVAILABLE_DATABASE') + '</span>';
         var response = Ext.util.JSON.decode(response.responseText);
-        Ext.get('wfDatabaseSpan').dom.innerHTML = (response.wfDatabaseExists ? existMsg : noExistsMsg);
+        Ext.get('database_message').dom.innerHTML = (response.wfDatabaseExists ? existMsg : noExistsMsg);
 
         var dbFlag = ((!response.wfDatabaseExists) || Ext.getCmp('deleteDB').getValue());
         wizard.onClientValidation(4, dbFlag);
@@ -411,6 +417,22 @@ Ext.onReady(function(){
                 id: 'pathPublic',
                 width: 430,
                 value: path_public,
+                disabled: true
+              },
+              {
+                xtype: 'textfield',
+                fieldLabel: '<span id="pathTranslationsSpan"></span> ' + _('ID_TRANSLATIONS_DIRECTORY'),
+                id: 'pathTranslations',
+                width: 430,
+                value: path_translations,
+                disabled: true
+              },
+              {
+                xtype: 'textfield',
+                fieldLabel: '<span id="pathTranslationsMafeSpan"></span> ' + _('ID_MAFE_TRANSLATION_DIRECTORY'),
+                id: 'pathTranslationsMafe',
+                width: 430,
+                value: path_translationsMafe,
                 disabled: true
               },
               {
@@ -762,7 +784,7 @@ Ext.onReady(function(){
                  }),
                  {
                     xtype     : 'textfield',
-                    fieldLabel: _('ID_WF_DATABASE_NAME') + ' <span id="wfDatabaseSpan"></span>',
+                    fieldLabel: _('ID_WF_DATABASE_NAME'),
                     id : 'wfDatabase',
                     value  :'wf_workflow',
                     allowBlank : false,
@@ -776,6 +798,10 @@ Ext.onReady(function(){
                     listeners: {keyup: function() {
                       wizard.onClientValidation(4, false);
                     }}
+                  },
+                  {
+                    xtype     : 'displayfield',
+                    id  : 'database_message'
                   },
                   new Ext.form.Checkbox({
                     boxLabel   : _('ID_DELETE_DATABASES'),

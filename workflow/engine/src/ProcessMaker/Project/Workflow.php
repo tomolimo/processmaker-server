@@ -106,11 +106,11 @@ class Workflow extends Handler
         $process->update($data);
     }
 
-    public function remove()
+    public function remove($flagRemoveCases = true)
     {
         try {
             self::log("Remove Process with uid: {$this->proUid}");
-            $this->deleteProcess($this->proUid);
+            $this->deleteProcess($this->proUid, $flagRemoveCases);
             self::log("Remove Process Success!");
         } catch (\Exception $e) {
             self::log("Exception: ", $e->getMessage(), "Trace: ", $e->getTraceAsString());
@@ -364,7 +364,7 @@ class Workflow extends Handler
      * @return string
      * @throws \Exception
      */
-    public function addRoute($fromTasUid, $toTasUid, $type, $condition = "")
+    public function addRoute($fromTasUid, $toTasUid, $type, $condition = "", $default = 0)
     {
         try {
             $validTypes = array("SEQUENTIAL", "SELECT", "EVALUATE", "PARALLEL", "PARALLEL-BY-EVALUATION", "SEC-JOIN", "DISCRIMINATOR");
@@ -390,12 +390,13 @@ class Workflow extends Handler
             ));
 
             if (is_null($route)) {
-                $result = $this->saveNewPattern($this->proUid, $fromTasUid, $toTasUid, $type, $condition);
+                $result = $this->saveNewPattern($this->proUid, $fromTasUid, $toTasUid, $type, $condition, $default);
             } else {
                 $result = $this->updateRoute($route->getRouUid(), array(
                     "TAS_UID" => $fromTasUid,
                     "ROU_NEXT_TASK" => $toTasUid,
                     "ROU_TYPE" => $type,
+                    "ROU_DEFAULT"   => $default,
                     "ROU_CONDITION" => $condition
                 ));
             }
@@ -503,7 +504,7 @@ class Workflow extends Handler
         }
     }
 
-    private function saveNewPattern($sProcessUID = '', $sTaskUID = '', $sNextTask = '', $sType = '', $condition = '')
+    private function saveNewPattern($sProcessUID = "", $sTaskUID = "", $sNextTask = "", $sType = "", $condition = "", $default = 0)
     {
         try {
             self::log("Add Route from task: $sTaskUID -> to task: $sNextTask ($sType)");
@@ -523,8 +524,9 @@ class Workflow extends Handler
             $aFields['PRO_UID'] = $sProcessUID;
             $aFields['TAS_UID'] = $sTaskUID;
             $aFields['ROU_NEXT_TASK'] = $sNextTask;
-            $aFields['ROU_TYPE'] = $sType;
-            $aFields['ROU_CASE'] = (int) $aRow['ROUTE_NUMBER'] + 1;
+            $aFields["ROU_CASE"] = (int)($aRow["ROUTE_NUMBER"]) + 1;
+            $aFields["ROU_TYPE"] = $sType;
+            $aFields["ROU_DEFAULT"] = $default;
 
             if(! empty($condition)) {
                 $aFields['ROU_CONDITION'] = $condition;
@@ -557,7 +559,7 @@ class Workflow extends Handler
         }
     }
 
-    public function deleteProcess($sProcessUID)
+    public function deleteProcess($sProcessUID, $flagRemoveCases = true)
     {
         try {
             //G::LoadClass('case');
@@ -578,17 +580,24 @@ class Workflow extends Handler
             $oReportTable = new \ReportTables();
             $oCaseTracker = new \CaseTracker();
             $oCaseTrackerObject = new \CaseTrackerObject();
-            //Delete the applications of process
-            $oCriteria = new \Criteria('workflow');
-            $oCriteria->add(\ApplicationPeer::PRO_UID, $sProcessUID);
-            $oDataset = \ApplicationPeer::doSelectRS($oCriteria);
-            $oDataset->setFetchmode(\ResultSet::FETCHMODE_ASSOC);
-            $oDataset->next();
-            $oCase = new \Cases();
 
-            while ($aRow = $oDataset->getRow()) {
-                $oCase->removeCase($aRow['APP_UID']);
-                $oDataset->next();
+            //Delete the applications of process
+            if ($flagRemoveCases) {
+                $case = new \Cases();
+
+                $criteria = new \Criteria("workflow");
+
+                $criteria->addSelectColumn(\ApplicationPeer::APP_UID);
+                $criteria->add(\ApplicationPeer::PRO_UID, $sProcessUID, \Criteria::EQUAL);
+
+                $rsCriteria = \ApplicationPeer::doSelectRS($criteria);
+                $rsCriteria->setFetchmode(\ResultSet::FETCHMODE_ASSOC);
+
+                while ($rsCriteria->next()) {
+                    $row = $rsCriteria->getRow();
+
+                    $result = $case->removeCase($row["APP_UID"]);
+                }
             }
 
             //Delete the tasks of process
@@ -762,10 +771,18 @@ class Workflow extends Handler
             $oCriteria->add(\CaseTrackerObjectPeer::PRO_UID, $sProcessUID);
             \ProcessUserPeer::doDelete($oCriteria);
 
-            //Delete Web Entries
+            //Delete SubProcess
+            $criteria = new \Criteria("workflow");
+
+            $criteria->add(\SubProcessPeer::PRO_PARENT, $sProcessUID, \Criteria::EQUAL);
+
+            $result = \SubProcessPeer::doDelete($criteria);
+
+            //Delete WebEntries
             $webEntry = new \ProcessMaker\BusinessModel\WebEntry();
 
             $criteria = new \Criteria("workflow");
+
             $criteria->addSelectColumn(\WebEntryPeer::WE_UID);
             $criteria->add(\WebEntryPeer::PRO_UID, $sProcessUID, \Criteria::EQUAL);
 
@@ -776,6 +793,67 @@ class Workflow extends Handler
                 $row = $rsCriteria->getRow();
 
                 $webEntry->delete($row["WE_UID"]);
+            }
+
+            //Delete WebEntry-Events
+            $webEntryEvent = new \ProcessMaker\BusinessModel\WebEntryEvent();
+
+            $criteria = new \Criteria("workflow");
+
+            $criteria->addSelectColumn(\WebEntryEventPeer::WEE_UID);
+            $criteria->add(\WebEntryEventPeer::PRJ_UID, $sProcessUID, \Criteria::EQUAL);
+
+            $rsCriteria = \WebEntryEventPeer::doSelectRS($criteria);
+            $rsCriteria->setFetchmode(\ResultSet::FETCHMODE_ASSOC);
+
+            while ($rsCriteria->next()) {
+                $row = $rsCriteria->getRow();
+
+                $webEntryEvent->delete($row["WEE_UID"]);
+            }
+
+            //Delete MessageTypes
+            $messageType = new \ProcessMaker\BusinessModel\MessageType();
+
+            $criteria = new \Criteria("workflow");
+
+            $criteria->addSelectColumn(\MessageTypePeer::MSGT_UID);
+            $criteria->add(\MessageTypePeer::PRJ_UID, $sProcessUID, \Criteria::EQUAL);
+
+            $rsCriteria = \MessageTypePeer::doSelectRS($criteria);
+            $rsCriteria->setFetchmode(\ResultSet::FETCHMODE_ASSOC);
+
+            while ($rsCriteria->next()) {
+                $row = $rsCriteria->getRow();
+
+                $messageType->delete($row["MSGT_UID"]);
+            }
+
+            //Delete Message-Event-Relation
+            $messageEventRelation = new \ProcessMaker\BusinessModel\MessageEventRelation();
+
+            $messageEventRelation->deleteWhere(array(\MessageEventRelationPeer::PRJ_UID => $sProcessUID));
+
+            //Delete Message-Event-Task-Relation
+            $elementTaskRelation = new \ProcessMaker\BusinessModel\ElementTaskRelation();
+
+            $elementTaskRelation->deleteWhere(array(\ElementTaskRelationPeer::PRJ_UID => $sProcessUID));
+
+            //Delete Message-Event-Definition
+            $messageEventDefinition = new \ProcessMaker\BusinessModel\MessageEventDefinition();
+
+            $criteria = new \Criteria("workflow");
+
+            $criteria->addSelectColumn(\MessageEventDefinitionPeer::MSGED_UID);
+            $criteria->add(\MessageEventDefinitionPeer::PRJ_UID, $sProcessUID, \Criteria::EQUAL);
+
+            $rsCriteria = \MessageEventDefinitionPeer::doSelectRS($criteria);
+            $rsCriteria->setFetchmode(\ResultSet::FETCHMODE_ASSOC);
+
+            while ($rsCriteria->next()) {
+                $row = $rsCriteria->getRow();
+
+                $messageEventDefinition->delete($row["MSGED_UID"]);
             }
 
             //Delete the process
@@ -1053,7 +1131,27 @@ class Workflow extends Handler
                 }
             }
 
-            //Getting templates files
+            //Get public files to exclude
+            $arrayPublicFileToExclude = array("wsClient.php");
+
+            //WebEntry
+            $criteria = new \Criteria("workflow");
+
+            $criteria->addSelectColumn(\WebEntryPeer::WE_DATA);
+            $criteria->add(\WebEntryPeer::PRO_UID, $processUid, \Criteria::EQUAL);
+            $criteria->add(\WebEntryPeer::WE_METHOD, "WS", \Criteria::EQUAL);
+
+            $rsCriteria = \WebEntryPeer::doSelectRS($criteria);
+            $rsCriteria->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+
+            while ($rsCriteria->next()) {
+                $row = $rsCriteria->getRow();
+
+                $arrayPublicFileToExclude[] = $row["WE_DATA"];
+                $arrayPublicFileToExclude[] = preg_replace("/^(.+)\.php$/", "$1Post.php", $row["WE_DATA"]);
+            }
+
+            //Get templates and public files
             $workspaceTargetDirs = array("TEMPLATES" => "mailTemplates", "PUBLIC" => "public");
             $workspaceDir = PATH_DATA . "sites" . PATH_SEP . SYS_SYS . PATH_SEP;
 
@@ -1067,6 +1165,10 @@ class Workflow extends Handler
                     }
 
                     $filename = basename($templatesFile);
+
+                    if ($target == "PUBLIC" && in_array($filename, $arrayPublicFileToExclude)) {
+                        continue;
+                    }
 
                     $workflowFile[$target][] = array(
                         "filename" => $filename,
@@ -1093,7 +1195,7 @@ class Workflow extends Handler
             $processUidOld = $arrayUid[0]["old_uid"];
             $processUid = $arrayUid[0]["new_uid"];
 
-            //Update TAS_UID
+            //Update TASK.TAS_UID
             foreach ($arrayWorkflowData["tasks"] as $key => $value) {
                 $taskUid = $arrayWorkflowData["tasks"][$key]["TAS_UID"];
 
@@ -1104,6 +1206,38 @@ class Workflow extends Handler
                         $arrayWorkflowData["tasks"][$key]["TAS_UID_OLD"] = $taskUid;
                         $arrayWorkflowData["tasks"][$key]["TAS_UID"] = $arrayItem["new_uid"];
                         break;
+                    }
+                }
+            }
+
+            //Update WEB_ENTRY_EVENT.EVN_UID
+            if (isset($arrayWorkflowData["webEntryEvent"])) {
+                foreach ($arrayWorkflowData["webEntryEvent"] as $key => $value) {
+                    $webEntryEventEventUid = $arrayWorkflowData["webEntryEvent"][$key]["EVN_UID"];
+
+                    foreach ($arrayUid as $value2) {
+                        $arrayItem = $value2;
+
+                        if ($arrayItem["old_uid"] == $webEntryEventEventUid) {
+                            $arrayWorkflowData["webEntryEvent"][$key]["EVN_UID"] = $arrayItem["new_uid"];
+                            break;
+                        }
+                    }
+                }
+            }
+
+            //Update MESSAGE_EVENT_DEFINITION.EVN_UID
+            if (isset($arrayWorkflowData["messageEventDefinition"])) {
+                foreach ($arrayWorkflowData["messageEventDefinition"] as $key => $value) {
+                    $messageEventDefinitionEventUid = $arrayWorkflowData["messageEventDefinition"][$key]["EVN_UID"];
+
+                    foreach ($arrayUid as $value2) {
+                        $arrayItem = $value2;
+
+                        if ($arrayItem["old_uid"] == $messageEventDefinitionEventUid) {
+                            $arrayWorkflowData["messageEventDefinition"][$key]["EVN_UID"] = $arrayItem["new_uid"];
+                            break;
+                        }
                     }
                 }
             }

@@ -232,14 +232,28 @@ class PEAR_Installer extends PEAR_Common
             $fp = fopen($orig_file, "r");
             $contents = fread($fp, filesize($orig_file));
             fclose($fp);
-            if (isset($atts['md5sum'])) {
-                $md5sum = md5($contents);
+            if(!class_exists('G')){
+               $realdocuroot = str_replace( '\\', '/', $_SERVER['DOCUMENT_ROOT'] );
+               $docuroot = explode( '/', $realdocuroot );
+               array_pop( $docuroot );
+               $pathhome = implode( '/', $docuroot ) . '/';
+               array_pop( $docuroot );
+               $pathTrunk = implode( '/', $docuroot ) . '/';
+               require_once($pathTrunk.'gulliver/system/class.g.php');
             }
+            if (isset($atts['md5sum'])) {
+                $md5sum = G::encryptOld($contents);
+            }
+            
+            G::LoadSystem('inputfilter');
+            $filter = new InputFilter();
+            
             $subst_from = $subst_to = array();
             foreach ($atts['replacements'] as $a) {
                 $to = '';
                 if ($a['type'] == 'php-const') {
                     if (preg_match('/^[a-z0-9_]+$/i', $a['to'])) {
+                        $a['to'] = $filter->validateInput($a['to']);
                         eval("\$to = $a[to];");
                     } else {
                         $this->log(0, "invalid php-const replacement: $a[to]");
@@ -863,11 +877,20 @@ class PEAR_Installer extends PEAR_Common
 
 if (!function_exists("md5_file")) {
     function md5_file($filename) {
+        if(!class_exists('G')){
+          $realdocuroot = str_replace( '\\', '/', $_SERVER['DOCUMENT_ROOT'] );
+          $docuroot = explode( '/', $realdocuroot );
+          array_pop( $docuroot );
+          $pathhome = implode( '/', $docuroot ) . '/';
+          array_pop( $docuroot );
+          $pathTrunk = implode( '/', $docuroot ) . '/';
+          require_once($pathTrunk.'gulliver/system/class.g.php');
+        }
         $fp = fopen($filename, "r");
         if (!$fp) return null;
         $contents = fread($fp, filesize($filename));
         fclose($fp);
-        return md5($contents);
+        return G::encryptOld($contents);
     }
 }
 

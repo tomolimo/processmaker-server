@@ -22,6 +22,6 @@
     <en><![CDATA[End Date]]></en>
   </DEL_FINISH_DATE>
   <APP_TYPE type="dropdown" colWidth="100" colAlign="center" titleAlign="center">
-    <en><![CDATA[Action]]><option name="PAUSE"><![CDATA[Paused]]></option><option name="CANCEL"><![CDATA[Cancelled]]></option><option name=""><![CDATA[Routed]]></option></en>
+    <en><![CDATA[Action]]><option name="PAUSE"><![CDATA[Paused]]></option><option name="CANCEL"><![CDATA[Canceled]]></option><option name=""><![CDATA[Routed]]></option></en>
   </APP_TYPE>
 </dynaForm>

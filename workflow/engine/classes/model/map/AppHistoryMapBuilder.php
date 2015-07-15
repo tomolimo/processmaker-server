@@ -75,6 +75,8 @@ class AppHistoryMapBuilder
 
         $tMap->addColumn('DYN_UID', 'DynUid', 'string', CreoleTypes::VARCHAR, true, 32);
 
+        $tMap->addColumn('OBJ_TYPE', 'ObjType', 'string', CreoleTypes::VARCHAR, true, 20);
+
         $tMap->addColumn('USR_UID', 'UsrUid', 'string', CreoleTypes::VARCHAR, true, 32);
 
         $tMap->addColumn('APP_STATUS', 'AppStatus', 'string', CreoleTypes::VARCHAR, true, 100);
@@ -82,6 +84,8 @@ class AppHistoryMapBuilder
         $tMap->addColumn('HISTORY_DATE', 'HistoryDate', 'int', CreoleTypes::TIMESTAMP, false, null);
 
         $tMap->addColumn('HISTORY_DATA', 'HistoryData', 'string', CreoleTypes::LONGVARCHAR, true, null);
+
+        $tMap->addValidator('OBJ_TYPE', 'validValues', 'propel.validator.ValidValuesValidator', 'DYNAFORM|INPUT_DOCUMENT|OUTPUT_DOCUMENT|EXTERNAL|ASSIGN_TASK', 'Please enter a valid value for OBJ_TYPE');
 
     } // doBuild()
 

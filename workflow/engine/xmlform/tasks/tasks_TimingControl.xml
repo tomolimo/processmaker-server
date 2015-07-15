@@ -4,7 +4,7 @@
   <INDEX type="hidden"/>
   <IFORM type="hidden"/>
   <TAS_TRANSFER_FLY type="checkbox" value="TRUE" falsevalue="FALSE" defaultvalue="TRUE" group="1">
-    <en><![CDATA[Allow user defined timing control]]></en>
+    <en><![CDATA[Allow users to change the task duration in runtime]]></en>
   </TAS_TRANSFER_FLY>
   <TAS_DURATION type="text" size="3" maxlength="3" defaultvalue="1" required="1" validate="Any" mask="###" group="1" dependentfields="" linkfield="" strto="UPPER" readonly="0" noshowingrid="0" readonlyingrid="0" totalizeable="0" sqlconnection="">
     <en><![CDATA[Task duration]]></en>

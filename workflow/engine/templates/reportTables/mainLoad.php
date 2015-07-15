@@ -1,3 +1,11 @@
+<?php
+G::LoadSystem('inputfilter');
+$filter = new InputFilter();
+if(isset($_GET['gui'])) {
+    $_GET['gui'] = $filter->xssFilterHard($_GET['gui']);
+    $gui = $_GET['gui'];
+}
+?>
 <html>
 <style>
 .Footer{
@@ -12,7 +20,7 @@
 }
 </style>
 <body onresize="autoResizeScreen()" onload="autoResizeScreen()">
-<iframe name="frameMain" id="frameMain" src ="../reportTables/mainInit?PRO_UID=<?php echo $_GET['gui']?>" width="99%" height="200" frameborder="0">
+<iframe name="frameMain" id="frameMain" src ="../reportTables/mainInit?PRO_UID=<?php echo $filter->xssFilterHard($gui)?>" width="99%" height="200" frameborder="0">
   <p>Your browser does not support iframes.</p>
 </iframe>
 </body>

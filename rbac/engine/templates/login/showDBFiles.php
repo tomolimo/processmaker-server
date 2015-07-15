@@ -30,11 +30,14 @@
     die;
   }
 
-
+  G::LoadSystem('inputfilter');
+  $filter = new InputFilter();
+  
   echo "<table class='basicTable' cellpadding='5' cellspacing='0' border='0'>";
   echo "<tr class='Record'><td colspan='2' class='formTitle'>Please select a valid workspace to continue</td></tr>";
   echo "<tr valign='top'>";
   $curPage = getenv( "REQUEST_URI" );
+  $curPage = $filter->xssFilterHard($curPage,"url");
   //running the while loop
   $first = 0;
   while ($file = readdir($dir_handle))

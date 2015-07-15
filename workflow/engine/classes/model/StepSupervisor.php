@@ -187,14 +187,12 @@ class StepSupervisor extends BaseStepSupervisor
             $oCriteria->add( StepSupervisorPeer::STEP_POSITION, $iPosition, '>' );
             $oDataset = StepSupervisorPeer::doSelectRS( $oCriteria );
             $oDataset->setFetchmode( ResultSet::FETCHMODE_ASSOC );
-            $oDataset->next();
-            var_dump( StepSupervisorPeer::doCount( $oCriteria ) );
-            while ($aRow = $oDataset->getRow()) {
-                var_dump( $aRow );
-                echo "\n";
+
+            while ($oDataset->next()) {
+                $aRow = $oDataset->getRow();
+
                 $this->update( array ('STEP_UID' => $aRow['STEP_UID'],'PRO_UID' => $aRow['PRO_UID'],'STEP_TYPE_OBJ' => $aRow['STEP_TYPE_OBJ'],'STEP_UID_OBJ' => $aRow['STEP_UID_OBJ'],'STEP_POSITION' => $aRow['STEP_POSITION'] - 1
                 ) );
-                $oDataset->next();
             }
         } catch (Exception $oException) {
             throw $Exception;
@@ -243,7 +241,7 @@ class StepSupervisor extends BaseStepSupervisor
         $oCriteria->add( StepSupervisorPeer::STEP_TYPE_OBJ, 'DYNAFORM' );
         $oDataset = StepSupervisorPeer::doSelectRS( $oCriteria );
         $oDataset->setFetchmode( ResultSet::FETCHMODE_ASSOC );
-        while($oDataset->next()) {
+        while ($oDataset->next()) {
             $res[] = $oDataset->getRow();
         }
         return $res;

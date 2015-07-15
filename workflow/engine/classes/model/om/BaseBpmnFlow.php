@@ -136,6 +136,12 @@ abstract class BaseBpmnFlow extends BaseObject implements Persistent
     protected $flo_state;
 
     /**
+     * The value for the flo_position field.
+     * @var        int
+     */
+    protected $flo_position = 0;
+
+    /**
      * @var        BpmnProject
      */
     protected $aBpmnProject;
@@ -355,6 +361,17 @@ abstract class BaseBpmnFlow extends BaseObject implements Persistent
     {
 
         return $this->flo_state;
+    }
+
+    /**
+     * Get the [flo_position] column value.
+     * 
+     * @return     int
+     */
+    public function getFloPosition()
+    {
+
+        return $this->flo_position;
     }
 
     /**
@@ -762,6 +779,28 @@ abstract class BaseBpmnFlow extends BaseObject implements Persistent
     } // setFloState()
 
     /**
+     * Set the value of [flo_position] column.
+     * 
+     * @param      int $v new value
+     * @return     void
+     */
+    public function setFloPosition($v)
+    {
+
+        // Since the native PHP type for this column is integer,
+        // we will cast the input value to an int (if it is not).
+        if ($v !== null && !is_int($v) && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->flo_position !== $v || $v === 0) {
+            $this->flo_position = $v;
+            $this->modifiedColumns[] = BpmnFlowPeer::FLO_POSITION;
+        }
+
+    } // setFloPosition()
+
+    /**
      * Hydrates (populates) the object variables with values from the database resultset.
      *
      * An offset (1-based "start column") is specified so that objects can be hydrated
@@ -814,12 +853,14 @@ abstract class BaseBpmnFlow extends BaseObject implements Persistent
 
             $this->flo_state = $rs->getString($startcol + 17);
 
+            $this->flo_position = $rs->getInt($startcol + 18);
+
             $this->resetModified();
 
             $this->setNew(false);
 
             // FIXME - using NUM_COLUMNS may be clearer.
-            return $startcol + 18; // 18 = BpmnFlowPeer::NUM_COLUMNS - BpmnFlowPeer::NUM_LAZY_LOAD_COLUMNS).
+            return $startcol + 19; // 19 = BpmnFlowPeer::NUM_COLUMNS - BpmnFlowPeer::NUM_LAZY_LOAD_COLUMNS).
 
         } catch (Exception $e) {
             throw new PropelException("Error populating BpmnFlow object", $e);
@@ -1115,6 +1156,9 @@ abstract class BaseBpmnFlow extends BaseObject implements Persistent
             case 17:
                 return $this->getFloState();
                 break;
+            case 18:
+                return $this->getFloPosition();
+                break;
             default:
                 return null;
                 break;
@@ -1153,6 +1197,7 @@ abstract class BaseBpmnFlow extends BaseObject implements Persistent
             $keys[15] => $this->getFloX2(),
             $keys[16] => $this->getFloY2(),
             $keys[17] => $this->getFloState(),
+            $keys[18] => $this->getFloPosition(),
         );
         return $result;
     }
@@ -1237,6 +1282,9 @@ abstract class BaseBpmnFlow extends BaseObject implements Persistent
                 break;
             case 17:
                 $this->setFloState($value);
+                break;
+            case 18:
+                $this->setFloPosition($value);
                 break;
         } // switch()
     }
@@ -1333,6 +1381,10 @@ abstract class BaseBpmnFlow extends BaseObject implements Persistent
             $this->setFloState($arr[$keys[17]]);
         }
 
+        if (array_key_exists($keys[18], $arr)) {
+            $this->setFloPosition($arr[$keys[18]]);
+        }
+
     }
 
     /**
@@ -1414,6 +1466,10 @@ abstract class BaseBpmnFlow extends BaseObject implements Persistent
 
         if ($this->isColumnModified(BpmnFlowPeer::FLO_STATE)) {
             $criteria->add(BpmnFlowPeer::FLO_STATE, $this->flo_state);
+        }
+
+        if ($this->isColumnModified(BpmnFlowPeer::FLO_POSITION)) {
+            $criteria->add(BpmnFlowPeer::FLO_POSITION, $this->flo_position);
         }
 
 
@@ -1503,6 +1559,8 @@ abstract class BaseBpmnFlow extends BaseObject implements Persistent
         $copyObj->setFloY2($this->flo_y2);
 
         $copyObj->setFloState($this->flo_state);
+
+        $copyObj->setFloPosition($this->flo_position);
 
 
         $copyObj->setNew(true);

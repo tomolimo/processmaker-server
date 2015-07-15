@@ -18,7 +18,7 @@ class DashletInstance extends BaseDashletInstance
 {
     private $filterThisFields = array('DAS_INS_UID', 'DAS_UID', 'DAS_INS_OWNER_TYPE', 'DAS_INS_OWNER_UID',
                                     'DAS_INS_CREATE_DATE', 'DAS_INS_UPDATE_DATE', 'DAS_INS_STATUS',
-                                    'pmos_generik', 'ys-admin-tabpanel', 'PHPSESSID');
+                                    "pm_sys_sys", "ys-admin-tabpanel", "PHPSESSID");
 
     public function load($dasInsUid)
     {

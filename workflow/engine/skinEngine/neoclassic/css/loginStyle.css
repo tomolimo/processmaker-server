@@ -1,0 +1,287 @@
+/*
+*  LOGIN PM3 STYLES
+*/
+
+@font-face {
+        font-family: "Chivo";
+        font-style: normal;
+        font-weight: normal;
+        src: local("?"), url("/fonts/Chivo-Regular.ttf") format("truetype");
+    }
+
+  body.login {
+    background-color: #444;
+    background: url(/images/backgroundpm3.jpg);
+    background-size: cover;
+}
+
+.vertical-offset-100 {
+    padding-top: 90px;
+}
+
+img.img-responsive {
+    margin-bottom: 20px;
+}
+.img-responsive {
+    display: block;
+    height: auto;
+    margin: auto;
+    max-width: 100%;
+}
+
+.login .panel {
+    border-radius: 0;
+    padding: 20px;
+}
+.panel {
+   background-color: rgba(255, 255, 255, 0.8);
+    border: 1px solid transparent;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+    margin-bottom: 20px;
+    margin-left: 50px;
+    margin-right: 50px;
+    -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+}
+
+.login .panel-default > .panel-heading {
+    background: none repeat scroll 0 0 transparent;
+}
+
+
+.login .panel-heading {
+    border-bottom: 1px solid transparent;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    padding: 5px 1px;
+}
+
+
+.module_app_input___gray {
+    font-family: "Chivo",sans-serif; 
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+    color: #555;
+    display: block;
+    font-size: 14px;
+    height: 34px;
+    line-height: 1.42857;
+    padding: 6px 12px;
+    transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+    width: 100%;
+}
+.login .module_app_input___gray_file{
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+    color: #555;
+    display: block;
+    font-size: 14px;
+    //height: 45px;
+    box-sizing: border-box;
+    //padding-top: 12px;
+    line-height: 1.42857;
+    //padding: 9px 12px;
+    transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+    width: 100%;
+}
+.form-signin .module_app_input___gray {
+    border-radius: 0;
+    box-sizing: border-box;
+    color: #444;
+    font-family: "Open Sans",Arial,Helvetica,sans-serif;
+    //font-family: "Chivo",sans-serif; 
+    font-size: 16px;
+    height: 45px;
+    padding: 10px;
+    position: relative;
+    margin-bottom: 6px;
+}
+
+
+.form-signin .module_app_input___gray:-ms-input-placeholder {
+    font-family: "Open Sans",Arial,Helvetica,sans-serif;    
+    color:#999;
+  }
+
+.module_app_input___gray::-moz-placeholder {
+    color: #999;
+    opacity: 1;
+}
+
+.login .panel h3 {
+    margin-bottom: 8px;
+}
+h1, h2, h3, h4, h5, h6 {
+    color: #444;
+    font-family: "Montserrat",sans-serif;
+    font-weight: 400;
+    margin: 0 0 30px;
+}
+p {
+    font-size: 16px;
+    line-height: 1.5em;
+    margin: 0 0 10px;
+}
+
+.panel-body table{
+	width: 100%;
+}
+
+.button-login-cancel{
+    background-image: none;
+    width: 100%;  
+    color: #fff;
+    border-radius: 6px;
+    font-size: 18px;
+    line-height: 1.33;
+    padding: 10px 16px;
+    display: block;
+    padding-left: 0;
+    padding-right: 0;
+    width: 100%;
+    background: none repeat scroll 0 0 #e4655f;
+    border: 1px solid #e14333;
+    color: #fff;
+    font-weight: 700;
+    //transition: all 0.3s ease-in-out 0s;
+    max-width: 400px;
+    filter:none; 
+}
+
+.button-login-cancel:hover{
+   background-color: #e14333; 
+   background-image:none;
+   color: #fff;
+   filter:none;   
+}
+
+.button-login-success{
+    background-image: none;
+    width: 100%;  
+    color: #fff;
+    border-radius: 6px;
+    font-size: 18px;
+    line-height: 1.33;
+    padding: 10px 16px;
+    display: block;
+    padding-left: 0;
+    padding-right: 0;
+    width: 100%;
+    background: none repeat scroll 0 0 #1fbc99;
+    border: 1px solid #1fbc99;
+    color: #fff;
+    font-weight: 700;
+    //transition: all 0.3s ease-in-out 0s;
+    max-width: 400px;
+    filter:none;    
+}
+
+.button-login-success:hover{
+   background-color: #1ba385; 
+   background-image:none;
+   color: #fff;
+   filter:none;   
+}
+
+
+.login-message{
+    border: 1px solid transparent;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    padding: 15px;    
+    text-align: center;
+    font-size: 13px;
+    line-height: 1.42857;
+}
+
+.login #temporalMessageWARNING{
+    padding: 15px;
+    background-color: #ffc85c;
+    border-color: #db9d22;
+    color: #4d380d;    
+}
+
+.login #temporalMessageERROR{
+    padding: 15px;
+     background-color: #e87a75;
+    border-color: #e14333;
+    color: #5a1212;  
+}
+
+.login #temporalMessageINFO{
+    padding: 15px;
+    background-color: #44afff;
+    border-color: #2481c5;
+    color: #0a263c;
+}
+
+
+.login #temporalMessageTD {
+    border-width: 0px;
+    font-size: normal 6pt !important;
+    height: 25px !important;
+    padding: 0 0px !important;
+    background-size: 100% 100% !important;
+    font-size: 11px;    
+}
+
+.footer-login span{
+    color: white;
+    font-weight: 900;
+    font-size: 12px;
+}
+
+.login_result span{
+    margin-bottom: 6px;
+    display: block;
+}
+
+
+.login .module_app_inputFailed___gray{
+    font-family: "Chivo",sans-serif; 
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+    color: #555;
+    display: block;
+    font-size: 14px;
+    height: 45px;
+    line-height: 1.42857;
+    padding: 9px 12px;
+    transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+    width: 100%;
+    border:1px solid #e14333;
+}
+
+.page-wrap{
+    height: auto;
+    margin: 0 auto -60px;
+    min-height: 95%;
+    padding: 0 0 60px;
+}
+
+.page-wrap:after{
+    width: 100%;
+    display:block;
+    clear:both;
+}
+ 
+.footer-login{
+    text-align: center;
+    height: auto;
+    margin: -0px auto 0;
+}
+
+#form[FORGOT_PASWORD_LINK]{
+    font-family: Chivo;
+    font-size: 14px;
+    padding-top: 10px;    
+}

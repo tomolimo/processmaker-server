@@ -25,6 +25,9 @@
   * @Date Aug 26th, 2009
   */
 
+G::LoadSystem('inputfilter');
+$filter = new InputFilter();
+$_POST = $filter->xssFilterHard($_POST);
 $request = $_POST['request'];
 
 switch ($request) {
@@ -32,6 +35,7 @@ switch ($request) {
         if (isset( $_POST['items'] )) {
             $items = $_POST['items'];
             $tmpfilename = $_SESSION['Current_Dynafom']['Parameters']['FILE'];
+            $tmpfilename = $filter->xssFilterHard($tmpfilename);
             G::LoadSystem( 'dynaformhandler' );
 
             $o = new dynaFormHandler( PATH_DYNAFORM . "{$tmpfilename}.xml" );
@@ -53,6 +57,7 @@ switch ($request) {
         break;
     case 'saveHidden':
         $tmpfilename = $_SESSION['Current_Dynafom']['Parameters']['FILE'];
+        $tmpfilename = $filter->xssFilterHard($tmpfilename);
         G::LoadSystem( 'dynaformhandler' );
         $o = new dynaFormHandler( PATH_DYNAFORM . "{$tmpfilename}.xml" );
         $hidden_items = Array ();

@@ -1,4 +1,8 @@
 <?php
+G::LoadSystem('inputfilter');
+$filter = new InputFilter();
+$_REQUEST = $filter->xssFilterHard($_REQUEST);
+
 if (! isset( $_REQUEST['action'] )) {
     $res['success'] = false;
     $res['error'] = $res['message'] = G::LoadTranslation('ID_REQUEST_ACTION');
@@ -162,7 +166,7 @@ function newSkin ($baseSkin = 'classic')
         $configFileFinal = PATH_CUSTOM_SKINS . $skinFolder . PATH_SEP . 'config.xml';
 
         $xmlConfiguration = file_get_contents( $configFileOriginal );
-
+        
         $workspace = ($_REQUEST['workspace'] == 'global') ? '' : SYS_SYS;
 
         $xmlConfigurationObj = G::xmlParser($xmlConfiguration);
@@ -315,6 +319,8 @@ function importSkin ()
 
 function exportSkin ($skinToExport = "")
 {
+    G::LoadSystem('inputfilter');
+    $filter = new InputFilter();
     try {
         if (! isset( $_REQUEST['SKIN_FOLDER_ID'] )) {
             throw (new Exception( G::LoadTranslation( 'ID_SKIN_NAME_REQUIRED' ) ));
@@ -325,6 +331,7 @@ function exportSkin ($skinToExport = "")
         $skinFolderBase = PATH_CUSTOM_SKINS . $skinName;
         $skinFolder = $skinFolderBase . PATH_SEP;
         $skinTar = PATH_CUSTOM_SKINS . $skinName . '.tar';
+        $skinTar = $filter->xssFilterHard($skinTar, 'path');
         if (! is_dir( $skinFolder )) {
             throw (new Exception( G::LoadTranslation( 'ID_SKIN_DOESNT_EXIST' ) ));
         }
@@ -349,17 +356,25 @@ function exportSkin ($skinToExport = "")
         $response['success'] = true;
         $response['message'] = $skinTar;
         G::auditLog("ExportSkin", "Skin Name: ".$skinName);
+        
+        $response = $filter->xssFilterHard($response);
+        
         print_r( G::json_encode( $response ) );
     } catch (Exception $e) {
         $response['success'] = false;
         $response['message'] = $e->getMessage();
+        $response = $filter->xssFilterHard($response);
         print_r( G::json_encode( $response ) );
     }
 }
 
 function deleteSkin ()
 {
+    G::LoadSystem('inputfilter');
+    $filter = new InputFilter();
     try {
+        $_REQUEST['SKIN_FOLDER_ID'] = $filter->xssFilterHard($_REQUEST['SKIN_FOLDER_ID']);
+    
         if (! (isset( $_REQUEST['SKIN_FOLDER_ID'] ))) {
             throw (new Exception( G::LoadTranslation( 'ID_SKIN_FOLDER_REQUIRED' ) ));
         }
@@ -378,6 +393,7 @@ function deleteSkin ()
     } catch (Exception $e) {
         $response['success'] = false;
         $response['error'] = $response['message'] = $e->getMessage();
+        $response = $filter->xssFilterHard($response);
         print_r( G::json_encode( $response ) );
     }
 }

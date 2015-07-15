@@ -1,6 +1,8 @@
 <?php
 namespace ProcessMaker\BusinessModel;
 
+use \G;
+
 class Variable
 {
     /**
@@ -19,7 +21,7 @@ class Variable
 
             $arrayData = array_change_key_case($arrayData, CASE_UPPER);
 
-            $this->existsName($processUid, $arrayData["VAR_NAME"]);
+            $this->existsName($processUid, $arrayData["VAR_NAME"], "");
 
             $this->throwExceptionFieldDefinition($arrayData);
 
@@ -127,11 +129,20 @@ class Variable
             $cnn = \Propel::getConnection("workflow");
             try {
                 $variable = \ProcessVariablesPeer::retrieveByPK($variableUid);
+                $dbConnection = \DbSourcePeer::retrieveByPK($variable->getVarDbconnection(), $variable->getPrjUid());
 
+                $oldVariable = array(
+                    "VAR_NAME" => $variable->getVarName(),
+                    "VAR_FIELD_TYPE" => $variable->getVarFieldType(),
+                    "VAR_DBCONNECTION" => $variable->getVarDbconnection(),
+                    "VAR_DBCONNECTION_LABEL" => $dbConnection !== null ? '[' . $dbConnection->getDbsServer() . ':' . $dbConnection->getDbsPort() . '] ' . $dbConnection->getDbsType() . ': ' . $dbConnection->getDbsDatabaseName() : 'PM Database',
+                    "VAR_SQL" => $variable->getVarSql(),
+                    "VAR_ACCEPTED_VALUES" => $variable->getVarAcceptedValues()
+                );
                 if ($variable->validate()) {
                     $cnn->begin();
                     if (isset($arrayData["VAR_NAME"])) {
-                        $this->existsName($processUid, $arrayData["VAR_NAME"]);
+                        $this->existsName($processUid, $arrayData["VAR_NAME"], $variableUid);
                         $variable->setVarName($arrayData["VAR_NAME"]);
                     }
                     if (isset($arrayData["VAR_FIELD_TYPE"])) {
@@ -161,6 +172,19 @@ class Variable
                     }
                     $variable->save();
                     $cnn->commit();
+                    //update dynaforms
+                    $dbConnection = \DbSourcePeer::retrieveByPK($variable->getVarDbconnection(), $variable->getPrjUid());
+                    $newVariable = array(
+                        "VAR_NAME" => $variable->getVarName(),
+                        "VAR_FIELD_TYPE" => $variable->getVarFieldType(),
+                        "VAR_DBCONNECTION" => $variable->getVarDbconnection(),
+                        "VAR_DBCONNECTION_LABEL" => $dbConnection !== null ? '[' . $dbConnection->getDbsServer() . ':' . $dbConnection->getDbsPort() . '] ' . $dbConnection->getDbsType() . ': ' . $dbConnection->getDbsDatabaseName() : 'PM Database',
+                        "VAR_SQL" => $variable->getVarSql(),
+                        "VAR_ACCEPTED_VALUES" => $variable->getVarAcceptedValues()
+                    );
+                    \G::LoadClass('pmDynaform');
+                    $pmDynaform = new \pmDynaform();
+                    $pmDynaform->synchronizeVariable($processUid, $newVariable, $oldVariable);
                 } else {
 
                     $msg = "";
@@ -198,7 +222,14 @@ class Variable
 
             $this->throwExceptionIfNotExistsVariable($variableUid);
 
-            $this->verifyUse($processUid, $variableUid);
+            $variable = $this->getVariable($processUid, $variableUid);
+            \G::LoadClass('pmDynaform');
+            $pmDynaform = new \pmDynaform();
+            $isUsed = $pmDynaform->isUsed($processUid, $variable);
+            if ($isUsed !== false) {
+                $titleDynaform=$pmDynaform->getDynaformTitle($isUsed);
+                throw new \Exception(\G::LoadTranslation("ID_VARIABLE_IN_USE", array($titleDynaform)));
+            }
             //Delete
             $criteria = new \Criteria("workflow");
 
@@ -240,9 +271,14 @@ class Variable
             $criteria->addSelectColumn(\ProcessVariablesPeer::VAR_NULL);
             $criteria->addSelectColumn(\ProcessVariablesPeer::VAR_DEFAULT);
             $criteria->addSelectColumn(\ProcessVariablesPeer::VAR_ACCEPTED_VALUES);
+            $criteria->addSelectColumn(\DbSourcePeer::DBS_SERVER);
+            $criteria->addSelectColumn(\DbSourcePeer::DBS_PORT);
+            $criteria->addSelectColumn(\DbSourcePeer::DBS_DATABASE_NAME);
+            $criteria->addSelectColumn(\DbSourcePeer::DBS_TYPE);
 
             $criteria->add(\ProcessVariablesPeer::PRJ_UID, $processUid, \Criteria::EQUAL);
             $criteria->add(\ProcessVariablesPeer::VAR_UID, $variableUid, \Criteria::EQUAL);
+            $criteria->addJoin(\ProcessVariablesPeer::VAR_DBCONNECTION, \DbSourcePeer::DBS_UID, \Criteria::LEFT_JOIN);
 
             $rsCriteria = \ProcessVariablesPeer::doSelectRS($criteria);
 
@@ -258,7 +294,8 @@ class Variable
                     'var_field_type' => $aRow['VAR_FIELD_TYPE'],
                     'var_field_size' => (int)$aRow['VAR_FIELD_SIZE'],
                     'var_label' => $aRow['VAR_LABEL'],
-                    'var_dbconnection' => $aRow['VAR_DBCONNECTION'],
+                    'var_dbconnection' => $aRow['VAR_DBCONNECTION'] === 'none' ? 'workflow' : $aRow['VAR_DBCONNECTION'],
+                    'var_dbconnection_label' => $aRow['DBS_SERVER'] !== null ? '[' . $aRow['DBS_SERVER'] . ':' . $aRow['DBS_PORT'] . '] ' . $aRow['DBS_TYPE'] . ': ' . $aRow['DBS_DATABASE_NAME'] : 'PM Database',
                     'var_sql' => $aRow['VAR_SQL'],
                     'var_null' => (int)$aRow['VAR_NULL'],
                     'var_default' => $aRow['VAR_DEFAULT'],
@@ -301,8 +338,13 @@ class Variable
             $criteria->addSelectColumn(\ProcessVariablesPeer::VAR_NULL);
             $criteria->addSelectColumn(\ProcessVariablesPeer::VAR_DEFAULT);
             $criteria->addSelectColumn(\ProcessVariablesPeer::VAR_ACCEPTED_VALUES);
+            $criteria->addSelectColumn(\DbSourcePeer::DBS_SERVER);
+            $criteria->addSelectColumn(\DbSourcePeer::DBS_PORT);
+            $criteria->addSelectColumn(\DbSourcePeer::DBS_DATABASE_NAME);
+            $criteria->addSelectColumn(\DbSourcePeer::DBS_TYPE);
 
             $criteria->add(\ProcessVariablesPeer::PRJ_UID, $processUid, \Criteria::EQUAL);
+            $criteria->addJoin(\ProcessVariablesPeer::VAR_DBCONNECTION, \DbSourcePeer::DBS_UID, \Criteria::LEFT_JOIN);
 
             $rsCriteria = \ProcessVariablesPeer::doSelectRS($criteria);
 
@@ -318,7 +360,8 @@ class Variable
                     'var_field_type' => $aRow['VAR_FIELD_TYPE'],
                     'var_field_size' => (int)$aRow['VAR_FIELD_SIZE'],
                     'var_label' => $aRow['VAR_LABEL'],
-                    'var_dbconnection' => $aRow['VAR_DBCONNECTION'],
+                    'var_dbconnection' => $aRow['VAR_DBCONNECTION'] === 'none' ? 'workflow' : $aRow['VAR_DBCONNECTION'],
+                    'var_dbconnection_label' => $aRow['DBS_SERVER'] !== null ? '[' . $aRow['DBS_SERVER'] . ':' . $aRow['DBS_PORT'] . '] ' . $aRow['DBS_TYPE'] . ': ' . $aRow['DBS_DATABASE_NAME'] : 'PM Database',
                     'var_sql' => $aRow['VAR_SQL'],
                     'var_null' => (int)$aRow['VAR_NULL'],
                     'var_default' => $aRow['VAR_DEFAULT'],
@@ -385,18 +428,29 @@ class Variable
      * @param string $variableName       Name
      *
      */
-    public function existsName($processUid, $variableName)
+    public function existsName($processUid, $variableName, $variableUidToExclude = "")
     {
         try {
             $criteria = new \Criteria("workflow");
             $criteria->addSelectColumn(\ProcessVariablesPeer::VAR_UID);
+            $criteria->addSelectColumn(\ProcessVariablesPeer::VAR_NAME);
+
+            if ($variableUidToExclude != "") {
+                $criteria->add(\ProcessVariablesPeer::VAR_UID, $variableUidToExclude, \Criteria::NOT_EQUAL);
+            }
+
             $criteria->add(\ProcessVariablesPeer::VAR_NAME, $variableName, \Criteria::EQUAL);
             $criteria->add(\ProcessVariablesPeer::PRJ_UID, $processUid, \Criteria::EQUAL);
             $rsCriteria = \ProcessVariablesPeer::doSelectRS($criteria);
             $rsCriteria->setFetchmode(\ResultSet::FETCHMODE_ASSOC);
             $rsCriteria->next();
-            if ($rsCriteria->getRow()) {
-                throw new \Exception(\G::LoadTranslation("DYNAFIELD_ALREADY_EXIST"));
+
+            while ($rsCriteria->next()) {
+                $row = $rsCriteria->getRow();
+
+                if ($variableName == $row["VAR_NAME"]) {
+                    throw new \Exception(\G::LoadTranslation("DYNAFIELD_ALREADY_EXIST"));
+                }
             }
         } catch (\Exception $e) {
             throw $e;
@@ -469,30 +523,11 @@ class Variable
             $process->throwExceptionIfNotExistsProcess($processUid, strtolower("PRJ_UID"));
 
             //Set data
-            $variableDbConnectionUid = "";
-            $variableSql = "";
-
-            $criteria = new \Criteria("workflow");
-
-            $criteria->addSelectColumn(\ProcessVariablesPeer::VAR_DBCONNECTION);
-            $criteria->addSelectColumn(\ProcessVariablesPeer::VAR_SQL);
-            $criteria->add(\ProcessVariablesPeer::PRJ_UID, $processUid, \Criteria::EQUAL);
-            $criteria->add(\ProcessVariablesPeer::VAR_NAME, $variableName, \Criteria::EQUAL);
-
-            $rsCriteria = \ProcessVariablesPeer::doSelectRS($criteria);
-            $rsCriteria->setFetchmode(\ResultSet::FETCHMODE_ASSOC);
-
-            if ($rsCriteria->next()) {
-                $row = $rsCriteria->getRow();
-
-                $variableDbConnectionUid = $row["VAR_DBCONNECTION"];
-                $variableSql = $row["VAR_SQL"];
-            } else {
-                throw new \Exception(\G::LoadTranslation("ID_PROCESS_VARIABLE_DOES_NOT_EXIST", array(strtolower("VAR_NAME"), $variableName)));
-            }
-
-            //Verify data
-            $this->throwExceptionIfSomeRequiredVariableSqlIsMissingInVariables($variableName, $variableSql, $arrayVariable);
+            \G::LoadClass('pmDynaform');
+            $pmDynaform = new \pmDynaform();
+            $field = $pmDynaform->searchField($arrayVariable["dyn_uid"], $arrayVariable["field_id"]);
+            $variableDbConnectionUid = $field !== null ? $field->dbConnection : "";
+            $variableSql = $field !== null ? $field->sql : "";
 
             //Get data
             $_SESSION["PROCESS"] = $processUid;
@@ -500,14 +535,16 @@ class Variable
             $cnn = \Propel::getConnection(($variableDbConnectionUid . "" != "")? $variableDbConnectionUid : "workflow");
             $stmt = $cnn->createStatement();
 
-            $rs = $stmt->executeQuery(\G::replaceDataField($variableSql, $arrayVariable), \ResultSet::FETCHMODE_NUM);
+            $replaceFields = G::replaceDataField($variableSql, $arrayVariable);
+
+            $rs = $stmt->executeQuery($replaceFields, \ResultSet::FETCHMODE_NUM);
 
             while ($rs->next()) {
                 $row = $rs->getRow();
 
                 $arrayRecord[] = array(
                     strtolower("VALUE") => $row[0],
-                    strtolower("TEXT")  => $row[1]
+                    strtolower("TEXT") => isset($row[1]) ? $row[1] : $row[0]
                 );
             }
 
@@ -586,5 +623,99 @@ class Variable
             throw $e;
         }
     }
-}
 
+    /**
+     * Get all records by execute SQL suggest
+     *
+     * @param string $processUid    Unique id of Process
+     * @param string $variableName  Variable name
+     * @param array  $arrayVariable The variables
+     *
+     * return array Return an array with all records
+     */
+    public function executeSqlSuggest($processUid, $variableName, array $arrayVariable = array())
+    {
+        try {
+            $arrayRecord = array();
+
+            //Verify data
+            $process = new \ProcessMaker\BusinessModel\Process();
+
+            $process->throwExceptionIfNotExistsProcess($processUid, strtolower("PRJ_UID"));
+
+            //Set data
+            $variableDbConnectionUid = "";
+            $variableSql = "";
+            $sqlLimit = "";
+            $variableSqlLimit = "";
+            $sqlConditionLike = "";
+
+            $criteria = new \Criteria("workflow");
+
+            $criteria->addSelectColumn(\ProcessVariablesPeer::VAR_DBCONNECTION);
+            $criteria->addSelectColumn(\ProcessVariablesPeer::VAR_SQL);
+            $criteria->add(\ProcessVariablesPeer::PRJ_UID, $processUid, \Criteria::EQUAL);
+            $criteria->add(\ProcessVariablesPeer::VAR_NAME, $variableName, \Criteria::EQUAL);
+
+            $rsCriteria = \ProcessVariablesPeer::doSelectRS($criteria);
+
+            $rsCriteria->setFetchmode(\ResultSet::FETCHMODE_ASSOC);
+            if ($rsCriteria->next()) {
+                $row = $rsCriteria->getRow();
+
+                $variableDbConnectionUid = $row["VAR_DBCONNECTION"];
+                $variableSql = $row["VAR_SQL"];
+            } else {
+                throw new \Exception(\G::LoadTranslation("ID_PROCESS_VARIABLE_DOES_NOT_EXIST", array(strtolower("VAR_NAME"), $variableName)));
+            }
+
+            //Verify data
+            $this->throwExceptionIfSomeRequiredVariableSqlIsMissingInVariables($variableName, $variableSql, $arrayVariable);
+
+            //Get data
+            $_SESSION["PROCESS"] = $processUid;
+
+            foreach ($arrayVariable as $keyRequest => $valueRequest) {
+                $keyRequest = strtoupper($keyRequest);
+
+                if ($keyRequest == 'LIMIT') {
+                    if (strpos($variableSql, 'LIMIT')) {
+                        $variableSqlLimit = explode("LIMIT", $variableSql);
+                        $sqlLimit = " LIMIT " . $variableSqlLimit[1];
+                        $variableSql = $variableSqlLimit[0];
+                    } else {
+                        $sqlLimit = " LIMIT ". 0 . ", " . $valueRequest;
+                    }
+                } else {
+                    if (strpos($variableSql, 'WHERE')) {
+                        $sqlConditionLike = " AND " . $keyRequest . " LIKE '%" . $valueRequest . "%'";
+                    } else {
+                        $sqlConditionLike = " WHERE " . $keyRequest . " LIKE '%" . $valueRequest . "%'";
+                    }
+                }
+            }
+
+            $sqlQuery = $variableSql . $sqlConditionLike . $sqlLimit;
+
+            $cnn = \Propel::getConnection(($variableDbConnectionUid . "" != "")? $variableDbConnectionUid : "workflow");
+            $stmt = $cnn->createStatement();
+            $replaceFields = G::replaceDataField($sqlQuery, $arrayVariable);
+
+            $rs = $stmt->executeQuery($replaceFields, \ResultSet::FETCHMODE_NUM);
+
+            while ($rs->next()) {
+                $row = $rs->getRow();
+
+                $arrayRecord[] = array(
+                    strtolower("VALUE") => $row[0],
+                    strtolower("TEXT")  => $row[1]
+                );
+            }
+
+            //Return
+            return $arrayRecord;
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
+}

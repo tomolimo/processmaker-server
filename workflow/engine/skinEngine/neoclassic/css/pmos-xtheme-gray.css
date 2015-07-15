@@ -438,12 +438,12 @@ button.x-btn-text:focus,
   background-image: url(/skins/neoclassic/images/icons_silk/sprites.png) !important;
   background-position: 0 -8497px !important;
 }
-.ICON_CONSOLIDATED_CASES {
+.ICON_CONSOLIDATED_CASES{
   /*ss_consolidated_cases*/
-
-  background-image: url(/skins/neoclassic/images/icons_silk/sprites.png) !important;
-  background-position: 0 -18500px !important;
+  background-image:url(/images/icons_silk/sprites.png) !important;
+  background-position:0 -18500px !important
 }
+
 .ICON_CASES_DELETE {
   background-image: url(/skins/neoclassic/images/delete-16x16.gif) !important;
 }
@@ -959,6 +959,13 @@ antes funcionaba.
   width: 15px !important;
   height: 15px !important;
 }
+
+.ICON_STRATEGIC_DASHBOARD {
+  background-image: url(/skins/neoclassic/images/dashboard.png) !important;
+  width: 15px !important;
+  height: 15px !important;
+}
+
 .ICON_PM_REQUIREMENTS {
   /*ss_wrench*/
 

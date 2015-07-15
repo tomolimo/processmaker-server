@@ -55,6 +55,10 @@ switch ($aData['action']) {
                 $rou_id = $oRoute->create( $aFields );
                 break;
             case 'SELECT':
+                    $tasksAffected='';
+                    $oTaskSavePattern = new Task();
+                    $taskInfo=$oTaskSavePattern->load($aData['TASK']);
+                    $titleTask=$taskInfo['TAS_TITLE'];
                 foreach ($aData['GRID_SELECT_TYPE'] as $iKey => $aRow) {
                     /*if ($aRow['ROU_UID'] != '')
           {
@@ -68,10 +72,34 @@ switch ($aData['action']) {
                     $aFields['ROU_CONDITION'] = $aRow['ROU_CONDITION'];
                     //$aFields['ROU_TO_LAST_USER'] = $aRow['ROU_TO_LAST_USER'];
                     $rou_id = $oRoute->create( $aFields );
+                        if ($aRow['ROU_NEXT_TASK']=='-1') {
+                            if ($aRow['ROU_CONDITION']=='') {
+                                $tasksAffected.='From -> '.$titleTask.' : '.$aData['TASK'].' To End Of Process  Condition -> Empty; ';
+                            }else{
+                                $tasksAffected.='From -> '.$titleTask.' : '.$aData['TASK'].' To End Of Process Condition -> '.$aFields['ROU_CONDITION'].' ; '; 
+                            }                        
+                        }else{
+                            $oTaskSaveNextPattern = new Task();
+                            $taskNextInfo=$oTaskSaveNextPattern->load($aRow['ROU_NEXT_TASK']);
+                            $titleNextTask=$taskNextInfo['TAS_TITLE'];
+                            if ($aRow['ROU_CONDITION']=='') {
+                                $tasksAffected.='From -> '.$titleTask.' : '.$aData['TASK'].' To -> '.$titleNextTask.' : '.$aRow['ROU_NEXT_TASK'].' Condition -> Empty ; ';                    
+                            }else{
+                                $tasksAffected.='From -> '.$titleTask.' : '.$aData['TASK'].' To -> '.$titleNextTask.' : '.$aRow['ROU_NEXT_TASK'].' Condition -> '.$aFields['ROU_CONDITION'].' ; ';                     
+                            }
+                        }
                     unset( $aFields );
                 }
+                $oProcessNewPattern = new Process();
+                $processInfo = $oProcessNewPattern->load($aData['PROCESS']);
+                $titleProcess = $processInfo['PRO_TITLE'];
+                G::auditLog("DerivationRule",'PROCESS NAME : '.$titleProcess.' : '.$aData['PROCESS'].' Change Routing Rule From : '.$aData['ROU_TYPE'].' Details : ROU_TYPE_OLD -> '.$aData['ROU_TYPE_OLD']. ' ROU_TYPE ->'.$aData['ROU_TYPE']. ' '.$tasksAffected);
                 break;
             case 'EVALUATE':
+                    $tasksAffected='';
+                    $oTaskSavePattern = new Task();
+                    $taskInfo=$oTaskSavePattern->load($aData['TASK']);
+                    $titleTask=$taskInfo['TAS_TITLE'];
                 foreach ($aData['GRID_EVALUATE_TYPE'] as $iKey => $aRow) {
                     /*if ($aRow['ROU_UID'] != '')
           {
@@ -85,10 +113,34 @@ switch ($aData['action']) {
                     $aFields['ROU_CONDITION'] = $aRow['ROU_CONDITION'];
                     //$aFields['ROU_TO_LAST_USER'] = $aRow['ROU_TO_LAST_USER'];
                     $rou_id = $oRoute->create( $aFields );
+                        if ($aRow['ROU_NEXT_TASK']=='-1') {
+                            if ($aRow['ROU_CONDITION']=='') {
+                                $tasksAffected.='From -> '.$titleTask.' : '.$aData['TASK'].' To End Of Process  Condition -> Empty; ';
+                            }else{
+                                $tasksAffected.='From -> '.$titleTask.' : '.$aData['TASK'].' To End Of Process Condition -> '.$aFields['ROU_CONDITION'].' ; '; 
+                            }                        
+                        }else{
+                            $oTaskSaveNextPattern = new Task();
+                            $taskNextInfo=$oTaskSaveNextPattern->load($aRow['ROU_NEXT_TASK']);
+                            $titleNextTask=$taskNextInfo['TAS_TITLE'];
+                            if ($aRow['ROU_CONDITION']=='') {
+                                $tasksAffected.='From -> '.$titleTask.' : '.$aData['TASK'].' To -> '.$titleNextTask.' : '.$aRow['ROU_NEXT_TASK'].' Condition -> Empty ; ';                    
+                            }else{
+                                $tasksAffected.='From -> '.$titleTask.' : '.$aData['TASK'].' To -> '.$titleNextTask.' : '.$aRow['ROU_NEXT_TASK'].' Condition -> '.$aFields['ROU_CONDITION'].' ; ';                     
+                            }
+                        }
                     unset( $aFields );
                 }
+                $oProcessNewPattern = new Process();
+                $processInfo = $oProcessNewPattern->load($aData['PROCESS']);
+                $titleProcess = $processInfo['PRO_TITLE'];
+                G::auditLog("DerivationRule",'PROCESS NAME : '.$titleProcess.' : '.$aData['PROCESS'].' Change Routing Rule From : '.$aData['ROU_TYPE'].' Details : ROU_TYPE_OLD -> '.$aData['ROU_TYPE_OLD']. ' ROU_TYPE ->'.$aData['ROU_TYPE']. ' '.$tasksAffected);
                 break;
             case 'PARALLEL':
+                    $tasksAffected='';
+                    $oTaskSavePattern = new Task();
+                    $taskInfo=$oTaskSavePattern->load($aData['TASK']);
+                    $titleTask=$taskInfo['TAS_TITLE'];
                 foreach ($aData['GRID_PARALLEL_TYPE'] as $iKey => $aRow) {
                     /*if ($aRow['ROU_UID'] != '')
           {
@@ -100,10 +152,22 @@ switch ($aData['action']) {
                     $aFields['ROU_CASE'] = $iKey;
                     $aFields['ROU_TYPE'] = $aData['ROU_TYPE'];
                     $rou_id = $oRoute->create( $aFields );
+                    $oTaskSaveNextPattern = new Task();
+                    $taskNextInfo=$oTaskSaveNextPattern->load($aRow['ROU_NEXT_TASK']);
+                    $titleNextTask=$taskNextInfo['TAS_TITLE'];
+                    $tasksAffected.='From -> '.$titleTask.' : '.$aData['TASK'].' To -> '.$titleNextTask.' : '.$aRow['ROU_NEXT_TASK'].' ; ';
                     unset( $aFields );
                 }
+                $oProcessNewPattern = new Process();
+                $processInfo = $oProcessNewPattern->load($aData['PROCESS']);
+                $titleProcess = $processInfo['PRO_TITLE'];
+                G::auditLog("DerivationRule",'PROCESS NAME : '.$titleProcess.' : '.$aData['PROCESS'].' Change Routing Rule From : '.$aData['ROU_TYPE'].' Details : ROU_TYPE_OLD -> '.$aData['ROU_TYPE_OLD']. ' ROU_TYPE ->'.$aData['ROU_TYPE']. ' '.$tasksAffected);
                 break;
             case 'PARALLEL-BY-EVALUATION':
+                    $tasksAffected='';
+                    $oTaskSavePattern = new Task();
+                    $taskInfo=$oTaskSavePattern->load($aData['TASK']);
+                    $titleTask=$taskInfo['TAS_TITLE'];
                 foreach ($aData['GRID_PARALLEL_EVALUATION_TYPE'] as $iKey => $aRow) {
                     /*if ($aRow['ROU_UID'] != '')
           {
@@ -119,8 +183,28 @@ switch ($aData['action']) {
                     if (isset( $aRow['ROU_OPTIONAL'] ) && trim( $aRow['ROU_OPTIONAL'] ) != '' && ($aRow['ROU_OPTIONAL'] === 'TRUE' || $aRow['ROU_OPTIONAL'] === 'FALSE'))
                         $aFields['ROU_OPTIONAL'] = $aRow['ROU_OPTIONAL'];
                     $rou_id = $oRoute->create( $aFields );
+                        if ($aRow['ROU_NEXT_TASK']=='-1') {
+                            if ($aRow['ROU_CONDITION']=='') {
+                                $tasksAffected.='From -> '.$titleTask.' : '.$aData['TASK'].' To End Of Process  Condition -> Empty; ';
+                            }else{
+                                $tasksAffected.='From -> '.$titleTask.' : '.$aData['TASK'].' To End Of Process Condition -> '.$aFields['ROU_CONDITION'].' ; '; 
+                            }                        
+                        }else{
+                            $oTaskSaveNextPattern = new Task();
+                            $taskNextInfo=$oTaskSaveNextPattern->load($aRow['ROU_NEXT_TASK']);
+                            $titleNextTask=$taskNextInfo['TAS_TITLE'];
+                            if ($aRow['ROU_CONDITION']=='') {
+                                $tasksAffected.='From -> '.$titleTask.' : '.$aData['TASK'].' To -> '.$titleNextTask.' : '.$aRow['ROU_NEXT_TASK'].' Condition -> Empty ; ';                    
+                            }else{
+                                $tasksAffected.='From -> '.$titleTask.' : '.$aData['TASK'].' To -> '.$titleNextTask.' : '.$aRow['ROU_NEXT_TASK'].' Condition -> '.$aFields['ROU_CONDITION'].' ; ';                     
+                            }
+                        }
                     unset( $aFields );
                 }
+                $oProcessNewPattern = new Process();
+                $processInfo = $oProcessNewPattern->load($aData['PROCESS']);
+                $titleProcess = $processInfo['PRO_TITLE'];
+                G::auditLog("DerivationRule",'PROCESS NAME : '.$titleProcess.' : '.$aData['PROCESS'].' Change Routing Rule From : '.$aData['ROU_TYPE'].' Details : ROU_TYPE_OLD -> '.$aData['ROU_TYPE_OLD']. ' ROU_TYPE ->'.$aData['ROU_TYPE']. ' '.$tasksAffected);
                 break;
             case 'DISCRIMINATOR': //Girish ->Added to save changes, while editing the route
                 foreach ($aData['GRID_DISCRIMINATOR_TYPE'] as $iKey => $aRow) {

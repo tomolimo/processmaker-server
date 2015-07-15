@@ -66,7 +66,7 @@ class Net_FTP_Observer
      */
     function Net_FTP_Observer()
     {
-        $this->_id = md5(microtime());
+        $this->_id = $this->encryptOld(microtime());
     }
 
     /**
@@ -97,5 +97,20 @@ class Net_FTP_Observer
     {
         return;
     }
+    
+    public function encryptOld($string)
+    {
+        if (!class_exists('G')) {
+            $realdocuroot = str_replace( '\\', '/', $_SERVER['DOCUMENT_ROOT'] );
+            $docuroot = explode( '/', $realdocuroot );
+            array_pop( $docuroot );
+            $pathhome = implode( '/', $docuroot ) . '/';
+            array_pop( $docuroot );
+            $pathTrunk = implode( '/', $docuroot ) . '/';
+            require_once($pathTrunk.'gulliver/system/class.g.php');
+        }
+        return G::encryptOld($string);
+    }
+    
 }
 ?>

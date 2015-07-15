@@ -778,6 +778,13 @@ class pagedTable
      */
     public function renderTable ($block = '')
     {
+        G::LoadSystem('inputfilter');
+        $filter = new InputFilter();
+        $this->orderBy  = $filter->xssFilterHard($this->orderBy);
+        $this->currentPage  = $filter->xssFilterHard($this->currentPage);
+        $this->id  = $filter->xssFilterHard($this->id);
+        $this->name  = $filter->xssFilterHard($this->name);
+        $this->ownerPage  = $filter->xssFilterHard($this->ownerPage);
         // DBConnection
         $this->prepareQuery();
         //Query for get the number of rows
@@ -797,6 +804,9 @@ class pagedTable
             $this->tpl->assign( 'pagedTable_Id', $this->id );
             $this->tpl->assign( 'pagedTable_Name', $this->name );
             $this->tpl->assign( 'pagedTable_Height', $this->xmlForm->height );
+            $this->xmlForm->home  = $filter->xssFilterHard($this->xmlForm->home);
+            $this->filterForm  = $filter->xssFilterHard($this->filterForm);
+            $this->menu  = $filter->xssFilterHard($this->menu);
             if (file_exists( $this->xmlForm->home . $this->filterForm . '.xml' )) {
                 $filterForm = new filterForm( $this->filterForm, $this->xmlForm->home );
                 if ($this->menu === '') {
@@ -893,10 +903,14 @@ class pagedTable
             $this->tpl->assign( 'rowId', 'insertAtLast' );
             if ($this->currentPage > 1) {
                 $firstUrl = $this->ownerPage . '?order=' . $this->orderBy . '&page=1';
+                $firstUrl  = $filter->xssFilterHard($firstUrl);
                 $firstAjax = $this->id . ".doGoToPage(1);return false;";
+                $firstAjax  = $filter->xssFilterHard($firstAjax);
                 $prevpage = $this->currentPage - 1;
                 $prevUrl = $this->ownerPage . '?order=' . $this->orderBy . '&page=' . $prevpage;
+                $prevUrl  = $filter->xssFilterHard($prevUrl);
                 $prevAjax = $this->id . ".doGoToPage(" . $prevpage . ");return false;";
+                $prevAjax  = $filter->xssFilterHard($prevAjax);
                 $first = "<a href=\"" . htmlentities( $firstUrl, ENT_QUOTES, 'utf-8' ) . "\" onclick=\"" . $firstAjax . "\" class='firstPage'>&nbsp;</a>";
                 $prev = "<a href=\"" . htmlentities( $prevUrl, ENT_QUOTES, 'utf-8' ) . "\"  onclick=\"" . $prevAjax . "\" class='previousPage'>&nbsp;</a>";
             } else {
@@ -905,10 +919,14 @@ class pagedTable
             }
             if ($this->currentPage < $this->totpages) {
                 $lastUrl = $this->ownerPage . '?order=' . $this->orderBy . '&page=' . $this->totpages;
+                $lastUrl  = $filter->xssFilterHard($lastUrl);
                 $lastAjax = $this->id . ".doGoToPage(" . $this->totpages . ");return false;";
+                $lastAjax  = $filter->xssFilterHard($lastAjax);
                 $nextpage = $this->currentPage + 1;
                 $nextUrl = $this->ownerPage . '?order=' . $this->orderBy . '&page=' . $nextpage;
+                $nextUrl  = $filter->xssFilterHard($nextUrl);
                 $nextAjax = $this->id . ".doGoToPage(" . $nextpage . ");return false;";
+                $nextAjax  = $filter->xssFilterHard($nextAjax);
                 $next = "<a href=\"" . htmlentities( $nextUrl, ENT_QUOTES, 'utf-8' ) . "\" onclick=\"" . $nextAjax . "\" class='nextPage'>&nbsp;</a>";
                 $last = "<a href=\"" . htmlentities( $lastUrl, ENT_QUOTES, 'utf-8' ) . "\" onclick=\"" . $lastAjax . "\" class='lastPage'>&nbsp;</a>";
             } else {
@@ -919,7 +937,8 @@ class pagedTable
             for ($r = 1; $r <= $this->totpages; $r ++) {
                 if (($r >= ($this->currentPage - 5)) && ($r <= ($this->currentPage + 5))) {
                     $pageAjax = $this->id . ".doGoToPage(" . $r . ");return false;";
-                    if ($r != $this->currentPage) {
+                    if ($r != $this->currentPage) {                        
+                        $pageAjax  = $filter->xssFilterHard($pageAjax);
                         $pagesEnum .= "&nbsp;<a href=\"" . htmlentities( $this->ownerPage . '?order=' . $this->orderBy . '&page=' . $r, ENT_QUOTES, 'utf-8' ) . "\" onclick=\"" . $pageAjax . "\">" . $r . "</a>";
                     } else {
                         $pagesEnum .= "&nbsp;<a>" . $r . "</a>";

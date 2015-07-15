@@ -184,6 +184,60 @@ abstract class BaseUsers extends BaseObject implements Persistent
     protected $usr_ux = 'NORMAL';
 
     /**
+     * The value for the usr_total_inbox field.
+     * @var        int
+     */
+    protected $usr_total_inbox = 0;
+
+    /**
+     * The value for the usr_total_draft field.
+     * @var        int
+     */
+    protected $usr_total_draft = 0;
+
+    /**
+     * The value for the usr_total_cancelled field.
+     * @var        int
+     */
+    protected $usr_total_cancelled = 0;
+
+    /**
+     * The value for the usr_total_participated field.
+     * @var        int
+     */
+    protected $usr_total_participated = 0;
+
+    /**
+     * The value for the usr_total_paused field.
+     * @var        int
+     */
+    protected $usr_total_paused = 0;
+
+    /**
+     * The value for the usr_total_completed field.
+     * @var        int
+     */
+    protected $usr_total_completed = 0;
+
+    /**
+     * The value for the usr_total_unassigned field.
+     * @var        int
+     */
+    protected $usr_total_unassigned = 0;
+
+    /**
+     * The value for the usr_cost_by_hour field.
+     * @var        double
+     */
+    protected $usr_cost_by_hour = 0;
+
+    /**
+     * The value for the usr_unit_cost field.
+     * @var        string
+     */
+    protected $usr_unit_cost = '';
+
+    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      * @var        boolean
@@ -565,6 +619,105 @@ abstract class BaseUsers extends BaseObject implements Persistent
     {
 
         return $this->usr_ux;
+    }
+
+    /**
+     * Get the [usr_total_inbox] column value.
+     * 
+     * @return     int
+     */
+    public function getUsrTotalInbox()
+    {
+
+        return $this->usr_total_inbox;
+    }
+
+    /**
+     * Get the [usr_total_draft] column value.
+     * 
+     * @return     int
+     */
+    public function getUsrTotalDraft()
+    {
+
+        return $this->usr_total_draft;
+    }
+
+    /**
+     * Get the [usr_total_cancelled] column value.
+     * 
+     * @return     int
+     */
+    public function getUsrTotalCancelled()
+    {
+
+        return $this->usr_total_cancelled;
+    }
+
+    /**
+     * Get the [usr_total_participated] column value.
+     * 
+     * @return     int
+     */
+    public function getUsrTotalParticipated()
+    {
+
+        return $this->usr_total_participated;
+    }
+
+    /**
+     * Get the [usr_total_paused] column value.
+     * 
+     * @return     int
+     */
+    public function getUsrTotalPaused()
+    {
+
+        return $this->usr_total_paused;
+    }
+
+    /**
+     * Get the [usr_total_completed] column value.
+     * 
+     * @return     int
+     */
+    public function getUsrTotalCompleted()
+    {
+
+        return $this->usr_total_completed;
+    }
+
+    /**
+     * Get the [usr_total_unassigned] column value.
+     * 
+     * @return     int
+     */
+    public function getUsrTotalUnassigned()
+    {
+
+        return $this->usr_total_unassigned;
+    }
+
+    /**
+     * Get the [usr_cost_by_hour] column value.
+     * 
+     * @return     double
+     */
+    public function getUsrCostByHour()
+    {
+
+        return $this->usr_cost_by_hour;
+    }
+
+    /**
+     * Get the [usr_unit_cost] column value.
+     * 
+     * @return     string
+     */
+    public function getUsrUnitCost()
+    {
+
+        return $this->usr_unit_cost;
     }
 
     /**
@@ -1168,6 +1321,198 @@ abstract class BaseUsers extends BaseObject implements Persistent
     } // setUsrUx()
 
     /**
+     * Set the value of [usr_total_inbox] column.
+     * 
+     * @param      int $v new value
+     * @return     void
+     */
+    public function setUsrTotalInbox($v)
+    {
+
+        // Since the native PHP type for this column is integer,
+        // we will cast the input value to an int (if it is not).
+        if ($v !== null && !is_int($v) && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->usr_total_inbox !== $v || $v === 0) {
+            $this->usr_total_inbox = $v;
+            $this->modifiedColumns[] = UsersPeer::USR_TOTAL_INBOX;
+        }
+
+    } // setUsrTotalInbox()
+
+    /**
+     * Set the value of [usr_total_draft] column.
+     * 
+     * @param      int $v new value
+     * @return     void
+     */
+    public function setUsrTotalDraft($v)
+    {
+
+        // Since the native PHP type for this column is integer,
+        // we will cast the input value to an int (if it is not).
+        if ($v !== null && !is_int($v) && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->usr_total_draft !== $v || $v === 0) {
+            $this->usr_total_draft = $v;
+            $this->modifiedColumns[] = UsersPeer::USR_TOTAL_DRAFT;
+        }
+
+    } // setUsrTotalDraft()
+
+    /**
+     * Set the value of [usr_total_cancelled] column.
+     * 
+     * @param      int $v new value
+     * @return     void
+     */
+    public function setUsrTotalCancelled($v)
+    {
+
+        // Since the native PHP type for this column is integer,
+        // we will cast the input value to an int (if it is not).
+        if ($v !== null && !is_int($v) && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->usr_total_cancelled !== $v || $v === 0) {
+            $this->usr_total_cancelled = $v;
+            $this->modifiedColumns[] = UsersPeer::USR_TOTAL_CANCELLED;
+        }
+
+    } // setUsrTotalCancelled()
+
+    /**
+     * Set the value of [usr_total_participated] column.
+     * 
+     * @param      int $v new value
+     * @return     void
+     */
+    public function setUsrTotalParticipated($v)
+    {
+
+        // Since the native PHP type for this column is integer,
+        // we will cast the input value to an int (if it is not).
+        if ($v !== null && !is_int($v) && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->usr_total_participated !== $v || $v === 0) {
+            $this->usr_total_participated = $v;
+            $this->modifiedColumns[] = UsersPeer::USR_TOTAL_PARTICIPATED;
+        }
+
+    } // setUsrTotalParticipated()
+
+    /**
+     * Set the value of [usr_total_paused] column.
+     * 
+     * @param      int $v new value
+     * @return     void
+     */
+    public function setUsrTotalPaused($v)
+    {
+
+        // Since the native PHP type for this column is integer,
+        // we will cast the input value to an int (if it is not).
+        if ($v !== null && !is_int($v) && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->usr_total_paused !== $v || $v === 0) {
+            $this->usr_total_paused = $v;
+            $this->modifiedColumns[] = UsersPeer::USR_TOTAL_PAUSED;
+        }
+
+    } // setUsrTotalPaused()
+
+    /**
+     * Set the value of [usr_total_completed] column.
+     * 
+     * @param      int $v new value
+     * @return     void
+     */
+    public function setUsrTotalCompleted($v)
+    {
+
+        // Since the native PHP type for this column is integer,
+        // we will cast the input value to an int (if it is not).
+        if ($v !== null && !is_int($v) && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->usr_total_completed !== $v || $v === 0) {
+            $this->usr_total_completed = $v;
+            $this->modifiedColumns[] = UsersPeer::USR_TOTAL_COMPLETED;
+        }
+
+    } // setUsrTotalCompleted()
+
+    /**
+     * Set the value of [usr_total_unassigned] column.
+     * 
+     * @param      int $v new value
+     * @return     void
+     */
+    public function setUsrTotalUnassigned($v)
+    {
+
+        // Since the native PHP type for this column is integer,
+        // we will cast the input value to an int (if it is not).
+        if ($v !== null && !is_int($v) && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->usr_total_unassigned !== $v || $v === 0) {
+            $this->usr_total_unassigned = $v;
+            $this->modifiedColumns[] = UsersPeer::USR_TOTAL_UNASSIGNED;
+        }
+
+    } // setUsrTotalUnassigned()
+
+    /**
+     * Set the value of [usr_cost_by_hour] column.
+     * 
+     * @param      double $v new value
+     * @return     void
+     */
+    public function setUsrCostByHour($v)
+    {
+
+        if ($this->usr_cost_by_hour !== $v || $v === 0) {
+            $this->usr_cost_by_hour = $v;
+            $this->modifiedColumns[] = UsersPeer::USR_COST_BY_HOUR;
+        }
+
+    } // setUsrCostByHour()
+
+    /**
+     * Set the value of [usr_unit_cost] column.
+     * 
+     * @param      string $v new value
+     * @return     void
+     */
+    public function setUsrUnitCost($v)
+    {
+
+        // Since the native PHP type for this column is string,
+        // we will cast the input to a string (if it is not).
+        if ($v !== null && !is_string($v)) {
+            $v = (string) $v;
+        }
+
+        if ($this->usr_unit_cost !== $v || $v === '') {
+            $this->usr_unit_cost = $v;
+            $this->modifiedColumns[] = UsersPeer::USR_UNIT_COST;
+        }
+
+    } // setUsrUnitCost()
+
+    /**
      * Hydrates (populates) the object variables with values from the database resultset.
      *
      * An offset (1-based "start column") is specified so that objects can be hydrated
@@ -1236,12 +1581,30 @@ abstract class BaseUsers extends BaseObject implements Persistent
 
             $this->usr_ux = $rs->getString($startcol + 25);
 
+            $this->usr_total_inbox = $rs->getInt($startcol + 26);
+
+            $this->usr_total_draft = $rs->getInt($startcol + 27);
+
+            $this->usr_total_cancelled = $rs->getInt($startcol + 28);
+
+            $this->usr_total_participated = $rs->getInt($startcol + 29);
+
+            $this->usr_total_paused = $rs->getInt($startcol + 30);
+
+            $this->usr_total_completed = $rs->getInt($startcol + 31);
+
+            $this->usr_total_unassigned = $rs->getInt($startcol + 32);
+
+            $this->usr_cost_by_hour = $rs->getFloat($startcol + 33);
+
+            $this->usr_unit_cost = $rs->getString($startcol + 34);
+
             $this->resetModified();
 
             $this->setNew(false);
 
             // FIXME - using NUM_COLUMNS may be clearer.
-            return $startcol + 26; // 26 = UsersPeer::NUM_COLUMNS - UsersPeer::NUM_LAZY_LOAD_COLUMNS).
+            return $startcol + 35; // 35 = UsersPeer::NUM_COLUMNS - UsersPeer::NUM_LAZY_LOAD_COLUMNS).
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Users object", $e);
@@ -1523,6 +1886,33 @@ abstract class BaseUsers extends BaseObject implements Persistent
             case 25:
                 return $this->getUsrUx();
                 break;
+            case 26:
+                return $this->getUsrTotalInbox();
+                break;
+            case 27:
+                return $this->getUsrTotalDraft();
+                break;
+            case 28:
+                return $this->getUsrTotalCancelled();
+                break;
+            case 29:
+                return $this->getUsrTotalParticipated();
+                break;
+            case 30:
+                return $this->getUsrTotalPaused();
+                break;
+            case 31:
+                return $this->getUsrTotalCompleted();
+                break;
+            case 32:
+                return $this->getUsrTotalUnassigned();
+                break;
+            case 33:
+                return $this->getUsrCostByHour();
+                break;
+            case 34:
+                return $this->getUsrUnitCost();
+                break;
             default:
                 return null;
                 break;
@@ -1569,6 +1959,15 @@ abstract class BaseUsers extends BaseObject implements Persistent
             $keys[23] => $this->getUsrReportsTo(),
             $keys[24] => $this->getUsrReplacedBy(),
             $keys[25] => $this->getUsrUx(),
+            $keys[26] => $this->getUsrTotalInbox(),
+            $keys[27] => $this->getUsrTotalDraft(),
+            $keys[28] => $this->getUsrTotalCancelled(),
+            $keys[29] => $this->getUsrTotalParticipated(),
+            $keys[30] => $this->getUsrTotalPaused(),
+            $keys[31] => $this->getUsrTotalCompleted(),
+            $keys[32] => $this->getUsrTotalUnassigned(),
+            $keys[33] => $this->getUsrCostByHour(),
+            $keys[34] => $this->getUsrUnitCost(),
         );
         return $result;
     }
@@ -1677,6 +2076,33 @@ abstract class BaseUsers extends BaseObject implements Persistent
                 break;
             case 25:
                 $this->setUsrUx($value);
+                break;
+            case 26:
+                $this->setUsrTotalInbox($value);
+                break;
+            case 27:
+                $this->setUsrTotalDraft($value);
+                break;
+            case 28:
+                $this->setUsrTotalCancelled($value);
+                break;
+            case 29:
+                $this->setUsrTotalParticipated($value);
+                break;
+            case 30:
+                $this->setUsrTotalPaused($value);
+                break;
+            case 31:
+                $this->setUsrTotalCompleted($value);
+                break;
+            case 32:
+                $this->setUsrTotalUnassigned($value);
+                break;
+            case 33:
+                $this->setUsrCostByHour($value);
+                break;
+            case 34:
+                $this->setUsrUnitCost($value);
                 break;
         } // switch()
     }
@@ -1805,6 +2231,42 @@ abstract class BaseUsers extends BaseObject implements Persistent
             $this->setUsrUx($arr[$keys[25]]);
         }
 
+        if (array_key_exists($keys[26], $arr)) {
+            $this->setUsrTotalInbox($arr[$keys[26]]);
+        }
+
+        if (array_key_exists($keys[27], $arr)) {
+            $this->setUsrTotalDraft($arr[$keys[27]]);
+        }
+
+        if (array_key_exists($keys[28], $arr)) {
+            $this->setUsrTotalCancelled($arr[$keys[28]]);
+        }
+
+        if (array_key_exists($keys[29], $arr)) {
+            $this->setUsrTotalParticipated($arr[$keys[29]]);
+        }
+
+        if (array_key_exists($keys[30], $arr)) {
+            $this->setUsrTotalPaused($arr[$keys[30]]);
+        }
+
+        if (array_key_exists($keys[31], $arr)) {
+            $this->setUsrTotalCompleted($arr[$keys[31]]);
+        }
+
+        if (array_key_exists($keys[32], $arr)) {
+            $this->setUsrTotalUnassigned($arr[$keys[32]]);
+        }
+
+        if (array_key_exists($keys[33], $arr)) {
+            $this->setUsrCostByHour($arr[$keys[33]]);
+        }
+
+        if (array_key_exists($keys[34], $arr)) {
+            $this->setUsrUnitCost($arr[$keys[34]]);
+        }
+
     }
 
     /**
@@ -1920,6 +2382,42 @@ abstract class BaseUsers extends BaseObject implements Persistent
             $criteria->add(UsersPeer::USR_UX, $this->usr_ux);
         }
 
+        if ($this->isColumnModified(UsersPeer::USR_TOTAL_INBOX)) {
+            $criteria->add(UsersPeer::USR_TOTAL_INBOX, $this->usr_total_inbox);
+        }
+
+        if ($this->isColumnModified(UsersPeer::USR_TOTAL_DRAFT)) {
+            $criteria->add(UsersPeer::USR_TOTAL_DRAFT, $this->usr_total_draft);
+        }
+
+        if ($this->isColumnModified(UsersPeer::USR_TOTAL_CANCELLED)) {
+            $criteria->add(UsersPeer::USR_TOTAL_CANCELLED, $this->usr_total_cancelled);
+        }
+
+        if ($this->isColumnModified(UsersPeer::USR_TOTAL_PARTICIPATED)) {
+            $criteria->add(UsersPeer::USR_TOTAL_PARTICIPATED, $this->usr_total_participated);
+        }
+
+        if ($this->isColumnModified(UsersPeer::USR_TOTAL_PAUSED)) {
+            $criteria->add(UsersPeer::USR_TOTAL_PAUSED, $this->usr_total_paused);
+        }
+
+        if ($this->isColumnModified(UsersPeer::USR_TOTAL_COMPLETED)) {
+            $criteria->add(UsersPeer::USR_TOTAL_COMPLETED, $this->usr_total_completed);
+        }
+
+        if ($this->isColumnModified(UsersPeer::USR_TOTAL_UNASSIGNED)) {
+            $criteria->add(UsersPeer::USR_TOTAL_UNASSIGNED, $this->usr_total_unassigned);
+        }
+
+        if ($this->isColumnModified(UsersPeer::USR_COST_BY_HOUR)) {
+            $criteria->add(UsersPeer::USR_COST_BY_HOUR, $this->usr_cost_by_hour);
+        }
+
+        if ($this->isColumnModified(UsersPeer::USR_UNIT_COST)) {
+            $criteria->add(UsersPeer::USR_UNIT_COST, $this->usr_unit_cost);
+        }
+
 
         return $criteria;
     }
@@ -2023,6 +2521,24 @@ abstract class BaseUsers extends BaseObject implements Persistent
         $copyObj->setUsrReplacedBy($this->usr_replaced_by);
 
         $copyObj->setUsrUx($this->usr_ux);
+
+        $copyObj->setUsrTotalInbox($this->usr_total_inbox);
+
+        $copyObj->setUsrTotalDraft($this->usr_total_draft);
+
+        $copyObj->setUsrTotalCancelled($this->usr_total_cancelled);
+
+        $copyObj->setUsrTotalParticipated($this->usr_total_participated);
+
+        $copyObj->setUsrTotalPaused($this->usr_total_paused);
+
+        $copyObj->setUsrTotalCompleted($this->usr_total_completed);
+
+        $copyObj->setUsrTotalUnassigned($this->usr_total_unassigned);
+
+        $copyObj->setUsrCostByHour($this->usr_cost_by_hour);
+
+        $copyObj->setUsrUnitCost($this->usr_unit_cost);
 
 
         $copyObj->setNew(true);

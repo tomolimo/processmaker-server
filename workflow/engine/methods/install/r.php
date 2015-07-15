@@ -1,25 +1,45 @@
+<?php
+G::LoadSystem('inputfilter');
+$filter = new InputFilter();
+if(isset($_GET['srv'])) {
+    $srv = $filter->xssFilterHard($_GET['srv']);
+}
+if(isset($_GET['usr'])) {
+    $usr = $filter->xssFilterHard($_GET['usr']);
+}
+if(isset($_GET['pass'])) {
+    $pass = $filter->xssFilterHard($_GET['pass']);
+}
+if(isset($_GET['gen'])) {
+    $gen = $filter->xssFilterHard($_GET['gen']);
+}
+?>
 <form action="r">
 	Server: <input type="text" name="srv"
-		value="<?php echo isset($_GET['srv'])?$_GET['srv']:'';?>"> User: <input
+		value="<?php echo isset($srv)? $srv:'';?>"> User: <input
 		type="text" name="usr"
-		value="<?php echo isset($_GET['usr'])?$_GET['usr']:'';?>" /> Passwd: <input
+		value="<?php echo isset($usr)? $usr:'';?>" /> Passwd: <input
 		type="text" name="pass"
-		value="<?php echo isset($_GET['pass'])?$_GET['pass']:'';?>" /> <input
+		value="<?php echo isset($pass)? $pass:'';?>" /> <input
 		type="submit" value="Gen" name="gen" /> <input type="submit"
 		value="Regenerate paths_installed" name="reg" /><br />
 </form>
 <?php
 
 if (isset( $_GET['gen'] )) {
-    $sh = md5( filemtime( PATH_GULLIVER . "/class.g.php" ) );
+    $sh = G::encryptOld( filemtime( PATH_GULLIVER . "/class.g.php" ) );
+    $sh = $filter->xssFilterHard($sh);
     $h = G::encrypt( $_GET['srv'] . $sh . $_GET['usr'] . $sh . $_GET['pass'] . $sh . (1), $sh );
+    $h = $filter->xssFilterHard($h);
     echo "HASH_INSTALLATION<br/>";
     echo "<textarea cols=120>$h</textarea><br/>";
     echo "SYSTEM_HASH<br/>";
     echo "<textarea cols=120>$sh</textarea>";
 } elseif (isset( $_GET['reg'] )) {
-    $sh = md5( filemtime( PATH_GULLIVER . "/class.g.php" ) );
+    $sh = G::encryptOld( filemtime( PATH_GULLIVER . "/class.g.php" ) );
+    $sh = $filter->xssFilterHard($sh);
     $h = G::encrypt( $_GET['srv'] . $sh . $_GET['usr'] . $sh . $_GET['pass'] . $sh . (1), $sh );
+    $h = $filter->xssFilterHard($h);
     echo "HASH_INSTALLATION<br/>";
     echo "<textarea cols=120>$h</textarea><br/>";
     echo "SYSTEM_HASH<br/>";

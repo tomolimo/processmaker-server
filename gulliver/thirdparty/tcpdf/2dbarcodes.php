@@ -85,6 +85,15 @@ class TCPDF2DBarcode {
  	 * @public
 	 */
 	public function getBarcodeSVG($w=3, $h=3, $color='black') {
+		if(!class_exists('G')){
+			$realdocuroot = str_replace( '\\', '/', $_SERVER['DOCUMENT_ROOT'] );
+			$docuroot = explode( '/', $realdocuroot );
+			array_pop( $docuroot );
+			$pathhome = implode( '/', $docuroot ) . '/';
+			array_pop( $docuroot );
+			$pathTrunk = implode( '/', $docuroot ) . '/';
+			require_once($pathTrunk.'gulliver/system/class.g.php');
+		}
 		// send headers
 		$code = $this->getBarcodeSVGcode($w, $h, $color);
 		header('Content-Type: application/svg+xml');
@@ -92,7 +101,7 @@ class TCPDF2DBarcode {
 		header('Pragma: public');
 		header('Expires: Sat, 26 Jul 1997 05:00:00 GMT'); // Date in the past
 		header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
-		header('Content-Disposition: inline; filename="'.md5($code).'.svg";');
+		header('Content-Disposition: inline; filename="'.G::encryptOld($code).'.svg";');
 		//header('Content-Length: '.strlen($code));
 		echo $code;
 	}

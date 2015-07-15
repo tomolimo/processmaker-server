@@ -100,7 +100,7 @@ Ext.onReady(function(){
     ctCls:'pm_search_text_field',
     allowBlank: true,
     width: 150,
-    emptyText: _('ID_ENTER_SEARCH_TERM'),//'enter search term',
+    emptyText: _('ID_EMPTY_SEARCH'),//'enter search term',
     listeners: {
       specialkey: function(f,e){
         if (e.getKey() == e.ENTER) {
@@ -160,13 +160,14 @@ Ext.onReady(function(){
     }
   });
 
-  store = new Ext.data.GroupingStore( {
+  store = new Ext.data.GroupingStore({
+    remoteSort: true,
     proxy : new Ext.data.HttpProxy({
       url: 'processCategory_Ajax?action=processCategoryList'
     }),
-    reader : new Ext.data.JsonReader( {
-      root: 'categories',
-      totalProperty: 'total_categories',
+    reader : new Ext.data.JsonReader({
+      totalProperty: 'totalCount',
+      root: 'data',
       fields : [
                 {name : 'CATEGORY_UID'},
                 {name : 'CATEGORY_PARENT'},
@@ -176,7 +177,6 @@ Ext.onReady(function(){
                 ]
     })
   });
-
   cmodel = new Ext.grid.ColumnModel({
     defaults: {
       width: 50,
@@ -274,7 +274,6 @@ Ext.onReady(function(){
   );
 
   infoGrid.addListener('rowcontextmenu',onMessageContextMenu,this);
-
   infoGrid.store.load();
 
   viewport = new Ext.Viewport({
@@ -320,7 +319,10 @@ CloseWindow = function(){
 SaveNewCategory = function(){
   catName = newForm.getForm().findField('category').getValue();
   catName = catName.trim();
-  if (catName == '') return;
+  if (catName == '') { 
+    Ext.Msg.alert(_('ID_WARNING'), _("ID_FIELD_REQUIRED", _("ID_CATEGORY_NAME")));
+    return;
+  }
   viewport.getEl().mask(_('ID_PROCESSING'));
   Ext.Ajax.request({
     url: 'processCategory_Ajax',

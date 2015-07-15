@@ -853,9 +853,12 @@ class database extends database_base
      */
     public function reportTableExist ()
     {
+        G::LoadSystem('inputfilter');
+        $filter = new InputFilter();
+        $DB_NAME = $filter->validateInput(DB_NAME);
         $bExists = true;
         $oConnection = mysql_connect( DB_HOST, DB_USER, DB_PASS );
-        mysql_select_db( DB_NAME );
+        mysql_select_db( $DB_NAME );
         $oDataset = mysql_query( 'SELECT COUNT(*) FROM REPORT_TABLE' ) || ($bExists = false);
 
         return $bExists;

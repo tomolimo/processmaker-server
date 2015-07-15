@@ -1,0 +1,68 @@
+{
+    "name": "form-example2",
+    "items": [
+        {
+            "type":"form",       
+            "items":
+            [
+                [
+                    {
+                        "type": "title",
+                        "colSpan": 12,
+                        "name": "title",
+                        "label": "PMDynaform 4"
+                    }
+                ],
+                [
+                    {
+                        "type": "text",
+                        "colSpan":12,
+                        "name": "name",
+                        "value": "",
+                        "label": "Integer",
+                        "required": true,
+                        "readonly": false,
+                        "dataType": "integer",
+                        "variable": "varexample"
+                    }
+                ],
+                [
+                    {
+                        "type": "text",
+                        "colSpan":12,
+                        "name": "name",
+                        "value": "",
+                        "label": "Float",
+                        "required": true,
+                        "readonly": false,
+                        "dataType": "float"
+                    }
+                ],
+                [
+                    {
+                        "type": "text",
+                        "colSpan":12,
+                        "name": "name",
+                        "value": "",
+                        "label": "String",
+                        "required": true,
+                        "readonly": false,
+                        "dataType": "string"
+                    }
+                ],
+                [
+                    {
+                        "type": "text",
+                        "colSpan":12,
+                        "name": "name",
+                        "value": "",
+                        "label": "Money",
+                        "required": true,
+                        "readonly": false,
+                        "dataType": "integer"
+                    }
+                ]
+            ]
+        }
+    ]
+}

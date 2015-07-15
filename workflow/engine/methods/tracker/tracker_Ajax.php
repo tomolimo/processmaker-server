@@ -22,9 +22,14 @@
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  */
 try {
+    G::LoadSystem('inputfilter');
+    $filter = new InputFilter();
+    $_POST = $filter->xssFilterHard($_POST);
+    
     if (isset( $_POST['form']['action'] )) {
         $_POST['action'] = $_POST['form']['action'];
     }
+    
     switch ($_POST['action']) {
         case 'availableCaseTrackerObjects':
             G::LoadClass( 'processMap' );
@@ -36,6 +41,9 @@ try {
             $oProcessMap = new ProcessMap();
             $cto_UID = $oProcessMap->assignCaseTrackerObject( $_POST['PRO_UID'], $_POST['OBJECT_TYPE'], $_POST['OBJECT_UID'] );
             $oProcessMap->getCaseTrackerObjectsCriteria( $_POST['PRO_UID'] );
+            $infoProcess = new Process();
+            $resultProcess = $infoProcess->load($_POST['PRO_UID']);
+            G::auditLog('CaseTrackers','Assign Case Tracker Object ('.$cto_UID.' - '.$_POST['OBJECT_TYPE'].') in Process "'.$resultProcess['PRO_TITLE'].'"');
             echo $cto_UID;
             break;
         case 'removeCaseTrackerObject':
@@ -43,18 +51,27 @@ try {
             $oProcessMap = new ProcessMap();
             $oProcessMap->removeCaseTrackerObject( $_POST['CTO_UID'], $_POST['PRO_UID'], $_POST['STEP_POSITION'] );
             $oProcessMap->getCaseTrackerObjectsCriteria( $_POST['PRO_UID'] );
+            $infoProcess = new Process();
+            $resultProcess = $infoProcess->load($_POST['PRO_UID']);
+            G::auditLog('CaseTrackers','Remove Case Tracker Object ('.$_POST['CTO_UID'].') in Process "'.$resultProcess['PRO_TITLE'].'"');
             break;
         case 'upCaseTrackerObject':
             G::LoadClass( 'processMap' );
             $oProcessMap = new ProcessMap();
             $oProcessMap->upCaseTrackerObject( $_POST['CTO_UID'], $_POST['PRO_UID'], $_POST['STEP_POSITION'] );
             $oProcessMap->getCaseTrackerObjectsCriteria( $_POST['PRO_UID'] );
+            $infoProcess = new Process();
+            $resultProcess = $infoProcess->load($_POST['PRO_UID']);
+            G::auditLog('CaseTrackers','Move Up Case Tracker Object ('.$_POST['CTO_UID'].') in Process "'.$resultProcess['PRO_TITLE'].'"');
             break;
         case 'downCaseTrackerObject':
             G::LoadClass( 'processMap' );
             $oProcessMap = new ProcessMap();
             $oProcessMap->downCaseTrackerObject( $_POST['CTO_UID'], $_POST['PRO_UID'], $_POST['STEP_POSITION'] );
             $oProcessMap->getCaseTrackerObjectsCriteria( $_POST['PRO_UID'] );
+            $infoProcess = new Process();
+            $resultProcess = $infoProcess->load($_POST['PRO_UID']);
+            G::auditLog('CaseTrackers','Move Down Case Tracker Object ('.$_POST['CTO_UID'].') in Process "'.$resultProcess['PRO_TITLE'].'"');
             break;
         case 'editStagesMap':
             $oTemplatePower = new TemplatePower( PATH_TPL . 'tracker/stages_Map.html' );

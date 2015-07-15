@@ -834,7 +834,8 @@ var maborak = function(forceCssLoad){
 		var userAgent=navigator.userAgent;
 		var u;
 		this.browser={
-			isIE:((userAgent.indexOf('MSIE')>=0)?true:false),
+			
+			isIE:((userAgent.indexOf('MSIE')>=0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))?true:false),
 			isNS:((userAgent.indexOf('Netscape6/')>=0)?true:false),
 			isFF:((userAgent.indexOf('Firefox')>=0)?true:false),
 			isSF:((userAgent.indexOf('Safari')>=0)?true:false),

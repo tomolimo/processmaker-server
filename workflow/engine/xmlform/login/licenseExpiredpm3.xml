@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm type="xmlform" name="login/licenseExpired" width="450" enabletemplate="1">
+  <thetitle type="title" required="0" readonly="0" optgroup="0">
+    <en><![CDATA[Your license has expired or the System does not have a license. To use the ProcessMaker Enterprise Edition upload a valid license]]></en>
+  </thetitle>
+  <licenseFile type="file" required="1" readonly="0" optgroup="0">
+    <en>License File</en>
+  </licenseFile>
+  <updateButton type="submit" required="0" readonly="0" optgroup="0">
+    <en>Update License</en>
+  </updateButton>
+   <JS type="javascript"><![CDATA[
+
+function getElementsByClassNameIE8(node, classname) {
+    var a = [];
+    var re = new RegExp('(^| )'+classname+'( |$)');
+    var els = node.getElementsByTagName("*");
+    for(var i=0,j=els.length; i<j; i++)
+        if(re.test(els[i].className))a.push(els[i]);
+    return a;
+};
+
+window.onload= function(){
+  if(document.getElementById('form[updateButton]').classList == undefined){
+    document.getElementById('form[updateButton]').className = "button-login-success";         
+  }else{
+    document.getElementById('form[updateButton]').classList.remove('module_app_button___gray');
+    document.getElementById('form[updateButton]').classList.add('button-login-success');  
+  }  
+};
+]]></JS>
+</dynaForm>

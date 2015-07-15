@@ -56,7 +56,9 @@ $html = '
      }
  return 'Unknown';
  }
-
+G::LoadSystem('inputfilter');
+$filter = new InputFilter();
+$_SERVER['HTTP_USER_AGENT'] = $filter->xssFilterHard($_SERVER['HTTP_USER_AGENT']);
 if((looking_for_browser($_SERVER['HTTP_USER_AGENT'])=='Internet Explorer 8')||(looking_for_browser($_SERVER['HTTP_USER_AGENT'])=='Internet Explorer 7')||(looking_for_browser($_SERVER['HTTP_USER_AGENT'])=='Internet Explorer 6')){
     $html.="
         <div class='content' style='width:360px;height: expression( this.scrollHeight > 319 ? \'320px\' : \'auto\' ); /* sets max-height for IE */  max-height: 320px; /* sets max-height value for all standards-compliant browsers */  overflow:hidden;'>

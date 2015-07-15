@@ -107,7 +107,7 @@ Ext.onReady(function(){
     ctCls:'pm_search_text_field',
     allowBlank: true,
     width: 150,
-    emptyText: _('ID_ENTER_SEARCH_TERM'),
+    emptyText: _('ID_EMPTY_SEARCH'),
     listeners: {
       specialkey: function(f,e){
         if (e.getKey() == e.ENTER) {
@@ -175,10 +175,34 @@ Ext.onReady(function(){
              selectOnFocus:true
            }
            ],
-           buttons: [
-                     {text: _('ID_SAVE'), handler: SaveNewGroupAction},
-                     {text: _('ID_CANCEL'), handler: CloseWindow}
-                     ]
+    buttons: [
+        {
+            xtype: "button",
+            id: "btnCreateSave",
+            text: _("ID_SAVE"),
+            handler: function (btn, ev)
+            {
+                if( newForm.getForm().findField('name').getValue().trim() == "") {
+                    Ext.Msg.alert(_('ID_WARNING'), _("ID_FIELD_REQUIRED", _("ID_GROUP_NAME")));
+                    newForm.getForm().findField('name').setValue("");
+                    return false;
+                } else {
+                    Ext.getCmp("btnCreateSave").setDisabled(true);
+                }
+
+                SaveNewGroupAction();
+            }
+        },
+        {
+            xtype: "button",
+            id: "btnCreateCancel",
+            text: _("ID_CANCEL"),
+            handler: function (btn, ev)
+            {
+                CloseWindow();
+            }
+        }
+    ]
   });
 
   editForm = new Ext.FormPanel({
@@ -205,13 +229,32 @@ Ext.onReady(function(){
              selectOnFocus:true
            }
            ],
-           buttons: [
-                     {text: _('ID_SAVE'), handler: SaveEditGroupAction},
-                     {text: _('ID_CANCEL'), handler: CloseWindow}
-                     ]
+    buttons: [
+        {
+            xtype: "button",
+            id: "btnUpdateSave",
+            text: _("ID_SAVE"),
+            handler: function (btn, ev)
+            {
+                Ext.getCmp("btnUpdateSave").setDisabled(true);
+
+                SaveEditGroupAction();
+            }
+        },
+        {
+            xtype: "button",
+            id: "btnUpdateCancel",
+            text: _("ID_CANCEL"),
+            handler: function (btn, ev)
+            {
+                CloseWindow();
+            }
+        }
+    ]
   });
 
   store = new Ext.data.GroupingStore( {
+    remoteSort: true,
     proxy : new Ext.data.HttpProxy({
       url: 'groups_Ajax?action=groupsList'
     }),
@@ -243,8 +286,8 @@ Ext.onReady(function(){
               {id:'GRP_UID', dataIndex: 'USR_UID', hidden:true, hideable:false},
               {header: _('ID_GROUP_NAME'), dataIndex: 'CON_VALUE', width: 400, align:'left'},
               {header: _('ID_STATUS'), dataIndex: 'GRP_STATUS', width: 130, align:'center', renderer: render_status},
-              {header: _('ID_USERS'), dataIndex: 'GRP_USERS', width: 100, align:'center'},
-              {header: _('ID_TASKS'), dataIndex: 'GRP_TASKS', width: 100, align:'center'}
+              {header: _("ID_USERS"), dataIndex: "GRP_USERS", sortable: false, width: 100, align:"center"},
+              {header: _("ID_TASKS"), dataIndex: "GRP_TASKS", sortable: false, width: 100, align:"center"}
               ]
   });
 
@@ -351,6 +394,10 @@ DoNothing = function(){};
 NewGroupWindow = function(){
   newForm.getForm().reset();
   newForm.getForm().items.items[0].focus('',500);
+  newForm.getForm().items.items[1].setEditable(false);
+
+  Ext.getCmp("btnCreateSave").setDisabled(false);
+
   w = new Ext.Window({
     autoHeight: true,
     width: 400,
@@ -406,6 +453,9 @@ SaveNewGroupAction = function(){
 
 //Show Duplicate Group Name Message
 DuplicateGroupName = function(){
+  Ext.getCmp("btnCreateSave").setDisabled(false);
+  Ext.getCmp("btnUpdateSave").setDisabled(false);
+
   PMExt.warning(_('ID_GROUPS'), _('ID_MSG_GROUP_NAME_EXISTS'));
 };
 
@@ -443,6 +493,9 @@ EditGroupWindow = function(){
   editForm.getForm().findField('name').setValue(strName);
   var valueEditChangeInt = (rowSelected.data.GRP_STATUS == 'ACTIVE') ? '1' : '0';
   editForm.getForm().findField('status').setValue(valueEditChangeInt);
+
+  Ext.getCmp("btnUpdateSave").setDisabled(false);
+
   w = new Ext.Window({
     autoHeight: true,
     width: 440,

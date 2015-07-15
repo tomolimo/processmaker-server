@@ -4,6 +4,9 @@
  * and open the template in the editor.
  */
 
+G::LoadSystem('inputfilter');
+$filter = new InputFilter();
+$_POST = $filter->xssFilterHard($_POST);
 require_once ("classes/model/AdditionalTables.php");
 require_once ("classes/model/Fields.php");
 // passing the parameters

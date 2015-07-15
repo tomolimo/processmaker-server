@@ -1,0 +1,504 @@
+
+{
+  "name": "form-example",
+  "items": [
+    {
+      "type": "form",
+      "items": [
+        [
+            {
+                "type": "title",
+                "colSpan": 12,
+                "name": "title",
+                "label": "PMDynaform 10 - Grids"
+            }
+        ],
+        [
+          {
+            "colSpan": 12,
+            "name": "91621240253e8ed7d146fc9075381174",
+            "label": "[Title]",
+            "type": "title"
+          }
+        ],
+        [
+          {
+            "variable": "drp_Cost",
+            "variable_uid": "57820440553b1a6e430493803253276c",
+            "dataType": "float",
+            "colSpan": 4,
+            "name": "drp_Cost",
+            "label": "Cost",
+            "defaultValue": "",
+            "required": false,
+            "hint": "",
+            "dependentFields": [
+              "age",
+              "text_name_1",
+              "text_name",
+              "text_name_2",
+              "text_name_3",
+              "text_name_4"
+            ],
+            "dependenceStates": {
+              "directDependence": "[]",
+              "indirectDependence": "[]",
+              "dependentFields": "[\"age\",\"text_name_1\",\"text_name\",\"text_name_2\",\"text_name_3\",\"text_name_4\"]"
+            },
+            "textTransform": "lower",
+            "validate": "alphabetic",
+            "mask": "",
+            "maxLength": 100,
+            "formula": "(text_name_1-10)-text_name+(2+text_name)+sqrt(4)",
+            "type": "text"
+          },
+          {
+            "variable": "drp_Expires",
+            "variable_uid": "57820440553b1a6e430493803253276c",
+            "dataType": "datetime",
+            "colSpan": 4,
+            "name": "drp_Expires",
+            "label": "Expires",
+            "defaultValue": "",
+            "required": false,
+            "hint": "",
+            "mask": "",
+            "typeOfDateRange": [],
+            "editable": false,
+            "pickDate": "date",
+            "type": "datetime"
+          },
+          {
+            "variable": "date_of_birth",
+            "variable_uid": "57820440553b1a6e430493803253276f",
+            "dataType": "date",
+            "colSpan": 4,
+            "name": "date_of_birth",
+            "label": "Date of Birth",
+            "defaultValue": "",
+            "required": false,
+            "hint": "",
+            "mask": "",
+            "typeOfDateRange": [],
+            "editable": false,
+            "pickDate": "date",
+            "type": "datetime"
+          }
+        ],
+        [
+          {
+            "variable": "age",
+            "variable_uid": "57820440553b1a6e4304938032532769",
+            "dataType": "integer",
+            "colSpan": 6,
+            "name": "age",
+            "label": "Age",
+            "defaultValue": "",
+            "required": false,
+            "hint": "",
+            "dependentFields": [
+              "text_name_1",
+              "text_name",
+              "text_name_2",
+              "text_name_3",
+              "text_name_4"
+            ],
+            "dependenceStates": {
+              "directDependence": "[\"drp_Cost\"]",
+              "indirectDependence": "[]",
+              "dependentFields": "[\"text_name_1\",\"text_name\",\"text_name_2\",\"text_name_3\",\"text_name_4\"]"
+            },
+            "includeOptionGroup": false,
+            "disabled": false,
+            "options": [
+              {
+                "value": "2",
+                "label": "Two",
+                "disabled": false,
+                "isGroup": false
+              },
+              {
+                "value": "3",
+                "label": "Three",
+                "disabled": false,
+                "isGroup": false
+              },
+              {
+                "value": "3",
+                "label": "Three",
+                "disabled": false,
+                "isGroup": false
+              },
+              {
+                "value": "4",
+                "label": "Four",
+                "disabled": false,
+                "isGroup": false
+              },
+              {
+                "value": "5",
+                "label": "Five",
+                "disabled": false,
+                "isGroup": false
+              }
+            ],
+            "type": "dropdown"
+          },
+          {
+            "variable": "var_gender",
+            "variable_uid": "57820440553b1a6e43049380325327b",
+            "dataType": "boolean",
+            "colSpan": 6,
+            "name": "var_gender",
+            "label": "Gender",
+            "defaultValue": "",
+            "required": false,
+            "hint": "",
+            "disabled": false,
+            "options": [
+              {
+                "label": "One",
+                "value": "1",
+                "disabled": false,
+                "selected": false
+              },
+              {
+                "label": "Three",
+                "value": "3",
+                "disabled": false,
+                "selected": false
+              },
+              {
+                "label": "Three",
+                "value": "3",
+                "disabled": false,
+                "selected": false
+              },
+              {
+                "label": "Four",
+                "value": "4",
+                "disabled": false,
+                "selected": false
+              },
+              {
+                "label": "Five",
+                "value": "5",
+                "disabled": false,
+                "selected": false
+              }
+            ],
+            "type": "checkbox"
+          }
+        ],
+        [
+          {
+            "colSpan": 12,
+            "name": "75043463053e8ed99148095072334632",
+            "label": "[Subtitle]",
+            "type": "subtitle"
+          }
+        ],
+        [
+          {
+            "colSpan": 4
+          },
+          {
+            "variable": "text_name",
+            "variable_uid": "4415812967531539f30a166211600459",
+            "dataType": "string",
+            "colSpan": 4,
+            "name": "text_name_1",
+            "label": "Name",
+            "defaultValue": "Noel",
+            "required": false,
+            "hint": "",
+            "dependentFields": [
+              "text_name",
+              "text_name_2",
+              "text_name_3",
+              "text_name_4"
+            ],
+            "dependenceStates": {
+              "directDependence": "[\"drp_Cost\",\"age\"]",
+              "indirectDependence": "[\"drp_Cost\"]",
+              "dependentFields": "[\"text_name\",\"text_name_2\",\"text_name_3\",\"text_name_4\"]"
+            },
+            "textTransform": "none",
+            "validate": "any",
+            "mask": "",
+            "maxLength": 100,
+            "formula": "",
+            "type": "text"
+          },
+          {
+            "colSpan": 4
+          }
+        ],
+        [
+          {
+            "variable": "text_name",
+            "variable_uid": "4415812967531539f30a166211600459",
+            "dataType": "string",
+            "colSpan": 12,
+            "name": "text_name",
+            "label": "Name",
+            "defaultValue": "Richard",
+            "required": true,
+            "hint": "",
+            "dependentFields": [
+              "text_name_2",
+              "text_name_3",
+              "text_name_4"
+            ],
+            "dependenceStates": {
+              "directDependence": "[\"drp_Cost\",\"age\",\"text_name_1\"]",
+              "indirectDependence": "[\"drp_Cost\",\"age\"]",
+              "dependentFields": "[\"text_name_2\",\"text_name_3\",\"text_name_4\"]"
+            },
+            "textTransform": "upper",
+            "validate": "integer",
+            "mask": "",
+            "maxLength": 100,
+            "formula": "",
+            "type": "text"
+          }
+        ],
+        [
+          {
+            "variable": "text_name",
+            "variable_uid": "4415812967531539f30a166211600459",
+            "dataType": "string",
+            "colSpan": 12,
+            "name": "text_name_2",
+            "label": "Nombre",
+            "defaultValue": "",
+            "required": false,
+            "hint": "",
+            "dependentFields": [
+              "text_name_3",
+              "text_name_4"
+            ],
+            "dependenceStates": {
+              "directDependence": "[\"drp_Cost\",\"age\",\"text_name_1\",\"text_name\"]",
+              "indirectDependence": "[\"drp_Cost\",\"age\",\"text_name_1\"]",
+              "dependentFields": "[\"text_name_3\",\"text_name_4\"]"
+            },
+            "sql": "",
+            "disabled": false,
+            "type": "suggest"
+          }
+        ],
+        [
+          {
+            "variable": "text_name",
+            "variable_uid": "4415812967531539f30a166211600459",
+            "dataType": "string",
+            "colSpan": 6,
+            "name": "text_name_3",
+            "label": "Nombre",
+            "defaultValue": "",
+            "required": false,
+            "hint": "",
+            "dependentFields": [
+              "text_name_4"
+            ],
+            "dependenceStates": {
+              "directDependence": "[\"drp_Cost\",\"age\",\"text_name_1\",\"text_name\",\"text_name_2\"]",
+              "indirectDependence": "[\"drp_Cost\",\"age\",\"text_name_1\",\"text_name\"]",
+              "dependentFields": "[\"text_name_4\"]"
+            },
+            "textTransform": "none",
+            "validate": "any",
+            "mask": "",
+            "maxLength": 100,
+            "formula": "",
+            "type": "text"
+          },
+          {
+            "variable": "text_name",
+            "variable_uid": "4415812967531539f30a166211600459",
+            "dataType": "string",
+            "colSpan": 6,
+            "name": "text_name_4",
+            "label": "Nombre",
+            "defaultValue": "",
+            "required": false,
+            "hint": "",
+            "dependentFields": [],
+            "dependenceStates": {
+              "directDependence": "[\"drp_Cost\",\"age\",\"text_name_1\",\"text_name\",\"text_name_2\",\"text_name_3\"]",
+              "indirectDependence": "[\"drp_Cost\",\"age\",\"text_name_1\",\"text_name\",\"text_name_2\"]",
+              "dependentFields": "[]"
+            },
+            "textTransform": "none",
+            "validate": "any",
+            "mask": "",
+            "maxLength": 100,
+            "formula": "",
+            "type": "text"
+          }
+        ],
+        [
+          {
+            "variable": "var_options",
+            "variable_uid": "",
+            "dataType": "string",
+            "colSpan": 12,
+            "name": "var_options",
+            "label": "fibonaci",
+            "defaultValue": "",
+            "required": false,
+            "hint": "",
+            "dependentFields": [],
+            "dependenceStates": {
+              "directDependence": "[]",
+              "indirectDependence": "[]",
+              "dependentFields": "[]"
+            },
+            "includeOptionGroup": false,
+            "disabled": false,
+            "options": [
+              {
+                "value": "1",
+                "label": "One",
+                "disabled": false,
+                "isGroup": false
+              },
+              {
+                "value": "2",
+                "label": "Three",
+                "disabled": false,
+                "isGroup": false
+              },
+              {
+                "value": "3",
+                "label": "Three",
+                "disabled": false,
+                "isGroup": false
+              },
+              {
+                "value": "4",
+                "label": "Four",
+                "disabled": false,
+                "isGroup": false
+              },
+              {
+                "value": "5",
+                "label": "Five",
+                "disabled": false,
+                "isGroup": false
+              }
+            ],
+            "type": "dropdown"
+          }
+        ],
+        [
+          {
+            "variable": "var_options",
+            "variable_uid": "",
+            "dataType": "string",
+            "colSpan": 12,
+            "name": "var_options_1",
+            "label": "fibonaci",
+            "defaultValue": "",
+            "required": false,
+            "hint": "",
+            "disabled": false,
+            "options": [
+              {
+                "label": "Two",
+                "value": "1",
+                "disabled": false,
+                "selected": true
+              },
+              {
+                "label": "Three",
+                "value": "2",
+                "disabled": false,
+                "selected": true
+              },
+              {
+                "label": "Three",
+                "value": "3",
+                "disabled": false,
+                "selected": false
+              },
+              {
+                "label": "Four",
+                "value": "4",
+                "disabled": false,
+                "selected": false
+              },
+              {
+                "label": "Five",
+                "value": "5",
+                "disabled": false,
+                "selected": false
+              }
+            ],
+            "type": "checkbox"
+          }
+        ],
+        [
+          {
+            "variable": "var_options",
+            "variable_uid": "",
+            "dataType": "string",
+            "colSpan": 12,
+            "name": "var_options_2",
+            "label": "fibonaci",
+            "defaultValue": "",
+            "required": false,
+            "hint": "",
+            "disabled": null,
+            "options": [
+              {
+                "label": "Two",
+                "value": "1",
+                "disabled": false,
+                "selected": false
+              },
+              {
+                "label": "Three",
+                "value": "2",
+                "disabled": false,
+                "selected": true
+              },
+              {
+                "label": "Three",
+                "value": "3",
+                "disabled": false,
+                "selected": false
+              },
+              {
+                "label": "Four",
+                "value": "4",
+                "disabled": false,
+                "selected": false
+              },
+              {
+                "label": "Five",
+                "value": "5",
+                "disabled": false,
+                "selected": false
+              }
+            ],
+            "type": "radio"
+          }
+        ],
+        [
+          {
+            "label": "Submit",
+            "colSpan": 6,
+            "type": "submit"
+          },
+          {
+            "label": "Button",
+            "colSpan": 6,
+            "type": "button"
+          }
+        ]
+      ]
+    }
+  ]
+}

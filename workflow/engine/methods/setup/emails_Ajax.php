@@ -21,6 +21,13 @@
  * For more information, contact Colosa Inc, 2566 Le Jeune Rd.,
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  */
+ 
+G::LoadSystem('inputfilter');
+$filter = new InputFilter();
+$_POST = $filter->xssFilterHard($_POST);
+if(isset($_SERVER['SERVER_NAME'])) {
+$_SERVER['SERVER_NAME'] = $filter->xssFilterHard($_SERVER['SERVER_NAME']); 
+}
 
 global $RBAC;
 $RBAC->requirePermissions( 'PM_SETUP_ADVANCE' );

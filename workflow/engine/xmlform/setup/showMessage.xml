@@ -5,6 +5,6 @@
     <es>Error</es>
   </TITLE>
   <MESSAGE type="caption" enableHTML="1">
-    <en><![CDATA[you can't delete it is in use.]]></en>
+    <en><![CDATA[You can't delete this while it is in use.]]></en>
   </MESSAGE>
 </dynaForm>

@@ -22,10 +22,18 @@
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  *
  */
+ 
+G::LoadSystem('inputfilter');
+$filter = new InputFilter();
+$_POST = $filter->xssFilterHard($_POST);
+$_REQUEST = $filter->xssFilterHard($_REQUEST);
+ 
 $_SERVER["QUERY_STRING"] = isset($_SERVER["QUERY_STRING"])?$_SERVER["QUERY_STRING"]:'';
 $_REQUEST["sProcess"] = isset($_REQUEST["sProcess"])?$_REQUEST["sProcess"]:'';
 $_REQUEST["sFieldName"] = isset($_REQUEST["sFieldName"])?$_REQUEST["sFieldName"]:'';
 $_REQUEST['sSymbol']= isset($_REQUEST["sSymbol"])?$_REQUEST["sSymbol"]:'';
+
+$_SERVER["QUERY_STRING"] = $filter->xssFilterHard($_SERVER["QUERY_STRING"]);
 
 $html = '<form action="uploader.php?'.$_SERVER["QUERY_STRING"].'&q=upload" onLoad="onLoad()" method="post" enctype="multipart/form-data" onsubmit="">';
 $html .= '<div id="d_variables">';
@@ -40,24 +48,24 @@ $html .= '</tr>';
 
 $html .= '<tr>';
 $html .= '<td width="50%">';
-$html .= '<label for="type_label">'.G::LoadTranslation('ID_TINY_TYPE_VARIABLE').'</label>';
+$html .= '<label for="type_label">'.$filter->xssFilterHard(G::LoadTranslation('ID_TINY_TYPE_VARIABLE')).'</label>';
 $html .= '</td>';
 
 $html .= '<td width="25%">';
-$html .= '<label for="prefix_label">'.G::LoadTranslation('ID_PREFIX').'</label>';
+$html .= '<label for="prefix_label">'.$filter->xssFilterHard(G::LoadTranslation('ID_PREFIX')).'</label>';
 $html .= '</td>';
 
 $html .= '<td width="25%">';
-$html .= '<label for="variables_label">'.G::LoadTranslation( 'ID_SEARCH').'</label>';
+$html .= '<label for="variables_label">'.$filter->xssFilterHard(G::LoadTranslation( 'ID_SEARCH')).'</label>';
 $html .= '</td>';
 $html .= '</tr>';
 
 $html .= '<tr>';
 $html .= '<td width="25%">';
 $html .= '<select name="type_variables" id="type_variables">';
-$html .= '<option value="all">'.G::LoadTranslation( 'ID_TINY_ALL_VARIABLES' ).'</option>';
-$html .= '<option value="system">'.G::LoadTranslation( 'ID_TINY_SYSTEM_VARIABLES' ).'</option>';
-$html .= '<option value="process">'.G::LoadTranslation( 'ID_TINY_PROCESS_VARIABLES' ).'</option>';
+$html .= '<option value="all">'.$filter->xssFilterHard(G::LoadTranslation( 'ID_TINY_ALL_VARIABLES' )).'</option>';
+$html .= '<option value="system">'.$filter->xssFilterHard(G::LoadTranslation( 'ID_TINY_SYSTEM_VARIABLES' )).'</option>';
+$html .= '<option value="process">'.$filter->xssFilterHard(G::LoadTranslation( 'ID_TINY_PROCESS_VARIABLES' )).'</option>';
 $html .= '</select> &nbsp;&nbsp;&nbsp;&nbsp;';
 $html .= '</td>';
 
@@ -79,7 +87,7 @@ $html .= '<input type="text" id="search" size="15">';
 $html .= '</td>';
 $html .= '</tr>';
 $html .= '<tr>';
-$html .= '<tr><td><label for="prefix_label">'.G::LoadTranslation( 'ID_VARIABLES' ).'</label></td></tr>';
+$html .= '<tr><td><label for="prefix_label">'.$filter->xssFilterHard(G::LoadTranslation( 'ID_VARIABLES' )).'</label></td></tr>';
 $html .= '<tr>';
 
 $html .= '<td colspan="3">';
@@ -114,19 +122,19 @@ $html .= '</div>';
 $html .= '<br>';
 $html .= '<table border="1" width="90%" align="center">';
 $html .= '<tr width="40%">';
-$html .= '<td>'.G::LoadTranslation('ID_RESULT').'</td>';
+$html .= '<td>'.$filter->xssFilterHard(G::LoadTranslation('ID_RESULT')).'</td>';
 $html .= '<td><span id="selectedVariableLabel">@@SYS_LANG</span></td>';
 $html .= '</tr>';
 $html .= '<tr width="60%">';
-$html .= '<td>'.G::LoadTranslation('ID_DESCRIPTION').'</td>';
-$html .= '<td><span id="desc_variables">'.G::LoadTranslation('ID_SYSTEM').'</span></td>';
+$html .= '<td>'.$filter->xssFilterHard(G::LoadTranslation('ID_DESCRIPTION')).'</td>';
+$html .= '<td><span id="desc_variables">'.$filter->xssFilterHard(G::LoadTranslation('ID_SYSTEM')).'</span></td>';
 $html .= '</tr>';
 $html .= '</table>';
 $html .= '</div>';
 $html .= '<br>';
 $html .= '<table width="90%" align="center">';
 $html .= '<tr><td>';
-$html .= '<label for="desc_prefix">*<span id="desc_prefix">' . G::LoadTranslation( 'ID_TO_STRING' ) . '</span></label>';
+$html .= '<label for="desc_prefix">*<span id="desc_prefix">'.$filter->xssFilterHard(G::LoadTranslation( 'ID_TO_STRING' )).'</span></label>';
 $html .= '</td></tr>';
 $html .= '</div>';
 

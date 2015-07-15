@@ -55,7 +55,7 @@ class XmlForm_Field_HTML extends XmlForm_Field
      * @return string
      *
      */
-    public function render ($value, $owner = null)
+    public function render($value = null, $owner = null)
     {
         $value = ($value == '') ? '<br/>' : $value;
         $html = "<div style='width:" . $this->width . ";'>";

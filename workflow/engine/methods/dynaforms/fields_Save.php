@@ -55,6 +55,14 @@ if (isset($_POST['form']['PME_READONLY'])) {
     $_POST['form']['PME_READONLY'] = 0;
 }
 
+if (isset($_POST['form']['PME_RESIZABLE'])) {
+    if ($_POST['form']['PME_RESIZABLE'] == '') {
+        $_POST['form']['PME_RESIZABLE'] = 0;
+    }
+} else {
+    $_POST['form']['PME_RESIZABLE'] = 0;
+}
+
 $_POST["form"]["PME_OPTGROUP"] = (isset($_POST["form"]["PME_OPTGROUP"]) && !empty($_POST["form"]["PME_OPTGROUP"]))? intval($_POST["form"]["PME_OPTGROUP"]) : 0;
 
 if (isset($_POST['form']['PME_SAVELABEL'])) {

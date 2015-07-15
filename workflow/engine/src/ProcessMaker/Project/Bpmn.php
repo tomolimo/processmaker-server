@@ -4,8 +4,6 @@ namespace ProcessMaker\Project;
 use \BpmnProject as Project;
 use \BpmnProcess as Process;
 use \BpmnDiagram as Diagram;
-use \BpmnLaneset as Laneset;
-use \BpmnLane as Lane;
 use \BpmnActivity as Activity;
 use \BpmnBound as Bound;
 use \BpmnEvent as Event;
@@ -16,8 +14,7 @@ use \BpmnArtifact as Artifact;
 use \BpmnProjectPeer as ProjectPeer;
 use \BpmnProcessPeer as ProcessPeer;
 use \BpmnDiagramPeer as DiagramPeer;
-use \BpmnLanesetPeer as LanesetPeer;
-use \BpmnLanePeer as LanePeer;
+
 use \BpmnActivityPeer as ActivityPeer;
 use \BpmnBoundPeer as BoundPeer;
 use \BpmnEventPeer as EventPeer;
@@ -26,6 +23,10 @@ use \BpmnFlowPeer as FlowPeer;
 use \BpmnArtifactPeer as ArtifactPeer;
 use \BpmnParticipant as Participant;
 use \BpmnParticipantPeer as ParticipantPeer;
+use \BpmnLaneset as Laneset;
+use \BpmnLanesetPeer as LanesetPeer;
+use \BpmnLane as Lane;
+use \BpmnLanePeer as LanePeer;
 
 use \BasePeer;
 use \Criteria as Criteria;
@@ -61,30 +62,46 @@ class Bpmn extends Handler
 
     protected static $excludeFields = array(
         "activity" => array(
-            "PRJ_UID", "PRO_UID", "BOU_ELEMENT", "BOU_ELEMENT_TYPE", "BOU_REL_POSITION",
+            "PRJ_UID", "PRO_UID", "BOU_ELEMENT_TYPE", "BOU_REL_POSITION",
             "BOU_SIZE_IDENTICAL", "DIA_UID", "BOU_UID", "ELEMENT_UID"
         ),
         "event" => array(
-            "PRJ_UID", "PRO_UID", "BOU_ELEMENT", "BOU_ELEMENT_TYPE", "BOU_REL_POSITION",
+            "PRJ_UID", "PRO_UID", "BOU_ELEMENT_TYPE", "BOU_REL_POSITION",
             "BOU_SIZE_IDENTICAL", "DIA_UID", "BOU_UID", "ELEMENT_UID", "EVN_ATTACHED_TO", "EVN_CONDITION"
         ),
-        "gateway" => array("BOU_ELEMENT", "BOU_ELEMENT_TYPE", "BOU_REL_POSITION", "BOU_SIZE_IDENTICAL", "BOU_UID",
+        "gateway" => array("BOU_ELEMENT_TYPE", "BOU_REL_POSITION", "BOU_SIZE_IDENTICAL", "BOU_UID",
             "DIA_UID", "ELEMENT_UID", "PRJ_UID", "PRO_UID"
         ),
         "artifact" => array(
-            "PRJ_UID", "PRO_UID", "BOU_ELEMENT", "BOU_ELEMENT_TYPE", "BOU_REL_POSITION",
+            "PRJ_UID", "PRO_UID", "BOU_ELEMENT_TYPE", "BOU_REL_POSITION",
             "BOU_SIZE_IDENTICAL", "DIA_UID", "BOU_UID", "ELEMENT_UID"
         ),
         "flow" => array("PRJ_UID", "DIA_UID", "FLO_ELEMENT_DEST_PORT", "FLO_ELEMENT_ORIGIN_PORT"),
         "data" => array("PRJ_UID"),
         "participant" => array("PRJ_UID"),
+        "laneset" => array("BOU_ELEMENT_TYPE", "BOU_SIZE_IDENTICAL", "BOU_UID"),
+        "lane" => array("BOU_ELEMENT_TYPE", "BOU_SIZE_IDENTICAL", "BOU_UID")
     );
 
+    private $arrayElementOriginChecked = array();
 
     public function __construct($data = null)
     {
         if (! is_null($data)) {
             $this->create($data);
+        }
+    }
+
+    public function exists($projectUid)
+    {
+        try {
+            $obj = ProjectPeer::retrieveByPK($projectUid);
+
+            return (!is_null($obj))? true : false;
+        } catch (\Exception $e) {
+            self::log("Exception: ", $e->getMessage(), "Trace: ", $e->getTraceAsString());
+
+            throw $e;
         }
     }
 
@@ -179,7 +196,12 @@ class Bpmn extends Handler
         foreach ($this->getParticipants() as $participant) {
             $this->removeParticipant($participant["PAR_UID"]);
         }
-
+        foreach ($this->getLanes() as $lane) {
+            $this->removeLane($lane["LAN_UID"]);
+        }
+        foreach ($this->getLanesets() as $laneset) {
+            $this->removeLaneset($laneset["LNS_UID"]);
+        }
         if ($process = $this->getProcess("object")) {
             $process->delete();
         }
@@ -332,6 +354,10 @@ class Bpmn extends Handler
         $data["ACT_UID"] = (array_key_exists("ACT_UID", $data))? $data["ACT_UID"] : Common::generateUID();
         $data["PRO_UID"] = $processUid;
 
+        if (isset($data["ACT_LOOP_TYPE"]) && $data["ACT_LOOP_TYPE"] == "NONE") {
+            $data["ACT_LOOP_TYPE"] = "EMPTY";
+        }
+
         try {
             self::log("Add Activity with data: ", $data);
 
@@ -379,6 +405,10 @@ class Bpmn extends Handler
     public function updateActivity($actUid, $data)
     {
         try {
+            if (isset($data["ACT_LOOP_TYPE"]) && $data["ACT_LOOP_TYPE"] == "NONE") {
+                $data["ACT_LOOP_TYPE"] = "EMPTY";
+            }
+
             self::log("Update Activity: $actUid, with data: ", $data);
 
             $activity = ActivityPeer::retrieveByPk($actUid);
@@ -580,6 +610,8 @@ class Bpmn extends Handler
             //Return
             return false;
         } catch (\Exception $e) {
+            self::log("Exception: ", $e->getMessage(), "Trace: ", $e->getTraceAsString());
+
             throw $e;
         }
     }
@@ -617,12 +649,55 @@ class Bpmn extends Handler
         }
     }
 
+    public function throwExceptionFlowIfIsAnInvalidMessageFlow(array $bpmnFlow)
+    {
+        try {
+            if ($bpmnFlow["FLO_TYPE"] == "MESSAGE" &&
+                $bpmnFlow["FLO_ELEMENT_ORIGIN_TYPE"] == "bpmnEvent" && $bpmnFlow["FLO_ELEMENT_DEST_TYPE"] == "bpmnEvent"
+            ) {
+                $flagValid = true;
+
+                $arrayEventType = array("START", "END", "INTERMEDIATE");
+
+                $arrayAux = array(
+                    array("eventUid" => $bpmnFlow["FLO_ELEMENT_ORIGIN"], "eventMarker" => "MESSAGETHROW"),
+                    array("eventUid" => $bpmnFlow["FLO_ELEMENT_DEST"],   "eventMarker" => "MESSAGECATCH")
+                );
+
+                foreach ($arrayAux as $value) {
+                    $criteria = new \Criteria("workflow");
+
+                    $criteria->addSelectColumn(\BpmnEventPeer::EVN_UID);
+                    $criteria->add(\BpmnEventPeer::EVN_UID, $value["eventUid"], \Criteria::EQUAL);
+                    $criteria->add(\BpmnEventPeer::EVN_TYPE, $arrayEventType, \Criteria::IN);
+                    $criteria->add(\BpmnEventPeer::EVN_MARKER, $value["eventMarker"], \Criteria::EQUAL);
+
+                    $rsCriteria = \BpmnEventPeer::doSelectRS($criteria);
+
+                    if (!$rsCriteria->next()) {
+                        $flagValid = false;
+                        break;
+                    }
+                }
+
+                if (!$flagValid) {
+                    throw new \RuntimeException("Invalid Message Flow.");
+                }
+            }
+        } catch (\Exception $e) {
+            self::log("Exception: ", $e->getMessage(), "Trace: ", $e->getTraceAsString());
+
+            throw $e;
+        }
+    }
+
     public function addFlow($data)
     {
         self::log("Add Flow with data: ", $data);
 
         // setting defaults
         $data['FLO_UID'] = array_key_exists('FLO_UID', $data) ? $data['FLO_UID'] : Common::generateUID();
+
         if (array_key_exists('FLO_STATE', $data)) {
             $data['FLO_STATE'] = is_array($data['FLO_STATE']) ? json_encode($data['FLO_STATE']) : $data['FLO_STATE'];
         }
@@ -635,6 +710,8 @@ class Bpmn extends Handler
                 case "bpmnArtifact": $class = "BpmnArtifact"; break;
                 case "bpmnData": $class = "BpmnData"; break;
                 case "bpmnParticipant": $class = "BpmnParticipant"; break;
+                case "bpmnLaneset": $class = "BpmnLaneset"; break;
+                case "bpmnLane": $class = "BpmnLane"; break;
                 default:
                     throw new \RuntimeException(sprintf("Invalid Object type, accepted types: [%s|%s|%s|%s], given %s.",
                         "BpmnActivity", "BpmnBpmnGateway", "BpmnEvent", "bpmnArtifact", $data["FLO_ELEMENT_ORIGIN_TYPE"]
@@ -655,6 +732,8 @@ class Bpmn extends Handler
                 case "bpmnArtifact": $class = "BpmnArtifact"; break;
                 case "bpmnData": $class = "BpmnData"; break;
                 case "bpmnParticipant": $class = "BpmnParticipant"; break;
+                case "bpmnLaneset": $class = "BpmnLaneset"; break;
+                case "bpmnLane": $class = "BpmnLane"; break;
                 default:
                     throw new \RuntimeException(sprintf("Invalid Object type, accepted types: [%s|%s|%s|%s], given %s.",
                         "BpmnActivity", "BpmnBpmnGateway", "BpmnEvent", "bpmnArtifact", $data["FLO_ELEMENT_DEST_TYPE"]
@@ -668,16 +747,23 @@ class Bpmn extends Handler
                 ));
             }
 
+            //Check and validate Message Flow
+            $this->throwExceptionFlowIfIsAnInvalidMessageFlow($data);
+
+            //Create
             $flow = new Flow();
             $flow->fromArray($data, BasePeer::TYPE_FIELDNAME);
             $flow->setPrjUid($this->getUid());
             $flow->setDiaUid($this->getDiagram("object")->getDiaUid());
+            $flow->setFloPosition($this->getFlowNextPosition($data["FLO_UID"], $data["FLO_TYPE"], $data["FLO_ELEMENT_ORIGIN"]));
             $flow->save();
+
             self::log("Add Flow Success!");
 
             return $flow->getFloUid();
         } catch (\Exception $e) {
             self::log("Exception: ", $e->getMessage(), "Trace: ", $e->getTraceAsString());
+
             throw $e;
         }
     }
@@ -690,7 +776,12 @@ class Bpmn extends Handler
         if (array_key_exists('FLO_STATE', $data)) {
             $data['FLO_STATE'] = is_array($data['FLO_STATE']) ? json_encode($data['FLO_STATE']) : $data['FLO_STATE'];
         }
+
         try {
+            //Check and validate Message Flow
+            $this->throwExceptionFlowIfIsAnInvalidMessageFlow($data);
+
+            //Update
             $flow = FlowPeer::retrieveByPk($floUid);
             $flow->fromArray($data);
             $flow->save();
@@ -734,6 +825,8 @@ class Bpmn extends Handler
             self::log("Remove Flow: $floUid");
 
             $flow = FlowPeer::retrieveByPK($floUid);
+            $this->reOrderFlowPosition($flow->getFloElementOrigin(), $flow->getFloPosition());
+
             $flow->delete();
 
             self::log("Remove Flow Success!");
@@ -1005,36 +1098,169 @@ class Bpmn extends Handler
 
     public function addLane($data)
     {
-        // TODO: Implement update() method.
+        // setting defaults
+        $processUid = $this->getProcess("object")->getProUid();
+
+        $data['LAN_UID'] = array_key_exists('LAN_UID', $data) ? $data['LAN_UID'] : Common::generateUID();
+        $data["PRO_UID"] = $processUid;
+
+        try {
+            self::log("Add Lane with data: ", $data);
+            $lane = new Lane();
+            $lane->fromArray($data, BasePeer::TYPE_FIELDNAME);
+            $lane->setPrjUid($this->getUid());
+            //$lane->setProUid($this->getProcess("object")->getProUid());
+            $lane->save();
+            self::log("Add Lane Success!");
+        } catch (\Exception $e) {
+            self::log("Exception: ", $e->getMessage(), "Trace: ", $e->getTraceAsString());
+            throw $e;
+        }
+
+        return $lane->getLanUid();
     }
 
-    public function getLane($lanUid)
+    public function getLane($lanUid, $retType = 'array')
     {
-        // TODO: Implement update() method.
+        $lane = LanePeer::retrieveByPK($lanUid);
+
+        if ($retType != "object" && ! empty($lane)) {
+            $lane = $lane->toArray();
+            $lane = self::filterArrayKeys($lane, self::$excludeFields["lane"]);
+        }
+
+        return $lane;
     }
 
-    public function getLanes()
+    public function getLanes($start = null, $limit = null, $filter = '', $changeCaseTo = CASE_UPPER)
     {
-        // TODO: Implement update() method.
-        return array();
+        if (is_array($start)) {
+            extract($start);
+        }
+
+        $filter = $changeCaseTo != CASE_UPPER ? array_map("strtolower", self::$excludeFields["lane"]) : self::$excludeFields["lane"];
+
+        return self::filterCollectionArrayKeys(
+            Lane::getAll($this->getUid(), $start, $limit, $filter, $changeCaseTo),
+            $filter
+        );
+    }
+
+    public function removeLane($lanUid)
+    {
+        try {
+            self::log("Remove Lane: $lanUid");
+
+            $lane = LanePeer::retrieveByPK($lanUid);
+            $lane->delete();
+
+            // remove related object (flows)
+            Flow::removeAllRelated($lanUid);
+
+            self::log("Remove Lane Success!");
+        } catch (\Exception $e) {
+            self::log("Exception: ", $e->getMessage(), "Trace: ", $e->getTraceAsString());
+            throw $e;
+        }
+    }
+
+    public function updateLane($lanUid, $data)
+    {
+        try {
+            self::log("Update Lane: $lanUid", "With data: ", $data);
+            $lane = LanePeer::retrieveByPk($lanUid);
+
+            $lane->fromArray($data);
+            $lane->save();
+
+            self::log("Update Lane Success!");
+        } catch (\Exception $e) {
+            self::log("Exception: ", $e->getMessage(), "Trace: ", $e->getTraceAsString());
+            throw $e;
+        }
     }
 
     public function addLaneset($data)
     {
-        // TODO: Implement update() method.
+        // setting defaults
+        $processUid = $this->getProcess("object")->getProUid();
+        $data['LNS_UID'] = array_key_exists('LNS_UID', $data) ? $data['LNS_UID'] : Common::generateUID();
+        $data["PRO_UID"] = $processUid;
+
+        try {
+            self::log("Add Laneset with data: ", $data);
+            $laneset = new Laneset();
+            $laneset->fromArray($data, BasePeer::TYPE_FIELDNAME);
+            $laneset->setPrjUid($this->getUid());
+            $laneset->setProUid($this->getProcess("object")->getProUid());
+            $laneset->save();
+            self::log("Add Laneset Success!");
+        } catch (\Exception $e) {
+            self::log("Exception: ", $e->getMessage(), "Trace: ", $e->getTraceAsString());
+            throw $e;
+        }
+
+        return $laneset->getLnsUid();
     }
 
-    public function getLaneset($lnsUid)
+    public function getLaneset($lnsUid, $retType = 'array')
     {
-        // TODO: Implement update() method.
+        $laneset = LanesetPeer::retrieveByPK($lnsUid);
+
+        if ($retType != "object" && ! empty($laneset)) {
+            $laneset = $laneset->toArray();
+            $laneset = self::filterArrayKeys($laneset, self::$excludeFields["laneset"]);
+        }
+
+        return $laneset;
     }
 
-    public function getLanesets()
+    public function getLanesets($start = null, $limit = null, $filter = '', $changeCaseTo = CASE_UPPER)
     {
-        // TODO: Implement update() method.
-        return array();
+        if (is_array($start)) {
+            extract($start);
+        }
+        $filter = $changeCaseTo != CASE_UPPER ? array_map("strtolower", self::$excludeFields["laneset"]) : self::$excludeFields["laneset"];
+        return self::filterCollectionArrayKeys(
+            Laneset::getAll($this->getUid(), $start, $limit, $filter, $changeCaseTo),
+            $filter
+        );
     }
 
+    public function removeLaneset($lnsUid)
+    {
+        try {
+            self::log("Remove Laneset: $lnsUid");
+
+            $laneset = LanesetPeer::retrieveByPK($lnsUid);
+            $laneset->delete();
+
+            // remove related object (flows)
+            Flow::removeAllRelated($lnsUid);
+
+            self::log("Remove Laneset Success!");
+        } catch (\Exception $e) {
+            self::log("Exception: ", $e->getMessage(), "Trace: ", $e->getTraceAsString());
+            throw $e;
+        }
+    }
+
+    public function updateLaneset($lnsUid, $data)
+    {
+        try {
+            self::log("Update Laneset: $lnsUid", "With data: ", $data);
+
+            $laneset = LanesetPeer::retrieveByPk($lnsUid);
+
+            $laneset->fromArray($data);
+            $laneset->save();
+
+            self::log("Update Laneset Success!");
+        } catch (\Exception $e) {
+            self::log("Exception: ", $e->getMessage(), "Trace: ", $e->getTraceAsString());
+            throw $e;
+        }
+    }
 
     public function isModified($element, $uid, $newData)
     {
@@ -1094,6 +1320,156 @@ class Bpmn extends Handler
             //Return
             return $this->getGateway2($gatewayUid);
         } catch (\Exception $e) {
+            self::log("Exception: ", $e->getMessage(), "Trace: ", $e->getTraceAsString());
+
+            throw $e;
+        }
+    }
+
+    public function getFlowNextPosition ($sFloUid, $sFloType, $sFloElementOrigin)
+    {
+        try {
+
+            $oCriteria = new Criteria('workflow');
+            $oCriteria->addSelectColumn( '(COUNT(*) + 1) AS FLOW_POS' );
+            $oCriteria->add(\BpmnFlowPeer::PRJ_UID, $this->getUid());
+            $oCriteria->add(\BpmnFlowPeer::DIA_UID, $this->getDiagram("object")->getDiaUid());
+            $oCriteria->add(\BpmnFlowPeer::FLO_UID, $sFloUid, \Criteria::NOT_EQUAL);
+            $oCriteria->add(\BpmnFlowPeer::FLO_TYPE, $sFloType);
+            $oCriteria->add(\BpmnFlowPeer::FLO_ELEMENT_ORIGIN, $sFloElementOrigin);
+            $oDataset = \BpmnFlowPeer::doSelectRS($oCriteria);
+            $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+            $oDataset->next();
+            $aRow = $oDataset->getRow();
+            return (int)($aRow["FLOW_POS"]);
+
+        } catch (Exception $oException) {
+            throw $oException;
+        }
+    }
+
+    public function reOrderFlowPosition ($sFloOrigin, $iPosition)
+    {
+        try {
+            $con = \Propel::getConnection('workflow');
+            $oCriteria = new Criteria( 'workflow' );
+            $oCriteria->add( \BpmnFlowPeer::FLO_ELEMENT_ORIGIN, $sFloOrigin );
+            $oCriteria->add( \BpmnFlowPeer::FLO_POSITION, $iPosition, '>' );
+            $oDataset = \BpmnFlowPeer::doSelectRS( $oCriteria );
+            $oDataset->setFetchmode( ResultSet::FETCHMODE_ASSOC );
+            while ($oDataset->next()) {
+                $aRow = $oDataset->getRow();
+                $newPosition = ((int)$aRow['FLO_POSITION'])-1;
+                $oCriteriaTemp = new Criteria( 'workflow' );
+                $oCriteriaTemp->add( \BpmnFlowPeer::FLO_UID, $aRow['FLO_UID'] );
+                $oCriteria2 = new Criteria('workflow');
+                $oCriteria2->add(\BpmnFlowPeer::FLO_POSITION, $newPosition);
+                BasePeer::doUpdate($oCriteriaTemp, $oCriteria2, $con);
+            }
+        } catch (Exception $oException) {
+            throw $oException;
+        }
+    }
+
+    public function getElementsBetweenElementOriginAndElementDest(
+        $elementOriginUid,
+        $elementOriginType,
+        $elementDestUid,
+        $elementDestType,
+        $index
+    ) {
+        try {
+            if (isset($this->arrayElementOriginChecked[$elementOriginUid]) && $this->arrayElementOriginChecked[$elementOriginUid] == $elementOriginType) {
+                //Return
+                return array();
+            }
+
+            $this->arrayElementOriginChecked[$elementOriginUid] = $elementOriginType;
+
+            if ($elementOriginType == $elementDestType && $elementOriginUid == $elementDestUid) {
+                $arrayEvent = array();
+                $arrayEvent[$index] = array($elementDestUid, $elementDestType);
+
+                //Return
+                return $arrayEvent;
+            } else {
+                //Flows
+                $arrayFlow = \BpmnFlow::findAllBy(array(
+                    \BpmnFlowPeer::FLO_TYPE                => array("MESSAGE", \Criteria::NOT_EQUAL),
+                    \BpmnFlowPeer::FLO_ELEMENT_ORIGIN      => $elementOriginUid,
+                    \BpmnFlowPeer::FLO_ELEMENT_ORIGIN_TYPE => $elementOriginType
+                ));
+
+                foreach ($arrayFlow as $value) {
+                    $arrayFlowData = $value->toArray();
+
+                    $arrayEvent = $this->getElementsBetweenElementOriginAndElementDest(
+                        $arrayFlowData["FLO_ELEMENT_DEST"],
+                        $arrayFlowData["FLO_ELEMENT_DEST_TYPE"],
+                        $elementDestUid,
+                        $elementDestType,
+                        $index + 1
+                    );
+
+                    if (!empty($arrayEvent)) {
+                        $arrayEvent[$index] = array($elementOriginUid, $elementOriginType);
+
+                        //Return
+                        return $arrayEvent;
+                    }
+                }
+
+                //Return
+                return array();
+            }
+        } catch (\Exception $e) {
+            self::log("Exception: ", $e->getMessage(), "Trace: ", $e->getTraceAsString());
+
+            throw $e;
+        }
+    }
+
+    public function getMessageEventsOfThrowTypeBetweenElementOriginAndElementDest(
+        $elementOriginUid,
+        $elementOriginType,
+        $elementDestUid,
+        $elementDestType
+    ) {
+        try {
+            $arrayEventType   = array("END", "INTERMEDIATE");
+            $arrayEventMarker = array("MESSAGETHROW");
+
+            $this->arrayElementOriginChecked = array();
+
+            $arrayEventAux = $this->getElementsBetweenElementOriginAndElementDest(
+                $elementOriginUid,
+                $elementOriginType,
+                $elementDestUid,
+                $elementDestType,
+                0
+            );
+
+            ksort($arrayEventAux);
+
+            $arrayEvent = array();
+
+            foreach ($arrayEventAux as $value) {
+                if ($value[1] == "bpmnEvent") {
+                    $event = \BpmnEventPeer::retrieveByPK($value[0]);
+
+                    if (!is_null($event) &&
+                        in_array($event->getEvnType(), $arrayEventType) && in_array($event->getEvnMarker(), $arrayEventMarker)
+                    ) {
+                        $arrayEvent[] = $value;
+                    }
+                }
+            }
+
+            //Return
+            return $arrayEvent;
+        } catch (\Exception $e) {
+            self::log("Exception: ", $e->getMessage(), "Trace: ", $e->getTraceAsString());
+
             throw $e;
         }
     }

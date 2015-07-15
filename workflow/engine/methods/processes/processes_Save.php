@@ -30,7 +30,8 @@
 //G::LoadThirdParty( 'pear/json', 'class.json' );
 
 $function = isset( $_POST['function'] ) ? $_POST['function'] : '';
-
+$infoProcess = new Process();
+$resultProcessOld = $infoProcess->load($_POST['form']['PRO_UID']);
 switch ($function) {
     case 'lookForNameProcess':
         require_once 'classes/model/Content.php';
@@ -91,4 +92,63 @@ switch ($function) {
         }
         break;
 
+}
+$resultProcessNew = $infoProcess->load($_POST['form']['PRO_UID']);
+$oldFields = array_diff_assoc($resultProcessOld,$resultProcessNew);
+$newFields = array_diff_assoc($resultProcessNew,$resultProcessOld);
+$fields = array();
+
+if(array_key_exists('PRO_TITLE', $newFields)) {
+    $fields[] = G::LoadTranslation('ID_TITLE');
+}
+if(array_key_exists('PRO_DESCRIPTION', $newFields)) {
+    $fields[] = G::LoadTranslation('ID_DESCRIPTION');
+}
+if(array_key_exists('PRO_CALENDAR', $newFields)) {
+    $fields[] = G::LoadTranslation('ID_CALENDAR');
+}
+if(array_key_exists('PRO_CATEGORY', $newFields)) {
+    $fields[] = "Process Category";
+}
+if(array_key_exists('PRO_SUMMARY_DYNAFORM', $newFields)) {
+    $fields[] = "Dynaform to show a case summary";
+}
+if(array_key_exists('PRO_DERIVATION_SCREEN_TPL', $newFields)) {
+    $fields[] = "Routing Screen Template"; 
+}
+if(array_key_exists('PRO_DEBUG', $newFields)) {
+    $fields[] = G::LoadTranslation('ID_PRO_DEBUG');
+}
+if(array_key_exists('PRO_SHOW_MESSAGE', $newFields)) {
+    $fields[] = "Hide the case number and the case title in the steps";
+}
+if(array_key_exists('PRO_SUBPROCESS', $newFields)) {
+    $fields[] = "This a sub process";
+}
+if(array_key_exists('PRO_TRI_DELETED', $newFields)) {
+    $fields[] = "Execute a trigger when a case is deleted";
+}
+if(array_key_exists('PRO_TRI_CANCELED', $newFields)) {
+    $fields[] = "Execute a trigger when a case is canceled";
+}
+if(array_key_exists('PRO_TRI_PAUSED', $newFields)) {
+    $fields[] = "Execute a trigger when a case is paused";
+}
+if(array_key_exists('PRO_TRI_REASSIGNED', $newFields)) {
+    $fields[] = "Execute a trigger when a case is reassigned";
+}
+if(array_key_exists('PRO_TRI_UNPAUSED', $newFields)) {
+    $fields[] = "Execute a trigger when a case is unpaused";
+}
+if(array_key_exists('PRO_TYPE_PROCESS', $newFields)) {
+    $fields[] = "Type of process (only owners can edit private processes)";
+}
+G::auditLog('EditProcess','Edit fields ('.implode(', ',$fields).') in process "'.$_POST['form']['PRO_TITLE'].'"');
+
+if(isset($_POST['form']['PRO_UID']) && !empty($_POST['form']['PRO_UID'])) {
+    $valuesProcess['PRO_UID'] = $_POST['form']['PRO_UID'];
+    $valuesProcess['PRO_UPDATE_DATE'] = date("Y-m-d H:i:s"); 
+    G::LoadClass('processes');
+    $infoProcess = new Processes();
+    $resultProcess = $infoProcess->updateProcessRow($valuesProcess);
 }

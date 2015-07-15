@@ -212,5 +212,32 @@ function validDate() {
   return true;
 }
 
+leimnud.event.add(getField('PME_ENDDATE'), 'change', function() { 
+    validDateRange(getField('PME_STARTDATE'), getField('PME_ENDDATE'))
+});
+leimnud.event.add(getField('PME_AFTERDATE'), 'change', function() { 
+    validDateRange(getField('PME_BEFOREDATE'), getField('PME_AFTERDATE'))
+});
+
+function validDateRange(start, end) {
+    var startDate = Date.parse(start.value);
+    var endDate = Date.parse(end.value);
+    
+    if (isNaN(startDate)) {
+        msgBox('@G::LoadTranslation(ID_START_DATE_NOT_VALID)', "alert");
+        return false;
+    }
+    
+    if (isNaN(endDate)) {
+        msgBox('@G::LoadTranslation(ID_END_DATE_NOT_VALID)', "alert");
+        return false;
+    }
+    
+    if (startDate >= endDate) {
+        msgBox('@G::LoadTranslation(ID_END_DATE_GREATER)', "alert");
+        end.value = "";
+    }
+}
+
 ]]></PME_JS>
 </dynaForm>

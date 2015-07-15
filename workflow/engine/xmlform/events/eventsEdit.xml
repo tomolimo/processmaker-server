@@ -7,7 +7,7 @@
     <en><![CDATA[]]></en>
   </TITLE>
   <NOTE type="subtitle">
-    <en><![CDATA[Events execution is related to the due date of the cases or the estimated duration if you select "Multiple Tasks"]]></en>
+    <en><![CDATA[Event execution is related to the due date of the cases or the estimated duration if you select "Multiple Tasks"]]></en>
   </NOTE>
   <EVN_DESCRIPTION type="text" size="36" maxlength="255" required="1">
     <en><![CDATA[Description]]></en>

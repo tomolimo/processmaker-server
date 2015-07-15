@@ -58,6 +58,12 @@ abstract class BaseAppHistory extends BaseObject implements Persistent
     protected $dyn_uid = '';
 
     /**
+     * The value for the obj_type field.
+     * @var        string
+     */
+    protected $obj_type = 'DYNAFORM';
+
+    /**
      * The value for the usr_uid field.
      * @var        string
      */
@@ -148,6 +154,17 @@ abstract class BaseAppHistory extends BaseObject implements Persistent
     {
 
         return $this->dyn_uid;
+    }
+
+    /**
+     * Get the [obj_type] column value.
+     * 
+     * @return     string
+     */
+    public function getObjType()
+    {
+
+        return $this->obj_type;
     }
 
     /**
@@ -326,6 +343,28 @@ abstract class BaseAppHistory extends BaseObject implements Persistent
     } // setDynUid()
 
     /**
+     * Set the value of [obj_type] column.
+     * 
+     * @param      string $v new value
+     * @return     void
+     */
+    public function setObjType($v)
+    {
+
+        // Since the native PHP type for this column is string,
+        // we will cast the input to a string (if it is not).
+        if ($v !== null && !is_string($v)) {
+            $v = (string) $v;
+        }
+
+        if ($this->obj_type !== $v || $v === 'DYNAFORM') {
+            $this->obj_type = $v;
+            $this->modifiedColumns[] = AppHistoryPeer::OBJ_TYPE;
+        }
+
+    } // setObjType()
+
+    /**
      * Set the value of [usr_uid] column.
      * 
      * @param      string $v new value
@@ -447,20 +486,22 @@ abstract class BaseAppHistory extends BaseObject implements Persistent
 
             $this->dyn_uid = $rs->getString($startcol + 4);
 
-            $this->usr_uid = $rs->getString($startcol + 5);
+            $this->obj_type = $rs->getString($startcol + 5);
 
-            $this->app_status = $rs->getString($startcol + 6);
+            $this->usr_uid = $rs->getString($startcol + 6);
 
-            $this->history_date = $rs->getTimestamp($startcol + 7, null);
+            $this->app_status = $rs->getString($startcol + 7);
 
-            $this->history_data = $rs->getString($startcol + 8);
+            $this->history_date = $rs->getTimestamp($startcol + 8, null);
+
+            $this->history_data = $rs->getString($startcol + 9);
 
             $this->resetModified();
 
             $this->setNew(false);
 
             // FIXME - using NUM_COLUMNS may be clearer.
-            return $startcol + 9; // 9 = AppHistoryPeer::NUM_COLUMNS - AppHistoryPeer::NUM_LAZY_LOAD_COLUMNS).
+            return $startcol + 10; // 10 = AppHistoryPeer::NUM_COLUMNS - AppHistoryPeer::NUM_LAZY_LOAD_COLUMNS).
 
         } catch (Exception $e) {
             throw new PropelException("Error populating AppHistory object", $e);
@@ -680,15 +721,18 @@ abstract class BaseAppHistory extends BaseObject implements Persistent
                 return $this->getDynUid();
                 break;
             case 5:
-                return $this->getUsrUid();
+                return $this->getObjType();
                 break;
             case 6:
-                return $this->getAppStatus();
+                return $this->getUsrUid();
                 break;
             case 7:
-                return $this->getHistoryDate();
+                return $this->getAppStatus();
                 break;
             case 8:
+                return $this->getHistoryDate();
+                break;
+            case 9:
                 return $this->getHistoryData();
                 break;
             default:
@@ -716,10 +760,11 @@ abstract class BaseAppHistory extends BaseObject implements Persistent
             $keys[2] => $this->getProUid(),
             $keys[3] => $this->getTasUid(),
             $keys[4] => $this->getDynUid(),
-            $keys[5] => $this->getUsrUid(),
-            $keys[6] => $this->getAppStatus(),
-            $keys[7] => $this->getHistoryDate(),
-            $keys[8] => $this->getHistoryData(),
+            $keys[5] => $this->getObjType(),
+            $keys[6] => $this->getUsrUid(),
+            $keys[7] => $this->getAppStatus(),
+            $keys[8] => $this->getHistoryDate(),
+            $keys[9] => $this->getHistoryData(),
         );
         return $result;
     }
@@ -767,15 +812,18 @@ abstract class BaseAppHistory extends BaseObject implements Persistent
                 $this->setDynUid($value);
                 break;
             case 5:
-                $this->setUsrUid($value);
+                $this->setObjType($value);
                 break;
             case 6:
-                $this->setAppStatus($value);
+                $this->setUsrUid($value);
                 break;
             case 7:
-                $this->setHistoryDate($value);
+                $this->setAppStatus($value);
                 break;
             case 8:
+                $this->setHistoryDate($value);
+                break;
+            case 9:
                 $this->setHistoryData($value);
                 break;
         } // switch()
@@ -822,19 +870,23 @@ abstract class BaseAppHistory extends BaseObject implements Persistent
         }
 
         if (array_key_exists($keys[5], $arr)) {
-            $this->setUsrUid($arr[$keys[5]]);
+            $this->setObjType($arr[$keys[5]]);
         }
 
         if (array_key_exists($keys[6], $arr)) {
-            $this->setAppStatus($arr[$keys[6]]);
+            $this->setUsrUid($arr[$keys[6]]);
         }
 
         if (array_key_exists($keys[7], $arr)) {
-            $this->setHistoryDate($arr[$keys[7]]);
+            $this->setAppStatus($arr[$keys[7]]);
         }
 
         if (array_key_exists($keys[8], $arr)) {
-            $this->setHistoryData($arr[$keys[8]]);
+            $this->setHistoryDate($arr[$keys[8]]);
+        }
+
+        if (array_key_exists($keys[9], $arr)) {
+            $this->setHistoryData($arr[$keys[9]]);
         }
 
     }
@@ -866,6 +918,10 @@ abstract class BaseAppHistory extends BaseObject implements Persistent
 
         if ($this->isColumnModified(AppHistoryPeer::DYN_UID)) {
             $criteria->add(AppHistoryPeer::DYN_UID, $this->dyn_uid);
+        }
+
+        if ($this->isColumnModified(AppHistoryPeer::OBJ_TYPE)) {
+            $criteria->add(AppHistoryPeer::OBJ_TYPE, $this->obj_type);
         }
 
         if ($this->isColumnModified(AppHistoryPeer::USR_UID)) {
@@ -950,6 +1006,8 @@ abstract class BaseAppHistory extends BaseObject implements Persistent
         $copyObj->setTasUid($this->tas_uid);
 
         $copyObj->setDynUid($this->dyn_uid);
+
+        $copyObj->setObjType($this->obj_type);
 
         $copyObj->setUsrUid($this->usr_uid);
 

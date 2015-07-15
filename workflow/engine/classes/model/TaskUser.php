@@ -194,5 +194,46 @@ class TaskUser extends BaseTaskUser
 
         return $result;
     }
+    /**
+     * Get All users assigned to task
+     *
+     * @param string $TAS_UID
+     * @return array users info
+     *
+     */
+    public function getAllUsersTask ($TAS_UID)
+    {
+        require_once 'classes/model/Users.php';
+
+        $groupsTask = array ();
+        $usersTask = array ();
+
+        //getting task's users
+        $criteria = new Criteria( 'workflow' );
+        $criteria->addSelectColumn( UsersPeer::USR_FIRSTNAME );
+        $criteria->addSelectColumn( UsersPeer::USR_LASTNAME );
+        $criteria->addSelectColumn( UsersPeer::USR_USERNAME );
+        $criteria->addSelectColumn( TaskUserPeer::TAS_UID );
+        $criteria->addSelectColumn( TaskUserPeer::USR_UID );
+        $criteria->addSelectColumn( TaskUserPeer::TU_TYPE );
+        $criteria->addSelectColumn( TaskUserPeer::TU_RELATION );
+        $criteria->addJoin( TaskUserPeer::USR_UID, UsersPeer::USR_UID, Criteria::LEFT_JOIN );
+        $criteria->add( TaskUserPeer::TAS_UID, $TAS_UID );
+        $dataset = TaskUserPeer::doSelectRS( $criteria );
+        $dataset->setFetchmode( ResultSet::FETCHMODE_ASSOC );
+        while ($dataset->next()) {
+            $row = $dataset->getRow();
+            if($row["TU_RELATION"] == 2){                
+                $gpr = new GroupUser();
+                $array = $gpr->getAllGroupUser($row["USR_UID"]);
+                foreach($array as $urow){
+                  $usersTask[] = $urow;
+                }
+            }else{
+                $usersTask[] = $row;
+            }
+        }
+        return $usersTask;
+    }
 }
 

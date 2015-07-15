@@ -38,16 +38,105 @@ try {
       break;
       } */
     //$oJSON = new Services_JSON();
+    
+    G::LoadSystem('inputfilter');
+    $filter = new InputFilter();
+    $_GET = $filter->xssFilterHard($_GET);
+    $_POST = $filter->xssFilterHard($_POST);
+    $_REQUEST = $filter->xssFilterHard($_REQUEST);
+    //$_SESSION = $filter->xssFilterHard($_SESSION); 
 
     if (isset($_REQUEST['data'])) {
         if($_REQUEST['action']=="addText"||$_REQUEST['action']=="updateText") {
             $oData = Bootstrap::json_decode($_REQUEST['data']);
+            $oDataAux = G::json_decode($_REQUEST['data']);
+            $oDataAux = (array)$oDataAux;
         } else {
             $oData = Bootstrap::json_decode(stripslashes($_REQUEST['data']));
+            $oDataAux = G::json_decode(stripslashes($_REQUEST['data']));
+            $oDataAux = (array)$oDataAux;
         }
         //$oData = $oJSON->decode( stripslashes( $_REQUEST['data'] ) );
         $sOutput = '';
         $sTask = '';
+
+        if(array_key_exists('pro_uid', $oDataAux) || array_key_exists('uid', $oDataAux) || array_key_exists('PRO_UID', $oDataAux) || array_key_exists('UID', $oDataAux)) {
+            if(array_key_exists('pro_uid', $oDataAux) || array_key_exists('PRO_UID', $oDataAux)) {
+                if(array_key_exists('pro_uid', $oDataAux)) {
+                    $proUid = $oDataAux['pro_uid'];
+                } else {
+                    $proUid = $oDataAux['PRO_UID'];
+                }
+            } else {
+                $proUid = $oDataAux['uid'];
+                $uidAux = $proUid;
+            }
+
+            G::LoadClass('processes');
+            $infoProcess = new Processes();
+
+            if(!$infoProcess->processExists($proUid)) {
+                $oSL = new SwimlanesElements();
+                if($oSL->swimlanesElementsExists($proUid)) {
+                    $aFields = $oSL->load($proUid);
+                    $proUid = $aFields['PRO_UID'];
+                } else {
+                    $k = new Criteria('workflow');
+                    $k->clearSelectColumns();
+                    $k->addSelectColumn(TaskPeer::PRO_UID);
+                    $k->add(TaskPeer::TAS_UID, $uidAux );
+                    $rs = TaskPeer::doSelectRS($k);
+                    $rs->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+                    $rs->next();
+                    $row = $rs->getRow();
+                    $proUid = $row['PRO_UID'];
+                }
+            }
+            $resultProcess = $infoProcess->getProcessRow($proUid);
+        } else {
+            if(array_key_exists('PU_UID', $oDataAux)) {
+                $c = new Criteria('workflow');
+                $c->clearSelectColumns();
+                $c->addSelectColumn(ProcessUserPeer::PRO_UID);
+                $c->addSelectColumn(ProcessUserPeer::USR_UID);
+                $c->add(ProcessUserPeer::PU_UID, $oData->PU_UID);
+                $oDataset = AppDelegationPeer::doSelectRS($c);
+                $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+                $oDataset->next();
+                $row = $oDataset->getRow();
+                $userSupervisor = $row['USR_UID'];
+
+                G::LoadClass('processes');
+                $infoProcess = new Processes();
+                $resultProcess = $infoProcess->getProcessRow($row['PRO_UID']);
+            }
+        }
+    }
+
+    if(isset($_REQUEST['pro_uid']) && !empty($_REQUEST['pro_uid']) || isset($_REQUEST['PRO_UID']) && !empty($_REQUEST['PRO_UID'])) {
+        if(isset($_REQUEST['pro_uid']) && !empty($_REQUEST['pro_uid'])) {
+            $proUid = $_REQUEST['pro_uid'];
+        } else {
+            $proUid = $_REQUEST['PRO_UID'];
+        }
+        G::LoadClass('processes');
+        $infoProcess = new Processes();
+        $resultProcess = $infoProcess->getProcessRow($proUid);
+    }
+
+    if(isset($proUid) && $proUid != "") {
+        G::LoadClass("processes");
+
+        $infoProcess = new Processes();
+
+        if (!in_array($_REQUEST["action"], array("load"))) {
+            $infoProcess->updateProcessRow(array(
+                "PRO_UID"         => $proUid,
+                "PRO_UPDATE_DATE" => date("Y-m-d H:i:s")
+            ));
+        }
+
+        $resultProcess = $infoProcess->getProcessRow($proUid);
     }
 
     //G::LoadClass( 'processMap' );
@@ -85,6 +174,7 @@ try {
             break;
         case 'process_Export':
             include (PATH_METHODS . 'processes/processes_Export.php');
+            G::auditLog('ExportProcess','Export process "'.$resultProcess['PRO_TITLE'].'"');
             break;
         case 'process_User':
             include (PATH_METHODS . 'processes/processes_User.php');
@@ -101,9 +191,14 @@ try {
             break;
         case 'webEntry_delete':
             $form = $_REQUEST;
-            unlink(PATH_DATA . "sites" . PATH_SEP . SYS_SYS . PATH_SEP . "public" . PATH_SEP . $form['PRO_UID'] . PATH_SEP . $form['FILENAME']);
-            unlink(PATH_DATA . "sites" . PATH_SEP . SYS_SYS . PATH_SEP . "public" . PATH_SEP . $form['PRO_UID'] . PATH_SEP . str_replace(".php", "Post", $form['FILENAME']) . ".php");
+            if(file_exists(PATH_DATA . "sites" . PATH_SEP . SYS_SYS . PATH_SEP . "public" . PATH_SEP . $form['PRO_UID'] . PATH_SEP . $form['FILENAME'])) {
+                unlink(PATH_DATA . "sites" . PATH_SEP . SYS_SYS . PATH_SEP . "public" . PATH_SEP . $form['PRO_UID'] . PATH_SEP . $form['FILENAME']);
+            }
+            if(file_exists(PATH_DATA . "sites" . PATH_SEP . SYS_SYS . PATH_SEP . "public" . PATH_SEP . $form['PRO_UID'] . PATH_SEP . str_replace(".php", "Post", $form['FILENAME']) . ".php")) {
+                unlink(PATH_DATA . "sites" . PATH_SEP . SYS_SYS . PATH_SEP . "public" . PATH_SEP . $form['PRO_UID'] . PATH_SEP . str_replace(".php", "Post", $form['FILENAME']) . ".php");
+            }
             $oProcessMap->webEntry($_REQUEST['PRO_UID']);
+            G::auditLog('WebEntry','Delete web entry ('.$form['FILENAME'].') in process "'.$resultProcess['PRO_TITLE'].'"');
             break;
         case 'webEntry_new':
             $oProcessMap->webEntry_new($oData->PRO_UID);
@@ -113,6 +208,7 @@ try {
             G::LoadClass('processMap');
             $oProcessMap = new ProcessMap();
             $oProcessMap->listProcessesUser($oData->PRO_UID);
+            G::auditLog('AssignRole','Assign new supervisor ('.$oData->USR_UID.') in process "'.$resultProcess['PRO_TITLE'].'"');
             break;
         case 'removeProcessUser':
             $oProcessMap->removeProcessUser($oData->PU_UID);
@@ -122,6 +218,7 @@ try {
                     break;
                 }
             }
+            G::auditLog('RemoveUser','Remove supervisor ('.$userSupervisor.') in process "'.$resultProcess['PRO_TITLE'].'"');
             break;
         case 'supervisorDynaforms':
             $oProcessMap->supervisorDynaforms($oData->pro_uid);
@@ -159,9 +256,15 @@ try {
             break;
         case 'addTask':
             $sOutput = $oProcessMap->addTask($oData->uid, $oData->position->x, $oData->position->y);
+            $sOutputAux = G::json_decode($sOutput);
+            $sOutputAux = (array)$sOutputAux;
+            G::auditLog('AddTask','Add new task ('.$sOutputAux['uid'].') in process "'.$resultProcess['PRO_TITLE'].'"');
             break;
         case 'addSubProcess':
             $sOutput = $oProcessMap->addSubProcess($oData->uid, $oData->position->x, $oData->position->y);
+            $sOutputAux = G::json_decode($sOutput);
+            $sOutputAux = (array)$sOutputAux;
+            G::auditLog('AddSubProcess','Add new sub process ('.$sOutputAux['uid'].') in process "'.$resultProcess['PRO_TITLE'].'"');
             break;
         case 'taskColor':
             $oTask->taskColor($oData->pro_uid, $oData->tas_uid);
@@ -174,33 +277,52 @@ try {
             break;
         case 'saveTaskPosition':
             $sOutput = $oProcessMap->saveTaskPosition($oData->uid, $oData->position->x, $oData->position->y);
+            $oTask = new Task();
+            $oTask->load($uidAux);
+            G::auditLog('SaveTaskPosition','Change task position ('.$oTask->getTasTitle().') in process "'.$resultProcess['PRO_TITLE'].'"');
             break;
         case 'deleteTask':
+            $oTaskNewPattern = new Task();
+            $taskInfo=$oTaskNewPattern->load($oData->tas_uid);
+            $titleTask=$taskInfo['TAS_TITLE'];
+            G::auditlog("DeleteTask",'Delete Task -> '.$titleTask.' : '.$oData->tas_uid);
             $sOutput = $oProcessMap->deleteTask($oData->tas_uid);
             break;
         case 'addGuide':
             $sOutput = $oProcessMap->addGuide($oData->uid, $oData->position, $oData->direction);
+            $sOutputAux = G::json_decode($sOutput);
+            $sOutputAux = (array)$sOutputAux;
+            G::auditLog('Add'.ucwords($oDataAux['direction']).'Line','Add '.$oDataAux['direction'].' line ('.$sOutputAux['uid'].') in process "'.$resultProcess['PRO_TITLE'].'"');
             break;
         case 'saveGuidePosition':
             $sOutput = $oProcessMap->saveGuidePosition($oData->uid, $oData->position, $oData->direction);
+            G::auditLog('SaveGuidePosition','Change '.$oData->direction.' line position  ('.$oData->uid.') in process "'.$resultProcess['PRO_TITLE'].'"');
             break;
         case 'deleteGuide':
             $sOutput = $oProcessMap->deleteGuide($oData->uid);
+            G::auditLog('DeleteLine','Delete line ('.$oData->uid.') in process "'.$resultProcess['PRO_TITLE'].'"');
             break;
         case 'deleteGuides':
             $sOutput = $oProcessMap->deleteGuides($oData->pro_uid);
+            G::auditLog('DeleteLines','Delete all lines in process "'.$resultProcess['PRO_TITLE'].'"');
             break;
         case 'addText':
             $sOutput = $oProcessMap->addText($oData->uid, $oData->label, $oData->position->x, $oData->position->y);
+            $sOutputAux = G::json_decode($sOutput);
+            $sOutputAux = (array)$sOutputAux;
+            G::auditLog('AddText','Add new text ('.$sOutputAux['uid'].') in process "'.$resultProcess['PRO_TITLE'].'"');
             break;
         case 'updateText':
             $sOutput = $oProcessMap->updateText($oData->uid, $oData->label);
+            G::auditLog('UpdateText','Edit text ('.$oData->uid.' ) in process "'.$resultProcess['PRO_TITLE'].'"');
             break;
         case 'saveTextPosition':
             $sOutput = $oProcessMap->saveTextPosition($oData->uid, $oData->position->x, $oData->position->y);
+            G::auditLog('SaveTextPosition','Change text position ('.$oData->uid.' ) in process "'.$resultProcess['PRO_TITLE'].'"');
             break;
         case 'deleteText':
             $sOutput = $oProcessMap->deleteText($oData->uid);
+            G::auditLog('DeleteText','Delete text ('.$oData->uid.' ) in process "'.$resultProcess['PRO_TITLE'].'"');
             break;
         case 'dynaforms':
             $oProcessMap->dynaformsList($oData->pro_uid);
@@ -264,24 +386,126 @@ try {
             switch ($oData->type) {
                 case 0:
                     $sType = 'SEQUENTIAL';
+                    $oProcessNewPattern = new Process();
+                    $taskProcess=$oProcessNewPattern->load($oData->pro_uid);
+                    $titleProcess=$taskProcess['PRO_TITLE'];
+                    $oTaskNewPattern = new Task();
+                    $taskInfo=$oTaskNewPattern->load($oData->tas_uid);
+                    $titleTask=$taskInfo['TAS_TITLE'];
+                    if ($oData->next_task != "-1") {
+                        $oTaskNextNewPattern = new Task();
+                        $taskNextInfo=$oTaskNextNewPattern->load($oData->next_task);
+                        $titleNextTask=$taskNextInfo['TAS_TITLE'];
+                    } else {
+                        $titleNextTask=G::LoadTranslation("ID_END_OF_PROCESS");
+                    }
+                    if ($titleNextTask=='') {
+                        G::auditLog("DerivationRule",'PROCESS NAME : '.$titleProcess.' : '.$oData->pro_uid.' Routing rule : END OF PROCESS Task Name -> '.$titleTask.' : '.$oData->tas_uid);
+                    }else{
+                        G::auditLog("DerivationRule",'PROCESS NAME : '.$titleProcess.' : '.$oData->pro_uid.' Routing rule : '.$sType.' from -> '.$titleTask.' : '.$oData->tas_uid.' To -> '.$titleNextTask.' : '.$oData->next_task);
+                    }
                     break;
                 case 1:
                     $sType = 'SELECT';
+                    $oProcessNewPattern = new Process();
+                    $taskProcess=$oProcessNewPattern->load($oData->pro_uid);
+                    $titleProcess=$taskProcess['PRO_TITLE'];
+                    $oTaskNewPattern = new Task();
+                    $taskInfo=$oTaskNewPattern->load($oData->tas_uid);
+                    $titleTask=$taskInfo['TAS_TITLE'];
+                    if ($oData->next_task != "-1") {
+                        $oTaskNextNewPattern = new Task();
+                        $taskNextInfo=$oTaskNextNewPattern->load($oData->next_task);
+                        $titleNextTask=$taskNextInfo['TAS_TITLE'];
+                    } else {
+                        $titleNextTask=G::LoadTranslation("ID_END_OF_PROCESS");
+                    }
+                    G::auditLog("DerivationRule",'PROCESS NAME : '.$titleProcess.' : '.$oData->pro_uid.' Routing rule : '.$sType.' from -> '.$titleTask.' : '.$oData->tas_uid.' To -> '.$titleNextTask.' : '.$oData->next_task);
                     break;
                 case 2:
                     $sType = 'EVALUATE';
+                    $oProcessNewPattern = new Process();
+                    $taskProcess=$oProcessNewPattern->load($oData->pro_uid);
+                    $titleProcess=$taskProcess['PRO_TITLE'];
+                    $oTaskNewPattern = new Task();
+                    $taskInfo=$oTaskNewPattern->load($oData->tas_uid);
+                    $titleTask=$taskInfo['TAS_TITLE'];
+                    if ($oData->next_task != "-1") {
+                        $oTaskNextNewPattern = new Task();
+                        $taskNextInfo=$oTaskNextNewPattern->load($oData->next_task);
+                        $titleNextTask=$taskNextInfo['TAS_TITLE'];
+                    } else {
+                        $titleNextTask=G::LoadTranslation("ID_END_OF_PROCESS");
+                    }
+                    G::auditLog("DerivationRule",'PROCESS NAME : '.$titleProcess.' : '.$oData->pro_uid.' Routing rule : '.$sType.' from -> '.$titleTask.' : '.$oData->tas_uid.' To -> '.$titleNextTask.' : '.$oData->next_task);
                     break;
                 case 3:
                     $sType = 'PARALLEL';
+                    $oProcessNewPattern = new Process();
+                    $taskProcess=$oProcessNewPattern->load($oData->pro_uid);
+                    $titleProcess=$taskProcess['PRO_TITLE'];
+                    $oTaskNewPattern = new Task();
+                    $taskInfo=$oTaskNewPattern->load($oData->tas_uid);
+                    $titleTask=$taskInfo['TAS_TITLE'];
+                    if ($oData->next_task != "-1") {
+                        $oTaskNextNewPattern = new Task();
+                        $taskNextInfo=$oTaskNextNewPattern->load($oData->next_task);
+                        $titleNextTask=$taskNextInfo['TAS_TITLE'];
+                    } else {
+                        $titleNextTask=G::LoadTranslation("ID_END_OF_PROCESS");
+                    }
+                    G::auditLog("DerivationRule",'PROCESS NAME : '.$titleProcess.' : '.$oData->pro_uid.' Routing rule : '.$sType.' from -> '.$titleTask.' : '.$oData->tas_uid.' To -> '.$titleNextTask.' : '.$oData->next_task);
                     break;
                 case 4:
                     $sType = 'PARALLEL-BY-EVALUATION';
+                    $oProcessNewPattern = new Process();
+                    $taskProcess=$oProcessNewPattern->load($oData->pro_uid);
+                    $titleProcess=$taskProcess['PRO_TITLE'];
+                    $oTaskNewPattern = new Task();
+                    $taskInfo=$oTaskNewPattern->load($oData->tas_uid);
+                    $titleTask=$taskInfo['TAS_TITLE'];
+                    if ($oData->next_task != "-1") {
+                        $oTaskNextNewPattern = new Task();
+                        $taskNextInfo=$oTaskNextNewPattern->load($oData->next_task);
+                        $titleNextTask=$taskNextInfo['TAS_TITLE'];
+                    } else {
+                        $titleNextTask=G::LoadTranslation("ID_END_OF_PROCESS");
+                    }
+                    G::auditLog("DerivationRule",'PROCESS NAME : '.$titleProcess.' : '.$oData->pro_uid.' Routing rule : '.$sType.' from -> '.$titleTask.' : '.$oData->tas_uid.' To -> '.$titleNextTask.' : '.$oData->next_task);
                     break;
                 case 5:
                     $sType = 'SEC-JOIN';
+                    $oProcessNewPattern = new Process();
+                    $taskProcess=$oProcessNewPattern->load($oData->pro_uid);
+                    $titleProcess=$taskProcess['PRO_TITLE'];
+                    $oTaskNewPattern = new Task();
+                    $taskInfo=$oTaskNewPattern->load($oData->tas_uid);
+                    $titleTask=$taskInfo['TAS_TITLE'];
+                    if ($oData->next_task != "-1") {
+                        $oTaskNextNewPattern = new Task();
+                        $taskNextInfo=$oTaskNextNewPattern->load($oData->next_task);
+                        $titleNextTask=$taskNextInfo['TAS_TITLE'];
+                    } else {
+                        $titleNextTask=G::LoadTranslation("ID_END_OF_PROCESS");
+                    }
+                    G::auditLog("DerivationRule",'PROCESS NAME : '.$titleProcess.' : '.$oData->pro_uid.' Routing rule : '.$sType.' from -> '.$titleTask.' : '.$oData->tas_uid.' To -> '.$titleNextTask.' : '.$oData->next_task);
                     break;
                 case 8:
                     $sType = 'DISCRIMINATOR';
+                    $oProcessNewPattern = new Process();
+                    $taskProcess=$oProcessNewPattern->load($oData->pro_uid);
+                    $titleProcess=$taskProcess['PRO_TITLE'];
+                    $oTaskNewPattern = new Task();
+                    $taskInfo=$oTaskNewPattern->load($oData->tas_uid);
+                    $titleTask=$taskInfo['TAS_TITLE'];
+                    if ($oData->next_task != "-1") {
+                        $oTaskNextNewPattern = new Task();
+                        $taskNextInfo=$oTaskNextNewPattern->load($oData->next_task);
+                        $titleNextTask=$taskNextInfo['TAS_TITLE'];
+                    } else {
+                        $titleNextTask=G::LoadTranslation("ID_END_OF_PROCESS");
+                    }
+                    G::auditLog("DerivationRule",'PROCESS NAME : '.$titleProcess.' : '.$oData->pro_uid.' Routing rule : '.$sType.' from -> '.$titleTask.' : '.$oData->tas_uid.' To -> '.$titleNextTask.' : '.$oData->next_task);
                     break;
             }
             if (($oData->type != 0) && ($oData->type != 5) && ($oData->type != 8)) {
@@ -300,6 +524,10 @@ try {
             break;
         case 'deleteAllRoutes':
             G::LoadClass('tasks');
+            $oTaskNewPattern = new Task();
+            $taskInfo=$oTaskNewPattern->load($oData->tas_uid);
+            $titleTask=$taskInfo['TAS_TITLE'];
+            G::auditlog("DeleteRoutes",'Delete All Routes From Task -> '.$titleTask.' : '.$oData->tas_uid);
             $oTasks = new Tasks();
             $oTasks->deleteAllRoutesOfTask($oData->pro_uid, $oData->tas_uid);
             break;
@@ -326,9 +554,11 @@ try {
         case 'exploreDirectory':
             $_SESSION["PFMDirectory"] = $oData->main_directory;
             $oProcessMap->exploreDirectory($oData->pro_uid, $oData->main_directory, $oData->directory);
+            G::auditLog('ProcessFileManager','Upload template ('.$oData->main_directory.') in process "'.$resultProcess['PRO_TITLE'].'"');
             break;
         case 'deleteFile':
             $oProcessMap->deleteFile($oData->pro_uid, $oData->main_directory, $oData->directory, $oData->file);
+            G::auditLog('ProcessFileManager','Delete template ('.$oData->main_directory.': '.$oData->file.') in process "'.$resultProcess['PRO_TITLE'].'"');
             break;
         case 'deleteDirectory':
             $oProcessMap->deleteDirectory($oData->pro_uid, $oData->main_directory, $oData->directory, $oData->dir_to_delete);
@@ -337,6 +567,10 @@ try {
             $oProcessMap->downloadFile($oData->pro_uid, $oData->main_directory, $oData->directory, $oData->file);
             break;
         case 'deleteSubProcess':
+            $oTaskNewPattern = new Task();
+            $taskInfo=$oTaskNewPattern->load($oData->tas_uid);
+            $titleTask=$taskInfo['TAS_TITLE'];
+            G::auditlog("DeleteSubProcess",'Delete Sub-Process -> '.$titleTask.' : '.$oData->tas_uid);
             $sOutput = $oProcessMap->deleteSubProcess($oData->pro_uid, $oData->tas_uid);
             break;
         case 'subProcess_Properties':
@@ -440,9 +674,11 @@ try {
             switch ($sDir) {
                 case 'mailTemplates':
                     $sDirectory = PATH_DATA_MAILTEMPLATES . $_REQUEST['pro_uid'] . PATH_SEP . $_REQUEST['filename'];
+                    G::auditLog('ProcessFileManager','Edit template ('.$_REQUEST['filename'].') in process "'.$resultProcess['PRO_TITLE'].'"');
                     break;
                 case 'public':
                     $sDirectory = PATH_DATA_PUBLIC . $_REQUEST['pro_uid'] . PATH_SEP . $_REQUEST['filename'];
+                    G::auditLog('ProcessFileManager','Edit public template ('.$_REQUEST['filename'].') in process "'.$resultProcess['PRO_TITLE'].'"');
                     break;
                 default:
                     $sDirectory = PATH_DATA_MAILTEMPLATES . $_REQUEST['pro_uid'] . PATH_SEP . $_REQUEST['filename'];
@@ -512,6 +748,8 @@ try {
             // G::RenderPage( 'publish', 'blank' );
             break;
         case 'saveFile':
+            $_REQUEST['pro_uid'] = $filter->xssFilterHard($_REQUEST['pro_uid']);
+            $_REQUEST['filename'] = $filter->xssFilterHard($_REQUEST['filename']);
             global $G_PUBLISH;
             $G_PUBLISH = new Publisher();
             global $RBAC;
@@ -525,14 +763,17 @@ try {
 
                 $sDir = "";
                 if (isset($_REQUEST['MAIN_DIRECTORY'])) {
+                    $_REQUEST['MAIN_DIRECTORY'] = $filter->xssFilterHard($_REQUEST['MAIN_DIRECTORY']);
                     $sDir = $_REQUEST['MAIN_DIRECTORY'];
                 }
                 switch ($sDir) {
                     case 'mailTemplates':
                         $sDirectory = PATH_DATA_MAILTEMPLATES . $_REQUEST['pro_uid'] . PATH_SEP . $_REQUEST['filename'];
+                        G::auditLog('ProcessFileManager','Save template ('.$_REQUEST['filename'].') in process "'.$resultProcess['PRO_TITLE'].'"');
                         break;
                     case 'public':
                         $sDirectory = PATH_DATA_PUBLIC . $_REQUEST['pro_uid'] . PATH_SEP . $_REQUEST['filename'];
+                        G::auditLog('ProcessFileManager','Save public template ('.$_REQUEST['filename'].') in process "'.$resultProcess['PRO_TITLE'].'"');
                         break;
                     default:
                         $sDirectory = PATH_DATA_MAILTEMPLATES . $_REQUEST['pro_uid'] . PATH_SEP . $_REQUEST['filename'];
@@ -544,7 +785,15 @@ try {
                 $content = base64_decode($content);
                 fwrite($fp, $content);
                 fclose($fp);
+                $sDirectory = $filter->xssFilterHard($sDirectory);
                 echo 'saved: ' . $sDirectory;
+            }
+            break;
+        case 'getSessid':
+            if(isset($_SESSION['USER_LOGGED'])){
+                echo Bootstrap::json_encode(1);
+            }else{
+                echo Bootstrap::json_encode(0);
             }
             break;
         case 'events':
@@ -599,8 +848,10 @@ try {
             *
             */
         case 'getVariablePrefix':
+            $_REQUEST['prefix'] = $filter->xssFilterHard($_REQUEST['prefix']);
             $_REQUEST['prefix'] = $_REQUEST['prefix'] != null ? $_REQUEST['prefix'] : 'ID_TO_STRING';
-            echo G::LoadTranslation($_REQUEST['prefix']);
+            $prefix = $filter->xssFilterHard(G::LoadTranslation($_REQUEST['prefix']));
+            echo G::LoadTranslation($prefix);
             break;
             /**
             * return an array with all Variables of Grid type

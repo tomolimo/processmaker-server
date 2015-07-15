@@ -61,6 +61,9 @@ class Applications
             $confCasesList = $conf->getConfiguration("casesList", ($action == "search" || $action == "simple_search")? "search" : $action);
             $oAppCache->confCasesList = $confCasesList;
         }
+
+        $delimiter = DBAdapter::getStringDelimiter();
+
         // get the action based list
         switch ($action) {
             case "draft":
@@ -118,6 +121,9 @@ class Applications
                     case "COMPLETED":
                         $Criteria = $oAppCache->getCompletedListCriteria($userUid);
                         $CriteriaCount = $oAppCache->getCompletedCountCriteria($userUid);
+
+                        $Criteria->add (AppCacheViewPeer::DEL_LAST_INDEX,"1");
+                        $CriteriaCount->add (AppCacheViewPeer::DEL_LAST_INDEX,"1");
                         break;
                     default:
                         //All status
@@ -158,6 +164,14 @@ class Applications
                 break;
         }
 
+        $arrayTaskTypeToExclude = array("WEBENTRYEVENT", "END-MESSAGE-EVENT", "START-MESSAGE-EVENT", "INTERMEDIATE-THROW-MESSAGE-EVENT", "INTERMEDIATE-CATCH-MESSAGE-EVENT");
+
+        $Criteria->addJoin(AppCacheViewPeer::TAS_UID, TaskPeer::TAS_UID, Criteria::LEFT_JOIN);
+        $Criteria->add(TaskPeer::TAS_TYPE, $arrayTaskTypeToExclude, Criteria::NOT_IN);
+
+        $CriteriaCount->addJoin(AppCacheViewPeer::TAS_UID, TaskPeer::TAS_UID, Criteria::LEFT_JOIN);
+        $CriteriaCount->add(TaskPeer::TAS_TYPE, $arrayTaskTypeToExclude, Criteria::NOT_IN);
+
         $Criteria->addAlias( 'CU', 'USERS' );
         $Criteria->addJoin( AppCacheViewPeer::USR_UID, 'CU.USR_UID', Criteria::LEFT_JOIN );
         $Criteria->addAsColumn( 'USR_UID', 'CU.USR_UID' );
@@ -173,13 +187,24 @@ class Applications
         $CriteriaCount->addAsColumn( 'USR_USERNAME', 'CU.USR_USERNAME' );
 
         //Current delegation
-        if ($action == "to_reassign") {
-            $Criteria->addAsColumn("APPCVCR_APP_TAS_TITLE", "APP_CACHE_VIEW.APP_TAS_TITLE");
-            $CriteriaCount->addAsColumn("APPCVCR_APP_TAS_TITLE", "APP_CACHE_VIEW.APP_TAS_TITLE");
-        } else {
-            $Criteria->addAsColumn("APPCVCR_APP_TAS_TITLE", "APPCVCR.APP_TAS_TITLE");
-            $CriteriaCount->addAsColumn("APPCVCR_APP_TAS_TITLE", "APPCVCR.APP_TAS_TITLE");
+        $appdelcrTableName = AppCacheViewPeer::TABLE_NAME;
+        $appdelcrAppTasTitle = "APPDELCR.APP_TAS_TITLE";
+        $appdelcrAppTasTitleCount = $appdelcrAppTasTitle;
+
+        switch ($action) {
+            case "sent":
+                $appdelcrTableName = AppDelegationPeer::TABLE_NAME;
+                $appdelcrAppTasTitle = "(SELECT CON_VALUE FROM CONTENT WHERE CON_ID = APPDELCR.TAS_UID AND CON_LANG = " . $delimiter . SYS_LANG . $delimiter . " AND CON_CATEGORY = " . $delimiter . "TAS_TITLE" . $delimiter . ")";
+                $appdelcrAppTasTitleCount = "APPDELCR.TAS_UID";
+                break;
+            case "to_reassign":
+                $appdelcrAppTasTitle = "APP_CACHE_VIEW.APP_TAS_TITLE";
+                $appdelcrAppTasTitleCount = $appdelcrAppTasTitle;
+                break;
         }
+
+        $Criteria->addAsColumn("APPDELCR_APP_TAS_TITLE", $appdelcrAppTasTitle);
+        $CriteriaCount->addAsColumn("APPDELCR_APP_TAS_TITLE", $appdelcrAppTasTitleCount);
 
         $Criteria->addAsColumn("USRCR_USR_UID", "USRCR.USR_UID");
         $Criteria->addAsColumn("USRCR_USR_FIRSTNAME", "USRCR.USR_FIRSTNAME");
@@ -191,20 +216,20 @@ class Applications
         $CriteriaCount->addAsColumn("USRCR_USR_LASTNAME", "USRCR.USR_LASTNAME");
         $CriteriaCount->addAsColumn("USRCR_USR_USERNAME", "USRCR.USR_USERNAME");
 
-        $Criteria->addAlias("APPCVCR", AppCacheViewPeer::TABLE_NAME);
+        $Criteria->addAlias("APPDELCR", $appdelcrTableName);
         $Criteria->addAlias("USRCR", UsersPeer::TABLE_NAME);
 
-        $CriteriaCount->addAlias("APPCVCR", AppCacheViewPeer::TABLE_NAME);
+        $CriteriaCount->addAlias("APPDELCR", $appdelcrTableName);
         $CriteriaCount->addAlias("USRCR", UsersPeer::TABLE_NAME);
 
         $arrayCondition = array();
-        $arrayCondition[] = array(AppCacheViewPeer::APP_UID, "APPCVCR.APP_UID");
-        $arrayCondition[] = array("APPCVCR.DEL_LAST_INDEX", 1);
+        $arrayCondition[] = array(AppCacheViewPeer::APP_UID, "APPDELCR.APP_UID");
+        $arrayCondition[] = array("APPDELCR.DEL_LAST_INDEX", 1);
         $Criteria->addJoinMC($arrayCondition, Criteria::LEFT_JOIN);
         $CriteriaCount->addJoinMC($arrayCondition, Criteria::LEFT_JOIN);
 
         $arrayCondition = array();
-        $arrayCondition[] = array("APPCVCR.USR_UID", "USRCR.USR_UID");
+        $arrayCondition[] = array("APPDELCR.USR_UID", "USRCR.USR_UID");
         $Criteria->addJoinMC($arrayCondition, Criteria::LEFT_JOIN);
         $CriteriaCount->addJoinMC($arrayCondition, Criteria::LEFT_JOIN);
 
@@ -455,7 +480,7 @@ class Applications
                         $sort = "USRCR_" . $conf->userNameFormatGetFirstFieldByUsersTable();
                         break;
                     case "APP_CACHE_VIEW.APP_TAS_TITLE":
-                        $sort = "APPCVCR_APP_TAS_TITLE";
+                        $sort = "APPDELCR_APP_TAS_TITLE";
                         break;
                 }
             }
@@ -556,7 +581,7 @@ class Applications
             //Current delegation (*) || $action == "search" || $action == "to_revise"
             if (($action == "sent" || $action == "simple_search" || $action == "to_reassign") && ($status != "TO_DO")) {
                 //Current task
-                $aRow["APP_TAS_TITLE"] = $aRow["APPCVCR_APP_TAS_TITLE"];
+                $aRow["APP_TAS_TITLE"] = $aRow["APPDELCR_APP_TAS_TITLE"];
 
                 //Current user
                 //if ($action != "to_reassign" ) {
@@ -923,6 +948,7 @@ class Applications
 
                     $stepItem['title'] = $oDocument->getDynTitle();
                     $stepItem['url'] = "cases/cases_Step?UID=$stepUid&TYPE=$stepType&POSITION=$stepPosition&ACTION=EDIT";
+                    $stepItem['version'] = $oDocument->getDynVersion();
                     break;
                 case 'OUTPUT_DOCUMENT':
                     $oDocument = OutputDocumentPeer::retrieveByPK( $caseStep->getStepUidObj() );

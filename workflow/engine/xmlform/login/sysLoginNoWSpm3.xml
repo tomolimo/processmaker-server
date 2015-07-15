@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm name="sysLogin" version="1.0" basedir="" xmlform_type="NORMAL" width="400px" enabletemplate="1">
+  <TITLE type="title">
+    <en><![CDATA[Login]]></en>
+  </TITLE>
+  <USR_USERNAME type="text" size="30" maxlength="50" validate="Any" autocomplete="0">
+    <en><![CDATA[User]]></en>
+  </USR_USERNAME>
+  <USR_PASSWORD type="hidden" size="30" maxlength="32" autocomplete="0">
+    <en><![CDATA[Password]]></en>
+  </USR_PASSWORD>
+  <USR_PASSWORD_MASK type="password" size="30" maxlength="32" autocomplete="0">
+    <en><![CDATA[Password]]></en>
+  </USR_PASSWORD_MASK>
+  <USER_ENV type="text" size="30" maxlength="50" autocomplete="0">
+    <en><![CDATA[Workspace]]></en>
+  </USER_ENV>
+  <USER_LANG type="dropdown" sqlconnection="dbarray">
+SELECT LANG_ID, LANG_NAME FROM langOptions
+<en><![CDATA[Language]]></en>
+</USER_LANG>
+  <BSUBMIT type="button">
+    <en><![CDATA[Login]]></en>
+  </BSUBMIT>
+  <JS type="javascript"><![CDATA[
+
+function getElementsByClassNameIE8(node, classname) {
+    var a = [];
+    var re = new RegExp('(^| )'+classname+'( |$)');
+    var els = node.getElementsByTagName("*");
+    for(var i=0,j=els.length; i<j; i++)
+        if(re.test(els[i].className))a.push(els[i]);
+    return a;
+};
+
+function createEvent(elem, event, fn) {
+      if (elem.addEventListener) {
+            elem.addEventListener(event, fn, false);
+      } else {
+            elem.attachEvent("on" + event, fn);
+      }
+};
+
+window.onload= function(){
+  var inputUser,
+      inputWs,
+      inputPass; 
+  if(document.getElementById('form[USR_USERNAME]').placeholder === undefined && document.getElementById('form[BSUBMIT]').classList == undefined){
+    document.getElementById('form[USR_USERNAME]').value = _('ID_USER');
+    document.getElementById('form[USR_PASSWORD_MASK]').value = _('ID_PASSWORD');
+    document.getElementById('form[USER_ENV]').value = _('ID_WORKSPACE');
+    document.getElementById('form[BSUBMIT]').className = "button-login-success";
+    inputUser = document.getElementById('form[USR_USERNAME]');
+    inputPass = document.getElementById('form[USR_PASSWORD_MASK]');
+    inputWs = document.getElementById('form[USER_ENV]');    
+
+    inputUser.attachEvent("onclick", function (){
+      if(_('ID_USER') == inputUser.value){
+        inputUser.value="";
+      }        
+    });
+    inputUser.attachEvent("onblur", function (){
+      if(inputUser.value == ""){
+        inputUser.value=_('ID_USER');
+      }        
+    });
+    
+    inputPass.attachEvent("onclick", function (){
+      if(_('ID_PASSWORD') == inputPass.value){
+        inputPass.value="";
+      }        
+    });
+    
+    inputPass.attachEvent("onblur", function (){
+      if(inputPass.value == ""){
+        inputPass.value = _('ID_PASSWORD');
+      }        
+    });
+
+    inputWs.attachEvent("onclick", function (){
+      if(_('ID_WORKSPACE') == inputWs.value){
+        inputWs.value="";
+      }        
+    });
+
+    inputWs.attachEvent("onblur", function (){
+      if(inputWs.value == ""){
+        inputWs.value = _('ID_WORKSPACE');
+      }         
+    });
+    
+  }else{
+    document.getElementById('form[USR_USERNAME]').placeholder = _('ID_USER');
+    document.getElementById('form[USR_PASSWORD_MASK]').placeholder = _('ID_PASSWORD');
+    document.getElementById('form[USER_ENV]').placeholder = _('ID_WORKSPACE');
+    document.getElementById('form[BSUBMIT]').classList.remove('module_app_button___gray');
+    document.getElementById('form[BSUBMIT]').classList.add('button-login-success');        
+  }
+};
+
+setFocus (getField ('USR_USERNAME'));
+
+leimnud.event.add(document.getElementById('form[USR_PASSWORD_MASK]'), 'keypress', function(event) {
+  var key;
+  if(window.event)
+    key = window.event.keyCode;     //IE
+  else
+    key = event.which;     //firefox
+  if(key == 13) {
+    document.getElementById('form[BSUBMIT]').click();
+    return true;
+  } else {
+    return true;
+  }
+});
+
+leimnud.event.add(document.getElementById('form[USER_ENV]'), 'keypress', function(event) {
+  var key;
+  if(window.event)
+    key = window.event.keyCode;     //IE
+  else
+    key = event.which;     //firefox
+  if(key == 13) {
+    document.getElementById('form[BSUBMIT]').click();
+    return true;
+  } else {
+    return true;
+  }
+});
+
+leimnud.event.add(document.getElementById('form[BSUBMIT]'), 'click', function() {
+    createCookie("pm_sys_sys", "{\"sys_sys\": \"" + getField("USER_ENV").value + "\"}", 365);
+    document.getElementById('form[USR_PASSWORD]').value = document.getElementById('form[USR_PASSWORD_MASK]').value;
+    document.getElementById('form[USR_PASSWORD_MASK]').value = '';    
+    if(!navigator.userAgent.indexOf("MSIE 8.0")>0)
+      document.getElementById("form[USR_PASSWORD_MASK]").setAttribute("type", "text");       
+    document.sysLogin.submit();
+}.extend(document.getElementById('form[BSUBMIT]')));
+
+try{
+    var s = new String(readCookie("pm_sys_sys"));
+    var obj = eval("(" + s + ")");
+
+    if (obj != null) {
+        getField("USER_ENV").value = obj.sys_sys;
+    }
+} catch(e){}
+
+]]></JS>
+</dynaForm>
+

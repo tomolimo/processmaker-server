@@ -35,7 +35,7 @@
     <en><![CDATA[Start Date]]></en>
   </DEL_INIT_DATE>
   <APP_STATUS type="dropdown">
-    <en><![CDATA[Status]]><option name="DRAFT"><![CDATA[Draft]]></option><option name="TO_DO"><![CDATA[To Do]]></option><option name="CANCELLED"><![CDATA[Cancelled]]></option><option name="COMPLETED"><![CDATA[Completed]]></option></en>
+    <en><![CDATA[Status]]><option name="DRAFT"><![CDATA[Draft]]></option><option name="TO_DO"><![CDATA[To Do]]></option><option name="CANCELLED"><![CDATA[Canceled]]></option><option name="COMPLETED"><![CDATA[Completed]]></option></en>
   </APP_STATUS>
   <MARK2 type="cellMark" className="RowLink1" classNameAlt="RowLink2" defaultValue="1"/>
   <!--<EDIT type="link" colWidth="40" value="@G::LoadTranslation(ID_EDIT)" link="#" onclick="casesEdit(@QAPP_UID);return false;"/>-->

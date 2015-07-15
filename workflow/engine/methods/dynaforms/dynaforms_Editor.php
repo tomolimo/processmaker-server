@@ -21,6 +21,12 @@
  * For more information, contact Colosa Inc, 2566 Le Jeune Rd.,
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  */
+ 
+G::LoadSystem('inputfilter');
+$filter = new InputFilter();
+$_POST = $filter->xssFilterHard($_POST);
+$_GET = $filter->xssFilterHard($_GET);
+ 
 if (($RBAC_Response = $RBAC->userCanAccess( "PM_FACTORY" )) != 1) {
     return $RBAC_Response;
 }
@@ -38,6 +44,9 @@ $G_SUB_MENU = 'processes';
 $G_ID_MENU_SELECTED = 'PROCESSES';
 $G_ID_SUB_MENU_SELECTED = 'FIELDS';
 
+$_GET['PRO_UID'] = $filter->xssFilterHard($_GET['PRO_UID']);
+$_GET['DYN_UID'] = $filter->xssFilterHard($_GET['DYN_UID']);
+
 $PRO_UID = isset( $_GET['PRO_UID'] ) ? $_GET['PRO_UID'] : '0';
 $DYN_UID = (isset( $_GET['DYN_UID'] )) ? urldecode( $_GET['DYN_UID'] ) : '0';
 $_SESSION['PROCESS'] = $_GET['PRO_UID'];
@@ -50,6 +59,7 @@ if ($process->exists( $PRO_UID )) {
     $process->load( $PRO_UID );
 } else {
     //TODO
+    $PRO_UID = $filter->xssFilterHard($PRO_UID);
     print ("$PRO_UID doesn't exist, continue? yes") ;
 }
 

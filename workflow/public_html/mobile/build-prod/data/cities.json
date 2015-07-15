@@ -1,0 +1,68 @@
+[	
+	{
+		"name": "bolivia",
+		"options": [
+			{
+				"label": "Beni",
+				"value": "beni"
+			},
+			{
+				"label": "Tarija",
+				"value": "tarija"
+			},
+			{
+				"label": "Potosi",
+				"value": "potosi"
+			},
+			{
+                "label": "La Paz",
+                "value": "lapaz"
+            },
+            {
+                "label": "Oruro",
+                "value": "oruro"
+            },
+            {
+                "label": "Santa Cruz",
+                "value": "santacruz"
+            }
+		]
+	},
+	{
+		"name": "argentina",
+		"options": [
+			{
+                "label": "Buenos Aires",
+                "value": "buenosaires"
+            }
+		]
+	},
+	{
+		"name": "brasil",
+		"options": [
+			{
+                "label": "Rio de Janeiro",
+                "value": "riodejaneiro"
+            }
+		]
+	},
+	{
+		"name": "eeuu",
+		"options": [
+			{
+				"label": "New York",
+				"value": "newyork"
+			}
+		]
+	},
+	{
+		"name": "japan",
+		"options": [
+			{
+				"label": "Tokio",
+				"value": "tokio"
+			}
+		]
+	}
+
+]

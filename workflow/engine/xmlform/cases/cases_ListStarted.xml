@@ -35,7 +35,7 @@
     <en><![CDATA[Finish Date]]></en>
   </DEL_FINISH_DATE>
   <APP_STATUS type="dropdown">
-    <en><![CDATA[Status]]><option name="DRAFT"><![CDATA[Draft]]></option><option name="TO_DO"><![CDATA[To Do]]></option><option name="CANCELLED"><![CDATA[Cancelled]]></option><option name="COMPLETED"><![CDATA[Completed]]></option></en>
+    <en><![CDATA[Status]]><option name="DRAFT"><![CDATA[Draft]]></option><option name="TO_DO"><![CDATA[To Do]]></option><option name="CANCELLED"><![CDATA[Canceled]]></option><option name="COMPLETED"><![CDATA[Completed]]></option></en>
   </APP_STATUS>
   <MARK2 type="cellMark" className="RowLink1" classNameAlt="RowLink2" defaultValue="1"/>
   <OPEN type="link" value="@G::LoadTranslation(ID_OPEN)" link="@G::encryptlink(@#cases_Open)?APP_UID=@#APP_UID&amp;DEL_INDEX=@#DEL_INDEX" colWidth="40" titleAlign="left" align="left" dataCompareField="APP_TITLE.CON_VALUE" dataCompareType="contains">

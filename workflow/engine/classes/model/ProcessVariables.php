@@ -64,4 +64,26 @@ class ProcessVariables extends BaseProcessVariables {
             throw($oError);
         }
     }
+
+    /**
+     * verify if process variable row specified in [sUid] exists.
+     *
+     * @param      string $sUid   the uid
+     */
+    public function ProcessVariableExists($sUid)
+    {
+        $con = Propel::getConnection(ProcessVariablesPeer::DATABASE_NAME);
+
+        try {
+            $oObj = ProcessVariablesPeer::retrieveByPk($sUid);
+
+            if (is_object($oObj) && get_class($oObj) == 'ProcessVariables') {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception $oError) {
+            throw ($oError);
+        }
+    }
 } // ProcessVariables

@@ -12,7 +12,6 @@ try {
 
             $msgLog = $msgLog . "Javascript Cache";
 
-
             if (isset($_POST["metadataCache"])) {
                 G::rm_dir(PATH_C . "xmlform");
                 $response->xmlform = true;

@@ -32,16 +32,21 @@
  */
 
 	
+    G::LoadSystem('inputfilter');
     G::LoadClass('net');
     $host = new net($_POST['srv']);
+    $host = $filter->xssFilterHard($host);
     $width_content = '550px';
+    $filter = new InputFilter();
+    $_POST = $filter->xssFilterHard($_POST);
+    $ID_SETUP_MAILCONF_TITLE = $filter->xssFilterHard(G::loadTranslation('ID_SETUP_MAILCONF_TITLE'));
     
 	$html = '
 	<div class="boxTopBlue"><div class="a"></div><div class="b"></div><div class="c"></div></div>
 	<div class="boxContentBlue">
 		<table style="margin:0px;" cellspacing="0" cellpadding="0">
 			<tr>
-				<td class="userGroupTitle"><center>'.G::loadTranslation('ID_SETUP_MAILCONF_TITLE').'</center></td>
+				<td class="userGroupTitle"><center>'.$ID_SETUP_MAILCONF_TITLE.'</center></td>
 			</tr>
 		</table>
 	</div>

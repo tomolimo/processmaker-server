@@ -23,6 +23,11 @@
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  */
 
+G::LoadSystem('inputfilter');
+$filter = new InputFilter();
+$_POST = $filter->xssFilterHard($_POST);
+$_REQUEST = $filter->xssFilterHard($_REQUEST);
+
 function LookForChildren ($parent, $level, $aDepUsers)
 {
     G::LoadClass( 'configuration' );
@@ -230,7 +235,6 @@ switch ($_POST['action']) {
             $editDepartment['DEPO_TITLE'] = $dep_name;
             $editDepartment['DEP_STATUS'] = $dep_status;
             $editDepartment['DEP_MANAGER'] = $dep_manager;
-            
             $oDept = new Department();
             $oDept->update( $editDepartment );
             $oDept->updateDepartmentManager( $dep_uid );
@@ -249,13 +253,13 @@ switch ($_POST['action']) {
                     $aRow = $oDataset->getRow();
                     $managerName = $aRow['USR_USERNAME'] ? " - Department Manager: ".$aRow['USR_USERNAME'] : 'No Manager'; 
                 }
-            } 
+            }
 
             if ($dep_parent == '') {
                 G::auditLog("UpdateDepartament", "Department Name: ".$dep_name." (".$dep_uid.")  - Department Status: ".$dep_status.$managerName);
             } else {
                 G::auditLog("UpdateSubDepartament", "Sub Department Name: ".$dep_name." (".$dep_uid.")  - Sub Department Status: ".$dep_status.$managerName);
-            }            
+            }
 
             echo '{success: true}';
         } catch (exception $e) {
@@ -363,7 +367,7 @@ switch ($_POST['action']) {
         $dep_manager = $_POST['USR_UID'];
         $dep_uid = $_POST['DEP_UID'];
         $editDepartment['DEP_UID'] = $dep_uid;
-        $editDepartment['DEP_MANAGER'] = $dep_manager;
+        $editDepartment['DEP_MANAGER'] = (!isset($_POST['NO_DEP_MANAGER'])? $dep_manager : '');
         $oDept = new Department();
         $oDept->update( $editDepartment );
         $oDept->updateDepartmentManager( $dep_uid );

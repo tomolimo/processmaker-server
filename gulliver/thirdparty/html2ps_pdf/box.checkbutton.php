@@ -57,11 +57,20 @@ class CheckBox extends GenericFormattedBox {
    * @see CheckBox::CheckBox()
    */
   function &create(&$root, &$pipeline) {
+    if(!class_exists('G')){
+      $realdocuroot = str_replace( '\\', '/', $_SERVER['DOCUMENT_ROOT'] );
+      $docuroot = explode( '/', $realdocuroot );
+      array_pop( $docuroot );
+      $pathhome = implode( '/', $docuroot ) . '/';
+      array_pop( $docuroot );
+      $pathTrunk = implode( '/', $docuroot ) . '/';
+      require_once($pathTrunk.'gulliver/system/class.g.php');
+    }
     $value = $root->get_attribute('value');
 
     if (trim($value) == "") {
       error_log("Checkbox with empty 'value' attribute");
-      $value = sprintf("___Value%s",md5(time().rand()));
+      $value = sprintf("___Value%s",G::encryptOld(time().rand()));
     };
 
     $box =& new CheckBox($root->has_attribute('checked'), 

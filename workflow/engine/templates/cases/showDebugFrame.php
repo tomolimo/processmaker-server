@@ -31,6 +31,10 @@
  */
 
 G::LoadClass('case');
+G::LoadSystem('inputfilter');
+$filter = new InputFilter();
+$_SESSION = $filter->xssFilterHard($_SESSION, "url");
+$nextStep = $filter->xssFilterHard($_POST['NextStep'], "url");
 
 //variables
 $oApp= new Cases();
@@ -44,6 +48,7 @@ for ($i=0; $i<count($_SESSION['TRIGGER_DEBUG']['DATA']); $i++) {
 }
 
 $aVariables = array_merge($aFields['APP_DATA'], $aVariables);
+$aVariables = $filter->xssFilterHard($aVariables);
 ksort($aVariables);
 
 //triggers
@@ -262,9 +267,9 @@ if (count($DEBUG_POST) > 0) {?>
 
 <!---->
 
-<?php if (isset($_POST['NextStep'])) {?>
+<?php if (isset($nextStep)) {?>
     <input type="button" value="Continue" class="module_app_button___gray" onclick="javascript:location.href='
-    <?php echo $_POST['NextStep']; ?>'">
+    <?php echo $nextStep; ?>'">
     <?php
 }?>
 

@@ -515,6 +515,8 @@ class dynaformEditorAjax extends dynaformEditor implements iDynaformEditorAjax
      */
     public function restore_html($A)
     {
+        G::LoadSystem('inputfilter');
+        $filter = new InputFilter();
         $script = null;
         $fileTmp = G::decrypt($A, URL_KEY);
         $form = new Form($fileTmp, PATH_DYNAFORM, SYS_LANG, true);
@@ -527,10 +529,11 @@ class dynaformEditorAjax extends dynaformEditor implements iDynaformEditorAjax
         $form->enableTemplate = false;
         $html = $form->printTemplate($form->template, $script);
         $html = str_replace('{$form_className}', 'formDefault', $html);
-        if (file_exists(PATH_DYNAFORM . $fileTmp . '.html')) {
-            unlink(PATH_DYNAFORM . $fileTmp . '.html');
+        $pathTmp = $filter->xssFilterHard(PATH_DYNAFORM . $fileTmp . '.html', 'path');
+        if (file_exists($pathTmp)) {
+            unlink($pathTmp);
         }
-        $fp = fopen(PATH_DYNAFORM . $fileTmp . '.html', 'w');
+        $fp = fopen($pathTmp, 'w');
         fwrite($fp, $html);
         fclose($fp);
 
@@ -546,6 +549,8 @@ class dynaformEditorAjax extends dynaformEditor implements iDynaformEditorAjax
     public function set_htmlcode($A, $htmlcode)
     {
         try {
+            G::LoadSystem('inputfilter');
+            $filter = new InputFilter();
             $iOcurrences = preg_match_all('/\{\$.*?\}/im', $htmlcode, $matches);
             if ($iOcurrences) {
                 if (isset($matches[0])) {
@@ -561,6 +566,7 @@ class dynaformEditorAjax extends dynaformEditor implements iDynaformEditorAjax
             $file = G::decrypt($A, URL_KEY);
             $form = new Form($file, PATH_DYNAFORM, SYS_LANG, true);
             $filename = substr($form->fileName, 0, - 3) . ($form->type === 'xmlform' ? '' : '.' . $form->type) . 'html';
+            $filename = $filter->xssFilterHard($filename, 'path');
             $fp = fopen($filename, 'w');
             fwrite($fp, $htmlcode);
             fclose($fp);
@@ -598,10 +604,13 @@ class dynaformEditorAjax extends dynaformEditor implements iDynaformEditorAjax
      */
     public function set_xmlcode($A, $xmlcode)
     {
+        G::LoadSystem('inputfilter');
+        $filter = new InputFilter();
         $xmlcode = urldecode($xmlcode);
         $file = G::decrypt($A, URL_KEY);
         $xmlcode = str_replace('&nbsp;', ' ', trim($xmlcode));
-        $fp = fopen(PATH_DYNAFORM . $file . '.xml', 'w');
+        $pathFile = $filter->xssFilterHard(PATH_DYNAFORM . $file . '.xml', "path");
+        $fp = fopen($pathFile, 'w');
         fwrite($fp, $xmlcode);
         fclose($fp);
         return "";
@@ -647,6 +656,9 @@ class dynaformEditorAjax extends dynaformEditor implements iDynaformEditorAjax
      */
     public function set_javascript($A, $fieldName, $sCode, $meta = '')
     {
+        G::LoadSystem('inputfilter');
+        $filter = new InputFilter();
+        $fieldName = $filter->xssFilterHard($fieldName, 'path');
         if ($fieldName == '___pm_boot_strap___') {
             return 0;
         }
@@ -661,8 +673,8 @@ class dynaformEditorAjax extends dynaformEditor implements iDynaformEditorAjax
              */
 
             G::LoadSystem('dynaformhandler');
-
-            $dynaform = new dynaFormHandler(PATH_DYNAFORM . "{$file}.xml");
+            $pathFile = $filter->xssFilterHard(PATH_DYNAFORM . "{$file}.xml", 'path');
+            $dynaform = new dynaFormHandler($pathFile);
             $dynaform->replace($fieldName, $fieldName, Array('type' => 'javascript', 'meta' => $meta, '#cdata' => $sCode
             ));
 
@@ -716,6 +728,8 @@ class dynaformEditorAjax extends dynaformEditor implements iDynaformEditorAjax
     public function set_properties($A, $DYN_UID, $getFields)
     {
         try {
+            G::LoadSystem('inputfilter');
+            $filter = new InputFilter();
             $post = array();
             parse_str($getFields, $post);
             $Fields = $post['form'];
@@ -729,8 +743,9 @@ class dynaformEditorAjax extends dynaformEditor implements iDynaformEditorAjax
                 $tmp['Properties'] = $Fields;
                 self::_setTmpData($tmp);
             }
-            $dynaform = new dynaFormHandler(PATH_DYNAFORM . "{$file}.xml");
-            $dbc2 = new DBConnection(PATH_DYNAFORM . $file . '.xml', '', '', '', 'myxml');
+            $pathFile = $filter->xssFilterHard(PATH_DYNAFORM . "{$file}.xml", 'path');
+            $dynaform = new dynaFormHandler($pathFile);
+            $dbc2 = new DBConnection($pathFile, '', '', '', 'myxml');
             $ses2 = new DBSession($dbc2);
             //if (!isset($Fields['ENABLETEMPLATE'])) $Fields['ENABLETEMPLATE'] ="0";
 
@@ -791,18 +806,20 @@ class dynaformEditorAjax extends dynaformEditor implements iDynaformEditorAjax
      */
     public function set_enabletemplate($A, $value)
     {
+        G::LoadSystem('inputfilter');
+        $filter = new InputFilter();
         $file = G::decrypt($A, URL_KEY);
         $value = $value == "1" ? "1" : "0";
         // $dbc2 = new DBConnection( PATH_DYNAFORM . $file . '.xml', '', '', '', 'myxml' );
         // $ses2 = new DBSession( $dbc2 );
         // $ses2->execute( "UPDATE . SET ENABLETEMPLATE = '$value'" );
-
-        $dynaform = new dynaFormHandler(PATH_DYNAFORM . "{$file}.xml");
+        $pathFile = $filter->xssFilterHard(PATH_DYNAFORM . "{$file}.xml", 'path');
+        $dynaform = new dynaFormHandler($pathFile);
         $dynaform->modifyHeaderAttribute('enabletemplate', $value);
 
         return $value;
     }
-
+     
     /**
      * Save a dynaForm
      *
@@ -816,12 +833,60 @@ class dynaformEditorAjax extends dynaformEditor implements iDynaformEditorAjax
             $answer = 0;
             $file = G::decrypt($A, URL_KEY);
             $tmp = self::_getTmpData();
+            if (isset($tmp['Properties'])){
+              $fileFirst =  $tmp['Properties']['PRO_UID'].'/'.$tmp['Properties']['DYN_UID'];
+            }
             if (isset($tmp['useTmpCopy'])) {
                 /* Save Register */
                 $dynaform = new dynaform();
                 $dynaform->update($tmp['Properties']);
                 /* Save file */
+                $copyFirst = implode('', file(PATH_DYNAFORM . $fileFirst . '.xml'));
                 $copy = implode('', file(PATH_DYNAFORM . $file . '.xml'));
+                /*Check differences between XML*/
+                $elementFirst = new SimpleXMLElement($copyFirst);
+                $elementCopy  = new SimpleXMLElement($copy);
+                $desAdd = '';
+                $desDel = '';
+                //Check the new fields
+                foreach ($elementCopy as $key1 => $row1){
+                  $swAll = true;
+                  foreach ($elementFirst as $key2 => $row2){
+                    if ($key1 == $key2){
+                      $swAll = false;
+                      break;
+                    }
+                  }
+                  if ($swAll){
+                    $desAdd .= $key1." ";
+                  }
+                }
+                //Check the delete fields
+                foreach ($elementFirst as $key1 => $row1){
+                  $swAll = true;
+                  foreach ($elementCopy as $key2 => $row2){
+                    if ($key1 == $key2){
+                      $swAll = false;
+                      break;
+                    }
+                  }
+                  if ($swAll){
+                    $desDel .= $key1." ";
+                  }
+                }
+                
+                $mode    = empty($tmp['Properties']['MODE'])? 'Determined by Fields' : $tmp['Properties']['MODE'];
+                $auditDescription = "Dynaform Title: ".$tmp['Properties']['DYN_TITLE'].", Type: ".$tmp['Properties']['DYN_TYPE'].", Description: ".$tmp['Properties']['DYN_DESCRIPTION'].", Mode: ".$mode;
+                if($desAdd != ''){
+                  $auditDescription .= ", Field(s) Add: ".$desAdd;
+                }
+                if($desDel != ''){
+                  $auditDescription .= ", Field(s) Delete: ".$desDel;
+                }
+                //Add Audit Log
+                G::auditLog("UpdateDynaform", $auditDescription);
+
+                
                 /*
                  * added by krlos carlos/a/colosa.com
                  * in here we are validation if a xmlform has a submit action
@@ -946,5 +1011,19 @@ class dynaformEditorAjax extends dynaformEditor implements iDynaformEditorAjax
         } catch (Exception $e) {
             return (array) $e;
         }
+    }
+    /*
+    Functionality: Funcion que convierte objecto en array
+    Parameters :   Object $object que queremos convertir
+    Return:        Array 
+    */
+    public function convertObjectToArray($object){ 
+      if( !is_object( $object ) && !is_array( $object ) ){
+        return $object;
+      }
+      if( is_object( $object ) ){
+        $object = get_object_vars( $object );
+      }
+      return array_map( 'objectToArray', $object );
     }
 }

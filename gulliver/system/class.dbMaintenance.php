@@ -676,4 +676,3 @@ $o2->connect();
 $o2->restoreFromSql('/home/erik/backs/schema_os.sql');
 $o2->restoreAllData('sql');
 */
-

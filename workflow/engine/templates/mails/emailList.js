@@ -172,7 +172,8 @@ Ext.onReady(function(){
             {name : 'APP_MSG_STATUS'},
             {name : 'APP_MSG_DATE'},
             {name : 'APP_MSG_SEND_DATE'},
-            {name : 'APP_MSG_BODY'}
+            {name : 'APP_MSG_BODY'},
+            {name : 'APP_MSG_ERROR'}
         ]
       })
     });
@@ -219,6 +220,7 @@ Ext.onReady(function(){
             {header: _('ID_SUBJECT'), dataIndex: 'APP_MSG_SUBJECT', width: 80,hidden:false, renderer: columnRenderer, sortable: true},
             {header: _('ID_FROM'), dataIndex: 'APP_MSG_FROM', width: 80,hidden:false,renderer: columnRenderer, sortable: true},
             {header: _('ID_TO'), dataIndex: 'APP_MSG_TO', width: 80,hidden:false,renderer: columnRenderer, sortable: true},
+            {header: _('ID_ERROR_EMAIL'), dataIndex: 'APP_MSG_ERROR', width: 80,hidden:false,renderer: columnRenderer, sortable: true},
 
             {
                 header:  _('ID_STATUS'),

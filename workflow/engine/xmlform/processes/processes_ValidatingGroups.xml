@@ -4,7 +4,7 @@
     <en><![CDATA[<div align="center">Importing Groups</div>]]></en>
   </title>
   <TITLE1 type="subtitle">
-    <en><![CDATA[Some of the groups that are you trying to import, already exist. Please select one of the following options to continue:]]></en>
+    <en><![CDATA[Some of the groups that you are trying to import already exist. Please select one of the following options to continue:]]></en>
   </TITLE1>
   <IMPORT_OPTION type="hidden">
 </IMPORT_OPTION>
@@ -15,7 +15,7 @@
   <PRO_PATH type="hidden">
 </PRO_PATH>
   <GROUP_IMPORT_OPTION type="radiogroup" defaultvalue="rename">
-    <en><![CDATA[]]><option name="rename"><![CDATA[Rename the imported groups]]></option><option name="merge"><![CDATA[Merge the imported groups, with the preexistent local groups (no changes will be made to the local groups)]]></option></en>
+    <en><![CDATA[]]><option name="rename"><![CDATA[Rename the imported groups]]></option><option name="merge"><![CDATA[Merge the imported groups with the pre-existing local groups (no changes will be made to the local groups)]]></option></en>
   </GROUP_IMPORT_OPTION>
   <OBJ_UID type="hidden">
 </OBJ_UID>

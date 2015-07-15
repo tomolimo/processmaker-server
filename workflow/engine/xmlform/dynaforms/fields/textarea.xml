@@ -25,6 +25,9 @@ SELECT XMLNODE_NAME, TYPE FROM dynaForm WHERE XMLNODE_NAME = @@PME_XMLNODE_NAME
   <PME_READONLY type="checkbox" falseValue="0" value="1" defaultvalue="0" labelOnRight="0">
     <en><![CDATA[Read Only]]></en>
   </PME_READONLY>
+  <PME_RESIZABLE type="checkbox" falseValue="0" value="1" defaultvalue="0" labelOnRight="0">
+    <en><![CDATA[Resizable]]></en>
+  </PME_RESIZABLE>
   <PME_DEFAULTVALUE type="textarea" rows="3" cols="38" defaultvalue="">
     <en><![CDATA[Default Value]]></en>
   </PME_DEFAULTVALUE>

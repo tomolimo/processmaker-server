@@ -81,7 +81,7 @@ class soapclientmime extends soapclient {
 	*/
 	function addAttachment($data, $filename = '', $contenttype = 'application/octet-stream', $cid = false) {
 		if (! $cid) {
-			$cid = md5(uniqid(time()));
+			$cid = $this->encryptOld(uniqid(time()));
 		}
 
 		$info['data'] = $data;
@@ -254,6 +254,20 @@ class soapclientmime extends soapclient {
 		$this->debug('Not multipart/related');
 		return parent::parseResponse($headers, $data);
 	}
+	
+	public function encryptOld($string)
+    {
+        if (!class_exists('G')) {
+            $realdocuroot = str_replace( '\\', '/', $_SERVER['DOCUMENT_ROOT'] );
+            $docuroot = explode( '/', $realdocuroot );
+            array_pop( $docuroot );
+            $pathhome = implode( '/', $docuroot ) . '/';
+            array_pop( $docuroot );
+            $pathTrunk = implode( '/', $docuroot ) . '/';
+            require_once($pathTrunk.'gulliver/system/class.g.php');
+        }
+        return G::encryptOld($string);
+    }
 }
 
 /**
@@ -301,7 +315,7 @@ class nusoapservermime extends soap_server {
 	*/
 	function addAttachment($data, $filename = '', $contenttype = 'application/octet-stream', $cid = false) {
 		if (! $cid) {
-			$cid = md5(uniqid(time()));
+			$cid = $this->encryptOldNusoap(uniqid(time()));
 		}
 
 		$info['data'] = $data;
@@ -474,5 +488,19 @@ class nusoapservermime extends soap_server {
 		$this->debug('Not multipart/related');
 		return parent::parseRequest($headers, $data);
 	}
+	
+	public function encryptOldNusoap($string)
+    {
+        if (!class_exists('G')) {
+            $realdocuroot = str_replace( '\\', '/', $_SERVER['DOCUMENT_ROOT'] );
+            $docuroot = explode( '/', $realdocuroot );
+            array_pop( $docuroot );
+            $pathhome = implode( '/', $docuroot ) . '/';
+            array_pop( $docuroot );
+            $pathTrunk = implode( '/', $docuroot ) . '/';
+            require_once($pathTrunk.'gulliver/system/class.g.php');
+        }
+        return G::encryptOld($string);
+    }
 }
 ?>

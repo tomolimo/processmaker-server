@@ -70,6 +70,12 @@ abstract class BaseRoute extends BaseObject implements Persistent
     protected $rou_type = 'SEQUENTIAL';
 
     /**
+     * The value for the rou_default field.
+     * @var        int
+     */
+    protected $rou_default = 0;
+
+    /**
      * The value for the rou_condition field.
      * @var        string
      */
@@ -218,6 +224,17 @@ abstract class BaseRoute extends BaseObject implements Persistent
     {
 
         return $this->rou_type;
+    }
+
+    /**
+     * Get the [rou_default] column value.
+     * 
+     * @return     int
+     */
+    public function getRouDefault()
+    {
+
+        return $this->rou_default;
     }
 
     /**
@@ -485,6 +502,28 @@ abstract class BaseRoute extends BaseObject implements Persistent
     } // setRouType()
 
     /**
+     * Set the value of [rou_default] column.
+     * 
+     * @param      int $v new value
+     * @return     void
+     */
+    public function setRouDefault($v)
+    {
+
+        // Since the native PHP type for this column is integer,
+        // we will cast the input value to an int (if it is not).
+        if ($v !== null && !is_int($v) && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->rou_default !== $v || $v === 0) {
+            $this->rou_default = $v;
+            $this->modifiedColumns[] = RoutePeer::ROU_DEFAULT;
+        }
+
+    } // setRouDefault()
+
+    /**
      * Set the value of [rou_condition] column.
      * 
      * @param      string $v new value
@@ -735,32 +774,34 @@ abstract class BaseRoute extends BaseObject implements Persistent
 
             $this->rou_type = $rs->getString($startcol + 6);
 
-            $this->rou_condition = $rs->getString($startcol + 7);
+            $this->rou_default = $rs->getInt($startcol + 7);
 
-            $this->rou_to_last_user = $rs->getString($startcol + 8);
+            $this->rou_condition = $rs->getString($startcol + 8);
 
-            $this->rou_optional = $rs->getString($startcol + 9);
+            $this->rou_to_last_user = $rs->getString($startcol + 9);
 
-            $this->rou_send_email = $rs->getString($startcol + 10);
+            $this->rou_optional = $rs->getString($startcol + 10);
 
-            $this->rou_sourceanchor = $rs->getInt($startcol + 11);
+            $this->rou_send_email = $rs->getString($startcol + 11);
 
-            $this->rou_targetanchor = $rs->getInt($startcol + 12);
+            $this->rou_sourceanchor = $rs->getInt($startcol + 12);
 
-            $this->rou_to_port = $rs->getInt($startcol + 13);
+            $this->rou_targetanchor = $rs->getInt($startcol + 13);
 
-            $this->rou_from_port = $rs->getInt($startcol + 14);
+            $this->rou_to_port = $rs->getInt($startcol + 14);
 
-            $this->rou_evn_uid = $rs->getString($startcol + 15);
+            $this->rou_from_port = $rs->getInt($startcol + 15);
 
-            $this->gat_uid = $rs->getString($startcol + 16);
+            $this->rou_evn_uid = $rs->getString($startcol + 16);
+
+            $this->gat_uid = $rs->getString($startcol + 17);
 
             $this->resetModified();
 
             $this->setNew(false);
 
             // FIXME - using NUM_COLUMNS may be clearer.
-            return $startcol + 17; // 17 = RoutePeer::NUM_COLUMNS - RoutePeer::NUM_LAZY_LOAD_COLUMNS).
+            return $startcol + 18; // 18 = RoutePeer::NUM_COLUMNS - RoutePeer::NUM_LAZY_LOAD_COLUMNS).
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Route object", $e);
@@ -986,33 +1027,36 @@ abstract class BaseRoute extends BaseObject implements Persistent
                 return $this->getRouType();
                 break;
             case 7:
-                return $this->getRouCondition();
+                return $this->getRouDefault();
                 break;
             case 8:
-                return $this->getRouToLastUser();
+                return $this->getRouCondition();
                 break;
             case 9:
-                return $this->getRouOptional();
+                return $this->getRouToLastUser();
                 break;
             case 10:
-                return $this->getRouSendEmail();
+                return $this->getRouOptional();
                 break;
             case 11:
-                return $this->getRouSourceanchor();
+                return $this->getRouSendEmail();
                 break;
             case 12:
-                return $this->getRouTargetanchor();
+                return $this->getRouSourceanchor();
                 break;
             case 13:
-                return $this->getRouToPort();
+                return $this->getRouTargetanchor();
                 break;
             case 14:
-                return $this->getRouFromPort();
+                return $this->getRouToPort();
                 break;
             case 15:
-                return $this->getRouEvnUid();
+                return $this->getRouFromPort();
                 break;
             case 16:
+                return $this->getRouEvnUid();
+                break;
+            case 17:
                 return $this->getGatUid();
                 break;
             default:
@@ -1042,16 +1086,17 @@ abstract class BaseRoute extends BaseObject implements Persistent
             $keys[4] => $this->getRouNextTask(),
             $keys[5] => $this->getRouCase(),
             $keys[6] => $this->getRouType(),
-            $keys[7] => $this->getRouCondition(),
-            $keys[8] => $this->getRouToLastUser(),
-            $keys[9] => $this->getRouOptional(),
-            $keys[10] => $this->getRouSendEmail(),
-            $keys[11] => $this->getRouSourceanchor(),
-            $keys[12] => $this->getRouTargetanchor(),
-            $keys[13] => $this->getRouToPort(),
-            $keys[14] => $this->getRouFromPort(),
-            $keys[15] => $this->getRouEvnUid(),
-            $keys[16] => $this->getGatUid(),
+            $keys[7] => $this->getRouDefault(),
+            $keys[8] => $this->getRouCondition(),
+            $keys[9] => $this->getRouToLastUser(),
+            $keys[10] => $this->getRouOptional(),
+            $keys[11] => $this->getRouSendEmail(),
+            $keys[12] => $this->getRouSourceanchor(),
+            $keys[13] => $this->getRouTargetanchor(),
+            $keys[14] => $this->getRouToPort(),
+            $keys[15] => $this->getRouFromPort(),
+            $keys[16] => $this->getRouEvnUid(),
+            $keys[17] => $this->getGatUid(),
         );
         return $result;
     }
@@ -1105,33 +1150,36 @@ abstract class BaseRoute extends BaseObject implements Persistent
                 $this->setRouType($value);
                 break;
             case 7:
-                $this->setRouCondition($value);
+                $this->setRouDefault($value);
                 break;
             case 8:
-                $this->setRouToLastUser($value);
+                $this->setRouCondition($value);
                 break;
             case 9:
-                $this->setRouOptional($value);
+                $this->setRouToLastUser($value);
                 break;
             case 10:
-                $this->setRouSendEmail($value);
+                $this->setRouOptional($value);
                 break;
             case 11:
-                $this->setRouSourceanchor($value);
+                $this->setRouSendEmail($value);
                 break;
             case 12:
-                $this->setRouTargetanchor($value);
+                $this->setRouSourceanchor($value);
                 break;
             case 13:
-                $this->setRouToPort($value);
+                $this->setRouTargetanchor($value);
                 break;
             case 14:
-                $this->setRouFromPort($value);
+                $this->setRouToPort($value);
                 break;
             case 15:
-                $this->setRouEvnUid($value);
+                $this->setRouFromPort($value);
                 break;
             case 16:
+                $this->setRouEvnUid($value);
+                break;
+            case 17:
                 $this->setGatUid($value);
                 break;
         } // switch()
@@ -1186,43 +1234,47 @@ abstract class BaseRoute extends BaseObject implements Persistent
         }
 
         if (array_key_exists($keys[7], $arr)) {
-            $this->setRouCondition($arr[$keys[7]]);
+            $this->setRouDefault($arr[$keys[7]]);
         }
 
         if (array_key_exists($keys[8], $arr)) {
-            $this->setRouToLastUser($arr[$keys[8]]);
+            $this->setRouCondition($arr[$keys[8]]);
         }
 
         if (array_key_exists($keys[9], $arr)) {
-            $this->setRouOptional($arr[$keys[9]]);
+            $this->setRouToLastUser($arr[$keys[9]]);
         }
 
         if (array_key_exists($keys[10], $arr)) {
-            $this->setRouSendEmail($arr[$keys[10]]);
+            $this->setRouOptional($arr[$keys[10]]);
         }
 
         if (array_key_exists($keys[11], $arr)) {
-            $this->setRouSourceanchor($arr[$keys[11]]);
+            $this->setRouSendEmail($arr[$keys[11]]);
         }
 
         if (array_key_exists($keys[12], $arr)) {
-            $this->setRouTargetanchor($arr[$keys[12]]);
+            $this->setRouSourceanchor($arr[$keys[12]]);
         }
 
         if (array_key_exists($keys[13], $arr)) {
-            $this->setRouToPort($arr[$keys[13]]);
+            $this->setRouTargetanchor($arr[$keys[13]]);
         }
 
         if (array_key_exists($keys[14], $arr)) {
-            $this->setRouFromPort($arr[$keys[14]]);
+            $this->setRouToPort($arr[$keys[14]]);
         }
 
         if (array_key_exists($keys[15], $arr)) {
-            $this->setRouEvnUid($arr[$keys[15]]);
+            $this->setRouFromPort($arr[$keys[15]]);
         }
 
         if (array_key_exists($keys[16], $arr)) {
-            $this->setGatUid($arr[$keys[16]]);
+            $this->setRouEvnUid($arr[$keys[16]]);
+        }
+
+        if (array_key_exists($keys[17], $arr)) {
+            $this->setGatUid($arr[$keys[17]]);
         }
 
     }
@@ -1262,6 +1314,10 @@ abstract class BaseRoute extends BaseObject implements Persistent
 
         if ($this->isColumnModified(RoutePeer::ROU_TYPE)) {
             $criteria->add(RoutePeer::ROU_TYPE, $this->rou_type);
+        }
+
+        if ($this->isColumnModified(RoutePeer::ROU_DEFAULT)) {
+            $criteria->add(RoutePeer::ROU_DEFAULT, $this->rou_default);
         }
 
         if ($this->isColumnModified(RoutePeer::ROU_CONDITION)) {
@@ -1369,6 +1425,8 @@ abstract class BaseRoute extends BaseObject implements Persistent
         $copyObj->setRouCase($this->rou_case);
 
         $copyObj->setRouType($this->rou_type);
+
+        $copyObj->setRouDefault($this->rou_default);
 
         $copyObj->setRouCondition($this->rou_condition);
 

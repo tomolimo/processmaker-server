@@ -207,9 +207,16 @@ if (! defined ('SYS_SYS')) {
       define ('TIME_ZONE', $config ['time_zone']);
 
       date_default_timezone_set (TIME_ZONE);
-      print "TIME_ZONE: " . TIME_ZONE . "\n";
-      print "MEMCACHED_ENABLED: " . MEMCACHED_ENABLED . "\n";
-      print "MEMCACHED_SERVER: " . MEMCACHED_SERVER . "\n";
+      
+      G::LoadSystem('inputfilter');
+      $filter = new InputFilter();
+      $TIME_ZONE = $filter->xssFilterHard(TIME_ZONE);
+      $MEMCACHED_ENABLED = $filter->xssFilterHard(MEMCACHED_ENABLED);
+      $MEMCACHED_SERVER = $filter->xssFilterHard(MEMCACHED_SERVER);
+      
+      print "TIME_ZONE: " . $TIME_ZONE . "\n";
+      print "MEMCACHED_ENABLED: " . $MEMCACHED_ENABLED . "\n";
+      print "MEMCACHED_SERVER: " . $MEMCACHED_SERVER . "\n";
       // ****************************************
 
       include_once (PATH_HOME . 'engine' . PATH_SEP . 'config' . PATH_SEP . 'paths_installed.php');

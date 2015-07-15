@@ -31,7 +31,11 @@
 
 $G_PUBLISH = new Publisher();
 //echo G::generateUniqueNumber();
-$G_PUBLISH->AddContent( 'xmlform', 'xmlform', 'tracker/login', '', '', SYS_URI . 'tracker/authentication.php' );
+if(SYS_SKIN == 'neoclassic'){
+    $G_PUBLISH->AddContent( 'xmlform', 'xmlform', 'tracker/loginpm3', '', '', SYS_URI . 'tracker/authentication.php' );
+}else{
+    $G_PUBLISH->AddContent( 'xmlform', 'xmlform', 'tracker/login', '', '', SYS_URI . 'tracker/authentication.php' );
+}
 
 G::RenderPage( "publish" );
 session_destroy();

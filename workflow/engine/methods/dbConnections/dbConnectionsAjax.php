@@ -30,6 +30,11 @@
  * @Param  var action from POST request
  */
 
+G::LoadSystem('inputfilter');
+$filter = new InputFilter();
+$_POST = $filter->xssFilterHard($_POST);
+$_SESSION = $filter->xssFilterHard($_SESSION);
+
 if (isset( $_POST['action'] ) || isset( $_POST['function'] )) {
     $action = (isset( $_POST['action'] )) ? $_POST['action'] : $_POST['function'];
 } else {

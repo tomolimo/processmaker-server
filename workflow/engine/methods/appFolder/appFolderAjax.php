@@ -1,4 +1,9 @@
 <?php
+G::LoadSystem('inputfilter');
+$filter = new InputFilter();
+$_POST = $filter->xssFilterHard($_POST);
+$_GET = $filter->xssFilterHard($_GET);
+$_REQUEST = $filter->xssFilterHard($_REQUEST);
 if (! isset ($_SESSION ['USER_LOGGED'])) {
     $res ['success'] = false;
     $res ['error'] = G::LoadTranslation('ID_LOGIN_AGAIN');
@@ -1409,6 +1414,10 @@ function copyMoveExecuteTree($uidFolder, $newUidFolder)
             //Copy file
             $arrayPathFromFile = G::getPathFromFileUID($docInfo["APP_UID"], $docUid);
             $newFile = $arrayPathFromFile[0] . PATH_SEP . $arrayPathFromFile[1] . "_" . $docInfo["DOC_VERSION"] . "." . $extension;
+            
+            if(!file_exists($path . $arrayPathFromFile[0])) {
+                mkdir( $path . $arrayPathFromFile[0], 0777, true );
+            }
 
             copy($path . $originFile, $path . $newFile);
         } else {

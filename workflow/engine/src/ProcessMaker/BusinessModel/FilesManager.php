@@ -190,12 +190,11 @@ class FilesManager
                     break;
             }
             $content = $aData['prf_content'];
-            if (is_string($content)) {
-                if (file_exists($sDirectory)) {
-                    $directory = $sMainDirectory. PATH_SEP . $sSubDirectory . $aData['prf_filename'];
-                    throw new \Exception(\G::LoadTranslation("ID_EXISTS_FILE", array($directory)));
-                }
+            if (file_exists($sDirectory) ) {
+                $directory = $sMainDirectory. PATH_SEP . $sSubDirectory . $aData['prf_filename'];
+                throw new \Exception(\G::LoadTranslation("ID_EXISTS_FILE", array($directory)));
             }
+            
             if (!file_exists($sCheckDirectory)) {
                 $sPkProcessFiles = \G::generateUniqueID();
                 $oProcessFiles = new \ProcessFiles();
@@ -224,7 +223,8 @@ class FilesManager
             $oProcessFiles->setPrfCreateDate($sDate);
             $oProcessFiles->save();
             $fp = fopen($sDirectory, 'w');
-            $content = $aData['prf_content'];
+            $content = stripslashes($aData['prf_content']);
+            $content = str_replace("@amp@", "&", $content);
             fwrite($fp, $content);
             fclose($fp);
             $oProcessFile = array('prf_uid' => $oProcessFiles->getPrfUid(),
@@ -275,6 +275,10 @@ class FilesManager
                 $_FILES['prf_file']['name'] = $_FILES['prf_file']['name'].$extention;
             }
             $file = end(explode("/",$path));
+            if(strpos($file,"\\") > 0) {
+                $file = str_replace('\\', '/', $file);
+                $file = end(explode("/",$file));
+            }
             $path = str_replace($file,'',$path);
             if ($file == $_FILES['prf_file']['name']) {
                 if ($_FILES['prf_file']['error'] != 1) {
@@ -368,7 +372,8 @@ class FilesManager
             $oProcessFiles->setPrfUpdateDate($sDate);
             $oProcessFiles->save();
             $fp = fopen($path, 'w');
-            $content = $aData['prf_content'];
+            $content = stripslashes($aData['prf_content']);
+            $content = str_replace("@amp@", "&", $content);
             fwrite($fp, $content);
             fclose($fp);
             $oProcessFile = array('prf_uid' => $oProcessFiles->getPrfUid(),
@@ -549,4 +554,3 @@ class FilesManager
         }
     }
 }
-

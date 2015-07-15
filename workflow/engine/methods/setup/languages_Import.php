@@ -56,10 +56,13 @@ try {
     $sMaxExecutionTime = ini_get( 'max_execution_time' );
     ini_set( 'max_execution_time', '0' );
     G::LoadClass( 'configuration' );
+    G::LoadSystem('inputfilter');
+    $filter = new InputFilter();
 
     $languageFile = $_FILES['form']['tmp_name']['LANGUAGE_FILENAME'];
     $languageFilename = $_FILES['form']['name']['LANGUAGE_FILENAME'];
-
+    $languageFile = $filter->xssFilterHard($languageFile, 'path');
+    $languageFilename = $filter->xssFilterHard($languageFilename, 'path');
     if (substr_compare( $languageFilename, ".gz", - 3, 3, true ) == 0) {
         $zp = gzopen( $languageFile, "r" );
         $languageFile = tempnam( __FILE__, '' );

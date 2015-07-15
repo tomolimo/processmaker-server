@@ -80,18 +80,6 @@ abstract class BaseBpmnLaneset extends BaseObject implements Persistent
     protected $aBpmnProcess;
 
     /**
-     * Collection to store aggregation of collBpmnLanes.
-     * @var        array
-     */
-    protected $collBpmnLanes;
-
-    /**
-     * The criteria used to select the current contents of collBpmnLanes.
-     * @var        Criteria
-     */
-    protected $lastBpmnLaneCriteria = null;
-
-    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      * @var        boolean
@@ -501,14 +489,6 @@ abstract class BaseBpmnLaneset extends BaseObject implements Persistent
                 $this->resetModified(); // [HL] After being saved an object is no longer 'modified'
             }
 
-            if ($this->collBpmnLanes !== null) {
-                foreach($this->collBpmnLanes as $referrerFK) {
-                    if (!$referrerFK->isDeleted()) {
-                        $affectedRows += $referrerFK->save($con);
-                    }
-                }
-            }
-
             $this->alreadyInSave = false;
         }
         return $affectedRows;
@@ -597,14 +577,6 @@ abstract class BaseBpmnLaneset extends BaseObject implements Persistent
                 $failureMap = array_merge($failureMap, $retval);
             }
 
-
-                if ($this->collBpmnLanes !== null) {
-                    foreach($this->collBpmnLanes as $referrerFK) {
-                        if (!$referrerFK->validate($columns)) {
-                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
-                        }
-                    }
-                }
 
 
             $this->alreadyInValidation = false;
@@ -895,18 +867,6 @@ abstract class BaseBpmnLaneset extends BaseObject implements Persistent
         $copyObj->setLnsState($this->lns_state);
 
 
-        if ($deepCopy) {
-            // important: temporarily setNew(false) because this affects the behavior of
-            // the getter/setter methods for fkey referrer objects.
-            $copyObj->setNew(false);
-
-            foreach($this->getBpmnLanes() as $relObj) {
-                $copyObj->addBpmnLane($relObj->copy($deepCopy));
-            }
-
-        } // if ($deepCopy)
-
-
         $copyObj->setNew(true);
 
         $copyObj->setLnsUid(''); // this is a pkey column, so set to default value
@@ -1051,162 +1011,6 @@ abstract class BaseBpmnLaneset extends BaseObject implements Persistent
              */
         }
         return $this->aBpmnProcess;
-    }
-
-    /**
-     * Temporary storage of collBpmnLanes to save a possible db hit in
-     * the event objects are add to the collection, but the
-     * complete collection is never requested.
-     * @return     void
-     */
-    public function initBpmnLanes()
-    {
-        if ($this->collBpmnLanes === null) {
-            $this->collBpmnLanes = array();
-        }
-    }
-
-    /**
-     * If this collection has already been initialized with
-     * an identical criteria, it returns the collection.
-     * Otherwise if this BpmnLaneset has previously
-     * been saved, it will retrieve related BpmnLanes from storage.
-     * If this BpmnLaneset is new, it will return
-     * an empty collection or the current collection, the criteria
-     * is ignored on a new object.
-     *
-     * @param      Connection $con
-     * @param      Criteria $criteria
-     * @throws     PropelException
-     */
-    public function getBpmnLanes($criteria = null, $con = null)
-    {
-        // include the Peer class
-        include_once 'classes/model/om/BaseBpmnLanePeer.php';
-        if ($criteria === null) {
-            $criteria = new Criteria();
-        }
-        elseif ($criteria instanceof Criteria)
-        {
-            $criteria = clone $criteria;
-        }
-
-        if ($this->collBpmnLanes === null) {
-            if ($this->isNew()) {
-               $this->collBpmnLanes = array();
-            } else {
-
-                $criteria->add(BpmnLanePeer::LNS_UID, $this->getLnsUid());
-
-                BpmnLanePeer::addSelectColumns($criteria);
-                $this->collBpmnLanes = BpmnLanePeer::doSelect($criteria, $con);
-            }
-        } else {
-            // criteria has no effect for a new object
-            if (!$this->isNew()) {
-                // the following code is to determine if a new query is
-                // called for.  If the criteria is the same as the last
-                // one, just return the collection.
-
-
-                $criteria->add(BpmnLanePeer::LNS_UID, $this->getLnsUid());
-
-                BpmnLanePeer::addSelectColumns($criteria);
-                if (!isset($this->lastBpmnLaneCriteria) || !$this->lastBpmnLaneCriteria->equals($criteria)) {
-                    $this->collBpmnLanes = BpmnLanePeer::doSelect($criteria, $con);
-                }
-            }
-        }
-        $this->lastBpmnLaneCriteria = $criteria;
-        return $this->collBpmnLanes;
-    }
-
-    /**
-     * Returns the number of related BpmnLanes.
-     *
-     * @param      Criteria $criteria
-     * @param      boolean $distinct
-     * @param      Connection $con
-     * @throws     PropelException
-     */
-    public function countBpmnLanes($criteria = null, $distinct = false, $con = null)
-    {
-        // include the Peer class
-        include_once 'classes/model/om/BaseBpmnLanePeer.php';
-        if ($criteria === null) {
-            $criteria = new Criteria();
-        }
-        elseif ($criteria instanceof Criteria)
-        {
-            $criteria = clone $criteria;
-        }
-
-        $criteria->add(BpmnLanePeer::LNS_UID, $this->getLnsUid());
-
-        return BpmnLanePeer::doCount($criteria, $distinct, $con);
-    }
-
-    /**
-     * Method called to associate a BpmnLane object to this object
-     * through the BpmnLane foreign key attribute
-     *
-     * @param      BpmnLane $l BpmnLane
-     * @return     void
-     * @throws     PropelException
-     */
-    public function addBpmnLane(BpmnLane $l)
-    {
-        $this->collBpmnLanes[] = $l;
-        $l->setBpmnLaneset($this);
-    }
-
-
-    /**
-     * If this collection has already been initialized with
-     * an identical criteria, it returns the collection.
-     * Otherwise if this BpmnLaneset is new, it will return
-     * an empty collection; or if this BpmnLaneset has previously
-     * been saved, it will retrieve related BpmnLanes from storage.
-     *
-     * This method is protected by default in order to keep the public
-     * api reasonable.  You can provide public methods for those you
-     * actually need in BpmnLaneset.
-     */
-    public function getBpmnLanesJoinBpmnProject($criteria = null, $con = null)
-    {
-        // include the Peer class
-        include_once 'classes/model/om/BaseBpmnLanePeer.php';
-        if ($criteria === null) {
-            $criteria = new Criteria();
-        }
-        elseif ($criteria instanceof Criteria)
-        {
-            $criteria = clone $criteria;
-        }
-
-        if ($this->collBpmnLanes === null) {
-            if ($this->isNew()) {
-                $this->collBpmnLanes = array();
-            } else {
-
-                $criteria->add(BpmnLanePeer::LNS_UID, $this->getLnsUid());
-
-                $this->collBpmnLanes = BpmnLanePeer::doSelectJoinBpmnProject($criteria, $con);
-            }
-        } else {
-            // the following code is to determine if a new query is
-            // called for.  If the criteria is the same as the last
-            // one, just return the collection.
-
-            $criteria->add(BpmnLanePeer::LNS_UID, $this->getLnsUid());
-
-            if (!isset($this->lastBpmnLaneCriteria) || !$this->lastBpmnLaneCriteria->equals($criteria)) {
-                $this->collBpmnLanes = BpmnLanePeer::doSelectJoinBpmnProject($criteria, $con);
-            }
-        }
-        $this->lastBpmnLaneCriteria = $criteria;
-
-        return $this->collBpmnLanes;
     }
 }
 

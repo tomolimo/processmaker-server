@@ -97,6 +97,10 @@ class ApplicationMapBuilder
 
         $tMap->addColumn('APP_PIN', 'AppPin', 'string', CreoleTypes::VARCHAR, true, 32);
 
+        $tMap->addColumn('APP_DURATION', 'AppDuration', 'double', CreoleTypes::DOUBLE, false, null);
+
+        $tMap->addColumn('APP_DELAY_DURATION', 'AppDelayDuration', 'double', CreoleTypes::DOUBLE, false, null);
+
         $tMap->addValidator('APP_STATUS', 'validValues', 'propel.validator.ValidValuesValidator', 'DRAFT|TO_DO|PAUSED|COMPLETED|CANCELLED', 'Please select a valid status.');
 
     } // doBuild()

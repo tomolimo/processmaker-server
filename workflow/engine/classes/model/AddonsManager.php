@@ -61,7 +61,7 @@ class AddonsManager extends BaseAddonsManager
         if ($download_md5 == null) {
             return null;
         }
-        return (strcasecmp(md5_file($filename), $download_md5) == 0);
+        return (strcasecmp(G::encryptFileOld($filename), $download_md5) == 0);
     }
 
     /**
@@ -132,7 +132,11 @@ class AddonsManager extends BaseAddonsManager
 
         $oPluginRegistry = &PMPluginRegistry::getSingleton();
 
-        require_once (PATH_PLUGINS . $this->getAddonName() . ".php");
+        G::LoadSystem('inputfilter');
+        $filter = new InputFilter();
+        $requiredPath = PATH_PLUGINS . $this->getAddonName() . ".php";
+        $requiredPath = $filter->validateInput($requiredPath, 'path');
+        require_once ($requiredPath);
 
         if ($enable) {
             //$oDetails = $oPluginRegistry->getPluginDetails($this->getAddonName());
@@ -211,7 +215,7 @@ class AddonsManager extends BaseAddonsManager
         $var = explode("&", $aux[1]);
 
         ///////
-        $boundary = "---------------------" . substr(md5(rand(0, 32000)), 0, 10);
+        $boundary = "---------------------" . substr(G::encryptOld(rand(0, 32000)), 0, 10);
         $data = null;
 
         for ($i = 0; $i <= count($var) - 1; $i++) {

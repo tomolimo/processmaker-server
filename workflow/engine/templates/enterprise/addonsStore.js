@@ -472,7 +472,8 @@ Ext.onReady(function() {
       method: "POST"
     }),
     baseParams: {
-        "action": "addonsList"
+        "action": "addonsList",
+        "force" : true
     },
 
     //url: "addonsStoreAction?action=addonsList",
@@ -1153,7 +1154,8 @@ Ext.onReady(function() {
         store: addonsStore,
         defaultType: "displayfield",
         padding: 5,
-        autoHeight : true,
+        //autoHeight : true,
+        height: 335,
         disabled: !licensed,
         columns: [
             expander,
@@ -1443,54 +1445,6 @@ Ext.onReady(function() {
                   }
                   return '';
                 }
-            },
-            {
-                id       : "status-feature",
-                header   : _('ID_STATUS'),
-                width    : 60,
-                sortable : false,
-                hideable : false,
-                dataIndex: "status",
-                renderer: function (val) {
-                    var str = "";
-                    var text = "";
-
-                    switch (val) {
-                        case "available": text = _('ID_BUY_NOW'); break;
-                        case "installed": text = _('ID_INSTALLED'); break;
-                        case "ready":     text = _('ID_INSTALL_NOW'); break;
-                        case "upgrade":   text = _('ID_UPGRADE_NOW'); break;
-                        case "download":  text = _('ID_CANCEL'); break;
-                        case "install":   text = _('ID_INSTALLING'); break;
-                        case "cancel":    text = _('ID_CANCELLING'); break;
-                        case "disabled":  text = _('ID_DISABLED'); break;
-                        case "download-start": text = "<img src=\"/images/enterprise/loader.gif\" />"; break;
-                        default: text = val; break;
-                    }
-
-                    switch (val) {
-                      case "available":
-                      case "ready":
-                      case "upgrade":
-                      case "download":
-                      case "install":
-                      case "cancel":
-                      case "download-start":
-                        str = "<div class=\"" + val + " roundedCorners\">" + text + "</div>";
-                        break;
-
-                      case "installed":
-                      case "disabled":
-                        str = "<div style=\"margin-right: 0.85em; font-weight: bold; text-align: center;\">" + text + "</div>";
-                        break;
-
-                      default:
-                        str = "<div class=\"" + val + " roundedCorners\">" + text + "</div>";
-                        break;
-                    }
-
-                    return (str);
-                }
             }
         ]
     });
@@ -1579,7 +1533,7 @@ Ext.onReady(function() {
         activeTab: 0,
         height: 370,
         defaults:{
-            autoScroll: true,
+            //autoScroll: true,
             layout:'form',
             frame:true,
         },
@@ -1652,4 +1606,3 @@ Ext.onReady(function() {
     addonsFeaturesStore.load();
   }
 });
-

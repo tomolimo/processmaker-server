@@ -45,7 +45,7 @@ $parameters = unserialize( $oEvent->getEvnActionParameters() );
 //g::pr($parameters); die;
 $aTrigger = $oTrigger->load( $aFields['TRI_UID'] );
 
-$hash = md5( $oTrigger->getTriWebbot() );
+$hash = G::encryptOld( $oTrigger->getTriWebbot() );
 //var_dump($hash,$parameters->hash);die;
 //if the hash is different, the script was edited , so we will show the trigger editor.
 if ((isset( $parameters->hash ) && $hash != $parameters->hash) || $aFields['EVN_ACTION'] == 'EXECUTE_TRIGGER' || $aFields['EVN_ACTION'] == 'EXECUTE_CONDITIONAL_TRIGGER') {

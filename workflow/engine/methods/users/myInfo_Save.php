@@ -68,7 +68,7 @@ try {
             $aData['USR_PASSWORD'] = $_POST['form']['USR_PASSWORD'];
             require_once 'classes/model/UsersProperties.php';
             $oUserProperty = new UsersProperties();
-            $aUserProperty = $oUserProperty->loadOrCreateIfNotExists( $_POST['form']['USR_UID'], array ('USR_PASSWORD_HISTORY' => serialize( array (md5( $_POST['form']['USR_NEW_PASS'] )
+            $aUserProperty = $oUserProperty->loadOrCreateIfNotExists( $_POST['form']['USR_UID'], array ('USR_PASSWORD_HISTORY' => serialize( array (G::encryptOld( $_POST['form']['USR_NEW_PASS'] )
             ) )
             ) );
             $aErrors = $oUserProperty->validatePassword( $_POST['form']['USR_NEW_PASS'], $aUserProperty['USR_LAST_UPDATE_DATE'], $aUserProperty['USR_LOGGED_NEXT_TIME'] );
@@ -120,7 +120,7 @@ try {
     $aData['USR_DUE_DATE'] = $_POST['form']['USR_DUE_DATE'];
     $aData['USR_UPDATE_DATE'] = date( 'Y-m-d H:i:s' );
     $RBAC->updateUser( $aData );
-    $aData['USR_PASSWORD'] = md5( $_POST['form']['USR_USERNAME'] ); //fake :p
+    $aData['USR_PASSWORD'] = G::encryptOld( $_POST['form']['USR_USERNAME'] ); //fake :p
     $aData['USR_COUNTRY'] = $_POST['form']['USR_COUNTRY'];
     $aData['USR_CITY'] = $_POST['form']['USR_CITY'];
     $aData['USR_LOCATION'] = $_POST['form']['USR_LOCATION'];

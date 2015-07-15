@@ -5,12 +5,21 @@
  * and open the template in the editor.
  */
 
+G::LoadSystem('inputfilter');
+$filter = new InputFilter();
+
 $callback = isset($_POST['callback']) ? $_POST['callback'] : 'stcCallback1001';
+$callback = $filter->xssFilterHard($callback);
 $dir      = isset($_POST['dir'])    ? $_POST['dir']    : 'DESC';
+$dir      = $filter->xssFilterHard($dir);
 $sort     = isset($_POST['sort'])   ? $_POST['sort']   : '';
+$sort     = $filter->xssFilterHard($sort);
 $query    = isset($_POST['query'])  ? $_POST['query']  : '';
+$query    = $filter->xssFilterHard($query);
 $tabUid   = isset($_POST['table'])  ? $_POST['table']  : '';
+$tabUid   = $filter->xssFilterHard($tabUid);
 $action   = isset($_POST['action']) ? $_POST['action'] : 'todo';
+$action   = $filter->xssFilterHard($action);
 
 try {
     G::LoadClass("BasePeer" );

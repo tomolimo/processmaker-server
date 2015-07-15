@@ -141,6 +141,9 @@ class DbSource extends BaseDbSource
             if ($this->validate()) {
                 $result = $this->save();
                 $con->commit();
+                //Add Audit Log
+                G::auditLog("UpdateDatabaseConnection", "Connection Uid: ".$fields['DBS_UID'].", Connection Engine: ".$fields['DBS_TYPE'].", Connection Encode: ".$fields['DBS_ENCODE'].", Connection Server: ".$fields['DBS_SERVER'].", Connection Database: ".$fields['DBS_DATABASE_NAME'].", Connection Port: ".$fields['DBS_PORT']);
+                
                 return $result;
             } else {
                 $con->rollback();
@@ -156,6 +159,7 @@ class DbSource extends BaseDbSource
     {
         $con = Propel::getConnection(DbSourcePeer::DATABASE_NAME);
         try {
+            $fields = $this->load($DbsUid, $ProUID);
             $con->begin();
             $this->setDbsUid($DbsUid);
             $this->setProUid($ProUID);
@@ -167,6 +171,9 @@ class DbSource extends BaseDbSource
             }
             $result = $this->delete();
             $con->commit();
+            //Add Audit Log
+            G::auditLog("DeleteDatabaseConnection", "Connection Uid: ".$DbsUid.", Connection Engine: ".$fields['DBS_TYPE'].", Connection Database: ".$fields['DBS_DATABASE_NAME']);
+            
             return $result;
         } catch (exception $e) {
             $con->rollback();
@@ -196,6 +203,9 @@ class DbSource extends BaseDbSource
                 throw ($e);
             }
             $con->commit();
+            //Add Audit Log
+            G::auditLog("CreateDatabaseConnection", "Connection Uid: ".$aData['DBS_UID'].", Connection Engine: ".$aData['DBS_TYPE'].", Connection Encode: ".$aData['DBS_ENCODE'].", Connection Server: ".$aData['DBS_SERVER'].", Connection Database: ".$aData['DBS_DATABASE_NAME'].", Connection Port: ".$aData['DBS_PORT']);
+             
             return $this->getDbsUid();
         } catch (exception $e) {
             $con->rollback();

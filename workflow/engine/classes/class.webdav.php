@@ -398,13 +398,18 @@ class ProcessMakerWebDav extends HTTP_WebDAV_Server
      */
     public function GET(&$options)
     {
-        $paths = $this->paths;
+        G::LoadSystem('inputfilter');
+        $filter = new InputFilter();
+        $options = $filter->xssFilterHard($options);
+        $paths = $filter->xssFilterHard($this->paths);
 
         $pathClasses = PATH_DB . SYS_SYS . PATH_SEP . 'classes' . PATH_SEP;
         if (count($paths) > 0 && $paths[0] == 'classes' && is_dir($pathClasses)) {
             $fsFile = $pathClasses . $paths[1];
+            $fsFile = $filter->xssFilterHard($fsFile);
             if (count($paths) == 2 && file_exists($fsFile)) {
                 $content = file_get_contents($fsFile);
+                $content = $filter->xssFilterHard($content);
                 print $content;
                 header("Content-Type: " . mime_content_type($fsFile));
                 header("Last-Modified: " . date("D, j M Y H:m:s ", file_mtime($fsFile)) . "GMT");
@@ -418,8 +423,10 @@ class ProcessMakerWebDav extends HTTP_WebDAV_Server
             if (count($paths) == 4 && $paths[2] == 'xmlforms') {
                 $pathXmlform = $pathProcesses . 'xmlForms' . PATH_SEP . $paths[1] . PATH_SEP;
                 $fsFile = $pathXmlform . $paths[3];
+                $fsFile = $filter->xssFilterHard($fsFile);
                 if (count($paths) == 4 && file_exists($fsFile)) {
                     $content = file_get_contents($fsFile);
+                    $content = $filter->xssFilterHard($content);
                     print $content;
                     header("Content-Type: " . mime_content_type($fsFile));
                     header("Last-Modified: " . date("D, j M Y H:m:s ", file_mtime($fsFile)) . "GMT");
@@ -431,8 +438,10 @@ class ProcessMakerWebDav extends HTTP_WebDAV_Server
             if (count($paths) == 4 && $paths[2] == 'mailTemplates') {
                 $pathTemplates = $pathProcesses . 'mailTemplates' . PATH_SEP . $paths[1] . PATH_SEP;
                 $fsFile = $pathTemplates . $paths[3];
+                $fsFile = $filter->xssFilterHard($fsFile);
                 if (count($paths) == 4 && file_exists($fsFile)) {
                     $content = file_get_contents($fsFile);
+                    $content = $filter->xssFilterHard($content);
                     print $content;
                     header("Content-Type: " . mime_content_type($fsFile));
                     header("Last-Modified: " . date("D, j M Y H:m:s ", file_mtime($fsFile)) . "GMT");
@@ -444,8 +453,10 @@ class ProcessMakerWebDav extends HTTP_WebDAV_Server
             if (count($paths) == 4 && $paths[2] == 'public_html') {
                 $pathPublic = $pathProcesses . 'public' . PATH_SEP . $paths[1] . PATH_SEP;
                 $fsFile = $pathPublic . $paths[3];
+                $fsFile = $filter->xssFilterHard($fsFile);
                 if (count($paths) == 4 && file_exists($fsFile)) {
                     $content = file_get_contents($fsFile);
+                    $content = $filter->xssFilterHard($content);
                     print $content;
                     header("Content-Type: " . mime_content_type($fsFile));
                     header("Last-Modified: " . date("D, j M Y H:m:s ", file_mtime($fsFile)) . "GMT");
@@ -967,11 +978,15 @@ class ProcessMakerWebDav extends HTTP_WebDAV_Server
      */
     public function checkLock($path)
     {
+        G::LoadSystem('inputfilter');
+        $filter = new InputFilter();
+        $path = $filter->validateInput($path, 'nosql');
         $result = false;
 
         $query = "SELECT owner, token, expires, exclusivelock
               FROM locks
-            WHERE path = '$path' ";
+            WHERE path = '%s' ";
+        $query = $filter->preventSqlInjection($query, array($path));
         $res = mysql_query($query);
 
         if ($res) {

@@ -179,7 +179,7 @@ Ext.onReady(function(){
   });
 
   if (typeof(__PLUGIN_ERROR__) !== 'undefined') {
-    PMExt.notify(_('ID_PLUGINS'), __PLUGIN_ERROR__);
+      PMExt.notify(_("ID_PLUGINS"), __PLUGIN_ERROR__, "error", 5);
   }
 });
 
@@ -253,7 +253,15 @@ function activeDeactive(){
       params : { UIDS : ids },
       method: 'GET',
       success: function ( result, request ) {
-        //Ext.MessageBox.alert('Success', 'Data return from the server: '+ result.responseText);
+        var dataResponse = Ext.util.JSON.decode(result.responseText);
+
+        if (dataResponse.status) {
+            if (dataResponse.status == "DISABLED-CODE") {
+                PMExt.notify(_("ID_PLUGINS"), dataResponse.message, "error", 5);
+                return;
+            }
+        }
+
         var site = '';
         if (SYS_SKIN.substring(0,2) == 'ux') {
             site = PROCESSMAKER_URL + '/main?st=admin&s='+parent._NODE_SELECTED;
@@ -319,3 +327,4 @@ capitalize = function(s){
   s = s.toLowerCase();
   return s.replace( /(^|\s)([a-z])/g , function(m,p1,p2){ return p1+p2.toUpperCase(); } );
 };
+

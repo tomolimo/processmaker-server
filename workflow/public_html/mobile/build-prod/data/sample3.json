@@ -1,0 +1,117 @@
+{
+    "name": "form-example2",
+    "items": [
+        {
+            "type":"form",       
+            "items":
+            [
+                [
+                    {
+                        "type": "title",
+                        "colSpan": 12,
+                        "name": "title",
+                        "label": "PMDynaform 3"
+                    }
+                ],
+                [
+                    {
+                        "type": "text",
+                        "colSpan":12,
+                        "name": "name",
+                        "value": "",
+                        "label": "Mask ##:##:##",
+                        "readonly": false,
+                        "dataType": "string",
+                        "variable": "varexample",
+                        "mask": "##:##:##"
+                    }
+                ],
+                [
+                    {
+                        "type": "text",
+                        "colSpan":12,
+                        "name": "name",
+                        "value": "",
+                        "label": "Mask $-##-###--####---#",
+                        "readonly": false,
+                        "dataType": "string",
+                        "mask": "$ #-##-###--####---#"
+                    }
+                ],
+                [
+                    {
+                        "type": "text",
+                        "colSpan": 12,
+                        "name": "name",
+                        "value": "",
+                        "label": "Mask $ ###,##",
+                        "readonly": false,
+                        "dataType": "string",
+                        "mask": "$ ###,##"
+                    }
+                ],
+                [
+                    {
+                        "type": "text",
+                        "colSpan":12,
+                        "name": "name",
+                        "value": "1234567890",
+                        "label": "Mask #,#,#,#,#,#,#,#,#",
+                        "readonly": false,
+                        "dataType": "string",
+                        "mask": "#,#,#,#,#,#,#,#,#"
+                    }
+                ],
+                [
+                    {
+                        "type": "datetime",
+                        "pickType":"datetime",
+                        "colSpan":12,
+                        "name": "name",
+                        "value": "",
+                        "label": "Date time",
+                        "readonly": false,
+                        "format": "dd-MM-yyyy hh-mm-ss"
+                    }
+                ],
+                [
+                    {
+                        "type": "datetime",
+                        "pickType":"date",
+                        "colSpan":12,
+                        "name": "name",
+                        "value": "12/12/1212",
+                        "label": "Date",
+                        "readonly": false,
+                        "format": "dd/MM/yyyy"
+                    }
+                ],
+                [
+                    {
+                        "type": "datetime",
+                        "pickType":"time",
+                        "colSpan":12,
+                        "name": "name",
+                        "value": "",
+                        "label": "Time",
+                        "readonly": false,
+                        "format": "hh:mm:ss",
+                        "hint": "Date Field"
+                    }
+                ],
+                [
+                    {
+                      "type" : "button",
+                      "colSpan" : 6,
+                      "label":"Button"
+                    },
+                    {
+                      "type" : "submit",
+                      "colSpan" : 6,
+                      "label" : "Submit"
+                    }
+                ]
+            ]
+        }
+    ]
+}

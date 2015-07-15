@@ -827,6 +827,12 @@ antes funcionaba.
 	height:15px !important;
 }
 
+.ICON_STRATEGIC_DASHBOARD {
+  background-image: url(/skins/neoclassic/images/dashboard.png) !important;
+  width: 15px !important;
+  height: 15px !important;
+}
+
 .ICON_PM_REQUIREMENTS{
     /*ss_wrench*/
     background-image: url(/images/icons_silk/sprites.png) !important;

@@ -40,16 +40,34 @@ require_once ("classes/model/AdditionalTables.php");
 require_once ("classes/model/AppDelay.php");*/
 G::LoadClass( 'case' );
 
+G::LoadSystem('inputfilter');
+$filter = new InputFilter();
+$_POST = $filter->xssFilterHard($_POST);
+$_REQUEST = $filter->xssFilterHard($_REQUEST);
+$_SESSION = $filter->xssFilterHard($_SESSION);
+
 $actionAjax = isset( $_REQUEST['actionAjax'] ) ? $_REQUEST['actionAjax'] : null;
+
+function filterUserListArray($users = array(), $filter = '')
+{
+    $filteredUsers = array();
+    foreach ($users as $user) {
+        if(stripos($user['USR_FULLNAME'], $filter) || empty($filter)) {
+            $filteredUsers[] = $user;
+        }
+    }
+    return $filteredUsers;
+}
 
 if ($actionAjax == "userValues") {
     //global $oAppCache;
     $oAppCache = new AppCacheView();
     $action = isset( $_REQUEST['action'] ) ? $_REQUEST['action'] : null;
+    $query = isset( $_REQUEST['query'] ) ? $_REQUEST['query'] : null;
     $users = array();
     $users[] = array ("USR_UID" => "", "USR_FULLNAME" => G::LoadTranslation( "ID_ALL_USERS" ));
     $users[] = array ("USR_UID" => "CURRENT_USER", "USR_FULLNAME" => G::LoadTranslation( "ID_CURRENT_USER" ));
-
+    $users = filterUserListArray($users, $query);
     //now get users, just for the Search action
     switch ($action) {
         case 'search_simple':
@@ -67,6 +85,14 @@ if ($actionAjax == "userValues") {
             $cUsers->addSelectColumn(UsersPeer::USR_FIRSTNAME);
             $cUsers->addSelectColumn(UsersPeer::USR_LASTNAME);
             $cUsers->add( UsersPeer::USR_STATUS, 'CLOSED', Criteria::NOT_EQUAL );
+            
+            if (!is_null($query)) {
+                $filters = $cUsers->getNewCriterion( UsersPeer::USR_FIRSTNAME, '%'.$query.'%', Criteria::LIKE )->addOr(
+                    $cUsers->getNewCriterion( UsersPeer::USR_LASTNAME, '%'.$query.'%', Criteria::LIKE )->addOr(
+                    $cUsers->getNewCriterion( UsersPeer::USR_USERNAME, '%'.$query.'%', Criteria::LIKE )));
+                $cUsers->addOr( $filters );
+            }
+            $cUsers->setLimit(20);
             $cUsers->addAscendingOrderByColumn(UsersPeer::TABLE_NAME . "." . $conf->userNameFormatGetFirstFieldByUsersTable());
             $oDataset = UsersPeer::doSelectRS( $cUsers );
             $oDataset->setFetchmode( ResultSet::FETCHMODE_ASSOC );
@@ -196,6 +222,7 @@ if ($actionAjax == "getUsersToReassign") {
     G::LoadClass( 'tasks' );
     $task = new Task();
     $tasks = $task->load($_SESSION['TASK']);
+    $result = new stdclass();
     $result->data = $case->getUsersToReassign( $_SESSION['TASK'], $_SESSION['USER_LOGGED'], $tasks['PRO_UID'] );
     print G::json_encode( $result );
 }
@@ -220,6 +247,7 @@ if ($actionAjax == 'reassignCase') {
         //print_r($caseData);
         $data['APP_NUMBER'] = $caseData['APP_NUMBER'];
         $data['USER'] = $userData['USR_LASTNAME'] . ' ' . $userData['USR_FIRSTNAME']; //TODO change with the farmated username from environment conf
+        $result = new stdclass();
         $result->status = 0;
         $result->msg = G::LoadTranslation( 'ID_REASSIGNMENT_SUCCESS', SYS_LANG, $data );
     } catch (Exception $e) {
@@ -453,7 +481,7 @@ if ($actionAjax == 'showDynaformListHistory') {
         var showDynaformHistoryGlobal = {};
         showDynaformHistoryGlobal.dynUID = '';
         showDynaformHistoryGlobal.tablename = '';
-        showDynaformHistoryGlobal.dynDate = '';casesList_Ajax.php
+        showDynaformHistoryGlobal.dynDate = '';
         showDynaformHistoryGlobal.dynTitle = '';
           function showDynaformHistory(dynUID,tablename,dynDate,dynTitle){
             showDynaformHistoryGlobal.dynUID = dynUID;
@@ -521,7 +549,7 @@ if ($actionAjax == 'dynaformChangeLogViewHistory') {
 
     global $G_PUBLISH;
     $G_PUBLISH = new Publisher();
-    $FieldsHistory = unserialize( $_SESSION['HISTORY_DATA'] );
+    $FieldsHistory = $_SESSION['HISTORY_DATA'];
     $Fields['APP_DATA'] = $FieldsHistory[$_POST['HISTORY_ID']];
     $Fields['APP_DATA']['__DYNAFORM_OPTIONS']['PREVIOUS_STEP_LABEL'] = '';
     $Fields['APP_DATA']['__DYNAFORM_OPTIONS']['NEXT_STEP_LABEL'] = '';

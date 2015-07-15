@@ -1,4 +1,9 @@
 <?php
+G::LoadSystem('inputfilter');
+$filter = new InputFilter();
+$_POST = $filter->xssFilterHard($_POST);
+$_REQUEST = $filter->xssFilterHard($_REQUEST);
+$_SESSION = $filter->xssFilterHard($_SESSION);
 if (!isset($_SESSION['USER_LOGGED'])) {
     $res = new stdclass();
     $res->message = G::LoadTranslation('ID_LOGIN_AGAIN');
@@ -70,7 +75,7 @@ function getProcessList ()
         if (1) {
             foreach ($processList as $key => $processInfo) {
                 $tempTree['text'] = $key;
-                $tempTree['id'] = md5($key);
+                $tempTree['id'] = G::encryptOld($key);
                 $tempTree['cls'] = 'folder';
                 $tempTree['draggable'] = true;
                 $tempTree['optionType'] = "category";
@@ -87,7 +92,7 @@ function getProcessList ()
                     //print_r($processInfo);
                     $tempTreeChild['text'] = htmlentities($keyChild, ENT_QUOTES, 'UTF-8'); //ellipsis ( $keyChild, 50 );
                     //$tempTree['text']=$key;
-                    $tempTreeChild['id'] = md5($keyChild);
+                    $tempTreeChild['id'] = G::encryptOld($keyChild);
                     $tempTreeChild['draggable'] = true;
                     $tempTreeChild['leaf'] = true;
                     $tempTreeChild['icon'] = '/images/icon.trigger.png';
@@ -215,6 +220,11 @@ function lookinginforContentProcess ($sproUid)
 function startCase ()
 {
     G::LoadClass( 'case' );
+    G::LoadSystem('inputfilter');
+    $filter = new InputFilter();
+    $_POST = $filter->xssFilterHard($_POST);
+    $_REQUEST = $filter->xssFilterHard($_REQUEST);
+    $_SESSION = $filter->xssFilterHard($_SESSION);
 
     /* GET , POST & $_SESSION Vars */
     /* unset any variable, because we are starting a new case */
@@ -241,6 +251,7 @@ function startCase ()
         lookinginforContentProcess( $_POST['processId'] );
 
         $aData = $oCase->startCase( $_REQUEST['taskId'], $_SESSION['USER_LOGGED'] );
+        $aData = $filter->xssFilterHard($aData);
 
         $_SESSION['APPLICATION'] = $aData['APPLICATION'];
         $_SESSION['INDEX'] = $aData['INDEX'];

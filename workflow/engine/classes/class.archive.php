@@ -713,7 +713,7 @@ class zip_file extends archive
             } elseif ($fp = @fopen( $current['name'], "rb" )) {
                 $temp = fread( $fp, $current['stat'][7] );
                 fclose( $fp );
-                $crc32 = crc32( $temp );
+                $crc32 = G::encryptCrc32( $temp );
                 if (! isset( $current['method'] ) && $this->options['method'] == 1) {
                     $temp = gzcompress( $temp, $this->options['level'] );
                     $size = strlen( $temp ) - 6;

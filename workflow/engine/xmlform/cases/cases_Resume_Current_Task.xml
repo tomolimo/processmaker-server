@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+
+<dynaForm name="cases_Resume_Current_Task" type="xmlform" width="550px" labelWidth="150px">
+  <TAS_TITLE type="text" mode="view">
+    <en><![CDATA[Task]]></en>
+  </TAS_TITLE>
+  <CURRENT_USER type="text" mode="view">
+    <en><![CDATA[Current User]]></en>
+  </CURRENT_USER>
+  <DEL_DELEGATE_DATE type="text" mode="view">
+    <en><![CDATA[Task Delegate Date]]></en>
+  </DEL_DELEGATE_DATE>
+  <DEL_INIT_DATE type="text" mode="view">
+    <en><![CDATA[Task Init Date]]></en>
+  </DEL_INIT_DATE>
+  <DEL_TASK_DUE_DATE type="text" mode="view">
+    <en><![CDATA[Task Due Date]]></en>
+  </DEL_TASK_DUE_DATE>
+  <DEL_FINISH_DATE type="text" mode="view">
+    <en><![CDATA[Finish Date]]></en>
+  </DEL_FINISH_DATE>  
+</dynaForm>

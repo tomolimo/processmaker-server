@@ -16,6 +16,7 @@
             <cssFile file="sprite_ie7.css" enabledBrowsers="ie7" disabledBrowsers="ALL"></cssFile>
             <cssFile file="sprite.css" enabledBrowsers="ALL" disabledBrowsers="ie7"></cssFile>
             <cssFile file="rtl.css" enabledBrowsers="ALL" disabledBrowsers=""></cssFile>
+            <cssFile file="loginStyle.css" enabledBrowsers="ALL" disabledBrowsers=""></cssFile>            
         </skin>
         <blank>
             <cssFile file="style.css" enabledBrowsers="ALL" disabledBrowsers=""></cssFile>

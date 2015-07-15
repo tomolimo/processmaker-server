@@ -1,6 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="xmlmenu"><MNU_ADD type="link" value="" link="#" onclick="outputdocsAdd(); return false;" colAlign="left" colWidth="100"><en><![CDATA[New]]></en></MNU_ADD><PAGED_TABLE_ID type="private"/><PAGED_TABLE_FAST_SEARCH type="FastSearch" label="@G::LoadTranslation(ID_SEARCH)"/><PRO_UID type="private"/><![CDATA[>
 ]]><outputdocs_New type="private" defaultValue="../outputdocs/outputdocs_New"/><outputdocs_Edit type="private" defaultValue="../outputdocs/outputdocs_Edit"/><outputdocs_Properties type="private" defaultValue="../outputdocs/outputdocs_Properties"/><outputdocs_Delete type="private" defaultValue="../outputdocs/outputdocs_Delete"/><js type="javascript" replaceTags="1"><![CDATA[
+add_placeholder("form[PAGED_TABLE_FAST_SEARCH]","@G::LoadTranslation(ID_EMPTY_SEARCH)");
+function add_placeholder (id, placeholder) {
+	var el = document.getElementById(id);
+	el.placeholder = placeholder;
+ 
+    el.onfocus = function () {
+		if(this.value == this.placeholder) {
+			this.value = '';
+			el.style.cssText  = '';
+		}
+    };
+ 
+    el.onblur = function () {
+		if(this.value.length == 0) {
+			this.value = this.placeholder;
+			el.style.cssText = 'color:#A9A9A9;';
+		}
+    };
+ 
+	el.onblur();
+}
 var currentPagedTable = @#PAGED_TABLE_ID;
 var outputdocsEditor;
 

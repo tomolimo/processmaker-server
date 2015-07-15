@@ -167,9 +167,14 @@ if (!function_exists('md5_file')) {
         if (!$fd = @fopen($file, 'r')) {
             return false;
         }
-        $md5 = md5(fread($fd, filesize($file)));
+        $md5 = encryptOld(fread($fd, filesize($file)));
         fclose($fd);
         return $md5;
+    }
+    
+    public function encryptOld($string)
+    {
+        return md5($string);
     }
 }
 

@@ -1698,6 +1698,13 @@ var processmap=function(){
                   noClear : true
                 }]
               };
+              if (this.options.consolidated == '1') {
+                panel.tab.options.push({
+                  title : _('ID_CONSOLIDATED_CASE_LIST'),
+                  content : this.parent.closure({instance:this,method:iForm,args:[panel,index,8]}),
+                  noClear : true
+                });
+              }
             var taskOptions = this.data.db.taskOptions;
             this.loadExtendedProperties = function(){
               for(i=0;i<taskOptions.length;i++){
@@ -2232,10 +2239,25 @@ var processmap=function(){
     /*
     * Aca se definen  TASK inicio y TASK a la que se deriva.
     */
+    //In IE the event is undefined or 0
+    if(event === 0 || typeof(event) === 'undefined'){
+      event = window.event;
+    }
 
     if (event)
     {
-      if (typeof(this.data.db.task[index].derivation.type) == 'undefined')
+      if(typeof(this.data.db.task[index].derivation.type.length) == 'undefined')
+      {
+        var derivationFlag = '1';
+      } 
+      else
+      {
+        if(this.data.db.task[index].derivation.type.length == '0')
+        {
+          var derivationFlag = '0';
+        }  
+      }
+      if (typeof(this.data.db.task[index].derivation.type) == 'undefined' || derivationFlag == '0')
       {
         new leimnud.module.app.alert().make(
             {
@@ -2270,10 +2292,13 @@ var processmap=function(){
           iWidth  = 450;
           iHeight = 205;
         break;
-                                case 8:
+        case 8:
           iWidth  = 550;
           iHeight = 300;
         break;
+        default:
+          iWidth  = 400;
+          iHeight = 110;
       }
 
       this.tmp.derivationsPanel = panel =new leimnud.module.panel();

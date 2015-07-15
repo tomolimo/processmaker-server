@@ -463,8 +463,11 @@ class G
      * @return void
      */
     public static function LoadSystem ($strClass)
-    {
-        require_once (PATH_GULLIVER . 'class.' . $strClass . '.php');
+    {   require_once (PATH_GULLIVER . 'class.inputfilter.php');
+        $filter = new InputFilter();
+        $path  = PATH_GULLIVER . 'class.' . $strClass . '.php';
+        $path  = $filter->validateInput($path, 'path');
+        require_once ($path);
     }
 
     public function LoadSystemExist ($strClass)
@@ -713,7 +716,7 @@ class G
      * @param string $strClass
      * @return void
      */
-    public function LoadThirdParty ($sPath, $sFile)
+    public static function LoadThirdParty($sPath, $sFile)
     {
         $classfile = PATH_THIRDPARTY . $sPath . '/' . $sFile . ((substr( $sFile, 0, - 4 ) !== '.php') ? '.php' : '');
         return require_once ($classfile);
@@ -1070,6 +1073,12 @@ class G
      */
     public static function streamFile ($file, $download = false, $downloadFileName = '')
     {
+        G::LoadSystem('inputfilter');
+        $filter = new InputFilter();
+        $file = $filter->xssFilterHard($file);
+        if(isset($_SERVER['REQUEST_URI'])) {
+            $_SERVER['REQUEST_URI'] = $filter->xssFilterHard($_SERVER['REQUEST_URI'],"url");
+        }
         require_once (PATH_THIRDPARTY . 'jsmin/jsmin.php');
         $folderarray = explode( '/', $file );
         $typearray = explode( '.', basename( $file ) );
@@ -1078,8 +1087,11 @@ class G
 
         //trick to generate the translation.language.js file , merging two files
         if (strtolower( $typefile ) == 'js' && $typearray[0] == 'translation') {
+            $download = $filter->xssFilterHard($download);
+            $downloadFileName = $filter->xssFilterHard($downloadFileName);
             G::sendHeaders( $filename, 'text/javascript', $download, $downloadFileName );
             $output = G::streamJSTranslationFile( $filename, $typearray[1] );
+            $output = $filter->xssFilterHard($output);
             print $output;
             return;
         }
@@ -1088,6 +1100,7 @@ class G
         if (strtolower( $typefile ) == 'css' && $folderarray[count( $folderarray ) - 2] == 'css') {
             G::sendHeaders( $filename, 'text/css', $download, $downloadFileName );
             $output = G::streamCSSBigFile( $typearray[0] );
+            $output = $filter->xssFilterHard($output);
             print $output;
             return;
         }
@@ -1198,7 +1211,7 @@ class G
                 $mtime = date( 'U' );
             }
             $gmt_mtime = gmdate( "D, d M Y H:i:s", $mtime ) . " GMT";
-            header( 'ETag: "' . md5( $mtime . $filename ) . '"' );
+            header( 'ETag: "' . G::encryptOld( $mtime . $filename ) . '"' );
             header( "Last-Modified: " . $gmt_mtime );
             header( 'Cache-Control: public' );
             header( "Expires: " . gmdate( "D, d M Y H:i:s", time() + 60 * 10 ) . " GMT" ); //ten minutes
@@ -1215,7 +1228,7 @@ class G
                 $mtime = date( 'U' );
             }
             $gmt_mtime = gmdate( "D, d M Y H:i:s", $mtime ) . " GMT";
-            header( 'ETag: "' . md5( $mtime . $filename ) . '"' );
+            header( 'ETag: "' . G::encryptOld( $mtime . $filename ) . '"' );
             header( "Last-Modified: " . $gmt_mtime );
             header( 'Cache-Control: public' );
             header( "Expires: " . gmdate( "D, d M Y H:i:s", time() + 90 * 60 * 60 * 24 ) . " GMT" );
@@ -1227,7 +1240,7 @@ class G
             }
 
             if (isset( $_SERVER['HTTP_IF_NONE_MATCH'] )) {
-                if (str_replace( '"', '', stripslashes( $_SERVER['HTTP_IF_NONE_MATCH'] ) ) == md5( $mtime . $filename )) {
+                if (str_replace( '"', '', stripslashes( $_SERVER['HTTP_IF_NONE_MATCH'] ) ) == G::encryptOld( $mtime . $filename )) {
                     header( "HTTP/1.1 304 Not Modified" );
                     exit();
                 }
@@ -2082,7 +2095,7 @@ class G
     {
         global $translation;
 
-        // if the second parameter $lang is an array does mean it was especified to use as data
+        // if the second parameter ($lang) is an array, it was specified to use as data
         if (is_array( $lang )) {
             $data = $lang;
             $lang = SYS_LANG;
@@ -2622,9 +2635,30 @@ class G
             if (! is_dir( $path )) {
                 G::verifyPath( $path, true );
             }
+
+            if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+                $file = str_replace("\\\\","\\",$file,$count);
+                if(!$count) {
+                    $winPath = explode("\\",$file);
+                    $file = "";
+                    foreach($winPath as $k => $v){
+                        if($v != "") {
+                            $file.= $v."\\";
+                        }
+                    }
+                    $file = substr($file,0,-1);
+                }
+            }
+
+            G::LoadSystem('inputfilter');
+            $filter = new InputFilter();
+            $file = $filter->validateInput($file, "path");
+            $path = $filter->validateInput($path, "path");
+
             move_uploaded_file( $file, $path . "/" . $nameToSave );
             @chmod( $path . "/" . $nameToSave, $permission );
             umask( $oldumask );
+
         } catch (Exception $oException) {
             throw $oException;
         }
@@ -2684,6 +2718,12 @@ class G
         $image = $inputFn( $path );
         imagecopyresampled( $image_p, $image, 0, 0, 0, 0, $resWidth, $resHeight, $width, $height );
         $outputFn( $image_p, $saveTo );
+        
+        if(!is_null($saveTo)) {
+            G::LoadSystem('inputfilter');
+            $filter = new InputFilter();
+            $saveTo = $filter->validateInput($saveTo, "path");
+        }
 
         @chmod( $saveTo, 0666 );
     }
@@ -3100,7 +3140,10 @@ class G
      */
     public function evalJScript ($c)
     {
-        print ("<script language=\"javascript\">{$c}</script>") ;
+        /*G::LoadSystem('inputfilter');
+        $filter = new InputFilter();
+        $c = $filter->xssFilterHard($c);*/
+        print ('<script language="javascript">'.$c.'</script>') ;
     }
 
     /**
@@ -3137,6 +3180,9 @@ class G
      */
     public function pr ($var)
     {
+        G::LoadSystem('inputfilter');
+        $filter = new InputFilter();
+        $var = $filter->xssFilterHard($var);
         print ("<pre>") ;
         print_r( $var );
         print ("</pre>") ;
@@ -3190,7 +3236,7 @@ class G
             } else {
                 // Detect by creating a temporary file
                 // Try to use system's temporary directory as random name shouldn't exist
-                $temp_file = tempnam( md5( uniqid( rand(), true ) ), '' );
+                $temp_file = tempnam( G::encryptOld( uniqid( rand(), true ) ), '' );
                 if ($temp_file) {
                     $temp_dir = realpath( dirname( $temp_file ) );
                     unlink( $temp_file );
@@ -3314,10 +3360,10 @@ class G
       *
       * @author Erik A.O. <erik@colosa.com>
      */
-    public function json_decode($Json)
+    public function json_decode($Json, $assoc = false)
     {
         if (function_exists('json_decode')) {
-            return json_decode($Json);
+            return json_decode($Json, $assoc);
         } else {
             G::LoadThirdParty('pear/json', 'class.json');
             $oJSON = new Services_JSON();
@@ -3330,7 +3376,7 @@ class G
      *
      * @return boolean true or false
      */
-    public function isHttpRequest()
+    public static function isHttpRequest()
     {
         if (isset($_SERVER['SERVER_SOFTWARE']) && strpos(strtolower($_SERVER['SERVER_SOFTWARE']), 'apache') !== false) {
             return true;
@@ -3598,7 +3644,7 @@ class G
      * @author Erik Amaru Ortiz <erik@colosa.com>
      *
      * @param $path path to scan recursively the write permission
-     * @param $pattern pattern to filter some especified files
+     * @param $pattern pattern to filter some specified files
      * @return <boolean> if the $path, assuming that is a directory -> all files in it are writeables or not
      */
     public function is_rwritable($path, $pattern = '*')
@@ -3619,7 +3665,7 @@ class G
      *
      * @param $path path to scan recursively the write permission
      * @param $flags to notive glob function
-     * @param $pattern pattern to filter some especified files
+     * @param $pattern pattern to filter some specified files
      * @return <array> array containing the recursive glob results
      */
     public static function rglob($pattern = '*', $flags = 0, $path = '')
@@ -4546,10 +4592,10 @@ class G
         $checkSum = '';
         foreach ($files as $file) {
             if (is_file( $file )) {
-                $checkSum .= md5_file( $file );
+                $checkSum .= G::encryptFileOld( $file );
             }
         }
-        return md5( $checkSum . $key );
+        return G::encryptOld( $checkSum . $key );
     }
 
     /**
@@ -5299,12 +5345,14 @@ class G
         $sflagAudit = $oServerConf->getAuditLogProperty( 'AL_OPTION', $workspace );
         $ipClient = G::getIpAddress();
 
+        /*----------------------------------********---------------------------------*/
         $licensedFeatures = PMLicensedFeatures::getSingleton();
         if ($sflagAudit && $licensedFeatures->verifyfeature('vtSeHNhT0JnSmo1bTluUVlTYUxUbUFSVStEeXVqc1pEUG5EeXc0MGd2Q3ErYz0=')) {
             $username = isset($_SESSION['USER_LOGGED']) && $_SESSION['USER_LOGGED'] != '' ? $_SESSION['USER_LOGGED'] : 'Unknow User';
             $fullname = isset($_SESSION['USR_FULLNAME']) && $_SESSION['USR_FULLNAME'] != '' ? $_SESSION['USR_FULLNAME'] : '-';
             G::log("|". $workspace ."|". $ipClient ."|". $username . "|" . $fullname ."|" . $actionToLog . "|" . $valueToLog, PATH_DATA, "audit.log");
         }
+        /*----------------------------------********---------------------------------*/
     }
 
     /**
@@ -5552,6 +5600,39 @@ class G
        $clean = ($lowercase) ? (function_exists('mb_strtolower')) ? mb_strtolower($clean, 'UTF-8') : strtolower($clean) : $clean;
        return $clean;
    }
+   /**
+    * encryptOld
+    *
+    * @param string $string
+    *
+    * @return md5($string)
+    */
+    public function encryptOld ($string)
+    {
+        return md5($string);
+    }
+    /**
+    * encryptFileOld
+    *
+    * @param string $string
+    *
+    * @return md5_file($string)
+    */
+    public function encryptFileOld ($string)
+    {
+        return md5_file($string);
+    }
+    /**
+    * crc32
+    *
+    * @param string $string
+    *
+    * @return crc32($string)
+    */
+    public function encryptCrc32 ($string)
+    {
+        return crc32($string);
+    }
 }
 
 /**
@@ -5647,4 +5728,3 @@ function __ ($msgID, $lang = SYS_LANG, $data = null)
 {
     return G::LoadTranslation( $msgID, $lang, $data );
 }
-

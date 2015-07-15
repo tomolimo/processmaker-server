@@ -4,7 +4,7 @@ dbInfo.application = {
     init: function ()
     {
 
-        var sumaryInfPanel = PMExt.createInfoPanel('../../uxmodern/main/getSystemInfo');
+        var sumaryInfPanel = PMExt.createInfoPanel('../../'+skin+'/admin/getSystemInfo');
 
         var panelInfo = new Ext.Panel({
             id:'panelInfo',

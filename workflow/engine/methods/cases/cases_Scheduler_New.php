@@ -91,7 +91,7 @@ try {
         $aFields['SCH_LIST'] .=  htmlspecialchars($item['SCH_NAME'], ENT_QUOTES) . '^';
     }
 
-    $G_PUBLISH->AddContent( 'xmlform', 'xmlform', 'cases/cases_Scheduler_New.xml', '', $aFields, 'cases_Scheduler_Save' );
+    $G_PUBLISH->AddContent("xmlform", "xmlform", "cases" . PATH_SEP . "cases_Scheduler_New.xml", "", $aFields, "CaseSchedulerCreateUpdate");
     G::RenderPage( 'publishBlank', 'blank' );
 
 } catch (Exception $oException) {

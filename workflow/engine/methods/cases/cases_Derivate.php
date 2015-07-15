@@ -80,15 +80,18 @@ try {
         $_SESSION['TRIGGER_DEBUG']['info'][0]['TRIGGERS_VALUES'] = $triggers;
     }
 
-    $appFields['DEL_INDEX'] = $_SESSION['INDEX'];
-    $appFields['TAS_UID'] = $_SESSION['TASK'];
-
     unset($appFields['APP_STATUS']);
     unset($appFields['APP_PROC_STATUS']);
     unset($appFields['APP_PROC_CODE']);
     unset($appFields['APP_PIN']);
-    $oCase->updateCase( $_SESSION['APPLICATION'], $appFields ); //Save data
 
+    $appFields["DEL_INDEX"] = $_SESSION["INDEX"];
+    $appFields["TAS_UID"]   = $_SESSION["TASK"];
+    $appFields["USER_UID"]  = $_SESSION["USER_LOGGED"];
+    $appFields["CURRENT_DYNAFORM"] = "-2";
+    $appFields["OBJECT_TYPE"]      = "ASSIGN_TASK";
+
+    $oCase->updateCase($_SESSION["APPLICATION"], $appFields); //Save data
 
     //derivate case
     $oDerivation = new Derivation();
@@ -112,6 +115,13 @@ try {
     unset($appFields['APP_PROC_STATUS']);
     unset($appFields['APP_PROC_CODE']);
     unset($appFields['APP_PIN']);
+
+    $appFields["DEL_INDEX"] = $_SESSION["INDEX"];
+    $appFields["TAS_UID"]   = $_SESSION["TASK"];
+    $appFields["USER_UID"]  = $_SESSION["USER_LOGGED"];
+    $appFields["CURRENT_DYNAFORM"] = "-2";
+    $appFields["OBJECT_TYPE"]      = "ASSIGN_TASK";
+
     $oCase->updateCase( $_SESSION['APPLICATION'], $appFields );
 
     // Send notifications - Start

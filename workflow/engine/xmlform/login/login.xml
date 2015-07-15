@@ -3,19 +3,22 @@
   <TITLE type="title">
     <en><![CDATA[Login]]></en>
   </TITLE>
-  <USR_USERNAME type="text" size="30" maxlength="50" validate="Any">
+  <USR_USERNAME type="text" size="30" maxlength="50" validate="Any" autocomplete="0">
     <en><![CDATA[User]]></en>
   </USR_USERNAME>
-  <USR_PASSWORD type="password" size="30" maxlength="32" autocomplete="0">
+  <USR_PASSWORD type="text" size="30" maxlength="32" autocomplete="0">
     <en><![CDATA[Password]]></en>
   </USR_PASSWORD>
+  <USR_PASSWORD_MASK type="password" size="30" maxlength="32" autocomplete="0">
+    <en><![CDATA[Password]]></en>
+  </USR_PASSWORD_MASK>
   <USER_LANG type="dropdown" sqlconnection="dbarray">
 SELECT LANG_ID, LANG_NAME FROM langOptions
   <en><![CDATA[Language]]></en>
 </USER_LANG>
   <URL type="hidden"/>
   <LOGIN_VERIFY_MSG type="private" showInTable="0"/>
-  <BSUBMIT type="submit">
+  <BSUBMIT type="button">
     <en><![CDATA[Login]]></en>
   </BSUBMIT>
   <FORGOT_PASWORD_LINK type="link" link="forgotPassword" onclick="" colAlign="right" colWidth="135" style="display:none;">
@@ -83,15 +86,26 @@ var dynaformOnload = function() {
   }
 };
 
-leimnud.event.add(document.getElementById('form[BSUBMIT]'), 'click', function() {
-  setNestedProperty(this, Array('disabled'), 'true');
-  setNestedProperty(this, Array('value'), @@LOGIN_VERIFY_MSG);
-
-  var client = getBrowserClient();
-
-  if (client.browser != "firefox") {
-    document.login.submit();
+leimnud.event.add(document.getElementById('form[USR_PASSWORD_MASK]'), 'keypress', function(event) {
+  var key;
+  if(window.event)
+    key = window.event.keyCode;     //IE
+  else
+    key = event.which;     //firefox
+  if(key == 13) {
+    document.getElementById('form[BSUBMIT]').click();
+    return true;
+  } else {
+    return true;
   }
+});
+
+leimnud.event.add(document.getElementById('form[BSUBMIT]'), 'click', function() {
+  document.getElementById('form[USR_PASSWORD]').value = document.getElementById('form[USR_PASSWORD_MASK]').value;
+  document.getElementById('form[USR_PASSWORD_MASK]').value = '';
+  document.getElementById('form[USR_PASSWORD_MASK]').setAttribute('type', 'text');
+  document.login.submit();
+  //return true;
 }.extend(document.getElementById('form[BSUBMIT]')));
 
 ]]></JS>

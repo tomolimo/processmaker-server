@@ -71,7 +71,13 @@ var verifyInfo = function(oForm)
   allowedTypes = getField('fileTypes').value.split(", ");
 
   for(i=0; i<allowedTypes.length; i++){
-    allowed = allowedTypes[i].replace('*','').replace('.','');
+    var arrayMatch = [];
+    var allowed = "";
+
+    if ((arrayMatch = /^.*\.(.+)$/.exec(allowedTypes[i]))) {
+        allowed = arrayMatch[1];
+    }
+
     if((allowed != '*') && (docType.toLowerCase() != allowed.toLowerCase())){
       flag = 1;
     } else {

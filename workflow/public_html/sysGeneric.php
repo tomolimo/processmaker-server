@@ -151,7 +151,7 @@ if (file_exists($requestFile)) {
     header ( 'Pragma: cache' );
     $mtime = filemtime ( $requestFile );
     $gmt_mtime = gmdate ( "D, d M Y H:i:s", $mtime ) . " GMT";
-    header ( 'ETag: "' . md5 ( $mtime . $requestFile ) . '"' );
+    header ( 'ETag: "' . Bootstrap::encryptOld ( $mtime . $requestFile ) . '"' );
     header ( "Last-Modified: " . $gmt_mtime );
     header ( 'Cache-Control: public' );
     $userAgent = strtolower ( $_SERVER ['HTTP_USER_AGENT'] );
@@ -165,7 +165,7 @@ if (file_exists($requestFile)) {
             }
         }
         if (isset ( $_SERVER ['HTTP_IF_NONE_MATCH'] )) {
-            if (str_replace ( '"', '', stripslashes ( $_SERVER ['HTTP_IF_NONE_MATCH'] ) ) == md5 ( $mtime . $requestFile )) {
+            if (str_replace ( '"', '', stripslashes ( $_SERVER ['HTTP_IF_NONE_MATCH'] ) ) == Bootstrap::encryptOld ( $mtime . $requestFile )) {
                 header ( "HTTP/1.1 304 Not Modified" );
             }
         }
@@ -303,6 +303,20 @@ session_start();
 //$e_all = $config['debug'] ? $e_all : $e_all & ~ E_NOTICE;
 //$e_all = E_ALL & ~ E_DEPRECATED & ~ E_STRICT & ~ E_NOTICE  & ~E_WARNING;
 
+//Call Gulliver Classes
+Bootstrap::LoadThirdParty("smarty/libs", "Smarty.class");
+
+//Loading the autoloader libraries feature
+Bootstrap::registerSystemClasses();
+
+G::LoadSystem('inputfilter');
+$filter = new InputFilter();
+$config['display_errors'] = $filter->validateInput($config['display_errors']);
+$config['error_reporting'] = $filter->validateInput($config['error_reporting']);
+$config['memory_limit'] = $filter->validateInput($config['memory_limit']);
+$config['wsdl_cache'] = $filter->validateInput($config['wsdl_cache'],'int');
+$config['time_zone'] = $filter->validateInput($config['time_zone']);
+
 // Do not change any of these settings directly, use env.ini instead
 ini_set( 'display_errors', $config['display_errors']);
 ini_set( 'error_reporting', $config['error_reporting']);
@@ -334,12 +348,7 @@ define( 'PATH_C', (rtrim( Bootstrap::sys_get_temp_dir(), PATH_SEP ) . PATH_SEP) 
 define( 'PATH_LANGUAGECONT', PATH_HOME . 'engine/content/languages/' );
 }
 
-//Call Gulliver Classes
-Bootstrap::LoadThirdParty("smarty/libs", "Smarty.class");
-
-//Loading the autoloader libraries feature
-Bootstrap::registerSystemClasses();
-
+//Load filter class
 $skinPathErrors = G::skinGetPathToSrcByVirtualUri("errors", $config);
 $skinPathUpdate = G::skinGetPathToSrcByVirtualUri("update", $config);
 
@@ -485,8 +494,9 @@ if (defined( 'PATH_DATA' ) && file_exists( PATH_DATA )) {
     Bootstrap::LoadClass( 'serverConfiguration' );
     $oServerConf = & serverConf::getSingleton();
 }
-
-require_once  PATH_THIRDPARTY . '/pear/PEAR.php';
+$pathFile = PATH_THIRDPARTY . '/pear/PEAR.php';
+$pathFile = $filter->validateInput($pathFile,'path');
+require_once $pathFile;
 
 //Bootstrap::LoadSystem( 'pmException' );
 
@@ -500,7 +510,9 @@ if (! defined( 'PATH_DATA' ) || ! file_exists( PATH_DATA )) {
     define( 'PATH_DATA', PATH_C );
     //NewRelic Snippet - By JHL
     transactionLog(PATH_CONTROLLERS.'installer.php');
-    require_once (PATH_CONTROLLERS . 'installer.php');
+    $pathFile = PATH_CONTROLLERS . 'installer.php';
+    $pathFile = $filter->validateInput($pathFile,'path');
+    require_once ($pathFile);
     $controller = 'Installer';
 
     // if the method name is empty set default to index method
@@ -544,8 +556,10 @@ if ($oServerConf->isWSDisabled( SYS_TEMP )) {
 // if SYS_TEMP exists, the URL has a workspace, now we need to verify if exists their db.php file
 if (defined( 'SYS_TEMP' ) && SYS_TEMP != '') {
     //this is the default, the workspace db.php file is in /shared/workflow/sites/SYS_SYS
-    if (file_exists( PATH_DB . SYS_TEMP . '/db.php' )) {
-        require_once (PATH_DB . SYS_TEMP . '/db.php');
+    $pathFile = PATH_DB . SYS_TEMP . '/db.php';
+    $pathFile = $filter->validateInput($pathFile,'path');
+    if (file_exists( $pathFile )) {
+        require_once ($pathFile);
         define( 'SYS_SYS', SYS_TEMP );
 
         // defining constant for workspace shared directory
@@ -564,17 +578,21 @@ if (defined( 'SYS_TEMP' ) && SYS_TEMP != '') {
 } else { //when we are in global pages, outside any valid workspace
     if (SYS_TARGET === 'newSite') {
         $phpFile = G::ExpandPath( 'methods' ) . SYS_COLLECTION . "/" . SYS_TARGET . '.php';
+        $phpFile = $filter->validateInput($phpFile,'path');
         //NewRelic Snippet - By JHL
         transactionLog($phpFile);
         require_once ($phpFile);
         die();
     } else {
         if (SYS_TARGET == "dbInfo") { //Show dbInfo when no SYS_SYS
-            require_once (PATH_METHODS . "login/dbInfo.php");
+            $pathFile = PATH_METHODS . "login/dbInfo.php";
+            $pathFile = $filter->validateInput($pathFile,'path');
+            require_once ($pathFile);
         } else {
 
             if (substr( SYS_SKIN, 0, 2 ) === 'ux' && SYS_TARGET != 'sysLoginVerify') { // new ux sysLogin - extjs based form
-                require_once PATH_CONTROLLERS . 'main.php';
+                $pathFile = $filter->validateInput(PATH_CONTROLLERS . 'main.php','path');
+                require_once $pathFile;
                 $controllerClass = 'Main';
                 $controllerAction = SYS_TARGET == 'sysLoginVerify' ? SYS_TARGET : 'sysLogin';
                 //if the method exists
@@ -585,7 +603,8 @@ if (defined( 'SYS_TEMP' ) && SYS_TEMP != '') {
                     $controller->call( $controllerAction );
                 }
             } else { // classic sysLogin interface
-                require_once (PATH_METHODS . "login/sysLogin.php");
+                $pathFile = $filter->validateInput(PATH_METHODS . "login/sysLogin.php",'path');
+                require_once ($pathFile);
                 die();
             }
         }
@@ -627,7 +646,6 @@ if (file_exists( $sSerializedFile )) {
 } else{
     $oPluginRegistry = PMPluginRegistry::getSingleton();
 }
-
 // setup propel definitions and logging
 //changed to autoloader
 //require_once ("propel/Propel.php");
@@ -680,14 +698,22 @@ ob_start();
 
 // Rebuild the base Workflow translations if not exists
 if (! is_file( PATH_LANGUAGECONT . 'translation.en' )) {
-    require_once ("classes/model/Translation.php");
-    $fields = Translation::generateFileTranslation( 'en' );
+    $pathFile = $filter->validateInput(PATH_CLASSES . "model" . PATH_SEP . "Translation.php", "path");
+
+    require_once ($pathFile);
+
+    $pmTranslation = new Translation();
+    $fields = $pmTranslation->generateFileTranslation("en");
 }
 
 // TODO: Verify if the language set into url is defined in translations env.
 if (SYS_LANG != 'en' && ! is_file( PATH_LANGUAGECONT . 'translation.' . SYS_LANG )) {
-    require_once ("classes/model/Translation.php");
-    $fields = Translation::generateFileTranslation( SYS_LANG );
+    $pathFile = $filter->validateInput(PATH_CLASSES . "model" . PATH_SEP . "Translation.php", "path");
+
+    require_once ($pathFile);
+
+    $pmTranslation = new Translation();
+    $fields = $pmTranslation->generateFileTranslation(SYS_LANG);
 }
 
 // Setup plugins
@@ -756,7 +782,8 @@ if (substr( SYS_COLLECTION, 0, 8 ) === 'gulliver') {
     //erik: verify if it is a Controller Class or httpProxyController Class
     if (is_file( PATH_CONTROLLERS . SYS_COLLECTION . '.php' )) {
         Bootstrap::LoadSystem( 'controller' );
-        require_once PATH_CONTROLLERS . SYS_COLLECTION . '.php';
+        $pathFile = $filter->validateInput(PATH_CONTROLLERS . SYS_COLLECTION . '.php','path');
+        require_once $pathFile;
         $controllerClass = SYS_COLLECTION;
         //if the method name is empty set default to index method
         $controllerAction = SYS_TARGET != '' ? SYS_TARGET : 'index';
@@ -787,14 +814,16 @@ if (substr( SYS_COLLECTION, 0, 8 ) === 'gulliver') {
 
         $pluginControllerPath = PATH_PLUGINS . $pluginName . PATH_SEP . 'controllers' . PATH_SEP;
 
-        if (is_file($pluginControllerPath. $controllerClass . '.php')) {
-            require_once $pluginControllerPath. $controllerClass . '.php';
+        $pathFile = $pluginControllerPath. $controllerClass . '.php';
+        $pathFile = $filter->validateInput($pathFile,'path');
+        if (is_file($pathFile)) {
+            require_once $pathFile;
         } elseif (is_file($pluginControllerPath. ucfirst($controllerClass) . '.php')) {
             $controllerClass = ucfirst($controllerClass);
-            require_once $pluginControllerPath. $controllerClass . '.php';
+            require_once $pathFile;
         } elseif (is_file($pluginControllerPath. ucfirst($controllerClass) . 'Controller.php')) {
             $controllerClass = ucfirst($controllerClass) . 'Controller';
-            require_once $pluginControllerPath. $controllerClass . '.php';
+            require_once $pathFile;
         }
 
         //if the method exists
@@ -877,6 +906,7 @@ if (! defined( 'EXECUTE_BY_CRON' )) {
         $noLoginFiles[] = 'appFolderAjax';
         $noLoginFiles[] = 'steps_Ajax';
         $noLoginFiles[] = 'proxyCasesList';
+        $noLoginFiles[] = 'proxyNewCasesList';
         $noLoginFiles[] = 'casesStartPage_Ajax';
         $noLoginFiles[] = 'appProxy';
         $noLoginFiles[] = 'cases_Ajax';
@@ -894,6 +924,7 @@ if (! defined( 'EXECUTE_BY_CRON' )) {
         $noLoginFiles[] = 'casesSaveDataView';
         $noLoginFiles[] = 'propelTableAjax';
         $noLoginFiles[] = 'licenseUpdate';
+        $noLoginFiles[] = 'casesStreamingFile';
 
         $noLoginFolders[] = 'services';
         $noLoginFolders[] = 'tracker';
@@ -906,7 +937,8 @@ if (! defined( 'EXECUTE_BY_CRON' )) {
                 Bootstrap::LoadClass( 'sessions' );
                 $oSessions = new Sessions();
                 if ($aSession = $oSessions->verifySession( $_GET['sid'] )) {
-                    require_once 'classes/model/Users.php';
+                    $pathFile = $filter->validateInput('classes/model/Users.php','path');
+                    require_once $pathFile;
                     $oUser = new Users();
                     $aUser = $oUser->load( $aSession['USR_UID'] );
                     $_SESSION['USER_LOGGED'] = $aUser['USR_UID'];
@@ -929,7 +961,7 @@ if (! defined( 'EXECUTE_BY_CRON' )) {
                 }
             }
 
-            if ($bRedirect) {
+            if ($bRedirect && !isset($_GET["tracker_designer"])) {
                 if (substr( SYS_SKIN, 0, 2 ) == 'ux' && SYS_SKIN != 'uxs') { // verify if the current skin is a 'ux' variant
                     $loginUrl = 'main/login';
                 } else if (strpos( $_SERVER['REQUEST_URI'], '/home' ) !== false) { //verify is it is using the uxs skin for simplified interface

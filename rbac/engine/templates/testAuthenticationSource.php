@@ -22,6 +22,10 @@
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  * 
  */
+  G::LoadSystem('inputfilter');
+  $filter = new InputFilter();
+  $HTTP_SESSION_VARS = $filter->xssFilterHard($HTTP_SESSION_VARS);
+
   global $G_TABLE;
   global $G_CONTENT;
   global $HTTP_SESSION_VARS;
@@ -88,7 +92,8 @@
 
         $oResult = $oLdap->search($rootDn, $sFilter, $aParams);
         if (PEAR::isError($oResult)) {
-        print ( $oLdap->message);
+            $oLdap->message = $filter->xssFilterHard($oLdap->message);
+            print ( $oLdap->message);
             return $oResult;
         }
 /*

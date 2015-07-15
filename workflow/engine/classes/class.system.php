@@ -183,7 +183,10 @@ class System
         /* For distros with the lsb_release, this returns a one-line description of
         * the distro name, such as "CentOS release 5.3 (Final)" or "Ubuntu 10.10"
         */
-        $distro = exec( "lsb_release -d -s 2> /dev/null" );
+        $distro = '';
+        if (file_exists("/dev/")){ //Windows does not have this folder 
+          $distro = exec( "lsb_release -d -s 2> /dev/null" );          
+        }
 
         /* For distros without lsb_release, we look for *release (such as
         * redhat-release, gentoo-release, SuSE-release, etc) or *version (such as
@@ -257,7 +260,7 @@ class System
                 continue;
             }
             if (file_exists( realpath( $filename ) )) {
-                if (strcmp( $checksum, md5_file( realpath( $filename ) ) ) != 0) {
+                if (strcmp( $checksum, G::encryptFileOld( realpath( $filename ) ) ) != 0) {
                     $result['diff'][] = $filename;
                 }
             } else {
@@ -278,11 +281,15 @@ class System
      */
     public function verifyFileForUpgrade ()
     {
+        G::LoadSystem('inputfilter');
+        $filter = new InputFilter();
         $upgradeFilename = isset( $_FILES['form']['name']['UPGRADE_FILENAME'] ) ? $_FILES['form']['name']['UPGRADE_FILENAME'] : '';
         $tempFilename = isset( $_FILES['form']['tmp_name']['UPGRADE_FILENAME'] ) ? $_FILES['form']['tmp_name']['UPGRADE_FILENAME'] : '';
         $this->sRevision = str_replace( '.tar.gz', '', str_replace( 'pmos-patch-', '', $upgradeFilename ) );
         $sTemFilename = $tempFilename;
-        $this->sFilename = PATH_DATA . 'upgrade' . PATH_SEP . $upgradeFilename;
+        $sTemFilename = $filter->xssFilterHard($sTemFilename, 'path');
+        $pathFile = $filter->xssFilterHard(PATH_DATA . 'upgrade' . PATH_SEP . $upgradeFilename, 'path');
+        $this->sFilename = $pathFile;
         $this->sPath = dirname( $this->sFilename ) . PATH_SEP;
         G::mk_dir( PATH_DATA . 'upgrade' );
         if (! move_uploaded_file( $sTemFilename, $this->sFilename )) {
@@ -535,7 +542,7 @@ class System
                     $file = PATH_TRUNK . trim( $line[2] );
                     if (is_readable( $file )) {
                         $size = sprintf( "%07d", filesize( $file ) );
-                        $checksum = sprintf( "%010u", crc32( file_get_contents( $file ) ) );
+                        $checksum = sprintf( "%010u", G::encryptCrc32( file_get_contents( $file ) ) );
                         if (! ($line[0] == $size && $line[1] == $checksum) && substr( $file, - 4 ) != '.xml') {
                             $distinctFiles .= $file . "\n";
                             $distinct ++;
@@ -612,8 +619,12 @@ class System
             }
         }
 
+        G::LoadSystem('inputfilter');
+        $filter = new InputFilter();
+
         //clean up xmlform folders
         $sDir = PATH_C . 'xmlform';
+        $sDir = $filter->xssFilterHard($sDir, 'path');
         if (file_exists( $sDir ) && is_dir( $sDir )) {
             $oDirectory = dir( $sDir );
             while ($sObjectName = $oDirectory->read()) {
@@ -726,8 +737,11 @@ class System
      */
     public static function getPluginSchema ($pluginName)
     {
-        if (file_exists( PATH_PLUGINS . $pluginName . "/config/schema.xml" )) {
-            return System::getSchema( PATH_PLUGINS . $pluginName . "/config/schema.xml" );
+        G::LoadSystem('inputfilter');
+        $filter = new InputFilter();
+        $pathFile = $filter->xssFilterHard(PATH_PLUGINS . $pluginName . "/config/schema.xml", 'path');
+        if (file_exists( $pathFile )) {
+            return System::getSchema( $pathFile );
         } else {
             return false;
         }
@@ -917,7 +931,7 @@ class System
                             }
 
                             //#1067 - Invalid default value for int field
-                            if (substr( $newField['Type'], 0, 3 ) == "int" && isset( $newField['Default'] ) && $newField['Default'] == '') {
+                            if (substr( $newField['Type'], 0, 3 ) == "INT" && isset( $newField['Default'] ) && $newField['Default'] == '') {
                                 $changeDefaultAttr = false;
                             }
 
@@ -968,11 +982,41 @@ class System
 
     public function getEmailConfiguration ()
     {
-        G::LoadClass( 'configuration' );
-        $conf = new Configurations();
-        $config = $conf->load( 'Emails' );
+        $emailServer = new \ProcessMaker\BusinessModel\EmailServer();
 
-        return $config;
+        $arrayEmailServerDefault = $emailServer->getEmailServerDefault();
+
+        if (count($arrayEmailServerDefault) > 0) {
+            $arrayDataEmailServerConfig = array(
+                "MESS_ENGINE"              => $arrayEmailServerDefault["MESS_ENGINE"],
+                "MESS_SERVER"              => $arrayEmailServerDefault["MESS_SERVER"],
+                "MESS_PORT"                => (int)($arrayEmailServerDefault["MESS_PORT"]),
+                "MESS_RAUTH"               => (int)($arrayEmailServerDefault["MESS_RAUTH"]),
+                "MESS_ACCOUNT"             => $arrayEmailServerDefault["MESS_ACCOUNT"],
+                "MESS_PASSWORD"            => $arrayEmailServerDefault["MESS_PASSWORD"],
+                "MESS_FROM_MAIL"           => $arrayEmailServerDefault["MESS_FROM_MAIL"],
+                "MESS_FROM_NAME"           => $arrayEmailServerDefault["MESS_FROM_NAME"],
+                "SMTPSecure"               => $arrayEmailServerDefault["SMTPSECURE"],
+                "MESS_TRY_SEND_INMEDIATLY" => (int)($arrayEmailServerDefault["MESS_TRY_SEND_INMEDIATLY"]),
+                "MAIL_TO"                  => $arrayEmailServerDefault["MAIL_TO"],
+                "MESS_DEFAULT"             => (int)($arrayEmailServerDefault["MESS_DEFAULT"]),
+                "MESS_ENABLED"             => 1,
+                "MESS_BACKGROUND"          => "",
+                "MESS_PASSWORD_HIDDEN"     => "",
+                "MESS_EXECUTE_EVERY"       => "",
+                "MESS_SEND_MAX"            => ""
+            );
+
+            //Return
+            return $arrayDataEmailServerConfig;
+        } else {
+            G::LoadClass("configuration");
+
+            $conf = new Configurations();
+            $config = $conf->load("Emails");
+
+            return $config;
+        }
     }
 
     public function getSkingList ()

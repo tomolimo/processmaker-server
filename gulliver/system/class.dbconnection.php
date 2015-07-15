@@ -186,6 +186,10 @@ class DBConnection
     {
         global $_SESSION;
         global $_SERVER;
+        G::LoadSystem('inputfilter');
+        $filter = new InputFilter();
+        $_SERVER = $filter->xssFilterHard($_SERVER);
+        $_SESSION = $filter->xssFilterHard($_SESSION);
         if (is_null( $errorLevel ))
         if (isset( $this->errorLevel )) {
             $errorLevel = $this->errorLevel;
@@ -207,7 +211,7 @@ class DBConnection
             print "</textarea></td></tr></table>";
         }
         //G::setErrorHandler ( );
-        G::customErrorLog( 'DB_Error', $obj->code . ' ' . $obj->message . '-' . $obj->userinfo, '', '' );
+        //G::customErrorLog( 'DB_Error', $obj->code . ' ' . $obj->message . '-' . $obj->userinfo, '', '' );
         if ($errorLevel == DB_ERROR_SHOW_AND_STOP || $errorLevel == DB_ERROR_SHOWALL_AND_STOP) {
             die(); //stop
         }

@@ -29,8 +29,9 @@
  *
  */
 require_once 'classes/model/Process.php';
-if (! isset( $_SESSION['PROCESS'] )) {
+if (! isset( $_SESSION['PROCESS'] ) || ! isset( $_SESSION['APPLICATION'] )) {
     G::header( 'location: login' );
+    die;
 }
 $G_MAIN_MENU = 'caseTracker';
 $G_ID_MENU_SELECTED = 'MAP';

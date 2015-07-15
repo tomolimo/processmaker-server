@@ -23,6 +23,9 @@
  */
 //die("second");
 /* Permissions */
+G::LoadSystem('inputfilter');
+$filter = new InputFilter();
+$_GET = $filter->xssFilterHard($_GET,"url");
 switch ($RBAC->userCanAccess( 'PM_SUPERVISOR' )) {
     case - 2:
         G::SendTemporalMessage( 'ID_USER_HAVENT_RIGHTS_SYSTEM', 'error', 'labels' );
@@ -35,8 +38,9 @@ switch ($RBAC->userCanAccess( 'PM_SUPERVISOR' )) {
         die();
         break;
 }
-
+$_SESSION = $filter->xssFilterHard($_SESSION,"url");
 if ((int) $_SESSION['INDEX'] < 1) {
+    $_SERVER['HTTP_REFERER'] = $filter->xssFilterHard($_SERVER['HTTP_REFERER']);
     G::SendTemporalMessage( 'ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels' );
     G::header( 'location: ' . $_SERVER['HTTP_REFERER'] );
     die();
@@ -136,7 +140,7 @@ G::RenderPage( 'publish', 'blank' );
 //Deprecated Section since the interface are now movig to ExtJS
 function setSelect()
 {
-    var ex=<?php echo $_GET['ex']?>;
+    var ex=<?php echo $filter->xssFilterHard($_GET['ex'])?>;
     try {
         for (i=1; i<50; i++) {
             if (i == ex) {

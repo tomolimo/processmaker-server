@@ -544,6 +544,16 @@ class DynaForm
             $this->throwExceptionIfNotExistsDynaForm($dynaFormUidCopyImport, $processUidCopyImport, $this->getFieldNameByFormatFieldName("COPY_IMPORT.DYN_UID"));
 
             //Copy/Import
+            
+            //Copy content if version is 2
+            if ($arrayData["DYN_VERSION"] === 2) {
+                $dynaFormOld = new \Dynaform();
+
+                $arrayDynaFormData = $dynaFormOld->Load($dynaFormUidCopyImport);
+
+                $arrayData["DYN_CONTENT"] = $arrayDynaFormData["DYN_CONTENT"];
+            }
+            
             //Create
             $arrayData = $this->create($processUid, $arrayData);
 
@@ -602,14 +612,14 @@ class DynaForm
                         $dynGrdDescriptionCopyImport = $row["CON_VALUE"];
 
                         //Create Grid
+                        $dynaFormGrid = new \Dynaform();
+
                         $arrayDataAux = array(
                             "PRO_UID"   => $processUid,
-                            "DYN_TITLE" => $dynGrdTitleCopyImport,
+                            "DYN_TITLE" => $dynGrdTitleCopyImport . (($this->existsTitle($processUid, $dynGrdTitleCopyImport))? " (" . $arrayData["DYN_TITLE"] . ")" : ""),
                             "DYN_DESCRIPTION" => $dynGrdDescriptionCopyImport,
                             "DYN_TYPE" => "grid"
                         );
-
-                        $dynaFormGrid = new \Dynaform();
 
                         $dynaFormGridUid = $dynaFormGrid->create($arrayDataAux);
 
@@ -1124,6 +1134,4 @@ class DynaForm
             throw $e;
         }
     }
-
 }
-

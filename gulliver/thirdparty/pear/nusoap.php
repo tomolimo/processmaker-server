@@ -805,6 +805,20 @@ class nusoap_base {
 	 */
     function varDump($data) {
 		ob_start();
+		
+		if (!class_exists('G')) {
+            $realdocuroot = str_replace( '\\', '/', $_SERVER['DOCUMENT_ROOT'] );
+            $docuroot = explode( '/', $realdocuroot );
+            array_pop( $docuroot );
+            $pathhome = implode( '/', $docuroot ) . '/';
+            array_pop( $docuroot );
+            $pathTrunk = implode( '/', $docuroot ) . '/';
+            require_once($pathTrunk.'gulliver/system/class.g.php');
+        }
+        G::LoadSystem('inputfilter');
+        $filter = new InputFilter();
+        $data = $filter->xssFilterHard($data);
+                
 		var_dump($data);
 		$ret_val = ob_get_contents();
 		ob_end_clean();
@@ -2314,13 +2328,13 @@ class soap_transport_http extends nusoap_base {
 				$A1 = $username. ':' . (isset($digestRequest['realm']) ? $digestRequest['realm'] : '') . ':' . $password;
 
 				// H(A1) = MD5(A1)
-				$HA1 = md5($A1);
+				$HA1 = $this->encryptOld($A1);
 
 				// A2 = Method ":" digest-uri-value
 				$A2 = 'POST:' . $this->digest_uri;
 
 				// H(A2)
-				$HA2 =  md5($A2);
+				$HA2 =  $this->encryptOld($A2);
 
 				// KD(secret, data) = H(concat(secret, ":", data))
 				// if qop == auth:
@@ -2342,7 +2356,7 @@ class soap_transport_http extends nusoap_base {
 					$unhashedDigest = $HA1 . ':' . $nonce . ':' . $HA2;
 				}
 
-				$hashedDigest = md5($unhashedDigest);
+				$hashedDigest = $this->encryptOld($unhashedDigest);
 
 				$this->outgoing_headers['Authorization'] = 'Digest username="' . $username . '", realm="' . $digestRequest['realm'] . '", nonce="' . $nonce . '", uri="' . $this->digest_uri . '", cnonce="' . $cnonce . '", nc=' . sprintf("%08x", $digestRequest['nc']) . ', qop="' . $digestRequest['qop'] . '", response="' . $hashedDigest . '"';
 			}
@@ -3029,6 +3043,20 @@ class soap_transport_http extends nusoap_base {
 		}
 		return $cookie_str;
   }
+  
+    public function encryptOld($string)
+    {
+        if (!class_exists('G')) {
+            $realdocuroot = str_replace( '\\', '/', $_SERVER['DOCUMENT_ROOT'] );
+            $docuroot = explode( '/', $realdocuroot );
+            array_pop( $docuroot );
+            $pathhome = implode( '/', $docuroot ) . '/';
+            array_pop( $docuroot );
+            $pathTrunk = implode( '/', $docuroot ) . '/';
+            require_once($pathTrunk.'gulliver/system/class.g.php');
+        }
+        return G::encryptOld($string);
+    }
 }
 
 ?><?php
@@ -3249,6 +3277,20 @@ class soap_server extends nusoap_base {
 			$this->appendDebug($this->wsdl->getDebug());
 			$this->wsdl->clearDebug();
 			if($err = $this->wsdl->getError()){
+			    
+			    if (!class_exists('G')) {
+                    $realdocuroot = str_replace( '\\', '/', $_SERVER['DOCUMENT_ROOT'] );
+                    $docuroot = explode( '/', $realdocuroot );
+                    array_pop( $docuroot );
+                    $pathhome = implode( '/', $docuroot ) . '/';
+                    array_pop( $docuroot );
+                    $pathTrunk = implode( '/', $docuroot ) . '/';
+                    require_once($pathTrunk.'gulliver/system/class.g.php');
+                }
+                G::LoadSystem('inputfilter');
+                $filter = new InputFilter();
+                $err = $filter->xssFilterHard($err);
+            
 				die('WSDL ERROR: '.$err);
 			}
 		}
@@ -3296,7 +3338,21 @@ class soap_server extends nusoap_base {
 			}
 		} elseif ($data == '' && $this->wsdl) {
 			$this->debug("In service, there is no data, so return Web description");
-			print $this->wsdl->webDescription();
+			
+			if (!class_exists('G')) {
+                $realdocuroot = str_replace( '\\', '/', $_SERVER['DOCUMENT_ROOT'] );
+                $docuroot = explode( '/', $realdocuroot );
+                array_pop( $docuroot );
+                $pathhome = implode( '/', $docuroot ) . '/';
+                array_pop( $docuroot );
+                $pathTrunk = implode( '/', $docuroot ) . '/';
+                require_once($pathTrunk.'gulliver/system/class.g.php');
+            }
+            G::LoadSystem('inputfilter');
+            $filter = new InputFilter();
+            $webDescription = $filter->xssFilterHard($this->wsdl->webDescription());
+            
+			print $webDescription;
 		} else {
 			$this->debug("In service, invoke the request");
 			$this->parse_request($data);

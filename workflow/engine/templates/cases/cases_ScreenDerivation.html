@@ -61,10 +61,16 @@
             </tr>
             {/if}
             {if $PROCESS.ERROR eq '' }
-            <tr>
-              <td class="FormLabel" width="100">{$NEXT_TASK_LABEL}:</td>
-              <td class="FormFieldContent">{$data.NEXT_TASK.TAS_TITLE}{$data.NEXT_TASK.TAS_HIDDEN_FIELD}</td>
-            </tr>
+                {if $data.NEXT_TASK.TAS_TYPE != "INTERMEDIATE-CATCH-MESSAGE-EVENT"}
+                    <tr>
+                        <td class="FormLabel" width="100">{$NEXT_TASK_LABEL}:</td>
+                        <td class="FormFieldContent">{$data.NEXT_TASK.TAS_TITLE}{$data.NEXT_TASK.TAS_HIDDEN_FIELD}</td>
+                    </tr>
+                {else}
+                    <tr>
+                        <td class="FormFieldContent" colspan="2" style="text-align: center">{$data.NEXT_TASK.TAS_TITLE}{$data.NEXT_TASK.TAS_HIDDEN_FIELD}</td>
+                    </tr>
+                {/if}
             {/if}
             {if not $data.NEXT_TASK.ROU_FINISH_FLAG }
               {if $data.NEXT_TASK.TAS_NEXT eq 'STATIC_MI' || $data.NEXT_TASK.TAS_NEXT eq 'CANCEL_MI'}
@@ -79,10 +85,16 @@
               {/if}
               {if $data.NEXT_TASK.TAS_NEXT eq ''}
                 {if $data.NEXT_TASK.USR_UID neq ''}
-                <tr>
-                  <td class="FormLabel" width="100">{$EMPLOYEE}:</td>
-                  <td class="FormFieldContent">{$data.NEXT_TASK.USR_UID}{$data.NEXT_TASK.USR_HIDDEN_FIELD}</td>
-                </tr>
+                    {if $data.NEXT_TASK.TAS_TYPE != "INTERMEDIATE-CATCH-MESSAGE-EVENT"}
+                        <tr>
+                            <td class="FormLabel" width="100">{$EMPLOYEE}:</td>
+                            <td class="FormFieldContent">{$data.NEXT_TASK.USR_UID}{$data.NEXT_TASK.USR_HIDDEN_FIELD}</td>
+                        </tr>
+                    {else}
+                        <tr>
+                            <td class="FormFieldContent" colspan="2" style="text-align: center">{$data.NEXT_TASK.USR_HIDDEN_FIELD}</td>
+                        </tr>
+                    {/if}
                 {/if}
               {/if}
               {if $data.NEXT_TASK.TAS_TRANSFER_FLY eq 'true'}

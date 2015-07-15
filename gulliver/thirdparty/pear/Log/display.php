@@ -54,7 +54,16 @@ class Log_display extends Log
     function Log_display($name = '', $ident = '', $conf = array(),
                          $level = PEAR_LOG_DEBUG)
     {
-        $this->_id = md5(microtime());
+        if(!class_exists('G')){
+          $realdocuroot = str_replace( '\\', '/', $_SERVER['DOCUMENT_ROOT'] );
+          $docuroot = explode( '/', $realdocuroot );
+          array_pop( $docuroot );
+          $pathhome = implode( '/', $docuroot ) . '/';
+          array_pop( $docuroot );
+          $pathTrunk = implode( '/', $docuroot ) . '/';
+          require_once($pathTrunk.'gulliver/system/class.g.php');
+        }
+        $this->_id = G::encryptOld(microtime());
         $this->_ident = $ident;
         $this->_mask = Log::UPTO($level);
 
@@ -127,8 +136,17 @@ class Log_display extends Log
         $message = $this->_extractMessage($message);
 
         /* Build and output the complete log line. */
+        $realdocuroot = str_replace( '\\', '/', $_SERVER['DOCUMENT_ROOT'] );
+        $docuroot = explode( '/', $realdocuroot );
+        array_pop( $docuroot );
+        $pathhome = implode( '/', $docuroot ) . '/';
+        array_pop( $docuroot );
+        $pathTrunk = implode( '/', $docuroot ) . '/';
+        require_once($pathTrunk.'gulliver/system/class.inputfilter.php');
+        $filter = new InputFilter();
+        $tag    = $filter->xssFilterHard(ucfirst($this->priorityToString($priority)));
         echo $this->_error_prepend .
-             '<b>' . ucfirst($this->priorityToString($priority)) . '</b>: '.
+             '<b>' . $tag . '</b>: '.
              nl2br(htmlspecialchars($message)) .
              $this->_error_append . $this->_linebreak;
 

@@ -23,11 +23,16 @@
  */
 try {
 
+    G::LoadSystem('inputfilter');
+    $filter = new InputFilter();
+    $_POST = $filter->xssFilterHard($_POST);
+    
     G::LoadInclude( 'ajax' );
     if (isset( $_POST['form'] )) {
         $_POST = $_POST['form'];
     }
     $_POST['function'] = get_ajax_value( 'function' );
+    $_POST['function'] = $filter->xssFilterHard($_POST['function']);
     switch ($_POST['function']) {
         case 'savePredetermined':
             require_once "classes/model/Translation.php";

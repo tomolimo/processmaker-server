@@ -351,7 +351,12 @@ Ext.onReady(function(){
               Ext.Msg.alert(_('ID_FAILURE'),  _('ID_SERVER_REPORTED') + ':'+a.response.status+' '+a.response.statusText);
           }
           if (a.failureType === Ext.form.Action.SERVER_INVALID){
-              Ext.Msg.alert( _('ID_WARNING'), _('ID_YOU_HAVE_ERROR') );
+            if(Ext.isIE){
+                success = true;
+                window.location = 'authSources_List';
+            }else{
+                Ext.Msg.alert( _('ID_WARNING'), _('ID_YOU_HAVE_ERROR') );
+            } 
           }
       }
     });

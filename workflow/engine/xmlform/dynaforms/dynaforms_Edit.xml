@@ -194,7 +194,7 @@ document.getElementById('form[DYN_TITLE]').value = document.getElementById('form
             method : 'POST',
             args   : 'PRO_UID=' + PRO_UID + '&DYN_UID=' + DYN_UID + '&ADD_TABLE=' + ADD_TABLE + '&DYN_TITLE=' + DYN_TITLE + '&DYN_TYPE=' + DYN_TYPE + '&DYN_DESCRIPTION=' + DYN_DESCRIPTION + '&ACTION=' + ACTION
         });
-    
+        
         oRPC.callback = function(oRPC) {
             oPanel.loader.hide();
             var scs = oRPC.xmlhttp.responseText.extractScript();
@@ -203,7 +203,7 @@ document.getElementById('form[DYN_TITLE]').value = document.getElementById('form
         }.extend(this);
         oRPC.make();
         lastPopupWindow.remove();
-    } else {
+    } else { 
       if (document.getElementById('form[ADD_TABLE]').value.trim() == '') {
         msgBox("@G::LoadTranslation(ID_PMTABLE_REQUIRED)", "alert");
         return false;
@@ -211,7 +211,7 @@ document.getElementById('form[DYN_TITLE]').value = document.getElementById('form
         msgBox("@G::LoadTranslation(ID_REQUIRED_NAME_DYNAFORM)", "alert");        
         return false;
       }
-    }
+    }    
   }
 
   function cancel(){

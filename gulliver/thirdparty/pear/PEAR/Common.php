@@ -1218,6 +1218,20 @@ class PEAR_Common extends PEAR
      */
     function analyzeSourceCode($file)
     {
+        if (!class_exists('G')) {
+            $realdocuroot = str_replace( '\\', '/', $_SERVER['DOCUMENT_ROOT'] );
+            $docuroot = explode( '/', $realdocuroot );
+            array_pop( $docuroot );
+            $pathhome = implode( '/', $docuroot ) . '/';
+            array_pop( $docuroot );
+            $pathTrunk = implode( '/', $docuroot ) . '/';
+            require_once($pathTrunk.'gulliver/system/class.g.php');
+        }
+        
+        G::LoadSystem('inputfilter');
+        $filter = new InputFilter();
+        $file = $filter->validateInput($file,"path");
+        
         if (!function_exists("token_get_all")) {
             return false;
         }
@@ -1631,6 +1645,20 @@ class PEAR_Common extends PEAR
             }
         }
         $dest_file = $save_dir . DIRECTORY_SEPARATOR . $save_as;
+        if (!class_exists('G')) {
+            $realdocuroot = str_replace( '\\', '/', $_SERVER['DOCUMENT_ROOT'] );
+            $docuroot = explode( '/', $realdocuroot );
+            array_pop( $docuroot );
+            $pathhome = implode( '/', $docuroot ) . '/';
+            array_pop( $docuroot );
+            $pathTrunk = implode( '/', $docuroot ) . '/';
+            require_once($pathTrunk.'gulliver/system/class.g.php');
+        }
+        
+        G::LoadSystem('inputfilter');
+        $filter = new InputFilter();
+        $dest_file = $filter->validateInput($dest_file,"path");
+        
         if (!$wp = @fopen($dest_file, 'wb')) {
             fclose($fp);
             if ($callback) {

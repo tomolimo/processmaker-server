@@ -1,10 +1,21 @@
 <?php
-/*
- * ProcessMaker Web Application Bootstrap
- */
+register_shutdown_function(
+    create_function(
+        "",
+        "
+        if (class_exists(\"Propel\")) {
+            Propel::close();
+        }
+        "
+    )
+);
+
+ini_set("session.cookie_httponly", 1);
+
 if (isset($_SERVER['UNENCODED_URL'])) {
     $_SERVER['REQUEST_URI'] = $_SERVER['UNENCODED_URL'];
 }
+
 try {
     $rootDir = realpath(__DIR__ . "/../../") . DIRECTORY_SEPARATOR;
 
@@ -28,9 +39,7 @@ try {
             );
         }
     }
-
     $loader->add($rootDir . 'workflow/engine/src/', "ProcessMaker");
-    //$loader->add($rootDir . "workflow/engine/classes/model/");
     $loader->add($rootDir . 'workflow/engine/src/');
 
     // add vendors to autoloader
@@ -81,3 +90,4 @@ try {
     $response = new Maveriks\Http\Response($view->getOutput(), 503);
     $response->send();
 }
+

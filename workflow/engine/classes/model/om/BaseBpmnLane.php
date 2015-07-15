@@ -69,11 +69,6 @@ abstract class BaseBpmnLane extends BaseObject implements Persistent
     protected $aBpmnProject;
 
     /**
-     * @var        BpmnLaneset
-     */
-    protected $aBpmnLaneset;
-
-    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      * @var        boolean
@@ -219,10 +214,6 @@ abstract class BaseBpmnLane extends BaseObject implements Persistent
         if ($this->lns_uid !== $v) {
             $this->lns_uid = $v;
             $this->modifiedColumns[] = BpmnLanePeer::LNS_UID;
-        }
-
-        if ($this->aBpmnLaneset !== null && $this->aBpmnLaneset->getLnsUid() !== $v) {
-            $this->aBpmnLaneset = null;
         }
 
     } // setLnsUid()
@@ -425,13 +416,6 @@ abstract class BaseBpmnLane extends BaseObject implements Persistent
                 $this->setBpmnProject($this->aBpmnProject);
             }
 
-            if ($this->aBpmnLaneset !== null) {
-                if ($this->aBpmnLaneset->isModified()) {
-                    $affectedRows += $this->aBpmnLaneset->save($con);
-                }
-                $this->setBpmnLaneset($this->aBpmnLaneset);
-            }
-
 
             // If this object has been modified, then save it to the database.
             if ($this->isModified()) {
@@ -522,12 +506,6 @@ abstract class BaseBpmnLane extends BaseObject implements Persistent
             if ($this->aBpmnProject !== null) {
                 if (!$this->aBpmnProject->validate($columns)) {
                     $failureMap = array_merge($failureMap, $this->aBpmnProject->getValidationFailures());
-                }
-            }
-
-            if ($this->aBpmnLaneset !== null) {
-                if (!$this->aBpmnLaneset->validate($columns)) {
-                    $failureMap = array_merge($failureMap, $this->aBpmnLaneset->getValidationFailures());
                 }
             }
 
@@ -902,57 +880,6 @@ abstract class BaseBpmnLane extends BaseObject implements Persistent
              */
         }
         return $this->aBpmnProject;
-    }
-
-    /**
-     * Declares an association between this object and a BpmnLaneset object.
-     *
-     * @param      BpmnLaneset $v
-     * @return     void
-     * @throws     PropelException
-     */
-    public function setBpmnLaneset($v)
-    {
-
-
-        if ($v === null) {
-            $this->setLnsUid(NULL);
-        } else {
-            $this->setLnsUid($v->getLnsUid());
-        }
-
-
-        $this->aBpmnLaneset = $v;
-    }
-
-
-    /**
-     * Get the associated BpmnLaneset object
-     *
-     * @param      Connection Optional Connection object.
-     * @return     BpmnLaneset The associated BpmnLaneset object.
-     * @throws     PropelException
-     */
-    public function getBpmnLaneset($con = null)
-    {
-        // include the related Peer class
-        include_once 'classes/model/om/BaseBpmnLanesetPeer.php';
-
-        if ($this->aBpmnLaneset === null && (($this->lns_uid !== "" && $this->lns_uid !== null))) {
-
-            $this->aBpmnLaneset = BpmnLanesetPeer::retrieveByPK($this->lns_uid, $con);
-
-            /* The following can be used instead of the line above to
-               guarantee the related object contains a reference
-               to this object, but this level of coupling
-               may be undesirable in many circumstances.
-               As it can lead to a db query with many results that may
-               never be used.
-               $obj = BpmnLanesetPeer::retrieveByPK($this->lns_uid, $con);
-               $obj->addBpmnLanesets($this);
-             */
-        }
-        return $this->aBpmnLaneset;
     }
 }
 

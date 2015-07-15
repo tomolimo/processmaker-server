@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <head>
     <!-- translations -->
     <script type="text/javascript" src="{$translationMafe}"></script>
@@ -19,8 +20,11 @@
     <script type="text/javascript">
         var prj_uid = "{$prj_uid}";
         var app_uid = "{$app_uid}";
+        var consolidated = "{$consolidated}";
+        var enterprise = "{$enterprise}";
         var prj_readonly = "{$prj_readonly}";
         var credentials = "{$credentials}";
+        var distribution = "{$distribution}";
     </script>
     <script type="text/javascript" src="/lib-dev/js/wz_jsgraphics.js"></script>
     <script type="text/javascript" src="/lib-dev/js/jquery-1.10.2.min.js"></script>
@@ -65,8 +69,11 @@
     <script type="text/javascript">
         var prj_uid = "{$prj_uid}";
         var app_uid = "{$app_uid}";
+        var consolidated = "{$consolidated}";
+        var enterprise = "{$enterprise}";
         var prj_readonly = "{$prj_readonly}";
         var credentials = "{$credentials}";
+        var distribution = "{$distribution}";
     </script>
     <script type="text/javascript" src="/lib/js/mafe-{$buildhash}.js"></script>
 
@@ -75,61 +82,48 @@
 
 </head>
 <body onresize="resizingFrame();">
-
-
-<div class="ui-layout-north">
+<!--<div class="ui-layout-north">-->
+     <div class="loader"></div>
      <section class="navBar" id="idNavBar">
         <div class="head"></div>
         <nav>
             <ul>
-                <li><a href="#" class="mafe-button-save"></a></li>
+                <li><a class="mafe-close" href="#" ><span class="mafe-button-close" ></span></a></li>
+                <li class="mafe-save-process"><a href="#" class="mafe-button-save"></a></li>
                 <li><a href="#" class="mafe-button-export-process"></a></li>
-                <li><a href="#" class="mafe-button-undo"></a> <a href="#" class="mafe-button-redo"></a></li>
-                <li></li>
+                <li><a class="mafe-button-export-bpmn-process"></a></li>
+                <li><span class="mafe-zoom-options"></span></li>
+                <li class="mafe-undo"><a href="#"><span class="mafe-button-undo"></span></a></li>
+                <li class="mafe-redo"><a href="#"><span class="mafe-button-redo"></span></a></li>
                 <li><a href="#" title="" class="mafe-button-fullscreen"></a></li>
+                <li></li>
             </ul>
         </nav>
-        
+
     </section>
-</div>
-
-<div id="p-center-layout">
+<!--</div>-->
+<div id="p-center-layout"/>
     <!--BODY-->
-    
     <div class="ui-layout-center tab-content" id="div-layout-canvas">
-        <!--TODO INSERT DIV CANVAS-->
     </div>
-    <div class="ui-layout-east" id="div-layout-properties">
-        <div class="ui-layout-center">
-            <div id="diagram-treecontainer"></div>
-        </div>
-        <div class="ui-layout-south">
-            <div style="font-size: 11px;" id="diagram-property-grid"> </div>
-        </div>
-    </div>
-    <!--END BODY-->
-</div>
-
-
-<div class="ui-layout-west">   
     <div class="bpmn_shapes">
-            <!--<div class="head"></div>-->
-       
-      
      </div>
-</div>    
-    
-    
-   
-    
     <section class="content" id="idContent">
-        
+
         <div class="content_controls">
             <div class="head"></div>
             <ul>
-                <li>
-                    <a href="#" class="mafe-menu-variable"></a>
+                    <li>
+                        <a href="#" class="mafe-menu-variable"></a>
                     <a href="#" class="btn_create mafe-menu-variable-create"><span></span></a>
+                </li>
+                <!--<li>
+                    <a href="#" class="mafe-menu-eventmessages"></a>
+                    <a href="#" class="btn_create mafe-menu-eventmessages-create"><span></span></a>
+                </li>-->
+                <li>
+                    <a href="#" class="mafe-menu-messagetype"></a>
+                    <a href="#" class="btn_create mafe-menu-messagetype-create"><span></span></a>
                 </li>
                 <li>
                     <a href="#" class="mafe-menu-dynaform"></a>
@@ -155,11 +149,19 @@
                     <a href="#" class="mafe-menu-databaseconnections"></a>
                     <a href="#" class="btn_create mafe-menu-databaseconnections-create"><span></span></a>
                 </li>
+                <li>
+                    <a href="#" class="mafe-menu-permissions"></a>
+                    <a href="#" class="btn_create mafe-menu-permissions-create"><span></span></a>
+                </li>
+                <li>
+                    <a href="#" class="mafe-menu-filemanager"></a>
+                    <a href="#" class="btn_create mafe-menu-filemanager-create"><span></span></a>
+                </li>
             </ul>
         </div>
         <div class="bpmn_shapes_legend">
             <div class="head"></div>
         </div>
     </section>
+    
 </body>
-

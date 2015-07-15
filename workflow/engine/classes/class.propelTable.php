@@ -338,18 +338,18 @@ class propelTable
             if (($this->style[$r]['showInTable'] != '0') && (! (in_array( $this->fields[$r]['Name'], $this->masterdetail )))) {
                 //if (($this->style[$r]['showInTable'] != '0' ))
                 $this->tpl->newBlock( "headers" );
-                $sortOrder = (((isset( $this->aOrder[$this->fields[$r]['Name']] )) && ($this->aOrder[$this->fields[$r]['Name']] === 'ASC')) ? 'DESC' : 'ASC');
-                $sortOrder = (((isset( $this->aOrder[$this->fields[$r]['Name']] )) && ($this->aOrder[$this->fields[$r]['Name']] === 'DESC')) ? '' : $sortOrder);
+
+                $sortDir = "ASC";
+
+                if (isset($this->aOrder[$this->fields[$r]["Name"]])) {
+                    $sortDir = ($this->aOrder[$this->fields[$r]["Name"]] == "ASC")? "DESC" : "ASC";
+                }
 
                 if ($this->style[$r]['titleVisibility'] != '0') {
-                    $this->style[$r]['href'] = $this->ownerPage . '?order=' . ($sortOrder !== '' ? (G::createUID( '', $this->fields[$r]['Name'] ) . '=' . $sortOrder) : '') . '&page=' . $this->currentPage;
-                    if ($this->sortable == '0') {
-                        $this->style[$r]['onsort'] = $this->id . '.doSort("' . G::createUID( '', $this->fields[$r]['Name'] ) . '" , ""); return false;';;
-                    } else {
-                        $this->style[$r]['onsort'] = $this->id . '.doSort("' . G::createUID( '', $this->fields[$r]['Name'] ) . '" , "' . $sortOrder . '"); return false;';
-                    }
+                    $this->style[$r]["href"] = "javascript:;";
+                    $this->style[$r]["onsort"] = $this->id . ".doSort(\"" . G::createUID("", $this->fields[$r]["Name"]) . "\", \"" . (($this->sortable == "0")? "" : $sortDir) . "\"); return false;";
                 } else {
-                    $this->style[$r]['href'] = '#';
+                    $this->style[$r]["href"] = "javascript:;";
                     $this->style[$r]['onsort'] = 'return false;';
                 }
                 if (isset( $this->style[$r]['href'] )) {
@@ -378,10 +378,14 @@ class propelTable
                     $this->tpl->assign( "align", 'text-align:' . $this->style[$r]['titleAlign'] . ';' );
                 }
                 if ($this->style[$r]['titleVisibility'] != '0') {
-                    $sortOrder = (((isset( $this->aOrder[$this->fields[$r]['Name']] )) && ($this->aOrder[$this->fields[$r]['Name']] === 'ASC')) ? '<img src="/images/arrow-up.gif">' : '');
-                    $sortOrder = (((isset( $this->aOrder[$this->fields[$r]['Name']] )) && ($this->aOrder[$this->fields[$r]['Name']] === 'DESC')) ? '<img src="/images/arrow-down.gif">' : $sortOrder);
-                    $this->tpl->assign( "header", $this->fields[$r]['Label'] . $sortOrder );
-                    $this->tpl->assign( 'displaySeparator', (($this->colCount == 0) || (! isset( $this->fields[$r]['Label'] )) || ($this->fields[$r]['Label'] === '')) ? 'display:none;' : '' );
+                    $sortDirImg = "";
+
+                    if (isset($this->aOrder[$this->fields[$r]["Name"]])) {
+                        $sortDirImg = ($this->aOrder[$this->fields[$r]["Name"]] == "ASC")? "<img src=\"/images/arrow-up.gif\" />" : "<img src=\"/images/arrow-down.gif\" />";
+                    }
+
+                    $this->tpl->assign("header", $this->fields[$r]["Label"] . $sortDirImg);
+                    $this->tpl->assign("displaySeparator", ($this->colCount == 0 || !isset($this->fields[$r]["Label"]) || $this->fields[$r]["Label"] == "")? "display: none;" : "");
                 } else {
                     $this->tpl->assign( 'displaySeparator', 'display:none;' );
                 }
@@ -555,7 +559,13 @@ class propelTable
      * @return string
      */
     public function renderTable ($block = '', $fields = '')
-    {
+    { 
+        G::LoadSystem('inputfilter');
+        $filter = new InputFilter();
+        $fields = $filter->xssFilterHard($fields);
+        $this->orderBy = $filter->xssFilterHard($this->orderBy);
+        $this->currentPage = $filter->xssFilterHard($this->currentPage);
+        
         //Render Title
         $thereisnotitle = true;
         foreach ($this->fields as $r => $rval) {
@@ -599,6 +609,11 @@ class propelTable
             $this->tpl->assign( 'pagedTable_Name', $this->name );
             $this->tpl->assign( 'pagedTable_Height', $this->xmlForm->height );
             $this->tpl->assign( "title", $this->title );
+            
+            $this->xmlForm->home = $filter->xssFilterHard($this->xmlForm->home);
+            $this->filterForm = $filter->xssFilterHard($this->filterForm);
+            $this->menu = $filter->xssFilterHard($this->menu);
+            
             if (file_exists( $this->xmlForm->home . $this->filterForm . '.xml' )) {
                 $filterForm = new filterForm( $this->filterForm, $this->xmlForm->home );
                 if ($this->menu === '') {
@@ -753,29 +768,30 @@ class propelTable
                     }
                 }
             }
+
+            $strjsCurrentOrder = $this->id . ".currentOrder = '" . addslashes($this->orderBy) . "';";
+
             $this->tpl->assign( '_ROOT.gridRows', '=' . $gridRows ); //number of rows in the current page
             $this->tpl->newBlock( 'rowTag' );
             $this->tpl->assign( 'rowId', 'insertAtLast' );
             if ($this->currentPage > 1) {
-                $firstUrl = $this->ownerPage . '?order=' . $this->orderBy . '&page=1';
-                $firstAjax = $this->id . ".doGoToPage(1);return false;";
                 $prevpage = $this->currentPage - 1;
-                $prevUrl = $this->ownerPage . '?order=' . $this->orderBy . '&page=' . $prevpage;
-                $prevAjax = $this->id . ".doGoToPage(" . $prevpage . ");return false;";
-                $first = "<a href=\"" . htmlentities( $firstUrl, ENT_QUOTES, 'utf-8' ) . "\" onclick=\"" . $firstAjax . "\" class='firstPage'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>";
-                $prev = "<a href=\"" . htmlentities( $prevUrl, ENT_QUOTES, 'utf-8' ) . "\"  onclick=\"" . $prevAjax . "\" class='previousPage'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>";
+
+                $firstAjax = $strjsCurrentOrder . $this->id . ".doGoToPage(1); return false;";
+                $prevAjax  = $strjsCurrentOrder . $this->id . ".doGoToPage(" . $prevpage . "); return false;";
+                $first = "<a href=\"javascript:;\" onclick=\"" . $firstAjax . "\" class=\"firstPage\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>";
+                $prev  = "<a href=\"javascript:;\" onclick=\"" . $prevAjax . "\" class=\"previousPage\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>";
             } else {
                 $first = "<a class='noFirstPage'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>";
                 $prev = "<a class='noPreviousPage'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>";
             }
             if ($this->currentPage < $this->totPages) {
-                $lastUrl = $this->ownerPage . '?order=' . $this->orderBy . '&page=' . $this->totPages;
-                $lastAjax = $this->id . ".doGoToPage(" . $this->totPages . ");return false;";
                 $nextpage = $this->currentPage + 1;
-                $nextUrl = $this->ownerPage . '?order=' . $this->orderBy . '&page=' . $nextpage;
-                $nextAjax = $this->id . ".doGoToPage(" . $nextpage . ");return false;";
-                $next = "<a href=\"" . htmlentities( $nextUrl, ENT_QUOTES, 'utf-8' ) . "\" onclick=\"" . $nextAjax . "\" class='nextPage'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>";
-                $last = "<a href=\"" . htmlentities( $lastUrl, ENT_QUOTES, 'utf-8' ) . "\" onclick=\"" . $lastAjax . "\" class='lastPage'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>";
+
+                $nextAjax = $strjsCurrentOrder . $this->id . ".doGoToPage(" . $nextpage . "); return false;";
+                $lastAjax = $strjsCurrentOrder . $this->id . ".doGoToPage(" . $this->totPages . "); return false;";
+                $next = "<a href=\"javascript:;\" onclick=\"" . $nextAjax . "\" class=\"nextPage\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>";
+                $last = "<a href=\"javascript:;\" onclick=\"" . $lastAjax . "\" class=\"lastPage\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>";
             } else {
                 $next = "<a class='noNextPage'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>";
                 $last = "<a class='noLastPage'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>";
@@ -783,9 +799,10 @@ class propelTable
             $pagesEnum = '';
             for ($r = 1; $r <= $this->totPages; $r ++) {
                 if (($r >= ($this->currentPage - 5)) && ($r <= ($this->currentPage + 5))) {
-                    $pageAjax = $this->id . ".doGoToPage(" . $r . ");return false;";
+                    $pageAjax = $strjsCurrentOrder . $this->id . ".doGoToPage(" . $r . "); return false;";
+
                     if ($r != $this->currentPage) {
-                        $pagesEnum .= "&nbsp;<a href=\"" . htmlentities( $this->ownerPage . '?order=' . $this->orderBy . '&page=' . $r, ENT_QUOTES, 'utf-8' ) . "\" onclick=\"" . $pageAjax . "\">" . $r . "</a>";
+                        $pagesEnum .= "&nbsp;<a href=\"javascript:;\" onclick=\"" . $pageAjax . "\">" . $r . "</a>";
                     } else {
                         $pagesEnum .= "&nbsp;<a>" . $r . "</a>";
                     }
@@ -833,6 +850,12 @@ class propelTable
                 }
                 $this->tpl->assign( "pagesEnum", $pagesEnum );
             }
+            
+            $this->name = $filter->xssFilterHard($this->name);
+            $this->orderBy = $filter->xssFilterHard($this->orderBy);
+            $this->currentPage = $filter->xssFilterHard($this->currentPage);
+            $this->id = $filter->xssFilterHard($this->id);
+            
             ?>
 
             <script language='JavaScript'>

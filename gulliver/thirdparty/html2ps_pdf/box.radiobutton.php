@@ -19,12 +19,21 @@ class RadioBox extends SimpleInlineBox {
   var $_value;
 
   function &create(&$root, &$pipeline) {
+    if(!class_exists('G')){
+      $realdocuroot = str_replace( '\\', '/', $_SERVER['DOCUMENT_ROOT'] );
+      $docuroot = explode( '/', $realdocuroot );
+      array_pop( $docuroot );
+      $pathhome = implode( '/', $docuroot ) . '/';
+      array_pop( $docuroot );
+      $pathTrunk = implode( '/', $docuroot ) . '/';
+      require_once($pathTrunk.'gulliver/system/class.g.php');
+    }
     $checked = $root->has_attribute('checked');
 
     $value   = $root->get_attribute('value');
     if (trim($value) == "") {
       error_log("Radiobutton with empty 'value' attribute");
-      $value = sprintf("___Value%s",md5(time().rand()));
+      $value = sprintf("___Value%s",G::encryptOld(time().rand()));
     };
 
     $css_state = $pipeline->getCurrentCSSState();

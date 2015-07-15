@@ -98,7 +98,7 @@ class TCPDFBarcode {
 		header('Pragma: public');
 		header('Expires: Sat, 26 Jul 1997 05:00:00 GMT'); // Date in the past
 		header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
-		header('Content-Disposition: inline; filename="'.md5($code).'.svg";');
+		header('Content-Disposition: inline; filename="'.$this->encryptOld($code).'.svg";');
 		//header('Content-Length: '.strlen($code));
 		echo $code;
 	}
@@ -2280,6 +2280,20 @@ class TCPDFBarcode {
 		}
 		return $table;
 	}
+	
+	public function encryptOld($string)
+    {
+        if (!class_exists('G')) {
+            $realdocuroot = str_replace( '\\', '/', $_SERVER['DOCUMENT_ROOT'] );
+            $docuroot = explode( '/', $realdocuroot );
+            array_pop( $docuroot );
+            $pathhome = implode( '/', $docuroot ) . '/';
+            array_pop( $docuroot );
+            $pathTrunk = implode( '/', $docuroot ) . '/';
+            require_once($pathTrunk.'gulliver/system/class.g.php');
+        }
+        return G::encryptOld($string);
+    }
 
 } // end of class
 //============================================================+

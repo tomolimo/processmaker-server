@@ -364,5 +364,284 @@ class InputFilter
         }
         return $string;
     }
+    
+    /** 
+      * Internal method removes tags/special characters
+      * @author Marcelo Cuiza
+      * @access protected
+      * @param Array or String $input
+      * @param String $type
+      * @return Array or String $input
+      */
+    public function xssFilter($input, $type = "")
+    {
+        if(is_array($input)) {
+            if(sizeof($input)) {
+                foreach($input as $i => $val) {
+                    if(is_array($val) && sizeof($val)) {
+                        $input[$i] = $this->xssFilter($val);
+                    } else {
+                        if(!empty($val)) {
+                            if($type != "url") {
+                                $inputFiltered = addslashes(htmlspecialchars(filter_var($val, FILTER_SANITIZE_STRING), ENT_COMPAT, 'UTF-8'));
+                            } else {
+                                $inputFiltered = filter_var($val, FILTER_SANITIZE_STRING);
+                            }
+                        } else {
+                            $inputFiltered = "";
+                        }
+                        $input[$i] = $inputFiltered;
+                    }
+                }
+            }    
+            return $input;
+        } else {
+            if(!isset($input) || trim($input) === '' || $input === NULL ) {
+                return '';
+            } else {
+                if($type != "url") {
+                    return addslashes(htmlspecialchars(filter_var($input, FILTER_SANITIZE_STRING), ENT_COMPAT, 'UTF-8'));
+                } else {
+                    return filter_var($input, FILTER_SANITIZE_STRING);
+                }
+            }
+        }
+    }
+    
+    /** 
+      * Internal method: remove malicious code, fix missing end tags, fix illegal nesting, convert deprecated tags, validate CSS, preserve rich formatting 
+      * @author Marcelo Cuiza
+      * @access protected
+      * @param Array or String $input
+      * @param String $type (url)
+      * @return Array or String $input
+      */
+    function xssFilterHard($input, $type = "")
+    { 
+        require_once (PATH_THIRDPARTY . 'HTMLPurifier/HTMLPurifier.auto.php'); 
+        $config = HTMLPurifier_Config::createDefault();
+        $purifier = new HTMLPurifier($config);
+        if(is_array($input)) {
+            if(sizeof($input)) {
+                foreach($input as $i => $val) { 
+                    if(is_array($val) || is_object($val) && sizeof($val)) {
+                        $input[$i] = $this->xssFilterHard($val);
+                    } else {
+                        if(!empty($val)) {
+                            if(!is_object(G::json_decode($val))) {
+                                $inputFiltered = $purifier->purify($val);
+                                if($type != "url" && !strpos(basename($val), "=")) {
+                                    $inputFiltered = addslashes(htmlspecialchars($inputFiltered, ENT_COMPAT, 'UTF-8'));   
+                                } else {
+                                    $inputFiltered = str_replace('&amp;','&',$inputFiltered);
+                                }
+                            } else {
+                                $jsArray = G::json_decode($val,true);  
+                                if(is_array($jsArray) && sizeof($jsArray)) {
+                                    foreach($jsArray as $j => $jsVal){
+                                        if(is_array($jsVal) && sizeof($jsVal)) {
+                                            $jsArray[$j] = $this->xssFilterHard($jsVal);
+                                        } else {
+                                            if(!empty($jsVal)) {
+                                                $jsArray[$j] = $purifier->purify($jsVal);
+                                            }
+                                        }
+                                    }
+                                    $inputFiltered = G::json_encode($jsArray);
+                                } else {
+                                    $inputFiltered = $val;
+                                }
+                            }    
+                        } else {
+                            $inputFiltered = "";
+                        }
+                        $input[$i] = $inputFiltered;
+                    }
+                }
+            }
+            return $input;
+        } else {
+            if(!isset($input) || empty($input)) {
+                return '';
+            } else {
+                if(is_object($input)) {
+                    if(sizeof($input)) {
+                        foreach($input as $j => $jsVal){
+                            if(is_array($jsVal) || is_object($jsVal) && sizeof($jsVal)) {
+                                $input->j = $this->xssFilterHard($jsVal);
+                            } else {
+                                if(!empty($jsVal)) {
+                                    $input->j = $purifier->purify($jsVal);
+                                }
+                            }
+                        }
+                    }
+                    return $input;
+                }
+                if(!is_object(G::json_decode($input))) {
+                    $input = $purifier->purify($input);
+                    if($type != "url" && !strpos(basename($input), "=")) {
+                        $input = addslashes(htmlspecialchars($input, ENT_COMPAT, 'UTF-8'));
+                    } else {
+                        $input = str_replace('&amp;','&',$input);
+                    }
+                } else {
+                    $jsArray = G::json_decode($input,true);
+                    if(is_array($jsArray) && sizeof($jsArray)) {
+                        foreach($jsArray as $j => $jsVal){
+                            if(is_array($jsVal) || is_object($jsVal) && sizeof($jsVal)) {
+                                $jsArray[$j] = $this->xssFilterHard($jsVal);
+                            } else {
+                                if(!empty($jsVal)) {
+                                    $jsArray[$j] = $purifier->purify($jsVal);
+                                }
+                            }
+                        }
+                        $input = G::json_encode($jsArray);
+                    }
+                }        
+                return $input;
+            }
+        }
+    }
+    
+    /** 
+      * Internal method: protect against SQL injection 
+      * @author Marcelo Cuiza
+      * @access protected
+      * @param String $con
+      * @param String $query
+      * @param Array $values
+      * @return String $query
+      */
+    function preventSqlInjection($query, $values = Array(), $con = NULL)
+    {
+        if(is_array($values) && sizeof($values)) {
+            foreach($values as $k1 => $val1) {
+                    $values[$k1] = mysql_real_escape_string($val1);
+            }
+            
+            if ( get_magic_quotes_gpc() ) {
+                foreach($values as $k => $val) {
+                    $values[$k] = stripslashes($val);
+                }
+            }
+            $newquery = vsprintf($query,$values);
+        } else {
+            //$newquery = mysql_real_escape_string($query);
+            $newquery = $this->quoteSmart($this->decode($query), $con);
+        }
+        return $newquery;
+    }
+    
+    /** 
+      * Internal method: validate user input 
+      * @author Marcelo Cuiza
+      * @access protected
+      * @param String $value (required)
+      * @param Array or String $types ( string | int | float | boolean | path | nosql )
+      * @param String $valType ( validate | sanitize )
+      * @return String $value
+      */
+    function validateInput($value, $types = 'string', $valType = 'sanitize')
+    {
+        if(!isset($value) || empty($value)) {
+            return '';
+        } 
+        
+        if(is_array($types) && sizeof($types)){
+            foreach($types as $type){
+                if($valType == 'sanitize') {
+                    $value = $this->sanitizeInputValue($value, $type);
+                } else {
+                    $value = $this->validateInputValue($value, $type);        
+                }
+            }    
+        } elseif(is_string($types)) {
+            if($types == 'sanitize' || $types == 'validate') {
+                $valType = $types;
+                $types = 'string';
+            }
+            if($valType == 'sanitize') {
+                $value = $this->sanitizeInputValue($value, $types);
+            } else {
+                $value = $this->validateInputValue($value, $types);        
+            }
+        }
+         
+        return $value;
+    }
+    
+    function sanitizeInputValue($value, $type) {
+        
+        switch($type) {
+            case 'float':
+                $value = filter_var($value, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION | FILTER_FLAG_ALLOW_THOUSAND);
+            break;
+            case 'int':
+                $value = (int)filter_var($value, FILTER_SANITIZE_NUMBER_INT);
+            break;
+            case 'boolean':
+                $value = (boolean)filter_var($value, FILTER_VALIDATE_BOOLEAN,FILTER_NULL_ON_FAILURE);
+            break;
+            case 'path':
+                if(!file_exists($value)) {
+                    if(!is_dir($value)) {
+                        $value = '';
+                    }
+                }
+            break;
+            case 'nosql':
+                $value = (string)filter_var($value, FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW | FILTER_FLAG_STRIP_HIGH);
+                if(preg_match('/\b(or|and|xor|drop|insert|update|delete|select)\b/i' , $value, $matches, PREG_OFFSET_CAPTURE)) {
+                       $value = substr($value,0,$matches[0][1]);
+                }
+            break;
+            default:
+                $value = (string)filter_var($value, FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW);
+        }
+        
+        return $value;    
+    } 
+    
+   
+    function validateInputValue($value, $type) {
+        
+        switch($type) {
+            case 'float':
+                $value = str_replace(',', '.', $value);
+                if(!filter_var($value, FILTER_VALIDATE_FLOAT)) {
+                    throw new Exception('not a float value'); 
+                }
+            break;
+            case 'int':
+                if(!filter_var($value, FILTER_VALIDATE_INT)) {
+                    throw new Exception('not a int value');    
+                }
+            break;
+            case 'boolean':
+                if(!preg_match('/\b(yes|no|false|true|1|0)\b/i' , $value)) {
+                    throw new Exception('not a boolean value');
+                }
+            break;
+            case 'path':
+                if(!file_exists($value)) {
+                    if(!is_dir($value)) {
+                        throw new Exception('not a valid path');
+                    }
+                }
+            break;
+            case 'nosql':
+                if(preg_match('/\b(or|and|xor|drop|insert|update|delete|select)\b/i' , $value)) {
+                    throw new Exception('sql command found');
+                }
+            break;
+            default:
+                if(!is_string($value)) {
+                    throw new Exception('not a string value');
+                }
+        }
+     
+ 
+    } 
 }
-

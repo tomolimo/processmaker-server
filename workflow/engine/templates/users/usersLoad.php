@@ -28,7 +28,7 @@
   {
     oCasesFrame    = document.getElementById('frameMain');
     oClientWinSize = getClientWindowSize();
-    height         = oClientWinSize.height - 105;
+    height         = oClientWinSize.height - 70 + "px";
     oCasesFrame.style.height = height;
   }
   function getStyle(targetElement,styleProp)

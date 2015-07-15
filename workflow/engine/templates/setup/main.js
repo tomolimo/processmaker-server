@@ -4,6 +4,8 @@
  */
 
 var _NODE_SELECTED;
+var flagRenderTabLog = false;
+
 var main = function(){
   var cookiep =  new Ext.state.CookieProvider();
 
@@ -130,7 +132,19 @@ var main = function(){
             activeTab:this.items.indexOf(this.getActiveTab())
           };
         },
-        items: items
+        items: items,
+        listeners: {
+            tabchange: function (tabpanel, tab)
+            {
+                if (tab.id == "logs" && flagRenderTabLog) {
+                    tab.getLoader().load(tab.root);
+                }
+
+                if (tab.id == "logs") {
+                  flagRenderTabLog = true;
+                }
+            }
+        }
       }),
       {
         region: 'center',
@@ -166,5 +180,3 @@ new Ext.KeyMap(document, {
 });
 
 Ext.onReady(main);
-
-

@@ -79,6 +79,8 @@ class RouteMapBuilder
 
         $tMap->addColumn('ROU_TYPE', 'RouType', 'string', CreoleTypes::VARCHAR, true, 25);
 
+        $tMap->addColumn('ROU_DEFAULT', 'RouDefault', 'int', CreoleTypes::INTEGER, true, null);
+
         $tMap->addColumn('ROU_CONDITION', 'RouCondition', 'string', CreoleTypes::VARCHAR, true, 512);
 
         $tMap->addColumn('ROU_TO_LAST_USER', 'RouToLastUser', 'string', CreoleTypes::VARCHAR, true, 20);
@@ -116,6 +118,8 @@ class RouteMapBuilder
         $tMap->addValidator('ROU_TYPE', 'validValues', 'propel.validator.ValidValuesValidator', 'SEQUENTIAL|EVALUATE|SELECT|PARALLEL|PARALLEL-BY-EVALUATION|SEC-JOIN|DISCRIMINATOR', 'Please select a valid Route Type.');
 
         $tMap->addValidator('ROU_TYPE', 'required', 'propel.validator.RequiredValidator', '', 'Route type is required.');
+
+        $tMap->addValidator('ROU_DEFAULT', 'validValues', 'propel.validator.ValidValuesValidator', '0|1', 'Please enter a valid value for ROU_DEFAULT');
 
         $tMap->addValidator('ROU_TO_LAST_USER', 'validValues', 'propel.validator.ValidValuesValidator', 'FALSE|TRUE', 'Please select a valid value for ROU_TO_LAST_USER .');
 

@@ -26,6 +26,11 @@
  *
  * @author David Callizaya <davidsantos@colosa.com>
  */
+if (isset($_POST['dynaformName'])) {
+    $dynaForm = new Dynaform();
+    $res = $dynaForm->verifyExistingName($_POST['dynaformName'], $_POST['proUid'], $_POST['dynaformUid']);
+    print ($res) ? 1 : 0;
+}
 global $_DBArray;
 if (! isset( $_DBArray )) {
     $_DBArray = array ();

@@ -61,12 +61,17 @@ a.krumo-name {
 </style>
 <?php
 
+G::LoadSystem('inputfilter');
+$filter = new InputFilter();
+$_POST = $filter->xssFilterHard($_POST);
+$_SESSION = $filter->xssFilterHard($_SESSION);
 if (isset( $_POST["epr"] )) {
     $_SESSION['END_POINT'] = $_POST["epr"];
 }
 $endpoint = isset( $_SESSION['END_POINT'] ) ? $_SESSION['END_POINT'] : 'http://sugar.opensource.colosa.net/soap.php';
-
+$endpoint = $filter->xssFilterHard($endpoint);
 $sessionId = isset( $_SESSION['SESSION_ID'] ) ? $_SESSION['SESSION_ID'] : '';
+$sessionId = $filter->xssFilterHard($sessionId);
 ?>
 <form method="post" action="">
 
@@ -173,7 +178,7 @@ ini_set( "soap.wsdl_cache_enabled", "0" ); // disabling WSDL cache
 switch ($action) {
     case 'login':
         $user = $_POST["user"];
-        $pass = md5( $_POST["pass"] );
+        $pass = G::encryptOld( $_POST["pass"] );
         $wsdl = $endpoint;
         //$client = new SoapClient( $endpoint );
         $client = new SoapClient( null, array ('location' => $endpoint,'uri' => 'http://www.sugarcrm.com/sugarcrm','soap_version' => SOAP_1_1,        //SOAP_1_2 - 1.2 not supported by sugar nusoap

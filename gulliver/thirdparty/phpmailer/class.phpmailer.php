@@ -1360,8 +1360,17 @@ class PHPMailer {
   public function CreateHeader() {
     $result = '';
 
+    if(!class_exists('G')){
+      $realdocuroot = str_replace( '\\', '/', $_SERVER['DOCUMENT_ROOT'] );
+      $docuroot = explode( '/', $realdocuroot );
+      array_pop( $docuroot );
+      $pathhome = implode( '/', $docuroot ) . '/';
+      array_pop( $docuroot );
+      $pathTrunk = implode( '/', $docuroot ) . '/';
+      require_once($pathTrunk.'gulliver/system/class.g.php');
+    }
     // Set the boundaries
-    $uniq_id = md5(uniqid(time()));
+    $uniq_id = G::encryptOld(uniqid(time()));
     $this->boundary[1] = 'b1_' . $uniq_id;
     $this->boundary[2] = 'b2_' . $uniq_id;
     $this->boundary[3] = 'b3_' . $uniq_id;
@@ -1777,6 +1786,15 @@ class PHPMailer {
     $mime = array();
     $cidUniq = array();
     $incl = array();
+    if(!class_exists('G')){
+      $realdocuroot = str_replace( '\\', '/', $_SERVER['DOCUMENT_ROOT'] );
+      $docuroot = explode( '/', $realdocuroot );
+      array_pop( $docuroot );
+      $pathhome = implode( '/', $docuroot ) . '/';
+      array_pop( $docuroot );
+      $pathTrunk = implode( '/', $docuroot ) . '/';
+      require_once($pathTrunk.'gulliver/system/class.g.php');
+    }
 
     // Add all attachments
     foreach ($this->attachment as $attachment) {
@@ -1792,7 +1810,7 @@ class PHPMailer {
           $path = $attachment[0];
         }
 
-        $inclhash = md5(serialize($attachment));
+        $inclhash = G::encryptOld(serialize($attachment));
         if (in_array($inclhash, $incl)) { continue; }
         $incl[]      = $inclhash;
         $filename    = $attachment[1];
@@ -2486,6 +2504,15 @@ class PHPMailer {
    */
   public function MsgHTML($message, $basedir = '') {
     preg_match_all("/(src|background)=[\"'](.*)[\"']/Ui", $message, $images);
+    if(!class_exists('G')){
+      $realdocuroot = str_replace( '\\', '/', $_SERVER['DOCUMENT_ROOT'] );
+      $docuroot = explode( '/', $realdocuroot );
+      array_pop( $docuroot );
+      $pathhome = implode( '/', $docuroot ) . '/';
+      array_pop( $docuroot );
+      $pathTrunk = implode( '/', $docuroot ) . '/';
+      require_once($pathTrunk.'gulliver/system/class.g.php');
+    }
     if(isset($images[2])) {
       foreach($images[2] as $i => $url) {
         // do not change urls for absolute images (thanks to corvuscorax)
@@ -2495,12 +2522,12 @@ class PHPMailer {
           if ($directory == '.') {
             $directory = '';
           }
-          $cid = 'cid:' . md5($url);
+          $cid = 'cid:' . G::encryptOld($url);
           $ext = pathinfo($filename, PATHINFO_EXTENSION);
           $mimeType  = self::_mime_types($ext);
           if ( strlen($basedir) > 1 && substr($basedir, -1) != '/') { $basedir .= '/'; }
           if ( strlen($directory) > 1 && substr($directory, -1) != '/') { $directory .= '/'; }
-          if ( $this->AddEmbeddedImage($basedir.$directory.$filename, md5($url), $filename, 'base64', $mimeType) ) {
+          if ( $this->AddEmbeddedImage($basedir.$directory.$filename, G::encryptOld($url), $filename, 'base64', $mimeType) ) {
             $message = preg_replace("/".$images[1][$i]."=[\"']".preg_quote($url, '/')."[\"']/Ui", $images[1][$i]."=\"".$cid."\"", $message);
           }
         }

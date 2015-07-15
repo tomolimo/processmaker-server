@@ -46,7 +46,7 @@
     <es>Finalizar fecha</es>
   </DEL_FINISH_DATE>
   <APP_STATUS type="dropdown">
-    <en><![CDATA[Status]]><option name="DRAFT"><![CDATA[Draft]]></option><option name="TO_DO"><![CDATA[To Do]]></option><option name="CANCELLED"><![CDATA[Cancelled]]></option><option name="COMPLETED"><![CDATA[Completed]]></option></en>
+    <en><![CDATA[Status]]><option name="DRAFT"><![CDATA[Draft]]></option><option name="TO_DO"><![CDATA[To Do]]></option><option name="CANCELLED"><![CDATA[Canceled]]></option><option name="COMPLETED"><![CDATA[Completed]]></option></en>
     <es>Estado<option name="DRAFT">Borrador</option><option name="TO_DO">Pendientes</option><option name="CANCELLED">Cancelado</option><option name="COMPLETED">Completado</option></es>
   </APP_STATUS>
   <MARK2 type="cellMark" className="RowLink1" classNameAlt="RowLink2" defaultValue="1"/>

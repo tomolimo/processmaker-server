@@ -129,5 +129,27 @@ class Variable extends Api
             throw new RestException(Api::STAT_APP_EXCEPTION, $e->getMessage());
         }
     }
+
+    /**
+     * @url POST /:prj_uid/process-variable/:var_name/execute-query-suggest
+     *
+     * @param string $prj_uid      {@min 32}{@max 32}
+     * @param string $var_name
+     * @param array  $request_data
+     */
+    public function doPostVariableExecuteSqlSuggest($prj_uid, $var_name, $request_data)
+    {
+        try {
+            $variable = new \ProcessMaker\BusinessModel\Variable();
+
+            $arrayData = ($request_data != null)? $variable->executeSqlSuggest($prj_uid, $var_name, $request_data) : $variable->executeSqlSuggest($prj_uid, $var_name);
+
+            $response = $arrayData;
+
+            return $response;
+        } catch (\Exception $e) {
+            throw new RestException(Api::STAT_APP_EXCEPTION, $e->getMessage());
+        }
+    }
 }
 

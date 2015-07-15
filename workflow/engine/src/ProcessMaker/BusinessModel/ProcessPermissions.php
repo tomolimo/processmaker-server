@@ -232,18 +232,21 @@ class ProcessPermissions
                     $sObjectUID = '';
                     break;
                 case 'DYNAFORM':
+                    $data['DYNAFORMS'] = $data['DYNAFORMS'] == 0 ? '': $data['DYNAFORMS'];
                     if ($data['DYNAFORMS'] != '') {
                         $this->validateDynUid($data['DYNAFORMS']);
                     }
                     $sObjectUID = $data['DYNAFORMS'];
                     break;
                 case 'INPUT':
+                    $data['INPUTS'] = $data['INPUTS'] == 0 ? '': $data['INPUTS'];
                     if ($data['INPUTS'] != '') {
                         $this->validateInpUid($data['INPUTS']);
                     }
                     $sObjectUID = $data['INPUTS'];
                     break;
                 case 'OUTPUT':
+                    $data['OUTPUTS'] = $data['OUTPUTS'] == 0 ? '': $data['OUTPUTS'];
                     if ($data['OUTPUTS'] != '') {
                         $this->validateOutUid($data['OUTPUTS']);
                     }

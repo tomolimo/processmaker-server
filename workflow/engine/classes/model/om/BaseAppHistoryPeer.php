@@ -25,7 +25,7 @@ abstract class BaseAppHistoryPeer
     const CLASS_DEFAULT = 'classes.model.AppHistory';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 9;
+    const NUM_COLUMNS = 10;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
@@ -45,6 +45,9 @@ abstract class BaseAppHistoryPeer
 
     /** the column name for the DYN_UID field */
     const DYN_UID = 'APP_HISTORY.DYN_UID';
+
+    /** the column name for the OBJ_TYPE field */
+    const OBJ_TYPE = 'APP_HISTORY.OBJ_TYPE';
 
     /** the column name for the USR_UID field */
     const USR_UID = 'APP_HISTORY.USR_UID';
@@ -69,10 +72,10 @@ abstract class BaseAppHistoryPeer
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     private static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('AppUid', 'DelIndex', 'ProUid', 'TasUid', 'DynUid', 'UsrUid', 'AppStatus', 'HistoryDate', 'HistoryData', ),
-        BasePeer::TYPE_COLNAME => array (AppHistoryPeer::APP_UID, AppHistoryPeer::DEL_INDEX, AppHistoryPeer::PRO_UID, AppHistoryPeer::TAS_UID, AppHistoryPeer::DYN_UID, AppHistoryPeer::USR_UID, AppHistoryPeer::APP_STATUS, AppHistoryPeer::HISTORY_DATE, AppHistoryPeer::HISTORY_DATA, ),
-        BasePeer::TYPE_FIELDNAME => array ('APP_UID', 'DEL_INDEX', 'PRO_UID', 'TAS_UID', 'DYN_UID', 'USR_UID', 'APP_STATUS', 'HISTORY_DATE', 'HISTORY_DATA', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, )
+        BasePeer::TYPE_PHPNAME => array ('AppUid', 'DelIndex', 'ProUid', 'TasUid', 'DynUid', 'ObjType', 'UsrUid', 'AppStatus', 'HistoryDate', 'HistoryData', ),
+        BasePeer::TYPE_COLNAME => array (AppHistoryPeer::APP_UID, AppHistoryPeer::DEL_INDEX, AppHistoryPeer::PRO_UID, AppHistoryPeer::TAS_UID, AppHistoryPeer::DYN_UID, AppHistoryPeer::OBJ_TYPE, AppHistoryPeer::USR_UID, AppHistoryPeer::APP_STATUS, AppHistoryPeer::HISTORY_DATE, AppHistoryPeer::HISTORY_DATA, ),
+        BasePeer::TYPE_FIELDNAME => array ('APP_UID', 'DEL_INDEX', 'PRO_UID', 'TAS_UID', 'DYN_UID', 'OBJ_TYPE', 'USR_UID', 'APP_STATUS', 'HISTORY_DATE', 'HISTORY_DATA', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
     );
 
     /**
@@ -82,10 +85,10 @@ abstract class BaseAppHistoryPeer
      * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     private static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('AppUid' => 0, 'DelIndex' => 1, 'ProUid' => 2, 'TasUid' => 3, 'DynUid' => 4, 'UsrUid' => 5, 'AppStatus' => 6, 'HistoryDate' => 7, 'HistoryData' => 8, ),
-        BasePeer::TYPE_COLNAME => array (AppHistoryPeer::APP_UID => 0, AppHistoryPeer::DEL_INDEX => 1, AppHistoryPeer::PRO_UID => 2, AppHistoryPeer::TAS_UID => 3, AppHistoryPeer::DYN_UID => 4, AppHistoryPeer::USR_UID => 5, AppHistoryPeer::APP_STATUS => 6, AppHistoryPeer::HISTORY_DATE => 7, AppHistoryPeer::HISTORY_DATA => 8, ),
-        BasePeer::TYPE_FIELDNAME => array ('APP_UID' => 0, 'DEL_INDEX' => 1, 'PRO_UID' => 2, 'TAS_UID' => 3, 'DYN_UID' => 4, 'USR_UID' => 5, 'APP_STATUS' => 6, 'HISTORY_DATE' => 7, 'HISTORY_DATA' => 8, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, )
+        BasePeer::TYPE_PHPNAME => array ('AppUid' => 0, 'DelIndex' => 1, 'ProUid' => 2, 'TasUid' => 3, 'DynUid' => 4, 'ObjType' => 5, 'UsrUid' => 6, 'AppStatus' => 7, 'HistoryDate' => 8, 'HistoryData' => 9, ),
+        BasePeer::TYPE_COLNAME => array (AppHistoryPeer::APP_UID => 0, AppHistoryPeer::DEL_INDEX => 1, AppHistoryPeer::PRO_UID => 2, AppHistoryPeer::TAS_UID => 3, AppHistoryPeer::DYN_UID => 4, AppHistoryPeer::OBJ_TYPE => 5, AppHistoryPeer::USR_UID => 6, AppHistoryPeer::APP_STATUS => 7, AppHistoryPeer::HISTORY_DATE => 8, AppHistoryPeer::HISTORY_DATA => 9, ),
+        BasePeer::TYPE_FIELDNAME => array ('APP_UID' => 0, 'DEL_INDEX' => 1, 'PRO_UID' => 2, 'TAS_UID' => 3, 'DYN_UID' => 4, 'OBJ_TYPE' => 5, 'USR_UID' => 6, 'APP_STATUS' => 7, 'HISTORY_DATE' => 8, 'HISTORY_DATA' => 9, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
     );
 
     /**
@@ -195,6 +198,8 @@ abstract class BaseAppHistoryPeer
         $criteria->addSelectColumn(AppHistoryPeer::TAS_UID);
 
         $criteria->addSelectColumn(AppHistoryPeer::DYN_UID);
+
+        $criteria->addSelectColumn(AppHistoryPeer::OBJ_TYPE);
 
         $criteria->addSelectColumn(AppHistoryPeer::USR_UID);
 
@@ -541,6 +546,9 @@ abstract class BaseAppHistoryPeer
                 }
             }
         } else {
+
+        if ($obj->isNew() || $obj->isColumnModified(AppHistoryPeer::OBJ_TYPE))
+            $columns[AppHistoryPeer::OBJ_TYPE] = $obj->getObjType();
 
         }
 

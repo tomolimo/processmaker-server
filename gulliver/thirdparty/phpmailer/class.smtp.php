@@ -305,7 +305,7 @@ class SMTP {
         break;
       case 'LOGIN':
         // Start authentication
-        fputs($this->smtp_conn,"AUTH LOGIN" . $this->CRLF);
+        @fputs($this->smtp_conn,"AUTH LOGIN" . $this->CRLF);
     
         $rply = $this->get_lines();
         $code = substr($rply,0,3);

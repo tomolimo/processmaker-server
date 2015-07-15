@@ -33,6 +33,12 @@
 //require_once 'classes/model/AppDelay.php';
 //require_once 'classes/model/Process.php';
 //require_once 'classes/model/Task.php';
+
+G::LoadSystem('inputfilter');
+$filter = new InputFilter();
+$_REQUEST = $filter->xssFilterHard($_REQUEST);
+$_POST = $filter->xssFilterHard($_POST);
+
 if(isset($_REQUEST['action']) && $_REQUEST['action'] == "verifySession" ) {
     if (!isset($_SESSION['USER_LOGGED'])) {
         $response = new stdclass();
@@ -845,13 +851,21 @@ class Ajax
         $_POST["DYN_UID"] = $_REQUEST["DYN_UID"];
 
         $G_PUBLISH = new Publisher();
-        $FieldsHistory = unserialize($_SESSION["HISTORY_DATA"]);
+        $FieldsHistory = $_SESSION["HISTORY_DATA"];
         $Fields["APP_DATA"] = $FieldsHistory[$_POST["HISTORY_ID"]]; //isset($FieldsHistory[$_POST["HISTORY_ID"]])? $FieldsHistory[$_POST["HISTORY_ID"]] : "";
         $Fields["APP_DATA"]["__DYNAFORM_OPTIONS"]["PREVIOUS_STEP_LABEL"] = "";
         $Fields["APP_DATA"]["__DYNAFORM_OPTIONS"]["NEXT_STEP_LABEL"] = "";
         $Fields["APP_DATA"]["__DYNAFORM_OPTIONS"]["NEXT_STEP"] = "#";
         $Fields["APP_DATA"]["__DYNAFORM_OPTIONS"]["NEXT_ACTION"] = "return false;";
-        $G_PUBLISH->AddContent("dynaform", "xmlform", $_SESSION["PROCESS"] . "/" . $_POST["DYN_UID"], "", $Fields["APP_DATA"], "", "", "view");
+        G::LoadClass('pmDynaform');
+        $FieldsPmDynaform["PRO_UID"] = $_SESSION['PROCESS'];
+        $FieldsPmDynaform["CURRENT_DYNAFORM"] = $_REQUEST['DYN_UID'];
+        $a = new pmDynaform($FieldsPmDynaform);
+        if ($a->isResponsive()) {
+            $a->printView();
+        } else {
+            $G_PUBLISH->AddContent("dynaform", "xmlform", $_SESSION["PROCESS"] . "/" . $_POST["DYN_UID"], "", $Fields["APP_DATA"], "", "", "view");
+        }
         ?>
 
         <script type="text/javascript">

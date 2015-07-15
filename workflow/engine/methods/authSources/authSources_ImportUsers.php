@@ -40,7 +40,7 @@ foreach ($_POST['aUsers'] as $sUser) {
     $matches = array ();
     $aUser = (array) Bootstrap::json_decode( stripslashes( $sUser ) );
     $aData['USR_USERNAME'] = str_replace( "*", "'", $aUser['sUsername'] );
-    $aData['USR_PASSWORD'] = md5( str_replace( "*", "'", $aUser['sUsername'] ) );
+    $aData['USR_PASSWORD'] = G::encryptOld( str_replace( "*", "'", $aUser['sUsername'] ) );
     // note added by gustavo gustavo-at-colosa.com
     // asign the FirstName and LastName variables
     // add replace to change D*Souza to D'Souza by krlos
@@ -72,7 +72,7 @@ foreach ($_POST['aUsers'] as $sUser) {
     }
     $aData['USR_STATUS'] = 'ACTIVE';
     $aData['USR_UID'] = $sUserUID;
-    $aData['USR_PASSWORD'] = md5( $sUserUID ); //fake :p
+    $aData['USR_PASSWORD'] = G::encryptOld( $sUserUID ); //fake :p
     $aData['USR_ROLE'] = 'PROCESSMAKER_OPERATOR';
 
     if (count($aAttributes)) {

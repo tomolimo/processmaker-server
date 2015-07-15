@@ -4,7 +4,7 @@
     <en><![CDATA[No.]]></en>
   </id>
   <LOG0_IMACE type="text" size="36" maxlength="12" enableHTML="1">
-    <en><![CDATA[imagen]]></en>
+    <en><![CDATA[Imagen]]></en>
   </LOG0_IMACE>
   <LOG0_NAME type="text" size="15" maxlength="12">
     <en><![CDATA[name]]></en>

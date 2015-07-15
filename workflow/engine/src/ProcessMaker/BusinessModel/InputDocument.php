@@ -13,7 +13,10 @@ class InputDocument
         "INP_DOC_PUBLISHED"        => array("type" => "string", "required" => false, "empty" => false, "defaultValues" => array("PRIVATE", "PUBLIC"),             "fieldNameAux" => "inputDocumentPublished"),
         "INP_DOC_VERSIONING"       => array("type" => "int",    "required" => false, "empty" => false, "defaultValues" => array(0, 1),                            "fieldNameAux" => "inputDocumentVersioning"),
         "INP_DOC_DESTINATION_PATH" => array("type" => "string", "required" => false, "empty" => true,  "defaultValues" => array(),                                "fieldNameAux" => "inputDocumentDestinationPath"),
-        "INP_DOC_TAGS"             => array("type" => "string", "required" => false, "empty" => true,  "defaultValues" => array(),                                "fieldNameAux" => "inputDocumentTags")
+        "INP_DOC_TAGS"             => array("type" => "string", "required" => false, "empty" => true,  "defaultValues" => array(),                                "fieldNameAux" => "inputDocumentTags"),		
+        "INP_DOC_TYPE_FILE"             => array("type" => "string", "required" => true, "empty" => false,  "defaultValues" => array(),                                "fieldNameAux" => "inputDocumentTypeFile"),
+        "INP_DOC_MAX_FILESIZE"             => array("type" => "int", "required" => true, "empty" => false,  "defaultValues" => array(),                                "fieldNameAux" => "inputDocumentMaxFilesize"),
+        "INP_DOC_MAX_FILESIZE_UNIT"             => array("type" => "string", "required" => true, "empty" => false,  "defaultValues" => array(),                                "fieldNameAux" => "inputDocumentMaxFilesizeUnit")
     );
 
     private $formatFieldNameInUppercase = true;
@@ -454,6 +457,9 @@ class InputDocument
             $criteria->addSelectColumn(\InputDocumentPeer::INP_DOC_VERSIONING);
             $criteria->addSelectColumn(\InputDocumentPeer::INP_DOC_DESTINATION_PATH);
             $criteria->addSelectColumn(\InputDocumentPeer::INP_DOC_TAGS);
+            $criteria->addSelectColumn(\InputDocumentPeer::INP_DOC_TYPE_FILE);
+            $criteria->addSelectColumn(\InputDocumentPeer::INP_DOC_MAX_FILESIZE);
+            $criteria->addSelectColumn(\InputDocumentPeer::INP_DOC_MAX_FILESIZE_UNIT);
 
             $criteria->addAlias("CT", \ContentPeer::TABLE_NAME);
             $criteria->addAlias("CD", \ContentPeer::TABLE_NAME);
@@ -506,7 +512,10 @@ class InputDocument
                 $this->getFieldNameByFormatFieldName("INP_DOC_PUBLISHED")        => $record["INP_DOC_PUBLISHED"] . "",
                 $this->getFieldNameByFormatFieldName("INP_DOC_VERSIONING")       => (int)($record["INP_DOC_VERSIONING"]),
                 $this->getFieldNameByFormatFieldName("INP_DOC_DESTINATION_PATH") => $record["INP_DOC_DESTINATION_PATH"] . "",
-                $this->getFieldNameByFormatFieldName("INP_DOC_TAGS")             => $record["INP_DOC_TAGS"] . ""
+                $this->getFieldNameByFormatFieldName("INP_DOC_TAGS")             => $record["INP_DOC_TAGS"] . "",
+                $this->getFieldNameByFormatFieldName("INP_DOC_TYPE_FILE")             => $record["INP_DOC_TYPE_FILE"] . "",
+                $this->getFieldNameByFormatFieldName("INP_DOC_MAX_FILESIZE")             => (int)($record["INP_DOC_MAX_FILESIZE"]),
+                $this->getFieldNameByFormatFieldName("INP_DOC_MAX_FILESIZE_UNIT")             => $record["INP_DOC_MAX_FILESIZE_UNIT"] . ""
             );
         } catch (\Exception $e) {
             throw $e;

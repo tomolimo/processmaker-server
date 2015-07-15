@@ -126,6 +126,41 @@ class InputDocument extends BaseInputDocument
                 }
                 $iResult = $oInputDocument->save();
                 $oConnection->commit();
+                //Add Audit Log
+                switch ($aData['INP_DOC_FORM_NEEDED']){
+                  case 'VIRTUAL':
+                    $docType = 'Digital';
+                    break;
+                  case 'REAL':
+                    $docType = 'Printed';
+                    break;
+                  case 'VREAL':
+                    $docType = 'Digital/Printed';
+                    break;
+                }
+                if(isset($aData['INP_DOC_VERSIONING']) && $aData['INP_DOC_VERSIONING'] == 1){
+                  $enableVersion = 'Yes';
+                }else{
+                  $enableVersion = 'No';
+                }
+                $description = "Input Document Title: ".$aData['INP_DOC_TITLE'].", Input Document Uid: ".$aData['INP_DOC_UID'].", Document Type: ".$docType;
+                if(!empty($aData['INP_DOC_DESCRIPTION'])){
+                  $description .= ", Description: ".$aData['INP_DOC_DESCRIPTION'];
+                }
+                if(!empty($aData['INP_DOC_DESTINATION_PATH'])){
+                  $description .= ", Destination Path: ".$aData['INP_DOC_DESTINATION_PATH'];
+                }
+                $inputDocMaxFileSize = "";
+                if(!empty($aData['INP_DOC_MAX_FILESIZE'])){
+                  $inputDocMaxFileSize = $aData['INP_DOC_MAX_FILESIZE']? $aData['INP_DOC_MAX_FILESIZE'].' '.$aData['INP_DOC_MAX_FILESIZE_UNIT'] : "256 MB";
+                  $inputDocMaxFileSize = ", Maximum Input Document file size: ".$inputDocMaxFileSize;
+                }
+                if(!empty($aData['INP_DOC_MAX_FILESIZE'])){
+                  $description .= ", Extensions: ".$aData['INP_DOC_TYPE_FILE'];
+                }
+                $description .= $inputDocMaxFileSize;
+                G::auditLog("CreateInputDocument", $description);
+                
                 return $aData['INP_DOC_UID'];
             } else {
                 $sMessage = '';
@@ -165,6 +200,41 @@ class InputDocument extends BaseInputDocument
                     }
                     $iResult = $oInputDocument->save();
                     $oConnection->commit();
+                    //Add Audit Log
+                    switch ($aData['INP_DOC_FORM_NEEDED']){
+                      case 'VIRTUAL':
+                        $docType = 'Digital';
+                        break;
+                      case 'REAL':
+                        $docType = 'Printed';
+                        break;
+                      case 'VREAL':
+                        $docType = 'Digital/Printed';
+                        break;
+                    }
+                    if(isset($aData['INP_DOC_VERSIONING']) && $aData['INP_DOC_VERSIONING'] == 1){
+                      $enableVersion = 'Yes';
+                    }else{
+                      $enableVersion = 'No';
+                    }
+                    $description = "Input Document Title: ".$aData['INP_DOC_TITLE'].", Input Document Uid: ".$aData['INP_DOC_UID'].", Document Type: ".$docType;
+                    if(!empty($aData['INP_DOC_DESCRIPTION'])){
+                      $description .= ", Description: ".$aData['INP_DOC_DESCRIPTION'];
+                    }
+                    if(!empty($aData['INP_DOC_DESTINATION_PATH'])){
+                      $description .= ", Destination Path: ".$aData['INP_DOC_DESTINATION_PATH'];
+                    }
+                    $inputDocMaxFileSize = "";
+                    if(!empty($aData['INP_DOC_MAX_FILESIZE'])){
+                      $inputDocMaxFileSize = $aData['INP_DOC_MAX_FILESIZE']? $aData['INP_DOC_MAX_FILESIZE'].' '.$aData['INP_DOC_MAX_FILESIZE_UNIT'] : "256 MB";
+                      $inputDocMaxFileSize = ", Maximum Input Document file size: ".$inputDocMaxFileSize;
+                    }
+                    if(!empty($aData['INP_DOC_MAX_FILESIZE'])){
+                      $description .= ", Extensions: ".$aData['INP_DOC_TYPE_FILE'];
+                    }
+                    $description .= $inputDocMaxFileSize;
+                    G::auditLog("UpdateInputDocument", $description);
+                 
                     return $iResult;
                 } else {
                     $sMessage = '';
@@ -196,11 +266,18 @@ class InputDocument extends BaseInputDocument
         try {
             $oInputDocument = InputDocumentPeer::retrieveByPK( $sInpDocUid );
             if (! is_null( $oInputDocument )) {
+                $nameInput = $this->getInpDocTitle();
+                $descInput = $this->getInpDocDescription();
                 $oConnection->begin();
                 Content::removeContent( 'INP_DOC_TITLE', '', $oInputDocument->getInpDocUid() );
                 Content::removeContent( 'INP_DOC_DESCRIPTION', '', $oInputDocument->getInpDocUid() );
                 $iResult = $oInputDocument->delete();
                 $oConnection->commit();
+                //Add Audit Log
+                $nameInput = $this->getInpDocTitle();
+                $descInput = $this->getInpDocDescription();                
+                G::auditLog("DeleteInputDocument", "Input Document Name: ".$nameInput.", Input Document Uid: ".$sInpDocUid.", Description: ".$descInput);
+                
                 return $iResult;
             } else {
                 throw (new Exception( 'This row doesn\'t exist!' ));

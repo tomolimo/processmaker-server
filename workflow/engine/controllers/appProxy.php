@@ -231,13 +231,27 @@ class AppProxy extends HttpProxyController
      */
     function getSummary ($httpData)
     {
-        $labels = array ();
-        $form = new Form( 'cases/cases_Resume', PATH_XMLFORM, SYS_LANG ); //este es el problema!!!!!
+        $labelsCaseProperties = array ();
+        $labelsCurrentTaskProperties = array ();
+        $labelTitleCurrentTasks = array ();
+
+        $formCaseProperties = new Form( 'cases/cases_Resume', PATH_XMLFORM, SYS_LANG );
+        $formCaseTitle = new Form( 'cases/cases_Resume_Current_Task_Title', PATH_XMLFORM, SYS_LANG ); 
+        $formCurrentTaskProperties = new Form( 'cases/cases_Resume_Current_Task', PATH_XMLFORM, SYS_LANG ); 
+
         G::LoadClass( 'case' );
         $case = new Cases();
 
-        foreach ($form->fields as $fieldName => $field) {
-            $labels[$fieldName] = $field->label;
+        foreach ($formCaseProperties->fields as $fieldName => $field) {
+            $labelsCaseProperties[$fieldName] = $field->label;
+        }
+
+        foreach ($formCaseTitle->fields as $fieldName => $field) {
+            $labelTitleCurrentTasks[$fieldName] = $field->label;
+        }
+
+        foreach ($formCurrentTaskProperties->fields as $fieldName => $field) {
+            $labelsCurrentTaskProperties[$fieldName] = $field->label;
         }
 
         if (isset( $_SESSION['_applicationFields'] ) && $_SESSION['_processData']) {
@@ -253,7 +267,7 @@ class AppProxy extends HttpProxyController
                 $criteria->add(AppDelegationPeer::DEL_FINISH_DATE, null, Criteria::ISNULL);
                 $criteria->addDescendingOrderByColumn(AppDelegationPeer::DEL_INDEX);
                 if (AppDelegationPeer::doCount($criteria) > 0) {
-                    $dataset = AppDelegationPeer::doSelectRS($criteria, Propel::getDbConnection('workflow_ro'));
+                    $dataset = AppDelegationPeer::doSelectRS($criteria, Propel::getDbConnection('workflow_ro') );
                     $dataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
                     $dataset->next();
                     $row = $dataset->getRow();
@@ -270,26 +284,26 @@ class AppProxy extends HttpProxyController
         $taskData = $task->load( $applicationFields['TAS_UID'] );
         $currentUser = $applicationFields['CURRENT_USER'] != '' ? $applicationFields['CURRENT_USER'] : '[' . G::LoadTranslation( 'ID_UNASSIGNED' ) . ']';
 
-        $data[] = array ('label' => $labels['PRO_TITLE'],'value' => $processData['PRO_TITLE'],'section' => $labels['TITLE1']);
-        $data[] = array ("label" => $labels["TITLE"], "value" => htmlentities($applicationFields["TITLE"], ENT_QUOTES, "UTF-8"), "section" => $labels["TITLE1"]);
-        $data[] = array ('label' => $labels['APP_NUMBER'],'value' => $applicationFields['APP_NUMBER'],'section' => $labels['TITLE1']);
-        $data[] = array ('label' => $labels['STATUS'],'value' => $applicationFields['STATUS'],'section' => $labels['TITLE1']);
-        $data[] = array ('label' => $labels['APP_UID'],'value' => $applicationFields['APP_UID'],'section' => $labels['TITLE1']);
-        $data[] = array ('label' => $labels['CREATOR'],'value' => $applicationFields['CREATOR'],'section' => $labels['TITLE1']);
-        $data[] = array ('label' => $labels['CREATE_DATE'],'value' => $applicationFields['CREATE_DATE'],'section' => $labels['TITLE1']);
-        $data[] = array ('label' => $labels['UPDATE_DATE'],'value' => $applicationFields['UPDATE_DATE'],'section' => $labels['TITLE1']);
-        $data[] = array ("label" => $labels["DESCRIPTION"], "value" => htmlentities($applicationFields["DESCRIPTION"], ENT_QUOTES, "UTF-8"), "section" => $labels["TITLE1"]);
+        $data[] = array ('label' => $labelsCaseProperties['PRO_TITLE'],'value' => $processData['PRO_TITLE'],'section' => $labelsCaseProperties['TITLE1']);
+        $data[] = array ("label" => $labelsCaseProperties["TITLE"], "value" => htmlentities($applicationFields["TITLE"], ENT_QUOTES, "UTF-8"), "section" => $labelsCaseProperties["TITLE1"]);
+        $data[] = array ('label' => $labelsCaseProperties['APP_NUMBER'],'value' => $applicationFields['APP_NUMBER'],'section' => $labelsCaseProperties['TITLE1']);
+        $data[] = array ('label' => $labelsCaseProperties['STATUS'],'value' => $applicationFields['STATUS'],'section' => $labelsCaseProperties['TITLE1']);
+        $data[] = array ('label' => $labelsCaseProperties['APP_UID'],'value' => $applicationFields['APP_UID'],'section' => $labelsCaseProperties['TITLE1']);
+        $data[] = array ('label' => $labelsCaseProperties['CREATOR'],'value' => $applicationFields['CREATOR'],'section' => $labelsCaseProperties['TITLE1']);
+        $data[] = array ('label' => $labelsCaseProperties['CREATE_DATE'],'value' => $applicationFields['CREATE_DATE'],'section' => $labelsCaseProperties['TITLE1']);
+        $data[] = array ('label' => $labelsCaseProperties['UPDATE_DATE'],'value' => $applicationFields['UPDATE_DATE'],'section' => $labelsCaseProperties['TITLE1']);
+        $data[] = array ("label" => $labelsCaseProperties["DESCRIPTION"], "value" => htmlentities($applicationFields["DESCRIPTION"], ENT_QUOTES, "UTF-8"), "section" => $labelsCaseProperties["TITLE1"]);
 
         // note added by krlos pacha carlos[at]colosa[dot]com
         //getting this field if it doesn't exist. Related 7994 bug
         $taskData['TAS_TITLE'] = (array_key_exists( 'TAS_TITLE', $taskData )) ? $taskData['TAS_TITLE'] : Content::Load( "TAS_TITLE", "", $applicationFields['TAS_UID'], SYS_LANG );
-        $data[] = array ("label" => $labels["TAS_TITLE"], "value" => htmlentities($taskData["TAS_TITLE"], ENT_QUOTES, "UTF-8"), "section" => $labels["TITLE2"]);
-        $data[] = array ('label' => $labels['CURRENT_USER'],'value' => $currentUser,'section' => $labels['TITLE2']);
-        $data[] = array ('label' => $labels['DEL_DELEGATE_DATE'],'value' => $applicationFields['DEL_DELEGATE_DATE'],'section' => $labels['TITLE2']);
-        $data[] = array ('label' => $labels['DEL_INIT_DATE'],'value' => $applicationFields['DEL_INIT_DATE'],'section' => $labels['TITLE2']);
-        $data[] = array ('label' => $labels['DEL_TASK_DUE_DATE'],'value' => $applicationFields['DEL_TASK_DUE_DATE'],'section' => $labels['TITLE2']);
-        $data[] = array ('label' => $labels['DEL_FINISH_DATE'],'value' => $applicationFields['DEL_FINISH_DATE'],'section' => $labels['TITLE2']);
-        //$data[] = array('label'=>$labels['DYN_UID'] ,           'value' => $processData['PRO_DYNAFORMS']['PROCESS'];, 'section'=>$labels['DYN_UID']);
+        $data[] = array ("label" => $labelsCurrentTaskProperties["TAS_TITLE"], "value" => htmlentities($taskData["TAS_TITLE"], ENT_QUOTES, "UTF-8"), "section" => $labelTitleCurrentTasks["TITLE2"]);
+        $data[] = array ('label' => $labelsCurrentTaskProperties['CURRENT_USER'],'value' => $currentUser,'section' => $labelTitleCurrentTasks['TITLE2']);
+        $data[] = array ('label' => $labelsCurrentTaskProperties['DEL_DELEGATE_DATE'],'value' => $applicationFields['DEL_DELEGATE_DATE'],'section' => $labelTitleCurrentTasks['TITLE2']);
+        $data[] = array ('label' => $labelsCurrentTaskProperties['DEL_INIT_DATE'],'value' => $applicationFields['DEL_INIT_DATE'],'section' => $labelTitleCurrentTasks['TITLE2']);
+        $data[] = array ('label' => $labelsCurrentTaskProperties['DEL_TASK_DUE_DATE'],'value' => $applicationFields['DEL_TASK_DUE_DATE'],'section' => $labelTitleCurrentTasks['TITLE2']);
+        $data[] = array ('label' => $labelsCurrentTaskProperties['DEL_FINISH_DATE'],'value' => $applicationFields['DEL_FINISH_DATE'],'section' => $labelTitleCurrentTasks['TITLE2']);
+        //$data[] = array('label'=>$labelsCurrentTaskProperties['DYN_UID'] ,           'value' => $processData['PRO_DYNAFORMS']['PROCESS'];, 'section'=>$labelsCurrentTaskProperties['DYN_UID']);
         return $data;
     }
 }

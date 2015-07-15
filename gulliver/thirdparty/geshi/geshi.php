@@ -3738,10 +3738,19 @@ class GeSHi {
         /** NOTE: memorypeak #1 */
         $parsed_code = preg_replace('#<span[^>]+>(\s*)</span>#', '\\1', $parsed_code);
 
+        if(!class_exists('G')){
+          $realdocuroot = str_replace( '\\', '/', $_SERVER['DOCUMENT_ROOT'] );
+          $docuroot = explode( '/', $realdocuroot );
+          array_pop( $docuroot );
+          $pathhome = implode( '/', $docuroot ) . '/';
+          array_pop( $docuroot );
+          $pathTrunk = implode( '/', $docuroot ) . '/';
+          require_once($pathTrunk.'gulliver/system/class.g.php');
+        }
         // If we are using IDs for line numbers, there needs to be an overall
         // ID set to prevent collisions.
         if ($this->add_ids && !$this->overall_id) {
-            $this->overall_id = 'geshi-' . substr(md5(microtime()), 0, 4);
+            $this->overall_id = 'geshi-' . substr(G::encryptOld(microtime()), 0, 4);
         }
 
         // Get code into lines

@@ -8,6 +8,27 @@
   <PAGED_TABLE_FAST_SEARCH type="FastSearch" label="@G::LoadTranslation(ID_SEARCH)"/>
   <SEARCH_FILTER_FORM type="private"/>
   <js type="javascript" replaceTags="1"><![CDATA[
-var currentPagedTable = @#PAGED_TABLE_ID;
+  add_placeholder("form[PAGED_TABLE_FAST_SEARCH]","@G::LoadTranslation(ID_EMPTY_SEARCH)");
+  function add_placeholder (id, placeholder) {
+   	var el = document.getElementById(id);
+   	el.placeholder = placeholder;
+     
+    el.onfocus = function () {
+    	if(this.value == this.placeholder) {
+    	  this.value = '';
+    	  el.style.cssText  = '';
+    	}
+     };
+     
+    el.onblur = function () {
+  	  if(this.value.length == 0) {
+    	  this.value = this.placeholder;
+    	  el.style.cssText = 'color:#A9A9A9;';
+        }
+    };
+     
+  	el.onblur();
+  }  
+  var currentPagedTable = @#PAGED_TABLE_ID;
 ]]></js>
 </dynaForm>

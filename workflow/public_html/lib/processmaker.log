@@ -1,30 +1,30 @@
-[20 hours ago] 129b526  PM-1105 "Al actualizar ProcessMaker de la version 2.5.2 a..." SOLVED <Victor Saisa Lopez>
-[23 hours ago] c858264  PM-1099 "El archivo plugin.singleton se reescribe muchas..." SOLVED <Victor Saisa Lopez>
-[23 hours ago] 7b06ac5  PM-1099 "El archivo plugin.singleton se reescribe muchas..." SOLVED <Victor Saisa Lopez>
-[23 hours ago] 5568c4e  PM-1099 "El archivo plugin.singleton se reescribe muchas..." SOLVED <Victor Saisa Lopez>
-[23 hours ago] 0fd0323  PM-1099 "El archivo plugin.singleton se reescribe muchas..." SOLVED <Victor Saisa Lopez>
-[27 hours ago] 6d797d9  Little improvement in the message displayed when a a user wants to change his password <Julio Cesar Laura>
-[2 days ago] 3aa7110  PM-1066 "Al actualizar PM 2.5.2.3 a 2.8 no se puede crear..." SOLVED <Victor Saisa Lopez>
-[2 days ago] 007089d  Adicion de requerimiento de mcrypt par ala instalacion de PM <Brayan Osmar Pereyra Suxo>
-[2 days ago] 72c2da4  PM-1040. Remove code from the Community version. Change password hash method <Freddy Daniel Rojas Valda>
-[5 days ago] 738169b  PM-1040. Remove code from the Community version. Fix EOT space <Freddy Daniel Rojas Valda>
-[5 days ago] 842875f  PM-1055 Fixing CodeMirror Mode and Autocomplete <jennylee>
-[5 days ago] 903e731  Updating .po and .sql files for release 2014-12-05 <Julio Cesar Laura>
-[5 days ago] 1ff61ed  PM-1039 Aniadiendo files para a obviar codigo en la version community. <jennylee>
-[5 days ago] cb5f8a7  PM-1040. Remove code from the Community version. <Freddy Daniel Rojas Valda>
-[5 days ago] f2968a4  PM-1040. Remove code from the Community version. Fix 14636 New Functionality - To allow set index in tables. <Freddy Daniel Rojas Valda>
-[6 days ago] a327f02  PM-694 Deprecated for php 5.4 <norahmollo>
-[7 days ago] f2dc407  PM-1036 Bloquear el acceso a ProcessMaker Enterprise cuando la licencia expira SOLVED <Julio Cesar Laura>
-[8 days ago] 9d73802  Add mark comment to the file class.processMap.php <Julio Cesar Laura>
-[9 days ago] ec09f39  Improvement upload enterprise tar <Marco Antonio Nina>
-[12 days ago] 11d3667  Add some little fixes <Julio Cesar Laura>
-[13 days ago] 42083ea  PM-1006 Renombrar los nombres de las variables que guardan la info de los workspaces SOLVED <Julio Cesar Laura>
-[2 weeks ago] 3fd6d90  PM-921 Correccion <norahmollo>
-[2 weeks ago] d2a8250  PM-921 Installer for community version. <norahmollo>
-[3 weeks ago] ade0d4f  PM-921 Script de podado <norahmollo>
-[3 weeks ago] 0bcd63b  PM-921 Script de podado <norahmollo>
-[5 weeks ago] 659e9ef  PM_697 Correction <norahmollo>
-[5 weeks ago] e2fb87a  Improvement in audit log when a pm table is edited <Julio Cesar Laura>
-[5 weeks ago] 27c4520  PM 798-1 "la descripcióe pmtables..." SOLVED <Luis Fernando Saisa Lopez>
-[5 weeks ago] e8793d4  PM-798 Audit Log <norahmollo>
-[5 weeks ago] 1b090f6  Improvement in authenticatin source form in PHP 5.4 <Julio Cesar Laura>
+[6 days ago] 4c98ee9  PM-2976: ActionsByEmail is active in task <Paula V. Quispe>
+[6 days ago] f01aed4  PM-2939: ActionsByEmail executed if the task is active with actionsByEmail and exists the feature <Paula V. Quispe>
+[7 days ago] d9c925b  IMPROVEMENT <Roly Rudy Gutierrez Pinto>
+[7 days ago] 540e462  PM-2973: Batch routing - report table with Data <Paula V. Quispe>
+[8 days ago] 3c69a6e  PM-2939: I catch and show the error <Paula V. Quispe>
+[8 days ago] 379766c  PM-2938:I deleted some lines <Paula V. Quispe>
+[8 days ago] 30252e7  PM-2930-2895 MSSQL (http://php.net/manual/en/intro.mssql.php) These functions allow you to access MS SQL Server database. This extension is not available anymore on Windows with PHP 5.3 or later. SQLSRV, an alternative extension for MS SQL connectivity is available from Microsoft: » http://msdn.microsoft.com/en-us/sqlserver/ff657782.aspx. Alternatively to use the mssql functions in Windows, use php_dblib.dll (FreeTDS) http://www.freetds.org/ e.g. php.ini setting extension=php_dblib.dll php_dblib.dll (FreeTDS) use ':' as the delimiter in all installations. <Roly Rudy Gutierrez Pinto>
+[8 days ago] eaf7484  PM-2934 Validacion en el listado de variables en un proceso a la creacion de un ReportTable <dheeyi>
+[11 days ago] 57007ca  PM-2939: Actions by email plugin and feature working together <Paula V. Quispe>
+[11 days ago] b83b11f  PM-2938: I solved the issue when deschecked the option [Enable consolidate for this task] <Paula V. Quispe>
+[11 days ago] 918ef6e  PM-2938: I changed the clases in model folder <Paula V. Quispe>
+[11 days ago] c51c190  PM-2938: I changed some files <Paula V. Quispe>
+[11 days ago] ac04ecc  PM-2869 y M-2870 "Case sensitive variables." SOLVED <Luis Fernando Saisa Lopez>
+[11 days ago] ddeda5d  PM-2615,PM-2470 <marcelo.cuiza>
+[11 days ago] 3ba7b0e  IMPROVEMENT <Roly Rudy Gutierrez Pinto>
+[2 weeks ago] 7c18544  PM-2812: I solved a issue with port in Windows 8 <Paula V. Quispe>
+[2 weeks ago] c713422  PM-2884: I solved a issue with ENGINE=InnoDB with DEFAULT CHARSET=utf8 <Paula V. Quispe>
+[2 weeks ago] 181afa4  PM-2713 Outlook Connector: No muestra la informacióe Process Map en el cliente <dheeyi>
+[3 weeks ago] cf9cfc3  PM-2814: Update logo with the registered simbol <Paula V. Quispe>
+[3 weeks ago] bd37028  PM-2891 "No se muestra el scrollbar en el modulo..." SOLVED <Luis Fernando Saisa Lopez>
+[3 weeks ago] 35f6e44  PM-2835 "Adicionar los siguientes features..." SOLVED <Victor Saisa Lopez>
+[3 weeks ago] 5d81bd4  PM-2835 "Adicionar los siguientes features..." SOLVED <Victor Saisa Lopez>
+[3 weeks ago] 5ef217f  PM-2828 "In the BPMN Designer, can not connect..." SOLVED > Code Isuue:   0016744: In the BPMN Designer, can not connect to Oracle (and probably MS SQL) databases because no "Encode" options > Solution:   Cuando se selecciona la opcion en engine "oracle" no se mostraba los encodes. Se agrega los encodes para oracle. <Luis Fernando Saisa Lopez>
+[3 weeks ago] 40f1004  PM-2835 "Adicionar los siguientes features..." SOLVED <Victor Saisa Lopez>
+[3 weeks ago] 91db528  PM-2790 0017387: Derivacion en paralelo, una de los hilos llega a la bandeja como leido <dheeyi>
+[4 weeks ago] ee1bd0f  PM-2791: I added the regular expresion in other place <Paula V. Quispe>
+[4 weeks ago] bdf93ba  PM-00000 "Revert & Fix: Fix to import process" SOLVED <Victor Saisa Lopez>
+[4 weeks ago] 1d92a4c  pm-2731 <marcelo.cuiza>
+[4 weeks ago] 8046dec  PM-2811: Upgrade ProcessMaker from 2.8 to 3.0 on Ubuntu, problem with close in propel <Paula V. Quispe>
+[4 weeks ago] aeda410  PM-2791: Problema con el workspace-restore en Windows <Paula V. Quispe>

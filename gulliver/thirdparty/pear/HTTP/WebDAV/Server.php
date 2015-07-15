@@ -668,8 +668,21 @@ class HTTP_WebDAV_Server
             if(!is_array($file) || empty($file) || !isset($file["path"])) continue;
             $path = $file['path'];
             if(!is_string($path) || $path==="") continue;
+            
+            if (!class_exists('G')) {
+                $realdocuroot = str_replace( '\\', '/', $_SERVER['DOCUMENT_ROOT'] );
+                $docuroot = explode( '/', $realdocuroot );
+                array_pop( $docuroot );
+                $pathhome = implode( '/', $docuroot ) . '/';
+                array_pop( $docuroot );
+                $pathTrunk = implode( '/', $docuroot ) . '/';
+                require_once($pathTrunk.'gulliver/system/class.g.php');
+            }
+            G::LoadSystem('inputfilter');
+            $filter = new InputFilter();
+            $ns_defs = $filter->xssFilterHard($ns_defs);
 
-            echo " <D:response $ns_defs>\n";
+            echo ' <D:response '.$ns_defs.">\n";
 
             /* TODO right now the user implementation has to make sure
              collections end in a slash, this should be done in here
@@ -808,12 +821,25 @@ class HTTP_WebDAV_Server
 
             $this->http_status("207 Multi-Status");
             header('Content-Type: text/xml; charset="utf-8"');
+            
+            if (!class_exists('G')) {
+                $realdocuroot = str_replace( '\\', '/', $_SERVER['DOCUMENT_ROOT'] );
+                $docuroot = explode( '/', $realdocuroot );
+                array_pop( $docuroot );
+                $pathhome = implode( '/', $docuroot ) . '/';
+                array_pop( $docuroot );
+                $pathTrunk = implode( '/', $docuroot ) . '/';
+                require_once($pathTrunk.'gulliver/system/class.g.php');
+            }
+            G::LoadSystem('inputfilter');
+            $filter = new InputFilter();
+            $_mergePathes = $filter->xssFilterHard($this->_urlencode($this->_mergePathes($_SERVER["SCRIPT_NAME"], $this->path)));
 
             echo "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
 
             echo "<D:multistatus xmlns:D=\"DAV:\">\n";
             echo " <D:response>\n";
-            echo "  <D:href>".$this->_urlencode($this->_mergePathes($_SERVER["SCRIPT_NAME"], $this->path))."</D:href>\n";
+            echo "  <D:href>".$_mergePathes."</D:href>\n";
 
             foreach($options["props"] as $prop) {
                 echo "   <D:propstat>\n";
@@ -1031,7 +1057,7 @@ class HTTP_WebDAV_Server
 
                 // a little naive, this sequence *might* be part of the content
                 // but it's really not likely and rather expensive to check
-                $this->multipart_separator = "SEPARATOR_".md5(microtime());
+                $this->multipart_separator = "SEPARATOR_".$this->encryptOld(microtime());
 
                 // generate HTTP header
                 header("Content-type: multipart/byteranges; boundary=".$this->multipart_separator);
@@ -1131,7 +1157,21 @@ class HTTP_WebDAV_Server
                 case 'HTTP_CONTENT_ENCODING': // RFC 2616 14.11
                     // TODO support this if ext/zlib filters are available
                     $this->http_status("501 not implemented");
-                    echo "The service does not support '$val' content encoding";
+                    
+                    if (!class_exists('G')) {
+                        $realdocuroot = str_replace( '\\', '/', $_SERVER['DOCUMENT_ROOT'] );
+                        $docuroot = explode( '/', $realdocuroot );
+                        array_pop( $docuroot );
+                        $pathhome = implode( '/', $docuroot ) . '/';
+                        array_pop( $docuroot );
+                        $pathTrunk = implode( '/', $docuroot ) . '/';
+                        require_once($pathTrunk.'gulliver/system/class.g.php');
+                    }
+                    G::LoadSystem('inputfilter');
+                    $filter = new InputFilter();
+                    $val = $filter->xssFilterHard($val);
+                    
+                    echo 'The service does not support \''.$val.'\' content encoding';
                     return;
 
                 case 'HTTP_CONTENT_LANGUAGE': // RFC 2616 14.12
@@ -1176,7 +1216,21 @@ class HTTP_WebDAV_Server
                 default:
                     // any other unknown Content-* headers
                     $this->http_status("501 not implemented");
-                    echo "The service does not support '$key'";
+                    
+                    if (!class_exists('G')) {
+                        $realdocuroot = str_replace( '\\', '/', $_SERVER['DOCUMENT_ROOT'] );
+                        $docuroot = explode( '/', $realdocuroot );
+                        array_pop( $docuroot );
+                        $pathhome = implode( '/', $docuroot ) . '/';
+                        array_pop( $docuroot );
+                        $pathTrunk = implode( '/', $docuroot ) . '/';
+                        require_once($pathTrunk.'gulliver/system/class.g.php');
+                    }
+                    G::LoadSystem('inputfilter');
+                    $filter = new InputFilter();
+                    $key = $filter->xssFilterHard($key);
+            
+                    echo 'The service does not support \''.$key.'\' ';
                     return;
                 }
             }
@@ -1375,6 +1429,20 @@ class HTTP_WebDAV_Server
             } else {
                 $timeout = "Infinite";
             }
+            
+            if (!class_exists('G')) {
+                $realdocuroot = str_replace( '\\', '/', $_SERVER['DOCUMENT_ROOT'] );
+                $docuroot = explode( '/', $realdocuroot );
+                array_pop( $docuroot );
+                $pathhome = implode( '/', $docuroot ) . '/';
+                array_pop( $docuroot );
+                $pathTrunk = implode( '/', $docuroot ) . '/';
+                require_once($pathTrunk.'gulliver/system/class.g.php');
+            }
+            G::LoadSystem('inputfilter');
+            $filter = new InputFilter();
+            $options = $filter->xssFilterHard($options);
+            $timeout = $filter->xssFilterHard($timeout);
 
             header('Content-Type: text/xml; charset="utf-8"');
             header("Lock-Token: <$options[locktoken]>");
@@ -1582,7 +1650,7 @@ class HTTP_WebDAV_Server
         }
 
         // fallback
-        $uuid = md5(microtime().getmypid());    // this should be random enough for now
+        $uuid = $this->encryptOld(microtime().getmypid());    // this should be random enough for now
 
         // set variant and version fields for 'true' random uuid
         $uuid{12} = "4";
@@ -2003,5 +2071,19 @@ class HTTP_WebDAV_Server
         } else {
             return $this->_slashify($parent).$child;
         }
+    }
+    
+    public function encryptOld($string)
+    {
+        if (!class_exists('G')) {
+            $realdocuroot = str_replace( '\\', '/', $_SERVER['DOCUMENT_ROOT'] );
+            $docuroot = explode( '/', $realdocuroot );
+            array_pop( $docuroot );
+            $pathhome = implode( '/', $docuroot ) . '/';
+            array_pop( $docuroot );
+            $pathTrunk = implode( '/', $docuroot ) . '/';
+            require_once($pathTrunk.'gulliver/system/class.g.php');
+        }
+        return G::encryptOld($string);
     }
 }

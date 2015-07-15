@@ -32,12 +32,11 @@ try {
         throw (new Exception( G::LoadTranslation('ID_TASK') . "'" . $TaskFields['TAS_TITLE'] . "'" . G::LoadTranslation('ID_NOT_HAVE_USERS')));
     }
 
-    if (G::is_https())
-        $http = 'https://';
-    else
-        $http = 'http://';
-
+    $http = (G::is_https())? "https://" : "http://";
     $sContent = '';
+
+    $infoProcess = new Process();
+    $resultProcess = $infoProcess->load($sPRO_UID);
 
     if ($withWS) {
         //creating sys.info;
@@ -74,6 +73,8 @@ try {
         $template->assign( 'wsPass', Bootstrap::hashPassword($sWS_PASS, '', true) );
         $template->assign( 'wsRoundRobin', $sWS_ROUNDROBIN );
 
+        G::auditLog('WebEntry','Generate web entry with web services ('.$dynTitle.'.php) in process "'.$resultProcess['PRO_TITLE'].'"');
+
         if ($sWE_USR == "2") {
             $template->assign( 'USR_VAR', "\$cInfo = ws_getCaseInfo(\$caseId);\n\t  \$USR_UID = \$cInfo->currentUsers->userId;" );
         } else {
@@ -89,8 +90,7 @@ try {
         file_put_contents( $fileName, $template->getOutputContent() );
         //creating the third file, only if this wsClient.php file doesn't exist.
         $fileName = $pathProcess . 'wsClient.php';
-        $pluginTpl = file_exists(PATH_CORE . 'test' . PATH_SEP . 'unit' . PATH_SEP . 'ws' . PATH_SEP . 'wsClient.php') ? PATH_CORE . 'test' . PATH_SEP . 'unit' . PATH_SEP . 'ws' . PATH_SEP . 'wsClient.php' : PATH_CORE . 'templates' . PATH_SEP . 'processes' . PATH_SEP . 'wsClient.php';
-        
+        $pluginTpl = PATH_CORE . "templates" . PATH_SEP . "processes" . PATH_SEP . "wsClient.php";
         if (file_exists( $fileName )) {
             if (filesize( $fileName ) != filesize( $pluginTpl )) {
                 @copy( $fileName, $pathProcess . 'wsClient.php.bck' );
@@ -119,7 +119,6 @@ try {
         $link = $http . $_SERVER['HTTP_HOST'] . '/sys' . SYS_SYS . '/' . SYS_LANG . '/' . SYS_SKIN . '/' . $sPRO_UID . '/' . $dynTitle . '.php';
         print $link;
         //print "\n<a href='$link' target='_new' > $link </a>";
-
 
     } else {
         $G_FORM = new Form( $sPRO_UID . '/' . $sDYNAFORM, PATH_DYNAFORM, SYS_LANG, false );
@@ -159,7 +158,8 @@ try {
             }
         }
 
-        print_r( '<textarea cols="70" rows="20">' . htmlentities( str_replace( '</body>', '</form></body>', str_replace( '</form>', '', $template->getOutputContent() ) ) ) . '</textarea>' );
+        print_r( '<textarea cols="77" rows="26" style="width:100%; height:99%">' . htmlentities( str_replace( '</body>', '</form></body>', str_replace( '</form>', '', $template->getOutputContent() ) ) ) . '</textarea>' );
+        G::auditLog('WebEntry','Generate web entry with single HTML (dynaform uid: '.$sDYNAFORM.') in process "'.$resultProcess['PRO_TITLE'].'"');
     }
 
 } catch (Exception $e) {

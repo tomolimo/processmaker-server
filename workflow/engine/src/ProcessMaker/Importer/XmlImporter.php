@@ -24,9 +24,13 @@ class XmlImporter extends Importer
      * )
      * @throws \Exception
      */
-    public function load()
+    public function load($filename = null)
     {
-        $this->dom->load($this->filename);
+        if (!is_null($filename) && !file_exists($filename)) {
+            throw new \Exception(\G::LoadTranslation("ID_INVALID_FILE"));
+        }
+
+        $this->dom->load((is_null($filename))? $this->filename : $filename);
         $this->root = $this->dom->documentElement;
 
         // validate version

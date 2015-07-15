@@ -3284,55 +3284,6 @@ abstract class BaseBpmnProject extends BaseObject implements Persistent
         $l->setBpmnProject($this);
     }
 
-
-    /**
-     * If this collection has already been initialized with
-     * an identical criteria, it returns the collection.
-     * Otherwise if this BpmnProject is new, it will return
-     * an empty collection; or if this BpmnProject has previously
-     * been saved, it will retrieve related BpmnLanes from storage.
-     *
-     * This method is protected by default in order to keep the public
-     * api reasonable.  You can provide public methods for those you
-     * actually need in BpmnProject.
-     */
-    public function getBpmnLanesJoinBpmnLaneset($criteria = null, $con = null)
-    {
-        // include the Peer class
-        include_once 'classes/model/om/BaseBpmnLanePeer.php';
-        if ($criteria === null) {
-            $criteria = new Criteria();
-        }
-        elseif ($criteria instanceof Criteria)
-        {
-            $criteria = clone $criteria;
-        }
-
-        if ($this->collBpmnLanes === null) {
-            if ($this->isNew()) {
-                $this->collBpmnLanes = array();
-            } else {
-
-                $criteria->add(BpmnLanePeer::PRJ_UID, $this->getPrjUid());
-
-                $this->collBpmnLanes = BpmnLanePeer::doSelectJoinBpmnLaneset($criteria, $con);
-            }
-        } else {
-            // the following code is to determine if a new query is
-            // called for.  If the criteria is the same as the last
-            // one, just return the collection.
-
-            $criteria->add(BpmnLanePeer::PRJ_UID, $this->getPrjUid());
-
-            if (!isset($this->lastBpmnLaneCriteria) || !$this->lastBpmnLaneCriteria->equals($criteria)) {
-                $this->collBpmnLanes = BpmnLanePeer::doSelectJoinBpmnLaneset($criteria, $con);
-            }
-        }
-        $this->lastBpmnLaneCriteria = $criteria;
-
-        return $this->collBpmnLanes;
-    }
-
     /**
      * Temporary storage of collBpmnParticipants to save a possible db hit in
      * the event objects are add to the collection, but the

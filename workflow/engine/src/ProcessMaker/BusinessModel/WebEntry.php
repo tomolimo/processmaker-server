@@ -119,6 +119,24 @@ class WebEntry
     }
 
     /**
+     * Verify if exists the Web Entry
+     *
+     * @param string $webEntryUid Unique id of Web Entry
+     *
+     * return bool Return true if exists the Web Entry, false otherwise
+     */
+    public function exists($webEntryUid)
+    {
+        try {
+            $obj = \WebEntryPeer::retrieveByPK($webEntryUid);
+
+            return (!is_null($obj))? true : false;
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
+
+    /**
      * Verify if exists the title of a Web Entry
      *
      * @param string $processUid         Unique id of Process
@@ -165,19 +183,17 @@ class WebEntry
     }
 
     /**
-     * Verify if does not exist the Web Entry in table WEB_ENTRY
+     * Verify if does not exists the Web Entry
      *
      * @param string $webEntryUid           Unique id of Web Entry
      * @param string $fieldNameForException Field name for the exception
      *
-     * return void Throw exception if does not exist the Web Entry in table WEB_ENTRY
+     * return void Throw exception if does not exists the Web Entry
      */
     public function throwExceptionIfNotExistsWebEntry($webEntryUid, $fieldNameForException)
     {
         try {
-            $obj = \WebEntryPeer::retrieveByPK($webEntryUid);
-
-            if (is_null($obj)) {
+            if (!$this->exists($webEntryUid)) {
                 throw new \Exception(\G::LoadTranslation("ID_WEB_ENTRY_DOES_NOT_EXIST", array($fieldNameForException, $webEntryUid)));
             }
         } catch (\Exception $e) {
@@ -379,8 +395,15 @@ class WebEntry
                     $fileContent .= "\$_SESSION[\"PROCESS\"] = \"" . $processUid . "\";\n";
                     $fileContent .= "\$_SESSION[\"CURRENT_DYN_UID\"] = \"" . $dynaFormUid . "\";\n";
                     $fileContent .= "\$G_PUBLISH = new Publisher();\n";
-                    $fileContent .= "\$G_PUBLISH->AddContent(\"dynaform\", \"xmlform\", \"" . $processUid . "/" . $dynaFormUid . "\", \"\", array(), \"" . $fileName . "Post.php\");\n";
-                    $fileContent .= "G::RenderPage(\"publish\", \"blank\");";
+
+                    $fileContent .= "G::LoadClass(\"pmDynaform\");\n";
+                    $fileContent .= "\$a = new pmDynaform(array(\"CURRENT_DYNAFORM\" => \"" . $arrayWebEntryData["DYN_UID"] . "\"));\n";
+                    $fileContent .= "if (\$a->isResponsive()) {";
+                    $fileContent .= "  \$a->printWebEntry(\"" . $fileName . "Post.php\");";
+                    $fileContent .= "} else {";
+                    $fileContent .= "  \$G_PUBLISH->AddContent(\"dynaform\", \"xmlform\", \"" . $processUid . PATH_SEP . $dynaFormUid . "\", \"\", array(), \"" . $fileName . "Post.php\");\n";
+                    $fileContent .= "  G::RenderPage(\"publish\", \"blank\");";
+                    $fileContent .= "}";
 
                     file_put_contents($pathDataPublicProcess . PATH_SEP . $fileName . ".php", $fileContent);
 
@@ -396,7 +419,7 @@ class WebEntry
                     $template->assign("dynaformUid", $dynaFormUid);
                     $template->assign("taskUid", $taskUid);
                     $template->assign("wsUser", $usrUsername);
-                    $template->assign("wsPass", Bootstrap::getPasswordHashType() . ':' . $usrPassword);
+                    $template->assign("wsPass", \Bootstrap::getPasswordHashType() . ':' . $usrPassword);
                     $template->assign("wsRoundRobin", $wsRoundRobin);
 
                     if ($webEntryInputDocumentAccess == 0) {
@@ -418,7 +441,7 @@ class WebEntry
 
                     //Creating the third file, only if this wsClient.php file doesn't exist.
                     $fileName = $pathDataPublicProcess . PATH_SEP . "wsClient.php";
-                    $pluginTpl = PATH_TEST . "unit" . PATH_SEP . "ws" . PATH_SEP . "wsClient.php";
+                    $pluginTpl = PATH_CORE . "templates" . PATH_SEP . "processes" . PATH_SEP . "wsClient.php";
 
                     if (file_exists($fileName)) {
                         if (filesize($fileName) != filesize($pluginTpl)) {
@@ -601,7 +624,7 @@ class WebEntry
                         $msg = $msg . (($msg != "")? "\n" : "") . $validationFailure->getMessage();
                     }
 
-                    throw new \Exception(\G::LoadTranslation("ID_RECORD_CANNOT_BE_CREATED") . "\n" . $msg);
+                    throw new \Exception(\G::LoadTranslation("ID_RECORD_CANNOT_BE_CREATED") . (($msg != "")? "\n" . $msg : ""));
                 }
             } catch (\Exception $e) {
                 $cnn->rollback();
@@ -686,7 +709,7 @@ class WebEntry
                         $msg = $msg . (($msg != "")? "\n" : "") . $validationFailure->getMessage();
                     }
 
-                    throw new \Exception(\G::LoadTranslation("ID_RECORD_CANNOT_BE_CREATED") . "\n" . $msg);
+                    throw new \Exception(\G::LoadTranslation("ID_REGISTRY_CANNOT_BE_UPDATED") . (($msg != "")? "\n" . $msg : ""));
                 }
             } catch (\Exception $e) {
                 $cnn->rollback();

@@ -216,5 +216,64 @@ class Step extends Api
             throw (new RestException(Api::STAT_APP_EXCEPTION, $e->getMessage()));
         }
     }
-}
 
+    /**
+     * @url POST /:prj_uid/activity/:act_uid/step/all
+     *
+     * @param string $act_uid        {@min 32}{@max 32}
+     * @param string $prj_uid        {@min 32}{@max 32}
+     * @param array  $request_data
+     * @param string $step_type_obj  {@from body}{@choice DYNAFORM,INPUT_DOCUMENT,OUTPUT_DOCUMENT,EXTERNAL}{@required true}
+     * @param string $step_uid_obj   {@from body}{@min 32}{@max 32}{@required true}
+     * @param string $step_condition {@from body}
+     * @param int    $step_position  {@from body}{@min 1}
+     * @param string $step_mode      {@from body}{@choice EDIT,VIEW}{@required true}
+     *
+     * @status 201
+     */
+    public function doPostActivityStepAll(
+        $act_uid,
+        $prj_uid,
+        $request_data,
+        $step_type_obj = "DYNAFORM",
+        $step_uid_obj = "00000000000000000000000000000000",
+        $step_condition = "",
+        $step_position = 1,
+        $step_mode = "EDIT"
+    ) {
+        try {
+
+            $step = new \ProcessMaker\BusinessModel\Step();
+            $stepTrigger = new \ProcessMaker\BusinessModel\Step\Trigger();
+
+            $step->deleteAll($act_uid);
+
+            foreach ($request_data as $key => $valueRequest) {
+                if (array_key_exists('tri_uid', $valueRequest)) {
+
+                    $response[] = $stepTrigger->createAll("", $valueRequest["st_type"], $act_uid, $valueRequest["tri_uid"], $valueRequest);
+
+                } else {
+
+                    $step->setFormatFieldNameInUppercase(false);
+                    $step->setArrayParamException(array("stepUid" => "step_uid", "taskUid" => "act_uid", "processUid" => "prj_uid"));
+
+                    $arrayData[] = $step->createAll($act_uid, $prj_uid, $valueRequest);
+
+                    if (array_key_exists('triggers', $valueRequest)) {
+
+                        foreach ($valueRequest["triggers"] as $key => $valueTrigger) {
+                            $response["triggers"] = $stepTrigger->createAll($arrayData[0]["step_uid"], $valueTrigger["st_type"],
+                                                                            $act_uid, $valueTrigger["tri_uid"], $valueTrigger);
+                        }
+                    }
+                    $response = $arrayData;
+                }
+            }
+
+            return $response;
+        } catch (\Exception $e) {
+            throw (new RestException(Api::STAT_APP_EXCEPTION, $e->getMessage()));
+        }
+    }
+}

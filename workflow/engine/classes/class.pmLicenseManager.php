@@ -56,7 +56,7 @@ class pmLicenseManager
         $this->licensedfeatures = array();
         $this->licensedfeaturesList = array();
         if (in_array($this->result, $validStatus)) {
-            $this->serial="3ptta7Xko2prrptrZnSd356aqmPXvMrayNPFj6CLdaR1pWtrW6qPw9jV0OHjxrDGu8LVxtmSm9nP5kR23HRpdZWccpeui+bKkK°DoqCt2Kqgpq6Vg37s";
+            $this->serial="3ptta7Xko2prrptrZnSd356aqmPXvMrayNPFj6CLdaR1pWtrW6qPw9jV0OHjxrDGu8LVxtmSm9nP5kR23HRpdZWccpeui+bKkKÂ°DoqCt2Kqgpq6Vg37s";
             $info['FIRST_NAME']       = $results['DATA']['FIRST_NAME'];
             $info['LAST_NAME']        = $results['DATA']['LAST_NAME'];
             $info['DOMAIN_WORKSPACE'] = $results['DATA']['DOMAIN_WORKSPACE'];
@@ -75,6 +75,7 @@ class pmLicenseManager
                 $resultsRegister = $results['LIC'];
                 $this->server    = $results['LIC']['SRV'];
                 $this->file      = $results['LIC']['FILE'];
+                $this->workspace = isset($results['LIC']['WORKSPACE']) ? $results['LIC']['WORKSPACE'] : 'pmLicenseSrv';
                 $this->licenseSerial      = (isset($results['LIC']['SERIAL']))              ? $results['LIC']['SERIAL']                 : '';
                 $this->supportStartDate   = (isset($results['DATA']['SUPPORT_START_DATE'])) ? $results['DATA']['SUPPORT_START_DATE']    : '';
                 $this->supportEndDate     = (isset($results['DATA']['SUPPORT_END_DATE']))   ? $results['DATA']['SUPPORT_END_DATE']      : '';
@@ -442,6 +443,10 @@ class pmLicenseManager
             $LicenseStatus = $this->lookForStatusLicense(); //we're looking for a status ACTIVE
 
             //getting the content from file
+            G::LoadSystem('inputfilter');
+            $filter = new InputFilter();
+            $path = $filter->xssFilterHard($path, 'path');
+                
             $handle = fopen ( $path, "r" );
             $contents = fread ( $handle, filesize ( $path ) );
             fclose ( $handle );

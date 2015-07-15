@@ -35,6 +35,10 @@
  */
 
 G::LoadClass( 'xmlfield_InputPM' );
+G::LoadSystem('inputfilter');
+$filter = new InputFilter();
+$_POST = $filter->xssFilterHard($_POST);
+
 $aFields = getDynaformsVars( $_POST['sProcess'], true, isset( $_POST['bIncMulSelFields'] ) ? $_POST['bIncMulSelFields'] : 0 );
 $aType = $_POST['type'];
 

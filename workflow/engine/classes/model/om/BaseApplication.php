@@ -124,6 +124,18 @@ abstract class BaseApplication extends BaseObject implements Persistent
     protected $app_pin = '';
 
     /**
+     * The value for the app_duration field.
+     * @var        double
+     */
+    protected $app_duration = 0;
+
+    /**
+     * The value for the app_delay_duration field.
+     * @var        double
+     */
+    protected $app_delay_duration = 0;
+
+    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      * @var        boolean
@@ -395,6 +407,28 @@ abstract class BaseApplication extends BaseObject implements Persistent
     {
 
         return $this->app_pin;
+    }
+
+    /**
+     * Get the [app_duration] column value.
+     * 
+     * @return     double
+     */
+    public function getAppDuration()
+    {
+
+        return $this->app_duration;
+    }
+
+    /**
+     * Get the [app_delay_duration] column value.
+     * 
+     * @return     double
+     */
+    public function getAppDelayDuration()
+    {
+
+        return $this->app_delay_duration;
     }
 
     /**
@@ -778,6 +812,38 @@ abstract class BaseApplication extends BaseObject implements Persistent
     } // setAppPin()
 
     /**
+     * Set the value of [app_duration] column.
+     * 
+     * @param      double $v new value
+     * @return     void
+     */
+    public function setAppDuration($v)
+    {
+
+        if ($this->app_duration !== $v || $v === 0) {
+            $this->app_duration = $v;
+            $this->modifiedColumns[] = ApplicationPeer::APP_DURATION;
+        }
+
+    } // setAppDuration()
+
+    /**
+     * Set the value of [app_delay_duration] column.
+     * 
+     * @param      double $v new value
+     * @return     void
+     */
+    public function setAppDelayDuration($v)
+    {
+
+        if ($this->app_delay_duration !== $v || $v === 0) {
+            $this->app_delay_duration = $v;
+            $this->modifiedColumns[] = ApplicationPeer::APP_DELAY_DURATION;
+        }
+
+    } // setAppDelayDuration()
+
+    /**
      * Hydrates (populates) the object variables with values from the database resultset.
      *
      * An offset (1-based "start column") is specified so that objects can be hydrated
@@ -826,12 +892,16 @@ abstract class BaseApplication extends BaseObject implements Persistent
 
             $this->app_pin = $rs->getString($startcol + 15);
 
+            $this->app_duration = $rs->getFloat($startcol + 16);
+
+            $this->app_delay_duration = $rs->getFloat($startcol + 17);
+
             $this->resetModified();
 
             $this->setNew(false);
 
             // FIXME - using NUM_COLUMNS may be clearer.
-            return $startcol + 16; // 16 = ApplicationPeer::NUM_COLUMNS - ApplicationPeer::NUM_LAZY_LOAD_COLUMNS).
+            return $startcol + 18; // 18 = ApplicationPeer::NUM_COLUMNS - ApplicationPeer::NUM_LAZY_LOAD_COLUMNS).
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Application object", $e);
@@ -1083,6 +1153,12 @@ abstract class BaseApplication extends BaseObject implements Persistent
             case 15:
                 return $this->getAppPin();
                 break;
+            case 16:
+                return $this->getAppDuration();
+                break;
+            case 17:
+                return $this->getAppDelayDuration();
+                break;
             default:
                 return null;
                 break;
@@ -1119,6 +1195,8 @@ abstract class BaseApplication extends BaseObject implements Persistent
             $keys[13] => $this->getAppUpdateDate(),
             $keys[14] => $this->getAppData(),
             $keys[15] => $this->getAppPin(),
+            $keys[16] => $this->getAppDuration(),
+            $keys[17] => $this->getAppDelayDuration(),
         );
         return $result;
     }
@@ -1197,6 +1275,12 @@ abstract class BaseApplication extends BaseObject implements Persistent
                 break;
             case 15:
                 $this->setAppPin($value);
+                break;
+            case 16:
+                $this->setAppDuration($value);
+                break;
+            case 17:
+                $this->setAppDelayDuration($value);
                 break;
         } // switch()
     }
@@ -1285,6 +1369,14 @@ abstract class BaseApplication extends BaseObject implements Persistent
             $this->setAppPin($arr[$keys[15]]);
         }
 
+        if (array_key_exists($keys[16], $arr)) {
+            $this->setAppDuration($arr[$keys[16]]);
+        }
+
+        if (array_key_exists($keys[17], $arr)) {
+            $this->setAppDelayDuration($arr[$keys[17]]);
+        }
+
     }
 
     /**
@@ -1358,6 +1450,14 @@ abstract class BaseApplication extends BaseObject implements Persistent
 
         if ($this->isColumnModified(ApplicationPeer::APP_PIN)) {
             $criteria->add(ApplicationPeer::APP_PIN, $this->app_pin);
+        }
+
+        if ($this->isColumnModified(ApplicationPeer::APP_DURATION)) {
+            $criteria->add(ApplicationPeer::APP_DURATION, $this->app_duration);
+        }
+
+        if ($this->isColumnModified(ApplicationPeer::APP_DELAY_DURATION)) {
+            $criteria->add(ApplicationPeer::APP_DELAY_DURATION, $this->app_delay_duration);
         }
 
 
@@ -1443,6 +1543,10 @@ abstract class BaseApplication extends BaseObject implements Persistent
         $copyObj->setAppData($this->app_data);
 
         $copyObj->setAppPin($this->app_pin);
+
+        $copyObj->setAppDuration($this->app_duration);
+
+        $copyObj->setAppDelayDuration($this->app_delay_duration);
 
 
         $copyObj->setNew(true);

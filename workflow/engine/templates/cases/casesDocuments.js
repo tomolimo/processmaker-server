@@ -454,7 +454,7 @@ function openActionDialog(caller, action, dataAux)
       var urlDownload = ext_itemgrid.getSelectionModel().getSelected().get("downloadLink");
 
       if (selectedRows.length == 1) {
-    	  Ext.Ajax.request({
+        Ext.Ajax.request({
               url : 'ajaxListener' ,
               params : {action : 'verifySession'},
               success: function ( result, request ) {
@@ -517,11 +517,11 @@ function openActionDialog(caller, action, dataAux)
       }
 
       /*
-			 * if(document.location =
-			 * ext_itemgrid.getSelectionModel().getSelected().get('downloadLink')){
-			 * messageText="Downloading file "+fileName; statusBarMessage(
-			 * messageText, false, true ); }else{ alert("sadasd"); }
-			 */
+       * if(document.location =
+       * ext_itemgrid.getSelectionModel().getSelected().get('downloadLink')){
+       * messageText="Downloading file "+fileName; statusBarMessage(
+       * messageText, false, true ); }else{ alert("sadasd"); }
+       */
       break;
     //case 'rename':node.select();
     case 'rename':
@@ -766,8 +766,8 @@ function selectFile( dir, file ) {
 }
 
 /**
-		 * Debug Function, that works like print_r for Objects in Javascript
-		 */
+     * Debug Function, that works like print_r for Objects in Javascript
+     */
 function var_dump(obj) {
   var vartext = "";
   for (var prop in obj) {
@@ -878,7 +878,7 @@ datastore.on("beforeload",
     options.params.option = "gridDocuments";
     options.params.sendWhat = datastore.sendWhat;
     if (options.params.dir == "ASC" || options.params.dir == "DESC") {
- 	options.params.action = "sort";
+  options.params.action = "sort";
         options.params.node = ds.directory;
     } else {
         if (ds.sortInfo) {
@@ -1111,15 +1111,15 @@ var gridtb = new Ext.Toolbar(
     disabled : false,
     handler : function() {
       /*
-						 * Ext.ux.OnDemandLoad
-						 * .load("/scripts/extjs3-ext/ux.swfupload/SwfUploadPanel.css");
-						 * Ext.ux.OnDemandLoad
-						 * .load("/scripts/extjs3-ext/ux.swfupload/SwfUpload.js");
-						 * Ext.ux.OnDemandLoad .load(
-						 * "/scripts/extjs3-ext/ux.swfupload/SwfUploadPanel.js",
-						 * function(options) { openActionDialog(this, "upload", "");
-						 * });
-						 */
+             * Ext.ux.OnDemandLoad
+             * .load("/scripts/extjs3-ext/ux.swfupload/SwfUploadPanel.css");
+             * Ext.ux.OnDemandLoad
+             * .load("/scripts/extjs3-ext/ux.swfupload/SwfUpload.js");
+             * Ext.ux.OnDemandLoad .load(
+             * "/scripts/extjs3-ext/ux.swfupload/SwfUploadPanel.js",
+             * function(options) { openActionDialog(this, "upload", "");
+             * });
+             */
       openActionDialog(this, "uploadDocument", "");
     }
   },
@@ -1467,7 +1467,7 @@ gridCtxMenu = new Ext.menu.Menu({
   items : [ {
     id : 'gc_rename',
     iconCls: 'button_menu_ext ss_sprite ss_textfield_rename',// icon :
-    hidden : true,															// '/images/documents/_fonts.png',
+    hidden : true,                              // '/images/documents/_fonts.png',
     text : TRANSLATIONS.ID_RENAME,
     handler : function() {
       ext_itemgrid.onCellDblClick(ext_itemgrid, gsm.clickedRow, 0);
@@ -1597,8 +1597,15 @@ function copymove(action) {
     // alert('Move ' + dropEvent.data.node.id.replace( /_RRR_/g, '/' )+' to
     // '+ dropEvent.target.id.replace( /_RRR_/g, '/' ));
     requestParams = getRequestParams();
-    requestParams.dir = datastore.directory.substring(0,
-      datastore.directory.lastIndexOf('/'));
+    if (!((navigator.userAgent.indexOf("MSIE") != -1) || (navigator.userAgent.indexOf("Trident") != -1))) {
+        Ext.getCmp("dirTreePanel").getRootNode().reload();    
+        document.getElementById('ext-gen20').style.visibility='hidden';
+        document.getElementsByClassName('x-shadow')[0].style.visibility='hidden';          
+        parent.frames[0].location.href="casesStartPage?action=documents";
+    }
+    requestParams.copyMove = 'all';
+    //requestParams.dir = datastore.directory.substring(0,
+    //  datastore.directory.lastIndexOf('/'));
     requestParams.new_dir = dropEvent.target.id.replace(/_RRR_/g, '/');
     requestParams.new_dir = requestParams.new_dir.replace(/ext_root/g, '');
     requestParams.selitems = Array(dropEvent.data.node.id.replace(/_RRR_/g,
@@ -1606,6 +1613,8 @@ function copymove(action) {
     requestParams.confirm = 'true';
     requestParams.action = action;
     handleCallback(requestParams);
+    requestParams.copyMove = '';
+    requestParams.dir = '';
   }
 }
 // context menus
@@ -1736,18 +1745,17 @@ function copymoveCtx(e) {
   copymove('moveExecute');
 }
 
-var documentsTab = {
-  id : 'documents',
-  // title : 'Documents',
-  iconCls : 'ICON_FOLDERS',
-  layout : 'border',
-  region: 'center',
-  defaults : {
-    split : true
-  },
-  items : [
-  {
-    xtype : "treepanel",
+var loader = new Ext.tree.TreeLoader({
+      preloadChildren : true,
+      dataUrl : '../appFolder/appFolderAjax.php',
+      baseParams : {
+        action : 'expandNode',
+        sendWhat : 'dirs',
+        renderTree : 1
+      }
+  });
+
+var treepanelmain = new Ext.tree.TreePanel({
     id : "dirTreePanel",
     region : "west",
     title : TRANSLATIONS.ID_DIRECTORY,
@@ -1769,15 +1777,7 @@ var documentsTab = {
     }
     ],
     // rootVisible: false,
-    loader : new Ext.tree.TreeLoader({
-      preloadChildren : true,
-      dataUrl : '../appFolder/appFolderAjax.php',
-      baseParams : {
-        action : 'expandNode',
-        sendWhat : 'dirs',
-        renderTree : 1
-      }
-    }),
+    loader : loader,
     containerScroll : true,
     enableDD : true,
     ddGroup : 'TreeDD',
@@ -1833,9 +1833,20 @@ var documentsTab = {
       },
       'beforenodedrop' : {
         fn : function(e) {
-          dropEvent = e;
-          copymoveCtx(e);
-          datastore.reload();
+          if (!((navigator.userAgent.indexOf("MSIE") != -1) || (navigator.userAgent.indexOf("Trident") != -1))) {
+            dropEvent = e;
+            copymoveCtx(e);
+            datastore.reload();
+          }
+        }
+      },
+      'nodedrop' : {
+        fn : function(e) { 
+          if ((navigator.userAgent.indexOf("MSIE") != -1) || (navigator.userAgent.indexOf("Trident") != -1)) {
+              dropEvent = e;
+                copymoveCtx(e);
+                datastore.reload();
+          }
         }
       },
       'beforemove' : {
@@ -1846,7 +1857,18 @@ var documentsTab = {
     },
 
     root: rootNodeCreate()
+});
+
+var documentsTab = {
+  id : 'documents',
+  // title : 'Documents',
+  iconCls : 'ICON_FOLDERS',
+  layout : 'border',
+  region: 'center',
+  defaults : {
+    split : true
   },
+  items : [
   {
     layout : "border",
     region : "center",
@@ -1970,9 +1992,9 @@ var documentsTab = {
                   .get('is_file')) {
                   // console.log(datastore.directory);
                   chDir(/*
-																 * datastore.directory +
-																 * "/"+
-																 */selections[0]
+                                 * datastore.directory +
+                                 * "/"+
+                                 */selections[0]
                     .get('id'));
                 } else if (selections[0]
                   .get('is_editable')) {
@@ -2014,13 +2036,13 @@ var documentsTab = {
         // alert(Ext.getCmp("locationbarcmp"));
         // Ext.getCmp("documents").
         /*
-						 * if(typeof(sw_afterlayout)!="undefined"){
-						 * //console.log("starting locatiobar");
-						 * Ext.getCmp("locationbarcmp").tree =
-						 * Ext.getCmp("dirTreePanel");
-						 * Ext.getCmp("locationbarcmp").initComponent();
-						 * //console.log("location abr started"); return; }
-						 */
+             * if(typeof(sw_afterlayout)!="undefined"){
+             * //console.log("starting locatiobar");
+             * Ext.getCmp("locationbarcmp").tree =
+             * Ext.getCmp("dirTreePanel");
+             * Ext.getCmp("locationbarcmp").initComponent();
+             * //console.log("location abr started"); return; }
+             */
         // console.log(typeof(sw_afterlayout));
         sw_afterlayout=true;
 
@@ -2035,12 +2057,12 @@ var documentsTab = {
         // console.log("dirtree created");
 
         /*
-						 * dirTree.loader.on('load', function(loader, o,
-						 * response ) { if( response && response.responseText ) {
-						 * var json = Ext.decode( response.responseText ); if(
-						 * json && json.error ) { Ext.Msg.alert('Error',
-						 * json.error +'onLoad'); } } });
-						 */
+             * dirTree.loader.on('load', function(loader, o,
+             * response ) { if( response && response.responseText ) {
+             * var json = Ext.decode( response.responseText ); if(
+             * json && json.error ) { Ext.Msg.alert('Error',
+             * json.error +'onLoad'); } } });
+             */
 
         var tsm = dirTree.getSelectionModel();
         // console.log("tried to gtet selection model");
@@ -2086,7 +2108,7 @@ Ext.onReady(function() {
 
   var viewport = new Ext.Viewport({
     layout : 'border',
-    items : [
+    items : [treepanelmain,
     documentsTab ]
   });
 

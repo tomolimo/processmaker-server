@@ -80,6 +80,7 @@ leimnud.event.add(getField('WE_TYPE'), 'change', function() {
     showRowById('subtitle2');
   }
   else {
+    getField('SEARCH').disabled = false;
     hideRowById("TEST");
     showRowById("SEARCH");
 
@@ -87,7 +88,6 @@ leimnud.event.add(getField('WE_TYPE'), 'change', function() {
     hideRowById('WS_PASS');
     hideRowById('WS_ROUNDROBIN');
     hideRowById('subtitle2');
-
   }hideRowById('WS_ROUNDROBIN');
 }.extend(getField('WE_TYPE')));
 
@@ -121,7 +121,7 @@ var webEntry_validate = function(PRO_UID, TASKS, DYNAFORM) {
 
        }.extend(this);
        oRPC.make();
- }else{
+ }else{ 
 var tasksName = getField('TASKS')[getField('TASKS').selectedIndex].innerHTML;
 
     var oRPC = new leimnud.module.rpc.xmlhttp({
@@ -144,8 +144,6 @@ var tasksName = getField('TASKS')[getField('TASKS').selectedIndex].innerHTML;
          }
        }.extend(this);
        oRPC.make();
-
-
 }
 
 }
@@ -173,7 +171,7 @@ var webEntry_generate = function(PRO_UID, TASKS, DYNAFORM) {
   	if(getField('WE_TYPE').value=='SINGLE')
      { oPanel1 = new leimnud.module.panel();
        oPanel1.options = {
-       	size	:{w:600,h:400},
+       	size  :{w:500,h:400},
        	position:{x:0,y:0,center:true},
        	title	:"Web Entry",
        	statusBar:true,

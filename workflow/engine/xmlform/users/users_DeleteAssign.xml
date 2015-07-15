@@ -16,6 +16,6 @@
     <en><![CDATA[Completed]]></en>
   </COMPLETED>
   <CANCELLED type="text" mode="view">
-    <en><![CDATA[Cancelled]]></en>
+    <en><![CDATA[Canceled]]></en>
   </CANCELLED>
 </dynaForm>

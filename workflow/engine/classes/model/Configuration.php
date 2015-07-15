@@ -1,70 +1,40 @@
 <?php
-/**
- * Configuration.php
- * @package    workflow.engine.classes.model
- *
- * ProcessMaker Open Source Edition
- * Copyright (C) 2004 - 2011 Colosa Inc.
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- * For more information, contact Colosa Inc, 2566 Le Jeune Rd.,
- * Coral Gables, FL, 33134, USA, or email info@colosa.com.
- *
- */
-
-if (!class_exists('BaseConfiguration')) {
-    require_once 'classes/model/om/BaseConfiguration.php';
-}
-//require_once 'classes/model/Content.php';
-
-
-/**
- * Skeleton subclass for representing a row from the 'CONFIGURATION' table.
- *
- *
- *
- * You should add additional methods to this class to meet the
- * application requirements.  This class will only be generated as
- * long as it does not already exist in the output directory.
- *
- * @package    workflow.engine.classes.model
- */
 class Configuration extends BaseConfiguration
 {
-    public function create($aData)
+    public function create(array $arrayData)
     {
-        $con = Propel::getConnection(ConfigurationPeer::DATABASE_NAME);
+        $cnn = Propel::getConnection(ConfigurationPeer::DATABASE_NAME);
+
         try {
-            $con->begin();
-            $this->setCfgUid($aData['CFG_UID']);
-            $this->setObjUid($aData['OBJ_UID']);
-            $this->setCfgValue(isset($aData['CFG_VALUE'])?$aData['CFG_VALUE']:'');
-            $this->setProUid($aData['PRO_UID']);
-            $this->setUsrUid($aData['USR_UID']);
-            $this->setAppUid($aData['APP_UID']);
+            $this->setCfgUid($arrayData["CFG_UID"]);
+            $this->setObjUid($arrayData["OBJ_UID"]);
+            $this->setCfgValue((isset($arrayData["CFG_VALUE"]))? $arrayData["CFG_VALUE"] : "");
+            $this->setProUid($arrayData["PRO_UID"]);
+            $this->setUsrUid($arrayData["USR_UID"]);
+            $this->setAppUid($arrayData["APP_UID"]);
+
             if ($this->validate()) {
-                $result=$this->save();
-                $con->commit();
+                $cnn->begin();
+
+                $result = $this->save();
+
+                $cnn->commit();
+
+                //Return
                 return $result;
             } else {
-                $con->rollback();
-                throw(new Exception("Failed Validation in class ".get_class($this)."."));
+                $msg = "";
+
+                foreach ($this->getValidationFailures() as $validationFailure) {
+                    $msg = $msg . (($msg != "")? "\n" : "") . $validationFailure->getMessage();
+                }
+
+                throw new Exception(G::LoadTranslation("ID_RECORD_CANNOT_BE_CREATED") . (($msg != "")? "\n" . $msg : ""));
             }
         } catch (Exception $e) {
-            $con->rollback();
-            throw($e);
+            $cnn->rollback();
+
+            throw $e;
         }
     }
 
@@ -128,9 +98,9 @@ class Configuration extends BaseConfiguration
     }
 
     /**
-    * To check if the configuration row exists, by using Configuration Uid data 
+    * To check if the configuration row exists, by using Configuration Uid data
     */
-    public function exists($CfgUid, $ObjUid='', $ProUid='', $UsrUid='', $AppUid='')
+    public function exists($CfgUid, $ObjUid = "", $ProUid = "", $UsrUid = "", $AppUid = "")
     {
         $oRow = ConfigurationPeer::retrieveByPK( $CfgUid, $ObjUid, $ProUid, $UsrUid, $AppUid );
         return (( get_class ($oRow) == 'Configuration' )&&(!is_null($oRow)));

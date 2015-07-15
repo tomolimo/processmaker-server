@@ -20,16 +20,7 @@ class UploadFormat extends Format
      *
      * @var array
      */
-    public static $allowedMimeTypes = array(
-        'image/jpeg',
-        'image/png',
-        'image/png',
-        'application/octet-stream',
-        'text/plain',
-        'text/xml',
-        'text/html',
-        'text/css'
-    );
+    public static $allowedMimeTypes = array();
     /**
      * use it to restrict uploads based on file size
      * set it to 0 to allow all sizes
@@ -40,7 +31,7 @@ class UploadFormat extends Format
      *
      * @var int
      */
-    public static $maximumFileSize = 1048576;
+    public static $maximumFileSize = 0;
     /**
      * Your own validation function for validating each uploaded file
      * it can return false or throw an exception for invalid file

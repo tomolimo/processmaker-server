@@ -1,4 +1,10 @@
 <?php
+G::LoadSystem('inputfilter');
+$filter = new InputFilter();
+$_GET = $filter->xssFilterHard($_GET);
+$_REQUEST = $filter->xssFilterHard($_REQUEST);
+$_SESSION['USER_LOGGED'] = $filter->xssFilterHard($_SESSION['USER_LOGGED']);
+
 if (!isset($_SESSION['USER_LOGGED'])) {
     $responseObject = new stdclass();
     $responseObject->error = G::LoadTranslation('ID_LOGIN_AGAIN');
@@ -9,22 +15,22 @@ if (!isset($_SESSION['USER_LOGGED'])) {
 }
 
 //Getting the extJs parameters
-$callback = isset( $_POST["callback"] ) ? $_POST["callback"] : "stcCallback1001";
-$dir = isset( $_POST["dir"] ) ? $_POST["dir"] : "DESC";
-$sort = isset( $_POST["sort"] ) ? $_POST["sort"] : "";
-$start = isset( $_POST["start"] ) ? $_POST["start"] : "0";
-$limit = isset( $_POST["limit"] ) ? $_POST["limit"] : "25";
-$filter = isset( $_POST["filter"] ) ? $_POST["filter"] : "";
-$process = isset( $_POST["process"] ) ? $_POST["process"] : "";
-$category = isset( $_POST["category"] ) ? $_POST["category"] : "";
-$status = isset( $_POST["status"] ) ? strtoupper( $_POST["status"] ) : "";
-$user = isset( $_POST["user"] ) ? $_POST["user"] : "";
-$search = isset( $_POST["search"] ) ? $_POST["search"] : "";
-$action = isset( $_GET["action"] ) ? $_GET["action"] : (isset( $_POST["action"] ) ? $_POST["action"] : "todo");
-$type = isset( $_GET["type"] ) ? $_GET["type"] : (isset( $_POST["type"] ) ? $_POST["type"] : "extjs");
-$dateFrom = isset( $_POST["dateFrom"] ) ? substr( $_POST["dateFrom"], 0, 10 ) : "";
-$dateTo = isset( $_POST["dateTo"] ) ? substr( $_POST["dateTo"], 0, 10 ) : "";
-$first = isset( $_POST["first"] ) ? true :false;
+$callback = isset( $_REQUEST["callback"] ) ? $_REQUEST["callback"] : "stcCallback1001";
+$dir = isset( $_REQUEST["dir"] ) ? $_REQUEST["dir"] : "DESC";
+$sort = isset( $_REQUEST["sort"] ) ? $_REQUEST["sort"] : "";
+$start = isset( $_REQUEST["start"] ) ? $_REQUEST["start"] : "0";
+$limit = isset( $_REQUEST["limit"] ) ? $_REQUEST["limit"] : "25";
+$filter = isset( $_REQUEST["filter"] ) ? $_REQUEST["filter"] : "";
+$process = isset( $_REQUEST["process"] ) ? $_REQUEST["process"] : "";
+$category = isset( $_REQUEST["category"] ) ? $_REQUEST["category"] : "";
+$status = isset( $_REQUEST["status"] ) ? strtoupper( $_REQUEST["status"] ) : "";
+$user = isset( $_REQUEST["user"] ) ? $_REQUEST["user"] : "";
+$search = isset( $_REQUEST["search"] ) ? $_REQUEST["search"] : "";
+$action = isset( $_GET["action"] ) ? $_GET["action"] : (isset( $_REQUEST["action"] ) ? $_REQUEST["action"] : "todo");
+$type = isset( $_GET["type"] ) ? $_GET["type"] : (isset( $_REQUEST["type"] ) ? $_REQUEST["type"] : "extjs");
+$dateFrom = isset( $_REQUEST["dateFrom"] ) ? substr( $_REQUEST["dateFrom"], 0, 10 ) : "";
+$dateTo = isset( $_REQUEST["dateTo"] ) ? substr( $_REQUEST["dateTo"], 0, 10 ) : "";
+$first = isset( $_REQUEST["first"] ) ? true :false;
 
 if ($sort == 'CASE_SUMMARY' || $sort == 'CASE_NOTES_COUNT') {
     $sort = 'APP_NUMBER';//DEFAULT VALUE

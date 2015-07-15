@@ -41,6 +41,9 @@ try {
 
     G::LoadClass( 'processMap' );
     $oProcessMap = new ProcessMap();
+        
+    $infoProcess = new Processes();
+    $resultProcess = $infoProcess->getProcessRow($_POST['PRO_UID']);
 
     switch ($_POST['action']) {
         case 'availableSupervisorDynaforms':
@@ -48,18 +51,22 @@ try {
             break;
         case 'assignSupervisorDynaform':
             $oProcessMap->assignSupervisorStep( $_POST['PRO_UID'], 'DYNAFORM', $_POST['DYN_UID'] );
+            G::auditLog('AssignSupervisorDynaform','Assign Supervisor Dynaform ('.$_POST['DYN_UID'].') in Process "'.$resultProcess['PRO_TITLE'].'"');
             break;
         case 'removeSupervisorDynaform':
             $oProcessMap->removeSupervisorStep( $_POST['STEP_UID'], $_POST['PRO_UID'], 'DYNAFORM', $_POST['DYN_UID'], $_POST['STEP_POSITION'] );
+            G::auditLog('RemoveSupervisorDynaform','Remove Supervisor Dynaform ('.$_POST['DYN_UID'].') in Process "'.$resultProcess['PRO_TITLE'].'"');
             break;
         case 'availableSupervisorInputs':
             $oProcessMap->availableSupervisorInputs( $_POST['PRO_UID'] );
             break;
         case 'assignSupervisorInput':
             $oProcessMap->assignSupervisorStep( $_POST['PRO_UID'], 'INPUT_DOCUMENT', $_POST['INP_DOC_UID'] );
+            G::auditLog('AssignSupervisorInput','Assign Supervisor Input ('.$_POST['INP_DOC_UID'].') in Process "'.$resultProcess['PRO_TITLE'].'"');
             break;
         case 'removeSupervisorInput':
             $oProcessMap->removeSupervisorStep( $_POST['STEP_UID'], $_POST['PRO_UID'], 'INPUT_DOCUMENT', $_POST['INP_DOC_UID'], $_POST['STEP_POSITION'] );
+            G::auditLog('RemoveSupervisorInput','Remove Supervisor Input ('.$_POST['INP_DOC_UID'].') in Process "'.$resultProcess['PRO_TITLE'].'"');
             break;
     }
 } catch (Exception $oException) {

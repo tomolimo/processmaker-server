@@ -47,7 +47,7 @@
     <en><![CDATA[Maximun number of mails sended by attempt]]></en>
   </MESS_SEND_MAX>
   <MESS_TRY_SEND_INMEDIATLY type="checkbox" value="1">
-    <en><![CDATA[Try send mails inmediatly]]></en>
+    <en><![CDATA[Try to send emails immediately]]></en>
   </MESS_TRY_SEND_INMEDIATLY>
   <TEST type="button" onclick="javascript:verifyFields();">
     <en><![CDATA[Test]]></en>

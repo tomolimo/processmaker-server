@@ -257,7 +257,7 @@ Ext.onReady(function() {
             waitTitle : "&nbsp;",
             success : function(form, o) {
               obj = Ext.util.JSON.decode(o.response.responseText);
-              if (obj.failed == '0' && obj.uploaded != '0') {
+              if ((obj.failed == '' || obj.failed == '0') && obj.uploaded != '0') {
                 PMExt.notify(_('ID_SUCCESS'), _('ID_YOUR_IMAGE_HAS_BEEN_SUCCESSFULLY'));
               }
               else {

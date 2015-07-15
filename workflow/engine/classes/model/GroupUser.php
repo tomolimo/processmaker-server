@@ -151,5 +151,33 @@ class GroupUser extends BaseGroupUser
 
         return $rows;
     }
+    /**
+     * Get all users assigned to Group
+     *
+     * @param string $gprUid
+     * @return array $rows
+     */
+    public function getAllGroupUser ($gprUid)
+    {
+        $oCriteria = new Criteria( 'workflow' );
+        $oCriteria->add( GroupUserPeer::GRP_UID, $gprUid );
+        $oDataset = GroupUserPeer::doSelectRS( $oCriteria );
+        $oDataset->setFetchmode( ResultSet::FETCHMODE_ASSOC );
+
+        $rows = Array ();
+        while ($oDataset->next()) {
+            $row = $oDataset->getRow();
+            $g = new Groupwf();
+            try {
+                $grpRow = $g->load( $row['GRP_UID'] );
+                $row = array_merge( $row, $grpRow );
+                $rows[] = $row;
+            } catch (Exception $e) {
+                continue;
+            }
+        }
+
+        return $rows;
+    }
 }
 

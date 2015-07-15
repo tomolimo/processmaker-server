@@ -27,7 +27,7 @@ abstract class Importer
     const IMPORT_STAT_INVALID_SOURCE_FILE = 102;   //Error, Invalid file type or the file have corrupt data.
     const IMPORT_STAT_GROUP_ALREADY_EXISTS = 105;  //Error, Group already exists.
 
-    public abstract function load();
+    public abstract function load($filename = null);
 
     /**
      * Verify if exists reserved words SQL
@@ -73,8 +73,7 @@ abstract class Importer
     {
         $this->prepare();
 
-        $name = $this->importData["tables"]["bpmn"]["project"][0]["prj_name"];
-
+        //Verify data
         switch ($option) {
             case self::IMPORT_OPTION_CREATE_NEW:
                 if ($this->targetExists()) {
@@ -94,23 +93,12 @@ abstract class Importer
                         self::IMPORT_STAT_TARGET_ALREADY_EXISTS
                     );
                 }
-                $generateUid = false;
                 break;
             case self::IMPORT_OPTION_OVERWRITE:
-                $this->removeProject();
-                // this option shouldn't generate new uid for all objects
-                $generateUid = false;
                 break;
             case self::IMPORT_OPTION_DISABLE_AND_CREATE_NEW:
-                $this->disableProject();
-                // this option should generate new uid for all objects
-                $generateUid = true;
-                $name = "New - " . $name . " - " . date("M d, H:i");
                 break;
             case self::IMPORT_OPTION_KEEP_WITHOUT_CHANGING_AND_CREATE_NEW:
-                // this option should generate new uid for all objects
-                $generateUid = true;
-                $name = \G::LoadTranslation("ID_COPY_OF") . " - " . $name . " - " . date("M d, H:i");
                 break;
         }
 
@@ -146,6 +134,36 @@ abstract class Importer
                 break;
             case self::GROUP_IMPORT_OPTION_MERGE_PREEXISTENT:
                 $this->importData["tables"]["workflow"] = (array)($processes->groupwfsUpdateUidByDatabase((object)($this->importData["tables"]["workflow"])));
+                break;
+        }
+
+        //Import
+        $name = $this->importData["tables"]["bpmn"]["project"][0]["prj_name"];
+
+        switch ($option) {
+            case self::IMPORT_OPTION_CREATE_NEW:
+                //Shouldn't generate new UID for all objects
+                $generateUid = false;
+                break;
+            case self::IMPORT_OPTION_OVERWRITE:
+                //Shouldn't generate new UID for all objects
+                $this->removeProject();
+
+                $generateUid = false;
+                break;
+            case self::IMPORT_OPTION_DISABLE_AND_CREATE_NEW:
+                //Should generate new UID for all objects
+                $this->disableProject();
+
+                $name = "New - " . $name . " - " . date("M d, H:i");
+
+                $generateUid = true;
+                break;
+            case self::IMPORT_OPTION_KEEP_WITHOUT_CHANGING_AND_CREATE_NEW:
+                //Should generate new UID for all objects
+                $name = \G::LoadTranslation("ID_COPY_OF") . " - " . $name . " - " . date("M d, H:i");
+
+                $generateUid = true;
                 break;
         }
 
@@ -241,8 +259,7 @@ abstract class Importer
     public function removeProject()
     {
         $project = \ProcessMaker\Project\Adapter\BpmnWorkflow::load($this->metadata["uid"]);
-        $force = true;
-        $project->remove($force);
+        $project->remove(true, false);
     }
 
     /**
@@ -317,8 +334,8 @@ abstract class Importer
         $diagram["gateways"] = $tables["gateway"];
         $diagram["data"] = (isset($tables["data"]))? $tables["data"] : array();
         $diagram["participants"] = (isset($tables["participant"]))? $tables["participant"] : array();
-        $diagram["lanes"] = array();
-        $diagram["laneset"] = array();
+        $diagram["laneset"] = (isset($tables["laneset"]))? $tables["laneset"] : array();
+        $diagram["lanes"] = (isset($tables["lane"]))? $tables["lane"] : array();
         $project["diagrams"] = array($diagram);
         $project["prj_author"] = isset($this->data["usr_uid"])? $this->data["usr_uid"]: "00000000000000000000000000000001";
         $project["process"] = $tables["process"][0];
@@ -369,12 +386,14 @@ abstract class Importer
         $this->importWfFiles($arrayWorkflowFiles);
 
         //Update
-        $workflow = Project\Workflow::load($projectUid);
+        $workflow = \ProcessMaker\Project\Workflow::load($projectUid);
 
         foreach ($arrayWorkflowTables["tasks"] as $key => $value) {
             $arrayTaskData = $value;
 
-            $result = $workflow->updateTask($arrayTaskData["TAS_UID"], $arrayTaskData);
+            if (!in_array($arrayTaskData["TAS_TYPE"], array("GATEWAYTOGATEWAY", "WEBENTRYEVENT", "END-MESSAGE-EVENT", "START-MESSAGE-EVENT", "INTERMEDIATE-THROW-MESSAGE-EVENT", "INTERMEDIATE-CATCH-MESSAGE-EVENT"))) {
+                $result = $workflow->updateTask($arrayTaskData["TAS_UID"], $arrayTaskData);
+            }
         }
 
         unset($arrayWorkflowTables["process"]["PRO_CREATE_USER"]);

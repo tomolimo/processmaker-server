@@ -229,7 +229,7 @@ class PmSessionHandler //implements SessionHandlerInterface
     /**
      * Garbase Collection method 
      * 
-     * @param  int $maxlifetime max time that especify if the session is active or not
+     * @param int $maxlifetime max time that specifies if the session is active or not
      * @return bool always returns true
      */
     public function gc($maxlifetime)

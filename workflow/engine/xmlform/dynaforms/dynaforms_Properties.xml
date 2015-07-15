@@ -73,8 +73,34 @@
 </PME_PROP_REVERT>
 <sdfsdf type="javascript">
 
-
 <![CDATA[
+leimnud.event.add(getField('DYN_TITLE'), 'blur', function()
+{
+    var isTrue;
+    oRPC = new leimnud.module.rpc.xmlhttp({
+      url   : "../dynaforms/dynaforms_Ajax",
+      method: 'POST',
+      async : true,
+      args  : 'dynaformName=' + getField('DYN_TITLE').value + '&dynaformUid=' + getField('DYN_UID').value + '&proUid=' + getField('PRO_UID').value
+    });
+    oRPC.callback = function(oRPC) {
+      var response = oRPC.xmlhttp.responseText;
+      response = parseInt(response);
+      var nDynaform = new input(getField('DYN_TITLE'));
+      if (response){
+         nDynaform.passed();
+      } else {
+         nDynaform.failed();
+         nDynaform.focus();
+         msgBox("@G::LoadTranslation(ID_EXIST_DYNAFORM)", "alert");
+         dynaformEditor.refreshPropertiesDynTitle();
+      }
+    }.extend(this);
+    isTrue = oRPC.make();
+    return isTrue;
+});
+
+
 // added by gustavo cruz gustavo-at-colosa.com
 // function getElementsByClassNameCrossBrowser
 // CrossBrowser implemetation of the getElementsByClassName firefox function

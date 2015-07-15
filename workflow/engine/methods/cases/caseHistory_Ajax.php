@@ -137,7 +137,7 @@ if ($actionAjax == "showDynaformHistoryGetNomDynaform_JXP") {
         $dynTitle = $contentObjeto->getConValue();
     }
 
-    $md5Hash = md5( $idDin . $dynDate );
+    $md5Hash = G::encryptOld( $idDin . $dynDate );
 
     //assign task
     $result = new stdClass();

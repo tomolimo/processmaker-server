@@ -66,7 +66,14 @@ class WebResource
                     $paramsRef[] = '$parameters[' . $key . ']';
                 }
             }
-            $res = eval( 'return ($this->' . $post['function'] . '(' . implode( ',', $paramsRef ) . '));' );
+            
+            $paramsRef = implode( ',', $paramsRef );
+            G::LoadSystem('inputfilter');
+            $filter = new InputFilter();
+            $post['function'] = $filter->validateInput($post['function']);
+            $paramsRef = $filter->validateInput($paramsRef);
+            
+            $res = eval( 'return ($this->' . $post['function'] . '(' . $paramsRef . '));' );
             $res = G::json_encode( $res );
             print ($res) ;
         } else {
@@ -82,13 +89,18 @@ class WebResource
      */
     function _encode ()
     {
+        G::LoadSystem('inputfilter');
+        $filter = new InputFilter();
         header( 'Content-Type: text/json' );
         $methods = get_class_methods( get_class( $this ) );
+        $methods = $filter->xssFilterHard($methods);
+        $this->_uri = $filter->xssFilterHard($this->_uri);
         print ('{') ;
         $first = true;
         foreach ($methods as $method) {
             //To avoid PHP version incompatibilities, put the $method name in lowercase
             $method = strtolower( $method );
+            $method = $filter->xssFilterHard($method);
             if ((substr( $method, 0, 1 ) === '_') || (strcasecmp( $method, 'WebResource' ) == 0) || (strcasecmp( $method, get_class( $this ) ) == 0)) {
             } elseif (strcasecmp( substr( $method, 0, 3 ), 'js_' ) == 0) {
                 if (! $first) {

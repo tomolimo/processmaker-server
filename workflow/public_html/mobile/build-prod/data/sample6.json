@@ -1,0 +1,37 @@
+{
+    "name": "form-example5",
+    "items": [
+        {
+            "type":"panel",
+            "items":
+            [
+                [
+                    {
+                        "type": "title",
+                        "colSpan": 12,
+                        "name": "title",
+                        "label": "PMDynaform 6 - ReadOnly"
+                    }
+                ],
+                [
+                    {
+                        "type": "label",
+                        "colSpan": 12,
+                        "label": "First field",
+                        "options": ["This is the value for the field and the content.."]
+                    }
+                ],
+                [
+                    {
+                        "type": "label",
+                        "colSpan": 12,
+                        "label": "Second field",
+                        "options": ["First option - radio",
+                                    "Second option - radio",
+                                    "Third option - radio"]
+                    }
+                ]
+            ]
+        }
+    ]
+}

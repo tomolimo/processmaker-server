@@ -17,6 +17,7 @@ switch ($option) {
         break;
     case "processInfo":
         $oHeadPublisher = &headPublisher::getSingleton();
+        $oHeadPublisher->assign('skin', $_SESSION['currentSkin']);
         $oHeadPublisher->addContent("setup/dbInfo"); //Adding a html file .html
         $oHeadPublisher->addExtJsScript("setup/dbInfo", false); //Adding a javascript file .js
 

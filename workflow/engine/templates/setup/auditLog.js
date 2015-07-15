@@ -237,9 +237,11 @@ audit.application = {
 
                     handler: function ()
                     {
+                        Ext.getCmp("cboAction").reset(),
                         Ext.getCmp("dateFrom").reset(),
                         Ext.getCmp("dateTo").reset(),
-                        Ext.getCmp("fldDescription").reset()
+                        Ext.getCmp("fldDescription").reset(),
+                        pagingAudit.moveFirst();
                     }
                 },
                 "-",

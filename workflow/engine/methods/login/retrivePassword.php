@@ -8,7 +8,7 @@ G::LoadClass("system");
 
 $rbacUser = new RbacUsers();
 $user = new Users();
-
+$data['USR_USERNAME'] = strip_tags($data['USR_USERNAME']);
 $userData = $rbacUser->getByUsername($data['USR_USERNAME']);
 
 if ($userData['USR_EMAIL'] != '' && $userData['USR_EMAIL'] === $data['USR_EMAIL'] && ($userData['USR_AUTH_TYPE'] === '' || $userData['USR_AUTH_TYPE'] == 'MYSQL') ) {

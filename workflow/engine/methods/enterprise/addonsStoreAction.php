@@ -78,7 +78,8 @@ try {
                     preg_match("/^license_(.*).dat$/", $licenseManager->file, $matches);
                     $realId = urlencode($matches[1]);
 
-                    $addonLocation = "http://{$licenseManager->server}/syspmLicenseSrv/en/green/services/addonsStore?action=getInfo&licId=$realId";
+                    $workspace = (isset($licenseManager->workspace)) ? $licenseManager->workspace : 'pmLicenseSrv';
+                    $addonLocation = "http://{$licenseManager->server}/sys".$workspace."/en/green/services/addonsStore?action=getInfo&licId=$realId";
 
                     ///////
                     $cnn = Propel::getConnection("workflow");
@@ -261,15 +262,15 @@ try {
                 ///////
                 $licenseManager = &pmLicenseManager::getSingleton();
                 $server = $licenseManager->server;
-
-                $url = "http://$server/syspmLicenseSrv/en/green/services/rest";
+                $workspace = (isset($licenseManager->workspace)) ? $licenseManager->workspace : 'pmLicenseSrv';
+                $url = "http://$server/sys".$workspace."/en/green/services/rest";
 
                 if (EnterpriseUtils::checkConnectivity($url) == false) {
                     throw (new Exception("Server \"$server\" not available."));
                 }
 
                 ///////
-                $boundary = "---------------------" . substr(md5(rand(0, 32000)), 0, 10);
+                $boundary = "---------------------" . substr(G::encryptOld(rand(0, 32000)), 0, 10);
                 $data = null;
 
                 $data = $data . "--$boundary\n";

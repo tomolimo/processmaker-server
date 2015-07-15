@@ -69,6 +69,10 @@ try {
     $oCase->thisIsTheCurrentUser( $_SESSION["APPLICATION"], $_SESSION["INDEX"], $_SESSION["USER_LOGGED"], "REDIRECT", "casesListExtJs" );
     $Fields = $oCase->loadCase( $_SESSION["APPLICATION"] );
 
+    if ($swpmdynaform) {
+        $Fields["APP_DATA"] = array_merge( $Fields["APP_DATA"], $pmdynaform );
+    }
+
     $Fields["APP_DATA"] = array_merge( $Fields["APP_DATA"], G::getSystemConstants() );
     $Fields["APP_DATA"] = array_merge( $Fields["APP_DATA"], $_POST["form"] );
 
@@ -123,22 +127,29 @@ try {
                     $aAux = explode( '|', $oForm->fields[$oForm->fields[$sField]->pmconnection]->keys );
                     $i = 0;
                     $aValues = array ();
-                    foreach ($aData['FIELDS'] as $aField) {
-                        if ($aField['FLD_KEY'] == '1') {
-                            $aKeys[$aField['FLD_NAME']] = (isset( $aAux[$i] ) ? G::replaceDataField( $aAux[$i], $Fields['APP_DATA'] ) : '');
-                            $i ++;
-                        }
-                        if ($aField['FLD_NAME'] == $oForm->fields[$sField]->pmfield) {
-                            $aValues[$aField['FLD_NAME']] = $Fields['APP_DATA'][$sField];
-                        } else {
-                            $aValues[$aField['FLD_NAME']] = '';
-                        }
-                    }
-                    try {
-                        $aRow = $oAdditionalTables->getDataTable( $oForm->fields[$oForm->fields[$sField]->pmconnection]->pmtable, $aKeys );
-                    } catch (Exception $oError) {
+                    if ($aData == "" || count($aData['FIELDS']) < 1) {
+                        $message = G::LoadTranslation( 'ID_PMTABLE_NOT_FOUNDED_SAVED_DATA' );
+                        G::SendMessageText( $message, "WARNING" );
                         $aRow = false;
+                    } else {
+                        foreach ($aData['FIELDS'] as $aField) {
+                            if ($aField['FLD_KEY'] == '1') {
+                                $aKeys[$aField['FLD_NAME']] = (isset( $aAux[$i] ) ? G::replaceDataField( $aAux[$i], $Fields['APP_DATA'] ) : '');
+                                $i ++;
+                            }
+                            if ($aField['FLD_NAME'] == $oForm->fields[$sField]->pmfield) {
+                                $aValues[$aField['FLD_NAME']] = $Fields['APP_DATA'][$sField];
+                            } else {
+                                $aValues[$aField['FLD_NAME']] = '';
+                            }
+                        }
+                        try {
+                            $aRow = $oAdditionalTables->getDataTable( $oForm->fields[$oForm->fields[$sField]->pmconnection]->pmtable, $aKeys );
+                        } catch (Exception $oError) {
+                            $aRow = false;
+                        }
                     }
+                    
                     if ($aRow) {
                         foreach ($aValues as $sKey => $sValue) {
                             if ($sKey != $oForm->fields[$sField]->pmfield) {
@@ -206,9 +217,8 @@ try {
                 die();
             }
         }
-        
         $idPmtable = isset($oForm->fields[$id]->pmconnection->pmtable) && $oForm->fields[$id]->pmconnection->pmtable != '' ? $oForm->fields[$id]->pmconnection->pmtable : $oForm->fields[$id]->owner->tree->children[0]->attributes['pmtable'];
-        
+
         if (!($oAdditionalTables->updateDataInTable($idPmtable, $newValues ))) {
             //<--This is to know if it is a new registry on the PM Table
             $oAdditionalTables->saveDataInTable($idPmtable, $newValues );

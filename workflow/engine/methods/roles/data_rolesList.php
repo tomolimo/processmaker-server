@@ -24,6 +24,9 @@
 
 require_once (PATH_RBAC . "model/RolesPeer.php");
 G::LoadClass( 'ArrayPeer' );
+G::LoadSystem('inputfilter');
+$filter = new InputFilter();
+$_POST = $filter->xssFilterHard($_POST);
 
 isset( $_POST['textFilter'] ) ? $filter = $_POST['textFilter'] : $filter = '';
 

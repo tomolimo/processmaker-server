@@ -3,20 +3,23 @@
   <TITLE type="title">
     <en><![CDATA[Login]]></en>
   </TITLE>
-  <USR_USERNAME type="text" size="30" maxlength="50" validate="Any">
+  <USR_USERNAME type="text" size="30" maxlength="50" validate="Any" autocomplete="0">
     <en><![CDATA[User]]></en>
   </USR_USERNAME>
-  <USR_PASSWORD type="password" size="30" maxlength="32" autocomplete="0">
+  <USR_PASSWORD type="hidden" size="30" maxlength="32" autocomplete="0">
     <en><![CDATA[Password]]></en>
   </USR_PASSWORD>
-  <USER_ENV type="text" size="30" maxlength="50">
+  <USR_PASSWORD_MASK type="password" size="30" maxlength="32" autocomplete="0">
+    <en><![CDATA[Password]]></en>
+  </USR_PASSWORD_MASK>
+  <USER_ENV type="text" size="30" maxlength="50" autocomplete="0">
     <en><![CDATA[Workspace]]></en>
   </USER_ENV>
   <USER_LANG type="dropdown" sqlconnection="dbarray">
 SELECT LANG_ID, LANG_NAME FROM langOptions
 <en><![CDATA[Language]]></en>
 </USER_LANG>
-  <BSUBMIT type="submit">
+  <BSUBMIT type="button">
     <en><![CDATA[Login]]></en>
   </BSUBMIT>
   <JS type="javascript"><![CDATA[
@@ -24,23 +27,59 @@ SELECT LANG_ID, LANG_NAME FROM langOptions
 
 setFocus (getField ('USR_USERNAME'));
 
-leimnud.event.add(document.getElementById('form[BSUBMIT]'), 'click', function() {
-    ws = getField('USER_ENV').value;
-    createCookie('pmos_generik2', '{"ws":"'+ws+'"}', 365);
+leimnud.event.add(document.getElementById('form[USR_PASSWORD_MASK]'), 'keypress', function(event) {
+  var key;
+  if(window.event)
+    key = window.event.keyCode;     //IE
+  else
+    key = event.which;     //firefox
+  if(key == 13) {
+    document.getElementById('form[BSUBMIT]').click();
+    return true;
+  } else {
+    return true;
+  }
+});
 
+leimnud.event.add(document.getElementById('form[USER_ENV]'), 'keypress', function(event) {
+  var key;
+  if(window.event)
+    key = window.event.keyCode;     //IE
+  else
+    key = event.which;     //firefox
+  if(key == 13) {
+    document.getElementById('form[BSUBMIT]').click();
+    return true;
+  } else {
+    return true;
+  }
+});
+
+leimnud.event.add(document.getElementById('form[BSUBMIT]'), 'click', function() {
+    createCookie("pm_sys_sys", "{\"sys_sys\": \"" + getField("USER_ENV").value + "\"}", 365);
+
+    /*
     var client = getBrowserClient();
     if (client.browser == "msie" || client.browser == "safari"){
         document.sysLogin.submit();
     }
+    */
+
+    document.getElementById('form[USR_PASSWORD]').value = document.getElementById('form[USR_PASSWORD_MASK]').value;
+    document.getElementById('form[USR_PASSWORD_MASK]').value = '';
+    document.getElementById('form[USR_PASSWORD_MASK]').setAttribute('type', 'text');
+    document.sysLogin.submit();
 }.extend(document.getElementById('form[BSUBMIT]')));
 
 try{
-    c = new String(readCookie('pmos_generik2'));
-    o = eval("("+c+")");
-    if( o != null){
-        getField('USER_ENV').value = o.ws;
+    var s = new String(readCookie("pm_sys_sys"));
+    var obj = eval("(" + s + ")");
+
+    if (obj != null) {
+        getField("USER_ENV").value = obj.sys_sys;
     }
 } catch(e){}
 
 ]]></JS>
 </dynaForm>
+

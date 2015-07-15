@@ -26,10 +26,22 @@ try {
     //save info
     G::LoadClass( 'case' );
     G::LoadClass( 'tasks' );
-            
+
     $oAppDocument = new AppDocument();
-    $aFields = array ('APP_UID' => $_GET['APP_UID'],'DEL_INDEX' => 100000,'USR_UID' => $_SESSION['USER_LOGGED'],'DOC_UID' => $_GET['UID'],'APP_DOC_TYPE' => $_POST['form']['APP_DOC_TYPE'],'APP_DOC_CREATE_DATE' => date( 'Y-m-d H:i:s' ),'APP_DOC_COMMENT' => isset( $_POST['form']['APP_DOC_COMMENT'] ) ? $_POST['form']['APP_DOC_COMMENT'] : '','APP_DOC_TITLE' => '','APP_DOC_FILENAME' => isset( $_FILES['form']['name']['APP_DOC_FILENAME'] ) ? $_FILES['form']['name']['APP_DOC_FILENAME'] : ''
+    $aFields = array (
+        "APP_UID" => $_GET["APP_UID"],
+        "DEL_INDEX" => 100000,
+        "USR_UID" => $_SESSION["USER_LOGGED"],
+        "DOC_UID" => $_GET["UID"],
+        "APP_DOC_TYPE" => $_POST["form"]["APP_DOC_TYPE"],
+        "APP_DOC_CREATE_DATE" => date( "Y-m-d H:i:s" ),
+        "APP_DOC_COMMENT" => isset( $_POST["form"]["APP_DOC_COMMENT"] ) ? $_POST["form"]["APP_DOC_COMMENT"] : "",
+        "APP_DOC_TITLE" => "",
+        "APP_DOC_FILENAME" => isset( $_FILES["form"]["name"]["APP_DOC_FILENAME"] ) ? $_FILES["form"]["name"]["APP_DOC_FILENAME"] : "",
+        "APP_DOC_UID" => $_GET["APP_DOC_UID"],
+        "DOC_VERSION" => $_GET["DOC_VERSION"]
     );
+
     $oAppDocument->create( $aFields );
     $sAppDocUid = $oAppDocument->getAppDocUid();
     $info = pathinfo( $oAppDocument->getAppDocFilename() );
@@ -51,7 +63,7 @@ try {
                 unlink( $sPathName . $sFileName );
             }
             //end plugin
-            
+
             //update AppData with the current file uploaded
             $oCase = new Cases();
             $aAppDataFields = $oCase->loadCase( $_GET['APP_UID'] );
@@ -62,7 +74,7 @@ try {
             $oCriteria->addAscendingOrderByColumn(AppDelegationPeer::DEL_INDEX);
             $oDataset = AppDelegationPeer::doSelectRS($oCriteria);
             $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-            
+
             $oDataset->next();
             $oTask = new Tasks();
 
@@ -85,12 +97,12 @@ try {
                             $aDynaforms[] = $aRows['STEP_UID_OBJ'];
                         }
                     }
-                    unset($value);    
+                    unset($value);
                 }
                 $oDataset->next();
             }
 
-            
+
             if (count($aDynaforms) > 0) {
                 require_once ("classes/model/Dynaform.php");
                 $dynInstance = new Dynaform();

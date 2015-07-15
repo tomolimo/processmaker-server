@@ -77,7 +77,11 @@ class Zimbra
     public function sso($options = '')
     {
         if ($this->_username) {
-            setcookie('ZM_SKIN', 'plymouth', time() + 60 * 60 * 24 * 30, '/', '.plymouth.edu');
+            if (PHP_VERSION < 5.2) {
+                setcookie("ZM_SKIN", "plymouth", time() + (60 * 60 * 24 * 30), "/", ".plymouth.edu");
+            } else {
+                setcookie("ZM_SKIN", "plymouth", time() + (60 * 60 * 24 * 30), "/", ".plymouth.edu", false, true);
+            }
 
             $pre_auth = $this->getPreAuth($this->_username);
             $url = $this->_protocol . '/service/preauth?account=' . $this->_username . '@' . $this->_server . '&expires=' . $this->_preauth_expiration . '&timestamp=' . $this->_timestamp . '&preauth=' . $pre_auth; //.'&'.$options;
@@ -803,6 +807,9 @@ class Zimbra
     protected function message($message)
     {
         if ($this->debug) {
+            G::LoadSystem('inputfilter');
+            $filter = new InputFilter();
+            $message = $filter->xssFilterHard($message);
             echo $message;
         }
     }
@@ -823,6 +830,9 @@ class Zimbra
      */
     protected function soapRequest($body, $header = false, $connecting = false)
     {
+        G::LoadSystem('inputfilter');
+        $filter = new InputFilter();
+
         if (!$connecting && !$this->_connected) {
             throw new Exception('zimbra.class: soapRequest called without a connection to Zimbra server');
         }
@@ -842,7 +852,9 @@ class Zimbra
 
         curl_setopt($this->_curl, CURLOPT_POSTFIELDS, $soap_message);
 
-        if (!($response = curl_exec($this->_curl))) {
+        $this->_curl = $filter->xssFilterHard($this->_curl,"url");
+        $response = curl_exec($this->_curl);
+        if (!$response) {
             $this->error = 'ERROR: curl_exec - (' . curl_errno($this->_curl) . ') ' . curl_error($this->_curl);
             return false;
         } elseif (strpos($response, '<soap:Body><soap:Fault>') !== false) {

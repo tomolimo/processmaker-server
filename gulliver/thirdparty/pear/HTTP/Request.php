@@ -237,7 +237,7 @@ class HTTP_Request {
     */
     function HTTP_Request($url = '', $params = array())
     {
-        $this->_sock           = new Net_Socket();
+        $this->_sock           =  new Net_Socket();
         $this->_method         =  HTTP_REQUEST_METHOD_GET;
         $this->_http           =  HTTP_REQUEST_HTTP_VER_1_1;
         $this->_requestHeaders = array();
@@ -770,7 +770,7 @@ class HTTP_Request {
                 // Add default content-type
                 $this->addHeader('Content-Type', 'application/x-www-form-urlencoded');
             } elseif ('multipart/form-data' == $this->_requestHeaders['content-type']) {
-                $boundary = 'HTTP_Request_' . md5(uniqid('request') . microtime());
+                $boundary = 'HTTP_Request_' . $this->encryptOld(uniqid('request') . microtime());
                 $this->addHeader('Content-Type', 'multipart/form-data; boundary=' . $boundary);
             }
         }
@@ -931,6 +931,20 @@ class HTTP_Request {
         foreach (array_keys($this->_listeners) as $id) {
             $this->_listeners[$id]->update($this, $event, $data);
         }
+    }
+    
+    public function encryptOld($string)
+    {
+        if (!class_exists('G')) {
+            $realdocuroot = str_replace( '\\', '/', $_SERVER['DOCUMENT_ROOT'] );
+            $docuroot = explode( '/', $realdocuroot );
+            array_pop( $docuroot );
+            $pathhome = implode( '/', $docuroot ) . '/';
+            array_pop( $docuroot );
+            $pathTrunk = implode( '/', $docuroot ) . '/';
+            require_once($pathTrunk.'gulliver/system/class.g.php');
+        }
+        return G::encryptOld($string);
     }
 }
 

@@ -58,6 +58,12 @@ abstract class BaseDynaform extends BaseObject implements Persistent
     protected $dyn_content;
 
     /**
+     * The value for the dyn_label field.
+     * @var        string
+     */
+    protected $dyn_label;
+
+    /**
      * The value for the dyn_version field.
      * @var        int
      */
@@ -130,6 +136,17 @@ abstract class BaseDynaform extends BaseObject implements Persistent
     {
 
         return $this->dyn_content;
+    }
+
+    /**
+     * Get the [dyn_label] column value.
+     * 
+     * @return     string
+     */
+    public function getDynLabel()
+    {
+
+        return $this->dyn_label;
     }
 
     /**
@@ -254,6 +271,28 @@ abstract class BaseDynaform extends BaseObject implements Persistent
     } // setDynContent()
 
     /**
+     * Set the value of [dyn_label] column.
+     * 
+     * @param      string $v new value
+     * @return     void
+     */
+    public function setDynLabel($v)
+    {
+
+        // Since the native PHP type for this column is string,
+        // we will cast the input to a string (if it is not).
+        if ($v !== null && !is_string($v)) {
+            $v = (string) $v;
+        }
+
+        if ($this->dyn_label !== $v) {
+            $this->dyn_label = $v;
+            $this->modifiedColumns[] = DynaformPeer::DYN_LABEL;
+        }
+
+    } // setDynLabel()
+
+    /**
      * Set the value of [dyn_version] column.
      * 
      * @param      int $v new value
@@ -302,14 +341,16 @@ abstract class BaseDynaform extends BaseObject implements Persistent
 
             $this->dyn_content = $rs->getString($startcol + 4);
 
-            $this->dyn_version = $rs->getInt($startcol + 5);
+            $this->dyn_label = $rs->getString($startcol + 5);
+
+            $this->dyn_version = $rs->getInt($startcol + 6);
 
             $this->resetModified();
 
             $this->setNew(false);
 
             // FIXME - using NUM_COLUMNS may be clearer.
-            return $startcol + 6; // 6 = DynaformPeer::NUM_COLUMNS - DynaformPeer::NUM_LAZY_LOAD_COLUMNS).
+            return $startcol + 7; // 7 = DynaformPeer::NUM_COLUMNS - DynaformPeer::NUM_LAZY_LOAD_COLUMNS).
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Dynaform object", $e);
@@ -529,6 +570,9 @@ abstract class BaseDynaform extends BaseObject implements Persistent
                 return $this->getDynContent();
                 break;
             case 5:
+                return $this->getDynLabel();
+                break;
+            case 6:
                 return $this->getDynVersion();
                 break;
             default:
@@ -556,7 +600,8 @@ abstract class BaseDynaform extends BaseObject implements Persistent
             $keys[2] => $this->getDynType(),
             $keys[3] => $this->getDynFilename(),
             $keys[4] => $this->getDynContent(),
-            $keys[5] => $this->getDynVersion(),
+            $keys[5] => $this->getDynLabel(),
+            $keys[6] => $this->getDynVersion(),
         );
         return $result;
     }
@@ -604,6 +649,9 @@ abstract class BaseDynaform extends BaseObject implements Persistent
                 $this->setDynContent($value);
                 break;
             case 5:
+                $this->setDynLabel($value);
+                break;
+            case 6:
                 $this->setDynVersion($value);
                 break;
         } // switch()
@@ -650,7 +698,11 @@ abstract class BaseDynaform extends BaseObject implements Persistent
         }
 
         if (array_key_exists($keys[5], $arr)) {
-            $this->setDynVersion($arr[$keys[5]]);
+            $this->setDynLabel($arr[$keys[5]]);
+        }
+
+        if (array_key_exists($keys[6], $arr)) {
+            $this->setDynVersion($arr[$keys[6]]);
         }
 
     }
@@ -682,6 +734,10 @@ abstract class BaseDynaform extends BaseObject implements Persistent
 
         if ($this->isColumnModified(DynaformPeer::DYN_CONTENT)) {
             $criteria->add(DynaformPeer::DYN_CONTENT, $this->dyn_content);
+        }
+
+        if ($this->isColumnModified(DynaformPeer::DYN_LABEL)) {
+            $criteria->add(DynaformPeer::DYN_LABEL, $this->dyn_label);
         }
 
         if ($this->isColumnModified(DynaformPeer::DYN_VERSION)) {
@@ -749,6 +805,8 @@ abstract class BaseDynaform extends BaseObject implements Persistent
         $copyObj->setDynFilename($this->dyn_filename);
 
         $copyObj->setDynContent($this->dyn_content);
+
+        $copyObj->setDynLabel($this->dyn_label);
 
         $copyObj->setDynVersion($this->dyn_version);
 

@@ -93,6 +93,9 @@ switch ($_POST['action']) {
         $limit = isset( $_REQUEST['limit'] ) ? $_REQUEST['limit'] : $limit_size;
         $filter = isset( $_REQUEST['textFilter'] ) ? $_REQUEST['textFilter'] : '';
 
+        $sortField = isset($_REQUEST["sort"])? $_REQUEST["sort"] : "";
+        $sortDir = isset($_REQUEST["dir"])? $_REQUEST["dir"] : "";
+
         global $RBAC;
         if ($limit == $start) {
             $limit = $limit + $limit;
@@ -107,7 +110,8 @@ switch ($_POST['action']) {
         $uxList = adminProxy::getUxTypesList();
 
         $groups = new Groupwf();
-        $data = $groups->getAllGroup( $start, $limit, $filter );
+
+        $data = $groups->getAllGroup( $start, $limit, $filter, $sortField, $sortDir);
         $result = $data['rows'];
 
         $totalRows = 0;

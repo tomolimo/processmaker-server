@@ -376,7 +376,7 @@ var G_Grid = function(oForm, sGridName){
     var aCells = oRow.getElementsByTagName('td');
     var oNewRow = this.oGrid.insertRow(this.oGrid.rows.length - 1);
     var currentRow = this.oGrid.rows.length - 2;
-    var newID, attributes, img2, gridType;
+    var newID, attributes, img2;
 
     oNewRow.onmouseover=function(){
       highlightRow(this, '#D9E8FF');
@@ -400,6 +400,7 @@ var G_Grid = function(oForm, sGridName){
           eNodeName = eNodeName.toLowerCase();
         switch(eNodeName){
           case 'input':
+            oNewRow.getElementsByTagName('td')[i].innerHTML  = oNewRow.getElementsByTagName('td')[i].innerHTML.replace(/\[1\]/g, '\[' + currentRow + '\]');
             aObjects = oNewRow.getElementsByTagName('td')[i].getElementsByTagName('input');
             if (aObjects){
               newID = aObjects[0].id.replace(/\[1\]/g, '\[' + currentRow + '\]');
@@ -537,7 +538,9 @@ var G_Grid = function(oForm, sGridName){
                       break;
                   case 'hidden': //HIDDEN
                     if ((attributes.gridtype != "yesno" && attributes.gridtype != "dropdown") || typeof(attributes.gridtype) == "undefined") {
-                        aObjects[n].value = defaultValue;
+                        if(defaultValue != ''){
+                            aObjects[n].value = defaultValue;
+                        }
                         newID = aObjects[n].id.replace(/\[1\]/g, '\[' + currentRow + '\]');
                         aObjects[n].id = newID;
                         aObjects[n].name = newID;
@@ -576,34 +579,16 @@ var G_Grid = function(oForm, sGridName){
             aObjects = null;
             break;
           case 'select': //DROPDOWN
-            var oNewSelect;
             aObjects = oNewRow.getElementsByTagName('td')[i].getElementsByTagName('select');
+
             if (aObjects){
               newID = aObjects[0].id.replace(/\[1\]/g, '\[' + currentRow + '\]');
               aObjects[0].id = newID;
               aObjects[0].name = newID;
 
-              oNewSelect = document.createElement(aObjects[0].tagName);
+              var oNewSelect = this.cloneElement(aObjects[0]);
               oNewSelect.id = newID;
               oNewSelect.name = newID;
-              oNewSelect.setAttribute('class','module_app_input___gray');
-
-              aAttributes = aObjects[0].attributes;
-              for (a=0; a < aAttributes.length; a++){
-                if (aAttributes[a].name.indexOf('pm:') != -1){
-                  oNewSelect.setAttribute(aAttributes[a].name,aAttributes[a].value);
-                }
-                if (aAttributes[a].name == 'disabled'){
-                  if (_BROWSER.name == 'msie'){
-                	if (aAttributes[a].value=='true'){
-                	  oNewSelect.setAttribute(aAttributes[a].name,aAttributes[a].value);
-                	}
-                  }
-                  else{
-                    oNewSelect.setAttribute(aAttributes[a].name,aAttributes[a].value);
-                  }
-                }
-              }
 
               attributes = elementAttributesNS(aObjects[0], 'pm');
               //var MyAtt = attributes;
@@ -614,11 +599,7 @@ var G_Grid = function(oForm, sGridName){
               }else{
                 defaultValue = '';
               }
-              if (attributes.gridtype != '' && typeof attributes.gridtype != 'undefined'){
-                gridType = attributes.gridtype;
-              }else{
-                gridType = '';
-              }
+
               var aDependents = this.allDependentFields.split(',');
               sObject = this.getObjectName(newID);
 
@@ -764,36 +745,74 @@ var G_Grid = function(oForm, sGridName){
 
     this.deleteGridRow = function (sRow, bWithoutConfirm)
     {
-        if (typeof(bWithoutConfirm) == "undefined") {
-            bWithoutConfirm = false;
-        }
-        if (this.oGrid.rows.length == 2) {
-            new leimnud.module.app.alert().make({
-                label: G_STRINGS.ID_MSG_NODELETE_GRID_ITEM
-            });
-            return false;
-        }
-        if (bWithoutConfirm) {
-            if (this.oGrid.rows.length == 3) {
-                this.clearRowWC(this, sRow);
-            } else {
-                this.deleteRowWC(this, sRow);
+        if (leimnud.browser.isIE) {
+            if (typeof(bWithoutConfirm) == "undefined") {
+                bWithoutConfirm = false;
             }
-        } else {
-            if (this.oGrid.rows.length == 3) {
-                new leimnud.module.app.confirm().make({
-                    label: _('ID_MSG_CLEAR_GRID_FIRST_ITEM'),
-                    action: function () {
-                        this.clearRowWC(this, sRow);
-                    }.extend(this)
+            if (document.getElementById(this.sGridName).rows.length == 2) {
+                new leimnud.module.app.alert().make({
+                    label: G_STRINGS.ID_MSG_NODELETE_GRID_ITEM,
+                    width:400, height:120
                 });
+                return false;
+            }
+            if (bWithoutConfirm) {
+                if (document.getElementById(this.sGridName).rows.length == 3) {
+                    this.clearRowWC(this, sRow);
+                } else {
+                    this.deleteRowWC(this, sRow);
+                }
             } else {
-                new leimnud.module.app.confirm().make({
-                    label: G_STRINGS.ID_MSG_DELETE_GRID_ITEM,
-                    action: function () {
-                        this.deleteRowWC(this, sRow);
-                    }.extend(this)
+                if (document.getElementById(this.sGridName).rows.length == 3) {
+                    new leimnud.module.app.confirm().make({
+                        label: _('ID_MSG_CLEAR_GRID_FIRST_ITEM'),
+                        width:400, height:120,
+                        action: function () {
+                            this.clearRowWC(this, sRow);
+                        }.extend(this)
+                    });
+                } else {
+                    new leimnud.module.app.confirm().make({
+                        label: G_STRINGS.ID_MSG_DELETE_GRID_ITEM,
+                        width:400, height:120,
+                        action: function () {
+                            this.deleteRowWC(this, sRow);
+                        }.extend(this)
+                    });
+                }
+            }
+        }else{
+            if (typeof(bWithoutConfirm) == "undefined") {
+                bWithoutConfirm = false;
+            }
+            if (document.getElementById(this.sGridName).rows.length == 2) {
+                new leimnud.module.app.alert().make({
+                    label: G_STRINGS.ID_MSG_NODELETE_GRID_ITEM
                 });
+                return false;
+            }
+            if (bWithoutConfirm) {
+                if (document.getElementById(this.sGridName).rows.length == 3) {
+                    this.clearRowWC(this, sRow);
+                } else {
+                    this.deleteRowWC(this, sRow);
+                }
+            } else {
+                if (document.getElementById(this.sGridName).rows.length == 3) {
+                    new leimnud.module.app.confirm().make({
+                        label: _('ID_MSG_CLEAR_GRID_FIRST_ITEM'),
+                        action: function () {
+                            this.clearRowWC(this, sRow);
+                        }.extend(this)
+                    });
+                } else {
+                    new leimnud.module.app.confirm().make({
+                        label: G_STRINGS.ID_MSG_DELETE_GRID_ITEM,
+                        action: function () {
+                            this.deleteRowWC(this, sRow);
+                        }.extend(this)
+                    });
+                }
             }
         }
     };
@@ -805,7 +824,7 @@ var G_Grid = function(oForm, sGridName){
     sRow = sRow.replace("]", "");
     var iRow = Number(sRow);
     var iRowAux = iRow + 1;
-    var lastItem = oObj.oGrid.rows.length - 2;
+    var lastItem = document.getElementById(this.sGridName).rows.length - 2;
     var elemNodeName = "";
     var elem2ParentNode;
     var elem2Id   = "";
@@ -817,9 +836,9 @@ var G_Grid = function(oForm, sGridName){
     var i = 0;
 
     while (iRowAux <= (lastItem)) {
-      for (i = 1; i < oObj.oGrid.rows[iRowAux - 1].cells.length; i++) {
-        var oCell1 = oObj.oGrid.rows[iRowAux - 1].cells[i];
-        var oCell2 = oObj.oGrid.rows[iRowAux].cells[i];
+      for (i = 1; i < document.getElementById(this.sGridName).rows[iRowAux - 1].cells.length; i++) {
+        var oCell1 = document.getElementById(this.sGridName).rows[iRowAux - 1].cells[i];
+        var oCell2 = document.getElementById(this.sGridName).rows[iRowAux].cells[i];
 
         elemNodeName = oCell1.innerHTML.substring(oCell1.innerHTML.indexOf("<") + 1, oCell1.innerHTML.indexOf(" ")).toLowerCase();
 
@@ -935,7 +954,7 @@ var G_Grid = function(oForm, sGridName){
     }
 
     //Delete row
-    this.oGrid.deleteRow(lastItem);
+    document.getElementById(this.sGridName).deleteRow(lastItem);
 
     for (i = 0; i <= this.aFields.length - 1; i++) {
         this.aElements.pop();
@@ -975,8 +994,8 @@ var G_Grid = function(oForm, sGridName){
         var pmLabel = '';
         var elemNodeName = '';
         var objects = '';
-        for (i = 1; i < oObj.oGrid.rows[1].cells.length; i++) {
-            var oCell1 = oObj.oGrid.rows[1].cells[i];
+        for (i = 1; i < document.getElementById(this.sGridName).rows[1].cells.length; i++) {
+            var oCell1 = document.getElementById(this.sGridName).rows[1].cells[i];
             elemNodeName = oCell1.innerHTML.substring(oCell1.innerHTML.indexOf("<") + 1, oCell1.innerHTML.indexOf(" ")).toLowerCase();
             switch (elemNodeName) {
                 case "input":

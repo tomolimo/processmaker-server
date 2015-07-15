@@ -1,5 +1,6 @@
 <?php
 
+
 /**
  * class.configuration.php
  *
@@ -319,8 +320,17 @@ class Configurations // extends Configuration
         if ($usrUid != '') {
             $oUser = UsersPeer::retrieveByPK($usrUid);
             $aux = str_replace('@userName', trim($username), $this->UserConfig['format']);
+
+            $theFormat = $this->UserConfig['format'];
+            $fname = $oUser->getUsrFirstname();
+            $lname = $oUser->getUsrLastname();
+            if (strpos($theFormat, ',') !== false && ( trim($fname) == '' || trim($lname) == '')) {
+              $theFormat = str_replace(',', '', $theFormat);
+            }
+
+            $aux = str_replace('@userName', trim($username), $theFormat);
             $aux = str_replace('@firstName', $oUser->getUsrFirstname(), $aux);
-            $aux = str_replace('@lastName', $oUser->getUsrLastname(), $aux);
+            $aux = str_replace('@lastName', $oUser->getUsrLastname(), $aux);           
         }
         return $aux;
     }
@@ -374,7 +384,13 @@ class Configurations // extends Configuration
     public function getFormats()
     {
         if (!isset($this->UserConfig)) {
+            $this->UserConfig = array();
+        }
+        if (empty($this->UserConfig)) {
             $this->UserConfig = $this->getConfiguration("ENVIRONMENT_SETTINGS", "");
+        }
+        if (is_numeric($this->UserConfig)) {
+            $this->UserConfig = array();
         }
 
         //Setting defaults
@@ -648,7 +664,7 @@ class Configurations // extends Configuration
      * @param string $translation Translation
      * @return array Return the fields and configuration
      *
-     */
+    */
     public function casesListDefaultFieldsAndConfig($action, $translation = 1)
     {
         $caseColumns = array();
@@ -790,7 +806,7 @@ class Configurations // extends Configuration
                 $caseReaderFields[] = array("name" => "DEL_TASK_DUE_DATE");
                 $caseReaderFields[] = array("name" => "APP_UPDATE_DATE");
                 $caseReaderFields[] = array("name" => "DEL_PRIORITY");
-                $caseReaderFields[] = array("name" => "APP_STATUS_LABEL");
+                $caseReaderFields[] = array("name" => "DEL_THREAD_STATUS");
                 $caseReaderFields[] = array("name" => "APP_FINISH_DATE");
                 $caseReaderFields[] = array("name" => "CASE_SUMMARY");
                 $caseReaderFields[] = array("name" => "CASE_NOTES_COUNT");

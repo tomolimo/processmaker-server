@@ -19,6 +19,27 @@
   <PAGED_TABLE_ID type="private"/>
   <PAGED_TABLE_FAST_SEARCH type="FastSearch" label="@G::LoadTranslation(ID_SEARCH)"/>
   <JS type="javascript" replaceTags="1"><![CDATA[
+  add_placeholder("form[PAGED_TABLE_FAST_SEARCH]","@G::LoadTranslation(ID_EMPTY_SEARCH)");
+  function add_placeholder (id, placeholder){
+   	var el = document.getElementById(id);
+   	el.placeholder = placeholder;
+     
+    el.onfocus = function () {
+    	if(this.value == this.placeholder) {
+    	  this.value = '';
+    	  el.style.cssText  = '';
+    	}
+     };
+     
+    el.onblur = function () {
+  	  if(this.value.length == 0) {
+    	  this.value = this.placeholder;
+    	  el.style.cssText = 'color:#A9A9A9;';
+        }
+    };
+     
+  	el.onblur();
+  }
   var windowWidth = 600;
   var windowHeight = 460;
 

@@ -1,89 +1,114 @@
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <link rel="stylesheet" href="/lib/pmdynaform/libs/bootstrap-3.1.1/css/bootstrap.min.css">
     {$meta}
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />    
     <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon" />
     {$header}
   </head>
-  <body>
-    <table width="100%" height="100%" cellpadding="0" cellspacing="0" border="0" id="pm_main_table">
-      <tr>
-        <td id="pm_header" valign="top">
-          <table width="100%" height="32" border="0" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF">
-            <tr>
-                {if $user_logged neq '' or $tracker neq ''}
-                <td width="50%" rowspan="2" valign="center"><img src="{$logo_company}" class="logo_company"/></td>
-                <td width="50%" height="16" align="right" valign="top">
-                  <div align="right" class="logout">
-                    <small>
-                    {if $user_logged neq ''}
-                      {$msgVer}<label class="textBlue">{$userfullname} <a href="../users/myInfo">{$user}</a> | </label>
-                      {if $switch_interface}
-                      <label class="textBlue"><a href="../../uxs/home">{$switch_interface_label}</a> | </label>
+  {if $user_logged neq '' or $tracker neq ''}
+    <body>   
+      <table width="100%" height="100%" cellpadding="0" cellspacing="0" border="0" id="pm_main_table">
+        <tr>
+          <td id="pm_header" valign="top" {if $user_logged neq '' or $tracker neq ''}style="border-bottom:1px solid #e7e7e7;"{/if}>
+            <table width="100%" height="32" border="0" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF">
+              <tr>
+                  {if $user_logged neq '' or $tracker neq ''}
+                  <td rowspan="2" style="vertical-align:top;width: 245px;"><img src="{$logo_company}" class="logo_company"/></td>
+                  <td id="mainMenuBG" class="mainMenuBG" rowspan="2" valign="center" >
+                      {include file="$tpl_menu"}
+                      {if (count($subMenus)>0) }
+                          {include file= "$tpl_submenu"}
                       {/if}
-                      <a href="{$linklogout}" class="tableOption">{$logout}</a>&nbsp;&nbsp;<br/>
-                      <label class="textBlack"><b>{$rolename}</b> {$workspace_label} <b><u>{$workspace}</u></b> &nbsp; &nbsp; <br/>
-                      {$udate}</label>&nbsp; &nbsp;
-                    {else}
-                        {if $tracker eq 1}
-                            <a href="{$linklogout}" class="tableOption">{$logout}</a>&nbsp;&nbsp;
+                  </td>
+                  <td height="16" align="right" valign="top">
+                    <div align="right" class="logout">
+                      <small>
+                      {if $user_logged neq ''}
+                        {$msgVer}<label class="textBlue">{$userfullname} <a href="../users/myInfo">{$user}</a> | </label>
+                        {if $switch_interface}
+                        <label class="textBlue"><a href="../../uxs/home">{$switch_interface_label}</a> | </label>
                         {/if}
-                    {/if}
-                    </small>
-                  </div>
+                        <a href="{$linklogout}" class="tableOption">{$logout}</a>&nbsp;&nbsp;<br/>
+                        <label class="textBlack"><b>{$rolename}</b> {$workspace_label} <b><u>{$workspace}</u></b><br />
+                        {$udate}</label>&nbsp; &nbsp;
+                      {else}
+                          {if $tracker eq 1}
+                              <a href="{$linklogout}" class="tableOption">{$logout}</a>&nbsp;&nbsp;
+                          {/if}
+                      {/if}
+                      </small>
+                    </div>
+                  </td>
+                  {else}
+                  <td width="100%" style="padding-top: 10px">
+                      <img style="display: block; margin-left: auto; margin-right: auto;" src="{$logo_company}"/>
+                  </td>
+                  {/if}
+              </tr>
+              <tr>
+                <td height="16" valign="bottom" class="title">
+                  <div align="right"></div>
                 </td>
-                {else}
-                <td width="100%" style="padding-top: 10px"><img style="display: block; margin-left: auto; margin-right: auto;" src="{$logo_company}"/></td>
-                {/if}
-            </tr>
-            <tr>
-              <td width="50%" height="16" valign="bottom" class="title">
-                <div align="right"></div>
-              </td>
-            </tr>
-          </table>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <table width="100%" cellspacing="0" cellpadding="0" border="0" >
-            <tr>
-              {if $user_logged neq '' or $tracker neq ''}
-              <td width="100%" class="mainMenuBG" style="height:25px">
-                {include file="$tpl_menu"}
-              </td>
-              {else}
-              <td width="100%" style="height:25px">
-              </td>
-              {/if}
-            </tr>
-            {if (count($subMenus)>0) }
-            <tr>
-              <td >
-              <table width="100%" cellpadding="0" cellspacing="0" border="0">
-                <tr><td width="100%" class="mainMenuBG">{include file= "$tpl_submenu"}</td></tr>
-              </table>
-              </td>
-            </tr>
-            {/if}
-            <tr>
-              <td width="100%" align="center">
-                {php}
-                global $G_TEMPLATE;
-                if ($G_TEMPLATE != '') G::LoadTemplate($G_TEMPLATE);
-                {/php}
-              </td>
-            </tr>
-          </table>
-        </td>
-      </tr>
-      <tr height="100%">
-        <td height="100%">
-          <div class="Footer">
-            <div class="content">{$footer}</div>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <table width="100%" cellspacing="0" cellpadding="0" border="0" >
+              <tr>
+                <td width="100%" align="center">
+                  {php}
+                  global $G_TEMPLATE;
+                  if ($G_TEMPLATE != '') G::LoadTemplate($G_TEMPLATE);
+                  {/php}
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr height="100%">
+          <td height="100%">
+            <div class="Footer">
+              <div class="content">{$footer}</div>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </body>
+  {else}
+    <body id="page-top" class="login" data-spy="scroll" data-target=".navbar-custom">      
+      <div class="page-wrap">
+        <div class="container">         
+            <div class="row vertical-offset-100">
+                <div class="col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
+                      <div class="row-fluid user-row">
+                                <img src="/images/logopm3.png" class="img-responsive" alt="Conxole Admin">
+                            </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading text-center">                                                            
+                            <p>Please enter your credentials below</p>
+                        </div>
+                        <div class="panel-body">                           
+                            {php}
+                            global $G_TEMPLATE;
+                            if ($G_TEMPLATE != '') G::LoadTemplate($G_TEMPLATE);
+                            {/php}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div>       
+        <div class="footer-login">
+          <div class="container">
+            <span>
+              {$footer}
+            </span>
           </div>
-        </td>
-      </tr>
-    </table>
-  </body>
+        </div>
+    </body>
+  {/if}
 </html>

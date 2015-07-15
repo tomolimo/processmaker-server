@@ -15,6 +15,7 @@
 
 /* Layout */
 .o2k7Skin table.mceLayout {border:0; border-left:1px solid #ABC6DD; border-right:1px solid #ABC6DD}
+.o2k7Skin table.mceLayout tr.mceLast {height:1px !important}
 .o2k7Skin table.mceLayout tr.mceFirst td {border-top:1px solid #ABC6DD}
 .o2k7Skin table.mceLayout tr.mceLast td {border-bottom:1px solid #ABC6DD}
 .o2k7Skin table.mceToolbar, .o2k7Skin tr.mceFirst .mceToolbar tr td, .o2k7Skin tr.mceLast .mceToolbar tr td {border:0; margin:0; padding:0}

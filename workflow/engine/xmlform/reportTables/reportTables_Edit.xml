@@ -110,7 +110,7 @@ function reportTablesSave(form)
     if (getField("REP_TAB_GRID").value == "") {
         new leimnud.module.app.alert().make({label: _("ID_GRID_FIELDS_REQUIRED")});
         return false;
-     }
+    }
   }
 
   ajax_post(form.action, form, 'POST');

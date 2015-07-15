@@ -4,7 +4,7 @@
 SELECT TAS_UID, CON_VALUE FROM TASK LEFT JOIN CONTENT ON (TAS_UID = CON_ID AND CON_CATEGORY = 'TAS_TITLE' AND CON_LANG = '@#LANG') WHERE PRO_UID = '@#PROCESS'
   ]]><en><![CDATA[Next Task]]></en></ROU_NEXT_TASK>
   <ROU_CONDITION type="text" size="20" maxlength="2" showVars="1" validate="Int" process="@#PROCESS">
-    <en><![CDATA[No of Task to be Discriminated]]></en>
+    <en><![CDATA[Number of tasks to be discriminated]]></en>
   </ROU_CONDITION>
   <ROU_OPTIONAL type="dropdown" required="1" readonly="0" savelabel="0" mode="edit" options="Array" btn_cancel="Cancel">
     <en><![CDATA[Type of Discriminator]]><option name="FALSE"><![CDATA[Structured]]></option><option name="TRUE"><![CDATA[Cancelling]]></option></en>

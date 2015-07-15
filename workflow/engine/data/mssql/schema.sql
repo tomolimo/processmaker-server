@@ -1089,6 +1089,7 @@ CREATE TABLE [ROUTE]
 	[ROU_NEXT_TASK] VARCHAR(32) default '0' NOT NULL,
 	[ROU_CASE] INT default 0 NOT NULL,
 	[ROU_TYPE] VARCHAR(25) default 'SEQUENTIAL' NOT NULL,
+ [ROU_DEFAULT] INT default 0 NOT NULL,
 	[ROU_CONDITION] VARCHAR(512) default '' NOT NULL,
 	[ROU_TO_LAST_USER] VARCHAR(20) default 'FALSE' NOT NULL,
 	[ROU_OPTIONAL] VARCHAR(20) default 'FALSE' NOT NULL,
@@ -2612,6 +2613,7 @@ CREATE TABLE [APP_HISTORY]
 	[PRO_UID] VARCHAR(32) default '' NOT NULL,
 	[TAS_UID] VARCHAR(32) default '' NOT NULL,
 	[DYN_UID] VARCHAR(32) default '' NOT NULL,
+ [OBJ_TYPE] VARCHAR(20) default 'DYNAFORM' NOT NULL,
 	[USR_UID] VARCHAR(32) default '' NOT NULL,
 	[APP_STATUS] VARCHAR(100) default '' NOT NULL,
 	[HISTORY_DATE] CHAR(19)  NULL,
@@ -3236,5 +3238,167 @@ CREATE TABLE WEB_ENTRY
     WE_UPDATE_DATE    CHAR(19),
 
     CONSTRAINT WEB_ENTRY_PK PRIMARY KEY (WE_UID)
+);
+
+/* --------------------------------------------------------------------------- */
+/* APP_ASSIGN_SELF_SERVICE_VALUE */
+/* --------------------------------------------------------------------------- */
+
+IF EXISTS (SELECT 1 FROM sysobjects WHERE type = 'U' AND name = 'APP_ASSIGN_SELF_SERVICE_VALUE')
+BEGIN
+  DECLARE @reftable_71 nvarchar(60), @constraintname_71 nvarchar(60)
+  DECLARE refcursor CURSOR FOR
+  select reftables.name tablename, cons.name constraintname
+   from sysobjects tables,
+     sysobjects reftables,
+     sysobjects cons,
+     sysreferences ref
+    where tables.id = ref.rkeyid
+   and cons.id = ref.constid
+   and reftables.id = ref.fkeyid
+   and tables.name = 'APP_ASSIGN_SELF_SERVICE_VALUE'
+  OPEN refcursor
+  FETCH NEXT from refcursor into @reftable_71, @constraintname_71
+  while @@FETCH_STATUS = 0
+  BEGIN
+    exec ('alter table ' + @reftable_71 + ' drop constraint ' + @constraintname_71)
+    FETCH NEXT from refcursor into @reftable_71, @constraintname_71
+  END
+  CLOSE refcursor
+  DEALLOCATE refcursor
+  DROP TABLE [APP_ASSIGN_SELF_SERVICE_VALUE]
+END
+
+CREATE TABLE APP_ASSIGN_SELF_SERVICE_VALUE
+(
+    APP_UID   VARCHAR(32) NOT NULL,
+    DEL_INDEX INT         DEFAULT 0 NOT NULL,
+    PRO_UID   VARCHAR(32) NOT NULL,
+    TAS_UID   VARCHAR(32) NOT NULL,
+    GRP_UID   VARCHAR(32) DEFAULT '' NOT NULL
+);
+
+/* ---------------------------------------------------------------------- */
+/* MESSAGE											*/
+/* ---------------------------------------------------------------------- */
+
+
+IF EXISTS (SELECT 1 FROM sysobjects WHERE type = 'U' AND name = 'MESSAGE')
+BEGIN
+	 DECLARE @reftable_108 nvarchar(60), @constraintname_108 nvarchar(60)
+	 DECLARE refcursor CURSOR FOR
+	 select reftables.name tablename, cons.name constraintname
+	  from sysobjects tables,
+		   sysobjects reftables,
+		   sysobjects cons,
+		   sysreferences ref
+	   where tables.id = ref.rkeyid
+		 and cons.id = ref.constid
+		 and reftables.id = ref.fkeyid
+		 and tables.name = 'MESSAGE'
+	 OPEN refcursor
+	 FETCH NEXT from refcursor into @reftable_108, @constraintname_108
+	 while @@FETCH_STATUS = 0
+	 BEGIN
+	   exec ('alter table '+@reftable_108+' drop constraint '+@constraintname_108)
+	   FETCH NEXT from refcursor into @reftable_108, @constraintname_108
+	 END
+	 CLOSE refcursor
+	 DEALLOCATE refcursor
+	 DROP TABLE [MESSAGE]
+END
+
+
+CREATE TABLE [MESSAGE]
+(
+	[MES_UID] VARCHAR(32)  NOT NULL,
+	[PRJ_UID] VARCHAR(32)  NOT NULL,
+	[MES_NAME] VARCHAR(255) default '' NULL,
+	[MES_CONDITION] VARCHAR(255) default '' NULL,
+	CONSTRAINT MESSAGE_PK PRIMARY KEY ([MES_UID])
+);
+
+/* ---------------------------------------------------------------------- */
+/* MESSAGE_DETAIL											*/
+/* ---------------------------------------------------------------------- */
+
+
+IF EXISTS (SELECT 1 FROM sysobjects WHERE type = 'U' AND name = 'MESSAGE_DETAIL')
+BEGIN
+	 DECLARE @reftable_109 nvarchar(60), @constraintname_109 nvarchar(60)
+	 DECLARE refcursor CURSOR FOR
+	 select reftables.name tablename, cons.name constraintname
+	  from sysobjects tables,
+		   sysobjects reftables,
+		   sysobjects cons,
+		   sysreferences ref
+	   where tables.id = ref.rkeyid
+		 and cons.id = ref.constid
+		 and reftables.id = ref.fkeyid
+		 and tables.name = 'MESSAGE_DETAIL'
+	 OPEN refcursor
+	 FETCH NEXT from refcursor into @reftable_109, @constraintname_109
+	 while @@FETCH_STATUS = 0
+	 BEGIN
+	   exec ('alter table '+@reftable_109+' drop constraint '+@constraintname_109)
+	   FETCH NEXT from refcursor into @reftable_109, @constraintname_109
+	 END
+	 CLOSE refcursor
+	 DEALLOCATE refcursor
+	 DROP TABLE [MESSAGE_DETAIL]
+END
+
+
+CREATE TABLE [MESSAGE_DETAIL]
+(
+	[MD_UID] VARCHAR(32)  NOT NULL,
+	[MES_UID] VARCHAR(32)  NOT NULL,
+	[MD_TYPE] VARCHAR(32) default '' NULL,
+	[MD_NAME] VARCHAR(255) default '' NULL,
+	CONSTRAINT MESSAGE_DETAIL_PK PRIMARY KEY ([MD_UID])
+);
+
+/* --------------------------------------------------------------------------- */
+/* WEB_ENTRY_EVENT */
+/* --------------------------------------------------------------------------- */
+
+IF EXISTS (SELECT 1 FROM sysobjects WHERE type = 'U' AND name = 'WEB_ENTRY_EVENT')
+BEGIN
+  DECLARE @reftable_72 nvarchar(60), @constraintname_72 nvarchar(60)
+  DECLARE refcursor CURSOR FOR
+  select reftables.name tablename, cons.name constraintname
+   from sysobjects tables,
+     sysobjects reftables,
+     sysobjects cons,
+     sysreferences ref
+    where tables.id = ref.rkeyid
+   and cons.id = ref.constid
+   and reftables.id = ref.fkeyid
+   and tables.name = 'WEB_ENTRY_EVENT'
+  OPEN refcursor
+  FETCH NEXT from refcursor into @reftable_72, @constraintname_72
+  while @@FETCH_STATUS = 0
+  BEGIN
+    exec ('alter table ' + @reftable_72 + ' drop constraint ' + @constraintname_72)
+    FETCH NEXT from refcursor into @reftable_72, @constraintname_72
+  END
+  CLOSE refcursor
+  DEALLOCATE refcursor
+  DROP TABLE [WEB_ENTRY_EVENT]
+END
+
+CREATE TABLE WEB_ENTRY_EVENT
+(
+    WEE_UID    VARCHAR(32) NOT NULL,
+    PRJ_UID    VARCHAR(32) NOT NULL,
+    EVN_UID    VARCHAR(32) NOT NULL,
+    ACT_UID    VARCHAR(32) NOT NULL,
+    DYN_UID    VARCHAR(32) NOT NULL,
+    USR_UID    VARCHAR(32) NOT NULL,
+    WEE_STATUS VARCHAR(10) NOT NULL DEFAULT 'ENABLED',
+    WEE_WE_UID     VARCHAR(32) NOT NULL DEFAULT '',
+    WEE_WE_TAS_UID VARCHAR(32) NOT NULL DEFAULT '',
+
+    CONSTRAINT WEB_ENTRY_EVENT_PK PRIMARY KEY (WEE_UID)
 );
 

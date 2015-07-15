@@ -20,7 +20,7 @@ img {
 	font		:normal 8pt sans-serif,Tahoma,MiscFixed;
 	color		:#000;
 	height		:0px;
-  padding-top: 100px;
+    padding-top: 1px;
 	text-align	:center;
 }
 .Footer .image
@@ -68,6 +68,31 @@ img {
 	padding:0 20px;
     vertical-align:middle;
     font-weight: bold;
+}
+@media screen and (max-width: 1680px) {
+    #temporalMessageTD {
+          border-width: 0px;
+          font-size: normal 6pt !important;
+          height: 25px !important;
+          padding: 0 3px !important;
+          background-size: 100% 100% !important;
+        }
+}
+@media screen\0 {
+    #temporalMessageTD {
+          border-width: 0px;
+          font: normal 8pt "Open Sans", Tahoma, sans-serif, MiscFixed;
+          background-size: 100% 100%;
+        }
+}
+@media screen and (max-width: 600px) {
+    .temporalMessageERROR {
+          border-width: 0px;
+          font-size: normal 6pt !important;
+          height: 25px !important;
+          padding: 0 2px !important;
+          background-size: 100% 100% !important;
+        }
 }
 .temporalMessageWARNING
 {

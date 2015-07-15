@@ -29,7 +29,7 @@
     <en><![CDATA[To]]></en>
   </LAST_MODIFICATION_T>
   <APP_STATUS type="dropdown">
-    <en><![CDATA[Status]]><option name=""><![CDATA[All]]></option><option name="DRAFT"><![CDATA[Draft]]></option><option name="TO_DO"><![CDATA[To Do]]></option><option name="CANCELLED"><![CDATA[Cancelled]]></option><option name="COMPLETED"><![CDATA[Completed]]></option></en>
+    <en><![CDATA[Status]]><option name=""><![CDATA[All]]></option><option name="DRAFT"><![CDATA[Draft]]></option><option name="TO_DO"><![CDATA[To Do]]></option><option name="CANCELLED"><![CDATA[Canceled]]></option><option name="COMPLETED"><![CDATA[Completed]]></option></en>
   </APP_STATUS>
   <FILTER type="submit">
     <en><![CDATA[Filter]]></en>

@@ -75,7 +75,7 @@ class AuthenticationSource extends BaseAuthenticationSource {
         $authSourceEnabledTLS = isset($aData['AUTH_SOURCE_ENABLED_TLS']) ? ' - TLS: '.$aData['AUTH_SOURCE_ENABLED_TLS'] : '';
         $authSourceVersion = isset($aData['AUTH_SOURCE_VERSION']) ? ' - Version: '.$aData['AUTH_SOURCE_VERSION'] : '';
         $authSourceBaseDn = isset($aData['AUTH_SOURCE_BASE_DN']) ? ' - BaseDN: '.$aData['AUTH_SOURCE_BASE_DN'] : '';
-        $authAnonymous = $aData['AUTH_ANONYMOUS'] == 1 ? ' - Anonymous: YES' : ' - Anonymous: NO';
+        $authAnonymous = $aData['AUTH_ANONYMOUS'] == 1? ' - Anonymous: YES' : ' - Anonymous: NO';
         $authSourceSearchUser = isset($aData['AUTH_SOURCE_SEARCH_USER']) ? ' - Search User: '. $aData['AUTH_SOURCE_SEARCH_USER'] : '';
         $authSourceLdapType = isset($aData['AUTH_SOURCE_DATA']['LDAP_TYPE']) ? ' - LDAP type: '.$aData['AUTH_SOURCE_DATA']['LDAP_TYPE'] : '';
         $authSourceIdentifier = isset($aData['AUTH_SOURCE_DATA']['AUTH_SOURCE_IDENTIFIER_FOR_USER']) ? ' - Identifier: '.$aData['AUTH_SOURCE_DATA']['AUTH_SOURCE_IDENTIFIER_FOR_USER'] : '';
@@ -106,7 +106,7 @@ class AuthenticationSource extends BaseAuthenticationSource {
     $authSourceEnabledTLS = isset($aData['AUTH_SOURCE_ENABLED_TLS']) ? ' - TLS: '.$aData['AUTH_SOURCE_ENABLED_TLS'] : '';
     $authSourceVersion = isset($aData['AUTH_SOURCE_VERSION']) ? ' - Version: '.$aData['AUTH_SOURCE_VERSION'] : '';
     $authSourceBaseDn = isset($aData['AUTH_SOURCE_BASE_DN']) ? ' - BaseDN: '.$aData['AUTH_SOURCE_BASE_DN'] : '';
-    $authAnonymous = $aData['AUTH_ANONYMOUS'] == 1 ? ' - Anonymous: YES' : ' - Anonymous: NO';
+    $authAnonymous = $aData['AUTH_ANONYMOUS'] == 1? ' - Anonymous: YES' : ' - Anonymous: NO';
     $authSourceSearchUser = isset($aData['AUTH_SOURCE_SEARCH_USER']) ? ' - Search User: '. $aData['AUTH_SOURCE_SEARCH_USER'] : '';
     $authSourceLdapType = isset($aData['AUTH_SOURCE_DATA']['LDAP_TYPE']) ? ' - LDAP type: '.$aData['AUTH_SOURCE_DATA']['LDAP_TYPE'] : '';
     $authSourceIdentifier = isset($aData['AUTH_SOURCE_DATA']['AUTH_SOURCE_IDENTIFIER_FOR_USER']) ? ' - Identifier: '.$aData['AUTH_SOURCE_DATA']['AUTH_SOURCE_IDENTIFIER_FOR_USER'] : '';

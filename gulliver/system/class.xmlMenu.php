@@ -76,7 +76,7 @@ class XmlForm_Field_XmlMenu extends XmlForm_Field
      *
      * @return object $out
      */
-    public function render ($value)
+    public function render($value = null, $paramDummy2 = null)
     {
         $this->xmlMenu = new xmlMenu( $this->xmlfile, $this->home );
         $this->xmlMenu->setValues( $value );
@@ -97,7 +97,7 @@ class XmlForm_Field_XmlMenu extends XmlForm_Field
      *
      * @return none
      */
-    public function renderGrid ($value)
+    public function renderGrid($value = null, $paramDummy2 = null, $paramDummy3 = null, $paramDummy4 = null)
     {
         return $this->render( $value );
     }

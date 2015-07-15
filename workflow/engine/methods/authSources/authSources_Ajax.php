@@ -149,16 +149,30 @@ try {
             }
             break;
         case 'authSourcesNew':
+            $pluginRegistry = &PMPluginRegistry::getSingleton();
+
             $arr = Array ();
             $oDirectory = dir( PATH_RBAC . 'plugins' . PATH_SEP );
-            $aAuthSourceTypes = array ();
+
             while ($sObject = $oDirectory->read()) {
                 if (($sObject != '.') && ($sObject != '..') && ($sObject != '.svn') && ($sObject != 'ldap')) {
                     if (is_file( PATH_RBAC . 'plugins' . PATH_SEP . $sObject )) {
-                        $sType = trim( str_replace( 'class.', '', str_replace( '.php', '', $sObject ) ) );
-                        $aAuthSourceTypes['sType'] = $sType;
-                        $aAuthSourceTypes['sLabel'] = $sType;
-                        $arr[] = $aAuthSourceTypes;
+                        $sType = trim(str_replace(array("class.", ".php"), "", $sObject));
+
+                        $statusPlugin = $pluginRegistry->getStatusPlugin($sType);
+                        $flagAdd = false;
+
+                        if (preg_match("/^(?:enabled|disabled)$/", $statusPlugin)) {
+                            if ($statusPlugin == "enabled") {
+                                $flagAdd = true;
+                            }
+                        } else {
+                            $flagAdd = true;
+                        }
+
+                        if ($flagAdd) {
+                            $arr[] = array("sType" => $sType, "sLabel" => $sType);
+                        }
                     }
                 }
             }

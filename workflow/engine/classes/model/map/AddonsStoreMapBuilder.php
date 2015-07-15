@@ -3,6 +3,7 @@
 require_once 'propel/map/MapBuilder.php';
 include_once 'creole/CreoleTypes.php';
 
+
 /**
  * This class adds structure of 'ADDONS_STORE' table to 'workflow' DatabaseMap object.
  *
@@ -17,9 +18,10 @@ include_once 'creole/CreoleTypes.php';
  */
 class AddonsStoreMapBuilder
 {
+
     /**
      * The (dot-path) name of this class
-    */
+     */
     const CLASS_NAME = 'classes.model.map.AddonsStoreMapBuilder';
 
     /**
@@ -43,7 +45,6 @@ class AddonsStoreMapBuilder
      *
      * @return     the databasemap
      */
-
     public function getDatabaseMap()
     {
         return $this->dbMap;
@@ -55,13 +56,11 @@ class AddonsStoreMapBuilder
      * @return     void
      * @throws     PropelException
      */
-
     public function doBuild()
     {
         $this->dbMap = Propel::getDatabaseMap('workflow');
 
         $tMap = $this->dbMap->addTable('ADDONS_STORE');
-
         $tMap->setPhpName('AddonsStore');
 
         $tMap->setUseIdGenerator(false);
@@ -75,6 +74,7 @@ class AddonsStoreMapBuilder
         $tMap->addColumn('STORE_TYPE', 'StoreType', 'string', CreoleTypes::VARCHAR, true, 255);
 
         $tMap->addColumn('STORE_LAST_UPDATED', 'StoreLastUpdated', 'int', CreoleTypes::TIMESTAMP, false, null);
-    }
-}
 
+    } // doBuild()
+
+} // AddonsStoreMapBuilder

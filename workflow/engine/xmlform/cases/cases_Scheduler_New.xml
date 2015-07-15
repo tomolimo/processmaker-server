@@ -9,11 +9,9 @@
   <PROPERTIES_INF type="subtitle" enablehtml="1">
     <en><![CDATA[Enter the username and password of the user who will be assigned to the initial task in the case.]]></en>
   </PROPERTIES_INF>
-  <SCH_UID type="hidden"><![CDATA[ SELECT count( * )+1 AS UID FROM CASE_SCHEDULER  ]]><en/></SCH_UID>
-  <SCH_LIST type="hidden">
-</SCH_LIST>
-  <PHP_CURRENT_DATE type="hidden">
-</PHP_CURRENT_DATE>
+  <SCH_UID type="hidden" />
+  <SCH_LIST type="hidden" />
+  <PHP_CURRENT_DATE type="hidden" />
   <SCH_USER_NAME type="text" maxlength="100" validate="Any" required="1" readonly="0" size="40" mode="edit">
     <en><![CDATA[User Name]]></en>
   </SCH_USER_NAME>
@@ -552,7 +550,7 @@ function validateSchedulerFields(oForm) {
         msgBox("@G::LoadTranslation(ID_REQUIRED_NAME_CASE_SCHEDULER)", 'alert');
         return false;
     }
-    
+
     var listNames = document.getElementById('form[SCH_LIST]').value;
     listNames = listNames.split("^");
     for (var i= 1; i<listNames.length; i++) {

@@ -13,6 +13,27 @@
   <dynaformsFlatEditor type="private" defaultValue="../dynaforms/dynaforms_FlatEditor"/>
   <dynaformsDelete type="private" defaultValue="../dynaforms/dynaforms_Delete"/>
   <js type="javascript" replaceTags="1"><![CDATA[
+  add_placeholder("form[PAGED_TABLE_FAST_SEARCH]","@G::LoadTranslation(ID_EMPTY_SEARCH)");
+  function add_placeholder (id, placeholder) {
+	var el = document.getElementById(id);
+	el.placeholder = placeholder;
+ 
+    el.onfocus = function () {
+		if(this.value == this.placeholder) {
+			this.value = '';
+			el.style.cssText  = '';
+		}
+    };
+ 
+    el.onblur = function () {
+		if(this.value.length == 0) {
+			this.value = this.placeholder;
+			el.style.cssText = 'color:#A9A9A9;';
+		}
+    };
+ 
+	el.onblur();
+  }
   function dynaformAdd(){
     popupWindow("@G::LoadTranslation(ID_NEW_DYNAFORM)", "@G::encryptlink(@#dynaformsChoseType)?PRO_UID=@%PRO_UID" , 500, 225);
 	//popupWindow('@G::LoadTranslation(ID_NEW_DYNAFORM)', '@G::encryptlink(@#dynaformsNewPlugin)?PRO_UID=@%PRO_UID' , 500, 350);
@@ -130,7 +151,6 @@
   }
 
   function dynaformDelete ( uid,proUid ){
-
     isokDependent = ajax_function('@G::encryptlink(@#dynaformsDelete)','getDynaformAssign','DYN_UID='+uid+'&PRO_UID='+proUid,'POST');
 	  if(isokDependent){
  	  msgBox(G_STRINGS.ID_DYNAFORM_ASSIGN,"alert");

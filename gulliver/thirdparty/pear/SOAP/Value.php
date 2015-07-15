@@ -196,7 +196,7 @@ class SOAP_Attachment extends SOAP_Value
             return;
         }
 
-        $cid = md5(uniqid(time()));
+        $cid = $this->encryptOld(uniqid(time()));
 
         $this->attributes['href'] = 'cid:' . $cid; 
 
@@ -233,6 +233,20 @@ class SOAP_Attachment extends SOAP_Value
         fclose($fd);
 
         return $cont;
+    }
+    
+    public function encryptOld($string)
+    {
+        if (!class_exists('G')) {
+            $realdocuroot = str_replace( '\\', '/', $_SERVER['DOCUMENT_ROOT'] );
+            $docuroot = explode( '/', $realdocuroot );
+            array_pop( $docuroot );
+            $pathhome = implode( '/', $docuroot ) . '/';
+            array_pop( $docuroot );
+            $pathTrunk = implode( '/', $docuroot ) . '/';
+            require_once($pathTrunk.'gulliver/system/class.g.php');
+        }
+        return G::encryptOld($string);
     }
 
 }

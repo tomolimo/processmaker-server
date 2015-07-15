@@ -638,7 +638,7 @@ class Translation extends BaseTranslation
         include PATH_TRUNK .'vendor/colosa/MichelangeloFE/' . 'labels.php';
 
         foreach ($labels as $key => $row) {
-            $this->addTranslation ('LABEL', 'ID_MAFE_'.MD5($row), $lang, $row);
+            $this->addTranslation ('LABEL', 'ID_MAFE_'.G::encryptOld($row), $lang, $row);
         }
     }
 }

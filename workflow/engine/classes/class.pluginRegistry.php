@@ -277,12 +277,15 @@ class PMPluginRegistry
                 $pluginSrcDir = PATH_PLUGINS . $detail->sNamespace . PATH_SEP . 'src';
 
                 if (is_dir($pluginSrcDir)) {
-                    Bootstrap::registerDir($detail->sNamespace.'/src', $pluginSrcDir);
+                    //Bootstrap::registerDir($detail->sNamespace.'/src', $pluginSrcDir);
+                    $loader = \Maveriks\Util\ClassLoader::getInstance();
+                    $loader->add($pluginSrcDir);
                 }
 
                 if (array_key_exists($detail->sNamespace, $this->_restServiceEnabled)
                     && $this->_restServiceEnabled[$detail->sNamespace] == true
                 ) {
+
                     $oPlugin->registerRestService();
                 }
 
@@ -396,22 +399,19 @@ class PMPluginRegistry
     }
 
     /**
-     * get status plugin in the singleton
+     * Get status plugin in the singleton
      *
-     * @param unknown_type $sNamespace
+     * @param string $name Plugin name
+     *
+     * return mixed Return a string with status plugin, 0 otherwise
      */
-    public function getStatusPlugin ($sNamespace)
+    public function getStatusPlugin($name)
     {
-        foreach ($this->_aPluginDetails as $namespace => $detail) {
-            if ($sNamespace == $namespace) {
-                if ($this->_aPluginDetails[$sNamespace]->enabled) {
-                    return 'enabled';
-                } else {
-                    return 'disabled';
-                }
-            }
+        try {
+            return (isset($this->_aPluginDetails[$name]))? (($this->_aPluginDetails[$name]->enabled)? "enabled" : "disabled") : 0;
+        } catch (Excepton $e) {
+            throw $e;
         }
-        return 0;
     }
 
     /**
@@ -429,8 +429,8 @@ class PMPluginRegistry
         $plugins = array ();
         $namePlugin = array ();
         foreach ($files as $f) {
-            //if (preg_match("/^([\w\.]*).ini$/", $f["filename"], $matches)) {
-            if (preg_match( "/^(.*pluginConfig)\.ini$/", $f["filename"], $matches )) {
+            if (preg_match("/^([\w\.]*).ini$/", $f["filename"], $matches)) {
+            //if (preg_match( "/^(.*pluginConfig)\.ini$/", $f["filename"], $matches )) {
                 $plugins[] = $matches[1];
             }
             if (preg_match( "/^.*($pluginName)\.php$/", $f["filename"], $matches )) {
@@ -489,8 +489,11 @@ class PMPluginRegistry
         if (! file_exists( PATH_PLUGINS . $pluginFile )) {
             throw (new Exception( "File \"$pluginFile\" doesn't exist" ));
         }
-
-        require_once (PATH_PLUGINS . $pluginFile);
+        G::LoadSystem('inputfilter');
+        $filter = new InputFilter();
+        $path = PATH_PLUGINS . $pluginFile;
+        //$path = $filter->validateInput($path, 'path');
+        require_once ($path);
         $details = $this->getPluginDetails( $pluginFile );
 
         $this->installPlugin( $details->sNamespace );
@@ -509,7 +512,11 @@ class PMPluginRegistry
         }
 
         ///////
-        require_once (PATH_PLUGINS . $pluginFile);
+        $path = PATH_PLUGINS . $pluginFile;
+        G::LoadSystem('inputfilter');
+        $filter = new InputFilter();
+        $path = $filter->validateInput($path, 'path');
+        require_once ($path);
 
         foreach ($this->_aPluginDetails as $namespace => $detail) {
             if ($namespace == $sNamespace) {
@@ -1393,7 +1400,6 @@ class PMPluginRegistry
 
         foreach ($classesList as $classFile) {
             if (pathinfo($classFile, PATHINFO_EXTENSION) === 'php') {
-
                 $ns = str_replace(
                     DIRECTORY_SEPARATOR,
                     '\\',
@@ -1402,13 +1408,15 @@ class PMPluginRegistry
 
                 // Ensure that is registering only existent classes.
                 if (class_exists($ns)) {
-                    $this->_restServices[strtolower($sNamespace)][] = array(
+                    $this->_restServices[$sNamespace][] = array(
                         "filepath" => $classFile,
                         "namespace" => $ns
                     );
                 }
             }
         }
+
+        \Maveriks\WebApplication::purgeRestApiCache(basename(PATH_DATA_SITE));
 
         return true;
     }
@@ -1421,6 +1429,7 @@ class PMPluginRegistry
     public function unregisterRestService ($sNamespace)
     {
         unset($this->_restServices[$sNamespace]);
+        \Maveriks\WebApplication::purgeRestApiCache(basename(PATH_DATA_SITE));
     }
 
     public function getRegisteredRestServices()
@@ -1594,4 +1603,3 @@ class PMPluginRegistry
         }
     }
 }
-

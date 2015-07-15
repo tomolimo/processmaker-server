@@ -53,7 +53,8 @@ class AddonsStore extends BaseAddonsStore
             if (AddonsStorePeer::retrieveByPK($licenseManager->id) === null) {
                 preg_match("/^license_(.*).dat$/", $licenseManager->file, $matches);
                 $realId = urlencode($matches[1]);
-                $addonLocation = "http://{$licenseManager->server}/syspmLicenseSrv/en/green/services/addonsStore?action=getInfo&licId=$realId";
+                $workspace = (isset($licenseManager->workspace)) ? $licenseManager->workspace : 'pmLicenseSrv';
+                $addonLocation = "http://{$licenseManager->server}/sys".$workspace."/en/green/services/addonsStore?action=getInfo&licId=$realId";
 
                 self::addStore($licenseManager->id, $addonLocation);
 
@@ -99,13 +100,12 @@ class AddonsStore extends BaseAddonsStore
             }
 
             $sw = 1;
-            $addonInLicense = in_array($addon->getAddonId(), $licenseManager->features);
-
-            if ($sw == 1 && $addon->getAddonId() != "enterprise" && !$addonInLicense) {
-                $sw = 0;
-            }
-
             if ($type == 'plugin') {
+                $addonInLicense = in_array($addon->getAddonId(), $licenseManager->features);
+
+                if ($sw == 1 && $addon->getAddonId() != "enterprise" && !$addonInLicense) {
+                    $sw = 0;
+                }
                 if ($sw == 1 && $addon->isInstalled()) {
                     if ($addon->isEnabled()) {
                         $status = "installed";
@@ -125,7 +125,8 @@ class AddonsStore extends BaseAddonsStore
             } else {
                 $status = "available";
                 $enabled = false;
-                if (!$addonInLicense && in_array($addon->getAddonName(), $licenseManager->licensedfeatures) == 1) {
+                $addonInLicense = in_array($addon->getAddonId(), $licenseManager->licensedfeatures);
+                if (in_array($addon->getAddonName(), $licenseManager->licensedfeatures) == 1) {
                     $status = "installed";
                     $enabled = true;
                 }
@@ -547,7 +548,8 @@ class AddonsStore extends BaseAddonsStore
                         $addon->setAddonStatus(isset($addonInfo->status)? $addonInfo->status : "");
                         $addon->setAddonType(isset($addonInfo->type)? $addonInfo->type : "");
                         $addon->setAddonPublisher(isset($addonInfo->publisher)? $addonInfo->publisher : "");
-                        $addon->setAddonDownloadUrl(isset($addonInfo->download_url)? $addonInfo->download_url : "http://" . $pmLicenseManagerO->server . "/syspmLicenseSrv/en/green/services/rest?action=getPlugin&OBJ_UID=" . $addonInfo->guid);
+                        $workspace = (isset($pmLicenseManagerO->workspace)) ? $pmLicenseManagerO->workspace : 'pmLicenseSrv';
+                        $addon->setAddonDownloadUrl(isset($addonInfo->download_url)? $addonInfo->download_url : "http://" . $pmLicenseManagerO->server . "/sys".$workspace."/en/green/services/rest?action=getPlugin&OBJ_UID=" . $addonInfo->guid);
                         $addon->setAddonDownloadMd5(isset($addonInfo->download_md5)? $addonInfo->download_md5 : "");
                         $addon->setAddonReleaseDate(isset($addonInfo->release_date)? $addonInfo->release_date : "");
                         $addon->setAddonReleaseType(isset($addonInfo->release_type)? $addonInfo->release_type : '');

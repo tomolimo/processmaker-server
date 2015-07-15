@@ -1,46 +1,8 @@
 <?php
-/**
- * Language.php
- *
- * @package workflow.engine.classes.model
- *
- * ProcessMaker Open Source Edition
- * Copyright (C) 2004 - 2011 Colosa Inc.
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- *
- * For more information, contact Colosa Inc, 2566 Le Jeune Rd.,
- * Coral Gables, FL, 33134, USA, or email info@colosa.com.
- */
-
-//require_once 'classes/model/om/BaseLanguage.php';
-//require_once 'classes/model/Content.php';
-//require_once 'classes/model/IsoCountry.php';
-//require_once 'classes/model/Translation.php';
-
-/**
- * Skeleton subclass for representing a row from the 'LANGUAGE' table.
- *
- * You should add additional methods to this class to meet the
- * application requirements. This class will only be generated as
- * long as it does not already exist in the output directory.
- *
- *
- * @package workflow.engine.classes.model
- */
 class Language extends BaseLanguage
 {
+    private static $arrayRecord = array();
+
     private $exceptionFields = array ('','javascript','hidden','phpvariable','private','toolbar','xmlmenu','toolbutton','cellmark','grid','CheckboxTable');
 
     public function load ($sLanUid)
@@ -130,16 +92,32 @@ class Language extends BaseLanguage
         return $oDataset->getRow();
     }
 
-    public function findLocationByLanId ($LAN_ID)
-    {   
-        $oCriteria = new Criteria( 'workflow' );
-        $oCriteria->addSelectColumn( LanguagePeer::LAN_LOCATION );
-        $oCriteria->add( LanguagePeer::LAN_ID, $LAN_ID, Criteria::LIKE );
-        $oDataset = LanguagePeer::doSelectRS( $oCriteria );
-        $oDataset->setFetchmode( ResultSet::FETCHMODE_ASSOC );
-        $oDataset->next();
-        return $oDataset->getRow();
+    public function findLocationByLanId($languageId)
+    {
+        try {
+            if (!isset(self::$arrayRecord[$languageId])) {
+                $criteria = new Criteria("workflow");
+
+                $criteria->addSelectColumn(LanguagePeer::LAN_LOCATION);
+                $criteria->add(LanguagePeer::LAN_ID, $languageId, Criteria::LIKE);
+
+                $rsCriteria = LanguagePeer::doSelectRS($criteria);
+                $rsCriteria->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+
+                $rsCriteria->next();
+
+                self::$arrayRecord[$languageId] = $rsCriteria->getRow();
+            }
+
+            $record = self::$arrayRecord[$languageId];
+
+            //Return
+            return $record;
+        } catch (Exception $e) {
+            throw $e;
+        }
     }
+
     /*
      * Import a language file
      *

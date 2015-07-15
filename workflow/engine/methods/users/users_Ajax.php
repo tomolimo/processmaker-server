@@ -23,6 +23,12 @@
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  */
 try {
+    G::LoadSystem('inputfilter');
+    $filter = new InputFilter();
+    $_GET = $filter->xssFilterHard($_GET);
+    $_POST = $filter->xssFilterHard($_POST);
+    $_REQUEST = $filter->xssFilterHard($_REQUEST);
+    
     global $RBAC;
     switch ($RBAC->userCanAccess('PM_LOGIN')) {
         case - 2:
@@ -59,7 +65,7 @@ try {
                 G::LoadClass('Users');
                 $oUser = new Users();
                 $oCriteria = $oUser->loadByUsername($_POST['sUsername']);
-                $oDataset = UsersPeer::doSelectRS($oCriteria, Propel::getDbConnection('workflow_ro'));
+                $oDataset = UsersPeer::doSelectRs($oCriteria, Propel::getDbConnection('workflow_ro'));
                 $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
                 $oDataset->next();
                 $aRow = $oDataset->getRow();
@@ -86,11 +92,13 @@ try {
             switch ((int) $_POST['TU_RELATION']) {
                 case 1:
                     echo $oTasks->assignUser($_POST['TAS_UID'], $_POST['USR_UID'], $_POST['TU_TYPE']);
+                    G::auditlog("AssignUserTask","Assign a User to a Task -> ".$_POST['TAS_UID'].' User UID -> '.$_POST['USR_UID']);
                     break;
                 case 2:
                     echo $oTasks->assignGroup($_POST['TAS_UID'], $_POST['USR_UID'], $_POST['TU_TYPE']);
+                    G::auditlog("AssignGroupTask","Assign a Group to a Task -> ".$_POST['TAS_UID'].' User UID -> '.$_POST['USR_UID']);
                     break;
-            }
+            }            
             break;
         case 'ofToAssign':
             G::LoadClass('tasks');
@@ -98,11 +106,13 @@ try {
             switch ((int) $_POST['TU_RELATION']) {
                 case 1:
                     echo $oTasks->ofToAssignUser($_POST['TAS_UID'], $_POST['USR_UID'], $_POST['TU_TYPE']);
+                    G::auditlog("DeleteUserTask"," Delete a User from a Task -> ".$_POST['TAS_UID'].' User UID -> '.$_POST['USR_UID']);
                     break;
                 case 2:
                     echo $oTasks->ofToAssignGroup($_POST['TAS_UID'], $_POST['USR_UID'], $_POST['TU_TYPE']);
+                    G::auditlog("DeleteGroupTask","Delete a Group from a Task -> ".$_POST['TAS_UID'].' User UID -> '.$_POST['USR_UID']);
                     break;
-            }
+            }            
             break;
         case 'changeView':
             $_SESSION['iType'] = $_POST['TU_TYPE'];
@@ -391,7 +401,7 @@ try {
             if ($auths != '') {
                 $totalRows = sizeof($aUsers);
             } else {
-                $oDataset = UsersPeer::DoSelectRS($oCriteria);
+                $oDataset = UsersPeer::DoSelectRs($oCriteria);
                 $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
                 $oDataset->next();
                 $row = $oDataset->getRow();
@@ -434,7 +444,7 @@ try {
             }
             $oCriteria->setOffset($start);
             $oCriteria->setLimit($limit);
-            $oDataset = UsersPeer::DoSelectRS($oCriteria);
+            $oDataset = UsersPeer::DoSelectRs($oCriteria);
             $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
 
             $Login = new LoginLog();

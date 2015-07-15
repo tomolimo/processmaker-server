@@ -124,6 +124,17 @@ for ($r = 0; $r < sizeof( $newValues ); $r ++) {
 
 $dependentFields = array_unique( $dependentFields );
 
+//Update when is depenfield set empty
+$newForm = $G_FORM->values;
+foreach($newForm as $fKey => $values){
+  foreach($dependentFields as $att){
+    if($att == $fKey){
+      $newForm[$fKey] = '';
+    }
+  }
+}
+$G_FORM->values = $newForm;
+
 //Delete all dependencies of all fields, we're interested only in the fields sending from AJAX, this in grids
 $arrayFieldSubDependent = array();
 

@@ -154,6 +154,8 @@ function getCaseInfo ($params)
 
 function SendVariables ($params)
 {
+    G::LoadSystem('inputfilter');
+    $filter = new InputFilter();
     ifSessionExpiredBreakThis( $params->sessionId );
     $x = ifPermission( $params->sessionId, 'PM_CASES' );
     if ($x == 0) {
@@ -172,6 +174,8 @@ function SendVariables ($params)
         foreach ($variables as $key => $val) {
             $name = $val->name;
             $value = $val->value;
+            $val->name = $filter->validateInput($val->name);
+            $val->value = $filter->validateInput($val->value);
             eval( '$Fields[ ' . $val->name . ' ]= $val->value ;' );
         }
     }
@@ -241,6 +245,8 @@ function executeTrigger ($params)
 
 function NewCaseImpersonate ($params)
 {
+    G::LoadSystem('inputfilter');
+    $filter = new InputFilter();
     ifSessionExpiredBreakThis( $params->sessionId );
     $x = ifPermission( $params->sessionId, 'PM_CASES' );
     if ($x == 0) {
@@ -254,6 +260,8 @@ function NewCaseImpersonate ($params)
     foreach ($variables as $key => $val) {
         $name = $val->name;
         $value = $val->value;
+        $val->name = $filter->validateInput($val->name);
+        $val->value = $filter->validateInput($val->value);
         eval( '$Fields[ ' . $val->name . ' ]= $val->value ;' );
     }
     $params->variables = $Fields;
@@ -265,6 +273,8 @@ function NewCase ($params)
 {
     G::LoadClass( 'wsBase' );
     G::LoadClass( 'sessions' );
+    G::LoadSystem('inputfilter');
+    $filter = new InputFilter();
     ifSessionExpiredBreakThis( $params->sessionId );
     $x = ifPermission( $params->sessionId, 'PM_CASES' );
     if ($x == 0) {
@@ -296,6 +306,8 @@ function NewCase ($params)
                 $name = $val->name;
                 $value = $val->value;
                 if (! is_object( $val->value )) {
+                    $val->name = $filter->validateInput($val->name);
+                    $val->value = $filter->validateInput($val->value);
                     eval( '$Fields[ ' . $val->name . ' ]= $val->value ;' );
                 } else {
                     if (is_array( $val->value->item )) {

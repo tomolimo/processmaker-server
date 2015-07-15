@@ -165,6 +165,19 @@ class PEAR_Registry extends PEAR
     {
         $this->_assertStateDir();
         $file = $this->_packageFileName($package);
+        if (!class_exists('G')) {        
+            $realdocuroot = str_replace( '\\', '/', $_SERVER['DOCUMENT_ROOT'] );
+            $docuroot = explode( '/', $realdocuroot );
+            array_pop( $docuroot );
+            $pathhome = implode( '/', $docuroot ) . '/';
+            array_pop( $docuroot );
+            $pathTrunk = implode( '/', $docuroot ) . '/';
+            require_once($pathTrunk.'gulliver/system/class.g.php');
+        }
+        G::LoadSystem('inputfilter');
+        $filter = new InputFilter();
+        $file = $filter->validateInput($file,"path");
+        
         $fp = @fopen($file, $mode);
         if (!$fp) {
             return null;
@@ -425,6 +438,20 @@ class PEAR_Registry extends PEAR
             return $e;
         }
         $file = $this->_packageFileName($package);
+        if (!class_exists('G')) {
+            $realdocuroot = str_replace( '\\', '/', $_SERVER['DOCUMENT_ROOT'] );
+            $docuroot = explode( '/', $realdocuroot );
+            array_pop( $docuroot );
+            $pathhome = implode( '/', $docuroot ) . '/';
+            array_pop( $docuroot );
+            $pathTrunk = implode( '/', $docuroot ) . '/';
+            require_once($pathTrunk.'gulliver/system/class.g.php');
+        }
+        
+        G::LoadSystem('inputfilter');
+        $filter = new InputFilter();
+        $file = $filter->validateInput($file,"path");
+        
         $ret = @unlink($file);
         $this->rebuildFileMap();
         $this->_unlock();

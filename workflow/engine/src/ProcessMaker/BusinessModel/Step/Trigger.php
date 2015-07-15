@@ -411,6 +411,8 @@ class Trigger
         }
 
         $range = range($iniPos, $finPos);
+        $stepChangeIds = array();
+        $stepChangePos = array();
         foreach ($aStepTriggers as $dataStep) {
             if (($dataStep['st_type'] == $typeCompare) && (in_array($dataStep['st_position'], $range)) && ($dataStep['tri_uid'] != $triUid)) {
                 $stepChangeIds[] = $dataStep['tri_uid'];
@@ -450,6 +452,162 @@ class Trigger
         );
         $StepTrigger = new \StepTrigger();
         $StepTrigger->update($data);
+    }
+
+    /**
+     * Assign Trigger to a Step
+     *
+     * @param string $stepUid    Unique id of Step
+     * @param string $type       Type (BEFORE, AFTER, BEFORE_ASSIGNMENT, BEFORE_ROUTING, AFTER_ROUTING)
+     * @param string $taskUid    Unique id of Task
+     * @param string $triggerUid Unique id of Trigger
+     * @param array  $arrayData  Data
+     *
+     * return array Data of the Trigger assigned to a Step
+     */
+    public function createAll($stepUid, $type, $taskUid, $triggerUid, $arrayData)
+    {
+        try {
+            $stepUidIni = $stepUid;
+            $typeIni = $type;
+
+            $flagStepAssignTask = 0;
+
+            if ($stepUid == "") {
+                $flagStepAssignTask = 1;
+
+                switch ($type) {
+                    case "BEFORE_ASSIGNMENT":
+                        $stepUid = "-1";
+                        $type = "BEFORE";
+                        break;
+                    case "BEFORE_ROUTING":
+                        $stepUid = "-2";
+                        $type = "BEFORE";
+                        break;
+                    case "AFTER_ROUTING":
+                        $stepUid = "-2";
+                        $type = "AFTER";
+                        break;
+                }
+            }
+
+            //Verify data
+            if ($flagStepAssignTask == 0) {
+                $step = new \Step();
+
+                if (!$step->StepExists($stepUid)) {
+                    throw new \Exception(\G::LoadTranslation("ID_STEP_DOES_NOT_EXIST", array("step_uid", $stepUid)));
+                }
+            }
+
+            $task = new \Task();
+
+            if (!$task->taskExists($taskUid)) {
+                throw new \Exception(\G::LoadTranslation("ID_ACTIVITY_DOES_NOT_EXIST", array("act_uid", $taskUid)));
+            }
+
+            $trigger = new \Triggers();
+
+            if (!$trigger->TriggerExists($triggerUid)) {
+                throw new \Exception(\G::LoadTranslation("ID_TRIGGER_DOES_NOT_EXIST", array("tri_uid", $triggerUid)));
+            }
+
+            if ($this->existsRecord($stepUid, $type, $taskUid, $triggerUid)) {
+                throw new \Exception(\G::LoadTranslation("ID_RECORD_EXISTS_IN_TABLE", array($stepUid . ", " . $type . ", " . $taskUid . ", " . $triggerUid, "STEP_TRIGGER")));
+            }
+
+            //Create
+            $stepTrigger = new \StepTrigger();
+//            $posIni = $stepTrigger->getNextPosition($stepUid, $type, $taskUid);
+
+            $stepTrigger->createRow(array(
+                "STEP_UID" => $stepUid,
+                "TAS_UID" => $taskUid,
+                "TRI_UID" => $triggerUid,
+                "ST_TYPE" => $type,
+                "ST_CONDITION" => (isset($arrayData['st_condition'])) ? $arrayData['st_condition'] : '',
+                "ST_POSITION" => $arrayData['st_position']
+            ));
+
+            $arrayData = $this->updateAll($stepUid, $typeIni, $taskUid, $triggerUid, $arrayData);
+
+            return $arrayData;
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
+
+    /**
+     * Update Trigger of a Step
+     *
+     * @param string $stepUid    Unique id of Step
+     * @param string $type       Type (BEFORE, AFTER, BEFORE_ASSIGNMENT, BEFORE_ROUTING, AFTER_ROUTING)
+     * @param string $taskUid    Unique id of Task
+     * @param string $triggerUid Unique id of Trigger
+     * @param array  $arrayData  Data
+     *
+     * return array Data updated of the Trigger assigned to a Step
+     */
+    public function updateAll($stepUid, $type, $taskUid, $triggerUid, $arrayData)
+    {
+        try {
+            $flagStepAssignTask = 0;
+
+            if (($stepUid == "") || ($stepUid == "-1") || ($stepUid == "-2")) {
+                $flagStepAssignTask = 1;
+
+                switch ($type) {
+                    case "BEFORE_ASSIGNMENT":
+                        $stepUid = "-1";
+                        $type = "BEFORE";
+                        break;
+                    case "BEFORE_ROUTING":
+                        $stepUid = "-2";
+                        $type = "BEFORE";
+                        break;
+                    case "AFTER_ROUTING":
+                        $stepUid = "-2";
+                        $type = "AFTER";
+                        break;
+                }
+            }
+
+            //Verify data
+            if ($flagStepAssignTask == 0) {
+                $step = new \Step();
+
+                if (!$step->StepExists($stepUid)) {
+                    throw new \Exception(\G::LoadTranslation("ID_STEP_DOES_NOT_EXIST", array("step_uid", $stepUid)));
+                }
+            }
+
+            $trigger = new \Triggers();
+
+            if (!$trigger->TriggerExists($triggerUid)) {
+                throw new \Exception(\G::LoadTranslation("ID_TRIGGER_DOES_NOT_EXIST", array("tri_uid", $triggerUid)));
+            }
+
+            //Update
+            $stepTrigger = new \StepTrigger();
+
+            $arrayUpdateData = array();
+
+            $arrayUpdateData["STEP_UID"] = $stepUid;
+            $arrayUpdateData["TAS_UID"] = $taskUid;
+            $arrayUpdateData["TRI_UID"] = $triggerUid;
+            $arrayUpdateData["ST_TYPE"] = $type;
+
+            if (isset($arrayData["st_condition"])) {
+                $arrayUpdateData["ST_CONDITION"] = $arrayData["st_condition"];
+            }
+
+            $stepTrigger->update($arrayUpdateData);
+
+            return array_change_key_case($arrayUpdateData, CASE_LOWER);
+        } catch (\Exception $e) {
+            throw $e;
+        }
     }
 }
 

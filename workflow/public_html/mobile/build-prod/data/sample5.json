@@ -1,0 +1,59 @@
+{
+    "name": "form-example2",
+    "items": [
+        {
+            "type":"form",       
+            "items":
+            [
+                [
+                    {
+                        "type": "title",
+                        "colSpan": 12,
+                        "name": "title",
+                        "label": "PMDynaform 5"
+                    }
+                ],
+                [
+                    {
+                        "type": "text",
+                        "colSpan":12,
+                        "name": "name",
+                        "defaultValue": "",
+                        "label": "Integer",
+                        "required": true,
+                        "readonly": false,
+                        "dataType": "integer",
+                        "variable": "varexample"
+                    }
+                ],
+                [
+                    {
+                        "colSpan":4
+                    },
+                    {
+                        "type": "text",
+                        "colSpan":4,
+                        "name": "name2",
+                        "value": "",
+                        "label": "Old integer input",
+                        "required": false,
+                        "readonly": false,
+                        "dataType": "integer",
+                        "variable": "varexample2"
+                    },
+                    {
+                        "type": "text",
+                        "colSpan":4,
+                        "name": "name3",
+                        "value": "",
+                        "label": "Integer",
+                        "required": true,
+                        "readonly": false,
+                        "dataType": "integer",
+                        "variable": "varexample2"
+                    }
+                ]
+            ]
+        }
+    ]
+}

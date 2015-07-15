@@ -10,16 +10,38 @@
     <en><![CDATA[New]]></en>
   </MNU_ADD>
   <PAGED_TABLE_ID type="private"/>
-  <PAGED_TABLE_FAST_SEARCH type="FastSearch" label=""/>
-  <MNU_FAST_SEARCH type="button" label="@G::LoadTranslation(ID_SEARCH)" colAlign="right" colWidth="50" onclick="@#PAGED_TABLE_ID.doFastSearch(getField('PAGED_TABLE_FAST_SEARCH',this.form).value);"/>
+  <PAGED_TABLE_FAST_SEARCH type="FastSearch" label="@G::LoadTranslation(ID_SEARCH)"/>
   <JS type="javascript"><![CDATA[
+
+add_placeholder("form[PAGED_TABLE_FAST_SEARCH]","@G::LoadTranslation(ID_EMPTY_SEARCH)");
+function add_placeholder (id, placeholder) {
+	var el = document.getElementById(id);
+	el.placeholder = placeholder;
+ 
+    el.onfocus = function () {
+		if(this.value == this.placeholder) {
+			this.value = '';
+			el.style.cssText  = '';
+		}
+    };
+ 
+    el.onblur = function () {
+		if(this.value.length == 0) {
+			this.value = this.placeholder;
+			el.style.cssText = 'color:#A9A9A9;';
+		}
+    };
+ 
+	el.onblur();
+}
+
 function $_GET(q,s) {
     s = (s) ? s : self.location.search;
     var re = new RegExp('&'+q+'=([^&]*)','i');
     return (s=s.replace(/^\?/,'&').match(re)) ? s=s[1] : s='';
 }
-function 	newScheduler() {
-	window.location = 'cases_Scheduler_New?PRO_UID='+$_GET('PRO_UID'); return false;
+function  newScheduler() {
+  window.location = 'cases_Scheduler_New?PRO_UID='+$_GET('PRO_UID'); return false;
 }
 
 function casesSchedulerDelete(schUID,proUid) {
@@ -30,9 +52,9 @@ function casesSchedulerDelete(schUID,proUid) {
 }
 
 function editCaseScheduler(SCH_UID,PRO_UID)
-{  	
-	window.location = 'cases_Scheduler_Edit?SCH_UID='+SCH_UID+'&PRO_UID='+PRO_UID;
-	return false;	
+{   
+  window.location = 'cases_Scheduler_Edit?SCH_UID='+SCH_UID+'&PRO_UID='+PRO_UID;
+  return false; 
 }
 
 ]]></JS>

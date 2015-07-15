@@ -30,7 +30,7 @@
 require_once 'classes/model/om/BaseRbacUsers.php';
 
 if (!class_exists('PMLicensedFeatures')) {
-    G::LoadClass('licensedFeatures');
+  G::LoadClass('licensedFeatures');
 }
 
 /**
@@ -169,7 +169,7 @@ class RbacUsers extends BaseRbacUsers
         try {
             $c = new Criteria('rbac');
             $c->add(RbacUsersPeer::USR_UID, $sUserId);
-            $rs = RbacUsersPeer::doSelect($c);
+            $rs = RbacUsersPeer::doSelect($c, Propel::getDbConnection('rbac_ro'));
             if (is_array($rs) && isset($rs[0]) && is_object($rs[0]) && get_class($rs[0]) == 'RbacUsers') {
                 return 1;
             } else {
@@ -312,7 +312,7 @@ class RbacUsers extends BaseRbacUsers
             $c->addSelectColumn ( RolesPeer::ROL_STATUS );
             $c->addJoin ( UsersRolesPeer::ROL_UID, RolesPeer::ROL_UID );
             $c->add ( UsersRolesPeer::USR_UID, $UsrUid );
-            $rs = UsersRolesPeer::doSelectRs( $c, Propel::getDbConnection('rbac_ro') );
+            $rs = UsersRolesPeer::doSelectRs( $c , Propel::getDbConnection('rbac_ro'));
             $rs->setFetchmode (ResultSet::FETCHMODE_ASSOC);
             $rs->next();
             $row = $rs->getRow();

@@ -165,11 +165,20 @@ abstract class BaseObject {
 	 */
 	public function hashCode()
 	{
+		if(!class_exists('G')){
+			$realdocuroot = str_replace( '\\', '/', $_SERVER['DOCUMENT_ROOT'] );
+			$docuroot = explode( '/', $realdocuroot );
+			array_pop( $docuroot );
+			$pathhome = implode( '/', $docuroot ) . '/';
+			array_pop( $docuroot );
+			$pathTrunk = implode( '/', $docuroot ) . '/';
+			require_once($pathTrunk.'gulliver/system/class.g.php');
+		}
 		$ok = $this->getPrimaryKey();
 		if ($ok === null) {
-			return crc32(serialize($this));
+			return G::encryptCrc32(serialize($this));
 		}
-		return crc32(serialize($ok)); // serialize because it could be an array ("ComboKey")
+		return G::encryptCrc32(serialize($ok)); // serialize because it could be an array ("ComboKey")
 	}
 
 	/**

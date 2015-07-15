@@ -6,6 +6,7 @@
  * @inherits HttpProxyController
  * @access public
  */
+header("Content-type: text/html;charset=utf-8");
 require_once 'classes/model/AdditionalTables.php';
 
 class pmTablesProxy extends HttpProxyController
@@ -115,14 +116,20 @@ class pmTablesProxy extends HttpProxyController
         G::LoadClass( 'dbConnections' );
         $proUid = $_POST['PRO_UID'];
         $dbConn = new DbConnections();
-        $dbConnections = $dbConn->getConnectionsProUid( $proUid );
-        $defaultConnections = array (array ('DBS_UID' => 'workflow','DBS_NAME' => 'Workflow'
-        ),array ('DBS_UID' => 'rp','DBS_NAME' => 'REPORT'
-        )
-        );
+        $dbConnections = $dbConn->getConnectionsProUid( $proUid, array('mysql') );
+        
+        $workSpace = new workspaceTools(SYS_SYS);
+        $workspaceDB = $workSpace->getDBInfo();
 
+        if ($workspaceDB['DB_NAME'] == $workspaceDB['DB_RBAC_NAME']) {
+            $defaultConnections = array (array ('DBS_UID' => 'workflow','DBS_NAME' => 'Workflow'));
+        } else {
+            $defaultConnections = array (array ('DBS_UID' => 'workflow','DBS_NAME' => 'Workflow'),
+                                         array ('DBS_UID' => 'rp','DBS_NAME' => 'REPORT'));    
+        }
+ 
         $dbConnections = array_merge( $defaultConnections, $dbConnections );
-
+        
         return $dbConnections;
     }
 
@@ -208,12 +215,10 @@ class pmTablesProxy extends HttpProxyController
         $result = new StdClass();
 
         try {
-            $result = new stdClass();
             ob_start();
             $data = (array) $httpData;
             $data['PRO_UID'] = trim( $data['PRO_UID'] );
             $data['columns'] = G::json_decode( stripslashes( $httpData->columns ) ); //decofing data columns
-
 
             $isReportTable = $data['PRO_UID'] != '' ? true : false;
             $oAdditionalTables = new AdditionalTables();
@@ -252,7 +257,6 @@ class pmTablesProxy extends HttpProxyController
                     ) ) ));
                 }
             }
-
             //backward compatility
             foreach ($columns as $i => $column) {
                 if (in_array( strtoupper( $columns[$i]->field_name ), $reservedWordsSql ) || in_array( strtolower( $columns[$i]->field_name ), $reservedWordsPhp )) {
@@ -318,7 +322,6 @@ class pmTablesProxy extends HttpProxyController
                 $oCriteria->add( FieldsPeer::ADD_TAB_UID, $data['REP_TAB_UID'] );
                 FieldsPeer::doDelete( $oCriteria );
             }
-
             // Updating pmtable fields
             foreach ($columns as $i => $column) {
                 $field = array (
@@ -661,16 +664,118 @@ class pmTablesProxy extends HttpProxyController
         $this->message = $this->success ? G::loadTranslation( 'ID_DELETED_SUCCESSFULLY' ) : G::loadTranslation( 'ID_DELETE_FAILED' );
     }
 
+        public function importCSV ($httpData)
+    {
+        G::LoadClass('pmFunctions');
+        G::LoadSystem('inputfilter');
+        $filter = new InputFilter();
+        $countRow = 250;
+        $tmpfilename = $_FILES['form']['tmp_name']['CSV_FILE'];
+        //$tmpfilename = $filter->xssFilterHard($tmpfilename, 'path');
+        if (preg_match( '/[\x00-\x08\x0b-\x0c\x0e\x1f]/', file_get_contents( $tmpfilename ) ) === 0) {
+            $filename = $_FILES['form']['name']['CSV_FILE'];
+            //$filename = $filter->xssFilterHard($filename, 'path');
+            if ($oFile = fopen( $filter->xssFilterHard($tmpfilename, 'path'), 'r' )) {
+                require_once 'classes/model/AdditionalTables.php';
+                $oAdditionalTables = new AdditionalTables();
+                $aAdditionalTables = $oAdditionalTables->load( $_POST['form']['ADD_TAB_UID'], true );
+                $sErrorMessages = '';
+                $i = 1;
+                $conData = 0;
+                $insert = 'INSERT INTO ' . $aAdditionalTables['ADD_TAB_NAME'] . ' (';
+                $query = '';
+                $swHead = false;
+                while (($aAux = fgetcsv( $oFile, 4096, $_POST['form']['CSV_DELIMITER'] )) !== false) {
+                    if (! is_null( $aAux[0] )) {
+                        if (count( $aAdditionalTables['FIELDS'] ) > count( $aAux )) {
+                            $this->success = false;
+                            $this->message = G::LoadTranslation( 'INVALID_FILE' );
+                            return 0;
+                        }
+                        if ($i == 1) {
+                            $j = 0;
+                            foreach ($aAdditionalTables['FIELDS'] as $aField) {
+                                $insert .= $aField['FLD_NAME'] . ', ';
+                                if ($aField['FLD_NAME'] === $aAux[$j]) {
+                                    $swHead = true;
+                                }
+                                $j ++;
+                            }
+                            $insert = substr($insert, 0, -2);
+                            $insert .= ') VALUES ';
+                        }
+
+                        if ($swHead == false) {
+                            $queryRow = '(';
+                            $j = 0;
+                            foreach ($aAdditionalTables['FIELDS'] as $aField) {
+                                $conData++;
+                                $temp = isset($aAux[$j]) ? '"'.addslashes($aAux[$j]).'"' : '""';
+                                if ($temp == '') {
+                                    switch ($aField['FLD_TYPE']) {
+                                        case 'DATE':
+                                        case 'TIMESTAMP':
+                                            $temp = 'NULL';
+                                            break;
+                                    }
+                                }
+                                $j ++;
+                                $queryRow .= $temp . ',';
+                            }
+                            $query .= substr($queryRow, 0, -1) . '),';
+                            try {
+                                if ($conData == $countRow) {
+                                    $query = substr($query, 0, -1);
+                                    executeQuery($insert . $query . ';', $aAdditionalTables['DBS_UID']);
+                                    $query = '';
+                                    $conData = 0;
+                                }
+                            } catch (Exception $oError) {
+                                $sErrorMessages .= G::LoadTranslation( 'ID_ERROR_INSERT_LINE' ) . ': ' . G::LoadTranslation( 'ID_LINE' ) . ' ' . $i . '. ';
+                            }
+                        } else {
+                            $swHead = false;
+                        }
+                        $i ++;
+                    }
+                }
+                fclose( $oFile );
+                if ($conData > 0) {
+                    $query = substr($query, 0, -1);
+                    executeQuery($insert . $query . ';', $aAdditionalTables['DBS_UID']);
+                }
+            }
+            if ($sErrorMessages != '') {
+                $this->success = false;
+                $this->message = $sErrorMessages;
+            } else {
+                $this->success = true;
+                $this->message = G::loadTranslation( 'ID_FILE_IMPORTED_SUCCESSFULLY', array ($filename
+                ) );
+                G::auditLog("ImportTable", $filename);
+            }
+        } else {
+            $sMessage = G::LoadTranslation( 'ID_UPLOAD_VALID_CSV_FILE' );
+            $this->success = false;
+            $this->message = $sMessage;
+        }
+    }
+
     /**
      * import a CSV to pm tables record
      *
      * @param string $httpData->id
      */
-    public function importCSV ($httpData)
+    public function importCSVDeprecated ($httpData)
     {
-        if (preg_match( '/[\x00-\x08\x0b-\x0c\x0e\x1f]/', file_get_contents( $_FILES['form']['tmp_name']['CSV_FILE'] ) ) === 0) {
+        G::LoadSystem('inputfilter');
+        $filter = new InputFilter();
+        $tmpfilename = $_FILES['form']['tmp_name']['CSV_FILE'];
+        //$tmpfilename = $filter->xssFilterHard($tmpfilename, 'path');
+        if (preg_match( '/[\x00-\x08\x0b-\x0c\x0e\x1f]/', file_get_contents( $tmpfilename ) ) === 0) {
             $filename = $_FILES['form']['name']['CSV_FILE'];
-            if ($oFile = fopen( $_FILES['form']['tmp_name']['CSV_FILE'], 'r' )) {
+            $filename = $filter->xssFilterHard($filename, 'path');
+            if ($oFile = fopen( $filter->xssFilterHard($tmpfilename, 'path'), 'r' )) {
                 require_once 'classes/model/AdditionalTables.php';
                 $oAdditionalTables = new AdditionalTables();
                 $aAdditionalTables = $oAdditionalTables->load( $_POST['form']['ADD_TAB_UID'], true );
@@ -747,7 +852,7 @@ class pmTablesProxy extends HttpProxyController
      */
     public function exportCSV ($httpData)
     {
-
+        $result = new StdClass();
         try {
 
             $link = '';
@@ -1516,6 +1621,44 @@ class pmTablesProxy extends HttpProxyController
                     }
                 }
                 $oDataset->next();
+            }
+            
+            // getting bpmn projects
+            $oCriteria = new Criteria('workflow');
+            $oCriteria->addSelectColumn(BpmnProcessPeer::PRJ_UID);
+            $oCriteria->add(BpmnProcessPeer::PRJ_UID, $proUid);
+            $oDataset = BpmnProcessPeer::doSelectRS($oCriteria, Propel::getDbConnection('workflow_ro'));
+            $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+            $oDataset->next();
+            $row = $oDataset->getRow();
+            if (isset($row["PRJ_UID"])) {
+                $oCriteria = new Criteria('workflow');
+                $oCriteria->addSelectColumn(ProcessVariablesPeer::VAR_UID);
+                $oCriteria->addSelectColumn(ProcessVariablesPeer::VAR_NAME);
+                $oCriteria->addSelectColumn(ProcessVariablesPeer::VAR_FIELD_TYPE);
+                $oCriteria->addSelectColumn(ProcessVariablesPeer::VAR_SQL);
+                $oCriteria->addSelectColumn(ProcessVariablesPeer::VAR_ACCEPTED_VALUES);
+                $oCriteria->add(ProcessVariablesPeer::PRJ_UID, $row["PRJ_UID"]);
+                $oDataset = ProcessVariablesPeer::doSelectRS($oCriteria);
+                $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+                $index = 0;
+                while ($oDataset->next()) {
+                    $row = $oDataset->getRow();
+                    $fieldType = isset($row["VAR_FIELD_TYPE"]) ? $row["VAR_FIELD_TYPE"]: '';
+                    $varSql = isset($row["VAR_SQL"]) ? $row["VAR_SQL"] : '';                    
+                    $varProcessVariable = isset($row["VAR_ACCEPTED_VALUES"]) ? $row["VAR_ACCEPTED_VALUES"] : '[]';
+                    if(! in_array( $fieldType, $excludeFieldsList )){
+                       if(strlen($varSql) == 0 && $varProcessVariable == '[]'){
+                            array_push($fields, array(
+                                "FIELD_UID" => $row["VAR_NAME"] . "-" . $row["VAR_FIELD_TYPE"],
+                                "FIELD_NAME" => $row["VAR_NAME"],
+                                "FIELD_VALIDATE" => "any",
+                                "_index" => $index ++,
+                                "_isset" => true
+                            ));
+                        }
+                    }
+                }
             }
 
             sort( $fields );

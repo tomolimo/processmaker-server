@@ -1,0 +1,95 @@
+{
+    "name": "form-example",
+    "items": [
+        {
+            "type":"panel",       
+            "items":
+            [
+                [
+                    {
+                        "type": "title",
+                        "colSpan": 12,
+                        "name": "title",
+                        "label": "PMDynaform 8 - Formula"
+                    }
+                ],
+                [
+                    {
+                        "type": "text",
+                        "colSpan":12,
+                        "name": "fieldOne",
+                        "label": "Field 1",
+                        "required": true,
+                        "readonly": false,
+                        "placeholder": "enter a number",
+                        "dataType": "integer",
+                        "variable": "variable1",
+                        "maxLength": 10
+                    }
+                ],
+                [
+                    {
+                        "type": "text",
+                        "colSpan":12,
+                        "name": "fieldTwo",
+                        "label": "Field 1",
+                        "readonly": false,
+                        "dataType": "integer",
+                        "placeholder": "enter a number",
+                        "variable": "variable1",
+                        "maxLength": 10
+                    }
+                ],
+                [
+                    {
+                        "type": "text",
+                        "colSpan":4,
+                        "name": "result1",
+                        "label": "2 + 2 - sqrt(4) + fieldOne + fieldTwo + fieldOne +1000",
+                        "formula": "2 + 2 - sqrt(4) + fieldOne + fieldTwo + fieldOne +1000",
+                        "readonly": true,
+                        "dataType": "integer",
+                        "variable": "variable1",
+                        "maxLength": 10
+                    },
+                    {
+                        "type": "text",
+                        "colSpan":4,
+                        "name": "result2",
+                        "label": "(fieldOne * fieldTwo) - (100 - (fieldOne +100)-200 - (fieldTwo-1))*fieldOne",
+                        "formula": "(fieldOne * fieldTwo) - (100 - (fieldOne +100)-200 - (fieldTwo-1))*fieldOne",
+                        "readonly": true,
+                        "dataType": "integer",
+                        "variable": "variable1",
+                        "maxLength": 10
+                    },
+                    {
+                        "type": "text",
+                        "colSpan":4,
+                        "name": "result3",
+                        "label": "100 + fieldOne + fieldTwo",
+                        "formula": "100 + fieldOne + fieldTwo",
+                        "readonly": true,
+                        "dataType": "integer",
+                        "variable": "variable1",
+                        "maxLength": 10
+                    }
+                ],
+
+                [
+                    {
+                      "type" : "button",
+                      "colSpan" : 6,
+                      "disabled": true,
+                      "label":"Button"
+                    },
+                    {
+                      "type" : "submit",
+                      "colSpan" : 6,
+                      "label" : "Submit"
+                    }
+                ]
+            ]
+        }
+    ]
+}

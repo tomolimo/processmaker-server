@@ -165,12 +165,38 @@ class Home extends Controller
     public function indexSingle ($httpData)
     {
         require_once 'classes/model/Step.php';
-        G::LoadClass( 'applications' );
 
-        $apps = new Applications();
         $step = new Step();
 
-        $cases = $apps->getAll( $this->userID, 0, 1, 'todo' );
+        $solrEnabled = false;
+
+        if (($solrConf = System::solrEnv()) !== false) {
+            G::LoadClass("AppSolr");
+
+            $ApplicationSolrIndex = new AppSolr(
+                $solrConf["solr_enabled"],
+                $solrConf["solr_host"],
+                $solrConf["solr_instance"]
+            );
+
+            if ($ApplicationSolrIndex->isSolrEnabled() && $solrConf['solr_enabled'] == true) {
+                //Check if there are missing records to reindex and reindex them
+                $ApplicationSolrIndex->synchronizePendingApplications();
+                $solrEnabled = true;
+            } else{
+                $solrEnabled = false;
+            }
+        }
+
+        if ($solrEnabled) {
+            $cases = $ApplicationSolrIndex->getAppGridData($this->userID, 0, 1, 'todo');
+        } else {
+            G::LoadClass( 'applications' );
+
+            $apps = new Applications();
+
+            $cases = $apps->getAll( $this->userID, 0, 1, 'todo' );
+        }
 
         if (! isset( $cases['data'][0] )) {
             //the current user has not any aplication to do
@@ -314,9 +340,7 @@ class Home extends Controller
         $category = null)
     {
         require_once ("classes/model/AppNotes.php");
-        G::LoadClass( 'applications' );
 
-        $apps = new Applications();
         $appNotes = new AppNotes();
 
         $start = empty( $start ) ? $this->appListStart : $start;
@@ -339,7 +363,73 @@ class Home extends Controller
                 break;
         }
 
-        $cases = $apps->getAll( $user, $start, $limit, $type, $filter, $search, $process, $status, $type, $dateFrom, $dateTo, $callback, $dir, $sort, $category, false);
+        $solrEnabled = false;
+
+        if ((
+            $type == "todo" || $type == "draft" || $type == "paused" || $type == "sent" ||
+            $type == "selfservice" || $type == "unassigned" || $type == "search"
+        ) &&
+        (($solrConf = System::solrEnv()) !== false)
+        ) {
+            G::LoadClass("AppSolr");
+
+            $ApplicationSolrIndex = new AppSolr(
+                $solrConf["solr_enabled"],
+                $solrConf["solr_host"],
+                $solrConf["solr_instance"]
+            );
+
+            if ($ApplicationSolrIndex->isSolrEnabled() && $solrConf['solr_enabled'] == true) {
+                //Check if there are missing records to reindex and reindex them
+                $ApplicationSolrIndex->synchronizePendingApplications();
+                $solrEnabled = true;
+            } else{
+                $solrEnabled = false;
+            }
+        }
+
+        if ($solrEnabled) {
+            $cases = $ApplicationSolrIndex->getAppGridData(
+                $user,
+                $start,
+                $limit,
+                $type,
+                $filter,
+                $search,
+                $process,
+                $status,
+                '',
+                $dateFrom,
+                $dateTo,
+                $callback,
+                $dir,
+                $sort,
+                $category
+            );
+        } else {
+            G::LoadClass( 'applications' );
+
+            $apps = new Applications();
+
+            $cases = $apps->getAll(
+                $user,
+                $start,
+                $limit,
+                $type,
+                $filter,
+                $search,
+                $process,
+                $status,
+                '',
+                $dateFrom,
+                $dateTo,
+                $callback,
+                $dir,
+                $sort,
+                $category,
+                false
+            );
+        }
 
         // formating & complitting apps data with 'Notes'
         foreach ($cases['data'] as $i => $row) {

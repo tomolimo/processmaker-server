@@ -222,5 +222,10 @@ class OutputDocumentStructure
      * @var string {@from body} {@min 0} {@max 150}
      */
     public $out_doc_pdf_security_permissions;
+
+    /**
+     * @var int {@from body} {@choice 0,1}
+     */
+    public $out_doc_open_type;
 }
 

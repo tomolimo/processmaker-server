@@ -35,6 +35,8 @@ if (isset( $_REQUEST['action'] )) {
             $start = isset( $_POST['start'] ) ? $_POST['start'] : 0;
             $limit = isset( $_POST['limit'] ) ? $_POST['limit'] : $limit_size;
             $filter = isset( $_REQUEST['textFilter'] ) ? $_REQUEST['textFilter'] : '';
+            $dir = isset( $_POST['dir'] ) ? $_POST['dir'] : 'ASC';
+            $sort = isset( $_POST['sort'] ) ? $_POST['sort'] : 'CATEGORY_NAME';
 
             $oCriteria = new Criteria( 'workflow' );
             $oCriteria->addSelectColumn( 'COUNT(*) AS CNT' );
@@ -55,6 +57,13 @@ if (isset( $_REQUEST['action'] )) {
             if ($filter != '') {
                 $oCriteria->add( ProcessCategoryPeer::CATEGORY_NAME, '%' . $filter . '%', Criteria::LIKE );
             }
+            
+            if ($dir == "DESC") {
+                $oCriteria->addDescendingOrderByColumn($sort);
+            } else {
+                $oCriteria->addAscendingOrderByColumn($sort);
+            }
+
             $oCriteria->setLimit( $limit );
             $oCriteria->setOffset( $start );
             $oDataset = ProcessCategoryPeer::doSelectRS( $oCriteria );
@@ -62,14 +71,16 @@ if (isset( $_REQUEST['action'] )) {
 
             $proc = new Process();
             $aProcess = $proc->getAllProcessesByCategory();
-
+            $result = "";
             $aCat = array ();
             while ($oDataset->next()) {
                 $aCat[] = $oDataset->getRow();
                 $index = sizeof( $aCat ) - 1;
                 $aCat[$index]['TOTAL_PROCESSES'] = isset( $aProcess[$aCat[$index]['CATEGORY_UID']] ) ? $aProcess[$aCat[$index]['CATEGORY_UID']] : 0;
             }
-            echo '{categories: ' . G::json_encode( $aCat ) . ', total_categories: ' . $total_categories . '}';
+            $result['data'] = $aCat;
+            $result['totalCount'] = $total_categories;
+            echo G::json_encode( $result );
             break;
         case 'updatePageSize':
             G::LoadClass( 'configuration' );

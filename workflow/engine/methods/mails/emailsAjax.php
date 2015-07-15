@@ -73,6 +73,7 @@ switch($req){
         $criteria->addSelectColumn(AppMessagePeer::APP_MSG_DATE);
         $criteria->addSelectColumn(AppMessagePeer::APP_MSG_SEND_DATE);
         $criteria->addSelectColumn(AppMessagePeer::APP_MSG_SHOW_MESSAGE);
+        $criteria->addSelectColumn(AppMessagePeer::APP_MSG_ERROR);
 
         $criteria->addSelectColumn(ApplicationPeer::PRO_UID);
         $criteria->addSelectColumn(ApplicationPeer::APP_NUMBER);

@@ -25,7 +25,7 @@ abstract class BaseApplicationPeer
     const CLASS_DEFAULT = 'classes.model.Application';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 16;
+    const NUM_COLUMNS = 18;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
@@ -79,6 +79,12 @@ abstract class BaseApplicationPeer
     /** the column name for the APP_PIN field */
     const APP_PIN = 'APPLICATION.APP_PIN';
 
+    /** the column name for the APP_DURATION field */
+    const APP_DURATION = 'APPLICATION.APP_DURATION';
+
+    /** the column name for the APP_DELAY_DURATION field */
+    const APP_DELAY_DURATION = 'APPLICATION.APP_DELAY_DURATION';
+
     /** The PHP to DB Name Mapping */
     private static $phpNameMap = null;
 
@@ -90,10 +96,10 @@ abstract class BaseApplicationPeer
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     private static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('AppUid', 'AppNumber', 'AppParent', 'AppStatus', 'ProUid', 'AppProcStatus', 'AppProcCode', 'AppParallel', 'AppInitUser', 'AppCurUser', 'AppCreateDate', 'AppInitDate', 'AppFinishDate', 'AppUpdateDate', 'AppData', 'AppPin', ),
-        BasePeer::TYPE_COLNAME => array (ApplicationPeer::APP_UID, ApplicationPeer::APP_NUMBER, ApplicationPeer::APP_PARENT, ApplicationPeer::APP_STATUS, ApplicationPeer::PRO_UID, ApplicationPeer::APP_PROC_STATUS, ApplicationPeer::APP_PROC_CODE, ApplicationPeer::APP_PARALLEL, ApplicationPeer::APP_INIT_USER, ApplicationPeer::APP_CUR_USER, ApplicationPeer::APP_CREATE_DATE, ApplicationPeer::APP_INIT_DATE, ApplicationPeer::APP_FINISH_DATE, ApplicationPeer::APP_UPDATE_DATE, ApplicationPeer::APP_DATA, ApplicationPeer::APP_PIN, ),
-        BasePeer::TYPE_FIELDNAME => array ('APP_UID', 'APP_NUMBER', 'APP_PARENT', 'APP_STATUS', 'PRO_UID', 'APP_PROC_STATUS', 'APP_PROC_CODE', 'APP_PARALLEL', 'APP_INIT_USER', 'APP_CUR_USER', 'APP_CREATE_DATE', 'APP_INIT_DATE', 'APP_FINISH_DATE', 'APP_UPDATE_DATE', 'APP_DATA', 'APP_PIN', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, )
+        BasePeer::TYPE_PHPNAME => array ('AppUid', 'AppNumber', 'AppParent', 'AppStatus', 'ProUid', 'AppProcStatus', 'AppProcCode', 'AppParallel', 'AppInitUser', 'AppCurUser', 'AppCreateDate', 'AppInitDate', 'AppFinishDate', 'AppUpdateDate', 'AppData', 'AppPin', 'AppDuration', 'AppDelayDuration', ),
+        BasePeer::TYPE_COLNAME => array (ApplicationPeer::APP_UID, ApplicationPeer::APP_NUMBER, ApplicationPeer::APP_PARENT, ApplicationPeer::APP_STATUS, ApplicationPeer::PRO_UID, ApplicationPeer::APP_PROC_STATUS, ApplicationPeer::APP_PROC_CODE, ApplicationPeer::APP_PARALLEL, ApplicationPeer::APP_INIT_USER, ApplicationPeer::APP_CUR_USER, ApplicationPeer::APP_CREATE_DATE, ApplicationPeer::APP_INIT_DATE, ApplicationPeer::APP_FINISH_DATE, ApplicationPeer::APP_UPDATE_DATE, ApplicationPeer::APP_DATA, ApplicationPeer::APP_PIN, ApplicationPeer::APP_DURATION, ApplicationPeer::APP_DELAY_DURATION, ),
+        BasePeer::TYPE_FIELDNAME => array ('APP_UID', 'APP_NUMBER', 'APP_PARENT', 'APP_STATUS', 'PRO_UID', 'APP_PROC_STATUS', 'APP_PROC_CODE', 'APP_PARALLEL', 'APP_INIT_USER', 'APP_CUR_USER', 'APP_CREATE_DATE', 'APP_INIT_DATE', 'APP_FINISH_DATE', 'APP_UPDATE_DATE', 'APP_DATA', 'APP_PIN', 'APP_DURATION', 'APP_DELAY_DURATION', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, )
     );
 
     /**
@@ -103,10 +109,10 @@ abstract class BaseApplicationPeer
      * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     private static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('AppUid' => 0, 'AppNumber' => 1, 'AppParent' => 2, 'AppStatus' => 3, 'ProUid' => 4, 'AppProcStatus' => 5, 'AppProcCode' => 6, 'AppParallel' => 7, 'AppInitUser' => 8, 'AppCurUser' => 9, 'AppCreateDate' => 10, 'AppInitDate' => 11, 'AppFinishDate' => 12, 'AppUpdateDate' => 13, 'AppData' => 14, 'AppPin' => 15, ),
-        BasePeer::TYPE_COLNAME => array (ApplicationPeer::APP_UID => 0, ApplicationPeer::APP_NUMBER => 1, ApplicationPeer::APP_PARENT => 2, ApplicationPeer::APP_STATUS => 3, ApplicationPeer::PRO_UID => 4, ApplicationPeer::APP_PROC_STATUS => 5, ApplicationPeer::APP_PROC_CODE => 6, ApplicationPeer::APP_PARALLEL => 7, ApplicationPeer::APP_INIT_USER => 8, ApplicationPeer::APP_CUR_USER => 9, ApplicationPeer::APP_CREATE_DATE => 10, ApplicationPeer::APP_INIT_DATE => 11, ApplicationPeer::APP_FINISH_DATE => 12, ApplicationPeer::APP_UPDATE_DATE => 13, ApplicationPeer::APP_DATA => 14, ApplicationPeer::APP_PIN => 15, ),
-        BasePeer::TYPE_FIELDNAME => array ('APP_UID' => 0, 'APP_NUMBER' => 1, 'APP_PARENT' => 2, 'APP_STATUS' => 3, 'PRO_UID' => 4, 'APP_PROC_STATUS' => 5, 'APP_PROC_CODE' => 6, 'APP_PARALLEL' => 7, 'APP_INIT_USER' => 8, 'APP_CUR_USER' => 9, 'APP_CREATE_DATE' => 10, 'APP_INIT_DATE' => 11, 'APP_FINISH_DATE' => 12, 'APP_UPDATE_DATE' => 13, 'APP_DATA' => 14, 'APP_PIN' => 15, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, )
+        BasePeer::TYPE_PHPNAME => array ('AppUid' => 0, 'AppNumber' => 1, 'AppParent' => 2, 'AppStatus' => 3, 'ProUid' => 4, 'AppProcStatus' => 5, 'AppProcCode' => 6, 'AppParallel' => 7, 'AppInitUser' => 8, 'AppCurUser' => 9, 'AppCreateDate' => 10, 'AppInitDate' => 11, 'AppFinishDate' => 12, 'AppUpdateDate' => 13, 'AppData' => 14, 'AppPin' => 15, 'AppDuration' => 16, 'AppDelayDuration' => 17, ),
+        BasePeer::TYPE_COLNAME => array (ApplicationPeer::APP_UID => 0, ApplicationPeer::APP_NUMBER => 1, ApplicationPeer::APP_PARENT => 2, ApplicationPeer::APP_STATUS => 3, ApplicationPeer::PRO_UID => 4, ApplicationPeer::APP_PROC_STATUS => 5, ApplicationPeer::APP_PROC_CODE => 6, ApplicationPeer::APP_PARALLEL => 7, ApplicationPeer::APP_INIT_USER => 8, ApplicationPeer::APP_CUR_USER => 9, ApplicationPeer::APP_CREATE_DATE => 10, ApplicationPeer::APP_INIT_DATE => 11, ApplicationPeer::APP_FINISH_DATE => 12, ApplicationPeer::APP_UPDATE_DATE => 13, ApplicationPeer::APP_DATA => 14, ApplicationPeer::APP_PIN => 15, ApplicationPeer::APP_DURATION => 16, ApplicationPeer::APP_DELAY_DURATION => 17, ),
+        BasePeer::TYPE_FIELDNAME => array ('APP_UID' => 0, 'APP_NUMBER' => 1, 'APP_PARENT' => 2, 'APP_STATUS' => 3, 'PRO_UID' => 4, 'APP_PROC_STATUS' => 5, 'APP_PROC_CODE' => 6, 'APP_PARALLEL' => 7, 'APP_INIT_USER' => 8, 'APP_CUR_USER' => 9, 'APP_CREATE_DATE' => 10, 'APP_INIT_DATE' => 11, 'APP_FINISH_DATE' => 12, 'APP_UPDATE_DATE' => 13, 'APP_DATA' => 14, 'APP_PIN' => 15, 'APP_DURATION' => 16, 'APP_DELAY_DURATION' => 17, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, )
     );
 
     /**
@@ -238,6 +244,10 @@ abstract class BaseApplicationPeer
         $criteria->addSelectColumn(ApplicationPeer::APP_DATA);
 
         $criteria->addSelectColumn(ApplicationPeer::APP_PIN);
+
+        $criteria->addSelectColumn(ApplicationPeer::APP_DURATION);
+
+        $criteria->addSelectColumn(ApplicationPeer::APP_DELAY_DURATION);
 
     }
 

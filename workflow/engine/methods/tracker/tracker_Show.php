@@ -54,11 +54,27 @@ switch ($_GET['CTO_TYPE_OBJ']) {
         $Fields['APP_DATA']['__DYNAFORM_OPTIONS']['PRINT_PREVIEW'] = '#';
         $Fields['APP_DATA']['__DYNAFORM_OPTIONS']['PRINT_PREVIEW_ACTION'] = 'tracker_PrintView?CTO_UID_OBJ=' . $_GET['CTO_UID_OBJ'] . '&CTO_TYPE_OBJ=PRINT_PREVIEW';
         $_SESSION['CTO_UID_OBJ'] = $_GET['CTO_UID_OBJ'];
-        $G_PUBLISH = new Publisher();
-        $G_PUBLISH->AddContent( 'dynaform', 'xmlform', $_SESSION['PROCESS'] . '/' . $_GET['CTO_UID_OBJ'], '', $Fields['APP_DATA'], '', '', 'view' );
-        G::RenderPage( 'publish' );
-        break;
 
+        $dynaForm = new Dynaform();
+        $arrayDynaFormData = $dynaForm->Load($_GET["CTO_UID_OBJ"]);
+
+        if (isset($arrayDynaFormData["DYN_VERSION"]) && $arrayDynaFormData["DYN_VERSION"] == 2) {
+            G::LoadClass("pmDynaform");
+
+            $Fields["PRO_UID"] = $_SESSION["PROCESS"];
+            $Fields["CURRENT_DYNAFORM"] = $_GET["CTO_UID_OBJ"];
+
+            $pmDynaForm = new pmDynaform($Fields);
+
+            if ($pmDynaForm->isResponsive()) {
+                $pmDynaForm->printTracker();
+            }
+        } else {
+            $G_PUBLISH = new Publisher();
+            $G_PUBLISH->AddContent("dynaform", "xmlform", $_SESSION["PROCESS"] . "/" . $_GET["CTO_UID_OBJ"], "", $Fields["APP_DATA"], "", "", "view");
+            G::RenderPage("publish");
+        }
+        break;
     case 'INPUT_DOCUMENT':
         G::LoadClass( 'case' );
         $oCase = new Cases();

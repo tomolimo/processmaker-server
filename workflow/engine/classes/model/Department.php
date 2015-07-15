@@ -460,6 +460,10 @@ class Department extends BaseDepartment
                     $node['DEP_MANAGER_LASTNAME'] = '';
                 }
 
+                $criteria = new \Criteria();
+                $criteria->add(UsersPeer::DEP_UID, $node['DEP_UID'], \Criteria::EQUAL );
+                $node['DEP_MEMBERS'] = UsersPeer::doCount($criteria);
+
                 $criteriaCount = new Criteria( 'workflow' );
                 $criteriaCount->clearSelectColumns();
                 $criteriaCount->addSelectColumn( 'COUNT(*)' );

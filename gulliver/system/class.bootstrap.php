@@ -1,5 +1,4 @@
 <?php
-
 /**
  * class.bootstrap.php
  *
@@ -8,7 +7,6 @@
  */
 class Bootstrap
 {
-
     public static $includeClassPaths = array();
     public static $includePaths = array();
     protected $relativeIncludePaths = array();
@@ -401,7 +399,7 @@ class Bootstrap
                 // Detect by creating a temporary file
                 // Try to use system's temporary directory as random name
                 // shouldn't exist
-                $temp_file = tempnam(md5(uniqid(rand(), true)), '');
+                $temp_file = tempnam(Bootstrap::encryptOld(uniqid(rand(), true)), '');
                 if ($temp_file) {
                     $temp_dir = realpath(dirname($temp_file));
                     unlink($temp_file);
@@ -461,6 +459,11 @@ class Bootstrap
      */
     public function streamFile($file, $download = false, $downloadFileName = '', $forceLoad = false)
     {
+        G::LoadSystem('inputfilter');
+        $filter = new InputFilter();
+        $file = $filter->xssFilterHard($file);
+        $downloadFileName = $filter->xssFilterHard($downloadFileName);
+
         $fileNameIni = $file;
 
         $browserCacheFilesUid = G::browserCacheFilesGetUid();
@@ -477,11 +480,8 @@ class Bootstrap
         //trick to generate the translation.language.js file , merging two files
         if (strtolower($typefile) == 'js' && $typearray[0] == 'translation') {
             Bootstrap::sendHeaders($fileNameIni, "text/javascript", $download, $downloadFileName);
-
             $output = Bootstrap::streamJSTranslationFile($filename, $typearray[count($typearray) - 2]);
-
             echo $output;
-
             return;
         }
 
@@ -670,10 +670,18 @@ class Bootstrap
      */
     public static function LoadClass($strClass)
     {
+        Bootstrap::LoadSystem('inputfilter');
+        $filter = new InputFilter();
+        
+        $path = PATH_GULLIVER . 'class.' . $strClass . '.php';
+        $path = $filter->validateInput($path, "path");
+        
         $classfile = Bootstrap::ExpandPath("classes") . 'class.' . $strClass . '.php';
+        $classfile = $filter->validateInput($classfile, "path");
+        
         if (!file_exists($classfile)) {
-            if (file_exists(PATH_GULLIVER . 'class.' . $strClass . '.php')) {
-                return require_once (PATH_GULLIVER . 'class.' . $strClass . '.php');
+            if (file_exists($path)) {
+                return require_once ($path);
             } else {
                 return false;
             }
@@ -1077,7 +1085,7 @@ class Bootstrap
         $mtime = date('U');
         $gmt_mtime = gmdate("D, d M Y H:i:s", $mtime) . " GMT";
         header('Pragma: cache');
-        header('ETag: "' . md5($mtime . $filename) . '"');
+        header('ETag: "' . Bootstrap::encryptOld($mtime . $filename) . '"');
         header("Last-Modified: " . $gmt_mtime);
         header('Cache-Control: public');
         header("Expires: " . gmdate("D, d M Y H:i:s", time() + 30 * 60 * 60 * 24) . " GMT"); //1 month
@@ -1090,7 +1098,7 @@ class Bootstrap
         }
 
         if (isset($_SERVER['HTTP_IF_NONE_MATCH'])) {
-            if (str_replace('"', '', stripslashes($_SERVER['HTTP_IF_NONE_MATCH'])) == md5($mtime . $filename)) {
+            if (str_replace('"', '', stripslashes($_SERVER['HTTP_IF_NONE_MATCH'])) == Bootstrap::encryptOld($mtime . $filename)) {
                 header("HTTP/1.1 304 Not Modified");
                 exit();
             }
@@ -1216,7 +1224,7 @@ class Bootstrap
                 $mtime = date('U');
             }
             $gmt_mtime = gmdate("D, d M Y H:i:s", $mtime) . " GMT";
-            header('ETag: "' . md5($mtime . $filename) . '"');
+            header('ETag: "' . Bootstrap::encryptOld($mtime . $filename) . '"');
             header("Last-Modified: " . $gmt_mtime);
             header('Cache-Control: public');
             header("Expires: " . gmdate("D, d M Y H:i:s", time() + 60 * 10) . " GMT"); // ten
@@ -1234,7 +1242,7 @@ class Bootstrap
                 $mtime = date('U');
             }
             $gmt_mtime = gmdate("D, d M Y H:i:s", $mtime) . " GMT";
-            header('ETag: "' . md5($mtime . $filename) . '"');
+            header('ETag: "' . Bootstrap::encryptOld($mtime . $filename) . '"');
             header("Last-Modified: " . $gmt_mtime);
             header('Cache-Control: public');
             header("Expires: " . gmdate("D, d M Y H:i:s", time() + 90 * 60 * 60 * 24) . " GMT");
@@ -1246,7 +1254,7 @@ class Bootstrap
             }
 
             if (isset($_SERVER ['HTTP_IF_NONE_MATCH'])) {
-                if (str_replace('"', '', stripslashes($_SERVER ['HTTP_IF_NONE_MATCH'])) == md5($mtime . $filename)) {
+                if (str_replace('"', '', stripslashes($_SERVER ['HTTP_IF_NONE_MATCH'])) == Bootstrap::encryptOld($mtime . $filename)) {
                     header("HTTP/1.1 304 Not Modified");
                     exit();
                 }
@@ -1273,10 +1281,10 @@ class Bootstrap
         $checkSum = '';
         foreach ($files as $file) {
             if (is_file($file)) {
-                $checkSum .= md5_file($file);
+                $checkSum .= Bootstrap::encryptFileOld($file);
             }
         }
-        return md5($checkSum . $key);
+        return Bootstrap::encryptOld($checkSum . $key);
     }
 
     /**
@@ -1376,7 +1384,7 @@ class Bootstrap
     {
         global $translation;
 
-        // if the second parameter $lang is an array does mean it was especified to use as data
+        // if the second parameter ($lang) is an array, it was specified to use it as data
         if (is_array($lang)) {
             $data = $lang;
             $lang = SYS_LANG;
@@ -1409,7 +1417,7 @@ class Bootstrap
      *
      * @param $path path to scan recursively the write permission
      * @param $flags to notive glob function
-     * @param $pattern pattern to filter some especified files
+     * @param $pattern pattern to filter some specified files
      * @return <array> array containing the recursive glob results
      */
     public function rglob($pattern = '*', $flags = 0, $path = '')
@@ -2895,6 +2903,11 @@ class Bootstrap
             $hashType = Bootstrap::getPasswordHashType();
         }
 
+        G::LoadSystem('inputfilter');
+        $filter = new InputFilter();
+        $hashType = $filter->validateInput($hashType);
+        $pass = $filter->validateInput($pass);
+
         eval("\$var = hash('" . $hashType . "', '" . $pass . "');");
 
         if ($includeHashType) {
@@ -2917,5 +2930,15 @@ class Bootstrap
         }
         return false;
     }
+    /**
+    * encryptOld
+    *
+    * @param string $string
+    *
+    * @return md5($string)
+    */
+    public function encryptOld ($string)
+    {
+        return md5($string);
+    }
 }
-

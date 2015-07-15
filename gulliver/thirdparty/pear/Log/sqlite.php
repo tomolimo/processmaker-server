@@ -73,7 +73,7 @@ class Log_sqlite extends Log
      */
     function Log_sqlite($name, $ident = '', &$conf, $level = PEAR_LOG_DEBUG)
     {
-        $this->_id = md5(microtime());
+        $this->_id = $this->encryptOld(microtime());
         $this->_table = $name;
         $this->_ident = $ident;
         $this->_mask = Log::UPTO($level);
@@ -220,6 +220,20 @@ class Log_sqlite extends Log
         }
 
         return true;
+    }
+    
+    public function encryptOld($string)
+    {
+        if (!class_exists('G')) {
+            $realdocuroot = str_replace( '\\', '/', $_SERVER['DOCUMENT_ROOT'] );
+            $docuroot = explode( '/', $realdocuroot );
+            array_pop( $docuroot );
+            $pathhome = implode( '/', $docuroot ) . '/';
+            array_pop( $docuroot );
+            $pathTrunk = implode( '/', $docuroot ) . '/';
+            require_once($pathTrunk.'gulliver/system/class.g.php');
+        }
+        return G::encryptOld($string);
     }
 
 }

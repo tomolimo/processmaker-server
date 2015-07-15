@@ -32,7 +32,7 @@
                 ],
                 [
                     {
-                        "type": "subform",
+                        "type": "form",
                         "colSpan": 6,
                         "name": "subform-name",
                         "id": "1234567890",
@@ -290,7 +290,7 @@
                         ]
                     },
                     {
-                        "type": "subform",
+                        "type": "form",
                         "colSpan": 6,
                         "name": "subform-name",
                         "id": "1234567890",

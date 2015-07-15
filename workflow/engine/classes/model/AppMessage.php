@@ -84,6 +84,7 @@ class AppMessage extends BaseAppMessage
         $spool->setappMsgAttach( $data_spool['app_msg_attach'] );
         $spool->setAppMsgTemplate( $data_spool['app_msg_template'] );
         $spool->setAppMsgStatus( $data_spool['app_msg_status'] );
+        $spool->setAppMsgError( $data_spool['app_msg_error'] );
 
         if (! $spool->validate()) {
             $this->error_spool = $spool->getValidationFailures();

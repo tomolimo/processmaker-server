@@ -1,0 +1,57 @@
+[	
+	{
+		"name": "american",
+		"options": [
+			{
+				"label": "Bolivia",
+				"value": "bolivia"
+			},
+			{
+				"label": "EEUU",
+				"value": "eeuu"
+			},
+			{
+				"label": "Argentina",
+				"value": "argentina"
+			},
+			{
+                "label": "Brasil",
+                "value": "brasil"
+            },
+            {
+                "label": "Peru",
+                "value": "peru"
+            },
+            {
+                "label": "Ecuador",
+                "value": "ecuador"
+            }
+		]
+	},
+	{
+		"name": "asia",
+		"options": [
+			{
+                "label": "Japan",
+                "value": "japan"
+            },
+            {
+            	"label": "Rusia",
+            	"value": "japon"
+            }
+		]
+	},
+	{
+		"name": "europe",
+		"options": [
+			{
+                "label": "Spain",
+                "value": "spain"
+            },
+            {
+            	"label": "Italia",
+            	"value": "italia"
+            }
+		]
+	}
+]

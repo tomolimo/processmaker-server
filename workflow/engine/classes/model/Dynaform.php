@@ -150,7 +150,7 @@ class Dynaform extends BaseDynaform
      * @return void
      */
 
-    public function create ($aData)
+    public function create ($aData, $pmTableUid='')
     {
         if (! isset( $aData['PRO_UID'] )) {
             throw (new PropelException( 'The dynaform cannot be created. The PRO_UID is empty.' ));
@@ -173,10 +173,17 @@ class Dynaform extends BaseDynaform
             if (isset($aData["DYN_CONTENT"])) {
                 $this->setDynContent($aData["DYN_CONTENT"]);
             }
+            if (isset($aData["DYN_LABEL"])) {
+                $this->setDynLabel($aData["DYN_LABEL"]);
+            }
             if (!isset($aData['DYN_VERSION'])) {
                 $aData['DYN_VERSION'] = 0;
             }
             $this->setDynVersion( $aData['DYN_VERSION'] );
+            if (!isset($aData['DYN_CONTENT'])) {
+                $aData['DYN_CONTENT'] = "{}";
+            }
+            $this->setDynContent( $aData['DYN_CONTENT'] );
             if ($this->validate()) {
                 $con->begin();
                 $res = $this->save();
@@ -194,6 +201,17 @@ class Dynaform extends BaseDynaform
                 }
 
                 $con->commit();
+                
+                //Add Audit Log
+                $mode    = isset($aData['MODE'])? $aData['MODE'] : 'Determined by Fields';
+                $description = "";
+                if($pmTableUid!=''){
+                  $pmTable = AdditionalTablesPeer::retrieveByPK( $pmTableUid );
+                  $addTabName = $pmTable->getAddTabName();
+                  $description = "Create from a PM Table: ".$addTabName.", ";
+                }
+                G::auditLog("CreateDynaform", $description."Dynaform Title: ".$aData['DYN_TITLE'].", Type: ".$aData['DYN_TYPE'].", Description: ".$aData['DYN_DESCRIPTION'].", Mode: ".$mode);
+                
                 $sXml = '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                 $sXml .= '<dynaForm type="' . $this->getDynType() . '" name="' . $this->getProUid() . '/' . $this->getDynUid() . '" width="500" enabletemplate="0" mode="" nextstepsave="prompt">' . "\n";
                 $sXml .= '</dynaForm>';
@@ -232,7 +250,7 @@ class Dynaform extends BaseDynaform
 
     public function createFromPMTable ($aData, $pmTableUid)
     {
-        $this->create( $aData );
+        $this->create( $aData , $pmTableUid);
         $aData['DYN_UID'] = $this->getDynUid();
         //krumo(BasePeer::getFieldnames('Content'));
         $fields = array ();
@@ -353,6 +371,158 @@ class Dynaform extends BaseDynaform
         $attributes = array ('XMLNODE_NAME_OLD' => '','XMLNODE_NAME' => 'SUBMIT','TYPE' => 'submit'
         );
         $fieldXML->Save( $attributes, $labels, $options );
+        
+        //update content if version is 2
+        if ($this->getDynVersion() === 2) {
+            $items = array();
+            $variables = array();
+            $res = $sth->executeQuery($sql, ResultSet::FETCHMODE_ASSOC);
+            while ($res->next()) {
+                //data type
+                $type = "text";
+                $dataType = explode('(', $res->get('Type'));
+                error_log(print_r($dataType, true));
+                switch ($dataType[0]) {
+                    case 'bigint':
+                        $type = 'text';
+                        $dataType = 'integer';
+                        break;
+                    case 'int':
+                        $type = 'text';
+                        $dataType = 'integer';
+                        break;
+                    case 'smallint':
+                        $type = 'text';
+                        $dataType = 'integer';
+                        break;
+                    case 'tinyint':
+                        $type = 'text';
+                        $dataType = 'integer';
+                        break;
+                    case 'decimal':
+                        $type = 'text';
+                        $dataType = 'float';
+                        break;
+                    case 'double':
+                        $type = 'text';
+                        $dataType = 'float';
+                        break;
+                    case 'float':
+                        $type = 'text';
+                        $dataType = 'float';
+                        break;
+                    case 'datetime':
+                        $type = 'datetime';
+                        $dataType = 'datetime';
+                        break;
+                    case 'date':
+                        $type = 'datetime';
+                        $dataType = 'datetime';
+                        break;
+                    case 'time':
+                        $type = 'datetime';
+                        $dataType = 'datetime';
+                        break;
+                    case 'char':
+                        $type = 'text';
+                        $dataType = 'string';
+                        break;
+                    case 'varchar':
+                        $type = 'text';
+                        $dataType = 'string';
+                        break;
+                    case 'mediumtext':
+                        $type = 'textarea';
+                        $dataType = 'string';
+                        break;
+                    default:
+                        $type = "text";
+                        $dataType = 'string';
+                        break;
+                }
+                
+                //variables
+                $arrayData = array(
+                    "var_name" => $res->get('Field'),
+                    "var_label" => $res->get('Field'),
+                    "var_field_type" => $dataType,
+                    "var_field_size" => 10,
+                    "var_null" => 1,
+                    "var_dbconnection" => "none",
+                    "var_sql" => "",
+                    "var_options_control" => "",
+                    "var_default" => "",
+                    "var_accepted_values" => Array()
+                );
+                $objVariable = new \ProcessMaker\BusinessModel\Variable();
+                try {
+                    $objVariable->existsName($this->getProUid(), $res->get('Field'));
+                    $variable = $objVariable->create($this->getProUid(), $arrayData);
+                } catch (\Exception $e) {
+                    $data = $objVariable->getVariables($this->getProUid());
+                    foreach ($data as $datavariable) {
+                        if ($datavariable["var_name"] === $res->get('Field')) {
+                            $variable = $datavariable;
+                            break;
+                        }
+                    }
+                }
+                array_push($variables, $variable);
+
+                array_push($items, array(
+                    array(
+                        "type" => $type,
+                        "dataType" => $dataType, //$res->get('Type'),
+                        "id" => $res->get('Field'),
+                        "name" => $res->get('Field'),
+                        "label" => $res->get('Field'),
+                        "hint" => "",
+                        "required" => false,
+                        "defaultValue" => "",
+                        "dependentFields" => array(),
+                        "textTransform" => "none",
+                        "validate" => "any",
+                        "mask" => "",
+                        "maxLength" => 1000,
+                        "formula" => "",
+                        "mode" => "parent",
+                        "var_uid" => $variable["var_uid"],
+                        "var_name" => $variable["var_name"],
+                        "colSpan" => 12
+                    )
+                ));
+            }
+            //submit button
+            array_push($items, array(
+                array(
+                    "type" => "submit",
+                    "id" => "FormDesigner-" . \ProcessMaker\Util\Common::generateUID(),
+                    "name" => "submit",
+                    "label" => "submit",
+                    "colSpan" => 12
+                )
+            ));
+            $json = array(
+                "name" => $this->getDynTitle(),
+                "description" => $this->getDynDescription(),
+                "items" => array(
+                    array(
+                        "type" => "form",
+                        "id" => $this->getDynUid(),
+                        "name" => $this->getDynTitle(),
+                        "description" => $this->getDynDescription(),
+                        "mode" => "edit",
+                        "script" => "",
+                        "items" => $items,
+                        "variables" => $variables
+                    )
+                )
+            );
+
+            $aData = $this->Load($this->getDynUid());
+            $aData["DYN_CONTENT"] = G::json_encode($json);
+            $this->update($aData);
+        }
     }
 
     /**
@@ -439,9 +609,17 @@ class Dynaform extends BaseDynaform
         try {
             $oPro = DynaformPeer::retrieveByPK( $ProUid );
             if (! is_null( $oPro )) {
+                $title = $oPro->getDynTitle();
+                $type  = $oPro->getDynType(); 
+                $description = $oPro->getDynDescription();
+
                 Content::removeContent( 'DYN_TITLE', '', $oPro->getDynUid() );
                 Content::removeContent( 'DYN_DESCRIPTION', '', $oPro->getDynUid() );
                 $iResult = $oPro->delete();
+                
+                //Add Audit Log
+                G::auditLog("DeleteDynaform", "Dynaform Title: ".$title.", Type: ".$type.", Description: ".$description);
+
                 if (file_exists( PATH_DYNAFORM . $oPro->getProUid() . PATH_SEP . $oPro->getDynUid() . '.xml' )) {
                     unlink( PATH_DYNAFORM . $oPro->getProUid() . PATH_SEP . $oPro->getDynUid() . '.xml' );
                 }
@@ -517,13 +695,14 @@ class Dynaform extends BaseDynaform
         return $G_FORM->fields;
     }
 
-    public function verifyExistingName ($sName, $sProUid)
+    public function verifyExistingName ($sName, $sProUid, $sDynUid)
     {
         $sNameDyanform = urldecode( $sName );
         $sProUid = urldecode( $sProUid );
         $oCriteria = new Criteria( 'workflow' );
         $oCriteria->addSelectColumn( DynaformPeer::DYN_UID );
         $oCriteria->add( DynaformPeer::PRO_UID, $sProUid );
+        $oCriteria->add( DynaformPeer::DYN_UID, $sDynUid );
         $oDataset = DynaformPeer::doSelectRS( $oCriteria );
         $oDataset->setFetchmode( ResultSet::FETCHMODE_ASSOC );
         $flag = true;
@@ -532,14 +711,16 @@ class Dynaform extends BaseDynaform
             $oCriteria1 = new Criteria( 'workflow' );
             $oCriteria1->addSelectColumn( 'COUNT(*) AS DYNAFORMS' );
             $oCriteria1->add( ContentPeer::CON_CATEGORY, 'DYN_TITLE' );
-            $oCriteria1->add( ContentPeer::CON_ID, $aRow['DYN_UID'] );
+            $oCriteria1->add( ContentPeer::CON_ID, $sDynUid, Criteria::NOT_EQUAL);
             $oCriteria1->add( ContentPeer::CON_VALUE, $sNameDyanform );
             $oCriteria1->add( ContentPeer::CON_LANG, SYS_LANG );
+            $oCriteria1->add( DynaformPeer::PRO_UID, $sProUid);
+            $oCriteria1->addJoin( ContentPeer::CON_ID, DynaformPeer::DYN_UID, Criteria::INNER_JOIN );
             $oDataset1 = ContentPeer::doSelectRS( $oCriteria1 );
             $oDataset1->setFetchmode( ResultSet::FETCHMODE_ASSOC );
             $oDataset1->next();
             $aRow1 = $oDataset1->getRow();
-            if ($aRow1['DYNAFORMS']) {
+            if ($aRow1['DYNAFORMS'] == 1) {
                 $flag = false;
                 break;
             }

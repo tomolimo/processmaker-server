@@ -174,7 +174,7 @@ class caseSchedulerProxy extends HttpProxyController
         $aData['SCH_UID'] = G::generateUniqueID();
         $aData['SCH_NAME'] = $params->fDescription; //$_POST['form']['SCH_NAME'];
         $aData['SCH_DEL_USER_NAME'] = $params->fUser; //$_POST['form']['SCH_USER_NAME'];
-        $aData['SCH_DEL_USER_PASS'] = md5( $params->fPassword );
+        $aData['SCH_DEL_USER_PASS'] = G::encryptOld( $params->fPassword );
         $aData['SCH_DEL_USER_UID'] = $params->usr_uid; //$_POST['form']['SCH_USER_UID'];
         $aData['PRO_UID'] = $params->pro_uid; //$_POST['form']['PRO_UID'];
         $aData['TAS_UID'] = $params->tas_uid; //$_POST['form']['TAS_UID'];

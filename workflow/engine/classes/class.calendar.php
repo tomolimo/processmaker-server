@@ -414,7 +414,7 @@ class calendar extends CalendarDefinition
     			$hoursDuration -= (float)($secondRes/3600);
     			//$dataLog[] = (float)($secondRes/3600);
     		} else {
-    			$newDate = date('Y-m-d H:i:s', strtotime('+' . (((float)$hoursDuration)*3600) . ' seconds', strtotime($newDate)));
+    			$newDate = date("Y-m-d H:i:s", strtotime("+" . round(((float)($hoursDuration)) * 3600) . " seconds", strtotime($newDate)));
     			//$dataLog[] = (float)($hoursDuration);
     			$hoursDuration = 0;
     		}
@@ -794,6 +794,254 @@ class calendar extends CalendarDefinition
         $return['BUSINESS_HOURS'] = $businessHoursA;
 
         return $return;
+    }
+
+
+
+
+
+    /**************SLA classes***************/
+    public function dashCalculateDate ($iniDate, $duration, $formatDuration, $calendarData = array())
+    {
+    	if ( G::toUpper($formatDuration) == 'DAYS' ) {
+    		$duration = $duration*$calendarData['HOURS_FOR_DAY'];
+    	}
+    
+    	$hoursDuration = (float)$duration;
+    	$newDate = $iniDate;
+    
+    	while ($hoursDuration > 0) {
+    		$newDate = $this->dashGetIniDate($newDate, $calendarData);
+    
+    		$rangeWorkHour = $this->dashGetRangeWorkHours($newDate, $calendarData['BUSINESS_DAY']);
+    		$onlyDate = (date('Y-m-d',strtotime($newDate))) . ' ' . $rangeWorkHour['END'];
+    
+    		if ( (((float)$hoursDuration) >= ((float)$rangeWorkHour['TOTAL'])) ||
+    				((strtotime($onlyDate) - strtotime($newDate)) < (((float)$hoursDuration)*3600))
+    		) {
+    			$secondRes = (float)(strtotime($onlyDate) - strtotime($newDate));
+    			$newDate = $onlyDate;
+    			$hoursDuration -= (float)($secondRes/3600);
+    		} else {
+    			$newDate = date('Y-m-d H:i:s', strtotime('+' . (((float)$hoursDuration)*3600) . ' seconds', strtotime($newDate)));
+    			$hoursDuration = 0;
+    		}
+    	}
+    	return $newDate;
+    }
+    
+    //Calculate the duration betwen two dates with a calendar
+    public function dashCalculateDurationWithCalendar ($iniDate, $finDate = null, $calendarData = array())
+    {
+    	if ((is_null($finDate)) || ($finDate == '')) {
+    		$finDate = date('Y-m-d H:i:s');
+    	}
+    
+    	$secondDuration = 0.00;
+    
+    	if ( (strtotime($iniDate)) < (strtotime($finDate)) ) {
+    		$timeIniDate = strtotime($iniDate);
+    		$timeFinDate = strtotime($finDate);
+    	} elseif ( (strtotime($finDate)) < (strtotime($iniDate)) ) {
+    		$timeIniDate = strtotime($finDate);
+    		$timeFinDate = strtotime($iniDate);
+    		$auxDate = $iniDate;
+    		$iniDate = $finDate;
+    		$finDate = $auxDate;
+    	} else {
+    		return $secondDuration;
+    	}
+    
+    	$finDate = $this->dashGetIniDate($finDate, $calendarData);
+    	$newDate = $iniDate;
+    	while ($timeIniDate < $timeFinDate) {
+    		$newDate = $this->dashGetIniDate($newDate, $calendarData);
+    
+    		$rangeWorkHour = $this->dashGetRangeWorkHours($newDate, $calendarData['BUSINESS_DAY']);
+    		$onlyDate = (date('Y-m-d',strtotime($newDate))) . ' ' . $rangeWorkHour['END'];
+    
+    		if ( (strtotime($finDate)) < (strtotime($onlyDate)) ) {
+    			$secondRes = ( ((float)strtotime($finDate)) - ((float)strtotime($newDate)) );
+    			$timeIniDate = strtotime($finDate);
+    			$secondDuration += (float)$secondRes;
+    		} else {
+    			$secondRes = ( ((float)strtotime($onlyDate)) - ((float)strtotime($newDate)) );
+    			$newDate = $onlyDate;
+    			$timeIniDate = strtotime($onlyDate);
+    			$secondDuration += (float)$secondRes;
+    		}
+    	}
+    	return $secondDuration;
+    }
+    
+    public function dashGetIniDate ($iniDate, $calendarData = array())
+    {
+    	$flagIniDate = true;
+    
+    	while ($flagIniDate) {
+    		// 1 if it's a work day
+    		$weekDay = date('w',strtotime($iniDate));
+    		if ( !(in_array($weekDay, $calendarData['CALENDAR_WORK_DAYS_A'])) ) {
+    			$iniDate = date('Y-m-d'.' 00:00:00' , strtotime('+1 day', strtotime($iniDate)));
+    			continue;
+    		}
+    
+    		// 2 if it's a holiday
+    		$iniDateHolidayDay = $this->dashIs_holiday($iniDate, $calendarData['HOLIDAY']);
+    		if ($iniDateHolidayDay) {
+    			$iniDate = date('Y-m-d'.' 00:00:00' , strtotime('+1 day', strtotime($iniDate)));
+    			continue;
+    		}
+    
+    		// 3 if it's work time
+    		$workHours = $this->dashNextWorkHours($iniDate, $weekDay, $calendarData['BUSINESS_DAY']);
+    		if ( !($workHours['STATUS']) ) {
+    			$iniDate = date('Y-m-d'.' 00:00:00' , strtotime('+1 day', strtotime($iniDate)));
+    			continue;
+    		} else {
+    			$iniDate = $workHours['DATE'];
+    		}
+    		$flagIniDate = false;
+    	}
+    
+    	return $iniDate;
+    }
+    
+    public function dashNextWorkHours ($date, $weekDay, $workHours = array())
+    {
+    	$auxIniDate = explode(' ', $date);
+    
+    	$timeDate = $auxIniDate['1'];
+    	$timeDate = (float)str_replace(':', '', ((strlen($timeDate) == 8) ? $timeDate : $timeDate.':00') );
+    	$nextWorkHours = array();
+    
+    	$workHoursDay = array();
+    	$tempWorkHoursDay = array();
+    
+    	foreach ($workHours as $value) {
+    		if ($value['CALENDAR_BUSINESS_DAY'] == $weekDay) {
+    			$rangeWorkHour = array();
+    			$timeStart = $value['CALENDAR_BUSINESS_START'];
+    			$timeEnd   = $value['CALENDAR_BUSINESS_END'];
+    			$rangeWorkHour['START'] = ((strlen($timeStart) == 8) ? $timeStart : $timeStart.':00');
+    			$rangeWorkHour['END']   = ((strlen($timeEnd) == 8) ? $timeEnd : $timeEnd.':00');
+    
+    			$workHoursDay[] = $rangeWorkHour;
+    		}
+    
+    		if ($value['CALENDAR_BUSINESS_DAY'] == '7') {
+    			$rangeWorkHour = array();
+    			$timeStart = $value['CALENDAR_BUSINESS_START'];
+    			$timeEnd   = $value['CALENDAR_BUSINESS_END'];
+    			$rangeWorkHour['START'] = ((strlen($timeStart) == 8) ? $timeStart : $timeStart.':00');
+    			$rangeWorkHour['END']   = ((strlen($timeEnd) == 8) ? $timeEnd : $timeEnd.':00');
+    
+    			$tempWorkHoursDay[] = $rangeWorkHour;
+    		}
+    	}
+    
+    	if ( !(count($workHoursDay)) ) {
+    		$workHoursDay = $tempWorkHoursDay;
+    	}
+    
+    	$countHours = count($workHoursDay);
+    	if ($countHours) {
+    		for ($i = 1; $i < $countHours; $i++) {
+    			for ($j = 0; $j < $countHours-$i; $j++) {
+    				$dataft = (float)str_replace(':', '', $workHoursDay[$j]['START']);
+    				$datasc = (float)str_replace(':', '', $workHoursDay[$j+1]['END']);
+    				if ($dataft > $datasc) {
+    					$aux = $workHoursDay[$j+1];
+    					$workHoursDay[$j+1] = $workHoursDay[$j];
+    					$workHoursDay[$j] = $aux;
+    				}
+    			}
+    		}
+    
+    		foreach ($workHoursDay as $value) {
+    			$iniTime = (float)str_replace(':', '', ((strlen($value['START']) == 8) ? $value['START'] : $value['START'].':00'));
+    			$finTime = (float)str_replace(':', '', ((strlen($value['END']) == 8) ? $value['END'] : $value['END'].':00'));
+    
+    			if ( $timeDate <= $iniTime ) {
+    				$nextWorkHours['STATUS'] = true;
+    				$nextWorkHours['DATE']   = $auxIniDate['0'] . ' ' . ((strlen($value['START']) == 8) ? $value['START'] : $value['START'].':00');
+    				return $nextWorkHours;
+    			} elseif ( ($iniTime <= $timeDate)  && ($timeDate < $finTime) ) {
+    				$nextWorkHours['STATUS'] = true;
+    				$nextWorkHours['DATE']   = $date;
+    				return $nextWorkHours;
+    			}
+    		}
+    	}
+    
+    	$nextWorkHours['STATUS'] = false;
+    	return $nextWorkHours;
+    }
+    
+    public function dashIs_holiday ($date, $holidays = array())
+    {
+    	$auxIniDate = explode(' ', $date);
+    	$iniDate = $auxIniDate['0'];
+    	$iniDate = strtotime($iniDate);
+    
+    	foreach ($holidays as $value) {
+    		$holidayStartDate = strtotime(date('Y-m-d',strtotime($value['CALENDAR_HOLIDAY_START'])));
+    		$holidayEndDate   = strtotime(date('Y-m-d',strtotime($value['CALENDAR_HOLIDAY_END'])));
+    
+    		if ( ($holidayStartDate <= $iniDate) && ($iniDate <= $holidayEndDate) ) {
+    			return true;
+    		}
+    	}
+    	return false;
+    }
+    
+    public function dashGetRangeWorkHours ($date, $workHours)
+    {
+    	$auxIniDate = explode(' ', $date);
+    	$timeDate = $auxIniDate['1'];
+    	$timeDate = (float)str_replace(':', '', ((strlen($timeDate) == 8) ? $timeDate : $timeDate.':00') );
+    	$weekDay = date('w',strtotime($date));
+    
+    	$workHoursDay = array();
+    	$tempWorkHoursDay = array();
+    
+    	foreach ($workHours as $value) {
+    		if ($value['CALENDAR_BUSINESS_DAY'] == $weekDay) {
+    			$rangeWorkHour = array();
+    			$timeStart = $value['CALENDAR_BUSINESS_START'];
+    			$timeEnd   = $value['CALENDAR_BUSINESS_END'];
+    			$rangeWorkHour['START'] = ((strlen($timeStart) == 8) ? $timeStart : $timeStart.':00');
+    			$rangeWorkHour['END']   = ((strlen($timeEnd) == 8) ? $timeEnd : $timeEnd.':00');
+    
+    			$workHoursDay[] = $rangeWorkHour;
+    		}
+    
+    		if ($value['CALENDAR_BUSINESS_DAY'] == '7') {
+    			$rangeWorkHour = array();
+    			$timeStart = $value['CALENDAR_BUSINESS_START'];
+    			$timeEnd   = $value['CALENDAR_BUSINESS_END'];
+    			$rangeWorkHour['START'] = ((strlen($timeStart) == 8) ? $timeStart : $timeStart.':00');
+    			$rangeWorkHour['END']   = ((strlen($timeEnd) == 8) ? $timeEnd : $timeEnd.':00');
+    
+    			$tempWorkHoursDay[] = $rangeWorkHour;
+    		}
+    	}
+    
+    	if ( !(count($workHoursDay)) ) {
+    		$workHoursDay = $tempWorkHoursDay;
+    	}
+    
+    	foreach ($workHoursDay as $value) {
+    		$iniTime = (float)str_replace(':', '', $value['START']);
+    		$finTime = (float)str_replace(':', '', $value['END']);
+    
+    		if ( ($iniTime <= $timeDate)  && ($timeDate <= $finTime) ) {
+    			//pr($finTime .' menos '.$iniTime .' = '.($finTime-$iniTime));
+    			$value['TOTAL'] = (($finTime-$iniTime)/10000);
+    			return $value;
+    		}
+    	}
+    	return false;
     }
 
 }

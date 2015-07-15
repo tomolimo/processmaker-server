@@ -28,8 +28,9 @@
  * @author Everth S. Berrios Morales <everth@colosa.com>
  *
  */
-if (! isset( $_SESSION['PROCESS'] )) {
+if (! isset( $_SESSION['PROCESS'] ) || ! isset( $_SESSION['APPLICATION'] )) {
     G::header( 'location: login' );
+    die;
 }
 $G_MAIN_MENU = 'caseTracker';
 $G_ID_MENU_SELECTED = 'DYNADOC';

@@ -103,7 +103,16 @@ class Log_mail extends Log
     function Log_mail($name, $ident = '', $conf = array(),
                       $level = PEAR_LOG_DEBUG)
     {
-        $this->_id = md5(microtime());
+        if(!class_exists('G')){
+          $realdocuroot = str_replace( '\\', '/', $_SERVER['DOCUMENT_ROOT'] );
+          $docuroot = explode( '/', $realdocuroot );
+          array_pop( $docuroot );
+          $pathhome = implode( '/', $docuroot ) . '/';
+          array_pop( $docuroot );
+          $pathTrunk = implode( '/', $docuroot ) . '/';
+          require_once($pathTrunk.'gulliver/system/class.g.php');
+        }
+        $this->_id = G::encryptOld(microtime());
         $this->_recipients = $name;
         $this->_ident = $ident;
         $this->_mask = Log::UPTO($level);

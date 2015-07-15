@@ -131,7 +131,7 @@ try {
     }
 
 
-    $G_PUBLISH->AddContent( 'xmlform', 'xmlform', 'cases/cases_Scheduler_Edit.xml', '', $aFields, 'cases_Scheduler_Update' );
+    $G_PUBLISH->AddContent("xmlform", "xmlform", "cases" . PATH_SEP . "cases_Scheduler_Edit.xml", "", $aFields, "CaseSchedulerCreateUpdate");
 
     G::RenderPage( 'publishBlank', 'blank' );
 

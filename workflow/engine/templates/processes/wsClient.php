@@ -27,7 +27,7 @@ function parseItemArray($array) {
  * @return array of objects
  */
 function convertFormToWSObjects($form) {
-
+  $aVariables = array();
   foreach ( $form as $key => $val ) {
     if (! is_array($val)) { //Normal Variables
       $obj = new stdClass();

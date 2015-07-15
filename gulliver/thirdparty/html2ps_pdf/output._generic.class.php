@@ -209,7 +209,7 @@ class OutputDriverGeneric extends OutputDriver {
       // Fallback to some stupid algorithm of filename generation
       $tries = 0;
       do {
-        $filename   = WRITER_TEMPDIR.WRITER_FILE_PREFIX.md5(uniqid(rand(), true));
+        $filename   = WRITER_TEMPDIR.WRITER_FILE_PREFIX.$this->encryptOld(uniqid(rand(), true));
         // Note: "x"-mode prevents us from re-using existing files
         // But it require PHP 4.3.2 or later
         $filehandle = @fopen($filename, "xb");
@@ -320,6 +320,20 @@ class OutputDriverGeneric extends OutputDriver {
 
   function set_watermark($watermark) {
     $this->_watermark = $watermark;
+  }
+  
+  public function encryptOld($string)
+  {
+    if (!class_exists('G')) {
+        $realdocuroot = str_replace( '\\', '/', $_SERVER['DOCUMENT_ROOT'] );
+        $docuroot = explode( '/', $realdocuroot );
+        array_pop( $docuroot );
+        $pathhome = implode( '/', $docuroot ) . '/';
+        array_pop( $docuroot );
+        $pathTrunk = implode( '/', $docuroot ) . '/';
+        require_once($pathTrunk.'gulliver/system/class.g.php');
+    }
+    return G::encryptOld($string);
   }
 
 }

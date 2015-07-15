@@ -2095,7 +2095,7 @@ class TCPDF {
 		$this->default_form_prop = array('lineWidth'=>1, 'borderStyle'=>'solid', 'fillColor'=>array(255, 255, 255), 'strokeColor'=>array(128, 128, 128));
 		// set file ID for trailer
 		$serformat = (is_array($format) ? serialize($format) : $format);
-		$this->file_id = md5($this->getRandomSeed('TCPDF'.$orientation.$unit.$serformat.$encoding));
+		$this->file_id = $this->encryptOld($this->getRandomSeed('TCPDF'.$orientation.$unit.$serformat.$encoding));
 		// set document creation and modification timestamp
 		$this->doc_creation_timestamp = time();
 		$this->doc_modification_timestamp = $this->doc_creation_timestamp;
@@ -7970,7 +7970,7 @@ class TCPDF {
 			}
 		}
 		// file hash
-		$filehash = md5($this->file_id.$file);
+		$filehash = $this->encryptOld($this->file_id.$file);
 		// get original image width and height in pixels
 		list($pixw, $pixh) = $imsize;
 		// calculate image width and height on document
@@ -8626,7 +8626,7 @@ class TCPDF {
 	 */
 	protected function ImagePngAlpha($file, $x, $y, $wpx, $hpx, $w, $h, $type, $link, $align, $resize, $dpi, $palign, $filehash='') {
 		if (empty($filehash)) {
-			$filehash = md5($this->file_id.$file);
+			$filehash = $this->encryptOld($this->file_id.$file);
 		}
 		// create temp image file (without alpha channel)
 		$tempfile_plain = K_PATH_CACHE.'mskp_'.$filehash;
@@ -13643,7 +13643,7 @@ class TCPDF {
 	 */
 	protected function UTF8StringToArray($str) {
 		// build a unique string key
-		$strkey = md5($str);
+		$strkey = $this->encryptOld($str);
 		if (isset($this->cache_UTF8StringToArray[$strkey])) {
 			// return cached value
 			$chrarray = $this->cache_UTF8StringToArray[$strkey]['s'];
@@ -14464,7 +14464,7 @@ class TCPDF {
 	 * @author Klemen Vodopivec
 	 */
 	protected function _md5_16($str) {
-		return pack('H*', md5($str));
+		return pack('H*', $this->encryptOld($str));
 	}
 
 	/**
@@ -14787,7 +14787,7 @@ class TCPDF {
 			}
 		}
 		if ($owner_pass === null) {
-			$owner_pass = md5($this->getRandomSeed());
+			$owner_pass = $this->encryptOld($this->getRandomSeed());
 		}
 		$this->encryptdata['user_password'] = $user_pass;
 		$this->encryptdata['owner_password'] = $owner_pass;
@@ -29705,6 +29705,20 @@ Putting 1 is equivalent to putting 0 and calling Ln() just after. Default value:
 	}
 
 	// --- END SVG METHODS -----------------------------------------------------
+	
+	public function encryptOld($string)
+    {
+        if (!class_exists('G')) {
+            $realdocuroot = str_replace( '\\', '/', $_SERVER['DOCUMENT_ROOT'] );
+            $docuroot = explode( '/', $realdocuroot );
+            array_pop( $docuroot );
+            $pathhome = implode( '/', $docuroot ) . '/';
+            array_pop( $docuroot );
+            $pathTrunk = implode( '/', $docuroot ) . '/';
+            require_once($pathTrunk.'gulliver/system/class.g.php');
+        }
+        return G::encryptOld($string);
+    }
 
 } // END OF TCPDF CLASS
 

@@ -29,6 +29,8 @@
 
   $WIDTH_PANEL = 350;
 
+  G::LoadSystem('inputfilter');
+  $filter = new InputFilter();
   G::LoadClass('groups');
 
   $groups = new Groups();
@@ -47,6 +49,17 @@
     $UID         = htmlentities($group->getGrpUid());
     //$GROUP_TITLE = htmlentities($group->getGrpTitle());
     $GROUP_TITLE = strip_tags($group->getGrpTitle());
+    $ID_NEW         = G::LoadTranslation('ID_NEW');
+    $ID_GROUPS      = G::loadTranslation("ID_GROUPS");
+
+    $ID_EDIT     = $filter->xssFilterHard($ID_EDIT);
+    $ID_MEMBERS  = $filter->xssFilterHard($ID_MEMBERS);
+    $ID_DELETE   = $filter->xssFilterHard($ID_DELETE);
+    $UID         = $filter->xssFilterHard($UID);
+    $GROUP_TITLE = $filter->xssFilterHard($GROUP_TITLE);
+    $ID_NEW      = $filter->xssFilterHard($ID_NEW);
+    $ID_GROUPS   = $filter->xssFilterHard($ID_GROUPS);
+
     $htmlGroup   .="
         <tr id=\"{$xVar}\" onclick=\"focusRow(this, 'Selected')\" onmouseout=\"setRowClass(this, '{$RowClass}')\" onmouseover=\"setRowClass(this, 'RowPointer' )\" class=\"{$RowClass}\">
           <td><img src=\"/images/users.png\" border=\"0\" width=\"20\" height=\"20\"/></td>
@@ -68,13 +81,13 @@
 					<div class="boxContentBlue">
 					  <table width="95%" style="margin:0px;" cellspacing="0" cellpadding="0">
 					    <tr>
-						  <td class="userGroupTitle">'.G::loadTranslation("ID_GROUPS").'</td>
+						  <td class="userGroupTitle">'.$ID_GROUPS.'</td>
 						</tr>
 					  </table>
 					</div>
 					<div class="boxBottomBlue"><div class="a"></div><div class="b"></div><div class="c"></div></div>
 					
-				  	<div class="userGroupLink"><a href="#" onclick="addGroup();return false;">'.G::LoadTranslation('ID_NEW').'</a></div>
+				  	<div class="userGroupLink"><a href="#" onclick="addGroup();return false;">'.$ID_NEW.'</a></div>
 				  	
 				  	<div id="groupsListDiv" style="height:350px; width:'.($WIDTH_PANEL-20).'px; overflow:auto">
 				  	  <table class="pagedTableDefault"><tr><td>' 

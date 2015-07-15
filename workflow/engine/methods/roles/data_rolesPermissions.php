@@ -22,6 +22,10 @@
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  */
 
+G::LoadSystem('inputfilter');
+$filter = new InputFilter();
+$_GET = $filter->xssFilterHard($_GET);
+$_REQUEST = $filter->xssFilterHard($_REQUEST);
 $ROL_UID = $_GET['rUID'];
 $TYPE_DATA = $_GET["type"];
 

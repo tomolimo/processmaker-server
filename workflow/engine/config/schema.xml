@@ -37,6 +37,8 @@
     <column name="APP_UPDATE_DATE" type="TIMESTAMP" required="true"/>
     <column name="APP_DATA" type="LONGVARCHAR" required="true"/>
     <column name="APP_PIN" type="VARCHAR" size="32" required="true" default=""/>
+    <column name="APP_DURATION" type="DOUBLE" default="0"/>
+    <column name="APP_DELAY_DURATION" type="DOUBLE" default="0"/>
     <validator column="APP_STATUS">
       <rule name="validValues" value="DRAFT|TO_DO|PAUSED|COMPLETED|CANCELLED" message="Please select a valid status." />
     </validator>
@@ -121,8 +123,9 @@
     <column name="DEL_PRIORITY" type="VARCHAR" size="32" required="true" default="3"/>
     <column name="DEL_DELEGATE_DATE" type="TIMESTAMP" required="true"/>
     <column name="DEL_INIT_DATE" type="TIMESTAMP" required="false"/>
-    <column name="DEL_TASK_DUE_DATE" type="TIMESTAMP" required="false"/>
     <column name="DEL_FINISH_DATE" type="TIMESTAMP" required="false"/>
+    <column name="DEL_TASK_DUE_DATE" type="TIMESTAMP" required="false" />
+    <column name="DEL_RISK_DATE" type="TIMESTAMP" required="false" />
     <column name="DEL_DURATION" type="DOUBLE" default="0"/>
     <column name="DEL_QUEUE_DURATION" type="DOUBLE" default="0"/>
     <column name="DEL_DELAY_DURATION" type="DOUBLE" default="0"/>
@@ -266,6 +269,7 @@
     <column name="APP_MSG_ATTACH" type="LONGVARCHAR" required="false"/>
     <column name="APP_MSG_SEND_DATE" type="TIMESTAMP" required="true"/>
     <column name="APP_MSG_SHOW_MESSAGE" type="TINYINT" required="true" default="1"/>
+    <column name="APP_MSG_ERROR" type="LONGVARCHAR" required="false" default=""/>
   </table>
   <table name="APP_OWNER">
     <vendor type="mysql">
@@ -459,6 +463,7 @@
     <column name="DYN_TYPE" type="VARCHAR" size="20" required="true" default="xmlform"/>
     <column name="DYN_FILENAME" type="VARCHAR" size="100" required="true" default=""/>
     <column name="DYN_CONTENT" type="LONGVARCHAR"/>
+    <column name="DYN_LABEL" type="LONGVARCHAR"/>
     <column name="DYN_VERSION" type="INTEGER" required="true"/>
     <validator column="DYN_TYPE">
       <rule name="validValues" value="xmlform|grid" message="Please select a valid dynaform type."/>
@@ -1020,6 +1025,7 @@
     <column name="ROU_NEXT_TASK" type="VARCHAR" size="32" required="true" default="0"/>
     <column name="ROU_CASE" type="INTEGER" required="true" default="0"/>
     <column name="ROU_TYPE" type="VARCHAR" size="25" required="true" default="SEQUENTIAL"/>
+    <column name="ROU_DEFAULT" type="INTEGER" default="0" required="true" />
     <column name="ROU_CONDITION" type="VARCHAR" size="512" required="true" default=""/>
     <column name="ROU_TO_LAST_USER" type="VARCHAR" size="20" required="true" default="FALSE"/>
     <column name="ROU_OPTIONAL" type="VARCHAR" size="20" required="true" default="FALSE"/>
@@ -1048,6 +1054,9 @@
     <validator column="ROU_TYPE">
       <rule name="validValues" value="SEQUENTIAL|EVALUATE|SELECT|PARALLEL|PARALLEL-BY-EVALUATION|SEC-JOIN|DISCRIMINATOR" message="Please select a valid Route Type."/>
       <rule name="required" message="Route type is required."/>
+    </validator>
+    <validator column="ROU_DEFAULT">
+        <rule name="validValues" value="0|1" message="Please enter a valid value for ROU_DEFAULT" />
     </validator>
     <validator column="ROU_TO_LAST_USER">
       <rule name="validValues" value="FALSE|TRUE" message="Please select a valid value for ROU_TO_LAST_USER ."/>
@@ -1197,7 +1206,7 @@
     </vendor>
     <column name="PRO_UID" type="VARCHAR" size="32" required="true" default=""/>
     <column name="TAS_UID" type="VARCHAR" size="32" required="true" primaryKey="true" default=""/>
-    <column name="TAS_TYPE" type="VARCHAR" size="20" required="true" default="NORMAL"/>
+    <column name="TAS_TYPE" type="VARCHAR" size="50" required="true" default="NORMAL"/>
     <column name="TAS_DURATION" type="DOUBLE" required="true" default="0"/>
     <column name="TAS_DELAY_TYPE" type="VARCHAR" size="30" required="true" default=""/>
     <column name="TAS_TEMPORIZER" type="DOUBLE" required="true" default="0"/>
@@ -1244,7 +1253,7 @@
     <column name="TAS_SELFSERVICE_EXECUTION" type="VARCHAR" size="15" default="EVERY_TIME"/>
 
     <validator column="TAS_TYPE">
-      <rule name="validValues" value="NORMAL|ADHOC|SUBPROCESS|HIDDEN" message="Please select a valid value for TAS_TYPE."/>
+        <rule name="validValues" value="NORMAL|ADHOC|SUBPROCESS|HIDDEN|GATEWAYTOGATEWAY|WEBENTRYEVENT|END-MESSAGE-EVENT|START-MESSAGE-EVENT|INTERMEDIATE-THROW-MESSAGE-EVENT|INTERMEDIATE-CATCH-MESSAGE-EVENT" message="Please enter a valid value for TAS_TYPE"/>
     </validator>
     <validator column="TAS_TIMEUNIT">
       <rule name="validValues" value="MINUTES|HOURS|DAYS|WEEKS|MONTHS" message="Please select a valid value for TAS_TIMEUNIT."/>
@@ -1464,6 +1473,15 @@
     <column name="USR_REPORTS_TO" type="VARCHAR" size="32" default=""/>
     <column name="USR_REPLACED_BY" type="VARCHAR" size="32" default=""/>
     <column name="USR_UX" type="VARCHAR" size="128" default="NORMAL"/>
+    <column name="USR_TOTAL_INBOX" type="INTEGER" default="0"/>
+    <column name="USR_TOTAL_DRAFT" type="INTEGER" default="0"/>
+    <column name="USR_TOTAL_CANCELLED" type="INTEGER" default="0"/>
+    <column name="USR_TOTAL_PARTICIPATED" type="INTEGER" default="0"/>
+    <column name="USR_TOTAL_PAUSED" type="INTEGER" default="0"/>
+    <column name="USR_TOTAL_COMPLETED" type="INTEGER" default="0"/>
+    <column name="USR_TOTAL_UNASSIGNED" type="INTEGER" default="0"/>
+    <column name="USR_COST_BY_HOUR" type="DECIMAL" size="7,2" required="false" default="0"/>
+    <column name="USR_UNIT_COST" type="VARCHAR" size="50" required="false" default=""/>
     <validator column="USR_STATUS">
       <rule name="validValues" value="ACTIVE|INACTIVE|VACATION|CLOSED" message="Please select a valid type."/>
       <rule name="required" message="Type is required."/>
@@ -1918,6 +1936,32 @@
         <parameter name="Comment" value=""/>
       </vendor>
     </index>
+  </table>
+  <table name="CASE_CONSOLIDATED">
+    <vendor type="mysql">
+      <parameter name="Name" value="CASE_CONSOLIDATED"/>
+      <parameter name="Engine" value="InnoDB"/>
+      <parameter name="Version" value="10"/>
+      <parameter name="Row_format" value="Dynamic"/>
+      <parameter name="Rows" value="18"/>
+      <parameter name="Avg_row_length" value="106"/>
+      <parameter name="Data_length" value="1956"/>
+      <parameter name="Max_data_length" value="281474976710655"/>
+      <parameter name="Index_length" value="2048"/>
+      <parameter name="Data_free" value="40"/>
+      <parameter name="Auto_increment" value=""/>
+      <parameter name="Create_time" value="2015-16-03 11:50:00"/>
+      <parameter name="Update_time" value="2015-16-03 11:50:00"/>
+      <parameter name="Check_time" value=""/>
+      <parameter name="Collation" value="utf8_general_ci"/>
+      <parameter name="Checksum" value=""/>
+      <parameter name="Create_options" value=""/>
+      <parameter name="Comment" value=""/>
+    </vendor>
+    <column name="TAS_UID" type="VARCHAR" size="32" required="true" primaryKey="true" default=""/>
+    <column name="DYN_UID" type="VARCHAR" size="32" required="true" default=""/>
+    <column name="REP_TAB_UID" type="VARCHAR" size="32" required="true" default=""/>
+    <column name="CON_STATUS" type="VARCHAR" size="20" required="true" default="ACTIVE"/>
   </table>
   <table name="STAGE">
     <vendor type="mysql">
@@ -2396,8 +2440,9 @@
     <column name="PRO_UID" type="VARCHAR" size="32" required="true" default=""/>
     <column name="DEL_DELEGATE_DATE" type="TIMESTAMP" required="true"/>
     <column name="DEL_INIT_DATE" type="TIMESTAMP" required="false"/>
-    <column name="DEL_TASK_DUE_DATE" type="TIMESTAMP" required="false"/>
     <column name="DEL_FINISH_DATE" type="TIMESTAMP" required="false"/>
+    <column name="DEL_TASK_DUE_DATE" type="TIMESTAMP" required="false" />
+    <column name="DEL_RISK_DATE" type="TIMESTAMP" required="false" />
     <column name="DEL_THREAD_STATUS" type="VARCHAR" size="32" default="OPEN"/>
     <column name="APP_THREAD_STATUS" type="VARCHAR" size="32" default="OPEN"/>
     <column name="APP_TITLE" type="VARCHAR" size="255" required="true" default=""/>
@@ -2549,10 +2594,14 @@
     <column name="PRO_UID" type="VARCHAR" size="32" required="true" default=""/>
     <column name="TAS_UID" type="VARCHAR" size="32" required="true" default=""/>
     <column name="DYN_UID" type="VARCHAR" size="32" required="true" default=""/>
+    <column name="OBJ_TYPE" type="VARCHAR" size="20" required="true" default="DYNAFORM" />
     <column name="USR_UID" type="VARCHAR" size="32" required="true" default=""/>
     <column name="APP_STATUS" type="VARCHAR" size="100" required="true" default=""/>
     <column name="HISTORY_DATE" type="TIMESTAMP" required="false"/>
     <column name="HISTORY_DATA" type="LONGVARCHAR" required="true"/>
+    <validator column="OBJ_TYPE">
+        <rule name="validValues" value="DYNAFORM|INPUT_DOCUMENT|OUTPUT_DOCUMENT|EXTERNAL|ASSIGN_TASK" message="Please enter a valid value for OBJ_TYPE" />
+    </validator>
     <index name="indexAppHistory">
       <index-column name="APP_UID"/>
       <index-column name="TAS_UID"/>
@@ -2643,7 +2692,7 @@
       <parameter name="Create_options" value=""/>
       <parameter name="Comment" value="Cases Launched with Case Scheduler"/>
     </vendor>
-    <column name="LOG_CASE_UID" size="32" required="true" primaryKey="true" default=""/>
+    <column name="LOG_CASE_UID" type="VARCHAR" size="32" required="true" primaryKey="true" default=""/>
     <column name="PRO_UID" type="VARCHAR" size="32" required="true" default=""/>
     <column name="TAS_UID" type="VARCHAR" size="32" required="true" default=""/>
     <column name="USR_NAME" type="VARCHAR" size="32" required="true" default=""/>
@@ -3235,7 +3284,7 @@
     <column name="PRJ_UID" type="VARCHAR" size="32" required="true" default="" primaryKey="true"/>
     <column name="PRJ_NAME" type="VARCHAR" size="255" required="true" default=""/>
     <column name="PRJ_DESCRIPTION" type="VARCHAR" size="512" required="false"/>
-    <column name="PRJ_TARGET_NAMESPACE" type="LONGVARCHAR" required="true"/>
+    <column name="PRJ_TARGET_NAMESPACE" type="LONGVARCHAR" required="false"/>
     <column name="PRJ_EXPRESION_LANGUAGE" type="LONGVARCHAR" required="false"/>
     <column name="PRJ_TYPE_LANGUAGE" type="LONGVARCHAR" required="false"/>
     <column name="PRJ_EXPORTER" type="LONGVARCHAR" required="false"/>
@@ -3575,6 +3624,7 @@
     <column name="FLO_X2" type="INTEGER" required="true" default="0"/>
     <column name="FLO_Y2" type="INTEGER" required="true" default="0"/>
     <column name="FLO_STATE" type="LONGVARCHAR" required="false"/>
+    <column name="FLO_POSITION" type="INTEGER" required="true" default="0"/>
     <foreign-key name="fk_bpmn_flow_project" foreignTable="BPMN_PROJECT">
       <reference local="PRJ_UID" foreign="PRJ_UID"/>
     </foreign-key>
@@ -3691,9 +3741,6 @@
     <column name="LAN_IS_HORIZONTAL" type="TINYINT" required="false" default="1"/>
     <foreign-key name="fk_bpmn_lane_project" foreignTable="BPMN_PROJECT">
       <reference local="PRJ_UID" foreign="PRJ_UID"/>
-    </foreign-key>
-    <foreign-key name="fk_bpmn_lane_laneset" foreignTable="BPMN_LANESET">
-      <reference local="LNS_UID" foreign="LNS_UID"/>
     </foreign-key>
     <index name="BPMN_LANE_I_1">
       <index-column name="LAN_UID"/>
@@ -3857,6 +3904,1148 @@
         <column name="LICENSE_PATH"         type="VARCHAR"      size="255"      required="true" default="0"/>
         <column name="LICENSE_WORKSPACE"    type="VARCHAR"      size="32"       required="true" default="0"/>
         <column name="LICENSE_TYPE"         type="VARCHAR"      size="32"       required="true" default="0"/>
+    </table>
+
+    <table name="APP_ASSIGN_SELF_SERVICE_VALUE">
+        <vendor type="mysql">
+            <parameter name="Name" value="APP_ASSIGN_SELF_SERVICE_VALUE" />
+            <parameter name="Engine" value="InnoDB" />
+            <parameter name="Version" value="10" />
+            <parameter name="Row_format" value="Dynamic" />
+            <parameter name="Data_free" value="0" />
+            <parameter name="Auto_increment" value="" />
+            <parameter name="Check_time" value="" />
+            <parameter name="Collation" value="utf8_general_ci" />
+            <parameter name="Checksum" value="" />
+            <parameter name="Create_options" value="" />
+        </vendor>
+        <column name="APP_UID"   type="VARCHAR" size="32" required="true" />
+        <column name="DEL_INDEX" type="INTEGER" required="true" default="0" />
+        <column name="PRO_UID"   type="VARCHAR" size="32" required="true" />
+        <column name="TAS_UID"   type="VARCHAR" size="32" required="true" />
+        <column name="GRP_UID"   type="VARCHAR" size="32" required="true" default="" />
+    </table>
+    <table name="LIST_INBOX">
+        <vendor type="mysql">
+            <parameter name="Name" value="LIST_INBOX"/>
+            <parameter name="Engine" value="InnoDB"/>
+            <parameter name="Version" value="10"/>
+            <parameter name="Row_format" value="Dynamic"/>
+            <parameter name="Rows" value="88"/>
+            <parameter name="Avg_row_length" value="311"/>
+            <parameter name="Data_length" value="27984"/>
+            <parameter name="Max_data_length" value="281474976710655"/>
+            <parameter name="Index_length" value="7168"/>
+            <parameter name="Data_free" value="564"/>
+            <parameter name="Auto_increment" value=""/>
+            <parameter name="Create_time" value="2014-10-10 14:00:00"/>
+            <parameter name="Update_time" value="2014-10-10 14:00:00"/>
+            <parameter name="Check_time" value=""/>
+            <parameter name="Collation" value="utf8_general_ci"/>
+            <parameter name="Checksum" value=""/>
+            <parameter name="Create_options" value=""/>
+            <parameter name="Comment" value="Inbox list"/>
+        </vendor>
+        <column name="APP_UID" type="VARCHAR" size="32" required="true" primaryKey="true" default=""/>
+        <column name="DEL_INDEX" type="INTEGER" required="true" primaryKey="true" default="0"/>
+        <column name="USR_UID" type="VARCHAR" size="32" required="true" default=""/>
+        <column name="TAS_UID" type="VARCHAR" size="32" required="true" default=""/>
+        <column name="PRO_UID" type="VARCHAR" size="32" required="true" default=""/>
+        <column name="APP_NUMBER" type="INTEGER" required="true" default="0"/>
+        <column name="APP_STATUS" type="VARCHAR" size="32" required="false" default="0"/>
+        <column name="APP_TITLE" type="VARCHAR" size="255" required="true" default=""/>
+        <column name="APP_PRO_TITLE" type="VARCHAR" size="255" required="true" default=""/>
+        <column name="APP_TAS_TITLE" type="VARCHAR" size="255" required="true" default=""/>
+        <column name="APP_UPDATE_DATE" type="TIMESTAMP" required="true"/>
+        <column name="DEL_PREVIOUS_USR_UID" type="VARCHAR" size="32" default=""/>
+        <column name="DEL_PREVIOUS_USR_USERNAME" type="VARCHAR" size="100" default=""/>
+        <column name="DEL_PREVIOUS_USR_FIRSTNAME" type="VARCHAR" size="50" default=""/>
+        <column name="DEL_PREVIOUS_USR_LASTNAME" type="VARCHAR" size="50" default=""/>
+        <column name="DEL_DELEGATE_DATE" type="TIMESTAMP" required="true"/>
+        <column name="DEL_INIT_DATE" type="TIMESTAMP" required="false"/>
+        <column name="DEL_DUE_DATE" type="TIMESTAMP" required="false"/>
+        <column name="DEL_RISK_DATE" type="TIMESTAMP" required="false" />
+        <column name="DEL_PRIORITY" type="VARCHAR" size="32" required="true" default="3"/>
+        <index name="indexInboxUser">
+            <index-column name="USR_UID"/>
+            <index-column name="DEL_DELEGATE_DATE"/>
+            <vendor type="mysql">
+                <parameter name="Table" value="LIST_INBOX"/>
+                <parameter name="Non_unique" value="1"/>
+                <parameter name="Key_name" value="indexInboxUser"/>
+                <parameter name="Seq_in_index" value="1"/>
+            </vendor>
+        </index>
+    </table>
+    <table name="LIST_PARTICIPATED_HISTORY">
+        <vendor type="mysql">
+            <parameter name="Name" value="LIST_PARTICIPATED_HISTORY"/>
+            <parameter name="Engine" value="InnoDB"/>
+            <parameter name="Version" value="10"/>
+            <parameter name="Row_format" value="Dynamic"/>
+            <parameter name="Rows" value="88"/>
+            <parameter name="Avg_row_length" value="311"/>
+            <parameter name="Data_length" value="27984"/>
+            <parameter name="Max_data_length" value="281474976710655"/>
+            <parameter name="Index_length" value="7168"/>
+            <parameter name="Data_free" value="564"/>
+            <parameter name="Auto_increment" value=""/>
+            <parameter name="Create_time" value="2014-10-10 14:00:00"/>
+            <parameter name="Update_time" value="2014-10-10 14:00:00"/>
+            <parameter name="Check_time" value=""/>
+            <parameter name="Collation" value="utf8_general_ci"/>
+            <parameter name="Checksum" value=""/>
+            <parameter name="Create_options" value=""/>
+            <parameter name="Comment" value="Participated history list"/>
+        </vendor>
+        <column name="APP_UID" type="VARCHAR" size="32" required="true" primaryKey="true" default=""/>
+        <column name="DEL_INDEX" type="INTEGER" required="true" primaryKey="true" default="0"/>
+        <column name="USR_UID" type="VARCHAR" size="32" required="true" default=""/>
+        <column name="TAS_UID" type="VARCHAR" size="32" required="true" default=""/>
+        <column name="PRO_UID" type="VARCHAR" size="32" required="true" default=""/>
+        <column name="APP_NUMBER" type="INTEGER" required="true" default="0"/>
+        <column name="APP_TITLE" type="VARCHAR" size="255" required="true" default=""/>
+        <column name="APP_PRO_TITLE" type="VARCHAR" size="255" required="true" default=""/>
+        <column name="APP_TAS_TITLE" type="VARCHAR" size="255" required="true" default=""/>
+        <column name="DEL_PREVIOUS_USR_UID" type="VARCHAR" size="32" default=""/>
+        <column name="DEL_PREVIOUS_USR_USERNAME" type="VARCHAR" size="100" default=""/>
+        <column name="DEL_PREVIOUS_USR_FIRSTNAME" type="VARCHAR" size="50" default=""/>
+        <column name="DEL_PREVIOUS_USR_LASTNAME" type="VARCHAR" size="50" default=""/>
+        <column name="DEL_CURRENT_USR_USERNAME" type="VARCHAR" size="100" default=""/>
+        <column name="DEL_CURRENT_USR_FIRSTNAME" type="VARCHAR" size="50" default=""/>
+        <column name="DEL_CURRENT_USR_LASTNAME" type="VARCHAR" size="50" default=""/>
+        <column name="DEL_DELEGATE_DATE" type="TIMESTAMP" required="true"/>
+        <column name="DEL_INIT_DATE" type="TIMESTAMP" required="false"/>
+        <column name="DEL_DUE_DATE" type="TIMESTAMP" required="false"/>
+        <column name="DEL_PRIORITY" type="VARCHAR" size="32" required="true" default="3"/>
+        <index name="indexInboxUser">
+            <index-column name="USR_UID"/>
+            <index-column name="DEL_DELEGATE_DATE"/>
+            <vendor type="mysql">
+                <parameter name="Table" value="LIST_PARTICIPATED_HISTORY"/>
+                <parameter name="Non_unique" value="1"/>
+                <parameter name="Key_name" value="indexParticipatedUser"/>
+                <parameter name="Seq_in_index" value="1"/>
+            </vendor>
+        </index>
+    </table>
+    <table name="LIST_PARTICIPATED_LAST">
+        <vendor type="mysql">
+            <parameter name="Name" value="LIST_PARTICIPATED_LAST"/>
+            <parameter name="Engine" value="InnoDB"/>
+            <parameter name="Version" value="10"/>
+            <parameter name="Row_format" value="Dynamic"/>
+            <parameter name="Rows" value="88"/>
+            <parameter name="Avg_row_length" value="311"/>
+            <parameter name="Data_length" value="27984"/>
+            <parameter name="Max_data_length" value="281474976710655"/>
+            <parameter name="Index_length" value="7168"/>
+            <parameter name="Data_free" value="564"/>
+            <parameter name="Auto_increment" value=""/>
+            <parameter name="Create_time" value="2014-10-10 14:00:00"/>
+            <parameter name="Update_time" value="2014-10-10 14:00:00"/>
+            <parameter name="Check_time" value=""/>
+            <parameter name="Collation" value="utf8_general_ci"/>
+            <parameter name="Checksum" value=""/>
+            <parameter name="Create_options" value=""/>
+            <parameter name="Comment" value="Participated last list"/>
+        </vendor>
+        <column name="APP_UID" type="VARCHAR" size="32" required="true" primaryKey="true" default=""/>
+        <column name="USR_UID" type="VARCHAR" size="32" required="true" primaryKey="true" default=""/>
+        <column name="DEL_INDEX" type="INTEGER" required="true" primaryKey="true" default=""/>
+        <column name="TAS_UID" type="VARCHAR" size="32" required="true" default=""/>
+        <column name="PRO_UID" type="VARCHAR" size="32" required="true" default=""/>
+        <column name="APP_NUMBER" type="INTEGER" required="true" default="0"/>
+        <column name="APP_TITLE" type="VARCHAR" size="255" required="true" default=""/>
+        <column name="APP_PRO_TITLE" type="VARCHAR" size="255" required="true" default=""/>
+        <column name="APP_TAS_TITLE" type="VARCHAR" size="255" required="true" default=""/>
+        <column name="APP_STATUS" type="VARCHAR" size="20" required="false" default="0"/>
+        <column name="DEL_PREVIOUS_USR_UID" type="VARCHAR" size="32" default=""/>
+        <column name="DEL_PREVIOUS_USR_USERNAME" type="VARCHAR" size="100" default=""/>
+        <column name="DEL_PREVIOUS_USR_FIRSTNAME" type="VARCHAR" size="50" default=""/>
+        <column name="DEL_PREVIOUS_USR_LASTNAME" type="VARCHAR" size="50" default=""/>
+        <column name="DEL_CURRENT_USR_USERNAME" type="VARCHAR" size="100" default=""/>
+        <column name="DEL_CURRENT_USR_FIRSTNAME" type="VARCHAR" size="50" default=""/>
+        <column name="DEL_CURRENT_USR_LASTNAME" type="VARCHAR" size="50" default=""/>
+        <column name="DEL_DELEGATE_DATE" type="TIMESTAMP" required="true"/>
+        <column name="DEL_INIT_DATE" type="TIMESTAMP" required="false"/>
+        <column name="DEL_DUE_DATE" type="TIMESTAMP" required="false"/>
+        <column name="DEL_PRIORITY" type="VARCHAR" size="32" required="true" default="3"/>
+        <column name="DEL_THREAD_STATUS" type="VARCHAR" size="32" required="true" default="OPEN"/>
+    </table>
+    <table name="LIST_COMPLETED">
+        <vendor type="mysql">
+            <parameter name="Name" value="LIST_COMPLETED"/>
+            <parameter name="Engine" value="InnoDB"/>
+            <parameter name="Version" value="10"/>
+            <parameter name="Row_format" value="Dynamic"/>
+            <parameter name="Rows" value="88"/>
+            <parameter name="Avg_row_length" value="311"/>
+            <parameter name="Data_length" value="27984"/>
+            <parameter name="Max_data_length" value="281474976710655"/>
+            <parameter name="Index_length" value="7168"/>
+            <parameter name="Data_free" value="564"/>
+            <parameter name="Auto_increment" value=""/>
+            <parameter name="Create_time" value="2014-10-10 14:00:00"/>
+            <parameter name="Update_time" value="2014-10-10 14:00:00"/>
+            <parameter name="Check_time" value=""/>
+            <parameter name="Collation" value="utf8_general_ci"/>
+            <parameter name="Checksum" value=""/>
+            <parameter name="Create_options" value=""/>
+            <parameter name="Comment" value="Completed list"/>
+        </vendor>
+        <column name="APP_UID" type="VARCHAR" size="32" required="true" primaryKey="true" default=""/>
+        <column name="USR_UID" type="VARCHAR" size="32" required="true" default=""/>
+        <column name="TAS_UID" type="VARCHAR" size="32" required="true" default=""/>
+        <column name="PRO_UID" type="VARCHAR" size="32" required="true" default=""/>
+        <column name="APP_NUMBER" type="INTEGER" required="true" default="0"/>
+        <column name="APP_TITLE" type="VARCHAR" size="255" required="true" default=""/>
+        <column name="APP_PRO_TITLE" type="VARCHAR" size="255" required="true" default=""/>
+        <column name="APP_TAS_TITLE" type="VARCHAR" size="255" required="true" default=""/>
+        <column name="APP_CREATE_DATE" type="TIMESTAMP" required="true"/>
+        <column name="APP_FINISH_DATE" type="TIMESTAMP" required="true"/>
+        <column name="DEL_INDEX" type="INTEGER" required="true" default="0"/>
+        <column name="DEL_PREVIOUS_USR_UID" type="VARCHAR" size="32" default=""/>
+        <column name="DEL_CURRENT_USR_USERNAME" type="VARCHAR" size="100" default=""/>
+        <column name="DEL_CURRENT_USR_FIRSTNAME" type="VARCHAR" size="50" default=""/>
+        <column name="DEL_CURRENT_USR_LASTNAME" type="VARCHAR" size="50" default=""/>
+    </table>
+    <table name="LIST_PAUSED">
+        <vendor type="mysql">
+            <parameter name="Name" value="LIST_PAUSED"/>
+            <parameter name="Engine" value="InnoDB"/>
+            <parameter name="Version" value="10"/>
+            <parameter name="Row_format" value="Dynamic"/>
+            <parameter name="Rows" value="88"/>
+            <parameter name="Avg_row_length" value="311"/>
+            <parameter name="Data_length" value="27984"/>
+            <parameter name="Max_data_length" value="281474976710655"/>
+            <parameter name="Index_length" value="7168"/>
+            <parameter name="Data_free" value="564"/>
+            <parameter name="Auto_increment" value=""/>
+            <parameter name="Create_time" value="2014-10-10 14:00:00"/>
+            <parameter name="Update_time" value="2014-10-10 14:00:00"/>
+            <parameter name="Check_time" value=""/>
+            <parameter name="Collation" value="utf8_general_ci"/>
+            <parameter name="Checksum" value=""/>
+            <parameter name="Create_options" value=""/>
+            <parameter name="Comment" value="Paused list"/>
+        </vendor>
+        <column name="APP_UID" type="VARCHAR" size="32" required="true" primaryKey="true" default=""/>
+        <column name="DEL_INDEX" type="INTEGER" required="true" primaryKey="true" default="0"/>
+        <column name="USR_UID" type="VARCHAR" size="32" required="true" default=""/>
+        <column name="TAS_UID" type="VARCHAR" size="32" required="true" default=""/>
+        <column name="PRO_UID" type="VARCHAR" size="32" required="true" default=""/>
+        <column name="APP_NUMBER" type="INTEGER" required="true" default="0"/>
+        <column name="APP_TITLE" type="VARCHAR" size="255" required="true" default=""/>
+        <column name="APP_PRO_TITLE" type="VARCHAR" size="255" required="true" default=""/>
+        <column name="APP_TAS_TITLE" type="VARCHAR" size="255" required="true" default=""/>
+        <column name="APP_PAUSED_DATE" type="TIMESTAMP" required="true"/>
+        <column name="APP_RESTART_DATE" type="TIMESTAMP" required="true"/>
+        <column name="DEL_PREVIOUS_USR_UID" type="VARCHAR" size="32" default=""/>
+        <column name="DEL_PREVIOUS_USR_USERNAME" type="VARCHAR" size="100" default=""/>
+        <column name="DEL_PREVIOUS_USR_FIRSTNAME" type="VARCHAR" size="50" default=""/>
+        <column name="DEL_PREVIOUS_USR_LASTNAME" type="VARCHAR" size="50" default=""/>
+        <column name="DEL_CURRENT_USR_USERNAME" type="VARCHAR" size="100" default=""/>
+        <column name="DEL_CURRENT_USR_FIRSTNAME" type="VARCHAR" size="50" default=""/>
+        <column name="DEL_CURRENT_USR_LASTNAME" type="VARCHAR" size="50" default=""/>
+        <column name="DEL_DELEGATE_DATE" type="TIMESTAMP" required="true"/>
+        <column name="DEL_INIT_DATE" type="TIMESTAMP" required="false"/>
+        <column name="DEL_DUE_DATE" type="TIMESTAMP" required="false"/>
+        <column name="DEL_PRIORITY" type="VARCHAR" size="32" required="true" default="3"/>
+        <index name="indexPausedUser">
+            <index-column name="USR_UID"/>
+            <vendor type="mysql">
+                <parameter name="Table" value="LIST_PAUSED"/>
+                <parameter name="Non_unique" value="1"/>
+                <parameter name="Key_name" value="indexPausedUser"/>
+                <parameter name="Seq_in_index" value="1"/>
+            </vendor>
+        </index>
+    </table>
+    <table name="LIST_CANCELED">
+        <vendor type="mysql">
+            <parameter name="Name" value="LIST_CANCELED"/>
+            <parameter name="Engine" value="InnoDB"/>
+            <parameter name="Version" value="10"/>
+            <parameter name="Row_format" value="Dynamic"/>
+            <parameter name="Rows" value="88"/>
+            <parameter name="Avg_row_length" value="311"/>
+            <parameter name="Data_length" value="27984"/>
+            <parameter name="Max_data_length" value="281474976710655"/>
+            <parameter name="Index_length" value="7168"/>
+            <parameter name="Data_free" value="564"/>
+            <parameter name="Auto_increment" value=""/>
+            <parameter name="Create_time" value="2014-10-10 14:00:00"/>
+            <parameter name="Update_time" value="2014-10-10 14:00:00"/>
+            <parameter name="Check_time" value=""/>
+            <parameter name="Collation" value="utf8_general_ci"/>
+            <parameter name="Checksum" value=""/>
+            <parameter name="Create_options" value=""/>
+            <parameter name="Comment" value="Canceled list"/>
+        </vendor>
+        <column name="APP_UID" type="VARCHAR" size="32" required="true" primaryKey="true" default=""/>
+        <column name="USR_UID" type="VARCHAR" size="32" required="true" default=""/>
+        <column name="TAS_UID" type="VARCHAR" size="32" required="true" default=""/>
+        <column name="PRO_UID" type="VARCHAR" size="32" required="true" default=""/>
+        <column name="APP_NUMBER" type="INTEGER" required="true" default="0"/>
+        <column name="APP_TITLE" type="VARCHAR" size="255" required="true" default=""/>
+        <column name="APP_PRO_TITLE" type="VARCHAR" size="255" required="true" default=""/>
+        <column name="APP_TAS_TITLE" type="VARCHAR" size="255" required="true" default=""/>
+        <column name="APP_CANCELED_DATE" type="TIMESTAMP" required="true"/>
+        <column name="DEL_INDEX" type="INTEGER" required="true" default="0"/>
+        <column name="DEL_PREVIOUS_USR_UID" type="VARCHAR" size="32" default=""/>
+        <column name="DEL_CURRENT_USR_USERNAME" type="VARCHAR" size="100" default=""/>
+        <column name="DEL_CURRENT_USR_FIRSTNAME" type="VARCHAR" size="50" default=""/>
+        <column name="DEL_CURRENT_USR_LASTNAME" type="VARCHAR" size="50" default=""/>
+        <column name="DEL_DELEGATE_DATE" type="TIMESTAMP" required="true"/>
+        <column name="DEL_INIT_DATE" type="TIMESTAMP" required="false"/>
+        <column name="DEL_DUE_DATE" type="TIMESTAMP" required="false"/>
+        <column name="DEL_PRIORITY" type="VARCHAR" size="32" required="true" default="3"/>
+        <index name="indexCanceledUser">
+            <index-column name="USR_UID"/>
+            <vendor type="mysql">
+                <parameter name="Table" value="LIST_CANCELED"/>
+                <parameter name="Non_unique" value="1"/>
+                <parameter name="Key_name" value="indexCanceledUser"/>
+                <parameter name="Seq_in_index" value="1"/>
+            </vendor>
+        </index>
+    </table>
+    <table name="LIST_MY_INBOX">
+        <vendor type="mysql">
+            <parameter name="Name" value="LIST_MY_INBOX"/>
+            <parameter name="Engine" value="InnoDB"/>
+            <parameter name="Version" value="10"/>
+            <parameter name="Row_format" value="Dynamic"/>
+            <parameter name="Rows" value="88"/>
+            <parameter name="Avg_row_length" value="311"/>
+            <parameter name="Data_length" value="27984"/>
+            <parameter name="Max_data_length" value="281474976710655"/>
+            <parameter name="Index_length" value="7168"/>
+            <parameter name="Data_free" value="564"/>
+            <parameter name="Auto_increment" value=""/>
+            <parameter name="Create_time" value="2014-10-10 14:00:00"/>
+            <parameter name="Update_time" value="2014-10-10 14:00:00"/>
+            <parameter name="Check_time" value=""/>
+            <parameter name="Collation" value="utf8_general_ci"/>
+            <parameter name="Checksum" value=""/>
+            <parameter name="Create_options" value=""/>
+            <parameter name="Comment" value="My Inbox list"/>
+        </vendor>
+        <column name="APP_UID" type="VARCHAR" size="32" required="true" primaryKey="true" default=""/>
+        <column name="USR_UID" type="VARCHAR" size="32" required="true" default=""/>
+        <column name="TAS_UID" type="VARCHAR" size="32" required="true" default=""/>
+        <column name="PRO_UID" type="VARCHAR" size="32" required="true" default=""/>
+        <column name="APP_NUMBER" type="INTEGER" required="true" default="0"/>
+        <column name="APP_TITLE" type="VARCHAR" size="255" required="true" default=""/>
+        <column name="APP_PRO_TITLE" type="VARCHAR" size="255" required="true" default=""/>
+        <column name="APP_TAS_TITLE" type="VARCHAR" size="255" required="true" default=""/>
+        <column name="APP_CREATE_DATE" type="TIMESTAMP" required="false"/>
+        <column name="APP_UPDATE_DATE" type="TIMESTAMP" required="false"/>
+        <column name="APP_FINISH_DATE" type="TIMESTAMP" required="false"/>
+        <column name="APP_STATUS" type="VARCHAR" size="100" required="true" default=""/>
+        <column name="DEL_INDEX" type="INTEGER" required="true" default="0"/>
+        <column name="DEL_PREVIOUS_USR_UID" type="VARCHAR" size="32" default=""/>
+        <column name="DEL_PREVIOUS_USR_USERNAME" type="VARCHAR" size="100" default=""/>
+        <column name="DEL_PREVIOUS_USR_FIRSTNAME" type="VARCHAR" size="50" default=""/>
+        <column name="DEL_PREVIOUS_USR_LASTNAME" type="VARCHAR" size="50" default=""/>
+        <column name="DEL_CURRENT_USR_UID" type="VARCHAR" size="32" default=""/>
+        <column name="DEL_CURRENT_USR_USERNAME" type="VARCHAR" size="100" default=""/>
+        <column name="DEL_CURRENT_USR_FIRSTNAME" type="VARCHAR" size="50" default=""/>
+        <column name="DEL_CURRENT_USR_LASTNAME" type="VARCHAR" size="50" default=""/>
+        <column name="DEL_DELEGATE_DATE" type="TIMESTAMP" required="false"/>
+        <column name="DEL_INIT_DATE" type="TIMESTAMP" required="false"/>
+        <column name="DEL_DUE_DATE" type="TIMESTAMP" required="false"/>
+        <column name="DEL_PRIORITY" type="VARCHAR" size="32" required="true" default="3"/>
+    </table>
+    <table name="LIST_UNASSIGNED">
+        <vendor type="mysql">
+            <parameter name="Name" value="LIST_UNASSIGNED"/>
+            <parameter name="Engine" value="InnoDB"/>
+            <parameter name="Version" value="10"/>
+            <parameter name="Row_format" value="Dynamic"/>
+            <parameter name="Rows" value="88"/>
+            <parameter name="Avg_row_length" value="311"/>
+            <parameter name="Data_length" value="27984"/>
+            <parameter name="Max_data_length" value="281474976710655"/>
+            <parameter name="Index_length" value="7168"/>
+            <parameter name="Data_free" value="564"/>
+            <parameter name="Auto_increment" value=""/>
+            <parameter name="Create_time" value="2014-10-10 14:00:00"/>
+            <parameter name="Update_time" value="2014-10-10 14:00:00"/>
+            <parameter name="Check_time" value=""/>
+            <parameter name="Collation" value="utf8_general_ci"/>
+            <parameter name="Checksum" value=""/>
+            <parameter name="Create_options" value=""/>
+            <parameter name="Comment" value="Unassiged list"/>
+        </vendor>
+        <column name="APP_UID" type="VARCHAR" size="32" required="true" primaryKey="true" default=""/>
+        <column name="UNA_UID" type="VARCHAR" size="32" required="true" primaryKey="true" default=""/>
+        <column name="TAS_UID" type="VARCHAR" size="32" required="true" default=""/>
+        <column name="PRO_UID" type="VARCHAR" size="32" required="true" default=""/>
+        <column name="APP_NUMBER" type="INTEGER" required="true" default="0"/>
+        <column name="APP_TITLE" type="VARCHAR" size="255" required="true" default=""/>
+        <column name="APP_PRO_TITLE" type="VARCHAR" size="255" required="true" default=""/>
+        <column name="APP_TAS_TITLE" type="VARCHAR" size="255" required="true" default=""/>
+        <column name="APP_PREVIOUS_USR_USERNAME" type="VARCHAR" size="100" default=""/>
+        <column name="APP_PREVIOUS_USR_FIRSTNAME" type="VARCHAR" size="50" default=""/>
+        <column name="APP_PREVIOUS_USR_LASTNAME" type="VARCHAR" size="50" default=""/>
+        <column name="DEL_INDEX" type="INTEGER" required="true" default="0"/>
+        <column name="DEL_PREVIOUS_USR_UID" type="VARCHAR" size="32" default=""/>
+        <column name="DEL_DELEGATE_DATE" type="TIMESTAMP" required="true"/>
+        <column name="DEL_DUE_DATE" type="TIMESTAMP" required="false"/>
+        <column name="DEL_PRIORITY" type="VARCHAR" size="32" required="true" default="3"/>
+    </table>
+    <table name="LIST_UNASSIGNED_GROUP">
+        <vendor type="mysql">
+            <parameter name="Name" value="LIST_UNASSIGNED_GROUP"/>
+            <parameter name="Engine" value="InnoDB"/>
+            <parameter name="Version" value="10"/>
+            <parameter name="Row_format" value="Dynamic"/>
+            <parameter name="Rows" value="88"/>
+            <parameter name="Avg_row_length" value="311"/>
+            <parameter name="Data_length" value="27984"/>
+            <parameter name="Max_data_length" value="281474976710655"/>
+            <parameter name="Index_length" value="7168"/>
+            <parameter name="Data_free" value="564"/>
+            <parameter name="Auto_increment" value=""/>
+            <parameter name="Create_time" value="2014-10-10 14:00:00"/>
+            <parameter name="Update_time" value="2014-10-10 14:00:00"/>
+            <parameter name="Check_time" value=""/>
+            <parameter name="Collation" value="utf8_general_ci"/>
+            <parameter name="Checksum" value=""/>
+            <parameter name="Create_options" value=""/>
+            <parameter name="Comment" value="Unassiged list"/>
+        </vendor>
+        <column name="UNA_UID" type="VARCHAR" size="32" required="true" primaryKey="true" default=""/>
+        <column name="USR_UID" type="VARCHAR" size="32" required="true" primaryKey="true" default=""/>
+        <column name="TYPE"    type="VARCHAR" size="255" required="true" primaryKey="true" default=""/>
+        <column name="TYP_UID" type="VARCHAR" size="32" required="true" default=""/>
+    </table>
+    <table name="MESSAGE_TYPE">
+        <vendor type="mysql">
+            <parameter name="Name" value="MESSAGE_TYPE" />
+            <parameter name="Engine" value="InnoDB" />
+            <parameter name="Version" value="10" />
+            <parameter name="Row_format" value="Dynamic" />
+            <parameter name="Data_free" value="0" />
+            <parameter name="Auto_increment" value="" />
+            <parameter name="Check_time" value="" />
+            <parameter name="Collation" value="utf8_general_ci" />
+            <parameter name="Checksum" value="" />
+            <parameter name="Create_options" value="" />
+        </vendor>
+        <column name="MSGT_UID" type="VARCHAR" size="32" required="true" primaryKey="true" />
+        <column name="PRJ_UID" type="VARCHAR" size="32" required="true" />
+        <column name="MSGT_NAME" type="VARCHAR" size="512" default="" />
+    </table>
+    <table name="MESSAGE_TYPE_VARIABLE">
+        <vendor type="mysql">
+            <parameter name="Name" value="MESSAGE_TYPE_VARIABLE" />
+            <parameter name="Engine" value="InnoDB" />
+            <parameter name="Version" value="10" />
+            <parameter name="Row_format" value="Dynamic" />
+            <parameter name="Data_free" value="0" />
+            <parameter name="Auto_increment" value="" />
+            <parameter name="Check_time" value="" />
+            <parameter name="Collation" value="utf8_general_ci" />
+            <parameter name="Checksum" value="" />
+            <parameter name="Create_options" value="" />
+        </vendor>
+        <column name="MSGTV_UID" type="VARCHAR" size="32" required="true" primaryKey="true" />
+        <column name="MSGT_UID" type="VARCHAR" size="32" required="true" />
+        <column name="MSGTV_NAME" type="VARCHAR" size="512" default="" />
+        <column name="MSGTV_DEFAULT_VALUE" type="VARCHAR" size="512" default="" />
+    </table>
+    <table name="EMAIL_SERVER">
+        <vendor type="mysql">
+            <parameter name="Name" value="EMAIL_SERVER" />
+            <parameter name="Engine" value="InnoDB" />
+            <parameter name="Version" value="10" />
+            <parameter name="Row_format" value="Dynamic" />
+            <parameter name="Data_free" value="0" />
+            <parameter name="Auto_increment" value="" />
+            <parameter name="Check_time" value="" />
+            <parameter name="Collation" value="utf8_general_ci" />
+            <parameter name="Checksum" value="" />
+            <parameter name="Create_options" value="" />
+        </vendor>
+        <column name="MESS_UID" type="VARCHAR" size="32" required="true" primaryKey="true" default="" />
+        <column name="MESS_ENGINE" type="VARCHAR" size="256" required="true" default="" />
+        <column name="MESS_SERVER" type="VARCHAR" size="256" required="true" default="" />
+        <column name="MESS_PORT" type="INTEGER" required="true" default="0" />
+        <column name="MESS_RAUTH" type="INTEGER" required="true" default="0" />
+        <column name="MESS_ACCOUNT" type="VARCHAR" size="256" required="true" default="" />
+        <column name="MESS_PASSWORD" type="VARCHAR" size="256" required="true" default="" />
+        <column name="MESS_FROM_MAIL" type="VARCHAR" size="256" default="" />
+        <column name="MESS_FROM_NAME" type="VARCHAR" size="256" default="" />
+        <column name="SMTPSECURE" type="VARCHAR" size="3" required="true" default="No" />
+        <column name="MESS_TRY_SEND_INMEDIATLY" type="INTEGER" required="true" default="0" />
+        <column name="MAIL_TO" type="VARCHAR" size="256" required="true" default="" />
+        <column name="MESS_DEFAULT" type="INTEGER" required="true" default="0" />
+    </table>
+
+    <table name="WEB_ENTRY_EVENT">
+        <vendor type="mysql">
+            <parameter name="Name" value="WEB_ENTRY_EVENT" />
+            <parameter name="Engine" value="InnoDB" />
+            <parameter name="Version" value="10" />
+            <parameter name="Row_format" value="Dynamic" />
+            <parameter name="Data_free" value="0" />
+            <parameter name="Auto_increment" value="" />
+            <parameter name="Check_time" value="" />
+            <parameter name="Collation" value="utf8_general_ci" />
+            <parameter name="Checksum" value="" />
+            <parameter name="Create_options" value="" />
+        </vendor>
+        <column name="WEE_UID"    type="VARCHAR" size="32" required="true" primaryKey="true" />
+        <column name="PRJ_UID"    type="VARCHAR" size="32" required="true" />
+        <column name="EVN_UID"    type="VARCHAR" size="32" required="true" />
+        <column name="ACT_UID"    type="VARCHAR" size="32" required="true" />
+        <column name="DYN_UID"    type="VARCHAR" size="32" required="true" />
+        <column name="USR_UID"    type="VARCHAR" size="32" required="true" />
+        <column name="WEE_STATUS" type="VARCHAR" size="10" required="true" default="ENABLED" />
+        <column name="WEE_WE_UID"     type="VARCHAR" size="32" required="true" default="" />
+        <column name="WEE_WE_TAS_UID" type="VARCHAR" size="32" required="true" default="" />
+        <validator column="WEE_STATUS">
+            <rule name="validValues" value="ENABLED|DISABLED" message="Please enter a valid value for WEE_STATUS" />
+        </validator>
+    </table>
+
+    <table name="MESSAGE_EVENT_DEFINITION">
+        <vendor type="mysql">
+            <parameter name="Name" value="MESSAGE_EVENT_DEFINITION" />
+            <parameter name="Engine" value="InnoDB" />
+            <parameter name="Version" value="10" />
+            <parameter name="Row_format" value="Dynamic" />
+            <parameter name="Data_free" value="0" />
+            <parameter name="Auto_increment" value="" />
+            <parameter name="Check_time" value="" />
+            <parameter name="Collation" value="utf8_general_ci" />
+            <parameter name="Checksum" value="" />
+            <parameter name="Create_options" value="" />
+        </vendor>
+        <column name="MSGED_UID" type="VARCHAR" size="32" required="true" primaryKey="true" />
+        <column name="PRJ_UID"   type="VARCHAR" size="32" required="true" />
+        <column name="EVN_UID"   type="VARCHAR" size="32" required="true" />
+        <column name="MSGT_UID"  type="VARCHAR" size="32" required="true" default="" />
+        <column name="MSGED_USR_UID"     type="VARCHAR" size="32" required="true" default="" />
+        <column name="MSGED_VARIABLES"   type="LONGVARCHAR" required="true" />
+        <column name="MSGED_CORRELATION" type="VARCHAR" size="512" required="true" default="" />
+    </table>
+
+    <table name="MESSAGE_EVENT_RELATION">
+        <vendor type="mysql">
+            <parameter name="Name" value="MESSAGE_EVENT_RELATION" />
+            <parameter name="Engine" value="InnoDB" />
+            <parameter name="Version" value="10" />
+            <parameter name="Row_format" value="Dynamic" />
+            <parameter name="Data_free" value="0" />
+            <parameter name="Auto_increment" value="" />
+            <parameter name="Check_time" value="" />
+            <parameter name="Collation" value="utf8_general_ci" />
+            <parameter name="Checksum" value="" />
+            <parameter name="Create_options" value="" />
+        </vendor>
+        <column name="MSGER_UID"     type="VARCHAR" size="32" required="true" primaryKey="true" />
+        <column name="PRJ_UID"       type="VARCHAR" size="32" required="true" />
+        <column name="EVN_UID_THROW" type="VARCHAR" size="32" required="true" />
+        <column name="EVN_UID_CATCH" type="VARCHAR" size="32" required="true" />
+    </table>
+
+    <table name="MESSAGE_APPLICATION">
+        <vendor type="mysql">
+            <parameter name="Name" value="MESSAGE_APPLICATION" />
+            <parameter name="Engine" value="InnoDB" />
+            <parameter name="Version" value="10" />
+            <parameter name="Row_format" value="Dynamic" />
+            <parameter name="Data_free" value="0" />
+            <parameter name="Auto_increment" value="" />
+            <parameter name="Check_time" value="" />
+            <parameter name="Collation" value="utf8_general_ci" />
+            <parameter name="Checksum" value="" />
+            <parameter name="Create_options" value="" />
+        </vendor>
+        <column name="MSGAPP_UID"    type="VARCHAR" size="32" required="true" primaryKey="true" />
+        <column name="APP_UID"       type="VARCHAR" size="32" required="true" />
+        <column name="PRJ_UID"       type="VARCHAR" size="32" required="true" />
+        <column name="EVN_UID_THROW" type="VARCHAR" size="32" required="true" />
+        <column name="EVN_UID_CATCH" type="VARCHAR" size="32" required="true" />
+        <column name="MSGAPP_VARIABLES"   type="LONGVARCHAR" required="true" />
+        <column name="MSGAPP_CORRELATION" type="VARCHAR" size="512" required="true" default="" />
+        <column name="MSGAPP_THROW_DATE"  type="TIMESTAMP" required="true" />
+        <column name="MSGAPP_CATCH_DATE"  type="TIMESTAMP" required="false" />
+        <column name="MSGAPP_STATUS"      type="VARCHAR" size="25" required="true" default="UNREAD" />
+        <validator column="MSGAPP_STATUS">
+            <rule name="validValues" value="READ|UNREAD" message="Please enter a valid value for MSGAPP_STATUS" />
+        </validator>
+    </table>
+    <table name="ELEMENT_TASK_RELATION">
+        <vendor type="mysql">
+            <parameter name="Name" value="ELEMENT_TASK_RELATION" />
+            <parameter name="Engine" value="InnoDB" />
+            <parameter name="Version" value="10" />
+            <parameter name="Row_format" value="Dynamic" />
+            <parameter name="Data_free" value="0" />
+            <parameter name="Auto_increment" value="" />
+            <parameter name="Check_time" value="" />
+            <parameter name="Collation" value="utf8_general_ci" />
+            <parameter name="Checksum" value="" />
+            <parameter name="Create_options" value="" />
+        </vendor>
+        <column name="ETR_UID"      type="VARCHAR" size="32" required="true" primaryKey="true" />
+        <column name="PRJ_UID"      type="VARCHAR" size="32" required="true" />
+        <column name="ELEMENT_UID"  type="VARCHAR" size="32" required="true" />
+        <column name="ELEMENT_TYPE" type="VARCHAR" size="50" required="true" default=""/>
+        <column name="TAS_UID"      type="VARCHAR" size="32" required="true" />
+    </table>
+    <table name="ABE_CONFIGURATION">
+    <vendor type="mysql">
+      <parameter name="Name" value="ABE_CONFIGURATION"/>
+      <parameter name="Engine" value="MyISAM"/>
+      <parameter name="Version" value="10"/>
+      <parameter name="Row_format" value="Dynamic"/>
+      <parameter name="Auto_increment" value=""/>
+      <parameter name="Collation" value="utf8_general_ci"/>
+      <parameter name="Create_options" value=""/>
+      <parameter name="Comment" value="The plugin table for actionsByEmail"/>
+    </vendor>
+    <column name="ABE_UID" type="VARCHAR" size="32" required="true" primaryKey="true" default="">
+      <vendor type="mysql">
+        <parameter name="Field" value="ABE_UID"/>
+        <parameter name="Type" value="varchar(32)"/>
+        <parameter name="Null" value="NO"/>
+        <parameter name="Key" value="PRI"/>
+        <parameter name="Default" value=""/>
+        <parameter name="Extra" value=""/>
+      </vendor>
+    </column>
+    <column name="PRO_UID" type="VARCHAR" size="32" required="true" default="">
+      <vendor type="mysql">
+        <parameter name="Field" value="PRO_UID"/>
+        <parameter name="Type" value="varchar(32)"/>
+        <parameter name="Null" value="NO"/>
+        <parameter name="Key" value=""/>
+        <parameter name="Default" value=""/>
+        <parameter name="Extra" value=""/>
+      </vendor>
+    </column>
+    <column name="TAS_UID" type="VARCHAR" size="32" required="true" default="">
+      <vendor type="mysql">
+        <parameter name="Field" value="TAS_UID"/>
+        <parameter name="Type" value="varchar(32)"/>
+        <parameter name="Null" value="NO"/>
+        <parameter name="Key" value=""/>
+        <parameter name="Default" value=""/>
+        <parameter name="Extra" value=""/>
+      </vendor>
+    </column>
+    <column name="ABE_TYPE" type="VARCHAR" size="10" required="true" default="">
+      <vendor type="mysql">
+        <parameter name="Field" value="ABE_TYPE"/>
+        <parameter name="Type" value="varchar(10)"/>
+        <parameter name="Null" value="NO"/>
+        <parameter name="Key" value=""/>
+        <parameter name="Default" value=""/>
+        <parameter name="Extra" value=""/>
+      </vendor>
+    </column>
+    <column name="ABE_TEMPLATE" type="VARCHAR" size="100" required="true" default="">
+      <vendor type="mysql">
+        <parameter name="Field" value="ABE_TEMPLATE"/>
+        <parameter name="Type" value="varchar(100)"/>
+        <parameter name="Null" value="NO"/>
+        <parameter name="Key" value=""/>
+        <parameter name="Default" value=""/>
+        <parameter name="Extra" value=""/>
+      </vendor>
+    </column>
+    <column name="ABE_DYN_TYPE" type="VARCHAR" size="10" required="true" default="NORMAL">
+      <vendor type="mysql">
+        <parameter name="Field" value="ABE_DYN_TYPE"/>
+        <parameter name="Type" value="varchar(10)"/>
+        <parameter name="Null" value="NO"/>
+        <parameter name="Key" value=""/>
+        <parameter name="Default" value="NORMAL"/>
+        <parameter name="Extra" value=""/>
+      </vendor>
+    </column>
+    <column name="DYN_UID" type="VARCHAR" size="32" required="true" default="">
+      <vendor type="mysql">
+        <parameter name="Field" value="DYN_UID"/>
+        <parameter name="Type" value="varchar(32)"/>
+        <parameter name="Null" value="NO"/>
+        <parameter name="Key" value=""/>
+        <parameter name="Default" value=""/>
+        <parameter name="Extra" value=""/>
+      </vendor>
+    </column>
+    <column name="ABE_EMAIL_FIELD" type="VARCHAR" size="255" required="true" default="">
+      <vendor type="mysql">
+        <parameter name="Field" value="ABE_ACTION_FIELD"/>
+        <parameter name="Type" value="varchar(255)"/>
+        <parameter name="Null" value="NO"/>
+        <parameter name="Key" value=""/>
+        <parameter name="Default" value=""/>
+        <parameter name="Extra" value=""/>
+      </vendor>
+    </column>
+    <column name="ABE_ACTION_FIELD" type="VARCHAR" size="255" required="false" default="">
+      <vendor type="mysql">
+        <parameter name="Field" value="ABE_ACTION_FIELD"/>
+        <parameter name="Type" value="varchar(255)"/>
+        <parameter name="Null" value="YES"/>
+        <parameter name="Key" value=""/>
+        <parameter name="Default" value=""/>
+        <parameter name="Extra" value=""/>
+      </vendor>
+    </column>
+    <column name="ABE_CASE_NOTE_IN_RESPONSE" type="INTEGER" required="false" default="0">
+      <vendor type="mysql">
+        <parameter name="Field" value="ABE_CASE_NOTE_IN_RESPONSE"/>
+        <parameter name="Type" value="int(1)"/>
+        <parameter name="Null" value="YES"/>
+        <parameter name="Key" value=""/>
+        <parameter name="Default" value="0"/>
+        <parameter name="Extra" value=""/>
+      </vendor>
+    </column>
+    <column name="ABE_CREATE_DATE" type="TIMESTAMP" required="true">
+      <vendor type="mysql">
+        <parameter name="Field" value="ABE_CREATE_DATE"/>
+        <parameter name="Type" value="datetime"/>
+        <parameter name="Null" value="NO"/>
+        <parameter name="Key" value=""/>
+        <parameter name="Extra" value=""/>
+      </vendor>
+    </column>
+    <column name="ABE_UPDATE_DATE" type="TIMESTAMP" required="false">
+      <vendor type="mysql">
+        <parameter name="Field" value="ABE_CREATE_UPDATE"/>
+        <parameter name="Type" value="datetime"/>
+        <parameter name="Null" value="YES"/>
+        <parameter name="Key" value=""/>
+        <parameter name="Extra" value=""/>
+      </vendor>
+    </column>
+    <column name="ABE_SUBJECT_FIELD" type="VARCHAR" size="100" required="false" default="">
+      <vendor type="mysql">
+        <parameter name="Field" value="ABE_SUBJECT_FIELD"/>
+        <parameter name="Type" value="varchar(100)"/>
+        <parameter name="Null" value="NO"/>
+        <parameter name="Key" value=""/>
+        <parameter name="Default" value=""/>
+        <parameter name="Extra" value=""/>
+      </vendor>
+    </column>
+  </table>
+
+  <table name="ABE_REQUESTS">
+    <vendor type="mysql">
+      <parameter name="Name" value="ABE_REQUESTS"/>
+      <parameter name="Engine" value="MyISAM"/>
+      <parameter name="Version" value="10"/>
+      <parameter name="Row_format" value="Dynamic"/>
+      <parameter name="Auto_increment" value=""/>
+      <parameter name="Collation" value="utf8_general_ci"/>
+      <parameter name="Create_options" value=""/>
+      <parameter name="Comment" value="The plugin table for actionsByEmail"/>
+    </vendor>
+    <column name="ABE_REQ_UID" type="VARCHAR" size="32" required="true" primaryKey="true" default="">
+      <vendor type="mysql">
+        <parameter name="Field" value="ABE_REQ_UID"/>
+        <parameter name="Type" value="varchar(32)"/>
+        <parameter name="Null" value="NO"/>
+        <parameter name="Key" value="PRI"/>
+        <parameter name="Default" value=""/>
+        <parameter name="Extra" value=""/>
+      </vendor>
+    </column>
+    <column name="ABE_UID" type="VARCHAR" size="32" required="true" default="">
+      <vendor type="mysql">
+        <parameter name="Field" value="ABE_UID"/>
+        <parameter name="Type" value="varchar(32)"/>
+        <parameter name="Null" value="NO"/>
+        <parameter name="Key" value=""/>
+        <parameter name="Default" value=""/>
+        <parameter name="Extra" value=""/>
+      </vendor>
+    </column>
+    <column name="APP_UID" type="VARCHAR" size="32" required="true" default="">
+      <vendor type="mysql">
+        <parameter name="Field" value="APP_UID"/>
+        <parameter name="Type" value="varchar(32)"/>
+        <parameter name="Null" value="NO"/>
+        <parameter name="Key" value=""/>
+        <parameter name="Default" value=""/>
+        <parameter name="Extra" value=""/>
+      </vendor>
+    </column>
+    <column name="DEL_INDEX" type="INTEGER" required="true" default="0">
+      <vendor type="mysql">
+        <parameter name="Field" value="DEL_INDEX"/>
+        <parameter name="Type" value="int(11)"/>
+        <parameter name="Null" value="NO"/>
+        <parameter name="Key" value=""/>
+        <parameter name="Default" value="0"/>
+        <parameter name="Extra" value=""/>
+      </vendor>
+    </column>
+    <column name="ABE_REQ_SENT_TO" type="VARCHAR" size="100" required="true" default="">
+      <vendor type="mysql">
+        <parameter name="Field" value="ABE_REQ_SENT_TO"/>
+        <parameter name="Type" value="varchar(100)"/>
+        <parameter name="Null" value="NO"/>
+        <parameter name="Key" value=""/>
+        <parameter name="Default" value=""/>
+        <parameter name="Extra" value=""/>
+      </vendor>
+    </column>
+    <column name="ABE_REQ_SUBJECT" type="VARCHAR" size="150" required="true" default="">
+      <vendor type="mysql">
+        <parameter name="Field" value="ABE_REQ_SUBJECT"/>
+        <parameter name="Type" value="varchar(150)"/>
+        <parameter name="Null" value="NO"/>
+        <parameter name="Key" value=""/>
+        <parameter name="Default" value=""/>
+        <parameter name="Extra" value=""/>
+      </vendor>
+    </column>
+    <column name="ABE_REQ_BODY" type="LONGVARCHAR" required="true">
+      <vendor type="mysql">
+        <parameter name="Field" value="ABE_REQ_BODY"/>
+        <parameter name="Type" value="MEDIUMTEXT"/>
+        <parameter name="Null" value="NO"/>
+        <parameter name="Key" value=""/>
+        <parameter name="Default" value=""/>
+        <parameter name="Extra" value=""/>
+      </vendor>
+    </column>
+    <column name="ABE_REQ_DATE" type="TIMESTAMP" required="true">
+      <vendor type="mysql">
+        <parameter name="Field" value="ABE_REQ_DATE"/>
+        <parameter name="Type" value="datetime"/>
+        <parameter name="Null" value="NO"/>
+        <parameter name="Key" value=""/>
+        <parameter name="Extra" value=""/>
+      </vendor>
+    </column>
+    <column name="ABE_REQ_STATUS" type="VARCHAR" size="10" required="false" default="">
+      <vendor type="mysql">
+        <parameter name="Field" value="ABE_REQ_STATUS"/>
+        <parameter name="Type" value="varchar(10)"/>
+        <parameter name="Null" value="YES"/>
+        <parameter name="Key" value=""/>
+        <parameter name="Default" value=""/>
+        <parameter name="Extra" value=""/>
+      </vendor>
+    </column>
+    <column name="ABE_REQ_ANSWERED" type="TINYINT" required="true" default="0">
+      <vendor type="mysql">
+        <parameter name="Field" value="ABE_REQ_ANSWERED"/>
+        <parameter name="Type" value="TINYINT"/>
+        <parameter name="Null" value="NO"/>
+        <parameter name="Key" value=""/>
+        <parameter name="Default" value="0"/>
+        <parameter name="Extra" value=""/>
+      </vendor>
+    </column>
+  </table>
+
+  <table name="ABE_RESPONSES">
+    <vendor type="mysql">
+      <parameter name="Name" value="ABE_RESPONSES"/>
+      <parameter name="Engine" value="MyISAM"/>
+      <parameter name="Version" value="10"/>
+      <parameter name="Row_format" value="Dynamic"/>
+      <parameter name="Auto_increment" value=""/>
+      <parameter name="Collation" value="utf8_general_ci"/>
+      <parameter name="Create_options" value=""/>
+      <parameter name="Comment" value="The plugin table for actionsByEmail"/>
+    </vendor>
+    <column name="ABE_RES_UID" type="VARCHAR" size="32" required="true" primaryKey="true" default="">
+      <vendor type="mysql">
+        <parameter name="Field" value="ABE_RES_UID"/>
+        <parameter name="Type" value="varchar(32)"/>
+        <parameter name="Null" value="NO"/>
+        <parameter name="Key" value="PRI"/>
+        <parameter name="Default" value=""/>
+        <parameter name="Extra" value=""/>
+      </vendor>
+    </column>
+    <column name="ABE_REQ_UID" type="VARCHAR" size="32" required="true" default="">
+      <vendor type="mysql">
+        <parameter name="Field" value="ABE_REQ_UID"/>
+        <parameter name="Type" value="varchar(32)"/>
+        <parameter name="Null" value="NO"/>
+        <parameter name="Key" value=""/>
+        <parameter name="Default" value=""/>
+        <parameter name="Extra" value=""/>
+      </vendor>
+    </column>
+    <column name="ABE_RES_CLIENT_IP" type="VARCHAR" size="20" required="true" default="">
+      <vendor type="mysql">
+        <parameter name="Field" value="ABE_RES_CLIENT_IP"/>
+        <parameter name="Type" value="varchar(20)"/>
+        <parameter name="Null" value="NO"/>
+        <parameter name="Key" value=""/>
+        <parameter name="Default" value=""/>
+        <parameter name="Extra" value=""/>
+      </vendor>
+    </column>
+    <column name="ABE_RES_DATA" type="LONGVARCHAR" required="true">
+      <vendor type="mysql">
+        <parameter name="Field" value="ABE_RES_DATA"/>
+        <parameter name="Type" value="text"/>
+        <parameter name="Null" value="NO"/>
+        <parameter name="Key" value=""/>
+        <parameter name="Default" value="0"/>
+        <parameter name="Extra" value=""/>
+      </vendor>
+    </column>
+    <column name="ABE_RES_DATE" type="TIMESTAMP" required="true">
+      <vendor type="mysql">
+        <parameter name="Field" value="ABE_RES_DATE"/>
+        <parameter name="Type" value="datetime"/>
+        <parameter name="Null" value="NO"/>
+        <parameter name="Key" value=""/>
+        <parameter name="Extra" value=""/>
+      </vendor>
+    </column>
+    <column name="ABE_RES_STATUS" type="VARCHAR" size="10" required="true" default="">
+      <vendor type="mysql">
+        <parameter name="Field" value="ABE_RES_STATUS"/>
+        <parameter name="Type" value="varchar(10)"/>
+        <parameter name="Null" value="NO"/>
+        <parameter name="Key" value=""/>
+        <parameter name="Default" value=""/>
+        <parameter name="Extra" value=""/>
+      </vendor>
+    </column>
+    <column name="ABE_RES_MESSAGE" type="VARCHAR" size="255" required="false" default="">
+      <vendor type="mysql">
+        <parameter name="Field" value="ABE_RES_MESSAGE"/>
+        <parameter name="Type" value="varchar(255)"/>
+        <parameter name="Null" value="YES"/>
+        <parameter name="Key" value=""/>
+        <parameter name="Default" value=""/>
+        <parameter name="Extra" value=""/>
+      </vendor>
+    </column>
+  </table>
+
+  <table name="USR_REPORTING">
+        <vendor type="mysql">
+            <parameter name="Name" value="USR_REPORTING" />
+            <parameter name="Engine" value="InnoDB" />
+            <parameter name="Version" value="10" />
+            <parameter name="Row_format" value="Dynamic" />
+            <parameter name="Data_free" value="0" />
+            <parameter name="Auto_increment" value="" />
+            <parameter name="Check_time" value="" />
+            <parameter name="Collation" value="utf8_general_ci" />
+            <parameter name="Checksum" value="" />
+            <parameter name="Create_options" value="" />
+            <parameter name="Comment" value="Data calculated users by task"/>
+        </vendor>
+        <column name="USR_UID"              type="VARCHAR"  size="32" required="true" primaryKey="true" />
+        <column name="TAS_UID"              type="VARCHAR"  size="32" required="true" primaryKey="true" />
+        <column name="PRO_UID"              type="VARCHAR"  size="32" required="true" />
+        <column name="MONTH"                type="INTEGER"  required="true" default="0" primaryKey="true" />
+        <column name="YEAR"                 type="INTEGER"  required="true" default="0" primaryKey="true" />
+        <column name="TOTAL_TIME_BY_TASK"   type="DECIMAL"  size="7,2"  default="0" />
+        <column name="TOTAL_CASES_IN"       type="DECIMAL"  size="7,2"  default="0" />
+        <column name="TOTAL_CASES_OUT"      type="DECIMAL"  size="7,2"  default="0" />
+        <column name="USER_HOUR_COST"       type="DECIMAL"  size="7,2"  default="0" />
+        <column name="AVG_TIME"             type="DECIMAL"  size="7,2"  default="0" />
+        <column name="SDV_TIME"             type="DECIMAL"  size="7,2"  default="0" />
+        <column name="CONFIGURED_TASK_TIME" type="DECIMAL"  size="7,2"  default="0" />
+        <column name="TOTAL_CASES_OVERDUE"  type="DECIMAL"  size="7,2"  default="0" />
+        <column name="TOTAL_CASES_ON_TIME"  type="DECIMAL"  size="7,2"  default="0" />
+        <index name="indexReporting">
+            <index-column name="USR_UID"/>
+            <index-column name="TAS_UID"/>
+            <index-column name="PRO_UID"/>
+            <vendor type="mysql">
+                <parameter name="Table" value="USR_REPORTING"/>
+                <parameter name="Non_unique" value="1"/>
+                <parameter name="Key_name" value="indexReporting"/>
+                <parameter name="Seq_in_index" value="1"/>
+                <parameter name="Column_name" value="USR_UID"/>
+                <parameter name="Collation" value="A"/>
+                <parameter name="Cardinality" value=""/>
+                <parameter name="Sub_part" value=""/>
+                <parameter name="Packed" value=""/>
+                <parameter name="Null" value=""/>
+                <parameter name="Index_type" value="BTREE"/>
+                <parameter name="Comment" value=""/>
+            </vendor>
+        </index>
+    </table>
+
+    <table name="PRO_REPORTING">
+        <vendor type="mysql">
+            <parameter name="Name" value="PRO_REPORTING" />
+            <parameter name="Engine" value="InnoDB" />
+            <parameter name="Version" value="10" />
+            <parameter name="Row_format" value="Dynamic" />
+            <parameter name="Data_free" value="0" />
+            <parameter name="Auto_increment" value="" />
+            <parameter name="Check_time" value="" />
+            <parameter name="Collation" value="utf8_general_ci" />
+            <parameter name="Checksum" value="" />
+            <parameter name="Create_options" value="" />
+            <parameter name="Comment" value="Data calculated by process"/>
+        </vendor>
+        <column name="PRO_UID"                  type="VARCHAR"  size="32" required="true" primaryKey="true" />
+        <column name="MONTH"                    type="INTEGER"  required="true" default="0" primaryKey="true" />
+        <column name="YEAR"                     type="INTEGER"  required="true" default="0" primaryKey="true" />
+        <column name="AVG_TIME"                 type="DECIMAL"  size="7,2"  default="0" />
+        <column name="SDV_TIME"                 type="DECIMAL"  size="7,2"  default="0" />
+        <column name="TOTAL_CASES_IN"           type="DECIMAL"  size="7,2"  default="0" />
+        <column name="TOTAL_CASES_OUT"          type="DECIMAL"  size="7,2"  default="0" />
+        <column name="CONFIGURED_PROCESS_TIME"  type="DECIMAL"  size="7,2"  default="0" />
+        <column name="CONFIGURED_PROCESS_COST"  type="DECIMAL"  size="7,2"  default="0" />
+        <column name="TOTAL_CASES_OPEN"         type="DECIMAL"  size="7,2"  default="0" />
+        <column name="TOTAL_CASES_OVERDUE"      type="DECIMAL"  size="7,2"  default="0" />
+        <column name="TOTAL_CASES_ON_TIME"      type="DECIMAL"  size="7,2"  default="0" />
+    </table>
+
+    <table name="DASHBOARD">
+        <vendor type="mysql">
+            <parameter name="Name" value="DASHBOARD" />
+            <parameter name="Engine" value="InnoDB" />
+            <parameter name="Version" value="10" />
+            <parameter name="Row_format" value="Dynamic" />
+            <parameter name="Data_free" value="0" />
+            <parameter name="Auto_increment" value="" />
+            <parameter name="Check_time" value="" />
+            <parameter name="Collation" value="utf8_general_ci" />
+            <parameter name="Checksum" value="" />
+            <parameter name="Create_options" value="" />
+            <parameter name="Comment" value="Dashboard definitions."/>
+        </vendor>
+        <column name="DAS_UID"          type="VARCHAR"      size="32" required="true" primaryKey="true" default="" />
+        <column name="DAS_TITLE"        type="VARCHAR"      size="255" required="true" default="" />
+        <column name="DAS_DESCRIPTION"  type="LONGVARCHAR"  required="false" />
+        <column name="DAS_CREATE_DATE"  type="TIMESTAMP"    required="true" />
+        <column name="DAS_UPDATE_DATE"  type="TIMESTAMP"    required="false" />
+        <column name="DAS_STATUS"       type="TINYINT"      required="true" default="1"/>
+    </table>
+
+    <table name="DASHBOARD_INDICATOR">
+        <vendor type="mysql">
+            <parameter name="Name" value="DASHBOARD_INDICATOR" />
+            <parameter name="Engine" value="InnoDB" />
+            <parameter name="Version" value="10" />
+            <parameter name="Row_format" value="Dynamic" />
+            <parameter name="Data_free" value="0" />
+            <parameter name="Auto_increment" value="" />
+            <parameter name="Check_time" value="" />
+            <parameter name="Collation" value="utf8_general_ci" />
+            <parameter name="Checksum" value="" />
+            <parameter name="Create_options" value="" />
+            <parameter name="Comment" value="Dashboard Indicators definitions."/>
+        </vendor>
+        <column name="DAS_IND_UID"              type="VARCHAR"      size="32" required="true" primaryKey="true"  default="" />
+        <column name="DAS_UID"                  type="VARCHAR"      size="32" required="true" default="" />
+        <column name="DAS_IND_TYPE"             type="VARCHAR"      size="32" required="true" default="" />
+        <column name="DAS_IND_TITLE"            type="VARCHAR"      size="255" required="true" default="" />
+        <column name="DAS_IND_GOAL"             type="DECIMAL"      size="7,2" default="0" />
+        <column name="DAS_IND_DIRECTION"        type="TINYINT"      required="true" default="2"/>
+        <column name="DAS_UID_PROCESS"          type="VARCHAR"      size="32" required="true" default="" />
+        <column name="DAS_IND_FIRST_FIGURE"     type="VARCHAR"      size="32" required="false" default="" />
+        <column name="DAS_IND_FIRST_FREQUENCY"  type="VARCHAR"      size="32" required="false" default="" />
+        <column name="DAS_IND_SECOND_FIGURE"    type="VARCHAR"      size="32" required="false" default="" />
+        <column name="DAS_IND_SECOND_FREQUENCY" type="VARCHAR"      size="32" required="false" default="" />
+        <column name="DAS_IND_CREATE_DATE"      type="TIMESTAMP"    required="true" />
+        <column name="DAS_IND_UPDATE_DATE"      type="TIMESTAMP"    required="false" />
+        <column name="DAS_IND_STATUS"           type="TINYINT"      required="true" default="1"/>
+        <foreign-key name="fk_dashboard_indicator_dashboard" foreignTable="DASHBOARD">
+            <reference local="DAS_UID" foreign="DAS_UID"/>
+        </foreign-key>
+        <index name="indexDashboard">
+            <index-column name="DAS_UID"/>
+            <index-column name="DAS_IND_TYPE"/>
+            <vendor type="mysql">
+                <parameter name="Table" value="DASHBOARD_INDICATOR"/>
+                <parameter name="Non_unique" value="1"/>
+                <parameter name="Key_name" value="indexDashboard"/>
+                <parameter name="Seq_in_index" value="1"/>
+                <parameter name="Column_name" value="DAS_UID"/>
+                <parameter name="Collation" value="A"/>
+                <parameter name="Cardinality" value=""/>
+                <parameter name="Sub_part" value=""/>
+                <parameter name="Packed" value=""/>
+                <parameter name="Null" value=""/>
+                <parameter name="Index_type" value="BTREE"/>
+                <parameter name="Comment" value=""/>
+            </vendor>
+        </index>
+    </table>
+
+    <table name="DASHBOARD_DAS_IND">
+        <vendor type="mysql">
+            <parameter name="Name" value="DASHBOARD_DAS_IND" />
+            <parameter name="Engine" value="InnoDB" />
+            <parameter name="Version" value="10" />
+            <parameter name="Row_format" value="Dynamic" />
+            <parameter name="Data_free" value="0" />
+            <parameter name="Auto_increment" value="" />
+            <parameter name="Check_time" value="" />
+            <parameter name="Collation" value="utf8_general_ci" />
+            <parameter name="Checksum" value="" />
+            <parameter name="Create_options" value="" />
+            <parameter name="Comment" value="Dashboard definitions to user."/>
+        </vendor>
+        <column name="DAS_UID"      type="VARCHAR" size="32" required="true" primaryKey="true" default=""/>
+        <column name="OWNER_UID"    type="VARCHAR" size="32" required="true" primaryKey="true" default=""/>
+        <column name="OWNER_TYPE"   type="VARCHAR" size="15" required="true" default=""/>
+        <foreign-key name="fk_dashboard_indicator_dashboard_das_ind" foreignTable="DASHBOARD">
+            <reference local="DAS_UID" foreign="DAS_UID"/>
+        </foreign-key>
+    </table>
+
+
+    <table name="CATALOG">
+        <vendor type="mysql">
+            <parameter name="Name" value="CATALOG" />
+            <parameter name="Engine" value="InnoDB" />
+            <parameter name="Version" value="10" />
+            <parameter name="Row_format" value="Dynamic" />
+            <parameter name="Data_free" value="0" />
+            <parameter name="Auto_increment" value="" />
+            <parameter name="Check_time" value="" />
+            <parameter name="Collation" value="utf8_general_ci" />
+            <parameter name="Checksum" value="" />
+            <parameter name="Create_options" value="" />
+            <parameter name="Comment" value="Definitions catalog."/>
+        </vendor>
+        <column name="CAT_UID"          type="VARCHAR" size="32"  required="true"  primaryKey="true" default=""/>
+        <column name="CAT_LABEL_ID"     type="VARCHAR" size="100" required="true"  default=""/>
+        <column name="CAT_TYPE"         type="VARCHAR" size="100" required="true"  primaryKey="true" default=""/>
+        <column name="CAT_FLAG"         type="VARCHAR" size="50"  required="false" default=""/>
+        <column name="CAT_OBSERVATION"  type="LONGVARCHAR"        required="false" default=""/>
+        <column name="CAT_CREATE_DATE"  type="TIMESTAMP"          required="true" />
+        <column name="CAT_UPDATE_DATE"  type="TIMESTAMP"          required="false" />
+        <index name="indexType">
+            <index-column name="CAT_TYPE"/>
+            <vendor type="mysql">
+                <parameter name="Table" value="CATALOG"/>
+                <parameter name="Non_unique" value="1"/>
+                <parameter name="Key_name" value="indexDashboard"/>
+                <parameter name="Seq_in_index" value="1"/>
+                <parameter name="Column_name" value="CAT_TYPE"/>
+                <parameter name="Collation" value="A"/>
+                <parameter name="Cardinality" value=""/>
+                <parameter name="Sub_part" value=""/>
+                <parameter name="Packed" value=""/>
+                <parameter name="Null" value=""/>
+                <parameter name="Index_type" value="BTREE"/>
+                <parameter name="Comment" value=""/>
+            </vendor>
+        </index>
     </table>
 </database>
 

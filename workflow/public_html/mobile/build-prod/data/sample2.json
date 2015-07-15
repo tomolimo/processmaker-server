@@ -1,0 +1,208 @@
+{
+    "name": "form-example2",
+    "items": [
+        {
+            "type":"form",       
+            "items":
+            [
+                [
+                    {
+                        "type": "title",
+                        "colSpan": 12,
+                        "name": "title",
+                        "label": "PMDynaform 2 - Required, DataType and Hint property"
+                    }
+                ],
+                [
+                    {
+                        "type": "subtitle",
+                        "colSpan": 12,
+                        "name": "subtitle",
+                        "label": "Fields required and dataType with string, integer, float, date, datetime and time"
+                    }
+                ],
+                [
+                    {
+                        "type": "text",
+                        "colSpan":12,
+                        "name": "Textinput1",
+                        "defaultValue": "",
+                        "disabled": false,
+                        "label": "Data type - String",
+                        "required": true,
+                        "readonly": false,
+                        "dataType": "string",
+                        "variable": "simpleVariable",
+                        "hint": "Text field example with the string validation"
+                    }
+                ],
+                [
+                    {
+                        "type": "text",
+                        "colSpan":12,
+                        "name": "Textinput2",
+                        "defaultValue": "",
+                        "label": "Data type - Integer",
+                        "required": true,
+                        "readonly": false,
+                        "dataType": "integer",
+                        "variable": "simpleVariable",
+                        "hint": "Text field example with the integer validation"
+                    }
+                ],
+                [
+                    {
+                        "type": "text",
+                        "colSpan":12,
+                        "name": "Textinput3",
+                        "defaultValue": "",
+                        "label": "Data type - Float",
+                        "required": true,
+                        "readonly": false,
+                        "dataType": "float",
+                        "variable": "simpleVariable",
+                        "hint": "Text field example with the float validation"
+                    }
+                ],
+                [
+                    {
+                        "type": "textarea",
+                        "colSpan":12,
+                        "name": "TextArea",
+                        "defaultValue": "",
+                        "label": "TextArea",
+                        "required": true,
+                        "readonly": false,
+                        "dataType": "string",
+                        "hint": "TextArea field example with the string validation"
+                    }
+                ],
+                [
+                    {
+                        "type": "dropdown",
+                        "colSpan":12,
+                        "name": "Option",
+                        "label": "Dropdown",
+                        "defaultValue": "option1",
+                        "readonly": false,
+                        "required": true,
+                        "hint": "Dropdown field example with the string validation",
+                        "options":[
+                            {
+                                "label": "Option 1",
+                                "value": "option1"
+                            },
+                            {
+                                "label": "Option 2",
+                                "value": "option2"
+                            },
+                            {
+                                "label": "Option 3",
+                                "value": "option3"
+                            }
+                        ]
+                    }
+                ],
+                [
+                    {
+                        "type": "checkbox",
+                        "colSpan":12,
+                        "name": "radiogroup1",
+                        "defaultValue": "1",
+                        "label": "CheckBoxGroup",
+                        "required": true,
+                        "dataType": "string",
+                        "hint": "CheckBoxGroup field example with the string validation",
+                        "options": [
+                            {
+                                "label": "This is the option AA",
+                                "value": "1",
+                                "selected": true
+                            },
+                            {
+                                "label": "This is the option B",
+                                "value": "2"
+                            },
+                            {
+                                "label": "This is the option C",
+                                "value": "3",
+                                "selected": true
+                            }
+                        ]
+                    }
+                ],
+                [
+                    {
+                        "type": "radio",
+                        "colSpan":12,
+                        "name": "radiogroup123",
+                        "defaultValue": "",
+                        "label": "Radio Grp2",
+                        "required": true,
+                        "dataType": "string",
+                        "hint": "RadioGroup field example with the string validation",
+                        "options": [
+                            {
+                                "label" : "Radio option A",
+                                "value" : "1"
+                            },
+                            {
+                                "label" : "Radio option B",
+                                "value" : "2"
+                            }
+                        ]
+                    }
+                ],
+                [
+                    {
+                        "type": "datetime",
+                        "pickType":"datetime",
+                        "colSpan": 12,
+                        "name": "datetime1",
+                        "defaultValue": "",
+                        "label": "Date time",
+                        "dataType": "datetime",
+                        "hint": "Datetime field example with the datetime validation",
+                        "required": true,
+                        "readonly": false
+                    }
+                ],
+                [
+                    {
+                        "type": "datetime",
+                        "pickType":"date",
+                        "colSpan": 12,
+                        "name": "datetime2",
+                        "defaultValue": "",
+                        "label": "Date",
+                        "dataType": "date",
+                        "hint": "Date field example with the date validation",
+                        "required": true,
+                        "readonly": false
+                    }
+                ],
+                [
+                    {
+                        "type": "datetime",
+                        "pickType":"time",
+                        "colSpan": 12,
+                        "name": "datetime3",
+                        "defaultValue": "",
+                        "label": "Time",
+                        "dataType": "time",
+                        "hint": "Time field example with the time validation",
+                        "required": true,
+                        "readonly": false
+                    }
+                ],
+                [
+                    {
+                      "type" : "submit",
+                      "colSpan" : 12,
+                      "label" : "Submit"
+                    }
+                ]
+            ]
+        }
+    ]
+}

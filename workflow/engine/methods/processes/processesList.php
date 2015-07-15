@@ -40,16 +40,16 @@ $memcacheUsed = 'not used';
 $totalCount = 0;
 if (isset( $_POST['category'] ) && $_POST['category'] !== '<reset>') {
     if (isset( $_POST['processName'] ))
-        $proData = $oProcess->getAllProcesses( $start, $limit, $_POST['category'], $_POST['processName']);
+        $proData = $oProcess->getAllProcesses( $start, $limit, $_POST['category'], $_POST['processName'], true, false, $_SESSION["USER_LOGGED"]);
     else
-        $proData = $oProcess->getAllProcesses( $start, $limit, $_POST['category']);
+        $proData = $oProcess->getAllProcesses( $start, $limit, $_POST['category'], null, true, false, $_SESSION["USER_LOGGED"]);
 } else {
     if (isset( $_POST['processName'] )) {
         $memkey = 'processList-' . $start . '-' . $limit . '-' . $_POST['processName'];
         $memcacheUsed = 'yes';
         $proData = $memcache->get( $memkey );
         if ($proData === false) {
-            $proData = $oProcess->getAllProcesses( $start, $limit, null, $_POST['processName']);
+            $proData = $oProcess->getAllProcesses( $start, $limit, null, $_POST['processName'], true, false, $_SESSION["USER_LOGGED"]);
             $memcache->set( $memkey, $proData, PMmemcached::ONE_HOUR );
             $totalCount = count($proData);
             $proData = array_splice($proData, $start, $limit);

@@ -29,6 +29,10 @@ class Server implements iAuthenticate
     protected static $dbUser;
     protected static $dbPassword;
     protected static $dsn;
+    protected static $dbUserRBAC;
+    protected static $dbPasswordRBAC;
+    protected static $dsnRBAC;
+    protected static $isRBAC = false;
     protected static $workspace;
 
     public function __construct()
@@ -42,12 +46,18 @@ class Server implements iAuthenticate
         );
 
         // $dsn is the Data Source Name for your database, for exmaple "mysql:dbname=my_oauth2_db;host=localhost"
-        $config = array('dsn' => self::$dsn, 'username' => self::$dbUser, 'password' => self::$dbPassword);
-        //var_dump($config); die;
-        $this->storage = new PmPdo($config);
+        $cnn = array('dsn' => self::$dsn, 'username' => self::$dbUser, 'password' => self::$dbPassword);
+
+        if (self::$isRBAC) {
+            $config = array();
+            $cnnrbac = array('dsn' => self::$dsnRBAC, 'username' => self::$dbUserRBAC, 'password' => self::$dbPasswordRBAC);
+            $this->storage = new PmPdo($cnn, $config, $cnnrbac);
+        } else {
+            $this->storage = new PmPdo($cnn);
+        }
 
         // Pass a storage object or array of storage objects to the OAuth2 server class
-        $this->server = new \OAuth2\Server($this->storage, array('allow_implicit' => true));
+        $this->server = new \OAuth2\Server($this->storage, array('allow_implicit' => true, 'access_lifetime' => 86400));
 
         $this->server->setConfig('enforce_state', false);
 
@@ -58,7 +68,10 @@ class Server implements iAuthenticate
         $this->server->addGrantType(new \ProcessMaker\Services\OAuth2\PmClientCredentials($this->storage));
 
         // Add the "Refresh token" grant type
-        $this->server->addGrantType(new \OAuth2\GrantType\RefreshToken($this->storage));
+        $this->server->addGrantType(new \OAuth2\GrantType\RefreshToken(
+            $this->storage,
+            array("always_issue_new_refresh_token" => true)
+        ));
 
         // create some users in memory
         //$users = array('bshaffer' => array('password' => 'brent123', 'first_name' => 'Brent', 'last_name' => 'Shaffer'));
@@ -73,6 +86,32 @@ class Server implements iAuthenticate
         $this->server->setScopeUtil($scope);
     }
 
+    /**
+     * @url POST /:token/expire
+     *
+     */
+    public function doPostExpireToken($token)
+    {
+        try {
+            $this->storage->expireToken($token);
+        } catch (\Exception $e) {
+            throw new RestException(400, $e->getMessage());
+        }
+    }
+
+    /**
+     * @url DELETE /:token
+     *
+     */
+    public function doDeleteToken($token)
+    {
+        try {
+            $this->storage->deleteToken($token);
+        } catch (\Exception $e) {
+            throw new RestException(400, $e->getMessage());
+        }
+    }
+
     public static function setDatabaseSource($user, $password = '', $dsn = '')
     {
         if (is_array($user)) {
@@ -83,6 +122,21 @@ class Server implements iAuthenticate
             self::$dbUser = $user;
             self::$dbPassword = $password;
             self::$dsn = $dsn;
+        }
+    }
+
+    public static function setDatabaseSourceRBAC($user, $password = '', $dsn = '')
+    {
+        if (is_array($user)) {
+            self::$dbUserRBAC = $user['username'];
+            self::$dbPasswordRBAC = $user['password'];
+            self::$dsnRBAC = $user['dsn'];
+            self::$isRBAC = true;
+        } else {
+            self::$dbUserRBAC = $user;
+            self::$dbPasswordRBAC = $password;
+            self::$dsnRBAC = $dsn;
+            self::$isRBAC = true;
         }
     }
 
@@ -153,7 +207,7 @@ class Server implements iAuthenticate
         $clientId = $_GET['client_id'];
         $requestedScope = isset($_GET['scope']) ? $_GET['scope'] : '*';
         $requestedScope = empty($requestedScope) ? array() : explode(' ', $requestedScope);
-        $client = $this->storage->getClientDetails($clientId);;
+        $client = $this->storage->getClientDetails($clientId);
 
         if (empty($client)) {
             // throw error, client does not exist.
@@ -210,7 +264,9 @@ class Server implements iAuthenticate
         if ($returnResponse) {
             return $response;
         } else {
-            die($response->send());
+            $response->send();
+
+            exit(0);
         }
     }
 
@@ -228,9 +284,11 @@ class Server implements iAuthenticate
         if ($request == null) {
             $request = \OAuth2\Request::createFromGlobals();
         }
-        $response = $this->server->handleTokenRequest($request);
+
+        $response = $this->server->handleTokenRequest($request); //Set/Get token //PmPdo->setAccessToken()
 
         $token = $response->getParameters();
+
         if (array_key_exists('access_token', $token)
             && array_key_exists('refresh_token', $token)
         ) {
@@ -259,6 +317,8 @@ class Server implements iAuthenticate
             return $response;
         } else {
             $response->send();
+
+            exit(0);
         }
     }
 
@@ -295,7 +355,7 @@ class Server implements iAuthenticate
                     $lifetime = 1440;
                 }
 
-                setcookie($session->getSessionName(), $_COOKIE[$session->getSessionName()], time() + $lifetime, "/");
+                setcookie($session->getSessionName(), $_COOKIE[$session->getSessionName()], time() + $lifetime, "/", null, false, true);
             }
         }
 

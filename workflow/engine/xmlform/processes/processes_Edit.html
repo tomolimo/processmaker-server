@@ -1,94 +1,187 @@
 <form id="{$form_id}" name="{$form_name}" action="{$form_action}" class="{$form_className}" method="post" encType="multipart/form-data" style="margin:0px;" onsubmit='return validateForm("{$form_objectRequiredFields}".parseJSON());'>
- <div class="borderForm" style="padding-left: 0pt; padding-right: 0pt;">
-   <div class="boxTop"><div class="a"></div><div class="b"></div><div class="c"></div></div>
-     <div class="content" style="">
-     <table width="99%">
-     <tbody>
-     <tr>
-       <td valign="top">
-         <input class="notValidateThisFields" name="__notValidateThisFields__" id="__notValidateThisFields__" value="" type="hidden">
-         <input name="DynaformRequiredFields" id="DynaformRequiredFields" value="{$form_objectRequiredFields}" type="hidden">
-         <table border="0" cellpadding="0" cellspacing="0" width="100%">
-         <tbody>
-         <tr>
-           <td class="FormTitle" colspan="2" align="">{$form.TITLE1}</td>
-         </tr>
-         <tr style="display: none;">
-           <td colspan="2">{$form.PRO_UID}</td>
-         </tr>
-         <tr style="display: none;">
-           <td colspan="2">{$form.THETYPE}</td>
-         </tr>
-         <tr style="display: none;">
-           <td colspan="2">{$form.SYS_LANG} {$form.PRO_VALIDATE_TITLE}</td>
-         </tr>
-         <tr>
-           <td class="FormLabel" width="{$form_labelWidth}"><font color="red">*  </font>{$PRO_TITLE}</td>
-           <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.PRO_TITLE}</td>
-         </tr>
-         <tr>
-           <td class="FormLabel" width="{$form_labelWidth}">{$PRO_DESCRIPTION}</td>
-           <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.PRO_DESCRIPTION}</td>
-         </tr>
-         <tr>
-           <td class="FormLabel" width="{$form_labelWidth}">{$PRO_CALENDAR}</td>
-           <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.PRO_CALENDAR}</td>
-         </tr>
-         <tr>
-           <td class="FormLabel" width="{$form_labelWidth}">{$PRO_CATEGORY}</td>
-           <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.PRO_CATEGORY}</td>
-         </tr>
-         <tr>
-           <td class="FormLabel" width="{$form_labelWidth}">{$PRO_SUMMARY_DYNAFORM}</td>
-           <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.PRO_SUMMARY_DYNAFORM}</td>
-         </tr>
-         <tr>
-           <td class="FormLabel" width="{$form_labelWidth}">{$PRO_DERIVATION_SCREEN_TPL}</td>
-           <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.PRO_DERIVATION_SCREEN_TPL}</td>
-         </tr>
-         <tr>
-           <td class="FormLabel" width="{$form_labelWidth}">{$PRO_DEBUG}</td>
-           <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.PRO_DEBUG}</td>
-         </tr>
-         <tr>
-           <td class="FormLabel" width="{$form_labelWidth}">{$PRO_SHOW_MESSAGE}</td>
-           <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.PRO_SHOW_MESSAGE}</td>
-         </tr>
-         <tr>
-           <td class="FormLabel" width="{$form_labelWidth}">{$PRO_SUBPROCESS}</td>
-           <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.PRO_SUBPROCESS}</td>
-         </tr>
-         <tr>
-           <td class="FormLabel" width="{$form_labelWidth}">{$PRO_TRI_DELETED}</td>
-           <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.PRO_TRI_DELETED}</td>
-         </tr>
-         <tr>
-           <td class="FormLabel" width="{$form_labelWidth}">{$PRO_TRI_CANCELED}</td>
-           <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.PRO_TRI_CANCELED}</td>
-         </tr>
-         <tr>
-           <td class="FormLabel" width="{$form_labelWidth}">{$PRO_TRI_PAUSED}</td>
-           <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.PRO_TRI_PAUSED}</td>
-         </tr>
-         <tr>
-           <td class="FormLabel" width="{$form_labelWidth}">{$PRO_TRI_REASSIGNED}</td>
-           <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.PRO_TRI_REASSIGNED}</td>
-         </tr>
-         <!--//////////////////////////////////********//////////////////////////////////-->
-         <tr>
-           <td class="FormButton" colspan="2" align="center"><br/> {$form.SUBMIT} &nbsp; {$form.BTN_CANCEL} </td>
-         </tr>
-         </tbody>
-         </table>
-       </td>
-     </tr>
-     </tbody>
-     </table>
-     <div class="FormRequiredTextMessage"><font color="red">*  </font>{php}echo (G::LoadTranslation('ID_REQUIRED_FIELD'));{/php}</div>
-   </div>
-   <div class="boxBottom"><div class="a"></div><div class="b"></div><div class="c"></div>
- </div>
- <script type="text/javascript">
- {$form.JS}
- </script>
- </form>
+
+<div class="borderForm" style="padding-left: 0pt; padding-right: 0pt;">
+
+  <div class="boxTop"><div class="a"></div><div class="b"></div><div class="c"></div></div>
+
+    <div class="content" style="">
+
+    <table width="99%">
+
+    <tbody>
+
+    <tr>
+
+      <td valign="top">
+
+        <input class="notValidateThisFields" name="__notValidateThisFields__" id="__notValidateThisFields__" value="" type="hidden">
+
+        <input name="DynaformRequiredFields" id="DynaformRequiredFields" value="{$form_objectRequiredFields}" type="hidden">
+
+        <table border="0" cellpadding="0" cellspacing="0" width="100%">
+
+        <tbody>
+
+        <tr>
+
+          <td class="FormTitle" colspan="2" align="">{$form.TITLE1}</td>
+
+        </tr>
+
+        <tr style="display: none;">
+
+          <td colspan="2">{$form.PRO_UID}</td>
+
+        </tr>
+
+        <tr style="display: none;">
+
+          <td colspan="2">{$form.THETYPE}</td>
+
+        </tr>
+
+        <tr style="display: none;">
+
+          <td colspan="2">{$form.SYS_LANG} {$form.PRO_VALIDATE_TITLE}</td>
+
+        </tr>
+
+        <tr>
+
+          <td class="FormLabel" width="{$form_labelWidth}"><font color="red">*  </font>{$PRO_TITLE}</td>
+
+          <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.PRO_TITLE}</td>
+
+        </tr>
+
+        <tr>
+
+          <td class="FormLabel" width="{$form_labelWidth}">{$PRO_DESCRIPTION}</td>
+
+          <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.PRO_DESCRIPTION}</td>
+
+        </tr>
+
+        <tr>
+
+          <td class="FormLabel" width="{$form_labelWidth}">{$PRO_CALENDAR}</td>
+
+          <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.PRO_CALENDAR}</td>
+
+        </tr>
+
+        <tr>
+
+          <td class="FormLabel" width="{$form_labelWidth}">{$PRO_CATEGORY}</td>
+
+          <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.PRO_CATEGORY}</td>
+
+        </tr>
+
+        <tr>
+
+          <td class="FormLabel" width="{$form_labelWidth}">{$PRO_SUMMARY_DYNAFORM}</td>
+
+          <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.PRO_SUMMARY_DYNAFORM}</td>
+
+        </tr>
+
+        <tr>
+
+          <td class="FormLabel" width="{$form_labelWidth}">{$PRO_DERIVATION_SCREEN_TPL}</td>
+
+          <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.PRO_DERIVATION_SCREEN_TPL}</td>
+
+        </tr>
+
+        <tr>
+
+          <td class="FormLabel" width="{$form_labelWidth}">{$PRO_DEBUG}</td>
+
+          <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.PRO_DEBUG}</td>
+
+        </tr>
+
+        <tr>
+
+          <td class="FormLabel" width="{$form_labelWidth}">{$PRO_SHOW_MESSAGE}</td>
+
+          <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.PRO_SHOW_MESSAGE}</td>
+
+        </tr>
+
+        <tr>
+
+          <td class="FormLabel" width="{$form_labelWidth}">{$PRO_SUBPROCESS}</td>
+
+          <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.PRO_SUBPROCESS}</td>
+
+        </tr>
+
+        <tr>
+
+          <td class="FormLabel" width="{$form_labelWidth}">{$PRO_TRI_DELETED}</td>
+
+          <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.PRO_TRI_DELETED}</td>
+
+        </tr>
+
+        <tr>
+
+          <td class="FormLabel" width="{$form_labelWidth}">{$PRO_TRI_CANCELED}</td>
+
+          <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.PRO_TRI_CANCELED}</td>
+
+        </tr>
+
+        <tr>
+
+          <td class="FormLabel" width="{$form_labelWidth}">{$PRO_TRI_PAUSED}</td>
+
+          <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.PRO_TRI_PAUSED}</td>
+
+        </tr>
+
+        <tr>
+
+          <td class="FormLabel" width="{$form_labelWidth}">{$PRO_TRI_REASSIGNED}</td>
+
+          <td class="FormFieldContent" width="{$form_fieldContentWidth}">{$form.PRO_TRI_REASSIGNED}</td>
+
+        </tr>
+
+        <!--//////////////////////////////////********//////////////////////////////////-->
+
+        <tr>
+
+          <td class="FormButton" colspan="2" align="center"><br/> {$form.SUBMIT} &nbsp; {$form.BTN_CANCEL} </td>
+
+        </tr>
+
+        </tbody>
+
+        </table>
+
+      </td>
+
+    </tr>
+
+    </tbody>
+
+    </table>
+
+    <div class="FormRequiredTextMessage"><font color="red">*  </font>{php}echo (G::LoadTranslation('ID_REQUIRED_FIELD'));{/php}</div>
+
+  </div>
+
+  <div class="boxBottom"><div class="a"></div><div class="b"></div><div class="c"></div>
+
+</div>
+
+<script type="text/javascript">
+
+{$form.JS}
+
+</script>
+
+</form>

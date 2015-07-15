@@ -1,4 +1,7 @@
 <?php
+G::LoadSystem('inputfilter');
+$filter = new InputFilter();
+$_REQUEST = $filter->xssFilterHard($_REQUEST);
 
 $action = isset( $_REQUEST['action'] ) ? $_REQUEST['action'] :'';
 
@@ -9,6 +12,7 @@ if ($action == '') {
 
 switch ($action) {
     case 'setTemplateFile':
+        $_FILES = $filter->xssFilterHard($_FILES);
         //print_r($_FILES);
         $_SESSION['outpudocs_tmpFile'] = PATH_DATA . $_FILES['templateFile']['name'];
         //    file_put_contents($_FILES['templateFile']['name'], file_get_contents($_FILES['templateFile']['tmp_name']));
@@ -21,6 +25,7 @@ switch ($action) {
         break;
 
     case 'getTemplateFile':
+        $_SESSION['outpudocs_tmpFile'] = $filter->xssFilterHard($_SESSION['outpudocs_tmpFile']);
         $aExtensions = array ("exe","com","dll","ocx","fon","ttf","doc","xls","mdb","rtf","bin","jpeg","jpg","jif","jfif","gif","tif","tiff","png","bmp","pdf","aac","mp3","mp3pro","vorbis","realaudio","vqf","wma","aiff","flac","wav","midi","mka","ogg","jpeg","ilbm","tar","zip","rar","arj","gzip","bzip2","afio","kgb","gz","asf","avi","mov","iff","ogg","ogm","mkv","3gp"
         );
         $sFileName = strtolower( $_SESSION['outpudocs_tmpFile'] );
@@ -28,11 +33,15 @@ switch ($action) {
         $searchPos = strpos( $strRev, '.' );
         $pos = (strlen( $sFileName ) - 1) - $searchPos;
         $sExtension = substr( $sFileName, $pos + 1, strlen( $sFileName ) );
-        if (! in_array( $sExtension, $aExtensions ))
-            echo $content = file_get_contents( $_SESSION['outpudocs_tmpFile'] );
+        if (! in_array( $sExtension, $aExtensions )) {
+            $content = file_get_contents( $_SESSION['outpudocs_tmpFile'] );
+            $content = $filter->xssFilterHard($content);
+            echo $content;
+        }
         break;
 
     case 'loadTemplateContent':
+        $_POST = $filter->xssFilterHard($_POST);
         require_once 'classes/model/OutputDocument.php';
         $ooutputDocument = new OutputDocument();
         if (isset( $_POST['OUT_DOC_UID'] )) {
@@ -43,6 +52,7 @@ switch ($action) {
         break;
 
     case 'lookForNameOutput':
+        $_POST = $filter->xssFilterHard($_POST);
         require_once ('classes/model/Content.php');
         require_once ("classes/model/OutputDocument.php");
 

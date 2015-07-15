@@ -1,4 +1,10 @@
 <?php
+G::LoadSystem('inputfilter');
+$filter = new InputFilter();
+$_GET = $filter->xssFilterHard($_GET,"url");
+$_POST = $filter->xssFilterHard($_POST,"url");
+$_REQUEST = $filter->xssFilterHard($_REQUEST,"url");
+$_SESSION = $filter->xssFilterHard($_SESSION,"url");
 
 $request = isset($_POST['request'])? $_POST['request']: null;
 if( !isset($request) ){
@@ -174,7 +180,7 @@ if( isset($request) ){
           $gKey = (int)$row['lastId'] + 1;
 
         } else {
-          $gKey = md5(date('Y-m-d H:i:s').'@'.rand());
+          $gKey = G::encryptOld(date('Y-m-d H:i:s').'@'.rand());
         }
 
         $rs = $con->executeQuery("INSERT INTO {$_GET['table']} ({$_GET['pk']}, {$_GET['fld']}) VALUES ('$gKey', '{$_GET['value']}');");

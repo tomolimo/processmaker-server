@@ -105,8 +105,8 @@ abstract class Exporter
         $bpmnStruct["EXTENSION"] = array();
         $bpmnStruct["FLOW"] = \BpmnFlow::getAll($this->prjUid, null, null, "", CASE_UPPER, false);
         $bpmnStruct["GATEWAY"] = \BpmnGateway::getAll($this->prjUid);
-        $bpmnStruct["LANE"] = array();
-        $bpmnStruct["LANESET"] = array();
+        $bpmnStruct["LANE"] = \BpmnLane::getAll($this->prjUid);
+        $bpmnStruct["LANESET"] = \BpmnLaneset::getAll($this->prjUid);
         $bpmnStruct["PARTICIPANT"] = \BpmnParticipant::getAll($this->prjUid);
         $bpmnStruct["PROCESS"] = \BpmnProcess::getAll($this->prjUid);
         $bpmnStruct["PROJECT"] = array(\BpmnProjectPeer::retrieveByPK($this->prjUid)->toArray());

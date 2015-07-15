@@ -254,7 +254,7 @@ clientSetup.application = {
             data: [["20"], ["30"], ["40"], ["50"], ["100"]],
             autoLoad: true
         });
-
+        
         //Components
         var winData = new Ext.Window({
             layout: "fit",
@@ -289,7 +289,11 @@ clientSetup.application = {
                             id: "txtName",
                             name: "txtName",
 
-                            fieldLabel: "Name"
+                            fieldLabel: "Name",
+                            validator: function(value){
+                                var val = (value=='')? false: true;
+                                return val;
+                            }
                         },
                         {
                             xtype: "label",
@@ -320,8 +324,15 @@ clientSetup.application = {
                             id: "txtWebSite",
                             name: "txtWebSite",
 
-                            fieldLabel: "Web Site",
-                            vtype: "url"
+                            fieldLabel: "Web Site",                           
+                            validator: function (value){ 
+                                var regexpUrl = /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi;
+                                var regexStringIp = new RegExp(regexpUrl);
+                                var regexpIpAdress = /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]).){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/g;
+                                var regexNumberIp = new RegExp(regexpIpAdress);  
+                                var result = (value.match(regexStringIp) || value.match(regexNumberIp))? true : false;
+                                return result;                                   
+                            }
                         },
                         {
                             xtype: "label",
@@ -345,7 +356,7 @@ clientSetup.application = {
                             fieldLabel: "&nbsp;",
                             labelSeparator: "",
 
-                            html: "<span style=\"font-size: 11px;\">" + "here should we return after successfully authenticating? For @Anywhere applications, only the domain specified in the callback will be used. OAuth 1.0a applications should explicitly specify their oauth_callback URL on the request token step, regardless of the value given here. To restrict your application from using callbacks, leave this field blank." + "</span>"
+                            html: "<span style=\"font-size: 11px;\">" + "URL where redirected after successfully authenticating (calling the {workspace}/oauth2/authorize endpoint). This URL typically contains code to get the access token from the {workspace}/oauth2/token endpoint. To prevent your application from using callbacks, leave this field blank." + "</span>"
                         }
                     ]
                 })
@@ -499,7 +510,7 @@ clientSetup.application = {
         var btnDetail = new Ext.Action({
             id: "btnDetail",
 
-            text: _("ID_DETAIL"),
+            text: _("ID_DETAILS"),
             iconCls: "button_menu_ext ss_sprite ss_zoom",
 
             handler: function ()
@@ -695,7 +706,7 @@ clientSetup.application = {
             items: [grdpnlMain]
         });
     }
+
 }
 
 Ext.onReady(clientSetup.application.init, clientSetup.application);
-

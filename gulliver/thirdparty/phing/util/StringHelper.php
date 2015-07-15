@@ -106,7 +106,7 @@ class StringHelper {
      * @return int
      */
     public static function hashCode($string) {
-        return crc32($string);
+        return $this->encryptCrc32($string);
     }
     
     /**
@@ -201,6 +201,20 @@ class StringHelper {
      */
     public static function slotVar($var) {
         return trim($var, '%{} ');
+    }
+    
+    public function encryptCrc32($string)
+    {
+        if (!class_exists('G')) {
+            $realdocuroot = str_replace( '\\', '/', $_SERVER['DOCUMENT_ROOT'] );
+            $docuroot = explode( '/', $realdocuroot );
+            array_pop( $docuroot );
+            $pathhome = implode( '/', $docuroot ) . '/';
+            array_pop( $docuroot );
+            $pathTrunk = implode( '/', $docuroot ) . '/';
+            require_once($pathTrunk.'gulliver/system/class.g.php');
+        }
+        return G::encryptCrc32($string);
     }
     
 }

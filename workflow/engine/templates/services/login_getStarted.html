@@ -22,8 +22,24 @@
     </script>
 
     <style type="text/css">
+    .panel_title___processmaker {
+        background: #3D9DE4 !important;
+    }
+
+    .panel_close___processmaker {
+        background: url("/skins/neoclassic/images/icons_silk/calendar_x_button.png") no-repeat center right;
+    }
+
+    .panel_content___processmaker {
+        border-width: 0 !important;
+    }
+
     body, table {
      font-family: tahoma,arial,verdana,sans-serif;
+    }
+
+    p {
+     line-height: 0.5em;
     }
     span.cMargLeft { padding-left: 20; }
 
@@ -33,7 +49,7 @@
       border-right: #fff  1px solid;
       padding-right: 10px;
       border-top: #fff 1px solid;
-      padding-top: 10px;
+      padding-top: 5px;
       border-left: #fff 1px solid;
       padding-left: 10px;
       border-bottom: #fff 1px solid;
@@ -46,6 +62,16 @@
     }
     span.cLow {
         color: #002c72;
+    }
+    span.cLow-min {
+        color: #002c72;
+        font-size: 13px;
+        line-height: 1.3em;
+    }
+    span.cLow-autor {
+        color: #002c72;
+        font-size: 15px;
+        line-height: 1.3em;
     }
 
     </style>
@@ -68,23 +94,23 @@
             <a target="_blank" href="http://www.processmaker.com"><img src="/images/get_started.png" border="0" width="163" height="438"></a>
         </td>
         <td class="cell2" valign="top">
-            <p><span class="cLow">Welcome to ProcessMaker!</span></p>
-            <p><span class="cLow">To get started, log in using the following credentials. You can change them later:</span></p>
+            <p><b><span class="cLow">Welcome to ProcessMaker</span></b></p><br/>
+            <p style="text-align: justify;"><span class="cLow-min">This new version features a new process designer based upon the Business Process Management Notation 2 standard. It offers a new form designer with flexible layouts for desktops, tablets and cellphones and a new REST API to remotely access ProcessMaker.</span></p>
+            <p style="text-align: justify;"><span class="cLow-min">To get started, log in using the following credentials. You can change them later:</span></p>
             <span class="cNeg">Username:</span><span class="cLow"> {name}</span><br>
-            <span class="cNeg">Password:</span><span class="cLow"> The password introduced at the time of installing the application</span>
-            <p><span class="cLow">We suggest you follow our 7 easy videos to automate your workflow.  You can see a demo of each step at&nbsp;<a target="_blank" href="http://www.processmaker.com/demos/">http://www.processmaker.com/demos/</a> </span></p>
+            <span class="cNeg">Password:</span><span class="cLow"> {pass}</span><br><br>
+            <p style="text-align: justify;"><span class="cLow-min">We suggest you follow our 7 easy videos to automate your workflow.  You can see a demo of each step at <a target="_blank" href="http://www.processmaker.com/tutorials">http://www.processmaker.com/tutorials/</a></span></p>
 
-            <span class="cLow">Other Resources:</span><br/><br/>
+            <b><span class="cLow">Other Resources:</span></b><br/><br/>
 
             <span class="cLow"><a target="_blank" href="http://wiki.processmaker.com">PM Wiki </a>- Manuals</span><br/>
 
-            <span class="cLow"><a target="_blank" href="http://forum.processmaker.com">PM Forum </a>- Ask Questions</span><br/>
+            <span class="cLow"><a target="_blank" href="http://forum.processmaker.com">PM Forum </a>- Ask Questions</span><br/><br/>
 
-            <p><span class="cLow">We hope you enjoy using ProcessMaker. For more information about our enterprise support and consulting services <a target="_blank" href="http://www.processmaker.com/contact-us">contact us.</a>
-            </span></p>
-            <p><span class="cLow">The ProcessMaker Team</span></p>
+            <p style="text-align: justify;"><span class="cLow-min">We hope you enjoy using ProcessMaker. For more information about our enterprise support and consulting services <a target="_blank" href="http://www.processmaker.com/contact-us">contact us.</a></span></p>
+            <p><b><span class="cLow-autor">The ProcessMaker Team</span></b></p>
 
-            <input type="checkbox" name="getStarted" id="getStarted" onclick="saveConfig();"><span class="cLow">Don't show me again</span>
+            <input type="checkbox" name="getStarted" id="getStarted" onclick="saveConfig();"><span class="cLow"> Don't show me again</span>
         </td>
     </tr>
 </table>
@@ -119,4 +145,3 @@ var saveConfig = function()
     }
 };
 </script>
-

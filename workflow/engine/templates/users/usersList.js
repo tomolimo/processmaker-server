@@ -140,7 +140,7 @@ Ext.onReady(function(){
     ctCls:'pm_search_text_field',
     allowBlank: true,
     width: 100,
-    emptyText: _('ID_ENTER_SEARCH_TERM'),//'enter search term',
+    emptyText: _('ID_EMPTY_SEARCH'),//'enter search term',
     listeners: {
       specialkey: function(f,e){
         if (e.getKey() == e.ENTER) {

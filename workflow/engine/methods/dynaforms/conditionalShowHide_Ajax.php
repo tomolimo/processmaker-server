@@ -116,6 +116,14 @@ try {
             $_POST['FCD_UID'] = ($_POST['FCD_UID'] == '0') ? '' : $_POST['FCD_UID'];
             $aData = Array ('FCD_UID' => Isset( $_POST['FCD_UID'] ) ? $_POST['FCD_UID'] : '','FCD_FUNCTION' => $_POST['function'],'FCD_FIELDS' => $_POST['fields_selected'],'FCD_CONDITION' => $_POST['condition'],'FCD_EVENTS' => $_POST['events'],'FCD_EVENT_OWNERS' => $_POST['event_owner_selected'],'FCD_STATUS' => $_POST['enabled'],'FCD_DYN_UID' => $aDYN['DYN_UID']);
             $oFieldCondition->quickSave( $aData );
+            //Add Audit Log
+            if(isset($_POST['enabled']) && $_POST['enabled'] == 1){
+              $enable = 'enable';
+            }else{
+              $enable = 'disable';
+            }  
+            G::auditLog("ConditionsEditorDynaform", "Dynaform Title: " .$aDYN['DYNAFORM_NAME']. ", Condition Editor: [Function: ".$_POST['function']. ", Fields: ".$_POST['fields_selected']. ", Conditions: ".$_POST['condition']. ", Events: ".$_POST['events']. ", Event Owner: ".$_POST['event_owner_selected']. ", Status: ".$enable."]");
+                
             break;
         case 'delete':
             require_once 'classes/model/FieldCondition.php';

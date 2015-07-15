@@ -94,16 +94,22 @@ abstract class BaseAppCacheView extends BaseObject implements Persistent
     protected $del_init_date;
 
     /**
+     * The value for the del_finish_date field.
+     * @var        int
+     */
+    protected $del_finish_date;
+
+    /**
      * The value for the del_task_due_date field.
      * @var        int
      */
     protected $del_task_due_date;
 
     /**
-     * The value for the del_finish_date field.
+     * The value for the del_risk_date field.
      * @var        int
      */
-    protected $del_finish_date;
+    protected $del_risk_date;
 
     /**
      * The value for the del_thread_status field.
@@ -391,6 +397,38 @@ abstract class BaseAppCacheView extends BaseObject implements Persistent
     }
 
     /**
+     * Get the [optionally formatted] [del_finish_date] column value.
+     * 
+     * @param      string $format The date/time format string (either date()-style or strftime()-style).
+     *                          If format is NULL, then the integer unix timestamp will be returned.
+     * @return     mixed Formatted date/time value as string or integer unix timestamp (if format is NULL).
+     * @throws     PropelException - if unable to convert the date/time to timestamp.
+     */
+    public function getDelFinishDate($format = 'Y-m-d H:i:s')
+    {
+
+        if ($this->del_finish_date === null || $this->del_finish_date === '') {
+            return null;
+        } elseif (!is_int($this->del_finish_date)) {
+            // a non-timestamp value was set externally, so we convert it
+            $ts = strtotime($this->del_finish_date);
+            if ($ts === -1 || $ts === false) {
+                throw new PropelException("Unable to parse value of [del_finish_date] as date/time value: " .
+                    var_export($this->del_finish_date, true));
+            }
+        } else {
+            $ts = $this->del_finish_date;
+        }
+        if ($format === null) {
+            return $ts;
+        } elseif (strpos($format, '%') !== false) {
+            return strftime($format, $ts);
+        } else {
+            return date($format, $ts);
+        }
+    }
+
+    /**
      * Get the [optionally formatted] [del_task_due_date] column value.
      * 
      * @param      string $format The date/time format string (either date()-style or strftime()-style).
@@ -423,27 +461,27 @@ abstract class BaseAppCacheView extends BaseObject implements Persistent
     }
 
     /**
-     * Get the [optionally formatted] [del_finish_date] column value.
+     * Get the [optionally formatted] [del_risk_date] column value.
      * 
      * @param      string $format The date/time format string (either date()-style or strftime()-style).
      *                          If format is NULL, then the integer unix timestamp will be returned.
      * @return     mixed Formatted date/time value as string or integer unix timestamp (if format is NULL).
      * @throws     PropelException - if unable to convert the date/time to timestamp.
      */
-    public function getDelFinishDate($format = 'Y-m-d H:i:s')
+    public function getDelRiskDate($format = 'Y-m-d H:i:s')
     {
 
-        if ($this->del_finish_date === null || $this->del_finish_date === '') {
+        if ($this->del_risk_date === null || $this->del_risk_date === '') {
             return null;
-        } elseif (!is_int($this->del_finish_date)) {
+        } elseif (!is_int($this->del_risk_date)) {
             // a non-timestamp value was set externally, so we convert it
-            $ts = strtotime($this->del_finish_date);
+            $ts = strtotime($this->del_risk_date);
             if ($ts === -1 || $ts === false) {
-                throw new PropelException("Unable to parse value of [del_finish_date] as date/time value: " .
-                    var_export($this->del_finish_date, true));
+                throw new PropelException("Unable to parse value of [del_risk_date] as date/time value: " .
+                    var_export($this->del_risk_date, true));
             }
         } else {
-            $ts = $this->del_finish_date;
+            $ts = $this->del_risk_date;
         }
         if ($format === null) {
             return $ts;
@@ -972,6 +1010,35 @@ abstract class BaseAppCacheView extends BaseObject implements Persistent
     } // setDelInitDate()
 
     /**
+     * Set the value of [del_finish_date] column.
+     * 
+     * @param      int $v new value
+     * @return     void
+     */
+    public function setDelFinishDate($v)
+    {
+
+        if ($v !== null && !is_int($v)) {
+            $ts = strtotime($v);
+            //Date/time accepts null values
+            if ($v == '') {
+                $ts = null;
+            }
+            if ($ts === -1 || $ts === false) {
+                throw new PropelException("Unable to parse date/time value for [del_finish_date] from input: " .
+                    var_export($v, true));
+            }
+        } else {
+            $ts = $v;
+        }
+        if ($this->del_finish_date !== $ts) {
+            $this->del_finish_date = $ts;
+            $this->modifiedColumns[] = AppCacheViewPeer::DEL_FINISH_DATE;
+        }
+
+    } // setDelFinishDate()
+
+    /**
      * Set the value of [del_task_due_date] column.
      * 
      * @param      int $v new value
@@ -1001,12 +1068,12 @@ abstract class BaseAppCacheView extends BaseObject implements Persistent
     } // setDelTaskDueDate()
 
     /**
-     * Set the value of [del_finish_date] column.
+     * Set the value of [del_risk_date] column.
      * 
      * @param      int $v new value
      * @return     void
      */
-    public function setDelFinishDate($v)
+    public function setDelRiskDate($v)
     {
 
         if ($v !== null && !is_int($v)) {
@@ -1016,18 +1083,18 @@ abstract class BaseAppCacheView extends BaseObject implements Persistent
                 $ts = null;
             }
             if ($ts === -1 || $ts === false) {
-                throw new PropelException("Unable to parse date/time value for [del_finish_date] from input: " .
+                throw new PropelException("Unable to parse date/time value for [del_risk_date] from input: " .
                     var_export($v, true));
             }
         } else {
             $ts = $v;
         }
-        if ($this->del_finish_date !== $ts) {
-            $this->del_finish_date = $ts;
-            $this->modifiedColumns[] = AppCacheViewPeer::DEL_FINISH_DATE;
+        if ($this->del_risk_date !== $ts) {
+            $this->del_risk_date = $ts;
+            $this->modifiedColumns[] = AppCacheViewPeer::DEL_RISK_DATE;
         }
 
-    } // setDelFinishDate()
+    } // setDelRiskDate()
 
     /**
      * Set the value of [del_thread_status] column.
@@ -1461,52 +1528,54 @@ abstract class BaseAppCacheView extends BaseObject implements Persistent
 
             $this->del_init_date = $rs->getTimestamp($startcol + 10, null);
 
-            $this->del_task_due_date = $rs->getTimestamp($startcol + 11, null);
+            $this->del_finish_date = $rs->getTimestamp($startcol + 11, null);
 
-            $this->del_finish_date = $rs->getTimestamp($startcol + 12, null);
+            $this->del_task_due_date = $rs->getTimestamp($startcol + 12, null);
 
-            $this->del_thread_status = $rs->getString($startcol + 13);
+            $this->del_risk_date = $rs->getTimestamp($startcol + 13, null);
 
-            $this->app_thread_status = $rs->getString($startcol + 14);
+            $this->del_thread_status = $rs->getString($startcol + 14);
 
-            $this->app_title = $rs->getString($startcol + 15);
+            $this->app_thread_status = $rs->getString($startcol + 15);
 
-            $this->app_pro_title = $rs->getString($startcol + 16);
+            $this->app_title = $rs->getString($startcol + 16);
 
-            $this->app_tas_title = $rs->getString($startcol + 17);
+            $this->app_pro_title = $rs->getString($startcol + 17);
 
-            $this->app_current_user = $rs->getString($startcol + 18);
+            $this->app_tas_title = $rs->getString($startcol + 18);
 
-            $this->app_del_previous_user = $rs->getString($startcol + 19);
+            $this->app_current_user = $rs->getString($startcol + 19);
 
-            $this->del_priority = $rs->getString($startcol + 20);
+            $this->app_del_previous_user = $rs->getString($startcol + 20);
 
-            $this->del_duration = $rs->getFloat($startcol + 21);
+            $this->del_priority = $rs->getString($startcol + 21);
 
-            $this->del_queue_duration = $rs->getFloat($startcol + 22);
+            $this->del_duration = $rs->getFloat($startcol + 22);
 
-            $this->del_delay_duration = $rs->getFloat($startcol + 23);
+            $this->del_queue_duration = $rs->getFloat($startcol + 23);
 
-            $this->del_started = $rs->getInt($startcol + 24);
+            $this->del_delay_duration = $rs->getFloat($startcol + 24);
 
-            $this->del_finished = $rs->getInt($startcol + 25);
+            $this->del_started = $rs->getInt($startcol + 25);
 
-            $this->del_delayed = $rs->getInt($startcol + 26);
+            $this->del_finished = $rs->getInt($startcol + 26);
 
-            $this->app_create_date = $rs->getTimestamp($startcol + 27, null);
+            $this->del_delayed = $rs->getInt($startcol + 27);
 
-            $this->app_finish_date = $rs->getTimestamp($startcol + 28, null);
+            $this->app_create_date = $rs->getTimestamp($startcol + 28, null);
 
-            $this->app_update_date = $rs->getTimestamp($startcol + 29, null);
+            $this->app_finish_date = $rs->getTimestamp($startcol + 29, null);
 
-            $this->app_overdue_percentage = $rs->getFloat($startcol + 30);
+            $this->app_update_date = $rs->getTimestamp($startcol + 30, null);
+
+            $this->app_overdue_percentage = $rs->getFloat($startcol + 31);
 
             $this->resetModified();
 
             $this->setNew(false);
 
             // FIXME - using NUM_COLUMNS may be clearer.
-            return $startcol + 31; // 31 = AppCacheViewPeer::NUM_COLUMNS - AppCacheViewPeer::NUM_LAZY_LOAD_COLUMNS).
+            return $startcol + 32; // 32 = AppCacheViewPeer::NUM_COLUMNS - AppCacheViewPeer::NUM_LAZY_LOAD_COLUMNS).
 
         } catch (Exception $e) {
             throw new PropelException("Error populating AppCacheView object", $e);
@@ -1744,63 +1813,66 @@ abstract class BaseAppCacheView extends BaseObject implements Persistent
                 return $this->getDelInitDate();
                 break;
             case 11:
-                return $this->getDelTaskDueDate();
-                break;
-            case 12:
                 return $this->getDelFinishDate();
                 break;
+            case 12:
+                return $this->getDelTaskDueDate();
+                break;
             case 13:
-                return $this->getDelThreadStatus();
+                return $this->getDelRiskDate();
                 break;
             case 14:
-                return $this->getAppThreadStatus();
+                return $this->getDelThreadStatus();
                 break;
             case 15:
-                return $this->getAppTitle();
+                return $this->getAppThreadStatus();
                 break;
             case 16:
-                return $this->getAppProTitle();
+                return $this->getAppTitle();
                 break;
             case 17:
-                return $this->getAppTasTitle();
+                return $this->getAppProTitle();
                 break;
             case 18:
-                return $this->getAppCurrentUser();
+                return $this->getAppTasTitle();
                 break;
             case 19:
-                return $this->getAppDelPreviousUser();
+                return $this->getAppCurrentUser();
                 break;
             case 20:
-                return $this->getDelPriority();
+                return $this->getAppDelPreviousUser();
                 break;
             case 21:
-                return $this->getDelDuration();
+                return $this->getDelPriority();
                 break;
             case 22:
-                return $this->getDelQueueDuration();
+                return $this->getDelDuration();
                 break;
             case 23:
-                return $this->getDelDelayDuration();
+                return $this->getDelQueueDuration();
                 break;
             case 24:
-                return $this->getDelStarted();
+                return $this->getDelDelayDuration();
                 break;
             case 25:
-                return $this->getDelFinished();
+                return $this->getDelStarted();
                 break;
             case 26:
-                return $this->getDelDelayed();
+                return $this->getDelFinished();
                 break;
             case 27:
-                return $this->getAppCreateDate();
+                return $this->getDelDelayed();
                 break;
             case 28:
-                return $this->getAppFinishDate();
+                return $this->getAppCreateDate();
                 break;
             case 29:
-                return $this->getAppUpdateDate();
+                return $this->getAppFinishDate();
                 break;
             case 30:
+                return $this->getAppUpdateDate();
+                break;
+            case 31:
                 return $this->getAppOverduePercentage();
                 break;
             default:
@@ -1834,26 +1906,27 @@ abstract class BaseAppCacheView extends BaseObject implements Persistent
             $keys[8] => $this->getProUid(),
             $keys[9] => $this->getDelDelegateDate(),
             $keys[10] => $this->getDelInitDate(),
-            $keys[11] => $this->getDelTaskDueDate(),
-            $keys[12] => $this->getDelFinishDate(),
-            $keys[13] => $this->getDelThreadStatus(),
-            $keys[14] => $this->getAppThreadStatus(),
-            $keys[15] => $this->getAppTitle(),
-            $keys[16] => $this->getAppProTitle(),
-            $keys[17] => $this->getAppTasTitle(),
-            $keys[18] => $this->getAppCurrentUser(),
-            $keys[19] => $this->getAppDelPreviousUser(),
-            $keys[20] => $this->getDelPriority(),
-            $keys[21] => $this->getDelDuration(),
-            $keys[22] => $this->getDelQueueDuration(),
-            $keys[23] => $this->getDelDelayDuration(),
-            $keys[24] => $this->getDelStarted(),
-            $keys[25] => $this->getDelFinished(),
-            $keys[26] => $this->getDelDelayed(),
-            $keys[27] => $this->getAppCreateDate(),
-            $keys[28] => $this->getAppFinishDate(),
-            $keys[29] => $this->getAppUpdateDate(),
-            $keys[30] => $this->getAppOverduePercentage(),
+            $keys[11] => $this->getDelFinishDate(),
+            $keys[12] => $this->getDelTaskDueDate(),
+            $keys[13] => $this->getDelRiskDate(),
+            $keys[14] => $this->getDelThreadStatus(),
+            $keys[15] => $this->getAppThreadStatus(),
+            $keys[16] => $this->getAppTitle(),
+            $keys[17] => $this->getAppProTitle(),
+            $keys[18] => $this->getAppTasTitle(),
+            $keys[19] => $this->getAppCurrentUser(),
+            $keys[20] => $this->getAppDelPreviousUser(),
+            $keys[21] => $this->getDelPriority(),
+            $keys[22] => $this->getDelDuration(),
+            $keys[23] => $this->getDelQueueDuration(),
+            $keys[24] => $this->getDelDelayDuration(),
+            $keys[25] => $this->getDelStarted(),
+            $keys[26] => $this->getDelFinished(),
+            $keys[27] => $this->getDelDelayed(),
+            $keys[28] => $this->getAppCreateDate(),
+            $keys[29] => $this->getAppFinishDate(),
+            $keys[30] => $this->getAppUpdateDate(),
+            $keys[31] => $this->getAppOverduePercentage(),
         );
         return $result;
     }
@@ -1919,63 +1992,66 @@ abstract class BaseAppCacheView extends BaseObject implements Persistent
                 $this->setDelInitDate($value);
                 break;
             case 11:
-                $this->setDelTaskDueDate($value);
-                break;
-            case 12:
                 $this->setDelFinishDate($value);
                 break;
+            case 12:
+                $this->setDelTaskDueDate($value);
+                break;
             case 13:
-                $this->setDelThreadStatus($value);
+                $this->setDelRiskDate($value);
                 break;
             case 14:
-                $this->setAppThreadStatus($value);
+                $this->setDelThreadStatus($value);
                 break;
             case 15:
-                $this->setAppTitle($value);
+                $this->setAppThreadStatus($value);
                 break;
             case 16:
-                $this->setAppProTitle($value);
+                $this->setAppTitle($value);
                 break;
             case 17:
-                $this->setAppTasTitle($value);
+                $this->setAppProTitle($value);
                 break;
             case 18:
-                $this->setAppCurrentUser($value);
+                $this->setAppTasTitle($value);
                 break;
             case 19:
-                $this->setAppDelPreviousUser($value);
+                $this->setAppCurrentUser($value);
                 break;
             case 20:
-                $this->setDelPriority($value);
+                $this->setAppDelPreviousUser($value);
                 break;
             case 21:
-                $this->setDelDuration($value);
+                $this->setDelPriority($value);
                 break;
             case 22:
-                $this->setDelQueueDuration($value);
+                $this->setDelDuration($value);
                 break;
             case 23:
-                $this->setDelDelayDuration($value);
+                $this->setDelQueueDuration($value);
                 break;
             case 24:
-                $this->setDelStarted($value);
+                $this->setDelDelayDuration($value);
                 break;
             case 25:
-                $this->setDelFinished($value);
+                $this->setDelStarted($value);
                 break;
             case 26:
-                $this->setDelDelayed($value);
+                $this->setDelFinished($value);
                 break;
             case 27:
-                $this->setAppCreateDate($value);
+                $this->setDelDelayed($value);
                 break;
             case 28:
-                $this->setAppFinishDate($value);
+                $this->setAppCreateDate($value);
                 break;
             case 29:
-                $this->setAppUpdateDate($value);
+                $this->setAppFinishDate($value);
                 break;
             case 30:
+                $this->setAppUpdateDate($value);
+                break;
+            case 31:
                 $this->setAppOverduePercentage($value);
                 break;
         } // switch()
@@ -2046,83 +2122,87 @@ abstract class BaseAppCacheView extends BaseObject implements Persistent
         }
 
         if (array_key_exists($keys[11], $arr)) {
-            $this->setDelTaskDueDate($arr[$keys[11]]);
+            $this->setDelFinishDate($arr[$keys[11]]);
         }
 
         if (array_key_exists($keys[12], $arr)) {
-            $this->setDelFinishDate($arr[$keys[12]]);
+            $this->setDelTaskDueDate($arr[$keys[12]]);
         }
 
         if (array_key_exists($keys[13], $arr)) {
-            $this->setDelThreadStatus($arr[$keys[13]]);
+            $this->setDelRiskDate($arr[$keys[13]]);
         }
 
         if (array_key_exists($keys[14], $arr)) {
-            $this->setAppThreadStatus($arr[$keys[14]]);
+            $this->setDelThreadStatus($arr[$keys[14]]);
         }
 
         if (array_key_exists($keys[15], $arr)) {
-            $this->setAppTitle($arr[$keys[15]]);
+            $this->setAppThreadStatus($arr[$keys[15]]);
         }
 
         if (array_key_exists($keys[16], $arr)) {
-            $this->setAppProTitle($arr[$keys[16]]);
+            $this->setAppTitle($arr[$keys[16]]);
         }
 
         if (array_key_exists($keys[17], $arr)) {
-            $this->setAppTasTitle($arr[$keys[17]]);
+            $this->setAppProTitle($arr[$keys[17]]);
         }
 
         if (array_key_exists($keys[18], $arr)) {
-            $this->setAppCurrentUser($arr[$keys[18]]);
+            $this->setAppTasTitle($arr[$keys[18]]);
         }
 
         if (array_key_exists($keys[19], $arr)) {
-            $this->setAppDelPreviousUser($arr[$keys[19]]);
+            $this->setAppCurrentUser($arr[$keys[19]]);
         }
 
         if (array_key_exists($keys[20], $arr)) {
-            $this->setDelPriority($arr[$keys[20]]);
+            $this->setAppDelPreviousUser($arr[$keys[20]]);
         }
 
         if (array_key_exists($keys[21], $arr)) {
-            $this->setDelDuration($arr[$keys[21]]);
+            $this->setDelPriority($arr[$keys[21]]);
         }
 
         if (array_key_exists($keys[22], $arr)) {
-            $this->setDelQueueDuration($arr[$keys[22]]);
+            $this->setDelDuration($arr[$keys[22]]);
         }
 
         if (array_key_exists($keys[23], $arr)) {
-            $this->setDelDelayDuration($arr[$keys[23]]);
+            $this->setDelQueueDuration($arr[$keys[23]]);
         }
 
         if (array_key_exists($keys[24], $arr)) {
-            $this->setDelStarted($arr[$keys[24]]);
+            $this->setDelDelayDuration($arr[$keys[24]]);
         }
 
         if (array_key_exists($keys[25], $arr)) {
-            $this->setDelFinished($arr[$keys[25]]);
+            $this->setDelStarted($arr[$keys[25]]);
         }
 
         if (array_key_exists($keys[26], $arr)) {
-            $this->setDelDelayed($arr[$keys[26]]);
+            $this->setDelFinished($arr[$keys[26]]);
         }
 
         if (array_key_exists($keys[27], $arr)) {
-            $this->setAppCreateDate($arr[$keys[27]]);
+            $this->setDelDelayed($arr[$keys[27]]);
         }
 
         if (array_key_exists($keys[28], $arr)) {
-            $this->setAppFinishDate($arr[$keys[28]]);
+            $this->setAppCreateDate($arr[$keys[28]]);
         }
 
         if (array_key_exists($keys[29], $arr)) {
-            $this->setAppUpdateDate($arr[$keys[29]]);
+            $this->setAppFinishDate($arr[$keys[29]]);
         }
 
         if (array_key_exists($keys[30], $arr)) {
-            $this->setAppOverduePercentage($arr[$keys[30]]);
+            $this->setAppUpdateDate($arr[$keys[30]]);
+        }
+
+        if (array_key_exists($keys[31], $arr)) {
+            $this->setAppOverduePercentage($arr[$keys[31]]);
         }
 
     }
@@ -2180,12 +2260,16 @@ abstract class BaseAppCacheView extends BaseObject implements Persistent
             $criteria->add(AppCacheViewPeer::DEL_INIT_DATE, $this->del_init_date);
         }
 
+        if ($this->isColumnModified(AppCacheViewPeer::DEL_FINISH_DATE)) {
+            $criteria->add(AppCacheViewPeer::DEL_FINISH_DATE, $this->del_finish_date);
+        }
+
         if ($this->isColumnModified(AppCacheViewPeer::DEL_TASK_DUE_DATE)) {
             $criteria->add(AppCacheViewPeer::DEL_TASK_DUE_DATE, $this->del_task_due_date);
         }
 
-        if ($this->isColumnModified(AppCacheViewPeer::DEL_FINISH_DATE)) {
-            $criteria->add(AppCacheViewPeer::DEL_FINISH_DATE, $this->del_finish_date);
+        if ($this->isColumnModified(AppCacheViewPeer::DEL_RISK_DATE)) {
+            $criteria->add(AppCacheViewPeer::DEL_RISK_DATE, $this->del_risk_date);
         }
 
         if ($this->isColumnModified(AppCacheViewPeer::DEL_THREAD_STATUS)) {
@@ -2344,9 +2428,11 @@ abstract class BaseAppCacheView extends BaseObject implements Persistent
 
         $copyObj->setDelInitDate($this->del_init_date);
 
+        $copyObj->setDelFinishDate($this->del_finish_date);
+
         $copyObj->setDelTaskDueDate($this->del_task_due_date);
 
-        $copyObj->setDelFinishDate($this->del_finish_date);
+        $copyObj->setDelRiskDate($this->del_risk_date);
 
         $copyObj->setDelThreadStatus($this->del_thread_status);
 

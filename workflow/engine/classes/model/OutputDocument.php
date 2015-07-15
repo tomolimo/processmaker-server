@@ -173,6 +173,41 @@ class OutputDocument extends BaseOutputDocument
 
                 $iResult = $oOutputDocument->save();
                 $oConnection->commit();
+                //Add Audit Log
+                $description = "Output Document Name: ".$aData['OUT_DOC_TITLE'].", Output Document Uid: ".$aData['OUT_DOC_UID'].", Filename generated: ".$aData['OUT_DOC_FILENAME'];
+                if(!empty($aData['OUT_DOC_DESCRIPTION'])){
+                  $description .= ", Description: ".$aData['OUT_DOC_DESCRIPTION'];
+                }
+                if(!empty($aData['OUT_DOC_REPORT_GENERATOR'])){
+                    $description .= ", Report Generator: ". $aData['OUT_DOC_REPORT_GENERATOR'];
+                }
+                if(!empty($aData['OUT_DOC_GENERATE'])){
+                    $description .= ", Output Document to Generate: ".$aData['OUT_DOC_GENERATE'];
+                }
+                if($aData['OUT_DOC_PDF_SECURITY_ENABLED']==0){
+                  $pdfSecurity = 'Disabled';
+                }else{
+                  $pdfSecurity = 'Enabled';
+                }
+                $description .= ", PDF Security: ".$pdfSecurity;
+                if(!empty($aData['OUT_DOC_VERSIONING'])){
+                  $description .= ", Enable Versioning: Yes";
+                }
+                if(!empty($aData['OUT_DOC_DESTINATION_PATH'])){
+                  $description .= ", Destination Path: ".$aData['OUT_DOC_DESTINATION_PATH'];
+                }
+                if(!empty($aData['OUT_DOC_TAGS'])){
+                  $description .= ", Tags: ".$aData['OUT_DOC_TAGS'];
+                }
+                if(!empty($aData['OUT_DOC_OPEN_TYPE'])){
+                    if($aData['OUT_DOC_OPEN_TYPE']==0){
+                        $genLink = 'Open the file';
+                    }else{
+                        $genLink = 'Download the file';
+                    }
+                    $description .= ", By clicking on the generated file link: ".$genLink;
+                }
+                G::auditLog("CreateOutputDocument", $description);
 
                 return $aData['OUT_DOC_UID'];
             } else {
@@ -228,6 +263,44 @@ class OutputDocument extends BaseOutputDocument
 
                     $iResult = $oOutputDocument->save();
                     $oConnection->commit();
+                    //Add Audit Log
+                    $description = "Output Document Name: ".$aData['OUT_DOC_TITLE'].", Output Document Uid: ".$aData['OUT_DOC_UID'].", Filename generated: ".$aData['OUT_DOC_FILENAME'];
+                    if(!empty($aData['OUT_DOC_DESCRIPTION'])){
+                      $description .= ", Description: ".$aData['OUT_DOC_DESCRIPTION'];
+                    }
+                    if(!empty($aData['OUT_DOC_REPORT_GENERATOR'])){
+                        $description .= ", Report Generator: ". $aData['OUT_DOC_REPORT_GENERATOR'];
+                    }
+                    if(!empty($aData['OUT_DOC_REPORT_GENERATOR'])){
+                        $description .= ", Output Document to Generate: ".$aData['OUT_DOC_GENERATE'];
+                    }
+                    if($aData['OUT_DOC_PDF_SECURITY_ENABLED']==0){
+                      $pdfSecurity = 'Disabled';
+                    }else{
+                      $pdfSecurity = 'Enabled';
+                    }
+                    $description .= ", PDF Security: ".$pdfSecurity;
+                    if(!empty($aData['OUT_DOC_VERSIONING'])){
+                      $description .= ", Enable Versioning: Yes";
+                    }
+                    if(!empty($aData['OUT_DOC_DESTINATION_PATH'])){
+                      $description .= ", Destination Path: ".$aData['OUT_DOC_DESTINATION_PATH'];
+                    }
+                    if(!empty($aData['OUT_DOC_TAGS'])){
+                      $description .= ", Tags: ".$aData['OUT_DOC_TAGS'];
+                    }
+                    if(!empty($aData['OUT_DOC_OPEN_TYPE'])){
+                       if($aData['OUT_DOC_OPEN_TYPE']==0){
+                          $genLink = 'Open the file';
+                       }else{
+                          $genLink = 'Download the file';
+                       }
+                       $description .= ", By clicking on the generated file link: ".$genLink;
+                    }
+                    if (isset($aData['OUT_DOC_TEMPLATE'])) {
+                        $description .= ", [EDIT TEMPLATE]";
+                    }
+                    G::auditLog("UpdateOutputDocument", $description);
 
                     return $iResult;
                 } else {
@@ -271,6 +344,10 @@ class OutputDocument extends BaseOutputDocument
                 $iResult = $oOutputDocument->delete();
                 $oConnection->commit();
 
+                //Add Audit Log
+                G::auditLog("DeleteOutputDocument", "Output Document Name: " . $oOutputDocument->getOutDocTitle() . ", Output Document Uid: " . $sOutDocUid . ", Description: " . $oOutputDocument->getOutDocDescription() . ", Filename generated: " . $oOutputDocument->getOutDocFilename());
+
+                //Return
                 return $iResult;
             } else {
                 throw (new Exception('This row doesn\'t exist!'));
@@ -784,6 +861,8 @@ class OutputDocument extends BaseOutputDocument
         $sContent = str_ireplace("</font>", "</span>", $sContent);
 
         $sContent = str_replace($nrthtml, $nrt, $sContent);
+
+        $sContent = str_replace("margin-left", "text-indent", $sContent);
 
         // define Save file
         $sOutput = 2;

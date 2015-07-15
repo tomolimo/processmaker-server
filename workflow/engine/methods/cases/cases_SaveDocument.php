@@ -153,6 +153,10 @@ $arrayData["APP_NUMBER"] = $arrayField["APP_NUMBER"];
 $arrayData["APP_DATA"]  = $arrayField["APP_DATA"];
 $arrayData["DEL_INDEX"] = $_SESSION["INDEX"];
 $arrayData["TAS_UID"]   = $_SESSION["TASK"];
+$arrayData["PRO_UID"]   = $_SESSION["PROCESS"];
+$arrayData["USER_UID"]  = $_SESSION["USER_LOGGED"];
+$arrayData["CURRENT_DYNAFORM"] = $inputDocumentUid;
+$arrayData["OBJECT_TYPE"]      = "INPUT_DOCUMENT";
 
 $case->updateCase($_SESSION["APPLICATION"], $arrayData);
 

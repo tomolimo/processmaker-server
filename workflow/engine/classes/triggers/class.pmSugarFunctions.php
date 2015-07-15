@@ -51,7 +51,7 @@ function getSoapClientOptions ()
 function sugarLogin ($sugarSoap, $user, $password)
 {
     $client = new SoapClient( $sugarSoap, getSoapClientOptions() );
-    $auth_array = array ('user_auth' => array ('user_name' => $user,'password' => md5( $password ),'version' => '1.0') );
+    $auth_array = array ('user_auth' => array ('user_name' => $user,'password' => G::encryptOld( $password ),'version' => '1.0') );
     $login_results = $client->__SoapCall( 'login', $auth_array );
     $session_id = $login_results->id;
     $user_guid = $client->__SoapCall( 'get_user_id', array ($session_id) );

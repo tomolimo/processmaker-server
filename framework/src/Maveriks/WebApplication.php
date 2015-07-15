@@ -129,6 +129,14 @@ class WebApplication
         switch ($type) {
             case self::SERVICE_API:
                 $request = $this->parseApiRequestUri();
+
+                if ($request["version"] != $this->getApiVersion()) {
+                    $rest = new \Maveriks\Extension\Restler();
+                    $rest->setMessage(new RestException(Api::STAT_APP_EXCEPTION, "Invalid API version."));
+
+                    exit(0);
+                }
+
                 $this->loadEnvironment($request["workspace"]);
 
                 Util\Logger::log("REST API Dispatching url: ".$_SERVER["REQUEST_METHOD"]." ".$request["uri"]);
@@ -202,7 +210,7 @@ class WebApplication
      */
     public function dispatchApiRequest($uri, $version = "1.0", $multipart = false, $inputExecute = '')
     {
-        $this->initRest($uri, "1.0", $multipart);
+        $uri = $this->initRest($uri, "1.0", $multipart);
 
         // to handle a request with "OPTIONS" method
         if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
@@ -296,12 +304,47 @@ class WebApplication
         list($host, $port) = strpos(DB_HOST, ':') !== false ? explode(':', DB_HOST) : array(DB_HOST, '');
         $port = empty($port) ? '' : ";port=$port";
         Services\OAuth2\Server::setDatabaseSource(DB_USER, DB_PASS, DB_ADAPTER.":host=$host;dbname=".DB_NAME.$port);
+        if (DB_NAME != DB_RBAC_NAME) { //it's PM < 3
+            list($host, $port) = strpos(DB_RBAC_HOST, ':') !== false ? explode(':', DB_RBAC_HOST) : array(DB_RBAC_HOST, '');
+            $port = empty($port) ? '' : ";port=$port";
+            Services\OAuth2\Server::setDatabaseSourceRBAC(DB_RBAC_USER, DB_RBAC_PASS, DB_ADAPTER.":host=$host;dbname=".DB_RBAC_NAME.$port);
+        }
 
         // Setting default OAuth Client id, for local PM Web Designer
         Services\OAuth2\Server::setPmClientId($pmOauthClientId);
 
         $this->rest->setOverridingFormats('JsonFormat', 'UploadFormat');
 
+        // scan all api directory to find api classes
+        $classesList = Util\Common::rglob($apiDir . "/*");
+
+        foreach ($classesList as $classFile) {
+            if (pathinfo($classFile, PATHINFO_EXTENSION) === 'php') {
+                $relClassPath = str_replace('.php', '', str_replace($servicesDir, '', $classFile));
+                $namespace = '\\ProcessMaker\\Services\\' . str_replace(DS, '\\', $relClassPath);
+                $namespace = strpos($namespace, "//") === false? $namespace: str_replace("//", '', $namespace);
+
+                //if (! class_exists($namespace)) {
+                require_once $classFile;
+                //}
+
+                $this->rest->addAPIClass($namespace);
+            }
+        }
+        // adding aliases for Restler
+        if (array_key_exists('alias', $config)) {
+            foreach ($config['alias'] as $alias => $aliasData) {
+                if (is_array($aliasData)) {
+                    foreach ($aliasData as $label => $namespace) {
+                        $namespace = '\\' . ltrim($namespace, '\\');
+                        $this->rest->addAPIClass($namespace, $alias);
+                    }
+                }
+            }
+        }
+
+        // 
+        // Register API Plugins classes
         $isPluginRequest = strpos($uri, '/plugin-') !== false ? true : false;
 
         if ($isPluginRequest) {
@@ -310,56 +353,34 @@ class WebApplication
             $tmp = array_shift($tmp);
             $tmp = explode('-', $tmp);
             $pluginName = $tmp[1];
-            $uri = str_replace('/plugin-'.$pluginName, '', $uri);
+            $uri = str_replace('plugin-'.$pluginName, strtolower($pluginName), $uri);
         }
+        
+        // hook to get rest api classes from plugins
+        if (class_exists('PMPluginRegistry') && file_exists(PATH_DATA_SITE . 'plugin.singleton')) {
+            $pluginRegistry = \PMPluginRegistry::loadSingleton(PATH_DATA_SITE . 'plugin.singleton');
+            $plugins = $pluginRegistry->getRegisteredRestServices();
 
-        // Override $_SERVER['REQUEST_URI'] to Restler handles the modified url
+            if (! empty($plugins)) {
+                foreach ($plugins as $pluginName => $plugin) {
+                    $pluginSourceDir = PATH_PLUGINS . $pluginName . DIRECTORY_SEPARATOR . 'src';
 
-        if (! $isPluginRequest) { // if it is not a request for a plugin endpoint
-            // scan all api directory to find api classes
-            $classesList = Util\Common::rglob($apiDir . "/*");
-
-            foreach ($classesList as $classFile) {
-                if (pathinfo($classFile, PATHINFO_EXTENSION) === 'php') {
-                    $relClassPath = str_replace('.php', '', str_replace($servicesDir, '', $classFile));
-                    $namespace = '\\ProcessMaker\\Services\\' . str_replace(DS, '\\', $relClassPath);
-                    $namespace = strpos($namespace, "//") === false? $namespace: str_replace("//", '', $namespace);
-
-                    //if (! class_exists($namespace)) {
-                    require_once $classFile;
-                    //}
-
-                    $this->rest->addAPIClass($namespace);
+                    $loader = \Maveriks\Util\ClassLoader::getInstance();
+                    $loader->add($pluginSourceDir);
+                    
+                    foreach ($plugin as $class) {
+                        if (class_exists($class['namespace'])) {
+                            $this->rest->addAPIClass($class['namespace'], strtolower($pluginName));
+                        }             
+                    }                    
                 }
             }
-
-            // adding aliases for Restler
-            if (array_key_exists('alias', $config)) {
-                foreach ($config['alias'] as $alias => $aliasData) {
-                    if (is_array($aliasData)) {
-                        foreach ($aliasData as $label => $namespace) {
-                            $namespace = '\\' . ltrim($namespace, '\\');
-                            $this->rest->addAPIClass($namespace, $alias);
-                        }
-                    }
-                }
-            }
-        } else {
-            // hook to get rest api classes from plugins
-//            if (class_exists('PMPluginRegistry')) {
-//                $pluginRegistry = & PMPluginRegistry::getSingleton();
-//                $plugins = $pluginRegistry->getRegisteredRestServices();
-//
-//                if (is_array($plugins) && array_key_exists($pluginName, $plugins)) {
-//                    foreach ($plugins[$pluginName] as $class) {
-//                        $rest->addAPIClass($class['namespace']);
-//                    }
-//                }
-//            }
         }
 
         Services\OAuth2\Server::setWorkspace(SYS_SYS);
         $this->rest->addAPIClass('\ProcessMaker\\Services\\OAuth2\\Server', 'oauth2');
+
+        return $uri;
     }
 
     public function parseApiRequestUri()
@@ -476,15 +497,21 @@ class WebApplication
         define("PATH_TEMPORAL", PATH_C . "dynEditor/");
         define("PATH_DB", PATH_DATA . "sites" . PATH_SEP);
 
+        \Bootstrap::LoadTranslationObject((defined("SYS_LANG"))? SYS_LANG : "en");
+
         if (empty($workspace)) {
             return true;
         }
 
         define("SYS_SYS", $workspace);
 
-        if (! file_exists( PATH_DB . SYS_SYS . "/db.php" )) {
-            throw new \Exception(\G::loadTranslation("ID_NOT_WORKSPACE"));
+        if (!file_exists(PATH_DB . SYS_SYS . PATH_SEP . "db.php")) {
+            $rest = new \Maveriks\Extension\Restler();
+            $rest->setMessage(new RestException(Api::STAT_APP_EXCEPTION, \G::LoadTranslation("ID_NOT_WORKSPACE")));
+
+            exit(0);
         }
+
         require_once (PATH_DB . SYS_SYS . "/db.php");
 
         // defining constant for workspace shared directory
@@ -542,8 +569,31 @@ class WebApplication
 
         \Propel::init(PATH_CONFIG . "databases.php");
 
-        \Bootstrap::LoadTranslationObject(defined( 'SYS_LANG' ) ? SYS_LANG : "en");
-
         return true;
     }
+
+    public function getApiVersion()
+    {
+        try {
+            $arrayConfig = array();
+
+            //$apiIniFile - Contains file name of api ini configuration
+            $apiIniFile = $this->workflowDir . "engine" . DS . "src" . DS . "ProcessMaker" . DS . "Services" . DS . "api.ini";
+
+            if (file_exists($apiIniFile)) {
+                $arrayConfig = Util\Common::parseIniFile($apiIniFile);
+            }
+
+            return (isset($arrayConfig["api"]["version"]))? $arrayConfig["api"]["version"] : "1.0";
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
+
+    public static function purgeRestApiCache($workspace)
+    {
+        @unlink(PATH_DATA . 'compiled' . DS . 'routes.php');
+        @unlink(PATH_DATA . 'sites' . DS . $workspace . DS . 'api-config.php');
+    }
 }
+

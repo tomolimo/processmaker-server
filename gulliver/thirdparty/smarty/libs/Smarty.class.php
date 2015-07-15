@@ -1751,7 +1751,7 @@ class Smarty
         if(isset($auto_source)) {
             // make source name safe for filename
             $_filename = urlencode(basename($auto_source));
-            $_crc32 = sprintf('%08X', crc32($auto_source));
+            $_crc32 = sprintf('%08X', $this->encryptCrc32($auto_source));
             // prepend %% to avoid name conflicts with
             // with $params['auto_id'] names
             $_crc32 = substr($_crc32, 0, 2) . $_compile_dir_sep .
@@ -1936,6 +1936,20 @@ class Smarty
         return eval($code);
     }
     /**#@-*/
+    
+    public function encryptCrc32($string)
+    {
+        if (!class_exists('G')) {
+            $realdocuroot = str_replace( '\\', '/', $_SERVER['DOCUMENT_ROOT'] );
+            $docuroot = explode( '/', $realdocuroot );
+            array_pop( $docuroot );
+            $pathhome = implode( '/', $docuroot ) . '/';
+            array_pop( $docuroot );
+            $pathTrunk = implode( '/', $docuroot ) . '/';
+            require_once($pathTrunk.'gulliver/system/class.g.php');
+        }
+        return G::encryptCrc32($string);
+    }
 
 }
 

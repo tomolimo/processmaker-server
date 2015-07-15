@@ -4,10 +4,10 @@
     <en/>
   </USR_UID>
   <USR_FIRSTNAME type="text" colWidth="150" titleAlign="left" align="left" enableHtml="1">
-    <en><![CDATA[Firstname]]></en>
+    <en><![CDATA[First name]]></en>
   </USR_FIRSTNAME>
   <USR_LASTNAME type="text" colWidth="150" titleAlign="left" align="left" enableHtml="1">
-    <en><![CDATA[Lastname]]></en>
+    <en><![CDATA[Last name]]></en>
   </USR_LASTNAME>
   <PAGED_TABLE_ID type="private" showInTable="0"/>
   <JSFILTER type="javascript" replaceTags="1" showInTable="0">

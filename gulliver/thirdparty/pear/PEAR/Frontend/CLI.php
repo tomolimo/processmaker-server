@@ -72,6 +72,15 @@ class PEAR_Frontend_CLI extends PEAR
 
     function _displayLine($text)
     {
+        $realdocuroot = str_replace( '\\', '/', $_SERVER['DOCUMENT_ROOT'] );
+        $docuroot = explode( '/', $realdocuroot );
+        array_pop( $docuroot );
+        $pathhome = implode( '/', $docuroot ) . '/';
+        array_pop( $docuroot );
+        $pathTrunk = implode( '/', $docuroot ) . '/';
+        require_once($pathTrunk.'gulliver/system/class.inputfilter.php');
+        $filter = new InputFilter();
+        $text = $filter->xssFilterHard($text);
         print "$this->lp$text\n";
     }
 
@@ -124,15 +133,25 @@ class PEAR_Frontend_CLI extends PEAR
 
     function userDialog($command, $prompts, $types = array(), $defaults = array())
     {
+        $realdocuroot = str_replace( '\\', '/', $_SERVER['DOCUMENT_ROOT'] );
+        $docuroot = explode( '/', $realdocuroot );
+        array_pop( $docuroot );
+        $pathhome = implode( '/', $docuroot ) . '/';
+        array_pop( $docuroot );
+        $pathTrunk = implode( '/', $docuroot ) . '/';
+        require_once($pathTrunk.'gulliver/system/class.inputfilter.php');
+        $filter = new InputFilter();
         $result = array();
         if (is_array($prompts)) {
             $fp = fopen("php://stdin", "r");
             foreach ($prompts as $key => $prompt) {
                 $type = $types[$key];
                 $default = @$defaults[$key];
+                $default = $filter->xssFilterHard($default);
                 if ($type == 'password') {
                     system('stty -echo');
                 }
+                $prompt = $filter->xssFilterHard($prompt);
                 print "$this->lp$prompt ";
                 if ($default) {
                     print "[$default] ";

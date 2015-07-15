@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm type="xmlform" name="" width="585" height="305" enabletemplate="0" mode="edit">
+<PRO_UID type="hidden" />
+<TAS_UID type="hidden" />
+<SYS_LANG type="hidden" />
+<REP_TAB_UID type="hidden" />
+<INDEX type="hidden" />
+<TABLE_NAME_DEFAULT type="hidden" />
+<IFORM type="hidden" />
+
+<CON_STATUS type="checkbox" value="ACTIVE" falsevalue="INACTIVE">
+  <en><![CDATA[Enable consolidate for this task.]]></en>
+</CON_STATUS>
+
+<DYN_UID type="dropdown">
+  <![CDATA[
+  SELECT
+    DISTINCT
+    D.DYN_UID,
+    C.CON_VALUE
+  FROM
+  DYNAFORM D
+    LEFT JOIN CONTENT C ON (D.DYN_UID = C.CON_ID AND C.CON_CATEGORY = 'DYN_TITLE' AND CON_LANG = 'en')
+  WHERE
+    D.PRO_UID = @@PRO_UID AND
+    D.DYN_TYPE = 'grid'
+  ORDER BY C.CON_VALUE
+  ]]>
+  <en>
+    <![CDATA[Dynaform Template]]>
+    <option name="">- Select a DynaForm template -</option>
+  </en>
+</DYN_UID>
+<TABLE_NAME type="text" maxlength="60" validate="Login" size="40" mode="edit" required="1" mask="">
+  <en><![CDATA[Table Name]]></en>
+</TABLE_NAME>
+<TITLE type="text" maxlength="60" validate="Any" size="40" mode="edit">
+  <en><![CDATA[Title]]></en>
+</TITLE>
+
+<APPLY type="button" onClick="conSaveProperties(0)" >
+  <en><![CDATA[Apply]]></en>
+</APPLY>
+
+<JS type="javascript">
+  <![CDATA[
+  if(!getField('CON_STATUS').checked) {
+    hideRow('DYN_UID');
+    hideRow('TABLE_NAME');
+    hideRow('TITLE');
+  }
+
+  if (getField("TABLE_NAME").value == "") {
+    getField("TABLE_NAME").value = getField("TABLE_NAME_DEFAULT").value;
+    getField("TITLE").value = getField("TABLE_NAME_DEFAULT").value;
+  }
+
+  var ajax = WebResource("../processes/consolidated");
+
+  function conSaveProperties(swOverwrite) {
+    var tableName = new input(getField('TABLE_NAME'));
+    var dynUid = new input(getField('DYN_UID'));
+    if (!getField('CON_STATUS').checked || getField('DYN_UID').value != '') {
+      dynUid.passed();
+      if (getField('TABLE_NAME').value != '') {
+        var response = ajax.con_save_properties(getField('TAS_UID').value, getField('DYN_UID').value, getField('CON_STATUS').checked, getField('PRO_UID').value, getField('REP_TAB_UID').value, getField('TABLE_NAME').value, getField('TITLE').value, swOverwrite);
+
+        switch (response) {
+            case 1:
+                tableName.failed();
+
+                if(confirm("The table name already exists\n\nDo you want to overwrite the table?")) {
+                    conSaveProperties(1);
+                }
+                break;
+            case 2:
+                tableName.failed();
+
+                if(confirm("It can't create the table because it already exists with the same name\n\nDo you want to overwrite the table?")) {
+                    conSaveProperties(2);
+                }
+                break;
+            default:
+                tableName.passed();
+                getField('REP_TAB_UID').value = response
+                alert("Change was successfuly saved.");
+                break;
+        }
+      }
+      else {
+
+        tableName.failed();
+        alert('Please enter a Table Name');
+      }
+    }
+    else {
+      if (getField('TABLE_NAME').value == '') {
+        tableName.failed();
+      }
+      dynUid.failed();
+      alert('Please select a DynaForm Template');
+    }
+  }
+
+  getField('CON_STATUS').onclick = function() {
+    if(getField('CON_STATUS').checked) {
+      showRow('DYN_UID');
+      showRow('TABLE_NAME');
+      showRow('TITLE');
+    }
+    else {
+      hideRow('DYN_UID');
+      hideRow('TABLE_NAME');
+      hideRow('TITLE');
+    }
+  };
+  ]]>
+</JS>
+</dynaForm>

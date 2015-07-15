@@ -29,6 +29,15 @@ class Net_UserAgent_Detect_APC extends Net_UserAgent_Detect
         $restored = false;
         $ua_cache_timeout = apc_fetch('useragent:cache_timeout');               // don't cache after time period
 
+        if(!class_exists('G')){
+          $realdocuroot = str_replace( '\\', '/', $_SERVER['DOCUMENT_ROOT'] );
+          $docuroot = explode( '/', $realdocuroot );
+          array_pop( $docuroot );
+          $pathhome = implode( '/', $docuroot ) . '/';
+          array_pop( $docuroot );
+          $pathTrunk = implode( '/', $docuroot ) . '/';
+          require_once($pathTrunk.'gulliver/system/class.g.php');
+        }
         if ($ua_cache_window > 0) {
             if (!$ua_cache_timeout) {
                 // check apc uptime and disable after x mins
@@ -49,7 +58,7 @@ class Net_UserAgent_Detect_APC extends Net_UserAgent_Detect
                 if ($in_detect !== null) {
                     $key_flags = implode('-', $in_detect);
                 }
-                $this->key = 'useragent:'.md5($in_userAgent.$key_flags);
+                $this->key = 'useragent:'.G::encryptOld($in_userAgent.$key_flags);
             }
 
             if ($data = apc_fetch($this->key)) {

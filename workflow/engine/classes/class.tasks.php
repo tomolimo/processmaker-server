@@ -391,12 +391,23 @@ class Tasks
             $oCriteria = new Criteria('workflow');
             $oCriteria->add(ObjectPermissionPeer::OP_TASK_SOURCE, $sTaskUID);
             ObjectPermissionPeer::doDelete($oCriteria);
+
+            //Delete Cases Schedulers
+            $criteria = new Criteria("workflow");
+
+            $criteria->add(CaseSchedulerPeer::TAS_UID, $sTaskUID, Criteria::EQUAL);
+
+            $result = CaseSchedulerPeer::doDelete($criteria);
+
+            //Delete Configuration
+            $criteria = new Criteria("workflow");
+
+            $criteria->add(ConfigurationPeer::OBJ_UID, $sTaskUID, Criteria::EQUAL);
+
+            $result = ConfigurationPeer::doDelete($criteria);
+
             //Delete task
             $oTask->remove($sTaskUID);
-            //Delete cases schedulers added by krlos
-            $oCriteria = new Criteria('workflow');
-            $oCriteria->add(CaseSchedulerPeer::TAS_UID, $sTaskUID);
-            CaseSchedulerPeer::doDelete($oCriteria);
         } catch (Exception $oError) {
             throw ($oError);
         }
@@ -855,4 +866,4 @@ class Tasks
         }
     }
 }
- 
+

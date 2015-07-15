@@ -450,6 +450,7 @@ class Step
     public function delete($stepUid)
     {
         try {
+
             //Verify data
             $this->throwExceptionIfNotExistsStep($stepUid);
 
@@ -915,6 +916,244 @@ class Step
         );
         $oStep = new \Step();
         $oStep->update($data);
+    }
+
+    /**
+     * Create Steps for a Task
+     *
+     * @param string $taskUid    Unique id of Task
+     * @param string $processUid Unique id of Process
+     * @param array  $arrayData  Data
+     *
+     * return array Return data of the new Steps created
+     */
+    public function createAll($taskUid, $processUid, $arrayData)
+    {
+        try {
+            $stepTrigger = new \ProcessMaker\BusinessModel\Step\Trigger();
+
+            $arrayData = array_change_key_case($arrayData, CASE_UPPER);
+
+            unset($arrayData["STEP_UID"]);
+
+            //Verify data
+            $this->throwExceptionIfNotExistsTask($taskUid);
+
+            $this->throwExceptionIfNotExistsProcess($processUid);
+
+            if (!isset($arrayData["STEP_TYPE_OBJ"])) {
+                throw new \Exception(\G::LoadTranslation("ID_UNDEFINED_VALUE_IS_REQUIRED", array($this->arrayParamException["stepTypeObj"])));
+            }
+
+            $arrayData["STEP_TYPE_OBJ"] = trim($arrayData["STEP_TYPE_OBJ"]);
+
+            if ($arrayData["STEP_TYPE_OBJ"] == "") {
+                throw new \Exception(\G::LoadTranslation("ID_INVALID_VALUE_CAN_NOT_BE_EMPTY", array($this->arrayParamException["stepTypeObj"])));
+            }
+
+            if (!isset($arrayData["STEP_UID_OBJ"])) {
+                throw new \Exception(\G::LoadTranslation("ID_UNDEFINED_VALUE_IS_REQUIRED", array($this->arrayParamException["stepUidObj"])));
+            }
+
+            $arrayData["STEP_UID_OBJ"] = trim($arrayData["STEP_UID_OBJ"]);
+
+            if ($arrayData["STEP_UID_OBJ"] == "") {
+                throw new \Exception(\G::LoadTranslation("ID_INVALID_VALUE_CAN_NOT_BE_EMPTY", array($this->arrayParamException["stepUidObj"])));
+            }
+
+            if (!isset($arrayData["STEP_MODE"])) {
+                throw new \Exception(\G::LoadTranslation("ID_UNDEFINED_VALUE_IS_REQUIRED", array($this->arrayParamException["stepMode"])));
+            }
+
+            $arrayData["STEP_MODE"] = trim($arrayData["STEP_MODE"]);
+
+            if ($arrayData["STEP_MODE"] == "") {
+                throw new \Exception(\G::LoadTranslation("ID_INVALID_VALUE_CAN_NOT_BE_EMPTY", array($this->arrayParamException["stepMode"])));
+            }
+
+            $this->throwExceptionIfHaveInvalidValueInTypeObj($arrayData["STEP_TYPE_OBJ"]);
+
+            $this->throwExceptionIfHaveInvalidValueInMode($arrayData["STEP_MODE"]);
+
+            $msg = $this->existsObjectUid($arrayData["STEP_TYPE_OBJ"], $arrayData["STEP_UID_OBJ"], $this->arrayParamException["stepUidObj"]);
+
+            if ($msg != "") {
+                throw new \Exception($msg);
+            }
+
+            if ($this->existsRecord($taskUid, $arrayData["STEP_TYPE_OBJ"], $arrayData["STEP_UID_OBJ"])) {
+                throw new \Exception(\G::LoadTranslation("ID_RECORD_EXISTS_IN_TABLE", array($taskUid . ", " . $arrayData["STEP_TYPE_OBJ"] . ", " . $arrayData["STEP_UID_OBJ"], "STEP")));
+            }
+
+            //Create
+            $step = new \Step();
+
+            $stepUid = $step->create(array(
+                "PRO_UID" => $processUid,
+                "TAS_UID" => $taskUid,
+                "STEP_POSITION" => $arrayData["STEP_POSITION"]
+            ));
+
+            if (!isset($arrayData["STEP_POSITION"]) || $arrayData["STEP_POSITION"] == "") {
+                unset($arrayData["STEP_POSITION"]);
+            }
+
+            $arrayData = $this->updateAll($stepUid, $arrayData);
+
+            //Return
+            unset($arrayData["STEP_UID"]);
+
+            $arrayData = array_merge(array("STEP_UID" => $stepUid), $arrayData);
+
+            if (!$this->formatFieldNameInUppercase) {
+                $arrayData = array_change_key_case($arrayData, CASE_LOWER);
+            }
+
+            return $arrayData;
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
+
+    /**
+     * Update Steps of a Task
+     *
+     * @param string $stepUid   Unique id of Step
+     * @param array  $arrayData Data
+     *
+     * return array Return data of the Steps updated
+     */
+    public function updateAll($stepUid, $arrayData)
+    {
+        try {
+            $arrayData = array_change_key_case($arrayData, CASE_UPPER);
+
+            //Verify data
+            $this->throwExceptionIfNotExistsStep($stepUid);
+
+            //Load Step
+            $step = new \Step();
+            $arrayStepData = $step->load($stepUid);
+
+            $taskUid = $arrayStepData["TAS_UID"];
+            $proUid = $arrayStepData["PRO_UID"];
+
+            //Verify data
+            if (isset($arrayData["STEP_TYPE_OBJ"]) && !isset($arrayData["STEP_UID_OBJ"])) {
+                throw new \Exception(\G::LoadTranslation("ID_UNDEFINED_VALUE_IS_REQUIRED", array($this->arrayParamException["stepUidObj"])));
+            }
+
+            if (!isset($arrayData["STEP_TYPE_OBJ"]) && isset($arrayData["STEP_UID_OBJ"])) {
+                throw new \Exception(\G::LoadTranslation("ID_UNDEFINED_VALUE_IS_REQUIRED", array($this->arrayParamException["stepTypeObj"])));
+            }
+
+            if (isset($arrayData["STEP_TYPE_OBJ"])) {
+                $arrayData["STEP_TYPE_OBJ"] = trim($arrayData["STEP_TYPE_OBJ"]);
+
+                if ($arrayData["STEP_TYPE_OBJ"] == "") {
+                    throw new \Exception(\G::LoadTranslation("ID_INVALID_VALUE_CAN_NOT_BE_EMPTY", array($this->arrayParamException["stepTypeObj"])));
+                }
+            }
+
+            if (isset($arrayData["STEP_UID_OBJ"])) {
+                $arrayData["STEP_UID_OBJ"] = trim($arrayData["STEP_UID_OBJ"]);
+
+                if ($arrayData["STEP_UID_OBJ"] == "") {
+                    throw new \Exception(\G::LoadTranslation("ID_INVALID_VALUE_CAN_NOT_BE_EMPTY", array($this->arrayParamException["stepUidObj"])));
+                }
+            }
+
+            if (isset($arrayData["STEP_MODE"])) {
+                $arrayData["STEP_MODE"] = trim($arrayData["STEP_MODE"]);
+
+                if ($arrayData["STEP_MODE"] == "") {
+                    throw new \Exception(\G::LoadTranslation("ID_INVALID_VALUE_CAN_NOT_BE_EMPTY", array($this->arrayParamException["stepMode"])));
+                }
+            }
+
+            if (isset($arrayData["STEP_TYPE_OBJ"])) {
+                $this->throwExceptionIfHaveInvalidValueInTypeObj($arrayData["STEP_TYPE_OBJ"]);
+            }
+
+            if (isset($arrayData["STEP_MODE"])) {
+                $this->throwExceptionIfHaveInvalidValueInMode($arrayData["STEP_MODE"]);
+            }
+
+            if (isset($arrayData["STEP_TYPE_OBJ"]) && isset($arrayData["STEP_UID_OBJ"])) {
+                $msg = $this->existsObjectUid($arrayData["STEP_TYPE_OBJ"], $arrayData["STEP_UID_OBJ"], $this->arrayParamException["stepUidObj"]);
+
+                if ($msg != "") {
+                    throw new \Exception($msg);
+                }
+
+                if ($this->existsRecord($taskUid, $arrayData["STEP_TYPE_OBJ"], $arrayData["STEP_UID_OBJ"], 0, $stepUid)) {
+                    throw new \Exception(\G::LoadTranslation("ID_RECORD_EXISTS_IN_TABLE", array($taskUid . ", " . $arrayData["STEP_TYPE_OBJ"] . ", " . $arrayData["STEP_UID_OBJ"], "STEP")));
+                }
+            }
+
+            //Update
+            $step = new \Step();
+
+            $arrayData["STEP_UID"] = $stepUid;
+            $result = $step->update($arrayData);
+
+            //Return
+            unset($arrayData["STEP_UID"]);
+
+            if (!$this->formatFieldNameInUppercase) {
+                $arrayData = array_change_key_case($arrayData, CASE_LOWER);
+            }
+
+            return $arrayData;
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
+
+    /**
+     * Delete Steps and triggers of a Task
+     *
+     * @param string $stepUid Unique id of Step
+     * @param string $taskUid Unique id of Step
+     *
+     * return void
+     */
+    public function deleteAll($taskUid)
+    {
+        try {
+            $step = new \Step();
+            $stepTrigger = new \ProcessMaker\BusinessModel\Step\Trigger();
+
+            $criteriaTrigger = new \Criteria("workflow");
+            $criteriaTrigger->addSelectColumn(\StepTriggerPeer::STEP_UID);
+            $criteriaTrigger->addSelectColumn(\StepTriggerPeer::ST_TYPE);
+            $criteriaTrigger->addSelectColumn(\StepTriggerPeer::TRI_UID);
+            $criteriaTrigger->add(\StepTriggerPeer::TAS_UID, $taskUid, \Criteria::EQUAL);
+            $rsCriteriaTrigger = \StepTriggerPeer::doSelectRS($criteriaTrigger);
+            $rsCriteriaTrigger->setFetchmode(\ResultSet::FETCHMODE_ASSOC);
+            $rsCriteriaTrigger->next();
+
+            while ($aRowTrigger = $rsCriteriaTrigger->getRow()) {
+
+                $stepTrigger->delete($aRowTrigger['STEP_UID'], $aRowTrigger['ST_TYPE'], $taskUid, $aRowTrigger['TRI_UID']);
+                $rsCriteriaTrigger->next();
+            }
+
+            $criteria = new \Criteria("workflow");
+            $criteria->addSelectColumn(\StepPeer::STEP_UID);
+            $criteria->add(\StepPeer::TAS_UID, $taskUid, \Criteria::EQUAL);
+            $rsCriteria = \StepPeer::doSelectRS($criteria);
+            $rsCriteria->setFetchmode(\ResultSet::FETCHMODE_ASSOC);
+            $rsCriteria->next();
+
+            while ($aRow = $rsCriteria->getRow()) {
+                $step->remove($aRow['STEP_UID']);
+                $rsCriteria->next();
+            }
+
+        } catch (\Exception $e) {
+            throw $e;
+        }
     }
 }
 

@@ -36,6 +36,8 @@ if (! class_exists( "FieldCondition" )) {
 
 try {
 
+    G::LoadSystem('inputfilter');
+    $filter = new InputFilter();
     $frm = $_POST['form'];
     $PRO_UID = $frm['PRO_UID'];
     $DYN_UID = $frm['DYN_UID'];
@@ -62,6 +64,7 @@ try {
     $hd = fopen( PATH_DYNAFORM . $PRO_UID . '/' . $DYN_UID . '.xml', "r" );
     $hd1 = fopen( PATH_DYNAFORM . $PRO_UID . '/' . $dynUid . '.xml', "w" );
     $templateFilename = PATH_DYNAFORM . $PRO_UID . '/' . $DYN_UID . '.html';
+    $templateFilename = $filter->xssFilterHard($templateFilename, 'path');
 
     // also make a copy of the template file in case that the html edition is enabled
     if (file_exists( $templateFilename )) {

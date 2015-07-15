@@ -24,8 +24,8 @@ Usage: {$argv[0]} [build-crud] [gen-ini] [-p <plugin name>] [-w <workspace name>
 Options:
     build-crud : Task, build Rest Crud API.
     gen-ini    : Task, generates the rest config ini file.
-    -p         : Especify a plugin to set as enviroment to perform the tasks.
-    -w         : Especify a workspace to set as enviroment to perform the tasks.
+    -p         : Specifies a plugin to set as environment to perform the tasks.
+    -w         : Specifies a workspace to set as environment to perform the tasks.
 
 EOT;
 
@@ -42,7 +42,7 @@ try {
         case 'gen-ini':
             if (isset($argv[2])) {
                 if (! isset($argv[3])) {
-                    throw new Exception("Missing option, need especify a valid argument after option '{$argv[2]}'");
+                    throw new Exception("Missing option, need specify a valid argument after option '{$argv[2]}'");
                 }
 
                 switch ($argv[2]) {

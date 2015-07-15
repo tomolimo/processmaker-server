@@ -75,8 +75,6 @@ class User extends Api
             $userLoggedUid = $this->getUserId();
             $user = new \ProcessMaker\BusinessModel\User();
             $arrayData = $user->update($usr_uid, $request_data, $userLoggedUid);
-            $response = $arrayData;
-            return $response;
         } catch (\Exception $e) {
             throw (new RestException(Api::STAT_APP_EXCEPTION, $e->getMessage()));
         }
@@ -113,4 +111,3 @@ class User extends Api
         }
     }
 }
-

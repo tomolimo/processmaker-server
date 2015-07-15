@@ -565,6 +565,11 @@ class TriggerWizard
                                 break;
                             case "bool":
                             case "boolean":
+                                $paramValue = 'true';
+                                if($arrayParamData["input"][$paramName]!=''){
+                                  $paramValue = $arrayParamData["input"][$paramName];
+                                }
+                                break;
                             case "array":
                                 $paramValue = trim($arrayParamData["input"][$paramName]);
                                 break;

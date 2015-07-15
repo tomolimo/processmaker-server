@@ -169,6 +169,10 @@ class Process
     public function throwExceptionIfDataNotMetFieldDefinition($arrayData, $arrayFieldDefinition, $arrayFieldNameForException, $flagValidateRequired = true)
     {
         try {
+            
+            \G::LoadSystem('inputfilter');
+            $filter = new \InputFilter();
+            
             if ($flagValidateRequired) {
                 foreach ($arrayFieldDefinition as $key => $value) {
                     $fieldName = $key;
@@ -187,6 +191,7 @@ class Process
             foreach ($arrayData as $key => $value) {
                 $fieldName = $key;
                 $fieldValue = $value;
+                
 
                 if (isset($arrayFieldDefinition[$fieldName])) {
                     $fieldNameAux = (isset($arrayFieldNameForException[$arrayFieldDefinition[$fieldName]["fieldNameAux"]]))? $arrayFieldNameForException[$arrayFieldDefinition[$fieldName]["fieldNameAux"]] : "";
@@ -213,23 +218,23 @@ class Process
                             if ($arrayFieldDefinition[$fieldName]["empty"] && $fieldValue . "" == "") {
                                 //
                             } else {
-                                $eregDate = "[1-9]\d{3}\-(?:0[1-9]|1[012])\-(?:[0][1-9]|[12][0-9]|3[01])";
-                                $eregHour = "(?:[0-1]\d|2[0-3])\:(?:[0-5]\d)(?:\:[0-5]\d)?";
-                                $eregDatetime = $eregDate . "\s" . $eregHour;
+                                $regexpDate = "[1-9]\d{3}\-(?:0[1-9]|1[012])\-(?:[0][1-9]|[12][0-9]|3[01])";
+                                $regexpHour = "(?:[0-1]\d|2[0-3])\:(?:[0-5]\d)(?:\:[0-5]\d)?";
+                                $regexpDatetime = $regexpDate . "\s" . $regexpHour;
 
                                 switch ($arrayFieldDefinition[$fieldName]["type"]) {
                                     case "date":
-                                        if (!preg_match("/^" . $eregDate . "$/", $fieldValue)) {
+                                        if (!preg_match("/^" . $regexpDate . "$/", $fieldValue)) {
                                             throw new \Exception(\G::LoadTranslation("ID_INVALID_VALUE", array($fieldNameAux)));
                                         }
                                         break;
                                     case "hour":
-                                        if (!preg_match("/^" . $eregHour . "$/", $fieldValue)) {
+                                        if (!preg_match("/^" . $regexpHour . "$/", $fieldValue)) {
                                             throw new \Exception(\G::LoadTranslation("ID_INVALID_VALUE", array($fieldNameAux)));
                                         }
                                         break;
                                     case "datetime":
-                                        if (!preg_match("/^" . $eregDatetime . "$/", $fieldValue)) {
+                                        if (!preg_match("/^" . $regexpDatetime . "$/", $fieldValue)) {
                                             throw new \Exception(\G::LoadTranslation("ID_INVALID_VALUE", array($fieldNameAux)));
                                         }
                                         break;
@@ -239,9 +244,12 @@ class Process
                         case 2:
                             switch ($arrayFieldDefinition[$fieldName]["type"]) {
                                 case "array":
+                                    $regexpArray1 = "\s*array\s*\(";
+                                    $regexpArray2 = "\)\s*";
+
                                     //type
                                     if (!is_array($fieldValue)) {
-                                        if ($fieldValue != "" && !preg_match("/^\s*array\s*\(.*\)\s*$/", $fieldValue)) {
+                                        if ($fieldValue != "" && !preg_match("/^" . $regexpArray1 . ".*" . $regexpArray2 . "$/", $fieldValue)) {
                                             throw new \Exception(\G::LoadTranslation("ID_INVALID_VALUE_THIS_MUST_BE_ARRAY", array($fieldNameAux)));
                                         }
                                     }
@@ -255,7 +263,13 @@ class Process
                                         }
 
                                         if (is_string($fieldValue) && trim($fieldValue) . "" != "") {
-                                            eval("\$arrayAux = $fieldValue;");
+                                            //eval("\$arrayAux = $fieldValue;");
+
+                                            if (preg_match("/^" . $regexpArray1 . "(.*)" . $regexpArray2 . "$/", $fieldValue, $arrayMatch)) {
+                                                if (trim($arrayMatch[1], " ,") != "") {
+                                                    $arrayAux = array(0);
+                                                }
+                                            }
                                         }
 
                                         if (count($arrayAux) == 0) {
@@ -272,6 +286,7 @@ class Process
                                         }
 
                                         if (is_string($fieldValue) && trim($fieldValue) . "" != "") {
+                                            $fieldValue = $filter->validateInput($fieldValue);
                                             eval("\$arrayAux = $fieldValue;");
                                         }
 

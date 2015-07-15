@@ -394,7 +394,7 @@ class XmlForm_Field
      * @param string value
      * @return string
      */
-    public function render ($value = null)
+    public function render($value = null, $paramDummy2 = null)
     {
         //this is an unknown field type.
         return $this->htmlentities( $value != '' ? $value : $this->name, ENT_COMPAT, 'utf-8' );
@@ -737,47 +737,54 @@ class XmlForm_Field
                     $aKeys = array ();
                     $aValues = explode( '|', $oOwner->fields[$this->pmconnection]->keys );
                     $i = 0;
-                    foreach ($aData['FIELDS'] as $aField) {
-                        if ($aField['FLD_KEY'] == '1') {
-                            // note added by gustavo cruz gustavo[at]colosa[dot]com
-                            // this additional [if] checks if a case variable has been set
-                            // in the keys attribute, so it can be parsed and replaced for
-                            // their respective value.
-                            if (preg_match( "/@#/", $aValues[$i] )) {
-                                // check if a case are running in order to prevent that preview is
-                                // erroneous rendered.
-                                if (isset( $_SESSION['APPLICATION'] )) {
-                                    G::LoadClass( 'case' );
-                                    $oApp = new Cases();
-                                    if ($oApp->loadCase( $_SESSION['APPLICATION'] ) != null) {
-                                        $aFields = $oApp->loadCase( $_SESSION['APPLICATION'] );
-                                        $formVariable = substr( $aValues[$i], 2 );
-                                        if (isset( $aFields['APP_DATA'][$formVariable] )) {
-                                            $formVariableValue = $aFields['APP_DATA'][$formVariable];
-                                            $aKeys[$aField['FLD_NAME']] = (isset( $formVariableValue ) ? G::replaceDataField( $formVariableValue, $oOwner->values ) : '');
-                                        } else {
-                                            $aKeys[$aField['FLD_NAME']] = '';
-                                        }
-                                    } else {
-                                        $aKeys[$aField['FLD_NAME']] = '';
-                                    }
-                                } else {
-                                    $aKeys[$aField['FLD_NAME']] = '';
-                                }
-                            } else {
-                                $aKeys[$aField['FLD_NAME']] = (isset( $aValues[$i] ) ? G::replaceDataField( $aValues[$i], $oOwner->values ) : '');
-                            }
-                            $i ++;
-                        }
+                    if($aData == "" || count($aData['FIELDS']) < 1){
+                    	$message = G::LoadTranslation( 'ID_PMTABLE_NOT_FOUND' );
+                        G::SendMessageText( $message, "WARNING" );
+                        $sValue = "";
+                    } else {
+                    	foreach ($aData['FIELDS'] as $aField) {
+                    		if ($aField['FLD_KEY'] == '1') {
+                    			// note added by gustavo cruz gustavo[at]colosa[dot]com
+                    			// this additional [if] checks if a case variable has been set
+                    			// in the keys attribute, so it can be parsed and replaced for
+                    			// their respective value.
+                    			if (preg_match( "/@#/", $aValues[$i] )) {
+                    				// check if a case are running in order to prevent that preview is
+                    				// erroneous rendered.
+                    				if (isset( $_SESSION['APPLICATION'] )) {
+                    					G::LoadClass( 'case' );
+                    					$oApp = new Cases();
+                    					if ($oApp->loadCase( $_SESSION['APPLICATION'] ) != null) {
+                    						$aFields = $oApp->loadCase( $_SESSION['APPLICATION'] );
+                    						$formVariable = substr( $aValues[$i], 2 );
+                    						if (isset( $aFields['APP_DATA'][$formVariable] )) {
+                    							$formVariableValue = $aFields['APP_DATA'][$formVariable];
+                    							$aKeys[$aField['FLD_NAME']] = (isset( $formVariableValue ) ? G::replaceDataField( $formVariableValue, $oOwner->values ) : '');
+                    						} else {
+                    							$aKeys[$aField['FLD_NAME']] = '';
+                    						}
+                    					} else {
+                    						$aKeys[$aField['FLD_NAME']] = '';
+                    					}
+                    				} else {
+                    					$aKeys[$aField['FLD_NAME']] = '';
+                    				}
+                    			} else {
+                    				$aKeys[$aField['FLD_NAME']] = (isset( $aValues[$i] ) ? G::replaceDataField( $aValues[$i], $oOwner->values ) : '');
+                    			}
+                    			$i ++;
+                    		}
+                    	}
+                    	try {
+                    		$aData = $oAdditionalTables->getDataTable( $oOwner->fields[$this->pmconnection]->pmtable, $aKeys );
+                    	} catch (Exception $oError) {
+                    		$aData = array ();
+                    	}
+                    	if (isset( $aData[$this->pmfield] )) {
+                    		$sValue = $aData[$this->pmfield];
+                    	}
                     }
-                    try {
-                        $aData = $oAdditionalTables->getDataTable( $oOwner->fields[$this->pmconnection]->pmtable, $aKeys );
-                    } catch (Exception $oError) {
-                        $aData = array ();
-                    }
-                    if (isset( $aData[$this->pmfield] )) {
-                        $sValue = $aData[$this->pmfield];
-                    }
+
                 }
             }
         }
@@ -927,7 +934,7 @@ class XmlForm_Field_Title extends XmlForm_Field
      * @param string value
      * @return string
      */
-    public function render ($value = null, &$owner = null)
+    public function render($value = null, $owner = null)
     {
         $this->label = G::replaceDataField( $this->label, $owner->values );
         return '<span id=\'form[' . $this->name . ']\' name=\'form[' . $this->name . ']\' ' . $this->NSFieldType() . ' >' . $this->htmlentities( $this->label ) . '</span>';
@@ -963,7 +970,7 @@ class XmlForm_Field_Subtitle extends XmlForm_Field
      * @param string value
      * @return string
      */
-    public function render ($value = null)
+    public function render($value = null, $paramDummy2 = null)
     {
         return '<span id=\'form[' . $this->name . ']\' name=\'form[' . $this->name . ']\' ' . $this->NSFieldType() . ' >' . $this->htmlentities( $this->label ) . '</span>';
     }
@@ -1005,7 +1012,7 @@ class XmlForm_Field_SimpleText extends XmlForm_Field
      * @param string value
      * @return string
      */
-    public function render ($value = null, &$owner = null)
+    public function render($value = null, $owner = null)
     {
         if (($this->pmconnection != '') && ($this->pmfield != '') && $value == null) {
             $value = $this->getPMTableValue( $owner );
@@ -1033,7 +1040,7 @@ class XmlForm_Field_SimpleText extends XmlForm_Field
      * @param string owner
      * @return string
      */
-    public function renderGrid ($values = array(), $owner = null)
+    public function renderGrid($values = array(), $owner = null, $paramDummy3 = null, $paramDummy4 = null)
     {
         $result = array ();
         $r = 1;
@@ -1102,6 +1109,7 @@ class XmlForm_Field_Text extends XmlForm_Field_SimpleText
     public $replaceTags = 0;
     public $renderMode = '';
     public $comma_separator = '.';
+    public $autocomplete = "on";
 
     /**
      * Function render
@@ -1114,6 +1122,13 @@ class XmlForm_Field_Text extends XmlForm_Field_SimpleText
      */
     public function render ($value = null, $owner = null)
     {
+        if ($this->autocomplete === '1') {
+            $this->autocomplete = "on";
+        } else {
+            if ($this->autocomplete === '0') {
+                $this->autocomplete = "off";
+            }
+        }
         if ($this->renderMode == '') {
             $this->renderMode = $this->mode;
         }
@@ -1161,6 +1176,7 @@ class XmlForm_Field_Text extends XmlForm_Field_SimpleText
             $html .= 'id="form[' . $this->name . ']" ';
             $html .= 'name="form[' . $this->name . ']" ';
             $html .= 'type="text" size="' . $this->size . '" maxlength="' . $this->maxLength . '" ';
+            $html .= 'autocomplete="' . $this->autocomplete . '" ';
             $html .= 'value="' . $this->htmlentities( $value, ENT_QUOTES, 'utf-8' ) . '" ';
             $html .= 'style="' . $this->htmlentities( $this->style, ENT_COMPAT, 'utf-8' ) . '" ';
             $html .= 'onkeypress="' . $this->htmlentities( $onkeypress, ENT_COMPAT, 'utf-8' ) . '" ';
@@ -1197,7 +1213,7 @@ class XmlForm_Field_Text extends XmlForm_Field_SimpleText
      * @param string owner
      * @return string
      */
-    public function renderGrid ($values = array(), $owner = null)
+    public function renderGrid($values = array(), $owner = null, $paramDummy3 = null, $paramDummy4 = null)
     {
         $result = $aux = array ();
         $r = 1;
@@ -1250,7 +1266,7 @@ class XmlForm_Field_Text extends XmlForm_Field_SimpleText
         return $result;
     }
 
-    public function renderTable ($values = '', $owner = null)
+    public function renderTable($values = "", $owner = null, $paramDummy3 = null)
     {
         $result = $this->htmlentities( $values, ENT_COMPAT, 'utf-8' );
         return $result;
@@ -1709,7 +1725,7 @@ class XmlForm_Field_Suggest extends XmlForm_Field_SimpleText //by neyek
      * @param string owner
      * @return string
      */
-    public function renderGrid ($values = array(), $owner = null)
+    public function renderGrid($values = array(), $owner = null, $paramDummy3 = null, $paramDummy4 = null)
     {
         $aResult = array();
         $r = 1;
@@ -1728,7 +1744,7 @@ class XmlForm_Field_Suggest extends XmlForm_Field_SimpleText //by neyek
      * @param <String> $owner
      * @return <String> $result
      */
-    public function renderTable ($values = '', $owner = null)
+    public function renderTable($values = "", $owner = null, $paramDummy3 = null)
     {
         $result = $this->htmlentities( $values, ENT_COMPAT, 'utf-8' );
         return $result;
@@ -1805,10 +1821,8 @@ class XmlForm_Field_Caption extends XmlForm_Field
      * @param $owner
      * @return true
      */
-    public function validateValue ($value, &$owner)
+    public function validateValue($value)
     {
-        /*$this->executeSQL( $owner );
-        return isset($value) && ( array_key_exists( $value , $this->options ) );*/
         return true;
     }
 
@@ -1890,7 +1904,7 @@ class XmlForm_Field_Password extends XmlForm_Field
      * @param string value
      * @return string
      */
-    public function render ($value = null)
+    public function render($value = null, $paramDummy2 = null)
     {
         if ($this->autocomplete === '1') {
             $this->autocomplete = "on";
@@ -1931,6 +1945,7 @@ class XmlForm_Field_Textarea extends XmlForm_Field
     public $cols = 40;
     public $required = false;
     public $readOnly = false;
+    public $resizable = false;
     public $wrap = 'OFF';
     public $className;
     public $renderMode = '';
@@ -1963,9 +1978,9 @@ class XmlForm_Field_Textarea extends XmlForm_Field
         if ($this->renderMode == '') {
             $this->renderMode = $this->mode;
         }
-
+        $resizable = ($this->resizable == 1 || $this->resizable == '1') ? 'resize:both;' : 'resize:none;';
         $html = '';
-        $scrollStyle = $this->style . "overflow:scroll;overflow-y:scroll;overflow-x:hidden;overflow:-moz-scrollbars-vertical;resize:none;";
+        $scrollStyle = $this->style . "overflow:scroll;overflow-y:scroll;overflow-x:hidden;overflow:-moz-scrollbars-vertical;".$resizable;
         if ($this->renderMode == 'edit') {
             //EDIT MODE
             $readOnlyText = ($this->readOnly == 1 || $this->readOnly == '1') ? 'readOnly="readOnly"' : '';
@@ -2005,7 +2020,7 @@ class XmlForm_Field_Textarea extends XmlForm_Field
      * @param string owner
      * @return string
      */
-    public function renderGrid ($values = array(), $owner = null)
+    public function renderGrid($values = array(), $owner = null, $paramDummy3 = null, $paramDummy4 = null)
     {
         $this->gridFieldType = 'textarea';
 
@@ -2030,8 +2045,8 @@ class XmlForm_Field_Textarea extends XmlForm_Field
             }
 
             $arrayOptions[$r] = $v;
-
-            $scrollStyle = $this->style . "overflow:scroll;overflow-y:scroll;overflow-x:hidden;overflow:-moz-scrollbars-vertical;resize:none;";
+            $resizable = ($this->resizable == 1 || $this->resizable == '1') ? 'resize:both;' : 'resize:none;';
+            $scrollStyle = $this->style . "overflow:scroll;overflow-y:scroll;overflow-x:hidden;overflow:-moz-scrollbars-vertical;".$resizable;
             $html = '';
             if ($this->renderMode == 'edit') {
                 //EDIT MODE
@@ -2168,7 +2183,7 @@ class XmlForm_Field_Currency extends XmlForm_Field_SimpleText
      * @param string owner
      * @return string
      */
-    public function renderGrid ($values = array(), $owner = null)
+    public function renderGrid($values = array(), $owner = null, $paramDummy3 = null, $paramDummy4 = null)
     {
         $result = array ();
         $r = 1;
@@ -2234,7 +2249,7 @@ class XmlForm_Field_CaptionCurrency extends XmlForm_Field
      * @param string value
      * @return string
      */
-    public function render ($value = null)
+    public function render($value = null, $paramDummy2 = null)
     {
         return '$ ' . $this->htmlentities( $value, ENT_COMPAT, 'utf-8' );
     }
@@ -2315,7 +2330,7 @@ class XmlForm_Field_Percentage extends XmlForm_Field_SimpleText
         return $html;
     }
 
-    public function renderGrid ($values = array(), $owner = null)
+    public function renderGrid($values = array(), $owner = null, $paramDummy3 = null, $paramDummy4 = null)
     {
         $result = array ();
         $r = 1;
@@ -2373,7 +2388,7 @@ class XmlForm_Field_Percentage extends XmlForm_Field_SimpleText
 class XmlForm_Field_CaptionPercentage extends XmlForm_Field
 {
 
-    public function render ($value = null)
+    public function render($value = null, $paramDummy2 = null)
     {
         return $this->htmlentities( $value, ENT_COMPAT, 'utf-8' );
     }
@@ -2567,7 +2582,7 @@ class XmlForm_Field_Date2 extends XmlForm_Field_SimpleText
      * @param $onlyValue
      * @return <String>
      */
-    public function renderGrid ($values = null, $owner = null, $onlyValue = false)
+    public function renderGrid($values = null, $owner = null, $onlyValue = false, $paramDummy4 = null)
     {
         $result = array ();
         $r = 1;
@@ -2650,7 +2665,7 @@ class XmlForm_Field_Date2 extends XmlForm_Field_SimpleText
 class XmlForm_Field_DateView extends XmlForm_Field
 {
 
-    public function render ($value = null)
+    public function render($value = null, $paramDummy2 = null)
     {
         return $this->htmlentities( $value, ENT_COMPAT, 'utf-8' );
     }
@@ -2733,7 +2748,7 @@ class XmlForm_Field_YesNo extends XmlForm_Field
      * @param $owner
      * @return <array>
      */
-    public function renderGrid ($values = array(), $owner = null)
+    public function renderGrid($values = array(), $owner = null, $paramDummy3 = null, $paramDummy4 = null)
     {
         $this->gridFieldType = 'yesno';
         $result = array ();
@@ -2880,7 +2895,7 @@ class XmlForm_Field_Link extends XmlForm_Field
      * @param $owner
      * @return <array>
      */
-    public function renderGrid($value = array(), $label = array(), $owner = null)
+    public function renderGrid($value = array(), $label = array(), $owner = null, $paramDummy4 = null)
     {
         $arrayResult = array();
         $row = 1;
@@ -2906,7 +2921,7 @@ class XmlForm_Field_Link extends XmlForm_Field
      * @param $owner
      * @return <String>
      */
-    public function renderTable ($value = null, $owner = null)
+    public function renderTable($value = null, $owner = null, $paramDummy3 = null)
     {
         $onclick = $this->htmlentities( G::replaceDataField( $this->onclick, $owner->values ), ENT_QUOTES, 'utf-8' );
         $link = $this->htmlentities( G::replaceDataField( $this->link, $owner->values ), ENT_QUOTES, 'utf-8' );
@@ -3045,7 +3060,7 @@ class XmlForm_Field_File extends XmlForm_Field
         return $html;
     }
 
-    public function renderGrid ($value = array(), $owner = null, $therow = -1)
+    public function renderGrid($value = array(), $owner = null, $therow = -1, $paramDummy4 = null)
     {
         $arrayResult = array ();
         $r = 1;
@@ -3134,7 +3149,7 @@ class XmlForm_Field_Checkboxpt extends XmlForm_Field
      * @param $owner
      * @return <Array> result
      */
-    public function renderGrid ($values = array(), $owner = null)
+    public function renderGrid($values = array(), $owner = null, $paramDummy3 = null, $paramDummy4 = null)
     {
         $result = array ();
         $r = 1;
@@ -3213,12 +3228,12 @@ class XmlForm_Field_Checkbox extends XmlForm_Field
         } elseif ($this->mode === 'view') {
             $checked = (isset( $value ) && ($value == $this->value)) ? 'checked' : '';
             if ($this->labelOnRight) {
-                $html = "<input value='{$this->value}' type='checkbox' $checked $readOnly disabled />
+                $html = "<input id='form[" . $this->name . "]' value='{$this->value}' type='checkbox' $checked $readOnly disabled />
                  <span class='FormCheck'>" . $this->label . '</span></input>';
             } else {
-                $html = "<input value='{$this->value}' type='checkbox' $checked $readOnly disabled />";
+                $html = "<input id='form[" . $this->name . "]' value='{$this->value}' type='checkbox' $checked $readOnly disabled />";
             }
-            $html .= "<input id='form[" . $this->name . "]' name='form[" . $this->name . "]' type='hidden' " . $this->NSFieldType() . " value='{$value}' />";
+            $html .= "<input name='form[" . $this->name . "]' type='hidden' " . $this->NSFieldType() . " value='{$value}' />";
             return $html;
         }
     }
@@ -3230,7 +3245,7 @@ class XmlForm_Field_Checkbox extends XmlForm_Field
      * @param $owner
      * @return <Array> result
      */
-    public function renderGrid ($values = array(), $owner = null)
+    public function renderGrid($values = array(), $owner = null, $paramDummy3 = null, $paramDummy4 = null)
     {
         $this->gridFieldType = 'checkbox';
         $result = array ();
@@ -3278,7 +3293,7 @@ class XmlForm_Field_Checkbox2 extends XmlForm_Field
 {
     public $required = false;
 
-    public function render ($value = null)
+    public function render($value = null, $paramDummy2 = null)
     {
         return '<input class="FormCheck" name="' . $this->name . '" type ="checkbox" disabled>' . $this->label . '</input>';
     }
@@ -3435,11 +3450,12 @@ class XmlForm_Field_Hidden extends XmlForm_Field
                 }
             }
         }
+        //$html .= 'value="' . $this->htmlentities( $value, ENT_QUOTES, 'utf-8' ) . '" ';
         if ($this->mode === 'edit') {
-            return '<input id="form[' . $this->name . ']" ' . $this->NSFieldType() . ' name="form[' . $this->name . ']" type=\'hidden\' value=\'' . $value . '\'/>';
+            return '<input id="form[' . $this->name . ']" ' . $this->NSFieldType() . ' name="form[' . $this->name . ']" type=\'hidden\' value=\'' . $this->htmlentities( $value, ENT_QUOTES, 'utf-8' ) . '\'/>';
         } elseif ($this->mode === 'view') {
             //a button? who wants a hidden field be showed like a button?? very strange.
-            return '<input id="form[' . $this->name . ']" ' . $this->NSFieldType() . ' name="form[' . $this->name . ']" type=\'text\' value=\'' . $value . '\' style="display:none"/>';
+            return '<input id="form[' . $this->name . ']" ' . $this->NSFieldType() . ' name="form[' . $this->name . ']" type=\'text\' value=\'' . $this->htmlentities( $value, ENT_QUOTES, 'utf-8' ) . '\' style="display:none"/>';
         } else {
             return $this->htmlentities( $value, ENT_COMPAT, 'utf-8' );
         }
@@ -3452,7 +3468,7 @@ class XmlForm_Field_Hidden extends XmlForm_Field
      * @param $owner
      * @return <Array> result
      */
-    public function renderGrid ($values = null, $owner = null)
+    public function renderGrid($values = null, $owner = null, $paramDummy3 = null, $paramDummy4 = null)
     {
         $result = array ();
         $r = 1;
@@ -3471,7 +3487,7 @@ class XmlForm_Field_Hidden extends XmlForm_Field
      * @param $owner
      * @return <Array> result
      */
-    public function renderTable ($value = '', $owner = null)
+    public function renderTable($value = "", $owner = null, $paramDummy3 = null)
     {
         return '<input id="form[' . $this->name . ']"  name="form[' . $this->name . ']" type=\'hidden\' value=\'' . $value . '\'/>';
     }
@@ -3500,10 +3516,8 @@ class XmlForm_Field_Dropdown extends XmlForm_Field
     public $renderMode = '';
     public $selectedValue = '';
 
-    public function validateValue ($value, &$owner)
+    public function validateValue($value)
     {
-        /*$this->executeSQL( $owner );
-        return isset($value) && ( array_key_exists( $value , $this->options ) );*/
         return true;
     }
 
@@ -3818,7 +3832,7 @@ class XmlForm_Field_Listbox extends XmlForm_Field
      * @param $owner
      * @return <Array> result
      */
-    public function renderGrid ($value = null, $owner = null)
+    public function renderGrid($value = null, $owner = null, $paramDummy3 = null, $paramDummy4 = null)
     {
         return $this->render( $value, $owner );
     }
@@ -4037,7 +4051,7 @@ class XmlForm_Field_CheckGroupView extends XmlForm_Field
      * @param string value
      * @return string
      */
-    public function render ($value = null)
+    public function render($value = null, $paramDummy2 = null)
     {
         $html = '';
         foreach ($this->option as $optionName => $option) {
@@ -4116,7 +4130,7 @@ class XmlForm_Field_Grid extends XmlForm_Field
      * @return <Template Object>
      */
 
-    public function render ($values, $owner = null)
+    public function render($values = null, $owner = null)
     {
         $emptyRow = $this->setScrollStyle( $owner );
         return $this->renderGrid( $emptyRow, $owner );
@@ -4131,7 +4145,7 @@ class XmlForm_Field_Grid extends XmlForm_Field
      * @param string values
      * @return string
      */
-    public function renderGrid ($values, $owner = null, $therow = -1)
+    public function renderGrid($values = array(), $owner = null, $therow = -1, $paramDummy4 = null)
     {
         $this->id = $this->owner->id . $this->name;
         $using_template = 'grid';
@@ -4387,7 +4401,7 @@ class XmlForm_Field_JavaScript extends XmlForm_Field
      * @param string owner
      * @return string
      */
-    public function renderGrid ($value, $owner)
+    public function renderGrid($values = null, $owner = null, $paramDummy3 = null, $paramDummy4 = null)
     {
         return array ('');
     }
@@ -4486,17 +4500,50 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
     {
         $part1 = $sign * substr( $date, 0, strlen( $date ) - 1 );
         $part2 = substr( $date, strlen( $date ) - 1 );
+
+        $year  = (int)(date("Y"));
+        $month = (int)(date("m"));
+        $day   = (int)(date("d"));
+
+        $osIsLinux = strtoupper(substr(PHP_OS, 0, 3)) != "WIN";
+        $checkYear = false;
+
         switch ($part2) {
-            case 'd':
-                $res = date( 'Y-m-d', mktime( 0, 0, 0, date( 'm' ), date( 'd' ) + $part1, date( 'Y' ) ) );
+            case "y":
+                $year = $year + $part1;
+
+                $res = date("Y-m-d", mktime(0, 0, 0, $month, $day, $year));
+
+                $checkYear = true;
                 break;
-            case 'm':
-                $res = date( 'Y-m-d', mktime( 0, 0, 0, date( 'm' ) + $part1, date( 'd' ), date( 'Y' ) ) );
+            case "m":
+                $month = $month + $part1;
+
+                $res = date("Y-m-d", mktime(0, 0, 0, $month, $day, $year));
+
+                if ($month > 12) {
+                    $year = $year + (int)($month / 12);
+
+                    $checkYear = true;
+                }
                 break;
-            case 'y':
-                $res = date( 'Y-m-d', mktime( 0, 0, 0, date( 'm' ), date( 'd' ), date( 'Y' ) + $part1 ) );
+            case "d":
+                $res = date("Y-m-d", mktime(0, 0, 0, $month, $day + $part1, $year));
+
+                $dayAux = ($month * 31) - (31 - $day) + $part1;
+
+                if ($dayAux > 365) {
+                    $year = $year + (int)($dayAux / 365);
+
+                    $checkYear = true;
+                }
                 break;
         }
+
+        if (!$osIsLinux && $checkYear && !preg_match("/^$year\-\d{2}\-\d{2}$/", $res)) {
+            $res = preg_replace("/^\d{4}(\-\d{2}\-\d{2})$/", "$year$1", $res);
+        }
+
         return $res;
     }
 
@@ -4529,7 +4576,7 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
      * @param $onlyValue
      * @return Array $result
      */
-    public function renderGrid ($values = null, $owner = null, $onlyValue = false)
+    public function renderGrid($values = null, $owner = null, $onlyValue = false, $paramDummy4 = null)
     {
         $this->gridFieldType = 'date';
         $result = array ();
@@ -4781,16 +4828,37 @@ class XmlForm_Field_Date extends XmlForm_Field_SimpleText
             }
         }
 
-        $withHours = (strpos($mask, '%H') !== false || strpos($mask, '%M') !== false || strpos($mask, '%S') !== false);
+        $withHours = (strpos($mask, '%H') !== false || strpos($mask, '%I') !== false || strpos($mask, '%k') !== false || strpos($mask, '%l') !== false || strpos($mask, '%M') !== false || strpos($mask, '%S') !== false);
 
         $tmp = str_replace( "%", "", $mask );
         return $this->date_create_from_format($tmp, $value, $withHours);
     }
 
+    /*
+      //Year
+      %Y year with the century
+      %y year without the century (range 00 to 99)
+      //Month
+      %m month, range 01 to 12
+      %B full month name
+      %b abbreviated month name
+      //Day
+      %d the day of the month (range 01 to 31)
+      %e the day of the month (range 1 to 31)
+      //Hour
+      %H hour, range 00 to 23 (24h format)
+      %I hour, range 01 to 12 (12h format)
+      %k hour, range 0 to 23 (24h format)
+      %l hour, range 1 to 12 (12h format)
+      //Min
+      %M minute, range 00 to 59
+      //Sec
+      %S seconds, range 00 to 59
+    */
     function date_create_from_format( $dformat, $dvalue, $withHours = false )
     {
         $schedule = $dvalue;
-        $schedule_format = str_replace(array('Y','m','d','H','M','S'),array('%Y','%m','%d','%H','%M','%S') ,$dformat);
+        $schedule_format = str_replace(array('Y','y','m','B','b','d','e','H','I','k','l','M','S'),array('%Y','%y','%m','%B','%b','%d','%e','%H','%I','%k','%l','%M','%S') ,$dformat);
         $ugly = strptime($schedule, $schedule_format);
         $ymd = sprintf(
             '%04d-%02d-%02d %02d:%02d:%02d',
@@ -4957,7 +5025,7 @@ class XmlForm_Field_Date5 extends XmlForm_Field_SimpleText
      * @param $onlyValue
      * @return Array $result
      */
-    public function renderGrid ($values = null, $owner = null, $onlyValue = false)
+    public function renderGrid($values = null, $owner = null, $onlyValue = false, $paramDummy4 = null)
     {
         $result = array ();
         $r = 1;
@@ -5289,7 +5357,7 @@ class XmlForm_Field_Xmlform extends XmlForm_Field
      * @param string values
      * @return string
      */
-    public function render ($values)
+    public function render($values = null, $paramDummy2 = null)
     {
         $html = '';
         foreach ($this->fields as $f => $v) {
@@ -5401,7 +5469,7 @@ class XmlForm
         }
         $filesToDelete = substr( (defined( 'PATH_C' ) ? PATH_C : PATH_DATA) . 'xmlform/', 0, - 1 ) . $realPath . '.*.js';
         $auxPath = explode( PATH_SEP, $realPath );
-        $auxPath[count( $auxPath ) - 1] = $auxPath[count( $auxPath ) - 1] . '.' . md5( filemtime( $this->fileName ) );
+        $auxPath[count( $auxPath ) - 1] = $auxPath[count( $auxPath ) - 1] . '.' . G::encryptOld( filemtime( $this->fileName ) );
         $realPath = implode( PATH_SEP, $auxPath );
         // Improvement for the js cache - End
         $this->parsedFile = $parsedFilePath;
@@ -5626,7 +5694,7 @@ class XmlForm_Field_Image extends XmlForm_Field
     * @param string values
     * @return string
     */
-    public function render ($value, $owner = null)
+    public function render($value = null, $owner = null)
     {
         $url = G::replaceDataField($this->file, $owner->values);
         if ($this->home === "methods") {
@@ -5763,3 +5831,4 @@ if (!function_exists('strptime')) {
         return $ret;
     }
 }
+

@@ -365,7 +365,7 @@ class Content extends BaseContent
         $workSpace = new workspaceTools( $workSpace );
         $workSpace->getDBInfo();
 
-        $link = mysql_pconnect( $workSpace->dbHost, $workSpace->dbUser, $workSpace->dbPass) or die( "Could not connect" );
+        $link = @mysql_pconnect( $workSpace->dbHost, $workSpace->dbUser, $workSpace->dbPass) or die( "Could not connect" );
 
         mysql_select_db( $workSpace->dbName, $link );
         mysql_query( "SET NAMES 'utf8';" );

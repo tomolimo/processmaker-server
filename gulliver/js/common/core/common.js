@@ -1915,15 +1915,29 @@ function msgBox(msg, type, callbackAccept, callbackCancel){
 
 	switch(type){
 		case 'alert':
-		    new leimnud.module.app.alert().make({
-			  	label: msg,
-			   	width: 350,
-			   	action:function(){
-		    		if( acceptEv ){
-		    			setTimeout(acceptEv, 1);
-		    		}
-		    	}.extend(this)
-			 });
+    
+        if (leimnud.browser.isIE) {
+            new leimnud.module.app.alert().make({
+                label: msg,
+                width: 450,
+                height: 120,
+                action:function(){
+                  if( acceptEv ){
+                    setTimeout(acceptEv, 1);
+                  }
+                }.extend(this)
+            });
+        }else{
+            new leimnud.module.app.alert().make({
+              label: msg,
+              width: 350,
+              action:function(){
+                if( acceptEv ){
+                  setTimeout(acceptEv, 1);
+                }
+              }.extend(this)
+            });
+        }		    
 			break;
 		case 'info':
 			new leimnud.module.app.info().make({

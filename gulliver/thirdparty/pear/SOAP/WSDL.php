@@ -1026,13 +1026,13 @@ class SOAP_WSDL_Cache extends SOAP_Base
         $cachename = $md5_wsdl = $file_data = '';
         if ($this->_cacheUse) {
             // Try to retrieve WSDL from cache
-            $cachename = $this->_cacheDir() . '/' . md5($wsdl_fname). ' .wsdl';
+            $cachename = $this->_cacheDir() . '/' . $this->encryptOld($wsdl_fname). ' .wsdl';
             if (file_exists($cachename)) {
                 $wf = fopen($cachename, 'rb');
                 if ($wf) {
                     // Reading cached file
                     $file_data = fread($wf, filesize($cachename));
-                    $md5_wsdl = md5($file_data);
+                    $md5_wsdl = $this->encryptOld($file_data);
                     fclose($wf);
                 }
                 if ($cache) {
@@ -1090,7 +1090,7 @@ class SOAP_WSDL_Cache extends SOAP_Base
                 }
             }
 
-            $md5_wsdl = md5($file_data);
+            $md5_wsdl = $this->encryptOld($file_data);
 
             if ($this->_cacheUse) {
                 $fp = fopen($cachename, "wb");
@@ -1102,6 +1102,20 @@ class SOAP_WSDL_Cache extends SOAP_Base
             return $this->_raiseSoapFault("WSDL Checksum error!", $wsdl_fname);
         }
         return $file_data;
+    }
+    
+    public function encryptOld($string)
+    {
+        if (!class_exists('G')) {
+            $realdocuroot = str_replace( '\\', '/', $_SERVER['DOCUMENT_ROOT'] );
+            $docuroot = explode( '/', $realdocuroot );
+            array_pop( $docuroot );
+            $pathhome = implode( '/', $docuroot ) . '/';
+            array_pop( $docuroot );
+            $pathTrunk = implode( '/', $docuroot ) . '/';
+            require_once($pathTrunk.'gulliver/system/class.g.php');
+        }
+        return G::encryptOld($string);
     }
 
 }

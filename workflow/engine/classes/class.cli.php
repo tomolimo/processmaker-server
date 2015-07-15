@@ -274,6 +274,10 @@ EOT;
             call_user_func( $taskData['function'], $arguments, $taskOpts );
         } catch (Exception $e) {
             echo self::error( "\n  Error executing '$taskName':\n\n  {$e->getMessage()}\n" ) . "\n";
+            global $tempDirectory;
+            if (!empty($tempDirectory)) {
+                G::rm_dir($tempDirectory);
+            }
         }
     }
 

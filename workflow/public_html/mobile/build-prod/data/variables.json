@@ -1,0 +1,13 @@
+[
+	{
+		"name":"variable1",
+		"fieldType":"string",
+		"fieldSize":10,
+		"label":"label1",
+		"dbConnection":"1",
+		"sql":"2",
+		"null":false,
+		"defaultValue":"default value",
+		"acceptedValues":["american","asia","europe"]
+	}
+]

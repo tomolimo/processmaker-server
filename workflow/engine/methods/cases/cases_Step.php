@@ -1,4 +1,11 @@
 <?php
+require_once 'classes/model/AppDelegation.php';
+$delegation = new AppDelegation();
+if( $delegation->alreadyRouted($_SESSION['APPLICATION'],$_SESSION['INDEX']) ) {
+    G::header('location: ../cases/casesListExtJs');
+    die();
+}
+
 if (!isset($_SESSION['USER_LOGGED'])) {
       G::SendTemporalMessage( 'ID_LOGIN_AGAIN', 'warning', 'labels' );
       die( '<script type="text/javascript">
@@ -123,7 +130,13 @@ if (isset( $oProcessFieds['PRO_DEBUG'] ) && $oProcessFieds['PRO_DEBUG']) {
 }
 
 //cleaning debug variables
-if (! isset( $_GET['breakpoint'] )) {
+$flagExecuteBeforeTriggers = !isset($_GET["breakpoint"]);
+
+if (isset($_GET["TYPE"]) && $_GET["TYPE"] == "OUTPUT_DOCUMENT" && isset($_GET["ACTION"]) && $_GET["ACTION"] != "GENERATE") {
+    $flagExecuteBeforeTriggers = false;
+}
+
+if ($flagExecuteBeforeTriggers) {
     if (isset( $_SESSION['TRIGGER_DEBUG']['info'] )) {
         unset( $_SESSION['TRIGGER_DEBUG']['info'] );
     }
@@ -147,15 +160,14 @@ if (! isset( $_GET['breakpoint'] )) {
     if (! isset( $_SESSION['_NO_EXECUTE_TRIGGERS_'] )) {
         //Execute before triggers - Start
         $Fields['APP_DATA'] = $oCase->ExecuteTriggers( $_SESSION['TASK'], $_GET['TYPE'], $_GET['UID'], 'BEFORE', $Fields['APP_DATA'] );
-        $Fields['DEL_INDEX'] = $_SESSION['INDEX'];
-        $Fields['TAS_UID'] = $_SESSION['TASK'];
         //Execute before triggers - End
     } else {
         unset( $_SESSION['_NO_EXECUTE_TRIGGERS_'] );
-        $Fields['DEL_INDEX'] = $_SESSION['INDEX'];
-        $Fields['TAS_UID'] = $_SESSION['TASK'];
     }
 }
+
+$Fields["DEL_INDEX"] = $_SESSION["INDEX"];
+$Fields["TAS_UID"] = $_SESSION["TASK"];
 
 if (isset( $_GET['breakpoint'] )) {
     $_POST['NextStep'] = $_SESSION['TRIGGER_DEBUG']['BREAKPAGE'];
@@ -182,12 +194,16 @@ unset($Fields['APP_STATUS']);
 unset($Fields['APP_PROC_STATUS']);
 unset($Fields['APP_PROC_CODE']);
 unset($Fields['APP_PIN']);
+
+$Fields["USER_UID"]         = $_SESSION["USER_LOGGED"];
+$Fields["CURRENT_DYNAFORM"] = $_GET["UID"];
+$Fields["OBJECT_TYPE"]      = ($_GET["UID"] == "-1")? "ASSIGN_TASK" : $_GET["TYPE"];
+
 $oCase->updateCase( $_SESSION['APPLICATION'], $Fields );
 //Save data - End
 
-
 //Obtain previous and next step - Start
-try { 
+try {
     $oCase = new Cases();
     $aNextStep = $oCase->getNextStep( $_SESSION['PROCESS'], $_SESSION['APPLICATION'], $_SESSION['INDEX'], $_SESSION['STEP_POSITION'] );
     $aPreviousStep = $oCase->getPreviousStep( $_SESSION['PROCESS'], $_SESSION['APPLICATION'], $_SESSION['INDEX'], $_SESSION['STEP_POSITION'] );
@@ -258,20 +274,24 @@ try {
             $_SESSION['CURRENT_DYN_UID'] = $_GET['UID'];
 
             G::LoadClass('pmDynaform');
-            $a = new pmDynaform($_GET['UID'], $Fields['APP_DATA']);
+            $FieldsPmDynaform = $Fields;
+            $FieldsPmDynaform["PM_RUN_OUTSIDE_MAIN_APP"] = (!isset($_SESSION["PM_RUN_OUTSIDE_MAIN_APP"])) ? "true" : "false";
+            $FieldsPmDynaform["STEP_MODE"] = $oStep->getStepMode();
+            $FieldsPmDynaform["PRO_SHOW_MESSAGE"] = $noShowTitle;
+            $FieldsPmDynaform["TRIGGER_DEBUG"] = $_SESSION['TRIGGER_DEBUG']['ISSET'];
+            $a = new pmDynaform($FieldsPmDynaform);
             if ($a->isResponsive()) {
-                $a->mergeValues();
-                $a->printEdit((!isset($_SESSION["PM_RUN_OUTSIDE_MAIN_APP"])) ? "true" : "false", $_SESSION['APPLICATION'], $array);
+                $a->printEdit();
             } else {
                 $G_PUBLISH->AddContent('dynaform', 'xmlform', $_SESSION['PROCESS'] . '/' . $_GET['UID'], '', $Fields['APP_DATA'], 'cases_SaveData?UID=' . $_GET['UID'] . '&APP_UID=' . $_SESSION['APPLICATION'], '', (strtolower($oStep->getStepMode()) != 'edit' ? strtolower($oStep->getStepMode()) : ''));
             }
             break;
-        case 'INPUT_DOCUMENT': 
+        case 'INPUT_DOCUMENT':
             if ($noShowTitle == 0) {
                 $G_PUBLISH->AddContent( 'smarty', 'cases/cases_title', '', '', $array );
             }
             $oInputDocument = new InputDocument();
-            $Fields = $oInputDocument->load( $_GET['UID'] ); 
+            $Fields = $oInputDocument->load( $_GET['UID'] );
             if (! $aPreviousStep) {
                 $Fields['__DYNAFORM_OPTIONS']['PREVIOUS_STEP_LABEL'] = '';
                 $Fields['PREVIOUS_STEP_LABEL'] = '';
@@ -285,13 +305,13 @@ try {
             $Fields['NEXT_STEP'] = $aNextStep['PAGE'];
             $Fields['NEXT_STEP_LABEL'] = G::loadTranslation( "ID_NEXT_STEP" );
             switch ($_GET['ACTION']) {
-                case 'ATTACH': 
+                case 'ATTACH':
                     switch ($Fields['INP_DOC_FORM_NEEDED']) {
                         case 'REAL':
                             $Fields['TYPE_LABEL'] = G::LoadTranslation( 'ID_NEW' );
                             $sXmlForm = 'cases/cases_AttachInputDocument2';
                             break;
-                        case 'VIRTUAL': 
+                        case 'VIRTUAL':
                             $Fields['TYPE_LABEL'] = G::LoadTranslation( 'ID_ATTACH' );
                             $sXmlForm = 'cases/cases_AttachInputDocument1';
                             break;
@@ -326,7 +346,7 @@ try {
 
                     $oHeadPublisher = & headPublisher::getSingleton();
                     $titleDocument = "<h3>" . $Fields['INP_DOC_TITLE'] . "<br><small>" . G::LoadTranslation( 'ID_INPUT_DOCUMENT' ) . "</small></h3>";
-                    if ($Fields['INP_DOC_DESCRIPTION']) { 
+                    if ($Fields['INP_DOC_DESCRIPTION']) {
                         $titleDocument .= " " . str_replace( "\n", "", str_replace( "'", "\'", nl2br( html_entity_decode($Fields['INP_DOC_DESCRIPTION'], ENT_COMPAT, "UTF-8") ) ) ) . "";
                     }
 
@@ -498,15 +518,21 @@ try {
                             $util->setInputPath( $javaInput );
                             $util->setOutputPath( $javaOutput );
 
+                            G::LoadSystem('inputfilter');
+                            $filter = new InputFilter();
+
                             //$content = file_get_contents ( PATH_DYNAFORM . $aOD['PRO_UID'] . PATH_SEP . $aOD['OUT_DOC_UID'] . '.jrxml' );
                             //$iSize = file_put_contents ( $javaInput .  $aOD['OUT_DOC_UID'] . '.jrxml', $content );
-                            copy( PATH_DYNAFORM . $aOD['PRO_UID'] . PATH_SEP . $aOD['OUT_DOC_UID'] . '.jrxml', $javaInput . $aOD['OUT_DOC_UID'] . '.jrxml' );
+                            $locationFrom = PATH_DYNAFORM . $aOD['PRO_UID'] . PATH_SEP . $aOD['OUT_DOC_UID'] . '.jrxml';
+                            $locationFrom = $filter->validateInput($locationFrom, "path");
+                            copy( $locationFrom, $javaInput . $aOD['OUT_DOC_UID'] . '.jrxml' );
 
                             $outputFile = $javaOutput . $sFilename . '.pdf';
                             print $util->jrxml2pdf( $aOD['OUT_DOC_UID'] . '.jrxml', basename( $outputFile ) );
 
                             //$content = file_get_contents ( $outputFile );
                             //$iSize = file_put_contents ( $pathOutput .  $sFilename . '.pdf' , $content );
+                            $outputFile = $filter->validateInput($outputFile, "path");
                             copy( $outputFile, $pathOutput . $sFilename . '.pdf' );
                             //die;
                             break;
@@ -527,12 +553,19 @@ try {
                             $util->setInputPath( $javaInput );
                             $util->setOutputPath( $javaOutput );
 
-                            copy( PATH_DYNAFORM . $aOD['PRO_UID'] . PATH_SEP . $aOD['OUT_DOC_UID'] . '.pdf', $javaInput . $aOD['OUT_DOC_UID'] . '.pdf' );
+                            G::LoadSystem('inputfilter');
+                            $filter = new InputFilter();
+
+                            $locationFrom = PATH_DYNAFORM . $aOD['PRO_UID'] . PATH_SEP . $aOD['OUT_DOC_UID'] . '.pdf';
+                            $locationFrom = $filter->validateInput($locationFrom, "path");
+                            copy( $locationFrom, $javaInput . $aOD['OUT_DOC_UID'] . '.pdf' );
 
                             $outputFile = $javaOutput . $sFilename . '.pdf';
                             print $util->writeVarsToAcroFields( $aOD['OUT_DOC_UID'] . '.pdf', $xmlData );
 
-                            copy( $javaOutput . $aOD['OUT_DOC_UID'] . '.pdf', $pathOutput . $sFilename . '.pdf' );
+                            $locationFrom = $javaOutput . $aOD['OUT_DOC_UID'] . '.pdf';
+                            $locationFrom = $filter->validateInput($locationFrom, "path");
+                            copy( $locationFrom, $pathOutput . $sFilename . '.pdf' );
 
                             break;
                         default:
@@ -874,7 +907,7 @@ try {
                             $daysSelected = "selected = 'selected'";
                         }
 
-                        $sAux = '<select name=' . $hiddenName . '[NEXT_TASK][TAS_TIMEUNIT] id= ' . $hiddenName . '[NEXT_TASK][TAS_TIMEUNIT] ';
+                        $sAux = '<select name=' . $hiddenName . '[NEXT_TASK][TAS_TIMEUNIT] id= ' . $hiddenName . '[NEXT_TASK][TAS_TIMEUNIT] >';
                         $sAux .= "<option " . $hoursSelected . " value='HOURS'>Hours</option> ";
                         $sAux .= "<option " . $daysSelected . " value='DAYS'>Days</option> ";
                         $sAux .= '</select>';
@@ -887,7 +920,7 @@ try {
                             $calendarSelected = "selected = 'selected'";
                         }
 
-                        $sAux = '<select name=' . $hiddenName . '[NEXT_TASK][TAS_TYPE_DAY] id= ' . $hiddenName . '[NEXT_TASK][TAS_TYPE_DAY] ';
+                        $sAux = '<select name=' . $hiddenName . '[NEXT_TASK][TAS_TYPE_DAY] id= ' . $hiddenName . '[NEXT_TASK][TAS_TYPE_DAY] >';
                         $sAux .= "<option " . $workSelected . " value='1'>Work Days</option> ";
                         $sAux .= "<option " . $calendarSelected . " value='2'>Calendar Days</option> ";
                         $sAux .= '</select>';
@@ -948,6 +981,12 @@ try {
 
             $title = htmlentities($aFields['TASK'][$sKey]['NEXT_TASK']['TAS_TITLE'], ENT_QUOTES, 'UTF-8');
             $aFields['TASK'][$sKey]['NEXT_TASK']['TAS_TITLE'] = $title;
+
+            if (!preg_match("/\-1$/", $aFields["TASK"][$sKey]["NEXT_TASK"]["TAS_UID"]) &&
+                $aFields["TASK"][$sKey]["NEXT_TASK"]["TAS_TYPE"] == "INTERMEDIATE-CATCH-MESSAGE-EVENT"
+            ) {
+                $aFields["TASK"][$sKey]["NEXT_TASK"]["TAS_TITLE"] = G::LoadTranslation("ID_ROUTE_TO_TASK_INTERMEDIATE_CATCH_MESSAGE_EVENT");
+            }
 
             $G_PUBLISH->AddContent( 'smarty', $tplFile, '', '', $aFields );
             /*
@@ -1016,7 +1055,13 @@ try {
     }
     //Add content content step - End
 } catch (Exception $e) {
-    G::SendTemporalMessage( G::LoadTranslation( 'ID_PROCESS_DEF_PROBLEM' ), 'error', 'string', 3, 100 );
+    //Check if the process is BPMN
+    if(isset($oProcessFieds['PRO_BPMN']) && $oProcessFieds['PRO_BPMN'] == 1){
+      G::SendTemporalMessage( G::LoadTranslation( 'ID_BPMN_PROCESS_DEF_PROBLEM' ), 'error', 'string', 3, 100 );
+    }else{
+      G::SendTemporalMessage( G::LoadTranslation( 'ID_PROCESS_DEF_PROBLEM' ), 'error', 'string', 3, 100 );
+    }
+
     $aMessage = array ();
     $aMessage['MESSAGE'] = $e->getMessage();
     $G_PUBLISH = new Publisher();

@@ -204,5 +204,157 @@ class Admin extends Controller
         $this->setView('admin/maintenance');
         $this->render('extJs');
     }
+    
+    function getSystemInfo ()
+    {
+        $this->setResponseType( 'json' );
+        $infoList = $this->_getSystemInfo();
+        $data = array ();
+
+        foreach ($infoList as $row) {
+            $data[] = array ('label' => $row[0],'value' => $row[1],'section' => $row[2]
+            );
+        }
+        return $data;
+    }
+    
+    private function _getSystemInfo ()
+    {
+        G::LoadClass( "system" );
+
+        if (getenv( 'HTTP_CLIENT_IP' )) {
+            $ip = getenv( 'HTTP_CLIENT_IP' );
+        } else {
+            if (getenv( 'HTTP_X_FORWARDED_FOR' )) {
+                $ip = getenv( 'HTTP_X_FORWARDED_FOR' );
+            } else {
+                $ip = getenv( 'REMOTE_ADDR' );
+            }
+        }
+
+        $redhat = '';
+        if (file_exists( '/etc/redhat-release' )) {
+            $fnewsize = filesize( '/etc/redhat-release' );
+            $fp = fopen( '/etc/redhat-release', 'r' );
+            $redhat = trim( fread( $fp, $fnewsize ) );
+            fclose( $fp );
+        }
+
+        $redhat .= " (" . PHP_OS . ")";
+        if (defined( "DB_HOST" )) {
+            G::LoadClass( 'net' );
+            G::LoadClass( 'dbConnections' );
+            $dbNetView = new NET( DB_HOST );
+            $dbNetView->loginDbServer( DB_USER, DB_PASS );
+
+            $dbConns = new dbConnections( '' );
+            $availdb = '';
+            foreach ($dbConns->getDbServicesAvailables() as $key => $val) {
+                if ($availdb != '') {
+                    $availdb .= ', ';
+                }
+                $availdb .= $val['name'];
+            }
+
+            try {
+                $sMySQLVersion = $dbNetView->getDbServerVersion( DB_ADAPTER );
+            } catch (Exception $oException) {
+                $sMySQLVersion = '?????';
+            }
+        }
+
+        
+        if (file_exists(PATH_HTML . "lib/versions")) {
+            $versions = json_decode(file_get_contents(PATH_HTML . "lib/versions"), true);
+            $pmuiVer = $versions["pmui_ver"];
+            $mafeVer = $versions["mafe_ver"];
+            $pmdynaformVer = $versions["pmdynaform_ver"];
+        } else {
+            $pmuiVer = $mafeVer = $pmdynaformVer = "(unknown)";
+        }
+
+        $sysSection = G::loadTranslation('ID_SYSTEM_INFO' );
+        $pmSection = G::LoadTranslation('ID_PROCESS_INFORMATION');
+
+        $properties = array ();
+        $ee = class_exists( 'pmLicenseManager' ) ? " - Enterprise Edition" : '';
+        $systemName = 'ProcessMaker';
+        if (defined('SYSTEM_NAME')) {
+            $systemName = SYSTEM_NAME;
+        }
+        $properties[] = array ($systemName. ' Ver.', System::getVersion() . $ee, $pmSection);
+        $properties[] = array("PMUI JS Lib. Ver.", $pmuiVer, $pmSection);
+        $properties[] = array("MAFE JS Lib. Ver.", $mafeVer, $pmSection);
+        $properties[] = array("PM Dynaform JS Lib. Ver.", $pmdynaformVer, $pmSection);
+
+        if (file_exists(PATH_DATA. 'log/upgrades.log')) {
+            $properties[] = array (G::LoadTranslation('ID_UPGRADES_PATCHES'), '<a href="#" onclick="showUpgradedLogs(); return false;">' . G::LoadTranslation( 'ID_UPGRADE_VIEW_LOG') . '</a>' ,$pmSection);
+        } else {
+            $properties[] = array (G::LoadTranslation('ID_UPGRADES_PATCHES'), G::LoadTranslation( 'ID_UPGRADE_NEVER_UPGRADE') ,$pmSection);
+        }
+
+        $properties[] = array (G::LoadTranslation('ID_OPERATING_SYSTEM') ,$redhat,$sysSection
+        );
+        $properties[] = array (G::LoadTranslation('ID_TIME_ZONE') ,(defined( 'TIME_ZONE' )) ? TIME_ZONE : "Unknown",$sysSection
+        );
+        $properties[] = array (G::LoadTranslation('ID_WEB_SERVER') ,getenv( 'SERVER_SOFTWARE' ),$sysSection
+        );
+        $properties[] = array (G::LoadTranslation('ID_SERVER_NAME') ,getenv( 'SERVER_NAME' ),$pmSection
+        );
+        $properties[] = array (G::LoadTranslation('ID_SERVER_IP') ,$this->lookup( $ip ),$sysSection
+        );
+        $properties[] = array (G::LoadTranslation('ID_PHP_VERSION') ,phpversion(),$sysSection
+        );
+
+        if (defined( "DB_HOST" )) {
+            $properties[] = array (G::LoadTranslation('ID_DATABASE') ,$dbNetView->dbName( DB_ADAPTER ) . ' (Version ' . $sMySQLVersion . ')',$pmSection
+            );
+            $properties[] = array (G::LoadTranslation('ID_DATABASE_SERVER') ,DB_HOST,$pmSection
+            );
+            $properties[] = array (G::LoadTranslation('ID_DATABASE_NAME') ,DB_NAME,$pmSection
+            );
+            $properties[] = array (G::LoadTranslation('ID_AVAILABLE_DB') ,$availdb,$sysSection
+            );
+        } else {
+            $properties[] = array (G::LoadTranslation('ID_DATABASE') ,"Not defined",$pmSection
+            );
+            $properties[] = array (G::LoadTranslation('ID_DATABASE_SERVER') ,"Not defined",$pmSection
+            );
+            $properties[] = array (G::LoadTranslation('ID_DATABASE_NAME') ,"Not defined",$pmSection
+            );
+            $properties[] = array (G::LoadTranslation('ID_AVAILABLE_DB') ,"Not defined",$sysSection
+            );
+        }
+
+        $properties[] = array ( G::LoadTranslation('ID_WORKSPACE') ,defined( "SYS_SYS" ) ? SYS_SYS : "Not defined",$pmSection
+        );
+
+        $properties[] = array ( G::LoadTranslation('ID_SERVER_PROTOCOL') ,getenv( 'SERVER_PROTOCOL' ),$sysSection
+        );
+        $properties[] = array ( G::LoadTranslation('ID_SERVER_PORT') ,getenv( 'SERVER_PORT' ),$sysSection
+        );
+        //$sysSection[] = array('Remote Host', getenv ('REMOTE_HOST'), $sysSection);
+        $properties[] = array ( G::LoadTranslation('ID_SERVER_NAME') , getenv( 'SERVER_ADDR' ),$sysSection
+        );
+        $properties[] = array ( G::LoadTranslation('ID_USER_BROWSER') , getenv( 'HTTP_USER_AGENT' ),$sysSection
+        );
+
+        return $properties;
+    }
+    
+    private function lookup ($target)
+    {
+        global $ntarget;
+        $msg = $target . ' => ';
+        //if (eregi ('[a-zA-Z]', $target))
+        if (preg_match( '[a-zA-Z]', $target )) {
+            //Made compatible to PHP 5.3
+            $ntarget = gethostbyname( $target );
+        } else {
+            $ntarget = gethostbyaddr( $target );
+        }
+        $msg .= $ntarget;
+        return ($msg);
+    }
 }
 

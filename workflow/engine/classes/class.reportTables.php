@@ -582,6 +582,15 @@ class ReportTables
                                 $sQuery = 'UPDATE `' . $aRow['REP_TAB_NAME'] . '` SET ';
                                 foreach ($aTableFields as $aField) {
                                     $sQuery .= '`' . $aField['sFieldName'] . '` = ';
+
+                                    if(!isset($aFields[$aField['sFieldName']])){
+                                       foreach($aFields as $row){
+                                         if(is_array($row)){
+                                           $aFields = $row[count($row)];
+                                         }
+                                       }
+                                    }
+
                                     switch ($aField['sType']) {
                                         case 'number':
                                             $sQuery .= (isset( $aFields[$aField['sFieldName']] ) ? (float) str_replace( ',', '', $aFields[$aField['sFieldName']] ) : '0') . ',';

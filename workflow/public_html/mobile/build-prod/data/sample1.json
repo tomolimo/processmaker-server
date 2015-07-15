@@ -1,0 +1,227 @@
+{
+    "name": "form-example",
+    "items": [
+        {
+            "type":"panel",
+            "items":
+            [
+                [
+                    {
+                        "type": "title",
+                        "colSpan": 12,
+                        "name": "title",
+                        "label": "PMDynaform 1 - Basic Fields"
+                    }
+                ],
+                [
+                    {
+                        "type": "subtitle",
+                        "colSpan": 12,
+                        "name": "subtitle",
+                        "label": "Basic fields without validations"
+                    }
+                ],
+                [
+                    {
+                        "type": "text",
+                        "colSpan": 12,
+                        "name": "TextName1",
+                        "placeholder": "TextName1",
+                        "defaultValue": "",
+                        "label": "TextInput",
+                        "required": false,
+                        "readonly": false,
+                        "dataType": "string",
+                        "variable": "simpleVariable",
+                        "hint":null
+                    }
+                ],
+                [
+                    {
+                        "type": "textarea",
+                        "colSpan": 12,
+                        "label": "Textarea",                        
+                        "name": "textarea1",
+                        "defaultValue": "",
+                        "required": true,
+                        "readonly": false,
+                        "rows":3,
+                        "cols":5,
+                        "hint":null
+                    }
+                ],
+                [
+                    {
+                        "type": "suggest",
+                        "colSpan":12,
+                        "name": "suggestName",
+                        "defaultValue": "",
+                        "label": "Suggest",
+                        "placeholder": "suggest",
+                        "required": false,
+                        "readonly": false,
+                        "dataType": "string",
+                        "variable": "simpleVariable",
+                        "options":[
+                            {
+                                "label": "Option 1",
+                                "value": "option1"
+                            },
+                            {
+                                "label": "Option 2",
+                                "value": "option2"
+                            },
+                            {
+                                "label": "Option 3",
+                                "value": "option2"  
+                            }
+                        ],
+                        "hint":null
+                    }
+                ],
+                [
+                    {
+                        "type": "link",
+                        "colSpan":12,
+                        "name": "linkName",
+                        "label": "link",
+                        "required": false,               
+                        "variable": "simpleVariable",
+                        "hint": null,
+                        "readOnly": false
+                    }
+                ],
+                [
+                    {
+                        "type": "dropdown",
+                        "colSpan":12,
+                        "name": "Option",
+                        "label": "Options",
+                        "defaultValue": "option1",
+                        "readonly": false,
+                        "hint": null,
+                        "options":[
+                            {
+                                "label": "Option 1",
+                                "value": "option1"
+                            },
+                            {
+                                "label": "Option 2",
+                                "value": "option2"
+                            },
+                            {
+                                "label": "Option 3",
+                                "value": "option3"
+                            }
+                        ]
+                    }
+                ],
+                [
+                    {
+                        "type": "checkbox",
+                        "colSpan": 12,
+                        "name": "chekboxName",
+                        "label": "Checkbox",               
+                        "required": false,
+                        "hint":null,
+                        "options": [
+                            {
+                                "label": "This is the option A",
+                                "value": 1,
+                                "selected": true
+                            },
+                            {
+                                "label": "This is the option B",
+                                "value": 2
+                            },
+                            {
+                                "label": "This is the option C",
+                                "value": 3,
+                                "selected": true
+                            }
+                        ]
+                    }
+                ],
+                [
+                    {
+                        "type": "radio",
+                        "colSpan": 12,
+                        "name": "radiogroupName",
+                        "defaultValue": "2",
+                        "label": "RadioGroup",
+                        "required": false,
+                        "options": [
+                            {
+                                "label": "This is the option A",
+                                "value": 1,
+                                "selected": true
+                            },
+                            {
+                                "label": "This is the option B",
+                                "value": 2
+                            },
+                            {
+                                "label": "This is the option C",
+                                "value": 3
+                            }
+                        ],
+                        "hint":null
+                    }
+                ],
+                [
+                    {
+                        "type": "datetime",
+                        "pickType":"datetime",
+                        "colSpan": 12,
+                        "name": "datetime1",
+                        "defaultValue": "",
+                        "label": "Date time",
+                        "required": false,
+                        "readonly": false,
+                        "hint":null
+                    }
+                ],
+                [
+                    {
+                        "type": "datetime",
+                        "pickType":"date",
+                        "colSpan": 12,
+                        "name": "datetime2",
+                        "defaultValue": "",
+                        "label": "Date",
+                        "required": false,
+                        "readonly": false,
+                        "hint":null
+                    }
+                ],
+                [
+                    {
+                        "type": "datetime",
+                        "pickType":"time",
+                        "colSpan": 12,
+                        "name": "datetime3",
+                        "defaultValue": "",
+                        "label": "Time",
+                        "required": false,
+                        "readonly": false,
+                        "hint":null
+                    }
+                ],
+                [
+                    {
+                      "type" : "button",
+                      "colSpan" : 12,
+                      "label":"Button"
+                    }
+                ],
+                [
+                    {
+                      "type" : "submit",
+                      "colSpan" : 12,
+                      "label" : "Submit"
+                    }
+                ]
+            ]
+        }
+    ]
+}

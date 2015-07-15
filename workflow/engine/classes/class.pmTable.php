@@ -40,6 +40,7 @@ class PmTable
     private $schemaFile = '';
     private $tableName;
     private $columns;
+    private $primaryKey= array();
     private $baseDir = '';
     private $targetDir = '';
     private $configDir = '';
@@ -71,7 +72,7 @@ class PmTable
      */
     public function setColumns ($columns)
     {
-        $this->columns = $columns;        
+        $this->columns = $columns;
     }
 
     /**
@@ -134,7 +135,7 @@ class PmTable
      * @param string $dbsUid corresponding to DBS_UID key
      * @return string contains resolved DBS_UID
      */
-    public function resolveDbSource ($dbsUid)
+    public static function resolveDbSource($dbsUid)
     {
         switch ($dbsUid) {
             case 'workflow':
@@ -182,7 +183,7 @@ class PmTable
      * Build the pmTable with all dependencies
      */
     public function build ()
-    {   
+    {
         $this->prepare();
         $this->preparePropelIniFile();
         $this->buildSchema();
@@ -278,7 +279,7 @@ class PmTable
         $flag = false;
 
         foreach ($this->columns as $column) {
-            
+
             // create the column node
             $columnNode = $this->dom->createElement( 'column' );
             // setting column node attributes
@@ -296,7 +297,7 @@ class PmTable
                     $columnNode->setAttribute( 'scale', 1 );
                 }
             }
-            
+
             $columnNode->setAttribute( 'required', ($column->field_null ? 'false' : 'true') );
 
             // only define the primaryKey attribute if it is defined
@@ -400,7 +401,7 @@ class PmTable
      * Save the xml schema for propel
      */
     public function saveSchema ()
-    {   
+    {
         $this->dom->save( $this->configDir . $this->schemaFilename );
     }
 
@@ -671,8 +672,29 @@ class PmTable
             $sql = "SELECT * FROM $tableBackup";
             $rs = $stmt->executeQuery($sql, ResultSet::FETCHMODE_ASSOC);
 
+            // array the primary keys
+            foreach($this->columns as $value) {
+                if ($value->field_key == 1) {
+                    $this->primaryKey[] = $value->field_name;
+                }
+            }
+
+            $flagPrimaryKey = 1;
             while ($rs->next()) {
                 $row = $rs->getRow();
+                if ($flagPrimaryKey) {
+                    // verify row has all primary keys
+                    $keys = 0;
+                    foreach ($row as $colName => $value) {
+                        if (in_array($colName,$this->primaryKey)){
+                            $keys++;
+                        }
+                    }
+                    if ($keys != count($this->primaryKey)) {
+                        return $stmt->executeQuery(str_replace($table, $tableBackup, $queryStack["drop"]));
+                    }
+                    $flagPrimaryKey = 0;
+                }
 
                 $oTable = new $tableFileName();
                 $oTable->fromArray($row, BasePeer::TYPE_FIELDNAME);

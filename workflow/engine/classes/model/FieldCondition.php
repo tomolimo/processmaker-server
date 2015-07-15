@@ -150,7 +150,7 @@ class FieldCondition extends BaseFieldCondition
 
         if (sizeof( $aRows ) != 0) {
             foreach ($aRows as $aRow) {
-                $hashCond = md5( $aRow['FCD_UID'] );
+                $hashCond = G::encryptOld( $aRow['FCD_UID'] );
                 $sCondition = $this->parseCondition( $aRow['FCD_CONDITION'] );
                 $sCondition = addslashes( $sCondition );
 

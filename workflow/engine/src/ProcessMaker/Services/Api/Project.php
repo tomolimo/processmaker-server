@@ -108,13 +108,14 @@ class Project extends Api
     public function export($prj_uid)
     {
         $exporter = new \ProcessMaker\Exporter\XmlExporter($prj_uid);
+        $getProjectName = $exporter->truncateName($exporter->getProjectName(),false);
 
         $outputDir = PATH_DATA . "sites" . PATH_SEP . SYS_SYS . PATH_SEP . "files" . PATH_SEP . "output" . PATH_SEP;
-        $version = \ProcessMaker\Util\Common::getLastVersion($outputDir . $exporter->getProjectName() . "-*.pmx") + 1;
-        $outputFilename = $outputDir . sprintf("%s-%s.%s", $exporter->getProjectName(), $version, "pmx");
+        $version = \ProcessMaker\Util\Common::getLastVersion($outputDir . $getProjectName . "-*.pmx") + 1;
+        $outputFilename = $outputDir . sprintf("%s-%s.%s", str_replace(" ", "_", $getProjectName), $version, "pmx");
 
         $exporter->setMetadata("export_version", $version);
-        $exporter->saveExport($outputFilename);
+        $outputFilename = $outputDir.$exporter->saveExport($outputFilename);
 
         $httpStream = new \ProcessMaker\Util\IO\HttpStream();
         $fileExtension = pathinfo($outputFilename, PATHINFO_EXTENSION);

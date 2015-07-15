@@ -2,6 +2,7 @@
 namespace Maveriks\Extension;
 
 use Luracast\Restler\Defaults;
+use Luracast\Restler\Format\JsonFormat;
 use Luracast\Restler\Format\UrlEncodedFormat;
 use ProcessMaker\Services\Api;
 use Luracast\Restler\RestException;
@@ -102,8 +103,9 @@ class Restler extends \Luracast\Restler\Restler
             } else {
                 $r = $this->inputExecute;
             }
-
-            $r = $this->requestFormat->decode($r);
+            if(!empty($r) || !$this->requestFormat instanceof JsonFormat){
+                $r = $this->requestFormat->decode($r);
+            }
             $r = is_array($r)
                 ? array_merge($r, array(Defaults::$fullRequestDataName => $r))
                 : array(Defaults::$fullRequestDataName => $r);

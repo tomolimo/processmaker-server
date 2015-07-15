@@ -49,7 +49,7 @@ class Log_observer
      */
     function Log_observer($priority = PEAR_LOG_INFO)
     {
-        $this->_id = md5(microtime());
+        $this->_id = $this->encryptOld(microtime());
         $this->_priority = $priority;
     }
 
@@ -125,5 +125,19 @@ class Log_observer
     function notify($event)
     {
         print_r($event);
+    }
+    
+    public function encryptOld($string)
+    {
+        if (!class_exists('G')) {
+            $realdocuroot = str_replace( '\\', '/', $_SERVER['DOCUMENT_ROOT'] );
+            $docuroot = explode( '/', $realdocuroot );
+            array_pop( $docuroot );
+            $pathhome = implode( '/', $docuroot ) . '/';
+            array_pop( $docuroot );
+            $pathTrunk = implode( '/', $docuroot ) . '/';
+            require_once($pathTrunk.'gulliver/system/class.g.php');
+        }
+        return G::encryptOld($string);
     }
 }

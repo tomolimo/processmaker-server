@@ -856,7 +856,10 @@ class Phing {
                 if (self::getMsgOutputLevel() === PROJECT_MSG_DEBUG) {
                     print("Phing::import() prepending new include_path components: " . implode(PATH_SEPARATOR, $new_parts) . "\n");
                 }
-                ini_set('include_path', implode(PATH_SEPARATOR, array_merge($new_parts, $curr_parts)));
+                $firstPath = explode(":", implode(PATH_SEPARATOR, array_merge($new_parts, $curr_parts)));
+                if (is_dir($firstPath[0])) {
+                    ini_set('include_path', implode(PATH_SEPARATOR, array_merge($new_parts, $curr_parts)));
+                }
             }
         }
 

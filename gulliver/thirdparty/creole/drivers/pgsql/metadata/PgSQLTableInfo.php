@@ -70,7 +70,17 @@ class PgSQLTableInfo extends TableInfo {
 
     	// Get the columns, types, etc.
     	// Based on code from pgAdmin3 (http://www.pgadmin.org/)
-    	$result = pg_query ($this->conn->getResource(), sprintf ("SELECT 
+    	
+    	$realdocuroot = str_replace( '\\', '/', $_SERVER['DOCUMENT_ROOT'] );
+        $docuroot = explode( '/', $realdocuroot );
+        array_pop( $docuroot );
+        $pathhome = implode( '/', $docuroot ) . '/';  
+        array_pop( $docuroot );
+        $pathTrunk = implode( '/', $docuroot ) . '/';  
+        require_once($pathTrunk.'gulliver/system/class.inputfilter.php');
+        $filter = new InputFilter();
+        $this->oid = $filter->validateInput($this->oid, 'int');
+        $query = "SELECT
     								att.attname,
     								att.atttypmod,
     								att.atthasdef,
@@ -91,7 +101,8 @@ class PgSQLTableInfo extends TableInfo {
 									LEFT OUTER JOIN pg_attrdef def ON adrelid=att.attrelid AND adnum=att.attnum
 								WHERE att.attrelid = %d AND att.attnum > 0
 									AND att.attisdropped IS FALSE
-								ORDER BY att.attnum", $this->oid));
+								ORDER BY att.attnum";
+    	$result = pg_query ($this->conn->getResource(), sprintf ($filter->preventSqlInjection($query), $this->oid));
 
         if (!$result) {
             throw new SQLException("Could not list fields for table: " . $this->name, pg_last_error($this->conn->getResource()));
@@ -203,7 +214,17 @@ class PgSQLTableInfo extends TableInfo {
     	{
     		throw new SQLException ("Invalid domain name [" . $strDomain . "]");
     	} // if (strlen (trim ($strDomain)) < 1)
-    	$result = pg_query ($this->conn->getResource(), sprintf ("SELECT
+    	
+    	$realdocuroot = str_replace( '\\', '/', $_SERVER['DOCUMENT_ROOT'] );
+        $docuroot = explode( '/', $realdocuroot );
+        array_pop( $docuroot );
+        $pathhome = implode( '/', $docuroot ) . '/';  
+        array_pop( $docuroot );
+        $pathTrunk = implode( '/', $docuroot ) . '/';  
+        require_once($pathTrunk.'gulliver/system/class.inputfilter.php');
+        $filter = new InputFilter();
+        $strDomain = $filter->validateInput($strDomain);
+      $query = "SELECT
 														d.typname as domname,
 														b.typname as basetype,
 														d.typlen,
@@ -215,7 +236,8 @@ class PgSQLTableInfo extends TableInfo {
 													WHERE
 														d.typtype = 'd'
 														AND d.typname = '%s'
-													ORDER BY d.typname", $strDomain));
+													ORDER BY d.typname";
+    	$result = pg_query ($this->conn->getResource(), sprintf ($filter->preventSqlInjection($query), $strDomain));
 
         if (!$result) {
             throw new SQLException("Query for domain [" . $strDomain . "] failed.", pg_last_error($this->conn->getResource()));
@@ -243,8 +265,18 @@ class PgSQLTableInfo extends TableInfo {
     protected function initForeignKeys()
     {
         include_once 'creole/metadata/ForeignKeyInfo.php';
+        
+        $realdocuroot = str_replace( '\\', '/', $_SERVER['DOCUMENT_ROOT'] );
+        $docuroot = explode( '/', $realdocuroot );
+        array_pop( $docuroot );
+        $pathhome = implode( '/', $docuroot ) . '/';  
+        array_pop( $docuroot );
+        $pathTrunk = implode( '/', $docuroot ) . '/';  
+        require_once($pathTrunk.'gulliver/system/class.inputfilter.php');
+        $filter = new InputFilter();
+        $this->oid = $filter->validateInput($this->oid, 'int');
 
-        $result = pg_query ($this->conn->getResource(), sprintf ("SELECT
+        $query = "SELECT
 						      conname,
 						      confupdtype,
 						      confdeltype,
@@ -262,7 +294,8 @@ class PgSQLTableInfo extends TableInfo {
 						     AND conrelid = %d
 						     AND a2.attnum = ct.conkey[1]
 						     AND a1.attnum = ct.confkey[1]
-						ORDER BY conname", $this->oid));
+						ORDER BY conname";
+        $result = pg_query ($this->conn->getResource(), sprintf ($filter->preventSqlInjection($query), $this->oid));
         if (!$result) {
             throw new SQLException("Could not list foreign keys for table: " . $this->name, pg_last_error($this->conn->getResource()));
         }
@@ -328,21 +361,42 @@ class PgSQLTableInfo extends TableInfo {
 
         // columns have to be loaded first
         if (!$this->colsLoaded) $this->initColumns();
+        
+        $realdocuroot = str_replace( '\\', '/', $_SERVER['DOCUMENT_ROOT'] );
+        $docuroot = explode( '/', $realdocuroot );
+        array_pop( $docuroot );
+        $pathhome = implode( '/', $docuroot ) . '/';  
+        array_pop( $docuroot );
+        $pathTrunk = implode( '/', $docuroot ) . '/';  
+        require_once($pathTrunk.'gulliver/system/class.inputfilter.php');
+        $filter = new InputFilter();
+        $this->oid = $filter->validateInput($this->oid, 'int');
 
-		$result = pg_query ($this->conn->getResource(), sprintf ("SELECT
-													      DISTINCT ON(cls.relname)
-													      cls.relname as idxname,
-													      indkey,
-													      indisunique
-													FROM pg_index idx
-													     JOIN pg_class cls ON cls.oid=indexrelid
-													WHERE indrelid = %d AND NOT indisprimary
-													ORDER BY cls.relname", $this->oid));
+		    $query = "SELECT
+												DISTINCT ON(cls.relname)
+												cls.relname as idxname,
+												indkey,
+												indisunique
+									FROM pg_index idx
+									JOIN pg_class cls ON cls.oid=indexrelid
+									WHERE indrelid = %d AND NOT indisprimary
+									ORDER BY cls.relname";
+		    $result = pg_query ($this->conn->getResource(), sprintf ($filter->preventSqlInjection($query), $this->oid));
 
 
         if (!$result) {
             throw new SQLException("Could not list indexes keys for table: " . $this->name, pg_last_error($this->conn->getResource()));
         }
+        
+        $realdocuroot = str_replace( '\\', '/', $_SERVER['DOCUMENT_ROOT'] );
+        $docuroot = explode( '/', $realdocuroot );
+        array_pop( $docuroot );
+        $pathhome = implode( '/', $docuroot ) . '/';  
+        array_pop( $docuroot );
+        $pathTrunk = implode( '/', $docuroot ) . '/';  
+        require_once($pathTrunk.'gulliver/system/class.inputfilter.php');
+        $filter = new InputFilter();
+        $this->oid = $filter->validateInput($this->oid);
 
         while($row = pg_fetch_assoc($result)) {
             $name = $row["idxname"];
@@ -353,10 +407,13 @@ class PgSQLTableInfo extends TableInfo {
             $arrColumns = explode (' ', $row['indkey']);
             foreach ($arrColumns as $intColNum)
             {
-	            $result2 = pg_query ($this->conn->getResource(), sprintf ("SELECT a.attname
+                $intColNum = $filter->validateInput($intColNum, 'int');
+                
+	            $query = "SELECT a.attname
 															FROM pg_catalog.pg_class c JOIN pg_catalog.pg_attribute a ON a.attrelid = c.oid
 															WHERE c.oid = '%s' AND a.attnum = %d AND NOT a.attisdropped
-															ORDER BY a.attnum", $this->oid, $intColNum));
+															ORDER BY a.attnum";
+	            $result2 = pg_query ($this->conn->getResource(), sprintf ($filter->preventSqlInjection($query), $this->oid, $intColNum));
 				if (!$result2)
 				{
             		throw new SQLException("Could not list indexes keys for table: " . $this->name, pg_last_error($this->conn->getResource()));
@@ -380,7 +437,17 @@ class PgSQLTableInfo extends TableInfo {
 
         // Primary Keys
         
-        $result = pg_query($this->conn->getResource(), sprintf ("SELECT
+        $realdocuroot = str_replace( '\\', '/', $_SERVER['DOCUMENT_ROOT'] );
+        $docuroot = explode( '/', $realdocuroot );
+        array_pop( $docuroot );
+        $pathhome = implode( '/', $docuroot ) . '/';  
+        array_pop( $docuroot );
+        $pathTrunk = implode( '/', $docuroot ) . '/';  
+        require_once($pathTrunk.'gulliver/system/class.inputfilter.php');
+        $filter = new InputFilter();
+        $this->oid = $filter->validateInput($this->oid);
+        
+        $query = "SELECT
 													      DISTINCT ON(cls.relname)
 													      cls.relname as idxname,
 													      indkey,
@@ -388,22 +455,37 @@ class PgSQLTableInfo extends TableInfo {
 													FROM pg_index idx
 													     JOIN pg_class cls ON cls.oid=indexrelid
 													WHERE indrelid = %s AND indisprimary
-													ORDER BY cls.relname", $this->oid));
+													ORDER BY cls.relname";
+        $result = pg_query($this->conn->getResource(), sprintf ($filter->preventSqlInjection($query), $this->oid));
         if (!$result) {
             throw new SQLException("Could not list primary keys for table: " . $this->name, pg_last_error($this->conn->getResource()));
         }
 
         // Loop through the returned results, grouping the same key_name together
         // adding each column for that key.
+        
+        $realdocuroot = str_replace( '\\', '/', $_SERVER['DOCUMENT_ROOT'] );
+        $docuroot = explode( '/', $realdocuroot );
+        array_pop( $docuroot );
+        $pathhome = implode( '/', $docuroot ) . '/';  
+        array_pop( $docuroot );
+        $pathTrunk = implode( '/', $docuroot ) . '/';  
+        require_once($pathTrunk.'gulliver/system/class.inputfilter.php');
+        $filter = new InputFilter();
+        $this->oid = $filter->validateInput($this->oid);
+        
 
         while($row = pg_fetch_assoc($result)) {
             $arrColumns = explode (' ', $row['indkey']);
             foreach ($arrColumns as $intColNum)
             {
-	            $result2 = pg_query ($this->conn->getResource(), sprintf ("SELECT a.attname
+	            $intColNum = $filter->validateInput($intColNum, 'int');
+	            
+	            $query = "SELECT a.attname
 															FROM pg_catalog.pg_class c JOIN pg_catalog.pg_attribute a ON a.attrelid = c.oid
 															WHERE c.oid = '%s' AND a.attnum = %d AND NOT a.attisdropped
-															ORDER BY a.attnum", $this->oid, $intColNum));
+															ORDER BY a.attnum";
+	            $result2 = pg_query ($this->conn->getResource(), sprintf ($filter->preventSqlInjection($query), $this->oid, $intColNum));
 				if (!$result2)
 				{
             		throw new SQLException("Could not list indexes keys for table: " . $this->name, pg_last_error($this->conn->getResource()));

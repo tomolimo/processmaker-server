@@ -40,6 +40,10 @@ CLI::taskRun('run_create_translation');
 
 function run_create_translation($args, $opts)
 {
+    G::LoadSystem('inputfilter');
+    $filter = new InputFilter();
+    $opts = $filter->xssFilterHard($opts);
+    $args = $filter->xssFilterHard($args);
     $rootDir = realpath(__DIR__."/../../../../");
     $app = new Maveriks\WebApplication();
     $app->setRootDir($rootDir);
@@ -53,7 +57,6 @@ function run_create_translation($args, $opts)
     foreach ($workspaces as $workspace) {
         try {
             echo "Updating labels for workspace " . pakeColor::colorize($workspace->name, "INFO") . "\n";
-            $app->loadEnvironment($workspace->name, $loadConstants);
             $translation->generateTransaltionMafe($lang);
         } catch (Exception $e) {
             echo "Errors upgrading labels for workspace " . CLI::info($workspace->name) . ": " . CLI::error($e->getMessage()) . "\n";

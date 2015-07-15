@@ -31,7 +31,7 @@ switch ($REQUEST) {
         G::RenderPage( 'publish', 'raw' );
         break;
     case 'saveNewRole':
-        $newid = md5( $_POST['code'] . date( "d-M-Y_H:i:s" ) );
+        $newid = G::encryptOld( $_POST['code'] . date( "d-M-Y_H:i:s" ) );
         $aData['ROL_UID'] = $newid;
         //$aData['ROL_PARENT'] = $_POST['parent'];
         $aData['ROL_SYSTEM'] = '00000000000000000000000000000002';

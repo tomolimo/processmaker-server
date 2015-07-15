@@ -64,6 +64,50 @@ class Route extends BaseRoute
     }
 
     /**
+     * Set default Route by Unique id of Route
+     *
+     * @param string $routeUid Unique id of Route
+     *
+     * return void
+     */
+    public function setRouDefaultByUid($routeUid)
+    {
+        try {
+            $arrayRouteData = $this->load($routeUid);
+
+            if (in_array($arrayRouteData["ROU_TYPE"], array("EVALUATE", "PARALLEL-BY-EVALUATION"))) {
+                //Update
+                //Update - WHERE
+                $criteriaWhere = new Criteria("workflow");
+                $criteriaWhere->add(RoutePeer::PRO_UID, $arrayRouteData["PRO_UID"], Criteria::EQUAL);
+                $criteriaWhere->add(RoutePeer::TAS_UID, $arrayRouteData["TAS_UID"], Criteria::EQUAL);
+                $criteriaWhere->add(RoutePeer::ROU_UID, $routeUid, Criteria::NOT_EQUAL);
+
+                //Update - SET
+                $criteriaSet = new Criteria("workflow");
+                $criteriaSet->add(RoutePeer::ROU_DEFAULT, 0);
+
+                BasePeer::doUpdate($criteriaWhere, $criteriaSet, Propel::getConnection("workflow"));
+
+                if ((int)($arrayRouteData["ROU_DEFAULT"]) == 0) {
+                    //Update
+                    //Update - WHERE
+                    $criteriaWhere = new Criteria("workflow");
+                    $criteriaWhere->add(RoutePeer::ROU_UID, $routeUid, Criteria::EQUAL);
+
+                    //Update - SET
+                    $criteriaSet = new Criteria("workflow");
+                    $criteriaSet->add(RoutePeer::ROU_DEFAULT, 1);
+
+                    BasePeer::doUpdate($criteriaWhere, $criteriaSet, Propel::getConnection("workflow"));
+                }
+            }
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
+
+    /**
      * Create the application document registry
      *
      * @param array $aData
@@ -92,6 +136,11 @@ class Route extends BaseRoute
                 $oConnection->begin();
                 $iResult = $oRoute->save();
                 $oConnection->commit();
+
+                if (isset($aData["ROU_DEFAULT"]) && (int)($aData["ROU_DEFAULT"]) == 1) {
+                    $this->setRouDefaultByUid($sRouteUID);
+                }
+
                 return $sRouteUID;
             } else {
                 $sMessage = '';
@@ -139,6 +188,11 @@ class Route extends BaseRoute
                     $oConnection->begin();
                     $iResult = $oRoute->save();
                     $oConnection->commit();
+
+                    if (isset($aData["ROU_DEFAULT"]) && (int)($aData["ROU_DEFAULT"]) == 1) {
+                        $this->setRouDefaultByUid($aData["ROU_UID"]);
+                    }
+
                     return $iResult;
                 } else {
                     $sMessage = '';

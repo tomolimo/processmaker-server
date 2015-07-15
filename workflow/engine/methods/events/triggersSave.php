@@ -36,3 +36,11 @@ if ($_POST['form']['TRI_UID'] != '') {
 
 $oTrigger->update( $_POST['form'] );
 
+$triggerFields = $oTrigger->load($_POST['form']['TRI_UID']);
+$proUid = $triggerFields['PRO_UID'];
+
+$infoProcess = new Process();
+$resultProcess = $infoProcess->load($proUid);
+
+G::auditLog('EditEvent','Save trigger from event ('.$_POST['form']['TRI_UID'].') in process "'.$resultProcess['PRO_TITLE'].'"');
+

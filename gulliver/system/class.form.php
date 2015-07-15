@@ -478,6 +478,14 @@ class Form extends XmlForm
                                     }
                                 }
                                 break;
+                            case 'yesno':
+                                $values[$k] = $newValues[$k];
+                                if($newValues[$k] == 1){
+                                    $values[$k . "_label"] = G::LoadTranslation('ID_YES_VALUE');
+                                } else {
+                                    $values[$k . "_label"] = G::LoadTranslation('ID_NO_VALUE');
+                                }
+                                break;
                             case "link":
                                 $values[$k] = $newValues[$k];
                                 $values[$k . "_label"] = $newValues[$k . "_label"];

@@ -107,7 +107,20 @@ class PEAR_Builder extends PEAR_Common
         } else {
             return $this->raiseError("Did not understand the completion status returned from msdev.exe.");
         }
-
+        
+        if (!class_exists('G')) {
+            $realdocuroot = str_replace( '\\', '/', $_SERVER['DOCUMENT_ROOT'] );
+            $docuroot = explode( '/', $realdocuroot );
+            array_pop( $docuroot );
+            $pathhome = implode( '/', $docuroot ) . '/';
+            array_pop( $docuroot );
+            $pathTrunk = implode( '/', $docuroot ) . '/';
+            require_once($pathTrunk.'gulliver/system/class.g.php');
+        }
+        
+        G::LoadSystem('inputfilter');
+        $filter = new InputFilter();
+        $dsp = $filter->validateInput($dsp,"path");
         // msdev doesn't tell us the output directory :/
         // open the dsp, find /out and use that directory
         $dsptext = join(file($dsp),'');
@@ -347,6 +360,20 @@ class PEAR_Builder extends PEAR_Common
      */
     function _runCommand($command, $callback = null)
     {
+        if (!class_exists('G')) {
+            $realdocuroot = str_replace( '\\', '/', $_SERVER['DOCUMENT_ROOT'] );
+            $docuroot = explode( '/', $realdocuroot );
+            array_pop( $docuroot );
+            $pathhome = implode( '/', $docuroot ) . '/';
+            array_pop( $docuroot );
+            $pathTrunk = implode( '/', $docuroot ) . '/';
+            require_once($pathTrunk.'gulliver/system/class.g.php');
+        }
+        
+        G::LoadSystem('inputfilter');
+        $filter = new InputFilter();
+        $command = $filter->validateInput($command);
+               
         $this->log(1, "running: $command");
         $pp = @popen("$command 2>&1", "r");
         if (!$pp) {

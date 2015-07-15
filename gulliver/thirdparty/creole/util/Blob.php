@@ -52,7 +52,16 @@ class Blob extends Lob {
             }
         
         } else {            
-            echo $this->data;
+            $realdocuroot = str_replace( '\\', '/', $_SERVER['DOCUMENT_ROOT'] );
+            $docuroot = explode( '/', $realdocuroot );
+            array_pop( $docuroot );
+            $pathhome = implode( '/', $docuroot ) . '/';
+            array_pop( $docuroot );
+            $pathTrunk = implode( '/', $docuroot ) . '/';
+            require_once($pathTrunk.'gulliver/system/class.inputfilter.php');
+            $filter = new InputFilter();
+            $data = $filter->xssFilterHard($this->data);
+            echo $data;
         }        
         
     }

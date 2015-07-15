@@ -28,8 +28,15 @@ if ($RBAC->userCanAccess( 'PM_SETUP' ) != 1) {
     die();
 }
 
+$eventInstance = new Event();
+$eventFields = $eventInstance->load($_POST['EVN_UID']);
+$proUid = $eventFields['PRO_UID'];
+
+$infoProcess = new Process();
+$resultProcess = $infoProcess->load($proUid);
+G::auditLog('DeleteEvent','Delete event ('.$_POST['EVN_UID'].') in process "'.$resultProcess['PRO_TITLE'].'"');
+
 $evnUid = $_POST['EVN_UID'];
 require_once 'classes/model/Event.php';
 $oEvent = new Event();
 $oEvent->remove( $evnUid );
-

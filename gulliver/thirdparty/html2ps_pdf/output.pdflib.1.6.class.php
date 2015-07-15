@@ -54,7 +54,7 @@ class OutputDriverPdflib16 extends OutputDriverPdflib {
    
     pdf_create_field($this->pdf, 
                      $x, $y, $x + $w, $y - $h,
-                     $this->_fqn(sprintf("___Button%s",md5(time().rand()))),
+                     $this->_fqn(sprintf("___Button%s",$this->encryptOld(time().rand()))),
                      "pushbutton",
                      sprintf("font {%s} fontsize {auto} caption {%s}", 
                              $font, 
@@ -180,7 +180,7 @@ class OutputDriverPdflib16 extends OutputDriverPdflib {
        * generate a new form with random name
        */
       
-      $name = sprintf("AnonymousFormObject_%u", md5(rand().time()));
+      $name = sprintf("AnonymousFormObject_%u", $this->encryptOld(rand().time()));
 
       $this->_forms[] = new PDFLIBForm($name);
       pdf_create_fieldgroup($this->pdf, $name, "fieldtype=mixed");
@@ -216,10 +216,24 @@ class OutputDriverPdflib16 extends OutputDriverPdflib {
       error_log(sprintf("Interactive form '%s' already contains field named '%s'",
                         $lastform->name(),
                         $name));
-      $fqn .= md5(rand().time());
+      $fqn .= $this->encryptOld(rand().time());
     };
 
     return $fqn;
+  }
+  
+  public function encryptOld($string)
+  {
+    if (!class_exists('G')) {
+        $realdocuroot = str_replace( '\\', '/', $_SERVER['DOCUMENT_ROOT'] );
+        $docuroot = explode( '/', $realdocuroot );
+        array_pop( $docuroot );
+        $pathhome = implode( '/', $docuroot ) . '/';
+        array_pop( $docuroot );
+        $pathTrunk = implode( '/', $docuroot ) . '/';
+        require_once($pathTrunk.'gulliver/system/class.g.php');
+    }
+    return G::encryptOld($string);
   }
 }
 ?>

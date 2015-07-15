@@ -660,7 +660,12 @@ function ftp_get(&$control, $local, $remote, $mode, $resume = 0)
         return false;
     }
 
-    $fp = fopen($local, 'w'.$windows[$mode]);
+    if(is_file($local)) {
+        $fp = fopen($local, 'w'.$windows[$mode]);
+    } else {
+        $fp = false;
+    }
+    
     if (!is_resource($fp)) {
         $fp = null;
         return false;

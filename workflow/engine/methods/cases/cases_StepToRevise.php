@@ -23,6 +23,9 @@
  */
 //  die("first");
 /* Permissions */
+G::LoadSystem('inputfilter');
+$filter = new InputFilter();
+$_GET = $filter->xssFilterHard($_GET,"url");
 switch ($RBAC->userCanAccess( 'PM_SUPERVISOR' )) {
     case - 2:
         G::SendTemporalMessage( 'ID_USER_HAVENT_RIGHTS_SYSTEM', 'error', 'labels' );
@@ -35,8 +38,9 @@ switch ($RBAC->userCanAccess( 'PM_SUPERVISOR' )) {
         die();
         break;
 }
-
+$_SESSION = $filter->xssFilterHard($_SESSION,"url");
 if ((int) $_SESSION['INDEX'] < 1) {
+    $_SERVER['HTTP_REFERER'] = $filter->xssFilterHard($_SERVER['HTTP_REFERER']);
     G::SendTemporalMessage( 'ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels' );
     G::header( 'location: ' . $_SERVER['HTTP_REFERER'] );
     die();
@@ -119,7 +123,16 @@ $oDbConnections->loadAdditionalConnections();
 $G_PUBLISH = new Publisher();
 if ($_GET['DYN_UID'] != '') {
     $_SESSION['CURRENT_DYN_UID'] = $_GET['DYN_UID'];
-    $G_PUBLISH->AddContent( 'dynaform', 'xmlform', $_SESSION['PROCESS'] . '/' . $_GET['DYN_UID'], '', $Fields['APP_DATA'], 'cases_SaveDataSupervisor?UID=' . $_GET['DYN_UID'] );
+    G::LoadClass('pmDynaform');
+    $FieldsPmDynaform = $Fields;
+    $FieldsPmDynaform["PRO_UID"] = $_SESSION['PROCESS'];
+    $FieldsPmDynaform["CURRENT_DYNAFORM"] = $_GET['DYN_UID'];
+    $a = new pmDynaform($FieldsPmDynaform);
+    if ($a->isResponsive()) {
+        $a->printView();
+    }else{
+        $G_PUBLISH->AddContent( 'dynaform', 'xmlform', $_SESSION['PROCESS'] . '/' . $_GET['DYN_UID'], '', $Fields['APP_DATA'], 'cases_SaveDataSupervisor?UID=' . $_GET['DYN_UID'] );
+    }
 }
 
 G::RenderPage( 'publish', 'blank' );
@@ -134,7 +147,7 @@ if (! isset( $_GET['ex'] )) {
 // DEPRECATED this JS section is marked for removal
 function setSelect()
 {
-  var ex=<?php echo $_GET['ex']?>;
+  var ex=<?php echo $filter->xssFilterHard($_GET['ex'])?>;
   try {
     for(i=1; i<50; i++) {
       if (i == ex) {

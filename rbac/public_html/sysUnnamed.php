@@ -5,7 +5,9 @@
 //  define("URL_KEY", 'c0l0s40pt1mu59r1m3' );
 //  define("ENABLE_ENCRYPT", 'yes' );
 
-  $COMPLETE_URI = $_SERVER["REQUEST_URI"];
+  G::LoadSystem('inputfilter');
+  $filter = new InputFilter();
+  $COMPLETE_URI = $filter->xssFilterHard($_SERVER["REQUEST_URI"]);
 
   $webAddress = substr($COMPLETE_URI,1);
   $COMPLETE_URI = strtolower ($COMPLETE_URI) . "/mNE/qsll/n9KX1Z4/n9KX1Z6hnKTd4A";

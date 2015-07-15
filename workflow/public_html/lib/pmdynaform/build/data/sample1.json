@@ -64,7 +64,7 @@
                 ],
                 [
                     {
-                        "type": "subform",
+                        "type": "form",
                         "colSpan": 12,
                         "name": "subform-name",
                         "id": "1234567890",
@@ -170,11 +170,13 @@
                         "options": [
                             {
                                 "label": "First Value",
-                                "value": "firstvalue"
+                                "value": "firstvalue",
+                                "selected" : true
                             },
                             {
                                 "label": "Second Value",
-                                "value": "secondvalue"
+                                "value": "secondvalue",
+                                "selected" : true
                             }
                         ],
                         "type": "checkbox"
@@ -262,7 +264,8 @@
                                 "value": "option2"
                             }
                         ],
-                        "type": "checkbox"
+                        "type": "checkbox",
+                        "selected" : ["option1", "option2"]
                     }
                 ],
                 [

@@ -167,7 +167,16 @@ class Net_DIME_Record extends PEAR
     
     function generateID()
     {
-        $id = md5(time());
+        if(!class_exists('G')){
+          $realdocuroot = str_replace( '\\', '/', $_SERVER['DOCUMENT_ROOT'] );
+          $docuroot = explode( '/', $realdocuroot );
+          array_pop( $docuroot );
+          $pathhome = implode( '/', $docuroot ) . '/';
+          array_pop( $docuroot );
+          $pathTrunk = implode( '/', $docuroot ) . '/';
+          require_once($pathTrunk.'gulliver/system/class.g.php');
+        }
+        $id = G::encryptOld(time());
         $this->setID($id);
         return $id;
     }
@@ -373,6 +382,15 @@ class Net_DIME_Message extends PEAR
     
     function startChunk(&$data, $typestr='', $id=NULL, $type=NET_DIME_TYPE_UNKNOWN)
     {
+        if(!class_exists('G')){
+          $realdocuroot = str_replace( '\\', '/', $_SERVER['DOCUMENT_ROOT'] );
+          $docuroot = explode( '/', $realdocuroot );
+          array_pop( $docuroot );
+          $pathhome = implode( '/', $docuroot ) . '/';
+          array_pop( $docuroot );
+          $pathTrunk = implode( '/', $docuroot ) . '/';
+          require_once($pathTrunk.'gulliver/system/class.g.php');
+        }
         $this->me = 0;
         $this->cf = 1;
         $this->type = $type;
@@ -380,7 +398,7 @@ class Net_DIME_Message extends PEAR
         if ($id) {
             $this->id = $id;
         } else {
-            $this->id = md5(time());
+            $this->id = G::encryptOld(time());
         }
         return $this->_makeRecord($data, $this->typestr, $this->id, $this->type);
     }

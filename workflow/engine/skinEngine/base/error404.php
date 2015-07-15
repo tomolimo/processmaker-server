@@ -1,3 +1,39 @@
+<?php
+
+$http = (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == "on")? "https" : "http";
+$host = $_SERVER["SERVER_NAME"] . (($_SERVER["SERVER_PORT"] != "80")? ":" . $_SERVER["SERVER_PORT"] : "");
+
+$urlLogin = $http . "://" . $host . "/sys/en/neoclassic/login/login";
+$urlHome =  $urlLogin;
+
+if (isset($_GET["url"]) && $_GET["url"] != "") {
+    $url = urldecode($_GET["url"]);
+    $url = explode("/", $url);
+
+    $sysSys = "";
+    $sysLang = "";
+    $sysSkin = "";
+
+    if (isset($url[1]) && preg_match("/^sys(.+)$/", $url[1], $match)) {
+        $sysSys = $match[1];
+    }
+
+    if (isset($url[2])) {
+        $sysLang = $url[2];
+    }
+
+    if (isset($url[3])) {
+        $sysSkin = $url[3];
+    }
+
+    if ($sysSys != "" && $sysLang != "" && $sysSkin != "") {
+        $urlLogin = $http . "://" . $host . "/sys" . $sysSys . "/" . $sysLang . "/" . $sysSkin . "/login/login";
+        $urlHome =  $http . "://" . $host . "/sys" . $sysSys . "/" . $sysLang . "/" . $sysSkin . "/cases/main";
+    }
+}
+
+?>
+
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <META http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -16,15 +52,14 @@
 
         <!-- Header -->
         <div id="header">
-            <table border="0" cellspacing="0" cellpadding="0" width="90%"><tr>
-                <td align="left"><img src="images/colosa.png" alt="www.colosa.com" id="colosa" /></td>
-                <td align="center">
-                    <h2>Oops, page not found!</h2>
-                    <h5>This page may be busy or the URL incorrect.</h5>
-                </td>
-                <td align="right"><img src="images/processmaker.logo2.png" alt="www.colosa.com" id="colosa" /></td>
-          </tr></table>
-
+            <table border="0" cellspacing="0" cellpadding="0" width="90%">
+                <tr>
+                    <td align="center">
+                        <h2>Oops, page not found!</h2>
+                        <h5>This page may be busy or the URL incorrect.</h5>
+                    </td>
+                </tr>
+            </table>
         </div>
         <!-- End Header -->
 
@@ -43,16 +78,14 @@
 </ul>
 <ul>
                 <br/>
-                <h3>Lost? We suggest...</h3>
+                <h3>What you can do?</h3>
                 <!-- End info text -->
                 <br/>
                 <!-- Page links -->
                 <ul id="textInfo">
-                    <li><a href="http://www.processmakerblog.com/" target="_blank">PROCESSMAKER BLOG</a></li>
-                    <li><a href="http://wiki.processmaker.com/index.php/Main_Page" target="_blank">DOCUMENTATION</a></li>
-                    <li><a href="http://forum.processmaker.com/" target="_blank">FORUM</a></li>
-                    <li><a href="http://library.processmaker.com/" target="_blank">LIBRARY</a></li>
-                    <li><a href="http://bugs.processmaker.com/my_view_page.php" target="_blank">BUG TRACKER</a></li>
+                    <li>You might try retyping the URL and trying again.</li>
+                    <li>Or we could take you back to the <a href="<?php echo $urlHome; ?>">home page.</a></li>
+                    <li>Or you could start again from the <a href="<?php echo $urlLogin; ?>">login page.</a></li>
                 </ul>
                 <!-- End page links -->
             </div>
@@ -69,41 +102,8 @@
 
 
         <!-- Footer -->
-        <div id="footer">
-
-            <!-- Twitter -->
-            <img src="images/pm.png" alt="twitter" id="twitter" />
-
-            <p id="twitter_text">
-            <a href= "http://www.processmaker.com/privacy-statement" target="_blank"> Privacy Statement </a>| <a href= "http://www.processmaker.com/security-statement" target="_blank">Security Statement </a> | <a href= "http://www.processmaker.com/terms-of-service" target="_blank"> Terms of Service </a> | <a href= "http://www.processmaker.com/commercial-license" target="_blank"> Commercial License </a> | <a href= "http://www.processmaker.com/contact-us" target="_blank"> Contact Us </a>| <a href= "http://feeds.feedburner.com/processmaker" target="_blank"> RSS </a>
-            &#169; Copyright 2000 - <?php echo date('Y'); ?> Colosa, Inc. <a href= "http://www.colosa.com/" target="_blank"> www.colosa.com </a>
-            </p>
-        <!-- End Twitter -->
-            <div id="socialmedia" style="float: left; text-align: right;margin-top: 20px;">
-            <a href="https://www.facebook.com/processmaker" target="_blank">
-                <img height="25" width="25" alt="Facebook" src="images/socialmedia/fb.png">
-            </a>
-            <a href="http://twitter.com/processmaker" target="_blank">
-                <img height="25" width="25" alt="Twitter" src="images/socialmedia/tw.png">
-            </a>
-            <a href="http://www.youtube.com/processmaker#play/uploads" target="_blank">
-                <img height="25" width="25" alt="YouTube" src="images/socialmedia/yb.png">
-            </a>
-            <a href="http://feeds.feedburner.com/processmaker" target="_blank">
-                <img height="25" width="25" alt="RSS" src="images/socialmedia/rs.png">
-            </a>
-          </div>
-
-            <!-- Search Form -->
-            <!--<form action="#" method="post">
-            <p id="searchform">
-                <input type="submit" name="submit" id="submit" value="Search" />
-                <input type="text" name="search" id="search" />
-            </p>
-            </form>-->
-            <!-- End Search form -->
-
-            <div style="clear:both;"></div>
+        <div id="footer" style="padding-top: 10px; color: #878787; font-size: 10px; text-align: center;">
+            <span>&#169; Copyright 2000 - <?php echo date("Y"); ?> </span>
         </div>
         <!-- End Footer -->
 

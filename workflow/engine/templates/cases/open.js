@@ -30,7 +30,15 @@ function formatAMPM(date, initVal) {
   minutes = minutes < 10 ? '0'+minutes : minutes;
   var strTime = hours + ':' + minutes + ' ' + ampm;
   return strTime;
-}
+};
+
+function isBrowserIE(){
+  if ( (navigator.userAgent.indexOf("MSIE")!=-1) || (navigator.userAgent.indexOf("Trident")!=-1) ){
+   return true;
+   } else {
+     return false;
+   }
+};
 
 Ext.onReady(function(){
   openToRevisePanel = function() {
@@ -244,13 +252,19 @@ Ext.onReady(function(){
                     var dynaformChange ="";
                     var swDynaformChange = 0;
 
-                    if (window.frames["openCaseFrame"].document.getElementsByTagName("form")) {
-                    	dynaformChange = window.frames["openCaseFrame"].document.getElementsByTagName("form").item(0);
-                    	swDynaformChange = (window.frames["openCaseFrame"].dynaFormChanged(dynaformChange))? 1 : 0;
+                    var iframeDynaForm = (typeof(window.frames["openCaseFrame"].document) != "undefined")? window.frames["openCaseFrame"].document : ((typeof(window.frames["openCaseFrame"].contentDocument) != "undefined")? window.frames["openCaseFrame"].contentDocument : window.frames["openCaseFrame"].contentWindow.document);
+
+                    if (iframeDynaForm.getElementsByTagName("form")) {
+                        dynaformChange = iframeDynaForm.getElementsByTagName("form").item(0);
+
+                        if (typeof(window.frames["openCaseFrame"].dynaFormChanged) == "function" && dynaformChange) {
+                            swDynaformChange = (window.frames["openCaseFrame"].dynaFormChanged(dynaformChange))? 1 : 0;
+                        }
                     }
 
-                    if (window.frames["openCaseFrame"].document.getElementById("DynaformRequiredFields")) {
-                        requiredField = window.frames["openCaseFrame"].document.getElementById("DynaformRequiredFields").value;
+                    if (iframeDynaForm.getElementById("DynaformRequiredFields")) {
+                        requiredField = iframeDynaForm.getElementById("DynaformRequiredFields").value;
+
                         if (requiredField != "") {
                             swRequiredField = (window.frames["openCaseFrame"].validateForm(requiredField))? 1 : 0;
                         }
@@ -268,7 +282,7 @@ Ext.onReady(function(){
 	                                loadMaskStep.show();
 
 	                                if (btn == "ok") {
-	                                    var frm = window.frames["openCaseFrame"].document.getElementsByTagName("form");
+	                                    var frm = iframeDynaForm.getElementsByTagName("form");
 
 	                                    if (frm.length > 0) {
 	                                        var result = window.frames["openCaseFrame"].ajax_post(
@@ -1525,19 +1539,22 @@ Ext.onReady(function(){
 	                  TabPanel.setActiveTab(tabId);
 	                }
 	                else {
-                            TabPanel.add({
-                                id: tabId,
-                                title: menuSelectedTitle[name],
-                                frameConfig: {name: name + 'Frame', id: name + 'Frame'},
-                                defaultSrc: uri,
-                                loadMask: {msg: _('ID_LOADING_GRID') + '...'},
-                                autoWidth: true,
-                                closable: true,
-                                autoScroll: true,
-                                bodyStyle: {height: (PMExt.getBrowser().screen.height - 60) + 'px', overflow: 'auto'}
-                            }).show();
-
-                            TabPanel.doLayout();
+	                  if(name == "processMap" && isBrowserIE() && _PROJECT_TYPE === 'bpmn'){
+	                      var windContainer = window.open(uri,"winContainer");
+	                  } else {
+	                      TabPanel.add({
+	                         id: tabId,
+	                         title: menuSelectedTitle[name],
+	                         frameConfig:{name: name + 'Frame', id: name + 'Frame'},
+	                         defaultSrc : uri,
+	                         loadMask:{msg:_('ID_LOADING_GRID')+'...'},
+	                         autoWidth: true,
+	                         closable:true,
+	                         autoScroll: true,
+	                         bodyStyle:{height: (PMExt.getBrowser().screen.height-60) + 'px', overflow:'auto'}
+	                      }).show();
+	                      TabPanel.doLayout();
+	                  }
 	                }
 	            }
 	          },

@@ -48,7 +48,6 @@ class adminProxy extends HttpProxyController
         }
 
         $sysConf = System::getSystemConfiguration($envFile);
-
         $updatedConf = array();
 
         if ($sysConf['default_lang'] != $httpData->default_lang) {
@@ -178,6 +177,7 @@ class adminProxy extends HttpProxyController
         $httpData=array_unique((array)$httpData);
         $message = '';
         $oldName = isset($_POST['oldName'])? $_POST['oldName']:'';
+        $uid = isset($_POST['uid'])? $_POST['uid']:'';
 
         switch ($_POST['action']){
             case 'calendarName':
@@ -185,18 +185,22 @@ class adminProxy extends HttpProxyController
                 $oCalendar  = new CalendarDefinition();
                 $aCalendars = $oCalendar->getCalendarList(false,true);
                 $aCalendarDefinitions = end($aCalendars);
-
+                
                 foreach ($aCalendarDefinitions as $aDefinitions) {
                     if (trim($_POST['name'])=='') {
                         $validated = false;
                         $message  = G::loadTranslation('ID_CALENDAR_INVALID_NAME');
                         break;
                     }
+                    
                     if (isset($aDefinitions['CALENDAR_NAME'])) {
-                        if ($aDefinitions['CALENDAR_NAME'] == $_POST['name']) {
-                            $validated = false;
-                            $message  = G::loadTranslation('ID_CALENDAR_INVALID_NAME');
-                            break;
+                        
+                        if ($aDefinitions['CALENDAR_UID'] != $uid) {
+                            if ($aDefinitions['CALENDAR_NAME'] == $_POST['name']) {
+                                $validated = false;
+                                $message  = G::loadTranslation('ID_CALENDAR_INVALID_NAME');
+                                break;
+                            }
                         }
                     }
                 }
@@ -1005,6 +1009,11 @@ class adminProxy extends HttpProxyController
     public function uploadImage()
     {
         //!dataSystem
+        G::LoadSystem('inputfilter');
+        $filter = new InputFilter();
+        $_SERVER["REQUEST_URI"] = $filter->xssFilterHard($_SERVER["REQUEST_URI"]);
+        $_FILES = $filter->xssFilterHard($_FILES);
+        
         $ainfoSite = explode("/", $_SERVER["REQUEST_URI"]);
         $dir       = PATH_DATA."sites".PATH_SEP.str_replace("sys","",$ainfoSite[1]).PATH_SEP."files/logos";
         global $_FILES;
@@ -1031,8 +1040,10 @@ class adminProxy extends HttpProxyController
 
         $uploaded = 0;
         $failed   = 0;
+        
+        $files_img_type = $_FILES['img']['type'];
 
-        if (in_array($_FILES['img']['type'], $allowedType)) {
+        if (in_array($files_img_type, $allowedType)) {
              // max upload file is 500 KB
             if ($_FILES['img']['size'] <= 500000) {
                 $formf     = $_FILES['img'];
@@ -1051,7 +1062,7 @@ class adminProxy extends HttpProxyController
                         $arrayInfo = getimagesize($dir . '/' . 'tmp' . $fileName);
                         $typeMime  = $arrayInfo[2];
                     }
-                    if ($typeMime == $allowedTypeArray['index' . base64_encode($_FILES['img']['type'])]) {
+                    if ($typeMime == $allowedTypeArray['index' . base64_encode($files_img_type)]) {
                         $error = false;
                         try {
                             list($imageWidth, $imageHeight, $imageType) = @getimagesize($dir . '/' . 'tmp' . $fileName);
@@ -1064,17 +1075,27 @@ class adminProxy extends HttpProxyController
                     } else {
                         $failed = "3";
                     }
-                    unlink ($dir . '/tmp' . $fileName);
+                    $path = $filter->xssFilterHard($dir . '/tmp' . $fileName, 'path');
+                    unlink ($path);
                 } catch (Exception $e) {
                     $failed = "3";
                 }
             } else {
                 $failed = "2";
             }
-        } elseif ($_FILES['img']['type'] != '') {
+        } elseif ($files_img_type != '') {
             $failed = "1";
         }
-        echo '{success: true, failed: ' . $failed . ', uploaded: ' . $uploaded . ', type: "' . $_FILES['img']['type'] . '"}';
+        $uploaded = $filter->validateInput($uploaded,'int');
+        $files_img_type = $filter->xssFilterHard($files_img_type);
+        $failed = $filter->validateInput($failed,'int');
+        $resp = array(
+            'success'   => true,
+            'failed'    => $failed,
+            'uploaded'  => $uploaded,
+            'type'      => $files_img_type
+        );
+        echo G::json_encode($resp);
         exit();
     }
 
@@ -1222,6 +1243,11 @@ class adminProxy extends HttpProxyController
     public function showLogo($imagen)
     {
         $info = @getimagesize($imagen);
+        
+        G::LoadSystem('inputfilter');
+        $filter = new InputFilter();
+        $imagen = $filter->validateInput($imagen, "path");
+            
         $fp   = fopen($imagen, "rb");
         if ($info && $fp) {
             header("Content-type: {$info['mime']}");
@@ -1281,6 +1307,11 @@ class adminProxy extends HttpProxyController
             }
             $newDir .= PATH_SEP.$base64Id;
             $dir    .= PATH_SEP.$base64Id;
+            
+            G::LoadSystem('inputfilter');
+            $filter = new InputFilter();
+            $dir = $filter->validateInput($dir, "path");
+        
             copy($dir,$newDir);
             self::showLogo($newDir);
             die;

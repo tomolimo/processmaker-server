@@ -91,9 +91,11 @@ class AppDelegationMapBuilder
 
         $tMap->addColumn('DEL_INIT_DATE', 'DelInitDate', 'int', CreoleTypes::TIMESTAMP, false, null);
 
+        $tMap->addColumn('DEL_FINISH_DATE', 'DelFinishDate', 'int', CreoleTypes::TIMESTAMP, false, null);
+
         $tMap->addColumn('DEL_TASK_DUE_DATE', 'DelTaskDueDate', 'int', CreoleTypes::TIMESTAMP, false, null);
 
-        $tMap->addColumn('DEL_FINISH_DATE', 'DelFinishDate', 'int', CreoleTypes::TIMESTAMP, false, null);
+        $tMap->addColumn('DEL_RISK_DATE', 'DelRiskDate', 'int', CreoleTypes::TIMESTAMP, false, null);
 
         $tMap->addColumn('DEL_DURATION', 'DelDuration', 'double', CreoleTypes::DOUBLE, false, null);
 

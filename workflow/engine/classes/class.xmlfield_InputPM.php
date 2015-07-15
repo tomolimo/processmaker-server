@@ -392,30 +392,56 @@ function getDynaformsVars ($sProcessUID, $bSystemVars = true, $bIncMulSelFields 
     if ($bIncMulSelFields != 0) {
         $aInvalidTypes = array_merge( $aInvalidTypes, $aMultipleSelectionFields );
     }
-    require_once 'classes/model/Dynaform.php';
-    $oCriteria = new Criteria( 'workflow' );
-    $oCriteria->addSelectColumn( DynaformPeer::DYN_FILENAME );
-    $oCriteria->add( DynaformPeer::PRO_UID, $sProcessUID );
-    $oCriteria->add( DynaformPeer::DYN_TYPE, 'xmlform' );
-    $oDataset = DynaformPeer::doSelectRS( $oCriteria );
-    $oDataset->setFetchmode( ResultSet::FETCHMODE_ASSOC );
+    // getting bpmn projects
+    $oCriteria = new Criteria('workflow');
+    $oCriteria->addSelectColumn(BpmnProjectPeer::PRJ_UID);
+    $oCriteria->add(BpmnProjectPeer::PRJ_UID, $sProcessUID);
+    $oDataset = ProcessPeer::doSelectRS($oCriteria, Propel::getDbConnection('workflow_ro'));
+    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
     $oDataset->next();
-    while ($aRow = $oDataset->getRow()) {
-        if (file_exists( PATH_DYNAFORM . PATH_SEP . $aRow['DYN_FILENAME'] . '.xml' )) {
-            $G_FORM = new Form( $aRow['DYN_FILENAME'], PATH_DYNAFORM, SYS_LANG );
-            if (($G_FORM->type == 'xmlform') || ($G_FORM->type == '')) {
-                foreach ($G_FORM->fields as $k => $v) {
-                    if (! in_array( $v->type, $aInvalidTypes )) {
-                        if (! in_array( $k, $aFieldsNames )) {
-                            $aFields[] = array ('sName' => $k,'sType' => $v->type,'sLabel' => ($v->type != 'grid' ? $v->label : '[ ' . G::LoadTranslation( 'ID_GRID' ) . ' ]')
-                            );
-                            $aFieldsNames[] = $k;
+    $row = $oDataset->getRow();
+    if (isset($row["PRJ_UID"])) {
+        $oCriteria = new Criteria('workflow');
+        $oCriteria->addSelectColumn(ProcessVariablesPeer::VAR_UID);
+        $oCriteria->addSelectColumn(ProcessVariablesPeer::VAR_NAME);
+        $oCriteria->addSelectColumn(ProcessVariablesPeer::VAR_FIELD_TYPE);
+        $oCriteria->add(ProcessVariablesPeer::PRJ_UID, $sProcessUID);
+        $oDataset = DynaformPeer::doSelectRS($oCriteria);
+        $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+        while ($oDataset->next()) {
+            $row = $oDataset->getRow();
+            array_push($aFields, array(
+                "sName" => $row["VAR_NAME"],
+                "sType" => $row["VAR_FIELD_TYPE"],
+                "sLabel" => $row["VAR_NAME"] . " [" . $row["VAR_FIELD_TYPE"] . "]"
+            ));
+        }
+    } else {
+        require_once 'classes/model/Dynaform.php';
+        $oCriteria = new Criteria( 'workflow' );
+        $oCriteria->addSelectColumn( DynaformPeer::DYN_FILENAME );
+        $oCriteria->add( DynaformPeer::PRO_UID, $sProcessUID );
+        $oCriteria->add( DynaformPeer::DYN_TYPE, 'xmlform' );
+        $oDataset = DynaformPeer::doSelectRS( $oCriteria );
+        $oDataset->setFetchmode( ResultSet::FETCHMODE_ASSOC );
+        $oDataset->next();
+        while ($aRow = $oDataset->getRow()) {
+            if (file_exists( PATH_DYNAFORM . PATH_SEP . $aRow['DYN_FILENAME'] . '.xml' )) {
+                $G_FORM = new Form( $aRow['DYN_FILENAME'], PATH_DYNAFORM, SYS_LANG );
+                if (($G_FORM->type == 'xmlform') || ($G_FORM->type == '')) {
+                    foreach ($G_FORM->fields as $k => $v) {
+                        if (! in_array( $v->type, $aInvalidTypes )) {
+                            if (! in_array( $k, $aFieldsNames )) {
+                                $aFields[] = array ('sName' => $k,'sType' => $v->type,'sLabel' => ($v->type != 'grid' ? $v->label : '[ ' . G::LoadTranslation( 'ID_GRID' ) . ' ]')
+                                );
+                                $aFieldsNames[] = $k;
+                            }
                         }
                     }
                 }
             }
+            $oDataset->next();
         }
-        $oDataset->next();
     }
     return $aFields;
 }

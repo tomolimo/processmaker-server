@@ -117,6 +117,24 @@ class UsersMapBuilder
 
         $tMap->addColumn('USR_UX', 'UsrUx', 'string', CreoleTypes::VARCHAR, false, 128);
 
+        $tMap->addColumn('USR_TOTAL_INBOX', 'UsrTotalInbox', 'int', CreoleTypes::INTEGER, false, null);
+
+        $tMap->addColumn('USR_TOTAL_DRAFT', 'UsrTotalDraft', 'int', CreoleTypes::INTEGER, false, null);
+
+        $tMap->addColumn('USR_TOTAL_CANCELLED', 'UsrTotalCancelled', 'int', CreoleTypes::INTEGER, false, null);
+
+        $tMap->addColumn('USR_TOTAL_PARTICIPATED', 'UsrTotalParticipated', 'int', CreoleTypes::INTEGER, false, null);
+
+        $tMap->addColumn('USR_TOTAL_PAUSED', 'UsrTotalPaused', 'int', CreoleTypes::INTEGER, false, null);
+
+        $tMap->addColumn('USR_TOTAL_COMPLETED', 'UsrTotalCompleted', 'int', CreoleTypes::INTEGER, false, null);
+
+        $tMap->addColumn('USR_TOTAL_UNASSIGNED', 'UsrTotalUnassigned', 'int', CreoleTypes::INTEGER, false, null);
+
+        $tMap->addColumn('USR_COST_BY_HOUR', 'UsrCostByHour', 'double', CreoleTypes::DOUBLE, false, 11,2);
+
+        $tMap->addColumn('USR_UNIT_COST', 'UsrUnitCost', 'string', CreoleTypes::VARCHAR, false, 50);
+
         $tMap->addValidator('USR_STATUS', 'validValues', 'propel.validator.ValidValuesValidator', 'ACTIVE|INACTIVE|VACATION|CLOSED', 'Please select a valid type.');
 
         $tMap->addValidator('USR_STATUS', 'required', 'propel.validator.RequiredValidator', '', 'Type is required.');

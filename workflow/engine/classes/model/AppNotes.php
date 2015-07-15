@@ -153,8 +153,10 @@ class AppNotes extends BaseAppNotes
             }
             $aConfiguration = System::getEmailConfiguration();
 
+            $msgError = "";
             if (! isset( $aConfiguration['MESS_ENABLED'] ) || $aConfiguration['MESS_ENABLED'] != '1') {
-                return false;
+                $msgError = "The default configuration wasn't defined";
+                $aConfiguration['MESS_ENGINE'] = '';
             }
 
             $oUser = new Users();
@@ -185,9 +187,27 @@ class AppNotes extends BaseAppNotes
                 $oSpool = new spoolRun();
 
                 $oSpool->setConfig($aConfiguration);
-                $oSpool->create( array ('msg_uid' => '','app_uid' => $appUid,'del_index' => 0,'app_msg_type' => 'DERIVATION','app_msg_subject' => $sSubject,'app_msg_from' => $sFrom,'app_msg_to' => $sTo,'app_msg_body' => $sBody,'app_msg_cc' => '','app_msg_bcc' => '','app_msg_attach' => '','app_msg_template' => '','app_msg_status' => 'pending') );
-                if (($aConfiguration['MESS_BACKGROUND'] == '') || ($aConfiguration['MESS_TRY_SEND_INMEDIATLY'] == '1')) {
-                    $oSpool->sendMail();
+                $oSpool->create(
+                    array ('msg_uid' => '',
+                           'app_uid' => $appUid,
+                           'del_index' => 0,
+                           'app_msg_type' => 'DERIVATION',
+                           'app_msg_subject' => $sSubject,
+                           'app_msg_from' => $sFrom,
+                           'app_msg_to' => $sTo,
+                           'app_msg_body' => $sBody,
+                           'app_msg_cc' => '',
+                           'app_msg_bcc' => '',
+                           'app_msg_attach' => '',
+                           'app_msg_template' => '',
+                           'app_msg_status' => 'pending',
+                           'app_msg_error' => $msgError
+                           )
+                    );
+                if ($msgError == '') {
+                    if (($aConfiguration['MESS_BACKGROUND'] == '') || ($aConfiguration['MESS_TRY_SEND_INMEDIATLY'] == '1')) {
+                        $oSpool->sendMail();
+                    }
                 }
 
             }

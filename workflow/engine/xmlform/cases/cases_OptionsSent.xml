@@ -12,7 +12,7 @@
     <en><![CDATA[Process]]><option name="0"><![CDATA[All]]></option></en>
 </PROCESS_FILTER>
   <APP_STATUS_FILTER type="dropdown" colWidth="200" colAlign="left">
-    <en><![CDATA[Status]]><option name="ALL"><![CDATA[All]]></option><option name="TO_DO"><![CDATA[To Do]]></option><option name="CANCELLED"><![CDATA[Cancelled]]></option><option name="COMPLETED"><![CDATA[Completed]]></option></en>
+    <en><![CDATA[Status]]><option name="ALL"><![CDATA[All]]></option><option name="TO_DO"><![CDATA[To Do]]></option><option name="CANCELLED"><![CDATA[Canceled]]></option><option name="COMPLETED"><![CDATA[Completed]]></option></en>
   </APP_STATUS_FILTER>
   <MINE type="link" link="#" onclick="javascript:applyAdditionalFilter('MINE'); return false" value="" colWidth="2%" colAlign="bottom">
     <en><![CDATA[Started by me]]></en>

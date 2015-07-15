@@ -23,6 +23,10 @@
  *
  */
 $G_PUBLISH = new Publisher ();
-$G_PUBLISH->AddContent ( 'xmlform', 'xmlform', 'login/forgotPassword', '', array(), 'retrivePassword.php');
+if(SYS_SKIN == 'neoclassic'){    
+    $G_PUBLISH->AddContent ( 'xmlform', 'xmlform', 'login/forgotPasswordpm3', '', array(), 'retrivePassword.php');
+}else{    
+    $G_PUBLISH->AddContent ( 'xmlform', 'xmlform', 'login/forgotPassword', '', array(), 'retrivePassword.php');
+} 
 G::RenderPage ( "publish" );
 

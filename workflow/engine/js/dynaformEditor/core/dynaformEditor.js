@@ -856,6 +856,13 @@ var dynaformEditor={
     /*getField("ENABLETEMPLATE","dynaforms_Properties").checked=(prop.ENABLETEMPLATE=="1");*/
     getField("MODE","dynaforms_Properties").value=prop.MODE;
   },
+  refreshPropertiesDynTitle:function()
+  {
+    var form=this.views["properties"].getElementsByTagName("form")[0];
+    var prop=this.ajax.get_properties(this.A,this.dynUid);
+    getField("A","dynaforms_Properties").value=prop.A;
+    getField("DYN_TITLE","dynaforms_Properties").value=prop.DYN_TITLE;
+  },
   // Internal functions
   runScripts:function(scripts)
   {

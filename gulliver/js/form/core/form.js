@@ -3227,7 +3227,7 @@ var validateForm = function(sRequiredFields) {
             var systemMessaggeInvalid = "";
 
             if(invalid_fields.length > 0) {
-                systemMessaggeInvalid += "\n \n"+G_STRINGS.ID_REQUIRED_FIELDS + ": \n \n [ " + sMessage + " ]";
+                systemMessaggeInvalid += "\n \n"+G_STRINGS.ID_REQUIRED_FIELDS_GRID;
             }
 
             if(fielEmailInvalid.length > 0) {
@@ -3877,6 +3877,14 @@ function getNumericValue(val, decimalSeparator)
         }
     }
 
+    //Check if number is + or -
+    var arrayMatch = [];
+
+    if (num != "" && (arrayMatch = eval("/^[^\\d\\+\\-]*(\\+|\\-)\\s*\\d+[\\d\\.\\,\\;" + ((decimalSeparator != "")? "\\" + decimalSeparator : "") + "]*[^\\d\\+\\-]*$/").exec(val))) {
+        num = arrayMatch[1] + num;
+    }
+
+    //Return
     return num;
 }
 

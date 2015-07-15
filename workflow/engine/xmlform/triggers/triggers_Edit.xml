@@ -86,16 +86,38 @@ window.onbeforeunload=function(){
     }
 };
 
-function triggerSave1(form){
-    ajax_post(form.action, form, 'POST');
-    if(opener) {
-        if(@QSTEP_UID!="" && @QST_TYPE!="" && opener.showTriggers)
-            opener.showTriggers(@QSTEP_UID,@QST_TYPE);
-        if(opener.reloadTriggersShortList)
-            opener.reloadTriggersShortList();
-    }
-    window.close();
+function triggerSave1(form)
+{
+    ajax_post(
+        form.action,
+        form,
+        "POST",
+        function (responseText)
+        {
+            var dataResponse = eval("(" + responseText + ")"); //json
+
+            if (dataResponse.success) {
+                if (opener) {
+                    if (@QSTEP_UID != "" && @QST_TYPE != "" && opener.showTriggers) {
+                        opener.showTriggers(@QSTEP_UID, @QST_TYPE);
+                    }
+
+                    if (opener.reloadTriggersShortList) {
+                        opener.reloadTriggersShortList();
+                    }
+                }
+
+                window.close();
+            } else {
+                new leimnud.module.app.alert().make({
+                    label: dataResponse.msg
+                });
+            }
+        },
+        true
+    );
 }
-    
-]]></JS>
+]]>
+</JS>
 </dynaForm>
+

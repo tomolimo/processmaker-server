@@ -51,8 +51,11 @@ for ($r = 1; $r < 10; $r ++) {
 	</select> <input type="submit" value="Send" />
 </form>
 <?php
+G::LoadSystem('inputfilter');
+$filter = new InputFilter();
 $test = $_POST['form']['test'];
 if ($test) {
+    $test = $filter->xssFilterHard($test);
     foreach ($test as $t) {
         echo 'You selected ', $t, '<br />';
     }

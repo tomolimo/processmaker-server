@@ -23,6 +23,10 @@
  */
 ini_set( "soap.wsdl_cache_enabled", "0" ); // enabling WSDL cache
 
+G::LoadSystem('inputfilter');
+$filter = new InputFilter();
+$_GET = $filter->xssFilterHard($_GET);
+//$_SESSION = $filter->xssFilterHard($_SESSION); 
 
 G::LoadClass( 'ArrayPeer' );
 if ($RBAC->userCanAccess( 'PM_SETUP' ) != 1 && $RBAC->userCanAccess( 'PM_FACTORY' ) != 1) {
@@ -37,6 +41,8 @@ $_POST['action'] = get_ajax_value( 'action' );
 if ($_POST['action'] == '') {
     $_POST['action'] = (isset( $_GET['action'] )) ? $_GET['action'] : '';
 }
+
+$_POST = $filter->xssFilterHard($_POST);
 
 switch ($_POST['action']) {
     case 'showForm':
@@ -1504,8 +1510,8 @@ try {
                 die();
                 break;
             default:
-
-                print_r( $_POST );
+                $post = $filter->xssFilterHard($_POST);
+                print_r( $post );
         }
     }
 

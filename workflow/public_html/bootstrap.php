@@ -69,14 +69,21 @@
   //$e_all  = $config['debug']        ? $e_all                 : $e_all & ~E_NOTICE;
   //$e_all = E_ALL & ~ E_DEPRECATED & ~ E_STRICT & ~ E_NOTICE  & ~E_WARNING;
 
+  G::LoadSystem('inputfilter');
+  $filter = new InputFilter();  
+  $config['display_errors'] = $filter->validateInput($config['display_errors']);
+  $config['error_reporting'] = $filter->validateInput($config['error_reporting']);
+  $config['memory_limit'] = $filter->validateInput($config['memory_limit']);
+  $config['wsdl_cache'] = $filter->validateInput($config['wsdl_cache'],'int');
+  $config['time_zone'] = $filter->validateInput($config['time_zone']);
   // Do not change any of these settings directly, use env.ini instead
-  ini_set( 'display_errors', $config['display_errors']);
-  ini_set( 'error_reporting', $config['error_reporting']);  
+  ini_set( 'display_errors', $filter->validateInput($config['display_errors']) );
+  ini_set( 'error_reporting', $filter->validateInput($config['error_reporting']) );
   ini_set('short_open_tag', 'On');
   ini_set('default_charset', "UTF-8");
-  ini_set('memory_limit', $config['memory_limit']);
+  ini_set('memory_limit', $filter->validateInput($config['memory_limit']) );
   ini_set('soap.wsdl_cache_enabled', $config['wsdl_cache']);
-  ini_set('date.timezone', $config['time_zone']);
+  ini_set('date.timezone', $filter->validateInput($config['time_zone']) );
 
   define ('DEBUG_SQL_LOG', $config['debug_sql']);
   define ('DEBUG_TIME_LOG', $config['debug_time']);
@@ -266,6 +273,10 @@
   G::LoadSystem('headPublisher');
   $oHeadPublisher =& headPublisher::getSingleton();
 
+  //Load filter class
+  G::LoadSystem('inputfilter');
+  $filter = new InputFilter();
+  
   // Installer, redirect to install if we don't have a valid shared data folder
   if ( !defined('PATH_DATA') || !file_exists(PATH_DATA)) {
 
@@ -314,7 +325,8 @@
   if ( defined('SYS_TEMP') && SYS_TEMP != '')  {
     //this is the default, the workspace db.php file is in /shared/workflow/sites/SYS_SYS
     if ( file_exists( PATH_DB .  SYS_TEMP . '/db.php' ) ) {
-      require_once( PATH_DB .  SYS_TEMP . '/db.php' );
+      $pathFile = $filter->validateInput(PATH_DB .  SYS_TEMP . '/db.php','path');
+      require_once( $pathFile );
       define ( 'SYS_SYS' , SYS_TEMP );
 
       // defining constant for workspace shared directory
@@ -331,17 +343,21 @@
   else {  //when we are in global pages, outside any valid workspace
     if (SYS_TARGET==='newSite') {
       $phpFile = G::ExpandPath('methods') . SYS_COLLECTION . "/" . SYS_TARGET.'.php';
+      $phpFile = $filter->validateInput($phpFile,'path');
       require_once($phpFile);
       die();
     }
     else {
       if(SYS_TARGET=="dbInfo"){ //Show dbInfo when no SYS_SYS
-          require_once( PATH_METHODS . "login/dbInfo.php" );
+          $pathFile = PATH_METHODS . 'login/dbInfo.php';
+          $pathFile = $filter->validateInput($pathFile,'path');
+          require_once($pathFile);
       }
       else{
 
         if (substr(SYS_SKIN, 0, 2) === 'ux' && SYS_TARGET != 'sysLoginVerify') { // new ux sysLogin - extjs based form
-          require_once PATH_CONTROLLERS . 'main.php';
+          $pathFile = $filter->validateInput(PATH_CONTROLLERS . 'main.php','path');
+          require_once $pathFile;
           $controllerClass  = 'Main';
           $controllerAction = SYS_TARGET == 'sysLoginVerify' ? SYS_TARGET : 'sysLogin';
           //if the method exists
@@ -352,7 +368,9 @@
           }
         }
         else { // classic sysLogin interface
-          require_once( PATH_METHODS . "login/sysLogin.php" ) ;
+          $pathFile = PATH_METHODS . 'login/sysLogin.php';
+          $pathFile = $filter->validateInput($pathFile,'path');
+          require_once($pathFile) ;
           die();
         }
       }
@@ -543,7 +561,8 @@
 
     //erik: verify if it is a Controller Class or httpProxyController Class
     if (is_file(PATH_CONTROLLERS . SYS_COLLECTION . '.php')) {
-      require_once PATH_CONTROLLERS . SYS_COLLECTION . '.php';
+      $pathFile = $filter->validateInput(PATH_CONTROLLERS . SYS_COLLECTION . '.php','path');
+      require_once $pathFile;
       $controllerClass  = SYS_COLLECTION;
       //if the method name is empty set default to index method
       $controllerAction = SYS_TARGET != '' ? SYS_TARGET : 'index';
@@ -694,7 +713,7 @@
     } elseif ($isRestRequest) {
       G::dispatchRestService(SYS_TARGET, $restConfig, $restApiClassPath);
     } else {
-      require_once $phpFile;
+      require_once $filter->validateInput($phpFile,'path');
     }
 
     if (defined('SKIP_HEADERS')){

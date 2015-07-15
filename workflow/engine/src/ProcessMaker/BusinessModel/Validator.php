@@ -36,47 +36,6 @@ class Validator
     }
 
     /**
-     * Validate dep_title
-     * @var string $dep_title. Name or Title for Departament
-     * @var string $dep_uid. Uid for Departament
-     *
-     * @access public
-     * @author Brayan Pereyra (Cochalo) <brayan@colosa.com>
-     * @copyright Colosa - Bolivia
-     *
-     * @return array
-     *
-     * @url GET
-     */
-    static public function depTitle($dep_title, $dep_uid = '')
-    {
-        $dep_title = trim($dep_title);
-        if ($dep_title == '') {
-            throw (new \Exception(\G::LoadTranslation("ID_DEPARTMENT_NOT_EXIST", array('dep_title',''))));
-        }
-
-        $oCriteria = new \Criteria( 'workflow' );
-        $oCriteria->clearSelectColumns();
-        $oCriteria->addSelectColumn( \ContentPeer::CON_CATEGORY );
-        $oCriteria->addSelectColumn( \ContentPeer::CON_VALUE );
-        $oCriteria->addSelectColumn( \DepartmentPeer::DEP_PARENT );
-        $oCriteria->add( \ContentPeer::CON_CATEGORY, 'DEPO_TITLE' );
-        $oCriteria->addJoin( \ContentPeer::CON_ID, \DepartmentPeer::DEP_UID, \Criteria::LEFT_JOIN );
-        $oCriteria->add( \ContentPeer::CON_VALUE, $dep_title );
-        $oCriteria->add( \ContentPeer::CON_LANG, SYS_LANG );
-        if ($dep_uid != '') {
-            $oCriteria->add( \ContentPeer::CON_ID, $dep_uid, \Criteria::NOT_EQUAL );
-        }
-
-        $oDataset = \DepartmentPeer::doSelectRS( $oCriteria );
-        $oDataset->setFetchmode( \ResultSet::FETCHMODE_ASSOC );
-        if ($oDataset->next()) {
-            throw (new \Exception(\G::LoadTranslation("ID_DEPARTMENT_NOT_EXIST", array('dep_title',$dep_title))));
-        }
-        return $dep_title;
-    }
-
-    /**
      * Validate dep_status
      * @var string $dep_uid. Uid for Departament
      * @var string $nameField. Name of field for message

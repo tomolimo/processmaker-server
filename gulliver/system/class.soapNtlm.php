@@ -184,6 +184,9 @@ class soapNtlm
      */
     private function createBuffer ($path)
     {
+        G::LoadSystem('inputfilter');
+        $filter = new InputFilter();
+        $path = $filter->xssFilterHard($path, "url");
         if ($this->buffer) {
             return;
         }
@@ -198,6 +201,7 @@ class soapNtlm
         //Apply proxy settings
         if (class_exists( 'System' )) {
             $sysConf = System::getSystemConfiguration();
+            $sysConf = $filter->xssFilterHard($sysConf);
             if ($sysConf['proxy_host'] != '') {
                 curl_setopt( $this->ch, CURLOPT_PROXY, $sysConf['proxy_host'] . ($sysConf['proxy_port'] != '' ? ':' . $sysConf['proxy_port'] : '') );
                 if ($sysConf['proxy_port'] != '') {
@@ -209,7 +213,9 @@ class soapNtlm
                 curl_setopt( $this->ch, CURLOPT_HTTPHEADER, array ('Expect:') );
             }
         }
-        echo $this->buffer = curl_exec( $this->ch );
+        $this->buffer = curl_exec( $this->ch );
+        $buffer = $filter->xssFilterHard($this->buffer);
+        echo $buffer;
         //echo "[NTLMStream::createBuffer] buffer size : " . strlen($this->buffer) . "bytes<br>";
         $this->pos = 0;
     }

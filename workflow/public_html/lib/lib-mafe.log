@@ -1,30 +1,30 @@
-[4 hours ago] 04cf012  (HEAD, origin/master, origin/HEAD, composer/master, master) PMFormDesigner <Roly Rudy Gutierrez Pinto>
-[4 hours ago] 0ed35fd  PMFormDesigner <Roly Rudy Gutierrez Pinto>
-[4 hours ago] b456108  PMFormDesigner <Roly Rudy Gutierrez Pinto>
-[20 hours ago] 95aa5a4  update field design in new formdesigner <richard yujra>
-[20 hours ago] 6cdfc35  fix windows loation <rodrigo quelca>
-[22 hours ago] a5219d8  comment an inneesary validation <rodrigo quelca>
-[22 hours ago] e6cd538  issue resolved: can not open start timer event properties <rodrigo quelca>
-[26 hours ago] 667c2be  PMFormDesigner <Roly Rudy Gutierrez Pinto>
-[26 hours ago] b7799fa  PMFormDesigner <Roly Rudy Gutierrez Pinto>
-[27 hours ago] dbb3c08  update validators in properties new formdesigner <richard yujra>
-[27 hours ago] 8e1fdc8  PMFormDesigner <Roly Rudy Gutierrez Pinto>
-[2 days ago] 5c0c220  PMFormDesigner <Roly Rudy Gutierrez Pinto>
-[2 days ago] a106817  complete import for all bpmn 2.0 elements <rodrigo quelca>
-[2 days ago] 9e153cf  PMFormDesigner <Roly Rudy Gutierrez Pinto>
-[2 days ago] c2712e0  fix the collapsed list toolbar <Omar Suca>
-[5 days ago] c270ff9  PMFormDesigner <Roly Rudy Gutierrez Pinto>
-[5 days ago] 87c3db3  PMFormDesigner <Roly Rudy Gutierrez Pinto>
-[5 days ago] 3b511e4  PMFormDesigner <Roly Rudy Gutierrez Pinto>
-[5 days ago] bfb09a3  PMFormDesigner <Roly Rudy Gutierrez Pinto>
-[5 days ago] 1d5f411  fix new features inf config to row in formdesigner <Omar Suca>
-[5 days ago] aed2aa7  PMFormDesigner <Roly Rudy Gutierrez Pinto>
-[5 days ago] f54bd31  fix toolbar for rows in new formdesigner <Omar Suca>
-[5 days ago] 28564b4  PMFormDesigner <Roly Rudy Gutierrez Pinto>
-[5 days ago] d61f957  PMFormDesigner <Roly Rudy Gutierrez Pinto>
-[5 days ago] 32600d1  PMFormDesigner <Roly Rudy Gutierrez Pinto>
-[6 days ago] 497cbe2  PMFormDesigner <Roly Rudy Gutierrez Pinto>
-[6 days ago] 0e7ad99  PMFormDesigner <Roly Rudy Gutierrez Pinto>
-[6 days ago] d65151f  PMFormDesigner <Roly Rudy Gutierrez Pinto>
-[6 days ago] 5ae923f  interactivity between fields and properties in new formdesigner <Omar Suca>
-[6 days ago] bee0e8f  PMFormDesigner <Roly Rudy Gutierrez Pinto>
+[8 days ago] 32739ee  IMPROVEMENT <Roly Rudy Gutierrez Pinto>
+[11 days ago] b36e4fd  PM-2348,PM-2469,PM-2470 <marcelo.cuiza>
+[11 days ago] ae9c074  PM-2930  PM-2171  PM-2734  PM-2677  PM-2537 <Roly Rudy Gutierrez Pinto>
+[2 weeks ago] 2092dcb  PM-2786 Enable editing the min, max and default date fields in the properties of datetime. <Roly Rudy Gutierrez Pinto>
+[3 weeks ago] 2a012c4  PM-2835 "Adicionar los siguientes features..." SOLVED <Victor Saisa Lopez>
+[3 weeks ago] e783f53  PM-2828 "In the BPMN Designer, can not connect..." SOLVED > Code Isuue:   0016744: In the BPMN Designer, can not connect to Oracle (and probably MS SQL) databases because no "Encode" options > Solution:   Cuando se selecciona la opcion en engine "oracle" no se mostraba los encodes. Se agrega los encodes para oracle. <Luis Fernando Saisa Lopez>
+[4 weeks ago] 9002977  Change color the title and subtitle <Roly Rudy Gutierrez Pinto>
+[5 weeks ago] a9a86f7  PM-2710 <Roly Rudy Gutierrez Pinto>
+[5 weeks ago] 8322739  PM-2701 "Designer > Event > Properties: muestra un mensaje de..." SOLVED <Victor Saisa Lopez>
+[6 weeks ago] 14c31bf  PM-2669 <marcelo.cuiza>
+[6 weeks ago] d38fd89  PM-2669 <marcelo.cuiza>
+[6 weeks ago] 8398116  PM-2669 <marcelo.cuiza>
+[6 weeks ago] 75823cd  PM-2068 "Designer > Event > Properties: muestra un mensaje de..." SOLVED <Victor Saisa Lopez>
+[6 weeks ago] 9c57661  IMPROVEMENT <Roly Rudy Gutierrez Pinto>
+[6 weeks ago] c4dc66b  update pm2577 <jonathan>
+[6 weeks ago] 42a1deb  udpate pm2577 <jonathan>
+[6 weeks ago] 0c4c0ff  pm2577 <jonathan>
+[6 weeks ago] 4045990  pm2590 <jonathan>
+[7 weeks ago] 3beaf85  PM-2670 "Designer>Input Documents>..." SOLVED > Code Isuue:   Designer > Input Documents > Create New: Al hacer click sobre el boton CANCEL cierra todo incluso el listado de input documents > Solution:   Al hacer click sobre el boton cancel se muestra el listado de input documents. <Luis Fernando Saisa Lopez>
+[7 weeks ago] db82391  PM-2682 Si se crean varios pools consecutivamente, el primero deja d funcionar correctamente <rodrigo quelca>
+[7 weeks ago] eb5098c  PM-2660 Adicion del permiso Summary Form <Brayan Pereyra>
+[7 weeks ago] c45c7ae  pm2611 <jonathan>
+[7 weeks ago] f365ec2  PM-2661 Exclusive/Inclusive Gateways: En Internet Explorer al modificar el orden de los routing rules las conexiones muestran el label null <rodrigo quelca>
+[7 weeks ago] 2930aaf  IMPROVEMENT <Roly Rudy Gutierrez Pinto>
+[7 weeks ago] 43f9803  PM-2638 "Designer>BPMN Designer>Button Create..." SOLVED > Code Isuue:   Designer > BPMN Designer > Button Create Input Documents: Al momento de hacer click en el icono "X", nos muestra el listado de Input Documents > Solution:   Cuando se realizar click sobre la "X" del formulario del input documents, se agrega validacion para que no se muestra el   listado tomando en cuenta que el listado se mostrara cuando se guarde los datos. <Luis Fernando Saisa Lopez>
+[7 weeks ago] 1b618d2  PM-2616 No se pueden seleccionar el "ID" en los dialogos <rodrigo quelca>
+[7 weeks ago] ef9eaa2  IMPROVEMENT <Roly Rudy Gutierrez Pinto>
+[7 weeks ago] c980bdb  p,2577 <jonathan>
+[7 weeks ago] cb0be00  PM-2560 Al momento de crear un Dynaform y presionar "ENTER" al ponerle el titulo al dynaform este se queda cargando <rodrigo quelca>
+[7 weeks ago] 0c4f94a  pm2640 v1 <jonathan>

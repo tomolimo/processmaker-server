@@ -196,7 +196,7 @@ class Event extends BaseEvent
                 $oEvent->setTriUid( $oTrigger->getTriUid() );
 
                 $parameters = new StdClass();
-                $parameters->hash = md5( $oTrigger->getTriWebbot() );
+                $parameters->hash = G::encryptOld( $oTrigger->getTriWebbot() );
 
                 if (isset( $aData['EVN_ACTION_PARAMETERS']->SUBJECT )) {
                     $parameters->SUBJECT = $aData['EVN_ACTION_PARAMETERS']->SUBJECT;
@@ -327,7 +327,7 @@ class Event extends BaseEvent
                     $aTrigger['TRI_WEBBOT'] = $sTrigger;
                     $oTrigger->update( $aTrigger );
                     $oParameters = new StdClass();
-                    $oParameters->hash = md5( $sTrigger );
+                    $oParameters->hash = G::encryptOld( $sTrigger );
                     $oParameters->SUBJECT = $aData['EVN_ACTION_PARAMETERS']['SUBJECT'];
                     $oParameters->TO = $aData['EVN_ACTION_PARAMETERS']['TO'];
                     $oParameters->CC = $aData['EVN_ACTION_PARAMETERS']['CC'];

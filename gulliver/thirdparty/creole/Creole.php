@@ -189,10 +189,19 @@ class Creole {
 			trigger_error("The Creole::NO_ASSOC_LOWER flag has been deprecated, and is now the default behavior. Use Creole::COMPAT_ASSOC_LOWER to lowercase resulset keys.", E_USER_WARNING);
 		}
 
+        if(!class_exists('G')){
+          $realdocuroot = str_replace( '\\', '/', $_SERVER['DOCUMENT_ROOT'] );
+          $docuroot = explode( '/', $realdocuroot );
+          array_pop( $docuroot );
+          $pathhome = implode( '/', $docuroot ) . '/';
+          array_pop( $docuroot );
+          $pathTrunk = implode( '/', $docuroot ) . '/';
+          require_once($pathTrunk.'gulliver/system/class.g.php');
+        }
         // sort $dsninfo by keys so the serialized result is always the same
         // for identical connection parameters, no matter what their order is
         ksort($dsninfo);
-        $connectionMapKey = crc32(serialize($dsninfo + array('compat_flags' => ($flags & Creole::COMPAT_ALL))));
+        $connectionMapKey = G::encryptCrc32(serialize($dsninfo + array('compat_flags' => ($flags & Creole::COMPAT_ALL))));
 
         // see if we already have a connection with these parameters cached
         if(isset(self::$connectionMap[$connectionMapKey]) && $dsninfo['phptype'] !== 'dbarray')
@@ -244,7 +253,7 @@ class Creole {
         try {
             $obj->connect($dsninfo, $flags);
         } catch(SQLException $sqle) {
-            $sqle->setUserInfo($dsninfo);
+            $sqle->setUserInfo((isset($dsninfo["username"]))? $dsninfo["username"] : "");
             throw $sqle;
         }
 		$persistent = ($flags & Creole::PERSISTENT) === Creole::PERSISTENT;

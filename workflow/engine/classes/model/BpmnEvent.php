@@ -32,8 +32,6 @@ class BpmnEvent extends BaseBpmnEvent
     private function setBoundDefaults()
     {
         $this->bound->setBouElementType(lcfirst(str_replace(__NAMESPACE__, '', __CLASS__)));
-        $this->bound->setBouElement('pm_canvas');
-        $this->bound->setBouContainer('bpmnDiagram');
 
         $this->bound->setPrjUid($this->getPrjUid());
         $this->bound->setElementUid($this->getEvnUid());
@@ -42,6 +40,18 @@ class BpmnEvent extends BaseBpmnEvent
 
         if (is_object($process)) {
             $this->bound->setDiaUid($process->getDiaUid());
+            if ($this->bound->getBouElement()) {
+                $lane = BpmnLanePeer::retrieveByPK($this->bound->getBouElement());
+                $laneset = BpmnLanesetPeer::retrieveByPK($this->bound->getBouElement());
+                if (is_object($lane)) {
+                    $this->bound->setBouContainer('bpmnLane');
+                } elseif (is_object($laneset)) {
+                    $this->bound->setBouContainer('bpmnPool');
+                }
+            } else {
+                $this->bound->setBouContainer('bpmnDiagram');
+                $this->bound->setBouElement($process->getDiaUid());
+            }
         }
     }
 

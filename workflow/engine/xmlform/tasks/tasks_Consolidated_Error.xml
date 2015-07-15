@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm type="xmlform" name="" width="585" height="305" enabletemplate="0" mode="">
+  <PRO_UID type="hidden" />
+  <TAS_UID type="hidden" />
+  <SYS_LANG type="hidden" />
+  <REP_TAB_UID type="hidden" />
+  <INDEX type="hidden" />
+  <TABLE_NAME_DEFAULT type="hidden" />
+  <IFORM type="hidden" />
+
+  <TITLE_ALERT type="title">
+    <en><![CDATA[Alert]]></en>
+    <es><![CDATA[Alert]]></es>
+  </TITLE_ALERT>
+  <SUBTITLE_MESSAGE type="text" mode="view">
+    <en><![CDATA[Message]]></en>
+    <en><![CDATA[Mensaje]]></en>
+  </SUBTITLE_MESSAGE>
+</dynaForm>

@@ -32,6 +32,10 @@ class AppHistory extends BaseAppHistory
         $this->setHistoryDate($aData['APP_UPDATE_DATE']);
         $this->setHistoryData($aData['APP_DATA']);
 
+        if (isset($aData["OBJECT_TYPE"])) {
+            $this->setObjType($aData["OBJECT_TYPE"]);
+        }
+
         if ($this->validate() ) {
             $res = $this->save();
         } else {
@@ -78,12 +82,36 @@ class AppHistory extends BaseAppHistory
             }
         }
 
+        $appDocument = new AppDocument();
+
+        foreach (array("INPUT_DOCUMENTS", "OUTPUT_DOCUMENTS") as $value) {
+            $key = $value;
+
+            if ($aObjectPermissions[$key]) {
+                foreach ($aObjectPermissions[$key] as $key2 => $value2) {
+                    $appDocumentUid = $value2;
+
+                    try {
+                        $arrayAppDocumentData = $appDocument->load($appDocumentUid);
+
+                        $aObjectPermissions[$key][$key2] = $arrayAppDocumentData["DOC_UID"];
+                    } catch (Exception $e) {
+                    }
+                }
+            }
+        }
+
+        $dynaForm = new Dynaform();
+        $inputDocument = new InputDocument();
+        $outputDocument = new OutputDocument();
+
         $c = new Criteria('workflow');
         $c->addSelectColumn(AppHistoryPeer::APP_UID);
         $c->addSelectColumn(AppHistoryPeer::DEL_INDEX);
         $c->addSelectColumn(AppHistoryPeer::PRO_UID);
         $c->addSelectColumn(AppHistoryPeer::TAS_UID);
         $c->addSelectColumn(AppHistoryPeer::DYN_UID);
+        $c->addSelectColumn(AppHistoryPeer::OBJ_TYPE);
         $c->addSelectColumn(AppHistoryPeer::USR_UID);
         $c->addSelectColumn(AppHistoryPeer::APP_STATUS);
         $c->addSelectColumn(AppHistoryPeer::HISTORY_DATE);
@@ -94,31 +122,56 @@ class AppHistory extends BaseAppHistory
         $c->addJoin(AppHistoryPeer::USR_UID, UsersPeer::USR_UID, Criteria::LEFT_JOIN);
 
         //WHERE
-        $c->add(AppHistoryPeer::DYN_UID, $aObjectPermissions['DYNAFORMS'], Criteria::IN);
+        $c->add(
+            $c->getNewCriterion(AppHistoryPeer::DYN_UID, $aObjectPermissions["DYNAFORMS"],        Criteria::IN)->addOr(
+            $c->getNewCriterion(AppHistoryPeer::DYN_UID, $aObjectPermissions["INPUT_DOCUMENTS"],  Criteria::IN))->addOr(
+            $c->getNewCriterion(AppHistoryPeer::DYN_UID, $aObjectPermissions["OUTPUT_DOCUMENTS"], Criteria::IN))
+        );
+
         $c->add(AppHistoryPeer::PRO_UID, $PRO_UID);
         $c->add(AppHistoryPeer::APP_UID, $APP_UID);
+        $c->add(AppHistoryPeer::TAS_UID, $TAS_UID);
         if ((isset($DYN_UID))&&($DYN_UID!="")) {
             $c->add(AppHistoryPeer::DYN_UID, $DYN_UID);
         }
 
-        //ORDER BY
-        $c->clearOrderByColumns();
-        $c->addDescendingOrderByColumn(AppHistoryPeer::HISTORY_DATE);
-
         //Execute
         $oDataset = AppHistoryPeer::doSelectRS($c);
         $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-        $oDataset->next();
 
         $aDynHistory = array();
         $aDynHistory[] = array(
             'DYN_TITLE' => 'char'
         );
 
-        while ($aRow = $oDataset->getRow()) {
-            $o = new Dynaform();
-            $o->setDynUid($aRow['DYN_UID']);
-            $aRow['DYN_TITLE'] = $o->getDynTitle();
+        while ($oDataset->next()) {
+            $aRow = $oDataset->getRow();
+
+            $title = "";
+
+            switch ($aRow["OBJ_TYPE"]) {
+                case "DYNAFORM":
+                    $arrayDynaFormData = $dynaForm->Load($aRow["DYN_UID"]);
+
+                    $title = $arrayDynaFormData["DYN_TITLE"] . " (" . G::LoadTranslation("ID_DYNAFORM") . ")";
+                    break;
+                case "INPUT_DOCUMENT":
+                    $arrayInputDocumentData = $inputDocument->load($aRow["DYN_UID"]);
+
+                    $title = $arrayInputDocumentData["INP_DOC_TITLE"] . " (" . G::LoadTranslation("ID_INPUT_DOCUMENT") . ")";
+                    break;
+                case "OUTPUT_DOCUMENT":
+                    $arrayOutputDocumentData = $outputDocument->load($aRow["DYN_UID"]);
+
+                    $title = $arrayOutputDocumentData["OUT_DOC_TITLE"] . " (" . G::LoadTranslation("ID_OUTPUT_DOCUMENT") . ")";
+                    break;
+                case "ASSIGN_TASK":
+                    $title = G::LoadTranslation("ID_ASSIGN_TASK") . " (" . G::LoadTranslation("ID_TRIGGERS") . ")";
+                    break;
+            }
+
+            $aRow["DYN_TITLE"] = $title;
+
             $changedValues=unserialize($aRow['HISTORY_DATA']);
             $html="<table border='0' cellpadding='0' cellspacing='0'>";
             $sw_add=false;
@@ -166,7 +219,6 @@ class AppHistory extends BaseAppHistory
             if ($sw_add) {
                 $aDynHistory[] = $aRow;
             }
-            $oDataset->next();
         }
 
         global $_DBArray;
@@ -175,7 +227,8 @@ class AppHistory extends BaseAppHistory
         G::LoadClass('ArrayPeer');
         $oCriteria = new Criteria('dbarray');
         $oCriteria->setDBArrayTable('DynaformsHistory');
-        $oCriteria->addDescendingOrderByColumn(AppHistoryPeer::HISTORY_DATE);
+        $oCriteria->addAscendingOrderByColumn(AppHistoryPeer::HISTORY_DATE);
+
         return $oCriteria;
     }
 }

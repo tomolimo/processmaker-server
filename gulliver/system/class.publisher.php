@@ -294,10 +294,10 @@ class Publisher
 
                         //This dynaform has show/hide field conditions
                         if (isset($_SESSION['CURRENT_DYN_UID']) && $_SESSION['CURRENT_DYN_UID'] != '') {
-                            $ConditionalShowHideRoutines = $oFieldCondition->getConditionScript($_SESSION["CURRENT_DYN_UID"]); //lsl
+                            $ConditionalShowHideRoutines = $oFieldCondition->getConditionScript($_SESSION["CURRENT_DYN_UID"]);
                         } else {
                             if (isset($_SESSION['CONDITION_DYN_UID']) && $_SESSION['CONDITION_DYN_UID'] != '') {
-                                $ConditionalShowHideRoutines = $oFieldCondition->getConditionScript($_SESSION["CONDITION_DYN_UID"]); //lsl
+                                $ConditionalShowHideRoutines = $oFieldCondition->getConditionScript($_SESSION["CONDITION_DYN_UID"]); 
                             }
                         }
                     }
@@ -649,4 +649,3 @@ class Publisher
         $G_TABLE = null;
     }
 }
-

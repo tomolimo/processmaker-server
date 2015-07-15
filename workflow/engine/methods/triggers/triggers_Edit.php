@@ -40,7 +40,7 @@ if (isset( $_GET['TRI_UID'] )) {
     if ($aFields['TRI_PARAM'] != '' && ! $editWizardSource) {
         $aTriggerData = unserialize( $aFields['TRI_PARAM'] );
         // if the trigger has been modified manually, it cant be edited with the wizard.
-        if (md5( $aFields['TRI_WEBBOT'] ) == $aTriggerData['hash']) {
+        if (G::encryptOld( $aFields['TRI_WEBBOT'] ) == $aTriggerData['hash']) {
             $triUid = $_GET['TRI_UID'];
             $STEP_UID = isset($_GET['STEP_UID'])?$_GET['STEP_UID']:'';
             $ST_TYPE = isset($_GET['ST_TYPE'])?$_GET['ST_TYPE']:'';

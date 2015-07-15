@@ -502,6 +502,8 @@ function fieldReset($translation)
 
 function fieldComplete($translation)
 {
+    G::LoadSystem('inputfilter');
+    $filter = new InputFilter();
     global $action;
 
     $arrayField  = getDefaultFields($action, $translation);
@@ -509,10 +511,15 @@ function fieldComplete($translation)
 
     //Get values from JSON request
     $first  = G::json_decode((isset($_POST["first"]))?  $_POST["first"] :  G::json_encode(array()));
+    $first  = $filter->xssFilterHard($first);
     $second = G::json_decode((isset($_POST["second"]))? $_POST["second"] : G::json_encode(array()));
+    $second = $filter->xssFilterHard($second);
     $pmtable = (isset($_POST["pmtable"]))? $_POST["pmtable"] : "";
+    $pmtable = $filter->xssFilterHard($pmtable);
     $rowsperpage = (isset($_POST["rowsperpage"]))? $_POST["rowsperpage"] : $arrayConfig["rowsperpage"];
+    $rowsperpage = $filter->xssFilterHard($rowsperpage);
     $dateformat  = (isset($_POST["dateformat"]) && !empty($_POST["dateformat"]))? $_POST["dateformat"] : $arrayConfig["dateformat"];
+    $dateformat = $filter->xssFilterHard($dateformat);
 
     //Complete fields
     foreach ($first as $index1 => $value1) {
@@ -560,17 +567,24 @@ function fieldComplete($translation)
 
 function fieldLabelReset($translation)
 {
+    G::LoadSystem('inputfilter');
+    $filter = new InputFilter();
     global $action;
 
     $arrayField  = getDefaultFields($action, $translation);
     $arrayConfig = getDefaultConfig($action, $translation);
 
     //Get values from JSON request
-    $first  = G::json_decode((isset($_POST["first"]))?  $_POST["first"] :  G::json_encode(array()));
-    $second = G::json_decode((isset($_POST["second"]))? $_POST["second"] : G::json_encode(array()));
-    $pmtable = (isset($_POST["pmtable"]))? $_POST["pmtable"] : "";
+    $first       = G::json_decode((isset($_POST["first"]))?  $_POST["first"] :  G::json_encode(array()));
+    $first       = $filter->xssFilterHard($first);
+    $second      = G::json_decode((isset($_POST["second"]))? $_POST["second"] : G::json_encode(array()));
+    $second      = $filter->xssFilterHard($second);
+    $pmtable     = (isset($_POST["pmtable"]))? $_POST["pmtable"] : "";
+    $pmtable     = $filter->xssFilterHard($pmtable);
     $rowsperpage = (isset($_POST["rowsperpage"]))? $_POST["rowsperpage"] : $arrayConfig["rowsperpage"];
+    $rowsperpage = $filter->xssFilterHard($rowsperpage);
     $dateformat  = (isset($_POST["dateformat"]) && !empty($_POST["dateformat"]))? $_POST["dateformat"] : $arrayConfig["dateformat"];
+    $dateformat  = $filter->xssFilterHard($dateformat);
 
     //Reset label's fields
     foreach ($second as $index1 => $value1) {
@@ -592,6 +606,8 @@ function fieldLabelReset($translation)
 
 function fieldSave()
 {
+    G::LoadSystem('inputfilter');
+    $filter = new InputFilter();
     global $conf;
     global $action;
 
@@ -599,11 +615,15 @@ function fieldSave()
     $arrayConfig = getDefaultConfig($action, 0);
 
     //Get values from JSON request
-    $first  = G::json_decode((isset($_POST["first"]))?  $_POST["first"] :  G::json_encode(array()));
-    $second = G::json_decode((isset($_POST["second"]))? $_POST["second"] : G::json_encode(array()));
-    $pmtable = (isset($_POST["pmtable"]))? $_POST["pmtable"] : "";
+    $first       = G::json_decode((isset($_POST["first"]))?  $_POST["first"] :  G::json_encode(array()));
+    $first       = $filter->xssFilterHard($first);
+    $second      = G::json_decode((isset($_POST["second"]))? $_POST["second"] : G::json_encode(array()));
+    $pmtable     = (isset($_POST["pmtable"]))? $_POST["pmtable"] : "";
+    $pmtable     = $filter->xssFilterHard($pmtable);
     $rowsperpage = (isset($_POST["rowsperpage"]))? $_POST["rowsperpage"] : $arrayConfig["rowsperpage"];
+    $rowsperpage = $filter->xssFilterHard($rowsperpage);
     $dateformat  = (isset($_POST["dateformat"]) && !empty($_POST["dateformat"]))? $_POST["dateformat"] : $arrayConfig["dateformat"];
+    $dateformat  = $filter->xssFilterHard($dateformat);
 
     //Adding the key fields to second array
     //Required fields for AppCacheView.php - addPMFieldsToCriteria()
@@ -744,6 +764,7 @@ function xgetFieldsFromPMTable($tabUid)
     $oCriteria->addSelectColumn ( FieldsPeer::FLD_INDEX );
     $oCriteria->add (FieldsPeer::ADD_TAB_UID, $tabUid , CRITERIA::EQUAL );
     $oCriteria->add (FieldsPeer::FLD_NAME, 'APP_UID' , CRITERIA::NOT_EQUAL );
+    $oCriteria->addAnd (FieldsPeer::FLD_NAME, 'APP_NUMBER' , CRITERIA::NOT_EQUAL );
     $oCriteria->addDescendingOrderByColumn('FLD_INDEX');
     $oDataset = FieldsPeer::doSelectRS($oCriteria);
     $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);

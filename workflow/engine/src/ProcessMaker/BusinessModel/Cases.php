@@ -431,40 +431,36 @@ class Cases
                     throw (new \Exception($arrayData));
                 }
             } else {
+                \G::LoadClass("wsBase");
+
+                //Verify data
+                $this->throwExceptionIfNotExistsCase($applicationUid, $this->getFieldNameByFormatFieldName("APP_UID"));
+
                 $criteria = new \Criteria("workflow");
-                $criteria->addSelectColumn(\AppCacheViewPeer::DEL_INDEX);
-                $criteria->add(\AppCacheViewPeer::USR_UID, $userUid);
-                $criteria->add(\AppCacheViewPeer::APP_UID, $applicationUid);
-                $criteria->add(
-                //ToDo - getToDo()
-                    $criteria->getNewCriterion(\AppCacheViewPeer::APP_STATUS, "TO_DO", \CRITERIA::EQUAL)->addAnd(
-                        $criteria->getNewCriterion(\AppCacheViewPeer::DEL_FINISH_DATE, null, \Criteria::ISNULL))->addAnd(
-                            $criteria->getNewCriterion(\AppCacheViewPeer::APP_THREAD_STATUS, "OPEN"))->addAnd(
-                            $criteria->getNewCriterion(\AppCacheViewPeer::DEL_THREAD_STATUS, "OPEN"))
-                )->addOr(
-                    //Draft - getDraft()
-                        $criteria->getNewCriterion(\AppCacheViewPeer::APP_STATUS, "DRAFT", \CRITERIA::EQUAL)->addAnd(
-                            $criteria->getNewCriterion(\AppCacheViewPeer::APP_THREAD_STATUS, "OPEN"))->addAnd(
-                                $criteria->getNewCriterion(\AppCacheViewPeer::DEL_THREAD_STATUS, "OPEN"))
-                    );
-                $criteria->addDescendingOrderByColumn(\AppCacheViewPeer::APP_NUMBER);
-                $rsCriteria = \AppCacheViewPeer::doSelectRS($criteria);
-                $rsCriteria->setFetchmode(\ResultSet::FETCHMODE_ASSOC);
-                $row["DEL_INDEX"] = '';
-                while ($rsCriteria->next()) {
-                    $row = $rsCriteria->getRow();
+
+                $criteria->addSelectColumn(\AppDelegationPeer::APP_UID);
+                $criteria->add(\AppDelegationPeer::APP_UID, $applicationUid);
+                $criteria->add(\AppDelegationPeer::USR_UID, $userUid);
+
+                $rsCriteria = \AppDelegationPeer::doSelectRS($criteria);
+
+                if (!$rsCriteria->next()) {
+                    throw new \Exception(\G::LoadTranslation("ID_NO_PERMISSION_NO_PARTICIPATED"));
                 }
-                \G::LoadClass('wsBase');
+
+                //Get data
                 $ws = new \wsBase();
-                $fields = $ws->getCaseInfo($applicationUid, $row["DEL_INDEX"]);
+
+                $fields = $ws->getCaseInfo($applicationUid, 0);
                 $array = json_decode(json_encode($fields), true);
+
                 if ($array ["status_code"] != 0) {
                     throw (new \Exception($array ["message"]));
                 } else {
                     $array['app_uid'] = $array['caseId'];
                     $array['app_number'] = $array['caseNumber'];
                     $array['app_name'] = $array['caseName'];
-                    $array['app_status'] = $array['caseStatus'];
+                    $array["app_status"] = $array["caseStatus"];
                     $array['app_init_usr_uid'] = $array['caseCreatorUser'];
                     $array['app_init_usr_username'] = trim($array['caseCreatorUserName']);
                     $array['pro_uid'] = $array['processId'];
@@ -472,6 +468,9 @@ class Cases
                     $array['app_create_date'] = $array['createDate'];
                     $array['app_update_date'] = $array['updateDate'];
                     $array['current_task'] = $array['currentUsers'];
+
+                    $aCurrent_task = array();
+
                     for ($i = 0; $i<=count($array['current_task'])-1; $i++) {
                         $current_task = $array['current_task'][$i];
                         $current_task['usr_uid'] = $current_task['userId'];
@@ -481,6 +480,8 @@ class Cases
                         $current_task['del_index'] = $current_task['delIndex'];
                         $current_task['del_thread'] = $current_task['delThread'];
                         $current_task['del_thread_status'] = $current_task['delThreadStatus'];
+                        $current_task["del_init_date"] = $current_task["delInitDate"] . "";
+                        $current_task["del_task_due_date"] = $current_task["delTaskDueDate"];
                         unset($current_task['userId']);
                         unset($current_task['userName']);
                         unset($current_task['taskId']);
@@ -528,12 +529,31 @@ class Cases
     public function getTaskCase($applicationUid, $userUid)
     {
         try {
-            $result = array ();
-            \G::LoadClass('wsBase');
+            //Verify data
+            $this->throwExceptionIfNotExistsCase($applicationUid, $this->getFieldNameByFormatFieldName("APP_UID"));
+
+            $criteria = new \Criteria("workflow");
+
+            $criteria->addSelectColumn(\ApplicationPeer::APP_UID);
+
+            $criteria->add(\ApplicationPeer::APP_UID, $applicationUid, \Criteria::EQUAL);
+            $criteria->add(\ApplicationPeer::APP_STATUS, "COMPLETED", \Criteria::EQUAL);
+
+            $rsCriteria = \ApplicationPeer::doSelectRS($criteria);
+
+            if ($rsCriteria->next()) {
+                throw new \Exception(\G::LoadTranslation("ID_CASE_NO_CURRENT_TASKS_BECAUSE_CASE_ITS_COMPLETED", array($this->getFieldNameByFormatFieldName("APP_UID"), $applicationUid)));
+            }
+
+            //Get data
+            $result = array();
+
             $oCriteria = new \Criteria( 'workflow' );
             $del       = \DBAdapter::getStringDelimiter();
             $oCriteria->addSelectColumn( \AppDelegationPeer::DEL_INDEX );
             $oCriteria->addSelectColumn( \AppDelegationPeer::TAS_UID );
+            $oCriteria->addSelectColumn(\AppDelegationPeer::DEL_INIT_DATE);
+            $oCriteria->addSelectColumn(\AppDelegationPeer::DEL_TASK_DUE_DATE);
             $oCriteria->addAsColumn( 'TAS_TITLE', 'C1.CON_VALUE' );
             $oCriteria->addAlias( "C1", 'CONTENT' );
             $tasTitleConds   = array ();
@@ -551,7 +571,9 @@ class Cases
             while ($aRow = $oDataset->getRow()) {
                 $result = array ('tas_uid'   => $aRow['TAS_UID'],
                                  'tas_title'  => $aRow['TAS_TITLE'],
-                                 'del_index' => $aRow['DEL_INDEX']);
+                                 'del_index' => $aRow['DEL_INDEX'],
+                                 "del_init_date"     => $aRow["DEL_INIT_DATE"] . "",
+                                 "del_task_due_date" => $aRow["DEL_TASK_DUE_DATE"]);
                 $oDataset->next();
             }
             //Return
@@ -794,6 +816,12 @@ class Cases
         }
         Validator::isInteger($del_index, '$del_index');
 
+        $oDelay = new \AppDelay();
+
+        if (!$oDelay->isPaused($app_uid, $del_index)) {
+            throw (new \Exception(\G::LoadTranslation("ID_CASE_NOT_PAUSED", array($app_uid))));
+        }
+
         $case = new \Cases();
         $case->unpauseCase( $app_uid, $del_index, $usr_uid );
     }
@@ -833,15 +861,33 @@ class Cases
      *
      * @access public
      * @param string $app_uid, Uid for case
+     * @param string $usr_uid, Uid user
      * @return array
      *
      * @author Brayan Pereyra (Cochalo) <brayan@colosa.com>
      * @copyright Colosa - Bolivia
      */
-    public function deleteCase($app_uid)
+    public function deleteCase($app_uid, $usr_uid)
     {
         Validator::isString($app_uid, '$app_uid');
         Validator::appUid($app_uid, '$app_uid');
+
+        $criteria = new \Criteria();
+        $criteria->addSelectColumn( \ApplicationPeer::APP_STATUS );
+        $criteria->addSelectColumn( \ApplicationPeer::APP_INIT_USER );
+        $criteria->add( \ApplicationPeer::APP_UID, $app_uid, \Criteria::EQUAL );
+        $dataset = \ApplicationPeer::doSelectRS($criteria);
+        $dataset->setFetchmode(\ResultSet::FETCHMODE_ASSOC);
+        $dataset->next();
+        $aRow = $dataset->getRow();
+        if ($aRow['APP_STATUS'] != 'DRAFT') {
+            throw (new \Exception(\G::LoadTranslation("ID_DELETE_CASE_NO_STATUS")));
+        }
+
+        if ($aRow['APP_INIT_USER'] != $usr_uid) {
+            throw (new \Exception(\G::LoadTranslation("ID_DELETE_CASE_NO_OWNER")));
+        }
+
         $case = new \Cases();
         $case->removeCase( $app_uid );
     }
@@ -1424,11 +1470,12 @@ class Cases
      * @access public
      * @param string $app_uid, Uid for case
      * @param array $app_data, Data for case variables
+     * @param string $dyn_uid, Uid for dynaform
      *
      * @author Brayan Pereyra (Cochalo) <brayan@colosa.com>
      * @copyright Colosa - Bolivia
      */
-    public function setCaseVariables($app_uid, $app_data)
+    public function setCaseVariables($app_uid, $app_data, $dyn_uid = null)
     {
         Validator::isString($app_uid, '$app_uid');
         Validator::appUid($app_uid, '$app_uid');
@@ -1436,7 +1483,18 @@ class Cases
 
         $case = new \Cases();
         $fields = $case->loadCase($app_uid);
-        $data['APP_DATA'] = array_merge($fields['APP_DATA'], $app_data);
+        $_POST['form'] = $app_data;
+
+        if (!is_null($dyn_uid) && $dyn_uid != '') {
+            $oDynaform = \DynaformPeer::retrieveByPK($dyn_uid);
+
+            if ($oDynaform->getDynVersion() < 2) {
+                $oForm = new \Form ( $fields['PRO_UID'] . "/" . $dyn_uid, PATH_DYNAFORM );
+                $oForm->validatePost();
+            }
+        }
+
+        $data['APP_DATA'] = array_merge($fields['APP_DATA'], $_POST['form']);
         $case->updateCase($app_uid, $data);
     }
 
@@ -1901,6 +1959,380 @@ class Cases
 
             //Return
             return $arrayTask;
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
+
+    /**
+     * Put execute triggers
+     *
+     * @access public
+     * @param string $app_uid , Uid for case
+     * @param int $del_index , Index for case
+     * @param string $obj_type , Index for case
+     * @param string $obj_uid , Index for case
+     *
+     * @copyright Colosa - Bolivia
+     */
+    public function putExecuteTriggers($app_uid, $del_index, $obj_type, $obj_uid)
+    {
+        Validator::isString($app_uid, '$app_uid');
+        Validator::appUid($app_uid, '$app_uid');
+        Validator::isInteger($del_index, '$del_index');
+
+        $oCase = new \Cases();
+        $aField = $oCase->loadCase($app_uid, $del_index);
+        $tas_uid  = $aField["TAS_UID"];
+
+        $task = new \Tasks();
+        $aField["APP_DATA"] = $oCase->executeTriggers($tas_uid, $obj_type, $obj_uid, "AFTER", $aField["APP_DATA"]);
+        $aField = $oCase->updateCase($app_uid, $aField);
+    }
+
+    /**
+     * Get Steps evaluate
+     *
+     * @access public
+     * @param string $app_uid, Uid for case
+     * @param int $del_index , Index for case
+     * @return array
+     *
+     * @copyright Colosa - Bolivia
+     */
+    public function getSteps($app_uid, $del_index)
+    {
+        Validator::isString($app_uid, '$app_uid');
+        Validator::appUid($app_uid, '$app_uid');
+        Validator::isInteger($del_index, '$del_index');
+
+        $oCase = new \Cases();
+        $aCaseField = $oCase->loadCase($app_uid, $del_index);
+        $tas_uid  = $aCaseField["TAS_UID"];
+        $pro_uid  = $aCaseField["PRO_UID"];
+
+        $oApplication = new \Applications();
+        $aField = $oApplication->getSteps($app_uid, $del_index, $tas_uid, $pro_uid);
+
+        return $aField;
+    }
+
+    /**
+     * Throw Message-Events for the Case
+     *
+     * @param string $elementOriginUid     Unique id of Element Origin (unique id of Task)
+     * @param string $elementDestUid       Unique id of Element Dest   (unique id of Task)
+     * @param array  $arrayApplicationData Case data
+     *
+     * return void
+     */
+    public function throwMessageEventBetweenElementOriginAndElementDest($elementOriginUid, $elementDestUid, array $arrayApplicationData)
+    {
+        try {
+            //Verify if the Project is BPMN
+            $bpmn = new \ProcessMaker\Project\Bpmn();
+
+            if (!$bpmn->exists($arrayApplicationData["PRO_UID"])) {
+                return;
+            }
+
+            //Element origin and dest
+            $elementTaskRelation = new \ProcessMaker\BusinessModel\ElementTaskRelation();
+
+            $arrayElement = array(
+                "elementOrigin" => array("uid" => $elementOriginUid, "type" => "bpmnActivity"),
+                "elementDest"   => array("uid" => $elementDestUid,   "type" => "bpmnActivity")
+            );
+
+            foreach ($arrayElement as $key => $value) {
+                $arrayElementTaskRelationData = $elementTaskRelation->getElementTaskRelationWhere(
+                    array(
+                        \ElementTaskRelationPeer::PRJ_UID      => $arrayApplicationData["PRO_UID"],
+                        \ElementTaskRelationPeer::ELEMENT_TYPE => "bpmnEvent",
+                        \ElementTaskRelationPeer::TAS_UID      => $arrayElement[$key]["uid"]
+                    ),
+                    true
+                );
+
+                if (!is_null($arrayElementTaskRelationData)) {
+                    $arrayElement[$key]["uid"]  = $arrayElementTaskRelationData["ELEMENT_UID"];
+                    $arrayElement[$key]["type"] = "bpmnEvent";
+                }
+            }
+
+            $elementOriginUid  = $arrayElement["elementOrigin"]["uid"];
+            $elementOriginType = $arrayElement["elementOrigin"]["type"];
+            $elementDestUid    = $arrayElement["elementDest"]["uid"];
+            $elementDestType   = $arrayElement["elementDest"]["type"];
+
+            //Get Message-Events of throw type
+            $arrayEvent = $bpmn->getMessageEventsOfThrowTypeBetweenElementOriginAndElementDest(
+                $elementOriginUid,
+                $elementOriginType,
+                $elementDestUid,
+                $elementDestType
+            );
+
+            //Throw Message-Events
+            $messageApplication = new \ProcessMaker\BusinessModel\MessageApplication();
+
+            foreach ($arrayEvent as $value) {
+                //Message-Application throw
+                $result = $messageApplication->create($arrayApplicationData["APP_UID"], $arrayApplicationData["PRO_UID"], $value[0], $arrayApplicationData);
+            }
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
+
+    /**
+     * Catch Message-Events for the Cases
+     *
+     * @param bool $frontEnd Flag to represent progress bar
+     *
+     * return void
+     */
+    public function catchMessageEvent($frontEnd = false)
+    {
+        try {
+            \G::LoadClass("wsBase");
+
+            //Set variables
+            $ws = new \wsBase();
+            $case = new \Cases();
+
+            $messageApplication = new \ProcessMaker\BusinessModel\MessageApplication();
+            $messageApplication->setFrontEnd($frontEnd);
+
+            //Get data
+            $totalMessageEvent = 0;
+
+            $counterStartMessageEvent = 0;
+            $counterIntermediateCatchMessageEvent = 0;
+            $counter = 0;
+
+            $flagFirstTime = false;
+
+            $messageApplication->frontEndShow("START");
+
+            do {
+                $flagNextRecords = false;
+
+                $arrayMessageApplicationUnread = $messageApplication->getMessageApplications(array("messageApplicationStatus" => "UNREAD"), null, null, 0, 1000);
+
+                if (!$flagFirstTime) {
+                    $totalMessageEvent = $arrayMessageApplicationUnread["total"];
+
+                    $flagFirstTime = true;
+                }
+
+                foreach ($arrayMessageApplicationUnread["data"] as $value) {
+                    if ($counter + 1 > $totalMessageEvent) {
+                        $flagNextRecords = false;
+                        break;
+                    }
+
+                    $arrayMessageApplicationData = $value;
+
+                    $processUid = $arrayMessageApplicationData["PRJ_UID"];
+                    $taskUid = $arrayMessageApplicationData["TAS_UID"];
+
+                    $messageApplicationUid         = $arrayMessageApplicationData["MSGAPP_UID"];
+                    $messageApplicationCorrelation = $arrayMessageApplicationData["MSGAPP_CORRELATION"];
+
+                    $messageEventDefinitionUserUid     = $arrayMessageApplicationData["MSGED_USR_UID"];
+                    $messageEventDefinitionCorrelation = $arrayMessageApplicationData["MSGED_CORRELATION"];
+
+                    $arrayVariable = $messageApplication->mergeVariables($arrayMessageApplicationData["MSGED_VARIABLES"], $arrayMessageApplicationData["MSGAPP_VARIABLES"]);
+
+                    $flagCatched = false;
+
+                    switch ($arrayMessageApplicationData["EVN_TYPE"]) {
+                        case "START":
+                            if ($messageEventDefinitionCorrelation == $messageApplicationCorrelation && $messageEventDefinitionUserUid != "") {
+                                //Start and derivate new Case
+                                $result = $ws->newCase($processUid, $messageEventDefinitionUserUid, $taskUid, $arrayVariable);
+
+                                $arrayResult = json_decode(json_encode($result), true);
+
+                                if ($arrayResult["status_code"] == 0) {
+                                    $applicationUid = $arrayResult["caseId"];
+
+                                    $result = $ws->derivateCase($messageEventDefinitionUserUid, $applicationUid, 1);
+
+                                    $flagCatched = true;
+
+                                    //Counter
+                                    $counterStartMessageEvent++;
+                                }
+                            }
+                            break;
+                        case "INTERMEDIATE":
+                            $criteria = new \Criteria("workflow");
+
+                            $criteria->addSelectColumn(\AppDelegationPeer::APP_UID);
+                            $criteria->addSelectColumn(\AppDelegationPeer::DEL_INDEX);
+                            $criteria->addSelectColumn(\AppDelegationPeer::USR_UID);
+
+                            $criteria->add(\AppDelegationPeer::PRO_UID, $processUid, \Criteria::EQUAL);
+                            $criteria->add(\AppDelegationPeer::TAS_UID, $taskUid, \Criteria::EQUAL);
+                            $criteria->add(\AppDelegationPeer::DEL_THREAD_STATUS, "OPEN", \Criteria::EQUAL);
+                            $criteria->add(\AppDelegationPeer::DEL_FINISH_DATE, null, \Criteria::ISNULL);
+
+                            $rsCriteria = \AppDelegationPeer::doSelectRS($criteria);
+                            $rsCriteria->setFetchmode(\ResultSet::FETCHMODE_ASSOC);
+
+                            while ($rsCriteria->next()) {
+                                $row = $rsCriteria->getRow();
+
+                                $applicationUid = $row["APP_UID"];
+                                $delIndex = $row["DEL_INDEX"];
+                                $userUid = $row["USR_UID"];
+
+                                $arrayApplicationData = $case->loadCase($applicationUid);
+
+                                if (\G::replaceDataField($messageEventDefinitionCorrelation, $arrayApplicationData["APP_DATA"]) == $messageApplicationCorrelation) {
+                                    //"Unpause" and derivate Case
+                                    $arrayApplicationData["APP_DATA"] = array_merge($arrayApplicationData["APP_DATA"], $arrayVariable);
+
+                                    $arrayResult = $case->updateCase($applicationUid, $arrayApplicationData);
+
+                                    $result = $ws->derivateCase($userUid, $applicationUid, $delIndex);
+
+                                    $flagCatched = true;
+                                }
+                            }
+
+                            //Counter
+                            if ($flagCatched) {
+                                $counterIntermediateCatchMessageEvent++;
+                            }
+                            break;
+                    }
+
+                    //Message-Application catch
+                    if ($flagCatched) {
+                        $result = $messageApplication->update($messageApplicationUid, array("MSGAPP_STATUS" => "READ"));
+                    }
+
+                    $counter++;
+
+                    //Progress bar
+                    $messageApplication->frontEndShow("BAR", "Message-Events (unread): " . $counter . "/" . $totalMessageEvent . " " . $messageApplication->progressBar($totalMessageEvent, $counter));
+
+                    $flagNextRecords = true;
+                }
+            } while ($flagNextRecords);
+
+            $messageApplication->frontEndShow("TEXT", "Total Message-Events unread: " . $totalMessageEvent);
+            $messageApplication->frontEndShow("TEXT", "Total cases started: " . $counterStartMessageEvent);
+            $messageApplication->frontEndShow("TEXT", "Total cases continued: " . $counterIntermediateCatchMessageEvent);
+            $messageApplication->frontEndShow("TEXT", "Total Message-Events pending: " . ($totalMessageEvent - ($counterStartMessageEvent + $counterIntermediateCatchMessageEvent)));
+
+            $messageApplication->frontEndShow("END");
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
+
+    /**
+     * Get status info Case
+     *
+     * @param string $applicationUid Unique id of Case
+     *
+     * return array Return an array with status info Case, array empty otherwise
+     */
+    public function getStatusInfo($applicationUid)
+    {
+        try {
+            //Verify data
+            $this->throwExceptionIfNotExistsCase($applicationUid, $this->getFieldNameByFormatFieldName("APP_UID"));
+
+            //Get data
+            //Status is PAUSED
+            $delimiter = \DBAdapter::getStringDelimiter();
+
+            $criteria = new \Criteria("workflow");
+
+            $criteria->addSelectColumn($delimiter . "PAUSED" . $delimiter . " AS APP_STATUS");
+            $criteria->addSelectColumn(\AppDelayPeer::APP_DEL_INDEX . " AS DEL_INDEX");
+
+            $criteria->add(\AppDelayPeer::APP_UID, $applicationUid, \Criteria::EQUAL);
+            $criteria->add(\AppDelayPeer::APP_TYPE, "PAUSE", \Criteria::EQUAL);
+            $criteria->add(
+                $criteria->getNewCriterion(\AppDelayPeer::APP_DISABLE_ACTION_USER, null, \Criteria::ISNULL)->addOr(
+                $criteria->getNewCriterion(\AppDelayPeer::APP_DISABLE_ACTION_USER, 0, \Criteria::EQUAL))
+            );
+
+            $rsCriteria = \AppDelayPeer::doSelectRS($criteria);
+            $rsCriteria->setFetchmode(\ResultSet::FETCHMODE_ASSOC);
+
+            if ($rsCriteria->next()) {
+                $row = $rsCriteria->getRow();
+
+                //Return
+                return array("APP_STATUS" => $row["APP_STATUS"], "DEL_INDEX" => $row["DEL_INDEX"]);
+            }
+
+            //Status is TO_DO, DRAFT
+            $criteria = new \Criteria("workflow");
+
+            $criteria->addSelectColumn(\ApplicationPeer::APP_STATUS);
+            $criteria->addSelectColumn(\AppDelegationPeer::DEL_INDEX);
+
+            $arrayCondition = array();
+            $arrayCondition[] = array(\ApplicationPeer::APP_UID, \AppDelegationPeer::APP_UID, \Criteria::EQUAL);
+            $arrayCondition[] = array(\ApplicationPeer::APP_UID, \AppThreadPeer::APP_UID, \Criteria::EQUAL);
+            $arrayCondition[] = array(\ApplicationPeer::APP_UID, $delimiter . $applicationUid . $delimiter, \Criteria::EQUAL);
+            $criteria->addJoinMC($arrayCondition, \Criteria::LEFT_JOIN);
+
+            $criteria->add(
+                $criteria->getNewCriterion(\ApplicationPeer::APP_STATUS, "TO_DO", \Criteria::EQUAL)->addAnd(
+                $criteria->getNewCriterion(\AppDelegationPeer::DEL_FINISH_DATE, null, \Criteria::ISNULL))->addAnd(
+                $criteria->getNewCriterion(\AppDelegationPeer::DEL_THREAD_STATUS, "OPEN"))->addAnd(
+                $criteria->getNewCriterion(\AppThreadPeer::APP_THREAD_STATUS, "OPEN"))
+            )->addOr(
+                $criteria->getNewCriterion(\ApplicationPeer::APP_STATUS, "DRAFT", \Criteria::EQUAL)->addAnd(
+                $criteria->getNewCriterion(\AppDelegationPeer::DEL_THREAD_STATUS, "OPEN"))->addAnd(
+                $criteria->getNewCriterion(\AppThreadPeer::APP_THREAD_STATUS, "OPEN"))
+            );
+
+            $rsCriteria = \ApplicationPeer::doSelectRS($criteria);
+            $rsCriteria->setFetchmode(\ResultSet::FETCHMODE_ASSOC);
+
+            if ($rsCriteria->next()) {
+                $row = $rsCriteria->getRow();
+
+                //Return
+                return array("APP_STATUS" => $row["APP_STATUS"], "DEL_INDEX" => $row["DEL_INDEX"]);
+            }
+
+            //Status is CANCELLED, COMPLETED
+            $criteria = new \Criteria("workflow");
+
+            $criteria->addSelectColumn(\ApplicationPeer::APP_STATUS);
+            $criteria->addSelectColumn(\AppDelegationPeer::DEL_INDEX);
+
+            $arrayCondition = array();
+            $arrayCondition[] = array(\ApplicationPeer::APP_UID, \AppDelegationPeer::APP_UID, \Criteria::EQUAL);
+            $arrayCondition[] = array(\ApplicationPeer::APP_UID, $delimiter . $applicationUid . $delimiter, \Criteria::EQUAL);
+            $criteria->addJoinMC($arrayCondition, \Criteria::LEFT_JOIN);
+
+            $criteria->add(\ApplicationPeer::APP_STATUS, array("CANCELLED", "COMPLETED"), \Criteria::IN);
+            $criteria->add(\AppDelegationPeer::DEL_LAST_INDEX, 1, \Criteria::EQUAL);
+
+            $rsCriteria = \ApplicationPeer::doSelectRS($criteria);
+            $rsCriteria->setFetchmode(\ResultSet::FETCHMODE_ASSOC);
+
+            if ($rsCriteria->next()) {
+                $row = $rsCriteria->getRow();
+
+                //Return
+                return array("APP_STATUS" => $row["APP_STATUS"], "DEL_INDEX" => $row["DEL_INDEX"]);
+            }
+
+            //Return
+            return array();
         } catch (\Exception $e) {
             throw $e;
         }

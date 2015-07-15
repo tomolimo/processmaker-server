@@ -1669,14 +1669,23 @@ class Criterion  {
 	 */
 	public function hashCode()
 	{
-		$h = crc32(serialize($this->value)) ^ crc32($this->comparison);
+		if(!class_exists('G')){
+			$realdocuroot = str_replace( '\\', '/', $_SERVER['DOCUMENT_ROOT'] );
+			$docuroot = explode( '/', $realdocuroot );
+			array_pop( $docuroot );
+			$pathhome = implode( '/', $docuroot ) . '/';
+			array_pop( $docuroot );
+			$pathTrunk = implode( '/', $docuroot ) . '/';
+			require_once($pathTrunk.'gulliver/system/class.g.php');
+		}
+		$h = G::encryptCrc32(serialize($this->value)) ^ G::encryptCrc32($this->comparison);
 
 		if ($this->table !== null) {
-			$h ^= crc32($this->table);
+			$h ^= G::encryptCrc32($this->table);
 		}
 
 		if ($this->column !== null) {
-			$h ^= crc32($this->column);
+			$h ^= G::encryptCrc32($this->column);
 		}
 
 		foreach ( $this->clauses as $clause ) {
@@ -1687,7 +1696,7 @@ class Criterion  {
 			$sb = '';
 			$params = array();
 			$clause->appendPsTo($sb,$params);
-			$h ^= crc32(serialize(array($sb,$params)));
+			$h ^= G::encryptCrc32(serialize(array($sb,$params)));
 			unset ( $sb, $params );
 		}
 

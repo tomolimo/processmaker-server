@@ -91,7 +91,7 @@ try {
         $sUserUID = $RBAC->createUser( $aData, $form['USR_ROLE'] );
         $aData['USR_STATUS'] = $statusWF;
         $aData['USR_UID'] = $sUserUID;
-        $aData['USR_PASSWORD'] = md5( $sUserUID ); //fake :p
+        $aData['USR_PASSWORD'] = G::encryptOld( $sUserUID ); //fake :p
         $aData['USR_COUNTRY'] = $form['USR_COUNTRY'];
         $aData['USR_CITY'] = $form['USR_CITY'];
         $aData['USR_LOCATION'] = $form['USR_LOCATION'];
@@ -130,7 +130,7 @@ try {
                 $aData['USR_PASSWORD'] = $form['USR_PASSWORD'];
                 require_once 'classes/model/UsersProperties.php';
                 $oUserProperty = new UsersProperties();
-                $aUserProperty = $oUserProperty->loadOrCreateIfNotExists( $form['USR_UID'], array ('USR_PASSWORD_HISTORY' => serialize( array (md5( $form['USR_PASSWORD'] )
+                $aUserProperty = $oUserProperty->loadOrCreateIfNotExists( $form['USR_UID'], array ('USR_PASSWORD_HISTORY' => serialize( array (G::encryptOld( $form['USR_PASSWORD'] )
                 ) )
                 ) );
 

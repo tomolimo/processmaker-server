@@ -206,14 +206,29 @@ class NET
      *
      * @return void
      */
-    public function tryConnectServer($pDbDriver, array $arrayServerData = array())
+    public function tryConnectServer($pDbDriver, array $arrayServerData = array(), $dbsEncode = "")
     {
+        G::LoadSystem('inputfilter');
+        $filter = new InputFilter();
+        $this->ip = $filter->validateInput($this->ip);
+        $this->db_port = $filter->validateInput($this->db_port,'int');
+        $this->db_user = $filter->validateInput($this->db_user);
+        $this->db_passwd = $filter->validateInput($this->db_passwd);
+        $this->db_sourcename = $filter->validateInput($this->db_sourcename);
         if ($this->errno != 0) {
             return 0;
         }
         $stat = new Stat();
 
-        $flagTns = (isset($arrayServerData["connectionType"]) && $arrayServerData["connectionType"] == "TNS")? 1 : 0;
+        if (array_key_exists("connectionType", $arrayServerData) || array_key_exists("DBS_TYPEORACLE", $arrayServerData)) {
+            if ($arrayServerData["connectionType"] == "TNS" || $arrayServerData["DBS_TYPEORACLE"] == "TNS") {
+                $flagTns=1;
+            }else{
+                $flagTns=0;
+            }
+        }else{
+            $flagTns=0;
+        }
 
         if (isset($this->db_user) && (isset($this->db_passwd) || $this->db_passwd == "") && (isset($this->db_sourcename) || $flagTns == 1)) {
             switch ($pDbDriver) {
@@ -276,9 +291,9 @@ class NET
                         if ($flagTns == 0) {
                             $this->db_port = ($this->db_port == "" || $this->db_port == 0)? "1521" : $this->db_port;
 
-                            $cnn = @oci_connect($this->db_user, $this->db_passwd, "(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP) (HOST=$this->ip) (PORT=$this->db_port) )) (CONNECT_DATA=(SERVICE_NAME=$this->db_sourcename)))");
+                            $cnn = @oci_connect($this->db_user, $this->db_passwd, "(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP) (HOST=$this->ip) (PORT=$this->db_port) )) (CONNECT_DATA=(SERVICE_NAME=$this->db_sourcename)))", $dbsEncode);
                         } else {
-                            $cnn = @oci_connect($this->db_user, $this->db_passwd, $arrayServerData["tns"]);
+                            $cnn = @oci_connect($this->db_user, $this->db_passwd, $arrayServerData["tns"], $dbsEncode);
                         }
 
                         if ($cnn) {
@@ -314,8 +329,15 @@ class NET
      *
      * @return void
      */
-    public function tryOpenDataBase($pDbDriver, array $arrayServerData = array())
+    public function tryOpenDataBase($pDbDriver, array $arrayServerData = array(), $dbsEncode = "")
     {
+        G::LoadSystem('inputfilter');
+        $filter = new InputFilter();
+        $this->ip = $filter->validateInput($this->ip);
+        $this->db_port = $filter->validateInput($this->db_port,'int');
+        $this->db_user = $filter->validateInput($this->db_user);
+        $this->db_passwd = $filter->validateInput($this->db_passwd);
+        $this->db_sourcename = $filter->validateInput($this->db_sourcename);
         if ($this->errno != 0) {
             return 0;
         }
@@ -323,7 +345,15 @@ class NET
         set_time_limit( 0 );
         $stat = new Stat();
 
-        $flagTns = (isset($arrayServerData["connectionType"]) && $arrayServerData["connectionType"] == "TNS")? 1 : 0;
+        if (array_key_exists("connectionType", $arrayServerData) || array_key_exists("DBS_TYPEORACLE", $arrayServerData)) {
+            if ($arrayServerData["connectionType"] == "TNS" || $arrayServerData["DBS_TYPEORACLE"] == "TNS") {
+                $flagTns=1;
+            }else{
+                $flagTns=0;
+            }
+        }else{
+            $flagTns=0;
+        }
 
         if (isset($this->db_user) && (isset($this->db_passwd) || $this->db_passwd == "") && (isset($this->db_sourcename) || $flagTns == 1)) {
             switch ($pDbDriver) {
@@ -404,9 +434,9 @@ class NET
                     if ($flagTns == 0) {
                         $this->db_port = ($this->db_port == "" || $this->db_port == 0)? "1521" : $this->db_port;
 
-                        $cnn = @oci_connect($this->db_user, $this->db_passwd, "(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP) (HOST=$this->ip) (PORT=$this->db_port) )) (CONNECT_DATA=(SERVICE_NAME=$this->db_sourcename)))");
+                        $cnn = @oci_connect($this->db_user, $this->db_passwd, "(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP) (HOST=$this->ip) (PORT=$this->db_port) )) (CONNECT_DATA=(SERVICE_NAME=$this->db_sourcename)))", $dbsEncode);
                     } else {
-                        $cnn = @oci_connect($this->db_user, $this->db_passwd, $arrayServerData["tns"]);
+                        $cnn = @oci_connect($this->db_user, $this->db_passwd, $arrayServerData["tns"], $dbsEncode);
                     }
 
                     if ($cnn) {
@@ -562,4 +592,3 @@ class Stat
         $this->status = false;
     }
 }
-

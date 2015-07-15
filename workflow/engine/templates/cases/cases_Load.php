@@ -1,3 +1,8 @@
+<?php
+G::LoadSystem('inputfilter');
+$filter = new InputFilter();
+$_POST['qs'] = $filter->xssFilterHard($_POST['qs']);
+?>
 <html>
   <style type="text/css">
    .Footer .content {
@@ -21,18 +26,34 @@
 
 
     function autoResizeScreen() {
-      oCasesFrame    = document.getElementById('casesFrame');
-      height = getClientWindowSize().height-90;
-      oCasesFrame.style.height = height + 'px';;
-      oCasesSubFrame = oCasesFrame.contentWindow.document.getElementById('casesSubFrame');
-        if(oCasesSubFrame){
-          oCasesSubFrame.style.height = (height-5) + 'px';;
-        }
-        else {
-          setTimeout('autoResizeScreen()', 2000);
-        }
-
-
+		var containerList1, containerList2;
+		oCasesFrame    = document.getElementById('casesFrame');
+		oClientWinSize = getClientWindowSize();
+		
+		containerList1 = document.getElementById("pm_header");
+		if (document.getElementById("mainMenuBG") &&
+			document.getElementById("mainMenuBG").parentNode &&
+			document.getElementById("mainMenuBG").parentNode.parentNode &&
+			document.getElementById("mainMenuBG").parentNode.parentNode.parentNode &&
+			document.getElementById("mainMenuBG").parentNode.parentNode.parentNode.parentNode){
+				containerList2 = document.getElementById("mainMenuBG").parentNode.parentNode.parentNode.parentNode;
+			}
+		if (containerList1 === containerList2) {
+			height = oClientWinSize.height - containerList1.clientHeight;
+			oCasesFrame.style.height = height;
+			if (oCasesFrame.height ) {
+				oCasesFrame.height = height;
+			}
+		} else {
+			height = getClientWindowSize().height-90;
+			oCasesFrame.style.height = height + 'px';
+			oCasesSubFrame = oCasesFrame.contentWindow.document.getElementById('casesSubFrame');
+			if(oCasesSubFrame){
+				oCasesSubFrame.style.height = (height-5) + 'px';;
+			} else {
+			setTimeout('autoResizeScreen()', 2000);
+			}
+		}
     }
   </script>
 </html>

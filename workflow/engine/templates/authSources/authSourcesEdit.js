@@ -251,7 +251,7 @@ Ext.onReady(function(){
             txtSearchUser,
             txtPassword ,
             txtIdentifier,
-            txtoAddFilter,
+            txtoAddFilter
             ]
     });
 
@@ -327,7 +327,12 @@ Ext.onReady(function(){
               Ext.Msg.alert('Failure', 'Server reported:'+a.response.status+' '+a.response.statusText);
           }
           if (a.failureType === Ext.form.Action.SERVER_INVALID){
-              Ext.Msg.alert('Warning', 'you have an error');
+            if(Ext.isIE){
+                success = true;
+                window.location = 'authSources_List';
+            }else{
+                Ext.Msg.alert( _('ID_WARNING'), _('ID_YOU_HAVE_ERROR') );
+            }              
           }
       }
     });

@@ -1,12 +1,22 @@
 <?php
+
+G::LoadSystem('inputfilter');
+$filter = new InputFilter();
+$_SESSION['USER_LOGGED'] = $filter->xssFilterHard($_SESSION['USER_LOGGED']);
+
 $callback = isset($_POST['callback']) ? $_POST['callback'] : 'stcCallback1001';
-$dir    = isset($_POST['dir'])    ? $_POST['dir']    : 'DESC';
-$sort   = isset($_POST['sort'])   ? $_POST['sort']   : '';
-$query  = isset($_POST['query']) ? $_POST['query'] : '';
+$callback = $filter->xssFilterHard($callback);
+$dir      = isset($_POST['dir'])    ? $_POST['dir']    : 'DESC';
+$dir      = $filter->xssFilterHard($dir);
+$sort     = isset($_POST['sort'])   ? $_POST['sort']   : '';
+$sort     = $filter->xssFilterHard($sort);
+$query    = isset($_POST['query']) ? $_POST['query'] : '';
+$query    = $filter->xssFilterHard($query);
 $option = '';
 
 if ( isset($_GET['t'] ) ) {
     $option = $_GET['t'];
+    $option = $filter->xssFilterHard($option);
 }
 
 try {

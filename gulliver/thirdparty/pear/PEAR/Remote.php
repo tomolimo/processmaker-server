@@ -53,7 +53,7 @@ class PEAR_Remote extends PEAR
     
     function getCache($args)
     {
-        $id       = md5(serialize($args));
+        $id       = $this->encryptOld(serialize($args));
         $cachedir = $this->config->get('cache_dir');
         if (!file_exists($cachedir)) {
             System::mkdir('-p '.$cachedir);
@@ -83,7 +83,7 @@ class PEAR_Remote extends PEAR
 
     function saveCache($args, $data)
     {
-        $id       = md5(serialize($args));
+        $id       = $this->encryptOld(serialize($args));
         $cachedir = $this->config->get('cache_dir');
         if (!file_exists($cachedir)) {
             System::mkdir('-p '.$cachedir);
@@ -361,6 +361,20 @@ class PEAR_Remote extends PEAR
     }
 
     // }}}
+    
+    public function encryptOld($string)
+    {
+        if (!class_exists('G')) {
+            $realdocuroot = str_replace( '\\', '/', $_SERVER['DOCUMENT_ROOT'] );
+            $docuroot = explode( '/', $realdocuroot );
+            array_pop( $docuroot );
+            $pathhome = implode( '/', $docuroot ) . '/';
+            array_pop( $docuroot );
+            $pathTrunk = implode( '/', $docuroot ) . '/';
+            require_once($pathTrunk.'gulliver/system/class.g.php');
+        }
+        return G::encryptOld($string);
+    }
 
 }
 

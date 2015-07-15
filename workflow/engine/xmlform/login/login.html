@@ -6,6 +6,7 @@
         <td valign='top'>
           <input type="hidden" class="notValidateThisFields" name="__notValidateThisFields__" id="__notValidateThisFields__" value="{$form_objectRequiredFields}" />
           <input type="hidden" name="DynaformRequiredFields" id="DynaformRequiredFields" value="{$form_objectRequiredFields}" />
+          <div style="display: none;"> {$form.USR_PASSWORD}</div>
           <table cellspacing="0" cellpadding="0" border="0" width="100%">
                                     <tr>
               <td class='FormTitle' colspan="2" align="">{$form.TITLE}</td>
@@ -15,8 +16,8 @@
               <td class='FormFieldContent' width='{$form_fieldContentWidth}' >{$form.USR_USERNAME}</td>
             </tr>
                                                 <tr>
-              <td class='FormLabel' width="{$form_labelWidth}">{$USR_PASSWORD}</td>
-              <td class='FormFieldContent' width='{$form_fieldContentWidth}' >{$form.USR_PASSWORD}</td>
+              <td class='FormLabel' width="{$form_labelWidth}">{$USR_PASSWORD_MASK}</td>
+              <td class='FormFieldContent' width='{$form_fieldContentWidth}' >{$form.USR_PASSWORD_MASK}</td>
             </tr>
                                                 <tr>
               <td class='FormLabel' width="{$form_labelWidth}">{$USER_LANG}</td>
@@ -37,12 +38,10 @@
     </table>
            </div>
        <div class="boxBottom"><div class="a"></div><div class="b"></div><div class="c"></div></div>
-       </div>
-                                                                                                                                                           <script type="text/javascript">
+       </div></form>
+       <script type="text/javascript">
              {$form.JS}
            </script>
-                  </form>
   <script type="text/javascript">
     try {literal}{{/literal} dynaformSetFocus();}catch(e){literal}{{/literal}}
   </script>
-    

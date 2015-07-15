@@ -33,6 +33,8 @@ class Upgrade
 
     public function install()
     {
+        G::LoadSystem('inputfilter');
+        $filter = new InputFilter();
         //echo "Starting core installation...\n";
         $start = microtime(1);
         $filename = $this->addon->getDownloadFilename();
@@ -42,7 +44,9 @@ class Upgrade
         //printf("Time to open archive: %f\n", microtime(1) - $time);
         $time = microtime(1);
         $extractDir = dirname($this->addon->getDownloadFilename()) . "/extract";
+        $extractDir = $filter->xssFilterHard($extractDir);
         $backupDir = dirname($this->addon->getDownloadFilename()) . "/backup";
+        $backupDir = $filter->xssFilterHard($backupDir);
         if (file_exists($extractDir)) {
             G::rm_dir($extractDir);
         }
@@ -85,6 +89,7 @@ class Upgrade
         $checksumTime = 0;
         foreach ($checksums as $filename => $checksum) {
             if (is_dir("$extractDir/$filename")) {
+                $filename = $filter->xssFilterHard($filename);
                 print $filename;
                 continue;
             }
@@ -93,17 +98,17 @@ class Upgrade
                 $installedMD5 = "";
             } else {
                 $time = microtime(1);
-                $installedMD5 = md5_file($installedFile);
+                $installedMD5 = G::encryptFileOld($installedFile);
                 $checksumTime += microtime(1) - $time;
             }
             $archiveMD5 = $checksum;
             if (strcasecmp($archiveMD5, $installedMD5) != 0) {
                 $changedFiles[] = $filename;
-                if (!is_dir(dirname("$backupDir/$filename"))) {
-                    mkdir(dirname("$backupDir/$filename"), 0777, true);
+                if (!is_dir(dirname($backupDir.'/'.$filename))) {
+                    mkdir(dirname($backupDir.'/'.$filename), 0777, true);
                 }
                 if (file_exists($installedFile) && is_file($installedFile)) {
-                    copy($installedFile, "$backupDir/$filename");
+                    copy($installedFile, $backupDir.'/'.$filename);
                 }
                 if (!is_dir(dirname($installedFile))) {
                     mkdir(dirname($installedFile), 0777, true);

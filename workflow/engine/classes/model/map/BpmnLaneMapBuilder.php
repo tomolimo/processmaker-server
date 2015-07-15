@@ -69,7 +69,7 @@ class BpmnLaneMapBuilder
 
         $tMap->addForeignKey('PRJ_UID', 'PrjUid', 'string', CreoleTypes::VARCHAR, 'BPMN_PROJECT', 'PRJ_UID', true, 32);
 
-        $tMap->addForeignKey('LNS_UID', 'LnsUid', 'string', CreoleTypes::VARCHAR, 'BPMN_LANESET', 'LNS_UID', true, 32);
+        $tMap->addColumn('LNS_UID', 'LnsUid', 'string', CreoleTypes::VARCHAR, true, 32);
 
         $tMap->addColumn('LAN_NAME', 'LanName', 'string', CreoleTypes::VARCHAR, false, 255);
 

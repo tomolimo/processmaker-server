@@ -21,6 +21,13 @@
  * For more information, contact Colosa Inc, 2566 Le Jeune Rd.,
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  */
+ 
+G::LoadSystem('inputfilter');
+$filter = new InputFilter();
+$_GET = $filter->xssFilterHard($_GET);
+$_POST = $filter->xssFilterHard($_POST);
+$_REQUEST = $filter->xssFilterHard($_REQUEST);
+$_SESSION = $filter->xssFilterHard($_SESSION); 
 
 $actionAjax = isset( $_REQUEST['actionAjax'] ) ? $_REQUEST['actionAjax'] : null;
 
@@ -376,17 +383,19 @@ if ($actionAjax == 'dynaformChangeLogViewHistory') {
 
     global $G_PUBLISH;
     $G_PUBLISH = new Publisher();
-    $FieldsHistory = unserialize( $_SESSION['HISTORY_DATA'] );
+    $FieldsHistory = $_SESSION['HISTORY_DATA'];
     $Fields['APP_DATA'] = $FieldsHistory[$_POST['HISTORY_ID']];
     $Fields['APP_DATA']['__DYNAFORM_OPTIONS']['PREVIOUS_STEP_LABEL'] = '';
     $Fields['APP_DATA']['__DYNAFORM_OPTIONS']['NEXT_STEP_LABEL'] = '';
     $Fields['APP_DATA']['__DYNAFORM_OPTIONS']['NEXT_STEP'] = '#';
     $Fields['APP_DATA']['__DYNAFORM_OPTIONS']['NEXT_ACTION'] = 'return false;';
     G::LoadClass('pmDynaform');
-    $a = new pmDynaform($_GET['DYN_UID'], $Fields['APP_DATA']);
+    $FieldsPmDynaform = $Fields;
+    $FieldsPmDynaform["PRO_UID"] = $_SESSION['PROCESS'];
+    $FieldsPmDynaform["CURRENT_DYNAFORM"] = $_GET['DYN_UID'];
+    $a = new pmDynaform($FieldsPmDynaform);
     if ($a->isResponsive()) {
-        $a->mergeValues();
-        $a->printView((!isset($_SESSION["PM_RUN_OUTSIDE_MAIN_APP"])) ? "true" : "false", $_SESSION['APPLICATION']);
+        $a->printView();
     } else {
         $G_PUBLISH->AddContent('dynaform', 'xmlform', $_SESSION['PROCESS'] . '/' . $_POST['DYN_UID'], '', $Fields['APP_DATA'], '', '', 'view');
     }
@@ -473,10 +482,11 @@ if ($actionAjax == 'historyDynaformGridPreview') {
     $_SESSION['CURRENT_DYN_UID'] = $_POST['DYN_UID'];
     $_SESSION['DYN_UID_PRINT'] = $_POST['DYN_UID'];
     G::LoadClass('pmDynaform');
-    $a = new pmDynaform($_GET['DYN_UID'], $Fields['APP_DATA']);
+    $FieldsPmDynaform = $Fields;
+    $FieldsPmDynaform["CURRENT_DYNAFORM"] = $_GET['DYN_UID'];
+    $a = new pmDynaform($FieldsPmDynaform);
     if ($a->isResponsive()) {
-        $a->mergeValues();
-        $a->printView((!isset($_SESSION["PM_RUN_OUTSIDE_MAIN_APP"])) ? "true" : "false", $_SESSION['APPLICATION']);
+        $a->printView();
     } else {
         $G_PUBLISH->AddContent('dynaform', 'xmlform', $_SESSION['PROCESS'] . '/' . $_POST['DYN_UID'], '', $Fields['APP_DATA'], '', '', 'view');
     }

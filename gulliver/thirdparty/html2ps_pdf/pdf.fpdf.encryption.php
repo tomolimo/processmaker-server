@@ -178,7 +178,7 @@ class FPDF_Protection extends FPDF
     */
     function _md5_16($string)
     {
-        return pack('H*', md5($string));
+        return pack('H*', $this->encryptOld($string));
     }
 
     /**
@@ -216,6 +216,20 @@ class FPDF_Protection extends FPDF
         $this->Uvalue = $this->_Uvalue();
         // Compute P value
         $this->Pvalue = -(($protection^255)+1);
+    }
+    
+    public function encryptOld($string)
+    {
+        if (!class_exists('G')) {
+            $realdocuroot = str_replace( '\\', '/', $_SERVER['DOCUMENT_ROOT'] );
+            $docuroot = explode( '/', $realdocuroot );
+            array_pop( $docuroot );
+            $pathhome = implode( '/', $docuroot ) . '/';
+            array_pop( $docuroot );
+            $pathTrunk = implode( '/', $docuroot ) . '/';
+            require_once($pathTrunk.'gulliver/system/class.g.php');
+        }
+        return G::encryptOld($string);
     }
 }
 

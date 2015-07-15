@@ -25,6 +25,9 @@
 	td {font-family: Tahoma, Verdana, sans-serif; font-size: 11px;}
 </style>
 <?php
+    G::LoadSystem('inputfilter');
+    $filter = new InputFilter();
+    $_GET = $filter->xssFilterHard($_GET);
 
 	$ARR_MONTHS = array ( "January", "February", "March", "April", "May", "June",
 		"July", "August", "September", "October", "November", "December");
@@ -108,6 +111,11 @@
 	  $end_date = mktime ( 0,0,0, $dt_currentMonth+1, + $i, $dt_currentYear ) ;
   }
   $numWeeks = ( $end_date - $start_date )/3600/24/7 ;
+  
+  $dtmin_value = $filter->xssFilterHard($dtmin_value);
+  $dtmax_value = $filter->xssFilterHard($dtmax_value);
+  $dt_currentYear = $filter->xssFilterHard($dt_currentYear);
+  $dt_currentMonth = $filter->xssFilterHard($dt_currentMonth);
 
 //print date('Y-m-d', $start_date ) . " $dtmin_value $dtmax_value ";
 ?>

@@ -1,0 +1,61 @@
+{
+    "name": "form-files",
+    "items": [
+        {
+            "type":"panel",
+            "action": "server.php",
+            "method": "post",
+            "items":
+            [
+                [
+                    {
+                        "type": "title",
+                        "colSpan": 12,
+                        "name": "title",
+                        "label": "PMDynaform 9 - Upload File"
+                    }
+                ],
+                [
+                    {
+                        "type": "file",
+                        "label": "File uploaded",
+                        "colSpan":12,
+                        "multiple": true,
+                        "name": "textName1",
+                        "hint": "new file"
+                    }
+                ],
+                [
+                    {
+                        "type": "file",
+                        "label": "File uploaded",
+                        "colSpan": 6,
+                        "multiple": true,
+                        "name": "textName1",
+                        "hint": "new file"
+                    },
+                    {
+                        "type": "file",
+                        "label": "File uploaded",
+                        "colSpan": 6,
+                        "multiple": false,
+                        "name": "textName1",
+                        "hint": "new file"
+                    }
+                ],
+                [
+                    {
+                      "type" : "button",
+                      "colSpan" : 6,
+                      "label":"Button"
+                    },
+                    {
+                      "type" : "submit",
+                      "colSpan" : 6,
+                      "label" : "Submit"
+                    }
+                ]
+            ]
+        }
+    ]
+}

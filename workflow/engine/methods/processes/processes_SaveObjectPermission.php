@@ -76,3 +76,8 @@ $oOP->save();
 G::LoadClass( 'processMap' );
 $oProcessMap = new ProcessMap();
 $oProcessMap->getObjectsPermissionsCriteria( $sValue['PRO_UID'] );
+
+$infoProcess = new Processes();
+$resultProcess = $infoProcess->getProcessRow($sValue['PRO_UID']);
+$participation = $sValue['OP_PARTICIPATE'] == 1 ? "YES" : "NO";
+G::auditLog('ProcessPermissions','Add Permission (group or user: '.end(explode( '|', $sValue['GROUP_USER'] )).', permission: '.$sValue['OP_ACTION'].', status case: '.$sValue['OP_CASE_STATUS'].', type: '.$sValue['OP_OBJ_TYPE'].', participation required: '.$participation.') in Process "'.$resultProcess['PRO_TITLE'].'"');

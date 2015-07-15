@@ -48,7 +48,7 @@
                                                         <tr>
                                                             <td class="FormLabel" width="25%"><label for="form[web_site]">Web Site</label></td>
                                                             <td class="FormFieldContent" width="240">
-                                                                <input class="module_app_input___gray" id="form[web_site]" name="form[web_site]" type="text" size="50" maxlength="50" value="" style="" onkeypress="" />
+                                                                <input class="module_app_input___gray" id="form[web_site]" name="form[web_site]" type="text" size="50" maxlength="300" value="" style="" onkeypress="" />
                                                                 <br />
                                                                 <small>Your application's publicly accessible home page, where users can go to download, make use of, or find out more information about your application. This fully-qualified URL is used in the source attribution for request created by your application and will be shown in user-facing authorization screens.
                                                                     (If you don't have a URL yet, just put a placeholder here but remember to change it later.)</small>
@@ -58,7 +58,7 @@
                                                         <tr>
                                                             <td class="FormLabel" width="25%"><label for="form[callback_url]">Callback URL</label></td>
                                                             <td class="FormFieldContent" width="240">
-                                                                <input class="module_app_input___gray" id="form[callback_url]" name="form[callback_url]" type="text" size="50" maxlength="50" value="" style="" onkeypress="" />
+                                                                <input class="module_app_input___gray" id="form[callback_url]" name="form[callback_url]" type="text" size="50" maxlength="300" value="" style="" onkeypress="" />
                                                                 <br />
                                                                 <small>here should we return after successfully authenticating? For @Anywhere applications, only the domain specified in the callback will be used. OAuth 1.0a applications should explicitly specify their oauth_callback URL on the request token step, regardless of the value given here. To restrict your application from using callbacks, leave this field blank.</small>
                                                             </td>

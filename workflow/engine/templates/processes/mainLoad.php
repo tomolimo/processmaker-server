@@ -25,10 +25,32 @@
     document.getElementById('pm_submenu').style.display = 'none';
   document.documentElement.style.overflowY = 'hidden';
   function autoResizeScreen() {
-    oCasesFrame    = document.getElementById('frameMain');
-    oClientWinSize = getClientWindowSize();
-    height = oClientWinSize.height-105;
-    oCasesFrame.style.height = height;
+  	var containerList1, containerList2;
+    oCasesFrame = document.getElementById('frameMain');
+	containerList1 = document.getElementById("pm_header");
+	if (document.getElementById("mainMenuBG") && 
+		document.getElementById("mainMenuBG").parentNode &&
+		document.getElementById("mainMenuBG").parentNode.parentNode &&
+		document.getElementById("mainMenuBG").parentNode.parentNode.parentNode &&
+		document.getElementById("mainMenuBG").parentNode.parentNode.parentNode.parentNode
+		){
+			containerList2 = document.getElementById("mainMenuBG").parentNode.parentNode.parentNode.parentNode;			
+		}
+	if (containerList1 === containerList2) {
+		height = oClientWinSize.height - containerList1.clientHeight;
+		oCasesFrame.style.height = height;
+		if (oCasesFrame.height ) {
+			oCasesFrame.height = height;
+		}
+	} else {
+	    oCasesFrame    = document.getElementById('frameMain');
+		oClientWinSize = getClientWindowSize();
+		height = oClientWinSize.height-105;
+		oCasesFrame.style.height = height;
+		if (oCasesFrame.height ) {
+			oCasesFrame.height = height;
+		}		
+	}
     //oCasesSubFrame = oCasesFrame.contentWindow.document.getElementById('casesSubFrame');
     //oCasesSubFrame.style.height = height-10;
   }

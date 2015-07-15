@@ -1,0 +1,286 @@
+{
+    "name": "form-example",
+    "items": [
+        {
+            "type":"panel",       
+            "items":
+            [
+                [
+                    {
+                        "type": "title",
+                        "colSpan": 12,
+                        "name": "title",
+                        "label": "PMDynaform 7 - Fields disabled"
+                    }
+                ],
+                [
+                    {
+                        "type": "text",
+                        "colSpan":12,
+                        "name": "textName1",
+                        "defaultValue": "field1",
+                        "label": "Integer with max Length",
+                        "required": true,
+                        "readonly": false,
+                        "dataType": "integer",
+                        "variable": "variable1",
+                        "maxLength": 10,
+                        "transformTo": "upper",
+                        "disabled": true,
+                        "autoComplete": "on",
+                        "hint":null
+                    }
+                ],
+                [
+                    {
+                        "type": "suggest",
+                        "colSpan":12,
+                        "name": "textName1",
+                        "defaultValue": "field2",
+                        "label": "Suggest",
+                        "required": true,
+                        "readonly": false,
+                        "disabled": true,
+                        "dataType": "integer",
+                        "variable": "variable1",
+                        "maxLength": 10,
+                        "options":[],
+                        "hint":null
+                    }
+                ],
+                [
+                    {
+                        "type": "link",
+                        "colSpan":12,
+                        "name": "textName1",
+                        "label": "link",
+                        "required": true,  
+                        "disabled": true,                      
+                        "variable": "variable1",
+                        "maxLength": 10,
+                        "hint":null,
+                        "readOnly": true
+                    }
+                ],
+                [
+                    {
+                        "type": "text",
+                        "colSpan":12,
+                        "name": "textName2",
+                        "defaultValue": "field3",
+                        "label": "Float",
+                        "disabled": true,
+                        "required": true,
+                        "readonly": false,
+                        "dataType": "float",
+                        "hint":null
+                    }
+                ],
+                [
+                    {
+                        "type": "text",
+                        "colSpan":12,
+                        "name": "textName3",
+                        "defaultValue": "field4",
+                        "label": "String",
+                        "required": true,
+                        "disabled": true,
+                        "readonly": false,
+                        "dataType": "string",
+                        "hint":null
+                    }
+                ],
+                [
+                    {
+                        "type": "dropdown",
+                        "colSpan":12,
+                        "name": "Option",
+                        "label": "Options",
+                        "readonly": false,
+                        "disabled": true,
+                        "options":[
+                            {
+                                "label": "Option 1",
+                                "value": "option1"
+                            },
+                            {
+                                "label": "Option 2",
+                                "value": "option2"
+                            },
+                            {
+                                "label": "Option 3",
+                                "value": "option3"
+                            }
+                        ],
+                        "hint":null
+                    }
+                ],
+                [
+                    {
+                        "type": "checkbox",
+                        "colSpan":12,
+                        "name": "chekbox1",
+                        "label": "Checkbox",  
+                        "disabled": true,             
+                        "required": true,
+                        "options": [
+                            {
+                                "label": "This is the option A",
+                                "value": 1,
+                                "selected": true
+                            },
+                            {
+                                "label": "This is the option B",
+                                "value": 2
+                            },
+                            {
+                                "label": "This is the option C",
+                                "value": 3,
+                                "selected": true
+                            }
+                        ],
+                        "hint":null
+                    }
+                ],
+                [
+                    {
+                        "type": "textarea",
+                        "colSpan":6,
+                        "label": "Textarea",                        
+                        "name": "textarea1",
+                        "placeholder": "Column1",
+                        "defaultValue": "Column1",
+                        "maxLength": 15,
+                        "disabled": true,
+                        "required": true,
+                        "readonly": false,
+                        "rows":3,
+                        "cols":5,
+                        "hint":null
+                    },
+                    {
+                        "type": "textarea",
+                        "colSpan":6,
+                        "label": "Textarea",                        
+                        "name": "textarea2",
+                        "disabled": true,
+                        "placeholder": "Column2",
+                        "defaultValue": "Column2",
+                        "required": false,
+                        "readonly": false,
+                        "rows":3,
+                        "cols":5,
+                        "hint":null
+                    }
+                ],
+                [
+                    {
+                        "type": "text",
+                        "colSpan":4,
+                        "name": "textName6",
+                        "defaultValue": "123",
+                        "label": "Text Field",
+                        "placeholder": "",
+                        "disabled": true, 
+                        "required": true,
+                        "readonly": false,
+                        "hint":null
+                    },
+                    {
+                        "type": "checkbox",
+                        "colSpan":4,
+                        "name": "checkbox3",
+                        "label": "CheckBox",                        
+                        "required": false,
+                        "disabled": true,
+                        "options": [
+                            {
+                                "label" : "optA",
+                                "value" : 1,
+                                "selected" : true
+                            },
+                            {
+                                "label" : "optB",
+                                "value" : 2,
+                                "selected": true
+                            }
+                        ],
+                        "hint":null
+                    },
+                    {
+                        "type": "radio",
+                        "colSpan":4,
+                        "name": "radiogroup1",
+                        "defaultValue": "1",
+                        "label": "Radio Grp",
+                        "disabled": true,
+                        "required": true,
+                        "options": [
+                            {
+                                "label" : "optA",
+                                "value" : "1"
+                            },
+                            {
+                                "label" : "optB",
+                                "value" : "2"
+                            }
+                        ],
+                        "hint":null
+                    }
+                ],
+                [
+                    {
+                        "type": "datetime",
+                        "pickType":"datetime",
+                        "colSpan":4,
+                        "name": "datetime1",
+                        "defaultValue": "",
+                        "label": "Date time",
+                        "disabled": true,
+                        "required": true,
+                        "readonly": false,
+                        "hint":null
+                    },
+                    {
+                        "type": "datetime",
+                        "pickType":"date",
+                        "colSpan":4,
+                        "name": "datetime2",
+                        "defaultValue": "",
+                        "label": "Date",
+                        "required": true,
+                        "disabled": true,
+                        "readonly": false,
+                        "hint":null
+                    },
+                    {
+                        "type": "datetime",
+                        "pickType":"time",
+                        "colSpan":4,
+                        "name": "datetime3",
+                        "defaultValue": "",
+                        "label": "Time",
+                        "disabled": true,
+                        "required": true,
+                        "readonly": false,
+                        "hint":null
+                    }
+                ],
+                
+                [
+                    {
+                      "type" : "button",
+                      "colSpan" : 6,
+                      "disabled": true,
+                      "label":"Button"
+                    },
+                    {
+                      "type" : "submit",
+                      "colSpan" : 6,
+                      "label" : "Submit"
+                    }
+                ]
+            ]
+        }
+    ]
+}

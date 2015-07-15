@@ -14,7 +14,7 @@ $code = empty($_GET['code']) ? 'NN' : $_GET['code'];
 
 $clientId = 'x-pm-local-client';
 $secret = '179ad45c6ce2cb97cf1029e212046e81';
-
+$userPwd = $clientId.':'.$secret;
 $data = array(
     'grant_type' => 'authorization_code',
     'code' => $code
@@ -23,7 +23,7 @@ $data = array(
 $ch = curl_init($endpoint);
 
 curl_setopt($ch, CURLOPT_HEADER, false);
-curl_setopt($ch, CURLOPT_USERPWD, "$clientId:$secret");
+curl_setopt($ch, CURLOPT_USERPWD, $userPwd);
 curl_setopt($ch, CURLOPT_TIMEOUT, 30);
 curl_setopt($ch, CURLOPT_POST, 1);
 curl_setopt($ch, CURLOPT_POSTFIELDS, $data);

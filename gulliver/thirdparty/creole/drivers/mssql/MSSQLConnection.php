@@ -69,11 +69,28 @@ class MSSQLConnection extends ConnectionCommon implements Connection {
         $pw = $dsninfo['password'];
         $dbhost = $dsninfo['hostspec'] ? $dsninfo['hostspec'] : 'localhost';
 		
+        /**
+         * MSSQL (http://php.net/manual/en/intro.mssql.php)
+         * These functions allow you to access MS SQL Server database. 
+         * This extension is not available anymore on Windows with PHP 5.3 or later. 
+         * SQLSRV, an alternative extension for MS SQL connectivity is available from 
+         * Microsoft: Â» http://msdn.microsoft.com/en-us/sqlserver/ff657782.aspx.
+         * http://blogs.msdn.com/b/brian_swan/archive/2010/03/08/mssql-vs-sqlsrv-what-s-the-difference-part-1.aspx
+         * 
+         * Alternatively to use the mssql functions in Windows, use php_dblib.dll (FreeTDS) http://www.freetds.org/
+         * e.g. php.ini setting
+         * extension=php_dblib.dll
+         * 
+         * php_dblib.dll (FreeTDS) use ':' as the delimiter in all installations.
+         */
+        /*
 		if (PHP_OS == "WINNT" || PHP_OS == "WIN32") {
             $portDelimiter = ",";
         } else {
             $portDelimiter = ":";
         }
+        */
+        $portDelimiter = ":";
 
           if(!empty($dsninfo['port'])) {
                   $dbhost .= $portDelimiter.$dsninfo['port'];

@@ -25,7 +25,7 @@ abstract class BaseBpmnFlowPeer
     const CLASS_DEFAULT = 'classes.model.BpmnFlow';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 18;
+    const NUM_COLUMNS = 19;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
@@ -85,6 +85,9 @@ abstract class BaseBpmnFlowPeer
     /** the column name for the FLO_STATE field */
     const FLO_STATE = 'BPMN_FLOW.FLO_STATE';
 
+    /** the column name for the FLO_POSITION field */
+    const FLO_POSITION = 'BPMN_FLOW.FLO_POSITION';
+
     /** The PHP to DB Name Mapping */
     private static $phpNameMap = null;
 
@@ -96,10 +99,10 @@ abstract class BaseBpmnFlowPeer
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     private static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('FloUid', 'PrjUid', 'DiaUid', 'FloType', 'FloName', 'FloElementOrigin', 'FloElementOriginType', 'FloElementOriginPort', 'FloElementDest', 'FloElementDestType', 'FloElementDestPort', 'FloIsInmediate', 'FloCondition', 'FloX1', 'FloY1', 'FloX2', 'FloY2', 'FloState', ),
-        BasePeer::TYPE_COLNAME => array (BpmnFlowPeer::FLO_UID, BpmnFlowPeer::PRJ_UID, BpmnFlowPeer::DIA_UID, BpmnFlowPeer::FLO_TYPE, BpmnFlowPeer::FLO_NAME, BpmnFlowPeer::FLO_ELEMENT_ORIGIN, BpmnFlowPeer::FLO_ELEMENT_ORIGIN_TYPE, BpmnFlowPeer::FLO_ELEMENT_ORIGIN_PORT, BpmnFlowPeer::FLO_ELEMENT_DEST, BpmnFlowPeer::FLO_ELEMENT_DEST_TYPE, BpmnFlowPeer::FLO_ELEMENT_DEST_PORT, BpmnFlowPeer::FLO_IS_INMEDIATE, BpmnFlowPeer::FLO_CONDITION, BpmnFlowPeer::FLO_X1, BpmnFlowPeer::FLO_Y1, BpmnFlowPeer::FLO_X2, BpmnFlowPeer::FLO_Y2, BpmnFlowPeer::FLO_STATE, ),
-        BasePeer::TYPE_FIELDNAME => array ('FLO_UID', 'PRJ_UID', 'DIA_UID', 'FLO_TYPE', 'FLO_NAME', 'FLO_ELEMENT_ORIGIN', 'FLO_ELEMENT_ORIGIN_TYPE', 'FLO_ELEMENT_ORIGIN_PORT', 'FLO_ELEMENT_DEST', 'FLO_ELEMENT_DEST_TYPE', 'FLO_ELEMENT_DEST_PORT', 'FLO_IS_INMEDIATE', 'FLO_CONDITION', 'FLO_X1', 'FLO_Y1', 'FLO_X2', 'FLO_Y2', 'FLO_STATE', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, )
+        BasePeer::TYPE_PHPNAME => array ('FloUid', 'PrjUid', 'DiaUid', 'FloType', 'FloName', 'FloElementOrigin', 'FloElementOriginType', 'FloElementOriginPort', 'FloElementDest', 'FloElementDestType', 'FloElementDestPort', 'FloIsInmediate', 'FloCondition', 'FloX1', 'FloY1', 'FloX2', 'FloY2', 'FloState', 'FloPosition', ),
+        BasePeer::TYPE_COLNAME => array (BpmnFlowPeer::FLO_UID, BpmnFlowPeer::PRJ_UID, BpmnFlowPeer::DIA_UID, BpmnFlowPeer::FLO_TYPE, BpmnFlowPeer::FLO_NAME, BpmnFlowPeer::FLO_ELEMENT_ORIGIN, BpmnFlowPeer::FLO_ELEMENT_ORIGIN_TYPE, BpmnFlowPeer::FLO_ELEMENT_ORIGIN_PORT, BpmnFlowPeer::FLO_ELEMENT_DEST, BpmnFlowPeer::FLO_ELEMENT_DEST_TYPE, BpmnFlowPeer::FLO_ELEMENT_DEST_PORT, BpmnFlowPeer::FLO_IS_INMEDIATE, BpmnFlowPeer::FLO_CONDITION, BpmnFlowPeer::FLO_X1, BpmnFlowPeer::FLO_Y1, BpmnFlowPeer::FLO_X2, BpmnFlowPeer::FLO_Y2, BpmnFlowPeer::FLO_STATE, BpmnFlowPeer::FLO_POSITION, ),
+        BasePeer::TYPE_FIELDNAME => array ('FLO_UID', 'PRJ_UID', 'DIA_UID', 'FLO_TYPE', 'FLO_NAME', 'FLO_ELEMENT_ORIGIN', 'FLO_ELEMENT_ORIGIN_TYPE', 'FLO_ELEMENT_ORIGIN_PORT', 'FLO_ELEMENT_DEST', 'FLO_ELEMENT_DEST_TYPE', 'FLO_ELEMENT_DEST_PORT', 'FLO_IS_INMEDIATE', 'FLO_CONDITION', 'FLO_X1', 'FLO_Y1', 'FLO_X2', 'FLO_Y2', 'FLO_STATE', 'FLO_POSITION', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, )
     );
 
     /**
@@ -109,10 +112,10 @@ abstract class BaseBpmnFlowPeer
      * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     private static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('FloUid' => 0, 'PrjUid' => 1, 'DiaUid' => 2, 'FloType' => 3, 'FloName' => 4, 'FloElementOrigin' => 5, 'FloElementOriginType' => 6, 'FloElementOriginPort' => 7, 'FloElementDest' => 8, 'FloElementDestType' => 9, 'FloElementDestPort' => 10, 'FloIsInmediate' => 11, 'FloCondition' => 12, 'FloX1' => 13, 'FloY1' => 14, 'FloX2' => 15, 'FloY2' => 16, 'FloState' => 17, ),
-        BasePeer::TYPE_COLNAME => array (BpmnFlowPeer::FLO_UID => 0, BpmnFlowPeer::PRJ_UID => 1, BpmnFlowPeer::DIA_UID => 2, BpmnFlowPeer::FLO_TYPE => 3, BpmnFlowPeer::FLO_NAME => 4, BpmnFlowPeer::FLO_ELEMENT_ORIGIN => 5, BpmnFlowPeer::FLO_ELEMENT_ORIGIN_TYPE => 6, BpmnFlowPeer::FLO_ELEMENT_ORIGIN_PORT => 7, BpmnFlowPeer::FLO_ELEMENT_DEST => 8, BpmnFlowPeer::FLO_ELEMENT_DEST_TYPE => 9, BpmnFlowPeer::FLO_ELEMENT_DEST_PORT => 10, BpmnFlowPeer::FLO_IS_INMEDIATE => 11, BpmnFlowPeer::FLO_CONDITION => 12, BpmnFlowPeer::FLO_X1 => 13, BpmnFlowPeer::FLO_Y1 => 14, BpmnFlowPeer::FLO_X2 => 15, BpmnFlowPeer::FLO_Y2 => 16, BpmnFlowPeer::FLO_STATE => 17, ),
-        BasePeer::TYPE_FIELDNAME => array ('FLO_UID' => 0, 'PRJ_UID' => 1, 'DIA_UID' => 2, 'FLO_TYPE' => 3, 'FLO_NAME' => 4, 'FLO_ELEMENT_ORIGIN' => 5, 'FLO_ELEMENT_ORIGIN_TYPE' => 6, 'FLO_ELEMENT_ORIGIN_PORT' => 7, 'FLO_ELEMENT_DEST' => 8, 'FLO_ELEMENT_DEST_TYPE' => 9, 'FLO_ELEMENT_DEST_PORT' => 10, 'FLO_IS_INMEDIATE' => 11, 'FLO_CONDITION' => 12, 'FLO_X1' => 13, 'FLO_Y1' => 14, 'FLO_X2' => 15, 'FLO_Y2' => 16, 'FLO_STATE' => 17, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, )
+        BasePeer::TYPE_PHPNAME => array ('FloUid' => 0, 'PrjUid' => 1, 'DiaUid' => 2, 'FloType' => 3, 'FloName' => 4, 'FloElementOrigin' => 5, 'FloElementOriginType' => 6, 'FloElementOriginPort' => 7, 'FloElementDest' => 8, 'FloElementDestType' => 9, 'FloElementDestPort' => 10, 'FloIsInmediate' => 11, 'FloCondition' => 12, 'FloX1' => 13, 'FloY1' => 14, 'FloX2' => 15, 'FloY2' => 16, 'FloState' => 17, 'FloPosition' => 18, ),
+        BasePeer::TYPE_COLNAME => array (BpmnFlowPeer::FLO_UID => 0, BpmnFlowPeer::PRJ_UID => 1, BpmnFlowPeer::DIA_UID => 2, BpmnFlowPeer::FLO_TYPE => 3, BpmnFlowPeer::FLO_NAME => 4, BpmnFlowPeer::FLO_ELEMENT_ORIGIN => 5, BpmnFlowPeer::FLO_ELEMENT_ORIGIN_TYPE => 6, BpmnFlowPeer::FLO_ELEMENT_ORIGIN_PORT => 7, BpmnFlowPeer::FLO_ELEMENT_DEST => 8, BpmnFlowPeer::FLO_ELEMENT_DEST_TYPE => 9, BpmnFlowPeer::FLO_ELEMENT_DEST_PORT => 10, BpmnFlowPeer::FLO_IS_INMEDIATE => 11, BpmnFlowPeer::FLO_CONDITION => 12, BpmnFlowPeer::FLO_X1 => 13, BpmnFlowPeer::FLO_Y1 => 14, BpmnFlowPeer::FLO_X2 => 15, BpmnFlowPeer::FLO_Y2 => 16, BpmnFlowPeer::FLO_STATE => 17, BpmnFlowPeer::FLO_POSITION => 18, ),
+        BasePeer::TYPE_FIELDNAME => array ('FLO_UID' => 0, 'PRJ_UID' => 1, 'DIA_UID' => 2, 'FLO_TYPE' => 3, 'FLO_NAME' => 4, 'FLO_ELEMENT_ORIGIN' => 5, 'FLO_ELEMENT_ORIGIN_TYPE' => 6, 'FLO_ELEMENT_ORIGIN_PORT' => 7, 'FLO_ELEMENT_DEST' => 8, 'FLO_ELEMENT_DEST_TYPE' => 9, 'FLO_ELEMENT_DEST_PORT' => 10, 'FLO_IS_INMEDIATE' => 11, 'FLO_CONDITION' => 12, 'FLO_X1' => 13, 'FLO_Y1' => 14, 'FLO_X2' => 15, 'FLO_Y2' => 16, 'FLO_STATE' => 17, 'FLO_POSITION' => 18, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, )
     );
 
     /**
@@ -248,6 +251,8 @@ abstract class BaseBpmnFlowPeer
         $criteria->addSelectColumn(BpmnFlowPeer::FLO_Y2);
 
         $criteria->addSelectColumn(BpmnFlowPeer::FLO_STATE);
+
+        $criteria->addSelectColumn(BpmnFlowPeer::FLO_POSITION);
 
     }
 

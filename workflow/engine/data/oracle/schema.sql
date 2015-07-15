@@ -608,6 +608,7 @@ CREATE TABLE "ROUTE"
 	"ROU_NEXT_TASK" VARCHAR2(32) default '0' NOT NULL,
 	"ROU_CASE" NUMBER default 0 NOT NULL,
 	"ROU_TYPE" VARCHAR2(25) default 'SEQUENTIAL' NOT NULL,
+ "ROU_DEFAULT" NUMBER default 0 NOT NULL,
 	"ROU_CONDITION" VARCHAR2(512) default '' NOT NULL,
 	"ROU_TO_LAST_USER" VARCHAR2(20) default 'FALSE' NOT NULL,
 	"ROU_OPTIONAL" VARCHAR2(20) default 'FALSE' NOT NULL,
@@ -1491,6 +1492,7 @@ CREATE TABLE "APP_HISTORY"
 	"PRO_UID" VARCHAR2(32) default '' NOT NULL,
 	"TAS_UID" VARCHAR2(32) default '' NOT NULL,
 	"DYN_UID" VARCHAR2(32) default '' NOT NULL,
+ "OBJ_TYPE" VARCHAR(20) default 'DYNAFORM' NOT NULL,
 	"USR_UID" VARCHAR2(32) default '' NOT NULL,
 	"APP_STATUS" VARCHAR2(100) default '' NOT NULL,
 	"HISTORY_DATE" DATE,
@@ -1830,4 +1832,84 @@ CREATE TABLE WEB_ENTRY
 ALTER TABLE WEB_ENTRY
 ADD CONSTRAINT WEB_ENTRY_PK
 PRIMARY KEY (WE_UID);
+
+/*
+---------------------------------------------------------------------------
+APP_ASSIGN_SELF_SERVICE_VALUE
+---------------------------------------------------------------------------
+*/
+
+DROP TABLE APP_ASSIGN_SELF_SERVICE_VALUE CASCADE CONSTRAINTS;
+
+CREATE TABLE APP_ASSIGN_SELF_SERVICE_VALUE
+(
+    APP_UID   VARCHAR2(32) NOT NULL,
+    DEL_INDEX NUMBER       DEFAULT 0 NOT NULL,
+    PRO_UID   VARCHAR2(32) NOT NULL,
+    TAS_UID   VARCHAR2(32) NOT NULL,
+    GRP_UID   VARCHAR2(32) DEFAULT '' NOT NULL
+);
+
+
+/* -----------------------------------------------------------------------
+   MESSAGE
+   ----------------------------------------------------------------------- */
+
+DROP TABLE "MESSAGE" CASCADE CONSTRAINTS;
+
+
+CREATE TABLE "MESSAGE"
+(
+	"MES_UID" VARCHAR2(32)  NOT NULL,
+	"PRJ_UID" VARCHAR2(32)  NOT NULL,
+	"MES_NAME" VARCHAR2(255) default '',
+	"MES_CONDITION" VARCHAR2(255) default ''
+);
+
+	ALTER TABLE "MESSAGE"
+		ADD CONSTRAINT "MESSAGE_PK"
+	PRIMARY KEY ("MES_UID");
+
+
+/* -----------------------------------------------------------------------
+   MESSAGE_DETAIL
+   ----------------------------------------------------------------------- */
+
+DROP TABLE "MESSAGE_DETAIL" CASCADE CONSTRAINTS;
+
+
+CREATE TABLE "MESSAGE_DETAIL"
+(
+	"MD_UID" VARCHAR2(32)  NOT NULL,
+	"MES_UID" VARCHAR2(32)  NOT NULL,
+	"MD_TYPE" VARCHAR2(32) default '',
+	"MD_NAME" VARCHAR2(255) default ''
+);
+
+	ALTER TABLE "MESSAGE_DETAIL"
+		ADD CONSTRAINT "MESSAGE_DETAIL_PK"
+	PRIMARY KEY ("MD_UID");
+
+/* -----------------------------------------------------------------------
+   WEB_ENTRY_EVENT
+   ----------------------------------------------------------------------- */
+
+DROP TABLE WEB_ENTRY_EVENT CASCADE CONSTRAINTS;
+
+CREATE TABLE WEB_ENTRY_EVENT
+(
+    WEE_UID    VARCHAR2(32) NOT NULL,
+    PRJ_UID    VARCHAR2(32) NOT NULL,
+    EVN_UID    VARCHAR2(32) NOT NULL,
+    ACT_UID    VARCHAR2(32) NOT NULL,
+    DYN_UID    VARCHAR2(32) NOT NULL,
+    USR_UID    VARCHAR2(32) NOT NULL,
+    WEE_STATUS VARCHAR2(10) NOT NULL DEFAULT 'ENABLED',
+    WEE_WE_UID     VARCHAR2(32) NOT NULL DEFAULT '',
+    WEE_WE_TAS_UID VARCHAR2(32) NOT NULL DEFAULT ''
+);
+
+ALTER TABLE WEB_ENTRY_EVENT
+ADD CONSTRAINT WEB_ENTRY_EVENT_PK
+PRIMARY KEY (WEE_UID);
 

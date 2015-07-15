@@ -201,7 +201,7 @@ img {
   font: normal 8pt "Open Sans", Tahoma, sans-serif, MiscFixed;
   color: #000;
   height: 0px;
-  padding-top: 100px;
+  padding-top: 1px;
   text-align: center;
 }
 .Footer .image {
@@ -244,6 +244,31 @@ img {
   padding: 0 20px;
   vertical-align: middle;
   font-weight: bold;
+}
+@media screen and (max-width: 1680px) {
+    #temporalMessageTD {
+          border-width: 0px;
+          font-size: normal 6pt !important;
+          height: 25px !important;
+          padding: 0 3px !important;
+          background-size: 100% 100% !important;
+        }
+}
+@media screen\0 {
+    #temporalMessageTD {
+          border-width: 0px;
+          font: normal 8pt "Open Sans", Tahoma, sans-serif, MiscFixed;
+          background-size: 100% 100%;
+        }
+}
+@media screen and (max-width: 600px) {
+    .temporalMessageERROR {
+          border-width: 0px;
+          font-size: normal 6pt !important;
+          height: 25px !important;
+          padding: 0 2px !important;
+          background-size: 100% 100% !important;
+        }
 }
 .temporalMessageWARNING {
   -moz-border-radius: 6px;
@@ -461,14 +486,7 @@ span.XtreeMinus:hover {
 /*	Theme leimnud.module.grid	END */
 /* Menues */
 TD.mainMenuBG {
-  background-image: url(/skins/neoclassic/images/ext/gray/toolbar/bg.gif);
-  background-repeat: repeat-x;
-  /*height: 25px;*/
-
-  left: 46px;
-  top: 72px;
-  direction: ltr;
-  text-align: left;
+  vertical-align: top;
 }
 TD.mainMenu {
   background-image: url(/skins/neoclassic/images/classic/bm.jpg);
@@ -768,6 +786,11 @@ form.formDefault .content,
 .pagedTableDefault {
   background-color: #FFF;
   border: #dddddd 1px solid;
+}
+@media screen\0 {
+    form.formDefault .content, .pagedTableDefault {
+          width:450px;
+    }
 }
 .pagedTableDefault {
   padding: 10px;
@@ -3237,7 +3260,6 @@ table.DynarchCalendar-titleCont {
 }
 /*Menu Principal*/
 #pm_main_table .mainMenuBG {
-  background: #676767;
 }
 ul#pm_menu {
   list-style: none;
@@ -3247,21 +3269,27 @@ ul#pm_menu {
 ul#pm_menu li {
   float: left;
   padding: 0;
-  height: 25px;
+  margin-top: 6.5px;
 }
 ul#pm_menu a {
-  color: #fff;
-  font-size: 13px;
+  color: #7b7c80;
+  font-size: 14px;
   text-decoration: none;
   display: block;
-  padding: 0px 25px;
-  text-transform: uppercase;
-  line-height: 25px;
+  text-transform: capitalize;
   font-weight: bold;
+  padding: 16px 3px 3px 3px;
+  margin: 0 12px 0 12px;
+}
+ul#pm_menu a:hover {
+    color:#3397e1;
+}
+ul#pm_menu li.SelectedMenu a{
+    color:#3397e1;
+    border-bottom: 2px solid #3397e1;
 }
 ul#pm_menu li.SelectedMenu,
 ul#pm_menu li:hover {
-  background: #00a1e4;
 }
 ul#pm_submenu {
   list-style: none;
@@ -3460,5 +3488,5 @@ button.x-btn-text:focus,
 }
 
 .logo_company {
-    padding-left: 10px;
+    padding: 7px 10px;
 }

@@ -112,7 +112,7 @@ class XmlForm_Field_DVEditor extends XmlForm_Field
      *
      * @return string '<div> ... </div>'
      */
-    public function render($value, $owner = null)
+    public function render($value = null, $owner = null)
     {
         return '<div style="width:' . htmlentities($this->width, ENT_QUOTES, 'utf-8') . ';height:' . htmlentities($this->height, ENT_QUOTES, 'utf-8') . '"><input id="form[' . $this->name . ']" name="form[' . $this->name . ']" type="hidden" value="' . htmlentities($value, ENT_QUOTES, 'UTF-8') . '"/></div>';
     }

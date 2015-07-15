@@ -278,7 +278,13 @@ function executeQuery ($SqlStatement, $DBConnectionUID = 'workflow', $aParameter
                     break;
             }
         } else {
-            $result = executeQueryOci( $SqlStatement, $con, $aParameter );
+            $dataEncode = $con->getDSN();
+
+            if (isset($dataEncode["encoding"]) && $dataEncode["encoding"] != "") {
+                $result = executeQueryOci($SqlStatement, $con, $aParameter, $dataEncode["encoding"]);
+            } else {
+                $result = executeQueryOci($SqlStatement, $con, $aParameter);
+            }
         }
 
         return $result;
@@ -821,17 +827,17 @@ function getEmailConfiguration ()
  * @link http://wiki.processmaker.com/index.php/ProcessMaker_Functions#PMFSendMessage.28.29
  *
  * @param string(32) | $caseId | UID for case | The UID (unique identification) for a case, which is a string of 32 hexadecimal characters to identify the case.
- * @param string(32) | $sFrom | Email address | The email address of the person who sends out the email.
- * @param string(100) | $sTo | Email receptor | The email address(es) to whom the email is sent. If multiple recipients, separate each email address with a comma.
- * @param string(100) | $sCc = '' | Email address for copies | The email address(es) of people who will receive carbon copies of the email.
- * @param string(100) | $sBcc = ''| Email address for copies hidden | The email address(es) of people who will receive blind carbon copies of the email.
+ * @param string(32) | $sFrom | Sender | The email address of the person who sends out the email.
+ * @param string(100) | $sTo | Recipient | The email address(es) to whom the email is sent. If multiple recipients, separate each email address with a comma.
+ * @param string(100) | $sCc = '' | Carbon copy recipient | The email address(es) of people who will receive carbon copies of the email.
+ * @param string(100) | $sBcc = ''| Carbon copy recipient | The email address(es) of people who will receive blind carbon copies of the email.
  * @param string(50) | $sSubject | Subject of the email | The subject (title) of the email.
  * @param string(50) | $sTemplate | Name of the template | The name of the template file in plain text or HTML format which will produce the body of the email.
- * @param array | $aFields = array() | An optional associative array | Optional parameter. An associative array where the keys are the variable names and the values are the variables' values.
+ * @param array | $aFields = array() | Variables for email template | Optional parameter. An associative array where the keys are the variable names and the values are the variables' values.
  * @param array | $aAttachment = array() | Attachment | An Optional arrray. An array of files (full paths) to be attached to the email.
- * @param boolean | $showMessage = true | Show message | Optional parameter.
+ * @param boolean | $showMessage = true | Show message | Optional parameter. Set to TRUE to show the message in the case's message history.
  * @param int | $delIndex = 0 | Delegation index of the case | Optional parameter. The delegation index of the current task in the case.
- * @param array | $config = array() | Alternative Email Settings | An optional array: An array of parameters to be used in the Email sent (MESS_ENGINE, MESS_SERVER, MESS_PORT, MESS_FROM_MAIL, MESS_RAUTH, MESS_ACCOUNT, MESS_PASSWORD, and SMTPSecure).
+ * @param string(100) | $config = '' | Email server configuration | An optional array: An array of parameters to be used in the Email sent (MESS_ENGINE, MESS_SERVER, MESS_PORT, MESS_FROM_MAIL, MESS_RAUTH, MESS_ACCOUNT, MESS_PASSWORD, and SMTPSecure) Or String: UID of Email server .
  * @return int | | result | Result of sending email
  *
  */
@@ -885,7 +891,7 @@ function PMFSendMessage(
     if ($result->status_code == 0) {
         return 1;
     } else {
-    	error_log($result->message);
+        error_log($result->message);
         return 0;
     }
 }
@@ -1235,7 +1241,7 @@ function WSInformationUser($userUid)
  *
  * @method
  *
- * Returns the unique ID for the current active session.
+ * Returns the unique ID for the current login session.
  *
  * @name WSGetSession
  * @label WS Get Session
@@ -1400,10 +1406,10 @@ function WSUnpauseCase ($caseUid, $delIndex, $userUid)
  *
  * @method
  *
- * Add case note.
+ * Add a case note.
  *
- * @name WSAddCaseNote
- * @label WS Add case note
+ * @name WSAddACaseNote
+ * @label WS Add a case note
  * @link http://wiki.processmaker.com/index.php/ProcessMaker_Functions#WSAddCaseNote.28.29
  *
  * @param string(32) | $caseUid | ID of the case | The unique ID of the case.
@@ -1537,10 +1543,10 @@ function PMFUserList () //its test was successfull
 /**
  * @method
  *
- * Add a input document.
+ * Add an Input Document.
  *
- * @name PMFAddInputDocument
- * @label PMF Add a input document
+ * @name PMFAddAnInputDocument
+ * @label PMF Add an input document
  * @link http://wiki.processmaker.com/index.php/ProcessMaker_Functions#PMFAddInputDocument.28.29
  *
  * @param string(32) | $inputDocumentUid | ID of the input document | The unique ID of the input document.
@@ -1552,7 +1558,7 @@ function PMFUserList () //its test was successfull
  * @param string(32) | $caseUid | ID of the case | The unique ID of the case.
  * @param int | $delIndex | Delegation index of the case | The delegation index of the current task in the case.
  * @param string(32) | $taskUid | ID of the task | The unique ID of the task.
- * @param string(32) | $userUid | ID user | The unique ID of the user who will add a input document.
+ * @param string(32) | $userUid | ID user | The unique ID of the user who will add an input document.
  * @param string | $option = "file" | Option | Option, value: "file".
  * @param string | $file = "path_to_file/myfile.txt" | File, path to file | File, path to file.
  * @return string | $appDocUid | ID of the application document | Returns ID if it has added the input document successfully; otherwise, returns null or empty if an error occurred.
@@ -2061,7 +2067,7 @@ function PMFNewCase ($processId, $userId, $taskId, $variables)
  *
  * @method
  *
- * Assigns a user to a group.
+ *
  *
  * Assigns a user to a group. Note that the logged-in user must have the PM_USERS permission in his/her role to be able to assign a user to a group.
  *
@@ -2133,7 +2139,7 @@ function PMFCreateUser ($userId, $password, $firstname, $lastname, $email, $role
  * @link http://wiki.processmaker.com/index.php/ProcessMaker_Functions#PMFUpdateUser.28.29
  *
  * @param string(32) | $userUid | User UID | The user UID.
- * @param string(32) | $userName | User ID | The username for the user.
+ * @param string(32) | $userName | Username | The username for the user.
  * @param string(32) | $firstName=null | Firstname of the user | Optional parameter. The first name of the user, which can be up to 50 characters long.
  * @param string(32) | $lastName=null | Lastname of the user | Optional parameter. The last name of the user, which can be up to 50 characters long.
  * @param string(32) | $email=null | Email the user | Optional parameter. The email of the user, which can be up to 100 characters long.
@@ -2234,7 +2240,7 @@ function setCaseTrackerCode ($sApplicationUID, $sCode, $sPIN = '')
         $aFields['APP_PROC_CODE'] = $sCode;
         if ($sPIN != '') {
             $aFields['APP_DATA']['PIN'] = $sPIN;
-            $aFields['APP_PIN'] = md5( $sPIN );
+            $aFields['APP_PIN'] = G::encryptOld( $sPIN );
         }
         $oCase->updateCase( $sApplicationUID, $aFields );
         if (isset($_SESSION['APPLICATION'])) {
@@ -2466,7 +2472,7 @@ function PMFGetNextAssignedUser ($application, $task, $delIndex = null, $userUid
 /**
  * @method
  *
- * Returns a list or user.
+ * Returns the email address of the specified user.
  *
  * @name PMFGetUserEmailAddress
  * @label PMF Get User Email Address
@@ -2706,10 +2712,10 @@ function PMFCancelCase ($caseUid, $delIndex, $userUid)
  * @label PMF Pauses a specified case.
  * @link http://wiki.processmaker.com/index.php/ProcessMaker_Functions#PMFPauseCase.28.29
  *
- * @param string(32) | $caseUid | ID of the case | The unique ID of the case.
+ * @param string(32) | $caseUid | Case UID | The unique ID of the case.
  * @param int | $delIndex | Delegation index of the case | The delegation index of the current task in the case.
- * @param string(32) | $userUid | ID user | The unique ID of the user who will pause the case.
- * @param string(32) | $unpauseDate=null | Date | Optional parameter. The date in the format "yyyy-mm-dd" indicating when to unpause the case.
+ * @param string(32) | $userUid | User UID | The unique ID of the user who will pause the case.
+ * @param string(32) | $unpauseDate=null | Unpaused date | The date in the format "yyyy-mm-dd" indicating when to unpause the case.
  * @return int | $result | Result of the pause | Returns 1 if the case is paused successfully; otherwise, returns 0 if an error occurred.
  *
  */
@@ -2771,10 +2777,10 @@ function PMFUnpauseCase ($caseUid, $delIndex, $userUid)
  *
  * @method
  *
- * Add case note.
+ * Add a case note.
  *
- * @name PMFAddCaseNote
- * @label PMF Add case note
+ * @name PMFAddACaseNote
+ * @label PMF Add a case note
  * @link http://wiki.processmaker.com/index.php/ProcessMaker_Functions#PMFAddCaseNote.28.29
  *
  * @param string(32) | $caseUid | ID of the case | The unique ID of the case.
@@ -2783,7 +2789,7 @@ function PMFUnpauseCase ($caseUid, $delIndex, $userUid)
  * @param string(32) | $userUid | ID user | The unique ID of the user who will add note case.
  * @param string | $note | Note of the case | Note of the case.
  * @param int | $sendMail = 1 | Send mail | Optional parameter. If set to 1, will send an email to all participants in the case.
- * @return int | $result | Result of the add case note | Returns 1 if the note has been added to the case.; otherwise, returns 0 if an error occurred.
+ * @return int | $result | Result of the add a case note | Returns 1 if the note has been added to the case.; otherwise, returns 0 if an error occurred.
  *
  */
 function PMFAddCaseNote($caseUid, $processUid, $taskUid, $userUid, $note, $sendMail = 1)
@@ -2803,24 +2809,24 @@ function PMFAddCaseNote($caseUid, $processUid, $taskUid, $userUid, $note, $sendM
 /**
  *@method
  *
- * It adds an element to the asociative array of attached documents that will be sent by mail, if it exists a file with the same name, it wll return a generated name with an autoincrementable sequential number.
+ * Adds a filename and file path to an associative array of files which can be passed to the PMFSendMessage() to send emails with attachments. It renames files with the same filename so existing files will not be replaced in the array.
  *
  * @name PMFAddAttachmentToArray
- * @label Add Element in Array
- * @link http://wiki.processmaker.com/index.php/ProcessMaker_Functions#arrayDocumentAddElement.28.29
+ * @label Add File to Array
+ * @link http://wiki.processmaker.com/index.php/ProcessMaker_Functions#PMFAddAttachmentToArray.28.29
  *
- * @param array | $arrayData | Array that will contain new data | Array value comes where will contain the new data.
- * @param string(32) | $index | Name of the index | New index name
- * @param string(32) | $value | Index value | New value will contain the index
- * @param string | $suffix = " Copy({i})" | Is suffix | A string that is concatenated to index different
- * @return array | $arrayData | Array with new data | The array will contain the new data
+ * @param array | $arrayData | Array of files | Associative array where the index of each element is its new filename and its value is the path to the file or its web address.
+ * @param string(32) | $index | Filename | New filename which will be added as the index in the array
+ * @param string(32) | $value | File location | The web address or path on the ProcessMaker server for the file
+ * @param string | $suffix = " Copy({i})" | Filename suffix | A suffix to add to the filename if the filename already exists in the array
+ * @return array | $arrayData | Array with new data | The array with the added file
  *
  */
 
 function PMFAddAttachmentToArray($arrayData, $index, $value, $suffix = " Copy({i})")
 {
     if (isset($suffix) && $suffix == "") {
-        $suffix = " Copy ({i})";
+        $suffix = " Copy({i})";
     }
 
     $newIndex = $index;
@@ -2845,7 +2851,7 @@ function PMFAddAttachmentToArray($arrayData, $index, $value, $suffix = " Copy({i
 /**
  *@method
  *
- * It delete the mask a field.
+ * Removes the currency symbol and thousands separator inserted by a currency mask.
  *
  * @name PMFRemoveMask
  * @label PMF Remove Mask
@@ -2859,12 +2865,41 @@ function PMFAddAttachmentToArray($arrayData, $index, $value, $suffix = " Copy({i
 
 function PMFRemoveMask ($field, $separator = '.', $currency = '')
 {
-    $sep = array();
-    if ( trim($currency) != '') {
-        $sep[] = $currency;
+    $thousandSeparator = $separator;
+    $decimalSeparator = ($thousandSeparator == ".") ? "," : ".";
+
+    $field = str_replace($thousandSeparator, "", $field);
+    $field = str_replace($decimalSeparator, ".", $field);
+    $field = str_replace($currency, "", $field);
+    if(strpos($decimalSeparator, $field) !== false){
+        $field = (float)(trim($field));
     }
-    $sep[] = ($separator == ',') ? '.' : ',';
-    $field = str_replace($sep, '', $field);
-    $field = trim(str_replace($separator, '.', $field));
+
     return $field;
+}
+
+/**
+ *@method
+ *
+ * Sends an array of case variables to a specified case.
+ *
+ * @name PMFSaveCurrentData
+ * @label PMF Save Current Data
+ *
+ * @return int | $result | Result of send variables | Returns 1 if the variables were sent successfully to the case; otherwise, returns 0 if an error occurred.
+ *
+ */
+
+function PMFSaveCurrentData ()
+{
+    global $oPMScript;
+    $result = 0;
+
+    if (isset($_SESSION['APPLICATION']) && isset($oPMScript->aFields)) {
+        G::LoadClass( 'wsBase' );
+        $ws = new wsBase();
+        $result = $ws->sendVariables( $_SESSION['APPLICATION'], $oPMScript->aFields );
+    }
+
+    return $result;
 }
