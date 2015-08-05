@@ -1,30 +1,30 @@
-[6 days ago] 4c98ee9  PM-2976: ActionsByEmail is active in task <Paula V. Quispe>
-[6 days ago] f01aed4  PM-2939: ActionsByEmail executed if the task is active with actionsByEmail and exists the feature <Paula V. Quispe>
-[7 days ago] d9c925b  IMPROVEMENT <Roly Rudy Gutierrez Pinto>
-[7 days ago] 540e462  PM-2973: Batch routing - report table with Data <Paula V. Quispe>
-[8 days ago] 3c69a6e  PM-2939: I catch and show the error <Paula V. Quispe>
-[8 days ago] 379766c  PM-2938:I deleted some lines <Paula V. Quispe>
-[8 days ago] 30252e7  PM-2930-2895 MSSQL (http://php.net/manual/en/intro.mssql.php) These functions allow you to access MS SQL Server database. This extension is not available anymore on Windows with PHP 5.3 or later. SQLSRV, an alternative extension for MS SQL connectivity is available from Microsoft: » http://msdn.microsoft.com/en-us/sqlserver/ff657782.aspx. Alternatively to use the mssql functions in Windows, use php_dblib.dll (FreeTDS) http://www.freetds.org/ e.g. php.ini setting extension=php_dblib.dll php_dblib.dll (FreeTDS) use ':' as the delimiter in all installations. <Roly Rudy Gutierrez Pinto>
-[8 days ago] eaf7484  PM-2934 Validacion en el listado de variables en un proceso a la creacion de un ReportTable <dheeyi>
-[11 days ago] 57007ca  PM-2939: Actions by email plugin and feature working together <Paula V. Quispe>
-[11 days ago] b83b11f  PM-2938: I solved the issue when deschecked the option [Enable consolidate for this task] <Paula V. Quispe>
-[11 days ago] 918ef6e  PM-2938: I changed the clases in model folder <Paula V. Quispe>
-[11 days ago] c51c190  PM-2938: I changed some files <Paula V. Quispe>
-[11 days ago] ac04ecc  PM-2869 y M-2870 "Case sensitive variables." SOLVED <Luis Fernando Saisa Lopez>
-[11 days ago] ddeda5d  PM-2615,PM-2470 <marcelo.cuiza>
-[11 days ago] 3ba7b0e  IMPROVEMENT <Roly Rudy Gutierrez Pinto>
-[2 weeks ago] 7c18544  PM-2812: I solved a issue with port in Windows 8 <Paula V. Quispe>
-[2 weeks ago] c713422  PM-2884: I solved a issue with ENGINE=InnoDB with DEFAULT CHARSET=utf8 <Paula V. Quispe>
-[2 weeks ago] 181afa4  PM-2713 Outlook Connector: No muestra la informacióe Process Map en el cliente <dheeyi>
-[3 weeks ago] cf9cfc3  PM-2814: Update logo with the registered simbol <Paula V. Quispe>
-[3 weeks ago] bd37028  PM-2891 "No se muestra el scrollbar en el modulo..." SOLVED <Luis Fernando Saisa Lopez>
-[3 weeks ago] 35f6e44  PM-2835 "Adicionar los siguientes features..." SOLVED <Victor Saisa Lopez>
-[3 weeks ago] 5d81bd4  PM-2835 "Adicionar los siguientes features..." SOLVED <Victor Saisa Lopez>
-[3 weeks ago] 5ef217f  PM-2828 "In the BPMN Designer, can not connect..." SOLVED > Code Isuue:   0016744: In the BPMN Designer, can not connect to Oracle (and probably MS SQL) databases because no "Encode" options > Solution:   Cuando se selecciona la opcion en engine "oracle" no se mostraba los encodes. Se agrega los encodes para oracle. <Luis Fernando Saisa Lopez>
-[3 weeks ago] 40f1004  PM-2835 "Adicionar los siguientes features..." SOLVED <Victor Saisa Lopez>
-[3 weeks ago] 91db528  PM-2790 0017387: Derivacion en paralelo, una de los hilos llega a la bandeja como leido <dheeyi>
-[4 weeks ago] ee1bd0f  PM-2791: I added the regular expresion in other place <Paula V. Quispe>
-[4 weeks ago] bdf93ba  PM-00000 "Revert & Fix: Fix to import process" SOLVED <Victor Saisa Lopez>
-[4 weeks ago] 1d92a4c  pm-2731 <marcelo.cuiza>
-[4 weeks ago] 8046dec  PM-2811: Upgrade ProcessMaker from 2.8 to 3.0 on Ubuntu, problem with close in propel <Paula V. Quispe>
-[4 weeks ago] aeda410  PM-2791: Problema con el workspace-restore en Windows <Paula V. Quispe>
+[3 hours ago] e57bfa1  Updating a new label for MAFE, release 3.0.1-GA <Julio Cesar Laura>
+[6 hours ago] 24df46f  fix more session <Ronald Quenta>
+[7 hours ago] cfbf5c7  fix add process uid in session process <Ronald Quenta>
+[7 hours ago] e3fbb21  fix <Ronald Quenta>
+[7 hours ago] 035c8b8  fix add process uid in session process <Ronald Quenta>
+[7 hours ago] 39a1128  fix in trigger assignment <Ronald Quenta>
+[19 hours ago] 38a8382  fix in execute triggers assigment <Ronald Quenta>
+[22 hours ago] 980cde4  PM-0000 "Error with debug-panel in Enterprise-Search list" SOLVED <Victor Saisa Lopez>
+[23 hours ago] 5115d4d  PM-1659 <Roly Rudy Gutierrez Pinto>
+[24 hours ago] b49fb69  PM-3188 0017892: Error al conectar al listar variables y conexiones a base de datos con contraseñlargas <dheeyi>
+[24 hours ago] bb5b3e0  PM-3188 0017892: Error al conectar al listar variables y conexiones a base de datos con contraseñlargas <dheeyi>
+[24 hours ago] f53f8ba  test <dheeyi>
+[24 hours ago] 9916756  PM-3188 0017892: Error al conectar al listar variables y conexiones a base de datos con contraseñlargas <dheeyi>
+[4 days ago] 88bbad7  PM-1659 <Roly Rudy Gutierrez Pinto>
+[4 days ago] 9662525  Add field APP_DISABLE_ACTION_DATE to criteria <Julio Cesar Laura>
+[4 days ago] 330bd45  PM-3163 <marcelo.cuiza>
+[4 days ago] 258e50e  Updating.po and .sql files for release 3.0.1-GA <Julio Cesar Laura>
+[5 days ago] 6c5bd55  add endpoint case delete and list draft, fix in tag <Ronald Quenta>
+[6 days ago] 638366c  14970 El Boton de acciones de un caso no es Standar, solo se puede abrir el menu si se hace click en la flecha. SOLVED como dice su titulo, la apariencia del boton y el boton estaba en modo split, por eso solo reaccionaba cuando se le daba click en la flecha se soluciono cambiando el formato del boton, de split a uno normal de forma que ahora tanto en inbox, draft y paused ya no presentan el problema <ricardo>
+[7 days ago] 5ac57de  PM-2907 <Roly Rudy Gutierrez Pinto>
+[7 days ago] 4bbfcf4  PM-2923 "0017509: El caso que se derivo a un grupo no..." SOLVED <Victor Saisa Lopez>
+[7 days ago] 021606e  Adding rows in insert.sql file <Julio Cesar Laura>
+[7 days ago] d257486  Fix little problem inserting check.data <Julio Cesar Laura>
+[8 days ago] 9f4bde8  PM-3065 improvement: debug panel for var_label update <Roly Rudy Gutierrez Pinto>
+[11 days ago] abde01e  PM-3165 SOLVED <Julio Cesar Laura>
+[12 days ago] 311cfce  test1 <dheeyi>
+[12 days ago] 4dc6b7d  pm1 <dheeyi>
+[12 days ago] f433ed8  ga update <Dante>
+[12 days ago] 59bea48  PM-3155 <Roly Rudy Gutierrez Pinto>
+[12 days ago] d8e683c  PM-3154 0017842: No aparecen varios usuarios para la asignacion <dheeyi>

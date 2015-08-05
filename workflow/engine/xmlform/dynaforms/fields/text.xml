@@ -31,7 +31,7 @@
     <en><![CDATA[Mask]]></en>
   </PME_MASK>
   <PME_STRTO type="dropdown" defaultvalue="">
-    <en><![CDATA[Text transform to]]><option name=""><![CDATA[]]></option><option name="UPPER"><![CDATA[UPPER]]></option><option name="LOWER"><![CDATA[LOWER]]></option><option name="PHRASE"><![CDATA[CAPITALIZE PHRASE]]></option><option name="TITLE"><![CDATA[TITLE CASE]]></option></en>
+    <en><![CDATA[Text transform to]]><option name=""><![CDATA[]]></option><option name="UPPER"><![CDATA[UPPER]]></option><option name="LOWER"><![CDATA[lower]]></option><option name="TITLE"><![CDATA[Capitalize Phrase]]></option><option name="PHRASE"><![CDATA[Title case]]></option></en>
   </PME_STRTO>
   <PME_REQUIRED type="checkbox" falseValue="0" value="1" defaultvalue="0" labelOnRight="0">
     <en><![CDATA[Required]]></en>

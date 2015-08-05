@@ -60,7 +60,7 @@ class PMLicensedFeatures
 
             0 => array(
 
-                "description" => "Enables de Actions By Email feature.",
+                "description" => "Actions By Email allows users to enter information and route cases via email.",
 
                 "enabled" => false,
 
@@ -94,7 +94,7 @@ class PMLicensedFeatures
 
             1 => array(
 
-                "description" => "Enables de Batch Routing feature.",
+                "description" => "Batch Routing allows a user to route multiple cases at a time onto the next task in the process. ",
 
                 "enabled" => false,
 
@@ -196,7 +196,7 @@ class PMLicensedFeatures
 
             4 => array(
 
-                "description" => "Registers every admin action in a log. The actions in administration settings options are registered in the log.",
+                "description" => "Registers every administrator action in a log. Any change in the settings under the Admin menu is registered in the log.",
 
                 "enabled" => false,
 
@@ -264,7 +264,7 @@ class PMLicensedFeatures
 
             6 => array(
 
-                "description" => "This functionality enables the flexibility to send mails from different email servers or configurations.",
+                "description" => "This features allows ProcessMaker to send out notifications using different email accounts and email servers.",
 
                 "enabled" => false,
 
@@ -396,6 +396,74 @@ class PMLicensedFeatures
 
                 "version"        => ""
 
+            ),
+
+            10 => array(
+
+                "description"    => "This plugin will synchronize ProcessMaker with an LDAP or Active Directory server for user authentication.",
+
+                "enabled"        => false,
+
+                "id"             => "ldapAdvanced",
+
+                "latest_version" => "",
+
+                "log"            => null,
+
+                "name"           => "ldapAdvanced",
+
+                "nick"           => "ldapAdvanced",
+
+                "progress"       => 0,
+
+                "publisher"      => "Colosa",
+
+                "release_type"   => "localRegistry",
+
+                "status"         => "ready",
+
+                "store"          => "00000000000000000000000000010010",
+
+                "type"           => "features",
+
+                "url"            => "",
+
+                "version"        => ""
+
+            ),
+
+            11 => array(
+
+                "description"    => "SSO with an LDAP provider.",
+
+                "enabled"        => false,
+
+                "id"             => "windowsSSO",
+
+                "latest_version" => "",
+
+                "log"            => null,
+
+                "name"           => "windowsSSO",
+
+                "nick"           => "windowsSSO",
+
+                "progress"       => 0,
+
+                "publisher"      => "Colosa",
+
+                "release_type"   => "localRegistry",
+
+                "status"         => "ready",
+
+                "store"          => "00000000000000000000000000010011",
+
+                "type"           => "features",
+
+                "url"            => "",
+
+                "version"        => ""
+
             )
 
         );
@@ -473,5 +541,3 @@ class PMLicensedFeatures
     /*----------------------------------********---------------------------------*/
 
 }
-
-

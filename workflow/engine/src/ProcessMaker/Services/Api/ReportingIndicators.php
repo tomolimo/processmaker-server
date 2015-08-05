@@ -197,6 +197,31 @@ class ReportingIndicators extends Api
         }
     }
 
+    /**
+     * Get historic data of an indicator
+     *
+     * @return array
+     *
+     * @author Dante Loayza
+     * @copyright Colosa - Bolivia
+     *
+     * @url GET /indicator-historic-data
+     */
+    public function doGetHistoricDataFromIndicator($indicator_uid, $init_date, $end_date, $periodicity, $language) {
+        try {
+            $indicatorsObj = new \ProcessMaker\BusinessModel\ReportingIndicators();
+            $response = $indicatorsObj->getHistoricData
+											($indicator_uid,
+											new \DateTime($init_date),
+											new \DateTime($end_date),
+											$periodicity,
+											$language);
+            return $response;
+        } catch (\Exception $e) {
+            throw (new RestException(Api::STAT_APP_EXCEPTION, $e->getMessage()));
+        }
+    }
+
 }
 
 

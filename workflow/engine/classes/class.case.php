@@ -500,7 +500,7 @@ class Cases
 
 
 
-        $arrayTaskTypeToExclude = array("WEBENTRYEVENT", "END-MESSAGE-EVENT", "START-MESSAGE-EVENT", "INTERMEDIATE-THROW-MESSAGE-EVENT", "INTERMEDIATE-CATCH-MESSAGE-EVENT");
+        $arrayTaskTypeToExclude = array("WEBENTRYEVENT", "END-MESSAGE-EVENT", "START-MESSAGE-EVENT", "INTERMEDIATE-THROW-MESSAGE-EVENT", "INTERMEDIATE-CATCH-MESSAGE-EVENT", "SCRIPT-TASK", "START-TIMER-EVENT", "INTERMEDIATE-CATCH-TIMER-EVENT");
 
 
 
@@ -1190,7 +1190,15 @@ class Cases
 
                         }
 
-                       $aFields['CURRENT_USER'] = implode(" - ", array_values($aFields['CURRENT_USER']));
+                        $aFields['CURRENT_USER'] = implode(" - ", array_values($aFields['CURRENT_USER']));
+
+                        $tasksArray = array_filter(explode("-",$aFields['TAS_UID']));
+
+                        if(count($tasksArray) == 1) {
+
+                            $aFields['TAS_UID'] = $tasksArray[0];
+
+                        }
 
                     } else {
 
@@ -2626,7 +2634,7 @@ class Cases
 
 
 
-    /*
+    /**
 
      * This function returns the threads open in a task
 
@@ -2634,23 +2642,21 @@ class Cases
 
      *
 
-     * @name getOpenSiblingThreads,
+     * @param string $nextTaskUid
 
-     * @param string $sNextTask
+     * @param string $applicationUid
 
-     * @param string $sAppUid
+     * @param string $delIndex
 
-     * @param string $iDelIndex
+     * @param string $currentTaskUid
 
-     * @param string $sCurrentTask
+     *
 
-     * @return $aThreads
+     * return array Return $arrayThread
 
      */
 
-
-
-    public function getOpenSiblingThreads($sNextTask, $sAppUid, $iDelIndex, $sCurrentTask)
+    public function getOpenSiblingThreads($nextTaskUid, $applicationUid, $delIndex, $currentTaskUid)
 
     {
 
@@ -2662,41 +2668,55 @@ class Cases
 
             //and we are removing the current task from the search
 
-            $aThreads = array();
+            $arrayThread = array();
 
-            $oCriteria = new Criteria('workflow');
 
-            $oCriteria->add(RoutePeer::ROU_NEXT_TASK, $sNextTask);
 
-            $oCriteria->add(RoutePeer::TAS_UID, $sCurrentTask, Criteria::NOT_EQUAL);
+            $criteria = new Criteria("workflow");
 
-            $oCriteria->add(RoutePeer::ROU_TYPE, 'SEC-JOIN');
 
-            $oDataset = RoutePeer::doSelectRs($oCriteria);
 
-            $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+            $criteria->add(RoutePeer::TAS_UID, $currentTaskUid, Criteria::NOT_EQUAL);
 
-            $oDataset->next();
+            $criteria->add(RoutePeer::ROU_NEXT_TASK, $nextTaskUid, Criteria::EQUAL);
 
-            while ($aRow = $oDataset->getRow()) {
+            $criteria->add(RoutePeer::ROU_TYPE, "SEC-JOIN", Criteria::EQUAL);
 
-                $aPrevious = $this->searchOpenPreviousTasks($aRow['TAS_UID'], $sAppUid);
 
-                if (is_array($aPrevious) && count($aPrevious) > 0) {
 
-                    $aThreads[] = array_merge($aPrevious, $aThreads);
+            $rsCriteria = RoutePeer::doSelectRS($criteria);
+
+            $rsCriteria->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+
+
+
+            while ($rsCriteria->next()) {
+
+                $row = $rsCriteria->getRow();
+
+
+
+                $arrayPrevious = $this->searchOpenPreviousTasks($row["TAS_UID"], $applicationUid);
+
+
+
+                if (is_array($arrayPrevious) && !empty($arrayPrevious)) {
+
+                    $arrayThread = array_merge($arrayThread, $arrayPrevious);
 
                 }
 
-                $oDataset->next();
-
             }
 
-            return $aThreads;
 
-        } catch (exception $e) {
 
-            throw ($e);
+            //Return
+
+            return $arrayThread;
+
+        } catch (Exception $e) {
+
+            throw $e;
 
         }
 
@@ -2772,15 +2792,17 @@ class Cases
 
         $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
 
-        $oDataset->next();
-
-        $aRow = $oDataset->getRow();
 
 
+        while ($oDataset->next()) {
 
-        while (is_array($aRow)) {
+            $aRow = $oDataset->getRow();
+
+
 
             $delegations = $this->getReviewedTasks($aRow['TAS_UID'], $sAppUid);
+
+
 
             if ($delegations !== false) {
 
@@ -2798,7 +2820,7 @@ class Cases
 
                     } else {
 
-                        $aTaskReviewed = array_merge($aTaskReviewed, $delegations['closed']);
+                        //$aTaskReviewed = array_merge($aTaskReviewed, $delegations['closed']);
 
                     }
 
@@ -2825,10 +2847,6 @@ class Cases
                 }
 
             }
-
-            $oDataset->next();
-
-            $aRow = $oDataset->getRow();
 
         }
 
@@ -3958,15 +3976,25 @@ class Cases
 
             try {
 
-                $this->Task = new Task;
+                $task = TaskPeer::retrieveByPK($sTasUid);
 
-                $Fields = $this->Task->Load($sTasUid);
+
+
+                if (is_null($task)) {
+
+                    throw new Exception(G::LoadTranslation("ID_TASK_NOT_EXIST", array("TAS_UID", $sTasUid)));
+
+                }
 
 
 
                 //To allow Self Service as the first task
 
-                if (($Fields['TAS_ASSIGN_TYPE'] != 'SELF_SERVICE') && ($sUsrUid == '')) {
+                $arrayTaskTypeToExclude = array("START-TIMER-EVENT");
+
+
+
+                if (!is_null($task) && !in_array($task->getTasType(), $arrayTaskTypeToExclude) && $task->getTasAssignType() != "SELF_SERVICE" && $sUsrUid == "") {
 
                     throw (new Exception('You tried to start a new case without send the USER UID!'));
 
@@ -3976,7 +4004,7 @@ class Cases
 
                 //Process
 
-                $sProUid = $this->Task->getProUid();
+                $sProUid = $task->getProUid();
 
                 $this->Process = new Process;
 
@@ -12976,32 +13004,6 @@ class Cases
 
 
 
-    public function discriminateCases($aData)
-
-    {
-
-        $siblingThreadData = $this->GetAllOpenDelegation($aData);
-
-        foreach ($siblingThreadData as $thread => $threadData) {
-
-            $this->closeAppThread($aData['APP_UID'], $threadData['DEL_INDEX']); //Close Sibling AppThreads
-
-            $this->CloseCurrentDelegation($aData['APP_UID'], $threadData['DEL_INDEX']); //Close Sibling AppDelegations
-
-            //update searchindex
-
-            if ($this->appSolr != null) {
-
-                $this->appSolr->updateApplicationSearchIndex($aData['APP_UID']);
-
-            }
-
-        }
-
-    }
-
-
-
     /*
 
      * We're getting all threads in a task
@@ -13248,7 +13250,7 @@ class Cases
 
                 if (!in_array($USR_UID,$row)) {
 
-                    $rows[] = $oDataset->getRow();
+                        $rows[] = $oDataset->getRow();
 
                 }
 
@@ -13317,6 +13319,8 @@ class Cases
             }
 
         }
+
+
 
         return $rows;
 

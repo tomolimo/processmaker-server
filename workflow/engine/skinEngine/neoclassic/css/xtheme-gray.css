@@ -362,6 +362,11 @@ textarea.x-form-field {
   border-bottom: 1px solid #dddddd;
   color: #333;
 }
+
+.x-form-check-wrap {
+    overflow: hidden !important;
+}
+
 .x-editor .x-form-check-wrap {
   background-color: #fff;
 }
@@ -431,6 +436,7 @@ textarea.x-form-inner-invalid {
 }
 .x-fieldset {
   border-color: #CCCCCC;
+  margin-top: -5px;
 }
 .x-fieldset legend {
   font: bold 11px "Open Sans", Tahoma, sans-serif, MiscFixed;
@@ -1465,6 +1471,7 @@ a.x-menu-item {
 }
 .x-panel-body .x-panel-body {
   border: #dddddd 1px solid;
+  overflow: hidden !important;
 }
 .x-panel-bbar .x-toolbar,
 .x-panel-tbar .x-toolbar {

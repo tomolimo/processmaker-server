@@ -38,7 +38,7 @@ try {
       break;
       } */
     //$oJSON = new Services_JSON();
-    
+
     G::LoadSystem('inputfilter');
     $filter = new InputFilter();
     $_GET = $filter->xssFilterHard($_GET);
@@ -307,7 +307,7 @@ try {
             G::auditLog('DeleteLines','Delete all lines in process "'.$resultProcess['PRO_TITLE'].'"');
             break;
         case 'addText':
-            $sOutput = $oProcessMap->addText($oData->uid, $oData->label, $oData->position->x, $oData->position->y);
+            $sOutput = $oProcessMap->addText($oData->uid, html_entity_decode(html_entity_decode($oData->label)), $oData->position->x, $oData->position->y);
             $sOutputAux = G::json_decode($sOutput);
             $sOutputAux = (array)$sOutputAux;
             G::auditLog('AddText','Add new text ('.$sOutputAux['uid'].') in process "'.$resultProcess['PRO_TITLE'].'"');
@@ -806,15 +806,21 @@ try {
             G::LoadClass('xmlfield_InputPM');
             $proUid = isset($_REQUEST['process']) ? $_REQUEST['process'] : '';
             $queryText = isset($_REQUEST['queryText']) ? $_REQUEST['queryText'] : '';
-            if ($_REQUEST['type'] == 'system') {
-                $isSystem = true;
-            } else {
-                $isSystem = false;
+            switch($_REQUEST['type']) {
+                case 'system';
+                    $typeVars = $_REQUEST['type'];
+                break;
+                case 'process';
+                    $typeVars = $_REQUEST['type'];
+                break;
+                case 'grid';
+                    $typeVars = $_REQUEST['type'];
+                break;     
             }
             if ($_REQUEST['type'] == 'all') {
                 $aFields = getDynaformsVars($proUid);
             } else {
-                $aFields = getDynaformsVars($proUid, $isSystem, isset($_REQUEST['bIncMulSelFields']) ? $_REQUEST['bIncMulSelFields'] : 1);
+                $aFields = getDynaformsVars($proUid, $typeVars, isset($_REQUEST['bIncMulSelFields']) ? $_REQUEST['bIncMulSelFields'] : 1);
             }
             $aVariables = array();
 

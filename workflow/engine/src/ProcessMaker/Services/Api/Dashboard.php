@@ -238,6 +238,7 @@ class Dashboard extends Api
     {
         try {
             $dashboard = new \ProcessMaker\BusinessModel\Dashboard();
+            $request_data['USR_UID'] = $this->getUserId();
             $response = $dashboard->createDashboard($request_data);
             return $response;
         } catch (\Exception $e) {
@@ -260,6 +261,7 @@ class Dashboard extends Api
     {
         try {
             $dashboard = new \ProcessMaker\BusinessModel\Dashboard();
+            $request_data['USR_UID'] = $this->getUserId();
             $response = $dashboard->createDashboard($request_data);
             return $response;
         } catch (\Exception $e) {
@@ -279,7 +281,8 @@ class Dashboard extends Api
     {
         try {
             $dashboard = new \ProcessMaker\BusinessModel\Dashboard();
-            $response = $dashboard->deletedashboard($das_uid);
+            $request_data['USR_UID'] = $this->getUserId();
+            $response = $dashboard->deletedashboard($das_uid, $this->getUserId());
             return $response;
         } catch (\Exception $e) {
             throw (new RestException(Api::STAT_APP_EXCEPTION, $e->getMessage()));
@@ -300,6 +303,7 @@ class Dashboard extends Api
     {
         try {
             $dashboard = new \ProcessMaker\BusinessModel\Dashboard();
+            $request_data['USR_UID'] = $this->getUserId();
             $response = $dashboard->createOwner($request_data);
             return $response;
         } catch (\Exception $e) {
@@ -320,7 +324,7 @@ class Dashboard extends Api
     {
         try {
             $dashboard = new \ProcessMaker\BusinessModel\Dashboard();
-            $response = $dashboard->deleteDashboardOwner($das_uid, $owner_uid);
+            $response = $dashboard->deleteDashboardOwner($das_uid, $owner_uid, $this->getUserId());
             return $response;
         } catch (\Exception $e) {
             throw (new RestException(Api::STAT_APP_EXCEPTION, $e->getMessage()));
@@ -341,6 +345,7 @@ class Dashboard extends Api
     {
         try {
             $dashboard = new \ProcessMaker\BusinessModel\Dashboard();
+            $request_data['USR_UID'] = $this->getUserId();
             $response = $dashboard->createIndicator($request_data);
             return $response;
         } catch (\Exception $e) {
@@ -363,6 +368,7 @@ class Dashboard extends Api
     {
         try {
             $dashboard = new \ProcessMaker\BusinessModel\Dashboard();
+            $request_data['USR_UID'] = $this->getUserId();
             $response = $dashboard->createIndicator($request_data);
             return $response;
         } catch (\Exception $e) {
@@ -382,7 +388,7 @@ class Dashboard extends Api
     {
         try {
             $dashboard = new \ProcessMaker\BusinessModel\Dashboard();
-            $response = $dashboard->delete($ind_uid);
+            $response = $dashboard->delete($ind_uid, $this->getUserId());
             return $response;
         } catch (\Exception $e) {
             throw (new RestException(Api::STAT_APP_EXCEPTION, $e->getMessage()));

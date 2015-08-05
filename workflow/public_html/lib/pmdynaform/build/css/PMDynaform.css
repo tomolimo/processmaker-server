@@ -831,12 +831,10 @@ textarea {
   top: -7px; }
 
 .pmdynaform-grid-field-static {
-  width: 250px;
   /*position: relative;*/
   min-height: 1px;
   box-sizing: border-box;
   display: table-cell;
-  min-width: 200px;
   vertical-align: top;
   heigth: 40px; }
 
@@ -1575,4 +1573,201 @@ textarea {
   box-shadow: 0px 0px 10px 1px #484848; }
 
 /*# sourceMappingURL=extendsMobile.css.map */
+
+.pm-form {
+  background-color: #fff;
+  position: absolute;
+  z-index: 10000;
+  top: 1px;
+  right: 1px;
+  bottom: 1px;
+  left: 1px;
+  overflow: auto;
+  padding: 15px;
+  /*importante*/ }
+
+.pm-form-text {
+  border: 1px solid #faebcc;
+  padding: 6px; }
+
+.pm-form-title {
+  font-size: 18px;
+  margin: 0px;
+  padding: 10px; }
+
+.pm-form-subtitle {
+  font-size: 14px;
+  margin: 0px;
+  padding: 8px; }
+
+.pm-form-hint {
+  position: absolute;
+  right: 3px; }
+
+.pm-form-hint-x {
+  position: relative;
+  padding-right: 20px; }
+
+.pm-form-required {
+  color: #e84c3d;
+  padding-left: 2px; }
+
+.pm-form-grid-body {
+  margin: 0px; }
+
+.pm-form-grid-header {
+  font-weight: bold;
+  color: #fff;
+  background: #3196E8;
+  border: 1px solid #3196E8;
+  padding: 10px 10px 5px 10px;
+  overflow: auto; }
+
+.pm-form-grid-header-title {
+  float: left; }
+
+.pm-form-grid-header-add {
+  float: right;
+  cursor: pointer; }
+
+.pm-form-grid-body {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  border-left: 1px solid #DADADA;
+  border-right: 1px solid #DADADA; }
+
+.pm-form-grid-footer {
+  font-weight: bold;
+  color: #fff;
+  background: #3196E8;
+  border: 1px solid #3196E8;
+  padding: 10px 10px 10px 10px;
+  overflow: auto;
+  position: relative; }
+
+.pm-form-grid-footer-plabel {
+  float: left; }
+
+.pm-form-grid-footer-pagination {
+  width: 180px;
+  margin: 0px;
+  top: 11px;
+  left: inherit;
+  right: 10px;
+  text-align: right;
+  overflow: visible; }
+
+.pm-form-grid-row {
+  display: table-row;
+  margin: 0px; }
+
+.pm-form-grid-row-cell {
+  display: table-cell;
+  padding: 5px 5px 5px 5px;
+  border-right-color: #DADADA;
+  border-right-style: solid;
+  border-right-width: 1px;
+  border-bottom-color: #DADADA;
+  border-bottom-style: solid;
+  border-bottom-width: 1px; }
+
+.pm-form-grid-row-header {
+  display: table-row;
+  margin: 0px;
+  font-weight: bold;
+  color: #8CC1ED; }
+
+.pm-form-grid-row-header-cell {
+  display: table-cell;
+  padding: 5px 3px 5px 3px;
+  border-right-color: #DADADA;
+  border-right-style: solid;
+  border-right-width: 1px;
+  border-bottom-color: #DADADA;
+  border-bottom-style: solid;
+  border-bottom-width: 1px; }
+
+.pm-form-grid-modal {
+  opacity: 0.5;
+  background-color: black;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  z-index: 10000; }
+
+.pm-form-grid-modal-menu {
+  position: absolute;
+  right: 10px;
+  left: 10px;
+  top: 0px;
+  height: 160px;
+  padding: 10px;
+  background: #ffffff;
+  z-index: 20000; }
+
+.pm-form-grid-modal-menu-button {
+  height: 40px;
+  padding: 10px;
+  margin-bottom: 10px;
+  width: 100%;
+  text-align: center;
+  font-weight: bold; }
+
+.pm-form-grid-modal-menu-button-edit {
+  border: 1px solid #20BB99;
+  background: #20BB99;
+  color: #ffffff; }
+
+.pm-form-grid-modal-menu-button-del {
+  border: 1px solid #E56660;
+  background: #E56660;
+  color: #ffffff; }
+
+.pm-form-grid-modal-menu-button-cancel {
+  border: 1px solid #5C9BCC;
+  background: #ffffff;
+  color: #5C9BCC; }
+
+.pm-form-grid-modal-message {
+  position: absolute;
+  right: 10px;
+  left: 10px;
+  top: 0px;
+  height: 150px;
+  padding: 10px 0px 10px 0px;
+  background: #ffffff;
+  z-index: 20000; }
+
+.pm-form-grid-modal-message-title {
+  text-align: center;
+  font-weight: bold; }
+
+.pm-form-grid-modal-message-label {
+  text-align: center;
+  margin-bottom: 20px; }
+
+.pm-form-grid-modal-menu-button-yes {
+  border: 1px solid #20BB99;
+  background: #20BB99;
+  color: #ffffff;
+  display: inline-block;
+  width: 50%; }
+
+.pm-form-grid-modal-menu-button-no {
+  border: 1px solid #E56660;
+  background: #E56660;
+  color: #ffffff;
+  display: inline-block;
+  width: 50%; }
+
+.carousel-indicators li {
+  border: none;
+  background-color: #96CAF4;
+  margin-right: 3px !important; }
+
+/*# sourceMappingURL=GridMobile.css.map */
 

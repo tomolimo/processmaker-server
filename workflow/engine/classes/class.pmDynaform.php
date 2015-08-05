@@ -16,6 +16,7 @@ class pmDynaform
     public $credentials = null;
     public $lang = null;
     public $langs = null;
+    public $onPropertyRead = "";
 
     public function __construct($fields = array())
     {
@@ -56,7 +57,7 @@ class pmDynaform
         $a->addSelectColumn(DynaformPeer::PRO_UID);
         $a->addSelectColumn(DynaformPeer::DYN_UID);
         $a->add(DynaformPeer::DYN_UID, $this->fields["CURRENT_DYNAFORM"], Criteria::EQUAL);
-        $ds = ProcessPeer::doSelectRS($a);
+        $ds = DynaformPeer::doSelectRS($a);
         $ds->setFetchmode(ResultSet::FETCHMODE_ASSOC);
         $ds->next();
         $row = $ds->getRow();
@@ -67,8 +68,15 @@ class pmDynaform
 
     public function getCredentials()
     {
+        $flagTrackerUser = false;
+
         if (!isset($_SESSION['USER_LOGGED'])) {
-            return;
+            if (!preg_match("/^.*\/" . SYS_SKIN . "\/tracker\/.*$/", $_SERVER["REQUEST_URI"])) {
+                return;
+            }
+
+            $_SESSION["USER_LOGGED"] = "00000000000000000000000000000001";
+            $flagTrackerUser = true;
         }
         if ($this->credentials != null) {
             return $this->credentials;
@@ -83,6 +91,11 @@ class pmDynaform
             "clientId" => $a["client_id"],
             "clientSecret" => $a["client_secret"]
         );
+
+        if ($flagTrackerUser) {
+            unset($_SESSION["USER_LOGGED"]);
+        }
+
         return $this->credentials;
     }
 
@@ -95,6 +108,11 @@ class pmDynaform
                 $this->jsonr($value);
             }
             if (!$sw1 && !$sw2) {
+                //read event
+                $fn = $this->onPropertyRead;
+                if (function_exists($fn)) {
+                    $fn($json, $key, $value);
+                }
                 //set properties from trigger
                 $prefixs = array("@@", "@#", "@%", "@?", "@$", "@=");
                 if (is_string($value) && in_array(substr($value, 0, 2), $prefixs)) {
@@ -135,6 +153,8 @@ class pmDynaform
                         $json->sql = "";
                     if (!isset($json->options))
                         $json->options = array();
+                    if (!isset($json->optionsSql))
+                        $json->optionsSql = array();
                     else {
                         //convert stdClass to array
                         if (is_array($json->options)) {
@@ -159,7 +179,7 @@ class pmDynaform
                                     "label" => isset($row[1]) ? $row[1] : $row[0],
                                     "value" => $row[0]
                                 );
-                                array_push($json->options, $option);
+                                array_push($json->optionsSql, $option);
                             }
                         } catch (Exception $e) {
                             
@@ -169,7 +189,7 @@ class pmDynaform
                         $json->data = $json->options[0];
                         $no = count($json->options);
                         for ($io = 0; $io < $no; $io++) {
-                            if ($json->options[$io]["value"] === $json->defaultValue) {
+                            if ((is_array($json->options[$io]) ? $json->options[$io]["value"] : $json->options[$io]->value) === $json->defaultValue) {
                                 $json->data = $json->options[$io];
                             }
                         }
@@ -183,6 +203,25 @@ class pmDynaform
                     );
                     if ($json->data["label"] === "") {
                         $json->data["label"] = $json->data["value"];
+                    }
+                    //synchronize var_label
+                    if (isset($this->fields["APP_DATA"]["__VAR_CHANGED__"]) &&
+                            in_array($json->name, explode(",", $this->fields["APP_DATA"]["__VAR_CHANGED__"]))) {
+                        $json->data["label"] = $json->data["value"];
+                        foreach ($json->options as $io) {
+                            if ($json->data["value"] === $io->value) {
+                                $json->data["label"] = $io->label;
+                            }
+                        }
+                        foreach ($json->optionsSql as $io) {
+                            if ($json->data["value"] === $io["value"]) {
+                                $json->data["label"] = $io["label"];
+                            }
+                        }
+                        $_SESSION["TRIGGER_DEBUG"]["DATA"][] = Array(
+                            "key" => $json->name . "_label",
+                            "value" => $json->data["label"]
+                        );
                     }
                 }
                 if ($key === "type" && ($value === "checkbox")) {
@@ -230,6 +269,13 @@ class pmDynaform
                         }
                         $json->rows = count($rows);
                         $json->data = $rows;
+                    }
+                    //todo compatibility 'columnWidth'
+                    foreach ($json->columns as $column) {
+                        if (!isset($column->columnWidth)) {
+                            $json->layout = "static";
+                            $column->columnWidth = "";
+                        }
                     }
                 }
                 //languages
@@ -483,13 +529,14 @@ class pmDynaform
         exit();
     }
 
-    public function printPmDynaform()
+    public function printPmDynaform($js = "")
     {
         $json = G::json_decode($this->record["DYN_CONTENT"]);
         $this->jsonr($json);
         $javascrip = "" .
                 "<script type='text/javascript'>" .
                 "var jsonData = " . G::json_encode($json) . ";" .
+                $js .
                 "</script>";
 
         $file = file_get_contents(PATH_HOME . 'public_html/lib/pmdynaform/build/pmdynaform.html');

@@ -528,15 +528,20 @@ class ActionsByEmail extends Api
     {
         $templates = array();
         $path = PATH_DATA_MAILTEMPLATES . $proId . PATH_SEP;
-
+        $userUid = $this->getUserId();
+        $filesManager = new \ProcessMaker\BusinessModel\FilesManager();
         \G::verifyPath($path, true);
 
         if (defined('PARTNER_FLAG')) {
             if (!file_exists($path . 'actionsByEmailPartner.html')) {
+                $data = array('prf_content' => '', 'prf_filename' => 'actionsByEmailPartner.html', 'prf_path' => 'templates');
+                $arrayData = $filesManager->addProcessFilesManager($proId, $userUid, $data);
                 @copy(PATH_TPL . 'actionsByEmail' . PATH_SEP . 'actionsByEmailPartner.html', $path . 'actionsByEmail.html');
             }
         } else {
             if (!file_exists($path . 'actionsByEmail.html')) {
+                $data = array('prf_content' => '', 'prf_filename' => 'actionsByEmail.html', 'prf_path' => 'templates');
+                $arrayData = $filesManager->addProcessFilesManager($proId, $userUid, $data);
                 @copy(PATH_TPL . 'actionsByEmail' . PATH_SEP . 'actionsByEmail.html', $path . 'actionsByEmail.html');
             }
         }

@@ -33,13 +33,15 @@ function openCaseNotesWindow(appUid1, delIndex, modalSw, appTitle, proUid, taskU
   var startRecord=0;
   var loadSize=10;
 
+  startRecord=startRecord+loadSize;
+
   storeNotes = new Ext.data.JsonStore({
     url: "../appProxy/getNotesList?appUid=" + appUid + "&delIndex=" + delIndex + "&pro=" + proUid + "&tas=" + taskUid,
     root: 'notes',
     totalProperty: 'totalCount',
     fields: ['USR_USERNAME','USR_FIRSTNAME','USR_LASTNAME','USR_FULL_NAME','NOTE_DATE','NOTE_CONTENT', 'USR_UID', 'user'],
     baseParams:{
-      start:startRecord,
+      start:0,
       limit:startRecord+loadSize
     },
     listeners:{
@@ -216,14 +218,14 @@ function openCaseNotesWindow(appUid1, delIndex, modalSw, appTitle, proUid, taskU
           allowBlank :false,
           selectOnFocus :true,
           enableKeyEvents: true,
-          listeners :{
+          listeners : {
             scope : this,
             keyup : updateTextCtr,
             keydown: updateTextCtr,
             'change': function(field, newVal, oldVal){
-              var textAreaValue = newVal.replace(/^\s+/,'').replace(/\s+$/,'');
-              field.setValue(textAreaValue.trim());
-              Ext.getCmp('caseNoteText').focus(false, 200);
+                var textAreaValue = newVal.replace(/^\s+/,'').replace(/\s+$/,'');
+                field.setValue(textAreaValue.trim());
+                Ext.getCmp('caseNoteText').focus(false, 200);
             }
           }
         })
@@ -532,7 +534,8 @@ var openSummaryWindow = function(appUid, delIndex, action)
                 return isMovil.Android() || isMovil.BlackBerry() || isMovil.iOS() || isMovil.Opera() || isMovil.Windows() || isMovil.other();
             }
         };
-
+        
+        tabs.push(sumaryInfPanel);
         if (response.dynUid != '') {
             if (isMovil.any()) {
                 var src = '../cases/summary?APP_UID=' + appUid + '&DEL_INDEX=' + delIndex + '&DYN_UID=' + response.dynUid;
@@ -600,7 +603,6 @@ var openSummaryWindow = function(appUid, delIndex, action)
                 }});
             }
         }
-        tabs.push(sumaryInfPanel);
         
         tabs.push({title: Ext.util.Format.capitalize(_('ID_UPLOADED_DOCUMENTS')), bodyCfg: {
           tag: 'iframe',

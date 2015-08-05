@@ -109,7 +109,7 @@ WHERE A.PRO_UID='@#PRO_UID' AND A.TAS_START = 'TRUE' ]]><en><![CDATA[Task]]></en
     <en><![CDATA[Monthly]]></en>
   </SELECT_3>
   <SCH_START_DAY type="radiogroup" required="0" mode="edit" options="Array">
-    <en><![CDATA[]]><option name="1"><![CDATA[Day]]></option><option name="2"><![CDATA[The]]></option></en>
+    <en><![CDATA[]]><option name="1"><![CDATA[Day of month]]></option><option name="2"><![CDATA[The day]]></option></en>
   </SCH_START_DAY>
   <SCH_START_DAY_OPT_1 type="text" maxlength="2" validate="Int" mask="##" required="0" readonly="0" defaultvalue="1" size="2" mode="edit">
     <en><![CDATA[]]></en>
@@ -696,7 +696,7 @@ function validateSchedulerFields(oForm) {
         msgBox("@G::LoadTranslation(ID_REQUIRED_NAME_CASE_SCHEDULER)", 'alert');
         return false;
     }
-    
+
     var listNames = document.getElementById('form[SCH_LIST]').value;
     listNames = listNames.split("^");
     for (var i= 1; i<listNames.length; i++) {

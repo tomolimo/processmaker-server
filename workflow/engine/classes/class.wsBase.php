@@ -2340,7 +2340,7 @@ class wsBase
 
 
 
-            if (! empty( $dueDate )) {
+            if (! empty( $dueDate ) && $dueDate != 'null' && $dueDate) {
 
                 if (! preg_match( "/^(\d{4})-(\d{2})-(\d{2})$/", $dueDate, $arrayMatch )) {
 
@@ -2364,7 +2364,7 @@ class wsBase
 
 
 
-            if (! empty( $status )) {
+            if (! empty( $status ) && $status != 'null' && $status) {
 
                 if ($status != "ACTIVE" && $status != "INACTIVE" && $status != "VACATION") {
 
@@ -3908,7 +3908,15 @@ class wsBase
 
 
 
-            if ($founded == '') {
+            $task = TaskPeer::retrieveByPK($taskId);
+
+
+
+            $arrayTaskTypeToExclude = array("START-TIMER-EVENT");
+
+
+
+            if (!is_null($task) && !in_array($task->getTasType(), $arrayTaskTypeToExclude) && $founded == "") {
 
                 $result = new wsResponse( 14, G::loadTranslation( 'ID_TASK_INVALID_USER_NOT_ASSIGNED_TASK' ) );
 
@@ -4248,13 +4256,15 @@ class wsBase
 
      * @param string $delIndex
 
+     * @param array $tasks
+
      * @param bool   $bExecuteTriggersBeforeAssignment
 
      * @return $result will return an object
 
      */
 
-    public function derivateCase ($userId, $caseId, $delIndex, $bExecuteTriggersBeforeAssignment = false)
+    public function derivateCase ($userId, $caseId, $delIndex, $bExecuteTriggersBeforeAssignment = false, $tasks = array())
 
     {
 
@@ -4389,6 +4399,8 @@ class wsBase
             }
 
 
+
+            $aData = array();
 
             $aData['APP_UID'] = $caseId;
 
@@ -4638,39 +4650,31 @@ class wsBase
 
             $oDerivation = new Derivation();
 
-            $derive = $oDerivation->prepareInformation( $aData );
+            if (!empty($tasks)) {
 
-
-
-            if (isset( $derive[1] )) {
-
-                if ($derive[1]['ROU_TYPE'] == 'SELECT') {
-
-                    $result = new wsResponse( 21, G::loadTranslation( 'ID_CAN_NOT_ROUTE_CASE_USING_WEBSERVICES' ) );
-
-
-
-                    return $result;
-
-                }
+                $nextDelegations = $tasks;
 
             } else {
 
-                $result = new wsResponse( 22, G::loadTranslation( 'ID_TASK_DOES_NOT_HAVE_ROUTING_RULE' ) );
+                $derive = $oDerivation->prepareInformation($aData);
 
 
 
-                return $result;
+                if (isset($derive[1])) {
 
-            }
+                    if ($derive[1]['ROU_TYPE'] == 'SELECT') {
+
+                        $result = new wsResponse(21, G::loadTranslation('ID_CAN_NOT_ROUTE_CASE_USING_WEBSERVICES'));
 
 
 
-            foreach ($derive as $key => $val) {
+                        return $result;
 
-                if ($val['NEXT_TASK']['TAS_ASSIGN_TYPE'] == 'MANUAL') {
+                    }
 
-                    $result = new wsResponse( 15, G::loadTranslation( 'ID_TASK_DEFINED_MANUAL_ASSIGNMENT' ) );
+                } else {
+
+                    $result = new wsResponse(22, G::loadTranslation('ID_TASK_DOES_NOT_HAVE_ROUTING_RULE'));
 
 
 
@@ -4680,47 +4684,61 @@ class wsBase
 
 
 
-                //Routed to the next task, if end process then not exist user
+                foreach ($derive as $key => $val) {
 
-                $nodeNext = array ();
+                    if ($val['NEXT_TASK']['TAS_ASSIGN_TYPE'] == 'MANUAL') {
 
-                $usrasgdUid = null;
-
-                $usrasgdUserName = null;
+                        $result = new wsResponse(15, G::loadTranslation('ID_TASK_DEFINED_MANUAL_ASSIGNMENT'));
 
 
 
-                if (isset( $val['NEXT_TASK']['USER_ASSIGNED'] )) {
+                        return $result;
 
-                    $usrasgdUid = $val['NEXT_TASK']['USER_ASSIGNED']['USR_UID'];
+                    }
 
-                    $usrasgdUserName = '(' . $val['NEXT_TASK']['USER_ASSIGNED']['USR_USERNAME'] . ')';
+
+
+                    //Routed to the next task, if end process then not exist user
+
+                    $nodeNext = array();
+
+                    $usrasgdUid = null;
+
+                    $usrasgdUserName = null;
+
+
+
+                    if (isset($val['NEXT_TASK']['USER_ASSIGNED'])) {
+
+                        $usrasgdUid = $val['NEXT_TASK']['USER_ASSIGNED']['USR_UID'];
+
+                        $usrasgdUserName = '(' . $val['NEXT_TASK']['USER_ASSIGNED']['USR_USERNAME'] . ')';
+
+                    }
+
+
+
+                    $nodeNext['TAS_UID'] = $val['NEXT_TASK']['TAS_UID'];
+
+                    $nodeNext['USR_UID'] = $usrasgdUid;
+
+                    $nodeNext['TAS_ASSIGN_TYPE'] = $val['NEXT_TASK']['TAS_ASSIGN_TYPE'];
+
+                    $nodeNext['TAS_DEF_PROC_CODE'] = $val['NEXT_TASK']['TAS_DEF_PROC_CODE'];
+
+                    $nodeNext['DEL_PRIORITY'] = $appdel['DEL_PRIORITY'];
+
+                    $nodeNext['TAS_PARENT'] = $val['NEXT_TASK']['TAS_PARENT'];
+
+
+
+                    $nextDelegations[] = $nodeNext;
+
+                    $varResponse = $varResponse . (($varResponse != '') ? ',' : '') . $val['NEXT_TASK']['TAS_TITLE'] . $usrasgdUserName;
 
                 }
 
-
-
-                $nodeNext['TAS_UID'] = $val['NEXT_TASK']['TAS_UID'];
-
-                $nodeNext['USR_UID'] = $usrasgdUid;
-
-                $nodeNext['TAS_ASSIGN_TYPE'] = $val['NEXT_TASK']['TAS_ASSIGN_TYPE'];
-
-                $nodeNext['TAS_DEF_PROC_CODE'] = $val['NEXT_TASK']['TAS_DEF_PROC_CODE'];
-
-                $nodeNext['DEL_PRIORITY'] = $appdel['DEL_PRIORITY'];
-
-                $nodeNext['TAS_PARENT'] = $val['NEXT_TASK']['TAS_PARENT'];
-
-
-
-                $nextDelegations[] = $nodeNext;
-
-                $varResponse = $varResponse . (($varResponse != '') ? ',' : '') . $val['NEXT_TASK']['TAS_TITLE'] . $usrasgdUserName;
-
             }
-
-
 
             $appFields['DEL_INDEX'] = $delIndex;
 
@@ -4894,21 +4912,33 @@ class wsBase
 
 
 
-            $oUser = new Users();
-
-            $aUser = $oUser->load( $userId );
+            $sFromName = "";
 
 
 
-            if (trim( $aUser['USR_EMAIL'] ) == '') {
+            if ($userId != "") {
 
-                $aUser['USR_EMAIL'] = 'info@' . $_SERVER['HTTP_HOST'];
+                $user = new Users();
+
+
+
+                $arrayUserData = $user->load($userId);
+
+
+
+                if (trim($arrayUserData["USR_EMAIL"]) == "") {
+
+                    $arrayUserData["USR_EMAIL"] = "info@" . $_SERVER["HTTP_HOST"];
+
+                }
+
+
+
+                $sFromName = "\"" . $arrayUserData["USR_FIRSTNAME"] . " " . $arrayUserData["USR_LASTNAME"] . "\" <" . $arrayUserData["USR_EMAIL"] . ">";
 
             }
 
 
-
-            $sFromName = '"' . $aUser['USR_FIRSTNAME'] . ' ' . $aUser['USR_LASTNAME'] . '" <' . $aUser['USR_EMAIL'] . '>';
 
             $oCase->sendNotifications( $appdel['TAS_UID'], $nextDelegations, $appFields['APP_DATA'], $caseId, $delIndex, $sFromName );
 
@@ -5191,6 +5221,8 @@ class wsBase
             $oCriteria->addSelectColumn( AppDelayPeer::APP_DEL_INDEX );
 
             $oCriteria->addSelectColumn( AppDelayPeer::APP_DISABLE_ACTION_USER );
+
+            $oCriteria->addSelectColumn( AppDelayPeer::APP_DISABLE_ACTION_DATE );
 
             $oCriteria->add( AppDelayPeer::APP_TYPE, '' );
 

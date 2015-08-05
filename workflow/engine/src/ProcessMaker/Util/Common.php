@@ -3,6 +3,78 @@ namespace ProcessMaker\Util;
 
 class Common extends \Maveriks\Util\Common
 {
+    private $frontEnd = false;
+
+    /**
+     * Set front-end flag (Terminal's front-end)
+     *
+     * @param bool $flag Flag
+     *
+     * return void
+     */
+    public function setFrontEnd($flag)
+    {
+        try {
+            $this->frontEnd = $flag;
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
+
+    /**
+     * Show front-end (Terminal's front-end)
+     *
+     * @param string $option Option
+     * @param string $data   Data string
+     *
+     * return void
+     */
+    public function frontEndShow($option, $data = "")
+    {
+        try {
+            if (!$this->frontEnd) {
+                return;
+            }
+
+            $numc = 100;
+
+            switch ($option) {
+                case "BAR":
+                    echo "\r" . "| " . $data . str_repeat(" ", $numc - 2 - strlen($data));
+                    break;
+                case "TEXT":
+                    echo "\r" . "| " . $data . str_repeat(" ", $numc - 2 - strlen($data)) . "\n";
+                    break;
+                default:
+                    //START, END
+                    echo "\r" . "+" . str_repeat("-", $numc - 2) . "+" . "\n";
+                    break;
+            }
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
+
+    /**
+     * Progress bar (Progress bar for terminal)
+     *
+     * @param int $total Total
+     * @param int $count Count
+     *
+     * return string Return a string that represent progress bar
+     */
+    public function progressBar($total, $count)
+    {
+        try {
+            $p = (int)(($count * 100) / $total);
+            $n = (int)($p / 2);
+
+            return "[" . str_repeat("|", $n) . str_repeat(" ", 50 - $n) . "] $p%";
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
+
     /**
      * Generate random number
      *
@@ -65,3 +137,4 @@ class Common extends \Maveriks\Util\Common
         return $sCode;
     }
 }
+

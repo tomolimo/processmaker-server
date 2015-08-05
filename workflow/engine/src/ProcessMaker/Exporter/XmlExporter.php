@@ -168,9 +168,9 @@ class XmlExporter extends Exporter
                 $newFileName = str_replace(" ","_",$fileName);
                 $excess = strlen($newFileName) - $limit;
                 $newFileName = substr($newFileName,0,strlen($newFileName)-$excess);
-                $newOutputFile = str_replace($fileName, $newFileName, $outputFile);
+                $newOutputFile = str_replace($fileName,$newFileName,$outputFile);
                 if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-                    $newOutputFile = str_replace("/",DIRECTORY_SEPARATOR.DIRECTORY_SEPARATOR,$newOutputFile);
+                    $newOutputFile = str_replace("/", DIRECTORY_SEPARATOR.DIRECTORY_SEPARATOR, $newOutputFile);
                 }
                 $outputFile = $newOutputFile;
             } 

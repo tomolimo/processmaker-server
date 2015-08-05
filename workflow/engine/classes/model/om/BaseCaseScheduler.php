@@ -172,6 +172,12 @@ abstract class BaseCaseScheduler extends BaseObject implements Persistent
     protected $sch_repeat_stop_if_running = 0;
 
     /**
+     * The value for the sch_execution_date field.
+     * @var        int
+     */
+    protected $sch_execution_date;
+
+    /**
      * The value for the case_sh_plugin_uid field.
      * @var        string
      */
@@ -558,6 +564,38 @@ abstract class BaseCaseScheduler extends BaseObject implements Persistent
     {
 
         return $this->sch_repeat_stop_if_running;
+    }
+
+    /**
+     * Get the [optionally formatted] [sch_execution_date] column value.
+     * 
+     * @param      string $format The date/time format string (either date()-style or strftime()-style).
+     *                          If format is NULL, then the integer unix timestamp will be returned.
+     * @return     mixed Formatted date/time value as string or integer unix timestamp (if format is NULL).
+     * @throws     PropelException - if unable to convert the date/time to timestamp.
+     */
+    public function getSchExecutionDate($format = 'Y-m-d H:i:s')
+    {
+
+        if ($this->sch_execution_date === null || $this->sch_execution_date === '') {
+            return null;
+        } elseif (!is_int($this->sch_execution_date)) {
+            // a non-timestamp value was set externally, so we convert it
+            $ts = strtotime($this->sch_execution_date);
+            if ($ts === -1 || $ts === false) {
+                throw new PropelException("Unable to parse value of [sch_execution_date] as date/time value: " .
+                    var_export($this->sch_execution_date, true));
+            }
+        } else {
+            $ts = $this->sch_execution_date;
+        }
+        if ($format === null) {
+            return $ts;
+        } elseif (strpos($format, '%') !== false) {
+            return strftime($format, $ts);
+        } else {
+            return date($format, $ts);
+        }
     }
 
     /**
@@ -1135,6 +1173,35 @@ abstract class BaseCaseScheduler extends BaseObject implements Persistent
     } // setSchRepeatStopIfRunning()
 
     /**
+     * Set the value of [sch_execution_date] column.
+     * 
+     * @param      int $v new value
+     * @return     void
+     */
+    public function setSchExecutionDate($v)
+    {
+
+        if ($v !== null && !is_int($v)) {
+            $ts = strtotime($v);
+            //Date/time accepts null values
+            if ($v == '') {
+                $ts = null;
+            }
+            if ($ts === -1 || $ts === false) {
+                throw new PropelException("Unable to parse date/time value for [sch_execution_date] from input: " .
+                    var_export($v, true));
+            }
+        } else {
+            $ts = $v;
+        }
+        if ($this->sch_execution_date !== $ts) {
+            $this->sch_execution_date = $ts;
+            $this->modifiedColumns[] = CaseSchedulerPeer::SCH_EXECUTION_DATE;
+        }
+
+    } // setSchExecutionDate()
+
+    /**
      * Set the value of [case_sh_plugin_uid] column.
      * 
      * @param      string $v new value
@@ -1221,14 +1288,16 @@ abstract class BaseCaseScheduler extends BaseObject implements Persistent
 
             $this->sch_repeat_stop_if_running = $rs->getInt($startcol + 23);
 
-            $this->case_sh_plugin_uid = $rs->getString($startcol + 24);
+            $this->sch_execution_date = $rs->getTimestamp($startcol + 24, null);
+
+            $this->case_sh_plugin_uid = $rs->getString($startcol + 25);
 
             $this->resetModified();
 
             $this->setNew(false);
 
             // FIXME - using NUM_COLUMNS may be clearer.
-            return $startcol + 25; // 25 = CaseSchedulerPeer::NUM_COLUMNS - CaseSchedulerPeer::NUM_LAZY_LOAD_COLUMNS).
+            return $startcol + 26; // 26 = CaseSchedulerPeer::NUM_COLUMNS - CaseSchedulerPeer::NUM_LAZY_LOAD_COLUMNS).
 
         } catch (Exception $e) {
             throw new PropelException("Error populating CaseScheduler object", $e);
@@ -1505,6 +1574,9 @@ abstract class BaseCaseScheduler extends BaseObject implements Persistent
                 return $this->getSchRepeatStopIfRunning();
                 break;
             case 24:
+                return $this->getSchExecutionDate();
+                break;
+            case 25:
                 return $this->getCaseShPluginUid();
                 break;
             default:
@@ -1551,7 +1623,8 @@ abstract class BaseCaseScheduler extends BaseObject implements Persistent
             $keys[21] => $this->getSchRepeatEvery(),
             $keys[22] => $this->getSchRepeatUntil(),
             $keys[23] => $this->getSchRepeatStopIfRunning(),
-            $keys[24] => $this->getCaseShPluginUid(),
+            $keys[24] => $this->getSchExecutionDate(),
+            $keys[25] => $this->getCaseShPluginUid(),
         );
         return $result;
     }
@@ -1656,6 +1729,9 @@ abstract class BaseCaseScheduler extends BaseObject implements Persistent
                 $this->setSchRepeatStopIfRunning($value);
                 break;
             case 24:
+                $this->setSchExecutionDate($value);
+                break;
+            case 25:
                 $this->setCaseShPluginUid($value);
                 break;
         } // switch()
@@ -1778,7 +1854,11 @@ abstract class BaseCaseScheduler extends BaseObject implements Persistent
         }
 
         if (array_key_exists($keys[24], $arr)) {
-            $this->setCaseShPluginUid($arr[$keys[24]]);
+            $this->setSchExecutionDate($arr[$keys[24]]);
+        }
+
+        if (array_key_exists($keys[25], $arr)) {
+            $this->setCaseShPluginUid($arr[$keys[25]]);
         }
 
     }
@@ -1888,6 +1968,10 @@ abstract class BaseCaseScheduler extends BaseObject implements Persistent
             $criteria->add(CaseSchedulerPeer::SCH_REPEAT_STOP_IF_RUNNING, $this->sch_repeat_stop_if_running);
         }
 
+        if ($this->isColumnModified(CaseSchedulerPeer::SCH_EXECUTION_DATE)) {
+            $criteria->add(CaseSchedulerPeer::SCH_EXECUTION_DATE, $this->sch_execution_date);
+        }
+
         if ($this->isColumnModified(CaseSchedulerPeer::CASE_SH_PLUGIN_UID)) {
             $criteria->add(CaseSchedulerPeer::CASE_SH_PLUGIN_UID, $this->case_sh_plugin_uid);
         }
@@ -1991,6 +2075,8 @@ abstract class BaseCaseScheduler extends BaseObject implements Persistent
         $copyObj->setSchRepeatUntil($this->sch_repeat_until);
 
         $copyObj->setSchRepeatStopIfRunning($this->sch_repeat_stop_if_running);
+
+        $copyObj->setSchExecutionDate($this->sch_execution_date);
 
         $copyObj->setCaseShPluginUid($this->case_sh_plugin_uid);
 

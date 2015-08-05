@@ -450,5 +450,14 @@ class CalendarDefinition extends BaseCalendarDefinition
         $oDataset->next();
         return $oDataset->getRow();
     }
+
+    public function calendarName ($calendarUid)
+    {
+        $tr = CalendarDefinitionPeer::retrieveByPK( $calendarUid );
+        if ((is_object( $tr ) && get_class( $tr ) == 'CalendarDefinition')) {
+            return $tr->getCalendarName();
+        }
+        return false; 
+    }
 }
 

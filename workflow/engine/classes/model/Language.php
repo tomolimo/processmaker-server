@@ -293,6 +293,20 @@ class Language extends BaseLanguage
         G::LoadSystem( 'i18n_po' );
         G::LoadClass( "system" );
 
+        //get labels MichelangeloFE
+        try {
+            $oTranslation = new Translation();
+            $MichelangeloFE = PATH_HOME . "../workflow/public_html/lib/js";
+            if ($_GET['LOCALE'] === "en" & file_exists($MichelangeloFE)) {
+                $labels = $this->readLabelsDirectory($MichelangeloFE, true);
+                foreach ($labels as $label) {
+                    $oTranslation->addTranslation('LABEL', 'ID_MAFE_' . G::encryptOld($label), 'en', $label);
+                }
+            }
+        } catch (Exception $e) {
+            error_log($e->getMessage());
+        }
+
         //creating the .po file
         $sPOFile = PATH_CORE . 'content' . PATH_SEP . 'translations' . PATH_SEP . MAIN_POFILE . '.' . $_GET['LOCALE'] . '.po';
 
@@ -809,6 +823,65 @@ class Language extends BaseLanguage
             } //end foreach
         }
     }
+    
+    public function readLabelsDirectory($path, $unique = false)
+    {
+        $labels = array();
+        $items = opendir($path);
+        while (false !== ($item = readdir($items))) {
+            $a = $path . "/" . $item;
+            if ($item !== "." && $item !== ".." && is_dir($a)) {
+                $labels = array_merge($labels, $this->readLabelsDirectory($a, false));
+            }
+            if (is_file($a)) {
+                $info = pathinfo($a);
+                if ($info["extension"] === "js" || $info["extension"] === "JS") {
+                    $file = file_get_contents($a);
+                    //search string 'xx\'xx\'xx'.translate()
+                    $labels = array_merge($labels, $this->readLabelsFile($file, "'"));
+                    //search string "xx\"xx\"xx".translate()
+                    $labels = array_merge($labels, $this->readLabelsFile($file, "\""));
+                }
+            }
+        }
+        if ($unique) {
+            $labels = array_unique($labels);
+        }
+        closedir($items);
+        return $labels;
+    }
+
+    public function readLabelsFile($file, $sep)
+    {
+        $labels = array();
+        $k = 0;
+        $j = 0;
+        while ($j !== false) {
+            $j = strpos($file, $sep . ".translate(", $k);
+            if ($j !== false) {
+                $k = $j + 1;
+                $label = "";
+                $j--;
+                $c = substr($file, $j, 1);
+                while (($c !== $sep || substr($file, $j - 1, 2) === "\\" . $sep) && $j > 0) {
+                    $label = $c . $label;
+                    $j--;
+                    $c = substr($file, $j, 1);
+                }
+                if ($label !== "") {
+                    if ($sep === "'") {
+                        $label = str_replace("\'", "'", $label);
+                    }
+                    if ($sep === '"') {
+                        $label = str_replace('\"', '"', $label);
+                    }
+                    array_push($labels, $label);
+                }
+            }
+        }
+        return $labels;
+    }
+
 }
 // Language
 

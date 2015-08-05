@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm name="authSources/ldap_Edit" type="xmlform" width="650" enabletemplate="0" mode="">
+  <title type="title">
+    <en><![CDATA[Authentication Source Information]]></en>
+    <pt-BR><![CDATA[Informações de fonte de autenticação]]></pt-BR>
+  </title>
+  <AUTH_SOURCE_UID type="hidden"/>
+  <AUTH_SOURCE_NAME type="text" size="50" maxlength="50" required="1">
+    <en><![CDATA[Name]]></en>
+    <pt-BR><![CDATA[Nome]]></pt-BR>
+  </AUTH_SOURCE_NAME>
+  <AUTH_SOURCE_PROVIDER type="hidden" defaultValue="ldap"/>
+  <LDAP_TYPE type="dropdown" required="0">
+    <en><![CDATA[Type]]><option name="ldap"><![CDATA[OpenLDAP]]></option><option name="ad"><![CDATA[Active Directory]]></option><option name="ds"><![CDATA[389 DS]]></option></en>
+    <pt-BR><![CDATA[Tipo]]><option name="ldap"><![CDATA[OpenLDAP]]></option><option name="ad"><![CDATA[Active Directory]]></option><option name="ds"><![CDATA[389 DS]]></option></pt-BR>
+  </LDAP_TYPE>
+  <AUTH_SOURCE_AUTO_REGISTER type="dropdown">
+    <en><![CDATA[Enable automatic register]]><option name="0"><![CDATA[No]]></option><option name="1"><![CDATA[Yes]]></option></en>
+    <pt-BR><![CDATA[Ativado automatic registrar]]><option name="0"><![CDATA[Não]]></option><option name="1"><![CDATA[Sim]]></option></pt-BR>
+  </AUTH_SOURCE_AUTO_REGISTER>
+  <AUTH_SOURCE_SERVER_NAME type="text" size="50" maxlength="50" required="1">
+    <en><![CDATA[Server Address]]></en>
+    <pt-BR><![CDATA[Endereço do Servidor]]></pt-BR>
+  </AUTH_SOURCE_SERVER_NAME>
+  <AUTH_SOURCE_PORT type="text" size="5" maxlength="5" required="1" defaultValue="389" validate="Int">
+    <en><![CDATA[Port]]></en>
+    <pt-BR><![CDATA[Porto]]></pt-BR>
+  </AUTH_SOURCE_PORT>
+  <AUTH_SOURCE_ENABLED_TLS type="dropdown">
+    <en><![CDATA[Enabled TLS]]><option name="0"><![CDATA[No]]></option><option name="1"><![CDATA[Yes]]></option></en>
+    <pt-BR><![CDATA[Ativado TLS]]><option name="0"><![CDATA[Não]]></option><option name="1"><![CDATA[Sim]]></option></pt-BR>
+  </AUTH_SOURCE_ENABLED_TLS>
+  <AUTH_SOURCE_BASE_DN type="text" size="50" maxlength="128" required="1">
+    <en><![CDATA[Base DN]]></en>
+    <pt-BR><![CDATA[Base DN]]></pt-BR>
+  </AUTH_SOURCE_BASE_DN>
+  <AUTH_ANONYMOUS type="dropdown">
+    <en><![CDATA[Anonymous]]><option name="0"><![CDATA[No]]></option><option name="1"><![CDATA[Yes]]></option></en>
+    <pt-BR><![CDATA[anônimo]]><option name="0"><![CDATA[Não]]></option><option name="1"><![CDATA[Sim]]></option></pt-BR>
+  </AUTH_ANONYMOUS>
+  <AUTH_SOURCE_SEARCH_USER type="text" size="50" maxlength="128" required="0">
+    <en><![CDATA[Username]]></en>
+    <pt-BR><![CDATA[Usuário]]></pt-BR>
+  </AUTH_SOURCE_SEARCH_USER>
+  <AUTH_SOURCE_PASSWORD type="password" size="20" maxlength="32" required="0">
+    <en><![CDATA[Password]]></en>
+    <pt-BR><![CDATA[Senha]]></pt-BR>
+  </AUTH_SOURCE_PASSWORD>
+  <AUTH_SOURCE_IDENTIFIER_FOR_USER type="text" size="20" maxlength="20" required="1" defaultValue="uid">
+    <en><![CDATA[User Identifier]]></en>
+    <pt-BR><![CDATA[Identificador de usuário]]></pt-BR>
+  </AUTH_SOURCE_IDENTIFIER_FOR_USER>
+  <AUTH_SOURCE_USERS_FILTER type="text" size="50" maxlength="200" required="0" defaultValue="">
+    <en><![CDATA[Filter to search users (Default set to (&(!(objectClass=organizationalUnit))))]]></en>
+    <pt-BR><![CDATA[Filtro para os usuários de busca (Default set to (&(!(objectClass=organizationalUnit))))]]></pt-BR>
+  </AUTH_SOURCE_USERS_FILTER>
+  <AUTH_SOURCE_RETIRED_OU type="text" size="50" maxlength="128" required="0">
+    <en><![CDATA[OU for Retired Employees OU]]></en>
+    <pt-BR><![CDATA[OU ao Aposentado UO]]></pt-BR>
+  </AUTH_SOURCE_RETIRED_OU>
+  <AUTH_SOURCE_ATTRIBUTE_IDS type="hidden"/>
+  <AUTH_SOURCE_SHOWGRID_FLAG type="hidden"/>
+  <AUTH_SOURCE_GRID_TEXT type="hidden"/>
+  <AUTH_SOURCE_ATTRIBUTE_SUBTITLE type="subtitle" enablehtml="1" btn_cancel="Cancel" required="0" readonly="0" savelabel="0">
+    <en><![CDATA[<input type="checkbox" name="form[AUTH_SOURCE_SHOWGRID]" id="form[AUTH_SOURCE_SHOWGRID]"> Match attributes to sync]]></en>
+    <pt-BR><![CDATA[<input type="checkbox" name="form[AUTH_SOURCE_SHOWGRID]" id="form[AUTH_SOURCE_SHOWGRID]"> Combinar atributos para sincronizar]]></pt-BR>
+  </AUTH_SOURCE_ATTRIBUTE_SUBTITLE>
+  <AUTH_SOURCE_GRID_ATTRIBUTE type="grid" xmlgrid="ldapAdvanced/gridAttribute" addrow="1" deleterow="1" btn_cancel="Cancel"/>
+  <SUBTITLETESTCONNECTION type="subtitle">
+      <en><![CDATA[Minimum data required to run the "Test Connection": "Server Address, Port, Enabled TLS, Anonymous, Username, Password"]]></en>
+      <pt-BR><![CDATA[Dados mínimos necessários para executar o "Test Connection": "Server Address, Port, TLS Habilitado, Anonymous, Nome de usuário, Senha"]]></pt-BR>
+  </SUBTITLETESTCONNECTION>
+  <btnSave type="submit">
+    <en><![CDATA[Save]]></en>
+    <pt-BR><![CDATA[Salvar]]></pt-BR>
+  </btnSave>
+  <BTNTESTCONNECTION type="button" onclick="testConnection();">
+      <en><![CDATA[Test connection]]></en>
+      <pt-BR><![CDATA[Teste de conexão]]></pt-BR>
+  </BTNTESTCONNECTION>
+  <btnCancel type="button" onclick="history.go(-1);">
+    <en><![CDATA[Cancel]]></en>
+    <pt-BR><![CDATA[Cancel]]></pt-BR>
+  </btnCancel>
+  <JS type="javascript"><![CDATA[
+
+var dynaformOnload = function() {
+  getField('AUTH_SOURCE_SHOWGRID').checked = (getField('AUTH_SOURCE_SHOWGRID_FLAG').value == 1) ? true : false;
+  var fieldGridTd = getField('AUTH_SOURCE_GRID_ATTRIBUTE').parentNode.parentNode.parentNode;
+  fieldGridTd.style.display = 'none';
+  leimnud.event.add(getField('AUTH_ANONYMOUS'), 'change', hideShowSearchUser);
+  leimnud.event.add(getField('LDAP_TYPE'), 'change', hideShowSuggest);
+  leimnud.event.add(getField('AUTH_SOURCE_SHOWGRID'), 'click', showGrid);
+  hideShowSearchUser();
+  hideShowSuggest();
+  showGrid();
+
+  var valuesDrop = getField('AUTH_SOURCE_ATTRIBUTE_IDS').value;
+  valuesDropArray = valuesDrop.split('|');
+
+  for (var i = 0 ; i < valuesDropArray.length ; i++) {
+    if (valuesDropArray[i] != '') {
+      var iRows = Number_Rows_Grid('AUTH_SOURCE_GRID_ATTRIBUTE','attributeLdap');
+      for (cont=1 ; cont<=iRows ; cont=cont+1) {
+          eval(" var newOption = document.createElement('option'); newOption.text  = valuesDropArray[i]; newOption.value = valuesDropArray[i]; try { getField('AUTH_SOURCE_GRID_ATTRIBUTE][" + cont + "][attributeUser').add(newOption, null);} catch(ex) { getField('AUTH_SOURCE_GRID_ATTRIBUTE][" + cont + "][attributeUser').add(newOption);}");
+      }
+    }
+  }
+
+  var valuesGrid = getField('AUTH_SOURCE_GRID_TEXT').value;
+  valuesGridArray = valuesGrid.split('|');
+  var fil = 1;
+  for (var i = 0 ; i < valuesGridArray.length ; i++) {
+      if(valuesGridArray[i] != '')
+      {
+          var valuesFielddGrid = valuesGridArray[i].split("/");
+          getField('AUTH_SOURCE_GRID_ATTRIBUTE][' + fil + '][attributeUser').value = valuesFielddGrid['1'];
+          fil++;
+      }
+  }
+
+  function showGrid() {
+    if (getField('AUTH_SOURCE_SHOWGRID').checked == true) {
+      fieldGridTd.style.display = 'block';
+      fieldGridTd.removeAttribute("style",0);
+    } else {
+      fieldGridTd.style.display = 'none';
+    }
+  }
+};
+
+var hideShowSearchUser = function() {
+  if (getField('AUTH_ANONYMOUS').value == '1') {
+    hideRowById('AUTH_SOURCE_SEARCH_USER');
+    hideRowById('AUTH_SOURCE_PASSWORD');
+  }
+  else {
+    showRowById('AUTH_SOURCE_SEARCH_USER');
+    showRowById('AUTH_SOURCE_PASSWORD');
+  }
+};
+
+var hideShowSuggest = function ()
+{
+    getField("AUTH_SOURCE_IDENTIFIER_FOR_USER").value = (getField("LDAP_TYPE").value == "ad")? "samaccountname" : "uid";
+};
+
+var testConnection = function ()
+{
+    var strArgs = "functionAccion=ldapTestConnection&";
+    strArgs += "AUTH_SOURCE_SERVER_NAME=" + getField("AUTH_SOURCE_SERVER_NAME").value + "&";
+    strArgs += "AUTH_SOURCE_PORT="        + getField("AUTH_SOURCE_PORT").value + "&";
+    strArgs += "AUTH_SOURCE_ENABLED_TLS=" + getField("AUTH_SOURCE_ENABLED_TLS").value + "&";
+    strArgs += "AUTH_ANONYMOUS="          + getField("AUTH_ANONYMOUS").value + "&";
+    strArgs += "AUTH_SOURCE_SEARCH_USER=" + getField("AUTH_SOURCE_SEARCH_USER").value + "&";
+    strArgs += "AUTH_SOURCE_PASSWORD="    + getField("AUTH_SOURCE_PASSWORD").value + "&";
+    strArgs += "AUTH_SOURCE_VERSION=3";
+
+    var rpcAjax = new leimnud.module.rpc.xmlhttp({
+        url: "../ldapAdvanced/controllers/ldapAdvancedProxy.php",
+        method: "POST",
+        args: strArgs
+    });
+
+    rpcAjax.callback = function (rpc)
+    {
+        var dataResponse = rpc.xmlhttp.responseText.parseJSON();
+
+        if (dataResponse.status) {
+            var panel = new leimnud.module.panel();
+
+            panel.options = {
+                statusBarButtons: [{value: _("ID_ACCEPT")}],
+                position: {center: true},
+                size: {
+                    w: 400,
+                    h: 125
+                },
+                control: {
+                  close: true,
+                  resize: false
+                },
+                fx: {modal: true}
+            };
+
+            panel.setStyle = {
+                content:{
+                    padding: 10,
+                    paddingLeft: 50,
+                    textAlign: "left",
+                    background: "url(/images/" + ((dataResponse.status == "OK")? "dialog-ok-apply" : "error") + ".png)",
+                    backgroundRepeat: "no-repeat",
+                    backgroundPosition: "2% 10%",
+                    backgroundColor: "transparent",
+                    borderWidth: 0
+                }
+            };
+
+            panel.make();
+            panel.addContent((dataResponse.status == "OK")? "Successfully connected" : dataResponse.message);
+            panel.fixContent();
+            panel.elements.statusBarButtons[0].onmouseup = function ()
+            {
+              panel.remove();
+
+              return false;
+            }.extend(this);
+        }
+    }.extend(this);
+
+    rpcAjax.make();
+};
+]]></JS>
+</dynaForm>
+

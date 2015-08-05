@@ -1,6 +1,7 @@
 var grdNumRows = 0; //
 var grdRowLabel = []; //
-
+var fieldGridGral = '';
+var fieldGridGralVal = '';
 
 
 
@@ -409,9 +410,16 @@ Ext.onReady(function () {
       var selectedRow = Ext.getCmp(gridId).getSelectionModel().getSelections();
       var maxLenght = selectedRow.length;
       for (var i in selectedRow) {
+        rowGrid = selectedRow[i].data
+        for (fieldGrid in rowGrid){
+          if(fieldGrid != 'APP_UID' && fieldGrid != 'APP_NUMBER' && fieldGrid != 'APP_TITLE' && fieldGrid != 'DEL_INDEX' ){
+               fieldGridGral = fieldGrid;
+               fieldGridGralVal = rowGrid[fieldGrid];
+          }
+        }
         if (selectedRow[i].data) {
           //alert (derivateRequestAjax(selectedRow[i].data["company"]));
-          ajaxDerivationRequest(selectedRow[i].data["APP_UID"], selectedRow[i].data["DEL_INDEX"], maxLenght, selectedRow[i].data["APP_NUMBER"]);
+          ajaxDerivationRequest(selectedRow[i].data["APP_UID"], selectedRow[i].data["DEL_INDEX"], maxLenght, selectedRow[i].data["APP_NUMBER"],fieldGridGral, fieldGridGralVal);
         }
       }
     }
@@ -1298,14 +1306,14 @@ function generateGrid(proUid, tasUid, dynUid)
   });
 }
 
-function ajaxDerivationRequest(appUid, delIndex, maxLenght, appNumber){
+function ajaxDerivationRequest(appUid, delIndex, maxLenght, appNumber,fieldGridGral, fieldGridGralVal){
   Ext.Ajax.request({
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer ' + credentials.access_token
     },
-    url: urlProxy + 'derivate/' + appUid + '/' + appNumber + '/' + delIndex,
+    url: urlProxy + 'derivate/' + appUid + '/' + appNumber + '/' + delIndex + '/' + fieldGridGral + '/' + fieldGridGralVal,
     success: function(response) {
       var dataResponse;
       var fullResponseText = response.responseText;
@@ -1333,7 +1341,7 @@ function ajaxDerivationRequest(appUid, delIndex, maxLenght, appNumber){
               window.location.reload();
             }
 
-            if (fullResponseText.charAt(0) != "<") {
+            if (fullResponseText.charAt(0) != "<" && parent.document.getElementById("batchRoutingCasesNumRec") != null) {
                 parent.document.getElementById("batchRoutingCasesNumRec").innerHTML = parseInt(dataResponse.casesNumRec);
             }
 

@@ -136,19 +136,21 @@ class Consolidated extends Api
      * @param string $app_uid {@min 1} {@max 32}
      * @param string $app_number
      * @param string $del_index
+     * @param string $field_grid
+     * @param string $field_grid_val
      * @return array
      *
      * @author Brayan Pereyra (Cochalo) <brayan@colosa.com>
      * @copyright Colosa - Bolivia
      *
-     * @url POST /derivate/:app_uid/:app_number/:del_index
+     * @url POST /derivate/:app_uid/:app_number/:del_index/:field_grid/:field_grid_val
      */
-    public function doPostDerivate($app_uid, $app_number, $del_index)
+    public function doPostDerivate($app_uid, $app_number, $del_index, $field_grid, $field_grid_val)
     {
         try {
             $usr_uid = $this->getUserId();
             $consolidated = new \ProcessMaker\BusinessModel\Consolidated();
-            return $consolidated->postDerivate($app_uid, $app_number, $del_index, $usr_uid);
+            return $consolidated->postDerivate($app_uid, $app_number, $del_index, $usr_uid,$field_grid, $field_grid_val);
         } catch (\Exception $e) {
             throw (new RestException(Api::STAT_APP_EXCEPTION, $e->getMessage()));
         }

@@ -75,7 +75,7 @@ class Variable
                         $variable->setVarDefault($arrayData["VAR_DEFAULT"]);
                     }
                     if (isset($arrayData["VAR_ACCEPTED_VALUES"])) {
-                        $encodeAcceptedValues = json_encode($arrayData["VAR_ACCEPTED_VALUES"]);
+                        $encodeAcceptedValues = \G::json_encode($arrayData["VAR_ACCEPTED_VALUES"]);
                         $variable->setVarAcceptedValues($encodeAcceptedValues);
                     }
                     $variable->save();
@@ -143,6 +143,7 @@ class Variable
                     $cnn->begin();
                     if (isset($arrayData["VAR_NAME"])) {
                         $this->existsName($processUid, $arrayData["VAR_NAME"], $variableUid);
+
                         $variable->setVarName($arrayData["VAR_NAME"]);
                     }
                     if (isset($arrayData["VAR_FIELD_TYPE"])) {
@@ -167,7 +168,7 @@ class Variable
                         $variable->setVarDefault($arrayData["VAR_DEFAULT"]);
                     }
                     if (isset($arrayData["VAR_ACCEPTED_VALUES"])) {
-                        $encodeAcceptedValues = json_encode($arrayData["VAR_ACCEPTED_VALUES"]);
+                        $encodeAcceptedValues = \G::json_encode($arrayData["VAR_ACCEPTED_VALUES"]);
                         $variable->setVarAcceptedValues($encodeAcceptedValues);
                     }
                     $variable->save();
@@ -288,6 +289,14 @@ class Variable
             $arrayVariables = array();
 
             while ($aRow = $rsCriteria->getRow()) {
+                
+                $VAR_ACCEPTED_VALUES = \G::json_decode($aRow['VAR_ACCEPTED_VALUES'], true);
+                if(sizeof($VAR_ACCEPTED_VALUES)) {
+                    $encodeAcceptedValues = preg_replace("/\\\\u([a-f0-9]{4})/e", "iconv('UCS-4LE','UTF-8',pack('V', hexdec('U$1')))", \G::json_encode($VAR_ACCEPTED_VALUES));
+                } else {
+                    $encodeAcceptedValues = $aRow['VAR_ACCEPTED_VALUES'];
+                }
+                
                 $arrayVariables = array('var_uid' => $aRow['VAR_UID'],
                     'prj_uid' => $aRow['PRJ_UID'],
                     'var_name' => $aRow['VAR_NAME'],
@@ -299,7 +308,7 @@ class Variable
                     'var_sql' => $aRow['VAR_SQL'],
                     'var_null' => (int)$aRow['VAR_NULL'],
                     'var_default' => $aRow['VAR_DEFAULT'],
-                    'var_accepted_values' => $aRow['VAR_ACCEPTED_VALUES']);
+                    'var_accepted_values' => $encodeAcceptedValues);
                 $rsCriteria->next();
             }
             //Return
@@ -354,6 +363,14 @@ class Variable
             $arrayVariables = array();
 
             while ($aRow = $rsCriteria->getRow()) {
+                
+                $VAR_ACCEPTED_VALUES = \G::json_decode($aRow['VAR_ACCEPTED_VALUES'], true);
+                if(sizeof($VAR_ACCEPTED_VALUES)) {
+                    $encodeAcceptedValues = preg_replace("/\\\\u([a-f0-9]{4})/e", "iconv('UCS-4LE','UTF-8',pack('V', hexdec('U$1')))", \G::json_encode($VAR_ACCEPTED_VALUES));
+                } else {
+                    $encodeAcceptedValues = $aRow['VAR_ACCEPTED_VALUES'];
+                }
+                
                 $arrayVariables[] = array('var_uid' => $aRow['VAR_UID'],
                     'prj_uid' => $aRow['PRJ_UID'],
                     'var_name' => $aRow['VAR_NAME'],
@@ -365,7 +382,7 @@ class Variable
                     'var_sql' => $aRow['VAR_SQL'],
                     'var_null' => (int)$aRow['VAR_NULL'],
                     'var_default' => $aRow['VAR_DEFAULT'],
-                    'var_accepted_values' => $aRow['VAR_ACCEPTED_VALUES']);
+                    'var_accepted_values' => $encodeAcceptedValues);
                 $rsCriteria->next();
             }
             //Return
@@ -432,6 +449,7 @@ class Variable
     {
         try {
             $criteria = new \Criteria("workflow");
+
             $criteria->addSelectColumn(\ProcessVariablesPeer::VAR_UID);
             $criteria->addSelectColumn(\ProcessVariablesPeer::VAR_NAME);
 
@@ -442,8 +460,8 @@ class Variable
             $criteria->add(\ProcessVariablesPeer::VAR_NAME, $variableName, \Criteria::EQUAL);
             $criteria->add(\ProcessVariablesPeer::PRJ_UID, $processUid, \Criteria::EQUAL);
             $rsCriteria = \ProcessVariablesPeer::doSelectRS($criteria);
+
             $rsCriteria->setFetchmode(\ResultSet::FETCHMODE_ASSOC);
-            $rsCriteria->next();
 
             while ($rsCriteria->next()) {
                 $row = $rsCriteria->getRow();
@@ -597,7 +615,7 @@ class Variable
 
                 $row = $rsCriteria->getRow();
 
-                $contentDecode = json_decode($row["DYN_CONTENT"], true);
+                $contentDecode = \G::json_decode($row["DYN_CONTENT"], true);
                 $content = $contentDecode['items'][0]['items'];
                 if (is_array($content)) {
                     foreach ($content as $key => $value) {

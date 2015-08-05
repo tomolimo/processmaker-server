@@ -197,7 +197,7 @@ try {
     G::header( "location: $loc" );
 } catch (Exception $e) {
     $aMessage = array ();
-    $aMessage['MESSAGE'] = $e->getMessage() . '<br>' . $e->getTraceAsString();
+    $aMessage['MESSAGE'] = $e->getMessage();
     $G_PUBLISH = new Publisher();
     $G_PUBLISH->AddContent( 'xmlform', 'xmlform', 'login/showMessage', '', $aMessage );
     G::RenderPage( 'publish', 'blank' );

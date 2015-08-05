@@ -1272,8 +1272,16 @@ RestClient.prototype.consume = function (options) {
         xhr.setRequestHeader(key, value);
     });
 
-    xhr.send(body);
-
+    try {
+        xhr.send(body);
+    } catch (ev) {
+        try {
+                options.failure(xhr, response);
+            }
+        catch (e) {
+              throw new Error (e.message);
+        }
+    }
     return success;
 };
 

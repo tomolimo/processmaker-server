@@ -1,7 +1,7 @@
 <div id="publisherContent[1]" style="margin: 0px;" align="center">
 <form name="frmDerivation" id="frmDerivation" action="cases_Derivate" method="POST" class="formDefault" style="margin: 0px;">
   <input type="hidden" name="form[ROU_TYPE]" id="form[ROU_TYPE]" value="{$PROCESS.ROU_TYPE}">
-  <div class="borderForm" style="width: 500px; padding-left: 0; padding-right: 0; border-width: 1;">
+  <div class="borderForm" style="width: 500px; padding-left: 0; padding-right: 0; border-width: 1px;">
     <div class="boxTop">
       <div class="a"></div>
       <div class="b"></div>
@@ -16,7 +16,7 @@
               <td colspan="2" class="withoutLabel">
               <table width='100%' cellspacing="0" cellpadding="0">
                 <tr>
-                    {if $PREVIOUS_PAGE}
+                  {if $PREVIOUS_PAGE}
                   <td valign='top' class='tableOption' width='33%' align="left">
                   <table cellspacing="0" cellpadding="0" width='100%'>
                     <tr>
@@ -61,14 +61,18 @@
             </tr>
             {/if}
             {if $PROCESS.ERROR eq '' }
-                {if $data.NEXT_TASK.TAS_TYPE != "INTERMEDIATE-CATCH-MESSAGE-EVENT"}
+                {if ($data.NEXT_TASK.TAS_TYPE == "INTERMEDIATE-CATCH-MESSAGE-EVENT")}
                     <tr>
-                        <td class="FormLabel" width="100">{$NEXT_TASK_LABEL}:</td>
-                        <td class="FormFieldContent">{$data.NEXT_TASK.TAS_TITLE}{$data.NEXT_TASK.TAS_HIDDEN_FIELD}</td>
+                        <td class="FormFieldContent" colspan="2" style="text-align: center">{$data.NEXT_TASK.TAS_TITLE}{$data.NEXT_TASK.TAS_HIDDEN_FIELD}</td>
+                    </tr>
+                {elseif ($data.NEXT_TASK.TAS_TYPE == "INTERMEDIATE-CATCH-TIMER-EVENT")}
+                    <tr style="display: none;">
+                        <td class="FormFieldContent" colspan="2">{$data.NEXT_TASK.TAS_HIDDEN_FIELD}</td>
                     </tr>
                 {else}
                     <tr>
-                        <td class="FormFieldContent" colspan="2" style="text-align: center">{$data.NEXT_TASK.TAS_TITLE}{$data.NEXT_TASK.TAS_HIDDEN_FIELD}</td>
+                        <td class="FormLabel" width="100">{$NEXT_TASK_LABEL}:</td>
+                        <td class="FormFieldContent">{$data.NEXT_TASK.TAS_TITLE}{$data.NEXT_TASK.TAS_HIDDEN_FIELD}</td>
                     </tr>
                 {/if}
             {/if}
@@ -85,14 +89,24 @@
               {/if}
               {if $data.NEXT_TASK.TAS_NEXT eq ''}
                 {if $data.NEXT_TASK.USR_UID neq ''}
-                    {if $data.NEXT_TASK.TAS_TYPE != "INTERMEDIATE-CATCH-MESSAGE-EVENT"}
+                    {if ($data.NEXT_TASK.TAS_TYPE == "INTERMEDIATE-CATCH-MESSAGE-EVENT")}
                         <tr>
-                            <td class="FormLabel" width="100">{$EMPLOYEE}:</td>
+                            <td class="FormFieldContent" colspan="2" style="text-align: center">{$data.NEXT_TASK.USR_HIDDEN_FIELD}</td>
+                        </tr>
+                    {elseif ($data.NEXT_TASK.TAS_TYPE == "SCRIPT-TASK")}
+                        <tr>
+                            <td class="FormLabel" width="100"></td>
+                            <td class="FormFieldContent">{$data.NEXT_TASK.USR_UID}{$data.NEXT_TASK.USR_HIDDEN_FIELD}</td>
+                        </tr>
+                    {elseif ($data.NEXT_TASK.TAS_TYPE == "INTERMEDIATE-CATCH-TIMER-EVENT")}
+                        <tr>
+                            <td class="FormLabel" width="100">{$NEXT_TASK_LABEL}:</td>
                             <td class="FormFieldContent">{$data.NEXT_TASK.USR_UID}{$data.NEXT_TASK.USR_HIDDEN_FIELD}</td>
                         </tr>
                     {else}
                         <tr>
-                            <td class="FormFieldContent" colspan="2" style="text-align: center">{$data.NEXT_TASK.USR_HIDDEN_FIELD}</td>
+                            <td class="FormLabel" width="100">{$EMPLOYEE}:</td>
+                            <td class="FormFieldContent">{$data.NEXT_TASK.USR_UID}{$data.NEXT_TASK.USR_HIDDEN_FIELD}</td>
                         </tr>
                     {/if}
                 {/if}

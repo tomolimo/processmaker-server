@@ -159,7 +159,11 @@ if ($flagExecuteBeforeTriggers) {
 
     if (! isset( $_SESSION['_NO_EXECUTE_TRIGGERS_'] )) {
         //Execute before triggers - Start
-        $Fields['APP_DATA'] = $oCase->ExecuteTriggers( $_SESSION['TASK'], $_GET['TYPE'], $_GET['UID'], 'BEFORE', $Fields['APP_DATA'] );
+        if (!isset($_SESSION['beforeTriggersExecuted'])) {
+            $Fields['APP_DATA'] = $oCase->ExecuteTriggers( $_SESSION['TASK'], $_GET['TYPE'], $_GET['UID'], 'BEFORE', $Fields['APP_DATA'] );
+        } else {
+            unset($_SESSION['beforeTriggersExecuted']);
+        } 
         //Execute before triggers - End
     } else {
         unset( $_SESSION['_NO_EXECUTE_TRIGGERS_'] );
@@ -760,8 +764,7 @@ try {
                 } //set priority value
 
 
-                $sTask = $aFields['TASK'][$sKey]['NEXT_TASK']['TAS_UID'];
-
+                //$sTask = $aFields['TASK'][$sKey]['NEXT_TASK']['TAS_UID'];
                 //TAS_UID has a hidden field to store the TAS_UID
                 $hiddenName = "form[TASKS][" . $sKey . "][TAS_UID]";
                 $hiddenField = '<input type="hidden" name="' . $hiddenName . '" id="' . $hiddenName . '" value="' . $aValues['NEXT_TASK']['TAS_UID'] . '">';
@@ -889,6 +892,18 @@ try {
                         $aFields['PROCESS']['ROU_FINISH_FLAG'] = true;
                         break;
                 }
+
+                $optionTaskType = (isset($aFields["TASK"][$sKey]["NEXT_TASK"]["TAS_TYPE"]))? $aFields["TASK"][$sKey]["NEXT_TASK"]["TAS_TYPE"] : "";
+
+                switch ($optionTaskType) {
+                    case "SCRIPT-TASK":
+                        $aFields["TASK"][$sKey]["NEXT_TASK"]["USR_UID"] = G::LoadTranslation("ID_ROUTE_TO_TASK_SCRIPT_TASK");
+                        break;
+                    case "INTERMEDIATE-CATCH-TIMER-EVENT":
+                        $aFields["TASK"][$sKey]["NEXT_TASK"]["USR_UID"] = G::LoadTranslation("ID_ROUTE_TO_TASK_INTERMEDIATE_CATCH_TIMER_EVENT");
+                        break;
+                }
+
                 $hiddenName = 'form[TASKS][' . $sKey . ']';
 
                 /* Allow user defined Timing Control
@@ -904,12 +919,16 @@ try {
                         if ($aFields['TASK'][$sKey]['NEXT_TASK']['TAS_TIMEUNIT'] == 'HOURS') {
                             $hoursSelected = "selected = 'selected'";
                         } else {
+                            if ($aFields['TASK'][$sKey]['NEXT_TASK']['TAS_TIMEUNIT'] == 'MINUTES') {
+                               $minSelected = "selected = 'selected'";
+                            }
                             $daysSelected = "selected = 'selected'";
                         }
 
                         $sAux = '<select name=' . $hiddenName . '[NEXT_TASK][TAS_TIMEUNIT] id= ' . $hiddenName . '[NEXT_TASK][TAS_TIMEUNIT] >';
                         $sAux .= "<option " . $hoursSelected . " value='HOURS'>Hours</option> ";
                         $sAux .= "<option " . $daysSelected . " value='DAYS'>Days</option> ";
+                        $sAux .= "<option " . $minSelected . " value='MINUTES'>Minutes</option> ";
                         $sAux .= '</select>';
                         $aFields['TASK'][$sKey]['NEXT_TASK']['TAS_TIMEUNIT'] = $sAux;
 
@@ -955,6 +974,7 @@ try {
                     $aFields['TASK'][$sKey]['NEXT_TASK']['TAS_PARENT'] = '<input type="hidden" name="' . $hiddenName . '[TAS_PARENT]"        id="' . $hiddenName . '[TAS_PARENT]"        value="' . $aValues['NEXT_TASK']['TAS_PARENT'] . '">';
                 }
             }
+
             $aFields['PROCESSING_MESSAGE'] = G::loadTranslation( 'ID_PROCESSING' );
 
             /**

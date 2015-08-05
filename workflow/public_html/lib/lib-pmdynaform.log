@@ -1,30 +1,30 @@
-[6 hours ago] 8986c88  (HEAD, origin/3.0-GA, composer/3.0-GA, 3.0-GA) fix new id in submit button <richard yujra>
-[22 hours ago] 642a1ea  PM-3008 fix id button in button tag <richard yujra>
-[5 days ago] d9784ec  (origin/IMPROVEMENT, composer/IMPROVEMENT) fix fulloptions in textarea modo view in grid fields <richard yujra>
-[5 days ago] 33ad0f6  to perform the performance data are lost hidden fields fixed <richard yujra>
-[6 days ago] 9b3d42a  UPDATE set data in grid field when have data in dependent field <richard yujra>
-[6 days ago] b9b9b77  failure data upload <richard yujra>
-[6 days ago] 98effe4  update perfomance with property layaut static and without page <richard yujra>
-[6 days ago] a5ff34a  upadte IMPROVEMENTS performance <richard yujra>
-[7 days ago] 90c0d06  a <richard yujra>
-[8 days ago] 71c8776  IMPROVEMENT performance in gridfield <richard yujra>
-[8 days ago] 7a67ba2  IMPROVEMENT <Roly Rudy Gutierrez Pinto>
-[8 days ago] 9d18348  (tag: 3.0.0.5) validate null values in dropdawn options <richard yujra>
-[11 days ago] 3ad3712  FIX get and set data for mobile <richard yujra>
-[11 days ago] 6be8629  FIX PM-2918, PM-2839, PM-2807 <Richard Yujra>
-[11 days ago] 6c8c8af  IMPROVEMENTS PARTY-1 <richard yujra>
-[2 weeks ago] d740f81  pm-2415 <marcelo.cuiza>
-[2 weeks ago] 833ab17  PM-2415 <marcelo.cuiza>
-[2 weeks ago] b7bd522  (tag: 3.0.0.4) UPDATE SUGGEST submit event <richard yujra>
-[2 weeks ago] 42b33f9  update suggest enter key value <richard yujra>
-[3 weeks ago] f06c9d2  update xample <richard yujra>
-[3 weeks ago] 3dcc7de  a <richard yujra>
-[3 weeks ago] a3fb60f  update IMPROVEMENTS <richard yujra>
-[3 weeks ago] bcaed15  a <richard yujra>
-[3 weeks ago] e1e7431  a <richard yujra>
-[3 weeks ago] cbc332f  update performance dependentfields form and grids <richard yujra>
-[3 weeks ago] 8a9f921  PM-2897, PM-2898 <marcelo.cuiza>
-[3 weeks ago] a075199  PM-2897, PM-2898 <marcelo.cuiza>
-[3 weeks ago] c77cd39  PM-2415 <marcelo.cuiza>
-[3 weeks ago] 65aab53  PM-2897 <marcelo.cuiza>
-[3 weeks ago] 16b3451  PM-2898 <marcelo.cuiza>
+[6 days ago] 4915300  (HEAD, origin/master, origin/HEAD, composer/master, master) PM-3128 <Roly Rudy Gutierrez Pinto>
+[7 days ago] 456dc43  update PM-2972 <richard yujra>
+[7 days ago] 39817cd  PM-3103 update <richard yujra>
+[7 days ago] ae19a93  PM-3128 <Roly Rudy Gutierrez Pinto>
+[8 days ago] a037625  PM-2949 <Roly Rudy Gutierrez Pinto>
+[8 days ago] fb71a9c  PM-2949 <Roly Rudy Gutierrez Pinto>
+[8 days ago] 770e222  PM-3170 <Roly Rudy Gutierrez Pinto>
+[8 days ago] d698db7  a <richard yujra>
+[8 days ago] d601311  PM-3128 RESOLVED <richard yujra>
+[8 days ago] f3c709e  PM-3128 resolved <richard yujra>
+[11 days ago] c57abab  PM-3066 resolved <richard yujra>
+[11 days ago] e4af5c7  improvement suggest field for mode view <richard yujra>
+[11 days ago] 4acd1f7  improvement checkbox control for grid <richard yujra>
+[12 days ago] b5e4a2e  PM-2947 improvement in field checkbox <richard yujra>
+[12 days ago] a1654bd  update handler options width field options <richard yujra>
+[13 days ago] 417e786  PM-3128 <Roly Rudy Gutierrez Pinto>
+[13 days ago] a38c4b1  PM-3128 <Roly Rudy Gutierrez Pinto>
+[13 days ago] 6f9c36b  PM-2972 resolved <richard yujra>
+[13 days ago] 902304b  PM-3112 <Roly Rudy Gutierrez Pinto>
+[13 days ago] 85f0211  PM-3112 <Roly Rudy Gutierrez Pinto>
+[2 weeks ago] 6049bd0  PM-3112 <Roly Rudy Gutierrez Pinto>
+[2 weeks ago] 16ffcc3  PM-3112 <Roly Rudy Gutierrez Pinto>
+[2 weeks ago] dfb3ace  PM-2775 <Roly Rudy Gutierrez Pinto>
+[2 weeks ago] b810771  IMPROVEMENT <Roly Rudy Gutierrez Pinto>
+[3 weeks ago] 3111adc  add new paginator in grid field <richard yujra>
+[3 weeks ago] 72367b0  restar sample files <richard yujra>
+[3 weeks ago] 6686833  improvements view label <richard yujra>
+[3 weeks ago] b550a65  improvement grid function in layout static <richard yujra>
+[3 weeks ago] 6b38bf7  improvements grids width <richard yujra>
+[3 weeks ago] c4a6cfb  fix responsive width <richard yujra>

@@ -287,10 +287,21 @@ class Users extends BaseUsers
             $arrayData["birthday"] = $aFields["USR_BIRTHDAY"];
             $arrayData["position"] = $aFields["USR_POSITION"];
             $arrayData["replacedby"] = $aFields["USR_REPLACED_BY"];
+            if(strlen($arrayData["replacedby"] != 0)){
+                $oUser = UsersPeer::retrieveByPK( $arrayData["replacedby"] );
+                $arrayData["replacedbyfullname"] = $oUser->getUsrFirstname() . ' ' . $oUser->getUsrLastname();
+            }
             $arrayData["duedate"] = $aFields["USR_DUE_DATE"];
             $arrayData["calendar"] = $aFields["USR_CALENDAR"];
+            if(strlen($aFields["USR_CALENDAR"] != 0)){
+                $arrayData["calendarname"] = $calendar->calendarName( $aFields["USR_CALENDAR"] );
+            }
             $arrayData["status"] = $aFields["USR_STATUS"];
             $arrayData["department"] = $aFields["DEP_UID"];
+            if (strlen($arrayData["department"]) != 0) {
+                $oDepart = DepartmentPeer::retrieveByPk( $arrayData["department"] );
+                $arrayData["departmentname"] = $oDepart->getDepTitle();
+            }
             $arrayData["reportsto"] = $aFields["USR_REPORTS_TO"];
             $arrayData["userexperience"] = $aFields["USR_UX"];
             $arrayData["photo"] = $pathPhoto;
@@ -388,6 +399,10 @@ class Users extends BaseUsers
 
     public function refreshTotal ($userId, $type = 'add', $list = "inbox", $total = 1)
     {
+        if ($userId == "") {
+            return;
+        }
+
         $nameList = self::getNameTotal($list);
         $criteria = new Criteria();
         $criteria->addSelectColumn( $nameList );

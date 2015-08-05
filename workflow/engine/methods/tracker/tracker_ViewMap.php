@@ -59,7 +59,7 @@ while ($ds->next()) {
     $row = $ds->getRow();
     $bpmnProjects[] = $row['PRJ_UID'];
 }
-        
+
 switch (($aCaseTracker['CT_MAP_TYPE'])) {
     case 'NONE':
         //Nothing
@@ -71,11 +71,48 @@ switch (($aCaseTracker['CT_MAP_TYPE'])) {
         $aFields = $oCase->loadCase( $_SESSION['APPLICATION'] );
         if (in_array($aFields['PRO_UID'], $bpmnProjects)) {
             //bpmb
-            $_SESSION["APP_UID"] = $aFields["APP_UID"];
+            $_SESSION["APPLICATION"] = $aFields["APP_UID"];
             $G_PUBLISH = new Publisher();
             $G_PUBLISH->AddContent( 'view', 'tracker/viewMap' );
-            G::RenderPage( 'publish' );
+
+            $urlTrackerProcessMap = "../designer?prj_uid=" . $_SESSION["PROCESS"] . "&prj_readonly=true&app_uid=" . $_SESSION["APPLICATION"] . "&tracker_designer=1";
+
+            $_SESSION["TRACKER_JAVASCRIPT"] = "
+                <script type=\"text/javascript\">
+                    var winTracker;
+
+                    if ((navigator.userAgent.indexOf(\"MSIE\") != -1) || (navigator.userAgent.indexOf(\"Trident\") != -1)) {
+                        var li1 = document.getElementById(\"MAP\");
+                        var a1 = li1.getElementsByTagName(\"a\");
+                        a1[0].onclick = function () {
+                            winTracker = window.open(\"$urlTrackerProcessMap\", \"winTracker\");
+                            li1.className = \"SelectedMenu\";
+                            li2.className = \"mainMenu\";
+                            li3.className = \"mainMenu\";
+                            li4.className = \"mainMenu\";
+                            document.getElementById(\"trackerContainer\").innerHTML = \"\";
+                            
+                            return false;
+                        };
+
+                        var li2 = document.getElementById(\"DYNADOC\");
+                        var a2= li2.getElementsByTagName(\"a\");
+                        a2[0].onclick = function () { if (winTracker) { winTracker.close(); } };
+
+                        var li3 = document.getElementById(\"HISTORY\");
+                        var a3 = li3.getElementsByTagName(\"a\");
+                        a3[0].onclick = function () { if (winTracker) { winTracker.close(); } };
+
+                        var li4 = document.getElementById(\"MESSAGES\");
+                        var a4 = li4.getElementsByTagName(\"a\");
+                        a4[0].onclick = function () { if (winTracker) { winTracker.close(); } };
+                    }
+                </script>
+            ";
+
+            G::RenderPage("publish");
             //note: url processmap "../designer?prj_uid=$_SESSION['PROCESS']&prj_readonly=true&app_uid=$_SESSION['APP_UID']"
+
             break;
         }
         if (isset( $aFields['TITLE'] )) {
@@ -246,9 +283,8 @@ switch (($aCaseTracker['CT_MAP_TYPE'])) {
           }.extend(this);
 
           rpcRequest.make();
-          
+
         });' );
         G::RenderPage( 'publish' );
         break;
 }
-

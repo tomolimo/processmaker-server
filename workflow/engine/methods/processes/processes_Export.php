@@ -36,7 +36,7 @@ try {
 
         $version = ProcessMaker\Util\Common::getLastVersion($outputDir . $getProjectName . "-*.pmx") + 1;
         $outputFilename = sprintf("%s-%s.%s", str_replace(" ","_",$getProjectName), $version, "pmx");
-        $outputFilename = $exporter->saveExport($outputDir.$outputFilename);
+        $outputFilename = $exporter->saveExport($outputDir . $outputFilename);
     } else {
         $oProcess = new Processes();
         $proFields = $oProcess->serializeProcess($_GET["pro_uid"]);

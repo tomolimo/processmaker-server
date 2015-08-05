@@ -306,7 +306,9 @@ class ListInbox extends BaseListInbox
                 }
             }
         } else {
-            $users->refreshTotal($data['USR_UID'], 'add', 'inbox');
+            if($data['USR_UID'] !=''){
+                $users->refreshTotal($data['USR_UID'], 'add', 'inbox');
+            }
             if ($dataPreviusApplication['APP_STATUS'] == 'DRAFT') {
                 $users->refreshTotal($dataPreviusApplication['CURRENT_USER_UID'], 'remove', 'draft');
             } else {
@@ -318,12 +320,13 @@ class ListInbox extends BaseListInbox
 
     public function loadFilters (&$criteria, $filters)
     {
-        $filter = isset($filters['filter']) ? $filters['filter'] : "";
-        $search = isset($filters['search']) ? $filters['search'] : "";
-        $process = isset($filters['process']) ? $filters['process'] : "";
-        $category = isset($filters['category']) ? $filters['category'] : "";
-        $dateFrom = isset($filters['dateFrom']) ? $filters['dateFrom'] : "";
-        $dateTo = isset($filters['dateTo']) ? $filters['dateTo'] : "";
+        $filter         = isset($filters['filter']) ? $filters['filter'] : "";
+        $search         = isset($filters['search']) ? $filters['search'] : "";
+        $process        = isset($filters['process']) ? $filters['process'] : "";
+        $category       = isset($filters['category']) ? $filters['category'] : "";
+        $dateFrom       = isset($filters['dateFrom']) ? $filters['dateFrom'] : "";
+        $dateTo         = isset($filters['dateTo']) ? $filters['dateTo'] : "";
+        $filterStatus   = isset($filters['filterStatus']) ? $filters['filterStatus'] : "";
 
         if ($filter != '') {
             switch ($filter) {
@@ -339,8 +342,8 @@ class ListInbox extends BaseListInbox
         if ($search != '') {
             $criteria->add(
                 $criteria->getNewCriterion( ListInboxPeer::APP_TITLE, '%' . $search . '%', Criteria::LIKE )->
-                    addOr( $criteria->getNewCriterion( ListInboxPeer::APP_TAS_TITLE, '%' . $search . '%', Criteria::LIKE )->
-                        addOr( $criteria->getNewCriterion( ListInboxPeer::APP_NUMBER, $search, Criteria::LIKE ) ) ) );
+                addOr( $criteria->getNewCriterion( ListInboxPeer::APP_TAS_TITLE, '%' . $search . '%', Criteria::LIKE )->
+                addOr( $criteria->getNewCriterion( ListInboxPeer::APP_NUMBER, $search, Criteria::LIKE ) ) ) );
         }
 
         if ($process != '') {
@@ -368,7 +371,7 @@ class ListInbox extends BaseListInbox
                 }
 
                 $criteria->add( $criteria->getNewCriterion( ListInboxPeer::DEL_DELEGATE_DATE, $dateFrom, Criteria::GREATER_EQUAL )->
-                    addAnd( $criteria->getNewCriterion( ListInboxPeer::DEL_DELEGATE_DATE, $dateTo, Criteria::LESS_EQUAL ) ) );
+                addAnd( $criteria->getNewCriterion( ListInboxPeer::DEL_DELEGATE_DATE, $dateTo, Criteria::LESS_EQUAL ) ) );
             } else {
                 $dateFrom = $dateFrom . " 00:00:00";
 
@@ -378,6 +381,21 @@ class ListInbox extends BaseListInbox
             $dateTo = $dateTo . " 23:59:59";
 
             $criteria->add( ListInboxPeer::DEL_DELEGATE_DATE, $dateTo, Criteria::LESS_EQUAL );
+        }
+
+        if ($filterStatus != '') {
+            switch ($filterStatus) {
+                case 'ON_TIME':
+                    $criteria->add( ListInboxPeer::DEL_RISK_DATE  , "TIMEDIFF(". ListInboxPeer::DEL_RISK_DATE." , NOW( ) ) > 0", Criteria::CUSTOM);
+                    break;
+                case 'AT_RISK':
+                    $criteria->add( ListInboxPeer::DEL_RISK_DATE  , "TIMEDIFF(". ListInboxPeer::DEL_RISK_DATE .", NOW( ) ) < 0", Criteria::CUSTOM);
+                    $criteria->add( ListInboxPeer::DEL_DUE_DATE  , "TIMEDIFF(". ListInboxPeer::DEL_DUE_DATE .", NOW( ) ) >  0", Criteria::CUSTOM);
+                    break;
+                case 'OVERDUE':
+                    $criteria->add( ListInboxPeer::DEL_DUE_DATE  , "TIMEDIFF(". ListInboxPeer::DEL_DUE_DATE." , NOW( ) ) < 0", Criteria::CUSTOM);
+                    break;
+            }
         }
     }
 

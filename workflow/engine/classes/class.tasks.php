@@ -423,14 +423,11 @@ class Tasks
     public function deleteAllRoutesOfTask($sProcessUID = '', $sTaskUID = '', $bAll = false)
     {
         try {
-            $oProcess = new Process();
-            $aFields = $oProcess->load($sProcessUID);
-            $oTask = new Task();
-            $aFields = $oTask->load($sTaskUID);
             $oCriteria = new Criteria('workflow');
             $oCriteria->add(RoutePeer::PRO_UID, $sProcessUID);
             $oCriteria->add(RoutePeer::TAS_UID, $sTaskUID);
             RoutePeer::doDelete($oCriteria);
+
             if ($bAll) {
                 $oCriteria = new Criteria('workflow');
                 $oCriteria->add(RoutePeer::PRO_UID, $sProcessUID);

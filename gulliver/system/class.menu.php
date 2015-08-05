@@ -111,13 +111,13 @@ class Menu
             if ($G_TMP_MENU->Enabled[$i] == 1) {
                 $this->Options[$c] = $G_TMP_MENU->Options[$i];
                 $this->Labels[$c] = $G_TMP_MENU->Labels[$i];
-                $this->Icons[$c] = $G_TMP_MENU->Icons[$i];
-                $this->JS[$c] = $G_TMP_MENU->JS[$i];
+                $this->Icons[$c] = (isset($G_TMP_MENU->Icons[$i]))? $G_TMP_MENU->Icons[$i] : "";
+                $this->JS[$c]    = (isset($G_TMP_MENU->JS[$i]))?    $G_TMP_MENU->JS[$i] : "";
                 $this->Types[$c] = $G_TMP_MENU->Types[$i];
                 $this->Enabled[$c] = $G_TMP_MENU->Enabled[$i];
                 $this->Id[$c] = $G_TMP_MENU->Id[$i];
                 $this->Classes[$c] = $G_TMP_MENU->Classes[$i];
-                $this->ElementClass[$c] = $G_TMP_MENU->ElementClass[$i];
+                $this->ElementClass[$c] = (isset($G_TMP_MENU->ElementClass[$i]))? $G_TMP_MENU->ElementClass[$i] : "";
                 $c++;
             } else {
                 if ($i == $this->optionOn) {
@@ -383,4 +383,4 @@ class Menu
         return $menus;
     }
 }
- 
+

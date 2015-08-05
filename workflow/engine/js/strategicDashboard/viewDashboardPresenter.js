@@ -1,5 +1,3 @@
-
-
 var ViewDashboardPresenter = function (model) {
 	this.helper = new ViewDashboardHelper();
 	this.helper.assert(model != null, "A model must be passed for the presenter work.")
@@ -40,7 +38,6 @@ ViewDashboardPresenter.prototype.userDashboardsViewModel = function(data) {
 	if (!hasFavorite && returnList.length > 0 ) {
 		returnList[0].isFavorite = 1;
 	}
-
 	return returnList;
 };
 
@@ -97,7 +94,7 @@ ViewDashboardPresenter.prototype.dashboardIndicatorsViewModel = function(data) {
 									: "normal";
 
 		//rounding
-		newObject.comparative =  Math.round(newObject.comparative*100)/100;
+		newObject.comparative =  Math.round(newObject.comparative * 100)/100;
 		newObject.comparative = ((newObject.comparative > 0) ? "+": "") + newObject.comparative;
 
 		newObject.percentComparative = (newObject.percentComparative != '--')
@@ -144,6 +141,7 @@ ViewDashboardPresenter.prototype.setStatusButtonWidthsAndDisplayValues = functio
 	var minPercent = 10;
 	var barsLessThanMin = [];
 	var barsNormal = [];
+	var barsNonZero = [];
 
 	var classifyBar = function (bar) {
 		if (bar.valueRounded <= minPercent && bar.valueRounded > 0) {
@@ -151,6 +149,12 @@ ViewDashboardPresenter.prototype.setStatusButtonWidthsAndDisplayValues = functio
 		} else {
 			barsNormal.push (bar)	
 		}
+	}
+
+	var nonZeroBar = function (bar) {
+		if (bar.valueRounded != null && bar.valueRounded > 0) {
+			barsNonZero.push (bar);
+		} 	
 	}
 
 	var atRisk = {
@@ -183,9 +187,37 @@ ViewDashboardPresenter.prototype.setStatusButtonWidthsAndDisplayValues = functio
 						? ""
 						: onTime.valueRounded + "%";
 
-	classifyBar(atRisk);
 	classifyBar(overdue);
+	classifyBar(atRisk);
 	classifyBar(onTime);
+
+	nonZeroBar(overdue);
+	nonZeroBar(atRisk);
+	nonZeroBar(onTime);
+
+	var valuesArray = barsNonZero.map(function (d) { return d.valueRounded; });
+	var completedTo100Sum = 100 - valuesArray.reduce(function(prev, curr, index, array) {
+														var acum = (index == valuesArray.length -1) 
+																	? prev
+																	: prev + curr;
+														return acum;
+													}, 0);
+
+	switch (barsNonZero.length) {
+		case 0:
+			barsNormal [0].valueToShow = "100%";
+			barsNormal [0].valueRounded = 100;
+			break;
+		case 1:
+			barsNonZero[0].valueToShow = "100%";
+			barsNonZero[0].valueRounded = 100;
+			break;
+		case 2:
+		case 3:
+			barsNonZero[barsNonZero.length - 1].valueToShow =  completedTo100Sum + "%";
+			barsNonZero[barsNonZero.length - 1].valueRounded =  completedTo100Sum;
+			break;
+	}
 
 	var widthToDivide = 100 - barsLessThanMin.length * minPercent;
 	var normalsSum = 0;
@@ -263,6 +295,8 @@ ViewDashboardPresenter.prototype.peiViewModel = function(data) {
 			"inefficiencyCost" : "value"
 		};
 		var newObject = that.helper.merge(originalObject, {}, map);
+        //the values do not come with a minus and moneny symbol, so we add them
+        newObject.valuePrefix = that.model.moneySymbol + " -";
 		graphData.push(newObject);
 		originalObject.efficiencyIndexToShow = that.roundedIndicatorValue(originalObject.efficiencyIndex);
 		//rounded to 1 decimal
@@ -294,6 +328,7 @@ ViewDashboardPresenter.prototype.ueiViewModel = function(data) {
 			"deviationTime" : "dispersion"
 		};
 		var newObject = that.helper.merge(originalObject, {}, map);
+        newObject.valuePrefix = that.model.moneySymbol + " -";
 		graphData.push(newObject);
 		originalObject.inefficiencyCostToShow = Math.round(originalObject.inefficiencyCost * 10)/10;
 		originalObject.efficiencyIndexToShow = that.roundedIndicatorValue(originalObject.efficiencyIndex);
@@ -333,7 +368,7 @@ ViewDashboardPresenter.prototype.statusViewModel = function(indicatorId, data) {
 		};
 		var newObject3 = {
 			datalabel : originalObject.taskTitle,
-			value : originalObject.percentageTotalOnTime
+			value : 100 - (originalObject.percentageTotalOverdue + originalObject.percentageTotalAtRisk)
 		};
 
 		if (newObject1.value > 0) {
@@ -429,6 +464,7 @@ ViewDashboardPresenter.prototype.returnIndicatorSecondLevelPei = function(modelD
 			"deviationTime" : "dispersion"
 		};
 		var newObject = that.helper.merge(originalObject, {}, map);
+        newObject.valuePrefix = that.model.moneySymbol + " -";
 		originalObject.inefficiencyCostToShow =  Math.round(originalObject.inefficiencyCost * 10) / 10;
 		originalObject.efficiencyIndexToShow = that.roundedIndicatorValue(originalObject.efficiencyIndex);
 		originalObject.deviationTimeToShow = Math.round(originalObject.deviationTime);
@@ -456,6 +492,7 @@ ViewDashboardPresenter.prototype.returnIndicatorSecondLevelUei = function(modelD
 			"deviationTime" : "dispersion"
 		};
 		var newObject = that.helper.merge(originalObject, {}, map);
+        newObject.valuePrefix = that.model.moneySymbol + " -";
 		originalObject.inefficiencyCostToShow = Math.round(originalObject.inefficiencyCost * 10) / 10;
 		originalObject.efficiencyIndexToShow = that.roundedIndicatorValue(originalObject.efficiencyIndex);
 		originalObject.deviationTimeToShow = Math.round(originalObject.deviationTime);

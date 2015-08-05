@@ -196,7 +196,7 @@ try {
     $aData['PRO_UID'] = $_SESSION['PROCESS'];
 
     if ($swpmdynaform) {
-        $aData['APP_DATA'] = array_merge($aData['APP_DATA'], $pmdynaform);
+        $aData['APP_DATA'] = array_merge($pmdynaform,$aData['APP_DATA']);
         $_POST["DynaformRequiredFields"] = '[]';
     }
 

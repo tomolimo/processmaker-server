@@ -634,15 +634,29 @@
             $dir = dirname($path)."/";
             $base = basename($path);
             
+            if (!class_exists('G')) {
+                $realdocuroot = str_replace( '\\', '/', $_SERVER['DOCUMENT_ROOT'] );
+                $docuroot = explode( '/', $realdocuroot );
+                array_pop( $docuroot );
+                $pathhome = implode( '/', $docuroot ) . '/';  
+                array_pop( $docuroot );
+                $pathTrunk = implode( '/', $docuroot ) . '/';  
+                require_once($pathTrunk.'gulliver/system/class.g.php');
+            }
+            G::LoadSystem('inputfilter');
+            $filter = new InputFilter();
+            
             foreach($options["props"] as $key => $prop) {
                 if ($prop["ns"] == "DAV:") {
                     $options["props"][$key]['status'] = "403 Forbidden";
                 } else {
                     if (isset($prop["val"])) {
-                        $query = "REPLACE INTO properties SET path = '$options[path]', name = '$prop[name]', ns= '$prop[ns]', value = '$prop[val]'";
+                        $query = "REPLACE INTO properties SET path = '%s', name = '%s', ns= '%s', value = '%s'";
+                        $query = $filter->preventSqlInjection($query, Array($options['path'],$prop['name'],$prop['ns'],$prop['val']));
                         error_log($query);
                     } else {
-                        $query = "DELETE FROM properties WHERE path = '$options[path]' AND name = '$prop[name]' AND ns = '$prop[ns]'";
+                        $query = "DELETE FROM properties WHERE path = '%s' AND name = '%s' AND ns = '%s'";
+                        $query = $filter->preventSqlInjection($query, Array($options['path'],$prop['name'],$prop['ns']));
                     }       
                     mysql_query($query);
                 }

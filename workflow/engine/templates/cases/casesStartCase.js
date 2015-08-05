@@ -6,8 +6,12 @@ Ext.FlashComponent.EXPRESS_INSTALL_URL = '/images/expressinstall.swf';
 // The Quicktips are used for the toolbar and Tree mouseover tooltips!
 
 // Refresh treePanel
-if (typeof(parent.timer) != 'undefined') {
-  parent.timer();
+try {
+  if (typeof(parent.timer) != 'undefined') {
+    parent.timer();
+  }
+} catch(theError) {
+  // This try-catch is for Zimbra error
 }
 
 

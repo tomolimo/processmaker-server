@@ -556,6 +556,24 @@ class OutputDocument extends BaseOutputDocument
         if (($sUID != '') && is_array($aFields) && ($sPath != '')) {
             $sContent = G::replaceDataGridField($sContent, $aFields);
 
+            if (strpos($sContent, '<!---{') !== false) {
+                $template = new Smarty();
+                $template->compile_dir      = PATH_SMARTY_C;
+                $template->cache_dir        = PATH_SMARTY_CACHE;
+                $template->config_dir       = PATH_THIRDPARTY . 'smarty/configs';
+                $template->caching          = false;
+                $template->left_delimiter   = '<!---{';
+                $template->right_delimiter  = '}--->';
+                $oFile = fopen($sPath .  $sFilename . '_smarty.html', 'wb');
+                fwrite($oFile, $sContent);
+                fclose($oFile);
+                $template->templateFile = $sPath . $sFilename . '_smarty.html';
+                //assign the variables and use the template $template
+                $template->assign($aFields);
+                $sContent = $template->fetch($template->templateFile);
+                unlink($template->templateFile);
+            }
+
             G::verifyPath($sPath, true);
 
             //Start - Create .doc

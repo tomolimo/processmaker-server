@@ -590,10 +590,10 @@ class ajax_con extends WebResource
             $sRepTabUid = "";
         }
 
-        $oCaseConsolidated = CaseConsolidatedPeer::retrieveByPK($sTasUid);
+        $oCaseConsolidated = CaseConsolidatedCorePeer::retrieveByPK($sTasUid);
 
         if (!(is_object($oCaseConsolidated)) || get_class($oCaseConsolidated) != 'CaseConsolidated') {
-            $oCaseConsolidated = new CaseConsolidated();
+            $oCaseConsolidated = new CaseConsolidatedCore();
             $oCaseConsolidated->setTasUid($sTasUid);
         }
 

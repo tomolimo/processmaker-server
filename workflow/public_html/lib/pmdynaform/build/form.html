@@ -22,7 +22,6 @@
         <script type="text/javascript" src="../libs/restclient/restclient.js"></script>
         <script type="text/javascript" src="../libs/restclient/restclient.js"></script>
         <script type="text/javascript" src="../libs/datepicker/bootstrap-datetimepicker.js"></script>
-
         <!--other-->
         <link rel="stylesheet" href="codemirror.css"/>
         <script src="codemirror.js"></script>
@@ -36,6 +35,7 @@
         </style>
     </head>
     <body style="padding-left:10px; display: block;">
+        
         <script type="text/template" id="fieldset-template">
 	<fieldset>
 	    <legend>Options</legend>
@@ -250,7 +250,7 @@
 									<%}%>
 				        			class="<%=namespace%>-control-<%=type%>"
 					        		value="<%=options[i].value%>" 
-					        		type="<%=type%>"
+					        		type="checkbox"
 					        		<% if(options[i].selected){%>checked<%}%>
 					        		<% if(disabled === true){%>disabled<%}%>>
 					        		<%if(dataType !== "boolean"){%>
@@ -782,7 +782,7 @@
 		</div>
 </script>
 <script type="text/template" id="tpl-grid">
-	<div id="field-<%=id%>" name="field-<%=name%>" class="<%=namespace%>-field-<%=type%> form-group col-sm-<%=colSpan%> col-md-<%=colSpan%> col-lg-<%=colSpan%> <%=namespace%>-<%=mode%>-<%=type%> <%=layout%>">
+	<div id="<%=id%>" name="field-<%=name%>" class="<%=namespace%>-field-<%=type%> form-group col-sm-<%=colSpan%> col-md-<%=colSpan%> col-lg-<%=colSpan%> <%=namespace%>-<%=mode%>-<%=type%> <%=layout%>">
 		<div class="<%=namespace%>-<%=type%>-new">
 			<p class="pmdynaform-grid-title"><span><%=title%></span>
 				<%if (hint !== "" && hint !== null) {%>
@@ -799,7 +799,7 @@
 		<div class="pmdynaform-grid-fields">
 			<div class="pmdynaform-grid">
 				<div class="row pmdynaform-grid-thead"></div>
-				<div id="<%=id%>" <% if(pager) {%> class="carousel slide" data-ride="carousel" <%}%> >
+				<div id="<%=id%>-body" <% if(pager) {%> class="carousel slide" data-ride="carousel" <%}%> >
 					<div class="<% if(pager) {%>carousel-inner <%}%> pmdynaform-grid-tbody pmdynaform-form"></div>
 					<%if (functions) {%>
 						<div class="pmdynaform-grid-functions">
@@ -817,11 +817,32 @@
 
 <script type="text/template" id="tpl-grid-pagination">
  	<ul class="pagination">
-		<li><a data-target="#<%=id%>" data-slide-to="0" href="#">&laquo;</a></li>
-		<%for (var i=0; i<paginationItems; i+=1) {%>
-			<li <%if(i === 0){%>class="active"<%}%> ><a data-target="#<%=id%>" data-slide-to="<%=i%>" class="active" href=""><%=i+1%></a></li>
+		<li class="toFirst"><a data-target="#<%=id%>" data-slide-to="0" href="#">&laquo;</a></li>
+		<% 
+		var pointer;
+		var display = ""; 
+		var sectionSize = 5;
+		var name;
+		for (var i=0; i<paginationItems; i+=1) {
+		    pointer = i+1;
+    		if(pointer > sectionSize && !paginationRotate) {
+                display = "none";
+    		}
+		%>	
+			<% 
+				name = "sec_" + i
+			%>
+			<li 
+				<%if(i === 0){%>
+					class = "sec_<%=i+1%>"
+				<%}else{%>
+					class = "sec_<%=i+1%>"
+				<%}%>
+			>
+			    <a data-target="#<%=id%>" data-slide-to="<%=i%>" href=""><%=pointer%></a>
+			</li>
 		<%}%>
-		<li><a data-target="#<%=id%>" data-slide-to="<%=paginationItems-1%>" href="">&raquo;</a></li>
+		<li class="toLast"><a data-target="#<%=id%>" data-slide-to="<%=paginationItems-1%>" href="">&raquo;</a></li>
 	</ul>
 </script>
 
@@ -841,11 +862,6 @@
 	  		<%}%>
         </label>
         <div class="col-lg-<%=colSpanControl%>">
-            <% if(fullscreen === true) {%>
-                <div class="pmdynaform-map-fullscreen">
-                    <button type="button">[...]</button>
-                </div>
-            <%}%>
             <% if(disabled === true) {%>
                 <div class="pmdynaform-map-layer-disabled"></div>
             <%}%>
@@ -954,10 +970,10 @@
 
 
 <script type="text/template" id="tpl-ext-scannercode">
-	<div id="field-<%=id%>" name="field-<%=name%>" class="<%=namespace%>-field-<%=type%> <%if (group === 'form'){%> form-group col-sm-<%=colSpan%> col-md-<%=colSpan%> col-lg-<%=colSpan%> <%}%> <%=namespace%>-<%=mode%>-<%=type%>">
+	<div id="<%=id%>" name="field-<%=name%>" class="<%=namespace%>-field-<%=type%> <%if (group === 'form'){%> form-group col-sm-<%=colSpan%> col-md-<%=colSpan%> col-lg-<%=colSpan%> <%}%> <%=namespace%>-<%=mode%>-<%=type%>">
 		<% if(group === "form") {%>
 			<label class="col-md-<%=colSpanLabel%> col-lg-<%=colSpanLabel%> control-label pmdynaform-label"> 
-	        	<span><%= label %></span>
+	        	<span class="textlabel"><%= label %></span>
 	            <%if(required){%>
 		  			<span class="pmdynaform-field-required">*</span>
 		  		<%}%>
@@ -1005,7 +1021,7 @@
 	<div id="<%=id%>" name="<%=name%>" class="<%=namespace%>-field-<%=type%> <%if (group === 'form'){%> form-group col-sm-<%=colSpan%> col-md-<%=colSpan%> col-lg-<%=colSpan%> <%}%> <%=namespace%>-<%=mode%>-<%=type%>">
 	    <% if(group === "form") {%>
 		    <label class="col-lg-<%=colSpanLabel%> control-label pmdynaform-label"> 
-		    	<span><%= label %></span>
+		    	<span class="textlabel"><%= label %></span>
 		        <%if(required){%>
 		  			<span class="pmdynaform-field-required">*</span>
 		  		<%}%>
@@ -1198,7 +1214,7 @@
 	<div id="<%=id%>" name="<%=name%>" class="<%=namespace%>-field-<%=type%> <%if (group === 'form'){%> form-group col-sm-<%=colSpan%> col-md-<%=colSpan%> col-lg-<%=colSpan%> <%}%> <%=namespace%>-<%=mode%>-<%=type%>">
 	    <% if(group === "form") {%>
 		    <label class="col-lg-<%=colSpanLabel%> control-label pmdynaform-label"> 
-		    	<span><%= label %></span>
+		    	<span class="textlabel"><%= label %></span>
 		        <%if(required){%>
 		  			<span class="pmdynaform-field-required">*</span>
 		  		<%}%>
@@ -1224,10 +1240,10 @@
 	</div>
 </script>
 <script type="text/template" id="tpl-ext-scannercode">
-	<div id="field-<%=id%>" name="field-<%=name%>" class="<%=namespace%>-field-<%=type%> <%if (group === 'form'){%> form-group col-sm-<%=colSpan%> col-md-<%=colSpan%> col-lg-<%=colSpan%> <%}%> <%=namespace%>-<%=mode%>-<%=type%>">
+	<div id="<%=id%>" name="field-<%=name%>" class="<%=namespace%>-field-<%=type%> <%if (group === 'form'){%> form-group col-sm-<%=colSpan%> col-md-<%=colSpan%> col-lg-<%=colSpan%> <%}%> <%=namespace%>-<%=mode%>-<%=type%>">
 		<% if(group === "form") {%>
 			<label class="col-md-<%=colSpanLabel%> col-lg-<%=colSpanLabel%> control-label pmdynaform-label"> 
-	        	<span><%= label %></span>
+	        	<span class="textlabel"><%= label %></span>
 	            <%if(required){%>
 		  			<span class="pmdynaform-field-required">*</span>
 		  		<%}%>
@@ -1275,7 +1291,7 @@
 	<div id="<%=id%>" name="<%=name%>" class="<%=namespace%>-field-<%=type%> <%if (group === 'form'){%> form-group col-sm-<%=colSpan%> col-md-<%=colSpan%> col-lg-<%=colSpan%> <%}%> <%=namespace%>-<%=mode%>-<%=type%>">
 	    <% if(group === "form") {%>
 		    <label class="col-lg-<%=colSpanLabel%> control-label pmdynaform-label"> 
-		    	<span><%= label %></span>
+		    	<span class="textlabel"><%= label %></span>
 		        <%if(required){%>
 		  			<span class="pmdynaform-field-required">*</span>
 		  		<%}%>
@@ -1301,11 +1317,26 @@
 	</div>
 </script>
 
+        <script type="text/javascript">
+          var pm_run_outside_main_app = 'true';
+          var dyn_uid = '229723097555a11781ed309062592560';
+          var __DynaformName__ = '498574572555a0fa9474b40040026428_229723097555a11781ed309062592560';
+          var app_uid = '363233990558d7efa2d9435051120245';
+          var prj_uid = '498574572555a0fa9474b40040026428';
+          var step_mode = 'EDIT';
+          var workspace = 'testAdmin';
+          var credentials = {"accessToken":"8fe8e4d149983315f51a78afece80c1ee78b1ea6","expiresIn":86400,"tokenType":"bearer","scope":"view_processes edit_processes *","refreshToken":"4066c01724611406e26046e33acf7111b11426d5","clientId":"x-pm-local-client","clientSecret":"179ad45c6ce2cb97cf1029e212046e81"};
+          var filePost = null;
+          var fieldsRequired = null;
+          var triggerDebug = true;
+        </script>
         <script type="text/javascript" src="../libs/underscore/underscore-1.6.js"></script>
         <script type="text/javascript" src="../libs/html5/html5.js"></script>
         <script type="text/javascript" src="../libs/respondjs/respond.min.js"></script>
         <script type="text/javascript" src="js/PMDynaform.js"></script>
+         <input id="run_script" type="button" value="run script"/>
         <script type="text/javascript" src="appBuild.js"></script>
+
         <h3 style="margin:10px 0px 0px 0px;">ProcessMaker - PMDynaform</h3>
         <span style="font-size:13px;">Please enter a valid json. (This json can be obtained from the form editor ProcessMaker). More examples in pmDynaform/data</span><br>
         <div style="display:inline-block;vertical-align:top; float : left;">
@@ -1316,6 +1347,7 @@
         </div>
         <div style="display:inline-block;vertical-align:top;width:100%;">
             <input id="test" type="button" value="run"/>
+            <input id="run_script" type="button" value="run script"/>
             <input id="desktop" type="button" value="desktop"/>
             <input id="tablet" type="button" value="tablet"/>
             <input id="smartphone" type="button" value="smartphone"/><br>    

@@ -1,30 +1,30 @@
-[8 days ago] 32739ee  IMPROVEMENT <Roly Rudy Gutierrez Pinto>
-[11 days ago] b36e4fd  PM-2348,PM-2469,PM-2470 <marcelo.cuiza>
-[11 days ago] ae9c074  PM-2930  PM-2171  PM-2734  PM-2677  PM-2537 <Roly Rudy Gutierrez Pinto>
-[2 weeks ago] 2092dcb  PM-2786 Enable editing the min, max and default date fields in the properties of datetime. <Roly Rudy Gutierrez Pinto>
-[3 weeks ago] 2a012c4  PM-2835 "Adicionar los siguientes features..." SOLVED <Victor Saisa Lopez>
-[3 weeks ago] e783f53  PM-2828 "In the BPMN Designer, can not connect..." SOLVED > Code Isuue:   0016744: In the BPMN Designer, can not connect to Oracle (and probably MS SQL) databases because no "Encode" options > Solution:   Cuando se selecciona la opcion en engine "oracle" no se mostraba los encodes. Se agrega los encodes para oracle. <Luis Fernando Saisa Lopez>
-[4 weeks ago] 9002977  Change color the title and subtitle <Roly Rudy Gutierrez Pinto>
-[5 weeks ago] a9a86f7  PM-2710 <Roly Rudy Gutierrez Pinto>
-[5 weeks ago] 8322739  PM-2701 "Designer > Event > Properties: muestra un mensaje de..." SOLVED <Victor Saisa Lopez>
-[6 weeks ago] 14c31bf  PM-2669 <marcelo.cuiza>
-[6 weeks ago] d38fd89  PM-2669 <marcelo.cuiza>
-[6 weeks ago] 8398116  PM-2669 <marcelo.cuiza>
-[6 weeks ago] 75823cd  PM-2068 "Designer > Event > Properties: muestra un mensaje de..." SOLVED <Victor Saisa Lopez>
-[6 weeks ago] 9c57661  IMPROVEMENT <Roly Rudy Gutierrez Pinto>
-[6 weeks ago] c4dc66b  update pm2577 <jonathan>
-[6 weeks ago] 42a1deb  udpate pm2577 <jonathan>
-[6 weeks ago] 0c4c0ff  pm2577 <jonathan>
-[6 weeks ago] 4045990  pm2590 <jonathan>
-[7 weeks ago] 3beaf85  PM-2670 "Designer>Input Documents>..." SOLVED > Code Isuue:   Designer > Input Documents > Create New: Al hacer click sobre el boton CANCEL cierra todo incluso el listado de input documents > Solution:   Al hacer click sobre el boton cancel se muestra el listado de input documents. <Luis Fernando Saisa Lopez>
-[7 weeks ago] db82391  PM-2682 Si se crean varios pools consecutivamente, el primero deja d funcionar correctamente <rodrigo quelca>
-[7 weeks ago] eb5098c  PM-2660 Adicion del permiso Summary Form <Brayan Pereyra>
-[7 weeks ago] c45c7ae  pm2611 <jonathan>
-[7 weeks ago] f365ec2  PM-2661 Exclusive/Inclusive Gateways: En Internet Explorer al modificar el orden de los routing rules las conexiones muestran el label null <rodrigo quelca>
-[7 weeks ago] 2930aaf  IMPROVEMENT <Roly Rudy Gutierrez Pinto>
-[7 weeks ago] 43f9803  PM-2638 "Designer>BPMN Designer>Button Create..." SOLVED > Code Isuue:   Designer > BPMN Designer > Button Create Input Documents: Al momento de hacer click en el icono "X", nos muestra el listado de Input Documents > Solution:   Cuando se realizar click sobre la "X" del formulario del input documents, se agrega validacion para que no se muestra el   listado tomando en cuenta que el listado se mostrara cuando se guarde los datos. <Luis Fernando Saisa Lopez>
-[7 weeks ago] 1b618d2  PM-2616 No se pueden seleccionar el "ID" en los dialogos <rodrigo quelca>
-[7 weeks ago] ef9eaa2  IMPROVEMENT <Roly Rudy Gutierrez Pinto>
-[7 weeks ago] c980bdb  p,2577 <jonathan>
-[7 weeks ago] cb0be00  PM-2560 Al momento de crear un Dynaform y presionar "ENTER" al ponerle el titulo al dynaform este se queda cargando <rodrigo quelca>
-[7 weeks ago] 0c4f94a  pm2640 v1 <jonathan>
+[15 minutes ago] 2fb44d3  enable bad end event conect <rodrigo quelca>
+[48 minutes ago] a83bf4d  disable connect to end event <rodrigo quelca>
+[3 hours ago] 0db2a2a  PM-3230 DesignerBPMN>Supervisors>No se puede ver los usuarios que tiene asignado el grupo. <dheeyi>
+[4 hours ago] 9e51820  PM-2907 3.0.1-GA <Roly Rudy Gutierrez Pinto>
+[4 hours ago] 09d5e52  DesignerBPMN>Supervisors>No se puede ver los usuarios que tiene asignado el grupo. <dheeyi>
+[4 hours ago] 78abc76  DesignerBPMN>Supervisors>No se puede ver los usuarios que tiene asignado el grupo. <dheeyi>
+[5 hours ago] 73e0e3b  PM-3069 <rodrigo quelca>
+[5 hours ago] 6b2c1ae  PM-3036 and PM-3044 <rodrigo quelca>
+[24 hours ago] 38f5a55  PM-3218 Designer > Designer BPMN > Task Properties > Action By Email: No se puede guardar la configuracion de las propiedades. <dheeyi>
+[24 hours ago] 3b20354  test <dheeyi>
+[5 days ago] 3142b9e  New Project>Supervisor: La pantalla emergente de edicion de un supervisor dice variables SOLVED en la pantalla de asignacion de supervisores cuando se salia sin guardar manda una alerta que su titulo no estaba deacuerdo con la ventana anterior se soluciono cambiando el titulo de forma ahora ya hay continuidad <Ricardo Viscarra>
+[11 days ago] 4b8837c  PM-3004 "TNS: Si configuras una coneccion a BD..." SOLVED <Luis Fernando Saisa Lopez>
+[12 days ago] 74d66d3  Complete UX of message types screen <dheeyi>
+[13 days ago] 2e83864  PM-2978 Complete UX of message types screen <dheeyi>
+[13 days ago] 1dde773  PM-2978 Complete UX of message types screen <dheeyi>
+[2 weeks ago] 290fa2e  PM-3109 <marcelo.cuiza>
+[2 weeks ago] 0a28b3f  PM-3119 <Roly Rudy Gutierrez Pinto>
+[2 weeks ago] 17e0f32  PM-2949 <Roly Rudy Gutierrez Pinto>
+[2 weeks ago] 6451969  PM-3116 <Roly Rudy Gutierrez Pinto>
+[2 weeks ago] 4e85c7d  PM-3116 <Roly Rudy Gutierrez Pinto>
+[2 weeks ago] 1b8ae43  casesTracker colores invertidos de botones "yes", "no" <marcelo.cuiza>
+[2 weeks ago] 1308ca7  PM-2878 Cambiar estandarizar el UX/diseñe las grillas <dheeyi>
+[2 weeks ago] 6ec82ec  PM-3119 <Roly Rudy Gutierrez Pinto>
+[2 weeks ago] 1c184a1  PM-3119 <Roly Rudy Gutierrez Pinto>
+[2 weeks ago] dc552c9  PM-2879, PM-2878 y PM-2868 <dheeyi>
+[2 weeks ago] 4570d3a  PM-3004 "TNS: Si configuras una coneccion a BD..." SOLVED <Luis Fernando Saisa Lopez>
+[2 weeks ago] 6c4529d  PM-3116 <Roly Rudy Gutierrez Pinto>
+[3 weeks ago] 1ff523b  PM-3116 <Roly Rudy Gutierrez Pinto>
+[3 weeks ago] 924a281  PM-3004 "TNS: Si configuras una coneccion a BD..." SOLVED <Luis Fernando Saisa Lopez>
+[3 weeks ago] 0ee14cc  IMPROVEMENT <Roly Rudy Gutierrez Pinto>

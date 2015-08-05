@@ -212,6 +212,7 @@ CREATE TABLE `DYNAFORM`
 	`DYN_CONTENT` MEDIUMTEXT,
 	`DYN_LABEL` MEDIUMTEXT,
 	`DYN_VERSION` INTEGER  NOT NULL,
+	`DYN_UPDATE_DATE` DATETIME NOT NULL,
 	PRIMARY KEY (`DYN_UID`)
 )ENGINE=InnoDB  DEFAULT CHARSET='utf8' COMMENT='Forms required';
 #-----------------------------------------------------------------------------
@@ -429,6 +430,8 @@ CREATE TABLE `PROCESS`
 	`PRO_DEBUG` INTEGER default 0 NOT NULL,
 	`PRO_DYNAFORMS` MEDIUMTEXT,
 	`PRO_DERIVATION_SCREEN_TPL` VARCHAR(128) default '',
+    `PRO_COST` DECIMAL(7,2) default 0,
+    `PRO_UNIT_COST` VARCHAR(50) default '',
 	PRIMARY KEY (`PRO_UID`)
 )ENGINE=InnoDB  DEFAULT CHARSET='utf8' COMMENT='Store process Information';
 #-----------------------------------------------------------------------------
@@ -806,7 +809,7 @@ CREATE TABLE `DB_SOURCE`
 	`DBS_SERVER` VARCHAR(100) default '0' NOT NULL,
 	`DBS_DATABASE_NAME` VARCHAR(100) default '0' NOT NULL,
 	`DBS_USERNAME` VARCHAR(32) default '0' NOT NULL,
-	`DBS_PASSWORD` VARCHAR(32) default '',
+	`DBS_PASSWORD` VARCHAR(256) default '',
 	`DBS_PORT` INTEGER default 0,
 	`DBS_ENCODE` VARCHAR(32) default '',
 	`DBS_CONNECTION_TYPE` VARCHAR(32) default 'NORMAL',
@@ -1329,11 +1332,12 @@ CREATE TABLE `CASE_SCHEDULER`
 	`SCH_EVERY_DAYS` TINYINT default 0,
 	`SCH_WEEK_DAYS` CHAR(14) default '0|0|0|0|0|0|0' NOT NULL,
 	`SCH_START_DAY` CHAR(6) default '' NOT NULL,
-	`SCH_MONTHS` CHAR(24) default '0|0|0|0|0|0|0|0|0|0|0|0' NOT NULL,
+ `SCH_MONTHS` CHAR(27) default '0|0|0|0|0|0|0|0|0|0|0|0' NOT NULL,
 	`SCH_END_DATE` DATETIME,
 	`SCH_REPEAT_EVERY` VARCHAR(15) default '' NOT NULL,
 	`SCH_REPEAT_UNTIL` VARCHAR(15) default '' NOT NULL,
 	`SCH_REPEAT_STOP_IF_RUNNING` TINYINT default 0,
+ `SCH_EXECUTION_DATE` DATETIME,
 	`CASE_SH_PLUGIN_UID` VARCHAR(100),
 	PRIMARY KEY (`SCH_UID`)
 )ENGINE=InnoDB  DEFAULT CHARSET='utf8' COMMENT='Conditions store to show or hide dynaform fields..';
@@ -2699,20 +2703,23 @@ DROP TABLE IF EXISTS `USR_REPORTING`;
 
 CREATE TABLE `USR_REPORTING`
 (
-    `USR_UID`               VARCHAR(32)  NOT NULL,
-    `TAS_UID`               VARCHAR(32)  NOT NULL,
-    `PRO_UID`               VARCHAR(32)  NOT NULL,
-    `MONTH`                 INTEGER default 0 NOT NULL,
-    `YEAR`                  INTEGER default 0 NOT NULL,
-    `TOTAL_TIME_BY_TASK`    DECIMAL(7,2) default 0,
-    `TOTAL_CASES_IN`        DECIMAL(7,2) default 0,
-    `TOTAL_CASES_OUT`       DECIMAL(7,2) default 0,
-    `USER_HOUR_COST`        DECIMAL(7,2) default 0,
-    `AVG_TIME`              DECIMAL(7,2) default 0,
-    `SDV_TIME`              DECIMAL(7,2) default 0,
-    `CONFIGURED_TASK_TIME`  DECIMAL(7,2) default 0,
-    `TOTAL_CASES_OVERDUE`   DECIMAL(7,2) default 0,
-    `TOTAL_CASES_ON_TIME`   DECIMAL(7,2) default 0,
+    `USR_UID`                   VARCHAR(32)  NOT NULL,
+    `TAS_UID`                   VARCHAR(32)  NOT NULL,
+    `PRO_UID`                   VARCHAR(32)  NOT NULL,
+    `MONTH`                     INTEGER default 0 NOT NULL,
+    `YEAR`                      INTEGER default 0 NOT NULL,
+    `TOTAL_QUEUE_TIME_BY_TASK`  DECIMAL(7,2) default 0,
+    `TOTAL_TIME_BY_TASK`        DECIMAL(7,2) default 0,
+    `TOTAL_CASES_IN`            DECIMAL(7,2) default 0,
+    `TOTAL_CASES_OUT`           DECIMAL(7,2) default 0,
+    `USER_HOUR_COST`            DECIMAL(7,2) default 0,
+    `AVG_TIME`                  DECIMAL(7,2) default 0,
+    `SDV_TIME`                  DECIMAL(7,2) default 0,
+    `CONFIGURED_TASK_TIME`      DECIMAL(7,2) default 0,
+    `TOTAL_CASES_OVERDUE`       DECIMAL(7,2) default 0,
+    `TOTAL_CASES_ON_TIME`       DECIMAL(7,2) default 0,
+    `PRO_COST`                  DECIMAL(7,2) default 0,
+    `PRO_UNIT_COST`             VARCHAR(50) default '',
     PRIMARY KEY (`USR_UID`, `TAS_UID`,`MONTH`,`YEAR`),
     KEY `indexReporting`(`USR_UID`, `TAS_UID`, `PRO_UID`)
 )ENGINE=InnoDB  DEFAULT CHARSET='utf8' COMMENT='Data calculated users by task';
@@ -2737,6 +2744,8 @@ CREATE TABLE `PRO_REPORTING`
     `TOTAL_CASES_OPEN`          DECIMAL(7,2) default 0,
     `TOTAL_CASES_OVERDUE`       DECIMAL(7,2) default 0,
     `TOTAL_CASES_ON_TIME`       DECIMAL(7,2) default 0,
+    `PRO_COST` DECIMAL(7,2) default 0,
+    `PRO_UNIT_COST` VARCHAR(50) default '',
     PRIMARY KEY (`PRO_UID`,`MONTH`,`YEAR`)
 )ENGINE=InnoDB  DEFAULT CHARSET='utf8' COMMENT='Data calculated by process';
 #-----------------------------------------------------------------------------
@@ -2821,5 +2830,67 @@ CREATE TABLE `CATALOG`
     PRIMARY KEY (`CAT_UID`, `CAT_TYPE`),
     KEY `indexType`( `CAT_TYPE`)
 )ENGINE=InnoDB  DEFAULT CHARSET='utf8' COMMENT='Definitions catalog.';
+
+#-----------------------------------------------------------------------------
+#-- TABLE: SCRIPT_TASK
+#-----------------------------------------------------------------------------
+
+DROP TABLE IF EXISTS SCRIPT_TASK;
+
+CREATE TABLE SCRIPT_TASK
+(
+  SCRTAS_UID      VARCHAR(32) NOT NULL,
+  PRJ_UID         VARCHAR(32) NOT NULL,
+  ACT_UID         VARCHAR(32) NOT NULL,
+  SCRTAS_OBJ_TYPE VARCHAR(10) default 'TRIGGER' NOT NULL,
+  SCRTAS_OBJ_UID  VARCHAR(32) NOT NULL,
+
+  PRIMARY KEY (SCRTAS_UID)
+)ENGINE=InnoDB DEFAULT CHARSET='utf8';
+
+#-----------------------------------------------------------------------------
+#-- TIMER_EVENT
+#-----------------------------------------------------------------------------
+
+DROP TABLE IF EXISTS TIMER_EVENT;
+
+CREATE TABLE TIMER_EVENT
+(
+    TMREVN_UID                 VARCHAR(32) NOT NULL,
+    PRJ_UID                    VARCHAR(32) NOT NULL,
+    EVN_UID                    VARCHAR(32) NOT NULL,
+    TMREVN_OPTION              VARCHAR(50) default 'DAILY' NOT NULL,
+    TMREVN_START_DATE          DATE,
+    TMREVN_END_DATE            DATE,
+    TMREVN_DAY                 VARCHAR(5) default '' NOT NULL,
+    TMREVN_HOUR                VARCHAR(5) default '' NOT NULL,
+    TMREVN_MINUTE              VARCHAR(5) default '' NOT NULL,
+    TMREVN_CONFIGURATION_DATA  MEDIUMTEXT default '' NOT NULL,
+    TMREVN_NEXT_RUN_DATE       DATETIME,
+    TMREVN_LAST_RUN_DATE       DATETIME,
+    TMREVN_LAST_EXECUTION_DATE DATETIME,
+    TMREVN_STATUS              VARCHAR(25) default 'ACTIVE' NOT NULL,
+
+    PRIMARY KEY (TMREVN_UID)
+)ENGINE=InnoDB DEFAULT CHARSET='utf8';
+
+#-----------------------------------------------------------------------------
+#-- EMAIL_EVENT
+#-----------------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `EMAIL_EVENT`;
+CREATE TABLE `EMAIL_EVENT`
+(
+	`EMAIL_EVENT_UID` VARCHAR(32)  NOT NULL,
+	`PRJ_UID` VARCHAR(32) default '' NOT NULL,
+	`EVN_UID` VARCHAR(32)  NOT NULL,
+	`EMAIL_EVENT_FROM` VARCHAR(100) default '' NOT NULL,
+	`EMAIL_EVENT_TO` MEDIUMTEXT  NOT NULL,
+	`EMAIL_EVENT_SUBJECT` VARCHAR(150) default '' NOT NULL,
+	`PRF_UID` VARCHAR(32) default '' NOT NULL,
+	PRIMARY KEY (`EMAIL_EVENT_UID`)
+)ENGINE=InnoDB  DEFAULT CHARSET='utf8';
+
 # This restores the fkey checks, after having unset them earlier
 SET FOREIGN_KEY_CHECKS = 1;
+

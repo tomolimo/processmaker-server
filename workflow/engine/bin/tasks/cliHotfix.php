@@ -4,7 +4,7 @@ CLI::taskName("hotfix-install");
 CLI::taskDescription(<<<EOT
     Install hotfix to system
 
-    This command is executed when you want to update certain files, which have improvements or bugs solutions.
+    This command installs a hotfix, which updates ProcessMaker in order to add improvements or fix bugs.
 EOT
 );
 

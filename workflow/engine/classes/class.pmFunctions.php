@@ -242,6 +242,7 @@ function executeQuery ($SqlStatement, $DBConnectionUID = 'workflow', $aParameter
 {
     $con = Propel::getConnection( $DBConnectionUID );
     $con->begin();
+
     try {
         $statement = trim( $SqlStatement );
         $statement = str_replace( '(', '', $statement );
@@ -304,9 +305,9 @@ function executeQuery ($SqlStatement, $DBConnectionUID = 'workflow', $aParameter
  * @label order Grid
  * @link http://wiki.processmaker.com/index.php/ProcessMaker_Functions#orderGrid.28.29
  *
- * @param array | $dataM | User ID | A grid, which is a numbered array containing associative arrays with field names and their values, it has to be set like this "@=".
+ * @param array | $dataM | Grid Name | A grid, which is a numbered array containing associative arrays with field names and their values, it has to be set like this "@=".
  * @param string(32) | $field | Name of field | The name of the field by which the grid will be sorted.
- * @param string(32) | $ord = "ASC"| Optional parameter | Optional parameter. The order which can either be 'ASC' (ascending) or 'DESC' (descending). If not included, 'ASC' will be used by default.
+ * @param string(32) | $ord = "ASC"| Optional parameter (Criteria) | Optional parameter. The order which can either be 'ASC' (ascending) or 'DESC' (descending). If not included, 'ASC' will be used by default.
  * @return array | $dataM | Grid Sorted | Grid sorted
  *
  */
@@ -2103,7 +2104,7 @@ function PMFAssignUserToGroup ($userId, $groupId)
  * @label PMF Create User
  * @link http://wiki.processmaker.com/index.php/ProcessMaker_Functions#PMFCreateUser.28.29
  *
- * @param string(32) | $userId | User ID | The username for the new user.
+ * @param string(32) | $userId | User Name | The username for the new user.
  * @param string(32) | $password | Password of the new user | The password of the new user, which can be up to 32 characters long.
  * @param string(32) | $firstname | Firstname of the new user | The first name of the user, which can be up to 50 characters long.
  * @param string(32) | $lastname | Lastname of the new user | The last name of the user, which can be up to 50 characters long.
@@ -2874,7 +2875,6 @@ function PMFRemoveMask ($field, $separator = '.', $currency = '')
     if(strpos($decimalSeparator, $field) !== false){
         $field = (float)(trim($field));
     }
-
     return $field;
 }
 

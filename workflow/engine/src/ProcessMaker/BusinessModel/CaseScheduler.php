@@ -897,7 +897,6 @@ class CaseScheduler
             $sDaysPerformTask = "";
             $sWeeks = "";
             $sMonths = "";
-            $sStartDay = "";
 
             switch ($option) {
                 case "INS":
@@ -992,141 +991,53 @@ class CaseScheduler
                     }
 
                     $arrayCaseSchedulerData["SCH_MONTHS"] = $sMonths;
-                    $sStartDay = $arrayCaseSchedulerData["SCH_START_DAY"];
                     $sValue = $nStartDay;
                     break;
             }
 
             $caseScheduler = new \CaseScheduler();
 
+            $recalculateDate = false;
+            $recalculateTime = false;
+
             switch ($option) {
                 case "INS":
+                    $recalculateDate = true;
+                    $recalculateTime = true;
                     break;
                 case "UPD":
                     $arrayDataAux = $caseScheduler->load($caseSchedulerUid);
 
-                    if ($arrayData["SCH_END_DATE"] != "") {
-                        $arrayCaseSchedulerData["SCH_END_DATE"] = $arrayData["SCH_END_DATE"];
-                    }
+                    $arrayCaseSchedulerData["SCH_END_DATE"] = ($arrayData["SCH_END_DATE"] != "")? $arrayData["SCH_END_DATE"] : null;
 
                     //If the start date has changed then recalculate the next run time
-                    $recalculateDate = ($arrayData["SCH_START_DATE"] == $arrayData["PREV_SCH_START_DATE"])? false : true;
-                    $recalculateTime = (date("H:i:s", strtotime($arrayData["SCH_START_TIME"])) == date("H:i:s", strtotime($arrayData["PREV_SCH_START_TIME"])))? false : true;
+                    $recalculateDate = ($arrayData["SCH_START_DATE"] != $arrayData["PREV_SCH_START_DATE"])? true : false;
+                    $recalculateTime = (date("H:i:s", strtotime($arrayData["SCH_START_TIME"])) != date("H:i:s", strtotime($arrayData["PREV_SCH_START_TIME"])))? true : false;
                     break;
             }
 
-            $nActualTime = $arrayData["SCH_START_TIME"];
-
-            if ($caseSchedulerOption != 1 && $caseSchedulerOption != 4 && $caseSchedulerOption != 5) {
-                if ($sStartDay == "") {
-                    $sStartDay = date("Y-m-d");
-                }
-
-                $dCurrentDay = (int)(date("d"));
-                $dCurrentMonth = (int)(date("m"));
-
-                $aStartDay = explode("|", $arrayCaseSchedulerData["SCH_START_DAY"]);
-
-                if ($caseSchedulerOption == 3 && $aStartDay[0] == "1") {
-                    $monthsArray = explode("|", $sMonths);
-
-                    foreach ($monthsArray as $row) {
-                        switch ($option) {
-                            case "INS":
-                                if ((int)($row) == $dCurrentMonth && $dCurrentDay <= (int)($aStartDay[1])) {
-                                    $startTime = $arrayData["SCH_START_TIME"] . ":00";
-                                    $arrayCaseSchedulerData["SCH_TIME_NEXT_RUN"] = date("Y") . "-" . $row . "-" . $aStartDay[1] . " " . $startTime;
-                                    break;
-                                } else {
-                                    $arrayCaseSchedulerData["SCH_TIME_NEXT_RUN"] = $caseScheduler->updateNextRun($caseSchedulerOption, $sValue, $nActualTime, $sDaysPerformTask, $sWeeks, $sStartDay, $sMonths, $sDateTmp, false);
-                                }
-                                break;
-                            case "UPD":
-                                if ($dCurrentMonth == $row && $dCurrentDay < $aStartDay[1]) {
-                                    $startTime = $arrayData["SCH_START_TIME"] . ":00";
-
-                                    if ($recalculateDate) {
-                                        $arrayCaseSchedulerData["SCH_TIME_NEXT_RUN"] = date("Y") . "-" . $row . "-" . $aStartDay[1] . " " . $startTime;
-                                    } else {
-                                        if ($recalculateTime) {
-                                            $arrayCaseSchedulerData["SCH_TIME_NEXT_RUN"] = $caseScheduler->getSchTimeNextRun("Y-m-d") . " " . $arrayData["SCH_START_TIME"] . ":00";
-                                        }
-                                    }
-                                    break;
-                                } else {
-                                    if ($recalculateDate) {
-                                        $arrayCaseSchedulerData["SCH_TIME_NEXT_RUN"] = $caseScheduler->updateNextRun($caseSchedulerOption, $sValue, $nActualTime, $sDaysPerformTask, $sWeeks, $sStartDay, $sMonths, $sDateTmp, false);
-                                    } else {
-                                        if ($recalculateTime) {
-                                            $arrayCaseSchedulerData["SCH_TIME_NEXT_RUN"] = $caseScheduler->getSchTimeNextRun("Y-m-d") . " " . $arrayData["SCH_START_TIME"] . ":00";
-                                        }
-                                    }
-                                }
-                                break;
-                        }
-                    }
-                } else {
-                    switch ($option) {
-                        case "INS":
-                            $arrayCaseSchedulerData["SCH_TIME_NEXT_RUN"] = $caseScheduler->updateNextRun($caseSchedulerOption, $sValue, $nActualTime, $sDaysPerformTask, $sWeeks, $sStartDay, $sMonths, $sDateTmp, false);
-                            break;
-                        case "UPD":
-                            if ($recalculateDate) {
-                                $arrayCaseSchedulerData["SCH_TIME_NEXT_RUN"] = $caseScheduler->updateNextRun($caseSchedulerOption, $sValue, $nActualTime, $sDaysPerformTask, $sWeeks, $sStartDay, $sMonths, $sDateTmp, false);
-                            } else {
-                                if ($recalculateTime) {
-                                    $arrayCaseSchedulerData["SCH_TIME_NEXT_RUN"] = $caseScheduler->getSchTimeNextRun("Y-m-d") . " " . $arrayData["SCH_START_TIME"] . ":00";
-                                }
-                            }
-                            break;
-                    }
-                }
-            } else {
-                if ($caseSchedulerOption == 4) {
-                    $arrayCaseSchedulerData["SCH_END_DATE"] = $arrayCaseSchedulerData["SCH_START_TIME"];
-                }
-
-                switch ($option) {
-                    case "INS":
-                        $arrayCaseSchedulerData["SCH_TIME_NEXT_RUN"] = $arrayCaseSchedulerData["SCH_START_TIME"];
-                        break;
-                    case "UPD":
-                        if ($recalculateDate) {
-                            $arrayCaseSchedulerData["SCH_TIME_NEXT_RUN"] = $arrayCaseSchedulerData["SCH_START_TIME"];
-                        } else {
-                            if ($recalculateTime) {
-                                $arrayCaseSchedulerData["SCH_TIME_NEXT_RUN"] = $caseScheduler->getSchTimeNextRun("Y-m-d") . " " . $arrayData["SCH_START_TIME"] . ":00";
-                            }
-                        }
-                        break;
-                }
-
-                if ($caseSchedulerOption == 5) {
+            switch ($caseSchedulerOption) {
+                case 4:
+                    //$arrayCaseSchedulerData["SCH_END_DATE"] = $arrayCaseSchedulerData["SCH_START_TIME"];
+                    break;
+                case 5:
                     switch ($option) {
                         case "INS":
                             $arrayCaseSchedulerData["SCH_START_TIME"] = time();
                             $arrayCaseSchedulerData["SCH_START_DATE"] = $arrayCaseSchedulerData["SCH_START_TIME"];
-
-                            $date = $arrayCaseSchedulerData["SCH_START_TIME"];
                             break;
                         case "UPD":
-                            $date = $caseScheduler->getSchLastRunTime();
-
-                            if (is_null($date)) {
-                                $date = $caseScheduler->getSchStartTime();
-                            }
-
-                            $date = strtotime($date);
                             break;
                     }
 
-                    $arrayCaseSchedulerData["SCH_REPEAT_EVERY"]  = $arrayData["SCH_REPEAT_EVERY"];
-                    $arrayCaseSchedulerData["SCH_TIME_NEXT_RUN"] = date("Y-m-d H:i", $date + (((int)($arrayData["SCH_REPEAT_EVERY"])) * 60 * 60));
-                }
+                    $arrayCaseSchedulerData["SCH_REPEAT_EVERY"] = $arrayData["SCH_REPEAT_EVERY"];
+                    break;
             }
 
             switch ($option) {
                 case "INS":
+                    $arrayCaseSchedulerData["SCH_TIME_NEXT_RUN"] = date("Y-m-d") . " " . (($caseSchedulerOption != 5)? $arrayData["SCH_START_TIME"] . ":00" : date("H:i:s"));
+
                     if ($arrayData["SCH_END_DATE"] != "") {
                         $arrayCaseSchedulerData["SCH_END_DATE"] = $arrayData["SCH_END_DATE"];
                     }
@@ -1135,26 +1046,71 @@ class CaseScheduler
                     break;
             }
 
-            if (!empty($arrayData["SCH_REPEAT_TASK_CHK"])) {
-                if ($arrayData["SCH_REPEAT_EVERY_OPT"] . "" == "2") {
-                    $arrayCaseSchedulerData["SCH_REPEAT_EVERY"] = ((int)($arrayData["SCH_REPEAT_EVERY"])) * 60;
-                } else {
-                    $arrayCaseSchedulerData["SCH_REPEAT_EVERY"] = (int)($arrayData["SCH_REPEAT_EVERY"]);
-                }
-            }
+            //if (!empty($arrayData["SCH_REPEAT_TASK_CHK"])) {
+            //    if ($arrayData["SCH_REPEAT_EVERY_OPT"] . "" == "2") {
+            //        $arrayCaseSchedulerData["SCH_REPEAT_EVERY"] = ((int)($arrayData["SCH_REPEAT_EVERY"])) * 60;
+            //    } else {
+            //        $arrayCaseSchedulerData["SCH_REPEAT_EVERY"] = (int)($arrayData["SCH_REPEAT_EVERY"]);
+            //    }
+            //}
 
             //Create/Update
+            $caseSchedulerAux = new \CaseScheduler();
+
+            $caseSchedulerUid = "";
+            $arrayCaseSchedulerDataOld = array();
+
             switch ($option) {
                 case "INS":
                     if (isset($arrayData["CASE_SH_PLUGIN_UID"]) && $arrayData["CASE_SH_PLUGIN_UID"] != "") {
                         $arrayCaseSchedulerData["CASE_SH_PLUGIN_UID"] = $arrayData["CASE_SH_PLUGIN_UID"];
                     }
 
-                    $caseScheduler->create($arrayCaseSchedulerData);
+                    $result = $caseScheduler->create($arrayCaseSchedulerData);
+
+                    $caseSchedulerUid = $caseScheduler->getSchUid();
+                    $arrayCaseSchedulerDataOld = $caseSchedulerAux->load($caseSchedulerUid);
                     break;
                 case "UPD":
-                    $caseScheduler->update($arrayCaseSchedulerData);
+                    $caseSchedulerUid = $caseScheduler->getSchUid();
+                    $arrayCaseSchedulerDataOld = $caseSchedulerAux->load($caseSchedulerUid);
+
+                    $result = $caseScheduler->update($arrayCaseSchedulerData);
                     break;
+            }
+
+            //Update the SCH_TIME_NEXT_RUN field
+            $caseScheduler = new \CaseScheduler();
+
+            $arrayCaseSchedulerData = $caseScheduler->load($caseSchedulerUid);
+
+            $flagUpdateTimeNextRun = false;
+
+            switch ((int)($arrayCaseSchedulerData["SCH_OPTION"])) {
+                case 1:
+                    //Daily
+                    $flagUpdateTimeNextRun = $recalculateDate || $recalculateTime;
+                    break;
+                case 2:
+                    //Weekly
+                    $flagUpdateTimeNextRun = $recalculateDate || $recalculateTime || $arrayCaseSchedulerData["SCH_WEEK_DAYS"] != $arrayCaseSchedulerDataOld["SCH_WEEK_DAYS"];
+                    break;
+                case 3:
+                    //Monthly
+                    $flagUpdateTimeNextRun = $recalculateDate || $recalculateTime || $arrayCaseSchedulerData["SCH_START_DAY"] != $arrayCaseSchedulerDataOld["SCH_START_DAY"] || $arrayCaseSchedulerData["SCH_MONTHS"] != $arrayCaseSchedulerDataOld["SCH_MONTHS"];
+                    break;
+                case 4:
+                    //One time only
+                    $flagUpdateTimeNextRun = $recalculateTime || $arrayCaseSchedulerData["SCH_START_TIME"] != $arrayCaseSchedulerDataOld["SCH_START_TIME"];
+                    break;
+                case 5:
+                    //Every
+                    $flagUpdateTimeNextRun = $option == "INS" || $arrayCaseSchedulerData["SCH_REPEAT_EVERY"] != $arrayCaseSchedulerDataOld["SCH_REPEAT_EVERY"];
+                    break;
+            }
+
+            if ($flagUpdateTimeNextRun) {
+                $caseSchedulerTimeNextRunNew = $caseScheduler->getTimeNextRunByDate($arrayCaseSchedulerData, date("Y-m-d H:i:s"));
             }
 
             //Plugin

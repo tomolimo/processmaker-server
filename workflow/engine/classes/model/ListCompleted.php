@@ -104,7 +104,9 @@ class ListCompleted extends BaseListCompleted
         BasePeer::doUpdate($criteriaWhere, $criteriaSet, Propel::getConnection("workflow"));
 
         $users = new Users();
-        $users->refreshTotal($data['USR_UID'], 'add', 'completed');
+        if($data['USR_UID'] != ''){
+            $users->refreshTotal($data['USR_UID'], 'add', 'completed');
+        }
         if ($data['DEL_PREVIOUS'] != 0) {
             $criteria = new Criteria();
             $criteria->addSelectColumn(TaskPeer::TAS_TYPE);

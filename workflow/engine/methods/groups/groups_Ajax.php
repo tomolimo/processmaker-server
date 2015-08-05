@@ -194,6 +194,12 @@ switch ($_POST['action']) {
         $criteria->add(ProcessUserPeer::USR_UID, $_POST['GRP_UID']);
         $criteria->add(ProcessUserPeer::PU_TYPE, 'GROUP_SUPERVISOR');
         ProcessUserPeer::doDelete( $criteria );
+        
+        //Delete group users
+        require_once 'classes/model/GroupUser.php';
+        $criteria = new Criteria( 'workflow' );
+        $criteria->add(GroupUserPeer::GRP_UID, $_POST['GRP_UID']);
+        GroupUserPeer::doDelete( $criteria );
 
         echo '{success: true}';
         break;

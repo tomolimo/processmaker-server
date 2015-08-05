@@ -1,19 +1,37 @@
 var setVariablePickerJS = function(){       
    if (document.getElementById('_Var_Form_').addEventListener)  // W3C DOM
       document.getElementById('_Var_Form_').addEventListener('dblclick', function(){
-        if (this.getAttribute('displayOption')=='event'){
-            e.insertFormVar(this.value.substring(2), this.value.substring(2), 'dyn' );
+        if(this.value.substring(0,5) == 'gridt') {
+            try {
+                updateEditorContent(this.value.substring(5));
+                closePluginPopup();
+            } catch(err) {
+                closePluginPopup();
+            }
         } else {
-            insertFormVar(document.getElementById('selectedField').value, this.value);
+            if (this.getAttribute('displayOption')=='event'){
+                e.insertFormVar(this.value.substring(2), this.value.substring(2), 'dyn' );
+            } else {
+                insertFormVar(document.getElementById('selectedField').value, this.value);
+            }
         }
       });
    else if (document.getElementById('selectedField').attachEvent) { // IE DOM
       var element = document.getElementById('_Var_Form_');
       element.attachEvent("ondblclick", function(){
-          if (element.displayOption=='event'){
-              e.insertFormVar(element.value.substring(2), element.value.substring(2), 'dyn' );
-          } else {
-              insertFormVar(document.getElementById('selectedField').value, element.value);
+          if(element.value.substring(0,5) == 'gridt') { 
+            try {
+                updateEditorContent(element.value.substring(5));
+                closePluginPopup();
+            } catch(err) {
+                closePluginPopup();
+            }
+          } else {         
+              if (element.displayOption=='event'){
+                  e.insertFormVar(element.value.substring(2), element.value.substring(2), 'dyn' );
+              } else {
+                  insertFormVar(document.getElementById('selectedField').value, element.value);
+              }
           }
       });
    }
@@ -99,7 +117,12 @@ var setVariablePickerJS = function(){
     });
 
     leimnud.event.add(document.getElementById('_Var_Form_'), 'change', function(event) {
-        document.getElementById('selectedVariableLabel').textContent = document.getElementById('_Var_Form_').value
+        var selectElement = document.getElementById('_Var_Form_');
+        if(selectElement.value.substring(0,5) == 'gridt') {
+            document.getElementById('selectedVariableLabel').textContent = selectElement.options[selectElement.selectedIndex].text;
+        } else {
+            document.getElementById('selectedVariableLabel').textContent = selectElement.value
+        }
     });    
 
     leimnud.event.add(document.getElementById('search'), 'keypress', function(e) {
@@ -130,6 +153,7 @@ var setVariablePickerJS = function(){
         var list = getVariableList(document.getElementById('search').value, document.getElementById('process').value, document.getElementById('type_variables').value);
         var combo = document.getElementById("_Var_Form_");
         var option = document.createElement('option');
+        var isBpmn = document.getElementById('isBpmn').value;
 
         for(i=(combo.length-1); i>=0; i--)
         {
@@ -140,8 +164,15 @@ var setVariablePickerJS = function(){
         if(list.length>0){
             for(i=0; i<list.length; i++)
             {
+               var optionValue = prefix+list[i].sName;
+               if(isBpmn) {
+                  if(list[i].sLabel.toLowerCase() == 'grid') {
+                     var gridValue = 'gridt<table border=1 cellspacing=0><tr><th>Header_1</th></tr><tbody><!--@>'+list[i].sName+'--><tr><td>column_name1</td></tr><!--@<'+list[i].sName+'--></tbody></table>'; 
+                     optionValue = gridValue;
+                  }      
+               } 
                option = document.createElement("OPTION");
-               option.value = prefix+list[i].sName;
+               option.value = optionValue;
                option.text = prefix+list[i].sName+' ('+list[i].sLabel+')';
                combo.add(option);
             }

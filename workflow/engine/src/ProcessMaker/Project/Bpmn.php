@@ -1473,5 +1473,50 @@ class Bpmn extends Handler
             throw $e;
         }
     }
+    
+    public function getEmailEventTypeBetweenElementOriginAndElementDest(
+        $elementOriginUid,
+        $elementOriginType,
+        $elementDestUid,
+        $elementDestType
+    ) {
+        try {
+            $arrayEventType   = array("END", "INTERMEDIATE");
+            $arrayEventMarker = array("EMAIL");
+
+            $this->arrayElementOriginChecked = array();
+
+            $arrayEventAux = $this->getElementsBetweenElementOriginAndElementDest(
+                $elementOriginUid,
+                $elementOriginType,
+                $elementDestUid,
+                $elementDestType,
+                0
+            );
+
+            ksort($arrayEventAux);
+
+            $arrayEvent = array();
+
+            foreach ($arrayEventAux as $value) {
+                if ($value[1] == "bpmnEvent") {
+                    $event = \BpmnEventPeer::retrieveByPK($value[0]);
+
+                    if (!is_null($event) &&
+                        in_array($event->getEvnType(), $arrayEventType) && in_array($event->getEvnMarker(), $arrayEventMarker)
+                    ) {
+                        $arrayEvent[] = $value;
+                    }
+                }
+            }
+
+            //Return
+            return $arrayEvent;
+        } catch (\Exception $e) {
+            self::log("Exception: ", $e->getMessage(), "Trace: ", $e->getTraceAsString());
+
+            throw $e;
+        }
+    }
 }
 

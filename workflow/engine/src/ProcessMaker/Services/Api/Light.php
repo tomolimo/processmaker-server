@@ -121,6 +121,7 @@ class Light extends Api
             'app_number'        => 'caseNumber',
             'app_update_date'   => 'date',
             'del_task_due_date' => 'dueDate',
+            'del_index'         => 'delIndex',
             //'' => 'status'
             'user' => array(
                 'usrcr_usr_uid'       => 'userId',
@@ -133,6 +134,76 @@ class Light extends Api
                 'previous_usr_firstname' => 'firstName',
                 'previous_usr_lastname'  => 'lastName',
                 'previous_usr_username'  => 'fullName',
+            ),
+            'process' => array(
+                'pro_uid'       => 'processId',
+                'app_pro_title' => 'name'
+            ),
+            'task' => array(
+                'tas_uid'       => 'taskId',
+                'app_tas_title' => 'name'
+            ),
+            'inp_doc_uid' => 'documentUid' //Esta opcion es temporal
+        );
+
+        $response = $this->replaceFields($data, $structure);
+        return $response;
+    }
+
+    /**
+     * Get list Case Draft
+     *
+     * @copyright Colosa - Bolivia
+     *
+     * @url GET /draft
+     */
+    public function doGetCasesListDraft(
+        $start = 0,
+        $limit = 10,
+        $sort = 'APP_CACHE_VIEW.APP_NUMBER',
+        $dir = 'DESC',
+        $cat_uid = '',
+        $pro_uid = '',
+        $search = ''
+    ) {
+        try {
+            $dataList['userId'] = $this->getUserId();
+            $dataList['action'] = 'draft';
+            $dataList['paged']  = true;
+
+            $dataList['start'] = $start;
+            $dataList['limit'] = $limit;
+            $dataList['sort'] = $sort;
+            $dataList['dir'] = $dir;
+            $dataList['category'] = $cat_uid;
+            $dataList['process'] = $pro_uid;
+            $dataList['search'] = $search;
+
+            $oCases   = new \ProcessMaker\BusinessModel\Cases();
+            $response = $oCases->getList($dataList);
+            $result   = $this->parserDataDraft($response['data']);
+            return $result;
+        } catch (\Exception $e) {
+            throw (new RestException(Api::STAT_APP_EXCEPTION, $e->getMessage()));
+        }
+    }
+
+    public function parserDataDraft ($data)
+    {
+        $structure = array(
+            //'app_uid' => 'mongoId',
+            'app_uid'           => 'caseId',
+            'app_title'         => 'caseTitle',
+            'app_number'        => 'caseNumber',
+            'app_update_date'   => 'date',
+            'del_task_due_date' => 'dueDate',
+            'del_index'         => 'delIndex',
+            //'' => 'status'
+            'user' => array(
+                'usrcr_usr_uid'       => 'userId',
+                'usrcr_usr_firstname' => 'firstName',
+                'usrcr_usr_lastname'  => 'lastName',
+                'usrcr_usr_username'  => 'fullName',
             ),
             'process' => array(
                 'pro_uid'       => 'processId',
@@ -194,6 +265,7 @@ class Light extends Api
             'app_number'        => 'caseNumber',
             'app_update_date'   => 'date',
             'del_task_due_date' => 'dueDate',
+            'del_index'         => 'delIndex',
             'currentUser' => array(
                 'usrcr_usr_uid'       => 'userId',
                 'usrcr_usr_firstname' => 'firstName',
@@ -266,6 +338,7 @@ class Light extends Api
             'app_number'        => 'caseNumber',
             'app_update_date'   => 'date',
             'del_task_due_date' => 'dueDate',
+            'del_index'         => 'delIndex',
             'currentUser' => array(
                 'usrcr_usr_uid'       => 'userId',
                 'usrcr_usr_firstname' => 'firstName',
@@ -338,6 +411,7 @@ class Light extends Api
             'app_number'        => 'caseNumber',
             'app_update_date'   => 'date',
             'del_task_due_date' => 'dueDate',
+            'del_index'         => 'delIndex',
             'currentUser' => array(
                 'usrcr_usr_uid'       => 'userId',
                 'usrcr_usr_firstname' => 'firstName',
@@ -404,6 +478,29 @@ class Light extends Api
     }
 
     /**
+     * Delete case
+     *
+     * @copyright Colosa - Bolivia
+     *
+     * @url DELETE /case/:app_uid/delete
+     *
+     * @param string $app_uid {@min 32}{@max 32}
+     */
+    public function doDeleteCases($app_uid)
+    {
+        try {
+            $oCase = new \Cases();
+            $oCase->removeCase( $app_uid );
+            $result = array (
+                "message" => \G::LoadTranslation( "ID_COMMAND_EXECUTED_SUCCESSFULLY" )
+            );
+        } catch (\Exception $e) {
+            throw (new RestException(Api::STAT_APP_EXCEPTION, $e->getMessage()));
+        }
+        return $result;
+    }
+
+    /**
      * Get list History case
      *
      * @copyright Colosa - Bolivia
@@ -459,11 +556,14 @@ class Light extends Api
             $process = new \ProcessMaker\BusinessModel\Process();
             $process->setFormatFieldNameInUppercase(false);
             $process->setArrayFieldNameForException(array("processUid" => "prj_uid"));
-
+            $_SESSION['PROCESS'] = $prj_uid;
             $response = $process->getDynaForms($prj_uid);
             $result   = $this->parserDataDynaForm($response);
+            \G::LoadClass("pmDynaform");
+            $pmDynaForm = new \pmDynaform();
             foreach ($result as $k => $form) {
                 $result[$k]['formContent'] = (isset($form['formContent']) && $form['formContent'] != null)?json_decode($form['formContent']):"";
+                $pmDynaForm->jsonr($result[$k]['formContent']);
                 $result[$k]['index']       = $k;
             }
         } catch (\Exception $e) {
@@ -486,19 +586,23 @@ class Light extends Api
             $task->setArrayParamException(array("taskUid" => "act_uid", "stepUid" => "step_uid"));
 
             $activitySteps = $task->getSteps($act_uid);
-
+            $_SESSION['PROCESS'] = $prj_uid;
             $dynaForm = new \ProcessMaker\BusinessModel\DynaForm();
             $dynaForm->setFormatFieldNameInUppercase(false);
             $oMobile = new \ProcessMaker\BusinessModel\Light();
             $step = new \ProcessMaker\Services\Api\Project\Activity\Step();
+            \G::LoadClass("pmDynaform");
+            $pmDynaForm = new \pmDynaform();
             $response = array();
             for ($i = 0; $i < count($activitySteps); $i++) {
                 if ($activitySteps[$i]['step_type_obj'] == "DYNAFORM") {
                     $dataForm = $dynaForm->getDynaForm($activitySteps[$i]['step_uid_obj']);
                     $result   = $this->parserDataDynaForm($dataForm);
                     $result['formContent'] = (isset($result['formContent']) && $result['formContent'] != null)?json_decode($result['formContent']):"";
+                    $pmDynaForm->jsonr($result['formContent']);
                     $result['index']       = $i;
                     $result['stepId']      = $activitySteps[$i]["step_uid"];
+                    $result['stepMode']   = $activitySteps[$i]['step_mode'];
                     $trigger = $oMobile->statusTriggers($step->doGetActivityStepTriggers($activitySteps[$i]["step_uid"], $act_uid, $prj_uid));
                     $result["triggers"]    = $trigger;
                     $response[] = $result;
@@ -540,25 +644,31 @@ class Light extends Api
                     $cases->putExecuteTriggerCase($cas_uid, $trigger['tri_uid'], $userUid);
                 }
             }
+            $response = array('status' => 'ok');
         } catch (\Exception $e) {
             throw (new RestException(Api::STAT_APP_EXCEPTION, $e->getMessage()));
         }
+        return $response;
     }
 
     /**
-     * @url GET /project/dynaform/:dyn_uid
+     * @url GET /project/:prj_uid/dynaform/:dyn_uid
      *
      * @param string $dyn_uid {@min 32}{@max 32}
+     * @param string $prj_uid {@min 32}{@max 32}
      */
-    public function doGetDynaForm($dyn_uid)
+    public function doGetDynaForm($prj_uid, $dyn_uid)
     {
         try {
             $dynaForm = new \ProcessMaker\BusinessModel\DynaForm();
             $dynaForm->setFormatFieldNameInUppercase(false);
-
+            $_SESSION['PROCESS'] = $prj_uid;
             $response = $dynaForm->getDynaForm($dyn_uid);
             $result   = $this->parserDataDynaForm($response);
             $result['formContent'] = (isset($result['formContent']) && $result['formContent'] != null)?json_decode($result['formContent']):"";
+            \G::LoadClass("pmDynaform");
+            $pmDynaForm = new \pmDynaform();
+            $pmDynaForm->jsonr($result['formContent']);
             return $result;
         } catch (\Exception $e) {
             throw (new RestException(Api::STAT_APP_EXCEPTION, $e->getMessage()));
@@ -566,19 +676,25 @@ class Light extends Api
     }
 
     /**
-     * @url POST /project/dynaforms
+     * @url POST /project/:prj_uid/dynaforms
+     *
+     * @param string $prj_uid {@min 32}{@max 32}
      *
      */
-    public function doGetDynaFormsId($request_data)
+    public function doGetDynaFormsId($prj_uid, $request_data)
     {
         try {
             $dynaForm = new \ProcessMaker\BusinessModel\DynaForm();
             $dynaForm->setFormatFieldNameInUppercase(false);
+            \G::LoadClass("pmDynaform");
+            $pmDynaForm = new \pmDynaform();
+            $_SESSION['PROCESS'] = $prj_uid;
             $return = array();
             foreach ($request_data['formId'] as $dyn_uid) {
                 $response = $dynaForm->getDynaForm($dyn_uid);
                 $result   = $this->parserDataDynaForm($response);
                 $result['formContent'] = (isset($result['formContent']) && $result['formContent'] != null)?json_decode($result['formContent']):"";
+                $pmDynaForm->jsonr($result['formContent']);
                 $return[] = $result;
             }
         } catch (\Exception $e) {
@@ -619,17 +735,40 @@ class Light extends Api
     }
 
     /**
+     * Return Informaction User for derivate
+     * assignment Users
+     *
+     * @url GET /task/:tas_uid/case/:app_uid/:del_index/assignment
+     *
+     * @param string $tas_uid {@min 32}{@max 32}
+     * @param string $app_uid {@min 32}{@max 32}
+     * @param string $del_index
+     */
+    public function doGetPrepareInformation($tas_uid, $app_uid, $del_index = null)
+    {
+        try {
+            $usr_uid = $this->getUserId();
+            $oMobile = new \ProcessMaker\BusinessModel\Light();
+            $response = $oMobile->getPrepareInformation($usr_uid, $tas_uid, $app_uid, $del_index);
+        } catch (\Exception $e) {
+            throw (new RestException(Api::STAT_APP_EXCEPTION, $e->getMessage()));
+        }
+        return $response;
+    }
+
+    /**
      * Route Case
      * @url PUT /cases/:app_uid/route-case
      *
      * @param string $app_uid {@min 32}{@max 32}
      * @param string $del_index {@from body}
+     * @param array $tasks {@from body}
      */
-    public function doPutRouteCase($app_uid, $del_index = null)
+    public function doPutRouteCase($app_uid, $del_index = null, $tasks = array())
     {
         try {
             $oMobile  = new \ProcessMaker\BusinessModel\Light();
-            $response = $oMobile->updateRouteCase($app_uid, $this->getUserId(), $del_index);
+            $response = $oMobile->updateRouteCase($app_uid, $this->getUserId(), $del_index, $tasks);
         } catch (\Exception $e) {
             throw (new RestException(Api::STAT_APP_EXCEPTION, $e->getMessage()));
         }
@@ -832,7 +971,7 @@ class Light extends Api
     /**
      * @url POST /case/:app_uid/claim
      *
-     * @param $app_uid
+     * @param $app_uid {@min 1}{@max 32}
      * @return mixed
      */
     public function claimCaseUser($app_uid)

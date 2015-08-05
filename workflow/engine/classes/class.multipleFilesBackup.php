@@ -50,7 +50,7 @@ class multipleFilesBackup
         $tempDirectory = PATH_DATA . "upgrade/" . basename( tempnam( __FILE__, '' ) );
         mkdir( $tempDirectory );
         $metadata = $workspace->getMetadata();
-        CLI::logging( "Temporing up database...\n" );
+        CLI::logging( "Creating temporary files on database...\n" );
         $metadata["databases"] = $workspace->exportDatabase( $tempDirectory );
         $metadata["directories"] = array ("{$workspace->name}.files");
         $metadata["version"] = 1;

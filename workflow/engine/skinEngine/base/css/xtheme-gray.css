@@ -219,6 +219,10 @@ ul.x-tab-strip-bottom{
     color: #333;
 }
 
+.x-form-check-wrap {
+    overflow: hidden !important;
+}
+
 .x-editor .x-form-check-wrap {
     background-color:#fff;
 }
@@ -304,6 +308,7 @@ ul.x-tab-strip-bottom{
 
 .x-fieldset {
     border-color:#CCCCCC;
+    margin-top: -5px;
 }
 
 .x-fieldset legend {

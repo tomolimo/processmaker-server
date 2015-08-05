@@ -29,10 +29,11 @@ CLI::taskName('build-js');
 CLI::taskDescription(<<<EOT
     Generate Javascript Files
 
-    This command should be run after any modification of javascript files in
-    folder gulliver/js/*.
+    This command should be run after any modification of JavaScript files in
+  the gulliver/js/* directory.
 EOT
 );
+CLI::taskOpt("lang", "", "lLANG","lang=LANG");
 //CLI::taskOpt("minify", "If the option is enabled, performs the build only with minified files", "min", "buildmin");
 CLI::taskRun("minify_javascript");
 

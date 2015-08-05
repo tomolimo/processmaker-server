@@ -668,7 +668,7 @@ class AppCacheView extends BaseAppCacheView
 
 
 
-            $arrayApplicationUid = array();
+            $arrayAppAssignSelfServiceValueData = array();
 
 
 
@@ -691,6 +691,10 @@ class AppCacheView extends BaseAppCacheView
                 $criteria->setDistinct();
 
                 $criteria->addSelectColumn(AppAssignSelfServiceValuePeer::APP_UID);
+
+                $criteria->addSelectColumn(AppAssignSelfServiceValuePeer::DEL_INDEX);
+
+                $criteria->addSelectColumn(AppAssignSelfServiceValuePeer::TAS_UID);
 
 
 
@@ -726,7 +730,15 @@ class AppCacheView extends BaseAppCacheView
 
 
 
-                    $arrayApplicationUid[] = $row["APP_UID"];
+                    $arrayAppAssignSelfServiceValueData[] = array(
+
+                        "APP_UID" => $row["APP_UID"],
+
+                        "DEL_INDEX" => $row["DEL_INDEX"],
+
+                        "TAS_UID" => $row["TAS_UID"]
+
+                    );
 
                 }
 
@@ -736,7 +748,7 @@ class AppCacheView extends BaseAppCacheView
 
             //Return
 
-            return $arrayApplicationUid;
+            return $arrayAppAssignSelfServiceValueData;
 
         } catch (Exception $e) {
 
@@ -804,19 +816,55 @@ class AppCacheView extends BaseAppCacheView
 
 
 
-        $cases = $this->getSelfServiceCasesByEvaluate($userUid);
+        $arrayAppAssignSelfServiceValueData = $this->getSelfServiceCasesByEvaluate($userUid);
 
-        if (!empty($cases)) {
+
+
+        if (!empty($arrayAppAssignSelfServiceValueData)) {
+
+            //Self Service Value Based Assignment
+
+            $criterionAux = null;
+
+
+
+            foreach ($arrayAppAssignSelfServiceValueData as $value) {
+
+                if (is_null($criterionAux)) {
+
+                    $criterionAux = $criteria->getNewCriterion(AppCacheViewPeer::APP_UID, $value["APP_UID"], Criteria::EQUAL)->addAnd(
+
+                                    $criteria->getNewCriterion(AppCacheViewPeer::DEL_INDEX, $value["DEL_INDEX"], Criteria::EQUAL))->addAnd(
+
+                                    $criteria->getNewCriterion(AppCacheViewPeer::TAS_UID, $value["TAS_UID"], Criteria::EQUAL));
+
+                } else {
+
+                    $criterionAux = $criteria->getNewCriterion(AppCacheViewPeer::APP_UID, $value["APP_UID"], Criteria::EQUAL)->addAnd(
+
+                                    $criteria->getNewCriterion(AppCacheViewPeer::DEL_INDEX, $value["DEL_INDEX"], Criteria::EQUAL))->addAnd(
+
+                                    $criteria->getNewCriterion(AppCacheViewPeer::TAS_UID, $value["TAS_UID"], Criteria::EQUAL))->addOr(
+
+                                        $criterionAux
+
+                                    );
+
+                }
+
+            }
+
+
 
             $criteria->add(
 
-            $criteria->getNewCriterion(AppCacheViewPeer::TAS_UID, $tasks, Criteria::IN)->
-
-              addOr($criteria->getNewCriterion(AppCacheViewPeer::APP_UID, $cases, Criteria::IN))
+                $criterionAux->addOr($criteria->getNewCriterion(AppCacheViewPeer::TAS_UID, $tasks, Criteria::IN))
 
             );
 
         } else {
+
+            //Self Service
 
             $criteria->add(AppCacheViewPeer::TAS_UID, $tasks, Criteria::IN);
 
@@ -3322,7 +3370,7 @@ class AppCacheView extends BaseAppCacheView
 
         $oCriteria->add(
 
-            $oCriteria->getNewCriterion(AppDelayPeer::APP_TYPE, NULL, Criteria::ISNULL)->addOr(                
+            $oCriteria->getNewCriterion(AppDelayPeer::APP_TYPE, NULL, Criteria::ISNULL)->addOr(
 
             $oCriteria->getNewCriterion(AppDelayPeer::APP_TYPE, 'REASSIGN', Criteria::NOT_EQUAL))
 
@@ -3522,7 +3570,7 @@ class AppCacheView extends BaseAppCacheView
 
      *
 
-     * @return object criteria 
+     * @return object criteria
 
      */
 

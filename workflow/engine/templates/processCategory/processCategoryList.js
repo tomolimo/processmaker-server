@@ -120,19 +120,6 @@ Ext.onReady(function(){
     handler: GridByDefault
   });
 
-  newForm = new Ext.FormPanel({
-    url: 'processCategory_Ajax?action=saveNewCategory',
-    frame: true,
-    items:[
-           {xtype: 'textfield', fieldLabel: _('ID_CATEGORY_NAME'), name: 'category', width: 250, maxLength :100, allowBlank: false}
-           ],
-           buttons: [
-                     {text: _('ID_SAVE'), handler: SaveNewCategory},
-                     {text: _('ID_CANCEL'), handler: CloseWindow}
-
-                     ]
-  });
-
   editForm = new Ext.FormPanel({
     url: 'processCategory_Ajax?action=updateCategory',
     frame: true,
@@ -297,6 +284,18 @@ DoNothing = function(){};
 
 //Open New Category Form
 NewCategoryWindow = function(){
+  newForm = new Ext.FormPanel({
+    url: 'processCategory_Ajax?action=saveNewCategory',
+    frame: true,
+    items: [
+           {xtype: 'textfield', fieldLabel: _('ID_CATEGORY_NAME'), name: 'category', width: 250, maxLength :100, allowBlank: false}
+    ],
+    buttons: [
+           {text: _('ID_SAVE'), handler: SaveNewCategory},
+           {text: _('ID_CANCEL'), handler: CloseWindow}
+    ]
+  });
+  
   newForm.getForm().reset();
   newForm.getForm().items.items[0].focus('',500);
   w = new Ext.Window({
@@ -428,7 +427,8 @@ EditCategory = function(){
       title: _('ID_EDIT_CATEGORY'),
       items: [editForm],
       id: 'w',
-      modal: true
+      modal: true,
+      closeAction: "hide"
     });
     w.show();
   }

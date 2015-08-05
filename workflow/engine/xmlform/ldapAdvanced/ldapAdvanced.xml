@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm name="Ldap Setup Form" type="xmlform" width="550">
+  <TITLE type="title" group="1">
+    <en><![CDATA[Ldap Advance Plugin]]></en>
+    <pt-BR><![CDATA[Ldap Plugin Adiantamento]]></pt-BR>
+  </TITLE>
+  <HelpText type="subtitle" maxlength="100" size="60">
+    <en><![CDATA[Please check the User Section in order to Synchronize or Import users from an authentication source using this plugin. There is no further configuration needed.]]></en>
+    <pt-BR><![CDATA[Por favor verifique a seção do usuário, a fim de sincronizar ou importar usuários a partir de uma fonte de autenticação usando este plugin. Não há nenhuma configuração adicional necessário.]]></pt-BR>
+  </HelpText>
+</dynaForm>

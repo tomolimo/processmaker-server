@@ -71,6 +71,13 @@ $_SESSION['STEP_POSITION'] = 0;
 
 /* Redirect to next step */
 $aNextStep = $oCase->getNextSupervisorStep( $_SESSION['PROCESS'], 0 );
-$sPage = "cases_StepToRevise?type=DYNAFORM&PRO_UID=" . $aFields['PRO_UID'] . "&DYN_UID=" . $aNextStep['UID'] . "&APP_UID=$sAppUid&DEL_INDEX=$iDelIndex&position=1"; //$aNextStep['PAGE'];
-G::header( 'location: ' . $sPage );
-
+if($aNextStep['UID'] != ''){
+    $sPage = "cases_StepToRevise?type=DYNAFORM&PRO_UID=" . $aFields['PRO_UID'] . "&DYN_UID=" . $aNextStep['UID'] . "&APP_UID=$sAppUid&DEL_INDEX=$iDelIndex&position=1"; //$aNextStep['PAGE'];
+    G::header( 'location: ' . $sPage );
+}else{
+    $aMessage = array ();
+    $aMessage['MESSAGE'] = G::LoadTranslation( 'ID_SUPERVISOR_DOES_NOT_HAVE_DYNAFORMS' );
+    $G_PUBLISH = new Publisher();
+    $G_PUBLISH->AddContent( 'xmlform', 'xmlform', 'login/showMessage', '', $aMessage );
+    G::RenderPage( 'publishBlank', 'blank' );
+}

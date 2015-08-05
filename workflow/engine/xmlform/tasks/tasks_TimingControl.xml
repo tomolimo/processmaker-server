@@ -10,7 +10,7 @@
     <en><![CDATA[Task duration]]></en>
   </TAS_DURATION>
   <TAS_TIMEUNIT type="dropdown" defaultvalue="DAYS" group="1">
-    <en><![CDATA[Time unit]]><option name="HOURS"><![CDATA[Hours]]></option><option name="DAYS"><![CDATA[Days]]></option></en>
+    <en><![CDATA[Time unit]]><option name="HOURS"><![CDATA[Hours]]></option><option name="DAYS"><![CDATA[Days]]></option><option name="MINUTES"><![CDATA[Minutes]]></option></en>
   </TAS_TIMEUNIT>
   <TAS_TYPE_DAY type="dropdown" defaultvalue="1" group="1">
     <en><![CDATA[Count days by]]><option name="1"><![CDATA[Work Days]]></option><option name="2"><![CDATA[Calendar Days]]></option></en>

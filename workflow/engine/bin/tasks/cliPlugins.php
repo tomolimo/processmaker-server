@@ -31,6 +31,9 @@ CLI::taskName('plugins-translation-update');
 CLI::taskDescription(<<<EOT
     Update plugin translations
 
+    LANG is the language, such as 'fr' (French) or 'zh-CN' (mainland Chinese).
+  If the language is not specified, then it is 'en' (English) by default.
+
 EOT
 );
 CLI::taskArg('plugin', false);
@@ -40,6 +43,9 @@ CLI::taskRun("run_update");
 CLI::taskName('plugins-translation-create');
 CLI::taskDescription(<<<EOT
     Create .po file for the plugin
+
+    LANG is the language, such as 'fr' (French) or 'zh-CN' (mainland Chinese).
+  If the language is not specified, then it is 'en' (English) by default.
 
 EOT
 );

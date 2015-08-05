@@ -59,10 +59,16 @@
           <td>
             <table width="100%" cellspacing="0" cellpadding="0" border="0" >
               <tr>
-                <td width="100%" align="center">
+                <td {php} if (isset($_SESSION["TRACKER_JAVASCRIPT"])) { echo "id=\"trackerContainer\""; } {/php} width="100%" align="center">
                   {php}
                   global $G_TEMPLATE;
                   if ($G_TEMPLATE != '') G::LoadTemplate($G_TEMPLATE);
+                  
+                  if (isset($_SESSION["TRACKER_JAVASCRIPT"])) {
+                      echo $_SESSION["TRACKER_JAVASCRIPT"];
+
+                      unset($_SESSION["TRACKER_JAVASCRIPT"]);
+                  } 
                   {/php}
                 </td>
               </tr>

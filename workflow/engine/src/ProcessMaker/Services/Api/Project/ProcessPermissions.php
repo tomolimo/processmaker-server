@@ -126,7 +126,7 @@ class ProcessPermissions extends Api
      * @param string $op_user_relation {@from body} {@choice 1,2}
      * @param string $op_case_status {@from body} {@choice ALL,DRAFT,TO_DO,PAUSED,COMPLETED}
      * @param string $op_participate {@from body} {@choice 0,1}
-     * @param string $op_obj_type {@from body} {@choice ANY,DYNAFORM,INPUT,OUTPUT,CASES_NOTES,MSGS_HISTORY}
+     * @param string $op_obj_type {@from body} {@choice ANY,DYNAFORM,INPUT,OUTPUT,CASES_NOTES,MSGS_HISTORY,SUMMARY_FORM}
      * @param string $op_action {@from body} {@choice VIEW,BLOCK,DELETE,RESEND}
      * @param string $tas_uid {@from body}
      * @param string $op_task_source {@from body}

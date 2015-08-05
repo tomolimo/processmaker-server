@@ -3090,7 +3090,7 @@ class processMap
 
                 $oCaseConsolidated = CaseConsolidatedCorePeer::retrieveByPK($_SESSION["cDhTajE2T2lxSkhqMzZUTXVacWYyNcKwV3A4eWYybDdyb1p3"]["TAS_UID"]);
 
-                if ((is_object($oCaseConsolidated)) && get_class($oCaseConsolidated) == "CaseConsolidated") {
+                if ((is_object($oCaseConsolidated)) && get_class($oCaseConsolidated) == "CaseConsolidatedCore") {
 
                     require_once ("classes/model/ReportTable.php");
 

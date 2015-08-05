@@ -116,18 +116,6 @@ class dashletProcessMakerEnterprise implements DashletInterface
     <div id=\"container\">
       <div id=\"page1\">
         <div class=\"icon\">
-          <a href=\"http://processmaker.com/workflow-inbox-and-bpm-inbox\" target=\"_blank\"><img src=\"/images/dashlets/enterprise_list_builder.png\" /></a>
-        </div>
-        <div class=\"description\">
-          <a href=\"http://processmaker.com/workflow-inbox-and-bpm-inbox\" target=\"_blank\">Custom Case List Builder</a>
-          <br />
-          Allows an admin to setup custom column views inside a user's cases boxes (inbox, draft, sent, etc). &nbsp;Information from report tables or Dynaforms can then be displayed in the columns making the inbox experience more relevent and useful to the user.
-          <br />
-          <a href=\"http://processmaker.com/workflow-inbox-and-bpm-inbox\" target=\"_blank\">Read More&gt;&gt;</a>
-        </div>
-        <div class=\"clearf\"></div>
-
-        <div class=\"icon\">
           <a href=\"http://processmaker.com/bpm-ldap-and-bpm-active-directory\" target=\"_blank\"><img src=\"/images/dashlets/enterprise_ldap.png\" /></a>
         </div>
         <div class=\"description\">

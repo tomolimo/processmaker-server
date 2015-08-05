@@ -2661,9 +2661,10 @@ processmap.prototype={
             uid:false
           };
           this.data.build.text(index);
+          text = text.replace(/"/g, '\\"');
           var r = new leimnud.module.rpc.xmlhttp({
             url:this.options.dataServer,
-            args:"action=addText&data="+{uid:this.options.uid,label:text,position:{x:pos.x,y:pos.y}}.toJSONString()
+            args:"action=addText&data="+{uid:this.options.uid,label:encodeURIComponent(text),position:{x:pos.x,y:pos.y}}.toJSONString()
           });
           r.callback=function(rpc,index){
             var rs = rpc.xmlhttp.responseText.parseJSON();

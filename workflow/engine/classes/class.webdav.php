@@ -902,16 +902,21 @@ class ProcessMakerWebDav extends HTTP_WebDAV_Server
 
         $dir = dirname($path) . "/";
         $base = basename($path);
+        
+        G::LoadSystem('inputfilter');
+        $filter = new InputFilter();
 
         foreach ($options["props"] as $key => $prop) {
             if ($prop["ns"] == "DAV:") {
                 $options["props"][$key]['status'] = "403 Forbidden";
             } else {
                 if (isset($prop["val"])) {
-                    $query = "REPLACE INTO properties SET path = '$options[path]', name = '$prop[name]', ns= '$prop[ns]', value = '$prop[val]'";
+                    $query = "REPLACE INTO properties SET path = '%s', name = '%s', ns= '%s', value = '%s'";
+                    $query = $filter->preventSqlInjection($query, Array($options['path'],$prop['name'],$prop['ns'],$prop['val']));
                     error_log($query);
                 } else {
-                    $query = "DELETE FROM properties WHERE path = '$options[path]' AND name = '$prop[name]' AND ns = '$prop[ns]'";
+                    $query = "DELETE FROM properties WHERE path = '%s' AND name = '%s' AND ns = '%s'";
+                    $query = $filter->preventSqlInjection($query, Array($options['path'],$prop['name'],$prop['ns']));
                 }
                 mysql_query($query);
             }

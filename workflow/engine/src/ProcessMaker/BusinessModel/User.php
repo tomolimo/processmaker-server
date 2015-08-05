@@ -662,6 +662,30 @@ class User
 
         try {
 
+            //Get Calendar
+
+            $calendar = new \Calendar();
+
+            $calendarInfo = $calendar->getCalendarFor( $record["USR_UID"], "", "" );
+
+            $aFields["USR_CALENDAR_UID"] = ($calendarInfo["CALENDAR_APPLIED"] != "DEFAULT") ? $calendarInfo["CALENDAR_UID"] : ""; 
+
+            $aFields["USR_CALENDAR"] = ($aFields["USR_CALENDAR_UID"] != "") ? $calendar->calendarName( $aFields["USR_CALENDAR_UID"] ) : $aFields["USR_CALENDAR_UID"];
+
+
+
+            //Get photo 
+
+            $pathPhotoUser = PATH_IMAGES_ENVIRONMENT_USERS . $record["USR_UID"] . ".gif";
+
+            if (! file_exists( $pathPhotoUser )) {
+
+                $pathPhotoUser = PATH_HOME . "public_html" . PATH_SEP . "images" . PATH_SEP . "user.gif";
+
+            }
+
+
+
             return array(
 
                 $this->getFieldNameByFormatFieldName("USR_UID")                => $record["USR_UID"],
@@ -714,6 +738,10 @@ class User
 
                 $this->getFieldNameByFormatFieldName("USR_REPLACED_BY")        => $record["USR_REPLACED_BY"],
 
+                $this->getFieldNameByFormatFieldName("USR_CALENDAR_UID")       => $aFields["USR_CALENDAR_UID"],
+
+                $this->getFieldNameByFormatFieldName("USR_CALENDAR_NAME")           => $aFields["USR_CALENDAR"],
+
                 $this->getFieldNameByFormatFieldName("USR_UX")                 => $record["USR_UX"],
 
                 /*----------------------------------********---------------------------------*/
@@ -730,7 +758,9 @@ class User
 
                 $this->getFieldNameByFormatFieldName("USR_TOTAL_COMPLETED")    => $record["USR_TOTAL_COMPLETED"],
 
-                $this->getFieldNameByFormatFieldName("USR_TOTAL_UNASSIGNED")   => $record["USR_TOTAL_UNASSIGNED"]
+                $this->getFieldNameByFormatFieldName("USR_TOTAL_UNASSIGNED")   => $record["USR_TOTAL_UNASSIGNED"],
+
+                $this->getFieldNameByFormatFieldName("USR_PHOTO_PATH")   => $pathPhotoUser
 
             );
 

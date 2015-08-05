@@ -83,17 +83,8 @@ if ($fields['AUTH_SOURCE_PROVIDER'] == 'ldap') {
     $oHeadPublisher->assign( 'sUID', $_GET['sUID'] );
     G::RenderPage( 'publish', 'extJs' );
 } else {
-    if (file_exists( PATH_PLUGINS . $fields['AUTH_SOURCE_PROVIDER'] . PATH_SEP . $fields['AUTH_SOURCE_PROVIDER'] . 'Edit.xml' )) {
-        $pluginEnabled = 0;
-
-        if (file_exists(PATH_PLUGINS . $fields["AUTH_SOURCE_PROVIDER"] . ".php")) {
-            $pluginRegistry = &PMPluginRegistry::getSingleton();
-            $pluginDetail = $pluginRegistry->getPluginDetails($fields["AUTH_SOURCE_PROVIDER"] . ".php");
-
-            if ($pluginDetail && $pluginDetail->enabled) {
-                $pluginEnabled = 1;
-            }
-        }
+    if (file_exists( PATH_XMLFORM . 'ldapAdvanced/' . $fields['AUTH_SOURCE_PROVIDER'] . 'Edit.xml' )) {
+        $pluginEnabled = 1;
 
         if ($pluginEnabled == 1) {
             //The attributes the users
@@ -110,17 +101,17 @@ if ($fields['AUTH_SOURCE_PROVIDER'] == 'ldap') {
             }
 
             $fields["AUTH_SOURCE_ATTRIBUTE_IDS"] = $attributes;
-            if (file_exists(PATH_PLUGINS . $fields["AUTH_SOURCE_PROVIDER"] . PATH_SEP . $fields["AUTH_SOURCE_PROVIDER"] . 'Flag')) {
+            if (file_exists(PATH_XMLFORM . 'ldapAdvanced/' . $fields['AUTH_SOURCE_PROVIDER'] . 'Flag')) {
                 $oHeadPublisher = & headPublisher::getSingleton ();
 
                 $oHeadPublisher->assign("Fields", $fields);
-                $oHeadPublisher->addExtJsScript (PATH_PLUGINS . $fields["AUTH_SOURCE_PROVIDER"] . PATH_SEP . 'js' . PATH_SEP . 'library', false, true );
-                $oHeadPublisher->addExtJsScript (PATH_PLUGINS . $fields["AUTH_SOURCE_PROVIDER"] . PATH_SEP . 'js' . PATH_SEP . 'ldapAdvancedForm', false, true );
-                $oHeadPublisher->addExtJsScript (PATH_PLUGINS . $fields["AUTH_SOURCE_PROVIDER"] . PATH_SEP . 'js' . PATH_SEP . 'ldapAdvancedList', false, true );
+                $oHeadPublisher->addExtJsScript (PATH_TPL. 'ldapAdvanced/library', false, true );
+                $oHeadPublisher->addExtJsScript (PATH_TPL. 'ldapAdvanced/ldapAdvancedForm', false, true );
+                $oHeadPublisher->addExtJsScript (PATH_TPL. 'ldapAdvanced/ldapAdvancedList', false, true );
                 G::RenderPage ('publish', 'extJs');
                 die();
             }
-            $G_PUBLISH->AddContent("xmlform", "xmlform", $fields["AUTH_SOURCE_PROVIDER"] . PATH_SEP . $fields["AUTH_SOURCE_PROVIDER"] . "Edit", "", $fields, "../authSources/authSources_Save");
+            $G_PUBLISH->AddContent("xmlform", "xmlform", 'ldapAdvanced/' . $fields['AUTH_SOURCE_PROVIDER'] . 'Edit', '', $fields, '../authSources/authSources_Save');
         } else {
             $G_PUBLISH->AddContent( 'xmlform', 'xmlform', 'login/showMessage', '', array ('MESSAGE' => G::LoadTranslation( 'ID_AUTH_SOURCE_MISSING' )
             ) );

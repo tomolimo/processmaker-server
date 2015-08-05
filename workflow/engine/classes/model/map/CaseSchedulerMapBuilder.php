@@ -103,7 +103,7 @@ class CaseSchedulerMapBuilder
 
         $tMap->addColumn('SCH_START_DAY', 'SchStartDay', 'string', CreoleTypes::CHAR, true, 6);
 
-        $tMap->addColumn('SCH_MONTHS', 'SchMonths', 'string', CreoleTypes::CHAR, true, 24);
+        $tMap->addColumn('SCH_MONTHS', 'SchMonths', 'string', CreoleTypes::CHAR, true, 27);
 
         $tMap->addColumn('SCH_END_DATE', 'SchEndDate', 'int', CreoleTypes::TIMESTAMP, false, null);
 
@@ -112,6 +112,8 @@ class CaseSchedulerMapBuilder
         $tMap->addColumn('SCH_REPEAT_UNTIL', 'SchRepeatUntil', 'string', CreoleTypes::VARCHAR, true, 15);
 
         $tMap->addColumn('SCH_REPEAT_STOP_IF_RUNNING', 'SchRepeatStopIfRunning', 'int', CreoleTypes::TINYINT, false, null);
+
+        $tMap->addColumn('SCH_EXECUTION_DATE', 'SchExecutionDate', 'int', CreoleTypes::TIMESTAMP, false, null);
 
         $tMap->addColumn('CASE_SH_PLUGIN_UID', 'CaseShPluginUid', 'string', CreoleTypes::VARCHAR, false, 100);
 

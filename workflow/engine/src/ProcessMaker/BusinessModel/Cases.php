@@ -852,6 +852,12 @@ class Cases
         }
         Validator::isInteger($del_index, '$del_index');
 
+        global $RBAC;
+        if (!method_exists($RBAC, 'initRBAC')) {
+            $RBAC = \RBAC::getSingleton( PATH_DATA, session_id() );
+            $RBAC->sSystem = 'PROCESSMAKER';
+        }
+
         $case = new \wsBase();
         $case->executeTrigger( $usr_uid, $app_uid, $tri_uid, $del_index );
     }

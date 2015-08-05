@@ -62,7 +62,6 @@ class DataBaseConnection extends Api
      * @param string $dbs_server {@from body} {@required true}
      * @param string $dbs_database_name {@from body} {@required true}
      * @param string $dbs_username {@from body}
-     * @param string $dbs_port {@from body} {@type float}
      * @param string $dbs_encode {@from body} {@required true}
      * @param string $dbs_password {@from body}
      * @param string $dbs_description {@from body}
@@ -80,7 +79,6 @@ class DataBaseConnection extends Api
         $dbs_server,
         $dbs_database_name,
         $dbs_username,
-        $dbs_port,
         $dbs_encode,
         $dbs_password = '',
         $dbs_description = ''
@@ -103,7 +101,6 @@ class DataBaseConnection extends Api
      * @param string $dbs_server {@from body} {@required true}
      * @param string $dbs_database_name {@from body} {@required true}
      * @param string $dbs_username {@from body}
-     * @param string $dbs_port {@from body} {@type float}
      * @param string $dbs_encode {@from body} {@required true}
      * @param string $dbs_password {@from body}
      * @param string $dbs_description {@from body}
@@ -122,7 +119,6 @@ class DataBaseConnection extends Api
         $dbs_server,
         $dbs_database_name,
         $dbs_username,
-        $dbs_port,
         $dbs_encode,
         $dbs_password = '',
         $dbs_description = ''
@@ -145,7 +141,6 @@ class DataBaseConnection extends Api
      * @param string $dbs_server {@from body} {@required true}
      * @param string $dbs_database_name {@from body} {@required true}
      * @param string $dbs_username {@from body}
-     * @param string $dbs_port {@from body} {@type float}
      * @param string $dbs_encode {@from body} {@required true}
      * @param string $dbs_password {@from body}
      * @param string $dbs_description {@from body}
@@ -164,7 +159,6 @@ class DataBaseConnection extends Api
         $dbs_server,
         $dbs_database_name,
         $dbs_username,
-        $dbs_port,
         $dbs_encode,
         $dbs_password = '',
         $dbs_description = ''

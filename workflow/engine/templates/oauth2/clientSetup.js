@@ -645,7 +645,7 @@ clientSetup.application = {
             //style: "margin: 0 auto 0 auto;",
             //width: 550,
             //height: 450,
-            title: "<div><div style=\"float: left;\">" + "ProcessMaker Dev Tools / User Applications" + "</div><div id=\"divAccessTokenSetup\" style=\"float: right;\"></div><div style=\"clear: both; height: 0; line-height:0; font-size: 0;\"></div></div>",
+            title: "<div><div style=\"float: left;\">" + "User Applications" + "</div><div id=\"divAccessTokenSetup\" style=\"float: right;\"></div><div style=\"clear: both; height: 0; line-height:0; font-size: 0;\"></div></div>",
             border: false,
 
             listeners: {

@@ -31,6 +31,12 @@ class DataBaseConnection
         while ($row = $rs->getRow()) {
             $row = array_change_key_case($row, CASE_LOWER);
             $dataDb = $this->getDataBaseConnection($pro_uid, $row['dbs_uid'], false);
+
+            if($dataDb["dbs_type"] == "oracle" && $dataDb["dbs_connection_type"] == "TNS") {
+                $dataDb["dbs_server"] = "[" . $dataDb["dbs_tns"] . "]";
+                $dataDb["dbs_database_name"] = "[" . $dataDb["dbs_tns"] . "]";
+            }
+
             $dbConnecions[] = array_change_key_case($dataDb, CASE_LOWER);
             $rs->next();
         }
@@ -96,6 +102,8 @@ class DataBaseConnection
         $oContent  = new \Content();
         $dataDBConnection = array_change_key_case($dataDBConnection, CASE_UPPER);
 
+        $flagTns = ($dataDBConnection["DBS_TYPE"] == "oracle" && $dataDBConnection["DBS_CONNECTION_TYPE"] == "TNS")? 1 : 0;
+
         $dataDBConnection['PRO_UID'] = $pro_uid;
 
         if (isset($dataDBConnection['DBS_TYPE'])) {
@@ -109,17 +117,23 @@ class DataBaseConnection
             }
         }
 
-        if (isset($dataDBConnection['DBS_SERVER']) && $dataDBConnection['DBS_SERVER'] == '') {
+        if (isset($dataDBConnection["DBS_SERVER"]) && $dataDBConnection["DBS_SERVER"] == "" && $flagTns == 0) {
             throw (new \Exception(\G::LoadTranslation("ID_DBC_SERVER_INVALID", array($dataDBConnection['DBS_SERVER']))));
         }
 
-        if (isset($dataDBConnection['DBS_DATABASE_NAME']) && $dataDBConnection['DBS_DATABASE_NAME'] == '') {
+        if (isset($dataDBConnection["DBS_DATABASE_NAME"]) && $dataDBConnection["DBS_DATABASE_NAME"] == "" && $flagTns == 0) {
             throw (new \Exception(\G::LoadTranslation("ID_DBC_DBNAME_INVALID", array($dataDBConnection['DBS_DATABASE_NAME']))));
         }
 
         if (isset($dataDBConnection['DBS_PORT']) &&
             ($dataDBConnection['DBS_PORT'] == ''|| $dataDBConnection['DBS_PORT'] == 0)) {
-            throw (new \Exception(\G::LoadTranslation("ID_DBC_PORT_INVALID", array($dataDBConnection['DBS_PORT']))));
+                if ($flagTns == 0) {
+                    throw (new \Exception(\G::LoadTranslation("ID_DBC_PORT_INVALID", array($dataDBConnection["DBS_PORT"]))));
+                }
+        }
+
+        if (isset($dataDBConnection["DBS_TNS"]) && $dataDBConnection["DBS_TNS"] == "" && $flagTns == 1) {
+            throw (new \Exception(\G::LoadTranslation("ID_DBC_TNS_NOT_EXIST", array($dataDBConnection["DBS_TNS"]))));
         }
 
         if (isset($dataDBConnection['DBS_ENCODE'])) {
@@ -140,9 +154,23 @@ class DataBaseConnection
             if ($dataDBConnection['DBS_PASSWORD'] == 'none') {
                 $dataDBConnection['DBS_PASSWORD'] = '';
             } else {
-                $pass = G::encrypt( $dataDBConnection['DBS_PASSWORD'], $dataDBConnection['DBS_DATABASE_NAME']) . "_2NnV3ujj3w";
+                if ($flagTns == 0) {
+                    $pass = \G::encrypt( $dataDBConnection["DBS_PASSWORD"], $dataDBConnection["DBS_DATABASE_NAME"]) . "_2NnV3ujj3w";
+                } else {
+                    $pass = \G::encrypt($dataDBConnection["DBS_PASSWORD"], $dataDBConnection["DBS_TNS"]) . "_2NnV3ujj3w";
+                }
+
                 $dataDBConnection['DBS_PASSWORD'] = $pass;
             }
+        }
+
+        if ($flagTns == 0) {
+            $dataDBConnection["DBS_CONNECTION_TYPE"] = "NORMAL";
+            $dataDBConnection["DBS_TNS"] = "";
+        } else {
+            $dataDBConnection["DBS_SERVER"] = "";
+            $dataDBConnection["DBS_DATABASE_NAME"] = "";
+            $dataDBConnection["DBS_PORT"] = 0;
         }
 
         if ($create) {
@@ -216,89 +244,141 @@ class DataBaseConnection
 
         $dataCon = array_change_key_case($dataCon, CASE_UPPER);
 
+        $flagTns = ($dataCon["DBS_TYPE"] == "oracle" && $dataCon["DBS_CONNECTION_TYPE"] == "TNS")? 1 : 0;
+
         G::LoadClass( 'net' );
-        $Server = new \NET($dataCon['DBS_SERVER']);
 
-        // STEP 1 : Resolving Host Name
-        $respTest['0'] = array();
-        $respTest['0']['test'] = 'Resolving Host Name ' . $dataCon['DBS_SERVER'];
-        if ($Server->getErrno() != 0) {
-            if ($returnArray) {
-                $respTest['0']['error'] = "Error Testing Connection: Resolving Host Name FAILED : " . $Server->error;
-            } else {
-                $resp['message'] = "Error Testing Connection: Resolving Host Name FAILED : " . $Server->error;
-                return $resp;
-            }
-        }
+        if ($flagTns == 0) {
+            $Server = new \NET($dataCon['DBS_SERVER']);
 
-        // STEP 2 : Checking port
-        $respTest['1'] = array();
-        $respTest['1']['test'] = 'Checking port ' . $dataCon['DBS_PORT'];
-        $Server->scannPort($dataCon['DBS_PORT']);
-        if ($Server->getErrno() != 0) {
-            if ($returnArray) {
-                $respTest['1']['error'] = "Error Testing Connection: Checking port FAILED : " . $Server->error;
-            } else {
-                $resp['message'] = "Error Testing Connection: Checking port FAILED : " . $Server->error;
-                return $resp;
-            }
-        }
-
-        // STEP 3 : Trying to connect to host
-        $respTest['2'] = array();
-        $respTest['2']['test'] = 'Trying to connect to host ' . $dataCon['DBS_SERVER'] . (($dataCon['DBS_PORT'] != '') ? ':'.$dataCon['DBS_PORT'] : '');
-        $Server->loginDbServer($dataCon['DBS_USERNAME'], $dataCon['DBS_PASSWORD']);
-        $Server->setDataBase($dataCon['DBS_DATABASE_NAME'], $dataCon['DBS_PORT']);
-        if ($Server->errno == 0) {
-            $response = $Server->tryConnectServer($dataCon['DBS_TYPE']);
-            if ($response->status != 'SUCCESS') {
+            // STEP 1 : Resolving Host Name
+            $respTest['0'] = array();
+            $respTest['0']['test'] = 'Resolving Host Name ' . $dataCon['DBS_SERVER'];
+            if ($Server->getErrno() != 0) {
                 if ($returnArray) {
-                    $respTest['2']['error'] = "Error Testing Connection: Trying to connect to host FAILED : " . $Server->error;
+                    $respTest['0']['error'] = "Error Testing Connection: Resolving Host Name FAILED : " . $Server->error;
                 } else {
-                    $resp['message'] = "Error Testing Connection: Trying to connect to host FAILED : " . $Server->error;
+                    $resp['message'] = "Error Testing Connection: Resolving Host Name FAILED : " . $Server->error;
                     return $resp;
                 }
             }
-        } else {
-            if ($returnArray) {
-                $respTest['2']['error'] = "Error Testing Connection: Trying to connect to host FAILED : " . $Server->error;
-            } else {
-                $resp['message'] = "Error Testing Connection: Trying to connect to host FAILED : " . $Server->error;
-                return $resp;
-            }
-        }
 
-        // STEP 4 : Trying to open database
-        $respTest['3'] = array();
-        $respTest['3']['test'] = 'Trying to open database [' . $dataCon['DBS_DATABASE_NAME'] . ']';
-        $Server->loginDbServer($dataCon['DBS_USERNAME'], $dataCon['DBS_PASSWORD']);
-        $Server->setDataBase($dataCon['DBS_DATABASE_NAME'], $dataCon['DBS_PORT']);
-        if ($Server->errno == 0) {
-            $response = $Server->tryConnectServer($dataCon['DBS_TYPE']);
-            if ($response->status == 'SUCCESS') {
-                $response = $Server->tryOpenDataBase($dataCon['DBS_TYPE']);
+            // STEP 2 : Checking port
+            $respTest['1'] = array();
+            $respTest['1']['test'] = 'Checking port ' . $dataCon['DBS_PORT'];
+            $Server->scannPort($dataCon['DBS_PORT']);
+            if ($Server->getErrno() != 0) {
+                if ($returnArray) {
+                    $respTest['1']['error'] = "Error Testing Connection: Checking port FAILED : " . $Server->error;
+                } else {
+                    $resp['message'] = "Error Testing Connection: Checking port FAILED : " . $Server->error;
+                    return $resp;
+                }
+            }
+
+            // STEP 3 : Trying to connect to host
+            $respTest['2'] = array();
+            $respTest['2']['test'] = 'Connecting to host ' . $dataCon['DBS_SERVER'] . (($dataCon['DBS_PORT'] != '') ? ':'.$dataCon['DBS_PORT'] : '');
+            $Server->loginDbServer($dataCon['DBS_USERNAME'], $dataCon['DBS_PASSWORD']);
+            $Server->setDataBase($dataCon['DBS_DATABASE_NAME'], $dataCon['DBS_PORT']);
+            if ($Server->errno == 0) {
+                $response = $Server->tryConnectServer($dataCon['DBS_TYPE']);
                 if ($response->status != 'SUCCESS') {
                     if ($returnArray) {
-                        $respTest['3']['error'] = "Error Testing Connection: Trying to open database FAILED : " . $Server->error;
+                        $respTest['2']['error'] = "Error Testing Connection: Connecting to host FAILED : " . $Server->error;
                     } else {
-                        $resp['message'] = "Error Testing Connection: Trying to open database FAILED : " . $Server->error;
+                        $resp['message'] = "Error Testing Connection: Connecting to host FAILED : " . $Server->error;
                         return $resp;
                     }
                 }
             } else {
                 if ($returnArray) {
-                    $respTest['3']['error'] = "Error Testing Connection: Trying to open database FAILED : " . $Server->error;
+                    $respTest['2']['error'] = "Error Testing Connection: Connecting to host FAILED : " . $Server->error;
                 } else {
-                    $resp['message'] = "Error Testing Connection: Trying to open database FAILED : " . $Server->error;
+                    $resp['message'] = "Error Testing Connection: Connecting to host FAILED : " . $Server->error;
+                    return $resp;
+                }
+            }
+
+            // STEP 4 : Trying to open database
+            $respTest['3'] = array();
+            $respTest['3']['test'] = 'Opening database [' . $dataCon['DBS_DATABASE_NAME'] . ']';
+            $Server->loginDbServer($dataCon['DBS_USERNAME'], $dataCon['DBS_PASSWORD']);
+            $Server->setDataBase($dataCon['DBS_DATABASE_NAME'], $dataCon['DBS_PORT']);
+            if ($Server->errno == 0) {
+                $response = $Server->tryConnectServer($dataCon['DBS_TYPE']);
+                if ($response->status == 'SUCCESS') {
+                    $response = $Server->tryOpenDataBase($dataCon['DBS_TYPE']);
+                    if ($response->status != 'SUCCESS') {
+                        if ($returnArray) {
+                            $respTest['3']['error'] = "Error Testing Connection: Opening database FAILED : " . $Server->error;
+                        } else {
+                            $resp['message'] = "Error Testing Connection: Opening database FAILED : " . $Server->error;
+                            return $resp;
+                        }
+                    }
+                } else {
+                    if ($returnArray) {
+                        $respTest['3']['error'] = "Error Testing Connection: Opening database FAILED : " . $Server->error;
+                    } else {
+                        $resp['message'] = "Error Testing Connection: Opening database FAILED : " . $Server->error;
+                        return $resp;
+                    }
+                }
+            } else {
+                if ($returnArray) {
+                    $respTest['3']['error'] = "Error Testing Connection: Opening database FAILED : " . $Server->error;
+                } else {
+                    $resp['message'] = "Error Testing Connection: Opening database FAILED : " . $Server->error;
                     return $resp;
                 }
             }
         } else {
-            if ($returnArray) {
-                $respTest['3']['error'] = "Error Testing Connection: Trying to open database FAILED : " . $Server->error;
+            $net = new \NET();
+
+            //STEP 0: Trying to open database type TNS
+            $respTest["0"] = array();
+            $respTest["0"]["test"] = "Test TNS: " . $dataCon["DBS_TNS"];
+
+            $net->loginDbServer($dataCon["DBS_USERNAME"], $dataCon["DBS_PASSWORD"]);
+
+            if ($net->errno == 0) {
+                $arrayServerData = array("connectionType" => $dataCon["DBS_CONNECTION_TYPE"], "tns" => $dataCon["DBS_TNS"]);
+
+                $response = $net->tryConnectServer($dataCon["DBS_TYPE"], $arrayServerData);
+
+                if ($response->status == "SUCCESS") {
+                    $response = $net->tryOpenDataBase($dataCon["DBS_TYPE"], $arrayServerData);
+
+                    if ($response->status != "SUCCESS") {
+                        if ($returnArray) {
+                            $respTest["0"]["error"] = "Error Testing Connection: Opening database type TNS FAILED, " . $net->error;
+                        } else {
+                            $resp["message"] = "Error Testing Connection: Opening database type TNS FAILED, " . $net->error;
+
+                            //Return
+                            return $resp;
+                        }
+                    }
+                } else {
+                    if ($returnArray) {
+                        $respTest["0"]["error"] = "Error Testing Connection: Opening database type TNS FAILED, " . $net->error;
+                    } else {
+                        $resp["message"] = "Error Testing Connection: Opening database type TNS FAILED, " . $net->error;
+
+                        //Return
+                        return $resp;
+                    }
+                }
             } else {
-                $resp['message'] = "Error Testing Connection: Trying to open database FAILED : " . $Server->error;
-                return $resp;
+                if ($returnArray) {
+                    $respTest["0"]["error"] = "Error Testing Connection: Opening database type TNS FAILED, " . $net->error;
+                } else {
+                    $resp["message"] = "Error Testing Connection: Opening database type TNS FAILED, " . $net->error;
+
+                    //Return
+                    return $resp;
+                }
             }
         }
 
@@ -374,4 +454,3 @@ class DataBaseConnection
         return $dbs_uid;
     }
 }
-

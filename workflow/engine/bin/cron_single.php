@@ -184,7 +184,7 @@ if (!defined('PATH_HOME')) {
 
     G::LoadSystem('inputfilter');
 
-    $filter = new InputFilter();  
+    $filter = new InputFilter();
 
     $config['debug'] = $filter->validateInput($config['debug']);
 
@@ -976,7 +976,11 @@ if (!defined('SYS_SYS')) {
 
 
 
-    unlink(PATH_CORE . 'config/_databases_.php');
+    if (file_exists(PATH_CORE . "config" . PATH_SEP . "_databases_.php")) {
+
+        unlink(PATH_CORE . "config" . PATH_SEP . "_databases_.php");
+
+    }
 
 } else {
 
@@ -1800,7 +1804,7 @@ function executeCaseSelfService()
 
                 $taskSelfServiceTime,
 
-                $taskSelfServiceTimeUnit //HOURS|DAYS
+                $taskSelfServiceTimeUnit //HOURS|DAYS|MINUTES
 
                 //1
 

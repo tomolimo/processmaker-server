@@ -192,6 +192,8 @@ if (isset ($_SESSION['USER_LOGGED'])) {
 
     if (defined('PM_SINGLE_SIGN_ON')) {
 
+        /*----------------------------------********---------------------------------*/
+
         if ($pluginRegistry->existsTrigger(PM_SINGLE_SIGN_ON)) {
 
             if ($pluginRegistry->executeTriggers(PM_SINGLE_SIGN_ON, null)) {

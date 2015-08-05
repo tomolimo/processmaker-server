@@ -1114,7 +1114,7 @@ function newProcess(params)
 
         listeners: {
 
-            'focus': function(value){
+            'focus' : function(value){
 
                 document.getElementById("PRO_TITLE").onpaste = function() {
 
@@ -2495,6 +2495,10 @@ importProcess = function()
                                                       title: _("ID_ERROR"),
 
                                                       msg: "<div style=\"overflow: auto; width: 500px; height: 150px;\">" + stringReplace("\\x0A", "<br />", resp_.message) + "</div>", //\n 10
+
+                                                      width: 570,
+
+                                                      height: 250,
 
                                                       icon: Ext.MessageBox.ERROR,
 

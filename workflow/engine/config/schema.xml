@@ -465,6 +465,7 @@
     <column name="DYN_CONTENT" type="LONGVARCHAR"/>
     <column name="DYN_LABEL" type="LONGVARCHAR"/>
     <column name="DYN_VERSION" type="INTEGER" required="true"/>
+    <column name="DYN_UPDATE_DATE" type="TIMESTAMP" required="false"/>
     <validator column="DYN_TYPE">
       <rule name="validValues" value="xmlform|grid" message="Please select a valid dynaform type."/>
     </validator>
@@ -860,6 +861,8 @@
     <column name="PRO_DEBUG" type="INTEGER" required="true" default="0"/>
     <column name="PRO_DYNAFORMS" type="LONGVARCHAR" required="false"/>
     <column name="PRO_DERIVATION_SCREEN_TPL" type="VARCHAR" size="128" default="" required="false"/>
+    <column name="PRO_COST" type="DECIMAL" size="7,2" required="false" default="0"/>
+    <column name="PRO_UNIT_COST" type="VARCHAR" size="50" required="false" default=""/>
     <validator column="PRO_TIMEUNIT">
       <rule name="validValues" value="WEEKS|MONTHS|DAYS|HOURS|MINUTES" message="Please select a valid Time Unit."/>
     </validator>
@@ -1253,7 +1256,7 @@
     <column name="TAS_SELFSERVICE_EXECUTION" type="VARCHAR" size="15" default="EVERY_TIME"/>
 
     <validator column="TAS_TYPE">
-        <rule name="validValues" value="NORMAL|ADHOC|SUBPROCESS|HIDDEN|GATEWAYTOGATEWAY|WEBENTRYEVENT|END-MESSAGE-EVENT|START-MESSAGE-EVENT|INTERMEDIATE-THROW-MESSAGE-EVENT|INTERMEDIATE-CATCH-MESSAGE-EVENT" message="Please enter a valid value for TAS_TYPE"/>
+        <rule name="validValues" value="NORMAL|ADHOC|SUBPROCESS|HIDDEN|GATEWAYTOGATEWAY|WEBENTRYEVENT|END-MESSAGE-EVENT|START-MESSAGE-EVENT|INTERMEDIATE-THROW-MESSAGE-EVENT|INTERMEDIATE-CATCH-MESSAGE-EVENT|SCRIPT-TASK|START-TIMER-EVENT|INTERMEDIATE-CATCH-TIMER-EVENT|END-EMAIL-EVENT" message="Please set a valid value for TAS_TYPE" />
     </validator>
     <validator column="TAS_TIMEUNIT">
       <rule name="validValues" value="MINUTES|HOURS|DAYS|WEEKS|MONTHS" message="Please select a valid value for TAS_TIMEUNIT."/>
@@ -1680,7 +1683,7 @@
     <column name="DBS_SERVER" type="VARCHAR" size="100" required="true" default="0"/>
     <column name="DBS_DATABASE_NAME" type="VARCHAR" size="100" required="true" default="0"/>
     <column name="DBS_USERNAME" type="VARCHAR" size="32" required="true" default="0"/>
-    <column name="DBS_PASSWORD" type="VARCHAR" size="32" default=""/>
+    <column name="DBS_PASSWORD" type="VARCHAR" size="256" default=""/>
     <column name="DBS_PORT" type="INTEGER" default="0"/>
     <column name="DBS_ENCODE" type="VARCHAR" size="32" default=""/>
     <column name="DBS_CONNECTION_TYPE" type="VARCHAR" size="32" default="NORMAL"/>
@@ -2755,11 +2758,12 @@
     <column name="SCH_EVERY_DAYS" type="TINYINT" required="false" default="0"/>
     <column name="SCH_WEEK_DAYS" type="CHAR" size="14" required="true" default="0|0|0|0|0|0|0"/>
     <column name="SCH_START_DAY" type="CHAR" size="6" required="true" default="" />
-    <column name="SCH_MONTHS" type="CHAR" size="24" required="true" default="0|0|0|0|0|0|0|0|0|0|0|0"/>
+    <column name="SCH_MONTHS" type="CHAR" size="27" required="true" default="0|0|0|0|0|0|0|0|0|0|0|0" />
     <column name="SCH_END_DATE" type="TIMESTAMP" required="false"/>
     <column name="SCH_REPEAT_EVERY" type="VARCHAR" size="15" required="true" default="" />
     <column name="SCH_REPEAT_UNTIL" type="VARCHAR" size="15" required="true" default="" />
     <column name="SCH_REPEAT_STOP_IF_RUNNING" type="TINYINT" required="false" default="0"/>
+    <column name="SCH_EXECUTION_DATE" type="TIMESTAMP" required="false" />
     <column name="CASE_SH_PLUGIN_UID" type="VARCHAR" size="100" required="false"/>
   </table>
   <table name="CALENDAR_DEFINITION">
@@ -3064,7 +3068,7 @@
   </table>
 
   <table name="SESSION_STORAGE">
-  	<vendor type="mysql">
+    <vendor type="mysql">
         <parameter name="Name" value="SESSION_STORAGE"/>
         <parameter name="Engine" value="InnoDB"/>
         <parameter name="Version" value="10"/>
@@ -3594,7 +3598,7 @@
   </table>
 
   <table name="BPMN_FLOW">
-  	<vendor type="mysql">
+    <vendor type="mysql">
       <parameter name="Name" value="BPMN_FLOW"/>
       <parameter name="Engine" value="InnoDB"/>
       <parameter name="Version" value="10"/>
@@ -3643,7 +3647,7 @@
   </table>
 
   <table name="BPMN_GATEWAY">
-  	<vendor type="mysql">
+    <vendor type="mysql">
       <parameter name="Name" value="BPMN_GATEWAY"/>
       <parameter name="Engine" value="InnoDB"/>
       <parameter name="Version" value="10"/>
@@ -3721,7 +3725,7 @@
   </table>
 
   <table name="BPMN_LANE">
-  	<vendor type="mysql">
+    <vendor type="mysql">
       <parameter name="Name" value="BPMN_LANE"/>
       <parameter name="Engine" value="InnoDB"/>
       <parameter name="Version" value="10"/>
@@ -3816,7 +3820,7 @@
   </table>
 
   <table name="BPMN_DOCUMENTATION">
-  	<vendor type="mysql">
+    <vendor type="mysql">
       <parameter name="Name" value="BPMN_DOCUMENTATION"/>
       <parameter name="Engine" value="InnoDB"/>
       <parameter name="Version" value="10"/>
@@ -4382,7 +4386,7 @@
         <column name="MESS_FROM_NAME" type="VARCHAR" size="256" default="" />
         <column name="SMTPSECURE" type="VARCHAR" size="3" required="true" default="No" />
         <column name="MESS_TRY_SEND_INMEDIATLY" type="INTEGER" required="true" default="0" />
-        <column name="MAIL_TO" type="VARCHAR" size="256" required="true" default="" />
+        <column name="MAIL_TO" type="VARCHAR" size="256" required="false" default="" />
         <column name="MESS_DEFAULT" type="INTEGER" required="true" default="0" />
     </table>
 
@@ -4849,20 +4853,23 @@
             <parameter name="Create_options" value="" />
             <parameter name="Comment" value="Data calculated users by task"/>
         </vendor>
-        <column name="USR_UID"              type="VARCHAR"  size="32" required="true" primaryKey="true" />
-        <column name="TAS_UID"              type="VARCHAR"  size="32" required="true" primaryKey="true" />
-        <column name="PRO_UID"              type="VARCHAR"  size="32" required="true" />
-        <column name="MONTH"                type="INTEGER"  required="true" default="0" primaryKey="true" />
-        <column name="YEAR"                 type="INTEGER"  required="true" default="0" primaryKey="true" />
-        <column name="TOTAL_TIME_BY_TASK"   type="DECIMAL"  size="7,2"  default="0" />
-        <column name="TOTAL_CASES_IN"       type="DECIMAL"  size="7,2"  default="0" />
-        <column name="TOTAL_CASES_OUT"      type="DECIMAL"  size="7,2"  default="0" />
-        <column name="USER_HOUR_COST"       type="DECIMAL"  size="7,2"  default="0" />
-        <column name="AVG_TIME"             type="DECIMAL"  size="7,2"  default="0" />
-        <column name="SDV_TIME"             type="DECIMAL"  size="7,2"  default="0" />
-        <column name="CONFIGURED_TASK_TIME" type="DECIMAL"  size="7,2"  default="0" />
-        <column name="TOTAL_CASES_OVERDUE"  type="DECIMAL"  size="7,2"  default="0" />
-        <column name="TOTAL_CASES_ON_TIME"  type="DECIMAL"  size="7,2"  default="0" />
+        <column name="USR_UID"                type="VARCHAR"  size="32" required="true" primaryKey="true" />
+        <column name="TAS_UID"                type="VARCHAR"  size="32" required="true" primaryKey="true" />
+        <column name="PRO_UID"                type="VARCHAR"  size="32" required="true" />
+        <column name="MONTH"                  type="INTEGER"  required="true" default="0" primaryKey="true" />
+        <column name="YEAR"                   type="INTEGER"  required="true" default="0" primaryKey="true" />
+        <column name="TOTAL_QUEUE_TIME_BY_TASK" type="DECIMAL"  size="7,2"  default="0" />
+        <column name="TOTAL_TIME_BY_TASK"     type="DECIMAL"  size="7,2"  default="0" />
+        <column name="TOTAL_CASES_IN"         type="DECIMAL"  size="7,2"  default="0" />
+        <column name="TOTAL_CASES_OUT"        type="DECIMAL"  size="7,2"  default="0" />
+        <column name="USER_HOUR_COST"         type="DECIMAL"  size="7,2"  default="0" />
+        <column name="AVG_TIME"               type="DECIMAL"  size="7,2"  default="0" />
+        <column name="SDV_TIME"               type="DECIMAL"  size="7,2"  default="0" />
+        <column name="CONFIGURED_TASK_TIME"   type="DECIMAL"  size="7,2"  default="0" />
+        <column name="TOTAL_CASES_OVERDUE"    type="DECIMAL"  size="7,2"  default="0" />
+        <column name="TOTAL_CASES_ON_TIME"    type="DECIMAL"  size="7,2"  default="0" />
+        <column name="PRO_COST"               type="DECIMAL"  size="7,2"  required="false" default="0"/>
+        <column name="PRO_UNIT_COST"          type="VARCHAR"  size="50"   required="false" default=""/>
         <index name="indexReporting">
             <index-column name="USR_UID"/>
             <index-column name="TAS_UID"/>
@@ -4910,6 +4917,8 @@
         <column name="TOTAL_CASES_OPEN"         type="DECIMAL"  size="7,2"  default="0" />
         <column name="TOTAL_CASES_OVERDUE"      type="DECIMAL"  size="7,2"  default="0" />
         <column name="TOTAL_CASES_ON_TIME"      type="DECIMAL"  size="7,2"  default="0" />
+        <column name="PRO_COST"                 type="DECIMAL"  size="7,2"  required="false" default="0"/>
+        <column name="PRO_UNIT_COST"            type="VARCHAR"  size="50"   required="false" default=""/>
     </table>
 
     <table name="DASHBOARD">
@@ -5046,6 +5055,86 @@
                 <parameter name="Comment" value=""/>
             </vendor>
         </index>
+    </table>
+
+    <table name="SCRIPT_TASK">
+        <vendor type="mysql">
+            <parameter name="Name" value="SCRIPT_TASK" />
+            <parameter name="Engine" value="InnoDB" />
+            <parameter name="Version" value="10" />
+            <parameter name="Row_format" value="Dynamic" />
+            <parameter name="Data_free" value="0" />
+            <parameter name="Auto_increment" value="" />
+            <parameter name="Check_time" value="" />
+            <parameter name="Collation" value="utf8_general_ci" />
+            <parameter name="Checksum" value="" />
+            <parameter name="Create_options" value="" />
+        </vendor>
+        <column name="SCRTAS_UID" type="VARCHAR" size="32" required="true" primaryKey="true" default="" />
+        <column name="PRJ_UID" type="VARCHAR" size="32" required="true" default="" />
+        <column name="ACT_UID" type="VARCHAR" size="32" required="true" default="" />
+        <column name="SCRTAS_OBJ_TYPE" type="VARCHAR" size="10" required="true" default="TRIGGER" />
+        <column name="SCRTAS_OBJ_UID" type="VARCHAR" size="32" required="true" default="" />
+        <validator column="SCRTAS_OBJ_TYPE">
+            <rule name="validValues" value="TRIGGER" message="Please set a valid value for SCRTAS_OBJ_TYPE" />
+        </validator>
+    </table>
+
+    <table name="TIMER_EVENT">
+        <vendor type="mysql">
+            <parameter name="Name" value="TIMER_EVENT" />
+            <parameter name="Engine" value="InnoDB" />
+            <parameter name="Version" value="10" />
+            <parameter name="Row_format" value="Dynamic" />
+            <parameter name="Data_free" value="0" />
+            <parameter name="Auto_increment" value="" />
+            <parameter name="Check_time" value="" />
+            <parameter name="Collation" value="utf8_general_ci" />
+            <parameter name="Checksum" value="" />
+            <parameter name="Create_options" value="" />
+        </vendor>
+        <column name="TMREVN_UID"                 type="VARCHAR" size="32" required="true" primaryKey="true" />
+        <column name="PRJ_UID"                    type="VARCHAR" size="32" required="true" />
+        <column name="EVN_UID"                    type="VARCHAR" size="32" required="true" />
+        <column name="TMREVN_OPTION"              type="VARCHAR" size="50" required="true" default="DAILY" />
+        <column name="TMREVN_START_DATE"          type="DATE" required="false" />
+        <column name="TMREVN_END_DATE"            type="DATE" required="false" />
+        <column name="TMREVN_DAY"                 type="VARCHAR" size="5" required="true" default="" />
+        <column name="TMREVN_HOUR"                type="VARCHAR" size="5" required="true" default="" />
+        <column name="TMREVN_MINUTE"              type="VARCHAR" size="5" required="true" default="" />
+        <column name="TMREVN_CONFIGURATION_DATA"  type="LONGVARCHAR" required="true" default="" />
+        <column name="TMREVN_NEXT_RUN_DATE"       type="TIMESTAMP" required="false" />
+        <column name="TMREVN_LAST_RUN_DATE"       type="TIMESTAMP" required="false" />
+        <column name="TMREVN_LAST_EXECUTION_DATE" type="TIMESTAMP" required="false" />
+        <column name="TMREVN_STATUS"              type="VARCHAR" size="25" required="true" default="ACTIVE" />
+        <validator column="TMREVN_OPTION">
+            <rule name="validValues" value="HOURLY|DAILY|MONTHLY|EVERY|ONE-DATE-TIME|WAIT-FOR|WAIT-UNTIL-SPECIFIED-DATE-TIME" message="Please set a valid value for TMREVN_OPTION" />
+        </validator>
+        <validator column="TMREVN_STATUS">
+            <rule name="validValues" value="ACTIVE|INACTIVE|PROCESSED" message="Please set a valid value for TMREVN_STATUS" />
+        </validator>
+    </table>
+
+    <table name="EMAIL_EVENT">
+        <vendor type="mysql">
+            <parameter name="Name" value="EMAIL_EVENT" />
+            <parameter name="Engine" value="InnoDB" />
+            <parameter name="Version" value="10" />
+            <parameter name="Row_format" value="Dynamic" />
+            <parameter name="Data_free" value="0" />
+            <parameter name="Auto_increment" value="" />
+            <parameter name="Check_time" value="" />
+            <parameter name="Collation" value="utf8_general_ci" />
+            <parameter name="Checksum" value="" />
+            <parameter name="Create_options" value="" />
+        </vendor>
+        <column name="EMAIL_EVENT_UID" type="VARCHAR" size="32" required="true" primaryKey="true" />
+        <column name="PRJ_UID" type="VARCHAR" size="32" required="true" default=""/>
+        <column name="EVN_UID" type="VARCHAR" size="32" required="true" />
+        <column name="EMAIL_EVENT_FROM" type="VARCHAR" size="100" required="true" default="" />
+        <column name="EMAIL_EVENT_TO" type="LONGVARCHAR" required="true" />
+        <column name="EMAIL_EVENT_SUBJECT" type="VARCHAR" size="150" required="false" default=""/>
+        <column name="PRF_UID" type="VARCHAR" size="32" required="false" default="" />
     </table>
 </database>
 

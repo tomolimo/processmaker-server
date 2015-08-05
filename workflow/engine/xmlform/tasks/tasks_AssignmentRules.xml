@@ -58,7 +58,7 @@
 
   <TAS_SELFSERVICE_TIME_UNIT type="dropdown">
 
-    <en><![CDATA[Time unit]]><option name="HOURS"><![CDATA[Hours]]></option><option name="DAYS"><![CDATA[Days]]></option></en>
+    <en><![CDATA[Time unit]]><option name="HOURS"><![CDATA[Hours]]></option><option name="DAYS"><![CDATA[Days]]></option><option name="MINUTES"><![CDATA[Minutes]]></option></en>
 
   </TAS_SELFSERVICE_TIME_UNIT>
 

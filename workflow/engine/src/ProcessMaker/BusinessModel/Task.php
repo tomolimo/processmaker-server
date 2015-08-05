@@ -312,7 +312,9 @@ class Task
 
                     "TAS_SELFSERVICE_TIME_UNIT"   => $arrayDataAux["TAS_SELFSERVICE_TIME_UNIT"],
 
-                    "TAS_SELFSERVICE_TRIGGER_UID" => $arrayDataAux["TAS_SELFSERVICE_TRIGGER_UID"]
+                    "TAS_SELFSERVICE_TRIGGER_UID" => $arrayDataAux["TAS_SELFSERVICE_TRIGGER_UID"],
+
+                    "TAS_SELFSERVICE_EXECUTION"   => $arrayDataAux["TAS_SELFSERVICE_EXECUTION"]
 
                 ),
 
@@ -331,6 +333,8 @@ class Task
                     "TAS_TRANSFER_FLY" => $arrayDataAux["TAS_TRANSFER_FLY"],
 
                     "TAS_DURATION"     => $arrayDataAux["TAS_DURATION"],
+
+                    /*----------------------------------********---------------------------------*/
 
                     "TAS_TIMEUNIT"     => $arrayDataAux["TAS_TIMEUNIT"],
 
@@ -556,6 +560,8 @@ class Task
 
                     $this->unsetVar($arrayProperty, "TAS_SELFSERVICE_TRIGGER_UID");
 
+                    $this->unsetVar($arrayProperty, "TAS_SELFSERVICE_EXECUTION");
+
                     break;
 
                 case 'EVALUATE':
@@ -575,6 +581,8 @@ class Task
                     $this->unsetVar($arrayProperty, "TAS_SELFSERVICE_TIME_UNIT");
 
                     $this->unsetVar($arrayProperty, "TAS_SELFSERVICE_TRIGGER_UID");
+
+                    $this->unsetVar($arrayProperty, "TAS_SELFSERVICE_EXECUTION");
 
                     break;
 
@@ -626,6 +634,12 @@ class Task
 
                         }
 
+                        if (empty($arrayProperty["TAS_SELFSERVICE_EXECUTION"])) {
+
+                            throw (new \Exception("Invalid value specified for 'tas_selfservice_execution'"));
+
+                        }
+
                     } else {
 
                         $this->unsetVar($arrayProperty, "TAS_SELFSERVICE_TIME");
@@ -633,6 +647,8 @@ class Task
                         $this->unsetVar($arrayProperty, "TAS_SELFSERVICE_TIME_UNIT");
 
                         $this->unsetVar($arrayProperty, "TAS_SELFSERVICE_TRIGGER_UID");
+
+                        $this->unsetVar($arrayProperty, "TAS_SELFSERVICE_EXECUTION");
 
                     }
 
@@ -652,7 +668,7 @@ class Task
 
                 }
 
-                $valuesTimeUnit = array('DAYS','HOURS');
+                $valuesTimeUnit = array('DAYS','HOURS','MINUTES');
 
                 if ((!isset($arrayProperty["TAS_TIMEUNIT"])) ||
 
@@ -1720,7 +1736,7 @@ class Task
 
             } else {
 
-                $limit = 1000;
+                $limit = count($aUsers) + 1;
 
             }
 
@@ -1986,7 +2002,7 @@ class Task
 
             } else {
 
-                $limit = 1000;
+                $limit = count($aUsers) + 1;
 
             }
 
@@ -2722,7 +2738,7 @@ class Task
 
             } else {
 
-                $limit = 1000;
+                $limit = count($aUsers) + 1;
 
             }
 
@@ -2988,7 +3004,7 @@ class Task
 
             } else {
 
-                $limit = 1000;
+                $limit = count($aUsers) + 1;
 
             }
 
@@ -3828,7 +3844,7 @@ class Task
 
             } else {
 
-                $limit = 1000;
+                $limit = count($aUsersGroups) + 1;
 
             }
 
@@ -4064,7 +4080,7 @@ class Task
 
             } else {
 
-                $limit = 1000;
+                $limit = count($aUsersGroups) + 1;
 
             }
 

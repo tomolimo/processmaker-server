@@ -498,6 +498,20 @@ if ($action == "uploadFileNewProcess") {
 
         $result->proFileName = $Fields['PRO_FILENAME'];
 
+
+
+        //Add Audit Log
+
+        $ogetProcess = new Process();
+
+        $getprocess=$ogetProcess->load($oData->process['PRO_UID']);
+
+        $nameProcess=$getprocess['PRO_TITLE'];
+
+        G::auditLog("ImportProcess", 'PM File Imported '.$nameProcess. ' ('.$oData->process['PRO_UID'].')');
+
+
+
     } catch (Exception $e) {
 
         $result->response = $e->getMessage();

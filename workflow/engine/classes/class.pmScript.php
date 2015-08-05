@@ -346,6 +346,7 @@ class PMScript
         $sScript = "try {\n" . $sScript . "\n} catch (Exception \$oException) {\n " . " \$this->aFields['__ERROR__'] = utf8_encode(\$oException->getMessage());\n}";
         //echo '<pre>-->'; print_r($this->aFields); echo '<---</pre>';
         $this->executeAndCatchErrors( $sScript, $this->sScript );
+        $this->aFields["__VAR_CHANGED__"] = implode(",", $this->affected_fields);
         for ($i = 0; $i < count( $this->affected_fields ); $i ++) {
             $_SESSION['TRIGGER_DEBUG']['DATA'][] = Array ('key' => $this->affected_fields[$i],'value' => isset( $this->aFields[$this->affected_fields[$i]] ) ? $this->aFields[$this->affected_fields[$i]] : ''
             );

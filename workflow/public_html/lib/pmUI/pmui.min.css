@@ -402,6 +402,91 @@ a.mafe-button-edit:hover {
   opacity: 1;
 }
 
+a.mafe-button-edit-assign-no-hover {
+  background-image: url(../img/plus_.png);
+  background-position: 99% 50%;
+  background-repeat: no-repeat;
+  background-color: inherit;
+  background-color: #3397e1;
+  padding: 0 12px;
+  text-transform: none;
+  line-height: 26px !important;
+  height: 26px !important;
+  font-size: 14px;
+}
+
+a.mafe-button-edit-assign {
+  background-image: url(../img/arrow-grid.png);
+  background-position: 99% 50%;
+  background-repeat: no-repeat;
+  background-color: inherit;
+  padding: 0 12px;
+  text-transform: none;
+  line-height: 26px !important;
+  height: 26px !important;
+  font-size: 14px;
+}
+
+a.mafe-button-edit-assign:hover {
+  background-image: url(../img/arrow-grid.png);
+  background-position: 99% 50%;
+  background-repeat: no-repeat;
+  background-color: #e0e0e0;
+  opacity: 1;
+}
+
+a.mafe-button-edit-message-type {
+  background-image: url(../img/_edit.png);
+  background-position: 1%;
+  background-repeat: no-repeat;
+  background-color: inherit;
+}
+
+a.mafe-button-delete-message-type {
+  background-image: url(../img/_remove.png);
+  background-position: 1%;
+  background-repeat: no-repeat;
+  background-color: inherit;
+}
+
+a.mafe-button-save-message-type {
+  background-image: url(../img/_save.png);
+  background-position: 1%;
+  background-repeat: no-repeat;
+  background-color: inherit;
+}
+
+a.mafe-button-close-message-type {
+  background-image: url(../img/_close.png);
+  background-position: 1%;
+  background-repeat: no-repeat;
+  background-color: inherit;
+}
+
+a.mafe-button-create-message-type {
+  background-image: url(../img/_add.png);
+  background-position: 50%;
+  background-repeat: no-repeat;
+  background-color: inherit;
+  background-color: #1fbc99;
+  border: 1px solid #1ba385;
+  height: 32px !important;
+}
+
+a.mafe-button-editstep {
+  background-color: #1fbc99;
+  padding: 0 12px;
+  text-transform: none;
+  line-height: 26px !important;
+  height: 26px !important;
+  font-size: 14px;
+}
+
+a.mafe-button-editstep:hover {
+  background: #1ba385;
+  opacity: 1;
+}
+
 a.mafe-button-condition-trigger {
   line-height: 18px !important;
   height: 40px !important;
@@ -439,6 +524,38 @@ a.mafe-button-delete {
 
 a.mafe-button-delete:hover {
   background: #e14333;
+  opacity: 1;
+}
+
+a.mafe-button-delete-assign-no-hover {
+  background-image: url("../img/close_.png");
+  background-position: 99% 50%;
+  background-repeat: no-repeat;
+  background-color: inherit;
+  padding: 0 12px;
+  text-transform: none;
+  line-height: 26px !important;
+  height: 26px !important;
+  font-size: 14px;
+}
+
+a.mafe-button-delete-assign {
+  background-image: url("../img/close-grid.png");
+  background-position: 99% 50%;
+  background-repeat: no-repeat;
+  background-color: inherit;
+  padding: 0 12px;
+  text-transform: none;
+  line-height: 26px !important;
+  height: 26px !important;
+  font-size: 14px;
+}
+
+a.mafe-button-delete-assign:hover {
+  background-image: url("../img/close-grid.png");
+  background-position: 99% 50%;
+  background-repeat: no-repeat;
+  background-color: #e0e0e0;
   opacity: 1;
 }
 
@@ -636,9 +753,9 @@ a.mafe-button-create:hover{
 
 .mafe-grid-panel-empty {
   background: url(../img/i_group_big.png) no-repeat center;
-  height: 290px;
+  height: none;
   text-align: center;
-  padding-top: 208px;
+  padding-top: 205px;
   box-sizing: border-box;
 }
 
@@ -749,7 +866,7 @@ a.mafe-button-create:hover{
   top: 0px;
   left: 10px;
   width: 95%;
-  margin-top: 435px;
+  margin-top: 425px;
   height: 13px;
   padding-top: 1px !important;
 }
@@ -758,8 +875,8 @@ a.mafe-button-create:hover{
   position: absolute;
   top: 0px;
   left: -10px;
-  width: 90%;
-  margin-top: 360px;
+  width: 95%;
+  margin-top: 370px;
   height: 13px;
   padding-top: 1px !important;
 }
@@ -768,11 +885,15 @@ a.mafe-button-create:hover{
   background: white;
   position: absolute;
   top: 0px;
-  left: 10px;
+  left: 5px;
   width: 85%;
-  margin-top: 360px;
+  margin-top: 370px;
   height: 13px;
   padding-top: 1px !important;
+}
+
+.pmui-field-control-table td {
+  padding: 0px 45px 0px 20px !important;
 }
 
 #gridAcceptedValues .pmui-gridpanel-footer {
@@ -780,9 +901,101 @@ a.mafe-button-create:hover{
   top: 0px;
   left: 10px;
   width: 89%;
-  margin-top: 210px;
+  margin-top: 226px;
   height: 13px;
   padding-top: 1px !important;
+}
+
+.clearlooks2 .mceFocus .mceTop .mceCenter {
+  background: #3397e1 !important;
+  color: white !important;
+  text-align: left !important;
+  padding: 10px 15px !important;
+  cursor: move !important;
+  font-size: 14px !important;
+  border-bottom: 1px solid #e5e5e5 !important;
+}
+
+.clearlooks2 .mceBottom .mceCenter {
+  left: 5px !important;
+  width: 100% !important;
+  background: none !important;
+  background-color: white !important;
+}
+
+.clearlooks2 {
+  box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.4) !important;
+}
+
+.clearlooks2 a.mceResizeW {
+  background-color: white !important;
+}
+
+.clearlooks2 a.mceResizeE {
+  background-color: white !important;
+}
+
+.clearlooks2 .mceResize {
+  background: none !important;
+}
+
+.clearlooks2 .mceClose {
+  background: url("../img/mafe-tools.png") no-repeat !important;
+  background-position: 0 -916px !important;
+  width: 20px !important;
+  height: 20px !important;
+  margin-top: -1px !important;
+  margin-right: 3px !important;
+  opacity: inherit !important;
+}
+
+.clearlooks2 .mceClose:hover {
+  background: url("../img/mafe-tools.png") no-repeat !important;
+  background-position: 0 -1086px !important;
+}
+
+.clearlooks2 .mceFocus .mceMax {
+  background: url(../img/mafe-tools.png) no-repeat !important;
+  background-position: 0 -916px !important;
+  width: 27px !important;
+  height: 20px !important;
+  margin-top: -3px !important;
+}
+
+.clearlooks2 .mceFocus .mceMed {
+  background: url(../img/mafe-tools.png) no-repeat !important;
+  background-position: 0 -916px !important;
+  width: 27px !important;
+  height: 20px !important;
+  margin-top: -3px !important;
+}
+
+.pmui-window-close {
+  margin-top: 0px  !important;
+  outline: 0;
+}
+
+.pmui-window-close .button-icon {
+  background: url("../img/mafe-tools.png") no-repeat !important;
+  background-position: 0 -916px !important;
+  width: 20px !important;
+  height: 20px !important;
+  margin-top: 0px !important;
+  opacity: inherit !important;
+}
+
+.pmui-window-close .button-icon:hover {
+  background: url("../img/mafe-tools.png") no-repeat !important;
+  background-position: 0 -1086px !important;
+}
+
+.content_controls ul li {
+  padding: 1px 0 !important;
+}
+
+.pmui-gridpanel-footer-dinamic .pmui-gridpanel-pager {
+  width: 423px !important;
+  margin-left: -50px !important;
 }
 
 .pmui {
@@ -1480,8 +1693,71 @@ a.mafe-button-create:hover{
 }
 
 .pmui-gridpanel-pager {
-  float: right;
+  display: inline-block;
   margin: 0;
+}
+
+.pmui-gridpanel-pager-current {
+  text-decoration: none;
+  float: left;
+  color: #0493E5;
+  font-size: 14px;
+  line-height: 26px;
+  font-weight: normal;
+  text-align: center;
+  border: 1px solid #ddd;
+  min-width: 14px;
+  padding: 0 11px;
+  margin: 0 5px 0 0;
+  background: #FFF;
+  background: #0493E5;
+  color: #FFF;
+  cursor: default;
+  margin-left: -7px;
+}
+
+.pmui-gridpanel-pager-ellipse {
+  background: none;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  font-weight: bold;
+  cursor: default;
+  text-decoration: none;
+  float: left;
+  color: #0493E5;
+  font-size: 14px;
+  line-height: 26px;
+  font-weight: normal;
+  text-align: center;
+  border: 1px solid #ddd;
+  min-width: 14px;
+  padding: 0 7px;
+  margin: 0 5px 0 0;
+  background: #FFF;
+  margin-left: -7px;
+}
+
+.pmui-gridpanel-pager li a {
+  text-decoration: none;
+  float: left;
+  color: #0493E5;
+  font-size: 14px;
+  line-height: 26px;
+  font-weight: normal;
+  text-align: center;
+  border: 1px solid #ddd;
+  min-width: 14px;
+  padding: 0 11px;
+  margin: 0 5px 0 0;
+  background: #FFF;
+  margin-left: -7px;
+}
+
+.pmui-gridpanel-pager li a:hover {
+  text-decoration: none;
+  background: #0493E5;
+  color: #FFF;
 }
 
 .pmui-gridpanel-pager li {
@@ -1547,6 +1823,7 @@ a.mafe-button-create:hover{
 }
 
 .pmui-gridpanel-footer {
+  text-align: center;
   padding: 10px 20px;
   background-color: #fff;
 }
@@ -1654,35 +1931,30 @@ a.mafe-button-create:hover{
   background: none;
 }
 
-.pmui-tabpanel-tabs,
-.pmui-tabitem {
-  float: left;
-  font-family: 'SourceSansProBold', Arial, Tahoma, Verdana;
-}
-
 .pmui-tabpanel-container {
   background: #FFF;
+  overflow: visible !important;
 }
 
 .pmui-tabpanel-tabs {
   padding: 0;
   margin: 0;
-  border-bottom: 1px solid #FFF;
+  border-bottom: 1px solid #ddd;
   width: 92%;
 }
 
 .pmui-tabitem {
   font-size: 14px;
-  font-weight: bold;
+  font-weight: normal;
   text-transform: none;
   margin: 0 4px;
 }
 
 .pmui-tab-ref {
   display: block;
-  color: #e9ebee;
+  color: #337ab7;
   text-decoration: none;
-  background: #C7CDD4;
+  background: #FFF;
   padding: 0.6em 0.9em;
   -webkit-transition: all .4s;
   -moz-transition: all .4s;
@@ -1692,13 +1964,15 @@ a.mafe-button-create:hover{
 }
 
 .pmui-tabitem.pmui-active .pmui-tab-ref {
-  color: #FFF;
-  background: #EDB60B;
+  color: #555;
+  background: FFF;
+  border: 1px solid #ddd;
+  border-top: 3px solid #3397e1;
 }
 
 .pmui-tabitem:hover .pmui-tab-ref {
-  color: #E9EBEE;
-  background: #4D5B6A;
+  color: #555;
+  background: #FFF;
 }
 
 .pmui-tab_title {
@@ -1713,7 +1987,6 @@ a.mafe-button-create:hover{
   padding-right: 6px;
 }
 .pmui-tabpanel-left .pmui-tabitem {
-  float: left;
   clear: both;
   text-align: left;
   /*width: 100%;*/

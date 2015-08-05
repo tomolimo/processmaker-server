@@ -632,6 +632,14 @@ class Installer extends Controller
 
         }
 
+        
+
+        G::LoadSystem('inputfilter');
+
+        $filter = new InputFilter();
+
+        $pathShared = $filter->validateInput($_REQUEST['pathShared'], 'path');
+
 
 
         if ($info->pathShared->result) {
@@ -646,7 +654,7 @@ class Installer extends Controller
 
                     @file_put_contents( $_REQUEST['pathLogFile'], '' );
 
-                    @chmod($_REQUEST['pathShared'], 0770);
+                    @chmod($pathShared , 0770);
 
                 }
 
@@ -778,7 +786,15 @@ class Installer extends Controller
 
         }
 
+        
 
+        G::LoadSystem('inputfilter');
+
+        $filter = new InputFilter();
+
+        $logFile = $filter->validateInput($logFile, 'path');
+
+        
 
         $fpt = fopen( $logFile, 'a' );
 

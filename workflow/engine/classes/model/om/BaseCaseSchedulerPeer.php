@@ -25,7 +25,7 @@ abstract class BaseCaseSchedulerPeer
     const CLASS_DEFAULT = 'classes.model.CaseScheduler';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 25;
+    const NUM_COLUMNS = 26;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
@@ -103,6 +103,9 @@ abstract class BaseCaseSchedulerPeer
     /** the column name for the SCH_REPEAT_STOP_IF_RUNNING field */
     const SCH_REPEAT_STOP_IF_RUNNING = 'CASE_SCHEDULER.SCH_REPEAT_STOP_IF_RUNNING';
 
+    /** the column name for the SCH_EXECUTION_DATE field */
+    const SCH_EXECUTION_DATE = 'CASE_SCHEDULER.SCH_EXECUTION_DATE';
+
     /** the column name for the CASE_SH_PLUGIN_UID field */
     const CASE_SH_PLUGIN_UID = 'CASE_SCHEDULER.CASE_SH_PLUGIN_UID';
 
@@ -117,10 +120,10 @@ abstract class BaseCaseSchedulerPeer
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     private static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('SchUid', 'SchDelUserName', 'SchDelUserPass', 'SchDelUserUid', 'SchName', 'ProUid', 'TasUid', 'SchTimeNextRun', 'SchLastRunTime', 'SchState', 'SchLastState', 'UsrUid', 'SchOption', 'SchStartTime', 'SchStartDate', 'SchDaysPerformTask', 'SchEveryDays', 'SchWeekDays', 'SchStartDay', 'SchMonths', 'SchEndDate', 'SchRepeatEvery', 'SchRepeatUntil', 'SchRepeatStopIfRunning', 'CaseShPluginUid', ),
-        BasePeer::TYPE_COLNAME => array (CaseSchedulerPeer::SCH_UID, CaseSchedulerPeer::SCH_DEL_USER_NAME, CaseSchedulerPeer::SCH_DEL_USER_PASS, CaseSchedulerPeer::SCH_DEL_USER_UID, CaseSchedulerPeer::SCH_NAME, CaseSchedulerPeer::PRO_UID, CaseSchedulerPeer::TAS_UID, CaseSchedulerPeer::SCH_TIME_NEXT_RUN, CaseSchedulerPeer::SCH_LAST_RUN_TIME, CaseSchedulerPeer::SCH_STATE, CaseSchedulerPeer::SCH_LAST_STATE, CaseSchedulerPeer::USR_UID, CaseSchedulerPeer::SCH_OPTION, CaseSchedulerPeer::SCH_START_TIME, CaseSchedulerPeer::SCH_START_DATE, CaseSchedulerPeer::SCH_DAYS_PERFORM_TASK, CaseSchedulerPeer::SCH_EVERY_DAYS, CaseSchedulerPeer::SCH_WEEK_DAYS, CaseSchedulerPeer::SCH_START_DAY, CaseSchedulerPeer::SCH_MONTHS, CaseSchedulerPeer::SCH_END_DATE, CaseSchedulerPeer::SCH_REPEAT_EVERY, CaseSchedulerPeer::SCH_REPEAT_UNTIL, CaseSchedulerPeer::SCH_REPEAT_STOP_IF_RUNNING, CaseSchedulerPeer::CASE_SH_PLUGIN_UID, ),
-        BasePeer::TYPE_FIELDNAME => array ('SCH_UID', 'SCH_DEL_USER_NAME', 'SCH_DEL_USER_PASS', 'SCH_DEL_USER_UID', 'SCH_NAME', 'PRO_UID', 'TAS_UID', 'SCH_TIME_NEXT_RUN', 'SCH_LAST_RUN_TIME', 'SCH_STATE', 'SCH_LAST_STATE', 'USR_UID', 'SCH_OPTION', 'SCH_START_TIME', 'SCH_START_DATE', 'SCH_DAYS_PERFORM_TASK', 'SCH_EVERY_DAYS', 'SCH_WEEK_DAYS', 'SCH_START_DAY', 'SCH_MONTHS', 'SCH_END_DATE', 'SCH_REPEAT_EVERY', 'SCH_REPEAT_UNTIL', 'SCH_REPEAT_STOP_IF_RUNNING', 'CASE_SH_PLUGIN_UID', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, )
+        BasePeer::TYPE_PHPNAME => array ('SchUid', 'SchDelUserName', 'SchDelUserPass', 'SchDelUserUid', 'SchName', 'ProUid', 'TasUid', 'SchTimeNextRun', 'SchLastRunTime', 'SchState', 'SchLastState', 'UsrUid', 'SchOption', 'SchStartTime', 'SchStartDate', 'SchDaysPerformTask', 'SchEveryDays', 'SchWeekDays', 'SchStartDay', 'SchMonths', 'SchEndDate', 'SchRepeatEvery', 'SchRepeatUntil', 'SchRepeatStopIfRunning', 'SchExecutionDate', 'CaseShPluginUid', ),
+        BasePeer::TYPE_COLNAME => array (CaseSchedulerPeer::SCH_UID, CaseSchedulerPeer::SCH_DEL_USER_NAME, CaseSchedulerPeer::SCH_DEL_USER_PASS, CaseSchedulerPeer::SCH_DEL_USER_UID, CaseSchedulerPeer::SCH_NAME, CaseSchedulerPeer::PRO_UID, CaseSchedulerPeer::TAS_UID, CaseSchedulerPeer::SCH_TIME_NEXT_RUN, CaseSchedulerPeer::SCH_LAST_RUN_TIME, CaseSchedulerPeer::SCH_STATE, CaseSchedulerPeer::SCH_LAST_STATE, CaseSchedulerPeer::USR_UID, CaseSchedulerPeer::SCH_OPTION, CaseSchedulerPeer::SCH_START_TIME, CaseSchedulerPeer::SCH_START_DATE, CaseSchedulerPeer::SCH_DAYS_PERFORM_TASK, CaseSchedulerPeer::SCH_EVERY_DAYS, CaseSchedulerPeer::SCH_WEEK_DAYS, CaseSchedulerPeer::SCH_START_DAY, CaseSchedulerPeer::SCH_MONTHS, CaseSchedulerPeer::SCH_END_DATE, CaseSchedulerPeer::SCH_REPEAT_EVERY, CaseSchedulerPeer::SCH_REPEAT_UNTIL, CaseSchedulerPeer::SCH_REPEAT_STOP_IF_RUNNING, CaseSchedulerPeer::SCH_EXECUTION_DATE, CaseSchedulerPeer::CASE_SH_PLUGIN_UID, ),
+        BasePeer::TYPE_FIELDNAME => array ('SCH_UID', 'SCH_DEL_USER_NAME', 'SCH_DEL_USER_PASS', 'SCH_DEL_USER_UID', 'SCH_NAME', 'PRO_UID', 'TAS_UID', 'SCH_TIME_NEXT_RUN', 'SCH_LAST_RUN_TIME', 'SCH_STATE', 'SCH_LAST_STATE', 'USR_UID', 'SCH_OPTION', 'SCH_START_TIME', 'SCH_START_DATE', 'SCH_DAYS_PERFORM_TASK', 'SCH_EVERY_DAYS', 'SCH_WEEK_DAYS', 'SCH_START_DAY', 'SCH_MONTHS', 'SCH_END_DATE', 'SCH_REPEAT_EVERY', 'SCH_REPEAT_UNTIL', 'SCH_REPEAT_STOP_IF_RUNNING', 'SCH_EXECUTION_DATE', 'CASE_SH_PLUGIN_UID', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, )
     );
 
     /**
@@ -130,10 +133,10 @@ abstract class BaseCaseSchedulerPeer
      * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     private static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('SchUid' => 0, 'SchDelUserName' => 1, 'SchDelUserPass' => 2, 'SchDelUserUid' => 3, 'SchName' => 4, 'ProUid' => 5, 'TasUid' => 6, 'SchTimeNextRun' => 7, 'SchLastRunTime' => 8, 'SchState' => 9, 'SchLastState' => 10, 'UsrUid' => 11, 'SchOption' => 12, 'SchStartTime' => 13, 'SchStartDate' => 14, 'SchDaysPerformTask' => 15, 'SchEveryDays' => 16, 'SchWeekDays' => 17, 'SchStartDay' => 18, 'SchMonths' => 19, 'SchEndDate' => 20, 'SchRepeatEvery' => 21, 'SchRepeatUntil' => 22, 'SchRepeatStopIfRunning' => 23, 'CaseShPluginUid' => 24, ),
-        BasePeer::TYPE_COLNAME => array (CaseSchedulerPeer::SCH_UID => 0, CaseSchedulerPeer::SCH_DEL_USER_NAME => 1, CaseSchedulerPeer::SCH_DEL_USER_PASS => 2, CaseSchedulerPeer::SCH_DEL_USER_UID => 3, CaseSchedulerPeer::SCH_NAME => 4, CaseSchedulerPeer::PRO_UID => 5, CaseSchedulerPeer::TAS_UID => 6, CaseSchedulerPeer::SCH_TIME_NEXT_RUN => 7, CaseSchedulerPeer::SCH_LAST_RUN_TIME => 8, CaseSchedulerPeer::SCH_STATE => 9, CaseSchedulerPeer::SCH_LAST_STATE => 10, CaseSchedulerPeer::USR_UID => 11, CaseSchedulerPeer::SCH_OPTION => 12, CaseSchedulerPeer::SCH_START_TIME => 13, CaseSchedulerPeer::SCH_START_DATE => 14, CaseSchedulerPeer::SCH_DAYS_PERFORM_TASK => 15, CaseSchedulerPeer::SCH_EVERY_DAYS => 16, CaseSchedulerPeer::SCH_WEEK_DAYS => 17, CaseSchedulerPeer::SCH_START_DAY => 18, CaseSchedulerPeer::SCH_MONTHS => 19, CaseSchedulerPeer::SCH_END_DATE => 20, CaseSchedulerPeer::SCH_REPEAT_EVERY => 21, CaseSchedulerPeer::SCH_REPEAT_UNTIL => 22, CaseSchedulerPeer::SCH_REPEAT_STOP_IF_RUNNING => 23, CaseSchedulerPeer::CASE_SH_PLUGIN_UID => 24, ),
-        BasePeer::TYPE_FIELDNAME => array ('SCH_UID' => 0, 'SCH_DEL_USER_NAME' => 1, 'SCH_DEL_USER_PASS' => 2, 'SCH_DEL_USER_UID' => 3, 'SCH_NAME' => 4, 'PRO_UID' => 5, 'TAS_UID' => 6, 'SCH_TIME_NEXT_RUN' => 7, 'SCH_LAST_RUN_TIME' => 8, 'SCH_STATE' => 9, 'SCH_LAST_STATE' => 10, 'USR_UID' => 11, 'SCH_OPTION' => 12, 'SCH_START_TIME' => 13, 'SCH_START_DATE' => 14, 'SCH_DAYS_PERFORM_TASK' => 15, 'SCH_EVERY_DAYS' => 16, 'SCH_WEEK_DAYS' => 17, 'SCH_START_DAY' => 18, 'SCH_MONTHS' => 19, 'SCH_END_DATE' => 20, 'SCH_REPEAT_EVERY' => 21, 'SCH_REPEAT_UNTIL' => 22, 'SCH_REPEAT_STOP_IF_RUNNING' => 23, 'CASE_SH_PLUGIN_UID' => 24, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, )
+        BasePeer::TYPE_PHPNAME => array ('SchUid' => 0, 'SchDelUserName' => 1, 'SchDelUserPass' => 2, 'SchDelUserUid' => 3, 'SchName' => 4, 'ProUid' => 5, 'TasUid' => 6, 'SchTimeNextRun' => 7, 'SchLastRunTime' => 8, 'SchState' => 9, 'SchLastState' => 10, 'UsrUid' => 11, 'SchOption' => 12, 'SchStartTime' => 13, 'SchStartDate' => 14, 'SchDaysPerformTask' => 15, 'SchEveryDays' => 16, 'SchWeekDays' => 17, 'SchStartDay' => 18, 'SchMonths' => 19, 'SchEndDate' => 20, 'SchRepeatEvery' => 21, 'SchRepeatUntil' => 22, 'SchRepeatStopIfRunning' => 23, 'SchExecutionDate' => 24, 'CaseShPluginUid' => 25, ),
+        BasePeer::TYPE_COLNAME => array (CaseSchedulerPeer::SCH_UID => 0, CaseSchedulerPeer::SCH_DEL_USER_NAME => 1, CaseSchedulerPeer::SCH_DEL_USER_PASS => 2, CaseSchedulerPeer::SCH_DEL_USER_UID => 3, CaseSchedulerPeer::SCH_NAME => 4, CaseSchedulerPeer::PRO_UID => 5, CaseSchedulerPeer::TAS_UID => 6, CaseSchedulerPeer::SCH_TIME_NEXT_RUN => 7, CaseSchedulerPeer::SCH_LAST_RUN_TIME => 8, CaseSchedulerPeer::SCH_STATE => 9, CaseSchedulerPeer::SCH_LAST_STATE => 10, CaseSchedulerPeer::USR_UID => 11, CaseSchedulerPeer::SCH_OPTION => 12, CaseSchedulerPeer::SCH_START_TIME => 13, CaseSchedulerPeer::SCH_START_DATE => 14, CaseSchedulerPeer::SCH_DAYS_PERFORM_TASK => 15, CaseSchedulerPeer::SCH_EVERY_DAYS => 16, CaseSchedulerPeer::SCH_WEEK_DAYS => 17, CaseSchedulerPeer::SCH_START_DAY => 18, CaseSchedulerPeer::SCH_MONTHS => 19, CaseSchedulerPeer::SCH_END_DATE => 20, CaseSchedulerPeer::SCH_REPEAT_EVERY => 21, CaseSchedulerPeer::SCH_REPEAT_UNTIL => 22, CaseSchedulerPeer::SCH_REPEAT_STOP_IF_RUNNING => 23, CaseSchedulerPeer::SCH_EXECUTION_DATE => 24, CaseSchedulerPeer::CASE_SH_PLUGIN_UID => 25, ),
+        BasePeer::TYPE_FIELDNAME => array ('SCH_UID' => 0, 'SCH_DEL_USER_NAME' => 1, 'SCH_DEL_USER_PASS' => 2, 'SCH_DEL_USER_UID' => 3, 'SCH_NAME' => 4, 'PRO_UID' => 5, 'TAS_UID' => 6, 'SCH_TIME_NEXT_RUN' => 7, 'SCH_LAST_RUN_TIME' => 8, 'SCH_STATE' => 9, 'SCH_LAST_STATE' => 10, 'USR_UID' => 11, 'SCH_OPTION' => 12, 'SCH_START_TIME' => 13, 'SCH_START_DATE' => 14, 'SCH_DAYS_PERFORM_TASK' => 15, 'SCH_EVERY_DAYS' => 16, 'SCH_WEEK_DAYS' => 17, 'SCH_START_DAY' => 18, 'SCH_MONTHS' => 19, 'SCH_END_DATE' => 20, 'SCH_REPEAT_EVERY' => 21, 'SCH_REPEAT_UNTIL' => 22, 'SCH_REPEAT_STOP_IF_RUNNING' => 23, 'SCH_EXECUTION_DATE' => 24, 'CASE_SH_PLUGIN_UID' => 25, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, )
     );
 
     /**
@@ -281,6 +284,8 @@ abstract class BaseCaseSchedulerPeer
         $criteria->addSelectColumn(CaseSchedulerPeer::SCH_REPEAT_UNTIL);
 
         $criteria->addSelectColumn(CaseSchedulerPeer::SCH_REPEAT_STOP_IF_RUNNING);
+
+        $criteria->addSelectColumn(CaseSchedulerPeer::SCH_EXECUTION_DATE);
 
         $criteria->addSelectColumn(CaseSchedulerPeer::CASE_SH_PLUGIN_UID);
 

@@ -1698,6 +1698,30 @@ class Processes
 
 
 
+        if (isset($oData->emailEvent)) {
+
+            foreach ($oData->emailEvent as $key => $value) {
+
+                $oData->emailEvent[$key]["PRJ_UID"] = $sNewProUid;
+
+            }
+
+        }
+
+
+
+        if (isset($oData->filesManager)) {
+
+            foreach ($oData->filesManager as $key => $value) {
+
+                $oData->filesManager[$key]["PRO_UID"] = $sNewProUid;
+
+            }
+
+        }
+
+
+
         return true;
 
     }
@@ -3989,6 +4013,32 @@ class Processes
             if (isset($map[$oData->process[$key]])) {
 
                 $oData->process[$key] = $map[$oData->process[$key]];
+
+            }
+
+        }
+
+
+
+        //Script-Task
+
+        if (isset($oData->scriptTask)) {
+
+            foreach ($oData->scriptTask as $key => $value) {
+
+                $record = $value;
+
+
+
+                if (isset($map[$record["SCRTAS_OBJ_UID"]])) {
+
+                    $newUid = $map[$record["SCRTAS_OBJ_UID"]];
+
+
+
+                    $oData->scriptTask[$key]["SCRTAS_OBJ_UID"] = $newUid;
+
+                }
 
             }
 
@@ -6314,6 +6364,226 @@ class Processes
 
 
 
+    public function getScriptTasks($processUid)
+
+    {
+
+        try {
+
+            $arrayScriptTask = array();
+
+
+
+            $scriptTask = new \ProcessMaker\BusinessModel\ScriptTask();
+
+
+
+            //Get data
+
+            $criteria = $scriptTask->getScriptTaskCriteria();
+
+
+
+            $criteria->add(\ScriptTaskPeer::PRJ_UID, $processUid, \Criteria::EQUAL);
+
+
+
+            $rsCriteria = \ScriptTaskPeer::doSelectRS($criteria);
+
+            $rsCriteria->setFetchmode(\ResultSet::FETCHMODE_ASSOC);
+
+
+
+            while ($rsCriteria->next()) {
+
+                $row = $rsCriteria->getRow();
+
+
+
+                $arrayScriptTask[] = $row;
+
+            }
+
+
+
+            //Return
+
+            return $arrayScriptTask;
+
+        } catch (Exception $e) {
+
+            throw $e;
+
+        }
+
+    }
+
+
+
+    public function getTimerEvents($processUid)
+
+    {
+
+        try {
+
+            $arrayTimerEvent = array();
+
+
+
+            $timerEvent = new \ProcessMaker\BusinessModel\TimerEvent();
+
+
+
+            //Get data
+
+            $criteria = $timerEvent->getTimerEventCriteria();
+
+
+
+            $criteria->add(\TimerEventPeer::PRJ_UID, $processUid, \Criteria::EQUAL);
+
+
+
+            $rsCriteria = \TimerEventPeer::doSelectRS($criteria);
+
+            $rsCriteria->setFetchmode(\ResultSet::FETCHMODE_ASSOC);
+
+
+
+            while ($rsCriteria->next()) {
+
+                $row = $rsCriteria->getRow();
+
+
+
+                $arrayTimerEvent[] = $row;
+
+            }
+
+
+
+            //Return
+
+            return $arrayTimerEvent;
+
+        } catch (Exception $e) {
+
+            throw $e;
+
+        }
+
+    }
+
+
+
+    public function getEmailEvent($processUid)
+
+    {
+
+        try {
+
+            $arrayEmailEvent = array();
+
+
+
+            $emailEvent = new \ProcessMaker\BusinessModel\EmailEvent();
+
+            $criteria = $emailEvent->getEmailEventCriteria();
+
+
+
+            //Get data
+
+            $criteria->add(EmailEventPeer::PRJ_UID, $processUid, Criteria::EQUAL);
+
+            $rsCriteria = EmailEventPeer::doSelectRS($criteria);
+
+            $rsCriteria->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+
+            $rsCriteria->next();
+
+            while ($aRow = $rsCriteria->getRow()) {
+
+                $arrayEmailEvent[] = $aRow;
+
+                $rsCriteria->next();
+
+            }
+
+            //Return
+
+            return $arrayEmailEvent;
+
+        } catch (Exception $e) {
+
+            throw $e;
+
+        }
+
+    }
+
+
+
+    public function getFilesManager($processUid)
+
+    {
+
+        try {
+
+            $arrayFilesManager = array();
+
+            //Get data
+
+            $criteria = new \Criteria("workflow");
+
+            $criteria->addSelectColumn(\ProcessFilesPeer::PRF_UID);
+
+            $criteria->addSelectColumn(\ProcessFilesPeer::PRO_UID);
+
+            $criteria->addSelectColumn(\ProcessFilesPeer::USR_UID);
+
+            $criteria->addSelectColumn(\ProcessFilesPeer::PRF_UPDATE_USR_UID);
+
+            $criteria->addSelectColumn(\ProcessFilesPeer::PRF_PATH);
+
+            $criteria->addSelectColumn(\ProcessFilesPeer::PRF_TYPE);
+
+            $criteria->addSelectColumn(\ProcessFilesPeer::PRF_EDITABLE);
+
+            $criteria->addSelectColumn(\ProcessFilesPeer::PRF_CREATE_DATE);
+
+            $criteria->addSelectColumn(\ProcessFilesPeer::PRF_UPDATE_DATE);
+
+            $criteria->add(ProcessFilesPeer::PRO_UID, $processUid, Criteria::EQUAL);
+
+            $rsCriteria = ProcessFilesPeer::doSelectRS($criteria);
+
+            $rsCriteria->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+
+            $rsCriteria->next();
+
+            while ($aRow = $rsCriteria->getRow()) {
+
+                $arrayFilesManager[] = $aRow;
+
+                $rsCriteria->next();
+
+            }
+
+            //Return
+
+            return $arrayFilesManager;
+
+        } catch (Exception $e) {
+
+            throw $e;
+
+        }
+
+    }
+
+
+
     /**
 
      * Get Task User Rows from an array of data
@@ -6634,7 +6904,7 @@ class Processes
 
         } catch (Exception $e) {
 
-            //throw $e;
+            throw $e;
 
         }
 
@@ -6682,7 +6952,7 @@ class Processes
 
         } catch (Exception $e) {
 
-            //throw $e;
+            throw $e;
 
         }
 
@@ -6833,6 +7103,182 @@ class Processes
 
 
                 $arrayMessageEventDefinitionData = $messageEventDefinition->create($processUid, $record, false);
+
+            }
+
+        } catch (Exception $e) {
+
+            throw $e;
+
+        }
+
+    }
+
+
+
+    /**
+
+     * Create Script-Task records
+
+     *
+
+     * @param string $processUid Unique id of Process
+
+     * @param array  $arrayData  Data
+
+     *
+
+     * return void
+
+     */
+
+    public function createScriptTask($processUid, array $arrayData)
+
+    {
+
+        try {
+
+            $scriptTask = new \ProcessMaker\BusinessModel\ScriptTask();
+
+
+
+            foreach ($arrayData as $value) {
+
+                $record = $value;
+
+
+
+                $result = $scriptTask->create($processUid, $record);
+
+            }
+
+        } catch (Exception $e) {
+
+            throw $e;
+
+        }
+
+    }
+
+
+
+    /**
+
+     * Create Timer-Event records
+
+     *
+
+     * @param string $processUid Unique id of Process
+
+     * @param array  $arrayData  Data
+
+     *
+
+     * return void
+
+     */
+
+    public function createTimerEvent($processUid, array $arrayData)
+
+    {
+
+        try {
+
+            $timerEvent = new \ProcessMaker\BusinessModel\TimerEvent();
+
+
+
+            foreach ($arrayData as $value) {
+
+                $record = $value;
+
+
+
+                $result = $timerEvent->singleCreate($processUid, $record);
+
+            }
+
+        } catch (Exception $e) {
+
+            throw $e;
+
+        }
+
+    }
+
+
+
+    /**
+
+     * Create Email-Event records
+
+     *
+
+     * @param string $processUid Unique id of Process
+
+     * @param array  $arrayData  Data
+
+     *
+
+     * return void
+
+     */
+
+    public function createEmailEvent($processUid, array $arrayData)
+
+    {
+
+        try {
+
+            $emailEvent = new \ProcessMaker\BusinessModel\EmailEvent();
+
+
+
+            foreach ($arrayData as $value) {
+
+                $emailEventData = $emailEvent->save($processUid, $value);
+
+            }
+
+        } catch (Exception $e) {
+
+            throw $e;
+
+        }
+
+    }
+
+
+
+    /**
+
+     * Create Files Manager records
+
+     *
+
+     * @param string $processUid Unique id of Process
+
+     * @param array  $arrayData  Data
+
+     *
+
+     * return void
+
+     */
+
+    public function createFilesManager($processUid, array $arrayData)
+
+    {
+
+        try {
+
+            $filesManager = new \ProcessMaker\BusinessModel\FilesManager();
+
+
+
+            foreach ($arrayData as $value) {
+
+                $filesManager->addProcessFilesManagerInDb($value);
 
             }
 
@@ -7223,6 +7669,14 @@ class Processes
         $oData->messageTypeVariable = $this->getMessageTypeVariables($sProUid);
 
         $oData->messageEventDefinition = $this->getMessageEventDefinitions($sProUid);
+
+        $oData->scriptTask = $this->getScriptTasks($sProUid);
+
+        $oData->timerEvent = $this->getTimerEvents($sProUid);
+
+        $oData->emailEvent = $this->getEmailEvent($sProUid);
+
+        $oData->filesManager = $this->getFilesManager($sProUid);
 
         $oData->groupwfs = $this->groupwfsMerge($oData->groupwfs, $oData->processUser, "USR_UID");
 
@@ -9422,9 +9876,15 @@ class Processes
 
         $this->createMessageEventDefinition($arrayProcessData["PRO_UID"], (isset($oData->messageEventDefinition))? $oData->messageEventDefinition : array());
 
+        $this->createScriptTask($arrayProcessData["PRO_UID"], (isset($oData->scriptTask))? $oData->scriptTask : array());
+
+        $this->createTimerEvent($arrayProcessData["PRO_UID"], (isset($oData->timerEvent))? $oData->timerEvent : array());
+
+        $this->createEmailEvent($arrayProcessData["PRO_UID"], (isset($oData->emailEvent))? $oData->emailEvent : array());
+
+        $this->createFilesManager($arrayProcessData["PRO_UID"], (isset($oData->filesManager))? $oData->filesManager : array());
+
     }
-
-
 
 
 

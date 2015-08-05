@@ -937,8 +937,7 @@ if (! defined( 'EXECUTE_BY_CRON' )) {
                 Bootstrap::LoadClass( 'sessions' );
                 $oSessions = new Sessions();
                 if ($aSession = $oSessions->verifySession( $_GET['sid'] )) {
-                    $pathFile = $filter->validateInput('classes/model/Users.php','path');
-                    require_once $pathFile;
+                    require_once 'classes/model/Users.php';
                     $oUser = new Users();
                     $aUser = $oUser->load( $aSession['USR_UID'] );
                     $_SESSION['USER_LOGGED'] = $aUser['USR_UID'];

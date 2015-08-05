@@ -64,5 +64,45 @@ if ($noShowTitle == 0) {
 }
 $G_PUBLISH->AddContent( 'propeltable', 'paged-table', 'tracker/tracker_Messages', Cases::getHistoryMessagesTracker( $_SESSION['APPLICATION'] ), array ('VIEW' => G::LoadTranslation( 'ID_VIEW' )
 ) );
-G::RenderPage( 'publish' );
 
+$bpmn = new ProcessMaker\Project\Bpmn();
+$flagIsBpmn = ($bpmn->exists($_SESSION["PROCESS"]))? true : false;
+
+if ($flagIsBpmn) {
+    $urlTrackerProcessMap = "../designer?prj_uid=" . $_SESSION["PROCESS"] . "&prj_readonly=true&app_uid=" . $_SESSION["APPLICATION"] . "&tracker_designer=1";
+
+    $_SESSION["TRACKER_JAVASCRIPT"] = "
+        <script type=\"text/javascript\">
+            var winTracker;
+
+            if ((navigator.userAgent.indexOf(\"MSIE\") != -1) || (navigator.userAgent.indexOf(\"Trident\") != -1)) {
+                var li1 = document.getElementById(\"MAP\");
+                var a1 = li1.getElementsByTagName(\"a\");
+                a1[0].onclick = function () {
+                    winTracker = window.open(\"$urlTrackerProcessMap\", \"winTracker\");
+                    li1.className = \"SelectedMenu\";
+                    li2.className = \"mainMenu\";
+                    li3.className = \"mainMenu\";
+                    li4.className = \"mainMenu\";
+                    document.getElementById(\"trackerContainer\").innerHTML = \"\";
+                    
+                    return false;
+                };
+
+                var li2 = document.getElementById(\"DYNADOC\");
+                var a2= li2.getElementsByTagName(\"a\");
+                a2[0].onclick = function () { if (winTracker) { winTracker.close(); } };
+
+                var li3 = document.getElementById(\"HISTORY\");
+                var a3 = li3.getElementsByTagName(\"a\");
+                a3[0].onclick = function () { if (winTracker) { winTracker.close(); } };
+
+                var li4 = document.getElementById(\"MESSAGES\");
+                var a4 = li4.getElementsByTagName(\"a\");
+                a4[0].onclick = function () { if (winTracker) { winTracker.close(); } };
+            }
+        </script>
+    ";
+}
+
+G::RenderPage("publish");

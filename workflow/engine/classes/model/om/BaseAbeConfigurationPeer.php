@@ -25,7 +25,7 @@ abstract class BaseAbeConfigurationPeer
     const CLASS_DEFAULT = 'classes.model.AbeConfiguration';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 12;
+    const NUM_COLUMNS = 13;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;

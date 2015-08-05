@@ -25,7 +25,7 @@ abstract class BaseDynaformPeer
     const CLASS_DEFAULT = 'classes.model.Dynaform';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 7;
+    const NUM_COLUMNS = 8;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
@@ -52,6 +52,9 @@ abstract class BaseDynaformPeer
     /** the column name for the DYN_VERSION field */
     const DYN_VERSION = 'DYNAFORM.DYN_VERSION';
 
+    /** the column name for the DYN_UPDATE_DATE field */
+    const DYN_UPDATE_DATE = 'DYNAFORM.DYN_UPDATE_DATE';
+
     /** The PHP to DB Name Mapping */
     private static $phpNameMap = null;
 
@@ -63,10 +66,10 @@ abstract class BaseDynaformPeer
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     private static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('DynUid', 'ProUid', 'DynType', 'DynFilename', 'DynContent', 'DynLabel', 'DynVersion', ),
-        BasePeer::TYPE_COLNAME => array (DynaformPeer::DYN_UID, DynaformPeer::PRO_UID, DynaformPeer::DYN_TYPE, DynaformPeer::DYN_FILENAME, DynaformPeer::DYN_CONTENT, DynaformPeer::DYN_LABEL, DynaformPeer::DYN_VERSION, ),
-        BasePeer::TYPE_FIELDNAME => array ('DYN_UID', 'PRO_UID', 'DYN_TYPE', 'DYN_FILENAME', 'DYN_CONTENT', 'DYN_LABEL', 'DYN_VERSION', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, )
+        BasePeer::TYPE_PHPNAME => array ('DynUid', 'ProUid', 'DynType', 'DynFilename', 'DynContent', 'DynLabel', 'DynVersion', 'DynUpdateDate', ),
+        BasePeer::TYPE_COLNAME => array (DynaformPeer::DYN_UID, DynaformPeer::PRO_UID, DynaformPeer::DYN_TYPE, DynaformPeer::DYN_FILENAME, DynaformPeer::DYN_CONTENT, DynaformPeer::DYN_LABEL, DynaformPeer::DYN_VERSION, DynaformPeer::DYN_UPDATE_DATE, ),
+        BasePeer::TYPE_FIELDNAME => array ('DYN_UID', 'PRO_UID', 'DYN_TYPE', 'DYN_FILENAME', 'DYN_CONTENT', 'DYN_LABEL', 'DYN_VERSION', 'DYN_UPDATE_DATE', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, )
     );
 
     /**
@@ -76,10 +79,10 @@ abstract class BaseDynaformPeer
      * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     private static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('DynUid' => 0, 'ProUid' => 1, 'DynType' => 2, 'DynFilename' => 3, 'DynContent' => 4, 'DynLabel' => 5, 'DynVersion' => 6, ),
-        BasePeer::TYPE_COLNAME => array (DynaformPeer::DYN_UID => 0, DynaformPeer::PRO_UID => 1, DynaformPeer::DYN_TYPE => 2, DynaformPeer::DYN_FILENAME => 3, DynaformPeer::DYN_CONTENT => 4, DynaformPeer::DYN_LABEL => 5, DynaformPeer::DYN_VERSION => 6, ),
-        BasePeer::TYPE_FIELDNAME => array ('DYN_UID' => 0, 'PRO_UID' => 1, 'DYN_TYPE' => 2, 'DYN_FILENAME' => 3, 'DYN_CONTENT' => 4, 'DYN_LABEL' => 5, 'DYN_VERSION' => 6, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, )
+        BasePeer::TYPE_PHPNAME => array ('DynUid' => 0, 'ProUid' => 1, 'DynType' => 2, 'DynFilename' => 3, 'DynContent' => 4, 'DynLabel' => 5, 'DynVersion' => 6, 'DynUpdateDate' => 7, ),
+        BasePeer::TYPE_COLNAME => array (DynaformPeer::DYN_UID => 0, DynaformPeer::PRO_UID => 1, DynaformPeer::DYN_TYPE => 2, DynaformPeer::DYN_FILENAME => 3, DynaformPeer::DYN_CONTENT => 4, DynaformPeer::DYN_LABEL => 5, DynaformPeer::DYN_VERSION => 6, DynaformPeer::DYN_UPDATE_DATE => 7, ),
+        BasePeer::TYPE_FIELDNAME => array ('DYN_UID' => 0, 'PRO_UID' => 1, 'DYN_TYPE' => 2, 'DYN_FILENAME' => 3, 'DYN_CONTENT' => 4, 'DYN_LABEL' => 5, 'DYN_VERSION' => 6, 'DYN_UPDATE_DATE' => 7, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, )
     );
 
     /**
@@ -193,6 +196,8 @@ abstract class BaseDynaformPeer
         $criteria->addSelectColumn(DynaformPeer::DYN_LABEL);
 
         $criteria->addSelectColumn(DynaformPeer::DYN_VERSION);
+
+        $criteria->addSelectColumn(DynaformPeer::DYN_UPDATE_DATE);
 
     }
 

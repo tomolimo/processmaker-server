@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm type="grid" name="ldapAdvanced/gridAttribute" enabletemplate="0" mode="">
+  <attributeLdap type="text" maxlength="64" validate="Any" required="0" readonly="0" size="15" mode="edit" btn_cancel="Cancel">
+    <en><![CDATA[LDAP Field]]></en>
+    <pt-BR><![CDATA[Campo LDAP]]></pt-BR>
+  </attributeLdap>
+  <attributeUser type="dropdown" required="0" readonly="0" mode="edit" options="Array" btn_cancel="Cancel">
+    <en><![CDATA[User Field]]></en>
+    <pt-BR><![CDATA[Campo de Usuário]]></pt-BR>
+  </attributeUser>
+</dynaForm>

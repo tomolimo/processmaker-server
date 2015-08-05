@@ -1154,7 +1154,6 @@ Ext.onReady(function() {
         store: addonsStore,
         defaultType: "displayfield",
         padding: 5,
-        //autoHeight : true,
         height: 335,
         disabled: !licensed,
         columns: [
@@ -1493,38 +1492,6 @@ Ext.onReady(function() {
         listeners: {
             render: function(){
                 this.loadMask = new Ext.LoadMask(this.body, {msg:_('ID_LOADING_GRID')});
-            },
-            "cellclick": function (grid, rowIndex, columnIndex, e) {
-                var record = grid.getStore().getAt(rowIndex);
-                var fieldName = grid.getColumnModel().getDataIndex(columnIndex);
-
-                if (fieldName != "status") {
-                  return;
-                }
-
-                switch (record.get("status")) {
-                    case "upgrade":
-                    case "ready":
-                        if (INTERNET_CONNECTION == 1) {
-                            installAddon(record.get("id"), record.get("store"));
-                        } else {
-                            Ext.MessageBox.alert(_('ID_INFORMATION'), _('ID_NO_INTERNET_CONECTION'));
-                        }
-                        break;
-                    case "download":
-                        Ext.Ajax.request({
-                          url: "addonsStoreAction",
-                          params: {
-                            "action": "cancel",
-                            "addon": record.get("id"),
-                            "store": record.get("store")
-                            }
-                        });
-                        break;
-                    case "available":
-                        addonAvailable(record.get("id"));
-                        break;
-                }
             }
         }
     });
@@ -1533,7 +1500,7 @@ Ext.onReady(function() {
         activeTab: 0,
         height: 370,
         defaults:{
-            //autoScroll: true,
+            autoScroll: true,
             layout:'form',
             frame:true,
         },

@@ -129,6 +129,10 @@ class ProcessMapBuilder
 
         $tMap->addColumn('PRO_DERIVATION_SCREEN_TPL', 'ProDerivationScreenTpl', 'string', CreoleTypes::VARCHAR, false, 128);
 
+        $tMap->addColumn('PRO_COST', 'ProCost', 'double', CreoleTypes::DECIMAL, false, 7,2);
+
+        $tMap->addColumn('PRO_UNIT_COST', 'ProUnitCost', 'string', CreoleTypes::VARCHAR, false, 50);
+
         $tMap->addValidator('PRO_TIMEUNIT', 'validValues', 'propel.validator.ValidValuesValidator', 'WEEKS|MONTHS|DAYS|HOURS|MINUTES', 'Please select a valid Time Unit.');
 
         $tMap->addValidator('PRO_STATUS', 'validValues', 'propel.validator.ValidValuesValidator', 'ACTIVE|INACTIVE|DISABLED', 'Please select a valid Process Status.');

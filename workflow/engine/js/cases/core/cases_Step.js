@@ -912,23 +912,24 @@ var resendMessage = function(APP_UID, APP_MSG_UID)
   });
 };
 
-
 function showdebug()
 {
-  if ( typeof parent != 'undefined' && typeof parent.parent != 'undefined') {
-    if ( typeof parent.parent.Ext != 'undefined') {
-      if (!parent.parent.PANEL_EAST_OPEN ) {
-        var debugPanel = parent.parent.Ext.getCmp('debugPanel');
-        parent.parent.PANEL_EAST_OPEN = true;
+    try {
+        if (typeof(parent) != "undefined" && typeof(parent.parent) != "undefined" && typeof(parent.parent.Ext) != "undefined") {
+            if (!parent.parent.PANEL_EAST_OPEN) {
+                var debugPanel = parent.parent.Ext.getCmp("debugPanel");
+                parent.parent.PANEL_EAST_OPEN = true;
 
-        debugPanel.show();
-        debugPanel.ownerCt.doLayout();
-        debugPanel.expand();
-      }
-      parent.parent.propStore.load();
-      parent.parent.triggerStore.load();
+                debugPanel.show();
+                debugPanel.ownerCt.doLayout();
+                debugPanel.expand();
+            }
+
+            parent.parent.propStore.load();
+            parent.parent.triggerStore.load();
+        }
+    } catch(e) {
     }
-  }
 }
 
 var uploadInputDocument = function(docID,appDocId,docVersion,actionType){
@@ -1042,3 +1043,4 @@ var inputDocumentVersionHistory = function(docID,appDocId){
   }.extend(this);
   oRPC.make();
 };
+

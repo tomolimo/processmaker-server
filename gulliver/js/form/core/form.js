@@ -3227,11 +3227,11 @@ var validateForm = function(sRequiredFields) {
             var systemMessaggeInvalid = "";
 
             if(invalid_fields.length > 0) {
-                systemMessaggeInvalid += "\n \n"+G_STRINGS.ID_REQUIRED_FIELDS_GRID;
+                systemMessaggeInvalid += "\n \n" + _('ID_REQUIRED_FIELDS_GRID'); 
             }
 
             if(fielEmailInvalid.length > 0) {
-              systemMessaggeInvalid += "\n \n" +  G_STRINGS.ID_VALIDATED_FIELDS + ": \n \n [ " + emailInvalidMessage + " ]";
+                systemMessaggeInvalid += "\n \n" + _('ID_VALIDATED_FIELDS') + ": \n \n [ " + emailInvalidMessage + " ]";
             }
 
             alert(systemMessaggeInvalid);

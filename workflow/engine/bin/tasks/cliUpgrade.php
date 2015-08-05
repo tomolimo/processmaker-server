@@ -64,11 +64,11 @@ G::LoadClass("cli");
 
 CLI::taskName('upgrade');
 
-CLI::taskDescription("Upgrade workspaces.\n\n This command should be run after ProcessMaker files are upgraded so that all workspaces are upgraded to the current version.");
+CLI::taskDescription("Upgrade workspaces.\n\n This command should be run after upgrading ProcessMaker to a new version so that all workspaces are also upgraded to the\n  new version.");
 
 
 
-CLI::taskOpt("buildACV", "If the option is enabled, performs the Build Cache View.", "ACV", "buildACV");
+CLI::taskOpt("buildACV", "If this option is enabled, the Cache View is built.", "ACV", "buildACV");
 
 CLI::taskRun("run_upgrade");
 

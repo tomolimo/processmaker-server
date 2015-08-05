@@ -373,11 +373,11 @@ class XmlForm_Field_hours extends XmlForm_Field_SimpleText
  * @param eter boolean $bSystemVars
  * @return array
  */
-function getDynaformsVars ($sProcessUID, $bSystemVars = true, $bIncMulSelFields = 0)
+function getDynaformsVars ($sProcessUID, $typeVars = 'all', $bIncMulSelFields = 0)
 {
     $aFields = array ();
     $aFieldsNames = array ();
-    if ($bSystemVars) {
+    if ($typeVars == 'system' || $typeVars == 'all') {
         $aAux = G::getSystemConstants();
         foreach ($aAux as $sName => $sValue) {
             $aFields[] = array ('sName' => $sName,'sType' => 'system','sLabel' => G::LoadTranslation('ID_TINY_SYSTEM_VARIABLES'));
@@ -401,21 +401,54 @@ function getDynaformsVars ($sProcessUID, $bSystemVars = true, $bIncMulSelFields 
     $oDataset->next();
     $row = $oDataset->getRow();
     if (isset($row["PRJ_UID"])) {
-        $oCriteria = new Criteria('workflow');
-        $oCriteria->addSelectColumn(ProcessVariablesPeer::VAR_UID);
-        $oCriteria->addSelectColumn(ProcessVariablesPeer::VAR_NAME);
-        $oCriteria->addSelectColumn(ProcessVariablesPeer::VAR_FIELD_TYPE);
-        $oCriteria->add(ProcessVariablesPeer::PRJ_UID, $sProcessUID);
-        $oDataset = DynaformPeer::doSelectRS($oCriteria);
-        $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-        while ($oDataset->next()) {
-            $row = $oDataset->getRow();
-            array_push($aFields, array(
-                "sName" => $row["VAR_NAME"],
-                "sType" => $row["VAR_FIELD_TYPE"],
-                "sLabel" => $row["VAR_NAME"] . " [" . $row["VAR_FIELD_TYPE"] . "]"
-            ));
+        if($typeVars == 'process' || $typeVars == 'all') {
+            $oCriteria = new Criteria('workflow');
+            $oCriteria->addSelectColumn(ProcessVariablesPeer::VAR_UID);
+            $oCriteria->addSelectColumn(ProcessVariablesPeer::VAR_NAME);
+            $oCriteria->addSelectColumn(ProcessVariablesPeer::VAR_FIELD_TYPE);
+            $oCriteria->add(ProcessVariablesPeer::PRJ_UID, $sProcessUID);
+            $oDataset = DynaformPeer::doSelectRS($oCriteria);
+            $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+            while ($oDataset->next()) {
+                $row = $oDataset->getRow();
+                array_push($aFields, array(
+                    "sName" => $row["VAR_NAME"],
+                    "sType" => $row["VAR_FIELD_TYPE"],
+                    "sLabel" => $row["VAR_FIELD_TYPE"]
+                ));
+            }
+        } 
+        if($typeVars == 'grid' || $typeVars == 'all') {
+            $oC = new Criteria( 'workflow' );
+            $oC->addSelectColumn( DynaformPeer::DYN_CONTENT );
+            $oC->add( DynaformPeer::PRO_UID, $sProcessUID );
+            $oC->add( DynaformPeer::DYN_TYPE, 'xmlform' );
+            $oData = DynaformPeer::doSelectRS( $oC );
+            $oData->setFetchmode( ResultSet::FETCHMODE_ASSOC );
+            $oData->next();
+            while ($aRowd = $oData->getRow()) {
+                $dynaform = G::json_decode($aRowd['DYN_CONTENT'],true);
+                if(is_array($dynaform) && sizeof($dynaform)) {
+                    $items = $dynaform['items'][0]['items'];
+                    foreach($items as $key => $val){
+                        if($val[0]['type'] == 'grid'){
+                            if(sizeof($val[0]['columns'])) {
+                                $columns = $val[0]['columns'];
+                                foreach($columns as $column) {
+                                    array_push($aFields, array(
+                                        "sName" => $column['name'],
+                                        "sType" => $column['type'],
+                                        "sLabel" => $column['type']
+                                    ));
+                                }
+                            }
+                        }
+                    }
+                }
+                $oData->next();
+            }
         }
+        
     } else {
         require_once 'classes/model/Dynaform.php';
         $oCriteria = new Criteria( 'workflow' );

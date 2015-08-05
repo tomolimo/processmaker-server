@@ -915,17 +915,31 @@ class pmTablesProxy extends HttpProxyController
      */
     public function import ($httpData)
     {
+        $fromAdmin = false;
+        if (isset( $_POST["form"]["TYPE_TABLE"] ) && ! empty( $_POST["form"]["TYPE_TABLE"] )) {
+            if($_POST["form"]["TYPE_TABLE"] == 'admin') {
+                $fromAdmin = true;
+            } 
+        }
+        
         require_once 'classes/model/AdditionalTables.php';
         try {
             $result = new stdClass();
             $errors = '';
+            $fromConfirm = false;
 
             $overWrite = isset( $_POST['form']['OVERWRITE'] ) ? true : false;
+            
+            if (isset( $_POST["form"]["FROM_CONFIRM"] ) && ! empty( $_POST["form"]["FROM_CONFIRM"] )) {
+                $fromConfirm = $_POST["form"]["FROM_CONFIRM"];
+                $_FILES['form'] = $_SESSION['FILES_FORM'];
+            }
 
             //save the file
             if ($_FILES['form']['error']['FILENAME'] !== 0) {
                 throw new Exception( G::loadTranslation( 'ID_PMTABLE_UPLOADING_FILE_PROBLEM' ) );
             }
+            $_SESSION['FILES_FORM'] = $_FILES['form'];
 
             $oAdditionalTables = new AdditionalTables();
             $tableNameMap = array ();
@@ -935,7 +949,14 @@ class pmTablesProxy extends HttpProxyController
             $PUBLIC_ROOT_PATH = PATH_DATA . 'sites' . PATH_SEP . SYS_SYS . PATH_SEP . 'public' . PATH_SEP;
             $filename = $_FILES['form']['name']['FILENAME'];
             $tempName = $_FILES['form']['tmp_name']['FILENAME'];
-            G::uploadFile( $tempName, $PUBLIC_ROOT_PATH, $filename );
+            
+            if(!$fromConfirm) {
+                G::uploadFile( $tempName, $PUBLIC_ROOT_PATH, $filename );
+            }
+            
+            if ($fromConfirm == 'clear') {
+                $fromConfirm = true;
+            }
 
             $fileContent = file_get_contents( $PUBLIC_ROOT_PATH . $filename );
 
@@ -946,6 +967,17 @@ class pmTablesProxy extends HttpProxyController
             $fp = fopen( $PUBLIC_ROOT_PATH . $filename, "rb" );
             $fsData = intval( fread( $fp, 9 ) ); //reading the metadata
             $sType = fread( $fp, $fsData );
+
+            $pmTables = $this->getList('');
+            $proUids = Array();
+            if($pmTables['count']) {
+                $pmTables = $pmTables['rows'];
+                foreach($pmTables as $val) {
+                    if($val['PRO_UID'] != '') {
+                        $proUids[] = $val['PRO_UID'];   
+                    }
+                }
+            }
 
             // first create the tables structures
 
@@ -964,7 +996,57 @@ class pmTablesProxy extends HttpProxyController
                         $additionalTable = new additionalTables();
                         $tableExists = $additionalTable->loadByName( $contentSchema['ADD_TAB_NAME'] );
                         $tableNameMap[$contentSchema['ADD_TAB_NAME']] = $contentSchema['ADD_TAB_NAME'];
+                        
+                        $tableData = new stdClass();
+                        if (isset( $_POST["form"]["PRO_UID"] ) && ! empty( $_POST["form"]["PRO_UID"] )) {
+                            $tableData->PRO_UID = $_POST["form"]["PRO_UID"];
+                        } else {
+                            $tableData->PRO_UID = isset( $contentSchema["PRO_UID"] ) ? $contentSchema["PRO_UID"] : "";
+                        }
+                        
+                        $isPmTable = false; /*is a report table*/
+                        if($contentSchema["PRO_UID"] == "" ) {
+                            $isPmTable = true;
+                        }
+                        if (isset( $_POST["form"]["PRO_UID_HELP"] ) && !empty($_POST["form"]["PRO_UID_HELP"])) {
+                            $currentPRO_UID = $_POST["form"]["PRO_UID_HELP"];
+                        } else {
+                            $currentPRO_UID = (isset( $_SESSION['PROCESS']  ) && !empty( $_SESSION['PROCESS']  )) ? $_SESSION['PROCESS']  : '';
+                        }
 
+                        if($fromAdmin) { /* from admin tab */
+                            if ($tableExists !== false && !$fromConfirm) {
+                                $validationType = 1;
+                                throw new Exception( G::loadTranslation( 'ID_OVERWRITE_PMTABLE' ) );    
+                            } 
+                            if(!in_array($tableData->PRO_UID, $proUids) && !$isPmTable) {
+                                $validationType = 2;
+                                throw new Exception( G::loadTranslation( 'ID_NO_RELATED_PROCESS' ) );
+                            }
+                        } else { /* from designer tab */
+                            if($isPmTable){
+                                $validationType = '';
+                                throw new Exception( G::loadTranslation( 'ID_NO_REPORT_TABLE' ) );    
+                            }
+                            if ($tableExists !== false && !$fromConfirm) {
+                                $validationType = 1;
+                                throw new Exception( G::loadTranslation( 'ID_OVERWRITE_PMTABLE' ) );    
+                            }
+                            if($currentPRO_UID != $tableData->PRO_UID) {
+                                if(!in_array($tableData->PRO_UID, $proUids)) {
+                                    $validationType = 2;
+                                    if(($fromConfirm == $validationType || !$fromConfirm) && !$isPmTable) {
+                                        throw new Exception( G::loadTranslation( 'ID_OVERWRITE_RELATED_PROCESS' ) );
+                                    } else {
+                                        $tableData->PRO_UID = $currentPRO_UID;
+                                    }
+                                } else {
+                                    $validationType = 3;
+                                    throw new Exception( G::loadTranslation( 'ID_ALREADY_RELATED_TABLE ' ) );
+                                }
+                            }
+                        }
+                       
                         if ($overWrite) {
                             if ($tableExists !== false) {
                                 $additionalTable->deleteAll( $tableExists['ADD_TAB_UID'] );
@@ -995,18 +1077,11 @@ class pmTablesProxy extends HttpProxyController
                             $columns[] = $column;
                         }
 
-                        $tableData = new stdClass();
                         $tableData->REP_TAB_UID = $contentSchema['ADD_TAB_UID'];
                         $tableData->REP_TAB_NAME = $contentSchema['ADD_TAB_NAME'];
                         $tableData->REP_TAB_DSC = $contentSchema['ADD_TAB_DESCRIPTION'];
                         $tableData->REP_TAB_CONNECTION = $contentSchema['DBS_UID'];
-
-                        if (isset( $_POST["form"]["PRO_UID"] ) && ! empty( $_POST["form"]["PRO_UID"] )) {
-                            $tableData->PRO_UID = $_POST["form"]["PRO_UID"];
-                        } else {
-                            $tableData->PRO_UID = isset( $contentSchema["PRO_UID"] ) ? $contentSchema["PRO_UID"] : "";
-                        }
-
+                       
                         $tableData->REP_TAB_TYPE = isset( $contentSchema['ADD_TAB_TYPE'] ) ? $contentSchema['ADD_TAB_TYPE'] : '';
                         $tableData->REP_TAB_GRID = isset( $contentSchema['ADD_TAB_GRID'] ) ? $contentSchema['ADD_TAB_GRID'] : '';
                         $tableData->columns = G::json_encode( $columns );
@@ -1147,6 +1222,8 @@ class pmTablesProxy extends HttpProxyController
             $result->message = $msg;
         } catch (Exception $e) {
             $result = new stdClass();
+            $result->fromAdmin = $fromAdmin;
+            $result->validationType = $validationType;
             $result->errorType = 'error';
             $result->buildResult = ob_get_contents();
             ob_end_clean();
@@ -1648,7 +1725,7 @@ class pmTablesProxy extends HttpProxyController
                     $varSql = isset($row["VAR_SQL"]) ? $row["VAR_SQL"] : '';                    
                     $varProcessVariable = isset($row["VAR_ACCEPTED_VALUES"]) ? $row["VAR_ACCEPTED_VALUES"] : '[]';
                     if(! in_array( $fieldType, $excludeFieldsList )){
-                       if(strlen($varSql) == 0 && $varProcessVariable == '[]'){
+                        if(strlen($varSql) == 0 && $varProcessVariable == '[]'){
                             array_push($fields, array(
                                 "FIELD_UID" => $row["VAR_NAME"] . "-" . $row["VAR_FIELD_TYPE"],
                                 "FIELD_NAME" => $row["VAR_NAME"],
@@ -1656,7 +1733,7 @@ class pmTablesProxy extends HttpProxyController
                                 "_index" => $index ++,
                                 "_isset" => true
                             ));
-                        }
+                        }                       
                     }
                 }
             }

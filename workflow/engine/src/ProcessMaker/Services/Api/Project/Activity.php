@@ -470,7 +470,7 @@ class ActivityPropertiesStructure
 
     /**
 
-     * @var string {@from body} {@choice DAYS,,HOURS}
+     * @var string {@from body} {@choice DAYS,,HOURS,MINUTES}
 
      */
 
@@ -485,6 +485,16 @@ class ActivityPropertiesStructure
      */
 
     public $tas_selfservice_trigger_uid;
+
+
+
+    /**
+
+     * @var string {@from body} {@choice EVERY_TIME,ONCE}
+
+     */
+
+    public $tas_selfservice_execution;
 
 
 

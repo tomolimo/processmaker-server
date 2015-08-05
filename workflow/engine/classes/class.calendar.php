@@ -806,7 +806,9 @@ class calendar extends CalendarDefinition
     	if ( G::toUpper($formatDuration) == 'DAYS' ) {
     		$duration = $duration*$calendarData['HOURS_FOR_DAY'];
     	}
-    
+      if ( G::toUpper($formatDuration) == 'MINUTES' ) {
+          $duration = $duration/60;
+      }
     	$hoursDuration = (float)$duration;
     	$newDate = $iniDate;
     
@@ -837,23 +839,19 @@ class calendar extends CalendarDefinition
     		$finDate = date('Y-m-d H:i:s');
     	}
     
-    	$secondDuration = 0.00;
-    
-    	if ( (strtotime($iniDate)) < (strtotime($finDate)) ) {
-    		$timeIniDate = strtotime($iniDate);
-    		$timeFinDate = strtotime($finDate);
-    	} elseif ( (strtotime($finDate)) < (strtotime($iniDate)) ) {
-    		$timeIniDate = strtotime($finDate);
-    		$timeFinDate = strtotime($iniDate);
-    		$auxDate = $iniDate;
-    		$iniDate = $finDate;
-    		$finDate = $auxDate;
-    	} else {
-    		return $secondDuration;
-    	}
+
+        if ((strtotime($finDate)) <= (strtotime($iniDate))) {
+            return 0.00;
+        }
+	
+        $secondDuration = 0.00;
     
     	$finDate = $this->dashGetIniDate($finDate, $calendarData);
     	$newDate = $iniDate;
+
+		$timeIniDate = strtotime($iniDate);
+		$timeFinDate = strtotime($finDate);
+
     	while ($timeIniDate < $timeFinDate) {
     		$newDate = $this->dashGetIniDate($newDate, $calendarData);
     

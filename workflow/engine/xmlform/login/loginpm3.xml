@@ -98,7 +98,7 @@ function showGettingStarted() {
   panel.options = {
     size: {w:620,h:500},
     position: {x:50,y:50,center:true},
-    control: {close:true,resize:false},fx:{modal:true},
+    control: {close:true,resize:false, drag: false},fx:{modal:true},
     statusBar: false,
     fx: {shadow:true,modal:true}
   };

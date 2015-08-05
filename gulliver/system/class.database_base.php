@@ -88,6 +88,10 @@ class database_base implements iDatabase
         $this->sQuoteCharacter = '';
     }
 
+    public function getDatabaseName() {
+        return $this->sDataBase;
+    }
+
     /**
      * Function generateDropTableSQL
      *

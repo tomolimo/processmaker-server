@@ -115,7 +115,7 @@ class Project extends Api
         $outputFilename = $outputDir . sprintf("%s-%s.%s", str_replace(" ", "_", $getProjectName), $version, "pmx");
 
         $exporter->setMetadata("export_version", $version);
-        $outputFilename = $outputDir.$exporter->saveExport($outputFilename);
+        $outputFilename = $outputDir . $exporter->saveExport($outputFilename);
 
         $httpStream = new \ProcessMaker\Util\IO\HttpStream();
         $fileExtension = pathinfo($outputFilename, PATHINFO_EXTENSION);
@@ -153,6 +153,20 @@ class Project extends Api
         } catch (\Exception $e) {
             throw (new RestException(Api::STAT_APP_EXCEPTION, $e->getMessage()));
         }
+    }
+    
+    /**
+     * @url POST /save-as
+     * 
+     * @param string $prj_uid
+     * @param string $prj_name
+     * @param string $prj_description
+     * @param string $prj_category
+     */
+    public function doSaveAs($prj_uid, $prj_name, $prj_description, $prj_category)
+    {
+        $importer = new \ProcessMaker\Importer\XmlImporter();
+        return $importer->saveAs($prj_uid, $prj_name, $prj_description, $prj_category);
     }
 
     /**

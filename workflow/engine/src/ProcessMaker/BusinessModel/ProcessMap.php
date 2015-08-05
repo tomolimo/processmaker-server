@@ -100,7 +100,7 @@ class ProcessMap
             $tmpData[2] = $laneset['bou_y'];
             $tmpData[3] = $laneset['bou_width'];
             $tmpData[4] = $laneset['bou_height'];
-            $tmpData[5] = $laneset['dat_type'];
+            //$tmpData[5] = $laneset['dat_type'];
             $tmpData[6] = $laneset['lns_name'];
             $tmpData[7] = "";
             $tmpData[8] = $laneset['lns_uid'];
@@ -260,56 +260,56 @@ class ProcessMap
     private function load_sprite_coords()
     {
         $xMap = array();
-        $xMap['1_START_EVENT'] = array(0, 4759);
-        $xMap['START_MESSAGECATCH_LEAD'] = array(0, 9371);
-        $xMap['START_TIMER_LEAD'] = array(0, 8872);
-        $xMap['START_CONDITIONAL_LEAD'] = array(0, 9180);
-        $xMap['START_SIGNALCATCH_LEAD'] = array(0, 8905);
-        $xMap['INTERMEDIATE_MESSAGETHROW_THROW'] = array(0, 8987);
+        $xMap['1_START_EVENT'] = array(0, 6623);
+        $xMap['START_MESSAGECATCH_LEAD'] = array(0, 6770);
+        $xMap['START_TIMER_LEAD'] = array(0, 10382);
+        $xMap['START_CONDITIONAL_LEAD'] = array(0, 4737);
+        $xMap['START_SIGNALCATCH_LEAD'] = array(0, 4643);
+        $xMap['INTERMEDIATE_MESSAGETHROW_THROW'] = array(0, 5425);
 //        $xMap['INTERMEDIATE_LINKTHROW_THROW'] = array(0, 4887);
 //        $xMap['INTERMEDIATE_COMPENSATIONTHROW_THROW'] = array(0, 4260);
-        $xMap['INTERMEDIATE_SIGNALTHROW_THROW'] = array(0, 9338);
-        $xMap['INTERMEDIATE_MESSAGECATCH_CATCH'] = array(0, 9213);
-        $xMap['INTERMEDIATE_TIMER_CATCH'] = array(0, 8704);
-        $xMap['INTERMEDIATE_CONDITIONAL_CATCH'] = array(0, 9053);
+        $xMap['INTERMEDIATE_SIGNALTHROW_THROW'] = array(0, 5556);
+        $xMap['INTERMEDIATE_MESSAGECATCH_CATCH'] = array(0, 10509);
+        $xMap['INTERMEDIATE_TIMER_CATCH'] = array(0, 4405);
+        $xMap['INTERMEDIATE_CONDITIONAL_CATCH'] = array(0, 5310);
 //        $xMap['INTERMEDIATE_LINKCATCH_CATCH'] = array(0, 4648);
-        $xMap['INTERMEDIATE_SIGNALCATCH_CATCH'] = array(0, 9246);
+        $xMap['INTERMEDIATE_SIGNALCATCH_CATCH'] = array(0, 5162);
 
-        $xMap['1_END_EVENT'] = array(0, 4832);
-        $xMap['END_MESSAGETHROW'] = array(0, 9486);
-        $xMap['END_ERRORTHROW'] = array(0, 9545);
+        $xMap['1_END_EVENT'] = array(0, 6704);
+        $xMap['END_MESSAGETHROW'] = array(0, 6856);
+        $xMap['END_ERRORTHROW'] = array(0, 6312);
         $xMap['END_CANCELTHROW'] = array(0, 5125);
         $xMap['END_COMPENSATIONTHROW'] = array(0, 5473);
-        $xMap['END_SIGNALTHROW'] = array(0, 9657);
-        $xMap['END_TERMINATETHROW'] = array(0, 9609);
+        $xMap['END_SIGNALTHROW'] = array(0, 6985);
+        $xMap['END_TERMINATETHROW'] = array(0, 6737);
 
-        $xMap['EXCLUSIVE_GATEWAY'] = array(0, 2624);
-        $xMap['PARALLEL_GATEWAY'] = array(0, 3301);
-        $xMap['INCLUSIVE_GATEWAY'] = array(0, 2369);
+        $xMap['EXCLUSIVE_GATEWAY'] = array(0, 3228);
+        $xMap['PARALLEL_GATEWAY'] = array(0, 4438);
+        $xMap['INCLUSIVE_GATEWAY'] = array(0, 2736);
 //        $xMap['EVENTBASED_GATEWAY'] = array(0, 2753);
 //        $xMap['COMPLEX_GATEWAY'] = array(0, 4394);
 
-        $xMap['TASK_SENDTASK'] = array(0, 10468);
-        $xMap['TASK_RECEIVETASK'] = array(0, 10219);
-        $xMap['TASK_USERTASK'] = array(0, 4453);
-        $xMap['TASK_SERVICETASK'] = array(0, 8439);
-        $xMap['TASK_SCRIPTTASK'] = array(0, 8851);
-        $xMap['TASK_MANUALTASK'] = array(0, 9777);
-        $xMap['TASK_BUSINESSRULE'] = array(0, 10561);
-        $xMap['LOOP_LOOP'] = array(0, 5654);
-        $xMap['LOOP_PARALLEL'] = array(0, 7108);
-        $xMap['LOOP_SEQUENTIAL'] = array(0, 7036);
+        $xMap['TASK_SENDTASK'] = array(0, 11059);
+        $xMap['TASK_RECEIVETASK'] = array(0, 10890);
+        $xMap['TASK_USERTASK'] = array(0, 6482);
+        $xMap['TASK_SERVICETASK'] = array(0, 10187);
+        $xMap['TASK_SCRIPTTASK'] = array(0, 10361);
+        $xMap['TASK_MANUALTASK'] = array(0, 10688);
+        $xMap['TASK_BUSINESSRULE'] = array(0, 11136);
+        $xMap['LOOP_LOOP'] = array(0, 8439);
+        $xMap['LOOP_PARALLEL'] = array(0, 9714);
+        $xMap['LOOP_SEQUENTIAL'] = array(0, 9642);
 
-        $xMap['DATAOBJECT'] = array(0, 5401);
-        $xMap['DATAINPUT'] = array(0, 5791);
-        $xMap['DATAOUTPUT'] = array(0, 6071);
-        $xMap['DATASTORE'] = array(0, 3037);
+        $xMap['DATAOBJECT'] = array(0, 8010);
+        $xMap['DATAINPUT'] = array(0, 8544);
+        $xMap['DATAOUTPUT'] = array(0, 8824);
+        $xMap['DATASTORE'] = array(0, 3780);
 
 
-        $xMap['arrow_target_right'] = array(0, 6727);
-        $xMap['arrow_target_left'] = array(0, 6774);
-        $xMap['arrow_target_top'] = array(0, 6819);
-        $xMap['arrow_target_bottom'] = array(0, 6852);
+        $xMap['arrow_target_right'] = array(0, 9333);
+        $xMap['arrow_target_left'] = array(0, 9380);
+        $xMap['arrow_target_top'] = array(0, 9425);
+        $xMap['arrow_target_bottom'] = array(0, 9458);
 
         $xMap['arrow_conditional_source_right'] = array(0, 99);
         $xMap['arrow_conditional_source_left'] = array(0, 99);
@@ -399,7 +399,7 @@ class ProcessMap
                         $tt = explode('_', $figure[7]);
                         $this->print_text($img, $figure[6], 10, 90, $black, $font, $X1, $Y1, $X2, $Y2, $figure[0], $tt[0]);
                     } else {
-                        $this->print_text($img, $figure[6], 10, 90, $black, $font, $X1, $Y1, $X2, $Y2, $figure[0], $figure[5]);
+                        $this->print_text($img, $figure[6], 10, 90, $black, $font, $X1, $Y1, $X2, $Y2, $figure[0]);
                     }
                     break;
                 case 'bpmnLane':

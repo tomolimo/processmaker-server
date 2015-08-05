@@ -220,6 +220,18 @@ abstract class BaseProcess extends BaseObject implements Persistent
     protected $pro_derivation_screen_tpl = '';
 
     /**
+     * The value for the pro_cost field.
+     * @var        double
+     */
+    protected $pro_cost = 0;
+
+    /**
+     * The value for the pro_unit_cost field.
+     * @var        string
+     */
+    protected $pro_unit_cost = '';
+
+    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      * @var        boolean
@@ -625,6 +637,28 @@ abstract class BaseProcess extends BaseObject implements Persistent
     {
 
         return $this->pro_derivation_screen_tpl;
+    }
+
+    /**
+     * Get the [pro_cost] column value.
+     * 
+     * @return     double
+     */
+    public function getProCost()
+    {
+
+        return $this->pro_cost;
+    }
+
+    /**
+     * Get the [pro_unit_cost] column value.
+     * 
+     * @return     string
+     */
+    public function getProUnitCost()
+    {
+
+        return $this->pro_unit_cost;
     }
 
     /**
@@ -1340,6 +1374,44 @@ abstract class BaseProcess extends BaseObject implements Persistent
     } // setProDerivationScreenTpl()
 
     /**
+     * Set the value of [pro_cost] column.
+     * 
+     * @param      double $v new value
+     * @return     void
+     */
+    public function setProCost($v)
+    {
+
+        if ($this->pro_cost !== $v || $v === 0) {
+            $this->pro_cost = $v;
+            $this->modifiedColumns[] = ProcessPeer::PRO_COST;
+        }
+
+    } // setProCost()
+
+    /**
+     * Set the value of [pro_unit_cost] column.
+     * 
+     * @param      string $v new value
+     * @return     void
+     */
+    public function setProUnitCost($v)
+    {
+
+        // Since the native PHP type for this column is string,
+        // we will cast the input to a string (if it is not).
+        if ($v !== null && !is_string($v)) {
+            $v = (string) $v;
+        }
+
+        if ($this->pro_unit_cost !== $v || $v === '') {
+            $this->pro_unit_cost = $v;
+            $this->modifiedColumns[] = ProcessPeer::PRO_UNIT_COST;
+        }
+
+    } // setProUnitCost()
+
+    /**
      * Hydrates (populates) the object variables with values from the database resultset.
      *
      * An offset (1-based "start column") is specified so that objects can be hydrated
@@ -1420,12 +1492,16 @@ abstract class BaseProcess extends BaseObject implements Persistent
 
             $this->pro_derivation_screen_tpl = $rs->getString($startcol + 31);
 
+            $this->pro_cost = $rs->getFloat($startcol + 32);
+
+            $this->pro_unit_cost = $rs->getString($startcol + 33);
+
             $this->resetModified();
 
             $this->setNew(false);
 
             // FIXME - using NUM_COLUMNS may be clearer.
-            return $startcol + 32; // 32 = ProcessPeer::NUM_COLUMNS - ProcessPeer::NUM_LAZY_LOAD_COLUMNS).
+            return $startcol + 34; // 34 = ProcessPeer::NUM_COLUMNS - ProcessPeer::NUM_LAZY_LOAD_COLUMNS).
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Process object", $e);
@@ -1725,6 +1801,12 @@ abstract class BaseProcess extends BaseObject implements Persistent
             case 31:
                 return $this->getProDerivationScreenTpl();
                 break;
+            case 32:
+                return $this->getProCost();
+                break;
+            case 33:
+                return $this->getProUnitCost();
+                break;
             default:
                 return null;
                 break;
@@ -1777,6 +1859,8 @@ abstract class BaseProcess extends BaseObject implements Persistent
             $keys[29] => $this->getProDebug(),
             $keys[30] => $this->getProDynaforms(),
             $keys[31] => $this->getProDerivationScreenTpl(),
+            $keys[32] => $this->getProCost(),
+            $keys[33] => $this->getProUnitCost(),
         );
         return $result;
     }
@@ -1903,6 +1987,12 @@ abstract class BaseProcess extends BaseObject implements Persistent
                 break;
             case 31:
                 $this->setProDerivationScreenTpl($value);
+                break;
+            case 32:
+                $this->setProCost($value);
+                break;
+            case 33:
+                $this->setProUnitCost($value);
                 break;
         } // switch()
     }
@@ -2055,6 +2145,14 @@ abstract class BaseProcess extends BaseObject implements Persistent
             $this->setProDerivationScreenTpl($arr[$keys[31]]);
         }
 
+        if (array_key_exists($keys[32], $arr)) {
+            $this->setProCost($arr[$keys[32]]);
+        }
+
+        if (array_key_exists($keys[33], $arr)) {
+            $this->setProUnitCost($arr[$keys[33]]);
+        }
+
     }
 
     /**
@@ -2194,6 +2292,14 @@ abstract class BaseProcess extends BaseObject implements Persistent
             $criteria->add(ProcessPeer::PRO_DERIVATION_SCREEN_TPL, $this->pro_derivation_screen_tpl);
         }
 
+        if ($this->isColumnModified(ProcessPeer::PRO_COST)) {
+            $criteria->add(ProcessPeer::PRO_COST, $this->pro_cost);
+        }
+
+        if ($this->isColumnModified(ProcessPeer::PRO_UNIT_COST)) {
+            $criteria->add(ProcessPeer::PRO_UNIT_COST, $this->pro_unit_cost);
+        }
+
 
         return $criteria;
     }
@@ -2309,6 +2415,10 @@ abstract class BaseProcess extends BaseObject implements Persistent
         $copyObj->setProDynaforms($this->pro_dynaforms);
 
         $copyObj->setProDerivationScreenTpl($this->pro_derivation_screen_tpl);
+
+        $copyObj->setProCost($this->pro_cost);
+
+        $copyObj->setProUnitCost($this->pro_unit_cost);
 
 
         $copyObj->setNew(true);

@@ -3,9 +3,9 @@
 $action = (isset($_REQUEST["action"])) ? $_REQUEST["action"] : "consolidated";
 
 $oCriteria = new Criteria("workflow");
-$oCriteria->addSelectColumn(CaseConsolidatedPeer::CON_STATUS);
-$oCriteria->add(CaseConsolidatedPeer::CON_STATUS, "ACTIVE");
-$activeNumRows = CaseConsolidatedPeer::doCount($oCriteria);
+$oCriteria->addSelectColumn(CaseConsolidatedCorePeer::CON_STATUS);
+$oCriteria->add(CaseConsolidatedCorePeer::CON_STATUS, "ACTIVE");
+$activeNumRows = CaseConsolidatedCorePeer::doCount($oCriteria);
 
 G::LoadClass ("BasePeer");
 G::LoadClass ("configuration");
@@ -18,16 +18,16 @@ $usrUid = $_SESSION["USER_LOGGED"];
 
 $oCriteria = new Criteria("workflow");
 $oCriteria->addSelectColumn("*");
-$oCriteria->addSelectColumn(CaseConsolidatedPeer::TAS_UID);
-$oCriteria->addJoin(CaseConsolidatedPeer::TAS_UID,ContentPeer::CON_ID, Criteria::LEFT_JOIN);
-$oCriteria->addJoin(CaseConsolidatedPeer::TAS_UID,TaskPeer::TAS_UID, Criteria::LEFT_JOIN);
+$oCriteria->addSelectColumn(CaseConsolidatedCorePeer::TAS_UID);
+$oCriteria->addJoin(CaseConsolidatedCorePeer::TAS_UID,ContentPeer::CON_ID, Criteria::LEFT_JOIN);
+$oCriteria->addJoin(CaseConsolidatedCorePeer::TAS_UID,TaskPeer::TAS_UID, Criteria::LEFT_JOIN);
 $oCriteria->addAnd(ContentPeer::CON_CATEGORY, "TAS_TITLE");
 $oCriteria->addAnd(ContentPeer::CON_LANG, "en");
 
 $params = array(); //This will be filled with the parameters
 $sql = BasePeer::createSelectSql($oCriteria, $params);
 
-$oDataset = CaseConsolidatedPeer::doSelectRS($oCriteria);
+$oDataset = CaseConsolidatedCorePeer::doSelectRS($oCriteria);
 $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
 //$oDataset->next();
 while ($oDataset->next()) {

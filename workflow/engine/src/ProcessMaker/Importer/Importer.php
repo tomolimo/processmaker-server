@@ -391,7 +391,7 @@ abstract class Importer
         foreach ($arrayWorkflowTables["tasks"] as $key => $value) {
             $arrayTaskData = $value;
 
-            if (!in_array($arrayTaskData["TAS_TYPE"], array("GATEWAYTOGATEWAY", "WEBENTRYEVENT", "END-MESSAGE-EVENT", "START-MESSAGE-EVENT", "INTERMEDIATE-THROW-MESSAGE-EVENT", "INTERMEDIATE-CATCH-MESSAGE-EVENT"))) {
+            if (!in_array($arrayTaskData["TAS_TYPE"], array("GATEWAYTOGATEWAY", "WEBENTRYEVENT", "END-MESSAGE-EVENT", "START-MESSAGE-EVENT", "INTERMEDIATE-THROW-MESSAGE-EVENT", "INTERMEDIATE-CATCH-MESSAGE-EVENT", "START-TIMER-EVENT", "INTERMEDIATE-CATCH-TIMER-EVENT", "END-EMAIL-EVENT", "INTERMEDIATE-EMAIL-EVENT"))) {
                 $result = $workflow->updateTask($arrayTaskData["TAS_UID"], $arrayTaskData);
             }
         }
@@ -401,6 +401,11 @@ abstract class Importer
         unset($arrayWorkflowTables["process"]["PRO_UPDATE_DATE"]);
 
         $workflow->update($arrayWorkflowTables["process"]);
+
+        //Process-Files upgrade
+        $filesManager = new \ProcessMaker\BusinessModel\FilesManager();
+
+        $filesManager->processFilesUpgrade($projectUid);
 
         //Return
         return $projectUid;
@@ -557,6 +562,40 @@ abstract class Importer
             return $arrayData;
         } catch (\Exception $e) {
             throw $e;
+        }
+    }
+
+    public function saveAs($prj_uid, $prj_name, $prj_description, $prj_category)
+    {
+        try {
+            $exporter = new \ProcessMaker\Exporter\XmlExporter($prj_uid);
+            $getProjectName = $exporter->truncateName($exporter->getProjectName(), false);
+
+            $outputDir = PATH_DATA . "sites" . PATH_SEP . SYS_SYS . PATH_SEP . "files" . PATH_SEP . "output" . PATH_SEP;
+            $version = \ProcessMaker\Util\Common::getLastVersion($outputDir . $getProjectName . "-*.pmx") + 1;
+            $outputFilename = $outputDir . sprintf("%s-%s.%s", str_replace(" ", "_", $getProjectName), $version, "pmx");
+
+            $exporter->setMetadata("export_version", $version);
+            $outputFilename = $outputDir . $exporter->saveExport($outputFilename);
+
+            $httpStream = new \ProcessMaker\Util\IO\HttpStream();
+            $fileExtension = pathinfo($outputFilename, PATHINFO_EXTENSION);
+
+            $this->setSourceFile($outputFilename);
+            $this->prepare();
+            $this->importData["tables"]["bpmn"]["project"][0]["prj_name"] = $prj_name;
+            $this->importData["tables"]["bpmn"]["project"][0]["prj_description"] = $prj_description;
+            $this->importData["tables"]["bpmn"]["diagram"][0]["dia_name"] = $prj_name;
+            $this->importData["tables"]["bpmn"]["process"][0]["pro_name"] = $prj_name;
+            $this->importData["tables"]["workflow"]["process"][0]["PRO_TITLE"] = $prj_name;
+            $this->importData["tables"]["workflow"]["process"][0]["PRO_DESCRIPTION"] = $prj_description;
+            $this->importData["tables"]["workflow"]["process"][0]["PRO_CATEGORY"] = $prj_category;
+            $this->importData["tables"]["workflow"]["process"][0]["PRO_CATEGORY_LABEL"] = null;
+            $this->importData["tables"]["workflow"]["process"][0]["PRO_UPDATE_DATE"] = null;
+            $this->importData["tables"]["workflow"]["process"] = $this->importData["tables"]["workflow"]["process"][0];
+            return array("prj_uid" => $this->doImport());
+        } catch (\Exception $e) {
+            return $e->getMessage();
         }
     }
 }

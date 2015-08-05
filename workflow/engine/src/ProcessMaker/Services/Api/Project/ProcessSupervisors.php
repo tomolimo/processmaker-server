@@ -92,6 +92,25 @@ class ProcessSupervisors extends Api
 
     /**
      * @param string $prjUid {@min 32} {@max 32}
+     *
+     * @url GET /:prjUid/process-supervisor/assignmentsteps
+     */
+    public function doGetProcessSupervisorAssignmentsteps($prjUid)
+    {
+        try {
+            $supervisor = new \ProcessMaker\BusinessModel\ProcessSupervisor();
+            $arrayData = $supervisor->getProcessSupervisorDynaformsInputsDocuments($prjUid);
+            //Response
+            $response = $arrayData;
+        } catch (\Exception $e) {
+            //response
+            throw new RestException(Api::STAT_APP_EXCEPTION, $e->getMessage());
+        }
+        return $response;
+    }
+
+    /**
+     * @param string $prjUid {@min 32} {@max 32}
      * @param string $pudUid {@min 32} {@max 32}
      *
      * @url GET /:prjUid/process-supervisor/dynaform/:pudUid
@@ -120,6 +139,25 @@ class ProcessSupervisors extends Api
         try {
             $supervisor = new \ProcessMaker\BusinessModel\ProcessSupervisor();
             $arrayData = $supervisor->getAvailableProcessSupervisorDynaform($prjUid);
+            //Response
+            $response = $arrayData;
+        } catch (\Exception $e) {
+            //response
+            throw new RestException(Api::STAT_APP_EXCEPTION, $e->getMessage());
+        }
+        return $response;
+    }
+
+    /**
+     * @param string $prjUid {@min 32} {@max 32}
+     *
+     * @url GET /:prjUid/process-supervisor/available-assignmentsteps
+     */
+    public function doGetAvailableProcessSupervisorAssignmentstep($prjUid)
+    {
+        try {
+            $supervisor = new \ProcessMaker\BusinessModel\ProcessSupervisor();
+            $arrayData = $supervisor->getAvailableProcessSupervisorDynaformInputDocument($prjUid);
             //Response
             $response = $arrayData;
         } catch (\Exception $e) {

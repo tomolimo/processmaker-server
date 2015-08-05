@@ -79,6 +79,8 @@ class DynaformMapBuilder
 
         $tMap->addColumn('DYN_VERSION', 'DynVersion', 'int', CreoleTypes::INTEGER, true, null);
 
+        $tMap->addColumn('DYN_UPDATE_DATE', 'DynUpdateDate', 'int', CreoleTypes::TIMESTAMP, false, null);
+
         $tMap->addValidator('DYN_TYPE', 'validValues', 'propel.validator.ValidValuesValidator', 'xmlform|grid', 'Please select a valid dynaform type.');
 
     } // doBuild()

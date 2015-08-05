@@ -172,6 +172,29 @@ class StepSupervisor extends BaseStepSupervisor
     }
 
     /**
+     * Get the next position for a atep
+     *
+     * @param string $sProcessUID
+     * @return integer
+     *
+     */
+    public function getNextPositionAll ($sProcessUID)
+    {
+        try {
+            $oCriteria = new Criteria( 'workflow' );
+            $oCriteria->addSelectColumn( '(COUNT(*) + 1) AS POSITION' );
+            $oCriteria->add( StepSupervisorPeer::PRO_UID, $sProcessUID );
+            $oDataset = StepSupervisorPeer::doSelectRS( $oCriteria );
+            $oDataset->setFetchmode( ResultSet::FETCHMODE_ASSOC );
+            $oDataset->next();
+            $aRow = $oDataset->getRow();
+            return (int) $aRow['POSITION'];
+        } catch (Exception $oException) {
+            throw $Exception;
+        }
+    }
+
+    /**
      * Reorder the steps positions
      *
      * @param string $sProcessUID

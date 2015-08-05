@@ -76,19 +76,17 @@ CLI::taskName('workspace-backup');
 
 CLI::taskDescription(<<<EOT
 
-  Backup the specified workspace to an archive.
+  Backup the specified workspace to a file.
 
 
 
-  BACKUP-FILE is the backup filename. If it contains slashes, it will be
+  BACKUP-FILE is the backup filename which will be created. If it contains
 
-  treated as a path and filename, either absolute or relative. Otherwise, it
+  slashes, it will be treated as a path and filename, either absolute or relative.
 
-  will be treated as a filename inside the 'shared/backups' directory.
+  Otherwise, it will be treated as a filename inside the "shared/backups" directory.
 
-  If no BACKUP-FILE is specified, it will use the workspace name as the
-
-  filename.
+  If no BACKUP-FILE is specified, it will use the workspace name as the filename.
 
 
 
@@ -106,7 +104,7 @@ CLI::taskArg('workspace', false);
 
 CLI::taskArg('backup-file', true);
 
-CLI::taskOpt("filesize", "Set the max size of the compressed splitted files, by default the max is 1000 Mb.", "s:","filesize=");
+CLI::taskOpt("filesize", "Split the backup file in multiple files which are compressed. The maximum size of these files is set to MAX-SIZE in megabytes. If MAX-SIZE is not set, then it is 1000 megabytes by default. It may be necessary to use this option if using a 32 bit Linux/UNIX system which limits its maximum file size to 2GB. This option does not work on Windows systems.", "sMAX-SIZE","filesize=MAX-SIZE");
 
 CLI::taskRun("run_workspace_backup");
 
@@ -116,7 +114,7 @@ CLI::taskName('workspace-restore');
 
 CLI::taskDescription(<<<EOT
 
-  Restore a workspace from a backup.
+  Restore a workspace from a backup file
 
 
 
@@ -142,17 +140,19 @@ CLI::taskArg('workspace', true);
 
 CLI::taskOpt("overwrite", "If a workspace already exists, overwrite it.", "o", "overwrite");
 
-CLI::taskOpt("info", "Only shows information about a backup archive.", "i");
+CLI::taskOpt("info", "Show information about backup file, but do not restore any workspaces.", "i");
 
-CLI::taskOpt("multiple", "Restore from multiple compresed enumerated files.", "m");
+CLI::taskOpt("multiple", "Restore from multiple compressed backup files which are numbered.", "m");
 
-CLI::taskOpt("workspace", "Select which workspace to restore if multiple workspaces are present in the archive.",
+CLI::taskOpt("workspace", "Specify which workspace to restore if multiple workspaces are present in the backup file.
 
-             "w:", "workspace=");
+        Ex: -wworkflow.",
 
-CLI::taskOpt("lang", "You must specify language on which rebuild of the case cache list builder will be done; if you don't specify this, it will use 'en' by default", "l:","lang=");
+             "wWORKSPACE", "workspace=WORKSPACE");
 
-CLI::taskOpt("port", "You must specify mysql port.", "p:");
+CLI::taskOpt("lang", "Specify the language which will be used to rebuild the case cache list. If this option isn't included, then 'en' (English) will be used by default.", "lLANG","lang=LANG");
+
+CLI::taskOpt("port", "Specify the port number used by MySQL. If not specified, then the port 3306 will be used by default.", "pPORT");
 
 CLI::taskRun("run_workspace_restore");
 
@@ -188,7 +188,7 @@ EOT
 
 CLI::taskArg('workspace', true, true);
 
-CLI::taskOpt("lang", "You must specify language on which rebuild of the case cache list builder will be done; if you don't specify this, it will use 'en' by default", "l:","lang=");
+CLI::taskOpt("lang", "Specify the language to rebuild the case cache list. If not specified, then 'en' (English) will be used by default.\n        Ex: -lfr (French) Ex: --lang=zh-CN (Mainland Chinese)", "lLANG", "lang=LANG");
 
 CLI::taskRun("run_cacheview_upgrade");
 
@@ -202,7 +202,7 @@ CLI::taskDescription(<<<EOT
 
 
 
-  Specify the workspaces whose database schema should be upgraded or repaired.
+  Specify the workspaces whose database schema should be upgraded or repaired.
 
   If no workspace is specified, then the database schema will be upgraded or
 
@@ -210,13 +210,13 @@ CLI::taskDescription(<<<EOT
 
 
 
-  This command will read the system schema and attempt to modify the workspaces
+  This command will read the system schema and attempt to modify the workspaces
 
-  tables to match this new schema. Use this command to fix corrupted database
+  tables to match this new schema. Use this command to fix corrupted database
 
   schemas or after ProcessMaker has been upgraded, so the database schemas will
 
-  changed to match the new ProcessMaker code.
+  be changed to match the new ProcessMaker code.
 
 EOT
 
@@ -236,7 +236,7 @@ CLI::taskDescription(<<<EOT
 
 
 
-  Specify the workspaces whose database schema should be upgraded or repaired
+  Specify the workspaces whose database schema should be upgraded or repaired
 
   for plugins. If no workspace is specified, then the database schema will be
 
@@ -244,9 +244,11 @@ CLI::taskDescription(<<<EOT
 
 
 
-  The same as database-upgrade but works with schemas provided by plugins.
+  This is the same as database-upgrade but it works with schemas provided
 
-  This is useful if there are installed plugins that include database schemas.
+  by plugins. This is useful if plugins are installed that include
+
+  database schemas.
 
 EOT
 
@@ -262,7 +264,7 @@ CLI::taskName('workspace-upgrade');
 
 CLI::taskDescription(<<<EOT
 
-  Upgrade the workspace(s) specified.
+  Upgrade the specified workspace(s).
 
 
 
@@ -272,7 +274,7 @@ CLI::taskDescription(<<<EOT
 
 
 
-  This command is a shortcut to execute all upgrade commands for workspaces.
+  This command is a shortcut to execute all the upgrade commands for workspaces.
 
   Upgrading a workspace will make it correspond to the current version of
 
@@ -282,7 +284,7 @@ CLI::taskDescription(<<<EOT
 
   Use this command to upgrade workspaces individually, otherwise use the
 
-  upgrade command to upgrade the entire system.
+  'processmaker upgrade' command to upgrade the entire system.
 
 EOT
 
@@ -310,7 +312,7 @@ CLI::taskDescription(<<<EOT
 
   This command will go through each language installed in ProcessMaker and
 
-  update this workspace translations to match the current version of
+  update the translations for the workspace(s) to match the current version of
 
   ProcessMaker.
 
@@ -340,9 +342,9 @@ EOT
 
 //CLI::taskArg('workspace', true);
 
-CLI::taskOpt("workspace", "Select which workspace to migrate the cases folders, if multiple workspaces are present in the server.",
+CLI::taskOpt("workspace", "Select the workspace whose case folders will be migrated, if multiple workspaces are present in the server.\n        Ex: -wworkflow.        Ex: --workspace=workflow",
 
-             "w:", "workspace=");
+             "wWORKSPACE", "workspace=WORKSPACE");
 
 CLI::taskRun("runStructureDirectories");
 
@@ -356,9 +358,11 @@ CLI::taskDescription(<<<EOT
 
 
 
-  This command populate the table "self-service by value", this for the cases when
+  This command populates the table "self-service by value" for cases whose
 
-  a task it's defined with "Self Service Value Based Assignment" in "Assignment Rules".
+  task is defined with "Self Service Value Based Assignment" in "Assignment
+
+  Rules".
 
 
 
@@ -960,87 +964,97 @@ function run_workspace_backup($args, $opts) {
 
 function run_workspace_restore($args, $opts) {
 
-  $filename = $args[0];
+  if (sizeof($args) > 0) {
 
 
 
-  G::verifyPath(PATH_DATA . 'upgrade', true);
+    $filename = $args[0];
 
 
 
-  if (strpos($filename, "/") === false && strpos($filename, '\\') === false) {
+    G::verifyPath(PATH_DATA . 'upgrade', true);
 
-    $filename = PATH_DATA . "backups/$filename";
 
-    if (!file_exists($filename) && substr_compare($filename, ".tar", -4, 4, true) != 0)
 
-      $filename .= ".tar";
+    if (strpos($filename, "/") === false && strpos($filename, '\\') === false) {
 
-  }
+      $filename = PATH_DATA . "backups/$filename";
 
-  $info = array_key_exists("info", $opts);
+      if (!file_exists($filename) && substr_compare($filename, ".tar", -4, 4, true) != 0)
 
-  $lang = array_key_exists("lang", $opts) ? $opts['lang'] : 'en';
+        $filename .= ".tar";
 
-  $port = array_key_exists("port", $opts) ? $opts['port'] : '';
+    }
 
-  if ($info) {
+    $info = array_key_exists("info", $opts);
 
-    workspaceTools::getBackupInfo($filename);
+    $lang = array_key_exists("lang", $opts) ? $opts['lang'] : 'en';
+
+    $port = array_key_exists("port", $opts) ? $opts['port'] : '';
+
+    if ($info) {
+
+      workspaceTools::getBackupInfo($filename);
+
+    } else {
+
+      CLI::logging("Restoring from $filename\n");
+
+      $workspace = array_key_exists("workspace", $opts) ? $opts['workspace'] : NULL;
+
+      $overwrite = array_key_exists("overwrite", $opts);
+
+      $multiple = array_key_exists("multiple", $opts);
+
+      $dstWorkspace = isset($args[1]) ? $args[1] : null;
+
+      if(!empty($multiple)){
+
+          if(!Bootstrap::isLinuxOs()){
+
+              CLI::error("This is not a Linux enviroment, cannot use this multiple [-m] feature.\n");
+
+              return;
+
+          }
+
+          multipleFilesBackup::letsRestore ($filename,$workspace,$dstWorkspace,$overwrite);
+
+      }
+
+      else{
+
+          $anotherExtention = ".*"; //if there are files with and extra extention: e.g. <file>.tar.number
+
+          $multiplefiles = glob($filename . $anotherExtention);// example: //shared/workflow_data/backups/myWorkspace.tar.*
+
+          if(count($multiplefiles) > 0)
+
+          {
+
+              CLI::error("Processmaker found these files: .\n");
+
+              foreach($multiplefiles as $index => $value){
+
+                  CLI::logging($value . "\n");
+
+              }
+
+              CLI::error("Please, you should use -m parameter to restore them.\n");
+
+              return;
+
+          }
+
+          workspaceTools::restore($filename, $workspace, $dstWorkspace, $overwrite, $lang, $port );
+
+      }
+
+    }
 
   } else {
 
-    CLI::logging("Restoring from $filename\n");
-
-    $workspace = array_key_exists("workspace", $opts) ? $opts['workspace'] : NULL;
-
-    $overwrite = array_key_exists("overwrite", $opts);
-
-    $multiple = array_key_exists("multiple", $opts);
-
-    $dstWorkspace = isset($args[1]) ? $args[1] : null;
-
-    if(!empty($multiple)){
-
-        if(!Bootstrap::isLinuxOs()){
-
-            CLI::error("This is not a Linux enviroment, cannot use this multiple [-m] feature.\n");
-
-            return;
-
-        }
-
-        multipleFilesBackup::letsRestore ($filename,$workspace,$dstWorkspace,$overwrite);
-
-    }
-
-    else{
-
-        $anotherExtention = ".*"; //if there are files with and extra extention: e.g. <file>.tar.number
-
-        $multiplefiles = glob($filename . $anotherExtention);// example: //shared/workflow_data/backups/myWorkspace.tar.*
-
-        if(count($multiplefiles) > 0)
-
-        {
-
-            CLI::error("Processmaker found these files: .\n");
-
-            foreach($multiplefiles as $index => $value){
-
-                CLI::logging($value . "\n");
-
-            }
-
-            CLI::error("Please, you should use -m parameter to restore them.\n");
-
-            return;
-
-        }
-
-        workspaceTools::restore($filename, $workspace, $dstWorkspace, $overwrite, $lang, $port );
-
-    }
+        throw new Exception("No workspace specified for restore");
 
   }
 

@@ -28,6 +28,8 @@ G::LoadSystem("g");
 CLI::taskName('flush-cache');
 CLI::taskDescription(<<<EOT
     Flush cache of all workspaces of a given workspace
+
+    If no workspace is specified, then the cache will be flushed in all available workspaces.
 EOT
 );
 

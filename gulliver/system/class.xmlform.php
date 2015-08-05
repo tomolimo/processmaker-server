@@ -4028,6 +4028,42 @@ class XmlForm_Field_CheckGroup extends XmlForm_Field
         }
 
     }
+
+    /**
+     * Renderring the checkgroup inner grid for Staff Eval Plugin
+     * @see class.form.php#validateArray();
+     * @author Edauto
+     * @since  2012-07-20
+     */
+    public function renderGrid($values = NULL, $owner = NULL) {
+        $this->executeSQL ( $owner );
+        $disable = ($owner->mode === 'view') ? 'disabled="disabled" ' : ' ';
+        $r = 1;
+        $result = array();
+        foreach ( $values as $v ) { // foreach the grid row with selection
+            $i=1;
+            $html = '';
+            if (! is_array ( $v )) {
+                $aV = explode ( '|', str_replace(" ","",$v));
+            } else {
+                $aV = $v;
+            }
+            foreach ( $this->options as $optionName => $option ) { // foreach the options of checkbox group
+                $bChecked =  in_array ( $i , $aV, true ) || in_array($optionName, $aV, true);
+                $html .= '<input id="form[' . $owner->name . ']['. $r .']['. $this->name .'][' . $optionName . ']" ';
+                $html .= 'name="form[' . $owner->name . ']['. $r .']['. $this->name .'][]" ';
+                $html .= 'type="checkbox" value="' . $optionName . '" ' . ($bChecked ? 'checked ' : ' ') ;
+                $html .= $disable . '><span class="FormCheck">' . $option . '</span></input>';
+                if(++$i==count($this->options)){
+                    $html .= ' ' . $this->renderHint();
+                }
+                $html .= '<br />';
+            }
+            $result[] = $html;
+            $r++;
+        }
+        return $result;
+    }
 }
 
 /* TODO: DEPRECATED */

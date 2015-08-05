@@ -5,7 +5,41 @@ use \G;
 
 class ReportingIndicators
 {
-//    /**et
+
+
+    /**
+     * Returns the historic data of an indicator
+     *
+     * @param array $indicatorUid indicator from which will be extracted the information
+     * @param DateTime $initDate date from the index will be calculated
+     * @param DateTime $endDate date until the index will be calculated
+     * @param string $language language for the names (en, es, etc.)
+     *
+     * return decimal  value
+     */
+    public function getHistoricData($indicatorUid,  $initDate, $endDate, $periodicity, $language)
+    {
+        G::loadClass('indicatorsCalculator');
+		$retval = "";
+        $calculator = new \IndicatorsCalculator();
+        $arr = $calculator->indicatorData($indicatorUid);
+        $indicator = $arr[0];
+		$processesId = $indicator['DAS_UID_PROCESS'];
+		$indicatorType = $indicator['DAS_IND_TYPE'];
+		switch ($indicatorType) {
+			case \ReportingIndicatorTypeEnum::PEI:
+				$retval = $calculator->peiHistoric($processesId, $initDate, $endDate, \ReportingPeriodicityEnum::fromValue($periodicity));
+				break;
+			case \ReportingIndicatorTypeEnum::UEI:
+				$retval = $calculator->ueiHistoric($processesId, $initDate, $endDate, \ReportingPeriodicityEnum::fromValue($periodicity));
+				break;
+			default:
+				throw new Exception("Can't retrive historic Data becasuse de indicator type " + $indicator['DAS_IND_TYPE'] + " has no operation associated.");
+				break;
+		}
+        return $retval;
+    }
+	
 
     /**
      * Lists tasks of a process and it's statistics (efficiency, average times, etc.)
@@ -25,7 +59,7 @@ class ReportingIndicators
         $arr = $calculator->indicatorData($indicatorUid);
         $indicator = $arr[0];
 		$processesId = $indicator['DAS_UID_PROCESS'];
-		$peiValue = current(reset($calculator-> peiHistoric($processesId, $measureDate, $measureDate, \ReportingPeriodicityEnum::NONE)));
+		$peiValue = current(reset($calculator->peiHistoric($processesId, $measureDate, $measureDate, \ReportingPeriodicityEnum::NONE)));
 		$peiCost = current(reset($calculator->peiCostHistoric($processesId, $measureDate, $measureDate, \ReportingPeriodicityEnum::NONE)));
 		$peiCompare = current(reset($calculator->peiHistoric($processesId, $compareDate, $compareDate, \ReportingPeriodicityEnum::NONE)));
 

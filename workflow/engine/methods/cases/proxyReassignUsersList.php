@@ -52,6 +52,7 @@ function array_sort ($array, $on, $order = SORT_ASC, $query = '')
             }
         }
     }
+    
     return $new_array;
 }
 //  $APP_UIDS          = explode(',', $_POST['APP_UID']);

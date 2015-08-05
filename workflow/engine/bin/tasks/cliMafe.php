@@ -29,13 +29,16 @@ G::LoadClass("wsTools");
 
 CLI::taskName('mafe-translation');
 CLI::taskDescription(<<<EOT
-    Creates labels of mafe for the database 
+    Creates labels of mafe for the database
 
+    If no workspace is specified, then the translation labels will be created in all available workspaces.
 EOT
 );
 
 CLI::taskArg('workspace', true, true);
-CLI::taskOpt("lang", "languaje", "l:","lang=");
+CLI::taskOpt("lang", "Specify the language to create the translation labels. If not specified then the language will be 'en' (English) by default.
+        Ex: -lfr (French)
+        Ex: --lang=zh-CN (Mainland Chinese)", "lLANG","lang=LANG");
 CLI::taskRun('run_create_translation');
 
 function run_create_translation($args, $opts)

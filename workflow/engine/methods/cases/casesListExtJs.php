@@ -10,6 +10,10 @@ $action = isset( $_GET['action'] ) ? $_GET['action'] : (isset( $_POST['action'] 
 
 
 
+/*----------------------------------********---------------------------------*/
+
+
+
 //fix a previous inconsistency
 
 $urlProxy = 'proxyCasesList';
@@ -210,7 +214,7 @@ if ($action == "todo" || $action == "draft" || $action == "sent" || $action == "
 
         if ($applicationSolrIndex->isSolrEnabled()) {
 
-          $solrEnabled = 1;
+            $solrEnabled = 1;
 
         }
 
@@ -279,6 +283,12 @@ $oHeadPublisher->assign( 'allUsersValues', $allUsers ); //Sending the listing of
 $oHeadPublisher->assign( 'solrEnabled', $solrEnabled ); //Sending the status of solar
 
 $oHeadPublisher->assign( 'enableEnterprise', $enableEnterprise ); //sending the page size
+
+
+
+
+
+/*----------------------------------********---------------------------------*/
 
 
 

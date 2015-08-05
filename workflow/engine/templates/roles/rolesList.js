@@ -540,7 +540,7 @@ EditRole = function(){
         id: 'w',
         modal: true,
         width: 420,
-        title: _('ID_EDIT_ROLE_TITLE'),
+        title: _("ID_EDIT_ROLE_TITLE"),
         items: [editForm]
       });
       w.show();
