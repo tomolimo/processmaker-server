@@ -34,7 +34,7 @@ $e_all  = defined('E_STRICT')     ? $e_all & ~E_STRICT     : $e_all;
 $e_all  = $config['debug']        ? $e_all                 : $e_all & ~E_NOTICE;
 
 G::LoadSystem('inputfilter');
-$filter = new InputFilter();  
+$filter = new InputFilter();
 $config['debug'] = $filter->validateInput($config['debug']);
 $config['memory_limit'] = $filter->validateInput($config['memory_limit']);
 $config['wsdl_cache'] = $filter->validateInput($config['wsdl_cache'],'int');
@@ -113,6 +113,10 @@ if ($force || !$bCronIsRunning) {
         $dateSystem = date("Y-m-d H:i:s");
 
         for ($i = 1; $i <= count($argv) - 1; $i++) {
+            if (!isset($argv[$i])) {
+                continue;
+            }
+
             if (strpos($argv[$i], "+d") !== false) {
                 $sDate = substr($argv[$i],2);
             } else {
@@ -125,7 +129,7 @@ if ($force || !$bCronIsRunning) {
         }
 
         //If $sDate is not set, so take the system time
-        if ($sDate != null) {
+        if (!empty($sDate) && preg_match("/^[1-9]\d{3}\-(?:0[1-9]|1[0-2])\-(?:0[1-9]|[12][0-9]|3[01])(?:\s(?:[0-1]\d|2[0-3])\:[0-5]\d\:[0-5]\d)?$/", $sDate)) {
             eprintln("[Applying date filter: $sDate]");
         } else {
             $sDate = $dateSystem;

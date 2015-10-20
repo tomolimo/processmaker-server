@@ -5436,7 +5436,7 @@ class G
     {
         // Initialize variables
         $res = new stdclass();
-        $allowedTypes = array_map('G::getRealExtension', explode(', ', $InpDocAllowedFiles));
+        $allowedTypes = array_map('G::getRealExtension', explode(',', $InpDocAllowedFiles));
 
         // If required extension is *.* don't validate
         if (in_array('*', $allowedTypes)) {

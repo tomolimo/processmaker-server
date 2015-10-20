@@ -512,10 +512,6 @@ Bootstrap::registerClass('BaseTranslation',    PATH_HOME . "engine/classes/model
 
 Bootstrap::registerClass('Translation',        PATH_HOME . "engine/classes/model/Translation.php");
 
-Bootstrap::registerClass('BaseLanguage',       PATH_HOME . "engine/classes/model/om/BaseLanguage.php");
-
-Bootstrap::registerClass('Language',           PATH_HOME . "engine/classes/model/Language.php");
-
 
 
 Bootstrap::registerClass('BaseLogCasesScheduler',PATH_HOME . "engine/classes/model/om/BaseLogCasesScheduler.php");
@@ -718,7 +714,31 @@ Bootstrap::registerClass("AddonsManagerPeer",   PATH_HOME . "engine" . PATH_SEP 
 
 
 
-$arrayClass = array("Configuration", "EmailServer", "ListInbox", "ListParticipatedHistory");
+$arrayClass = array(
+
+    "BpmnProject",
+
+
+
+    "Configuration",
+
+    "EmailServer",
+
+    "Language",
+
+    "ListInbox",
+
+    "ListMyInbox",
+
+    "ListPaused",
+
+    "ListParticipatedLast",
+
+    "ListParticipatedHistory",
+
+    "AbeConfiguration"
+
+);
 
 
 

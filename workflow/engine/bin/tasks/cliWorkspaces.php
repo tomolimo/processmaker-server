@@ -104,7 +104,7 @@ CLI::taskArg('workspace', false);
 
 CLI::taskArg('backup-file', true);
 
-CLI::taskOpt("filesize", "Split the backup file in multiple files which are compressed. The maximum size of these files is set to MAX-SIZE in megabytes. If MAX-SIZE is not set, then it is 1000 megabytes by default. It may be necessary to use this option if using a 32 bit Linux/UNIX system which limits its maximum file size to 2GB. This option does not work on Windows systems.", "sMAX-SIZE","filesize=MAX-SIZE");
+CLI::taskOpt("filesize", "Split the backup file in multiple files which are compressed. The maximum size of these files is set to MAX-SIZE in megabytes. If MAX-SIZE is not set, then it is 1000 megabytes by default. It may be necessary to use this option if using a 32 bit Linux/UNIX system which limits its maximum file size to 2GB. This option does not work on Windows systems.", "s:","filesize=");
 
 CLI::taskRun("run_workspace_backup");
 
@@ -148,11 +148,11 @@ CLI::taskOpt("workspace", "Specify which workspace to restore if multiple worksp
 
         Ex: -wworkflow.",
 
-             "wWORKSPACE", "workspace=WORKSPACE");
+             "w:", "workspace=");
 
-CLI::taskOpt("lang", "Specify the language which will be used to rebuild the case cache list. If this option isn't included, then 'en' (English) will be used by default.", "lLANG","lang=LANG");
+CLI::taskOpt("lang", "Specify the language which will be used to rebuild the case cache list. If this option isn't included, then 'en' (English) will be used by default.", "l:","lang=");
 
-CLI::taskOpt("port", "Specify the port number used by MySQL. If not specified, then the port 3306 will be used by default.", "pPORT");
+CLI::taskOpt("port", "Specify the port number used by MySQL. If not specified, then the port 3306 will be used by default.", "p:");
 
 CLI::taskRun("run_workspace_restore");
 
@@ -188,7 +188,7 @@ EOT
 
 CLI::taskArg('workspace', true, true);
 
-CLI::taskOpt("lang", "Specify the language to rebuild the case cache list. If not specified, then 'en' (English) will be used by default.\n        Ex: -lfr (French) Ex: --lang=zh-CN (Mainland Chinese)", "lLANG", "lang=LANG");
+CLI::taskOpt("lang", "Specify the language to rebuild the case cache list. If not specified, then 'en' (English) will be used by default.\n        Ex: -lfr (French) Ex: --lang=zh-CN (Mainland Chinese)", "l:","lang=");
 
 CLI::taskRun("run_cacheview_upgrade");
 
@@ -344,7 +344,7 @@ EOT
 
 CLI::taskOpt("workspace", "Select the workspace whose case folders will be migrated, if multiple workspaces are present in the server.\n        Ex: -wworkflow.        Ex: --workspace=workflow",
 
-             "wWORKSPACE", "workspace=WORKSPACE");
+             "w:", "workspace=");
 
 CLI::taskRun("runStructureDirectories");
 
@@ -429,6 +429,22 @@ function run_workspace_upgrade($args, $opts) {
   foreach ($workspaces as $workspace) {
 
     try {
+
+      if (!defined("SYS_SYS")) {
+
+          define("SYS_SYS", $workspace->name);
+
+      }
+
+
+
+      if (!defined("PATH_DATA_SITE")) {
+
+          define("PATH_DATA_SITE", PATH_DATA . "sites" . PATH_SEP . SYS_SYS . PATH_SEP);
+
+      }
+
+
 
       $workspace->upgrade($first, false, $workspace->name, $lang);
 
@@ -1153,3 +1169,5 @@ function run_database_generate_self_service_by_value($args, $opts)
 }
 
 /*----------------------------------********---------------------------------*/
+
+

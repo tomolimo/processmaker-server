@@ -295,5 +295,6 @@ class PmPdo implements \OAuth2\Storage\AuthorizationCodeInterface,
 
         return array_merge($a, array_change_key_case($a, $case));
     }
+
 }
 

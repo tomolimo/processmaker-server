@@ -68,7 +68,7 @@ var verifyInfo = function(oForm)
   docType = oAux.value.split(".");
   docType = docType[docType.length - 1];
 
-  allowedTypes = getField('fileTypes').value.split(", ");
+  allowedTypes = getField('fileTypes').value.split(",");
 
   for(i=0; i<allowedTypes.length; i++){
     var arrayMatch = [];
