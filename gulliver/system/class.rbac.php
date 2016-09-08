@@ -94,6 +94,8 @@ class RBAC
 
 {
 
+    const SETUPERMISSIONUID= '00000000000000000000000000000002';
+
     /**
 
      *
@@ -320,47 +322,143 @@ class RBAC
 
      */
 
-    public function loadPermissionAdmin ()
+    public function loadPermissionAdmin()
 
     {
 
-        $permissionsAdmin = array (array ("PER_UID" => "00000000000000000000000000000001","PER_CODE" => "PM_LOGIN"
+        $permissionsAdmin = array(array("PER_UID" => "00000000000000000000000000000001", "PER_CODE" => "PM_LOGIN",
 
-        ),array ("PER_UID" => "00000000000000000000000000000002","PER_CODE" => "PM_SETUP"
+            "PER_NAME" => "Login"
 
-        ),array ("PER_UID" => "00000000000000000000000000000003","PER_CODE" => "PM_USERS"
+        ), array("PER_UID" => "00000000000000000000000000000002", "PER_CODE" => "PM_SETUP", "PER_NAME" => "Setup"
 
-        ),array ("PER_UID" => "00000000000000000000000000000004","PER_CODE" => "PM_FACTORY"
+        ), array("PER_UID" => "00000000000000000000000000000003", "PER_CODE" => "PM_USERS", "PER_NAME" => "Users"
 
-        ),array ("PER_UID" => "00000000000000000000000000000005","PER_CODE" => "PM_CASES"
+        ), array("PER_UID" => "00000000000000000000000000000004", "PER_CODE" => "PM_FACTORY", "PER_NAME" => "Design
 
-        ),array ("PER_UID" => "00000000000000000000000000000006","PER_CODE" => "PM_ALLCASES"
+        Process"
 
-        ),array ("PER_UID" => "00000000000000000000000000000007","PER_CODE" => "PM_REASSIGNCASE"
+        ), array("PER_UID" => "00000000000000000000000000000005", "PER_CODE" => "PM_CASES", "PER_NAME" => "Create Users"
 
-        ),array ("PER_UID" => "00000000000000000000000000000008","PER_CODE" => "PM_REPORTS"
+        ), array("PER_UID" => "00000000000000000000000000000006", "PER_CODE" => "PM_ALLCASES", "PER_NAME" => "All Cases"
 
-        ),array ("PER_UID" => "00000000000000000000000000000009","PER_CODE" => "PM_SUPERVISOR"
+        ), array("PER_UID" => "00000000000000000000000000000007", "PER_CODE" => "PM_REASSIGNCASE", "PER_NAME" =>
 
-        ),array ("PER_UID" => "00000000000000000000000000000010","PER_CODE" => "PM_SETUP_ADVANCE"
+            "Reassign case"
 
-        ),array ("PER_UID" => "00000000000000000000000000000011","PER_CODE" => "PM_DASHBOARD"
+        ), array("PER_UID" => "00000000000000000000000000000008", "PER_CODE" => "PM_REPORTS", "PER_NAME" => "PM reports"
 
-        ),array ("PER_UID" => "00000000000000000000000000000012","PER_CODE" => "PM_WEBDAV"
+        ), array("PER_UID" => "00000000000000000000000000000009", "PER_CODE" => "PM_SUPERVISOR", "PER_NAME" =>
 
-        ),array ("PER_UID" => "00000000000000000000000000000013","PER_CODE" => "PM_DELETECASE"
+            "Supervisor"
 
-        ),array ("PER_UID" => "00000000000000000000000000000014","PER_CODE" => "PM_EDITPERSONALINFO"
+        ), array("PER_UID" => "00000000000000000000000000000010", "PER_CODE" => "PM_SETUP_ADVANCE", "PER_NAME" =>
 
-        ),array ("PER_UID" => "00000000000000000000000000000015","PER_CODE" => "PM_FOLDERS_VIEW"
+            "Setup Advanced"
 
-        ),array ("PER_UID" => "00000000000000000000000000000016","PER_CODE" => "PM_FOLDERS_ADD_FOLDER"
+        ), array("PER_UID" => "00000000000000000000000000000011", "PER_CODE" => "PM_DASHBOARD", "PER_NAME" => "Dashboard"
 
-        ),array ("PER_UID" => "00000000000000000000000000000017","PER_CODE" => "PM_FOLDERS_ADD_FILE"
+        ), array("PER_UID" => "00000000000000000000000000000012", "PER_CODE" => "PM_WEBDAV", "PER_NAME" => "WebDav"
 
-        ),array ("PER_UID" => "00000000000000000000000000000018","PER_CODE" => "PM_CANCELCASE"
+        ), array("PER_UID" => "00000000000000000000000000000013", "PER_CODE" => "PM_DELETECASE", "PER_NAME" => "Cancel
 
-        ),array ("PER_UID" => "00000000000000000000000000000019","PER_CODE" => "PM_FOLDER_DELETE"
+         cases"
+
+        ), array("PER_UID" => "00000000000000000000000000000014", "PER_CODE" => "PM_EDITPERSONALINFO", "PER_NAME" =>
+
+            "Edit Personal Info"
+
+        ), array("PER_UID" => "00000000000000000000000000000015", "PER_CODE" => "PM_FOLDERS_VIEW", "PER_NAME" => "View
+
+         Folders"
+
+        ), array("PER_UID" => "00000000000000000000000000000016", "PER_CODE" => "PM_FOLDERS_ADD_FOLDER", "PER_NAME" =>
+
+            "Delete folders"
+
+        ), array("PER_UID" => "00000000000000000000000000000017", "PER_CODE" => "PM_FOLDERS_ADD_FILE", "PER_NAME" =>
+
+            "Delete folders"
+
+        ), array("PER_UID" => "00000000000000000000000000000018", "PER_CODE" => "PM_CANCELCASE", "PER_NAME" => "Cancel
+
+         cases"
+
+        ), array("PER_UID" => "00000000000000000000000000000019", "PER_CODE" => "PM_FOLDER_DELETE", "PER_NAME" =>
+
+            "Cancel cases"
+
+        ), array("PER_UID" => "00000000000000000000000000000020", "PER_CODE" => "PM_SETUP_LOGO", "PER_NAME" => "Setup
+
+        Logo"
+
+        ), array("PER_UID" => "00000000000000000000000000000021", "PER_CODE" => "PM_SETUP_EMAIL", "PER_NAME" => "Setup
+
+         Email"
+
+        ), array("PER_UID" => "00000000000000000000000000000022", "PER_CODE" => "PM_SETUP_CALENDAR", "PER_NAME" =>
+
+            "Setup Calendar"
+
+        ), array("PER_UID" => "00000000000000000000000000000023", "PER_CODE" => "PM_SETUP_PROCESS_CATEGORIES",
+
+            "PER_NAME" => "Setup Process Categories"
+
+        ), array("PER_UID" => "00000000000000000000000000000024", "PER_CODE" => "PM_SETUP_CLEAR_CACHE", "PER_NAME" =>
+
+            "Setup Clear Cache"
+
+        ), array("PER_UID" => "00000000000000000000000000000025", "PER_CODE" => "PM_SETUP_HEART_BEAT", "PER_NAME" =>
+
+            "Setup Heart Beat"
+
+        ), array("PER_UID" => "00000000000000000000000000000026", "PER_CODE" => "PM_SETUP_ENVIRONMENT", "PER_NAME" =>
+
+            "Setup Environment"
+
+        ), array("PER_UID" => "00000000000000000000000000000027", "PER_CODE" => "PM_SETUP_PM_TABLES", "PER_NAME" =>
+
+            "Setup PM Tables"
+
+        ), array("PER_UID" => "00000000000000000000000000000028", "PER_CODE" => "PM_SETUP_LOGIN", "PER_NAME" => "Setup
+
+         Login"
+
+        ), array("PER_UID" => "00000000000000000000000000000029", "PER_CODE" => "PM_SETUP_DASHBOARDS", "PER_NAME" =>
+
+            "Setup Dashboards"
+
+        ), array("PER_UID" => "00000000000000000000000000000030", "PER_CODE" => "PM_SETUP_LANGUAGE", "PER_NAME" =>
+
+            "Setup Language"
+
+        ), array("PER_UID" => "00000000000000000000000000000031", "PER_CODE" => "PM_SETUP_SKIN", "PER_NAME" => "Setup
+
+        Skin"
+
+        ), array("PER_UID" => "00000000000000000000000000000032", "PER_CODE" => "PM_SETUP_CASES_LIST_CACHE_BUILDER",
+
+            "PER_NAME" => "Setup Case List Cache Builder"
+
+        ), array("PER_UID" => "00000000000000000000000000000033", "PER_CODE" => "PM_SETUP_PLUGINS", "PER_NAME" =>
+
+            "Setup Plugins"
+
+        ), array("PER_UID" => "00000000000000000000000000000034", "PER_CODE" =>
+
+            "PM_SETUP_USERS_AUTHENTICATION_SOURCES", "PER_NAME" => "Setup User Authentication Sources"
+
+        ), array("PER_UID" => "00000000000000000000000000000035", "PER_CODE" => "PM_SETUP_LOGS", "PER_NAME" => "Setup
+
+        Logs"
+
+        ), array("PER_UID" => "00000000000000000000000000000036", "PER_CODE" => "PM_DELETE_PROCESS_CASES", "PER_NAME" =>
+
+            "Delete process cases"
+
+        ), array("PER_UID" => "00000000000000000000000000000037", "PER_CODE" => "PM_EDITPERSONALINFO_CALENDAR",
+
+            "PER_NAME" => "Edit personal info Calendar"
 
         )
 
@@ -786,7 +884,7 @@ class RBAC
 
      * @param string $perm id of Permissions
 
-     * @return 1: If it is ok
+     * @return int 1: If it is ok
 
      * -1: System doesn't exists
 
@@ -1464,7 +1562,7 @@ class RBAC
 
     {
 
-        return $this->rolesObj->getRoleUsers( $ROL_UID, $filter );
+        throw new Exception(__METHOD__ . ': The method is deprecated');
 
     }
 
@@ -1606,7 +1704,7 @@ class RBAC
 
     {
 
-        return $this->rolesObj->getAllUsers( $ROL_UID, $filter );
+        throw new Exception(__METHOD__ . ': The method is deprecated');
 
     }
 
@@ -1635,6 +1733,34 @@ class RBAC
     {
 
         return $this->rolesObj->assignUserToRole( $aData );
+
+    }
+
+
+
+    /**
+
+     * this function gets role permission
+
+     *
+
+     *
+
+     * @access public
+
+     *
+
+     * @param string $ROL_UID
+
+     * @return $this->rolesObj->getRolePermissionsByPerUid
+
+     */
+
+    public function getRolePermissionsByPerUid ($ROL_UID)
+
+    {
+
+        return $this->rolesObj->getRolePermissionsByPerUid( $ROL_UID );
 
     }
 
@@ -2434,6 +2560,10 @@ class RBAC
 
         foreach($listPermissions as $key => $item) {
 
+            //Adding new permissions
+
+            $data = array();
+
             $data['PER_UID']         = $item['PER_UID'];
 
             $data['PER_CODE']        = $item['PER_CODE'];
@@ -2451,6 +2581,60 @@ class RBAC
             $permission->save();
 
             $message[] = 'Add permission missing ' . $item['PER_CODE'];
+
+
+
+            //Adding new labels for new permissions
+
+            $o = new RolesPermissions();
+
+            $o->setPerUid($item['PER_UID']);
+
+            $o->setPermissionName($item['PER_NAME']);
+
+
+
+            //Assigning new permissions
+
+            $rolesWithPermissionSetup = $this->getRolePermissionsByPerUid(self::SETUPERMISSIONUID);
+
+            $rolesWithPermissionSetup->next();
+
+            while ($aRow = $rolesWithPermissionSetup->getRow()) {
+
+                $userRolePermission = $this->getRolePermissions($aRow['ROL_UID']);
+
+                $userRolePermission->next();
+
+                $valueNewPermissions = false;
+
+                while ($aRowPermission = $userRolePermission->getRow()) {
+
+                    if ($item['PER_CODE'] === $aRowPermission['PER_CODE']) {
+
+                        $valueNewPermissions = true;
+
+                    }
+
+                    $userRolePermission->next();
+
+                }
+
+                $dataPermissions = array();
+
+                if (!$valueNewPermissions) {
+
+                    $dataPermissions['ROL_UID'] = $aRow['ROL_UID'];
+
+                    $dataPermissions['PER_UID'] = $item['PER_UID'];
+
+                    $this->assignPermissionRole($dataPermissions);
+
+                }
+
+                $rolesWithPermissionSetup->next();
+
+            }
 
         }
 

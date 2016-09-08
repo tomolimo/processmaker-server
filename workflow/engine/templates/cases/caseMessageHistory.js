@@ -417,7 +417,8 @@ var ActionTabFrameGlobal = '';
         // cls : 'grid_with_checkbox',
         columnLines: true,
         viewConfig: {
-          forceFit:true
+          forceFit:true,
+          emptyText: (_('ID_NO_RECORDS_FOUND'))
         },
         cm: new Ext.grid.ColumnModel({
           defaults: {

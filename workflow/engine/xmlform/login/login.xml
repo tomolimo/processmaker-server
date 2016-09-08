@@ -25,6 +25,23 @@ SELECT LANG_ID, LANG_NAME FROM langOptions
     <en><![CDATA[Forgot Password]]></en>
   </FORGOT_PASWORD_LINK>
   <JS type="javascript"><![CDATA[
+
+//validate iframe login
+if(inIframe()) {
+  if (PM.Sessions.getCookie('PM-TabPrimary') !== '101010010'
+      && (window.location.pathname.indexOf("login/login") !== -1
+      || window.location.pathname.indexOf("sysLogin") !== -1)) {
+      window.top.location.href = window.location.pathname;
+  }
+}
+function inIframe () {
+    try {
+        return window.self !== window.top;
+    } catch (e) {
+        return true;
+    }
+};
+
 // enable/disable forgot password link
 if(flagForgotPassword == 'on' || flagForgotPassword == '1') {
   document.getElementById("form[FORGOT_PASWORD_LINK]").style.display = 'block';//hideRowById('FORGOT_PASWORD_LINK');

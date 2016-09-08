@@ -87,7 +87,7 @@ class EmailServerMapBuilder
 
         $tMap->addColumn('MESS_TRY_SEND_INMEDIATLY', 'MessTrySendInmediatly', 'int', CreoleTypes::INTEGER, true, null);
 
-        $tMap->addColumn('MAIL_TO', 'MailTo', 'string', CreoleTypes::VARCHAR, true, 256);
+        $tMap->addColumn('MAIL_TO', 'MailTo', 'string', CreoleTypes::VARCHAR, false, 256);
 
         $tMap->addColumn('MESS_DEFAULT', 'MessDefault', 'int', CreoleTypes::INTEGER, true, null);
 

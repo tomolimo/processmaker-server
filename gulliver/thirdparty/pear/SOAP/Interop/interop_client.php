@@ -720,10 +720,10 @@ class Interop_Client
             . "<table border=\"1\" cellspacing=\"0\" cellpadding=\"2\">\n"
             . "<tr><td class=\"BLANK\">Endpoint</td>\n";
         foreach ($methods as $method) {
-            $info = split(':', $method);
+            $info = explode(':', $method);
             echo "<td class='BLANK' valign='top'>";
             foreach ($info as $m) {
-                $hi = split(',', $m);
+                $hi = explode(',', $m);
                 echo '<b>'. $hi[0] . "</b><br>\n";
                 if (count($hi) > 1) {
                     echo "&nbsp;&nbsp;Actor="

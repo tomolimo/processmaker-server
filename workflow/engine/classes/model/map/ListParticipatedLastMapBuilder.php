@@ -99,6 +99,8 @@ class ListParticipatedLastMapBuilder
 
         $tMap->addColumn('DEL_CURRENT_USR_LASTNAME', 'DelCurrentUsrLastname', 'string', CreoleTypes::VARCHAR, false, 50);
 
+        $tMap->addColumn('DEL_CURRENT_TAS_TITLE', 'DelCurrentTasTitle', 'string', CreoleTypes::VARCHAR, true, 255);
+
         $tMap->addColumn('DEL_DELEGATE_DATE', 'DelDelegateDate', 'int', CreoleTypes::TIMESTAMP, true, null);
 
         $tMap->addColumn('DEL_INIT_DATE', 'DelInitDate', 'int', CreoleTypes::TIMESTAMP, false, null);

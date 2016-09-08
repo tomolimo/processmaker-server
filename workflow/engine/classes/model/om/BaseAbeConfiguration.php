@@ -112,6 +112,12 @@ abstract class BaseAbeConfiguration extends BaseObject implements Persistent
     protected $abe_mailserver_or_mailcurrent = 0;
 
     /**
+     * The value for the abe_custom_grid field.
+     * @var        string
+     */
+    protected $abe_custom_grid;
+
+    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      * @var        boolean
@@ -319,6 +325,17 @@ abstract class BaseAbeConfiguration extends BaseObject implements Persistent
     {
 
         return $this->abe_mailserver_or_mailcurrent;
+    }
+
+    /**
+     * Get the [abe_custom_grid] column value.
+     * 
+     * @return     string
+     */
+    public function getAbeCustomGrid()
+    {
+
+        return $this->abe_custom_grid;
     }
 
     /**
@@ -644,6 +661,28 @@ abstract class BaseAbeConfiguration extends BaseObject implements Persistent
     } // setAbeMailserverOrMailcurrent()
 
     /**
+     * Set the value of [abe_custom_grid] column.
+     * 
+     * @param      string $v new value
+     * @return     void
+     */
+    public function setAbeCustomGrid($v)
+    {
+
+        // Since the native PHP type for this column is string,
+        // we will cast the input to a string (if it is not).
+        if ($v !== null && !is_string($v)) {
+            $v = (string) $v;
+        }
+
+        if ($this->abe_custom_grid !== $v) {
+            $this->abe_custom_grid = $v;
+            $this->modifiedColumns[] = AbeConfigurationPeer::ABE_CUSTOM_GRID;
+        }
+
+    } // setAbeCustomGrid()
+
+    /**
      * Hydrates (populates) the object variables with values from the database resultset.
      *
      * An offset (1-based "start column") is specified so that objects can be hydrated
@@ -688,12 +727,14 @@ abstract class BaseAbeConfiguration extends BaseObject implements Persistent
 
             $this->abe_mailserver_or_mailcurrent = $rs->getInt($startcol + 13);
 
+            $this->abe_custom_grid = $rs->getString($startcol + 14);
+
             $this->resetModified();
 
             $this->setNew(false);
 
             // FIXME - using NUM_COLUMNS may be clearer.
-            return $startcol + 14; // 14 = AbeConfigurationPeer::NUM_COLUMNS - AbeConfigurationPeer::NUM_LAZY_LOAD_COLUMNS).
+            return $startcol + 15; // 15 = AbeConfigurationPeer::NUM_COLUMNS - AbeConfigurationPeer::NUM_LAZY_LOAD_COLUMNS).
 
         } catch (Exception $e) {
             throw new PropelException("Error populating AbeConfiguration object", $e);
@@ -939,6 +980,9 @@ abstract class BaseAbeConfiguration extends BaseObject implements Persistent
             case 13:
                 return $this->getAbeMailserverOrMailcurrent();
                 break;
+            case 14:
+                return $this->getAbeCustomGrid();
+                break;
             default:
                 return null;
                 break;
@@ -973,6 +1017,7 @@ abstract class BaseAbeConfiguration extends BaseObject implements Persistent
             $keys[11] => $this->getAbeUpdateDate(),
             $keys[12] => $this->getAbeSubjectField(),
             $keys[13] => $this->getAbeMailserverOrMailcurrent(),
+            $keys[14] => $this->getAbeCustomGrid(),
         );
         return $result;
     }
@@ -1045,6 +1090,9 @@ abstract class BaseAbeConfiguration extends BaseObject implements Persistent
                 break;
             case 13:
                 $this->setAbeMailserverOrMailcurrent($value);
+                break;
+            case 14:
+                $this->setAbeCustomGrid($value);
                 break;
         } // switch()
     }
@@ -1125,6 +1173,10 @@ abstract class BaseAbeConfiguration extends BaseObject implements Persistent
             $this->setAbeMailserverOrMailcurrent($arr[$keys[13]]);
         }
 
+        if (array_key_exists($keys[14], $arr)) {
+            $this->setAbeCustomGrid($arr[$keys[14]]);
+        }
+
     }
 
     /**
@@ -1190,6 +1242,10 @@ abstract class BaseAbeConfiguration extends BaseObject implements Persistent
 
         if ($this->isColumnModified(AbeConfigurationPeer::ABE_MAILSERVER_OR_MAILCURRENT)) {
             $criteria->add(AbeConfigurationPeer::ABE_MAILSERVER_OR_MAILCURRENT, $this->abe_mailserver_or_mailcurrent);
+        }
+
+        if ($this->isColumnModified(AbeConfigurationPeer::ABE_CUSTOM_GRID)) {
+            $criteria->add(AbeConfigurationPeer::ABE_CUSTOM_GRID, $this->abe_custom_grid);
         }
 
 
@@ -1271,6 +1327,8 @@ abstract class BaseAbeConfiguration extends BaseObject implements Persistent
         $copyObj->setAbeSubjectField($this->abe_subject_field);
 
         $copyObj->setAbeMailserverOrMailcurrent($this->abe_mailserver_or_mailcurrent);
+
+        $copyObj->setAbeCustomGrid($this->abe_custom_grid);
 
 
         $copyObj->setNew(true);

@@ -835,8 +835,11 @@ Ext.onReady(function(){
       }
     ],
     listeners: {
-      show: function() {
-        checkWorkspaceConfiguration();
+      show: function () {
+        setTimeout(function () {
+          wizard.onClientValidation(4, false);
+          checkWorkspaceConfiguration();
+        }, 100);
       }
     }
   });

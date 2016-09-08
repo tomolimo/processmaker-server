@@ -70,6 +70,32 @@ class DataBaseConnection
             }
             $aFields['DBS_PASSWORD'] = $dbs->getPassWithoutEncrypt($aFields);
 
+            $aFields['DBS_DATABASE_DESCRIPTION'] = '';
+
+            $dbDescription = '';
+
+            $criteria2 = new \Criteria('workflow');
+
+            $criteria2->addSelectColumn(\ContentPeer::CON_VALUE);
+            $criteria2->add(\ContentPeer::CON_ID, $aFields['DBS_UID'], \Criteria::EQUAL);
+
+            $rsCriteria2 = \ContentPeer::doSelectRS($criteria2);
+            $rsCriteria2->setFetchmode(\ResultSet::FETCHMODE_ASSOC);
+
+            if ($rsCriteria2->next()) {
+                $row2 = $rsCriteria2->getRow();
+
+                if ($row2['CON_VALUE'] != '') {
+                    $dbDescription = ' - [' . $row2['CON_VALUE'] . ']';
+                }
+            }
+
+            if($aFields['DBS_TYPE'] == 'oracle' && $aFields['DBS_CONNECTION_TYPE'] == 'TNS') {
+                $aFields['DBS_DATABASE_DESCRIPTION'] = '[' . $aFields['DBS_TNS'] . ']' . $dbDescription;
+            } else {
+                $aFields['DBS_DATABASE_DESCRIPTION'] = $dbDescription;
+            }
+
             $response = array_change_key_case($aFields, CASE_LOWER);
             return $response;
         } catch (\Exception $e) {

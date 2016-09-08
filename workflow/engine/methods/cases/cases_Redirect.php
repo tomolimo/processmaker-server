@@ -32,7 +32,7 @@ $aFields = $oAppDocument->load( $_GET['a'] );
 require_once 'classes/model/OutputDocument.php';
 $oOutputDocument = new OutputDocument();
 $aOD = $oOutputDocument->load( $aFields['DOC_UID'] );
-$a = $_GET['a'];
+$a = htmlspecialchars($_GET['a']);
 $ext = strtolower( $aOD['OUT_DOC_GENERATE'] );
 
 G::header( 'location: cases_ShowOutputDocument?a=' . $a . '&ext=' . $ext );

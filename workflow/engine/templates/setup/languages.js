@@ -86,9 +86,9 @@ Ext.onReady(function(){
 
                         Ext.MessageBox.show({
                           title: '',
-                          width: 500,
-                          height: 500,
-                          msg: "<pre style='font-size:10px'>"+resp.result.msg+"</pre>",
+                          width: 510,
+                          height: 300,
+                          msg: "<div style=\"overflow: auto; width: 439px; height: 200px;\">" + stringReplace("\\x0A", "<br />", resp.result.msg) + "</div>",
                           buttons: Ext.MessageBox.OK,
                           animEl: 'mb9',
                           fn: function(){},

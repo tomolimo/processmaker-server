@@ -476,9 +476,11 @@ class Translation extends BaseTranslation
             $this->addTranslationEnvironment( $params['LOCALE'], $params['HEADERS'], $params['COUNT'] );
             //getting more language translations
             $files = glob( $translationsPath . "*.po" );
-            foreach ($files as $file) {
-                $params = self::getInfoFromPOFile( $file );
-                $this->addTranslationEnvironment( $params['LOCALE'], $params['HEADERS'], $params['COUNT'] );
+            if(is_array($files)){
+                foreach ($files as $file) {
+                    $params = self::getInfoFromPOFile( $file );
+                    $this->addTranslationEnvironment( $params['LOCALE'], $params['HEADERS'], $params['COUNT'] );
+                }
             }
         }
         $envs = unserialize( file_get_contents( $filePath ) );

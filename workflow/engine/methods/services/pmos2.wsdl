@@ -40,6 +40,7 @@
         <xs:sequence>
           <xs:element name="guid" type="xs:string"/>
           <xs:element name="name" type="xs:string"/>
+          <xs:element name="project_type" type="xs:string"/>
         </xs:sequence>
       </xs:complexType>
       <xs:element name="processListResponse">
@@ -114,7 +115,7 @@
         <xs:sequence>
           <xs:element name="guid" type="xs:string"/>
           <xs:element name="name" type="xs:string"/>
-		  <xs:element name="status" type="xs:string"/>
+          <xs:element name="status" type="xs:string"/>
         </xs:sequence>
       </xs:complexType>
       <xs:element name="userListRequest">

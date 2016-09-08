@@ -64,8 +64,12 @@ class Department extends Api
     {
         try {
             $oDepartment = new \ProcessMaker\BusinessModel\Department();
-            $response = $oDepartment->getAssignedUser($dep_uid);
-            return $response;
+
+            $response = $oDepartment->getUsers(
+                $dep_uid, 'ASSIGNED', null, null, null, null, null, false
+            );
+
+            return $response['data'];
         } catch (\Exception $e) {
             throw (new RestException(Api::STAT_APP_EXCEPTION, $e->getMessage()));
         }
@@ -82,12 +86,16 @@ class Department extends Api
      * @return array
      *
      */
-    public function doGetAvailableUser($dep_uid, $start = 0, $limit = 0, $search = '')
+    public function doGetAvailableUser($dep_uid, $start = null, $limit = null, $search = null)
     {
         try {
             $oDepartment = new \ProcessMaker\BusinessModel\Department();
-            $response = $oDepartment->getAvailableUser($dep_uid, $start, $limit, $search);
-            return $response;
+
+            $response = $oDepartment->getUsers(
+                $dep_uid, 'AVAILABLE', ['filter' => $search, 'filterOption' => ''], null, null, $start, $limit, false
+            );
+
+            return $response['data'];
         } catch (\Exception $e) {
             throw (new RestException(Api::STAT_APP_EXCEPTION, $e->getMessage()));
         }
@@ -114,20 +122,19 @@ class Department extends Api
     }
 
     /**
-     * @url PUT /:dep_uid/unassign-user/:usr_uid
+     * @url DELETE /:dep_uid/unassign-user/:usr_uid
      *
      * @param string $dep_uid {@min 1}{@max 32}
      * @param string $usr_uid {@min 1}{@max 32}
      *
-     * @return array
+     * @status 200
      *
      */
-    public function doPutUnassignUser($dep_uid, $usr_uid)
+    public function doDeleteUnassignUser($dep_uid, $usr_uid)
     {
         try {
             $oDepartment = new \ProcessMaker\BusinessModel\Department();
-            $response = $oDepartment->unassignUser($dep_uid, $usr_uid);
-            return $response;
+            $oDepartment->unassignUser($dep_uid, $usr_uid);
         } catch (\Exception $e) {
             throw (new RestException(Api::STAT_APP_EXCEPTION, $e->getMessage()));
         }

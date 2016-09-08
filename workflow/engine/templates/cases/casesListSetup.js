@@ -317,7 +317,7 @@ Ext.onReady(function () {
         data: [['left', _('ID_LEFT')], ['center', _('ID_CENTER')], ['right', _('ID_RIGHT')]]
     }),
     valueField: 'id',
-    displayField: 'label',
+    displayField: 'label'
   });
 
   var alignComboBoxLabel = new Ext.form.ComboBox ({

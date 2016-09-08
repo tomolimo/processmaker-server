@@ -193,6 +193,19 @@ class InputDocument
                 $flagAssigned = true;
                 $arrayData[] = \G::LoadTranslation("ID_PROCESS_PERMISSIONS");
             }
+            
+            //Variables
+            $criteria = new \Criteria("workflow");
+
+            $criteria->addSelectColumn(\ProcessVariablesPeer::VAR_UID);
+            $criteria->add(\ProcessVariablesPeer::INP_DOC_UID, $inputDocumentUid);
+
+            $rsCriteria = \ProcessVariablesPeer::doSelectRS($criteria);
+
+            if ($rsCriteria->next()) {
+                $flagAssigned = true;
+                $arrayData[] = \G::LoadTranslation("ID_VARIABLES");
+            }
 
             //Return
             return array($flagAssigned, $arrayData);

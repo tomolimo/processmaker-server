@@ -313,7 +313,11 @@ class Log_file extends Log
         $myPid     = PM_PID; 
         //$request variable will have all the values in POST and GET
         $request = '';
-        foreach( $_POST as $k => $v ) $request .= ($request!='' ? "\t" : '') . $k . '='.$v; 
+        foreach( $_POST as $k => $v ){
+            if(is_string($v)){
+                $request .= ($request!='' ? "\t" : '') . $k . '='.$v;
+            }
+        }
         foreach( $_GET  as $k => $v ) $request .= ($request!='' ? "\t" : '') . $k . '='.$v; 
 
         //exact time with microseconds        

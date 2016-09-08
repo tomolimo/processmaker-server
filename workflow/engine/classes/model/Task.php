@@ -1598,6 +1598,8 @@ class Task extends BaseTask
 
                 $oCriteria->add(AppDelegationPeer::TAS_UID, $newValues['TAS_UID']);
 
+                $oCriteria->add(AppDelegationPeer::USR_UID, "");
+
                 $oApplication = AppDelegationPeer::doSelectOne($oCriteria);
 
                 if(!empty($oApplication)) {

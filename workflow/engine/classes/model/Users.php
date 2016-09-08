@@ -91,6 +91,17 @@ class Users extends BaseUsers
                 throw (new Exception(G::LoadTranslation("ID_USER_UID_DOESNT_EXIST", SYS_LANG, array("USR_UID" => $UsrUid))));
             }
         } catch (PropelException $e) {
+            if(empty($oRow)) {
+                error_log(\G::LoadTranslation('ID_CONTACT_ADMIN'));
+                error_log($e->getTraceAsString());
+                $oError = new \Exception(
+                    \G::LoadTranslation('ID_ERROR_IN_SERVER').".\n"
+                    .\G::LoadTranslation('ID_CONTACT_ADMIN'),
+                    0,
+                    $e
+                );
+                throw ($oError);
+            }
             //capture invalid birthday date and replace by null
             $msg = $e->getMessage();
             if (strpos( 'Unable to parse value of [usr_birthday]', $msg ) != - 1) {
@@ -173,6 +184,10 @@ class Users extends BaseUsers
                 $roles = new Roles();
                 $role = $roles->loadByCode($aFields['USR_ROLE']);
                 $aFields['USR_ROLE_NAME'] = $role['ROL_NAME'];
+
+                $translations = new Language();
+                $translation  = $translations->loadByCode($aFields['USR_DEFAULT_LANG']);
+                $aFields['USR_DEFAULT_LANG_NAME'] = $translation['LANGUAGE_NAME'];
 
                 $result = $aFields;
 
@@ -480,6 +495,23 @@ class Users extends BaseUsers
                 break;
         }
         return $return;
+    }
+
+    public function userLanguaje ($usrUid = "")
+    {
+        try {
+
+            $oCriteria = new Criteria( 'workflow' );
+            $oCriteria->addSelectColumn( UsersPeer::USR_UID );
+            $oCriteria->addSelectColumn( UsersPeer::USR_DEFAULT_LANG );
+            $oCriteria->add( UsersPeer::USR_UID, $usrUid );
+            $rsCriteria = UsersPeer::doSelectRS( $oCriteria );
+            $rsCriteria->setFetchmode( ResultSet::FETCHMODE_ASSOC );
+
+            return $rsCriteria;
+        } catch (exception $oError) {
+            throw ($oError);
+        }
     }
 }
 

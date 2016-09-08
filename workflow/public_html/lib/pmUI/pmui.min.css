@@ -93,11 +93,11 @@
 @include font-face("SourceSansProBold", font-files("SourceSansPro-Bold/SourceSansPro-Bold-webfont.ttf", "SourceSansPro-Bold/SourceSansPro-Bold-webfont.eot", "SourceSansPro-Bold/SourceSansPro-Bold-webfont.woff", "SourceSansPro-Bold/SourceSansPro-Bold-webfont.svg"),"SourceSansPro-Bold/SourceSansPro-Bold-webfont.eot");*/
 @font-face {
   font-family: "Chivo";
-  src: url('../fonts/Chivo/Chivo-Black.ttf?1440534832') format('truetype'), url('../fonts/Chivo/Chivo-BlackItalic.ttf?1440534832') format('truetype'), url('../fonts/Chivo/Chivo-Italic.ttf?1440534832') format('truetype'), url('../fonts/Chivo/Chivo-Regular.ttf?1440534832') format('truetype');
+  src: url('../fonts/Chivo/Chivo-Black.ttf?1462915576') format('truetype'), url('../fonts/Chivo/Chivo-BlackItalic.ttf?1462915576') format('truetype'), url('../fonts/Chivo/Chivo-Italic.ttf?1462915576') format('truetype'), url('../fonts/Chivo/Chivo-Regular.ttf?1462915576') format('truetype');
 }
 @font-face {
   font-family: "Montserrat";
-  src: url('../fonts/Montserrat/Montserrat-Bold.ttf?1440534832') format('truetype'), url('../fonts/Montserrat/Montserrat-Regular.ttf?1440534832') format('truetype');
+  src: url('../fonts/Montserrat/Montserrat-Bold.ttf?1462915576') format('truetype'), url('../fonts/Montserrat/Montserrat-Regular.ttf?1462915576') format('truetype');
 }
 .pmui-sprite-sprite, .pmui-sprite-arrow-down, .pmui-sprite-arrow-next, .pmui-sprite-arrow-previous, .pmui-sprite-arrow-right, .pmui-sprite-arrow-up, .pmui-sprite-delete-16, .pmui-sprite-error-64, .pmui-sprite-error, .pmui-sprite-grid-arrow-down, .pmui-sprite-grid-arrow-up, .pmui-sprite-help, .pmui-sprite-info-64, .pmui-sprite-information, .pmui-sprite-question-64, .pmui-sprite-success-64, .pmui-sprite-warning-64, .pmui-sprite-warning, .pmui-sprite-window-close, .pmui-accordion-item-closed, .pmui-accordion-item-expanded, .pmui-gridpanel-pagelink.pmui-gridpanel-nextbutton .pmui-icon, .pmui-gridpanel-pagelink.pmui-gridpanel-previousbutton .pmui-icon, .pmui-gridpanelcolumn.pmui-sortable.pmui-sort-asc .pmui-grid-sort-icon, .pmui-gridpanelcolumn.pmui-sortable.pmui-sort-desc .pmui-grid-sort-icon, .pmui-icon-help, .pmui-icon-info, .pmui-icon-error, .pmui-icon-warning, .pmui-messagewindow-icon-error, .pmui-messagewindow-icon-warning, .pmui-messagewindow-icon-info, .pmui-messagewindow-icon-success, .pmui-messagewindow-icon-confirm {
   background-image: url('../img/pmui-sprite-s947c1ade08.png');
@@ -210,151 +210,6 @@
   background-position: 0 -468px;
   height: 14px;
   width: 18px;
-}
-
-.mafe-activity-task {
-  background-color: white;
-  border: 2px solid #3b4753;
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  -ms-border-radius: 3px;
-  -o-border-radius: 3px;
-  border-radius: 12px;
-  /*-webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
-  -moz-box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
-  box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);*/
-  box-sizing: border-box;
-}
-
-.mafe-activity-task-disabled {
-  background-color: white;
-  border: 2px solid #a5adb4;
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  -ms-border-radius: 3px;
-  -o-border-radius: 3px;
-  border-radius: 12px;
-  /*-webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
-  -moz-box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
-  box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);*/
-  box-sizing: border-box;
-}
-
-.pmui-pmactivity .pmui-label span {
-  color: black;
-}
-
-.pmui-pmevent .pmui-label span {
-  color: black;
-}
-
-.pmui-pmgateway .pmui-label span {
-  color: black;
-}
-
-.pmui-pmpool .pmui-label > first-child {
-  color: black;
-}
-
-.rotateText {
-  color: #3b4753;
-}
-
-.mafe-activity-subprocess {
-  background-color: white;
-  border: 4px solid #3b4753;
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  -ms-border-radius: 3px;
-  -o-border-radius: 3px;
-  border-radius: 12px;
-  /*-webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
-  -moz-box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
-  box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);*/
-  box-sizing: border-box;
-}
-
-.mafe-activity-subprocess-disabled {
-  background-color: white;
-  border: 3px solid #a5adb4;
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  -ms-border-radius: 3px;
-  -o-border-radius: 3px;
-  border-radius: 12px;
-  /*-webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
-  -moz-box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
-  box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);*/
-  box-sizing: border-box;
-}
-
-.pmui-pmactivity .pmui-label span {
-  color: black;
-}
-
-.pmui-pmdata .pmui-label span {
-  color: black;
-}
-
-.pmui-connection .pmui-label span {
-  color: black;
-}
-
-.mafe-intersection {
-  bacground-color: black;
-}
-
-.dragConnectHandler {
-  background-color: #FAB606;
-  border-radius: 50%;
-}
-
-/*.dragConnectHandler.ui-draggable-dragging {
-    background: green;
-    z-index:200;
-}
-*/
-.dropConnectHandler {
-  background-color: #3b4753;
-  border-radius: 50%;
-}
-
-/*.dropConnectHandler.ui-draggable-dragging {
-    background: #0317FC;
-    z-index:200;
-}*/
-.dropConnectHandler.ui-state-active {
-  background: white;
-}
-
-.dropConnectHandler .ui-state-hover {
-  background: green;
-}
-
-#buttonCriteriaField {
-  background: black;
-}
-
-.mafe-activity-task-red {
-  background-color: #ce0615;
-  border: 1px solid #9f0614;
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  -ms-border-radius: 3px;
-  -o-border-radius: 3px;
-  border-radius: 3px;
-  -webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
-  -moz-box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
-  box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
-}
-
-.list-suggest-item :hover {
-  background-color: #e0e0e0;
-}
-
-.list-suggest-item.single-label :hover {
-  background-color: initial;
-  color: white;
 }
 
 /* Title assignment */
@@ -938,11 +793,7 @@ a.mafe-button-create:hover{
 }
 
 .clearlooks2 .mceFocus .mceMax {
-  background: url(../img/mafe-tools.png) no-repeat !important;
-  background-position: 0 -966px !important;
-  width: 27px !important;
-  height: 20px !important;
-  margin-top: -3px !important;
+  visibility: hidden;
 }
 
 .clearlooks2 .mceFocus .mceMed {
@@ -978,6 +829,156 @@ a.mafe-button-create:hover{
   background: #D6D2D2;
   color: #ffffff;
   cursor: default;
+}
+
+.mafe-button-submenu-option {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.mafe-activity-task {
+  background-color: white;
+  border: 2px solid #3b4753;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
+  border-radius: 12px;
+  /*-webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+  -moz-box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);*/
+  box-sizing: border-box;
+}
+
+.mafe-activity-task-disabled {
+  background-color: white;
+  border: 2px solid #a5adb4;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
+  border-radius: 12px;
+  /*-webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+  -moz-box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);*/
+  box-sizing: border-box;
+}
+
+.pmui-pmactivity .pmui-label span {
+  color: black;
+}
+
+.pmui-pmevent .pmui-label span {
+  color: black;
+}
+
+.pmui-pmgateway .pmui-label span {
+  color: black;
+}
+
+.pmui-pmpool .pmui-label > first-child {
+  color: black;
+}
+
+.rotateText {
+  color: #3b4753;
+}
+
+.mafe-activity-subprocess {
+  background-color: white;
+  border: 4px solid #3b4753;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
+  border-radius: 12px;
+  /*-webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+  -moz-box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);*/
+  box-sizing: border-box;
+}
+
+.mafe-activity-subprocess-disabled {
+  background-color: white;
+  border: 3px solid #a5adb4;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
+  border-radius: 12px;
+  /*-webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+  -moz-box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);*/
+  box-sizing: border-box;
+}
+
+.pmui-pmactivity .pmui-label span {
+  color: black;
+}
+
+.pmui-pmdata .pmui-label span {
+  color: black;
+}
+
+.pmui-connection .pmui-label span {
+  color: black;
+}
+
+.mafe-intersection {
+  bacground-color: black;
+}
+
+.dragConnectHandler {
+  background-color: #FAB606;
+  border-radius: 50%;
+}
+
+/*.dragConnectHandler.ui-draggable-dragging {
+    background: green;
+    z-index:200;
+}
+*/
+.dropConnectHandler {
+  background-color: #3b4753;
+  border-radius: 50%;
+}
+
+/*.dropConnectHandler.ui-draggable-dragging {
+    background: #0317FC;
+    z-index:200;
+}*/
+.dropConnectHandler.ui-state-active {
+  background: white;
+}
+
+.dropConnectHandler .ui-state-hover {
+  background: green;
+}
+
+#buttonCriteriaField {
+  background: black;
+}
+
+.mafe-activity-task-red {
+  background-color: #ce0615;
+  border: 1px solid #9f0614;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
+  border-radius: 3px;
+  -webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+  -moz-box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+}
+
+.list-suggest-item :hover {
+  background-color: #e0e0e0;
+}
+
+.list-suggest-item.single-label :hover {
+  background-color: initial;
+  color: white;
 }
 
 .pmui {

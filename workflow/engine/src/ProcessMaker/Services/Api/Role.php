@@ -13,6 +13,11 @@ class Role extends Api
 {
     private $role;
 
+    private $arrayFieldIso8601 = [
+        "rol_create_date",
+        "rol_update_date"
+    ];
+
     /**
      * Constructor of the class
      *
@@ -45,7 +50,7 @@ class Role extends Api
         try {
             $response = $this->role->getRoles(array("filter" => $filter), null, null, $start, $limit);
 
-            return $response;
+            return \ProcessMaker\Util\DateTime::convertUtcToIso8601($response, $this->arrayFieldIso8601);
         } catch (\Exception $e) {
             throw new RestException(Api::STAT_APP_EXCEPTION, $e->getMessage());
         }
@@ -61,7 +66,7 @@ class Role extends Api
         try {
             $response = $this->role->getRole($rol_uid);
 
-            return $response;
+            return \ProcessMaker\Util\DateTime::convertUtcToIso8601($response, $this->arrayFieldIso8601);
         } catch (\Exception $e) {
             throw new RestException(Api::STAT_APP_EXCEPTION, $e->getMessage());
         }

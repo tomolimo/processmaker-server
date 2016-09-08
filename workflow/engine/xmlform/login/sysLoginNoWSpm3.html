@@ -1,15 +1,20 @@
+<div class="panel-default">
+    <p>{php}echo G::LoadTranslation('ID_LOGIN_TITLE');{/php}</p>
+</div>
+
 <form accept-charset="UTF-8" role="form" class="form-signin" id="{$form_id}" name="{$form_name}" action="{$form_action}" method="post" encType="multipart/form-data" style="margin:0px;" onsubmit="return validateForm('{$form_objectRequiredFields}');">
     <input type="hidden" class="notValidateThisFields" name="__notValidateThisFields__" id="__notValidateThisFields__" value="{$form_objectRequiredFields}" />
     <input type="hidden" name="DynaformRequiredFields" id="DynaformRequiredFields" value="{$form_objectRequiredFields}" />
     <input type="hidden" name="__DynaformName__" id="__DynaformName__" value="{$form_name}" />
+    {$form.BROWSER_TIME_ZONE_OFFSET}
     <div style="display: none;"> {$form.USR_PASSWORD}</div>
     <fieldset>
       <label class="panel-login">
         <div class="login_result"></div>
       </label>
       {$form.USR_USERNAME}
-      {$form.USR_PASSWORD_MASK}    
-      
+      {$form.USR_PASSWORD_MASK}
+
     </fieldset>
     <fieldset>
         <label class="panel-login">
@@ -17,13 +22,14 @@
         </label>
         {$form.USER_ENV}
         {$form.USER_LANG}
-       
+
         <br>
-        {$form.BSUBMIT}        
+        {$form.BSUBMIT}
     </fieldset>
     <script src="/lib/pmdynaform/libs/respondjs/respond.min.js"></script>
-    <script src="/lib/pmdynaform/libs/html5shiv/html5shiv.js"></script> 
-    <script type="text/javascript">      
+    <script src="/lib/pmdynaform/libs/html5shiv/html5shiv.js"></script>
+    <script type="text/javascript">
         {$form.JS}
     </script>
 </form>
+

@@ -752,6 +752,11 @@ function NewCase ($params)
     $variables = $params->variables;
 
     $field = array ();
+    
+    if ($variables->name === "__POST_VARIABLES__") {
+        $field = G::json_decode($variables->value, true);
+        $variables = null;
+    }
 
     if (is_object( $variables )) {
         $field[$variables->name] = $variables->value;

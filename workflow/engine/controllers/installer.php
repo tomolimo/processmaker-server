@@ -262,7 +262,7 @@ class Installer extends Controller
 
         $info->php->version = phpversion();
 
-        $info->php->result = version_compare(phpversion(), '5.2.10') >= 0 ? true : false;
+        $info->php->result = version_compare(phpversion(), '5.5.33') >= 0 ? true : false;
 
 
 
@@ -434,7 +434,7 @@ class Installer extends Controller
 
         $info->memory->version = $memory . 'M';
 
-        if ($memory > 80) {
+        if ($memory > 255) {
 
             $info->memory->result = true;
 
@@ -632,7 +632,7 @@ class Installer extends Controller
 
         }
 
-        
+
 
         G::LoadSystem('inputfilter');
 
@@ -786,7 +786,7 @@ class Installer extends Controller
 
         }
 
-        
+
 
         G::LoadSystem('inputfilter');
 
@@ -794,7 +794,7 @@ class Installer extends Controller
 
         $logFile = $filter->validateInput($logFile, 'path');
 
-        
+
 
         $fpt = fopen( $logFile, 'a' );
 
@@ -1490,7 +1490,7 @@ class Installer extends Controller
 
             $path_site = $pathShared . "/sites/" . $workspace . "/";
 
-            $db_file = $path_site . "db.php";
+
 
             @mkdir( $path_site, 0777, true );
 
@@ -1505,6 +1505,8 @@ class Installer extends Controller
             @mkdir( $path_site . "xmlForms", 0777, true );
 
 
+
+            $db_file = $path_site . 'db.php';
 
             $dbText = "<?php\n";
 
@@ -1560,7 +1562,11 @@ class Installer extends Controller
 
 
 
-            // Generate the databases.php file
+            /*----------------------------------********---------------------------------*/
+
+
+
+            //Generate the databases.php file
 
             $databases_file = $path_site . 'databases.php';
 
@@ -1612,7 +1618,7 @@ class Installer extends Controller
 
             $this->mysqlFileQuery( PATH_RBAC_HOME . 'engine/data/mysql/insert.sql' );
 
-            
+
 
             $query = sprintf( "USE %s;", $wf_workpace );
 
@@ -1622,7 +1628,7 @@ class Installer extends Controller
 
             $this->mysqlFileQuery( PATH_HOME . 'engine/data/mysql/insert.sql' );
 
-            
+
 
 
 
@@ -2466,6 +2472,14 @@ class Installer extends Controller
 
             $db_password = $filter->validateInput($_REQUEST['db_password']);
 
+            $db_port     = $filter->validateInput($_REQUEST['db_port']);
+
+            if($db_port != "3306"){
+
+                $db_hostname = $db_hostname.":".$db_port;
+
+            }
+
             $link = @mysql_connect( $db_hostname, $db_username, $db_password );
 
             $wfDatabase = $filter->validateInput($_REQUEST['wfDatabase'], 'nosql');
@@ -2596,7 +2610,7 @@ class Installer extends Controller
 
         $db_host = ($db_port != '' && $db_port != 1433) ? $db_hostname . ':' . $db_port : $db_hostname;
 
-       
+
 
         $link = @mysql_connect( $db_host, $db_username, $db_password );
 
@@ -2612,7 +2626,7 @@ class Installer extends Controller
 
         $db_hostname = $filter->validateInput($db_hostname, 'nosql');
 
-        $query = "SELECT * FROM `information_schema`.`USER_PRIVILEGES` where (GRANTEE = \"'%s'@'%s'\" OR GRANTEE = \"'%s'@'%%'\") ";   
+        $query = "SELECT * FROM `information_schema`.`USER_PRIVILEGES` where (GRANTEE = \"'%s'@'%s'\" OR GRANTEE = \"'%s'@'%%'\") ";
 
         $query = $filter->preventSqlInjection($query, array($db_username, $db_hostname, $db_username));
 
@@ -2702,7 +2716,7 @@ class Installer extends Controller
 
         $db_host = ($db_port != '' && $db_port != 1433) ? $db_hostname . ':' . $db_port : $db_hostname;
 
-            
+
 
         $link = @mssql_connect( $db_host, $db_username, $db_password );
 
@@ -3332,7 +3346,7 @@ class Installer extends Controller
 
                 $db_host = ($db_port != '' && $db_port != 3306) ? $db_hostname . ':' . $db_port : $db_hostname;
 
-            
+
 
                 $link = @mysql_connect( $db_host, $db_username, $db_password );
 

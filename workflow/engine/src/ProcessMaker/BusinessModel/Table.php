@@ -497,7 +497,9 @@ class Table
         }
 
         $index = G::encrypt( implode( ',', $primaryKeysValues ), 'pmtable' );
-        $rep = $this->getTableData($pmt_uid);
+        $rep = $obj->toArray(\BasePeer::TYPE_FIELDNAME);
+        $rep = array_change_key_case($rep, CASE_LOWER);
+        $rep['__index__'] = $index;
         return $rep;
     }
 

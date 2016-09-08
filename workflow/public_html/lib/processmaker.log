@@ -1,30 +1,30 @@
-[38 minutes ago] 7e22660  Fix notice when _label variable doesn't exists <Julio Cesar Laura>
-[4 hours ago] 014fbe3  validacion para los demas elementos del menu <marcelo.cuiza>
-[8 hours ago] a4c632f  PM-3790 <Roly Rudy Gutierrez Pinto>
-[34 hours ago] 6893ece  IMPROVEMENT <Roly Rudy Gutierrez Pinto>
-[35 hours ago] e757134  validate in pmdynaform <Ronald Quenta>
-[4 days ago] a3573f0  PM-3536-A <Roly Rudy Gutierrez Pinto>
-[4 days ago] 77ee946  PM-3741 <Roly Rudy Gutierrez Pinto>
-[4 days ago] 8c6aa71  PM-3755 Consume the oauth/token endpoint specifying an invalid workspace, <Ronald Quenta>
-[5 days ago] da3e457  Last update of .po and .sql files for version 3.0.1.5 <Julio Cesar Laura>
-[5 days ago] 2676d2c  PM-2907-A <Roly Rudy Gutierrez Pinto>
-[5 days ago] b5d5132  PM-3750: No se puede importar plugins personalizados <marcelo.cuiza>
-[5 days ago] 2e8b81f  PM-3714 <Roly Rudy Gutierrez Pinto>
-[5 days ago] 3fc12fd  PM-3740: 0018724: Menus change randomly when viewing Unassigned cases <marcelo.cuiza>
-[5 days ago] fa3a238  PM-3737 "0018694: Error when using 'Jump to' functionality..." SOLVED <Victor Saisa Lopez>
-[6 days ago] 4c05109  PM-3731 Los registros del equipo tienen que actualizarse con los tokens vigentes <Ronald Quenta>
-[6 days ago] 85cfb3b  EX-236: Error screen to save the template of an output document in IE <Paula V. Quispe>
-[7 days ago] 0776b6b  PM-3720 <Roly Rudy Gutierrez Pinto>
-[8 days ago] b89fd8c  Updating .po and .sql for release of ProcessMaker 3.0.1.5 <Julio Cesar Laura>
-[8 days ago] 9f996a0  Updating .po and .sql for release of ProcessMaker 3.0.1.5 <Julio Cesar Laura>
-[8 days ago] 5d42a26  PM-3705: 18640: Subdepartments sin supervisors no hacen report to al inmediato supervisor del department. <marcelo.cuiza>
-[8 days ago] a493a54  PM-2905 <Roly Rudy Gutierrez Pinto>
-[9 days ago] 8f1b122  PM-3701 <Roly Rudy Gutierrez Pinto>
-[11 days ago] 90ed130  PM-3709 No permitir loguearse con SSO si existen 2 cuentas de usuario con el mismo mail <Ronald Quenta>
-[11 days ago] 08ab6c8  PM-3690 "Unpause Time no funciona, el caso se queda en 'Paused'..." SOLVED <Victor Saisa Lopez>
-[12 days ago] 88ee67d  PM-3688 : Include Accepted_language header in REST endpoint calls in MAFE <jonathan>
-[13 days ago] c917eb2  PM-3632-A "REST endpoint GET /cases/{app_uid}/input-documents" SOLVED <Luis Fernando Saisa Lopez>
-[13 days ago] 4b4b755  PM-3554 Documentos generados con seguridad no se pueden abrir <dheeyi>
-[2 weeks ago] f1c0ca9  0018335: Scrollbar missing in ldap advanced department list <Emerson Joel Rojas Soliz>
-[2 weeks ago] c5ab924  PM-3693 devuelve el json con notice <Ronald Quenta>
-[2 weeks ago] d1dedcd  PM-3462 "REST endpoint DELETE /cases/{app_uid}/..." SOLVED <Luis Fernando Saisa Lopez>
+[2 hours ago] 813df3c  HOR-969: Translations changed as requested. <Gustavo Adolfo Cruz Laura>
+[24 hours ago] 5c6c9ff  HOR-964 <Julio Cesar Laura Avendaño>
+[24 hours ago] 48f4d5b  HOR-963 <Julio Cesar Laura Avendaño>
+[25 hours ago] d442d92  MT-173: The new migrate lists task can have an additional language parameter the same as the cache view regeneration task, but it's entirely optional, if not passed the en language is selected instead. <Gustavo Adolfo Cruz Laura>
+[5 days ago] aa03dd6  HOR-925 Upgrade Windows> Al concluir con el upgrade en servidores windows sale un error <dheeyi>
+[6 days ago] ff68281  HOR-919: Se pierde conexion con usuario Operador <mcuiza>
+[6 days ago] e3aeabb  HOR-916 <Paula V. Quispe>
+[6 days ago] f909e8e  HOR-898 <Paula V. Quispe>
+[6 days ago] 47344d4  HOR-917 El tamaño máximo permitido para subir un file en el endpoint light/config sin Auth no es el correcto <Ronald Q>
+[7 days ago] 1423485  HOR-912 <Roly Rudy Gutierrez Pinto>
+[7 days ago] 03f45c8  HOR-914 Cuando se salta la ventana de ruteo los correos no son enviados correctamente <dheeyi>
+[7 days ago] 915b108  HOR-905: Participated folder doesn't sort by current user <mcuiza>
+[7 days ago] a4a9374  HOR-900 Error en stack 210 al exportar un proceso con templates e importarlo de nuevo <dheeyi>
+[11 days ago] 362aad3  HOR-903 <Roly Rudy Gutierrez Pinto>
+[11 days ago] 88b1df4  HOR-898 <Paula V. Quispe>
+[11 days ago] 54d3628  OM-641: Nex step button no funciona correctamente <alex_santos>
+[11 days ago] 3e36d36  HOR-896 (Change log) Controles mobile una vez editado ya no se muestran en el listado de cambios <Ronald Q>
+[11 days ago] edd78ae  HOR-894 Crear 2 end points para grabar y recuperar las variables sin timezone <Ronald Q>
+[12 days ago] 94bec50  HOR-886 Se precisa informacion del nombre de time zone <Ronald Q>
+[12 days ago] 53c7c93  HOR-885 <Roly Rudy Gutierrez Pinto>
+[13 days ago] 3f20d53  HOR-877: Very High: OS Command Injection Package.php <mcuiza>
+[13 days ago] 6067d0f  HOR-874 Problema con los valores datetime con timezone entre mobile y web <Ronald Q>
+[13 days ago] 19a5cb8  HOR-881-A "Añr cóo defensivo para..." SOLVED <root>
+[13 days ago] 2687fe6  HOR-844 <Paula V. Quispe>
+[13 days ago] 2ceedc9  HOR-878 <Paula V. Quispe>
+[13 days ago] 2c2bfb7  OM-619:[grid-web-FIREFOX ] Cuando la grilla no tiene filas, se queda con el loading y no continua con el proceso <richardnoel>
+[13 days ago] 8030ad8  HOR-835 Medium: Directory Traversal <dheeyi>
+[13 days ago] 63d7cc3  HOR-846 <Roly Rudy Gutierrez Pinto>
+[2 weeks ago] 1fb2426  HOR-850 "Admin -> Users -> Edit User -> Replaced By..." SOLVED <Victor Saisa Lopez>
+[2 weeks ago] 4abc987  HOR-871 <Paula V. Quispe>

@@ -153,7 +153,7 @@ class OCI8Connection extends ConnectionCommon implements Connection
 			);
         }
 
-        $success				= oci_execute( $result, $this->execMode );
+        $success = @oci_execute($result, $this->execMode);
 
         if ( ! $success )
 		{

@@ -148,6 +148,24 @@ class Tasks
     }
 
     /**
+     * updates row tasks from an Task Array
+     *
+     * @param string $aTasks
+     * @return array
+     */
+    public function addNewTaskRows($aTask)
+    {
+        foreach ($aTask as $key => $row) {
+            $oTask = new Task();
+            if (!$oTask->taskExists($row['TAS_UID'])) {
+                $res = $oTask->create($row);
+            }
+        }
+        return;
+    }
+
+
+    /**
      * Get all Routes for any Process
      *
      * @param string $sProUid
@@ -283,7 +301,7 @@ class Tasks
     /**
      * updates row tasks from an Route Array
      *
-     * @param string $aTasks
+     * @param string $aRoutes
      * @return array
      */
     public function updateRouteRows($aRoutes)

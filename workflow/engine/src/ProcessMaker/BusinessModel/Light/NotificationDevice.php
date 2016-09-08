@@ -2,10 +2,23 @@
 
 namespace ProcessMaker\BusinessModel\Light;
 
+use \ProcessMaker\Services\Api;
 use G;
 
 class NotificationDevice
 {
+    
+    
+    public function checkMobileNotifications()
+    {
+        $conf = \System::getSystemConfiguration('', '', SYS_SYS);
+        $activeNotifications = true;
+        if (isset($conf['mobileNotifications'])) {
+            $activeNotifications = $conf['mobileNotifications'] == 1 ? true : false;
+        }
+        return $activeNotifications;
+    }
+    
     /**
      * Post Create register device with userUid
      *
@@ -135,7 +148,7 @@ class NotificationDevice
             }
 
         } catch (\Exception $e) {
-            throw new \Exception(\Api::STAT_APP_EXCEPTION, $e->getMessage());
+            throw new \Exception($e->getMessage(), Api::STAT_APP_EXCEPTION);
         }
         return $response;
     }
@@ -147,33 +160,18 @@ class NotificationDevice
      * @author Ronald Quenta <ronald.quenta@processmaker.com>
      *
      */
-    public function routeCaseNotification($currentUserId, $processId, $currentTaskId, $appFields, $aTasks, $nextIndex)
+    public function routeCaseNotification($currentUserId, $processId, $currentTaskId, $appFields, $aTasks,
+                                          $nextIndex, $currentDelIndex)
     {
         try {
-            $oUser = new \Users();
-            $aUser = $oUser->load( $currentUserId );
-
             $response = array();
-            $task = new \Tasks();
-            $group = new \Groups();
+            $typeList = 'todo';
             foreach ($aTasks as $aTask) {
                 $arrayTaskUser = array();
                 switch ($aTask["TAS_ASSIGN_TYPE"]) {
                     case "SELF_SERVICE":
-                        if (isset($aTask["TAS_UID"]) && !empty($aTask["TAS_UID"])) {
-                            $arrayAux1 = $task->getGroupsOfTask($aTask["TAS_UID"], 1);
-                            foreach ($arrayAux1 as $arrayGroup) {
-                                $arrayAux2 = $group->getUsersOfGroup($arrayGroup["GRP_UID"]);
-                                foreach ($arrayAux2 as $arrayUser) {
-                                    $arrayTaskUser[] = $arrayUser["USR_UID"];
-                                }
-                            }
-                            $arrayAux1 = $task->getUsersOfTask($aTask["TAS_UID"], 1);
-
-                            foreach ($arrayAux1 as $arrayUser) {
-                                $arrayTaskUser[] = $arrayUser["USR_UID"];
-                            }
-                        }
+                        $arrayTaskUser = $this->getTaskUserSelfService($aTask["TAS_UID"], $appFields);
+                        $typeList = 'unassigned';
                         break;
                     default:
                         if (isset($aTask["USR_UID"]) && !empty($aTask["USR_UID"])) {
@@ -182,11 +180,9 @@ class NotificationDevice
                         break;
                 }
 
-//                $oTask = new \Task();
-//                $currentTask = $oTask->load($aTask['TAS_UID']);
                 $delIndex = null;
                 foreach ($nextIndex as $nIndex) {
-                    if($aTask['TAS_UID'] == $nIndex['TAS_UID']){
+                    if ($aTask['TAS_UID'] == $nIndex['TAS_UID']) {
                         $delIndex = $nIndex['DEL_INDEX'];
                         break;
                     }
@@ -200,18 +196,14 @@ class NotificationDevice
                     'caseId' => $appFields['APP_UID'],
                     'caseTitle' => $appFields['APP_TITLE'],
                     'delIndex' => $delIndex,
-                    'typeList' => 'todo'
+                    'typeList' => $typeList
                 );
 
                 if ($userIds) {
-
                     $oNoti = new \NotificationDevice();
                     $devices = array();
-                    if (is_array($userIds)){
-                        foreach ($userIds as $id) {
-                            $deviceUser = $oNoti->loadByUsersId($id);
-                            $devices = array_merge($devices, $deviceUser);
-                        }
+                    if (is_array($userIds)) {
+                        $devices = $oNoti->loadUsersArrayId($userIds);
                     } else {
                         $devices = $oNoti->loadByUsersId($userIds);
                         $lists   = new \ProcessMaker\BusinessModel\Lists();
@@ -233,13 +225,15 @@ class NotificationDevice
                                 break;
                         }
                     }
-                    if (count($devicesAppleIds) > 0) {
+                    $isExistNextNotifications = $oNoti->isExistNextNotification($appFields['APP_UID'],
+                        $currentDelIndex);
+                    if (count($devicesAppleIds) > 0 && $isExistNextNotifications) {
                         $oNotification = new PushMessageIOS();
                         $oNotification->setSettingNotification();
                         $oNotification->setDevices($devicesAppleIds);
                         $response['apple'] = $oNotification->send($message, $data);
                     }
-                    if (count($devicesAndroidIds) > 0) {
+                    if (count($devicesAndroidIds) > 0 && $isExistNextNotifications) {
                         $oNotification = new PushMessageAndroid();
                         $oNotification->setSettingNotification();
                         $oNotification->setDevices($devicesAndroidIds);
@@ -248,9 +242,49 @@ class NotificationDevice
                 }
             }
         } catch (\Exception $e) {
-            throw new \Exception(\Api::STAT_APP_EXCEPTION, $e->getMessage());
+            throw new \Exception($e->getMessage(), Api::STAT_APP_EXCEPTION);
         }
+        
         return $response;
+    }
+
+    public function getTaskUserSelfService($tas_uid, $appFields)
+    {
+        $oTask = new \Tasks();
+        $oGroup = new \Groups();
+        $taskNextDel = \TaskPeer::retrieveByPK($tas_uid);
+        $arrayTaskUser = array();
+
+        if ($taskNextDel->getTasAssignType() == "SELF_SERVICE" && trim($taskNextDel->getTasGroupVariable()) != "") {
+            // Self Service Value Based Assignment
+            $nextTaskGroupVariable = trim($taskNextDel->getTasGroupVariable(), " @#");
+            if (isset($appFields["APP_DATA"][$nextTaskGroupVariable])) {
+                $dataGroupVariable = $appFields["APP_DATA"][$nextTaskGroupVariable];
+                $dataGroupVariable = (is_array($dataGroupVariable))? $dataGroupVariable : trim($dataGroupVariable);
+                if (!empty($dataGroupVariable) && is_array($dataGroupVariable)){
+                    $arrayTaskUser[] = $dataGroupVariable;
+                } elseif(!empty($dataGroupVariable)) {
+                    $arrayUsersOfGroup = $oGroup->getUsersOfGroup($dataGroupVariable);
+                    foreach ($arrayUsersOfGroup as $arrayUser) {
+                        $arrayTaskUser[] = $arrayUser["USR_UID"];
+                    }
+                }
+            }
+        } else { // Self Service
+            $arrayGroupsOfTask = $oTask->getGroupsOfTask($tas_uid, 1);
+            foreach ($arrayGroupsOfTask as $arrayGroup) {
+                $arrayUsersOfGroup = $oGroup->getUsersOfGroup($arrayGroup["GRP_UID"]);
+                foreach ($arrayUsersOfGroup as $arrayUser) {
+                    $arrayTaskUser[] = $arrayUser["USR_UID"];
+                }
+            }
+            $arrayUsersOfTask = $oTask->getUsersOfTask($tas_uid, 1);
+            foreach ($arrayUsersOfTask as $arrayUser) {
+                $arrayTaskUser[] = $arrayUser["USR_UID"];
+            }
+        }
+
+        return $arrayTaskUser;
     }
 
 }

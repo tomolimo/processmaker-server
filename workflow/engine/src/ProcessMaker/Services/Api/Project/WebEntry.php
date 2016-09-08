@@ -3,6 +3,8 @@ namespace ProcessMaker\Services\Api\Project;
 
 use \ProcessMaker\Services\Api;
 use \Luracast\Restler\RestException;
+use \ProcessMaker\Util\DateTime;
+use \ProcessMaker\BusinessModel\Validator;
 
 /**
  * Project\WebEntry Api Controller
@@ -12,6 +14,11 @@ use \Luracast\Restler\RestException;
 class WebEntry extends Api
 {
     private $webEntry;
+
+    private $arrayFieldIso8601 = [
+        "we_create_date",
+        "we_update_date"
+    ];
 
     /**
      * Constructor of the class
@@ -40,7 +47,7 @@ class WebEntry extends Api
         try {
             $response = $this->webEntry->getWebEntries($prj_uid);
 
-            return $response;
+            return DateTime::convertUtcToIso8601($response, $this->arrayFieldIso8601);
         } catch (\Exception $e) {
             throw (new RestException(Api::STAT_APP_EXCEPTION, $e->getMessage()));
         }
@@ -57,7 +64,7 @@ class WebEntry extends Api
         try {
             $response = $this->webEntry->getWebEntry($we_uid);
 
-            return $response;
+            return DateTime::convertUtcToIso8601($response, $this->arrayFieldIso8601);
         } catch (\Exception $e) {
             throw (new RestException(Api::STAT_APP_EXCEPTION, $e->getMessage()));
         }
@@ -74,11 +81,12 @@ class WebEntry extends Api
     public function doPostWebEntry($prj_uid, array $request_data)
     {
         try {
-            $arrayData = $this->webEntry->create($prj_uid, $this->getUserId(), $request_data);
+            Validator::throwExceptionIfDataNotMetIso8601Format($request_data, $this->arrayFieldIso8601);
+            $arrayData = $this->webEntry->create($prj_uid, $this->getUserId(), DateTime::convertDataToUtc($request_data, $this->arrayFieldIso8601));
 
             $response = $arrayData;
 
-            return $response;
+            return DateTime::convertUtcToIso8601($response, $this->arrayFieldIso8601);
         } catch (\Exception $e) {
             throw (new RestException(Api::STAT_APP_EXCEPTION, $e->getMessage()));
         }
@@ -94,7 +102,8 @@ class WebEntry extends Api
     public function doPutWebEntry($prj_uid, $we_uid, array $request_data)
     {
         try {
-            $arrayData = $this->webEntry->update($we_uid, $this->getUserId(), $request_data);
+            Validator::throwExceptionIfDataNotMetIso8601Format($request_data, $this->arrayFieldIso8601);
+            $arrayData = $this->webEntry->update($we_uid, $this->getUserId(), DateTime::convertDataToUtc($request_data, $this->arrayFieldIso8601));
         } catch (\Exception $e) {
             throw (new RestException(Api::STAT_APP_EXCEPTION, $e->getMessage()));
         }

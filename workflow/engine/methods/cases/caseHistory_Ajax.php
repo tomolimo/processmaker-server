@@ -48,7 +48,7 @@ if ($actionAjax == 'historyGridList_JXP') {
     $newDir = '/tmp/test/directory';
     G::verifyPath( $newDir );
     $r = new stdclass();
-    $r->data = $aProcesses;
+    $r->data = \ProcessMaker\Util\DateTime::convertUtcToTimeZone($aProcesses);
     $r->totalCount = 2;
 
     echo G::json_encode( $r );

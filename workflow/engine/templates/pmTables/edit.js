@@ -398,9 +398,17 @@ Ext.onReady(function(){
 
             validator: function(v) {
 
-              return valueInputField= /^[0-9a-zA-Z\_|-]+$/.test(v)?true:false;
+                if (v != "") {
 
-            }
+                    return (/^[0-9a-zA-Z\_|-]+$/.test(v))? true : false;
+
+                } else {
+
+                    return true;
+
+                }
+
+            },
 
           }
 
@@ -426,11 +434,9 @@ Ext.onReady(function(){
 
                 this.setValue(this.getValue().replace(/^\s+/,'').replace(/\s+$/,''));
 
-                var valueInputField= /^[0-9a-zA-Z\_|-]+$/.test(this.getValue()) ? true : false; 
+                var valueInputField= /^[0-9a-zA-Z _\|-]+$/.test(this.getValue()) ? true : false;
 
                 if (!valueInputField) {
-
-                  //Ext.Msg.alert(_('ID_WARNING'), _('ID_FIELD_LABEL'));
 
                   this.setValue('');
 
@@ -442,9 +448,17 @@ Ext.onReady(function(){
 
             validator: function(v) {
 
-              return valueInputField= /^[0-9a-zA-Z\_|-]+$/.test(v)?true:_('ID_ROLE_NAME_NOT_EMPTY');
+                if (v != "") {
 
-            }
+                    return (/^[0-9a-zA-Z _\|-]+$/.test(v))? true : _('ID_THE') + ' ' +_('ID_FIELD_LABEL') + ' ' + _('ID_FIELD_NOT_EMPTY_OR_SPECIAL_CHAR');
+
+                } else {
+
+                    return true;
+
+                }
+
+            },
 
           }
 
@@ -804,7 +818,13 @@ Ext.onReady(function(){
 
         if (flagShowMessageError == 1) {
 
-            Ext.msgBoxSlider.msgTopCenter("error", _("ID_ERROR"), msg, 3);
+            if (msg != "" && msg != "<ul><li></li></ul>") {
+
+                Ext.msgBoxSlider.msgTopCenter("error", _("ID_ERROR"), msg, 3);
+
+            }
+
+
 
             flagShowMessageError = 0;
 

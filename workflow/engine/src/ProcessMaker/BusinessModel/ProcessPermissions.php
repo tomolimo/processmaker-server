@@ -111,8 +111,15 @@ class ProcessPermissions
                     $sObjectType = G::LoadTranslation('ID_DYNAFORM');
                     if (($aRow['OP_OBJ_UID'] != '') && ($aRow['OP_OBJ_UID'] != '0')) {
                         $oDynaform = new \Dynaform();
-                        $aFields = $oDynaform->load($aRow['OP_OBJ_UID']);
-                        $sObject = $aFields['DYN_TITLE'];
+                        try {
+                            $aFields = $oDynaform->load($aRow['OP_OBJ_UID']);
+                            $sObject = $aFields['DYN_TITLE'];
+                        } catch (\Exception $errorNotExists) {
+                            error_log($errorNotExists->getMessage() . ' - ' . G::LoadTranslation('ID_PROCESS_PERMISSIONS') . 
+                                      ' - ' . $aRow['OP_OBJ_TYPE'] . ' - ' . $aRow['OP_OBJ_UID']);
+                            $oDataset->next();
+                            continue 2;
+                        }
                     } else {
                         $sObject = G::LoadTranslation('ID_ALL');
                     }
@@ -121,8 +128,15 @@ class ProcessPermissions
                     $sObjectType = G::LoadTranslation('ID_INPUT_DOCUMENT');
                     if (($aRow['OP_OBJ_UID'] != '') && ($aRow['OP_OBJ_UID'] != '0')) {
                         $oInputDocument = new \InputDocument();
-                        $aFields = $oInputDocument->load($aRow['OP_OBJ_UID']);
-                        $sObject = $aFields['INP_DOC_TITLE'];
+                        try {
+                            $aFields = $oInputDocument->load($aRow['OP_OBJ_UID']);
+                            $sObject = $aFields['INP_DOC_TITLE'];
+                        } catch (\Exception $errorNotExists) {
+                            error_log($errorNotExists->getMessage() . ' - ' . G::LoadTranslation('ID_PROCESS_PERMISSIONS') . 
+                                      ' - ' . $aRow['OP_OBJ_TYPE'] . ' - ' . $aRow['OP_OBJ_UID']);
+                            $oDataset->next();
+                            continue 2;
+                        }
                     } else {
                         $sObject = G::LoadTranslation('ID_ALL');
                     }
@@ -131,8 +145,15 @@ class ProcessPermissions
                     $sObjectType = G::LoadTranslation('ID_OUTPUT_DOCUMENT');
                     if (($aRow['OP_OBJ_UID'] != '') && ($aRow['OP_OBJ_UID'] != '0')) {
                         $oOutputDocument = new \OutputDocument();
-                        $aFields = $oOutputDocument->load($aRow['OP_OBJ_UID']);
-                        $sObject = $aFields['OUT_DOC_TITLE'];
+                        try {
+                            $aFields = $oOutputDocument->load($aRow['OP_OBJ_UID']);
+                            $sObject = $aFields['OUT_DOC_TITLE'];
+                        } catch (\Exception $errorNotExists) {
+                            error_log($errorNotExists->getMessage() . ' - ' . G::LoadTranslation('ID_PROCESS_PERMISSIONS') . 
+                                      ' - ' . $aRow['OP_OBJ_TYPE'] . ' - ' . $aRow['OP_OBJ_UID']);
+                            $oDataset->next();
+                            continue 2;
+                        }
                     } else {
                         $sObject = G::LoadTranslation('ID_ALL');
                     }

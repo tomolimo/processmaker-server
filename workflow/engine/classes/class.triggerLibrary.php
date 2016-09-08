@@ -35,6 +35,7 @@ class triggerLibrary
             //$folderData = new folderData($sProUid, $proFields['PRO_TITLE'], $sAppUid, $Fields['APP_TITLE'], $sUsrUid);
             $oPluginRegistry = &PMPluginRegistry::getSingleton();
             $aAvailablePmFunctions = $oPluginRegistry->getPmFunctions();
+            $oPluginRegistry->setupPlugins(); //Get and setup enabled plugins
             foreach ($aAvailablePmFunctions as $key => $class) {
                 $filePlugin = PATH_PLUGINS . $class . PATH_SEP . 'classes' . PATH_SEP . 'class.pmFunctions.php';
 

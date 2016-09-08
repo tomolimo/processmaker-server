@@ -10,6 +10,8 @@ var storeCalendar;
 
 var storeRole;
 
+var storeLanguage;
+
 
 
 var storeDefaultMainMenuOption;
@@ -29,6 +31,10 @@ var comboReplacedBy;
 var comboCalendar;
 
 var comboRole;
+
+var cboTimeZone;
+
+var comboLanguage;
 
 
 
@@ -73,6 +79,8 @@ var userRoleLoad = '';
 
 
 var PROCESSMAKER_ADMIN = 'PROCESSMAKER_ADMIN';
+
+var usertmp;
 
 
 
@@ -554,7 +562,13 @@ Ext.onReady(function () {
 
 
 
-      baseParams: {"action": "usersList", "USR_UID": USR_UID, "addNone": 1},
+      baseParams: {
+
+          "action": "usersList",
+
+          "USR_UID": USR_UID
+
+      },
 
 
 
@@ -576,31 +590,39 @@ Ext.onReady(function () {
 
   comboReplacedBy = new Ext.form.ComboBox({
 
-    fieldLabel    : _("ID_REPLACED_BY"),
+      id: "USR_REPLACED_BY",
 
-    hiddenName    : "USR_REPLACED_BY",
+      hiddenName: "USR_REPLACED_BY",
 
-    id            : "USR_REPLACED_BY",
 
-    readOnly      : readMode,
 
-    store         : storeReplacedBy,
+      store: storeReplacedBy,
 
-    valueField    : "USR_UID",
+      valueField: "USR_UID",
 
-    displayField  : "USER_FULLNAME",
+      displayField: "USER_FULLNAME",
 
-    emptyText     : (readMode)? ' ': TRANSLATIONS.ID_SELECT,
 
-    width         : 180,
 
-    selectOnFocus : true,
+      queryParam: "filter",
 
-    editable      : false,
 
-    triggerAction: "all",
 
-    mode: "local"
+      fieldLabel: _("ID_REPLACED_BY"),
+
+      emptyText: "- " + _("ID_NONE") + " -",
+
+      readOnly: readMode,
+
+      minChars: 1,
+
+      hideTrigger: true,
+
+
+
+      width: 260,
+
+      triggerAction: "all"
 
   });
 
@@ -801,6 +823,56 @@ Ext.onReady(function () {
     mode          : 'local'
 
   });
+
+
+
+    cboTimeZone = new Ext.form.ComboBox({
+
+        id: "cboTimeZone",
+
+        name: "USR_TIME_ZONE",
+
+
+
+        valueField: "id",
+
+        displayField: "value",
+
+        value: SYSTEM_TIME_ZONE,
+
+        store: new Ext.data.ArrayStore({
+
+            idIndex: 0,
+
+            fields: ["id", "value"],
+
+            data: TIME_ZONE_DATA
+
+        }),
+
+
+
+        fieldLabel: _("ID_TIME_ZONE"),
+
+
+
+        triggerAction: "all",
+
+        mode: "local",
+
+        editable: false,
+
+        width: 260,
+
+
+
+        hidden: !(__SYSTEM_UTC_TIME_ZONE__ == 1)
+
+    });
+
+
+
+  /*----------------------------------********---------------------------------*/
 
 
 
@@ -1022,7 +1094,11 @@ Ext.onReady(function () {
 
         comboStatus,
 
-        comboRole
+        comboRole,
+
+        cboTimeZone
+
+        /*----------------------------------********---------------------------------*/
 
       ]
 
@@ -1796,6 +1872,36 @@ Ext.onReady(function () {
 
         width      : 260
 
+      },
+
+      {
+
+          id: "USR_TIME_ZONE2",
+
+          fieldLabel: _("ID_TIME_ZONE"),
+
+          xtype: "label",
+
+          width: 260,
+
+
+
+          hidden: !(__SYSTEM_UTC_TIME_ZONE__ == 1)
+
+      },
+
+      {
+
+        id         : 'USR_DEFAULT_LANG2',
+
+        fieldLabel : _('ID_DEFAULT_LANGUAGE'),
+
+        xtype      : 'label',
+
+        width      : 260,
+
+        hidden     : !(LANGUAGE_MANAGEMENT == 1)
+
       }
 
     ]
@@ -2052,7 +2158,25 @@ function editUser()
 
     frmSumary.hide();
 
+
+
+    if (typeof(usertmp) != "undefined") {
+
+        frmDetails.getForm().findField("USR_REPLACED_BY").setValue(usertmp.USR_REPLACED_BY);
+
+        frmDetails.getForm().findField("USR_REPLACED_BY").setRawValue(usertmp.REPLACED_NAME);
+
+    }
+
+
+
     frmDetails.show();
+
+    if (window.canEditCalendar === true) {
+
+        comboCalendar.setReadOnly(false);
+
+    }
 
 }
 
@@ -2137,6 +2261,20 @@ function validateUserName() {
 function userFrmEditSubmit()
 
 {
+
+    if (typeof(usertmp) != "undefined" &&
+
+        usertmp.REPLACED_NAME == frmDetails.getForm().findField("USR_REPLACED_BY").getRawValue()
+
+    ) {
+
+        frmDetails.getForm().findField("USR_REPLACED_BY").setValue(usertmp.USR_REPLACED_BY);
+
+        frmDetails.getForm().findField("USR_REPLACED_BY").setRawValue(usertmp.REPLACED_NAME);
+
+    }
+
+
 
     Ext.getCmp("USR_STATUS").setDisabled(readMode);
 
@@ -2488,29 +2626,7 @@ function loadData()
 
 {
 
-
-
     comboCountry.store.load();
-
-
-
-
-
-    //comboRegion
-
-
-
-
-
-    //comboLocation
-
-
-
-
-
-    comboReplacedBy.store.load();
-
-
 
 
 
@@ -2533,6 +2649,10 @@ function loadData()
     });
 
     comboRole.store.load();
+
+
+
+    /*----------------------------------********---------------------------------*/
 
 
 
@@ -2585,6 +2705,10 @@ function loadUserData()
         success: function (r, o) {
 
             var data = Ext.util.JSON.decode(r.responseText);
+
+
+
+            usertmp = data.user;
 
 
 
@@ -2654,6 +2778,8 @@ function loadUserData()
 
                 Ext.getCmp("USR_ROLE2").setText(data.user.USR_ROLE_NAME);
 
+                Ext.getCmp("USR_TIME_ZONE2").setText((data.user.USR_TIME_ZONE != "")? data.user.USR_TIME_ZONE : SYSTEM_TIME_ZONE);
+
                 /*----------------------------------********---------------------------------*/
 
                 Ext.getCmp("USR_CALENDAR2").setText(data.user.CALENDAR_NAME);
@@ -2706,13 +2832,13 @@ function loadUserData()
 
 
 
-            comboReplacedBy.store.on("load", function (store) {
+            if (data.user.USR_REPLACED_BY != "") {
 
                 comboReplacedBy.setValue(data.user.USR_REPLACED_BY);
 
                 comboReplacedBy.setRawValue(data.user.REPLACED_NAME);
 
-            });
+            }
 
 
 
@@ -2729,6 +2855,14 @@ function loadUserData()
                 comboRole.setValue(data.user.USR_ROLE);
 
             });
+
+
+
+            cboTimeZone.setValue((data.user.USR_TIME_ZONE != "")? data.user.USR_TIME_ZONE : SYSTEM_TIME_ZONE);
+
+
+
+            /*----------------------------------********---------------------------------*/
 
 
 
@@ -2814,15 +2948,15 @@ function loadUserData()
 
 
 
-            storeReplacedBy.load();
-
-
-
             storeCalendar.load();
 
 
 
             storeRole.load();
+
+
+
+            /*----------------------------------********---------------------------------*/
 
 
 

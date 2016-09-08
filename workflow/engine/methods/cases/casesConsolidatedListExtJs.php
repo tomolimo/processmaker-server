@@ -133,7 +133,7 @@ while ($rsSql->next()) {
 }
 
 if (count($arrayTabItem) > 0) {
-    $urlProxy = '/api/1.0/' . SYS_SYS . '/consolidated/';
+    $urlProxy = System::getHttpServerHostnameRequestsFrontEnd() . '/api/1.0/' . SYS_SYS . '/consolidated/';
     $clientId = 'x-pm-local-client';
     $client = getClientCredentials($clientId);
     $authCode = getAuthorizationCode($client);
@@ -178,6 +178,8 @@ if (count($arrayTabItem) > 0) {
     $headPublisher->assign("FORMATS", $conf->getFormats());
     $headPublisher->assign("urlProxy", $urlProxy);
     $headPublisher->assign('credentials', $clientToken );
+
+    $oHeadPublisher->assign('isIE', Bootstrap::isIE());
 
     $headPublisher->addExtJsScript("app/main", true);
     $headPublisher->addExtJsScript("cases/casesListConsolidated", false);   //Adding a JavaScript file .js

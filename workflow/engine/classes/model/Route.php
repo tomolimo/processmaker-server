@@ -252,6 +252,31 @@ class Route extends BaseRoute
         }
     }
 
+    public function routeExistsFiltered($aData)
+    {
+        $con = Propel::getConnection( RoutePeer::DATABASE_NAME );
+        try {
+            if (!empty($aData)) {
+                $c = new Criteria('workflow');
+                $c->addSelectColumn("ROUTE.*");
+                $c->add(RoutePeer::PRO_UID, $aData['PRO_UID'], Criteria::EQUAL);
+                $c->add(RoutePeer::TAS_UID, $aData['TAS_UID'], Criteria::EQUAL);
+                $c->add(RoutePeer::ROU_NEXT_TASK, $aData['ROU_NEXT_TASK'], Criteria::EQUAL);
+            }
+
+            $query =$c->toString();
+            $rs = RoutePeer::doSelectRS($c);
+            $rs->setFetchmode(\ResultSet::FETCHMODE_ASSOC);
+            $routes = array();
+            while ($rs->next()) {
+                $routes[] = $rs->getRow();
+            }
+            return $routes;
+        } catch (Exception $oError) {
+            throw ($oError);
+        }
+    }
+
     /**
      * Validate value for a variable that only accepts some determinated values
      *

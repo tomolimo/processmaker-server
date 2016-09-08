@@ -14,15 +14,16 @@ class FilesManager extends Api
     /**
      * @param string $prj_uid {@min 32} {@max 32}
      * @param string $path
+     * @param string $get_content
      *
      * @url GET /:prj_uid/file-manager
      */
-    public function doGetProcessFilesManager($prj_uid, $path = '')
+    public function doGetProcessFilesManager($prj_uid, $path = '', $get_content = true)
     {
         try {
             $filesManager = new \ProcessMaker\BusinessModel\FilesManager();
             if ($path != '') {
-                $arrayData = $filesManager->getProcessFilesManagerPath($prj_uid, $path);
+                $arrayData = $filesManager->getProcessFilesManagerPath($prj_uid, $path, $get_content);
             } else {
                 $arrayData = $filesManager->getProcessFilesManager($prj_uid);
             }

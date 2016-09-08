@@ -3,6 +3,7 @@ namespace ProcessMaker\Services\Api;
 
 use \ProcessMaker\Services\Api;
 use \Luracast\Restler\RestException;
+use \ProcessMaker\Util\DateTime;
 
 
 /**
@@ -41,7 +42,31 @@ class ReportingIndicators extends Api
 //        }
 //    }
 
-   /**
+
+    /**
+     * @param string $date
+     *
+     * @return \DateTime
+     */
+    private function convertDateTimeToUtc ($date)
+    {
+        if ($date == "") {
+            $date = new \DateTime("now", new \DateTimeZone('UTC'));
+        } else {
+            $dateTimezone = new \DateTime($date, new \DateTimeZone('UTC'));
+            $toUtcTime = DateTime::convertDataToUtc($dateTimezone);
+            if (!(isset($_SESSION['__SYSTEM_UTC_TIME_ZONE__']) && $_SESSION['__SYSTEM_UTC_TIME_ZONE__'])) {
+                $date = $toUtcTime;
+            }
+            else {
+                $date = (new \DateTime($toUtcTime->date));
+            }
+        }
+
+        return $date;
+    }
+
+    /**
      * Lists tasks of a process and it's statistics (efficiency, average times, etc.)
      *
      * @param string $process_list {@from path}
@@ -61,10 +86,11 @@ class ReportingIndicators extends Api
         try {
             $indicatorsObj = new \ProcessMaker\BusinessModel\ReportingIndicators();
             $listArray =  $listArray = explode(',', $process_list);
-            $response = $indicatorsObj->getPeiTasksStatistics($listArray,
-                            new \DateTime($init_date),
-                            new \DateTime($end_date),
-                            $language);
+            $response = $indicatorsObj->getPeiTasksStatistics(
+                $listArray,
+                $this->convertDateTimeToUtc($init_date),
+                $this->convertDateTimeToUtc($end_date),
+                $language);
             return $response;
         } catch (\Exception $e) {
             throw (new RestException(Api::STAT_APP_EXCEPTION, $e->getMessage()));
@@ -85,37 +111,38 @@ class ReportingIndicators extends Api
     public function doGetProcessEficciencyData($indicator_uid, $compare_date, $measure_date, $language)
     {
         try {
+
             $indicatorsObj = new \ProcessMaker\BusinessModel\ReportingIndicators();
-			$response = $indicatorsObj->getPeiCompleteData
-							($indicator_uid,
-                            new \DateTime($compare_date),
-                            new \DateTime($measure_date),
-                            $language);
+            $response = $indicatorsObj->getPeiCompleteData(
+                $indicator_uid,
+                $this->convertDateTimeToUtc($compare_date),
+                $this->convertDateTimeToUtc($measure_date),
+                $language);
             return $response;
         } catch (\Exception $e) {
             throw (new RestException(Api::STAT_APP_EXCEPTION, $e->getMessage()));
         }
     }
-     /**
-     * Returns the total of Cases with Completed time with the selected periodicity
-     *
-     * @param string $indicator_uid {@from path}
-     * @param string $measure_date {@from path}
-     * @param string $compare_date {@from path}
-     * @param string $language {@from path}
-     * @return array
-     *
-     * @url GET /employee-efficiency-data
-     */
+    /**
+    * Returns the total of Cases with Completed time with the selected periodicity
+    *
+    * @param string $indicator_uid {@from path}
+    * @param string $measure_date {@from path}
+    * @param string $compare_date {@from path}
+    * @param string $language {@from path}
+    * @return array
+    *
+    * @url GET /employee-efficiency-data
+    */
     public function doGetEmployeeEficciencyData($indicator_uid, $compare_date, $measure_date, $language)
     {
         try {
             $indicatorsObj = new \ProcessMaker\BusinessModel\ReportingIndicators();
-			$response = $indicatorsObj->getUeiCompleteData
-							($indicator_uid,
-                            new \DateTime($compare_date),
-                            new \DateTime($measure_date),
-                            $language);
+            $response = $indicatorsObj->getUeiCompleteData (
+                $indicator_uid,
+                $this->convertDateTimeToUtc($compare_date),
+                $this->convertDateTimeToUtc($measure_date),
+                $language );
             return $response;
         } catch (\Exception $e) {
             throw (new RestException(Api::STAT_APP_EXCEPTION, $e->getMessage()));
@@ -125,9 +152,9 @@ class ReportingIndicators extends Api
     /**
      * Returns the total of Cases with Completed time with the selected periodicity
      *
-     * @param string $indicator_uid {@from path}
-     * @param string $measure_date {@from path}
-     * @param string $compare_date {@from path}
+     * @param string $group_uid {@from path}
+     * @param string $init_date {@from path}
+     * @param string $end_date {@from path}
      * @param string $language {@from path}
      * @return array
      *
@@ -138,11 +165,11 @@ class ReportingIndicators extends Api
     {
         try {
             $indicatorsObj = new \ProcessMaker\BusinessModel\ReportingIndicators();
-			$response = $indicatorsObj->getUeiGroupsStatistics
-							($group_uid,
-                            new \DateTime($init_date),
-                            new \DateTime($end_date),
-                            $language);
+            $response = $indicatorsObj->getUeiGroupsStatistics(
+                $group_uid,
+                $this->convertDateTimeToUtc($init_date),
+                $this->convertDateTimeToUtc($end_date),
+                $language);
             return $response;
         } catch (\Exception $e) {
             throw (new RestException(Api::STAT_APP_EXCEPTION, $e->getMessage()));
@@ -164,10 +191,10 @@ class ReportingIndicators extends Api
     {
         try {
             $indicatorsObj = new \ProcessMaker\BusinessModel\ReportingIndicators();
-            $response = $indicatorsObj->getGeneralIndicatorStatistics
-                ($indicator_uid,
-                new \DateTime($init_date),
-                new \DateTime($end_date),
+            $response = $indicatorsObj->getGeneralIndicatorStatistics(
+                $indicator_uid,
+                $this->convertDateTimeToUtc($init_date),
+                $this->convertDateTimeToUtc($end_date),
                 $language);
             return $response;
         } catch (\Exception $e) {
@@ -210,12 +237,12 @@ class ReportingIndicators extends Api
     public function doGetHistoricDataFromIndicator($indicator_uid, $init_date, $end_date, $periodicity, $language) {
         try {
             $indicatorsObj = new \ProcessMaker\BusinessModel\ReportingIndicators();
-            $response = $indicatorsObj->getHistoricData
-											($indicator_uid,
-											new \DateTime($init_date),
-											new \DateTime($end_date),
-											$periodicity,
-											$language);
+            $response = $indicatorsObj->getHistoricData (
+                $indicator_uid,
+                $this->convertDateTimeToUtc($init_date),
+                $this->convertDateTimeToUtc($end_date),
+                $periodicity,
+                $language);
             return $response;
         } catch (\Exception $e) {
             throw (new RestException(Api::STAT_APP_EXCEPTION, $e->getMessage()));

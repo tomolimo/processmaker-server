@@ -874,24 +874,26 @@ class EmailServer
             try {
                 $emailServer = \EmailServerPeer::retrieveByPK($emailServerUid);
 
-                $passwd = $arrayData["MESS_PASSWORD"];
-                $passwdDec = \G::decrypt($passwd, "EMAILENCRYPT");
-                $auxPass = explode("hash:", $passwdDec);
+                if (isset($arrayData['MESS_PASSWORD'])) {
+                    $passwd = $arrayData['MESS_PASSWORD'];
+                    $passwdDec = \G::decrypt($passwd, 'EMAILENCRYPT');
+                    $auxPass = explode('hash:', $passwdDec);
 
-                if (count($auxPass) > 1) {
-                    if (count($auxPass) == 2) {
-                        $passwd = $auxPass[1];
-                    } else {
-                        array_shift($auxPass);
-                        $passwd = implode("", $auxPass);
+                    if (count($auxPass) > 1) {
+                        if (count($auxPass) == 2) {
+                            $passwd = $auxPass[1];
+                        } else {
+                            array_shift($auxPass);
+                            $passwd = implode('', $auxPass);
+                        }
                     }
-                }
 
-                $arrayData["MESS_PASSWORD"] = $passwd;
+                    $arrayData['MESS_PASSWORD'] = $passwd;
 
-                if ($arrayData["MESS_PASSWORD"] != "") {
-                    $arrayData["MESS_PASSWORD"] = "hash:" . $arrayData["MESS_PASSWORD"];
-                    $arrayData["MESS_PASSWORD"] = \G::encrypt($arrayData["MESS_PASSWORD"], "EMAILENCRYPT");
+                    if ($arrayData['MESS_PASSWORD'] != '') {
+                        $arrayData['MESS_PASSWORD'] = 'hash:' . $arrayData['MESS_PASSWORD'];
+                        $arrayData['MESS_PASSWORD'] = \G::encrypt($arrayData['MESS_PASSWORD'], 'EMAILENCRYPT');
+                    }
                 }
 
                 $emailServer->fromArray($arrayData, \BasePeer::TYPE_FIELDNAME);

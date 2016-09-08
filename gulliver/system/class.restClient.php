@@ -33,7 +33,7 @@ class RestClient
      *
      * @return RestClient
      */
-    public function execute ()
+    public function execute ($getResponseIfDelete = false)
     {
         if ($this->method === "POST") {
             curl_setopt( $this->curl, CURLOPT_POST, true );
@@ -59,7 +59,7 @@ class RestClient
         }
         curl_setopt( $this->curl, CURLOPT_URL, $this->url );
         $r = curl_exec( $this->curl );
-        if ($this->method !== "DELETE") {
+        if ($this->method !== "DELETE" || $getResponseIfDelete) {
             $this->treatResponse( $r ); // Extract the headers and response
             return $this;
         } else {
@@ -325,9 +325,9 @@ class RestClient
      * @param string $password=null [optional]
      * @return RestClient
      */
-    public static function delete ($url, $user = null, $pwd = null, $contentType = null)
+    public static function delete ($url, $user = null, $pwd = null, $contentType = null, $getResponse = false)
     {
-        return self::call( "DELETE", $url, null, $user, $pwd, $contentType );
+        return self::call( "DELETE", $url, null, $user, $pwd, $contentType, $getResponse );
     }
 
     /**
@@ -341,9 +341,9 @@ class RestClient
      * @param string $contentType=null [optional]
      * @return RestClient
      */
-    public static function call ($method, $url, $body, $user = null, $pwd = null, $contentType = null)
+    public static function call ($method, $url, $body, $user = null, $pwd = null, $contentType = null, $getResponseIfDelete)
     {
-        return self::createClient( $url )->setParameters( $body )->setMethod( $method )->setCredentials( $user, $pwd )->setContentType( $contentType )->execute()->close();
+        return self::createClient( $url )->setParameters( $body )->setMethod( $method )->setCredentials( $user, $pwd )->setContentType( $contentType )->execute($getResponseIfDelete)->close();
     }
 }
 

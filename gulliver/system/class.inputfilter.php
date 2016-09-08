@@ -571,7 +571,12 @@ class InputFilter
          
         return $value;
     }
-    
+
+    /**
+     * @param $value
+     * @param $type
+     * @return bool|int|mixed|string
+     */
     function sanitizeInputValue($value, $type) {
         
         switch($type) {
@@ -602,9 +607,13 @@ class InputFilter
         }
         
         return $value;    
-    } 
-    
-   
+    }
+
+    /**
+     * @param $value
+     * @param $type
+     * @throws Exception
+     */
     function validateInputValue($value, $type) {
         
         switch($type) {
@@ -641,7 +650,15 @@ class InputFilter
                     throw new Exception('not a string value');
                 }
         }
-     
- 
-    } 
+    }
+
+    /**
+     * @param $pathFile
+     * @return string
+     */
+    function validatePath($pathFile) {
+        $sanitizefilteredPath = mb_ereg_replace("([\.]{2,})", '', $pathFile);
+        $sanitizefilteredPath = mb_ereg_replace("(^~)", '', $sanitizefilteredPath);
+        return $sanitizefilteredPath;
+    }
 }

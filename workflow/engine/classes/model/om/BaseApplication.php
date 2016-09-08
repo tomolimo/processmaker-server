@@ -136,6 +136,12 @@ abstract class BaseApplication extends BaseObject implements Persistent
     protected $app_delay_duration = 0;
 
     /**
+     * The value for the app_drive_folder_uid field.
+     * @var        string
+     */
+    protected $app_drive_folder_uid = '';
+
+    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      * @var        boolean
@@ -429,6 +435,17 @@ abstract class BaseApplication extends BaseObject implements Persistent
     {
 
         return $this->app_delay_duration;
+    }
+
+    /**
+     * Get the [app_drive_folder_uid] column value.
+     * 
+     * @return     string
+     */
+    public function getAppDriveFolderUid()
+    {
+
+        return $this->app_drive_folder_uid;
     }
 
     /**
@@ -844,6 +861,28 @@ abstract class BaseApplication extends BaseObject implements Persistent
     } // setAppDelayDuration()
 
     /**
+     * Set the value of [app_drive_folder_uid] column.
+     * 
+     * @param      string $v new value
+     * @return     void
+     */
+    public function setAppDriveFolderUid($v)
+    {
+
+        // Since the native PHP type for this column is string,
+        // we will cast the input to a string (if it is not).
+        if ($v !== null && !is_string($v)) {
+            $v = (string) $v;
+        }
+
+        if ($this->app_drive_folder_uid !== $v || $v === '') {
+            $this->app_drive_folder_uid = $v;
+            $this->modifiedColumns[] = ApplicationPeer::APP_DRIVE_FOLDER_UID;
+        }
+
+    } // setAppDriveFolderUid()
+
+    /**
      * Hydrates (populates) the object variables with values from the database resultset.
      *
      * An offset (1-based "start column") is specified so that objects can be hydrated
@@ -896,12 +935,14 @@ abstract class BaseApplication extends BaseObject implements Persistent
 
             $this->app_delay_duration = $rs->getFloat($startcol + 17);
 
+            $this->app_drive_folder_uid = $rs->getString($startcol + 18);
+
             $this->resetModified();
 
             $this->setNew(false);
 
             // FIXME - using NUM_COLUMNS may be clearer.
-            return $startcol + 18; // 18 = ApplicationPeer::NUM_COLUMNS - ApplicationPeer::NUM_LAZY_LOAD_COLUMNS).
+            return $startcol + 19; // 19 = ApplicationPeer::NUM_COLUMNS - ApplicationPeer::NUM_LAZY_LOAD_COLUMNS).
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Application object", $e);
@@ -1159,6 +1200,9 @@ abstract class BaseApplication extends BaseObject implements Persistent
             case 17:
                 return $this->getAppDelayDuration();
                 break;
+            case 18:
+                return $this->getAppDriveFolderUid();
+                break;
             default:
                 return null;
                 break;
@@ -1197,6 +1241,7 @@ abstract class BaseApplication extends BaseObject implements Persistent
             $keys[15] => $this->getAppPin(),
             $keys[16] => $this->getAppDuration(),
             $keys[17] => $this->getAppDelayDuration(),
+            $keys[18] => $this->getAppDriveFolderUid(),
         );
         return $result;
     }
@@ -1281,6 +1326,9 @@ abstract class BaseApplication extends BaseObject implements Persistent
                 break;
             case 17:
                 $this->setAppDelayDuration($value);
+                break;
+            case 18:
+                $this->setAppDriveFolderUid($value);
                 break;
         } // switch()
     }
@@ -1377,6 +1425,10 @@ abstract class BaseApplication extends BaseObject implements Persistent
             $this->setAppDelayDuration($arr[$keys[17]]);
         }
 
+        if (array_key_exists($keys[18], $arr)) {
+            $this->setAppDriveFolderUid($arr[$keys[18]]);
+        }
+
     }
 
     /**
@@ -1458,6 +1510,10 @@ abstract class BaseApplication extends BaseObject implements Persistent
 
         if ($this->isColumnModified(ApplicationPeer::APP_DELAY_DURATION)) {
             $criteria->add(ApplicationPeer::APP_DELAY_DURATION, $this->app_delay_duration);
+        }
+
+        if ($this->isColumnModified(ApplicationPeer::APP_DRIVE_FOLDER_UID)) {
+            $criteria->add(ApplicationPeer::APP_DRIVE_FOLDER_UID, $this->app_drive_folder_uid);
         }
 
 
@@ -1547,6 +1603,8 @@ abstract class BaseApplication extends BaseObject implements Persistent
         $copyObj->setAppDuration($this->app_duration);
 
         $copyObj->setAppDelayDuration($this->app_delay_duration);
+
+        $copyObj->setAppDriveFolderUid($this->app_drive_folder_uid);
 
 
         $copyObj->setNew(true);

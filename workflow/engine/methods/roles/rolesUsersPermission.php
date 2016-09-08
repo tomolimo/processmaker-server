@@ -48,8 +48,15 @@ $G_ID_SUB_MENU_SELECTED = 'ROLES';
 
 $G_PUBLISH = new Publisher();
 
+$configuration = new Configurations();
+$arrayConfigPage = $configuration->getConfiguration('roleUsersPermissionsList', 'pageSize', null, $_SESSION['USER_LOGGED']);
+
+$arrayConfig = [];
+$arrayConfig['pageSize'] = (isset($arrayConfigPage['pageSize']))? $arrayConfigPage['pageSize'] : 20;
+
 $oHeadPublisher = & headPublisher::getSingleton();
 $oHeadPublisher->assign("PARTNER_FLAG", (defined('PARTNER_FLAG')) ? PARTNER_FLAG : false);
+$oHeadPublisher->assign('CONFIG', $arrayConfig);
 $oHeadPublisher->addExtJsScript( 'roles/rolesUsersPermission', false ); //adding a javascript file .js
 $oHeadPublisher->addContent( 'roles/rolesUsersPermission' ); //adding a html file  .html.
 

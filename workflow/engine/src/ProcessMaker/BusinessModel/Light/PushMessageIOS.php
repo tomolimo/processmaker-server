@@ -14,34 +14,47 @@ namespace ProcessMaker\BusinessModel\Light;
 
 class PushMessageIOS
 {
-    var $url = 'ssl://gateway.sandbox.push.apple.com:2195';
-    var $passphrase = "sample";
-    var $pemFile;
-    var $devices = array();
-    var $response = array();
+    private $url = 'ssl://gateway.sandbox.push.apple.com:2195';
+    private $passphrase = "sample";
+    private $pemFile = 'mobileios.pem';
+    private $devices = array();
+    private $response = array();
 
     /**
+     * Sete server notification Ios
      * @param $url string the url server
      */
-    function setUrl($url){
+    public function setUrl($url)
+    {
         $this->url = $url;
     }
 
     /**
-     * Constructor
-     * @param $passphrase update your private key's
+     * Set key passphrase
+     * @param string $passphrase update your private key's
      */
-    function setKey($passphrase){
+    public function setKey($passphrase)
+    {
         $this->passphrase = $passphrase;
     }
 
     /**
-     *    Set the devices token to send to
-     *    @param $deviceIds array of device tokens to send to
+     * Set name file .pem
+     * @param string $file name file .pem
      */
-    function setDevices($devicesToken)
+    public function setPemFile($file)
     {
-        if(is_array($devicesToken)){
+        $file = file_exists(PATH_CONFIG . $file)?$file:'mobileios.pem';
+        $this->pemFile = $file;
+    }
+
+    /**
+     * Set the devices token to send to
+     * @param array $devicesToken  of device tokens to send to
+     */
+    public function setDevices($devicesToken)
+    {
+        if (is_array($devicesToken)) {
             $this->devices = $devicesToken;
         } else {
             $this->devices = array($devicesToken);
@@ -53,27 +66,30 @@ class PushMessageIOS
      */
     public function setSettingNotification()
     {
-        $conf = \System::getSystemConfiguration( PATH_CONFIG . 'mobile.ini' );
+        $conf = \System::getSystemConfiguration(PATH_CONFIG . 'mobile.ini');
         $this->setUrl($conf['apple']['url']);
         $this->setKey($conf['apple']['passphrase']);
+        $this->setPemFile($conf['apple']['pemFile']);
     }
 
     /**
      * Send the message to the device
-     * @param $message the message to send
-     * @return mixed
+     * @param $message string the message to send
+     * @param $data object for payload body
+     * @return array
+     * @throws \Exception
      */
-    function send($message, $data)
+    public function send($message, $data)
     {
-        if(!is_array($this->devices) || count($this->devices) == 0){
+        if (!is_array($this->devices) || count($this->devices) == 0) {
             $this->error("No devices set");
         }
-        if(strlen($this->passphrase) < 8){
+        if (strlen($this->passphrase) < 8) {
             $this->error("Server API Key not set");
         }
 
         $ctx = stream_context_create();
-        stream_context_set_option($ctx, 'ssl', 'local_cert', PATH_CONFIG . 'mobileios.pem');
+        stream_context_set_option($ctx, 'ssl', 'local_cert', PATH_CONFIG . $this->pemFile);
         stream_context_set_option($ctx, 'ssl', 'passphrase', $this->passphrase);
 
         // Open a connection to the APNS server
@@ -88,7 +104,7 @@ class PushMessageIOS
             $body['aps'] = array(
                 'alert' => $message,
                 'sound' => 'default',
-                'data'  => $data
+                'data' => $data
             );
         } else {
             $body['aps'] = array(
@@ -112,7 +128,7 @@ class PushMessageIOS
             $fp = stream_socket_client($this->url, $err, $errstr, 60, STREAM_CLIENT_CONNECT | STREAM_CLIENT_PERSISTENT, $ctx);
 
             if (!$fp) {
-                throw (new \Exception( G::LoadTranslation( 'ID_FAILED' ).': ' ."$err $errstr"));
+                throw (new \Exception(\G::LoadTranslation('ID_FAILED') . ': ' . "$err $errstr"));
             } else {
                 //echo 'Apple service is online. ' . '<br />';
             }
@@ -138,7 +154,8 @@ class PushMessageIOS
         return $this->response;
     }
 
-    function error($msg){
+    public function error($msg)
+    {
         echo "Android send notification failed with error:";
         echo "\t" . $msg;
     }

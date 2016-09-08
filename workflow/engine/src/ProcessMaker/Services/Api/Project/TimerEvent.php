@@ -13,6 +13,12 @@ class TimerEvent extends Api
 {
     private $timerEvent;
 
+    private $arrayFieldIso8601 = [
+        'tmrevn_next_run_date',
+        'tmrevn_last_run_date',
+        'tmrevn_last_execution_date'
+    ];
+
     /**
      * Constructor of the class
      *
@@ -39,7 +45,7 @@ class TimerEvent extends Api
         try {
             $response = $this->timerEvent->getTimerEvents($prj_uid);
 
-            return $response;
+            return \ProcessMaker\Util\DateTime::convertUtcToIso8601($response, $this->arrayFieldIso8601);
         } catch (\Exception $e) {
             throw new RestException(Api::STAT_APP_EXCEPTION, $e->getMessage());
         }
@@ -56,7 +62,7 @@ class TimerEvent extends Api
         try {
             $response = $this->timerEvent->getTimerEvent($tmrevn_uid);
 
-            return $response;
+            return \ProcessMaker\Util\DateTime::convertUtcToIso8601($response, $this->arrayFieldIso8601);
         } catch (\Exception $e) {
             throw new RestException(Api::STAT_APP_EXCEPTION, $e->getMessage());
         }
@@ -73,7 +79,7 @@ class TimerEvent extends Api
         try {
             $response = $this->timerEvent->getTimerEventByEvent($prj_uid, $evn_uid);
 
-            return $response;
+            return \ProcessMaker\Util\DateTime::convertUtcToIso8601($response, $this->arrayFieldIso8601);
         } catch (\Exception $e) {
             throw new RestException(Api::STAT_APP_EXCEPTION, $e->getMessage());
         }
@@ -90,11 +96,13 @@ class TimerEvent extends Api
     public function doPostTimerEvent($prj_uid, array $request_data)
     {
         try {
-            $arrayData = $this->timerEvent->create($prj_uid, $request_data);
+            \ProcessMaker\BusinessModel\Validator::throwExceptionIfDataNotMetIso8601Format($request_data, $this->arrayFieldIso8601);
+
+            $arrayData = $this->timerEvent->create($prj_uid, \ProcessMaker\Util\DateTime::convertDataToUtc($request_data, $this->arrayFieldIso8601));
 
             $response = $arrayData;
 
-            return $response;
+            return \ProcessMaker\Util\DateTime::convertUtcToIso8601($response, $this->arrayFieldIso8601);
         } catch (\Exception $e) {
             throw new RestException(Api::STAT_APP_EXCEPTION, $e->getMessage());
         }
@@ -110,7 +118,9 @@ class TimerEvent extends Api
     public function doPutTimerEvent($prj_uid, $tmrevn_uid, array $request_data)
     {
         try {
-            $arrayData = $this->timerEvent->update($tmrevn_uid, $request_data);
+            \ProcessMaker\BusinessModel\Validator::throwExceptionIfDataNotMetIso8601Format($request_data, $this->arrayFieldIso8601);
+
+            $arrayData = $this->timerEvent->update($tmrevn_uid, \ProcessMaker\Util\DateTime::convertDataToUtc($request_data, $this->arrayFieldIso8601));
         } catch (\Exception $e) {
             throw new RestException(Api::STAT_APP_EXCEPTION, $e->getMessage());
         }

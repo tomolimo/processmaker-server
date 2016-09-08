@@ -1,24 +1,53 @@
 <?php
+if (!isset($_SESSION['USER_LOGGED'])) {
+	G::SendTemporalMessage( 'ID_LOGIN_AGAIN', 'warning', 'labels' );
+	die( '<script type="text/javascript">
+				try
+				{
+				var olink = document.location.href;
+				olink = ( olink.search("gmail") == -1 ) ? parent.document.location.href : olink;
+
+				if(olink.search("gmail") == -1 ){
+					prnt = parent.parent;
+					top.location = top.location;
+				} else {
+					var data = olink.split("?");
+					var odata = data[1].split("&");
+					var appUid = odata[0].split("=");
+
+					var dataToSend = {
+						"action": "credentials",
+						"operation": "refreshPmSession",
+						"type": "processCall",
+						"funParams": [
+						appUid[1],
+						""
+						],
+						"expectReturn": false
+					};
+
+					var x = parent.postMessage(JSON.stringify(dataToSend), "*");
+					if (x == undefined){
+						x = parent.parent.postMessage(JSON.stringify(dataToSend), "*");
+					}
+				}
+			}catch (err)
+			{
+				parent.location = parent.location;
+			}
+		</script>');
+}
+
 require_once 'classes/model/AppDelegation.php';
 $delegation = new AppDelegation();
 if( $delegation->alreadyRouted($_SESSION['APPLICATION'],$_SESSION['INDEX']) ) {
-    G::header('location: ../cases/casesListExtJs');
-    die();
-}
-
-if (!isset($_SESSION['USER_LOGGED'])) {
-      G::SendTemporalMessage( 'ID_LOGIN_AGAIN', 'warning', 'labels' );
-      die( '<script type="text/javascript">
-                try
-                  {
-                     prnt = parent.parent;
-                     top.location = top.location;
-                  }
-                catch (err)
-                  {
-                     parent.location = parent.location;
-                  }
-            </script>');
+	if(array_key_exists('gmail',$_SESSION) && $_SESSION['gmail'] == 1){
+		$mUrl = '../cases/cases_Open?APP_UID='.$_SESSION['APPLICATION'].'&DEL_INDEX='.$_SESSION['INDEX'].'&action=sent';
+		header( 'location:' . $mUrl );
+		die();
+	}
+	G::header('location: ../cases/casesListExtJs');
+	die();
 }
 /**
  * cases_Step.php
@@ -55,6 +84,10 @@ switch ($RBAC->userCanAccess( 'PM_CASES' )) {
         G::header( 'location: ../login/login' );
         die();
         break;
+}
+
+if(array_key_exists('gmail',$_GET) && $_GET['gmail'] == 1){
+	$_SESSION['gmail'] = 1;
 }
 
 if ((int) $_SESSION['INDEX'] < 1) {
@@ -106,6 +139,7 @@ $oHeadPublisher->addScriptCode( '
 $G_PUBLISH->AddContent( 'template', '', '', '', $oTemplatePower );
 
 $oCase = new Cases();
+$oStep = new Step();
 
 $Fields = $oCase->loadCase( $_SESSION['APPLICATION'] );
 $Fields['APP_DATA'] = array_merge( $Fields['APP_DATA'], G::getSystemConstants() );
@@ -159,11 +193,7 @@ if ($flagExecuteBeforeTriggers) {
 
     if (! isset( $_SESSION['_NO_EXECUTE_TRIGGERS_'] )) {
         //Execute before triggers - Start
-        if (!isset($_SESSION['beforeTriggersExecuted'])) {
-            $Fields['APP_DATA'] = $oCase->ExecuteTriggers( $_SESSION['TASK'], $_GET['TYPE'], $_GET['UID'], 'BEFORE', $Fields['APP_DATA'] );
-        } else {
-            unset($_SESSION['beforeTriggersExecuted']);
-        }
+        $Fields['APP_DATA'] = $oCase->ExecuteTriggers( $_SESSION['TASK'], $_GET['TYPE'], $_GET['UID'], 'BEFORE', $Fields['APP_DATA'] );
         //Execute before triggers - End
     } else {
         unset( $_SESSION['_NO_EXECUTE_TRIGGERS_'] );
@@ -180,7 +210,9 @@ if (isset( $_GET['breakpoint'] )) {
 /**
  * Here we throw the debug view
  */
-if (isset( $_GET['breakpoint'] )) {
+$isIE = Bootstrap::isIE();
+
+if (isset($_GET['breakpoint'])) {
 
     $G_PUBLISH->AddContent( 'view', 'cases/showDebugFrameLoader' );
     $G_PUBLISH->AddContent( 'view', 'cases/showDebugFrameBreaker' );
@@ -265,7 +297,6 @@ try {
                                                     }" );
             }
 
-            $oStep = new Step();
             $oStep = $oStep->loadByProcessTaskPosition( $_SESSION['PROCESS'], $_SESSION['TASK'], $_GET['POSITION'] );
 
             /**
@@ -283,11 +314,15 @@ try {
             $FieldsPmDynaform["STEP_MODE"] = $oStep->getStepMode();
             $FieldsPmDynaform["PRO_SHOW_MESSAGE"] = $noShowTitle;
             $FieldsPmDynaform["TRIGGER_DEBUG"] = $_SESSION['TRIGGER_DEBUG']['ISSET'];
-            $a = new pmDynaform($FieldsPmDynaform);
+            $a = new pmDynaform(\ProcessMaker\Util\DateTime::convertUtcToTimeZone($FieldsPmDynaform));
             if ($a->isResponsive()) {
                 $a->printEdit();
             } else {
-                $G_PUBLISH->AddContent('dynaform', 'xmlform', $_SESSION['PROCESS'] . '/' . $_GET['UID'], '', $Fields['APP_DATA'], 'cases_SaveData?UID=' . $_GET['UID'] . '&APP_UID=' . $_SESSION['APPLICATION'], '', (strtolower($oStep->getStepMode()) != 'edit' ? strtolower($oStep->getStepMode()) : ''));
+            	if(array_key_exists('gmail',$_GET) && $_GET['gmail'] == 1){
+            		$G_PUBLISH->AddContent('dynaform', 'xmlform', $_SESSION['PROCESS'] . '/' . $_GET['UID'], '', \ProcessMaker\Util\DateTime::convertUtcToTimeZone($Fields['APP_DATA']), 'cases_SaveData?UID=' . $_GET['UID'] . '&APP_UID=' . $_SESSION['APPLICATION'] . '&gmail=1', '', (strtolower($oStep->getStepMode()) != 'edit' ? strtolower($oStep->getStepMode()) : ''));
+            	}else{
+            		$G_PUBLISH->AddContent('dynaform', 'xmlform', $_SESSION['PROCESS'] . '/' . $_GET['UID'], '', \ProcessMaker\Util\DateTime::convertUtcToTimeZone($Fields['APP_DATA']), 'cases_SaveData?UID=' . $_GET['UID'] . '&APP_UID=' . $_SESSION['APPLICATION'], '', (strtolower($oStep->getStepMode()) != 'edit' ? strtolower($oStep->getStepMode()) : ''));
+            	}
             }
             break;
         case 'INPUT_DOCUMENT':
@@ -768,6 +803,7 @@ try {
                 $hiddenName = "form[TASKS][" . $sKey . "][TAS_UID]";
                 $hiddenField = '<input type="hidden" name="' . $hiddenName . '" id="' . $hiddenName . '" value="' . $aValues['NEXT_TASK']['TAS_UID'] . '">';
                 $aFields['TASK'][$sKey]['NEXT_TASK']['TAS_HIDDEN_FIELD'] = $hiddenField;
+
                 //print "<hr>".$aValues['NEXT_TASK']['TAS_ASSIGN_TYPE']."<hr>";
                 switch ($aValues['NEXT_TASK']['TAS_ASSIGN_TYPE']) {
                     case 'EVALUATE':
@@ -983,6 +1019,13 @@ try {
                     }
                     $aFields['TASK'][$sKey]['NEXT_TASK']['DEL_PRIORITY'] = '<input type="hidden" name="' . $hiddenName . '[DEL_PRIORITY]"      id="' . $hiddenName . '[DEL_PRIORITY]"      value="' . $sPriority . '">';
                     $aFields['TASK'][$sKey]['NEXT_TASK']['TAS_PARENT'] = '<input type="hidden" name="' . $hiddenName . '[TAS_PARENT]"        id="' . $hiddenName . '[TAS_PARENT]"        value="' . $aValues['NEXT_TASK']['TAS_PARENT'] . '">';
+                    if(isset($aValues['NEXT_TASK']['ROU_PREVIOUS_TASK']) && isset($aValues['NEXT_TASK']['ROU_PREVIOUS_TYPE'])){
+                        $aFields['TASK'][$sKey]['NEXT_TASK']['ROU_PREVIOUS_TASK'] = '<input type="hidden" name="' . $hiddenName . '[ROU_PREVIOUS_TASK]"        id="' . $hiddenName . '[ROU_PREVIOUS_TASK]"        value="' . $aValues['NEXT_TASK']['ROU_PREVIOUS_TASK'] . '">';
+                        $aFields['TASK'][$sKey]['NEXT_TASK']['ROU_PREVIOUS_TYPE'] = '<input type="hidden" name="' . $hiddenName . '[ROU_PREVIOUS_TYPE]"        id="' . $hiddenName . '[ROU_PREVIOUS_TYPE]"        value="' . $aValues['NEXT_TASK']['ROU_PREVIOUS_TYPE'] . '">';
+                    }
+                    if(isset($aValues['ROU_CONDITION'])){
+                        $aFields['TASK'][$sKey]['NEXT_TASK']['ROU_CONDITION'] = '<input type="hidden" name="' . $hiddenName . '[ROU_CONDITION]"        id="' . $hiddenName . '[ROU_CONDITION]"        value="' . $aValues['ROU_CONDITION'] . '">';
+                    }
                 }
             }
 
@@ -1120,7 +1163,7 @@ if (!isset($_SESSION["PM_RUN_OUTSIDE_MAIN_APP"])) {
 
 G::RenderPage( 'publish', 'blank' );
 
-if ($_SESSION['TRIGGER_DEBUG']['ISSET']) {
+if ($_SESSION['TRIGGER_DEBUG']['ISSET'] && !$isIE) {
     G::evalJScript( '
     if (typeof showdebug != \'undefined\') {
       showdebug();

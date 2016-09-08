@@ -18,7 +18,9 @@ class Applications
         $sort = "APP_CACHE_VIEW.APP_NUMBER",
         $category = null,
         $configuration = true,
-        $paged = true
+        $paged = true,
+        $newerThan = '',
+        $oldestThan = ''
     ) {
         $callback = isset($callback)? $callback : "stcCallback1001";
         $dir = isset($dir)? $dir : "DESC";
@@ -301,7 +303,7 @@ class Applications
                 }
 
                 $Criteria->add( $Criteria->getNewCriterion( AppCacheViewPeer::DEL_DELEGATE_DATE, $dateFrom, Criteria::GREATER_EQUAL )->addAnd( $Criteria->getNewCriterion( AppCacheViewPeer::DEL_DELEGATE_DATE, $dateTo, Criteria::LESS_EQUAL ) ) );
-                $CriteriaCount->add( $CriteriaCount->getNewCriterion( AppCacheViewPeer::DEL_DELEGATE_DATE, $dateFrom, Criteria::GREATER_EQUAL )->addAnd( $Criteria->getNewCriterion( AppCacheViewPeer::DEL_DELEGATE_DATE, $dateTo, Criteria::LESS_EQUAL ) ) );
+                $CriteriaCount->add( $CriteriaCount->getNewCriterion( AppCacheViewPeer::DEL_DELEGATE_DATE, $dateFrom, Criteria::GREATER_EQUAL )->addAnd( $CriteriaCount->getNewCriterion( AppCacheViewPeer::DEL_DELEGATE_DATE, $dateTo, Criteria::LESS_EQUAL ) ) );
             } else {
                 $dateFrom = $dateFrom . " 00:00:00";
 
@@ -313,6 +315,27 @@ class Applications
 
             $Criteria->add( AppCacheViewPeer::DEL_DELEGATE_DATE, $dateTo, Criteria::LESS_EQUAL );
             $CriteriaCount->add( AppCacheViewPeer::DEL_DELEGATE_DATE, $dateTo, Criteria::LESS_EQUAL );
+        }
+
+        if ($newerThan != '') {
+            if ($oldestThan != '') {
+                $Criteria->add(
+                    $Criteria->getNewCriterion(AppCacheViewPeer::DEL_DELEGATE_DATE, $newerThan, Criteria::GREATER_THAN)->addAnd(
+                    $Criteria->getNewCriterion(AppCacheViewPeer::DEL_DELEGATE_DATE, $oldestThan, Criteria::LESS_THAN))
+                );
+                $CriteriaCount->add(
+                    $CriteriaCount->getNewCriterion(AppCacheViewPeer::DEL_DELEGATE_DATE, $newerThan, Criteria::GREATER_THAN)->addAnd(
+                    $CriteriaCount->getNewCriterion(AppCacheViewPeer::DEL_DELEGATE_DATE, $oldestThan, Criteria::LESS_THAN))
+                );
+            } else {
+                $Criteria->add(AppCacheViewPeer::DEL_DELEGATE_DATE, $newerThan, Criteria::GREATER_THAN);
+                $CriteriaCount->add( AppCacheViewPeer::DEL_DELEGATE_DATE, $newerThan, Criteria::GREATER_THAN);
+            }
+        } else {
+            if ($oldestThan != '') {
+                $Criteria->add(AppCacheViewPeer::DEL_DELEGATE_DATE, $oldestThan, Criteria::LESS_THAN);
+                $CriteriaCount->add(AppCacheViewPeer::DEL_DELEGATE_DATE, $oldestThan, Criteria::LESS_THAN);
+            }
         }
 
         //add the filter
@@ -474,7 +497,7 @@ class Applications
             $sort = "";
 
             //Current delegation (*)
-            if (($action == "sent" || $action == "search" || $action == "simple_search" || $action == "to_revise" || $action == "to_reassign") && ($status != "TO_DO")) {
+            if ($action == 'sent' || $action == 'simple_search' || $action == 'to_reassign') {
                 switch ($sortBk) {
                     case "APP_CACHE_VIEW.APP_CURRENT_USER":
                         $sort = "USRCR_" . $conf->userNameFormatGetFirstFieldByUsersTable();
@@ -512,20 +535,20 @@ class Applications
                 $oCriteria->addAscendingOrderByColumn(FieldsPeer::FLD_INDEX);
 
                 $oDataset = FieldsPeer::doSelectRS($oCriteria);
-                $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-                $oDataset->next();
-                $row = $oDataset->getRow();
-                if (is_array($row)) {
+
+                if ($oDataset->next()) {
                     $sort = $tableNameAux . "." . $sortTable[1];
                 }
             }
 
-            if ($sort == "") {
-                $sort = $sortBk;
-            }
+            $arraySelectColumn = $Criteria->getSelectColumns();
 
-            if (!in_array($sort, $Criteria->getSelectColumns())) {
-                $sort = AppCacheViewPeer::APP_NUMBER; //DEFAULT VALUE
+            if (!in_array($sort, $arraySelectColumn)) {
+                $sort = $sortBk;
+
+                if (!in_array($sort, $arraySelectColumn)) {
+                    $sort = AppCacheViewPeer::APP_NUMBER; //DEFAULT VALUE
+                }
             }
 
             if ($dir == "DESC") {
@@ -578,8 +601,8 @@ class Applications
              $maxDataset->close();
               }*/
 
-            //Current delegation (*) || $action == "search" || $action == "to_revise"
-            if (($action == "sent" || $action == "simple_search" || $action == "to_reassign") && ($status != "TO_DO")) {
+            //Current delegation (*)
+            if ($action == 'sent' || $action == 'simple_search' || $action == 'to_reassign') {
                 //Current task
                 $aRow["APP_TAS_TITLE"] = $aRow["APPDELCR_APP_TAS_TITLE"];
 

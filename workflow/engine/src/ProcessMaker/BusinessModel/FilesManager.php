@@ -41,7 +41,7 @@ class FilesManager
      *
      * @access public
      */
-    public function getProcessFilesManagerPath($sProcessUID, $path)
+    public function getProcessFilesManagerPath($sProcessUID, $path, $getContent = true)
     {
         try {
             $checkPath = substr($path, -1);
@@ -85,7 +85,10 @@ class FilesManager
             }
             foreach ($aFiles as $aFile) {
                 $arrayFileUid = $this->getFileManagerUid($sDirectory.$aFile['FILE']);
-                $fcontent = file_get_contents($sDirectory.$aFile['FILE']);
+                $fcontent = "";
+                if ($getContent === true) {
+                    $fcontent = file_get_contents($sDirectory . $aFile['FILE']);
+                }
                 $fileUid =  $arrayFileUid["PRF_UID"];
                 if ($fileUid != null) {
                     $oProcessFiles = \ProcessFilesPeer::retrieveByPK($fileUid);
@@ -243,6 +246,11 @@ class FilesManager
         }
     }
 
+    /**
+     * @param $aData
+     * @throws Exception
+     * @throws \Exception
+     */
     public function addProcessFilesManagerInDb($aData)
     {
         try {
@@ -250,18 +258,62 @@ class FilesManager
             $aData = array_change_key_case($aData, CASE_UPPER);
             $oProcessFiles->fromArray($aData, \BasePeer::TYPE_FIELDNAME);
 
+            $path = $aData['PRF_PATH'];
+
+            $allDirectories = pathinfo($path);
+            $path = explode('/',$allDirectories['dirname']);
+            $fileDirectory = $path[count($path)-2];
+
+            switch ($fileDirectory) {
+                case 'mailTemplates':
+                    $sDirectory = PATH_DATA_MAILTEMPLATES . $aData['PRO_UID'] . PATH_SEP . basename($aData['PRF_PATH']);
+                    break;
+                case 'public':
+                    $sDirectory = PATH_DATA_PUBLIC . $aData['PRO_UID'] . PATH_SEP . basename($aData['PRF_PATH']);
+                    break;
+                default:
+                    if (strtoupper(substr(PHP_OS, 0, 3)) !== 'WIN') {
+                        error_log(\G::LoadTranslation("ID_INVALID_VALUE_FOR", array($aData['PRF_PATH'])));
+                    }
+                    return;
+                    break;
+            }
+
+            $oProcessFiles->setPrfPath($sDirectory);
+
             if($this->existsProcessFile($aData['PRF_UID'])) {
                 $sPkProcessFiles = \G::generateUniqueID();
                 $oProcessFiles->setPrfUid($sPkProcessFiles);
-
-                $sDirectory = PATH_DATA_MAILTEMPLATES . $aData['PRO_UID'] . PATH_SEP . basename($aData['PRF_PATH']);
-                $oProcessFiles->setPrfPath($sDirectory);
 
                 $emailEvent = new \ProcessMaker\BusinessModel\EmailEvent();
                 $emailEvent->updatePrfUid($aData['PRF_UID'], $sPkProcessFiles, $aData['PRO_UID']);
             }
 
             $result = $oProcessFiles->save();
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
+
+    /**
+     * @param $aData
+     * @throws Exception
+     */
+    public function updateProcessFilesManagerInDb($aData)
+    {
+        try {
+            //update database
+            if ($this->existsProcessFile($aData['prf_uid'])) {
+                $aData = array_change_key_case($aData, CASE_UPPER);
+                $oProcessFiles = \ProcessFilesPeer::retrieveByPK($aData['PRF_UID']);
+                $sDate = date('Y-m-d H:i:s');
+                $oProcessFiles->setPrfUpdateDate($sDate);
+                $oProcessFiles->setProUid($aData['PRO_UID']);
+                $oProcessFiles->setPrfPath($aData['PRF_PATH']);
+                $oProcessFiles->save();
+            } else {
+                $this->addProcessFilesManagerInDb($aData);
+            }
         } catch (Exception $e) {
             throw $e;
         }
@@ -388,7 +440,7 @@ class FilesManager
             if ($path == '') {
                 throw new \Exception(\G::LoadTranslation("ID_INVALID_VALUE_FOR", array('prf_uid')));
             }
-            $sFile = end(explode(DIRECTORY_SEPARATOR,$path));
+            $sFile = basename($path);
             $sPath = str_replace($sFile,'',$path);
             $sSubDirectory = substr(str_replace($sProcessUID,'',substr($sPath,(strpos($sPath, $sProcessUID)))),0,-1);
             $sMainDirectory = str_replace(substr($sPath, strpos($sPath, $sProcessUID)),'', $sPath);
@@ -444,14 +496,14 @@ class FilesManager
      *
      * @access public
      */
-    public function deleteProcessFilesManager($sProcessUID, $prfUid)
+    public function deleteProcessFilesManager($sProcessUID, $prfUid, $verifyingRelationship = false)
     {
         try {
             $path = '';
-            $criteria = new \Criteria("workflow");
-            $criteria->addSelectColumn(\ProcessFilesPeer::PRF_PATH);
-            $criteria->add(\ProcessFilesPeer::PRF_UID, $prfUid, \Criteria::EQUAL);
-            $rsCriteria = \ProcessFilesPeer::doSelectRS($criteria);
+            $criteriaPf = new \Criteria("workflow");
+            $criteriaPf->addSelectColumn(\ProcessFilesPeer::PRF_PATH);
+            $criteriaPf->add(\ProcessFilesPeer::PRF_UID, $prfUid, \Criteria::EQUAL);
+            $rsCriteria = \ProcessFilesPeer::doSelectRS($criteriaPf);
             $rsCriteria->setFetchmode(\ResultSet::FETCHMODE_ASSOC);
             $rsCriteria->next();
             while ($aRow = $rsCriteria->getRow()) {
@@ -460,6 +512,22 @@ class FilesManager
             }
             if ($path == '') {
                 throw new \Exception(\G::LoadTranslation("ID_INVALID_VALUE_FOR", array('prf_uid')));
+            }
+
+            $relationshipEmailEvent = false;
+            $criteria = new \Criteria("workflow");
+            $criteria->addSelectColumn(\EmailEventPeer::PRF_UID);
+            $criteria->add(\EmailEventPeer::PRF_UID, $prfUid, \Criteria::EQUAL);
+            $rsCriteria = \EmailEventPeer::doSelectRS($criteria);
+            $rsCriteria->setFetchmode(\ResultSet::FETCHMODE_ASSOC);
+            $rsCriteria->next();
+            while ($aRow = $rsCriteria->getRow()) {
+                $relationshipEmailEvent = true;
+                $rsCriteria->next();
+            }
+            if ($relationshipEmailEvent && !$verifyingRelationship) {
+                throw new \Exception(\G::LoadTranslation(G::LoadTranslation('ID_CANNOT_REMOVE_TEMPLATE_EMAIL_EVENT',
+                    array(end(explode(DIRECTORY_SEPARATOR,$path))))));
             }
 
             $sFile = end(explode(DIRECTORY_SEPARATOR,$path));
@@ -473,9 +541,9 @@ class FilesManager
               if (file_exists($path) && !is_dir($path)) {
                   unlink($path);
               }
-            } 
+            }
 
-            $rs = \ProcessFilesPeer::doDelete($criteria);
+            $rs = \ProcessFilesPeer::doDelete($criteriaPf);
         } catch (Exception $e) {
             throw $e;
         }
@@ -506,7 +574,7 @@ class FilesManager
             if ($path == '') {
                 throw new \Exception(\G::LoadTranslation("ID_INVALID_VALUE_FOR", array('prf_uid')));
             }
-            $sFile = end(explode("/",$path));
+            $sFile = end(explode("/",str_replace('\\', '/',$path)));
             $sPath = str_replace($sFile,'',$path);
             $sSubDirectory = substr(str_replace($sProcessUID,'',substr($sPath,(strpos($sPath, $sProcessUID)))),0,-1);
             $sMainDirectory = str_replace(substr($sPath, strpos($sPath, $sProcessUID)),'', $sPath);

@@ -1,11 +1,6 @@
 <?php
   //sysGeneric, to redirect workspace, the url should by encrypted or not
 
-  if (version_compare(phpversion(), "5.1.0", ">=")) {
-    date_default_timezone_set("America/La_Paz");
-  } else {
-    // you're not
-  }
 //***************** URL KEY *********************************************
   define("URL_KEY", 'c0l0s40pt1mu59r1m3' );
 
@@ -80,7 +75,7 @@ $virtualURITable['/(*)'] = PATH_HTML;
   }
 
 //************** verify if the URI is encrypted or not **************
-  G::parseURI ( getenv( "REQUEST_URI" ) );    
+  G::parseURI ( getenv( "REQUEST_URI" ) );
 
   //print '-' . SYS_TEMP .'-' . SYS_LANG. '-' . SYS_SKIN.'-' . SYS_COLLECTION.'-' . SYS_TARGET.'<br>';
 

@@ -1,42 +1,32 @@
 <?php
-/**
- * data_rolesUsers.php
- *
- * ProcessMaker Open Source Edition
- * Copyright (C) 2004 - 2008 Colosa Inc.23
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- *
- * For more information, contact Colosa Inc, 2566 Le Jeune Rd.,
- * Coral Gables, FL, 33134, USA, or email info@colosa.com.
- */
+$response = [];
 
-$ROL_UID = $_GET['rUID'];
-$TYPE_DATA = $_GET["type"];
+try {
+    $option  = $_POST['option'];
+    $roleUid = $_POST['roleUid'];
 
-global $RBAC;
+    $pageSize = $_POST['pageSize'];
+    $filter = $_POST['filter'];
 
-$filter = (isset( $_REQUEST['textFilter'] )) ? $_REQUEST['textFilter'] : '';
+    $sortField = (isset($_POST['sort']))? $_POST['sort']: 'USR_FIRSTNAME';
+    $sortDir   = (isset($_POST['dir']))? $_POST['dir']: 'ASC';
+    $start = (isset($_POST['start']))? $_POST['start']: 0;
+    $limit = (isset($_POST['limit']))? $_POST['limit']: $pageSize;
 
-if ($TYPE_DATA == 'list')
-    $oDataset = $RBAC->getRoleUsers( $ROL_UID, $filter );
-if ($TYPE_DATA == 'show')
-    $oDataset = $RBAC->getAllUsers( $ROL_UID, $filter );
+    $roleUser = new \ProcessMaker\BusinessModel\Role\User();
 
-$rows = Array ();
-while ($oDataset->next()) {
-    $rows[] = $oDataset->getRow();
+    $result = $roleUser->getUsers(
+        $roleUid, $option, ['filter' => $filter, 'filterOption' => ''], $sortField, $sortDir, $start, $limit
+    );
+
+    $response['status']  = 'OK';
+    $response['success'] = true;
+    $response['resultTotal'] = $result['total'];
+    $response['resultRoot']  = $result['data'];
+} catch (Exception $e) {
+    $response['status']  = 'ERROR';
+    $response['message'] = $e->getMessage();
 }
-echo '{users: ' . G::json_encode( $rows ) . '}';
+
+echo G::json_encode($response);
 

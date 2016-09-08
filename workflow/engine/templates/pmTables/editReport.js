@@ -824,13 +824,13 @@ Ext.onReady(function(){
 
   ];
 
-  
+
 
 function validateFieldSizeAutoincrement(valueType, defaultValue) {
 
     if (Ext.getCmp("sizeEdit").getEl()) {
 
-        
+
 
         if (valueType === 'INTEGER' || valueType === 'BIGINT' || valueType === 'SMALLINT' || valueType === 'TINYINT') {
 
@@ -846,7 +846,7 @@ function validateFieldSizeAutoincrement(valueType, defaultValue) {
 
             }
 
-            
+
 
             Ext.getCmp("field_incre").enable();
 
@@ -858,7 +858,7 @@ function validateFieldSizeAutoincrement(valueType, defaultValue) {
 
         }
 
-        
+
 
         if (valueType === 'CHAR' || valueType === 'VARCHAR' || valueType === 'LONGVARCHAR') {
 
@@ -874,7 +874,7 @@ function validateFieldSizeAutoincrement(valueType, defaultValue) {
 
             }
 
-            
+
 
             Ext.getCmp("field_incre").disable();
 
@@ -882,7 +882,7 @@ function validateFieldSizeAutoincrement(valueType, defaultValue) {
 
         }
 
-        
+
 
         if (valueType === 'BOOLEAN' || valueType === 'DATE' || valueType === 'DATETIME' || valueType === 'TIME' || valueType === 'DECIMAL' || valueType === 'DOUBLE' || valueType === 'FLOAT' || valueType === 'REAL') {
 
@@ -890,7 +890,7 @@ function validateFieldSizeAutoincrement(valueType, defaultValue) {
 
             Ext.getCmp("sizeEdit").setValue('');
 
-            
+
 
             Ext.getCmp("field_incre").disable();
 
@@ -1412,11 +1412,23 @@ function validateFieldSizeAutoincrement(valueType, defaultValue) {
 
 
 
-  var types = new Ext.data.SimpleStore({
+  var arrayBpmnTypeData = [["NORMAL", _("ID_GLOBAL")]];
 
-    fields: ['REP_TAB_TYPE', 'type'],
+  var arrayClassicTypeData = [["NORMAL", _("ID_GLOBAL")], ["GRID", _("ID_GRID")]];
 
-    data : [['NORMAL',_("ID_GLOBAL")],['GRID',_("ID_GRID")]]
+
+
+  var types = new Ext.data.ArrayStore({
+
+      storeId: "types",
+
+      autoDestroy: true,
+
+
+
+      fields: ["REP_TAB_TYPE", "type"],
+
+      data : [['NORMAL',_("ID_GLOBAL")],['GRID',_("ID_GRID")]]
 
   });
 
@@ -1479,6 +1491,8 @@ function validateFieldSizeAutoincrement(valueType, defaultValue) {
     }
 
   });
+
+
 
 
 
@@ -1722,9 +1736,9 @@ function validateFieldSizeAutoincrement(valueType, defaultValue) {
 
   });
 
-  
 
-  comboReport.setReadOnly(isBpmn);
+
+  comboReport.setDisabled(isBpmn);
 
 
 
@@ -1748,7 +1762,7 @@ function validateFieldSizeAutoincrement(valueType, defaultValue) {
 
     reader : new Ext.data.JsonReader( {
 
-      fields : [{name : 'PRO_UID'}, {name : 'PRO_TITLE'},{name : 'PRO_DESCRIPTION'}]
+      fields : [{name : 'PRO_UID'}, {name : 'PRO_TITLE'},{name : 'PRO_DESCRIPTION'}, {name: "PRO_PROCESS_TYPE"}]
 
     }),
 
@@ -1836,6 +1850,8 @@ function validateFieldSizeAutoincrement(valueType, defaultValue) {
 
 
 
+  var rptPosArray = 0;
+
   processComboBox = new Ext.form.ComboBox({
 
     id: 'PROCESS',
@@ -1873,6 +1889,34 @@ function validateFieldSizeAutoincrement(valueType, defaultValue) {
     listeners:{
 
       select: function(){
+
+          var dataStore = Ext.getCmp('PROCESS').store.getRange();
+
+          var i = Ext.getCmp('PROCESS').store.find("PRO_UID", Ext.getCmp('PROCESS').getValue());
+
+
+
+          types.loadData(
+
+              (dataStore[i].data.PRO_PROCESS_TYPE == "BPMN")? arrayBpmnTypeData : arrayClassicTypeData, false
+
+          );
+
+
+
+          var dataStoreAux = types.getRange(rptPosArray);
+
+
+
+          comboReport.setValue(dataStoreAux[0].data.REP_TAB_TYPE);
+
+          comboReport.setDisabled(dataStore[i].data.PRO_PROCESS_TYPE === "BPMN");
+
+
+
+          comboGridsList.setVisible(false);
+
+
 
               comboDbConnections.getStore().reload({params:{PRO_UID : Ext.getCmp('PROCESS').getValue()}});
 

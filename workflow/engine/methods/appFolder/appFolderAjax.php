@@ -1374,7 +1374,10 @@ function copyMoveExecuteTree($uidFolder, $newUidFolder)
 {
     require_once ("classes/model/AppDocument.php");
     require_once ('classes/model/AppFolder.php');
-
+    if($newUidFolder==="root") {
+        return $newUidFolder;
+    }
+    
     $appFoder = new AppFolder ();
     $folderContent = $appFoder->getFolderContent($uidFolder);
     $folderOrigin = $appFoder->getFolderStructure($uidFolder);

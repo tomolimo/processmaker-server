@@ -116,7 +116,7 @@ class ListCompleted extends BaseListCompleted
             $dataset->next();
             $aRow = $dataset->getRow();
             if ($aRow['TAS_TYPE'] != 'SUBPROCESS') {
-                $users->refreshTotal($data['USR_UID'], 'remove', 'inbox');
+                //$users->refreshTotal($data['USR_UID'], 'remove', 'inbox');
             }
         } else {
             $criteria = new Criteria();
@@ -125,9 +125,9 @@ class ListCompleted extends BaseListCompleted
             $dataset = SubApplicationPeer::doSelectRS($criteria);
             $dataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
             if ($dataset->next()) {
-                $users->refreshTotal($data['USR_UID'], 'remove', 'inbox');
+                //$users->refreshTotal($data['USR_UID'], 'remove', 'inbox');
             } else {
-                $users->refreshTotal($data['USR_UID'], 'remove', 'draft');
+                //$users->refreshTotal($data['USR_UID'], 'remove', 'draft');
             }
         }
 

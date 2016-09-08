@@ -404,52 +404,6 @@
         store: store,
         tbar:[
           {
-
-            text:_("ID_DYNAFORM_HISTORY"),
-            id:'sendMailMessageFormRadioId',
-            iconCls: 'button_menu_ext',
-            icon: '/images/ext/gray/shapes/hourglass.png',
-            handler: function(){
-
-              var rowSelected = processesGrid.getSelectionModel().getSelected();
-
-                if( rowSelected ){
-                  //!dataGrid
-
-                  //historyDynaformGridGlobal construct
-                  historyDynaformGridHistoryGlobal.PRO_UID   = rowSelected.data.PRO_UID;
-                  historyDynaformGridHistoryGlobal.APP_UID   = rowSelected.data.APP_UID;
-                  historyDynaformGridHistoryGlobal.TAS_UID   = rowSelected.data.TAS_UID;
-                  historyDynaformGridHistoryGlobal.DYN_UID   = rowSelected.data.DYN_UID;
-                  historyDynaformGridHistoryGlobal.DYN_TITLE = rowSelected.data.DYN_TITLE;
-
-                  var PRO_UID = historyDynaformGridHistoryGlobal.PRO_UID;
-                  var APP_UID = historyDynaformGridHistoryGlobal.APP_UID;
-                  var TAS_UID = historyDynaformGridHistoryGlobal.TAS_UID;
-                  var DYN_UID = historyDynaformGridHistoryGlobal.DYN_UID;
-                  var DYN_TITLE = historyDynaformGridHistoryGlobal.DYN_TITLE;
-
-                  historyDynaformGridHistory();
-                }
-                else{
-                  Ext.Msg.show({
-                    title:'',
-                    msg: TRANSLATIONS.ID_NO_SELECTION_WARNING,
-                    buttons: Ext.Msg.INFO,
-                    fn: function(){},
-                    animEl: 'elId',
-                    icon: Ext.MessageBox.INFO,
-                    buttons: Ext.MessageBox.OK
-
-                  });
-                }
-
-
-
-            },
-            disabled:false
-          },
-          {
             xtype: 'tbseparator'
           },
           {

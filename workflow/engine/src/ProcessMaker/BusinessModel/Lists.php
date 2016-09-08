@@ -86,7 +86,7 @@ class Lists {
 
         $filters["sort"]     = isset( $dataList["sort"] ) ? $dataList["sort"] : "";
 
-        $filters["dir"]      = isset( $dataList["dir"] ) ? $dataList["dir"] : "DESC";
+        $filters["dir"]      = isset( $dataList["dir"] ) ? $dataList["dir"] : "ASC";
 
 
 
@@ -94,7 +94,9 @@ class Lists {
 
 
 
-        $filters['newestthan'] = isset( $dataList['newestthan'] ) ? $dataList['newestthan'] : '';
+        $filters['newestthan'] = isset( $dataList['newerThan'] ) ? $dataList['newerThan'] : '';
+
+
 
         $filters['oldestthan'] = isset( $dataList['oldestthan'] ) ? $dataList['oldestthan'] : '';
 

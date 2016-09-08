@@ -120,6 +120,7 @@ class Content extends BaseContent
         $c1->add(ContentPeer::CON_CATEGORY, $ConCategory);
         $c1->add(ContentPeer::CON_PARENT, $ConParent);
         $c1->add(ContentPeer::CON_ID, $ConId);
+        $c1->add(ContentPeer::CON_LANG, SYS_LANG);
 
         // update set
         $c2 = new Criteria('workflow');

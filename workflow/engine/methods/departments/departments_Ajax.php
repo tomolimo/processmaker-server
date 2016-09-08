@@ -22,12 +22,6 @@
  * For more information, contact Colosa Inc, 2566 Le Jeune Rd.,
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  */
-
-G::LoadSystem('inputfilter');
-$filter = new InputFilter();
-$_POST = $filter->xssFilterHard($_POST);
-$_REQUEST = $filter->xssFilterHard($_REQUEST);
-
 function LookForChildren ($parent, $level, $aDepUsers)
 {
     G::LoadClass( 'configuration' );
@@ -251,7 +245,7 @@ switch ($_POST['action']) {
 
                 while ($oDataset->next()) {
                     $aRow = $oDataset->getRow();
-                    $managerName = $aRow['USR_USERNAME'] ? " - Department Manager: ".$aRow['USR_USERNAME'] : 'No Manager'; 
+                    $managerName = $aRow['USR_USERNAME'] ? " - Department Manager: ".$aRow['USR_USERNAME'] : 'No Manager';
                 }
             }
 
@@ -282,55 +276,43 @@ switch ($_POST['action']) {
         echo '{success: true}';
         break;
     case 'assignedUsers':
-        $filter = isset( $_POST['textFilter'] ) ? $_POST['textFilter'] : '';
-        $dep_uid = $_REQUEST['dUID'];
-        $oDept = new Department();
-        $oDept->Load( $dep_uid );
-        $manager = $oDept->getDepManager();
-        $oCriteria = new Criteria( 'workflow' );
-        $oCriteria->addSelectColumn( UsersPeer::USR_UID );
-        $oCriteria->addSelectColumn( UsersPeer::USR_USERNAME );
-        $oCriteria->addSelectColumn( UsersPeer::USR_FIRSTNAME );
-        $oCriteria->addSelectColumn( UsersPeer::USR_LASTNAME );
-        $oCriteria->addSelectColumn( UsersPeer::USR_STATUS );
-        $oCriteria->add( UsersPeer::DEP_UID, '' );
-        $oCriteria->add( UsersPeer::USR_STATUS, 'CLOSED', Criteria::NOT_EQUAL );
-        if ($filter != '') {
-            $oCriteria->add( $oCriteria->getNewCriterion( UsersPeer::USR_USERNAME, '%' . $filter . '%', Criteria::LIKE )->addOr( $oCriteria->getNewCriterion( UsersPeer::USR_FIRSTNAME, '%' . $filter . '%', Criteria::LIKE )->addOr( $oCriteria->getNewCriterion( UsersPeer::USR_LASTNAME, '%' . $filter . '%', Criteria::LIKE ) ) ) );
-        }
-        $oCriteria->add( UsersPeer::DEP_UID, $dep_uid );
-        $oDataset = UsersPeer::doSelectRS( $oCriteria );
-        $oDataset->setFetchmode( ResultSet::FETCHMODE_ASSOC );
-        $aUsers = array ();
-        while ($oDataset->next()) {
-            $aUsers[] = $oDataset->getRow();
-            $index = sizeof( $aUsers ) - 1;
-            $aUsers[$index]['USR_SUPERVISOR'] = ($manager == $aUsers[$index]['USR_UID']) ? true : false;
-        }
-        echo '{users:' . G::json_encode( $aUsers ) . '}';
-        break;
     case 'availableUsers':
-        $filter = isset( $_POST['textFilter'] ) ? $_POST['textFilter'] : '';
-        $dep_uid = $_REQUEST['dUID'];
-        $oCriteria = new Criteria( 'workflow' );
-        $oCriteria->addSelectColumn( UsersPeer::USR_UID );
-        $oCriteria->addSelectColumn( UsersPeer::USR_USERNAME );
-        $oCriteria->addSelectColumn( UsersPeer::USR_FIRSTNAME );
-        $oCriteria->addSelectColumn( UsersPeer::USR_LASTNAME );
-        $oCriteria->addSelectColumn( UsersPeer::USR_STATUS );
-        $oCriteria->add( UsersPeer::DEP_UID, '' );
-        $oCriteria->add( UsersPeer::USR_STATUS, 'CLOSED', Criteria::NOT_EQUAL );
+        $response = [];
 
-        if ($filter != '') {
-            $oCriteria->add( $oCriteria->getNewCriterion( UsersPeer::USR_USERNAME, '%' . $filter . '%', Criteria::LIKE )->addOr( $oCriteria->getNewCriterion( UsersPeer::USR_FIRSTNAME, '%' . $filter . '%', Criteria::LIKE )->addOr( $oCriteria->getNewCriterion( UsersPeer::USR_LASTNAME, '%' . $filter . '%', Criteria::LIKE ) ) ) );
+        try {
+            $option = $_POST['option'];
+            $departmentUid = $_POST['departmentUid'];
+
+            $pageSize = $_POST['pageSize'];
+            $filter = $_POST['filter'];
+
+            $sortField = (isset($_POST['sort']) && $_POST['sort'] != 'USR_USERNAME')? $_POST['sort']: '';
+            $sortDir   = (isset($_POST['dir']))? $_POST['dir']: 'ASC';
+            $start = (isset($_POST['start']))? $_POST['start']: 0;
+            $limit = (isset($_POST['limit']))? $_POST['limit']: $pageSize;
+
+            $department = new \ProcessMaker\BusinessModel\Department();
+
+            $result = $department->getUsers(
+                $departmentUid,
+                $option,
+                ['filter' => $filter, 'filterOption' => ''],
+                $sortField,
+                $sortDir,
+                $start,
+                $limit
+            );
+
+            $response['status']  = 'OK';
+            $response['success'] = true;
+            $response['resultTotal'] = $result['total'];
+            $response['resultRoot']  = $result['data'];
+        } catch (Exception $e) {
+            $response['status']  = 'ERROR';
+            $response['message'] = $e->getMessage();
         }
-        $oDataset = UsersPeer::doSelectRS( $oCriteria );
-        $oDataset->setFetchmode( ResultSet::FETCHMODE_ASSOC );
-        $aUsers = array ();
-        while ($oDataset->next()) {
-            $aUsers[] = $oDataset->getRow();
-        }
-        echo '{users:' . G::json_encode( $aUsers ) . '}';
+
+        echo G::json_encode($response);
         break;
     case 'assignDepartmentToUserMultiple':
         $DEP_UID = $_REQUEST['DEP_UID'];

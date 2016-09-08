@@ -398,85 +398,11 @@ class Roles extends BaseRoles {
     }
 
     function getRoleUsers($ROL_UID, $filter='') {
-        try {
-            $criteria = new Criteria();
-            $criteria->addSelectColumn(RolesPeer::ROL_UID);
-            $criteria->addSelectColumn(RolesPeer::ROL_PARENT);
-            $criteria->addSelectColumn(RolesPeer::ROL_SYSTEM);
-            $criteria->addSelectColumn(RolesPeer::ROL_CODE);
-            $criteria->addSelectColumn(RolesPeer::ROL_CREATE_DATE);
-            $criteria->addSelectColumn(RolesPeer::ROL_UPDATE_DATE);
-            $criteria->addSelectColumn(RolesPeer::ROL_STATUS);
-            $criteria->addSelectColumn(RbacUsersPeer::USR_UID);
-            $criteria->addSelectColumn(RbacUsersPeer::USR_USERNAME);
-            $criteria->addSelectColumn(RbacUsersPeer::USR_FIRSTNAME);
-            $criteria->addSelectColumn(RbacUsersPeer::USR_LASTNAME);
-            $criteria->add(RolesPeer::ROL_UID, "", Criteria::NOT_EQUAL);
-            $criteria->add(RolesPeer::ROL_UID, $ROL_UID);
-
-            $criteria->add(RbacUsersPeer::USR_STATUS, 0, Criteria::NOT_EQUAL);
-
-            $criteria->addJoin(RolesPeer::ROL_UID, UsersRolesPeer::ROL_UID);
-            $criteria->addJoin(UsersRolesPeer::USR_UID, RbacUsersPeer::USR_UID);
-
-            if ($filter != ''){
-            	$criteria->add(
-            	  $criteria->getNewCriterion(RbacUsersPeer::USR_USERNAME,'%'.$filter.'%',Criteria::LIKE)->addOr(
-            	  $criteria->getNewCriterion(RbacUsersPeer::USR_FIRSTNAME,'%'.$filter.'%',Criteria::LIKE)->addOr(
-            	  $criteria->getNewCriterion(RbacUsersPeer::USR_LASTNAME,'%'.$filter.'%',Criteria::LIKE)))
-            	);
-            }
-
-            $oDataset = RolesPeer::doSelectRS($criteria);
-            $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-            return $oDataset;
-
-        } catch( exception $e ) {
-            throw $e;
-        }
+        throw new Exception(__METHOD__ . ': The method is deprecated');
     }
 
     function getAllUsers($ROL_UID, $filter='') {
-        try {
-            $c = new Criteria();
-            $c->addSelectColumn(RbacUsersPeer::USR_UID);
-            $c->add(RolesPeer::ROL_UID, $ROL_UID);
-            $c->addJoin(RolesPeer::ROL_UID, UsersRolesPeer::ROL_UID);
-            $c->addJoin(UsersRolesPeer::USR_UID, RbacUsersPeer::USR_UID);
-
-            $result = RolesPeer::doSelectRS($c);
-            $result->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-            $result->next();
-
-            $a = Array();
-            while( $row = $result->getRow() ) {
-                $a[] = $row['USR_UID'];
-                $result->next();
-            }
-
-            $criteria = new Criteria();
-
-            $criteria->addSelectColumn(RbacUsersPeer::USR_UID);
-            $criteria->addSelectColumn(RbacUsersPeer::USR_USERNAME);
-            $criteria->addSelectColumn(RbacUsersPeer::USR_FIRSTNAME);
-            $criteria->addSelectColumn(RbacUsersPeer::USR_LASTNAME);
-            $criteria->add(RbacUsersPeer::USR_STATUS, 1, Criteria::EQUAL);
-            $criteria->add(RbacUsersPeer::USR_UID, $a, Criteria::NOT_IN);
-
-            if ($filter != ''){
-            	$criteria->add(
-            	  $criteria->getNewCriterion(RbacUsersPeer::USR_USERNAME,'%'.$filter.'%',Criteria::LIKE)->addOr(
-            	  $criteria->getNewCriterion(RbacUsersPeer::USR_FIRSTNAME,'%'.$filter.'%',Criteria::LIKE)->addOr(
-            	  $criteria->getNewCriterion(RbacUsersPeer::USR_LASTNAME,'%'.$filter.'%',Criteria::LIKE)))
-            	);
-            }
-
-            $oDataset = RbacUsersPeer::doSelectRS($criteria);
-            $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-            return $oDataset;
-        } catch( exception $e ) {
-            throw $e;
-        }
+        throw new Exception(__METHOD__ . ': The method is deprecated');
     }
 
     function assignUserToRole($aData) {
@@ -545,6 +471,22 @@ class Roles extends BaseRoles {
         G::auditLog("DeleteUserToRole", "Delete user ".$user['USR_USERNAME']." (".$USR_UID.") to Role ".$rol['ROL_NAME']." (".$ROL_UID.") ");
     }
 
+    function getRolePermissionsByPerUid($roleUid){
+        try {
+            $criteria = new Criteria();
+            $criteria->addSelectColumn(RolesPermissionsPeer::ROL_UID);
+            $criteria->addSelectColumn(RolesPermissionsPeer::PER_UID);
+            $criteria->add(RolesPermissionsPeer::PER_UID, $roleUid);
+
+            $oDataset = RolesPeer::doSelectRS($criteria);
+            $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+
+            return $oDataset;
+
+        } catch( exception $e ) {
+            throw $e;
+        }
+    }
     function getRolePermissions($ROL_UID, $filter='', $status=null) {
         try {
             $criteria = new Criteria();

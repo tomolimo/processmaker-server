@@ -77,7 +77,7 @@ class DbSourceMapBuilder
 
         $tMap->addColumn('DBS_USERNAME', 'DbsUsername', 'string', CreoleTypes::VARCHAR, true, 32);
 
-        $tMap->addColumn('DBS_PASSWORD', 'DbsPassword', 'string', CreoleTypes::VARCHAR, false, 32);
+        $tMap->addColumn('DBS_PASSWORD', 'DbsPassword', 'string', CreoleTypes::VARCHAR, false, 256);
 
         $tMap->addColumn('DBS_PORT', 'DbsPort', 'int', CreoleTypes::INTEGER, false, null);
 

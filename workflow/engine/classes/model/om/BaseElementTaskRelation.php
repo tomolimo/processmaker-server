@@ -58,6 +58,12 @@ abstract class BaseElementTaskRelation extends BaseObject implements Persistent
     protected $tas_uid;
 
     /**
+     * The value for the element_uid_dest field.
+     * @var        string
+     */
+    protected $element_uid_dest = '';
+
+    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      * @var        boolean
@@ -124,6 +130,17 @@ abstract class BaseElementTaskRelation extends BaseObject implements Persistent
     {
 
         return $this->tas_uid;
+    }
+
+    /**
+     * Get the [element_uid_dest] column value.
+     * 
+     * @return     string
+     */
+    public function getElementUidDest()
+    {
+
+        return $this->element_uid_dest;
     }
 
     /**
@@ -237,6 +254,28 @@ abstract class BaseElementTaskRelation extends BaseObject implements Persistent
     } // setTasUid()
 
     /**
+     * Set the value of [element_uid_dest] column.
+     * 
+     * @param      string $v new value
+     * @return     void
+     */
+    public function setElementUidDest($v)
+    {
+
+        // Since the native PHP type for this column is string,
+        // we will cast the input to a string (if it is not).
+        if ($v !== null && !is_string($v)) {
+            $v = (string) $v;
+        }
+
+        if ($this->element_uid_dest !== $v || $v === '') {
+            $this->element_uid_dest = $v;
+            $this->modifiedColumns[] = ElementTaskRelationPeer::ELEMENT_UID_DEST;
+        }
+
+    } // setElementUidDest()
+
+    /**
      * Hydrates (populates) the object variables with values from the database resultset.
      *
      * An offset (1-based "start column") is specified so that objects can be hydrated
@@ -263,12 +302,14 @@ abstract class BaseElementTaskRelation extends BaseObject implements Persistent
 
             $this->tas_uid = $rs->getString($startcol + 4);
 
+            $this->element_uid_dest = $rs->getString($startcol + 5);
+
             $this->resetModified();
 
             $this->setNew(false);
 
             // FIXME - using NUM_COLUMNS may be clearer.
-            return $startcol + 5; // 5 = ElementTaskRelationPeer::NUM_COLUMNS - ElementTaskRelationPeer::NUM_LAZY_LOAD_COLUMNS).
+            return $startcol + 6; // 6 = ElementTaskRelationPeer::NUM_COLUMNS - ElementTaskRelationPeer::NUM_LAZY_LOAD_COLUMNS).
 
         } catch (Exception $e) {
             throw new PropelException("Error populating ElementTaskRelation object", $e);
@@ -487,6 +528,9 @@ abstract class BaseElementTaskRelation extends BaseObject implements Persistent
             case 4:
                 return $this->getTasUid();
                 break;
+            case 5:
+                return $this->getElementUidDest();
+                break;
             default:
                 return null;
                 break;
@@ -512,6 +556,7 @@ abstract class BaseElementTaskRelation extends BaseObject implements Persistent
             $keys[2] => $this->getElementUid(),
             $keys[3] => $this->getElementType(),
             $keys[4] => $this->getTasUid(),
+            $keys[5] => $this->getElementUidDest(),
         );
         return $result;
     }
@@ -558,6 +603,9 @@ abstract class BaseElementTaskRelation extends BaseObject implements Persistent
             case 4:
                 $this->setTasUid($value);
                 break;
+            case 5:
+                $this->setElementUidDest($value);
+                break;
         } // switch()
     }
 
@@ -601,6 +649,10 @@ abstract class BaseElementTaskRelation extends BaseObject implements Persistent
             $this->setTasUid($arr[$keys[4]]);
         }
 
+        if (array_key_exists($keys[5], $arr)) {
+            $this->setElementUidDest($arr[$keys[5]]);
+        }
+
     }
 
     /**
@@ -630,6 +682,10 @@ abstract class BaseElementTaskRelation extends BaseObject implements Persistent
 
         if ($this->isColumnModified(ElementTaskRelationPeer::TAS_UID)) {
             $criteria->add(ElementTaskRelationPeer::TAS_UID, $this->tas_uid);
+        }
+
+        if ($this->isColumnModified(ElementTaskRelationPeer::ELEMENT_UID_DEST)) {
+            $criteria->add(ElementTaskRelationPeer::ELEMENT_UID_DEST, $this->element_uid_dest);
         }
 
 
@@ -693,6 +749,8 @@ abstract class BaseElementTaskRelation extends BaseObject implements Persistent
         $copyObj->setElementType($this->element_type);
 
         $copyObj->setTasUid($this->tas_uid);
+
+        $copyObj->setElementUidDest($this->element_uid_dest);
 
 
         $copyObj->setNew(true);

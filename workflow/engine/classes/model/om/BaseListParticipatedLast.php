@@ -130,6 +130,12 @@ abstract class BaseListParticipatedLast extends BaseObject implements Persistent
     protected $del_current_usr_lastname = '';
 
     /**
+     * The value for the del_current_tas_title field.
+     * @var        string
+     */
+    protected $del_current_tas_title = '';
+
+    /**
      * The value for the del_delegate_date field.
      * @var        int
      */
@@ -358,6 +364,17 @@ abstract class BaseListParticipatedLast extends BaseObject implements Persistent
     {
 
         return $this->del_current_usr_lastname;
+    }
+
+    /**
+     * Get the [del_current_tas_title] column value.
+     * 
+     * @return     string
+     */
+    public function getDelCurrentTasTitle()
+    {
+
+        return $this->del_current_tas_title;
     }
 
     /**
@@ -853,6 +870,28 @@ abstract class BaseListParticipatedLast extends BaseObject implements Persistent
     } // setDelCurrentUsrLastname()
 
     /**
+     * Set the value of [del_current_tas_title] column.
+     * 
+     * @param      string $v new value
+     * @return     void
+     */
+    public function setDelCurrentTasTitle($v)
+    {
+
+        // Since the native PHP type for this column is string,
+        // we will cast the input to a string (if it is not).
+        if ($v !== null && !is_string($v)) {
+            $v = (string) $v;
+        }
+
+        if ($this->del_current_tas_title !== $v || $v === '') {
+            $this->del_current_tas_title = $v;
+            $this->modifiedColumns[] = ListParticipatedLastPeer::DEL_CURRENT_TAS_TITLE;
+        }
+
+    } // setDelCurrentTasTitle()
+
+    /**
      * Set the value of [del_delegate_date] column.
      * 
      * @param      int $v new value
@@ -1034,22 +1073,24 @@ abstract class BaseListParticipatedLast extends BaseObject implements Persistent
 
             $this->del_current_usr_lastname = $rs->getString($startcol + 16);
 
-            $this->del_delegate_date = $rs->getTimestamp($startcol + 17, null);
+            $this->del_current_tas_title = $rs->getString($startcol + 17);
 
-            $this->del_init_date = $rs->getTimestamp($startcol + 18, null);
+            $this->del_delegate_date = $rs->getTimestamp($startcol + 18, null);
 
-            $this->del_due_date = $rs->getTimestamp($startcol + 19, null);
+            $this->del_init_date = $rs->getTimestamp($startcol + 19, null);
 
-            $this->del_priority = $rs->getString($startcol + 20);
+            $this->del_due_date = $rs->getTimestamp($startcol + 20, null);
 
-            $this->del_thread_status = $rs->getString($startcol + 21);
+            $this->del_priority = $rs->getString($startcol + 21);
+
+            $this->del_thread_status = $rs->getString($startcol + 22);
 
             $this->resetModified();
 
             $this->setNew(false);
 
             // FIXME - using NUM_COLUMNS may be clearer.
-            return $startcol + 22; // 22 = ListParticipatedLastPeer::NUM_COLUMNS - ListParticipatedLastPeer::NUM_LAZY_LOAD_COLUMNS).
+            return $startcol + 23; // 23 = ListParticipatedLastPeer::NUM_COLUMNS - ListParticipatedLastPeer::NUM_LAZY_LOAD_COLUMNS).
 
         } catch (Exception $e) {
             throw new PropelException("Error populating ListParticipatedLast object", $e);
@@ -1305,18 +1346,21 @@ abstract class BaseListParticipatedLast extends BaseObject implements Persistent
                 return $this->getDelCurrentUsrLastname();
                 break;
             case 17:
-                return $this->getDelDelegateDate();
+                return $this->getDelCurrentTasTitle();
                 break;
             case 18:
-                return $this->getDelInitDate();
+                return $this->getDelDelegateDate();
                 break;
             case 19:
-                return $this->getDelDueDate();
+                return $this->getDelInitDate();
                 break;
             case 20:
-                return $this->getDelPriority();
+                return $this->getDelDueDate();
                 break;
             case 21:
+                return $this->getDelPriority();
+                break;
+            case 22:
                 return $this->getDelThreadStatus();
                 break;
             default:
@@ -1356,11 +1400,12 @@ abstract class BaseListParticipatedLast extends BaseObject implements Persistent
             $keys[14] => $this->getDelCurrentUsrUsername(),
             $keys[15] => $this->getDelCurrentUsrFirstname(),
             $keys[16] => $this->getDelCurrentUsrLastname(),
-            $keys[17] => $this->getDelDelegateDate(),
-            $keys[18] => $this->getDelInitDate(),
-            $keys[19] => $this->getDelDueDate(),
-            $keys[20] => $this->getDelPriority(),
-            $keys[21] => $this->getDelThreadStatus(),
+            $keys[17] => $this->getDelCurrentTasTitle(),
+            $keys[18] => $this->getDelDelegateDate(),
+            $keys[19] => $this->getDelInitDate(),
+            $keys[20] => $this->getDelDueDate(),
+            $keys[21] => $this->getDelPriority(),
+            $keys[22] => $this->getDelThreadStatus(),
         );
         return $result;
     }
@@ -1444,18 +1489,21 @@ abstract class BaseListParticipatedLast extends BaseObject implements Persistent
                 $this->setDelCurrentUsrLastname($value);
                 break;
             case 17:
-                $this->setDelDelegateDate($value);
+                $this->setDelCurrentTasTitle($value);
                 break;
             case 18:
-                $this->setDelInitDate($value);
+                $this->setDelDelegateDate($value);
                 break;
             case 19:
-                $this->setDelDueDate($value);
+                $this->setDelInitDate($value);
                 break;
             case 20:
-                $this->setDelPriority($value);
+                $this->setDelDueDate($value);
                 break;
             case 21:
+                $this->setDelPriority($value);
+                break;
+            case 22:
                 $this->setDelThreadStatus($value);
                 break;
         } // switch()
@@ -1550,23 +1598,27 @@ abstract class BaseListParticipatedLast extends BaseObject implements Persistent
         }
 
         if (array_key_exists($keys[17], $arr)) {
-            $this->setDelDelegateDate($arr[$keys[17]]);
+            $this->setDelCurrentTasTitle($arr[$keys[17]]);
         }
 
         if (array_key_exists($keys[18], $arr)) {
-            $this->setDelInitDate($arr[$keys[18]]);
+            $this->setDelDelegateDate($arr[$keys[18]]);
         }
 
         if (array_key_exists($keys[19], $arr)) {
-            $this->setDelDueDate($arr[$keys[19]]);
+            $this->setDelInitDate($arr[$keys[19]]);
         }
 
         if (array_key_exists($keys[20], $arr)) {
-            $this->setDelPriority($arr[$keys[20]]);
+            $this->setDelDueDate($arr[$keys[20]]);
         }
 
         if (array_key_exists($keys[21], $arr)) {
-            $this->setDelThreadStatus($arr[$keys[21]]);
+            $this->setDelPriority($arr[$keys[21]]);
+        }
+
+        if (array_key_exists($keys[22], $arr)) {
+            $this->setDelThreadStatus($arr[$keys[22]]);
         }
 
     }
@@ -1646,6 +1698,10 @@ abstract class BaseListParticipatedLast extends BaseObject implements Persistent
 
         if ($this->isColumnModified(ListParticipatedLastPeer::DEL_CURRENT_USR_LASTNAME)) {
             $criteria->add(ListParticipatedLastPeer::DEL_CURRENT_USR_LASTNAME, $this->del_current_usr_lastname);
+        }
+
+        if ($this->isColumnModified(ListParticipatedLastPeer::DEL_CURRENT_TAS_TITLE)) {
+            $criteria->add(ListParticipatedLastPeer::DEL_CURRENT_TAS_TITLE, $this->del_current_tas_title);
         }
 
         if ($this->isColumnModified(ListParticipatedLastPeer::DEL_DELEGATE_DATE)) {
@@ -1766,6 +1822,8 @@ abstract class BaseListParticipatedLast extends BaseObject implements Persistent
         $copyObj->setDelCurrentUsrFirstname($this->del_current_usr_firstname);
 
         $copyObj->setDelCurrentUsrLastname($this->del_current_usr_lastname);
+
+        $copyObj->setDelCurrentTasTitle($this->del_current_tas_title);
 
         $copyObj->setDelDelegateDate($this->del_delegate_date);
 

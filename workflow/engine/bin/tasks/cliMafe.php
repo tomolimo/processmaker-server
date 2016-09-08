@@ -62,7 +62,7 @@ function run_create_translation($args, $opts)
             echo "Updating labels for workspace " . pakeColor::colorize($workspace->name, "INFO") . "\n";
             $translation->generateTransaltionMafe($lang);
         } catch (Exception $e) {
-            echo "Errors upgrading labels for workspace " . CLI::info($workspace->name) . ": " . CLI::error($e->getMessage()) . "\n";
+            echo "Errors upgrading labels for workspace " . CLI::info($workspace->name) . ": " . CLI::error(G::getErrorMessage($e)) . "\n";
         }
     }
 

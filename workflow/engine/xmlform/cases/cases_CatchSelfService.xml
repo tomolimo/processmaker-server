@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm enabletemplate="1" name="cases_Resume" type="xmlform" width="500px" labelWidth="100px">
+  <isIE type="hidden" />
   <TITLE1 type="title">
     <en><![CDATA[Claim Case]]></en>
   </TITLE1>
@@ -39,4 +40,20 @@
   <BTN_CANCEL type="button" onclick="javascript:history.back()">
     <en><![CDATA[Cancel]]></en>
   </BTN_CANCEL>
+  <JS type="javascript"> <![CDATA[
+    var dynaformOnload = function() {
+        if(getField("isIE").value == "true") {
+            getField("BTN_CANCEL").setAttribute("onclick","");
+            getField("BTN_CANCEL").onclick = function(){;
+                try {
+                    if(top.opener) {
+                        top.opener.location.reload();
+                        top.close();
+                    }
+                } catch(e) {
+                }
+            };
+        }
+    };
+  ]]></JS>
 </dynaForm>

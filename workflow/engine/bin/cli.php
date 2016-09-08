@@ -96,7 +96,7 @@ $app->setRootDir($rootDir);
 $app->loadEnvironment();
 
 require PATH_THIRDPARTY . "pake" . PATH_SEP . "pakeFunction.php";
-require PATH_THIRDPARTY . "pake" . PATH_SEP . "pakeGetopt.class.php";
+require_once PATH_THIRDPARTY . "pake" . PATH_SEP . "pakeGetopt.class.php";
 
 G::LoadClass("cli");
 

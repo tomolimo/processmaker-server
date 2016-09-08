@@ -4,6 +4,26 @@ namespace ProcessMaker\BusinessModel\Cases;
 class OutputDocument
 {
     /**
+     * Verify exists app_doc_uid in table APP_DOCUMENT when is output
+     *
+     * @param string $applicationUid
+     *
+     * return void Throw exception output not exists
+     */
+    private function throwExceptionIfNotExistsAppDocument($appDocumentUid)
+    {
+        try {
+            $appDocument = \AppDocumentPeer::retrieveByPK($appDocumentUid, 1);
+
+            if (is_null($appDocument)) {
+                throw new \Exception(\G::LoadTranslation("ID_CASES_OUTPUT_DOES_NOT_EXIST", array($appDocumentUid)));
+            }
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
+
+    /**
      * Check if the user has permissions
      *
      * @param string $applicationUid Unique id of Case
@@ -25,6 +45,9 @@ class OutputDocument
             if (empty($arrayResult) || !preg_match("/^(?:TO_DO|DRAFT)$/", $arrayResult["APP_STATUS"])) {
                 $flagInbox = 0;
             }
+
+            //Verfiry exists $appDocumentUid
+            $this->throwExceptionIfNotExistsAppDocument($appDocumentUid);
 
             //Verify data permission
             $flagPermission = 0;
@@ -197,7 +220,7 @@ class OutputDocument
                     $docrow['app_doc_create_user'] = $row['CREATED_BY'];
                     $docrow['app_doc_type'] = $row['TYPE'];
                     $docrow['app_doc_index'] = $row['APP_DOC_INDEX'];
-                    $docrow['app_doc_link'] = 'cases/' . $row['DOWNLOAD_LINK'];
+                    $docrow['app_doc_link'] = $row['DOWNLOAD_LINK'];
                     $result[] = $docrow;
                 }
             }
@@ -241,7 +264,7 @@ class OutputDocument
                     $docrow['app_doc_create_user'] = $row['CREATED_BY'];
                     $docrow['app_doc_type'] = $row['TYPE'];
                     $docrow['app_doc_index'] = $row['APP_DOC_INDEX'];
-                    $docrow['app_doc_link'] = 'cases/' . $row['DOWNLOAD_LINK'];
+                    $docrow['app_doc_link'] = $row['DOWNLOAD_LINK'];
                     if ($docrow['app_doc_uid'] == $applicationDocumentUid) {
                         $oAppDocument = \AppDocumentPeer::retrieveByPK( $applicationDocumentUid, $row['DOC_VERSION'] );
                         if (is_null( $oAppDocument )) {
@@ -380,6 +403,7 @@ class OutputDocument
                 $aProperties['report_generator'] = $aOD['OUT_DOC_REPORT_GENERATOR'];
             }
             $this->generate( $outputID, $Fields['APP_DATA'], $pathOutput, $sFilename, $aOD['OUT_DOC_TEMPLATE'], (boolean) $aOD['OUT_DOC_LANDSCAPE'], $aOD['OUT_DOC_GENERATE'], $aProperties , $applicationUid);
+
             //Plugin Hook PM_UPLOAD_DOCUMENT for upload document
             //G::LoadClass('plugin');
             $oPluginRegistry = & \PMPluginRegistry::getSingleton();

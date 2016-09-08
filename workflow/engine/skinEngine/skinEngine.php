@@ -276,6 +276,7 @@ class SkinEngine
     	if(preg_match("/^.*\(.*MSIE (\d+)\..+\).*$/", $_SERVER["HTTP_USER_AGENT"], $arrayMatch) || preg_match("/^.*\(.*rv.(\d+)\..+\).*$/", $_SERVER["HTTP_USER_AGENT"], $arrayMatch)){
     		$ie = intval($arrayMatch[1]);
     	}
+        $isIE = Bootstrap::isIE();
 
         $swTrident = (preg_match("/^.*Trident.*$/", $_SERVER["HTTP_USER_AGENT"]))? 1 : 0; //Trident only in IE8+
 
@@ -293,6 +294,12 @@ class SkinEngine
 
             $doctype = null;
             $meta    = "<meta http-equiv=\"X-UA-Compatible\" content=\"IE=$ie\" />";
+
+            if (SYS_COLLECTION == 'cases') {
+                if($isIE) {
+                    $meta = "<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\" />";
+                }
+            }
         }
     }
 
@@ -378,7 +385,7 @@ class SkinEngine
         $freeOfChargeText = "";
         if (! defined('SKIP_FREE_OF_CHARGE_TEXT'))
         $freeOfChargeText = "Supplied free of charge with no support, certification, warranty, <br>maintenance nor indemnity by Processmaker and its Certified Partners.";
-        if(file_exists(PATH_CLASSES."class.pmLicenseManager.php")) $freeOfChargeText="";  
+        if(file_exists(PATH_CLASSES."class.pmLicenseManager.php")) $freeOfChargeText="";
 
         $fileFooter = PATH_SKINS . SYS_SKIN . PATH_SEP . 'footer.html';
         if (file_exists($fileFooter)) {
@@ -427,11 +434,6 @@ class SkinEngine
         G::LoadClass( "configuration" );
         $conf = new Configurations();
         $conf->getFormats();
-        if (defined('SYS_SYS')) {
-            $smarty->assign('udate', $conf->getSystemDate(date('Y-m-d H:i:s')));
-        } else {
-            $smarty->assign('udate', G::getformatedDate(date('Y-m-d'), 'M d, yyyy', SYS_LANG));
-        }
         $name = $conf->userNameFormat(isset($_SESSION['USR_USERNAME']) ? $_SESSION['USR_USERNAME']: '', isset($_SESSION['USR_FULLNAME']) ? htmlentities($_SESSION['USR_FULLNAME'] , ENT_QUOTES, 'UTF-8'): '', isset($_SESSION['USER_LOGGED']) ? $_SESSION['USER_LOGGED'] : '');
         $smarty->assign('user',$name);
       }
@@ -699,7 +701,7 @@ class SkinEngine
         $freeOfChargeText = "";
         if (! defined('SKIP_FREE_OF_CHARGE_TEXT'))
         $freeOfChargeText = "Supplied free of charge with no support, certification, warranty, maintenance nor indemnity by ProcessMaker and its Certified Partners.";
-        if(file_exists(PATH_CLASSES."class.pmLicenseManager.php")) $freeOfChargeText="";        
+        if(file_exists(PATH_CLASSES."class.pmLicenseManager.php")) $freeOfChargeText="";
 
         $fileFooter = PATH_SKINS . SYS_SKIN . PATH_SEP . 'footer.html';
         if (file_exists($fileFooter)) {
@@ -751,12 +753,7 @@ class SkinEngine
         G::LoadClass( "configuration" );
         $conf = new Configurations();
         $conf->getFormats();
-        if ( defined('SYS_SYS')) {
-            $smarty->assign('udate', $conf->getSystemDate(date('Y-m-d H:i:s')));
-        } else {
-            $smarty->assign('udate', G::getformatedDate(date('Y-m-d H:i:s'), 'M d, yyyy', SYS_LANG));
-        }
-        $name = $conf->userNameFormat(isset($_SESSION['USR_USERNAME']) ? $_SESSION['USR_USERNAME']: '', isset($_SESSION['USR_FULLNAME']) ? htmlentities($_SESSION['USR_FULLNAME'] , ENT_QUOTES, 'UTF-8'): '', isset($_SESSION['USER_LOGGED']) ? $_SESSION['USER_LOGGED'] : '');            
+        $name = $conf->userNameFormat(isset($_SESSION['USR_USERNAME']) ? $_SESSION['USR_USERNAME']: '', isset($_SESSION['USR_FULLNAME']) ? htmlentities($_SESSION['USR_FULLNAME'] , ENT_QUOTES, 'UTF-8'): '', isset($_SESSION['USER_LOGGED']) ? $_SESSION['USER_LOGGED'] : '');
         $smarty->assign('user',$name);
       }
 

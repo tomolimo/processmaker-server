@@ -247,32 +247,27 @@ Ext.onReady(function(){
     chkSelModel = new Ext.grid.CheckboxSelectionModel({
       listeners:{
         selectionchange: function(sm){
-          if (sm.last !== false) {
-            var count_rows = sm.getCount();
-            //var isReport = sm.getSelected().get('PRO_UID') != '';
-
-            currentSelectedRow = sm.last;
-            switch(count_rows){
-              case 0:
-                editButton.disable();
-                deleteButton.disable();
-                exportButton.disable();
-                dataButton.disable();
-                break;
-              case 1:
-                editButton.enable();
-                deleteButton.enable();
-                exportButton.enable();
-                dataButton.enable();
-                break;
-              default:
-                editButton.disable();
-                deleteButton.enable();
-                exportButton.enable();
-                dataButton.disable();
-                break;
-            }
-
+          var count_rows = sm.getCount();
+          currentSelectedRow = sm.last;
+          switch(count_rows){
+            case 0:
+              editButton.disable();
+              deleteButton.disable();
+              exportButton.disable();
+              dataButton.disable();
+              break;
+            case 1:
+              editButton.enable();
+              deleteButton.enable();
+              exportButton.enable();
+              dataButton.enable();
+              break;
+            default:
+              editButton.disable();
+              deleteButton.enable();
+              exportButton.enable();
+              dataButton.disable();
+              break;
           }
         }
       }
@@ -520,6 +515,9 @@ DeletePMTable = function() {
 //Load Import PM Table Form
 ImportPMTable = function(){
 
+  var aOverwrite, 
+      aRelated, 
+      aMessage;
   var w = new Ext.Window({
     id: 'windowPmTableUploaderImport',
     title: '',
@@ -556,15 +554,13 @@ ImportPMTable = function(){
                 iconCls: 'upload-icon'
             }
         }, {
-          id: 'importPMTableOverwrite',
-          xtype: 'checkbox',
-          fieldLabel: '',
-          boxLabel: _('ID_OVERWRITE_EXIST'), // 'Overwrite if exists?',
-          name: 'form[OVERWRITE]'
-        }, {
             xtype: 'hidden',
             name: 'form[TYPE_TABLE]',
             value: (PRO_UID? 'designer' : 'admin')
+        }, {
+            xtype: 'hidden',
+            name: 'form[PRO_UID]',
+            value: (PRO_UID)
         }],
         buttons: [{
             id: 'importPMTableButtonUpload',
@@ -581,7 +577,7 @@ ImportPMTable = function(){
                     var result = Ext.util.JSON.decode(resp.response.responseText);
 
                     if (result.success) {
-                      PMExt.notify(_('ID_IMPORT_RESULT'), result.message);
+                      PMExt.notify('', result.message);
                     }
                     else {
                       win = new Ext.Window({
@@ -614,219 +610,34 @@ ImportPMTable = function(){
 
                     var result = Ext.util.JSON.decode(resp.response.responseText);
                     if (result.errorType == 'warning') {
-                      PMExt.warning(_('ID_WARNING'), result.message.replace(/\n/g,' <br>'));
-                    }
-                    else {
+                      Ext.MessageBox.show({
+                          title: _('ID_WARNING_PMTABLES'),
+                          width: 510,
+                          height: 300,
+                          msg: "<div style=\"overflow: auto; width: 439px; height: 200px;\">" + result.message.replace(/\n/g,' <br>') + "</div>",
+                          buttons: Ext.MessageBox.OK,
+                          animEl: 'mb9',
+                          fn: function(){},
+                          icon: Ext.MessageBox.INFO
+                        });
+                    } else {
                       if(result.fromAdmin) { /* from admin tab */
-                        if(result.validationType == 1) {
-                          Ext.MessageBox.confirm('Confirmation', result.message.replace(/\n/g,' <br>'), function(btn, text){
-                            if (btn == 'yes'){
-                              Ext.Ajax.request({
-                                url: 'pmTablesProxy/import',
-                                params: {
-                                  'form[FROM_CONFIRM]':'overWrite',
-                                  'form[TYPE_TABLE]':(PRO_UID? 'designer' : 'admin'),
-                                  'form[OVERWRITE]':true
-                                },
-                                success: function(resp){
-                                  var result = Ext.util.JSON.decode(resp.responseText);
-                                  if (result.success) {
-                                    PMExt.notify(_('ID_IMPORT_RESULT'), result.message);
-                                    Ext.getCmp('infoGrid').getStore().reload();
-                                  } else {
-                                    if(result.validationType == 2) {
-                                      PMExt.error(_('ID_ERROR'), result.message.replace(/\n/g,' <br>'));
-                                    }
-                                  }
-                                },
-                                failure: function(obj, resp){
-                                  var result = Ext.util.JSON.decode(resp.responseText);  
-                                  if(result.validationType == 2) {
-                                     PMExt.error(_('ID_ERROR'), result.message.replace(/\n/g,' <br>'));
-                                  }
-                                }
-                              });
-                            } else {
-                              Ext.Ajax.request({
-                                url: 'pmTablesProxy/import',
-                                params: {
-                                  'form[FROM_CONFIRM]':'clear',
-                                  'form[TYPE_TABLE]':(PRO_UID? 'designer' : 'admin')
-                                },
-                                success: function(resp) {
-                                  var result = Ext.util.JSON.decode(resp.responseText);
-                                  PMExt.notify(_('ID_IMPORT_RESULT'), result.message);
-                                  Ext.getCmp('infoGrid').getStore().reload();
-                                }  
-                              });
-                            }
-                            Ext.getCmp('infoGrid').getStore().reload();
-                          });
-                          return false;
-                        } else {
-                          PMExt.error(_('ID_ERROR'), result.message.replace(/\n/g,' <br>'));  
-                        }
+                        aOverwrite = result.arrayOverwrite;
+                        aRelated = result.arrayRelated;
+                        aMessage = result.arrayMessage;
+                        pmtablesErrors(aOverwrite,aRelated,aMessage);
                       } else { /* from designer tab */
-                        if(result.validationType == 1) {
-                          Ext.MessageBox.confirm('Confirmation', result.message.replace(/\n/g,' <br>'), function(btn, text){
-                            if (btn == 'yes'){
-                              Ext.Ajax.request({
-                                url: 'pmTablesProxy/import',
-                                params: {
-                                  'form[FROM_CONFIRM]':'2',
-                                  'form[TYPE_TABLE]':(PRO_UID? 'designer' : 'admin'),
-                                  'form[OVERWRITE]':true
-                                },
-                                success: function(resp){
-                                  var result = Ext.util.JSON.decode(resp.responseText);
-                                  if (result.success) {
-                                    PMExt.notify(_('ID_IMPORT_RESULT'), result.message);
-                                    Ext.getCmp('infoGrid').getStore().reload();
-                                  } else {
-                                    if(result.validationType == 2) {
-                                      Ext.MessageBox.confirm('Confirmation', result.message.replace(/\n/g,' <br>'), function(btn, text){
-                                        if (btn == 'yes'){
-                                          Ext.Ajax.request({
-                                            url: 'pmTablesProxy/import',
-                                            params: {
-                                              'form[FROM_CONFIRM]':'overWrite',
-                                              'form[TYPE_TABLE]':(PRO_UID? 'designer' : 'admin'),
-                                              'form[OVERWRITE]':true
-                                            },
-                                            success: function(resp){
-                                              var result = Ext.util.JSON.decode(resp.responseText);
-                                              if (result.success) {
-                                                PMExt.notify(_('ID_IMPORT_RESULT'), result.message);
-                                                Ext.getCmp('infoGrid').getStore().reload();
-                                              } else {
-                                                PMExt.error(_('ID_ERROR'), result.message.replace(/\n/g,' <br>'));
-                                              }
-                                            },
-                                            failure: function(obj, resp){
-                                              PMExt.error(_('ID_ERROR'), result.message.replace(/\n/g,' <br>'));
-                                            }
-                                          });
-                                          Ext.getCmp('infoGrid').getStore().reload();
-                                        }
-                                      });
-                                      return false;
-                                    }
-                                    else {
-                                      PMExt.error(_('ID_ERROR'), result.message.replace(/\n/g,' <br>'));
-                                    }
-                                  }
-                                },
-                                failure: function(obj, resp){
-                                  var result = Ext.util.JSON.decode(resp.responseText);  
-                                  if(result.validationType == 2) {
-                                     PMExt.error(_('ID_ERROR'), result.message.replace(/\n/g,' <br>'));
-                                  }
-                                }
-                              });
-                              Ext.getCmp('infoGrid').getStore().reload();
-                            } else {
-                              Ext.Ajax.request({
-                                url: 'pmTablesProxy/import',
-                                params: {
-                                  'form[FROM_CONFIRM]':'2',
-                                  'form[TYPE_TABLE]':(PRO_UID? 'designer' : 'admin'),
-                                  'form[PRO_UID_HELP]':PRO_UID
-                                },
-                                success: function(resp) {
-                                  var result = Ext.util.JSON.decode(resp.responseText);
-                                  if(result.validationType == 2) {
-                                      /*add code if related process*/
-                                    Ext.MessageBox.confirm('Confirmation', result.message.replace(/\n/g,' <br>'), function(btn, text){
-                                        if (btn == 'yes'){
-                                          Ext.Ajax.request({
-                                            url: 'pmTablesProxy/import',
-                                            params: {
-                                              'form[FROM_CONFIRM]':'overWrite',
-                                              'form[TYPE_TABLE]':(PRO_UID? 'designer' : 'admin'),
-                                              'form[PRO_UID_HELP]':PRO_UID
-                                            },
-                                            success: function(resp){
-                                              var result = Ext.util.JSON.decode(resp.responseText);
-                                              if (result.success) {
-                                                PMExt.notify(_('ID_IMPORT_RESULT'), result.message);
-                                                Ext.getCmp('infoGrid').getStore().reload();
-                                              } else {
-                                                PMExt.error(_('ID_ERROR'), result.message.replace(/\n/g,' <br>'));
-                                              }
-                                            },
-                                            failure: function(obj, resp){
-                                              PMExt.error(_('ID_ERROR'), result.message.replace(/\n/g,' <br>'));
-                                            }
-                                          });
-                                          Ext.getCmp('infoGrid').getStore().reload();
-                                        }
-                                      });
-                                      return false;
-                                  } else {
-                                    var result = Ext.util.JSON.decode(resp.responseText);
-                                    if (result.success) {
-                                      PMExt.notify(_('ID_IMPORT_RESULT'), result.message);
-                                      Ext.getCmp('infoGrid').getStore().reload();
-                                    } else {
-                                      PMExt.error(_('ID_ERROR'), result.message.replace(/\n/g,' <br>'));
-                                    }
-                                  }
-                                  //PMExt.notify(_('ID_IMPORT_RESULT'), result.message);
-                                },
-                                failure: function(obj, resp){
-                                  var result = Ext.util.JSON.decode(resp.responseText);  
-                                  PMExt.error(_('ID_ERROR'), result.message.replace(/\n/g,' <br>'));
-                                }  
-                              });
-                            }
-                            Ext.getCmp('infoGrid').getStore().reload();
-                          });   
-                          return false; 
-                        }
-                        if(result.validationType == 2) {
-                          Ext.MessageBox.confirm('Confirmation', result.message.replace(/\n/g,' <br>'), function(btn, text){
-                            if (btn == 'yes'){
-                              Ext.Ajax.request({
-                                url: 'pmTablesProxy/import',
-                                params: {
-                                  'form[FROM_CONFIRM]':'overWrite',
-                                  'form[TYPE_TABLE]':(PRO_UID? 'designer' : 'admin'),
-                                  'form[OVERWRITE]':true,
-                                  'form[PRO_UID_HELP]':PRO_UID
-                                },
-                                success: function(resp){
-                                  var result = Ext.util.JSON.decode(resp.responseText);
-                                  if (result.success) {
-                                    PMExt.notify(_('ID_IMPORT_RESULT'), result.message);
-                                    Ext.getCmp('infoGrid').getStore().reload();
-                                  } else {
-                                    PMExt.error(_('ID_ERROR'), result.message.replace(/\n/g,' <br>'));
-                                  }
-                                },
-                                failure: function(obj, resp){
-                                  PMExt.error(_('ID_ERROR'), result.message.replace(/\n/g,' <br>'));
-                                }
-                              });
-                              Ext.getCmp('infoGrid').getStore().reload();
-                            }
-                          });  
-                          return false;
-                        } else {
-                          PMExt.error(_('ID_ERROR'), result.message.replace(/\n/g,' <br>'));  
-                        } 
+                        aOverwrite = result.arrayOverwrite;
+                        aRelated = result.arrayRelated;
+                        aMessage = result.arrayMessage;
+                        pmtablesErrors(aOverwrite,aRelated,aMessage);
                       }  
                     }
                   }
                 });
               }
             }
-        }/*,{
-            text: 'Reset',
-            handler: function(){
-              uploader = Ext.getCmp('uploader');
-              uploader.getForm().reset();
-            }
-        }*/,{
+        },{
             id: 'importPMTableButtonCancel',
             text: TRANSLATIONS.ID_CANCEL,
             handler: function(){
@@ -960,3 +771,167 @@ function updateTagPermissions(){
     var top = (Ext.getBody().getViewSize().height/3);
     var targetWin = window.open (pageURL, title, 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width='+w+', height='+h+', top='+top+', left='+left);
   }
+
+function pmtablesErrors(aOverwrite,aRelated,aMessage){
+  var jsonDataArray = [],
+      i,
+      fieldMessage,
+      fieldRadio2Options,
+      fieldRadio3Options,
+      win,
+      tablesOfNo,
+      tablesOfYes,
+      tablesOfNew,
+      valueSelected,
+      nameId,
+      number;
+  //Show the error message ERROR_PROCESS_NOT_EXIST or ERROR_NO_REPORT_TABLE
+  for (i = 0; i < aMessage.length; i++){
+    fieldMessage =  {
+                  xtype      : 'fieldset',
+                  title      : aMessage[i]['ERROR_MESS'],
+                  id         : aMessage[i]['NAME_TABLE'],
+                  autoHeight : true
+    };
+    jsonDataArray.push(fieldMessage);
+  }
+  //Check the ERROR_OVERWRITE_RELATED_PROCESS
+  for (i = 0; i < aRelated.length; i++){
+    fieldRadio2Options =  {
+                            xtype      : 'fieldset',
+                            title      : aRelated[i]['ERROR_MESS'],
+                            id         : aRelated[i]['NAME_TABLE'],
+                            autoHeight : true,
+                            defaultType: 'radio', // each item will be a radio button
+                            items: [{
+                              checked    : true,
+                              boxLabel   : _('ID_RADIO_RELATED_PROCESS'),
+                              name       : aRelated[i]['NAME_TABLE'],
+                              inputValue : 'related'
+                            }, {
+                              boxLabel   : _('ID_RADIO_NOT_IMPORTED_RPT'),
+                              name       : aRelated[i]['NAME_TABLE'],
+                              inputValue : 'no'
+                            }]
+    };
+    jsonDataArray.push(fieldRadio2Options);
+  }
+  // check the ERROR_PM_TABLES_OVERWRITE or ERROR_RP_TABLES_OVERWRITE
+  for (i = 0; i < aOverwrite.length; i++){
+    fieldRadio3Options =  {
+                            xtype       : 'fieldset',
+                            title       : aOverwrite[i]['ERROR_MESS'],
+                            id          : aOverwrite[i]['NAME_TABLE'],
+                            autoHeight  : true,
+                            defaultType : 'radio', // each item will be a radio button
+                            items: [{
+                              boxLabel   : _('ID_RADIO_CREATE_NEW'),
+                              name       : aOverwrite[i]['NAME_TABLE'],
+                              inputValue : 'new'
+                            }, {
+                              boxLabel   : _('ID_RADIO_OVERWRITE'),
+                              name       : aOverwrite[i]['NAME_TABLE'],
+                              inputValue : 'overwrite'
+                            }, {
+                              checked    : true,
+                              boxLabel   : _('ID_RADIO_NOT_IMPORTED'),
+                              name       : aOverwrite[i]['NAME_TABLE'],
+                              inputValue : 'no'
+                            }]
+    };
+    jsonDataArray.push(fieldRadio3Options);
+  }
+
+  number = Math.floor((Math.random() * 100) + 1);
+  win = new Ext.Window({
+    id         : 'winPmtableRptableErrors'+number,
+    layout     : 'fit',
+    width      : 700,
+    height     : 400,
+    title      : _('ID_WARNING_PMTABLES'),
+    modal      : true,
+    maximizable: true,
+    constrain  : true,
+    plain      : true,
+    autoScroll : true,
+    items      : jsonDataArray,
+    buttons    : [{
+                    text   : _('ID_CONTINUE'),
+                    handler: function(){
+                      tablesOfNo  = '';
+                      tablesOfYes = '';
+                      tablesOfNew = '';
+                      for (i = 0; i < aMessage.length; i++){
+                          nameId = aMessage[i]['NAME_TABLE'];
+                          tablesOfNo = tablesOfNo.concat('|',nameId);
+                      }
+                      for (i = 0; i < aRelated.length; i++){
+                        nameId = aRelated[i]['NAME_TABLE'];
+                        valueSelected = Ext.getCmp(nameId).items.get(0).getGroupValue();
+                        switch(valueSelected) {
+                          case 'related':
+                            tablesOfYes = tablesOfYes.concat('|',nameId);
+                            break;
+                          case 'no':
+                            tablesOfNo = tablesOfNo.concat('|',nameId);
+                            break;
+                        }
+                      }
+                      for (i = 0; i < aOverwrite.length; i++){
+                        nameId = aOverwrite[i]['NAME_TABLE'];
+                        valueSelected = Ext.getCmp(nameId).items.get(0).getGroupValue();
+                        switch(valueSelected) {
+                          case 'new':
+                            tablesOfNew = tablesOfNew.concat('|',nameId);
+                            break;
+                          case 'overwrite':
+                            tablesOfYes = tablesOfYes.concat('|',nameId);
+                            break;
+                          case 'no':
+                            tablesOfNo = tablesOfNo.concat('|',nameId);
+                            break;
+                        }
+                      }
+                      win.close();
+                      Ext.Ajax.request({
+                                        url: 'pmTablesProxy/import',
+                                        params: {
+                                          'form[FROM_CONFIRM]':'yes',
+                                          'form[TYPE_TABLE]':(PRO_UID? 'designer' : 'admin'),
+                                          'form[OVERWRITE]':true,
+                                          'form[TABLES_OF_NO]':tablesOfNo,
+                                          'form[TABLES_OF_YES]':tablesOfYes,
+                                          'form[TABLES_OF_NEW]':tablesOfNew
+                                        },
+                                        success: function(resp){
+                                          var result = Ext.util.JSON.decode(resp.responseText);
+                                          if (result.success) {
+                                            PMExt.notify('', result.message);
+                                            Ext.getCmp('infoGrid').getStore().reload();
+                                          }
+                                        },
+                                        failure: function(obj, resp){
+                                          var result = Ext.util.JSON.decode(resp.responseText);
+                                          Ext.getCmp('infoGrid').getStore().reload();
+                                        }
+                      });
+                    }
+                  },{
+                      text: _('ID_CANCEL'),
+                      handler: function(){
+                        win.close();
+                    }
+    }]
+  });
+  win.show();
+
+  for (i = 0; i < aMessage.length; i++){
+    Ext.get(aMessage[i]['NAME_TABLE']).setStyle({border: '0', marginTop:'0'} );
+  }
+  for (i = 0; i < aRelated.length; i++){
+    Ext.get(aRelated[i]['NAME_TABLE']).setStyle({border: '0', marginTop:'0'} );
+  }
+  for (i = 0; i < aOverwrite.length; i++){
+    Ext.get(aOverwrite[i]['NAME_TABLE']).setStyle({border: '0', marginTop:'0'} );
+  }
+}

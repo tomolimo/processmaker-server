@@ -63,6 +63,11 @@ $oHeadPublisher->addContent( 'departments/departmentUsers' ); //adding a html fi
 G::LoadClass( 'configuration' );
 $c = new Configurations();
 
+$arrayConfigPage = $c->getConfiguration('departmentUsersList', 'pageSize', null, $_SESSION['USER_LOGGED']);
+
+$arrayConfig = [];
+$arrayConfig['pageSize'] = (isset($arrayConfigPage['pageSize']))? $arrayConfigPage['pageSize'] : 20;
+
 $dep = new Department();
 $dep->Load( $_GET['dUID'] );
 
@@ -73,6 +78,7 @@ $depart['DEP_MANAGER'] = $dep->getDepManager();
 
 $oHeadPublisher->assign( 'DEPARTMENT', $depart );
 $oHeadPublisher->assign( 'FORMATS', $c->getFormats() );
+$oHeadPublisher->assign('CONFIG', $arrayConfig);
 
 G::RenderPage( 'publish', 'extJs' );
 

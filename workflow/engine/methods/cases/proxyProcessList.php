@@ -44,6 +44,37 @@ try {
     if (isset( $start )) {
         $Criteria->setOffset( $start );
     }
+    
+
+    // The $sort field is arbitrary
+    // This can result in ORDER BY 
+    // SQL injection 
+    
+    // This ensures that ORDER BY will ONLY 
+    // use a known good sort field.
+    // There is a matching list on the javascript side at
+    // workflow/engine/templates/processes/main.js
+
+    $allowedSortField = array( 
+        "PRO_TITLE",
+        "PROJECT_TYPE",
+        "PRO_CATEGORY_LABEL",
+        "PRO_STATUS_LABEL",
+        "PRO_CREATE_USER_LABEL",
+        "PRO_CREATE_DATE",
+        "CASES_COUNT_TO_DO",
+        "CASES_COUNT_DRAFT",
+        "CASES_COUNT_COMPLETED",
+        "CASES_COUNT_CANCELLED",
+        "CASES_COUNT",
+        "PRO_DEBUG_LABEL",
+        "PRO_TYPE_PROCESS",
+        "PRO_UPDATE_DATE",
+    );
+    
+    if(!in_array($sort, $allowedSortField)) { 
+        $sort = '';
+    }
 
     if ($sort != '') {
         if ($dir == 'DESC') {

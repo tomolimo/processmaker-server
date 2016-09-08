@@ -96,9 +96,8 @@ class HTMLPurifier_DefinitionCache_Serializer extends HTMLPurifier_DefinitionCac
         
         G::LoadSystem('inputfilter');
         $filter = new InputFilter();
-        $file = $filter->validateInput($file,'path');
-        
-        return unlink($file);
+
+        return unlink($filter->validateInput($file,'path'));
     }
 
     /**
@@ -198,19 +197,17 @@ class HTMLPurifier_DefinitionCache_Serializer extends HTMLPurifier_DefinitionCac
     private function _write($file, $data, $config)
     {
         if (!class_exists('G')) {
-            $realdocuroot = str_replace( '\\', '/', $_SERVER['DOCUMENT_ROOT'] );
-            $docuroot = explode( '/', $realdocuroot );
-            array_pop( $docuroot );
-            $pathhome = implode( '/', $docuroot ) . '/';
-            array_pop( $docuroot );
-            $pathTrunk = implode( '/', $docuroot ) . '/';
-            require_once($pathTrunk.'gulliver/system/class.g.php');
+            $realdocuroot = str_replace('\\', '/', $_SERVER['DOCUMENT_ROOT']);
+            $docuroot = explode('/', $realdocuroot);
+            array_pop($docuroot);
+            $pathhome = implode('/', $docuroot) . '/';
+            array_pop($docuroot);
+            $pathTrunk = implode('/', $docuroot) . '/';
+            require_once($pathTrunk . 'gulliver/system/class.g.php');
         }
-        
         G::LoadSystem('inputfilter');
         $filter = new InputFilter();
-        $file = $filter->validateInput($file,'path');
-        
+
         if(is_file($file)) {
             $result = file_put_contents($file, $data);
         } else {
@@ -223,7 +220,7 @@ class HTMLPurifier_DefinitionCache_Serializer extends HTMLPurifier_DefinitionCac
                 $chmod = 0644; // invalid config or simpletest
             }
             $chmod = $chmod & 0666;
-            chmod($file, $chmod);
+            chmod($filter->validateInput($file, 'path'), $chmod);
         }
         return $result;
     }

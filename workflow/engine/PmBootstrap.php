@@ -38,14 +38,14 @@ class PmBootstrap extends Bootstrap
         ini_set('default_charset', "UTF-8");
         ini_set('memory_limit', $this->pmConfig['memory_limit']);
         ini_set('soap.wsdl_cache_enabled', $this->pmConfig['wsdl_cache']);
-        ini_set('date.timezone', $this->pmConfig['time_zone']);
+        ini_set('date.timezone', (isset($_SESSION['__SYSTEM_UTC_TIME_ZONE__']) && $_SESSION['__SYSTEM_UTC_TIME_ZONE__'])? 'UTC' : $this->pmConfig['time_zone']); //Set Time Zone
 
         define ('DEBUG_SQL_LOG', $this->pmConfig['debug_sql']);
         define ('DEBUG_TIME_LOG', $this->pmConfig['debug_time']);
         define ('DEBUG_CALENDAR_LOG', $this->pmConfig['debug_calendar']);
         define ('MEMCACHED_ENABLED',  $this->pmConfig['memcached']);
         define ('MEMCACHED_SERVER',   $this->pmConfig['memcached_server']);
-        define ('TIME_ZONE', $this->pmConfig['time_zone']);
+        define ('TIME_ZONE', ini_get('date.timezone'));
 
         // enable ERROR_SHOW_SOURCE_CODE to display the source code for any WARNING OR NOTICE
         define ('ERROR_SHOW_SOURCE_CODE', true);

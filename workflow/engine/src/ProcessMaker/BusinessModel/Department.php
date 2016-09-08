@@ -51,6 +51,27 @@ class Department
     }
 
     /**
+     * Verify if the User is not in a Department
+     *
+     * @param string $departmentUid
+     * @param string $userUid
+     *
+     * return void Throw exception user not exists
+     */
+    private function throwExceptionUserNotExistsInDepartment($departmentUid, $userUid)
+    {
+        try {
+            $user = \UsersPeer::retrieveByPK($userUid);
+
+            if (is_null($user) || $user->getDepUid() != $departmentUid) {
+                throw new \Exception(\G::LoadTranslation('ID_USER_NOT_EXIST_DEPARTMENT', [$userUid]));
+            }
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
+
+    /**
      * Verify if exists the title of a Department
      *
      * @param string $departmentTitle       Title
@@ -65,6 +86,41 @@ class Department
             if ($this->existsTitle($departmentTitle, $departmentUidExclude)) {
                 throw new \Exception(\G::LoadTranslation("ID_DEPARTMENT_TITLE_ALREADY_EXISTS", array($fieldNameForException, $departmentTitle)));
             }
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
+
+    /**
+     * Get Department record
+     *
+     * @param string $departmentUid                 Unique id of Department
+     * @param array  $arrayVariableNameForException Variable name for exception
+     * @param bool   $throwException Flag to throw the exception if the main parameters are invalid or do not exist
+     *                               (TRUE: throw the exception; FALSE: returns FALSE)
+     *
+     * @return array Returns an array with Department record, ThrowTheException/FALSE otherwise
+     */
+    public function getDepartmentRecordByPk(
+        $departmentUid,
+        array $arrayVariableNameForException,
+        $throwException = true
+    ) {
+        try {
+            $obj = \DepartmentPeer::retrieveByPK($departmentUid);
+
+            if (is_null($obj)) {
+                if ($throwException) {
+                    throw new \Exception(\G::LoadTranslation(
+                        'ID_DEPARTMENT_NOT_EXIST', [$arrayVariableNameForException['$departmentUid'], $departmentUid]
+                    ));
+                } else {
+                    return false;
+                }
+            }
+
+            //Return
+            return $obj->toArray(\BasePeer::TYPE_FIELDNAME);
         } catch (\Exception $e) {
             throw $e;
         }
@@ -88,95 +144,6 @@ class Department
             $depData = array_change_key_case($depData, CASE_LOWER);
         }
         return $aDepts;
-    }
-
-    /**
-     * Get list for Assigned User
-     *
-     * @access public
-     * @author Brayan Pereyra (Cochalo) <brayan@colosa.com>
-     * @copyright Colosa - Bolivia
-     *
-     * @return array
-     */
-    public function getAssignedUser($dep_uid)
-    {
-        $dep_uid = Validator::depUid($dep_uid);
-        $oDept = new \Department();
-        $oDept->Load( $dep_uid );
-        $manager = $oDept->getDepManager();
-        $oCriteria = new \Criteria( 'workflow' );
-        $oCriteria->addSelectColumn( UsersPeer::USR_UID );
-        $oCriteria->addSelectColumn( UsersPeer::USR_USERNAME );
-        $oCriteria->addSelectColumn( UsersPeer::USR_FIRSTNAME );
-        $oCriteria->addSelectColumn( UsersPeer::USR_LASTNAME );
-        $oCriteria->addSelectColumn( UsersPeer::USR_STATUS );
-        $oCriteria->add( UsersPeer::DEP_UID, '' );
-        $oCriteria->add( UsersPeer::USR_STATUS, 'CLOSED', \Criteria::NOT_EQUAL );
-        $oCriteria->add( UsersPeer::DEP_UID, $dep_uid );
-        $oDataset = UsersPeer::doSelectRS( $oCriteria );
-        $oDataset->setFetchmode( \ResultSet::FETCHMODE_ASSOC );
-        $aUsers = array ();
-        while ($oDataset->next()) {
-            $dataTemp = $oDataset->getRow();
-            $aUsers[] = array_change_key_case($dataTemp, CASE_LOWER);
-            $index = sizeof( $aUsers ) - 1;
-            $aUsers[$index]['usr_supervisor'] = ($manager == $aUsers[$index]['usr_uid']) ? true : false;
-        }
-        return $aUsers;
-    }
-
-    /**
-     * Get list for Available User
-     *
-     * @access public
-     * @author Brayan Pereyra (Cochalo) <brayan@colosa.com>
-     * @copyright Colosa - Bolivia
-     *
-     * @return array
-     */
-    public function getAvailableUser($dep_uid, $start = 0, $limit = 0, $search = '')
-    {
-        $dep_uid = Validator::depUid($dep_uid);
-
-        $start = (int)$start;
-        $start = abs($start);
-        if ($start != 0) {
-            $start+1;
-        }
-
-        $limit = (int)$limit;
-        $limit = abs($limit);
-        if ($limit == 0) {
-            $limit = 25;
-        } else {
-            $limit = (int)$limit;
-        }
-
-        $oCriteria = new \Criteria( 'workflow' );
-        $oCriteria->addSelectColumn( UsersPeer::USR_UID );
-        $oCriteria->addSelectColumn( UsersPeer::USR_USERNAME );
-        $oCriteria->addSelectColumn( UsersPeer::USR_FIRSTNAME );
-        $oCriteria->addSelectColumn( UsersPeer::USR_LASTNAME );
-        $oCriteria->addSelectColumn( UsersPeer::USR_STATUS );
-        $oCriteria->add( UsersPeer::DEP_UID, '' );
-        $oCriteria->add( UsersPeer::USR_STATUS, 'CLOSED', \Criteria::NOT_EQUAL );
-
-        $oCriteria->setLimit( $limit );
-        $oCriteria->setOffset( $start );
-
-        if ($search != '') {
-            $oCriteria->add( $oCriteria->getNewCriterion( UsersPeer::USR_USERNAME, '%' . $search . '%', \Criteria::LIKE )->addOr( $oCriteria->getNewCriterion( UsersPeer::USR_FIRSTNAME, '%' . $search . '%', \Criteria::LIKE )->addOr( $oCriteria->getNewCriterion( UsersPeer::USR_LASTNAME, '%' . $search . '%', \Criteria::LIKE ) ) ) );    
-        }
-
-        $oDataset = UsersPeer::doSelectRS( $oCriteria );
-        $oDataset->setFetchmode( \ResultSet::FETCHMODE_ASSOC );
-        $aUsers = array ();
-        while ($oDataset->next()) {
-            $dataTemp = $oDataset->getRow();
-            $aUsers[] = array_change_key_case($dataTemp, CASE_LOWER);
-        }
-        return $aUsers;
     }
 
     /**
@@ -253,6 +220,8 @@ class Department
         $dep_uid = Validator::depUid($dep_uid);
         $usr_uid = Validator::usrUid($usr_uid);
 
+        $this->throwExceptionUserNotExistsInDepartment($dep_uid, $usr_uid);
+
         $dep = new \Department();
         $dep->load( $dep_uid );
         $manager = $dep->getDepManager();
@@ -262,6 +231,217 @@ class Department
             $editDepto['DEP_MANAGER'] = '';
             $dep->update( $editDepto );
             $dep->updateDepartmentManager($dep_uid);
+        }
+    }
+
+    /**
+     * Get custom record
+     *
+     * @param array $record Record
+     *
+     * @return array Return an array with custom record
+     */
+    private function __getUserCustomRecordFromRecord(array $record)
+    {
+        try {
+            $recordc = [
+                'usr_uid'       => $record['USR_UID'],
+                'usr_username'  => $record['USR_USERNAME'],
+                'usr_firstname' => $record['USR_FIRSTNAME'],
+                'usr_lastname'  => $record['USR_LASTNAME'],
+                'usr_status'    => $record['USR_STATUS']
+            ];
+
+            if (isset($record['USR_SUPERVISOR'])) {
+                $recordc['usr_supervisor'] = $record['USR_SUPERVISOR'];
+            }
+
+            return $recordc;
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
+
+    /**
+     * Get all Users of a Department (Assigned/Available)
+     *
+     * @param string $departmentUid   Unique id of Department
+     * @param string $option          Option (ASSIGNED, AVAILABLE)
+     * @param array  $arrayFilterData Data of the filters
+     * @param string $sortField       Field name to sort
+     * @param string $sortDir         Direction of sorting (ASC, DESC)
+     * @param int    $start           Start
+     * @param int    $limit           Limit
+     * @param bool   $flagRecord      Flag that set the "getting" of record
+     * @param bool   $throwException  Flag to throw the exception (This only if the parameters are invalid)
+     *                                (TRUE: throw the exception; FALSE: returns FALSE)
+     *
+     * @return array Return an array with all Users of a Department, ThrowTheException/FALSE otherwise
+     */
+    public function getUsers(
+        $departmentUid,
+        $option,
+        array $arrayFilterData = null,
+        $sortField = null,
+        $sortDir = null,
+        $start = null,
+        $limit = null,
+        $flagRecord = true,
+        $throwException = true
+    ) {
+        try {
+            $arrayUser = array();
+
+            $numRecTotal = 0;
+
+            //Verify data and Set variables
+            $flagFilter = !is_null($arrayFilterData) && is_array($arrayFilterData) && isset($arrayFilterData['filter']);
+
+            $result = \ProcessMaker\BusinessModel\Validator::validatePagerDataByPagerDefinition(
+                ['$start' => $start, '$limit' => $limit],
+                ['$start' => '$start', '$limit' => '$limit']
+            );
+
+            if ($result !== true) {
+                if ($throwException) {
+                    throw new \Exception($result);
+                } else {
+                    return false;
+                }
+            }
+
+            $arrayDepartmentData = $this->getDepartmentRecordByPk(
+                $departmentUid, ['$departmentUid' => '$departmentUid'], $throwException
+            );
+
+            if ($arrayDepartmentData === false) {
+                return false;
+            }
+
+            //Set variables
+            $filterName = 'filter';
+
+            if ($flagFilter) {
+                $arrayAux = [
+                    ''      => 'filter',
+                    'LEFT'  => 'lfilter',
+                    'RIGHT' => 'rfilter'
+                ];
+
+                $filterName = $arrayAux[
+                    (isset($arrayFilterData['filterOption']))? $arrayFilterData['filterOption'] : ''
+                ];
+            }
+
+            //Get data
+            if (!is_null($limit) && (string)($limit) == '0') {
+                return [
+                    'total'     => $numRecTotal,
+                    'start'     => (int)((!is_null($start))? $start : 0),
+                    'limit'     => (int)((!is_null($limit))? $limit : 0),
+                    $filterName => ($flagFilter)? $arrayFilterData['filter'] : '',
+                    'data'      => $arrayUser
+                ];
+            }
+
+            //Query
+            $criteria = new \Criteria('workflow');
+
+            $criteria->addSelectColumn(\UsersPeer::USR_UID);
+            $criteria->addSelectColumn(\UsersPeer::USR_USERNAME);
+            $criteria->addSelectColumn(\UsersPeer::USR_FIRSTNAME);
+            $criteria->addSelectColumn(\UsersPeer::USR_LASTNAME);
+            $criteria->addSelectColumn(\UsersPeer::USR_STATUS);
+
+            $criteria->add(\UsersPeer::USR_STATUS, 'CLOSED', \Criteria::NOT_EQUAL);
+
+            switch ($option) {
+                case 'ASSIGNED':
+                    $criteria->add(\UsersPeer::DEP_UID, $departmentUid, \Criteria::EQUAL);
+                    break;
+                case 'AVAILABLE':
+                    $criteria->add(\UsersPeer::DEP_UID, '', \Criteria::EQUAL);
+                    break;
+            }
+
+            if ($flagFilter && trim($arrayFilterData['filter']) != '') {
+                $arraySearch = [
+                    ''      => '%' . $arrayFilterData['filter'] . '%',
+                    'LEFT'  => $arrayFilterData['filter'] . '%',
+                    'RIGHT' => '%' . $arrayFilterData['filter']
+                ];
+
+                $search = $arraySearch[
+                    (isset($arrayFilterData['filterOption']))? $arrayFilterData['filterOption'] : ''
+                ];
+
+                $criteria->add(
+                    $criteria->getNewCriterion(\UsersPeer::USR_USERNAME,  $search, \Criteria::LIKE)->addOr(
+                    $criteria->getNewCriterion(\UsersPeer::USR_FIRSTNAME, $search, \Criteria::LIKE)->addOr(
+                    $criteria->getNewCriterion(\UsersPeer::USR_LASTNAME,  $search, \Criteria::LIKE)))
+                );
+            }
+
+            //Number records total
+            $numRecTotal = \UsersPeer::doCount($criteria);
+
+            //Query
+            $conf = new \Configurations();
+            $sortFieldDefault = \UsersPeer::TABLE_NAME . '.' . $conf->userNameFormatGetFirstFieldByUsersTable();
+
+            if (!is_null($sortField) && trim($sortField) != '') {
+                $sortField = strtoupper($sortField);
+
+                if (in_array(\UsersPeer::TABLE_NAME . '.' . $sortField, $criteria->getSelectColumns())) {
+                    $sortField = \UsersPeer::TABLE_NAME . '.' . $sortField;
+                } else {
+                    $sortField = $sortFieldDefault;
+                }
+            } else {
+                $sortField = $sortFieldDefault;
+            }
+
+            if (!is_null($sortDir) && trim($sortDir) != '' && strtoupper($sortDir) == 'DESC') {
+                $criteria->addDescendingOrderByColumn($sortField);
+            } else {
+                $criteria->addAscendingOrderByColumn($sortField);
+            }
+
+            if (!is_null($start)) {
+                $criteria->setOffset((int)($start));
+            }
+
+            if (!is_null($limit)) {
+                $criteria->setLimit((int)($limit));
+            }
+
+            $rsCriteria = \UsersPeer::doSelectRS($criteria);
+            $rsCriteria->setFetchmode(\ResultSet::FETCHMODE_ASSOC);
+
+            while ($rsCriteria->next()) {
+                $record = $rsCriteria->getRow();
+
+                switch ($option) {
+                    case 'ASSIGNED':
+                        $record['USR_SUPERVISOR'] = $record['USR_UID'] == $arrayDepartmentData['DEP_MANAGER'];
+                        break;
+                    case 'AVAILABLE':
+                        break;
+                }
+
+                $arrayUser[] = ($flagRecord)? $record : $this->__getUserCustomRecordFromRecord($record);
+            }
+
+            //Return
+            return [
+                'total'     => $numRecTotal,
+                'start'     => (int)((!is_null($start))? $start : 0),
+                'limit'     => (int)((!is_null($limit))? $limit : 0),
+                $filterName => ($flagFilter)? $arrayFilterData['filter'] : '',
+                'data'      => $arrayUser
+            ];
+        } catch (\Exception $e) {
+            throw $e;
         }
     }
 

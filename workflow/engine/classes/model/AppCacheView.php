@@ -70,7 +70,7 @@ class AppCacheView extends BaseAppCacheView
 
 
 
-    public function getAllCounters($aTypes, $userUid, $processSummary = false)
+    public function getAllCounters($aTypes, $userUid, $flagPausedSupervisor = true)
 
     {
 
@@ -80,7 +80,7 @@ class AppCacheView extends BaseAppCacheView
 
         foreach ($aTypes as $type) {
 
-            $aResult[$type] = $this->getListCounters($type, $userUid, $processSummary);
+            $aResult[$type] = $this->getListCounters($type, $userUid, $flagPausedSupervisor);
 
         }
 
@@ -92,7 +92,7 @@ class AppCacheView extends BaseAppCacheView
 
 
 
-    public function getListCounters($type, $userUid, $processSummary)
+    public function getListCounters($type, $userUid, $flagPausedSupervisor = true)
 
     {
 
@@ -132,7 +132,7 @@ class AppCacheView extends BaseAppCacheView
 
             case 'paused':
 
-                $criteria = $this->getPausedCountCriteria($userUid);
+                $criteria = $this->getPausedCountCriteria($userUid, $flagPausedSupervisor);
 
                 break;
 
@@ -159,6 +159,12 @@ class AppCacheView extends BaseAppCacheView
                 return $type;
 
         }
+
+        $arrayTaskTypeToExclude = array("WEBENTRYEVENT", "END-MESSAGE-EVENT", "START-MESSAGE-EVENT", "INTERMEDIATE-THROW-MESSAGE-EVENT", "INTERMEDIATE-CATCH-MESSAGE-EVENT");
+
+        $criteria->addJoin(AppCacheViewPeer::TAS_UID, TaskPeer::TAS_UID, Criteria::LEFT_JOIN);
+
+        $criteria->add(TaskPeer::TAS_TYPE, $arrayTaskTypeToExclude, Criteria::NOT_IN);
 
 
 
@@ -203,6 +209,8 @@ class AppCacheView extends BaseAppCacheView
         $criteria->addSelectColumn(AppCacheViewPeer::TAS_UID);
 
         $criteria->addSelectColumn(AppCacheViewPeer::PRO_UID);
+
+        $criteria->addSelectColumn(AppCacheViewPeer::DEL_RISK_DATE);
 
 
 
@@ -1034,11 +1042,13 @@ class AppCacheView extends BaseAppCacheView
 
      * param $doCount if true this will return the criteria for count cases only
 
+     * @param bool $flagSupervisor Flag to include the records of the supervisor
+
      * @return Criteria object $Criteria
 
      */
 
-    public function getPaused($userUid, $doCount)
+    public function getPaused($userUid, $doCount, $flagSupervisor = true)
 
     {
 
@@ -1070,17 +1080,27 @@ class AppCacheView extends BaseAppCacheView
 
         if (!empty($userUid)) {
 
-            $criteria->add(
+            $criterionAux = $criteria->getNewCriterion(AppCacheViewPeer::USR_UID, $userUid, Criteria::EQUAL);
 
-                $criteria->getNewCriterion(AppCacheViewPeer::USR_UID, $userUid)->addOr(
 
-                $criteria->getNewCriterion(AppCacheViewPeer::PRO_UID, $aProcesses, Criteria::IN))
 
-            );
+            if ($flagSupervisor && !empty($aProcesses)) {
+
+                $criterionAux = $criterionAux->addOr(
+
+                    $criteria->getNewCriterion(AppCacheViewPeer::PRO_UID, $aProcesses, Criteria::IN)
+
+                );
+
+            }
+
+
+
+            $criteria->add($criterionAux);
 
         } else {
 
-            if (count($aProcesses) > 0) {
+            if ($flagSupervisor && !empty($aProcesses)) {
 
                 $criteria->add(AppCacheViewPeer::PRO_UID, $aProcesses, Criteria::IN);
 
@@ -1130,15 +1150,17 @@ class AppCacheView extends BaseAppCacheView
 
      * param $userUid the current userUid
 
+     * @param bool $flagSupervisor Flag to include the records of the supervisor
+
      * @return Criteria object $Criteria
 
      */
 
-    public function getPausedCountCriteria($userUid)
+    public function getPausedCountCriteria($userUid, $flagSupervisor = true)
 
     {
 
-        return $this->getPaused($userUid, true);
+        return $this->getPaused($userUid, true, $flagSupervisor);
 
     }
 
@@ -1755,6 +1777,10 @@ class AppCacheView extends BaseAppCacheView
 
 
             foreach ($this->confCasesList["second"]["data"] as $fieldData) {
+
+                $fieldData['name'] = ($fieldData['name'] == 'APP_STATUS_LABEL')? 'APP_STATUS' : $fieldData['name'];
+
+
 
                 if (in_array($fieldData["name"], $defaultFields)) {
 

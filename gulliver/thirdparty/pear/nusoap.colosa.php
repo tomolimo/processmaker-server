@@ -2940,7 +2940,7 @@ class soap_transport_http extends nusoap_base_colosa {
 	 */
 	function parseCookie($cookie_str) {
 		$cookie_str = str_replace('; ', ';', $cookie_str) . ';';
-		$data = split(';', $cookie_str);
+		$data = explode(';', $cookie_str);
 		$value_str = $data[0];
 
 		$cookie_param = 'domain=';

@@ -43,15 +43,18 @@ class Groups
      *
      * @param string $sGroupUID
      * @return array
+     * @throws Exception
      */
-    public function getUsersOfGroup($sGroupUID)
+    public function getUsersOfGroup($sGroupUID, $statusUser = 'ACTIVE')
     {
         try {
             $aUsers = array();
             $oCriteria = new Criteria();
             $oCriteria->addJoin(UsersPeer::USR_UID, GroupUserPeer::USR_UID, Criteria::LEFT_JOIN);
             $oCriteria->add(GroupUserPeer::GRP_UID, $sGroupUID);
-            $oCriteria->add(UsersPeer::USR_STATUS, 'ACTIVE');
+            if($statusUser !== 'ALL'){
+                $oCriteria->add(UsersPeer::USR_STATUS, $statusUser);
+            }
             $oDataset = UsersPeer::doSelectRS($oCriteria);
             $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
             $oDataset->next();

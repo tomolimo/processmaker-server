@@ -36,7 +36,7 @@ class G
      * is_https
      * @return void
     */
-    public function is_https()
+    public static function is_https()
     {
         if (isset($_SERVER['HTTPS'])) {
             if ($_SERVER['HTTPS']=='on') {
@@ -229,7 +229,7 @@ class G
      * @param string $key
      * @return string
      */
-    public function encrypt ($string, $key)
+    public static function encrypt ($string, $key)
     {
         //print $string;
         //    if ( defined ( 'ENABLE_ENCRYPT' ) && ENABLE_ENCRYPT == 'yes' ) {
@@ -526,13 +526,13 @@ class G
             $oHeadPublisher->clearScripts();
             $oHeadPublisher->leimnudInitString = $leimnudInitString;
             $oHeadPublisher->addScriptFile( '/js/maborak/core/maborak.js' );
-            $G_PUBLISH->AddContent( 'xmlform', 'xmlform', 'login/showMessage', null, array ('MESSAGE' => $e->getMessage()
+            $G_PUBLISH->AddContent( 'xmlform', 'xmlform', 'login/showMessage', null, array ('MESSAGE' => self::getErrorMessage($e)
             ) );
             if (class_exists( 'SkinEngine' )) {
                 $skinEngine = new SkinEngine( 'publish', 'blank', '' );
                 $skinEngine->dispatch();
             } else {
-                die( $e->getMessage() );
+                die( self::getErrorMessage($e) );
             }
         }
     }
@@ -3188,9 +3188,6 @@ class G
      */
     public function pr ($var)
     {
-        G::LoadSystem('inputfilter');
-        $filter = new InputFilter();
-        $var = $filter->xssFilterHard($var);
         print ("<pre>") ;
         print_r( $var );
         print ("</pre>") ;
@@ -3368,7 +3365,7 @@ class G
       *
       * @author Erik A.O. <erik@colosa.com>
      */
-    public function json_decode($Json, $assoc = false)
+    public static function json_decode($Json, $assoc = false)
     {
         if (function_exists('json_decode')) {
             return json_decode($Json, $assoc);
@@ -4910,10 +4907,14 @@ class G
             $list = glob( rtrim( $path, DIRECTORY_SEPARATOR ) . DIRECTORY_SEPARATOR . '*' );
 
             $sw = true;
-            foreach ($list as $f) {
-                if (! G::is_writable_r( $f, $noWritableFiles )) {
-                    $sw = false;
+            if(is_array($list)){
+                foreach ($list as $f) {
+                    if (! G::is_writable_r( $f, $noWritableFiles )) {
+                        $sw = false;
+                    }
                 }
+            } else {
+                $sw = false;
             }
 
             return $sw;
@@ -5030,7 +5031,7 @@ class G
         $rest->handle();
     }
 
-    public function reservedWordsSql ()
+    public static function reservedWordsSql ()
     {
         //Reserved words SQL
         $reservedWordsSql = array ("ACCESSIBLE","ACTION","ADD","ALL","ALTER","ANALYZE","AND","ANY","AS","ASC","ASENSITIVE","AUTHORIZATION","BACKUP","BEFORE","BEGIN","BETWEEN","BIGINT","BINARY","BIT","BLOB","BOTH","BREAK","BROWSE","BULK","BY","CALL","CASCADE","CASE","CHANGE","CHAR","CHARACTER","CHECK","CHECKPOINT","CLOSE","CLUSTERED","COALESCE","COLLATE","COLUMN","COMMIT","COMPUTE","CONDITION","CONSTRAINT","CONTAINS","CONTAINSTABLE","CONTINUE","CONVERT","CREATE","CROSS","CURRENT","CURRENT_DATE","CURRENT_TIME","CURRENT_TIMESTAMP","CURRENT_USER","CURSOR","DATABASE","DATABASES","DATE","DAY_HOUR","DAY_MICROSECOND","DAY_MINUTE","DAY_SECOND","DBCC","DEALLOCATE","DEC","DECIMAL","DECLARE","DEFAULT","DELAYED","DELETE","DENY","DESC","DESCRIBE","DETERMINISTIC","DISK","DISTINCT","DISTINCTROW",
@@ -5495,16 +5496,31 @@ class G
                     }
                     break;
                 case 'docx':
+                    if ($docType[1] == 'vnd.openxmlformats-officedocument.wordprocessingml.document') {
+                        $res->status = true;
+                        return $res;
+                    }
+                    break;
                 case 'pptx':
+                    if ($docType[1] == 'vnd.openxmlformats-officedocument.presentationml.presentation') {
+                        $res->status = true;
+                        return $res;
+                    }
+                    break;
                 case 'xlsx':
-                    if ($docType[1] == 'zip') {
+                    if ($docType[1] == 'vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
                         $res->status = true;
                         return $res;
                     }
                     break;
                 case 'exe':
+                    if ($docType[1] == 'x-msdownload' || $docType[1] == 'x-dosexec') {
+                        $res->status = true;
+                        return $res;
+                    }
+                    break;
                 case 'wmv':
-                    if($docType[1] == 'octet-stream'){
+                    if($docType[1] == 'x-ms-asf' || $docType[1] == 'x-ms-wmv'){
                         $res->status = true;
                         return $res;
                     }
@@ -5640,6 +5656,18 @@ class G
     public function encryptCrc32 ($string)
     {
         return crc32($string);
+    }
+
+    /**
+     * this function get the Message
+     * @access public
+     * @param string $e
+     * @return string
+     *
+     */
+    public static function getErrorMessage($e)
+    {
+        return $e->getMessage();
     }
 }
 

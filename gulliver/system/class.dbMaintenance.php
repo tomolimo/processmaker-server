@@ -425,7 +425,7 @@ class DataBaseMaintenance
         if (empty( $aTables ))
             return false;
         printf( "%-70s", "LOCK TABLES" );
-        if (@mysql_query( "LOCK TABLES " . implode( " READ, ", $aTables ) . " READ; " )) {
+        if (@mysql_query( 'LOCK TABLES ' . implode( ' READ, ', $aTables ) . ' READ; ' )) {
             echo "    [OK]\n";
             return true;
         } else {
@@ -455,7 +455,7 @@ class DataBaseMaintenance
     {
 
         $bytesSaved = 0;
-        $result = @mysql_query( "SELECT * FROM `$table`" );
+        $result = @mysql_query( 'SELECT * FROM `'.$table.'`' );
 
         $num_rows = mysql_num_rows( $result );
         $num_fields = mysql_num_fields( $result );
@@ -489,48 +489,30 @@ class DataBaseMaintenance
      */
     function backupDataBase ($outfile)
     {
-        $tablesBpmn = array(
-            'BPMN_PROJECT','BPMN_DIAGRAM','BPMN_DOCUMENTATION','BPMN_EXTENSION','BPMN_PARTICIPANT',
-            'BPMN_PROCESS','BPMN_ACTIVITY','BPMN_ARTIFACT','BPMN_DATA','BPMN_EVENT','BPMN_GATEWAY',
-            'BPMN_LANESET','BPMN_BOUND','BPMN_FLOW','BPMN_LANE'
-        );
-        $sqlTablesBpmn = array();
-        $aTables = $this->getTablesList();
-        $ws = explode( '_', $this->dbName );
-        $ws = isset( $ws[1] ) ? $ws[1] : $this->dbName;
-        $schema = "\n";
-        $schema .= " -- Processmaker Data Base Maintenance Tool\n";
-        $schema .= " --\n";
-        $schema .= " -- Workspace: " . $ws . "\n";
-        $schema .= " -- Data Base: " . $this->dbName . "\n";
-        $schema .= " -- Tables:    " . (count( $aTables )) . "\n";
-        $schema .= " -- Date:      " . (date( 'l jS \of F Y h:i:s A' )) . "\n";
-        $schema .= " --\n\n";
-        $schema .= "SET FOREIGN_KEY_CHECKS=0; \n\n";
-
-        $file = fopen( $outfile, "w+" );
-
-        fwrite( $file, $schema );
-
-        foreach ($aTables as $table) {
-            $tableSchema = "\nDROP TABLE IF EXISTS `$table`;\n\n";
-            $tableSchema .= $this->getSchemaFromTable( $table );
-            $data = $this->dumpSqlInserts( $table );
-            if (in_array($table, $tablesBpmn)) {
-                $sqlTablesBpmn[$table] = $tableSchema . $data;
-            } else {
-                fwrite( $file, $tableSchema );
-                fwrite( $file, $data );
-            }
+        $aHost = explode(':', $this->host);
+        $dbHost = $aHost[0];
+        if (isset($aHost[1])) {
+            $dbPort = $aHost[1];
+            $command = 'mysqldump'
+                . ' --user=' . $this->user
+                . ' --password=' . str_replace('"', '\"', str_replace("'", "\'", quotemeta($this->passwd)))
+                . ' --host=' . $dbHost
+                . ' --port=' . $dbPort
+                . ' --opt'
+                . ' --skip-comments'
+                . ' ' . $this->dbName
+                . ' > ' . $outfile;
+        } else {
+            $command = 'mysqldump'
+                . ' --host=' . $dbHost
+                . ' --user=' . $this->user
+                . ' --opt'
+                . ' --skip-comments'
+                . ' --password=' . str_replace('"', '\"', str_replace("'", "\'", quotemeta($this->passwd)))
+                . ' ' . $this->dbName
+                . ' > ' . $outfile;
         }
-        
-        if (count ($sqlTablesBpmn) > 0) {
-            foreach ($tablesBpmn as $table) {
-                fwrite( $file, $sqlTablesBpmn[$table] );
-            }
-        }
-
-        fclose( $file );
+        shell_exec($command);
     }
 
     /**

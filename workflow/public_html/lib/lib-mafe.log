@@ -1,30 +1,30 @@
-[5 days ago] d2ec2b6  PM-3747:En todos los browsers el paginador en la ocion de supervisors se encuntra desfado y mas en IE <Richard Yujra>
-[5 days ago] ec53f75  PM-3659:improvements, show text <Richard Yujra>
-[7 days ago] e462605  PM-3659:Uso de interface lenta (supervisores) cuando se tienen varios usuarios (40000) <Richard Yujra>
-[7 days ago] bc6044f  PM-3718 <Roly Rudy Gutierrez Pinto>
-[8 days ago] d8d3ff4  PM-3533 <Roly Rudy Gutierrez Pinto>
-[8 days ago] f651258  PM-2905 <Roly Rudy Gutierrez Pinto>
-[8 days ago] 9a60f5b  PM-2905 <Roly Rudy Gutierrez Pinto>
-[9 days ago] b4e1d82  PM-2905 <Roly Rudy Gutierrez Pinto>
-[13 days ago] 3bcce9c  PM-3554 Documentos generados con seguridad no se pueden abrir <dheeyi>
-[13 days ago] 0f226ac  Error al asignar y desasignar los objetos en los "supervisors" <Emerson Joel Rojas Soliz>
-[13 days ago] adc46f5  PM-3544: No se puede acceder al menu contextual del dise�ador en FIREFOX <rodrigo quelca>
-[2 weeks ago] 4914b0d  PM-3547: La primera vez que ingresas a properties de time event sale un error sol la primera vez. <rodrigo quelca>
-[3 weeks ago] 3fc51ec  PM-3523: Design>New BPMN>Timer event: cuando colcoas la hora minutos, etc con la opcion de incremento con el mouse no respeta la perimwera vez campo requerido <marcelo.cuiza>
-[3 weeks ago] ee80591  PM-3508: 0018251: Error en Gateway <marcelo.cuiza>
-[3 weeks ago] 6994999  PM-3443 <Roly Rudy Gutierrez Pinto>
-[3 weeks ago] 87bdf00  PM-3678 Cuando se utiliza un gateway entre dos lanes no se puede asignar a las tareas siguientes. <rodrigo quelca>
-[3 weeks ago] 3702021  PM-3568 Se muestra un error al crear ciertos triggers que contienen variables del tipo array <dheeyi>
-[3 weeks ago] 7d8b92c  PM-3687: Include Accepted_language header in REST endpoint calls in ProcessDesigner <rodrigo quelca>
-[3 weeks ago] fa0d23c  PM-3522: Se borra la configuracion de one date/time en timer event al vovler a ingresar a la misma <marcelo.cuiza>
-[3 weeks ago] b86387c  PM-3589: Add Routing Rule>>En el mensaje de error muestra la palabra Undefined y el nombre del elemento <rodrigo quelca>
-[3 weeks ago] cc3088d  PM-2094 0017076: Variable creator in BPMN Designer should not allow variables which start with number, but should allow underscores "_" <dheeyi>
-[3 weeks ago] 755febc  PM-3648 No se guarda las propiedades de un "Step" con Internet Explorer <dheeyi>
-[3 weeks ago] ecb2abc  PM-3534: No te permite conectar un "Task" con un "End Email Event" <rodrigo quelca>
-[3 weeks ago] 2b29d8f  PM-3389: Error de espacio de trabajo / posicion de flujos y elementos <rodrigo quelca>
-[4 weeks ago] 47f342e  PM-3624 Completar traduccióe labels faltantes para la versió.0.1.5 <dheeyi>
-[4 weeks ago] 487e517  PM-3564 <Roly Rudy Gutierrez Pinto>
-[4 weeks ago] 9289d12  PM-3148_PM-3121: mplement Multiple Instance Task/ Task Marker Parallel, Changes in assignment rules in multiple instance tasks <marcelo.cuiza>
-[4 weeks ago] 7febe7f  PM-3341 <Roly Rudy Gutierrez Pinto>
-[4 weeks ago] 55ade5a  PM-3146 Add new variable type "array" <dheeyi>
-[4 weeks ago] ddcf30a  PM-3489 <Roly Rudy Gutierrez Pinto>
+[2 hours ago] 5dbaad0  HOR-969: Translation text changed as requested. <Gustavo Adolfo Cruz Laura>
+[5 days ago] 63aa65b  OM-666: No es posible jalar un intermediate timer event al lane de un pool en 3.0.1.8 (build 28) <Rodrigo Quelca>
+[11 days ago] 6eb3371  Gateway Exclusive Convergente: Debe tener la condificional true <richardnoel>
+[13 days ago] 549f450  OM-508: TaskPropierties> No se muestra mensaje de campo requerido al tener otro(s) campo(s) requerido(s) en otra pestaña <duhnnie>
+[13 days ago] 0bacda4  HOR-872 <Roly Rudy Gutierrez Pinto>
+[2 weeks ago] ce6d348  OM-598: Mensaje de campo requerido, innecesario. <duhnnie>
+[3 weeks ago] fc01543  BY-249 Fields Average y SDV aun se muestran <Marco A. Nina Mena>
+[3 weeks ago] 72feec1  OM-582 <richardnoel>
+[3 weeks ago] da79bca  HOR-785 <Roly Rudy Gutierrez Pinto>
+[3 weeks ago] 2b7dec8  OM-577: No se puede editar la propiedades del gateway inclusivo <Rodrigo Quelca>
+[4 weeks ago] f28f136  OM-557:[ProcessDesign] La corona del shape end se muestra desfazada si se crea en 50% <richardnoel>
+[4 weeks ago] a7e31ee  HOR-768 <Roly Rudy Gutierrez Pinto>
+[4 weeks ago] 826a03f  OM-552: Cambio en el mensaje de error, cuando un task o subprocess tiene espacios en blanco <alex_santos>
+[4 weeks ago] effb77b  OM-546: [Process Designer] Al poner y sacar un elemento del pool las flechas que unen los elementos BPMN se ven mal <Rodrigo Quelca>
+[4 weeks ago] e8581ae  OM-551:Activity allows white-space character(s) in the whole string as its name. <richardnoel>
+[4 weeks ago] 539e1e2  OM-548:Process Designer: After moving any shape on canvas it is necessary two click on it twice to select it. <richardnoel>
+[4 weeks ago] 76dda3a  OM-544: [processDesigner] Cuando se Suelta un elemeto dentro de un "LANE" se redimemsiona el contenedor <Rodrigo Quelca>
+[4 weeks ago] 801e39c  OM-383:Error de un gateway de tipo Inclusive Converging <richardnoel>
+[4 weeks ago] 969683c  OM-536:Date fields autopopulated <richardnoel>
+[5 weeks ago] 722f29b  MT-115: Selective Import/Export - Add license key to include it only in enterprise/enterprise edition <mcuiza>
+[5 weeks ago] f9245fc  OM-518: (WSSO) No permite hacer download de las templetas y public files <Rodrigo Quelca>
+[5 weeks ago] c02ad26  BY-242 Verificar variables windows.distribution - se cambio variable a window.enterprise <Marco A. Nina Mena>
+[5 weeks ago] 52a3f38  MT-106: Fix the component load for import and export processes. <Gustavo Adolfo Cruz Laura>
+[5 weeks ago] 0b86947  HOR-696 <Roly Rudy Gutierrez Pinto>
+[5 weeks ago] 92cf4b0  OM-511:No se visualiza bien la pantalla de 'Editor de HTML' <richardnoel>
+[5 weeks ago] c501811  (origin/MT-10, composer/MT-10) Removing the download dorpdown icon. <Gustavo Adolfo Cruz Laura>
+[5 weeks ago] 21e9f63  HOR-679 <Roly Rudy Gutierrez Pinto>
+[5 weeks ago] 99edcf9  MT10 <Gustavo Adolfo Cruz>
+[5 weeks ago] f4b4d64  MT-10 Marcas para version Enterprise. <dheeyi>
+[6 weeks ago] bf1f6b4  OM-493:Redireccion diferente al refrescar la pagina del diseñador <richardnoel>

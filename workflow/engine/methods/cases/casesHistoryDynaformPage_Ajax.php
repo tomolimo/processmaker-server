@@ -49,7 +49,8 @@ if ($actionAjax == 'historyDynaformGrid_Ajax') {
     $oCase = new Cases();
 
     $aProcesses = Array ();
-    $c = $oCase->getallDynaformsCriteria( $_SESSION['PROCESS'], $_SESSION['APPLICATION'], $_SESSION['TASK'], $_SESSION['USER_LOGGED'] );
+    $c = $oCase->getallDynaformsCriteria( $_SESSION['PROCESS'], $_SESSION['APPLICATION'], $_SESSION['CURRENT_TASK'],
+        $_SESSION['USER_LOGGED'] , $_SESSION['INDEX']);
 
     if ($c->getDbName() == 'dbarray') {
         $rs = ArrayBasePeer::doSelectRs( $c );

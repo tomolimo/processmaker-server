@@ -179,12 +179,15 @@ function createFolder($alfrescoServerUrl, $parentFolder, $folderName, $user, $pw
  */
 function deleteObject($alfrescoServerUrl, $objetcId, $user, $pwd)
 {
+    $getResponse = true;
     $alfresco_url  = "$alfrescoServerUrl/s/cmis/s/workspace:SpacesStore/i/$objetcId";
-    $alfresco_exec = RestClient::delete($alfresco_url, $user, $pwd, "application/atom+xml");
-
-    $alfresco_res = G::json_decode($alfresco_exec->getResponse());
-
-    return $alfresco_res;
+    $alfresco_exec = RestClient::delete($alfresco_url, $user, $pwd, "application/atom+xml", $getResponse);
+    if($alfresco_exec->getResponseCode() === 204 && trim($alfresco_exec->getResponse()) === '') {
+        $alfresco_res = true;
+    } else {
+        $alfresco_res = false;
+    }
+    return $getResponse ? $alfresco_res : '';
 }
 
 /**

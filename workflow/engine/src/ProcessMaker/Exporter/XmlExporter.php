@@ -76,6 +76,9 @@ class XmlExporter extends Exporter
                     $recordData = array_change_key_case($recordData, CASE_LOWER);
 
                     foreach ($recordData as $key => $value) {
+                        if(is_object($value)){
+                            $value = serialize($value);
+                        }
                         $columnNode = $this->dom->createElement($key);
                         $columnNode->appendChild($this->getTextNode($value));
                         $recordNode->appendChild($columnNode);

@@ -15,6 +15,16 @@ use \Luracast\Restler\RestException;
  */
 class Lists extends Api
 {
+    private $arrayFieldIso8601 = [
+        'app_paused_date',
+        'app_restart_date',
+        'del_delegate_date',
+        'del_init_date',
+        'del_due_date',
+        'del_task_due_date',
+        'app_update_date'
+    ];
+
     /**
      * Get list Inbox
      *
@@ -74,7 +84,8 @@ class Lists extends Api
 
             $lists = new \ProcessMaker\BusinessModel\Lists();
             $response = $lists->getList('inbox', $dataList);
-            return $response;
+
+            return \ProcessMaker\Util\DateTime::convertUtcToIso8601($response, $this->arrayFieldIso8601);
         } catch (\Exception $e) {
             throw (new RestException(Api::STAT_APP_EXCEPTION, $e->getMessage()));
         }
@@ -179,7 +190,8 @@ class Lists extends Api
 
             $lists = new \ProcessMaker\BusinessModel\Lists();
             $response = $lists->getList('participated_last', $dataList);
-            return $response;
+
+            return \ProcessMaker\Util\DateTime::convertUtcToIso8601($response, $this->arrayFieldIso8601);
         } catch (\Exception $e) {
             throw (new RestException(Api::STAT_APP_EXCEPTION, $e->getMessage()));
         }
@@ -283,7 +295,8 @@ class Lists extends Api
 
             $lists = new \ProcessMaker\BusinessModel\Lists();
             $response = $lists->getList('participated_history', $dataList);
-            return $response;
+
+            return \ProcessMaker\Util\DateTime::convertUtcToIso8601($response, $this->arrayFieldIso8601);
         } catch (\Exception $e) {
             throw (new RestException(Api::STAT_APP_EXCEPTION, $e->getMessage()));
         }
@@ -389,7 +402,8 @@ class Lists extends Api
 
             $lists = new \ProcessMaker\BusinessModel\Lists();
             $response = $lists->getList('paused', $dataList);
-            return $response;
+
+            return \ProcessMaker\Util\DateTime::convertUtcToIso8601($response, $this->arrayFieldIso8601);
         } catch (\Exception $e) {
             throw (new RestException(Api::STAT_APP_EXCEPTION, $e->getMessage()));
         }
@@ -494,7 +508,8 @@ class Lists extends Api
 
             $lists = new \ProcessMaker\BusinessModel\Lists();
             $response = $lists->getList('canceled', $dataList);
-            return $response;
+
+            return \ProcessMaker\Util\DateTime::convertUtcToIso8601($response, $this->arrayFieldIso8601);
         } catch (\Exception $e) {
             throw (new RestException(Api::STAT_APP_EXCEPTION, $e->getMessage()));
         }
@@ -598,7 +613,8 @@ class Lists extends Api
 
             $lists = new \ProcessMaker\BusinessModel\Lists();
             $response = $lists->getList('completed', $dataList);
-            return $response;
+
+            return \ProcessMaker\Util\DateTime::convertUtcToIso8601($response, $this->arrayFieldIso8601);
         } catch (\Exception $e) {
             throw (new RestException(Api::STAT_APP_EXCEPTION, $e->getMessage()));
         }
@@ -702,7 +718,8 @@ class Lists extends Api
 
             $lists = new \ProcessMaker\BusinessModel\Lists();
             $response = $lists->getList('completed', $dataList);
-            return $response;
+
+            return \ProcessMaker\Util\DateTime::convertUtcToIso8601($response, $this->arrayFieldIso8601);
         } catch (\Exception $e) {
             throw (new RestException(Api::STAT_APP_EXCEPTION, $e->getMessage()));
         }
@@ -806,7 +823,8 @@ class Lists extends Api
 
             $lists = new \ProcessMaker\BusinessModel\Lists();
             $response = $lists->getList('unassigned', $dataList);
-            return $response;
+
+            return \ProcessMaker\Util\DateTime::convertUtcToIso8601($response, $this->arrayFieldIso8601);
         } catch (\Exception $e) {
             throw (new RestException(Api::STAT_APP_EXCEPTION, $e->getMessage()));
         }

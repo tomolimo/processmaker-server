@@ -33,96 +33,72 @@ if (isset($_GET["url"]) && $_GET["url"] != "") {
 }
 
 ?>
-
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon"/>
-  <link href="style1.css" type="text/css" rel="stylesheet"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Processmaker Styleguide</title>
+    <!-- Bootstrap core CSS -->
+    <link href="../lib/pmdynaform/libs/bootstrap-3.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../lib/pmdynaform/libs/fonts/css/font-awesome.min.css" rel="stylesheet">
+    <!-- Custom styling plus plugins -->
+    <link href="../lib/pmdynaform/libs/custom/custom.css" rel="stylesheet">
+    <script type="text/javascript" src="../lib/pmdynaform/libs/jquery/jquery-1.11.js"></script>
+    <script type="text/javascript">
+        jQuery(document).ready(function($) {
+            var btnLogin = $("#login"),
+                btnGoBack = $("#goBack");
+            btnLogin.click(function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                window.location.href = '<?php echo  $urlLogin;?>';
+            });
+            btnGoBack.click(function(e){
+                e.preventDefault();
+                e.stopPropagation();
+                history.back();
+            });
+        });
+    </script>
 </head>
-<body style="margin: 0px; overflow: auto; background: url(images/background1.jpg); no-repeat; top;">
-	<!-- Warp around everything -->
-	<div id="warp">
+<body class="nav-md special-page">
+    <div class="container body ">
+        <div class="main_container">
+            <!-- page content -->
+            <div class="col-md-12">
+                <div class="col-middle">
+                    <div class="text-center">
+                        <h1 class="error-number"><i class="fa fa-hand-paper-o"></i></h1>
+                    </div>
+                    <div class="text-center text-error">
+                        <h1>403 Access denied</h1>
+                        <p>You don't have privileges to access with those credentials. You can contact your administrator, <br> <a id="goBack" href="#">go back</a> to where you came from, or
+                        </p>
+                        <div class="mid_center">
+                            <button type="button" id="login" class="btn btn-success btn-lg">Login with other credentials</button>
+                        </span>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /page content -->
+        </div>
+        <!-- footer content -->
+        <div id="footer">
+            <div class="container">
+                <p><img src="../lib/pmdynaform/build/img/logow.png"></p>
+                <p class="muted credit">Supplied free of charge with no support, certification, warranty, maintenance nor indemnity by ProcessMaker and its Certified Partners<br>
+Copyright © 2003-<?php echo date("Y");?> ProcessMaker, Inc. All rights reserved. </p>
+            </div>
+        </div>
+    </div>
 
-
-		<!-- Header top -->
-		<div id="header_top"></div>
-		<!-- End header top -->
-
-
-  <!-- Header -->
-  <div id="header">
-      <table border="0" cellspacing="0" cellpadding="0" width="90%">
-          <tr>
-              <td align="center">
-                  <h2>Access denied!</h2>
-                  <h5>Somebody prohibited this page, or the URL is incorrect.</h5>
-              </td>
-          </tr>
-      </table>
-  </div>
-  <!-- End Header -->
-
-
-		<!-- The content div -->
-		<div id="content">
-
-			<!-- text -->
-			<div id="text">
-				<!-- The info text -->
-				<strong>Possible reasons: </strong>
-<ul id="textInfo">
-<li>The link is broken. This may occur when you receive a link via email but your client software adds line breaks, thus distorting long URLs.</li>
-<li>The page you requested is no longer active.</li>
-<li>There is a spelling mistake in the link, in case you entered the URL into the browser's address toolbar.</li>
-</ul>
-<ul>
-				<br/>
-				<h3>What you can do?</h3>
-				<!-- End info text -->
-				<br/>
-    <!-- Page links -->
-    <ul id="textInfo">
-        <li>You might try retyping the URL and trying again.</li>
-        <li>Or we could take you back to the <a href="<?php echo $urlHome; ?>">home page.</a></li>
-        <li>Or you could start again from the <a href="<?php echo $urlLogin; ?>">login page.</a></li>
-    </ul>
-    <!-- End page links -->
-			</div>
-			<!-- End info text -->
-
-
-			<!-- Book icon -->
-			<img id="book" src="images/img-02.png" alt="Book iCon" />
-			<!-- End Book icon -->
-
-			<div style="clear:both;"></div>
-		</div>
-		<!-- End Content -->
-
-
-  <!-- Footer -->
-  <div id="footer" style="padding-top: 10px; color: #878787; font-size: 10px; text-align: center;">
-      <span>&#169; Copyright 2000 - <?php echo date("Y"); ?> </span>
-  </div>
-  <!-- End Footer -->
-
-
-		<!-- Footer bottom -->
-		<div id="footer_bottom"></div>
-		<!-- End Footer bottom -->
-
-
-		<!-- Social Media list -->
-
-
-		<!-- End Social media -->
-		<div style="clear:both;"></div>
-
-
-	  </div>
-	<!-- End Warp around everything -->
-
-  </div>
 </body>
 </html>

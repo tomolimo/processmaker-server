@@ -82,6 +82,7 @@ class Menu
     public function Load($strMenuName)
     {
         global $G_TMP_MENU;
+        
         $G_TMP_MENU = null;
         $G_TMP_MENU = new Menu();
         $fMenu = G::ExpandPath("menus") . $strMenuName . ".php";
@@ -104,11 +105,23 @@ class Menu
         //this line will add options to current menu.
         $oPluginRegistry = & PMPluginRegistry::getSingleton();
         $oPluginRegistry->getMenus($strMenuName);
-
+        
+        $oMenuFromPlugin = array();
+        $oMenuFromPlugin = $oPluginRegistry->getMenuOptionsToReplace($strMenuName);
+        
         //?
         $c = 0;
         for ($i = 0; $i < count($G_TMP_MENU->Options); $i++) {
             if ($G_TMP_MENU->Enabled[$i] == 1) {
+                
+                if(sizeof($oMenuFromPlugin)) {
+                    $menId = $G_TMP_MENU->Id[$i];
+                    if(array_key_exists($menId,$oMenuFromPlugin)) {    
+                        $G_TMP_MENU->Labels[$i] = $oMenuFromPlugin[$menId][0]['label'];
+                        $G_TMP_MENU->Options[$i] = $oMenuFromPlugin[$menId][0]['href'];
+                    }
+                }
+                
                 $this->Options[$c] = $G_TMP_MENU->Options[$i];
                 $this->Labels[$c] = $G_TMP_MENU->Labels[$i];
                 $this->Icons[$c] = (isset($G_TMP_MENU->Icons[$i]))? $G_TMP_MENU->Icons[$i] : "";

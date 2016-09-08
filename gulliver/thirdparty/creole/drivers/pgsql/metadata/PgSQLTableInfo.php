@@ -102,7 +102,7 @@ class PgSQLTableInfo extends TableInfo {
 								WHERE att.attrelid = %d AND att.attnum > 0
 									AND att.attisdropped IS FALSE
 								ORDER BY att.attnum";
-    	$result = pg_query ($this->conn->getResource(), sprintf ($filter->preventSqlInjection($query), $this->oid));
+        $result = $this->executePgQuery($this->conn->getResource(), sprintf ($filter->preventSqlInjection($query), $this->oid));
 
         if (!$result) {
             throw new SQLException("Could not list fields for table: " . $this->name, pg_last_error($this->conn->getResource()));
@@ -224,7 +224,7 @@ class PgSQLTableInfo extends TableInfo {
         require_once($pathTrunk.'gulliver/system/class.inputfilter.php');
         $filter = new InputFilter();
         $strDomain = $filter->validateInput($strDomain);
-      $query = "SELECT
+        $query = "SELECT
 														d.typname as domname,
 														b.typname as basetype,
 														d.typlen,
@@ -237,7 +237,7 @@ class PgSQLTableInfo extends TableInfo {
 														d.typtype = 'd'
 														AND d.typname = '%s'
 													ORDER BY d.typname";
-    	$result = pg_query ($this->conn->getResource(), sprintf ($filter->preventSqlInjection($query), $strDomain));
+        $result = $this->executePgQuery($this->conn->getResource(), sprintf ($filter->preventSqlInjection($query), $strDomain));
 
         if (!$result) {
             throw new SQLException("Query for domain [" . $strDomain . "] failed.", pg_last_error($this->conn->getResource()));
@@ -295,7 +295,7 @@ class PgSQLTableInfo extends TableInfo {
 						     AND a2.attnum = ct.conkey[1]
 						     AND a1.attnum = ct.confkey[1]
 						ORDER BY conname";
-        $result = pg_query ($this->conn->getResource(), sprintf ($filter->preventSqlInjection($query), $this->oid));
+        $result = $this->executePgQuery($this->conn->getResource(), sprintf ($filter->preventSqlInjection($query), $this->oid));
         if (!$result) {
             throw new SQLException("Could not list foreign keys for table: " . $this->name, pg_last_error($this->conn->getResource()));
         }
@@ -381,7 +381,7 @@ class PgSQLTableInfo extends TableInfo {
 									JOIN pg_class cls ON cls.oid=indexrelid
 									WHERE indrelid = %d AND NOT indisprimary
 									ORDER BY cls.relname";
-		    $result = pg_query ($this->conn->getResource(), sprintf ($filter->preventSqlInjection($query), $this->oid));
+		    $result = $this->executePgQuery($this->conn->getResource(), sprintf ($filter->preventSqlInjection($query), $this->oid));
 
 
         if (!$result) {
@@ -413,7 +413,7 @@ class PgSQLTableInfo extends TableInfo {
 															FROM pg_catalog.pg_class c JOIN pg_catalog.pg_attribute a ON a.attrelid = c.oid
 															WHERE c.oid = '%s' AND a.attnum = %d AND NOT a.attisdropped
 															ORDER BY a.attnum";
-	            $result2 = pg_query ($this->conn->getResource(), sprintf ($filter->preventSqlInjection($query), $this->oid, $intColNum));
+	            $result2 = $this->executePgQuery($this->conn->getResource(), sprintf ($filter->preventSqlInjection($query), $this->oid, $intColNum));
 				if (!$result2)
 				{
             		throw new SQLException("Could not list indexes keys for table: " . $this->name, pg_last_error($this->conn->getResource()));
@@ -456,7 +456,7 @@ class PgSQLTableInfo extends TableInfo {
 													     JOIN pg_class cls ON cls.oid=indexrelid
 													WHERE indrelid = %s AND indisprimary
 													ORDER BY cls.relname";
-        $result = pg_query($this->conn->getResource(), sprintf ($filter->preventSqlInjection($query), $this->oid));
+        $result = $this->executePgQuery($this->conn->getResource(), sprintf ($filter->preventSqlInjection($query), $this->oid));
         if (!$result) {
             throw new SQLException("Could not list primary keys for table: " . $this->name, pg_last_error($this->conn->getResource()));
         }
@@ -485,7 +485,7 @@ class PgSQLTableInfo extends TableInfo {
 															FROM pg_catalog.pg_class c JOIN pg_catalog.pg_attribute a ON a.attrelid = c.oid
 															WHERE c.oid = '%s' AND a.attnum = %d AND NOT a.attisdropped
 															ORDER BY a.attnum";
-	            $result2 = pg_query ($this->conn->getResource(), sprintf ($filter->preventSqlInjection($query), $this->oid, $intColNum));
+                $result2 = $this->executePgQuery($this->conn->getResource(), sprintf ($filter->preventSqlInjection($query), $this->oid, $intColNum));
 				if (!$result2)
 				{
             		throw new SQLException("Could not list indexes keys for table: " . $this->name, pg_last_error($this->conn->getResource()));
@@ -500,6 +500,9 @@ class PgSQLTableInfo extends TableInfo {
         $this->pkLoaded = true;
     }
 
-    
+    function executePgQuery($conn, $query){
+        $result = pg_query($conn, $query);
+        return $result;
+    }
 
 }

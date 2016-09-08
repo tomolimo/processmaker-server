@@ -50,7 +50,27 @@
 
 try {
 
+    $usr = '';
+
+    $pwd = '';
+
+
+
+    if (strpos($_SERVER['HTTP_REFERER'], 'home/login') !== false) {
+
+        $urlLogin = '../home/login';
+
+    } else {
+
+        $urlLogin = (substr(SYS_SKIN, 0, 2) !== 'ux')? 'login' : '../main/login';
+
+    }
+
+
+
     if (!$RBAC->singleSignOn) {
+
+        setcookie("singleSignOn", '0', time() + (24 * 60 * 60), '/');
 
         if (!isset($_POST['form']) ) {
 
@@ -65,10 +85,6 @@ try {
 
 
         $frm = $_POST['form'];
-
-        $usr = '';
-
-        $pwd = '';
 
 
 
@@ -270,33 +286,21 @@ try {
 
             if (strpos($_SERVER['HTTP_REFERER'], 'home/login') !== false) {
 
-                $d = serialize(array('u'=>$usr, 'p'=>$pwd, 'm'=>G::LoadTranslation($errLabel)));
+                $d = serialize(['u' => $usr, 'p' => $pwd, 'm' => G::LoadTranslation($errLabel)]);
 
-                $loginUrl = '../home/login?d='.base64_encode($d);
+                $urlLogin = $urlLogin . '?d=' . base64_encode($d);
 
             } else {
 
                 G::SendTemporalMessage($errLabel, "warning");
 
-
-
-                if (substr(SYS_SKIN, 0, 2) !== 'ux') {
-
-                    $loginUrl = 'login';
-
-                } else {
-
-                    $loginUrl = '../main/login';
-
-                }
-
             }
 
 
 
-            G::header("location: $loginUrl");
+            G::header('Location: ' . $urlLogin);
 
-            die;
+            exit(0);
 
         }
 
@@ -334,6 +338,8 @@ try {
 
     } else {
 
+        setcookie("singleSignOn", '1', time() + (24 * 60 * 60), '/');
+
         $uid = $RBAC->userObj->fields['USR_UID'];
 
         $usr = $RBAC->userObj->fields['USR_USERNAME'];
@@ -345,6 +351,124 @@ try {
     }
 
 
+
+    //Set default Languaje
+
+    if (isset($frm['USER_LANG'])) {
+
+        if ($frm['USER_LANG'] != '') {
+
+            $lang = $frm['USER_LANG'];
+
+            if($frm['USER_LANG'] == "default"){
+
+                //Check the USR_DEFAULT_LANG
+
+                require_once 'classes/model/Users.php';
+
+                $user = new Users();
+
+                $rsUser = $user->userLanguaje($_SESSION['USER_LOGGED']);
+
+                $rsUser->next();
+
+                $rowUser = $rsUser->getRow();
+
+                if( isset($rowUser["USR_DEFAULT_LANG"]) &&  $rowUser["USR_DEFAULT_LANG"]!=''){
+
+                    $lang = $rowUser["USR_DEFAULT_LANG"];
+
+                } else {
+
+                    //Check the login_defaultLanguage
+
+                    $oConf = new Configurations();
+
+                    $oConf->loadConfig($obj, 'ENVIRONMENT_SETTINGS', '');
+
+                    if (isset($oConf->aConfig["login_defaultLanguage"]) && $oConf->aConfig["login_defaultLanguage"] != "") {
+
+                        $lang = $oConf->aConfig["login_defaultLanguage"];
+
+                    }else{
+
+                        if(SYS_LANG != ''){
+
+                            $lang = SYS_LANG;
+
+                        }else{
+
+                            $lang = 'en';
+
+                        }
+
+                    }
+
+                }
+
+            } else {
+
+                $lang = $frm['USER_LANG'];
+
+            }
+
+        }
+
+    } else {
+
+        if (defined("SYS_LANG") && SYS_LANG != "") {
+
+            $lang = SYS_LANG;
+
+        } else {
+
+            $lang = 'en';
+
+        }
+
+    }
+
+
+
+    /*----------------------------------********---------------------------------*/
+
+
+
+    //Set User Time Zone
+
+    $user = UsersPeer::retrieveByPK($_SESSION['USER_LOGGED']);
+
+
+
+    if (!is_null($user)) {
+
+        $userTimeZone = $user->getUsrTimeZone();
+
+
+
+        if (trim($userTimeZone) == '') {
+
+            $arraySystemConfiguration = System::getSystemConfiguration('', '', SYS_SYS);
+
+
+
+            $userTimeZone = $arraySystemConfiguration['time_zone'];
+
+        }
+
+
+
+        $_SESSION['USR_TIME_ZONE'] = $userTimeZone;
+
+    }
+
+
+
+    /*----------------------------------********---------------------------------*/
+
+
+
+    //Set data
 
     $aUser = $RBAC->userObj->load($_SESSION['USER_LOGGED']);
 
@@ -393,30 +517,6 @@ try {
         G::header  ("location: login.html");
 
         die;
-
-    }
-
-
-
-    if (isset($frm['USER_LANG'])) {
-
-        if ($frm['USER_LANG'] != '') {
-
-            $lang = $frm['USER_LANG'];
-
-        }
-
-    } else {
-
-        if (defined("SYS_LANG") && SYS_LANG != "") {
-
-            $lang = SYS_LANG;
-
-        } else {
-
-            $lang = 'en';
-
-        }
 
     }
 
@@ -641,6 +741,18 @@ try {
         G::RenderPage('publish');
 
         die;
+
+    }
+
+
+
+    $configS = System::getSystemConfiguration('', '', SYS_SYS);
+
+    $activeSession = isset($configS['session_block']) ? !(int)$configS['session_block']:true;
+
+    if ($activeSession){
+
+        setcookie("PM-TabPrimary", 101010010, time() + (24 * 60 * 60), '/');
 
     }
 

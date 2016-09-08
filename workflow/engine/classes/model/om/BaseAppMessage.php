@@ -129,11 +129,11 @@ abstract class BaseAppMessage extends BaseObject implements Persistent
      */
     protected $app_msg_show_message = 1;
 
-/**
+    /**
      * The value for the app_msg_error field.
-     * @var        int
+     * @var        string
      */
-    protected $app_msg_error;
+    protected $app_msg_error = '';
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -381,7 +381,7 @@ abstract class BaseAppMessage extends BaseObject implements Persistent
     /**
      * Get the [app_msg_error] column value.
      * 
-     * @return     String
+     * @return     string
      */
     public function getAppMsgError()
     {
@@ -797,7 +797,7 @@ abstract class BaseAppMessage extends BaseObject implements Persistent
             $this->modifiedColumns[] = AppMessagePeer::APP_MSG_ERROR;
         }
 
-    } // setAppMsgFrom()
+    } // setAppMsgError()
 
     /**
      * Hydrates (populates) the object variables with values from the database resultset.
@@ -857,7 +857,7 @@ abstract class BaseAppMessage extends BaseObject implements Persistent
             $this->setNew(false);
 
             // FIXME - using NUM_COLUMNS may be clearer.
-            return $startcol + 18; // 17 = AppMessagePeer::NUM_COLUMNS - AppMessagePeer::NUM_LAZY_LOAD_COLUMNS).
+            return $startcol + 18; // 18 = AppMessagePeer::NUM_COLUMNS - AppMessagePeer::NUM_LAZY_LOAD_COLUMNS).
 
         } catch (Exception $e) {
             throw new PropelException("Error populating AppMessage object", $e);
@@ -1332,6 +1332,7 @@ abstract class BaseAppMessage extends BaseObject implements Persistent
         if (array_key_exists($keys[17], $arr)) {
             $this->setAppMsgError($arr[$keys[17]]);
         }
+
     }
 
     /**
@@ -1414,6 +1415,7 @@ abstract class BaseAppMessage extends BaseObject implements Persistent
         if ($this->isColumnModified(AppMessagePeer::APP_MSG_ERROR)) {
             $criteria->add(AppMessagePeer::APP_MSG_ERROR, $this->app_msg_error);
         }
+
 
         return $criteria;
     }
@@ -1501,6 +1503,7 @@ abstract class BaseAppMessage extends BaseObject implements Persistent
         $copyObj->setAppMsgShowMessage($this->app_msg_show_message);
 
         $copyObj->setAppMsgError($this->app_msg_error);
+
 
         $copyObj->setNew(true);
 

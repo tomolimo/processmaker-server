@@ -166,7 +166,10 @@ var setVariablePickerJS = function(){
             {
                var optionValue = prefix+list[i].sName;
                if(isBpmn) {
-                  if(list[i].sLabel.toLowerCase() == 'grid') {
+                  if (list[i].sType === "hidden"){
+                      list[i].sLabel = "hidden";
+                  }
+                  if(list[i].sLabel && list[i].sLabel.toLowerCase() == 'grid') {
                      var gridValue = 'gridt<table border=1 cellspacing=0><tr><th>Header_1</th></tr><tbody><!--@>'+list[i].sName+'--><tr><td>column_name1</td></tr><!--@<'+list[i].sName+'--></tbody></table>'; 
                      optionValue = gridValue;
                   }      

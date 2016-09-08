@@ -3,6 +3,7 @@ namespace ProcessMaker\Services\Api\Project;
 
 use \ProcessMaker\Services\Api;
 use \Luracast\Restler\RestException;
+use \ProcessMaker\Util\DateTime;
 
 /**
  * Project\DynaForm Api Controller
@@ -11,6 +12,10 @@ use \Luracast\Restler\RestException;
  */
 class DynaForm extends Api
 {
+    private $arrayFieldIso8601 = [
+        "dyn_update_date"
+    ];
+
     /**
      * @url GET /:prj_uid/dynaform/:dyn_uid
      *
@@ -25,7 +30,7 @@ class DynaForm extends Api
 
             $response = $dynaForm->getDynaForm($dyn_uid);
 
-            return $response;
+            return DateTime::convertUtcToIso8601($response, $this->arrayFieldIso8601);
         } catch (\Exception $e) {
             throw (new RestException(Api::STAT_APP_EXCEPTION, $e->getMessage()));
         }
@@ -176,6 +181,27 @@ class DynaForm extends Api
             \G::LoadClass('pmDynaform');
             $pmDynaform = new \pmDynaform();
             return $pmDynaform->listLanguage($dyn_uid);
+        } catch (\Exception $e) {
+            throw (new RestException(Api::STAT_APP_EXCEPTION, $e->getMessage()));
+        }
+    }
+
+    /**
+     * @url POST /:prj_uid/dynaform/:dyn_uid/history
+     *
+     * @param string $dyn_uid {@min 32}{@max 32}
+     * @param string $prj_uid {@min 32}{@max 32}
+     * @param array  $request_data
+     */
+    public function doGetDynaFormHistory($dyn_uid, $prj_uid, $request_data)
+    {
+        try {
+            $dynaForm = new \ProcessMaker\BusinessModel\DynaForm();
+            $dynaForm->setFormatFieldNameInUppercase(false);
+
+            $response = $dynaForm->getDynaFormHistory($prj_uid, $dyn_uid, $request_data);
+
+            return $response;
         } catch (\Exception $e) {
             throw (new RestException(Api::STAT_APP_EXCEPTION, $e->getMessage()));
         }

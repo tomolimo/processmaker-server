@@ -229,6 +229,7 @@ var htmlMessage;
 //var rowLabels = [];
 
 var smodel;
+var newCaseNewTab;
 
 function openCase(){
   var rowModel = consolidatedGrid.getSelectionModel().getSelected();
@@ -236,15 +237,16 @@ function openCase(){
     var appUid    = rowModel.data.APP_UID;
     var delIndex  = rowModel.data.DEL_INDEX;
     var caseTitle = (rowModel.data.APP_TITLE) ? rowModel.data.APP_TITLE : rowModel.data.APP_UID;
-
-    Ext.Msg.show({
-      msg: _("ID_OPEN_CASE") + " " + caseTitle,
-      width:300,
-      wait:true,
-      waitConfig: {
-        interval:200
-      }
-    });
+    if(!isIE) {
+      Ext.Msg.show({
+        msg: _("ID_OPEN_CASE") + " " + caseTitle,
+        width:300,
+        wait:true,
+        waitConfig: {
+          interval:200
+        }
+      });
+    }
     params = '';
     switch(action){
       case 'consolidated':
@@ -255,24 +257,44 @@ function openCase(){
         break;
     }
     params += '&action=' + 'todo';
-    redirect(requestFile + '?' + params);
+    
+    if(isIE) {
+      if(newCaseNewTab) {
+        newCaseNewTab.close();
+      }
 
+      newCaseNewTab = window.open(requestFile + '?' + params);
+      newCaseNewTab.name = PM.Sessions.getCookie('PM-TabPrimary');
+    } else {
+      redirect(requestFile + '?' + params);
+    }
   } else {
       msgBox(_("ID_INFORMATION"), _("ID_SELECT_ONE_AT_LEAST"));
   }
 }
 
 function jumpToCase(appNumber){
-  Ext.MessageBox.show({ msg: _('ID_PROCESSING'), wait:true,waitConfig: {interval:200} });
+  if(!isIE) {
+    Ext.MessageBox.show({ msg: _('ID_PROCESSING'), wait:true,waitConfig: {interval:200} });
+  }
   Ext.Ajax.request({
     url: 'cases_Ajax',
     success: function(response) {
-      var res = Ext.decode(response.responseText);
+      var res = Ext.decode(response.responseText),
+          nameTab;
       if (res.exists === true) {
         params = 'APP_NUMBER=' + appNumber;
         params += '&action=jump';
         requestFile = '../cases/open';
-        redirect(requestFile + '?' + params);
+        if(isIE) {
+          if(newCaseNewTab) {
+            newCaseNewTab.close();
+          }
+          nameTab = PM.Sessions.getCookie('PM-TabPrimary') + '_openCase';
+            newCaseNewTab = window.open(requestFile + '?' + params, nameTab);
+        } else {
+          redirect(requestFile + '?' + params);
+        }
       } else {
         Ext.MessageBox.hide();
         var message = new Array();
@@ -403,27 +425,27 @@ Ext.onReady(function () {
   });
 
   var buttonProcess = new Ext.Action({
-    text: "Derivate",
+    text: _("ID_DERIVATED"),
     //iconCls: 'ICON_CASES_PAUSED',
     handler : function (){
-      Ext.Msg.confirm('Confirm Routing', 'Route cases per batch?',
+      Ext.Msg.confirm(_("ID_CONFIRM_ROUTING"), _("ID_ROUTE_BATCH_ROUTING"),
         function(btn, text){
-          if (btn=='yes'){
-              htmlMessage = "";
-              var selectedRow = Ext.getCmp(gridId).getSelectionModel().getSelections();
-              var maxLenght = selectedRow.length;
-              for (var i in selectedRow) {
-                rowGrid = selectedRow[i].data
-                for (fieldGrid in rowGrid){
-                  if(fieldGrid != 'APP_UID' && fieldGrid != 'APP_NUMBER' && fieldGrid != 'APP_TITLE' && fieldGrid != 'DEL_INDEX' ){
-                       fieldGridGral = fieldGrid;
-                       fieldGridGralVal = rowGrid[fieldGrid];
-                  }
-                }
-                if (selectedRow[i].data) {
-                    ajaxDerivationRequest(selectedRow[i].data["APP_UID"], selectedRow[i].data["DEL_INDEX"], maxLenght, selectedRow[i].data["APP_NUMBER"],fieldGridGral, fieldGridGralVal);
+          if (btn == 'yes') {
+            htmlMessage = "";
+            var selectedRow = Ext.getCmp(gridId).getSelectionModel().getSelections();
+            var maxLenght = selectedRow.length;
+            for (var i in selectedRow) {
+              rowGrid = selectedRow[i].data
+              for (fieldGrid in rowGrid) {
+                if (fieldGrid != 'APP_UID' && fieldGrid != 'APP_NUMBER' && fieldGrid != 'APP_TITLE' && fieldGrid != 'DEL_INDEX') {
+                  fieldGridGral = fieldGrid;
+                  fieldGridGralVal = rowGrid[fieldGrid];
                 }
               }
+              if (selectedRow[i].data) {
+                ajaxDerivationRequest(selectedRow[i].data["APP_UID"], selectedRow[i].data["DEL_INDEX"], maxLenght, selectedRow[i].data["APP_NUMBER"], fieldGridGral, fieldGridGralVal);
+              }
+            }
           }
          }
       );
@@ -457,6 +479,7 @@ Ext.onReady(function () {
   });
 
   smodel = new Ext.grid.CheckboxSelectionModel({
+    checkOnly:true,
     listeners:{
       selectionchange: function(sm){
         var count_rows = sm.getCount();
@@ -542,36 +565,23 @@ Ext.onReady(function () {
     }
   });
 
-  function enableDisableMenuOption(){
-    var rl = Ext.getCmp(gridId).store.getModifiedRecords();
-    //alert ('-'+rl+'-');
-    var rows = consolidatedGrid.getSelectionModel().getSelections();
-    if (rl.toString()!='') {
-      //alert(rl);
-      optionMenuOpen.setDisabled(true);
-      optionMenuPause.setDisabled(true);
-      buttonProcess.setDisabled(true);
-      return;
-    }
-    switch(action){
-      case 'consolidated':
-        if (rows.length == 0) {
-          optionMenuOpen.setDisabled(true);
-          optionMenuPause.setDisabled(true);
-          buttonProcess.setDisabled(true);
-        } else if( rows.length == 1 ) {
-          optionMenuOpen.setDisabled(false);
-          optionMenuPause.setDisabled(false);
-          buttonProcess.setDisabled(false);
-        } else {
-          optionMenuOpen.setDisabled(true);
-          optionMenuPause.setDisabled(true);
-          buttonProcess.setDisabled(false);
+    function enableDisableMenuOption() {
+        var rl = Ext.getCmp(gridId).store.getModifiedRecords();
+        var rows = consolidatedGrid.getSelectionModel().getSelections();
+        optionMenuOpen.setDisabled(true);
+        optionMenuPause.setDisabled(true);
+        buttonProcess.setDisabled(true);
+        if (action === "consolidated" && rows.length === 1) {
+            optionMenuOpen.setDisabled(false);
+            optionMenuPause.setDisabled(false);
+            buttonProcess.setDisabled(false);
         }
-        break;
+        if (action === "consolidated" && rows.length > 1) {
+            optionMenuOpen.setDisabled(true);
+            optionMenuPause.setDisabled(true);
+            buttonProcess.setDisabled(false);
+        }
     }
-
-  }
 
   toolbarconsolidated = [
   {
@@ -1315,7 +1325,7 @@ function ajaxDerivationRequest(appUid, delIndex, maxLenght, appNumber, fieldGrid
 
       if (index == maxLenght) {
         Ext.MessageBox.show({
-          title: "Derivation Result",
+          title: _("ID_DERIVATION_RESULT"),
           msg: htmlMessage,
 
           fn: function (btn, text, opt) {
@@ -1354,3 +1364,8 @@ function linkRenderer(value)
     return "<a href=\"" + value + "\" onclick=\"window.open('" + value + "', '_blank'); return false;\">" + value + "</a>";
 }
 
+Ext.EventManager.on(window, 'beforeunload', function () {
+  if(newCaseNewTab) {
+    newCaseNewTab.close();
+  }
+});

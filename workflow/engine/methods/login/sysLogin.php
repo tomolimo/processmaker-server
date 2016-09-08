@@ -340,7 +340,19 @@ switch (WS_IN_LOGIN) {
 
 }
 
-error_log($fileLogin);
+setcookie("PM-Warning", trim(G::LoadTranslation('ID_BLOCKER_MSG'),'*'), time() + (24 * 60 * 60), SYS_CURRENT_URI);
+
+setcookie("PM-TabPrimary", uniqid(), time() + (24 * 60 * 60), '/');
+
+$oHeadPublisher = & headPublisher::getSingleton();
+
+$oHeadPublisher->addScriptFile('/jscore/src/PM.js');
+
+$oHeadPublisher->addScriptFile('/jscore/src/Sessions.js');
+
+$oHeadPublisher->addScriptFile('/jscore/src/Register.js');
+
+
 
 $G_PUBLISH->AddContent ('xmlform', 'xmlform', $fileLogin, '', $aField, 'sysLogin');
 

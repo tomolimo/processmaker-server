@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="sysLogin" version="1.0" basedir="" xmlform_type="NORMAL" width="400px" enabletemplate="1">
+  <BROWSER_TIME_ZONE_OFFSET type="hidden" />
+
   <TITLE type="title">
     <en><![CDATA[Login]]></en>
   </TITLE>
@@ -44,7 +46,7 @@ function createEvent(elem, event, fn) {
 window.onload= function(){
   var inputUser,
       inputWs,
-      inputPass; 
+      inputPass;
   if(document.getElementById('form[USR_USERNAME]').placeholder === undefined && document.getElementById('form[BSUBMIT]').classList == undefined){
     document.getElementById('form[USR_USERNAME]').value = _('ID_USER');
     document.getElementById('form[USR_PASSWORD_MASK]').value = _('ID_PASSWORD');
@@ -52,49 +54,49 @@ window.onload= function(){
     document.getElementById('form[BSUBMIT]').className = "button-login-success";
     inputUser = document.getElementById('form[USR_USERNAME]');
     inputPass = document.getElementById('form[USR_PASSWORD_MASK]');
-    inputWs = document.getElementById('form[USER_ENV]');    
+    inputWs = document.getElementById('form[USER_ENV]');
 
     inputUser.attachEvent("onclick", function (){
       if(_('ID_USER') == inputUser.value){
         inputUser.value="";
-      }        
+      }
     });
     inputUser.attachEvent("onblur", function (){
       if(inputUser.value == ""){
         inputUser.value=_('ID_USER');
-      }        
+      }
     });
-    
+
     inputPass.attachEvent("onclick", function (){
       if(_('ID_PASSWORD') == inputPass.value){
         inputPass.value="";
-      }        
+      }
     });
-    
+
     inputPass.attachEvent("onblur", function (){
       if(inputPass.value == ""){
         inputPass.value = _('ID_PASSWORD');
-      }        
+      }
     });
 
     inputWs.attachEvent("onclick", function (){
       if(_('ID_WORKSPACE') == inputWs.value){
         inputWs.value="";
-      }        
+      }
     });
 
     inputWs.attachEvent("onblur", function (){
       if(inputWs.value == ""){
         inputWs.value = _('ID_WORKSPACE');
-      }         
+      }
     });
-    
+
   }else{
     document.getElementById('form[USR_USERNAME]').placeholder = _('ID_USER');
     document.getElementById('form[USR_PASSWORD_MASK]').placeholder = _('ID_PASSWORD');
     document.getElementById('form[USER_ENV]').placeholder = _('ID_WORKSPACE');
     document.getElementById('form[BSUBMIT]').classList.remove('module_app_button___gray');
-    document.getElementById('form[BSUBMIT]').classList.add('button-login-success');        
+    document.getElementById('form[BSUBMIT]').classList.add('button-login-success');
   }
 };
 
@@ -131,9 +133,10 @@ leimnud.event.add(document.getElementById('form[USER_ENV]'), 'keypress', functio
 leimnud.event.add(document.getElementById('form[BSUBMIT]'), 'click', function() {
     createCookie("pm_sys_sys", "{\"sys_sys\": \"" + getField("USER_ENV").value + "\"}", 365);
     document.getElementById('form[USR_PASSWORD]').value = document.getElementById('form[USR_PASSWORD_MASK]').value;
-    document.getElementById('form[USR_PASSWORD_MASK]').value = '';    
+    document.getElementById('form[USR_PASSWORD_MASK]').value = '';
+    document.getElementById("form[BROWSER_TIME_ZONE_OFFSET]").value = getBrowserTimeZoneOffset();
     if(!navigator.userAgent.indexOf("MSIE 8.0")>0)
-      document.getElementById("form[USR_PASSWORD_MASK]").setAttribute("type", "text");       
+      document.getElementById("form[USR_PASSWORD_MASK]").setAttribute("type", "text");
     document.sysLogin.submit();
 }.extend(document.getElementById('form[BSUBMIT]')));
 

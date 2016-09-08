@@ -158,7 +158,11 @@ class DebugConnection implements Connection {
 		$res = $this->childConnection->executeQuery($sql, $fetchmode);	
   	$endTime =  microtime(true);
   	$time = $endTime - $startTime;
-		$this->log("executeQuery|$time|$sql");
+    if(is_string($sql)){
+        $this->log("executeQuery|$time|$sql");
+    }else{
+        $this->log("executeQuery|$time|Sql empty");
+    }
 		return $res;
 	}
 	

@@ -1182,7 +1182,7 @@ class TimerEvent
             //Start Timer-Event (start new case) ///////////////////////////////////////////////////////////////////////
             $common->frontEndShow("START");
 
-            $this->log("START-NEW-CASES", "Date \"$datetime\": Start new cases");
+            $this->log("START-NEW-CASES", "Date \"$datetime (UTC +00:00)\": Start new cases");
 
             //Query
             $criteria = $this->getTimerEventCriteria();
@@ -1349,17 +1349,17 @@ class TimerEvent
             }
 
             if (!$flagRecord) {
-                $common->frontEndShow("TEXT", "Not exists any record to start a new case, on date \"$datetime\"");
+                $common->frontEndShow("TEXT", "Not exists any record to start a new case, on date \"$datetime (UTC +00:00)\"");
 
                 $this->log("NO-RECORDS", "Not exists any record to start a new case");
             }
 
             $common->frontEndShow("END");
 
-            $this->log("END-NEW-CASES", "Date \"$datetime\": End new cases");
+            $this->log("END-NEW-CASES", "Date \"$datetime (UTC +00:00)\": End new cases");
 
             //Intermediate Catch Timer-Event (continue the case) ///////////////////////////////////////////////////////
-            $this->log("START-CONTINUE-CASES", "Date \"$datetime\": Start continue the cases");
+            $this->log("START-CONTINUE-CASES", "Date \"$datetime (UTC +00:00)\": Start continue the cases");
 
             //Query
             $criteriaMain = $this->getTimerEventCriteria();
@@ -1555,14 +1555,14 @@ class TimerEvent
             } while ($flagNextRecord);
 
             if (!$flagRecord) {
-                $common->frontEndShow("TEXT", "Not exists any record to continue a case, on date \"$datetime\"");
+                $common->frontEndShow("TEXT", "Not exists any record to continue a case, on date \"$datetime (UTC +00:00)\"");
 
                 $this->log("NO-RECORDS", "Not exists any record to continue a case");
             }
 
             $common->frontEndShow("END");
 
-            $this->log("END-CONTINUE-CASES", "Date \"$datetime\": End continue the cases");
+            $this->log("END-CONTINUE-CASES", "Date \"$datetime (UTC +00:00)\": End continue the cases");
         } catch (\Exception $e) {
             throw $e;
         }

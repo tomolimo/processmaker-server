@@ -28,9 +28,11 @@
 //(count ($argv) == 4) || ((count ($argv) == 5) && ($argv [3] != '-skip'))
 $commandLineSyntaxMsg = "Invalid command line arguments: \n " .
   "syntax: ".
-  "php reindex_solr.php [workspace_name] [reindexall|reindexmissing|optimizeindex|reindexone] [-skip {record_number}] [-reindextrunksize {trunk_size}] [-appuid {APP_UID}]\n" .
+  "php reindex_solr.php [workspace_name] [reindexall|reindexmissing|optimizeindex|reindexone|deleteindexone] [-skip {record_number}] [-reindextrunksize {trunk_size}] [-appuid {APP_UID}]\n" .
   " Where \n".
   "       reindexall : reindex all the database. \n" .
+  "       reindexone : reindex one case. -appuid parameter is required.\n" .
+  "       deleteindexone : delete one case from index. -appuid parameter is required.\n" .
   "       reindexmissing: reindex only the missing records stored in database. \n".
   "                     (records defined in APP_SOLR_QUEUE table are required)\n" .
   "       optimizeindex: optimize the changes in the search index. (used to get faster results) \n" .
@@ -39,7 +41,7 @@ $commandLineSyntaxMsg = "Invalid command line arguments: \n " .
   " -reindextrunksize {trunk_size}: specify the number of records sent to index each time. \n ex: -reindextrunksize 100 //(default = 1000) \n Reduce the trunk if using big documents, and memory is not enough. \n";
 
 if ( (count ($argv) < 3) || ((count ($argv) % 2) == 0) ||
-    ($argv [2] != 'reindexall' && $argv [2] != 'reindexmissing' && $argv [2] != 'optimizeindex'  && $argv [2] != 'reindexone')) {
+    ($argv [2] != 'reindexall' && $argv [2] != 'reindexmissing' && $argv [2] != 'optimizeindex'  && $argv [2] != 'reindexone' && $argv [2] != 'deleteindexone')) {
   print $commandLineSyntaxMsg;
   die ();
 }
@@ -337,6 +339,12 @@ function processWorkspace()
           print "Missing -appuid parameter. please complete it with this option.\n";
         }
         $oAppSolr->updateApplicationSearchIndex ($appUid, false);
+      }
+      if($ScriptAction == "deleteindexone"){
+        if($appUid == ""){
+          print "Missing -appuid parameter. please complete it with this option.\n";
+        }
+        $oAppSolr->deleteApplicationSearchIndex ($appUid, false);
       }
     }
     else {

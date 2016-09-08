@@ -578,11 +578,31 @@ class Task
 
             $flagTaskAssignTypeIsMultipleInstance = preg_match("/^(?:MULTIPLE_INSTANCE|MULTIPLE_INSTANCE_VALUE_BASED)$/", $arrayProperty["TAS_ASSIGN_TYPE"]);
 
+            
+
+            if ($flagTaskIsMultipleInstance && !$flagTaskAssignTypeIsMultipleInstance) {
+
+                $arrayProperty["TAS_ASSIGN_TYPE"] = "MULTIPLE_INSTANCE";
+
+                $flagTaskAssignTypeIsMultipleInstance = true;
+
+            }
+
 
 
             if ($flagTaskIsMultipleInstance && !$flagTaskAssignTypeIsMultipleInstance) {
 
                 throw new \Exception(\G::LoadTranslation("ID_ACTIVITY_INVALID_ASSIGNMENT_METHOD_FOR_MULTIPLE_INSTANCE_ACTIVITY", array(strtolower("ACT_UID"), $act_uid)));
+
+            }
+
+            
+
+            if (!$flagTaskIsMultipleInstance && $flagTaskAssignTypeIsMultipleInstance) {
+
+                $arrayProperty["TAS_ASSIGN_TYPE"] = "BALANCED";
+
+                $flagTaskAssignTypeIsMultipleInstance = false;
 
             }
 
@@ -2114,17 +2134,21 @@ class Task
 
 
 
+                    $row["GRP_TITLE"] = $row["GRP_TITLE"] . " (" . $row2["NUM_MEM"] . " " . \G::LoadTranslation(((int)($row2["NUM_MEM"]) == 1)? "ID_USER" : "ID_USERS") . ")";
+
+
+
                     $arrayAssignee[] = $this->getTaskAssigneeDataFromRecord(
 
                         array(
 
                             $row["GRP_UID"],
 
-                            $row["GRP_TITLE"] . " (" . $row2["NUM_MEM"] . " " . \G::LoadTranslation(((int)($row2["NUM_MEM"]) == 1)? "ID_USER" : "ID_USERS") . ")",
+                            $row["GRP_TITLE"],
 
                             "",
 
-                            "",
+                            $row["GRP_TITLE"],
 
                             "group"
 
@@ -3846,6 +3870,76 @@ class Task
 
     }
 
+    
+
+    public function getValidateSelfService($data)
+
+    {                                                    
+
+        $paused = false;     
+
+        $data = array_change_key_case($data, CASE_LOWER);
+
+        $sTaskUID = $data['act_uid']; 
+
+        $caseType = isset($data['case_type']) ? ($data['case_type'] == 'assigned' ? $data['case_type'] : 'unassigned') : 'unassigned';
+
+        $response = new \stdclass();   
+
+
+
+        $oCriteria = new \Criteria();
+
+        $arrayCondition = array();       
+
+        $arrayCondition[] = array(\AppDelegationPeer::APP_UID, \AppDelayPeer::APP_UID);
+
+        $arrayCondition[] = array(\AppDelegationPeer::DEL_INDEX, \AppDelayPeer::APP_DEL_INDEX); 
+
+        $oCriteria->addJoinMC($arrayCondition, \Criteria::LEFT_JOIN);  
+
+        $oCriteria->add(\AppDelegationPeer::TAS_UID, $sTaskUID); 
+
+        $oCriteria->add(\AppDelayPeer::APP_DISABLE_ACTION_USER, "0");  
+
+        $oResult = \AppDelegationPeer::doSelectOne($oCriteria); 
+
+        if(!empty($oResult)) { 
+
+            $paused = true; 
+
+        }
+
+        
+
+        $response->paused = $paused;
+
+        $oCriteria = new \Criteria();
+
+        $oCriteria->add(\AppDelegationPeer::DEL_THREAD_STATUS, "OPEN");
+
+        $oCriteria->add(\AppDelegationPeer::TAS_UID, $sTaskUID);
+
+        if($caseType == 'unassigned') {   
+
+            $oCriteria->add(\AppDelegationPeer::USR_UID, "", \Criteria::EQUAL);
+
+        }
+
+        $oApplication = \AppDelegationPeer::doSelectOne($oCriteria);
+
+        $response->result = true;
+
+        if(!empty($oApplication) || $paused) {
+
+            $response->result = false;
+
+            $response->message = G::LoadTranslation('ID_CURRENT_ASSING_TYPE_WITH_CASES');
+
+        }
+
+        return $response;
+
+    }
+
 }
-
-

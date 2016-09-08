@@ -117,7 +117,15 @@ class Capsule {
         
         // extract variables into local namespace
         extract($this->vars);
-        
+
+        $realdocuroot = str_replace( '\\', '/', $_SERVER['DOCUMENT_ROOT'] );
+        $docuroot = explode( '/', $realdocuroot );
+        array_pop( $docuroot );
+        $pathhome = implode( '/', $docuroot ) . '/';
+        array_pop( $docuroot );
+        $pathTrunk = implode( '/', $docuroot ) . '/';
+        require_once($pathTrunk.'gulliver/system/class.inputfilter.php');
+        $filter = new InputFilter();
         // prepend template path to include path, 
         // so that include "path/relative/to/templates"; can be used within templates
         $__old_inc_path = ini_get('include_path');
@@ -126,11 +134,15 @@ class Capsule {
         if(strpos($path,":")>0){
             $firstPath = explode(":", $this->templatePath . PATH_SEPARATOR . $__old_inc_path);
             if (is_dir($firstPath[0])) {
-                ini_set('include_path', $this->templatePath . PATH_SEPARATOR . $__old_inc_path);
+                $incPath = $this->templatePath . PATH_SEPARATOR . $__old_inc_path;
+                $incPath = $filter->validateInput($incPath, 'path');
+                ini_set('include_path', $incPath);
             } 
         } else {
             if(is_dir($this->templatePath . PATH_SEPARATOR . $__old_inc_path)) {
-                ini_set('include_path', $this->templatePath . PATH_SEPARATOR . $__old_inc_path);
+                $incPath = $this->templatePath . PATH_SEPARATOR . $__old_inc_path;
+                $incPath = $filter->validateInput($incPath, 'path');
+                ini_set('include_path', $incPath);
             }
         }
                 

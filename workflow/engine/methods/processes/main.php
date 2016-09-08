@@ -48,8 +48,9 @@ $G_ID_MENU_SELECTED = 'PROCESSES';
 $G_ID_SUB_MENU_SELECTED = '-';
 
 $G_PUBLISH = new Publisher();
-// $oHeadPublisher = & headPublisher::getSingleton();
-//$oHeadPublisher->addScriptFile('/jscore/processes/main.js');
+$oHeadPublisher = & headPublisher::getSingleton();
+$oHeadPublisher->addScriptFile('/jscore/src/PM.js');
+$oHeadPublisher->addScriptFile('/jscore/src/Sessions.js');
 $G_PUBLISH->AddContent( 'view', 'processes/mainLoad' );
 
 if (isset( $_GET['type'] ))

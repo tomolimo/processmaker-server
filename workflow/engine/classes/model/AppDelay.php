@@ -98,7 +98,7 @@ class AppDelay extends BaseAppDelay
         $oCriteria->add(AppDelayPeer::APP_TYPE, 'PAUSE');
         $oCriteria->add(
             $oCriteria->getNewCriterion(AppDelayPeer::APP_DISABLE_ACTION_USER, 0, Criteria::EQUAL)->addOr(
-            $oCriteria->getNewCriterion(AppDelayPeer::APP_DISABLE_ACTION_USER, null, Criteria::ISNULL))
+                $oCriteria->getNewCriterion(AppDelayPeer::APP_DISABLE_ACTION_USER, null, Criteria::ISNULL))
         );
 
         $oDataset = AppDelayPeer::doSelectRS($oCriteria);
@@ -106,7 +106,7 @@ class AppDelay extends BaseAppDelay
         $oDataset->next();
         $aRow = $oDataset->getRow();
 
-        if ( $aRow ) {
+        if ($aRow) {
             return true;
         } else {
             return false;

@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: ProcessMaker 3.0\n"
+"Project-Id-Version: ProcessMaker (Branch 3.0.1.8)\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2015-10-08 18:22:42\n"
+"PO-Revision-Date: 2016-03-30 19:23:50\n"
 "Last-Translator: \n"
 "Language-Team: Colosa Developers Team <developers@colosa.com>\n"
 "MIME-Version: 1.0\n"
@@ -3436,8 +3436,8 @@ msgstr "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified
 # TRANSLATION
 # LABEL/ID_UPLOAD_ERR_INI_SIZE
 #: LABEL/ID_UPLOAD_ERR_INI_SIZE
-msgid "The uploaded file exceeds the upload_max_filesize directive in php.ini"
-msgstr "The uploaded file exceeds the upload_max_filesize directive in php.ini"
+msgid "The uploaded file exceeds the upload_max_filesize or post_max_size directive in php.ini"
+msgstr "The uploaded file exceeds the upload_max_filesize or post_max_size directive in php.ini"
 
 # TRANSLATION
 # LABEL/ID_NOT_PROCESS_RELATED
@@ -3972,6 +3972,12 @@ msgstr "No fields found!"
 #: LABEL/ID_UNASSIGNED
 msgid "Unassigned"
 msgstr "Unassigned"
+
+# TRANSLATION
+# LABEL/ID_UNASSIGNED_STATUS
+#: LABEL/ID_UNASSIGNED_STATUS
+msgid "Unassigned Status"
+msgstr "Unassigned Status"
 
 # TRANSLATION
 # LABEL/ID_CLAIM
@@ -5052,6 +5058,12 @@ msgstr "Language deleted successfully!"
 #: LABEL/ID_LANGUAGE_CANT_DELETE
 msgid "There is {0} cases started with this language, delete action canceled!"
 msgstr "There is {0} cases started with this language, delete action canceled!"
+
+# TRANSLATION
+# LABEL/ID_CANNOT_REMOVE_TEMPLATE_EMAIL_EVENT
+#: LABEL/ID_CANNOT_REMOVE_TEMPLATE_EMAIL_EVENT
+msgid "You can not delete the template {0} because it has a relationship with Email Event"
+msgstr "You can not delete the template {0} because it has a relationship with Email Event"
 
 # TRANSLATION
 # LABEL/ID_TOTAL_CASES
@@ -6580,8 +6592,8 @@ msgstr "Do you want to assign all available users to this role?"
 # TRANSLATION
 # LABEL/ID_MSG_AJAX_FAILURE
 #: LABEL/ID_MSG_AJAX_FAILURE
-msgid "Some error has occurred. Try again later."
-msgstr "Some error has occurred. Try again later."
+msgid "An error has occurred. Please contact your system administrator."
+msgstr "An error has occurred. Please contact your system administrator."
 
 # TRANSLATION
 # LABEL/ID_FINISH
@@ -6768,6 +6780,18 @@ msgstr "Departments"
 #: LABEL/ID_DEPARTMENT_NAME
 msgid "Department Name"
 msgstr "Department Name"
+
+# TRANSLATION
+# LABEL/ID_DEPARTMENT_ERROR_CREATE
+#: LABEL/ID_DEPARTMENT_ERROR_CREATE
+msgid "Error creating department"
+msgstr "Error creating department"
+
+# TRANSLATION
+# LABEL/ID_DEPARTMENT_CHECK_PARENT_DEPARTMENT
+#: LABEL/ID_DEPARTMENT_CHECK_PARENT_DEPARTMENT
+msgid "It's necessary to check the parent-department: {0} for the sub-department: {1}"
+msgstr "It's necessary to check the parent-department: {0} for the sub-department: {1}"
 
 # TRANSLATION
 # LABEL/ID_CONFIRM_CANCEL_CASE
@@ -9518,6 +9542,12 @@ msgid "The process you are trying to import already exists. Please select one of
 msgstr "The process you are trying to import already exists. Please select one of the following options to continue:"
 
 # TRANSLATION
+# LABEL/ID_PROCESS_DEFINITION_INCOMPLETE
+#: LABEL/ID_PROCESS_DEFINITION_INCOMPLETE
+msgid "To create a new process all the process objects must be selected/included in the pmx2 file."
+msgstr "To create a new process all the process objects must be selected/included in the pmx2 file."
+
+# TRANSLATION
 # LABEL/ID_DEBUG_MESSAGE
 #: LABEL/ID_DEBUG_MESSAGE
 msgid "Debug Messages"
@@ -10558,8 +10588,8 @@ msgstr "Switching Skin"
 # TRANSLATION
 # LABEL/ID_CONFIRM_REMOVE_FIELD
 #: LABEL/ID_CONFIRM_REMOVE_FIELD
-msgid "Do you want to remove this field?"
-msgstr "Do you want to remove this field?"
+msgid "Do you want to remove the selected rows?"
+msgstr "Do you want to remove the selected rows?"
 
 # TRANSLATION
 # LABEL/ID_INVALID_EXTENSION
@@ -11086,8 +11116,8 @@ msgstr "File \"{0}\" imported successfully."
 # TRANSLATION
 # LABEL/ID_PMTABLE_IMPORT_WITH_ERRORS
 #: LABEL/ID_PMTABLE_IMPORT_WITH_ERRORS
-msgid "File \"{0}\" imported but with errors."
-msgstr "File \"{0}\" imported but with errors."
+msgid "File \"{0}\" imported but with errors:"
+msgstr "File \"{0}\" imported but with errors:"
 
 # TRANSLATION
 # LABEL/DBS_NAME
@@ -14536,8 +14566,8 @@ msgstr "Failure to do so could lead your ProcessMaker installation not functioni
 # TRANSLATION
 # LABEL/ID_PROCESSMAKER_REQUIREMENTS_PHP
 #: LABEL/ID_PROCESSMAKER_REQUIREMENTS_PHP
-msgid "PHP Version >= 5.2.10"
-msgstr "PHP Version >= 5.2.10"
+msgid "PHP Version >= 5.5.33"
+msgstr "PHP Version >= 5.5.33"
 
 # TRANSLATION
 # LABEL/ID_PROCESSMAKER_REQUIREMENTS_MYSQL
@@ -14596,8 +14626,8 @@ msgstr "LDAP Support (*)"
 # TRANSLATION
 # LABEL/ID_PROCESSMAKER_REQUIREMENTS_MEMORYLIMIT
 #: LABEL/ID_PROCESSMAKER_REQUIREMENTS_MEMORYLIMIT
-msgid "Memory Limit >= 80M"
-msgstr "Memory Limit >= 80M"
+msgid "Memory Limit >= 256M"
+msgstr "Memory Limit >= 256M"
 
 # TRANSLATION
 # LABEL/ID_ADMINISTRATOR_ROLE_CANT_CHANGED
@@ -15820,8 +15850,8 @@ msgstr "Definition section is incomplete."
 # TRANSLATION
 # LABEL/ID_CASES_INPUT_DOES_NOT_EXIST
 #: LABEL/ID_CASES_INPUT_DOES_NOT_EXIST
-msgid "This input document with inp_doc_uid: {0} does not exist!"
-msgstr "This input document with inp_doc_uid: {0} does not exist!"
+msgid "This input document with app_doc_uid: {0} does not exist!"
+msgstr "This input document with app_doc_uid: {0} does not exist!"
 
 # TRANSLATION
 # LABEL/ID_CASES_INPUT_FILENAME_DOES_NOT_EXIST
@@ -15832,8 +15862,8 @@ msgstr "This filename does not exist!"
 # TRANSLATION
 # LABEL/ID_CASES_OUTPUT_DOES_NOT_EXIST
 #: LABEL/ID_CASES_OUTPUT_DOES_NOT_EXIST
-msgid "This output document with out_doc_id: {0} does not exist!"
-msgstr "This output document with out_doc_id: {0} does not exist!"
+msgid "This output document with app_doc_id: {0} does not exist!"
+msgstr "This output document with app_doc_id: {0} does not exist!"
 
 # TRANSLATION
 # LABEL/ID_CASES_INCORRECT_INFORMATION
@@ -16168,8 +16198,8 @@ msgstr "The output with {0}: '{1}' does not exist."
 # TRANSLATION
 # LABEL/ID_PROCESS_NOT_EXIST
 #: LABEL/ID_PROCESS_NOT_EXIST
-msgid "The process with {0}: '{1}' does not exist."
-msgstr "The process with {0}: '{1}' does not exist."
+msgid "The report table '{0}' is related to a process not present in the workspace, import the related process first. To relate the report table to other process, open the process in the designer and import from there. The report table can't be imported."
+msgstr "The report table '{0}' is related to a process not present in the workspace, import the related process first. To relate the report table to other process, open the process in the designer and import from there. The report table can't be imported."
 
 # TRANSLATION
 # LABEL/ID_PROJECT_NOT_EXIST
@@ -18916,8 +18946,8 @@ msgstr "Grid Variables"
 # TRANSLATION
 # LABEL/ID_OVERWRITE_PMTABLE
 #: LABEL/ID_OVERWRITE_PMTABLE
-msgid "The table name already exists, do you wish overwrite it?"
-msgstr "The table name already exists, do you wish overwrite it?"
+msgid "The PMTable '{0}' already exists in the workspace, what do you want to do?"
+msgstr "The PMTable '{0}' already exists in the workspace, what do you want to do?"
 
 # TRANSLATION
 # LABEL/ID_NO_RELATED_PROCESS
@@ -18928,14 +18958,14 @@ msgstr "The related process does not exists"
 # TRANSLATION
 # LABEL/ID_OVERWRITE_RELATED_PROCESS
 #: LABEL/ID_OVERWRITE_RELATED_PROCESS
-msgid "The related process does not exists, do you wish relate it with the current process?"
-msgstr "The related process does not exists, do you wish relate it with the current process?"
+msgid "The report table '{0}' that you want to import is related to other process, what do you want to do?"
+msgstr "The report table '{0}' that you want to import is related to other process, what do you want to do?"
 
 # TRANSLATION
 # LABEL/ID_ALREADY_RELATED_TABLE
 #: LABEL/ID_ALREADY_RELATED_TABLE
-msgid "The table is already related to another process, it won't be imported"
-msgstr "The table is already related to another process, it won't be imported"
+msgid "The table is already related with the '{0}' process, do you want to continue? (Note: The table will be imported to the original process)."
+msgstr "The table is already related with the '{0}' process, do you want to continue? (Note: The table will be imported to the original process)."
 
 # TRANSLATION
 # LABEL/ID_DASH_COMPARE_INIT_PERIOD
@@ -18958,8 +18988,8 @@ msgstr "Supervisor does not have a permission for Dynaform(s)."
 # TRANSLATION
 # LABEL/ID_NO_REPORT_TABLE
 #: LABEL/ID_NO_REPORT_TABLE
-msgid "The table that you trying to import is not a report table"
-msgstr "The table that you trying to import is not a report table"
+msgid "The table '{0}' that you trying to import is not a report table."
+msgstr "The table '{0}' that you trying to import is not a report table."
 
 # TRANSLATION
 # LABEL/ID_TASK_OVERDUE
@@ -24130,20 +24160,20 @@ msgstr "Service Account Email"
 # TRANSLATION
 # LABEL/ID_PMG_FILE
 #: LABEL/ID_PMG_FILE
-msgid "Sevice Accout Certificate"
-msgstr "Sevice Accout Certificate"
+msgid "Service Account Certificate"
+msgstr "Service Account Certificate"
 
 # TRANSLATION
 # LABEL/ID_PMG_TYPE_ACCEPT
 #: LABEL/ID_PMG_TYPE_ACCEPT
-msgid "Only accepts files in format P12"
-msgstr "Only accepts files in format P12"
+msgid "Only accepts files in format json"
+msgstr "Only accepts files in format json"
 
 # TRANSLATION
 # LABEL/ID_PMG_SELECT_FILE
 #: LABEL/ID_PMG_SELECT_FILE
-msgid "Please select a P12 file  to upload"
-msgstr "Please select a P12 file  to upload"
+msgid "Please select a json file to upload"
+msgstr "Please select a json file to upload"
 
 # TRANSLATION
 # LABEL/ID_PMGMAIL
@@ -24386,10 +24416,22 @@ msgid "The user with \"{0}\" did not have permission to perform this action."
 msgstr "The user with \"{0}\" did not have permission to perform this action."
 
 # TRANSLATION
+# LABEL/ID_NOT_EXECUTE_QUERY
+#: LABEL/ID_NOT_EXECUTE_QUERY
+msgid "Changes to {0} are forbidden. Please contact system administrator for more information."
+msgstr "Changes to {0} are forbidden. Please contact system administrator for more information."
+
+# TRANSLATION
 # LABEL/ID_EMAIL_MORE_THAN_ONE_USER
 #: LABEL/ID_EMAIL_MORE_THAN_ONE_USER
 msgid "This email is assigned to more than one user. Please contact your administrator."
 msgstr "This email is assigned to more than one user. Please contact your administrator."
+
+# TRANSLATION
+# LABEL/ID_EMAIL_EVENT_DEFINITION_DOES_NOT_EXIST
+#: LABEL/ID_EMAIL_EVENT_DEFINITION_DOES_NOT_EXIST
+msgid "The email event definition does not exist."
+msgstr "The email event definition does not exist."
 
 # TRANSLATION
 # LABEL/ID_USER_DOES_NOT_CORRESPOND
@@ -26406,6 +26448,916 @@ msgstr "Can't create folder <br/> A folder with same name already exist.<br/>"
 #: LABEL/CANT_CREATE_FOLDER_A
 msgid "Can't create folder A"
 msgstr "Can't create folder A"
+
+# TRANSLATION
+# LABEL/ID_CURRENT_ASSING_TYPE_WITH_CASES
+#: LABEL/ID_CURRENT_ASSING_TYPE_WITH_CASES
+msgid "The current activity has cases and cannot be deleted"
+msgstr "The current activity has cases and cannot be deleted"
+
+# TRANSLATION
+# LABEL/ID_TEST_EMAIL_SERVER
+#: LABEL/ID_TEST_EMAIL_SERVER
+msgid "Test Email Server"
+msgstr "Test Email Server"
+
+# TRANSLATION
+# LABEL/ID_CREATE_EMAIL_SERVER
+#: LABEL/ID_CREATE_EMAIL_SERVER
+msgid "Create Email Server"
+msgstr "Create Email Server"
+
+# TRANSLATION
+# LABEL/ID_DELETE_EMAIL_SERVER
+#: LABEL/ID_DELETE_EMAIL_SERVER
+msgid "Delete Email Server"
+msgstr "Delete Email Server"
+
+# TRANSLATION
+# LABEL/ID_UPDATE_EMAIL_SERVER
+#: LABEL/ID_UPDATE_EMAIL_SERVER
+msgid "Update Email Server"
+msgstr "Update Email Server"
+
+# TRANSLATION
+# LABEL/ID_SCRIPT_TASK
+#: LABEL/ID_SCRIPT_TASK
+msgid "[LABEL/ID_SCRIPT_TASK] Script Task"
+msgstr "Script Task"
+
+# TRANSLATION
+# LABEL/ID_INVALID_QUERY
+#: LABEL/ID_INVALID_QUERY
+msgid "Invalid query."
+msgstr "Invalid query."
+
+# TRANSLATION
+# LABEL/ID_SESSION_DIRECTORY
+#: LABEL/ID_SESSION_DIRECTORY
+msgid "Session directory"
+msgstr "Session directory"
+
+# TRANSLATION
+# LABEL/ID_ISO8601_INVALID_FORMAT
+#: LABEL/ID_ISO8601_INVALID_FORMAT
+msgid "Invalid value for \"{0}\", this has not the format ISO 8601."
+msgstr "Invalid value for \"{0}\", this has not the format ISO 8601."
+
+# TRANSLATION
+# LABEL/ID_TIME_ZONE_DOES_NOT_EXIST
+#: LABEL/ID_TIME_ZONE_DOES_NOT_EXIST
+msgid "The time zone with {0}: \"{1}\" does not exist."
+msgstr "The time zone with {0}: \"{1}\" does not exist."
+
+# TRANSLATION
+# LABEL/ID_PROCESSMAKER_REQUIREMENTS_APCU
+#: LABEL/ID_PROCESSMAKER_REQUIREMENTS_APCU
+msgid "ACPU"
+msgstr "ACPU"
+
+# TRANSLATION
+# LABEL/ID_MAFE_d83b8b001a039716e2e7b8c02c4c9b4d
+#: LABEL/ID_MAFE_d83b8b001a039716e2e7b8c02c4c9b4d
+msgid "+ '"
+msgstr "+ '"
+
+# TRANSLATION
+# LABEL/ID_MAFE_6c24f6923944d3f9d84bcf924661abff
+#: LABEL/ID_MAFE_6c24f6923944d3f9d84bcf924661abff
+msgid "New variables created"
+msgstr "New variables created"
+
+# TRANSLATION
+# LABEL/ID_MAFE_0064d01e99a46ae4d9ff7eed1b75ec22
+#: LABEL/ID_MAFE_0064d01e99a46ae4d9ff7eed1b75ec22
+msgid "The following variables have been created and related to the imported form:<br>"
+msgstr "The following variables have been created and related to the imported form:<br>"
+
+# TRANSLATION
+# LABEL/ID_MAFE_076bbf458415eb4b6684ebad6c6094c0
+#: LABEL/ID_MAFE_076bbf458415eb4b6684ebad6c6094c0
+msgid "Variable Name:"
+msgstr "Variable Name:"
+
+# TRANSLATION
+# LABEL/ID_MAFE_f4f70727dc34561dfde1a3c529b6205c
+#: LABEL/ID_MAFE_f4f70727dc34561dfde1a3c529b6205c
+msgid "[LABEL/ID_MAFE_f4f70727dc34561dfde1a3c529b6205c] Settings"
+msgstr "Settings"
+
+# TRANSLATION
+# LABEL/ID_MAFE_e659b52eba1f0299b2d8ca3483919e72
+#: LABEL/ID_MAFE_e659b52eba1f0299b2d8ca3483919e72
+msgid "Type:"
+msgstr "Type:"
+
+# TRANSLATION
+# LABEL/ID_MAFE_e071ce22a73ed2e5ea13f4d61d76f5ab
+#: LABEL/ID_MAFE_e071ce22a73ed2e5ea13f4d61d76f5ab
+msgid "Database Connection:"
+msgstr "Database Connection:"
+
+# TRANSLATION
+# LABEL/ID_MAFE_d3eb32a3c80167aaa9aa114db53a22dd
+#: LABEL/ID_MAFE_d3eb32a3c80167aaa9aa114db53a22dd
+msgid "Sql:"
+msgstr "Sql:"
+
+# TRANSLATION
+# LABEL/ID_MAFE_ebcc39462e6620a8cf432194084a5483
+#: LABEL/ID_MAFE_ebcc39462e6620a8cf432194084a5483
+msgid "Options:"
+msgstr "Options:"
+
+# TRANSLATION
+# LABEL/ID_MAFE_08a7d6fab0acef5396b8e564b32f48f8
+#: LABEL/ID_MAFE_08a7d6fab0acef5396b8e564b32f48f8
+msgid "Supported Controls: text, textarea, dropdown, radio, suggest, hidden."
+msgstr "Supported Controls: text, textarea, dropdown, radio, suggest, hidden."
+
+# TRANSLATION
+# LABEL/ID_MAFE_380e92305f89798cc7ff7db6e73b22c6
+#: LABEL/ID_MAFE_380e92305f89798cc7ff7db6e73b22c6
+msgid "There are problems updating the Loop Marker"
+msgstr "There are problems updating the Loop Marker"
+
+# TRANSLATION
+# LABEL/ID_MAFE_4b420957db489cc5aff8bee58d07b8b1
+#: LABEL/ID_MAFE_4b420957db489cc5aff8bee58d07b8b1
+msgid "The row can not be removed, because is being edited."
+msgstr "The row can not be removed, because is being edited."
+
+# TRANSLATION
+# LABEL/ID_MAFE_acd6337dfeb8a29685e3856bfa76756c
+#: LABEL/ID_MAFE_acd6337dfeb8a29685e3856bfa76756c
+msgid "History of use"
+msgstr "History of use"
+
+# TRANSLATION
+# LABEL/ID_MAFE_b754d64a4ddb13e5eb9803baabb938b6
+#: LABEL/ID_MAFE_b754d64a4ddb13e5eb9803baabb938b6
+msgid "This content is empty."
+msgstr "This content is empty."
+
+# TRANSLATION
+# LABEL/ID_MAFE_aa0f2fff4f672e8106d8490171512bbd
+#: LABEL/ID_MAFE_aa0f2fff4f672e8106d8490171512bbd
+msgid "The form was recovered from a previous version {0}. Possible missing controls are going to be recreated."
+msgstr "The form was recovered from a previous version {0}. Possible missing controls are going to be recreated."
+
+# TRANSLATION
+# LABEL/ID_MAFE_f6eb4ee83cd8508379e695479564fddd
+#: LABEL/ID_MAFE_f6eb4ee83cd8508379e695479564fddd
+msgid "The imported dynaform include new variables and existing variables that require changes."
+msgstr "The imported dynaform include new variables and existing variables that require changes."
+
+# TRANSLATION
+# LABEL/ID_MAFE_dc57a7c94c6039e453fc44f153b865a4
+#: LABEL/ID_MAFE_dc57a7c94c6039e453fc44f153b865a4
+msgid "The changed variables have been added with the suffix “_1”."
+msgstr "The changed variables have been added with the suffix “_1”."
+
+# TRANSLATION
+# LABEL/ID_MAFE_2b30b478acce5ed435bdf80f39de9b1f
+#: LABEL/ID_MAFE_2b30b478acce5ed435bdf80f39de9b1f
+msgid "Please take note of the changes to update your process logic."
+msgstr "Please take note of the changes to update your process logic."
+
+# TRANSLATION
+# LABEL/ID_MAFE_cba3917d344178657c24e17192d622be
+#: LABEL/ID_MAFE_cba3917d344178657c24e17192d622be
+msgid "The following variables have been created:<br>"
+msgstr "The following variables have been created:<br>"
+
+# TRANSLATION
+# LABEL/ID_MAFE_6e139990d75202b4688849d505e9f659
+#: LABEL/ID_MAFE_6e139990d75202b4688849d505e9f659
+msgid "Current form."
+msgstr "Current form."
+
+# TRANSLATION
+# LABEL/ID_MAFE_473f81670bcdd9d92624698f43d6a517
+#: LABEL/ID_MAFE_473f81670bcdd9d92624698f43d6a517
+msgid "Empty."
+msgstr "Empty."
+
+# TRANSLATION
+# LABEL/ID_MAFE_c793116b0fc9df6d8761028f4adbe90e
+#: LABEL/ID_MAFE_c793116b0fc9df6d8761028f4adbe90e
+msgid "Execute a trigger when a case is opened"
+msgstr "Execute a trigger when a case is opened"
+
+# TRANSLATION
+# LABEL/ID_GMAIL_NEED_SERVER
+#: LABEL/ID_GMAIL_NEED_SERVER
+msgid "The ProcessMaker address must be passed, it can't be empty"
+msgstr "The ProcessMaker address must be passed, it can't be empty"
+
+# TRANSLATION
+# LABEL/ID_TIME_ZONE_LOGIN_TITLE
+#: LABEL/ID_TIME_ZONE_LOGIN_TITLE
+msgid "Time zone configuration"
+msgstr "Time zone configuration"
+
+# TRANSLATION
+# LABEL/ID_TIME_ZONE_LOGIN_DESCRIPTION1
+#: LABEL/ID_TIME_ZONE_LOGIN_DESCRIPTION1
+msgid "Your local machine time zone does not match your current profile settings."
+msgstr "Your local machine time zone does not match your current profile settings."
+
+# TRANSLATION
+# LABEL/ID_TIME_ZONE_LOGIN_DESCRIPTION2
+#: LABEL/ID_TIME_ZONE_LOGIN_DESCRIPTION2
+msgid "Your time zone profile settings will be updated in accordance to your current location."
+msgstr "Your time zone profile settings will be updated in accordance to your current location."
+
+# TRANSLATION
+# LABEL/ID_TIME_ZONE_LOGIN_DESCRIPTION3
+#: LABEL/ID_TIME_ZONE_LOGIN_DESCRIPTION3
+msgid "This operation will help you avoid date storage issues."
+msgstr "This operation will help you avoid date storage issues."
+
+# TRANSLATION
+# LABEL/ID_TIME_ZONE_LOGIN_DESCRIPTION_DETAILS
+#: LABEL/ID_TIME_ZONE_LOGIN_DESCRIPTION_DETAILS
+msgid "Your current profile time zone: {0}, is going to be updated to: {1}."
+msgstr "Your current profile time zone: {0}, is going to be updated to: {1}."
+
+# TRANSLATION
+# LABEL/ID_MAFE_bebfb2a099450ef06ded421e59c888b2
+#: LABEL/ID_MAFE_bebfb2a099450ef06ded421e59c888b2
+msgid "Format (CSS)"
+msgstr "Format (CSS)"
+
+# TRANSLATION
+# LABEL/ID_MAFE_cabf52523fbbddadbde30994e36845d0
+#: LABEL/ID_MAFE_cabf52523fbbddadbde30994e36845d0
+msgid "Store Result In"
+msgstr "Store Result In"
+
+# TRANSLATION
+# LABEL/ID_MAFE_21037a59373ae01e31ee20ec61555333
+#: LABEL/ID_MAFE_21037a59373ae01e31ee20ec61555333
+msgid "Store result in variable @@myResult"
+msgstr "Store result in variable @@myResult"
+
+# TRANSLATION
+# LABEL/ID_MAFE_b1fcd78a4983c63c73972229b16cb7a6
+#: LABEL/ID_MAFE_b1fcd78a4983c63c73972229b16cb7a6
+msgid "print dynaform"
+msgstr "print dynaform"
+
+# TRANSLATION
+# LABEL/ID_MAFE_4ed131033015697f970660a0cb48ff1e
+#: LABEL/ID_MAFE_4ed131033015697f970660a0cb48ff1e
+msgid "Create variable"
+msgstr "Create variable"
+
+# TRANSLATION
+# LABEL/ID_MAFE_dc45332742bde79337287a115c6422a4
+#: LABEL/ID_MAFE_dc45332742bde79337287a115c6422a4
+msgid "Select variable"
+msgstr "Select variable"
+
+# TRANSLATION
+# LABEL/ID_MAFE_7a21a691b5d03d92a29b79bbeecf706e
+#: LABEL/ID_MAFE_7a21a691b5d03d92a29b79bbeecf706e
+msgid "Custom actions"
+msgstr "Custom actions"
+
+# TRANSLATION
+# LABEL/ID_MAFE_5b37be2f6e6fc0bc307e3146980709ea
+#: LABEL/ID_MAFE_5b37be2f6e6fc0bc307e3146980709ea
+msgid "Please enter only CSS code"
+msgstr "Please enter only CSS code"
+
+# TRANSLATION
+# LABEL/ID_MAFE_bf8252265e26d92c011456899a2d522e
+#: LABEL/ID_MAFE_bf8252265e26d92c011456899a2d522e
+msgid "At least one option must be filled."
+msgstr "At least one option must be filled."
+
+# TRANSLATION
+# LABEL/ID_ACCESS_DENIED
+#: LABEL/ID_ACCESS_DENIED
+msgid "Access Denied!"
+msgstr "Access Denied!"
+
+# TRANSLATION
+# LABEL/ID_LOGIN_TITLE
+#: LABEL/ID_LOGIN_TITLE
+msgid "[LABEL/ID_LOGIN_TITLE] Please enter your credentials below"
+msgstr "Please enter your credentials below"
+
+# TRANSLATION
+# LABEL/ID_LICENCE_LOGIN_TITLE
+#: LABEL/ID_LICENCE_LOGIN_TITLE
+msgid "License"
+msgstr "License"
+
+# TRANSLATION
+# LABEL/ID_PMDRIVE_NO_CONTENT_IN_FILE
+#: LABEL/ID_PMDRIVE_NO_CONTENT_IN_FILE
+msgid "The file doesn't have any content stored on Drive."
+msgstr "The file doesn't have any content stored on Drive."
+
+# TRANSLATION
+# LABEL/ID_PMGMAIL_GENERAL_ERROR
+#: LABEL/ID_PMGMAIL_GENERAL_ERROR
+msgid "An error in processing Gmail requests occurred"
+msgstr "An error in processing Gmail requests occurred"
+
+# TRANSLATION
+# LABEL/ID_NOT_HAVE_BOOKMARKED_PROCESSES
+#: LABEL/ID_NOT_HAVE_BOOKMARKED_PROCESSES
+msgid "You don't have bookmarked processes"
+msgstr "You don't have bookmarked processes"
+
+# TRANSLATION
+# LABEL/ID_MAFE_4bb78cf31aa7936d4031f8de1481d308
+#: LABEL/ID_MAFE_4bb78cf31aa7936d4031f8de1481d308
+msgid "The label is empty"
+msgstr "The label is empty"
+
+# TRANSLATION
+# LABEL/ID_MAFE_0862528079a06dc37cf808953afca073
+#: LABEL/ID_MAFE_0862528079a06dc37cf808953afca073
+msgid "Input Document:"
+msgstr "Input Document:"
+
+# TRANSLATION
+# LABEL/ID_MAFE_e0c9b0646bf818123171ad13d15b48e0
+#: LABEL/ID_MAFE_e0c9b0646bf818123171ad13d15b48e0
+msgid "There are problems removing task"
+msgstr "There are problems removing task"
+
+# TRANSLATION
+# LABEL/ID_MAFE_0778b522479c97b0c98fb221e86f8054
+#: LABEL/ID_MAFE_0778b522479c97b0c98fb221e86f8054
+msgid "Invalid operation, please delete elements individually"
+msgstr "Invalid operation, please delete elements individually"
+
+# TRANSLATION
+# LABEL/ID_CASES1
+#: LABEL/ID_CASES1
+msgid "[LABEL/ID_CASES1] Cases"
+msgstr "Cases"
+
+# TRANSLATION
+# LABEL/ID_QUOTA_TYPE
+#: LABEL/ID_QUOTA_TYPE
+msgid "Quota type"
+msgstr "Quota type"
+
+# TRANSLATION
+# LABEL/ID_QUOTA_TOTAL
+#: LABEL/ID_QUOTA_TOTAL
+msgid "Quota total"
+msgstr "Quota total"
+
+# TRANSLATION
+# LABEL/ID_QUOTA_USED
+#: LABEL/ID_QUOTA_USED
+msgid "Quota used"
+msgstr "Quota used"
+
+# TRANSLATION
+# LABEL/ID_MAFE_03de5d2d75b7dd914fbc5c775bf21b63
+#: LABEL/ID_MAFE_03de5d2d75b7dd914fbc5c775bf21b63
+msgid "Input Document<span style='color:red;'>*</span>:"
+msgstr "Input Document<span style='color:red;'>*</span>:"
+
+# TRANSLATION
+# LABEL/ID_MAFE_99493c187e709deb387b6ee3ec6c8179
+#: LABEL/ID_MAFE_99493c187e709deb387b6ee3ec6c8179
+msgid "The input document is required, please select the value."
+msgstr "The input document is required, please select the value."
+
+# TRANSLATION
+# LABEL/ID_GOOGLEINTEGRATION
+#: LABEL/ID_GOOGLEINTEGRATION
+msgid "Google Integration"
+msgstr "Google Integration"
+
+# TRANSLATION
+# LABEL/ID_PMGMAIL_DISABLE
+#: LABEL/ID_PMGMAIL_DISABLE
+msgid "Are you sure to disable the Gmail Integration? If you do this, all the mails and relabelling sent to Gmail will be disabled."
+msgstr "Are you sure to disable the Gmail Integration? If you do this, all the mails and relabelling sent to Gmail will be disabled."
+
+# TRANSLATION
+# LABEL/ID_PMDRIVE_DISABLE
+#: LABEL/ID_PMDRIVE_DISABLE
+msgid "Are you sure to disable the Google Drive Integration? If you do this, the input, output and file documents will be stored only in your ProcessMaker server."
+msgstr "Are you sure to disable the Google Drive Integration? If you do this, the input, output and file documents will be stored only in your ProcessMaker server."
+
+# TRANSLATION
+# LABEL/ID_GMAIL_HELP_ENABLE
+#: LABEL/ID_GMAIL_HELP_ENABLE
+msgid "Enabling this option, users will be able to use the  Gmail extension that allows to interact with Processamaker from the urser's Gmail web page."
+msgstr "Enabling this option, users will be able to use the  Gmail extension that allows to interact with Processamaker from the urser's Gmail web page."
+
+# TRANSLATION
+# LABEL/ID_DRIVE_HELP_ENABLE
+#: LABEL/ID_DRIVE_HELP_ENABLE
+msgid "Enabling this option will allow to store all input, output and attached documents generated in your processes in Google Drive."
+msgstr "Enabling this option will allow to store all input, output and attached documents generated in your processes in Google Drive."
+
+# TRANSLATION
+# LABEL/ID_ENABLE_PMDRIVE
+#: LABEL/ID_ENABLE_PMDRIVE
+msgid "Enable Google Drive."
+msgstr "Enable Google Drive."
+
+# TRANSLATION
+# LABEL/ID_GOOGLE_CERTIFICATE_ERROR
+#: LABEL/ID_GOOGLE_CERTIFICATE_ERROR
+msgid "Google's JSON account certificate does not exist. Please contact the system administrator."
+msgstr "Google's JSON account certificate does not exist. Please contact the system administrator."
+
+# TRANSLATION
+# LABEL/ID_ACTIONS_BY_EMAIL_LOG
+#: LABEL/ID_ACTIONS_BY_EMAIL_LOG
+msgid "Actions By Email Log"
+msgstr "Actions By Email Log"
+
+# TRANSLATION
+# LABEL/ID_MAFE_9bea7040abc67529a463697e233bcbe9
+#: LABEL/ID_MAFE_9bea7040abc67529a463697e233bcbe9
+msgid "The colspan change is going to remove columns and content fields. Do you want to continue?"
+msgstr "The colspan change is going to remove columns and content fields. Do you want to continue?"
+
+# TRANSLATION
+# LABEL/ID_DISPATCH_PARAMS_BODY
+#: LABEL/ID_DISPATCH_PARAMS_BODY
+msgid "Invalid Request, multipart without body."
+msgstr "Invalid Request, multipart without body."
+
+# TRANSLATION
+# LABEL/ID_DISPATCH_PARAMS_CALLS
+#: LABEL/ID_DISPATCH_PARAMS_CALLS
+msgid "Invalid Request, multipart body without calls."
+msgstr "Invalid Request, multipart body without calls."
+
+# TRANSLATION
+# LABEL/ID_VARIABLE_ASSOCIATED_WITH_REPORT_TABLE
+#: LABEL/ID_VARIABLE_ASSOCIATED_WITH_REPORT_TABLE
+msgid "The variable with \"{0}\", it is associated with a report table."
+msgstr "The variable with \"{0}\", it is associated with a report table."
+
+# TRANSLATION
+# LABEL/ID_USER_NOT_EXIST_DEPARTMENT
+#: LABEL/ID_USER_NOT_EXIST_DEPARTMENT
+msgid "The user with \"{0}\", does not exist in the Department"
+msgstr "The user with \"{0}\", does not exist in the Department"
+
+# TRANSLATION
+# LABEL/ID_MAFE_fc4786f4974405965a4a00dde8d6e9f9
+#: LABEL/ID_MAFE_fc4786f4974405965a4a00dde8d6e9f9
+msgid "Create/Select Variable"
+msgstr "Create/Select Variable"
+
+# TRANSLATION
+# LABEL/ID_PMTABLE_NOT_IMPORT_HAS_ERRORS
+#: LABEL/ID_PMTABLE_NOT_IMPORT_HAS_ERRORS
+msgid "File \"{0}\" was not imported has errors:"
+msgstr "File \"{0}\" was not imported has errors:"
+
+# TRANSLATION
+# LABEL/ID_WARNING_PMTABLES
+#: LABEL/ID_WARNING_PMTABLES
+msgid "Error uploading the PM Table(s)"
+msgstr "Error uploading the PM Table(s)"
+
+# TRANSLATION
+# LABEL/ID_GRID_DOES_NOT_EXIST_IN_DYNAFORM
+#: LABEL/ID_GRID_DOES_NOT_EXIST_IN_DYNAFORM
+msgid "The Grid with {0}: \"{1}\" does not exist in DynaForm"
+msgstr "The Grid with {0}: \"{1}\" does not exist in DynaForm"
+
+# TRANSLATION
+# LABEL/ID_GRID_DOES_NOT_HAVE_FIELDS
+#: LABEL/ID_GRID_DOES_NOT_HAVE_FIELDS
+msgid "The Grid with {0}: \"{1}\" does not have fields defined"
+msgstr "The Grid with {0}: \"{1}\" does not have fields defined"
+
+# TRANSLATION
+# LABEL/ID_GRID_FIELD_DOES_NOT_EXIST
+#: LABEL/ID_GRID_FIELD_DOES_NOT_EXIST
+msgid "The Field with {0}: \"{1}\" does not exist"
+msgstr "The Field with {0}: \"{1}\" does not exist"
+
+# TRANSLATION
+# LABEL/ID_CASE_VARIABLE_DOES_NOT_EXIST
+#: LABEL/ID_CASE_VARIABLE_DOES_NOT_EXIST
+msgid "The Variable with {0}: \"{1}\" does not exist in Case"
+msgstr "The Variable with {0}: \"{1}\" does not exist in Case"
+
+# TRANSLATION
+# LABEL/ID_CASE_VARIABLE_ALREADY_EXISTS
+#: LABEL/ID_CASE_VARIABLE_ALREADY_EXISTS
+msgid "The Variable with {0}: \"{1}\" already exists in Case"
+msgstr "The Variable with {0}: \"{1}\" already exists in Case"
+
+# TRANSLATION
+# LABEL/ID_VARIABLE_NO_IS_GRID
+#: LABEL/ID_VARIABLE_NO_IS_GRID
+msgid "The Variable with {0}: \"{1}\" is not a grid"
+msgstr "The Variable with {0}: \"{1}\" is not a grid"
+
+# TRANSLATION
+# LABEL/ID_CAPTCHA_INPUT_CODE
+#: LABEL/ID_CAPTCHA_INPUT_CODE
+msgid "Security Code"
+msgstr "Security Code"
+
+# TRANSLATION
+# LABEL/ID_CAPTCHA_REFRESH_CODE
+#: LABEL/ID_CAPTCHA_REFRESH_CODE
+msgid "Click to refresh code"
+msgstr "Click to refresh code"
+
+# TRANSLATION
+# LABEL/ID_CAPTCHA_CODE
+#: LABEL/ID_CAPTCHA_CODE
+msgid "[LABEL/ID_CAPTCHA_CODE] Code"
+msgstr "Code"
+
+# TRANSLATION
+# LABEL/ID_CAPTCHA_CODE_INCORRECT
+#: LABEL/ID_CAPTCHA_CODE_INCORRECT
+msgid "The Captcha Code is incorrect"
+msgstr "The Captcha Code is incorrect"
+
+# TRANSLATION
+# LABEL/ID_AFFECTED_GROUPS
+#: LABEL/ID_AFFECTED_GROUPS
+msgid "Affected Groups"
+msgstr "Affected Groups"
+
+# TRANSLATION
+# LABEL/ID_SEE_FULL_LIST
+#: LABEL/ID_SEE_FULL_LIST
+msgid "See complete list"
+msgstr "See complete list"
+
+# TRANSLATION
+# LABEL/ID_BATCH_ROUTING
+#: LABEL/ID_BATCH_ROUTING
+msgid "Batch Routing"
+msgstr "Batch Routing"
+
+# TRANSLATION
+# LABEL/ID_CONFIRM_ROUTING
+#: LABEL/ID_CONFIRM_ROUTING
+msgid "Confirm Routing"
+msgstr "Confirm Routing"
+
+# TRANSLATION
+# LABEL/ID_ROUTE_BATCH_ROUTING
+#: LABEL/ID_ROUTE_BATCH_ROUTING
+msgid "Route cases per batch?"
+msgstr "Route cases per batch?"
+
+# TRANSLATION
+# LABEL/ID_SUMMARY_DERIVATION_BATCH_ROUTING
+#: LABEL/ID_SUMMARY_DERIVATION_BATCH_ROUTING
+msgid "Summary of Derivations"
+msgstr "Summary of Derivations"
+
+# TRANSLATION
+# LABEL/ID_DERIVATION_RESULT
+#: LABEL/ID_DERIVATION_RESULT
+msgid "Derivation Result"
+msgstr "Derivation Result"
+
+# TRANSLATION
+# LABEL/ID_CREATE_NEW_PROCESS_UID
+#: LABEL/ID_CREATE_NEW_PROCESS_UID
+msgid "Do you wish to create a new UID for this process?"
+msgstr "Do you wish to create a new UID for this process?"
+
+# TRANSLATION
+# LABEL/ID_KEEP_PROCESS_UID
+#: LABEL/ID_KEEP_PROCESS_UID
+msgid "Keep imported process UID"
+msgstr "Keep imported process UID"
+
+# TRANSLATION
+# LABEL/ID_OVERWRITE_RPTABLE
+#: LABEL/ID_OVERWRITE_RPTABLE
+msgid "The report table '{0}' already exist, what do you want to do?"
+msgstr "The report table '{0}' already exist, what do you want to do?"
+
+# TRANSLATION
+# LABEL/ID_BLOCKER_MSG
+#: LABEL/ID_BLOCKER_MSG
+msgid "Warning: Processmaker does not permit you to open multiple tabs in the same browser session because of security restrictions.\n"
+"\n"
+"This page will be closed."
+msgstr "Warning: Processmaker does not permit you to open multiple tabs in the same browser session because of security restrictions.\n"
+"\n"
+"This page will be closed."
+
+# TRANSLATION
+# LABEL/ID_THE
+#: LABEL/ID_THE
+msgid "The"
+msgstr "The"
+
+# TRANSLATION
+# LABEL/ID_FIELD_NOT_EMPTY_OR_SPECIAL_CHAR
+#: LABEL/ID_FIELD_NOT_EMPTY_OR_SPECIAL_CHAR
+msgid "cannot be empty or contain special characters"
+msgstr "cannot be empty or contain special characters"
+
+# TRANSLATION
+# LABEL/ID_DELETE_CASES
+#: LABEL/ID_DELETE_CASES
+msgid "Delete Cases"
+msgstr "Delete Cases"
+
+# TRANSLATION
+# LABEL/ID_DELETE_PROCESS_CASES
+#: LABEL/ID_DELETE_PROCESS_CASES
+msgid "Are you sure you want to delete all the cases of the selected process(es)?"
+msgstr "Are you sure you want to delete all the cases of the selected process(es)?"
+
+# TRANSLATION
+# LABEL/ID_RADIO_RELATED_PROCESS
+#: LABEL/ID_RADIO_RELATED_PROCESS
+msgid "Import and relate it to the current process"
+msgstr "Import and relate it to the current process"
+
+# TRANSLATION
+# LABEL/ID_RADIO_NOT_IMPORTED_RPT
+#: LABEL/ID_RADIO_NOT_IMPORTED_RPT
+msgid "Do not import the report table"
+msgstr "Do not import the report table"
+
+# TRANSLATION
+# LABEL/ID_RADIO_CREATE_NEW
+#: LABEL/ID_RADIO_CREATE_NEW
+msgid "Create a new copy of the Table"
+msgstr "Create a new copy of the Table"
+
+# TRANSLATION
+# LABEL/ID_RADIO_OVERWRITE
+#: LABEL/ID_RADIO_OVERWRITE
+msgid "Overwrite the existing Table"
+msgstr "Overwrite the existing Table"
+
+# TRANSLATION
+# LABEL/ID_RADIO_NOT_IMPORTED_PMT
+#: LABEL/ID_RADIO_NOT_IMPORTED_PMT
+msgid "Do not import the Table"
+msgstr "Do not import the Table"
+
+# TRANSLATION
+# LABEL/ID_RADIO_NOT_IMPORTED
+#: LABEL/ID_RADIO_NOT_IMPORTED
+msgid "[LABEL/ID_RADIO_NOT_IMPORTED] Do not import the Table"
+msgstr "Do not import the Table"
+
+# TRANSLATION
+# LABEL/ID_ERROR_CREATE_TABLE
+#: LABEL/ID_ERROR_CREATE_TABLE
+msgid "Error creating table:"
+msgstr "Error creating table:"
+
+# TRANSLATION
+# LABEL/ID_CHECK
+#: LABEL/ID_CHECK
+msgid "Check"
+msgstr "Check"
+
+# TRANSLATION
+# LABEL/ID_UNCHECK
+#: LABEL/ID_UNCHECK
+msgid "Uncheck"
+msgstr "Uncheck"
+
+# TRANSLATION
+# LABEL/ID_MAFE_5896ecd1d83886eb157d9cbfb988f1da
+#: LABEL/ID_MAFE_5896ecd1d83886eb157d9cbfb988f1da
+msgid "protected value"
+msgstr "protected value"
+
+# TRANSLATION
+# LABEL/ID_MAFE_1ea7e575defdf6bc3f26a3f127e98170
+#: LABEL/ID_MAFE_1ea7e575defdf6bc3f26a3f127e98170
+msgid "datasource"
+msgstr "datasource"
+
+# TRANSLATION
+# LABEL/ID_MAFE_11e0eed8d3696c0a632f822df385ab3c
+#: LABEL/ID_MAFE_11e0eed8d3696c0a632f822df385ab3c
+msgid "database"
+msgstr "database"
+
+# TRANSLATION
+# LABEL/ID_MAFE_c9838204ecea4595edd1ef4a76b66846
+#: LABEL/ID_MAFE_c9838204ecea4595edd1ef4a76b66846
+msgid "array variable"
+msgstr "array variable"
+
+# TRANSLATION
+# LABEL/ID_MAFE_59d0ce20b062e00466be1ad296c22407
+#: LABEL/ID_MAFE_59d0ce20b062e00466be1ad296c22407
+msgid "data variable"
+msgstr "data variable"
+
+# TRANSLATION
+# LABEL/ID_MAFE_e16d24cd68030dda478e6ca7151010e2
+#: LABEL/ID_MAFE_e16d24cd68030dda478e6ca7151010e2
+msgid "@@myData"
+msgstr "@@myData"
+
+# TRANSLATION
+# LABEL/ID_MAFE_944b95760dc358a122162ce63974488a
+#: LABEL/ID_MAFE_944b95760dc358a122162ce63974488a
+msgid "Enter a regular expression which is a search pattern which matches the text entered in the field."
+msgstr "Enter a regular expression which is a search pattern which matches the text entered in the field."
+
+# TRANSLATION
+# LABEL/ID_MAFE_8bf8bd52a2df4f9292a3a9b7c469fada
+#: LABEL/ID_MAFE_8bf8bd52a2df4f9292a3a9b7c469fada
+msgid "To learn more about regular expressions, see the <a href=\"http://wiki.processmaker.com/3.0/Text_and_Textarea_Controls#Validate\" target=\"_blank\">wiki</a>.<br><br>"
+msgstr "To learn more about regular expressions, see the <a href=\"http://wiki.processmaker.com/3.0/Text_and_Textarea_Controls#Validate\" target=\"_blank\">wiki</a>.<br><br>"
+
+# TRANSLATION
+# LABEL/ID_MAFE_e787b4cb0cdefd8881e38a4f54305701
+#: LABEL/ID_MAFE_e787b4cb0cdefd8881e38a4f54305701
+msgid "Examples:<br>"
+msgstr "Examples:<br>"
+
+# TRANSLATION
+# LABEL/ID_MAFE_cf9f7adb0fd03f4072c4f44f8328433f
+#: LABEL/ID_MAFE_cf9f7adb0fd03f4072c4f44f8328433f
+msgid "An integer"
+msgstr "An integer"
+
+# TRANSLATION
+# LABEL/ID_MAFE_a1d5cbaf61c018e7d8456c66df0332c3
+#: LABEL/ID_MAFE_a1d5cbaf61c018e7d8456c66df0332c3
+msgid "An integer or decimal number"
+msgstr "An integer or decimal number"
+
+# TRANSLATION
+# LABEL/ID_MAFE_33e7ca8872a98fe4b44833054a5ccc3e
+#: LABEL/ID_MAFE_33e7ca8872a98fe4b44833054a5ccc3e
+msgid "An email address"
+msgstr "An email address"
+
+# TRANSLATION
+# LABEL/ID_NORMAL_EXPORT
+#: LABEL/ID_NORMAL_EXPORT
+msgid "[LABEL/ID_NORMAL_EXPORT] Normal"
+msgstr "Normal"
+
+# TRANSLATION
+# LABEL/ID_GRANULAR_EXPORT
+#: LABEL/ID_GRANULAR_EXPORT
+msgid "Custom"
+msgstr "Custom"
+
+# TRANSLATION
+# LABEL/ID_EXPORT_PROCESS_OBJECTS
+#: LABEL/ID_EXPORT_PROCESS_OBJECTS
+msgid "Export Process Objects"
+msgstr "Export Process Objects"
+
+# TRANSLATION
+# LABEL/ID_IMPORT_PROCESS_OBJECTS
+#: LABEL/ID_IMPORT_PROCESS_OBJECTS
+msgid "Import Process Objects"
+msgstr "Import Process Objects"
+
+# TRANSLATION
+# LABEL/ID_ADD_TO_EXISTING
+#: LABEL/ID_ADD_TO_EXISTING
+msgid "Add to existing"
+msgstr "Add to existing"
+
+# TRANSLATION
+# LABEL/ID_REPLACE_ALL
+#: LABEL/ID_REPLACE_ALL
+msgid "Replace all"
+msgstr "Replace all"
+
+# TRANSLATION
+# LABEL/ID_PROCESS_DEFINITION_NON_EXISTENT
+#: LABEL/ID_PROCESS_DEFINITION_NON_EXISTENT
+msgid "The PROCESS_DEFINITION is required to complete the process."
+msgstr "The PROCESS_DEFINITION is required to complete the process."
+
+# TRANSLATION
+# LABEL/ID_TEMPLATE_PARAMETER_EMPTY
+#: LABEL/ID_TEMPLATE_PARAMETER_EMPTY
+msgid "The TEMPLATE parameter is empty."
+msgstr "The TEMPLATE parameter is empty."
+
+# TRANSLATION
+# LABEL/ID_PRO_UID_PARAMETER_IS_EMPTY
+#: LABEL/ID_PRO_UID_PARAMETER_IS_EMPTY
+msgid "The PRO_UID parameter is empty."
+msgstr "The PRO_UID parameter is empty."
+
+# TRANSLATION
+# LABEL/ID_TAS_UID_PARAMETER_IS_EMPTY
+#: LABEL/ID_TAS_UID_PARAMETER_IS_EMPTY
+msgid "The TAS_UID parameter is empty."
+msgstr "The TAS_UID parameter is empty."
+
+# TRANSLATION
+# LABEL/ID_DYN_UID_PARAMETER_IS_EMPTY
+#: LABEL/ID_DYN_UID_PARAMETER_IS_EMPTY
+msgid "The DYN_UID parameter is empty."
+msgstr "The DYN_UID parameter is empty."
+
+# TRANSLATION
+# LABEL/ID_EMAIL_RESENT_TO
+#: LABEL/ID_EMAIL_RESENT_TO
+msgid "The email was resend to"
+msgstr "The email was resend to"
+
+# TRANSLATION
+# LABEL/ID_USER_NOT_RESPONDED_REQUEST
+#: LABEL/ID_USER_NOT_RESPONDED_REQUEST
+msgid "The user has not responded to this request."
+msgstr "The user has not responded to this request."
+
+# TRANSLATION
+# LABEL/ID_UNEXPECTED_ERROR_OCCURRED_PLEASE
+#: LABEL/ID_UNEXPECTED_ERROR_OCCURRED_PLEASE
+msgid "An unexpected error occurred please try again later."
+msgstr "An unexpected error occurred please try again later."
+
+# TRANSLATION
+# LABEL/ID_UNABLE_TO_SEND_EMAIL
+#: LABEL/ID_UNABLE_TO_SEND_EMAIL
+msgid "Unable to send email, the task is closed."
+msgstr "Unable to send email, the task is closed."
+
+# TRANSLATION
+# LABEL/ID_PLEASE_TRY_LATER
+#: LABEL/ID_PLEASE_TRY_LATER
+msgid "Please try later."
+msgstr "Please try later."
+
+# TRANSLATION
+# LABEL/ID_THERE_PROBLEM_SENDING_EMAIL
+#: LABEL/ID_THERE_PROBLEM_SENDING_EMAIL
+msgid "There was a problem sending the email to"
+msgstr "There was a problem sending the email to"
+
+# TRANSLATION
+# LABEL/ID_USER_CANT_BE_DELETED_FOR_THE_PROCESS
+#: LABEL/ID_USER_CANT_BE_DELETED_FOR_THE_PROCESS
+msgid "The user can't be deleted because it is referenced in the process {processTitle} in a process permission."
+msgstr "The user can't be deleted because it is referenced in the process {processTitle} in a process permission."
+
+# TRANSLATION
+# LABEL/ID_MAFE_c5d84b6c19cb058b7b5471b30e926823
+#: LABEL/ID_MAFE_c5d84b6c19cb058b7b5471b30e926823
+msgid "Invalid operation: Delete message flow before converting it to"
+msgstr "Invalid operation: Delete message flow before converting it to"
+
+# TRANSLATION
+# LABEL/ID_MAFE_be1a57f7e1cfe44284e71c5175874967
+#: LABEL/ID_MAFE_be1a57f7e1cfe44284e71c5175874967
+msgid "[LABEL/ID_MAFE_be1a57f7e1cfe44284e71c5175874967] Event"
+msgstr "Event"
+
+# TRANSLATION
+# LABEL/ID_MAFE_d8012aca7276ee78d2e2bd33861d72a1
+#: LABEL/ID_MAFE_d8012aca7276ee78d2e2bd33861d72a1
+msgid "At least one object should be selected in order to execute the action."
+msgstr "At least one object should be selected in order to execute the action."
+
+# TRANSLATION
+# LABEL/ID_MAFE_7e8ad464ec9fa062e514fd034e6ea7a1
+#: LABEL/ID_MAFE_7e8ad464ec9fa062e514fd034e6ea7a1
+msgid "There are problems loading the process objects."
+msgstr "There are problems loading the process objects."
+
+# TRANSLATION
+# LABEL/ID_MAFE_f4b5974fd11406f8410fa7e8502a26a3
+#: LABEL/ID_MAFE_f4b5974fd11406f8410fa7e8502a26a3
+msgid "[LABEL/ID_MAFE_f4b5974fd11406f8410fa7e8502a26a3] Custom"
+msgstr "Custom"
+
+# TRANSLATION
+# LABEL/ID_MAFE_84f6ae383a4278397861eb8c783fe1d8
+#: LABEL/ID_MAFE_84f6ae383a4278397861eb8c783fe1d8
+msgid "[LABEL/ID_MAFE_84f6ae383a4278397861eb8c783fe1d8] Export Process Objects"
+msgstr "Export Process Objects"
+
+# TRANSLATION
+# LABEL/ID_MAFE_5e9df908eafa83cb51c0a3720e8348c7
+#: LABEL/ID_MAFE_5e9df908eafa83cb51c0a3720e8348c7
+msgid "[LABEL/ID_MAFE_5e9df908eafa83cb51c0a3720e8348c7] Check All"
+msgstr "Check All"
 
 # additionalTables/additionalTablesData.xml?ADD_TAB_NAME
 # additionalTables/additionalTablesData.xml
@@ -35728,6 +36680,18 @@ msgstr "Test connection"
 #: button - btnCancel
 msgid "[ldapAdvanced/ldapAdvancedEdit.xml?btnCancel] Cancel"
 msgstr "Cancel"
+
+# login/TimeZoneAlert.xml?BROWSER_TIME_ZONE
+# login/TimeZoneAlert.xml
+#: dropdown - BROWSER_TIME_ZONE
+msgid "[login/TimeZoneAlert.xml?BROWSER_TIME_ZONE] "
+msgstr ""
+
+# login/TimeZoneAlert.xml?BTNOK
+# login/TimeZoneAlert.xml
+#: submit - BTNOK
+msgid "[login/TimeZoneAlert.xml?BTNOK] "
+msgstr ""
 
 # login/changePassword.xml?THETITLE
 # login/changePassword.xml

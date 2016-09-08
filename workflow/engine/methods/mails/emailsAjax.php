@@ -51,13 +51,19 @@ switch($req){
             $criteria->add( AppMessagePeer::APP_MSG_DATE, $dateTo, Criteria::LESS_EQUAL );
         }
 
-        $result = AppMessagePeer::doSelectRS($criteria);
-        $result->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-        $data = Array();
-        while ( $result->next() ) {
-            $data[] = $result->getRow();
-        }
-        $totalCount = count($data);
+        //Number records total
+        $criteriaCount = clone $criteria;
+
+        $criteriaCount->clearSelectColumns();
+        $criteriaCount->addSelectColumn('COUNT(' . AppMessagePeer::APP_MSG_UID . ') AS NUM_REC');
+
+        $rsCriteriaCount = AppMessagePeer::doSelectRS($criteriaCount);
+        $rsCriteriaCount->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+
+        $resultCount = $rsCriteriaCount->next();
+        $rowCount = $rsCriteriaCount->getRow();
+
+        $totalCount = (int)($rowCount['NUM_REC']);
 
         $criteria = new Criteria();
         $criteria->addSelectColumn(AppMessagePeer::APP_MSG_UID);

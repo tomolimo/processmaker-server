@@ -67,7 +67,7 @@ class Language extends BaseLanguage
     public function findById ($LAN_ID)
     {
         if (strpos($LAN_ID, '_') !== false) {
-            $aux = split('_', $LAN_ID);
+            $aux = explode('_', $LAN_ID);
             $LAN_ID = $aux[0];
         }
         $oCriteria = new Criteria( 'workflow' );
@@ -897,6 +897,25 @@ class Language extends BaseLanguage
         return $labels;
     }
 
+    function loadByCode($langId) {
+        try {
+            $oCriteria = new Criteria('workflow');
+            $oCriteria->addSelectColumn( LanguagePeer::LAN_NAME );
+            $oCriteria->add(LanguagePeer::LAN_ID, $langId);
+            $oDataset = LanguagePeer::doSelectRS($oCriteria);
+            $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+            $oDataset->next();
+            $aRow = $oDataset->getRow();
+            $aRow['LANGUAGE_NAME'] = $aRow['LAN_NAME'];
+            if (is_array($aRow)) {
+                return $aRow;
+            } else {
+                throw (new Exception("The language '$langId' doesn\'t exist!"));
+            }
+        } catch( exception $oError ) {
+            throw ($oError);
+        }
+    }
 }
 // Language
 

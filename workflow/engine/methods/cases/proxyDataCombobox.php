@@ -5,12 +5,11 @@
  */
 
 $appUid    = isset($_POST["appUid"])? $_POST["appUid"] : "";
-$dynUid    = isset($_POST["dynUid"])? $_POST["dynUid"] : "";
-$proUid    = isset($_POST["proUid"])? $_POST["proUid"] : "";
+$dynUid    = isset($_POST["dynUid"])? htmlspecialchars($_POST["dynUid"]) : "";
+$proUid    = isset($_POST["proUid"])? htmlspecialchars($_POST["proUid"]) : "";
 $fieldName = isset($_POST["fieldName"])? $_POST["fieldName"] : "";
 
 $filename = $proUid . PATH_SEP . $dynUid . ".xml";
-
 $G_FORM = new xmlform();
 $G_FORM->home = PATH_DYNAFORM;
 $G_FORM->parseFile($filename, SYS_LANG, true);

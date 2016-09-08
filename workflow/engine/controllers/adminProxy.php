@@ -313,7 +313,7 @@ class adminProxy extends HttpProxyController
     public function testingOption($params)
     {
         $data['success'] = true;
-        $data['optionAuthS'] = $params->optionAuthS;
+        $data['optionAuthS'] = htmlspecialchars($params->optionAuthS);
         return $data;
 
     }

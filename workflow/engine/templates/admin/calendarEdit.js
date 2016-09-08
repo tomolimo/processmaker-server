@@ -543,6 +543,8 @@ Ext.onReady( function() {
           iconCls: 'icon-user-add',
           text: _('ID_ADD'),
           handler: function(){
+            Ext.getCmp('startdt').setMaxValue(0);
+            Ext.getCmp('enddt').setMinValue(0);
               var e = new EmployeeHoliday({
                   name: '',
                   startdt: (new Date()).clearTime(),

@@ -23,7 +23,7 @@
       <parameter name="Comment" value="Permissions"/>
     </vendor>
     <column name="PER_UID" type="VARCHAR" size="32" required="true" primaryKey="true" default="" />
-    <column name="PER_CODE" type="VARCHAR" size="32" required="true" default="" />
+    <column name="PER_CODE" type="VARCHAR" size="64" required="true" default="" />
     <column name="PER_CREATE_DATE" type="TIMESTAMP" />
     <column name="PER_UPDATE_DATE" type="TIMESTAMP" />
     <column name="PER_STATUS" type="INTEGER" required="true" default="1" />

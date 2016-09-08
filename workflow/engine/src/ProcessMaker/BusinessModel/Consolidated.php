@@ -121,7 +121,9 @@ class Consolidated
         $response["casesNumRec"] = \Library::getCasesNumRec($usr_uid);
 
         if (is_array($res)) {
-            $response ["message"] = "<b>" . G::LoadTranslation("ID_CASE") . " " . $app_number . "</b> Summary of Derivations: <br> " . $messageDerivateCase;
+            $response ["message"] = "<b>" . G::LoadTranslation("ID_CASE") . " " . $app_number . "</b> " .
+                G::LoadTranslation("ID_SUMMARY_DERIVATION_BATCH_ROUTING") . ' :' . " <br> " .
+                $messageDerivateCase;
         } else {
             $response ["message"] = G::LoadTranslation("ID_CASE") . " " . $app_number . " " . $res->message;
         }
@@ -458,8 +460,8 @@ class Consolidated
         $dataTask = $oDyna->load($dyn_uid);
         if ($dataTask['DYN_VERSION'] > 0) {
             G::LoadClass("pmDynaform");
-            $pmDyna = new \pmDynaform(array('APP_DATA' => array()));
-            $pmDyna->fields["CURRENT_DYNAFORM"] = $dyn_uid;
+            $_SESSION['PROCESS'] = $pro_uid;
+            $pmDyna = new \pmDynaform(array('APP_DATA' => array(), "CURRENT_DYNAFORM" => $dyn_uid));
             $json = G::json_decode($dataTask["DYN_CONTENT"]);
             $pmDyna->jsonr($json);
             $fieldsDyna = $json->items[0]->items;
@@ -467,41 +469,46 @@ class Consolidated
             $xmlfrm->fields = array();
             foreach ($fieldsDyna as $key => $value) {
                 foreach ($value as $val) {
-                    if ($val->type == 'title' || $val->type == 'submit' || $val->type == 'panel' || $val->type == 'image' || $val->type == 'button' || $val->type == 'grid' || $val->type == 'checkgroup' || $val->type == 'radiogroup' || $val->type == 'radio' || $val->type == 'hidden' || $val->type == 'link' || $val->type == 'file' || $val->type == 'subform' || $val->type == 'label') {
-                        continue;
-                    }
-                    $temp = new \stdclass();
-                    $temp->type = $val->type;
-                    $temp->label = $val->label;
-                    $temp->name = $val->name;
-                    $temp->required = (isset($val->required)) ? $val->required : 0;
-                    $temp->mode = (isset($val->mode)) ? $val->mode : 'edit';
+                    if (isset($val->type) && ($val->type == 'text' || $val->type == 'textarea' || $val->type == 'dropdown' || $val->type == 'checkbox' || $val->type == 'datetime')) {
+                        $temp = new \stdclass();
+                        $temp->type = $val->type;
+                        $temp->label = $val->label;
+                        $temp->name = $val->name;
+                        $temp->required = (isset($val->required)) ? $val->required : 0;
+                        $temp->mode = (isset($val->mode)) ? $val->mode : 'edit';
 
-                    if (!empty($val->options) || !empty($val->optionsSql)) {
-                        $temp->storeData = '[';
-                        foreach ($val->options as $valueOption) {
-                            if(isset($valueOption->value)){
-                                $temp->storeData .= '["' . $valueOption->value . '", "' . $valueOption->label . '"],';
-                            }else{
-                                $temp->storeData .= '["' . $valueOption['value'] . '", "' . $valueOption['label'] . '"],';   
+                        if ((isset($val->options) && !empty($val->options)) || (isset($val->optionsSql) && !empty($val->optionsSql))) {
+                            $temp->storeData = '[';
+
+                            if (isset($val->options) && !empty($val->options)) {
+                                foreach ($val->options as $valueOption) {
+                                    if (isset($valueOption->value)) {
+                                        $temp->storeData .= '["' . $valueOption->value . '", "' . $valueOption->label . '"],';
+                                    } else {
+                                        $temp->storeData .= '["' . $valueOption['value'] . '", "' . $valueOption['label'] . '"],';
+                                    }
+                                }
                             }
+
+                            if (isset($val->optionsSql) && !empty($val->optionsSql)) {
+                                foreach ($val->optionsSql as $valueOption) {
+                                    if (isset($valueOption->value)) {
+                                        $temp->storeData .= '["' . $valueOption->value . '", "' . $valueOption->label . '"],';
+                                    } else {
+                                        $temp->storeData .= '["' . $valueOption['value'] . '", "' . $valueOption['label'] . '"],';
+                                    }
+                                }
+                            }
+
+                            $temp->storeData = substr($temp->storeData, 0, -1);
+                            $temp->storeData .= ']';
                         }
 
-                        foreach ($val->optionsSql as $valueOption) {
-                            if(isset($valueOption->value)){
-                                $temp->storeData .= '["' . $valueOption->value . '", "' . $valueOption->label . '"],';
-                            }else{
-                                $temp->storeData .= '["' . $valueOption['value'] . '", "' . $valueOption['label'] . '"],';   
-                            }
-                        }
-                        $temp->storeData = substr($temp->storeData,0,-1);
-                        $temp->storeData .= ']';
+                        $temp->readOnly = ($temp->mode == 'view') ? "1" : "0";
+                        $temp->colWidth = 200;
+                        $xmlfrm->fields[] = $temp;
                     }
-
-                    $temp->readOnly = ($temp->mode == 'view') ? "1" : "0";
-                    $temp->colWidth = 200;
-                    $xmlfrm->fields[] = $temp;
-                    }
+                }
             }
         } else {
             $filename = $pro_uid . PATH_SEP . $dyn_uid . ".xml";

@@ -68,6 +68,7 @@ $aFields = $oCase->loadCase( $sAppUid, $iDelIndex );
 $_SESSION['PROCESS'] = $aFields['PRO_UID'];
 $_SESSION['TASK'] = $aFields['TAS_UID'];
 $_SESSION['STEP_POSITION'] = 0;
+$_SESSION['CURRENT_TASK'] = $aFields['TAS_UID'];
 
 /* Redirect to next step */
 

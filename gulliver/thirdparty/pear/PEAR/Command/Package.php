@@ -151,14 +151,6 @@ after running cvstag once, but before the tarball is released to the public,
 use the "slide" option to move the release tag.
 ',
             ),
-        'run-tests' => array(
-            'summary' => 'Run Regression Tests',
-            'function' => 'doRunTests',
-            'shortcut' => 'rt',
-            'options' => array(),
-            'doc' => '[testfile|dir ...]
-Run regression tests with PHP\'s regression testing script (run-tests.php).',
-            ),
         'package-dependencies' => array(
             'summary' => 'Show package dependencies',
             'function' => 'doPackageDependencies',
@@ -448,56 +440,24 @@ Wrote: /usr/src/redhat/RPMS/i386/PEAR::Net_Socket-1.0-1.i386.rpm
     }
 
     // }}}
-    // {{{ doRunTests()
+    // {{{ doPackageDependencies()
 
-    function doRunTests($command, $options, $params)
+    function doPackageDependencies($command, $options, $params)
     {
         if (!class_exists('G')) {
             $realdocuroot = str_replace( '\\', '/', $_SERVER['DOCUMENT_ROOT'] );
             $docuroot = explode( '/', $realdocuroot );
             array_pop( $docuroot );
-            $pathhome = implode( '/', $docuroot ) . '/';  
+            $pathhome = implode( '/', $docuroot ) . '/';
             array_pop( $docuroot );
-            $pathTrunk = implode( '/', $docuroot ) . '/';  
+            $pathTrunk = implode( '/', $docuroot ) . '/';
             require_once($pathTrunk.'gulliver/system/class.g.php');
         }
+
         G::LoadSystem('inputfilter');
         $filter = new InputFilter();
-        
-        $cwd = getcwd();
-        $php = PHP_BINDIR . '/php' . (OS_WINDOWS ? '.exe' : '');
-        putenv("TEST_PHP_EXECUTABLE=$php");
-        $ip = ini_get("include_path");
-        $ps = OS_WINDOWS ? ';' : ':';
-        $run_tests = $this->config->get('php_dir') . DIRECTORY_SEPARATOR . 'run-tests.php';
-        if (!file_exists($run_tests)) {
-            $run_tests = PEAR_INSTALL_DIR . DIRECTORY_SEPARATOR . 'run-tests.php';
-            if (!file_exists($run_tests)) {
-                return $this->raiseError("No `run-tests.php' file found");
-            }
-        }
-        $plist = implode(" ", $params);
-        
-        $php  = $filter->validateInput($php);
-        $cwd  = $filter->validateInput($cwd);
-        $ps  = $filter->validateInput($ps);
-        $ip  = $filter->validateInput($ip);
-        $run_tests  = $filter->validateInput($run_tests);
-        $plist  = $filter->validateInput($plist);
-        
-        $cmd = $php.' -C -d include_path='.$cwd.$ps.$ip.' -f '.$run_tests.' -- '.$plist;
-        
-        $cmd  = $filter->validateInput($cmd);
-        
-        system($cmd);
-        return true;
-    }
+        $command = $filter->validateInput($command);
 
-    // }}}
-    // {{{ doPackageDependencies()
-
-    function doPackageDependencies($command, $options, $params)
-    {
         // $params[0] -> the PEAR package to list its information
         if (sizeof($params) != 1) {
             return $this->raiseError("bad parameter(s), try \"help $command\"");

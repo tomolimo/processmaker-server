@@ -70,7 +70,9 @@ class System
         'ie_cookie_lifetime' => 1,
         'safari_cookie_lifetime' => 1,
         'error_reporting' => "",
-        'display_errors' => 'On'
+        'display_errors' => 'On',
+        'system_utc_time_zone' => 0,
+        'server_hostname_requests_frontend' => ''
     );
 
     /**
@@ -184,8 +186,8 @@ class System
         * the distro name, such as "CentOS release 5.3 (Final)" or "Ubuntu 10.10"
         */
         $distro = '';
-        if (file_exists("/dev/")){ //Windows does not have this folder 
-          $distro = exec( "lsb_release -d -s 2> /dev/null" );          
+        if (file_exists("/dev/")){ //Windows does not have this folder
+          $distro = exec( "lsb_release -d -s 2> /dev/null" );
         }
 
         /* For distros without lsb_release, we look for *release (such as
@@ -1099,33 +1101,7 @@ class System
 
     public function getAllTimeZones ()
     {
-        $timezones = DateTimeZone::listAbbreviations();
-
-        $cities = array ();
-        foreach ($timezones as $key => $zones) {
-            foreach ($zones as $id => $zone) {
-                /**
-                 * Only get timezones explicitely not part of "Others".
-                 *
-                 * @see http://www.php.net/manual/en/timezones.others.php
-                 */
-                if (preg_match( '/^(America|Antartica|Arctic|Asia|Atlantic|Africa|Europe|Indian|Pacific)\//', $zone['timezone_id'] ) && $zone['timezone_id']) {
-                    $cities[$zone['timezone_id']][] = $key;
-                }
-            }
-        }
-
-        // For each city, have a comma separated list of all possible timezones for that city.
-        foreach ($cities as $key => $value) {
-            $cities[$key] = join( ', ', $value );
-        }
-        // Only keep one city (the first and also most important) for each set of possibilities.
-        $cities = array_unique( $cities );
-
-        // Sort by area/city name.
-        ksort( $cities );
-
-        return $cities;
+        throw new Exception(__METHOD__ . ': The method is deprecated');
     }
 
     public static function getSystemConfiguration ($globalIniFile = '', $wsIniFile = '', $wsName = '')
@@ -1185,6 +1161,29 @@ class System
             $config['proxy_pass'] = $G->decrypt($config['proxy_pass'], 'proxy_pass');
         }
 
+        return $config;
+    }
+
+    /*
+    * Get information about the queries permitted and tables we can modified
+    * @access public
+    * @param string $globalIniFile
+    * @return array of execute query Black list
+    */
+    public static function getQueryBlackList($globalIniFile = ''){
+        $config = array();
+        if (empty($globalIniFile)) {
+            $blackListIniFile = PATH_CONFIG . 'execute-query-blacklist.ini';
+            $sysTablesIniFile = PATH_CONFIG . 'system-tables.ini';
+        }
+        // read the global execute-query-blacklist.ini configuration file
+        if(file_exists($blackListIniFile)){
+            $config = @parse_ini_file($blackListIniFile);
+        }
+        if(file_exists($sysTablesIniFile)){
+            $systemTables = @parse_ini_file($sysTablesIniFile);
+            $config['tables'] = $systemTables['tables'];
+        }
         return $config;
     }
 
@@ -1253,6 +1252,26 @@ class System
         }
 
         return self::$debug;
+    }
+
+    /**
+     * Get the complete name of the server host configured for requests Front-End (e.g. https://127.0.0.1:81)
+     *
+     * @return string Returns an string with the complete name of the server host configured for requests Front-End
+     */
+    public static function getHttpServerHostnameRequestsFrontEnd()
+    {
+        try {
+            $arraySystemConfiguration = self::getSystemConfiguration();
+
+            $serverHostname = $arraySystemConfiguration['server_hostname_requests_frontend'];
+            $serverHostname = ($serverHostname != '')? $serverHostname : $_SERVER['HTTP_HOST'];
+
+            //Return
+            return ((G::is_https())? 'https://' : 'http://') . $serverHostname;
+        } catch (Exception $e) {
+            throw $e;
+        }
     }
 }
 // end System class

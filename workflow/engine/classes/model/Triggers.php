@@ -364,6 +364,60 @@ class Triggers extends BaseTriggers
                 $oResult->code = 1;
             }
         }
+        
+        /**
+         * Process elements:
+         * 
+         * PRO_TRI_DELETED
+         * PRO_TRI_CANCELED
+         * PRO_TRI_PAUSED
+         * PRO_TRI_REASSIGNED
+         * PRO_TRI_OPEN
+         */
+        $criteria = new Criteria();
+
+        $crit0 = $criteria->getNewCriterion(ProcessPeer::PRO_TRI_DELETED, $TRI_UID);
+        $crit1 = $criteria->getNewCriterion(ProcessPeer::PRO_TRI_CANCELED, $TRI_UID);
+        $crit2 = $criteria->getNewCriterion(ProcessPeer::PRO_TRI_PAUSED, $TRI_UID);
+        $crit3 = $criteria->getNewCriterion(ProcessPeer::PRO_TRI_REASSIGNED, $TRI_UID);
+        $crit4 = $criteria->getNewCriterion(ProcessPeer::PRO_TRI_OPEN, $TRI_UID);
+
+        $crit0->addOr($crit1);
+        $crit0->addOr($crit2);
+        $crit0->addOr($crit3);
+        $crit0->addOr($crit4);
+
+        $criteria->addSelectColumn(ProcessPeer::PRO_UID);
+        $criteria->addSelectColumn(ProcessPeer::PRO_TRI_DELETED);
+        $criteria->addSelectColumn(ProcessPeer::PRO_TRI_CANCELED);
+        $criteria->addSelectColumn(ProcessPeer::PRO_TRI_PAUSED);
+        $criteria->addSelectColumn(ProcessPeer::PRO_TRI_REASSIGNED);
+        $criteria->addSelectColumn(ProcessPeer::PRO_TRI_OPEN);
+        $criteria->add($crit0);
+
+        $rsCriteria = ProcessPeer::doSelectRS($criteria);
+        $rsCriteria->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+
+        $arrayRow = array();
+
+        while ($rsCriteria->next()) {
+            array_push($arrayRow, $rsCriteria->getRow());
+        }
+
+        $oResult->dependencies["Process"] = array();
+
+        if ($oResult->code == 0 && count($arrayRow) == 0) {
+            $oResult->code = 0;
+        } else {
+            if (count($arrayRow) > 0) {
+                foreach ($arrayRow as $row) {
+                    $process = ProcessPeer::retrieveByPK($row["PRO_UID"]);
+                    array_push($oResult->dependencies["Process"], array("UID" => $process->getProUid(), "DESCRIPTION" => $process->getProTitle()));
+                }
+
+                $oResult->code = 1;
+            }
+        }
 
         return $oResult;
     }

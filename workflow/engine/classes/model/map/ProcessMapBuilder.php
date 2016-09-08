@@ -77,7 +77,7 @@ class ProcessMapBuilder
 
         $tMap->addColumn('PRO_TYPE_DAY', 'ProTypeDay', 'string', CreoleTypes::CHAR, true, 1);
 
-        $tMap->addColumn('PRO_TYPE', 'ProType', 'string', CreoleTypes::VARCHAR, true, 20);
+        $tMap->addColumn('PRO_TYPE', 'ProType', 'string', CreoleTypes::VARCHAR, true, 256);
 
         $tMap->addColumn('PRO_ASSIGNMENT', 'ProAssignment', 'string', CreoleTypes::VARCHAR, true, 20);
 
@@ -86,6 +86,8 @@ class ProcessMapBuilder
         $tMap->addColumn('PRO_SHOW_MESSAGE', 'ProShowMessage', 'int', CreoleTypes::TINYINT, true, null);
 
         $tMap->addColumn('PRO_SUBPROCESS', 'ProSubprocess', 'int', CreoleTypes::TINYINT, true, null);
+
+        $tMap->addColumn('PRO_TRI_OPEN', 'ProTriOpen', 'string', CreoleTypes::VARCHAR, true, 32);
 
         $tMap->addColumn('PRO_TRI_DELETED', 'ProTriDeleted', 'string', CreoleTypes::VARCHAR, true, 32);
 
@@ -136,8 +138,6 @@ class ProcessMapBuilder
         $tMap->addValidator('PRO_TIMEUNIT', 'validValues', 'propel.validator.ValidValuesValidator', 'WEEKS|MONTHS|DAYS|HOURS|MINUTES', 'Please select a valid Time Unit.');
 
         $tMap->addValidator('PRO_STATUS', 'validValues', 'propel.validator.ValidValuesValidator', 'ACTIVE|INACTIVE|DISABLED', 'Please select a valid Process Status.');
-
-        $tMap->addValidator('PRO_TYPE', 'validValues', 'propel.validator.ValidValuesValidator', 'NORMAL', 'Please select a valid Process Type.');
 
         $tMap->addValidator('PRO_ASSIGNMENT', 'validValues', 'propel.validator.ValidValuesValidator', 'TRUE|FALSE', 'Please select a valid Process Assignment');
 

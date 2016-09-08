@@ -358,6 +358,46 @@ class Activity extends Api
 
     }
 
+    
+
+    /**
+
+     * @url PUT /:prj_uid/activity/validate-active-cases
+
+     *
+
+     * @param string $prj_uid {@min 32}{@max 32}
+
+     */
+
+    public function doGetActivityValidateSelfService($prj_uid, $request_data =  array())
+
+    {
+
+        try {
+
+            $task = new \ProcessMaker\BusinessModel\Task();
+
+            $task->setFormatFieldNameInUppercase(false);
+
+            $task->setArrayParamException(array("taskUid" => "act_uid"));
+
+
+
+            $response = $task->getValidateSelfService($request_data);
+
+
+
+            return $response;
+
+        } catch (\Exception $e) {
+
+            throw (new RestException(Api::STAT_APP_EXCEPTION, $e->getMessage()));
+
+        }
+
+    }
+
 }
 
 
