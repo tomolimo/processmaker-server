@@ -4,11 +4,15 @@ global $RBAC;
 
 
 
-if ($RBAC->userCanAccess("PM_SETUP") != 1) {
+$resultRbac  = $RBAC->requirePermissions('PM_SETUP_EMAIL');
 
-    G::SendTemporalMessage("ID_USER_HAVENT_RIGHTS_PAGE", "error", "labels");
+if (!$resultRbac) {
 
-    exit(0);
+    G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');
+
+    G::header('location: ../login/login');
+
+    die();
 
 }
 

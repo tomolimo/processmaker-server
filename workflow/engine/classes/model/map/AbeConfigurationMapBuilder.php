@@ -93,6 +93,8 @@ class AbeConfigurationMapBuilder
 
         $tMap->addColumn('ABE_MAILSERVER_OR_MAILCURRENT', 'AbeMailserverOrMailcurrent', 'int', CreoleTypes::INTEGER, false, null);
 
+        $tMap->addColumn('ABE_CUSTOM_GRID', 'AbeCustomGrid', 'string', CreoleTypes::LONGVARCHAR, false, null);
+
     } // doBuild()
 
 } // AbeConfigurationMapBuilder

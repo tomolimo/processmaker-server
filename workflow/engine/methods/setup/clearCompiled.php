@@ -22,7 +22,12 @@
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  */
 global $RBAC;
-$RBAC->requirePermissions( 'PM_SETUP' );
+$resultRbac  = $RBAC->requirePermissions('PM_SETUP_CLEAR_CACHE');
+if (!$resultRbac) {
+    G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');
+    G::header('location: ../login/login');
+    die();
+}
 
 $oHeadPublisher = & headPublisher::getSingleton();
 $oHeadPublisher->addExtJsScript( 'setup/clearCompiled', true ); //adding a javascript file .js

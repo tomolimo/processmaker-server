@@ -38,9 +38,13 @@ class User extends Api
     public function doGetUsers($rol_uid, $filter = null, $start = null, $limit = null)
     {
         try {
-            $response = $this->roleUser->getUsers($rol_uid, (preg_match("/^.*\/users$/", $this->restler->url))? "USERS" : "AVAILABLE-USERS", array("filter" => $filter), null, null, $start, $limit);
+            $option = (preg_match('/^.*\/users$/', $this->restler->url))? 'USERS' : 'AVAILABLE-USERS';
 
-            return $response;
+            $response = $this->roleUser->getUsers(
+                $rol_uid, $option, ['filter' => $filter, 'filterOption' => ''], null, null, $start, $limit
+            );
+
+            return $response['data'];
         } catch (\Exception $e) {
             throw new RestException(Api::STAT_APP_EXCEPTION, $e->getMessage());
         }

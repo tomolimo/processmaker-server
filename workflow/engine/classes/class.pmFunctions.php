@@ -28,7 +28,7 @@
 //
 // License: LGPL, see LICENSE
 ////////////////////////////////////////////////////
-
+use ProcessMaker\Util\ElementTranslation;
 
 if (! class_exists( 'PMScript' )) {
     G::LoadClass( 'pmScript' );
@@ -242,8 +242,60 @@ function executeQuery ($SqlStatement, $DBConnectionUID = 'workflow', $aParameter
 {
     $con = Propel::getConnection( $DBConnectionUID );
     $con->begin();
-
+    G::loadClass('system');
+    $blackList = System::getQueryBlackList();
+    $aListQueries = explode('|', $blackList['queries']);
+    $aListAllTables = explode(
+        '|',
+        ((isset($blackList['tables']))? $blackList['tables'] : '') .
+        ((isset($blackList['pmtables']))? $blackList['pmtables'] : '')
+    );
+    if (!class_exists('PHPSQLParser')) {
+        G::LoadSystem('phpSqlParser');
+    }
+    $parseSqlStm = new PHPSQLParser($SqlStatement);
     try {
+        //Parsing queries and check the blacklist
+        foreach ($parseSqlStm as $key => $value) {
+            if($key === 'parsed'){
+                $aParseSqlStm = $value;
+                continue;
+            }
+        }
+        $nameOfTable = '';
+        $arrayOfTables = array();
+        foreach ($aParseSqlStm as $key => $value) {
+            if(in_array($key, $aListQueries)){
+                if(isset($value['table'])){
+                    $nameOfTable = $value['table'];
+                } else {
+                    foreach ($value as $valueTab) {
+                        if(is_array($valueTab)){
+                            $arrayOfTables = $valueTab;
+                        } else {
+                            $nameOfTable = $valueTab;
+                        }
+                    }
+                }
+                if(isset($nameOfTable) && $nameOfTable !== ''){
+                    if(in_array($nameOfTable,$aListAllTables)){
+                        G::SendTemporalMessage( G::loadTranslation('ID_NOT_EXECUTE_QUERY', array($nameOfTable)), 'error', 'labels' );
+                        throw new SQLException(G::loadTranslation('ID_NOT_EXECUTE_QUERY', array($nameOfTable)));
+                    }
+                }
+                if (is_array($arrayOfTables)){
+                    foreach ($arrayOfTables as $row){
+                        if(!empty($row)){
+                            if(in_array($row, $aListAllTables)){
+                                G::SendTemporalMessage(G::loadTranslation('ID_NOT_EXECUTE_QUERY', array($nameOfTable)), 'error', 'labels' );
+                                throw new SQLException(G::loadTranslation('ID_NOT_EXECUTE_QUERY', array($nameOfTable)));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         $statement = trim( $SqlStatement );
         $statement = str_replace( '(', '', $statement );
 
@@ -264,8 +316,11 @@ function executeQuery ($SqlStatement, $DBConnectionUID = 'workflow', $aParameter
                     $rs = $con->executeUpdate( $SqlStatement );
                     $result = $con->getUpdateCount();
                     $con->commit();
-                    //$result = $lastId->getId();
-                    // $result = 1;
+                    break;
+                case preg_match( "/^REPLACE\s/i", $statement ):
+                    $rs = $con->executeUpdate( $SqlStatement );
+                    $result = $con->getUpdateCount();
+                    $con->commit();
                     break;
                 case preg_match( "/^UPDATE\s/i", $statement ):
                     $rs = $con->executeUpdate( $SqlStatement );
@@ -290,6 +345,11 @@ function executeQuery ($SqlStatement, $DBConnectionUID = 'workflow', $aParameter
 
         return $result;
     } catch (SQLException $sqle) {
+        if (isset($sqle->xdebug_message)) {
+            error_log(print_r($sqle->xdebug_message, true));
+        } else {
+            error_log(print_r($sqle, true));
+        }
         $con->rollback();
         throw $sqle;
     }
@@ -367,6 +427,17 @@ function evaluateFunction ($aGrid, $sExpresion)
         $pmScript->execute();
 
         $aGrid[$i] = $pmScript->aFields;
+        
+        //compatibility for var_label
+        foreach ($aFields as $j => $val) {
+            if (isset($aGrid[$i][$j . "_label"]) && empty($aGrid[$i][$j . "_label"]) && !empty($aGrid[$i][$j])) {
+                $aGrid[$i][$j . "_label"] = $aGrid[$i][$j];
+            }
+            if (substr($j, -6) !== "_label" && ($val !== $aGrid[$i][$j])) {
+                $aGrid[$i][$j . "_label"] = $aGrid[$i][$j];
+            }
+        }
+        //end
     }
     return $aGrid;
 }
@@ -1743,6 +1814,9 @@ function PMFGenerateOutputDocument ($outputID, $sApplication = null, $index = nu
     $aProperties['media'] = $aOD['OUT_DOC_MEDIA'];
     $aProperties['margins'] = array ('left' => $aOD['OUT_DOC_LEFT_MARGIN'],'right' => $aOD['OUT_DOC_RIGHT_MARGIN'],'top' => $aOD['OUT_DOC_TOP_MARGIN'],'bottom' => $aOD['OUT_DOC_BOTTOM_MARGIN']
     );
+    if ($aOD['OUT_DOC_PDF_SECURITY_ENABLED'] == '1') {
+        $aProperties['pdfSecurity'] = array('openPassword' => $aOD['OUT_DOC_PDF_SECURITY_OPEN_PASSWORD'], 'ownerPassword' => $aOD['OUT_DOC_PDF_SECURITY_OWNER_PASSWORD'], 'permissions' => $aOD['OUT_DOC_PDF_SECURITY_PERMISSIONS']);
+    }
     if (isset($aOD['OUT_DOC_REPORT_GENERATOR'])) {
         $aProperties['report_generator'] = $aOD['OUT_DOC_REPORT_GENERATOR'];
     }
@@ -2903,3 +2977,378 @@ function PMFSaveCurrentData ()
 
     return $result;
 }
+
+/**
+ * @method
+ * Return an array of associative arrays which contain the unique task ID and title.
+ * @name PMFTasksListByProcessId
+ * @label PMF Tasks List By Process Id
+ * @param string | $processId | ID Process | To get the current process id, use the system variable @@PROCESS
+ * @param string | $lang | Language | Is the language of the text, that must be the same to the column: "CON_LANG" of the CONTENT table
+ * @return array | $result | Array result | Array of associative arrays which contain the unique task ID and title
+ */
+function PMFTasksListByProcessId($processId, $lang = 'en')
+{
+    $result = array();
+    $criteria = new Criteria("workflow");
+    $criteria->addSelectColumn(TaskPeer::TAS_UID);
+    $criteria->addSelectColumn(ContentPeer::CON_VALUE);
+    $criteria->addSelectColumn(ContentPeer::CON_LANG);
+    $criteria->addJoin(TaskPeer::TAS_UID, ContentPeer::CON_ID, Criteria::INNER_JOIN);
+    $criteria->add(ContentPeer::CON_CATEGORY, 'TAS_TITLE', Criteria::EQUAL);
+    $criteria->add(ContentPeer::CON_LANG, $lang, Criteria::EQUAL);
+    $criteria->add(TaskPeer::PRO_UID, $processId, Criteria::EQUAL);
+    $ds = TaskPeer::doSelectRS($criteria);
+    $ds->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    while ($ds->next()) {
+        $result[] = $ds->getRow();
+    }
+    return $result;
+}
+
+/**
+ *
+ * @method
+ *
+ * Get the Unique id of Process by name
+ *
+ * @name PMFGetProcessUidByName
+ * @label PMF Get the Unique id of Process by name
+ * @link http://wiki.processmaker.com/index.php/ProcessMaker_Functions#PMFGetProcessUidByName.28.29
+ *
+ * @param  string | $processName = '' | Name of Process | Name of Process
+ * @return string(32) | $processUid | Unique id of Process | Returns the Unique id of Process, FALSE otherwise
+ *
+ */
+function PMFGetProcessUidByName($processName = '')
+{
+    try {
+        $processUid = '';
+
+        if ($processName == '') {
+            //Return
+            return (isset($_SESSION['PROCESS']))? $_SESSION['PROCESS'] : false;
+        }
+
+        $criteria = new Criteria('workflow');
+
+        $criteria->addSelectColumn(ProcessPeer::PRO_UID);
+
+        $criteria->addJoin(ContentPeer::CON_ID, ProcessPeer::PRO_UID, Criteria::LEFT_JOIN);
+        $criteria->add(ContentPeer::CON_VALUE, $processName, Criteria::EQUAL);
+        $criteria->add(ContentPeer::CON_CATEGORY, 'PRO_TITLE', Criteria::EQUAL);
+
+        $rsCriteria = ContentPeer::doSelectRS($criteria);
+        $rsCriteria->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+
+        if ($rsCriteria->next()) {
+            $row = $rsCriteria->getRow();
+            $processUid = $row['PRO_UID'];
+        } else {
+            //Return
+            return false;
+        }
+
+        //Return
+        return $processUid;
+    } catch (Exception $e) {
+        throw $e;
+    }
+}
+
+/**
+ * @method
+ * The requested text in the specified language | If not found returns false
+ * @name PMFGeti18nText
+ * @label PMF Get i18n Text
+ * @param string | $id | ID Text | Is the identifier of text, that must be the same to the column: "CON_ID" of the CONTENT table
+ * @param string | $category | Category  | Is the category of the text, that must be the same to the column: "CON_CATEGORY" of the CONTENT table
+ * @param string | $lang | Language | Is the language of the text, that must be the same to the column: "CON_LANG" of the CONTENT table
+ * @return string | $text | Translated text | the translated text of a string in Content
+ */
+function PMFGeti18nText($id, $category, $lang = "en")
+{
+    $text = false;
+    $criteria = new Criteria("workflow");
+    $criteria->addSelectColumn(ContentPeer::CON_VALUE);
+    $criteria->add(ContentPeer::CON_ID, $id, Criteria::EQUAL);
+    $criteria->add(ContentPeer::CON_CATEGORY, $category, Criteria::EQUAL);
+    $criteria->add(ContentPeer::CON_LANG, $lang, Criteria::EQUAL);
+    $ds = ContentPeer::doSelectRS($criteria);
+    $ds->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+    $ds->next();
+    $row = $ds->getRow();
+    if (isset($row["CON_VALUE"])) {
+        $text = $row["CON_VALUE"];
+    }
+    return $text;
+}
+
+/**
+ * @method
+ * Function to return an array of objects containing the properties of the fields
+ * in a specified DynaForm.
+ * It also inserts the "value" and "value_label" as properties in the fields' objects,
+ * if the case is specified.
+ * @name PMFDynaFormFields
+ * @label PMF DynaForm Fields
+ * @param string | $dynUid | Dynaform ID | Id of the dynaform
+ * @param string | $appUid | Case ID | Id of the case
+ * @param int | $delIndex | Delegation index | Delegation index for case
+ * @return array | $fields | List of fields | Return a list of fields
+ */
+function PMFDynaFormFields($dynUid, $appUid = false, $delIndex = 0)
+{
+    G::LoadClass("pmDynaform");
+    $fields = array();
+    $data = array();
+
+    if ($appUid !== false) {
+        if ($delIndex < 0) {
+            throw new Exception(G::LoadTranslation('ID_INVALID_DELEGATION_INDEX_FOR_CASE') . "'" . $appUid . "'.");
+        }
+        $cases = new Cases();
+        $data = $cases->loadCase($appUid, $delIndex);
+    } else {
+        global $oPMScript;
+        if (isset($oPMScript->aFields) && is_array($oPMScript->aFields)) {
+            $data['APP_DATA'] = $oPMScript->aFields;
+        }
+    }
+    $data["CURRENT_DYNAFORM"] = $dynUid;
+
+    $dynaform = new pmDynaform($data);
+    $dynaform->onPropertyRead = function(&$json, $key, $value) {
+        if (isset($json->data) && !isset($json->value)) {
+            $json->value = $json->data->value;
+            $json->value_label = $json->data->label;
+        }
+    };
+
+    if ($dynaform->isResponsive()) {
+        $json = G::json_decode($dynaform->record["DYN_CONTENT"]);
+        $dynaform->jsonr($json);
+
+        $rows = $json->items[0]->items;
+        foreach ($rows as $items) {
+            foreach ($items as $item) {
+                $fields[] = $item;
+            }
+        }
+    } else {
+        $oldDynaform = new Dynaform();
+        $aFields = $oldDynaform->getDynaformFields($dynUid);
+        foreach ($aFields as $value) {
+            if (isset($data["APP_DATA"]) && isset($data["APP_DATA"][$value->name])) {
+                $value->value = $data["APP_DATA"][$value->name];
+            }
+            $fields[] = $value;
+        }
+    }
+    return $fields;
+}
+
+/**
+ * @method
+ * Return the task title of the specified task uid | If not found returns false
+ * @name PMFGetTaskName
+ * @label PMF Get Task Title Text
+ * @param string | $taskUid | ID Task | Is the identifier of task, that must be the same to the column: "TAS_UID" of the TASK table
+ * @param string | $lang | Language | Is the language of the text, that must be the same to the column: "CON_LANG" of the CONTENT table
+ * @return string | $text | Translated text | the translated text of a string in Content
+ */
+function PMFGetTaskName($taskUid, $lang = SYS_LANG) {
+    if (empty($taskUid)) {
+        return false;
+    }
+    return PMFGeti18nText($taskUid, 'TAS_TITLE', $lang);
+}
+
+/**
+ * @method
+ * Return the group title of the specified group uid | If not found returns false
+ * @name PMFGetGroupName
+ * @label PMF Get Group Title Text
+ * @param string | $grpUid | ID Group | Is the identifier of group, that must be the same to the column: "GPR_UID" of the GROUPWF table
+ * @param string | $lang | Language | Is the language of the text, that must be the same to the column: "CON_LANG" of the CONTENT table
+ * @return string | $text | Translated text | the translated text of a string in Content
+ */
+function PMFGetGroupName($grpUid, $lang = SYS_LANG) {
+    if (empty($grpUid)) {
+        return false;
+    }
+    return PMFGeti18nText($grpUid, 'GRP_TITLE', $lang);
+}
+
+/**
+ * @method
+ * The identifier of the element found using the text.
+ * @name PMFGetUidFromText
+ * @label PMF Get Uid From Text
+ * @param string | $text | Text
+ * @param string | $category | Category
+ * @param string | $proUid | ProcessUid
+ * @param string | $lang | Languaje
+ * @return array
+ */
+function PMFGetUidFromText($text, $category, $proUid = null, $lang = SYS_LANG)
+{
+    $obj = new ElementTranslation();
+    $uids = $obj->getUidFromTextI18n($text, $category, $proUid, $lang);
+    return $uids;
+}
+
+/**
+ * @method
+ * Get UID of a Dynaform
+ * @name PMFGetDynaformUID
+ * @label PMF Get Dynafrom UID
+ * @param string | $dynaformName | Name Dynaform | Is the name of a Dynaform
+ * @param string | $proUid = null | Process ID | The process identifier to search the dynaform name. If not specified the current process is used.
+ * @return  array | $result | array
+ */
+function PMFGetDynaformUID($dynaformName, $proUid = null)
+{
+    return PMFGetUidFromText($dynaformName, 'DYN_TITLE', $proUid);
+}
+
+/**
+ * @method
+ * Get UID of a Group
+ * @name PMFGetGroupUID
+ * @label PMF Get Group UID
+ * @param string | $groupName | Name Group | Is the name of a Group
+ * @return  array | $result | array
+ */
+function PMFGetGroupUID($groupName)
+{
+    return PMFGetUidFromText($groupName, 'GRP_TITLE');
+}
+
+/**
+ * @method
+ * Get UID of a Task
+ * @name PMFGetTaskUID
+ * @label PMF Get Task UID
+ * @param string | $taskName | Name Task | Is the name of a Task
+ * @param string | $proUid  = null| Process ID | The process identifier to search the dynaform name. If not specified the current process is used.
+ * @return  array | $result | array
+ */
+function PMFGetTaskUID($taskName, $proUid = null)
+{
+    return PMFGetUidFromText($taskName, 'TAS_TITLE', $proUid);
+}
+
+/**
+ * @method
+ * Get Group Users
+ * @name PMFGetGroupUsers
+ * @label PMF Group Users
+ * @param string | $GroupUID | Is UID of Group
+ * @return  array | $result | array
+ */
+function PMFGetGroupUsers($GroupUID)
+{
+    G::LoadClass('groups');
+    $groups = new Groups();
+    $usersGroup = $groups->getUsersOfGroup($GroupUID, 'ALL');
+    return $usersGroup;
+
+}
+
+/**
+ * @method
+ *
+ * Get next derivation info
+ *
+ * @name PMFGetNextDerivationInfo
+ * @label PMF Get next derivation info
+ * @link http://wiki.processmaker.com/index.php/ProcessMaker_Functions#PMFGetNextDerivationInfo.28.29
+ *
+ * @param string(32) | $caseUid | ID of the case | The unique ID of the case
+ * @param int | $delIndex | Delegation index of the case | The delegation index of the current task in the case
+ *
+ * @return array | $arrayNextDerivationInfo | Next derivation info | Returns the next derivation info, FALSE otherwise
+ */
+function PMFGetNextDerivationInfo($caseUid, $delIndex)
+{
+    try {
+        $arrayNextDerivationInfo = [];
+
+        //Verify data and Set variables
+        $case = new \ProcessMaker\BusinessModel\Cases();
+
+        $arrayAppDelegationData = $case->getAppDelegationRecordByPk(
+            $caseUid,
+            $delIndex,
+            ['$applicationUid' => '$caseUid', '$delIndex' => '$delIndex'],
+            false
+        );
+
+        if ($arrayAppDelegationData === false) {
+            return false;
+        }
+
+        //Set variables
+        $processUid = $arrayAppDelegationData['PRO_UID'];
+        $userUid = $arrayAppDelegationData['USR_UID'];
+
+        //Get next derivation
+        $derivation = new Derivation();
+
+        $arrayData = $derivation->prepareInformation([
+            'APP_UID'   => $caseUid,
+            'DEL_INDEX' => $delIndex,
+            'USER_UID'  => $userUid //User logged
+        ]);
+
+        $task = new \ProcessMaker\BusinessModel\Task();
+
+        foreach ($arrayData as $value) {
+            $arrayInfo = $value;
+
+            $nextTaskUid = $arrayInfo['NEXT_TASK']['TAS_UID'];
+
+            $arrayUserUid = [];
+            $arrayGroupUid = [];
+
+            if ($nextTaskUid != '-1') {
+                $arrayResult = $task->getTaskAssignees($processUid, $nextTaskUid, 'ASSIGNEE', 1);
+
+                foreach ($arrayResult['data'] as $value2) {
+                    $arrayAssigneeData = $value2;
+
+                    switch ($arrayAssigneeData['aas_type']) {
+                        case 'user':
+                            $arrayUserUid[] = $arrayAssigneeData['aas_uid'];
+                            break;
+                        case 'group':
+                            $arrayGroupUid[] = $arrayAssigneeData['aas_uid'];
+                            break;
+                    }
+                }
+
+                $assignmentType = $arrayInfo['NEXT_TASK']['TAS_ASSIGN_TYPE'];
+
+                if ($arrayInfo['NEXT_TASK']['TAS_ASSIGN_TYPE'] == 'SELF_SERVICE' &&
+                    trim($arrayInfo['NEXT_TASK']['TAS_GROUP_VARIABLE']) != ''
+                ) {
+                    $assignmentType = 'SELF_SERVICE_VALUE';
+                }
+
+                $arrayNextDerivationInfo[] = [
+                    'taskUid'        => $nextTaskUid,
+                    'assignmentType' => $assignmentType,
+                    'users'  => $arrayUserUid,
+                    'groups' => $arrayGroupUid,
+                ];
+            }
+        }
+
+        //Return
+        return $arrayNextDerivationInfo;
+    } catch (Exception $e) {
+        throw $e;
+    }
+}
+

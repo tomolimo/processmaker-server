@@ -289,37 +289,6 @@
         store: store,
         tbar:[
           {
-            text:_("ID_DYNAFORM_HISTORY"),
-            id:'changueLogFormRadioId',
-            iconCls: 'button_menu_ext',
-            icon: '/images/ext/gray/shapes/hourglass.png',
-            handler: function(){
-              var rowSelected = processesGrid.getSelectionModel().getSelected();
-
-              if( rowSelected ){
-                window.parent.historyGridListChangeLogGlobal.idHistory = rowSelected.data.ID_HISTORY;
-                window.parent.historyGridListChangeLogGlobal.tasTitle = rowSelected.data.TAS_TITLE;
-
-                var idHistory = window.parent.historyGridListChangeLogGlobal.idHistory;
-                window.parent.Actions.tabFrame('changeLogTab'+idHistory);
-              }
-              else{
-                Ext.Msg.show({
-                  title:'',
-                  msg: TRANSLATIONS.ID_NO_SELECTION_WARNING,
-                  buttons: Ext.Msg.INFO,
-                  fn: function(){},
-                  animEl: 'elId',
-                  icon: Ext.MessageBox.INFO,
-                  buttons: Ext.MessageBox.OK
-                });
-              }
-
-
-          },
-            disabled:false
-          },
-          {
             xtype: 'tbfill'
           }
         ],

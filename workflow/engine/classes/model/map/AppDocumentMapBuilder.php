@@ -95,6 +95,12 @@ class AppDocumentMapBuilder
 
         $tMap->addColumn('APP_DOC_FIELDNAME', 'AppDocFieldname', 'string', CreoleTypes::VARCHAR, false, 150);
 
+        $tMap->addColumn('APP_DOC_DRIVE_DOWNLOAD', 'AppDocDriveDownload', 'string', CreoleTypes::LONGVARCHAR, false, null);
+
+        $tMap->addColumn('SYNC_WITH_DRIVE', 'SyncWithDrive', 'string', CreoleTypes::VARCHAR, true, 32);
+
+        $tMap->addColumn('SYNC_PERMISSIONS', 'SyncPermissions', 'string', CreoleTypes::LONGVARCHAR, false, null);
+
         $tMap->addValidator('APP_DOC_UID', 'maxLength', 'propel.validator.MaxLengthValidator', '32', 'Application Document UID can be no larger than 32 in size');
 
         $tMap->addValidator('APP_DOC_UID', 'required', 'propel.validator.RequiredValidator', '', 'Application Document UID is required.');
@@ -124,6 +130,10 @@ class AppDocumentMapBuilder
         $tMap->addValidator('APP_DOC_STATUS', 'validValues', 'propel.validator.ValidValuesValidator', 'ACTIVE|DELETED', 'Please select a valid document status (ACTIVE|DELETED).');
 
         $tMap->addValidator('APP_DOC_STATUS', 'required', 'propel.validator.RequiredValidator', '', 'Application Document Status is required.');
+
+        $tMap->addValidator('SYNC_WITH_DRIVE', 'validValues', 'propel.validator.ValidValuesValidator', 'SYNCHRONIZED|UNSYNCHRONIZED|NO_EXIST_FILE_PM', 'Please select a valid type.');
+
+        $tMap->addValidator('SYNC_WITH_DRIVE', 'required', 'propel.validator.RequiredValidator', '', 'Type is required.');
 
     } // doBuild()
 

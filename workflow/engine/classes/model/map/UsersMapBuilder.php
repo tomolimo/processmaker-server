@@ -131,9 +131,17 @@ class UsersMapBuilder
 
         $tMap->addColumn('USR_TOTAL_UNASSIGNED', 'UsrTotalUnassigned', 'int', CreoleTypes::INTEGER, false, null);
 
-        $tMap->addColumn('USR_COST_BY_HOUR', 'UsrCostByHour', 'double', CreoleTypes::DOUBLE, false, 11,2);
+        $tMap->addColumn('USR_COST_BY_HOUR', 'UsrCostByHour', 'double', CreoleTypes::DECIMAL, false, 7,2);
 
         $tMap->addColumn('USR_UNIT_COST', 'UsrUnitCost', 'string', CreoleTypes::VARCHAR, false, 50);
+
+        $tMap->addColumn('USR_PMDRIVE_FOLDER_UID', 'UsrPmdriveFolderUid', 'string', CreoleTypes::VARCHAR, false, 32);
+
+        $tMap->addColumn('USR_BOOKMARK_START_CASES', 'UsrBookmarkStartCases', 'string', CreoleTypes::LONGVARCHAR, false, null);
+
+        $tMap->addColumn('USR_TIME_ZONE', 'UsrTimeZone', 'string', CreoleTypes::VARCHAR, false, 100);
+
+        $tMap->addColumn('USR_DEFAULT_LANG', 'UsrDefaultLang', 'string', CreoleTypes::VARCHAR, false, 10);
 
         $tMap->addValidator('USR_STATUS', 'validValues', 'propel.validator.ValidValuesValidator', 'ACTIVE|INACTIVE|VACATION|CLOSED', 'Please select a valid type.');
 

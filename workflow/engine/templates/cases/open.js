@@ -157,6 +157,14 @@ Ext.onReady(function(){
               tb.add(menu);
           }
         }
+        
+        var olink = document.location.href;
+        if(olink.search("gmail") != -1){
+      	  Ext.getCmp('stepsMenu').hide();
+      	  Ext.getCmp('informationMenu').hide();
+      	  Ext.getCmp('actionMenu').hide();
+      	  Ext.getCmp('caseNotes').hide();
+        }
 
         if (Ext.getCmp('stepsMenu').disabled === true) {
           Ext.getCmp('stepsMenu').hide();
@@ -772,6 +780,43 @@ Ext.onReady(function(){
      });
   }
 
+    Actions.changeLogHistory = function ()
+    {
+        Ext.Ajax.request({
+            url: 'ajaxListener',
+            params: {action: 'verifySession'},
+            success: function (result, request) {
+                var data = Ext.util.JSON.decode(result.responseText);
+                if (data.lostSession) {
+                    Ext.Msg.show({
+                        title: _('ID_ERROR'),
+                        msg: data.message,
+                        animEl: 'elId',
+                        icon: Ext.MessageBox.ERROR,
+                        buttons: Ext.MessageBox.OK,
+                        fn: function (btn) {
+                            try
+                            {
+                                prnt = parent.parent;
+                                top.location = top.location;
+                            } catch (err)
+                            {
+                                parent.location = parent.location;
+                            }
+                        }
+                    });
+                } else {
+                    Actions.tabFrame('changeLogHistory');
+                }
+            },
+            failure: function (result, request) {
+                if (typeof (result.responseText) != 'undefined') {
+                    Ext.MessageBox.alert(_('ID_FAILED'), result.responseText);
+                }
+            }
+        });
+    }
+
   Actions.uploadedDocuments = function()
   {
 		Ext.Ajax.request({
@@ -926,82 +971,153 @@ Ext.onReady(function(){
 
   Actions.getUsersToReassign = function()
   {
-    var store = new Ext.data.Store( {
-      autoLoad: true,
-      proxy : new Ext.data.HttpProxy({
-        url: 'ajaxListener?action=getUsersToReassign'
-      }),
-      reader : new Ext.data.JsonReader( {
-        root: 'data',
-        fields : [
-          {name : 'USR_UID'},
-          {name : 'USR_USERNAME'},
-          {name : 'USR_FIRSTNAME'},
-          {name : 'USR_LASTNAME'}
-        ]
-      })
+    var loadMaskUsersToReassign = new Ext.LoadMask(Ext.getBody(), {msg: _("ID_LOADING_GRID")});
+
+    //Variables
+    var pageSizeUsersToReassign = 10;
+
+    //Stores
+    var storeUsersToReassign = new Ext.data.Store({
+        proxy: new Ext.data.HttpProxy({
+            url: "ajaxListener",
+            method: "POST"
+        }),
+
+        reader: new Ext.data.JsonReader({
+            root: "resultRoot",
+            totalProperty: "resultTotal",
+            fields: [
+                {name : "USR_UID"},
+                {name : "USR_USERNAME"},
+                {name : "USR_FIRSTNAME"},
+                {name : "USR_LASTNAME"}
+            ]
+        }),
+
+        remoteSort: true,
+
+        listeners: {
+            beforeload: function (store)
+            {
+                winReassignInCasesList.setDisabled(true);
+
+                loadMaskUsersToReassign.show();
+
+                this.baseParams = {
+                    action: "getUsersToReassign",
+                    search: Ext.getCmp("txtSearchUsersToReassign").getValue(),
+                    pageSize: pageSizeUsersToReassign
+                };
+            },
+            load: function (store, record, opt)
+            {
+                winReassignInCasesList.setDisabled(false);
+
+                loadMaskUsersToReassign.hide();
+            }
+        }
     });
 
-    var grid = new Ext.grid.GridPanel( {
-      id: 'reassignGrid',
-      height:300,
-      width:'300',
-      title : '',
-      stateful : true,
-      stateId : 'gridCasesOpen',
-      enableColumnResize: true,
-      enableHdMenu: true,
-      frame:false,
-      cls : 'grid_with_checkbox',
-      columnLines: true,
+    //Components
+    var pagingUsersToReassign = new Ext.PagingToolbar({
+        id: "pagingUsersToReassign",
 
-      viewConfig: {
-        forceFit:true
-      },
+        pageSize: pageSizeUsersToReassign,
+        store: storeUsersToReassign,
+        displayInfo: true,
+        displayMsg: _("ID_DISPLAY_ITEMS"),
+        emptyMsg: _("ID_NO_RECORDS_FOUND")
+    });
 
-      cm: new Ext.grid.ColumnModel({
+    var cmodelUsersToReassign = new Ext.grid.ColumnModel({
         defaults: {
             width: 200,
             sortable: true
         },
         columns: [
-          {id:'USR_UID', dataIndex: 'USR_UID', hidden:true, hideable:false},
-          {header: _('ID_USER_NAME'), dataIndex: 'USR_USERNAME',  width: 300},
-          {header: _('ID_FIRSTNAME'), dataIndex: 'USR_FIRSTNAME', width: 300},
-          {header: _('ID_LASTNAME'),  dataIndex: 'USR_LASTNAME',  width: 300}
+            {id: "USR_UID",       dataIndex: "USR_UID", hidden: true, hideable: false},
+            {id: "USR_FIRSTNAME", dataIndex: "USR_FIRSTNAME", header: _("ID_FIRSTNAME"), width: 300},
+            {id: "USR_LASTNAME",  dataIndex: "USR_LASTNAME", header: _("ID_LASTNAME"), width: 300}
         ]
-      }),
-      sm: new Ext.grid.RowSelectionModel({singleSelect: true}),
-      store: store,
-
-      tbar:[
-        {
-          text:_('ID_REASSIGN'),
-          iconCls: 'ICON_CASES_TO_REASSIGN',
-          handler: Actions.reassignCase
-        }
-      ],
-      listeners: {
-        //rowdblclick: openCase,
-        render: function(){
-          this.loadMask = new Ext.LoadMask(this.body, {msg:_('ID_LOADING')});
-          this.ownerCt.doLayout();
-        }
-      }
     });
 
-    var win = new Ext.Window({
+    var smodelUsersToReassign = new Ext.grid.RowSelectionModel({
+        singleSelect: true
+    });
+
+    var grdpnlUsersToReassign = new Ext.grid.GridPanel({
+        id: "grdpnlUsersToReassign",
+
+        store: storeUsersToReassign,
+        colModel: cmodelUsersToReassign,
+        selModel: smodelUsersToReassign,
+
+        columnLines: true,
+        viewConfig: {forceFit: true},
+        enableColumnResize: true,
+        enableHdMenu: true,
+
+        tbar: [
+            {
+                text: _("ID_REASSIGN"),
+                iconCls: "ICON_CASES_TO_REASSIGN",
+
+                handler: Actions.reassignCase
+            },
+            "->",
+            {
+                xtype: "textfield",
+                id: "txtSearchUsersToReassign",
+
+                emptyText: _("ID_EMPTY_SEARCH"),
+                width: 150,
+                allowBlank: true,
+
+                listeners: {
+                    specialkey: function (f, e)
+                    {
+                        if (e.getKey() == e.ENTER) {
+                            pagingUsersToReassign.moveFirst();
+                        }
+                    }
+                }
+            },
+            {
+                text: "X",
+                ctCls: "pm_search_x_button",
+
+                handler: function ()
+                {
+                    Ext.getCmp("txtSearchUsersToReassign").reset();
+                }
+            },
+            {
+                text: _("ID_SEARCH"),
+
+                handler: function ()
+                {
+                    pagingUsersToReassign.moveFirst();
+                }
+            }
+        ],
+        bbar: pagingUsersToReassign,
+
+        title: ""
+    });
+
+    var winReassignInCasesList = new Ext.Window({
       title: '',
       width: 450,
-      height: 280,
+      height: 350,
       layout:'fit',
       autoScroll:true,
       modal: true,
       resizable: false,
       maximizable: false,
-      items: [grid]
+      items: [grdpnlUsersToReassign]
     });
-	Ext.Ajax.request({
+
+    Ext.Ajax.request({
         url : 'ajaxListener' ,
         params : {action : 'verifySession'},
         success: function ( result, request ) {
@@ -1026,7 +1142,9 @@ Ext.onReady(function(){
                   }
                 });
           } else {
-         win.show();
+              winReassignInCasesList.show();
+
+              grdpnlUsersToReassign.store.load();
           }
         },
         failure: function ( result, request) {
@@ -1039,7 +1157,8 @@ Ext.onReady(function(){
 
   Actions.reassignCase = function()
   {
-    var rowSelected = Ext.getCmp('reassignGrid').getSelectionModel().getSelected();
+    var rowSelected = Ext.getCmp("grdpnlUsersToReassign").getSelectionModel().getSelected();
+
     if( rowSelected ) {
       PMExt.confirm(_('ID_CONFIRM'), _('ID_REASSIGN_CONFIRM'), function(){
         Ext.Ajax.request({
@@ -1196,80 +1315,76 @@ Ext.onReady(function(){
   Actions.pauseCase = function()
   {
 	  Ext.Ajax.request({
-          url : 'ajaxListener' ,
-          params : {action : 'verifySession'},
-          success: function ( result, request ) {
+        url : 'ajaxListener' ,
+        params : {action : 'verifySession'},
+        success: function ( result, request ) {
             var data = Ext.util.JSON.decode(result.responseText);
             if( data.lostSession ) {
-             Ext.Msg.show({
-                    title: _('ID_ERROR'),
-                    msg: data.message,
-                    animEl: 'elId',
-                    icon: Ext.MessageBox.ERROR,
-                    buttons: Ext.MessageBox.OK,
-                    fn : function(btn) {
-                      try
-                                  {
-                                    prnt = parent.parent;
-                                    top.location = top.location;
-                                  }
-                                catch (err)
-                                  {
-                                    parent.location = parent.location;
-                                  }
-                    }
-                  });
+              Ext.Msg.show({
+                title: _('ID_ERROR'),
+                msg: data.message,
+                animEl: 'elId',
+                icon: Ext.MessageBox.ERROR,
+                buttons: Ext.MessageBox.OK,
+                fn : function(btn) {
+                  try{
+                    prnt = parent.parent;
+                    top.location = top.location;
+                  } catch (err){
+                    parent.location = parent.location;
+                  }
+                }
+              });
             } else {
-           if (Ext.getCmp('noteReason').getValue() != '') {
-				var noteReasonTxt = _('ID_CASE_PAUSE_LABEL_NOTE') + ' ' + Ext.getCmp('noteReason').getValue();
-				} else {
-				var noteReasonTxt = '';
-				}
-				var notifyReasonVal = Ext.getCmp('notifyReason').getValue() == true ? 1 : 0;
-				var paramsNote = '&NOTE_REASON=' + noteReasonTxt + '&NOTIFY_PAUSE=' + notifyReasonVal;
+              if (Ext.getCmp('noteReason').getValue() != '') {
+                var noteReasonTxt = _('ID_CASE_PAUSE_LABEL_NOTE') + ' ' + Ext.getCmp('noteReason').getValue();
+              } else {
+                var noteReasonTxt = '';
+              }
+              var notifyReasonVal = Ext.getCmp('notifyReason').getValue() == true ? 1 : 0;
+              var paramsNote = '&NOTE_REASON=' + noteReasonTxt + '&NOTIFY_PAUSE=' + notifyReasonVal;
+              var unpauseDate = Ext.getCmp('unpauseDate').getValue();
+              if( unpauseDate == '') {
+                return;
+              } else {
+                unpauseDate = unpauseDate.format('Y-m-d');
+              }
 
-				var unpauseDate = Ext.getCmp('unpauseDate').getValue();
-				if( unpauseDate == '') {
-				//Ext.getCmp('submitPauseCase').setDisabled(true);
-				return;
-				} else
-				//Ext.getCmp('submitPauseCase').enable();
-
-				unpauseDate = unpauseDate.format('Y-m-d');
-
-				Ext.getCmp('unpauseFrm').getForm().submit({
-				waitTitle : "&nbsp;",
-        url:'ajaxListener',
-				method : 'post',
-				params : {
-				action: 'pauseCase',
-				unpauseDate:unpauseDate,
-				NOTE_REASON: noteReasonTxt,
-				NOTIFY_PAUSE: notifyReasonVal
-				},
-				waitMsg:'Pausing Case '+stringReplace("\\: ", "", _APP_NUM)+'...',
-				timeout : 36000,
-				success : function(res, req) {
-				if(req.result.success) {
-				try {
-				parent.notify('PAUSE CASE', req.result.msg);
-				}
-				catch (e) {
-				}
-				location.href = 'casesListExtJs';
-				} else {
-				PMExt.error(_('ID_ERROR'), req.result.msg);
-				}
-				}
-				});
-		  }
-		  },
-          failure: function ( result, request) {
-           if (typeof(result.responseText) != 'undefined') {
-                   Ext.MessageBox.alert( _('ID_FAILED'), result.responseText);
-               }
-          }
-     });
+              Ext.getCmp('unpauseFrm').getForm().submit({
+                waitTitle : "&nbsp;",
+                url:'ajaxListener',
+                method : 'post',
+                params : {
+                  action: 'pauseCase',
+                  unpauseDate:unpauseDate,
+                  NOTE_REASON: noteReasonTxt,
+                  NOTIFY_PAUSE: notifyReasonVal
+                },
+                waitMsg:'Pausing Case '+stringReplace("\\: ", "", _APP_NUM)+'...',
+                timeout : 36000,
+                success : function(res, req) {
+                  if(req.result.success) {
+                    try {
+                      parent.notify('PAUSE CASE', req.result.msg);
+                    }catch (e) {
+                    }
+                    location.href = urlToRedirectAfterPause;
+                  } else {
+                    PMExt.error(_('ID_ERROR'), req.result.msg);
+                  }
+                },
+                failure: function ( res, req) {
+                  PMExt.error(_('ID_ERROR'), req.result.msg);
+                }
+              });
+            }
+          },
+        failure: function ( result, request) {
+            if (typeof(result.responseText) != 'undefined') {
+              Ext.MessageBox.alert( _('ID_FAILED'), result.responseText);
+            }
+        }
+    });
   }
 
   Actions.unpauseCase = function()

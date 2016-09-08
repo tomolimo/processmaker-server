@@ -1,0 +1,37 @@
+<script type="text/javascript">
+    {$form.JS}
+</script>
+
+<div class="panel-default">
+    <p>{php}echo G::LoadTranslation('ID_TIME_ZONE_LOGIN_TITLE');{/php}</p>
+</div>
+
+<form id="{$form_id}" method="post" enctype="multipart/form-data" action="{$form_action}" class="form-signin" style="margin:0px;" accept-charset="UTF-8" role="form">
+    {$form.BROWSER_TIME_ZONE_OFFSET}
+
+    {$form.USR_USERNAME}
+    {$form.USR_PASSWORD}
+    {$form.USER_LANG}
+    {$form.USR_TIME_ZONE}
+
+    <fieldset>
+        <label class="panel-login">
+            <div class="login_result" style="text-align: left;">
+                {php}echo G::LoadTranslation("ID_TIME_ZONE_LOGIN_DESCRIPTION1");{/php}
+                {php}echo G::LoadTranslation("ID_TIME_ZONE_LOGIN_DESCRIPTION2");{/php}
+                {php}echo G::LoadTranslation("ID_TIME_ZONE_LOGIN_DESCRIPTION3");{/php}
+                <br />
+                <br />
+                <span id="details">{php}echo G::LoadTranslation("ID_TIME_ZONE_LOGIN_DESCRIPTION_DETAILS");{/php}</span>
+                <br />
+                {$form.BROWSER_TIME_ZONE}
+            </div>
+        </label>
+    </fieldset>
+    <fieldset>
+        {$form.BTNOK}
+    </fieldset>
+</form>
+<script src="/lib/pmdynaform/libs/respondjs/respond.min.js"></script>
+<script src="/lib/pmdynaform/libs/html5shiv/html5shiv.js"></script>
+

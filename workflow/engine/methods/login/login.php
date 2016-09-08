@@ -228,6 +228,10 @@ if (isset ($_SESSION['USER_LOGGED'])) {
 
 
 
+/*----------------------------------********---------------------------------*/
+
+
+
 //start new session
 
 @session_destroy();
@@ -298,6 +302,8 @@ $availableLangArray = array ();
 
 $availableLangArray [] = array ('LANG_ID' => 'char', 'LANG_NAME' => 'char' );
 
+/*----------------------------------********---------------------------------*/
+
 foreach ($translationsTable as $locale) {
 
     $row['LANG_ID'] = $locale['LOCALE'];
@@ -343,6 +349,8 @@ $oConf->loadConfig($obj, 'ENVIRONMENT_SETTINGS', '');
 if (isset($oConf->aConfig["login_defaultLanguage"]) && $oConf->aConfig["login_defaultLanguage"] != "") {
 
     $aFields["USER_LANG"] = $oConf->aConfig["login_defaultLanguage"];
+
+    /*----------------------------------********---------------------------------*/
 
 } else {
 
@@ -472,7 +480,33 @@ $flagForgotPassword = isset($oConf->aConfig['login_enableForgotPassword'])
 
 
 
+setcookie('PM-Warning', trim(G::LoadTranslation('ID_BLOCKER_MSG'), '*'), time() + (24 * 60 * 60), SYS_URI);
+
+
+
+$configS = System::getSystemConfiguration('', '', SYS_SYS);
+
+$activeSession = isset($configS['session_block']) ? !(int)$configS['session_block'] : true;
+
+if ($activeSession) {
+
+    setcookie("PM-TabPrimary", 101010010, time() + (24 * 60 * 60), '/');
+
+} else {
+
+    setcookie("PM-TabPrimary", uniqid(), time() + (24 * 60 * 60), '/');
+
+}
+
+
+
 $oHeadPublisher->addScriptCode("var flagForgotPassword = '$flagForgotPassword';");
+
+$oHeadPublisher->addScriptFile('/jscore/src/PM.js');
+
+$oHeadPublisher->addScriptFile('/jscore/src/Sessions.js');
+
+$oHeadPublisher->addScriptFile('/jscore/src/Register.js');
 
 
 

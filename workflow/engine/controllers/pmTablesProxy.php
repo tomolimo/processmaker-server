@@ -117,7 +117,7 @@ class pmTablesProxy extends HttpProxyController
         $proUid = $_POST['PRO_UID'];
         $dbConn = new DbConnections();
         $dbConnections = $dbConn->getConnectionsProUid( $proUid, array('mysql') );
-        
+
         $workSpace = new workspaceTools(SYS_SYS);
         $workspaceDB = $workSpace->getDBInfo();
 
@@ -125,11 +125,11 @@ class pmTablesProxy extends HttpProxyController
             $defaultConnections = array (array ('DBS_UID' => 'workflow','DBS_NAME' => 'Workflow'));
         } else {
             $defaultConnections = array (array ('DBS_UID' => 'workflow','DBS_NAME' => 'Workflow'),
-                                         array ('DBS_UID' => 'rp','DBS_NAME' => 'REPORT'));    
+                                         array ('DBS_UID' => 'rp','DBS_NAME' => 'REPORT'));
         }
- 
+
         $dbConnections = array_merge( $defaultConnections, $dbConnections );
-        
+
         return $dbConnections;
     }
 
@@ -210,185 +210,13 @@ class pmTablesProxy extends HttpProxyController
      */
     public function save ($httpData, $alterTable = true)
     {
-        //require_once 'classes/model/AdditionalTables.php';
-        //require_once 'classes/model/Fields.php';
-        $result = new StdClass();
-
         try {
-            ob_start();
-            $data = (array) $httpData;
-            $data['PRO_UID'] = trim( $data['PRO_UID'] );
-            $data['columns'] = G::json_decode( stripslashes( $httpData->columns ) ); //decofing data columns
+            $reportTable = new \ProcessMaker\BusinessModel\ReportTable();
 
-            $isReportTable = $data['PRO_UID'] != '' ? true : false;
-            $oAdditionalTables = new AdditionalTables();
-            $oFields = new Fields();
-            $repTabClassName = $oAdditionalTables->getPHPName( $data['REP_TAB_NAME'] );
-            $columns = $data['columns'];
-
-            // Reserved Words Table
-            $reservedWords = array ('ALTER','CLOSE','COMMIT','CREATE','DECLARE','DELETE','DROP','FETCH','FUNCTION','GRANT','INDEX','INSERT','OPEN','REVOKE','ROLLBACK','SELECT','SYNONYM','TABLE','UPDATE','VIEW','APP_UID','ROW','PMTABLE' );
-
-            // Reserved Words Field
-            $reservedWordsPhp = array ('case','catch','cfunction','class','clone','const','continue','declare','default','do','else','elseif','enddeclare','endfor','endforeach','endif','endswitch','endwhile','extends','final','for','foreach','function','global','goto','if','implements','interface','instanceof','private','namespace','new','old_function','or','throw','protected','public','static','switch','xor','try','use','var','while'
-            );
-
-            $reservedWordsSql = G::reservedWordsSql();
-
-            // verify if exists.
-            if ($data['REP_TAB_UID'] == '' || (isset( $httpData->forceUid ) && $httpData->forceUid)) {
-                //new report table
-                if ($isReportTable && $alterTable) {
-                    //setting default columns
-                    $defaultColumns = $this->_getReportTableDefaultColumns( $data['REP_TAB_TYPE'] );
-                    $columns = array_merge( $defaultColumns, $columns );
-                }
-
-                /**
-                 * validations *
-                 */
-                if (is_array( $oAdditionalTables->loadByName( $data['REP_TAB_NAME'] ) )) {
-                    throw new Exception( G::loadTranslation( 'ID_PMTABLE_ALREADY_EXISTS', array ($data['REP_TAB_NAME']
-                    ) ) );
-                }
-
-                if (in_array( strtoupper( $data["REP_TAB_NAME"] ), $reservedWords ) || in_array( strtoupper( $data["REP_TAB_NAME"] ), $reservedWordsSql )) {
-                    throw (new Exception( G::LoadTranslation( "ID_PMTABLE_INVALID_NAME", array ($data["REP_TAB_NAME"]
-                    ) ) ));
-                }
-            }
-            //backward compatility
-            foreach ($columns as $i => $column) {
-                if (in_array( strtoupper( $columns[$i]->field_name ), $reservedWordsSql ) || in_array( strtolower( $columns[$i]->field_name ), $reservedWordsPhp )) {
-                    throw (new Exception( G::LoadTranslation( "ID_PMTABLE_INVALID_FIELD_NAME", array ($columns[$i]->field_name
-                    ) ) ));
-                }
-
-                switch ($column->field_type) {
-                    case 'INT':
-                        $columns[$i]->field_type = 'INTEGER';
-                        break;
-                    case 'TEXT':
-                        $columns[$i]->field_type = 'LONGVARCHAR';
-                        break;
-                    // propel DATETIME equivalent is TIMESTAMP
-                    case 'DATETIME':
-                        $columns[$i]->field_type = 'TIMESTAMP';
-                        break;
-                }
-
-                // VALIDATIONS
-                if ($columns[$i]->field_autoincrement) {
-                    $typeCol = $columns[$i]->field_type;
-                    if (! ($typeCol === 'INTEGER' || $typeCol === 'TINYINT' || $typeCol === 'SMALLINT' || $typeCol === 'BIGINT')) {
-                        $columns[$i]->field_autoincrement = false;
-                    }
-                }
-            }
-
-            G::LoadClass("pmTable");
-
-            $pmTable = new pmTable( $data['REP_TAB_NAME'] );
-            $pmTable->setDataSource( $data['REP_TAB_CONNECTION'] );
-            $pmTable->setColumns( $columns );
-            $pmTable->setAlterTable( $alterTable );
-
-            if (isset($data["keepData"]) && $data["keepData"] == 1) {
-                //PM Table
-                $pmTable->setKeepData(true);
-            }
-
-            $pmTable->build();
-
-            $buildResult = ob_get_contents();
-            ob_end_clean();
-
-            // Updating additional table struture information
-            $addTabData = array ('ADD_TAB_UID' => $data['REP_TAB_UID'],'ADD_TAB_NAME' => $data['REP_TAB_NAME'],'ADD_TAB_CLASS_NAME' => $repTabClassName,'ADD_TAB_DESCRIPTION' => $data['REP_TAB_DSC'],'ADD_TAB_PLG_UID' => '','DBS_UID' => ($data['REP_TAB_CONNECTION'] ? $data['REP_TAB_CONNECTION'] : 'workflow'),'PRO_UID' => $data['PRO_UID'],'ADD_TAB_TYPE' => $data['REP_TAB_TYPE'],'ADD_TAB_GRID' => $data['REP_TAB_GRID']
-            );
-            if ($data['REP_TAB_UID'] == '' || (isset( $httpData->forceUid ) && $httpData->forceUid)) {
-                //new report table
-                //create record
-
-                $addTabUid = $oAdditionalTables->create( $addTabData );
-            } else {
-                //editing report table
-                //updating record
-                $addTabUid = $data['REP_TAB_UID'];
-                $oAdditionalTables->update( $addTabData );
-
-                //removing old data fields references
-                $oCriteria = new Criteria( 'workflow' );
-                $oCriteria->add( FieldsPeer::ADD_TAB_UID, $data['REP_TAB_UID'] );
-                FieldsPeer::doDelete( $oCriteria );
-            }
-            // Updating pmtable fields
-            foreach ($columns as $i => $column) {
-                $field = array (
-                    'FLD_UID' => $column->uid,
-                    'FLD_INDEX' => $i,
-                    'ADD_TAB_UID' => $addTabUid,
-                    'FLD_NAME' => $column->field_name,
-                    'FLD_DESCRIPTION' => $column->field_label,
-                    'FLD_TYPE' => $column->field_type,
-                    'FLD_SIZE' => $column->field_size == '' ? null : $column->field_size,
-                    'FLD_NULL' => $column->field_null ? 1 : 0,
-                    'FLD_AUTO_INCREMENT' => $column->field_autoincrement ? 1 : 0,
-                    'FLD_KEY' => $column->field_key ? 1 : 0,
-                    'FLD_TABLE_INDEX' => (isset($column->field_index) && $column->field_index) ? 1 : 0,
-                    'FLD_FOREIGN_KEY' => 0,
-                    'FLD_FOREIGN_KEY_TABLE' => '',
-                    'FLD_DYN_NAME' => $column->field_dyn,
-                    'FLD_DYN_UID' => $column->field_uid,
-                    'FLD_FILTER' => (isset( $column->field_filter ) && $column->field_filter) ? 1 : 0
-                );
-                $oFields->create( $field );
-            }
-
-            if ($isReportTable && $alterTable) {
-                // the table was create successfully but we're catching problems while populating table
-                try {
-                    $oAdditionalTables->populateReportTable( $data['REP_TAB_NAME'], $pmTable->getDataSource(), $data['REP_TAB_TYPE'], $data['PRO_UID'], $data['REP_TAB_GRID'], $addTabUid );
-                } catch (Exception $e) {
-                    $result->message = $result->msg = $e->getMessage();
-                }
-            }
-
-            //--- Message Audit Log
-            $nFields = count($columns) - 1;
-            $fieldsName = "";
-
-            foreach ($columns as $i => $column) {
-                if ($i != $nFields) {
-                    $fieldsName = $fieldsName . $columns[$i]->field_name . " [" . implode(', ', get_object_vars($column)) . "], ";
-                } else {
-                    $fieldsName = $fieldsName . $columns[$i]->field_name . " [" . implode(', ', get_object_vars($column)) . "].";
-                }
-            }
-
-            G::auditLog((isset($data["REP_TAB_UID"]) && $data["REP_TAB_UID"] == "")? "CreatePmtable" : "UpdatePmtable", "Fields: " . $fieldsName);
-
-            $result->success = true;
-            $result->message = $result->msg = $buildResult;
+            return $reportTable->saveStructureOfTable((array)($httpData), $alterTable);
         } catch (Exception $e) {
-            $result = new stdClass();
-            $buildResult = ob_get_contents();
-            ob_end_clean();
-            $result->success = false;
-
-            // if it is a propel exception message
-            if (preg_match( '/(.*)\s\[(.*):\s(.*)\]\s\[(.*):\s(.*)\]/', $e->getMessage(), $match )) {
-                $result->message = $result->msg = $match[3];
-                $result->type = ucfirst( $pmTable->getDbConfig()->adapter );
-            } else {
-                $result->message = $result->msg = $e->getMessage();
-                $result->type = G::loadTranslation( 'ID_EXCEPTION' );
-            }
-
-            $result->trace = $e->getTraceAsString();
+            throw $e;
         }
-
-        return $result;
     }
 
     /**
@@ -447,6 +275,16 @@ class pmTablesProxy extends HttpProxyController
                 } else {
                     $at->deleteAll( $row->id );
                     $count ++;
+                }
+
+                $oCriteria = new Criteria('workflow');
+                $oCriteria->add(CaseConsolidatedCorePeer::REP_TAB_UID, $row->id);
+                $oResult = CaseConsolidatedCorePeer::doSelectOne($oCriteria);
+                if(!empty($oResult)) {
+                    $sTasUid = $oResult->getTasUid();
+                    $oCaseConsolidated = new CaseConsolidatedCore();
+                    $oCaseConsolidated = CaseConsolidatedCorePeer::retrieveByPK($sTasUid);
+                    $oCaseConsolidated->delete();
                 }
             } catch (Exception $e) {
                 $tableName = isset( $table['ADD_TAB_NAME'] ) ? $table['ADD_TAB_NAME'] : $row->id;
@@ -524,68 +362,22 @@ class pmTablesProxy extends HttpProxyController
      */
     public function dataCreate ($httpData, $codification = 'json')
     {
-        if ($codification == 'base64') {
-            $rows = unserialize( base64_decode( $httpData->rows ) );
-        } else {
-            $rows = G::json_decode( $httpData->rows );
-        }
+        $result = new stdClass();
 
         try {
-            require_once 'classes/model/AdditionalTables.php';
-            $additionalTables = new AdditionalTables();
-            $table = $additionalTables->load( $httpData->id, true );
-            $primaryKeys = $additionalTables->getPrimaryKeys();
+            $reportTable = new \ProcessMaker\BusinessModel\ReportTable();
 
-            $this->className = $table['ADD_TAB_CLASS_NAME'];
-            $this->classPeerName = $this->className . 'Peer';
-            $row = (array) $rows;
+            $arrayResult = $reportTable->createRecord((array)($httpData), $codification);
 
-            $row = array_merge( array_change_key_case( $row, CASE_LOWER ), array_change_key_case( $row, CASE_UPPER ) );
-            $toSave = false;
-
-            if (! file_exists( PATH_WORKSPACE . 'classes/' . $this->className . '.php' )) {
-                throw new Exception( 'Create::' . G::loadTranslation( 'ID_PMTABLE_CLASS_DOESNT_EXIST', $this->className ) );
-            }
-
-            require_once PATH_WORKSPACE . 'classes/' . $this->className . '.php';
-            eval( '$obj = new ' . $this->className . '();' );
-
-            if (count( $row ) > 0) {
-                eval( '$con = Propel::getConnection(' . $this->classPeerName . '::DATABASE_NAME);' );
-                $obj->fromArray( $row, BasePeer::TYPE_FIELDNAME );
-
-                if ($obj->validate()) {
-                    $obj->save();
-                    $toSave = true;
-                    G::auditLog("AddDataPmtable", "Table Name: ".$table['ADD_TAB_NAME']." Table ID: (".$table['ADD_TAB_UID'].") ");
-                    $primaryKeysValues = array ();
-                    foreach ($primaryKeys as $primaryKey) {
-                        $method = 'get' . AdditionalTables::getPHPName( $primaryKey['FLD_NAME'] );
-                        $primaryKeysValues[] = $obj->$method();
-                    }
-                } else {
-                    $msg = '';
-                    foreach ($obj->getValidationFailures() as $objValidationFailure) {
-                        $msg .= $objValidationFailure->getMessage() . "\n";
-                    }
-                    throw new Exception( G::LoadTranslation('ID_ERROR_TRYING_INSERT'). '"' . $table['ADD_TAB_NAME'] . "\"\n" . $msg );
-                }
-
-                $index = G::encrypt( implode( ',', $primaryKeysValues ), 'pmtable' );
-            } else {
-                $toSave = false;
-            }
-
-            $result = new stdclass();
-            if ($toSave) {
+            if ($arrayResult['success']) {
                 $result->success = true;
-                $result->message = G::LoadTranslation('ID_RECORD_SAVED_SUCCESFULLY');
-                $result->rows = $obj->toArray( BasePeer::TYPE_FIELDNAME );
-                $result->rows['__index__'] = $index;
+                $result->message = $arrayResult['message'];
+                $result->rows    = $arrayResult['rows'];
+                $result->rows['__index__'] = $arrayResult['index'];
             } else {
                 $result->success = false;
-                $result->rows = array ();
                 $result->message = '$$';
+                $result->rows = [];
             }
         } catch (Exception $e) {
             $result->success = false;
@@ -682,7 +474,7 @@ class pmTablesProxy extends HttpProxyController
                 $sErrorMessages = '';
                 $i = 1;
                 $conData = 0;
-                $insert = 'INSERT INTO ' . $aAdditionalTables['ADD_TAB_NAME'] . ' (';
+                $insert = 'REPLACE INTO ' . $aAdditionalTables['ADD_TAB_NAME'] . ' (';
                 $query = '';
                 $swHead = false;
                 while (($aAux = fgetcsv( $oFile, 4096, $_POST['form']['CSV_DELIMITER'] )) !== false) {
@@ -710,7 +502,7 @@ class pmTablesProxy extends HttpProxyController
                             $j = 0;
                             foreach ($aAdditionalTables['FIELDS'] as $aField) {
                                 $conData++;
-                                $temp = isset($aAux[$j]) ? '"'.addslashes($aAux[$j]).'"' : '""';
+                                $temp = isset($aAux[$j]) ? '"'.addslashes(stripslashes($aAux[$j])).'"' : '""';
                                 if ($temp == '') {
                                     switch ($aField['FLD_TYPE']) {
                                         case 'DATE':
@@ -875,11 +667,23 @@ class pmTablesProxy extends HttpProxyController
             $filename = $PUBLIC_ROOT_PATH . $filenameOnly;
             $fp = fopen( $filename, "wb" );
 
+            $swColumns = true;
             foreach ($rows as $keyCol => $cols) {
                 $SDATA = "";
-                $cnt = count( $cols );
+                $header = "";
+                $cnt = $cntC = count( $cols );
                 foreach ($cols as $key => $val) {
-                    $SDATA .= $val;
+                    if($swColumns){
+                        $header .= $key;
+                        if (-- $cntC > 0) {
+                           $header .= $sDelimiter;
+                        } else {
+                            $header .= "\n";
+                            $bytesSaved += fwrite( $fp, $header );
+                            $swColumns = false;
+                        }
+                    }
+                    $SDATA .= addslashes($val);
                     if (-- $cnt > 0) {
                         $SDATA .= $sDelimiter;
                     }
@@ -915,21 +719,26 @@ class pmTablesProxy extends HttpProxyController
      */
     public function import ($httpData)
     {
+        define('ERROR_PM_TABLES_OVERWRITE', 1);
+        define('ERROR_PROCESS_NOT_EXIST', 2);
+        define('ERROR_RP_TABLES_OVERWRITE', 3);
+        define('ERROR_NO_REPORT_TABLE', 4);
+        define('ERROR_OVERWRITE_RELATED_PROCESS', 5);
+
         $fromAdmin = false;
         if (isset( $_POST["form"]["TYPE_TABLE"] ) && ! empty( $_POST["form"]["TYPE_TABLE"] )) {
             if($_POST["form"]["TYPE_TABLE"] == 'admin') {
                 $fromAdmin = true;
-            } 
+            }
         }
-        
-        require_once 'classes/model/AdditionalTables.php';
+
         try {
             $result = new stdClass();
             $errors = '';
             $fromConfirm = false;
 
             $overWrite = isset( $_POST['form']['OVERWRITE'] ) ? true : false;
-            
+
             if (isset( $_POST["form"]["FROM_CONFIRM"] ) && ! empty( $_POST["form"]["FROM_CONFIRM"] )) {
                 $fromConfirm = $_POST["form"]["FROM_CONFIRM"];
                 $_FILES['form'] = $_SESSION['FILES_FORM'];
@@ -941,19 +750,15 @@ class pmTablesProxy extends HttpProxyController
             }
             $_SESSION['FILES_FORM'] = $_FILES['form'];
 
-            $oAdditionalTables = new AdditionalTables();
-            $tableNameMap = array ();
-            $processQueue = array ();
-            $processQueueTables = array ();
 
             $PUBLIC_ROOT_PATH = PATH_DATA . 'sites' . PATH_SEP . SYS_SYS . PATH_SEP . 'public' . PATH_SEP;
             $filename = $_FILES['form']['name']['FILENAME'];
             $tempName = $_FILES['form']['tmp_name']['FILENAME'];
-            
+
             if(!$fromConfirm) {
                 G::uploadFile( $tempName, $PUBLIC_ROOT_PATH, $filename );
             }
-            
+
             if ($fromConfirm == 'clear') {
                 $fromConfirm = true;
             }
@@ -964,265 +769,141 @@ class pmTablesProxy extends HttpProxyController
                 throw new Exception( G::loadTranslation( 'ID_PMTABLE_INVALID_FILE' ) );
             }
 
-            $fp = fopen( $PUBLIC_ROOT_PATH . $filename, "rb" );
-            $fsData = intval( fread( $fp, 9 ) ); //reading the metadata
-            $sType = fread( $fp, $fsData );
+            $currentProUid = '';
+            if (isset( $_POST["form"]["PRO_UID_HELP"] ) && !empty($_POST["form"]["PRO_UID_HELP"])) {
+                $currentProUid = $_POST["form"]["PRO_UID_HELP"];
+            } else {
+                if(isset( $_POST["form"]["PRO_UID"]) && !empty( $_POST["form"]["PRO_UID"])){
+                    $currentProUid = $_POST["form"]["PRO_UID"];
+                    $_SESSION['PROCESS'] = $currentProUid;
+                } else{
+                    $currentProUid = $_SESSION['PROCESS'];
+                }
+            }
 
-            $pmTables = $this->getList('');
-            $proUids = Array();
-            if($pmTables['count']) {
-                $pmTables = $pmTables['rows'];
-                foreach($pmTables as $val) {
-                    if($val['PRO_UID'] != '') {
-                        $proUids[] = $val['PRO_UID'];   
+            //Get Additional Tables
+            $arrayTableSchema = [];
+            $arrayTableData = [];
+
+            $f = fopen($PUBLIC_ROOT_PATH . $filename, 'rb');
+
+            $fdata = intval(fread($f, 9));
+            $type = fread($f, $fdata);
+
+            while (!feof($f)) {
+                switch ($type) {
+                    case '@META':
+                        $fdata = intval(fread($f, 9));
+                        $metadata = fread($f, $fdata);
+                        break;
+                    case '@SCHEMA':
+                        $fdataUid = intval(fread($f, 9));
+                        $uid = fread($f, $fdataUid );
+
+                        $fdata = intval(fread($f, 9));
+                        $schema = fread($f, $fdata);
+
+                        $arrayTableSchema[] = unserialize($schema);
+                        break;
+                    case '@DATA':
+                        $fdata = intval(fread($f, 9));
+                        $tableName = fread($f, $fdata);
+
+                        $fdata = intval(fread($f, 9));
+
+                        if ($fdata > 0) {
+                            $data = fread($f, $fdata);
+
+                            $arrayTableData[$tableName] = unserialize($data);
+                        }
+                        break;
+                }
+
+                $fdata = intval(fread($f, 9));
+
+                if ($fdata > 0) {
+                    $type = fread($f, $fdata);
+                } else {
+                    break;
+                }
+            }
+
+            fclose($f);
+
+            //First Validate the file
+            $reportTable = new \ProcessMaker\BusinessModel\ReportTable();
+
+            $arrayOverwrite = array();
+            $arrayRelated = array();
+            $arrayMessage = array();
+            $validationType = 0;
+            if(!$fromConfirm){
+                $aErrors = $reportTable->checkPmtFileThrowErrors(
+                    $arrayTableSchema, $currentProUid, $fromAdmin, $overWrite, $_POST['form']['PRO_UID']
+                );
+                $countC = 0;
+                $countM = 0;
+                $countI = 0;
+                foreach($aErrors as $row){
+                    if($row['ERROR_TYPE'] == ERROR_PM_TABLES_OVERWRITE || $row['ERROR_TYPE'] == ERROR_RP_TABLES_OVERWRITE){
+                        $arrayOverwrite[$countC] = $row;
+                        $countC++;
+                    } else {
+                        if($row['ERROR_TYPE'] == ERROR_OVERWRITE_RELATED_PROCESS){
+                            $arrayRelated[$countI] = $row;
+                            $countI++;
+                        } else {
+                            $arrayMessage[$countM] = $row;
+                            $countM++;
+                        }
                     }
                 }
-            }
-
-            // first create the tables structures
-
-            while (! feof( $fp )) {
-                switch ($sType) {
-                    case '@META':
-                        $fsData = intval( fread( $fp, 9 ) );
-                        $METADATA = fread( $fp, $fsData );
-                        break;
-                    case '@SCHEMA':
-                        $fsUid = intval( fread( $fp, 9 ) );
-                        $uid = fread( $fp, $fsUid );
-                        $fsData = intval( fread( $fp, 9 ) );
-                        $schema = fread( $fp, $fsData );
-                        $contentSchema = unserialize( $schema );
-                        $additionalTable = new additionalTables();
-                        $tableExists = $additionalTable->loadByName( $contentSchema['ADD_TAB_NAME'] );
-                        $tableNameMap[$contentSchema['ADD_TAB_NAME']] = $contentSchema['ADD_TAB_NAME'];
-                        
-                        $tableData = new stdClass();
-                        if (isset( $_POST["form"]["PRO_UID"] ) && ! empty( $_POST["form"]["PRO_UID"] )) {
-                            $tableData->PRO_UID = $_POST["form"]["PRO_UID"];
-                        } else {
-                            $tableData->PRO_UID = isset( $contentSchema["PRO_UID"] ) ? $contentSchema["PRO_UID"] : "";
-                        }
-                        
-                        $isPmTable = false; /*is a report table*/
-                        if($contentSchema["PRO_UID"] == "" ) {
-                            $isPmTable = true;
-                        }
-                        if (isset( $_POST["form"]["PRO_UID_HELP"] ) && !empty($_POST["form"]["PRO_UID_HELP"])) {
-                            $currentPRO_UID = $_POST["form"]["PRO_UID_HELP"];
-                        } else {
-                            $currentPRO_UID = (isset( $_SESSION['PROCESS']  ) && !empty( $_SESSION['PROCESS']  )) ? $_SESSION['PROCESS']  : '';
-                        }
-
-                        if($fromAdmin) { /* from admin tab */
-                            if ($tableExists !== false && !$fromConfirm) {
-                                $validationType = 1;
-                                throw new Exception( G::loadTranslation( 'ID_OVERWRITE_PMTABLE' ) );    
-                            } 
-                            if(!in_array($tableData->PRO_UID, $proUids) && !$isPmTable) {
-                                $validationType = 2;
-                                throw new Exception( G::loadTranslation( 'ID_NO_RELATED_PROCESS' ) );
-                            }
-                        } else { /* from designer tab */
-                            if($isPmTable){
-                                $validationType = '';
-                                throw new Exception( G::loadTranslation( 'ID_NO_REPORT_TABLE' ) );    
-                            }
-                            if ($tableExists !== false && !$fromConfirm) {
-                                $validationType = 1;
-                                throw new Exception( G::loadTranslation( 'ID_OVERWRITE_PMTABLE' ) );    
-                            }
-                            if($currentPRO_UID != $tableData->PRO_UID) {
-                                if(!in_array($tableData->PRO_UID, $proUids)) {
-                                    $validationType = 2;
-                                    if(($fromConfirm == $validationType || !$fromConfirm) && !$isPmTable) {
-                                        throw new Exception( G::loadTranslation( 'ID_OVERWRITE_RELATED_PROCESS' ) );
-                                    } else {
-                                        $tableData->PRO_UID = $currentPRO_UID;
-                                    }
-                                } else {
-                                    $validationType = 3;
-                                    throw new Exception( G::loadTranslation( 'ID_ALREADY_RELATED_TABLE ' ) );
-                                }
-                            }
-                        }
-                       
-                        if ($overWrite) {
-                            if ($tableExists !== false) {
-                                $additionalTable->deleteAll( $tableExists['ADD_TAB_UID'] );
-                            }
-                        } else {
-                            if ($tableExists !== false) {
-                                // some table exists with the same name
-                                // renaming...
-                                $tNameOld = $contentSchema['ADD_TAB_NAME'];
-                                $newTableName = $contentSchema['ADD_TAB_NAME'] . '_' . date( 'YmdHis' );
-                                $contentSchema['ADD_TAB_UID'] = G::generateUniqueID();
-                                $contentSchema['ADD_TAB_NAME'] = $newTableName;
-                                $contentSchema['ADD_TAB_CLASS_NAME'] = additionalTables::getPHPName( $newTableName );
-                                //mapping the table name for posterior uses
-                                $tableNameMap[$tNameOld] = $contentSchema['ADD_TAB_NAME'];
-                            }
-                        }
-
-                        // validating invalid bds_uid in old tables definition -> mapped to workflow
-                        if (! $contentSchema['DBS_UID'] || $contentSchema['DBS_UID'] == '0' || ! $contentSchema['DBS_UID']) {
-                            $contentSchema['DBS_UID'] = 'workflow';
-                        }
-
-                        $columns = array ();
-                        foreach ($contentSchema['FIELDS'] as $field) {
-                            $column = array ('uid' => '','field_uid' => '','field_name' => $field['FLD_NAME'],'field_dyn' => isset( $field['FLD_DYN_NAME'] ) ? $field['FLD_DYN_NAME'] : '','field_label' => isset( $field['FLD_DESCRIPTION'] ) ? $field['FLD_DESCRIPTION'] : '','field_type' => $field['FLD_TYPE'],'field_size' => $field['FLD_SIZE'],'field_key' => isset( $field['FLD_KEY'] ) ? $field['FLD_KEY'] : 0,'field_null' => isset( $field['FLD_NULL'] ) ? $field['FLD_NULL'] : 1,'field_autoincrement' => isset( $field['FLD_AUTO_INCREMENT'] ) ? $field['FLD_AUTO_INCREMENT'] : 0
-                            );
-                            $columns[] = $column;
-                        }
-
-                        $tableData->REP_TAB_UID = $contentSchema['ADD_TAB_UID'];
-                        $tableData->REP_TAB_NAME = $contentSchema['ADD_TAB_NAME'];
-                        $tableData->REP_TAB_DSC = $contentSchema['ADD_TAB_DESCRIPTION'];
-                        $tableData->REP_TAB_CONNECTION = $contentSchema['DBS_UID'];
-                       
-                        $tableData->REP_TAB_TYPE = isset( $contentSchema['ADD_TAB_TYPE'] ) ? $contentSchema['ADD_TAB_TYPE'] : '';
-                        $tableData->REP_TAB_GRID = isset( $contentSchema['ADD_TAB_GRID'] ) ? $contentSchema['ADD_TAB_GRID'] : '';
-                        $tableData->columns = G::json_encode( $columns );
-                        $tableData->forceUid = true;
-
-                        //save the table
-                        $alterTable = false;
-                        $result = $this->save( $tableData, $alterTable );
-
-                        if ($result->success) {
-                            $processQueueTables[$contentSchema['DBS_UID']][] = $contentSchema['ADD_TAB_NAME'];
-                        } else {
-                            $errors .= 'Error creating table: ' . $tableData->REP_TAB_NAME . '-> ' . $result->message . "\n\n";
-                        }
-
-                        break;
-                    case '@DATA':
-                        $fstName = intval( fread( $fp, 9 ) );
-                        $tableName = fread( $fp, $fstName );
-                        $fsData = intval( fread( $fp, 9 ) );
-                        if ($fsData > 0) {
-                            $data = fread( $fp, $fsData );
-                        }
-                        break;
-                }
-
-                $fsData = intval( fread( $fp, 9 ) ); //reading the metadata
-                if ($fsData > 0) {
-                    // reading next block type
-                    $sType = fread( $fp, $fsData );
-                } else {
-                    break;
+                if(sizeof($aErrors)){
+                   $validationType = 1; //Yes no
+                   throw new Exception(G::loadTranslation( 'ID_PMTABLE_IMPORT_WITH_ERRORS', array ($filename)));
                 }
             }
-
-            fclose( $fp );
-            G::loadClass( 'pmTable' );
-
-            foreach ($processQueueTables as $dbsUid => $tables) {
-                $pmTable = new pmTable();
-                ob_start();
-                $pmTable->buildModelFor( $dbsUid, $tables );
-                $buildResult = ob_get_contents();
-                ob_end_clean();
-                $errors .= $pmTable->upgradeDatabaseFor( $pmTable->getDataSource(), $tables );
+            //Then create the tables
+            if(isset($_POST["form"]["TABLES_OF_NO"])){
+                $arrayOfNo = $_POST["form"]["TABLES_OF_NO"];
+                $arrayOfNew = $_POST["form"]["TABLES_OF_NEW"];
+                $aTablesCreateNew = explode('|',$arrayOfNew);
+                $aTablesNoCreate = explode('|',$arrayOfNo);
+                $errors = $reportTable->createStructureOfTables(
+                    $arrayTableSchema,
+                    $arrayTableData,
+                    $currentProUid,
+                    $fromAdmin,
+                    true,
+                    $aTablesNoCreate,
+                    $aTablesCreateNew
+                );
+            } else {
+                $errors = $reportTable->createStructureOfTables(
+                    $arrayTableSchema,
+                    $arrayTableData,
+                    $currentProUid,
+                    $fromAdmin,
+                    true
+                );
             }
-
-            $fp = fopen( $PUBLIC_ROOT_PATH . $filename, "rb" );
-            $fsData = intval( fread( $fp, 9 ) );
-            $sType = fread( $fp, $fsData );
-
-            // data processing
-            while (! feof( $fp )) {
-
-                switch ($sType) {
-                    case '@META':
-                        $fsData = intval( fread( $fp, 9 ) );
-                        $METADATA = fread( $fp, $fsData );
-                        break;
-                    case '@SCHEMA':
-                        $fsUid = intval( fread( $fp, 9 ) );
-                        $uid = fread( $fp, $fsUid );
-                        $fsData = intval( fread( $fp, 9 ) );
-                        $schema = fread( $fp, $fsData );
-                        $contentSchema = unserialize( $schema );
-                        $additionalTable = new additionalTables();
-                        $table = $additionalTable->loadByName( $tableNameMap[$contentSchema['ADD_TAB_NAME']] );
-                        if ($table['PRO_UID'] != '') {
-                            // is a report table, try populate it
-                            $additionalTable->populateReportTable( $table['ADD_TAB_NAME'], pmTable::resolveDbSource( $table['DBS_UID'] ), $table['ADD_TAB_TYPE'], $table['PRO_UID'], $table['ADD_TAB_GRID'], $table['ADD_TAB_UID'] );
-                        }
-                        G::auditLog("ImportTable", $table['ADD_TAB_NAME']." (".$table['ADD_TAB_UID'].") ");
-                        break;
-                    case '@DATA':
-                        $fstName = intval( fread( $fp, 9 ) );
-                        $tableName = fread( $fp, $fstName );
-                        $fsData = intval( fread( $fp, 9 ) );
-
-                        if ($fsData > 0) {
-                            $data = fread( $fp, $fsData );
-                            $contentData = unserialize( $data );
-                            $tableName = $tableNameMap[$tableName];
-
-                            $oAdditionalTables = new AdditionalTables();
-                            $table = $oAdditionalTables->loadByName( $tableName );
-                            $isReport = $table['PRO_UID'] !== '' ? true : false;
-
-                            if ($table !== false) {
-                                if (! $isReport) {
-                                    if (count( $contentData ) > 0) {
-                                        $oAdditionalTables->load( $table['ADD_TAB_UID'], true );
-                                        $primaryKeys = $oAdditionalTables->getPrimaryKeys();
-                                        // Obtain a list of columns
-                                        $primaryKeyColumn = array();
-                                        foreach ($contentData as $key => $row) {
-                                            $primaryKeyColumn[$key]  = $row[$primaryKeys[0]['FLD_NAME']];
-                                        }
-                                        unset($row);
-                                        array_multisort($primaryKeyColumn, SORT_ASC, $contentData);
-                                        foreach ($contentData as $row) {
-                                            $data = new StdClass();
-                                            $data->id = $table['ADD_TAB_UID'];
-                                            $data->rows = base64_encode( serialize( $row ) );
-                                            $res = $this->dataCreate( $data, 'base64' );
-                                            if (! $res->success) {
-                                                $errors .= $res->message;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        break;
-                }
-
-                $fsData = intval( fread( $fp, 9 ) );
-                if ($fsData > 0) {
-                    $sType = fread( $fp, $fsData );
-                } else {
-                    break;
-                }
-            }
-
-            ////////////
-
 
             if ($errors == '') {
                 $result->success = true;
-                $msg = G::loadTranslation( 'ID_PMTABLE_IMPORT_SUCCESS', array ($filename
-                ) );
+                $msg = G::loadTranslation( 'ID_DONE' );
             } else {
                 $result->success = false;
                 $result->errorType = 'warning';
-                $msg = G::loadTranslation( 'ID_PMTABLE_IMPORT_WITH_ERRORS', array ($filename
-                ) ) . "\n\n" . $errors;
+                $msg = G::loadTranslation( 'ID_PMTABLE_IMPORT_WITH_ERRORS', array ($filename) ) . "\n\n" . $errors;
             }
 
             $result->message = $msg;
         } catch (Exception $e) {
             $result = new stdClass();
             $result->fromAdmin = $fromAdmin;
+            $result->arrayMessage = $arrayMessage;
+            $result->arrayRelated = $arrayRelated;
+            $result->arrayOverwrite = $arrayOverwrite;
             $result->validationType = $validationType;
             $result->errorType = 'error';
             $result->buildResult = ob_get_contents();
@@ -1237,7 +918,6 @@ class pmTablesProxy extends HttpProxyController
                 $result->message = $e->getMessage();
                 $result->type = G::loadTranslation( 'ID_EXCEPTION' );
             }
-            //$result->trace = $e->getTraceAsString();
         }
 
         return $result;
@@ -1507,81 +1187,6 @@ class pmTablesProxy extends HttpProxyController
     }
 
     /**
-     * Get report table default columns
-     *
-     * @param $type
-     */
-    protected function _getReportTableDefaultColumns ($type = 'NORMAL')
-    {
-        $defaultColumns = array ();
-        $application = new stdClass(); //APPLICATION KEY
-        $application->uid = '';
-        $application->field_dyn = '';
-        $application->field_uid = '';
-        $application->field_name = 'APP_UID';
-        $application->field_label = 'APP_UID';
-        $application->field_type = 'VARCHAR';
-        $application->field_size = 32;
-        $application->field_dyn = '';
-        $application->field_key = 1;
-        $application->field_null = 0;
-        $application->field_filter = false;
-        $application->field_autoincrement = false;
-        array_push( $defaultColumns, $application );
-
-        $application = new stdClass(); //APP_NUMBER
-        $application->uid = '';
-        $application->field_dyn = '';
-        $application->field_uid = '';
-        $application->field_name = 'APP_NUMBER';
-        $application->field_label = 'APP_NUMBER';
-        $application->field_type = 'INTEGER';
-        $application->field_size = 11;
-        $application->field_dyn = '';
-        $application->field_key = 0;
-        $application->field_null = 0;
-        $application->field_filter = false;
-        $application->field_autoincrement = false;
-        array_push( $defaultColumns, $application );
-
-        $application = new stdClass(); //APP_STATUS
-        $application->uid = '';
-        $application->field_dyn = '';
-        $application->field_uid = '';
-        $application->field_name = 'APP_STATUS';
-        $application->field_label = 'APP_STATUS';
-        $application->field_type = 'VARCHAR';
-        $application->field_size = 10;
-        $application->field_dyn = '';
-        $application->field_key = 0;
-        $application->field_null = 0;
-        $application->field_filter = false;
-        $application->field_autoincrement = false;
-        array_push( $defaultColumns, $application );
-
-        //if it is a grid report table
-        if ($type == 'GRID') {
-            //GRID INDEX
-            $gridIndex = new stdClass();
-            $gridIndex->uid = '';
-            $gridIndex->field_dyn = '';
-            $gridIndex->field_uid = '';
-            $gridIndex->field_name = 'ROW';
-            $gridIndex->field_label = 'ROW';
-            $gridIndex->field_type = 'INTEGER';
-            $gridIndex->field_size = '11';
-            $gridIndex->field_dyn = '';
-            $gridIndex->field_key = 1;
-            $gridIndex->field_null = 0;
-            $gridIndex->field_filter = false;
-            $gridIndex->field_autoincrement = false;
-            array_push( $defaultColumns, $gridIndex );
-        }
-
-        return $defaultColumns;
-    }
-
-    /**
      * Get all dynaform fields from a process (without grid fields)
      *
      * @param $proUid
@@ -1699,7 +1304,7 @@ class pmTablesProxy extends HttpProxyController
                 }
                 $oDataset->next();
             }
-            
+
             // getting bpmn projects
             $oCriteria = new Criteria('workflow');
             $oCriteria->addSelectColumn(BpmnProcessPeer::PRJ_UID);
@@ -1710,7 +1315,25 @@ class pmTablesProxy extends HttpProxyController
             $row = $oDataset->getRow();
             if (isset($row["PRJ_UID"])) {
                 $sProcessUID = $row["PRJ_UID"];
-                $dynaformNotAllowedVariables = $this->getDynaformVariables($sProcessUID,$excludeFieldsList,false);
+
+                $arrayDataTypeToExclude = array("array", "grid");
+                $arrayTypeToExclude = array("title", "subtitle", "link", "file", "button", "reset", "submit", "listbox", "grid", "array", "javascript", "location", "scannerCode");
+
+                $arrayControlSupported = array();
+
+                $dynaformAllControl = $this->getDynaformVariables($sProcessUID, $arrayTypeToExclude, true, "DATA");
+
+                foreach ($dynaformAllControl as $value) {
+                    $arrayControl = array_change_key_case($value, CASE_UPPER);
+
+                    if(isset($arrayControl["DATATYPE"]) && isset($arrayControl["TYPE"])){
+                        if (!in_array($arrayControl["DATATYPE"], $arrayDataTypeToExclude) && !in_array($arrayControl["TYPE"], $arrayTypeToExclude)) {
+                            $arrayControlSupported[$arrayControl["VAR_UID"]] = $arrayControl["TYPE"];
+                        }
+                    }
+                }
+
+                $dynaformNotAllowedVariables = $this->getDynaformVariables($sProcessUID,$arrayTypeToExclude,false);
                 $oCriteria = new Criteria('workflow');
                 $oCriteria->addSelectColumn(ProcessVariablesPeer::VAR_UID);
                 $oCriteria->addSelectColumn(ProcessVariablesPeer::VAR_NAME);
@@ -1721,7 +1344,7 @@ class pmTablesProxy extends HttpProxyController
                 $index = 0;
                 while ($oDataset->next()) {
                     $row = $oDataset->getRow();
-                    if(!in_array($row["VAR_NAME"], $dynaformNotAllowedVariables) && !in_array($row["VAR_FIELD_TYPE"], $excludeFieldsList)) {
+                    if(!in_array($row["VAR_NAME"], $dynaformNotAllowedVariables) && !in_array($row["VAR_FIELD_TYPE"], $arrayTypeToExclude) && !in_array($row["VAR_NAME"], $fieldsNames)) {
                         array_push($fields, array(
                             "FIELD_UID" => $row["VAR_NAME"] . "-" . $row["VAR_FIELD_TYPE"],
                             "FIELD_NAME" => $row["VAR_NAME"],
@@ -1729,7 +1352,21 @@ class pmTablesProxy extends HttpProxyController
                             "_index" => $index ++,
                             "_isset" => true
                         ));
-                    } 
+                    }
+
+                    array_push($fieldsNames, $row["VAR_NAME"]);
+
+                    if (isset($arrayControlSupported[$row["VAR_UID"]]) && !in_array($row["VAR_NAME"] . "_label", $fieldsNames)) {
+                        array_push($fields, array(
+                            "FIELD_UID" => $row["VAR_NAME"] . "_label-" . $arrayControlSupported[$row["VAR_UID"]],
+                            "FIELD_NAME" => $row["VAR_NAME"] . "_label",
+                            "FIELD_VALIDATE" => "any",
+                            "_index" => $index++,
+                            "_isset" => true
+                        ));
+
+                        array_push($fieldsNames, $row["VAR_NAME"] . "_label");
+                    }
                 }
             }
 
@@ -1868,13 +1505,13 @@ class pmTablesProxy extends HttpProxyController
         }
         return $aFields;
     }
-    
+
     /**
-     * Get all dynaform variables 
+     * Get all dynaform variables
      *
      * @param $sProcessUID
      */
-    public function getDynaformVariables($sProcessUID,$excludeFieldsList,$allowed = true)
+    public function getDynaformVariables($sProcessUID, $excludeFieldsList, $allowed = true, $option = "VARIABLE")
     {
         $dynaformVariables = array();
         $oC = new Criteria( 'workflow' );
@@ -1891,18 +1528,32 @@ class pmTablesProxy extends HttpProxyController
                     foreach($val as $column) {
                         if($allowed) {
                             if(isset($column['type']) && !in_array( $column['type'], $excludeFieldsList )){
-                                if(array_key_exists('variable',$column)) {
-                                    if($column['variable'] != "") {
-                                        $dynaformVariables[] = $column['variable'];
-                                    }
+                                switch ($option) {
+                                    case "VARIABLE":
+                                        if (array_key_exists("variable", $column)) {
+                                            if($column["variable"] != "") {
+                                                $dynaformVariables[] = $column["variable"];
+                                            }
+                                        }
+                                        break;
+                                    case "DATA":
+                                        $dynaformVariables[] = $column;
+                                        break;
                                 }
                             }
                         } else {
                             if(isset($column['type']) && in_array( $column['type'], $excludeFieldsList )){
-                                if(array_key_exists('variable',$column)) {
-                                    if($column['variable'] != "") {
-                                        $dynaformVariables[] = $column['variable']; 
-                                    }
+                                switch ($option) {
+                                    case "VARIABLE":
+                                        if (array_key_exists("variable", $column)) {
+                                            if($column["variable"] != "") {
+                                                $dynaformVariables[] = $column["variable"];
+                                            }
+                                        }
+                                        break;
+                                    case "DATA":
+                                        $dynaformVariables[] = $column;
+                                        break;
                                 }
                             }
                         }
@@ -1911,7 +1562,12 @@ class pmTablesProxy extends HttpProxyController
             }
             $oData->next();
         }
-        return array_unique($dynaformVariables);    
+
+        if ($option == "VARIABLE") {
+            return array_unique($dynaformVariables);
+        } else {
+            return $dynaformVariables;
+        }
     }
 }
 

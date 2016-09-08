@@ -90,6 +90,10 @@ class AddonsStore extends BaseAddonsStore
         $addons = AddonsManagerPeer::doSelect($criteria);
 
         foreach ($addons as $addon) {
+            if ($addon->getAddonState() != '' && $addon->isInstalled()) {
+                $addon->setState();
+                $addon->refresh();
+            }
 
             $status  = $addon->getAddonStatus();
             $version = $addon->getAddonVersion();
@@ -602,4 +606,3 @@ class AddonsStore extends BaseAddonsStore
         return true;
     }
 }
-

@@ -16,19 +16,48 @@
     left: 50%;
     top: 50%;
     width: 300px;
-    height: 140px;
     margin-top: -140px;
     margin-left: -210px;
     overflow: none;
   }
 
   </style>
+
+    <script type="text/javascript">
+        function getBrowserTimeZoneOffset()
+        {
+            return -1 * ((new Date()).getTimezoneOffset() * 60);
+        }
+
+        function stringReplace(strSearch, strReplace, str)
+        {
+            var expression = eval("/" + strSearch + "/g");
+
+            return str.replace(expression, strReplace);
+        }
+
+        function onLoad()
+        {
+            document.getElementById("form[BROWSER_TIME_ZONE_OFFSET]").value = getBrowserTimeZoneOffset();
+
+            if (document.getElementById("timeZoneFailed").value == "1") {
+                var strHtml = document.getElementById("details").innerHTML;
+                strHtml = stringReplace("\\{0\\}", document.getElementById("form[USR_TIME_ZONE]").value, strHtml);
+                strHtml = stringReplace("\\{1\\}", document.getElementById("form[BROWSER_TIME_ZONE]").value, strHtml);
+
+                document.getElementById("details").innerHTML = strHtml;
+            }
+        }
+    </script>
   {/literal}
 </head>
 
-<body onload="resize()" onresize="resize()" >
+<body onload="onLoad();">
 <center>
   <form method="post" action="../login/authentication" class="formDefault">
+    <input type="hidden" id="form[BROWSER_TIME_ZONE_OFFSET]" name="form[BROWSER_TIME_ZONE_OFFSET]" />
+    <input type="hidden" id="timeZoneFailed" name="timeZoneFailed" value="{$timeZoneFailed}" />
+
     <div class="borderForm" style="width:400px; padding-left:0; padding-right:0; border-width:1;">
       <div class="boxTop"><div class="a"></div><div class="b"></div><div class="c"></div></div>
       <div class="content" style="height:100%;">
@@ -36,31 +65,61 @@
         <tr>
         <td valign='top'>
           <table cellspacing="0" cellpadding="0" border="0" width="100%">
-            <tr>
-              <td class='FormTitle' colspan="2" align=""><span id='form[TITLE]' name='form[TITLE]' >{translate label="ID_LOGIN"}</span></td>
-            </tr>
-            <tr>
-              <td class='FormLabel' width="40%">{translate label="ID_USER"}</td>
-              <td class='FormFieldContent' width='240' >
-                <input class="module_app_input___gray" name="form[USR_USERNAME]" type="text" size="30" maxlength="50" value=""/>
-              </td>
-            </tr>
-            <tr>
-              <td class='FormLabel' width="40%">{translate label="ID_PASSWORD"}</td>
-              <td class='FormFieldContent' width='240' >
-                <input class="module_app_input___gray" name="form[USR_PASSWORD]" type ="password" size="31" maxlength="50" value=""/>
-              </td>
-            </tr>
-            <!-- <tr>
-              <td class='FormLabel' width="40%">Language</td>
-              <td class='FormFieldContent' width='240' ><select  class="module_app_input___gray" id="form[USER_LANG]" name="form[USER_LANG]"   pm:label="Language"  pm:dependent="0" ><option value="en" >English</option></select></td>
-            </tr> -->
-            <tr>
-              <td class='FormButton' colspan="2" align="">
-                <br/>
-                <input class='module_app_button___gray ' name="form[BSUBMIT]" type='submit' value="{translate label="ID_LOGIN"}" />
-              </td>
-            </tr>
+            {if (!$timeZoneFailed) }
+                <tr>
+                    <td class="FormTitle" colspan="2">{translate label="ID_LOGIN"}</td>
+                </tr>
+                <tr>
+                    <td class="FormLabel" width="40%">{translate label="ID_USER"}</td>
+                    <td class="FormFieldContent" width="240">
+                        <input class="module_app_input___gray" name="form[USR_USERNAME]" type="text" size="30" maxlength="50" value="" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="FormLabel" width="40%">{translate label="ID_PASSWORD"}</td>
+                    <td class="FormFieldContent" width="240">
+                        <input class="module_app_input___gray" name="form[USR_PASSWORD]" type ="password" size="31" maxlength="50" value="" />
+                    </td>
+                </tr>
+                <!-- <tr>
+                  <td class="FormLabel" width="40%">Language</td>
+                  <td class="FormFieldContent" width="240"><select class="module_app_input___gray" id="form[USER_LANG]" name="form[USER_LANG]" pm:label="Language" pm:dependent="0"><option value="en" >English</option></select></td>
+                </tr> -->
+                <tr>
+                    <td class="FormButton" colspan="2">
+                        <br/>
+                        <input type="submit" class="module_app_button___gray" value="{translate label="ID_LOGIN"}" />
+                    </td>
+                </tr>
+            {else}
+                <input type="hidden" id="form[USR_USERNAME]" name="form[USR_USERNAME]" value="{$usr}" />
+                <input type="hidden" id="form[USR_PASSWORD]" name="form[USR_PASSWORD]" value="{$pwd}" />
+
+                <input type="hidden" id="form[USR_TIME_ZONE]" name="form[USR_TIME_ZONE]" value="{$userTimeZone}" />
+                <input type="hidden" id="form[BROWSER_TIME_ZONE]" name="form[BROWSER_TIME_ZONE]" value="{$browserTimeZone}" />
+
+                <tr>
+                    <td class="FormTitle" colspan="2">{translate label="ID_TIME_ZONE_LOGIN_TITLE"}</td>
+                </tr>
+
+                <tr>
+                    <td class="FormFieldContent" colspan="2" align="left">
+                        {translate label="ID_TIME_ZONE_LOGIN_DESCRIPTION1"}
+                        {translate label="ID_TIME_ZONE_LOGIN_DESCRIPTION2"}
+                        {translate label="ID_TIME_ZONE_LOGIN_DESCRIPTION3"}
+                        <br />
+                        <br />
+                        <span id="details">{translate label="ID_TIME_ZONE_LOGIN_DESCRIPTION_DETAILS"}</span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="FormButton" colspan="2">
+                        <br/>
+                        <input type="submit" class="module_app_button___gray" value="{translate label="ID_OK"}" />
+                    </td>
+                </tr>
+            {/if}
           </table>
         </td>
         </tr>
@@ -73,3 +132,4 @@
 </body>
 
 </html>
+

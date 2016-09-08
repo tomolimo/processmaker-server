@@ -47,6 +47,7 @@ if (PMLicensedFeatures
         $record['APP_UID'] = $_REQUEST['APP_UID'];
         $record['DEL_INDEX'] = $_REQUEST['DEL_INDEX'];
         $record['ABER'] = $_REQUEST['ABER'];
+        $record['APP_DATA'] = $caseFields['APP_DATA'];
         if (is_null($caseFields['DEL_FINISH_DATE'])) {
             $a = new pmDynaform($record);
             $a->printABE($action,$record);

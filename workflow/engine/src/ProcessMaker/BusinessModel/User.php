@@ -60,7 +60,9 @@ class User
 
         /*----------------------------------********---------------------------------*/
 
-        "USR_LOGGED_NEXT_TIME" => array("type" => "int",    "required" => false, "empty" => false, "defaultValues" => array(0, 1),                                           "fieldNameAux" => "usrLoggedNextTime")
+        'USR_LOGGED_NEXT_TIME' => ['type' => 'int',         'required' => false, 'empty' => false, 'defaultValues' => [0, 1],                                                'fieldNameAux' => 'usrLoggedNextTime'],
+
+        'USR_TIME_ZONE'        => ['type' => 'string',      'required' => false, 'empty' => true,  'defaultValues' => [],                                                    'fieldNameAux' => 'usrTimeZone']
 
     );
 
@@ -586,6 +588,18 @@ class User
 
             }
 
+
+
+            if (isset($arrayData['USR_TIME_ZONE']) && $arrayData['USR_TIME_ZONE'] != '') {
+
+                if (!in_array($arrayData['USR_TIME_ZONE'], \DateTimeZone::listIdentifiers())) {
+
+                    throw new \Exception(\G::LoadTranslation('ID_TIME_ZONE_DOES_NOT_EXIST', [$this->arrayFieldNameForException['usrTimeZone'], $arrayData['USR_TIME_ZONE']]));
+
+                }
+
+            }
+
         } catch (\Exception $e) {
 
             throw $e;
@@ -640,7 +654,71 @@ class User
 
     /**
 
-     * Get data of a from a record
+     * Get User record
+
+     *
+
+     * @param string $userUid                       Unique id of User
+
+     * @param array  $arrayVariableNameForException Variable name for exception
+
+     * @param bool   $throwException Flag to throw the exception if the main parameters are invalid or do not exist
+
+     *                               (TRUE: throw the exception; FALSE: returns FALSE)
+
+     *
+
+     * @return array Returns an array with User record, ThrowTheException/FALSE otherwise
+
+     */
+
+    public function getUserRecordByPk($userUid, array $arrayVariableNameForException, $throwException = true)
+
+    {
+
+        try {
+
+            $obj = \UsersPeer::retrieveByPK($userUid);
+
+
+
+            if (is_null($obj)) {
+
+                if ($throwException) {
+
+                    throw new \Exception(\G::LoadTranslation(
+
+                        'ID_USER_DOES_NOT_EXIST', [$arrayVariableNameForException['$userUid'], $userUid]
+
+                    ));
+
+                } else {
+
+                    return false;
+
+                }
+
+            }
+
+
+
+            //Return
+
+            return $obj->toArray(\BasePeer::TYPE_FIELDNAME);
+
+        } catch (\Exception $e) {
+
+            throw $e;
+
+        }
+
+    }
+
+
+
+    /**
+
+     * Get custom record
 
      *
 
@@ -648,11 +726,11 @@ class User
 
      *
 
-     * return array Return an array with data User
+     * @return array Return an array with custom record
 
      */
 
-    public function getUserDataFromRecord(array $record)
+    private function __getUserCustomRecordFromRecord(array $record)
 
     {
 
@@ -682,83 +760,95 @@ class User
 
 
 
-            return array(
+            $arrayResult = [];
 
-                $this->getFieldNameByFormatFieldName("USR_UID")                => $record["USR_UID"],
+            $arrayResult[$this->getFieldNameByFormatFieldName('USR_UID')]                = $record['USR_UID'];
 
-                $this->getFieldNameByFormatFieldName("USR_USERNAME")           => $record["USR_USERNAME"],
+            $arrayResult[$this->getFieldNameByFormatFieldName('USR_USERNAME')]           = $record['USR_USERNAME'];
 
-                //$this->getFieldNameByFormatFieldName("USR_PASSWORD")           => $record["USR_PASSWORD"],
+            //$arrayResult[$this->getFieldNameByFormatFieldName('USR_PASSWORD')]           = $record['USR_PASSWORD'];
 
-                $this->getFieldNameByFormatFieldName("USR_FIRSTNAME")          => $record["USR_FIRSTNAME"],
+            $arrayResult[$this->getFieldNameByFormatFieldName('USR_FIRSTNAME')]          = $record['USR_FIRSTNAME'];
 
-                $this->getFieldNameByFormatFieldName("USR_LASTNAME")           => $record["USR_LASTNAME"],
+            $arrayResult[$this->getFieldNameByFormatFieldName('USR_LASTNAME')]           = $record['USR_LASTNAME'];
 
-                $this->getFieldNameByFormatFieldName("USR_EMAIL")              => $record["USR_EMAIL"],
+            $arrayResult[$this->getFieldNameByFormatFieldName('USR_EMAIL')]              = $record['USR_EMAIL'];
 
-                $this->getFieldNameByFormatFieldName("USR_DUE_DATE")           => $record["USR_DUE_DATE"],
+            $arrayResult[$this->getFieldNameByFormatFieldName('USR_DUE_DATE')]           = $record['USR_DUE_DATE'];
 
-                $this->getFieldNameByFormatFieldName("USR_CREATE_DATE")        => $record["USR_CREATE_DATE"],
+            $arrayResult[$this->getFieldNameByFormatFieldName('USR_CREATE_DATE')]        = $record['USR_CREATE_DATE'];
 
-                $this->getFieldNameByFormatFieldName("USR_UPDATE_DATE")        => $record["USR_UPDATE_DATE"],
+            $arrayResult[$this->getFieldNameByFormatFieldName('USR_UPDATE_DATE')]        = $record['USR_UPDATE_DATE'];
 
-                $this->getFieldNameByFormatFieldName("USR_STATUS")             => $record["USR_STATUS"],
+            $arrayResult[$this->getFieldNameByFormatFieldName('USR_STATUS')]             = $record['USR_STATUS'];
 
-                $this->getFieldNameByFormatFieldName("USR_COUNTRY")            => $record["USR_COUNTRY"],
+            $arrayResult[$this->getFieldNameByFormatFieldName('USR_COUNTRY')]            = $record['USR_COUNTRY'];
 
-                $this->getFieldNameByFormatFieldName("USR_CITY")               => $record["USR_CITY"],
+            $arrayResult[$this->getFieldNameByFormatFieldName('USR_CITY')]               = $record['USR_CITY'];
 
-                $this->getFieldNameByFormatFieldName("USR_LOCATION")           => $record["USR_LOCATION"],
+            $arrayResult[$this->getFieldNameByFormatFieldName('USR_LOCATION')]           = $record['USR_LOCATION'];
 
-                $this->getFieldNameByFormatFieldName("USR_ADDRESS")            => $record["USR_ADDRESS"],
+            $arrayResult[$this->getFieldNameByFormatFieldName('USR_ADDRESS')]            = $record['USR_ADDRESS'];
 
-                $this->getFieldNameByFormatFieldName("USR_PHONE")              => $record["USR_PHONE"],
+            $arrayResult[$this->getFieldNameByFormatFieldName('USR_PHONE')]              = $record['USR_PHONE'];
 
-                $this->getFieldNameByFormatFieldName("USR_FAX")                => $record["USR_FAX"],
+            $arrayResult[$this->getFieldNameByFormatFieldName('USR_FAX')]                = $record['USR_FAX'];
 
-                $this->getFieldNameByFormatFieldName("USR_CELLULAR")           => $record["USR_CELLULAR"],
+            $arrayResult[$this->getFieldNameByFormatFieldName('USR_CELLULAR')]           = $record['USR_CELLULAR'];
 
-                $this->getFieldNameByFormatFieldName("USR_ZIP_CODE")           => $record["USR_ZIP_CODE"],
+            $arrayResult[$this->getFieldNameByFormatFieldName('USR_ZIP_CODE')]           = $record['USR_ZIP_CODE'];
 
-                $this->getFieldNameByFormatFieldName("DEP_UID")                => $record["DEP_UID"],
+            $arrayResult[$this->getFieldNameByFormatFieldName('DEP_UID')]                = $record['DEP_UID'];
 
-                $this->getFieldNameByFormatFieldName("USR_POSITION")           => $record["USR_POSITION"],
+            $arrayResult[$this->getFieldNameByFormatFieldName('USR_POSITION')]           = $record['USR_POSITION'];
 
-                $this->getFieldNameByFormatFieldName("USR_RESUME")             => $record["USR_RESUME"],
+            $arrayResult[$this->getFieldNameByFormatFieldName('USR_RESUME')]             = $record['USR_RESUME'];
 
-                $this->getFieldNameByFormatFieldName("USR_BIRTHDAY")           => $record["USR_BIRTHDAY"],
+            $arrayResult[$this->getFieldNameByFormatFieldName('USR_BIRTHDAY')]           = $record['USR_BIRTHDAY'];
 
-                $this->getFieldNameByFormatFieldName("USR_ROLE")               => $record["USR_ROLE"],
+            $arrayResult[$this->getFieldNameByFormatFieldName('USR_ROLE')]               = $record['USR_ROLE'];
 
-                $this->getFieldNameByFormatFieldName("USR_REPORTS_TO")         => $record["USR_REPORTS_TO"],
+            $arrayResult[$this->getFieldNameByFormatFieldName('USR_REPORTS_TO')]         = $record['USR_REPORTS_TO'];
 
-                $this->getFieldNameByFormatFieldName("USR_REPLACED_BY")        => $record["USR_REPLACED_BY"],
+            $arrayResult[$this->getFieldNameByFormatFieldName('USR_REPLACED_BY')]        = $record['USR_REPLACED_BY'];
 
-                $this->getFieldNameByFormatFieldName("USR_CALENDAR_UID")       => $aFields["USR_CALENDAR_UID"],
+            $arrayResult[$this->getFieldNameByFormatFieldName('USR_CALENDAR_UID')]       = $aFields['USR_CALENDAR_UID'];
 
-                $this->getFieldNameByFormatFieldName("USR_CALENDAR_NAME")           => $aFields["USR_CALENDAR"],
+            $arrayResult[$this->getFieldNameByFormatFieldName('USR_CALENDAR_NAME')]      = $aFields['USR_CALENDAR'];
 
-                $this->getFieldNameByFormatFieldName("USR_UX")                 => $record["USR_UX"],
+            $arrayResult[$this->getFieldNameByFormatFieldName('USR_UX')]                 = $record['USR_UX'];
 
-                /*----------------------------------********---------------------------------*/
+            /*----------------------------------********---------------------------------*/
 
-                $this->getFieldNameByFormatFieldName("USR_TOTAL_INBOX")        => $record["USR_TOTAL_INBOX"],
+            $arrayResult[$this->getFieldNameByFormatFieldName('USR_TOTAL_INBOX')]        = $record['USR_TOTAL_INBOX'];
 
-                $this->getFieldNameByFormatFieldName("USR_TOTAL_DRAFT")        => $record["USR_TOTAL_DRAFT"],
+            $arrayResult[$this->getFieldNameByFormatFieldName('USR_TOTAL_DRAFT')]        = $record['USR_TOTAL_DRAFT'];
 
-                $this->getFieldNameByFormatFieldName("USR_TOTAL_CANCELLED")    => $record["USR_TOTAL_CANCELLED"],
+            $arrayResult[$this->getFieldNameByFormatFieldName('USR_TOTAL_CANCELLED')]    = $record['USR_TOTAL_CANCELLED'];
 
-                $this->getFieldNameByFormatFieldName("USR_TOTAL_PARTICIPATED") => $record["USR_TOTAL_PARTICIPATED"],
+            $arrayResult[$this->getFieldNameByFormatFieldName('USR_TOTAL_PARTICIPATED')] = $record['USR_TOTAL_PARTICIPATED'];
 
-                $this->getFieldNameByFormatFieldName("USR_TOTAL_PAUSED")       => $record["USR_TOTAL_PAUSED"],
+            $arrayResult[$this->getFieldNameByFormatFieldName('USR_TOTAL_PAUSED')]       = $record['USR_TOTAL_PAUSED'];
 
-                $this->getFieldNameByFormatFieldName("USR_TOTAL_COMPLETED")    => $record["USR_TOTAL_COMPLETED"],
+            $arrayResult[$this->getFieldNameByFormatFieldName('USR_TOTAL_COMPLETED')]    = $record['USR_TOTAL_COMPLETED'];
 
-                $this->getFieldNameByFormatFieldName("USR_TOTAL_UNASSIGNED")   => $record["USR_TOTAL_UNASSIGNED"],
+            $arrayResult[$this->getFieldNameByFormatFieldName('USR_TOTAL_UNASSIGNED')]   = $record['USR_TOTAL_UNASSIGNED'];
 
-                $this->getFieldNameByFormatFieldName("USR_PHOTO_PATH")   => $pathPhotoUser
+            $arrayResult[$this->getFieldNameByFormatFieldName('USR_PHOTO_PATH')]         = $pathPhotoUser;
 
-            );
+
+
+            if (isset($_SESSION['__SYSTEM_UTC_TIME_ZONE__']) && $_SESSION['__SYSTEM_UTC_TIME_ZONE__']) {
+
+                $arrayResult[$this->getFieldNameByFormatFieldName('USR_TIME_ZONE')] = (trim($record['USR_TIME_ZONE']) != '')? trim($record['USR_TIME_ZONE']) : \ProcessMaker\Util\System::getTimeZone();
+
+            }
+
+
+
+            //Return
+
+            return $arrayResult;
 
         } catch (\Exception $e) {
 
@@ -858,7 +948,11 @@ class User
 
             $criteria->addSelectColumn(\UsersPeer::USR_TOTAL_UNASSIGNED);
 
+            $criteria->addSelectColumn(\UsersPeer::USR_TIME_ZONE);
 
+
+
+            //Return
 
             return $criteria;
 
@@ -1176,9 +1270,17 @@ class User
 
 
 
-                if (isset($arrayData["USR_NEW_PASS"])) {
+                if (isset($arrayData['USR_PASSWORD'])) {
 
-                    $arrayData["USR_PASSWORD"] = \Bootstrap::hashPassword($arrayData["USR_NEW_PASS"]);
+                    $arrayData['USR_PASSWORD'] = \Bootstrap::hashPassword($arrayData['USR_PASSWORD']);
+
+                } else {
+
+                    if (isset($arrayData['USR_NEW_PASS'])) {
+
+                        $arrayData['USR_PASSWORD'] = \Bootstrap::hashPassword($arrayData['USR_NEW_PASS']);
+
+                    }
 
                 }
 
@@ -1478,7 +1580,7 @@ class User
 
 
 
-            $rsCriteria->next();
+            $result = $rsCriteria->next();
 
 
 
@@ -1488,7 +1590,7 @@ class User
 
             //Return
 
-            return (!$flagGetRecord)? $this->getUserDataFromRecord($row) : $row;
+            return (!$flagGetRecord)? $this->__getUserCustomRecordFromRecord($row) : $row;
 
         } catch (\Exception $e) {
 
@@ -2040,25 +2142,45 @@ class User
 
      *
 
-     * @param array  $arrayFilterData Data of the filters
+     * @param array  $arrayWhere     Where (Condition and filters)
 
-     * @param string $sortField       Field name to sort
+     * @param string $sortField      Field name to sort
 
-     * @param string $sortDir         Direction of sorting (ASC, DESC)
+     * @param string $sortDir        Direction of sorting (ASC, DESC)
 
-     * @param int    $start           Start
+     * @param int    $start          Start
 
-     * @param int    $limit           Limit
+     * @param int    $limit          Limit
+
+     * @param bool   $flagRecord     Flag that set the "getting" of record
+
+     * @param bool   $throwException Flag to throw the exception (This only if the parameters are invalid)
+
+     *                               (TRUE: throw the exception; FALSE: returns FALSE)
 
      *
 
-     * return array Return an array with all Users
+     * @return array Return an array with all Users, ThrowTheException/FALSE otherwise
 
      */
 
-    public function getUsers($arrayFilterData = null, $sortField = null, $sortDir = null, $start = null, $limit = null)
+    public function getUsers(
 
-    {
+        array $arrayWhere = null,
+
+        $sortField = null,
+
+        $sortDir = null,
+
+        $start = null,
+
+        $limit = null,
+
+        $flagRecord = true,
+
+        $throwException = true
+
+    ) {
 
         try {
 
@@ -2070,13 +2192,39 @@ class User
 
 
 
-            //Verify data
+            //Verify data and Set variables
 
-            $process = new \ProcessMaker\BusinessModel\Process();
+            $flag = !is_null($arrayWhere) && is_array($arrayWhere);
+
+            $flagCondition = $flag && isset($arrayWhere['condition']);
+
+            $flagFilter    = $flag && isset($arrayWhere['filter']);
 
 
 
-            $process->throwExceptionIfDataNotMetPagerVarDefinition(array("start" => $start, "limit" => $limit), array("start" => "start", "limit" => "limit"));
+            $result = \ProcessMaker\BusinessModel\Validator::validatePagerDataByPagerDefinition(
+
+                ['$start' => $start, '$limit' => $limit],
+
+                ['$start' => '$start', '$limit' => '$limit']
+
+            );
+
+
+
+            if ($result !== true) {
+
+                if ($throwException) {
+
+                    throw new \Exception($result);
+
+                } else {
+
+                    return false;
+
+                }
+
+            }
 
 
 
@@ -2086,7 +2234,7 @@ class User
 
 
 
-            if (!is_null($arrayFilterData) && is_array($arrayFilterData) && isset($arrayFilterData["filter"])) {
+            if ($flagFilter) {
 
                 $arrayAux = array(
 
@@ -2100,7 +2248,11 @@ class User
 
 
 
-                $filterName = $arrayAux[(isset($arrayFilterData["filterOption"]))? $arrayFilterData["filterOption"] : ""];
+                $filterName = $arrayAux[
+
+                    (isset($arrayWhere['filterOption']))? $arrayWhere['filterOption'] : ''
+
+                ];
 
             }
 
@@ -2108,7 +2260,7 @@ class User
 
             //Get data
 
-            if (!is_null($limit) && $limit . "" == "0") {
+            if (!is_null($limit) && (string)($limit) == '0') {
 
                 //Return
 
@@ -2120,7 +2272,7 @@ class User
 
                     "limit"     => (int)((!is_null($limit))? $limit : 0),
 
-                    $filterName => (!is_null($arrayFilterData) && is_array($arrayFilterData) && isset($arrayFilterData["filter"]))? $arrayFilterData["filter"] : "",
+                    $filterName => ($flagFilter)? $arrayWhere['filter'] : '',
 
                     "data"      => $arrayUser
 
@@ -2136,21 +2288,41 @@ class User
 
 
 
-            if (!is_null($arrayFilterData) && is_array($arrayFilterData) && isset($arrayFilterData["filter"]) && trim($arrayFilterData["filter"]) != "") {
+            if ($flagCondition && !empty($arrayWhere['condition'])) {
 
-                $arraySearch = array(
+                foreach ($arrayWhere['condition'] as $value) {
 
-                    ""      => "%" . $arrayFilterData["filter"] . "%",
+                    $criteria->add($value[0], $value[1], $value[2]);
 
-                    "LEFT"  => $arrayFilterData["filter"] . "%",
+                }
 
-                    "RIGHT" => "%" . $arrayFilterData["filter"]
+            } else {
 
-                );
+                $criteria->add(\UsersPeer::USR_STATUS, 'ACTIVE', \Criteria::EQUAL);
+
+            }
 
 
 
-                $search = $arraySearch[(isset($arrayFilterData["filterOption"]))? $arrayFilterData["filterOption"] : ""];
+            if ($flagFilter && trim($arrayWhere['filter']) != '') {
+
+                $arraySearch = [
+
+                    ''      => '%' . $arrayWhere['filter'] . '%',
+
+                    'LEFT'  => $arrayWhere['filter'] . '%',
+
+                    'RIGHT' => '%' . $arrayWhere['filter']
+
+                ];
+
+
+
+                $search = $arraySearch[
+
+                    (isset($arrayWhere['filterOption']))? $arrayWhere['filterOption'] : ''
+
+                ];
 
 
 
@@ -2168,39 +2340,19 @@ class User
 
 
 
-            $criteria->add(\UsersPeer::USR_STATUS, "ACTIVE", \Criteria::EQUAL);
-
-
-
             //Number records total
 
-            $criteriaCount = clone $criteria;
-
-
-
-            $criteriaCount->clearSelectColumns();
-
-            $criteriaCount->addSelectColumn("COUNT(" . \UsersPeer::USR_UID . ") AS NUM_REC");
-
-
-
-            $rsCriteriaCount = \UsersPeer::doSelectRS($criteriaCount);
-
-            $rsCriteriaCount->setFetchmode(\ResultSet::FETCHMODE_ASSOC);
-
-
-
-            $result = $rsCriteriaCount->next();
-
-            $row = $rsCriteriaCount->getRow();
-
-
-
-            $numRecTotal = (int)($row["NUM_REC"]);
+            $numRecTotal = \UsersPeer::doCount($criteria);
 
 
 
             //Query
+
+            $conf = new \Configurations();
+
+            $sortFieldDefault = \UsersPeer::TABLE_NAME . '.' . $conf->userNameFormatGetFirstFieldByUsersTable();
+
+
 
             if (!is_null($sortField) && trim($sortField) != "") {
 
@@ -2214,13 +2366,13 @@ class User
 
                 } else {
 
-                    $sortField = \UsersPeer::USR_FIRSTNAME;
+                    $sortField = $sortFieldDefault;
 
                 }
 
             } else {
 
-                $sortField = \UsersPeer::USR_FIRSTNAME;
+                $sortField = $sortFieldDefault;
 
             }
 
@@ -2262,11 +2414,11 @@ class User
 
             while ($rsCriteria->next()) {
 
-                $row = $rsCriteria->getRow();
+                $record = $rsCriteria->getRow();
 
 
 
-                $arrayUser[] = $this->getUserDataFromRecord($row);
+                $arrayUser[] = ($flagRecord)? $record : $this->__getUserCustomRecordFromRecord($record);
 
             }
 
@@ -2282,7 +2434,7 @@ class User
 
                 "limit"     => (int)((!is_null($limit))? $limit : 0),
 
-                $filterName => (!is_null($arrayFilterData) && is_array($arrayFilterData) && isset($arrayFilterData["filter"]))? $arrayFilterData["filter"] : "",
+                $filterName => ($flagFilter)? $arrayWhere['filter'] : '',
 
                 "data"      => $arrayUser
 
@@ -2372,6 +2524,56 @@ class User
 
     /**
 
+     * change Bookmarks of an user
+
+     *
+
+     * @access public
+
+     * @param $userUID
+
+     * @param $tasUid
+
+     * @param $type
+
+     * @return void
+
+     */
+
+    public function updateBookmark($userUID, $tasUid, $type)
+
+    {
+
+        $this->userObj = new \Users();
+
+        $fields = $this->userObj->load($userUID);
+
+        $bookmark = empty($fields['USR_BOOKMARK_START_CASES']) ? array() : unserialize($fields['USR_BOOKMARK_START_CASES']);
+
+        $position = array_search($tasUid, $bookmark);
+
+
+
+        if ($type === 'INSERT' and $position === false) {
+
+            $bookmark[] = $tasUid;
+
+        } elseif ($type === 'DELETE' and $position !== false) {
+
+            unset($bookmark[$position]);
+
+        }
+
+        $fields['USR_BOOKMARK_START_CASES'] = serialize($bookmark);
+
+        $this->userObj->update($fields);
+
+    }
+
+
+
+    /**
+
      * Check permission
 
      *
@@ -2417,6 +2619,180 @@ class User
             //Return
 
             return $flagPermission;
+
+        } catch (\Exception $e) {
+
+            throw $e;
+
+        }
+
+    }
+
+
+
+    /**
+
+     * Get User-Logged Time Zone
+
+     *
+
+     * @return string Return the User-Logged Time Zone; Time Zone system settings otherwise
+
+     */
+
+    public static function getUserLoggedTimeZone()
+
+    {
+
+        try {
+
+            $timeZone = 'UTC';
+
+
+
+            if (isset($_SESSION['USR_TIME_ZONE'])) {
+
+                $tz = trim($_SESSION['USR_TIME_ZONE']);
+
+
+
+                $timeZone = ($tz != '')? $tz : $timeZone;
+
+            }
+
+
+
+            //Return
+
+            return $timeZone;
+
+        } catch (\Exception $e) {
+
+            throw $e;
+
+        }
+
+    }
+
+
+
+    /**
+
+     * Get the User's Manager
+
+     *
+
+     * @param string $userUid        Unique id of User
+
+     * @param bool   $throwException Flag to throw the exception if the main parameters are invalid or do not exist
+
+     *                               (TRUE: throw the exception; FALSE: returns FALSE)
+
+     *
+
+     * @return string Returns an string with Unique id of User (Manager), ThrowTheException/FALSE otherwise
+
+     */
+
+    public function getUsersManager($userUid, $throwException = true)
+
+    {
+
+        try {
+
+            //Verify data and Set variables
+
+            $arrayUserData = $this->getUserRecordByPk($userUid, ['$userUid' => '$userUid'], $throwException);
+
+
+
+            if ($arrayUserData === false) {
+
+                return false;
+
+            }
+
+
+
+            //Set variables
+
+            $department = new \ProcessMaker\BusinessModel\Department();
+
+
+
+            //Get Manager
+
+            if ((string)($arrayUserData['USR_REPORTS_TO']) == '' ||
+
+                (string)($arrayUserData['USR_REPORTS_TO']) == $userUid
+
+            ) {
+
+                if ((string)($arrayUserData['DEP_UID']) != '') {
+
+                    $departmentUid = $arrayUserData['DEP_UID'];
+
+
+
+                    do {
+
+                        $flagd = false;
+
+
+
+                        $arrayDepartmentData = $department->getDepartmentRecordByPk(
+
+                            $departmentUid, ['$departmentUid' => '$departmentUid'], $throwException
+
+                        );
+
+
+
+                        if ($arrayDepartmentData === false) {
+
+                            return false;
+
+                        }
+
+
+
+                        if ((string)($arrayDepartmentData['DEP_MANAGER']) == '' ||
+
+                            (string)($arrayDepartmentData['DEP_MANAGER']) == $userUid
+
+                        ) {
+
+                            if ((string)($arrayDepartmentData['DEP_PARENT']) != '') {
+
+                                $departmentUid = $arrayDepartmentData['DEP_PARENT'];
+
+                                $flagd = true;
+
+                            } else {
+
+                                return false;
+
+                            }
+
+                        } else {
+
+                            return $arrayDepartmentData['DEP_MANAGER'];
+
+                        }
+
+                    } while ($flagd);
+
+                } else {
+
+                    return false;
+
+                }
+
+            } else {
+
+                return $arrayUserData['USR_REPORTS_TO'];
+
+            }
 
         } catch (\Exception $e) {
 

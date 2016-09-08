@@ -23,8 +23,9 @@ if (file_exists(PATH_DATA . "cron")) {
     //Get data of cron file
     $arrayCron = unserialize(trim(file_get_contents(PATH_DATA . "cron")));
 
-    $bCronIsRunning = (boolean)($arrayCron["bCronIsRunning"]);
-    $sLastExecution = $arrayCron["sLastExecution"];
+    $bCronIsRunning = (isset($arrayCron['bCronIsRunning']))? (bool)($arrayCron['bCronIsRunning']) : ((isset($arrayCron['flagIsRunning']))? (bool)($arrayCron['flagIsRunning']) : false);
+    $sLastExecution = (isset($arrayCron['sLastExecution']))? $arrayCron['sLastExecution'] : ((isset($arrayCron['lastExecution']))? $arrayCron['lastExecution'] : '');
+
     $processcTimeProcess = (isset($arrayCron["processcTimeProcess"]))? (int)($arrayCron["processcTimeProcess"]) : 10; //Minutes
     $processcTimeStart   = (isset($arrayCron["processcTimeStart"]))? $arrayCron["processcTimeStart"] : 0;
 }
@@ -88,4 +89,3 @@ $oHeadPublisher->assign( "CRON", $cronInfo );
 $oHeadPublisher->assign( "STATUS", $arrayStatus );
 
 G::RenderPage( "publish", "extJs" );
-

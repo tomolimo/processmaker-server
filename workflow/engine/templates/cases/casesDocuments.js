@@ -35,6 +35,7 @@ itemSelected = "";
 lastDir = "";
 var conn = new Ext.data.Connection();
 var showDirs = 'noFolders';
+var pageSize = 25;
 
 streamFilefromPM=function(fileStream) {
   Ext.Ajax.request({
@@ -106,7 +107,7 @@ function chDir( directory, loadGridOnly ) {
       datastore.load({
         params:{
           start: 0,
-          limit: 100,
+          limit: pageSize,
           dir: directory,
           node: directory,
           option:'gridDocuments',
@@ -283,6 +284,8 @@ function openActionDialog(caller, action, dataAux)
     Ext.Msg.alert( 'Error',TRANSLATIONS.ID_NO_ITEMS_SELECTED);
     return false;
   }
+
+  Ext.Ajax.timeout = 300000;
 
   switch( action ) {
     case 'copyAction':
@@ -788,7 +791,7 @@ var datastore = new Ext.data.Store({
     directory : "/",
     params : {
       start: 0,
-      limit: 100,
+      limit: pageSize,
       dir : this.directory,
       node : this.directory,
       option : "gridDocuments",
@@ -1158,7 +1161,7 @@ var gridtb = new Ext.Toolbar(
         datastore.clearFilter();
         Ext.getCmp("filterField").setValue("");
         datastore.setBaseParam( 'search', '');
-        datastore.load({params:{ start : 0 , limit : 100 }});
+        datastore.load({params:{ start : 0 , limit : pageSize }});
     }
   })
 
@@ -1166,12 +1169,12 @@ var gridtb = new Ext.Toolbar(
 function filterDataStore(btn, e) {
     var filterVal = Ext.getCmp("filterField").getValue();
     datastore.setBaseParam( 'search', filterVal);
-    datastore.load({params:{ start : 0 , limit : 100 }});
+    datastore.load({params:{ start : 0 , limit : pageSize }});
 }
 // add a paging toolbar to the grid's footer
 var gridbb = new Ext.PagingToolbar({
   store: datastore,
-  pageSize: 100,
+  pageSize: pageSize,
   displayInfo: true,
   displayMsg: _("ID_DISPLAY_TOTAL"),
   emptyMsg: _("ID_DISPLAY_EMPTY"),
@@ -1412,7 +1415,7 @@ function loadDir() {
     datastore.load({
       params : {
         start: 0,
-        limit: 100,
+        limit: pageSize,
         dir : datastore.directory,
         node : datastore.directory,
         option : 'gridDocuments',
@@ -1598,7 +1601,6 @@ function copymove(action) {
     // '+ dropEvent.target.id.replace( /_RRR_/g, '/' ));
     requestParams = getRequestParams();
     if (!((navigator.userAgent.indexOf("MSIE") != -1) || (navigator.userAgent.indexOf("Trident") != -1))) {
-        Ext.getCmp("dirTreePanel").getRootNode().reload();    
         document.getElementById('ext-gen20').style.visibility='hidden';
         document.getElementsByClassName('x-shadow')[0].style.visibility='hidden';          
         parent.frames[0].location.href="casesStartPage?action=documents";
@@ -1834,19 +1836,28 @@ var treepanelmain = new Ext.tree.TreePanel({
       'beforenodedrop' : {
         fn : function(e) {
           if (!((navigator.userAgent.indexOf("MSIE") != -1) || (navigator.userAgent.indexOf("Trident") != -1))) {
-            dropEvent = e;
-            copymoveCtx(e);
-            datastore.reload();
+              if(typeof e.target==="object" && e.target.id==="root"){
+                e.dropStatus=true;
+                return false;
+              }
+              setTimeout(
+                (function(e,datastore){
+                  return function(){
+                    dropEvent = e;
+                    copymoveCtx(e);
+                    datastore.load();
+                  }
+                })(e,datastore),
+                0
+              );
           }
+          e.dropStatus=true;
+          return false;
         }
       },
       'nodedrop' : {
         fn : function(e) { 
-          if ((navigator.userAgent.indexOf("MSIE") != -1) || (navigator.userAgent.indexOf("Trident") != -1)) {
-              dropEvent = e;
-                copymoveCtx(e);
-                datastore.reload();
-          }
+          return false;
         }
       },
       'beforemove' : {

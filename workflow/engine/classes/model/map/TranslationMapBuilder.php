@@ -87,7 +87,7 @@ class TranslationMapBuilder
 
         $tMap->addValidator('TRN_LANG', 'required', 'propel.validator.RequiredValidator', '', 'Language is required.');
 
-        $tMap->addValidator('TRN_VALUE', 'maxLength', 'propel.validator.MaxLengthValidator', '200', 'Value can be no larger than 200 in size');
+        $tMap->addValidator('TRN_VALUE', 'maxLength', 'propel.validator.MaxLengthValidator', '1500', 'Value can be no larger than 1500 in size');
 
         $tMap->addValidator('TRN_VALUE', 'required', 'propel.validator.RequiredValidator', '', 'Value is required.');
 

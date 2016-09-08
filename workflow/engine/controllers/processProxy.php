@@ -118,7 +118,7 @@ class ProcessProxy extends HttpProxyController
         $oProcess = new Processes();
         if (count( $ids ) > 0) {
             foreach ($ids as $id) {
-                $oProcess->changeStatus( $id );
+                $oProcess->changeStatus( htmlspecialchars($id) );
             }
         }
     }

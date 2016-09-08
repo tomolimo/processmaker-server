@@ -93,6 +93,7 @@ class HttpProxyController
      */
     public function call ($name)
     {
+        $result = new stdClass();
         try {
             $result = $this->$name( $this->__request__ );
 
@@ -122,7 +123,7 @@ class HttpProxyController
                     break;
             }
             $result->error = $e->getMessage();
-
+            $result->exception = new stdClass();
             $result->exception->class = get_class( $e );
             $result->exception->code = $e->getCode();
             $result->exception->trace = $e->getTraceAsString();

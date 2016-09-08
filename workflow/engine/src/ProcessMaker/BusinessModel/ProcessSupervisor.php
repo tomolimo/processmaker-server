@@ -2,7 +2,6 @@
 namespace ProcessMaker\BusinessModel;
 
 use \G;
-use Luracast\Restler\User;
 
 class ProcessSupervisor
 {

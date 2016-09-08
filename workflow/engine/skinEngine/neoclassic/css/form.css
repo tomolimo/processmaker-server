@@ -1125,3 +1125,12 @@ div#toolbar {
 .module_app_buttonDisabled___gray:hover {
   background: url("/skins/neoclassic/images/ext/gray/button/btn.gif") repeat-x scroll 0 -3240px transparent;
 }
+/*style for login footer */
+.footer-login a {
+  color: white;
+  text-decoration: none;
+}
+.footer-login a:hover, a:focus {
+  color: white;
+  text-decoration: underline;
+}

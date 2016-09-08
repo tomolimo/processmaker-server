@@ -24,26 +24,51 @@
  */
 global $G_TMP_MENU;
 global $sStatus;
+global $RBAC;
+$statusSendAndUnassigned = false;
 
-if ((($sStatus == 'DRAFT') || ($sStatus == 'TO_DO')) && ($_SESSION['TASK'] != -1)) {
-  if (isset($_SESSION['bNoShowSteps'])) {
-    unset($_SESSION['bNoShowSteps']);
-  } else {
-    $G_TMP_MENU->AddIdOption('STEPS' , G::LoadTranslation('ID_STEPS')      , 'javascript:showSteps();'      , 'absolute');
-    $G_TMP_MENU->AddIdOption('INFO'  , G::LoadTranslation('ID_INFORMATION'), 'javascript:showInformation();', 'absolute');
-  }
-  $G_TMP_MENU->AddIdOption('ACTIONS' , G::LoadTranslation('ID_ACTIONS')    , 'javascript:showActions();'    , 'absolute');
-} else {
-  $G_TMP_MENU->AddIdOption('INFO'  , G::LoadTranslation('ID_INFORMATION'), 'javascript:showInformation();', 'absolute');
+//caseOptions
+switch ($_SESSION['actionCaseOptions']) {
+    case 'todo':
+    case 'draft':
+        if (isset($_SESSION['bNoShowSteps'])) {
+            unset($_SESSION['bNoShowSteps']);
+        }
+        break;
+    case 'sent':
+    case 'unassigned':
+        $statusSendAndUnassigned = true;
+        break;
+    case 'paused':
+        if (isset($_SESSION['bNoShowSteps'])) {
+            unset($_SESSION['bNoShowSteps']);
+        }
+        break;
+    case 'to_revise':
+    case 'to_reassign':
+        $access = $RBAC->requirePermissions('PM_REASSIGNCASE', 'PM_SUPERVISOR');
+        if ($access) {
+            if (isset($_SESSION['bNoShowSteps'])) {
+                unset($_SESSION['bNoShowSteps']);
+            }
+        }
+        break;
+    default:
+        unset($_SESSION['bNoShowSteps']);
+        break;
 }
-$G_TMP_MENU->AddIdOption('NOTES'  , G::LoadTranslation('ID_NOTES'), 'javascript:showNotes();', 'absolute');
 
+unset($_SESSION['actionCaseOptions']);
 
-
-
-
-
-
-
-
-
+if ((($sStatus === 'DRAFT') || ($sStatus === 'TO_DO')) && !$statusSendAndUnassigned) {
+    if (isset($_SESSION['bNoShowSteps'])) {
+        unset($_SESSION['bNoShowSteps']);
+    } else {
+        $G_TMP_MENU->AddIdOption('STEPS', G::LoadTranslation('ID_STEPS'), 'javascript:showSteps();', 'absolute');
+        $G_TMP_MENU->AddIdOption('INFO', G::LoadTranslation('ID_INFORMATION'), 'javascript:showInformation();', 'absolute');
+    }
+    $G_TMP_MENU->AddIdOption('ACTIONS', G::LoadTranslation('ID_ACTIONS'), 'javascript:showActions();', 'absolute');
+} else {
+    $G_TMP_MENU->AddIdOption('INFO', G::LoadTranslation('ID_INFORMATION'), 'javascript:showInformation();', 'absolute');
+}
+$G_TMP_MENU->AddIdOption('NOTES', G::LoadTranslation('ID_NOTES'), 'javascript:showNotes();', 'absolute');

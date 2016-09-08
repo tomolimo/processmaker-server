@@ -3,7 +3,7 @@ var wizard;
 // Extend timeout for all Ext.Ajax.requests to 90 seconds.
 // Ext.Ajax is a singleton, this statement will extend the timeout
 // for all subsequent Ext.Ajax calls.
-Ext.Ajax.timeout = 4 * 60 * 1000;
+Ext.Ajax.timeout = 900000;
 
 Ext.onReady(function(){
 
@@ -103,8 +103,7 @@ function finishInstallation()
       'wfDatabase'    : Ext.getCmp('wfDatabase'       ).getValue(),
       'deleteDB'      : Ext.getCmp('deleteDB'         ).getValue(),
       'userLogged'    : Ext.getCmp('createUserLogged' ).getValue()
-    },
-    timeout: 180000
+    }
   });
 }
 

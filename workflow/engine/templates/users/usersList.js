@@ -638,6 +638,11 @@ DeleteUser = function(uid){
   url: 'users_Ajax',
   params: {'function': 'deleteUser', USR_UID: uid},
   success: function(res, opt){
+    var response = Ext.util.JSON.decode(res.responseText);
+    if (response.status === 'ERROR') {
+        Ext.Msg.alert(_('ID_USERS'), response.message);
+        return;
+    }
     DoSearch();
     PMExt.notify(_('ID_USERS'),_('ID_USERS_SUCCESS_DELETE'));
   },

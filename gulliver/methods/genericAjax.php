@@ -171,10 +171,17 @@ if( isset($request) ){
 
 
     case 'storeInTmp':
+        if(!isset($_SESSION['USER_LOGGED'])) { 
+            echo "{status: 1, message: \"success\"}";
+            break;
+        }
       try {
         $con = Propel::getConnection($_GET['cnn']);
         if($_GET['pkt'] == 'int'){
-          $rs = $con->executeQuery("SELECT MAX({$_GET['pk']}) as lastId FROM {$_GET['table']};");
+            
+          $primaryKeyField = Propel::getDB($_GET['cnn'])->quoteIdentifier($_GET['pk']);
+          $tableName = Propel::getDB($_GET['cnn'])->quoteIdentifier($_GET['table']);
+          $rs = $con->executeQuery("SELECT MAX($primaryKeyField) as lastId FROM $tableName");
           $rs->next();
           $row = $rs->getRow();
           $gKey = (int)$row['lastId'] + 1;
@@ -182,15 +189,23 @@ if( isset($request) ){
         } else {
           $gKey = G::encryptOld(date('Y-m-d H:i:s').'@'.rand());
         }
+        
+        // See above. Gross, but it works. 
+        $field = mysql_real_escape_string($_GET['fld']);
+        $field = str_replace("`", "", $field);
+        
+        $query = "INSERT INTO $tableName ($primaryKeyField, $field) VALUES (?, ?)"; // '$gKey', '{$_GET['value']}')";
 
-        $rs = $con->executeQuery("INSERT INTO {$_GET['table']} ({$_GET['pk']}, {$_GET['fld']}) VALUES ('$gKey', '{$_GET['value']}');");
+        $rs = $con->prepareStatement($query);
+        $rs->set(1, $gKey);
+        $rs->set(2, $_GET['value']);
+        $rs->executeQuery();
 
         echo "{status: 1, message: \"success\"}";
       } catch (Exception $e) {
         $err = $e->getMessage();
         //$err = eregi_replace("[\n|\r|\n\r]", ' ', $err);
         $err = preg_replace("[\n|\r|\n\r]", " ", $err); //Made compatible to PHP 5.3
-
         echo "{status: 0, message: \"" . $err . "\"}";
       }
       break;

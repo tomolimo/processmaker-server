@@ -6,7 +6,7 @@ $actionAjax = isset( $_REQUEST['actionAjax'] ) ? $_REQUEST['actionAjax'] : null;
 if ($actionAjax == "streaming") {
 
     $app_uid = isset( $_REQUEST['a'] ) ? $_REQUEST['a'] : null;
-    $inp_doc_uid = isset( $_REQUEST['d'] ) ? $_REQUEST['d'] : null;
+    $inp_doc_uid = isset( $_REQUEST['d'] ) ? htmlspecialchars($_REQUEST['d']) : null;
     $oAppDocument = new \AppDocument();
 
     if (! isset( $fileData['version'] )) {
@@ -52,7 +52,7 @@ if ($actionAjax == "streaming") {
 
 if ($actionAjax == "fileMobile") {
     $app_uid = isset( $_REQUEST['a'] ) ? $_REQUEST['a'] : null;
-    $inp_doc_uid = isset( $_REQUEST['d'] ) ? $_REQUEST['d'] : null;
+    $inp_doc_uid = isset( $_REQUEST['d'] ) ? htmlspecialchars($_REQUEST['d']) : null;
 
     $structure = file_get_contents(PATH_HTML ."/mobile/index.json");
     $structure = json_decode($structure);

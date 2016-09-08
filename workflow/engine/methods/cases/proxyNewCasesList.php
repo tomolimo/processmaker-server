@@ -56,7 +56,7 @@ try {
 
     $filters['limit']    = isset( $_REQUEST["limit"] ) ? $_REQUEST["limit"] : "25";
 
-    $filters['sort']     = isset( $_REQUEST["sort"] ) ? $_REQUEST["sort"] : "";
+    $filters['sort']     = (isset($_REQUEST['sort']))? (($_REQUEST['sort'] == 'APP_STATUS_LABEL')? 'APP_STATUS' : $_REQUEST['sort']) : '';
 
     $filters['dir']      = isset( $_REQUEST["dir"] ) ? $_REQUEST["dir"] : "DESC";
 
@@ -194,9 +194,19 @@ try {
 
     $columnsList = $listpeer::getFieldNames(BasePeer::TYPE_FIELDNAME);
 
+
+
     if (!(in_array($filters['sort'], $columnsList))) {
 
-        $filters['sort'] = '';
+        if ($filters['sort'] == 'APP_CURRENT_USER' && ($listName == 'participated' || $listName == 'participated_last')) {
+
+            $filters['sort'] = 'DEL_CURRENT_USR_LASTNAME';
+
+        } else {
+
+            $filters['sort'] = '';
+
+        }
 
     }
 
@@ -225,6 +235,46 @@ try {
             try {
 
                 if (isset($record["DEL_PREVIOUS_USR_UID"])) {
+
+                    if ($record["DEL_PREVIOUS_USR_UID"] == "") {
+
+                        $appDelegation = AppDelegationPeer::retrieveByPK($record["APP_UID"], $record["DEL_INDEX"]);
+
+
+
+                        if (!is_null($appDelegation)) {
+
+                            $appDelegationPrevious = AppDelegationPeer::retrieveByPK($record["APP_UID"], $appDelegation->getDelPrevious());
+
+
+
+                            if (!is_null($appDelegationPrevious)) {
+
+                                $taskPrevious = TaskPeer::retrieveByPK($appDelegationPrevious->getTasUid());
+
+
+
+                                if (!is_null($taskPrevious)) {
+
+                                    switch ($taskPrevious->getTasType()) {
+
+                                        case "SCRIPT-TASK":
+
+                                            $record["DEL_PREVIOUS_USR_UID"] = $taskPrevious->getTasType();
+
+                                            break;
+
+                                    }
+
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+
 
                     $record["PREVIOUS_USR_UID"]       = $record["DEL_PREVIOUS_USR_UID"];
 
@@ -263,6 +313,14 @@ try {
                     $record["USR_LASTNAME"]    = $record["DEL_CURRENT_USR_LASTNAME"];
 
                     $record["APP_UPDATE_DATE"] = $record["DEL_DELEGATE_DATE"];
+
+                }
+
+
+
+                if (isset($record['DEL_CURRENT_TAS_TITLE'])) {
+
+                    $record['APP_TAS_TITLE'] = $record['DEL_CURRENT_TAS_TITLE'];
 
                 }
 
@@ -330,7 +388,7 @@ try {
 
 
 
-    $response["data"] = $result;
+    $response['data'] = \ProcessMaker\Util\DateTime::convertUtcToTimeZone($result);
 
 
 

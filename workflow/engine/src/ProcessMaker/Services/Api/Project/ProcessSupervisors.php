@@ -31,7 +31,7 @@ class ProcessSupervisors extends Api
 
             return (preg_match("/^.*\/paged.*$/", $this->restler->url))? $response : $response["data"];
         } catch (\Exception $e) {
-            throw new RestException(Api::STAT_APP_EXCEPTION, $e->getMessage());
+            throw new RestException(Api::STAT_APP_EXCEPTION, htmlspecialchars($e->getMessage()));
         }
     }
 

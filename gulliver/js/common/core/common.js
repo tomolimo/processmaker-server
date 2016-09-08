@@ -1915,7 +1915,7 @@ function msgBox(msg, type, callbackAccept, callbackCancel){
 
 	switch(type){
 		case 'alert':
-    
+
         if (leimnud.browser.isIE) {
             new leimnud.module.app.alert().make({
                 label: msg,
@@ -1937,7 +1937,7 @@ function msgBox(msg, type, callbackAccept, callbackCancel){
                 }
               }.extend(this)
             });
-        }		    
+        }
 			break;
 		case 'info':
 			new leimnud.module.app.info().make({
@@ -2256,3 +2256,9 @@ function inputDocumentVerifySize(inpDocMaxFileSize, file)
         return 1;
     }
 }
+
+function getBrowserTimeZoneOffset()
+{
+    return -1 * ((new Date()).getTimezoneOffset() * 60);
+}
+

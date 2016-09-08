@@ -552,3 +552,47 @@ function stringReplace(strSearch, strReplace, str)
     return str.replace(expression, strReplace);
 }
 
+function getBrowserTimeZoneOffset()
+{
+    return -1 * ((new Date()).getTimezoneOffset() * 60);
+}
+
+/**
+ * This is the global state manager. By default all components that are 
+ * "state aware" check this class for state information if you don't pass them a 
+ * custom state provider. In order for this class to be useful, it must be 
+ * initialized with a provider when your application initializes.
+ * 
+ * @param {string} cache
+ * @param {string} additionalPrefix
+ * @returns {undefined}
+ */
+function setExtStateManagerSetProvider(cache, additionalPrefix) {
+    var workspace = 'ws-undefined';
+    var pathname = location.pathname.split('/');
+    var cookieProvider = new Ext.state.CookieProvider();
+    var i;
+    if (additionalPrefix === undefined) {
+        additionalPrefix = '';
+    }
+    if (pathname.length > 1) {
+        workspace = pathname[1].replace('sys', '');
+    }
+    workspace = workspace + additionalPrefix;
+    cookieProvider.on('statechange', function (provider, key, value) {
+        if (value !== null && JSON.stringify(Ext.state.Manager.get(workspace + cache)) !== JSON.stringify(value)) {
+            Ext.state.Manager.set(workspace + cache, value);
+        }
+    });
+    Ext.state.Manager.setProvider(cookieProvider);
+    Ext.state.Manager.clear(cache);
+    try {
+        if (window.extJsViewState !== undefined) {
+            for (i in extJsViewState) {
+                Ext.state.Manager.clear(i);
+            }
+            Ext.state.Manager.set(cache, Ext.state.Manager.getProvider().decodeValue(extJsViewState[workspace + cache]));
+        }
+    } catch (e) {
+    }
+}

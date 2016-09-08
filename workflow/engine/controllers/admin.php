@@ -26,8 +26,6 @@ class Admin extends Controller
             }
         }
         $skins = array ();
-        $timeZonesList = System::getAllTimeZones();
-        $timeZonesList = array_keys( $timeZonesList );
         $mainController = new Main();
         $languagesList = $mainController->getLanguagesList();
         $languagesList[] = array ("", G::LoadTranslation("ID_USE_LANGUAGE_URL"));
@@ -35,10 +33,6 @@ class Admin extends Controller
 
         foreach ($skinsList['skins'] as $skin) {
             $skins[] = array ($skin['SKIN_FOLDER_ID'],$skin['SKIN_NAME']);
-        }
-
-        foreach ($timeZonesList as $tz) {
-            $timeZones[] = array ($tz,$tz);
         }
 
         $this->includeExtJS( 'admin/system' );
@@ -55,7 +49,7 @@ class Admin extends Controller
 
         $this->setJSVar( 'skinsList', $skins );
         $this->setJSVar( 'languagesList', $languagesList );
-        $this->setJSVar( 'timeZonesList', $timeZones );
+        $this->setJSVar('timeZonesList', array_map(function ($value) { return [$value, $value]; }, DateTimeZone::listIdentifiers()));
         $this->setJSVar( 'sysConf', $sysConf );
 
         G::RenderPage( 'publish', 'extJs' );
@@ -173,7 +167,7 @@ class Admin extends Controller
     public function pmLogo ($httpData)
     {
         global $RBAC;
-        $RBAC->requirePermissions( 'PM_SETUP_ADVANCE' );
+        $RBAC->requirePermissions( 'PM_SETUP_ADVANCE', 'PM_SETUP_LOGO');
 
         G::LoadClass( 'configuration' );
         $c = new Configurations();
@@ -204,7 +198,7 @@ class Admin extends Controller
         $this->setView('admin/maintenance');
         $this->render('extJs');
     }
-    
+
     function getSystemInfo ()
     {
         $this->setResponseType( 'json' );
@@ -217,7 +211,7 @@ class Admin extends Controller
         }
         return $data;
     }
-    
+
     private function _getSystemInfo ()
     {
         G::LoadClass( "system" );
@@ -263,7 +257,7 @@ class Admin extends Controller
             }
         }
 
-        
+
         if (file_exists(PATH_HTML . "lib/versions")) {
             $versions = json_decode(file_get_contents(PATH_HTML . "lib/versions"), true);
             $pmuiVer = $versions["pmui_ver"];
@@ -341,7 +335,7 @@ class Admin extends Controller
 
         return $properties;
     }
-    
+
     private function lookup ($target)
     {
         global $ntarget;

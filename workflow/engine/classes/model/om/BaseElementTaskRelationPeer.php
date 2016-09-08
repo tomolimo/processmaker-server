@@ -25,7 +25,7 @@ abstract class BaseElementTaskRelationPeer
     const CLASS_DEFAULT = 'classes.model.ElementTaskRelation';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 5;
+    const NUM_COLUMNS = 6;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
@@ -46,6 +46,9 @@ abstract class BaseElementTaskRelationPeer
     /** the column name for the TAS_UID field */
     const TAS_UID = 'ELEMENT_TASK_RELATION.TAS_UID';
 
+    /** the column name for the ELEMENT_UID_DEST field */
+    const ELEMENT_UID_DEST = 'ELEMENT_TASK_RELATION.ELEMENT_UID_DEST';
+
     /** The PHP to DB Name Mapping */
     private static $phpNameMap = null;
 
@@ -57,10 +60,10 @@ abstract class BaseElementTaskRelationPeer
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     private static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('EtrUid', 'PrjUid', 'ElementUid', 'ElementType', 'TasUid', ),
-        BasePeer::TYPE_COLNAME => array (ElementTaskRelationPeer::ETR_UID, ElementTaskRelationPeer::PRJ_UID, ElementTaskRelationPeer::ELEMENT_UID, ElementTaskRelationPeer::ELEMENT_TYPE, ElementTaskRelationPeer::TAS_UID, ),
-        BasePeer::TYPE_FIELDNAME => array ('ETR_UID', 'PRJ_UID', 'ELEMENT_UID', 'ELEMENT_TYPE', 'TAS_UID', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, )
+        BasePeer::TYPE_PHPNAME => array ('EtrUid', 'PrjUid', 'ElementUid', 'ElementType', 'TasUid', 'ElementUidDest', ),
+        BasePeer::TYPE_COLNAME => array (ElementTaskRelationPeer::ETR_UID, ElementTaskRelationPeer::PRJ_UID, ElementTaskRelationPeer::ELEMENT_UID, ElementTaskRelationPeer::ELEMENT_TYPE, ElementTaskRelationPeer::TAS_UID, ElementTaskRelationPeer::ELEMENT_UID_DEST, ),
+        BasePeer::TYPE_FIELDNAME => array ('ETR_UID', 'PRJ_UID', 'ELEMENT_UID', 'ELEMENT_TYPE', 'TAS_UID', 'ELEMENT_UID_DEST', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, )
     );
 
     /**
@@ -70,10 +73,10 @@ abstract class BaseElementTaskRelationPeer
      * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     private static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('EtrUid' => 0, 'PrjUid' => 1, 'ElementUid' => 2, 'ElementType' => 3, 'TasUid' => 4, ),
-        BasePeer::TYPE_COLNAME => array (ElementTaskRelationPeer::ETR_UID => 0, ElementTaskRelationPeer::PRJ_UID => 1, ElementTaskRelationPeer::ELEMENT_UID => 2, ElementTaskRelationPeer::ELEMENT_TYPE => 3, ElementTaskRelationPeer::TAS_UID => 4, ),
-        BasePeer::TYPE_FIELDNAME => array ('ETR_UID' => 0, 'PRJ_UID' => 1, 'ELEMENT_UID' => 2, 'ELEMENT_TYPE' => 3, 'TAS_UID' => 4, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, )
+        BasePeer::TYPE_PHPNAME => array ('EtrUid' => 0, 'PrjUid' => 1, 'ElementUid' => 2, 'ElementType' => 3, 'TasUid' => 4, 'ElementUidDest' => 5, ),
+        BasePeer::TYPE_COLNAME => array (ElementTaskRelationPeer::ETR_UID => 0, ElementTaskRelationPeer::PRJ_UID => 1, ElementTaskRelationPeer::ELEMENT_UID => 2, ElementTaskRelationPeer::ELEMENT_TYPE => 3, ElementTaskRelationPeer::TAS_UID => 4, ElementTaskRelationPeer::ELEMENT_UID_DEST => 5, ),
+        BasePeer::TYPE_FIELDNAME => array ('ETR_UID' => 0, 'PRJ_UID' => 1, 'ELEMENT_UID' => 2, 'ELEMENT_TYPE' => 3, 'TAS_UID' => 4, 'ELEMENT_UID_DEST' => 5, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, )
     );
 
     /**
@@ -183,6 +186,8 @@ abstract class BaseElementTaskRelationPeer
         $criteria->addSelectColumn(ElementTaskRelationPeer::ELEMENT_TYPE);
 
         $criteria->addSelectColumn(ElementTaskRelationPeer::TAS_UID);
+
+        $criteria->addSelectColumn(ElementTaskRelationPeer::ELEMENT_UID_DEST);
 
     }
 

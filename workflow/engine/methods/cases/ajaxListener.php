@@ -149,6 +149,7 @@ class Ajax
         $options[] = Array('text' => G::LoadTranslation('ID_CASE_HISTORY'), 'fn' => 'caseHistory');
         $options[] = Array('text' => G::LoadTranslation('ID_HISTORY_MESSAGE_CASE'), 'fn' => 'messageHistory');
         $options[] = Array('text' => G::LoadTranslation('ID_DYNAFORMS'), 'fn' => 'dynaformHistory');
+        $options[] = Array('text' => G::LoadTranslation('ID_DYNAFORM_HISTORY'), 'fn' => 'changeLogHistory');
         $options[] = Array('text' => G::LoadTranslation('ID_UPLOADED_DOCUMENTS'), 'fn' => 'uploadedDocuments');
         $options[] = Array('text' => G::LoadTranslation('ID_GENERATED_DOCUMENTS'), 'fn' => 'generatedDocuments');
 
@@ -200,7 +201,7 @@ class Ajax
                 } else {
                     $options[] = Array('text' => G::LoadTranslation('ID_UNPAUSE'), 'fn' => 'unpauseCase');
                 }
-                if ($RBAC->userCanAccess('PM_REASSIGNCASE') == 1) {
+                if ($RBAC->userCanAccess('PM_REASSIGNCASE') == 1 || $RBAC->userCanAccess('PM_SUPERVISOR') == 1) {
                     $options[] = Array('text' => G::LoadTranslation('ID_REASSIGN'), 'fn' => 'getUsersToReassign');
                 }
                 break;
@@ -363,6 +364,8 @@ class Ajax
         }
         $taskData = $task->getDelegatedTaskData($_SESSION['TASK'], $_SESSION['APPLICATION'], $_SESSION['INDEX']);
 
+        $taskData = \ProcessMaker\Util\DateTime::convertUtcToTimeZone($taskData);
+
         print (G::json_encode($taskData));
     }
 
@@ -402,6 +405,25 @@ class Ajax
         $oHeadPublisher->addExtJsScript('cases/caseHistoryDynaformPage', true); //adding a javascript file .js
         $oHeadPublisher->addContent('cases/caseHistoryDynaformPage'); //adding a html file  .html.
         $oHeadPublisher->assign('pageSize', $conf->getEnvSetting('casesListRowNumber'));
+        G::RenderPage('publish', 'extJs');
+    }
+
+    public function changeLogHistory()
+    {
+        global $G_PUBLISH;
+        G::loadClass('configuration');
+        $idHistory = sprintf(
+            '%s_%s_%s',
+            $_SESSION['PROCESS'],
+            $_SESSION['APPLICATION'],
+            $_SESSION['TASK']
+        );
+
+        $oHeadPublisher = & headPublisher::getSingleton();
+        $conf = new Configurations();
+        $oHeadPublisher->addExtJsScript('cases/caseChangeLog', true); //adding a javascript file .js
+        $oHeadPublisher->addContent('cases/caseChangeLog'); //adding a html file  .html.
+        $oHeadPublisher->assign('ID_HISTORY', $idHistory);
         G::RenderPage('publish', 'extJs');
     }
 
@@ -518,14 +540,37 @@ class Ajax
             print G::json_encode( $response );
             die();
         }
-        G::LoadClass( 'tasks' );
-        $task = new Task();
-        $tasks = $task->load($_SESSION['TASK']);
-        $case = new Cases();
-        $result = new stdclass();
-        $result->data = $case->getUsersToReassign($_SESSION['TASK'], $_SESSION['USER_LOGGED'], $tasks['PRO_UID']);
 
-        print G::json_encode($result);
+        if(isset($_SESSION['TASK']) && $_SESSION['TASK'] != '-1'){
+            $taskUid  = $_SESSION['TASK'];
+        } else {
+            $taskUid  = $_SESSION['CURRENT_TASK'];
+        }
+        $search   = $_POST['search'];
+        $pageSize = $_POST['pageSize'];
+
+        $sortField = (isset($_POST['sort']))?  $_POST['sort'] : '';
+        $sortDir   = (isset($_POST['dir']))?   $_POST['dir'] : '';
+        $start     = (isset($_POST['start']))? $_POST['start'] : 0;
+        $limit     = (isset($_POST['limit']))? $_POST['limit'] : $pageSize;
+
+        $response = [];
+
+        try {
+            $case = new \ProcessMaker\BusinessModel\Cases();
+
+            $result = $case->getUsersToReassign($_SESSION['USER_LOGGED'], $taskUid, ['filter' => $search], $sortField, $sortDir, $start, $limit);
+
+            $response['status'] = 'OK';
+            $response['success'] = true;
+            $response['resultTotal'] = $result['total'];
+            $response['resultRoot'] = $result['data'];
+        } catch (Exception $e) {
+            $response['status'] = 'ERROR';
+            $response['message'] = $e->getMessage();
+        }
+
+        echo G::json_encode($response);
     }
 
     public function reassignCase()
@@ -660,6 +705,19 @@ class Ajax
         }
 
         print G::json_encode($result);
+    }
+
+    public function changeLogAjax()
+    {
+        $changeLog = new ProcessMaker\BusinessModel\Cases\ChangeLog();
+        $idHistory = $_REQUEST["idHistory"];
+        $idHistoryArray = explode("_", $idHistory);
+        $proUid = $idHistoryArray[0];
+        $appUid = $idHistoryArray[1];
+        $tasUid = $idHistoryArray[2];
+        $start = isset($_REQUEST['start']) ? (int) $_REQUEST['start']: 0;
+        $limit = isset($_REQUEST['limit']) ? (int) $_REQUEST['limit']: 15;
+        echo G::json_encode($changeLog->getChangeLog($appUid, $proUid, $tasUid, $start, $limit));
     }
 
     public function changeLogTab()

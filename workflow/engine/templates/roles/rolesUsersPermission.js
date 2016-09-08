@@ -26,8 +26,6 @@ var storeA;
 var cmodelP;
 var smodelA;
 var smodelP;
-var storeU;
-var storeX;
 var cmodelU;
 var smodelU;
 var smodelX;
@@ -53,6 +51,9 @@ var removeUButton;
 var removeUAllButton;
 var backButton;
 var editForm;
+
+var pagingUser;
+var pagingAvailableUser;
 
 var sw_func_permissions;
 var sw_func_users;
@@ -83,12 +84,12 @@ GridByDefaultP = function(){
 
 //Function DoSearch Available
 DoSearchU = function(){
-	availableUGrid.store.load({params: {textFilter: searchTextU.getValue()}});
+    pagingAvailableUser.moveFirst();
 };
 
 //Function DoSearch Assigned
 DoSearchX = function(){
-	assignedUGrid.store.load({params: {textFilter: searchTextX.getValue()}});
+    pagingUser.moveFirst();
 };
 
 //Load Grid By Default Available Members
@@ -149,6 +150,11 @@ CancelEditPermissionsActionU = function(){
 
 
 Ext.onReady(function(){
+    var loadMaskUserPermission = new Ext.LoadMask(Ext.getBody(), {msg: _("ID_LOADING_GRID")});
+
+    //Variables
+    var pageSizeU = parseInt(CONFIG.pageSize);
+    var pageSizeA = parseInt(CONFIG.pageSize);
 
 	sw_func_permissions = false;
 	sw_func_users = false;
@@ -404,34 +410,154 @@ Ext.onReady(function(){
 
     });
 
-    storeU = new Ext.data.GroupingStore({
-    	proxy : new Ext.data.HttpProxy({
-            url: 'data_rolesUsers?rUID=' + ROLES.ROL_UID + '&type=list'
-          }),
-    	reader : new Ext.data.JsonReader( {
-    		root: 'users',
-    		fields : [
-    		    {name : 'USR_UID'},
-    		    {name : 'USR_USERNAME'},
-    		    {name : 'USR_FIRSTNAME'},
-    		    {name : 'USR_LASTNAME'}
-    		    ]
-    	})
+    //Stores
+    var storePageSize = new Ext.data.SimpleStore({
+        fields: ["size"],
+        data: [["20"], ["30"], ["40"], ["50"], ["100"]],
+        autoLoad: true
     });
 
-    storeX = new Ext.data.GroupingStore({
-    	proxy : new Ext.data.HttpProxy({
-            url: 'data_rolesUsers?rUID=' + ROLES.ROL_UID + '&type=show'
-          }),
-    	reader : new Ext.data.JsonReader( {
-    		root: 'users',
-    		fields : [
-    		    {name : 'USR_UID'},
-    		    {name : 'USR_USERNAME'},
-    		    {name : 'USR_FIRSTNAME'},
-    		    {name : 'USR_LASTNAME'}
-    		    ]
-    	})
+    var storeUser = new Ext.data.Store({
+        proxy: new Ext.data.HttpProxy({
+            url: "data_rolesUsers",
+            method: "POST"
+        }),
+
+        reader: new Ext.data.JsonReader({
+            root: "resultRoot",
+            totalProperty: "resultTotal",
+            fields: [
+                {name: 'USR_UID'},
+                {name: 'USR_USERNAME'},
+                {name: 'USR_FIRSTNAME'},
+                {name: 'USR_LASTNAME'}
+            ]
+        }),
+
+        remoteSort: true,
+
+        listeners: {
+            beforeload: function (store)
+            {
+                loadMaskUserPermission.show();
+
+                this.baseParams = {
+                    "option": "USERS",
+                    "roleUid": ROLES.ROL_UID,
+                    "pageSize": pageSizeU,
+                    "filter": searchTextX.getValue()
+                };
+            },
+            load: function (store, record, opt)
+            {
+                loadMaskUserPermission.hide();
+            }
+        }
+    });
+
+    var storeAvailableUser = new Ext.data.Store({
+        proxy: new Ext.data.HttpProxy({
+            url: "data_rolesUsers",
+            method: "POST"
+        }),
+
+        reader: new Ext.data.JsonReader({
+            root: "resultRoot",
+            totalProperty: "resultTotal",
+            fields: [
+                {name: 'USR_UID'},
+                {name: 'USR_USERNAME'},
+                {name: 'USR_FIRSTNAME'},
+                {name: 'USR_LASTNAME'}
+            ]
+        }),
+
+        remoteSort: true,
+
+        listeners: {
+            beforeload: function (store)
+            {
+                loadMaskUserPermission.show();
+
+                this.baseParams = {
+                    "option": "AVAILABLE-USERS",
+                    "roleUid": ROLES.ROL_UID,
+                    "pageSize": pageSizeA,
+                    "filter": searchTextU.getValue()
+                };
+            },
+            load: function (store, record, opt)
+            {
+                loadMaskUserPermission.hide();
+            }
+        }
+    });
+
+    //Components
+    var cboPageSizeUser = new Ext.form.ComboBox({
+        id: "cboPageSizeUser",
+
+        mode: "local",
+        triggerAction: "all",
+        store: storePageSize,
+        valueField: "size",
+        displayField: "size",
+        width: 50,
+        editable: false,
+
+        listeners: {
+            select: function (combo, record, index)
+            {
+                pageSizeU = parseInt(record.data["size"]);
+
+                pagingUser.pageSize = pageSizeU;
+                pagingUser.moveFirst();
+            }
+        }
+    });
+
+    pagingUser = new Ext.PagingToolbar({
+        id: "pagingUser",
+
+        pageSize: pageSizeU,
+        store: storeUser,
+        displayInfo: true,
+        displayMsg: _("ID_GRID_PAGE_DISPLAYING_ITEMS"),
+        emptyMsg: _("ID_NO_RECORDS_FOUND"),
+        items: ["-", _("ID_PAGE_SIZE") + "&nbsp;", cboPageSizeUser]
+    });
+
+    var cboPageSizeAvailableUser = new Ext.form.ComboBox({
+        id: "cboPageSizeAvailableUser",
+
+        mode: "local",
+        triggerAction: "all",
+        store: storePageSize,
+        valueField: "size",
+        displayField: "size",
+        width: 50,
+        editable: false,
+
+        listeners: {
+            select: function (combo, record, index)
+            {
+                pageSizeA = parseInt(record.data["size"]);
+
+                pagingAvailableUser.pageSize = pageSizeA;
+                pagingAvailableUser.moveFirst();
+            }
+        }
+    });
+
+    pagingAvailableUser = new Ext.PagingToolbar({
+        id: "pagingAvailableUser",
+
+        pageSize: pageSizeA,
+        store: storeAvailableUser,
+        displayInfo: true,
+        displayMsg: _("ID_GRID_PAGE_DISPLAYING_ITEMS"),
+        emptyMsg: _("ID_NO_RECORDS_FOUND"),
+        items: ["-", _("ID_PAGE_SIZE") + "&nbsp;", cboPageSizeAvailableUser]
     });
 
     cmodelU = new Ext.grid.ColumnModel({
@@ -510,7 +636,7 @@ Ext.onReady(function(){
 	    title			: _('ID_AVAILABLE_USERS'),
 	    region          : 'center',
     	ddGroup         : 'assignedUGridDDGroup',
-        store           : storeX,
+        store: storeAvailableUser,
         cm          	: cmodelU,
         sm				: smodelX,
         enableDragDrop  : true,
@@ -528,7 +654,7 @@ Ext.onReady(function(){
     	columnLines		: false,
     	viewConfig		: {forceFit:true},
         tbar: [cancelEditPermissionsUButton,{xtype: 'tbfill'},'-',searchTextU, clearTextButtonU],
-        //bbar: [{xtype: 'tbfill'}, assignUAllButton],
+        bbar: pagingAvailableUser,
         listeners: {rowdblclick: AssignUserAction},
         hidden : true
     });
@@ -537,7 +663,7 @@ Ext.onReady(function(){
         layout          : 'fit',
         title           : _('ID_ASSIGNED_USERS'),
         ddGroup         : 'availableUGridDDGroup',
-        store           : storeU,
+        store: storeUser,
         cm              : cmodelU,
         sm              : smodelU,
         enableDragDrop  : false,
@@ -554,7 +680,8 @@ Ext.onReady(function(){
         frame           : false,
         columnLines     : false,
         viewConfig      : {forceFit:true},
-        tbar            : [editPermissionsUButton,{xtype: 'tbfill'},'-',searchTextX, clearTextButtonX]
+        tbar: [editPermissionsUButton, {xtype: "tbfill"}, "-", searchTextX, clearTextButtonX],
+        bbar: pagingUser
     });
 
     buttonsUPanel = new Ext.Panel({
@@ -612,6 +739,9 @@ Ext.onReady(function(){
     		}
     	}
     });
+
+    cboPageSizeUser.setValue(pageSizeU);
+    cboPageSizeAvailableUser.setValue(pageSizeA);
 
     //LOAD ALL PANELS
     viewport = new Ext.Viewport({

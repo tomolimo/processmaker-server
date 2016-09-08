@@ -61,6 +61,9 @@ class Home extends Controller
         $this->setVar( 'msg', $data['m'] );
         $this->setVar( 'usr', $data['u'] );
         $this->setVar( 'pwd', $data['p'] );
+        $this->setVar('timeZoneFailed',  (isset($data['timeZoneFailed']))?  $data['timeZoneFailed'] : 0);
+        $this->setVar('userTimeZone',    (isset($data['userTimeZone']))?    $data['userTimeZone'] : '');
+        $this->setVar('browserTimeZone', (isset($data['browserTimeZone']))? $data['browserTimeZone'] : '');
         $this->setVar( 'skin', $skin );
 
         $this->setView( $this->userUxBaseTemplate . PATH_SEP . $template );
@@ -97,11 +100,13 @@ class Home extends Controller
         $proData = $process->getAllProcesses( $start, $limit, null, null, false, true );
         $processList = $case->getStartCasesPerType( $_SESSION['USER_LOGGED'], 'category' );
 
-        unset( $processList[0] );
         $processesList = array ();
 
         foreach ($processList as $key => $valueProcess) {
             foreach ($proData as $keyPro => $valuePro) {
+                if (!isset($valueProcess['pro_uid'])) {
+                    $valueProcess['pro_uid'] = '';
+                }
                 if ($valueProcess['pro_uid'] == $valuePro['PRO_UID']) {
                     $processesList[] = $valueProcess;
                 }
@@ -407,28 +412,63 @@ class Home extends Controller
                 $category
             );
         } else {
-            G::LoadClass( 'applications' );
+            $dataList['userId']   = $user;
+            $dataList['start']    = $start;
+            $dataList['limit']    = $limit;
+            $dataList['filter']   = $filter;
+            $dataList['search']   = $search;
+            $dataList['process']  = $process;
+            $dataList['status']   = $status;
+            $dataList['dateFrom'] = $dateFrom;
+            $dataList['dateTo']   = $dateTo;
+            $dataList['callback'] = $callback;
+            $dataList['dir']      = $dir;
+            $dataList['sort']     = $sort;
+            $dataList['category'] = $category;
+            $dataList['action']   = $type;
+            /*----------------------------------********---------------------------------*/
+            if (true) {
+                //In enterprise version this block of code should always be executed
+                //In community version this block of code is deleted and is executed the other
+                $list = new \ProcessMaker\BusinessModel\Lists();
+                $listName = 'inbox';
+                switch ($type) {
+                    case 'draft':
+                    case 'todo':
+                        $listName = 'inbox';
+                        $cases = $list->getList($listName, $dataList);
+                        break;
+                    case 'unassigned':
+                        $case = new \ProcessMaker\BusinessModel\Cases();
+                        $cases = $case->getList($dataList);
+                        foreach ($cases['data'] as &$value) {
+                            $value = array_change_key_case($value, CASE_UPPER);
+                        }
+                        break;
+                }
+            } else {
+            /*----------------------------------********---------------------------------*/
+                $case = new \ProcessMaker\BusinessModel\Cases();
+                $cases = $case->getList($dataList);
+                foreach ($cases['data'] as &$value) {
+                    $value = array_change_key_case($value, CASE_UPPER);
+                }
+            /*----------------------------------********---------------------------------*/
+            }
+            /*----------------------------------********---------------------------------*/
 
-            $apps = new Applications();
+        }
 
-            $cases = $apps->getAll(
-                $user,
-                $start,
-                $limit,
-                $type,
-                $filter,
-                $search,
-                $process,
-                $status,
-                '',
-                $dateFrom,
-                $dateTo,
-                $callback,
-                $dir,
-                $sort,
-                $category,
-                false
-            );
+        if(empty($cases) && $type == 'search') {
+            $case = new \ProcessMaker\BusinessModel\Cases();
+            $cases = $case->getList($dataList);
+            foreach ($cases['data'] as &$value) {
+                $value = array_change_key_case($value, CASE_UPPER);
+            }
+        }
+
+        if(!isset($cases['totalCount'])){
+            $cases['totalCount'] = $cases['total'];
         }
 
         // formating & complitting apps data with 'Notes'

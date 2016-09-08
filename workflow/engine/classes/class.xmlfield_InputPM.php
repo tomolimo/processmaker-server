@@ -431,7 +431,7 @@ function getDynaformsVars ($sProcessUID, $typeVars = 'all', $bIncMulSelFields = 
                 if(is_array($dynaform) && sizeof($dynaform)) {
                     $items = $dynaform['items'][0]['items'];
                     foreach($items as $key => $val){
-                        if($val[0]['type'] == 'grid'){
+                        if(isset($val[0]['type']) && $val[0]['type'] == 'grid'){
                             if(sizeof($val[0]['columns'])) {
                                 $columns = $val[0]['columns'];
                                 foreach($columns as $column) {

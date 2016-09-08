@@ -1,7 +1,7 @@
 <?php
 /**
  * defines.php
- *  
+ *
  */
 
 //***************** URL KEY *********************************************
@@ -30,13 +30,4 @@
   define ( 'G_PRO_ENV',  'PRODUCTION' );
   define ( 'G_DEV_ENV',  'DEVELOPMENT' );
   define ( 'G_TEST_ENV', 'TEST' );
-
-///************TimeZone Set***************//
-
-  if (version_compare(phpversion(), "5.1.0", ">=")) {
-    date_default_timezone_set("America/La_Paz");
-  }
-  else {
-    // you're not
-  }
 

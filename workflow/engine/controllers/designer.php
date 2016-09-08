@@ -132,9 +132,9 @@ class Designer extends Controller
 
 
 
-        $this->setVar('prj_uid', $proUid);
+        $this->setVar('prj_uid', htmlspecialchars($proUid));
 
-        $this->setVar('app_uid', $appUid);
+        $this->setVar('app_uid', htmlspecialchars($appUid));
 
         $this->setVar('consolidated', $consolidated);
 
@@ -147,6 +147,14 @@ class Designer extends Controller
         $this->setVar('isDebugMode', $debug);
 
         $this->setVar("distribution", $distribution);
+
+        $this->setVar("SYS_SYS", SYS_SYS);
+
+        $this->setVar("SYS_LANG", SYS_LANG);
+
+        $this->setVar("SYS_SKIN", SYS_SKIN);
+
+        $this->setVar('HTTP_SERVER_HOSTNAME', System::getHttpServerHostnameRequestsFrontEnd());
 
 
 
@@ -232,13 +240,55 @@ class Designer extends Controller
 
         }
 
-        
+
 
         $this->setVar('sys_skin', SYS_SKIN);
 
 
 
-        $this->setView('designer/index');
+        //Verify user
+
+        $criteria = new Criteria('workflow');
+
+
+
+        $criteria->addSelectColumn(OauthAccessTokensPeer::ACCESS_TOKEN);
+
+        $criteria->addSelectColumn(OauthAccessTokensPeer::USER_ID);
+
+        $criteria->add(OauthAccessTokensPeer::ACCESS_TOKEN, $clientToken['access_token'], Criteria::EQUAL);
+
+        $rsCriteria = OauthAccessTokensPeer::doSelectRS($criteria);
+
+        $rsCriteria->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+
+
+
+        if ($rsCriteria->next()) {
+
+            $row = $rsCriteria->getRow();
+
+
+
+            $user = new \ProcessMaker\BusinessModel\User();
+
+
+
+            if ($user->checkPermission($row['USER_ID'], 'PM_FACTORY') || $proReadOnly == 'true') {
+
+                $this->setView('designer/index');
+
+            } else {
+
+                G::header('Location: /errors/error403.php');
+
+                die();
+
+            }
+
+        }
+
+
 
         $this->render();
 

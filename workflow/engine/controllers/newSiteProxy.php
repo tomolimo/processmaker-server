@@ -18,9 +18,17 @@ class newSiteProxy extends HttpProxyController
             //G::LoadClass( 'json' );
             $name = trim( $_POST['NW_TITLE'] );
             $inst = new Installer();
-            if ($inst->isset_site($name) && $ao_db_drop !==true) {
-                $this->error = true;
-                return;
+            if ($inst->isset_site($name)) {
+                if($ao_db_drop === true){
+                   if(!file_exists(PATH_DATA . "sites/" . $name)){
+                        $this->error = true;
+                        $this->message = 'We can not overwrite this workspace because the workspace '.$name.' does not exist please check the lower case and upper case.';
+                        return;
+                   }
+                } else {
+                    $this->error = true;
+                    return;
+                }
             }
             $user = (isset( $_POST['NW_USERNAME'] )) ? trim( $_POST['NW_USERNAME'] ) : 'admin';
             $pass = (isset( $_POST['NW_PASSWORD'] )) ? $_POST['NW_PASSWORD'] : 'admin';

@@ -3,6 +3,7 @@ namespace ProcessMaker\Services\Api;
 
 use \ProcessMaker\Services\Api;
 use \Luracast\Restler\RestException;
+use \ProcessMaker\Util\DateTime;
 
 
 /**
@@ -36,7 +37,7 @@ class Dashboard extends Api
             throw (new RestException(Api::STAT_APP_EXCEPTION, $e->getMessage()));
         }
     }
-    
+
     /**
      * Get dashboards data by user_uid
      *
@@ -58,7 +59,7 @@ class Dashboard extends Api
             throw (new RestException(Api::STAT_APP_EXCEPTION, $e->getMessage()));
         }
     }
-    
+
     /**
      * Get users by dashboards uid
      *
@@ -141,10 +142,20 @@ class Dashboard extends Api
     public function doGetIndicatorsbyDasUid($das_uid, $dateIni="", $dateFin="")
     {
         try {
-        	$dateIni = ($dateIni=="") ? date("Y/m/d") : $dateIni;
-        	$dateFin = ($dateFin=="") ? date("Y/m/d") : $dateFin;
+            if ($dateIni == "") {
+                $dateTimezone = new \DateTime("now", new \DateTimeZone('UTC'));
+                $dateIni = $dateTimezone->format('Y-m-d H:i:s');
+            } else {
+                $dateIni = $this->normalizedTimeZone($dateIni);
+            }
+            if ($dateFin == "") {
+                $dateTimezone = new \DateTime("now", new \DateTimeZone('UTC'));
+                $dateFin = $dateTimezone->format('Y-m-d H:i:s');
+            } else {
+                $dateFin = $this->normalizedTimeZone($dateFin);
+            }
 
-        	$usrUid = $this->getUserId();
+            $usrUid = $this->getUserId();
             $Dashboard = new \ProcessMaker\BusinessModel\Dashboard();
             $response = $Dashboard->getIndicatorsByDasUid($das_uid, $dateIni, $dateFin, $usrUid);
             return $response;
@@ -206,7 +217,7 @@ class Dashboard extends Api
      *
      */
     public function doGetOwnersByDasUid(
-        $das_uid, 
+        $das_uid,
         $start = 0,
         $limit = 0,
         $search = '')
@@ -254,7 +265,7 @@ class Dashboard extends Api
      * @author Marco Antonio Nina <marco.antonio.nina@colosa.com>
      * @copyright Colosa - Bolivia
      *
-     * @url PUT 
+     * @url PUT
      *
      */
     public function doPutDashboard($request_data)
@@ -410,7 +421,7 @@ class Dashboard extends Api
     {
     	try {
     		$usrUid = $this->getUserId();
-    
+
     		$ConfigDashboards = new \ProcessMaker\BusinessModel\Dashboard();
     		$response = $ConfigDashboards->postConfigByUsr($request_data, $usrUid);
     		return $response;
@@ -418,7 +429,7 @@ class Dashboard extends Api
     		throw (new RestException(Api::STAT_APP_EXCEPTION, $e->getMessage()));
     	}
     }
-    
+
     /**
      * Get dashboards configuration by usr_uid
      *
@@ -432,7 +443,7 @@ class Dashboard extends Api
     {
     	try {
     		$usrUid = $this->getUserId();
-    
+
     		$Dashboard = new \ProcessMaker\BusinessModel\Dashboard();
     		$response = $Dashboard->getConfig($usrUid);
     		return $response;
@@ -440,7 +451,7 @@ class Dashboard extends Api
     		throw (new RestException(Api::STAT_APP_EXCEPTION, $e->getMessage()));
     	}
     }
-    
+
     /**
      * Put dashboards configuration by usr_uid
      *
@@ -456,7 +467,7 @@ class Dashboard extends Api
     {
     	try {
     		$usrUid = $this->getUserId();
-    
+
     		$ConfigDashboards = new \ProcessMaker\BusinessModel\Dashboard();
     		$response = $ConfigDashboards->putConfigByUsr($request_data, $usrUid);
     		return $response;
@@ -464,6 +475,20 @@ class Dashboard extends Api
     		throw (new RestException(Api::STAT_APP_EXCEPTION, $e->getMessage()));
     	}
     }
-    
+
+    public function normalizedTimeZone($date)
+    {
+        $result = $date;
+        $dateTimezone = new \DateTime($date, new \DateTimeZone('UTC'));
+        $dateTimezone = DateTime::convertDataToUtc($dateTimezone);
+
+        if (!(isset($_SESSION['__SYSTEM_UTC_TIME_ZONE__']) && $_SESSION['__SYSTEM_UTC_TIME_ZONE__'])) {
+            $result = $dateTimezone->format('Y-m-d H:i:s');
+        }
+        else {
+            $result = (new \DateTime($dateTimezone->date))->format('Y-m-d H:i:s');
+        }
+        return $result;
+    }
 }
 

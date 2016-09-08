@@ -27,15 +27,66 @@ if (!isset($_SESSION['USER_LOGGED'])) {
     die( '<script type="text/javascript">
                     try
                       {
-                        prnt = parent.parent;
-                        top.location = top.location;
+    					var olink = document.location.href;
+    					if(olink.search("gmail") != -1){
+    						var data = olink.split("?");
+                            var odata = data[1].split("&");
+                            var appUid = odata[1].split("=");
+    						var proUid = odata[0].split("=");
+
+    						var dataToSend = {
+                    			"action": "credentials",
+                    			"operation": "refreshPmSession",
+                    			"type": "processCall",
+    							"funParams": [
+                                               appUid[1],
+                                               proUid[1]
+                                ],
+                    			"expectReturn": false
+                			};
+    						var x = parent.postMessage(JSON.stringify(dataToSend), "*");
+    						if (x == undefined){
+    							x = parent.parent.postMessage(JSON.stringify(dataToSend), "*");
+    						}
+						}else{
+    						prnt = parent.parent;
+	                        top.location = top.location;
+    					}
                       }
-                    catch (err)
+                      catch (err)
                       {
                         parent.location = parent.location;
                       }
                     </script>');
 }
+
+/**
+ * If you can, you may want to set post_max_size to a low value (say 1M) to make 
+ * testing easier. First test to see how your script behaves. Try uploading a file 
+ * that is larger than post_max_size. If you do you will get a message like this 
+ * in your error log:
+ * 
+ * [09-Jun-2010 19:28:01] PHP Warning:  POST Content-Length of 30980857 bytes exceeds 
+ * the limit of 2097152 bytes in Unknown on line 0
+ * 
+ * This makes the script is not completed.
+ * 
+ * Solving the problem:
+ * The PHP documentation http://php.net/manual/en/ini.core.php#ini.post-max-size
+ * provides a hack to solve this problem:
+ * 
+ * If the size of post data is greater than post_max_size, the $_POST and $_FILES 
+ * superglobals are empty.
+ */
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && empty($_POST) && empty($_FILES) && $_SERVER['CONTENT_LENGTH'] > 0) {
+    $aMessage = array();
+    $aMessage['MESSAGE'] = G::loadTranslation('ID_UPLOAD_ERR_INI_SIZE');
+    $G_PUBLISH = new Publisher();
+    $G_PUBLISH->AddContent('xmlform', 'xmlform', 'login/showMessage', '', $aMessage);
+    G::RenderPage('publish', 'blank');
+    die();
+}
+
 try {
     if ($_GET['APP_UID'] !== $_SESSION['APPLICATION']) {
         throw new Exception( G::LoadTranslation( 'ID_INVALID_APPLICATION_ID_MSG', array ('<a href=\'' . $_SERVER['HTTP_REFERER'] . '\'>{1}</a>',G::LoadTranslation( 'ID_REOPEN' ) ) ) );
@@ -66,6 +117,13 @@ try {
     $Fields = $oCase->loadCase( $_SESSION["APPLICATION"] );
 
     if ($swpmdynaform) {
+        $dataFields = $Fields["APP_DATA"];
+        $dataFields["CURRENT_DYNAFORM"] = $_GET['UID'];
+
+        G::LoadClass('pmDynaform');
+        $oPmDynaform = new pmDynaform($dataFields);
+        $pmdynaform = $oPmDynaform->validatePost($pmdynaform);
+
         $Fields["APP_DATA"] = array_merge( $Fields["APP_DATA"], $pmdynaform );
     }
 
@@ -335,7 +393,13 @@ try {
                     $pathUID = G::getPathFromUID($_SESSION["APPLICATION"]);
                     $sPathName = PATH_DOCUMENT . $pathUID . PATH_SEP;
                     $sFileName = $sAppDocUid . "_" . $iDocVersion . "." . $sExtension;
+
                     G::uploadFile( $arrayFileTmpName[$i], $sPathName, $sFileName );
+
+                    //set variable for APP_DOC_UID
+                    $aData["APP_DATA"][$oAppDocument->getAppDocFieldname()] = G::json_encode([$oAppDocument->getAppDocUid()]);
+                    $aData["APP_DATA"][$oAppDocument->getAppDocFieldname() . "_label"] = G::json_encode([$oAppDocument->getAppDocFilename()]);
+                    $oCase->updateCase($_SESSION['APPLICATION'], $aData);
 
                     //Plugin Hook PM_UPLOAD_DOCUMENT for upload document
                     $oPluginRegistry = &PMPluginRegistry::getSingleton();

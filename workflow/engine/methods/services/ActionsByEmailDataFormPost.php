@@ -93,7 +93,6 @@ if (PMLicensedFeatures
         $dataResponses['ABE_RES_MESSAGE'] = '';
     
         try {
-            set_include_path(PATH_PLUGINS . 'actionsByEmail' . PATH_SEPARATOR . get_include_path());
             require_once 'classes/model/AbeResponses.php';
     
             $abeAbeResponsesInstance = new AbeResponses();

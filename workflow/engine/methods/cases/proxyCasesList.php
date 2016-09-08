@@ -24,6 +24,7 @@ $filter = isset( $_REQUEST["filter"] ) ? $_REQUEST["filter"] : "";
 $process = isset( $_REQUEST["process"] ) ? $_REQUEST["process"] : "";
 $category = isset( $_REQUEST["category"] ) ? $_REQUEST["category"] : "";
 $status = isset( $_REQUEST["status"] ) ? strtoupper( $_REQUEST["status"] ) : "";
+$filterStatus = isset( $_REQUEST["filterStatus"] ) ? strtoupper( $_REQUEST["filterStatus"] ) : "";
 $user = isset( $_REQUEST["user"] ) ? $_REQUEST["user"] : "";
 $search = isset( $_REQUEST["search"] ) ? $_REQUEST["search"] : "";
 $action = isset( $_GET["action"] ) ? $_GET["action"] : (isset( $_REQUEST["action"] ) ? $_REQUEST["action"] : "todo");
@@ -103,6 +104,8 @@ try {
             $category
         );
 
+        $data['data'] = \ProcessMaker\Util\DateTime::convertUtcToTimeZone($data['data']);
+
         $result = G::json_encode($data);
     } else {
         G::LoadClass("applications");
@@ -116,7 +119,7 @@ try {
             $filter,
             $search,
             $process,
-            $status,
+            $filterStatus,
             $type,
             $dateFrom,
             $dateTo,
@@ -125,6 +128,8 @@ try {
             (strpos($sort, ".") !== false)? $sort : "APP_CACHE_VIEW." . $sort,
             $category
         );
+
+        $data['data'] = \ProcessMaker\Util\DateTime::convertUtcToTimeZone($data['data']);
 
         $result = G::json_encode($data);
     }

@@ -227,10 +227,19 @@ class DynaForm
                 $messageCaseTracker = "($countSteps) Depends in case traker";
             }
 
+            $dynaformDepends = \Dynaform::verifyDynaformAssignDynaform($dynUid, $proUid);
+            $messageDynaform = '(0) Depends in case traker';
+            if (!empty($dynaformDepends)) {
+                $flagDepend = true;
+                $countSteps = count($dynaformDepends);
+                $messageDynaform = "($countSteps) Depends in dynaform";
+            }
+
             if ($flagDepend) {
                 $message = "You can not delete the dynaform '$dynUid', because it has the following dependencies: \n\n";
                 $message .= $messageSteps . ".\n" . $messageStepsSupervisors . ".\n";
-                $message .= $messageObjectPermission . ".\n" . $messageCaseTracker;
+                $message .= $messageObjectPermission . ".\n" . $messageCaseTracker . "\n";
+                $message .= $messageDynaform;
                 return $message;
             }
             return '';
@@ -260,6 +269,21 @@ class DynaForm
     }
 
     /**
+     * Throw the exception "The DynaForm doesn't exist"
+     *
+     * @param string $dynaFormUid           Unique id of DynaForm
+     * @param string $fieldNameForException Field name for the exception
+     *
+     * @return void
+     */
+    private function throwExceptionDynaFormDoesNotExist($dynaFormUid, $fieldNameForException)
+    {
+        throw new \Exception(\G::LoadTranslation(
+            'ID_DYNAFORM_DOES_NOT_EXIST', [$fieldNameForException, $dynaFormUid]
+        ));
+    }
+
+    /**
      * Verify if doesn't exists the DynaForm in table DYNAFORM
      *
      * @param string $dynaFormUid           Unique id of DynaForm
@@ -284,7 +308,7 @@ class DynaForm
             $rsCriteria = \DynaformPeer::doSelectRS($criteria);
 
             if (!$rsCriteria->next()) {
-                throw new \Exception(\G::LoadTranslation("ID_DYNAFORM_DOES_NOT_EXIST", array($fieldNameForException, $dynaFormUid)));
+                $this->throwExceptionDynaFormDoesNotExist($dynaFormUid, $fieldNameForException);
             }
         } catch (\Exception $e) {
             throw $e;
@@ -331,6 +355,38 @@ class DynaForm
             if ($arrayDynaFormData["DYN_TYPE"] != "grid") {
                 throw new \Exception(\G::LoadTranslation("ID_DYNAFORM_IS_NOT_GRID", array($fieldNameForException, $dynaFormUid)));
             }
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
+
+    /**
+     * Get DynaForm record
+     *
+     * @param string $dynaFormUid                   Unique id of DynaForm
+     * @param array  $arrayVariableNameForException Variable name for exception
+     * @param bool   $throwException Flag to throw the exception if the main parameters are invalid or do not exist
+     *                               (TRUE: throw the exception; FALSE: returns FALSE)
+     *
+     * @return array Returns an array with DynaForm record, ThrowTheException/FALSE otherwise
+     */
+    public function getDynaFormRecordByPk($dynaFormUid, array $arrayVariableNameForException, $throwException = true)
+    {
+        try {
+            $obj = \DynaformPeer::retrieveByPK($dynaFormUid);
+
+            if (is_null($obj)) {
+                if ($throwException) {
+                    $this->throwExceptionDynaFormDoesNotExist(
+                        $dynaFormUid, $arrayVariableNameForException['$dynaFormUid']
+                    );
+                } else {
+                    return false;
+                }
+            }
+
+            //Return
+            return $obj->toArray(\BasePeer::TYPE_FIELDNAME);
         } catch (\Exception $e) {
             throw $e;
         }
@@ -544,7 +600,7 @@ class DynaForm
             $this->throwExceptionIfNotExistsDynaForm($dynaFormUidCopyImport, $processUidCopyImport, $this->getFieldNameByFormatFieldName("COPY_IMPORT.DYN_UID"));
 
             //Copy/Import
-            
+
             //Copy content if version is 2
             if ($arrayData["DYN_VERSION"] === 2) {
                 $dynaFormOld = new \Dynaform();
@@ -553,7 +609,7 @@ class DynaForm
 
                 $arrayData["DYN_CONTENT"] = $arrayDynaFormData["DYN_CONTENT"];
             }
-            
+
             //Create
             $arrayData = $this->create($processUid, $arrayData);
 
@@ -967,7 +1023,7 @@ class DynaForm
             if ($record["DYN_VERSION"] == 0) {
                 $record["DYN_VERSION"] = 1;
             }
-            
+
             $record["DYN_CONTENT"] = preg_replace("/\\\\u([a-f0-9]{4})/e", "iconv('UCS-4LE','UTF-8',pack('V', hexdec('U$1')))", $record["DYN_CONTENT"]);
 
             return array(
@@ -1138,4 +1194,70 @@ class DynaForm
             throw $e;
         }
     }
+
+    /**
+     * Get data of a DynaForm History
+     *
+     * @param string $dynaFormUid Unique id of DynaForm
+     *
+     * return array Return an array with data of a DynaForm History
+     */
+    public function getDynaFormHistory($prj_uid, $dynaFormUid, array $arrayData = array())
+    {
+        try {
+            $filter = "";
+            if (isset($arrayData["filter"])) {
+                $filter = $arrayData["filter"];
+            }
+            $start = 0;
+            if (isset($arrayData["start"])) {
+                $start = $arrayData["start"];
+            }
+            $limit = 50;
+            if (isset($arrayData["limit"])) {
+                $limit = $arrayData["limit"];
+            }
+            $this->throwExceptionIfNotExistsDynaForm($dynaFormUid, "", $this->arrayFieldNameForException["dynaFormUid"]);
+
+            $criteria = new \Criteria("workflow");
+
+            $subcriteria = $criteria->getNewCriterion(\AppHistoryPeer::HISTORY_DATE, "%" . $filter . "%", \Criteria::LIKE);
+
+            $criteria->addSelectColumn(\AppHistoryPeer::DYN_UID);
+            $criteria->addSelectColumn(\AppHistoryPeer::HISTORY_DATA);
+            $criteria->addSelectColumn(\AppHistoryPeer::HISTORY_DATE);
+            $criteria->addAnd(\AppHistoryPeer::DYN_UID, $dynaFormUid, \Criteria::EQUAL);
+            $criteria->addAnd(\AppHistoryPeer::OBJ_TYPE, "DYNAFORM", \Criteria::EQUAL);
+            $criteria->addAnd(\AppHistoryPeer::HISTORY_DATA, "%DYN_CONTENT_HISTORY%", \Criteria::LIKE);
+            $criteria->addAnd($subcriteria);
+
+            $criteria->addDescendingOrderByColumn(\AppHistoryPeer::HISTORY_DATE);
+            $criteria->setOffset($start);
+            $criteria->setLimit($limit);
+
+            $rsCriteria = \AppHistoryPeer::doSelectRS($criteria);
+            $rsCriteria->setFetchmode(\ResultSet::FETCHMODE_ASSOC);
+            $data = array();
+            while ($rsCriteria->next()) {
+                $row = $rsCriteria->getRow();
+                $d = @unserialize($row["HISTORY_DATA"]);
+                $jsonData = "";
+                if (isset($d["DYN_CONTENT_HISTORY"])) {
+                    $decode = base64_decode($d["DYN_CONTENT_HISTORY"], true);
+                    if ($decode !== false) {
+                        $jsonData = $decode;
+                    }
+                }
+                $data[] = array(
+                    "history_date" => $row["HISTORY_DATE"],
+                    "dyn_uid" => $row["DYN_UID"],
+                    "dyn_content_history" => $jsonData
+                );
+            }
+            return $data;
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
+
 }

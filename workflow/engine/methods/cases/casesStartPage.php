@@ -17,6 +17,7 @@ switch ($page) {
         G::LoadClass( 'configuration' );
         $c = new Configurations();
         $oHeadPublisher->assign( 'FORMATS', $c->getFormats() );
+        $oHeadPublisher->assign('isIE', Bootstrap::isIE());
         break;
     case "documents":
 

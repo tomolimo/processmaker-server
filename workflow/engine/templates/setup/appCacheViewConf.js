@@ -3,7 +3,6 @@ Ext.onReady(function() {
   Ext.QuickTips.init();
   // turn on validation errors beside the field globally
   Ext.form.Field.prototype.msgTarget = 'side';
-  var bd = Ext.getBody();
 
   // Store
   var store = new Ext.data.Store( {
@@ -67,7 +66,7 @@ Ext.onReady(function() {
             success: function(response) {
               store.reload();
               Ext.MessageBox.hide();  
-              res = Ext.decode ( response.responseText );            
+              res = Ext.decode ( response.responseText );
               Ext.Msg.alert ( '', res.msg );
                 
             },
@@ -109,17 +108,73 @@ Ext.onReady(function() {
       disabled: false,
       hidden: false,
       value: ''
-    }
-    
-    fieldsetRoot = {
+    };
+
+    var txtCode = {
+      allowBlank: false,
+      disabled: false,
+      fieldLabel: _('ID_CAPTCHA_INPUT_CODE'),// Security Code
+      id   : 'txtCode',
+      name: 'code',
+      xtype : 'textfield'
+    };
+
+    var onCaptchaChange = function () {
+      Ext.get('cacheViewAjax').dom.src = 'appCacheViewAjax?request=captcha&t=' + Math.random();
+    };
+
+    var refreshBtn = new Ext.Button({
+      columnWidth: 0.1,
+      iconCls:'x-tbar-loading',
+      scale:'small',
+      handler : function() {
+        Ext.get('cacheViewAjax').dom.src = 'appCacheViewAjax?request=captcha&t=' + Math.random();
+      }
+    });
+
+    var boxCaptcha = new Ext.BoxComponent({
+      columnWidth: 0.9,
+      autoEl: {
+        tag:'img',
+        id: 'cacheViewAjax',
+        title : _('ID_CAPTCHA_REFRESH_CODE'), //Click to refresh code
+        src:'appCacheViewAjax?request=captcha&t=' + Math.random()
+      }
+    });
+
+    boxCaptcha.on('render',function (){
+      var curr = Ext.get('cacheViewAjax');
+      curr.on('click',onCaptchaChange,this);
+    },this);
+
+    var captcha = {
+      xtype:'fieldset',
+      hideLabels: true,
+      labelWidth: 0,
+      width: 350,
+      layout:'column',
+      border:false,
+      items:[
+        boxCaptcha,
+        refreshBtn
+      ]
+    };
+
+    var fieldsetRoot = {
       xtype : 'fieldset',
       title : _('ID_CACHE_SUBTITLE_SETUP_DB'), // 'Setup MySql Root Password',
       collapsible : true,
       collapsed: true,
       autoHeight  : true,
-      defaults    : { width : 170 },
+      defaults    : { width : 200 },
       defaultType : 'textfield',
-      items   : [txtHost, txtUser, txtPasswd ],
+      items   : [
+        txtHost,
+        txtUser,
+        txtPasswd,
+        captcha,
+        txtCode
+      ],
       buttons : [{
         text : _('ID_CACHE_BTN_SETUP_PASSWRD'), // 'Setup Password',
         handler : function() {
@@ -139,14 +194,14 @@ Ext.onReady(function() {
               Ext.Msg.hide();              
               Ext.Msg.alert ( _('ID_ERROR'), response.responseText );
             },
-            params: { request: 'recreate-root', lang: 'en', host: Ext.getCmp('txtHost').getValue(), user: Ext.getCmp('txtUser').getValue(), password: Ext.getCmp('txtPasswd').getValue() },
+            params: { request: 'recreate-root', lang: 'en', host: Ext.getCmp('txtHost').getValue(), user: Ext.getCmp('txtUser').getValue(), password: Ext.getCmp('txtPasswd').getValue(), codeCaptcha: Ext.getCmp('txtCode').getValue() },
             // timeout : 1000
             // 30 mins
             timeout : 1000*60*30 //30 mins
           });
         }
       }]      
-    }
+    };
 
     fsf.add(fieldsetRoot);
     fsf.render(document.getElementById('main-panel'));
@@ -155,7 +210,7 @@ Ext.onReady(function() {
     Ext.Ajax.request({
       url: 'appCacheViewAjax',
       success: function(response) {
-        myData = Ext.decode ( response.responseText );
+        var myData = Ext.decode ( response.responseText );
         store.loadData(myData);  
         if ( myData.error ) {
           Warning( _('ID_ERROR'), myData.errorMsg );
@@ -170,9 +225,10 @@ Ext.onReady(function() {
   });  //ExtReady
 
 var Warning = function( msgTitle, msgError ) {
-  tplEl = Ext.get ('errorMsg');
+  var tplEl = Ext.get ('errorMsg');
 
-  tplText = '<div style="font-size:12px; border: 1px solid #FF0000; background-color:#FFAAAA; display:block; padding:10px; color:#404000;"><b>' + msgTitle + ': </b>' + msgError + '</div>';
+  var tplText = '<div style="font-size:12px; border: 1px solid #FF0000; background-color:#FFAAAA; display:block;' +
+      ' padding:10px; color:#404000;"><b>' + msgTitle + ': </b>' + msgError + '</div>';
   tplEl.update ( tplText );
 
-}
+};

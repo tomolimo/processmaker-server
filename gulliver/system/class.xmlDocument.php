@@ -284,7 +284,7 @@ class Xml_document extends Xml_Node
     { //$content is a new variable, if it has any value then use it instead of the file content.
         if ($content == "") {
             if (! file_exists( $filename )) {
-                throw (new Exception( "failed to open Xmlform File : No such file or directory in $filename " ));
+                throw (new Exception( "failed to open Xmlform File : No such file or directory in ".htmlspecialchars($filename) ));
             }
             $data = implode( '', file( $filename ) );
         } else {

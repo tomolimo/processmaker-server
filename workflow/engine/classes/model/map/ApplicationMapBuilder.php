@@ -101,6 +101,8 @@ class ApplicationMapBuilder
 
         $tMap->addColumn('APP_DELAY_DURATION', 'AppDelayDuration', 'double', CreoleTypes::DOUBLE, false, null);
 
+        $tMap->addColumn('APP_DRIVE_FOLDER_UID', 'AppDriveFolderUid', 'string', CreoleTypes::VARCHAR, false, 32);
+
         $tMap->addValidator('APP_STATUS', 'validValues', 'propel.validator.ValidValuesValidator', 'DRAFT|TO_DO|PAUSED|COMPLETED|CANCELLED', 'Please select a valid status.');
 
     } // doBuild()

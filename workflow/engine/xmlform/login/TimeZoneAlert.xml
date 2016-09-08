@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dynaForm type="xmlform" name="login/TimeZoneAlert" enabletemplate="1">
+    <BROWSER_TIME_ZONE_OFFSET type="hidden" />
+
+    <USR_USERNAME type="hidden" />
+    <USR_PASSWORD type="hidden" />
+    <USER_LANG type="hidden" />
+
+    <USR_TIME_ZONE type="hidden" />
+
+    <BROWSER_TIME_ZONE type="dropdown" sqlconnection="dbarray">
+        <![CDATA[
+        SELECT TZ_UID, TZ_NAME
+        FROM   TIME_ZONE
+        ]]>
+        <en></en>
+    </BROWSER_TIME_ZONE>
+
+    <BTNOK type="submit">
+        <en></en>
+    </BTNOK>
+
+    <JS type="javascript">
+        <![CDATA[
+        window.onload= function ()
+        {
+            document.getElementById("form[BROWSER_TIME_ZONE_OFFSET]").value = getBrowserTimeZoneOffset();
+
+            var strHtml = document.getElementById("details").innerHTML;
+            strHtml = stringReplace("\\{0\\}", document.getElementById("form[USR_TIME_ZONE]").value, strHtml);
+            strHtml = stringReplace("\\{1\\}.", "", strHtml);
+            strHtml = stringReplace("\\{1\\}", "", strHtml);
+
+            document.getElementById("details").innerHTML = strHtml;
+
+            document.getElementById("form[BTNOK]").value = _("ID_OK");
+
+            if (document.getElementById("form[BTNOK]").classList == undefined) {
+                document.getElementById("form[BTNOK]").className = "button-login-success";
+            } else {
+                document.getElementById("form[BTNOK]").classList.remove("module_app_button___gray");
+                document.getElementById("form[BTNOK]").classList.add("button-login-success");
+            }
+        };
+        ]]>
+    </JS>
+</dynaForm>
+

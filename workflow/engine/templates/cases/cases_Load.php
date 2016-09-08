@@ -56,4 +56,6 @@ $_POST['qs'] = $filter->xssFilterHard($_POST['qs']);
 		}
     }
   </script>
+  <SCRIPT src="/jscore/src/PM.js" type=text/javascript></SCRIPT>
+  <SCRIPT src="/jscore/src/Sessions.js" type=text/javascript></SCRIPT>
 </html>

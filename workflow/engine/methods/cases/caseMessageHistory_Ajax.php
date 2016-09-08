@@ -122,11 +122,15 @@ if ($actionAjax == 'messageHistoryGridList_JXP') {
     $r->data = $aProcesses;
     $r->totalCount = $totalCount;
 
-    if (!isset($r->data[0])) {
-        $r->data[0] = array('APP_MSG_TYPE' => '');
-    }
+    if (!empty($aProcesses)) {
+        if (!isset($r->data[0])) {
+            $r->data[0] = array('APP_MSG_TYPE' => '');
+        }
 
-    $r->data[0]["APP_MSG_TYPE"] = (array_key_exists($r->data[0]["APP_MSG_TYPE"], $arrayToTranslation))? $arrayToTranslation[$r->data[0]["APP_MSG_TYPE"]] : $r->data[0]["APP_MSG_TYPE"];
+        $r->data[0]["APP_MSG_TYPE"] = (array_key_exists($r->data[0]["APP_MSG_TYPE"], $arrayToTranslation)) ? 
+                                      $arrayToTranslation[$r->data[0]["APP_MSG_TYPE"]] :
+                                      $r->data[0]["APP_MSG_TYPE"];
+    }
 
     echo G::json_encode( $r );
 }

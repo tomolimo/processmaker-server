@@ -789,7 +789,7 @@ form.formDefault .content,
 }
 @media screen\0 {
     form.formDefault .content, .pagedTableDefault {
-          width:450px;
+
     }
 }
 .pagedTableDefault {

@@ -21,10 +21,11 @@
  * For more information, contact Colosa Inc, 2566 Le Jeune Rd.,
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  */
-
-if ($RBAC->userCanAccess( 'PM_SETUP' ) != 1 && $RBAC->userCanAccess( 'PM_SETUP_ADVANCE' ) != 1) {
-    G::SendTemporalMessage( 'ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels' );
-    //G::header('location: ../login/login');
+global $RBAC;
+$resultRbac  = $RBAC->requirePermissions('PM_SETUP_CALENDAR');
+if (!$resultRbac) {
+    G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');
+    G::header('location: ../login/login');
     die();
 }
 

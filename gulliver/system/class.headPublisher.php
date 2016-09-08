@@ -650,6 +650,10 @@ class headPublisher
 
         $head = $head . "  <script type=\"text/javascript\" src=\"" . G::browserCacheFilesUrl("/js/ext/ext-all.js") . "\"></script>\n";
 
+        $head = $head . "  <script type=\"text/javascript\" src=\"" . G::browserCacheFilesUrl("/jscore/src/PM.js") . "\"></script>\n";
+
+        $head = $head . "  <script type=\"text/javascript\" src=\"" . G::browserCacheFilesUrl("/jscore/src/Sessions.js") . "\"></script>\n";
+
 
 
         if (SYS_LANG != 'en') {
@@ -1463,6 +1467,78 @@ class headPublisher
         $this->disableHeaderScripts = true;
 
     }
+
+
+
+    /**
+
+     * Gets an array that contains the status of the view.
+
+     * 
+
+     * @return array $views
+
+     */
+
+    public function getExtJsViewState()
+
+    {
+
+        $views = array();
+
+        $keyState = "extJsViewState";
+
+        $prefixExtJs = "ys-";
+
+        $oServerConf = &serverConf::getSingleton();
+
+        $deleteCache = true;
+
+
+
+        $sjson = $oServerConf->getProperty($keyState);
+
+        if ($sjson !== "") {
+
+            $json = G::json_decode($sjson);
+
+            if ((is_array($json) || is_object($json)) && sizeof($json)){
+
+                foreach ($json as $key => $value) {
+
+                    $views[$key] = $value;
+
+                }
+
+            }
+
+        }
+
+        $httpCookies = explode("; ", $_SERVER['HTTP_COOKIE']);
+
+        foreach ($httpCookies as $cookie) {
+
+            $value = explode("=", $cookie);
+
+            if (count($value) > 1 && substr($value[0], 0, 3) === $prefixExtJs) {
+
+                $deleteCache = false;
+
+                $key = substr($value[0], 3);
+
+                $views[$key] = $value[1];
+
+            }
+
+        }
+
+        $oServerConf->setProperty($keyState, G::json_encode($views));
+
+        return $views;
+
+    }
+
+
 
 }
 

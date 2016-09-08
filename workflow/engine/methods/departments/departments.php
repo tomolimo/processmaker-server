@@ -25,7 +25,7 @@
 G::LoadClass( 'configuration' );
 $c = new Configurations();
 
-$access = $RBAC->userCanAccess( 'PM_USERS' );
+$access = $RBAC->requirePermissions( 'PM_USERS' );
 if ($access != 1) {
     switch ($access) {
         case - 1:

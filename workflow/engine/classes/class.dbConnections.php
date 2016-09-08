@@ -137,7 +137,7 @@ class dbConnections
      * getConnectionsProUid
      *
      * Parameter $only list of items displayed, everything else is ignored.
-     * 
+     *
      * @param string $pProUid
      * @param string $only
      * @return Array $connections
@@ -153,6 +153,8 @@ class dbConnections
         $c->addSelectColumn( DbSourcePeer::DBS_TYPE );
         $c->addSelectColumn( DbSourcePeer::DBS_SERVER );
         $c->addSelectColumn( DbSourcePeer::DBS_DATABASE_NAME );
+        $c->addSelectColumn( DbSourcePeer::DBS_CONNECTION_TYPE );
+        $c->addSelectColumn( DbSourcePeer::DBS_TNS );
 
         $result = DbSourcePeer::doSelectRS( $c );
         $result->next();
@@ -161,8 +163,31 @@ class dbConnections
         $sw = count($only) > 0;
         while ($row = $result->getRow()) {
             if ((trim( $pProUid ) == trim( $row[1] )) && ( $sw ? in_array($row[2], $only) : true )) {
-                $connections[] = Array ('DBS_UID' => $row[0],'DBS_NAME' => '[' . $row[3] . '] ' . $row[2] . ': ' . $row[4]
-                );
+                $dbUid = $row[0];
+
+                $dbDescription = '';
+
+                $criteria2 = new Criteria('workflow');
+
+                $criteria2->addSelectColumn(ContentPeer::CON_VALUE);
+                $criteria2->add(ContentPeer::CON_ID, $dbUid, Criteria::EQUAL);
+
+                $rsCriteria2 = ContentPeer::doSelectRS($criteria2);
+                $rsCriteria2->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+
+                if ($rsCriteria2->next()) {
+                    $row2 = $rsCriteria2->getRow();
+
+                    if ($row2['CON_VALUE'] != '') {
+                        $dbDescription = ' - [' . $row2['CON_VALUE'] . ']';
+                    }
+                }
+
+                if ($row[5] == 'NORMAL') {
+                    $connections[] = array('DBS_UID' => $row[0], 'DBS_NAME' => '[' . $row[3] . '] ' . $row[2] . ': ' . $row[4] . $dbDescription);
+                } else {
+                    $connections[] = array('DBS_UID' => $row[0], 'DBS_NAME' => '[' . $row[6] . '] ' . $row[2] . ': ' . $row[6] . $dbDescription);
+                }
             }
             $result->next();
         }

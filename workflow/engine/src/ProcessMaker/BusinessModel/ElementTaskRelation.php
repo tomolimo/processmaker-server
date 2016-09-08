@@ -9,7 +9,8 @@ class ElementTaskRelation
         "PRJ_UID"      => array("type" => "string", "required" => false, "empty" => false, "defaultValues" => array(), "fieldNameAux" => "projectUid"),
         "ELEMENT_UID"  => array("type" => "string", "required" => true,  "empty" => false, "defaultValues" => array(), "fieldNameAux" => "elementUid"),
         "ELEMENT_TYPE" => array("type" => "string", "required" => true,  "empty" => false, "defaultValues" => array(), "fieldNameAux" => "elementType"),
-        "TAS_UID"      => array("type" => "string", "required" => true,  "empty" => false, "defaultValues" => array(), "fieldNameAux" => "taskUid")
+        "TAS_UID"      => array("type" => "string", "required" => true,  "empty" => false, "defaultValues" => array(), "fieldNameAux" => "taskUid"),
+        "ELEMENT_UID_DEST" => array("type" => "string", "required" => false,  "empty" => false, "defaultValues" => array(), "fieldNameAux" => "elementUidDest")
     );
 
     private $formatFieldNameInUppercase = true;
@@ -355,6 +356,31 @@ class ElementTaskRelation
                 //Return
                 return null;
             }
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
+
+    /**
+     * Verify if exists the Element-Task-Relation Gateway to Gateway
+     *
+     * @param string $elementUid uid of Element-Task-Relation
+     * @param string $elementUidDest uid of Element-Task-Relation Destiny
+     *
+     * return bool Return true if exists the Element-Task-Relation Gateway to Gateway, false otherwise
+     */
+    public function existsGatewayToGateway($elementUid,$elementUidDest)
+    {
+        try {
+            $criteria = new \Criteria("workflow");
+            $criteria->addSelectColumn(\ElementTaskRelationPeer::ETR_UID);
+            $criteria->add(\ElementTaskRelationPeer::ELEMENT_UID, $elementUid, \Criteria::EQUAL);
+            $criteria->add(\ElementTaskRelationPeer::ELEMENT_UID_DEST, $elementUidDest, \Criteria::EQUAL);
+            $rsCriteria = \UsersPeer::doSelectRS( $criteria );
+            $rsCriteria->setFetchmode( \ResultSet::FETCHMODE_ASSOC );
+            $rsCriteria->next();
+
+            return ( $rsCriteria->getRow() )? true : false;
         } catch (\Exception $e) {
             throw $e;
         }

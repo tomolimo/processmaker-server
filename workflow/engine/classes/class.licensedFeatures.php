@@ -464,6 +464,178 @@ class PMLicensedFeatures
 
                 "version"        => ""
 
+            ),
+
+            12 => array(
+
+                "description"    => "Integration with Gmail.",
+
+                "enabled"        => false,
+
+                "id"             => "pmGmail",
+
+                "latest_version" => "",
+
+                "log"            => null,
+
+                "name"           => "pmGmail",
+
+                "nick"           => "pmGmail",
+
+                "progress"       => 0,
+
+                "publisher"      => "Colosa",
+
+                "release_type"   => "localRegistry",
+
+                "status"         => "ready",
+
+                "store"          => "00000000000000000000000000010012",
+
+                "type"           => "features",
+
+                "url"            => "",
+
+                "version"        => ""
+
+            ),
+
+            13 => array(
+
+                "description"    => "User-based Language Management.",
+
+                "enabled"        => false,
+
+                "id"             => "userBasedLanguage",
+
+                "latest_version" => "",
+
+                "log"            => null,
+
+                "name"           => "userBasedLanguage",
+
+                "nick"           => "userBasedLanguage",
+
+                "progress"       => 0,
+
+                "publisher"      => "Colosa",
+
+                "release_type"   => "localRegistry",
+
+                "status"         => "ready",
+
+                "store"          => "00000000000000000000000000010013",
+
+                "type"           => "features",
+
+                "url"            => "",
+
+                "version"        => ""
+
+            ),
+
+            14 => array(
+
+                "description"    => "User-based Time Zone Management.",
+
+                "enabled"        => false,
+
+                "id"             => "userBasedTimeZone",
+
+                "latest_version" => "",
+
+                "log"            => null,
+
+                "name"           => "userBasedTimeZone",
+
+                "nick"           => "userBasedTimeZone",
+
+                "progress"       => 0,
+
+                "publisher"      => "Colosa",
+
+                "release_type"   => "localRegistry",
+
+                "status"         => "ready",
+
+                "store"          => "00000000000000000000000000010014",
+
+                "type"           => "features",
+
+                "url"            => "",
+
+                "version"        => ""
+
+            ),
+
+            15 => array(
+
+                "description" => "This Feature will allow to store all input, output and attached documents generated
+
+                 in your processes in Google Drive.",
+
+                "enabled" => false,
+
+                "id" => "pmGoogleDrive",
+
+                "latest_version" => "",
+
+                "log" => null,
+
+                "name" => "pmGoogleDrive",
+
+                "nick" => "pmGoogleDrive",
+
+                "progress" => 0,
+
+                "publisher" => "Colosa",
+
+                "release_type" => "localRegistry",
+
+                "status" => "ready",
+
+                "store" => "00000000000000000000000000010015",
+
+                "type" => "features",
+
+                "url" => "",
+
+                "version" => ""
+
+            ),
+
+            16 => array(
+
+                "description" => "Promotion Manager",
+
+                "enabled" => false,
+
+                "id" => "selectiveImportExport",
+
+                "latest_version" => "",
+
+                "log" => null,
+
+                "name" => "selectiveImportExport",
+
+                "nick" => "selectiveImportExport",
+
+                "progress" => 0,
+
+                "publisher" => "Colosa",
+
+                "release_type" => "localRegistry",
+
+                "status" => "ready",
+
+                "store" => "00000000000000000000000000010016",
+
+                "type" => "features",
+
+                "url" => "",
+
+                "version" => ""
+
             )
 
         );

@@ -21,21 +21,26 @@
  * For more information, contact Colosa Inc, 2566 Le Jeune Rd.,
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  */
+$RBAC_Response = $RBAC->requirePermissions('PM_USERS');
+if (!$RBAC_Response) {
+    return $RBAC_Response;
+}
 global $RBAC;
-switch ($RBAC->userCanAccess( 'PM_USERS' )) {
-    case - 2:
-        G::SendTemporalMessage( 'ID_USER_HAVENT_RIGHTS_SYSTEM', 'error', 'labels' );
-        G::header( 'location: ../login/login' );
+$access = $RBAC->userCanAccess('PM_USERS');
+switch ($access !== 1) {
+    case -2:
+        G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_SYSTEM', 'error', 'labels');
+        G::header('location: ../login/login');
         die();
         break;
-    case - 1:
-        G::SendTemporalMessage( 'ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels' );
-        G::header( 'location: ../login/login' );
+    case -1:
+        G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');
+        G::header('location: ../login/login');
         die();
         break;
-    case - 3:
-        G::SendTemporalMessage( 'ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels' );
-        G::header( 'location: ../login/login' );
+    case -3:
+        G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');
+        G::header('location: ../login/login');
         die();
         break;
 }
@@ -47,17 +52,17 @@ $G_ID_SUB_MENU_SELECTED = 'ROLES';
 
 $G_PUBLISH = new Publisher();
 
-G::LoadClass( 'configuration' );
+G::LoadClass('configuration');
 $c = new Configurations();
-$configPage = $c->getConfiguration( 'rolesList', 'pageSize', '', $_SESSION['USER_LOGGED'] );
-$Config['pageSize'] = isset( $configPage['pageSize'] ) ? $configPage['pageSize'] : 20;
+$configPage = $c->getConfiguration('rolesList', 'pageSize', '', $_SESSION['USER_LOGGED']);
+$Config['pageSize'] = isset($configPage['pageSize']) ? $configPage['pageSize'] : 20;
 
-$oHeadPublisher = & headPublisher::getSingleton();
+$oHeadPublisher = &headPublisher::getSingleton();
 
-$oHeadPublisher->addExtJsScript( 'roles/rolesList', false ); //adding a javascript file .js
-$oHeadPublisher->addContent( 'roles/rolesList' ); //adding a html file  .html.
-$oHeadPublisher->assign( 'PARTNER_FLAG', (defined('PARTNER_FLAG')) ? PARTNER_FLAG : false);
-$oHeadPublisher->assign( 'FORMATS', $c->getFormats() );
-$oHeadPublisher->assign( 'CONFIG', $Config );
-G::RenderPage( 'publish', 'extJs' );
+$oHeadPublisher->addExtJsScript('roles/rolesList', false); //adding a javascript file .js
+$oHeadPublisher->addContent('roles/rolesList'); //adding a html file  .html.
+$oHeadPublisher->assign('PARTNER_FLAG', (defined('PARTNER_FLAG')) ? PARTNER_FLAG : false);
+$oHeadPublisher->assign('FORMATS', $c->getFormats());
+$oHeadPublisher->assign('CONFIG', $Config);
+G::RenderPage('publish', 'extJs');
 

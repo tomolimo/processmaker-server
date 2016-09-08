@@ -660,8 +660,9 @@ class Bpmn extends Handler
                 $arrayEventType = array("START", "END", "INTERMEDIATE");
 
                 $arrayAux = array(
-                    array("eventUid" => $bpmnFlow["FLO_ELEMENT_ORIGIN"], "eventMarker" => "MESSAGETHROW"),
-                    array("eventUid" => $bpmnFlow["FLO_ELEMENT_DEST"],   "eventMarker" => "MESSAGECATCH")
+                    array("eventUid" => $bpmnFlow["FLO_ELEMENT_ORIGIN"], "eventMarker" => array("MESSAGETHROW",
+                        "EMAIL")),
+                    array("eventUid" => $bpmnFlow["FLO_ELEMENT_DEST"],   "eventMarker" => array("MESSAGECATCH"))
                 );
 
                 foreach ($arrayAux as $value) {
@@ -670,7 +671,7 @@ class Bpmn extends Handler
                     $criteria->addSelectColumn(\BpmnEventPeer::EVN_UID);
                     $criteria->add(\BpmnEventPeer::EVN_UID, $value["eventUid"], \Criteria::EQUAL);
                     $criteria->add(\BpmnEventPeer::EVN_TYPE, $arrayEventType, \Criteria::IN);
-                    $criteria->add(\BpmnEventPeer::EVN_MARKER, $value["eventMarker"], \Criteria::EQUAL);
+                    $criteria->add(\BpmnEventPeer::EVN_MARKER, $value["eventMarker"], \Criteria::IN);
 
                     $rsCriteria = \BpmnEventPeer::doSelectRS($criteria);
 
@@ -1371,7 +1372,7 @@ class Bpmn extends Handler
         }
     }
 
-    public function getElementsBetweenElementOriginAndElementDest(
+    private function __getElementsBetweenElementOriginAndElementDest(
         $elementOriginUid,
         $elementOriginType,
         $elementDestUid,
@@ -1381,29 +1382,35 @@ class Bpmn extends Handler
         try {
             if (isset($this->arrayElementOriginChecked[$elementOriginUid]) && $this->arrayElementOriginChecked[$elementOriginUid] == $elementOriginType) {
                 //Return
-                return array();
+                return [];
             }
 
             $this->arrayElementOriginChecked[$elementOriginUid] = $elementOriginType;
 
-            if ($elementOriginType == $elementDestType && $elementOriginUid == $elementDestUid) {
-                $arrayEvent = array();
-                $arrayEvent[$index] = array($elementDestUid, $elementDestType);
+            if ($index > 0 && $elementOriginType == $elementDestType) {
+                if ($elementOriginUid == $elementDestUid) {
+                    $arrayEvent = [];
+
+                    array_unshift($arrayEvent, [$elementDestUid, $elementDestType]);
+
+                    //Return
+                    return $arrayEvent;
+                }
 
                 //Return
-                return $arrayEvent;
+                return [];
             } else {
                 //Flows
-                $arrayFlow = \BpmnFlow::findAllBy(array(
-                    \BpmnFlowPeer::FLO_TYPE                => array("MESSAGE", \Criteria::NOT_EQUAL),
+                $arrayFlow = \BpmnFlow::findAllBy([
+                    \BpmnFlowPeer::FLO_TYPE                => ["MESSAGE", \Criteria::NOT_EQUAL],
                     \BpmnFlowPeer::FLO_ELEMENT_ORIGIN      => $elementOriginUid,
                     \BpmnFlowPeer::FLO_ELEMENT_ORIGIN_TYPE => $elementOriginType
-                ));
+                ]);
 
                 foreach ($arrayFlow as $value) {
                     $arrayFlowData = $value->toArray();
 
-                    $arrayEvent = $this->getElementsBetweenElementOriginAndElementDest(
+                    $arrayEvent = $this->__getElementsBetweenElementOriginAndElementDest(
                         $arrayFlowData["FLO_ELEMENT_DEST"],
                         $arrayFlowData["FLO_ELEMENT_DEST_TYPE"],
                         $elementDestUid,
@@ -1412,7 +1419,7 @@ class Bpmn extends Handler
                     );
 
                     if (!empty($arrayEvent)) {
-                        $arrayEvent[$index] = array($elementOriginUid, $elementOriginType);
+                        array_unshift($arrayEvent, [$elementOriginUid, $elementOriginType]);
 
                         //Return
                         return $arrayEvent;
@@ -1420,7 +1427,7 @@ class Bpmn extends Handler
                 }
 
                 //Return
-                return array();
+                return [];
             }
         } catch (\Exception $e) {
             self::log("Exception: ", $e->getMessage(), "Trace: ", $e->getTraceAsString());
@@ -1429,89 +1436,17 @@ class Bpmn extends Handler
         }
     }
 
-    public function getMessageEventsOfThrowTypeBetweenElementOriginAndElementDest(
+    public function getElementsBetweenElementOriginAndElementDest(
         $elementOriginUid,
         $elementOriginType,
         $elementDestUid,
         $elementDestType
     ) {
         try {
-            $arrayEventType   = array("END", "INTERMEDIATE");
-            $arrayEventMarker = array("MESSAGETHROW");
-
-            $this->arrayElementOriginChecked = array();
-
-            $arrayEventAux = $this->getElementsBetweenElementOriginAndElementDest(
-                $elementOriginUid,
-                $elementOriginType,
-                $elementDestUid,
-                $elementDestType,
-                0
-            );
-
-            ksort($arrayEventAux);
-
-            $arrayEvent = array();
-
-            foreach ($arrayEventAux as $value) {
-                if ($value[1] == "bpmnEvent") {
-                    $event = \BpmnEventPeer::retrieveByPK($value[0]);
-
-                    if (!is_null($event) &&
-                        in_array($event->getEvnType(), $arrayEventType) && in_array($event->getEvnMarker(), $arrayEventMarker)
-                    ) {
-                        $arrayEvent[] = $value;
-                    }
-                }
-            }
+            $this->arrayElementOriginChecked = [];
 
             //Return
-            return $arrayEvent;
-        } catch (\Exception $e) {
-            self::log("Exception: ", $e->getMessage(), "Trace: ", $e->getTraceAsString());
-
-            throw $e;
-        }
-    }
-    
-    public function getEmailEventTypeBetweenElementOriginAndElementDest(
-        $elementOriginUid,
-        $elementOriginType,
-        $elementDestUid,
-        $elementDestType
-    ) {
-        try {
-            $arrayEventType   = array("END", "INTERMEDIATE");
-            $arrayEventMarker = array("EMAIL");
-
-            $this->arrayElementOriginChecked = array();
-
-            $arrayEventAux = $this->getElementsBetweenElementOriginAndElementDest(
-                $elementOriginUid,
-                $elementOriginType,
-                $elementDestUid,
-                $elementDestType,
-                0
-            );
-
-            ksort($arrayEventAux);
-
-            $arrayEvent = array();
-
-            foreach ($arrayEventAux as $value) {
-                if ($value[1] == "bpmnEvent") {
-                    $event = \BpmnEventPeer::retrieveByPK($value[0]);
-
-                    if (!is_null($event) &&
-                        in_array($event->getEvnType(), $arrayEventType) && in_array($event->getEvnMarker(), $arrayEventMarker)
-                    ) {
-                        $arrayEvent[] = $value;
-                    }
-                }
-            }
-
-            //Return
-            return $arrayEvent;
+            return call_user_func_array([$this, "__getElementsBetweenElementOriginAndElementDest"], array_merge(func_get_args(), [0]));
         } catch (\Exception $e) {
             self::log("Exception: ", $e->getMessage(), "Trace: ", $e->getTraceAsString());
 

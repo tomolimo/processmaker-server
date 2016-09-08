@@ -396,6 +396,42 @@ class PMPlugin
             throw $e;
         }
     }
+    
+    /**
+     * Changes the menu properties from the given processmaker section and menu id
+     *
+     * @param array $from
+     *
+     * @param array $options
+     *
+     * @return void
+     */
+    public function registerMenuOptionsToReplace($from = array(), $options = array())
+    {
+        try {
+            $oPluginRegistry =& PMPluginRegistry::getSingleton();
+            $oPluginRegistry->registerMenuOptionsToReplace($this->sNamespace, $from, $options);
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
+    
+    /**
+     * callBack File after import process
+     *
+     * @param string $callBackFile
+     *
+     * @return void
+     */
+    public function registerImportProcessCallback($callBackFile = '')
+    {
+        try {
+            $oPluginRegistry =& PMPluginRegistry::getSingleton();
+            $oPluginRegistry->registerImportProcessCallback($this->sNamespace, $callBackFile);
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
 }
 
 class menuDetail
@@ -736,3 +772,20 @@ class cronFile
     }
 }
 
+class importCallBack
+{
+    public $namespace;
+    public $callBackFile;
+
+    /**
+     * This function is the constructor of the cronFile class
+     * param string $namespace
+     * param string $callBackFile
+     * @return void
+     */
+    public function __construct($namespace, $callBackFile)
+    {
+        $this->namespace = $namespace;
+        $this->callBackFile  = $callBackFile;
+    }
+}

@@ -102,6 +102,8 @@ class PMPluginRegistry
     private $_aDashboardPages = array ();
     private $_aCronFiles = array ();
     private $_arrayDesignerMenu = array();
+    private $_aMenuOptionsToReplace = array ();
+    private $_aImportProcessCallbackFile = array ();
 
     /**
      * Registry a plugin javascript to include with js core at same runtime
@@ -403,7 +405,15 @@ class PMPluginRegistry
                 unset($this->_arrayDesignerMenu[$key]);
             }
         }
-
+        
+        if(sizeof( $this->_aMenuOptionsToReplace )){
+            unset( $this->_aMenuOptionsToReplace );
+        }
+        
+        if(sizeof( $this->_aImportProcessCallbackFile )){
+            unset( $this->_aImportProcessCallbackFile );
+        }
+        
         //unregistering javascripts from this plugin
         $this->unregisterJavascripts( $sNamespace );
         //unregistering rest services from this plugin
@@ -1000,6 +1010,7 @@ class PMPluginRegistry
      */
     public function executeTriggers ($triggerId, $oData)
     {
+        G::LoadThirdParty( "pear", "PEAR" );
         foreach ($this->_aTriggers as $row => $detail) {
             if ($triggerId == $detail->sTriggerId) {
                 //review all folders registered for this namespace
@@ -1106,8 +1117,9 @@ class PMPluginRegistry
      */
     public function &getPlugin ($sNamespace)
     {
+        $oPlugin = null;
         if (array_key_exists( $sNamespace, $this->_aPlugins )) {
-            return $this->_aPlugins[$sNamespace];
+            $oPlugin = $this->_aPlugins[$sNamespace];
         }
         /*
         $aDetails = KTUtil::arrayGet($this->_aPluginDetails, $sNamespace);
@@ -1123,6 +1135,7 @@ class PMPluginRegistry
         $this->_aPlugins[$sNamespace] =& $oPlugin;
         return $oPlugin;
         */
+        return $oPlugin;
     }
 
     /**
@@ -1658,6 +1671,82 @@ class PMPluginRegistry
         } catch (Exception $e) {
             throw $e;
         }
+    }
+    
+    /**
+     * Replace new options to menu
+     *
+     * @param unknown_type $namespace
+     *
+     * @param array $from
+     * 
+     * @param array $options
+     *
+     * @return void
+     */
+    public function registerMenuOptionsToReplace ($namespace, $from, $options)
+    {
+        if(isset($from["section"]) && isset($from["menuId"])) {
+            $section = $from["section"];
+            $oMenuFromPlugin = $this->_aMenuOptionsToReplace;
+            if(array_key_exists($section,$oMenuFromPlugin)) {
+                unset($this->_aMenuOptionsToReplace[$from["section"]]);
+            }
+            $this->_aMenuOptionsToReplace[$from["section"]][$from["menuId"]][] = $options;
+        }
+    }
+    
+    /**
+     * Return all menu Options from a specific section
+     *
+     * @return array
+     */
+    public function getMenuOptionsToReplace($strMenuName)
+    {
+        $oMenuFromPlugin = $this->_aMenuOptionsToReplace;
+        if(sizeof($oMenuFromPlugin)) {
+            if(array_key_exists($strMenuName,$oMenuFromPlugin)) {
+                return $oMenuFromPlugin[$strMenuName];
+            }    
+        }
+    }
+    
+    /**
+     * Register a callBackFile in the singleton
+     *
+     * @param unknown_type $namespace
+     *
+     * @param string $callBackFile
+     *
+     * @return void
+     */
+    public function registerImportProcessCallback ($namespace, $callBackFile)
+    {
+        try {
+            $found = false;
+            foreach ($this->_aImportProcessCallbackFile as $row => $detail) {
+                if ($callBackFile == $detail->callBackFile && $namespace == $detail->namespace) {
+                    $detail->callBackFile = $callBackFile;
+                    $found = true;
+                }
+            }
+            if (!$found) {
+                $callBackFile = new importCallBack( $namespace, $callBackFile );
+                $this->_aImportProcessCallbackFile[] = $callBackFile;
+            }    
+        } catch(Excepton $e) {
+            throw $e;
+        }
+    }
+    
+    /**
+     * Return all callBackFiles registered
+     *
+     * @return array
+     */
+    public function getImportProcessCallback()
+    {
+        return $this->_aImportProcessCallbackFile;
     }
 }
 

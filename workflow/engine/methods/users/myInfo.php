@@ -25,6 +25,9 @@
 $G_MAIN_MENU = 'processmaker';
 $G_ID_MENU_SELECTED = 'MY_ACCOUNT';
 $G_PUBLISH = new Publisher();
+$oHeadPublisher = & headPublisher::getSingleton();
+$oHeadPublisher->addScriptFile('/jscore/src/PM.js');
+$oHeadPublisher->addScriptFile('/jscore/src/Sessions.js');
 
 if (isset( $_GET['type'] )) {
     $G_PUBLISH->AddContent( 'view', 'users/usersReload' );

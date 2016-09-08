@@ -1,0 +1,274 @@
+[
+    {
+        "name": "bshaffer/oauth2-server-php",
+        "version": "v1.0",
+        "version_normalized": "1.0.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/bshaffer/oauth2-server-php.git",
+            "reference": "7abe692c57d8f11026556036ee59575f8b0d328e"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/bshaffer/oauth2-server-php/zipball/7abe692c57d8f11026556036ee59575f8b0d328e",
+            "reference": "7abe692c57d8f11026556036ee59575f8b0d328e",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.2.0"
+        },
+        "time": "2013-08-12 16:35:58",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "OAuth2": "src/"
+            }
+        },
+        "notification-url": "http://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Brent Shaffer",
+                "email": "bshafs@gmail.com",
+                "homepage": "http://github.com/bshaffer"
+            }
+        ],
+        "description": "OAuth2 Server for PHP",
+        "homepage": "http://github.com/bshaffer/oauth2-server-php",
+        "keywords": [
+            "auth",
+            "oauth",
+            "oauth2"
+        ]
+    },
+    {
+        "name": "colosa/pmUI",
+        "version": "3.0.1.8-dev",
+        "version_normalized": "3.0.1.8-dev",
+        "source": {
+            "type": "git",
+            "url": "git@bitbucket.org:colosa/pmui.git",
+            "reference": "851ee86a1006df111ee8b281bf2b033cdbcc6f0b"
+        },
+        "time": "2016-02-26 21:41:50",
+        "type": "library",
+        "installation-source": "source",
+        "description": "JS UI Library",
+        "homepage": "http://processmaker.com",
+        "keywords": [
+            "js lib ProcessMaker UI"
+        ]
+    },
+    {
+        "name": "colosa/MichelangeloFE",
+        "version": "3.0.1.8-dev",
+        "version_normalized": "3.0.1.8-dev",
+        "source": {
+            "type": "git",
+            "url": "git@bitbucket.org:colosa/michelangelofe.git",
+            "reference": "7e889f23a7e8397c052a4d9ae6331334b57c9d48"
+        },
+        "require": {
+            "colosa/pmui": "3.0.1.8-dev"
+        },
+        "time": "2016-03-09 20:18:44",
+        "type": "library",
+        "installation-source": "source",
+        "description": "ProcessMaker Michelangelo Front End",
+        "homepage": "http://processmaker.com",
+        "keywords": [
+            "js app ProcessMaker"
+        ]
+    },
+    {
+        "name": "colosa/pmDynaform",
+        "version": "3.0.1.8-dev",
+        "version_normalized": "3.0.1.8-dev",
+        "source": {
+            "type": "git",
+            "url": "git@bitbucket.org:colosa/pmdynaform.git",
+            "reference": "c2008027bd721ac42e4a7d98cc773f82ac25921e"
+        },
+        "time": "2016-03-15 17:46:33",
+        "type": "library",
+        "installation-source": "source",
+        "description": "JS Library to render ProcessMaker Dynaforms",
+        "homepage": "http://processmaker.com",
+        "keywords": [
+            "js lib ProcessMaker Dynaforms"
+        ]
+    },
+    {
+        "name": "dapphp/securimage",
+        "version": "3.6.4",
+        "version_normalized": "3.6.4.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/dapphp/securimage.git",
+            "reference": "2ed50264ae5541fec8d8c79e4c9b6235a7cfd506"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/dapphp/securimage/zipball/2ed50264ae5541fec8d8c79e4c9b6235a7cfd506",
+            "reference": "2ed50264ae5541fec8d8c79e4c9b6235a7cfd506",
+            "shasum": ""
+        },
+        "require": {
+            "ext-gd": "*",
+            "php": ">=5.2.0"
+        },
+        "suggest": {
+            "ext-pdo": "For database storage support",
+            "ext-pdo_mysql": "For MySQL database support",
+            "ext-pdo_sqlite": "For SQLite3 database support"
+        },
+        "time": "2016-03-04 21:08:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "classmap": [
+                "securimage.php"
+            ]
+        },
+        "notification-url": "http://packagist.org/downloads/",
+        "license": [
+            "BSD"
+        ],
+        "authors": [
+            {
+                "name": "Drew Phillips",
+                "email": "drew@drew-phillips.com"
+            }
+        ],
+        "description": "PHP CAPTCHA Library",
+        "homepage": "https://www.phpcaptcha.org",
+        "keywords": [
+            "captcha",
+            "security"
+        ]
+    },
+    {
+        "name": "google/apiclient",
+        "version": "1.1.6",
+        "version_normalized": "1.1.6.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/google/google-api-php-client.git",
+            "reference": "a25dc9d5c109ebb02945ba1ff6336cc937c27628"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/google/google-api-php-client/zipball/a25dc9d5c109ebb02945ba1ff6336cc937c27628",
+            "reference": "a25dc9d5c109ebb02945ba1ff6336cc937c27628",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.2.1"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "3.7.*",
+            "squizlabs/php_codesniffer": "~2.3"
+        },
+        "time": "2015-10-16 22:11:08",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.1.x-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "classmap": [
+                "src/"
+            ]
+        },
+        "notification-url": "http://packagist.org/downloads/",
+        "license": [
+            "Apache-2.0"
+        ],
+        "description": "Client library for Google APIs",
+        "homepage": "http://developers.google.com/api-client-library/php",
+        "keywords": [
+            "google"
+        ]
+    },
+    {
+        "name": "luracast/restler",
+        "version": "3.0.0-RC4",
+        "version_normalized": "3.0.0.0-RC4",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/Luracast/Restler.git",
+            "reference": "72c28484d6a7677643324744be2ff0aab6795d5a"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/Luracast/Restler/zipball/72c28484d6a7677643324744be2ff0aab6795d5a",
+            "reference": "72c28484d6a7677643324744be2ff0aab6795d5a",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.0"
+        },
+        "require-dev": {
+            "behat/behat": "2.4.*@stable",
+            "bshaffer/oauth2-server-php": "v0.3",
+            "guzzle/guzzle": "~3.1.1",
+            "luracast/explorer": "*",
+            "mustache/mustache": "dev-master",
+            "rodneyrehm/plist": "dev-master",
+            "symfony/yaml": "*",
+            "twig/twig": "v1.13.0",
+            "zendframework/zendamf": "dev-master"
+        },
+        "suggest": {
+            "behat/behat": "Behaviour driven development testing framework (see require-dev for details)",
+            "bshaffer/oauth2-server-php": "Restler can provide OAuth2 authentication using this library (see require-dev for details)",
+            "guzzle/guzzle": "RESTful api HTTP client framework (see require-dev for details)",
+            "luracast/explorer": "Restler's very own api explorer (see require-dev for details)",
+            "mustache/mustache": "Restler can render HtmlView using mustache/handlebar templates (see require-dev for details)",
+            "rodneyrehm/plist": "Restler supports tho Apple plist xml format (see require-dev for details)",
+            "symfony/yaml": "Restler can produce content in yaml format as well (see require-dev for details)",
+            "twig/twig": "Restler can render HtmlView using twig templates (see require-dev for details)",
+            "zendframework/zendamf": "Support for the amf document format  (see require-dev for details)"
+        },
+        "time": "2014-04-13 05:38:15",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "v3": "v3.0.x-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "Luracast\\Restler": "vendor/"
+            }
+        },
+        "notification-url": "http://packagist.org/downloads/",
+        "license": [
+            "LGPL-2.1"
+        ],
+        "authors": [
+            {
+                "name": "Luracast",
+                "email": "arul@luracast.com"
+            },
+            {
+                "name": "Nick nickl- Lombard",
+                "email": "github@jigsoft.co.za"
+            }
+        ],
+        "description": "Restler is a simple and effective multi-format Web API Server framework written in PHP. Just deal with your business logic in php, Restler will take care of the REST!",
+        "homepage": "http://luracast.com/products/restler/",
+        "keywords": [
+            "api",
+            "framework",
+            "rest",
+            "server"
+        ]
+    }
+]

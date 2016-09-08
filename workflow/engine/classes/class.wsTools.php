@@ -224,7 +224,7 @@ class workspaceTools
 
         CLI::logging("> Migrate new lists...\n");
 
-        $this->migrateList($workSpace);
+        $this->migrateList($workSpace, false, $lang);
 
         $stop = microtime(true);
 
@@ -372,19 +372,13 @@ class workspaceTools
 
 
 
-        if($this->onedb){
+        if ($this->onedb) {
 
-        	$dbInfo = $this->getDBInfo();
+            $dbInfo = $this->getDBInfo();
 
             $dbPrefix = array('DB_NAME' => 'wf_', 'DB_USER' => 'wf_', 'DB_RBAC_NAME' => 'wf_', 'DB_RBAC_USER' => 'wf_', 'DB_REPORT_NAME' => 'wf_', 'DB_REPORT_USER' => 'wf_');
 
-        	if (array_search($key, array('DB_PASS', 'DB_RBAC_PASS', 'DB_REPORT_PASS'))) {
-
-        		$value = $dbInfo['DB_PASS'];
-
-        	}
-
-        } else{
+        } else {
 
             $dbPrefix = array('DB_NAME' => 'wf_', 'DB_USER' => 'wf_', 'DB_RBAC_NAME' => 'rb_', 'DB_RBAC_USER' => 'rb_', 'DB_REPORT_NAME' => 'rp_', 'DB_REPORT_USER' => 'rp_');
 
@@ -408,25 +402,25 @@ class workspaceTools
 
                  */
 
-                if($this->unify){
+                if ($this->unify) {
 
-            		$nameDb = explode("_", $value);
+                    $nameDb = explode("_", $value);
 
-            		if(!isset($nameDb[1])){
+                    if (!isset($nameDb[1])) {
 
-            			$dbName = $value;
+                        $dbName = $value;
 
-            		} else {
+                    } else {
 
-            			$dbName = $dbPrefix[$key] . $nameDb[1];
+                        $dbName = $dbPrefix[$key] . $nameDb[1];
 
-            		}
+                    }
 
-            	}else {
+                } else {
 
-            		$dbName = $dbPrefix[$key] . $this->name;
+                    $dbName = $dbPrefix[$key] . $this->name;
 
-            	}
+                }
 
             } else {
 
@@ -604,13 +598,13 @@ class workspaceTools
 
         $config = array('datasources' => array('workflow' => array('connection' => $wfDetails["dsn"], 'adapter' => $wfDetails["adapter"]
 
-                ), 'rbac' => array('connection' => $rbDetails["dsn"], 'adapter' => $rbDetails["adapter"]
+        ), 'rbac' => array('connection' => $rbDetails["dsn"], 'adapter' => $rbDetails["adapter"]
 
-                ), 'rp' => array('connection' => $rpDetails["dsn"], 'adapter' => $rpDetails["adapter"]
+        ), 'rp' => array('connection' => $rpDetails["dsn"], 'adapter' => $rpDetails["adapter"]
 
-                )
+        )
 
-            )
+        )
 
         );
 
@@ -656,9 +650,9 @@ class workspaceTools
 
 
 
-        require_once ("propel/Propel.php");
+        require_once("propel/Propel.php");
 
-        require_once ("creole/Creole.php");
+        require_once("creole/Creole.php");
 
 
 
@@ -796,13 +790,13 @@ class workspaceTools
 
         G::LoadSystem('database_' . strtolower($this->dbAdapter));
 
-        if ($rbac == true){
+        if ($rbac == true) {
 
             $this->db = new database($this->dbAdapter, $this->dbRbacHost, $this->dbRbacUser, $this->dbRbacPass, $this->dbRbacName);
 
         } else {
 
-        	$this->db = new database($this->dbAdapter, $this->dbHost, $this->dbUser, $this->dbPass, $this->dbName);
+            $this->db = new database($this->dbAdapter, $this->dbHost, $this->dbUser, $this->dbPass, $this->dbName);
 
         }
 
@@ -876,7 +870,7 @@ class workspaceTools
 
     {
 
-    	$oDataBase = $this->getDatabase($rbac);
+        $oDataBase = $this->getDatabase($rbac);
 
 
 
@@ -984,9 +978,9 @@ class workspaceTools
 
      *
 
-     * @param bool   $flagRecreate Recreate
+     * @param bool $flagRecreate Recreate
 
-     * @param string $language     Language
+     * @param string $language Language
 
      *
 
@@ -1116,31 +1110,7 @@ class workspaceTools
 
 
 
-        CLI::logging("-> Verifying roles permissions in RBAC \n");
 
-        //Update table RBAC permissions
-
-        Bootstrap::LoadSystem( 'rbac' );
-
-        $RBAC = & RBAC::getSingleton();
-
-        $RBAC->initRBAC();
-
-        $result = $RBAC->verifyPermissions();
-
-        if (count($result) > 1) {
-
-            foreach ($result as $item) {
-
-                CLI::logging("    $item... \n");
-
-            }
-
-        } else {
-
-            CLI::logging("    All roles permissions already updated \n");
-
-        }
 
 
 
@@ -1192,7 +1162,7 @@ class workspaceTools
 
         if (substr(PHP_OS, 0, 3) != 'WIN') {
 
-            $connection = Propel::getConnection( 'workflow' );
+            $connection = Propel::getConnection('workflow');
 
 
 
@@ -1200,7 +1170,7 @@ class workspaceTools
 
             $stmt_sleep = $connection->createStatement();
 
-            $rs_sleep = $stmt_sleep->executeQuery( $sql_sleep, ResultSet::FETCHMODE_ASSOC );
+            $rs_sleep = $stmt_sleep->executeQuery($sql_sleep, ResultSet::FETCHMODE_ASSOC);
 
 
 
@@ -1208,7 +1178,7 @@ class workspaceTools
 
                 $row_sleep = $rs_sleep->getRow();
 
-                $oStatement_sleep = $connection->prepareStatement( "kill ". $row_sleep['ID'] );
+                $oStatement_sleep = $connection->prepareStatement("kill " . $row_sleep['ID']);
 
                 $oStatement_sleep->executeQuery();
 
@@ -1220,7 +1190,7 @@ class workspaceTools
 
             $stmt_query = $connection->createStatement();
 
-            $rs_query = $stmt_query->executeQuery( $sql_query, ResultSet::FETCHMODE_ASSOC );
+            $rs_query = $stmt_query->executeQuery($sql_query, ResultSet::FETCHMODE_ASSOC);
 
 
 
@@ -1228,7 +1198,7 @@ class workspaceTools
 
                 $row_query = $rs_query->getRow();
 
-                $oStatement_query = $connection->prepareStatement( "kill ". $row_query['ID'] );
+                $oStatement_query = $connection->prepareStatement("kill " . $row_query['ID']);
 
                 $oStatement_query->executeQuery();
 
@@ -1248,21 +1218,13 @@ class workspaceTools
 
      */
 
-    public function upgradeCasesDirectoryStructure ($workspace)
+    public function upgradeCasesDirectoryStructure($workspace)
 
     {
 
-        define('PATH_DOCUMENT',  PATH_DATA . 'sites/' . $workspace . '/' . 'files/');
+        define('PATH_DOCUMENT', PATH_DATA . 'sites' . DIRECTORY_SEPARATOR . $workspace . DIRECTORY_SEPARATOR . 'files');
 
-        $doclevel = explode('/', PATH_DOCUMENT);
-
-        $length = sizeof(PATH_DOCUMENT);
-
-        $filesDir = $doclevel[$length - 1];
-
-
-
-        if (is_dir(PATH_DOCUMENT) && is_writable($filesDir)) {
+        if (!is_writable(PATH_DOCUMENT)) {
 
             CLI::logging(CLI::error("Error:" . PATH_DOCUMENT . " is not writable... please check the su permissions.\n"));
 
@@ -1282,7 +1244,7 @@ class workspaceTools
 
 
 
-        if (! @chdir(PATH_DOCUMENT)) {
+        if (!@chdir(PATH_DOCUMENT)) {
 
             CLI::logging(CLI::error("Cannot use Document directory. The upgrade must be done as root.\n"));
 
@@ -1296,7 +1258,7 @@ class workspaceTools
 
         for ($index = 0; $index < $dirslength; $index++) {
 
-            $depthdirlevel = explode('/', $directory[$index]);
+            $depthdirlevel = explode(DIRECTORY_SEPARATOR, $directory[$index]);
 
             $lastlength = sizeof($depthdirlevel);
 
@@ -1330,7 +1292,7 @@ class workspaceTools
 
                         G::rm_dir($UIdDir);
 
-                        rmdir($UIdDir);//remove the diretory itself, G::rm_dir cannot do it
+                        rmdir($UIdDir); //remove the diretory itself, G::rm_dir cannot do it
 
                     } else {
 
@@ -1342,7 +1304,7 @@ class workspaceTools
 
                     CLI::logging("$UIdDir is empty, removing it\n");
 
-                    rmdir($UIdDir);//remove the diretory itself
+                    rmdir($UIdDir); //remove the diretory itself
 
                 }
 
@@ -1354,13 +1316,13 @@ class workspaceTools
 
         //Start '0' directory migration
 
-        $black = PATH_DOCUMENT . $blackHoleDir . '/';
+        $black = PATH_DOCUMENT . $blackHoleDir . DIRECTORY_SEPARATOR;
 
         if (is_dir($black)) {
 
             $newpattern = array();
 
-            $file = glob($black . '*.*');//files only
+            $file = glob($black . '*.*'); //files only
 
             $dirlen = count($file);
 
@@ -1368,7 +1330,7 @@ class workspaceTools
 
             for ($index = 0; $index < $dirlen; $index++) {
 
-                $levelfile = explode('/', $file[$index]);
+                $levelfile = explode(DIRECTORY_SEPARATOR, $file[$index]);
 
                 $lastlevel = sizeof($levelfile);
 
@@ -1384,7 +1346,7 @@ class workspaceTools
 
 
 
-                if (copy($black . $goalFile, $black . $newpattern[0] . '/' . $newpattern[1])) {
+                if (copy($black . $goalFile, $black . $newpattern[0] . DIRECTORY_SEPARATOR . $newpattern[1])) {
 
                     unlink($file[$index]);
 
@@ -1410,19 +1372,19 @@ class workspaceTools
 
         if (!$conf->exists("ENVIRONMENT_SETTINGS")) {
 
-            $conf->aConfig = array ("format" => '@userName (@firstName @lastName)',
+            $conf->aConfig = array("format" => '@userName (@firstName @lastName)',
 
-                                "dateFormat" => 'd/m/Y',
+                "dateFormat" => 'd/m/Y',
 
-                                "startCaseHideProcessInf" => false,
+                "startCaseHideProcessInf" => false,
 
-                                "casesListDateFormat" => 'Y-m-d H:i:s',
+                "casesListDateFormat" => 'Y-m-d H:i:s',
 
-                                "casesListRowNumber" => 25,
+                "casesListRowNumber" => 25,
 
-                                "casesListRefreshTime" => 120 );
+                "casesListRefreshTime" => 120);
 
-            $conf->saveConfig( 'ENVIRONMENT_SETTINGS', '' );
+            $conf->saveConfig('ENVIRONMENT_SETTINGS', '');
 
         }
 
@@ -1474,13 +1436,13 @@ class workspaceTools
 
      */
 
-    public function upgradeDatabase ($onedb = false, $checkOnly = false)
+    public function upgradeDatabase($onedb = false, $checkOnly = false)
 
     {
 
         G::LoadClass("patch");
 
-        $this->initPropel( true );
+        $this->initPropel(true);
 
         p11835::$dbAdapter = $this->dbAdapter;
 
@@ -1490,11 +1452,17 @@ class workspaceTools
 
         $systemSchemaRbac = System::getSystemSchemaRbac($this->dbAdapter);// get the Rbac Schema
 
-        $this->upgradeSchema( $systemSchema );
+        $this->registerSystemTables(array_merge($systemSchema,$systemSchemaRbac));
 
-        $this->upgradeSchema( $systemSchemaRbac, false, true, $onedb ); // perform Upgrade to Rbac
+        $this->upgradeSchema($systemSchema);
+
+        $this->upgradeSchema($systemSchemaRbac, false, true, $onedb); // perform Upgrade to Rbac
 
         $this->upgradeData();
+
+        $this->checkRbacPermissions();//check or add new permissions
+
+        $this->checkSequenceNumber();
 
 
 
@@ -2438,6 +2406,8 @@ class workspaceTools
 
         $metadata["version"] = 1;
 
+        $metadata['backupEngineVersion'] = 2;
+
         $metaFilename = "$tempDirectory/{$this->name}.meta";
 
         /* Write metadata to file, but make it prettier before. The metadata is just
@@ -2578,7 +2548,7 @@ class workspaceTools
 
      */
 
-    public function executeSQLScript($database, $filename, $parameters)
+    public function executeSQLScript($database, $filename, $parameters, $versionBackupEngine = 1)
 
     {
 
@@ -2592,7 +2562,7 @@ class workspaceTools
 
         $flag = false;
 
-        if ($disabled_functions!='') {
+        if ($disabled_functions != '') {
 
             $arr = explode(',', $disabled_functions);
 
@@ -2612,7 +2582,7 @@ class workspaceTools
 
         $flagFunction = null;
 
-        if ( !$flag ) {
+        if (!$flag) {
 
             $flagFunction = shell_exec('mysql --version');
 
@@ -2620,63 +2590,75 @@ class workspaceTools
 
 
 
-        $arrayRegExpEngineSearch  = array("/\)\s*TYPE\s*=\s*(InnoDB)/i",       "/\)\s*TYPE\s*=\s*(MyISAM)/i");
+        $arrayRegExpEngineSearch = array("/\)\s*TYPE\s*=\s*(InnoDB)/i", "/\)\s*TYPE\s*=\s*(MyISAM)/i","/SET\s*FOREIGN_KEY_CHECKS\s*=\s*0\s*;/");
 
-        $arrayRegExpEngineReplace = array(") ENGINE=\\1 DEFAULT CHARSET=utf8", ") ENGINE=\\1");
+        $arrayRegExpEngineReplace = array(") ENGINE=\\1 DEFAULT CHARSET=utf8", ") ENGINE=\\1","SET FOREIGN_KEY_CHECKS=0;\nSET unique_checks=0;\nSET AUTOCOMMIT=0;");
 
 
 
-        if ( !$flag && !is_null($flagFunction) ) {
+        if (!$flag && !is_null($flagFunction)) {
 
             //Replace TYPE by ENGINE
 
-            $script = preg_replace($arrayRegExpEngineSearch, $arrayRegExpEngineReplace, file_get_contents($filename));
+            if( $versionBackupEngine == 1) {
+
+                $script = preg_replace($arrayRegExpEngineSearch, $arrayRegExpEngineReplace, file_get_contents($filename));
+
+                file_put_contents($filename, $script."\nCOMMIT;");
+
+            }else{
+
+                $arrayRegExpEngineSearch = array("/\)\s*TYPE\s*=\s*(InnoDB)/i", "/\)\s*TYPE\s*=\s*(MyISAM)/i");
+
+                $arrayRegExpEngineReplace = array(") ENGINE=\\1 DEFAULT CHARSET=utf8", ") ENGINE=\\1");
+
+                $script = preg_replace($arrayRegExpEngineSearch, $arrayRegExpEngineReplace, file_get_contents($filename));
+
+                file_put_contents($filename, $script);
+
+            }
 
 
 
-            file_put_contents($filename,$script);
-
-
-
-            $aHost = explode(':',$parameters['dbHost']);
+            $aHost = explode(':', $parameters['dbHost']);
 
             $dbHost = $aHost[0];
 
-            if(isset($aHost[1])){
+            if (isset($aHost[1])) {
 
                 $dbPort = $aHost[1];
 
                 $command = 'mysql'
 
-                . ' --host=' . $dbHost
+                    . ' --host=' . $dbHost
 
-                . ' --port=' . $dbPort
+                    . ' --port=' . $dbPort
 
-                . ' --user=' . $parameters['dbUser']
+                    . ' --user=' . $parameters['dbUser']
 
-                . ' --password=' . str_replace('"', '\"', str_replace("'", "\'", quotemeta($parameters['dbPass'])))//no change! supports the type passwords: .\+*?[^]($)'"\"'
+                    . ' --password=' . str_replace('"', '\"', str_replace("'", "\'", quotemeta($parameters['dbPass'])))//no change! supports the type passwords: .\+*?[^]($)'"\"'
 
-                . ' --database=' . mysql_real_escape_string($database)
+                    . ' --database=' . mysql_real_escape_string($database)
 
-                . ' --default_character_set utf8'
+                    . ' --default_character_set utf8'
 
-                . ' --execute="SOURCE '.$filename.'"';
+                    . ' --execute="SOURCE ' . $filename . '"';
 
-            }else{
+            } else {
 
                 $command = 'mysql'
 
-                . ' --host=' . $dbHost
+                    . ' --host=' . $dbHost
 
-                . ' --user=' . $parameters['dbUser']
+                    . ' --user=' . $parameters['dbUser']
 
-                . ' --password=' . str_replace('"', '\"', str_replace("'", "\'", quotemeta($parameters['dbPass'])))//no change! supports the type passwords: .\+*?[^]($)'"\"'
+                    . ' --password=' . str_replace('"', '\"', str_replace("'", "\'", quotemeta($parameters['dbPass'])))//no change! supports the type passwords: .\+*?[^]($)'"\"'
 
-                . ' --database=' . mysql_real_escape_string($database)
+                    . ' --database=' . mysql_real_escape_string($database)
 
-                . ' --default_character_set utf8'
+                    . ' --default_character_set utf8'
 
-                . ' --execute="SOURCE '.$filename.'"';
+                    . ' --execute="SOURCE ' . $filename . '"';
 
             }
 
@@ -2695,6 +2677,12 @@ class workspaceTools
                 //Replace TYPE by ENGINE
 
                 $script = preg_replace($arrayRegExpEngineSearch, $arrayRegExpEngineReplace, file_get_contents($filename));
+
+                if( $versionBackupEngine == 1) {
+
+                    $script = $script."\nCOMMIT;";
+
+                }
 
 
 
@@ -2850,7 +2838,7 @@ class workspaceTools
 
             $filename = $backupFile["filename"];
 
-            if (strpos($filename, "/") === false && substr_compare($filename, ".meta", - 5, 5, true) === 0) {
+            if (strpos($filename, "/") === false && substr_compare($filename, ".meta", -5, 5, true) === 0) {
 
                 if (!$backup->extractList(array($filename), $tempDirectory)) {
 
@@ -2878,7 +2866,7 @@ class workspaceTools
 
             CLI::logging("\n");
 
-            workspaceTools::printInfo((array) $workspaceData);
+            workspaceTools::printInfo((array)$workspaceData);
 
         }
 
@@ -2904,7 +2892,7 @@ class workspaceTools
 
         if ($chgrp === false || $chmod === false || $chown === false) {
 
-            if (strtoupper( substr( PHP_OS, 0, 3 ) ) === 'WIN') {
+            if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
 
                 exec("icacls \"" . $filename . "\" /grant Administrador:(D,WDAC) /T", $res);
 
@@ -3036,7 +3024,15 @@ class workspaceTools
 
         $version = System::getVersion();
 
-        $pmVersion = (preg_match("/^([\d\.]+).*$/", $version, $arrayMatch))? $arrayMatch[1] : ""; //Otherwise: Branch master
+        $pmVersion = (preg_match("/^([\d\.]+).*$/", $version, $arrayMatch)) ? $arrayMatch[1] : ""; //Otherwise: Branch master
+
+
+
+        /*if($pmVersion == '' && strpos(strtoupper($version), 'BRANCH')){
+
+            $pmVersion = 'dev-version-backup';
+
+        }*/
 
 
 
@@ -3112,7 +3108,7 @@ class workspaceTools
 
 
 
-            if ($workspace->workspaceExists()) {
+            if (Installer::isset_site($workspaceName)) {
 
                 if ($overwrite) {
 
@@ -3131,6 +3127,14 @@ class workspaceTools
                     if ($newDatabases != $oldDatabases) {
 
                         throw new Exception("We can't overwrite this workspace because it has a different amount of databases. Not only the 'source' but also the 'target' must have the same amount of databases.");
+
+                    }
+
+
+
+                    if(!$workspace->workspaceExists()){
+
+                        throw new Exception('We can not overwrite this workspace because the workspace '.$workspaceName.' does not exist please check the lower case and upper case.');
 
                     }
 
@@ -3196,13 +3200,13 @@ class workspaceTools
 
             list ($dbHost, $dbUser, $dbPass) = @explode(SYSTEM_HASH, G::decrypt(HASH_INSTALLATION, SYSTEM_HASH));
 
-            if($port != ''){
+            if ($port != '') {
 
-               $dbHost = $dbHost.$port; //127.0.0.1:3306
+                $dbHost = $dbHost . $port; //127.0.0.1:3306
 
             }
 
-            $aParameters = array('dbHost'=>$dbHost,'dbUser'=>$dbUser,'dbPass'=>$dbPass);
+            $aParameters = array('dbHost' => $dbHost, 'dbUser' => $dbUser, 'dbPass' => $dbPass);
 
 
 
@@ -3224,7 +3228,7 @@ class workspaceTools
 
 
 
-            $pmVersionWorkspaceToRestore = (preg_match("/^([\d\.]+).*$/", $metadata->PM_VERSION, $arrayMatch))? $arrayMatch[1] : "";
+            $pmVersionWorkspaceToRestore = (preg_match("/^([\d\.]+).*$/", $metadata->PM_VERSION, $arrayMatch)) ? $arrayMatch[1] : "";
 
 
 
@@ -3264,7 +3268,7 @@ class workspaceTools
 
                     if (mysql_select_db($dbName, $link)) {
 
-                        if(!$overwrite) {
+                        if (!$overwrite) {
 
                             throw new Exception("Destination Database already exist (use -o to overwrite)");
 
@@ -3276,7 +3280,9 @@ class workspaceTools
 
                     CLI::logging("+> Restoring database {$db->name} to $dbName\n");
 
-                    $workspace->executeSQLScript($dbName, "$tempDirectory/{$db->name}.sql",$aParameters);
+                    $versionBackupEngine = (isset($metadata->backupEngineVersion)) ? $metadata->backupEngineVersion : 1;
+
+                    $workspace->executeSQLScript($dbName, "$tempDirectory/{$db->name}.sql", $aParameters, $versionBackupEngine);
 
                     $workspace->createDBUser($dbName, $db->pass, "localhost", $dbName);
 
@@ -3292,7 +3298,11 @@ class workspaceTools
 
 
 
-            if (version_compare($pmVersionWorkspaceToRestore . "", $pmVersion . "", "<") || $pmVersion == "") {
+            if (($pmVersionWorkspaceToRestore != '') && (version_compare($pmVersionWorkspaceToRestore . "",
+
+                        $pmVersion . "", "<") || $pmVersion == "")
+
+            ) {
 
                 $start = microtime(true);
 
@@ -3344,7 +3354,11 @@ class workspaceTools
 
 
 
-            if (version_compare($pmVersionWorkspaceToRestore . "", $pmVersion . "", "<") || $pmVersion == "") {
+            if (($pmVersionWorkspaceToRestore != '') && (version_compare($pmVersionWorkspaceToRestore . "",
+
+                        $pmVersion . "", "<") || $pmVersion == "")
+
+            ) {
 
                 $start = microtime(true);
 
@@ -3359,6 +3373,14 @@ class workspaceTools
             } else {
 
                 $workspace->upgradeTriggersOfTables(true, $lang);
+
+            }
+
+
+
+            if($pmVersion == '' && strpos(strtoupper($version), 'BRANCH')){
+
+                $pmVersion = 'dev-version-backup';
 
             }
 
@@ -3404,11 +3426,11 @@ class workspaceTools
 
 
 
-        $f = ($arrayPathInfo["dirname"] == ".")? $dirHotfix . PATH_SEP . $file : $file;
+        $f = ($arrayPathInfo["dirname"] == ".") ? $dirHotfix . PATH_SEP . $file : $file;
 
 
 
-        $swv  = 1;
+        $swv = 1;
 
         $msgv = "";
 
@@ -3424,9 +3446,9 @@ class workspaceTools
 
         if (!file_exists($f)) {
 
-            $swv  = 0;
+            $swv = 0;
 
-            $msgv = $msgv . (($msgv != "")? "\n": null) . "- The file \"$f\" does not exist";
+            $msgv = $msgv . (($msgv != "") ? "\n" : null) . "- The file \"$f\" does not exist";
 
         }
 
@@ -3434,9 +3456,9 @@ class workspaceTools
 
         if ($arrayPathInfo["extension"] != "tar") {
 
-            $swv  = 0;
+            $swv = 0;
 
-            $msgv = $msgv . (($msgv != "")? "\n": null) . "- The file extension \"$file\" is not \"tar\"";
+            $msgv = $msgv . (($msgv != "") ? "\n" : null) . "- The file extension \"$file\" is not \"tar\"";
 
         }
 
@@ -3876,7 +3898,7 @@ class workspaceTools
 
      */
 
-    public function migrateList($workSpace, $flagReinsert = false)
+    public function migrateList($workSpace, $flagReinsert = false, $lang='en')
 
     {
 
@@ -3907,8 +3929,6 @@ class workspaceTools
             foreach ($arrayTable as $value) {
 
                 $tableName = $value . "Peer";
-
-
 
                 $list = new $tableName();
 
@@ -3946,225 +3966,817 @@ class workspaceTools
 
             BasePeer::doUpdate($criteriaWhere, $criteriaSet, Propel::getConnection("workflow"));
 
+            $this->regenerateListCompleted($lang);
+
+            $this->regenerateListCanceled($lang);
+
+            $this->regenerateListMyInbox(); // this list require no translation
+
+            $this->regenerateListInbox(); // this list require no translation
+
+            $this->regenerateListParticipatedHistory(); // this list require no translation
+
+            $this->regenerateListParticipatedLast(); // this list require no translation
+
+            $this->regenerateListPaused(); // this list require no translation
+
+        }
+
+
+
+
+
+        // ADD LISTS COUNTS
+
+        $this->migrateCounters();
+
+
+
+        if (!$flagReinsert) {
+
+            $this->listFirstExecution("insert");
+
         }
 
 
 
-        $appCache = new AppCacheView();
+        //Return
 
-        $users    = new Users();
+        return true;
 
-        $case = new Cases();
+    }
 
 
 
-        //Select data CANCELLED
+    public function regenerateListCanceled($lang = 'en')
 
-        $canCriteria = $appCache->getSelAllColumns();
+    {
 
-        $canCriteria->add(AppCacheViewPeer::APP_STATUS, "CANCELLED", CRITERIA::EQUAL);
+        $this->initPropel(true);
 
-        $canCriteria->add(AppCacheViewPeer::DEL_LAST_INDEX, "1", CRITERIA::EQUAL);
+        $query = 'INSERT INTO '.$this->dbName.'.LIST_CANCELED
 
-        $rsCriteria = AppCacheViewPeer::doSelectRS($canCriteria);
+                    (APP_UID,
 
-        $rsCriteria->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+                    USR_UID,
 
-        //Insert data LIST_CANCELED
+                    TAS_UID,
 
-        while ($rsCriteria->next()) {
+                    PRO_UID,
 
-              $row = $rsCriteria->getRow();
+                    APP_NUMBER,
 
-              $listCanceled = new ListCanceled();
+                    APP_TITLE,
 
-              $listCanceled->remove($row["APP_UID"]);
+                    APP_PRO_TITLE,
 
-              $listCanceled->setDeleted(false);
+                    APP_TAS_TITLE,
 
-              $listCanceled->create($row);
+                    APP_CANCELED_DATE,
 
-        }
+                    DEL_INDEX,
+
+                    DEL_PREVIOUS_USR_UID,
+
+                    DEL_CURRENT_USR_USERNAME,
+
+                    DEL_CURRENT_USR_FIRSTNAME,
+
+                    DEL_CURRENT_USR_LASTNAME,
+
+                    DEL_DELEGATE_DATE,
+
+                    DEL_INIT_DATE,
+
+                    DEL_DUE_DATE,
+
+                    DEL_PRIORITY)
+
+                    SELECT
+
+                        ACV.APP_UID,
+
+                        ACV.USR_UID,
+
+                        ACV.TAS_UID,
+
+                        ACV.PRO_UID,
+
+                        ACV.APP_NUMBER,
+
+                        C_APP.CON_VALUE AS APP_TITLE,
+
+                        C_PRO.CON_VALUE AS APP_PRO_TITLE,
+
+                        C_TAS.CON_VALUE AS APP_TAS_TITLE,
+
+                        NOW() AS APP_CANCELED_DATE,
+
+                        ACV.DEL_INDEX,
+
+                        PREV_AD.USR_UID AS DEL_PREVIOUS_USR_UID,
+
+                        USR.USR_USERNAME AS DEL_CURRENT_USR_USERNAME,
+
+                        USR.USR_FIRSTNAME AS DEL_CURRENT_USR_FIRSTNAME,
+
+                        USR.USR_LASTNAME AS DEL_CURRENT_USR_LASTNAME,
+
+                        AD.DEL_DELEGATE_DATE AS DEL_DELEGATE_DATE,
+
+                        AD.DEL_INIT_DATE AS DEL_INIT_DATE,
+
+                        AD.DEL_TASK_DUE_DATE AS DEL_DUE_DATE,
+
+                        ACV.DEL_PRIORITY
+
+                    FROM
+
+                        ('.$this->dbName.'.APP_CACHE_VIEW ACV
+
+                        LEFT JOIN '.$this->dbName.'.CONTENT C_APP ON ACV.APP_UID = C_APP.CON_ID
+
+                            AND C_APP.CON_CATEGORY = \'APP_TITLE\'
+
+                            AND C_APP.CON_LANG = \''.$lang.'\'
+
+                        LEFT JOIN '.$this->dbName.'.CONTENT C_PRO ON ACV.PRO_UID = C_PRO.CON_ID
+
+                            AND C_PRO.CON_CATEGORY = \'PRO_TITLE\'
+
+                            AND C_PRO.CON_LANG = \''.$lang.'\'
+
+                        LEFT JOIN '.$this->dbName.'.CONTENT C_TAS ON ACV.TAS_UID = C_TAS.CON_ID
+
+                            AND C_TAS.CON_CATEGORY = \'TAS_TITLE\'
+
+                            AND C_TAS.CON_LANG = \''.$lang.'\')
+
+                            LEFT JOIN
+
+                        ('.$this->dbName.'.APP_DELEGATION AD
+
+                        INNER JOIN '.$this->dbName.'.APP_DELEGATION PREV_AD ON AD.APP_UID = PREV_AD.APP_UID
+
+                            AND AD.DEL_PREVIOUS = PREV_AD.DEL_INDEX) ON ACV.APP_UID = AD.APP_UID
+
+                            AND ACV.DEL_INDEX = AD.DEL_INDEX
+
+                            LEFT JOIN
+
+                        '.$this->dbName.'.USERS USR ON ACV.USR_UID = USR.USR_UID
+
+                    WHERE
+
+                        ACV.APP_STATUS = \'CANCELLED\'
+
+                            AND ACV.DEL_LAST_INDEX = 1';
+
+        $con = Propel::getConnection("workflow");
+
+        $stmt = $con->createStatement();
+
+        $stmt->executeQuery($query);
 
         CLI::logging("> Completed table LIST_CANCELED\n");
 
+    }
 
 
-        //Select data COMPLETED
 
-        $comCriteria = $appCache->getSelAllColumns();
+    public function regenerateListCompleted($lang = 'en'){
 
-        $comCriteria->add(AppCacheViewPeer::APP_STATUS, "COMPLETED", CRITERIA::EQUAL);
+        $this->initPropel(true);
 
-        $comCriteria->add(AppCacheViewPeer::DEL_LAST_INDEX, "1", CRITERIA::EQUAL);
+        $query = 'INSERT INTO '.$this->dbName.'.LIST_COMPLETED
 
-        $rsCriteria = AppCacheViewPeer::doSelectRS($comCriteria);
+                    (APP_UID,
 
-        $rsCriteria->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+                    USR_UID,
 
-        //Insert new data LIST_COMPLETED
+                    TAS_UID,
 
-        while ($rsCriteria->next()) {
+                    PRO_UID,
 
-              $row = $rsCriteria->getRow();
+                    APP_NUMBER,
 
-              $listCompleted = new ListCompleted();
+                    APP_TITLE,
 
-              $listCompleted->remove($row["APP_UID"]);
+                    APP_PRO_TITLE,
 
-              $listCompleted->setDeleted(false);
+                    APP_TAS_TITLE,
 
-              $listCompleted->create($row);
+                    APP_CREATE_DATE,
 
-        }
+                    APP_FINISH_DATE,
+
+                    DEL_INDEX,
+
+                    DEL_PREVIOUS_USR_UID,
+
+                    DEL_CURRENT_USR_USERNAME,
+
+                    DEL_CURRENT_USR_FIRSTNAME,
+
+                    DEL_CURRENT_USR_LASTNAME)
+
+
+
+                    SELECT
+
+                        ACV.APP_UID,
+
+                        ACV.USR_UID,
+
+                        ACV.TAS_UID,
+
+                        ACV.PRO_UID,
+
+                        ACV.APP_NUMBER,
+
+                        C_APP.CON_VALUE AS APP_TITLE,
+
+                        C_PRO.CON_VALUE AS APP_PRO_TITLE,
+
+                        C_TAS.CON_VALUE AS APP_TAS_TITLE,
+
+                        ACV.APP_CREATE_DATE,
+
+                        ACV.APP_FINISH_DATE,
+
+                        ACV.DEL_INDEX,
+
+                        PREV_AD.USR_UID AS DEL_PREVIOUS_USR_UID,
+
+                        USR.USR_USERNAME AS DEL_CURRENT_USR_USERNAME,
+
+                        USR.USR_FIRSTNAME AS DEL_CURRENT_USR_FIRSTNAME,
+
+                        USR.USR_LASTNAME AS DEL_CURRENT_USR_LASTNAME
+
+                    FROM
+
+                        ('.$this->dbName.'.APP_CACHE_VIEW ACV
+
+                        LEFT JOIN '.$this->dbName.'.CONTENT C_APP ON ACV.APP_UID = C_APP.CON_ID
+
+                            AND C_APP.CON_CATEGORY = \'APP_TITLE\'
+
+                            AND C_APP.CON_LANG = \''.$lang.'\'
+
+                        LEFT JOIN '.$this->dbName.'.CONTENT C_PRO ON ACV.PRO_UID = C_PRO.CON_ID
+
+                            AND C_PRO.CON_CATEGORY = \'PRO_TITLE\'
+
+                            AND C_PRO.CON_LANG = \''.$lang.'\'
+
+                        LEFT JOIN '.$this->dbName.'.CONTENT C_TAS ON ACV.TAS_UID = C_TAS.CON_ID
+
+                            AND C_TAS.CON_CATEGORY = \'TAS_TITLE\'
+
+                            AND C_TAS.CON_LANG = \''.$lang.'\')
+
+                            LEFT JOIN
+
+                        ('.$this->dbName.'.APP_DELEGATION AD
+
+                        INNER JOIN '.$this->dbName.'.APP_DELEGATION PREV_AD ON AD.APP_UID = PREV_AD.APP_UID
+
+                            AND AD.DEL_PREVIOUS = PREV_AD.DEL_INDEX) ON ACV.APP_UID = AD.APP_UID
+
+                            AND ACV.DEL_INDEX = AD.DEL_INDEX
+
+                            LEFT JOIN
+
+                        '.$this->dbName.'.USERS USR ON ACV.USR_UID = USR.USR_UID
+
+                    WHERE
+
+                        ACV.APP_STATUS = \'COMPLETED\'
+
+                            AND ACV.DEL_LAST_INDEX = 1';
+
+        $con = Propel::getConnection("workflow");
+
+        $stmt = $con->createStatement();
+
+        $stmt->executeQuery($query);
 
         CLI::logging("> Completed table LIST_COMPLETED\n");
 
+    }
 
 
-        //Select data TO_DO OR DRAFT
 
-        $inbCriteria = $appCache->getSelAllColumns();
+    public function regenerateListMyInbox(){
 
-        $rsCriteria = AppCacheViewPeer::doSelectRS($inbCriteria);
+        $this->initPropel(true);
 
-        $rsCriteria->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+        $query = 'INSERT INTO '.$this->dbName.'.LIST_MY_INBOX
 
+                    (APP_UID,
 
+                    USR_UID,
 
-        $criteriaUser = new Criteria();
+                    TAS_UID,
 
-        $criteriaUser->addSelectColumn( UsersPeer::USR_UID );
+                    PRO_UID,
 
-        $criteriaUser->addSelectColumn( UsersPeer::USR_FIRSTNAME );
+                    APP_NUMBER,
 
-        $criteriaUser->addSelectColumn( UsersPeer::USR_LASTNAME );
+                    APP_TITLE,
 
-        $criteriaUser->addSelectColumn( UsersPeer::USR_USERNAME );
+                    APP_PRO_TITLE,
 
-        //Insert new data LIST_INBOX
+                    APP_TAS_TITLE,
 
-        while ($rsCriteria->next()) {
+                    APP_CREATE_DATE,
 
-            $row = $rsCriteria->getRow();
+                    APP_UPDATE_DATE,
 
-            $isSelfService = ($row['USR_UID'] == '') ? true : false;
+                    APP_FINISH_DATE,
 
-            if($row["DEL_THREAD_STATUS"] == 'OPEN'){
+                    APP_STATUS,
 
-                //Update information about the previous_user
+                    DEL_INDEX,
 
-                $row["DEL_PREVIOUS_USR_UID"] = $row["PREVIOUS_USR_UID"];
+                    DEL_PREVIOUS_USR_UID,
 
-                $criteriaUser->add( UsersPeer::USR_UID, $row["PREVIOUS_USR_UID"] );
+                    DEL_PREVIOUS_USR_USERNAME,
 
-                $datasetU = UsersPeer::doSelectRS($criteriaUser);
+                    DEL_PREVIOUS_USR_FIRSTNAME,
 
-                $datasetU->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+                    DEL_PREVIOUS_USR_LASTNAME,
 
-                $datasetU->next();
+                    DEL_CURRENT_USR_UID,
 
-                $arrayUsers = $datasetU->getRow();
+                    DEL_CURRENT_USR_USERNAME,
 
-                $row["DEL_PREVIOUS_USR_USERNAME"] = $arrayUsers["USR_USERNAME"];
+                    DEL_CURRENT_USR_FIRSTNAME,
 
-                $row["DEL_PREVIOUS_USR_FIRSTNAME"]= $arrayUsers["USR_FIRSTNAME"];
+                    DEL_CURRENT_USR_LASTNAME,
 
-                $row["DEL_PREVIOUS_USR_LASTNAME"] = $arrayUsers["USR_LASTNAME"];
+                    DEL_DELEGATE_DATE,
 
-                //Update the due date
+                    DEL_INIT_DATE,
 
-                $row["DEL_DUE_DATE"]         = $row["DEL_TASK_DUE_DATE"];
+                    DEL_DUE_DATE,
 
-                $listInbox = new ListInbox();
+                    DEL_PRIORITY)
 
-                $listInbox->remove($row["APP_UID"],$row["DEL_INDEX"]);
 
-                $listInbox->setDeleted(false);
 
-                $listInbox->create($row, $isSelfService);
+                    SELECT
 
-            } else {
+                        ACV.APP_UID,
 
-                // create participated List when the thread is CLOSED
+                        ACV.USR_UID,
 
-                $listParticipatedHistory = new ListParticipatedHistory();
+                        ACV.TAS_UID,
 
-                $listParticipatedHistory->remove($row['APP_UID'], $row['DEL_INDEX']);
+                        ACV.PRO_UID,
 
-                $listParticipatedHistory = new ListParticipatedHistory();
+                        ACV.APP_NUMBER,
 
-                $listParticipatedHistory->create($row);
+                        ACV.APP_TITLE,
 
+                        ACV.APP_PRO_TITLE,
 
+                        ACV.APP_TAS_TITLE,
 
-                $oCriteria = new Criteria('workflow');
+                        ACV.APP_CREATE_DATE,
 
-                $oCriteria->add(ListParticipatedLastPeer::APP_UID, $row['APP_UID']);
+                        ACV.APP_UPDATE_DATE,
 
-                $oCriteria->add(ListParticipatedLastPeer::USR_UID, $row['USR_UID']);
+                        ACV.APP_FINISH_DATE,
 
-                ListParticipatedLastPeer::doDelete($oCriteria);
+                        ACV.APP_STATUS,
 
+                        ACV.DEL_INDEX,
 
+                        ACV.PREVIOUS_USR_UID AS DEL_PREVIOUS_USR_UID,
 
-                $listParticipatedLast = new ListParticipatedLast();
+                        PRE_USR.USR_USERNAME AS DEL_PREVIOUS_USR_USERNAME,
 
-                $listParticipatedLast->create($row);
+                        PRE_USR.USR_FIRSTNAME AS DEL_PREVIOUS_USR_FIRSTNAME,
 
-                $listParticipatedLast = new ListParticipatedLast();
+                        PRE_USR.USR_LASTNAME AS DEL_PREVIOUS_USR_LASTNAME,
 
-                $listParticipatedLast->refresh($row);
+                        ACV.USR_UID AS DEL_CURRENT_USR_UID,
 
-            }
+                        CUR_USR.USR_USERNAME AS DEL_CURRENT_USR_USERNAME,
 
+                        CUR_USR.USR_FIRSTNAME AS DEL_CURRENT_USR_FIRSTNAME,
 
+                        CUR_USR.USR_LASTNAME AS DEL_CURRENT_USR_LASTNAME,
 
-        }
+                        ACV.DEL_DELEGATE_DATE AS DEL_DELEGATE_DATE,
 
+                        ACV.DEL_INIT_DATE AS DEL_INIT_DATE,
 
+                        ACV.DEL_TASK_DUE_DATE AS DEL_DUE_DATE,
 
-        CLI::logging("> Completed table LIST_INBOX\n");
+                        ACV.DEL_PRIORITY
 
-        //With this List is populated the LIST_PARTICIPATED_HISTORY and LIST_PARTICIPATED_LAST
+                    FROM
 
-        CLI::logging("> Completed table LIST_PARTICIPATED_HISTORY\n");
+                        '.$this->dbName.'.APP_CACHE_VIEW ACV
 
-        CLI::logging("> Completed table LIST_PARTICIPATED_LAST\n");
+                            LEFT JOIN
 
+                        '.$this->dbName.'.USERS CUR_USR ON ACV.USR_UID = CUR_USR.USR_UID
 
+                            LEFT JOIN
 
-        //Select data TO_DO OR DRAFT CASES CREATED BY AN USER
+                        '.$this->dbName.'.USERS PRE_USR ON ACV.PREVIOUS_USR_UID = PRE_USR.USR_UID
 
-        $myiCriteria = $appCache->getSelAllColumns();
+                    WHERE ACV.DEL_INDEX=1';
 
-        $myiCriteria->add(AppCacheViewPeer::DEL_INDEX, "1", CRITERIA::EQUAL);
 
-        $rsCriteria = AppCacheViewPeer::doSelectRS($myiCriteria);
 
-        $rsCriteria->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+        $con = Propel::getConnection("workflow");
 
-        //Insert new data LIST_MY_INBOX
+        $stmt = $con->createStatement();
 
-        while ($rsCriteria->next()) {
-
-              $row = $rsCriteria->getRow();
-
-              $listMyInbox = new ListMyInbox();
-
-              $listMyInbox ->remove($row["APP_UID"],$row["USR_UID"]);
-
-              $listMyInbox->setDeleted(false);
-
-              $listMyInbox->create($row);
-
-        }
+        $stmt->executeQuery($query);
 
         CLI::logging("> Completed table LIST_MY_INBOX\n");
 
+    }
 
 
-        //Select data PAUSED
+
+    public function regenerateListInbox(){
+
+        $this->initPropel(true);
+
+        $query = 'INSERT INTO '.$this->dbName.'.LIST_INBOX
+
+                    (APP_UID,
+
+                    DEL_INDEX,
+
+                    USR_UID,
+
+                    TAS_UID,
+
+                    PRO_UID,
+
+                    APP_NUMBER,
+
+                    APP_STATUS,
+
+                    APP_TITLE,
+
+                    APP_PRO_TITLE,
+
+                    APP_TAS_TITLE,
+
+                    APP_UPDATE_DATE,
+
+                    DEL_PREVIOUS_USR_UID,
+
+                    DEL_PREVIOUS_USR_USERNAME,
+
+                    DEL_PREVIOUS_USR_FIRSTNAME,
+
+                    DEL_PREVIOUS_USR_LASTNAME,
+
+                    DEL_DELEGATE_DATE,
+
+                    DEL_INIT_DATE,
+
+                    DEL_DUE_DATE,
+
+                    DEL_RISK_DATE,
+
+                    DEL_PRIORITY)
+
+
+
+                    SELECT
+
+                        ACV.APP_UID,
+
+                        ACV.DEL_INDEX,
+
+                        ACV.USR_UID,
+
+                        ACV.TAS_UID,
+
+                        ACV.PRO_UID,
+
+                        ACV.APP_NUMBER,
+
+                        ACV.APP_STATUS,
+
+                        ACV.APP_TITLE,
+
+                        ACV.APP_PRO_TITLE,
+
+                        ACV.APP_TAS_TITLE,
+
+                        ACV.APP_UPDATE_DATE,
+
+                        ACV.PREVIOUS_USR_UID AS DEL_PREVIOUS_USR_UID,
+
+                        USR.USR_USERNAME AS DEL_PREVIOUS_USR_USERNAME,
+
+                        USR.USR_FIRSTNAME AS DEL_PREVIOUS_USR_FIRSTNAME,
+
+                        USR.USR_LASTNAME AS DEL_PREVIOUS_USR_LASTNAME,
+
+                        ACV.DEL_DELEGATE_DATE AS DEL_DELEGATE_DATE,
+
+                        ACV.DEL_INIT_DATE AS DEL_INIT_DATE,
+
+                        ACV.DEL_TASK_DUE_DATE AS DEL_DUE_DATE,
+
+                        ACV.DEL_RISK_DATE AS DEL_RISK_DATE,
+
+                        ACV.DEL_PRIORITY
+
+                    FROM
+
+                        '.$this->dbName.'.APP_CACHE_VIEW ACV
+
+                            LEFT JOIN
+
+                        '.$this->dbName.'.USERS USR ON ACV.PREVIOUS_USR_UID = USR.USR_UID
+
+                    WHERE
+
+                        ACV.DEL_THREAD_STATUS = \'OPEN\'';
+
+        $con = Propel::getConnection("workflow");
+
+        $stmt = $con->createStatement();
+
+        $stmt->executeQuery($query);
+
+        CLI::logging("> Completed table LIST_INBOX\n");
+
+    }
+
+
+
+    public function regenerateListParticipatedHistory(){
+
+        $this->initPropel(true);
+
+        $query = 'INSERT INTO '.$this->dbName.'.LIST_PARTICIPATED_HISTORY
+
+                    (APP_UID,
+
+                    DEL_INDEX,
+
+                    USR_UID,
+
+                    TAS_UID,
+
+                    PRO_UID,
+
+                    APP_NUMBER,
+
+                    APP_TITLE,
+
+                    APP_PRO_TITLE,
+
+                    APP_TAS_TITLE,
+
+                    DEL_PREVIOUS_USR_UID,
+
+                    DEL_PREVIOUS_USR_USERNAME,
+
+                    DEL_PREVIOUS_USR_FIRSTNAME,
+
+                    DEL_PREVIOUS_USR_LASTNAME,
+
+                    DEL_CURRENT_USR_USERNAME,
+
+                    DEL_CURRENT_USR_FIRSTNAME,
+
+                    DEL_CURRENT_USR_LASTNAME,
+
+                    DEL_DELEGATE_DATE,
+
+                    DEL_INIT_DATE,
+
+                    DEL_DUE_DATE,
+
+                    DEL_PRIORITY)
+
+
+
+                    SELECT
+
+                        ACV.APP_UID,
+
+                        ACV.DEL_INDEX,
+
+                        ACV.USR_UID,
+
+                        ACV.TAS_UID,
+
+                        ACV.PRO_UID,
+
+                        ACV.APP_NUMBER,
+
+                        ACV.APP_TITLE,
+
+                        ACV.APP_PRO_TITLE,
+
+                        ACV.APP_TAS_TITLE,
+
+                        ACV.PREVIOUS_USR_UID AS DEL_PREVIOUS_USR_UID,
+
+                        PRE_USR.USR_USERNAME AS DEL_PREVIOUS_USR_USERNAME,
+
+                        PRE_USR.USR_FIRSTNAME AS DEL_PREVIOUS_USR_FIRSTNAME,
+
+                        PRE_USR.USR_LASTNAME AS DEL_PREVIOUS_USR_LASTNAME,
+
+                        CUR_USR.USR_USERNAME AS DEL_CURRENT_USR_USERNAME,
+
+                        CUR_USR.USR_FIRSTNAME AS DEL_CURRENT_USR_FIRSTNAME,
+
+                        CUR_USR.USR_LASTNAME AS DEL_CURRENT_USR_LASTNAME,
+
+                        ACV.DEL_DELEGATE_DATE AS DEL_DELEGATE_DATE,
+
+                        ACV.DEL_INIT_DATE AS DEL_INIT_DATE,
+
+                        ACV.DEL_TASK_DUE_DATE AS DEL_DUE_DATE,
+
+                        ACV.DEL_PRIORITY
+
+                    FROM
+
+                        '.$this->dbName.'.APP_CACHE_VIEW ACV
+
+                            LEFT JOIN
+
+                        '.$this->dbName.'.USERS CUR_USR ON ACV.USR_UID = CUR_USR.USR_UID
+
+                            LEFT JOIN
+
+                        '.$this->dbName.'.USERS PRE_USR ON ACV.PREVIOUS_USR_UID = PRE_USR.USR_UID';
+
+        $con = Propel::getConnection("workflow");
+
+        $stmt = $con->createStatement();
+
+        $stmt->executeQuery($query);
+
+        CLI::logging("> Completed table LIST_PARTICIPATED_HISTORY\n");
+
+    }
+
+
+
+    public function regenerateListParticipatedLast(){
+
+        $this->initPropel(true);
+
+        $query = 'INSERT INTO '.$this->dbName.'.LIST_PARTICIPATED_LAST
+
+                    (
+
+                    APP_UID,
+
+                    USR_UID,
+
+                    DEL_INDEX,
+
+                    TAS_UID,
+
+                    PRO_UID,
+
+                    APP_NUMBER,
+
+                    APP_TITLE,
+
+                    APP_PRO_TITLE,
+
+                    APP_TAS_TITLE,
+
+                    APP_STATUS,
+
+                    DEL_PREVIOUS_USR_UID,
+
+                    DEL_PREVIOUS_USR_USERNAME,
+
+                    DEL_PREVIOUS_USR_FIRSTNAME,
+
+                    DEL_PREVIOUS_USR_LASTNAME,
+
+                    DEL_CURRENT_USR_USERNAME,
+
+                    DEL_CURRENT_USR_FIRSTNAME,
+
+                    DEL_CURRENT_USR_LASTNAME,
+
+                    DEL_DELEGATE_DATE,
+
+                    DEL_INIT_DATE,
+
+                    DEL_DUE_DATE,
+
+                    DEL_PRIORITY,
+
+                    DEL_THREAD_STATUS)
+
+
+
+                    SELECT
+
+                        ACV.APP_UID,
+
+                        ACV.USR_UID,
+
+                        ACV.DEL_INDEX,
+
+                        ACV.TAS_UID,
+
+                        ACV.PRO_UID,
+
+                        ACV.APP_NUMBER,
+
+                        ACV.APP_TITLE,
+
+                        ACV.APP_PRO_TITLE,
+
+                        ACV.APP_TAS_TITLE,
+
+                        ACV.APP_STATUS,
+
+                        ACV.PREVIOUS_USR_UID AS DEL_PREVIOUS_USR_UID,
+
+                        PRE_USR.USR_USERNAME AS DEL_PREVIOUS_USR_USERNAME,
+
+                        PRE_USR.USR_FIRSTNAME AS DEL_PREVIOUS_USR_FIRSTNAME,
+
+                        PRE_USR.USR_LASTNAME AS DEL_PREVIOUS_USR_LASTNAME,
+
+                        CUR_USR.USR_USERNAME AS DEL_CURRENT_USR_USERNAME,
+
+                        CUR_USR.USR_FIRSTNAME AS DEL_CURRENT_USR_FIRSTNAME,
+
+                        CUR_USR.USR_LASTNAME AS DEL_CURRENT_USR_LASTNAME,
+
+                        ACV.DEL_DELEGATE_DATE AS DEL_DELEGATE_DATE,
+
+                        ACV.DEL_INIT_DATE AS DEL_INIT_DATE,
+
+                        ACV.DEL_TASK_DUE_DATE AS DEL_DUE_DATE,
+
+                        ACV.DEL_PRIORITY,
+
+                        ACV.DEL_THREAD_STATUS
+
+                    FROM
+
+                        '.$this->dbName.'.APP_CACHE_VIEW ACV
+
+                            LEFT JOIN
+
+                        '.$this->dbName.'.USERS CUR_USR ON ACV.USR_UID = CUR_USR.USR_UID
+
+                            LEFT JOIN
+
+                        '.$this->dbName.'.USERS PRE_USR ON ACV.PREVIOUS_USR_UID = PRE_USR.USR_UID
+
+                            INNER JOIN
+
+                        (SELECT
+
+                            ACV.APP_UID, ACV.USR_UID, MAX(DEL_INDEX) DEL_INDEX
+
+                        FROM
+
+                            '.$this->dbName.'.APP_CACHE_VIEW ACV
+
+                        GROUP BY ACV.APP_UID , ACV.USR_UID) LAST_ACV ON LAST_ACV.APP_UID = ACV.APP_UID
+
+                            AND LAST_ACV.USR_UID = ACV.USR_UID
+
+                            AND LAST_ACV.DEL_INDEX = ACV.DEL_INDEX
+
+		';
+
+        $con = Propel::getConnection("workflow");
+
+        $stmt = $con->createStatement();
+
+        $stmt->executeQuery($query);
+
+        CLI::logging("> Completed table LIST_PARTICIPATED_LAST\n");
+
+    }
+
+
+
+    public function regenerateListPaused(){
 
         $delaycriteria = new Criteria("workflow");
 
@@ -4194,65 +4806,35 @@ class workspaceTools
 
         $rsCriteria->setFetchmode(ResultSet::FETCHMODE_ASSOC);
 
-        //Insert new data LIST_PAUSED
 
-        while ($rsCriteria->next()) {
-
-              $row = $rsCriteria->getRow();
-
-              $data = $row;
-
-              $data["DEL_INDEX"] = $row["APP_DEL_INDEX"];
-
-              $listPaused = new ListPaused();
-
-              $listPaused ->remove($row["APP_UID"],$row["APP_DEL_INDEX"],$data);
-
-              $listPaused->setDeleted(false);
-
-              $listPaused->create($data);
-
-        }
-
-        CLI::logging("> Completed table LIST_PAUSED\n");
-
-
-
-        //Select and Insert LIST_UNASSIGNED
-
-        $unaCriteria = $appCache->getSelAllColumns();
-
-        $unaCriteria->add(AppCacheViewPeer::USR_UID, "", CRITERIA::EQUAL);
-
-        $rsCriteria = AppCacheViewPeer::doSelectRS($unaCriteria);
-
-        $rsCriteria->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-
-        $del = new ListUnassignedPeer();
-
-        $del->doDeleteAll();
-
-        $del = new ListUnassignedGroupPeer();
-
-        $del->doDeleteAll();
 
         while ($rsCriteria->next()) {
 
             $row = $rsCriteria->getRow();
 
-            $listUnassigned = new ListUnassigned();
+            $data = $row;
 
-            $unaUid = $listUnassigned->generateData($row["APP_UID"],$row["PREVIOUS_USR_UID"]);
+            $data["DEL_INDEX"] = $row["APP_DEL_INDEX"];
+
+            $listPaused = new ListPaused();
+
+            $listPaused ->remove($row["APP_UID"],$row["APP_DEL_INDEX"],$data);
+
+            $listPaused->setDeleted(false);
+
+            $listPaused->create($data);
 
         }
 
-        CLI::logging("> Completed table LIST_UNASSIGNED\n");
+        CLI::logging("> Completed table LIST_PAUSED\n");
 
-        CLI::logging("> Completed table LIST_UNASSIGNED_GROUP\n");
+    }
 
 
 
-        // ADD LISTS COUNTS
+    public function migrateCounters()
+
+    {
 
         $aTypes = array(
 
@@ -4290,7 +4872,7 @@ class workspaceTools
 
             $oAppCache = new AppCacheView();
 
-            $aCount = $oAppCache->getAllCounters( $aTypes, $aRow['USR_UID'] );
+            $aCount = $oAppCache->getAllCounters($aTypes, $aRow['USR_UID'], false);
 
             $newData = array(
 
@@ -4315,20 +4897,6 @@ class workspaceTools
             $users->update($newData);
 
         }
-
-
-
-        if (!$flagReinsert) {
-
-            $this->listFirstExecution("insert");
-
-        }
-
-
-
-        //Return
-
-        return true;
 
     }
 
@@ -4513,5 +5081,971 @@ class workspaceTools
         }
 
     }
+
+
+
+    /**
+
+     * Register system tables in a file
+
+     *
+
+     * return void
+
+     */
+
+    public static function registerSystemTables($aSquema){
+
+        //Register all tables
+
+        $sListTables = '';
+
+        foreach ($aSquema as $key => $value) {
+
+            $sListTables .= $key .'|';
+
+        }
+
+
+
+        $sysTablesIniFile= PATH_CONFIG . 'system-tables.ini';
+
+        $contents = file_put_contents( $sysTablesIniFile, sprintf( "%s '%s'\n", "tables = ", $sListTables ) );
+
+        if ($contents === null) {
+
+            throw (new Exception( G::LoadTranslation('ID_FILE_NOT_WRITEABLE', SYS_LANG, array($sysTablesIniFile) ) ));
+
+        }
+
+    }
+
+
+
+    /**
+
+     *return void
+
+     */
+
+    public function checkRbacPermissions(){
+
+        CLI::logging("-> Verifying roles permissions in RBAC \n");
+
+        //Update table RBAC permissions
+
+        Bootstrap::LoadSystem('rbac');
+
+        $RBAC = &RBAC::getSingleton();
+
+        $RBAC->initRBAC();
+
+        $result = $RBAC->verifyPermissions();
+
+        if (count($result) > 1) {
+
+            foreach ($result as $item) {
+
+                CLI::logging("    $item... \n");
+
+            }
+
+        } else {
+
+            CLI::logging("    All roles permissions already updated \n");
+
+        }
+
+    }
+
+    
+
+    public function checkSequenceNumber()
+
+    {
+
+        $criteria = new Criteria("workflow");
+
+        $rsCriteria = AppSequencePeer::doSelectRS($criteria);
+
+        $rsCriteria->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+
+        $rsCriteria->next();
+
+        $appSequenceRow = $rsCriteria->getRow();
+
+        if (empty($appSequenceRow)) {
+
+            $sequenceInstance = SequencesPeer::retrieveByPK("APP_NUMBER");
+
+            $appSequenceInstance = new AppSequence();
+
+            if (!is_null($sequenceInstance)) {
+
+                $sequenceFields = $sequenceInstance->toArray(BasePeer::TYPE_FIELDNAME);
+
+                $appSequenceInstance->updateSequenceNumber($sequenceFields['SEQ_VALUE']);
+
+            } else {
+
+                $appSequenceInstance->updateSequenceNumber(0);
+
+            }
+
+        }
+
+    }
+
+
+
+    public function hasMissingUsers()
+
+    {
+
+        $this->initPropel(true);
+
+        file_put_contents(
+
+            PATH_DATA."/missing-users-".$this->name.".txt",
+
+            "Missing Processes List.\n"
+
+        );
+
+
+
+        $criteria = new Criteria("workflow");
+
+        $criteria->addSelectColumn(AppCacheViewPeer::APP_UID);
+
+        $criteria->addSelectColumn(AppCacheViewPeer::DEL_INDEX);
+
+        $criteria->addSelectColumn(AppCacheViewPeer::USR_UID);
+
+        $criteria->addJoinMC(array(
+
+            array(AppCacheViewPeer::USR_UID, UsersPeer::USR_UID)),
+
+            Criteria::LEFT_JOIN
+
+        );
+
+        $criteria->add(UsersPeer::USR_UID, null, Criteria::ISNULL);
+
+        $rsCriteria = AppCacheViewPeer::doSelectRS($criteria);
+
+        $rsCriteria->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+
+        $counter = 0;
+
+        while ($rsCriteria->next()) {
+
+            $item = $rsCriteria->getRow();
+
+            $counter++;
+
+            file_put_contents(
+
+                PATH_DATA."/missing-users-".$this->name.".txt",
+
+                "APP_UID:[".$item['APP_UID']."] - DEL_INDEX[".$item['DEL_INDEX']."] have relation " .
+
+                "with invalid or non-existent user user with ".
+
+                "id [".$item['USR_UID']."]"
+
+            );
+
+        }
+
+        CLI::logging("> Number of user related inconsistencies for workspace " . CLI::info($this->name) . ": " . CLI::info($counter) . "\n");
+
+        return ($counter > 0);
+
+    }
+
+
+
+    public function hasMissingTasks()
+
+    {
+
+        $this->initPropel(true);
+
+        file_put_contents(
+
+            PATH_DATA."/missing-tasks-".$this->name.".txt",
+
+            "Missing Processes List\n"
+
+        );
+
+
+
+        $criteria = new Criteria("workflow");
+
+        $criteria->addSelectColumn(AppCacheViewPeer::APP_UID);
+
+        $criteria->addSelectColumn(AppCacheViewPeer::DEL_INDEX);
+
+        $criteria->addSelectColumn(AppCacheViewPeer::TAS_UID);
+
+        $criteria->addJoinMC(array(
+
+            array(AppCacheViewPeer::USR_UID, TaskPeer::TAS_UID)),
+
+            Criteria::LEFT_JOIN
+
+        );
+
+
+
+        $criteria->add(TaskPeer::TAS_UID, null, Criteria::ISNULL);
+
+        $rsCriteria = AppCacheViewPeer::doSelectRS($criteria);
+
+        $rsCriteria->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+
+        $counter = 0;
+
+        while ($rsCriteria->next()) {
+
+            $item = $rsCriteria->getRow();
+
+            file_put_contents(
+
+                PATH_DATA."/missing-tasks-".$this->name.".txt",
+
+                "APP_UID:[".$item['APP_UID']."] - DEL_INDEX[".$item['DEL_INDEX']."] have relation " .
+
+                "with invalid or non-existent task with ".
+
+                "id [".$item['TAS_UID']."]"
+
+            );
+
+        }
+
+
+
+        CLI::logging("> Number of task related inconsistencies for workspace " . CLI::info($this->name) . ": " . CLI::info($counter) . "\n");
+
+        return ($counter > 0);
+
+    }
+
+
+
+    public function hasMissingProcesses()
+
+    {
+
+        $this->initPropel(true);
+
+        file_put_contents(
+
+            PATH_DATA."/missing-processes-".$this->name.".txt",
+
+            "Missing Processes List\n"
+
+        );
+
+
+
+        $criteria = new Criteria("workflow");
+
+        $criteria->addSelectColumn(AppCacheViewPeer::APP_UID);
+
+        $criteria->addSelectColumn(AppCacheViewPeer::DEL_INDEX);
+
+        $criteria->addSelectColumn(AppCacheViewPeer::PRO_UID);
+
+        $criteria->addJoinMC(array(
+
+            array(AppCacheViewPeer::USR_UID, ProcessPeer::PRO_UID)),
+
+            Criteria::LEFT_JOIN
+
+        );
+
+
+
+        $criteria->add(ProcessPeer::PRO_UID, null, Criteria::ISNULL);
+
+        $rsCriteria = AppCacheViewPeer::doSelectRS($criteria);
+
+        $rsCriteria->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+
+        $counter = 0;
+
+        while ($rsCriteria->next()) {
+
+            $item = $rsCriteria->getRow();
+
+            file_put_contents(
+
+                PATH_DATA."/missing-processes-".$this->name.".txt",
+
+                "APP_UID:[".$item['APP_UID']."] - DEL_INDEX[".$item['DEL_INDEX']."] have relation " .
+
+                "with invalid or non-existent process with ".
+
+                "id [".$item['PRO_UID']."]"
+
+            );
+
+        }
+
+        CLI::logging("> Number of processes related data inconsistencies for workspace " . CLI::info($this->name) . ": " . CLI::info($counter) . "\n");
+
+        return ($counter > 0);
+
+    }
+
+
+
+    public function hasMissingAppDelegations()
+
+    {
+
+        $this->initPropel(true);
+
+        file_put_contents(
+
+            PATH_DATA."/missing-app-delegation-".$this->name.".txt",
+
+            "Missing AppDelegation List.\n"
+
+        );
+
+
+
+        $criteria = new Criteria("workflow");
+
+        $criteria->addSelectColumn(AppCacheViewPeer::APP_UID);
+
+        $criteria->addSelectColumn(AppCacheViewPeer::DEL_INDEX);
+
+        $criteria->addJoinMC(array(
+
+            array(AppCacheViewPeer::APP_UID, AppCacheViewPeer::DEL_INDEX),
+
+            array(AppDelegationPeer::APP_UID, AppDelegationPeer::DEL_INDEX)),
+
+            Criteria::LEFT_JOIN
+
+        );
+
+        $criteria->add(AppDelegationPeer::APP_UID, null, Criteria::ISNULL);
+
+        $rsCriteria = AppCacheViewPeer::doSelectRS($criteria);
+
+        $rsCriteria->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+
+        $counter = 0;
+
+        while ($rsCriteria->next()) {
+
+            $item = $rsCriteria->getRow();
+
+            $counter++;
+
+            file_put_contents(
+
+                PATH_DATA."/missing-app-delegation-".$this->name.".txt",
+
+                "APP_UID:[".$item['APP_UID']."] - DEL_INDEX[".$item['DEL_INDEX']."] have relation " .
+
+                "with invalid or non-existent process with ".
+
+                "id [".$item['PRO_UID']."]"
+
+            );
+
+        }
+
+        CLI::logging("> Number of delegations related data inconsistencies for workspace " . CLI::info($this->name) . ": " . CLI::info($counter) . "\n");
+
+        return ($counter > 0);
+
+    }
+
+
+
+
+
+    public function verifyMissingCancelled()
+
+    {
+
+        $this->initPropel(true);
+
+        file_put_contents(
+
+            PATH_DATA."/post-missing-cancelled-".$this->name.".txt",
+
+            "Missing Cancelled List.\n"
+
+        );
+
+        $criteria = new Criteria("workflow");
+
+        $criteria->addSelectColumn(AppCacheViewPeer::APP_UID);
+
+        $criteria->addSelectColumn(AppCacheViewPeer::DEL_INDEX);
+
+        $criteria->addJoinMC(array(
+
+            array(AppCacheViewPeer::APP_UID, ListCanceledPeer::APP_UID),
+
+            array(AppCacheViewPeer::DEL_INDEX, ListCanceledPeer::DEL_INDEX)),
+
+            Criteria::LEFT_JOIN
+
+        );
+
+
+
+        $criteria->add(AppCacheViewPeer::APP_STATUS, 'CANCELLED', Criteria::EQUAL);
+
+        $criteria->add(AppCacheViewPeer::DEL_LAST_INDEX, 1, Criteria::EQUAL);
+
+        $criteria->add(ListCanceledPeer::APP_UID, null, Criteria::ISNULL);
+
+
+
+        $rsCriteria = AppCacheViewPeer::doSelectRS($criteria);
+
+        $rsCriteria->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+
+        $counter = 0;
+
+        while ($rsCriteria->next()) {
+
+            $item = $rsCriteria->getRow();
+
+            $counter++;
+
+
+
+            file_put_contents(
+
+                PATH_DATA."/post-missing-cancelled-".$this->name.".txt",
+
+                "[".$item['APP_UID']."] has not been found"
+
+            );
+
+        }
+
+
+
+        CLI::logging("> Number of missing cancelled cases for workspace " . CLI::info($this->name) . ": " . CLI::info($counter) . "\n");
+
+    }
+
+
+
+    public function verifyMissingCompleted()
+
+    {
+
+        $this->initPropel(true);
+
+        file_put_contents(
+
+            PATH_DATA."/post-missing-completed-".$this->name.".txt",
+
+            "Missing Completed List.\n"
+
+        );
+
+        $criteria = new Criteria("workflow");
+
+        $criteria->addSelectColumn(AppCacheViewPeer::APP_UID);
+
+        $criteria->addSelectColumn(AppCacheViewPeer::DEL_INDEX);
+
+        $criteria->addJoinMC(array(
+
+            array(AppCacheViewPeer::APP_UID, ListCompletedPeer::APP_UID),
+
+            array(AppCacheViewPeer::DEL_INDEX, ListCompletedPeer::DEL_INDEX)),
+
+            Criteria::LEFT_JOIN
+
+        );
+
+
+
+        $criteria->add(AppCacheViewPeer::APP_STATUS, 'COMPLETED', Criteria::EQUAL);
+
+        $criteria->add(AppCacheViewPeer::DEL_LAST_INDEX, 1, Criteria::EQUAL);
+
+        $criteria->add(ListCompletedPeer::APP_UID, null, Criteria::ISNULL);
+
+
+
+        $rsCriteria = AppCacheViewPeer::doSelectRS($criteria);
+
+        $rsCriteria->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+
+        $counter = 0;
+
+        while ($rsCriteria->next()) {
+
+            $item = $rsCriteria->getRow();
+
+            $counter++;
+
+            file_put_contents(
+
+                PATH_DATA."/post-missing-completed-".$this->name.".txt",
+
+                "[".$item['APP_UID']."] has not been found"
+
+            );
+
+        }
+
+
+
+        CLI::logging("> Number of missing completed cases for workspace " . CLI::info($this->name) . ": " . CLI::info($counter) . "\n");
+
+    }
+
+
+
+    public function verifyMissingInbox()
+
+    {
+
+        $this->initPropel(true);
+
+        file_put_contents(
+
+            PATH_DATA."/post-missing-inbox-".$this->name.".txt",
+
+            "Missing Inbox List.\n"
+
+        );
+
+        $criteria = new Criteria("workflow");
+
+        $criteria->addSelectColumn(AppCacheViewPeer::APP_UID);
+
+        $criteria->addSelectColumn(AppCacheViewPeer::DEL_INDEX);
+
+        $criteria->addJoinMC(array(
+
+            array(AppCacheViewPeer::APP_UID, ListInboxPeer::APP_UID),
+
+            array(AppCacheViewPeer::DEL_INDEX, ListInboxPeer::DEL_INDEX)),
+
+            Criteria::LEFT_JOIN
+
+        );
+
+
+
+        $criteria->add(AppCacheViewPeer::DEL_THREAD_STATUS, 'OPEN', Criteria::EQUAL);
+
+        $criteria->add(ListInboxPeer::APP_UID, null, Criteria::ISNULL);
+
+
+
+        $rsCriteria = AppCacheViewPeer::doSelectRS($criteria);
+
+        $rsCriteria->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+
+        $counter = 0;
+
+        while ($rsCriteria->next()) {
+
+            $item = $rsCriteria->getRow();
+
+            $counter++;
+
+            file_put_contents(
+
+                PATH_DATA."/post-missing-inbox-".$this->name.".txt",
+
+                "[".$item['APP_UID']."] has not been found"
+
+            );
+
+
+
+        }
+
+
+
+        CLI::logging("> Number of missing inbox cases for workspace " . CLI::info($this->name) . ": " . CLI::info($counter) . "\n");
+
+    }
+
+
+
+    public function verifyMissingParticipatedHistory()
+
+    {
+
+        $this->initPropel(true);
+
+        file_put_contents(
+
+            PATH_DATA."/post-missing-participated-history-".$this->name.".txt",
+
+            "Missing ParticipatedHistory List.\n"
+
+        );
+
+        $criteria = new Criteria("workflow");
+
+        $criteria->addSelectColumn(AppCacheViewPeer::APP_UID);
+
+        $criteria->addSelectColumn(AppCacheViewPeer::DEL_INDEX);
+
+        $criteria->addJoinMC(array(
+
+            array(AppCacheViewPeer::APP_UID, ListParticipatedHistoryPeer::APP_UID),
+
+            array(AppCacheViewPeer::DEL_INDEX, ListParticipatedHistoryPeer::DEL_INDEX)
+
+            ),
+
+            Criteria::LEFT_JOIN
+
+        );
+
+
+
+        $criteria->add(AppCacheViewPeer::DEL_THREAD_STATUS, 'OPEN', Criteria::NOT_EQUAL);
+
+        $criteria->add(ListParticipatedHistoryPeer::APP_UID, null, Criteria::ISNULL);
+
+
+
+        $rsCriteria = AppCacheViewPeer::doSelectRS($criteria);
+
+        $rsCriteria->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+
+        $counter = 0;
+
+        while ($rsCriteria->next()) {
+
+            $item = $rsCriteria->getRow();
+
+            $counter++;
+
+            file_put_contents(
+
+                PATH_DATA."/post-missing-participated-history-".$this->name.".txt",
+
+                "[".$item['APP_UID']."] has not been found"
+
+            );
+
+        }
+
+
+
+        CLI::logging("> Number of missing participated history entries for workspace " . CLI::info($this->name) . ": " . CLI::info($counter) . "\n");
+
+    }
+
+
+
+    public function verifyMissingParticipatedLast()
+
+    {
+
+        $this->initPropel(true);
+
+        file_put_contents(
+
+            PATH_DATA."/post-missing-participated-last-".$this->name.".txt",
+
+            "Missing ParticipatedLast List.\n"
+
+        );
+
+        $criteria = new Criteria("workflow");
+
+        $criteria->addSelectColumn(AppCacheViewPeer::APP_UID);
+
+        $criteria->addSelectColumn(AppCacheViewPeer::DEL_INDEX);
+
+        $criteria->addJoinMC(array(
+
+            array(AppCacheViewPeer::APP_UID, ListParticipatedLastPeer::APP_UID),
+
+            array(AppCacheViewPeer::DEL_INDEX, ListParticipatedLastPeer::DEL_INDEX)
+
+        ),
+
+            Criteria::LEFT_JOIN
+
+        );
+
+
+
+        $criteria->add(AppCacheViewPeer::DEL_THREAD_STATUS, 'OPEN', Criteria::NOT_EQUAL);
+
+        $criteria->add(ListParticipatedLastPeer::APP_UID, null, Criteria::ISNULL);
+
+
+
+        $rsCriteria = AppCacheViewPeer::doSelectRS($criteria);
+
+        $rsCriteria->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+
+        $counter = 0;
+
+        while ($rsCriteria->next()) {
+
+            $item = $rsCriteria->getRow();
+
+            $counter++;
+
+            file_put_contents(
+
+                PATH_DATA."/post-missing-participated-last-".$this->name.".txt",
+
+                "[".$item['APP_UID']."] has not been found"
+
+            );
+
+        }
+
+
+
+        CLI::logging("> Number of missing participated last entries for workspace " . CLI::info($this->name) . ": " . CLI::info($counter) . "\n");
+
+    }
+
+
+
+    public function verifyMissingMyInbox()
+
+    {
+
+        $this->initPropel(true);
+
+        file_put_contents(
+
+            PATH_DATA."/post-missing-my-inbox-".$this->name.".txt",
+
+            "Missing MyInbox List.\n"
+
+        );
+
+        $criteria = new Criteria("workflow");
+
+        $criteria->addSelectColumn(AppCacheViewPeer::APP_UID);
+
+        $criteria->addSelectColumn(AppCacheViewPeer::DEL_INDEX);
+
+        $criteria->addJoinMC(array(
+
+            array(AppCacheViewPeer::APP_UID, ListMyInboxPeer::APP_UID),
+
+            array(AppCacheViewPeer::DEL_INDEX, ListMyInboxPeer::DEL_INDEX)
+
+        ),
+
+            Criteria::LEFT_JOIN
+
+        );
+
+
+
+        $criteria->add(AppCacheViewPeer::DEL_INDEX, 1, Criteria::EQUAL);
+
+        $criteria->add(ListMyInboxPeer::APP_UID, null, Criteria::ISNULL);
+
+
+
+        $rsCriteria = AppCacheViewPeer::doSelectRS($criteria);
+
+        $rsCriteria->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+
+        $counter = 0;
+
+        while ($rsCriteria->next()) {
+
+            $item = $rsCriteria->getRow();
+
+            $counter++;
+
+            file_put_contents(
+
+                PATH_DATA."/post-missing-my-inbox-".$this->name.".txt",
+
+                "[".$item['APP_UID']."] has not been found"
+
+            );
+
+        }
+
+
+
+        CLI::logging("> Number of missing my inbox entries for workspace " . CLI::info($this->name) . ": " . CLI::info($counter) . "\n");
+
+    }
+
+
+
+    public function verifyMissingUnassigned()
+
+    {
+
+        $this->initPropel(true);
+
+        file_put_contents(
+
+            PATH_DATA."/post-missing-unassigned-".$this->name.".txt",
+
+            "Missing MissingUnassigned List.\n"
+
+        );
+
+        $criteria = new Criteria("workflow");
+
+        $criteria->addSelectColumn(AppCacheViewPeer::APP_UID);
+
+        $criteria->addSelectColumn(AppCacheViewPeer::DEL_INDEX);
+
+        $criteria->addJoinMC(array(
+
+            array(AppCacheViewPeer::APP_UID, ListUnassignedPeer::APP_UID),
+
+            array(AppCacheViewPeer::DEL_INDEX, ListUnassignedPeer::DEL_INDEX)
+
+        ),
+
+            Criteria::LEFT_JOIN
+
+        );
+
+
+
+        $criteria->add(AppCacheViewPeer::USR_UID, '', Criteria::EQUAL);
+
+        $criteria->add(ListUnassignedPeer::APP_UID, null, Criteria::ISNULL);
+
+
+
+        $rsCriteria = AppCacheViewPeer::doSelectRS($criteria);
+
+        $rsCriteria->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+
+        $counter = 0;
+
+        while ($rsCriteria->next()) {
+
+            $item = $rsCriteria->getRow();
+
+            $counter++;
+
+            file_put_contents(
+
+                PATH_DATA."/post-missing-unassigned-".$this->name.".txt",
+
+                "[".$item['APP_UID']."] has not been found"
+
+            );
+
+        }
+
+        CLI::logging("> Number of unassigned cases for workspace " . CLI::info($this->name) . ": " . CLI::info($counter) . "\n");
+
+    }
+
+
+
+    public function verifyListData($type)
+
+    {
+
+        switch($type) {
+
+            case 'LIST_CANCELLED':
+
+                $response = $this->verifyMissingCancelled();
+
+                break;
+
+            case 'LIST_COMPLETED':
+
+                $response = $this->verifyMissingCompleted();
+
+                break;
+
+            case 'LIST_INBOX':
+
+                $response = $this->verifyMissingInbox();
+
+                break;
+
+            case 'LIST_PARTICIPATED_HISTORY':
+
+                $response = $this->verifyMissingParticipatedHistory();
+
+                break;
+
+            case 'LIST_PARTICIPATED_LAST':
+
+                $response = $this->verifyMissingParticipatedLast();
+
+                break;
+
+            case 'LIST_MY_INBOX':
+
+                $response = $this->verifyMissingMyInbox();
+
+                break;
+
+            case 'LIST_PAUSED':
+
+                // The list implementation needs to be reestructured in order to
+
+                // properly validate the list consistency, currently we are maintaining the
+
+                // current LIST_PAUSED implementation.
+
+                $response = '';
+
+                break;
+
+            case 'LIST_UNASSIGNED':
+
+                $response = $this->verifyMissingUnassigned();
+
+                break;
+
+            case 'LIST_UNASSIGNED_GROUP':
+
+                // There is still no need to validate this list since is not being
+
+                // populated until the logic has been defined
+
+                $response = '';
+
+                break;
+
+            default:
+
+                $response = '';
+
+                break;
+
+        }
+
+        return $response;
+
+    }
+
+
 
 }

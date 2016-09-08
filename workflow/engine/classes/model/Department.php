@@ -114,7 +114,7 @@ class Department extends BaseDepartment
                 $res = $this->save();
 
                 $con->commit();
-                
+
                 G::auditLog("Create".$msgLog, $msgLog." Name: ". $aData['DEP_TITLE']);
 
                 return $this->getDepUid();
@@ -332,7 +332,7 @@ class Department extends BaseDepartment
     }
 
     public function updateDepartmentManager ($depId)
-    {   
+    {
         $managerId = '';
         $depParent = '';
         $oDept = DepartmentPeer::retrieveByPk( $depId );
@@ -347,10 +347,6 @@ class Department extends BaseDepartment
         $selectCriteria = new Criteria( 'workflow' );
         $selectCriteria->add( UsersPeer::DEP_UID, $depId );
         $selectCriteria->add( UsersPeer::USR_UID, $managerId, Criteria::NOT_EQUAL );
-        
-        if(empty($depParent)) {
-            $depParent = $depId;
-        }
 
         // Create a Criteria object includes the value you want to set
         $updateCriteria = new Criteria( 'workflow' );
@@ -370,7 +366,7 @@ class Department extends BaseDepartment
             }
             $oUser->save();
         }
-        
+
         if ($managerId) {
             $user = $oUser->loadDetailed ($managerId);
             if (is_object( $oDept ) && get_class( $oDept ) == 'Department') {
@@ -393,41 +389,6 @@ class Department extends BaseDepartment
             }
             $oDataset->next();
         }
-        
-        $this->updateUserReportsTo($depId);
-    }
-    
-    public function updateUserReportsTo($depId)
-    {
-        $departments = $this->getChildDepartments($depId);
-        $departments = explode("_",$departments);
-        $departments = array_filter(array_unique($departments));
-        foreach($departments as $depUid) {
-            $mgrParentId = $this->getDepartmentParentManager($depUid);
-            $conn = Propel::getConnection( UsersPeer::DATABASE_NAME );
-            $selectCriteria = new Criteria( 'workflow' );
-            $selectCriteria->add( UsersPeer::DEP_UID, $depUid );
-            $updateCriteria = new Criteria( 'workflow' );
-            $updateCriteria->add( UsersPeer::USR_REPORTS_TO, $mgrParentId );
-            BasePeer::doUpdate( $selectCriteria, $updateCriteria, $conn );
-        }
-    }
-    
-    public function getChildDepartments($depId)
-    {   
-        $depIds = "";
-        $depIds .= $depId."_";
-        $childrenCriteria = new Criteria( 'workflow' );
-        $childrenCriteria->add( DepartmentPeer::DEP_PARENT, $depId );
-        $oDataset = DepartmentPeer::doSelectRS( $childrenCriteria );
-        $oDataset->setFetchmode( ResultSet::FETCHMODE_ASSOC );
-        $oDataset->next();
-        while ($aRow = $oDataset->getRow()) {
-            $depId = $aRow['DEP_UID'];
-            $depIds .= $this->getChildDepartments($depId);
-            $oDataset->next();
-        }
-        return $depIds;
     }
 
     //add an user to a department and sync all about manager info
@@ -623,7 +584,7 @@ class Department extends BaseDepartment
                 $oUser->setDepUid( '' );
                 $oUser->setUsrReportsTo( '' );
                 $oUser->save();
-            
+
                 G::auditLog("RemoveUsersFromDepartament", "Remove user ".$user['USR_USERNAME']."( ".$UsrUid.") from departament ".$dptoTitle['DEPO_TITLE']." (".$DepUid.") ");
             }
         } catch (exception $oError) {
@@ -737,20 +698,6 @@ class Department extends BaseDepartment
             $dataset->next();
         }
         return $departments;
-    }
-    
-    public function getDepartmentParentManager($depId)
-    {
-        $managerUid = ""; 
-        $depInfo = $this->Load($depId);
-        if(empty($depInfo['DEP_MANAGER'])) {
-            if(!empty($depInfo['DEP_PARENT'])) {
-                $managerUid = $this->getDepartmentParentManager($depInfo['DEP_PARENT']);
-            } 
-        } else {
-            $managerUid = $depInfo['DEP_MANAGER']; 
-        }
-        return $managerUid;
     }
 }
 

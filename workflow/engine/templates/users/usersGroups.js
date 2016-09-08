@@ -553,7 +553,7 @@ LoadAuthForm = function(){
       authForm.getForm().findField('usr_uid').setValue(user.data.USR_UID);
       authForm.getForm().findField('auth_source').setValue(user.auth.AUTH_SOURCE_NAME);
       authForm.getForm().findField('auth_dn').setValue(user.data.USR_AUTH_USER_DN);
-      if (user.auth.AUTH_SOURCE_NAME=='ProcessMaker'){
+      if (user.auth.AUTH_SOURCE_NAME=='ProcessMaker (MYSQL)'){
         authForm.getForm().findField('auth_dn').disable();
       }else{
         authForm.getForm().findField('auth_dn').enable();

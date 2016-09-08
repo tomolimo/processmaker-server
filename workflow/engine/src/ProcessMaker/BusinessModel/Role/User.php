@@ -218,48 +218,6 @@ class User
     }
 
     /**
-     * Get criteria for User
-     *
-     * @param string $roleUid             Unique id of Role
-     * @param array  $arrayUserUidExclude Unique id of Users to exclude
-     *
-     * return object
-     */
-    public function getUserCriteria($roleUid, array $arrayUserUidExclude = null)
-    {
-        try {
-            $criteria = new \Criteria("rbac");
-
-            $criteria->addSelectColumn(\RbacUsersPeer::USR_UID);
-            $criteria->addSelectColumn(\RbacUsersPeer::USR_USERNAME);
-            $criteria->addSelectColumn(\RbacUsersPeer::USR_FIRSTNAME);
-            $criteria->addSelectColumn(\RbacUsersPeer::USR_LASTNAME);
-            $criteria->addSelectColumn(\RbacUsersPeer::USR_STATUS);
-
-            $criteria->addAlias("USR", \RbacUsersPeer::TABLE_NAME);
-
-            $arrayCondition = array();
-            $arrayCondition[] = array(\RbacUsersPeer::USR_UID, "USR.USR_UID", \Criteria::EQUAL);
-            $criteria->addJoinMC($arrayCondition, \Criteria::LEFT_JOIN);
-
-            if ($roleUid != "") {
-                $criteria->addJoin(\UsersRolesPeer::USR_UID, \RbacUsersPeer::USR_UID, \Criteria::LEFT_JOIN);
-                $criteria->add(\UsersRolesPeer::ROL_UID, $roleUid, \Criteria::EQUAL);
-            }
-
-            $criteria->add("USR.USR_USERNAME", "", \Criteria::NOT_EQUAL);
-
-            if (!is_null($arrayUserUidExclude) && is_array($arrayUserUidExclude)) {
-                $criteria->add(\RbacUsersPeer::USR_UID, $arrayUserUidExclude, \Criteria::NOT_IN);
-            }
-
-            return $criteria;
-        } catch (\Exception $e) {
-            throw $e;
-        }
-    }
-
-    /**
      * Get data of a User from a record
      *
      * @param array $record Record
@@ -299,7 +257,11 @@ class User
         try {
             $arrayUser = array();
 
-            //Verify data
+            $numRecTotal = 0;
+
+            //Verify data and Set variables
+            $flagFilter = !is_null($arrayFilterData) && is_array($arrayFilterData) && isset($arrayFilterData['filter']);
+
             $process = new \ProcessMaker\BusinessModel\Process();
             $role    = new \ProcessMaker\BusinessModel\Role();
 
@@ -314,56 +276,89 @@ class User
 
             $process->throwExceptionIfDataNotMetPagerVarDefinition(array("start" => $start, "limit" => $limit), $this->arrayFieldNameForException);
 
-            //Get data
-            if (!is_null($limit) && $limit . "" == "0") {
-                return $arrayUser;
+            //Set variables
+            $filterName = 'filter';
+
+            if ($flagFilter) {
+                $arrayAux = [
+                    ''      => 'filter',
+                    'LEFT'  => 'lfilter',
+                    'RIGHT' => 'rfilter'
+                ];
+
+                $filterName = $arrayAux[
+                    (isset($arrayFilterData['filterOption']))? $arrayFilterData['filterOption'] : ''
+                ];
             }
 
-            //SQL
+            //Get data
+            if (!is_null($limit) && (string)($limit) == '0') {
+                return [
+                    'total'     => $numRecTotal,
+                    'start'     => (int)((!is_null($start))? $start : 0),
+                    'limit'     => (int)((!is_null($limit))? $limit : 0),
+                    $filterName => ($flagFilter)? $arrayFilterData['filter'] : '',
+                    'data'      => $arrayUser
+                ];
+            }
+
+            //Query
+            $criteria = new \Criteria('rbac');
+
+            $criteria->addSelectColumn(\RbacUsersPeer::USR_UID);
+            $criteria->addSelectColumn(\RbacUsersPeer::USR_USERNAME);
+            $criteria->addSelectColumn(\RbacUsersPeer::USR_FIRSTNAME);
+            $criteria->addSelectColumn(\RbacUsersPeer::USR_LASTNAME);
+            $criteria->addSelectColumn(\RbacUsersPeer::USR_STATUS);
+
+            $criteria->addJoin(\RbacUsersPeer::USR_UID, \UsersRolesPeer::USR_UID, \Criteria::LEFT_JOIN);
+
+            $criteria->add(\RbacUsersPeer::USR_USERNAME, '', \Criteria::NOT_EQUAL);
+
             switch ($option) {
                 case "USERS":
-                    //Criteria
-                    $criteria = $this->getUserCriteria($roleUid);
+                    $criteria->add(\UsersRolesPeer::ROL_UID, $roleUid, \Criteria::EQUAL);
                     break;
                 case "AVAILABLE-USERS":
-                    //Get Uids
-                    $arrayUid = array();
-
-                    $criteria = $this->getUserCriteria($roleUid);
-
-                    $rsCriteria = \RbacUsersPeer::doSelectRS($criteria);
-                    $rsCriteria->setFetchmode(\ResultSet::FETCHMODE_ASSOC);
-
-                    while ($rsCriteria->next()) {
-                        $row = $rsCriteria->getRow();
-
-                        $arrayUid[] = $row["USR_UID"];
-                    }
-
-                    //Criteria
-                    $criteria = $this->getUserCriteria("", $arrayUid);
+                    $criteria->add(\UsersRolesPeer::ROL_UID, $roleUid, \Criteria::NOT_EQUAL);
                     break;
             }
 
-            if (!is_null($arrayFilterData) && is_array($arrayFilterData) && isset($arrayFilterData["filter"]) && trim($arrayFilterData["filter"]) != "") {
+            if ($flagFilter && trim($arrayFilterData['filter']) != '') {
+                $arraySearch = [
+                    ''      => '%' . $arrayFilterData['filter'] . '%',
+                    'LEFT'  => $arrayFilterData['filter'] . '%',
+                    'RIGHT' => '%' . $arrayFilterData['filter']
+                ];
+
+                $search = $arraySearch[
+                    (isset($arrayFilterData['filterOption']))? $arrayFilterData['filterOption'] : ''
+                ];
+
                 $criteria->add(
-                    $criteria->getNewCriterion(\RbacUsersPeer::USR_USERNAME, "%" . $arrayFilterData["filter"] . "%", \Criteria::LIKE)->addOr(
-                    $criteria->getNewCriterion(\RbacUsersPeer::USR_FIRSTNAME, "%" . $arrayFilterData["filter"] . "%", \Criteria::LIKE)->addOr(
-                    $criteria->getNewCriterion(\RbacUsersPeer::USR_LASTNAME, "%" . $arrayFilterData["filter"] . "%", \Criteria::LIKE)))
+                    $criteria->getNewCriterion(\RbacUsersPeer::USR_USERNAME,  $search, \Criteria::LIKE)->addOr(
+                    $criteria->getNewCriterion(\RbacUsersPeer::USR_FIRSTNAME, $search, \Criteria::LIKE)->addOr(
+                    $criteria->getNewCriterion(\RbacUsersPeer::USR_LASTNAME,  $search, \Criteria::LIKE)))
                 );
             }
 
-            //SQL
-            if (!is_null($sortField) && trim($sortField) != "") {
+            //Number records total
+            $numRecTotal = \RbacUsersPeer::doCount($criteria);
+
+            //Query
+            $conf = new \Configurations();
+            $sortFieldDefault = \RbacUsersPeer::TABLE_NAME . '.' . $conf->userNameFormatGetFirstFieldByUsersTable();
+
+            if (!is_null($sortField) && trim($sortField) != '') {
                 $sortField = strtoupper($sortField);
 
-                if (in_array($sortField, array("USR_UID", "USR_USERNAME", "USR_FIRSTNAME", "USR_LASTNAME", "USR_STATUS"))) {
-                    $sortField = \RbacUsersPeer::TABLE_NAME . "." . $sortField;
+                if (in_array(\RbacUsersPeer::TABLE_NAME . '.' . $sortField, $criteria->getSelectColumns())) {
+                    $sortField = \RbacUsersPeer::TABLE_NAME . '.' . $sortField;
                 } else {
-                    $sortField = \RbacUsersPeer::USR_USERNAME;
+                    $sortField = $sortFieldDefault;
                 }
             } else {
-                $sortField = \RbacUsersPeer::USR_USERNAME;
+                $sortField = $sortFieldDefault;
             }
 
             if (!is_null($sortDir) && trim($sortDir) != "" && strtoupper($sortDir) == "DESC") {
@@ -390,7 +385,13 @@ class User
             }
 
             //Return
-            return $arrayUser;
+            return [
+                'total'     => $numRecTotal,
+                'start'     => (int)((!is_null($start))? $start : 0),
+                'limit'     => (int)((!is_null($limit))? $limit : 0),
+                $filterName => ($flagFilter)? $arrayFilterData['filter'] : '',
+                'data'      => $arrayUser
+            ];
         } catch (\Exception $e) {
             throw $e;
         }

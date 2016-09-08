@@ -386,7 +386,6 @@ UpdateCategory = function(){
           success: function(f,a){
             viewport.getEl().unmask();
             CloseWindow(); //Hide popup widow
-            newForm.getForm().reset(); //Set empty form to next use
             searchText.reset();
             infoGrid.store.load();
             response = Ext.decode(a.response.responseText);

@@ -114,7 +114,7 @@ class AppDelegation extends BaseAppDelegation
 
      */
 
-    public function createAppDelegation ($sProUid, $sAppUid, $sTasUid, $sUsrUid, $sAppThread, $iPriority = 3, $isSubprocess = false, $sPrevious = -1, $sNextTasParam = null)
+    public function createAppDelegation ($sProUid, $sAppUid, $sTasUid, $sUsrUid, $sAppThread, $iPriority = 3, $isSubprocess = false, $sPrevious = -1, $sNextTasParam = null, $flagControl = false, $flagControlMulInstance = false, $delPrevious = 0)
 
     {
 
@@ -165,6 +165,8 @@ class AppDelegation extends BaseAppDelegation
         $criteria->add(AppDelegationPeer::APP_UID, $sAppUid);
 
         $criteria->add(AppDelegationPeer::DEL_LAST_INDEX, 1);
+
+        $criteria->addDescendingOrderByColumn(AppDelegationPeer::DEL_INDEX);
 
 
 
@@ -225,6 +227,38 @@ class AppDelegation extends BaseAppDelegation
             }
 
         }
+
+        //Verify successors: parrallel submit in the same time
+
+        if($flagControl){
+
+            $nextTaskUid = $sTasUid;
+
+            $index = $this->getAllTasksBeforeSecJoin($nextTaskUid, $sAppUid);
+
+            if($this->createThread($index, $sAppUid)){
+
+                return 0;
+
+            }
+
+        }
+
+        if($flagControlMulInstance){
+
+            $nextTaskUid = $sTasUid;
+
+            $index = $this->getAllTheardMultipleInstance($delPrevious, $sAppUid);
+
+            if($this->createThread($index, $sAppUid)){
+
+                return 0;
+
+            }
+
+        }
+
+
 
 
 
@@ -314,7 +348,9 @@ class AppDelegation extends BaseAppDelegation
 
             } catch (PropelException $e) {
 
-                throw ($e);
+                error_log($e->getMessage());
+
+                return;
 
             }
 
@@ -486,6 +522,8 @@ class AppDelegation extends BaseAppDelegation
 
         $c->addSelectColumn( AppDelegationPeer::DEL_FINISH_DATE );
 
+        $c->addSelectColumn( AppDelegationPeer::DEL_PREVIOUS );
+
 
 
         $c->add( AppDelegationPeer::DEL_THREAD_STATUS, 'OPEN' );
@@ -531,6 +569,8 @@ class AppDelegation extends BaseAppDelegation
             $case['DEL_TASK_DUE_DATE'] = $row['DEL_TASK_DUE_DATE'];
 
             $case['DEL_FINISH_DATE']   = $row['DEL_FINISH_DATE'];
+
+            $case['DEL_PREVIOUS']      = $row['DEL_PREVIOUS'];
 
             $aCases[] = $case;
 
@@ -1431,6 +1471,142 @@ class AppDelegation extends BaseAppDelegation
         }
 
     }
+
+
+
+    /**
+
+    * Get all task before Join Threads
+
+    *
+
+    * @param string $nextTaskUid
+
+    * @param string $sAppUid
+
+    * @return array $index
+
+    */
+
+    public static function getAllTasksBeforeSecJoin($nextTaskUid, $sAppUid){
+
+        $criteriaR = new Criteria('workflow');
+
+        $criteriaR->addSelectColumn(AppDelegationPeer::DEL_INDEX);
+
+        $criteriaR->addJoin(RoutePeer::TAS_UID, AppDelegationPeer::TAS_UID, Criteria::LEFT_JOIN);
+
+        $criteriaR->add(RoutePeer::ROU_NEXT_TASK, $nextTaskUid, Criteria::EQUAL);
+
+        $criteriaR->add(RoutePeer::ROU_TYPE, 'SEC-JOIN', Criteria::EQUAL);
+
+        $criteriaR->add(AppDelegationPeer::APP_UID, $sAppUid, Criteria::EQUAL);
+
+        $rsCriteriaR = RoutePeer::doSelectRS($criteriaR);
+
+        $rsCriteriaR->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+
+        $index = array();
+
+        $c = 0;
+
+        while($rsCriteriaR->next()){
+
+            $row = $rsCriteriaR->getRow();
+
+            $index[$c++] = $row['DEL_INDEX'];
+
+        }
+
+        return $index;
+
+    }
+
+
+
+    /**
+
+    * Verify if we need to create a new Thread
+
+    *
+
+    * @param array $index
+
+    * @param string $sAppUid
+
+    * @return boolean $res
+
+    */
+
+    public static function createThread($index, $sAppUid){
+
+        $criteriaDel = new Criteria("workflow");
+
+        $criteriaDel->addSelectColumn(AppDelegationPeer::DEL_INDEX);
+
+        $criteriaDel->addSelectColumn(AppDelegationPeer::DEL_PREVIOUS);
+
+        $criteriaDel->add(AppDelegationPeer::APP_UID, $sAppUid);
+
+        $criteriaDel->add(AppDelegationPeer::DEL_PREVIOUS, $index, Criteria::IN);
+
+        $criteriaDel = AppDelegationPeer::doSelectRS($criteriaDel);
+
+        $criteriaDel->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+
+        $res = $criteriaDel->next();
+
+        return $res;
+
+    }
+
+
+
+    /**
+
+    * Get all Threads for Multiple Instance
+
+    *
+
+    * @param string $sPrevious
+
+    * @param string $sAppUid
+
+    * @return array $index
+
+    */
+
+    public static function getAllTheardMultipleInstance($sPrevious, $sAppUid){
+
+        $criteriaR = new Criteria('workflow');
+
+        $criteriaR->addSelectColumn(AppDelegationPeer::DEL_INDEX);
+
+        $criteriaR->add(AppDelegationPeer::APP_UID, $sAppUid, Criteria::EQUAL);
+
+        $criteriaR->add(AppDelegationPeer::DEL_PREVIOUS, $sPrevious, Criteria::EQUAL);
+
+        $rsCriteriaR = AppDelegationPeer::doSelectRS($criteriaR);
+
+        $rsCriteriaR->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+
+        $index = array();
+
+        $c = 0;
+
+        while($rsCriteriaR->next()){
+
+            $row = $rsCriteriaR->getRow();
+
+            $index[$c++] = $row['DEL_INDEX'];
+
+        }
+
+        return $index;
+
+    }
+
+
 
 }
 

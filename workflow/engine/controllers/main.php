@@ -40,7 +40,6 @@ class Main extends Controller
         $this->setVar( 'logout', G::LoadTranslation( 'ID_LOGOUT' ) );
         $this->setVar( 'workspace', defined( 'SYS_SYS' ) ? ucfirst( SYS_SYS ) : '' );
         $this->setVar( 'user_avatar', 'users/users_ViewPhotoGrid?pUID=' . $_SESSION['USER_LOGGED'] . '&h=' . rand() );
-        $this->setVar( 'udate', G::getformatedDate( date( 'Y-m-d' ), 'M d, yyyy', SYS_LANG ) );
 
         // license notification
         $expireInLabel = '';

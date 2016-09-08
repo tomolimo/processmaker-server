@@ -70,7 +70,7 @@
   //$e_all = E_ALL & ~ E_DEPRECATED & ~ E_STRICT & ~ E_NOTICE  & ~E_WARNING;
 
   G::LoadSystem('inputfilter');
-  $filter = new InputFilter();  
+  $filter = new InputFilter();
   $config['display_errors'] = $filter->validateInput($config['display_errors']);
   $config['error_reporting'] = $filter->validateInput($config['error_reporting']);
   $config['memory_limit'] = $filter->validateInput($config['memory_limit']);
@@ -83,14 +83,14 @@
   ini_set('default_charset', "UTF-8");
   ini_set('memory_limit', $filter->validateInput($config['memory_limit']) );
   ini_set('soap.wsdl_cache_enabled', $config['wsdl_cache']);
-  ini_set('date.timezone', $filter->validateInput($config['time_zone']) );
+  ini_set('date.timezone', (isset($_SESSION['__SYSTEM_UTC_TIME_ZONE__']) && $_SESSION['__SYSTEM_UTC_TIME_ZONE__'])? 'UTC' : $config['time_zone']); //Set Time Zone
 
   define ('DEBUG_SQL_LOG', $config['debug_sql']);
   define ('DEBUG_TIME_LOG', $config['debug_time']);
   define ('DEBUG_CALENDAR_LOG', $config['debug_calendar']);
   define ('MEMCACHED_ENABLED',  $config['memcached']);
   define ('MEMCACHED_SERVER',   $config['memcached_server']);
-  define ('TIME_ZONE', $config['time_zone']);
+  define ('TIME_ZONE', ini_get('date.timezone'));
 
   // IIS Compatibility, SERVER_ADDR doesn't exist on that env, so we need to define it.
   $_SERVER['SERVER_ADDR'] = isset($_SERVER['SERVER_ADDR']) ? $_SERVER['SERVER_ADDR'] : $_SERVER['SERVER_NAME'];
@@ -276,7 +276,7 @@
   //Load filter class
   G::LoadSystem('inputfilter');
   $filter = new InputFilter();
-  
+
   // Installer, redirect to install if we don't have a valid shared data folder
   if ( !defined('PATH_DATA') || !file_exists(PATH_DATA)) {
 

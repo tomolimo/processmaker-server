@@ -806,6 +806,8 @@ var mb_strlen=function(str){str=str||'';var len=0;for(var i=0;i<str.length;i++){
 return len;};var stripNonNumeric=function(str){str+='';var rgx=/^\d|\.|-$/;var out='';for(var i=0;i<str.length;i++){if(rgx.test(str.charAt(i))){if(!((str.charAt(i)=='.'&&out.indexOf('.')!=-1)||(str.charAt(i)=='-'&&out.length!=0))){out+=str.charAt(i);}}}
 return out;};function inputDocumentVerifySize(inpDocMaxFileSize,file)
 {try{return(file.files[0].size<=inpDocMaxFileSize)?1:0;}catch(e){return 1;}}
+function getBrowserTimeZoneOffset()
+{return-1*((new Date()).getTimezoneOffset()*60);}
 var TimeToFade=1000.0;function fade(eid,inOut){inOut=(typeof(inOut)!='undefined')?true:false;var element=document.getElementById(eid);if(element==null)
 return;if(element.FadeState==null)
 {if(element.style.opacity==null||element.style.opacity==''||element.style.opacity=='1')

@@ -21,8 +21,14 @@ if ($userData['USR_EMAIL'] != '' && $userData['USR_EMAIL'] === $data['USR_EMAIL'
 
     $newPass = G::generate_password();
 
-    $aData['USR_UID']      = $userData['USR_UID'];
+    $aData['USR_UID'] = $userData['USR_UID'];
     $aData['USR_PASSWORD'] = Bootstrap::hashPassword($newPass);
+    $oUserProperty = new UsersProperties();
+    $aUserPropertyData = $oUserProperty->load($aData['USR_UID']);
+    if (is_array($aUserPropertyData)) {
+        $aUserPropertyData['USR_LOGGED_NEXT_TIME'] = 1;
+        $oUserProperty = $oUserProperty->update($aUserPropertyData);
+    }
     /* **Save after sending the mail
       $rbacUser->update($aData);
       $user->update($aData);
@@ -81,14 +87,14 @@ if ($userData['USR_EMAIL'] != '' && $userData['USR_EMAIL'] === $data['USR_EMAIL'
         $oSpool->sendMail();
         $rbacUser->update($aData);
         $user->update($aData);
-        G::header  ("location: login");
-        G::SendTemporalMessage ('ID_NEW_PASSWORD_SENT', "info");
+        G::header("location: login");
+        G::SendTemporalMessage('ID_NEW_PASSWORD_SENT', "info");
     } catch (phpmailerException $e) {
-        G::header  ("location: login");
-        G::SendTemporalMessage (G::LoadTranslation('MISSING_OR_NOT_CONFIGURED_SMTP'), "warning", 'string');
+        G::header("location: login");
+        G::SendTemporalMessage(G::LoadTranslation('MISSING_OR_NOT_CONFIGURED_SMTP'), "warning", 'string');
     } catch (Exception $e) {
-        G::header  ("location: login");
-        G::SendTemporalMessage ($e->getMessage(), "warning", 'string');
+        G::header("location: login");
+        G::SendTemporalMessage($e->getMessage(), "warning", 'string');
     }
 } else {
     if ($userData['USR_AUTH_TYPE'] === '' || $userData['USR_AUTH_TYPE'] === 'MYSQL') {

@@ -330,7 +330,7 @@ class Configurations // extends Configuration
 
             $aux = str_replace('@userName', trim($username), $theFormat);
             $aux = str_replace('@firstName', $oUser->getUsrFirstname(), $aux);
-            $aux = str_replace('@lastName', $oUser->getUsrLastname(), $aux);           
+            $aux = str_replace('@lastName', $oUser->getUsrLastname(), $aux);
         }
         return $aux;
     }
@@ -583,7 +583,7 @@ class Configurations // extends Configuration
                 require_once 'model/Language.php';
                 $language = new language();
                 $lanLocation = $language->findLocationByLanId(SYS_LANG);
-                $location = isset($lanLocation['LAN_LOCATION']) ? $lanLocation['LAN_LOCATION'] : '';    
+                $location = isset($lanLocation['LAN_LOCATION']) ? $lanLocation['LAN_LOCATION'] : '';
 
                 if (G::toLower(PHP_OS) == 'linux' || G::toLower(PHP_OS) == 'darwin') {
                     if (SYS_LANG == 'es') {
@@ -612,7 +612,7 @@ class Configurations // extends Configuration
                             break;
                     }
                 }
-                
+
                 if (defined('PARTNER_FLAG')) {
                     setlocale(LC_TIME, $langLocate);
                     $dateTime = utf8_encode(strftime($newCreation, mktime($h, $i, $s, $m, $d, $y)));
@@ -698,7 +698,6 @@ class Configurations // extends Configuration
                 $caseReaderFields[] = array("name" => "DEL_TASK_DUE_DATE");
                 $caseReaderFields[] = array("name" => "APP_UPDATE_DATE");
                 $caseReaderFields[] = array("name" => "DEL_PRIORITY");
-                $caseReaderFields[] = array("name" => "APP_STATUS_LABEL");
                 $caseReaderFields[] = array("name" => "APP_FINISH_DATE");
                 $caseReaderFields[] = array("name" => "CASE_SUMMARY");
                 $caseReaderFields[] = array("name" => "CASE_NOTES_COUNT");
@@ -733,7 +732,6 @@ class Configurations // extends Configuration
                 $caseReaderFields[] = array("name" => "DEL_TASK_DUE_DATE");
                 $caseReaderFields[] = array("name" => "APP_UPDATE_DATE");
                 $caseReaderFields[] = array("name" => "DEL_PRIORITY");
-                $caseReaderFields[] = array("name" => "APP_STATUS_LABEL");
                 $caseReaderFields[] = array("name" => "APP_FINISH_DATE");
                 $caseReaderFields[] = array("name" => "APP_THREAD_INDEX");
                 $caseReaderFields[] = array("name" => "CASE_SUMMARY");
@@ -770,7 +768,6 @@ class Configurations // extends Configuration
                 $caseReaderFields[] = array("name" => "DEL_TASK_DUE_DATE");
                 $caseReaderFields[] = array("name" => "APP_UPDATE_DATE");
                 $caseReaderFields[] = array("name" => "DEL_PRIORITY");
-                $caseReaderFields[] = array("name" => "APP_STATUS_LABEL");
                 $caseReaderFields[] = array("name" => "APP_FINISH_DATE");
                 $caseReaderFields[] = array("name" => "CASE_SUMMARY");
                 $caseReaderFields[] = array("name" => "CASE_NOTES_COUNT");
@@ -843,7 +840,6 @@ class Configurations // extends Configuration
                 $caseReaderFields[] = array("name" => "APP_UPDATE_DATE");
                 $caseReaderFields[] = array("name" => "DEL_DELEGATE_DATE");
                 $caseReaderFields[] = array("name" => "DEL_PRIORITY");
-                $caseReaderFields[] = array("name" => "APP_STATUS_LABEL");
                 $caseReaderFields[] = array("name" => "APP_FINISH_DATE");
                 $caseReaderFields[] = array("name" => "CASE_SUMMARY");
                 $caseReaderFields[] = array("name" => "CASE_NOTES_COUNT");

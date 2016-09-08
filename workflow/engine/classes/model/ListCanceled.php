@@ -104,11 +104,6 @@ class ListCanceled extends BaseListCanceled {
         $oListInbox->removeAll($data['APP_UID']);
 
         $users = new Users();
-        if (!empty($data['APP_STATUS_CURRENT']) && $data['APP_STATUS_CURRENT'] == 'DRAFT') {
-            $users->refreshTotal($data['USR_UID'], 'removed', 'draft');
-        } else {
-            $users->refreshTotal($data['USR_UID'], 'removed', 'inbox');
-        }
         $users->refreshTotal($data['USR_UID'], 'add', 'canceled');
 
         //Update - WHERE

@@ -150,7 +150,7 @@ function getLoadTreeMenuData ()
 
             list($childs, $index) = getChilds($oMenu, ++$index);
 
-            
+
 
             $menuCases[$CurrentBlockID]['blockItems'][$oMenu->Id[$i]]['childs'] = $childs;
 
@@ -538,7 +538,7 @@ function getAllCounters ()
 
     $userUid = (isset( $_SESSION['USER_LOGGED'] ) && $_SESSION['USER_LOGGED'] != '') ? $_SESSION['USER_LOGGED'] : null;
 
-    $oAppCache = new AppCacheView();
+
 
     $aTypes = Array ();
 
@@ -560,51 +560,11 @@ function getAllCounters ()
 
     //$aTypes['to_reassign'] = 'CASES_TO_REASSIGN';
 
-    $solrEnabled = false;
 
 
+    $case = new \ProcessMaker\BusinessModel\Cases();
 
-    if ((($solrConf = System::solrEnv()) !== false)) {
-
-        G::LoadClass( 'AppSolr' );
-
-        $ApplicationSolrIndex = new AppSolr( $solrConf['solr_enabled'], $solrConf['solr_host'], $solrConf['solr_instance'] );
-
-
-
-        if ($ApplicationSolrIndex->isSolrEnabled() && $solrConf['solr_enabled'] == true) {
-
-            $solrEnabled = true;
-
-        }
-
-    }
-
-
-
-    if ($solrEnabled) {
-
-        $aCount = $ApplicationSolrIndex->getCasesCount( $userUid );
-
-
-
-        //get paused count
-
-        $aCountMissing = $oAppCache->getAllCounters( array ('completed','cancelled'), $userUid );
-
-
-
-        $aCount = array_merge( $aCount, $aCountMissing );
-
-    } else {
-
-
-
-        $aCount = $oAppCache->getAllCounters( array_keys( $aTypes ), $userUid );
-
-
-
-    }
+    $aCount = $case->getListCounters($userUid, array_keys($aTypes));
 
 
 
@@ -642,7 +602,7 @@ function getChilds($menu, $index)
 
         if ($menu->Types[$i] == 'childNode') {
 
-            
+
 
             $childs[$menu->Id[$i]] = array(
 

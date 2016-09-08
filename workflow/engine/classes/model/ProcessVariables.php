@@ -20,12 +20,35 @@ class ProcessVariables extends BaseProcessVariables {
     {
         $con = Propel::getConnection( ProcessVariablesPeer::DATABASE_NAME );
         try {
+            $con->begin();
             $this->fromArray( $aData, BasePeer::TYPE_FIELDNAME );
             if ($this->validate()) {
                 $result = $this->save();
             } else {
                 $e = new Exception( "Failed Validation in class " . get_class( $this ) . "." );
                 $e->aValidationFailures = $this->getValidationFailures();
+                throw ($e);
+            }
+            $con->commit();
+            return $result;
+        } catch (Exception $e) {
+            $con->rollback();
+            throw ($e);
+        }
+    }
+
+    public function update ($aData)
+    {
+        $con = Propel::getConnection( ProcessVariablesPeer::DATABASE_NAME );
+        try {
+            $con->begin();
+            $variable = ProcessVariablesPeer::retrieveByPK($aData['VAR_UID']);
+            $variable->fromArray( $aData, BasePeer::TYPE_FIELDNAME );
+            if ($variable->validate()) {
+                $result = $variable->save();
+            } else {
+                $e = new Exception( "Failed Validation in class " . get_class( $variable ) . "." );
+                $e->aValidationFailures = $variable->getValidationFailures();
                 throw ($e);
             }
             $con->commit();

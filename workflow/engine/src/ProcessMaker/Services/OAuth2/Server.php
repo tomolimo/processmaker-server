@@ -236,9 +236,13 @@ class Server implements iAuthenticate
      *
      * @format JsonFormat,UploadFormat
      */
-    public function postAuthorize($authorize = null, $userId = null, $returnResponse = false)
+    public function postAuthorize($authorize = null, $userId = null, $returnResponse = false, $cacheSessionValue = array())
     {
         @session_start();
+
+        foreach ($cacheSessionValue as $key => $value) {
+            $_SESSION[$key] = $value;
+        }
 
         if (! isset($_SESSION['USER_LOGGED'])) {
             throw new RestException(400, "Local Authentication Error, user session is not started.");
@@ -356,6 +360,21 @@ class Server implements iAuthenticate
                 }
 
                 setcookie($session->getSessionName(), $_COOKIE[$session->getSessionName()], time() + $lifetime, "/", null, false, true);
+            }
+
+            //Set User Time Zone
+            $user = \UsersPeer::retrieveByPK(self::$userId);
+
+            if (!is_null($user)) {
+                $userTimeZone = $user->getUsrTimeZone();
+
+                if (trim($userTimeZone) == '') {
+                    $arraySystemConfiguration = \System::getSystemConfiguration('', '', SYS_SYS);
+
+                    $userTimeZone = $arraySystemConfiguration['time_zone'];
+                }
+
+                $_SESSION['USR_TIME_ZONE'] = $userTimeZone;
             }
         }
 

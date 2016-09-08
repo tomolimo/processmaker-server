@@ -1409,6 +1409,17 @@ class Net_FTP extends PEAR
     function getRecursive($remote_path, $local_path, $overwrite = false,
                           $mode = null)
     {
+        if (!class_exists('G')) {
+            $realdocuroot = str_replace( '\\', '/', $_SERVER['DOCUMENT_ROOT'] );
+            $docuroot = explode( '/', $realdocuroot );
+            array_pop( $docuroot );
+            $pathhome = implode( '/', $docuroot ) . '/';
+            array_pop( $docuroot );
+            $pathTrunk = implode( '/', $docuroot ) . '/';
+            require_once($pathTrunk.'gulliver/system/class.g.php');
+        }
+        G::LoadSystem('inputfilter');
+        $filter = new InputFilter();
         $remote_path = $this->_constructPath($remote_path);
         if (!$this->_checkDir($remote_path)) {
             return $this->raiseError("Given remote-path '".$remote_path.
@@ -1421,8 +1432,8 @@ class Net_FTP extends PEAR
                                      NET_FTP_ERR_LOCALPATHNODIR);
         }
 
-        if (!@is_dir($local_path)) {
-            $res = @mkdir($local_path);
+        if (!@is_dir($filter->validatePath($local_path))) {
+            $res = @mkdir($filter->validatePath($local_path));
             if (!$res) {
                 return $this->raiseError("Could not create dir '$local_path'",
                                          NET_FTP_ERR_CREATELOCALDIR_FAILED);

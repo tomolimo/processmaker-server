@@ -22,7 +22,7 @@
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  */
 global $RBAC;
-$RBAC->requirePermissions( 'PM_SETUP' );
+$RBAC->requirePermissions( 'PM_SETUP', 'PM_SETUP_HEART_BEAT');
 
 $oHeadPublisher = & headPublisher::getSingleton();
 G::LoadClass( 'serverConfiguration' );

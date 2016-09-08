@@ -366,7 +366,7 @@ class ListUnassigned extends BaseListUnassigned
                     $arrayUsers = $task->getAllUsersTask($row["TAS_UID"]);
                     $arrayUniqueUsers = array( ) ;
                     foreach($arrayUsers as $urow){
-                        if( !in_array( $urow["USR_UID"], $arrayUniqueUsers) ){
+                    if( !in_array( $urow["USR_UID"], $arrayUniqueUsers) ){
                             $arrayUniqueUsers[]=$urow["USR_UID"] ;
                             $newRow["USR_UID"] = $urow["USR_UID"];
                             $listUnassignedGpr = new ListUnassignedGroup();

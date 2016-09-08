@@ -173,6 +173,28 @@ class Dynaform extends BaseDynaform
 
             if (isset($aData["DYN_CONTENT"])) {
                 $this->setDynContent($aData["DYN_CONTENT"]);
+            } else {
+                $this->setDynContent(G::json_encode(array(
+                            "name" => $aData["DYN_TITLE"],
+                            "description" => $aData["DYN_DESCRIPTION"],
+                            "items" => array(array(
+                                    "type" => "form",
+                                    "variable" => "",
+                                    "var_uid" => "",
+                                    "dataType" => "",
+                                    "id" => $this->getDynUid(),
+                                    "name" => $aData["DYN_TITLE"],
+                                    "description" => $aData["DYN_DESCRIPTION"],
+                                    "mode" => "edit",
+                                    "script" => "",
+                                    "language" => "en",
+                                    "externalLibs" => "",
+                                    "printable" => false,
+                                    "items" => array(),
+                                    "variables" => array()
+                                )
+                            )
+                )));
             }
             if (isset($aData["DYN_LABEL"])) {
                 $this->setDynLabel($aData["DYN_LABEL"]);
@@ -181,10 +203,6 @@ class Dynaform extends BaseDynaform
                 $aData['DYN_VERSION'] = 0;
             }
             $this->setDynVersion( $aData['DYN_VERSION'] );
-            if (!isset($aData['DYN_CONTENT'])) {
-                $aData['DYN_CONTENT'] = "{}";
-            }
-            $this->setDynContent( $aData['DYN_CONTENT'] );
             if ($this->validate()) {
                 $con->begin();
                 $res = $this->save();
@@ -729,5 +747,28 @@ class Dynaform extends BaseDynaform
         }
         return $flag;
     }
+    
+    /**
+     * verify if a dynaform is assigned some dynaform
+     *
+     * @param string $proUid the uid of the process
+     * @param string $dynUid the uid of the dynaform
+     *
+     * @return array
+     */
+    public function verifyDynaformAssignDynaform ($dynUid, $proUid) 
+    {
+        $res = array();
+        $oCriteria = new Criteria();
+        $oCriteria->addSelectColumn(DynaformPeer::DYN_UID);
+        $oCriteria->add(DynaformPeer::PRO_UID, $proUid);
+        $oCriteria->add(DynaformPeer::DYN_UID, $dynUid, Criteria::NOT_EQUAL);
+        $oCriteria->add(DynaformPeer::DYN_CONTENT, "%" . $dynUid . "%", Criteria::LIKE);
+        $oDataset = DynaformPeer::doSelectRS($oCriteria);
+        $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+        while ($oDataset->next()) {
+            $res[] = $oDataset->getRow();
+        }
+        return $res;
+    }
 }
-

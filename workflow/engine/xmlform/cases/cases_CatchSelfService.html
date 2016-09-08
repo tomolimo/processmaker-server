@@ -1,76 +1,72 @@
-<form id="{$form_id}" name="{$form_name}" action="{$form_action}" target="" class="{$form_className}" method="post" encType="multipart/form-data" style="margin:0px;" onsubmit="return validateForm('{$form_objectRequiredFields}');">  <div class="borderForm" style="width:{$form_width}; padding-left:0; padding-right:0; border-width:{$form_border};">
-		<div class="boxTop"><div class="a"></div><div class="b"></div><div class="c"></div></div>
-		<div class="content" style="height:{$form_height};" >
-	  <table width="99%">
+  <form id="{$form_id}" name="{$form_name}" action="{$form_action}" class="{$form_className}" method="post" encType="multipart/form-data" style="margin:0px;" onsubmit="return validateForm('{$form_objectRequiredFields}');">  <div class="borderForm" style="width:{$form_width}; padding-left:0; padding-right:0; border-width:{$form_border};">
+    <div class="boxTop"><div class="a">&nbsp;</div><div class="b">&nbsp;</div><div class="c">&nbsp;</div></div>
+    <div class="content" style="height:{$form_height};" >
+    <table width="99%">
       <tr>
         <td valign='top'>
-        <input type="hidden" class="notValidateThisFields" name="__notValidateThisFields__" id="__notValidateThisFields__" value="" />
-        <input type="hidden" name="DynaformRequiredFields" id="DynaformRequiredFields" value="{$form_objectRequiredFields}" />
-           <table cellspacing="0" cellpadding="0" border="0" width="100%">
-                                   <tr>
+          <input type="hidden" class="notValidateThisFields" name="__notValidateThisFields__" id="__notValidateThisFields__" value="{$form_objectRequiredFields}" />
+          <input type="hidden" name="DynaformRequiredFields" id="DynaformRequiredFields" value="{$form_objectRequiredFields}" />
+          <input type="hidden" name="__DynaformName__" id="__DynaformName__" value="{$form_name}" />
+          <table cellspacing="0" cellpadding="0" border="0" width="100%">
+                                    <tr style="display: none">
+              <td colspan="2">{$form.isIE}</td>
+            </tr>
+                                                <tr>
               <td class='FormTitle' colspan="2" align="">{$form.TITLE1}</td>
-             </tr>
+            </tr>
                                                 <tr>
               <td class='FormLabel' width="{$form_labelWidth}">{$PRO_TITLE}</td>
-              <!-- <td class='FormFieldContent' width="{$form_width}" >{$form.PRO_TITLE} </td>  //-->
-              <td class='FormFieldContent' width='{$form_fieldContentWidth}' >{$form.PRO_TITLE}</td> 
-              </tr>
+              <td class='FormFieldContent' width='{$form_fieldContentWidth}' >{$form.PRO_TITLE}</td>
+            </tr>
                                                 <tr>
               <td class='FormLabel' width="{$form_labelWidth}">{$STATUS}</td>
-              <!-- <td class='FormFieldContent' width="{$form_width}" >{$form.STATUS} </td>  //-->
-              <td class='FormFieldContent' width='{$form_fieldContentWidth}' >{$form.STATUS}</td> 
-              </tr>
+              <td class='FormFieldContent' width='{$form_fieldContentWidth}' >{$form.STATUS}</td>
+            </tr>
                                                 <tr>
               <td class='FormLabel' width="{$form_labelWidth}">{$TITLE}</td>
-              <!-- <td class='FormFieldContent' width="{$form_width}" >{$form.TITLE} </td>  //-->
-              <td class='FormFieldContent' width='{$form_fieldContentWidth}' >{$form.TITLE}</td> 
-              </tr>
+              <td class='FormFieldContent' width='{$form_fieldContentWidth}' >{$form.TITLE}</td>
+            </tr>
                                                 <tr>
               <td class='FormLabel' width="{$form_labelWidth}">{$APP_NUMBER}</td>
-              <!-- <td class='FormFieldContent' width="{$form_width}" >{$form.APP_NUMBER} </td>  //-->
-              <td class='FormFieldContent' width='{$form_fieldContentWidth}' >{$form.APP_NUMBER}</td> 
-              </tr>
+              <td class='FormFieldContent' width='{$form_fieldContentWidth}' >{$form.APP_NUMBER}</td>
+            </tr>
                                                 <tr>
               <td class='FormLabel' width="{$form_labelWidth}">{$APP_UID}</td>
-              <!-- <td class='FormFieldContent' width="{$form_width}" >{$form.APP_UID} </td>  //-->
-              <td class='FormFieldContent' width='{$form_fieldContentWidth}' >{$form.APP_UID}</td> 
-              </tr>
+              <td class='FormFieldContent' width='{$form_fieldContentWidth}' >{$form.APP_UID}</td>
+            </tr>
                                                 <tr>
               <td class='FormLabel' width="{$form_labelWidth}">{$TAS_TITLE}</td>
-              <!-- <td class='FormFieldContent' width="{$form_width}" >{$form.TAS_TITLE} </td>  //-->
-              <td class='FormFieldContent' width='{$form_fieldContentWidth}' >{$form.TAS_TITLE}</td> 
-              </tr>
+              <td class='FormFieldContent' width='{$form_fieldContentWidth}' >{$form.TAS_TITLE}</td>
+            </tr>
                                                 <tr>
               <td class='FormLabel' width="{$form_labelWidth}">{$DEL_DELEGATE_DATE}</td>
-              <!-- <td class='FormFieldContent' width="{$form_width}" >{$form.DEL_DELEGATE_DATE} </td>  //-->
-              <td class='FormFieldContent' width='{$form_fieldContentWidth}' >{$form.DEL_DELEGATE_DATE}</td> 
-              </tr>
+              <td class='FormFieldContent' width='{$form_fieldContentWidth}' >{$form.DEL_DELEGATE_DATE}</td>
+            </tr>
                                                 <tr>
               <td class='FormLabel' width="{$form_labelWidth}">{$DEL_TASK_DUE_DATE}</td>
-              <!-- <td class='FormFieldContent' width="{$form_width}" >{$form.DEL_TASK_DUE_DATE} </td>  //-->
-              <td class='FormFieldContent' width='{$form_fieldContentWidth}' >{$form.DEL_TASK_DUE_DATE}</td> 
-              </tr>
+              <td class='FormFieldContent' width='{$form_fieldContentWidth}' >{$form.DEL_TASK_DUE_DATE}</td>
+            </tr>
                                                 <tr>
               <td class='FormLabel' width="{$form_labelWidth}">{$PREVIOUS_TASK}</td>
-              <!-- <td class='FormFieldContent' width="{$form_width}" >{$form.PREVIOUS_TASK} </td>  //-->
-              <td class='FormFieldContent' width='{$form_fieldContentWidth}' >{$form.PREVIOUS_TASK}</td> 
-              </tr>
+              <td class='FormFieldContent' width='{$form_fieldContentWidth}' >{$form.PREVIOUS_TASK}</td>
+            </tr>
                                                 <tr>
               <td class='FormLabel' width="{$form_labelWidth}">{$PREVIOUS_USER}</td>
-              <!-- <td class='FormFieldContent' width="{$form_width}" >{$form.PREVIOUS_USER} </td>  //-->
-              <td class='FormFieldContent' width='{$form_fieldContentWidth}' >{$form.PREVIOUS_USER}</td> 
-              </tr>
-             <tr>
-              <td class='FormButton' colspan="2" align="">{$form.BTN_CATCH} {$form.BTN_CANCEL}</td> 
-             </tr>
-                                               
-           </table>
+              <td class='FormFieldContent' width='{$form_fieldContentWidth}' >{$form.PREVIOUS_USER}</td>
+            </tr>
+                                                <tr>
+              <td class='FormButton' colspan="2" align="">{$form.BTN_CATCH} {$form.BTN_CANCEL}</td>
+            </tr>
+                                                                      </table>
         </td>
       </tr>
     </table>
-    		</div>
-		<div class="boxBottom"><div class="a"></div><div class="b"></div><div class="c"></div></div>
-  </div>
-</form>
+           </div>
+       <div class="boxBottom"><div class="a">&nbsp;</div><div class="b">&nbsp;</div><div class="c">&nbsp;</div></div>
+       </div>
+                                                                                                                                                                                                                                                           <script type="text/javascript">
+             {$form.JS}
+           </script>
+                  </form>
 
 

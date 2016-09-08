@@ -31,8 +31,7 @@
                         <label class="textBlue"><a href="../../uxs/home">{$switch_interface_label}</a> | </label>
                         {/if}
                         <a href="{$linklogout}" class="tableOption">{$logout}</a>&nbsp;&nbsp;<br/>
-                        <label class="textBlack"><b>{$rolename}</b> {$workspace_label} <b><u>{$workspace}</u></b><br />
-                        {$udate}</label>&nbsp; &nbsp;
+                        <label class="textBlack"><b>{$rolename}</b> {$workspace_label} <b><u>{$workspace}</u></b></label>&nbsp; &nbsp;
                       {else}
                           {if $tracker eq 1}
                               <a href="{$linklogout}" class="tableOption">{$logout}</a>&nbsp;&nbsp;
@@ -91,12 +90,9 @@
             <div class="row vertical-offset-100">
                 <div class="col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
                       <div class="row-fluid user-row">
-                                <img src="/images/logopm3.png" class="img-responsive" alt="Conxole Admin">
+                                <img src="/images/logopm3login.png" class="img-responsive" alt="Conxole Admin">
                             </div>
                     <div class="panel panel-default">
-                        <div class="panel-heading text-center">                                                            
-                            <p>Please enter your credentials below</p>
-                        </div>
                         <div class="panel-body">                           
                             {php}
                             global $G_TEMPLATE;

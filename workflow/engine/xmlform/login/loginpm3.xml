@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm name="login" version="1.0" basedir="" xmlform_type="NORMAL" width="400px" enabletemplate="1">
+  <BROWSER_TIME_ZONE_OFFSET type="hidden" />
+
   <TITLE type="title">
     <en><![CDATA[Login]]></en>
   </TITLE>
@@ -26,6 +28,21 @@ SELECT LANG_ID, LANG_NAME FROM langOptions
   </FORGOT_PASWORD_LINK>
   <JS type="javascript"><![CDATA[
 
+//validate iframe login
+if(inIframe()) {
+  if (PM.Sessions.getCookie('PM-TabPrimary') !== '101010010'
+      && (window.location.pathname.indexOf("login/login") !== -1
+      || window.location.pathname.indexOf("sysLogin") !== -1)) {
+      window.top.location.href = window.location.pathname;
+  }
+}
+function inIframe () {
+    try {
+        return window.self !== window.top;
+    } catch (e) {
+        return true;
+    }
+};
 function getElementsByClassNameIE8(node, classname) {
     var a = [];
     var re = new RegExp('(^| )'+classname+'( |$)');
@@ -38,34 +55,34 @@ function getElementsByClassNameIE8(node, classname) {
 window.onload= function(){
    var inputUser,
        inputPass;
-   if(document.getElementById('form[USR_USERNAME]').placeholder == undefined && document.getElementById('form[BSUBMIT]').classList == undefined){     
+   if(document.getElementById('form[USR_USERNAME]').placeholder == undefined && document.getElementById('form[BSUBMIT]').classList == undefined){
     document.getElementById('form[USR_USERNAME]').value = _('ID_USER');
     document.getElementById('form[USR_PASSWORD_MASK]').value = _('ID_PASSWORD');
     document.getElementById('form[BSUBMIT]').className = "button-login-success";
     inputUser = document.getElementById('form[USR_USERNAME]');
     inputPass = document.getElementById('form[USR_PASSWORD_MASK]');
-    
+
     inputUser.attachEvent("onclick", function (){
       if(_('ID_USER') == inputUser.value){
         inputUser.value="";
-      }        
+      }
     });
     inputUser.attachEvent("onblur", function (){
       if(inputUser.value == ""){
         inputUser.value=_('ID_USER');
-      }        
+      }
     });
-    
+
     inputPass.attachEvent("onclick", function (){
       if(_('ID_PASSWORD') == inputPass.value){
         inputPass.value="";
-      }        
+      }
     });
-    
+
     inputPass.attachEvent("onblur", function (){
       if(inputPass.value == ""){
         inputPass.value = _('ID_PASSWORD');
-      }        
+      }
     });
 
 
@@ -74,7 +91,7 @@ window.onload= function(){
     document.getElementById('form[USR_PASSWORD_MASK]').placeholder = _('ID_PASSWORD');
     document.getElementById('form[BSUBMIT]').classList.remove('module_app_button___gray');
     document.getElementById('form[BSUBMIT]').classList.add('button-login-success');
-  }   
+  }
 };
 
 // enable/disable forgot password link
@@ -158,8 +175,9 @@ leimnud.event.add(document.getElementById('form[BSUBMIT]'), 'click', function() 
 
     document.getElementById("form[USR_PASSWORD]").value = document.getElementById("form[USR_PASSWORD_MASK]").value;
     document.getElementById("form[USR_PASSWORD_MASK]").value = "";
+    document.getElementById("form[BROWSER_TIME_ZONE_OFFSET]").value = getBrowserTimeZoneOffset();
     if(!navigator.userAgent.indexOf("MSIE 8.0")>0)
-      document.getElementById("form[USR_PASSWORD_MASK]").setAttribute("type", "text");    
+      document.getElementById("form[USR_PASSWORD_MASK]").setAttribute("type", "text");
     document.login.submit();
 }.extend(document.getElementById('form[BSUBMIT]')));
 

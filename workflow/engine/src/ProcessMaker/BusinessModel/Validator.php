@@ -328,5 +328,84 @@ class Validator
             throw $e;
         }
     }
+
+    /**
+     * Validate data by ISO 8601 format
+     *
+     * @param mixed $data  Data
+     * @param mixed $field Fields
+     *
+     * @return void Throw exception if data has an invalid value
+     */
+    public static function throwExceptionIfDataNotMetIso8601Format($data, $field = null)
+    {
+        try {
+            if (!(isset($_SESSION['__SYSTEM_UTC_TIME_ZONE__']) && $_SESSION['__SYSTEM_UTC_TIME_ZONE__'])) {
+                return;
+            }
+
+            $regexpDate = \ProcessMaker\Util\DateTime::REGEXPDATE;
+            $regexpTime = \ProcessMaker\Util\DateTime::REGEXPTIME;
+
+            $regexpIso8601 = $regexpDate . 'T' . $regexpTime . '[\+\-]\d{2}:\d{2}';
+
+            switch (gettype($data)) {
+                case 'string':
+                    if (trim($data) != '' && !preg_match('/^' . $regexpIso8601 . '$/', $data)) {
+                        throw new \Exception(\G::LoadTranslation('ID_ISO8601_INVALID_FORMAT', [(!is_null($field) && is_string($field))? $field : $data]));
+                    }
+                    break;
+                case 'array':
+                    if (!is_null($field) && is_array($field)) {
+                        foreach ($field as $value) {
+                            $fieldName = $value;
+
+                            $fieldName = (isset($data[strtoupper($fieldName)]))? strtoupper($fieldName) : $fieldName;
+                            $fieldName = (isset($data[strtolower($fieldName)]))? strtolower($fieldName) : $fieldName;
+
+                            if (isset($data[$fieldName]) && trim($data[$fieldName]) != '' && !preg_match('/^' . $regexpIso8601 . '$/', $data[$fieldName])) {
+                                throw new \Exception(\G::LoadTranslation('ID_ISO8601_INVALID_FORMAT', [$fieldName]));
+                            }
+                        }
+                    }
+                    break;
+            }
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
+
+    /**
+     * Validate pager data
+     *
+     * @param array $arrayData                     Data
+     * @param array $arrayVariableNameForException Variable name for exception
+     *
+     * @return mixed Returns TRUE when pager data is valid, Message Error otherwise
+     */
+    public static function validatePagerDataByPagerDefinition($arrayPagerData, $arrayVariableNameForException)
+    {
+        try {
+            foreach ($arrayPagerData as $key => $value) {
+                $nameForException = (isset($arrayVariableNameForException[$key]))?
+                    $arrayVariableNameForException[$key] : $key;
+
+                if (!is_null($value) &&
+                    (
+                        (string)($value) == '' ||
+                        !preg_match('/^(?:\+|\-)?(?:0|[1-9]\d*)$/', $value . '') ||
+                        (int)($value) < 0
+                    )
+                ) {
+                    return \G::LoadTranslation('ID_INVALID_VALUE_EXPECTING_POSITIVE_INTEGER', [$nameForException]);
+                }
+            }
+
+            //Return
+            return true;
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
 }
 

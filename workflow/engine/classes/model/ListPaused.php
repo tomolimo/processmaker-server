@@ -119,11 +119,6 @@ class ListPaused extends BaseListPaused {
         $oListInbox->remove($data['APP_UID'], $data['DEL_INDEX']);
 
         $users = new Users();
-        if ($data['APP_STATUS'] == 'DRAFT') {
-            $users->refreshTotal($data['USR_UID'], 'removed', 'draft');
-        } else {
-            $users->refreshTotal($data['USR_UID'], 'removed', 'inbox');
-        }
         $users->refreshTotal($data['USR_UID'], 'add', 'paused');
 
         $con = Propel::getConnection( ListPausedPeer::DATABASE_NAME );
@@ -188,9 +183,6 @@ class ListPaused extends BaseListPaused {
         $oRow = ApplicationPeer::retrieveByPK($app_uid);
         $aFields = $oRow->toArray( BasePeer::TYPE_FIELDNAME );
         $data_inbox['APP_STATUS'] = $aFields['APP_STATUS'];
-        if ($data_inbox['APP_STATUS'] == 'TO_DO') {
-            $users->refreshTotal($data_inbox['USR_UID'], 'add', 'inbox');
-        }
         $listInbox = new ListInbox();
         $listInbox->newRow($data_inbox, $data_inbox['USR_UID']);
 

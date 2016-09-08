@@ -24,7 +24,7 @@ class pmTables extends Controller
     public function index ($httpData)
     {
         global $RBAC;
-        $RBAC->requirePermissions( 'PM_SETUP_ADVANCE' );
+        $RBAC->requirePermissions( 'PM_SETUP_ADVANCE', 'PM_SETUP_PM_TABLES' );
 
         G::LoadClass( 'configuration' );
         $c = new Configurations();

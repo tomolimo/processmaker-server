@@ -199,7 +199,6 @@ class Bootstrap
         //self::registerClass("GroupUser", PATH_CLASSES . "class.groupUser.php");  -> this have conflicts with model/GroupUser.php
         self::registerClass("Groups", PATH_CLASSES . "class.groups.php");
         self::registerClass("JavaBridgePM", PATH_CLASSES . "class.javaBridgePM.php");
-        self::registerClass("Jrml", PATH_CLASSES . "class.jrml.php");
         self::registerClass("PMmemcached", PATH_CLASSES . "class.memcached.php");
         self::registerClass("multipleFilesBackup", PATH_CLASSES . "class.multipleFilesBackup.php");
         self::registerClass("NET", PATH_CLASSES . "class.net.php");
@@ -349,12 +348,18 @@ class Bootstrap
             throw new Exception("Template: $template, doesn't exist!");
         }
 
+        self::LoadSystem('inputfilter');
+        $filter = new InputFilter();
+
         $smarty = new Smarty ();
         $smarty->compile_dir = Bootstrap::sys_get_temp_dir();
         $smarty->cache_dir = Bootstrap::sys_get_temp_dir();
-        $smarty->config_dir = PATH_THIRDPARTY . 'smarty/configs';
-
-        $smarty->template_dir = PATH_TEMPLATE;
+        $configDir = PATH_THIRDPARTY . 'smarty/configs';
+        $configDir = $filter->validateInput($configDir, 'path');
+        $smarty->config_dir = $configDir;
+        $templateDir = PATH_TEMPLATE;
+        $templateDir = $filter->validateInput($templateDir, 'path');
+        $smarty->template_dir = $templateDir;
         $smarty->force_compile = true;
 
         foreach ($data as $key => $value) {
@@ -372,7 +377,7 @@ class Bootstrap
      * @param string $strClass
      * @return void
      */
-    public function LoadSystem($strClass)
+    public static function LoadSystem($strClass)
     {
         require_once (PATH_GULLIVER . 'class.' . $strClass . '.php');
     }
@@ -464,12 +469,12 @@ class Bootstrap
         $file = $filter->xssFilterHard($file);
         $downloadFileName = $filter->xssFilterHard($downloadFileName);
 
-        $fileNameIni = $file;
-
         $browserCacheFilesUid = G::browserCacheFilesGetUid();
 
         if ($browserCacheFilesUid != null) {
-            $file = str_replace(".$browserCacheFilesUid", null, $file);
+            $fileNameIni = $file = str_replace(".$browserCacheFilesUid", null, $file);
+        } else {
+            $fileNameIni = $file;
         }
 
         $folderarray = explode('/', $file);
@@ -670,7 +675,7 @@ class Bootstrap
      */
     public static function LoadClass($strClass)
     {
-        Bootstrap::LoadSystem('inputfilter');
+        self::LoadSystem('inputfilter');
         $filter = new InputFilter();
 
         $path = PATH_GULLIVER . 'class.' . $strClass . '.php';
@@ -717,7 +722,7 @@ class Bootstrap
      * @param  string lang
      * @return void
      */
-    public function LoadTranslationObject($lang = SYS_LANG)
+    public static function LoadTranslationObject($lang = SYS_LANG)
     {
         $defaultTranslations = Array();
         $foreignTranslations = Array();
@@ -2881,7 +2886,7 @@ class Bootstrap
         }
     }
 
-    public function getPasswordHashConfig()
+    public static function getPasswordHashConfig()
     {
         G::LoadClass('configuration');
         $config= new Configurations();
@@ -2902,7 +2907,7 @@ class Bootstrap
         return $passwordHashConfig;
     }
 
-    public function getPasswordHashType()
+    public static function getPasswordHashType()
     {
         $passwordHashConfig = Bootstrap::getPasswordHashConfig();
         return $passwordHashConfig['current'];
@@ -2975,5 +2980,19 @@ class Bootstrap
 
     }
 
+    /**
+     * Set Language
+     */
+    public static function isIE()
+    {
+        $isIE = false;
+        if (isset($_SERVER['HTTP_USER_AGENT'])) {
+            $ua = htmlentities($_SERVER['HTTP_USER_AGENT'], ENT_QUOTES, 'UTF-8');
+            if (preg_match('~MSIE|Internet Explorer~i', $ua) || (strpos($ua, 'Trident/7.0; rv:11.0') !== false)) {
+                $isIE = true;
+            }
+        }
+        return $isIE;
+    }
 }
 

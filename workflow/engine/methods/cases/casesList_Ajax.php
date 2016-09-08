@@ -1,9 +1,9 @@
 <?php
 if (!isset($_SESSION['USER_LOGGED'])) {
-    $response = new stdclass();
+    $response = new stdClass();
     $response->message = G::LoadTranslation('ID_LOGIN_AGAIN');
     $response->lostSession = true;
-    print G::json_encode( $response );
+    print G::json_encode($response);
     die();
 }
 /**
@@ -46,13 +46,13 @@ $_POST = $filter->xssFilterHard($_POST);
 $_REQUEST = $filter->xssFilterHard($_REQUEST);
 $_SESSION = $filter->xssFilterHard($_SESSION);
 
-$actionAjax = isset( $_REQUEST['actionAjax'] ) ? $_REQUEST['actionAjax'] : null;
+$actionAjax = isset($_REQUEST['actionAjax']) ? $_REQUEST['actionAjax'] : null;
 
 function filterUserListArray($users = array(), $filter = '')
 {
     $filteredUsers = array();
     foreach ($users as $user) {
-        if(stripos($user['USR_FULLNAME'], $filter) || empty($filter)) {
+        if (stripos($user['USR_FULLNAME'], $filter) || empty($filter)) {
             $filteredUsers[] = $user;
         }
     }
@@ -78,24 +78,24 @@ if ($actionAjax == "userValues") {
 
             $confEnvSetting = $conf->getFormats();
 
-            $cUsers = new Criteria( 'workflow' );
+            $cUsers = new Criteria('workflow');
             $cUsers->clearSelectColumns();
             $cUsers->addSelectColumn(UsersPeer::USR_UID);
             $cUsers->addSelectColumn(UsersPeer::USR_USERNAME);
             $cUsers->addSelectColumn(UsersPeer::USR_FIRSTNAME);
             $cUsers->addSelectColumn(UsersPeer::USR_LASTNAME);
-            $cUsers->add( UsersPeer::USR_STATUS, 'CLOSED', Criteria::NOT_EQUAL );
-            
+            $cUsers->add(UsersPeer::USR_STATUS, 'CLOSED', Criteria::NOT_EQUAL);
+
             if (!is_null($query)) {
                 $filters = $cUsers->getNewCriterion( UsersPeer::USR_FIRSTNAME, '%'.$query.'%', Criteria::LIKE )->addOr(
                     $cUsers->getNewCriterion( UsersPeer::USR_LASTNAME, '%'.$query.'%', Criteria::LIKE )->addOr(
-                    $cUsers->getNewCriterion( UsersPeer::USR_USERNAME, '%'.$query.'%', Criteria::LIKE )));
+                        $cUsers->getNewCriterion( UsersPeer::USR_USERNAME, '%'.$query.'%', Criteria::LIKE )));
                 $cUsers->addOr( $filters );
             }
             $cUsers->setLimit(20);
             $cUsers->addAscendingOrderByColumn(UsersPeer::TABLE_NAME . "." . $conf->userNameFormatGetFirstFieldByUsersTable());
-            $oDataset = UsersPeer::doSelectRS( $cUsers );
-            $oDataset->setFetchmode( ResultSet::FETCHMODE_ASSOC );
+            $oDataset = UsersPeer::doSelectRS($cUsers);
+            $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
 
             while ($oDataset->next()) {
                 $row = $oDataset->getRow();
@@ -110,121 +110,84 @@ if ($actionAjax == "userValues") {
             break;
     }
     //return $users;
-    return print G::json_encode( $users );
+    return print G::json_encode($users);
 }
 
 if ($actionAjax == "processListExtJs") {
-    $action = isset( $_REQUEST['action'] ) ? $_REQUEST['action'] : null;
-    $categoryUid = isset( $_REQUEST['CATEGORY_UID'] ) ? $_REQUEST['CATEGORY_UID'] : null;
-    $userUid = (isset( $_SESSION['USER_LOGGED'] ) && $_SESSION['USER_LOGGED'] != '') ? $_SESSION['USER_LOGGED'] : null;
+    $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
+    $query = isset($_REQUEST['query']) ? $_REQUEST['query'] : null;
+    $categoryUid = isset($_REQUEST['CATEGORY_UID']) ? $_REQUEST['CATEGORY_UID'] : null;
+    $userUid = (isset($_SESSION['USER_LOGGED']) && $_SESSION['USER_LOGGED'] != '') ? $_SESSION['USER_LOGGED'] : null;
 
-    global $oAppCache;
-    $oAppCache = new AppCacheView();
-    $processes = Array ();
-    $processes[] = array ('',G::LoadTranslation( 'ID_ALL_PROCESS' )
-    );
+    $processes = array();
+    //in search action, the query to obtain all process is too slow, so we need to query directly to
+    //process and content tables, and for that reason we need the current language in AppCacheView.
+    $oConf = new Configurations();
+    $oConf->loadConfig($x, 'APP_CACHE_VIEW_ENGINE', '', '', '', '');
+    $appCacheViewEngine = $oConf->aConfig;
+    $lang = isset($appCacheViewEngine['LANG']) ? $appCacheViewEngine['LANG'] : 'en';
 
-    //get the list based in the action provided
-    switch ($action) {
-        case 'draft':
-            $cProcess = $oAppCache->getDraftListCriteria( $userUid ); //fast enough
-            break;
-        case 'sent':
-            $cProcess = $oAppCache->getSentListProcessCriteria( $userUid ); // fast enough
-            break;
-        case 'simple_search':
-        case 'search':
-            //in search action, the query to obtain all process is too slow, so we need to query directly to
-            //process and content tables, and for that reason we need the current language in AppCacheView.
-            G::loadClass( 'configuration' );
-            $oConf = new Configurations();
-            $oConf->loadConfig( $x, 'APP_CACHE_VIEW_ENGINE', '', '', '', '' );
-            $appCacheViewEngine = $oConf->aConfig;
-            $lang = isset( $appCacheViewEngine['LANG'] ) ? $appCacheViewEngine['LANG'] : 'en';
-
-            $cProcess = new Criteria( 'workflow' );
-            $cProcess->clearSelectColumns();
-            $cProcess->addSelectColumn( ProcessPeer::PRO_UID );
-            $cProcess->addSelectColumn( ContentPeer::CON_VALUE );
-            if ($categoryUid) {
-                $cProcess->add( ProcessPeer::PRO_CATEGORY, $categoryUid );
-            }
-            $del = DBAdapter::getStringDelimiter();
-            $conds = array ();
-            $conds[] = array (ProcessPeer::PRO_UID,ContentPeer::CON_ID);
-            $conds[] = array (ContentPeer::CON_CATEGORY,$del . 'PRO_TITLE' . $del);
-            $conds[] = array (ContentPeer::CON_LANG,$del . $lang . $del);
-            $cProcess->addJoinMC( $conds, Criteria::LEFT_JOIN );
-            $cProcess->add( ProcessPeer::PRO_STATUS, 'ACTIVE' );
-            $cProcess->addAscendingOrderByColumn(ContentPeer::CON_VALUE);
-
-            $oDataset = ProcessPeer::doSelectRS( $cProcess );
-            $oDataset->setFetchmode( ResultSet::FETCHMODE_ASSOC );
-            $oDataset->next();
-
-            while ($aRow = $oDataset->getRow()) {
-                $processes[] = array ($aRow['PRO_UID'],$aRow['CON_VALUE']
-                );
-                $oDataset->next();
-            }
-            return print G::json_encode( $processes );
-            break;
-        case 'unassigned':
-            $cProcess = $oAppCache->getUnassignedListCriteria( $userUid );
-            break;
-        case 'paused':
-            $cProcess = $oAppCache->getPausedListCriteria( $userUid );
-            break;
-        case 'to_revise':
-            $cProcess = $oAppCache->getToReviseListCriteria( $userUid );
-            break;
-        case 'to_reassign':
-            $cProcess = $oAppCache->getToReassignListCriteria($userUid);
-            break;
-        case 'gral':
-            $cProcess = $oAppCache->getGeneralListCriteria();
-            break;
-        case 'todo':
-        default:
-            $cProcess = $oAppCache->getToDoListCriteria( $userUid ); //fast enough
-            break;
-    }
+    $cProcess = new Criteria('workflow');
     //get the processes for this user in this action
     $cProcess->clearSelectColumns();
-    $cProcess->addSelectColumn( AppCacheViewPeer::PRO_UID );
-    $cProcess->addSelectColumn( AppCacheViewPeer::APP_PRO_TITLE );
-    $cProcess->setDistinct( AppCacheViewPeer::PRO_UID );
+    $cProcess->addSelectColumn(ProcessPeer::PRO_UID);
+    $cProcess->addAsColumn('PRO_TITLE', ContentPeer::CON_VALUE);
     if ($categoryUid) {
-        require_once 'classes/model/Process.php';
-        $cProcess->addAlias( 'CP', 'PROCESS' );
-        $cProcess->add( 'CP.PRO_CATEGORY', $categoryUid, Criteria::EQUAL );
-        $cProcess->addJoin( AppCacheViewPeer::PRO_UID, 'CP.PRO_UID', Criteria::LEFT_JOIN );
-        $cProcess->addAsColumn( 'CATEGORY_UID', 'CP.PRO_CATEGORY' );
+        $cProcess->add(ProcessPeer::PRO_CATEGORY, $categoryUid);
     }
 
-    $cProcess->addAscendingOrderByColumn(AppCacheViewPeer::APP_PRO_TITLE);
+    $del = \DBAdapter::getStringDelimiter();
+    $conds = array();
+    $conds[] = array(ProcessPeer::PRO_UID, ContentPeer::CON_ID);
+    $conds[] = array(ContentPeer::CON_CATEGORY, $del . 'PRO_TITLE' . $del);
+    $conds[] = array(ContentPeer::CON_LANG, $del . $lang . $del);
+    $cProcess->addJoinMC($conds, Criteria::LEFT_JOIN);
+    $cProcess->add(ProcessPeer::PRO_STATUS, 'ACTIVE');
 
-    $oDataset = AppCacheViewPeer::doSelectRS( $cProcess, Propel::getDbConnection('workflow_ro') );
-    $oDataset->setFetchmode( ResultSet::FETCHMODE_ASSOC );
-    $oDataset->next();
-
-    while ($aRow = $oDataset->getRow()) {
-        $processes[] = array ($aRow['PRO_UID'],$aRow['APP_PRO_TITLE']
-        );
-        $oDataset->next();
+    if (!is_null($query)) {
+        $filters = $cProcess->getNewCriterion(ContentPeer::CON_VALUE, '%' . $query . '%', Criteria::LIKE);
+        $cProcess->addAnd($filters);
     }
-    return print G::json_encode( $processes );
+
+    $cProcess->addAscendingOrderByColumn(ContentPeer::CON_VALUE);
+
+    $oDataset = ProcessPeer::doSelectRS($cProcess);
+    $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+
+    while ($oDataset->next()) {
+        $aRow = $oDataset->getRow();
+        $processes[] = $aRow;
+    }
+    return print G::json_encode($processes);
 }
 
 if ($actionAjax == "getUsersToReassign") {
-    $_SESSION['TASK'] = $_REQUEST['TAS_UID'];
-    $case = new Cases();
-    G::LoadClass( 'tasks' );
-    $task = new Task();
-    $tasks = $task->load($_SESSION['TASK']);
-    $result = new stdclass();
-    $result->data = $case->getUsersToReassign( $_SESSION['TASK'], $_SESSION['USER_LOGGED'], $tasks['PRO_UID'] );
-    print G::json_encode( $result );
+    $taskUid  = $_POST['taskUid'];
+    $search   = $_POST['search'];
+    $pageSize = $_POST['pageSize'];
+
+    $sortField = (isset($_POST['sort']))?  $_POST['sort'] : '';
+    $sortDir   = (isset($_POST['dir']))?   $_POST['dir'] : '';
+    $start     = (isset($_POST['start']))? $_POST['start'] : 0;
+    $limit     = (isset($_POST['limit']))? $_POST['limit'] : $pageSize;
+
+    $response = [];
+
+    try {
+        $case = new \ProcessMaker\BusinessModel\Cases();
+
+        $result = $case->getUsersToReassign($_SESSION['USER_LOGGED'], $taskUid, ['filter' => $search], $sortField, $sortDir, $start, $limit);
+
+        $response['status'] = 'OK';
+        $response['success'] = true;
+        $response['resultTotal'] = $result['total'];
+        $response['resultRoot'] = $result['data'];
+    } catch (Exception $e) {
+        $response['status'] = 'ERROR';
+        $response['message'] = $e->getMessage();
+    }
+
+    echo G::json_encode($response);
 }
 if ($actionAjax == 'reassignCase') {
 
@@ -241,47 +204,48 @@ if ($actionAjax == 'reassignCase') {
     $TO_USR_UID = $_POST['USR_UID'];
 
     try {
-        $cases->reassignCase( $_SESSION['APPLICATION'], $_SESSION['INDEX'], $_SESSION['USER_LOGGED'], $TO_USR_UID );
-        $caseData = $app->load( $_SESSION['APPLICATION'] );
-        $userData = $user->load( $TO_USR_UID );
+        $cases->reassignCase($_SESSION['APPLICATION'], $_SESSION['INDEX'], $_SESSION['USER_LOGGED'], $TO_USR_UID);
+        $caseData = $app->load($_SESSION['APPLICATION']);
+        $userData = $user->load($TO_USR_UID);
         //print_r($caseData);
         $data['APP_NUMBER'] = $caseData['APP_NUMBER'];
         $data['USER'] = $userData['USR_LASTNAME'] . ' ' . $userData['USR_FIRSTNAME']; //TODO change with the farmated username from environment conf
-        $result = new stdclass();
+        $result = new stdClass();
         $result->status = 0;
-        $result->msg = G::LoadTranslation( 'ID_REASSIGNMENT_SUCCESS', SYS_LANG, $data );
+        $result->msg = G::LoadTranslation('ID_REASSIGNMENT_SUCCESS', SYS_LANG, $data);
     } catch (Exception $e) {
         $result->status = 1;
         $result->msg = $e->getMessage();
     }
 
-    print G::json_encode( $result );
+    print G::json_encode($result);
 
 }
 
 if ($actionAjax == 'showHistoryMessage') {
     ?>
-    <link rel="stylesheet" type="text/css" href="/css/classic.css" />
+    <link rel="stylesheet" type="text/css" href="/css/classic.css"/>
     <style type="text/css">
-    html {
-	    color: black !important;
-    }
+        html {
+            color: black !important;
+        }
 
-    body {
-	    color: black !important;
-    }
+        body {
+            color: black !important;
+        }
     </style>
     <script language="Javascript">
         //!Code that simulated reload library javascript maborak
         var leimnud = {};
         leimnud.exec = "";
         leimnud.fix = {};
-        leimnud.fix.memoryLeak  = "";
+        leimnud.fix.memoryLeak = "";
         leimnud.browser = {};
-        leimnud.browser.isIphone  = "";
+        leimnud.browser.isIphone = "";
         leimnud.iphone = {};
-        leimnud.iphone.make = function(){};
-        function ajax_function(ajax_server, funcion, parameters, method){
+        leimnud.iphone.make = function(){
+        };
+        function ajax_function(ajax_server, funcion, parameters, method) {
         }
         //!
     </script>
@@ -296,19 +260,22 @@ if ($actionAjax == 'showHistoryMessage') {
     $G_PUBLISH = new Publisher();
     $oCase = new Cases();
 
-    $G_PUBLISH->AddContent( 'xmlform', 'xmlform', 'cases/cases_MessagesView', '', $oCase->getHistoryMessagesTrackerView( $_POST['APP_UID'], $_POST['APP_MSG_UID'] ) );
+    $G_PUBLISH->AddContent('xmlform', 'xmlform', 'cases/cases_MessagesView', '', $oCase->getHistoryMessagesTrackerView($_POST['APP_UID'], $_POST['APP_MSG_UID']));
+
+    ?>
+
 
     ?>
     <script language="javascript">
-    <?php
-    global $G_FORM;
-    ?>
-          function loadForm_<?php echo $G_FORM->id;?>(parametro1){
-          }
+        <?php
+        global $G_FORM;
+        ?>
+        function loadForm_<?php echo $G_FORM->id;?>(parametro1){
+        }
     </script>
     <?php
 
-    G::RenderPage( 'publish', 'raw' );
+    G::RenderPage('publish', 'raw');
 }
 
 if ($actionAjax == 'showDynaformListHistory') {
@@ -320,170 +287,204 @@ if ($actionAjax == 'showDynaformListHistory') {
     $_POST["TAS_UID"] = $_REQUEST["TAS_UID"];
 
     ?>
-    <link rel="stylesheet" type="text/css" href="/css/classic.css" />
+    <link rel="stylesheet" type="text/css" href="/css/classic.css"/>
     <style type="text/css">
-    html {
-        color: black !important;
-    }
-    body {
-	    color: black !important;
-    }
+        html {
+            color: black !important;
+        }
+        body {
+            color: black !important;
+        }
     </style>
     <script language="Javascript">
-        globalMd5Return=function(s,raw,hexcase,chrsz) {
-            raw=raw||false;
-            hexcase=hexcase||false;
-            chrsz=chrsz||8;
-            function safe_add(x,y) {
-                var lsw=(x&0xFFFF)+(y&0xFFFF);
-                var msw=(x>>16)+(y>>16)+(lsw>>16);
-                return(msw<<16)|(lsw&0xFFFF)
+        globalMd5Return = function (s, raw, hexcase, chrsz) {
+            raw = raw || false;
+            hexcase = hexcase || false;
+            chrsz = chrsz || 8;
+            function safe_add(x, y) {
+                var lsw = (x & 0xFFFF) + (y & 0xFFFF);
+                var msw = (x >> 16) + (y >> 16) + (lsw >> 16);
+                return (msw << 16) | (lsw & 0xFFFF);
+            }
+
+            function bit_rol(num, cnt) {
+                return (num << cnt) | (num >>> (32 - cnt));
+            }
+
+            function md5_cmn(q, a, b, x, s, t) {
+                return safe_add(bit_rol(safe_add(safe_add(a, q), safe_add(x, t)), s), b);
+            }
+
+            function md5_ff(a, b, c, d, x, s, t) {
+                return md5_cmn((b & c) | ((~b) & d), a, b, x, s, t);
+            }
+
+            function md5_gg(a, b, c, d, x, s, t) {
+                return md5_cmn((b & d) | (c & (~d)), a, b, x, s, t);
+            }
+
+            function md5_hh(a, b, c, d, x, s, t) {
+                return md5_cmn(b ^ c ^ d, a, b, x, s, t);
+            }
+
+            function md5_ii(a, b, c, d, x, s, t) {
+                return md5_cmn(c ^ (b | (~d)), a, b, x, s, t);
+            }
+
+            function core_md5(x, len) {
+                x[len >> 5] |= 0x80 << ((len) % 32);
+                x[(((len + 64) >>> 9) << 4) + 14] = len;
+                var a = 1732584193;
+                var b = -271733879;
+                var c = -1732584194;
+                var d = 271733878;
+                for (var i = 0; i < x.length; i += 16) {
+                    var olda = a;
+                    var oldb = b;
+                    var oldc = c;
+                    var oldd = d;
+                    a = md5_ff(a, b, c, d, x[i + 0], 7, -680876936);
+                    d = md5_ff(d, a, b, c, x[i + 1], 12, -389564586);
+                    c = md5_ff(c, d, a, b, x[i + 2], 17, 606105819);
+                    b = md5_ff(b, c, d, a, x[i + 3], 22, -1044525330);
+                    a = md5_ff(a, b, c, d, x[i + 4], 7, -176418897);
+                    d = md5_ff(d, a, b, c, x[i + 5], 12, 1200080426);
+                    c = md5_ff(c, d, a, b, x[i + 6], 17, -1473231341);
+                    b = md5_ff(b, c, d, a, x[i + 7], 22, -45705983);
+                    a = md5_ff(a, b, c, d, x[i + 8], 7, 1770035416);
+                    d = md5_ff(d, a, b, c, x[i + 9], 12, -1958414417);
+                    c = md5_ff(c, d, a, b, x[i + 10], 17, -42063);
+                    b = md5_ff(b, c, d, a, x[i + 11], 22, -1990404162);
+                    a = md5_ff(a, b, c, d, x[i + 12], 7, 1804603682);
+                    d = md5_ff(d, a, b, c, x[i + 13], 12, -40341101);
+                    c = md5_ff(c, d, a, b, x[i + 14], 17, -1502002290);
+                    b = md5_ff(b, c, d, a, x[i + 15], 22, 1236535329);
+                    a = md5_gg(a, b, c, d, x[i + 1], 5, -165796510);
+                    d = md5_gg(d, a, b, c, x[i + 6], 9, -1069501632);
+                    c = md5_gg(c, d, a, b, x[i + 11], 14, 643717713);
+                    b = md5_gg(b, c, d, a, x[i + 0], 20, -373897302);
+                    a = md5_gg(a, b, c, d, x[i + 5], 5, -701558691);
+                    d = md5_gg(d, a, b, c, x[i + 10], 9, 38016083);
+                    c = md5_gg(c, d, a, b, x[i + 15], 14, -660478335);
+                    b = md5_gg(b, c, d, a, x[i + 4], 20, -405537848);
+                    a = md5_gg(a, b, c, d, x[i + 9], 5, 568446438);
+                    d = md5_gg(d, a, b, c, x[i + 14], 9, -1019803690);
+                    c = md5_gg(c, d, a, b, x[i + 3], 14, -187363961);
+                    b = md5_gg(b, c, d, a, x[i + 8], 20, 1163531501);
+                    a = md5_gg(a, b, c, d, x[i + 13], 5, -1444681467);
+                    d = md5_gg(d, a, b, c, x[i + 2], 9, -51403784);
+                    c = md5_gg(c, d, a, b, x[i + 7], 14, 1735328473);
+                    b = md5_gg(b, c, d, a, x[i + 12], 20, -1926607734);
+                    a = md5_hh(a, b, c, d, x[i + 5], 4, -378558);
+                    d = md5_hh(d, a, b, c, x[i + 8], 11, -2022574463);
+                    c = md5_hh(c, d, a, b, x[i + 11], 16, 1839030562);
+                    b = md5_hh(b, c, d, a, x[i + 14], 23, -35309556);
+                    a = md5_hh(a, b, c, d, x[i + 1], 4, -1530992060);
+                    d = md5_hh(d, a, b, c, x[i + 4], 11, 1272893353);
+                    c = md5_hh(c, d, a, b, x[i + 7], 16, -155497632);
+                    b = md5_hh(b, c, d, a, x[i + 10], 23, -1094730640);
+                    a = md5_hh(a, b, c, d, x[i + 13], 4, 681279174);
+                    d = md5_hh(d, a, b, c, x[i + 0], 11, -358537222);
+                    c = md5_hh(c, d, a, b, x[i + 3], 16, -722521979);
+                    b = md5_hh(b, c, d, a, x[i + 6], 23, 76029189);
+                    a = md5_hh(a, b, c, d, x[i + 9], 4, -640364487);
+                    d = md5_hh(d, a, b, c, x[i + 12], 11, -421815835);
+                    c = md5_hh(c, d, a, b, x[i + 15], 16, 530742520);
+                    b = md5_hh(b, c, d, a, x[i + 2], 23, -995338651);
+                    a = md5_ii(a, b, c, d, x[i + 0], 6, -198630844);
+                    d = md5_ii(d, a, b, c, x[i + 7], 10, 1126891415);
+                    c = md5_ii(c, d, a, b, x[i + 14], 15, -1416354905);
+                    b = md5_ii(b, c, d, a, x[i + 5], 21, -57434055);
+                    a = md5_ii(a, b, c, d, x[i + 12], 6, 1700485571);
+                    d = md5_ii(d, a, b, c, x[i + 3], 10, -1894986606);
+                    c = md5_ii(c, d, a, b, x[i + 10], 15, -1051523);
+                    b = md5_ii(b, c, d, a, x[i + 1], 21, -2054922799);
+                    a = md5_ii(a, b, c, d, x[i + 8], 6, 1873313359);
+                    d = md5_ii(d, a, b, c, x[i + 15], 10, -30611744);
+                    c = md5_ii(c, d, a, b, x[i + 6], 15, -1560198380);
+                    b = md5_ii(b, c, d, a, x[i + 13], 21, 1309151649);
+                    a = md5_ii(a, b, c, d, x[i + 4], 6, -145523070);
+                    d = md5_ii(d, a, b, c, x[i + 11], 10, -1120210379);
+                    c = md5_ii(c, d, a, b, x[i + 2], 15, 718787259);
+                    b = md5_ii(b, c, d, a, x[i + 9], 21, -343485551);
+                    a = safe_add(a, olda);
+                    b = safe_add(b, oldb);
+                    c = safe_add(c, oldc);
+                    d = safe_add(d, oldd);
                 }
-            function bit_rol(num,cnt) {
-                return(num<<cnt)|(num>>>(32-cnt))
+                return [a, b, c, d];
+            }
+
+            function str2binl(str) {
+                var bin = [];
+                var mask = (1 << chrsz) - 1;
+                for (var i = 0; i < str.length * chrsz; i += chrsz) {
+                    bin[i >> 5] |= (str.charCodeAt(i / chrsz) & mask) << (i % 32);
                 }
-            function md5_cmn(q,a,b,x,s,t) {
-                return safe_add(bit_rol(safe_add(safe_add(a,q),safe_add(x,t)),s),b)
+                return bin;
+            }
+
+            function binl2str(bin) {
+                var str = "";
+                var mask = (1 << chrsz) - 1;
+                for (var i = 0; i < bin.length * 32; i += chrsz) {
+                    str += String.fromCharCode((bin[i >> 5] >>> (i % 32)) & mask);
                 }
-            function md5_ff(a,b,c,d,x,s,t) {
-                    return md5_cmn((b&c)|((~b)&d),a,b,x,s,t)
-                    }
-                function md5_gg(a,b,c,d,x,s,t) {
-                        return md5_cmn((b&d)|(c&(~d)),a,b,x,s,t)
-                        }
-                    function md5_hh(a,b,c,d,x,s,t) {
-                        return md5_cmn(b^c^d,a,b,x,s,t)
-                        }
-                    function md5_ii(a,b,c,d,x,s,t) {
-                        return md5_cmn(c^(b|(~d)),a,b,x,s,t)
-                        }
-                    function core_md5(x,len) {
-                        x[len>>5]|=0x80<<((len)%32);
-                        x[(((len+64)>>>9)<<4)+14]=len;
-                        var a=1732584193;
-                        var b=-271733879;
-                        var c=-1732584194;
-                        var d=271733878;
-                        for(var i=0;i<x.length;i+=16) {
-                            var olda=a;
-                            var oldb=b;
-                            var oldc=c;
-                            var oldd=d;
-                            a=md5_ff(a,b,c,d,x[i+0],7,-680876936);
-                            d=md5_ff(d,a,b,c,x[i+1],12,-389564586);
-                            c=md5_ff(c,d,a,b,x[i+2],17,606105819);
-                            b=md5_ff(b,c,d,a,x[i+3],22,-1044525330);
-                            a=md5_ff(a,b,c,d,x[i+4],7,-176418897);
-                            d=md5_ff(d,a,b,c,x[i+5],12,1200080426);
-                            c=md5_ff(c,d,a,b,x[i+6],17,-1473231341);
-                            b=md5_ff(b,c,d,a,x[i+7],22,-45705983);
-                            a=md5_ff(a,b,c,d,x[i+8],7,1770035416);
-                            d=md5_ff(d,a,b,c,x[i+9],12,-1958414417);
-                            c=md5_ff(c,d,a,b,x[i+10],17,-42063);
-                            b=md5_ff(b,c,d,a,x[i+11],22,-1990404162);
-                            a=md5_ff(a,b,c,d,x[i+12],7,1804603682);
-                            d=md5_ff(d,a,b,c,x[i+13],12,-40341101);
-                            c=md5_ff(c,d,a,b,x[i+14],17,-1502002290);
-                            b=md5_ff(b,c,d,a,x[i+15],22,1236535329);
-                            a=md5_gg(a,b,c,d,x[i+1],5,-165796510);
-                            d=md5_gg(d,a,b,c,x[i+6],9,-1069501632);
-                            c=md5_gg(c,d,a,b,x[i+11],14,643717713);
-                            b=md5_gg(b,c,d,a,x[i+0],20,-373897302);
-                            a=md5_gg(a,b,c,d,x[i+5],5,-701558691);
-                            d=md5_gg(d,a,b,c,x[i+10],9,38016083);
-                            c=md5_gg(c,d,a,b,x[i+15],14,-660478335);
-                            b=md5_gg(b,c,d,a,x[i+4],20,-405537848);
-                            a=md5_gg(a,b,c,d,x[i+9],5,568446438);
-                            d=md5_gg(d,a,b,c,x[i+14],9,-1019803690);
-                            c=md5_gg(c,d,a,b,x[i+3],14,-187363961);
-                            b=md5_gg(b,c,d,a,x[i+8],20,1163531501);
-                            a=md5_gg(a,b,c,d,x[i+13],5,-1444681467);
-                            d=md5_gg(d,a,b,c,x[i+2],9,-51403784);
-                            c=md5_gg(c,d,a,b,x[i+7],14,1735328473);
-                            b=md5_gg(b,c,d,a,x[i+12],20,-1926607734);
-                            a=md5_hh(a,b,c,d,x[i+5],4,-378558);
-                            d=md5_hh(d,a,b,c,x[i+8],11,-2022574463);
-                            c=md5_hh(c,d,a,b,x[i+11],16,1839030562);
-                            b=md5_hh(b,c,d,a,x[i+14],23,-35309556);
-                            a=md5_hh(a,b,c,d,x[i+1],4,-1530992060);
-                            d=md5_hh(d,a,b,c,x[i+4],11,1272893353);
-                            c=md5_hh(c,d,a,b,x[i+7],16,-155497632);
-                            b=md5_hh(b,c,d,a,x[i+10],23,-1094730640);
-                            a=md5_hh(a,b,c,d,x[i+13],4,681279174);
-                            d=md5_hh(d,a,b,c,x[i+0],11,-358537222);
-                            c=md5_hh(c,d,a,b,x[i+3],16,-722521979);
-                            b=md5_hh(b,c,d,a,x[i+6],23,76029189);
-                            a=md5_hh(a,b,c,d,x[i+9],4,-640364487);
-                            d=md5_hh(d,a,b,c,x[i+12],11,-421815835);
-                            c=md5_hh(c,d,a,b,x[i+15],16,530742520);
-                            b=md5_hh(b,c,d,a,x[i+2],23,-995338651);
-                            a=md5_ii(a,b,c,d,x[i+0],6,-198630844);
-                            d=md5_ii(d,a,b,c,x[i+7],10,1126891415);
-                            c=md5_ii(c,d,a,b,x[i+14],15,-1416354905);
-                            b=md5_ii(b,c,d,a,x[i+5],21,-57434055);
-                            a=md5_ii(a,b,c,d,x[i+12],6,1700485571);
-                            d=md5_ii(d,a,b,c,x[i+3],10,-1894986606);
-                            c=md5_ii(c,d,a,b,x[i+10],15,-1051523);
-                            b=md5_ii(b,c,d,a,x[i+1],21,-2054922799);
-                            a=md5_ii(a,b,c,d,x[i+8],6,1873313359);
-                            d=md5_ii(d,a,b,c,x[i+15],10,-30611744);
-                            c=md5_ii(c,d,a,b,x[i+6],15,-1560198380);
-                            b=md5_ii(b,c,d,a,x[i+13],21,1309151649);
-                            a=md5_ii(a,b,c,d,x[i+4],6,-145523070);
-                            d=md5_ii(d,a,b,c,x[i+11],10,-1120210379);
-                            c=md5_ii(c,d,a,b,x[i+2],15,718787259);
-                            b=md5_ii(b,c,d,a,x[i+9],21,-343485551);
-                            a=safe_add(a,olda);b=safe_add(b,oldb);
-                            c=safe_add(c,oldc);d=safe_add(d,oldd)
-                        }
-                        return[a,b,c,d]
-                    }
-                    function str2binl(str){var bin=[];var mask=(1<<chrsz)-1;for(var i=0;i<str.length*chrsz;i+=chrsz){bin[i>>5]|=(str.charCodeAt(i/chrsz)&mask)<<(i%32)}
-                        return bin}
-                        function binl2str(bin){var str="";var mask=(1<<chrsz)-1;for(var i=0;i<bin.length*32;i+=chrsz){str+=String.fromCharCode((bin[i>>5]>>>(i%32))&mask)}return str}
-                        function binl2hex(binarray){var hex_tab=hexcase?"0123456789ABCDEF":"0123456789abcdef";var str="";for(var i=0;i<binarray.length*4;i++){str+=hex_tab.charAt((binarray[i>>2]>>((i%4)*8+4))&0xF)+hex_tab.charAt((binarray[i>>2]>>((i%4)*8))&0xF)}
-                        return str}
-                        return(raw?binl2str(core_md5(str2binl(s),s.length*chrsz)):binl2hex(core_md5(str2binl(s),s.length*chrsz)))};
+                return str;
+            }
+
+            function binl2hex(binarray) {
+                var hex_tab = hexcase ? "0123456789ABCDEF" : "0123456789abcdef";
+                var str = "";
+                for (var i = 0; i < binarray.length * 4; i++) {
+                    str += hex_tab.charAt((binarray[i >> 2] >> ((i % 4) * 8 + 4)) & 0xF) + hex_tab.charAt((binarray[i >> 2] >> ((i % 4) * 8)) & 0xF);
+                }
+                return str;
+            }
+
+            return (raw ? binl2str(core_md5(str2binl(s), s.length * chrsz)) : binl2hex(core_md5(str2binl(s), s.length * chrsz)));
+        };
 
         //!Code that simulated reload library javascript maborak
         var leimnud = {};
         leimnud.exec = "";
         leimnud.fix = {};
-        leimnud.fix.memoryLeak  = "";
+        leimnud.fix.memoryLeak = "";
         leimnud.browser = {};
-        leimnud.browser.isIphone  = "";
+        leimnud.browser.isIphone = "";
         leimnud.iphone = {};
-        leimnud.iphone.make = function(){};
-          function ajax_function(ajax_server, funcion, parameters, method){
-          }
+        leimnud.iphone.make = function () {
+        };
+        function ajax_function(ajax_server, funcion, parameters, method) {
+        }
 
-          function toggleTable(tablename){
+        function toggleTable(tablename) {
             //table= document.getElementByName(tablename);
-            table= document.getElementById(tablename);
-            if(table.style.display == ''){
-              table.style.display = 'none';
-            }else{
-              table.style.display = '';
+            table = document.getElementById(tablename);
+            if (table.style.display == '') {
+                table.style.display = 'none';
+            } else {
+                table.style.display = '';
             }
-          }
+        }
 
-          function noesFuncion(idIframe) {
+        function noesFuncion(idIframe) {
             window.parent.tabIframeWidthFix2(idIframe);
-          }
+        }
 
-          function onResizeIframe(idIframe){
+        function onResizeIframe(idIframe) {
 
 
             window.onresize = noesFuncion(idIframe);
 
-          }
+        }
 
         var showDynaformHistoryGlobal = {};
         showDynaformHistoryGlobal.dynUID = '';
         showDynaformHistoryGlobal.tablename = '';
         showDynaformHistoryGlobal.dynDate = '';
         showDynaformHistoryGlobal.dynTitle = '';
-          function showDynaformHistory(dynUID,tablename,dynDate,dynTitle){
+        function showDynaformHistory(dynUID, tablename, dynDate, dynTitle) {
             showDynaformHistoryGlobal.dynUID = dynUID;
             showDynaformHistoryGlobal.tablename = tablename;
             showDynaformHistoryGlobal.dynDate = dynDate;
@@ -494,54 +495,56 @@ if ($actionAjax == 'showDynaformListHistory') {
             var dynDate = showDynaformHistoryGlobal.dynDate;
             var dynTitle = showDynaformHistoryGlobal.dynTitle;
 
-            var idUnique = globalMd5Return(dynUID+tablename+dynDate+dynTitle);
+            var idUnique = globalMd5Return(dynUID + tablename + dynDate + dynTitle);
 
-            var tabData =  window.parent.Ext.util.JSON.encode(showDynaformHistoryGlobal);
-            var tabName = 'dynaformChangeLogViewHistory'+idUnique;
-            var tabTitle = 'View('+dynTitle+' '+dynDate+')';
+            var tabData = window.parent.Ext.util.JSON.encode(showDynaformHistoryGlobal);
+            var tabName = 'dynaformChangeLogViewHistory' + idUnique;
+            var tabTitle = 'View(' + dynTitle + ' ' + dynDate + ')';
 
             window.parent.ActionTabFrameGlobal.tabData = tabData;
             window.parent.ActionTabFrameGlobal.tabName = tabName;
             window.parent.ActionTabFrameGlobal.tabTitle = tabTitle;
 
             window.parent.Actions.tabFrame(tabName);
-          }
+        }
     </script>
     <?php
 
     require_once 'classes/model/AppHistory.php';
     $G_PUBLISH = new Publisher();
-    $G_PUBLISH->AddContent( 'view', 'cases/cases_DynaformHistory' );
+    $G_PUBLISH->AddContent('view', 'cases/cases_DynaformHistory');
 
-    G::RenderPage( 'publish', 'raw' );
+    G::RenderPage('publish', 'raw');
 }
 
 if ($actionAjax == 'dynaformChangeLogViewHistory') {
 
     ?>
-    <link rel="stylesheet" type="text/css" href="/css/classic.css" />
+    <link rel="stylesheet" type="text/css" href="/css/classic.css"/>
     <style type="text/css">
-    html {
-	    color: black !important;
-    }
-    body {
-	    color: black !important;
-    }
+        html {
+            color: black !important;
+        }
+
+        body {
+            color: black !important;
+        }
     </style>
     <script language="Javascript">
         //!Code that simulated reload library javascript maborak
         var leimnud = {};
         leimnud.exec = "";
         leimnud.fix = {};
-        leimnud.fix.memoryLeak  = "";
+        leimnud.fix.memoryLeak = "";
         leimnud.browser = {};
-        leimnud.browser.isIphone  = "";
+        leimnud.browser.isIphone = "";
         leimnud.iphone = {};
-        leimnud.iphone.make = function(){};
-        function ajax_function(ajax_server, funcion, parameters, method){
+        leimnud.iphone.make = function () {
+        };
+        function ajax_function(ajax_server, funcion, parameters, method) {
         }
         //!
-        </script>
+    </script>
     <?php
 
     $_POST['DYN_UID'] = $_REQUEST['DYN_UID'];
@@ -555,43 +558,46 @@ if ($actionAjax == 'dynaformChangeLogViewHistory') {
     $Fields['APP_DATA']['__DYNAFORM_OPTIONS']['NEXT_STEP_LABEL'] = '';
     $Fields['APP_DATA']['__DYNAFORM_OPTIONS']['NEXT_STEP'] = '#';
     $Fields['APP_DATA']['__DYNAFORM_OPTIONS']['NEXT_ACTION'] = 'return false;';
-    $G_PUBLISH->AddContent( 'dynaform', 'xmlform', $_SESSION['PROCESS'] . '/' . $_POST['DYN_UID'], '', $Fields['APP_DATA'], '', '', 'view' );
+    $G_PUBLISH->AddContent('dynaform', 'xmlform', $_SESSION['PROCESS'] . '/' . $_POST['DYN_UID'], '',
+        $Fields['APP_DATA'], '', '', 'view');
 
     ?>
     <script language="javascript">
-    <?php
-    global $G_FORM;
-    ?>
-          function loadForm_<?php echo $G_FORM->id;?>(parametro1){
+        <?php
+        global $G_FORM;
+        ?>
+        function loadForm_<?php echo $G_FORM->id;?>(parametro1) {
 
-          }
+        }
     </script>
     <?php
-    G::RenderPage( 'publish', 'raw' );
+    G::RenderPage('publish', 'raw');
 }
 if ($actionAjax == 'historyDynaformGridPreview') {
     ?>
-    <link rel="stylesheet" type="text/css" href="/css/classic.css" />
+    <link rel="stylesheet" type="text/css" href="/css/classic.css"/>
     <style type="text/css">
-    html {
-	    color: black !important;
-    }
-    body {
-	    color: black !important;
-    }
+        html {
+            color: black !important;
+        }
+
+        body {
+            color: black !important;
+        }
     </style>
     <script language="Javascript">
 
-    //!Code that simulated reload library javascript maborak
+        //!Code that simulated reload library javascript maborak
         var leimnud = {};
         leimnud.exec = "";
         leimnud.fix = {};
-        leimnud.fix.memoryLeak  = "";
+        leimnud.fix.memoryLeak = "";
         leimnud.browser = {};
-        leimnud.browser.isIphone  = "";
+        leimnud.browser.isIphone = "";
         leimnud.iphone = {};
-        leimnud.iphone.make = function(){};
-        function ajax_function(ajax_server, funcion, parameters, method){
+        leimnud.iphone.make = function () {
+        };
+        function ajax_function(ajax_server, funcion, parameters, method) {
         }
         //!
     </script>
@@ -600,28 +606,28 @@ if ($actionAjax == 'historyDynaformGridPreview') {
     //!dataIndex
     $_POST["DYN_UID"] = $_REQUEST["DYN_UID"];
 
-    G::LoadClass( 'case' );
 
     $G_PUBLISH = new Publisher();
     $oCase = new Cases();
-    $Fields = $oCase->loadCase( $_SESSION['APPLICATION'] );
+    $Fields = $oCase->loadCase($_SESSION['APPLICATION']);
     $Fields['APP_DATA']['__DYNAFORM_OPTIONS']['PREVIOUS_STEP_LABEL'] = '';
     $Fields['APP_DATA']['__DYNAFORM_OPTIONS']['NEXT_STEP_LABEL'] = '';
     $Fields['APP_DATA']['__DYNAFORM_OPTIONS']['NEXT_STEP'] = '#';
     $Fields['APP_DATA']['__DYNAFORM_OPTIONS']['NEXT_ACTION'] = 'return false;';
     $_SESSION['DYN_UID_PRINT'] = $_POST['DYN_UID'];
-    $G_PUBLISH->AddContent( 'dynaform', 'xmlform', $_SESSION['PROCESS'] . '/' . $_POST['DYN_UID'], '', $Fields['APP_DATA'], '', '', 'view' );
+    $G_PUBLISH->AddContent('dynaform', 'xmlform', $_SESSION['PROCESS'] . '/' . $_POST['DYN_UID'], '',
+    $Fields['APP_DATA'],
+        '', '', 'view');
 
     ?>
     <script language="javascript">
-    <?php
-    global $G_FORM;
-    ?>
-          function loadForm_<?php echo $G_FORM->id;?>(parametro1){
+        <?php
+        global $G_FORM;
+        ?>
+        function loadForm_<?php echo $G_FORM->id;?>(parametro1) {
 
-          }
+        }
     </script>
     <?php
-    G::RenderPage( 'publish', 'raw' );
+    G::RenderPage('publish', 'raw');
 }
-

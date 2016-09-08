@@ -75,6 +75,8 @@ class ElementTaskRelationMapBuilder
 
         $tMap->addColumn('TAS_UID', 'TasUid', 'string', CreoleTypes::VARCHAR, true, 32);
 
+        $tMap->addColumn('ELEMENT_UID_DEST', 'ElementUidDest', 'string', CreoleTypes::VARCHAR, false, 32);
+
     } // doBuild()
 
 } // ElementTaskRelationMapBuilder

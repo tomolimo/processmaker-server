@@ -54,8 +54,10 @@ class Common
         $files = glob("$path/$singlePattern", $flags);
         $dirs = glob("$path/*", GLOB_MARK|GLOB_ONLYDIR|GLOB_NOSORT);
 
-        foreach ($dirs as $dir) {
-            $files = array_merge($files, self::rglob("$dir/$singlePattern", $flags));
+        if(is_array($dirs)){
+            foreach ($dirs as $dir) {
+                $files = array_merge($files, self::rglob("$dir/$singlePattern", $flags));
+            }
         }
 
         if ($onlyFiles) {

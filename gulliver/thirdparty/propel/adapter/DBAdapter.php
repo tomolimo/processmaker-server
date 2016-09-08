@@ -97,7 +97,7 @@ abstract class DBAdapter {
 	 *
 	 * @return     string The text delimeter.
 	 */
-	public function getStringDelimiter()
+	public static function getStringDelimiter()
 	{
 		return '\'';
 	}

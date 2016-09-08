@@ -5724,6 +5724,7 @@ a.mafe-button-img-properties, a.mafe-button-img-delete, a.mafe-button-img-edit {
 .itemsSteps {
   border-radius: 7px;
   background: white;
+  box-sizing: border-box;
   border: 1px solid #ccc;
 }
 
@@ -6839,6 +6840,7 @@ body {
     background: #f8f8f8;
     font-size:11px;
     padding: 0.3em;
+    cursor: pointer;
 }
 .fd-list:nth-child(odd) {
     background: #eaebed;
@@ -6933,6 +6935,9 @@ body {
 .fd-table-td {
     padding: 2px;
     border-bottom: 1px solid #D6D6D6;
+}
+.fd-table-td-error {
+    border: 1px solid red;
 }
 .fd-gridForm-placeholder {
     background: rgba(128, 128, 128, 0.3);
@@ -7155,6 +7160,7 @@ body {
     top: 1px;
     overflow: hidden;
     height: 34px;
+    color: red;
 }
 .fd-gridForm-grid-geomap {
     position: absolute;
@@ -7272,6 +7278,12 @@ body {
 .fd-tooltip{
     padding:3px;
     border-radius: 0px;
+}
+.fd-message-error{
+    color: #fff;
+    background: #F5736D;
+    padding: 4px 10px;
+    display: inline-block;
 }
 
 ul.CodeMirror-hints {

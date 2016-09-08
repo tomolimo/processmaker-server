@@ -186,11 +186,7 @@ class AppProxy extends HttpProxyController
 
         G::LoadClass( 'case' );
         $case = new Cases();
-
-        if ($RBAC->userCanAccess( 'PM_ALLCASES' ) < 0 && $case->userParticipatedInCase( $httpData->appUid, $_SESSION['USER_LOGGED'] ) == 0) {
-            throw new Exception( G::LoadTranslation( 'ID_NO_PERMISSION_NO_PARTICIPATED' ) );
-        }
-
+        
         if ($httpData->action == 'sent') { // Get the last valid delegation for participated list
             $criteria = new Criteria();
             $criteria->addSelectColumn(AppDelegationPeer::DEL_INDEX);
@@ -304,6 +300,8 @@ class AppProxy extends HttpProxyController
         $data[] = array ('label' => $labelsCurrentTaskProperties['DEL_TASK_DUE_DATE'],'value' => $applicationFields['DEL_TASK_DUE_DATE'],'section' => $labelTitleCurrentTasks['TITLE2']);
         $data[] = array ('label' => $labelsCurrentTaskProperties['DEL_FINISH_DATE'],'value' => $applicationFields['DEL_FINISH_DATE'],'section' => $labelTitleCurrentTasks['TITLE2']);
         //$data[] = array('label'=>$labelsCurrentTaskProperties['DYN_UID'] ,           'value' => $processData['PRO_DYNAFORMS']['PROCESS'];, 'section'=>$labelsCurrentTaskProperties['DYN_UID']);
+        
+        $data = \ProcessMaker\Util\DateTime::convertUtcToTimeZone($data);
         return $data;
     }
 }

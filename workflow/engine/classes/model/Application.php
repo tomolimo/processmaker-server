@@ -122,7 +122,7 @@ class Application extends BaseApplication
 
         }
 
-            
+
 
         if ($this->getAppUid() == '') {
 
@@ -710,7 +710,7 @@ class Application extends BaseApplication
 
     {
 
-        require_once ("classes/model/Sequences.php");
+        require_once ("classes/model/AppSequence.php");
 
         $con = Propel::getConnection('workflow');
 
@@ -748,8 +748,6 @@ class Application extends BaseApplication
 
             $pin = G::generateCode(4, 'ALPHANUMERIC');
 
-            $this->setAppData(serialize(array('PIN' => $pin)));
-
             $this->setAppPin(G::encryptOld($pin));
 
 
@@ -760,21 +758,15 @@ class Application extends BaseApplication
 
 
 
-            $oSequences = new Sequences();
+            $oAppSequence = new AppSequence();
 
-            $oSequences->lockSequenceTable();
-
-
-
-            $maxNumber = $oSequences->getSequeceNumber("APP_NUMBER");
+            $maxNumber = $oAppSequence->sequenceNumber();
 
 
 
             $this->setAppNumber($maxNumber);
 
-            $oSequences->changeSequence('APP_NUMBER', $maxNumber);
-
-            $oSequences->unlockSequenceTable();
+            $this->setAppData(serialize(['APP_NUMBER' => $maxNumber, 'PIN' => $pin]));
 
 
 

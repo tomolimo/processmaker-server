@@ -121,7 +121,7 @@ foreach ($args[0] as $arg) {
         help();
         exit(0);
     case 'l':
-        $iop->skipEndpointList = split(',', $arg[1]);
+        $iop->skipEndpointList = explode(',', $arg[1]);
         break;
     case 'm':
         $iop->testMethod = $arg[1];

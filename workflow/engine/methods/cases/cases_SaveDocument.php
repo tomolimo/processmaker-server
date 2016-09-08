@@ -62,11 +62,11 @@ if ((isset( $_FILES['form'] )) && ($_FILES['form']['error']['APP_DOC_FILENAME'] 
 G::LoadClass("case");
 
 $inputDocumentUid = $_GET["UID"]; //$_POST["form"]["DOC_UID"]
-$appDocUid = $_POST["form"]["APP_DOC_UID"];
-$docVersion = intval($_POST["form"]["docVersion"]);
-$appDocType = $_POST["form"]["APP_DOC_TYPE"];
+$appDocUid = (isset($_POST["form"]["APP_DOC_UID"]))? $_POST["form"]["APP_DOC_UID"] : "";
+$docVersion = (isset($_POST["form"]["docVersion"]))? intval($_POST["form"]["docVersion"]) : "";
+$appDocType = (isset($_POST["form"]["APP_DOC_TYPE"]))? $_POST["form"]["APP_DOC_TYPE"] : "";
 $appDocComment = (isset($_POST["form"]["APP_DOC_COMMENT"]))? $_POST["form"]["APP_DOC_COMMENT"] : "";
-$actionType = $_POST["form"]["actionType"];
+$actionType = (isset($_POST["form"]["actionType"]))? $_POST["form"]["actionType"] : "";
 
 $case = new Cases();
 $case->thisIsTheCurrentUser($_SESSION["APPLICATION"], $_SESSION["INDEX"], $_SESSION["USER_LOGGED"], "REDIRECT", "casesListExtJs");
@@ -96,7 +96,14 @@ if ($_SESSION["TRIGGER_DEBUG"]["NUM_TRIGGERS"] > 0) {
 //***Validating the file allowed extensions***
 $oInputDocument = new InputDocument();
 $InpDocData = $oInputDocument->load( $inputDocumentUid );
-$res = G::verifyInputDocExtension($InpDocData['INP_DOC_TYPE_FILE'], $_FILES["form"]["name"]["APP_DOC_FILENAME"], $_FILES["form"]["tmp_name"]["APP_DOC_FILENAME"]);
+
+if(isset($_FILES["form"]["name"]["APP_DOC_FILENAME"]) && isset($_FILES["form"]["tmp_name"]["APP_DOC_FILENAME"])){
+    $res = G::verifyInputDocExtension($InpDocData['INP_DOC_TYPE_FILE'], $_FILES["form"]["name"]["APP_DOC_FILENAME"], $_FILES["form"]["tmp_name"]["APP_DOC_FILENAME"]);
+}else{
+    $res = new stdclass();
+    $res->status = false;
+    $res->message = G::LoadTranslation('ID_UPLOAD_ERR_INI_SIZE' );
+}
 if($res->status == 0){
 	$message = $res->message;
 	G::SendMessageText( $message, "ERROR" );

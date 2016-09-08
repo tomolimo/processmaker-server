@@ -99,7 +99,7 @@ class AppMessageMapBuilder
 
         $tMap->addColumn('APP_MSG_SHOW_MESSAGE', 'AppMsgShowMessage', 'int', CreoleTypes::TINYINT, true, null);
 
-        $tMap->addColumn('APP_MSG_ERROR', 'AppMsgError', 'string', CreoleTypes::LONGVARCHAR, true, null);
+        $tMap->addColumn('APP_MSG_ERROR', 'AppMsgError', 'string', CreoleTypes::LONGVARCHAR, false, null);
 
     } // doBuild()
 
