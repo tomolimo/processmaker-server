@@ -371,7 +371,7 @@ class wsBase
 
                 $arrayProcess = $oProcess->Load( $aRow['PRO_UID'] );
 
-                $result[] = array ('guid' => $aRow['PRO_UID'],'name' => $arrayProcess['PRO_TITLE'], 'project_type' => in_array($row['PRO_UID'], $bpmnProjects) ? 'bpmn' : 'classic'
+                $result[] = array ('guid' => $aRow['PRO_UID'],'name' => $arrayProcess['PRO_TITLE'], 'project_type' => in_array($aRow['PRO_UID'], $bpmnProjects) ? 'bpmn' : 'classic'
 
                 );
 

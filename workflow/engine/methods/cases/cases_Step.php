@@ -297,9 +297,14 @@ try {
                                                     }" );
             }
 
-            $oStep = $oStep->loadByProcessTaskPosition( $_SESSION['PROCESS'], $_SESSION['TASK'], $_GET['POSITION'] );
-
-            /**
+            //$oStep = $oStep->loadByProcessTaskPosition( $_SESSION['PROCESS'], $_SESSION['TASK'], $_GET['POSITION'] );
+            $oStepTemp = $oStep->loadByProcessTaskPosition( $_SESSION['PROCESS'], $_SESSION['TASK'], $_GET['POSITION'] );
+			   if( is_null( $oStepTemp ) )
+				   $oStep = $oStep->loadByProcessTaskPosition( $_SESSION['PROCESS'], $_SESSION['TASK'] );
+			   else
+				   $oStep = $oStepTemp ;
+            
+             /**
              * Added By erik 16-05-08
              * Description: this was added for the additional database connections
              */

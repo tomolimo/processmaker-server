@@ -120,13 +120,13 @@ class Step extends BaseStep
         }
     }
 
-    public function loadByProcessTaskPosition ($sProUid, $sTasUid, $sPosition)
+    public function loadByProcessTaskPosition ($sProUid, $sTasUid, $sPosition = '')
     {
-        try {
-            $c = new Criteria( 'workflow' );
+       try {
+          $c = new Criteria( 'workflow' );
             $c->add( StepPeer::PRO_UID, $sProUid );
-            $c->add( StepPeer::TAS_UID, $sTasUid );
-            $c->add( StepPeer::STEP_POSITION, $sPosition );
+            if( $sTasUid <> -1 ) $c->add( StepPeer::TAS_UID, $sTasUid );
+            if( $sPosition <> '' ) $c->add( StepPeer::STEP_POSITION, $sPosition );
             if (StepPeer::doCount( $c ) > 0) {
                 $rs = StepPeer::doSelect( $c );
                 return $rs[0];

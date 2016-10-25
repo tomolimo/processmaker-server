@@ -304,7 +304,8 @@ if (file_exists($requestFile)) {
 
     $gmt_mtime = gmdate ( "D, d M Y H:i:s", $mtime ) . " GMT";
 
-    header ( 'ETag: "' . Bootstrap::encryptOld ( $mtime . $requestFile ) . '"' );
+    $bs= new Bootstrap ;
+    header ( 'ETag: "' . $bs->encryptOld ( $mtime . $requestFile ) . '"' );
 
     header ( "Last-Modified: " . $gmt_mtime );
 
@@ -332,7 +333,7 @@ if (file_exists($requestFile)) {
 
         if (isset ( $_SERVER ['HTTP_IF_NONE_MATCH'] )) {
 
-            if (str_replace ( '"', '', stripslashes ( $_SERVER ['HTTP_IF_NONE_MATCH'] ) ) == Bootstrap::encryptOld ( $mtime . $requestFile )) {
+            if (str_replace ( '"', '', stripslashes ( $_SERVER ['HTTP_IF_NONE_MATCH'] ) ) == $bs->encryptOld ( $mtime . $requestFile )) {
 
                 header ( "HTTP/1.1 304 Not Modified" );
 
