@@ -19,13 +19,6 @@ if (isset($_SERVER['UNENCODED_URL'])) {
 try {
     $rootDir = realpath(__DIR__ . "/../../") . DIRECTORY_SEPARATOR;
 
-    $addToSessionRegEx = '@^(https{0,1}://[^/]+){0,1}/sys[^/]*/[^/]+/([^/]+)/@i' ;
-    $addToSessionRegEx2 = '@^/sys[^/]*/[^/]+/([^/]+)/@i' ;
-    if( !isset( $_SERVER['HTTP_REFERER'] ) || preg_match($addToSessionRegEx,  $_SERVER['HTTP_REFERER'], $matches) == 0 ) {
-       preg_match($addToSessionRegEx2,  $_SERVER['REQUEST_URI'], $matches) ;
-    }
-    session_name("pm_".md5($rootDir)."_".array_pop($matches)) ;
-
     require $rootDir . "framework/src/Maveriks/Util/ClassLoader.php";
     $loader = Maveriks\Util\ClassLoader::getInstance();
     $loader->add($rootDir . 'framework/src/', "Maveriks");
