@@ -62,10 +62,13 @@ function glpi_ob_handler(  $buffer ){
       if( preg_match("/(?'start'.*?<script)(?'end'.*)/sm", $buffer,  $matches ) ) {
          $domain = glpi_getCommonDomain( $_SERVER['HTTP_REFERER'], 'http://'.$_SERVER['HTTP_HOST'] ) ;
          // add our domain to script list
-         $buffer = $matches['start']." type='text/javascript'>document.domain='".$domain."';</script>";
-         $buffer .= "<script type='text/javascript' src='/glpi/glpi_helpers.js'></script>";
+         $buffer = $matches['start']." type='text/javascript'>";
+         if( $domain != '' ) {
+            $buffer .= "document.domain='$domain';" ;
+         }
+         $buffer .= "</script><script type='text/javascript' src='/glpi/glpi_helpers.js'></script>";
          $buffer .= "<script type='text/javascript'>
-            window.attachEvent('onload',
+            window.addEventListener('load',
                function() {
                   //debugger;
                   glpi.setClassAttribute( 'panel_modal___processmaker', 'background-color', 'rgb(170, 170, 170)') ;
