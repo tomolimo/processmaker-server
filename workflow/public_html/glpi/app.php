@@ -60,7 +60,12 @@ function glpi_ob_handler(  $buffer ){
 
       // try to get GLPI_DOMAIN from current case
       if( preg_match("/(?'start'.*?<script)(?'end'.*)/sm", $buffer,  $matches ) ) {
-         $domain = glpi_getCommonDomain( $_SERVER['HTTP_REFERER'], 'http://'.$_SERVER['HTTP_HOST'] ) ;
+         if( !isset($_SESSION['GLPI_DOMAIN']) ) {
+            $domain = glpi_getCommonDomain( $_SERVER['HTTP_REFERER'], 'http://'.$_SERVER['HTTP_HOST'] ) ;
+            $_SESSION['GLPI_DOMAIN'] = $domain;
+         }
+         $domain = $_SESSION['GLPI_DOMAIN'];
+
          // add our domain to script list
          $buffer = $matches['start']." type='text/javascript'>";
          if( $domain != '' ) {
