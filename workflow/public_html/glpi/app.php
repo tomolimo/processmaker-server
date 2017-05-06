@@ -9,12 +9,10 @@
 function glpi_getCommonDomain($url1, $url2) {
    $domain = '';
    try {
-      $glpi = explode( "/", $url1) ;
-      $glpi = explode( ".", $glpi[2] );
-      $pm = explode( "/", $url2) ;
-      $pm = explode( ".", $pm[2] );
-      $cglpi = array_shift(explode(":", array_pop( $glpi ))) ;
-      $cpm = array_shift(explode(":", array_pop( $pm))) ;
+      $glpi = explode(".", parse_url($url1, PHP_URL_HOST));
+      $pm = explode( ".", parse_url($url2, PHP_URL_HOST));
+      $cglpi = array_pop( $glpi );
+      $cpm = array_pop( $pm );
       while( $cglpi && $cpm && $cglpi == $cpm ) {
          $domain = $cglpi.($domain==''?'':'.'.$domain) ;
          $cglpi = array_pop( $glpi ) ;
