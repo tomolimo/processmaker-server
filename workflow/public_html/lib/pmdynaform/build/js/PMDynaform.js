@@ -11095,9 +11095,12 @@ jQuery.fn.extend({
                 this.keyPressed = false;
                 this.prevValue = suggest.val();
                 if (event && event.type !== "submit") {
-                    setTimeout(function () {
-                        that.suggestPanelFactory(that.numberOfOptions,event);
-                    }, 1000);
+                   if (this.timeoutHandler) {
+                      clearTimeout(this.timeoutHandler);
+                   } 
+                   this.timeoutHandler = setTimeout(function () {
+                      that.suggestPanelFactory(that.numberOfOptions, event);
+                   }, 750);                   
                 }
             }
         },
