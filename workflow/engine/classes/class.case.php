@@ -6957,6 +6957,7 @@ class Cases
                 if ($bExecute) {
 
                     $oPMScript->setScript($aTrigger['TRI_WEBBOT']);
+                    $oPMScript->aTrigger = $aTrigger;
 
                     $oPMScript->execute();
 
@@ -10548,9 +10549,9 @@ class Cases
 
     }
 
-    
 
-    public function getTo($taskType, $taskUid, $taskUsrUid, $arrayData) 
+
+    public function getTo($taskType, $taskUid, $taskUsrUid, $arrayData)
 
     {
 
@@ -10566,7 +10567,7 @@ class Cases
 
         $oUser = new Users ();
 
-        
+
 
         switch ($taskType) {
 
@@ -10576,17 +10577,17 @@ class Cases
 
                     $arrayTaskUser = array ();
 
-                    
+
 
                     $arrayAux1 = $task->getGroupsOfTask ( $taskUid, 1 );
 
-                    
+
 
                     foreach ( $arrayAux1 as $arrayGroup ) {
 
                         $arrayAux2 = $group->getUsersOfGroup ( $arrayGroup ["GRP_UID"] );
 
-                        
+
 
                         foreach ( $arrayAux2 as $arrayUser ) {
 
@@ -10596,11 +10597,11 @@ class Cases
 
                     }
 
-                    
+
 
                     $arrayAux1 = $task->getUsersOfTask ( $taskUid, 1 );
 
-                    
+
 
                     foreach ( $arrayAux1 as $arrayUser ) {
 
@@ -10608,11 +10609,11 @@ class Cases
 
                     }
 
-                    
+
 
                     $criteria = new Criteria ( "workflow" );
 
-                    
+
 
                     $criteria->addSelectColumn ( UsersPeer::USR_UID );
 
@@ -10630,7 +10631,7 @@ class Cases
 
                     $rsCriteria->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
 
-                    
+
 
                     $to = null;
 
@@ -10638,17 +10639,17 @@ class Cases
 
                     $sw = 1;
 
-                    
+
 
                     while ( $rsCriteria->next () ) {
 
                         $row = $rsCriteria->getRow ();
 
-                        
+
 
                         $toAux = ((($row ["USR_FIRSTNAME"] != "") || ($row ["USR_LASTNAME"] != "")) ? $row ["USR_FIRSTNAME"] . " " . $row ["USR_LASTNAME"] . " " : "") . "<" . $row ["USR_EMAIL"] . ">";
 
-                        
+
 
                         if ($sw == 1) {
 
@@ -10734,7 +10735,7 @@ class Cases
 
                     $userFields = $oDerivation->getUsersFullNameFromArray ( $arrayUsers );
 
-                    
+
 
                     foreach ( $userFields as $row ) {
 

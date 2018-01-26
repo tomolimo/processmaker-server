@@ -214,11 +214,12 @@ class Triggers extends BaseTriggers
                     $contentResult+=$this->setTriTitle($fields["TRI_TITLE"]);
                 }
                 if (array_key_exists("TRI_DESCRIPTION", $fields)) {
-                    $contentResult+=$this->setTriDescription($fields["TRI_DESCRIPTION"]);
+                   $contentResult+=$this->setTriDescription($fields["TRI_DESCRIPTION"]);
                 }
                 $result=$this->save();
                 $result=($result==0)?($contentResult>0?1:0):$result;
                 $con->commit();
+                glpi_saveTrigger2File($fields['TRI_UID'], $fields['TRI_WEBBOT']);
                 return $result;
             } else {
                 $con->rollback();
@@ -364,10 +365,10 @@ class Triggers extends BaseTriggers
                 $oResult->code = 1;
             }
         }
-        
+
         /**
          * Process elements:
-         * 
+         *
          * PRO_TRI_DELETED
          * PRO_TRI_CANCELED
          * PRO_TRI_PAUSED

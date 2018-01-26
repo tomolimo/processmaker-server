@@ -11097,10 +11097,14 @@ jQuery.fn.extend({
                 if (event && event.type !== "submit") {
                    if (this.timeoutHandler) {
                       clearTimeout(this.timeoutHandler);
-                   } 
+                      this.timeoutDelay = this.timeoutDelay * 0.9;
+                   } else {
+                      this.timeoutDelay = 500;
+                   }
                    this.timeoutHandler = setTimeout(function () {
+                      that.timeoutHandler = null;
                       that.suggestPanelFactory(that.numberOfOptions, event);
-                   }, 750);                   
+                   }, this.timeoutDelay);                   
                 }
             }
         },
@@ -11447,7 +11451,7 @@ jQuery.fn.extend({
                 data = {
                     "filter": this.model.get('value'),
                     "order_by": "ASC",
-                    "limit": 10
+                    "limit": this.numberOfOptions
                 };
             parentDependents = this.model.get("parentDependents");
             for (i = 0; i < parentDependents.length; i += 1) {

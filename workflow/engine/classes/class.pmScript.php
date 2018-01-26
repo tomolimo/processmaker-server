@@ -202,10 +202,16 @@ class PMScript
 
     public function executeAndCatchErrors ($sScript, $sCode)
     {
-        ob_start( 'handleFatalErrors' );
-        set_error_handler( 'handleErrors' );
-        $_SESSION['_CODE_'] = $sCode;
-        eval( $sScript );
+       ob_start( 'handleFatalErrors' );
+       set_error_handler( 'handleErrors' );
+       $_SESSION['_CODE_'] = $sCode;
+       if( isset($_SESSION['PMDEBUGGER']) && $_SESSION['PMDEBUGGER'] ) {
+          $tmpfname = glpi_savePHP2File( $this->aTrigger['TRI_UID'], $sScript) ;
+          include $tmpfname;
+       } else {
+          eval( $sScript );
+       }
+
         $this->evaluateVariable();
         unset( $_SESSION['_CODE_'] );
         ob_end_flush();
@@ -508,7 +514,7 @@ class PMScript
         }
         return $bResult;
     }
-    
+
     Public function evaluateVariable ()
     {
         $process = new Process();
@@ -530,7 +536,7 @@ class PMScript
                 if(strpos($var, '_label') === false) {
                     if(in_array($var,$processVariables)) {
                         if(isset($this->aFields[$var]) && is_array($this->aFields[$var][1]) ) {
-                            $varLabel = $var.'_label';   
+                            $varLabel = $var.'_label';
                             $arrayValue = $this->aFields[$var];
                             if(is_array($arrayValue) && sizeof($arrayValue)) {
                                 foreach($arrayValue as $val) {
@@ -546,7 +552,7 @@ class PMScript
                                         $varType = $varInfo['VAR_FIELD_TYPE'];
                                         switch($varType) {
                                             case 'array':
-                                                $arrayLabels = '["'.implode('","',$arrayLabels).'"]'; 
+                                                $arrayLabels = '["'.implode('","',$arrayLabels).'"]';
                                                 $newFields[$var] = $arrayValues;
                                                 $newFields[$varLabel] = $arrayLabels;
                                             break;
@@ -555,7 +561,7 @@ class PMScript
                                                 $newFields[$varLabel] = $arrayLabels[0];
                                             break;
                                         }
-                                        $this->affected_fields[] = $varLabel; 
+                                        $this->affected_fields[] = $varLabel;
                                         $this->aFields = array_merge($this->aFields,$newFields);
                                         unset($newFields);
                                         unset($arrayValues);
@@ -586,13 +592,13 @@ class PMScript
                                         }
                                     }
                                 } catch (Exception $e) {
-                                    
+
                                 }
                             }
                         }
                     }
                 }
-            }            
+            }
         }
     }
 }

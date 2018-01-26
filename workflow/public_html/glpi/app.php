@@ -1,29 +1,153 @@
 <?php
 
- /**
-   * Summary of getCommonDomain
-   * @param mixed $url1
-   * @param mixed $url2
-   * @return string the common domain part of the given urls
-   */
-function glpi_getCommonDomain($url1, $url2) {
-   $domain = '';
-   try {
-      $glpi = explode(".", parse_url($url1, PHP_URL_HOST));
-      $pm = explode( ".", parse_url($url2, PHP_URL_HOST));
-      $cglpi = array_pop( $glpi );
-      $cpm = array_pop( $pm );
-      while( $cglpi && $cpm && $cglpi == $cpm ) {
-         $domain = $cglpi.($domain==''?'':'.'.$domain) ;
-         $cglpi = array_pop( $glpi ) ;
-         $cpm = array_pop( $pm ) ;
-      }
-      if( $domain != '' ) {
-         return $domain ;
-      }
-   } catch(Exception $e) {}
-   return '';
+function glpi_savePHP2File( $tri_uid, $php_content, $force=false) {
+   $tmpfname = $_SERVER['DOCUMENT_ROOT']."/triggers/".$tri_uid.".php" ;
+   if( $force || !file_exists($tmpfname) ) {
+      $handle = fopen($tmpfname, "w+");
+      fwrite($handle, "<?php\n" . $php_content);
+      fclose($handle);
+   }
+   return $tmpfname ;
 }
+/**
+* Summary of glpi_saveTrigger2File
+* @param mixed $tri_uid
+* @param mixed $tri_webbot
+*/
+function glpi_saveTrigger2File( $tri_uid, $tri_webbot)
+{
+   $sScript = "";
+   $aFields = [] ;
+   $iAux = 0;
+   $iOcurrences = preg_match_all( '/\@(?:([\@\%\#\?\$\=])([a-zA-Z\_]\w*)|([a-zA-Z\_][\w\-\>\:]*)\(((?:[^\\\\\)]' . '*(?:[\\\\][\w\W])?)*)\))((?:\s*\[[\'"]?\w+[\'"]?\])+)?/', $tri_webbot, $aMatch, PREG_PATTERN_ORDER | PREG_OFFSET_CAPTURE );
+   if ($iOcurrences) {
+      for ($i = 0; $i < $iOcurrences; $i ++) {
+            $bEqual = false;
+            $sAux = substr( $tri_webbot, $iAux, $aMatch[0][$i][1] - $iAux );
+            if (! $bEqual) {
+               if (strpos($sAux, "==") !== false || strpos($sAux, "!=") !== false || strpos($sAux, ">") !== false || strpos($sAux, "<") !== false || strpos($sAux, ">=") !== false || strpos($sAux, "<=") !== false || strpos($sAux, "<>") !== false || strpos($sAux, "===") !== false || strpos($sAux, "!==") !== false) {
+                  $bEqual = false;
+               } else {
+                  if (strpos($sAux, "=") !== false || strpos($sAux, "+=") !== false || strpos($sAux, "-=") !== false || strpos($sAux, "*=") !== false || strpos($sAux, "/=") !== false || strpos($sAux, "%=") !== false || strpos($sAux, ".=") !== false) {
+                        $bEqual = true;
+                  }
+               }
+            }
+            if ($bEqual) {
+               if (strpos( $sAux, ';' ) !== false) {
+                  $bEqual = false;
+               }
+            }
+            if ($bEqual) {
+               if (! isset( $aMatch[5][$i][0] )) {
+                  eval( "if (!isset(\$aFields['" . $aMatch[2][$i][0] . "'])) { \$aFields['" . $aMatch[2][$i][0] . "'] = null; }" );
+               } else {
+                  eval( "if (!isset(\$aFields" . (isset( $aMatch[2][$i][0] ) ? "['" . $aMatch[2][$i][0] . "']" : '') . $aMatch[5][$i][0] . ")) { \$aFields" . (isset( $aMatch[2][$i][0] ) ? "['" . $aMatch[2][$i][0] . "']" : '') . $aMatch[5][$i][0] . " = null; }" );
+               }
+            }
+            $sScript .= $sAux;
+            $iAux = $aMatch[0][$i][1] + strlen( $aMatch[0][$i][0] );
+            switch ($aMatch[1][$i][0]) {
+               case '@':
+                  if ($bEqual) {
+                        if (! isset( $aMatch[5][$i][0] )) {
+                           $sScript .= "pmToString(\$this->aFields['" . $aMatch[2][$i][0] . "'])";
+                        } else {
+                           $sScript .= "pmToString(\$this->aFields" . (isset( $aMatch[2][$i][0] ) ? "['" . $aMatch[2][$i][0] . "']" : '') . $aMatch[5][$i][0] . ")";
+                        }
+                  } else {
+                        if (! isset( $aMatch[5][$i][0] )) {
+                           $sScript .= "\$this->aFields['" . $aMatch[2][$i][0] . "']";
+                        } else {
+                           $sScript .= "\$this->aFields" . (isset( $aMatch[2][$i][0] ) ? "['" . $aMatch[2][$i][0] . "']" : '') . $aMatch[5][$i][0];
+                        }
+                  }
+                  break;
+               case '%':
+                  if ($bEqual) {
+                        if (! isset( $aMatch[5][$i][0] )) {
+                           $sScript .= "pmToInteger(\$this->aFields['" . $aMatch[2][$i][0] . "'])";
+                        } else {
+                           $sScript .= "pmToInteger(\$this->aFields" . (isset( $aMatch[2][$i][0] ) ? "['" . $aMatch[2][$i][0] . "']" : '') . $aMatch[5][$i][0] . ")";
+                        }
+                  } else {
+                        if (! isset( $aMatch[5][$i][0] )) {
+                           $sScript .= "\$this->aFields['" . $aMatch[2][$i][0] . "']";
+                        } else {
+                           $sScript .= "\$this->aFields" . (isset( $aMatch[2][$i][0] ) ? "['" . $aMatch[2][$i][0] . "']" : '') . $aMatch[5][$i][0];
+                        }
+                  }
+                  break;
+               case '#':
+                  if ($bEqual) {
+                        if (! isset( $aMatch[5][$i][0] )) {
+                           $sScript .= "pmToFloat(\$this->aFields['" . $aMatch[2][$i][0] . "'])";
+                        } else {
+                           $sScript .= "pmToFloat(\$this->aFields" . (isset( $aMatch[2][$i][0] ) ? "['" . $aMatch[2][$i][0] . "']" : '') . $aMatch[5][$i][0] . ")";
+                        }
+                  } else {
+                        if (! isset( $aMatch[5][$i][0] )) {
+                           $sScript .= "\$this->aFields['" . $aMatch[2][$i][0] . "']";
+                        } else {
+                           $sScript .= "\$this->aFields" . (isset( $aMatch[2][$i][0] ) ? "['" . $aMatch[2][$i][0] . "']" : '') . $aMatch[5][$i][0];
+                        }
+                  }
+                  break;
+               case '?':
+                  if ($bEqual) {
+                        if (! isset( $aMatch[5][$i][0] )) {
+                           $sScript .= "pmToUrl(\$this->aFields['" . $aMatch[2][$i][0] . "'])";
+                        } else {
+                           $sScript .= "pmToUrl(\$this->aFields" . (isset( $aMatch[2][$i][0] ) ? "['" . $aMatch[2][$i][0] . "']" : '') . $aMatch[5][$i][0] . ")";
+                        }
+                  } else {
+                        if (! isset( $aMatch[5][$i][0] )) {
+                           $sScript .= "\$this->aFields['" . $aMatch[2][$i][0] . "']";
+                        } else {
+                           $sScript .= "\$this->aFields" . (isset( $aMatch[2][$i][0] ) ? "['" . $aMatch[2][$i][0] . "']" : '') . $aMatch[5][$i][0];
+                        }
+                  }
+                  break;
+               case '$':
+                  if ($bEqual) {
+                        if (! isset( $aMatch[5][$i][0] )) {
+                           $sScript .= "pmSqlEscape(\$this->aFields['" . $aMatch[2][$i][0] . "'])";
+                        } else {
+                           $sScript .= "pmSqlEscape(\$this->aFields" . (isset( $aMatch[2][$i][0] ) ? "['" . $aMatch[2][$i][0] . "']" : '') . $aMatch[5][$i][0] . ")";
+                        }
+                  } else {
+                        if (! isset( $aMatch[5][$i][0] )) {
+                           $sScript .= "\$this->aFields['" . $aMatch[2][$i][0] . "']";
+                        } else {
+                           $sScript .= "\$this->aFields" . (isset( $aMatch[2][$i][0] ) ? "['" . $aMatch[2][$i][0] . "']" : '') . $aMatch[5][$i][0];
+                        }
+                  }
+                  break;
+               case '=':
+                  if ($bEqual) {
+                        if (! isset( $aMatch[5][$i][0] )) {
+                           $sScript .= "\$this->aFields['" . $aMatch[2][$i][0] . "']";
+                        } else {
+                           $sScript .= "\$this->aFields" . (isset( $aMatch[2][$i][0] ) ? "['" . $aMatch[2][$i][0] . "']" : '') . $aMatch[5][$i][0];
+                        }
+                  } else {
+                        if (! isset( $aMatch[5][$i][0] )) {
+                           $sScript .= "\$this->aFields['" . $aMatch[2][$i][0] . "']";
+                        } else {
+                           $sScript .= "\$this->aFields" . (isset( $aMatch[2][$i][0] ) ? "['" . $aMatch[2][$i][0] . "']" : '') . $aMatch[5][$i][0];
+                        }
+                  }
+                  break;
+            }
+            //$this->affected_fields[] = $aMatch[2][$i][0];
+      }
+   }
+   $sScript .= substr( $tri_webbot, $iAux );
+   $sScript = "try {\n" . $sScript . "\n} catch (Exception \$oException) {\n " . " \$this->aFields['__ERROR__'] = utf8_encode(\$oException->getMessage());\n}";
+   // saves trigger file into triggers folder
+   glpi_savePHP2File($tri_uid, $sScript, true ) ;
+}
+
 
 /**
  * Summary of glpi_isHTML
@@ -50,26 +174,25 @@ function glpi_isHTML( ) {
  * @param string $buffer
  * @return string
  */
-function glpi_ob_handler(  $buffer ){
+function glpi_ob_handler( $buffer ){
    //global $Fields;
 
    if( glpi_isHTML() ) {
       $matches = array();
-
-      // try to get GLPI_DOMAIN from current case
       if( preg_match("/(?'start'.*?<script)(?'end'.*)/sm", $buffer,  $matches ) ) {
-         if( !isset($_SESSION['GLPI_DOMAIN']) ) {
-            $domain = glpi_getCommonDomain( $_SERVER['HTTP_REFERER'], 'http://'.$_SERVER['HTTP_HOST'] ) ;
-            $_SESSION['GLPI_DOMAIN'] = $domain;
-         }
-         $domain = $_SESSION['GLPI_DOMAIN'];
-
-         // add our domain to script list
          $buffer = $matches['start']." type='text/javascript'>";
+
+         $domain = $_SESSION['GLPI_DOMAIN'];
+         // add our domain to script list
          if( $domain != '' ) {
             $buffer .= "document.domain='$domain';" ;
          }
-         $buffer .= "</script><script type='text/javascript' src='/glpi/glpi_helpers.js'></script>";
+         $buffer .= "</script>";
+
+         // add default glpi_helpers.js
+         $buffer .= "<script type='text/javascript' src='/glpi/glpi_helpers.js'></script>";
+
+         // add some stuff to change CSS
          $buffer .= "<script type='text/javascript'>
             window.addEventListener('load',
                function() {
@@ -80,27 +203,9 @@ function glpi_ob_handler(  $buffer ){
             );
             </script>
          ";
+
          $buffer .= "<script ".$matches['end'];
       }
-
-      if( false ) {
-         if( preg_match('@(?\'start\'.*(?>href\s*=\s*"/lib/css/mafe-[0-9a-z]+-[0-9a-z]+\.css"\s*/>))(?\'end\'.*)@sm', $buffer, $matches ) ) {
-            // add our fixfilter.js file
-            // this file will empty .rotateText class
-            // to be compatible with IE9
-            $buffer = $matches['start']." <script type='text/javascript' src='/glpi/fixfilter.js'></script> ".$matches['end'];
-         }
-
-         if( preg_match('@(?\'start\'.*(?=src\s*=\s*"/lib/js/mafe-[0-9a-z]+-[0-9a-z]+\.js"\s*>))(?\'end\'.*)@sm', $buffer, $matches ) ) {
-            // add our classlist.js and object-watch.js files
-            // classlist.js adds classList to HTMLElement prototype which doesn't exist in IE9 and earlier
-            // and object-watch.js fixes an error in function enviromentVariables() (needed in IE10 and after?)
-            $buffer = $matches['start']." src='/glpi/classlist.js'></script>";
-            $buffer .= "<script type='text/javascript' src='/glpi/object-watch.js'></script>";
-            $buffer .= "<script type='text/javascript' ".$matches['end'];
-         }
-      }
-
    }
    return $buffer;
 }
@@ -135,9 +240,22 @@ function glpi_session_name() {
    return $skin ;
 }
 
+// is called by GLPI?
 if( stripos( glpi_session_name(), 'glpi_' ) === 0 ) {
+   // we have been called by GLPI
    ob_start( "glpi_ob_handler" ) ;
 }
 
+// clean session of _DBArray availableUsers record
+session_start();
+if( isset( $_SERVER['HTTP_REFERER'] ) && preg_match( "@/cases/main_init$@i", $_SERVER['HTTP_REFERER'] ) ) {
+   unset($_SESSION['_DBArray']['availableUsers']);
+}
+// if glpi_domain is available, then set it into the current session
+// to be available into glpi_ob_handler
+if (isset($_REQUEST['glpi_domain'])) {
+   $_SESSION['GLPI_DOMAIN'] = $_REQUEST['glpi_domain'];
+}
+session_write_close();
 // back to PM normal app.php
 include '../app.php' ;

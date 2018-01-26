@@ -8,7 +8,7 @@ $_POST = $filter->xssFilterHard($_POST);
 
 $_REQUEST = $filter->xssFilterHard($_REQUEST);
 
-$_SESSION = $filter->xssFilterHard($_SESSION);
+//$_SESSION = $filter->xssFilterHard($_SESSION);
 
 if (!isset($_SESSION['USER_LOGGED'])) {
 
@@ -450,7 +450,7 @@ function startCase ()
 
     $_REQUEST = $filter->xssFilterHard($_REQUEST);
 
-    $_SESSION = $filter->xssFilterHard($_SESSION);
+    $_SESSION['USER_LOGGED'] = $filter->xssFilterHard($_SESSION['USER_LOGGED']);
 
 
 
