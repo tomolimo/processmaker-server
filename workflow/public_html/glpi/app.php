@@ -256,6 +256,23 @@ if( isset( $_SERVER['HTTP_REFERER'] ) && preg_match( "@/cases/main_init$@i", $_S
 if (isset($_REQUEST['glpi_domain'])) {
    $_SESSION['GLPI_DOMAIN'] = $_REQUEST['glpi_domain'];
 }
+
+if (isset($_REQUEST['GLPI_APP_UID']) && isset($_REQUEST['GLPI_PRO_UID'])) {
+   $_SESSION['APPLICATION'] = $_REQUEST['GLPI_APP_UID'];
+   $_SESSION['PROCESS'] = $_REQUEST['GLPI_PRO_UID'];
+} elseif (/*isset($_REQUEST['actionAjax']) && $_REQUEST['actionAjax'] == 'historyGridList_JXP' &&*/ isset($_SERVER['HTTP_REFERER'])) {
+   // explore HTTP_REFERER for GLPI_APP_UID parmeter
+   if ($ret = parse_url($_SERVER['HTTP_REFERER'], PHP_URL_QUERY)) {
+      $query = [];
+      parse_str($ret, $query);
+      if (isset($query['GLPI_APP_UID']) && isset($query['GLPI_PRO_UID'])) {
+         $_SESSION['APPLICATION'] = $query['GLPI_APP_UID'];
+         $_SESSION['PROCESS'] = $query['GLPI_PRO_UID'];
+      }
+   }
+
+}
+
 session_write_close();
 // back to PM normal app.php
 include '../app.php' ;
