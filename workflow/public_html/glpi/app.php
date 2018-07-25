@@ -175,9 +175,17 @@ function glpi_isHTML( ) {
  * @return string
  */
 function glpi_ob_handler( $buffer ){
-   //global $Fields;
 
    if( glpi_isHTML() ) {
+
+      if (isset($_REQUEST['glpi_init_case']) && $_REQUEST['glpi_init_case'] == 1 && http_response_code() == 302) {
+         // this is a workaround to be able to initialize properly SESSION variables to be able to view
+         // pages that depend on SESSION variables
+         // glpi_init_case is used only by a GET on /cases/cases_Open
+         http_response_code(200);
+         header_remove('Location');
+      }
+
       $matches = array();
       if( preg_match("/(?'start'.*?<script)(?'end'.*)/sm", $buffer,  $matches ) ) {
          $buffer = $matches['start']." type='text/javascript'>";
@@ -244,6 +252,15 @@ function glpi_session_name() {
 if( stripos( glpi_session_name(), 'glpi_' ) === 0 ) {
    // we have been called by GLPI
    ob_start( "glpi_ob_handler" ) ;
+
+   if (preg_match("@/cases/casesListExtJs@i",  $_SERVER['REQUEST_URI'])) {
+      session_start();
+      // we have been called by GLPI AND URL is cases/caseslist_Ajax
+      // then must reload GLPI page in order to prevent case list to be shown
+      echo "<html><body><script>";
+      echo "</script><input id='GLPI_FORCE_RELOAD' type='hidden' value='GLPI_FORCE_RELOAD'/></body></html>";
+      die();
+   }
 }
 
 // clean session of _DBArray availableUsers record
@@ -255,22 +272,6 @@ if( isset( $_SERVER['HTTP_REFERER'] ) && preg_match( "@/cases/main_init$@i", $_S
 // to be available into glpi_ob_handler
 if (isset($_REQUEST['glpi_domain'])) {
    $_SESSION['GLPI_DOMAIN'] = $_REQUEST['glpi_domain'];
-}
-
-if (isset($_REQUEST['GLPI_APP_UID']) && isset($_REQUEST['GLPI_PRO_UID'])) {
-   $_SESSION['APPLICATION'] = $_REQUEST['GLPI_APP_UID'];
-   $_SESSION['PROCESS'] = $_REQUEST['GLPI_PRO_UID'];
-} elseif (/*isset($_REQUEST['actionAjax']) && $_REQUEST['actionAjax'] == 'historyGridList_JXP' &&*/ isset($_SERVER['HTTP_REFERER'])) {
-   // explore HTTP_REFERER for GLPI_APP_UID parmeter
-   if ($ret = parse_url($_SERVER['HTTP_REFERER'], PHP_URL_QUERY)) {
-      $query = [];
-      parse_str($ret, $query);
-      if (isset($query['GLPI_APP_UID']) && isset($query['GLPI_PRO_UID'])) {
-         $_SESSION['APPLICATION'] = $query['GLPI_APP_UID'];
-         $_SESSION['PROCESS'] = $query['GLPI_PRO_UID'];
-      }
-   }
-
 }
 
 session_write_close();
