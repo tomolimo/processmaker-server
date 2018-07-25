@@ -595,13 +595,20 @@ class pmDynaform
             preg_match_all('/\@(?:([\@\%\#\=\!Qq])([a-zA-Z\_]\w*)|([a-zA-Z\_][\w\-\>\:]*)\(((?:[^\\\\\)]*?)*)\))/', $json->sql, $salida, PREG_PATTERN_ORDER | PREG_OFFSET_CAPTURE);
             $variables = isset($salida[2]) ? $salida[2] : array();
             foreach ($variables as $key => $value) {
-                $jsonSearch = $this->jsonsf(G::json_decode($this->record["DYN_CONTENT"]), $value[0], $json->variable === "" ? "id" : "variable");
-                $a = $this->getValuesDependentFields($jsonSearch);
+               $jsonSearch = $this->jsonsf(G::json_decode($this->record["DYN_CONTENT"]), $value[0], $json->variable === "" ? "id" : "variable");
+               $a = $this->getValuesDependentFields($jsonSearch);
                 foreach ($a as $i => $v) {
                     $data[$i] = $v;
                 }
             }
             if ($json->dbConnection !== "" && $json->dbConnection !== "none" && $json->sql !== "") {
+                if (isset($this->fields["APP_DATA"])) {
+                    foreach ($this->fields["APP_DATA"] as $keyA => $valueA) {
+                        if (!isset($data[$keyA]) && !is_array($valueA)) {
+                            $data[$keyA] = $valueA;
+                        }
+                    }
+                }
                 $cnn = Propel::getConnection($json->dbConnection);
                 $stmt = $cnn->createStatement();
                 try {
