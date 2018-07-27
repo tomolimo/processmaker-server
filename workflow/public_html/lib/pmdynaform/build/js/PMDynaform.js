@@ -10646,12 +10646,14 @@ jQuery.fn.extend({
         },
         checkBinding: function () {
             var form = this.model.get("form");
-            if (typeof this.onChangeCallback === 'function') {
+            if (typeof this.onChangeCallback === 'function'
+               && this.getValue() != this.previousValue) {
                 this.onChangeCallback(this.getValue(), JSON.stringify(this.previousValue));
             }
             if (form && form.onChangeCallback) {
                 form.onChangeCallback(this.model.get("id"), JSON.stringify(this.model.get("value")), JSON.stringify(this.previousValue));
             }
+            this.previousValue = this.getValue();
             return this;
         },
         preventEvents: function (event) {
