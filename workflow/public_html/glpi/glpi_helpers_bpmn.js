@@ -27,7 +27,7 @@ glpi = {
 	   for (var i = 1; i <= grd.getNumberRows() && colNum > 0; i++) {
 	      //debugger ;
 	      var toBeChanged = callback_filter(glpi.getGridRow(gridName, i));
-	      if (toBechanged) {// && grd.getValue(i, colNum) != select) {
+	      if (toBeChanged) {// && grd.getValue(i, colNum) != select) {
 	         grd.setValue(select, i, colNum);
 	         $(grd.gridtable[i - 1][colNum - 1].el).change(); // to trigger change
 	      }
@@ -222,16 +222,26 @@ glpi = {
 	},
 
 	// Create the dialog with "Ok" button
-	showInfoDlg: function (title, content, oktext, element) {
+   showInfoDlg: function (title, content, oktext, elementOrPosition) {
 	   var locParent = window.document;
 	   if (window.parent.document) {
 	      locParent = window.parent.document;
 	   }
 	   var parentScrollTop = $(locParent).scrollTop();
 
+	   if (!elementOrPosition || (elementOrPosition instanceof jQuery && elementOrPosition.length == 0)) {
+	      position = { my: "top", at: "bottom", of: $('html, body') };
+	   } 
+	   else if (elementOrPosition instanceof jQuery) {
+	      position = { my: "top", at: "bottom", of: elementOrPosition };
+	   } else {
+	      position = elementOrPosition;
+	   }
+
+
 	   var dlgContents = {
 		  title: title,   
-		  width: 700,
+		  width: 900,
 		  modal: true,
 		  buttons: [{
 				text: oktext,
@@ -244,7 +254,7 @@ glpi = {
 		        scrollTop: parentScrollTop
 		     }, 1000);
 		  },
-		  position: { my: "top", at: "bottom", of: element },
+		  position: position,
 		  show: true,
 		  hide: true		  
 	   }

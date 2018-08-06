@@ -254,11 +254,19 @@ if( stripos( glpi_session_name(), 'glpi_' ) === 0 ) {
    ob_start( "glpi_ob_handler" ) ;
 
    if (preg_match("@/cases/casesListExtJs@i",  $_SERVER['REQUEST_URI'])) {
-      session_start();
+      session_start(); // start session to be able to get glpi_domain in the ob end handler
       // we have been called by GLPI AND URL is cases/caseslist_Ajax
       // then must reload GLPI page in order to prevent case list to be shown
       echo "<html><body><script>";
       echo "</script><input id='GLPI_FORCE_RELOAD' type='hidden' value='GLPI_FORCE_RELOAD'/></body></html>";
+      die();
+   }
+
+   if( isset($_SERVER['HTTP_REFERER']) 
+      && preg_match("@/designer@i", $_SERVER['HTTP_REFERER']) 
+      && $_SERVER['REQUEST_METHOD'] == 'PUT') {
+      // then must cancel this PUT call 
+      // to prevent saving of the map with extra text
       die();
    }
 }
