@@ -176,6 +176,8 @@ function glpi_isHTML( ) {
  */
 function glpi_ob_handler( $buffer ){
 
+   header("Access-Control-Allow-Origin: *");
+
    if( glpi_isHTML() ) {
 
       if (isset($_REQUEST['glpi_init_case']) && $_REQUEST['glpi_init_case'] == 1 && http_response_code() == 302) {
@@ -262,10 +264,10 @@ if( stripos( glpi_session_name(), 'glpi_' ) === 0 ) {
       die();
    }
 
-   if( isset($_SERVER['HTTP_REFERER']) 
-      && preg_match("@/designer@i", $_SERVER['HTTP_REFERER']) 
+   if( isset($_SERVER['HTTP_REFERER'])
+      && preg_match("@/designer@i", $_SERVER['HTTP_REFERER'])
       && $_SERVER['REQUEST_METHOD'] == 'PUT') {
-      // then must cancel this PUT call 
+      // then must cancel this PUT call
       // to prevent saving of the map with extra text
       die();
    }
